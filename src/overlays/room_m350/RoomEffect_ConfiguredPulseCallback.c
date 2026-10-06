@@ -8,7 +8,7 @@ extern unsigned short D_800F3372;
 extern unsigned short D_800F336E;
 extern unsigned short D_800F336C;
 extern unsigned short D_800F3370;
-extern short D_800F3378;
+extern unsigned short D_800F3378;
 extern unsigned short D_800F3376;
 extern volatile unsigned short D_800E11E8, D_800E1208;
 extern unsigned short D_800E2850[];

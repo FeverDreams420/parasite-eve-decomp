@@ -126,7 +126,7 @@ extern u16 D_800F336E;
 extern u16 D_800F3370;
 extern u16 D_800F3372;
 extern u16 D_800F3376;
-extern s16 D_800F3378;
+extern u16 D_800F3378;
 extern char D_8018EFF4[];
 
 void func_800CE8F0(void *arg0, s32 arg1, void *arg2, void *arg3);

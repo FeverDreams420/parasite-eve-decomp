@@ -72,7 +72,7 @@ extern u16 D_800F3370;
 extern u16 D_800F3372;
 extern s16 D_800F3374;
 extern u16 D_800F3376;
-extern s16 D_800F3378;
+extern u16 D_800F3378;
 extern s32 D_800F3428;
 extern s32 D_80190800;
 
