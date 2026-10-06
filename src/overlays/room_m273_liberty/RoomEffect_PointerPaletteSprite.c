@@ -10,7 +10,8 @@ extern void func_800CEE20(void *, void *, int, int, int, int, int, int, void *);
 extern RoomM273PlayerActorView *g_PlayerEntity;
 extern unsigned char D_8019AE5C;
 extern unsigned short D_800E11FA, D_800E2850[];
-extern unsigned short D_800F3368, D_800F336A, D_800F336E;
+extern unsigned short D_800F3368, D_800F336E;
+extern short D_800F336A;
 extern unsigned short D_800F3370, D_800F3372, D_800F3374;
 extern unsigned short D_800F3376, D_800F3378;
 
