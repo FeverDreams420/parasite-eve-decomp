@@ -110,7 +110,7 @@ extern RoomTimedSpawnSoundState D_800B0E64;
 extern s16 D_800F3368;
 extern s16 D_800F336A;
 extern u16 D_800F336C;
-extern s16 D_800F336E;
+extern u16 D_800F336E;
 extern u16 D_800F3370;
 extern s16 D_800F3372;
 extern s16 D_800F3374;

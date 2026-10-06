@@ -49,7 +49,8 @@ typedef RoomM350Vector Vector;
 extern RoomM350Emitter *D_800F33E0;
 extern unsigned char D_8019A86E, D_8019A859;
 extern unsigned short D_800E11E8, D_800E2850[];
-extern short D_800F3368, D_800F336A, D_800F336E;
+extern short D_800F3368, D_800F336A;
+extern unsigned short D_800F336E;
 extern unsigned short D_800F336C, D_800F3370;
 extern short D_800F3372, D_800F3374;
 /* Retail writes both fields twice during configuration. */

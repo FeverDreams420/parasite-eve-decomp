@@ -122,7 +122,7 @@ typedef RoomFxSeed8 RoomM086Blob8;
 
 extern void *D_800F32D0;
 extern void *D_800F33E0;
-extern s16 D_800F336E;
+extern u16 D_800F336E;
 extern u16 D_800F3370;
 extern s16 D_800F3372;
 extern s16 D_800F3376;
