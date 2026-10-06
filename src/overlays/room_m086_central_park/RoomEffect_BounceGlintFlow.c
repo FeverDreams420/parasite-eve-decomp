@@ -124,7 +124,7 @@ extern void *D_800F32D0;
 extern void *D_800F33E0;
 extern u16 D_800F336E;
 extern u16 D_800F3370;
-extern s16 D_800F3372;
+extern u16 D_800F3372;
 extern s16 D_800F3376;
 extern s16 D_800F3378;
 extern char D_8018EFF4[];

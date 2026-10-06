@@ -915,7 +915,7 @@ extern RoomChanCtx *D_800F32D0;
 extern RoomChanCtx *D_800F33E0;
 extern RoomDlgState *D_800E2368;
 extern int D_800E27EC;
-extern short D_800F3372;
+extern unsigned short D_800F3372;
 extern short D_800F3374;
 extern void *RoomMain_ActorPtr2;
 extern int func_800CE8F0();

@@ -264,8 +264,8 @@ int RoomEffect_HomingProjectile(int mode) {
             tpage = D_800E2850[index];
             D_800F3368.palette = 4;
             D_800F3368.parameter06 = 0;
-            D_800F3372.parameter0A = 0;
-            D_800F3372.depth = 0;
+            D_800F3368.parameter0A = 0;
+            D_800F3368.depth = 0;
             D_800F3368.tpage = tpage;
         }
         kind = D_800F3368.palette;

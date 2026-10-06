@@ -115,21 +115,14 @@ typedef union RoomHomingTrig {
 } RoomHomingTrig;
 
 extern RoomHomingTrig D_800966EC[];
-/* Texture page index slots and the trailing parameter pair, read and
- * written as records so they stay ordered with the parameter-block
- * pointer stores, as retail does. */
+/* Texture page index slots, read as records so they stay ordered with the
+ * parameter-block stores, as retail does. */
 typedef struct RoomHomingModelTextureSlot {
     u16 index;
 } RoomHomingModelTextureSlot;
 
-typedef struct RoomHomingModelParamsTail {
-    s16 parameter0A;
-    s16 depth;
-} RoomHomingModelParamsTail;
-
 extern RoomHomingModelTextureSlot D_800E11EC;
 extern RoomHomingModelTextureSlot D_800E11E8;
-extern RoomHomingModelParamsTail D_800F3372;
 
 extern int func_8006DCE4(int id, int channel, int x, int y, int z);
 extern int FieldEng_VecToAngle(s32 *vec, s32 *ref);

@@ -10,7 +10,7 @@ typedef RoomM273PairPoolRecord Record;
 
 extern short D_800966EE[];
 extern unsigned short D_800F336E, D_800F3370;
-extern short D_800F3372;
+extern unsigned short D_800F3372;
 extern unsigned char D_8019AE18[], D_8019AB70[];
 
 int func_80198B1C(int mode,Vector *input) {

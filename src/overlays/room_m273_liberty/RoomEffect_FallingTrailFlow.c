@@ -162,7 +162,7 @@ int func_80194E6C(int mode, RoomM273FallingTrail *trail) {
     return 0;
 }
 
-extern s16 D_800F3372;
+extern u16 D_800F3372;
 extern u16 D_800F3376, D_800F3378;
 extern s16 D_8019ACA8;
 extern s16 D_8019AE6C, D_8019AE70, D_8019AE74, D_8019AE78;

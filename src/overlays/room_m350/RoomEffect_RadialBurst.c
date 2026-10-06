@@ -52,7 +52,8 @@ extern unsigned short D_800E11E8, D_800E2850[];
 extern short D_800F3368, D_800F336A;
 extern unsigned short D_800F336E;
 extern unsigned short D_800F336C, D_800F3370;
-extern short D_800F3372, D_800F3374;
+extern short D_800F3374;
+extern unsigned short D_800F3372;
 /* Retail writes both fields twice during configuration. */
 extern short D_800F3376, D_800F3378;
 extern int func_80197A04(int, short *);

@@ -3,7 +3,8 @@
 typedef struct { short unit, scale; } RenderState;
 extern int D_800E27EC;
 extern RenderState D_800F3368;
-extern short D_800F336A, D_800F3372, D_800F3374;
+extern short D_800F336A, D_800F3374;
+extern unsigned short D_800F3372;
 extern unsigned short D_800F336E;
 extern unsigned short D_800F336C;
 extern unsigned short D_800F3370;

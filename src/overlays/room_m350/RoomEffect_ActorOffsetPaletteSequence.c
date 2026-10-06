@@ -48,7 +48,8 @@ extern unsigned char D_8019A82E;
 
 extern unsigned short D_800E2850[];
 extern unsigned short D_800E11E8,D_800F3370;
-extern short D_800F3368, D_800F3376, D_800F3378, D_800F3372, D_800F3374;
+extern short D_800F3368, D_800F3376, D_800F3378, D_800F3374;
+extern unsigned short D_800F3372;
 extern unsigned short D_800F336E;
 extern char D_8019A570[];
 extern int Asset_Find08w(int,void *,int,int,int),Inv_ScrambleGrid(void),GetClut(int,int);

@@ -7,7 +7,8 @@ extern unsigned char D_8019A86E;
 extern short D_8019A85C;
 extern Vector g_RoomEffectTrailPositions[4];
 extern unsigned short D_800E11E8, D_800E2850[];
-extern short D_800F3368, D_800F336A, D_800F3372, D_800F3374;
+extern short D_800F3368, D_800F336A, D_800F3374;
+extern unsigned short D_800F3372;
 extern unsigned short D_800F336E;
 extern unsigned short D_800F336C, D_800F3370;
 /* Retail writes both fields twice during configuration. */

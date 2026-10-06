@@ -69,7 +69,7 @@ extern s16 D_800F336A;
 extern u16 D_800F336C;
 extern u16 D_800F336E;
 extern u16 D_800F3370;
-extern s16 D_800F3372;
+extern u16 D_800F3372;
 extern s16 D_800F3374;
 extern s16 D_800F3376;
 extern s16 D_800F3378;
