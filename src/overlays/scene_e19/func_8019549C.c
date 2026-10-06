@@ -35,7 +35,8 @@ int func_800CFE94(s16 *from, s16 *to);
 void func_800CFD50(u16 *from, u16 *to, u16 speed);
 int func_800C6B90(s16 *position, int extraRadius);
 
-extern s16 D_800F3376, D_800F3378;
+extern s16 D_800F3378;
+extern u16 D_800F3376;
 extern RenderColor D_8018F218;
 /* Not declared in production headers; parameter order inferred from both
  * call sites and the ABI. The eighth argument is zero at both sites. */

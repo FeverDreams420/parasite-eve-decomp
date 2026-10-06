@@ -114,7 +114,7 @@ extern u16 D_800F336E;
 extern u16 D_800F3370;
 extern u16 D_800F3372;
 extern s16 D_800F3374;
-extern s16 D_800F3376;
+extern u16 D_800F3376;
 extern s16 D_800F3378;
 
 void func_800CE870(void *arg0, int arg1, void *arg2);
