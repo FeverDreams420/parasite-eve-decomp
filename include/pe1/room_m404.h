@@ -30,7 +30,7 @@ extern u16 D_800E2850[];
 extern volatile s16 D_800F3368, D_800F3376, D_800F3378;
 extern s16 D_800F336A;
 extern u16 D_800F336C;
-extern volatile s16 D_800F3374;
+extern s16 D_800F3374;
 extern u16 D_800F3372;
 extern u16 D_800F3370;
 extern u16 D_800F336E;
