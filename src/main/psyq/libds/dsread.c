@@ -26,7 +26,7 @@ int DsRead(CdlLOC *position, int sectors, void *destination, int incomingMode) {
         if (!ER_active()) goto start;
     }
     result = 0;
-    goto done;
+    return result;
 start:
     READ_STATE(state, inProgress)->sectorSize = 512;
     READ_STATE(state, inProgress)->destination = (int)destination;

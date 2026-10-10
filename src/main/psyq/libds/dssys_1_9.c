@@ -21,19 +21,10 @@ void DS_stop(void)
     if (state->view.system.command.read.status == 2) {
         kind = state->view.system.command.read.command;
         cmp = 0xB;
-        if (kind == cmp) {
-            goto abortPending;
-        }
-        cmp = 0x11;
-        if (kind == cmp) {
-            goto abortPending;
-        }
-        cmp = 0x10;
-        if (kind == cmp) {
+        if (kind == cmp || ((cmp = 0x11), kind == cmp) || ((cmp = 0x10), kind == cmp)) {
             DsReadStatusBlock *slot;
             u32 value;
 
-abortPending:
             slot = &g_DsReadStatusBlock;
             value = 1;
             slot->status = value;

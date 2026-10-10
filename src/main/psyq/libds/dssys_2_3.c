@@ -77,14 +77,12 @@ void CQ_error_flush(int event, u8 *data) {
                         if (last == sentinel) {
                             last = 0;
                             callbacks[0].id = id;
-                            goto saveCallback;
                         } else if (callbacks[last].id != id) {
                             last++;
                             callbacks[last].id = id;
-                            goto saveCallback;
+                        } else {
+                            goto skipCallback;
                         }
-                        goto skipCallback;
-                    saveCallback:
                         callbacks[last].callback = callback;
                     skipCallback:;
                     }

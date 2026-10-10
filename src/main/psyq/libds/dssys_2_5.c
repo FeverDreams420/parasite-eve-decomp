@@ -134,7 +134,7 @@ int DsPacket(int inMode, DslLOC *inPosition, int inCommand,
     ptr->payload.minute = mode;
     ptr->parameter = &commands[1].payload;
     if (DsPosToInt(callPosition) < 0) {
-        goto failure;
+        result = 0; return result;
     }
     commands[2].command = n;
     commands[2].payload = *position;
@@ -153,7 +153,7 @@ int DsPacket(int inMode, DslLOC *inPosition, int inCommand,
         asm("" ::: "memory");
         total = n + 1;
         if (D_800A3608 + total >= 9) {
-            goto failure;
+            result = 0; return result;
         }
         previous = D_8009B53C;
         next = previous + 1;
@@ -171,7 +171,7 @@ int DsPacket(int inMode, DslLOC *inPosition, int inCommand,
                 entry = CQ_last_queue();
                 asm("" : "=r"(entry) : "0"(entry));
                 if (!entry) {
-                    goto failure;
+                    result = 0; return result;
                 }
                 entry->active = ticket;
                 entry->command = list->command;
@@ -192,7 +192,7 @@ int DsPacket(int inMode, DslLOC *inPosition, int inCommand,
                 list++;
             } while (i < total);
         }
-        goto dispatch;
+        break;
     case 3:
     case 6:
     case 27:
@@ -206,7 +206,7 @@ int DsPacket(int inMode, DslLOC *inPosition, int inCommand,
         asm("" ::: "memory");
         total = n + 1;
         if (D_800A3608 + total >= 9) {
-            goto failure;
+            result = 0; return result;
         }
         previous = D_8009B53C;
         next = previous + 1;
@@ -224,7 +224,7 @@ int DsPacket(int inMode, DslLOC *inPosition, int inCommand,
                 entry = CQ_last_queue();
                 asm("" : "=r"(entry) : "0"(entry));
                 if (!entry) {
-                    goto failure;
+                    result = 0; return result;
                 }
                 entry->active = ticket;
                 entry->command = list->command;
@@ -245,7 +245,7 @@ int DsPacket(int inMode, DslLOC *inPosition, int inCommand,
                 list++;
             } while (i < total);
         }
-        goto dispatch;
+        break;
     default:
         goto failure;
     }
@@ -253,7 +253,7 @@ dispatch:
     if (DS_system_status(0) == 1 && D_800A3540[D_800A3604].active == ticket)
         CQ_execute();
     result = ticket;
-    goto done;
+    return result;
 failure:
     result = 0;
 done:
@@ -309,7 +309,7 @@ s32 DsSync(s32 inId, void *inResult) {
         }
         if (readiness != 7) {
             status = 0;
-            goto done;
+            return status;
         }
         {
             cursor = D_800A3690;
