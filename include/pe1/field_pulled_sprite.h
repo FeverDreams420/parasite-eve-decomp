@@ -11,6 +11,6 @@
  * projected point that is pulled toward the screen centre by `pull`
  * (4.12), forced to a fixed near depth when pulled at all. */
 
-void AddPrim(void *orderingEntry, void *primitive);
+void AddPrim(unsigned int *orderingEntry, unsigned int *primitive);
 
 #endif

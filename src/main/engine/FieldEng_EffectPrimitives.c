@@ -6,6 +6,11 @@
 #include "pe1/field_tile.h"
 #include "pe1/geom_state.h"
 #include "pe1/field_rotated_quad.h"
+#include "pe1/render_object.h"
+#include "pe1/field_glow_line.h"
+#include "pe1/field_textured_ribbon.h"
+#include "pe1/render_prim.h"
+#include "pe1/field_pulled_sprite.h"
 
 /* Triangle with its apex at `position` and a `breadth` wide base `length`
  * away along local Z, turned by `rotation` and shaded per corner from
@@ -602,5 +607,507 @@ void func_800D2370(GteShortVector *position, GteRotation *rotation,
             AddPrim((unsigned int *)D_800B0E38.ordering[D_8009CDDC] + depth,
                     (unsigned int *)packet);
         }
+    }
+}
+
+/* Haloed point at distance `x` from the view origin rotated by `y` about Z.
+ * The halo is always drawn semi-transparent; `mode` is not read.
+ * Matching debt: two pins and one empty pointer constraint. The rotation
+ * upload is gte_ldrotmatrix. */
+void func_800D27FC(int x, int y, void *color, int scale, int mode)
+{
+    GteShortVector offset;
+    GteMatrix matrix;
+    FieldTilePoint *point;
+    RenderTintTile *glow;
+    RenderTintMode *blend;
+    u8 *rgb = color;
+    FieldTileAddress table;
+    FieldTileAddress ot;
+    FieldTileAddress link;
+    u32 depth;
+
+    memset(&offset, 0, sizeof(offset));
+    offset.x = x;
+    offset.y = 0;
+    offset.z = 0;
+    point = (FieldTilePoint *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    D_8009CDD8 += sizeof(FieldTilePoint);
+    glow = (RenderTintTile *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    D_8009CDD8 += sizeof(RenderTintTile);
+    matrix.m[0][0] = matrix.m[1][1] = matrix.m[2][2] = 0x1000;
+    matrix.m[0][1] = matrix.m[0][2] = matrix.m[1][0] = matrix.m[1][2] =
+        matrix.m[2][0] = matrix.m[2][1] = 0;
+    RotMatrixZ(y, &matrix);
+    {
+        const GteMatrixWords *words = (const GteMatrixWords *)&matrix;
+        gte_ldrotmatrix(words);
+    }
+    gte_lwc2_0_0(&offset);
+    gte_lwc2_1_4(&offset);
+    gte_cop2_hazard_slot();
+    gte_cop2_hazard_slot();
+    gte_rtps_command();
+    SetTile1(point);
+    SetTile(glow);
+    SetSemiTrans(point, 1);
+    glow->r = point->r = rgb[0] * scale / 128;
+    glow->g = point->g = rgb[1] * scale / 128;
+    glow->b = point->b = rgb[2] * scale / 128;
+    glow->r >>= 2;
+    glow->g >>= 2;
+    glow->b >>= 2;
+    gte_stsxy2(&point->x);
+    {
+        s32 *out = (s32 *)&depth;
+        gte_stszotz(out);
+    }
+    depth -= (u16)D_800F3368.depth;
+    if (depth < 0x1000) {
+        glow->x = point->x - 1;
+        glow->y = point->y - 1;
+        glow->height = 3;
+        glow->width = 3;
+        AddPrim((u32 *)D_800B0E38.ordering[D_8009CDDC] + depth, (u32 *)point);
+        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[D_8009CDDC], depth);
+        blend = (RenderTintMode *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+        D_8009CDD8 += sizeof(RenderTintMode);
+        SetDrawTPage((char *)blend, 0, 1, GetTPage(0, 1, 0, 0));
+        if (glow) {
+            glow->command |= 2;
+            TILE_OT_ADDPRIM(ot, glow, link);
+        }
+        TILE_OT_ADDPRIM(ot, blend, link);
+    }
+}
+
+/* Matching debt: the packet-table pin, two SZ3 pins and four empty barriers
+ * preserve the retail register allocation and store order. Each GTE command,
+ * transfer and hazard nop is separate; depth shifts and writes are C. */
+
+/* Gouraud line from `from` (color0 at scale0/128) to `to` (color1 at
+ * scale1/128) linked at the mean depth, with a 16x16 glow cell stretched
+ * along it; mode 0xFF draws both opaque, anything else semi-transparent. */
+void func_800D2B58(GteShortVector *from, GteShortVector *to, u8 *color0,
+                   u8 *color1, int scale0, int scale1, int mode)
+{
+    register char **packetBuffers asm("$10");
+    u32 depth[2];
+    FieldLineG2Packet *line;
+    FieldGlowQuadPacket *glow;
+    RenderTintMode *drawMode;
+    FieldTileAddress table;
+    FieldTileAddress ot;
+    FieldTileAddress link;
+    int angle;
+    int across;
+    int acrossY;
+    int along;
+    int alongY;
+
+    packetBuffers = D_800B0E38.packets;
+    line = (FieldLineG2Packet *)(packetBuffers[D_8009CDDC] + D_8009CDD8);
+    D_8009CDD8 += sizeof(FieldLineG2Packet);
+    glow = (FieldGlowQuadPacket *)(packetBuffers[D_8009CDDC] + D_8009CDD8);
+    D_8009CDD8 += sizeof(FieldGlowQuadPacket);
+    gte_lwc2_0_0(from);
+    gte_lwc2_1_4(from);
+    gte_cop2_hazard_slot();
+    gte_cop2_hazard_slot();
+    gte_rtps_command();
+    line->r0 = color0[0] * scale0 / 128;
+    line->g0 = color0[1] * scale0 / 128;
+    line->b0 = color0[2] * scale0 / 128;
+    {
+        s32 *out;
+        out = (s32 *)&depth[0];
+        gte_stszotz(out);
+    }
+    gte_stsxy2(&line->x0);
+    line->tag.length = 4;
+    line->code = 0x50;
+    gte_lwc2_0_0(to);
+    gte_lwc2_1_4(to);
+    gte_cop2_hazard_slot();
+    gte_cop2_hazard_slot();
+    gte_rtps_command();
+    line->r1 = color1[0] * scale1 / 128;
+    line->g1 = color1[1] * scale1 / 128;
+    line->b1 = color1[2] * scale0 / 128;
+    {
+        s32 *out;
+        out = (s32 *)&depth[1];
+        gte_stszotz(out);
+    }
+    gte_stsxy2(&line->x1);
+    depth[0] = (int)(depth[0] + depth[1]) / 2 - (u16)D_800F3368.depth;
+    if (depth[0] < 0x1000) {
+        char **drawBuffers = packetBuffers;
+        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[D_8009CDDC], depth[0]);
+        if (mode != 0xFF) {
+            drawMode = (RenderTintMode *)(drawBuffers[D_8009CDDC] + D_8009CDD8);
+            D_8009CDD8 += sizeof(RenderTintMode);
+            SetDrawTPage((char *)drawMode, 0, 1, GetTPage(0, mode, 0, 0));
+            if (line) {
+                line->code |= 2;
+                TILE_OT_ADDPRIM(ot, line, link);
+            }
+            TILE_OT_ADDPRIM(ot, drawMode, link);
+        } else if (line) {
+            TILE_OT_ADDPRIM(ot, line, link);
+        }
+        angle = ratan2(line->y1 - line->y0, line->x1 - line->x0);
+        across = rsin(-angle) / 512;
+        acrossY = rcos(-angle) / 512;
+        along = rcos(angle) / 256;
+        alongY = rsin(angle) / 256;
+        glow->tag.length = 12;
+        glow->code = 0x3C;
+        if (mode == 0xFF) {
+            glow->code = 0x3C;
+            glow->tpage = D_800E2852;
+        } else {
+            glow->code = 0x3E;
+            glow->tpage = D_800E2852 | GetTPage(0, mode, 0, 0);
+        }
+        glow->clut = GetClut(0x20, 0x1D6);
+        glow->x0 = line->x0 - along + across;
+        glow->y0 = line->y0 - alongY + acrossY;
+        glow->x1 = line->x0 - along - across;
+        glow->y1 = line->y0 - alongY - acrossY;
+        glow->x2 = line->x1 + along + across;
+        glow->y2 = line->y1 + alongY + acrossY;
+        glow->x3 = line->x1 + along - across;
+        glow->y3 = line->y1 + alongY - acrossY;
+        glow->u0 = 0x90;
+        glow->u2 = 0x90;
+        glow->v0 = 0xD0;
+        glow->v1 = 0xD0;
+        glow->u1 = 0x9F;
+        glow->u3 = 0x9F;
+        glow->v2 = 0xDF;
+        glow->v3 = 0xDF;
+        glow->r0 = line->r0;
+        glow->g0 = line->g0;
+        glow->b0 = line->b0;
+        glow->r1 = line->r0;
+        glow->g1 = line->g0;
+        glow->b1 = line->b0;
+        glow->r2 = line->r1;
+        glow->g2 = line->g1;
+        glow->b2 = line->b1;
+        glow->r3 = line->r1;
+        glow->g3 = line->g1;
+        glow->b3 = line->b1;
+        AddPrim((unsigned int *)D_800B0E38.ordering[D_8009CDDC] + depth[0],
+                (unsigned int *)glow);
+    }
+}
+
+/* Draw a textured ribbon `width` wide through `count` points: every joint
+ * is widened across the screen direction of the segment that leaves it,
+ * shaded from color0 to color1 (each at scale/128) along the ribbon and
+ * textured from u..u+du by v..v+height. Mode 0xFF draws opaque, anything
+ * else semi-transparent. */
+void func_800D3114(GteShortVector *points, s16 count, int width, int u, int v,
+                   int du, int height, int tpage, int clut, int scale,
+                   RenderColor *color0, RenderColor *color1, int mode)
+{
+    GteShortVector *point;
+    GteShortVector angles;
+    GteShortVector right;
+    GteShortVector left;
+    FieldRibbonColor color0Scaled;
+    FieldRibbonColor color1Scaled;
+    FieldRibbonColor color;
+    FieldScreenPoint screen0;
+    FieldScreenPoint screen1;
+    GteMatrix matrix;
+    u32 unused;
+    u32 depth;
+    FieldRibbonPacket *packet;
+    int i;
+    u32 previousDepth;
+    int bias;
+    int t;
+    u32 shade;
+    int dx;
+    int dy;
+    int angle;
+    int joint;
+
+    packet = (FieldRibbonPacket *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    D_8009CDD8 += count * sizeof(FieldRibbonPacket);
+    bias = (u16)D_800F3368.depth;
+    color0Scaled.bytes.rgb[0] = color0->r * scale / 128;
+    color0Scaled.bytes.rgb[1] = color0->g * scale / 128;
+    color0Scaled.bytes.rgb[2] = color0->b * scale / 128;
+    color1Scaled.bytes.rgb[0] = color1->r * scale / 128;
+    color1Scaled.bytes.rgb[1] = color1->g * scale / 128;
+    color1Scaled.bytes.rgb[2] = color1->b * scale / 128;
+    right.x = width / 2;
+    previousDepth = 0;
+    right.y = right.z = 0;
+    left.y = left.z = 0;
+    left.x = -width / 2;
+    angles.x = angles.y = 0;
+    point = points;
+    for (i = 0; i < count; i++) {
+        gte_ldrotmatrix(D_800BCFA4.value);
+        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldv3(&point[0], &point[1], &point[0]);
+        gte_rtpt_padded();
+        packet->tag.length = 12;
+        packet->c0.bytes.code = 0x3C;
+        if (mode == 0xFF) {
+            packet->c0.bytes.code = 0x3C;
+            packet->tpage = tpage;
+        } else {
+            packet->c0.bytes.code = 0x3E;
+            packet->tpage = GetTPage(0, mode, 0, 0) | tpage;
+        }
+        packet->clut = clut;
+        gte_stsxy3(&screen0, &screen1, &unused);
+        gte_avsz3_padded();
+        gte_stszotz(&depth);
+        depth -= bias;
+        if (depth >= 0x1000) {
+            return;
+        }
+        dx = screen1.x - screen0.x;
+        dy = screen1.y - screen0.y;
+        angle = ratan2(dy, dx) + 0x400;
+        t = (i << 12) / count;
+        LoadAverageCol(&color0Scaled, &color1Scaled, 0x1000 - t, t, &color);
+        if (i == 0) {
+            joint = angle;
+            angles.z = joint;
+            RotMatrix(&angles, &matrix);
+            gte_ldv0(&point[0]);
+            gte_rt();
+            packet->c0.bytes.rgb[0] = packet->c1.bytes.rgb[0] = color.bytes.rgb[0];
+            packet->c0.bytes.rgb[1] = packet->c1.bytes.rgb[1] = color.bytes.rgb[1];
+            packet->c0.bytes.rgb[2] = packet->c1.bytes.rgb[2] = color.bytes.rgb[2];
+            gte_stmac(matrix.t);
+            gte_ldrotmatrix(&matrix);
+            gte_ldtransmatrix(&matrix);
+            gte_ldv3(&right, &left, &right);
+            gte_rtpt_padded();
+            packet->u0 = packet->u1 = u;
+            packet->v0 = v;
+            packet->v1 = v + height;
+            previousDepth = depth;
+            gte_stsxy3(&packet->p0, &packet->p1, &unused);
+            packet++;
+        } else if (i < count - 1) {
+            joint = angle;
+            angles.z = joint;
+            RotMatrix(&angles, &matrix);
+            gte_ldv0(&point[0]);
+            gte_rt();
+            shade = color.word;
+            packet[-1].c3.word = shade;
+            packet[-1].c2.word = shade;
+            gte_stmac(matrix.t);
+            gte_ldrotmatrix(&matrix);
+            gte_ldtransmatrix(&matrix);
+            gte_ldv3(&right, &left, &right);
+            gte_rtpt_padded();
+            packet[-1].v2 = v;
+            packet[-1].v3 = v + height;
+            packet[-1].u2 = packet[-1].u3 = u + du * i / count;
+            gte_stsxy3(&packet[-1].p2, &packet[-1].p3, &unused);
+            AddPrim((unsigned int *)D_800B0E38.ordering[D_8009CDDC] + previousDepth,
+                    (unsigned int *)&packet[-1]);
+            packet->p0.word = packet[-1].p2.word;
+            packet->p1.word = packet[-1].p3.word;
+            packet->c0.bytes.rgb[0] = packet->c1.bytes.rgb[0] = color.bytes.rgb[0];
+            packet->c0.bytes.rgb[1] = packet->c1.bytes.rgb[1] = color.bytes.rgb[1];
+            packet->c0.bytes.rgb[2] = packet->c1.bytes.rgb[2] = color.bytes.rgb[2];
+            packet->u0 = packet->u1 = packet[-1].u2;
+            packet->v0 = v;
+            packet->v1 = v + height;
+            previousDepth = depth;
+            packet++;
+        } else {
+            joint = angle;
+            angles.z = joint;
+            RotMatrix(&angles, &matrix);
+            gte_ldv0(&point[0]);
+            gte_rt();
+            shade = color.word;
+            packet[-1].c3.word = shade;
+            packet[-1].c2.word = shade;
+            gte_stmac(matrix.t);
+            gte_ldrotmatrix(&matrix);
+            gte_ldtransmatrix(&matrix);
+            gte_ldv3(&right, &left, &right);
+            gte_rtpt_padded();
+            packet[-1].v2 = v;
+            packet[-1].v3 = v + height;
+            packet[-1].u2 = packet[-1].u3 = u + du * i / count;
+            gte_stsxy3(&packet[-1].p2, &packet[-1].p3, &unused);
+            AddPrim((unsigned int *)D_800B0E38.ordering[D_8009CDDC] + previousDepth,
+                    (unsigned int *)&packet[-1]);
+            packet->p0.word = packet[-1].p2.word;
+            packet->p1.word = packet[-1].p3.word;
+            packet->c0.bytes.rgb[0] = packet->c1.bytes.rgb[0] = color.bytes.rgb[0];
+            packet->c0.bytes.rgb[1] = packet->c1.bytes.rgb[1] = color.bytes.rgb[1];
+            packet->c0.bytes.rgb[2] = packet->c1.bytes.rgb[2] = color.bytes.rgb[2];
+            packet->u0 = packet->u1 = packet[-1].u2;
+            packet->v0 = v;
+            packet->v1 = v + height;
+            angles.z = joint;
+            RotMatrix(&angles, &matrix);
+            gte_ldrotmatrix(D_800BCFA4.value);
+            gte_ldtransmatrix(D_800BCFA4.value);
+            gte_ldv0(&point[1]);
+            gte_rt();
+            packet->c2.word = packet->c3.word = color1Scaled.word;
+            gte_stmac(matrix.t);
+            gte_ldrotmatrix(&matrix);
+            gte_ldtransmatrix(&matrix);
+            gte_ldv3(&right, &left, &right);
+            gte_rtpt_padded();
+            packet->v2 = v;
+            packet->u2 = packet->u3 = u + du;
+            packet->v3 = v + height;
+            gte_stsxy3(&packet->p2, &packet->p3, &unused);
+            AddPrim((unsigned int *)D_800B0E38.ordering[D_8009CDDC] + depth,
+                    (unsigned int *)packet);
+        }
+        point++;
+    }
+}
+
+void FieldEng_UpdatePointHistory(RenderHistoryPoint *history, s16 count,
+                                 RenderHistoryPoint *value, int reset) {
+    RenderHistoryPoint *cursor;
+    int i;
+
+    if (reset) {
+        count++;
+        for (i = 0; i < count; i++) {
+            history->vector.x = value->vector.x;
+            history->vector.y = value->vector.y;
+            history->vector.z = value->vector.z;
+            history++;
+        }
+    } else {
+        cursor = history + (count - 1);
+        for (i = 0; i < count;) {
+            i++;
+            cursor[1].words[0] = cursor[0].words[0];
+            cursor[1].words[1] = cursor[0].words[1];
+            cursor--;
+        }
+        history->words[0] = value->words[0];
+        history->words[1] = value->words[1];
+    }
+}
+
+/* Matching debt: two empty barriers and five volatile stack
+ * parameters. The volatile copies and entry memory barrier keep all register
+ * saves before the ordered argument loads. Each argument is read exactly once.
+ * Matrix loads and depth scaling/stores are C;
+ GTE ops and nops are individual. */
+void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,
+                   int texture, volatile int input_clut, volatile int input_page,
+                   volatile int input_intensity, RenderColor *volatile input_color,
+                   volatile int input_pull)
+{
+    GteShortVector center;
+    GteShortVector screen;
+    s32 depth;
+    FieldStripPacket *packet;
+    int r, g, b;
+    int u, v;
+    int width, height;
+    int clut;
+    int page;
+    int intensity;
+    register RenderColor *color;
+    int pull;
+
+    asm volatile("" : : : "memory");
+    pull = input_pull;
+    clut = input_clut;
+    page = input_page;
+    intensity = input_intensity;
+    color = input_color;
+    asm volatile("" : : : "$6");
+    center.x = 0xA0;
+    center.y = 0x78;
+    packet = (FieldStripPacket *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
+    D_8009CDD8 += sizeof(FieldStripPacket);
+    if (color == 0) {
+        r = g = b = intensity;
+    } else {
+        r = intensity * color->r / 128;
+        g = intensity * color->g / 128;
+        b = intensity * color->b / 128;
+    }
+    packet->r0 = r;
+    packet->g0 = g;
+    packet->b0 = b;
+    if (D_800F3368.parameter06 != 0) {
+        u = texture & 0xF;
+        v = 0;
+        if (u >= 8) {
+            u -= 8;
+            v = 0x20;
+        }
+        u <<= 4;
+        v += texture / 16 * 16;
+    } else {
+        u = (texture & 0xF) << 4;
+        v = texture / 16 * 16;
+    }
+    {
+        register RenderMatrixSlot *slot = &D_800BCFA4;
+        gte_ldrotmatrix((const GteMatrixWords *)slot->value);
+        gte_ldtransmatrix((const GteMatrixWords *)slot->value);
+    }
+    gte_lwc2_0_0(position);
+    gte_lwc2_1_4(position);
+    gte_cop2_hazard_slot();
+    gte_cop2_hazard_slot();
+    gte_rtps_command();
+    packet->tag.length = 9;
+    packet->code = 0x2C;
+    if (page == 0xFF) {
+        packet->code &= ~2;
+        packet->tpage = D_800F3368.tpage;
+    } else {
+        packet->code |= 2;
+        packet->tpage = D_800F3368.tpage | GetTPage(0, page, 0, 0);
+    }
+    packet->clut = clut;
+    width = D_800F3368.extent_x;
+    height = D_800F3368.extent_y;
+    packet->u0 = packet->u2 = u;
+    packet->v1 = packet->v0 = v;
+    packet->u1 = packet->u3 = u + width - 1;
+    packet->v2 = packet->v3 = v + height - 1;
+    width = width * scale_x / 8192;
+    height = height * scale_y / 8192;
+    {
+        s32 *depthOut = &depth;
+        gte_stszotz(depthOut);
+
+    }
+    depth -= (u16)D_800F3368.depth;
+    if (pull != 0) {
+        depth = 14;
+    }
+    if ((u32)depth < 0x1000) {
+        gte_stsxy2(&screen);
+        pull *= 2;
+        LoadAverageShort12(&screen, &center, 0x1000 - pull, pull, &screen);
+        packet->x0 = packet->x2 = screen.x - width;
+        packet->y0 = packet->y1 = screen.y - height;
+        packet->x1 = packet->x3 = screen.x + width;
+        packet->y2 = packet->y3 = screen.y + height;
+        AddPrim((unsigned int *)STRIP_OT(depth), (unsigned int *)packet);
     }
 }
