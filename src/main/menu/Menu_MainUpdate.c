@@ -278,9 +278,9 @@ block_after_d2e8:
             *(&D_800B0170[0] + (D_8009CDDC * 0x48)) = var_a2;
             *(&D_800B0171[0] + (D_8009CDDC * 0x48)) = var_a1;
             var_v0_3 = draw_slot_status0;
-            goto block_40;
+            *(&D_800B0172[0] + ((var_v0_3 * 9) * 8)) = var_a0;
         }
-        if (var_v1 == 1) {
+        else if (var_v1 == 1) {
             var_a2 = 0xC1;
             var_a1 = 0x28;
             {
@@ -301,9 +301,9 @@ block_after_d2e8:
             *(&D_800B0170[0] + (D_8009CDDC * 0x48)) = var_a2;
             *(&D_800B0171[0] + (D_8009CDDC * 0x48)) = var_a1;
             var_v0_3 = draw_slot_status1;
-            goto block_40;
+            *(&D_800B0172[0] + ((var_v0_3 * 9) * 8)) = var_a0;
         }
-        if (var_v1 == 2) {
+        else if (var_v1 == 2) {
             var_t1 = 0x83;
             var_t0 = 0x13;
             var_a3 = 1;
@@ -327,8 +327,9 @@ block_after_d2e8:
             *(&D_800B0170[0] + (D_8009CDDC * 0x48)) = var_a2;
             *(&D_800B0171[0] + (D_8009CDDC * 0x48)) = var_a1;
             var_v0_3 = draw_slot_status2;
-            goto block_40;
+            *(&D_800B0172[0] + ((var_v0_3 * 9) * 8)) = var_a0;
         }
+        else {
         var_a2 = 0xC1;
         if (var_v1 == 3) {
             var_a2 = 0xC1;
@@ -351,8 +352,8 @@ block_after_d2e8:
             *(&D_800B0170[0] + (D_8009CDDC * 0x48)) = var_a2;
             *(&D_800B0171[0] + (D_8009CDDC * 0x48)) = var_a1;
             var_v0_3 = D_8009CDDC;
-block_40:
             *(&D_800B0172[0] + ((var_v0_3 * 9) * 8)) = var_a0;
+        }
         }
         if (D_8009D254->actionMode != 0x12) {
             Entity_SetActionMode(D_8009D254, 0x12U, var_a2);
@@ -433,9 +434,9 @@ block_40:
                     *(&D_800B014C[0] + (D_8009CDDC * 0x48)) = var_a2;
                     *(&D_800B014D[0] + (D_8009CDDC * 0x48)) = var_a1;
                     var_v0_4 = draw_slot_status0;
-                    goto block_57;
+                    *(&D_800B014E[0] + ((var_v0_4 * 9) * 8)) = var_a0_2;
                 }
-                if (var_v1 == 1) {
+                else if (var_v1 == 1) {
                     var_a2 = 0x25;
                     var_a1 = 0xC1;
                     {
@@ -456,9 +457,9 @@ block_40:
                     *(&D_800B014C[0] + (D_8009CDDC * 0x48)) = var_a2;
                     *(&D_800B014D[0] + (D_8009CDDC * 0x48)) = var_a1;
                     var_v0_4 = draw_slot_status1;
-                    goto block_57;
+                    *(&D_800B014E[0] + ((var_v0_4 * 9) * 8)) = var_a0_2;
                 }
-                if (var_v1 == 2) {
+                else if (var_v1 == 2) {
                     var_t0 = 0x4A;
                     var_a3 = 0xFF;
                     var_a2 = 0x3B;
@@ -481,9 +482,9 @@ block_40:
                     *(&D_800B014C[0] + (D_8009CDDC * 0x48)) = 0;
                     *(&D_800B014D[0] + (D_8009CDDC * 0x48)) = var_a1;
                     var_v0_4 = draw_slot_status2;
-                    goto block_57;
+                    *(&D_800B014E[0] + ((var_v0_4 * 9) * 8)) = var_a0_2;
                 }
-                if (var_v1 == 3) {
+                else if (var_v1 == 3) {
                     var_a2 = 0x25;
                     var_a1 = 0xC1;
                     {
@@ -504,7 +505,6 @@ block_40:
                     *(&D_800B014C[0] + (D_8009CDDC * 0x48)) = var_a2;
                     *(&D_800B014D[0] + (D_8009CDDC * 0x48)) = var_a1;
                     var_v0_4 = D_8009CDDC;
-block_57:
                     *(&D_800B014E[0] + ((var_v0_4 * 9) * 8)) = var_a0_2;
                 }
                 if (D_8009D278->exp_or_acc < D_8009D278->maxAtk) {

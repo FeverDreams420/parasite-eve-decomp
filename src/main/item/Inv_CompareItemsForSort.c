@@ -41,15 +41,14 @@ int Inv_CompareItemsForSort(const void *leftElement, const void *rightElement) {
     leftSubtype = D_8009D0BC[((unsigned char *)left)[0xE] & 0xF];
     rightSubtype = D_8009D0BC[((unsigned char *)right)[0xE] & 0xF];
 
-    if (left == 0) {
-        goto left_record_is_empty;
-    }
-    if (right == 0) {
-        return -1;
-    }
-    asm volatile("" ::: "memory");
-    goto compare_keys;
+    if (left != 0) {
+        if (right == 0) {
+            return -1;
+        }
+        asm volatile("" ::: "memory");
+        goto compare_keys;
 
+    }
 left_record_is_empty:
     if (right != 0) {
         return 1;

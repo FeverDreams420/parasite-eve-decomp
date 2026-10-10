@@ -316,31 +316,28 @@ s32 Render_DecompressAnimFrame(RenderAnimFrame *frame, void *arg1, s32 arg2, s32
                     var_a2 = temp_fp;
                     goto block_21;
                 }
-                if (temp_a0 != 0) {
-                    goto block_17;
+                if (temp_a0 == 0) {
+                    if (temp_v1_2 == 0) {
+                        var_t1 = temp_s5;
+                        var_t0 = temp_fp;
+                        goto block_20;
+                    }
                 }
-                if (temp_v1_2 != 0) {
-                    goto block_17;
-                }
-                var_t1 = temp_s5;
-                var_t0 = temp_fp;
-                goto block_20;
 block_17:
                 var_v0_2 = temp_v0_2_saved << 0x10;
                 if (var_v0_2 != 0) {
                     goto block_21;
                 }
                 var_v0_3 = var_s0 << 0x10;
-                if (temp_v1_2 != 0) {
-                    goto block_22;
+                if (temp_v1_2 == 0) {
+                    var_s0 = temp_s6;
+                    var_t1 = temp_s5;
+                    var_t0 = var_t4;
+    block_20:
+                    var_a2 = var_t3;
+    block_21:
+                    var_v0_3 = var_s0 << 0x10;
                 }
-                var_s0 = temp_s6;
-                var_t1 = temp_s5;
-                var_t0 = var_t4;
-block_20:
-                var_a2 = var_t3;
-block_21:
-                var_v0_3 = var_s0 << 0x10;
 block_22:
                 temp_v1_3 = var_v0_3 >> 0x10;
                 if ((temp_v1_3 != -1) && ((s16)var_t1 != -1)) {

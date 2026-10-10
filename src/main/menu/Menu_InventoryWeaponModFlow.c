@@ -42,15 +42,14 @@ void Menu_OpenInventoryOrSwapView(s32 arg0) {
     if (mode >= 2) {
         goto check_two;
     }
-    if (mode == 0) {
-        goto case_zero;
+    if (mode != 0) {
+        return;
+    check_two:
+        if (mode == 2) {
+            goto clear_cursor;
+        }
+        return;
     }
-    return;
-check_two:
-    if (mode == 2) {
-        goto clear_cursor;
-    }
-    return;
 case_zero:
     if (arg0 != 0) {
         temp_v0 = MenuWidget_GetCurrentNode();

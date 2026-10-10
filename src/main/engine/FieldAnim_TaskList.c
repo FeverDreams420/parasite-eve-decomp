@@ -15,20 +15,19 @@ int func_800CE4F8(int index) {
             goto ret0;
         }
         ret = 0;
-        goto done;
+        return ret;
     }
-    if (index == 2) {
-        goto ret2;
-    }
-    ret = 0;
-    goto done;
+    if (index != 2) {
+        ret = 0;
+        return ret;
 
-ret0:
-    ret = D_800B0E18;
-    goto done;
-ret1:
-    ret = D_800B0E1C;
-    goto done;
+    ret0:
+        ret = D_800B0E18;
+        return ret;
+    ret1:
+        ret = D_800B0E1C;
+        return ret;
+    }
 ret2:
     ret = D_800B1630;
 done:

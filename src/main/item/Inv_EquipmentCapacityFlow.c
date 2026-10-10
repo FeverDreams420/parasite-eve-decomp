@@ -197,50 +197,47 @@ int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
     }
 
     Inv_RestoreSelection(list_index < 1);
-    if (D_8009D048 != D_800C0E48) {
-        goto return_one;
-    }
-    if (selected_b != D_800C0E22) {
-        goto return_one;
-    }
-    if (mod_index < 0) {
-        goto return_one;
-    }
+    if (D_8009D048 == D_800C0E48) {
+        if (selected_b == D_800C0E22) {
+            if (mod_index >= 0) {
 
-    {
-        int raw;
-        int final_mod;
-        register int final_count asm("$6");
-        int final_existing;
-        int bit_existing;
-        raw = item_a->tailData[mod_index];
-        raw &= 0x1F;
-        final_mod = raw - 8;
-        if ((unsigned int)final_mod >= 3) goto return_one;
-        raw = item_b->tailCount;
-        i = 0;
-        if (raw > 0) {
-            final_count = raw;
-            while (1) {
-                raw = item_b->tailData[i];
-                raw &= 0x1F;
-                final_existing = raw - 8;
-                if ((unsigned int)final_existing < 3) {
-                    break;
+                {
+                    int raw;
+                    int final_mod;
+                    register int final_count asm("$6");
+                    int final_existing;
+                    int bit_existing;
+                    raw = item_a->tailData[mod_index];
+                    raw &= 0x1F;
+                    final_mod = raw - 8;
+                    if ((unsigned int)final_mod >= 3) goto return_one;
+                    raw = item_b->tailCount;
+                    i = 0;
+                    if (raw > 0) {
+                        final_count = raw;
+                        while (1) {
+                            raw = item_b->tailData[i];
+                            raw &= 0x1F;
+                            final_existing = raw - 8;
+                            if ((unsigned int)final_existing < 3) {
+                                break;
+                            }
+                            ++i;
+                            if (i >= final_count) {
+                                break;
+                            }
+                        }
+                        if (i < item_b->tailCount) {
+                            bit_existing = 1 << final_existing;
+                            mask = bit_existing - (1 << final_mod);
+                        }
+                    }
                 }
-                ++i;
-                if (i >= final_count) {
-                    break;
-                }
-            }
-            if (i < item_b->tailCount) {
-                bit_existing = 1 << final_existing;
-                mask = bit_existing - (1 << final_mod);
+                result = Inv_CheckFreeSlotCapacity(mask);
+                goto return_result;
             }
         }
     }
-    result = Inv_CheckFreeSlotCapacity(mask);
-    goto return_result;
 return_one:
     return 1;
 return_result:

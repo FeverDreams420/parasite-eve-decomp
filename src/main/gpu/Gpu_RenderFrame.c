@@ -55,16 +55,15 @@ void Gpu_RenderFrame(void) {
 
     state_ptr = &g_GameState;
     state = state_ptr->flags;
-    if ((state & 0x200) == 0) {
-        goto draw_buffer;
+    if ((state & 0x200) != 0) {
+
+    draw_direct:
+        idx = g_ActiveDrawSlot;
+        PutDrawEnv(DrawAddress(idx));
+        g_ActiveDrawSlot = g_ActiveDrawSlot < 1U;
+        return;
+
     }
-
-draw_direct:
-    idx = g_ActiveDrawSlot;
-    PutDrawEnv(DrawAddress(idx));
-    g_ActiveDrawSlot = g_ActiveDrawSlot < 1U;
-    return;
-
 draw_buffer:
     {
         int drawSlot;
