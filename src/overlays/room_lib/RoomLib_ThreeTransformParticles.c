@@ -261,13 +261,14 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
     register char *shortCursor asm("$17");
     register char *element asm("$21");
     register int positionOffset asm("$22");
-    register int scaleValue asm("$16");
+    s16 scaleValue;
     register void *arg0 asm("$4");
     void *inputArg;
     register s16 *callArgs asm("$7");
     register char *positionSource asm("$2");
     char *clock;
     int computedScale;
+    int alpha;
     int baseScale;
 
     workState = state;
@@ -305,9 +306,9 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
             stack.primaryMatrix.t[2] = (((RoomDebrisTriplet *)positionCursor)->position[0].z >> 16) +
                                        ((RoomDebrisTriplet *)workState)->jitter[2];
             callArgs = stack.args;
-            computedScale = ((RoomDebrisTriplet *)element)->size[0];
+            alpha = ((RoomDebrisTriplet *)element)->size[0];
             arg0 = RoomLib_ThreeParticleTable;
-            RoomLib_ThreeParticleAlpha = computedScale;
+            RoomLib_ThreeParticleAlpha = alpha;
             asm volatile("" ::: "memory");
             inputArg = (void *)(int)callArgs[1];
             func_800C3134(arg0, (int)inputArg, (unsigned char *)&RoomLib_ThreeParticlePacket);
@@ -322,7 +323,6 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
                 baseScale = ((RoomDebrisTriplet *)shortCursor)->phase[0];
                 computedScale += baseScale;
                 scaleValue = computedScale;
-                asm("" : "=r"(scaleValue) : "0"(scaleValue));
                 if (((RoomDebrisTriplet *)shortCursor)->swing[0] < (s16)computedScale) {
                     scaleValue = ((RoomDebrisTriplet *)shortCursor)->swing[0];
                 }
@@ -369,12 +369,11 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
                 inputArg = (void *)0x20;
                 asm("" : "=r"(inputArg) : "0"(inputArg));
                 stack.secondaryMatrix.t[2] = computedScale;
-                computedScale = ((RoomDebrisTriplet *)element)->size[0];
-                scaleValue = (int)&RoomLib_ThreeParticleFloorPacket.depth;
-                *(s16 *)scaleValue = (unsigned int)computedScale >> 1;
+                alpha = ((RoomDebrisTriplet *)element)->size[0];
+                RoomLib_ThreeParticleFloorPacket.depth = (unsigned int)alpha >> 1;
                 func_800C2FF0((int)arg0, (int)inputArg);
                 func_800C3238(3);
-                func_800C42A4((FieldGlowSprite *)((char *)scaleValue - 0xA),
+                func_800C42A4((FieldGlowSprite *)&RoomLib_ThreeParticleFloorPacket,
                               secondaryMatrix, 0);
             }
         }
