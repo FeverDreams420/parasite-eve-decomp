@@ -1,38 +1,39 @@
+#include "pe1/scene_e08_orbit_particles.h"
 #include "common.h"
 
 extern int func_80071A54(void);
 
-void func_80192F50(void *unused, char *condition_arg, char *effect) {
+void func_80192F50(void *unused, char *condition_arg, SceneE08OrbitParticles *effect) {
     /* Keep the four live cursors in the registers used by the original loop. */
     char *condition = condition_arg;
-    register char *base asm("$18") = effect;
+    register char *base asm("$18") = (char *)effect;
     register char *state asm("$16") = base;
     register char *data asm("$17") = base;
     int random;
 
     do {
-        if (*(u8 *)state == 0) {
+        if (((SceneE08OrbitParticles *)state)->active[0] == 0) {
             if (func_80071A54() % 30 == 0 && *(s16 *)(condition + 2) < 50) {
-                *(u8 *)state = 1;
-                *(u8 *)(state + 0x20) = 0;
-                *(s16 *)(data + 0x40) = func_80071A54() % 4096;
-                *(s16 *)(data + 0x80) = 0x7e8;
-                *(s16 *)(data + 0xc0) = 0x7e8;
+                ((SceneE08OrbitParticles *)state)->active[0] = 1;
+                ((SceneE08OrbitParticles *)state)->frame[0] = 0;
+                ((SceneE08OrbitParticles *)data)->angle[0] = func_80071A54() % 4096;
+                ((SceneE08OrbitParticles *)data)->size[0] = 0x7e8;
+                ((SceneE08OrbitParticles *)data)->radius[0] = 0x7e8;
                 random = func_80071A54();
-                *(u8 *)(state + 0x100) = 0;
-                *(u8 *)(state + 0x120) = random % 20 + 40;
+                ((SceneE08OrbitParticles *)state)->radialSpeed[0] = 0;
+                ((SceneE08OrbitParticles *)state)->angularSpeed[0] = random % 20 + 40;
             }
         } else {
-            *(u8 *)(state + 0x20) += 1;
-            *(u16 *)(data + 0x40) += *(u8 *)(state + 0x120);
-            *(u16 *)(data + 0xc0) -= *(u8 *)(state + 0x100);
-            *(u8 *)(state + 0x100) += 2;
-            *(u16 *)(data + 0x80) -= 40;
-            if (*(s16 *)(data + 0x80) < 0) {
-                *(s16 *)(data + 0x80) = 0;
+            ((SceneE08OrbitParticles *)state)->frame[0] += 1;
+            ((SceneE08OrbitParticles *)data)->angle[0] += ((SceneE08OrbitParticles *)state)->angularSpeed[0];
+            ((SceneE08OrbitParticles *)data)->radius[0] -= ((SceneE08OrbitParticles *)state)->radialSpeed[0];
+            ((SceneE08OrbitParticles *)state)->radialSpeed[0] += 2;
+            ((SceneE08OrbitParticles *)data)->size[0] -= 40;
+            if (((SceneE08OrbitParticles *)data)->size[0] < 0) {
+                ((SceneE08OrbitParticles *)data)->size[0] = 0;
             }
-            if (*(s16 *)(data + 0xc0) < 0) {
-                *(u8 *)state = 0;
+            if (((SceneE08OrbitParticles *)data)->radius[0] < 0) {
+                ((SceneE08OrbitParticles *)state)->active[0] = 0;
             }
         }
         state++;
