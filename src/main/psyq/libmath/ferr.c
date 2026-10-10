@@ -11,19 +11,13 @@ int _err_math(int arg0, int arg1) {
     D_80094564 = arg0;
     D_80094568 = arg1;
     if (arg0 != 0x21) {
-    if (arg0 == 0x22) {
-        goto event302;
+    if (arg0 != 0x22) {
+        return 0;
     }
-    return 0;
-
-    }
-event301:
+    } else {
     DeliverEvent(0xF4000002, 0x301);
     return 0;
-
-event302:
+    }
     DeliverEvent(0xF4000002, 0x302);
-
-done:
     return 0;
 }

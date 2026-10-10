@@ -22,12 +22,10 @@ int DsRead(CdlLOC *position, int sectors, void *destination, int incomingMode) {
     state = &g_CdReadInProgress;
     asm volatile("" : "=r"(state), "=r"(incoming) : "0"(state), "1"(incoming));
     mode = incoming;
-    if (*state != 1) {
-        if (!ER_active()) goto start;
+    if (*state == 1 || ER_active()) {
+        result = 0;
+        return result;
     }
-    result = 0;
-    return result;
-start:
     READ_STATE(state, inProgress)->sectorSize = 512;
     READ_STATE(state, inProgress)->destination = (int)destination;
     READ_STATE(state, inProgress)->remainingSectors = sectors;

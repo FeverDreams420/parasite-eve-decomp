@@ -22,13 +22,10 @@ void LIBDS_DSSYS_1_text_EA4(int event, u8 *data) {
     if (index < 0) {
         return;
     }
-    goto process;
 
-    }
-event_five:
+    } else {
     index = 0;
-
-process:
+    }
     src = data_reg + index;
     value = src[0];
     asm volatile("" : : "r"(value));
