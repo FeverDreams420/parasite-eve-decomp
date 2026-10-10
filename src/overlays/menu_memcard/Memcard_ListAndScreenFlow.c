@@ -6,7 +6,7 @@
 static inline MemcardImageNode *Memcard_FindImageNode(s32 kind) {
     MemcardImageNode *node;
 
-    for (node = D_801D1370; node != 0; node = node->next) {
+    for (node = ((MemcardImageNode *)D_801D1370); node != 0; node = node->next) {
         if (node->kind == kind) {
             break;
         }
@@ -370,7 +370,7 @@ s32 func_801909B4(void) {
                 func_8003EB04();
                 func_80190064();
                 func_8018F468();
-                node = D_801D1370;
+                node = ((MemcardImageNode *)D_801D1370);
                 previous = 0;
                 if (node != 0) {
                     do {
@@ -389,7 +389,7 @@ s32 func_801909B4(void) {
                             if (previous != 0) {
                                 node = previous->next;
                             } else {
-                                node = D_801D1370;
+                                node = ((MemcardImageNode *)D_801D1370);
                             }
                         } else {
                             previous = node;
@@ -453,7 +453,7 @@ s32 func_801909B4(void) {
         func_8005E788(2);
         if (D_801D1380 >= 0x3E9) {
             wantedKind = 7;
-            selection = D_801D1370;
+            selection = ((MemcardImageNode *)D_801D1370);
             while (selection != 0) {
                 searchKind = selection->kind;
                 if (searchKind == wantedKind) {

@@ -2,6 +2,7 @@
 #define MENU_MEMCARD_NODE_H
 
 #include "common.h"
+#include "menu_memcard_image.h"
 
 typedef struct MenuMemcardListNode {
     struct MenuMemcardListNode *next;
@@ -20,6 +21,5 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(MenuMemcardListNode, payload) == 0x0C,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(MenuMemcardListNode, kind) == 0x2C,
                   menu_memcard_node_kind_offset);
 
-extern MenuMemcardListNode *D_801D1370;
 
 #endif

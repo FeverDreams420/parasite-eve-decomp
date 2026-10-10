@@ -43,7 +43,7 @@ void func_8018F468(void) {
     left = 0x7FFF;
     bottom = 0;
     right = 0;
-    for (node = D_801D1370; node != 0; node = node->next) {
+    for (node = ((MemcardImageNode *)D_801D1370); node != 0; node = node->next) {
         step = node->draw;
         if (step != 0) {
             step(node);
@@ -102,7 +102,7 @@ void func_8018F468(void) {
             }
             source += 240 - words;
         }
-        for (node = D_801D1370; node != 0; node = node->next) {
+        for (node = ((MemcardImageNode *)D_801D1370); node != 0; node = node->next) {
             draw = node->update;
             if (draw != 0) {
                 offset = area.w * (node->y - area.y) + (node->x - area.x);
