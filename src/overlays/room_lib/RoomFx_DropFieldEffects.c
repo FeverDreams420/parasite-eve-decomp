@@ -18,6 +18,7 @@
 #include "pe1/gte_short_vector.h"
 #include "pe1/gte.h"
 #include "pe1/room_beam_pair.h"
+#include "pe1/room_four_sprite.h"
 
 #define RW16(o, off) (*(short *)((char *)(o) + (off)))
 #define RW32(o, off) (*(int *)((char *)(o) + (off)))
@@ -1259,19 +1260,14 @@ void RoomFx_InitQuadSprites(void *unused0, void *unused1, void *output_arg) {
     int value;
 
     clock = (char *)func_800C2B50();
-    PE1_COMPILER_LAUNDER(base);
     *(RoomRenderWords8 *)base = *(RoomRenderWords8 *)(clock + 4);
 
     index = 0;
     red = 159;
     blue = 137;
     mid = 64;
-    PE1_COMPILER_USE(index);
-    PE1_COMPILER_USE(red);
-    PE1_COMPILER_USE(blue);
     PE1_COMPILER_USE(mid);
     scale = base;
-    PE1_COMPILER_LAUNDER(scale);
     color = scale;
     motion = scale;
 
@@ -1280,16 +1276,16 @@ void RoomFx_InitQuadSprites(void *unused0, void *unused1, void *output_arg) {
         rand();
 
         value = -200;
-        RW16(motion, 0x32) = value;
-        RW16(motion, 0x34) = value;
+        ((RoomFourSpriteState *)motion)->position[0].y = value;
+        ((RoomFourSpriteState *)motion)->position[0].z = value;
         value = -(speed >> 1);
         speed <<= 6;
-        RW16(motion, 0x50) = value;
-        RW16(motion, 0x52) = value;
+        ((RoomFourSpriteState *)motion)->velocity[0].x = value;
+        ((RoomFourSpriteState *)motion)->velocity[0].y = value;
         value = 160;
-        RW16(motion, 0x30) = 0;
-        RW16(scale, 0x78) = value;
-        RW16(scale, 0x70) = speed;
+        ((RoomFourSpriteState *)motion)->position[0].x = 0;
+        ((RoomFourSpriteState *)scale)->depth[0] = value;
+        ((RoomFourSpriteState *)scale)->scale[0] = speed;
 
         if (index == 1) goto color1;
         if (index == 0) goto color0;
@@ -1329,25 +1325,6 @@ advance_scale:
 
 
 
-
-typedef struct RoomFourSpriteColor {
-    u8 r, g, b, pad;
-} RoomFourSpriteColor;
-
-typedef struct RoomFourSpritePosition {
-    s16 x, y, z, pad;
-} RoomFourSpritePosition;
-
-/* Per-room sprite set: the shared rotation matrix followed by the four
- * sprites' colors, positions, scales and packet depths. */
-typedef struct RoomFourSpriteState {
-    RoomSpriteMatrix rotation;            /* 0x00 */
-    RoomFourSpriteColor color[4];         /* 0x20 */
-    RoomFourSpritePosition position[4];   /* 0x30 */
-    u8 reserved50[0x20];                  /* 0x50 */
-    s16 scale[4];                         /* 0x70 */
-    u16 depth[4];                         /* 0x78 */
-} RoomFourSpriteState;
 
 typedef struct RoomFourSpriteStack {
     RoomFxSeed8 seed;
@@ -1443,31 +1420,20 @@ void RoomFx_DrawQuadSprites(void *unused0, void *unused1,
 
 
 
-typedef struct RoomDropFieldQuadStep {
-    char pad00[0x30];
-    unsigned short h30;
-    unsigned short h32;
-    unsigned short h34;
-    char pad36[0x1A];
-    unsigned short h50;
-    unsigned short h52;
-    unsigned short h54;
-} RoomDropFieldQuadStep;
-
-void RoomFx_UpdateQuadSprites(void *unused, unsigned char *state, RoomDropFieldQuadStep *p) {
+void RoomFx_UpdateQuadSprites(void *unused, unsigned char *state, RoomFourSpriteState *p) {
     unsigned int i;
     char *base = (char *)p;
 
     for (i = 0; i < 4; i++) {
-        char *rec = base + i * 8;
-        char *timer = base + i * 2;
+        RoomFourSpriteState *rec = (RoomFourSpriteState *)(base + i * 8);
+        RoomFourSpriteState *timer = (RoomFourSpriteState *)(base + i * 2);
 
-        RWU16(rec, 0x30) += RWU16(rec, 0x50);
-        RWU16(rec, 0x32) += RWU16(rec, 0x52);
-        RWU16(rec, 0x34) += RWU16(rec, 0x54);
-        RWU16(timer, 0x78) -= 8;
-        if ((short)RWU16(timer, 0x78) < 0) {
-            RWU16(timer, 0x78) = 0;
+        rec->position[0].x += (u16)rec->velocity[0].x;
+        rec->position[0].y += (u16)rec->velocity[0].y;
+        rec->position[0].z += (u16)rec->velocity[0].z;
+        timer->depth[0] -= 8;
+        if ((short)timer->depth[0] < 0) {
+            timer->depth[0] = 0;
         }
     }
 
