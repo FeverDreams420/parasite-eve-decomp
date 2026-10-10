@@ -47,12 +47,18 @@ void Seq_ApplyGlobalPitch(void);
 void func_8008AB9C(AkaoTrack *);
 
 /* Advance global, bank and voice slides every fourth tick.
- * Matching debt: old is pinned to v1; the empty memory barrier preserves
- * the cursor reload after the callback-dependent bank store. */
+ * Each slide keeps its own previous value so stock GCC can allocate its
+ * registers without a pin. The empty memory barrier preserves the cursor
+ * reload after the callback-dependent bank store. */
 void SPU_StepReverbLoad(void)
 {
     u32 value;
-    register u32 old asm("$3");
+    u32 oldGlobalParam;
+    u32 oldPrimaryPitch;
+    u32 oldSecondaryPitch;
+    u32 oldPanTarget;
+    u32 oldPanpot;
+    u32 oldPitchOffset;
     u32 pending;
     int count;
     AkaoTrack *track;
@@ -69,10 +75,10 @@ void SPU_StepReverbLoad(void)
         D_8009D2D0 += D_8009D214;
     }
     if (D_8009D21E != 0) {
-        old = D_8009D2CC;
+        oldGlobalParam = D_8009D2CC;
         D_8009D21E--;
-        value = old + D_8009D210;
-        if ((value & 0xFF0000) != (old & 0xFF0000)) {
+        value = oldGlobalParam + D_8009D210;
+        if ((value & 0xFF0000) != (oldGlobalParam & 0xFF0000)) {
             track = D_800B8AC0_Spu;
             for (count = 24; count != 0; --count, ++track)
                 track->update_flags |= 0x10;
@@ -81,10 +87,10 @@ void SPU_StepReverbLoad(void)
     }
     bank = D_8009D2C8_Spu;
     if (bank->active_voice_mask && bank->pitch_slide_duration) {
-        old = bank->pitch_current;
+        oldPrimaryPitch = bank->pitch_current;
         bank->pitch_slide_duration--;
-        value = old + bank->pitch_delta;
-        if ((value & 0x7F0000) != (old & 0x7F0000))
+        value = oldPrimaryPitch + bank->pitch_delta;
+        if ((value & 0x7F0000) != (oldPrimaryPitch & 0x7F0000))
             func_8008AB9C(D_800B8AC0_Spu);
         D_8009D2C8_Spu->pitch_current = value;
         asm volatile("" ::: "memory");
@@ -92,10 +98,10 @@ void SPU_StepReverbLoad(void)
     }
     D_8009D2C8_Spu = bank + 1;
     if (bank[1].active_voice_mask && bank[1].pitch_slide_duration) {
-        old = bank[1].pitch_current;
+        oldSecondaryPitch = bank[1].pitch_current;
         bank[1].pitch_slide_duration--;
-        value = old + bank[1].pitch_delta;
-        if ((value & 0x7F0000) != (old & 0x7F0000))
+        value = oldSecondaryPitch + bank[1].pitch_delta;
+        if ((value & 0x7F0000) != (oldSecondaryPitch & 0x7F0000))
             func_8008AB9C(D_800BA560);
         D_8009D2C8_Spu->pitch_current = value;
     }
@@ -107,26 +113,26 @@ void SPU_StepReverbLoad(void)
         do {
             if (pending & count) {
                 if (track->panpot_duration) {
-                    old = (s16)track->pan_target;
+                    oldPanTarget = (s16)track->pan_target;
                     track->panpot_duration--;
-                    value = old + (s16)track->pan_delta;
-                    if ((value & 0xFF00) != (old & 0xFF00))
+                    value = oldPanTarget + (s16)track->pan_delta;
+                    if ((value & 0xFF00) != (oldPanTarget & 0xFF00))
                         track->update_flags |= 3;
                     track->pan_target = value;
                 }
                 if (track->panpot_slide_duration) {
-                    old = track->panpot;
+                    oldPanpot = track->panpot;
                     track->panpot_slide_duration--;
-                    value = old + (s16)track->panpot_delta;
-                    if ((value & 0xFF00) != (old & 0xFF00))
+                    value = oldPanpot + (s16)track->panpot_delta;
+                    if ((value & 0xFF00) != (oldPanpot & 0xFF00))
                         track->update_flags |= 3;
                     track->panpot = value;
                 }
                 if (track->pitch_offset_duration) {
-                    old = track->pitch_offset;
+                    oldPitchOffset = track->pitch_offset;
                     track->pitch_offset_duration--;
-                    value = old + track->pitch_offset_step;
-                    if ((value & 0xFF00) != (old & 0xFF00))
+                    value = oldPitchOffset + track->pitch_offset_step;
+                    if ((value & 0xFF00) != (oldPitchOffset & 0xFF00))
                         track->update_flags |= 0x10;
                     track->pitch_offset = value;
                 }
