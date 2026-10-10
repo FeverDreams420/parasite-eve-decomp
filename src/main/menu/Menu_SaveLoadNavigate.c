@@ -3,11 +3,11 @@
 #include "pe1/inventory_slots.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/inventory.h"
+#include "pe1/menu_sound.h"
 
 int MenuWidget_GridCellIndex(MenuWidgetNode *ptr);
 void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
 void MenuWidget_InitPool(void);
-void Menu_PlayConfirmSound(void);
 
 int Menu_SaveLoadNavigate(MenuWidgetNode *arg0, unsigned int flags) {
     MenuWidgetNode *node;

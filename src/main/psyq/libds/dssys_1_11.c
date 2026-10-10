@@ -3,6 +3,7 @@
 /* CC1_FLAGS: -mno-split-addresses */
 /* Psy-Q LIBDS DSSYS_1.OBJ, part 11 of 11: tipDsSystem and the object's zero tail. */
 #include "pe1/psyq_ds.h"
+#include "pe1/psyq_bios.h"
 
 extern char D_80011D74[];
 extern char D_80011D94[];
@@ -13,7 +14,6 @@ extern char D_80011E0C[];
 extern char D_80011E3C[];
 extern char D_80011E44[];
 extern char D_80011E4C[];
-int printf(char *fmt, ...);
 
 void tipDsSystem(void) {
     enum {

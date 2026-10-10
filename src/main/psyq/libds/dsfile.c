@@ -8,6 +8,7 @@
 #include "pe1/psyq_ds.h"
 #include "pe1/cdrom.h"
 #include "common.h"
+#include "pe1/psyq_bios.h"
 
 PE1_STATIC_ASSERT(sizeof(DslFILE) == 24, ds_search_file_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(DslFILE, name) == 8, ds_search_file_name_offset);
@@ -53,8 +54,6 @@ int D_8009B6E0 = 0;
 int dsfile_data_padding[2] = {0, 0};
 
 extern char D_800A36B8[DSL_MAX_FILE][sizeof(DslFILE)];
-int printf(const char *, ...);
-int puts(const char *);
 DslFILE *DsSearchFile(DslFILE *output, char *input_name) {
     register DslFILE *out asm("$22") = output;
     char *name = input_name;
@@ -137,7 +136,6 @@ DslFILE *DsSearchFile(DslFILE *output, char *input_name) {
     if (D_8009AFC0 > 0) printf(D_80011EE8, component);
     return 0;
 }
-
 
 int _cmp(char *s1, char *s2) {
     return strncmp(s1, s2, 0xC) == 0;

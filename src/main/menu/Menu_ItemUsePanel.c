@@ -1,4 +1,6 @@
 #include "pe1/menu_item_record.h"
+#include "pe1/menu_queue.h"
+#include "pe1/menu_sound.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "common.h"
@@ -12,7 +14,6 @@
 #define NULL ((void *)0)
 void MenuWidget_OffsetPosition(MenuWidgetNode *node, int dx, int dy);
 void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
-void Queue_Init(void);
 extern s32 g_InvItemUsableFlag;
 ItemDataRecord *g_MenuSelectedItemData;
 void Menu_DrawEquipStatsPanel(void);
@@ -23,7 +24,6 @@ M2C_UNK Menu_DrawSoundEffectList();
 M2C_UNK Menu_DrawEquipItemDetailPanel();
 int g_MenuItemDiscardMode;
 void Inv_SetActiveList(int mode, int *slot);
-void Menu_PlayConfirmSound(void);
 u8 *Str_LookupTableC(unsigned int index);
 void Draw_PrintRawText(u8 *arg0);
 

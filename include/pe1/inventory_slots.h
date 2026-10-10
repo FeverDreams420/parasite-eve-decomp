@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "pe1/inventory.h"
+#include "pe1/inventory_queries.h"
 
 extern s16 D_800C0E48[];
 /* Retail adjacency: tracked selections at C0E20, 50 item IDs at C0E48,
@@ -104,7 +105,6 @@ int Inv_RestoreSelection(unsigned int index);
 void Inv_BuildStorageDisplay(void);
 
 void Inv_SetActiveListOverride(s16 *items, int count);
-int Inv_GetAyaSlotLimit(void);
 int Inv_GetBonusSlotCount(void);
 int Inv_FindFirstEmptySlot(int neededSlots);
 void Inv_CompactActiveListSlots(void);
@@ -113,7 +113,6 @@ int Inv_CheckFreeSlotCapacity(int requestedSlots);
 extern int D_8009D03C; /* First base-item ID represented by the three ammo pools. */
 
 int Inv_GetPackedListItem(int index);
-
 
 int Menu_GetCommandResult(void);
 void Menu_ClearCommandResult(void);

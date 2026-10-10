@@ -1,9 +1,8 @@
 /* ASSEMBLER: GNU */
 /* PSY-Q LIBSPU S_Q: SpuQuit. */
 #include "pe1/psyq_spu_internal.h"
+#include "pe1/psyq_bios.h"
 
-extern int EnterCriticalSection(void);
-extern void ExitCriticalSection(void);
 extern s32 CloseEvent(s32 event);
 extern s32 DisableEvent(s32 event);
 

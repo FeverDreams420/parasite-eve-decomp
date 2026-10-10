@@ -4,6 +4,8 @@
 #include "pe1/memcard.h"
 #include "pe1/save_blob.h"
 #include "pe1/memcard_save_state.h"
+#include "pe1/menu_notification_dialog.h"
+#include "pe1/psyq_bios.h"
 
 void Save_SprintfSjis(unsigned char *dst, unsigned char *fmt)
 {
@@ -393,8 +395,6 @@ void MemCard_StepPortState(int port) {
 
 extern int D_800A1850;
 
-int EnterCriticalSection(void);
-void ExitCriticalSection(void);
 int OpenEvent(int desc, int spec, int mode, int (*func)(void));
 int EnableEvent(int event);
 void InitCARD(int arg0);
@@ -1118,7 +1118,6 @@ void Save_RestoreHeader(void);
 void Menu_DestroyMemCardProgressWidget(void);
 void Menu_CreateNotificationDialog(int arg0, int arg1);
 void Menu_SetDeferredCallback(void (*callback)(void));
-void Menu_CreateTwoLineDialog(int arg0, int arg1);
 void Save_CancelUiFlow(void);
 
 void Save_LoadCardFileIntoRuntime(void) {
@@ -1398,7 +1397,6 @@ void MemCard_MarkActivePortState13(void) {
     int portIndex = g_MemCardActivePortOneBased - 1;
     g_MemCardPortStates[portIndex].managerState = 0xD;
 }
-
 
 void MemCard_ClearActivePrompt(void) {
     g_MemCardActivePortOneBased = 0;

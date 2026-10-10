@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/psyq_callbacks.h"
 #include "pe1/psyq_types.h"
+#include "pe1/psyq_gpu.h"
 
 typedef PsyqEventCallback CdlCB;
 
@@ -140,7 +141,6 @@ int CdPosToInt(CdlLOC *p);
 CdlLOC *CdIntToPos(int i, CdlLOC *p);
 void data_ready_callback(void);
 int StGetBackloc(CdlLOC *position);
-
 
 typedef struct CdlATV {
     u_char val0;
@@ -365,7 +365,6 @@ u32 StFreeRing(u32 *base);
 u32 StGetNext(u32 **addr, u32 **header);
 void StCdInterrupt(void);
 int DsDataSync(int mode);
-int VSync(int mode);
 int DsGetSector();
 int DsGetSector2();
 void DsReadBreak(void);

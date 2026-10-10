@@ -1,6 +1,7 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 #include "pe1/menu_widget.h"
+#include "pe1/menu_sound.h"
 
 extern int D_8009CF0C, D_8009CF30, D_8009CF34, D_8009CF1C;
 void MenuWidget_OffsetPosition(MenuWidgetNode *, int, int);
@@ -11,9 +12,6 @@ MenuWidgetNode *MenuWidget_GetCurrentNode(void);
 void MenuWidget_NavScrollTo(int);
 int Inv_GetPackedListCount(void);
 void Menu_SetupSkillSubmenu(int);
-void Menu_PlayConfirmSound(void);
-void Menu_PlayErrorSound(void);
-void Menu_PlayCancelSound(void);
 void Menu_StepInventoryRoot(int, int, int);
 void Menu_OpenEquipScreen(int);
 

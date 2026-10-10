@@ -4,12 +4,13 @@
 #include "pe1/menu_dialog.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/menu_widget.h"
+#include "pe1/inventory_queries.h"
+#include "pe1/menu_sound.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
-s32 Inv_GetAyaSlotLimit();
 extern s32 g_MenuActionSubmenuOpen;
 extern s32 g_InvSelectedItemIndex;
 extern s32 g_InvSwapTargetIndex;
@@ -134,7 +135,6 @@ block_5:
     }
 }
 
-
 void Menu_DrawWeaponModSlots(s32 arg0);
 void MenuWidget_DrawList(void *arg0, void (*callback)(int));
 
@@ -151,8 +151,6 @@ void Menu_DrawEquipOptionsList(int arg0) {
 #include "../../../tools/m2c/m2c_macros.h"
 void Menu_OpenInventoryOrSwapView(s32 arg0);
 void Menu_CreateEquipInfoPanel(int arg0, unsigned int arg1);
-void Menu_PlayConfirmSound(void);
-void Menu_PlayCancelSound(void);
 void Sort_ContainerItems(int arg0);
 extern s32 g_MenuInventoryViewMode;
 void Menu_DrawEquipSortToggleList(int arg0);
@@ -206,8 +204,6 @@ int g_MenuInventoryViewMode;
 void Sort_ContainerItems(int arg0);
 void Inv_SortInventoryByMode(int arg0, int arg1);
 void Menu_OpenInventoryOrSwapView(int arg0);
-void Menu_PlayConfirmSound(void);
-void Menu_PlayCancelSound(void);
 
 int g_InvItemUsableFlag;
 int g_MenuInventoryViewMode;
@@ -274,8 +270,6 @@ extern int g_MenuInventoryViewMode;
 extern void Inv_SortInventoryByMode(int arg0, int arg1);
 extern void Sort_InventoryItems(int arg0, int arg1);
 extern void Menu_OpenInventoryOrSwapView(int arg0);
-extern void Menu_PlayConfirmSound(void);
-extern void Menu_PlayCancelSound(void);
 
 void Menu_DrawEquipInfoOptionList(int arg0) {
     MenuWidget_DrawList(arg0, Menu_DrawEquipInfoOptionRow);

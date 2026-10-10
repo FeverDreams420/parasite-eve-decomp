@@ -1,5 +1,7 @@
 #include "pe1/menu_state.h"
 #include "pe1/menu_widget.h"
+#include "pe1/inventory_queries.h"
+#include "pe1/menu_sound.h"
 
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
@@ -22,13 +24,9 @@ extern int Battle_IsActiveWrapped(void);
 void Inv_SetActiveList(int mode, int *slot);
 extern void Menu_CreateMainMenuView(MenuWidgetNode *node);
 extern void Menu_CreateInvSwapView(MenuWidgetNode *node, int mode);
-extern int Inv_SelectActiveList(int list);
 extern int Inv_CountByCategory(int category);
 extern int WayneStorage_CountItemType(int item);
 extern void Menu_StepInventoryRoot(int mode, int arg1, int arg2);
-extern void Menu_PlayConfirmSound(void);
-extern void Menu_PlayErrorSound(void);
-extern void Menu_PlayCancelSound(void);
 extern void MenuWidget_InitPool(void);
 extern void BattleCmd_ResetTableCursor(void);
 extern void Menu_InitScrollDirection(void);

@@ -1,9 +1,9 @@
 #include "common.h"
 #include "pe1/inventory.h"
+#include "pe1/inventory_queries.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-s32 Inv_GetAyaSlotLimit();
 extern s16 *g_InvItemPtr;
 extern s32 g_InvSlotLimit;
 extern u32 *g_InvSelectionBits;

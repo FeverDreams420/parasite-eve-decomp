@@ -1,5 +1,5 @@
+#include "pe1/inventory_queries.h"
 void Menu_DrawArmorEquipItem(void);
-void Inv_SelectActiveList(int useOverride);
 void MenuWidget_DrawList(int arg0, void (*callback)(void));
 
 int MemCard_IsPortPresent(int arg0);

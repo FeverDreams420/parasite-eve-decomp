@@ -1,6 +1,6 @@
 #include "pe1/gpu_dma_timeout_state.h"
+#include "pe1/psyq_bios.h"
 
-int printf(char *fmt, ...);
 int SetIntrMask(int mask);
 
 typedef unsigned int u32;

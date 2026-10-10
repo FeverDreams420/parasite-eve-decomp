@@ -6,8 +6,7 @@
 #include "pe1/cdrom.h"
 #include "pe1/psyq_ds.h"
 #include "pe1/psyq_ds_queue.h"
-
-extern int VSync(int mode);
+#include "pe1/psyq_gpu.h"
 
 #define CD_READ_FIELD(anchor, field)                                      \
     ((anchor)[(PE1_OFFSETOF(CdReadProgressState, field) -                  \
@@ -55,7 +54,6 @@ void DS_read_cbready(int status, void *data, void *detail) {
 #undef CD_READ_FIELD
 
 extern int D_8009B6B0[];
-extern int VSync(int);
 extern void DsReadBreak(void);
 
 void DS_read_cbdata(void) {
@@ -73,8 +71,6 @@ void DS_read_cbdata(void) {
             g_CdReadCompleteCallback(state[1] < 0 ? 5 : 2, (void *)state[3]);
     }
 }
-
-extern int VSync(int arg0);
 
 int DsReadSync(void *argument) {
     int v0;

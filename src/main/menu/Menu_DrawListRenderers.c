@@ -1,3 +1,4 @@
+#include "pe1/inventory_queries.h"
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 
 int g_MenuActiveWidget;
@@ -33,7 +34,6 @@ void Menu_DrawItemList(void *arg0) {
 }
 
 void Menu_DrawSelectableEquipSlotRow(int arg0);
-void Inv_SelectActiveList(int useOverride);
 
 void Menu_DrawSelectableEquipSlotList(int arg0) {
     Inv_SelectActiveList(0);

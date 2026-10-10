@@ -1,5 +1,6 @@
 #include "pe1/menu_bonus_stats.h"
 #include "pe1/menu_confirm_callback.h"
+#include "pe1/menu_sound.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "pe1/menu_inventory_root.h"
@@ -892,7 +893,6 @@ void Menu_DrawBonusPointSpendPanel(void) {
 }
 #include "pe1/inventory.h"
 
-
 extern int D_8009CFAC;
 extern int D_8009CFD0;
 extern int D_8009CFD8;
@@ -904,10 +904,6 @@ extern int Inv_RestoreSelection(unsigned int index);
 extern ItemDataRecord *Inv_LookupActiveListData(int index);
 extern void Stat_QueryDistanceAndSubLevel(int kind, int value, int *distance_out, int *sublevel_out);
 extern int Stat_OverflowQuery(int kind, int value);
-extern void Menu_PlayMoveSound(void);
-extern void Menu_PlayErrorSound(void);
-extern void Menu_PlayConfirmSound(void);
-extern void Menu_PlayCancelSound(void);
 
 int Spend_BonusPoints(void *node, unsigned int buttons)
 {

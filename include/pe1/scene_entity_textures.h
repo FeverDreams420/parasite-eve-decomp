@@ -6,6 +6,7 @@
 #include "pe1/scene_assets.h"
 #include "pe1/field_actor.h"
 #include "pe1/player_entity.h"
+#include "pe1/scene_room_load.h"
 
 /*
  * Scene_LoadEntityTextures: 14-state loader for the area entity bank.
@@ -24,9 +25,7 @@ extern u8 g_EntityRenderScratch[];
 int Scene_UpdateBgDraw(void);
 int CdRom_PollReady(void);
 int CdRom_ReadSectorsFromLba(u32 lba, void *destination, u32 size);
-int Render_InitRoomPrimState(void *object);
 void Render_DrawWithAnim(void *object, int animation, int frame,
                          void *matrices, void *scratch);
-int Scene_LoadEntityTextures(void);
 
 #endif

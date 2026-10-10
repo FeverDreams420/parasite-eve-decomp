@@ -72,7 +72,7 @@ extern unsigned char D_8019AF69,D_8019AF68;
 extern unsigned short D_8019AF60;
 extern Vector D_8019AD60;
 extern unsigned short D_800E11E8;
-extern int func_8005186C(int),ratan2(int,int);
+extern int func_8005186C(int);
 #include "pe1/gte_types.h"
 extern void func_8006DCE4(int,void *,int,int,int);
 

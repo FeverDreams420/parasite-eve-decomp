@@ -5,6 +5,7 @@
 #include "pe1/render_prim.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/draw_wipe_rect.h"
+#include "pe1/psyq_gpu.h"
 
 int g_DrawBlendColor;
 extern int g_DrawScratchBuffer[];
@@ -148,8 +149,6 @@ void Draw_AllocColorRect(int firstVertex, int secondVertex, int width, int mode)
     *ot = (*ot & maskTop) | ((u32)&p->second & mask24);
     PE1_COMPILER_USE(p);
 }
-
-
 
 static inline u32 *AllocateDrawMode(int mode) {
     u32 *packet = 0;
@@ -338,8 +337,6 @@ void Draw_AllocColorGradient(int width, int height, u8 *points, int textured)
 typedef RenderColorTilePacket TilePrim;
 typedef RenderDrawModePacket DrawModePrim;
 
-
-int VSync(int mode);
 void SetDrawTPage(void *packet, int dfe, int dtd, int tpage);
 
 void Draw_AllocColorTri(int width, int height, int pulse) {
@@ -441,7 +438,6 @@ void Draw_AllocColorTri(int width, int height, int pulse) {
         *ot = (*ot & maskTop) | ((u32)drawMode & mask24);
     }
 }
-
 
 int g_DrawGradientBlendColor;
 

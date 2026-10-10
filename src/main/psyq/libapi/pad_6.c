@@ -1,9 +1,8 @@
+#include "pe1/psyq_bios.h"
 /* PSY-Q LIBAPI PAD, part 6 of 6: RemovePatchPad, func_8007E0F8, func_8007E160. */
 
 extern void D_800A34B0;
 
-void EnterCriticalSection(void);
-void ExitCriticalSection(void);
 void SysDeqIntRP(int index, void *queue);
 
 int RemovePatchPad(void) {

@@ -2,27 +2,21 @@
 #include "pe1/menu_confirm_callback.h"
 #include "common.h"
 #include "pe1/memcard.h"
+#include "pe1/inventory_queries.h"
+#include "pe1/menu_notification_dialog.h"
+#include "pe1/menu_sound.h"
+#include "pe1/text.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --dont-expand-li */
 /* ASPSX_VERSION: 2.21 */
 
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
-MemCardSaveSlot *MemCard_GetSlot();
 s32 MenuWidget_GetCellIndex();
 M2C_UNK MenuWidget_SetCurrentNode();
 M2C_UNK Save_SetTitleStyleFlag();
 s32 func_80042964();
-M2C_UNK MemCard_CloseAllAndResetState();
 M2C_UNK func_80042B50();
-M2C_UNK Menu_CreateTwoLineDialog();
-M2C_UNK Menu_CreateMemCardProgressWidget();
-M2C_UNK Menu_PlayConfirmSound();
-M2C_UNK Menu_PlayCancelSound();
-M2C_UNK Menu_PlayErrorSound();
-M2C_UNK Util_AppendFFTerminatedBytes();
-M2C_UNK Inv_SelectActiveList();
-s32 Str_LookupTable4();
 s32 Draw_MeasureTextWidth();
 M2C_UNK MenuWidget_NavScrollTo();
 extern s32 g_MenuActiveItemList;

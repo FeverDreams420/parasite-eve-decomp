@@ -2,13 +2,13 @@
 #define PE1_MENU_INVENTORY_H
 
 #include "pe1/menu_state.h"
+#include "pe1/menu_sound.h"
 
 #include "pe1/menu_widget.h"
 
 #include "pe1/bounds_check.h"
 void MenuWidget_InitPool(void);
 void Inventory_OpenAyaItemList(unsigned int mode);
-
 
 void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
 void MenuWidget_RestoreSavedCurrentNode(void);
@@ -17,9 +17,7 @@ void MenuWidget_NavScrollTo(int selectedBase);
 int Menu_InventoryNavigate(MenuWidgetNode *current, MenuWidgetNode *node,
                            u32 flags);
 void Menu_CreateBonusPointAllocationView(void);
-void Menu_PlayCancelSound(void);
 void Menu_SetSwapReturnFlag(void);
-void Menu_PlayMoveSound(void);
 
 extern int D_8009CF18, D_8009CFB0;
 int MenuWidget_GridCellIndex(MenuWidgetNode *node);
@@ -75,7 +73,6 @@ void MenuWidget_ClampScroll(MenuWidgetNode *node);
 void MenuWidget_OffsetPosition(MenuWidgetNode *node, int dx, int dy);
 void MenuWidget_ClearCursorY(MenuWidgetNode *node);
 void Menu_OpenBonusPointSpendDialog(MenuWidgetNode *node, int stat);
-void Menu_PlayConfirmSound(void);
 void func_800490B0(void);
 int Menu_StatSlotInputHandler(MenuWidgetNode *node, unsigned int flags);
 int Menu_StepListNavigate(MenuWidgetListNavigation *node, unsigned int flags);
@@ -87,7 +84,6 @@ extern u16 D_800C0E08[]; /* Current HP. */
 extern u16 D_800C0E06[]; /* Maximum HP. */
 
 int Menu_StepNameEntry(MenuWidgetNode *parent, unsigned int flags);
-void Menu_PlayErrorSound(void);
 extern u8 *D_8009CF54;
 extern int D_8009D004;
 

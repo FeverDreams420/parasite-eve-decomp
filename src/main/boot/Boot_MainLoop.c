@@ -3,10 +3,10 @@
 #include "pe1/field_bg_load.h"
 #include "pe1/boot_stack.h"
 #include "pe1/game_state.h"
+#include "pe1/psyq_gpu.h"
 extern void InitSystem(void);
 extern void Sys_SyncShutdown(void);
 extern int OpenPeImage(void);
-extern int VSync(int arg0);
 extern void Boot_InitGameState(void);
 extern void Boot_InitSubsystems(void);
 extern void Scene_LoadSceneData(void);

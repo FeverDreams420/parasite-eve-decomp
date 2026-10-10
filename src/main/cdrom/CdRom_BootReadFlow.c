@@ -6,6 +6,7 @@
 #include "pe1/cdrom.h"
 #include "pe1/cdrom_buffers.h"
 #include "pe1/psyq_cd.h"
+#include "pe1/psyq_bios.h"
 /* Scalar symbol view still preserves the boot loader scheduling.
  * Sector read and polling routines below use the shared structure fields. */
 extern int g_GameState;
@@ -13,7 +14,6 @@ extern int g_GameState;
 extern unsigned char g_DiscChangeFlags;
 
 void ClearImage(RECT *rect, int r, int g, int b);
-int DrawSync(int arg0);
 
 void Gpu_ClearOnFlag(void) {
     u32 *state = (u32 *)&g_GameState;
@@ -37,14 +37,12 @@ void Gpu_ClearOnFlag(void) {
     }
 }
 
-
 int CdRom_ReadSectorsFromLba(u32 lba, void *destination, u32 size) {
     return CdRom_ReadSectors(lba, 0, destination, size);
 }
 
 void exit(int code);
 CdlLOC *DsIntToPos(int i, CdlLOC *p);
-int printf(char *fmt, ...);
 
 extern u_short g_CdDiskType;
 extern char D_8001136C[];
@@ -104,11 +102,7 @@ int CdRom_PollReady(void) {
 
 #define NULL ((void *)0)
 
-
 void Akao_Cmd_F0(void);
-int VSync(int mode);
-s32 EnterCriticalSection();
-s32 ExitCriticalSection();
 void FlushCache(void);
 
 DISPENV *SetDefDispEnv(DISPENV *env, int x, int y, int w, int h);

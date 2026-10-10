@@ -2,6 +2,7 @@
 #define MENU_MEMCARD_IMAGE_H
 
 #include "common.h"
+#include "pe1/menu_sound.h"
 typedef struct MemcardImage { u8 header[16]; s16 width, height; } MemcardImage;
 typedef struct MemcardImageNode {
     struct MemcardImageNode *next;
@@ -41,7 +42,5 @@ extern u8 D_801931BC[], D_8019316C[];
 s32 func_8005E038(void); /* Draw_RemapStatusFlags: pad state */
 s32 func_80042770(s32 port); /* MemCard_IsPortPresent */
 s32 func_8003FFCC(void);
-void Menu_PlayConfirmSound(void);
-void Menu_PlayMoveSound(void);
 
 #endif

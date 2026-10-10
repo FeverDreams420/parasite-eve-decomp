@@ -1,4 +1,5 @@
 #include "pe1/battle.h"
+#include "pe1/textbox.h"
 
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
@@ -38,7 +39,6 @@ extern GlobalWordObject D_8009D1AC_write __asm__("D_8009D1AC");
 extern GlobalByteObject D_8009D1CE_o __asm__("D_8009D1CE");
 
 void Pm_StopAll(void);
-void Tbl_ResetAll(void);
 void Battle_InitFadeVars(void);
 
 void Battle_Init(void)

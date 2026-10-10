@@ -1,6 +1,7 @@
 /* ASSEMBLER: GNU */
 /* Psy-Q LIBETC VSYNC.OBJ: VSync, v_wait. */
 #include "common.h"
+#include "pe1/psyq_bios.h"
 
 extern volatile u32 *gpu_status __asm__("D_80094574");
 extern volatile u32 *hblank_counter __asm__("D_80094578");
@@ -49,8 +50,6 @@ int VSync(int mode) {
 
 extern char D_800116FC[];
 
-void puts(char *arg0);
-void ChangeClearPAD(int arg0);
 int ChangeClearRCnt(int counter, int enabled);
 
 void v_wait(int arg0, int arg1) {

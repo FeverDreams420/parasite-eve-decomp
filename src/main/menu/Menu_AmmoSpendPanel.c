@@ -2,6 +2,7 @@
 #include "pe1/menu_dialog.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/inventory.h"
+#include "pe1/inventory_queries.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 
@@ -10,7 +11,6 @@
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
 
-void Inv_SelectActiveList(s32 useOverride);
 void Inv_ClearSelectionBitset(void);
 
 #define ITEM_FIELD(base, type, member) \
@@ -109,7 +109,6 @@ s32 Menu_AmmoSpendInputHandler(s32 arg0, s32 arg1) {
     }
     return 1;
 }
-
 
 int g_MenuSpendArrowDirection;
 

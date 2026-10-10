@@ -20,6 +20,7 @@
 #include "pe1/gpu_state.h"
 #include "include_asm.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/psyq_bios.h"
 
 extern unsigned char D_8009574E;
 extern unsigned char D_80095704[];
@@ -27,7 +28,6 @@ extern char D_800117E0[], D_80011800[];
 extern unsigned short D_800957CC[][2], D_800957D8[][2];
 extern GpuCallbacks *D_80095744;
 extern GpuDebugPrintf D_80095748;
-int printf(char *, ...);
 void GPU_memset(void *, int, int);
 void GPU_cw(unsigned int);
 int Gpu_InitDmaQueue(int);

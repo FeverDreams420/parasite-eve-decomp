@@ -1,12 +1,11 @@
 /* ASSEMBLER: GNU */
 /* PSY-Q LIBSPU S_SI: SpuSetIRQ. */
 #include "pe1/psyq_spu_internal.h"
+#include "pe1/psyq_bios.h"
 
 extern char D_8001208C[];
 extern char D_8001209C[];
 extern char D_800120AC[];
-
-int printf(const char *, ...);
 
 long SpuSetIRQ(long mode) {
     u32 timer;

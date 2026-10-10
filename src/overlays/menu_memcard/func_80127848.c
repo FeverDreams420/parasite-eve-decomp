@@ -3,6 +3,7 @@
 #include "pe1/boot_disc_check.h"
 #include "pe1/boot_display.h"
 #include "pe1/signed_rect.h"
+#include "pe1/psyq_gpu.h"
 
 typedef PsxSignedRect Rect;
 
@@ -12,7 +13,6 @@ extern char *D_801D11C4;
 extern int D_80193258;
 extern char D_80193268[];
 
-void DrawSync(int);
 void func_80074A44(int);
 void func_800755F0(void *);
 

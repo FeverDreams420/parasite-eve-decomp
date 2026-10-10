@@ -14,7 +14,6 @@ void Draw_OffsetCursor(int x, int y);
 int g_McDialogMode;
 int g_MenuActiveWidget;
 
-MemCardSaveSlot *MemCard_GetSlot(unsigned int port, int slot);
 int Save_GetTitleStyleFlag(void);
 
 void Menu_DrawMemCardPortList(int arg0) {

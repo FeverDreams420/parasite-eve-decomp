@@ -2,6 +2,7 @@
 /* CC1_FLAGS: -fno-cse-follow-jumps */
 /* Psy-Q LIBETC INTR_DMA.OBJ: startIntrDMA, trapIntrDMA, setIntrDMA, memclrIntrDMA. */
 #include "pe1/psyq_api_internal.h"
+#include "pe1/psyq_bios.h"
 
 DmaCallbackSetter startIntrDMA(void) {
     memclrIntrDMA((int *)g_IntrDmaHandlerTable, 8);
@@ -9,8 +10,6 @@ DmaCallbackSetter startIntrDMA(void) {
     InterruptCallback(3, trapIntrDMA);
     return setIntrDMA;
 }
-
-int printf(const char *format, ...);
 
 #define DMA_STATUS (*(volatile u32 *)g_IntrDmaDispatchPtr)
 

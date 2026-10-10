@@ -1,4 +1,5 @@
 #include "pe1/menu_state.h"
+#include "pe1/inventory_queries.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "pe1/menu_equipment.h"
@@ -33,7 +34,6 @@ void Menu_CreateContextHelpPanel(void);
 void MenuWidget_NavScrollTo(int arg0);
 MenuWidgetNode *MenuWidget_GetCurrentNode(void);
 void Inv_RebuildSelectableMask(void);
-int Inv_GetAyaSlotLimit(void);
 extern int Menu_StepItemSelectScreen(MenuWidgetNode *node, unsigned int flags);
 extern void Menu_DrawItemList(void *node);
 extern void Menu_DrawAmmoTypeHeader(MenuWidgetNode *node);

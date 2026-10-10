@@ -3,6 +3,7 @@
 #include "pe1/render_setup.h"
 #include "pe1/scene_assets.h"
 #include "pe1/psyq_nop.h"
+#include "pe1/scene_room_load.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
@@ -26,7 +27,6 @@ extern u8 D_800BEA40[];
 void Battle_InitEquipLists();
 void Entity_SetActionMode();
 void *Entity_AllocBlock();
-void Render_InitRoomPrimState();
 void Render_DrawWithAnim();
 
 FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)

@@ -170,4 +170,8 @@ void Save_BuildHeader(void);
 int Save_BuildCardFile(char *path);
 void Save_StartWriteSlot(int port, int slot);
 
+void MemCard_CloseAllAndResetState(void);
+
+MemCardSaveSlot *MemCard_GetSlot(unsigned int port, int slot);
+
 #endif

@@ -6,6 +6,8 @@
 #include "pe1/field_actor.h"
 #include "pe1/entity_animation.h"
 #include "pe1/player_entity.h"
+#include "pe1/scene_room_load.h"
+#include "pe1/scene_transition.h"
 
 extern FieldActor *g_FieldActorListHead;
 /* Global game-state flags (bit 4 = menu open, 2 = battle, 0x100 =
@@ -24,7 +26,6 @@ extern s16 D_800BCFFE[];       /* camera height (integer part) */
 
 void Battle_Update(void);
 void Inventory_OpenAyaItemList(unsigned int mode);
-int Render_BeginSceneLoad(void);
 int Menu_RunFrameWithArg(u8 *arg);
 void func_80069660(void);
 void func_8001A9F8(void);
@@ -33,14 +34,12 @@ int Scene_IsNotBattleMode(void);
 void Render_SetViewport(int *camera);
 void Render_SetGteScreenOffset(void);
 void Render_ResetGteScreenOffset(void);
-int Render_InitRoomPrimState(void *object);
 int Anim_BuildRotationMatrices(RenderObjectEntity *object, void *action, int frame, int mode);
 void Render_TransformVertices(RenderObjectEntity *object);
 void Render_TransformSkinnedVertices(RenderObjectEntity *object, u32 *view_matrix);
 void Render_TransformMorphVertices(RenderObjectEntity *object, u32 *view_matrix);
 void Render_DrawEntity(RenderObjectEntity *object, u32 *view_matrix);
 int Render_DrawRoom(void *actor);
-void Scene_LoadEntityTextures(void);
 void func_80069594(void);
 void Scene_UpdateEntityPositions(void);
 void func_80012774(void);

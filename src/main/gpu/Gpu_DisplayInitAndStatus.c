@@ -9,7 +9,6 @@
 
 void SetDispMask(int arg0);
 void ClearImage(RECT *rect, int r, int g, int b);
-void DrawSync(int arg0);
 void Draw_InitBuffers(void);
 int CdRom_SetSeekPos(unsigned int arg0);
 void Gpu_RenderFrame(void);

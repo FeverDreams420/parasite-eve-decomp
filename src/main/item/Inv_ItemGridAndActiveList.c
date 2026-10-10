@@ -1,5 +1,6 @@
 #include "common.h"
 #include "pe1/inventory_slots.h"
+#include "pe1/inventory_queries.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
@@ -18,9 +19,6 @@ extern u8 D_800A1E6D[][32];
 extern s16 D_800A1E76[][16];
 
 extern ItemDataRecord D_800A1E64[];
-
-int Inv_GetAyaSlotLimit(void);
-void Inv_SelectActiveList(int useOverride);
 
 void Util_CopyFFTerminatedBytes(u8 *dst, u8 *src)
 {

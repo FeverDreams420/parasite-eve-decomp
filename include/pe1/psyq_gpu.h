@@ -87,4 +87,8 @@ u_short GetClut(int x, int y);
  * build-checked.
  */
 
+int DrawSync(int mode);
+
+int VSync(int mode);
+
 #endif

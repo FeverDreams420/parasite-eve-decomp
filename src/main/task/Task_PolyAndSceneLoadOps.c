@@ -2,14 +2,12 @@
 #include "pe1/cdrom_buffers.h"
 #include "pe1/cdrom.h"
 #include "pe1/field_collision.h"
+#include "pe1/psyq_bios.h"
+#include "pe1/psyq_gpu.h"
 
-void EnterCriticalSection(void);
-void ExitCriticalSection(void);
 void FlushCache(void);
-int VSync(int mode);
 void ResetGraph(s32);
 void SetDispMask(s32);
-void DrawSync(s32);
 void func_801216C4(s32, s32 *);
 void func_80121C04(s32);
 void func_801223A8(s32);

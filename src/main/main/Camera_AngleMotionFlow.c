@@ -2,6 +2,7 @@
 #include "pe1/global_slot.h"
 #include "pe1/task_node.h"
 #include "pe1/field_actor.h"
+#include "pe1/gte_types.h"
 
 PE1_STATIC_ASSERT(sizeof(TaskNode) == 0x2C, camera_task_node_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, flags) == 0x08,
@@ -24,7 +25,6 @@ extern FieldActor *D_8009D2F0[];
 extern int *D_8009CE00;
 
 int Math_FixedMul(int a, int b);
-int ratan2(int y, int x);
 int rsin(int angle);
 int rcos(int angle);
 

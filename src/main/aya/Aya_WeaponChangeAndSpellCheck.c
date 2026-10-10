@@ -1,14 +1,13 @@
 #include "pe1/battle.h"
 #include "pe1/inventory.h"
+#include "pe1/inventory_queries.h"
 
 extern void **g_PlayerEntity;
 extern short g_AyaHpCurrent;
 extern signed char g_AyaEquippedWeaponSlot;
 
 int Inv_IsActiveListOverrideSelected(void);
-void Inv_SelectActiveList(int);
 extern unsigned int g_AyaParasiteSpellFlags;
-
 
 void BattleCmd_ChangeWeaponAndSync(int arg0) {
     Combatant *current;
@@ -32,7 +31,6 @@ void BattleCmd_ChangeWeaponAndSync(int arg0) {
         }
     }
 }
-
 
 int Aya_HasParasiteSpell(int spell)
 {

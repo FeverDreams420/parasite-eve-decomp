@@ -31,7 +31,6 @@ extern FieldBgTextureSlot D_80091648[4];
 extern u16 D_800930D8[];
 
 void Akao_Cmd_F1(void);
-void DrawSync(int mode);
 void ResetGraph(int mode);
 void SetDispMask(int mask);
 void Battle_DrawHPBar(void);

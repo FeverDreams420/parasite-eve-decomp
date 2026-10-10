@@ -5,12 +5,12 @@
 #include "pe1/inventory_slots.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/menu_widget.h"
+#include "pe1/inventory_queries.h"
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 
 int g_InvItemUsableFlag;
 int g_MenuActiveWidget;
 
-void Inv_SelectActiveList(int arg0);
 int Inv_GetPackedListItem(int arg0);
 void Menu_DrawActionCodeItem(int arg0);
 void MenuWidget_DrawList(int arg0, void (*callback)(void));

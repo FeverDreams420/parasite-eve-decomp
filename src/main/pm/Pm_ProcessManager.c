@@ -1,5 +1,6 @@
 #define PE1_PM_LEGACY_RAW_VIEWS
 #include "pe1/pm.h"
+#include "pe1/psyq_bios.h"
 #undef PE1_PM_LEGACY_RAW_VIEWS
 extern int g_GameState;
 
@@ -95,9 +96,7 @@ extern u16 D_80093162[];
 extern void *D_80011618;
 extern u8 D_801F1BD8[], D_801F1C58[], D_801F1D00[], D_801F1D8C[];
 extern u8 D_801F1E18[], D_801F1EA4[], D_801F1EF0[];
-void EnterCriticalSection(void);
 void FlushCache(void);
-void ExitCriticalSection(void);
 void Asset_LoadTimTextures(int);
 void func_800CE49C(PmSlotHeader *, int);
 
@@ -188,8 +187,6 @@ retry:
     D_800942E0[command]->initialize(entry);
     return slot;
 }
-
-
 
 int Pm_SendCmd(int arg0, int arg1, int arg2, int *arg3, int *arg4, int *arg5) {
     PmSlotHeader *entry;
@@ -342,7 +339,6 @@ int Pm_Start(int arg0) {
 
     return -1;
 }
-
 
 #define PE1_GAME_STATE_LEGACY_RAW_VIEW
 #include "pe1/game_state.h"
@@ -532,7 +528,6 @@ int Pm_Stop(int arg0, int arg1, int arg2) {
     return result;
 }
 
-
 static inline void clearSlot(int slot)
 {
     PmSlotHeader *entry;
@@ -585,7 +580,6 @@ int Scene_FreeEntityTable(void *owner)
     }
     return result;
 }
-
 
 extern s32 g_PlayerEntity[];
 #define g_PlayerEntity (g_PlayerEntity[0])
@@ -654,7 +648,6 @@ block_13:
     }
     return var_v0;
 }
-
 
 /* Both passes share the PM slot ABI but walk their banks in opposite order. */
 s32 Pm_StopUpperHalf(void) {

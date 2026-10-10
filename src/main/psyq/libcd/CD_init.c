@@ -2,10 +2,9 @@
 /* CC1_FLAGS: -fno-expensive-optimizations */
 /* Psy-Q LIBCD BIOS.OBJ: CD_init. */
 #include "pe1/psyq_cd.h"
+#include "pe1/psyq_bios.h"
 
 extern char D_80011C08[], D_80011C14[], D_8009B298[];
-int puts(const char *text);
-int printf(const char *format, ...);
 
 int CD_init(void) {
     const int zero = 0;

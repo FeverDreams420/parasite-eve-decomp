@@ -24,9 +24,7 @@ extern DRAWENV D_800BCDC8[2];
 extern u8 D_800B0DCD;
 extern u16 D_800B0DD4;
 
-int VSync(int mode);
 void SetDispMask(int mask);
-void DrawSync(int mode);
 void ClearImage(RECT *rect, int r, int g, int b);
 void MoveImage(RECT *rect, int x, int y);
 void ClearOTagR(u32 *table, int length);

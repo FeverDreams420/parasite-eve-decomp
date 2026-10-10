@@ -2,6 +2,7 @@
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "pe1/menu_inventory.h"
 #include "pe1/text.h"
+#include "pe1/menu_sound.h"
 
 unsigned int g_MenuSelectedItemList;
 
@@ -9,7 +10,6 @@ void Inv_BuildStorageDisplay(void);
 void MenuWidget_NavScrollTo(int arg0);
 int Inv_RestoreSelection(unsigned int arg0);
 void Menu_StepInventoryRoot(int arg0, int arg1, int arg2);
-void Menu_PlayCancelSound(void);
 
 int g_MenuEquipMode;
 

@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -G8 */
 #include "pe1/menu_confirm_callback.h"
+#include "pe1/menu_notification_dialog.h"
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
 int g_SaveSelectedSlot;
@@ -17,10 +18,8 @@ void Save_StartSelectedReadSlot(void) {
     Save_StartReadSlot(g_SaveSelectedSlot, g_SaveSlotCellIndex);
 }
 
-
 void Save_StartSelectedWriteSlot(void);
 void MemCard_SetDelayedCallback(void (*callback)(void));
-void Menu_CreateMemCardProgressWidget(int arg0);
 void MenuWidget_NavScrollTo(int selected_base);
 
 void Menu_TriggerSaveWrite(struct MenuWidgetNode *arg0, int arg1) {

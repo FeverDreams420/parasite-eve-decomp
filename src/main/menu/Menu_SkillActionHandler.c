@@ -3,6 +3,8 @@
 #include "pe1/menu_dialog.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/text.h"
+#include "pe1/inventory_queries.h"
+#include "pe1/menu_sound.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "include_asm.h"
@@ -10,11 +12,7 @@
 int MenuWidget_GetCellIndex(MenuWidgetNode *ptr);
 void Menu_CreateBonusPointAllocationView(void);
 void Menu_StepItemDetailPanel2(void);
-void Menu_PlayConfirmSound(void);
-void Menu_PlayCancelSound(void);
-void Menu_PlayErrorSound(void);
 int Inv_GetPackedListItem(int index);
-void Inv_SelectActiveList(int list);
 
 int g_MenuBattleSelectedItem;
 extern int D_8009CFB4;

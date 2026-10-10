@@ -1,6 +1,7 @@
 #include "common.h"
 #include "pe1/vector_types.h"
 #include "pe1/field_vector_math.h"
+#include "pe1/gte_types.h"
 
 int func_800DFC44(int value) {
     int result = 0;
@@ -19,8 +20,6 @@ int func_800DFC44(int value) {
 
     return result;
 }
-
-
 
 s32 func_800DFC80(Vec3Fixed *lhs, Vec3Fixed *rhs) {
     s32 dx = (lhs->x - rhs->x) >> 16;
@@ -78,7 +77,6 @@ s32 func_800DFC80(Vec3Fixed *lhs, Vec3Fixed *rhs) {
         return result;
     }
 }
-
 
 s32 func_800DFD54(Pe1Vec3s *lhs, Pe1Vec3s *rhs)
 {
@@ -142,7 +140,6 @@ s32 func_800DFD54(Pe1Vec3s *lhs, Pe1Vec3s *rhs)
   }
 }
 
-
 #include "common.h"
 
 s32 func_800DFE20(Vec3Fixed *lhs, Vec3Fixed *rhs) {
@@ -172,10 +169,7 @@ s32 func_800DFE20(Vec3Fixed *lhs, Vec3Fixed *rhs) {
     return result;
 }
 
-
 #include "common.h"
-
-s32 ratan2(s32 x, s32 z);
 
 void func_800DFE94(Vec3Fixed *from, Vec3Fixed *to, s16 *out) {
     Vec3Fixed *from_reg = from;
@@ -212,10 +206,7 @@ void func_800DFE94(Vec3Fixed *from, Vec3Fixed *to, s16 *out) {
     out[2] = 0;
 }
 
-
 #include "common.h"
-
-s32 ratan2(s32 x, s32 z);
 
 int FieldEng_VecToAngle(Vec3Fixed *from, Vec3Fixed *to) {
     return (s16)ratan2(to->x - from->x, to->z - from->z);

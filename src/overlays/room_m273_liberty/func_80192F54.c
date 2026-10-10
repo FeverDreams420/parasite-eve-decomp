@@ -2,11 +2,11 @@
 #include "common.h"
 #include "pe1/field_actor.h"
 #include "room_m273.h"
+#include "pe1/gte_types.h"
 
 extern FieldActor *g_PlayerEntity;
 extern s16 D_800966EE[];
 
-int ratan2(int x, int z);
 int func_8005186C(int squaredDistance);
 
 int func_80192F54(void) {

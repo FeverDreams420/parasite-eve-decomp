@@ -60,8 +60,6 @@ void func_8007506C(RECT *rect, void *data); /* LoadImage */
 void func_80077C84(MemcardDrawTPage *packet, s32 dfe, s32 dtd, s32 tpage); /* SetDrawTPage */
 void func_80075358(void *packet); /* DrawPrim */
 void func_800755F0(DISPENV *env); /* PutDispEnv */
-void DrawSync(s32 mode);
-s32 VSync(s32 mode);
 void SetDispMask(s32 mask);
 void func_80074A44(s32 mode);
 

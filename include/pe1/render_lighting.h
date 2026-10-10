@@ -2,6 +2,7 @@
 #define PE1_RENDER_LIGHTING_H
 
 #include "pe1/gte_types.h"
+#include "pe1/scene_room_load.h"
 
 /* MATRIX arithmetic and the packed word transfers used by the GTE. */
 typedef union RenderLightingMatrix {
@@ -21,7 +22,5 @@ typedef struct RenderLightColor {
 
 PE1_STATIC_ASSERT(sizeof(RenderLightColor) == 3, render_light_color_size);
 extern RenderLightColor D_800BD025;
-
-int Render_InitRoomPrimState(void *object);
 
 #endif

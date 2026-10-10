@@ -4,12 +4,11 @@
 /* Psy-Q LIBCD BIOS.OBJ: CD_datasync. */
 
 #include "pe1/psyq_cd.h"
+#include "pe1/psyq_bios.h"
 
 extern char D_80011B18[];
 extern char D_80011B28[];
 extern char D_80011C20[];
-int printf(const char *format, ...);
-int puts(const char *text);
 void CD_flush(void);
 
 static inline int data_timed_out(char **commands, char **events, int limit,

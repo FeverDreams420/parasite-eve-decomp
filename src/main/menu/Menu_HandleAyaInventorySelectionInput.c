@@ -3,6 +3,7 @@
 #include "pe1/menu_equipment.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/psyq_nop.h"
+#include "pe1/menu_sound.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
@@ -10,8 +11,6 @@
 
 #include "../../../tools/m2c/m2c_macros.h"
 
-void Menu_PlayConfirmSound(void);
-void Menu_PlayCancelSound(void);
 void MenuWidget_NavScrollTo(s32 selected_base);
 
 extern s32 g_MenuEquipSwapSource;

@@ -1,12 +1,12 @@
 #include "common.h"
 #include "pe1/field_engine_state.h"
+#include "pe1/psyq_bios.h"
 
 /* Field engine objects: clearing an object's script state and dispatch
  * slots, and the two per-frame passes over the 0x40 dispatch slots. */
 
 int FieldEng_GetStatus(void *obj);
 int func_800C2DA0(u16 slot);
-int printf(char *fmt);
 
 extern char *D_800E2248;
 extern u8 *D_800F34F4;

@@ -6,13 +6,11 @@
 #include "pe1/asset_tim.h"
 #include "pe1/scene_assets.h"
 #include "include_asm.h"
+#include "pe1/psyq_bios.h"
+#include "pe1/psyq_gpu.h"
 
-int VSync(int arg0);
 void SetDispMask(int arg0);
-int DrawSync(int arg0);
-void EnterCriticalSection(void);
 void FlushCache(void);
-void ExitCriticalSection(void);
 
 extern int g_PeImageBaseLba;
 extern int g_SceneLoadScratchBuffer;
@@ -33,7 +31,6 @@ extern signed char D_800B0DB6;
 extern signed char D_800B0DB7;
 
 void Akao_Cmd_F0(void);
-
 
 int Overlay_LoadTables(void) {
     int scratch;

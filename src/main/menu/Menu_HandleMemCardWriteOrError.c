@@ -2,6 +2,7 @@
 /* CC1_FLAGS: -G8 */
 #include "pe1/menu_dialog.h"
 #include "pe1/menu_inventory.h"
+#include "pe1/menu_notification_dialog.h"
 
 extern int g_MemCardProgressPrimList;
 extern void (*g_MenuDeferredCallback)(void);
@@ -12,7 +13,6 @@ void MemCard_MarkActivePortState13(void);
 void MemCard_ClearActivePrompt(void);
 int MemCard_GetActivePort(void);
 void MemCard_SetDelayedCallback(void (*callback)(void));
-void Menu_CreateTwoLineDialog(int arg0, int arg1);
 
 void Menu_HandleMemCardWriteOrError(MenuWidgetNode *arg0, int arg1) {
     char *entry;

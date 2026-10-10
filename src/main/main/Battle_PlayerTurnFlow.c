@@ -1,6 +1,7 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 #include "pe1/battle_runtime.h"
+#include "pe1/gte_types.h"
 
 extern struct { BattleEntity *value; char pad[12]; } D_8009D254_absolute __asm__("D_8009D254");
 extern struct { Combatant *value; char pad[12]; } D_8009D278_absolute __asm__("D_8009D278");
@@ -13,7 +14,6 @@ extern s16 D_8009D27C;
 extern volatile u8 D_8009CE39, D_8009CE3B;
 int Battle_CalcDistToPlayer(BattleEntity *actor, BattleEntity *player);
 s16 Battle_CalcAngleToTarget(RenderObjectEntity *object, void *target);
-int ratan2(int y, int x);
 int Battle_StepCharacterAction(BattleInitSlot *slot);
 
 #define CORE_HEALTH(entity) (((EnemyCombatant *)(entity)->core)->hpAlive)

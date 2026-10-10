@@ -3,15 +3,13 @@
 #include "pe1/menu_widget.h"
 #include "pe1/draw_state.h"
 #include "pe1/menu_scroll_cursor.h"
+#include "pe1/psyq_gpu.h"
 
 /* Contiguous widget construction, pool initialization, list drawing and layout. */
 #include "pe1/bounds_check.h"
 MenuWidgetNode *MenuWidget_FindLastMode1WithCursorX(void);
 
-
-
 #include "pe1/menu_widget.h"
-
 
 #include "common.h"
 #include "pe1/menu_widget.h"
@@ -38,8 +36,6 @@ void MenuWidget_InitPoolUnk(void) {
 #define NULL ((void *)0)
 
 #include "pe1/bounds_check.h"
-
-
 
 MenuWidgetNode *MenuWidget_AllocNode(MenuWidgetNode *arg0, MenuWidgetNode *arg1) {
     s32 var_a0;
@@ -95,7 +91,6 @@ MenuWidgetNode *MenuWidget_AllocNode(MenuWidgetNode *arg0, MenuWidgetNode *arg1)
     }
     return temp_s0;
 }
-
 
 #include "pe1/menu_inventory.h"
 MenuWidgetNode *g_MenuWidgetActiveListHead;
@@ -729,7 +724,6 @@ MenuWidgetNode *MenuWidget_FindLastMode1WithCursorX(void) {
     return result;
 }
 
-
 MenuWidgetNode *MenuWidget_CreateNode(s32 arg0, MenuWidgetNode *arg1, MenuWidgetNode *arg2) {
     s32 mode = arg0;
     register MenuWidgetNode *parent_arg asm("$20") = arg1;
@@ -903,7 +897,6 @@ int MenuWidget_GetCellIndex(MenuWidgetNode *ptr) {
 #include "pe1/draw_area.h"
 
 #include "pe1/bounds_check.h"
-int VSync(int);
 void Draw_AllocColorTri(int, int, int);
 
 typedef DrawTextCursorPair CursorPair;
@@ -1037,7 +1030,6 @@ void MenuWidget_DrawListRow(MenuWidgetNode *node,
     RowMoveCursor(0, node->disabled);
 }
 
-
 void Draw_AllocPrimWithMask(MenuWidgetNode *node)
 {
     u32 x, y;
@@ -1083,7 +1075,6 @@ static inline void PopCursor(void)
         BoundsCheck_AssertStub(3);
     }
 }
-
 
 /* Coordinate offsets use the low 32 bits of the original MIPS arithmetic. */
 static inline u32 Product(u32 size, u32 count)
@@ -1721,11 +1712,9 @@ void MenuWidget_DrawCenteredText(u8 *text) {
 #include "pe1/draw_state.h"
 #include "pe1/text.h"
 
-
 void MenuWidget_DrawCenteredTableText(int text_id) {
     Draw_PrintCenteredTextInWidth(Str_LookupTable4(text_id), D_8009D164);
 }
-
 
 #include "pe1/draw_state.h"
 
@@ -1743,11 +1732,9 @@ void Draw_DropShadow(void) {
     g_DrawSpriteY += 2;
 }
 
-
 #include "pe1/menu_inventory.h"
 
 MenuWidgetNode *g_MenuWidgetFreeListHead;
-
 
 static inline MenuWidgetNode *Allocate(MenuWidgetNode *parent,
                                        MenuWidgetNode *owner)
@@ -1804,7 +1791,6 @@ void Draw_SwapPrimBuffers(MenuWidgetNode *list)
     list->popup_node = node;
 }
 
-
 #include "pe1/menu_widget.h"
 
 void MenuWidget_DestroyPopupNode(MenuWidgetNode *node) {
@@ -1821,7 +1807,6 @@ void MenuWidget_DestroyPopupNode(MenuWidgetNode *node) {
 
 int g_DrawColorSelect, g_DrawSpriteX, g_DrawSpriteY;
 int *g_TextCursorStack;
-
 
 static inline void Offset(int x, int y) {
     g_DrawSpriteX += x;

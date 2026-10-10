@@ -1,11 +1,10 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 
 #include "pe1/inventory_slots.h"
+#include "pe1/inventory_queries.h"
 extern unsigned char g_AyaInventorySlotCount[];
 s16 *g_InvItemPtr;
 int g_InvSlotLimit;
-
-int Inv_GetAyaSlotLimit(void);
 
 void Inv_SetAyaSlotCount(int count) {
     if (count >= 0x33) {

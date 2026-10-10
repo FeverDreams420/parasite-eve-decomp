@@ -1,3 +1,4 @@
+#include "pe1/psyq_gpu.h"
 #ifndef MEMCARD_RESET_DISPLAY_STATE_NAME
 #define MEMCARD_RESET_DISPLAY_STATE_NAME func_8012A848
 #endif
@@ -40,8 +41,6 @@ extern MemcardSlot20 MEMCARD_SLOT20_SOURCE[2];
 extern MemcardSlot92 D_800BCDC8[2];
 extern MemcardSlot92 MEMCARD_SLOT92_SOURCE[2];
 
-void DrawSync(s32 mode);
-void VSync(s32 mode);
 void SetDispMask(s32 enabled);
 void func_8007512C(MemcardRect *rect, s32 x, s32 y);
 

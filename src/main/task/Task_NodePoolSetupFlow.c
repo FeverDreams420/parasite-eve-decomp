@@ -7,6 +7,7 @@
 
 #include "pe1/reloc_block.h"
 #include "pe1/task_node.h"
+#include "pe1/psyq_gpu.h"
 
 extern TaskNode *g_TaskNodeFreeListHead;
 extern int g_SceneDataTable0;
@@ -15,7 +16,6 @@ extern unsigned short g_TaskNodeSeqCounter;
 extern int g_TaskNodeActiveFlags[64];
 extern int g_TaskScriptOperandTable[16];
 
-int DrawSync(int arg0);
 void Scene_LoadMap();
 
 void Task_InitNodePool(void) {

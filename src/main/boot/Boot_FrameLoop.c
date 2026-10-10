@@ -6,6 +6,7 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/game_state.h"
 #include "pe1/room_floor.h"
+#include "pe1/scene_room_load.h"
 
 extern s32 g_GlobalFrameCounter;
 extern char D_8009D224[];
@@ -26,7 +27,6 @@ extern char D_800BEA4C[];
 extern char D_800BEA4E[];
 extern char D_800BEA50[];
 
-
 #define W(sym) (*(s32 *)(sym))
 #define H(sym) (*(s16 *)(sym))
 #define B(sym) (*(s8 *)(sym))
@@ -43,7 +43,6 @@ void Gte_SetBackColor(void *arg0, int arg1, int arg2, int arg3);
 void Gte_SetLightColor(void *arg0, int arg1, int arg2, int arg3, int arg4);
 int CdRom_DetectDiscChange(void);
 int Scene_LoadEntityTexture(void);
-int Scene_LoadEntityTextures(void);
 void Entity_RelocateSceneData(void);
 void Render_SetupFogLayer(void *source);
 void Task_DrawSyncAndFlush(void);
@@ -210,11 +209,9 @@ void Render_ResetGteScreenOffset(void);
 int Render_SetCDDCSlot(void);
 void Gpu_RenderFrame(void);
 int Render_SetFadeColour(unsigned int arg0);
-int VSync(int mode);
 void Sys_Shutdown(void);
 void Akao_StepVoiceTable(void);
 void ClearImage(RECT *rect, int r, int g, int b);
-void DrawSync(int mode);
 void Akao_Cmd_F1(void);
 void Render_Noop(int mode);
 int Asset_UnloadTableEntries(void);

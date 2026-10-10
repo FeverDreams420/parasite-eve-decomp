@@ -1,12 +1,11 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "pe1/menu_inventory.h"
+#include "pe1/menu_notification_dialog.h"
 
 unsigned int g_MenuMemCardConfirmPending;
 
 int g_McDialogMode;
-
-void Menu_CreateTwoLineDialog(int arg0, int arg1);
 
 void Menu_SetMemCardConfirmPending(void) {
     g_MenuMemCardConfirmPending = 1;

@@ -2,6 +2,7 @@
 /* MASPSX_FLAGS: -G8 */
 
 #include "pe1/menu_widget.h"
+#include "pe1/inventory_queries.h"
 
 extern MenuWidgetNode *g_MenuActiveWidget;
 
@@ -9,7 +10,6 @@ int MenuWidget_GridCellIndex(MenuWidgetNode *node);
 int Inv_RestoreSelection(unsigned int index);
 int Inv_GetActiveListItemType(int index);
 int Inv_IsActiveListOverrideSelected(void);
-void Inv_SelectActiveList(int useOverride);
 void Inv_BuildFilteredPackedListExcluding(int mask, int excluded);
 int Inv_GetPackedListCount(void);
 void MenuWidget_DrawList(MenuWidgetNode *node, void (*draw)(int));

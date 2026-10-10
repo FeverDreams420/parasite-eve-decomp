@@ -3,11 +3,11 @@
 #include "pe1/menu_dialog.h"
 #include "pe1/menu_inventory.h"
 #include "include_asm.h"
+#include "pe1/menu_queue.h"
 
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
 
-void Queue_Init(void);
 s32 Inv_GetPackedListCursor(void);
 void Menu_StepInventoryRoot(s32 arg0, s32 arg1, s32 arg2);
 void Menu_OpenRenameScreen(s32 arg0);

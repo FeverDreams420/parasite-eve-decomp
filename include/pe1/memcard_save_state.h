@@ -7,6 +7,7 @@
 #include "pe1/menu_inventory.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/psyq_libc.h"
+#include "pe1/menu_notification_dialog.h"
 
 /* PSY-Q struct DIRENTRY as filled by firstfile/nextfile. */
 typedef struct MemCardDirEntry {
@@ -31,7 +32,6 @@ unsigned int MemCard_GetDialogMode(void);
 int Menu_CreateSaveSlotListView(int port, int count);
 void Menu_ShowMemCardErrorDialog(int port);
 void Menu_DestroyMemCardProgressWidget(void);
-void Menu_CreateTwoLineDialog(int first, int second);
 void Save_LoadCardFileIntoRuntime(void);
 
 /* Card directory path "bu00:" whose port digit is patched before scans. */

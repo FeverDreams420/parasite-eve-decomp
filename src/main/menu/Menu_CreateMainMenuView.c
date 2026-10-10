@@ -1,6 +1,7 @@
 
 #include "pe1/menu_widget.h"
 #include "pe1/menu_dialog.h"
+#include "pe1/menu_sound.h"
 
 void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
 int Menu_MainMenuInputHandler(MenuWidgetNode *arg0, u32 arg1);
@@ -28,8 +29,6 @@ extern void Menu_OpenBlendColorScreen(MenuWidgetNode *arg0);
 extern void Menu_OpenScreenAdjustView(MenuWidgetNode *arg0);
 extern void Inv_InitMaxLevelInventory(int arg0);
 extern void Menu_CreateBonusPointAllocationView(void);
-extern void Menu_PlayConfirmSound(void);
-extern void Menu_PlayCancelSound(void);
 
 int Menu_MainMenuInputHandler(MenuWidgetNode *arg0, u32 arg1) {
     MenuWidgetNode *child = MenuWidget_GetChild(arg0, 0);
@@ -73,8 +72,6 @@ int Menu_MainMenuInputHandler(MenuWidgetNode *arg0, u32 arg1) {
 extern MenuWidgetNode *MenuWidget_GetChild(MenuWidgetNode *arg0, int arg1);
 extern int MenuWidget_GridCellIndex(MenuWidgetNode *arg0);
 extern void MenuWidget_SetCurrentNode(MenuWidgetNode *arg0);
-extern void Menu_PlayConfirmSound(void);
-extern void Menu_PlayCancelSound(void);
 extern void Menu_SetActionSubmenuSelection(int arg0);
 extern void MenuWidget_SetColumnLayoutMode(int arg0);
 extern void Menu_DrawActionSubmenuList(void);

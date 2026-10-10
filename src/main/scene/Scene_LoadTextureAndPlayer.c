@@ -2,7 +2,7 @@
 #include "pe1/game_state.h"
 #include "pe1/cdrom.h"
 #include "pe1/asset_tim.h"
-s32 DrawSync(s32 arg0);
+#include "pe1/psyq_gpu.h"
 extern s8 D_800B0CE0;
 extern s8 g_LoadedTexturePageId;
 extern u16 g_EntityTexLbaStartTbl[];
@@ -366,7 +366,6 @@ block_21:
 #undef g_EntityRenderScratch
 #undef D_800BEA40
 
-
 extern u32 D_8009D2E8;
 /* Existing byte symbols for the shared state's pending/current day and flags.
  * Preserve the unsigned pending-byte read before its signed-day conversion. */
@@ -410,7 +409,6 @@ int Scene_SetStoryDay(s32 storyDay) {
 
     return 0;
 }
-
 
 /* Streams the area entity bank and rebuilds the scene render object. */
 int Scene_LoadEntityTextures(void)

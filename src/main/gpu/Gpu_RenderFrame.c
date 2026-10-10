@@ -4,11 +4,8 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-
 #include "include_asm.h"
-void DrawSync(int arg0);
 void Menu_DrawSaveBg(void);
-int VSync(int mode);
 int Seq_GetElapsed(void);
 void SetDispMask(int arg0);
 void ResetGraph(int arg0);
@@ -16,7 +13,6 @@ int Gpu_CheckDrawStatus(void);
 
 extern RenderFrameState g_GameState;
 extern int g_ActiveDrawSlot;
-
 
 static inline DISPENV *DispAddress(int index) {
     return &g_RenderDispEnvArray[index];

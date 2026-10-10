@@ -2,6 +2,8 @@
 #include "common.h"
 #include "pe1/inventory.h"
 #include "pe1/menu_widget.h"
+#include "pe1/inventory_queries.h"
+#include "pe1/menu_queue.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
@@ -9,8 +11,6 @@
 #include "../../../tools/m2c/m2c_macros.h"
 void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
 void Menu_CreateContextHelpPanel(void);
-s32 Inv_GetAyaSlotLimit();
-void Queue_Init(void);
 extern s32 g_MenuSelectionLocked;
 extern s32 g_MenuActionSubmenuOpen;
 extern s32 D_8009CF5C;

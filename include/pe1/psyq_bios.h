@@ -16,7 +16,7 @@ void ExitCriticalSection(void);
 int ResetEntryInt(void);
 void ReturnFromException(void);
 void HookEntryInt(void *entry);
-void ChangeClearPAD(long enabled);
+void ChangeClearPAD(int mode);
 int ChangeClearRCnt(int counter, int enabled);
 
 #define PE1_STRINGIFY_INNER(value) #value

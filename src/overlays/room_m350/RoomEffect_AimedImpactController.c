@@ -17,7 +17,6 @@ extern unsigned char D_8019A86E, D_8019A855;
 extern short D_8019A86A;
 extern int func_80196F2C(int, Particle *);
 extern int Math_IntSqrt(int);
-extern int ratan2(int, int);
 extern int Inv_ScrambleGrid(void);
 extern int Asset_Find08w(int, int, short, short, short);
 

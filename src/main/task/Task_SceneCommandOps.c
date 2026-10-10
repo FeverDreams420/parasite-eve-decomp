@@ -5,6 +5,8 @@
 #include "common.h"
 #include "pe1/field_actor.h"
 #include "pe1/field_collision.h"
+#include "pe1/gte_types.h"
+#include "pe1/inventory_queries.h"
 
 #define NULL ((void *)0)
 
@@ -15,7 +17,6 @@ extern FieldActor *g_PlayerEntity;
 
 int rsin(int arg0);
 int rcos(int arg0);
-int ratan2(int arg0, int arg1);
 int Math_IntSqrt(int value);
 void Task_SignalExit(void);
 void Menu_SetTextCursorRect(int arg0, int arg1, int arg2, int arg3);
@@ -233,10 +234,6 @@ int Task_SetEntityFlag1000000(void) {
     return 1;
 }
 
-
-
-
-
 int Math_FixedMul(int arg0, int arg1);
 
 int Entity_PolarToPosition(int **arg0)
@@ -297,8 +294,6 @@ int Entity_PolarToPosition(int **arg0)
     return 1;
 }
 
-
-
 extern int *D_8009D248;
 extern short D_8009D1CC;
 extern char D_800BCFFC;
@@ -333,9 +328,6 @@ int func_8001A374(int **arg0) {
     return 1;
 }
 
-
-
-
 int Entity_CallAction(int **arg0)
 {
     int **args;
@@ -355,11 +347,7 @@ int Entity_CallAction(int **arg0)
     return 1;
 }
 
-
-
-
 int Inv_CountTotal(void);
-int Inv_GetAyaSlotLimit(void);
 
 int Task_SetInventorySlotPointer(int **arg0) {
     D_8009D248 = (int *)(g_CurrentEntity->script_base + (*arg0[0] << 1));

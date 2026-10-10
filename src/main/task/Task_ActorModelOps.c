@@ -184,8 +184,6 @@ pop_state:
 
 #define NULL ((void *)0)
 
-int ratan2(int arg0, int arg1);
-
 extern FieldActor *g_PlayerEntity[];
 #define g_PlayerEntity (g_PlayerEntity[0])
 extern FieldActor *g_FieldActorListHead[];

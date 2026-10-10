@@ -10,6 +10,8 @@
 #include "pe1/text.h"
 #include "pe1/inventory_slots.h"
 #include "pe1/draw_state.h"
+#include "pe1/inventory_queries.h"
+#include "pe1/menu_sound.h"
 
 /* Item action submenu, skill/stat point use, the equip stats panel and the
  * item detail and item list views of the inventory menu. Contiguous at
@@ -22,9 +24,6 @@ int D_8009CFBC;
 int MenuWidget_GetCellIndex(MenuWidgetNode *ptr);
 void Menu_CreateItemActionSubmenu(void);
 void Menu_CreateItemList(void);
-void Menu_PlayConfirmSound(void);
-void Menu_PlayErrorSound(void);
-void Menu_PlayCancelSound(void);
 int g_MenuActionTextBase;
 void Menu_DrawItemActionSubmenu(void);
 int g_InvItemUsableFlag;
@@ -64,11 +63,9 @@ static inline void Menu_CreateScreenModeSubmenu(void) {
 
 void Menu_OpenItemList(void);
 void Menu_StepInventoryRoot(s32 arg0, s32 arg1, s32 arg2);
-void Menu_PlayMoveSound(void);
 void Inv_BuildStorageDisplay(void);
 void MenuWidget_NavScrollTo(s32 selected_base);
 extern void Menu_DrawUsableItemActionList2(void);
-extern void Inv_SelectActiveList(int arg0);
 extern MenuWidgetNode *MenuWidget_FindByModeAndSelectedBase(int mode, int selectedBase);
 extern void Inv_InitWayneStorage(void);
 extern MenuWidgetNode *MenuWidget_GetChild(MenuWidgetNode *arg0, int arg1);

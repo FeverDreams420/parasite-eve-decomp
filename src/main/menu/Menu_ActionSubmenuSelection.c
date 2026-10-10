@@ -1,5 +1,6 @@
 #include "pe1/menu_state.h"
 #include "pe1/inventory_slots.h"
+#include "pe1/menu_queue.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
@@ -25,7 +26,6 @@ void Inv_SetDefaultItemId(void);
 void Draw_InitBuffers(void);
 void MenuWidget_InitPoolUnk(void);
 void Sys_InitStateBuffer(void);
-void Queue_Init(void);
 void MemCard_ClearDelayedCallback(void);
 void BattleCmd_InitTableCursor(void);
 void Inv_BuildItemGridFromCategory(void);

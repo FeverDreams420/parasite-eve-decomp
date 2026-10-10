@@ -1,5 +1,6 @@
 #include "common.h"
 #include "pe1/menu_widget.h"
+#include "pe1/menu_sound.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
@@ -7,8 +8,6 @@
 #include "../../../tools/m2c/m2c_macros.h"
 void MenuWidget_OffsetPosition(MenuWidgetNode *node, int dx, int dy);
 void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
-void Menu_PlayConfirmSound(void);
-void Menu_PlayErrorSound(void);
 int Inv_GetActiveListItemType(int index);
 int Inv_GetPackedListCount(void);
 void Inv_BuildFilteredPackedList(int mask);

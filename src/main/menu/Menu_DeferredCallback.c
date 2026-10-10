@@ -1,10 +1,9 @@
 #include "pe1/menu_widget.h"
+#include "pe1/menu_sound.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
 void (*g_MenuDeferredCallback)(void);
-
-void Menu_PlayConfirmSound(void);
 
 void Menu_SetDeferredCallback(void (*callback)(void)) {
     g_MenuDeferredCallback = callback;

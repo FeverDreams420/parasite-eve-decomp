@@ -7,6 +7,7 @@
 #include "pe1/inventory_slots.h"
 #include "pe1/text.h"
 #include "pe1/draw_state.h"
+#include "pe1/inventory_queries.h"
 
 void Draw_StatePush(void);
 void Draw_StatePop(void);
@@ -21,7 +22,6 @@ int Inv_GetWayneListItemByIndex(int index);
 int Inv_GetPackedListCount(void);
 int Inv_GetPackedListItem(int index);
 int Inv_RestoreSelection(unsigned int index);
-void Inv_SelectActiveList(int list);
 int Menu_GetBattleCountEntry(int index);
 int MemCard_PollTransferDelay(void);
 int MemCard_IsPortPresent(int port);

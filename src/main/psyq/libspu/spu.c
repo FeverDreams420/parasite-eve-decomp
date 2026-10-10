@@ -82,7 +82,6 @@ int _spu_init(int hot) {
 }
 
 extern char D_80011C4C[], D_80011C6C[], D_80011C80[];
-int printf(const char *, ...);
 
 void _spu_FwriteByIO(void *address, u32 size) {
     u16 *source = address;
@@ -136,7 +135,6 @@ void _spu_FwriteByIO(void *address, u32 size) {
         }
     }
 }
-
 
 int DeliverEvent(u32 event, u32 spec);
 

@@ -2,6 +2,8 @@
 #include "pe1/draw_state.h"
 #include "pe1/menu_dialog.h"
 #include "pe1/menu_inventory.h"
+#include "pe1/menu_sound.h"
+#include "pe1/psyq_gpu.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
@@ -107,9 +109,6 @@ void Menu_DrawBlendColorChannelListUnk(MenuWidgetNode *arg0) {
 
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
-void Menu_PlayConfirmSound(void);
-void Menu_PlayCancelSound(void);
-void Menu_PlayMoveSound(void);
 int Draw_GetBlendColor(void);
 extern s32 D_8009CFE0;
 extern s32 g_SavedDrawBlendColor[];
@@ -219,7 +218,6 @@ void Menu_OpenScreenAdjustView(int arg0) {
 void Draw_OffsetCursor(int arg0, int arg1);
 int Draw_GetBaseY(void);
 void Draw_PrintSignedNumberWidth3(int arg0);
-int VSync(int arg0);
 void Draw_SetTextDimmed(int arg0);
 void Draw_AllocSprite(int arg0);
 void Draw_EmitGlyph(int arg0, int arg1);
@@ -240,9 +238,6 @@ extern int D_8009CFE4;
 
 void Draw_SetBaseOffsetPosition(int x, int y);
 int Draw_GetBaseY(void);
-void Menu_PlayMoveSound(void);
-void Menu_PlayConfirmSound(void);
-void Menu_PlayCancelSound(void);
 
 int func_8004B650(void *node, int input) {
     int zero_arg;

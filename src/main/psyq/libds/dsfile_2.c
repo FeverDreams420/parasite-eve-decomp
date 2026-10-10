@@ -2,12 +2,11 @@
 /* Psy-Q LIBDS DSFILE.OBJ, part 2 of 2: DS_cachefile, DS_newmedia, DS_searchdir, ds_read. */
 #include "pe1/psyq_ds.h"
 #include "pe1/cdrom.h"
+#include "pe1/psyq_bios.h"
 
 CdlLOC *DsIntToPos(int sector, CdlLOC *position);
 void *memcpy(void *, const void *, unsigned int);
 int strcmp(const char *, const char *);
-int printf(const char *, ...);
-int puts(const char *);
 
 extern const char D_80011EF8[], D_80011F24[], D_80011F2C[], D_80011F5C[];
 extern const char D_80011F80[], D_80011FA0[], D_80011FB4[];

@@ -18,7 +18,6 @@ int setjmp(void *env);
 void Render_InitSceneGeom(void);
 void HookEntryInt(void *entry);
 void _96_remove(void *arg);
-void ExitCriticalSection(void);
 
 u16 *Sys_InitIntrManager(void) {
     register u16 *state asm("$16");
@@ -132,7 +131,6 @@ void Render_InitSceneGeom(void)
     D_800945E6 = 0;
     ReturnFromException();
 }
-
 
 PsyqInterruptHandler Sys_SetIntrCallback(int channel, PsyqInterruptHandler handler) {
     PsyqInterruptHandler *handlers = D_800945E8;

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "pe1/gte_types.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --expand-div */
 
@@ -345,7 +346,6 @@ extern u8 *D_8009D2F0[];
 extern int *D_8009CE00;
 
 int Math_FixedMul(int a, int b);
-int ratan2(int y, int x);
 int rsin(int angle);
 int rcos(int angle);
 
@@ -483,7 +483,6 @@ extern u8 *D_8009D2F0[];
 extern int *D_8009CE00;
 
 int Math_FixedMul(int a, int b);
-int ratan2(int y, int x);
 int rsin(int angle);
 int rcos(int angle);
 

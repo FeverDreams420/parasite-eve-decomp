@@ -11,7 +11,6 @@
 
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
-MemCardSaveSlot *MemCard_GetSlot(unsigned int port, int slot);
 void *func_8005DD8C();
 M2C_UNK func_8005F5B8();
 void Draw_PrintNumberWidth3Unk(int value);

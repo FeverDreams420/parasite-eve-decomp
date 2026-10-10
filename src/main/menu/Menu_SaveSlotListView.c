@@ -1,5 +1,6 @@
 #include "common.h"
 #include "pe1/menu_widget.h"
+#include "pe1/menu_queue.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
@@ -7,7 +8,7 @@
 #include "m2c_macros.h"
 s32 MenuWidget_FindLastMode1WithCursorX();          /* extern */
 M2C_UNK MenuWidget_SetCurrentNode(void *);          /* extern */
-M2C_UNK Queue_Init();                            /* extern */
+                            /* extern */
 s32 MenuWidget_GridCellIndex(void *);                          /* extern */
 extern s32 g_SaveSelectedSlot;
 extern M2C_UNK (*g_MenuDeferredCallback)();

@@ -1,11 +1,11 @@
 #include "common.h"
 #include "pe1/battle.h"
+#include "pe1/gte_types.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
 #define NULL ((void *)0)
 s32 Battle_CalcDistToPlayer();
-s32 ratan2();
 extern s8 g_BattleTargetIndex;
 extern struct { char _[16]; } D_8009D20C_o __asm__("g_FieldActorListHead");
 #define g_FieldActorListHead (*(void **)&D_8009D20C_o)

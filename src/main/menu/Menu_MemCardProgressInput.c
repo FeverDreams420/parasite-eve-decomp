@@ -1,4 +1,5 @@
 #include "pe1/menu_widget.h"
+#include "pe1/inventory_queries.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "pe1/menu_inventory.h"
@@ -7,7 +8,6 @@
 
 void MenuWidget_SaveAndSetCurrentNode(MenuWidgetNode *arg0);
 int MemCard_GetActivePort(void);
-void Inv_SelectActiveList(int list);
 void Menu_CreateNotificationDialog(int arg0, int arg1);
 void MemCard_ClearActivePrompt(void);
 

@@ -2,6 +2,7 @@
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
 #include "pe1/menu_queue.h"
+#include "pe1/psyq_gpu.h"
 
 MenuQueueEntry *g_MenuEventQueueFreeList;
 MenuQueueEntry *g_MenuEventQueueHead;
@@ -9,7 +10,6 @@ MenuQueueEntry *g_MenuEventQueueTail;
 int g_MenuInputActive;
 int g_MenuInputPollingPaused;
 int g_MenuInputHeldStatusMask;
-
 
 #include "pe1/bounds_check.h"
 
@@ -388,7 +388,6 @@ void MenuInput_DispatchQueuedEvents(void) {
     }
 }
 
-
 int MenuInput_HasConfirm(void) {
     int ret;
     int mask;
@@ -553,8 +552,6 @@ void Draw_SelectBuffer(void) {
     }
 }
 
-int VSync(int arg0);
-void DrawSync(int arg0);
 void ResetGraph(int arg0);
 
 static inline int NormalizeSyncMode(int mode) {

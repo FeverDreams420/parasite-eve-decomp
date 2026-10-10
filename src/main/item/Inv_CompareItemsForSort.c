@@ -3,7 +3,7 @@
 
 #include "pe1/inventory_sort.h"
 #include "pe1/psyq_libc.h"
-
+#include "pe1/inventory_queries.h"
 
 int Inv_CompareItemsForSort(const void *leftElement, const void *rightElement) {
     const short *leftIndex = leftElement;
@@ -82,7 +82,6 @@ left_item_is_empty:
 /* MASPSX_FLAGS: -G8 */
 
 #include "pe1/inventory.h"
-
 
 int Inv_CompareItemsByStatForSort(const void *leftElement, const void *rightElement)
 {
@@ -237,7 +236,6 @@ void Inv_SortAmmoSubrange(void) {
 
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
-s32 Inv_GetAyaSlotLimit();
 void Inv_SortWeaponSubrange(void);
 void Inv_SortAmmoSubrange(void);
 extern M2C_UNK g_InvSortRankTableA[];

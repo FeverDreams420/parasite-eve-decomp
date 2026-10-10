@@ -1,4 +1,5 @@
 #include "pe1/menu_state.h"
+#include "pe1/menu_sound.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
@@ -115,7 +116,6 @@ done:
     return (unsigned int)result >> 31;
 }
 
-
 void Menu_ResetInputState(void) {
     g_SavedMenuMode.value = Menu_GetActiveMode() & 0xFF;
     Window_SetBoundsByMode(0);
@@ -123,10 +123,8 @@ void Menu_ResetInputState(void) {
 
 /* Open the player inventory using the same saved menu mode. */
 
-
 void BattleCmd_SyncActiveAmmo(void);
 void Menu_CreateInventoryTabView(void);
-void Menu_PlayConfirmSound(void);
 
 void Inventory_OpenAyaItemList(unsigned int arg) {
     g_MenuBattleEquipMode = arg;
@@ -144,7 +142,6 @@ void Inventory_OpenAyaItemList(unsigned int arg) {
 /* Memory-card dialog gating from the inventory frontend. */
 #include "pe1/menu_state.h"
 #include "pe1/game_state.h"
-
 
 void MemCard_CloseAll(void);
 

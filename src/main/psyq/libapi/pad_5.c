@@ -2,13 +2,12 @@
 /* CC1_FLAGS: -mno-split-addresses */
 /* PSY-Q LIBAPI PAD, part 5 of 6: Sys_SetInterruptHandler. */
 #include "common.h"
+#include "pe1/psyq_bios.h"
 
 extern int D_800A34B0;
 extern void (*D_800A34B4[2])(void);
 extern int D_800A34BC;
 
-void EnterCriticalSection(void);
-void ExitCriticalSection(void);
 void SysDeqIntRP(int index, void *queue);
 void SysEnqIntRP(int index, void *queue);
 void func_8007E0F8(void);

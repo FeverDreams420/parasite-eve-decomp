@@ -3,6 +3,7 @@
 
 #include "pe1/battle_runtime.h"
 #include "pe1/psyq_nop.h"
+#include "pe1/gte_types.h"
 
 typedef struct BattleGlobalSlot {
     char storage[16];
@@ -71,7 +72,6 @@ void Battle_FinalizeAttackResult(void)
     }
 }
 
-
 extern char battle_entity_alias_0[16] __asm__("D_8009D254");
 extern char battle_entity_alias_6[16] __asm__("D_8009D254");
 extern char battle_entity_alias_7[16] __asm__("D_8009D254");
@@ -81,7 +81,6 @@ extern char battle_sfx_slot_large[16] __asm__("D_8009D2FC");
 extern u8 D_8009D274, D_8009CE39, D_8009CE3A;
 extern s16 D_8009D27C;
 extern int D_8009D2FC;
-int ratan2(int y, int x);
 int BattleCmd_CommitAmmoAndUpdate(void);
 
 #define D_8009D254 (*(BattleEntity **)battle_entity_alias_0)
