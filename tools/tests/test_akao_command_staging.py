@@ -9,8 +9,9 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class CommandStagingTests(unittest.TestCase):
-    def test_translation_unit_is_plain_c(self):
-        source = (ROOT/'src/main/akao/Akao_CommandSenders.c').read_text()
+    def test_command_senders_are_plain_c(self):
+        source = (ROOT/'src/main/akao/Akao_SpuVoiceDriver.c').read_text()
+        source = source[:source.index('int Spu_PollOrWaitSeqBusy(')]
         source = re.sub(r'/\*.*?\*/|//[^\n]*', '', source, flags=re.S)
         self.assertNotRegex(source, r'\b(?:asm|__asm__|INCLUDE_ASM|CC_POSTPASS)\b')
 

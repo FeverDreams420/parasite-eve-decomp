@@ -152,7 +152,7 @@ segments:
       - [0x28BC, .rodata, psyq/libspu/s_sca]
       - [0x28FC, .rodata, psyq/libspu/s_svva]
       - [0x2938, rodata, main/rodata_002938]
-      - [0x293C, .rodata, akao/Akao_NoteTimingFlow]
+      - [0x293C, .rodata, akao/Akao_SequencerFlow]
       - [0x2A0C, c, boot/Boot_MainLoop]
       # Node-pool init, scene relocation, map flush and free-list setup share
       # the task-node pool and g_SceneDataTable1 (main_tu_evidence G0001).
@@ -1085,18 +1085,12 @@ segments:
       - [0x76AF0, pad]
       - [0x76AF4, c, psyq/libspu/s_svva]
       - [0x76C60, pad]
-      # Game-side AKAO command senders: each stages g_AkaoCmd and enqueues it;
-      # contiguous default-profile run with no split evidence.
-      - [0x76C64, c, akao/Akao_CommandSenders]
-      # SPU sample-bank uploads: transfer polling, master volume, the stream-mode
-      # flag D_8009D270 shared by both upload paths, and the bank upload/rebase
-      # routines; contiguous default-profile run with no split evidence.
-      - [0x77850, c, akao/Akao_SampleBankUpload]
-      # SPU voice control: register writers, per-voice parameter updates, envelope
-      # ticks, key on/off, stereo slot copies, and the voice queue and mask
-      # setters share AkaoTrack voice state (helper evidence 21 across the key and
-      # queue functions); contiguous default-profile run with no split evidence.
-      - [0x77F0C, c, akao/Akao_SpuVoiceControl]
+      # Game-side AKAO command senders, SPU sample-bank uploads (transfer
+      # polling, master volume, stream-mode flag, bank upload/rebase) and SPU
+      # voice control (register writers, per-voice parameters, envelope ticks,
+      # key on/off, voice queue and mask setters): one contiguous
+      # default-profile AKAO driver unit sharing AkaoTrack voice state.
+      - [0x76C64, c, akao/Akao_SpuVoiceDriver]
       - [0x7A6B8, c, psyq/libspu/s_snc]
       - [0x7A708, c, psyq/libspu/s_gvex]
       - [0x7A724, pad]
@@ -1109,10 +1103,10 @@ segments:
       - [0x7DE10, c, psyq/libspu/s_crwa]
       - [0x7DFA4, pad]
       - [0x7DFB0, c, psyq/libapi/a10]
-      # SPU ticking, sample-bank scanning and note stepping share AKAO track state.
-      - [0x7DFC0, c, akao/Akao_NoteTimingFlow]
-      # Track parameters, slides, masks and note commands share AKAO track state.
-      - [0x7F8D0, c, akao/Akao_TrackCommandAndNoteFlow]
+      # SPU ticking, sample-bank scanning, note stepping, track parameters,
+      # slides, masks and note commands: the --expand-div sequencer unit
+      # sharing AKAO track state.
+      - [0x7DFC0, c, akao/Akao_SequencerFlow]
       - [0x818A0, data, main/dtail_gp_pre_s016]
       - [0x84D28, .data, psyq/libc/sprintf]
       - [0x84D34, data, main/dtail_gp_post_sprintf]

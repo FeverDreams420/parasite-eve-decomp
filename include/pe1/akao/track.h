@@ -212,7 +212,7 @@ typedef struct AkaoTrack {
     /* 0x06A */ AkaoS16 volume;
     /* 0x06C */ AkaoU16 volume_base;
     /* 0x06E */ AkaoU16 volume_duration;
-    /* 0x070 */ AkaoU16 pitch_offset_duration; /* countdown in Akao_NoteTimingFlow */
+    /* 0x070 */ AkaoU16 pitch_offset_duration; /* countdown in Akao_SequencerFlow */
     /* 0x072 */ AkaoU16 expression_duration;
     /* 0x074 */ AkaoU16 panpot_duration;
     /* 0x076 */ AkaoU16 panpot; /* 8.8 stereo position, set by the voice pan commands */

@@ -1,9 +1,666 @@
 #include "common.h"
+#include "pe1/akao/commands.h"
 #include "pe1/akao.h"
-#include "pe1/akao/track.h"
 #include "pe1/akao/voice_state.h"
+#include "pe1/akao/track.h"
 #include "pe1/akao/voice_masks.h"
 #include "pe1/psyq_spu_internal.h"
+
+void Akao_Cmd_10(int arg0) {
+    g_AkaoCmd.opcode = 0x10;
+    g_AkaoCmd.arg0.value = arg0;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_11(int arg0) {
+    g_AkaoCmd.opcode = 0x11;
+    g_AkaoCmd.arg0.value = arg0;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_40(void) {
+    g_AkaoCmd.opcode = 0x40;
+    Akao_EnqueueStagedCommand();
+}
+
+int Akao_Cmd_19_Then_C0(int arg0, int arg1) {
+    int *opcode;
+    int saved_arg;
+    int next_opcode;
+    int ret;
+
+    opcode = &g_AkaoCmd.opcode;
+    *opcode = 0x19;
+    g_AkaoCmd.arg0.value = arg0;
+    saved_arg = arg1;
+    ret = Akao_EnqueueStagedCommand();
+
+    next_opcode = 0xC0;
+    *opcode = next_opcode;
+    saved_arg &= 0x7F;
+    g_AkaoCmd.arg0.value = saved_arg;
+    g_AkaoCmd.arg3 = 0;
+    saved_arg = ret;
+    Akao_EnqueueStagedCommand();
+
+    return saved_arg;
+}
+
+void Akao_Cmd_12(int arg0, int arg1) {
+    g_AkaoCmd.opcode = 0x12;
+    g_AkaoCmd.arg0.value = arg0;
+    g_AkaoCmd.arg1 = arg1;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_20(int arg0, int arg1, int arg2, int arg3) {
+    g_AkaoCmd.opcode = 0x20;
+    g_AkaoCmd.arg0.value = arg0 & 0x3FF;
+    g_AkaoCmd.arg1 = arg1 & 0xFFFFFF;
+    g_AkaoCmd.arg2 = arg2 & 0xFF;
+    g_AkaoCmd.arg3 = arg3 & 0x7F;
+    Akao_EnqueueStagedCommand();
+}
+
+int Akao_Cmd_24(void *header, int arg1, int arg2, int arg3) {
+    int status = Spu_ValidateSampleHeader(header);
+    if (status != 0) {
+        return status;
+    }
+
+    g_AkaoCmd.opcode = 0x24;
+    g_AkaoCmd.arg0.command_data = ((AkaoFilePrefix *)header)->contents;
+    g_AkaoCmd.arg1 = arg1 & 0xFFFFFF;
+    g_AkaoCmd.arg2 = arg2 & 0xFF;
+    g_AkaoCmd.arg3 = arg3 & 0x7F;
+    return Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_21(int arg0, int arg1) {
+    g_AkaoCmd.opcode = 0x21;
+    g_AkaoCmd.arg0.value = arg0 & 0xFFFF;
+    g_AkaoCmd.arg1 = arg1 & 0xFFFFFF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_30(int arg0) {
+    g_AkaoCmd.opcode = 0x30;
+    g_AkaoCmd.arg0.value = arg0 & 0x3FF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_80_81_82(int arg0) {
+    int opcode;
+
+    switch (arg0) {
+    case 1:
+        opcode = 0x81;
+        break;
+    case 2:
+        opcode = 0x82;
+        break;
+    default:
+        opcode = 0x80;
+        break;
+    }
+
+    g_AkaoCmd.opcode = opcode;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_90(int arg0) {
+    g_AkaoCmd.opcode = 0x90;
+    g_AkaoCmd.arg0.value = arg0 & 0xFFFFFF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_92(int arg0) {
+    g_AkaoCmd.opcode = 0x92;
+    g_AkaoCmd.arg0.value = arg0;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_99_9B_9D(int arg0) {
+    int opcode;
+
+    switch (arg0) {
+    case 1:
+        opcode = 0x9B;
+        break;
+    case 2:
+        opcode = 0x9D;
+        break;
+    default:
+        opcode = 0x99;
+        break;
+    }
+
+    g_AkaoCmd.opcode = opcode;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_98_9A_9C(int arg0) {
+    int opcode;
+
+    switch (arg0) {
+    case 1:
+        opcode = 0x9A;
+        break;
+    case 2:
+        opcode = 0x9C;
+        break;
+    default:
+        opcode = 0x98;
+        break;
+    }
+
+    g_AkaoCmd.opcode = opcode;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_A8(int arg0) {
+    g_AkaoCmd.opcode = 0xA8;
+    g_AkaoCmd.arg0.value = arg0 & 0x7F;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_A9(int arg0, int arg1) {
+    g_AkaoCmd.opcode = 0xA9;
+    g_AkaoCmd.arg0.value = arg0 & 0xFF;
+    g_AkaoCmd.arg1 = arg1 & 0x7F;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_A0(int arg0, int arg1, int arg2) {
+    g_AkaoCmd.opcode = 0xA0;
+    g_AkaoCmd.arg0.value = arg0 & 0xFFFF;
+    g_AkaoCmd.arg1 = arg1 & 0xFFFFFF;
+    g_AkaoCmd.arg2 = arg2 & 0x7F;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_A1(int arg0, int arg1, int arg2, int arg3) {
+    g_AkaoCmd.opcode = 0xA1;
+    g_AkaoCmd.arg0.value = arg0 & 0xFFFF;
+    g_AkaoCmd.arg1 = arg1 & 0xFFFFFF;
+    g_AkaoCmd.arg2 = arg2 & 0xFF;
+    g_AkaoCmd.arg3 = arg3 & 0x7F;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_AA(int arg0) {
+    g_AkaoCmd.opcode = 0xAA;
+    g_AkaoCmd.arg0.value = arg0 & 0xFF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_AB(int arg0, int arg1) {
+    g_AkaoCmd.opcode = 0xAB;
+    g_AkaoCmd.arg0.value = arg0 & 0xFF;
+    g_AkaoCmd.arg1 = arg1 & 0xFF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_A2(int arg0, int arg1, int arg2) {
+    g_AkaoCmd.opcode = 0xA2;
+    g_AkaoCmd.arg0.value = arg0 & 0x3FF;
+    g_AkaoCmd.arg1 = arg1 & 0xFFFFFF;
+    g_AkaoCmd.arg2 = arg2 & 0xFF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_A3(int arg0, int arg1, int arg2, int arg3) {
+    g_AkaoCmd.opcode = 0xA3;
+    g_AkaoCmd.arg0.value = arg0 & 0x3FF;
+    g_AkaoCmd.arg1 = arg1 & 0xFFFFFF;
+    g_AkaoCmd.arg2 = arg2 & 0xFF;
+    g_AkaoCmd.arg3 = arg3 & 0xFF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_AC(int arg0) {
+    g_AkaoCmd.opcode = 0xAC;
+    g_AkaoCmd.arg0.value = arg0 & 0xFF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_AD(int arg0, int arg1) {
+    g_AkaoCmd.opcode = 0xAD;
+    g_AkaoCmd.arg0.value = arg0 & 0xFF;
+    g_AkaoCmd.arg1 = arg1 & 0xFF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_A4(int arg0, int arg1, int arg2) {
+    g_AkaoCmd.opcode = 0xA4;
+    g_AkaoCmd.arg0.value = arg0 & 0xFFFF;
+    g_AkaoCmd.arg1 = arg1 & 0xFFFFFF;
+    g_AkaoCmd.arg2 = arg2 & 0xFF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_A5(int arg0, int arg1, int arg2, int arg3) {
+    g_AkaoCmd.opcode = 0xA5;
+    g_AkaoCmd.arg0.value = arg0 & 0xFFFF;
+    g_AkaoCmd.arg1 = arg1 & 0xFFFFFF;
+    g_AkaoCmd.arg2 = arg2 & 0xFF;
+    g_AkaoCmd.arg3 = arg3 & 0xFF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_C0_WithSlot(int arg0, int arg1) {
+    g_AkaoCmd.opcode = 0xC0;
+    g_AkaoCmd.arg0.value = arg1 & 0x7F;
+    g_AkaoCmd.arg3 = arg0;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_C1_WithSlot(int arg0, int arg1, int arg2) {
+    g_AkaoCmd.opcode = 0xC1;
+    g_AkaoCmd.arg0.value = arg1;
+    g_AkaoCmd.arg1 = arg2 & 0x7F;
+    g_AkaoCmd.arg3 = arg0;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_C2_WithSlot(int arg0, int arg1, int arg2, int arg3) {
+    g_AkaoCmd.opcode = 0xC2;
+    g_AkaoCmd.arg0.value = arg1;
+    g_AkaoCmd.arg1 = arg2 & 0x7F;
+    g_AkaoCmd.arg2 = arg3 & 0x7F;
+    g_AkaoCmd.arg3 = arg0;
+    Akao_EnqueueStagedCommand();
+}
+
+void func_80086CF8(int arg0) {
+    g_AkaoCmd.opcode = 0xC8;
+    g_AkaoCmd.arg0.value = arg0;
+    Akao_EnqueueStagedCommand();
+}
+
+void func_80086D2C(int arg0, int arg1) {
+    g_AkaoCmd.opcode = 0xC9;
+    g_AkaoCmd.arg0.value = arg0;
+    g_AkaoCmd.arg1 = arg1;
+    Akao_EnqueueStagedCommand();
+}
+
+void func_80086D68(int arg0, int arg1, int arg2) {
+    g_AkaoCmd.opcode = 0xCA;
+    g_AkaoCmd.arg0.value = arg0;
+    g_AkaoCmd.arg1 = arg1;
+    g_AkaoCmd.arg2 = arg2;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_D0(int arg0) {
+    g_AkaoCmd.opcode = 0xD0;
+    g_AkaoCmd.arg0.value = arg0 & 0xFF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_D1(int arg0, int arg1) {
+    g_AkaoCmd.opcode = 0xD1;
+    g_AkaoCmd.arg0.value = arg0;
+    g_AkaoCmd.arg1 = arg1 & 0xFF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_D2(int arg0, int arg1, int arg2) {
+    g_AkaoCmd.opcode = 0xD2;
+    g_AkaoCmd.arg0.value = arg0;
+    g_AkaoCmd.arg1 = arg1 & 0xFF;
+    g_AkaoCmd.arg2 = arg2 & 0xFF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_D4(int arg0) {
+    g_AkaoCmd.opcode = 0xD4;
+    g_AkaoCmd.arg0.value = arg0 & 0xFF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_D5(int arg0, int arg1) {
+    g_AkaoCmd.opcode = 0xD5;
+    g_AkaoCmd.arg0.value = arg0;
+    g_AkaoCmd.arg1 = arg1 & 0xFF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_D6(int arg0, int arg1, int arg2) {
+    g_AkaoCmd.opcode = 0xD6;
+    g_AkaoCmd.arg0.value = arg0;
+    g_AkaoCmd.arg1 = arg1 & 0xFF;
+    g_AkaoCmd.arg2 = arg2 & 0xFF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_D8(int arg0) {
+    g_AkaoCmd.opcode = 0xD8;
+    g_AkaoCmd.arg0.value = arg0 & 0xFF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_D9(int arg0, int arg1) {
+    g_AkaoCmd.opcode = 0xD9;
+    g_AkaoCmd.arg0.value = arg0;
+    g_AkaoCmd.arg1 = arg1 & 0xFF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_DA(int arg0, int arg1, int arg2) {
+    g_AkaoCmd.opcode = 0xDA;
+    g_AkaoCmd.arg0.value = arg0;
+    g_AkaoCmd.arg1 = arg1 & 0xFF;
+    g_AkaoCmd.arg2 = arg2 & 0xFF;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_F0(void) {
+    g_AkaoCmd.opcode = 0xF0;
+    Akao_EnqueueStagedCommand();
+}
+
+void Akao_Cmd_F1(void) {
+    g_AkaoCmd.opcode = 0xF1;
+    Akao_EnqueueStagedCommand();
+}
+
+extern volatile int D_8009D2E0;
+
+int Spu_PollOrWaitSeqBusy(int mode) {
+    if (mode == 0) {
+        while (D_8009D2E0 & 1) {
+        }
+        return 0;
+    }
+
+    return D_8009D2E0 & 1;
+}
+
+int func_800851A8(void *arg0, int arg1);
+
+void Spu_UploadSampleBlockBlocking(void *arg0, int arg1) {
+    while (func_800851A8(arg0, arg1) == 1) {
+    }
+}
+
+extern int D_8009D24C;
+
+int Spu_GetTransferStatus(void) {
+    return D_8009D24C;
+}
+
+extern unsigned char D_8009D1C8;
+extern unsigned char D_8009D1C9;
+extern unsigned char D_8009D1CA;
+extern unsigned char D_8009D1CB;
+
+void func_8007A88C(void *arg0);
+
+static inline unsigned char ScaleVolume(int volume) {
+    unsigned int value = volume;
+
+    value <<= 1;
+    value += volume;
+    value <<= 2;
+    value -= volume;
+    value += value << 5;
+    value <<= 3;
+    value -= volume;
+    return value >> 13;
+}
+
+void Spu_SetVoiceVolume(int arg0) {
+    unsigned char value;
+
+    if (D_8009D2C0 & 2) {
+        value = ScaleVolume(arg0);
+        D_8009D1CB = value;
+        D_8009D1C9 = value;
+        D_8009D1CA = value;
+        D_8009D1C8 = value;
+    } else {
+        value = arg0;
+        D_8009D1CA = value;
+        D_8009D1C8 = value;
+        D_8009D1CB = 0;
+        D_8009D1C9 = 0;
+    }
+    func_8007A88C(&D_8009D1C8);
+}
+
+int Spu_SetStreamModeA(void) {
+    D_8009D270 = 1;
+    return 0;
+}
+
+int Akao_StepNoteSequencer(unsigned char *input, unsigned available)
+{
+    unsigned char *instruments;
+    unsigned payload_size;
+    unsigned count;
+    unsigned address;
+    unsigned address_offset;
+    unsigned upload_size;
+    unsigned after_header;
+    unsigned char *rebase_instruments;
+    unsigned rebase_address;
+    unsigned next_address;
+    unsigned remaining_payload;
+    unsigned start;
+    unsigned *dest;
+    unsigned *dest_base;
+    unsigned result;
+    register unsigned mode asm("$3");
+    register unsigned clear_bits asm("$4");
+
+    if (D_8009D270 & 1) {
+        if (Spu_ValidateSampleHeader(input)) return -1;
+        input += 0x14;
+        asm volatile("" : "=r"(input) : "0"(input));
+        payload_size = *(unsigned *)input;
+        input += 4;
+        asm volatile("" : "=r"(input) : "0"(input));
+        start = *(unsigned *)input;
+        input += 4;
+        asm volatile("" : "=r"(input) : "0"(input));
+        count = *(unsigned *)input;
+        if (!count) count = 256;
+        count -= start;
+        input += 0x24;
+        instruments = input;
+        upload_size = count << 6;
+        input += upload_size;
+        after_header = available - 0x40;
+        available = after_header - upload_size;
+        asm volatile("" : "=r"(available) : "0"(available));
+        upload_size = available;
+        if (upload_size >= payload_size) upload_size = payload_size;
+
+        address = 0x8000;
+        if (count < 0x31) {
+            if (g_AkaoCurTrack[1].active_voice_mask != 0) {
+                if ((g_AkaoCurTrack[1].status_flags & 0x100) == 0) {
+                    address = 0x38000;
+                    g_AkaoVoiceKeyOnState |= 0x100;
+                } else {
+                    g_AkaoVoiceKeyOnState &= ~0x100U;
+                }
+            } else {
+                asm volatile("" : "=r"(address) : "0"(address));
+                address = 0x8000;
+                if (g_AkaoCurTrack[0].active_voice_mask != 0) {
+                    if ((g_AkaoCurTrack[0].status_flags & 0x100) == 0) {
+                        address = 0x38000;
+                        g_AkaoVoiceKeyOnState |= 0x100;
+                    } else {
+                        g_AkaoVoiceKeyOnState &= ~0x100U;
+                    }
+                } else {
+                    g_AkaoVoiceKeyOnState &= ~0x100U;
+                }
+            }
+        } else {
+            g_AkaoVoiceKeyOnState &= ~0x100U;
+        }
+        SpuSetTransferStartAddr(address);
+        Spu_UploadWithPrepare((int)input, upload_size);
+        rebase_instruments = instruments;
+        rebase_address = address;
+        next_address = address + upload_size;
+        D_8009D2BC = next_address;
+        remaining_payload = payload_size - upload_size;
+        D_8009D2E4 = remaining_payload;
+        Spu_RebaseStreamAddrs(rebase_instruments, rebase_address, count);
+        address_offset = address == 0x8000 ? 0x20 : 0x50;
+        address_offset <<= 6;
+        dest_base = (unsigned *)D_800B2900;
+        dest = (unsigned *)(address_offset + (unsigned)dest_base);
+        upload_size = count << 4;
+        do {
+            --upload_size;
+            *dest++ = *(unsigned *)instruments;
+            instruments += 4;
+        } while (upload_size);
+        clear_bits = ~1U;
+        mode = D_8009D270;
+        result = D_8009D2E4;
+        mode &= clear_bits;
+        D_8009D270 = mode;
+    } else {
+        SpuSetTransferStartAddr(D_8009D2BC);
+        upload_size = available;
+        if (upload_size >= D_8009D2E4) upload_size = D_8009D2E4;
+        Spu_UploadWithPrepare((int)input, upload_size);
+        D_8009D2BC += upload_size;
+        D_8009D2E4 -= upload_size;
+        result = D_8009D2E4;
+    }
+    return result;
+}
+
+int Spu_SetStreamModeB(void) {
+    D_8009D270 = 2;
+    return 0;
+}
+
+int Spu_UploadStreamBlockA(unsigned bank, unsigned char *cursor, unsigned size)
+{
+    register unsigned char *input asm("$16") = cursor;
+    register unsigned available asm("$18") = size;
+    unsigned char *instruments;
+    unsigned payload_size;
+    unsigned count;
+    unsigned address;
+    unsigned upload_size;
+    register unsigned uploadValue asm("$2");
+    unsigned address_base;
+    unsigned address_offset;
+    register unsigned char *rebase_instruments asm("$4");
+    register unsigned rebase_address asm("$5");
+    unsigned start;
+    unsigned *dest;
+    register unsigned *dest_base asm("$2");
+    unsigned result;
+    register unsigned mode asm("$3");
+    register unsigned clear_bits asm("$4");
+
+    if (D_8009D270 & 2) {
+        if (Spu_ValidateSampleHeader(input)) return -1;
+        input += 0x14;
+        asm volatile("" : "=r"(input) : "0"(input));
+        payload_size = *(unsigned *)input;
+        input += 4;
+        asm volatile("" : "=r"(input) : "0"(input));
+        start = *(unsigned *)input;
+        input += 4;
+        asm volatile("" : "=r"(input) : "0"(input));
+        count = *(unsigned *)input;
+        if (!count) count = 256;
+        count -= start;
+        input += 0x24;
+        instruments = input;
+        upload_size = count << 6;
+        input += upload_size;
+        uploadValue = available - 0x40;
+        available = uploadValue - upload_size;
+        asm volatile("" : "=r"(available) : "0"(available));
+        upload_size = available;
+        if (upload_size >= payload_size) upload_size = payload_size;
+        address_base = 0x4f000;
+        address_offset = ((bank * 5) << 13);
+        address = address_offset + address_base;
+        SpuSetTransferStartAddr(address);
+        Spu_UploadWithPrepare((int)input, upload_size);
+        rebase_instruments = instruments;
+        rebase_address = address;
+        uploadValue = rebase_address + upload_size;
+        D_8009D1EC = uploadValue;
+        uploadValue = payload_size - upload_size;
+        D_8009D204 = uploadValue;
+        Spu_RebaseStreamAddrs(rebase_instruments, rebase_address, count);
+        address = bank << 10;
+        dest_base = D_800B4D00;
+        dest = (unsigned *)(address + (unsigned)dest_base);
+        upload_size = count << 4;
+        do {
+            --upload_size;
+            *dest++ = *(unsigned *)instruments;
+            instruments += 4;
+        } while (upload_size);
+        clear_bits = ~2U;
+        mode = D_8009D270;
+        result = D_8009D204;
+        mode &= clear_bits;
+        D_8009D270 = mode;
+    } else {
+        SpuSetTransferStartAddr(D_8009D1EC);
+        upload_size = available;
+        if (upload_size >= D_8009D204) upload_size = D_8009D204;
+        Spu_UploadWithPrepare((int)input, upload_size);
+        D_8009D1EC += upload_size;
+        D_8009D204 -= upload_size;
+        result = D_8009D204;
+    }
+    return result;
+}
+
+int Spu_UploadStreamBlockB(unsigned bank, unsigned char *cursor)
+{
+    unsigned char *instruments;
+    unsigned size, start, count, address;
+    unsigned *dest;
+    if (bank & ~1U) return 1;
+    if (Spu_ValidateSampleHeader(cursor)) return -1;
+    /* Header words: payload size, first instrument, exclusive end.
+     * An encoded end of zero denotes instrument 256. */
+    cursor += 0x14;
+    size = *(unsigned *)cursor;
+    cursor += 4;
+    start = *(unsigned *)cursor;
+    cursor += 4;
+    count = *(unsigned *)cursor;
+    if (!count) count = 256;
+    count -= start;
+    /* The 0x40-byte header is followed by 0x40-byte instrument records. */
+    instruments = cursor + 0x24;
+    cursor = instruments + (count << 6);
+    address = 0x68000 + (bank << 13);
+    SpuSetTransferStartAddr(address);
+    Spu_UploadWithPrepare((int)cursor,size);
+    Spu_RebaseStreamAddrs(instruments,address,count);
+    /* Cache the relocated records after the SPU payload upload. */
+    address = bank << 10;
+    dest = (unsigned *)((unsigned char *)D_800B4900 + address);
+    size = count << 4;
+    do {
+        --size;
+        *dest++ = *(unsigned *)instruments;
+        instruments += 4;
+    } while (size);
+    return 0;
+}
 
 extern volatile u16 D_1F801D88;
 extern volatile u16 D_1F801D8A;
@@ -219,8 +876,6 @@ void Akao_WriteVoiceParam(voice_index, params)
 extern void *D_8009D2C8;
 extern u32 D_8009D2C4;
 
-void Seq_MarkTrack34MaskDirty(void);
-void Seq_MarkTrack3CMaskDirty(void);
 
 static inline int compute_volume(AkaoTrack *voice, s16 *table) {
     int value = (((S16(voice, 0x46) * (voice->volume_base >> 8)) >> 7) *
@@ -592,10 +1247,7 @@ if (depth != 0) { \
 } \
 } while (0)
 
-extern int D_8009D2C0;
 extern unsigned char D_8009D2CE;
-extern s16 D_8009B8F8[];
-extern s16 D_8009B9F8[];
 extern char D_800B8AC0[];
 
 void Akao_SetVoiceKeyOff(AkaoTrack *cursor, u32 voice_mask, int index) {
@@ -892,7 +1544,6 @@ void Akao_SetVoiceKeyOn(AkaoTrack *voice, u32 voice_mask) {
     }
 }
 
-extern AkaoTrack g_AkaoVoiceStateTable[];
 
 void Spu_CopyVoiceToStereoSlot(AkaoTrack *track, int stereo_voice_index) {
     int left;
@@ -1056,7 +1707,6 @@ void Akao_UpdateVoiceEnvelopes(s32 protectedMask) {
 
 extern unsigned D_800BCD58, g_AkaoVoiceMaskScratch;
 extern unsigned short g_AkaoTrack5ATransposeValue;
-extern AkaoTrack g_AkaoVoiceChannelTable[];
 void SpuSetReverbModeDepth(short, short);
 void Spu_WriteReverbEnable(unsigned);
 void Spu_WriteNoiseEnable(unsigned);
