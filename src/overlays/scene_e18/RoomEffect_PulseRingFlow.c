@@ -75,12 +75,13 @@ int func_8019330C(int mode, SceneE18PulseState *state) {
 
     if (mode != 1) {
         if (mode < 2) {
-            if (mode == 0) goto setup;
-            return 0;
-        }
+            if (mode != 0) {
+                return 0;
+            }
+        } else {
         return 0;
 
-    setup:
+        }
         state->stage = 0;
         state->ticks = 0;
         return func_800CE560(D_800F33E0->pool, 8, 4,

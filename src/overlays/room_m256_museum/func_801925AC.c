@@ -1,18 +1,15 @@
 #include "common.h"
 int func_801925AC(u8 *arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
     if (arg2 != 0x100) {
-        if ((unsigned int)arg2 >= 0x101) {
-            goto high_cmd;
-        }
-        if (arg2 != 0x19) {
-            return 0;
-
-        high_cmd:
+        if ((unsigned int)arg2 < 0x101) {
+            if (arg2 != 0x19) {
+                return 0;
+            }
+        } else {
             if (arg2 == 0x101) {
                 goto cmd_101;
             }
             return 0;
-
         }
     cmd_19:
         if (arg1 != 1) {

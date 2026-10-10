@@ -568,19 +568,9 @@ int RoomEffect_BurstSparkSpawner(int mode, int *count) {
     RoomSparkChannel *channel;
 
     offset = s_BurstSparkLaunchOffset;
-    if (mode != 1) {
-        if (mode < 2) {
-            if (mode == 0) {
-                goto mode0;
-            }
-            return 0;
-        }
-        if (mode == 2) {
-            goto mode2;
-        }
-        return 0;
+    switch (mode) {
+    case 0:
 
-    mode0:
         if (D_800E2368->active != 0) {
             RoomSparkNode **nodes = (RoomSparkNode **)D_800F32D0->pool;
             if (nodes != 0 && *nodes != 0) {
@@ -596,8 +586,7 @@ int RoomEffect_BurstSparkSpawner(int mode, int *count) {
         return func_800CE560(channel->pool, 0x14, 0x37,
                              (FieldAnimCallbackListCallback)RoomEffect_BurstSparkParticle);
 
-    }
-mode1:
+        case 1:
     func_800CE8F0(D_800F32D0->pool, 0x11, &offset, &launch);
     func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->pool, 0,
                   (GteShortVector *)&launch.hx);
@@ -627,14 +616,14 @@ mode1:
         }
         (*count)++;
     }
-    if (D_800E27EC >= 8) {
-        return 2;
+        if (D_800E27EC >= 8) return 2;
+    break;
+    case 2:
 
-    mode2:
         D_800F3368.parameter0A = 0;
         D_800F3368.depth = 4;
+    
     }
-ret0:
     return 0;
 }
 

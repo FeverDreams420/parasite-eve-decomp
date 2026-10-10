@@ -391,16 +391,9 @@ int RoomEffect_BurstOrbController(int mode, void *unused, s32 *state) {
     s16 target[4];
     char *pool;
     RoomDampedSpark *child;
-    if (mode != 1) {
-        if (mode < 2) {
-            if (mode == 0)
-                goto init;
-            return 0;
-        }
-        if (mode == 2)
-            goto configure;
-        return 0;
-    init:
+    switch (mode) {
+    case 0:
+
         if (D_800E2368->active) {
             RoomSparkNode **slot = (RoomSparkNode **)D_800F32D0->pool;
             if (slot && *slot) {
@@ -411,8 +404,7 @@ int RoomEffect_BurstOrbController(int mode, void *unused, s32 *state) {
         pool = D_800F33E0->pool;
         return func_800CE560(pool, 20, 46,
                              (FieldAnimCallbackListCallback)RoomEffect_BurstOrbParticle);
-    }
-update:
+        case 1:
     pool = D_800F32D0->pool;
     func_800CE8F0(pool, 7, &template, position);
     pool = D_800F32D0->pool;
@@ -443,9 +435,10 @@ update:
             child->timer = 0;
         }
     }
-    if (D_800E27EC >= 2) {
-        return 2;
-    configure:
+        if (D_800E27EC >= 2) return 2;
+    break;
+    case 2:
+
         {
             int palette = D_800E2850[D_800E11EA];
             D_800F3368.palette = 3;
@@ -454,8 +447,8 @@ update:
             D_800F3368.depth = 8;
             D_800F3368.tpage = palette;
         }
+    
     }
-done:
     return 0;
 }
 
@@ -552,16 +545,9 @@ int RoomEffect_DampedSparkController(int mode, void *unused, void *state) {
     char *pool;
     RoomDampedSpark *child;
     int angle, radius;
-    if (mode != 1) {
-        if (mode < 2) {
-            if (mode == 0)
-                goto init;
-            return 0;
-        }
-        if (mode == 2)
-            goto configure;
-        return 0;
-    init:
+    switch (mode) {
+    case 0:
+
         {
             int handle = func_800D3FD8();
             func_800D3F64(0x58B, handle);
@@ -569,8 +555,7 @@ int RoomEffect_DampedSparkController(int mode, void *unused, void *state) {
             return func_800CE560(pool, 20, 16,
                                  (FieldAnimCallbackListCallback)RoomEffect_DampedSparkParticle);
         }
-    }
-update:
+        case 1:
     pool = D_800F32D0->pool;
     func_800CE8F0(pool, 7, &template, position);
     pool = D_800F32D0->pool;
@@ -610,9 +595,10 @@ update:
             }
         }
     }
-    if (D_800E27EC >= 2) {
-        return 2;
-    configure:
+        if (D_800E27EC >= 2) return 2;
+    break;
+    case 2:
+
         {
             int idx = D_800E11EA;
             int palette;
@@ -627,8 +613,8 @@ update:
             D_800F3368.depth = 8;
             D_800F3368.tpage = palette;
         }
+    
     }
-done:
     return 0;
 }
 

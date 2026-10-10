@@ -7,15 +7,9 @@ int func_80195320(int mode, u16 *out) {
     RoomM256TrailEffect *task;
     u16 value;
 
-    if (mode != 1) {
-        if (mode < 2) {
-            if (mode == 0) goto mode0;
-            return 0;
-        }
-        if (mode == 2) goto mode2;
-        return 0;
+    switch (mode) {
+    case 0:
 
-    mode0:
         *out = (u16)D_800E2368->variables[0];
         D_80195EF8 = func_8006E498(D_800B0E64, 0xC5887704);
         func_800C6D5C((union FieldTexturedModel *)D_80195EF8, 0, 0);
@@ -32,8 +26,7 @@ int func_80195320(int mode, u16 *out) {
         return func_800CE560(D_800F33E0->end, 0x18, 0x20,
                                func_801940B0);
 
-    }
-mode1:
+        case 1:
     if (D_800E27EC == mode) {
         ret = D_800E27EC < 8;
         task = func_800CE610(D_800F33E0->end);
@@ -52,7 +45,7 @@ mode1:
     if (ret) return 0;
     return 2;
 
-mode2:
+    case 2:
     {
         unsigned palette_index = D_800E11EA;
         u16 palette;
@@ -66,6 +59,7 @@ mode2:
         D_800F3368.tpage = palette;
         /* Emit the zero result after the final write, not before it. */
         asm volatile("" : "=r"(ret) : : "memory");
+    }
     }
     return 0;
 }

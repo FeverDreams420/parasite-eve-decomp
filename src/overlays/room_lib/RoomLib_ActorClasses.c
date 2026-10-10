@@ -1763,12 +1763,11 @@ int RoomLib_InitHandlerA(RoomEnt *o) {
 }
 int RoomLib_ConfigureHandlerA(RoomEnt *o, int arg1, unsigned int op, int arg3, int sp10, int sp14) {
     if (op != 0xA) {
-        if (op >= 0xB) {
-            goto high;
-        }
+        if (op < 0xB) {
         if (op != 4) {
             return 0;
-        high:
+        }
+        } else {
             if (op != 0x19) {
                 if (op == 0x1C) {
                     goto case28;

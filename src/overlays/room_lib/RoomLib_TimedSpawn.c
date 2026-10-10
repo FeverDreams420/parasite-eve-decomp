@@ -111,19 +111,9 @@ int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
     int value;
     u16 ground;
 
-    if (mode != 1) {
-        if (mode < 2) {
-            if (mode == 0) {
-                goto mode0;
-            }
-            return 0;
-        }
-        if (mode == 2) {
-            goto mode2;
-        }
-        return 0;
+    switch (mode) {
+    case 0:
 
-    mode0:
         func_800CE870(((void **)D_800F32D0)[2], 0, (s16 *)&state->position);
         state->x = 0;
         state->y = 0;
@@ -145,8 +135,7 @@ int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
         return func_800CE560(((void **)D_800F33E0)[2], 0xC, 8,
                              (FieldAnimCallbackListCallback)RoomLib_UpdateTimedRender);
 
-    }
-mode1:
+        case 1:
     tick = D_800E27EC;
     if (tick < 0x20 && tick % 6 == 0) {
         actor = func_800CE610(((void **)D_800F33E0)[2]);
@@ -177,10 +166,10 @@ mode1:
             *(u32 *)object |= 0x80000000;
         }
     }
-    if (D_800E27EC >= 8) {
-        return 2;
-
-    mode2: {
+        if (D_800E27EC >= 8) return 2;
+    break;
+    case 2:
+ {
         int index = D_800E11EA;
         u16 tpage;
         D_800F3368.parameter00 = 0x20;
@@ -194,7 +183,7 @@ mode1:
         D_800F3368.depth = 0;
         D_800F3368.tpage = tpage;
     }
+    
     }
-ret0:
     return 0;
 }

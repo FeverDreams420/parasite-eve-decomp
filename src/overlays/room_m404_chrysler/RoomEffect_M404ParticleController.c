@@ -6,16 +6,8 @@ int func_80193368(int mode, void *unused, char *state) {
     s16 target[4];
     char *pool;
     RoomM404Particle *child;
-    if (mode != 1) {
-        if (mode < 2) {
-            if (mode == 0)
-                goto init;
-            return 0;
-        }
-        if (mode == 2)
-            goto configure;
-        return 0;
-    init:
+    switch (mode) {
+    case 0:
         {
             int handle = func_800D3FD8();
             func_800D3F64(0x5b9, handle);
@@ -30,8 +22,7 @@ int func_80193368(int mode, void *unused, char *state) {
             return func_800CE560(pool, 20, 55,
                                  (FieldAnimCallbackListCallback)func_80192540);
         }
-    }
-update:
+    case 1:
     {
         pool = D_800F32D0->pool;
         func_800CE8F0(pool, 3, &template, position);
@@ -50,10 +41,10 @@ update:
                 child->timer = 0;
             }
         }
-        if (D_800E27EC < 2) goto done;
+        if (D_800E27EC < 2) break;
         return 2;
     }
-configure:
+    case 2:
     {
         int idx = D_800E11EA;
         int palette;
@@ -69,6 +60,6 @@ configure:
         D_800F3368.depth = 8;
         D_800F3368.tpage = palette;
     }
-done:
+    }
     return 0;
 }
