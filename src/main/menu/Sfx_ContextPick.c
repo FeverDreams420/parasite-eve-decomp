@@ -36,7 +36,8 @@ void Sfx_ContextPick(int arg0)
             goto case_3;
         }
     }
-    goto tail;
+    MenuWidget_DrawCenteredText(Str_LookupTable4(state));
+    return;
 
 case_0:
     raw = g_MenuActiveItemSlot;
@@ -47,7 +48,9 @@ case_0:
         }
     }
     sound = flag ^ 1;
-    goto call_sound;
+    Draw_SetTextDimmed(sound);
+    MenuWidget_DrawCenteredText(Str_LookupTable4(state));
+    return;
 
 case_2:
     sound = Inv_IsSlotSelectable(g_MenuActiveItemSlot) == 0;

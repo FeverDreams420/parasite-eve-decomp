@@ -334,10 +334,10 @@ void Menu_OpenItemActionSubmenu(MenuWidgetNode *arg0, s32 arg1, s32 arg2) {
         if ((Inv_TestSelectionBit(temp_s0) != 0) && ((g_MenuEquipMode != 1) || (temp_s0_2->kind != 0xA) || ((u8) M2C_FIELD(temp_s0_2, u8 *, 0xE) < 4U))) {
             var_s2 = 1;
         }
-        if (var_s2 != 0) {
-            goto block_21;
+        if (var_s2 == 0) {
+            temp_s1->cursor_y = 1;
+            return;
         }
-        goto block_22;
     }
 block_21:
     if (g_MenuItemActionDisabled != 0) {

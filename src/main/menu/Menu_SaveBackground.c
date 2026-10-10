@@ -53,7 +53,10 @@ void Menu_ComputeGammaLut(int arg0, int arg1) {
         iter_end = check_end;
         do {
             if (*ptr >= arg1) {
-                goto out;
+                base = D_800A1878;
+                limit = (ptr - base) + 1;
+                g_MenuSaveBgFadeLutLen = limit;
+                return;
             }
             ptr[1] = (arg0 + (scale * *ptr)) >> 8;
             ptr++;

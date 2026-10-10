@@ -9,7 +9,7 @@ extern Combatant *g_ActiveActor[];
 
 int Battle_IsActive(void) {
     if (g_BattleActionQueueCount != 0) {
-        goto no;
+        return 0;
     }
     if ((g_GameStateFlags[0] & 2) == 0) {
         goto yes;
@@ -25,7 +25,7 @@ no:
 
 int Pad_IsMenuConfirmAvailable(void) {
     if (g_BattleActionQueueCount != 0) {
-        goto no;
+        return 0;
     }
     if ((g_GameStateFlags[0] & 2) == 0) {
         goto yes;

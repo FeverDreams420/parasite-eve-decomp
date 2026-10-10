@@ -175,10 +175,7 @@ int Menu_StepNameEntryAlt(MenuWidgetNode *parent, unsigned int input) {
             node->cursor_y = next_cursor_y;
         }
         move_node = node;
-        goto moved;
-    }
-
-    if (input & MENU_INPUT_UP) {
+    } else if (input & MENU_INPUT_UP) {
         int mode;
         if (node->selected_base != MODE_NAME_WINDOW_0) {
             node->cursor_x = -1;
@@ -197,10 +194,7 @@ int Menu_StepNameEntryAlt(MenuWidgetNode *parent, unsigned int input) {
         node->cursor_x = 0;
         node->cursor_y = node->y_limit - 1;
         move_node = node;
-        goto moved;
-    }
-
-    if (input & MENU_INPUT_DOWN) {
+    } else if (input & MENU_INPUT_DOWN) {
         int mode;
         int current;
         if (node->selected_base != MODE_NAME_WINDOW_0) {
@@ -218,12 +212,10 @@ int Menu_StepNameEntryAlt(MenuWidgetNode *parent, unsigned int input) {
         node->cursor_x = 0;
         node->cursor_y = 0;
         move_node = node;
-        goto moved;
+    } else {
+        goto after_move;
     }
 
-    goto after_move;
-
-moved:
     MenuWidget_SetCurrentNode(move_node);
     Menu_PlayMoveSound();
     return 1;

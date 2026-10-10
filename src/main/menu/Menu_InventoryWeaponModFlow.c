@@ -34,7 +34,8 @@ void Menu_OpenInventoryOrSwapView(s32 arg0) {
     MenuWidget_NavScrollTo(0x3A);
     mode = g_MenuInventoryViewMode;
     if (mode == 1) {
-        goto clear_cursor;
+        MenuWidget_ClearCursorY(MenuWidget_FindByModeAndSelectedBase(1, 0x33));
+        return;
     }
     if (mode >= 2) {
         goto check_two;
