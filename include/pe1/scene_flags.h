@@ -17,4 +17,8 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneFlagRecord, callback) == 0x0C,
 extern SceneFlagRecord *D_800943C0[];
 void Scene_CheckFlagBits(void *ctx, SceneFlagRecord **table, int *index_ptr);
 
+/* Pad buttons released this frame (old & changed), tested by scene flag
+ * records and task value ops. */
+extern unsigned int D_8009D1E4;
+
 #endif /* PE1_SCENE_FLAGS_H */

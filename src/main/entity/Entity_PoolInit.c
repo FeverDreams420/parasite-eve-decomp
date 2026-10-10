@@ -8,7 +8,7 @@
  * 14-entry 0x280-byte entity record block at D_800BEA90. */
 
 int g_FieldMoveLock;
-void *g_EntityFreeListHead;
+FieldActor *g_EntityFreeListHead;
 void *g_FieldActorListHead;
 int g_CurrentEntity;
 u16 g_EntityFreePoolCount;
@@ -85,7 +85,7 @@ void Entity_InitFreePool(void)
     offset = 0;
     g_EntityFreePoolCount = 0;
     g_FieldActorListHead = 0;
-    g_EntityFreeListHead = base;
+    g_EntityFreeListHead = (FieldActor *)base;
 
     do {
         *(void **)(D_800BEA94 + offset) = next;

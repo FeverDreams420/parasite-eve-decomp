@@ -6,6 +6,7 @@
 #include "pe1/card_obj.h"
 #include "pe1/game_state_types.h"
 #include "pe1/psyq_nop.h"
+#include "pe1/scene_flags.h"
 
 /* Field render-flag table setup and the helper that stores one table entry
  * at the bit index of a single-bit mask. The helper's only caller is the
@@ -91,7 +92,6 @@ extern struct { char _[16]; } D_800B0DBF_o __asm__("D_800B0DBF");
 #define D_800BE9A7 (*(u8 *)&D_800BE9A7_o)
 #define D_800B0DBF (*(s8 *)&D_800B0DBF_o)
 
-extern u32 D_8009D1E4;
 extern u32 D_8009D1F4;
 extern u32 D_8009D238;
 extern u32 D_8009D26C __asm__("g_FieldPadBits");

@@ -3,6 +3,7 @@
 #include "pe1/inventory.h"
 #include "pe1/inventory_slots.h"
 #include "pe1/aya.h"
+#include "pe1/inventory_sort.h"
 
 /* Contiguous inventory counts, removal-by-ID, active-item kind lookup, base
  * item kinds, the equipped-slot reservation test and the packed-list
@@ -12,7 +13,6 @@ int g_InvSlotLimit;
 u32 *g_InvSelectionBits;
 int g_InvSelectionBitWords;
 
-extern short g_WayneStorageItems[];
 /* The equipped-slot bytes live at 0x800C0E20/0x800C0E22, outside the gp
  * window; incomplete array types keep -G8 from making them small data. */
 extern signed char g_AyaEquippedArmorSlot[];

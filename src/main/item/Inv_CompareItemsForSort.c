@@ -247,7 +247,7 @@ extern M2C_UNK g_InvTypeRankTableB[];
 #define g_InvTypeRankTableB (g_InvTypeRankTableB[0])
 extern s16 *g_InvItemPtr;
 extern s32 g_InvSlotLimit;
-extern M2C_UNK *g_InvSelectionBits;
+extern u32 *g_InvSelectionBits;
 extern M2C_UNK g_AyaItemSelectionBits[];
 #define g_AyaItemSelectionBits (g_AyaItemSelectionBits[0])
 extern s32 g_InvSelectionBitWords;
@@ -331,7 +331,6 @@ void Inv_SortInventoryByMode(s32 arg0, s32 arg1) {
 
 extern M2C_UNK D_80092410[];
 #define D_80092410 (D_80092410[0])
-extern u16 g_WayneStorageItems[];
 
 void Sort_ContainerItems(int arg0) {
     if (arg0 != 0) {

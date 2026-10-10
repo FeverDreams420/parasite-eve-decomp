@@ -16,8 +16,8 @@ int func_800CE49C(FieldAnimTaskOwner *owner, int index)
     return 0;
 }
 
-extern int D_800B0E18;
-extern int D_800B0E1C;
+extern void *D_800B0E18;
+extern void *D_800B0E1C;
 extern int D_800B1630;
 
 int func_800CE4F8(int index) {
@@ -36,11 +36,11 @@ int func_800CE4F8(int index) {
         return ret;
 
     ret0:
-        ret = D_800B0E18;
+        ret = (int)D_800B0E18;
         return ret;
     }
     } else {
-        ret = D_800B0E1C;
+        ret = (int)D_800B0E1C;
         return ret;
     }
 ret2:

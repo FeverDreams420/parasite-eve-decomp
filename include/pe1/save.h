@@ -76,4 +76,8 @@ extern SaveSjisFormatArguments g_SaveSjisFormatArguments
     __asm__("D_800A1708");
 void Save_SprintfSjis(unsigned char *dst, unsigned char *fmt);
 
+/* Save header block copied by Save_BuildHeader/Save_RestoreHeader; the
+ * item search uses its address as the end of the item records. */
+extern u16 D_800C1EAC[];
+
 #endif /* PE1_SAVE_H */

@@ -175,7 +175,7 @@ void Entity_FrameUpdate(void) {
 typedef FieldActor Entity;
 
 Entity *g_FieldActorListHead;
-Entity *g_EntityFreeListHead;
+FieldActor *g_EntityFreeListHead;
 Entity *g_PlayerEntity;
 u16 g_EntityFreePoolCount;
 int g_FieldMoveLock;

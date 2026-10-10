@@ -2,7 +2,7 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 
 int g_InvCategoryBaseItemId;
-u16 *g_InvItemPtr;
+s16 *g_InvItemPtr;
 int g_InvSlotLimit;
 #include "pe1/inventory_category.h"
 extern u8 g_ItemCodeRemapTable[];
@@ -20,7 +20,7 @@ int Inv_CountByValue(int arg0) {
         count = g_InvCategoryItemTable[arg0 - g_InvCategoryBaseItemId].count;
     } else {
         temp = g_InvSlotLimit;
-        ptr = g_InvItemPtr;
+        ptr = (u16 *)g_InvItemPtr;
         temp <<= 1;
         end = (u16 *)((u8 *)ptr + temp);
         if (ptr < end) {

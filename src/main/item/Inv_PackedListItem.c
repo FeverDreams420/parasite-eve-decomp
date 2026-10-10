@@ -4,7 +4,7 @@
 int g_InvPackedListCount;
 short g_InvPackedList[];
 
-int *g_InvSelectionBits;
+unsigned int *g_InvSelectionBits;
 int g_InvSelectionBitWords;
 
 int Inv_GetPackedListItem(int arg0) {

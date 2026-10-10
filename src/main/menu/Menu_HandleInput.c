@@ -1,8 +1,8 @@
 #include "pe1/inventory.h"
+#include "pe1/menu_widget.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-extern int g_MenuActiveWidget;
 extern int g_MenuLayoutLocked;
 extern int g_MenuItemUseMode;
 extern int g_MenuItemRenameMode;
@@ -41,7 +41,7 @@ void Menu_HandleInput(int arg0) {
     blocked = Inv_IsAyaInventorySlotReserved(value);
 
     if (blocked != 0) {
-        if (*(int *)(g_MenuActiveWidget + 0x24) != 0xD) {
+        if (g_MenuActiveWidget->selected_base != 0xD) {
             if (g_MenuLayoutLocked == 0 && g_MenuItemUseMode == 0) {
                 Draw_SetTextDimmed(1);
             }

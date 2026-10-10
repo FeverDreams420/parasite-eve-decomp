@@ -5,7 +5,7 @@
 #include "pe1/menu_inventory.h"
 
 int g_MenuItemContextFlag;
-int g_MenuActiveWidget;
+MenuWidgetNode *g_MenuActiveWidget;
 
 int Battle_IsActiveWrapped(void);
 void Draw_SetTextDimmed(int value);

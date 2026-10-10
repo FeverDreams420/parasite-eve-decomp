@@ -7,6 +7,7 @@
 #include "pe1/game_state.h"
 #include "pe1/room_floor.h"
 #include "pe1/scene_room_load.h"
+#include "pe1/scene_dispatch.h"
 
 extern s32 g_GlobalFrameCounter;
 extern char D_8009D224[];
@@ -167,7 +168,6 @@ void Gpu_InitPipeline(void) {
 
 /* Field frame loop and its scene flush: Boot_FlushSceneFast is the exit tail
  * that Boot_RunFrame repeats after its loop. Contiguous -G8 pair. */
-extern u32 D_8009D1C4;
 extern u32 D_8009D280;
 extern u8 D_8009CDD8_blob[] asm("D_8009CDD8");
 #define D_8009CDD8 (*(u32 *)D_8009CDD8_blob)

@@ -5,4 +5,7 @@
  * map selection compares it with g_SceneDispatchToken. */
 extern int g_SceneDispatchCur;
 
+/* Mirror of the current room id (D_8009D280); see scene_transition.h. */
+extern int D_8009D1C4;
+
 #endif

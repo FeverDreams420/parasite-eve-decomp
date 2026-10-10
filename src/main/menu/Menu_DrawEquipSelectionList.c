@@ -5,7 +5,6 @@
 #include "pe1/inventory_queries.h"
 #include "pe1/menu_draw_list.h"
 
-extern MenuWidgetNode *g_MenuActiveWidget;
 
 int Inv_RestoreSelection(unsigned int index);
 int Inv_GetActiveListItemType(int index);

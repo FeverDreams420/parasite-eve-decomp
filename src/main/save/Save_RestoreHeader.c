@@ -1,9 +1,9 @@
 #include "common.h"
 #include "pe1/inventory_category.h"
+#include "pe1/save.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-extern u16 D_800C1EAC[];
 extern struct { char _[16]; } D_800C0DE8_o __asm__("D_800C0DE8");
 extern struct { char _[16]; } D_800C0DEC_o __asm__("D_800C0DEC");
 extern u8 D_800C0DFD_action[] __asm__("D_800C0DFD");

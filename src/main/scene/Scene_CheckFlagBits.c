@@ -3,7 +3,6 @@
 
 extern u32 D_8009D26C;
 extern u32 D_8009D1F4;
-extern u32 D_8009D1E4;
 
 void Scene_CheckFlagBits(void *ctx, SceneFlagRecord **table, int *index_ptr)
 {

@@ -1,4 +1,5 @@
 #include "pe1/field_collision.h"
+#include "pe1/scene_flags.h"
 /* MASPSX_FLAGS: --expand-div */
 /* Script value opcodes: expression evaluation, current-actor vector get/set
  * and pad/flag mask tests. Contiguous default-profile handlers between the
@@ -13,7 +14,6 @@ extern FieldActor *g_PlayerEntity;
 extern int g_RenderStateFlags[];
 extern u32 D_8009D26C[];
 extern u32 D_8009D1F4[];
-extern u32 D_8009D1E4[];
 extern u32 D_800A7770[];
 
 int Math_FixedMul(int lhs, int rhs);
@@ -230,7 +230,7 @@ int Task_DispatchCmd(int **args) {
     case 2: {
         u32 mask;
         u32 state;
-        state = D_8009D1E4[0];
+        state = D_8009D1E4;
         mask = *args[1];
         if ((state & mask) == mask) {
             *args[2] = 1;
