@@ -1168,10 +1168,11 @@ segments:
       - [0xC6A9C, c, engine/FieldEng_SpiralSpriteEffect]
       # Ember drift, fan-sweep spark instance and the fan-sweep controller share the spark pools (G1583).
       - [0xC78C0, c, engine/FieldEng_FanSweepSparks]
-      - [0xC821C, c, engine/FieldEng_ArcingEmitter]
-      # Orbiting, vertical and helical effect callbacks share draw helpers and literals (G1588).
-      - [0xC8678, c, engine/FieldEng_OrbitalEffects]
-      - [0xC9D54, c, engine/FieldEng_DampedSpark]
+      # Arcing emitter, orbiting/vertical/helical callbacks (G1588 draw helpers and literals)
+      # and the damped spark: the effect programs at D_800E1920..D_800E1AF0 chain their
+      # callbacks with the fan-sweep sparks above, which stays separate only because it
+      # includes room_ember_burst.h (conflicting D_800F33E0/D_800F32D0/D_800E2368/D_8009D20C).
+      - [0xC821C, c, engine/FieldEng_SparkEffects]
       - [0xCA28C, c, engine/FieldEng_SpinningModel]
       - [0xCA65C, c, engine/FieldEng_BallisticSprite]
       # The second spinning flare and the emitter that spawns it (call + private anchor D_800E2214).
