@@ -1,5 +1,6 @@
 #include "common.h"
 #include "../room_lib/room_lib.h"
+#include "pe1/scene_archive.h"
 
 typedef struct {
     s32 words[8];
@@ -15,7 +16,6 @@ extern void func_800C2B40(void *);
 extern void *func_8006DC18(int);
 extern int func_8006E498(void *, int);
 extern void func_8006DF50(void *, int, int, int, int);
-extern void *D_800B0E64;
 extern RoomLink *g_PlayerEntity;
 extern int D_80199528, D_8019956C, D_8019957C;
 extern u8 D_80199680, D_80199681, D_80199682, D_80199684, D_80199685, D_80199686;
@@ -33,7 +33,7 @@ void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
     register int intensity asm("$3");
     register int mode asm("$2");
     register int offset asm("$5");
-    void *volatile *sound = &D_800B0E64;
+    void *volatile *sound = D_800B0E64;
     void *handle;
     int playerX;
     register int playerZ asm("$3");

@@ -110,7 +110,7 @@ void func_80193C68(char *actor, void *unused, char *state) {
     D_80199544 = 96;
     D_80199555 = one;
     D_80199585 = one;
-    soundAddress = &D_800B0E64_slot;
+    soundAddress = (RoomSoundSlot *)D_800B0E64;
     D_80199554 = sixtyFour;
     D_8019955A = half128;
     D_80199550 = byte128;

@@ -51,7 +51,7 @@ int func_80192A30(int mode, unsigned short *dst, unsigned short *src) {
     }
 
     if (D_800E27EC == 9) {
-        RoomSoundSlot *sound = &D_800B0E64_slot;
+        RoomSoundSlot *sound = (RoomSoundSlot *)D_800B0E64;
         int volume;
         if (sound->channel != 0) {
             volume = 0x7F;

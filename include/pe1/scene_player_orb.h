@@ -11,6 +11,7 @@
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_script_context.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/scene_archive.h"
 
 /* Scene e08 player orb: an effect spawned at a random spot around the
  * player, swung around the scene anchor by the anchor's facing, then drawn
@@ -53,12 +54,6 @@ extern RenderColor D_8018F004;
 extern GteVector D_8018F008;
 extern u8 D_801987E4[];
 extern u8 D_80199690[];
-/* The sound owner read as a one-field record (see room_m089_spin_model.h). */
-typedef struct ScenePlayerOrbSound {
-    void *channel;
-} ScenePlayerOrbSound;
-
-extern ScenePlayerOrbSound D_800B0E64;
 
 int *func_800C2B10(int index);
 int func_800C6B90(GteShortVector *position, int radius);

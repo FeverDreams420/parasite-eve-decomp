@@ -15,6 +15,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/scene_archive.h"
 
 /* room_m005 joint beacon (func_8018FDC4): follows joint 0x14 of the actor,
  * sheds drifting sprites, swells and shrinks, tags the player on contact and
@@ -78,16 +79,11 @@ typedef struct RoomM005BeaconOffset {
     s32 word[2];
 } __attribute__((packed)) RoomM005BeaconOffset;
 
-typedef struct RoomM005BeaconArchive {
-    void *channel;
-} RoomM005BeaconArchive;
-
 typedef struct RoomM005BeaconColor {
     u8 r, g, b, code;
 } RoomM005BeaconColor;
 
 extern RoomM005BeaconEntity *D_8009D254;
-extern RoomM005BeaconArchive D_800B0E64;
 extern RoomM005BeaconOffset D_8018F010;
 extern u8 *D_80190B94;
 extern u8 *D_80190B98;

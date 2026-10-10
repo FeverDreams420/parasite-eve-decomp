@@ -116,7 +116,7 @@ int func_80195D20(int mode, RoomShakeBurstPoint *burst) {
         if (ANIM_TASK_AS(RoomShakeBurstEvent)->running == 0)
             return 1;
         if (D_800E27EC == 2) {
-            soundSlot = &D_800B0E64;
+            soundSlot = D_800B0E64;
             if (*soundSlot != 0) {
                 volume = 0x7F;
                 time = func_800D3FD8();

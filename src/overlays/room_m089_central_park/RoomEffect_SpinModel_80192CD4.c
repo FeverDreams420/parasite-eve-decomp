@@ -27,7 +27,7 @@ int func_80192CD4(int mode, RoomM089SpinModel *spin, GteShortVector *anchor) {
     case 0:
         spin->stage = 0;
         spin->timer = 0;
-        D_80194168 = func_8006E498(D_800B0E64.channel, 0xC5864704);
+        D_80194168 = func_8006E498(D_800B0E64[0], 0xC5864704);
         func_800C6D5C((union FieldTexturedModel *)D_80194168, 0, 0);
         return 0;
     case 1:

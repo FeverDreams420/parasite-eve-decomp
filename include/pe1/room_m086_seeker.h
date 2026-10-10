@@ -14,6 +14,7 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/scene_archive.h"
 
 /* room_m086 falling seeker (func_8018F004): a turning model that flies
  * along its heading until it lands, bursts on the player (flagging the
@@ -97,12 +98,6 @@ typedef struct RoomM086SpawnChannel {
 
 extern RoomM086Offset D_8018EFF4;
 extern RoomM086Offset D_8018EFFC;
-/* Model archive base, read twice through one address register. */
-typedef struct RoomM086Archive {
-    void *base;
-} RoomM086Archive;
-
-extern RoomM086Archive D_800B0E64;
 extern u8 *D_80190B88;
 extern u16 D_800E1208;
 

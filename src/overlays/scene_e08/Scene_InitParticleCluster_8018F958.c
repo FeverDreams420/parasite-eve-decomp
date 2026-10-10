@@ -40,7 +40,7 @@ void func_8018F958(int unused0, int unused1, SceneParticleCluster *slots) {
     }
     slots->count = 30;
     {
-        void *volatile *sound = &D_800B0E64;
+        void *volatile *sound = D_800B0E64;
         if (*sound) {
             func_8006DF50(*sound, 0x608, 0, 0x80, 0x7F);
         }

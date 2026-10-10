@@ -109,7 +109,7 @@ int func_80193BFC(int mode, s16 *counter) {
     switch (mode) {
     case 0:
         *counter = 0;
-        soundSlot = &D_800B0E64;
+        soundSlot = D_800B0E64;
         if (*soundSlot != 0) {
             volume = 0x7F;
             time = func_800D3FD8();

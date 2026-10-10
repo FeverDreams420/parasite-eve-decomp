@@ -7,6 +7,7 @@
 #include "pe1/render_prim.h"
 #include "pe1/field_model_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/scene_archive.h"
 
 /* room_m089 spinning model: a glow sprite swells over the anchor while two
  * copies of a loaded model turn and shrink above it. */
@@ -17,13 +18,6 @@ typedef struct RoomM089SpinModel {
 
 extern RenderColor D_8018F1D4;
 extern u8 *D_80194168;
-/* The sound owner read as a one-field record keeps its load below the
- * state stores, as retail has it. */
-typedef struct RoomM089SoundOwner {
-    void *channel;
-} RoomM089SoundOwner;
-
-extern RoomM089SoundOwner D_800B0E64;
 u8 *func_8006E498(void *channel, int id);
 u16 GetClut(int x, int y);
 int rsin(int angle);

@@ -5,6 +5,7 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_model_draw.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/scene_archive.h"
 
 extern RoomM273PlayerActorView *g_PlayerEntity;
 extern u8 D_8019AE9A;
@@ -21,7 +22,7 @@ typedef struct { void *asset,*pool; } AssetState;
 extern short D_8019AC18[];
 extern int D_8019AC0C[];
 extern AssetState D_8019AE8C;
-extern void *D_8019AE90,*D_800B0E64;
+extern void *D_8019AE90;
 extern unsigned char D_8019AE9A;
 extern int GetTPage(int,int,int,int),rcos(int),rsin(int);
 extern unsigned short GetClut(int,int);
@@ -142,7 +143,7 @@ int func_80193F30(int mode) {
     switch(mode) {
     case 0: {
         int size;
-        D_8019AE8C.asset=Asset_FindTable08ByU32Key(D_800B0E64,0xC5941704);
+        D_8019AE8C.asset=Asset_FindTable08ByU32Key(D_800B0E64[0],0xC5941704);
         func_800C6D5C(D_8019AE8C.asset,0,0);
         size=func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,16,6,
                            (FieldAnimCallbackListCallback)func_80193CB8);

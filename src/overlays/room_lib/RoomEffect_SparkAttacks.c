@@ -690,7 +690,7 @@ int RoomEffect_BeamSparkController(int mode, RoomBeamSpark *fx,
         fx->ty = params->y;
         fx->tz = params->z;
         fx->ty = g_RoomFloorY->raw;
-        g_RoomBeamSparkAsset = func_8006E498(D_800B0E64_slot.channel, 0xC5485704);
+        g_RoomBeamSparkAsset = func_8006E498(D_800B0E64[0], 0xC5485704);
         func_800C6D5C(g_RoomBeamSparkAsset, 0, 0);
         handle = func_800D3FD8();
         func_800D3F64(0x58A, handle);
@@ -1034,7 +1034,7 @@ int RoomEffect_JitterSparkController(int mode, GteShortVector *target,
 
     switch (mode) {
     case 0:
-        sound = &D_800B0E64_slot;
+        sound = (RoomSoundSlot *)D_800B0E64;
         if (sound->channel != 0) {
             volume = 0x7F;
             handle = func_800D3FD8();

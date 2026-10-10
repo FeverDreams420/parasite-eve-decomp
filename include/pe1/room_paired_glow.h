@@ -5,6 +5,7 @@
 #include "pe1/room_fx.h"
 #include "pe1/field_sprite_state.h"
 #include "pe1/field_model_draw.h"
+#include "pe1/scene_archive.h"
 
 /* The paired glow (src/overlays/room_lib/RoomLib_PairedGlow.c). */
 
@@ -14,7 +15,6 @@ extern RoomFxSpritePacket g_RoomPairedGlowSprite;
 extern void *g_RoomPairedGlowPacket;
 extern unsigned char g_RoomPairedGlowColorTable[];
 
-extern void *D_800B0E64;
 
 int *func_800C2B10(int index);
 void *func_8006E498(void *owner, int id);

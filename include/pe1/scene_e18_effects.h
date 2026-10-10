@@ -9,6 +9,7 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_model_draw.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/scene_archive.h"
 
 /* Particle emitters of the scene_e18 script: one rises from random model
  * joints and fades out, the other drops wave rings from random joints. */
@@ -104,7 +105,6 @@ typedef struct SceneE18FlankParticle {
     s16 leader;                   /* 0x12 */
 } SceneE18FlankParticle;
 
-extern void *D_800B0E64;
 extern void *D_801941C4;
 extern s16 D_801941C8;
 extern void *func_8006E498(void *base, u32 key);

@@ -517,7 +517,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
         case 0:
             sweep->timer++;
             if ((s16)sweep->timer == 2) {
-                RoomSoundSlot *sound = &D_800B0E64_slot;
+                RoomSoundSlot *sound = (RoomSoundSlot *)D_800B0E64;
                 sweep->soundHandle = sound->channel
                     ? func_8006DF50_handle(sound->channel, 0x598, func_800D3FD8(), 0x80, 0x7F)
                     : 0;
@@ -1195,14 +1195,14 @@ int RoomFx_RisingSprayController(int mode, void *state,
             }
         }
         if (D_800E27EC == 1) {
-            RoomSoundSlot *sound = &D_800B0E64_slot;
+            RoomSoundSlot *sound = (RoomSoundSlot *)D_800B0E64;
             if (sound->channel) {
                 func_8006DF50(sound->channel, 0x599, func_800D3FD8(), 0x80, 0x7F);
                 if (sound->channel) func_8006DF50(sound->channel, 0x5B5, 0x80, 0x80, 0x7F);
             }
         }
         if (D_800E27EC == 0x10) {
-            RoomSoundSlot *sound = &D_800B0E64_slot;
+            RoomSoundSlot *sound = (RoomSoundSlot *)D_800B0E64;
             if (sound->channel) {
                 func_8006DF50(sound->channel, 0x5B6, func_800D3FD8(), 0x80, 0x7F);
                 if (sound->channel) func_8006DF50(sound->channel, 0x5B7, 0x80, 0x80, 0x7F);

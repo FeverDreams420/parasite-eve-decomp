@@ -90,7 +90,7 @@ int func_80194C04(int mode, RoomPulseParticle *particle)
                     *object->status = 2;
             }
         }
-        soundSlot = &D_800B0E64_slot;
+        soundSlot = (RoomSoundSlot *)D_800B0E64;
         if (soundSlot->channel != 0) {
             volume = 0x7F;
             time = func_800D3FD8();

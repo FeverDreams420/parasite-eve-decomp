@@ -101,7 +101,7 @@ initialize:
             effect->position.y = (s16) (u16) effect->target.y;
             effect->position.z = (s16) (u16) effect->target.z;
             asm volatile("" : "=r"(assetKey) : "0"(assetKey) : "memory");
-            temp_v0 = func_8006E498(D_800B0E64, assetKey | 0x3704U);
+            temp_v0 = func_8006E498(D_800B0E64[0], assetKey | 0x3704U);
             D_8019085C = temp_v0;
             func_800C6D5C(temp_v0, 0, 0);
             func_800D1384(&effect->position, &effect->position, 0x3EE, (unsigned char *)initColor0, (unsigned char *)initColor1, 0x80, (struct FieldTrailPair *)effect->history, initialMode);

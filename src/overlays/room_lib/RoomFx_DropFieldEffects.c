@@ -46,7 +46,7 @@ void RoomFx_DropFieldInit(RoomDropFieldEntity *ent, void *unused, RoomDropFieldS
     RoomDropFieldMatrixWords *matrix;
 
     func_800C2B40(state);
-    g_RoomDropFieldModel = func_8006E498(D_800B0E64, 0x118704);
+    g_RoomDropFieldModel = func_8006E498(D_800B0E64[0], 0x118704);
 
     link = ent->link;
     state->link = link;

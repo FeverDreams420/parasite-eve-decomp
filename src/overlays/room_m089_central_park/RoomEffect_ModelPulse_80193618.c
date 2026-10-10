@@ -41,9 +41,9 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
                 if (*flag == 1) *flag = 2;
             }
         }
-        D_8019416C = func_8006E498(D_800B0E64.channel, 0xC5464704);
+        D_8019416C = func_8006E498(D_800B0E64[0], 0xC5464704);
         func_800C6D5C((union FieldTexturedModel *)D_8019416C, 0, 0);
-        D_80194168 = func_8006E498(D_800B0E64.channel, 0xC5864704);
+        D_80194168 = func_8006E498(D_800B0E64[0], 0xC5864704);
         func_800C6D5C((union FieldTexturedModel *)D_80194168, 0, 0);
         return func_800CE560(ANIM_POOL_AS(RoomM089SpawnChannel)->pool, 0x10, 0x18,
                              (FieldAnimCallbackListCallback)func_80193200);

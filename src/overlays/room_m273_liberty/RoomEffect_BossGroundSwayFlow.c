@@ -5,6 +5,7 @@
 #include "pe1/gte.h"
 #include "room_m273_sway.h"
 #include "pe1/field_model_draw.h"
+#include "pe1/scene_archive.h"
 typedef GteShortVector Vector;
 typedef RoomM273PairPoolRecord Record;
 
@@ -195,13 +196,13 @@ int func_80198E94(int mode, GteShortVector *position) {
 /* Partial storage views; the fourth halfword carries the emitter flag. */
 typedef RoomM273PairPoolRecord Entry;
 typedef struct { Entry entries[2]; unsigned char unknown[14]; unsigned char stopped; } EmitterState;
-extern void *D_800B0E64, *D_8019AF6C;
+extern void *D_8019AF6C;
 extern EmitterState D_8019AF84;
 
 int func_801993F0(int mode) {
     switch (mode) {
     case 0:
-        D_8019AF6C = Asset_FindTable08ByU32Key(D_800B0E64, 0xC5541704);
+        D_8019AF6C = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5541704);
         func_800C6D5C(D_8019AF6C, 0, 0);
         return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 4,
                              (FieldAnimCallbackListCallback)func_80198E94);

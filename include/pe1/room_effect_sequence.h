@@ -5,12 +5,12 @@
 #include "pe1/field_sprite_state.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_script_context.h"
+#include "pe1/scene_archive.h"
 
 /* The effect sequence (src/overlays/room_lib/RoomFx_EffectSequence.c):
  * the room data it fills and reads (the same addresses in all five rooms
  * that link it) and the main code it calls. */
 
-extern void *D_800B0E64;
 extern u8 D_80192C08;
 extern u8 D_80192C09;
 extern u8 D_80192C0A;

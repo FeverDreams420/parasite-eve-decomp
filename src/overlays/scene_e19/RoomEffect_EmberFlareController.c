@@ -34,7 +34,7 @@ int func_801978EC(int mode, SceneE22EmberBurst *burst) {
                     *object->status = 2;
             }
         }
-        soundSlot = &D_800B0E64.channel;
+        soundSlot = D_800B0E64;
         if (*soundSlot != 0) {
             volume = 0x7F;
             func_8006DF50(*soundSlot, 0x5E5, func_800D3FD8(), 0x80, volume);

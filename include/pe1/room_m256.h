@@ -8,9 +8,9 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_owner_actor.h"
+#include "pe1/scene_archive.h"
 
 /* ABI declarations used by the room_m256 effect dispatcher. */
-extern int D_800B0E64;
 extern u16 D_800E11EA;
 extern int D_80195EF8;
 extern int func_801940B0(int mode, void *state);

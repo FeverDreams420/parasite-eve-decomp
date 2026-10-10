@@ -98,7 +98,7 @@ int func_80195B40(int mode, SceneE22SwirlRing *swirl) {
         swirl->timer = 0;
         swirl->glow = 0;
         swirl->ring = 0;
-        soundSlot = &D_800B0E64.channel;
+        soundSlot = D_800B0E64;
         if (*soundSlot != 0) {
             volume = 0x7F;
             func_8006DF50(*soundSlot, 0x5D6, func_800D3FD8(), 0x80, volume);

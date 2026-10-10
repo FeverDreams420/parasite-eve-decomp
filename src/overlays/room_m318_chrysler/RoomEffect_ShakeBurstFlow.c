@@ -65,7 +65,7 @@ int func_80194164(int mode, RoomShakeBurstPoint *anchor) {
                     *object->status = 2;
             }
         }
-        soundSlot = &D_800B0E64;
+        soundSlot = D_800B0E64;
         if (*soundSlot != 0) {
             volume = 0x7F;
             time = func_800D3FD8();

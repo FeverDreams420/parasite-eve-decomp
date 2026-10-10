@@ -12,6 +12,7 @@
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/scene_archive.h"
 
 /* Shake burst controller (room_m318): shakes the camera while it scatters
  * debris particles around its anchor, then flags the actor for the
@@ -85,7 +86,6 @@ PE1_STATIC_ASSERT(sizeof(RoomShakeSweepParticle) == 0x10,
                   room_shake_sweep_particle_size);
 
 extern RoomShakeBurstEntity **D_8009D254;
-extern void *D_800B0E64;
 extern u16 D_800E11EA;
 
 extern void func_8006DF50(void *channel, int id, int value, int volume, int pan);

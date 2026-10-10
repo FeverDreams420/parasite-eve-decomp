@@ -5,6 +5,7 @@
 #include "pe1/akao.h"
 #include "pe1/game_state.h"
 #include "pe1/psyq_nop.h"
+#include "pe1/scene_archive.h"
 
 extern u8 D_8009317C[];
 extern u32 D_8009D170;
@@ -273,7 +274,6 @@ void Akao_ResetPositionalState(void) {
     Akao_Cmd_F0();
 }
 
-extern SceneAssetBlob *D_800B0E64[];
 extern SceneTrackRecord *D_8009D180;
 extern s16 D_8009D184;
 void *memcpy(void *, const void *, unsigned);

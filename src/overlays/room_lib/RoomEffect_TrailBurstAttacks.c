@@ -357,7 +357,7 @@ int RoomEffect_ModelBurstController(int mode, s16 *state) {
     switch (mode) {
     case 0:
         *state = 0;
-        g_RoomModelBurstAsset = func_8006E498(D_800B0E64, 0xC54A5704);
+        g_RoomModelBurstAsset = func_8006E498(D_800B0E64[0], 0xC54A5704);
         func_800C6D5C(g_RoomModelBurstAsset, 0, 0);
         {
             int tpage = D_800E2850[D_800E11EA];
@@ -797,7 +797,7 @@ int RoomEffect_ScatterBurstController(int mode, s16 *state) {
     switch (mode) {
     case 0:
         *state = 0;
-        g_RoomScatterBurstAsset = func_8006E498(D_800B0E64, 0xC54A5704);
+        g_RoomScatterBurstAsset = func_8006E498(D_800B0E64[0], 0xC54A5704);
         func_800C6D5C(g_RoomScatterBurstAsset, 0, 0);
         {
             int tpage = D_800E2850[D_800E11EA];

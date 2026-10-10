@@ -4,10 +4,10 @@
 #include "../room_lib/room_lib.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/scene_archive.h"
 
 extern short D_800966EC[][2];
 
-extern void *D_800B0E64;
 extern FieldActorNode *D_8009D20C;
 
 extern int func_80071A54(void);

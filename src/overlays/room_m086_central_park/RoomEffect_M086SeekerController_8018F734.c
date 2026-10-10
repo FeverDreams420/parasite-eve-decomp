@@ -40,9 +40,9 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
                 if (*flag == 1) *flag = 2;
             }
         }
-        D_80190B88 = func_8006E498(D_800B0E64.base, 0xC5465704);
+        D_80190B88 = func_8006E498(D_800B0E64[0], 0xC5465704);
         func_800C6D5C((union FieldTexturedModel *)D_80190B88, 0, 0);
-        D_80190B84 = func_8006E498(D_800B0E64.base, 0xC5865704);
+        D_80190B84 = func_8006E498(D_800B0E64[0], 0xC5865704);
         func_800C6D5C((union FieldTexturedModel *)D_80190B84, 0, 0);
         func_800D3F64(0x577, func_800D3FD8());
         return func_800CE560(ANIM_POOL_AS(RoomM086SpawnChannel)->pool, 0x14, 0xE,

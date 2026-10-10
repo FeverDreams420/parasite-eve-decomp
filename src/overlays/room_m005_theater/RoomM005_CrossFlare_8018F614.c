@@ -25,7 +25,7 @@ int func_8018F614(int mode) {
 
     switch (mode) {
     case 0:
-        soundSlot = &D_800B0E64_slot;
+        soundSlot = (RoomSoundSlot *)D_800B0E64;
         if (soundSlot->channel != 0) {
             volume = 0x7F;
             handle = func_800D3FD8();

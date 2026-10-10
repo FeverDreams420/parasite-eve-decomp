@@ -59,15 +59,15 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
 
     switch (mode) {
     case 0:
-        D_8019B680 = func_8006E498(D_800B0E64.channel, 0xC54C0704);
+        D_8019B680 = func_8006E498(D_800B0E64[0], 0xC54C0704);
         func_800C6D5C(D_8019B680, 0, 0);
-        D_8019B684 = func_8006E498(D_800B0E64.channel, 0xC58C0704);
+        D_8019B684 = func_8006E498(D_800B0E64[0], 0xC58C0704);
         func_800C6D5C(D_8019B684, 0, 0);
-        D_8019B688 = func_8006E498(D_800B0E64.channel, 0xC5CC0704);
+        D_8019B688 = func_8006E498(D_800B0E64[0], 0xC5CC0704);
         func_800C6D5C(D_8019B688, 0, 0);
-        D_8019B68C = func_8006E498(D_800B0E64.channel, 0xC60C0704);
+        D_8019B68C = func_8006E498(D_800B0E64[0], 0xC60C0704);
         func_800C6D5C(D_8019B68C, 0, 0);
-        D_8019B690 = func_8006E498(D_800B0E64.channel, 0xC64C0704);
+        D_8019B690 = func_8006E498(D_800B0E64[0], 0xC64C0704);
         func_800C6D5C(D_8019B690, 0, 0);
         blast->state = 0;
         blast->timer = 0;
@@ -81,10 +81,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
         case 0:
             timer = blast->timer + 1;
             blast->timer = timer;
-            if (timer == 2 && D_800B0E64.channel != 0) {
-                func_8006DF50(D_800B0E64.channel, 0x5E3, func_800D3FD8(), 0x80, 0x7F);
-                if (D_800B0E64.channel != 0) {
-                    func_8006DF50(D_800B0E64.channel, 0x5E4, 0x80, 0x80, 0x7F);
+            if (timer == 2 && D_800B0E64[0] != 0) {
+                func_8006DF50(D_800B0E64[0], 0x5E3, func_800D3FD8(), 0x80, 0x7F);
+                if (D_800B0E64[0] != 0) {
+                    func_8006DF50(D_800B0E64[0], 0x5E4, 0x80, 0x80, 0x7F);
                 }
             }
             if (blast->timer < 0x10) {

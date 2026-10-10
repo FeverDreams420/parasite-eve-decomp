@@ -11,6 +11,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/scene_archive.h"
 
 /* Ember controllers (scene_e22): ride the room actor, wake the scene
  * object's status byte, spray ember drift particles and draw a halo and a
@@ -113,13 +114,6 @@ typedef struct SceneE22SwirlRing {
     s16 ring;                     /* 0x0E */
 } SceneE22SwirlRing;
 
-/* The sound owner read as a one-field record so the twist model's read
- * stays behind its state clears (see room_m089_spin_model.h). */
-typedef struct SceneE22SoundOwner {
-    void *channel;
-} SceneE22SoundOwner;
-
-extern SceneE22SoundOwner D_800B0E64;
 extern GteRotation D_8018F1F4;
 extern RenderColor D_8018F214;
 extern u8 D_80199434[];

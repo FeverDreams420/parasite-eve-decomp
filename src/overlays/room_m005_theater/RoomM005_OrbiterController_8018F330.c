@@ -21,7 +21,7 @@ int func_8018F330(int mode, RoomM005OrbiterState *state) {
                              (FieldAnimCallbackListCallback)RoomM005_FxOrbiter_8018F018);
     case 1:
         if (D_800E27EC == 7) {
-            soundSlot = &D_800B0E64_slot;
+            soundSlot = (RoomSoundSlot *)D_800B0E64;
             if (soundSlot->channel != 0) {
                 volume = 0x7F;
                 handle = func_800D3FD8();

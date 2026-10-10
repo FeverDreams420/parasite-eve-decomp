@@ -12,7 +12,7 @@ int func_80192B8C(int mode, SceneE18EmitterState *state) {
     switch (mode) {
     case 0:
         D_801941C8 = 4;
-        D_801941C4 = func_8006E498(D_800B0E64, 0xC58C7704);
+        D_801941C4 = func_8006E498(D_800B0E64[0], 0xC58C7704);
         func_800C6D5C(D_801941C4, 0, 0);
         state->count = 0;
         state->delay = 0;

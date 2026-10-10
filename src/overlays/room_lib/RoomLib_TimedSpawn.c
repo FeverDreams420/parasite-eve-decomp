@@ -15,6 +15,7 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/scene_archive.h"
 
 /* The colour ramp table each room defines in its data. */
 extern char RoomLib_TimedRenderTable;
@@ -88,18 +89,10 @@ typedef struct RoomTimedSpawnEngine {
     u32 flags;                        /* 0x4C */
 } RoomTimedSpawnEngine;
 
-typedef struct RoomTimedSpawnSoundState {
-    void *owner;
-    u16 x;
-    u16 y;
-    u16 z;
-} RoomTimedSpawnSoundState;
-
 extern void *D_8009D254;
 extern void *g_PlayerEntity;
 extern void *RoomMain_ActorPtr2;
 extern u16 D_800E11EA;
-extern RoomTimedSpawnSoundState D_800B0E64;
 
 void Akao_SendTableCommand(void *owner, int id, int value, int volume, int pan);
 
@@ -126,9 +119,9 @@ int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
             }
         }
 
-        if (D_800B0E64.owner != 0) {
+        if (D_800B0E64[0] != 0) {
             value = func_800D3FD8();
-            Akao_SendTableCommand(D_800B0E64.owner, 0x588, value, 0x80, 0x7F);
+            Akao_SendTableCommand(D_800B0E64[0], 0x588, value, 0x80, 0x7F);
         }
         return func_800CE560(((void **)ANIM_POOL_AS(void))[2], 0xC, 8,
                              (FieldAnimCallbackListCallback)RoomLib_UpdateTimedRender);

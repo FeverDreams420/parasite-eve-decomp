@@ -11,7 +11,7 @@ int func_80195320(int mode, u16 *out) {
     case 0:
 
         *out = (u16)D_800E2368->variables[0];
-        D_80195EF8 = func_8006E498(D_800B0E64, 0xC5887704);
+        D_80195EF8 = func_8006E498(D_800B0E64[0], 0xC5887704);
         func_800C6D5C((union FieldTexturedModel *)D_80195EF8, 0, 0);
         if (D_800E2368->flags) {
             p = (char *)D_800F32D0->actor;

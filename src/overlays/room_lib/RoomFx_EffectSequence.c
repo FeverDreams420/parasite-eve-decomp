@@ -58,7 +58,7 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     register int c2 asm("$2");
 
     func_800C2B40(state);
-    D_80192C34 = func_8006E498(D_800B0E64, 0x498704);
+    D_80192C34 = func_8006E498(D_800B0E64[0], 0x498704);
     link = ent->link;
     state->link = link;
     matrix = (RoomLibFxMatrixWords *)link->p238;

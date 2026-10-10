@@ -9,6 +9,7 @@
 #include "pe1/field_model_draw.h"
 #include "pe1/field_vector_math.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/scene_archive.h"
 
 /* Steers a rotating footprint, tests contact, and draws three model/sprite layers. */
 typedef RoomM350Vector Vector;
@@ -19,7 +20,6 @@ typedef FieldActorState Owner;
 typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
 extern Instance *g_PlayerEntity;
-extern void *D_800B0E64;
 extern short D_8019A82A[];
 extern unsigned char D_8019A831,D_8019A82F,D_8019A830;
 extern short D_800966EC[],D_800966EE[];
@@ -42,7 +42,7 @@ int func_801960C4(int event,State *state)
     switch (event) {
 case 0:
     {
-        state->asset=Asset_FindTable08ByU32Key(D_800B0E64,0xC54E0704);
+        state->asset=Asset_FindTable08ByU32Key(D_800B0E64[0],0xC54E0704);
         func_800C6D5C(state->asset,0,0);
         state->size=0;
         {

@@ -34,9 +34,9 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
                 if (*flag == 1) *flag = 2;
             }
         }
-        D_80190B94 = func_8006E498(D_800B0E64.channel, 0xC5462704);
+        D_80190B94 = func_8006E498(D_800B0E64[0], 0xC5462704);
         func_800C6D5C((union FieldTexturedModel *)D_80190B94, 0, 0);
-        D_80190B98 = func_8006E498(D_800B0E64.channel, 0xC5862704);
+        D_80190B98 = func_8006E498(D_800B0E64[0], 0xC5862704);
         func_800C6D5C((union FieldTexturedModel *)D_80190B98, 0, 0);
         return func_800CE560(ANIM_POOL_AS(RoomM005BeaconSpawnChannel)->pool, 0x10, 8,
                              (FieldAnimCallbackListCallback)func_8018FB84);

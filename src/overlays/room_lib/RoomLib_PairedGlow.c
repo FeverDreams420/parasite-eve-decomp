@@ -56,7 +56,7 @@ void *RoomLib_InitPairedGlowSprite(char *obj, s32 arg1, char *state) {
     g_RoomPairedGlowSprite.g = 0x80;
     g_RoomPairedGlowSprite.b = 0x80;
     g_RoomPairedGlowSprite.zero = 0;
-    return g_RoomPairedGlowPacket = func_8006E498(D_800B0E64, 0xCB8704);
+    return g_RoomPairedGlowPacket = func_8006E498(D_800B0E64[0], 0xCB8704);
 }
 
 void RoomLib_PairedGlowNopA(void) {
@@ -125,7 +125,7 @@ void RoomLib_InitPairedEmitterWithSound(void *arg0, void *arg1,
     secondary->source = state->sourceData;
     func_800C4E50(secondary);
 
-    soundOwnerSlot = &D_800B0E64;
+    soundOwnerSlot = D_800B0E64;
     if (*soundOwnerSlot != 0) {
         func_8006DF50(*soundOwnerSlot, 0x57E, 0, 0x80, 0x7F);
     }
