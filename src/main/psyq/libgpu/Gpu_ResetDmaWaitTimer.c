@@ -1,15 +1,11 @@
 #include "pe1/gpu_dma_timeout_state.h"
 #include "pe1/psyq_bios.h"
+#include "pe1/gpu_dma_register_window.h"
 
 int SetIntrMask(int mask);
 
-typedef unsigned int u32;
-
 extern volatile u32 *g_GpuGp0Ptr;
 extern u32 *g_GpuGp1Ptr;
-extern volatile u32 *g_GpuDmaMadrPtr;
-extern volatile u32 *g_GpuDmaChcrPtr;
-extern volatile u32 *g_GpuDmaControlRegPtr;
 /* Queue indices can change asynchronously; preserve ordered status reads. */
 extern volatile u32 g_GpuDmaQueueHead;
 extern volatile u32 g_GpuDmaQueueTail;

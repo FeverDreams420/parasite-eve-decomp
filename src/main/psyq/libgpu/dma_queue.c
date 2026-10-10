@@ -10,10 +10,11 @@
 #include "pe1/gpu_state.h"
 #include "pe1/gpu_dma_state.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/gpu_dma_register_window.h"
 
 extern volatile u32 D_80095874, D_80095878;
 extern u32 D_8009587C;
-extern u32 *D_80095860, *D_80095854;
+extern u32 *D_80095860;
 void Gpu_ResetDmaWaitTimer(void);
 int Gpu_DmaTimeoutCheck(void);
 int SetIntrMask(int);
@@ -44,7 +45,7 @@ int Gpu_SwapDisplayBuffers(void (*function)(u32, u32), u32 *source, int size, u3
         if (state->drawSyncCallback) goto queued;
     }
     {
-        register volatile u32 *gp1 = (volatile u32 *)D_80095854;
+        register volatile u32 *gp1 = (volatile u32 *)D_80095854.gp1;
         register u32 ready = 0x04000000;
         do {} while (!(*gp1 & ready));
         function((u32)source, argument);
@@ -86,8 +87,6 @@ queued:
 }
 
 extern u32 *D_80095860;
-extern u32 *D_80095854;
-extern volatile u32 D_80095874;
 extern volatile u32 D_80095878;
 extern u32 D_80095880;
 int SetIntrMask(int);
@@ -111,7 +110,7 @@ int Gpu_SetDisplayBuffer(void) {
                 DMACallback(2, 0);
             }
             {
-                register volatile u32 *gp1 = (volatile u32 *)D_80095854;
+                register volatile u32 *gp1 = (volatile u32 *)D_80095854.gp1;
                 if (!(*gp1 & readyMask)) {
                     register u32 ready = 0x04000000;
                     do {} while (!(*gp1 & ready));
@@ -168,14 +167,11 @@ int Gpu_SetDisplayBuffer(void) {
 }
 
 extern u32 *g_GpuGp1Ptr;
-extern u32 *g_GpuDmaChcrPtr;
-extern u32 *g_GpuDmaControlRegPtr;
 extern volatile u32 g_GpuDmaQueueHead;
 extern volatile u32 g_GpuDmaQueueTail;
 extern u32 D_80095884;
-extern u32 D_80095874;
 extern volatile u32 D_80095878;
-extern u32 *D_80095860, *D_80095854;
+extern u32 *D_80095860;
 extern unsigned char D_800A3348[];
 
 int SetIntrMask(int mask);
@@ -223,7 +219,7 @@ void Gpu_ResetDmaWaitTimer(void);
 int Gpu_DmaTimeoutCheck(void);
 
 static __inline__ unsigned int readGpuStatus(void) {
-    return *(volatile u32 *)D_80095854;
+    return *(volatile u32 *)D_80095854.gp1;
 }
 
 int Gpu_DrainDmaQueue(int mode) {

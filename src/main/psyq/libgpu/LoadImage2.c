@@ -1,4 +1,5 @@
 #include "pe1/psyq_callbacks.h"
+#include "pe1/gpu_dma_register_window.h"
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses */
 #include "pe1/gpu_callbacks.h"
@@ -7,7 +8,6 @@
 #include "pe1/gpu_dma_timeout_state.h"
 extern char D_800119BC[];
 void checkRECT(char *, RECT *);
-extern volatile unsigned int *g_GpuDmaChcrPtr;
 extern volatile unsigned int *g_GpuGp1Ptr;
 int Gpu_DmaTimeoutCheck(void);
 void Gpu_RestoreDmaCallback(void);

@@ -13,7 +13,6 @@
 extern short D_80095750;
 extern short D_80095752;
 extern unsigned int *D_80095850;
-extern GpuDmaRegisterWindow D_80095854;
 void Gpu_ResetDmaWaitTimer(void);
 int Gpu_DmaTimeoutCheck(void);
 
@@ -187,9 +186,7 @@ int Gpu_WriteDataWords(unsigned int *src, int count) {
 }
 
 extern unsigned int *g_GpuGp1Ptr;
-extern unsigned int *g_GpuDmaMadrPtr;
 extern unsigned int *g_GpuDmaBcrPtr;
-extern unsigned int *g_GpuDmaChcrPtr;
 
 void Gpu_StartDmaTransfer(unsigned int value) {
     *g_GpuGp1Ptr = 0x4000002;
