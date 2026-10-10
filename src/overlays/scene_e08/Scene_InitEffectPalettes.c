@@ -74,8 +74,8 @@ void func_80193C68(char *actor, void *unused, char *state) {
     RoomSoundSlot *soundAddress;
     int sixtyFour;
     int one;
-    register int half128 asm("$5");
-    register int byte128 asm("$3");
+    u16 half128;
+    u8 byte128;
     int thirtyTwo;
     register int two asm("$8");
     int minus300;
