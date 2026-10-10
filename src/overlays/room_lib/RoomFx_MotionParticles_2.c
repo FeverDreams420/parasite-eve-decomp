@@ -31,7 +31,9 @@ void RoomFx_DrawMotionParticles(void *unused, RoomStatePair *control,
     RoomSpriteMatrix matrix;
     RoomLibMotionScaleScratch scale;
     RoomMotionContext *context;
-    register RoomMotionTransform *source asm("$2");
+    RoomMotionTransform *savedSecondary;
+    RoomMotionTransform *savedPrimary;
+    RoomMotionTransform *current;
     RoomSpriteMatrix *primary;
     RoomSpriteMatrix *secondary;
     u16 *depth;
@@ -61,10 +63,10 @@ void RoomFx_DrawMotionParticles(void *unused, RoomStatePair *control,
     ScaleMatrix(&matrix, &scale.value);
 
     if (control->h2 == 30) {
-        source = (RoomMotionTransform *)context->link->p238;
-        state->matrix[1] = source->secondary;
-        source = (RoomMotionTransform *)context->link->p238;
-        state->matrix[0] = source->primary;
+        savedSecondary = (RoomMotionTransform *)context->link->p238;
+        state->matrix[1] = savedSecondary->secondary;
+        savedPrimary = (RoomMotionTransform *)context->link->p238;
+        state->matrix[0] = savedPrimary->primary;
     }
 
     if (control->h2 >= 31) {
@@ -72,9 +74,9 @@ void RoomFx_DrawMotionParticles(void *unused, RoomStatePair *control,
         primary = &state->matrix[0];
         secondary = &state->matrix[1];
     } else {
-        source = (RoomMotionTransform *)context->link->p238;
-        primary = &source->primary;
-        secondary = &source->secondary;
+        current = (RoomMotionTransform *)context->link->p238;
+        primary = &current->primary;
+        secondary = &current->secondary;
     }
 
     i = 0;

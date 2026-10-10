@@ -27,9 +27,9 @@ extern int func_80071A54(void);
 
 
 void RoomFx_UpdateParticleMotion(int arg0, char *control, char *state) {
-    int i;
+    unsigned int i;
     char *controlReg = control;
-    char *stateReg = state;
+    RoomMotionState *stateReg = (RoomMotionState *)state;
     int count;
     int amplitude;
     s16 value;
@@ -38,42 +38,41 @@ void RoomFx_UpdateParticleMotion(int arg0, char *control, char *state) {
     PE1_COMPILER_LAUNDER_MEM(controlReg);
 
     i = 0;
-    if (((RoomMotionState *)stateReg)->count != 0) {
+    if (stateReg->count != 0) {
         do {
-            ((RoomMotionState *)stateReg)->lookup[i].id = func_80071A54() % 8;
-            ((RoomMotionState *)stateReg)->lookup[i].pad = func_80071A54() % 8;
-            count = ((RoomMotionState *)stateReg)->count;
-            PE1_COMPILER_MEMORY_BARRIER();
+            stateReg->lookup[i].id = func_80071A54() % 8;
+            stateReg->lookup[i].pad = func_80071A54() % 8;
+            count = stateReg->count;
             i++;
         } while ((u32)i < count);
     }
 
     if (*(s16 *)(controlReg + 2) >= 31) {
-        amplitude = (s16)((RoomMotionState *)stateReg)->depth;
+        amplitude = (s16)stateReg->depth;
         value = amplitude;
         PE1_COMPILER_LAUNDER(value);
         if (amplitude >= 5) {
-            ((RoomMotionState *)stateReg)->depth = value - 4;
+            stateReg->depth = value - 4;
         } else {
-            ((RoomMotionState *)stateReg)->depth = 0;
+            stateReg->depth = 0;
         }
 
         i = 0;
-        if (((RoomMotionState *)stateReg)->count != 0) {
+        if (stateReg->count != 0) {
             do {
-                ((RoomMotionState *)stateReg)->particle[i].primaryX += ((RoomMotionState *)stateReg)->velocity[i].primaryX;
-                ((RoomMotionState *)stateReg)->particle[i].primaryY += ((RoomMotionState *)stateReg)->velocity[i].primaryY;
-                ((RoomMotionState *)stateReg)->particle[i].primaryZ += ((RoomMotionState *)stateReg)->velocity[i].primaryZ;
-                ((RoomMotionState *)stateReg)->particle[i].secondaryX += ((RoomMotionState *)stateReg)->velocity[i].secondaryX;
-                ((RoomMotionState *)stateReg)->particle[i].secondaryY += ((RoomMotionState *)stateReg)->velocity[i].secondaryY;
-                ((RoomMotionState *)stateReg)->particle[i].secondaryZ += ((RoomMotionState *)stateReg)->velocity[i].secondaryZ;
+                stateReg->particle[i].primaryX += stateReg->velocity[i].primaryX;
+                stateReg->particle[i].primaryY += stateReg->velocity[i].primaryY;
+                stateReg->particle[i].primaryZ += stateReg->velocity[i].primaryZ;
+                stateReg->particle[i].secondaryX += stateReg->velocity[i].secondaryX;
+                stateReg->particle[i].secondaryY += stateReg->velocity[i].secondaryY;
+                stateReg->particle[i].secondaryZ += stateReg->velocity[i].secondaryZ;
                 i++;
-            } while ((u32)i < ((RoomMotionState *)stateReg)->count);
+            } while ((u32)i < stateReg->count);
         }
     }
 
     if ((u32)(*(u16 *)(controlReg + 2) - 1) < 31) {
-        ((RoomMotionState *)stateReg)->depth += 4;
+        stateReg->depth += 4;
     }
     if (*(s16 *)(controlReg + 2) == 65) {
         controlReg[1] = 2;
