@@ -10,14 +10,13 @@ void DeliverEvent(unsigned int arg0, int arg1);
 int _err_math(int arg0, int arg1) {
     D_80094564 = arg0;
     D_80094568 = arg1;
-    if (arg0 == 0x21) {
-        goto event301;
-    }
+    if (arg0 != 0x21) {
     if (arg0 == 0x22) {
         goto event302;
     }
     return 0;
 
+    }
 event301:
     DeliverEvent(0xF4000002, 0x301);
     return 0;

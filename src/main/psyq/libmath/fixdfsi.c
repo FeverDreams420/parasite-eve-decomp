@@ -35,11 +35,13 @@ s32 __fixdfsi(register double value)
     parts.lo = input.bits.lo;
     _dbl_shift(&parts, 0, parts, 10);
     mantissa = parts.hi;
-    if ((u32)(exponent - 0x3FE) >= 0x20) goto zero;
-    if (mantissa == 0) goto zero;
+    if ((u32)(exponent - 0x3FE) < 0x20) {
+    if (mantissa != 0) {
     mantissa >>= -shift;
     goto applySign;
 
+    }
+    }
 zero:
     result = 0;
     return result;

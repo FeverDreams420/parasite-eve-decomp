@@ -95,14 +95,14 @@ int MemCard_WriteByteWithAckCheck(CardObj *obj) {
     }
     ret = result + zero;
     asm volatile("" : "=r"(result), "=r"(ret) : "0"(result), "1"(ret));
-    if (result == 0)
-        goto done;
+    if (result != 0) {
     /* Retail returns -9 for positive values other than 90, and preserves
      * negative values. The BGEZ delay slot assigns -9 before branching. */
     ret = -9;
-    if (result >= 0)
-        goto done;
+    if (result < 0) {
     ret = result;
+    }
+    }
 done:
     return ret;
 }

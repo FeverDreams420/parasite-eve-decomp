@@ -135,13 +135,12 @@ int _padLoadActInfo(CardObj *obj, unsigned char *buffer) {
     if (obj->capabilities != 0) {
         return 0;
     }
-    if (g_MemCardIsTransferActiveFn() == 0) {
-        goto initialize;
-    }
+    if (g_MemCardIsTransferActiveFn() != 0) {
 
 return_zero:
     return 0;
 
+    }
 initialize:
     result = 1;
     asm volatile("" : "=r"(result) : "0"(result));
@@ -278,11 +277,11 @@ int LIBPAD_PADCMD_text_3A0(CardObj *inPort) {
             } while (bytes != -1);
         }
 
-        if (port->combinationBytesRemaining == 0)
-            goto exhausted;
+        if (port->combinationBytesRemaining != 0) {
     zero:
         asm("" ::: "memory");
         return 0;
+        }
     exhausted:
         {
             port->infoRecordIndex++;

@@ -116,19 +116,30 @@ void LIBDS_DSSYS_1_text_4A4(void) {
                     CMD(timer)->eventValue = 32;
                     LIBDS_DSSYS_1_text_368(19, 0);
                 }
-            } else if (step == 24)
-                goto poll;
+            } else if (step == 24) {
+                pending = g_CdRomCmdTimeout;
+                if (pending <= 0) {
+                    CMD(timer)->eventValue = 32;
+                    LIBDS_DSSYS_1_text_368(1, 0);
+                }
+            }
         } else if (state == 15) {
             if (!*timer) {
                 READ(timer)->status = one;
                 READ(timer)->command = eleven;
             }
         } else if (state == 16) {
-            if (!READ(timer)->eventFlags.bit7)
-                goto poll;
-            asm("" ::: "memory");
-            READ(timer)->status = one;
-            READ(timer)->command = eleven;
+            if (!READ(timer)->eventFlags.bit7) {
+                pending = g_CdRomCmdTimeout;
+                if (pending <= 0) {
+                    CMD(timer)->eventValue = 32;
+                    LIBDS_DSSYS_1_text_368(1, 0);
+                }
+            } else {
+                asm("" ::: "memory");
+                READ(timer)->status = one;
+                READ(timer)->command = eleven;
+            }
         } else if (state == 17) {
             if (!READ(timer)->eventFlags.bit5)
                 goto poll;
@@ -140,11 +151,11 @@ void LIBDS_DSSYS_1_text_4A4(void) {
     poll:
         pending = g_CdRomCmdTimeout;
     check_timeout:
-        if (pending > 0)
-            goto callbacks;
+        if (pending <= 0) {
     send_status:
         CMD(timer)->eventValue = 32;
         LIBDS_DSSYS_1_text_368(1, 0);
+        }
     }
         }
 callbacks:

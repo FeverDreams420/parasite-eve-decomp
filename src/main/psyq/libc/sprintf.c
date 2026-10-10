@@ -66,9 +66,7 @@ s32 sprintf(char *dest, s8 *format, ...)
     args = (u8 *)&format + 4;
     c = *format;
     length = 0;
-    if (c == 0) {
-        goto finished;
-    }
+    if (c != 0) {
     minus = '-';
     plus = '+';
     space = ' ';
@@ -396,6 +394,7 @@ hexadecimal:
         }
     } while ((c = *++format) != 0);
 
+    }
 finished:
     dest[length] = 0;
     return length;

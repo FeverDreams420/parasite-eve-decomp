@@ -384,9 +384,9 @@ copyResult:
     if (selected != 0) {
         rescpy(result, selected->slot.payload);
         status = selected->slot.command;
-        goto done;
+    } else {
+        status = 6;
     }
-    status = 6;
 done:
     return status;
 }

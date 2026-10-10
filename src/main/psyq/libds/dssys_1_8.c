@@ -16,9 +16,7 @@ void LIBDS_DSSYS_1_text_EA4(int event, u8 *data) {
 
     data_reg = data;
     event &= 0xFF;
-    if (event == 5) {
-        goto event_five;
-    }
+    if (event != 5) {
 
     index = D_8009B624[g_CdRomEventCommandState.pendingCommand] - 1;
     if (index < 0) {
@@ -26,6 +24,7 @@ void LIBDS_DSSYS_1_text_EA4(int event, u8 *data) {
     }
     goto process;
 
+    }
 event_five:
     index = 0;
 

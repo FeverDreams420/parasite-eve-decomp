@@ -39,8 +39,7 @@ void *firstfile(const char *inName, void *inResult) {
     }
     found = 0;
 check:
-    if (found)
-        goto second;
+    if (!(found)) {
     return 0;
 save:
     D_800A32D0 = entry->firstFile;
@@ -49,6 +48,7 @@ save:
 install:
     entry->firstFile = Sys_FirstFileHookCallback;
     goto call;
+    }
 second:
     count = BIOS_DEVICE_DIRECTORY->byteLength;
     entry = BIOS_DEVICE_DIRECTORY->entries;

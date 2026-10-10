@@ -404,10 +404,10 @@ int MemCard_WriteByte(CardObj *obj, int value)
 
     sio = D_8009B788;
     received = sio->data;
-    if (obj->response_index == 0 && (received >> 4) == 8)
-        goto special_baud;
+    if (obj->response_index != 0 || (received >> 4) != 8) {
     sio->baud = baud;
     goto baud_done;
+    }
 special_baud:
     sio->baud = 0x22;
 baud_done:

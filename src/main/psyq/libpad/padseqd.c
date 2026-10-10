@@ -36,18 +36,15 @@ int func_80084B78(CardObj *obj) {
 
     state = obj->field_46;
     compare = 1;
-    if (state == compare) {
-        goto emit_one;
-    }
+    if (state != compare) {
     compare = state < 2;
-    if (compare == 0) {
-        goto high_state;
-    }
+    if (compare != 0) {
     if (state == 0) {
         return 0;
     }
     goto dispatch;
 
+    }
 high_state:
     compare = 0xFE;
     if (state == compare) {
@@ -59,6 +56,7 @@ high_state:
     }
     goto dispatch;
 
+    }
 emit_one:
     asm volatile("" : : "r"(compare));
     _padCmdParaMode(obj, 1);
@@ -113,8 +111,7 @@ void LIBPAD_PADSEQD_text_108(CardObj *port) {
         if (state != 0 && state != 255 && !port->command)
             return;
         one = 1;
-        if (state == one)
-            goto initial;
+        if (state != one) {
         if (state < 2) {
             value = 254;
             asm("" : : "r"(value));
@@ -136,6 +133,7 @@ void LIBPAD_PADSEQD_text_108(CardObj *port) {
         value++;
         port->field_46 = value;
         return;
+        }
     initial:
         value = port->field_46;
         port->infoRecordIndex = 0;

@@ -81,8 +81,7 @@ setup:
                 }
                 {
                     register int value = *count;
-                    if (value == three)
-                        goto paired;
+                    if (value != three) {
                     if (value < 4) {
                         arg = port;
                         if (value >= 2)
@@ -96,6 +95,7 @@ setup:
                         goto call_transfer;
                     *count = three;
                     goto call_transfer;
+                    }
                 paired:
                     D_8009B744(other - 1);
                     result = 1;
