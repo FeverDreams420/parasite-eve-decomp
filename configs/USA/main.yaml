@@ -436,13 +436,9 @@ segments:
       - [0x3CB4C, c, menu/Menu_OpenEquipSlotSwap]
       - [0x3CCB4, c, menu/Menu_ParasiteSpellInfoPanel]
       - [0x3CD94, c, menu/Menu_ContextHelpFlow]
-      - [0x3D450, c, menu/Menu_NotificationDialogs]
-      - [0x3D824, c, menu/Menu_DeferredCallback]
-      - [0x3D884, c, menu/Menu_MemCardDialogs]
-      - [0x3DA7C, c, memcard/MemCard_GetDialogMode]
-      - [0x3DA88, c, menu/Menu_MemCardErrorDialog]
-      - [0x3DADC, c, menu/Menu_MemCardPortSelectHandler]
-      - [0x3DCA0, c, menu/Menu_IsMemCardDialogOpen]
+      # Notification and two-line dialogs, their deferred confirm callback and the
+      # memory-card port dialog with its error prompt share dialog state (g_McDialogMode).
+      - [0x3D450, c, menu/Menu_Dialogs]
       - [0x3DCC4, c, menu/Menu_SaveSlotListView]
       - [0x3DE90, c, menu/Menu_DrawSaveSlotPortLabel]
       - [0x3DED4, c, menu/Menu_StepSaveSelect]
