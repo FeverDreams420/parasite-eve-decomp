@@ -195,8 +195,8 @@ segments:
       # id, random range, field sfx, node table lookups, actor byte fields and
       # node free; g_CurrentEntity stays absolute through the array declaration.
       - [0x7D40, c, task/Task_ActorAndNodeFieldOps]
-      - [0x81F8, c, entity/Entity_BitOpcodes]
-      - [0x82E8, c, task/Task_EntityActionAnimation]
+      # Default-profile opcodes: bit and global-flag ops, action mode and anim frame.
+      - [0x81F8, c, task/Task_BitAndActionOpcodes]
       - [0x8374, c, task/Task_WaitAnimFrameMatch]
       # Default-profile script opcodes between the -G8 Task_WaitAnimFrameMatch
       # and Entity_TaskAnimationOps: barcode, fog/scroll, camera reset and
