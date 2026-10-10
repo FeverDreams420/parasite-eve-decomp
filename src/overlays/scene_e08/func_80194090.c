@@ -22,7 +22,7 @@ void func_80194090(void *arg0, void *arg1, char *effects) {
     register char *state asm("$17");
     register char *phase asm("$16");
     s16 *alpha;
-    register unsigned i asm("$18");
+    unsigned i;
     unsigned angleOffset;
     owner = func_800C2B50();
     i = 0;
