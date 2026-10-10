@@ -46,15 +46,12 @@ int Inv_CompareItemsForSort(const void *leftElement, const void *rightElement) {
             return -1;
         }
         asm volatile("" ::: "memory");
-        goto compare_keys;
 
-    }
-left_record_is_empty:
+    } else {
     if (right != 0) {
         return 1;
     }
-
-compare_keys:
+    }
     if (rightKind < leftKind) {
         return 1;
     }

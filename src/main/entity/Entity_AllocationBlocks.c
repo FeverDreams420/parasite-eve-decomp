@@ -30,7 +30,7 @@ block_6:
     temp_t0 = var_a3 & 0xFF;
     temp_t1 = &g_RenderScratchBufferBase;
     var_a0 = var_a1 & 0xFF;
-loop_8:
+    while (1) {
     var_v1 = var_a0 << 3;
     if (D_800A7620[var_a0].address == 0) {
         var_a2 = 1;
@@ -76,7 +76,7 @@ block_20:
     if (var_v0 >= 0x10U) {
         return 0;
     }
-    goto loop_8;
+    }
 }
 
 
