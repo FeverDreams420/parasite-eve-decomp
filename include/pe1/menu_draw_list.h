@@ -6,6 +6,7 @@
 extern int D_8009D0E8;
 extern int D_8009D164, D_8009D168;
 
+/* The list renderer passes the row index in a0 to its drawing callback. */
 void MenuWidget_DrawList(MenuWidgetNode *node, void (*draw_callback)(int));
 void MenuWidget_DrawListRow(MenuWidgetNode *node, void (*draw_callback)(int),
                             int row, int draw_cursor);

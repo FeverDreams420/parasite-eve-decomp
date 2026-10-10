@@ -141,4 +141,6 @@ AyaLevelStats *Aya_LookupLevelStats(int level);
  * Stat scaling parameters live at D_800A1B30..D_800A1B44 (per-category offsets).
  */
 
+void Inv_RecalcSlotStats(void);
+
 #endif /* PE1_AYA_H */

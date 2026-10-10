@@ -9,6 +9,7 @@
 #include "pe1/menu_item_record.h"
 #include "pe1/menu_item_rows.h"
 #include "pe1/text.h"
+#include "pe1/inventory.h"
 
 /* Per-row item drawers the widget list renderer calls with the row index:
  * action options, equipped weapon/armor, action codes, modifier names, armor
@@ -40,7 +41,6 @@ void Draw_PrintNumberWidth3Unk(int value);
 void Menu_UpdateStatBarAnimation(int);
 void Draw_AllocTexturedQuad(int);
 void Inv_ShowItemDescriptionPanel(void);
-void Sfx_CursorRenderData(ItemDataRecord *record);
 
 void Menu_DrawActionOptionRow(int arg0) {
     Draw_SetTextDimmed(0);

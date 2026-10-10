@@ -1,8 +1,7 @@
 #include "pe1/menu_inventory.h"
 #include "pe1/field_actor.h"
+#include "pe1/inventory.h"
 extern FieldActor *g_CurrentEntity[];
-
-int Inv_AddItem(int arg0);
 
 int Inv_CountByValue(int arg0);
 

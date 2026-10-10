@@ -5,6 +5,7 @@
 #include "pe1/menu_sound.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/text.h"
+#include "pe1/menu_draw_list.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
@@ -182,16 +183,14 @@ check10000:
 }
 
 void Menu_DrawBlendColorChannelRow(int arg0);
-void MenuWidget_DrawList(int arg0, void (*arg1)(void));
 
 void Menu_DrawBlendColorChannelList(int arg0) {
-    MenuWidget_DrawList(arg0, Menu_DrawBlendColorChannelRow);
+    MenuWidget_DrawList((MenuWidgetNode *)arg0, Menu_DrawBlendColorChannelRow);
 }
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
 void Menu_DrawBlendColorOptionRow(void);
-void MenuWidget_DrawList(int arg0, void (*arg1)(void));
 
 int D_8009CFE4;
 
@@ -200,7 +199,7 @@ void Menu_StepScrollList(void);
 int Draw_GetBaseY(void);
 
 void Menu_DrawBlendColorOptionList(int arg0) {
-    MenuWidget_DrawList(arg0, Menu_DrawBlendColorOptionRow);
+    MenuWidget_DrawList((MenuWidgetNode *)arg0, (void (*)(int))Menu_DrawBlendColorOptionRow);
 }
 
 void Menu_OpenScreenAdjustView(int arg0) {

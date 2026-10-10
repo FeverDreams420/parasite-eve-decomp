@@ -1,10 +1,8 @@
 #include "pe1/menu_widget.h"
 #include "common.h"
+#include "pe1/menu_draw_list.h"
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
-s32 MenuWidget_GetCurrentNode();                    /* extern */
-M2C_UNK MenuWidget_SetCurrentNode(void *);          /* extern */
-M2C_UNK MenuWidget_SetCursorY(s32);                 /* extern */
 void Menu_DrawSkillSelectionList(int arg0);
 extern M2C_UNK Menu_HandleAyaInventorySelectionInput[];
 #define Menu_HandleAyaInventorySelectionInput (Menu_HandleAyaInventorySelectionInput[0])
@@ -23,10 +21,8 @@ void Menu_OpenSkillSelectionView(void) {
     MenuWidget_SetCursorY(MenuWidget_FindByModeAndSelectedBase(1, 0x1B));
 }
 
-
 void Menu_DrawSkillItem(int arg0);
-void MenuWidget_DrawList(int arg0, void (*callback)(void));
 
 void Menu_DrawSkillSelectionList(int arg0) {
-    MenuWidget_DrawList(arg0, Menu_DrawSkillItem);
+    MenuWidget_DrawList((MenuWidgetNode *)arg0, Menu_DrawSkillItem);
 }

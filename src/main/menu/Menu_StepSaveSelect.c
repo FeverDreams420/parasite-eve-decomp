@@ -12,12 +12,9 @@
 
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
-s32 MenuWidget_GetCellIndex();
-M2C_UNK MenuWidget_SetCurrentNode();
 M2C_UNK Save_SetTitleStyleFlag();
 s32 func_80042964();
 M2C_UNK func_80042B50();
-M2C_UNK MenuWidget_NavScrollTo();
 extern s32 g_MenuActiveItemList;
 extern s32 g_MenuActionTextBase;
 extern s32 g_SaveSelectedSlot;

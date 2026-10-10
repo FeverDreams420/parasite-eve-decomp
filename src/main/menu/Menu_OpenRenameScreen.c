@@ -2,12 +2,12 @@
 #include "pe1/save.h"
 #include "pe1/game_state.h"
 #include "pe1/menu_widget.h"
+#include "pe1/inventory.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
-void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
 extern u8 D_80092354[];
 extern u8 D_80092380[];
 extern u8 D_800923A0[];
@@ -79,7 +79,6 @@ void Menu_OpenRenameScreen(s32 arg0) {
 
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
-void Sfx_CursorRenderData(ItemDataRecord *record);
 #include "pe1/text.h"
 #include "pe1/draw_state.h"
 void Draw_PrintRawText(u8 *text);

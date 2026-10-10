@@ -1,5 +1,6 @@
 #include "common.h"
 #include "pe1/map_selection.h"
+#include "pe1/font.h"
 
 extern u8 D_8009CD78[];
 extern u8 D_8009CD80[];
@@ -9,11 +10,7 @@ extern int D_8009D1C4;
 extern u32 D_8009D1A0;
 extern u32 D_800B0CD8[];
 
-int Menu_IsEquipSlotActive(int **args);
-int Render_GetOrLoadFontGlyph(int glyph);
-int Render_LoadFontGlyphAlt(void);
 int Menu_GetEquipSlotStateOrIndex(void);
-void Menu_ResetEquipSlotState(void);
 int Task_GpuPackPrimColor(int start, int end);
 int Str_ParseBase32Id(u8 *text);
 
@@ -26,10 +23,10 @@ int Scene_SelectMapById(int **args) {
     u32 map_flags;
     u32 state_flags;
 
-    if ((u8)Menu_IsEquipSlotActive(args) != 0) {
-        raw_selection = Render_GetOrLoadFontGlyph(*(u8 *)args[0]);
+    if ((u8)Menu_IsEquipSlotActive() != 0) {
+        raw_selection = ((int (*)(int))Render_GetOrLoadFontGlyph)(*(u8 *)args[0]);
     } else {
-        raw_selection = Render_LoadFontGlyphAlt();
+        raw_selection = ((int (*)(void))Render_LoadFontGlyphAlt)();
     }
     selection = raw_selection;
 
@@ -79,8 +76,6 @@ extern int g_SceneDispatchCur;
 extern u32 g_GameStateFlags;
 extern u32 g_GameState[];
 
-int Render_SetFontGlyphByCode();
-
 int Task_SetFloorByEntityRoll(u8 **args) {
     int selection;
     u8 state;
@@ -89,10 +84,10 @@ int Task_SetFloorByEntityRoll(u8 **args) {
     u32 map_flags;
     u32 state_flags;
 
-    if (!(Menu_IsEquipSlotActive((int **)args) & 0xFF)) {
+    if (!(Menu_IsEquipSlotActive() & 0xFF)) {
         Render_LoadFontGlyphAlt();
     }
-    selection = Render_SetFontGlyphByCode(**args) & 0xFF;
+    selection = ((int (*)(int))Render_SetFontGlyphByCode)(**args) & 0xFF;
 
     if (selection == 0xFF) {
         if ((u8)Menu_GetEquipSlotStateOrIndex() < 2) {

@@ -6,6 +6,7 @@
 #include "pe1/memcard_save_state.h"
 #include "pe1/menu_notification_dialog.h"
 #include "pe1/psyq_bios.h"
+#include "pe1/menu_widget.h"
 
 void Save_SetTitleStyleFlag(int value) {
     D_800A1704 = value;
@@ -1132,8 +1133,6 @@ void Save_StartWriteSlot(int port, int arg_slot) {
     slot_state->state = MEMCARD_SLOT_OCCUPIED;
 }
 extern u8 g_MemCardFileBuffer[];
-
-void MenuWidget_NavScrollTo(int selected_base);
 
 int Save_StartReadSlot(int port, int slot)
 {

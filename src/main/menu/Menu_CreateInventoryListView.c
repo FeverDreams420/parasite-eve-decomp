@@ -1,17 +1,15 @@
 #include "common.h"
 #include "pe1/menu_dialog.h"
 #include "pe1/menu_inventory.h"
+#include "pe1/menu_item_list_input.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-
 #define NULL ((void *)0)
-
 
 extern s32 g_InvItemUsableFlag;
 extern s32 g_MenuLayoutLocked;
 int Menu_InventoryPageInputHandler(MenuWidgetNode *root, u32 flags);
-void Menu_DrawUsableItemActionList(int arg0);
 
 void Menu_CreateInventoryListView(MenuWidgetNode *parent) {
     MenuWidgetNode *root;

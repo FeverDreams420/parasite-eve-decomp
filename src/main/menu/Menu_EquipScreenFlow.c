@@ -17,8 +17,6 @@
 
 #define NULL ((void *)0)
 
-void Inv_SwapSlots();
-void Menu_DrawAmmoTypeHeader(MenuWidgetNode *node);
 void Menu_CreateAmmoSpendPanel();
 s32 func_80052F0C();
 void Menu_DrawContextActionList();

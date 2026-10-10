@@ -5,11 +5,11 @@
 #include "pe1/text.h"
 #include "pe1/inventory_queries.h"
 #include "pe1/menu_sound.h"
+#include "pe1/menu_widget.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "include_asm.h"
 
-int MenuWidget_GetCellIndex(MenuWidgetNode *ptr);
 void Menu_CreateBonusPointAllocationView(void);
 void Menu_StepItemDetailPanel2(void);
 int Inv_GetPackedListItem(int index);
@@ -21,7 +21,6 @@ extern int D_8009CF10;
 extern int D_8009CFA0;
 extern unsigned char D_800A1980[];
 
-void MenuWidget_NavScrollTo(int arg0);
 void Battle_UseItem(int arg0);
 
 s32 Menu_SkillActionHandler(MenuWidgetNode *node, s32 flags) {

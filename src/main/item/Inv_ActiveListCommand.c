@@ -1,4 +1,5 @@
 #include "pe1/menu_state.h"
+#include "pe1/menu_widget.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 #include "common.h"
@@ -13,7 +14,6 @@ extern u8 *D_8009D1E0;
 extern int D_8009D010;
 #include "pe1/battle_modifiers.h"
 void Battle_DispatchSpecialAction(int);
-void MenuWidget_InitPool(void);
 
 void Inv_SetActiveList(int mode, int *slot) {
     Combatant *active;

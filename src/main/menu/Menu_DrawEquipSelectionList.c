@@ -3,16 +3,15 @@
 
 #include "pe1/menu_widget.h"
 #include "pe1/inventory_queries.h"
+#include "pe1/menu_draw_list.h"
 
 extern MenuWidgetNode *g_MenuActiveWidget;
 
-int MenuWidget_GridCellIndex(MenuWidgetNode *node);
 int Inv_RestoreSelection(unsigned int index);
 int Inv_GetActiveListItemType(int index);
 int Inv_IsActiveListOverrideSelected(void);
 void Inv_BuildFilteredPackedListExcluding(int mask, int excluded);
 int Inv_GetPackedListCount(void);
-void MenuWidget_DrawList(MenuWidgetNode *node, void (*draw)(int));
 void Menu_HandleInput(int index);
 
 void Menu_DrawEquipSelectionList(MenuWidgetNode *node) {

@@ -2,9 +2,8 @@
 #define PE1_MENU_ITEM_ROWS_H
 
 #include "pe1/menu_widget.h"
+#include "pe1/menu_draw_list.h"
 
-/* The list renderer passes the row index in a0 to its drawing callback. */
-void MenuWidget_DrawList(MenuWidgetNode *node, void (*draw)(int index));
 void Menu_DrawWeaponList(MenuWidgetNode *node);
 void Menu_DrawArmorList(MenuWidgetNode *node);
 void Menu_DrawInventoryItemRow(int index);

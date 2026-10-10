@@ -16,7 +16,6 @@
 
 #define NULL ((void *)0)
 void MenuWidget_OffsetPosition(MenuWidgetNode *node, int dx, int dy);
-void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
 extern s32 g_InvItemUsableFlag;
 ItemDataRecord *g_MenuSelectedItemData;
 void Menu_DrawEquipStatsPanel(void);
@@ -71,11 +70,6 @@ void Menu_CreateItemUsePanel(int itemId) {
     Queue_Init();
 }
 
-                      /* extern */
-            /* extern */
-                     /* extern */
-                          /* extern */
-                         /* extern */
 
 void Menu_DrawEquipStatsPanel(void) {
     ItemDataRecord *temp_s0;

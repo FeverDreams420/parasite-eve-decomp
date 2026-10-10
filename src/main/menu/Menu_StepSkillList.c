@@ -7,7 +7,6 @@
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
 void MenuWidget_OffsetPosition(MenuWidgetNode *node, int dx, int dy);
-void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
 int Inv_GetActiveListItemType(int index);
 int Inv_GetPackedListCount(void);
 void Inv_BuildFilteredPackedList(int mask);

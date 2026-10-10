@@ -22,7 +22,6 @@ int Menu_EquipStatsInputHandler(MenuWidgetNode *node, int flags);
 int Menu_DetailViewInput(MenuWidgetNode *arg0, unsigned int arg1);
 int g_MenuSelectedItemIndex;
 int D_8009CFBC;
-int MenuWidget_GetCellIndex(MenuWidgetNode *ptr);
 void Menu_CreateItemActionSubmenu(void);
 void Menu_CreateItemList(void);
 int g_MenuActionTextBase;
@@ -60,12 +59,10 @@ static inline void Menu_CreateScreenModeSubmenu(void) {
 void Menu_OpenItemList(void);
 void Menu_StepInventoryRoot(s32 arg0, s32 arg1, s32 arg2);
 void Inv_BuildStorageDisplay(void);
-void MenuWidget_NavScrollTo(s32 selected_base);
 extern void Menu_DrawUsableItemActionList2(void);
 extern MenuWidgetNode *MenuWidget_FindByModeAndSelectedBase(int mode, int selectedBase);
 extern void Inv_InitWayneStorage(void);
 extern MenuWidgetNode *MenuWidget_GetChild(MenuWidgetNode *arg0, int arg1);
-extern void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
 void Menu_DrawItemListHeader(void);
 int D_8009CFC0;
 

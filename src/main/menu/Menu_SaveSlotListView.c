@@ -1,17 +1,13 @@
 #include "common.h"
 #include "pe1/menu_widget.h"
 #include "pe1/menu_queue.h"
+#include "pe1/menu_dialog.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
 #define NULL ((void *)0)
 #include "m2c_macros.h"
-s32 MenuWidget_FindLastMode1WithCursorX();          /* extern */
-M2C_UNK MenuWidget_SetCurrentNode(void *);          /* extern */
-                            /* extern */
-s32 MenuWidget_GridCellIndex(void *);                          /* extern */
 extern s32 g_SaveSelectedSlot;
-extern M2C_UNK (*g_MenuDeferredCallback)();
 extern M2C_UNK Menu_DrawSaveSlotPortLabel[];
 #define Menu_DrawSaveSlotPortLabel (Menu_DrawSaveSlotPortLabel[0])
 extern M2C_UNK Menu_StepSaveSelect[];

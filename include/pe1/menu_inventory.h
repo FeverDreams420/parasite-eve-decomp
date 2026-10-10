@@ -7,21 +7,16 @@
 #include "pe1/menu_widget.h"
 
 #include "pe1/bounds_check.h"
-void MenuWidget_InitPool(void);
 void Inventory_OpenAyaItemList(unsigned int mode);
 
-void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
 void MenuWidget_RestoreSavedCurrentNode(void);
 void func_80064A54(MenuWidgetNode *node);
-void MenuWidget_NavScrollTo(int selectedBase);
 int Menu_InventoryNavigate(MenuWidgetNode *current, MenuWidgetNode *node,
                            u32 flags);
 void Menu_CreateBonusPointAllocationView(void);
 void Menu_SetSwapReturnFlag(void);
 
 extern int D_8009CF18, D_8009CFB0;
-int MenuWidget_GridCellIndex(MenuWidgetNode *node);
-MenuWidgetNode *MenuWidget_GetCurrentNode(void);
 void Menu_OpenItemUsePanelAtIndex(int index);
 void Menu_OpenSkillSelectionView(void);
 void Menu_StepInventoryRoot(int mode, int index, int arg);

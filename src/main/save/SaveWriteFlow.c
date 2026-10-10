@@ -4,6 +4,7 @@
 #include "pe1/menu_dialog.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/menu_notification_dialog.h"
+#include "pe1/menu_widget.h"
 
 /* Save-slot write and read starts and the two confirmation handlers that
  * launch the card write behind the progress widget or report the error. */
@@ -11,12 +12,10 @@
 int g_SaveSelectedSlot;
 int g_SaveSlotCellIndex;
 extern int g_MemCardProgressPrimList;
-extern void (*g_MenuDeferredCallback)(void);
 
 void Save_StartWriteSlot(int arg0, int arg1);
 int Save_StartReadSlot(int port, int slot);
 void MemCard_SetDelayedCallback(void (*callback)(void));
-void MenuWidget_NavScrollTo(int selected_base);
 void MemCard_DrawProgress(void);
 int Menu_MemCardProgressInputHandler(void);
 void MemCard_MarkActivePortState13(void);

@@ -8,8 +8,6 @@
 #define ATTRIBUTE_EFFECT_FLAGS(base) \
     ((BattleAttributes *)(base))->effectFlags
 
-int Inv_FindItemById(int arg0);
-
 #define D278_0 (*(u8 **)&D278_o16)
 #define D278_1 (*(u8 **)&D278_o16)
 #define D278_2 (*(u8 **)&D278_o17)

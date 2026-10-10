@@ -12,8 +12,6 @@ s32 Inv_GetPackedListCursor(void);
 void Menu_StepInventoryRoot(s32 arg0, s32 arg1, s32 arg2);
 void Menu_OpenRenameScreen(s32 arg0);
 
-void Menu_DrawContextHelpText(void);
-
 void Menu_OpenSaveLoadEntryPoint(s32 arg0) {
     Queue_Init();
     if ((MenuWidget_FindByModeAndSelectedBase(1, 0xD) == NULL) && (MenuWidget_FindByModeAndSelectedBase(1, 0x17) == NULL)) {

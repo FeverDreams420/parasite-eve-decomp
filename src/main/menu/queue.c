@@ -113,8 +113,6 @@ void Queue_DequeueByMask(int mask, MenuQueueEntry *out_arg) {
 
 typedef MenuWidgetNode MenuInputWidget;
 
-MenuWidgetNode *MenuWidget_GetCurrentNode(void);
-
 extern int D_8009D0F4;
 extern int D_8009D0F8;
 

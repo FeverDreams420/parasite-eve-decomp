@@ -2,7 +2,6 @@
 #include "pe1/menu_widget.h"
 #include "pe1/menu_dialog.h"
 
-void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
 void Item_PackParasiteSpells(void);
 int Inv_GetPackedListCount(void);
 void Menu_SkillActionHandler(void);

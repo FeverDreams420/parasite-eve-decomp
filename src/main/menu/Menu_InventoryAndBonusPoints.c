@@ -1,6 +1,8 @@
 #include "pe1/menu_bonus_stats.h"
 #include "pe1/menu_confirm_callback.h"
 #include "pe1/menu_sound.h"
+#include "pe1/aya.h"
+#include "pe1/menu_widget.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "pe1/menu_inventory_root.h"
@@ -189,8 +191,6 @@ void Menu_AlignEquipPanels(void) {
     MenuWidget_ClearCursorY(temp_v0_2);
 }
 
-void MenuWidget_SetCursorY(MenuWidgetNode *node);
-
 void Menu_SetEquipPanelsCursorY(void) {
     MenuWidget_SetCursorY(MenuWidget_FindByModeAndSelectedBase(1, 0xF));
     MenuWidget_SetCursorY(MenuWidget_FindByModeAndSelectedBase(1, 0xB));
@@ -213,8 +213,6 @@ void Menu_DrawBonusPointSlotValue(void) {
 }
 
 void Menu_CreateBonusPointAllocationView(void);
-void Inv_RecalcSlotStats(s32 arg0, void *arg1);
-void MenuWidget_NavScrollTo(s32 selected_base);
 
 extern s32 g_MenuBattleStatusOverlayActive;
 extern s32 g_MenuEquipMode;
@@ -241,7 +239,7 @@ void Menu_ExitBonusPointAllocation(void) {
         dst += 2;
     } while (index < 7);
     g_AyaBonusPoints = g_BonusPointDisplayValue;
-    Inv_RecalcSlotStats(index, dst);
+    Inv_RecalcSlotStats();
     MenuWidget_NavScrollTo(0xF);
     MenuWidget_NavScrollTo(0xB);
     MenuWidget_NavScrollTo(0xD);
@@ -758,7 +756,6 @@ extern s32 g_MenuSpendArrowDirection;
 extern s32 g_BonusPointSpendStat;
 extern s32 g_BonusPointSpendWorkingValue;
 extern s32 g_BonusPointSpendCurrentValue;
-void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
 void MenuWidget_OffsetPosition(MenuWidgetNode *ptr, int dx, int dy);
 s32 Inv_RestoreSelection(u32 index);
 void Menu_DrawBonusPointSpendPanel(void);
@@ -897,7 +894,6 @@ extern int D_8009CF68;
 extern signed char D_800C0E22[];
 
 extern int Inv_RestoreSelection(unsigned int index);
-extern ItemDataRecord *Inv_LookupActiveListData(int index);
 extern void Stat_QueryDistanceAndSubLevel(int kind, int value, int *distance_out, int *sublevel_out);
 extern int Stat_OverflowQuery(int kind, int value);
 

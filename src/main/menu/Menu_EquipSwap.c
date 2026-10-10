@@ -6,12 +6,11 @@
 #include "pe1/menu_inventory.h"
 #include "pe1/psyq_nop.h"
 #include "pe1/menu_sound.h"
+#include "pe1/menu_widget.h"
 
 #define NULL ((void *)0)
 
 #include "../../../tools/m2c/m2c_macros.h"
-
-void MenuWidget_NavScrollTo(s32 selected_base);
 
 /* Equipment swap: picking the Aya inventory item to exchange records the
  * swap source; returning from the equip screen reopens the inventory. */

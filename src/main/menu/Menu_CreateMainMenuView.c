@@ -3,7 +3,6 @@
 #include "pe1/menu_dialog.h"
 #include "pe1/menu_sound.h"
 
-void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
 int Menu_MainMenuInputHandler(MenuWidgetNode *arg0, u32 arg1);
 void Menu_DrawMainMenuList(void);
 
@@ -22,7 +21,6 @@ void Menu_CreateMainMenuView(int arg0) {
 #include "pe1/menu_widget.h"
 
 extern MenuWidgetNode *MenuWidget_GetChild(MenuWidgetNode *arg0, int arg1);
-extern int MenuWidget_GridCellIndex(MenuWidgetNode *arg0);
 extern void Menu_CreateActionSubmenu(MenuWidgetNode *arg0);
 extern void func_8004B03C(MenuWidgetNode *arg0);
 extern void Menu_OpenBlendColorScreen(MenuWidgetNode *arg0);
@@ -70,8 +68,6 @@ int Menu_MainMenuInputHandler(MenuWidgetNode *arg0, u32 arg1) {
 #include "pe1/menu_widget.h"
 
 extern MenuWidgetNode *MenuWidget_GetChild(MenuWidgetNode *arg0, int arg1);
-extern int MenuWidget_GridCellIndex(MenuWidgetNode *arg0);
-extern void MenuWidget_SetCurrentNode(MenuWidgetNode *arg0);
 extern void Menu_SetActionSubmenuSelection(int arg0);
 extern void MenuWidget_SetColumnLayoutMode(int arg0);
 extern void Menu_DrawActionSubmenuList(void);

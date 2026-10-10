@@ -7,7 +7,6 @@
 
 /* Contiguous widget construction, pool initialization, list drawing and layout. */
 #include "pe1/bounds_check.h"
-MenuWidgetNode *MenuWidget_FindLastMode1WithCursorX(void);
 
 #include "pe1/menu_widget.h"
 

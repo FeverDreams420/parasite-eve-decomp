@@ -1,6 +1,7 @@
 #include "pe1/menu_state.h"
 #include "pe1/inventory_queries.h"
 #include "pe1/menu_context_help.h"
+#include "pe1/inventory.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "pe1/menu_equipment.h"
@@ -28,19 +29,11 @@ extern s32 D_8009CF9C;
 extern s32 D_8009D008;
 extern short D_800C0E46[];
 void Inv_ResetActiveList(void);
-void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
 void Menu_CreateBonusPointAllocationView(void);
 void Menu_CreateContextHelpPanel(void);
-void MenuWidget_NavScrollTo(int arg0);
-MenuWidgetNode *MenuWidget_GetCurrentNode(void);
 void Inv_RebuildSelectableMask(void);
 extern int Menu_StepItemSelectScreen(MenuWidgetNode *node, unsigned int flags);
 extern void Menu_DrawItemList(void *node);
-extern void Menu_DrawAmmoTypeHeader(MenuWidgetNode *node);
-extern int Menu_InventoryInputHandler(MenuWidgetNode *node, unsigned int flags);
-extern void Menu_DrawSelectableEquipSlotList(int node);
-extern int Inv_SwapSlots(int unused, int from, int unused2, int to);
-extern void Menu_RebuildSelectableMask(void);
 
 void Menu_OpenEquipScreen(int mode)
 {

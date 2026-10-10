@@ -27,4 +27,7 @@ void Menu_DrawActionOptionList(void *node);
 void Menu_OnItemDiscardConfirm(MenuWidgetNode *node, int confirmed);
 void Menu_StepItemDetailPanel(void);
 
+void Menu_DrawContextHelpText(MenuWidgetNode *panel);
+extern void (*g_MenuDeferredCallback)(void);
+
 #endif

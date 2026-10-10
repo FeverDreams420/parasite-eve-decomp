@@ -7,7 +7,6 @@
 
 extern int D_800A1888[], D_800A188C[], D_800A1890[], D_800A1894[];
 int MenuWidget_IsCursorYClear(MenuWidgetNode *ptr);
-int MenuWidget_GridCellIndex(MenuWidgetNode *);
 int Inv_GetPackedListItem(int);
 int Inv_RestoreSelection(unsigned int);
 int Inv_GetPackedListCount(void);

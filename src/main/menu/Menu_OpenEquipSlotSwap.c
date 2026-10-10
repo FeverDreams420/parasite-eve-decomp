@@ -4,12 +4,12 @@
 #include "pe1/menu_widget.h"
 #include "pe1/inventory_queries.h"
 #include "pe1/menu_queue.h"
+#include "pe1/menu_equipment.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
-void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
 void Menu_CreateContextHelpPanel(void);
 extern s32 g_MenuSelectionLocked;
 extern s32 g_MenuActionSubmenuOpen;
@@ -17,16 +17,6 @@ extern s32 D_8009CF5C;
 extern s32 g_InvSelectedItemIndex;
 extern s32 g_InvSwapTargetIndex;
 extern s32 g_MenuEquipSwapSource;
-extern M2C_UNK Menu_InventoryInputHandler[];
-#define Menu_InventoryInputHandler (Menu_InventoryInputHandler[0])
-extern M2C_UNK Menu_DrawAmmoTypeHeader[];
-#define Menu_DrawAmmoTypeHeader (Menu_DrawAmmoTypeHeader[0])
-extern M2C_UNK Menu_DrawSelectableEquipSlotList[];
-#define Menu_DrawSelectableEquipSlotList (Menu_DrawSelectableEquipSlotList[0])
-extern M2C_UNK Menu_RebuildSelectableMask[];
-#define Menu_RebuildSelectableMask (Menu_RebuildSelectableMask[0])
-extern M2C_UNK Inv_SwapSlots[];
-#define Inv_SwapSlots (Inv_SwapSlots[0])
 
 s32 Menu_OpenEquipSlotSwap(s32 arg0) {
     s32 temp_s2;
@@ -38,15 +28,15 @@ s32 Menu_OpenEquipSlotSwap(s32 arg0) {
     temp_s2 = MenuWidget_FindByModeAndSelectedBase(1, 1) != NULL;
     if (temp_s2 == 0) {
         Queue_Init();
-        M2C_FIELD(MenuWidget_CreateSimpleNode(0x1B, 0, 0, 0), M2C_UNK **, 0x30) = &Menu_DrawAmmoTypeHeader;
+        M2C_FIELD(MenuWidget_CreateSimpleNode(0x1B, 0, 0, 0), M2C_UNK **, 0x30) = (M2C_UNK *)Menu_DrawAmmoTypeHeader;
         temp_v0 = MenuWidget_CreateSimpleNode(1, 0, 0, 0);
         temp_s1 = MenuWidget_CreateNode(1, temp_v0, temp_v0);
         temp_a0 = temp_s1;
-        M2C_FIELD(temp_v0, M2C_UNK **, 0x2C) = &Menu_InventoryInputHandler;
-        M2C_FIELD(temp_s1, M2C_UNK **, 0x30) = &Menu_DrawSelectableEquipSlotList;
+        M2C_FIELD(temp_v0, M2C_UNK **, 0x2C) = (M2C_UNK *)Menu_InventoryInputHandler;
+        M2C_FIELD(temp_s1, M2C_UNK **, 0x30) = (M2C_UNK *)Menu_DrawSelectableEquipSlotList;
         MenuWidget_SetCurrentNode(temp_a0);
-        M2C_FIELD(temp_s1, M2C_UNK **, 0x84) = &Inv_SwapSlots;
-        M2C_FIELD(temp_s1, M2C_UNK **, 0x88) = &Menu_RebuildSelectableMask;
+        M2C_FIELD(temp_s1, M2C_UNK **, 0x84) = (M2C_UNK *)Inv_SwapSlots;
+        M2C_FIELD(temp_s1, M2C_UNK **, 0x88) = (M2C_UNK *)Menu_RebuildSelectableMask;
         Inv_RebuildSelectableMask();
         g_InvSwapTargetIndex = -1;
         g_InvSelectedItemIndex = -1;

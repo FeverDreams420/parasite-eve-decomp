@@ -7,6 +7,8 @@
 #include "pe1/inventory_queries.h"
 #include "pe1/menu_sound.h"
 #include "pe1/text.h"
+#include "pe1/menu_equipment.h"
+#include "pe1/menu_draw_list.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
@@ -17,11 +19,6 @@ extern s32 g_InvSelectedItemIndex;
 extern s32 g_InvSwapTargetIndex;
 extern s32 g_MenuEquipSwapSource;
 extern s32 g_MenuInventoryViewMode;
-int Menu_InventoryInputHandler(MenuWidgetNode *node, unsigned int flags);
-void Menu_DrawAmmoTypeHeader(MenuWidgetNode *node);
-void Menu_DrawSelectableEquipSlotList(int node);
-void Menu_RebuildSelectableMask(void);
-int Inv_SwapSlots(int unused, int from, int unused2, int to);
 
 void Menu_OpenInventoryOrSwapView(s32 arg0) {
     s32 mode;
@@ -135,10 +132,9 @@ block_5:
 }
 
 void Menu_DrawWeaponModSlots(s32 arg0);
-void MenuWidget_DrawList(void *arg0, void (*callback)(int));
 
 void Menu_DrawEquipOptionsList(int arg0) {
-    MenuWidget_DrawList(arg0, Menu_DrawWeaponModSlots);
+    MenuWidget_DrawList((MenuWidgetNode *)arg0, Menu_DrawWeaponModSlots);
 }
 #include "common.h"
 /* CC1_FLAGS: -G8 */
@@ -196,7 +192,6 @@ s32 Menu_EquipOptionsInputHandler(void *arg0, s32 arg1) {
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
 void Menu_DrawEquipSortToggleRow(int arg0);
-void MenuWidget_DrawList(void *arg0, void (*callback)(int));
 
 int g_MenuInventoryViewMode;
 
@@ -211,7 +206,7 @@ int Menu_EquipSelectInput(void *arg0, unsigned int arg1);
 void Menu_DrawEquipInfoOptionList(int arg0);
 
 void Menu_DrawEquipSortToggleList(int arg0) {
-        MenuWidget_DrawList(arg0, Menu_DrawEquipSortToggleRow);
+        MenuWidget_DrawList((MenuWidgetNode *)arg0, Menu_DrawEquipSortToggleRow);
 }
 
 int Menu_EquipGridHandler(void *arg0, int arg1) {
@@ -261,7 +256,6 @@ void Menu_CreateEquipInfoPanel(int arg0, unsigned int arg1) {
 /* MASPSX_FLAGS: -G8 */
 
 void Menu_DrawEquipInfoOptionRow(int arg0);
-void MenuWidget_DrawList(void *arg0, void (*callback)(int));
 
 extern int g_InvItemUsableFlag;
 extern int g_MenuInventoryViewMode;
@@ -271,7 +265,7 @@ extern void Sort_InventoryItems(int arg0, int arg1);
 extern void Menu_OpenInventoryOrSwapView(int arg0);
 
 void Menu_DrawEquipInfoOptionList(int arg0) {
-    MenuWidget_DrawList(arg0, Menu_DrawEquipInfoOptionRow);
+    MenuWidget_DrawList((MenuWidgetNode *)arg0, Menu_DrawEquipInfoOptionRow);
 }
 
 int Menu_EquipSelectInput(void *arg0, unsigned int arg1) {

@@ -3,16 +3,13 @@
 #include "pe1/menu_widget.h"
 #include "pe1/menu_sound.h"
 #include "pe1/menu_context_help.h"
+#include "pe1/menu_item_list_input.h"
 
 extern int D_8009CF30, D_8009CF34, D_8009CF1C;
 void MenuWidget_OffsetPosition(MenuWidgetNode *, int, int);
 void MenuWidget_ClearCursorY(MenuWidgetNode *);
 void MenuWidget_ClampScroll(MenuWidgetNode *);
-void MenuWidget_SetCurrentNode(MenuWidgetNode *);
-MenuWidgetNode *MenuWidget_GetCurrentNode(void);
-void MenuWidget_NavScrollTo(int);
 int Inv_GetPackedListCount(void);
-void Menu_SetupSkillSubmenu(int);
 void Menu_StepInventoryRoot(int, int, int);
 void Menu_OpenEquipScreen(int);
 

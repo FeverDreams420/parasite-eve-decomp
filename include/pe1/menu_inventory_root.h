@@ -19,7 +19,6 @@ void Menu_DrawBonusPointSlotValue(void);
 void Menu_DrawParasiteAbilityList();
 void Menu_InitStateTables(void);
 void Menu_DrawItemDetailPanel(MenuWidgetNode *panel);
-void Menu_DrawUsableItemActionList();
 int Menu_BonusPointCancelHandler(void *node, int flags);
 void Menu_DrawEmptyList();
 void Menu_StepEquipSlotSelect2(void);

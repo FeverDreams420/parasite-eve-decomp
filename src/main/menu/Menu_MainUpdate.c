@@ -1,6 +1,7 @@
 #include "common.h"
 #include "pe1/scene_transition.h"
 #include "pe1/textbox.h"
+#include "pe1/menu_widget.h"
 
 /* CC1_FLAGS: -g3 -G1 */
 /* MASPSX_FLAGS: --expand-div -G1 */
@@ -10,15 +11,12 @@
 #include "pe1/battle.h"
 #include <m2c_macros.h>
 
-M2C_UNK MenuWidget_InitPool();                      /* extern */
 M2C_UNK Entity_SetActionMode();                            /* extern */
 M2C_UNK Battle_ReturnToIdle();                            /* extern */
 s8 Pad_GetMenuPressedBitOrDisabled();                                 /* extern */
 M2C_UNK Battle_FlushScriptSounds();                            /* extern */
 struct BattleStatusPanel;
 void Battle_DrawStatusPanel(s32, struct BattleStatusPanel *);
-                            /* extern */
-                            /* extern */
 M2C_UNK Asset_Find08w(u16, M2C_UNK, s16, s16, s32); /* extern */
 M2C_UNK Asset_Find08Alt(M2C_UNK, M2C_UNK, s16, s16, s32); /* extern */
 M2C_UNK Akao_SendTableCommand(s32, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */

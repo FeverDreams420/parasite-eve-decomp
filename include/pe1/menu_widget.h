@@ -186,12 +186,20 @@ extern MenuWidgetNode *g_MenuWidgetSavedNode;
  *   node->selected_base (+0x24); cursor = node->cursor_x/cursor_y (+0x44/+0x48).
  */
 
-
 MenuWidgetNode *MenuWidget_GetChild(MenuWidgetNode *node, int index);
 int MenuWidget_HasActiveNodes(void);
 MenuWidgetNode *MenuWidget_FindByFieldValue(int value);
 MenuWidgetNode *MenuWidget_FindByModeAndSelectedBase(int mode, int selectedBase);
 
 void MenuWidget_UpdateAndDraw(void);
+
+MenuWidgetNode *MenuWidget_FindLastMode1WithCursorX(void);
+int MenuWidget_GetCellIndex(MenuWidgetNode *node);
+MenuWidgetNode *MenuWidget_GetCurrentNode(void);
+int MenuWidget_GridCellIndex(MenuWidgetNode *node);
+void MenuWidget_InitPool(void);
+void MenuWidget_NavScrollTo(int selectedBase);
+void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
+void MenuWidget_SetCursorY(MenuWidgetNode *node);
 
 #endif

@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/battle.h"
 #include "pe1/gte_types.h"
+#include "pe1/inventory.h"
 
 #define NULL ((void *)0)
 typedef struct { u8 bytes[0x14]; } __attribute__((packed)) Tbl20;
@@ -23,7 +24,6 @@ s32 Battle_StepAyaAction();
 void Battle_StepCharacterAction();
 void Battle_UpdateEntityFacing();
 void Entity_SetActionMode();
-void Inv_AddItem();
 void Pm_StopAll();
 s32 Scene_LoadRoomAssets();
 extern volatile struct { Combatant *value; char pad[12]; } D_8009D278_absolute __asm__("D_8009D278");

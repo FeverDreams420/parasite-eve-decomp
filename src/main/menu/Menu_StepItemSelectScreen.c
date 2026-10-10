@@ -12,8 +12,6 @@ extern int D_8009CF30, D_8009CEF8;
 extern int D_800A1888[], D_800A188C[], D_800A1890[], D_800A1894[];
 
 extern MenuWidgetNode *MenuWidget_GetChild(MenuWidgetNode *node, int index);
-extern int MenuWidget_GridCellIndex(MenuWidgetNode *node);
-extern void MenuWidget_NavScrollTo(int mode);
 extern void Menu_CreateEquipScreen(MenuWidgetNode *node);
 extern void Menu_CreateSkillActionScreen(MenuWidgetNode *node);
 extern void Menu_CreateInventoryListView(MenuWidgetNode *node);
@@ -28,7 +26,6 @@ extern void Menu_CreateInvSwapView(MenuWidgetNode *node, int mode);
 extern int Inv_CountByCategory(int category);
 extern int WayneStorage_CountItemType(int item);
 extern void Menu_StepInventoryRoot(int mode, int arg1, int arg2);
-extern void MenuWidget_InitPool(void);
 extern void BattleCmd_ResetTableCursor(void);
 extern void Menu_InitScrollDirection(void);
 

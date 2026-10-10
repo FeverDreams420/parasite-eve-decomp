@@ -49,9 +49,7 @@ void Inv_RecalcSlotStats(void) {
 extern unsigned short g_AyaStatPeEnergyMax;
 extern int g_StatLevelOffsetType3;
 
-
 extern unsigned int *g_PlayerEntity;
-void Inv_RecalcSlotStats(void);
 
 void Aya_DeriveStats(int *out_max, int *out_current) {
     int base;

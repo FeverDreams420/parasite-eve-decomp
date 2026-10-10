@@ -5,10 +5,6 @@
 #include "pe1/inventory.h"
 #include "pe1/menu_sound.h"
 
-int MenuWidget_GridCellIndex(MenuWidgetNode *ptr);
-void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
-void MenuWidget_InitPool(void);
-
 int Menu_SaveLoadNavigate(MenuWidgetNode *arg0, unsigned int flags) {
     MenuWidgetNode *node;
     int mode;

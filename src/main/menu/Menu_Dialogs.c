@@ -21,7 +21,6 @@
 
 void MemCard_InitState(void);
 s32 MemCard_IsPortPresent(s32 port);
-int MenuWidget_GetCellIndex(MenuWidgetNode *ptr);
 s32 MemCard_CheckPresent(s32 port);
 void MemCard_StartRead(s32 port, s32 slot);
 s32 MemCard_IsOperationPending(void);
@@ -29,13 +28,11 @@ s32 Menu_MemCardPortSelectHandler(void *node, s32 flags);
 int Menu_IsMemCardSlotSelectable(int arg0);
 void Menu_DrawMemCardPortList(int arg0);
 
-void (*g_MenuDeferredCallback)(void);
 unsigned int g_McDialogMode;
 unsigned int g_MenuMemCardConfirmPending;
 int D_8009CFF4;
 
 void Menu_DrawParasiteSpellInfoPanel(void);
-void Menu_DrawContextHelpText(MenuWidgetNode *panel);
 
 void Menu_CreateParasiteSpellInfoPanel(int arg0) {
     void *widget;
