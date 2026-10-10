@@ -1,12 +1,11 @@
 #include "common.h"
 #include "pe1/field_script_context.h"
+#include "pe1/floor_polygon.h"
 
 typedef struct SceneE08PositionSample {
     s32 x, y, z, extra;
 } SceneE08PositionSample;
 
-extern s32 D_8009D248;
-extern u16 D_8009D1CC;
 
 int func_8001CAB0(int, int, int, int);
 int func_800C6B90(void *, int);

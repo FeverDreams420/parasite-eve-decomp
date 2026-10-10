@@ -12,6 +12,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/floor_polygon.h"
 
 /* room_m256 scatter drop (func_80192844): a falling drop that jitters,
  * sheds three kinds of splash children, flashes the scene when it reaches
@@ -68,8 +69,6 @@ typedef struct RoomM256DropEvent {
 extern RoomM256DropEntity *D_8009D254;
 extern RoomM256DropRotation D_8018F1CC;
 extern RoomM256DropColor D_8018F1D4;
-extern int D_8009D248;
-extern u16 D_8009D1CC;
 
 int func_80071A54(void);
 int func_800C6B90(void *position, int radius);

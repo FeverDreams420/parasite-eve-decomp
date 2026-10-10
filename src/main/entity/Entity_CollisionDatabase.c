@@ -2,6 +2,7 @@
 /* MASPSX_FLAGS: -G8 */
 #include "common.h"
 #include "pe1/collision_database.h"
+#include "pe1/floor_polygon.h"
 
 /* The room collision database: clearing the per-room collision state and
  * relocating the loaded database's offsets into pointers. */
@@ -14,8 +15,6 @@ extern short D_8009CE20;
 extern short D_8009CE24;
 extern short D_8009CE28;
 extern short g_EntityCollisionMoveDelta;
-extern short D_8009D1CC;
-extern int D_8009D248;
 extern short g_EntityCollisionWallParam;
 extern int g_EntityCollisionWallSlot;
 extern int D_8009DFB0[];

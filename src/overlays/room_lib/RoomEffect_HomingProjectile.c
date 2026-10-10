@@ -149,11 +149,11 @@ int RoomEffect_HomingProjectile(int mode) {
                 position.x = model->position[0].word + (rotated[0] << 12);
                 position.z = model->position[2].word + (rotated[2] << 12);
                 point = ((u32)position.x >> 16) | (position.z & 0xFFFF0000);
-                previous = D_8009D248[D_8009D1CC - 1].x |
-                           (D_8009D248[D_8009D1CC - 1].yz & 0xFFFF0000);
+                previous = FLOOR_POLYGON_AS(RoomHomingModelVertex)[D_8009D1CC - 1].x |
+                           (FLOOR_POLYGON_AS(RoomHomingModelVertex)[D_8009D1CC - 1].yz & 0xFFFF0000);
                 i = 0;
                 while (i < D_8009D1CC) {
-                    current = D_8009D248[i].x | (D_8009D248[i].yz & 0xFFFF0000);
+                    current = FLOOR_POLYGON_AS(RoomHomingModelVertex)[i].x | (FLOOR_POLYGON_AS(RoomHomingModelVertex)[i].yz & 0xFFFF0000);
                     gte_ldsxy0(point);
                     gte_ldsxy2(previous);
                     gte_ldsxy1(current);

@@ -1,8 +1,7 @@
 #include "scene_e08.h"
 #include "pe1/room_floor.h"
+#include "pe1/floor_polygon.h"
 
-extern u16 D_8009D1CC;
-extern s32 D_8009D248;
 
 int func_8001CAB0(int, int, int, int);
 int func_80071A54(void);

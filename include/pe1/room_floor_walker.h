@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/gte_types.h"
 #include "pe1/field_vector_math.h"
+#include "pe1/floor_polygon.h"
 
 /* Room creature that walks along its heading inside the walkable floor
  * polygon, turning off the polygon's edges, and hops with a simple
@@ -93,8 +94,6 @@ typedef struct RoomFloorWalkerTarget {
     s32 pos[3];                   /* 0x28 */
 } RoomFloorWalkerTarget;
 
-extern RoomFloorWalkerVertex *D_8009D248;
-extern s16 D_8009D1CC;
 /* The rsin/rcos table (D_800966EC) and the player entity (D_8009D254) are
  * declared by the room library header and read through the views above;
  * the floor height is g_RoomFloorY (pe1/room_floor.h). */

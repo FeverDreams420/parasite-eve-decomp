@@ -13,6 +13,7 @@
 #include "pe1/field_script_context.h"
 #include "room_lib.h"
 #include "pe1/room_floor.h"
+#include "pe1/floor_polygon.h"
 
 /* Seeds copied into the stack frames; file-scope so the all-zero rotation
  * stays a rodata copy. */
@@ -189,8 +190,6 @@ void func_80071A44(RoomFxVec4 *vec, int value, int shift);
 int func_8001CAB0(int x, int z, int arg2, int arg3);
 int func_800C61A8(GteShortVector *point, GteMatrix *matrix);
 
-extern int D_8009D248;
-extern u16 D_8009D1CC;
 extern char *D_8009D254;
 
 /* Retail marks this function handwritten; only its COP2 windows remain ASM. */

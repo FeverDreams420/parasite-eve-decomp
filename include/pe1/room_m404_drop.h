@@ -12,6 +12,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/floor_polygon.h"
 
 /* room_m404 sinking drop (func_80192540): a drop that sinks and jitters,
  * spreads on the floor and sheds splash children, a lingering pool that
@@ -71,8 +72,6 @@ extern RoomM404DropRotation D_8018F1CC;
 extern RoomM404DropColor D_8018F1D4;
 extern RoomM404DropColor D_8018F1D8;
 extern u8 D_80193EFC[];
-extern int D_8009D248;
-extern u16 D_8009D1CC;
 
 int func_80071A54(void);
 int func_800C6B90(void *position, int radius);

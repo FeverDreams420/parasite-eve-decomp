@@ -17,6 +17,7 @@
 #include "pe1/room_floor.h"
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_sprite_state.h"
+#include "pe1/floor_polygon.h"
 
 extern void func_800C2B40(void *arg0);
 extern void *func_8006DC18(int type);
@@ -385,8 +386,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomDebrisTriplet, position) == 0x3C,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomDebrisTriplet, velocity) == 0x9C,
                   room_debris_triplet_velocity_offset);
 
-extern void *D_8009D248;
-extern u16 D_8009D1CC;
 extern int func_80071A54(void);
 extern int rsin(int);
 extern int func_8001CAB0(int, int, void *, int);

@@ -9,6 +9,7 @@
 #include "pe1/field_vector_math.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/floor_polygon.h"
 
 /* Room projectile that flies along its heading, bounces off the walkable
  * polygon's edges, drops onto the floor and finally hands its position to
@@ -103,8 +104,6 @@ typedef struct RoomHomingModelEntity {
 } RoomHomingModelEntity;
 
 extern RoomHomingModelEntity *D_8009D254;
-extern RoomHomingModelVertex *D_8009D248;
-extern u16 D_8009D1CC;
 /* One packed word of the PSY-Q sine table: sine low, cosine high. */
 typedef union RoomHomingTrig {
     s32 word;

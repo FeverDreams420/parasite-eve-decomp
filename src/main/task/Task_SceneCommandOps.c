@@ -294,8 +294,6 @@ int Entity_PolarToPosition(int **arg0)
     return 1;
 }
 
-extern int *D_8009D248;
-extern short D_8009D1CC;
 extern char D_800BCFFC;
 
 int Entity_PopCount(int **arg0) {
@@ -350,7 +348,7 @@ int Entity_CallAction(int **arg0)
 int Inv_CountTotal(void);
 
 int Task_SetInventorySlotPointer(int **arg0) {
-    D_8009D248 = (int *)(g_CurrentEntity->script_base + (*arg0[0] << 1));
+    D_8009D248 = (PolygonVertex *)(g_CurrentEntity->script_base + (*arg0[0] << 1));
     D_8009D1CC = *arg0[1];
     return 1;
 }

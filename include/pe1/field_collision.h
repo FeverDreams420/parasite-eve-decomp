@@ -2,15 +2,7 @@
 #define PE1_FIELD_COLLISION_H
 
 #include "common.h"
-
-/* Little-endian 16.16 X/Z pair. The containment test reads only the
- * signed integer halves, at offsets 2 and 6 of each eight-byte vertex. */
-typedef struct {
-    unsigned short xFraction;
-    short x;
-    unsigned short zFraction;
-    short z;
-} PolygonVertex;
+#include "pe1/floor_polygon.h"
 
 /* vertices must contain count > 0 entries. x and z are 16.16 coordinates. */
 int Geo_PointInPoly(int x, int z, const PolygonVertex *vertices,

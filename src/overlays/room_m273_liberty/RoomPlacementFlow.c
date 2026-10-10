@@ -2,10 +2,9 @@
 #include "pe1/field_actor.h"
 #include "pe1/geom_state.h"
 #include "room_m273.h"
+#include "pe1/floor_polygon.h"
 
 extern FieldActor *g_PlayerEntity;
-extern int *D_8009D248;
-extern u16 D_8009D1CC;
 extern void **D_8009D254;
 void func_80020CE4(void);
 

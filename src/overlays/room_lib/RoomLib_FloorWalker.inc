@@ -69,11 +69,11 @@ void ROOMLIB_FLOOR_WALKER_FUNC(RoomFloorWalkerObject *object) {
         scratch->next.x = core->pos[0] + (scratch->rotated.x << 12);
         scratch->next.z = core->pos[2] + (scratch->rotated.z << 12);
         point = ((u32)scratch->next.x >> 16) | (scratch->next.z & 0xFFFF0000);
-        previous = D_8009D248[D_8009D1CC - 1].x |
-                   (D_8009D248[D_8009D1CC - 1].yz & 0xFFFF0000);
+        previous = FLOOR_POLYGON_AS(RoomFloorWalkerVertex)[(s16)D_8009D1CC - 1].x |
+                   (FLOOR_POLYGON_AS(RoomFloorWalkerVertex)[(s16)D_8009D1CC - 1].yz & 0xFFFF0000);
         i = 0;
-        while (i < D_8009D1CC) {
-            current = D_8009D248[i].x | (D_8009D248[i].yz & 0xFFFF0000);
+        while (i < (s16)D_8009D1CC) {
+            current = FLOOR_POLYGON_AS(RoomFloorWalkerVertex)[i].x | (FLOOR_POLYGON_AS(RoomFloorWalkerVertex)[i].yz & 0xFFFF0000);
             gte_ldsxy0(point);
             gte_ldsxy2(previous);
             gte_ldsxy1(current);
@@ -83,7 +83,7 @@ void ROOMLIB_FLOOR_WALKER_FUNC(RoomFloorWalkerObject *object) {
             i++;
             previous = current;
         }
-        if (i >= D_8009D1CC) {
+        if (i >= (s16)D_8009D1CC) {
             state->turning = 1;
             break;
         }

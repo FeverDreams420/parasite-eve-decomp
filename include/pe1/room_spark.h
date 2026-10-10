@@ -169,8 +169,6 @@ typedef struct RoomSparkBattleEntity {
 
 extern RoomSparkBattleEntity *D_8009D254;
 /* Walkable floor polygons and their count, for func_8001CAB0. */
-extern PolygonVertex *D_8009D248;
-extern u16 D_8009D1CC;
 extern int func_8001CAB0(int x, int z, void *map, int flags);
 extern int func_800C6B90(void *position, int radius);
 
