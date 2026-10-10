@@ -155,18 +155,18 @@ void RoomFx_DrawAnchoredSpriteQuad(void *unused0, void *unused1,
     RoomLibSpriteQuadStack stack;
     /* Retail keeps these in s0..s3; fx is reused for the packet pointers. */
     register char *fx asm("$16");
-    char *map;
+    RoomMotionInitModel *map;
     RoomSpriteMatrix *scaleMatrix;
     register RoomSpriteMatrix *matrix asm("$19");
-    char *root;
+    RoomMotionContext *root;
     short *floorY;
     int sprite;
 
     fx = params;
     root = func_800C2B50();
     stack.seed = s_MotionQuadSeed;
-    map = *(char **)(*(char **)root + 0x238);
-    func_800C2EAC(*(u8 *)(root + 0x6C));
+    map = *(RoomMotionInitModel **)((char *)root->link + 0x238);
+    func_800C2EAC(root->owner);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
@@ -221,25 +221,25 @@ void RoomFx_DrawAnchoredSpriteQuad(void *unused0, void *unused1,
     sprite = *(u16 *)(fx + 0x12);
     fx = (char *)&g_RoomMotionQuadDepth;
     *(s16 *)fx = sprite;
-    stack.scaleMatrix.t[0] = *(int *)(map + 0x134);
-    stack.scaleMatrix.t[1] = *(int *)(map + 0x138);
+    stack.scaleMatrix.t[0] = map->primary.t[0];
+    stack.scaleMatrix.t[1] = map->primary.t[1];
     fx -= 10;
-    stack.scaleMatrix.t[2] = *(int *)(map + 0x13C);
+    stack.scaleMatrix.t[2] = map->primary.t[2];
     func_800C42A4((FieldGlowSprite *)fx, scaleMatrix, 1);
-    stack.scaleMatrix.t[0] = *(int *)(map + 0x1B4);
-    stack.scaleMatrix.t[1] = *(int *)(map + 0x1B8);
-    stack.scaleMatrix.t[2] = *(int *)(map + 0x1BC);
+    stack.scaleMatrix.t[0] = map->secondary.t[0];
+    stack.scaleMatrix.t[1] = map->secondary.t[1];
+    stack.scaleMatrix.t[2] = map->secondary.t[2];
     func_800C42A4((FieldGlowSprite *)fx, scaleMatrix, 1);
 
     fx = (char *)g_RoomMotionQuadPacket;
     floorY = &g_RoomFloorY->y;
-    stack.matrix.t[0] = *(int *)(map + 0x134);
+    stack.matrix.t[0] = map->primary.t[0];
     stack.matrix.t[1] = *floorY;
-    stack.matrix.t[2] = *(int *)(map + 0x13C);
+    stack.matrix.t[2] = map->primary.t[2];
     func_800C42A4((FieldGlowSprite *)fx, matrix, 1);
-    stack.matrix.t[0] = *(int *)(map + 0x1B4);
+    stack.matrix.t[0] = map->secondary.t[0];
     stack.matrix.t[1] = *floorY;
-    stack.matrix.t[2] = *(int *)(map + 0x1BC);
+    stack.matrix.t[2] = map->secondary.t[2];
     func_800C42A4((FieldGlowSprite *)fx, matrix, 1);
 }
 
@@ -300,8 +300,8 @@ void RoomFx_DrawAnchoredSpritePair(void *unused0, void *unused1,
     RoomSpriteMatrix *scaleMatrix;
     register RoomSpriteMatrix *matrix asm("$17");
     char *fx;
-    char *root;
-    char *map;
+    RoomMotionContext *root;
+    RoomMotionInitModel *map;
     short *floorY;
     char *renderState;
     int firstY;
@@ -360,24 +360,24 @@ void RoomFx_DrawAnchoredSpritePair(void *unused0, void *unused1,
     }
 
     func_800C3238(2);
-    map = *(char **)(*(char **)root + 0x238);
+    map = *(RoomMotionInitModel **)((char *)root->link + 0x238);
     renderState = fx + 0x114;
     *(s16 *)(fx + 0x128) = *(u16 *)(fx + 0x12);
     /* Both anchors sit on the shared floor height; the first block stores
      * the height before the x coordinate, which fixes retail's register
      * choice. */
     floorY = &g_RoomFloorY->y;
-    firstX = *(int *)(map + 0x134);
+    firstX = map->primary.t[0];
     firstY = *floorY;
     stack.matrix.t[1] = firstY;
     stack.matrix.t[0] = firstX;
-    stack.matrix.t[2] = *(int *)(map + 0x13C);
+    stack.matrix.t[2] = map->primary.t[2];
     func_800C4FC4(renderState, matrix, 1);
-    secondX = *(int *)(map + 0x1B4);
+    secondX = map->secondary.t[0];
     secondY = *floorY;
     stack.matrix.t[0] = secondX;
     stack.matrix.t[1] = secondY;
-    stack.matrix.t[2] = *(int *)(map + 0x1BC);
+    stack.matrix.t[2] = map->secondary.t[2];
     func_800C4FC4(renderState, matrix, 1);
 }
 
