@@ -117,7 +117,7 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
     register RoomSpriteMatrix *secondMatrix asm("$17");
     RoomInitThreeVec *seed;
     void *callOwner;
-    register char *workState asm("$21");
+    register RoomDebrisTriplet *workState asm("$21");
     char *clock;
     int i;
     char *projectionMatrix;
@@ -130,7 +130,7 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
     int randomValue;
 
     callOwner = owner;
-    workState = state;
+    workState = (RoomDebrisTriplet *)state;
     clockResult = func_800C2B50();
     parameterIndex = 3;
     clock = clockResult;
@@ -189,13 +189,13 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
     }
 
     i = 0;
-    velocityCursor = workState;
-    positionCursor = workState;
-    timerCursor = workState;
+    velocityCursor = (char *)workState;
+    positionCursor = (char *)workState;
+    timerCursor = (char *)workState;
     for (; i < 3; i++) {
         randomValue = func_80071A54();
-        ((RoomDebrisTriplet *)workState)->size[i] = 0;
-        ((RoomDebrisTriplet *)workState)->countdown[i] = (randomValue % 10) + 1;
+        workState->size[i] = 0;
+        workState->countdown[i] = (randomValue % 10) + 1;
         ((RoomDebrisTriplet *)timerCursor)->life[0] = *func_800C2B28(2);
         ((RoomDebrisTriplet *)positionCursor)->position[0].x = *(s32 *)(clock + 0x18) << 16;
         ((RoomDebrisTriplet *)positionCursor)->position[0].y = *(s32 *)(clock + 0x1C) << 16;
@@ -204,31 +204,31 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
         ((RoomDebrisTriplet *)velocityCursor)->rotation[0].y = 0;
         ((RoomDebrisTriplet *)velocityCursor)->rotation[0].z = 0;
         ((RoomDebrisTriplet *)timerCursor)->swing[0] = 0;
-        ((RoomDebrisTriplet *)workState)->mode[i] = 1;
-        ((RoomDebrisTriplet *)workState)->active[i] = 0;
-        ((RoomDebrisTriplet *)workState)->landed[i] = 0;
+        workState->mode[i] = 1;
+        workState->active[i] = 0;
+        workState->landed[i] = 0;
         velocityCursor += 8;
         positionCursor += 0x10;
         timerCursor += 2;
     }
 
-    ((RoomDebrisTriplet *)workState)->remaining = 3;
-    ((RoomDebrisTriplet *)workState)->speed = *func_800C2B28(0);
-    ((RoomDebrisTriplet *)workState)->acceleration = *func_800C2B28(1);
-    ((RoomDebrisTriplet *)workState)->swingLimit = *func_800C2B28(5);
-    ((RoomDebrisTriplet *)workState)->keepAlive = *func_800C2B28(4);
-    ((RoomDebrisTriplet *)workState)->reserved08 = *func_800C2B10(1);
+    workState->remaining = 3;
+    workState->speed = *func_800C2B28(0);
+    workState->acceleration = *func_800C2B28(1);
+    workState->swingLimit = *func_800C2B28(5);
+    workState->keepAlive = *func_800C2B28(4);
+    workState->reserved08 = *func_800C2B10(1);
 
     stack.projectionSeed.x = 0;
     stack.projectionSeed.y = 0;
     stack.projectionSeed.z = 0x1000;
     ApplyMatrixSV(&stack.firstMatrix, &stack.projectionSeed,
-                  (GteShortVector *)(workState + 0x9C));
+                  (GteShortVector *)&workState->velocity[0]);
     projectionMatrix = clock + 4;
     ApplyMatrixSV((RoomSpriteMatrix *)projectionMatrix, &stack.projectionSeed,
-                  (GteShortVector *)(workState + 0xA4));
+                  (GteShortVector *)&workState->velocity[1]);
     ApplyMatrixSV(&stack.secondMatrix, &stack.projectionSeed,
-                  (GteShortVector *)(workState + 0xAC));
+                  (GteShortVector *)&workState->velocity[2]);
     func_800C66C8(callOwner, 0x573, projectionMatrix);
 }
 
@@ -261,7 +261,7 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
     register char *shortCursor asm("$17");
     s16 scaleValue;
     void *arg0;
-    void *inputArg;
+    RoomSpriteMatrix *inputArg;
     int frame;
     register s16 *callArgs asm("$7");
     char *clock;
