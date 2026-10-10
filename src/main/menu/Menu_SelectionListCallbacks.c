@@ -17,7 +17,7 @@ MenuWidgetNode *g_MenuActiveWidget;
 int g_McDialogMode;
 
 void Draw_AllocColorQuad(int arg0, int arg1);
-void Menu_DrawModNameItem(int index) __asm__("func_80050B48");
+void Menu_DrawModNameItem(int index);
 void Menu_DrawArmorListItem(int arg0);
 void Menu_DrawArmorEquipItem(int arg0);
 void Menu_DrawMemCardPortItem(int arg0);

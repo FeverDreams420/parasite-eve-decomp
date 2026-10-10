@@ -484,14 +484,10 @@ segments:
       - [0x40F48, c, menu/Menu_DrawItemSlot]
       - [0x41004, c, menu/Menu_DrawSelectableEquipSlotRow]
       - [0x41078, c, menu/Sfx_ContextPick]
-      - [0x411A8, c, menu/Menu_DrawActionOptionRow]
-      - [0x411E0, c, menu/Menu_SoundTestSelect]
-      - [0x412D8, c, menu/menu_draw2]
-      - [0x41394, c, menu/Menu_DrawArmorListItem]
-      - [0x413E8, c, menu/menu_draw3]
-      # Three grid-cell renderers share the same widget and sprite protocol.
-      - [0x41764, c, menu/Menu_DrawGridCellVariants]
-      - [0x41860, c, menu/Menu_DrawItemListCursor]
+      # Row drawers the widget list renderer calls with the row index: action
+      # options, equipped slots, action codes, modifier names, armor cells, table
+      # text, stat bars, item icons, save slots and the sound-effect cursor.
+      - [0x411A8, c, menu/Menu_ListItemDrawers]
       - [0x41884, c, battle/BattleCmd_InitTableCursor]
       # Command-stack allocation and rollback share the cursor and record ABI.
       - [0x41898, c, battle/BattleCmd_StackFlow]
