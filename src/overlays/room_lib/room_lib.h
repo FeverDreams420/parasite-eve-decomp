@@ -347,7 +347,7 @@ typedef struct RoomLibHandlerBState {
     int acceleration;             /* 0x6C */
     int duration;                 /* 0x70 */
     int phaseValue;               /* 0x74 */
-    char pad78[0x8];
+    int horizontalVelocity[2];   /* 0x78: X/Z velocity during the arc */
     int mode;                     /* 0x80 */
     char pad84[0x2];
     short rate;                   /* 0x86 */
@@ -366,7 +366,9 @@ typedef struct RoomLibHandlerCState {
     unsigned char flags;          /* 0x0D */
     char pad0E[0x22];
     int target[3];                /* 0x30 */
-    char pad3C[0x14];
+    char pad3C[0x4];
+    int arcTarget[3];             /* 0x40: transformed destination */
+    char pad4C[0x4];
     int localOffset[3];           /* 0x50 */
     char pad5C[0x4];
     int secondaryX;               /* 0x60 */
@@ -377,7 +379,7 @@ typedef struct RoomLibHandlerCState {
     RoomLink *secondaryLink;      /* 0x74 */
     char pad78[0x4];
     int phaseValue;               /* 0x7C */
-    char pad80[0x8];
+    int horizontalVelocity[2];   /* 0x80: X/Z velocity during the arc */
     int mode;                     /* 0x88 */
     char pad8C[0x4];
     short rate;                   /* 0x90 */

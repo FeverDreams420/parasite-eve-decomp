@@ -1228,17 +1228,17 @@ void RoomLib_AdvanceArcToTarget(RoomEnt *obj) {
         gte_mvmva();
         gte_stmac((void *)((int)scratch + 0x38));
 
-        RW32(state, 0x30) = RW32(scratch, 0x28) +
+        ((RoomLibHandlerBState *)state)->target[0] = RW32(scratch, 0x28) +
                             (RW32(scratch, 0x38) << 12);
-        RW32(state, 0x34) = RW32(scratch, 0x2C) +
+        ((RoomLibHandlerBState *)state)->target[1] = RW32(scratch, 0x2C) +
                             (RW32(scratch, 0x3C) << 12);
-        RW32(state, 0x38) = RW32(scratch, 0x30) +
+        ((RoomLibHandlerBState *)state)->target[2] = RW32(scratch, 0x30) +
                             (RW32(scratch, 0x40) << 12);
 
         count = 0;
         step = RW32(state, 0x74);
         accel = RW32(state, 0x80);
-        targetY = RW32(state, 0x34);
+        targetY = ((RoomLibHandlerBState *)state)->target[1];
         y = link->pos[1];
         do {
             y += step;
@@ -1246,11 +1246,11 @@ void RoomLib_AdvanceArcToTarget(RoomEnt *obj) {
             count++;
         } while (y < targetY);
         {
-            int xVelocity = (RW32(state, 0x30) - link->pos[0]) / count;
+            int xVelocity = (((RoomLibHandlerBState *)state)->target[0] - link->pos[0]) / count;
             int zVelocity;
-            RVW32(state, 0x78) = xVelocity;
-            zVelocity = (RW32(state, 0x38) - link->pos[2]) / count;
-            RVW32(state, 0x7C) = zVelocity;
+            *(volatile int *)&((RoomLibHandlerBState *)state)->horizontalVelocity[0] = xVelocity;
+            zVelocity = (((RoomLibHandlerBState *)state)->target[2] - link->pos[2]) / count;
+            *(volatile int *)&((RoomLibHandlerBState *)state)->horizontalVelocity[1] = zVelocity;
         }
     }
 
@@ -1261,8 +1261,8 @@ void RoomLib_AdvanceArcToTarget(RoomEnt *obj) {
             break;
         case 1:
             RW8(state, 0x8C) = 1;
-            RW32(state, 0x78) = 0;
-            RW32(state, 0x7C) = 0;
+            ((RoomLibHandlerBState *)state)->horizontalVelocity[0] = 0;
+            ((RoomLibHandlerBState *)state)->horizontalVelocity[1] = 0;
             if (RW32(state, 0x4) != 0) {
                 RW32((void *)RW32(state, 0x4), 0) = 2;
             }
@@ -1277,15 +1277,15 @@ void RoomLib_AdvanceArcToTarget(RoomEnt *obj) {
     if (RW8(link, 0xE) < 2) {
         return;
     }
-    link->pos[0] += RW32(state, 0x78);
+    link->pos[0] += ((RoomLibHandlerBState *)state)->horizontalVelocity[0];
     link->pos[1] += RW32(state, 0x74);
-    link->pos[2] += RW32(state, 0x7C);
+    link->pos[2] += ((RoomLibHandlerBState *)state)->horizontalVelocity[1];
     RW32(state, 0x74) += RW32(state, 0x80);
     if (RW16(link, 0x2E) >= RW16(state, 0x36)) {
         RW32(scratch, 0x48) = 1;
-        link->pos[0] = RW32(state, 0x30);
-        link->pos[1] = RW32(state, 0x34);
-        link->pos[2] = RW32(state, 0x38);
+        link->pos[0] = ((RoomLibHandlerBState *)state)->target[0];
+        link->pos[1] = ((RoomLibHandlerBState *)state)->target[1];
+        link->pos[2] = ((RoomLibHandlerBState *)state)->target[2];
     }
     func_800DFB20(self);
     if (RW32(scratch, 0x48) != 0) {
@@ -1664,17 +1664,17 @@ void RoomLib_AdvanceArcToTargetY(RoomEnt *obj) {
         gte_mvmva();
         gte_stmac((void *)((int)scratch + 0x38));
 
-        RW32(state, 0x40) = RW32(scratch, 0x28) +
+        ((RoomLibHandlerCState *)state)->arcTarget[0] = RW32(scratch, 0x28) +
                             (RW32(scratch, 0x38) << 12);
-        RW32(state, 0x44) = RW32(scratch, 0x2C) +
+        ((RoomLibHandlerCState *)state)->arcTarget[1] = RW32(scratch, 0x2C) +
                             (RW32(scratch, 0x3C) << 12);
-        RW32(state, 0x48) = RW32(scratch, 0x30) +
+        ((RoomLibHandlerCState *)state)->arcTarget[2] = RW32(scratch, 0x30) +
                             (RW32(scratch, 0x40) << 12);
 
         count = 0;
         step = RW32(state, 0x7C);
         accel = RW32(state, 0x88);
-        targetY = RW32(state, 0x44);
+        targetY = ((RoomLibHandlerCState *)state)->arcTarget[1];
         y = link->pos[1];
         do {
             y += step;
@@ -1682,11 +1682,11 @@ void RoomLib_AdvanceArcToTargetY(RoomEnt *obj) {
             count++;
         } while (y < targetY);
         {
-            int xVelocity = (RW32(state, 0x40) - link->pos[0]) / count;
+            int xVelocity = (((RoomLibHandlerCState *)state)->arcTarget[0] - link->pos[0]) / count;
             int zVelocity;
-            RVW32(state, 0x80) = xVelocity;
-            zVelocity = (RW32(state, 0x48) - link->pos[2]) / count;
-            RVW32(state, 0x84) = zVelocity;
+            *(volatile int *)&((RoomLibHandlerCState *)state)->horizontalVelocity[0] = xVelocity;
+            zVelocity = (((RoomLibHandlerCState *)state)->arcTarget[2] - link->pos[2]) / count;
+            *(volatile int *)&((RoomLibHandlerCState *)state)->horizontalVelocity[1] = zVelocity;
         }
     }
 
@@ -1697,8 +1697,8 @@ void RoomLib_AdvanceArcToTargetY(RoomEnt *obj) {
             break;
         case 1:
             RW8(state, 0x96) = 1;
-            RW32(state, 0x80) = 0;
-            RW32(state, 0x84) = 0;
+            ((RoomLibHandlerCState *)state)->horizontalVelocity[0] = 0;
+            ((RoomLibHandlerCState *)state)->horizontalVelocity[1] = 0;
             if (RW32(state, 0x4) != 0) {
                 RW32((void *)RW32(state, 0x4), 0) = 2;
             }
@@ -1713,13 +1713,13 @@ void RoomLib_AdvanceArcToTargetY(RoomEnt *obj) {
     if (RW8(link, 0xE) < 2) {
         return;
     }
-    link->pos[0] += RW32(state, 0x80);
+    link->pos[0] += ((RoomLibHandlerCState *)state)->horizontalVelocity[0];
     link->pos[1] += RW32(state, 0x7C);
-    link->pos[2] += RW32(state, 0x84);
+    link->pos[2] += ((RoomLibHandlerCState *)state)->horizontalVelocity[1];
     RW32(state, 0x7C) += RW32(state, 0x88);
     if (RW16(link, 0x2E) >= RW16(state, 0x46)) {
         RW32(scratch, 0x48) = 1;
-        link->pos[1] = RW32(state, 0x44);
+        link->pos[1] = ((RoomLibHandlerCState *)state)->arcTarget[1];
     }
     func_800DFB20(self);
     if (RW32(scratch, 0x48) != 0) {
