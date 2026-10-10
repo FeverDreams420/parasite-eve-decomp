@@ -126,7 +126,7 @@ int func_80193414(int mode, SceneE22LinkBeam *beam) {
                           (struct FieldTrailPair *)beam->trailB, 1);
         }
         {
-            int tpage = D_800E2850[D_800E11FA.index];
+            int tpage = D_800E2850[D_800E11FA];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 1;
             D_800F3368.parameter0A = 0;

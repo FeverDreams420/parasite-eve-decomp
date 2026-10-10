@@ -4,7 +4,7 @@
 
 typedef RoomTwinRibbonPulse RoomM318Pulse;
 
-extern u16 D_800E11EA, D_800E120A;
+extern u16 D_800E11EA;
 
 int func_80071A54(void);
 int rcos(int);

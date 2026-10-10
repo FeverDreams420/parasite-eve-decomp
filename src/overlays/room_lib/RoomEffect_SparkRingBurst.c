@@ -196,7 +196,7 @@ int RoomEffect_SparkRingController(int mode, RoomSparkRingState *state) {
             int index;
             int tpage;
             unit = 0x20;
-            index = D_800E11EC.index;
+            index = TEXTURE_SLOT_RECORD(D_800E11EC);
             D_800F3368.parameter02 = 2;
             D_800F3368.parameter00 = unit;
             D_800F3368.extent_x = unit;
@@ -241,7 +241,7 @@ int RoomEffect_SparkRingController(int mode, RoomSparkRingState *state) {
          * compiler from folding it back into absolute addresses. */
         tpageSlot = &D_800F3368.tpage;
         asm("" : "=r"(tpageSlot) : "0"(tpageSlot));
-        idx = D_800E11EC.index;
+        idx = TEXTURE_SLOT_RECORD(D_800E11EC);
         unit = tpageSlot[-4];
         palette = D_800E2850[idx];
         D_800F3368.palette = 4;
@@ -483,7 +483,7 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
             D_800F3368.parameter02 = 2;
             D_800F3368.extent_x = 0x20;
             D_800F3368.extent_y = 0x20;
-            D_800F3368.tpage = D_800E2850[D_800E11EC.index];
+            D_800F3368.tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11EC)];
             D_800F3368.palette = 4;
             D_800F3368.parameter06 = 0;
             kind = D_800F3368.palette;

@@ -8,6 +8,7 @@
 #include "pe1/room_floor.h"
 #include "pe1/field_vector_math.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/field_texture_tables.h"
 
 /* Room projectile that flies along its heading, bounces off the walkable
  * polygon's edges, drops onto the floor and finally hands its position to
@@ -121,7 +122,6 @@ typedef struct RoomHomingModelTextureSlot {
     u16 index;
 } RoomHomingModelTextureSlot;
 
-extern RoomHomingModelTextureSlot D_800E11EC;
 extern RoomHomingModelTextureSlot D_800E11E8;
 
 extern int func_8006DCE4(int id, int channel, int x, int y, int z);

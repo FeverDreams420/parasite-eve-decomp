@@ -106,7 +106,6 @@ typedef struct RoomM086Archive {
 extern RoomM086Archive D_800B0E64;
 extern u8 *D_80190B88;
 extern u16 D_800E1208;
-extern u16 D_800E120A;
 
 int func_8018F004(int mode, RoomM086Seeker *seeker, RoomM086SeekerParams *params);
 void func_800CE8F0(void *owner, int joint, RoomM086Offset *offset, void *out);

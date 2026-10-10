@@ -254,7 +254,7 @@ int RoomEffect_HomingProjectile(int mode) {
         }
         D_800F3368.parameter00 = 0x20;
         {
-            int index = D_800E11EC.index;
+            int index = TEXTURE_SLOT_RECORD(D_800E11EC);
             int tpage;
             D_800F3368.parameter02 = 2;
             D_800F3368.extent_x = 0x20;

@@ -6,6 +6,7 @@
 #include "pe1/render_object.h"
 #include "pe1/render_prim.h"
 #include "pe1/field_model_draw.h"
+#include "pe1/field_texture_tables.h"
 
 /* room_m089 spinning model: a glow sprite swells over the anchor while two
  * copies of a loaded model turn and shrink above it. */
@@ -23,8 +24,6 @@ typedef struct RoomM089SoundOwner {
 } RoomM089SoundOwner;
 
 extern RoomM089SoundOwner D_800B0E64;
-extern u16 D_800E11FA;
-extern u16 D_800E120A;
 u8 *func_8006E498(void *channel, int id);
 u16 GetClut(int x, int y);
 int rsin(int angle);

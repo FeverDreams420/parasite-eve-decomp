@@ -13,6 +13,7 @@
 #include "pe1/field_model_draw.h"
 #include "pe1/field_vector_math.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/field_texture_tables.h"
 
 /* Boss instance fields read by room_m273's animation controllers. */
 typedef struct RoomM273BossOwner {
@@ -186,8 +187,6 @@ extern RoomM273SweepStep D_8019AD80[];
 
 /* Ground ring (func_80198E94): model draw helpers and the ring colours. */
 extern RenderColor D_8019AE1C[2];
-extern u16 D_800E11FA;
-extern u16 D_800E120A;
 u16 GetTPage(int tp, int abr, int x, int y);
 void GsSetOrign(int tpage, int clut);
 void *memset(void *dst, int value, unsigned int size);

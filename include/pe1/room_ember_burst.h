@@ -10,6 +10,7 @@
 #include "pe1/player_entity.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/field_texture_tables.h"
 
 /* Ember burst controller (room_m318): attaches to the actor named by its
  * parameters, glows up, bursts orbiting sparks, embers and smoke, then
@@ -62,7 +63,6 @@ extern int func_80197618(int mode, RoomOrbitTrailParticle *p);
 
 /* Ember fountain particle (func_80197618). */
 extern u16 D_800E11E8;
-extern u16 D_800E11FA;
 extern GteRotation D_8018F1F4;
 extern RenderColor D_8018F240;
 extern u8 D_80199868[];

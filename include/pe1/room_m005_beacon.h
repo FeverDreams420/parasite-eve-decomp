@@ -94,7 +94,6 @@ extern u8 *D_80190B94;
 extern u8 *D_80190B98;
 extern GteShortVector D_80190BA0;
 extern GteShortVector D_80190BA8;
-extern u16 D_800E11FA;
 extern u16 D_800E11EA;
 
 u8 *func_8006E498(void *channel, int id);

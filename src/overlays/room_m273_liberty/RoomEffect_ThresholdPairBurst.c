@@ -9,7 +9,6 @@
 extern RoomM273PlayerActorView *g_PlayerEntity;
 extern u8 D_8019AE9A;
 extern RoomM273PulseSeed D_8019AC20[2];
-extern u16 D_800E11FA;
 extern int func_800CE688(void *);
 extern int Inv_ScrambleGrid(void);
 
@@ -21,7 +20,6 @@ typedef struct { void *asset,*pool; } AssetState;
 
 extern short D_8019AC18[];
 extern int D_8019AC0C[];
-extern unsigned short D_800E11FA;
 extern AssetState D_8019AE8C;
 extern void *D_8019AE90,*D_800B0E64;
 extern unsigned char D_8019AE9A;

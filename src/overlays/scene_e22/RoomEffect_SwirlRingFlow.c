@@ -56,7 +56,7 @@ int func_801957CC(int mode, RoomOrbitTrailParticle *p) {
             D_800F3368.extent_x = 0x20;
             D_800F3368.extent_y = 0x20;
             {
-                int tpage = D_800E2850[D_800E11FA.index];
+                int tpage = D_800E2850[D_800E11FA];
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 1;
                 D_800F3368.tpage = tpage;
@@ -179,7 +179,7 @@ int func_80195B40(int mode, SceneE22SwirlRing *swirl) {
         D_800F3368.extent_x = 0x20;
         D_800F3368.extent_y = 0x20;
         {
-            int tpage = D_800E2850[D_800E11FA.index];
+            int tpage = D_800E2850[D_800E11FA];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 1;
             D_800F3368.parameter0A = 0;
@@ -201,7 +201,7 @@ int func_80195B40(int mode, SceneE22SwirlRing *swirl) {
             D_800F3368.extent_x = 0x20;
             D_800F3368.extent_y = 0x20;
             {
-                int tpage = D_800E2850[D_800E11FA.index];
+                int tpage = D_800E2850[D_800E11FA];
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 1;
                 D_800F3368.tpage = tpage;

@@ -65,7 +65,7 @@ int func_8019485C(int mode, RoomOrbitTrailParticle *p) {
             D_800F3368.extent_x = 0x20;
             D_800F3368.extent_y = 0x20;
             {
-                int tpage = D_800E2850[D_800E11FA.index];
+                int tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11FA)];
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 1;
                 spin.x = 0;
@@ -94,7 +94,7 @@ int func_8019485C(int mode, RoomOrbitTrailParticle *p) {
             D_800F3368.extent_x = 0x40;
             D_800F3368.extent_y = 0x40;
             {
-                int tpage = D_800E2850[D_800E11FA.index];
+                int tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11FA)];
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 1;
                 spin.x = 0;
@@ -243,7 +243,7 @@ int func_80194F60(int mode, GteShortVector *anchor) {
         D_800F3368.extent_x = 0x20;
         D_800F3368.extent_y = 0x20;
         {
-            int tpage = D_800E2850[D_800E11FA.index];
+            int tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11FA)];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 1;
             D_800F3368.parameter0A = 5;

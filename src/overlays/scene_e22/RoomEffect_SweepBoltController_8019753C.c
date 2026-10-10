@@ -147,7 +147,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
                 int kind;
                 int palette;
                 int page;
-                u16 *slot = &D_800E11FA.index;
+                u16 *slot = &D_800E11FA;
                 int tpage = D_800E2850[*slot];
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 1;
@@ -183,7 +183,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
                 D_800F3368.extent_x = 0x40;
                 D_800F3368.extent_y = 0x40;
                 {
-                    int tpage = D_800E2850[D_800E11FA.index];
+                    int tpage = D_800E2850[D_800E11FA];
                     D_800F3368.palette = 3;
                     D_800F3368.parameter06 = 1;
                     D_800F3368.parameter0A = 0;
@@ -214,7 +214,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
                 int kind;
                 int palette;
                 int page;
-                u16 *slot = &D_800E11FA.index;
+                u16 *slot = &D_800E11FA;
                 int tpage = D_800E2850[*slot];
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 1;

@@ -60,7 +60,6 @@ typedef RoomM273EffectModeState State;
 extern unsigned char D_8019AEF8;
 extern Vector D_8019AE9C[];
 extern void *D_8019AE80;
-extern unsigned short D_800E11FA;
 extern int func_8019A398(),func_8019A4CC();
 extern void func_800CE688(void *);
 

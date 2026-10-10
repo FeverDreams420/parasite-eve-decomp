@@ -9,6 +9,7 @@
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/field_texture_tables.h"
 
 /* Scene e19 blast sequence: loads five shell models, then runs a five-state
  * charge/burst timeline at an actor position, spawning rising sparks while
@@ -55,7 +56,6 @@ extern SceneE19BlastSound D_800B0E64;
 extern SceneE19BlastPlayer **D_8009D254;
 extern SceneE19BlastScript *D_800E2368;
 extern u16 D_800E11EA[];
-extern u16 D_800E120A, D_800E11FA;
 extern s32 D_8019B668;
 extern void *D_8019B680, *D_8019B684, *D_8019B688, *D_8019B68C, *D_8019B690;
 

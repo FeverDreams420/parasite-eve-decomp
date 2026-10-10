@@ -102,7 +102,6 @@ extern int func_8019326C(int mode, RoomShakeSweepParticle *particle);
 extern GteShortVector D_80199904;
 
 /* Sweep particle draw: model asset, matrix helpers and clut lookups. */
-extern u16 D_800E11FA;
 extern u16 GetClut(int x, int y);
 extern int rsin(int angle);
 extern int func_80077A64(int, int, int, int);

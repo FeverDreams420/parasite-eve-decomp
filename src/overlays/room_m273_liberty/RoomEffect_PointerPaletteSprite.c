@@ -11,7 +11,6 @@ extern unsigned short D_800966EC[];
 extern char D_8019AB68[];
 extern RoomM273PlayerActorView *g_PlayerEntity;
 extern unsigned char D_8019AE5C;
-extern unsigned short D_800E11FA;
 
 int func_80193870(int mode, RoomM273SpritePoolEffect *state) {
     if (mode == 1) {

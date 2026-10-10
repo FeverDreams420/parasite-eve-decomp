@@ -107,7 +107,6 @@ typedef struct SceneE18FlankParticle {
 extern void *D_800B0E64;
 extern void *D_801941C4;
 extern s16 D_801941C8;
-extern u16 D_800E11FA;
 extern void *func_8006E498(void *base, u32 key);
 extern int func_80077A64(int, int, int, int);
 extern u16 func_80077AA4(int, int);

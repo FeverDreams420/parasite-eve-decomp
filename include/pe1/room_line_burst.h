@@ -6,6 +6,7 @@
 #include "pe1/render_object.h"
 #include "pe1/render_prim.h"
 #include "pe1/room_spark.h"
+#include "pe1/field_texture_tables.h"
 
 /* Room burst that spits a ring of bounce particles, draws a line from its
  * anchor to a point swept along the actor, then shrinks away. */
@@ -65,7 +66,6 @@ typedef struct RoomLineBurstColor {
 } RoomLineBurstColor;
 
 extern char *D_800B0E58[];
-extern u16 D_800E11EC;
 extern u16 D_800E11E8;
 extern void LoadAverageShort12(void *from, void *to, int weightFrom, int weightTo, void *out);
 

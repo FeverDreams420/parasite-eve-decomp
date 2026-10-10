@@ -86,7 +86,6 @@ extern RoomM123BeaconOffset D_8018F1E8;
 extern u8 *D_80195698;
 extern u8 *D_8019569C;
 extern u8 D_8019550C[];
-extern u16 D_800E11FA;
 extern u16 D_800E11EA;
 
 u8 *func_8006E498(void *channel, int id);

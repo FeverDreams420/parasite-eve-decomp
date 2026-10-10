@@ -6,7 +6,6 @@
 #include "pe1/field_texture_tables.h"
 
 extern short D_800966EC[][2];
-extern unsigned short D_800E11FA;
 
 extern void *D_800B0E64;
 extern FieldActorNode *D_8009D20C;

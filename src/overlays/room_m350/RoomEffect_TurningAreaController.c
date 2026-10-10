@@ -28,7 +28,6 @@ extern short D_8019A80A,D_8019A80C,D_8019A80E,D_8019A810,D_8019A812,D_8019A814,D
 extern int D_8019A81C,D_8019A820,D_8019A824;
 extern Vector D_8019A574[];
 extern char D_8019A594[],D_8019A3C8[];
-extern unsigned short D_800E11FA;
 extern int rcos(int), rsin(int);
 extern int GetTPage(int,int,int,int),GetClut(int,int);
 extern void GsSetOrign(int,int);

@@ -118,7 +118,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomFlareAnchor, x) == 0x268, room_flare_anchor_x
 extern RoomFlareEventState *D_800E2368;
 extern RoomFlareBattleEntity *D_8009D254;
 extern RoomFlareTextureSlot D_800E11E8;
-extern volatile u16 D_800E11EC;
 extern u16 D_800E1208;
 extern int D_8009D248;
 extern u16 D_8009D1CC;

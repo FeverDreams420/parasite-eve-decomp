@@ -2,6 +2,7 @@
 #include "pe1/field_sprite_params.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/room_fx.h"
+#include "pe1/field_texture_tables.h"
 
 #ifndef ROOMLIB_POLL_RESET_FUNC
 #error "ROOMLIB_POLL_RESET_FUNC must name the room entry point"
@@ -26,7 +27,6 @@
 #define ROOMLIB_POLL_RESET_POOL_EXPR ANIM_POOL_AS(RoomM273PoolContext)[2]
 #endif
 ROOMLIB_POLL_RESET_POOL_CONTEXT_DECL;
-extern u16 D_800E11FA;
 extern u8 ROOMLIB_POLL_RESET_FLAG;
 extern s16 ROOMLIB_POLL_RESET_COUNTER;
 extern RoomFxSeed8 ROOMLIB_POLL_RESET_SEED;
