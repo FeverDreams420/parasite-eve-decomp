@@ -1496,14 +1496,13 @@ void RoomFx_DrawEightParticles(
     unitScale = 0x1000;
     depthOut = &g_RoomDropFieldParticleSprite.depth;
     packet = (char *)depthOut - 10;
-    asm volatile("" ::: "memory");
 
     func_800C2EAC((u8)context[0x44]);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
 
-    do {
+    for (; i < 8; i++) {
         if (state->active[i] != 0) {
             matrix.m[2][2] = unitScale;
             matrix.m[1][1] = unitScale;
@@ -1542,8 +1541,7 @@ void RoomFx_DrawEightParticles(
                           (s16)state->angle[i], packet);
             func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
         }
-        i++;
-    } while (i < 8);
+    }
 }
 
 
