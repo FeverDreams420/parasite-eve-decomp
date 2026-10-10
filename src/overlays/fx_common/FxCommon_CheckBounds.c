@@ -6,14 +6,15 @@ extern int D_8019CC04, D_8019CC0C;
 int func_8018FFF4(int *point)
 {
     int first, second;
+    int secondVisible;
     int firstVisible = 0;
-    register int secondVisible asm("$5") = 0;
 
     first = D_8019CBB0 * point[0] + D_8019CBB4 * point[1]
           + D_8019CBB8 * point[2] + D_8019CB48;
     second = D_8019CBD0 * point[0] + D_8019CBD4 * point[1]
            + D_8019CBD8 * point[2] + D_8019CB4C;
 
+    secondVisible = 0;
     if (first > 0 && D_8019CC04 > 0)
         firstVisible = 1;
     if (first < 0 && D_8019CC04 < 0)
@@ -29,14 +30,15 @@ int func_8018FFF4(int *point)
 int func_80190124(short *point)
 {
     int first, second;
+    int secondVisible;
     int firstVisible = 0;
-    register int secondVisible asm("$5") = 0;
 
     first = D_8019CBB0 * point[0] + D_8019CBB4 * point[1]
           + D_8019CBB8 * point[2] + D_8019CB48;
     second = D_8019CBD0 * point[0] + D_8019CBD4 * point[1]
            + D_8019CBD8 * point[2] + D_8019CB4C;
 
+    secondVisible = 0;
     if (first > 0 && D_8019CC04 > 0)
         firstVisible = 1;
     if (first < 0 && D_8019CC04 < 0)
