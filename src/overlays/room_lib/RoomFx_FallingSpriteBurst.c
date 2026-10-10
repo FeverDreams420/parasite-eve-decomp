@@ -9,6 +9,8 @@
  * tables live in each room's own data.
  */
 #include "pe1/room_falling_burst.h"
+#include "pe1/field_actor.h"
+#include "pe1/render_object.h"
 
 static const RoomFxSeed8 s_FallingSpritePositionSeed = {
     { 0x00, 0x00, 0x14, 0x00, 0xD8, 0xFF, 0x00, 0x00 }
@@ -112,18 +114,6 @@ void RoomFx_FallingBurstTick(int arg0, char *arg1, char *arg2) {
     }
 }
 
-typedef struct RoomFallingSpriteView {
-    unsigned char pad0[0xA0];
-    unsigned char transform[0x14];
-    int baseX;
-    int baseY;
-    int baseZ;
-} RoomFallingSpriteView;
-
-typedef struct RoomFallingSpriteRoot {
-    unsigned char pad0[0x238];
-    RoomFallingSpriteView *view;
-} RoomFallingSpriteRoot;
 
 
 /* Places the sprite at the actor's offset and gives it a random sideways
@@ -134,19 +124,19 @@ void RoomFx_InitFallingSprite(void *entity, void *unused,
     unsigned short position[4];
     RoomFxSeed8 velocitySeed;
     unsigned short velocity[4];
-    RoomFallingSpriteRoot **root;
-    RoomFallingSpriteView *view;
+    FieldActor **root;
+    RenderMatrix *view;
 
     root = func_800C2B50();
     positionSeed = s_FallingSpritePositionSeed;
     velocitySeed = s_FallingSpriteVelocitySeed;
-    view = (*root)->view;
-    ApplyMatrixSV((GteMatrix *)&view->transform, &positionSeed.vector,
+    view = &(*root)->render_object.matrices[5];
+    ApplyMatrixSV((GteMatrix *)view, &positionSeed.vector,
                   (GteShortVector *)position);
 
-    state->x = position[0] + view->baseX;
-    state->y = position[1] + view->baseY;
-    state->z = position[2] + view->baseZ;
+    state->x = position[0] + view->translation[0];
+    state->y = position[1] + view->translation[1];
+    state->z = position[2] + view->translation[2];
     state->scale = 0x100;
     state->depth = 0x80;
     state->verticalStep = 0;
@@ -157,7 +147,7 @@ void RoomFx_InitFallingSprite(void *entity, void *unused,
         state->velocityY = 0;
         state->velocityZ = func_80071A54() % 10 - 5;
     } else {
-        ApplyMatrixSV((GteMatrix *)&view->transform, &velocitySeed.vector,
+        ApplyMatrixSV((GteMatrix *)view, &velocitySeed.vector,
                       (GteShortVector *)velocity);
         state->velocityX = velocity[0] * 2;
         state->velocityY = 0;
@@ -170,7 +160,7 @@ void RoomFx_InitFallingSprite(void *entity, void *unused,
 /* Draws the sprite stretched by its fall speed, then its shadow on the
  * floor. */
 void RoomFx_DrawFallingSprite(void *unused0, void *unused1,
-                              RoomSpriteFxParams *fx) {
+                              RoomFallingSpriteState *fx) {
     RoomSpriteMatrix matrix;
     RoomFxVec4 scratchScale;
     RoomFxVec4 scale;
@@ -197,15 +187,15 @@ void RoomFx_DrawFallingSprite(void *unused0, void *unused1,
 
     func_80071A44(&scale, 0, 0x10);
     scale.x = 0x100;
-    scale.y = fx->scale;
+    scale.y = (s16)fx->scale;
     scale.z = 0x1000;
     scratchScale = scale;
     ScaleMatrix(&matrix, &scratchScale);
 
     g_RoomFallingBurstSprite.depth = fx->depth;
-    matrix.t[0] = fx->x;
-    matrix.t[1] = fx->y - ((fx->scale - 0x100) >> 4);
-    matrix.t[2] = fx->z;
+    matrix.t[0] = (s16)fx->x;
+    matrix.t[1] = (s16)fx->y - (((s16)fx->scale - 0x100) >> 4);
+    matrix.t[2] = (s16)fx->z;
     func_800C42A4((FieldGlowSprite *)&g_RoomFallingBurstSprite, &matrix, 1);
 
     matrix.m[2][2] = 0x1000;
@@ -224,9 +214,9 @@ void RoomFx_DrawFallingSprite(void *unused0, void *unused1,
     scale = s_FallingShadowScale;
     ScaleMatrix(&matrix, &scale);
     func_800C3238(2);
-    matrix.t[0] = fx->x;
+    matrix.t[0] = (s16)fx->x;
     matrix.t[1] = g_RoomFloorY->y;
-    matrix.t[2] = fx->z;
+    matrix.t[2] = (s16)fx->z;
     func_800C42A4((FieldGlowSprite *)&g_RoomFallingBurstShadow, &matrix, 1);
 }
 
