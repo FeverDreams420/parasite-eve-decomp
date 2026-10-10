@@ -442,10 +442,9 @@ segments:
       - [0x3DCC4, c, menu/Menu_SaveSlotListView]
       - [0x3DE90, c, menu/Menu_DrawSaveSlotPortLabel]
       - [0x3DED4, c, menu/Menu_StepSaveSelect]
-      - [0x3E178, c, menu/Menu_CreateMemCardProgressWidget]
-      - [0x3E1D8, c, menu/Menu_DestroyMemCardProgressWidget]
-      - [0x3E204, c, memcard/MemCard_DrawProgress]
-      - [0x3E29C, c, menu/Menu_MemCardProgressInput]
+      # Memory-card progress widget lifecycle, block-meter draw and the write
+      # confirmation prompt share g_MemCardProgressPrimList.
+      - [0x3E178, c, menu/Menu_MemCardProgress]
       - [0x3E4A4, c, menu/Menu_OpenSaveLoadEntryPoint]
       - [0x3E564, c, menu/Menu_OpenRenameScreen]
       # Name entry page input handlers: private data and helpers join the pair.

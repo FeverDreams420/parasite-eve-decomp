@@ -1,11 +1,21 @@
-#include "pe1/menu_widget.h"
-#include "pe1/inventory_queries.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
-#include "pe1/menu_inventory.h"
+#include "pe1/draw_state.h"
+#include "pe1/inventory_queries.h"
 #include "pe1/menu_dialog.h"
+#include "pe1/menu_inventory.h"
+#include "pe1/menu_widget.h"
 #include "pe1/text.h"
 
+/* Memory-card progress widget: creation, teardown, block-meter draw and the
+ * write-confirmation prompt it raises when the card operation finishes. */
+
+int g_MemCardProgressPrimList;
+
+void MemCard_DrawProgress(void);
+int Menu_MemCardProgressInputHandler(void);
+void Draw_FlushPrimList(int arg0);
+int MemCard_GetActiveProgressBlocks(void);
 void MenuWidget_SaveAndSetCurrentNode(MenuWidgetNode *arg0);
 int MemCard_GetActivePort(void);
 void Menu_CreateNotificationDialog(int arg0, int arg1);
@@ -20,6 +30,44 @@ extern unsigned char D_800A19C0[];
 /* Separate compiler identities preserve address reloads across text calls. */
 extern unsigned char D_800A19C0_measure[] asm("D_800A19C0");
 extern unsigned char D_800A19C0_remeasure[] asm("D_800A19C0");
+
+void Menu_CreateMemCardProgressWidget(int arg0) {
+    void *node;
+    void *widget;
+
+    node = MenuWidget_GetCurrentNode();
+    widget = MenuWidget_CreateSimpleNode(0x27, node, 0, 1);
+    *(void **)((char *)widget + 0x30) = MemCard_DrawProgress;
+    *(void **)((char *)widget + 0x2C) = Menu_MemCardProgressInputHandler;
+    MenuWidget_SetCurrentNode(widget);
+    g_MemCardProgressPrimList = arg0;
+}
+
+void Menu_DestroyMemCardProgressWidget(void) {
+    MenuWidget_DestroyNode(MenuWidget_FindByModeAndSelectedBase(1, 0x27));
+}
+
+void MemCard_DrawProgress(void) {
+    int i;
+    int count;
+
+    Draw_OffsetCursor(0, 10);
+    Draw_FlushPrimList(g_MemCardProgressPrimList);
+    if (g_MemCardProgressPrimList != 0x40) {
+        count = MemCard_GetActiveProgressBlocks();
+        i = 0;
+        Draw_OffsetCursor(0x10, 0x14);
+        while (i < 8) {
+            if (i < count) {
+                Draw_AllocSprite(0x83);
+            } else {
+                Draw_AllocSprite(0x82);
+            }
+            i++;
+            Draw_OffsetCursor(0x10, 0);
+        }
+    }
+}
 
 int Menu_MemCardProgressInputHandler(void) {
     return 1;
