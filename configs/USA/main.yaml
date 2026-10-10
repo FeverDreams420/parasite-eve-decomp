@@ -1127,7 +1127,6 @@ segments:
       # share the model header and the tpage/CLUT/semi-transparency state (TU evidence:
       # private data D_800F346C, D_800F3414, D_800F33E4, D_800F3420).
       - [0xB755C, c, engine/FieldEng_TexturedModel]
-      - [0xB82E0, c, engine/FieldEng_TransformPackedVertex]
       # Eight field effect objects, one module each. The descriptor table D_80094188 lists
       # them; each descriptor names a setup function, the spawn/register/update entry points
       # and the particle and state callback lists. Every module starts with its setup

@@ -2,6 +2,7 @@
 #include "pe1/gte.h"
 #include "pe1/render_prim.h"
 #include "pe1/field_textured_model.h"
+#include "pe1/render_object.h"
 
 /* Textured field models: UV scrolling, the texture page, CLUT,
  * semi-transparency and depth state the draw reads, the colour-table
@@ -82,7 +83,6 @@ void func_800C6EF8(char *data) {
     }
 }
 
-
 void func_800C6F4C(char *data) {
     FieldModelHeader *table = (FieldModelHeader *)data;
     int i = 0;
@@ -94,7 +94,6 @@ void func_800C6F4C(char *data) {
         *dst++ = *src++;
     }
 }
-
 
 void func_800C6FA0(char *data, u16 factor)
 {
@@ -140,7 +139,6 @@ void func_800C6FA0(char *data, u16 factor)
         entry->rgb.b = blue;
     }
 }
-
 
 void func_800C7098(char *data, u8 r, u8 g, u8 b) {
     int i = 0;
@@ -420,4 +418,25 @@ void func_800C71E4(FieldTexturedModel *model, GteMatrix *placement)
             }
         }
     }
+}
+
+void FieldEng_TransformPackedVertex(RenderPackedGeometry *geometry,
+                                   GteMatrix *matrix, u16 index,
+                                   GteShortVector *out) {
+    u16 vertex_offset;
+    u32 translation;
+
+    /* The packed format deliberately truncates the byte offset to 16 bits. */
+    vertex_offset = 16
+        + (geometry->counts.record12_counts[0] + geometry->counts.record12_counts[1]) * 12
+        + (geometry->counts.record16_counts[0] + geometry->counts.record16_counts[1]) * 16;
+    ApplyMatrixSV(matrix,
+                  (GteShortVector *)&geometry->bytes[vertex_offset] + index,
+                  out);
+    translation = matrix->t[0];
+    out->x += translation;
+    translation = matrix->t[1];
+    out->y += translation;
+    translation = matrix->t[2];
+    out->z += translation;
 }
