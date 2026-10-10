@@ -1165,9 +1165,7 @@ segments:
       - [0xC5810, c, engine/FieldEng_ScatterBurst]
       - [0xC6098, c, engine/FieldEng_CosinePulse]
       - [0xC64E4, c, engine/FieldEng_RisingEffect]
-      - [0xC6A9C, c, engine/FieldEng_SpiralSprite]
-      - [0xC721C, c, engine/FieldEng_RingPulse]
-      - [0xC7458, c, engine/FieldEng_BouncingGlow]
+      - [0xC6A9C, c, engine/FieldEng_SpiralSpriteEffect]
       # Ember drift, fan-sweep spark instance and the fan-sweep controller share the spark pools (G1583).
       - [0xC78C0, c, engine/FieldEng_FanSweepSparks]
       - [0xC821C, c, engine/FieldEng_ArcingEmitter]
