@@ -1,8 +1,25 @@
-#include "pe1/menu_equipment.h"
-#include "pe1/menu_inventory.h"
-#include "pe1/psyq_nop.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
+#include "pe1/battle_modifiers.h"
+#include "pe1/menu_equipment.h"
+#include "pe1/menu_inventory.h"
+#include "pe1/menu_item_rows.h"
+#include "pe1/psyq_nop.h"
+
+/* Weapon and armor list draws, the inventory category step and the battle
+ * command list draw. */
+
+void Menu_DrawBattleCommandItem(int index);
+
+void Menu_DrawWeaponList(MenuWidgetNode *node) {
+    Inv_SelectActiveList(0);
+    MenuWidget_DrawList(node, Menu_DrawInventoryItemRow);
+}
+
+void Menu_DrawArmorList(MenuWidgetNode *node) {
+    Inv_SelectActiveList(1);
+    MenuWidget_DrawList(node, Menu_DrawArmorItemRow);
+}
 
 int Menu_StepInventoryCategory(MenuWidgetNode *node, unsigned int flags)
 {
@@ -65,4 +82,8 @@ int Menu_StepInventoryCategory(MenuWidgetNode *node, unsigned int flags)
         Menu_PlayCancelSound();
     }
     return 1;
+}
+
+void Menu_DrawBattleCommandList(MenuWidgetNode *node) {
+    MenuWidget_DrawList(node, Menu_DrawBattleCommandItem);
 }
