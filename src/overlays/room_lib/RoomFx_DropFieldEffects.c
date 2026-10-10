@@ -1412,18 +1412,15 @@ void RoomFx_DrawQuadSprites(void *unused0, void *unused1,
 
 void RoomFx_UpdateQuadSprites(void *unused, unsigned char *state, RoomFourSpriteState *p) {
     unsigned int i;
-    char *base = (char *)p;
 
     for (i = 0; i < 4; i++) {
-        RoomFourSpriteState *rec = (RoomFourSpriteState *)(base + i * 8);
-        RoomFourSpriteState *timer = (RoomFourSpriteState *)(base + i * 2);
 
-        rec->position[0].x += (u16)rec->velocity[0].x;
-        rec->position[0].y += (u16)rec->velocity[0].y;
-        rec->position[0].z += (u16)rec->velocity[0].z;
-        timer->depth[0] -= 8;
-        if ((short)timer->depth[0] < 0) {
-            timer->depth[0] = 0;
+        p->position[i].x += (u16)p->velocity[i].x;
+        p->position[i].y += (u16)p->velocity[i].y;
+        p->position[i].z += (u16)p->velocity[i].z;
+        p->depth[i] -= 8;
+        if ((short)p->depth[i] < 0) {
+            p->depth[i] = 0;
         }
     }
 
