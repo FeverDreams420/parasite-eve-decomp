@@ -522,8 +522,8 @@ segments:
       - [0x42F0C, c, akao/Akao_SetBgmVolumeFade]
       - [0x42F64, c, menu/Menu_ActionSubmenuSelection]
       - [0x4308C, c, time/game_time]
-      - [0x430F0, c, item/Inv_SetDefaultItemId]
-      - [0x4332C, c, item/Inv_ScrambleGrid]
+      # Item-drop random table seeding and per-draw refresh share g_ItemDropRngIndex.
+      - [0x430F0, c, item/Inv_DropRng]
       - [0x433CC, c, item/Inv_ItemGridAndActiveList]
       - [0x436B0, c, item/inv]
       - [0x4370C, c, item/Inv_IsActiveListOverrideSelected]

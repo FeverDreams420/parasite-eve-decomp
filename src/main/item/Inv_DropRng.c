@@ -1,12 +1,15 @@
 #include "common.h"
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: --use-comm-section -G8 */
 
-extern s32 D_8009D038;
+/* Item-drop random table: seeding from the play clock and the per-draw
+ * lagged-xor refresh of the 0x209-byte table. */
+
+int g_ItemDropRngIndex;
 extern u32 D_800A76A4[4];
-extern u8 D_800A1B70[];
-extern u8 D_800A1B90[];
-extern u8 D_800A1D79[];
+extern unsigned char g_ItemDropRngXorKeyHigh[];
+extern unsigned char g_ItemDropRngTable[];
+extern unsigned char g_ItemDropRngXorKeyLow[];
 
 #define D_800A76A4_VALUE (D_800A76A4[0])
 
@@ -14,10 +17,10 @@ extern u8 D_800A1D79[];
     do {                                           \
         int scramble_i_;                           \
         for (scramble_i_ = 0; scramble_i_ < 0x20; scramble_i_++) { \
-            D_800A1B90[scramble_i_] ^= D_800A1D79[scramble_i_];    \
+            g_ItemDropRngTable[scramble_i_] ^= g_ItemDropRngXorKeyLow[scramble_i_]; \
         }                                          \
         for (scramble_i_ = 0x20; scramble_i_ < 0x209; scramble_i_++) { \
-            D_800A1B90[scramble_i_] ^= D_800A1B70[scramble_i_];    \
+            g_ItemDropRngTable[scramble_i_] ^= g_ItemDropRngXorKeyHigh[scramble_i_]; \
         }                                          \
     } while (0)
 
@@ -46,12 +49,30 @@ void Inv_SetDefaultItemId(void) {
     }
 
     for (index = 0; index < 0x209; index++) {
-        D_800A1B90[index] = state[index];
+        g_ItemDropRngTable[index] = state[index];
     }
 
     SCRAMBLE_RANDOM_BYTES();
     SCRAMBLE_RANDOM_BYTES();
     SCRAMBLE_RANDOM_BYTES();
 
-    D_8009D038 = 0x208;
+    g_ItemDropRngIndex = 0x208;
+}
+
+int Inv_ScrambleGrid(void)
+{
+    int i;
+
+    g_ItemDropRngIndex++;
+    if (g_ItemDropRngIndex >= 0x209) {
+        for (i = 0; i < 0x20; i++) {
+            g_ItemDropRngTable[i] = g_ItemDropRngTable[i] ^ g_ItemDropRngXorKeyLow[i];
+        }
+        for (i = 0x20; i < 0x209; i++) {
+            g_ItemDropRngTable[i] = g_ItemDropRngTable[i] ^ g_ItemDropRngXorKeyHigh[i];
+        }
+        g_ItemDropRngIndex = 0;
+    }
+
+    return g_ItemDropRngTable[g_ItemDropRngIndex];
 }
