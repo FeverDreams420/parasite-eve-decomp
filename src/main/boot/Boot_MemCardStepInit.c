@@ -32,7 +32,7 @@ s32 Boot_MemCardStepInit(u8 **arg0) {
             base->memcard_init_phase = 0x37U;
         }
         base->flags = base->flags | 0x800000;
-        goto block_19;
+        break;
     case 0x37:
         if (!(g_GameState.flags & 0x400000)) {
             MemCard_InitSlotState();
@@ -47,13 +47,13 @@ s32 Boot_MemCardStepInit(u8 **arg0) {
             base->memcard_init_phase = 0x39U;
             goto loop_1;
         }
-        goto block_19;
+        break;
     case 0x39:
         if (Asset_LoadTimTextures(1) != 1) {
             base->memcard_init_phase = 0x3AU;
             goto loop_1;
         }
-        goto block_19;
+        break;
     case 0x3A:
         {
             s32 t1a0 = D_8009D1A0_rd[0] | 2;
@@ -61,7 +61,7 @@ s32 Boot_MemCardStepInit(u8 **arg0) {
         }
         Battle_StartEncounter(**arg0);
         base->memcard_init_phase = 0x3BU;
-        goto block_19;
+        break;
     case 0x3B:
         if (!(base->story_day_flags & 3)) {
             base->memcard_init_phase = 0U;

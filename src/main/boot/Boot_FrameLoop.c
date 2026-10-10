@@ -288,7 +288,7 @@ void Boot_RunFrame(void)
                     if ((s8)func_80122040() == 0) {
                         func_80121A00();
                         Gpu_ClearOnFlag();
-                        goto loop_end_check;
+                        continue;
                     }
                 } else if (!(*game_flags & 0x200)) {
                     Render_Update();
