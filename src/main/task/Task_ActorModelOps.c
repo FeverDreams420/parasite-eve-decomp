@@ -218,7 +218,8 @@ s32 Task_GetAngleToEntity(s32 *args[]) {
         key2 = key;
         node = g_FieldActorListHead;
         if (node == NULL) {
-            goto fail;
+            *args[2] = -1;
+            return 1;
         }
         do {
             if ((node->type_id != key2) ||

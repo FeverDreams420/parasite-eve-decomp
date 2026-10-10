@@ -300,7 +300,9 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         status = CD_SeekToTrack(*args->arg1, 1, 0, &locals.slot,
                                 *args->arg2 == 0);
         if (status == 1) {
-            goto wait_for_cd;
+            D_8009CE00 -= 0x20;
+            D_8009D300->active = status;
+            return 0;
         }
         if ((u32)(locals.slot + 2) < 2) {
             break;
@@ -313,7 +315,9 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         status = CD_SeekToTrack(*args->arg1, 1, 1, &locals.slot,
                                 *args->arg3 == 0);
         if (status == 1) {
-            goto wait_for_cd;
+            D_8009CE00 -= 0x20;
+            D_8009D300->active = status;
+            return 0;
         }
         if ((u32)(locals.slot + 2) < 2) {
             break;
@@ -334,7 +338,9 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         if (status != wait_one) {
             break;
         }
-        goto wait_for_cd;
+        D_8009CE00 -= 0x20;
+        D_8009D300->active = status;
+        return 0;
     case 0xCC:
         Akao_Cmd_90(*args->arg1);
         break;
@@ -529,7 +535,9 @@ find_actor_asset:
         status = CD_SeekTrack1(*args->arg1, 1, 1, &locals.slot,
                                *args->arg2 == 0);
         if (status == 1) {
-            goto wait_for_cd;
+            D_8009CE00 -= 0x20;
+            D_8009D300->active = status;
+            return 0;
         }
         goto store_audio_slot;
 wait_for_cd:

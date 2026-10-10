@@ -120,7 +120,13 @@ s32 Task_SetEntityParentLink(s32 *args[]) {
             return 1;
         }
         node = tmp;
-        goto link;
+        {
+            FieldActor *cur = g_CurrentEntity;
+            cur->parent = node;
+            node->flags |= 0x100000;
+            cur->flags |= 0x600000;
+        }
+        return 1;
     }
     {
         u32 k = key;
