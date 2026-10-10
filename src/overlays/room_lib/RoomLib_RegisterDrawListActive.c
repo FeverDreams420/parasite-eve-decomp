@@ -7,9 +7,4 @@
 #include "room_lib.h"
 #include "pe1/room_module.h"
 
-int RoomLib_RegisterDrawListActive(void *o) {
-    if (FieldEng_GetStatus(o) == 3) {
-        FieldEng_Register(o, g_RoomDrawList);
-    }
-    return 0;
-}
+ROOMLIB_REGISTER_TABLE_AT3(RoomLib_RegisterDrawListActive, g_RoomDrawList)
