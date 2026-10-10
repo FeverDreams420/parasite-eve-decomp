@@ -1258,11 +1258,10 @@ void RoomFx_InitQuadSprites(void *unused0, void *unused1, void *output_arg) {
     red = 159;
     blue = 137;
     mid = 64;
-    PE1_COMPILER_USE(mid);
     scale = base;
     color = scale;
 
-    do {
+    for (; (unsigned int)index < 4; index++) {
         speed = (int)rand() % 40 + 10;
         rand();
 
@@ -1310,8 +1309,7 @@ advance_color:
         color += 4;
 advance_scale:
         scale += 2;
-        index++;
-    } while ((unsigned int)index < 4);
+    }
 }
 
 
