@@ -174,7 +174,7 @@ void RoomEffect_GroundEruptionInitColumn(void *ent, void *unused,
 void RoomEffect_GroundEruptionTransformColumn(void *arg0, void *arg1,
                                               char *state) {
     RoomLibSpriteTransformStack stack;
-    register RoomSpriteMatrix *matrix asm("$16");
+    RoomSpriteMatrix *matrix;
     RoomSpriteMatrix *scaleMatrix;
     char *workState;
     char *owner;
@@ -203,12 +203,8 @@ void RoomEffect_GroundEruptionTransformColumn(void *arg0, void *arg1,
     stack.scale = stack.sourceScale;
     scaleMatrix = &stack.scaleMatrix;
     ScaleMatrix(scaleMatrix, &stack.scale);
-    {
-        register GteShortVector *seedArg asm("$4") = &stack.seed.vector;
-        asm("" : : "r"(seedArg));
-        matrix = &stack.matrix;
-        RotMatrix(seedArg, matrix);
-    }
+    RotMatrix(&stack.seed.vector, &stack.matrix);
+    matrix = &stack.matrix;
 
     gte_ldrotmatrix(scaleMatrix);
     gte_ldrtir12_matrix_column(&stack.matrix.m[0][0]);

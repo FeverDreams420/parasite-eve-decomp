@@ -388,12 +388,8 @@ void RoomLib_TransformPairedEmitter(void *unused, RoomFxControl *params,
     stack.scale = stack.sourceScale;
     scaleMatrix = &stack.scaleMatrix;
     ScaleMatrix(scaleMatrix, &stack.scale);
-    {
-        register GteShortVector *seedArg asm("$4") = &stack.seed.vector;
-        asm("" : : "r"(seedArg));
-        matrix = &stack.matrix;
-        RotMatrix(seedArg, matrix);
-    }
+    RotMatrix(&stack.seed.vector, &stack.matrix);
+    matrix = &stack.matrix;
 
     gte_ldrotmatrix(scaleMatrix);
     gte_ldrtir12_matrix_column(&stack.matrix.m[0][0]);
