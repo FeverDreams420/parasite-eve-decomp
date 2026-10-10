@@ -11,7 +11,7 @@
     "externs_in_c": 2443,
     "field_macros": 92,
     "game_asm_units": 4,
-    "gotos": 554,
+    "gotos": 466,
     "gte_matrix_windows": 0,
     "include_asm": 0,
     "nop_barriers": 157,
@@ -23,7 +23,7 @@
     "stack_reserves": 8,
     "stack_switch_macros": 1,
     "statement_expressions": 2,
-    "unknown_fields": 110
+    "unknown_fields": 111
   },
   "overlays": {
     "aliases": 3,
@@ -37,7 +37,7 @@
     "externs_in_c": 1014,
     "field_macros": 0,
     "game_asm_units": 0,
-    "gotos": 242,
+    "gotos": 225,
     "gte_matrix_windows": 12,
     "include_asm": 0,
     "nop_barriers": 0,
