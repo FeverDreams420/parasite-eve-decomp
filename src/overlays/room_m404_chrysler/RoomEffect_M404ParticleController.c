@@ -6,30 +6,30 @@ int func_80193368(int mode, void *unused, char *state) {
     s16 target[4];
     char *pool;
     RoomM404Particle *child;
-    if (mode == 1)
-        goto update;
-    if (mode < 2) {
-        if (mode == 0)
-            goto init;
-        return 0;
-    }
-    if (mode == 2)
-        goto configure;
-    return 0;
-init:
-    {
-        int handle = func_800D3FD8();
-        func_800D3F64(0x5b9, handle);
-        if (D_800E2368->active) {
-            RoomM404Node **slot = (RoomM404Node **)D_800F32D0->pool;
-            if (slot && *slot) {
-                u8 *flag = (*slot)->state;
-                if (*flag == 1) *flag = 2;
-            }
+    if (mode != 1) {
+        if (mode < 2) {
+            if (mode == 0)
+                goto init;
+            return 0;
         }
-        pool = D_800F33E0->pool;
-        return func_800CE560(pool, 20, 55,
-                             (FieldAnimCallbackListCallback)func_80192540);
+        if (mode == 2)
+            goto configure;
+        return 0;
+    init:
+        {
+            int handle = func_800D3FD8();
+            func_800D3F64(0x5b9, handle);
+            if (D_800E2368->active) {
+                RoomM404Node **slot = (RoomM404Node **)D_800F32D0->pool;
+                if (slot && *slot) {
+                    u8 *flag = (*slot)->state;
+                    if (*flag == 1) *flag = 2;
+                }
+            }
+            pool = D_800F33E0->pool;
+            return func_800CE560(pool, 20, 55,
+                                 (FieldAnimCallbackListCallback)func_80192540);
+        }
     }
 update:
     {

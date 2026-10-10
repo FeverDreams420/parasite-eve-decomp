@@ -11,18 +11,17 @@ int func_80194D54(int mode) {
     unsigned short timer;
     unsigned char *data;
 
-    if (mode == 1) {
-        goto mode_one;
-    }
-    if (mode >= 2) {
-        return 0;
-    }
-    if (mode != 0) {
-        return 0;
-    }
-    D_8019AE9A = 0;
-    goto ret_zero;
+    if (mode != 1) {
+        if (mode >= 2) {
+            return 0;
+        }
+        if (mode != 0) {
+            return 0;
+        }
+        D_8019AE9A = 0;
+        goto ret_zero;
 
+    }
 mode_one:
     obj = *(unsigned char **)((unsigned char *)D_800F32D0 + 8);
     state = *(unsigned char **)(*(unsigned char **)obj + 0x18);
@@ -34,20 +33,13 @@ mode_one:
     }
 
     obj_mode = *(unsigned char *)(obj + 0xE);
-    if (obj_mode == 9) {
-        goto mode_nine;
-    }
-    if (obj_mode != 0x10) {
-        goto check_flag;
-    }
-
-    if ((unsigned int)(frame - 0x23) < 0x19) {
-        D_8019AE9A = 1;
-    }
-    goto check_flag;
-
-mode_nine:
-    if ((short)frame >= 0x21) {
+    if (obj_mode != 9) {
+        if (obj_mode == 0x10) {
+            if ((unsigned int)(frame - 0x23) < 0x19) {
+                D_8019AE9A = 1;
+            }
+        }
+    } else if ((short)frame >= 0x21) {
         D_8019AE9A = 1;
     } else if ((short)frame > 0 && ((int)(timer << 16) <= 0)) {
         data = *(unsigned char **)(obj + 0x238);
@@ -56,7 +48,6 @@ mode_nine:
                       *(short *)(data + 0x59C));
     }
 
-check_flag:
     if (D_8019AE9A != 0) {
         return 1;
     }

@@ -36,15 +36,17 @@ int RoomM005_FxOrbiter_8018F018(int mode, RoomM005_OrbRec *r) {
     short q[4];
     char out[8];
 
-    if (mode == 1) goto tick;
-    if (mode == 2) goto burst;
-    return 0;
+    if (mode != 1) {
+        if (mode == 2) goto burst;
+        return 0;
 
+    }
 tick:
-    if (r->hC == 0) goto init;
-    if (r->hC == mode) goto fade;
-    return 0;
+    if (r->hC != 0) {
+        if (r->hC == mode) goto fade;
+        return 0;
 
+    }
 init:
     anchor[0] = g_RoomScriptRecord.h4;
     anchor[1] = g_RoomScriptRecord.h6;
@@ -68,30 +70,31 @@ fade:
         r->hE = n;
         LoadAverageShort12(r, g_RoomScriptRecord.hC, 0x1000 - (n << 7), n << 7, r);
     }
-    if (r->hE < 0x20) goto ret0;
-    return 1;
+    if (r->hE >= 0x20) {
+        return 1;
 
-burst:
-    q[0] = 0;
-    q[1] = 0;
-    q[2] = r->h8;
-    q[3] = 0;
-    func_800CF3AC(RoomM005_Rec2, out, (r->h2 + D_800E27EC) & 0x3F);
-    {
-        int a = D_800E1204[D_800F3368.palette];
-        if (D_800F3368.palette == 4 && D_800F3428 != 0) {
-            a += 4;
+    burst:
+        q[0] = 0;
+        q[1] = 0;
+        q[2] = r->h8;
+        q[3] = 0;
+        func_800CF3AC(RoomM005_Rec2, out, (r->h2 + D_800E27EC) & 0x3F);
+        {
+            int a = D_800E1204[D_800F3368.palette];
+            if (D_800F3368.palette == 4 && D_800F3428 != 0) {
+                a += 4;
+            }
+            func_800CEE20((GteShortVector *)r, (GteRotation *)q, 0x800, 0x800, (s16)D_800F3368.parameter02 + 0xD8,
+                          (unsigned short)func_80077AA4(0x20, a), 3, r->h6, (RenderColor *)out);
         }
-        func_800CEE20((GteShortVector *)r, (GteRotation *)q, 0x800, 0x800, (s16)D_800F3368.parameter02 + 0xD8,
-                      (unsigned short)func_80077AA4(0x20, a), 3, r->h6, (RenderColor *)out);
-    }
-    {
-        int a = D_800E1204[D_800F3368.palette];
-        if (D_800F3368.palette == 4 && D_800F3428 != 0) {
-            a += 4;
+        {
+            int a = D_800E1204[D_800F3368.palette];
+            if (D_800F3368.palette == 4 && D_800F3428 != 0) {
+                a += 4;
+            }
+            func_800CEE20((GteShortVector *)r, (GteRotation *)q, 0x1000, 0x1000, ((s16)D_800F3368.parameter02 << 1) + 0xD8,
+                          (unsigned short)func_80077AA4(0x20, a), 3, r->h6, (RenderColor *)out);
         }
-        func_800CEE20((GteShortVector *)r, (GteRotation *)q, 0x1000, 0x1000, ((s16)D_800F3368.parameter02 << 1) + 0xD8,
-                      (unsigned short)func_80077AA4(0x20, a), 3, r->h6, (RenderColor *)out);
     }
 ret0:
     return 0;

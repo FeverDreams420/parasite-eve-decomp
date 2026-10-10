@@ -73,19 +73,20 @@ int func_8019330C(int mode, SceneE18PulseState *state) {
     SceneE18PulseParticle *particle;
     int stage;
 
-    if (mode == 1) goto update;
-    if (mode < 2) {
-        if (mode == 0) goto setup;
+    if (mode != 1) {
+        if (mode < 2) {
+            if (mode == 0) goto setup;
+            return 0;
+        }
         return 0;
+
+    setup:
+        state->stage = 0;
+        state->ticks = 0;
+        return func_800CE560(D_800F33E0->pool, 8, 4,
+                             (FieldAnimCallbackListCallback)func_80193018);
+
     }
-    return 0;
-
-setup:
-    state->stage = 0;
-    state->ticks = 0;
-    return func_800CE560(D_800F33E0->pool, 8, 4,
-                         (FieldAnimCallbackListCallback)func_80193018);
-
 update:
     if (state->stage >= 4) return 2;
     state->ticks++;

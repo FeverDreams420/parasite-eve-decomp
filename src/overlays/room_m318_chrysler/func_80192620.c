@@ -8,14 +8,13 @@ extern s32 func_80071A54(void);
 s32 func_80192620(s32 mode, s16 *pos) {
     s16 in[4];
     s16 out[4];
-    if (mode == 1) {
-        goto mode1;
-    }
-    if (mode == 2) {
-        goto mode2;
-    }
-    return 0;
+    if (mode != 1) {
+        if (mode == 2) {
+            goto mode2;
+        }
+        return 0;
 
+    }
 mode1:
     pos[0] = (u16)(pos[0] - 3 + (func_80071A54() & 7));
     pos[1] = (u16)(pos[1] - 7 + (func_80071A54() & 3));

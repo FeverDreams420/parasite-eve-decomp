@@ -147,29 +147,28 @@ s32 func_80190574(s32 mode, RoomBounceGlint *ent) {
 
     blob = *(RoomM086Blob8 *)D_8018EFF4;
 
-    if (mode == 1) {
-        goto mode1;
-    }
-    if (mode < 2) {
-        if (mode == 0) {
-            goto mode0;
+    if (mode != 1) {
+        if (mode < 2) {
+            if (mode == 0) {
+                goto mode0;
+            }
+            goto ret0;
+        }
+        if (mode == 2) {
+            goto mode2;
         }
         goto ret0;
-    }
-    if (mode == 2) {
-        goto mode2;
-    }
-    goto ret0;
 
-mode0:
-    func_800CE8F0(((void **)D_800F32D0)[2], 7, &blob, ent);
-    ent->y = g_RoomFloorY->y;
-    value = func_800D3FD8();
-    func_800D3F64(0x579, value);
-    func_800CE560(((void **)D_800F33E0)[2], 0x14, 0x18,
-                  (FieldAnimCallbackListCallback)func_801900CC);
-    goto done;
+    mode0:
+        func_800CE8F0(((void **)D_800F32D0)[2], 7, &blob, ent);
+        ent->y = g_RoomFloorY->y;
+        value = func_800D3FD8();
+        func_800D3F64(0x579, value);
+        func_800CE560(((void **)D_800F33E0)[2], 0x14, 0x18,
+                      (FieldAnimCallbackListCallback)func_801900CC);
+        goto done;
 
+    }
 mode1:
     value = D_800E27EC;
     if (value == 1) {
@@ -267,26 +266,25 @@ mode1:
             actor->timer = 0;
         }
     }
-    if (D_800E27EC < 0x46) {
-        goto ret0;
+    if (D_800E27EC >= 0x46) {
+        return 1;
+
+    mode2: {
+        int index = D_800E11EA;
+        u16 tpage;
+        D_800F3368.depth = 0x10;
+        D_800F3368.parameter00 = 0x20;
+        D_800F3368.parameter02 = 2;
+        D_800F3368.extent_x = 0x20;
+        D_800F3368.extent_y = 0x20;
+        tpage = D_800E2850[index];
+        D_800F3368.palette = 3;
+        D_800F3368.parameter06 = 0;
+        D_800F3368.parameter0A = 0;
+        D_800F3368.tpage = tpage;
     }
-    return 1;
 
-mode2: {
-    int index = D_800E11EA;
-    u16 tpage;
-    D_800F3368.depth = 0x10;
-    D_800F3368.parameter00 = 0x20;
-    D_800F3368.parameter02 = 2;
-    D_800F3368.extent_x = 0x20;
-    D_800F3368.extent_y = 0x20;
-    tpage = D_800E2850[index];
-    D_800F3368.palette = 3;
-    D_800F3368.parameter06 = 0;
-    D_800F3368.parameter0A = 0;
-    D_800F3368.tpage = tpage;
-}
-
+    }
 ret0:
     return 0;
 done:;

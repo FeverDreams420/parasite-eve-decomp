@@ -7,31 +7,32 @@ int func_80195320(int mode, u16 *out) {
     RoomM256TrailEffect *task;
     u16 value;
 
-    if (mode == 1) goto mode1;
-    if (mode < 2) {
-        if (mode == 0) goto mode0;
+    if (mode != 1) {
+        if (mode < 2) {
+            if (mode == 0) goto mode0;
+            return 0;
+        }
+        if (mode == 2) goto mode2;
         return 0;
-    }
-    if (mode == 2) goto mode2;
-    return 0;
 
-mode0:
-    *out = (u16)D_800E2368->variables[0];
-    D_80195EF8 = func_8006E498(D_800B0E64, 0xC5887704);
-    func_800C6D5C((union FieldTexturedModel *)D_80195EF8, 0, 0);
-    if (D_800E2368->flags) {
-        p = (char *)D_800F32D0->actor;
-        if (p) {
-            q = *(char **)p;
-            if (q) {
-                r = *(char **)(q + 0x18);
-                if (*r == 1) *r = 2;
+    mode0:
+        *out = (u16)D_800E2368->variables[0];
+        D_80195EF8 = func_8006E498(D_800B0E64, 0xC5887704);
+        func_800C6D5C((union FieldTexturedModel *)D_80195EF8, 0, 0);
+        if (D_800E2368->flags) {
+            p = (char *)D_800F32D0->actor;
+            if (p) {
+                q = *(char **)p;
+                if (q) {
+                    r = *(char **)(q + 0x18);
+                    if (*r == 1) *r = 2;
+                }
             }
         }
-    }
-    return func_800CE560(D_800F33E0->end, 0x18, 0x20,
-                           func_801940B0);
+        return func_800CE560(D_800F33E0->end, 0x18, 0x20,
+                               func_801940B0);
 
+    }
 mode1:
     if (D_800E27EC == mode) {
         ret = D_800E27EC < 8;
