@@ -1,4 +1,5 @@
 #include "pe1/game_timers.h"
+#include "pe1/save.h"
 
 extern volatile int D_800A76A0;
 extern volatile int D_800A76A8;
@@ -7,7 +8,6 @@ extern int D_800A76B8;
 extern int D_800A76C0;
 
 extern int D_800A76AC;
-extern int D_800A76B0;
 extern int D_800A76B4;
 
 void GameTime_InitCounter0(void) {
@@ -35,7 +35,7 @@ void GameTime_InitCounter1(void) {
     int value;
 
     value = 1;
-    D_800A76B0 = 0;
+    D_800A76B0[0] = 0;
     D_800A76B4 = 0;
     D_800A76AC = value;
 }
