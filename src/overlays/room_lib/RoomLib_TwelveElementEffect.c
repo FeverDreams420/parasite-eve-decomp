@@ -206,13 +206,11 @@ void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
     char *workState;
     char *clock;
     unsigned int i;
-    register RoomSpriteMatrix *primaryMatrix asm("$23");
+    RoomSpriteMatrix *primaryMatrix;
     RoomFxVec4 *sourceScale;
     RoomSpriteMatrix *secondaryMatrix;
-    register char *valueCursor asm("$19");
     char *element;
     register unsigned char *secondPacket asm("$16");
-    unsigned int positionOffset;
     register int pointValue asm("$2");
     RoomSpriteMatrix *transformArg;
 
@@ -236,9 +234,7 @@ void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
     i = 0;
     primaryMatrix = &stack.primaryMatrix;
     sourceScale = &stack.sourceScale;
-    asm("" : : "r"(primaryMatrix), "r"(sourceScale));
     secondaryMatrix = &stack.secondaryMatrix;
-    valueCursor = workState;
     func_800C2EAC(*(u8 *)(clock + 0x24));
     func_800C2FF0(0x40, 0x40);
     func_800C3098(0x10);
@@ -249,16 +245,13 @@ void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
         if (((RoomLibTick12Rec *)element)->state[0] == 1) {
             stack.primaryMatrix = ((RoomLibTick12Rec *)workState)->matrix;
             transformArg = primaryMatrix;
-            asm("" : "=r"(transformArg) : "0"(transformArg));
-            positionOffset = i << 3;
-            positionOffset += 0x5C;
-            ApplyMatrix(transformArg, workState + positionOffset,
+            ApplyMatrix(transformArg, &((RoomLibTick12Rec *)workState)->position[i],
                           stack.primaryMatrix.t);
 
             func_80071A44(sourceScale, 0, 0x10);
-            stack.sourceScale.x = (s16)((RoomLibTick12Rec *)valueCursor)->phase[0];
-            stack.sourceScale.y = (s16)((RoomLibTick12Rec *)valueCursor)->phase[0];
-            stack.sourceScale.z = (s16)((RoomLibTick12Rec *)valueCursor)->phase[0];
+            stack.sourceScale.x = (s16)((RoomLibTick12Rec *)workState)->phase[i];
+            stack.sourceScale.y = (s16)((RoomLibTick12Rec *)workState)->phase[i];
+            stack.sourceScale.z = (s16)((RoomLibTick12Rec *)workState)->phase[i];
             stack.scale = stack.sourceScale;
             ScaleMatrix((GteMatrix *)primaryMatrix, (GteVector *)&stack.scale);
 
@@ -317,7 +310,6 @@ void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
             }
         }
         i++;
-        valueCursor += 2;
     } while (i < 12);
 }
 
