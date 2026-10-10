@@ -1,7 +1,30 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
+#include "common.h"
+#include "pe1/inventory.h"
 #include "pe1/inventory_slots.h"
 #include "pe1/menu_inventory.h"
+
+/* Wayne-list item lookup, kind filtering, filtered-slot lookup, equip
+ * eligibility and inventory swaps. */
+
+u8 *Inv_LookupItemData(int index) {
+    int value = D_8009D07C[index];
+    int saved_value = value;
+    u8 *entry;
+
+    if ((unsigned int)(value - 0x100) < 0x80) {
+        entry = g_EquipItemDataTable + (value << 5);
+    } else if ((unsigned int)(value - 1) < 0xFF) {
+        entry = Item_LookupBaseData(value - 1);
+    } else if ((unsigned int)(saved_value - 0x200) < 9) {
+        entry = D_8009DE64 + (saved_value << 5);
+    } else {
+        entry = 0;
+    }
+
+    return entry;
+}
 
 static inline ItemDataRecord *LookupItem(int value) {
     int saved = value;
