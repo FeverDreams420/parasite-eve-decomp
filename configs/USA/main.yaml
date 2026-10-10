@@ -1175,9 +1175,9 @@ segments:
       - [0xC821C, c, engine/FieldEng_SparkEffects]
       - [0xCA28C, c, engine/FieldEng_SpinningModel]
       - [0xCA65C, c, engine/FieldEng_BallisticSprite]
-      # The second spinning flare and the emitter that spawns it (call + private anchor D_800E2214).
-      - [0xCA9FC, c, engine/FieldEng_AttachedPointEmitter]
-      - [0xCAF80, c, engine/FieldEng_RotatingBallisticSprite]
+      # The second spinning flare, the emitter that spawns it (call + private anchor D_800E2214)
+      # and the rotating ballistic sprite the effect program at D_800E1BA8 pairs with it.
+      - [0xCA9FC, c, engine/FieldEng_AttachedEmitterEffect]
       - [0xCB398, c, engine/FieldEng_WaveEmitterEffect]
       - [0xCBA5C, c, engine/FieldEng_DiamondEmitter]
       - [0xCC29C, c, engine/FieldEng_RadialFlashEffect]
