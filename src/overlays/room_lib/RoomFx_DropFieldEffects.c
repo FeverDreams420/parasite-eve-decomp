@@ -19,6 +19,7 @@
 #include "pe1/gte.h"
 #include "pe1/room_beam_pair.h"
 #include "pe1/room_four_sprite.h"
+#include "pe1/room_ring_pair.h"
 
 #define RW16(o, off) (*(short *)((char *)(o) + (off)))
 #define RW32(o, off) (*(int *)((char *)(o) + (off)))
@@ -383,18 +384,8 @@ void RoomFx_UpdateDoubleSprite(int arg0, char *arg1, char *arg2) {
 
 
 
-typedef struct RoomFxInitBounds {
-    char pad0[0x10];
-    s16 width;
-    s16 height;
-    s16 alpha;
-    s16 depth;
-} RoomFxInitBounds;
-
-
-
 void RoomFx_InitRingPair(int unused0, int unused1,
-                                  RoomFxInitBounds *bounds) {
+                                  RoomRingPairState *bounds) {
     s16 *anchor;
     char *source;
     int mode;
@@ -405,23 +396,23 @@ void RoomFx_InitRingPair(int unused0, int unused1,
     register int extent1 asm("$18");
     RoomFxEmitterParams *params;
     RoomFxEmitterParams *secondary;
-    int extent0;
+    int primaryExtent;
+    int secondaryExtent;
 
     anchor = &g_RoomDropFieldRings[0].mode;
     params = (RoomFxEmitterParams *)(anchor - 6);
 
-    bounds->width = 10;
-    bounds->height = 10;
-    bounds->depth = 20;
-    bounds->alpha = 255;
+    bounds->scale = 10;
+    bounds->secondaryScale = 10;
+    bounds->secondaryScaleStep = 20;
+    bounds->depth = 255;
 
     mode = 16;
     intensity = 128;
     color1_0 = 120;
     color1_1 = 100;
     color1_2 = 30;
-    asm volatile("" ::: "memory");
-    extent0 = 0x6A4;
+    primaryExtent = 0x6A4;
     extent1 = 0x514;
     asm volatile("" ::: "memory");
     source = g_RoomDropFieldRingImages;
@@ -435,13 +426,13 @@ void RoomFx_InitRingPair(int unused0, int unused1,
     g_RoomDropFieldRings[0].color0[0] = 0;
     g_RoomDropFieldRings[0].color0[1] = 0;
     g_RoomDropFieldRings[0].color0[2] = 0;
-    g_RoomDropFieldRings[0].extent0 = extent0;
+    g_RoomDropFieldRings[0].extent0 = primaryExtent;
     g_RoomDropFieldRings[0].extent1 = extent1;
     params->source = source;
     func_800C4E50(params);
 
     params = (RoomFxEmitterParams *)(anchor + 6);
-    extent0 = 0x226;
+    secondaryExtent = 0x226;
     asm volatile("" : "=r"(anchor) : "0"(anchor));
     source += 0x100;
     secondary = (RoomFxEmitterParams *)(anchor + 6);
@@ -454,7 +445,7 @@ void RoomFx_InitRingPair(int unused0, int unused1,
     secondary->color0[0] = color1_0;
     secondary->color0[1] = color1_1;
     secondary->color0[2] = color1_2;
-    secondary->extent1 = extent0;
+    secondary->extent1 = secondaryExtent;
     secondary->extent0 = extent1;
     secondary->source = source;
     func_800C4E50(params);
@@ -466,7 +457,7 @@ void RoomFx_InitRingPair(int unused0, int unused1,
 
 
 void RoomFx_DrawRingPair(void *unused0, void *unused1,
-                              RoomLayeredSpriteParams *fx) {
+                              RoomRingPairState *fx) {
     RoomSpriteMatrix matrix;
     RoomFxSeed8 seed0;
     RoomFxSeed8 seed1;
@@ -521,23 +512,23 @@ void RoomFx_DrawRingPair(void *unused0, void *unused1,
 
 
 
-void RoomFx_UpdateRingPair(void *unused, u8 *signal, char *state) {
-    u16 h10;
-    u16 h12;
-    u16 h16;
-    u16 h14;
+void RoomFx_UpdateRingPair(void *unused, u8 *signal, RoomRingPairState *state) {
+    u16 scale;
+    u16 secondaryScale;
+    u16 step;
+    u16 depth;
 
-    h10 = RWU16(state, 0x10);
-    h12 = RWU16(state, 0x12);
-    h16 = RWU16(state, 0x16);
-    RWU16(state, 0x10) = h10 + 0x64;
-    RWU16(state, 0x12) = h12 + h16;
-    RWU16(state, 0x16) = RWU16(state, 0x16) + 0x32;
-    h14 = RWU16(state, 0x14) - 0x10;
-    RWU16(state, 0x14) = h14;
-    if ((short)h14 < 0) {
+    scale = state->scale;
+    secondaryScale = state->secondaryScale;
+    step = state->secondaryScaleStep;
+    state->scale = scale + 0x64;
+    state->secondaryScale = secondaryScale + step;
+    state->secondaryScaleStep = state->secondaryScaleStep + 0x32;
+    depth = state->depth - 0x10;
+    state->depth = depth;
+    if ((short)depth < 0) {
         signal[1] = 2;
-        RWU16(state, 0x14) = 0;
+        state->depth = 0;
     }
 }
 
