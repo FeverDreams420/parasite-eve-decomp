@@ -20,40 +20,38 @@ int RoomEffect_OrbitFlareDrift(int mode, RoomFxDriftParticle *rec) {
     s32 tex;
     s32 fade;
 
-    if (mode == 1) {
-        goto mode1;
-    }
-    if (mode == 2) {
-        goto mode2;
-    }
-    return 0;
+    if (mode != 1) {
+        if (mode == 2) {
+            goto mode2;
+        }
+        return 0;
 
+    }
 mode1:
     rec->y -= 2;
     rec->x += (rand() & 7) - 3;
     rec->z += (rand() & 7) - 3;
-    if (D_800E27EC < 0xE) {
-        goto ret0;
-    }
-    return 1;
+    if (D_800E27EC >= 0xE) {
+        return 1;
 
-mode2:
-    {
-        fade = rcos((D_800E27EC << 10) / 14) / 50;
-        value = ((rcos((D_800E27EC << 10) / 14) / 2) + 0x800) * rec->radius;
-        if (value < 0) {
-            value += 0xFFF;
+    mode2:
+        {
+            fade = rcos((D_800E27EC << 10) / 14) / 50;
+            value = ((rcos((D_800E27EC << 10) / 14) / 2) + 0x800) * rec->radius;
+            if (value < 0) {
+                value += 0xFFF;
+            }
+            scale = (value >> 12) + 0x400;
+            tex = D_800E1204[D_800F3368.palette];
+            if (D_800F3368.palette == 4 && D_800F3428 != 0) {
+                tex += 4;
+            }
+            func_800CEE20((GteShortVector *)rec, 0, scale, scale,
+                          ((s16)D_800F3368.parameter02 * ((D_800E27EC << 3) / 14)) + 0xE0,
+                          (u16)GetClut(0x40, tex), 1, fade, 0);
         }
-        scale = (value >> 12) + 0x400;
-        tex = D_800E1204[D_800F3368.palette];
-        if (D_800F3368.palette == 4 && D_800F3428 != 0) {
-            tex += 4;
-        }
-        func_800CEE20((GteShortVector *)rec, 0, scale, scale,
-                      ((s16)D_800F3368.parameter02 * ((D_800E27EC << 3) / 14)) + 0xE0,
-                      (u16)GetClut(0x40, tex), 1, fade, 0);
-    }
 
+    }
 ret0:
     return 0;
 }

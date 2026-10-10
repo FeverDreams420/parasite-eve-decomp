@@ -139,7 +139,7 @@ drawBounce:
         func_800CEE20((GteShortVector *)fx, 0, saved2, saved2,
                       (s16)D_800F3368.parameter02 * (fx->timer / 6) + ROOMLIB_BOUNCE_FRAME_BASE,
                       (unsigned short)texture, 1, saved0, 0);
-        goto ret0;
+        return 0;
     }
 drawRise:
     {

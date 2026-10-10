@@ -391,27 +391,27 @@ int RoomEffect_BurstOrbController(int mode, void *unused, s32 *state) {
     s16 target[4];
     char *pool;
     RoomDampedSpark *child;
-    if (mode == 1)
-        goto update;
-    if (mode < 2) {
-        if (mode == 0)
-            goto init;
-        return 0;
-    }
-    if (mode == 2)
-        goto configure;
-    return 0;
-init:
-    if (D_800E2368->active) {
-        RoomSparkNode **slot = (RoomSparkNode **)D_800F32D0->pool;
-        if (slot && *slot) {
-            u8 *flag = (*slot)->state;
-            if (*flag == 1) *flag = 2;
+    if (mode != 1) {
+        if (mode < 2) {
+            if (mode == 0)
+                goto init;
+            return 0;
         }
+        if (mode == 2)
+            goto configure;
+        return 0;
+    init:
+        if (D_800E2368->active) {
+            RoomSparkNode **slot = (RoomSparkNode **)D_800F32D0->pool;
+            if (slot && *slot) {
+                u8 *flag = (*slot)->state;
+                if (*flag == 1) *flag = 2;
+            }
+        }
+        pool = D_800F33E0->pool;
+        return func_800CE560(pool, 20, 46,
+                             (FieldAnimCallbackListCallback)RoomEffect_BurstOrbParticle);
     }
-    pool = D_800F33E0->pool;
-    return func_800CE560(pool, 20, 46,
-                         (FieldAnimCallbackListCallback)RoomEffect_BurstOrbParticle);
 update:
     pool = D_800F32D0->pool;
     func_800CE8F0(pool, 7, &template, position);
@@ -443,16 +443,17 @@ update:
             child->timer = 0;
         }
     }
-    if (D_800E27EC < 2) goto done;
-    return 2;
-configure:
-    {
-        int palette = D_800E2850[D_800E11EA];
-        D_800F3368.palette = 3;
-        D_800F3368.parameter06 = 0;
-        D_800F3368.parameter0A = 0;
-        D_800F3368.depth = 8;
-        D_800F3368.tpage = palette;
+    if (D_800E27EC >= 2) {
+        return 2;
+    configure:
+        {
+            int palette = D_800E2850[D_800E11EA];
+            D_800F3368.palette = 3;
+            D_800F3368.parameter06 = 0;
+            D_800F3368.parameter0A = 0;
+            D_800F3368.depth = 8;
+            D_800F3368.tpage = palette;
+        }
     }
 done:
     return 0;
@@ -551,23 +552,23 @@ int RoomEffect_DampedSparkController(int mode, void *unused, void *state) {
     char *pool;
     RoomDampedSpark *child;
     int angle, radius;
-    if (mode == 1)
-        goto update;
-    if (mode < 2) {
-        if (mode == 0)
-            goto init;
+    if (mode != 1) {
+        if (mode < 2) {
+            if (mode == 0)
+                goto init;
+            return 0;
+        }
+        if (mode == 2)
+            goto configure;
         return 0;
-    }
-    if (mode == 2)
-        goto configure;
-    return 0;
-init:
-    {
-        int handle = func_800D3FD8();
-        func_800D3F64(0x58B, handle);
-        pool = D_800F33E0->pool;
-        return func_800CE560(pool, 20, 16,
-                             (FieldAnimCallbackListCallback)RoomEffect_DampedSparkParticle);
+    init:
+        {
+            int handle = func_800D3FD8();
+            func_800D3F64(0x58B, handle);
+            pool = D_800F33E0->pool;
+            return func_800CE560(pool, 20, 16,
+                                 (FieldAnimCallbackListCallback)RoomEffect_DampedSparkParticle);
+        }
     }
 update:
     pool = D_800F32D0->pool;
@@ -609,22 +610,23 @@ update:
             }
         }
     }
-    if (D_800E27EC < 2) goto done;
-    return 2;
-configure:
-    {
-        int idx = D_800E11EA;
-        int palette;
-        D_800F3368.parameter00 = 32;
-        D_800F3368.parameter02 = 2;
-        D_800F3368.extent_x = 32;
-        D_800F3368.extent_y = 32;
-        palette = D_800E2850[idx];
-        D_800F3368.palette = 3;
-        D_800F3368.parameter06 = 0;
-        D_800F3368.parameter0A = 0;
-        D_800F3368.depth = 8;
-        D_800F3368.tpage = palette;
+    if (D_800E27EC >= 2) {
+        return 2;
+    configure:
+        {
+            int idx = D_800E11EA;
+            int palette;
+            D_800F3368.parameter00 = 32;
+            D_800F3368.parameter02 = 2;
+            D_800F3368.extent_x = 32;
+            D_800F3368.extent_y = 32;
+            palette = D_800E2850[idx];
+            D_800F3368.palette = 3;
+            D_800F3368.parameter06 = 0;
+            D_800F3368.parameter0A = 0;
+            D_800F3368.depth = 8;
+            D_800F3368.tpage = palette;
+        }
     }
 done:
     return 0;

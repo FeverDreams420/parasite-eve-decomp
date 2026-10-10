@@ -1280,18 +1280,20 @@ void RoomFx_InitQuadSprites(void *unused0, void *unused1, void *output_arg) {
         ((RoomFourSpriteState *)scale)->depth[0] = value;
         ((RoomFourSpriteState *)scale)->scale[0] = speed;
 
-        if (index == 1) goto color1;
-        if (index == 0) goto color0;
-        if (index == 2) goto color2;
-        if (index == 3) goto color3;
-        color += 4;
-        goto advance_scale;
+        if (index != 1) {
+            if (index != 0) {
+                if (index == 2) goto color2;
+                if (index == 3) goto color3;
+                color += 4;
+                goto advance_scale;
 
-color0:
-        color[0x20] = red;
-        color[0x21] = 138;
-        color[0x22] = blue;
-        goto advance_color;
+            }
+    color0:
+            color[0x20] = red;
+            color[0x21] = 138;
+            color[0x22] = blue;
+            goto advance_color;
+        }
 color1:
         base[0x24] = mid;
         base[0x25] = 76;

@@ -568,36 +568,35 @@ int RoomEffect_BurstSparkSpawner(int mode, int *count) {
     RoomSparkChannel *channel;
 
     offset = s_BurstSparkLaunchOffset;
-    if (mode == 1) {
-        goto mode1;
-    }
-    if (mode < 2) {
-        if (mode == 0) {
-            goto mode0;
+    if (mode != 1) {
+        if (mode < 2) {
+            if (mode == 0) {
+                goto mode0;
+            }
+            return 0;
+        }
+        if (mode == 2) {
+            goto mode2;
         }
         return 0;
-    }
-    if (mode == 2) {
-        goto mode2;
-    }
-    return 0;
 
-mode0:
-    if (D_800E2368->active != 0) {
-        RoomSparkNode **nodes = (RoomSparkNode **)D_800F32D0->pool;
-        if (nodes != 0 && *nodes != 0) {
-            unsigned char *state = (*nodes)->state;
-            if (*state == 1) {
-                *state = 2;
+    mode0:
+        if (D_800E2368->active != 0) {
+            RoomSparkNode **nodes = (RoomSparkNode **)D_800F32D0->pool;
+            if (nodes != 0 && *nodes != 0) {
+                unsigned char *state = (*nodes)->state;
+                if (*state == 1) {
+                    *state = 2;
+                }
             }
         }
-    }
-    func_800D3F64(0x59E, func_800D3FD8());
-    channel = D_800F33E0;
-    *count = 0;
-    return func_800CE560(channel->pool, 0x14, 0x37,
-                         (FieldAnimCallbackListCallback)RoomEffect_BurstSparkParticle);
+        func_800D3F64(0x59E, func_800D3FD8());
+        channel = D_800F33E0;
+        *count = 0;
+        return func_800CE560(channel->pool, 0x14, 0x37,
+                             (FieldAnimCallbackListCallback)RoomEffect_BurstSparkParticle);
 
+    }
 mode1:
     func_800CE8F0(D_800F32D0->pool, 0x11, &offset, &launch);
     func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->pool, 0,
@@ -628,14 +627,13 @@ mode1:
         }
         (*count)++;
     }
-    if (D_800E27EC < 8) {
-        goto ret0;
-    }
-    return 2;
+    if (D_800E27EC >= 8) {
+        return 2;
 
-mode2:
-    D_800F3368.parameter0A = 0;
-    D_800F3368.depth = 4;
+    mode2:
+        D_800F3368.parameter0A = 0;
+        D_800F3368.depth = 4;
+    }
 ret0:
     return 0;
 }

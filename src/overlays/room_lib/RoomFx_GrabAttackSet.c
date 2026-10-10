@@ -42,14 +42,13 @@ int RoomFx_GrabConfigure(char *obj, int arg1, int op, int arg3, int arg4) {
     int next;
 
     base = obj + 0xC;
-    if (op == 0x19) {
-        goto op19;
-    }
-    if (op == 0x200) {
-        goto op200;
-    }
-    return 0;
+    if (op != 0x19) {
+        if (op == 0x200) {
+            goto op200;
+        }
+        return 0;
 
+    }
 op19:
     if (arg1 == 1) {
         *(int *)(obj + 0x10) = arg3;
