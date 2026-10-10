@@ -8,6 +8,9 @@
 #include "pe1/field_collision.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_model_draw.h"
+#include "pe1/field_owner_actor.h"
+#include "pe1/field_sprite_draw.h"
 
 /* Room spark particles: damped velocity, gravity and a floor bounce against
  * the frame-count driven floor height. */
@@ -28,7 +31,6 @@ PE1_STATIC_ASSERT(sizeof(RoomDampedSpark) == 0x14, room_damped_spark_size);
 extern int rsin(int angle);
 extern int rcos(int angle);
 extern u16 func_80077AA4(int, int);
-void func_800D2104(GteShortVector *position, u8 *color, int scale, int abr);
 
 /* Particle pools reached through the two effect channels. */
 typedef struct RoomSparkChannel {
@@ -40,8 +42,6 @@ extern RoomSparkChannel *D_800F32D0, *D_800F33E0;
 extern RoomSparkChannel *D_800942E4;
 extern u16 D_800E11EA;
 extern int func_80071A54(void);
-extern int func_800D3FD8(void);
-extern int func_800D3F64(int sound, int handle);
 extern void *D_800B0E64;
 extern void func_8006DF50(void *channel, int id, int value, int volume, int pan);
 
@@ -49,11 +49,7 @@ extern void func_8006DF50(void *channel, int id, int value, int volume, int pan)
  * record a position into a history of points and draw the history as a
  * ribbon. */
 extern void func_800CFAA8(void *from, void *to, void *angles);
-extern void func_800CFD50(void *angles, void *out, int speed);
 extern void func_800D3AFC(void *history, int count, void *position, int reset);
-extern void func_800D3114(void *trail, int count, int length, int arg3, int arg4,
-                          int arg5, int arg6, int tpage, int clut, int alpha,
-                          void *headColor, void *tailColor, int mode);
 /* Rotates an offset by a bone's matrix. */
 extern void func_800CEAE8(void *bone, s16 *offset, s16 *out);
 /* Fades a colour layer record in or out. */
@@ -61,15 +57,8 @@ extern void func_800CF4B4(int kind, int value, void *layer);
 
 /* Asset library lookup and the model draw calls of the model effects. */
 void *func_8006E498(void *base, u32 key);
-void func_800C6D5C(void *asset, int x, int y);
 s32 func_80077A64(s32, s32, s32, s32);
 void func_800C6EC0(int tpage, int clut);
-void func_800C6ED8(int);
-void func_800C6EF8(void *asset);
-void func_800C6FA0(void *asset, int brightness);
-void func_800C7098(void *asset, int r, int g, int b);
-void func_800C71E4(void *asset, void *matrix);
-void func_800C6F4C(void *asset);
 
 /* Jitter spark: the damped spark layout with a spin angle and a size. */
 typedef struct RoomJitterSpark {

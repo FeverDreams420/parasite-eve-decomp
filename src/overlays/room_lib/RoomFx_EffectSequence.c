@@ -22,6 +22,7 @@
 #include "pe1/room_fx.h"
 #include "pe1/room_module.h"
 #include "pe1/gte_types.h"
+#include "pe1/field_model_draw.h"
 
 /* Seeds and scales copied into the draw passes' stack frames. */
 static const RoomOverlay024MatrixSeed8 s_EffectBaseSeed = {{0x00, 0x04, 0, 0, 0, 0, 0, 0}};
@@ -124,7 +125,7 @@ void RoomFx_EffectSequenceNopA(void) {
 }
 
 #define ROOMLIB_EFFECT_CALL(command) \
-    func_800C2B90(owner, (command), &D_80192BBC, &D_80192B5C)
+    func_800C2B90((void *)owner, (command), D_80192BBC, D_80192B5C)
 #define ROOMLIB_EFFECT_SET(index, value, command) \
     *func_800C2B10(index) = (value); \
     ROOMLIB_EFFECT_CALL(command)
@@ -1273,16 +1274,10 @@ void RoomFx_UpdateTransformedSparkle(
 void RoomFx_EffectSequenceNopB(void) {
 }
 
-void func_800C6D5C(void *arg0, s32 arg1, s32 arg2);
 void func_800C6EE8(s32 arg0);
 s32 func_80077A64(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 s32 func_80077AA4(s32 arg0, s32 arg1);
 void func_800C6EC0(s32 arg0, s32 arg1);
-void func_800C6ED8(s32 arg0);
-void func_800C6EF8(void *arg0);
-void func_800C6FA0(void *arg0, s32 arg1);
-void func_800C71E4(void *arg0, RoomOverlay024ViewMatrix *matrix);
-void func_800C6F4C(void *arg0);
 
 void RoomFx_DrawEffectGlow(void) {
     RoomOverlay024Root **root;
@@ -1321,7 +1316,7 @@ void RoomFx_DrawEffectGlow(void) {
     func_800C6ED8(0);
     func_800C6EF8(D_80192C34);
     func_800C6FA0(D_80192C34, 0x80);
-    func_800C71E4(D_80192C34, &matrix);
+    func_800C71E4(D_80192C34, (GteMatrix *)&matrix);
     func_800C6F4C(D_80192C34);
 }
 

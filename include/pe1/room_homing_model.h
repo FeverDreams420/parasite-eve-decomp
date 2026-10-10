@@ -6,6 +6,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/render_object.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_vector_math.h"
 
 /* Room projectile that flies along its heading, bounces off the walkable
  * polygon's edges, drops onto the floor and finally hands its position to
@@ -125,8 +126,6 @@ extern RoomHomingModelTextureSlot D_800E11EC;
 extern RoomHomingModelTextureSlot D_800E11E8;
 
 extern int func_8006DCE4(int id, int channel, int x, int y, int z);
-extern int FieldEng_VecToAngle(s32 *vec, s32 *ref);
-extern int func_800DFE20(s32 *vec, s32 *ref);
 extern int rcos(int angle);
 extern int rsin(int angle);
 extern void func_800866A4(int handle, int arg);
@@ -135,7 +134,6 @@ extern void func_8006F6D4(int handle, int, int index, int value, int, int);
 extern u16 func_80077AA4(int, int);
 /* Battle_GetEnemyContextField in main. */
 extern int func_8003010C(void *actor, int field);
-
 
 /* The projectile's constant seeds: the spark sprite's rotation and colour,
  * the model words reported to the scene script, and the floor ring's

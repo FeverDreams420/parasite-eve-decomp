@@ -9,6 +9,8 @@
 #include "pe1/room_floor.h"
 #include "pe1/player_entity.h"
 #include "pe1/field_glow_sprite.h"
+#include "pe1/field_script_context.h"
+#include "pe1/field_sprite_draw.h"
 
 /* Scene e08 player orb: an effect spawned at a random spot around the
  * player, swung around the scene anchor by the anchor's facing, then drawn
@@ -58,16 +60,11 @@ typedef struct ScenePlayerOrbSound {
 
 extern ScenePlayerOrbSound D_800B0E64;
 
-ScenePlayerOrbAnchor *func_800C2B50(void);
 int *func_800C2B10(int index);
-GteShortVector *func_800C2B90(void *object, int kind, u8 *script, u8 *data);
 int func_800C6B90(GteShortVector *position, int radius);
 int func_80071A54(void);
 int func_80077A64(int arg0, int arg1, int x, int y);
 int func_80077AA4(int x, int y);
-void func_800D3114(GteShortVector *trail, int last, int arg2, int arg3, int r, int g, int b,
-                   int tpage, int clut, int alpha, RenderColor *head,
-                   RenderColor *tail, int mode);
 void func_8006DF50(void *channel, int id, int value, int volume, int pan);
 
 /* Scene e08 limb beams: ten ribbons fanned from the player's chest bone to

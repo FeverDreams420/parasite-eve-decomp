@@ -121,7 +121,7 @@ int func_80195728(int mode, s16 *state) {
             ScaleMatrix(&matrix, &scale);
             func_800C6EF8(D_801960A8);
             func_800C6FA0(D_801960A8, (u16)brightness);
-            func_800C71E4(D_801960A8, &matrix);
+            func_800C71E4(D_801960A8, (GteMatrix *)&matrix);
             func_800C6F4C(D_801960A8);
         }
         D_800F3368.parameter00 = 0x10;

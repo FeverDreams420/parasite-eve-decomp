@@ -16,8 +16,8 @@ void func_80190914(void *object, void *timer, ScenePlayerOrb *orb)
     func_800C3238(2);
     func_800C2FF0(0x10, 0x10);
     if (orb->active != 0) {
-        func_800C3134(D_801987E4, orb->fade, &orb->head);
-        func_800C3134(D_801987E4, orb->fade, &orb->tail);
+        func_800C3134(D_801987E4, orb->fade, (unsigned char *)&orb->head);
+        func_800C3134(D_801987E4, orb->fade, (unsigned char *)&orb->tail);
         func_800D3114(orb->trailA, orb->count - 1, 0x3C, 0x20, 0x90, 0x51, 0x10,
                       (u16)func_80077A64(1, 0, 0x340, 0x100), (u16)func_80077AA4(0, 0x1D9),
                       orb->alpha, &orb->head, &orb->tail, 1);

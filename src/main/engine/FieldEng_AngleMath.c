@@ -1,6 +1,7 @@
 /* CC1_FLAGS: -fno-schedule-insns */
 
 #include "common.h"
+#include "pe1/field_vector_math.h"
 
 int FieldEng_TurnToward(int current, int target, int step) {
     register int target_copy asm("$8");

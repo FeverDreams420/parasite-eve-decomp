@@ -2,6 +2,7 @@
 #define SCENE_E08_H
 
 #include "pe1/room_fx.h"
+#include "pe1/field_script_context.h"
 
 typedef struct {
     RoomFxEmitterParams emitters[2];
@@ -50,7 +51,6 @@ typedef struct {
     } tail;
 } Ovl178RandomizedEffect;
 
-Ovl178Position *func_800C2B50(void);
 s32 *func_800C2B10(int index);
 s32 *func_800C2B28(int index);
 extern s16 D_80199590[];

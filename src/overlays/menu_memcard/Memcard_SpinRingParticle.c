@@ -111,7 +111,7 @@ int Memcard_SpinRingParticle(int mode, MemcardSpinParticle *p) {
             ScaleMatrix(&matrix, &scale);
             func_800C6EF8(D_800E22D4);
             func_800C6FA0(D_800E22D4, (u16)fade);
-            func_800C71E4(D_800E22D4, &matrix);
+            func_800C71E4((union FieldTexturedModel *)D_800E22D4, (GteMatrix *)&matrix);
             func_800C6F4C(D_800E22D4);
             break;
         }

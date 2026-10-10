@@ -47,8 +47,7 @@ extern short D_8019AEE8;
 extern void *D_8019AE7C;
 extern unsigned short D_800E11EA;
 extern int func_80195984(),func_8019A290();
-extern int func_800CE5AC(void **,int,int,int,int (*)());
-extern void func_800CE688(void *),func_800CE78C(void *);
+extern void func_800CE688(void *);
 
 int func_80195BD0(int mode) {
     /* Layout only: purpose of these eight original frame bytes is unknown. */

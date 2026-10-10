@@ -13,7 +13,7 @@ int Memcard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
         burst->z = ((MemcardGlintAnchor *)D_800F32D0->pool)->z;
         func_800CE9D4((struct RoomFxTransformOwner *)D_8009D254, 0, (GteShortVector *)&burst->rotation);
         burst->rotation.x = 0;
-        func_800C6D5C(D_800E22D4, 0, 0);
+        func_800C6D5C((union FieldTexturedModel *)D_800E22D4, 0, 0);
         return func_800CE560(D_800F33E0->pool, 20, 40,
                              (FieldAnimCallbackListCallback)Memcard_SpinRingParticle);
     case 1:

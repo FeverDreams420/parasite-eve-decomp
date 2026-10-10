@@ -88,8 +88,8 @@ void ROOMLIB_FLOOR_WALKER_FUNC(RoomFloorWalkerObject *object) {
             break;
         }
         if (state->turning == 0) {
-            state->angle = (FieldEng_VecToAngle(&core->pos[0],
-                                                ((RoomFloorWalkerTarget *)D_8009D254)->pos) + 0x800) & 0xFFF;
+            state->angle = (FieldEng_VecToAngle((Vec3Fixed *)&core->pos[0],
+                                                (Vec3Fixed *)((RoomFloorWalkerTarget *)D_8009D254)->pos) + 0x800) & 0xFFF;
             break;
         }
         {

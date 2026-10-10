@@ -77,12 +77,9 @@ typedef struct MemcardFlashOffset {
 extern MemcardFlashOffset D_801ED818, D_801ED820, D_801ED828, D_801ED830;
 extern RenderColor D_801ED838, D_801ED83C, D_801ED840;
 extern void func_800CE8F0(void *pool, int index, void *offset, void *position);
-extern void func_800D1384(void *from, void *to, int width, void *color0,
-                          void *color1, int alpha, void *trail, int mode);
 extern u8 *D_800E22D4;
 extern void func_8006DDCC(int sound, int mode, int x, int y, int z);
 extern u8 D_801F1CB0[];
-extern void func_800D1AE0(RenderColor *color, int intensity, int step, int count);
 
 int Memcard_FadingGlintParticle(int mode, RoomDampedSpark *spark);
 int Memcard_GlintBurstController(int mode, MemcardGlintBurst *burst);

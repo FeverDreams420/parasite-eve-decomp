@@ -79,11 +79,11 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
         D_800F3368.depth = 0x29;
         if (fx->timer < 4) {
             color.word = 0xFFFFFF;
-            func_800D1AE0(&color.color, 0x6E, 2, 8);
+            func_800D1AE0((unsigned char *)&color.color, 0x6E, 2, 8);
         } else if (fx->timer < 6) {
-            func_800D1AE0(&flash, 0x80, 1, 8);
+            func_800D1AE0((unsigned char *)&flash, 0x80, 1, 8);
         } else if (fx->timer < 0xD) {
-            func_800D1AE0(&flash, rcos(((fx->timer - 6) << 10) / 6) / 64, 1, 8);
+            func_800D1AE0((unsigned char *)&flash, rcos(((fx->timer - 6) << 10) / 6) / 64, 1, 8);
         }
         glow = rcos((fx->timer << 10) / 40) / 32;
         if ((u16)fx->timer & 1)
@@ -156,7 +156,7 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             ScaleMatrix(&matrix, &shape);
             func_800C6EF8(D_80199508);
             func_800C6FA0(D_80199508, (u16)(glow * 3 / 2));
-            func_800C71E4(D_80199508, &matrix);
+            func_800C71E4(D_80199508, (GteMatrix *)&matrix);
             func_800C6F4C(D_80199508);
         }
         scale = scale / 2;
@@ -191,7 +191,7 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             ScaleMatrix(&matrix, &shape);
             func_800C6EF8(D_80199508);
             func_800C6FA0(D_80199508, (u16)glow);
-            func_800C71E4(D_80199508, &matrix);
+            func_800C71E4(D_80199508, (GteMatrix *)&matrix);
             func_800C6F4C(D_80199508);
         }
         if (fx->timer < 0x19) {
@@ -228,7 +228,7 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             ScaleMatrix(&matrix, &shape);
             func_800C6EF8(D_8019950C);
             func_800C6FA0(D_8019950C, (u16)glow);
-            func_800C71E4(D_8019950C, &matrix);
+            func_800C71E4(D_8019950C, (GteMatrix *)&matrix);
             func_800C6F4C(D_8019950C);
         }
         D_800F3368.parameter00 = 0x10;

@@ -60,12 +60,12 @@ int func_801935E0(int mode, RoomDampedSpark *spark) {
             matrixSlot = &D_800BCFA4;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
-            func_800D2104(spark, &color, 40, 0xFF);
+            func_800D2104((GteShortVector *)spark, (unsigned char *)&color, 40, 0xFF);
             position.x = spark->x;
             position.y = spark->y;
             position.z = spark->z;
             position.y += 8;
-            func_800D2104(&position, &color, 40, 0xFF);
+            func_800D2104(&position, (unsigned char *)&color, 40, 0xFF);
             break;
         case 1: {
             int clut;

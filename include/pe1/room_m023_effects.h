@@ -5,6 +5,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_owner_actor.h"
 
 /* Room m023 controller that scatters particles around a model joint,
  * either at the joint itself or at a random point of a wide band. */
@@ -81,8 +82,6 @@ typedef struct RoomM023JointGlow {
 extern u16 D_800E11EA;
 extern RenderColor D_8018EFFC;
 extern RenderColor D_8018F000;
-extern int func_800D3FD8(void);
-extern int func_800D3F64(int sound, int handle);
 extern u16 GetClut(int x, int y);
 int func_8018F710(int mode, RoomM023JointGlow *glow);
 

@@ -180,9 +180,9 @@ int func_80195D20(int mode, RoomShakeBurstPoint *burst) {
             D_800F3368.tpage = tpage;
         }
         if (D_800E27EC == 1)
-            func_800D1AE0(&color, 0x80, 2, 8);
+            func_800D1AE0((unsigned char *)&color, 0x80, 2, 8);
         else if (D_800E27EC == 2)
-            func_800D1AE0(&color, 0x80, 3, 8);
+            func_800D1AE0((unsigned char *)&color, 0x80, 3, 8);
         if (D_800E27EC < 0x21) {
             int clut;
             int kind;

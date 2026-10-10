@@ -5,6 +5,8 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_model_draw.h"
+#include "pe1/field_vector_math.h"
 
 /* Steers a rotating footprint, tests contact, and draws three model/sprite layers. */
 typedef RoomM350Vector Vector;
@@ -29,11 +31,10 @@ extern int D_8019A81C,D_8019A820,D_8019A824;
 extern Vector D_8019A574[];
 extern char D_8019A594[],D_8019A3C8[];
 extern unsigned short D_800E11FA;
-extern void func_800C6D5C(void *,int,int);
-extern int func_800DFE20(int *,int *),FieldEng_VecToAngle(int *,int *),rcos(int),rsin(int);
+extern int rcos(int), rsin(int);
 extern int GetTPage(int,int,int,int),GetClut(int,int);
-extern void GsSetOrign(int,int),func_800C6ED8(int),func_800C6EF8(void *),func_800C6FA0(void *,int);
-extern void memset(void *,int,int),func_800C71E4(void *,Matrix *),func_800C6F4C(void *);
+extern void GsSetOrign(int,int);
+extern void memset(void *,int,int);
 int func_801960C4(int event,State *state)
 {
     union { struct { Vector vertices[4]; int area; } collision; Matrix matrix; } local;
@@ -81,8 +82,8 @@ update:
         state->brightness=size<=2048 ? size>>4:(4096-size)>>4;
         if(!state->initialized) {
             if(D_8019A831) {
-                int distance=func_800DFE20(g_PlayerEntity->localPosition,instance->localPosition);
-                int angle=FieldEng_VecToAngle(g_PlayerEntity->localPosition,instance->localPosition);
+                int distance=func_800DFE20((Vec3Fixed *)g_PlayerEntity->localPosition,(Vec3Fixed *)instance->localPosition);
+                int angle=FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->localPosition,(Vec3Fixed *)instance->localPosition);
                 int yaw=state->yaw;
                 int rawDelta=((unsigned int)angle-(yaw>>8))&4095;
                 register int delta asm("$4")=rawDelta;
@@ -210,7 +211,7 @@ draw:
             memset(clearTarget,clearValue,clearLength);
             scale.x=size; scale.y=size; scale.z=2048;
             ScaleMatrix((GteMatrix *)&local.matrix, (const GteVector *)&scale);
-            func_800C71E4(state->asset,&local.matrix);
+            func_800C71E4(state->asset,(GteMatrix *)&local.matrix);
         } while(i<3);
         func_800C6F4C(state->asset);
         i=0;

@@ -34,8 +34,8 @@ int func_80193618(int mode, RoomM123Beacon *state) {
         state->armed = 1;
         D_80195698 = func_8006E498(D_800B0E64.channel, 0xC5483704);
         D_8019569C = func_8006E498(D_800B0E64.channel, 0xC5883704);
-        func_800C6D5C(D_80195698, 0, 0);
-        func_800C6D5C(D_8019569C, 0, 0xF0);
+        func_800C6D5C((union FieldTexturedModel *)D_80195698, 0, 0);
+        func_800C6D5C((union FieldTexturedModel *)D_8019569C, 0, 0xF0);
         return 0;
     case 1:
         func_800CE8F0(D_800F32D0->pool, 0x17, &offset, state);
@@ -205,7 +205,7 @@ int func_80193618(int mode, RoomM123Beacon *state) {
                 func_800C7098(D_8019569C, color.r, color.g, color.b);
                 size = rcos(D_800E27EC << 6) / 64;
                 func_800C6FA0(D_8019569C, size);
-                func_800C71E4(D_8019569C, &matrix);
+                func_800C71E4((union FieldTexturedModel *)D_8019569C, &matrix);
                 func_800C6F4C(D_8019569C);
             }
         }
@@ -242,7 +242,7 @@ int func_80193618(int mode, RoomM123Beacon *state) {
         func_800C6ED8(1);
         func_800C6EF8(D_80195698);
         func_800C7098(D_80195698, color.r, color.g, color.b);
-        func_800C71E4(D_80195698, &matrix);
+        func_800C71E4((union FieldTexturedModel *)D_80195698, &matrix);
         func_800C6F4C(D_80195698);
         func_800C6EF8(D_80195698);
         scale.z = 0x1000;
@@ -263,7 +263,7 @@ int func_80193618(int mode, RoomM123Beacon *state) {
         }
         func_800C6ED8(1);
         func_800C7098(D_80195698, color.r, color.g, color.b);
-        func_800C71E4(D_80195698, &matrix);
+        func_800C71E4((union FieldTexturedModel *)D_80195698, &matrix);
         func_800C6F4C(D_80195698);
         func_800C6EF8(D_80195698);
         scale.z = 0x1000;
@@ -284,7 +284,7 @@ int func_80193618(int mode, RoomM123Beacon *state) {
         }
         func_800C6ED8(1);
         func_800C7098(D_80195698, color.r, color.g, color.b);
-        func_800C71E4(D_80195698, &matrix);
+        func_800C71E4((union FieldTexturedModel *)D_80195698, &matrix);
         func_800C6F4C(D_80195698);
         break;
     }

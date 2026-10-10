@@ -7,6 +7,9 @@
 #include "pe1/room_orbit_trail.h"
 #include "pe1/gte.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_model_draw.h"
+#include "pe1/field_owner_actor.h"
+#include "pe1/field_sprite_draw.h"
 
 /* Quake blast controller (scene_e22 func_80198348): a blast at the target
  * that lights the actor once it stands in reach, sprays sparks for six
@@ -97,19 +100,11 @@ extern int rsin(int angle);
 extern int rcos(int angle);
 extern u16 func_80077AA4(int, int);
 extern s32 func_80077A64(s32, s32, s32, s32);
-extern int func_800D3FD8(void);
 extern void func_8006DF50(void *channel, int id, int value, int volume, int pan);
 extern void *func_8006E498(void *base, u32 key);
-extern void func_800C6D5C(void *asset, int x, int y);
 extern int func_800C6B90(void *position, int radius);
-extern void func_800D1AE0(RenderColor *color, int value, int step, int count);
 extern void func_800C6EC0(int tpage, int clut);
-extern void func_800C6ED8(int);
 #include "pe1/gte_types.h"
-extern void func_800C6EF8(void *asset);
-extern void func_800C6FA0(void *asset, int brightness);
-extern void func_800C71E4(void *asset, void *matrix);
-extern void func_800C6F4C(void *asset);
 extern int func_801981B0(int mode, RoomOrbitTrailParticle *p);
 
 #endif

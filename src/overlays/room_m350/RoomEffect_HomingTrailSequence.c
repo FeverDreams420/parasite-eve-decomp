@@ -4,6 +4,7 @@
 #include "pe1/render_object.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_vector_math.h"
 /* Moving effect with collision, queued trail positions and ground rendering. */
 extern RoomM350EffectActor *D_800F32D0;
 extern RoomM350EffectInstance *g_PlayerEntity;
@@ -11,7 +12,6 @@ extern int D_800966EC[];
 extern short D_800966EE[],D_8019A7FE,D_8019A800,D_8019A802;
 extern GteRotation D_8019A3C0;
 extern RenderColor D_8019A4E4,D_8019A3C8;
-extern int FieldEng_VecToAngle(void *,void *),FieldEng_TurnToward(int,int,int);
 extern int Math_IntSqrt(int),GetClut(int,int);
 int func_801947BC(int event,RoomM350Particle *p)
 {
@@ -34,7 +34,7 @@ int func_801947BC(int event,RoomM350Particle *p)
             else {
                 int *trig=D_800966EC;
                 int speed=*(short *)((char *)trig+((timer<<6)&0x3FC0))/4;
-                int angle=FieldEng_VecToAngle(g_PlayerEntity->transform.t,D_800F32D0->instance->transform.t);
+                int angle=FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->transform.t,(Vec3Fixed *)D_800F32D0->instance->transform.t);
                 int yaw=FieldEng_TurnToward(p->motion.value.rotation.y,(short)angle,speed);
                 int sum,product;
                 p->motion.value.rotation.y=yaw;

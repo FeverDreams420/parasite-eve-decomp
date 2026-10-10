@@ -3,15 +3,14 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_model_draw.h"
 
 extern RoomM273PlayerActorView *g_PlayerEntity;
 extern RoomM273EffectStateContext *D_800F32D0;
 extern u8 D_8019AE9A;
 extern RoomM273PulseSeed D_8019AC20[2];
 extern u16 D_800E11FA;
-extern int func_800CE5AC(void *, int, int, int, int (*)());
 extern int func_800CE688(void *);
-extern int func_800CE78C(void *);
 extern int Inv_ScrambleGrid(void);
 
 /* Threshold model triple callbacks and controller. */
@@ -29,12 +28,9 @@ extern void *D_8019AE90,*D_800B0E64;
 extern unsigned char D_8019AE9A;
 extern int GetTPage(int,int,int,int),rcos(int),rsin(int);
 extern unsigned short GetClut(int,int);
-extern void GsSetOrign(int,int),func_800C6ED8(int);
-extern void func_800C6EF8(void *),func_800C6FA0(void *,int);
+extern void GsSetOrign(int,int);
 void *memset(void *dst, int value, unsigned int size);
-extern void func_800C71E4(void *,GteMatrix *),func_800C6F4C(void *);
 void *Asset_FindTable08ByU32Key(void *base, s32 key);
-extern void func_800C6D5C(void *,int,int);
 
 extern int func_80193CB8(),func_80193B5C();
 
@@ -387,9 +383,7 @@ int func_801947CC(int mode, RoomM273PaletteInput *input)
 }
 
 extern int func_80199F84();
-extern int func_800CE5AC(void *, int, int, int, int (*)());
 extern int func_800CE688(void *);
-extern int func_800CE78C(void *);
 
 int func_801949EC(int mode) {
     switch (mode) {

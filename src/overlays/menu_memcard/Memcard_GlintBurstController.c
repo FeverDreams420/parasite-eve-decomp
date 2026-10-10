@@ -76,9 +76,9 @@ int Memcard_GlintBurstController(int mode, MemcardGlintBurst *burst) {
         D_800F3368.parameter0A = 0;
         D_800F3368.depth = 32;
         if (D_800E27EC == 1) {
-            func_800D1AE0(&flash, 128, 2, 8);
+            func_800D1AE0((unsigned char *)&flash, 128, 2, 8);
         } else if (D_800E27EC == 2) {
-            func_800D1AE0(&flash, 128, 1, 8);
+            func_800D1AE0((unsigned char *)&flash, 128, 1, 8);
         }
         if (D_800E27EC < 33) {
             int kind;

@@ -288,7 +288,7 @@ void RoomFx_UpdateFallingSprite(void *entity, RoomFallingBurstControl *control,
 
             {
                 RoomFallingBurstDecal *shimmer = func_800C2B90(
-                    self, 3, g_RoomSpawnLayout,
+                    self, 3, (unsigned short *)g_RoomSpawnLayout,
                     g_RoomInitList);
                 if (shimmer != 0) {
                     shimmer->x = state->x;
@@ -299,7 +299,7 @@ void RoomFx_UpdateFallingSprite(void *entity, RoomFallingBurstControl *control,
 
             {
                 RoomFallingBurstDecal *pulse = func_800C2B90(
-                    self, 2, g_RoomSpawnLayout,
+                    self, 2, (unsigned short *)g_RoomSpawnLayout,
                     g_RoomInitList);
                 if (pulse != 0) {
                     pulse->x = state->x;
@@ -309,7 +309,7 @@ void RoomFx_UpdateFallingSprite(void *entity, RoomFallingBurstControl *control,
             }
 
             burst = func_800C2B90(
-                self, 4, g_RoomSpawnLayout,
+                self, 4, (unsigned short *)g_RoomSpawnLayout,
                 g_RoomInitList);
             if (burst != 0) {
                 i = 0;

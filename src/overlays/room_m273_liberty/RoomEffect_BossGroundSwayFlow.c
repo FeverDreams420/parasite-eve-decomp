@@ -4,6 +4,7 @@
 #include "pe1/scene_assets.h"
 #include "pe1/gte.h"
 #include "room_m273_sway.h"
+#include "pe1/field_model_draw.h"
 typedef GteShortVector Vector;
 typedef RoomM273PairPoolRecord Record;
 
@@ -157,7 +158,7 @@ int func_80198E94(int mode, GteShortVector *position) {
         matrix.t[0] = position->x;
         matrix.t[1] = position->y;
         matrix.t[2] = position->z;
-        func_800C71E4(D_8019AF04.model, &matrix);
+        func_800C71E4((union FieldTexturedModel *)D_8019AF04.model, &matrix);
         func_800C6F4C(D_8019AF04.model);
     }
     D_800F3368.parameter00 = 0x20;
@@ -196,7 +197,6 @@ typedef RoomM273PairPoolRecord Entry;
 typedef struct { Entry entries[2]; unsigned char unknown[14]; unsigned char stopped; } EmitterState;
 extern void *D_800B0E64, *D_8019AF6C;
 extern EmitterState D_8019AF84;
-extern void func_800C6D5C(void *, int, int);
 
 int func_801993F0(int mode) {
     switch (mode) {

@@ -22,7 +22,7 @@ int func_800DE0A8(int mode, FieldFlashBurst *state)
         state->anchor.x = g_PlayerEntity->render_object.matrices[19].translation[0];
         state->anchor.y = g_PlayerEntity->render_object.matrices[19].translation[1];
         state->anchor.z = g_PlayerEntity->render_object.matrices[19].translation[2];
-        func_800C6D5C(D_800F3474, 0, 0);
+        func_800C6D5C((union FieldTexturedModel *)D_800F3474, 0, 0);
         break;
     case 1:
         if (D_800E27EC >= 25)
@@ -65,7 +65,7 @@ int func_800DE0A8(int mode, FieldFlashBurst *state)
             func_800C6ED8(1);
             func_800C6EF8(D_800F3474);
             func_800C7098(D_800F3474, color.r, color.g, color.b);
-            func_800C71E4(D_800F3474, &matrix);
+            func_800C71E4((union FieldTexturedModel *)D_800F3474, &matrix);
             scale.x = scale.y = 0x1800;
             scale.z = 0x1000;
             ScaleMatrix(&matrix, &scale);
@@ -78,7 +78,7 @@ int func_800DE0A8(int mode, FieldFlashBurst *state)
                     palette += 4;
                 GsSetOrign(tpage, GetClut(0xD0, palette));
             }
-            func_800C71E4(D_800F3474, &matrix);
+            func_800C71E4((union FieldTexturedModel *)D_800F3474, &matrix);
             func_800C6F4C(D_800F3474);
         }
         if (D_800E27EC < 25) {

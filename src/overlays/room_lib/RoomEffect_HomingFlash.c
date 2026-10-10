@@ -37,7 +37,7 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
             func_800CE870((char *)D_8009D254, 0, (s16 *)&target);
             func_800CFAA8(spark, &target, &angles);
             angles.x = 0;
-            func_800CFD50(&angles, &spark->hx, params->speed);
+            func_800CFD50((unsigned short *)&angles, &spark->hx, params->speed);
             func_800CFB7C((GteShortVector *)&spark->hx, params->distance, &target);
             spark->x += target.x;
             spark->y += target.y;

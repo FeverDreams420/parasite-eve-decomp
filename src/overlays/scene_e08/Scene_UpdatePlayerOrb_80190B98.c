@@ -15,15 +15,15 @@ void func_80190B98(void *object, ScenePlayerOrbTimer *timer, ScenePlayerOrb *orb
     if (orb->delay != 0) {
         if (--orb->delay == 0) {
             orb->active = 1;
-            func_800C2B90(object, 1, (u8 *)g_SceneE08OrbSpawnLayout,
-                          (u8 *)g_SceneE08OrbInitList);
+            func_800C2B90(object, 1, (unsigned short *)g_SceneE08OrbSpawnLayout,
+                          (int (**)(void *, void *, void *))g_SceneE08OrbInitList);
         }
     }
     if (orb->active != 0) {
         orb->fade++;
         if (++orb->active == 12) {
-            spawn = func_800C2B90(object, 3, (u8 *)g_SceneE08OrbSpawnLayout,
-                                 (u8 *)g_SceneE08OrbInitList);
+            spawn = func_800C2B90(object, 3, (unsigned short *)g_SceneE08OrbSpawnLayout,
+                                 (int (**)(void *, void *, void *))g_SceneE08OrbInitList);
             if (spawn != 0) {
                 spawn->x = orb->position.x;
                 spawn->y = orb->position.y;

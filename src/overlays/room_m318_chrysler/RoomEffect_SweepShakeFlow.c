@@ -83,7 +83,7 @@ int func_8019326C(int mode, RoomShakeSweepParticle *p) {
         func_800C6ED8(1);
         func_800C6EF8(D_800F32D8);
         func_800C7098(D_800F32D8, (u8)(p->size / 3), 0, (u8)(p->size / 2));
-        func_800C71E4(D_800F32D8, &matrix);
+        func_800C71E4((union FieldTexturedModel *)D_800F32D8, &matrix);
         func_800C6F4C(D_800F32D8);
         break;
     }
@@ -127,7 +127,7 @@ int func_80193638(int mode, RoomShakeSweepAnchor *anchor) {
                     *object->status = 2;
             }
         }
-        func_800C6D5C(D_800F32D8, 0, 0);
+        func_800C6D5C((union FieldTexturedModel *)D_800F32D8, 0, 0);
         return func_800CE560(D_800F33E0->pool, 0x10, 0x18,
                              (FieldAnimCallbackListCallback)func_8019326C);
     case 1:

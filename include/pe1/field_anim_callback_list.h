@@ -28,4 +28,8 @@ void *func_800CE610(char *list);
  * each list walk; callbacks read it as their elapsed frame count. */
 extern int D_800E27EC;
 
+int func_800CE5AC(void *arg0, int arg1, int arg2, int arg3, void *arg4);
+
+int func_800CE78C(char *list);
+
 #endif /* PE1_FIELD_ANIM_CALLBACK_LIST_H */

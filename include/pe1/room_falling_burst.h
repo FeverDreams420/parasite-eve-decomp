@@ -67,7 +67,6 @@ typedef struct RoomFallingBurstParticles {
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomFallingBurstParticles, liveCount) == 0xA4,
                   room_falling_burst_particles_live);
 
-
 /* Per-room data: the five sprite records. When it lands the falling sprite
  * spawns from the room module's init list and spawn layout
  * (pe1/room_module.h). */
@@ -80,8 +79,6 @@ extern RoomFxSpritePacket g_RoomFallingBurstParticle;
 void *func_8006DC18(int type);
 int *func_800C2B10(int index);
 int *func_800C2B28(int index);
-void *func_800C2B90(void *entity, int kind, void *script, void *data);
-int func_800C2B68(void);
 void func_800C6800(void *entity, int effectId, void *state);
 void func_800C6C18(int entity);
 int func_800C6B90(void *position, int radius);

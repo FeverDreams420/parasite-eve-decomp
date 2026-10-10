@@ -6,6 +6,8 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_model_draw.h"
+#include "pe1/field_owner_actor.h"
 
 /* Scene e20 trail controller and its command/particle records.
  * Reserved members are observed offsets, not recovered field meanings. */
@@ -34,7 +36,6 @@ extern void *D_8019085C;
 int func_8018F750(int mode, SceneE20TrailEffect *effect, SceneEffectSlot *command);
 extern SceneEffectSlot D_80190860[];
 int func_80071A54(void);
-int func_800D3FD8(void);
 void *func_8006E498(void *archive, unsigned key);
 void func_8006DCE4(int sound, int volume, s16 x, s16 y, int z);
 int rsin(int angle);
@@ -43,18 +44,11 @@ u16 func_80077A64(int tp, int abr, int x, int y);
 u16 func_80077AA4(int x, int y);
 #include "pe1/gte_types.h"
 int func_800C6B90(SceneE20Vec *position, int radius);
-void func_800C6D5C(void *model, int a, int b);
 void func_800CFAA8(SceneE20Vec *from, SceneE20Vec *to, SceneE20Vec *angles);
-void func_800D1384(SceneE20Vec *from, SceneE20Vec *to, u32 count, SceneE20Color *color0, SceneE20Color *color1, int scale, void *history, int mode);
 void func_800D2B58(void *from, void *to, void *color0, void *color1, int scale0,
                   int scale1, int mode);
 
 void func_800C6EC0(int tpage,int clut);
-void func_800C6ED8(int mode);
-void func_800C6EF8(void *model);
-void func_800C6F4C(void *model);
-void func_800C6FA0(void *model, u16 alpha);
-void func_800C71E4(void *model, SceneE20Matrix *matrix);
 extern SceneE20Event *D_800E2368;
 extern SceneE20Matrix *D_800BCFA4;
 

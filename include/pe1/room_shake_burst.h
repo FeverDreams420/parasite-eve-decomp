@@ -8,6 +8,9 @@
 #include "pe1/room_orbit_trail.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_model_draw.h"
+#include "pe1/field_owner_actor.h"
+#include "pe1/field_sprite_draw.h"
 
 /* Shake burst controller (room_m318): shakes the camera while it scatters
  * debris particles around its anchor, then flags the actor for the
@@ -87,12 +90,10 @@ extern RoomShakeBurstEntity **D_8009D254;
 extern void *D_800B0E64;
 extern u16 D_800E11EA;
 
-extern int func_800D3FD8(void);
 extern void func_8006DF50(void *channel, int id, int value, int volume, int pan);
 extern int func_80071A54(void);
 extern void func_80020D50(void);
 extern u8 *D_800F32D8;
-extern void func_800C6D5C(u8 *data, u8 x_offset, u8 y_offset);
 extern void func_80020DD0(void);
 
 /* room_m318 particle callbacks and the sweep anchor. */
@@ -108,11 +109,6 @@ extern int rsin(int angle);
 extern int func_80077A64(int, int, int, int);
 #include "pe1/gte_types.h"
 extern void func_800C6EC0(int tpage, int clut);
-extern void func_800C6ED8(int);
-extern void func_800C6EF8(void *asset);
-extern void func_800C7098(void *asset, int r, int g, int b);
-extern void func_800C71E4(void *asset, RoomSpriteMatrix *matrix);
-extern void func_800C6F4C(void *asset);
 
 /* Flash burst controller (func_80195D20): its particle callback, colour
  * seed, glow track and the helpers it calls. */
@@ -120,7 +116,6 @@ extern int func_80195904(int mode, RoomOrbitTrailParticle *p);
 extern RenderColor D_8018F210;
 extern u8 D_80199770[];
 extern int rcos(int angle);
-extern void func_800D1AE0(RenderColor *color, int value, int step, int count);
 
 /* Rising column controller (func_801955E4): the anchor rises from the
  * floor over the configured duration while sparks fall off it. */
@@ -144,7 +139,6 @@ extern GteRotation D_8018F208;
 extern u8 D_801996EC[];
 extern u16 D_800E11E8;
 extern u16 D_800E11F8;
-extern int func_800D3F64(int sound, int handle);
 
 /* Cross flash controller (func_80196820): an anchor with an orientation,
  * and particles that carry their own position, rotation and draw kind. */

@@ -19,7 +19,7 @@ int func_800DA5D4(int mode, FieldAnimEmitter *state) {
     switch (mode) {
     case 0:
         state->angle = rand();
-        func_800C6D5C(D_800F32D8, 0, 0);
+        func_800C6D5C((union FieldTexturedModel *)D_800F32D8, 0, 0);
         return func_800CE560(D_800F33E0->end, 16, 24,
                              (FieldAnimCallbackListCallback)func_800DA1FC);
     case 1:

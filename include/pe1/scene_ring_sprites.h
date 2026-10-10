@@ -6,6 +6,7 @@
 #include "pe1/field_ring_geometry.h"
 #include "pe1/field_sprite_state.h"
 #include "pe1/field_glow_sprite.h"
+#include "pe1/field_script_context.h"
 
 /* Scene e08 ring sprites: an animated flash sprite (first 12 ticks), a
  * steady glow sprite, and two shaded rings scaled by the state's size. */
@@ -47,7 +48,6 @@ extern SceneRingSprite D_801995A8;
 extern SceneRingSprite D_801995B8;
 extern SceneRingShade D_801995C8[2];
 
-SceneRingSpritesOwner *func_800C2B50(void);
 void func_80071A44(GteVector *vector, int value, int size);
 
 #endif

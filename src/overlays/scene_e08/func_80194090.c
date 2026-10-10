@@ -3,15 +3,14 @@
 #include "pe1/gte_types.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_glow_sprite.h"
+#include "pe1/field_script_context.h"
+#include "pe1/field_sprite_state.h"
 
 extern s16 D_8019955A;
 extern FieldGlowSprite D_80199580;
 
-void *func_800C2B50(void);
-void func_800C2EAC(u8);
 void func_800C2FF0(int, int);
 void func_800C3098(int);
-void func_800C3238(int);
 void func_80071A44(GteVector *, int, int);
 void func_80194090(void *arg0, void *arg1, char *effects) {
     GteMatrix matrix;

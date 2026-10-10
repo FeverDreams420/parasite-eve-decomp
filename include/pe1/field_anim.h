@@ -8,6 +8,7 @@
 #include "pe1/field_oriented_sprite.h"
 #include "pe1/field_billboard.h"
 #include "pe1/field_glow_sprite.h"
+#include "pe1/field_model_draw.h"
 
 extern GteMatrix D_800F3478, D_800F33C0, D_800F32B0;
 extern GteVector D_800C220C, D_800C221C, D_800C222C;
@@ -87,9 +88,7 @@ extern FieldAnimTaskContext *D_800E2368;
 int func_800D401C(int id);
 
 extern FieldAnimTaskSlot *D_800F33E0;
-int func_800CE5AC(void *arg0, int arg1, int arg2, int arg3, void *arg4);
 int func_800CE688(void *arg0);
-int func_800CE78C(char *arg0);
 
 typedef struct FieldAnimEmitter {
     int angle;
@@ -138,7 +137,6 @@ int func_800DA5D4(int mode, FieldAnimEmitter *state);
 
 extern u8 *D_800F32D8;
 extern s16 D_800E220C[];
-void func_800C6D5C(u8 *data, u8 x_offset, u8 y_offset);
 /* Spinning model flare shared by func_800D9A8C and func_800DA1FC: the leader
  * (stage 0) follows an anchor point and drops stage 1 copies that shrink. */
 typedef struct FieldAnimSpinningModel {

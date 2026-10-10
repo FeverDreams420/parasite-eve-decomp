@@ -24,7 +24,7 @@ void SceneEffect_GrabOnApproach(SceneGrabHead *head) {
 
             target->x = actor->render_object.matrices[11].translation[0] << 16;
             target->z = actor->render_object.matrices[11].translation[2] << 16;
-            if (func_800DFE20(&g_PlayerEntity->pos_x, &target->x) < 0x140) {
+            if (func_800DFE20((Vec3Fixed *)&g_PlayerEntity->pos_x, (Vec3Fixed *)&target->x) < 0x140) {
                 FieldActor *player;
 
                 control->callback = func_80192878;

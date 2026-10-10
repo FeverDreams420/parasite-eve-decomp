@@ -12,6 +12,7 @@
 #include "pe1/room_floor.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_owner_actor.h"
 
 /* room_m086 falling seeker (func_8018F004): a turning model that flies
  * along its heading until it lands, bursts on the player (flagging the
@@ -66,7 +67,6 @@ extern u8 *D_80190B84;
 extern u16 D_800E11E8;
 extern u16 D_800E11EA;
 int func_800C6B90(void *position, int radius);
-void func_800C6FA0(u8 *data, u16 factor);
 u16 func_80077AA4(int, int);
 int rcos(int angle);
 
@@ -113,9 +113,6 @@ int func_8018F004(int mode, RoomM086Seeker *seeker, RoomM086SeekerParams *params
 void func_800CE8F0(void *owner, int joint, RoomM086Offset *offset, void *out);
 void func_800CEAE8(void *bone, RoomM086Offset *offset, void *out);
 void *func_8006E498(void *base, u32 key);
-void func_800C6D5C(void *asset, int x, int y);
-int func_800D3FD8(void);
-void func_800D3F64(int sound, int handle);
 int func_80071A54(void);
 int rsin(int angle);
 

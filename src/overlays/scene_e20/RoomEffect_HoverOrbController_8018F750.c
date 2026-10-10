@@ -104,7 +104,7 @@ initialize:
             temp_v0 = func_8006E498(D_800B0E64, assetKey | 0x3704U);
             D_8019085C = temp_v0;
             func_800C6D5C(temp_v0, 0, 0);
-            func_800D1384(&effect->position, &effect->position, 0x3EE, initColor0, initColor1, 0x80, effect->history, initialMode);
+            func_800D1384(&effect->position, &effect->position, 0x3EE, (unsigned char *)initColor0, (unsigned char *)initColor1, 0x80, (struct FieldTrailPair *)effect->history, initialMode);
             return func_800CE560((char *)D_800F33E0->pool, 0x14, 0x20,
                                  (FieldAnimCallbackListCallback)func_8018F028);
 update: {
@@ -387,9 +387,9 @@ block_63:
             ScaleMatrix(&matrix, &scale[0]);
             func_800C6EF8(D_8019085C);
             func_800C6FA0(D_8019085C, (u16) effect->alpha);
-            func_800C71E4(D_8019085C, &matrix);
+            func_800C71E4(D_8019085C, (GteMatrix *)&matrix);
             func_800C6F4C(D_8019085C);
-            func_800D1384(&effect->trailHead, &effect->trailTail, 6, &beamColor, &edgeColor, (s32) effect->alpha, effect->history, 1);
+            func_800D1384(&effect->trailHead, &effect->trailTail, 6, (unsigned char *)&beamColor, (unsigned char *)&edgeColor, (s32) effect->alpha, (struct FieldTrailPair *)effect->history, 1);
             D_800F3368.depth = 0x33;
             var_s0 = effect->alpha;
             if (D_800E27EC & 1) {

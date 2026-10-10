@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/field_sprite_state.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_script_context.h"
 
 /* The effect sequence (src/overlays/room_lib/RoomFx_EffectSequence.c):
  * the room data it fills and reads (the same addresses in all five rooms
@@ -45,10 +46,9 @@ extern s16 D_80192C42;
 extern void *func_8006E498(void *base, int id);
 extern int *func_800C2B28(int index);
 extern int *func_800C2B10(int index);
-extern int func_800C2B68(void);
-extern void func_800C2B90(int owner, int command, void *config, void *state);
-extern char D_80192B5C;
-extern char D_80192BBC;
+/* Per-command handler table and state size table for func_800C2B90. */
+extern int (*D_80192B5C[])(void *, void *, void *);
+extern u16 D_80192BBC[];
 extern volatile s16 D_80192C12;
 extern char D_80192BFC;
 extern char D_80192BF0;

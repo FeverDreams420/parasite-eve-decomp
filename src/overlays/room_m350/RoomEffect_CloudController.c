@@ -3,6 +3,7 @@
 #include "pe1/room_floor.h"
 #include "pe1/field_actor.h"
 #include "pe1/player_entity.h"
+#include "pe1/field_vector_math.h"
 typedef RoomM350Vector Vector;
 typedef RenderMatrix Matrix;
 typedef FieldActor Instance;
@@ -16,9 +17,6 @@ extern short D_8019A870,D_8019A872,D_8019A874,D_8019A876,D_8019A878,D_8019A87A,D
 extern int D_8019A884,D_8019A888,D_8019A88C;
 extern int Asset_Find08w(int,int,int,int,int);
 extern void Akao_Cmd_21(int,int);
-extern int func_800DFE20(int *,int *);
-extern int FieldEng_VecToAngle(int *,int *);
-extern int FieldEng_TurnToward(int,int,int);
 extern int rcos(int);
 extern int rsin(int);
 int func_80198CF8(int event,State *state)

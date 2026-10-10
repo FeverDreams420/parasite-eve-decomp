@@ -1,9 +1,10 @@
 #include "pe1/field_anim.h"
 #include "pe1/field_actor.h"
+#include "pe1/field_owner_actor.h"
 
-void Asset_Find08w(int arg0, int arg1, int arg2, int arg3, int arg4);
+int Asset_Find08w(int arg0, int arg1, int arg2, int arg3, int arg4);
 
-void func_800D3F64(int arg0, int arg1) {
+int func_800D3F64(int arg0, int arg1) {
     FieldAnimObjectPrefix *ctx;
     register FieldActor *child asm("$3");
     register RenderMatrix *node asm("$2");
@@ -30,7 +31,7 @@ void func_800D3F64(int arg0, int arg1) {
     z = node->translation[2];
     sz = z;
     z = (short)z;
-    Asset_Find08w(arg0, arg1, x, y, z);
+    return Asset_Find08w(arg0, arg1, x, y, z);
 }
 
 

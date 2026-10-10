@@ -1,5 +1,6 @@
 #include "common.h"
 #include "pe1/vector_types.h"
+#include "pe1/field_vector_math.h"
 
 int func_800DFC44(int value) {
     int result = 0;
@@ -20,11 +21,6 @@ int func_800DFC44(int value) {
 }
 
 
-typedef struct {
-    s32 x;
-    s32 y;
-    s32 z;
-} Vec3Fixed;
 
 s32 func_800DFC80(Vec3Fixed *lhs, Vec3Fixed *rhs) {
     s32 dx = (lhs->x - rhs->x) >> 16;
@@ -221,6 +217,6 @@ void func_800DFE94(Vec3Fixed *from, Vec3Fixed *to, s16 *out) {
 
 s32 ratan2(s32 x, s32 z);
 
-s16 FieldEng_VecToAngle(Vec3Fixed *from, Vec3Fixed *to) {
-    return ratan2(to->x - from->x, to->z - from->z);
+int FieldEng_VecToAngle(Vec3Fixed *from, Vec3Fixed *to) {
+    return (s16)ratan2(to->x - from->x, to->z - from->z);
 }

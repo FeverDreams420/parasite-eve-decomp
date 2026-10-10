@@ -5,6 +5,9 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_model_draw.h"
+#include "pe1/field_owner_actor.h"
+#include "pe1/field_sprite_draw.h"
 
 /* Scene e19 blast sequence: loads five shell models, then runs a five-state
  * charge/burst timeline at an actor position, spawning rising sparks while
@@ -67,15 +70,7 @@ int rsin(int angle);
 int rcos(int angle);
 #include "pe1/gte_types.h"
 int func_800C6B90(GteShortVector *position, int range);
-void func_800C6D5C(void *model, int x, int y);
 void func_800C6EC0(int page, int clut);
-void func_800C6ED8(int mode);
-void func_800C6EF8(void *model);
-void func_800C6F4C(void *model);
-void func_800C6FA0(void *model, int intensity);
-void func_800C71E4(void *model, GteMatrix *matrix);
-void func_800D1AE0(RenderColor *color, int value, int mode, int step);
 void func_800D1D24(int mode, int count, int value);
-int func_800D3FD8(void);
 
 #endif

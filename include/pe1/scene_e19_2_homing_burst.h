@@ -4,6 +4,7 @@
 #include "pe1/render_object.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte.h"
+#include "pe1/field_sprite_draw.h"
 
 /* Scene e19_2 homing burst controller: anchored on the room actor, it
  * releases twenty homing particles (func_8019549C) on odd frames, then
@@ -59,7 +60,6 @@ extern SceneHomingBurstEvent *D_800E2368;
 int rsin(int angle);
 u16 func_80077AA4(int x, int y);
 void func_800CE8F0(void *pool, int index, GteRotation *rotation, GteShortVector *position);
-void func_800D1AE0(RenderColor *color, int value, int step, int count);
 int func_8019549C(int mode, void *particle);
 
 #endif

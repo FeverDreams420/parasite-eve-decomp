@@ -315,7 +315,7 @@ checkLifetime:
             if ((D_800F336C == 4) && (D_800F3428 != 0)) {
                 trailClutY += 4;
             }
-            func_800D3114((state->index * 0x88) + D_80195EFC, 0x10, 0xF0, 0, 0x60, 0xFF, 0xF, (s32) D_800E2850[D_800E11EA], func_80077AA4(0x30, trailClutY) & 0xFFFF, 0x80, &color.r, &darkColor.r, 1);
+            func_800D3114((GteShortVector *)((state->index * 0x88) + D_80195EFC), 0x10, 0xF0, 0, 0x60, 0xFF, 0xF, (s32) D_800E2850[D_800E11EA], func_80077AA4(0x30, trailClutY) & 0xFFFF, 0x80, (RenderColor *)&color.r, (RenderColor *)&darkColor.r, 1);
             fade = ((D_800E27EC & 1) << 5) + 0x60;
             func_800D004C((GteShortVector *)state, 0x190, 0x190, 8, 0, 0x1000, 0x1000, (RenderColor *)&color.r, 0, fade, 1);
             historySample = D_80195EFC + ((func_80071A54() & 7) * 8);
@@ -416,11 +416,11 @@ checkLifetime:
             scale.z = 0x2AA;
             transform.t[2] = translationZ;
             ScaleMatrix(&transform, &scale.x);
-            func_800C6EF8(D_80195EF8);
-            func_800C7098(D_80195EF8, darkColor.r, darkColor.g, darkColor.b);
-            func_800C6FA0(D_80195EF8, fade & 0xFFFF);
-            func_800C71E4(D_80195EF8, &transform);
-            func_800C6F4C(D_80195EF8);
+            func_800C6EF8((char *)D_80195EF8);
+            func_800C7098((char *)D_80195EF8, darkColor.r, darkColor.g, darkColor.b);
+            func_800C6FA0((char *)D_80195EF8, fade & 0xFFFF);
+            func_800C71E4((union FieldTexturedModel *)D_80195EF8, &transform);
+            func_800C6F4C((char *)D_80195EF8);
             return 0;
         case 3:
             pulseSine = rsin(state->frame << 6);

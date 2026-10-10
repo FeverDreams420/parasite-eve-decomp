@@ -189,8 +189,8 @@ void RoomLib_UpdatePairedEmitter(void *arg0, char *arg1,
 
     table = g_RoomPairedGlowColorTable;
     link = (*(RoomLink **)owner)->p238;
-    func_800C3134(table, *(s16 *)(arg1 + 2), &state->primary.color0);
-    func_800C3134(table, *(s16 *)(arg1 + 2), &state->secondary.color0);
+    func_800C3134(table, *(s16 *)(arg1 + 2), (unsigned char *)&state->primary.color0);
+    func_800C3134(table, *(s16 *)(arg1 + 2), (unsigned char *)&state->secondary.color0);
     state->primary.intensity = state->intensity;
     stack.matrix.t[0] = RW32(link, 0x14);
     stack.matrix.t[1] = RW32(link, 0x18) - 0x64;

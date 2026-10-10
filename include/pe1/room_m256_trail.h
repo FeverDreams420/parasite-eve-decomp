@@ -7,6 +7,8 @@
 #include "pe1/field_anim.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_model_draw.h"
+#include "pe1/field_sprite_draw.h"
 
 /* Shared 24-byte pool record: steering trail, damped sparks, model burst,
  * expanding sprite and floor impact. Modes 1 and 2 update and draw it. */
@@ -38,16 +40,8 @@ int rcos(int);
 #include "pe1/player_entity.h"
 int func_800C6B90(void *,int);
 void func_800C6EC0(int,int);
-void func_800C6ED8(int);
-void func_800C6EF8(int);
-void func_800C6F4C(int);
-void func_800C6FA0(int,int);
-void func_800C7098(int,int,int,int);
-void func_800C71E4(int,void *);
 void func_800CE8F0(void *,int,void *,void *);
 void func_800CFAA8(void *,void *,void *);
-void func_800CFD50(void *,void *,int);
-void func_800D3114(void *,int,int,int,int,int,int,int,int,int,void *,void *,int);
 void func_800D3AFC(void *,int,void *,int);
 
 int func_801940B0(int mode, void *effect);

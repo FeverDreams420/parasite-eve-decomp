@@ -10,6 +10,8 @@
 #include "room_m273_sweep.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/field_model_draw.h"
+#include "pe1/field_vector_math.h"
 
 /* Boss instance fields read by room_m273's animation controllers. */
 typedef struct RoomM273BossOwner {
@@ -189,11 +191,6 @@ extern u16 D_800E11FA;
 extern u16 D_800E120A;
 u16 GetTPage(int tp, int abr, int x, int y);
 void GsSetOrign(int tpage, int clut);
-void func_800C6ED8(int mode);
-void func_800C6EF8(u8 *model);
-void func_800C6FA0(u8 *model, int depth);
-void func_800C71E4(u8 *model, GteMatrix *matrix);
-void func_800C6F4C(u8 *model);
 void *memset(void *dst, int value, unsigned int size);
 int func_8005186C(int value);
 extern GteRotation D_8019AB68;
@@ -227,9 +224,7 @@ typedef struct RoomM273PageIndex {
 
 extern RoomM273PageIndex D_800E11EA;
 
-int func_800CE5AC(void *list, int base, int size, int count, void *callback);
 int func_800CE688(void *list);
-int func_800CE78C(void *list);
 void Asset_Find08w(int id, int sound, int x, int y, int z);
 int func_801981A4(int mode, RoomM273SwayShard *shard);
 int func_80198060(int mode, GteShortVector *position);
@@ -256,8 +251,5 @@ extern GteShortVector D_8019ACA4; /* drop offset */
 extern GteShortVector D_8019ACAC; /* trail sample offsets */
 extern GteShortVector D_8019ACB4;
 extern RenderColor D_8019ACBC;
-
-int FieldEng_VecToAngle(s32 *from, s32 *to);
-int FieldEng_TurnToward(s16 current, s16 target, s16 step);
 
 #endif

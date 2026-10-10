@@ -28,7 +28,7 @@ int func_80192CD4(int mode, RoomM089SpinModel *spin, GteShortVector *anchor) {
         spin->stage = 0;
         spin->timer = 0;
         D_80194168 = func_8006E498(D_800B0E64.channel, 0xC5864704);
-        func_800C6D5C(D_80194168, 0, 0);
+        func_800C6D5C((union FieldTexturedModel *)D_80194168, 0, 0);
         return 0;
     case 1:
         spin->timer++;
@@ -111,7 +111,7 @@ int func_80192CD4(int mode, RoomM089SpinModel *spin, GteShortVector *anchor) {
         ScaleMatrix(&matrix, &scale);
         func_800C6EF8(D_80194168);
         func_800C6FA0(D_80194168, intensity);
-        func_800C71E4(D_80194168, &matrix);
+        func_800C71E4((union FieldTexturedModel *)D_80194168, &matrix);
         func_800C6F4C(D_80194168);
         position.y += (0x20 - D_800E27EC) << 3;
         RotMatrixYXZ(&rotation, &innerMatrix);
@@ -124,7 +124,7 @@ int func_80192CD4(int mode, RoomM089SpinModel *spin, GteShortVector *anchor) {
         ScaleMatrix(&innerMatrix, &innerScale);
         func_800C6EF8(D_80194168);
         func_800C6FA0(D_80194168, intensity);
-        func_800C71E4(D_80194168, &innerMatrix);
+        func_800C71E4((union FieldTexturedModel *)D_80194168, &innerMatrix);
         func_800C6F4C(D_80194168);
         break;
     }

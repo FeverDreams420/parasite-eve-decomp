@@ -121,7 +121,7 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
             ScaleMatrix(&matrix, &scale);
             func_800C6EF8(D_80199500);
             func_800C6FA0(D_80199500, (u16)glow);
-            func_800C71E4(D_80199500, &matrix);
+            func_800C71E4(D_80199500, (GteMatrix *)&matrix);
             func_800C6F4C(D_80199500);
             break;
         }
@@ -162,7 +162,7 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
             ScaleMatrix(&matrix, &scale);
             func_800C6EF8(D_80199500);
             func_800C6FA0(D_80199500, (u16)glow);
-            func_800C71E4(D_80199500, &matrix);
+            func_800C71E4(D_80199500, (GteMatrix *)&matrix);
             func_800C6F4C(D_80199500);
             {
                 int kind;

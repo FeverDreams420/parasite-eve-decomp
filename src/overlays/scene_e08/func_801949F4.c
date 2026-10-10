@@ -1,13 +1,11 @@
 #include "common.h"
 #include "pe1/field_glow_sprite.h"
+#include "pe1/field_script_context.h"
+#include "pe1/field_sprite_state.h"
 
-s32 func_800C2B50(void);
-void func_800C2EAC(s32);
 void func_800C2FF0(s32, s32);
 void func_800C3098(s32);
-void func_800C3238(s32);
 void func_80071A44(GteVector *arg0, s32 arg1, s32 arg2);
-void func_800C3134(u8 *table, s32 step, u8 *out);
 
 extern u8 D_80198AD4;
 extern u8 D_80199570;
@@ -15,7 +13,7 @@ extern u8 D_80199574;
 extern u16 D_8019957A;
 
 void func_801949F4(s32 arg0, char *arg1, char *rec) {
-    s32 ctx;
+    char *ctx;
     u32 idx;
     char *r;
     GteMatrix buf;

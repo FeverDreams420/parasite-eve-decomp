@@ -90,8 +90,6 @@ extern u16 D_800E11FA;
 extern u16 D_800E11EA;
 
 u8 *func_8006E498(void *channel, int id);
-void func_800C6D5C(u8 *data, u8 x_offset, u8 y_offset);
-void func_800C6FA0(u8 *data, u16 factor);
 void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y, int texture,
                    int clut, int page, int intensity, int unused, int angle);
 void func_800CE8F0(void *pool, int index, void *offset, void *position);

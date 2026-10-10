@@ -62,7 +62,7 @@ int func_801960C4(int mode, SceneHomingBurst *burst)
             time = burst->timer;
         }
         if (time < 0xD) {
-            func_800D1AE0(&flashColor, 0x80 - (time << 7) / 12, 1, 8);
+            func_800D1AE0((unsigned char *)&flashColor, 0x80 - (time << 7) / 12, 1, 8);
         }
         if (burst->timer < 0x21) {
             {

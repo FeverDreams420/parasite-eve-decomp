@@ -6,6 +6,7 @@
 #include "pe1/render_object.h"
 #include "pe1/room_orbit_trail.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_owner_actor.h"
 
 /* Ring burst controller (scene_e22): scene event gate, particle channel
  * and the helpers the burst and its orbit trail particles call. */
@@ -32,8 +33,6 @@ extern int rsin(int angle);
 extern int rcos(int angle);
 extern u16 func_80077AA4(int, int);
 extern int func_80071A54(void);
-extern int func_800D3FD8(void);
-extern int func_800D3F64(int sound, int handle);
 extern int func_80192548(int mode, RoomOrbitTrailParticle *p);
 
 /* Orbit ring trail particle (func_80192548): its colour seed and trail

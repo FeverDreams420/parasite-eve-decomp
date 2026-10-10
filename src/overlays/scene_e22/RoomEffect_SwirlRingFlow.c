@@ -221,9 +221,9 @@ int func_80195B40(int mode, SceneE22SwirlRing *swirl) {
             int size;
             int timer = swirl->timer;
             if (timer == 1)
-                func_800D1AE0(&color, 0x80, 2, 8);
+                func_800D1AE0((unsigned char *)&color, 0x80, 2, 8);
             else if (timer < 6)
-                func_800D1AE0(&color, rsin(((timer - 2) << 10) / 3) / 32, 1, 8);
+                func_800D1AE0((unsigned char *)&color, rsin(((timer - 2) << 10) / 3) / 32, 1, 8);
             glow = swirl->glow;
             D_800F3368.depth = 0x20;
             func_800D0728(&position, 0x44C, 0x5DC, 0x18, 0, swirl->ring, swirl->ring, 0,

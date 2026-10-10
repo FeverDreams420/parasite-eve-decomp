@@ -2,6 +2,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/field_actor.h"
 #include "pe1/player_entity.h"
+#include "pe1/field_vector_math.h"
 /* Dispatches frame-table events and the actor's turning/recoil motion. */
 typedef RoomM350Vector Vector;
 typedef struct { unsigned char frame,slot,value,pad; } Event;
@@ -15,8 +16,6 @@ extern int D_8019A858;
 extern short D_8019A85C,D_8019A85E,D_8019A86A,D_8019A86C;
 extern int D_800966EC[];
 extern short D_800966EE[];
-extern int FieldEng_VecToAngle(int *,int *);
-extern int FieldEng_TurnToward(int,int,int);
 
 int func_80197DA8(int event,short *cursor) {
     Events events=D_8018F1CC;

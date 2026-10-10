@@ -30,16 +30,16 @@ int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
         tipB.x *= -1;
         func_800CE8F0(D_8009D254, 8, &hand, &from);
         func_800CE8F0(D_8009D254, 8, &tipA, &to);
-        func_800D1384(&from, &to, 0x3F0, &inner, &outer, 128, flash->trailA, 1);
+        func_800D1384(&from, &to, 0x3F0, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailA, 1);
         func_800CE8F0(D_8009D254, 8, &tipB, &from);
-        func_800D1384(&from, &to, 0x3F2, &edge, &outer, 128, flash->trailC, 1);
+        func_800D1384(&from, &to, 0x3F2, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailC, 1);
         tipA.x *= -1;
         tipB.x *= -1;
         func_800CE8F0(D_8009D254, 21, &hand, &from);
         func_800CE8F0(D_8009D254, 21, &tipA, &to);
-        func_800D1384(&from, &to, 0x3F0, &inner, &outer, 128, flash->trailB, 1);
+        func_800D1384(&from, &to, 0x3F0, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailB, 1);
         func_800CE8F0(D_8009D254, 21, &tipB, &from);
-        func_800D1384(&from, &to, 0x3F2, &edge, &outer, 128, flash->trailD, 1);
+        func_800D1384(&from, &to, 0x3F2, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailD, 1);
         return func_800CE560(D_800F33E0->pool, 20, 36,
                              (FieldAnimCallbackListCallback)Memcard_RisingEmberParticle);
     case 1:
@@ -144,16 +144,16 @@ int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
         tipB.x *= -1;
         func_800CE8F0(D_8009D254, 8, &hand, &from);
         func_800CE8F0(D_8009D254, 8, &tipA, &to);
-        func_800D1384(&from, &to, 8, &inner, &outer, 128, flash->trailA, 1);
+        func_800D1384(&from, &to, 8, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailA, 1);
         func_800CE8F0(D_8009D254, 8, &tipB, &from);
-        func_800D1384(&from, &to, 10, &edge, &outer, 128, flash->trailC, 1);
+        func_800D1384(&from, &to, 10, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailC, 1);
         tipA.x *= -1;
         tipB.x *= -1;
         func_800CE8F0(D_8009D254, 21, &hand, &from);
         func_800CE8F0(D_8009D254, 21, &tipA, &to);
-        func_800D1384(&from, &to, 8, &inner, &outer, 128, flash->trailB, 1);
+        func_800D1384(&from, &to, 8, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailB, 1);
         func_800CE8F0(D_8009D254, 21, &tipB, &from);
-        func_800D1384(&from, &to, 10, &edge, &outer, 128, flash->trailD, 1);
+        func_800D1384(&from, &to, 10, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailD, 1);
         D_800F3368.depth = 16;
         break;
     }

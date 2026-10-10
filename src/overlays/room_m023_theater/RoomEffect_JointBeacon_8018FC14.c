@@ -38,7 +38,7 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
         }
         state->armed = 1;
         D_80190760 = func_8006E498(D_800B0E64.channel, 0xC5463704);
-        func_800C6D5C(D_80190760, 0, 0);
+        func_800C6D5C((union FieldTexturedModel *)D_80190760, 0, 0);
         return 0;
     case 1:
         func_800CE8F0(D_800F32D0->pool, state->joint, &offset, state);
@@ -177,7 +177,7 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
         }
         func_800C6ED8(1);
         func_800C6EF8(D_80190760);
-        func_800C71E4(D_80190760, &matrix);
+        func_800C71E4((union FieldTexturedModel *)D_80190760, &matrix);
         func_800C6F4C(D_80190760);
         func_800C6EF8(D_80190760);
         scale.z = 0x1000;
@@ -185,7 +185,7 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
         scale.x = 0x1800;
         ScaleMatrix(&matrix, &scale);
         func_800C70EC(D_80190760, -0xFF, -0x8C, -0xFF);
-        func_800C71E4(D_80190760, &matrix);
+        func_800C71E4((union FieldTexturedModel *)D_80190760, &matrix);
         func_800C6F4C(D_80190760);
         func_800C6EF8(D_80190760);
         scale.z = 0x1000;
@@ -194,7 +194,7 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
         matrix.t[1] = g_RoomFloorY->y;
         ScaleMatrix(&matrix, &scale);
         func_800C6FA0(D_80190760, 0x19);
-        func_800C71E4(D_80190760, &matrix);
+        func_800C71E4((union FieldTexturedModel *)D_80190760, &matrix);
         func_800C6F4C(D_80190760);
         break;
     }

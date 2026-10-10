@@ -119,7 +119,7 @@ void RoomFx_GrabStartOnProximity(RoomMotionTrigger *arg) {
         func_8003E0FC(&arg->source_actor->render_object, 6, sp);
         sp->x <<= 16;
         sp->z <<= 16;
-        if (func_800DFE20((RoomGrabPoint *)&GRAB_PLAYER->pos_x, sp) >= 0x100) {
+        if (func_800DFE20((Vec3Fixed *)&GRAB_PLAYER->pos_x, (Vec3Fixed *)sp) >= 0x100) {
             return;
         }
         arg->callback = RoomFx_GrabHold;
@@ -504,7 +504,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
         sweep->heading.y = func_80071A54() & 0xFFF;
         sweep->heading.z = 0;
         func_800CE8F0(D_800F32D0->pool, 4, &offset, &hand);
-        func_800D1384(&hand, sweep, 0x3F0, &colorA, &colorA, 0x8C, sweep->trail, 1);
+        func_800D1384(&hand, (GteShortVector *)sweep, 0x3F0, (unsigned char *)&colorA, (unsigned char *)&colorA, 0x8C, (struct FieldTrailPair *)sweep->trail, 1);
         if (D_800E2368->active) {
             RoomSparkNode **slot = (RoomSparkNode **)D_800F32D0->pool;
             if (slot && *slot) {
@@ -579,7 +579,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
             scale = (s16)sweep->timer * 650;
             func_800CFAA8(sweep, &hand, &angles);
             angles.x = 0;
-            func_800CFD50(&angles, &sweep->heading, (u16)scale);
+            func_800CFD50((unsigned short *)&angles, (unsigned short *)&sweep->heading, (u16)scale);
             func_800CFB7C(&sweep->heading, (s16)(params->distance / 2), &step);
             sweep->x += step.x;
             sweep->y += step.y;
@@ -670,7 +670,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
             int kind;
             int palette;
             func_800D2B58(&hand, sweep, color, color, 0x8C, 0x8C, 1);
-            func_800D1384(&hand, sweep, 8, color, &colorA, 0x8C, sweep->trail, 1);
+            func_800D1384(&hand, (GteShortVector *)sweep, 8, (unsigned char *)color, (unsigned char *)&colorA, 0x8C, (struct FieldTrailPair *)sweep->trail, 1);
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
@@ -685,7 +685,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
             int kind;
             int palette;
             func_800D2B58(&hand, sweep, color, color, 0x60, 0x60, 1);
-            func_800D1384(&hand, sweep, 8, color, &colorA, 0x8C, sweep->trail, 1);
+            func_800D1384(&hand, (GteShortVector *)sweep, 8, (unsigned char *)color, (unsigned char *)&colorA, 0x8C, (struct FieldTrailPair *)sweep->trail, 1);
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
@@ -701,7 +701,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
             int palette;
             int fade = rcos((s16)sweep->timer << 7) / 32;
             func_800D2B58(&hand, sweep, color, color, fade, fade, 1);
-            func_800D1384(&hand, sweep, 8, color, &colorA, 0x8C, sweep->trail, 1);
+            func_800D1384(&hand, (GteShortVector *)sweep, 8, (unsigned char *)color, (unsigned char *)&colorA, 0x8C, (struct FieldTrailPair *)sweep->trail, 1);
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;

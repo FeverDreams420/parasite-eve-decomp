@@ -35,9 +35,9 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
             }
         }
         D_80190B94 = func_8006E498(D_800B0E64.channel, 0xC5462704);
-        func_800C6D5C(D_80190B94, 0, 0);
+        func_800C6D5C((union FieldTexturedModel *)D_80190B94, 0, 0);
         D_80190B98 = func_8006E498(D_800B0E64.channel, 0xC5862704);
-        func_800C6D5C(D_80190B98, 0, 0);
+        func_800C6D5C((union FieldTexturedModel *)D_80190B98, 0, 0);
         return func_800CE560(D_800F33E0->pool, 0x10, 8,
                              (FieldAnimCallbackListCallback)func_8018FB84);
     case 1:
@@ -115,27 +115,27 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
         func_800C6ED8(1);
         func_800C6EF8(D_80190B94);
         func_800C6FA0(D_80190B94, 0x32);
-        func_800C71E4(D_80190B94, &matrix);
+        func_800C71E4((union FieldTexturedModel *)D_80190B94, &matrix);
         func_800C6F4C(D_80190B94);
         func_800C6EF8(D_80190B94);
         scale.z = 0x1000;
         scale.x = scale.y = 0x2000;
         ScaleMatrix(&matrix, &scale);
         func_800C70EC(D_80190B94, -0xFF, -0x82, 0x30);
-        func_800C71E4(D_80190B94, &matrix);
+        func_800C71E4((union FieldTexturedModel *)D_80190B94, &matrix);
         func_800C6F4C(D_80190B94);
         func_800C6EF8(D_80190B94);
         scale.x = scale.y = 0x400;
         ScaleMatrix(&matrix, &scale);
         func_800C6FA0(D_80190B94, 0xC8);
-        func_800C71E4(D_80190B94, &matrix);
+        func_800C71E4((union FieldTexturedModel *)D_80190B94, &matrix);
         func_800C6F4C(D_80190B94);
         func_800C6EF8(D_80190B94);
         matrix.t[1] = g_RoomFloorY->y;
         scale.x = scale.y = 0x2000;
         ScaleMatrix(&matrix, &scale);
         func_800C6FA0(D_80190B94, 0x18);
-        func_800C71E4(D_80190B94, &matrix);
+        func_800C71E4((union FieldTexturedModel *)D_80190B94, &matrix);
         func_800C6F4C(D_80190B94);
         D_800F3368.parameter00 = 0x20;
         D_800F3368.parameter02 = 2;
@@ -216,7 +216,7 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
             ScaleMatrix(&spin, &spinScale);
             func_800C6EF8(D_80190B98);
             func_800C6FA0(D_80190B98, alpha / 2);
-            func_800C71E4(D_80190B98, &spin);
+            func_800C71E4((union FieldTexturedModel *)D_80190B98, &spin);
             func_800C6F4C(D_80190B98);
         }
         D_800F3368.parameter00 = 0x20;

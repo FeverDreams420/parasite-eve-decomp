@@ -31,7 +31,4 @@ extern FieldEffectPool *D_800F33E0;
 extern FieldEffectOwner *D_800F32D0;
 extern u8 *D_800F32D4;
 
-void func_800C6D5C(u8 *data, u8 x_offset, u8 y_offset);
-void func_800C6FA0(u8 *data, u16 factor);
-
 #endif

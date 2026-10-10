@@ -77,7 +77,7 @@ int SPINNING_MODEL_FUNC(int mode, FieldAnimSpinningModel *state)
         func_800C6ED8(1);
         func_800C6EF8(D_800F32D8);
         func_800C7098(D_800F32D8, SPINNING_MODEL_COLOR(state->size));
-        func_800C71E4(D_800F32D8, &matrix);
+        func_800C71E4((union FieldTexturedModel *)D_800F32D8, &matrix);
         func_800C6F4C(D_800F32D8);
         break;
     }

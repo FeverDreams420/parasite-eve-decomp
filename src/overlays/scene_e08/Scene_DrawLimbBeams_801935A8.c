@@ -54,8 +54,8 @@ void func_801935A8(void *object, void *timer, SceneLimbBeams *beams)
             points[4].x = target->translation[0];
             points[4].y = target->translation[1];
             points[4].z = target->translation[2];
-            func_800C3134(D_801989BC, beams->fade[i], &head);
-            func_800C3134(D_801989D0, beams->fade[i], &tail);
+            func_800C3134(D_801989BC, beams->fade[i], (unsigned char *)&head);
+            func_800C3134(D_801989D0, beams->fade[i], (unsigned char *)&tail);
             tpage = (u16)func_80077A64(0, 0, 0x340, 0x100);
             func_800D3114(points, 4, 100, 0x40, 0x80, 0x9C, 0x10, tpage,
                           (u16)func_80077AA4(0, 0x1D7), 0x80, &tail, &tail, mode);

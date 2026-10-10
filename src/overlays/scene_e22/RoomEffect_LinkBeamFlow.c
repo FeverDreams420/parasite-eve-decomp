@@ -83,10 +83,10 @@ int func_80193414(int mode, SceneE22LinkBeam *beam) {
                       &offset0, &middle);
         func_800CE8F0(D_800F32D0->pool, D_801991B8[beam->jointSet].last,
                       &offset1, &last);
-        func_800D1384(&first, &middle, 0x3F2, &color2, &color1, 0x80,
-                      beam->trailA, 1);
-        func_800D1384(&middle, &last, 0x3F2, &color1, &color0, 0x80,
-                      beam->trailB, 1);
+        func_800D1384(&first, &middle, 0x3F2, (unsigned char *)&color2, (unsigned char *)&color1, 0x80,
+                      (struct FieldTrailPair *)beam->trailA, 1);
+        func_800D1384(&middle, &last, 0x3F2, (unsigned char *)&color1, (unsigned char *)&color0, 0x80,
+                      (struct FieldTrailPair *)beam->trailB, 1);
         return func_800CE560(D_800F33E0->pool, 0x14, 8,
                              (FieldAnimCallbackListCallback)func_801931B8);
     case 1:
@@ -120,10 +120,10 @@ int func_80193414(int mode, SceneE22LinkBeam *beam) {
                           &offset0, &middle);
             func_800CE8F0(D_800F32D0->pool, D_801991B8[beam->jointSet].last,
                           &offset1, &last);
-            func_800D1384(&first, &middle, 10, &color2, &color1, beam->alpha,
-                          beam->trailA, 1);
-            func_800D1384(&middle, &last, 10, &color1, &color0, beam->alpha,
-                          beam->trailB, 1);
+            func_800D1384(&first, &middle, 10, (unsigned char *)&color2, (unsigned char *)&color1, beam->alpha,
+                          (struct FieldTrailPair *)beam->trailA, 1);
+            func_800D1384(&middle, &last, 10, (unsigned char *)&color1, (unsigned char *)&color0, beam->alpha,
+                          (struct FieldTrailPair *)beam->trailB, 1);
         }
         {
             int tpage = D_800E2850[D_800E11FA.index];

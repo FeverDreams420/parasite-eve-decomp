@@ -5,6 +5,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "menu_memcard_pulse.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_sprite_draw.h"
 
 typedef struct MemcardLinkOffset { u8 bytes[8]; } MemcardLinkOffset;
 typedef struct MemcardLinkColor { u8 bytes[4]; } MemcardLinkColor;
@@ -16,7 +17,6 @@ extern void *D_8009D254;
 extern MemcardLinkChannel *D_800F33E0;
 extern s16 D_801F1D86, D_801F1D88;
 extern void func_800CE8F0(void *, s32, void *, void *);
-extern void func_800D1384(void *, void *, s32, void *, void *, s32, void *, s32);
 
 s32 Memcard_LinkEffect(s32 mode, MemcardLinkState *state);
 

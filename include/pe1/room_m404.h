@@ -7,6 +7,7 @@
 #include "pe1/field_transform_point.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_owner_actor.h"
 
 typedef struct { s32 word[2]; } __attribute__((packed)) RoomTemplate8;
 typedef struct RoomM404Node {
@@ -30,8 +31,6 @@ extern RoomTemplate8 D_8018F208;
 extern volatile u16 D_800E11EA;
 extern RoomM404Channel *D_800F32D0, *D_800F33E0;
 extern RoomM404EventState *D_800E2368;
-extern int func_800D3FD8(void);
-extern void func_800D3F64(int, int);
 extern void func_800CE8F0(void *, int, void *, void *);
 extern void func_80192540(void);
 

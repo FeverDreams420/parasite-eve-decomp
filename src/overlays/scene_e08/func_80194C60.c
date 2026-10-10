@@ -1,17 +1,16 @@
 #include "pe1/gte_types.h"
 #include "pe1/field_glow_sprite.h"
+#include "pe1/field_script_context.h"
+#include "pe1/field_sprite_state.h"
 
 typedef GteMatrix Overlay178Matrix;
 typedef GteVector Overlay178Vec4;
 
 extern s16 D_801994D2;
 
-void *func_800C2B50(void);
 void func_80071A44(void *arg0, s32 arg1, s32 arg2);
-void func_800C2EAC(u8 arg0);
 void func_800C2FF0(s32 arg0, s32 arg1);
 void func_800C3098(s32 arg0);
-void func_800C3238(s32 arg0);
 
 void func_80194C60(void *arg0, void *arg1, char *arg2) {
     Overlay178Matrix matrix;

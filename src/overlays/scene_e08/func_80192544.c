@@ -2,6 +2,7 @@
 #include "pe1/field_flash_burst.h"
 #include "pe1/gte_types.h"
 #include "pe1/field_ring_geometry.h"
+#include "pe1/field_sprite_state.h"
 
 typedef struct {
     s16 m[3][3];
@@ -27,7 +28,6 @@ typedef struct {
 extern char D_801995F8[];
 extern s32 D_8019956C, D_8019957C;
 
-void func_800C3238(int);
 void func_80071A44(void *, int, int);
 
 void func_80192544(void *unused, char *time, EffectGeometry *record) {

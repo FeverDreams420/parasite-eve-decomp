@@ -10,6 +10,7 @@
 #include "pe1/render_matrix_slot.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_owner_actor.h"
 
 /* Room effect controllers that play a sound, then emit one particle every
  * third frame along an angle that sweeps half a turn over seventy frames. */
@@ -76,8 +77,6 @@ extern RoomSoundBurstEventState *D_800E2368;
 extern volatile u16 D_800E11E8;
 extern void func_800CE8F0(void *, int, void *, void *);
 extern int rsin(int);
-extern int func_800D3FD8(void);
-extern int func_800D3F64(int, int);
 extern void func_800866A4(int, int);
 extern int func_80071A54(void);
 extern RoomSoundBurstBattleEntity *D_8009D254;
@@ -86,7 +85,6 @@ extern u16 func_80077AA4(int, int);
 extern void func_800CF844(void *, void *, int, void *, int, int);
 extern int func_800C6B90(void *position, int radius);
 extern void func_800CFAA8(void *from, void *to, void *angles);
-extern void func_800CFD50(void *angles, void *out, int speed);
 extern int rsin(int angle);
 extern void LoadAverageShort12(void *, void *, int, int, void *);
 extern void func_800D2B58(void *, void *, void *, void *, int, int, int);

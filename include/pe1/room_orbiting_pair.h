@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
+#include "pe1/field_owner_actor.h"
 
 typedef struct RoomOrbitPairTemplate8 {
     s32 word[2];
@@ -54,8 +55,6 @@ extern volatile u16 D_800E11EA;
 extern void func_800CE8F0(void *, int, void *, void *);
 extern int rcos(int);
 extern int rsin(int);
-extern int func_800D3FD8(void);
-extern void func_800D3F64(int, int);
 extern int func_80071A54(void);
 
 extern RoomOrbitPairTemplate8 D_8018F208;

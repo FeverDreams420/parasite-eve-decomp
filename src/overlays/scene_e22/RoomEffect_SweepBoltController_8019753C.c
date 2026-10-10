@@ -173,7 +173,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
             ScaleMatrix(&matrix, &scale);
             func_800C6EF8(D_80199500);
             func_800C6FA0(D_80199500, (u16)glow);
-            func_800C71E4(D_80199500, &matrix);
+            func_800C71E4(D_80199500, (GteMatrix *)&matrix);
             func_800C6F4C(D_80199500);
             {
                 int kind;
@@ -240,7 +240,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
             ScaleMatrix(&matrix, &scale);
             func_800C6EF8(D_80199500);
             func_800C6FA0(D_80199500, (u16)glow);
-            func_800C71E4(D_80199500, &matrix);
+            func_800C71E4(D_80199500, (GteMatrix *)&matrix);
             func_800C6F4C(D_80199500);
             modelScale = rcos(angle) + 0x1000;
             spin.z = bolt->timer * 32;

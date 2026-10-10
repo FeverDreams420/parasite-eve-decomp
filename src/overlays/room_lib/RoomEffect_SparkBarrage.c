@@ -816,7 +816,7 @@ int RoomEffect_CometSparkParticle(int mode, RoomCometSpark *spark) {
                 palette = D_800E1204[kind];
                 clut = func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 6
                                                                        : palette + 2);
-                func_800D3114(&g_RoomCometSparkTrail, 3, 0x12C, 0, 0x81, 0x7F,
+                func_800D3114((GteShortVector *)&g_RoomCometSparkTrail, 3, 0x12C, 0, 0x81, 0x7F,
                               0x1E, D_800E2850[D_800E11E4[11]], clut, 0x80, &color, &color,
                               1);
             }

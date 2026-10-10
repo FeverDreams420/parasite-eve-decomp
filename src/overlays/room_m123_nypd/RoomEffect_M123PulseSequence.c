@@ -8,6 +8,7 @@
 #include "pe1/room_floor.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_owner_actor.h"
 
 extern GteShortVector D_8018F1F0;
 extern int rsin(int);
@@ -63,7 +64,6 @@ extern RoomPulseGlobal **D_8009D254;
 extern u8 *D_800E2368;
 extern u16 D_800E11EA;
 extern int func_80194A70(int, RoomPulseParticle *, int *);
-extern int func_800D3FD8(void);
 extern void func_8006DF50(void *, int, int, int, int);
 
 int func_80194C04(int mode, RoomPulseParticle *particle)

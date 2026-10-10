@@ -7,6 +7,7 @@
 struct GteShortVector;
 struct GteRotation;
 struct RenderColor;
+struct FieldTrailPair;
 
 void func_800CE870(char *object, int mode, short *position);
 
@@ -47,5 +48,22 @@ void func_800D2370(struct GteShortVector *position, struct GteRotation *rotation
                    int texture_height, int clut, struct RenderColor *color0,
                    struct RenderColor *color1, int intensity, int mode);
 void func_800D27FC(int x, int y, void *color, int scale, int mode);
+
+void func_800D1AE0(unsigned char *color, int scale, int abr, unsigned int depth);
+
+void func_800D2104(struct GteShortVector *position, unsigned char *color,
+                   int scale, int abr);
+
+void func_800D1384(struct GteShortVector *head, struct GteShortVector *tail,
+                   unsigned int count, unsigned char *color0,
+                   unsigned char *color1, int scale,
+                   struct FieldTrailPair *history, int mode);
+
+void func_800D3114(struct GteShortVector *points, short count, int width, int u,
+                   int v, int du, int height, int tpage, int clut, int scale,
+                   struct RenderColor *color0, struct RenderColor *color1,
+                   int mode);
+
+void func_800CFD50(unsigned short *from, unsigned short *to, unsigned short speed);
 
 #endif /* PE1_FIELD_SPRITE_DRAW_H */

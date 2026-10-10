@@ -1,5 +1,5 @@
+#include "pe1/field_script_context.h"
 extern void func_800C6C18(int arg0);
-extern int func_800C2B68(void);
 
 void func_8019024C(int arg0, char *arg1, char *arg2) {
     short *state = (short *)arg2;

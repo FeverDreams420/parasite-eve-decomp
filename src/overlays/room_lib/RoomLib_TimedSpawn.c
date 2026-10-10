@@ -13,6 +13,7 @@
 #include "pe1/render_matrix_slot.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_owner_actor.h"
 
 /* The colour ramp table each room defines in its data. */
 extern char RoomLib_TimedRenderTable;
@@ -102,7 +103,6 @@ extern void *RoomMain_ActorPtr2;
 extern u16 D_800E11EA;
 extern RoomTimedSpawnSoundState D_800B0E64;
 
-int func_800D3FD8(void);
 void Akao_SendTableCommand(void *owner, int id, int value, int volume, int pan);
 
 int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {

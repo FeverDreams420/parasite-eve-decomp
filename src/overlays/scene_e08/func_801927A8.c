@@ -1,17 +1,14 @@
 #include "common.h"
 #include "pe1/field_sprite_params.h"
+#include "pe1/field_script_context.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_sprite_state.h"
 
 extern u8 D_80198820[];
 
-void *func_800C2B50(void);
-void func_800C2EAC(u8);
 void func_800C3098(int);
-void func_800C3238(int);
-void func_800C3134(u8 *table, u32 step, u8 *out);
 int func_80077A64(int, int, int, int);
 int func_80077AA4(int, int);
-void func_800D3114(void *, int, int, int, int, int, int, int, int, int,
-                   void *, void *, int);
 
 void func_801927A8(void *unused0, void *unused1, char *effect) {
     unsigned int i;
@@ -47,9 +44,9 @@ void func_801927A8(void *unused0, void *unused1, char *effect) {
             D_800F3368.depth = 0;
             retA = func_80077A64(1, 0, 0x340, 0x100) & 0xffff;
             retB = func_80077AA4(0, 0x1D9) & 0xffff;
-            func_800D3114(dst, 2, *(s16 *)(frame + 0x240), 0x20, 0x90,
+            func_800D3114((struct GteShortVector *)dst, 2, *(s16 *)(frame + 0x240), 0x20, 0x90,
                            0x51, 0x10, retA, retB, *(s16 *)(frame + 0x200),
-                           scratchA, scratchPtr, 1);
+                           (struct RenderColor *)scratchA, (struct RenderColor *)scratchPtr, 1);
         }
         dst += 0x18;
         step += 4;

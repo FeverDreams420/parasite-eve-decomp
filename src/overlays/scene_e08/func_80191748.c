@@ -1,9 +1,8 @@
-typedef signed short s16;
+#include "pe1/field_script_context.h"
 
 extern void *D_8009D254;
 
 int *func_800C2B28(int arg0);
-int func_800C2B68(void);
 void func_80020D50(void);
 void func_80020DD0(void *arg0);
 int FieldEng_GetStatus(void *arg0);

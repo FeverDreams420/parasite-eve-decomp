@@ -43,8 +43,8 @@ int func_80196348(int mode) {
             if (D_8019AE9C.tick >= D_8019AE9C.tick_limit) D_8019AE9C.spin_target = 0;
         } else {
             /* The heading is turned half way round in 16.16 form. */
-            value = FieldEng_VecToAngle(g_PlayerEntity->position, instance->position);
-            instance->yaw = FieldEng_TurnToward(instance->yaw, (value << 16) + 0x8000000 >> 16, 0x20);
+            value = FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->position, (Vec3Fixed *)instance->position);
+            instance->yaw = FieldEng_TurnToward((short)instance->yaw, (short)((value << 16) + 0x8000000 >> 16), 0x20);
         }
         if (D_8019AE9C.tick < 0x77) {
             value = (D_8019AE9C.tick << 13) / 118;

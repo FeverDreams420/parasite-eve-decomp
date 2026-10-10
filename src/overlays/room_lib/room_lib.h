@@ -12,6 +12,9 @@
 #include "../../../include/pe1/render_object.h"
 #include "../../../include/pe1/field_sprite_state.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_owner_actor.h"
+#include "pe1/field_script_context.h"
+#include "pe1/field_vector_math.h"
 
 typedef struct RoomObj {
     char pad0[0xC];
@@ -107,8 +110,6 @@ extern void RoomLib_HandlerC(struct RoomEnt *obj);
 extern void RoomLib_HandlerD(struct RoomEnt *obj);
 extern void RoomLib_HandlerE(struct RoomEnt *obj);
 extern void RoomLib_HandlerF();
-extern int FieldEng_VecToAngle(int *vec, int *ref);
-extern int FieldEng_TurnToward(short cur, short target, short rate);
 extern char *RoomMain_ActorPtr;
 extern int RoomMain_RotTable[];
 /* Field object status: 0 no model, 1 model without data, 2 inactive,
@@ -607,8 +608,6 @@ extern unsigned char RoomLib_TwelveEffectTable[];
 #define ROOMLIB_JOIN(a, b) ROOMLIB_JOIN_RAW(a, b)
 
 extern void RoomLib_FxNotify(RoomLink *l, struct RoomSub *s, int scratch);
-extern void func_800DFE94(void *a0, void *a1, void *a2);
-extern int func_800DFC80(int *lhs, int *rhs);
 extern int ratan2(int x, int z);
 extern void func_800DFB20(void *state);
 
@@ -650,7 +649,7 @@ extern void func_800DFB20(void *state);
             } \
             if (o->h46 != 0) { \
                 RW16(D_8009D254, 0x3A) = FieldEng_TurnToward( \
-                    RW16(D_8009D254, 0x3A), o->h48, o->h46); \
+                    RW16(D_8009D254, 0x3A), (short)o->h48, (short)o->h46); \
             } \
         } \
     }
@@ -912,8 +911,6 @@ extern RoomDlgState *D_800E2368;
 extern void *RoomMain_ActorPtr2;
 extern int func_800CE8F0();
 extern int func_800CFAA8();
-extern int func_800D3FD8();
-extern int func_800D3F64();
 
 #define ROOMLIB_MSG_DISPATCH(name, rect, blob) \
     int name(int mode, RoomMsg *msg, short *pitch) { \
@@ -1003,7 +1000,6 @@ typedef struct RoomTimer2 {
 } RoomTimer2;
 
 extern int func_800C6C18();
-extern int func_800C2B68();
 
 #define ROOMLIB_PARTICLE_TICK_A(name) \
     void name(RoomEnt *o, unsigned char *state, char *sys) { \

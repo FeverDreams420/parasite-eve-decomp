@@ -6,6 +6,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/render_object.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_owner_actor.h"
 
 /* The spark ring and spark burst effects linked by ten museum rooms
  * (src/overlays/room_lib/RoomEffect_SparkRingBurst.c). The ring controller
@@ -100,8 +101,6 @@ int func_80077AA4(int x, int y);
 void func_800CE8F0(char *pool, int joint, void *offset, void *out);
 int func_800C6B90(void *position, int radius);
 int func_8001CAB0(int x, int z, void *vertices, int count);
-int func_800D3FD8(void);
-int func_800D3F64(int sound, int handle);
 
 /* Per-room data: the colour ramp of the ring sprite and the damped sparks,
  * and the word the room's slot setter writes. */

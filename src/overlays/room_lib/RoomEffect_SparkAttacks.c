@@ -885,7 +885,7 @@ int RoomEffect_BeamSparkController(int mode, RoomBeamSpark *fx,
             ScaleMatrix(&matrix, &scale);
             func_800C6EF8(g_RoomBeamSparkAsset);
             func_800C6FA0(g_RoomBeamSparkAsset, (u16)((s16)fx->glow / 2));
-            func_800C71E4(g_RoomBeamSparkAsset, &matrix);
+            func_800C71E4(g_RoomBeamSparkAsset, (GteMatrix *)&matrix);
             func_800C6F4C(g_RoomBeamSparkAsset);
         }
         D_800F3368.parameter00 = 0x20;

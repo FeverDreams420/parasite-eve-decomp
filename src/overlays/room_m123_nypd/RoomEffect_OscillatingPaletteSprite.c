@@ -4,6 +4,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_owner_actor.h"
 
 extern GteShortVector D_8018F1F8;
 extern GteShortVector D_8018F1CC;
@@ -12,8 +13,6 @@ extern int rcos(int);
 extern u16 GetClut(int, int);
 extern u16 D_800E11E8;
 extern void func_800CE8F0(void *, int, void *, void *);
-extern int func_800D3FD8(void);
-extern void func_800D3F64(int, int);
 extern int func_80071A54(void);
 
 int func_80194F68(int mode, RoomM123Wave *wave) {

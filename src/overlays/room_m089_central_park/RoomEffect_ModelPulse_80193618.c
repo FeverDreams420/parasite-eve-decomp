@@ -42,9 +42,9 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             }
         }
         D_8019416C = func_8006E498(D_800B0E64.channel, 0xC5464704);
-        func_800C6D5C(D_8019416C, 0, 0);
+        func_800C6D5C((union FieldTexturedModel *)D_8019416C, 0, 0);
         D_80194168 = func_8006E498(D_800B0E64.channel, 0xC5864704);
-        func_800C6D5C(D_80194168, 0, 0);
+        func_800C6D5C((union FieldTexturedModel *)D_80194168, 0, 0);
         return func_800CE560(D_800F33E0->pool, 0x10, 0x18,
                              (FieldAnimCallbackListCallback)func_80193200);
     case 1:
@@ -117,7 +117,7 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             ScaleMatrix(&matrix, &scale);
             func_800C6EF8(D_8019416C);
             func_800C6FA0(D_8019416C, fade);
-            func_800C71E4(D_8019416C, &matrix);
+            func_800C71E4((union FieldTexturedModel *)D_8019416C, &matrix);
             func_800C6F4C(D_8019416C);
             rotation.x = 0;
             rotation.z = 0;
@@ -132,7 +132,7 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             ScaleMatrix(&wideMatrix, &wideScale);
             func_800C6EF8(D_8019416C);
             func_800C6FA0(D_8019416C, glow);
-            func_800C71E4(D_8019416C, &wideMatrix);
+            func_800C71E4((union FieldTexturedModel *)D_8019416C, &wideMatrix);
             func_800C6F4C(D_8019416C);
             rotation.x = 0;
             rotation.z = 0;
@@ -147,7 +147,7 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             ScaleMatrix(&lowMatrix, &lowScale);
             func_800C6EF8(D_8019416C);
             func_800C6FA0(D_8019416C, glow);
-            func_800C71E4(D_8019416C, &lowMatrix);
+            func_800C71E4((union FieldTexturedModel *)D_8019416C, &lowMatrix);
             func_800C6F4C(D_8019416C);
         }
         if (D_800E27EC < 0x19) {
@@ -179,7 +179,7 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             ScaleMatrix(&coreMatrix, &lowScale);
             func_800C6EF8(D_80194168);
             func_800C6FA0(D_80194168, fade);
-            func_800C71E4(D_80194168, &coreMatrix);
+            func_800C71E4((union FieldTexturedModel *)D_80194168, &coreMatrix);
             func_800C6F4C(D_80194168);
         }
         if (D_800E27EC < 0x31) {

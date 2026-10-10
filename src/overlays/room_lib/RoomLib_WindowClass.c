@@ -216,8 +216,8 @@ void RoomLib_WindowHandler(RoomWindowObject *obj) {
             obj->state.target[1] = obj->state.targetNode->pos[1];
             obj->state.target[2] = obj->state.targetNode->pos[2];
         }
-        trig = (RoomWindowTrig *)&D_800966EC[FieldEng_VecToAngle(&obj->state.origin[0].value,
-                                               obj->state.target) & 0xFFF];
+        trig = (RoomWindowTrig *)&D_800966EC[FieldEng_VecToAngle((Vec3Fixed *)&obj->state.origin[0].value,
+                                               (Vec3Fixed *)obj->state.target) & 0xFFF];
         {
             int c = trig->part.cos;
             int s;
@@ -240,7 +240,7 @@ void RoomLib_WindowHandler(RoomWindowObject *obj) {
         obj->state.target[0] += sp->out.x << 16;
         obj->state.target[1] += sp->out.y << 16;
         obj->state.target[2] += sp->out.z << 16;
-        dist = func_800DFC80(&obj->state.origin[0].value, obj->state.target) +
+        dist = func_800DFC80((Vec3Fixed *)&obj->state.origin[0].value, (Vec3Fixed *)obj->state.target) +
                ((obj->state.step * 0x70) >> 21);
         if (dist < 0x148) {
             dist = 0x148;
@@ -248,8 +248,8 @@ void RoomLib_WindowHandler(RoomWindowObject *obj) {
         quot = 0x5160000 / dist;
         obj->state.spinSpeed = quot << 8;
         obj->state.spin = (quot << 8) >> 3;
-        func_800DFE94(&obj->state.origin[0].value, obj->state.target,
-                      &obj->state.angles);
+        func_800DFE94((Vec3Fixed *)&obj->state.origin[0].value, (Vec3Fixed *)obj->state.target,
+                      (short *)&obj->state.angles);
         RotMatrixYXZ(&obj->state.angles, &obj->state.rotation);
     }
 
@@ -370,7 +370,7 @@ void RoomLib_WindowHandler(RoomWindowObject *obj) {
     actor->matrix[7] = sp->roll.m[2][1];
     actor->matrix[8] = sp->roll.m[2][2];
     if (state->touched == 0) {
-        if (func_800DFE20(actor->pos, g_PlayerEntity->pos) < 200) {
+        if (func_800DFE20((Vec3Fixed *)actor->pos, (Vec3Fixed *)g_PlayerEntity->pos) < 200) {
             state->touched = 1;
             g_PlayerEntity->core->flags |= 0x4000;
             if (anchor->marker != 0) {

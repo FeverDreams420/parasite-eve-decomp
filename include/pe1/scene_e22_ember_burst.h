@@ -6,6 +6,9 @@
 #include "pe1/render_object.h"
 #include "pe1/room_orbit_trail.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_model_draw.h"
+#include "pe1/field_owner_actor.h"
+#include "pe1/field_sprite_draw.h"
 
 /* Ember controllers (scene_e22): ride the room actor, wake the scene
  * object's status byte, spray ember drift particles and draw a halo and a
@@ -74,8 +77,6 @@ extern int func_80071A54(void);
 extern int rsin(int angle);
 extern int rcos(int angle);
 extern u16 func_80077AA4(int, int);
-extern int func_800D3FD8(void);
-extern int func_800D3F64(int sound, int handle);
 extern void func_80020D50(void);
 extern void func_80020DD0(void);
 extern int func_80193940(int mode, RoomOrbitTrailParticle *p);
@@ -103,8 +104,6 @@ extern RenderColor D_8018F1E8;
 extern RenderColor D_8018F1EC;
 extern RenderColor D_8018F1F0;
 extern void func_800CE8F0(void *pool, int index, void *offset, void *position);
-extern void func_800D1384(void *from, void *to, int width, void *color0,
-                          void *color1, int alpha, void *trail, int mode);
 extern int func_801931B8(int mode, RoomOrbitTrailParticle *p);
 
 /* Swirl ring controller (func_80195B40): rides an actor joint, swells a
@@ -129,7 +128,6 @@ extern GteRotation D_8018F1F4;
 extern RenderColor D_8018F214;
 extern u8 D_80199434[];
 extern void func_8006DF50(void *channel, int id, int value, int volume, int pan);
-extern void func_800D1AE0(RenderColor *color, int value, int step, int count);
 extern int func_801957CC(int mode, RoomOrbitTrailParticle *p);
 
 /* Ember column controller (func_80194F60): its spin template and halo
@@ -165,15 +163,9 @@ typedef struct SceneE22ModelScale {
 extern void *D_80199500;
 extern RenderColor D_8018F218;
 extern void *func_8006E498(void *base, u32 key);
-extern void func_800C6D5C(void *asset, int x, int y);
 extern s32 func_80077A64(s32, s32, s32, s32);
 extern void func_800C6EC0(int tpage, int clut);
-extern void func_800C6ED8(int);
 #include "pe1/gte_types.h"
-extern void func_800C6EF8(void *asset);
-extern void func_800C6FA0(void *asset, int brightness);
-extern void func_800C71E4(void *asset, void *matrix);
-extern void func_800C6F4C(void *asset);
 extern void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,
                           int texture, int clut, int page, int intensity, int arg7,
                           int size);

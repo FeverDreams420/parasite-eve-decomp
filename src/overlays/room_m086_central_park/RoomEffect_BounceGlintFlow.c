@@ -3,6 +3,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/room_bounce_glint.h"
 #include "pe1/room_fx.h"
+#include "pe1/field_owner_actor.h"
 
 /* Bouncing glint particle callback for the room_m086 controller: mode 1
  * moves it (drift, then fall and bounce), mode 2 draws it. Both draws read
@@ -129,9 +130,6 @@ void func_800CE8F0(void *arg0, s32 arg1, void *arg2, void *arg3);
 s32 func_80071A54(void);
 s32 rsin(s32 arg0);
 s32 rcos(s32 arg0);
-s32 func_800D3FD8(void);
-void func_800D3F64(s32 arg0, s32 arg1);
-
 
 #define COPY_POS(dst, src) \
     (dst)->x = (src)->x;   \

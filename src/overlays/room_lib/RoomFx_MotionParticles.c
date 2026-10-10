@@ -22,7 +22,6 @@
 #include "RoomSharedGlobalState.h"
 #include "pe1/room_floor.h"
 
-
 static const RoomFxSeed8 s_MotionQuadSeed = { { 0, 4, 0, 0, 0, 0, 0, 0 } };
 
 /* Motion particle setup: the two trails of ten particles and the four
@@ -117,8 +116,6 @@ void RoomFx_MotionParticlesInit(RoomMotionInitOwner *owner, void *unused, RoomMo
 void RoomFx_MotionParticlesNop(void) {
 }
 
-extern int func_800C2B68(void);
-
 void RoomFx_MotionParticlesTick(int arg0, char *arg1, char *arg2) {
     short *state = (short *)arg2;
 
@@ -155,7 +152,6 @@ void RoomFx_MotionParticlesAnchor(int a0, int a1, short *out) {
 }
 
 void func_80071A44(RoomFxVec4 *vec, int value, int shift);
-
 
 typedef struct RoomLibSpriteQuadStack {
     RoomSpriteMatrix scaleMatrix;
@@ -312,7 +308,6 @@ void RoomFx_InitSpritePair(void *arg0, void *arg1, char *obj) {
 }
 
 void func_80071A44(RoomFxVec4 *vec, int value, int shift);
-
 
 /* Builds a uniformly scaled rotation from the shared seed and draws the
  * sprite at two map anchors. Retail marks this function handwritten; only

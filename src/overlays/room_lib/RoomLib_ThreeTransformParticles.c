@@ -15,6 +15,7 @@
 #include "pe1/gte_short_vector.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_glow_sprite.h"
+#include "pe1/field_sprite_state.h"
 
 extern void func_800C2B40(void *arg0);
 extern void *func_8006DC18(int type);
@@ -70,7 +71,6 @@ void RoomLib_ThreeParticleNop3(void) {
 }
 
 extern void func_800C6C18(int arg0);
-extern int func_800C2B68(void);
 
 void RoomLib_UpdateThreeParticleTimer(int arg0, char *arg1, char *arg2) {
     short *state = (short *)arg2;
@@ -247,14 +247,10 @@ typedef struct RoomDrawThreeStack {
     s16 *args;
 } RoomDrawThreeStack;
 
-void func_800C2EAC(u8 owner);
 void func_800C3098(int depth);
 void func_80071A44(RoomFxVec4 *vec, int value, int shift);
-void func_800C3134(u8 *table, u32 step, u8 *out);
 void func_800C2FF0(int width, int height);
-void func_800C3238(int mode);
 int rsin(int angle);
-
 
 void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
     RoomDrawThreeStack stack;

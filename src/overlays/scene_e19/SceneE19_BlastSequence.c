@@ -377,9 +377,9 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             timer = blast->timer;
             phase = timer << 5;
             if (timer == 0) {
-                func_800D1AE0(&glowColor, 0x46, 2, 8);
+                func_800D1AE0((unsigned char *)&glowColor, 0x46, 2, 8);
             } else if (timer < 9) {
-                func_800D1AE0(&glowColor, 0x80 - timer * 0x10, 1, 8);
+                func_800D1AE0((unsigned char *)&glowColor, 0x80 - timer * 0x10, 1, 8);
             }
             radialScale = rcos(phase) / 2 + 0x400;
             verticalScale = rsin(phase) / 6 + 0x555;

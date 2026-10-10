@@ -10,6 +10,8 @@
 #include "pe1/room_ground_sweep.h"
 #include "pe1/room_orbit_trail.h"
 #include "pe1/room_rising_spray.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_vector_math.h"
 
 /* The grab attack set (src/overlays/room_lib/RoomFx_GrabAttackSet.c, in
  * room_m269 and scene_e01). */
@@ -66,7 +68,6 @@ int RoomFx_OrbitTrailParticle(int mode, RoomOrbitTrailParticle *p);
 int RoomFx_RisingSprayParticle(int mode, RoomSpraySpark *spark);
 
 void func_8003E0FC(void *object, int count, void *out);
-s32 func_800DFE20(RoomGrabPoint *lhs, RoomGrabPoint *rhs);
 void func_80020C74(void);
 void func_80020CE4(void);
 s32 func_8003010C(void *actor, s32 arg1);
@@ -75,7 +76,5 @@ extern int func_8006DF50_handle(void *channel, int id, int value, int volume,
                                 int pan) __asm__("func_8006DF50");
 void func_800866A4(int handle, int arg);
 void func_800D2B58(void *, void *, void *, void *, int, int, int);
-void func_800D1384(void *from, void *to, int width, void *color0,
-                   void *color1, int alpha, void *trail, int mode);
 
 #endif

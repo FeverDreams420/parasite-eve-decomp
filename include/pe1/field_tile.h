@@ -6,6 +6,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/render_prim.h"
 #include "pe1/render_tint.h"
+#include "pe1/field_sprite_draw.h"
 
 /* Flat colour tiles linked straight into the active ordering table. */
 
@@ -43,8 +44,5 @@ void SetTile(RenderTintTile *tile);
 void SetSemiTrans(void *packet, int dither);
 void AddPrim(unsigned int *orderingEntry, unsigned int *primitive);
 void SetTile1(FieldTilePoint *tile);
-
-void func_800D1AE0(u8 *color, int scale, int abr, u32 depth);
-void func_800D2104(GteShortVector *position, u8 *color, int scale, int abr);
 
 #endif

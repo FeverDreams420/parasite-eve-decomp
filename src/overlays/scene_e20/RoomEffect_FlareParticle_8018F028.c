@@ -139,7 +139,7 @@ int func_8018F028(int mode, SceneE20Particle *p)
             GTE_LOAD_ROTATION_WINDOW(D_800BCFA4.value);
             GTE_LOAD_TRANSLATION_WINDOW(D_800BCFA4.value);
             func_800CF3AC(D_80190804, &color, (p->timer << 4) / 20);
-            func_800D2104(&p->position, &color, 0x80, 1);
+            func_800D2104(&p->position, (unsigned char *)&color, 0x80, 1);
             break;
         }
         break;

@@ -1,4 +1,4 @@
-void *func_800C2B50(void);
+#include "pe1/field_script_context.h"
 
 void func_80194C04(void *arg0, void *arg1, char *arg2) {
     char *position = func_800C2B50();

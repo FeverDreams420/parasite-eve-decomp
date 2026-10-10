@@ -1,5 +1,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/field_glow_sprite.h"
+#include "pe1/field_script_context.h"
+#include "pe1/field_sprite_state.h"
 
 typedef GteMatrix SceneE08Matrix;
 typedef GteVector SceneE08Vector;
@@ -8,15 +10,11 @@ extern char D_801996A0[];
 extern char D_80198848[];
 extern s32 D_8019956C, D_8019957C;
 
-void *func_800C2B50(void);
-void func_800C2EAC(u8);
 void func_800C2FF0(int, int);
 void func_800C3098(int);
-void func_800C3238(int);
 int rsin(int);
 int rcos(int);
 void func_80071A44(SceneE08Vector *, int, int);
-void func_800C3134(u8 *table, u32 step, u8 *out);
 void func_80192D90(void *unused0, void *unused1, char *effect) {
     SceneE08Matrix matrix;
     s16 temp[3];

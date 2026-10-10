@@ -1,4 +1,5 @@
 #include "common.h"
+#include "pe1/field_script_context.h"
 
 typedef struct SceneE08PositionSample {
     s32 x, y, z, extra;
@@ -7,7 +8,6 @@ typedef struct SceneE08PositionSample {
 extern s32 D_8009D248;
 extern u16 D_8009D1CC;
 
-void *func_800C2B50(void);
 int func_8001CAB0(int, int, int, int);
 int func_800C6B90(void *, int);
 

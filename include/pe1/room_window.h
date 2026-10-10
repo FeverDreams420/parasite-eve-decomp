@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "pe1/gte_types.h"
+#include "pe1/field_vector_math.h"
 
 /* The window effect: a script object that flies a camera-facing frame from
  * its anchor actor towards a target actor, spinning it around the flight
@@ -131,11 +132,7 @@ typedef struct RoomWindowScratch {
 extern short D_800966EC[][2];
 extern RoomWindowPlayer *g_PlayerEntity;
 
-extern int FieldEng_VecToAngle(s32 *from, s32 *to);
-extern int func_800DFC80(s32 *from, s32 *to);
 extern int func_800DFC44(int value);
-extern int func_800DFE20(s32 *from, s32 *to);
-extern void func_800DFE94(void *from, void *to, void *angles);
 
 struct RoomEnt;
 

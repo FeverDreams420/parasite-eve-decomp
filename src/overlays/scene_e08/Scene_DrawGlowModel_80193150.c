@@ -24,7 +24,7 @@ void func_80193150(void *object, SceneGlowModelTimer *timer, SceneGlowModelState
     matrix.t[0] = D_8019956C;
     matrix.t[1] = g_RoomFloorY->y + model->height;
     matrix.t[2] = D_8019957C;
-    func_800C6D5C(D_80199528, 0, 0);
+    func_800C6D5C((union FieldTexturedModel *)D_80199528, 0, 0);
     if (owner->mode == 0) {
         int tpage = (u16)func_80077A64(0, 1, 0x340, 0x100);
         func_800C6EC0(tpage, (u16)func_80077AA4(0, 0x1D7));
@@ -33,11 +33,11 @@ void func_80193150(void *object, SceneGlowModelTimer *timer, SceneGlowModelState
         int tpage = (u16)func_80077A64(0, 1, 0x340, 0x160);
         func_800C6EC0(tpage, (u16)func_80077AA4(0, 0x1DB));
     }
-    func_800C3134(D_80198860, timer->ticks, &color);
+    func_800C3134(D_80198860, timer->ticks, (unsigned char *)&color);
     func_800C6ED8(1);
     func_800C6EF8(D_80199528);
     func_800C6FA0(D_80199528, model->depth);
-    func_800C71E4(D_80199528, &matrix);
+    func_800C71E4((union FieldTexturedModel *)D_80199528, &matrix);
     func_800C6F4C(D_80199528);
     if (timer->ticks > 10) {
         size = (timer->ticks - 10) << 9;

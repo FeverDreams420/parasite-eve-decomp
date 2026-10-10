@@ -79,7 +79,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             func_800CFAA8(trail, &target, &angles);
             angles.x = 0;
             if (trail->fade == 0) {
-                func_800CFD50(&angles, &trail->ax, trail->turn);
+                func_800CFD50((unsigned short *)&angles, &trail->ax, trail->turn);
                 if (trail->timer >= 3) {
                     range = trail->timer * 16 + 0x100;
                     if (!(func_80071A54() & 1)) {
@@ -169,7 +169,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
             }
             clut = func_80077AA4(0x10, palette);
-            func_800D3114(&g_RoomSeekingTrailHistory[trail->slot], 0x18, 0x78, i, scale,
+            func_800D3114((GteShortVector *)&g_RoomSeekingTrailHistory[trail->slot], 0x18, 0x78, i, scale,
                           0xFD, 0x1F, D_800E2850[D_800E11EA], clut, 0x80,
                           &colorA, &colorB, 1);
             func_800D004C(&g_RoomSeekingTrailHistory[trail->slot].point[func_80071A54() & 0xF],
@@ -528,7 +528,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             func_800CFAA8(trail, &target, &angles);
             angles.x = 0;
             if (trail->fade == 0) {
-                func_800CFD50(&angles, &trail->ax, trail->turn);
+                func_800CFD50((unsigned short *)&angles, &trail->ax, trail->turn);
                 if (!(func_80071A54() & 1)) {
                     trail->ay += func_80071A54() % 800 - 400;
                 } else {
@@ -615,7 +615,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
             }
             clut = func_80077AA4(0x10, palette);
-            func_800D3114(&g_RoomScatterTrailHistory[trail->slot], 0x18, 0x78, i, scale,
+            func_800D3114((GteShortVector *)&g_RoomScatterTrailHistory[trail->slot], 0x18, 0x78, i, scale,
                           0xFD, 0x1F, D_800E2850[D_800E11EA], clut, 0x80,
                           &colorA, &colorB, 1);
             func_800D004C(&g_RoomScatterTrailHistory[trail->slot].point[func_80071A54() & 0xF],

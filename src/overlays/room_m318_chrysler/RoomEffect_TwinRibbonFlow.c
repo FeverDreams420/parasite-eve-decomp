@@ -94,16 +94,16 @@ int func_80196E4C(int mode, RoomTwinRibbon *ribbon, RoomTwinRibbonParams *params
         fork.x *= -1;
         func_800CE8F0(D_800F32D0->pool, 8, &root, &from);
         func_800CE8F0(D_800F32D0->pool, 8, &tip, &to);
-        func_800D1384(&from, &to, 0x3EC, &colorA, &colorB, 0x80, ribbon->trailA, 1);
+        func_800D1384(&from, &to, 0x3EC, (unsigned char *)&colorA, (unsigned char *)&colorB, 0x80, (struct FieldTrailPair *)ribbon->trailA, 1);
         func_800CE8F0(D_800F32D0->pool, 8, &fork, &from);
-        func_800D1384(&from, &to, 0x3EE, &colorC, &colorB, 0x80, ribbon->trailC, 1);
+        func_800D1384(&from, &to, 0x3EE, (unsigned char *)&colorC, (unsigned char *)&colorB, 0x80, (struct FieldTrailPair *)ribbon->trailC, 1);
         tip.x *= -1;
         fork.x *= -1;
         func_800CE8F0(D_800F32D0->pool, 0x15, &root, &from);
         func_800CE8F0(D_800F32D0->pool, 0x15, &tip, &to);
-        func_800D1384(&from, &to, 0x3EC, &colorA, &colorB, 0x80, ribbon->trailB, 1);
+        func_800D1384(&from, &to, 0x3EC, (unsigned char *)&colorA, (unsigned char *)&colorB, 0x80, (struct FieldTrailPair *)ribbon->trailB, 1);
         func_800CE8F0(D_800F32D0->pool, 0x15, &fork, &from);
-        func_800D1384(&from, &to, 0x3EE, &colorC, &colorB, 0x80, ribbon->trailD, 1);
+        func_800D1384(&from, &to, 0x3EE, (unsigned char *)&colorC, (unsigned char *)&colorB, 0x80, (struct FieldTrailPair *)ribbon->trailD, 1);
         return func_800CE560(D_800F33E0->pool, 0x14, 0x10,
                              (FieldAnimCallbackListCallback)func_80196C48);
     case 1:
@@ -160,16 +160,16 @@ int func_80196E4C(int mode, RoomTwinRibbon *ribbon, RoomTwinRibbonParams *params
         fork.x *= -1;
         func_800CE8F0(D_800F32D0->pool, 8, &root, &from);
         func_800CE8F0(D_800F32D0->pool, 8, &tip, &to);
-        func_800D1384(&from, &to, 4, &colorA, &colorB, 0x80, ribbon->trailA, 1);
+        func_800D1384(&from, &to, 4, (unsigned char *)&colorA, (unsigned char *)&colorB, 0x80, (struct FieldTrailPair *)ribbon->trailA, 1);
         func_800CE8F0(D_800F32D0->pool, 8, &fork, &from);
-        func_800D1384(&from, &to, 6, &colorC, &colorB, 0x80, ribbon->trailC, 1);
+        func_800D1384(&from, &to, 6, (unsigned char *)&colorC, (unsigned char *)&colorB, 0x80, (struct FieldTrailPair *)ribbon->trailC, 1);
         tip.x *= -1;
         fork.x *= -1;
         func_800CE8F0(D_800F32D0->pool, 0x15, &root, &from);
         func_800CE8F0(D_800F32D0->pool, 0x15, &tip, &to);
-        func_800D1384(&from, &to, 4, &colorA, &colorB, 0x80, ribbon->trailB, 1);
+        func_800D1384(&from, &to, 4, (unsigned char *)&colorA, (unsigned char *)&colorB, 0x80, (struct FieldTrailPair *)ribbon->trailB, 1);
         func_800CE8F0(D_800F32D0->pool, 0x15, &fork, &from);
-        func_800D1384(&from, &to, 6, &colorC, &colorB, 0x80, ribbon->trailD, 1);
+        func_800D1384(&from, &to, 6, (unsigned char *)&colorC, (unsigned char *)&colorB, 0x80, (struct FieldTrailPair *)ribbon->trailD, 1);
         D_800F3368.parameter00 = 0x20;
         D_800F3368.parameter02 = 2;
         D_800F3368.extent_x = 0x20;

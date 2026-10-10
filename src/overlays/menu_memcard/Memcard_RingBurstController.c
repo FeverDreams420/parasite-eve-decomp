@@ -94,7 +94,7 @@ int Memcard_RingBurstController(int mode, MemcardRingBurst *burst) {
             angle = (burst->timer << 10) / 48;
             if (burst->timer < 5) {
                 amount = 0x80 - burst->timer * 32;
-                func_800D1AE0(&ring, amount, 1, 8);
+                func_800D1AE0((unsigned char *)&ring, amount, 1, 8);
             }
             gte_ldrotmatrix(D_800BCFA4.value);
             gte_ldtransmatrix(D_800BCFA4.value);

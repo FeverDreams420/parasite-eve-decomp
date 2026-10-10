@@ -6,6 +6,7 @@
 #include "pe1/overlay_math.h"
 #include "pe1/random.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_sprite_draw.h"
 
 /* Full callback reconstruction; source-level register constraints are tracked
  * in crutch debt because stock GCC needs them to reproduce the retail code. */
@@ -32,7 +33,6 @@ typedef struct SceneE19PackedPoint {
 extern SceneE19PackedPoint D_8018F210;
 extern FieldActor *D_8009D254;
 int func_800CFE94(s16 *from, s16 *to);
-void func_800CFD50(u16 *from, u16 *to, u16 speed);
 int func_800C6B90(s16 *position, int extraRadius);
 
 extern RenderColor D_8018F218;
@@ -40,7 +40,6 @@ extern RenderColor D_8018F218;
  * call sites and the ABI. The eighth argument is zero at both sites. */
 extern void func_800D3BC8(GteShortVector *, int, int, int,
                          int, int, int, int, int);
-
 
 int func_8019549C(int mode, SceneE19HomingParticle *particle)
 {

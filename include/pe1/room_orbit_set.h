@@ -43,7 +43,6 @@ int RoomFx_OrbitSetNop6(void);
 void *func_8006DC18(int size);
 void func_800C2B40(void *state);
 int *func_800C2B10(int index);
-int func_800C2B68(void);
 int func_800C66C8(void *object, int message, void *state);
 void func_80071A44(void *dst, int value, int size);
 int func_80071A54(void);

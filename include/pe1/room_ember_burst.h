@@ -8,6 +8,7 @@
 #include "pe1/room_orbit_trail.h"
 #include "pe1/room_floor.h"
 #include "pe1/player_entity.h"
+#include "pe1/field_owner_actor.h"
 
 /* Ember burst controller (room_m318): attaches to the actor named by its
  * parameters, glows up, bursts orbiting sparks, embers and smoke, then
@@ -38,8 +39,6 @@ extern u16 D_800E11EA;
 extern int func_80071A54(void);
 extern int rsin(int angle);
 extern int rcos(int angle);
-extern int func_800D3FD8(void);
-extern int func_800D3F64(int sound, int handle);
 extern int func_801944E8(int mode, RoomOrbitTrailParticle *p);
 
 /* Ember fountain controller (func_80197CBC): follows its actor for 141
@@ -136,9 +135,7 @@ extern FieldFanSweepEvent *D_800E2368;
 extern RenderColor D_800C22D8;
 extern int rand(void);
 extern int func_80192620(int mode, s16 *position);
-extern int func_800CE5AC(void **pool, int owner, int size, int count, void *callback);
 extern int func_800CE688(void *pool);
-extern int func_800CE78C(void *pool);
 
 /* Spiral drop controller (func_80192ED4): attaches to the actor named by
  * its parameters and drops falling sparks from a point that circles it on

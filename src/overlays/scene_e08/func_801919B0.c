@@ -1,17 +1,14 @@
 #include "common.h"
 #include "pe1/field_sprite_params.h"
+#include "pe1/field_script_context.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_sprite_state.h"
 
 extern u8 D_8019880C[];
 
-void *func_800C2B50(void);
-void func_800C2EAC(u8 arg0);
 void func_800C3098(s32 arg0);
-void func_800C3238(s32 arg0);
-void func_800C3134(u8 *table, u32 step, u8 *out);
 s32 func_80077A64(s32 a, s32 b, s32 c, s32 d);
 s32 func_80077AA4(s32 a, s32 b);
-void func_800D3114(void *entry, s32 a1, s32 a2, s32 a3, s32 s10, s32 s14,
-                   s32 s18, s32 s1c, s32 s20, s32 s24, void *s28, void *s2c, s32 s30);
 
 void func_801919B0(s32 arg0, s32 arg1, u8 *base) {
     u8 *st;
@@ -37,9 +34,9 @@ void func_801919B0(s32 arg0, s32 arg1, u8 *base) {
             D_800F3368.depth = 0x1F4;
             v64 = func_80077A64(0, 0, 0x340, 0x100) & 0xFFFF;
             vAA = func_80077AA4(0, 0x1D7) & 0xFFFF;
-            func_800D3114(base + i * 0x18, 2, *(s16 *)(base + i * 2 + 0x240), 0x40,
+            func_800D3114((struct GteShortVector *)(base + i * 0x18), 2, *(s16 *)(base + i * 2 + 0x240), 0x40,
                           0x80, 0x9C, 0x10, v64, vAA, *(s16 *)(base + i * 2 + 0x200),
-                          buf38, buf40, type);
+                          (struct RenderColor *)buf38, (struct RenderColor *)buf40, type);
         }
     }
 }

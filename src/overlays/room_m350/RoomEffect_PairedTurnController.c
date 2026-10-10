@@ -2,6 +2,7 @@
 #include "pe1/field_actor.h"
 #include "pe1/player_entity.h"
 #include "pe1/gte.h"
+#include "pe1/field_vector_math.h"
 /* Animation 11 controller: paired model points and alternating player-facing turn. */
 typedef RoomM350Vector Vector;
 typedef RenderMatrix Matrix;

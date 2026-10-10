@@ -168,17 +168,17 @@ void RoomFx_UpdateStageSpawn(void *effect, char *state, RoomFxSeed8 *seed) {
     char *slot;
 
     if (*(s16 *)(state + 2) == 0) {
-        slot = func_800C2B90(effect, 4, g_RoomDropFieldSpawnScript, g_RoomDropFieldSpawnData);
+        slot = func_800C2B90(effect, 4, (unsigned short *)g_RoomDropFieldSpawnScript, (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
         if (slot != 0) {
             *(RoomFxSeed8 *)slot = *seed;
         }
         if (*(s16 *)(state + 2) == 0) {
-            slot = func_800C2B90(effect, 3, g_RoomDropFieldSpawnScript, g_RoomDropFieldSpawnData);
+            slot = func_800C2B90(effect, 3, (unsigned short *)g_RoomDropFieldSpawnScript, (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
             if (slot != 0) {
                 *(RoomFxSeed8 *)slot = *seed;
             }
             if (*(s16 *)(state + 2) == 0) {
-                slot = func_800C2B90(effect, 2, g_RoomDropFieldSpawnScript, g_RoomDropFieldSpawnData);
+                slot = func_800C2B90(effect, 2, (unsigned short *)g_RoomDropFieldSpawnScript, (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
                 if (slot != 0) {
                     *(s16 *)(slot + 0x14) = 1;
                     *(RoomFxSeed8 *)slot = *seed;
@@ -187,14 +187,14 @@ void RoomFx_UpdateStageSpawn(void *effect, char *state, RoomFxSeed8 *seed) {
         }
     }
     if (*(s16 *)(state + 2) == 4) {
-        slot = func_800C2B90(effect, 2, g_RoomDropFieldSpawnScript, g_RoomDropFieldSpawnData);
+        slot = func_800C2B90(effect, 2, (unsigned short *)g_RoomDropFieldSpawnScript, (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
         if (slot != 0) {
             *(s16 *)(slot + 0x14) = 0;
             *(RoomFxSeed8 *)slot = *seed;
         }
     }
     if (*(s16 *)(state + 2) == 6) {
-        slot = func_800C2B90(effect, 5, g_RoomDropFieldSpawnScript, g_RoomDropFieldSpawnData);
+        slot = func_800C2B90(effect, 5, (unsigned short *)g_RoomDropFieldSpawnScript, (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
         if (slot != 0) {
             int i;
 
@@ -788,14 +788,14 @@ void RoomFx_UpdateStagedMotion(void *entity,
                     control->state = 2;
                 }
                 spawn = func_800C2B90(entity, 6,
-                                      g_RoomDropFieldSpawnScript,
-                                      g_RoomDropFieldSpawnData);
+                                      (unsigned short *)g_RoomDropFieldSpawnScript,
+                                      (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
                 if (spawn != 0) {
                     *(RoomStagedMotionPoint *)spawn = spawnPoint;
                 }
                 spawn = func_800C2B90(entity, 6,
-                                      g_RoomDropFieldSpawnScript,
-                                      g_RoomDropFieldSpawnData);
+                                      (unsigned short *)g_RoomDropFieldSpawnScript,
+                                      (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
                 if (spawn != 0) {
                     *(RoomStagedMotionPoint *)spawn = spawnPoint;
                 }
@@ -803,14 +803,14 @@ void RoomFx_UpdateStagedMotion(void *entity,
             if (g_RoomFloorY->y < (state->record[i].y >> 16) + state->y) {
                 state->kind[i] = 2;
                 spawn = func_800C2B90(entity, 6,
-                                      g_RoomDropFieldSpawnScript,
-                                      g_RoomDropFieldSpawnData);
+                                      (unsigned short *)g_RoomDropFieldSpawnScript,
+                                      (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
                 if (spawn != 0) {
                     *(RoomStagedMotionPoint *)spawn = spawnPoint;
                 }
                 spawn = func_800C2B90(entity, 6,
-                                      g_RoomDropFieldSpawnScript,
-                                      g_RoomDropFieldSpawnData);
+                                      (unsigned short *)g_RoomDropFieldSpawnScript,
+                                      (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
                 if (spawn != 0) {
                     *(RoomStagedMotionPoint *)spawn = spawnPoint;
                 }
@@ -1076,8 +1076,8 @@ void RoomFx_UpdateDropField(void *object, RoomDropSlot *slot, RoomDropField *fie
                 matrix.t[2] = field->drops[i].z;
                 gte_CompMatrix(&turn, &matrix, &matrix);
                 gte_CompMatrix(&field->matrix, &matrix, &matrix);
-                splash = func_800C2B90(object, 1, g_RoomDropFieldSpawnScript,
-                                       g_RoomDropFieldSpawnData);
+                splash = func_800C2B90(object, 1, (unsigned short *)g_RoomDropFieldSpawnScript,
+                                       (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
                 if (splash != 0) {
                     splash->x = matrix.t[0];
                     splash->y = matrix.t[1];

@@ -26,8 +26,6 @@ extern RoomM089SoundOwner D_800B0E64;
 extern u16 D_800E11FA;
 extern u16 D_800E120A;
 u8 *func_8006E498(void *channel, int id);
-void func_800C6D5C(u8 *data, u8 x_offset, u8 y_offset);
-void func_800C6FA0(u8 *data, u16 factor);
 u16 GetClut(int x, int y);
 int rsin(int angle);
 int rcos(int angle);

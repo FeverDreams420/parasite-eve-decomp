@@ -1,6 +1,7 @@
 #include "scene_e08.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_glow_sprite.h"
+#include "pe1/field_sprite_state.h"
 
 typedef struct {
     s16 fraction;
@@ -39,10 +40,8 @@ extern RoomFxVec4 D_8018F050;
 extern u8 D_80199560, D_80199561, D_80199562;
 extern s16 D_8019956A;
 
-void func_800C2EAC(u8);
 void func_800C2FF0(int, int);
 void func_800C3098(int);
-void func_800C3238(int);
 
 void func_80194498(void *unused, u16 *phase, SceneLayeredSpriteState *state) {
     RoomSpriteMatrix matrix;

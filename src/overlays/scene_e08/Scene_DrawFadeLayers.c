@@ -1,5 +1,6 @@
 #include "scene_e08.h"
 #include "pe1/field_glow_sprite.h"
+#include "pe1/field_sprite_state.h"
 
 typedef struct SceneShiftedPosition {
     char reserved[0x14];
@@ -29,11 +30,8 @@ typedef union SceneFadeSeed {
 extern RoomFxSeed8 D_8018EFF4;
 extern SceneDrawColor D_80199670;
 extern u8 D_801986F8[], D_80198708[];
-void func_800C2EAC(u8);
 void func_800C2FF0(int, int);
 void func_800C3098(int);
-void func_800C3238(int);
-void func_800C3134(u8 *table, u32 step, u8 *out);
 void func_80071A44(RoomFxVec4 *, int, int);
 
 void func_8018F640(void *unused, s16 *args, Ovl178FadeState *state) {
@@ -52,7 +50,7 @@ void func_8018F640(void *unused, s16 *args, Ovl178FadeState *state) {
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
-    func_800C3134(D_801986F8, args[1], &D_80199670);
+    func_800C3134(D_801986F8, args[1], (u8 *)&D_80199670);
     for (i = 0; i < 4; ++i) {
         seed.fields.angle = state->field_25C[i];
         RotMatrix(&seed.raw.vector, &matrix);

@@ -2,10 +2,9 @@
 #include "pe1/field_actor.h"
 #include "pe1/scene_grab_head.h"
 #include "room_m273.h"
+#include "pe1/field_vector_math.h"
 
 extern FieldActor *g_PlayerEntity;
-extern int FieldEng_VecToAngle(void *, void *);
-extern int func_800DFE20(int *, int *);
 extern void func_80020C74(void);
 extern void func_80192838(RoomSelectionState *);
 extern void func_80192D50(struct RoomEnt *);
@@ -31,13 +30,13 @@ void SceneEffect_GrabOnApproach(SceneGrabHead *head) {
             *(int *)0x1F800010 =
                 *(int *)(*(char **)&actor->render_object.matrices + 0x59C) << 16;
             mapAngle = FieldEng_VecToAngle(
-                origin, *(char **)&actor->render_object.matrices + 0x594);
+                origin, (Vec3Fixed *)(*(char **)&actor->render_object.matrices + 0x594));
 
             if (((FieldEng_VecToAngle(
-                      origin, g_PlayerEntity->render_object.model_matrix.translation) -
+                      origin, (Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation) -
                   mapAngle + 0x40) &
                  0xFFF) < 0x100) {
-                if (func_800DFE20(&g_PlayerEntity->pos_x, (void *)0x1F800008) <
+                if (func_800DFE20((Vec3Fixed *)&g_PlayerEntity->pos_x, (void *)0x1F800008) <
                     0x180) {
                     typedState->callback = func_80192838;
                     func_80020C74();
