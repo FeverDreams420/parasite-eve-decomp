@@ -468,11 +468,9 @@ segments:
       - [0x40150, c, menu/Menu_DrawOptionListAdapters]
       - [0x401A0, c, menu/Menu_ActionSubmenus]
       - [0x40348, c, menu/Menu_DrawEquipSelectionList]
-      - [0x4043C, c, menu/Menu_GetItemSlotAvailability]
-      - [0x40480, c, menu/Menu_DrawEquipModList]
-      - [0x404F8, c, menu/Menu_DrawArmorListContainer]
-      - [0x40568, c, menu/Menu_ArmorSelectionList]
-      - [0x405E8, c, menu/Menu_MemCardPortList]
+      # Item-slot availability, modifier, armor and memory-card port list draws and
+      # the port and save-slot selectability filters: contiguous list callbacks.
+      - [0x4043C, c, menu/Menu_SelectionListCallbacks]
       - [0x406EC, c, menu/Menu_DrawSaveSlotList]
       # Contiguous list-callback adapters, bounded by distinct compiler profiles.
       - [0x40730, c, menu/Menu_ListCallbacks]
