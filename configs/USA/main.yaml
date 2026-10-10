@@ -472,14 +472,9 @@ segments:
       # the port and save-slot selectability filters: contiguous list callbacks.
       - [0x4043C, c, menu/Menu_SelectionListCallbacks]
       - [0x406EC, c, menu/Menu_DrawSaveSlotList]
-      # Contiguous list-callback adapters, bounded by distinct compiler profiles.
+      # Contiguous list-draw adapters with the icon, save-slot, sound-effect and
+      # equip-detail lists and the equip sort-toggle and info-option rows.
       - [0x40730, c, menu/Menu_ListCallbacks]
-      - [0x408A8, c, menu/Menu_DrawItemIconList]
-      - [0x4090C, c, menu/Menu_DrawMemCardSlotLists]
-      - [0x40A04, c, menu/Menu_DrawSoundEffectList]
-      - [0x40A2C, c, menu/Menu_DrawEquipItemDetailPanel]
-      - [0x40A60, c, menu/Menu_SelectableMask]
-      - [0x40B08, c, menu/Menu_DrawEquipInfoOptionRow]
       - [0x40B3C, c, menu/Menu_ItemUseAction]
       - [0x40CBC, c, menu/Menu_DrawBlendColorOptionRow]
       - [0x40CF4, c, save/SaveWriteFlow]

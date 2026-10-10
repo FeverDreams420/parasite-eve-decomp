@@ -48,11 +48,11 @@ void Menu_DrawBlendOptionItem(int arg0) {
 
 void MenuWidget_DrawCenteredTableText(int arg0);
 
-void Menu_DrawNotificationItem(void) {
+void Menu_DrawNotificationItem(int index) {
     MenuWidget_DrawCenteredTableText(8);
 }
 
-void Menu_DrawInvPanelItemStub(void) {
+void Menu_DrawInvPanelItemStub(int index) {
 }
 
 /* CC1_FLAGS: -G8 */
