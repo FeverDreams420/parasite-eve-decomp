@@ -19,10 +19,10 @@ void func_80190914(void *object, void *timer, ScenePlayerOrb *orb)
         func_800C3134(D_801987E4, orb->fade, (unsigned char *)&orb->head);
         func_800C3134(D_801987E4, orb->fade, (unsigned char *)&orb->tail);
         func_800D3114(orb->trailA, orb->count - 1, 0x3C, 0x20, 0x90, 0x51, 0x10,
-                      (u16)func_80077A64(1, 0, 0x340, 0x100), (u16)func_80077AA4(0, 0x1D9),
+                      (u16)GetTPage(1, 0, 0x340, 0x100), (u16)GetClut(0, 0x1D9),
                       orb->alpha, &orb->head, &orb->tail, 1);
         func_800D3114(orb->trailB, orb->count - 1, 0x3C, 0x20, 0x90, 0x51, 0x10,
-                      (u16)func_80077A64(1, 0, 0x340, 0x100), (u16)func_80077AA4(0, 0x1D9),
+                      (u16)GetTPage(1, 0, 0x340, 0x100), (u16)GetClut(0, 0x1D9),
                       orb->alpha, &color, &color, 2);
         matrix.m[2][2] = 0x1000;
         matrix.m[1][1] = 0x1000;

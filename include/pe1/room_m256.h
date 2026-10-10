@@ -10,6 +10,7 @@
 #include "pe1/field_owner_actor.h"
 #include "pe1/scene_archive.h"
 #include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
 
 /* ABI declarations used by the room_m256 effect dispatcher. */
 extern u16 D_800E11EA;
@@ -25,7 +26,6 @@ extern char D_80196098[];
 extern char D_80195E64[];
 extern s16 D_80196094;
 
-int func_80077AA4(int, int);
 void func_800CF844(void *, void *, int, void *, int, int);
 
 #endif

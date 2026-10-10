@@ -10,6 +10,7 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
 
 /* Ring burst controller (scene_e22): scene event gate, particle channel
  * and the helpers the burst and its orbit trail particles call. */
@@ -29,7 +30,6 @@ extern u16 D_800E11EA;
 extern RenderColor D_8018F1D0;
 extern RenderColor D_8018F1D4;
 extern GteShortVector D_801994EC;
-extern u16 func_80077AA4(int, int);
 extern int func_80071A54(void);
 extern int func_80192548(int mode, RoomOrbitTrailParticle *p);
 

@@ -272,7 +272,7 @@ int RoomEffect_HomingProjectile(int mode) {
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428 != 0) palette += 4;
         tpages = D_800E2850;
-        clut = func_80077AA4(0x30, palette);
+        clut = GetClut(0x30, palette);
         func_800CEE20(&sprite, 0, scale, scale, 0x42, clut, 1, intensity, 0);
         if (model->state != 0) {
             sprite.y = model->floor;

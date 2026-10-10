@@ -2,6 +2,7 @@
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_script_context.h"
 #include "pe1/field_sprite_state.h"
+#include "pe1/psyq_libc.h"
 
 typedef GteMatrix Overlay178Matrix;
 typedef GteVector Overlay178Vec4;
@@ -10,7 +11,6 @@ extern s32 D_8019956C;
 extern s32 D_8019957C;
 extern char D_801996A0;
 
-void func_80071A44(void *arg0, s32 arg1, s32 arg2);
 void func_800C2FF0(s32 arg0, s32 arg1);
 void func_800C3098(s32 arg0);
 
@@ -39,7 +39,7 @@ void func_80191850(void *arg0, void *arg1, char *arg2) {
     matrix.m[0][2] = 0;
     matrix.m[0][1] = 0;
 
-    func_80071A44(&draw_scale, 0, 0x10);
+    memset(&draw_scale, 0, 0x10);
     draw_scale.x = *(s16 *)(arg2 + 0x8);
     draw_scale.y = *(s16 *)(arg2 + 0x8);
     draw_scale.z = 0x1000;

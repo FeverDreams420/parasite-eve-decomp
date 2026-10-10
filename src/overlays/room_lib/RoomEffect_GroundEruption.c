@@ -195,7 +195,7 @@ void RoomEffect_GroundEruptionTransformColumn(void *arg0, void *arg1,
     stack.scaleMatrix.m[1][0] = 0;
     stack.scaleMatrix.m[0][2] = 0;
     stack.scaleMatrix.m[0][1] = 0;
-    func_80071A44(&stack.sourceScale, 0, 0x10);
+    memset(&stack.sourceScale, 0, 0x10);
 
     stack.sourceScale.x = *(s16 *)(workState + 0x120);
     stack.sourceScale.y = *(s16 *)(workState + 0x120);

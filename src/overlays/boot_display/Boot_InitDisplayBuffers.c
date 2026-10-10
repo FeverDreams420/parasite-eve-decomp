@@ -50,8 +50,8 @@ void Boot_InitDisplayBuffers(void) {
     D_80172C9C = func_800719C4(resource);
     D_80172C90 = func_80071964(resource);
     D_80172C94 = func_80071944(resource);
-    g_BootDisplayTPage = func_80077A64(0, 0, D_80172C90[0], D_80172C90[1]);
-    g_BootDisplayClut = func_80077AA4(D_80172C94[0], D_80172C94[1]);
+    g_BootDisplayTPage = GetTPage(0, 0, D_80172C90[0], D_80172C90[1]);
+    g_BootDisplayClut = GetClut(D_80172C94[0], D_80172C94[1]);
     func_80124F40(0);
     func_80124F40(1);
     func_800755F0(g_RenderDisplayEnvArray + (g_ActiveDrawSlot * 20));

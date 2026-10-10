@@ -130,10 +130,10 @@ s16 func_80193B5C(s16 value)
         quad->u3 = u + 0x7F;
         quad->v3 = i * 13 + 12;
         if (D_8019CC52 == i)
-            quad->clut = func_80077AA4(0x3C0, 0x90);
+            quad->clut = GetClut(0x3C0, 0x90);
         else
-            quad->clut = func_80077AA4(0x3C0, 0x8F);
-        quad->tpage = func_80077A64(0, 1, 0x3C0, 0);
+            quad->clut = GetClut(0x3C0, 0x8F);
+        quad->tpage = GetTPage(0, 1, 0x3C0, 0);
         leftBuffer = D_8019C9C0;
         leftLink.pointer = quad;
         quad->tag.bits.address = leftBuffer->allocation[9].bits.address;
@@ -171,8 +171,8 @@ s16 func_80193B5C(s16 value)
         quad->v2 = i * 13 + 12;
         quad->u3 = u + 0x7F;
         quad->v3 = i * 13 + 12;
-        quad->clut = func_80077AA4(0x3C0, 0x91);
-        quad->tpage = func_80077A64(0, 2, 0x3C0, 0);
+        quad->clut = GetClut(0x3C0, 0x91);
+        quad->tpage = GetTPage(0, 2, 0x3C0, 0);
         rightBuffer = D_8019C9C0;
         rightLink.pointer = quad;
         quad->tag.bits.address = rightBuffer->allocation[9].bits.address;

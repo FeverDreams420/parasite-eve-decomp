@@ -2,6 +2,7 @@
 #define FX_COMMON_SETUP_H
 
 #include "fx_common.h"
+#include "pe1/psyq_gpu.h"
 
 typedef struct FxTextureSetup { s16 x,y,w,h,tpage,clut; s32 reserved; } FxTextureSetup;
 typedef char FxTextureSetupSizeCheck[sizeof(FxTextureSetup)==16 ? 1 : -1];
@@ -145,8 +146,6 @@ typedef struct FxCommonFixedVec {
 
 extern FxCommonFixedVec g_FxCommonMotionWhole[10] __asm__("D_8019CAA8");
 void func_80077BE4(FxCommonMarkerQuad *packet);
-u16 func_80077AA4(int x, int y);
-u16 func_80077A64(int mode, int rate, int x, int y);
 int RotTransPers3(GteShortVector *v0, GteShortVector *v1, GteShortVector *v2,
                   s32 *sxy0, s32 *sxy1, s32 *sxy2, s32 *p, s32 *flag);
 

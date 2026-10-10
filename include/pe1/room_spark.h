@@ -13,6 +13,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/scene_archive.h"
+#include "pe1/psyq_gpu.h"
 
 /* Room spark particles: damped velocity, gravity and a floor bounce against
  * the frame-count driven floor height. */
@@ -29,8 +30,6 @@ typedef struct RoomDampedSpark {
 } RoomDampedSpark;
 
 PE1_STATIC_ASSERT(sizeof(RoomDampedSpark) == 0x14, room_damped_spark_size);
-
-extern u16 func_80077AA4(int, int);
 
 /* Particle pools reached through the two effect channels. */
 typedef struct RoomSparkChannel {
@@ -55,7 +54,6 @@ extern void func_800CF4B4(int kind, int value, void *layer);
 
 /* Asset library lookup and the model draw calls of the model effects. */
 void *func_8006E498(void *base, u32 key);
-s32 func_80077A64(s32, s32, s32, s32);
 void func_800C6EC0(int tpage, int clut);
 
 /* Jitter spark: the damped spark layout with a spin angle and a size. */

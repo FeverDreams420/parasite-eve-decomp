@@ -192,7 +192,7 @@ test_timer:
         palette = D_800E1204[D_800F3368.palette];
         if (D_800F3368.palette == 4 && D_800F3428)
             palette += 4;
-        clut = func_80077AA4(16, palette);
+        clut = GetClut(16, palette);
         func_800CEE20(&particle->position, (GteRotation *)&rotation, 6144, 6144,
                      68, clut, 1, intensity / 2, 0);
         D_800F3368.parameter02 = 2;
@@ -205,7 +205,7 @@ test_timer:
         palette = D_800E1204[D_800F3368.palette];
         if (D_800F3368.palette == 4 && D_800F3428)
             palette += 4;
-        clut = func_80077AA4(16, palette);
+        clut = GetClut(16, palette);
         func_800CEE20(&particle->position, (GteRotation *)&rotation, 8192, 8192,
                      152, clut, 1, intensity, 0);
         gte_ldrotmatrix(D_800BCFA4.value);
@@ -228,7 +228,7 @@ D_800F3368.extent_x = pulseSum;
 D_800F3368.extent_y = pulseSum;
 palette = D_800E1204[floorIndex];
 if (floorIndex == 4 && D_800F3428) palette += 4;
-            clut = func_80077AA4(160, palette);
+            clut = GetClut(160, palette);
             func_800D3BC8(&temporaryPosition, 6144, 6144, 12,
                          clut, 1, intensity / 2, 0, 3072);
             D_800F3368.parameter00 = 32;
@@ -238,7 +238,7 @@ if (floorIndex == 4 && D_800F3428) palette += 4;
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428)
                 palette += 4;
-            clut = func_80077AA4(176, palette);
+            clut = GetClut(176, palette);
             func_800D3BC8(&temporaryPosition, 6144, 6144, 154,
                          clut, 1, intensity / 2, 0, 1536);
         }
@@ -265,7 +265,7 @@ asm("" : : "r"(divider));
         palette = D_800E1204[D_800F3368.palette];
         if (D_800F3368.palette == 4 && D_800F3428)
             palette += 4;
-        clut = func_80077AA4(16, palette);
+        clut = GetClut(16, palette);
         func_800CEE20(&particle->position, 0, scale, scale,
                      8, clut, 1, intensity, 0);
         floorIndex = D_800F3368.palette;
@@ -283,7 +283,7 @@ asm("" : : "r"(divider));
         palette = D_800E1204[floorIndex];
         if (floorIndex == 4 && D_800F3428)
             palette += 4;
-        clut = func_80077AA4(16, palette);
+        clut = GetClut(16, palette);
         func_800CEE20(&floor_position, &floor_rotation,
                      8192 - scale, 8192 - scale,
                      64, clut, 1, intensity / 2, 0);

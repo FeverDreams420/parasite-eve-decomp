@@ -111,7 +111,7 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             func_800CEE20(&floor, &flat, 0x2000, 0x2000, 0x64,
-                          func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 8
+                          GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 8
                                                                          : palette + 4),
                           1, glow, 0);
         }
@@ -140,11 +140,11 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
                 D_800F3368.parameter06 = 0;
                 D_800F3368.tpage = tpage;
             }
-            page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            func_800C6EC0(page, func_80077AA4(0x10, palette));
+            func_800C6EC0(page, GetClut(0x10, palette));
             func_800C6ED8(1);
             RotMatrixYXZ(&rotation, &matrix);
             shape.x = scale;
@@ -175,11 +175,11 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
                 D_800F3368.parameter06 = 0;
                 D_800F3368.tpage = tpage;
             }
-            page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
             kind = D_800F336C;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            func_800C6EC0(page, func_80077AA4(0x10, palette));
+            func_800C6EC0(page, GetClut(0x10, palette));
             func_800C6ED8(1);
             RotMatrixYXZ(&rotation, &matrix);
             shape.x = scale;
@@ -212,11 +212,11 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
                 D_800F3368.parameter06 = 0;
                 D_800F3368.tpage = tpage;
             }
-            page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
             kind = D_800F336C;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            func_800C6EC0(page, func_80077AA4(0x30, palette));
+            func_800C6EC0(page, GetClut(0x30, palette));
             func_800C6ED8(1);
             RotMatrixYXZ(&rotation, &matrix);
             shape.x = scale;

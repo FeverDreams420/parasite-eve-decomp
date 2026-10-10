@@ -5,6 +5,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/render_object.h"
 #include "pe1/room_m023_effects.h"
+#include "pe1/psyq_gpu.h"
 
 /* Two-phase room effect: phase 0 drifts a sprite and draws a glow strip at a
  * fixed anchor, phase 1 draws a swelling sprite at the drifted position. */
@@ -14,6 +15,5 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomDriftPulseState, vz) == 0x0C,
                   room_drift_pulse_vz_offset);
 
 extern GteShortVector g_RoomScriptRecord;
-int func_80077AA4(int, int);
 
 #endif

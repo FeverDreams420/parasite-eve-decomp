@@ -163,7 +163,7 @@ void RoomFx_DrawOrbitParticles(
     matrix.m[0][2] = 0;
     matrix.m[0][1] = 0;
 
-    func_80071A44(&scale, 0, 0x10);
+    memset(&scale, 0, 0x10);
     scale.x = (s16)fx->height;
     scale.y = (s16)fx->height;
     scale.z = 0x400;
@@ -277,7 +277,7 @@ void RoomFx_DrawOrbitBurst(
     while (i < 8) {
         if (state->active[i] == 1) {
             RotMatrix(&state->secondary[i], &matrix);
-            func_80071A44(&scale, 0, 0x10);
+            memset(&scale, 0, 0x10);
             scale.x = state->scale;
             scale.y = state->scale;
             scale.z = 0x400;
@@ -413,7 +413,7 @@ void RoomFx_DrawOrbitSprite(
     matrix.m[0][1] = matrix.m[0][2] = matrix.m[1][0] =
         matrix.m[1][2] = matrix.m[2][0] = matrix.m[2][1] = 0;
 
-    func_80071A44(&scale, 0, 0x10);
+    memset(&scale, 0, 0x10);
     scale.x = fx->scale;
     scale.y = fx->scale;
     scale.z = 0x400;

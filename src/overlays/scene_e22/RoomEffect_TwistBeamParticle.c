@@ -58,7 +58,7 @@ int func_8019702C(int mode, RoomOrbitTrailParticle *p) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             func_800CEE20(&offset, &spin, size, size, (s16)D_800F3368.parameter02 + 100,
-                          func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 10
+                          GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 10
                                                                           : palette + 6),
                           1, 0x80, &color);
             return 0;
@@ -84,7 +84,7 @@ int func_8019702C(int mode, RoomOrbitTrailParticle *p) {
             }
             func_800D2370((GteShortVector *)p, (GteRotation *)&p->heading, p->radius,
                           0xBE, u, v, 0x40, 0x20,
-                          func_80077AA4(0x20, D_800E120A), &color, 0, alpha, 1);
+                          GetClut(0x20, D_800E120A), &color, 0, alpha, 1);
             return 0;
         }
         case 2:

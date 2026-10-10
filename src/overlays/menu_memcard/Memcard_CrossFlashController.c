@@ -128,7 +128,7 @@ int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800CEE20(&from, 0, size / 4, size / 4, 128,
-                          func_80077AA4(192, palette), 1, alpha / 2, 0);
+                          GetClut(192, palette), 1, alpha / 2, 0);
         }
         {
             int kind;
@@ -138,7 +138,7 @@ int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800CEE20(&from, 0, size / 2, size / 2, 128,
-                          func_80077AA4(192, palette), 1, alpha / 2, 0);
+                          GetClut(192, palette), 1, alpha / 2, 0);
         }
         tipA.x *= -1;
         tipB.x *= -1;

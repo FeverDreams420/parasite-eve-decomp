@@ -22,6 +22,7 @@
 #include "RoomSharedGlobalState.h"
 #include "pe1/room_floor.h"
 #include "pe1/room_rearm_timer.h"
+#include "pe1/psyq_libc.h"
 
 static const RoomFxSeed8 s_MotionQuadSeed = { { 0, 4, 0, 0, 0, 0, 0, 0 } };
 
@@ -132,8 +133,6 @@ void RoomFx_MotionParticlesAnchor(int a0, int a1, short *out) {
     out[8] = 0x400;
 }
 
-void func_80071A44(RoomFxVec4 *vec, int value, int shift);
-
 typedef struct RoomLibSpriteQuadStack {
     RoomSpriteMatrix scaleMatrix;
     RoomFxSeed8 seed;
@@ -182,7 +181,7 @@ void RoomFx_DrawAnchoredSpriteQuad(void *unused0, void *unused1,
     stack.scaleMatrix.m[1][0] = 0;
     stack.scaleMatrix.m[0][2] = 0;
     stack.scaleMatrix.m[0][1] = 0;
-    func_80071A44(&stack.sourceScale, 0, 0x10);
+    memset(&stack.sourceScale, 0, 0x10);
 
     stack.sourceScale.x = *(s16 *)(fx + 0x10);
     stack.sourceScale.y = *(s16 *)(fx + 0x10);
@@ -283,8 +282,6 @@ void RoomFx_InitSpritePair(void *arg0, void *arg1, char *obj) {
     func_800C4E50(ring);
 }
 
-void func_80071A44(RoomFxVec4 *vec, int value, int shift);
-
 /* Builds a uniformly scaled rotation from the shared seed and draws the
  * sprite at two map anchors. Retail marks this function handwritten; only
  * its COP2 windows remain ASM. */
@@ -318,7 +315,7 @@ void RoomFx_DrawAnchoredSpritePair(void *unused0, void *unused1,
     stack.scaleMatrix.m[1][0] = 0;
     stack.scaleMatrix.m[0][2] = 0;
     stack.scaleMatrix.m[0][1] = 0;
-    func_80071A44(&stack.sourceScale, 0, 0x10);
+    memset(&stack.sourceScale, 0, 0x10);
 
     stack.sourceScale.x = *(s16 *)(params + 0x10);
     stack.sourceScale.y = *(s16 *)(params + 0x10);

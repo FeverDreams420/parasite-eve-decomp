@@ -58,10 +58,10 @@ int func_80192B8C(int mode, SceneE18EmitterState *state) {
         {
             int kind;
             int palette;
-            int page = (D_800E2850[D_800E11FA] | func_80077A64(0, 1, 0, 0)) & 0xFFFF;
+            int page = (D_800E2850[D_800E11FA] | GetTPage(0, 1, 0, 0)) & 0xFFFF;
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
-            func_800C6EC0(page, func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 10
+            func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 10
                                                                          : palette + 6));
         }
         func_800C6ED8(1);

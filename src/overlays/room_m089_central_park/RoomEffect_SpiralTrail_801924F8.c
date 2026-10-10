@@ -88,7 +88,7 @@ int func_801924F8(int mode, RoomM089SpiralTrail *trail, GteShortVector *anchor) 
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             func_800CEE20(&trail->points[0], &rotation, 0x1000, 0x1000, 6,
-                          (u16)func_80077AA4(0, (kind == 4 && D_800F3428) ? palette + 8 : palette + 4),
+                          (u16)GetClut(0, (kind == 4 && D_800F3428) ? palette + 8 : palette + 4),
                           1, intensity, &head);
             break;
         default:

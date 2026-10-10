@@ -61,7 +61,7 @@ int RoomEffect_SoundBurstParticle(int mode, RoomSoundBurstParticle *particle,
         kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428 != 0) palette += 4;
-        clut = func_80077AA4(0x80, palette);
+        clut = GetClut(0x80, palette);
         func_800CEE20((GteShortVector *)&particle->wx, 0, size, size,
                       (s16)D_800F3368.parameter02 * ((D_800E27EC / 4) & 1) + 0xFD, clut, 1,
                       scale, (struct RenderColor *)&color);
@@ -73,7 +73,7 @@ int RoomEffect_SoundBurstParticle(int mode, RoomSoundBurstParticle *particle,
         kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428 != 0) palette += 4;
-        clut2 = func_80077AA4(0x80, palette);
+        clut2 = GetClut(0x80, palette);
         func_800CEE20((GteShortVector *)&particle->wx, (GteRotation *)&position, size, size,
                       (s16)D_800F3368.parameter02 * ((D_800E27EC / 4) & 1) + 0xFD, clut2, 2,
                       scale / 4, 0);

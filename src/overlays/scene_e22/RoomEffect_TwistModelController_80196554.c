@@ -100,10 +100,10 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 1;
                 D_800F3368.tpage = tpage;
-                page = (u16)(D_800E2850[*slot] | func_80077A64(0, 1, 0, 0));
+                page = (u16)(D_800E2850[*slot] | GetTPage(0, 1, 0, 0));
                 kind = D_800F336C;
                 palette = D_800E1204[kind];
-                func_800C6EC0(page, func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
+                func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
                                                                              : palette + 3));
             }
             func_800C6ED8(1);
@@ -141,10 +141,10 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 1;
                 D_800F3368.tpage = tpage;
-                page = (u16)(D_800E2850[*slot] | func_80077A64(0, 1, 0, 0));
+                page = (u16)(D_800E2850[*slot] | GetTPage(0, 1, 0, 0));
                 kind = D_800F336C;
                 palette = D_800E1204[kind];
-                func_800C6EC0(page, func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
+                func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
                                                                              : palette + 3));
             }
             func_800C6ED8(1);
@@ -183,7 +183,7 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 func_800CEE20(&position, &spin, 0x1000, 0x1000, 4,
-                              func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
+                              GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
                                                                              : palette + 3),
                               1, glow / 2, 0);
             }
@@ -202,7 +202,7 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
                 if (kind == 4 && D_800F3428 != 0) palette += 8;
                 else palette += 4;
                 func_800D3BC8(&position, 0x1000, 0x1000, (s16)D_800F3368.parameter02 + 0x64,
-                              func_80077AA4(0, palette), 1, glow, 0, 0x600);
+                              GetClut(0, palette), 1, glow, 0, 0x600);
             }
             {
                 int kind;
@@ -221,7 +221,7 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 func_800D3BC8(&position, 0x1800, 0x1800, 2,
-                              func_80077AA4(0x40, palette), 1, glow, 0, 0xA00);
+                              GetClut(0x40, palette), 1, glow, 0, 0xA00);
             }
             {
                 int kind;
@@ -234,7 +234,7 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 func_800D3BC8(&position, 0x1800, 0x1800, 4,
-                              func_80077AA4(0x50, palette), 1, glow, 0, 0xE00);
+                              GetClut(0x50, palette), 1, glow, 0, 0xE00);
             }
             break;
         }

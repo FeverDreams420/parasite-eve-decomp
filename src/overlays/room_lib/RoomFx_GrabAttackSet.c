@@ -446,7 +446,7 @@ int RoomFx_GroundSweepMark(int mode, RoomGroundSweepMark *state) {
         first_kind = D_800F3368.palette;
         palette = D_800E1204[first_kind];
         if (first_kind == 4 && D_800F3428) palette += 4;
-        clut = func_80077AA4(16, palette);
+        clut = GetClut(16, palette);
         func_800CEE20(&position, (GteRotation *)&seed, 4096, 4096,
                         (s16)D_800F3368.parameter02 * (s16)state->frame + 32,
                         clut, 1, (unsigned)shade >> 1, 0);
@@ -456,7 +456,7 @@ int RoomFx_GroundSweepMark(int mode, RoomGroundSweepMark *state) {
     kind = D_800F3368.palette;
     palette = D_800E1204[kind];
     if (kind == 4 && D_800F3428) palette += 4;
-    clut = func_80077AA4(48, palette);
+    clut = GetClut(48, palette);
     func_800CEE20(&position, 0, 4096, 4096,
                     (s16)D_800F3368.parameter02 * ((s16)state->frame / 2) + 96,
                     clut, 1, (unsigned)shade >> 1, 0);
@@ -652,7 +652,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x20, palette);
+            clut = GetClut(0x20, palette);
             func_800CEE20(&hand, 0, 0x1000, 0x1000,
                           (s16)D_800F3368.parameter02 * (sweep->timer & 1) + 0x40,
                           clut, 1, 0x80, 0);
@@ -667,7 +667,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x20, palette);
+            clut = GetClut(0x20, palette);
             func_800CEE20(&hand, 0, 0x1000, 0x1000,
                           (s16)D_800F3368.parameter02 * (sweep->timer & 1) + 0x40,
                           clut, 1, 0x80, 0);
@@ -682,7 +682,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x20, palette);
+            clut = GetClut(0x20, palette);
             func_800CEE20(&hand, 0, 0x1000, 0x1000,
                           (s16)D_800F3368.parameter02 * (sweep->timer & 1) + 0x40,
                           clut, 1, 0x80, 0);
@@ -698,7 +698,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x20, palette);
+            clut = GetClut(0x20, palette);
             func_800CEE20(&hand, 0, 0x1000, 0x1000,
                           (s16)D_800F3368.parameter02 * (sweep->timer & 1) + 0x40,
                           clut, 1, fade, 0);
@@ -789,7 +789,7 @@ int RoomFx_OrbitTrailParticle(int mode, RoomOrbitTrailParticle *p) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0, palette);
+            clut = GetClut(0, palette);
             func_800CEE20((GteShortVector *)p, 0, size, size,
                           (s16)D_800F3368.parameter02 * ((s16)p->timer / 2),
                           clut, 1, glow, 0);
@@ -823,7 +823,7 @@ int RoomFx_OrbitTrailParticle(int mode, RoomOrbitTrailParticle *p) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x90, palette);
+            clut = GetClut(0x90, palette);
             func_800D2370(&offset, (GteRotation *)&p->heading, 600, 100, 0x70, 0xA0,
                           0x40, 0x20, clut, &color, &color, (s16)glow, 1);
             break;
@@ -926,7 +926,7 @@ int RoomFx_OrbitTrailBurst(int mode, RoomOrbitTrailBurst *burst) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x10, palette);
+            clut = GetClut(0x10, palette);
             func_800CEE20((GteShortVector *)burst, 0, 0x2000, 0x2000,
                           (s16)D_800F3368.parameter02 * (D_800E27EC / 3) + 0x20,
                           clut, 1, glow, 0);
@@ -1070,7 +1070,7 @@ int RoomFx_RisingSprayParticle(int mode, RoomSpraySpark *spark) {
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0x70, palette);
+                clut = GetClut(0x70, palette);
                 func_800CEE20(&position, &rotation, width, height, 0xA3, clut, 1,
                               0x80, 0);
             }
@@ -1088,7 +1088,7 @@ int RoomFx_RisingSprayParticle(int mode, RoomSpraySpark *spark) {
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0x70, palette);
+                clut = GetClut(0x70, palette);
                 func_800CEE20(&shadow, &shadowRotation, width, height, 0xA0, clut, 2,
                               0x30, 0);
             }
@@ -1106,7 +1106,7 @@ int RoomFx_RisingSprayParticle(int mode, RoomSpraySpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x70, palette);
+            clut = GetClut(0x70, palette);
             func_800CEE20(&position, 0, 0x1000, 0x1000,
                           (s16)D_800F3368.parameter02 * ((s16)spark->timer / 2) + 0x80,
                           clut, 1, 0x80, 0);
@@ -1123,7 +1123,7 @@ int RoomFx_RisingSprayParticle(int mode, RoomSpraySpark *spark) {
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0x70, palette);
+                clut = GetClut(0x70, palette);
                 func_800CEE20((GteShortVector *)spark, 0, width, width, 0xA3, clut, 1, 0x80, 0);
             } else {
                 u16 clut;
@@ -1133,7 +1133,7 @@ int RoomFx_RisingSprayParticle(int mode, RoomSpraySpark *spark) {
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0x70, palette);
+                clut = GetClut(0x70, palette);
                 func_800CEE20((GteShortVector *)spark, 0, 0xAAA, 0xAAA,
                               (s16)D_800F3368.parameter02 * height + 0x80,
                               clut, 1, 0x80, 0);

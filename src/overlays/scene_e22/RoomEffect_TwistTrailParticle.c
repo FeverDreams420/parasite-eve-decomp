@@ -39,7 +39,7 @@ int func_801962FC(int mode, RoomOrbitTrailParticle *p) {
         kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         func_800CEE20(&offset, &spin, size, size, (s16)D_800F3368.parameter02 + 100,
-                      func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 10
+                      GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 10
                                                                       : palette + 6),
                       1, 0x80, &color);
         break;

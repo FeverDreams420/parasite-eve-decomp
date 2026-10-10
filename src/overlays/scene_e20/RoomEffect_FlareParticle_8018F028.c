@@ -79,7 +79,7 @@ int func_8018F028(int mode, SceneE20Particle *p)
             kind = D_800F3368.palette;
             palette = D_800E1204[kind] + ((kind == 4 && D_800F3428 != 0) ? 8 : 4);
             func_800CEE20(&p->position, &rotation, scale * 3, scale * 3, 4,
-                          func_80077AA4(0, palette), 1, 0x80, &color);
+                          GetClut(0, palette), 1, 0x80, &color);
             if (p->timer < 8) {
                 int width = (p->timer / 2) << 5;
                 int top = 0x40;
@@ -89,7 +89,7 @@ int func_8018F028(int mode, SceneE20Particle *p)
                 streakKind = D_800F3368.palette;
                 palette = D_800E1204[streakKind] + ((streakKind == 4 && D_800F3428 != 0) ? 7 : 3);
                 func_800D2370(&p->position, &rotation, 500, 0x168, width, top, 0x1F, 0x1F,
-                              func_80077AA4(0, palette), &streakColor, &streakColor,
+                              GetClut(0, palette), &streakColor, &streakColor,
                               (s16)glow, 1);
             }
             break;
@@ -118,7 +118,7 @@ int func_8018F028(int mode, SceneE20Particle *p)
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800CEE20(&p->position, 0, 0x2000, 0x2000,
                           (s16)D_800F3368.parameter02 * (p->timer / 2) + 0x60,
-                          func_80077AA4(0, palette), state, 0x80, 0);
+                          GetClut(0, palette), state, 0x80, 0);
             scale = rcos(angle) / 2 + 0x800;
             glow = rsin(time << 7) / 32;
             {
@@ -132,7 +132,7 @@ int func_8018F028(int mode, SceneE20Particle *p)
             if (kind == 4 && D_800F3428 != 0) palette += 9;
             else palette += 5;
             func_800CEE20(&p->position, 0, scale * 4, scale * 4, 6,
-                          func_80077AA4(0, palette), 3, glow, &glowColor);
+                          GetClut(0, palette), 3, glow, &glowColor);
             break;
         }
         case 2:

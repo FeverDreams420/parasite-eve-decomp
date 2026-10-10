@@ -27,8 +27,8 @@ void Boot_InitDisplayResources(void) {
     D_80172C9C = func_800719C4(resource);
     D_80172C90 = func_80071964(resource);
     D_80172C94 = func_80071944(resource);
-    g_BootDisplayTPage = func_80077A64(0, 0, D_80172C90[0], D_80172C90[1]);
-    g_BootDisplayClut = func_80077AA4(D_80172C94[0], D_80172C94[1]);
+    g_BootDisplayTPage = GetTPage(0, 0, D_80172C90[0], D_80172C90[1]);
+    g_BootDisplayClut = GetClut(D_80172C94[0], D_80172C94[1]);
     func_8010BE3C(0);
     offset = 0x43000;
     func_8010BD4C(D_80011610 + (((D_80093168 - D_80093166) << 11) + offset));

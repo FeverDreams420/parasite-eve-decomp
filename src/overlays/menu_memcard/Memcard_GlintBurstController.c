@@ -90,7 +90,7 @@ int Memcard_GlintBurstController(int mode, MemcardGlintBurst *burst) {
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800CEE20((GteShortVector *)burst, 0, 0x2000, 0x2000,
                           (s16)D_800F3368.parameter02 * (D_800E27EC / 4) + 192,
-                          func_80077AA4(192, palette), 1, fade, 0);
+                          GetClut(192, palette), 1, fade, 0);
             func_800CF3AC(D_801F1CB0, &color, D_800E27EC);
             scale = rsin(angle) + 0x1000;
             if (D_800E27EC & 1) {

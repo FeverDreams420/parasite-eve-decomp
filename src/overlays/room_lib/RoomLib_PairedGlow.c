@@ -161,7 +161,7 @@ void RoomLib_UpdatePairedEmitter(void *arg0, char *arg1,
     stack.base_matrix.m[0][2] = 0;
     stack.base_matrix.m[0][1] = 0;
 
-    func_80071A44(&stack.scale, 0, 0x10);
+    memset(&stack.scale, 0, 0x10);
     stack.scale.x = state->timer * 2;
     stack.scale.y = state->timer * 2;
     stack.scale.z = state->timer * 2;
@@ -244,7 +244,7 @@ void RoomLib_DrawPairedGlowSprite(char *object, void *unused, RoomDoubleSpriteFx
     stack.matrix.t[1] = (s16)(entity->link->pos[1] >> 16);
     stack.matrix.t[2] = (s16)(entity->link->pos[2] >> 16);
 
-    func_80071A44(&stack.sourceScale, 0, 0x10);
+    memset(&stack.sourceScale, 0, 0x10);
     stack.sourceScale.x = workState->scale;
     stack.sourceScale.y = 0xC8;
     stack.sourceScale.z = workState->scale;
@@ -253,21 +253,21 @@ void RoomLib_DrawPairedGlowSprite(char *object, void *unused, RoomDoubleSpriteFx
 
     func_800C6D5C(g_RoomPairedGlowPacket, 0, 0);
     if (*(int *)(clock + 0x24) == 0) {
-        handleA = func_80077A64(0, 1, 0x340, 0x100);
+        handleA = GetTPage(0, 1, 0x340, 0x100);
         callArg0 = 0;
         callArg1 = 0x1D7;
         asm("" : : "r"(callArg0), "r"(callArg1));
         handleA = (u16)handleA;
-        handleB = func_80077AA4(callArg0, callArg1);
+        handleB = GetClut(callArg0, callArg1);
         func_800C6EC0((u16)handleA, (u16)handleB);
     }
     if (*(int *)(clock + 0x24) == 1) {
-        handleA = func_80077A64(0, 1, 0x340, 0x160);
+        handleA = GetTPage(0, 1, 0x340, 0x160);
         callArg0 = 0;
         callArg1 = 0x1DB;
         asm("" : : "r"(callArg0), "r"(callArg1));
         handleA = (u16)handleA;
-        handleB = func_80077AA4(callArg0, callArg1);
+        handleB = GetClut(callArg0, callArg1);
         func_800C6EC0((u16)handleA, (u16)handleB);
     }
     func_800C6ED8(1);
@@ -380,7 +380,7 @@ void RoomLib_TransformPairedEmitter(void *unused, RoomFxControl *params,
     stack.scaleMatrix.m[1][0] = 0;
     stack.scaleMatrix.m[0][2] = 0;
     stack.scaleMatrix.m[0][1] = 0;
-    func_80071A44(&stack.sourceScale, 0, 0x10);
+    memset(&stack.sourceScale, 0, 0x10);
 
     stack.sourceScale.x = workState->timer * 2;
     stack.sourceScale.y = workState->timer * 2;

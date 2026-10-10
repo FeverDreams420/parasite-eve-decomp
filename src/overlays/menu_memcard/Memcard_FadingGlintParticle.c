@@ -61,7 +61,7 @@ int Memcard_FadingGlintParticle(int mode, RoomDampedSpark *spark) {
             D_800F3368.extent_y = 32;
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
-            clut = func_80077AA4(0, (kind == 4 && D_800F3428) ? palette + 6 : palette + 2);
+            clut = GetClut(0, (kind == 4 && D_800F3428) ? palette + 6 : palette + 2);
             func_800CEE20((GteShortVector *)spark, &rotation, size, size, 6,
                           clut, 1, fade, 0);
             break;
@@ -83,7 +83,7 @@ int Memcard_FadingGlintParticle(int mode, RoomDampedSpark *spark) {
             D_800F3368.extent_y = 64;
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
-            clut = func_80077AA4(0, (kind == 4 && D_800F3428) ? palette + 5 : palette + 1);
+            clut = GetClut(0, (kind == 4 && D_800F3428) ? palette + 5 : palette + 1);
             func_800CEE20((GteShortVector *)spark, &rotation, size * 2, size * 2, 0,
                           clut, 1, fade, 0);
             break;

@@ -3,6 +3,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/field_ring_geometry.h"
 #include "pe1/field_sprite_state.h"
+#include "pe1/psyq_libc.h"
 
 typedef struct {
     s16 m[3][3];
@@ -28,8 +29,6 @@ typedef struct {
 extern char D_801995F8[];
 extern s32 D_8019956C, D_8019957C;
 
-void func_80071A44(void *, int, int);
-
 void func_80192544(void *unused, char *time, EffectGeometry *record) {
     Matrix matrix;
     Vec4 scratchScale, firstScale, secondScale;
@@ -39,7 +38,7 @@ void func_80192544(void *unused, char *time, EffectGeometry *record) {
     record->rotation[1] = 0;
     record->rotation[2] = 0;
     RotMatrixYXZ(record->rotation, &matrix);
-    func_80071A44(&firstScale, 0, 0x10);
+    memset(&firstScale, 0, 0x10);
     firstScale.x = record->firstScale;
     firstScale.y = record->firstScale;
     firstScale.z = record->firstScale;
@@ -55,7 +54,7 @@ void func_80192544(void *unused, char *time, EffectGeometry *record) {
         record->rotation[1] = 0x400;
         record->rotation[2] = 0;
         RotMatrixYXZ(record->rotation, &matrix);
-        func_80071A44(&secondScale, 0, 0x10);
+        memset(&secondScale, 0, 0x10);
         secondScale.x = record->secondScale;
         secondScale.y = record->secondScale;
         secondScale.z = record->secondScale;

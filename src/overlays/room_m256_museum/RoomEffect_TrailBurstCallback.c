@@ -315,7 +315,7 @@ checkLifetime:
             if ((D_800F336C == 4) && (D_800F3428 != 0)) {
                 trailClutY += 4;
             }
-            func_800D3114((GteShortVector *)((state->index * 0x88) + D_80195EFC), 0x10, 0xF0, 0, 0x60, 0xFF, 0xF, (s32) D_800E2850[D_800E11EA], func_80077AA4(0x30, trailClutY) & 0xFFFF, 0x80, (RenderColor *)&color.r, (RenderColor *)&darkColor.r, 1);
+            func_800D3114((GteShortVector *)((state->index * 0x88) + D_80195EFC), 0x10, 0xF0, 0, 0x60, 0xFF, 0xF, (s32) D_800E2850[D_800E11EA], GetClut(0x30, trailClutY) & 0xFFFF, 0x80, (RenderColor *)&color.r, (RenderColor *)&darkColor.r, 1);
             fade = ((D_800E27EC & 1) << 5) + 0x60;
             func_800D004C((GteShortVector *)state, 0x190, 0x190, 8, 0, 0x1000, 0x1000, (RenderColor *)&color.r, 0, fade, 1);
             historySample = D_80195EFC + ((func_80071A54() & 7) * 8);
@@ -349,7 +349,7 @@ checkLifetime:
                 int drawClut;
                 int drawOffset;
 
-                drawClut = func_80077AA4(0x20, spriteClutY) & 0xFFFF;
+                drawClut = GetClut(0x20, spriteClutY) & 0xFFFF;
                 callState = state;
                 callRotation = 0;
                 callScaleX = renderScale;
@@ -396,7 +396,7 @@ checkLifetime:
             D_800F336C = 3;
             D_800F3368.parameter06 = 0;
             D_800F3368.tpage = renderPalette;
-            tpage = func_80077A64(pageDepth, pageBlend, pageX, 0);
+            tpage = ((int (*)(int, int, int, int))GetTPage)(pageDepth, pageBlend, pageX, 0);
             }
             modelPage = (*(u16 *)((char *)D_800E2850 + ((unsigned)*paletteIndex << 1)) | tpage) & 0xFFFF;
             modelClutY = D_800E1204[D_800F336C];
@@ -405,7 +405,7 @@ checkLifetime:
                     modelClutY += 4;
                 }
             }
-            func_800C6EC0(modelPage, func_80077AA4(0x70, modelClutY) & 0xFFFF);
+            func_800C6EC0(modelPage, GetClut(0x70, modelClutY) & 0xFFFF);
             func_800C6ED8(1);
             RotMatrixYXZ(&state->motionX, &transform);
             transform.t[0] = (s32) state->x;
@@ -440,7 +440,7 @@ checkLifetime:
             if ((D_800F336C == 4) && (D_800F3428 != 0)) {
                 pulseClutY += 4;
             }
-            func_800CEE20((GteShortVector *)state, 0, renderScale, renderScale, 0x7C, func_80077AA4(0x60, pulseClutY) & 0xFFFF, 1, fade, 0);
+            func_800CEE20((GteShortVector *)state, 0, renderScale, renderScale, 0x7C, GetClut(0x60, pulseClutY) & 0xFFFF, 1, fade, 0);
             D_800F3368.depth = 8;
             goto done;
         case 4:
@@ -454,7 +454,7 @@ checkLifetime:
             if ((D_800F336C == 4) && (D_800F3428 != 0)) {
                 impactClutY += 4;
             }
-            clut = func_80077AA4(0x10, impactClutY) & 0xFFFF;
+            clut = GetClut(0x10, impactClutY) & 0xFFFF;
             tripledScale = renderScale * 3;
             impactScale = (s32) (tripledScale + (tripledScale >> 0x1F)) >> 1;
             spriteFrame = (s16 *)&D_800F3368.parameter02;
@@ -476,7 +476,7 @@ checkLifetime:
                 if ((D_800F336C == 4) && (D_800F3428 != 0)) {
                     ringClutY += 4;
                 }
-                func_800CEE20((GteShortVector *)state, &spriteRotation, renderScale, renderScale, 0x92, func_80077AA4(0x80, ringClutY) & 0xFFFF, 1, fade, (RenderColor *)&darkColor.r);
+                func_800CEE20((GteShortVector *)state, &spriteRotation, renderScale, renderScale, 0x92, GetClut(0x80, ringClutY) & 0xFFFF, 1, fade, (RenderColor *)&darkColor.r);
                 D_800F3368.parameter0A = 0;
             }
             return 0;

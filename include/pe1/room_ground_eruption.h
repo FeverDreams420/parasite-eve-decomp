@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/room_fx.h"
 #include "pe1/room_module.h"
+#include "pe1/psyq_libc.h"
 
 /* The ground eruption (src/overlays/room_lib/RoomEffect_GroundEruption.c). */
 
@@ -87,6 +88,5 @@ int RoomEffect_GroundEruptionNop6(void);
 int *func_800C2B28(int index);
 int func_800C66C8(void *object, int message, void *state);
 void func_800C4E50(void *params);
-void func_80071A44(void *dst, int value, int size);
 
 #endif

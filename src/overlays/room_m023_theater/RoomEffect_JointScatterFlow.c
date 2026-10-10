@@ -56,7 +56,7 @@ int func_8018F004(int mode, RoomDriftPulseState *state) {
                 palette = D_800E1204[kind];
                 fade = (D_800E27EC - 1) << 4;
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0, palette);
+                clut = GetClut(0, palette);
                 func_800D2370(anchor, (GteRotation *)state, 0x3C0, 0x64, 0, fade,
                               0xFF, 0xF, clut, 0, &color, 0xBE, 1);
             }
@@ -70,7 +70,7 @@ int func_8018F004(int mode, RoomDriftPulseState *state) {
                 u16 clut;
 
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0x20, palette);
+                clut = GetClut(0x20, palette);
                 func_800CEE20(&g_RoomScriptRecord, &rotation, 0x1000, 0x1000,
                               ((s16)D_800F3368.parameter02 << 1) * (D_800E27EC - 1) + 0x60, clut,
                               3, 0x80, 0);
@@ -88,7 +88,7 @@ int func_8018F004(int mode, RoomDriftPulseState *state) {
                 u16 clut;
 
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0x10, palette);
+                clut = GetClut(0x10, palette);
                 func_800CEE20((GteShortVector *)state, &rotation, 0x1000, 0x1000,
                               (s16)D_800F3368.parameter02 * D_800E27EC + 0x40, clut, 1, scale, 0);
             }

@@ -8,6 +8,7 @@
 #include "pe1/room_floor.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
 
 /* Scene e19_2 twin glow controller: glows on two actor joints that pulse,
  * burst into a ring of sparks at frame 15 and then fade while a ring and a
@@ -36,7 +37,6 @@ typedef struct SceneTwinGlowPageIndex {
 
 extern SceneTwinGlowPageIndex D_800E11EA;
 
-u16 func_80077AA4(int x, int y);
 int func_80071A54(void);
 void func_800CE8F0(void *pool, int index, GteShortVector *offset, GteShortVector *position);
 int func_80199C28(int mode, void *spark);

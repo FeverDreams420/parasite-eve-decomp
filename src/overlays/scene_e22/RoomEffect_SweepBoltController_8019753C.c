@@ -152,10 +152,10 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 1;
                 D_800F3368.tpage = tpage;
-                page = (u16)(D_800E2850[*slot] | func_80077A64(0, 1, 0, 0));
+                page = (u16)(D_800E2850[*slot] | GetTPage(0, 1, 0, 0));
                 kind = D_800F336C;
                 palette = D_800E1204[kind];
-                func_800C6EC0(page, func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
+                func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
                                                                              : palette + 3));
             }
             func_800C6ED8(1);
@@ -194,7 +194,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 func_800CEE20(&tip, &spin, 0x1000, 0x1000, 4,
-                              func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
+                              GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
                                                                              : palette + 3),
                               1, glow / 2, 0);
             }
@@ -219,10 +219,10 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 1;
                 D_800F3368.tpage = tpage;
-                page = (u16)(D_800E2850[*slot] | func_80077A64(0, 1, 0, 0));
+                page = (u16)(D_800E2850[*slot] | GetTPage(0, 1, 0, 0));
                 kind = D_800F336C;
                 palette = D_800E1204[kind];
-                func_800C6EC0(page, func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
+                func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
                                                                              : palette + 3));
             }
             func_800C6ED8(1);

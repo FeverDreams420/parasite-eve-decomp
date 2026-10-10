@@ -168,7 +168,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
             }
-            clut = func_80077AA4(0x10, palette);
+            clut = GetClut(0x10, palette);
             func_800D3114((GteShortVector *)&g_RoomSeekingTrailHistory[trail->slot], 0x18, 0x78, i, scale,
                           0xFD, 0x1F, D_800E2850[D_800E11EA], clut, 0x80,
                           &colorA, &colorB, 1);
@@ -190,7 +190,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x10, palette);
+            clut = GetClut(0x10, palette);
             func_800D2370((GteShortVector *)trail, (GteRotation *)&trail->ax, 0x1FE, 0x78,
                           i, 0, 0x80, 0x20, clut, &colorB, &colorA, (s16)scale, 1);
             palettes = D_800E1204;
@@ -208,7 +208,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
                 kind = D_800F3368.palette;
                 palette = palettes[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0x40, palette);
+                clut = GetClut(0x40, palette);
                 func_800CEE20((GteShortVector *)trail, 0, 0x1000, 0x1000,
                               (s16)D_800F3368.parameter02 * (trail->timer * 2 / 3) + 0x90, clut, 1,
                               scale, 0);
@@ -230,7 +230,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x40, palette);
+            clut = GetClut(0x40, palette);
             func_800CEE20(&target, 0, 0x1000, 0x1000,
                           (s16)D_800F3368.parameter02 * (trail->timer & 7) + 0x90, clut, 1, scale, 0);
             break;
@@ -323,13 +323,13 @@ int RoomEffect_ModelBurstParticle(int mode, RoomModelBurstParticle *state) {
         kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428 != 0) palette += 4;
-        clut = func_80077AA4(0x10, palette);
+        clut = GetClut(0x10, palette);
         func_800D2370(&g_RoomModelBurstAnchor, (GteRotation *)state, 0x1FE, 0x6E, u, 0,
                       0x80, 0x20, clut, &color, &color, (short)scale, 1);
         kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428 != 0) palette += 4;
-        clut = func_80077AA4(0x40, palette);
+        clut = GetClut(0x40, palette);
         func_800CEE20(&g_RoomModelBurstAnchor, 0, 0x1000, 0x1000,
                       (s16)D_800F3368.parameter02 * ((short)state->frame / 2) + 0x90, clut, 1, scale / 2, 0);
         break;
@@ -438,11 +438,11 @@ int RoomEffect_ModelBurstController(int mode, s16 *state) {
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
             D_800F3368.tpage = tpage;
-            page = (tpages[D_800E11EA] | func_80077A64(0, 1, 0, 0)) & 0xFFFF;
+            page = (tpages[D_800E11EA] | GetTPage(0, 1, 0, 0)) & 0xFFFF;
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x30, palette);
+            clut = GetClut(0x30, palette);
             func_800C6EC0(page, clut);
         }
         func_800C6ED8(1);
@@ -614,7 +614,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
             }
-            clut = func_80077AA4(0x10, palette);
+            clut = GetClut(0x10, palette);
             func_800D3114((GteShortVector *)&g_RoomScatterTrailHistory[trail->slot], 0x18, 0x78, i, scale,
                           0xFD, 0x1F, D_800E2850[D_800E11EA], clut, 0x80,
                           &colorA, &colorB, 1);
@@ -636,7 +636,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x10, palette);
+            clut = GetClut(0x10, palette);
             func_800D2370((GteShortVector *)trail, (GteRotation *)&trail->ax, 0x1FE, 0x6E,
                           i, 0, 0x80, 0x20, clut, &colorB, &colorA, (s16)scale, 1);
             palettes = D_800E1204;
@@ -654,7 +654,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
                 kind = D_800F3368.palette;
                 palette = palettes[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0x40, palette);
+                clut = GetClut(0x40, palette);
                 func_800CEE20((GteShortVector *)trail, 0, 0x1000, 0x1000,
                               (s16)D_800F3368.parameter02 * (trail->timer * 2 / 3) + 0x90, clut, 1,
                               scale, 0);
@@ -676,7 +676,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x40, palette);
+            clut = GetClut(0x40, palette);
             func_800CEE20(&target, 0, 0x1000, 0x1000,
                           (s16)D_800F3368.parameter02 * (trail->timer & 7) + 0x90, clut, 1, scale, 0);
             break;
@@ -765,13 +765,13 @@ int RoomEffect_ScatterBurstParticle(int mode, RoomModelBurstParticle *state) {
         kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428 != 0) palette += 4;
-        clut = func_80077AA4(0x10, palette);
+        clut = GetClut(0x10, palette);
         func_800D2370(&g_RoomScatterBurstAnchor, (GteRotation *)state, 0x1FE, 0x64, u, 0,
                       0x80, 0x20, clut, &color, &color, (short)scale, 1);
         kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428 != 0) palette += 4;
-        clut = func_80077AA4(0x40, palette);
+        clut = GetClut(0x40, palette);
         func_800CEE20(&g_RoomScatterBurstAnchor, 0, 0x1000, 0x1000,
                       (s16)D_800F3368.parameter02 * ((short)state->frame / 2) + 0x90, clut, 1, scale / 2, 0);
         break;
@@ -878,11 +878,11 @@ int RoomEffect_ScatterBurstController(int mode, s16 *state) {
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
             D_800F3368.tpage = tpage;
-            page = (tpages[D_800E11EA] | func_80077A64(0, 1, 0, 0)) & 0xFFFF;
+            page = (tpages[D_800E11EA] | GetTPage(0, 1, 0, 0)) & 0xFFFF;
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x30, palette);
+            clut = GetClut(0x30, palette);
             func_800C6EC0(page, clut);
         }
         func_800C6ED8(1);

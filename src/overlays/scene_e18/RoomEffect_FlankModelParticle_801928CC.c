@@ -51,7 +51,7 @@ int func_801928CC(int mode, SceneE18FlankParticle *particle) {
         matrix.m[1][0] = 0;
         matrix.m[0][1] = 0;
         matrix.m[1][1] = 0x1000;
-        func_80071A44(&scale, 0, 0x10);
+        memset(&scale, 0, 0x10);
         scale.x = particle->width;
         scale.y = particle->height;
         scale.z = particle->width;

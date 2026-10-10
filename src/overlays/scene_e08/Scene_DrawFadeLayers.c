@@ -1,6 +1,7 @@
 #include "scene_e08.h"
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_sprite_state.h"
+#include "pe1/psyq_libc.h"
 
 typedef struct SceneShiftedPosition {
     char reserved[0x14];
@@ -32,7 +33,6 @@ extern SceneDrawColor D_80199670;
 extern u8 D_801986F8[], D_80198708[];
 void func_800C2FF0(int, int);
 void func_800C3098(int);
-void func_80071A44(RoomFxVec4 *, int, int);
 
 void func_8018F640(void *unused, s16 *args, Ovl178FadeState *state) {
     RoomSpriteMatrix matrix;
@@ -54,7 +54,7 @@ void func_8018F640(void *unused, s16 *args, Ovl178FadeState *state) {
     for (i = 0; i < 4; ++i) {
         seed.fields.angle = state->field_25C[i];
         RotMatrix(&seed.raw.vector, &matrix);
-        func_80071A44(&sourceScale, 0, 0x10);
+        memset(&sourceScale, 0, 0x10);
         sourceScale.x = state->field_254[i];
         sourceScale.y = state->field_254[i];
         sourceScale.z = state->field_254[i];
@@ -79,7 +79,7 @@ void func_8018F640(void *unused, s16 *args, Ovl178FadeState *state) {
         matrix.m[1][0] = 0;
         matrix.m[0][2] = 0;
         matrix.m[0][1] = 0;
-        func_80071A44(&sourceScale, 0, 0x10);
+        memset(&sourceScale, 0, 0x10);
         sourceScale.x = state->field_230[i];
         sourceScale.y = state->field_230[i];
         sourceScale.z = state->field_230[i];

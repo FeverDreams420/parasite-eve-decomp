@@ -12,6 +12,7 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/scene_archive.h"
+#include "pe1/psyq_gpu.h"
 
 /* Ember controllers (scene_e22): ride the room actor, wake the scene
  * object's status byte, spray ember drift particles and draw a halo and a
@@ -71,7 +72,6 @@ extern RenderColor D_8018F204;
 extern u8 D_80199388[];
 
 extern int func_80071A54(void);
-extern u16 func_80077AA4(int, int);
 extern void func_80020D50(void);
 extern void func_80020DD0(void);
 extern int func_80193940(int mode, RoomOrbitTrailParticle *p);
@@ -151,7 +151,6 @@ typedef struct SceneE22ModelScale {
 extern void *D_80199500;
 extern RenderColor D_8018F218;
 extern void *func_8006E498(void *base, u32 key);
-extern s32 func_80077A64(s32, s32, s32, s32);
 extern void func_800C6EC0(int tpage, int clut);
 #include "pe1/gte_types.h"
 extern void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,

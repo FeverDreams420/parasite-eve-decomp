@@ -40,7 +40,7 @@ s32 Memcard_SineRotatingImage(s32 mode, MemcardPulseState *state) {
         if (index == four && D_800F3428 != 0) palette += 7;
         else palette += 3;
         func_800CEE20(&state->position, &rotation, scale, scale, 68,
-                     func_80077AA4(0, palette), 1, intensity, &D_801F1F34);
+                     GetClut(0, palette), 1, intensity, &D_801F1F34);
         break;
     }
     return 0;

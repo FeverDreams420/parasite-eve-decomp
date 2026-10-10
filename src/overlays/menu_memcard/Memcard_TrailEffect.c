@@ -53,7 +53,7 @@ s32 Memcard_TrailEffect(s32 mode, MemcardTrailState *state) {
             palette = D_800E1204[index];
             if (index == four && D_800F3428) palette += 8;
             else palette += 4;
-            func_800CEE20(&position, 0, scale, scale, 64, func_80077AA4(0,palette), 1, 128, &color);
+            func_800CEE20(&position, 0, scale, scale, 64, GetClut(0,palette), 1, 128, &color);
             index = D_800F3368.palette;
             __asm__("" : "=r"(index) : "0"(index) : "$3", "memory");
             four = 4;
@@ -61,7 +61,7 @@ s32 Memcard_TrailEffect(s32 mode, MemcardTrailState *state) {
             palette = D_800E1204[index];
             if (index == four && D_800F3428) palette += 7;
             else palette += 3;
-            func_800CEE20(&position, 0, scale, scale, 70, func_80077AA4(0,palette), 1, 128, &color);
+            func_800CEE20(&position, 0, scale, scale, 70, GetClut(0,palette), 1, 128, &color);
             D_801F1F30.r = color.r; D_801F1F30.g = color.g; D_801F1F30.b = color.b;
         } else {
             *(u32 *)&D_801F1F30 = 0;

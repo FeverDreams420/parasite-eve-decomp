@@ -103,7 +103,7 @@ int ROOMEFFECT_ORBIT_SPIN_FUNC(int mode, RoomOrbitTrailParticle *p) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x60, palette);
+            clut = GetClut(0x60, palette);
             func_800CEE20((GteShortVector *)p, &rotation, size, size, 0x40, clut, 1,
                           glow / 2, 0);
             break;
@@ -136,7 +136,7 @@ int ROOMEFFECT_ORBIT_SPIN_FUNC(int mode, RoomOrbitTrailParticle *p) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x10, palette);
+            clut = GetClut(0x10, palette);
             func_800D2370(&offset, (GteRotation *)&p->heading, 1000, 320, 0x80, 0x90,
                           0x1F, 0x1F, clut, &color, &color, (s16)glow, 1);
             break;

@@ -73,7 +73,7 @@ int func_80196748(int mode, SceneSpinRay *ray)
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800D2370(&offset, &ray->spin.rotation, width, 0x8C, 0x80, 0x80, 0x80, 0x10,
-                          (u16)func_80077AA4(0x70, palette), &bladeHead, &bladeTail,
+                          (u16)GetClut(0x70, palette), &bladeHead, &bladeTail,
                           (s16)glow, 1);
             break;
         }
@@ -98,7 +98,7 @@ int func_80196748(int mode, SceneSpinRay *ray)
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800CEE20(&D_8019B670, &ray->spin.rotation, width, width, 0x40,
-                          (u16)func_80077AA4(0, palette), 1, 0x80, &color);
+                          (u16)GetClut(0, palette), 1, 0x80, &color);
             break;
         }
         }

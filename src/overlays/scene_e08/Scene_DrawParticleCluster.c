@@ -3,6 +3,7 @@
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_script_context.h"
 #include "pe1/field_sprite_state.h"
+#include "pe1/psyq_libc.h"
 
 typedef GteMatrix Matrix;
 typedef GteVector Vec4;
@@ -19,7 +20,6 @@ typedef struct SceneFxColor {
 } SceneFxColor;
 
 extern s16 D_801994B2;
-void func_80071A44(Vec4 *, int, int);
 void func_800C2FF0(int, int);
 void func_800C3098(int);
 
@@ -60,7 +60,7 @@ void func_8018FBA4(void *unused0, void *unused1, SceneParticleCluster *argSlots)
             matrix.m[0][2] = 0;
             matrix.m[0][1] = 0;
 
-            func_80071A44(&draw, 0, 0x10);
+            memset(&draw, 0, 0x10);
             draw.x = ((SceneParticleCluster *)scale)->fieldF0[0];
             draw.y = ((SceneParticleCluster *)scale)->fieldF0[0];
             draw.z = ((SceneParticleCluster *)scale)->fieldF0[0];

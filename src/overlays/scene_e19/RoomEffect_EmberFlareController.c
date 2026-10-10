@@ -155,7 +155,7 @@ int func_801978EC(int mode, SceneE22EmberBurst *burst) {
                 position.z = z;
                 palette = D_800E1204[kind];
                 func_800CEE20(&position, &spin, 0x1000, 0x1000, 0,
-                              func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 6
+                              GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 6
                                                                         : palette + 2),
                               1, glow, 0);
             }
@@ -178,7 +178,7 @@ int func_801978EC(int mode, SceneE22EmberBurst *burst) {
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 func_800CEE20(&floorPosition, &floorSpin, 0x1800, 0x1800, 0x40,
-                              func_80077AA4(0x10, palette), 1, glow, 0);
+                              GetClut(0x10, palette), 1, glow, 0);
             }
             D_800F3368.depth = 0x28;
             func_800D004C((GteShortVector *)burst, 400, 400, 0x10, 0, 0x1000, 0x1000,

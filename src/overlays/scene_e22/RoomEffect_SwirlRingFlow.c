@@ -65,7 +65,7 @@ int func_801957CC(int mode, RoomOrbitTrailParticle *p) {
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 func_800CEE20(&offset, &spin, size, size, (s16)D_800F3368.parameter02 + 100,
-                              func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 8
+                              GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 8
                                                                               : palette + 4),
                               1, glow, 0);
             }
@@ -210,7 +210,7 @@ int func_80195B40(int mode, SceneE22SwirlRing *swirl) {
             palette = D_800E1204[kind];
             func_800CEE20((GteShortVector *)swirl, &spin, 0x1000, 0x1000,
                           (s16)D_800F3368.parameter02 * (swirl->timer & 1) + 0x64,
-                          func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 8
+                          GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 8
                                                                          : palette + 4),
                           1, glow, 0);
             break;
@@ -232,7 +232,7 @@ int func_80195B40(int mode, SceneE22SwirlRing *swirl) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             func_800CEE20(&position, 0, size, size, 0x44,
-                          func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 10
+                          GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 10
                                                                          : palette + 6),
                           1, glow, 0);
             break;

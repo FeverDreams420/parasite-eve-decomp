@@ -10,6 +10,8 @@
 #include "pe1/field_model_draw.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/scene_archive.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/psyq_libc.h"
 
 /* Particle emitters of the scene_e18 script: one rises from random model
  * joints and fades out, the other drops wave rings from random joints. */
@@ -106,8 +108,6 @@ typedef struct SceneE18FlankParticle {
 extern void *D_801941C4;
 extern s16 D_801941C8;
 extern void *func_8006E498(void *base, u32 key);
-extern int func_80077A64(int, int, int, int);
-extern u16 func_80077AA4(int, int);
 extern void func_800C6EC0(int tpage, int clut);
 extern int func_801928CC(int mode, SceneE18FlankParticle *particle);
 
@@ -115,7 +115,6 @@ extern int func_801928CC(int mode, SceneE18FlankParticle *particle);
  * to the model releases the actor, and the model draw helpers. */
 extern SceneE18Instance *RoomMain_ActorPtr;
 extern int func_8005186C(int value);
-extern void func_80071A44(void *data, int value, int size);
 
 /* Pulse ring particle (func_80193018): shrinking light rings around the
  * room model; the last one releases the actor once the player is near. */

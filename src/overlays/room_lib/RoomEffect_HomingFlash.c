@@ -96,7 +96,7 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x10, palette);
+            clut = GetClut(0x10, palette);
             func_800CEE20((GteShortVector *)spark, &rotation, 0x1000, 0x1000, 0x20, clut, 1,
                           fade / 2, 0);
             break;
@@ -107,7 +107,7 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0, palette);
+            clut = GetClut(0, palette);
             func_800CEE20((GteShortVector *)spark, &rotation, 0x1000, 0x1000,
                           (s16)D_800F3368.parameter02 * spark->timer, clut, 1,
                           0x80, (struct RenderColor *)&color);
@@ -120,7 +120,7 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x10, palette);
+            clut = GetClut(0x10, palette);
             func_800CEE20((GteShortVector *)spark, &rotation, 0x1000, 0x1000, 0x20, clut, 1,
                           fade, 0);
             break;
@@ -264,7 +264,7 @@ int RoomEffect_FlashSpriteController(int mode, RoomFlashSpriteState *state,
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x10, palette);
+            clut = GetClut(0x10, palette);
             func_800CEE20(&target, 0, scale, scale, 0x20, clut, 1, opacity, 0);
             break;
         case 1:

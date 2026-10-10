@@ -115,7 +115,7 @@ int ROOMEFFECT_ORBIT_SPIN_BURST_FUNC(int mode, RoomOrbitTrailBurst *burst) {
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0x90, palette);
+                clut = GetClut(0x90, palette);
                 func_800CEE20((GteShortVector *)burst, 0, 0x2000, 0x2000, 0x98,
                               clut, 1, glow, 0);
             }
@@ -147,7 +147,7 @@ int ROOMEFFECT_ORBIT_SPIN_BURST_FUNC(int mode, RoomOrbitTrailBurst *burst) {
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0xA0, palette);
+                clut = GetClut(0xA0, palette);
                 func_800D3BC8((GteShortVector *)burst, 0x1000, 0x1000, 12, clut,
                               1, glow, 0, 0xC00);
             }
@@ -162,7 +162,7 @@ int ROOMEFFECT_ORBIT_SPIN_BURST_FUNC(int mode, RoomOrbitTrailBurst *burst) {
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0xB0, palette);
+                clut = GetClut(0xB0, palette);
                 func_800D3BC8((GteShortVector *)burst, 0x1000, 0x1000, 0x9A, clut,
                               1, glow, 0, 0xA00);
             }
@@ -173,7 +173,7 @@ int ROOMEFFECT_ORBIT_SPIN_BURST_FUNC(int mode, RoomOrbitTrailBurst *burst) {
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0xC0, palette);
+                clut = GetClut(0xC0, palette);
                 func_800D3BC8((GteShortVector *)burst, 0x1000, 0x1000, 0x9C, clut,
                               1, glow, 0, 0x600);
             }

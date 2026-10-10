@@ -69,7 +69,7 @@ int func_801972EC(int mode, RoomOrbitTrailParticle *p) {
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800CEE20((GteShortVector *)p, &spin, size, size, 0x98,
-                          func_80077AA4(0x90, palette), 2, glow, 0);
+                          GetClut(0x90, palette), 2, glow, 0);
             break;
         }
         case 1: {
@@ -86,7 +86,7 @@ int func_801972EC(int mode, RoomOrbitTrailParticle *p) {
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800CEE20((GteShortVector *)p, &spin, size, size, 0x98,
-                          func_80077AA4(0x80, palette), 1, 0x80, &color);
+                          GetClut(0x80, palette), 1, 0x80, &color);
             break;
         }
         case 2:

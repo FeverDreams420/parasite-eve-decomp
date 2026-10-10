@@ -90,7 +90,7 @@ int func_80196CCC(int mode, SceneSpinRayBurst *burst)
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            func_800CEE20(&position, 0, scale, scale, 8, func_80077AA4(0x90, palette), 1,
+            func_800CEE20(&position, 0, scale, scale, 8, GetClut(0x90, palette), 1,
                           glow, 0);
         }
         flat.x = 0x400;
@@ -106,7 +106,7 @@ int func_80196CCC(int mode, SceneSpinRayBurst *burst)
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            func_800CEE20(&floor, &flat, scale, scale, 8, func_80077AA4(0x10, palette), 3,
+            func_800CEE20(&floor, &flat, scale, scale, 8, GetClut(0x10, palette), 3,
                           glow, 0);
         }
         glow = ((s16)burst->timer << 7) / 48;

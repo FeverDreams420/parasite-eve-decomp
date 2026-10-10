@@ -84,7 +84,7 @@ int RoomEffect_SparkRingParticle(int mode, RoomSparkRingParticle *state) {
         func_800CEE20((GteShortVector *)state, (GteRotation *)&seed,
                       scale, scale,
                       (s16)D_800F3368.parameter02 * (state->timer / 3) + 0x20,
-                      (unsigned short)func_80077AA4(0x10, texture),
+                      (unsigned short)GetClut(0x10, texture),
                       1, 0xA0, (RenderColor *)&out);
         return 0;
     default:
@@ -220,7 +220,7 @@ int RoomEffect_SparkRingController(int mode, RoomSparkRingState *state) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0, palette);
+            clut = GetClut(0, palette);
             func_800CEE20(&target, 0, width, height, 0, clut, 1, 0x80, &color);
             matrixSlot = &D_800BCFA4;
             gte_ldrotmatrix(matrixSlot->value);
@@ -425,7 +425,7 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0x20, palette);
+                clut = GetClut(0x20, palette);
             }
             func_800CEE20((GteShortVector *)spark, (GteRotation *)&target,
                           0x1000, 0x1000, 0xD8, clut, 1, opacity, &glow);
@@ -433,7 +433,7 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
                 u16 kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0x20, palette);
+                clut = GetClut(0x20, palette);
             }
             func_800CEE20((GteShortVector *)spark, (GteRotation *)&target,
                           0x2000, 0x2000,
@@ -449,7 +449,7 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x20, palette);
+            clut = GetClut(0x20, palette);
             func_800CEE20(&ground, (GteRotation *)&flat, 0x1000, 0x1000,
                           (s16)D_800F3368.parameter02 + 0xD8, clut, 1,
                           opacity, &shade);
@@ -470,7 +470,7 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x20, palette);
+            clut = GetClut(0x20, palette);
             func_800CEE20((GteShortVector *)spark, 0, 0x1000, 0x1000,
                           (s16)D_800F3368.parameter02 * (s16)spark->timer + 0xE0,
                           clut, 1, opacity, &shade);
@@ -489,7 +489,7 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0, palette);
+            clut = GetClut(0, palette);
             one = 1;
             func_800CEE20((GteShortVector *)spark, 0, 0x1800, 0x1800,
                           (s16)D_800F3368.parameter02 *
@@ -516,7 +516,7 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x20, palette);
+            clut = GetClut(0x20, palette);
             step = (s16)spark->timer * 2 / 3;
             func_800CEE20((GteShortVector *)spark, 0, 0x1000, 0x1000,
                           (s16)D_800F3368.parameter02 * step + 0xC8, clut, 1,
@@ -542,7 +542,7 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x90, palette);
+            clut = GetClut(0x90, palette);
             func_800CEE20((GteShortVector *)spark,
                           (GteRotation *)&spark->vx, scale, scale,
                           (s16)D_800F3368.parameter02 * 2 + 0xFD, clut, 1,

@@ -72,7 +72,7 @@ int func_801924E8(int mode, SceneE18SpinShell *shell) {
         matrix.m[1][0] = 0;
         matrix.m[0][1] = 0;
         matrix.m[1][1] = 0x1000;
-        func_80071A44(&scale, 0, 0x10);
+        memset(&scale, 0, 0x10);
         scale.x = shell->width;
         scale.y = shell->height;
         scale.z = shell->width;
@@ -84,10 +84,10 @@ int func_801924E8(int mode, SceneE18SpinShell *shell) {
         {
             int kind;
             int palette;
-            int page = (D_800E2850[D_800E11FA] | func_80077A64(0, 1, 0, 0)) & 0xFFFF;
+            int page = (D_800E2850[D_800E11FA] | GetTPage(0, 1, 0, 0)) & 0xFFFF;
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
-            func_800C6EC0(page, func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 8
+            func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 8
                                                                          : palette + 4));
         }
         func_800C6ED8(1);

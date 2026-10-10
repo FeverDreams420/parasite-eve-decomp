@@ -37,7 +37,7 @@ void func_80194DD8(void *object, void *timer, SceneArmGlow *glow)
     matrix.m[1][0] = 0;
     matrix.m[0][2] = 0;
     matrix.m[0][1] = 0;
-    func_80071A44(&source, 0, 0x10);
+    memset(&source, 0, 0x10);
     source.x = glow->scale;
     source.y = glow->scale;
     source.z = 0x1000;
@@ -59,7 +59,7 @@ void func_80194DD8(void *object, void *timer, SceneArmGlow *glow)
     matrix.m[1][0] = 0;
     matrix.m[0][2] = 0;
     matrix.m[0][1] = 0;
-    func_80071A44(&second, 0, 0x10);
+    memset(&second, 0, 0x10);
     second.x = glow->scale;
     second.y = glow->scale;
     second.z = 0x1000;
@@ -90,7 +90,7 @@ void func_80194DD8(void *object, void *timer, SceneArmGlow *glow)
     points[6].x = matrices[22].translation[0];
     points[6].y = matrices[22].translation[1];
     points[6].z = matrices[22].translation[2];
-    tpage = (u16)func_80077A64(0, 0, 0x340, 0x100);
+    tpage = (u16)GetTPage(0, 0, 0x340, 0x100);
     func_800D3114(points, 7, 300, 0x40, 0x80, 0x9C, 0x10, tpage,
-                  (u16)func_80077AA4(0, 0x1D7), 0x80, &head, &tail, 1);
+                  (u16)GetClut(0, 0x1D7), 0x80, &head, &tail, 1);
 }

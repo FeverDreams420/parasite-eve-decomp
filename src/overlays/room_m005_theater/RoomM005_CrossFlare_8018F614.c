@@ -61,7 +61,7 @@ int func_8018F614(int mode) {
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428) palette += 4;
                 func_800CEE20(&position, &rotation, 0x1000, 0x1000, 2,
-                              (u16)func_80077AA4(0x10, palette), 1, level, 0);
+                              (u16)GetClut(0x10, palette), 1, level, 0);
             }
             position.x += 0x20;
             {
@@ -69,7 +69,7 @@ int func_8018F614(int mode) {
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428) palette += 4;
                 func_800CEE20(&position, &rotation, 0x1000, 0x1000, 2,
-                              (u16)func_80077AA4(0x10, palette), 1, level, 0);
+                              (u16)GetClut(0x10, palette), 1, level, 0);
             }
         }
         D_800F3368.depth = 0x18;
@@ -103,7 +103,7 @@ int func_8018F614(int mode) {
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 func_800CEE20(&position, &rotation, size, size, 0x40,
-                              (u16)func_80077AA4(0, (kind == 4 && D_800F3428) ? palette + 6 : palette + 2),
+                              (u16)GetClut(0, (kind == 4 && D_800F3428) ? palette + 6 : palette + 2),
                               1, 0x60, &color);
             }
         }

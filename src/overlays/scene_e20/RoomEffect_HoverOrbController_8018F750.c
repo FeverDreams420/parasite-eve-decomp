@@ -354,7 +354,7 @@ block_63:
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 1;
             D_800F3368.tpage = texturePage;
-            temp_s0 = (D_800E2850[*pageIndex] | func_80077A64(pageArg0, pageArg1, pageArg2, 0)) & 0xFFFF;
+            temp_s0 = (D_800E2850[*pageIndex] | GetTPage(pageArg0, pageArg1, pageArg2, 0)) & 0xFFFF;
             modelScale = 0x400;
             temp_a1 = D_800E1204[D_800F336C];
             if ((D_800F336C == 4) && (D_800F3428 != 0)) {
@@ -362,7 +362,7 @@ block_63:
             } else {
                 var_a1_2 = temp_a1 + 2;
             }
-            func_800C6EC0(temp_s0, func_80077AA4(0, var_a1_2) & 0xFFFF);
+            func_800C6EC0(temp_s0, GetClut(0, var_a1_2) & 0xFFFF);
             if (temp_s3 != 0xFF) func_800C6ED8(1);
             else func_800C6ED8(0);
             drawAngle = D_800E27EC * 0x60;
@@ -407,7 +407,7 @@ block_63:
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 1;
             D_800F3368.tpage = texturePage;
-            func_800CEE20(&effect->position, NULL, 0x2000, 0x2000, 6, func_80077AA4(paletteX, paletteY + 5) & 0xFFFF, 3, (s32) var_s0, (struct RenderColor *)&beamColor);
+            func_800CEE20(&effect->position, NULL, 0x2000, 0x2000, 6, GetClut(paletteX, paletteY + 5) & 0xFFFF, 3, (s32) var_s0, (struct RenderColor *)&beamColor);
         }
         D_800F3368.depth = 0xB;
         return 0;

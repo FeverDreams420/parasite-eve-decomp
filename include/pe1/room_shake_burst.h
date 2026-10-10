@@ -102,7 +102,6 @@ extern int func_8019326C(int mode, RoomShakeSweepParticle *particle);
 extern GteShortVector D_80199904;
 
 /* Sweep particle draw: model asset, matrix helpers and clut lookups. */
-extern int func_80077A64(int, int, int, int);
 #include "pe1/gte_types.h"
 extern void func_800C6EC0(int tpage, int clut);
 

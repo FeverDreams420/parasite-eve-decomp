@@ -2,6 +2,7 @@
 #include "../room_lib/room_lib.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/psyq_gpu.h"
 
 typedef struct RoomM005_OrbRec {
     short h0;                     /* 0x00: x */
@@ -26,7 +27,6 @@ typedef struct RoomM005_Dialog {
 
 extern RoomM005_Dialog g_RoomScriptRecord;
 extern char RoomM005_Rec2[];
-extern int func_80077AA4();
 #include "pe1/gte_types.h"
 
 int RoomM005_FxOrbiter_8018F018(int mode, RoomM005_OrbRec *r) {
@@ -83,7 +83,7 @@ fade:
                 a += 4;
             }
             func_800CEE20((GteShortVector *)r, (GteRotation *)q, 0x800, 0x800, (s16)D_800F3368.parameter02 + 0xD8,
-                          (unsigned short)func_80077AA4(0x20, a), 3, r->h6, (RenderColor *)out);
+                          (unsigned short)GetClut(0x20, a), 3, r->h6, (RenderColor *)out);
         }
         {
             int a = D_800E1204[D_800F3368.palette];
@@ -91,7 +91,7 @@ fade:
                 a += 4;
             }
             func_800CEE20((GteShortVector *)r, (GteRotation *)q, 0x1000, 0x1000, ((s16)D_800F3368.parameter02 << 1) + 0xD8,
-                          (unsigned short)func_80077AA4(0x20, a), 3, r->h6, (RenderColor *)out);
+                          (unsigned short)GetClut(0x20, a), 3, r->h6, (RenderColor *)out);
         }
     }
 ret0:

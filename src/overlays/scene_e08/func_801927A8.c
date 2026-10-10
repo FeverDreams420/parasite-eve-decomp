@@ -3,12 +3,11 @@
 #include "pe1/field_script_context.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_sprite_state.h"
+#include "pe1/psyq_gpu.h"
 
 extern u8 D_80198820[];
 
 void func_800C3098(int);
-int func_80077A64(int, int, int, int);
-int func_80077AA4(int, int);
 
 void func_801927A8(void *unused0, void *unused1, char *effect) {
     unsigned int i;
@@ -42,8 +41,8 @@ void func_801927A8(void *unused0, void *unused1, char *effect) {
             scratchB[1] = 0;
             scratchB[2] = 0;
             D_800F3368.depth = 0;
-            retA = func_80077A64(1, 0, 0x340, 0x100) & 0xffff;
-            retB = func_80077AA4(0, 0x1D9) & 0xffff;
+            retA = GetTPage(1, 0, 0x340, 0x100) & 0xffff;
+            retB = GetClut(0, 0x1D9) & 0xffff;
             func_800D3114((struct GteShortVector *)dst, 2, *(s16 *)(frame + 0x240), 0x20, 0x90,
                            0x51, 0x10, retA, retB, *(s16 *)(frame + 0x200),
                            (struct RenderColor *)scratchA, (struct RenderColor *)scratchPtr, 1);

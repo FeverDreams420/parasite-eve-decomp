@@ -90,7 +90,7 @@ int func_801960C4(int mode, SceneHomingBurst *burst)
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 func_800CEE20(&position, &tilt, 0x3000, 0x3000, 0x98,
-                              func_80077AA4(0x10, palette), 1, fade, 0);
+                              GetClut(0x10, palette), 1, fade, 0);
             }
             {
                 int kind;
@@ -99,7 +99,7 @@ int func_801960C4(int mode, SceneHomingBurst *burst)
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 func_800CEE20(&position, &tilt, 0x1800, 0x1800, 0x98,
-                              func_80077AA4(0x70, palette), 1, fade, 0);
+                              GetClut(0x70, palette), 1, fade, 0);
             }
             D_800F3368.parameter00 = 0x40;
             D_800F3368.parameter02 = 4;
@@ -112,7 +112,7 @@ int func_801960C4(int mode, SceneHomingBurst *burst)
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 func_800CEE20(&position, 0, 0x2000, 0x2000, 8,
-                              func_80077AA4(0x90, palette), 1, fade / 2, 0);
+                              GetClut(0x90, palette), 1, fade / 2, 0);
             }
             {
                 RenderMatrixSlot *matrixSlot = &D_800BCFA4;

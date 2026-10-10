@@ -3,12 +3,11 @@
 #include "pe1/field_script_context.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_sprite_state.h"
+#include "pe1/psyq_gpu.h"
 
 extern u8 D_8019880C[];
 
 void func_800C3098(s32 arg0);
-s32 func_80077A64(s32 a, s32 b, s32 c, s32 d);
-s32 func_80077AA4(s32 a, s32 b);
 
 void func_801919B0(s32 arg0, s32 arg1, u8 *base) {
     u8 *st;
@@ -32,8 +31,8 @@ void func_801919B0(s32 arg0, s32 arg1, u8 *base) {
             buf40[1] = 0;
             buf40[2] = 0;
             D_800F3368.depth = 0x1F4;
-            v64 = func_80077A64(0, 0, 0x340, 0x100) & 0xFFFF;
-            vAA = func_80077AA4(0, 0x1D7) & 0xFFFF;
+            v64 = GetTPage(0, 0, 0x340, 0x100) & 0xFFFF;
+            vAA = GetClut(0, 0x1D7) & 0xFFFF;
             func_800D3114((struct GteShortVector *)(base + i * 0x18), 2, *(s16 *)(base + i * 2 + 0x240), 0x40,
                           0x80, 0x9C, 0x10, v64, vAA, *(s16 *)(base + i * 2 + 0x200),
                           (struct RenderColor *)buf38, (struct RenderColor *)buf40, type);

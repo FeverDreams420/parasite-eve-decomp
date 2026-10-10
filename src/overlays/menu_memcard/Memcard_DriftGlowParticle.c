@@ -44,7 +44,7 @@ int Memcard_DriftGlowParticle(int mode, RoomDampedSpark *spark) {
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800CEE20((GteShortVector *)spark, &rotation, size, size, 128,
-                          func_80077AA4(32, palette), 1, fade, &color);
+                          GetClut(32, palette), 1, fade, &color);
             break;
         }
         case 1: {
@@ -62,7 +62,7 @@ int Memcard_DriftGlowParticle(int mode, RoomDampedSpark *spark) {
             kind = D_800F336C;
             palette = D_800E1204[kind];
             func_800CEE20((GteShortVector *)spark, &rotation, size * 3 / 2, size * 3 / 2, 64,
-                          func_80077AA4(0, (kind == 4 && D_800F3428) ? palette + 7 : palette + 3),
+                          GetClut(0, (kind == 4 && D_800F3428) ? palette + 7 : palette + 3),
                           1, fade / 2, 0);
             break;
         }

@@ -14,7 +14,7 @@ void Boot_StepImageSprite(void) {
     BootDisplaySpritePacket *packet = (BootDisplaySpritePacket *)g_BootDisplayPrimitiveCursor;
     u16 tpage;
     s16 rect[4];
-    tpage = func_80077A64(2, 0, g_BootDisplayImageBuffers[g_BootDisplayBufferIndex].x, g_BootDisplayImageBuffers[g_BootDisplayBufferIndex].y);
+    tpage = GetTPage(2, 0, g_BootDisplayImageBuffers[g_BootDisplayBufferIndex].x, g_BootDisplayImageBuffers[g_BootDisplayBufferIndex].y);
     func_80077C84(packet, 0, 0, tpage);
     /* PsyQ packet length occupies the high byte of its ordering-table tag. */
     ((u8 *)&packet->sprite.tag)[3] = 4;

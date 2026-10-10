@@ -37,7 +37,7 @@ s32 Memcard_PulseImage(s32 mode, MemcardPulseState *state) {
         palette = D_800E1204[D_800F3368.palette];
         if (D_800F3368.palette == 4 && D_800F3428 != 0) palette += 4;
         func_800CEE20(&state->position, &rotation, scale, scale, 130,
-                     func_80077AA4(48, palette), 1, 128, &color);
+                     GetClut(48, palette), 1, 128, &color);
         break;
     }
     return 0;

@@ -15,7 +15,7 @@ void func_80193150(void *object, SceneGlowModelTimer *timer, SceneGlowModelState
     model = state;
     owner = func_800C2B50();
     RotMatrix(&model->seed.vector, &matrix);
-    func_80071A44(&source, 0, 0x10);
+    memset(&source, 0, 0x10);
     source.x = model->scaleX;
     source.y = model->scaleY;
     source.z = model->scaleZ;
@@ -26,12 +26,12 @@ void func_80193150(void *object, SceneGlowModelTimer *timer, SceneGlowModelState
     matrix.t[2] = D_8019957C;
     func_800C6D5C((union FieldTexturedModel *)D_80199528, 0, 0);
     if (owner->mode == 0) {
-        int tpage = (u16)func_80077A64(0, 1, 0x340, 0x100);
-        func_800C6EC0(tpage, (u16)func_80077AA4(0, 0x1D7));
+        int tpage = (u16)GetTPage(0, 1, 0x340, 0x100);
+        func_800C6EC0(tpage, (u16)GetClut(0, 0x1D7));
     }
     if (owner->mode == 1) {
-        int tpage = (u16)func_80077A64(0, 1, 0x340, 0x160);
-        func_800C6EC0(tpage, (u16)func_80077AA4(0, 0x1DB));
+        int tpage = (u16)GetTPage(0, 1, 0x340, 0x160);
+        func_800C6EC0(tpage, (u16)GetClut(0, 0x1DB));
     }
     func_800C3134(D_80198860, timer->ticks, (unsigned char *)&color);
     func_800C6ED8(1);
@@ -59,7 +59,7 @@ void func_80193150(void *object, SceneGlowModelTimer *timer, SceneGlowModelState
         matrix.m[1][0] = 0;
         matrix.m[0][2] = 0;
         matrix.m[0][1] = 0;
-        func_80071A44(&source, 0, 0x10);
+        memset(&source, 0, 0x10);
         source.x = size;
         source.y = size;
         source.z = size;

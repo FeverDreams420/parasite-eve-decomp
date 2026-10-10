@@ -67,7 +67,7 @@ void func_8019104C(void *object, void *timer, void *data)
     D_801995B8.depth = state->depth >> 2;
     func_800C42A4((FieldGlowSprite *)&D_801995B8, data, 1);
     RotMatrix(&rotation, data);
-    func_80071A44(&source, 0, 0x10);
+    memset(&source, 0, 0x10);
     source.x = state->size;
     source.y = state->size;
     source.z = state->size;

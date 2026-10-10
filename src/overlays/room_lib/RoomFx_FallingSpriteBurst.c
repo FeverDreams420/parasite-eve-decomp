@@ -166,7 +166,7 @@ void RoomFx_DrawFallingSprite(void *unused0, void *unused1,
     matrix.m[0][2] = 0;
     matrix.m[0][1] = 0;
 
-    func_80071A44(&scale, 0, 0x10);
+    memset(&scale, 0, 0x10);
     scale.x = 0x100;
     scale.y = (s16)fx->scale;
     scale.z = 0x1000;
@@ -295,7 +295,7 @@ void RoomFx_DrawImpactShimmer(void *arg0, void *arg1, RoomSpriteFxParams *fx) {
     func_800C3238(1);
     RotMatrix(&seed.vector, &matrix);
 
-    func_80071A44(&scale, 0, 0x10);
+    memset(&scale, 0, 0x10);
     scale.x = fx->scale;
     scale.y = fx->scale;
     scale.z = 0x1000;
@@ -349,7 +349,7 @@ void RoomFx_DrawGroundPulse(void *unused0, void *unused1,
     func_800C3238(1);
     RotMatrix(&seed.vector, matrixPtr);
 
-    func_80071A44(&scale, 0, 0x10);
+    memset(&scale, 0, 0x10);
     scale.x = fx->scale;
     scale.y = fx->scale;
     scale.z = fx->scale;

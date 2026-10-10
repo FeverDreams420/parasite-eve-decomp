@@ -2,10 +2,10 @@
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_script_context.h"
 #include "pe1/field_sprite_state.h"
+#include "pe1/psyq_libc.h"
 
 void func_800C2FF0(s32, s32);
 void func_800C3098(s32);
-void func_80071A44(GteVector *arg0, s32 arg1, s32 arg2);
 
 extern u8 D_80198AD4;
 extern u8 D_80199570;
@@ -31,7 +31,7 @@ void func_801949F4(s32 arg0, char *arg1, char *rec) {
     func_800C3098(0x10);
     func_800C3238(2);
     RotMatrix((GteShortVector *)(r + 0x10), &buf);
-    func_80071A44(&vsrc, 0, 0x10);
+    memset(&vsrc, 0, 0x10);
     vsrc.x = *(s16 *)(r + 0x1C);
     vsrc.y = *(s16 *)(r + 0x1C);
     vsrc.z = 0x1000;

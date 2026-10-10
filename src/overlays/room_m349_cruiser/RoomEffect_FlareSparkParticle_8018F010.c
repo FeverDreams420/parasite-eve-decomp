@@ -89,7 +89,7 @@ int func_8018F010(int mode, RoomM349FlareSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0, palette);
+            clut = GetClut(0, palette);
             func_800CEE20((GteShortVector *)spark, &rotation, size, size,
                           (s16)D_800F3368.parameter02 * frame, clut, 2,
                           fade / 3, 0);
@@ -109,7 +109,7 @@ int func_8018F010(int mode, RoomM349FlareSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0, palette);
+            clut = GetClut(0, palette);
             func_800CEE20((GteShortVector *)spark, &rotation, size, size,
                           (s16)D_800F3368.parameter02 * frame, clut, 3, fade, 0);
             break;
@@ -125,7 +125,7 @@ int func_8018F010(int mode, RoomM349FlareSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x10, palette);
+            clut = GetClut(0x10, palette);
             func_800CEE20((GteShortVector *)spark, &rotation, size, size * 2,
                           (s16)D_800F3368.parameter02 * ((s16)spark->timer / 2) + 0x80,
                           clut, 1, 0x50, 0);

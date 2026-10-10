@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "pe1/cdrom_buffers.h"
+#include "pe1/psyq_gpu.h"
 
 typedef struct {
     s32 tag;
@@ -126,8 +127,6 @@ s32 func_800719C4(void *resource);
 s32 func_80071994(void *resource);
 s16 *func_80071964(void *resource);
 s16 *func_80071944(void *resource);
-s32 func_80077A64(s32, s32, s32, s32);
-s32 func_80077AA4(s32, s32);
 void func_8010BE3C(s32 value);
 void func_8010BD4C(void *address);
 void func_800755F0(void *entry);

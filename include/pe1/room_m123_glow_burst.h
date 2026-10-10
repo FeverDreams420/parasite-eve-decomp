@@ -7,6 +7,7 @@
 #include "pe1/render_object.h"
 #include "pe1/room_m123_burst_particle.h"
 #include "pe1/field_owner_actor.h"
+#include "pe1/psyq_gpu.h"
 
 /* room_m123 glow burst (func_80192F0C): spawns pulsing particles at frame
  * 1, then layers four glow sprites, two flash rings and a swept flare on a
@@ -34,7 +35,6 @@ extern u8 D_801954BC[];
 extern u8 D_801954E4[];
 extern u16 D_800E11E8;
 
-u16 func_80077AA4(int, int);
 void func_800CE8F0(void *pool, int index, void *rotation, void *position);
 int func_80071A54(void);
 void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y, int texture,

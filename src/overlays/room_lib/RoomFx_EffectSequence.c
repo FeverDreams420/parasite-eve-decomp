@@ -23,6 +23,8 @@
 #include "pe1/room_module.h"
 #include "pe1/gte_types.h"
 #include "pe1/field_model_draw.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/psyq_libc.h"
 
 /* Seeds and scales copied into the draw passes' stack frames. */
 static const RoomOverlay024MatrixSeed8 s_EffectBaseSeed = {{0x00, 0x04, 0, 0, 0, 0, 0, 0}};
@@ -324,8 +326,6 @@ void RoomFx_InitVariant38(void *arg0, void *arg1, RoomOverlay024Variant38SetupSt
     state->field22 = 0;
 }
 
-void func_80071A44(void *arg0, s32 arg1, s32 arg2);
-
 void RoomFx_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control, RoomOverlay024Variant38State *state) {
     RoomOverlay024Root **owner_ptr;
     RoomOverlay024Root *owner;
@@ -371,7 +371,7 @@ void RoomFx_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control, Roo
     matrix.m[0][2] = 0;
     matrix.m[0][1] = 0;
 
-    func_80071A44(&draw_scale, 0, 0x10);
+    memset(&draw_scale, 0, 0x10);
     draw_scale.x = state->drift_value;
     draw_scale.y = state->drift_value;
     draw_scale.z = state->drift_value;
@@ -396,7 +396,7 @@ void RoomFx_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control, Roo
     func_800C42A4((FieldGlowSprite *)draw_slot, (GteMatrix *)&matrix, 1);
     RotMatrix(&base_seed, &matrix);
 
-    func_80071A44(&second_scale, 0, 0x10);
+    memset(&second_scale, 0, 0x10);
     second_scale.x = state->drift_value;
     second_scale.y = state->drift_value;
     second_scale.z = state->drift_value;
@@ -456,7 +456,7 @@ void RoomFx_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control, Roo
     matrix.m[0][2] = 0;
     matrix.m[0][1] = 0;
 
-    func_80071A44(&third_scale, 0, 0x10);
+    memset(&third_scale, 0, 0x10);
     third_scale.x = state->final_scale >> 1;
     third_scale.y = state->final_scale;
     third_scale.z = state->final_scale;
@@ -633,7 +633,7 @@ void RoomFx_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *control
     matrix.m[0][2] = 0;
     matrix.m[0][1] = 0;
 
-    func_80071A44(&draw_scale, 0, 0x10);
+    memset(&draw_scale, 0, 0x10);
     draw_scale.x = state->drift_value;
     draw_scale.y = state->drift_value >> 1;
     draw_scale.z = state->drift_value;
@@ -658,7 +658,7 @@ void RoomFx_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *control
     func_800C42A4((FieldGlowSprite *)draw_slot, (GteMatrix *)&matrix, 1);
     RotMatrix(&base_seed, &matrix);
 
-    func_80071A44(&second_scale, 0, 0x10);
+    memset(&second_scale, 0, 0x10);
     second_scale.x = state->drift_value * 2;
     second_scale.y = state->drift_value;
     second_scale.z = state->drift_value * 2;
@@ -714,7 +714,7 @@ void RoomFx_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *control
     matrix.m[0][2] = 0;
     matrix.m[0][1] = 0;
 
-    func_80071A44(&third_scale, 0, 0x10);
+    memset(&third_scale, 0, 0x10);
     third_scale.x = state->final_scale;
     third_scale.y = state->final_scale;
     third_scale.z = state->final_scale;
@@ -900,7 +900,7 @@ void RoomFx_DrawVariant290(void *arg0, RoomOverlay024VariantControl *control, Ro
     matrix.m[0][2] = 0;
     matrix.m[0][1] = 0;
 
-    func_80071A44(&draw_scale, 0, 0x10);
+    memset(&draw_scale, 0, 0x10);
     draw_scale.x = state->drift_value;
     draw_scale.y = state->drift_value;
     draw_scale.z = state->drift_value;
@@ -919,7 +919,7 @@ void RoomFx_DrawVariant290(void *arg0, RoomOverlay024VariantControl *control, Ro
     func_800C42A4((FieldGlowSprite *)((char *)fade_slot - 0xA), (GteMatrix *)&matrix, 1);
     RotMatrix(&base_seed, &matrix);
 
-    func_80071A44(&second_scale, 0, 0x10);
+    memset(&second_scale, 0, 0x10);
     second_scale.x = state->drift_value * 2;
     second_scale.y = state->drift_value;
     second_scale.z = state->drift_value * 4;
@@ -1106,7 +1106,7 @@ void RoomFx_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, Room
     matrix.m[0][2] = 0;
     matrix.m[0][1] = 0;
 
-    func_80071A44(&draw_scale, 0, 0x10);
+    memset(&draw_scale, 0, 0x10);
     draw_scale.x = scale * 3;
     draw_scale.y = state->drift_value;
     draw_scale.z = scale * 3;
@@ -1127,7 +1127,7 @@ void RoomFx_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, Room
     func_800C2FF0(0x20, 0x20);
     RotMatrix(&base_seed, &matrix);
 
-    func_80071A44(&second_scale, 0, 0x10);
+    memset(&second_scale, 0, 0x10);
     second_scale.x = state->drift_value;
     second_scale.y = state->drift_value;
     second_scale.z = state->drift_value;
@@ -1266,8 +1266,6 @@ void RoomFx_EffectSequenceNopB(void) {
 }
 
 void func_800C6EE8(s32 arg0);
-s32 func_80077A64(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-s32 func_80077AA4(s32 arg0, s32 arg1);
 void func_800C6EC0(s32 arg0, s32 arg1);
 
 void RoomFx_DrawEffectGlow(void) {
@@ -1300,9 +1298,9 @@ void RoomFx_DrawEffectGlow(void) {
     func_800C3238(2);
     func_800C6D5C(D_80192C34, 0, 0);
     func_800C6EE8(-10);
-    handle_a = func_80077A64(0, 1, 0x340, 0x100);
+    handle_a = GetTPage(0, 1, 0x340, 0x100);
     handle_a = (u16)handle_a;
-    handle_b = func_80077AA4(0x10, 0x1D7);
+    handle_b = GetClut(0x10, 0x1D7);
     func_800C6EC0(handle_a, (u16)handle_b);
     func_800C6ED8(0);
     func_800C6EF8(D_80192C34);
@@ -1415,7 +1413,7 @@ void RoomFx_DrawScaledEffect(void *unused0, void *unused1, RoomLibScaledEffect *
     matrix.m[0][1] = 0;
 
     scale = (short)effect->scaleTimer >> 2;
-    func_80071A44(&scaleSeed, 0, 0x10);
+    memset(&scaleSeed, 0, 0x10);
     scaleSeed.words[0] = scale * 3;
     scaleSeed.words[1] = scale * 3;
     scaleSeed.words[2] = scale * 3;

@@ -13,7 +13,7 @@ void func_80191E78(void *object, void *timer, SceneParticleSlots *slots)
     int palette;
     u32 i;
 
-    func_80071A44(&offset, 0, 8);
+    memset(&offset, 0, 8);
     offset.x = D_8019956C;
     offset.y = 0;
     offset.z = D_8019957C;
@@ -42,7 +42,7 @@ void func_80191E78(void *object, void *timer, SceneParticleSlots *slots)
             palette += 4;
         }
         func_800CEE20(&position, (GteRotation *)&offset, scale, scale, 0,
-                      (u16)func_80077AA4(0, palette), 1, slots->verticalOffset[i], 0);
+                      (u16)GetClut(0, palette), 1, slots->verticalOffset[i], 0);
     }
     D_800F3368.parameter00 = 0x40;
     D_800F3368.parameter02 = 4;
@@ -61,6 +61,6 @@ void func_80191E78(void *object, void *timer, SceneParticleSlots *slots)
             palette += 4;
         }
         func_800CEE20(&position, (GteRotation *)&slots->offset[i], scale, scale, 0x80,
-                      (u16)func_80077AA4(0x80, palette), 2, slots->verticalOffset[i], 0);
+                      (u16)GetClut(0x80, palette), 2, slots->verticalOffset[i], 0);
     }
 }

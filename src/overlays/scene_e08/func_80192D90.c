@@ -3,6 +3,7 @@
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_script_context.h"
 #include "pe1/field_sprite_state.h"
+#include "pe1/psyq_libc.h"
 
 typedef GteMatrix SceneE08Matrix;
 typedef GteVector SceneE08Vector;
@@ -13,7 +14,6 @@ extern s32 D_8019956C, D_8019957C;
 
 void func_800C2FF0(int, int);
 void func_800C3098(int);
-void func_80071A44(SceneE08Vector *, int, int);
 void func_80192D90(void *unused0, void *unused1, SceneE08OrbitParticles *effect) {
     SceneE08Matrix matrix;
     s16 temp[3];
@@ -52,7 +52,7 @@ void func_80192D90(void *unused0, void *unused1, SceneE08OrbitParticles *effect)
             matrix.m[1][0] = 0;
             matrix.m[0][2] = 0;
             matrix.m[0][1] = 0;
-            func_80071A44(&v, 0, 0x10);
+            memset(&v, 0, 0x10);
             v.x = ((SceneE08OrbitParticles *)phase)->size[0];
             v.y = ((SceneE08OrbitParticles *)phase)->size[0];
             v.z = scale;

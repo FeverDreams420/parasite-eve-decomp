@@ -94,7 +94,7 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 func_800CEE20(&jointA, 0, scale * 2 / 3, scale * 2 / 3, 0x98,
-                              func_80077AA4(0x10, palette), 1, fade, 0);
+                              GetClut(0x10, palette), 1, fade, 0);
             }
             {
                 int kind;
@@ -106,7 +106,7 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                func_800CEE20(&jointA, 0, scale, scale, 8, func_80077AA4(0x10, palette), 3,
+                func_800CEE20(&jointA, 0, scale, scale, 8, GetClut(0x10, palette), 3,
                               fade, 0);
             }
             {
@@ -120,7 +120,7 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 func_800CEE20(&jointB, 0, scale * 2 / 3, scale * 2 / 3, 0x98,
-                              func_80077AA4(0x10, palette), 1, fade, 0);
+                              GetClut(0x10, palette), 1, fade, 0);
             }
             {
                 int kind;
@@ -132,7 +132,7 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                func_800CEE20(&jointB, 0, scale, scale, 8, func_80077AA4(0x10, palette), 3,
+                func_800CEE20(&jointB, 0, scale, scale, 8, GetClut(0x10, palette), 3,
                               fade, 0);
             }
         } else if (glow->timer < 0x23) {
@@ -156,7 +156,7 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 func_800CEE20(&jointA, 0, scale * 2 / 3, scale * 2 / 3, 0x98,
-                              func_80077AA4(0x10, palette), 1, fade, 0);
+                              GetClut(0x10, palette), 1, fade, 0);
             }
             {
                 int kind;
@@ -168,7 +168,7 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                func_800CEE20(&jointA, 0, scale, scale, 8, func_80077AA4(0x10, palette), 3,
+                func_800CEE20(&jointA, 0, scale, scale, 8, GetClut(0x10, palette), 3,
                               fade, 0);
             }
             {
@@ -182,7 +182,7 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 func_800CEE20(&jointB, 0, scale * 2 / 3, scale * 2 / 3, 0x98,
-                              func_80077AA4(0x10, palette), 1, fade, 0);
+                              GetClut(0x10, palette), 1, fade, 0);
             }
             {
                 int kind;
@@ -194,7 +194,7 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                func_800CEE20(&jointB, 0, scale, scale, 8, func_80077AA4(0x10, palette), 3,
+                func_800CEE20(&jointB, 0, scale, scale, 8, GetClut(0x10, palette), 3,
                               fade, 0);
             }
             func_800D0728(&glow->position, 800, 400, 0x14, &ring, scale, scale, &color, 0,
@@ -213,7 +213,7 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                func_800CEE20(&floor, &flat, scale, scale, 8, func_80077AA4(0x10, palette), 1,
+                func_800CEE20(&floor, &flat, scale, scale, 8, GetClut(0x10, palette), 1,
                               fade * 2 / 3, 0);
             }
         }

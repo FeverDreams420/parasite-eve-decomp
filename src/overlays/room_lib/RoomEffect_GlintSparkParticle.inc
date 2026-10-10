@@ -78,7 +78,7 @@ int ROOMEFFECT_GLINT_SPARK_FUNC(int mode, RoomDampedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x80, palette);
+            clut = GetClut(0x80, palette);
             func_800CEE20((GteShortVector *)spark, &rotation, size, size,
                           (s16)D_800F3368.parameter02 * frame + 0xFD, clut, 1,
                           fade, 0);
@@ -99,7 +99,7 @@ int ROOMEFFECT_GLINT_SPARK_FUNC(int mode, RoomDampedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x80, palette);
+            clut = GetClut(0x80, palette);
             func_800CEE20((GteShortVector *)spark, &rotation, size, size,
                           (s16)D_800F3368.parameter02 * ((s16)spark->timer / 2) + 0xB8,
                           clut, 1, fade, &color);

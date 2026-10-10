@@ -69,7 +69,7 @@ int Memcard_RisingEmberParticle(int mode, RoomDampedSpark *spark) {
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800CEE20((GteShortVector *)spark, &rotation, size, size * 3 / 2, 141,
-                          func_80077AA4(48, palette), 1, 128, &color);
+                          GetClut(48, palette), 1, 128, &color);
             break;
         }
         case 1: {
@@ -95,7 +95,7 @@ int Memcard_RisingEmberParticle(int mode, RoomDampedSpark *spark) {
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800CEE20((GteShortVector *)spark, 0, size / 2, size / 2,
                           (s16)D_800F3368.parameter02 * (spark->timer & 3) + 104,
-                          func_80077AA4(16, palette), 3, fade, 0);
+                          GetClut(16, palette), 3, fade, 0);
             break;
         }
         case 2: {
@@ -125,7 +125,7 @@ int Memcard_RisingEmberParticle(int mode, RoomDampedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             func_800CEE20(&position, &tilt, size * 3, size * 3, 68,
-                          func_80077AA4(0, (kind == 4 && D_800F3428) ? palette + 7 : palette + 3),
+                          GetClut(0, (kind == 4 && D_800F3428) ? palette + 7 : palette + 3),
                           1, fade / 2, 0);
             break;
         }

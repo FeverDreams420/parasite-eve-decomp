@@ -198,7 +198,7 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
             int palette = D_800E1204[kind];
             u16 clut;
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0, palette);
+            clut = GetClut(0, palette);
             func_800CEE20((GteShortVector *)&state->px, (GteRotation *)&rotation,
                           state->scale, state->scale, 0, clut, 1,
                           state->intensity / 2, 0);

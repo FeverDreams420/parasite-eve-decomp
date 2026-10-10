@@ -236,7 +236,7 @@ int RoomEffect_BurstOrbParticle(int mode, RoomDampedSpark *spark) {
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0x50, palette);
+                clut = GetClut(0x50, palette);
                 func_800CEE20((GteShortVector *)spark, &rotation, 0x1800, 0x1800, 0xA0, clut, 1,
                               0x80, 0);
             }
@@ -258,7 +258,7 @@ int RoomEffect_BurstOrbParticle(int mode, RoomDampedSpark *spark) {
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0, palette);
+                clut = GetClut(0, palette);
                 func_800CEE20(&shadow, &shadowRotation, 0x3000, 0x3000, 0, clut, 3, 0x50, 0);
             }
             return 0;
@@ -285,7 +285,7 @@ int RoomEffect_BurstOrbParticle(int mode, RoomDampedSpark *spark) {
                 palette = D_800E1204[kind];
                 size = 1;
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0x20, palette);
+                clut = GetClut(0x20, palette);
                 func_800CEE20(&position, &ringRotation, scale, scale, 0x6C, clut, size, fade, 0);
             }
             return 0;
@@ -304,7 +304,7 @@ int RoomEffect_BurstOrbParticle(int mode, RoomDampedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x10, palette);
+            clut = GetClut(0x10, palette);
             func_800CEE20((GteShortVector *)spark, 0, scale * 9 / 4, scale * 9 / 4,
                           (s16)D_800F3368.parameter02 * size + 0x20, clut, 1, 0x80, 0);
             return 0;
@@ -323,7 +323,7 @@ int RoomEffect_BurstOrbParticle(int mode, RoomDampedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x30, palette);
+            clut = GetClut(0x30, palette);
             func_800CEE20((GteShortVector *)spark, 0, scale * 3, scale * 3,
                           (s16)D_800F3368.parameter02 * (s16)((s16)spark->timer / 6) + 0x80,
                           clut, 1, fade, 0);
@@ -362,7 +362,7 @@ int RoomEffect_BurstOrbParticle(int mode, RoomDampedSpark *spark) {
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 6;
                 else palette += 2;
-                clut = func_80077AA4(0, palette);
+                clut = GetClut(0, palette);
             }
             half = (s16)spark->timer / 2;
             func_800CEE20((GteShortVector *)spark, 0, 0x2000, 0x2000,
@@ -509,7 +509,7 @@ int RoomEffect_DampedSparkParticle(int mode, RoomDampedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x10, palette);
+            clut = GetClut(0x10, palette);
             func_800CEE20((GteShortVector *)spark, 0, 0xC00, 0xC00,
                           (s16)D_800F3368.parameter02 * scale + 0x20, clut, 1,
                           0x80, 0);
@@ -524,7 +524,7 @@ int RoomEffect_DampedSparkParticle(int mode, RoomDampedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x30, palette);
+            clut = GetClut(0x30, palette);
             func_800CEE20((GteShortVector *)spark, 0, scale, scale,
                           (s16)D_800F3368.parameter02 * ((s16)spark->timer / 4) + 0x80,
                           clut, 1, 0x60, 0);
@@ -856,11 +856,11 @@ int RoomEffect_BeamSparkController(int mode, RoomBeamSpark *fx,
                 D_800F3368.parameter06 = 0;
                 D_800F3368.tpage = tpage;
             }
-            page = (tpages[*index] | func_80077A64(0, 1, 0, 0)) & 0xFFFF;
+            page = (tpages[*index] | GetTPage(0, 1, 0, 0)) & 0xFFFF;
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x40, palette);
+            clut = GetClut(0x40, palette);
             func_800C6EC0(page, clut);
             func_800C6ED8(1);
             RotMatrixYXZ(&modelRotation, &matrix);
@@ -967,7 +967,7 @@ int RoomEffect_JitterSparkParticle(int mode, RoomDampedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x40, palette);
+            clut = GetClut(0x40, palette);
             func_800CEE20((GteShortVector *)spark, &rotation, size, size, 0x80,
                           clut, 1, fade, 0);
             break;
@@ -986,7 +986,7 @@ int RoomEffect_JitterSparkParticle(int mode, RoomDampedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x40, palette);
+            clut = GetClut(0x40, palette);
             func_800CEE20((GteShortVector *)spark, &rotation, size, size,
                           (s16)D_800F3368.parameter02 * (s16)((s16)spark->timer / 6) + 0x80,
                           clut, 1, fade / 2, 0);
@@ -1006,7 +1006,7 @@ int RoomEffect_JitterSparkParticle(int mode, RoomDampedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x40, palette);
+            clut = GetClut(0x40, palette);
             func_800CEE20((GteShortVector *)spark, &rotation, size, size,
                           (s16)D_800F3368.parameter02 * (s16)((s16)spark->timer / 6) + 0x80,
                           clut, 2, fade / 4, 0);

@@ -79,7 +79,7 @@ int func_8019485C(int mode, RoomOrbitTrailParticle *p) {
             palette = D_800E1204[kind];
             func_800CEE20((GteShortVector *)p, &spin, size, size,
                           (s16)D_800F3368.parameter02 + 0x64,
-                          func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 8
+                          GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 8
                                                                          : palette + 4),
                           1, 0x80, &color);
             break;
@@ -107,7 +107,7 @@ int func_8019485C(int mode, RoomOrbitTrailParticle *p) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             func_800CEE20((GteShortVector *)p, &spin, size * 2, size * 2, 0x40,
-                          func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 6
+                          GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 6
                                                                          : palette + 2),
                           1, glow, &color);
             break;
@@ -134,7 +134,7 @@ int func_8019485C(int mode, RoomOrbitTrailParticle *p) {
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800CEE20((GteShortVector *)p, &spin, 0x1800, 0x1800,
                           (s16)D_800F3368.parameter02 * (s16)p->timer + 0x80,
-                          func_80077AA4(0, palette), 1, 0x40, 0);
+                          GetClut(0, palette), 1, 0x40, 0);
             break;
         }
         }
@@ -261,7 +261,7 @@ int func_80194F60(int mode, GteShortVector *anchor) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             func_800CEE20(&position, 0, size * 3 / 2, size * 3 / 2, 0x46,
-                          func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 11
+                          GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 11
                                                                          : palette + 7),
                           1, glow, 0);
             func_800D004C(&position, 800, 600, 0x10, 0, 0x1000, 0x1000, &color, 0,

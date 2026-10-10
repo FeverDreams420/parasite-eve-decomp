@@ -5,6 +5,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/render_object.h"
 #include "pe1/room_floor.h"
+#include "pe1/psyq_gpu.h"
 
 /* Shared 20-byte pool record for the room_m086 bounce-glint emitter and
  * callback: phase 0 drifts for 24 frames; phase 1 falls and bounces. */
@@ -26,6 +27,5 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomBounceGlint, phase) == 0x12,
                   room_bounce_glint_phase_offset);
 
 extern u16 D_800E11EA;
-int func_80077AA4(int, int);
 
 #endif

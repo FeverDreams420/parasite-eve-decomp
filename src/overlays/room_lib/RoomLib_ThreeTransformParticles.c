@@ -19,6 +19,7 @@
 #include "pe1/field_sprite_state.h"
 #include "pe1/floor_polygon.h"
 #include "pe1/gte_types.h"
+#include "pe1/psyq_libc.h"
 
 extern void func_800C2B40(void *arg0);
 extern void *func_8006DC18(int type);
@@ -249,7 +250,6 @@ typedef struct RoomDrawThreeStack {
 } RoomDrawThreeStack;
 
 void func_800C3098(int depth);
-void func_80071A44(RoomFxVec4 *vec, int value, int shift);
 void func_800C2FF0(int width, int height);
 
 void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
@@ -286,7 +286,7 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
         if (workState->active[i] >= 0) {
             arg0 = &workState->rotation[i];
             RotMatrixYXZ(arg0, &stack.primaryMatrix);
-            func_80071A44(sourceScale, 0, 0x10);
+            memset(sourceScale, 0, 0x10);
             stack.sourceScale.x = ((RoomDebrisTriplet *)shortCursor)->swing[0] >> 1;
             stack.sourceScale.y = ((RoomDebrisTriplet *)shortCursor)->swing[0] >> 1;
             stack.sourceScale.z = ((RoomDebrisTriplet *)shortCursor)->swing[0] >> 1;
@@ -329,7 +329,7 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
                 scaleValue = (s16)scaleValue >> 1;
                 stack.position.z += ((RoomDebrisTriplet *)shortCursor)->life[0] << 4;
                 RotMatrixYXZ(arg0, inputArg);
-                func_80071A44(sourceScale, 0, 0x10);
+                memset(sourceScale, 0, 0x10);
                 stack.sourceScale.x = scaleValue;
                 stack.sourceScale.y = scaleValue;
                 stack.sourceScale.z = scaleValue;
@@ -344,7 +344,7 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
                               &stack.primaryMatrix, 1);
 
                 RotMatrix(&stack.seed.vector, secondaryMatrix);
-                func_80071A44(&stack.sourceFloorScale, 0, 0x10);
+                memset(&stack.sourceFloorScale, 0, 0x10);
                 stack.sourceFloorScale.x = ((RoomDebrisTriplet *)shortCursor)->swing[0];
                 stack.sourceFloorScale.y = ((RoomDebrisTriplet *)shortCursor)->swing[0];
                 stack.sourceFloorScale.z = ((RoomDebrisTriplet *)shortCursor)->swing[0];

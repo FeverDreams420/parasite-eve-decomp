@@ -56,7 +56,7 @@ s32 Memcard_SineTrailEffect(s32 mode, MemcardTrailState *state) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             func_800CEE20(&position, 0, scale, scale, 64,
-                          func_80077AA4(0, (kind == 4 && D_800F3428) ? palette + 8 : palette + 4),
+                          GetClut(0, (kind == 4 && D_800F3428) ? palette + 8 : palette + 4),
                           1, 128, &color);
             D_801F1F34.r = color.r;
             D_801F1F34.g = color.g;

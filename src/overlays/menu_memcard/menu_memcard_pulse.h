@@ -3,12 +3,12 @@
 
 #include "pe1/render_object.h"
 #include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
 typedef struct MemcardPulseState {
     GteShortVector position;
     GteRotation rotation;
     s16 phase, timer;
 } MemcardPulseState;
-extern u16 func_80077AA4(s32, s32);
 extern u8 D_801F1D5C[];
 extern RenderColor D_801F1F30;
 extern RenderColor D_801F1F34;

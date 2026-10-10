@@ -81,7 +81,7 @@ int func_801935E0(int mode, RoomDampedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0, palette);
+            clut = GetClut(0, palette);
             func_800CEE20((GteShortVector *)spark, &rotation, scale / 2, scale / 2,
                           (s16)D_800F3368.parameter02 * ((s16)spark->timer / 4),
                           clut, 1, 0x60, &trackColor);

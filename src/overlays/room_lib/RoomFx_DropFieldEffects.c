@@ -248,7 +248,7 @@ void RoomFx_DrawSpinSprite(s32 arg0, s32 arg1, char *arg2) {
     func_800C3098(0x100);
     func_800C3238(2);
     RotMatrix(arg2 + 8, &stack.sp10);
-    func_80071A44(&stack.sp40, 0, 0x10);
+    memset(&stack.sp40, 0, 0x10);
 
     {
         s32 x = *(s16 *)(arg2 + 0x10);
@@ -331,7 +331,7 @@ void RoomFx_DrawDoubleSprite(void *arg0, void *arg1, RoomDoubleSpriteFxParams *f
     func_800C3238(2);
     RotMatrix(&fx->seed, &matrix);
 
-    func_80071A44(&scale, 0, 0x10);
+    memset(&scale, 0, 0x10);
     scale.x = fx->scale;
     scale.y = fx->scale;
     scale.z = 0x1000;
@@ -347,7 +347,7 @@ void RoomFx_DrawDoubleSprite(void *arg0, void *arg1, RoomDoubleSpriteFxParams *f
     func_800C42A4((FieldGlowSprite *)((char *)depth_slot - 0xA), &matrix, 1);
 
     RotMatrix(&seed, &matrix);
-    func_80071A44(&second_scale, 0, 0x10);
+    memset(&second_scale, 0, 0x10);
     second_scale.x = fx->scale;
     second_scale.y = fx->scale;
     second_scale.z = 0x1000;
@@ -475,7 +475,7 @@ void RoomFx_DrawRingPair(void *unused0, void *unused1,
     g_RoomDropFieldRings[1].intensity = fx->depth;
     RotMatrix(&seed1, &matrix);
 
-    func_80071A44(&scale, 0, 0x10);
+    memset(&scale, 0, 0x10);
     scale.x = fx->scale;
     scale.y = fx->scale;
     scale.z = fx->scale;
@@ -491,7 +491,7 @@ void RoomFx_DrawRingPair(void *unused0, void *unused1,
     func_800C4FC4(depth_slot + 2, &matrix, 0);
 
     RotMatrix(&seed0, &matrix);
-    func_80071A44(&second_scale, 0, 0x10);
+    memset(&second_scale, 0, 0x10);
     second_scale.x = fx->scale * 2;
     second_scale.y = fx->scale * 2;
     second_scale.z = fx->scale * 2;
@@ -711,8 +711,8 @@ void RoomFx_DrawStagedMotion(void *unused,
                 ScaleMatrix((GteMatrix *)&matrix, (GteVector *)&scale2);
                 func_800C6D5C(g_RoomDropFieldModel, 0, 0);
                 func_800C6EE8(-0x64);
-                handle = (u16)func_80077A64(1, 1, 0x340, 0x100);
-                func_800C6EC0(handle, (u16)func_80077AA4(0, 0x1DB));
+                handle = (u16)GetTPage(1, 1, 0x340, 0x100);
+                func_800C6EC0(handle, (u16)GetClut(0, 0x1DB));
                 func_800C6ED8(1);
                 func_800C6EF8(g_RoomDropFieldModel);
                 func_800C6FA0(g_RoomDropFieldModel,
@@ -861,7 +861,7 @@ void RoomFx_DrawModelSprite(s32 arg0, s32 arg1, char *arg2) {
     func_800C3098(0x10);
     func_800C3238(2);
     RotMatrix(arg2 + 8, &stack.sp10);
-    func_80071A44(&stack.sp40, 0, 0x10);
+    memset(&stack.sp40, 0, 0x10);
 
     {
         s32 x = *(s16 *)(arg2 + 0x10);

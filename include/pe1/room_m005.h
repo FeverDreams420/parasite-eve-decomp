@@ -9,6 +9,7 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/scene_archive.h"
+#include "pe1/psyq_gpu.h"
 
 /* Orbiter effect controller state and the event flag it watches. */
 typedef struct RoomM005OrbiterState {
@@ -61,6 +62,5 @@ extern RoomM005Seed8 D_8018EFFC;
 extern RoomM005Seed8 D_8018F004;
 extern u8 D_80190AF4[];
 extern u16 D_800E11EA;
-int func_80077AA4(int, int);
 
 #endif

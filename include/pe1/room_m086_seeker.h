@@ -15,6 +15,7 @@
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/scene_archive.h"
+#include "pe1/psyq_gpu.h"
 
 /* room_m086 falling seeker (func_8018F004): a turning model that flies
  * along its heading until it lands, bursts on the player (flagging the
@@ -67,7 +68,6 @@ extern u8 *D_80190B84;
 extern u16 D_800E11E8;
 extern u16 D_800E11EA;
 int func_800C6B90(void *position, int radius);
-u16 func_80077AA4(int, int);
 
 /* room_m086 seeker controller (func_8018F734): follows joint 7 of the
  * actor, drifts and falls, then bursts into three seeker rings. */

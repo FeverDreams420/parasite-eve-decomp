@@ -30,7 +30,7 @@ int func_80192BDC(int mode, RoomM123PulsingParticle *particle) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428) palette += 4;
-            clut = func_80077AA4(0x20, palette);
+            clut = GetClut(0x20, palette);
             func_800CEE20(&position, 0, 0x1000, 0x1000,
                           (s16)D_800F3368.parameter02 * 2 + 0xD8, clut, 3, g_RoomScriptRecord,
                           (RenderColor *)&color);
@@ -120,7 +120,7 @@ int func_80192F0C(int mode, RoomM123GlowBurst *burst) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             func_800D3BC8(&position, 0x1000, 0x1000, 0x50,
-                          func_80077AA4(0, (kind == 4 && D_800F3428) ? palette + 6 : palette + 2),
+                          GetClut(0, (kind == 4 && D_800F3428) ? palette + 6 : palette + 2),
                           1, intensity, 0, 0);
         }
         D_800F3368.parameter00 = 0x20;
@@ -134,7 +134,7 @@ int func_80192F0C(int mode, RoomM123GlowBurst *burst) {
             int kind = D_800F3368.palette;
             int palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428) palette += 4;
-            func_800D3BC8(&position, 0x1000, 0x1000, 0x4D, func_80077AA4(0x50, palette),
+            func_800D3BC8(&position, 0x1000, 0x1000, 0x4D, GetClut(0x50, palette),
                           1, intensity, 0, 0xA00);
         }
         D_800F3368.parameter00 = 0x10;
@@ -145,7 +145,7 @@ int func_80192F0C(int mode, RoomM123GlowBurst *burst) {
             int kind = D_800F3368.palette;
             int palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428) palette += 4;
-            func_800D3BC8(&position, 0x1000, 0x1000, 0x48, func_80077AA4(0x30, palette),
+            func_800D3BC8(&position, 0x1000, 0x1000, 0x48, GetClut(0x30, palette),
                           1, intensity, 0, 0xC00);
         }
         D_800F3368.parameter00 = 0x40;
@@ -156,7 +156,7 @@ int func_80192F0C(int mode, RoomM123GlowBurst *burst) {
             int kind = D_800F3368.palette;
             int palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428) palette += 4;
-            func_800D3BC8(&position, 0x1000, 0x1000, 0x49, func_80077AA4(0x40, palette),
+            func_800D3BC8(&position, 0x1000, 0x1000, 0x49, GetClut(0x40, palette),
                           1, intensity, 0, 0xE00);
         }
         func_800CF3AC(D_801954BC, &color, D_800E27EC / 2);

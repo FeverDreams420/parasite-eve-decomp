@@ -6,6 +6,8 @@
 #include "pe1/field_sprite_state.h"
 #include "pe1/field_model_draw.h"
 #include "pe1/scene_archive.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/psyq_libc.h"
 
 /* The paired glow (src/overlays/room_lib/RoomLib_PairedGlow.c). */
 
@@ -20,9 +22,6 @@ int *func_800C2B10(int index);
 void *func_8006E498(void *owner, int id);
 void func_8006DF50(void *owner, int soundId, int arg2, int volume, int pan);
 void func_800C4E50(void *params);
-void func_80071A44(RoomFxVec4 *vec, int value, int shift);
-int func_80077A64(int arg0, int arg1, int arg2, int arg3);
-int func_80077AA4(int arg0, int arg1);
 void func_800C6EC0(int arg0, int arg1);
 
 #endif

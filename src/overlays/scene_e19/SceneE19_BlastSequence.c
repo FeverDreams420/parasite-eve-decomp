@@ -202,7 +202,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             floorGlow0.z = center.z;
             floorGlow0.y = g_RoomFloorY->raw;
             func_800CEE20(&floorGlow0, (GteRotation *)&floorRotation0, 0x2000, 0x2000, 0,
-                          func_80077AA4(0, D_800E120A + 2), 1, intensity, 0);
+                          GetClut(0, D_800E120A + 2), 1, intensity, 0);
             break;
         case 1:
             phase = blast->timer << 6;
@@ -225,7 +225,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             floorGlow1.z = center.z;
             floorGlow1.y = g_RoomFloorY->raw;
             func_800CEE20(&floorGlow1, (GteRotation *)&floorRotation1, 0x2000, 0x2000, 0,
-                          func_80077AA4(0, D_800E120A + 2), 1, intensity, 0);
+                          GetClut(0, D_800E120A + 2), 1, intensity, 0);
             intensity = rsin(phase) / 32;
             if (D_800E27EC & 1) {
                 intensity = intensity * 2 / 3;
@@ -240,12 +240,12 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, func_80077AA4(0x20, palette));
+            func_800C6EC0(page, GetClut(0x20, palette));
             func_800C6ED8(1);
             RotMatrixYXZ(&rotation, &shellMatrix1);
             shellScale1.x = radialScale / 2;
@@ -291,7 +291,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             floorGlow2.z = center.z;
             floorGlow2.y = g_RoomFloorY->raw;
             func_800CEE20(&floorGlow2, (GteRotation *)&floorRotation2, 0x2000, 0x2000, 0,
-                          func_80077AA4(0, D_800E120A + 2), 1, intensity, 0);
+                          GetClut(0, D_800E120A + 2), 1, intensity, 0);
             radialScale = 0x1000;
             {
                 s32 textureDepth;
@@ -312,7 +312,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 params->tpage = D_800E2850[pageIndex];
                 params->palette = 3;
                 params->parameter06 = 0;
-                page = (u16)(D_800E2850[pageSelector[-8]] | func_80077A64(textureDepth, blendMode, textureX, 0));
+                page = (u16)(D_800E2850[pageSelector[-8]] | GetTPage(textureDepth, blendMode, textureX, 0));
             }
             {
                 s32 paletteValue;
@@ -320,7 +320,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 if (params->palette == 4 && D_800F3428 != 0) {
                     paletteValue += 4;
                 }
-                func_800C6EC0(page, func_80077AA4(0x20, paletteValue));
+                func_800C6EC0(page, GetClut(0x20, paletteValue));
             }
             func_800C6ED8(1);
             RotMatrixYXZ(&rotation, &shellMatrix2);
@@ -393,12 +393,12 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, func_80077AA4(0x20, palette));
+            func_800C6EC0(page, GetClut(0x20, palette));
             func_800C6ED8(1);
             RotMatrixYXZ(&rotation, &shellMatrix3a);
             shellScale3a.x = radialScale;
@@ -424,12 +424,12 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, func_80077AA4(0x20, palette));
+            func_800C6EC0(page, GetClut(0x20, palette));
             func_800C6ED8(1);
             RotMatrixYXZ(&rotation, &shellMatrix3b);
             shellScale3b.x = radialScale;
@@ -456,12 +456,12 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, func_80077AA4(0x20, palette));
+            func_800C6EC0(page, GetClut(0x20, palette));
             func_800C6ED8(1);
             height = center.y;
             center.y -= blast->timer * 0x18;
@@ -502,12 +502,12 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, func_80077AA4(0x60, palette));
+            func_800C6EC0(page, GetClut(0x60, palette));
             func_800C6ED8(1);
             RotMatrixYXZ(&rotation, &shellMatrix3d);
             shellScale3d.x = radialScale;
@@ -533,12 +533,12 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, func_80077AA4(0x60, palette));
+            func_800C6EC0(page, GetClut(0x60, palette));
             func_800C6ED8(1);
             RotMatrixYXZ(&rotation, &shellMatrix3e);
             shellScale3e.x = radialScale;
@@ -567,12 +567,12 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, func_80077AA4(0x20, palette));
+            func_800C6EC0(page, GetClut(0x20, palette));
             func_800C6ED8(1);
             RotMatrixYXZ(&rotation, &shellMatrix4a);
             shellScale4a.x = radialScale;
@@ -599,12 +599,12 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, func_80077AA4(0x20, palette));
+            func_800C6EC0(page, GetClut(0x20, palette));
             func_800C6ED8(1);
             height = center.y;
             center.y -= (blast->timer + 0x20) * 0x18;
@@ -633,12 +633,12 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, func_80077AA4(0x60, palette));
+            func_800C6EC0(page, GetClut(0x60, palette));
             func_800C6ED8(1);
             RotMatrixYXZ(&rotation, &shellMatrix4c);
             shellScale4c.x = radialScale;
@@ -664,12 +664,12 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
-            func_800C6EC0(page, func_80077AA4(0x60, palette));
+            func_800C6EC0(page, GetClut(0x60, palette));
             func_800C6ED8(1);
             RotMatrixYXZ(&rotation, &shellMatrix4d);
             shellScale4d.x = radialScale;

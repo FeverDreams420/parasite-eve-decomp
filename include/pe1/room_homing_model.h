@@ -10,6 +10,7 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/floor_polygon.h"
+#include "pe1/psyq_gpu.h"
 
 /* Room projectile that flies along its heading, bounces off the walkable
  * polygon's edges, drops onto the floor and finally hands its position to
@@ -126,7 +127,6 @@ extern int func_8006DCE4(int id, int channel, int x, int y, int z);
 extern void func_800866A4(int handle, int arg);
 extern int func_8006F39C(int id, void *actor);
 extern void func_8006F6D4(int handle, int, int index, int value, int, int);
-extern u16 func_80077AA4(int, int);
 /* Battle_GetEnemyContextField in main. */
 extern int func_8003010C(void *actor, int field);
 

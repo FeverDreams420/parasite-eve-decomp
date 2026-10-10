@@ -73,7 +73,7 @@ int func_8019326C(int mode, RoomShakeSweepParticle *p) {
         {
             int kind;
             int palette;
-            int rawPage = func_80077A64(0, 1, 0, 0);
+            int rawPage = ((int (*)(int, int, int, int))GetTPage)(0, 1, 0, 0);
             page = (u16)(tpages[*index] | rawPage);
             kind = D_800F336C;
             palette = D_800E1204[kind];

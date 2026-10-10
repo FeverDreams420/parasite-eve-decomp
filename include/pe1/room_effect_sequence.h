@@ -6,6 +6,7 @@
 #include "pe1/room_floor.h"
 #include "pe1/field_script_context.h"
 #include "pe1/scene_archive.h"
+#include "pe1/psyq_libc.h"
 
 /* The effect sequence (src/overlays/room_lib/RoomFx_EffectSequence.c):
  * the room data it fills and reads (the same addresses in all five rooms
@@ -53,7 +54,6 @@ extern volatile s16 D_80192C12;
 extern char D_80192BFC;
 extern char D_80192BF0;
 extern short D_80192C30;
-extern void func_80071A44(void *, int, int);
 
 /* The module's class methods (slots 3 to 5). */
 int RoomFx_EffectSequenceRegister(void *o);

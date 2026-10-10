@@ -5,13 +5,13 @@
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_script_context.h"
 #include "pe1/field_sprite_state.h"
+#include "pe1/psyq_libc.h"
 
 extern s16 D_8019955A;
 extern FieldGlowSprite D_80199580;
 
 void func_800C2FF0(int, int);
 void func_800C3098(int);
-void func_80071A44(GteVector *, int, int);
 void func_80194090(void *arg0, void *arg1, char *effects) {
     GteMatrix matrix;
     GteVector scratch, vec;
@@ -39,7 +39,7 @@ void func_80194090(void *arg0, void *arg1, char *effects) {
 
     for (; i < 3; ++i, angleOffset += 8) {
         RotMatrix((GteShortVector *)(base + angleOffset), &matrix);
-        func_80071A44(&vec, 0, 0x10);
+        memset(&vec, 0, 0x10);
         vec.x = *(s16 *)(phase + 0x48);
         vec.y = *(s16 *)(phase + 0x4A);
         vec.z = *(s16 *)(phase + 0x4C);

@@ -24,7 +24,7 @@ int func_8019552C(int mode, RoomModelPulseParticle *particle) {
         kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428 != 0) palette += 4;
-        clut = func_80077AA4(0x20, palette);
+        clut = GetClut(0x20, palette);
         func_800CEE20(&position, 0, 0x1000, 0x1000,
                        (s16)D_800F3368.parameter02 * 2 + 0xD8, clut, 3,
                        D_80196094, (RenderColor *)&color);

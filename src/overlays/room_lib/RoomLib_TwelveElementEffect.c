@@ -14,6 +14,7 @@
 #include "room_lib.h"
 #include "pe1/room_floor.h"
 #include "pe1/floor_polygon.h"
+#include "pe1/psyq_libc.h"
 
 /* Seeds copied into the stack frames; file-scope so the all-zero rotation
  * stays a rodata copy. */
@@ -95,7 +96,6 @@ typedef struct RoomTwelveEffectStack {
 
 int *func_800C2B28(int index);
 int func_800C66C8(void *object, int message, void *state);
-
 
 /* Retail marks this function handwritten; only its COP2 windows remain ASM. */
 void RoomLib_InitTwelveElementEffect(void *owner, void *unused, char *state) {
@@ -186,7 +186,6 @@ typedef struct RoomTwelveEffectDrawStack {
 } RoomTwelveEffectDrawStack;
 
 void ApplyMatrix(RoomSpriteMatrix *matrix, void *position, int *translation);
-void func_80071A44(RoomFxVec4 *vec, int value, int shift);
 int func_8001CAB0(int x, int z, int arg2, int arg3);
 int func_800C61A8(GteShortVector *point, GteMatrix *matrix);
 
@@ -238,7 +237,7 @@ void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
             ApplyMatrix(primaryMatrix, &workState->position[i],
                           stack.primaryMatrix.t);
 
-            func_80071A44(sourceScale, 0, 0x10);
+            memset(sourceScale, 0, 0x10);
             stack.sourceScale.x = (s16)workState->phase[i];
             stack.sourceScale.y = (s16)workState->phase[i];
             stack.sourceScale.z = (s16)workState->phase[i];

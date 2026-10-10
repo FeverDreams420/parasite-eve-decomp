@@ -7,6 +7,7 @@
 #include "pe1/room_m123_joint_triangle.h"
 #include "pe1/room_m123_burst_particle.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/psyq_gpu.h"
 
 /* Particle drawn by the room_m123 pulsing sprite callback: it scales with a
  * cosine of its frame counter, then fades into a second blended sprite. */
@@ -15,7 +16,6 @@ typedef RoomM123BurstParticle RoomM123PulsingParticle;
 extern u8 D_801954BC[];
 extern s16 g_RoomScriptRecord;
 
-u16 func_80077AA4(int, int);
 void func_800CF844(void *, void *, int, void *, int, int);
 void LoadAverageShort12(void *, void *, int, int, void *);
 void func_800D2B58(void *, void *, void *, void *, int, int, int);

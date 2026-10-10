@@ -103,11 +103,11 @@ int func_80195728(int mode, s16 *state) {
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 0;
                 D_800F3368.tpage = tpage;
-                page = (tpages[D_800E11EA] | func_80077A64(0, 1, 0, 0)) & 0xFFFF;
+                page = (tpages[D_800E11EA] | ((int (*)(int, int, int, int))GetTPage)(0, 1, 0, 0)) & 0xFFFF;
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0x50, palette);
+                clut = GetClut(0x50, palette);
                 func_800C6EC0(page, clut);
             }
             func_800C6ED8(1);

@@ -125,7 +125,7 @@ int RoomEffect_SeekerSparkCallback(int mode, RoomDampedSpark *spark,
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0, palette);
+            clut = GetClut(0, palette);
             /* The kind is re-read through its own label after the call, so
              * it is not addressed off a saved parameter block base. */
             func_800D2370((GteShortVector *)spark, (GteRotation *)&spark->vx, 0x140, 0x78, 0,
@@ -161,7 +161,7 @@ int RoomEffect_SeekerSparkCallback(int mode, RoomDampedSpark *spark,
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x30, palette);
+            clut = GetClut(0x30, palette);
             func_800CEE20((GteShortVector *)spark, 0, scale, scale,
                           (s16)D_800F3368.parameter02 * (spark->timer & 1) + 0xDC, clut, 1,
                           intensity, &color);
@@ -182,7 +182,7 @@ int RoomEffect_SeekerSparkCallback(int mode, RoomDampedSpark *spark,
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0, palette);
+            clut = GetClut(0, palette);
             func_800CEE20((GteShortVector *)spark, 0, 0x1000, 0x1000,
                           (s16)D_800F3368.parameter02 * ((s16)spark->timer / 2) + 0xC0, clut, 1,
                           0x80, &glow);

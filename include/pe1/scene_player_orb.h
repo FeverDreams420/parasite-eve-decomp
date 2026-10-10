@@ -12,6 +12,8 @@
 #include "pe1/field_script_context.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/scene_archive.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/psyq_libc.h"
 
 /* Scene e08 player orb: an effect spawned at a random spot around the
  * player, swung around the scene anchor by the anchor's facing, then drawn
@@ -58,8 +60,6 @@ extern u8 D_80199690[];
 int *func_800C2B10(int index);
 int func_800C6B90(GteShortVector *position, int radius);
 int func_80071A54(void);
-int func_80077A64(int arg0, int arg1, int x, int y);
-int func_80077AA4(int x, int y);
 void func_8006DF50(void *channel, int id, int value, int volume, int pan);
 
 /* Scene e08 limb beams: ten ribbons fanned from the player's chest bone to
@@ -100,6 +100,5 @@ typedef struct SceneArmGlowSprite {
 extern SceneArmGlowSprite D_801994C8;
 extern RenderColor D_8018F060;
 extern RenderColor D_8018F064;
-void func_80071A44(GteVector *vector, int value, int size);
 
 #endif

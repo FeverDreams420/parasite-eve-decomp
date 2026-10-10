@@ -119,7 +119,7 @@ int func_8018F7C4(int mode, RoomM349FlareTarget *target,
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x20, palette);
+            clut = GetClut(0x20, palette);
             func_800CEE20(&anchor, 0, size, size,
                           (s16)D_800F3368.parameter02 + 0xD8, clut, 1, phase,
                           &color);
@@ -132,7 +132,7 @@ int func_8018F7C4(int mode, RoomM349FlareTarget *target,
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x20, palette);
+            clut = GetClut(0x20, palette);
             func_800CEE20(&anchor, 0, size, size,
                           (s16)D_800F3368.parameter02 + 0xD8, clut, 1, phase,
                           &color);

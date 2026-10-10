@@ -126,7 +126,7 @@ mode2:
         if (D_800F3368.palette == 4 && D_800F3428 != 0) {
             texture += 4;
         }
-        texture = func_80077AA4(ROOMLIB_BOUNCE_CLUT_X, texture);
+        texture = GetClut(ROOMLIB_BOUNCE_CLUT_X, texture);
         func_800CEE20((GteShortVector *)fx, 0, saved2, saved2,
                       (s16)D_800F3368.parameter02 * (fx->timer / 6) + ROOMLIB_BOUNCE_FRAME_BASE,
                       (unsigned short)texture, 1, saved0, 0);

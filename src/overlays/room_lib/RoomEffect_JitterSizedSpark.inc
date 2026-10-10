@@ -53,7 +53,7 @@ int ROOMEFFECT_JITTER_SIZED_FUNC(int mode, RoomJitterSpark *spark) {
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800CEE20((GteShortVector *)spark, &rotation, size * 3 / 2, size * 3 / 2,
                           (s16)D_800F3368.parameter02 * (s16)spark->timer + 184,
-                          func_80077AA4(208, palette), 1, 88, 0);
+                          GetClut(208, palette), 1, 88, 0);
             break;
         }
         }

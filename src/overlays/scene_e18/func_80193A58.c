@@ -5,6 +5,7 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
 
 typedef struct SceneE18WaveEffect {
     s16 x, y, z, field06;
@@ -12,7 +13,6 @@ typedef struct SceneE18WaveEffect {
     s16 size, wave, amplitude;
 } SceneE18WaveEffect;
 extern u32 D_80194180[], D_80194184[];
-int func_80077AA4(int,int);
 
 int func_80193A58(int mode, SceneE18WaveEffect *effect) {
     s16 position[4];
@@ -29,7 +29,7 @@ int func_80193A58(int mode, SceneE18WaveEffect *effect) {
     if (mode != 2) return 0;
     index = D_800F3368.palette;
     palette = D_800E1204[index];
-    palette = func_80077AA4(0, (index == 4 && D_800F3428 != 0) ? palette + 7 : palette + 3);
+    palette = GetClut(0, (index == 4 && D_800F3428 != 0) ? palette + 7 : palette + 3);
     func_800CEE20((struct GteShortVector *)effect, (struct GteRotation *)&effect->field08, effect->wave, effect->wave,
                   0x40, palette & 0xffff, 3, effect->size, 0);
     position[0] = effect->x;

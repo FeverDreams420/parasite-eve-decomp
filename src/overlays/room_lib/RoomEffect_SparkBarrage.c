@@ -173,7 +173,7 @@ int RoomEffect_PhasedSparkParticle(int mode, RoomPhasedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x20, palette);
+            clut = GetClut(0x20, palette);
             func_800CEE20((GteShortVector *)spark, &spin, scale, scale, 0xA0, clut, 0,
                           0xBE, 0);
             }
@@ -195,7 +195,7 @@ int RoomEffect_PhasedSparkParticle(int mode, RoomPhasedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x10, palette);
+            clut = GetClut(0x10, palette);
             func_800CEE20(&floorPos, &floorSpin, scale * 2, scale * 2,
                           (s16)D_800F3368.parameter02 * 3 + 0xA7, clut, 2, 0x64, 0);
             break;
@@ -214,7 +214,7 @@ int RoomEffect_PhasedSparkParticle(int mode, RoomPhasedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0, palette);
+            clut = GetClut(0, palette);
             func_800CEE20((GteShortVector *)spark, &rotation, scale * 3 / 2,
                           scale * 3 / 2, (s16)D_800F3368.parameter02 * fade, clut,
                           0, 0xBE, 0);
@@ -233,7 +233,7 @@ int RoomEffect_PhasedSparkParticle(int mode, RoomPhasedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x30, palette);
+            clut = GetClut(0x30, palette);
             func_800CEE20((GteShortVector *)spark, 0, scale, scale, 0xA2, clut, 1,
                           fade, 0);
             break;
@@ -251,7 +251,7 @@ int RoomEffect_PhasedSparkParticle(int mode, RoomPhasedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x10, palette);
+            clut = GetClut(0x10, palette);
             func_800CEE20((GteShortVector *)spark, 0, 0x1000, scale,
                           (s16)D_800F3368.parameter02 * ((s16)spark->timer / 2) + 0x20,
                           clut, 1, fade, 0);
@@ -380,7 +380,7 @@ int RoomEffect_BouncingSparkParticle(int mode, RoomDampedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x10, palette);
+            clut = GetClut(0x10, palette);
             func_800CEE20((GteShortVector *)spark, &rotation, scale, scale,
                           (s16)D_800F3368.parameter02 * (s16)((s16)spark->timer / 3) + 0x20,
                           clut, 1, 0x80, &color);
@@ -402,7 +402,7 @@ int RoomEffect_BouncingSparkParticle(int mode, RoomDampedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x10, palette);
+            clut = GetClut(0x10, palette);
             func_800CEE20((GteShortVector *)spark, 0, 0x1000, scale,
                           (s16)D_800F3368.parameter02 * ((s16)spark->timer / 2) + 0x20,
                           clut, 1, intensity, 0);
@@ -499,7 +499,7 @@ return 0;
         kind = D_800F3368.palette;                                           \
         palette = D_800E1204[kind];                                          \
         if (kind == 4 && D_800F3428 != 0) palette += 4;                      \
-        clut = func_80077AA4(0x40, palette);                                 \
+        clut = GetClut(0x40, palette);                                 \
         func_800CEE20(&position, 0, 0x2000, 0x2000,                          \
                       (s16)D_800F3368.parameter02 * (spark->timer & 3) + 0xA3, \
                       clut, 1, 0x80, 0);                                     \
@@ -522,7 +522,7 @@ return 0;
         kind = D_800F3368.palette;                                           \
         palette = D_800E1204[kind];                                          \
         if (kind == 4 && D_800F3428 != 0) palette += 4;                      \
-        clut = func_80077AA4(0x60, palette);                                 \
+        clut = GetClut(0x60, palette);                                 \
         func_800CEE20(&position, 0, scale, scale, 0xE, clut, 1, fade, 0);    \
     }
 
@@ -591,7 +591,7 @@ int RoomEffect_WaveSparkParticle(int mode, RoomPhasedSpark *spark) {
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0x50, palette);
+                clut = GetClut(0x50, palette);
                 func_800CEE20(&position, 0, 0x2000, 0x2000,
                               (s16)D_800F3368.parameter02 * (s16)spark->timer + 0xA7,
                               clut, 1, 0x80, 0);
@@ -610,7 +610,7 @@ int RoomEffect_WaveSparkParticle(int mode, RoomPhasedSpark *spark) {
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
-                clut = func_80077AA4(0x50, palette);
+                clut = GetClut(0x50, palette);
                 func_800CEE20(&floorPos, &floorSpin, 0x1000, 0x1000,
                               (s16)D_800F3368.parameter02 * (s16)spark->timer + 0xA7,
                               clut, 3, 0x80, 0);
@@ -775,7 +775,7 @@ int RoomEffect_CometSparkParticle(int mode, RoomCometSpark *spark) {
                     D_800F3368.palette = 3;
                     D_800F3368.parameter06 = 1;
                     D_800F3368.parameter0A = 5;
-                    clut = func_80077AA4(0, D_800E1204[D_800F3368.palette] + 2);
+                    clut = GetClut(0, D_800E1204[D_800F3368.palette] + 2);
                 } while (0);
                 func_800CEE20((GteShortVector *)spark, 0, 0x800, 0x800,
                               (s16)D_800F3368.parameter02 * (s16)spark->timer + 0x40, clut, 1,
@@ -794,7 +794,7 @@ int RoomEffect_CometSparkParticle(int mode, RoomCometSpark *spark) {
                 floorPos.y = g_RoomFloorY->y;
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
-                clut = func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 6
+                clut = GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 6
                                                                        : palette + 2);
                 func_800CEE20(&floorPos, &floorSpin, 0x800, 0x800,
                               (s16)D_800F3368.parameter02 * (s16)spark->timer + 0x40, clut, 3,
@@ -814,7 +814,7 @@ int RoomEffect_CometSparkParticle(int mode, RoomCometSpark *spark) {
                               (s16)spark->timer * 2);
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
-                clut = func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 6
+                clut = GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 6
                                                                        : palette + 2);
                 func_800D3114((GteShortVector *)&g_RoomCometSparkTrail, 3, 0x12C, 0, 0x81, 0x7F,
                               0x1E, D_800E2850[D_800E11E4[11]], clut, 0x80, &color, &color,
@@ -843,7 +843,7 @@ int RoomEffect_CometSparkParticle(int mode, RoomCometSpark *spark) {
                 int palette;
                 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
-                clut = func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 6
+                clut = GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 6
                                                                        : palette + 2);
                 func_800CEE20((GteShortVector *)spark, &rotationA, 0x2000, 0x2000,
                               (s16)D_800F3368.parameter02 * (s16)spark->timer + 0x40, clut, 1,
@@ -862,7 +862,7 @@ int RoomEffect_CometSparkParticle(int mode, RoomCometSpark *spark) {
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 0;
                 D_800F3368.parameter0A = 0;
-                clut = func_80077AA4(0x50, D_800E1204[D_800F3368.palette]);
+                clut = GetClut(0x50, D_800E1204[D_800F3368.palette]);
             } while (0);
             half = (s16)spark->timer / 2;
             func_800CEE20((GteShortVector *)spark, 0, 0x800, 0x800,
@@ -1013,7 +1013,7 @@ int RoomEffect_LiftedSparkParticle(int mode, RoomDampedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x20, palette);
+            clut = GetClut(0x20, palette);
             func_800CEE20((GteShortVector *)spark, 0, scale, scale, 0xA0, clut, 1,
                           intensity, 0);
             break;
@@ -1034,7 +1034,7 @@ int RoomEffect_LiftedSparkParticle(int mode, RoomDampedSpark *spark) {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
-            clut = func_80077AA4(0x10, palette);
+            clut = GetClut(0x10, palette);
             func_800CEE20((GteShortVector *)spark, &rotation, scale, scale,
                           (s16)D_800F3368.parameter02 * ((s16)spark->timer / 4) + 0x20,
                           clut, 1, 0xA0, &color);
