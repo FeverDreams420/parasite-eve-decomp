@@ -204,8 +204,9 @@ segments:
       - [0x81F8, c, entity/Entity_BitOpcodes]
       - [0x82E8, c, task/Task_EntityActionAnimation]
       - [0x8374, c, task/Task_WaitAnimFrameMatch]
-      - [0x83B4, c, task/Task_EncodeBarcode]
-      - [0x8454, c, task/Task_RenderAndBattleState]
+      # Barcode, fog/scroll, camera reset and battle render-state opcodes:
+      # contiguous default-profile handlers.
+      - [0x83B4, c, task/Task_BarcodeAndRenderStateOps]
       - [0x855C, c, entity/Entity_MoveLockOpcodes]
       # Menu-choice read and script branch: contiguous opcode pair.
       - [0x85E4, c, task/Task_MenuChoiceBranch]
