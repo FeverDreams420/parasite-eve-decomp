@@ -112,14 +112,14 @@ update: {
     switch (temp_v1_2) {                            /* switch 1 */
     case 0:                                         /* switch 1 */
         command->pending = 0;
-        func_800CE870(D_8009D254, 0, &point);
+        func_800CE870((char *)D_8009D254, 0, (s16 *)&point);
         point.x = (func_80071A54() & 0x7FF) - 0x400;
         point.y = ((u16) g_RoomFloorY->y - 0x258) - (func_80071A54() & 0x1FF);
         point.z = (func_80071A54() & 0x7FF) - 0x400;
         effect->target.x = (s16) (u16) point.x;
         effect->target.y = (s16) (u16) point.y;
         effect->target.z = (s16) (u16) point.z;
-        func_800CE870(D_8009D254, 1, &effect->endpoint);
+        func_800CE870((char *)D_8009D254, 1, (s16 *)&effect->endpoint);
         effect->duration = (func_80071A54() & 0xF) + 6;
         effect->timer = 0;
         effect->phase = 1;
@@ -132,7 +132,7 @@ update: {
         }
         temp_s3 = rsin((s32) (effect->timer << 0xA) / (s16) effect->duration);
         LoadAverageShort12(&effect->previousPosition, &effect->target, 0x1000 - temp_s3, temp_s3, &effect->position);
-        func_800CE870(D_8009D254, 1, &effect->endpoint);
+        func_800CE870((char *)D_8009D254, 1, (s16 *)&effect->endpoint);
         if (effect->timer >= effect->duration) {
             effect->phase = 2;
             effect->timer = 0;
@@ -140,7 +140,7 @@ update: {
         break;
     case 2:                                         /* switch 1 */
         effect->timer = (u16) effect->timer + 1;
-        func_800CE870(D_8009D254, 1, &effect->endpoint);
+        func_800CE870((char *)D_8009D254, 1, (s16 *)&effect->endpoint);
         if (effect->timer >= 4) {
             effect->phase = 0;
             effect->timer = 0;
@@ -407,7 +407,7 @@ block_63:
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 1;
             D_800F3368.tpage = texturePage;
-            func_800CEE20(&effect->position, NULL, 0x2000, 0x2000, 6, func_80077AA4(paletteX, paletteY + 5) & 0xFFFF, 3, (s32) var_s0, &beamColor);
+            func_800CEE20(&effect->position, NULL, 0x2000, 0x2000, 6, func_80077AA4(paletteX, paletteY + 5) & 0xFFFF, 3, (s32) var_s0, (struct RenderColor *)&beamColor);
         }
         D_800F3368.depth = 0xB;
         return 0;

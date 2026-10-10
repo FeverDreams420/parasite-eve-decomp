@@ -8,6 +8,8 @@
 #include "pe1/gte_types.h"
 #include "pe1/room_floor.h"
 #include "pe1/render_matrix_slot.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 
 /* Room effect controllers that play a sound, then emit one particle every
  * third frame along an angle that sweeps half a turn over seventy frames. */
@@ -71,9 +73,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomSoundBurstState, soundHandle) == 0xC,
 
 extern RoomSoundBurstChannel *D_800F32D0, *D_800F33E0;
 extern RoomSoundBurstEventState *D_800E2368;
-extern s32 D_800E27EC;
 extern volatile u16 D_800E11E8;
-extern u16 D_800E2850[];
 extern void func_800CE8F0(void *, int, void *, void *);
 extern int rsin(int);
 extern int func_800D3FD8(void);
@@ -81,17 +81,12 @@ extern int func_800D3F64(int, int);
 extern void func_800866A4(int, int);
 extern int func_80071A54(void);
 extern RoomSoundBurstBattleEntity *D_8009D254;
-extern u16 D_800E1204[];
-extern int D_800F3428;
 extern int rcos(int);
 extern u16 func_80077AA4(int, int);
 extern void func_800CF844(void *, void *, int, void *, int, int);
 extern int func_800C6B90(void *position, int radius);
-extern void func_800CEE20(void *, void *, int, int, int, int, int, int, void *);
-extern void func_800CE870(void *object, int mode, void *position);
 extern void func_800CFAA8(void *from, void *to, void *angles);
 extern void func_800CFD50(void *angles, void *out, int speed);
-extern void func_800CFB7C(void *angles, int distance, void *out);
 extern int rsin(int angle);
 extern void LoadAverageShort12(void *, void *, int, int, void *);
 extern void func_800D2B58(void *, void *, void *, void *, int, int, int);
@@ -112,10 +107,5 @@ typedef struct RoomHomingSparkParams {
 } RoomHomingSparkParams;
 
 PE1_STATIC_ASSERT(sizeof(RoomHomingSpark) == 0x16, room_homing_spark_size);
-
-extern void func_800CF3AC(void *track, void *color, int time);
-extern void func_800D004C(void *position, int width, int height, int segments,
-                          void *rotation, int scale_x, int scale_y,
-                          void *color0, void *color1, int intensity, int mode);
 
 #endif

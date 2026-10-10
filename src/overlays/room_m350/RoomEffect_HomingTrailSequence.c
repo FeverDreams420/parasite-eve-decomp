@@ -3,10 +3,11 @@
 #include "pe1/room_m350_effects.h"
 #include "pe1/render_object.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_texture_tables.h"
 /* Moving effect with collision, queued trail positions and ground rendering. */
 extern RoomM350EffectActor *D_800F32D0;
 extern RoomM350EffectInstance *g_PlayerEntity;
-extern int D_800E27EC,D_800966EC[];
+extern int D_800966EC[];
 extern short D_800966EE[],D_8019A7FE,D_8019A800,D_8019A802;
 extern GteRotation D_8019A3C0;
 extern RenderColor D_8019A4E4,D_8019A3C8;
@@ -114,12 +115,9 @@ int func_801947BC(int event,RoomM350Particle *p)
     return 0;
 }
 
-
 extern RoomM350EffectEmitter *D_800F33E0;
 extern GteShortVector D_8019A7A0;
 extern unsigned char D_8019A804;
-extern unsigned short D_800E11E4[];
-extern unsigned short D_800E2850[];
 int func_80194CFC(int event) {
     if (event == 1) goto update;
     if (event < 2) {

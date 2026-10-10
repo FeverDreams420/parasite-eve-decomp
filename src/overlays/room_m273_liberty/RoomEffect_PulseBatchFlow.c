@@ -2,6 +2,7 @@
 #include "room_m273.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/field_texture_tables.h"
 
 int func_80195984(int mode, RoomM273PulseInput *input)
 {
@@ -44,7 +45,7 @@ int func_80195984(int mode, RoomM273PulseInput *input)
 extern unsigned char D_8019AEF8;
 extern short D_8019AEE8;
 extern void *D_8019AE7C;
-extern unsigned short D_800E11EA,D_800E2850[];
+extern unsigned short D_800E11EA;
 extern int func_80195984(),func_8019A290();
 extern int func_800CE5AC(void **,int,int,int,int (*)());
 extern void func_800CE688(void *),func_800CE78C(void *);

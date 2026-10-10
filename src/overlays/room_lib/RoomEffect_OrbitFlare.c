@@ -49,7 +49,7 @@ mode2:
         if (D_800F3368.palette == 4 && D_800F3428 != 0) {
             tex += 4;
         }
-        func_800CEE20(rec, 0, scale, scale,
+        func_800CEE20((GteShortVector *)rec, 0, scale, scale,
                       ((s16)D_800F3368.parameter02 * ((D_800E27EC << 3) / 14)) + 0xE0,
                       (u16)GetClut(0x40, tex), 1, fade, 0);
     }
@@ -218,7 +218,7 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = GetClut(0x40, palette);
-            func_800CEE20(state, &spin, state->height, state->height,
+            func_800CEE20((GteShortVector *)state, &spin, state->height, state->height,
                           (s16)D_800F3368.parameter02 * 2 + 0xDC, clut, 1,
                           state->spread, 0);
             }
@@ -230,7 +230,7 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = GetClut(0x40, palette);
-            func_800CEE20(state, 0, state->height * 2, state->height * 2,
+            func_800CEE20((GteShortVector *)state, 0, state->height * 2, state->height * 2,
                           (s16)D_800F3368.parameter02 * 2 + 0xD8, clut, 3,
                           state->spread, 0);
             }
@@ -265,7 +265,7 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = GetClut(0x40, palette);
-            func_800CEE20(state, 0, scale, scale,
+            func_800CEE20((GteShortVector *)state, 0, scale, scale,
                           (s16)D_800F3368.parameter02 + 0xFD, clut, 1, fade, 0);
             }
             {

@@ -3,9 +3,9 @@
 
 #include "menu_memcard_link.h"
 #include "pe1/field_anim_callback_list.h"
+#include "pe1/field_texture_tables.h"
 
 typedef struct MemcardTrailState { s16 phase, timer, attachment; } MemcardTrailState;
-extern u16 D_800E11F6;
 extern u8 D_801F1DE8[];
 extern u8 D_801F1E74[];
 

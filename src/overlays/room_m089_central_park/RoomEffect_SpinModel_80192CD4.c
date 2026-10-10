@@ -81,7 +81,7 @@ int func_80192CD4(int mode, RoomM089SpinModel *spin, GteShortVector *anchor) {
             {
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
-                func_800CEE20(&position, &rotation, size, size, 0x26,
+                func_800CEE20(&position, (GteRotation *)&rotation, size, size, 0x26,
                               GetClut(0, (kind == 4 && D_800F3428) ? palette + 9 : palette + 5),
                               1, glow, &color);
             }

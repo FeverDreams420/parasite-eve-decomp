@@ -24,4 +24,8 @@ int func_800CE560(char *out, int stride, int count,
                   FieldAnimCallbackListCallback callback);
 void *func_800CE610(char *list);
 
+/* Age of the entry whose callback is running, saved and restored around
+ * each list walk; callbacks read it as their elapsed frame count. */
+extern int D_800E27EC;
+
 #endif /* PE1_FIELD_ANIM_CALLBACK_LIST_H */

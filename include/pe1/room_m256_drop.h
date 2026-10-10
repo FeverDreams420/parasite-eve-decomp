@@ -9,6 +9,8 @@
 #include "pe1/render_matrix_slot.h"
 #include "pe1/render_prim.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 
 /* room_m256 scatter drop (func_80192844): a falling drop that jitters,
  * sheds three kinds of splash children, flashes the scene when it reaches
@@ -68,8 +70,6 @@ extern RoomM256DropEvent *D_800E2368;
 extern RoomM256DropEntity *D_8009D254;
 extern RoomM256DropRotation D_8018F1CC;
 extern RoomM256DropColor D_8018F1D4;
-extern u16 D_800E1204[];
-extern int D_800F3428;
 extern int D_8009D248;
 extern u16 D_8009D1CC;
 
@@ -79,13 +79,5 @@ int func_8001CAB0(int x, int z, int floor, int count);
 int rsin(int angle);
 int rcos(int angle);
 u16 GetClut(int x, int y);
-void func_800CEE20(void *position, RoomM256DropRotation *rotation,
-                   int scale_x, int scale_y, int texture, int clut,
-                   int page, int intensity, RoomM256DropColor *color);
-void func_800D004C(void *position, int width, int height, int segments,
-                   RoomM256DropRotation *rotation, int scale_x, int scale_y,
-                   RoomM256DropColor *color0, RoomM256DropColor *color1,
-                   int intensity, int mode);
-void func_800D1DEC(void *position, RoomM256DropColor *color, int scale, int flags);
 
 #endif

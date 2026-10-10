@@ -1,5 +1,7 @@
 /* CC1_FLAGS: -fno-cse-skip-blocks */
 #include "common.h"
+#include "pe1/field_anim_callback_list.h"
+#include "pe1/field_sprite_draw.h"
 
 typedef struct Effect {
     s16 field00;
@@ -22,11 +24,7 @@ typedef struct SceneE18ObjectLink {
 } SceneE18ObjectLink;
 
 extern SceneE18ObjectLink *D_800F32D0;
-extern int D_800E27EC;
 extern u16 D_801941CC;
-void func_800D0728(void *position, int start, int end, int count,
-                   void *params, int frameA, int frameB, void *partA,
-                   void *partB, int size, int active);
 
 int func_80192E60(int mode, Effect *effect) {
     s16 position[4];
@@ -55,11 +53,11 @@ int func_80192E60(int mode, Effect *effect) {
     params[1] = D_800E27EC << 7;
     params[2] = 0;
     params[3] = 1;
-    func_800D0728(position, 0x300, 0x400, 0x10, params,
-                   effect->frame, effect->frame, effect, &effect->field04,
+    func_800D0728((struct GteShortVector *)position, 0x300, 0x400, 0x10, (struct GteRotation *)params,
+                   effect->frame, effect->frame, (struct RenderColor *)effect, (struct RenderColor *)&effect->field04,
                    effect->size > 0x80 ? 0x80 : effect->size, 1);
-    func_800D0728(position, 0x400, 0x500, 0x10, params,
-                   effect->frame, effect->frame, &effect->field04, effect,
+    func_800D0728((struct GteShortVector *)position, 0x400, 0x500, 0x10, (struct GteRotation *)params,
+                   effect->frame, effect->frame, (struct RenderColor *)&effect->field04, (struct RenderColor *)effect,
                    effect->size > 0x80 ? 0x80 : effect->size, 1);
     return 0;
 }

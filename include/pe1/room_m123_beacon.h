@@ -9,6 +9,9 @@
 #include "pe1/render_matrix_slot.h"
 #include "pe1/render_prim.h"
 #include "pe1/field_model_draw.h"
+#include "pe1/field_anim_callback_list.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 
 /* room_m123 joint beacon (func_80193618): follows joint 0x17 of the actor,
  * swells, pulses and fades, tags the player once on contact, and draws a glow
@@ -75,10 +78,6 @@ typedef struct RoomM123BeaconColor {
     u8 r, g, b, code;
 } RoomM123BeaconColor;
 
-extern u16 D_800E1204[];
-extern u16 D_800E2850[];
-extern int D_800F3428;
-extern int D_800E27EC;
 extern RoomM123BeaconChannel *D_800F32D0;
 extern RoomM123BeaconEvent *D_800E2368;
 extern RoomM123BeaconEntity *D_8009D254;
@@ -89,22 +88,12 @@ extern u8 *D_8019569C;
 extern u8 D_8019550C[];
 extern u16 D_800E11FA;
 extern u16 D_800E11EA;
-extern u16 D_800E11E4[];
 
 u8 *func_8006E498(void *channel, int id);
 void func_800C6D5C(u8 *data, u8 x_offset, u8 y_offset);
 void func_800C6FA0(u8 *data, u16 factor);
 void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y, int texture,
                    int clut, int page, int intensity, int unused, int angle);
-void func_800CFB7C(GteShortVector *angles, s16 distance, GteShortVector *out);
-void func_800CEE20(GteShortVector *position, GteShortVector *rotation,
-                   int scale_x, int scale_y, int texture, int clut,
-                   int page, int intensity, RoomM123BeaconColor *color);
-void func_800D004C(GteShortVector *position, int width, int height, int segments,
-                   GteShortVector *rotation, int scale_x, int scale_y,
-                   RoomM123BeaconColor *color0, RoomM123BeaconColor *color1,
-                   int intensity, int mode);
-void func_800CF3AC(void *track, RoomM123BeaconColor *color, int time);
 void func_800CE8F0(void *pool, int index, void *offset, void *position);
 int func_800CEB8C(void *position, GteShortVector *target, int radius);
 u16 GetClut(int x, int y);

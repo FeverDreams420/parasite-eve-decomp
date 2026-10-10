@@ -2,15 +2,15 @@
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte_types.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 typedef RoomM350OverlayTransform Transform;
 typedef struct RoomM350Instance { char reserved[0x238]; Transform *transform; } Instance;
 typedef RoomM350Actor Actor;
 
 extern Actor *D_800F32D0;
-extern int D_800E27EC, D_800F3428, D_800966EC[], D_8019A634[];
-extern unsigned short D_800E1204[];
+extern int D_800966EC[], D_8019A634[];
 extern int GetClut(int, int);
-extern void func_800CEE20(void *, int, int, int, int, unsigned int, int, int, void *);
 
 int func_80197A04(int event, short *object)
 {
@@ -35,10 +35,10 @@ int func_80197A04(int event, short *object)
             palette += 4;
         }
         handle = GetClut(32, palette);
-        func_800CEE20(position, 0, 5120, 5120, (s16)D_800F3368.parameter02 * 2 + 216,
+        func_800CEE20((GteShortVector *)position, 0, 5120, 5120, (s16)D_800F3368.parameter02 * 2 + 216,
             (unsigned short)handle, 1,
             (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80] >> 5,
-            D_8019A634);
+            (struct RenderColor *)D_8019A634);
     }
     return 0;
 }
@@ -48,7 +48,7 @@ typedef RoomM350TransformMatrix Matrix;
 typedef RoomM350Vector Vector;
 extern RoomM350Emitter *D_800F33E0;
 extern unsigned char D_8019A86E, D_8019A859;
-extern unsigned short D_800E11E8, D_800E2850[];
+extern unsigned short D_800E11E8;
 /* Retail writes both fields twice during configuration. */
 extern int func_80197A04(int, short *);
 extern int Inv_ScrambleGrid(void);

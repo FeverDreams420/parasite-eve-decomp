@@ -1,10 +1,9 @@
 #include "common.h"
-extern s32 D_800E27EC;
+#include "pe1/field_anim_callback_list.h"
+#include "pe1/field_sprite_draw.h"
 extern char D_80199464[];
 
 extern s32 func_80071A54(void);
-extern void func_800CF3AC();
-extern void func_800D1DEC();
 
 s32 func_80192620(s32 mode, s16 *pos) {
     s16 in[4];

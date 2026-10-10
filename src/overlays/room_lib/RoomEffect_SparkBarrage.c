@@ -75,7 +75,7 @@ int RoomEffect_PhasedSparkParticle(int mode, RoomPhasedSpark *spark) {
                 if ((s16)spark->timer >= 16) {
                     spark->phase = 1;
                     spark->timer = 0;
-                    func_800CE870(D_8009D254, 0, &target);
+                    func_800CE870((char *)D_8009D254, 0, (s16 *)&target);
                     spark->x = target.x + func_80071A54() % 1200 - 600;
                     spark->z = target.z + func_80071A54() % 1200 - 600;
                 }
@@ -889,7 +889,7 @@ int RoomEffect_CometSparkController(int mode, RoomCometSparkAnchor *anchor) {
     switch (mode) {
     case 0:
         anchor->count = 6;
-        func_800CE870(D_800F32D0->pool, 0, anchor);
+        func_800CE870(D_800F32D0->pool, 0, (s16 *)anchor);
         if (D_800E2368->active) {
             if (D_800F32D0->pool) {
                 node = *(RoomSparkNode **)D_800F32D0->pool;
@@ -1064,7 +1064,7 @@ int RoomEffect_LiftedSparkController(int mode) {
                              (FieldAnimCallbackListCallback)RoomEffect_LiftedSparkParticle);
     case 1:
         pool = D_800F32D0->pool;
-        func_800CE870(pool, 0, &target);
+        func_800CE870(pool, 0, (s16 *)&target);
         if ((D_800E27EC & 1) && D_800E27EC < 60) {
             pool = D_800F33E0->pool;
             child = func_800CE610(pool);

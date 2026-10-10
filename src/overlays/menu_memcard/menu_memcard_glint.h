@@ -3,6 +3,7 @@
 
 #include "pe1/room_spark.h"
 #include "pe1/gte.h"
+#include "pe1/field_sprite_draw.h"
 
 /* Scene object reached through the primary channel pool. */
 typedef struct MemcardGlintAnchor {
@@ -81,7 +82,6 @@ extern void func_800D1384(void *from, void *to, int width, void *color0,
 extern u8 *D_800E22D4;
 extern void func_8006DDCC(int sound, int mode, int x, int y, int z);
 extern u8 D_801F1CB0[];
-extern void func_800CF3AC(void *track, void *color, int time);
 extern void func_800D1AE0(RenderColor *color, int intensity, int step, int count);
 
 int Memcard_FadingGlintParticle(int mode, RoomDampedSpark *spark);

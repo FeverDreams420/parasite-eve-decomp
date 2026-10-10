@@ -1,9 +1,9 @@
+#include "pe1/field_anim_callback_list.h"
 typedef struct { char reserved[0x14]; short complete, signaled; } WaitState;
 typedef struct { char reserved[0x4C]; unsigned int status; } Owner;
 typedef struct { Owner *owner; } Actor;
 extern WaitState *D_800E2368;
 extern Actor *RoomMain_ActorPtr;
-extern int D_800E27EC;
 
 int func_80198F54(int mode) {
     switch (mode) {

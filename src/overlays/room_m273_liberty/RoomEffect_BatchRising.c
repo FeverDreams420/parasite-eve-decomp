@@ -1,15 +1,14 @@
 #include "pe1/field_sprite_params.h"
 #include "room_m273_effects.h"
 #include "pe1/field_anim_callback_list.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 /* The batch emitter fills the eight-byte records rendered by this callback. */
-extern int D_800E27EC, D_800F3428;
-extern unsigned short D_800E11EA,D_800E2850[];
-extern unsigned short D_800E1204[];
+extern unsigned short D_800E11EA;
 extern short D_8019AD68[];
 extern int D_800966EC[];
 extern RoomM273RisingBatchBuffer D_8019AF0C;
 extern unsigned short GetClut(int, int);
-extern void func_800CEE20(GteShortVector *, void *, int, int, int, int, int, int, void *);
 
 int func_80196F2C(int mode, GteShortVector *position) {
     if (mode == 1) {

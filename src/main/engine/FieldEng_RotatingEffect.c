@@ -26,7 +26,7 @@ int FieldEng_RotatingEffect(int mode) {
         rotation.flags = 1;
         scale = rsin((D_800E27EC << 10) / 24);
         func_800D0728(&position, 300, 400, 10, &rotation,
-                      scale, scale, 0, &color, 128, 1);
+                      scale, scale, 0, (RenderColor *)&color, 128, 1);
         break;
     }
     return 0;

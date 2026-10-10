@@ -45,7 +45,7 @@ update:
                 child->x = position[0];
                 child->y = position[1];
                 child->z = position[2];
-                func_800CFB7C(target, *(s16 *)state, &child->vx);
+                func_800CFB7C((GteShortVector *)target, *(s16 *)state, (GteShortVector *)&child->vx);
                 child->state = 0;
                 child->timer = 0;
             }

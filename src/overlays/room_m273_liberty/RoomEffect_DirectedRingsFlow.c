@@ -1,7 +1,6 @@
 #include "room_m273_boss.h"
 #include "pe1/gte.h"
-
-
+#include "pe1/field_texture_tables.h"
 
 /* Falling drop: queues its landing position, then knocks the player back on
  * contact; draws two rings before landing and a splash flash after. */
@@ -48,7 +47,7 @@ int func_8019665C(int mode, RoomM273Drop *drop) {
         ring.z = drop->ring.z;
         if (drop->position.pad == 0) {
             for (i = 0; i < 2; i++) {
-                func_800D0E88(&drop->position, &ring, 0x100, 0x10, &D_8019AD58,
+                func_800D0E88(&drop->position, (GteRotation *)&ring, 0x100, 0x10, &D_8019AD58,
                               &D_8019AD54, &D_8019AD54, (s16)shade, 1);
                 ring.z += 0x400;
             }
@@ -72,7 +71,7 @@ typedef struct { unsigned char unknown[0x2A]; short x,unknown2C,y,unknown30,z; }
 extern unsigned char D_8019AF69,D_8019AF68;
 extern unsigned short D_8019AF60;
 extern Vector D_8019AD60;
-extern unsigned short D_800E11E8,D_800E2850[];
+extern unsigned short D_800E11E8;
 extern int func_8005186C(int),ratan2(int,int);
 #include "pe1/gte_types.h"
 extern void func_8006DCE4(int,void *,int,int,int);

@@ -1,9 +1,9 @@
 #include "pe1/room_shake_burst.h"
 #include "pe1/gte.h"
+#include "pe1/field_sprite_draw.h"
 
 extern char D_801995FC[];
 extern int func_80071A54(void);
-extern void func_800CF3AC(void *, void *, int);
 
 int func_80193FC4(int mode, RoomShakeBurstParticleCallbackView *particle) {
     int color[2];
@@ -36,7 +36,7 @@ int func_80193FC4(int mode, RoomShakeBurstParticleCallbackView *particle) {
         if (kind == 4 && D_800F3428) palette += 4;
         clut = GetClut(48, palette);
         frame = (s16)D_800F3368.parameter02 * (D_800E27EC / 6 + 2) + 160;
-        func_800CEE20(particle, &position, scale, scale, frame, clut, 1, 128, color);
+        func_800CEE20((GteShortVector *)particle, (GteRotation *)&position, scale, scale, frame, clut, 1, 128, (RenderColor *)color);
         break;
     }
     return 0;

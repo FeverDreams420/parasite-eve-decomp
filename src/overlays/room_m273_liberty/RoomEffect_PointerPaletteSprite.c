@@ -2,15 +2,16 @@
 #include "room_m273_effects.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 
 typedef struct { short x, y, z, pad; } Sprite;
 
 extern unsigned short D_800966EC[];
 extern char D_8019AB68[];
-extern void func_800CEE20(void *, void *, int, int, int, int, int, int, void *);
 extern RoomM273PlayerActorView *g_PlayerEntity;
 extern unsigned char D_8019AE5C;
-extern unsigned short D_800E11FA, D_800E2850[];
+extern unsigned short D_800E11FA;
 
 int func_80193870(int mode, RoomM273SpritePoolEffect *state) {
     if (mode == 1) {
@@ -37,7 +38,7 @@ int func_80193870(int mode, RoomM273SpritePoolEffect *state) {
         sprite.x = x;
         kind = D_800F3368.palette;
         palette = D_800E1204[kind];
-        func_800CEE20(&sprite, D_8019AB68, (short)size, (short)size, 102,
+        func_800CEE20((GteShortVector *)&sprite, (GteRotation *)D_8019AB68, (short)size, (short)size, 102,
                         GetClut(0, (kind == 4 && D_800F3428) ? palette + 9 : palette + 5), 1, (short)shade, 0);
     }
     return 0;

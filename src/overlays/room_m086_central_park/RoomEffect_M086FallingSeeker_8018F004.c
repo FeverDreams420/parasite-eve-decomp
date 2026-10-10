@@ -115,7 +115,7 @@ int func_8018F004(int mode, RoomM086Seeker *seeker, RoomM086SeekerParams *params
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428) palette += 4;
-                func_800CEE20(&position, &rotation, size * 8, size * 8, 0xE8,
+                func_800CEE20(&position, (GteRotation *)&rotation, size * 8, size * 8, 0xE8,
                               func_80077AA4(0x50, palette), 2, 0x80, 0);
             }
             break;
@@ -153,7 +153,7 @@ int func_8018F004(int mode, RoomM086Seeker *seeker, RoomM086SeekerParams *params
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428) palette += 4;
-                func_800CEE20(&seeker->position, &rotation, 0x555, 0x555, 0x1A,
+                func_800CEE20(&seeker->position, (GteRotation *)&rotation, 0x555, 0x555, 0x1A,
                               func_80077AA4(0x10, palette), 1, 0x80, 0);
             }
             break;

@@ -177,7 +177,7 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
         {
             int kind = D_800F3368.palette;
             int palette = D_800E1204[kind];
-            func_800CEE20(&position, &rotation, size, size, 2,
+            func_800CEE20(&position, (GteRotation *)&rotation, size, size, 2,
                           GetClut(0, (kind == 4 && D_800F3428) ? palette + 8 : palette + 4),
                           3, alpha, 0);
         }

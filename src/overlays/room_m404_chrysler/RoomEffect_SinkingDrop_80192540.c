@@ -163,8 +163,8 @@ int func_80192540(int mode, RoomM404Drop *drop) {
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428) palette += 4;
-                func_800CEE20(drop, 0, size, size, 0x20, GetClut(0x10, palette), 1, alpha,
-                              &glow);
+                func_800CEE20((GteShortVector *)drop, 0, size, size, 0x20, GetClut(0x10, palette), 1, alpha,
+                              (struct RenderColor *)&glow);
             }
             if (func_80071A54() & 3) return 0;
             {
@@ -172,7 +172,7 @@ int func_80192540(int mode, RoomM404Drop *drop) {
                 gte_ldrotmatrix(slot->value);
                 gte_ldtransmatrix(slot->value);
             }
-            func_800D004C(drop, 0xC8, 0xC8, 5, 0, size, size, &glow, 0, alpha, 1);
+            func_800D004C((GteShortVector *)drop, 0xC8, 0xC8, 5, 0, size, size, (struct RenderColor *)&glow, 0, alpha, 1);
             break;
         case 2:
             func_800CF3AC(D_80193EFC, &fadeColor, (drop->timer << 4) / 12);
@@ -180,9 +180,9 @@ int func_80192540(int mode, RoomM404Drop *drop) {
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428) palette += 4;
-                func_800CEE20(drop, 0, 0x1000, 0x1000,
+                func_800CEE20((GteShortVector *)drop, 0, 0x1000, 0x1000,
                               (s16)D_800F3368.parameter02 * (drop->timer / 2) + 0x20,
-                              GetClut(0x10, palette), 1, 0x80, &fadeColor);
+                              GetClut(0x10, palette), 1, 0x80, (struct RenderColor *)&fadeColor);
             }
             return 0;
         case 3:
@@ -191,7 +191,7 @@ int func_80192540(int mode, RoomM404Drop *drop) {
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428) palette += 4;
-                func_800CEE20(drop, 0, size, size,
+                func_800CEE20((GteShortVector *)drop, 0, size, size,
                               (s16)D_800F3368.parameter02 * (drop->timer / 2),
                               GetClut(0, palette), 2, 0x20, 0);
             }
@@ -206,7 +206,7 @@ int func_80192540(int mode, RoomM404Drop *drop) {
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428) palette += 4;
-                func_800CEE20(drop, 0, 0x1800, 0x1000,
+                func_800CEE20((GteShortVector *)drop, 0, 0x1800, 0x1000,
                               (s16)D_800F3368.parameter02 * size + 0x40,
                               GetClut(0x20, palette), 1, alpha, 0);
             }
@@ -218,7 +218,7 @@ int func_80192540(int mode, RoomM404Drop *drop) {
                 gte_ldtransmatrix(slot->value);
             }
             if (func_80071A54() & 3) return 0;
-            func_800D004C(drop, 0x140, 0x140, 6, &rotation, 0x1000, 0x1000, &color, 0,
+            func_800D004C((GteShortVector *)drop, 0x140, 0x140, 6, (GteRotation *)&rotation, 0x1000, 0x1000, (struct RenderColor *)&color, 0,
                           alpha / 2, 1);
             break;
         }

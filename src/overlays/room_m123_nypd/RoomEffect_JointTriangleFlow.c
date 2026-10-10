@@ -3,6 +3,7 @@
 #include "pe1/room_m123.h"
 #include "pe1/room_m123_joint_triangle.h"
 #include "room_m123_effects.h"
+#include "pe1/field_texture_tables.h"
 
 int func_8019251C(int mode, RoomM123JointTriangle *triangle) {
     GteShortVector corners[4];
@@ -76,9 +77,7 @@ int func_8019251C(int mode, RoomM123JointTriangle *triangle) {
     return 0;
 }
 
-extern int D_800E27EC;
 extern u16 D_800E11EA;
-extern u16 D_800E2850[];
 
 int func_801929FC(int mode) {
     int frame, index;

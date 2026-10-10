@@ -4,6 +4,7 @@
 #include "pe1/field_sprite_state.h"
 #include "pe1/field_glow_sprite.h"
 #include "pe1/gte_types.h"
+#include "pe1/field_sprite_draw.h"
 
 void *memset(void *dest, int value, unsigned int count);
 
@@ -116,8 +117,6 @@ int func_800C9A34(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
 
 extern int D_800E0B38;
 
-
-
 int func_800C9A70(char *object) {
     int half;
     register int value asm("$3");
@@ -199,7 +198,6 @@ int func_800C9C10(void) {
 int func_800C9C18(void) {
     return 0;
 }
-void func_800CEDA8(int arg0);
 
 extern char *D_800E27A4;
 
@@ -214,7 +212,6 @@ int func_800C9C20(char *obj) {
 }
 
 int rand(void);
-
 
 int func_800C9C8C(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
     GteShortVector vec;

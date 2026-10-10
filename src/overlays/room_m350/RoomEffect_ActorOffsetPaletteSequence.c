@@ -1,13 +1,12 @@
 #include "pe1/field_sprite_params.h"
 #include "pe1/room_m350_effects.h"
 #include "pe1/field_anim_callback_list.h"
-
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 
 extern RoomM350EffectActor *D_800F32D0;
-extern int D_800E27EC, D_800F3428, D_800966EC[], D_8019A56C[];
-extern unsigned short D_800E1204[];
+extern int D_800966EC[], D_8019A56C[];
 extern int GetClut(int, int);
-extern void func_800CEE20(void *, void *, int, int, int, unsigned int, int, int, void *);
 
 int func_80195B64(int event, GteShortVector *object)
 {
@@ -33,12 +32,11 @@ int func_80195B64(int event, GteShortVector *object)
             palette += 4;
         }
         handle = GetClut(32, palette);
-        func_800CEE20(position, 0, object->pad, object->pad, (s16)D_800F3368.parameter02 + 216,
-            (unsigned short)handle, 1, shade, D_8019A56C);
+        func_800CEE20((GteShortVector *)position, 0, object->pad, object->pad, (s16)D_800F3368.parameter02 + 216,
+            (unsigned short)handle, 1, shade, (struct RenderColor *)D_8019A56C);
     }
     return 0;
 }
-
 
 /* MASPSX_FLAGS: --expand-div */
 /* Event state: rotation, emission count, brightness, fade phase and size. */
@@ -46,7 +44,6 @@ typedef struct { GteShortVector rotation; short count,brightness,fade,size; } St
 extern RoomM350EffectEmitter *D_800F33E0;
 extern unsigned char D_8019A82E;
 
-extern unsigned short D_800E2850[];
 extern unsigned short D_800E11E8;
 extern char D_8019A570[];
 extern int Asset_Find08w(int,void *,int,int,int),Inv_ScrambleGrid(void),GetClut(int,int);
@@ -143,7 +140,7 @@ draw:
             int clut,pal=palettes[kind];
             if(kind==specialKind && D_800F3428) pal+=4;
             clut=GetClut(32,pal);
-            func_800CEE20(&local.position,state,state->size,state->size,(s16)D_800F3368.parameter02+216,(unsigned short)clut,1,state->brightness,D_8019A570);
+            func_800CEE20(&local.position,(GteRotation *)state,state->size,state->size,(s16)D_800F3368.parameter02+216,(unsigned short)clut,1,state->brightness,(struct RenderColor *)D_8019A570);
             state->rotation.z=0u-(unsigned short)state->rotation.z;
         } while(++i<2);
     }

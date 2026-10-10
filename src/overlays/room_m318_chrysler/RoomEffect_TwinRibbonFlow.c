@@ -1,9 +1,10 @@
 #include "pe1/room_twin_ribbon.h"
 #include "pe1/gte.h"
+#include "pe1/field_texture_tables.h"
 
 typedef RoomTwinRibbonPulse RoomM318Pulse;
 
-extern u16 D_800E11EA, D_800E120A, D_800E2850[];
+extern u16 D_800E11EA, D_800E120A;
 
 int func_80071A54(void);
 int rcos(int);
@@ -59,7 +60,7 @@ int func_80196C48(int mode, RoomM318Pulse *pulse) {
         }
         clut = GetClut(clutX, clutY);
         size = (int)cosine / 2;
-        func_800CEE20(pulse, 0, size, size, 104 + settings[1] * (pulse->age & 3), clut, 1, (sine >> 5) / 2, 0);
+        func_800CEE20((GteShortVector *)pulse, 0, size, size, 104 + settings[1] * (pulse->age & 3), clut, 1, (sine >> 5) / 2, 0);
     }
     }
     return 0;

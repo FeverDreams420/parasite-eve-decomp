@@ -33,7 +33,7 @@ int func_80192DA0(int mode, volatile RoomSpiralDropSparkRecord *record) {
         position.z = z;
         palette = D_800E1204[kind];
         clut = GetClut(0, (kind == 4 && D_800F3428) ? palette + 10 : palette + 6);
-        func_800CEE20((GteShortVector *)&position, 0, 2048, 2048, 6, clut, 1, 128, color);
+        func_800CEE20((GteShortVector *)&position, 0, 2048, 2048, 6, clut, 1, 128, (RenderColor *)color);
         break;
     }
     }

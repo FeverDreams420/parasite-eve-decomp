@@ -2,15 +2,14 @@
 #include "pe1/room_m350_effects.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte.h"
-
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 
 extern RoomM350EffectActor *D_800F32D0;
 extern GteMatrix D_8019A870;
 extern short D_8019A890[];
-extern int D_800E27EC, D_800966EC[], D_800F3428, D_8019A690[];
-extern unsigned short D_800E1204[];
+extern int D_800966EC[], D_8019A690[];
 extern int GetClut(int, int);
-extern void func_800CEE20(void *, void *, int, int, int, int, int, int, void *);
 
 int func_801981D0(int event, RoomM350FlareParticle *particle)
 {
@@ -53,13 +52,12 @@ int func_801981D0(int event, RoomM350FlareParticle *particle)
             register int product asm("$8") = scale * phase;
             int texture = product + 64;
             asm("" : : "r"(product), "r"(texture));
-            func_800CEE20(&position, &rotation, 0x2200, 4096,
-                texture, clut, 1, particle->shade, &D_8019A690[timer & 3]);
+            func_800CEE20(&position, (GteRotation *)&rotation, 0x2200, 4096,
+                texture, clut, 1, particle->shade, (struct RenderColor *)&D_8019A690[timer & 3]);
         }
     }
     return 0;
 }
-
 
 /* Spawns flares and tests the quad swept by the actor's two side endpoints. */
 extern RoomM350EffectEmitter *D_800F33E0;
@@ -73,7 +71,7 @@ extern volatile short leftX asm("D_8019A8A0");
 extern GteShortVector D_8019A8A8,D_8019A8B0;
 extern volatile short D_8019A89C,D_8019A89E,D_8019A8A4;
 extern short D_8019A8AE;
-extern unsigned short D_800E11EA,D_800E2850[];
+extern unsigned short D_800E11EA;
 extern int Inv_ScrambleGrid(void);
 
 int func_80198400(int event) {

@@ -19,9 +19,9 @@ int func_8019320C(int mode, RoomM273SampledLayerEffect *effect) {
         position = effect->position;
         i = 0;
         do {
-            func_800D004C(&position, 128, 128, 12, &rotation,
-                          (short)size, (short)size, D_8019AB70,
-                          effect->parameter, (short)shade, 1);
+            func_800D004C(&position, 128, 128, 12, (GteRotation *)&rotation,
+                          (short)size, (short)size, (RenderColor *)D_8019AB70,
+                          (RenderColor *)effect->parameter, (short)shade, 1);
             shade = (short)shade >> 1;
             size = (short)size * 3 / 2;
             i++;

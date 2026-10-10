@@ -1,6 +1,7 @@
 #include "room_m273_effects.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_sprite_draw.h"
 typedef GteShortVector Vector;
 typedef struct { Vector position; unsigned char parameter[4]; } Effect;
 typedef RoomM273ThresholdTransform Transform;
@@ -8,10 +9,8 @@ typedef RoomM273ScaledLayerOwner Owner;
 
 /* The emitter owns the twelve-byte records rendered by this callback. */
 extern RoomM273EffectStateContext *D_800F32D0;
-extern int D_800E27EC;
 extern short D_800966EC[],D_800966EE[];
 extern unsigned char D_8019AB70[];
-extern void func_800D004C(Vector *,int,int,int,Vector *,int,int,void *,void *,int,int);
 
 int func_8019353C(int mode,Effect *effect) {
     Vector position,rotation;
@@ -31,7 +30,7 @@ int func_8019353C(int mode,Effect *effect) {
         position=effect->position;
         i=0;
         do {
-            func_800D004C(&position,128,128,12,&rotation,size,size,D_8019AB70,effect->parameter,shade,1);
+            func_800D004C(&position,128,128,12,(GteRotation *)&rotation,size,size,(struct RenderColor *)D_8019AB70,(struct RenderColor *)effect->parameter,shade,1);
             shade>>=1;
             size=size*3/2;
             i++;

@@ -1,10 +1,9 @@
 #include "pe1/room_floor.h"
+#include "pe1/field_sprite_draw.h"
 
 extern char *RoomMain_ActorPtr;
 extern s16 D_801994F4, D_801994F6, D_801994F8;
 extern int D_801994FC;
-
-void func_800CE870(char *actor, int mode, s16 *position);
 
 s16 *func_80199048(int mode, int value, int unused, int extra)
 {

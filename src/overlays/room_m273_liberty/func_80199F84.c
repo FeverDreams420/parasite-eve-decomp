@@ -34,8 +34,8 @@ int func_80199F84(int mode, RoomM273PulseState *state) {
         scaleY = state->scaleY;
         texture = D_8019AB70;
         position.x = positionX;
-        func_800D0E88(&position, &rotation, scaleX, scaleY, state,
-                       texture, texture,
+        func_800D0E88(&position, (GteRotation *)&rotation, scaleX, scaleY, (RenderColor *)state,
+                       (RenderColor *)texture, (RenderColor *)texture,
                        ((RoomM273TrigEntry *)((char *)D_800966EC +
                         ((frame << 9) & 0x3E00)))->high >> 5, 1);
     }

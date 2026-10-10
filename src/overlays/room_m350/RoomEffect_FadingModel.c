@@ -1,6 +1,7 @@
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
+#include "pe1/field_texture_tables.h"
 
 extern int GetClut(int, int);
 
@@ -60,7 +61,6 @@ typedef RoomM350Actor Actor;
 extern Actor *D_800F32D0;
 extern RoomM350Emitter *D_800F33E0;
 extern unsigned char D_8019A8C4;
-extern unsigned short D_800E11E4[];
 extern int Asset_Find08w(int,int,int,int,int);
 extern int func_80199148(int,Particle *);
 extern int rand(void),Inv_ScrambleGrid(void),rcos(int),rsin(int);

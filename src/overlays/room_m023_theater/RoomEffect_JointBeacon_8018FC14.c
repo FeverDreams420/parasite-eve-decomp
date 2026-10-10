@@ -127,11 +127,11 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428) palette += 4;
-                func_800CEE20(&state->position, &rotation, size, size, 0x80,
-                              GetClut(0x30, palette), 1, 0x80, &color);
+                func_800CEE20(&state->position, (GteRotation *)&rotation, size, size, 0x80,
+                              GetClut(0x30, palette), 1, 0x80, (struct RenderColor *)&color);
             }
-            func_800D004C(&state->position, 0x190, 0x190, 0xC, 0, size, size, &color, 0, 0x40, 1);
-            func_800D004C(&state->position, 0xBE, 0xBE, 8, 0, size, size, &color, 0, 0x80, 1);
+            func_800D004C(&state->position, 0x190, 0x190, 0xC, 0, size, size, (struct RenderColor *)&color, 0, 0x40, 1);
+            func_800D004C(&state->position, 0xBE, 0xBE, 8, 0, size, size, (struct RenderColor *)&color, 0, 0x80, 1);
             position.x = state->position.x;
             position.y = state->position.y;
             position.z = state->position.z;
@@ -142,8 +142,8 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428) palette += 4;
-                func_800CEE20(&position, &rotation, size, size, 0x80,
-                              GetClut(0x30, palette), 1, 0x40, &color);
+                func_800CEE20(&position, (GteRotation *)&rotation, size, size, 0x80,
+                              GetClut(0x30, palette), 1, 0x40, (struct RenderColor *)&color);
             }
         }
         rotation.x = 0;

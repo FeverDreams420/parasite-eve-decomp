@@ -9,6 +9,8 @@
 #include "pe1/render_matrix_slot.h"
 #include "pe1/render_prim.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 
 /* room_m404 sinking drop (func_80192540): a drop that sinks and jitters,
  * spreads on the floor and sheds splash children, a lingering pool that
@@ -71,9 +73,6 @@ extern RoomM404DropRotation D_8018F1CC;
 extern RoomM404DropColor D_8018F1D4;
 extern RoomM404DropColor D_8018F1D8;
 extern u8 D_80193EFC[];
-extern u16 D_800E1204[];
-extern int D_800F3428;
-extern int D_800E27EC;
 extern int D_8009D248;
 extern u16 D_8009D1CC;
 
@@ -83,13 +82,5 @@ int func_8001CAB0(int x, int z, int floor, int count);
 int rsin(int angle);
 int rcos(int angle);
 u16 GetClut(int x, int y);
-void func_800CEE20(void *position, RoomM404DropRotation *rotation,
-                   int scale_x, int scale_y, int texture, int clut,
-                   int page, int intensity, RoomM404DropColor *color);
-void func_800D004C(void *position, int width, int height, int segments,
-                   RoomM404DropRotation *rotation, int scale_x, int scale_y,
-                   RoomM404DropColor *color0, RoomM404DropColor *color1,
-                   int intensity, int mode);
-void func_800CF3AC(void *track, RoomM404DropColor *color, int time);
 
 #endif

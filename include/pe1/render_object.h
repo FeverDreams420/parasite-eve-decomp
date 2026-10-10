@@ -6,8 +6,10 @@
 #include "pe1/render_matrix_slot.h"
 #include "pe1/field_transform_point.h"
 #include "pe1/field_sprite_params.h"
-
-struct RenderColor;
+#include "pe1/field_color.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_anim_callback_list.h"
+#include "pe1/field_texture_tables.h"
 
 /* Packed geometry at 0x800C7AE0: two groups of 12-byte records and two
  * groups of 16-byte records precede the 8-byte vertex array. The record
@@ -28,7 +30,6 @@ PE1_STATIC_ASSERT(sizeof(RenderPackedGeometry) == 16,
 void FieldEng_TransformPackedVertex(RenderPackedGeometry *geometry,
                                    GteMatrix *matrix, u16 index,
                                    GteShortVector *out);
-void func_800CFB7C(GteShortVector *angles, s16 distance, GteShortVector *out);
 void FieldEng_CalculateLookAngles(GteShortVector *from, GteShortVector *to,
                                  GteShortVector *out);
 
@@ -86,12 +87,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RenderArcingEmitter, radius) == 0xC,
                   render_arcing_emitter_radius);
 int func_800D7B70(int mode, RenderArcingEmitter *state);
 extern u8 D_800E18F0[];
-extern u16 D_800E11E6;
-/* Texture page slot table; D_800E11E6 and D_800E11F6 are entries 1 and 9. */
-extern u16 D_800E11E4[];
-extern u16 D_800E11F6;
-extern u16 D_800E2850[];
-void func_800CEDA8(int index);
 
 typedef struct RenderOrbitingEffect {
     s16 stage;
@@ -182,7 +177,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RenderSparkEmitter, phase) == 8,
                   render_spark_emitter_phase);
 int func_800D9554(int mode, RenderDampedSpark *state);
 int func_800D96F4(int mode, RenderSparkEmitter *state);
-void func_800D1DEC(void *position, void *color, int scale, int flags);
 extern u8 D_800E1AC8[];
 
 typedef struct RenderArcingEffect {
@@ -227,11 +221,7 @@ int func_800DB0D0(int mode, RenderSineEmitter *state);
 extern u8 D_800E1C2C[];
 extern GteShortVector D_800E221C;
 int func_800DAF8C(int mode, RenderSineEffect *state);
-void func_800D0E88(GteShortVector *position, GteRotation *rotation, int length,
-                   int breadth, struct RenderColor *color0, struct RenderColor *color1,
-                   struct RenderColor *color2, int intensity, int mode);
 
-extern int D_800E27EC;
 extern u8 D_800E1C04[];
 extern int D_800E1D60;
 extern u8 D_800E1D64[], D_800E1D84[];
@@ -242,24 +232,10 @@ int func_800DC5BC(int mode, GteShortVector *state);
 int func_800DC750(int mode, GteShortVector *state);
 int func_800DBCD8(int mode, GteShortVector *state);
 int func_800DBE6C(int mode, GteShortVector *state);
-/* Initializes cached key times, clamps time at the end and blends colors.
- * The track requires at least one positive-duration key and a zero-duration
- * terminator carrying the final RGB value. Call with nonnegative time. */
-void func_800CF3AC(void *track, void *color, int time);
-void func_800D27FC(int x, int y, void *color, int scale, int mode);
 int FieldEng_CosineEffect(int mode, RenderCosineEffect *effect);
 
 extern u8 D_800E1494[];
-void func_800CE870(char *object, int mode, s16 *position);
-void func_800D0728(GteShortVector *position, int inner, int outer, int segments,
-                   GteRotation *rotation, int scale_x, int scale_y,
-                   struct RenderColor *color0, struct RenderColor *color1,
-                   int intensity, int mode);
 int FieldEng_RotatingEffect(int mode);
-
-typedef struct RenderColor {
-    u8 r, g, b, code;
-} RenderColor;
 
 extern RenderColor D_800C22BC;
 extern RenderColor D_800C22C0;
@@ -337,44 +313,14 @@ extern u8 D_800E1F18[];
 extern GteShortVector D_800E222C;
 int func_800DCCCC(int mode, RenderTiltingSprite *state);
 int func_800DCE94(int mode, RenderSparkEmitter *state);
-void func_800D2370(GteShortVector *position, GteRotation *rotation,
-                   int width, int height, int u, int v, int texture_width,
-                   int texture_height, int clut, RenderColor *color0,
-                   RenderColor *color1, int intensity, int mode);
 
 extern RenderColor D_800C22DC;
 extern RenderColor D_800C22E0;
 extern RenderColor D_800C22E4;
 extern RenderColor D_800C22E8;
 extern RenderColor D_800C22EC;
-void func_800D004C(GteShortVector *position, int width, int height, int segments,
-                   GteRotation *rotation, int scale_x, int scale_y,
-                   RenderColor *color0, RenderColor *color1, int intensity, int mode);
 int func_800DACA4(int mode, RenderSparkEmitter *state);
 
-PE1_STATIC_ASSERT(sizeof(RenderColor) == 4, render_color_size);
-
-/* In a color-track key, color.code stores the encoded segment duration. */
-typedef struct RenderColorKeyTiming {
-    u16 length;
-    u16 start;
-} RenderColorKeyTiming;
-
-typedef struct RenderColorKey {
-    RenderColor color;
-    RenderColorKeyTiming timing;
-} RenderColorKey;
-
-typedef struct RenderColorTrack {
-    int duration; /* Zero means the timing cache has not been initialized. */
-    int count;
-    RenderColorKey keys[0];
-} RenderColorTrack;
-
-PE1_STATIC_ASSERT(sizeof(RenderColorKey) == 8, render_color_key_size);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(RenderColorKey, timing) == 4,
-                  render_color_key_timing_offset);
-PE1_STATIC_ASSERT(sizeof(RenderColorTrack) == 8, render_color_track_header_size);
 
 void LoadAverageCol(void *first, void *second, int first_scale,
                     int second_scale, void *output);
@@ -382,11 +328,6 @@ void LoadAverageCol(void *first, void *second, int first_scale,
 
 extern u8 D_800E1988[];
 extern u8 D_800E1EE8[];
-extern u16 D_800E1204[];
-extern int D_800F3428;
-void func_800CEE20(GteShortVector *position, GteRotation *rotation,
-                   int scale_x, int scale_y, int texture, int clut,
-                   int page, int intensity, RenderColor *color);
 int FieldEng_DriftingEffect(int mode, GteShortVector *position);
 int func_800DCA80(int mode, GteShortVector *position);
 extern u8 D_800E1FA4[];

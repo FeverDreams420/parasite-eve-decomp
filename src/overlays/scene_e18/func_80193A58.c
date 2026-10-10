@@ -1,20 +1,18 @@
 #include "common.h"
 #include "pe1/field_sprite_params.h"
+#include "pe1/field_anim_callback_list.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 
 typedef struct SceneE18WaveEffect {
     s16 x, y, z, field06;
     s16 field08, field0a, field0c, field0e;
     s16 size, wave, amplitude;
 } SceneE18WaveEffect;
-extern s32 D_800E27EC;
-extern u16 D_800E1204[];
-extern s32 D_800F3428;
 extern void *D_800F32D0;
 extern u32 D_80194180[], D_80194184[];
 int rsin(int);
 int func_80077AA4(int,int);
-void func_800CEE20(void *, void *, int, int, int, int, int, int, int);
-void func_800D004C(void *, int, int, int, void *, int, int, void *, void *, int, int);
 
 int func_80193A58(int mode, SceneE18WaveEffect *effect) {
     s16 position[4];
@@ -32,7 +30,7 @@ int func_80193A58(int mode, SceneE18WaveEffect *effect) {
     index = D_800F3368.palette;
     palette = D_800E1204[index];
     palette = func_80077AA4(0, (index == 4 && D_800F3428 != 0) ? palette + 7 : palette + 3);
-    func_800CEE20(effect, &effect->field08, effect->wave, effect->wave,
+    func_800CEE20((struct GteShortVector *)effect, (struct GteRotation *)&effect->field08, effect->wave, effect->wave,
                   0x40, palette & 0xffff, 3, effect->size, 0);
     position[0] = effect->x;
     position[1] = *(int *)(*(char **)((char *)D_800F32D0 + 8) + 0x200);
@@ -41,8 +39,8 @@ int func_80193A58(int mode, SceneE18WaveEffect *effect) {
     params[1] = (D_800E27EC * 3) << 6;
     params[2] = 0;
     params[3] = 1;
-    func_800D004C(position, 0x100, 0x100, 10, params,
-                  effect->wave, effect->wave, D_80194180, D_80194184,
+    func_800D004C((struct GteShortVector *)position, 0x100, 0x100, 10, (struct GteRotation *)params,
+                  effect->wave, effect->wave, (struct RenderColor *)D_80194180, (struct RenderColor *)D_80194184,
                   effect->size, 1);
 ret0:
     return 0;

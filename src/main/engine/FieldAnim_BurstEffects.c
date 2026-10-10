@@ -2,6 +2,7 @@
 #include "pe1/field_anim.h"
 #include "pe1/game_audio_state.h"
 #include "pe1/field_engine_state.h"
+#include "pe1/field_sprite_draw.h"
 
 static __inline__ void identity_matrix(GteMatrix *matrix)
 {
@@ -73,7 +74,6 @@ int func_800CCEBC(int a, int b, int c, int d, int e, int f) {
     return 0;
 }
 
-
 extern char D_800E0E60[];
 extern void FieldEng_Register(void *o, void *table);
 
@@ -81,7 +81,6 @@ int func_800CCEE8(void *o) {
     FieldEng_Register(o, D_800E0E60);
     return 0;
 }
-
 
 extern char D_800E0E78[];
 extern char D_800E0E48[];
@@ -104,28 +103,23 @@ int func_800CCF10(void *obj) {
     return 0;
 }
 
-
 #include "common.h"
 int func_800CCF80(u8 *state) {
     state[0] = 4;
     return 0;
 }
 
-
 int func_800CCF90(void) {
     return 0;
 }
-
 
 int func_800CCF98(void) {
     return 0;
 }
 
-
 #include "common.h"
 int *func_800C2B10(int index);
 int *func_800C2B28(int index);
-void func_800CEDA8(int arg0);
 
 extern int D_800E2810;
 extern int D_800B0E14;
@@ -162,7 +156,6 @@ int func_800CCFA0(void) {
     func_800CEDA8(0);
 }
 
-
 #include "common.h"
 extern char *D_8009D254;
 
@@ -180,7 +173,6 @@ int func_800CD07C(void *arg0, void *arg1, u8 *anim) {
     *(u16 *)(anim + 6) = 0x60C;
     *(u16 *)(anim + 0xC) = z;
 }
-
 
 #include "common.h"
 #include "pe1/field_anim.h"
@@ -222,10 +214,8 @@ void FieldAnim_InitRandomOffsetPairs(void *arg0, void *arg1,
     } while (((unsigned int)i & 0xFFFF) < 2);
 }
 
-
 #include "common.h"
 int rand(void);
-
 
 int func_800CD1FC(void *arg0, void *arg1, u8 *anim) {
     u16 z;

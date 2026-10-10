@@ -10,6 +10,8 @@
 #include "pe1/gte_short_vector.h"
 #include "pe1/room_fx.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 
 /* Flare effects: a controller that orbits an anchor read from the scene
  * object and sheds drift particles, and a dropped flare particle that falls,
@@ -114,10 +116,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomFlareAnchor, x) == 0x268, room_flare_anchor_x
 extern RoomFlareChannel *D_800F32D0, *D_800F33E0;
 extern RoomFlareEventState *D_800E2368;
 extern RoomFlareBattleEntity *D_8009D254;
-extern int D_800E27EC;
-extern u16 D_800E1204[];
-extern u16 D_800E2850[];
-extern int D_800F3428;
 extern RoomFlareTextureSlot D_800E11E8;
 extern volatile u16 D_800E11EC;
 extern u16 D_800E1208;
@@ -134,14 +132,7 @@ extern void func_800866A4(int, int);
 extern void func_800CE8F0(void *, int, void *, void *);
 extern int func_800C6B90(void *position, int radius);
 extern int func_8001CAB0(int x, int z, int arg2, int arg3);
-extern void func_800CEE20(void *position, void *rotation, int scale_x,
-                          int scale_y, int texture, int clut, int kind,
-                          int fade, void *color);
-extern void func_800D1DEC(void *position, void *color, int scale, int flags);
-extern void func_800CE870(char *object, int mode, s16 *position);
 extern void func_800CFAA8(void *from, void *to, void *angles);
-extern void func_800CFB7C(GteShortVector *angles, s16 distance,
-                          GteShortVector *out);
 
 /* Room data the dropped-flare unit writes; each room defines it. */
 extern int RoomLib_PairA;

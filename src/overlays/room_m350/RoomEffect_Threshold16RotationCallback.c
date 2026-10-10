@@ -1,9 +1,8 @@
-extern int D_800E27EC;
+#include "pe1/field_anim_callback_list.h"
+#include "pe1/field_sprite_draw.h"
 extern short D_800966EC[];
 typedef struct { signed int scale:16; signed int shade:16; } EffectEntry;
 extern int D_8019A3C8[], D_8019A628[];
-extern void func_800D004C(void *, int, int, int, short *, int, int,
-                         int *, int *, int, int);
 
 int func_8019A21C(int event, void *context) {
     short rotation[4];
@@ -21,8 +20,8 @@ int func_8019A21C(int event, void *context) {
         rotation[1] = 0;
         rotation[2] = angle;
         rotation[3] = 1;
-        func_800D004C(context, 384, 384, 10, rotation, scale, scale,
-                     D_8019A3C8, D_8019A628,
+        func_800D004C(context, 384, 384, 10, (struct GteRotation *)rotation, scale, scale,
+                     (struct RenderColor *)D_8019A3C8, (struct RenderColor *)D_8019A628,
                      ((EffectEntry *)entry)->shade >> 5, 1);
     }
     return 0;

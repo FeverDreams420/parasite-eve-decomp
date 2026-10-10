@@ -1,6 +1,8 @@
 #include "common.h"
 #include "pe1/field_sprite_params.h"
 #include "pe1/gte_types.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 
 typedef struct SceneE19Effect {
     u16 x, y, z, pad;
@@ -9,11 +11,9 @@ typedef struct SceneE19Effect {
 } SceneE19Effect;
 
 extern GteShortVector D_8018F1CC;
-extern int D_800F3428, D_8019B668;
-extern u16 D_800E1204[];
+extern int D_8019B668;
 extern int rsin(int), rcos(int);
 extern u16 GetClut(int, int);
-extern void func_800CEE20(void *, void *, int, int, int, int, int, int, void *);
 
 int func_80192E08(int mode, SceneE19Effect *effect) {
     GteShortVector position = D_8018F1CC;
@@ -39,7 +39,7 @@ int func_80192E08(int mode, SceneE19Effect *effect) {
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428) palette += 4;
         clut = GetClut(144, palette);
-        func_800CEE20(effect, &position, 4096, cosine, 0x88, clut, 1, brightness, 0);
+        func_800CEE20((GteShortVector *)effect, (GteRotation *)&position, 4096, cosine, 0x88, clut, 1, brightness, 0);
         break;
     }
     }

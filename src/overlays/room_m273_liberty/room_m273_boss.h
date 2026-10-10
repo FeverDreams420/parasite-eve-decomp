@@ -9,6 +9,7 @@
 #include "room_m273_sway.h"
 #include "room_m273_sweep.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_sprite_draw.h"
 
 /* Boss instance fields read by room_m273's animation controllers. */
 typedef struct RoomM273BossOwner {
@@ -255,9 +256,6 @@ extern GteShortVector D_8019ACA4; /* drop offset */
 extern GteShortVector D_8019ACAC; /* trail sample offsets */
 extern GteShortVector D_8019ACB4;
 extern RenderColor D_8019ACBC;
-void func_800CEE20(GteShortVector *position, GteRotation *rotation,
-                   int scale_x, int scale_y, int texture, int clut,
-                   int page, int intensity, RenderColor *color);
 
 int FieldEng_VecToAngle(s32 *from, s32 *to);
 int FieldEng_TurnToward(s16 current, s16 target, s16 step);

@@ -2,6 +2,7 @@
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte_types.h"
+#include "pe1/field_texture_tables.h"
 /* MASPSX_FLAGS: --expand-div */
 typedef RoomM350Vector Vector;
 typedef RoomM350TransformMatrix Matrix;
@@ -9,10 +10,8 @@ typedef struct { short position[3],reserved; } Particle;
 
 extern RoomM350Emitter *D_800F33E0;
 extern Vector D_8019A778[];
-extern int D_800E27EC;
 extern short D_800966EE[];
 extern unsigned short D_800E11E8;
-extern unsigned short D_800E2850[];
 extern int func_80199B94(int,Particle *);
 extern int Inv_ScrambleGrid(void);
 int func_80192508(int event)

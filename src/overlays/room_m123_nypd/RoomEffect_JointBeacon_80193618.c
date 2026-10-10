@@ -115,13 +115,13 @@ int func_80193618(int mode, RoomM123Beacon *state) {
             {
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
-                func_800CEE20(&state->position, &rotation, size * 3 / 2, size * 3 / 2, 0x50,
+                func_800CEE20(&state->position, (GteRotation *)&rotation, size * 3 / 2, size * 3 / 2, 0x50,
                               GetClut(0, (kind == 4 && D_800F3428) ? palette + 6
                                                                   : palette + 2),
-                              1, 0xA0, &color);
+                              1, 0xA0, (struct RenderColor *)&color);
             }
-            func_800D004C(&state->position, 0x2BC, 0x2BC, 0xC, 0, size, size, &color, 0, 0x50, 1);
-            func_800D004C(&state->position, 0xF0, 0xF0, 8, 0, size, size, &color, 0, 0x80, 1);
+            func_800D004C(&state->position, 0x2BC, 0x2BC, 0xC, 0, size, size, (struct RenderColor *)&color, 0, 0x50, 1);
+            func_800D004C(&state->position, 0xF0, 0xF0, 8, 0, size, size, (struct RenderColor *)&color, 0, 0x80, 1);
             if (state->fade > 0) {
                 state->fade -= 8;
                 if (state->fade > 0) {

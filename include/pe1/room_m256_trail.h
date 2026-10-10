@@ -6,6 +6,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_anim.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_texture_tables.h"
 
 /* Shared 24-byte pool record: steering trail, damped sparks, model burst,
  * expanding sprite and floor impact. Modes 1 and 2 update and draw it. */
@@ -24,8 +25,8 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM256TrailEffect, frame) == 0x16,
 extern RenderColor D_8018F218, D_8018F21C;
 extern GteRotation D_8018F220,D_8018F1CC;
 extern char D_80195EFC[],D_80195F1C[],D_80195F1E[],D_80195F20[];
-extern s32 D_80195EF0,D_80195EF8,D_800E27EC,D_800F3428;
-extern u16 D_800E11EA, D_800E1204[], D_800E1208, D_800E2850[];
+extern s32 D_80195EF0, D_80195EF8;
+extern u16 D_800E11EA, D_800E1208;
 typedef struct RoomM256TrailPalettes { u16 first, second; } RoomM256TrailPalettes;
 extern RoomM256TrailPalettes D_800E11E8;
 int func_80071A54(void);

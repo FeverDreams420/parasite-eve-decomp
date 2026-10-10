@@ -5,6 +5,7 @@
 #include "pe1/field_glow_sprite.h"
 #include "pe1/gte_types.h"
 #include "pe1/gte_types.h"
+#include "pe1/field_sprite_draw.h"
 
 int func_800CA4A8(void *arg0, FieldEngSlot *state) {
     int ret = 2;
@@ -76,10 +77,6 @@ int func_800CA540(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
 #include "common.h"
 
 extern int D_800E0C88;
-
-
-
-
 
 int func_800CA574(char *object) {
     int half_a2;
@@ -194,7 +191,6 @@ int func_800CA7B0(void) {
 }
 
 #include "common.h"
-void func_800CEDA8(int arg0);
 
 extern char *D_800E27A8;
 
@@ -211,7 +207,6 @@ int func_800CA7B8(char *obj) {
 #include "common.h"
 
 int rand(void);
-
 
 int func_800CA824(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
     GteShortVector vec;

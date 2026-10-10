@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
+#include "pe1/field_texture_tables.h"
 
 /* Room m023 controller that scatters particles around a model joint,
  * either at the joint itself or at a random point of a wide band. */
@@ -63,7 +64,6 @@ extern RoomM023EventState *D_800E2368;
 extern RoomM023Channel *D_800F32D0, *D_800F33E0;
 extern RoomM023Template D_8018EFF4;
 extern GteShortVector g_RoomScriptRecord;
-extern u16 D_800E11E4[];
 
 extern void func_800CE8F0(void *pool, int index, void *template, void *position);
 extern int func_80071A54(void);

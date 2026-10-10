@@ -2,14 +2,14 @@
 #include "pe1/field_sprite_params.h"
 #include "room_m273_particles.h"
 #include "pe1/field_anim_callback_list.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 
 typedef RoomM273RisingParticle Particle;
 typedef struct { unsigned char r, g, b, unknown; } Color;
 extern Color D_8018F1E4;
-extern int D_800E27EC, D_800F3428, D_800966EC[];
-extern unsigned short D_800E1204[];
+extern int D_800966EC[];
 extern unsigned short GetClut(int, int);
-extern void func_800CEE20(Particle *, void *, int, int, int, int, int, int, Color *);
 
 int func_80195E10(int mode, Particle *particle) {
     Color color = D_8018F1E4;
@@ -36,8 +36,8 @@ int func_80195E10(int mode, Particle *particle) {
         if (kind == specialKind && D_800F3428) palette += 9;
         else palette += 5;
         clut = GetClut(0, palette);
-        func_800CEE20(particle, 0, size, size, 102, clut, 1,
-            (short)D_800966EC[(((unsigned int)frame << 9) & 0x3E00) / 4] >> 6, &color);
+        func_800CEE20((struct GteShortVector *)particle, 0, size, size, 102, clut, 1,
+            (short)D_800966EC[(((unsigned int)frame << 9) & 0x3E00) / 4] >> 6, (struct RenderColor *)&color);
     }
     return 0;
 }
@@ -60,7 +60,7 @@ extern RoomM273EffectStateContext *D_800F32D0;
 extern unsigned char D_8019AEF8;
 extern Vector D_8019AE9C[];
 extern void *D_8019AE80;
-extern unsigned short D_800E11FA,D_800E2850[];
+extern unsigned short D_800E11FA;
 extern int func_8019A398(),func_8019A4CC();
 extern int func_800CE5AC(void **,int,int,int,int (*)());
 extern void func_800CE688(void *),func_800CE78C(void *);

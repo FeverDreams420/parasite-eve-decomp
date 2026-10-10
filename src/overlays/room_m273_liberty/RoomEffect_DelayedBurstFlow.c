@@ -1,8 +1,8 @@
 #include "pe1/field_sprite_params.h"
 #include "room_m273.h"
+#include "pe1/field_anim_callback_list.h"
+#include "pe1/field_texture_tables.h"
 
-extern int D_800E27EC, D_800F3428;
-extern unsigned short D_800E1204[];
 extern unsigned short GetClut(int, int);
 
 int func_80199568(int mode, RoomM273RisingParticle *particle) {

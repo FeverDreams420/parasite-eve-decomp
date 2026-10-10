@@ -6,15 +6,11 @@
 #include "pe1/render_matrix_slot.h"
 #include "pe1/room_sound_slot.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 
 extern GteShortVector D_8018F1F0;
-extern int D_800E27EC;
-extern void func_800CF3AC(void *, void *, int);
 extern int rsin(int);
-void func_800D0728(GteShortVector *position, int inner, int outer, int segments,
-                   GteRotation *rotation, int scale_x, int scale_y,
-                   struct RenderColor *color0, struct RenderColor *color1,
-                   int intensity, int mode);
 
 int func_80194A70(int mode, RoomPulseParticle *particle, int *reference)
 {
@@ -41,7 +37,7 @@ int func_80194A70(int mode, RoomPulseParticle *particle, int *reference)
         gte_ldtransmatrix(*matrixSlot);
         func_800CF3AC((void *)*reference, color, particle->frame);
         wave = rsin((D_800E27EC << 10) / 24);
-        func_800D0728(particle, 1000, 1500, 24, positionPtr, wave, wave, 0, color, 128, 1);
+        func_800D0728((GteShortVector *)particle, 1000, 1500, 24, (GteRotation *)positionPtr, wave, wave, 0, (struct RenderColor *)color, 128, 1);
         break;
     }
     return 0;
@@ -65,10 +61,8 @@ typedef struct RoomPulseGlobal {
 
 extern RoomPulseGlobal **D_8009D254;
 extern u8 *D_800E2368;
-extern int D_800E27EC;
-extern u16 D_800E11EA, D_800E2850[];
+extern u16 D_800E11EA;
 extern int func_80194A70(int, RoomPulseParticle *, int *);
-extern void func_800CE870(void *, int, void *);
 extern int func_800D3FD8(void);
 extern void func_8006DF50(void *, int, int, int, int);
 

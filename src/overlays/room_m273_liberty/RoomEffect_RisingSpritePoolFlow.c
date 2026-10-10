@@ -4,11 +4,11 @@
 #include "pe1/field_anim_callback_list.h"
 #include "room_m273_sweep.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 typedef GteShortVector Vector;
-extern int D_800E27EC, D_800F3428, D_800966EC[];
-extern unsigned short D_800E1204[];
+extern int D_800966EC[];
 extern unsigned short GetClut(int, int);
-extern void func_800CEE20(void *, void *, int, int, int, int, int, int, void *);
 
 int func_80197230(int mode, Vector *position) {
     if (mode == 1) {
@@ -43,11 +43,10 @@ int func_80197230(int mode, Vector *position) {
 typedef RoomM273RisingParticle Particle;
 
 /* The timed emitter fills the eight-byte records rendered by this callback. */
-extern int D_800E27EC, D_800F3428, D_800966EC[];
+extern int D_800966EC[];
 extern short D_8019AE84;
-extern unsigned short D_800E1204[];
 extern unsigned char D_8019AD70[],D_8019AF6A,D_8019AF69;
-extern unsigned short D_800E11E8,D_800E2850[];
+extern unsigned short D_800E11E8;
 extern volatile unsigned short D_8019AEFE,D_8019AF00;
 extern unsigned short GetClut(int, int);
 
@@ -84,8 +83,8 @@ int func_801974DC(int mode, Particle *input) {
         size = *(short *)((char *)D_800966EC + sizeOffset) + 8192;
         if (kind == 4 && D_800F3428) palette += 4;
         clut = GetClut(16, palette);
-        func_800CEE20(particle, 0, size, size, (s16)D_800F3368.parameter02 * (frame / 4) + 200,
-            clut, 1, shade, D_8019AD70);
+        func_800CEE20((GteShortVector *)particle, 0, size, size, (s16)D_800F3368.parameter02 * (frame / 4) + 200,
+            clut, 1, shade, (struct RenderColor *)D_8019AD70);
     }
     return 0;
 }
@@ -131,15 +130,12 @@ int func_80197648(int mode) {
     return 0;
 }
 
-
 /* The position emitter fills the eight-byte records rendered by this callback. */
-extern int D_800E27EC,D_800F3428,D_800966EC[];
-extern unsigned short D_800E1204[];
+extern int D_800966EC[];
 extern unsigned char D_8019AB70[],D_8019AD74[],D_8019AD78[],D_8019AF68,D_8019AF69;
-extern unsigned short D_800E11EA,D_800E2850[];
+extern unsigned short D_800E11EA;
 extern volatile unsigned short D_8019AEFE,D_8019AF00;
 extern unsigned short GetClut(int,int);
-extern void func_800D004C(Vector *,int,int,int,Vector *,int,int,void *,void *,int,int);
 
 int func_801977F8(int mode,Vector *input) {
     Vector rotation,position;
@@ -159,16 +155,16 @@ int func_801977F8(int mode,Vector *input) {
         size=(short)sample*3+2048;
         if(kind==4 && D_800F3428) palette+=4;
         clut=GetClut(80,palette);
-        func_800CEE20(&position,&rotation,size,size,74,clut,1,shade,0);
+        func_800CEE20(&position,(GteRotation *)&rotation,size,size,74,clut,1,shade,0);
         rotation.z>>=1;
         sample=*(int *)((char *)D_800966EC+(((unsigned int)frame<<8)&0x3F00));
         shade=sample>>21;
         size=(short)sample+1024;
-        func_800D004C(&position,512,512,16,&rotation,size,size,D_8019AB70,D_8019AD74,shade,1);
+        func_800D004C(&position,512,512,16,(GteRotation *)&rotation,size,size,(struct RenderColor *)D_8019AB70,(struct RenderColor *)D_8019AD74,shade,1);
         rotation.x=1024; rotation.y=0; rotation.z=(unsigned int)frame<<8; rotation.pad=1;
         position.y=g_RoomFloorY->raw;
         asm("" : : "r"(frame) : "memory");
-        func_800D004C(&position,768,768,8,&rotation,4096,4096,D_8019AD78,D_8019AB70,shade,1);
+        func_800D004C(&position,768,768,8,(GteRotation *)&rotation,4096,4096,(struct RenderColor *)D_8019AD78,(struct RenderColor *)D_8019AB70,shade,1);
     }
     return 0;
 }

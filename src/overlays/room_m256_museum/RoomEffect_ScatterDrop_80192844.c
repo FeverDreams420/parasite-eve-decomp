@@ -157,12 +157,12 @@ int func_80192844(int mode, RoomM256Drop *drop) {
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428) palette += 4;
-                func_800CEE20(drop, 0, width, height,
+                func_800CEE20((GteShortVector *)drop, 0, width, height,
                               (s16)D_800F3368.parameter02 * (drop->timer / 4),
                               GetClut(0, palette), 1, 0x72, 0);
             }
             if (func_80071A54() & 3) return 0;
-            func_800D004C(drop, 0xFA, 0xFA, 5, 0, width, width, &color, 0,
+            func_800D004C((GteShortVector *)drop, 0xFA, 0xFA, 5, 0, width, width, (struct RenderColor *)&color, 0,
                           rcos(drop->timer << 5) / 32, 3);
             return 0;
         case 1:
@@ -171,7 +171,7 @@ int func_80192844(int mode, RoomM256Drop *drop) {
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428) palette += 4;
-                func_800CEE20(drop, &rotation, width, width,
+                func_800CEE20((GteShortVector *)drop, (GteRotation *)&rotation, width, width,
                               (s16)D_800F3368.parameter02 * (drop->timer / 4) + 0x20,
                               GetClut(0x10, palette), 1, 0x80, 0);
             }
@@ -182,7 +182,7 @@ int func_80192844(int mode, RoomM256Drop *drop) {
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428) palette += 4;
-                func_800CEE20(drop, 0, width, width,
+                func_800CEE20((GteShortVector *)drop, 0, width, width,
                               (s16)D_800F3368.parameter02 * (drop->timer / 2),
                               GetClut(0x10, palette), 1, 0x60, 0);
             }
@@ -193,7 +193,7 @@ int func_80192844(int mode, RoomM256Drop *drop) {
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428) palette += 4;
-                func_800CEE20(drop, 0, width, width,
+                func_800CEE20((GteShortVector *)drop, 0, width, width,
                               (s16)D_800F3368.parameter02 * (drop->timer / 2) + 0x40,
                               GetClut(0x20, palette), 2, 0x50, 0);
             }

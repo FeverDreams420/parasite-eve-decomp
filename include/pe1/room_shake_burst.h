@@ -7,6 +7,7 @@
 #include "pe1/room_fx.h"
 #include "pe1/room_orbit_trail.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_texture_tables.h"
 
 /* Shake burst controller (room_m318): shakes the camera while it scatters
  * debris particles around its anchor, then flags the actor for the
@@ -84,9 +85,7 @@ extern RoomShakeBurstChannel *D_800F32D0;
 extern RoomShakeBurstSparkChannel *D_800F33E0;
 extern RoomShakeBurstEntity **D_8009D254;
 extern void *D_800B0E64;
-extern int D_800E27EC;
 extern u16 D_800E11EA;
-extern u16 D_800E2850[];
 
 extern int func_800D3FD8(void);
 extern void func_8006DF50(void *channel, int id, int value, int volume, int pan);

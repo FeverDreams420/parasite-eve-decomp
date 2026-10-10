@@ -33,7 +33,7 @@ int func_80192BDC(int mode, RoomM123PulsingParticle *particle) {
             clut = func_80077AA4(0x20, palette);
             func_800CEE20(&position, 0, 0x1000, 0x1000,
                           (s16)D_800F3368.parameter02 * 2 + 0xD8, clut, 3, g_RoomScriptRecord,
-                          &color);
+                          (RenderColor *)&color);
             matrixSlot = &D_800BCFA4;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);

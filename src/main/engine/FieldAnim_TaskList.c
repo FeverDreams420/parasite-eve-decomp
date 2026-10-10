@@ -127,7 +127,6 @@ void *func_800CE610(char *list) {
     return 0;
 }
 
-extern int D_800E27EC;
 int func_800CE688(void *data)
 {
   char *list = data;

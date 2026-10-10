@@ -3,6 +3,7 @@
 #include "pe1/field_sprite_state.h"
 #include "pe1/field_glow_sprite.h"
 #include "pe1/gte_types.h"
+#include "pe1/field_sprite_draw.h"
 extern void FieldEng_Spawn6(int a, int b, int c, int d, int e, int f);
 
 int func_800C8E44(int a, int b, int c, int d, int e, int f) {
@@ -46,7 +47,6 @@ int func_800C8F18(void) {
 int func_800C8F20(void) {
     return 0;
 }
-void func_800CEDA8(int arg0);
 
 extern char *D_800E27A0;
 
@@ -61,7 +61,6 @@ int func_800C8F28(char *obj) {
 }
 
 int rand(void);
-
 
 int func_800C8F94(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
     GteShortVector vec;

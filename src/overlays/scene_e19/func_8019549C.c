@@ -194,7 +194,7 @@ test_timer:
         if (D_800F3368.palette == 4 && D_800F3428)
             palette += 4;
         clut = func_80077AA4(16, palette);
-        func_800CEE20(&particle->position, &rotation, 6144, 6144,
+        func_800CEE20(&particle->position, (GteRotation *)&rotation, 6144, 6144,
                      68, clut, 1, intensity / 2, 0);
         D_800F3368.parameter02 = 2;
         asm volatile("" : : : "memory");
@@ -207,7 +207,7 @@ test_timer:
         if (D_800F3368.palette == 4 && D_800F3428)
             palette += 4;
         clut = func_80077AA4(16, palette);
-        func_800CEE20(&particle->position, &rotation, 8192, 8192,
+        func_800CEE20(&particle->position, (GteRotation *)&rotation, 8192, 8192,
                      152, clut, 1, intensity, 0);
         gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldtransmatrix(D_800BCFA4.value);
@@ -246,7 +246,7 @@ if (floorIndex == 4 && D_800F3428) palette += 4;
         gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldtransmatrix(D_800BCFA4.value);
         if (particle->timer < 13 && !(particle->position.pad & 1)) {
-            func_800D0E88(&particle->position, &particle->angles,
+            func_800D0E88(&particle->position, (GteRotation *)&particle->angles,
                          1900, (12 - particle->timer) << 8,
                          &color, 0, 0, 62, 1);
         }

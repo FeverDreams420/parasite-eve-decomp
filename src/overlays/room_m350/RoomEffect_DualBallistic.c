@@ -1,6 +1,8 @@
 #include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 typedef RoomM350TransformMatrix Matrix;
 typedef RoomM350TransformOwner Instance;
 typedef RoomM350Actor Actor;
@@ -10,12 +12,9 @@ extern Actor *D_800F32D0;
 extern RoomM350Emitter *D_800F33E0;
 extern Instance *g_PlayerEntity;
 extern unsigned char D_8019A82F;
-extern int D_800E27EC, D_800F3428, D_800966EC[], D_8019A598[];
-extern unsigned short D_800E1204[];
+extern int D_800966EC[], D_8019A598[];
 extern unsigned short D_800E11E8;
-extern unsigned short D_800E2850[];
 extern int GetClut(int, int);
-extern void func_800CEE20(void *, int, int, int, int, unsigned int, int, int, void *);
 extern int Inv_ScrambleGrid(void);
 
 int func_801968D8(int event, short *position) {
@@ -29,11 +28,11 @@ int func_801968D8(int event, short *position) {
         int handle;
         if (kind == 4 && D_800F3428) palette += 4;
         handle = GetClut(16, palette);
-        func_800CEE20(position, 0, 12288, 12288,
+        func_800CEE20((GteShortVector *)position, 0, 12288, 12288,
             (s16)D_800F3368.parameter02 * (((D_800E27EC - 1) >> 1) & 7) + 200,
             (unsigned short)handle, 1,
             (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80] >> 5,
-            D_8019A598);
+            (struct RenderColor *)D_8019A598);
     }
     return 0;
 }

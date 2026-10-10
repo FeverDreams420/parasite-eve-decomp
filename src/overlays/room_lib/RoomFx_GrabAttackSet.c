@@ -454,7 +454,7 @@ int RoomFx_GroundSweepMark(int mode, RoomGroundSweepMark *state) {
         palette = D_800E1204[first_kind];
         if (first_kind == 4 && D_800F3428) palette += 4;
         clut = func_80077AA4(16, palette);
-        func_800CEE20(&position, &seed, 4096, 4096,
+        func_800CEE20(&position, (GteRotation *)&seed, 4096, 4096,
                         (s16)D_800F3368.parameter02 * (s16)state->frame + 32,
                         clut, 1, (unsigned)shade >> 1, 0);
     }

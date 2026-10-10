@@ -34,11 +34,11 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
     case 1:
         switch (spark->state) {
         case 0:
-            func_800CE870(D_8009D254, 0, &target);
+            func_800CE870((char *)D_8009D254, 0, (s16 *)&target);
             func_800CFAA8(spark, &target, &angles);
             angles.x = 0;
             func_800CFD50(&angles, &spark->hx, params->speed);
-            func_800CFB7C(&spark->hx, params->distance, &target);
+            func_800CFB7C((GteShortVector *)&spark->hx, params->distance, &target);
             spark->x += target.x;
             spark->y += target.y;
             spark->z += target.z;
@@ -97,7 +97,7 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = func_80077AA4(0x10, palette);
-            func_800CEE20(spark, &rotation, 0x1000, 0x1000, 0x20, clut, 1,
+            func_800CEE20((GteShortVector *)spark, &rotation, 0x1000, 0x1000, 0x20, clut, 1,
                           fade / 2, 0);
             break;
         }
@@ -108,9 +108,9 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = func_80077AA4(0, palette);
-            func_800CEE20(spark, &rotation, 0x1000, 0x1000,
+            func_800CEE20((GteShortVector *)spark, &rotation, 0x1000, 0x1000,
                           (s16)D_800F3368.parameter02 * spark->timer, clut, 1,
-                          0x80, &color);
+                          0x80, (struct RenderColor *)&color);
             break;
         }
         case 2: {
@@ -121,7 +121,7 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = func_80077AA4(0x10, palette);
-            func_800CEE20(spark, &rotation, 0x1000, 0x1000, 0x20, clut, 1,
+            func_800CEE20((GteShortVector *)spark, &rotation, 0x1000, 0x1000, 0x20, clut, 1,
                           fade, 0);
             break;
         }
@@ -178,7 +178,7 @@ int RoomEffect_FlashSpriteController(int mode, RoomFlashSpriteState *state,
         pool = D_800F32D0->pool;
         func_800CE8F0(pool, state->attachment, &rotation, state);
         state->y = g_RoomFloorY->y;
-        func_800CFB7C(&state->ax, 0x12C, &target);
+        func_800CFB7C((GteShortVector *)&state->ax, 0x12C, &target);
         state->x += target.x;
         state->y += target.y;
         state->z += target.z;

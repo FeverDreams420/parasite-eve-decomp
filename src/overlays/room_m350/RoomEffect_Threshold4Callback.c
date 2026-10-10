@@ -1,8 +1,7 @@
-extern int D_800E27EC;
+#include "pe1/field_anim_callback_list.h"
+#include "pe1/field_sprite_draw.h"
 extern short D_800966EE[];
 extern int D_8019A614[];
-extern void func_800D004C(short *, int, int, int, int, int, int,
-                         int *, int *, int, int);
 
 int func_8019A134(int event, int **position) {
     short point[4];
@@ -16,8 +15,8 @@ int func_8019A134(int event, int **position) {
         point[2] = (*position)[2];
         shade = D_800966EE[((D_800E27EC - 1) << 9) & 0x1E00];
         colors = D_8019A614;
-        func_800D004C(point, 512, 512, 16, 0, (short)shade, (short)shade,
-                     colors, colors + 1, (short)shade >> 5, 1);
+        func_800D004C((struct GteShortVector *)point, 512, 512, 16, 0, (short)shade, (short)shade,
+                     (struct RenderColor *)colors, (struct RenderColor *)(colors + 1), (short)shade >> 5, 1);
     }
     return 0;
 }

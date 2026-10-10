@@ -1,13 +1,11 @@
 #include "pe1/room_ember_burst.h"
 #include "pe1/gte.h"
+#include "pe1/field_sprite_draw.h"
 
 /* Rising ember sparks: the drifting ember callback and the fan-sweep
  * spark template instance. */
 
 extern char D_800E17E0;
-
-void func_800CF3AC(void *arg0, void *arg1, int arg2);
-void func_800D1DEC(void *arg0, void *arg1, int arg2, int arg3);
 
 int func_800D70C0(int mode, s16 *state) {
     s16 sp10[3];

@@ -192,7 +192,7 @@ int func_801981A4(int mode, RoomM273SwayShard *shard) {
         spin.flags = 1;
         for (i = 0; i < 2; i++) {
             func_800D0728(&position, 0x60, 0x88, 8, &spin, 0x1000, 0x1000, &D_8019AE04,
-                          D_8019AB70, 0x80, 1);
+                          (RenderColor *)D_8019AB70, 0x80, 1);
             spin.y = spin.x;
             spin.x = 0;
         }

@@ -1,10 +1,10 @@
 #include "pe1/room_m350_effects.h"
 #include "pe1/field_anim_callback_list.h"
+#include "pe1/field_texture_tables.h"
 
 typedef struct { signed int low:16; signed int high:16; } TrigEntry;
 #include "pe1/render_object.h"
 
-extern int D_800E27EC;
 extern short D_800966EC[],D_800966EE[];
 extern RenderColor D_8019A3D0;
 extern unsigned short GetClut(int,int);
@@ -54,13 +54,10 @@ int func_80198860(int event,RoomM350CloudParticle *particle)
     return 0;
 }
 
-
 /* MASPSX_FLAGS: --expand-div */
 extern RoomM350EffectActor *D_800F32D0;
 extern RoomM350EffectEmitter *D_800F33E0;
 extern unsigned char D_8019A8BE;
-extern unsigned short D_800E11E4[];
-extern unsigned short D_800E2850[];
 extern int Inv_ScrambleGrid(void);
 int func_80198ABC(int event)
 {

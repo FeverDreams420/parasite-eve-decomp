@@ -2,18 +2,15 @@
 #include "room_m123_effects.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte_types.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 
 extern GteShortVector D_8018F1F8;
 extern GteShortVector D_8018F1CC;
 extern char D_80195624[];
-extern int D_800E27EC, D_800F3428;
-extern u16 D_800E1204[];
-extern void func_800CF3AC(void *, void *, int);
 extern int rcos(int);
 extern u16 GetClut(int, int);
-extern void func_800CEE20(void *, void *, int, int, int, int, int, int, void *);
 extern u16 D_800E11E8;
-extern u16 D_800E2850[];
 extern void func_800CE8F0(void *, int, void *, void *);
 extern int func_800D3FD8(void);
 extern void func_800D3F64(int, int);
@@ -41,8 +38,8 @@ int func_80194F68(int mode, RoomM123Wave *wave) {
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428) palette += 4;
         clut = GetClut(48, palette);
-        func_800CEE20(wave, &position, scale, scale,
-                      (s16)D_800F3368.parameter02 + 220, clut, 1, 128, color);
+        func_800CEE20((GteShortVector *)wave, (GteRotation *)&position, scale, scale,
+                      (s16)D_800F3368.parameter02 + 220, clut, 1, 128, (struct RenderColor *)color);
         break;
     }
     return 0;

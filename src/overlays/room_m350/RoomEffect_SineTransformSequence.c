@@ -1,9 +1,9 @@
 #include "pe1/room_m350_effects.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
+#include "pe1/field_texture_tables.h"
 
 extern RoomM350EffectActor *D_800F32D0;
-extern int D_800E27EC;
 extern RenderColor D_8019A738, D_8019A734;
 extern int rsin(int);
 extern unsigned short GetClut(int, int);
@@ -39,12 +39,9 @@ int func_801996BC(int event, RoomM350SineParticle *object)
     return 0;
 }
 
-
 typedef struct { short count, delay; } EmissionState;
 extern RoomM350EffectEmitter *D_800F33E0;
 extern unsigned char D_8019A8C4;
-extern unsigned short D_800E11E4[];
-extern unsigned short D_800E2850[];
 extern int Inv_ScrambleGrid(void);
 extern int rand(void);
 

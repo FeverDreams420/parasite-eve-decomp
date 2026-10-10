@@ -121,7 +121,7 @@ s32 func_801940B0(int mode, void *effect) {
         case 1:
             state->frame = (s16) ((u16) state->frame + 1);
             history = (state->index * 0x88) + D_80195EFC;
-            func_800CE870(g_PlayerEntity, 1, &delta.x);
+            func_800CE870((char *)g_PlayerEntity, 1, &delta.x);
             func_800CFAA8(state, &delta.x, &angles.x);
             ending = state->ending;
             if (ending == 0) {
@@ -149,7 +149,7 @@ s32 func_801940B0(int mode, void *effect) {
                 if (squaredSpeed < 0) {
                     squaredSpeed += 0xF;
                 }
-                func_800CFB7C(motionAngles, (s32) (squaredSpeed << 0xC) >> 0x10, &delta.x);
+                func_800CFB7C(motionAngles, (s32) (squaredSpeed << 0xC) >> 0x10, (GteShortVector *)&delta.x);
                 state->x = (s16) ((u16) state->x + delta.x);
                 state->y = (s16) ((u16) state->y + delta.y);
                 state->z = (s16) ((u16) state->z + delta.z);
@@ -317,9 +317,9 @@ checkLifetime:
             }
             func_800D3114((state->index * 0x88) + D_80195EFC, 0x10, 0xF0, 0, 0x60, 0xFF, 0xF, (s32) D_800E2850[D_800E11EA], func_80077AA4(0x30, trailClutY) & 0xFFFF, 0x80, &color.r, &darkColor.r, 1);
             fade = ((D_800E27EC & 1) << 5) + 0x60;
-            func_800D004C(state, 0x190, 0x190, 8, 0, 0x1000, 0x1000, &color.r, 0, fade, 1);
+            func_800D004C((GteShortVector *)state, 0x190, 0x190, 8, 0, 0x1000, 0x1000, (RenderColor *)&color.r, 0, fade, 1);
             historySample = D_80195EFC + ((func_80071A54() & 7) * 8);
-            func_800D004C((void *)((unsigned)(state->index * 0x88) + (unsigned)historySample), 0x1F4, 0x1F4, 6, 0, 0x1000, 0x1000, &color.r, 0, (u32)fade >> 1, 1);
+            func_800D004C((void *)((unsigned)(state->index * 0x88) + (unsigned)historySample), 0x1F4, 0x1F4, 6, 0, 0x1000, 0x1000, (RenderColor *)&color.r, 0, (u32)fade >> 1, 1);
             return 0;
         case 1:
             firstFade = rcos(state->frame << 6) / 32;
@@ -358,7 +358,7 @@ checkLifetime:
                 /* Matching debt: consume CLUT and page in $2, then bound both
                  * outgoing stores before the texture-offset load. Empty ASM
                  * only; $4..$7 preserve the ready register arguments. */
-                func_800CEE20(callState, callRotation, callScaleX, callScaleY,
+                func_800CEE20((GteShortVector *)callState, callRotation, callScaleX, callScaleY,
                               drawOffset,
                     ({
                         register int clutWord asm("$2") = drawClut;
@@ -368,11 +368,11 @@ checkLifetime:
                         register int modeWord asm("$2") = 1;
                         modeWord;
                     }), firstFade,
-                    ({
+                    (RenderColor *)(({
                         asm("" : : "r"(callState), "r"(callRotation),
                             "r"(callScaleX), "r"(callScaleY) : "$21", "$2");
                         &color.r;
-                    }));
+                    })));
             }
             renderPalette = D_800E2850[palettes->second];
             asm("" : "=r"(renderPalette) : "0"(renderPalette) : "memory");
@@ -440,7 +440,7 @@ checkLifetime:
             if ((D_800F336C == 4) && (D_800F3428 != 0)) {
                 pulseClutY += 4;
             }
-            func_800CEE20(state, 0, renderScale, renderScale, 0x7C, func_80077AA4(0x60, pulseClutY) & 0xFFFF, 1, fade, 0);
+            func_800CEE20((GteShortVector *)state, 0, renderScale, renderScale, 0x7C, func_80077AA4(0x60, pulseClutY) & 0xFFFF, 1, fade, 0);
             D_800F3368.depth = 8;
             goto done;
         case 4:
@@ -458,7 +458,7 @@ checkLifetime:
             tripledScale = renderScale * 3;
             impactScale = (s32) (tripledScale + (tripledScale >> 0x1F)) >> 1;
             spriteFrame = (s16 *)&D_800F3368.parameter02;
-            func_800CEE20(state, &spriteRotation, impactScale, impactScale, (*spriteFrame * (s16) (state->frame / 3)) + 0x20, clut, 1, 0x80, 0);
+            func_800CEE20((GteShortVector *)state, &spriteRotation, impactScale, impactScale, (*spriteFrame * (s16) (state->frame / 3)) + 0x20, clut, 1, 0x80, 0);
             impactFrame = state->frame;
             if (impactFrame < 0xD) {
                 renderScale = rsin(((impactFrame << 10) / 12)) * 4;
@@ -476,7 +476,7 @@ checkLifetime:
                 if ((D_800F336C == 4) && (D_800F3428 != 0)) {
                     ringClutY += 4;
                 }
-                func_800CEE20(state, &spriteRotation, renderScale, renderScale, 0x92, func_80077AA4(0x80, ringClutY) & 0xFFFF, 1, fade, &darkColor.r);
+                func_800CEE20((GteShortVector *)state, &spriteRotation, renderScale, renderScale, 0x92, func_80077AA4(0x80, ringClutY) & 0xFFFF, 1, fade, (RenderColor *)&darkColor.r);
                 D_800F3368.parameter0A = 0;
             }
             return 0;

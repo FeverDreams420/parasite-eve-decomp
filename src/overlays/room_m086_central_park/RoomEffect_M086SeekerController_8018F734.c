@@ -174,7 +174,7 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428) palette += 4;
-                func_800CEE20(&position, &rotation, size * 20, size * 20,
+                func_800CEE20(&position, (GteRotation *)&rotation, size * 20, size * 20,
                               (s16)D_800F3368.parameter02 + 0xFD,
                               func_80077AA4(0x80, palette), 2, 0x80, 0);
             }

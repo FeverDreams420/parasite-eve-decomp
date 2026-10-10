@@ -2,11 +2,11 @@
 #define ROOM_M089_H
 
 #include "../room_lib/room_lib.h"
+#include "pe1/field_anim_callback_list.h"
+#include "pe1/field_texture_tables.h"
 
 extern short D_800966EC[][2];
 extern unsigned short D_800E11FA;
-extern unsigned short D_800E2850[];
-extern int D_800E27EC;
 
 extern void *D_800B0E64;
 extern FieldActorNode *D_8009D20C;

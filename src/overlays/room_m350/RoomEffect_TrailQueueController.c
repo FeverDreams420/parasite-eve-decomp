@@ -1,13 +1,14 @@
 #include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
+#include "pe1/field_texture_tables.h"
 
 typedef RoomM350Vector Vector;
 extern RoomM350Emitter *D_800F33E0;
 extern unsigned char D_8019A86E;
 extern short D_8019A85C;
 extern Vector g_RoomEffectTrailPositions[4];
-extern unsigned short D_800E11E8, D_800E2850[];
+extern unsigned short D_800E11E8;
 /* Retail writes both fields twice during configuration. */
 extern int func_8019A014(int, short *);
 

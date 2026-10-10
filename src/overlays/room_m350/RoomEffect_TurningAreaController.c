@@ -2,6 +2,9 @@
 #include "room_m350_shared.h"
 #include "pe1/scene_assets.h"
 #include "pe1/gte.h"
+#include "pe1/field_anim_callback_list.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 
 /* Steers a rotating footprint, tests contact, and draws three model/sprite layers. */
 typedef RoomM350Vector Vector;
@@ -19,22 +22,18 @@ extern Instance *g_PlayerEntity;
 extern void *D_800B0E64;
 extern short D_8019A82A[];
 extern unsigned char D_8019A831,D_8019A82F,D_8019A830;
-extern int D_800E27EC,D_800F3428;
 extern short D_800966EC[],D_800966EE[];
 extern Matrix D_8019A808;
 extern short D_8019A80A,D_8019A80C,D_8019A80E,D_8019A810,D_8019A812,D_8019A814,D_8019A816,D_8019A818;
 extern int D_8019A81C,D_8019A820,D_8019A824;
 extern Vector D_8019A574[];
 extern char D_8019A594[],D_8019A3C8[];
-extern unsigned short D_800E11FA, D_800E2850[], D_800E1204[];
+extern unsigned short D_800E11FA;
 extern void func_800C6D5C(void *,int,int);
 extern int func_800DFE20(int *,int *),FieldEng_VecToAngle(int *,int *),rcos(int),rsin(int);
 extern int GetTPage(int,int,int,int),GetClut(int,int);
 extern void GsSetOrign(int,int),func_800C6ED8(int),func_800C6EF8(void *),func_800C6FA0(void *,int);
 extern void memset(void *,int,int),func_800C71E4(void *,Matrix *),func_800C6F4C(void *);
-extern void func_800D0E88(GteShortVector *, struct GteRotation *, int, int,
-                          struct RenderColor *, struct RenderColor *,
-                          struct RenderColor *, int, int);
 int func_801960C4(int event,State *state)
 {
     union { struct { Vector vertices[4]; int area; } collision; Matrix matrix; } local;
@@ -229,7 +228,7 @@ draw:
             asm("" : "=r"(triple) : "0"(triple));
             size=triple*2;
             do {
-                func_800D0E88(&position,&rotation,size,512,D_8019A594,D_8019A3C8,D_8019A3C8,state->brightness,1);
+                func_800D0E88(&position,(GteRotation *)&rotation,size,512,(RenderColor *)D_8019A594,(RenderColor *)D_8019A3C8,(RenderColor *)D_8019A3C8,state->brightness,1);
                 rotation.y=(unsigned short)rotation.y+24;
             } while(++i<3);
         }

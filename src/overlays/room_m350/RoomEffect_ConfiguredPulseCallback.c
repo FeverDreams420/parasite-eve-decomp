@@ -1,15 +1,15 @@
 #include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
+#include "pe1/field_anim_callback_list.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 
-extern int D_800E27EC;
 extern volatile unsigned short D_800E11E8, D_800E1208;
-extern unsigned short D_800E2850[];
 extern short D_800966EC[], D_800966EE[];
 extern int D_8019A59C[];
 /* Signed high-half view avoids LHU followed by explicit sign extension. */
 typedef RoomM350SignedHalfPair SignedHalf;
 extern unsigned short GetClut(int, int);
-extern void func_800CEE20(void *, int, int, int, int, unsigned int, int, int, void *);
 
 int func_80196C64(int event, void *object)
 {
@@ -61,7 +61,7 @@ int func_80196C64(int event, void *object)
             func_800CEE20(object, 0, (short)size, (short)size,
                 (s16)((RenderEffectParameters *)state)->parameter02 * phase + 192,
                 handle, 1, ((SignedHalf *)((char *)D_800966EE - 2 +
-                    frame))->value >> 5, colors);
+                    frame))->value >> 5, (struct RenderColor *)colors);
         }
     }
     return 0;

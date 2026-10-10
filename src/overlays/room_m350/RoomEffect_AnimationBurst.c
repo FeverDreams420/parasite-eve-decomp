@@ -1,5 +1,6 @@
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
+#include "pe1/field_sprite_draw.h"
 typedef RoomM350TableShadeEntry TableEntry;
 typedef RoomM350SoundOwner Owner;
 typedef struct {
@@ -15,9 +16,7 @@ typedef struct { int reserved[2]; Animation *animation; } Actor;
 
 typedef struct { short remaining, delay; } State;
 
-extern int D_800E27EC, D_800966EC[], D_8019A3C8[], D_8019A4DC[], D_8019A4E0[];
-extern void func_800D004C(void *, int, int, int, short *, int, int, void *, void *, int, int);
-extern void func_800D0728(void *, int, int, int, short *, int, int, void *, void *, int, int);
+extern int D_800966EC[], D_8019A3C8[], D_8019A4DC[], D_8019A4E0[];
 extern Actor *D_800F32D0;
 extern RoomM350Emitter *D_800F33E0;
 extern short D_8019A7A0[];
@@ -41,13 +40,13 @@ int func_801944F0(int event, void **object)
         vector[1] = 0;
         vector[2] = counter * 128;
         vector[3] = 0;
-        func_800D004C(*object, 320, 320, 16, vector, size, size,
-            D_8019A4DC, D_8019A3C8, entry->shade >> 5, 1);
+        func_800D004C(*object, 320, 320, 16, (struct GteRotation *)vector, size, size,
+            (struct RenderColor *)D_8019A4DC, (struct RenderColor *)D_8019A3C8, entry->shade >> 5, 1);
         {
             int nextCounter = D_800E27EC;
             size = nextCounter * 512 + 2048;
-            func_800D0728(*object, 256, 512, 16, vector, size, size,
-                D_8019A3C8, D_8019A4E0,
+            func_800D0728(*object, 256, 512, 16, (struct GteRotation *)vector, size, size,
+                (struct RenderColor *)D_8019A3C8, (struct RenderColor *)D_8019A4E0,
                 (short)base[((unsigned int)(nextCounter - 1) << 8) & 0xF00] >> 5, 1);
         }
     }

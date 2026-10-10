@@ -3,7 +3,6 @@
 
 #include "room_m273_effects.h"
 
-extern s32 D_800E27EC;
 extern RoomM273EffectStateContext *D_800F32D0;
 extern u8 D_8019AE68;
 

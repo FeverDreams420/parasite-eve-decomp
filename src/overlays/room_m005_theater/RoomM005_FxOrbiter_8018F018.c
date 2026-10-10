@@ -1,5 +1,7 @@
 #include "pe1/field_sprite_params.h"
 #include "../room_lib/room_lib.h"
+#include "pe1/field_anim_callback_list.h"
+#include "pe1/field_texture_tables.h"
 
 typedef struct RoomM005_OrbRec {
     short h0;                     /* 0x00: x */
@@ -24,9 +26,6 @@ typedef struct RoomM005_Dialog {
 
 extern RoomM005_Dialog g_RoomScriptRecord;
 extern char RoomM005_Rec2[];
-extern int D_800E27EC;
-extern int D_800F3428;
-extern unsigned short D_800E1204[];
 extern int rsin();
 extern int rcos();
 extern int func_80077AA4();

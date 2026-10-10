@@ -27,7 +27,7 @@ int func_8019552C(int mode, RoomModelPulseParticle *particle) {
         clut = func_80077AA4(0x20, palette);
         func_800CEE20(&position, 0, 0x1000, 0x1000,
                        (s16)D_800F3368.parameter02 * 2 + 0xD8, clut, 3,
-                       D_80196094, &color);
+                       D_80196094, (RenderColor *)&color);
         gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldtransmatrix(D_800BCFA4.value);
         func_800D1DEC(&position, &color, D_80196094, 1);

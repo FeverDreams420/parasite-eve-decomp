@@ -97,7 +97,7 @@ int func_80192548(int mode, RoomOrbitTrailParticle *p) {
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
-            func_800D0E88(&D_801994EC, &p->heading, radius, size, &seed, 0, 0,
+            func_800D0E88(&D_801994EC, (GteRotation *)&p->heading, radius, size, &seed, 0, 0,
                           (s16)glow, 1);
             break;
         }

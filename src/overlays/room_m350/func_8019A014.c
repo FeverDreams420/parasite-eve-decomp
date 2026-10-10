@@ -1,12 +1,11 @@
 #include "common.h"
 #include "pe1/field_sprite_params.h"
-extern s32 D_800E27EC;
-extern u16 D_800E1204[];
-extern s32 D_800F3428;
+#include "pe1/field_anim_callback_list.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 extern void D_8019A630;
 
 s32 func_80077AA4(s32 arg0, s32 arg1);
-s32 func_800CEE20(void *arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, void *arg8);
 
 s32 func_8019A014(s32 mode, void *ctx) {
     s32 tex;

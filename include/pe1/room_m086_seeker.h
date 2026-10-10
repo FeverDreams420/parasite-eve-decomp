@@ -10,6 +10,8 @@
 #include "pe1/render_prim.h"
 #include "pe1/field_model_draw.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 
 /* room_m086 falling seeker (func_8018F004): a turning model that flies
  * along its heading until it lands, bursts on the player (flagging the
@@ -57,16 +59,6 @@ typedef struct RoomM086EventState {
     u8 active;
 } RoomM086EventState;
 
-extern int D_800E27EC;
-
-extern u16 D_800E11E4[];
-extern u16 D_800E1204[];
-extern u16 D_800E2850[];
-extern int D_800F3428;
-void func_800CFB7C(GteShortVector *angles, s16 distance, GteShortVector *out);
-void func_800CEE20(GteShortVector *position, GteShortVector *rotation,
-                   int scale_x, int scale_y, int texture, int clut,
-                   int page, int intensity, void *color);
 extern RoomM086Channel *D_800F32D0;
 extern RoomM086BattleEntity *D_8009D254;
 extern RoomM086EventState *D_800E2368;

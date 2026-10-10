@@ -89,7 +89,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
                     }
                 }
                 if (trail->speed < 0x3C) trail->speed += 2;
-                func_800CFB7C(&trail->ax, (s16)(trail->speed * trail->speed / 16), &target);
+                func_800CFB7C((GteShortVector *)&trail->ax, (s16)(trail->speed * trail->speed / 16), &target);
                 trail->x += target.x;
                 trail->y += target.y;
                 trail->z += target.z;
@@ -535,7 +535,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
                     trail->ay += (func_80071A54() & 0x1FF) - 0x100;
                 }
                 if (trail->speed < 0x3C) trail->speed += 2;
-                func_800CFB7C(&trail->ax, (s16)(trail->speed * trail->speed / 16), &target);
+                func_800CFB7C((GteShortVector *)&trail->ax, (s16)(trail->speed * trail->speed / 16), &target);
                 trail->x += target.x;
                 trail->y += target.y;
                 trail->z += target.z;

@@ -19,8 +19,8 @@ int func_8019A290(int mode, RoomM273PhaseState *state) {
         position.y = g_RoomFloorY->raw;
         position.z = state->source[2];
         func_800D004C(&position, 192, 192, 10,
-                       D_8019ACCC + ((frame & 1) << 3), size, size,
-                       D_8019AB70, D_8019ACC8, entry->high >> 5, 1);
+                       (GteRotation *)(D_8019ACCC + ((frame & 1) << 3)), size, size,
+                       (RenderColor *)D_8019AB70, (RenderColor *)D_8019ACC8, entry->high >> 5, 1);
     }
     return 0;
 }

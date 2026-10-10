@@ -1,7 +1,7 @@
 #include "common.h"
+#include "pe1/field_anim_callback_list.h"
 extern s16 *D_800E2368;
 extern char **D_8009D254;
-extern s32 D_800E27EC;
 
 s32 func_801992A4(s32 arg0, void *arg1, s32 *arg2) {
     char *actor;

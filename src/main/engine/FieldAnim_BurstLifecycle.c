@@ -1,5 +1,6 @@
 #include "pe1/field_engine_slot.h"
 #include "pe1/akao/commands.h"
+#include "pe1/field_sprite_draw.h"
 /* Burst and spark effect setup, draw and lifecycle callbacks. */
 
 #include "common.h"
@@ -8,7 +9,6 @@
 #include "pe1/field_anim.h"
 #include "pe1/game_audio_state.h"
 #include "pe1/field_anim_particle.h"
-
 
 int func_800CD50C(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
     int *base_a1;
@@ -94,11 +94,7 @@ int func_800CD71C(void *arg0, FieldEngSlot *state) {
     return ret;
 }
 
-
 extern int D_800E0F6C;
-
-
-
 
 int func_800CD728(char *object) {
     void **slot = FieldEng_GetSlot(object);
@@ -225,7 +221,6 @@ int func_800CD978(void) {
 
 int *func_800C2B10(int index);
 int *func_800C2B28(int index);
-void func_800CEDA8(int arg0);
 
 extern int D_800E2804;
 extern int D_800B0E14;
@@ -310,7 +305,6 @@ void func_800CDD04(void) {
 
 #include "pe1/field_billboard.h"
 
-
 int func_800CDD0C(void *arg0, void *arg1, FieldAnimSparkCloud *anim) {
     u16 lhs_v0;
     FieldBillboard *output;
@@ -348,7 +342,6 @@ int func_800CDD0C(void *arg0, void *arg1, FieldAnimSparkCloud *anim) {
         func_800C3B04(&D_800E2770.billboard);
     } while ((i & 0xFFFF) < 8);
 }
-
 
 int func_800CDE90(void *arg0, void *arg1, FieldAnimSparkPoint *anim) {
     u16 lhs_v0;
@@ -499,7 +492,6 @@ int func_800CE1F4(void) {
 
 int *func_800C2B10(int index);
 int *func_800C2B28(int index);
-void func_800CEDA8(int arg0);
 
 extern int D_800E2848;
 

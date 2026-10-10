@@ -7,6 +7,7 @@
 #include "pe1/render_object.h"
 #include "pe1/field_collision.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_texture_tables.h"
 
 /* Room spark particles: damped velocity, gravity and a floor bounce against
  * the frame-count driven floor height. */
@@ -200,7 +201,6 @@ typedef struct RoomBounceSpark {
 
 PE1_STATIC_ASSERT(sizeof(RoomBounceSpark) == 0x14, room_bounce_spark_size);
 
-
 /* Beam spark: a line drawn from the actor to a tip that is blended towards
  * the target, with a scaled model drawn at the target. */
 typedef struct RoomBeamSpark {
@@ -230,6 +230,5 @@ typedef struct RoomBeamSparkParams {
  * D_800E1204 palette table. An entry read as an array element is an
  * in-struct reference, so it stays ordered after a store through the
  * parameter block base register, as retail's reads do. */
-extern u16 D_800E11E4[];
 
 #endif

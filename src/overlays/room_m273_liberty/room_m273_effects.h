@@ -6,6 +6,8 @@
 #include "pe1/gte_types.h"
 #include "pe1/s32_vector3.h"
 #include "room_m273_particles.h"
+#include "pe1/field_anim_callback_list.h"
+#include "pe1/field_texture_tables.h"
 
 /* The third word of the shared allocator context points at its pool. */
 typedef struct RoomM273PoolContext {
@@ -157,9 +159,6 @@ typedef struct RoomM273EffectStateContext {
 } RoomM273EffectStateContext;
 
 extern RoomM273PoolContext *D_800F33E0;
-extern int D_800E27EC;
-extern u16 D_800E1204[];
-extern int D_800F3428;
 
 PE1_STATIC_ASSERT(sizeof(RoomM273PoolContext) == 0x0C,
                   room_m273_pool_context_size);

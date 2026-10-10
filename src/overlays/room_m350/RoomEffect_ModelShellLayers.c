@@ -2,6 +2,8 @@
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte_types.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 /* MASPSX_FLAGS: --expand-div */
 typedef RoomM350Vector Vector;
 typedef RoomM350TransformMatrix Matrix;
@@ -9,17 +11,13 @@ typedef struct { int color; short x, y, z, size; } Particle;
 typedef RoomM350TransformOwner Instance;
 typedef RoomM350TableShadeEntry TrigEntry;
 
-
 extern RoomM350Emitter *D_800F33E0;
 extern Instance *D_8019A7F8;
-extern int D_800E27EC, D_800F3428, D_800966EC[];
-extern unsigned short D_800E1204[], D_800E2850[];
+extern int D_800966EC[];
 extern short D_800966EE[];
 extern int D_8019A3CC[], D_8019A3C8[];
 extern unsigned short D_800E11E8;
 extern unsigned short GetClut(int, int);
-extern void func_800CEE20(void *, int, int, int, int, int, int, int, void *);
-extern void func_800D004C(void *, int, int, int, void *, int, int, void *, void *, int, int);
 extern int Inv_ScrambleGrid(void);
 
 int func_8019404C(int event, Particle *particle)
@@ -34,9 +32,9 @@ int func_8019404C(int event, Particle *particle)
         unsigned short clut;
         if (kind == 4 && D_800F3428) palette += 4;
         clut = GetClut(48, palette);
-        func_800CEE20(&particle->x, 0, size, size, (s16)D_800F3368.parameter02 * 5 + 216, clut, 1,
-            ((TrigEntry *)((char *)D_800966EE - 2 + ((((unsigned int)D_800E27EC - 1) << 9) & 0x3E00)))->shade >> 5, particle);
-        func_800D004C(&particle->x, 96, 96, 8, 0, size, size, D_8019A3CC, D_8019A3C8,
+        func_800CEE20((GteShortVector *)&particle->x, 0, size, size, (s16)D_800F3368.parameter02 * 5 + 216, clut, 1,
+            ((TrigEntry *)((char *)D_800966EE - 2 + ((((unsigned int)D_800E27EC - 1) << 9) & 0x3E00)))->shade >> 5, (struct RenderColor *)particle);
+        func_800D004C((GteShortVector *)&particle->x, 96, 96, 8, 0, size, size, (struct RenderColor *)D_8019A3CC, (struct RenderColor *)D_8019A3C8,
             (short)D_800966EC[(((unsigned int)D_800E27EC - 1) << 8) & 0xF00] >> 5, 1);
     }
     return 0;

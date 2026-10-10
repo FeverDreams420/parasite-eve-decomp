@@ -11,17 +11,13 @@
 #include "pe1/room_fx.h"
 #include "pe1/room_floor.h"
 #include "pe1/render_matrix_slot.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 
 /* The colour ramp table each room defines in its data. */
 extern char RoomLib_TimedRenderTable;
-extern int D_800E27EC;
 
-extern void func_800CF3AC(void *table, RoomFxSeed8 *work, int frame);
 extern int rsin(int angle);
-extern void func_800D0728(RoomFxTimedRenderState *state, int arg1, int arg2,
-                          int arg3, RoomFxSeed8 *arg4, int arg5,
-                          int arg6, int arg7, RoomFxSeed8 *work, int arg9,
-                          int arg10);
 
 int RoomLib_UpdateTimedRender(int mode, RoomFxTimedRenderState *state) {
     RoomFxSeed8 work;
@@ -51,8 +47,8 @@ int RoomLib_UpdateTimedRender(int mode, RoomFxTimedRenderState *state) {
         func_800CF3AC(&RoomLib_TimedRenderTable, &work,
                       (short)state->frame);
         angle = rsin((D_800E27EC << 10) / 24);
-        func_800D0728(state, 0x578, 0x640, 0x14, seedPtr, angle, angle, 0,
-                      &work, 0x80, 1);
+        func_800D0728((GteShortVector *)state, 0x578, 0x640, 0x14, (GteRotation *)seedPtr, angle, angle, 0,
+                      (struct RenderColor *)&work, 0x80, 1);
         return 0;
     }
 ret0:
@@ -62,7 +58,6 @@ ret1:
 disabled:
     return 0;
 }
-
 
 typedef struct RoomTimedSpawnPosition {
     u16 x;
@@ -104,15 +99,11 @@ extern RoomTimedSpawnEventState *D_800E2368;
 extern void *D_8009D254;
 extern void *g_PlayerEntity;
 extern void *RoomMain_ActorPtr2;
-extern s32 D_800E27EC;
 extern u16 D_800E11EA;
-extern u16 D_800E2850[];
 extern RoomTimedSpawnSoundState D_800B0E64;
 
-void func_800CE870(void *arg0, int arg1, void *arg2);
 int func_800D3FD8(void);
 void Akao_SendTableCommand(void *owner, int id, int value, int volume, int pan);
-
 
 int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
     void *actor;
@@ -135,7 +126,7 @@ int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
     return 0;
 
 mode0:
-    func_800CE870(((void **)D_800F32D0)[2], 0, &state->position);
+    func_800CE870(((void **)D_800F32D0)[2], 0, (s16 *)&state->position);
     state->x = 0;
     state->y = 0;
 

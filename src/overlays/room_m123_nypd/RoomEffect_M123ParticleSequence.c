@@ -3,15 +3,14 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_transform_point.h"
 #include "pe1/gte_types.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 
 extern s16 D_801956A4, D_801956A0;
-extern u16 D_800E1204[];
-extern int D_800F3428;
 extern u16 D_801956B0, D_801956B2, D_801956B4;
 extern u8 D_801956A8[];
 extern void func_800CF844(void *, void *, int, void *, int, int);
 extern u16 GetClut(int, int);
-extern void func_800CEE20(void *, void *, int, int, int, int, int, int, void *);
 
 int func_801945EC(int mode, RoomM123Particle *particle) {
     GteShortVector position;
@@ -49,8 +48,7 @@ int func_801945EC(int mode, RoomM123Particle *particle) {
 }
 
 extern GteShortVector D_8018F1E0;
-extern int D_800E27EC;
-extern u16 D_800E11EA, D_800E2850[];
+extern u16 D_800E11EA;
 extern int func_801945EC(int, RoomM123Particle *);
 extern void func_800CE8F0(void *, int, GteShortVector *, GteShortVector *);
 extern int func_80071A54(void);

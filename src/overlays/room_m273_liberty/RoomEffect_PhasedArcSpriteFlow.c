@@ -1,15 +1,12 @@
 #include "room_m273_effects.h"
+#include "pe1/field_sprite_draw.h"
 
 typedef RoomM273PointerPoolEffect Effect;
 typedef struct { unsigned char unknown[58]; unsigned short value; } Object;
 typedef struct { short zero; unsigned short value,phase,one; } Parameters;
 extern RoomM273EffectStateContext *D_800F32D0;
-extern int D_800E27EC,D_800966EC[];
+extern int D_800966EC[];
 extern unsigned char D_8019ACDC[],D_8019ACE0[];
-void func_800D0728(GteShortVector *position, int inner, int outer, int segments,
-                   GteRotation *rotation, int scale_x, int scale_y,
-                   struct RenderColor *color0, struct RenderColor *color1,
-                   int intensity, int mode);
 
 int func_8019A4CC(int mode,Effect *effect) {
     Parameters parameters;
@@ -27,8 +24,8 @@ int func_8019A4CC(int mode,Effect *effect) {
         parameters.value=((Object *)D_800F32D0->state.mode)->value;
         parameters.phase=(unsigned int)frame<<8;
         parameters.one=1;
-        func_800D0728(effect->position,32,96,8,&parameters,size,size,
-            D_8019ACDC,D_8019ACE0,shade,1);
+        func_800D0728(effect->position,32,96,8,(GteRotation *)&parameters,size,size,
+            (struct RenderColor *)D_8019ACDC,(struct RenderColor *)D_8019ACE0,shade,1);
     }
     return 0;
 }
@@ -38,15 +35,9 @@ int func_8019A4CC(int mode,Effect *effect) {
 #include "room_m273_arc.h"
 #include "pe1/scene_fx.h"
 
-extern s32 D_800E27EC;
 extern s32 D_800966EC[];
 extern char D_8019AB70[];
 extern char D_8019AD7C[];
-
-void func_800D004C(RoomM273ArcCallbackState *state, s32 scale0, s32 scale1,
-                   s32 count, volatile s16 *rotation, s32 offset0,
-                   s32 offset1, void *resource0, void *resource1, s32 angle,
-                   s32 one);
 
 extern short D_8019AF56;
 extern short D_8019AF58;
@@ -70,7 +61,6 @@ void *func_8019A5D4(int unused, int value, int flag) {
 #include "pe1/field_anim_callback_list.h"
 
 #include "room_m273_effects.h"
-extern s32 D_800E27EC;
 extern u8 D_8019AF6B;
 extern u16 D_8019AEFC;
 extern u16 D_8019AEFE;
@@ -155,10 +145,10 @@ s32 func_8019A720(s32 mode, RoomM273ArcCallbackState *state) {
         rotationValue = day << 7;
         rotationZ = rotationValue;
         packed = D_800966EC[(day << 6) & 0xFC0];
-        func_800D004C(callState, 0x100, 0x100, count, &rotationX,
+        func_800D004C((GteShortVector *)callState, 0x100, 0x100, count, (GteRotation *)&rotationX,
                       ((packed << 16) >> 16) + 0x400,
                       ((packed << 16) >> 16) + 0x400,
-                      D_8019AB70, D_8019AD7C, packed >> 21, 1);
+                      (struct RenderColor *)D_8019AB70, (struct RenderColor *)D_8019AD7C, packed >> 21, 1);
     }
 
 return_zero:

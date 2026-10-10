@@ -39,7 +39,7 @@ int func_801957CC(int mode, RoomOrbitTrailParticle *p) {
                 gte_ldtransmatrix(matrixSlot->value);
             }
             func_800CF3AC(D_80199434, &color, (s16)p->timer);
-            func_800D0E88(p, &p->heading, 0x7D0, size, &color, 0, 0, 0x80, 1);
+            func_800D0E88((GteShortVector *)p, (GteRotation *)&p->heading, 0x7D0, size, &color, 0, 0, 0x80, 1);
             return 0;
         case 1:
             angle = ((s16)p->timer << 10) / 24;

@@ -1,22 +1,21 @@
 #include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 typedef RoomM350Vector Vector;
 typedef struct { Vector rotation; Vector *position; int color; } Particle;
 typedef struct { short delay, count; } State;
 
-
 /* The spawner owns the particles rendered by this callback. */
 extern RoomM350Emitter *D_800F33E0;
-extern int D_800E27EC, D_800F3428, D_8019A414[];
-extern unsigned short D_800E1204[], D_800E2850[];
+extern int D_8019A414[];
 extern short D_800966EE[];
 extern int D_800966EC[];
 extern Vector D_8019A778[];
 extern unsigned short D_800E11EA;
 extern int GetClut(int, int);
 extern int Inv_ScrambleGrid(void);
-extern void func_800CEE20(void *, void *, int, int, int, unsigned int, int, int, void *);
 
 int func_801927A4(int event, Particle *effect) {
     if (event == 1) {
@@ -28,10 +27,10 @@ int func_801927A4(int event, Particle *effect) {
         int handle;
         if (kind == 4 && D_800F3428) palette += 4;
         handle = GetClut(48, palette);
-        func_800CEE20(effect->position, effect, scale, scale, 110,
+        func_800CEE20(effect->position, (struct GteRotation *)effect, scale, scale, 110,
             (unsigned short)handle, 1,
             (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80] >> 5,
-            &effect->color);
+            (struct RenderColor *)&effect->color);
     }
     return 0;
 }

@@ -1,6 +1,8 @@
 #include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 typedef RoomM350Vector Vector;
 typedef struct { Vector position; short delay,reserved; } Particle;
 typedef struct RoomM350Instance { char reserved[0x3A]; unsigned short yaw; } Instance;
@@ -10,15 +12,12 @@ typedef struct { Vector positions[8]; char reserved40[8]; short count; } Queue;
 typedef RoomM350SignedHalfPair SignedHalf;
 extern Actor *D_800F32D0;
 extern RoomM350Emitter *D_800F33E0;
-extern int D_800E27EC, D_800F3428, D_8019A3D0[];
-extern unsigned short D_800E1204[];
+extern int D_8019A3D0[];
 extern short D_800966EE[];
 extern int GetClut(int, int);
-extern void func_800CEE20(void *, void *, int, int, int, unsigned int, int, int, void *);
 extern short D_8019A800, D_8019A802;
 extern unsigned char D_8019A804;
 extern unsigned short D_800E11EA;
-extern unsigned short D_800E2850[];
 
 int func_80195218(int event, Particle *object)
 {
@@ -35,10 +34,10 @@ int func_80195218(int event, Particle *object)
             kind = D_800F3368.palette; palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428) palette += 4;
             handle = GetClut(0, palette);
-            func_800CEE20(object, vector, size, size * 2, (s16)D_800F3368.parameter02 * object->delay + 64,
+            func_800CEE20((GteShortVector *)object, (struct GteRotation *)vector, size, size * 2, (s16)D_800F3368.parameter02 * object->delay + 64,
                 (unsigned short)handle, 1,
                 ((SignedHalf *)((char *)D_800966EE - 2 + (((unsigned int)frame << 8) & 0x3F00)))->value >> 5,
-                D_8019A3D0);
+                (struct RenderColor *)D_8019A3D0);
         }
     }
     return 0;

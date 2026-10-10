@@ -127,8 +127,8 @@ int RoomEffect_DroppedFlareParticle(int mode, RoomDroppedFlare *flare,
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = GetClut(0x10, palette);
-            func_800CEE20(flare, 0, scale, scale, 0x20, clut, 0xFF, 0x80,
-                          &color);
+            func_800CEE20((GteShortVector *)flare, 0, scale, scale, 0x20, clut, 0xFF, 0x80,
+                          (struct RenderColor *)&color);
             }
             {
             u16 clut;
@@ -158,9 +158,9 @@ int RoomEffect_DroppedFlareParticle(int mode, RoomDroppedFlare *flare,
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = GetClut(0, palette);
-            func_800CEE20(flare, 0, lift, lift,
+            func_800CEE20((GteShortVector *)flare, 0, lift, lift,
                           (s16)D_800F3368.parameter02 * (s16)flare->timer, clut, 1,
-                          0x80, &color);
+                          0x80, (struct RenderColor *)&color);
             }
             return 0;
         case 2:
@@ -172,9 +172,9 @@ int RoomEffect_DroppedFlareParticle(int mode, RoomDroppedFlare *flare,
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = GetClut(0, palette);
-            func_800CEE20(flare, &rotation, lift, lift,
+            func_800CEE20((GteShortVector *)flare, &rotation, lift, lift,
                           (s16)D_800F3368.parameter02 * ((s16)flare->timer / 2),
-                          clut, 0, 0x80, &color);
+                          clut, 0, 0x80, (struct RenderColor *)&color);
             }
             break;
         case 3:
@@ -200,7 +200,7 @@ int RoomEffect_DroppedFlareParticle(int mode, RoomDroppedFlare *flare,
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = GetClut(0x80, palette);
-            func_800CEE20(flare, &rotation, scale, scale,
+            func_800CEE20((GteShortVector *)flare, &rotation, scale, scale,
                           (s16)D_800F3368.parameter02 * 2 + 0xFD, clut, 1, fade, 0);
             }
             return 0;

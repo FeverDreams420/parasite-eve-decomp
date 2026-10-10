@@ -2,18 +2,17 @@
 #include "room_m273.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/field_texture_tables.h"
 
 extern RoomM273PlayerActorView *g_PlayerEntity;
 extern RoomM273EffectStateContext *D_800F32D0;
 extern u8 D_8019AE9A;
 extern RoomM273PulseSeed D_8019AC20[2];
-extern u16 D_800E11FA, D_800E2850[];
-extern int D_800E27EC;
+extern u16 D_800E11FA;
 extern int func_800CE5AC(void *, int, int, int, int (*)());
 extern int func_800CE688(void *);
 extern int func_800CE78C(void *);
 extern int Inv_ScrambleGrid(void);
-
 
 /* Threshold model triple callbacks and controller. */
 typedef struct { short x,y,z,phase,scaleXZ,scaleY; unsigned short parameter12,unknown14; } ThresholdTripleEffect;
@@ -21,11 +20,9 @@ typedef GteMatrix ThresholdTripleMatrix;
 typedef GteVector ThresholdTripleVector;
 typedef struct { void *asset,*pool; } AssetState;
 
-extern int D_800E27EC;
 extern short D_8019AC18[];
 extern int D_8019AC0C[];
-extern int D_800F3428;
-extern unsigned short D_800E11FA, D_800E2850[], D_800E1204[];
+extern unsigned short D_800E11FA;
 extern RoomM273EffectStateContext *D_800F32D0;
 extern AssetState D_8019AE8C;
 extern void *D_8019AE90,*D_800B0E64;
@@ -38,9 +35,6 @@ void *memset(void *dst, int value, unsigned int size);
 extern void func_800C71E4(void *,GteMatrix *),func_800C6F4C(void *);
 void *Asset_FindTable08ByU32Key(void *base, s32 key);
 extern void func_800C6D5C(void *,int,int);
-
-
-
 
 extern int func_80193CB8(),func_80193B5C();
 
@@ -75,9 +69,9 @@ int func_80193B5C(int mode, void **arg1) {
     params[3] = 1;
 
     do {
-        func_800D0728(*objp, x[i], x_next[i], 0x10, params,
+        func_800D0728(*objp, x[i], x_next[i], 0x10, (GteRotation *)params,
                       *(short *)((char *)*objp + 8), *(short *)((char *)*objp + 8),
-                      (int *)(((int)i * 4) + (int)z), (int *)(((int)i * 4) + (int)z_next),
+                      (RenderColor *)((((int)i * 4) + (int)z)), (RenderColor *)((((int)i * 4) + (int)z_next)),
                       *(short *)((char *)*objp + 0xC), 1);
         i++;
     } while ((short)i < 2);
@@ -391,7 +385,6 @@ int func_801947CC(int mode, RoomM273PaletteInput *input)
     }
     return 0;
 }
-
 
 extern int func_80199F84();
 extern int func_800CE5AC(void *, int, int, int, int (*)());

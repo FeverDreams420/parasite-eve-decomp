@@ -100,7 +100,6 @@ typedef struct RoomLibTick12Rec {
         } \
     }
 
-
 struct RoomEnt;
 extern void RoomLib_HandlerA(struct RoomEnt *obj);
 extern void RoomLib_HandlerB(struct RoomEnt *obj);
@@ -613,7 +612,6 @@ extern int func_800DFC80(int *lhs, int *rhs);
 extern int ratan2(int x, int z);
 extern void func_800DFB20(void *state);
 
-
 /* state=4 and clear the signal word */
 #define ROOMLIB_SET4_CLEAR_SIGNAL(name) \
     int name(RoomEnt *o) { \
@@ -656,7 +654,6 @@ extern void func_800DFB20(void *state);
             } \
         } \
     }
-
 
 /* argument parser variant whose comparison value is stored as the fallback handler */
 #define ROOMLIB_ARG_DISPATCH_REARM_FALLBACK(name, rearm) \
@@ -709,7 +706,6 @@ extern void func_800DFB20(void *state);
     done: \
         return 0; \
     }
-
 
 extern char RoomLib_TableA[];
 extern char RoomLib_TableB[];
@@ -834,7 +830,6 @@ typedef struct RoomSlotRec {
     int wC;
 } RoomSlotRec;
 
-
 /* The room's slot table (RoomLib_SlotSet.c), named in each room's symbol
  * file. */
 extern RoomSlotRec RoomLib_SlotTable[];
@@ -914,7 +909,6 @@ typedef struct RoomDlgState {
 extern RoomChanCtx *D_800F32D0;
 extern RoomChanCtx *D_800F33E0;
 extern RoomDlgState *D_800E2368;
-extern int D_800E27EC;
 extern void *RoomMain_ActorPtr2;
 extern int func_800CE8F0();
 extern int func_800CFAA8();
@@ -1034,7 +1028,6 @@ extern int func_800C2B68();
         } \
     }
 
-
 typedef struct RoomFxParams {
     char pad0[0x8];
     short h8;
@@ -1076,7 +1069,6 @@ extern int func_800C6B90(void *position, int radius);
 #include "pe1/gte_types.h"
 #include "pe1/field_glow_sprite.h"
 extern int func_80071A54(void);
-
 
 #define ROOMLIB_REGISTER_TABLE_AT3(name, table) \
     int name(void *o) { \
