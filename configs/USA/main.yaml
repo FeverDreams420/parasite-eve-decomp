@@ -184,10 +184,9 @@ segments:
       # Pending-node launch controller for equip and save/load menus.
       - [0x7640, c, task/Task_BeginSceneTransition]
       - [0x77E0, c, task/Task_GetPlayerInputFlag]
-      # Interpreter loop and jump-to-actor-script opcode: contiguous -G8 pair
+      # Interpreter loop, jump-to-actor-script and mark-dead opcodes: -G8 unit
       # sharing the script cursor; no data of the jump opcode is COMMON.
       - [0x7818, c, task/Task_RunQueue]
-      - [0x7ABC, c, entity/Entity_MarkCurrentDead]
       # -G8 opcodes: current-node active/free, jump-if-zero, spawn, assign and
       # stop-anim; g_CurrentEntity stays absolute through the array declaration.
       - [0x7AE0, c, task/Task_NodeAndFlowOpcodes]

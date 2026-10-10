@@ -1,8 +1,10 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
+#include "pe1/task_queue.h"
+#include "pe1/field_actor.h"
+
 /* Script interpreter main loop and the jump-to-actor-script opcode; a
  * contiguous -G8 pair sharing the script cursor D_8009CE00. */
-#include "pe1/task_queue.h"
 
 PE1_STATIC_ASSERT(sizeof(TaskNode) == 0x2C, interpreter_task_node_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, current) == 0, interpreter_script_offset);
@@ -73,4 +75,11 @@ int Task_JumpToEntityOffset(TaskJumpOffsetEntry **arg0)
 {
     D_8009CE00 = (u32 *)(((FieldActor *)D_8009D2F0[0])->script_base + ((*arg0)->value * 2));
     return 1;
+}
+
+extern FieldActor *g_CurrentEntity[];
+
+int Entity_MarkCurrentDead(void) {
+    g_CurrentEntity[0]->flags |= 0x10;
+    return 0;
 }
