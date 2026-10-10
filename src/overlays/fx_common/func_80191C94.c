@@ -33,7 +33,7 @@ first:
         if (result == -1) goto first;
     }
 
-    if (D_8019C1F0) goto third;
+    if (!(D_8019C1F0)) {
 
 second:
     range = D_80093174;
@@ -47,6 +47,7 @@ second:
         if (result == -1) goto second;
     }
 
+    }
 third:
     range = D_80093172;
     do {

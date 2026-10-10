@@ -354,9 +354,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                     gte_rtpt_padded();
                     gte_nclip();
                     gte_stmac0_precise(&scratchpad->normalClip);
-                    if (!(scratchpad->normalClip > 0)) {
-                        goto nextTexturedTriangle;
-                    }
+                    if (scratchpad->normalClip > 0) {
                     gte_avsz3_padded();
                     gte_stotz_precise(&scratchpad->orderingDepth);
                     temp_a0_9 = (scratchpad->orderingDepth + scratchpad->depthBias) >> 2;
@@ -645,6 +643,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         (orderBuffer->allocation[scratchpad->orderingDepth].packed &
                          triangleLengthMask) |
                         temp_a0_13;
+                    }
                 nextTexturedTriangle:
                     primitiveIndex4 += 1;
 
@@ -692,9 +691,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                 gte_rtpt_padded();
                 gte_nclip();
                 gte_stmac0_precise(&scratchpad->normalClip);
-                if (!(scratchpad->normalClip > 0)) {
-                    goto nextTexturedQuad;
-                }
+                if (scratchpad->normalClip > 0) {
                 gte_avsz3_padded();
                 gte_stotz_precise(&scratchpad->orderingDepth);
                 temp_a0_14 = (scratchpad->orderingDepth + scratchpad->depthBias) >> 2;
@@ -1110,6 +1107,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         (orderBuffer->allocation[scratchpad->orderingDepth].packed &
                          quadLengthMask) |
                         lastQuadAddress;
+                }
                 }
             nextTexturedQuad:
                 var_s4 += 1;

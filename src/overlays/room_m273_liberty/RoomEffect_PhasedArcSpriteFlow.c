@@ -129,13 +129,12 @@ s32 func_8019A720(s32 mode, RoomM273ArcCallbackState *state) {
         }
         obj->value -= obj->step;
         obj->step++;
-        goto return_zero;
-    }
-    if (mode != 2) {
+    } else {
+        if (mode != 2) {
         result = 0;
         return result;
-    }
-    {
+        }
+        {
         rotationX = 0;
         rotationY = 0;
         rotationPad = 0;
@@ -146,11 +145,11 @@ s32 func_8019A720(s32 mode, RoomM273ArcCallbackState *state) {
         rotationZ = rotationValue;
         packed = D_800966EC[(day << 6) & 0xFC0];
         func_800D004C((GteShortVector *)callState, 0x100, 0x100, count, (GteRotation *)&rotationX,
-                      ((packed << 16) >> 16) + 0x400,
-                      ((packed << 16) >> 16) + 0x400,
-                      (struct RenderColor *)D_8019AB70, (struct RenderColor *)D_8019AD7C, packed >> 21, 1);
+        ((packed << 16) >> 16) + 0x400,
+        ((packed << 16) >> 16) + 0x400,
+        (struct RenderColor *)D_8019AB70, (struct RenderColor *)D_8019AD7C, packed >> 21, 1);
+        }
     }
-
 return_zero:
     result = 0;
 

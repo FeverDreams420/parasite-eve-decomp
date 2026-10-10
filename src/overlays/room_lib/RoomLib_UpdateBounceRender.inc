@@ -30,24 +30,19 @@ int ROOMLIB_UPDATE_BOUNCE_RENDER_NAME(int mode, RoomLineBurstParticle *fx) {
 
     blob = ROOMLIB_BOUNCE_RENDER_BLOB;
     saved2 = (int)&blob;
-    if (mode == 1) {
-        goto mode1;
-    }
+    if (mode != 1) {
     if (mode == 2) {
         goto mode2;
     }
     return 0;
 
+    }
 mode1:
-    if (fx->state == 0) {
-        goto updateBounce;
-    }
-    if (fx->state == 1) {
-        goto updateRise;
-    }
-    return 0;
-
-updateBounce:
+    if (fx->state != 0) {
+        if (fx->state != 1) {
+            return 0;
+        }
+    } else
     {
         int vx;
         int vz;
@@ -102,15 +97,11 @@ updateRise:
     }
 
 mode2:
-    if (fx->state == 0) {
-        goto drawBounce;
-    }
-    if (fx->state == 1) {
-        goto drawRise;
-    }
-    return 0;
-
-drawBounce:
+    if (fx->state != 0) {
+        if (fx->state != 1) {
+            return 0;
+        }
+    } else
     {
         int sinValue;
         int scale;

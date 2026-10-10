@@ -33,9 +33,7 @@ int RoomLib_ConfigureHandlerG(RoomEnt *o, int mode, unsigned int op,
                               int arg0, int arg1, int arg2) {
     char *p = (char *)o + 0xC;
 
-    if (op == 4) {
-        goto case4;
-    }
+    if (op != 4) {
     if (op < 5) {
         if (op == 0) {
             goto case0;
@@ -55,6 +53,7 @@ int RoomLib_ConfigureHandlerG(RoomEnt *o, int mode, unsigned int op,
     RW32(arg0, 0) = mode;
     goto ret;
 
+    }
 case4:
     RW32(o, 0x20) = arg0;
     return 0;
