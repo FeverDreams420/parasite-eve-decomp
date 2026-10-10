@@ -73,8 +73,7 @@ void LIBDS_DSSYS_1_text_4A4(void) {
     if (READ(timer)->status != one && READ(timer)->status == 2) {
         register int state = READ(timer)->command;
         register int eleven = 11;
-        if (state == eleven)
-            goto callbacks;
+        if (state != eleven) {
         if (state == 12) {
             if (g_CdReadCommandPollToggle) {
                 register u8 *arg = &parameter;
@@ -94,16 +93,24 @@ void LIBDS_DSSYS_1_text_4A4(void) {
         } else if (state == 13) {
             pending = g_CdRomCmdTimeout;
             g_CdReadCommandPollToggle = 0;
-            goto check_timeout;
+            if (pending <= 0) {
+                CMD(timer)->eventValue = 32;
+                LIBDS_DSSYS_1_text_368(1, 0);
+            }
         } else if (state == 14) {
             int step = READ(timer)->sector;
-            if (step == 21)
-                goto poll;
-            else if (step == 22) {
+            if (step == 21) {
+                pending = g_CdRomCmdTimeout;
+                if (pending <= 0) {
+                    CMD(timer)->eventValue = 32;
+                    LIBDS_DSSYS_1_text_368(1, 0);
+                }
+            } else if (step == 22) {
                 READ(timer)->reserved18++;
-                if (g_CdRomCmdTimeout > 0)
-                    goto callbacks;
-                goto send_status;
+                if (g_CdRomCmdTimeout <= 0) {
+                    CMD(timer)->eventValue = 32;
+                    LIBDS_DSSYS_1_text_368(1, 0);
+                }
             } else if (step == 23) {
                 if (g_CdRomCmdTimeout <= 0) {
                     CMD(timer)->eventValue = 32;
@@ -114,14 +121,14 @@ void LIBDS_DSSYS_1_text_4A4(void) {
         } else if (state == 15) {
             if (!*timer) {
                 READ(timer)->status = one;
-                goto complete;
+                READ(timer)->command = eleven;
             }
         } else if (state == 16) {
             if (!READ(timer)->eventFlags.bit7)
                 goto poll;
             asm("" ::: "memory");
             READ(timer)->status = one;
-            goto complete;
+            READ(timer)->command = eleven;
         } else if (state == 17) {
             if (!READ(timer)->eventFlags.bit5)
                 goto poll;
@@ -139,6 +146,7 @@ void LIBDS_DSSYS_1_text_4A4(void) {
         CMD(timer)->eventValue = 32;
         LIBDS_DSSYS_1_text_368(1, 0);
     }
+        }
 callbacks:
     if (g_DsPollCallback && g_DsReadSysEnabled.enabled)
         g_DsPollCallback();

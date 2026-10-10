@@ -47,30 +47,31 @@ int DS_newmedia(void) {
     cursor = g_DsFileSectorBuffer;
     end = cursor + 2048;
     count = 0;
-    if (cursor >= end) goto finished;
-    sectors = (char *)&g_DslDirectoryCache[0].sector;
-    names = sectors + 4;
-    limit = end;
-    while (1) {
-        record = (IsoPathRecord *)cursor;
-        if (record->nameLength == 0) break;
-        memcpy(count * sizeof(DslDirectoryCacheEntry) + sectors,
-               record->sectorLE, 4);
-        name = (char *)((count * sizeof(DslDirectoryCacheEntry)) +
-                       (u32)names);
-        g_DslDirectoryCache[count].parentDirectoryId =
-            record->parentDirectoryLE[0];
-        g_DslDirectoryCache[count].directoryId = count + 1;
-        memcpy(name, record->name, record->nameLength);
-        name[record->nameLength] = 0;
-        cursor += record->nameLength + 8 + (record->nameLength & 1);
-        if (D_8009AFC0 > 1)
-            printf(D_80011FA0, g_DslDirectoryCache[count].sector,
-                   g_DslDirectoryCache[count].directoryId,
-                   g_DslDirectoryCache[count].parentDirectoryId, name);
-        if (++count >= DSL_MAX_DIR) break;
-        if (cursor < limit) continue;
-        break;
+    if (cursor < end) {
+        sectors = (char *)&g_DslDirectoryCache[0].sector;
+        names = sectors + 4;
+        limit = end;
+        while (1) {
+            record = (IsoPathRecord *)cursor;
+            if (record->nameLength == 0) break;
+            memcpy(count * sizeof(DslDirectoryCacheEntry) + sectors,
+                   record->sectorLE, 4);
+            name = (char *)((count * sizeof(DslDirectoryCacheEntry)) +
+                           (u32)names);
+            g_DslDirectoryCache[count].parentDirectoryId =
+                record->parentDirectoryLE[0];
+            g_DslDirectoryCache[count].directoryId = count + 1;
+            memcpy(name, record->name, record->nameLength);
+            name[record->nameLength] = 0;
+            cursor += record->nameLength + 8 + (record->nameLength & 1);
+            if (D_8009AFC0 > 1)
+                printf(D_80011FA0, g_DslDirectoryCache[count].sector,
+                       g_DslDirectoryCache[count].directoryId,
+                       g_DslDirectoryCache[count].parentDirectoryId, name);
+            if (++count >= DSL_MAX_DIR) break;
+            if (cursor < limit) continue;
+            break;
+        }
     }
 finished:
     if (count < DSL_MAX_DIR) g_DslDirectoryCache[count].parentDirectoryId = 0;

@@ -36,13 +36,12 @@ int RotAverageNclip4(const GteShortVector *v0, const GteShortVector *v1,
     sxy2Ptr = sxy2;
     gte_getmac0(clip);
     gte_cop2_hazard_slot();
-    if (clip > 0) {
-        goto positive;
-    }
-    /* Bind a defined value to the architectural zero register.  This keeps
-     * the original two-branch rejection path without CPU instruction asm. */
-        if (zero == 0) {
-        goto done;
+    if (clip <= 0) {
+        /* Bind a defined value to the architectural zero register.  This keeps
+         * the original two-branch rejection path without CPU instruction asm. */
+            if (zero == 0) {
+            return clip;
+        }
     }
 positive:
     gte_stsxy3(sxy0Ptr, sxy1Ptr, sxy2Ptr);

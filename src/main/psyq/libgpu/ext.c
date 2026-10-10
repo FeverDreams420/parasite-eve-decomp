@@ -24,21 +24,20 @@ u32 LoadTPage(u_long *pixels, int mode, int blend,
     rect.y = y;
     rect.h = height;
 
-    if (mode == 1) {
-        goto mode1;
-    }
-    if (mode < 2) {
-        if (mode == 0) {
-            goto mode0;
+    if (mode != 1) {
+        if (mode < 2) {
+            if (mode == 0) {
+                goto mode0;
+            }
+        } else if (mode == 2) {
+            goto mode2;
         }
-    } else if (mode == 2) {
-        goto mode2;
-    }
-    goto load;
+        goto load;
 
-mode0:
-    rect.w = width / 4;
-    goto loadWidth;
+    mode0:
+        rect.w = width / 4;
+        goto loadWidth;
+    }
 mode1:
     rect.w = width / 2;
     goto loadWidth;

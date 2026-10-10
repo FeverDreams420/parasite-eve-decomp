@@ -176,19 +176,18 @@ int CD_initvol(void) {
     io = D_8009B290;
     g_CdInitVolValue = ((u16 *)io)[0x1B8 / 2];
     g_CdInitVolFrame--;
-    if (g_CdInitVolValue != 0) {
-        goto set_default;
-    }
-    g_CdInitVolValue = ((u16 *)io)[0x1BA / 2];
-    if (g_CdInitVolValue != 0) {
+    if (g_CdInitVolValue == 0) {
+        g_CdInitVolValue = ((u16 *)io)[0x1BA / 2];
+        if (g_CdInitVolValue != 0) {
+            g_CdInitVolValue = 0x3FFF;
+            goto store_common;
+        }
         g_CdInitVolValue = 0x3FFF;
-        goto store_common;
-    }
-    g_CdInitVolValue = 0x3FFF;
-    ((u16 *)io)[0x180 / 2] = g_CdInitVolValue;
-    ((u16 *)io)[0x182 / 2] = g_CdInitVolValue;
-    io = D_8009B290;
+        ((u16 *)io)[0x180 / 2] = g_CdInitVolValue;
+        ((u16 *)io)[0x182 / 2] = g_CdInitVolValue;
+        io = D_8009B290;
 
+    }
 set_default:
     g_CdInitVolValue = 0x3FFF;
 
