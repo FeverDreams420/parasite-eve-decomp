@@ -639,7 +639,7 @@ void RoomEffect_GroundEruptionDrawDebris(void *arg0, void *arg1, char *state) {
     RoomFxVec4 scale;
     char *owner;
     int depth;
-    register unsigned int i asm("$16");
+    unsigned int i;
     char *particle;
     u8 *packetFields;
     RoomFxSpritePacket *packet;
@@ -673,9 +673,8 @@ void RoomEffect_GroundEruptionDrawDebris(void *arg0, void *arg1, char *state) {
     scale = s_EruptionDebrisScale;
     ScaleMatrix(&matrix, &scale);
 
-    particle = state;
-    do {
-        PE1_COMPILER_LAUNDER(particle);
+    for (; i < 6; i++) {
+        particle = state + i * 8;
         depth -= 20;
         if (*(short *)(state + 0x78 + i * 2) == 1) {
             matrix.t[0] = *(short *)(particle + 0);
@@ -704,9 +703,7 @@ void RoomEffect_GroundEruptionDrawDebris(void *arg0, void *arg1, char *state) {
                 func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
             }
         }
-        i++;
-        particle += 8;
-    } while (i < 6);
+    }
 }
 
 typedef struct RoomEruptionTrailEntry {
