@@ -383,8 +383,7 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, RoomEruptionRing 
     RoomFxVec4 scale2;
     RoomEruptionActor *rawOwner;
     register RoomEruptionActor *owner asm("$17");
-    register unsigned int i asm("$21");
-    register GteShortVector *point asm("$18");
+    unsigned int i;
     s16 *packetDepth;
     RoomFxSpritePacket *packet;
     RoomEruptionRing *workState;
@@ -403,7 +402,6 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, RoomEruptionRing 
     packet = (RoomFxSpritePacket *)packetTemp;
     owner = rawOwner;
     PE1_COMPILER_USE(owner);
-    point = workState->point;
     func_800C2EAC((s8)owner->owner);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
@@ -446,14 +444,13 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, RoomEruptionRing 
     scale2 = s_EruptionRingPointScale;
     ScaleMatrix(&matrix, &scale2);
 
-    do {
+    for (; i < 16; i++) {
+        GteShortVector *point = &workState->point[i];
         matrix.t[0] = point->x;
         matrix.t[1] = point->y;
         matrix.t[2] = point->z;
         *packetDepth = (u16)workState->depth;
         code = workState->frame;
-        asm("" : "=r"(i) : "0"(i), "r"(code));
-        i++;
         *((u8 *)packetDepth - 6) = code * 2 + 0x20;
         func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
         matrix.t[0] = point->x;
@@ -461,10 +458,9 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, RoomEruptionRing 
         matrix.t[2] = point->z;
         *packetDepth = workState->depth >> 2;
         code = workState->frame;
-        point++;
         *((u8 *)packetDepth - 6) = code * 2 + 0x20;
         func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
-    } while (i < 16);
+    }
 }
 
 /* Spreads the ring and fades it out over seven steps. */
