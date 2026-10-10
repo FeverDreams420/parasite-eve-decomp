@@ -4,18 +4,9 @@
  * the room's data and returns where it went. Linked right after the
  * barrage module (RoomEffect_SparkBarrage).
  */
+#include "room_lib.h"
 #include "pe1/room_module.h"
 
-int *RoomLib_SetArgA(int unused, int value) {
-    int *arg = &g_RoomScriptArgA;
+ROOMLIB_SET_ARG1(RoomLib_SetArgA, g_RoomScriptArgA)
 
-    *arg = value;
-    return arg;
-}
-
-int *RoomLib_SetArgB(int unused, int value) {
-    int *arg = &g_RoomScriptArgB;
-
-    *arg = value;
-    return arg;
-}
+ROOMLIB_SET_ARG1(RoomLib_SetArgB, g_RoomScriptArgB)

@@ -4,11 +4,7 @@
  * after an effect module by the rooms that take one word from the script;
  * the word is the room's (g_RoomScriptArg, pe1/room_module.h).
  */
+#include "room_lib.h"
 #include "pe1/room_module.h"
 
-int *RoomLib_SetArg1(int unused, int value) {
-    int *arg = &g_RoomScriptArg;
-
-    *arg = value;
-    return arg;
-}
+ROOMLIB_SET_ARG1(RoomLib_SetArg1, g_RoomScriptArg)
