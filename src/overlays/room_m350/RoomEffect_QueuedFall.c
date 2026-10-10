@@ -29,7 +29,7 @@ int func_80197594(int event, short *position) {
     return 0;
 }
 
-extern unsigned char D_8019A86E, D_8019A857;
+extern unsigned char D_8019A857;
 extern short D_8019A864[3];
 
 int func_801976C8(int event)

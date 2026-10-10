@@ -46,7 +46,7 @@ int func_80197A04(int event, short *object)
 
 typedef RoomM350TransformMatrix Matrix;
 typedef RoomM350Vector Vector;
-extern unsigned char D_8019A86E, D_8019A859;
+extern unsigned char D_8019A859;
 extern unsigned short D_800E11E8;
 /* Retail writes both fields twice during configuration. */
 extern int func_80197A04(int, short *);

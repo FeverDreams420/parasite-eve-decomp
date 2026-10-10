@@ -5,7 +5,6 @@
 #include "pe1/field_anim_pool.h"
 
 typedef RoomM350Vector Vector;
-extern unsigned char D_8019A86E;
 extern short D_8019A85C;
 extern Vector g_RoomEffectTrailPositions[4];
 extern unsigned short D_800E11E8;

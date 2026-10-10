@@ -11,7 +11,7 @@ typedef struct { Event entries[8]; } Events;
 typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
 extern Events D_8018F1CC;
-extern unsigned char D_8019A854[],D_8019A859,D_8019A86E;
+extern unsigned char D_8019A854[], D_8019A859;
 extern int D_8019A858;
 extern short D_8019A85C,D_8019A85E,D_8019A86A,D_8019A86C;
 extern int D_800966EC[];

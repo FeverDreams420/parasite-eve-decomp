@@ -12,7 +12,7 @@ typedef RenderMatrix Transform;
 typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
 typedef FieldActor Player;
-extern unsigned char D_8019A86E, D_8019A855;
+extern unsigned char D_8019A855;
 extern short D_8019A86A;
 extern int func_80196F2C(int, Particle *);
 extern int Math_IntSqrt(int);

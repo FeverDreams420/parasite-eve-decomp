@@ -2,8 +2,8 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_anim_pool.h"
+#include "room_m350_shared.h"
 extern char D_8019A856;
-extern char D_8019A86E;
 extern u16 D_8019A860;
 extern u16 D_8019A862;
 
@@ -21,7 +21,7 @@ s32 func_80199F2C(s32 arg0) {
         }
         return func_800CE560(ANIM_POOL_AS(char *)[2], 8, 6,
                              (FieldAnimCallbackListCallback)func_8019A21C);
-    } else if (D_8019A86E != 0) {
+    } else if ((char)D_8019A86E != 0) {
         return 2;
     } else if (D_8019A856 != 0) {
         obj = func_800CE610(ANIM_POOL_AS(char *)[2]);
