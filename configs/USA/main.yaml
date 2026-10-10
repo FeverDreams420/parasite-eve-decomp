@@ -366,11 +366,9 @@ segments:
       # Variant draw, animation stepping, fade and blend update shared object state.
       - [0x2CAE0, c, render/Render_DrawObjectVariant]
       # Texture-page changes and model packet setup share RenderObjectEntity and packet types.
-      - [0x2D6F8, c, render/Render_SetupEntityPrims]
-      - [0x2E02C, c, entity/Util_ReturnTrue]
+      - [0x2D6F8, c, render/Render_ObjectSetupAndAnim]
       # Animated draw, packet setup and object-state helpers share RenderObjectEntity
       # and RenderMatrix; contiguous handlers with the default compiler profile.
-      - [0x2E034, c, render/Render_DrawWithAnim]
       # Render_IncrementCounter's counter word lives in .text; it is data,
       # not a function (docs/CONVENTIONS.md, text-resident data).
       - {start: 0x2EE0C, type: data, name: render/Render_Counter, linker_section_order: .text, linker_section: .code_data}
