@@ -129,22 +129,10 @@ void RoomFx_InitOrbitParticles(void *unused, void *unused2, RoomOrbitParticleSta
     state->radius = 0x258;
 }
 
-typedef struct RoomOrbitBatchFxParams {
-    struct {
-        short x;
-        short y;
-        short z;
-        short pad6;
-    } positions[8];
-    unsigned char pad40[0x40];
-    short scale;
-    unsigned short depth;
-    unsigned char alpha;
-} RoomOrbitBatchFxParams;
 
 
 void RoomFx_DrawOrbitParticles(
-    void *unused0, void *unused1, RoomOrbitBatchFxParams *fx) {
+    void *unused0, void *unused1, RoomOrbitParticleState *fx) {
     RoomSpriteMatrix matrix;
     RoomFxVec4 scratchScale;
     RoomFxVec4 scale;
@@ -176,19 +164,19 @@ void RoomFx_DrawOrbitParticles(
     matrix.m[0][1] = 0;
 
     func_80071A44(&scale, 0, 0x10);
-    scale.x = fx->scale;
-    scale.y = fx->scale;
+    scale.x = (s16)fx->height;
+    scale.y = (s16)fx->height;
     scale.z = 0x400;
     scratchScale = scale;
     ScaleMatrix(&matrix, &scratchScale);
 
-    position = &fx->positions[0].x;
+    position = (s16 *)&fx->position[0].x;
     while (i < 8) {
         matrix.t[0] = position[0];
         matrix.t[1] = position[1];
         matrix.t[2] = position[2];
-        *depthSlot = (short)fx->depth >> 1;
-        *((unsigned char *)depthSlot - 6) = fx->alpha << 1;
+        *depthSlot = (short)fx->decay >> 1;
+        *((unsigned char *)depthSlot - 6) = fx->frame << 1;
         func_800C42A4((FieldGlowSprite *)((char *)depthSlot - 0xA), &matrix, 1);
         i++;
         position += 4;
