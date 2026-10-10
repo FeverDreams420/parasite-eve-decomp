@@ -216,16 +216,14 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
     s4 = s0;
 
     if (s1->state == 0 || func_8003010C(s1, 0x2C) <= 0) {
-        if (GRAB_PLAYER->state->amount <= 0) {
-            goto L59C;
+        if (GRAB_PLAYER->state->amount > 0) {
+            func_80020CE4();
         }
-        func_80020CE4();
         RoomFx_GrabResetPlayer(s1, s3v);
         RoomFx_GrabRelease(arg0);
         return;
     }
 
-L478:
     if (GRAB_PLAYER->state->amount <= 0) {
         RoomFx_GrabResetPlayer(s1, s3v);
         RoomFx_GrabRelease(arg0);
@@ -243,7 +241,6 @@ L478:
         return;
     }
 
-L4C4:
     if (kind != 0x10) {
         func_80020CE4();
         RoomFx_GrabResetPlayer(s1, s3v);
@@ -266,37 +263,30 @@ L4C4:
      * its state, as retail does. */
     raw_val = val;
     asm volatile("" : "=r"(raw_val) : "0"(raw_val) : "memory");
-    if ((s16)val < 0xE) {
-        if ((s16)s0 >= 0xE) {
-            goto L594;
+    if ((s16)val >= 0xE || (s16)s0 < 0xE) {
+        signed_val = (s16)raw_val;
+        if (signed_val >= 3) {
+            return;
         }
-    }
-    signed_val = (s16)raw_val;
-    if (signed_val >= 3) {
-        return;
-    }
-    signed_s4 = (s16)s4;
-    if (signed_s4 < 3) {
-        return;
-    }
-    {
-        /* One load of the player's state for the read and the write. */
-        FieldActorState *state = GRAB_PLAYER->state;
+        signed_s4 = (s16)s4;
+        if (signed_s4 < 3) {
+            return;
+        }
+        {
+            /* One load of the player's state for the read and the write. */
+            FieldActorState *state = GRAB_PLAYER->state;
 
-        state->flags |= 0x4000;
-    }
-    if (s1->state != 0) {
-        s1->state->core_flags |= 0x80000000;
-    }
-    return;
+            state->flags |= 0x4000;
+        }
+        if (s1->state != 0) {
+            s1->state->core_flags |= 0x80000000;
+        }
+        return;
 
-L594:
+    }
     func_80020CE4();
-L59C:
     RoomFx_GrabResetPlayer(s1, s3v);
     RoomFx_GrabRelease(arg0);
-L5B0:
-    ;
 }
 
 /* Lets the player go: clears the animation borrowed from the actor, puts
