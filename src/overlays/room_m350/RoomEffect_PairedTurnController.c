@@ -1,27 +1,28 @@
-#include "room_m350_turn_sequence.h"
+#include "room_m350_shared.h"
+#include "pe1/field_actor.h"
+#include "pe1/player_entity.h"
 #include "pe1/gte.h"
 /* Animation 11 controller: paired model points and alternating player-facing turn. */
 typedef RoomM350Vector Vector;
-typedef RoomM350TransformMatrix Matrix;
-typedef RoomM350Action Action;
-typedef RoomM350TurnSequenceOwner Owner;
-typedef RoomM350Instance Instance;
+typedef RenderMatrix Matrix;
+typedef FieldActorState Owner;
+typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
 extern Actor *D_800F32D0;
-extern Instance *D_8019A774,*g_PlayerEntity;
+extern Instance *D_8019A774;
 extern Vector D_8019A778[];
 extern short D_8019A77E[],D_8019A798,D_800966EC[];
 extern unsigned char D_8019A79A,D_8019A79C;
-extern int FieldEng_VecToAngle(Vector *,Vector *);
+extern int FieldEng_VecToAngle(int *,int *);
 extern int FieldEng_TurnToward(int,int,int);
 int func_80193D6C(int event)
 {
-    register Instance *instance asm("$16")=D_800F32D0->instance;
+    register Instance *instance asm("$16")=(Instance *)D_800F32D0->instance;
     Vector offset;
     if(event==0) {
-        Owner *owner=instance->owner;
-        unsigned int flags=owner->flags;
-        owner->flags=flags|0x40000000;
+        Owner *owner=instance->state;
+        unsigned int flags=owner->core_flags;
+        owner->core_flags=flags|0x40000000;
         asm volatile("" ::: "memory");
         D_8019A798=3; D_8019A79A=0; D_8019A79C=0;
         asm volatile("" ::: "$2");
@@ -33,14 +34,14 @@ int func_80193D6C(int event)
         Vector *base;
         int frame;
         short *repeat;
-        if(instance->owner && instance->owner->action->state==1)
-            instance->owner->action->state=2;
+        if(instance->state && instance->state->action_state[0]==1)
+            instance->state->action_state[0]=2;
         i=0;
         input=&offset;
         base=D_8019A778;
         offset.x=-112; offset.y=0; offset.z=-80;
         for(;i<2;i++) {
-            register Matrix *matrix asm("$2")=D_8019A774->transforms;
+            register Matrix *matrix asm("$2")=D_8019A774->render_object.matrices;
             Vector *out;
             if(i) matrix+=15; else matrix+=11;
             {
@@ -87,25 +88,25 @@ int func_80193D6C(int event)
             offset.x=0u-(unsigned short)offset.x;
             D_8019A77E[i*4]=i;
         }
-        frame=*(unsigned short *)((char *)&instance->frame+2);
-        if(instance->animation!=11) return 0;
+        frame=instance->anim.parts.integer;
+        if(instance->mode!=11) return 0;
         repeat=&D_8019A798;
         if(*repeat>0) {
             int speed,bias,angle;
             int signedFrame=(short)frame;
             if(signedFrame>=40) {
-                instance->frame=0x30000;
+                instance->anim.fixed=0x30000;
                 *repeat=*(volatile unsigned short *)repeat-1;
             }
             if(signedFrame<28) return 0;
             speed=*(short *)((char *)D_800966EC+(((signedFrame-28)*680)&0x3FF8))/32;
             bias=-128;
             if(*(unsigned short *)repeat&1) bias=128;
-            angle=FieldEng_VecToAngle(&g_PlayerEntity->position,&instance->position);
-            instance->yaw=FieldEng_TurnToward(instance->yaw,(short)(bias+angle),speed);
-        } else if((short)frame>=instance->length-1) {
-            register Owner *owner asm("$4")=instance->owner;
-            if(owner) owner->action->state=4;
+            angle=FieldEng_VecToAngle(g_PlayerEntity->render_object.model_matrix.translation,instance->render_object.model_matrix.translation);
+            instance->rot_y=FieldEng_TurnToward(instance->rot_y,(short)(bias+angle),speed);
+        } else if((short)frame>=instance->action-1) {
+            register Owner *owner asm("$4")=instance->state;
+            if(owner) owner->action_state[0]=4;
             D_8019A79A=1;
             return 1;
         }

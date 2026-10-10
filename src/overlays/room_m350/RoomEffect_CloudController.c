@@ -1,20 +1,14 @@
 #include "room_m350_shared.h"
 #include "pe1/gte_types.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_actor.h"
+#include "pe1/player_entity.h"
 typedef RoomM350Vector Vector;
-typedef RoomM350TransformMatrix Matrix;
-typedef RoomM350Action Action;
-typedef struct { int reserved[2]; int asset; char reservedC[12]; Action *action; } Owner;
-typedef struct RoomM350Instance {
-    Owner *owner; char reserved04[10]; unsigned char animation,length;
-    char reserved10[4]; unsigned int frame;
-    char reserved18[16]; int position[3]; char reserved34[6]; short yaw;
-    char reserved3C[0x1FC]; Matrix *transforms;
-} Instance;
+typedef RenderMatrix Matrix;
+typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
 typedef struct { int asset; short speed,targetSpeed,heightPhase,mode; } State;
 extern Actor *D_800F32D0;
-extern Instance *g_PlayerEntity;
 extern unsigned char D_8019A8BE,D_8019A8C0;
 extern short D_8019A89E,D_8019A8B8,D_8019A8BA,D_8019A8BC;
 extern short D_800966EC[];
@@ -29,7 +23,7 @@ extern int rcos(int);
 extern int rsin(int);
 int func_80198CF8(int event,State *state)
 {
-    Instance *instance=D_800F32D0->instance;
+    Instance *instance=(Instance *)D_800F32D0->instance;
     Vector offset;
     /* Match note: original purpose of unused sp+0x20..0x2F is unknown. */
     char frameGap[16];
@@ -38,49 +32,49 @@ int func_80198CF8(int event,State *state)
         state->speed=0; state->targetSpeed=0; state->heightPhase=0; state->mode=0;
         D_8019A8BE=0; D_8019A8C0=0; D_8019A89E=0;
         asm volatile("" : : : "memory");
-        matrix=instance->transforms;
-        state->asset=Asset_Find08w(0x5CB,instance->owner->asset,
-            (short)matrix->position[0],(short)matrix->position[1],(short)matrix->position[2]);
+        matrix=instance->render_object.matrices;
+        state->asset=Asset_Find08w(0x5CB,instance->state->progress,
+            (short)matrix->translation[0],(short)matrix->translation[1],(short)matrix->translation[2]);
     } else if(event==1) {
         int frame,angle,delta,cosine,sine;
         int phase;
         int target;
         register int speed asm("$5");
         short *repeat;
-        if(instance->animation!=9) return 0;
-        if(instance->owner && instance->owner->action->state==1)
-            instance->owner->action->state=2;
+        if(instance->mode!=9) return 0;
+        if(instance->state && instance->state->action_state[0]==1)
+            instance->state->action_state[0]=2;
         repeat=&D_8019A8B8;
         {
-            register int current asm("$3")=*(unsigned short *)((char *)&instance->frame+2);
+            register int current asm("$3")=instance->anim.parts.integer;
             frame=current;
         if(*repeat>0) {
             register int signedFrame asm("$2")=(short)current;
             if(signedFrame>=30) {
-                instance->frame=0x50000;
+                instance->anim.fixed=0x50000;
                 *repeat=*(volatile unsigned short *)repeat-1;
             }
-        } else if((short)current>=instance->length-1) {
-            if(instance->owner) instance->owner->action->state=4;
+        } else if((short)current>=instance->action-1) {
+            if(instance->state) instance->state->action_state[0]=4;
             D_8019A8BE=1;
             asm volatile("" : : : "memory");
             Akao_Cmd_21(state->asset,0);
             return 1;
         }
         }
-        D_8019A8BA=func_800DFE20(g_PlayerEntity->position,instance->position);
-        angle=FieldEng_VecToAngle(g_PlayerEntity->position,instance->position)&4095;
+        D_8019A8BA=func_800DFE20(&g_PlayerEntity->pos_x,&instance->pos_x);
+        angle=FieldEng_VecToAngle(&g_PlayerEntity->pos_x,&instance->pos_x)&4095;
         D_8019A8BC=angle;
         asm volatile("" : : : "memory");
-        delta=(angle-(unsigned short)instance->yaw)&4095;
+        delta=(angle-(unsigned short)instance->rot_y)&4095;
         if(state->mode==0) goto accelerate;
         if(state->mode==1) goto steer;
         state->targetSpeed=0;
         goto adjust;
 accelerate:
         {
-            if(state->speed<=1280) instance->yaw=FieldEng_TurnToward(instance->yaw,angle,80);
-            if(state->speed<=state->targetSpeed && ((instance->yaw-D_8019A8BC+64)&4095)<=256) {
+            if(state->speed<=1280) instance->rot_y=FieldEng_TurnToward(instance->rot_y,angle,80);
+            if(state->speed<=state->targetSpeed && ((instance->rot_y-D_8019A8BC+64)&4095)<=256) {
                 state->mode=1; state->targetSpeed=1536; D_8019A8C0=0;
             }
         }
@@ -107,8 +101,8 @@ adjust:
                 }
             }
         }
-        cosine=rcos(instance->yaw+2048);
-        sine=rsin(instance->yaw+2048);
+        cosine=rcos(instance->rot_y+2048);
+        sine=rsin(instance->rot_y+2048);
         {
         register Matrix *matrix asm("$4")=(Matrix *)&D_8019A870;
         register Vector *vector asm("$5")=&offset;
@@ -121,8 +115,8 @@ adjust:
         offset.x=0; offset.y=0; offset.z=state->speed;
         ApplyMatrixSV(matrix,vector,vector);
         }
-        instance->position[0]=(unsigned int)instance->position[0]+((unsigned int)offset.x<<12);
-        instance->position[2]=(unsigned int)instance->position[2]+((unsigned int)offset.z<<12);
+        instance->pos_x=(unsigned int)instance->pos_x+((unsigned int)offset.x<<12);
+        instance->pos_z=(unsigned int)instance->pos_z+((unsigned int)offset.z<<12);
         phase=state->heightPhase;
         {
         int nextPhase=phase;
@@ -137,13 +131,13 @@ adjust:
             floor=g_RoomFloorY->y;
             height=height/8-128;
             height=floor-height;
-            instance->position[1]=(unsigned int)height<<16;
+            instance->pos_y=(unsigned int)height<<16;
         } else if((short)frame>=31) {
             int floor;
             state->mode=2;
             floor=(unsigned int)g_RoomFloorY->y<<16;
-            if(floor<instance->position[1]) instance->position[1]=(unsigned int)instance->position[1]-0x100000;
-            else instance->position[1]=floor;
+            if(floor<instance->pos_y) instance->pos_y=(unsigned int)instance->pos_y-0x100000;
+            else instance->pos_y=floor;
         }
         }
     }
