@@ -1149,7 +1149,8 @@ segments:
       - [0xBF070, c, engine/FieldEng_AnchorPosition]
       # Transform, direction and colour helpers with the shape builders that use them (G1558).
       - [0xBF0F0, c, engine/FieldEng_GeometryAndShapes]
-      # Effect primitive builders: rotated triangle, history trail, fade tile, point tiles, rotated quad (G1559).
+      # Effect primitive builders: rotated triangle, history trail, fade tile, point tiles, rotated quad
+      # (G1559), orbit tile, glow line, textured ribbon, point history and pulled sprite.
       - [0xC1688, c, engine/FieldEng_EffectPrimitives]
       # Effect task spawning: the descriptor at D_800E13D4 names the asset bootstrap,
       # the object lifecycle callbacks and the task spawn entry together.
