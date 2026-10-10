@@ -92,6 +92,7 @@ update:
         int scatterRandom;
         int index;
         int halfSize;
+        int sizeBits;
         int cosine,divisor;
         register int size asm("$3");
         int sine;
@@ -122,26 +123,27 @@ update:
             }
         }
         {
-        Instance *next;
+        Instance *ySource;
+        Instance *zSource;
         particle->x=instance->transforms[index].position[0];
-                next=actor->instance;
-        asm volatile("" : : "r"(next));
+                ySource=actor->instance;
+        asm volatile("" : : "r"(ySource));
         size=particle->size;
-        asm volatile("" : : "r"(size), "r"(next) : "memory");
-        halfSize=(unsigned short)particle->size;
-        particle->y=next->transforms[index].position[1];
+        asm volatile("" : : "r"(size), "r"(ySource) : "memory");
+        sizeBits=(unsigned short)particle->size;
+        particle->y=ySource->transforms[index].position[1];
         asm volatile("" : : : "$2");
         {
             u8 low7=random&127;
             product=low7*size;
         }
-        next=actor->instance;
-        asm volatile("" : : "r"(halfSize), "r"(next));
-        halfSize=(unsigned int)halfSize<<16;
+        zSource=actor->instance;
+        asm volatile("" : : "r"(sizeBits), "r"(zSource));
+        sizeBits=(unsigned int)sizeBits<<16;
                 {
-        Matrix *transforms=next->transforms;
-        asm volatile("" : "=r"(halfSize) : "0"(halfSize), "r"(transforms));
-        halfSize=halfSize>>17;
+        Matrix *transforms=zSource->transforms;
+        asm volatile("" : "=r"(sizeBits) : "0"(sizeBits), "r"(transforms));
+        halfSize=sizeBits>>17;
         asm volatile("" : "=r"(transforms) : "0"(transforms), "r"(halfSize));
         particle->z=transforms[index].position[2];
         }
