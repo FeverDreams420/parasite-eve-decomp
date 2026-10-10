@@ -1,6 +1,7 @@
 #include "pe1/cdrom_buffers.h"
+#include "pe1/boot_display.h"
 extern s32 g_ActiveDrawSlot __asm__("D_8009CDDC");
-extern u16 D_80093168, D_80093166;
+extern u16 D_80093168;
 extern char *volatile g_BootDisplayOrderingTable;
 extern char *volatile g_BootDisplayPrimitiveCursor;
 extern void func_800752AC(void *, s32);

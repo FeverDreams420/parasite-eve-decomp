@@ -8,6 +8,7 @@
 #include "include_asm.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/boot_display.h"
 
 void SetDispMask(int arg0);
 void FlushCache(void);
@@ -21,7 +22,6 @@ extern u16 g_LargeTexLbaTbl[];
 extern u16 D_8009316C[];
 extern u16 g_FontUiLbaTbl[];
 extern u16 D_8009315E[];
-extern u16 D_80093166[];
 extern int D_800B0DD8;
 extern signed char D_800B0DB2;
 extern signed char D_800B0DB3;
@@ -231,7 +231,7 @@ retry_first:
     ExitCriticalSection();
 
 retry_second:
-    range = D_80093166;
+    range = (unsigned short  *)&D_80093166;
     retry = -1;
     do {
         status = CdRom_ReadSectors(D_800B0DD8 + range[0], 0, D_80011610, range[1] - range[0]);
