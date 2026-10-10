@@ -162,12 +162,12 @@ void Entity_UpdateTimers(void) {
             if (Inv_CountByValue(0xD) != 0) {
                 Battle_ApplyDamage(0xD);
                 status_item_0 = 0xD;
-                goto consume_status_group0;
-            }
-            if (Inv_CountByValue(0x11) != 0) {
+                Inv_FindItemById(status_item_0);
+                Scene_LoadRoomAssets(0x57, D_8009D254);
+                Asset_Find08Alt(0x4B5, 0, D_8009D254->posX.parts.integer, D_8009D254->posY.parts.integer, D_8009D254->posZ.parts.integer);
+            } else if (Inv_CountByValue(0x11) != 0) {
                 Battle_ApplyDamage(0x11);
                 status_item_0 = 0x11;
-consume_status_group0:
                 Inv_FindItemById(status_item_0);
                 Scene_LoadRoomAssets(0x57, D_8009D254);
                 Asset_Find08Alt(0x4B5, 0, D_8009D254->posX.parts.integer, D_8009D254->posY.parts.integer, D_8009D254->posZ.parts.integer);
@@ -177,12 +177,12 @@ consume_status_group0:
             if (Inv_CountByValue(0xF) != 0) {
                 Battle_ApplyDamage(0xF);
                 status_item_1 = 0xF;
-                goto consume_status_group1;
-            }
-            if (Inv_CountByValue(0x11) != 0) {
+                Inv_FindItemById(status_item_1);
+                Scene_LoadRoomAssets(0x57, D_8009D254);
+                Asset_Find08Alt(0x4B5, 0, D_8009D254->posX.parts.integer, D_8009D254->posY.parts.integer, D_8009D254->posZ.parts.integer);
+            } else if (Inv_CountByValue(0x11) != 0) {
                 Battle_ApplyDamage(0x11);
                 status_item_1 = 0x11;
-consume_status_group1:
                 Inv_FindItemById(status_item_1);
                 Scene_LoadRoomAssets(0x57, D_8009D254);
                 Asset_Find08Alt(0x4B5, 0, D_8009D254->posX.parts.integer, D_8009D254->posY.parts.integer, D_8009D254->posZ.parts.integer);
@@ -192,12 +192,12 @@ consume_status_group1:
             if (Inv_CountByValue(0xE) != 0) {
                 Battle_ApplyDamage(0xE);
                 status_item_2 = 0xE;
-                goto consume_status_group2;
-            }
-            if (Inv_CountByValue(0x11) != 0) {
+                Inv_FindItemById(status_item_2);
+                Scene_LoadRoomAssets(0x57, D_8009D254);
+                Asset_Find08Alt(0x4B5, 0, D_8009D254->posX.parts.integer, D_8009D254->posY.parts.integer, D_8009D254->posZ.parts.integer);
+            } else if (Inv_CountByValue(0x11) != 0) {
                 Battle_ApplyDamage(0x11);
                 status_item_2 = 0x11;
-consume_status_group2:
                 Inv_FindItemById(status_item_2);
                 Scene_LoadRoomAssets(0x57, D_8009D254);
                 Asset_Find08Alt(0x4B5, 0, D_8009D254->posX.parts.integer, D_8009D254->posY.parts.integer, D_8009D254->posZ.parts.integer);
@@ -208,12 +208,12 @@ consume_status_group2:
             if (Inv_CountByValue(0x10) != 0) {
                 Battle_ApplyDamage(0x10);
                 status_item_3 = 0x10;
-                goto consume_status_group3;
-            }
-            if (Inv_CountByValue(0x11) != 0) {
+                Inv_FindItemById(status_item_3);
+                Scene_LoadRoomAssets(0x57, D_8009D254);
+                Asset_Find08Alt(0x4B5, 0, D_8009D254->posX.parts.integer, D_8009D254->posY.parts.integer, D_8009D254->posZ.parts.integer);
+            } else if (Inv_CountByValue(0x11) != 0) {
                 Battle_ApplyDamage(0x11);
                 status_item_3 = 0x11;
-consume_status_group3:
                 Inv_FindItemById(status_item_3);
                 Scene_LoadRoomAssets(0x57, D_8009D254);
                 Asset_Find08Alt(0x4B5, 0, D_8009D254->posX.parts.integer, D_8009D254->posY.parts.integer, D_8009D254->posZ.parts.integer);

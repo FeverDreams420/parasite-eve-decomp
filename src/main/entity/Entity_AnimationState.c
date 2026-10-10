@@ -44,14 +44,12 @@ void Entity_AdvanceAnim(BattleEntity *entity) {
             end_frame = limit << 16;
 
             if (flags & 0x200) {
-                if (!(old_frame < end_frame)) {
-                    goto check_reverse_crossing;
+                if (old_frame < end_frame) {
+                    if (end_frame < next_frame) {
+                        entity->animFrame = end_frame;
+                        return;
+                    }
                 }
-                if (end_frame < next_frame) {
-                    entity->animFrame = end_frame;
-                    return;
-                }
-check_reverse_crossing:
                 if (end_frame < old_frame) {
                     if (next_frame < end_frame) {
                         entity->animFrame = end_frame;
@@ -72,16 +70,15 @@ check_reverse_crossing:
             }
 
             if (entity->entityFlags & 0x200) {
-                if (end_frame < old_frame) {
-                    goto final_reverse_crossing;
+                if (!(end_frame < old_frame)) {
+                    if (end_frame < next_frame) {
+                        entity->animFrame = end_frame;
+                        return;
+                    }
                 }
-                if (end_frame < next_frame) {
-                    entity->animFrame = end_frame;
-                    return;
-                }
-final_reverse_crossing:
                 if (old_frame < end_frame) {
-                    goto store_next;
+                    entity->animFrame = next_frame;
+                    return;
                 }
                 if (next_frame < end_frame) {
                     entity->animFrame = end_frame;
