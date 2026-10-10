@@ -62,9 +62,7 @@ update:
             if (*count>0) {
                 Queue *queue=(Queue *)((char *)count-(unsigned long)&((Queue *)0)->count);
                 Vector *position=queue->positions;
-                goto emit;
-                for(;i<queue->count;i++,position++) {
-emit:
+                do {
                     {
                         Particle *particle=func_800CE610(D_800F33E0->pool);
                         if (!particle) break;
@@ -72,7 +70,9 @@ emit:
                         particle->position.pad=D_800F32D0->instance->yaw;
                         particle->delay=D_800E27EC & 7;
                     }
-                }
+                    i++;
+                    position++;
+                } while(i<queue->count);
             }
             D_8019A800=0;
         }

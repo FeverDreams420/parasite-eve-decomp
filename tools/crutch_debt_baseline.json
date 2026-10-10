@@ -37,7 +37,7 @@
     "externs_in_c": 1011,
     "field_macros": 0,
     "game_asm_units": 0,
-    "gotos": 224,
+    "gotos": 223,
     "gte_matrix_windows": 12,
     "include_asm": 0,
     "nop_barriers": 0,
