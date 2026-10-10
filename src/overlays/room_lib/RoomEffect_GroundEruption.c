@@ -716,49 +716,30 @@ typedef struct RoomEruptionTrailTrigger {
     s16 timer;
 } RoomEruptionTrailTrigger;
 
-typedef struct RoomEruptionTrailCursor {
-    u8 pad00[0x76];
-    u16 current;
-    u16 next;
-} RoomEruptionTrailCursor;
-
 typedef union RoomEruptionDebris {
     RoomEruptionDebrisState state;
     RoomEruptionTrailEntry history[6];
-    struct {
-        u8 pad00[0x0A];
-        RoomEruptionTrailCursor cursor;
-    } trailView;
 } RoomEruptionDebris;
 
 /* Moves the lead debris particle under gravity and shifts its trail. */
 void RoomEffect_GroundEruptionUpdateDebris(
     void *unused, RoomEruptionTrailTrigger *trigger, RoomEruptionDebris *object) {
-    RoomEruptionTrailEntry *history;
-    RoomEruptionTrailCursor *trail;
     int count;
 
     count = 5;
-    trail = &object->trailView.cursor;
-    history = &object->history[5];
-    /* A do-while strength-reduces the cursor and moves it out of $t0. */
-shiftTrail:
-    *history = history[-1];
-    history--;
-    trail->next = trail->current;
-    count--;
-    trail = (RoomEruptionTrailCursor *)((u8 *)trail - 2);
-    if (count != 0) {
-        goto shiftTrail;
+    while (count != 0) {
+        object->history[count] = object->history[count - 1];
+        object->state.visible[count] = object->state.visible[count - 1];
+        count--;
     }
 
-    *(u16 *)&object->state.position[0].x += (s16)*(u16 *)&object->state.velocity[0].x >> 8;
-    *(u16 *)&object->state.position[0].y += (s16)*(u16 *)&object->state.velocity[0].y >> 8;
-    *(u16 *)&object->state.position[0].z += (s16)*(u16 *)&object->state.velocity[0].z >> 8;
-    *(u16 *)&object->state.velocity[0].y += object->state.gravityStep[0];
+    object->state.position[0].x += object->state.velocity[0].x >> 8;
+    object->state.position[0].y += object->state.velocity[0].y >> 8;
+    object->state.position[0].z += object->state.velocity[0].z >> 8;
+    object->state.velocity[0].y += object->state.gravityStep[0];
 
     if (object->state.position[0].y > g_RoomFloorY->y) {
-        *(u16 *)&object->state.visible[0] = 0;
+        object->state.visible[0] = 0;
     }
     if (trigger->timer == 60) {
         trigger->state = 2;
