@@ -13,9 +13,10 @@
 #include "pe1/inventory_queries.h"
 #include "pe1/menu_sound.h"
 
-/* Item action submenu, skill/stat point use, the equip stats panel and the
- * item detail and item list views of the inventory menu. Contiguous at
- * 0x8004778C and joined by private data and helper calls. */
+/* Category tab reset and equip screen header, item action submenu,
+ * skill/stat point use, the equip stats panel and the item detail and item
+ * list views of the inventory menu. Contiguous at 0x80047678 and joined by
+ * private data and helper calls. */
 
 int Menu_EquipStatsInputHandler(MenuWidgetNode *node, int flags);
 int Menu_DetailViewInput(MenuWidgetNode *arg0, unsigned int arg1);
@@ -67,6 +68,46 @@ extern MenuWidgetNode *MenuWidget_GetChild(MenuWidgetNode *arg0, int arg1);
 extern void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
 void Menu_DrawItemListHeader(void);
 int D_8009CFC0;
+
+int g_MenuEquipMode;
+
+void Draw_FlushPrimList(int arg0);
+void Draw_SetColor(int arg0);
+
+void Menu_InitCategoryTabs(void) {
+    void *node;
+
+    Inv_BuildStorageDisplay();
+    MenuWidget_NavScrollTo(0x2C);
+    MenuWidget_NavScrollTo(0xB);
+    MenuWidget_NavScrollTo(0xA);
+    MenuWidget_NavScrollTo(5);
+    MenuWidget_NavScrollTo(6);
+    MenuWidget_NavScrollTo(7);
+
+    node = MenuWidget_FindByModeAndSelectedBase(2, 0);
+    if (node == 0) {
+        node = MenuWidget_FindByModeAndSelectedBase(2, 0x32);
+    }
+
+    MenuWidget_SetCurrentNode(node);
+    Menu_StepInventoryRoot(0x33E, -1, Inv_RestoreSelection(g_MenuSelectedItemList == 0));
+    Menu_PlayCancelSound();
+}
+
+void Menu_DrawEquipScreenHeader(void) {
+    Draw_OffsetCursor(0, 0xA);
+    Draw_FlushPrimList(0x69);
+
+    if (g_MenuEquipMode != 0) {
+        Draw_SetColor(0x78703C);
+        Draw_OffsetCursor(0xA, 0x16);
+        Draw_PrintTextById(0x1F);
+        Draw_OffsetCursor(0, 0x10);
+        Draw_PrintTextById(0x21);
+        Draw_SetColor(0x808080);
+    }
+}
 
 int Menu_InventoryItemHandler(MenuWidgetNode *arg0, int arg1) {
     int temp;

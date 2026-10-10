@@ -423,9 +423,9 @@ segments:
       - [0x375FC, c, menu/Menu_CreateInvSwapView]
       - [0x376AC, c, menu/Menu_InventoryWeaponModFlow]
       - [0x37D60, c, menu/Menu_ConfigureScreen]
-      - [0x37E78, c, menu/Menu_CategoryTabs]
-      # Item action submenu, skill select, equip stats, item detail and item list views: private data and helpers join the run.
-      - [0x37F8C, c, menu/Menu_ItemActionFlow]
+      # Category tab reset, equip screen header, item action submenu, skill select,
+      # equip stats, item detail and item list views: private data and helpers join the run.
+      - [0x37E78, c, menu/Menu_ItemActionFlow]
       - [0x38E54, c, menu/Menu_StepSaveLoadScreen]
       - [0x39038, c, menu/Menu_SaveLoadNavigate]
       # Inventory root step, equip panel alignment, bonus-point slot handlers and the bonus-point flow (G0426).
