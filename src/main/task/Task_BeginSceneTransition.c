@@ -19,9 +19,7 @@ int Task_BeginSceneTransition(int **arg0) {
     int flags;
     int cursor;
 
-    if (state->flags & 0x1000) {
-        goto ret_one;
-    }
+    if (!(state->flags & 0x1000)) {
 
     node = (int *)g_TaskNodePool;
     flags = *(unsigned short *)(node + 2);
@@ -47,6 +45,7 @@ int Task_BeginSceneTransition(int **arg0) {
         tail_node->flags = tail_flags;
     }
 
+    }
 ret_one:
     return 1;
 }
@@ -60,9 +59,7 @@ int Task_OpenSaveLoadMenu(int **arg0) {
     int flags;
     int cursor;
 
-    if (state->flags & 0x1000) {
-        goto ret_zero;
-    }
+    if (!(state->flags & 0x1000)) {
 
     node = g_TaskNodePool;
     flags = node->flags;
@@ -93,6 +90,7 @@ int Task_OpenSaveLoadMenu(int **arg0) {
         mark_node->active = one;
     }
 
+    }
 ret_zero:
     return 0;
 }

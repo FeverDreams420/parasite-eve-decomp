@@ -167,9 +167,10 @@ FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
         count = entry >> 22;
         walk = bankRows;
 scan_loop:
-        if (walk->source.bytes.id == sceneType) goto scan_done;
+        if (walk->source.bytes.id != sceneType) {
         ++i;
         if (i < count) { ++walk; goto scan_loop; }
+        }
         }
 scan_done:
         allocation = actor->allocation_block;

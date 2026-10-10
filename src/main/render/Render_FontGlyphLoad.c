@@ -23,11 +23,11 @@ retry:
     pollError = -1;
 poll:
     status = CdRom_PollReady();
-    if (status == 0)
-        goto copy;
+    if (status != 0) {
     if (status == pollError)
         goto retry;
     goto poll;
+    }
 copy:
     offset = code * sizeof(FontGlyphRecord);
     sourceOffset = offset + PE1_OFFSETOF(FontGlyphTable, groups.unknown[0]);

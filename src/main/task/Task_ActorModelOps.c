@@ -138,9 +138,8 @@ int Task_SetGteMatrix(int **args) {
         second_draw_slot = CDDC_toggle1_load.value.signed_value;
         second_draw_slot ^= 1;
         CDDC_toggle1_store.value.signed_value = second_draw_slot;
-        goto success;
-    }
-    if ((flags & 0x08000000) == 0) {
+    } else {
+        if ((flags & 0x08000000) == 0) {
         result = 0;
         script_ptr = D_8009CE00;
         flag_actor->flags = flags | 0x08000000;
@@ -148,8 +147,9 @@ int Task_SetGteMatrix(int **args) {
         D_8009CE00 = script_ptr - 5;
         task_state->active = 1;
         return result;
+        }
+        flag_actor->flags = flags & 0xF7FFFFFF;
     }
-    flag_actor->flags = flags & 0xF7FFFFFF;
 success:
     return 1;
 }
@@ -161,13 +161,12 @@ extern TaskNode *g_TaskNodePool;
 int Boot_CheckModeSwitch(void) {
     int mode = g_RenderStateFlags[0] & 7;
 
-    if (mode == 4) {
-        goto ret_one;
-    }
+    if (mode != 4) {
     if (mode != 0) {
         goto pop_state;
     }
 
+    }
 ret_one:
     return 1;
 

@@ -96,10 +96,11 @@ int Inv_FindItem(unsigned int arg0) {
                 }
 
                 if (value != 0) {
-                    if (value < 9) goto type_less_than_9;
+                    if (value >= 9) {
                     if (value == 9) goto type_eq_9;
                     result = -1;
                     goto done;
+                    }
 type_less_than_9:
                     g_AyaEquippedWeaponSlot[0] = result;
                     return (unsigned int)result >> 31;

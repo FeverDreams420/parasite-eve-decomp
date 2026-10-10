@@ -311,10 +311,9 @@ s32 Scene_InitEntityPlayer(s32 arg0) {
     case 38:
         phaseValue = 0x27;
         if (Scene_LoadEntityTextures() == 1) {
-            if ((u8) gameState->scene_init_subphase >= 0xBU) {
-                goto block_19;
+            if ((u8) gameState->scene_init_subphase < 0xBU) {
+                goto block_21;
             }
-            goto block_21;
         } else {
             phaseValue = 0x27;
             gameState->scene_init_phase = phaseValue;

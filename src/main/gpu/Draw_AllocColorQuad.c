@@ -70,11 +70,11 @@ void Draw_AllocColorQuad(int width, int height) {
     }
 
     packet = first;
-    if (h <= 0) goto ratio_zero;
+    if (h > 0) {
     widthSmaller = w < h;
     minimum = h;
     if (widthSmaller) minimum = w;
-    if (minimum < 0) goto ratio_zero;
+    if (minimum >= 0) {
     {
         int secondMinimum = h;
         int scaled;
@@ -83,6 +83,8 @@ void Draw_AllocColorQuad(int width, int height) {
         ratio = scaled / h;
     }
     goto ratio_done;
+    }
+    }
 ratio_zero:
     ratio = 0;
 ratio_done:

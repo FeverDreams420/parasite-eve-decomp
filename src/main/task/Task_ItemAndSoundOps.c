@@ -78,15 +78,11 @@ int Task_ShowReceivedItem(int **arg0) {
     int flags;
     int cursor;
 
-    if (state->flags & 0x1000) {
-        goto ret_one;
-    }
+    if (!(state->flags & 0x1000)) {
 
     node = (int *)g_TaskNodePool;
     flags = *(unsigned short *)(node + 2);
-    if (flags & 0x20) {
-        goto finish;
-    }
+    if (!(flags & 0x20)) {
     *(unsigned short *)(node + 2) = flags | 0x20;
     cursor = g_SceneDataTable0;
     node[4] = 1;
@@ -94,6 +90,7 @@ int Task_ShowReceivedItem(int **arg0) {
     g_SceneDataTable0 = cursor;
     return 0;
 
+    }
 finish:
     Render_BeginSceneLoad();
     Menu_CreateItemUsePanel(**saved);
@@ -108,6 +105,7 @@ finish:
         tail_node->flags = tail_flags;
     }
 
+    }
 ret_one:
     return 1;
 }
@@ -525,9 +523,7 @@ find_actor_asset:
     case 0x191:
         status = CD_SeekTrack0(*args->arg1, 1, 0, &locals.slot,
                                *args->arg2 == 0);
-        if (status == 1) {
-            goto wait_for_cd;
-        }
+        if (status != 1) {
         goto store_audio_slot;
     case 0x192:
         status = CD_SeekTrack1(*args->arg1, 1, 1, &locals.slot,
@@ -538,6 +534,7 @@ find_actor_asset:
             return 0;
         }
         goto store_audio_slot;
+        }
 wait_for_cd:
         D_8009CE00 -= 0x20;
         D_8009D300->active = status;

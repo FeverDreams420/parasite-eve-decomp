@@ -115,9 +115,7 @@ int Task_DispatchScriptCmd(TaskScriptArgs *args)
         }
         return 1;
     }
-    if (opcode == 0xBB8) {
-        goto find_entity;
-    }
+    if (opcode != 0xBB8) {
     if (opcode < 0xBB9) {
         if (opcode == 0xB54) {
             goto cmd_b54;
@@ -194,6 +192,7 @@ cmd_af1:
 cmd_b54:
         D_800B0CD8[0] |= 0x400000;
         goto done;
+    }
 find_entity:
         initial_entity_id = ARG_WORD(args->arg1);
         if (initial_entity_id == 0) {

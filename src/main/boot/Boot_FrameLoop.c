@@ -270,8 +270,7 @@ void Boot_RunFrame(void)
                                  : (flags & ~0x30u) | 0x10u) ^ 1u;
             }
 
-            if (D_8009D1A0 & 1)
-                goto do_vsync;
+            if (!(D_8009D1A0 & 1)) {
             if (!(*game_flags & 0x200)) {
                 ClearOTagR(((u32 **)((u8 *)game_flags + (D_8009CDDC << 2)))[0x58],
                            0x1000);
@@ -302,6 +301,7 @@ void Boot_RunFrame(void)
                 }
             }
             goto after_vsync;
+            }
 do_vsync:
             VSync(2);
 after_vsync:;
