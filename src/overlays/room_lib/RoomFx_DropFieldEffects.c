@@ -1481,8 +1481,6 @@ void RoomFx_DrawEightParticles(
     int unitScale;
     u16 *depthOut;
     char *packet;
-    register char *scalarCursor asm("$16");
-    register char *positionCursor asm("$17");
     RoomSpriteMatrix matrix;
     int scaleArg[4];
     volatile int sourceScale[4];
@@ -1499,8 +1497,6 @@ void RoomFx_DrawEightParticles(
     depthOut = &g_RoomDropFieldParticleSprite.depth;
     packet = (char *)depthOut - 10;
     asm volatile("" ::: "memory");
-    scalarCursor = (char *)state;
-    positionCursor = scalarCursor;
 
     func_800C2EAC((u8)context[0x44]);
     func_800C2FF0(0x20, 0x20);
@@ -1523,10 +1519,10 @@ void RoomFx_DrawEightParticles(
             matrix.m[0][1] = 0;
 
             memset((void *)sourceScale, 0, sizeof(sourceScale));
-            sourceScale[0] = (s16)((RoomEightParticleState *)scalarCursor)->scale[0];
+            sourceScale[0] = (s16)state->scale[i];
             matrixArg = &matrix;
             asm volatile("" : "=r"(matrixArg) : "0"(matrixArg));
-            secondScale = (s16)((RoomEightParticleState *)scalarCursor)->scale[0];
+            secondScale = (s16)state->scale[i];
             sourceScale[2] = unitScale;
             sourceScale[1] = secondScale;
             scaleArg[0] = sourceScale[0];
@@ -1538,17 +1534,15 @@ void RoomFx_DrawEightParticles(
             asm volatile("" ::: "$5");
             ScaleMatrix(matrixArg, (const GteVector *)scaleArg);
 
-            *depthOut = (u16)((RoomEightParticleState *)scalarCursor)->fade[0];
-            matrix.t[0] = (s16)((RoomEightParticleState *)positionCursor)->position[0].x;
-            matrix.t[1] = (s16)((RoomEightParticleState *)positionCursor)->position[0].y;
-            matrix.t[2] = (s16)((RoomEightParticleState *)positionCursor)->position[0].z;
+            *depthOut = (u16)state->fade[i];
+            matrix.t[0] = (s16)state->position[i].x;
+            matrix.t[1] = (s16)state->position[i].y;
+            matrix.t[2] = (s16)state->position[i].z;
             func_800C3134(g_RoomDropFieldParticleFrames,
-                          (s16)((RoomEightParticleState *)scalarCursor)->angle[0], packet);
+                          (s16)state->angle[i], packet);
             func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
         }
-        positionCursor += 8;
         i++;
-        scalarCursor += 2;
     } while (i < 8);
 }
 
