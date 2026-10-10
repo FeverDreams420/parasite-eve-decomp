@@ -264,14 +264,17 @@ s32 Scene_InitEntityPlayer(s32 arg0) {
             phaseValue = g_SceneAreaTypeDiscSwapBackup;
             g_SceneAreaType = phaseValue;
             phaseValue = 0x21;
-            goto block_20;
+            gameState->scene_init_phase = phaseValue;
+            return 1;
         }
     case 33:
         phaseValue = 0x22;
-        goto block_20;
+        gameState->scene_init_phase = phaseValue;
+        return 1;
     case 34:
         phaseValue = 0x23;
-        goto block_20;
+        gameState->scene_init_phase = phaseValue;
+        return 1;
     case 35:
         temp_a1 = g_SceneAreaType - 0xA;
         if (temp_a1 < 5U) {
@@ -286,16 +289,20 @@ s32 Scene_InitEntityPlayer(s32 arg0) {
             }
         }
                 phaseValue = 0x24;
-        goto block_20;
+        gameState->scene_init_phase = phaseValue;
+        return 1;
     case 36:
         if (Scene_LoadEntityTexture() != 1) {
             if (arg0v == 0) {
                 phaseValue = 0x25;
-                goto block_20;
+                gameState->scene_init_phase = phaseValue;
+                return 1;
             }
-            goto block_19;
+            phaseValue = 0x27;
+            gameState->scene_init_phase = phaseValue;
+            return 1;
         }
-        goto block_21;
+        return 1;
     case 37:
         g_DiscChangeFlags |= 4;
         Scene_SetStoryDay(g_CurrentStoryDay);
@@ -310,7 +317,8 @@ s32 Scene_InitEntityPlayer(s32 arg0) {
             goto block_21;
         } else {
             phaseValue = 0x27;
-            goto block_20;
+            gameState->scene_init_phase = phaseValue;
+            return 1;
         }
 block_19:
         phaseValue = 0x27;
