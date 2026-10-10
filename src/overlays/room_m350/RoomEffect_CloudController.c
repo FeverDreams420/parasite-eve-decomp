@@ -98,13 +98,13 @@ adjust:
             int result;
             if(speed<target) {
                 result=next+128;
-                goto store_speed;
-            }
-            result=target<speed;
-            if(result) {
-                result=next-32;
-store_speed:
                 state->speed=result;
+            } else {
+                result=target<speed;
+                if(result) {
+                    result=next-32;
+                    state->speed=result;
+                }
             }
         }
         cosine=rcos(instance->yaw+2048);
