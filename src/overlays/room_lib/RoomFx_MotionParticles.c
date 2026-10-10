@@ -262,30 +262,30 @@ void RoomFx_UpdateTimedFade(void *arg0, char *state, char *obj) {
 extern void func_800C4E50(void *arg0);
 
 void RoomFx_InitSpritePair(void *arg0, void *arg1, char *obj) {
+    FieldRingGeometry *ring = (FieldRingGeometry *)(obj + 0x114);
     int c80 = 0x80;
     int v = 0x10;
 
-    RW16(obj, 0x120) = v;
+    ring->mode = v;
     v = 0xC8;
     RW16(obj, 0x12) = c80;
-    RW16(obj, 0x128) = c80;
+    ring->intensity = c80;
     c80 = 0xFF;
-    RW16(obj, 0x126) = v;
+    ring->offset = v;
     v = 0x40;
-    RW8(obj, 0x118) = v;
+    ring->color0[0] = v;
     v = 0x80;
-    RW8(obj, 0x119) = v;
+    ring->color0[1] = v;
     v = 0x4B0;
-    RW16(obj, 0x122) = v;
-    v = (int)(obj + 0x14);
+    ring->extent0 = v;
     RW16(obj, 0x10) = 0;
-    RW8(obj, 0x11C) = c80;
-    RW8(obj, 0x11D) = c80;
-    RW8(obj, 0x11E) = c80;
-    RW8(obj, 0x11A) = c80;
-    RW16(obj, 0x124) = 0;
-    RW32(obj, 0x114) = v;
-    func_800C4E50(obj + 0x114);
+    ring->color1[0] = c80;
+    ring->color1[1] = c80;
+    ring->color1[2] = c80;
+    ring->color0[2] = c80;
+    ring->extent1 = 0;
+    ring->source = obj + 0x14;
+    func_800C4E50(ring);
 }
 
 void func_80071A44(RoomFxVec4 *vec, int value, int shift);
@@ -303,7 +303,7 @@ void RoomFx_DrawAnchoredSpritePair(void *unused0, void *unused1,
     RoomMotionContext *root;
     RoomMotionInitModel *map;
     short *floorY;
-    char *renderState;
+    FieldRingGeometry *renderState;
     int firstY;
     int firstX;
     int secondX;
@@ -361,8 +361,8 @@ void RoomFx_DrawAnchoredSpritePair(void *unused0, void *unused1,
 
     func_800C3238(2);
     map = ((RoomMotionInitLink *)root->link)->model;
-    renderState = fx + 0x114;
-    *(s16 *)(fx + 0x128) = *(u16 *)(fx + 0x12);
+    renderState = (FieldRingGeometry *)(fx + 0x114);
+    renderState->intensity = *(u16 *)(fx + 0x12);
     /* Both anchors sit on the shared floor height; the first block stores
      * the height before the x coordinate, which fixes retail's register
      * choice. */
