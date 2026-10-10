@@ -213,7 +213,7 @@ s32 Camera_StepAngleFade(s32 **arg0) {
         desiredAngle = temp_v1x;
         if (ta1b == tv1a) {
             phaseValue = 1;
-            goto exit;
+            return phaseValue;
         }
         tor = temp_t1 | 0x20;
         p300->flags = (u16) tor;

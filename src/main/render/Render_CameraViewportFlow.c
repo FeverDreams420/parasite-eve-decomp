@@ -696,14 +696,16 @@ int CdRom_SetScreenPos(int arg0, int arg1, int arg2, int arg3, unsigned short ar
     D_800BCFF4 = old2;
 
     if (mode >= 4) {
-        goto fail;
+        g_ScreenTransitionMode = 1;
+        return 0;
     }
     if (mode < 0) {
-        goto fail;
+        g_ScreenTransitionMode = 1;
+        return 0;
     }
 
     g_ScreenTransitionMode = arg4;
-    goto done;
+    return 0;
 
 fail:
     g_ScreenTransitionMode = 1;

@@ -66,7 +66,8 @@ void Gpu_RenderFrame(void) {
 draw_direct:
     idx = g_ActiveDrawSlot;
     PutDrawEnv(DrawAddress(idx));
-    goto done;
+    g_ActiveDrawSlot = g_ActiveDrawSlot < 1U;
+    return;
 
 draw_buffer:
     {
