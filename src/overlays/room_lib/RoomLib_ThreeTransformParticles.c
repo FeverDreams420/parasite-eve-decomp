@@ -11,6 +11,7 @@
 #include "pe1/gte.h"
 #include "pe1/room_fx.h"
 #include "pe1/room_effect_state.h"
+#include "pe1/room_debris_triplet.h"
 #include "pe1/field_script_context.h"
 #include "pe1/gte_short_vector.h"
 #include "pe1/room_floor.h"
@@ -119,7 +120,8 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
     register char *workState asm("$21");
     char *clock;
     int i;
-    register char *byteCursor asm("$16");
+    char *byteCursor;
+    char *projectionMatrix;
     register char *positionCursor asm("$17");
     register char *velocityCursor asm("$18");
     register char *timerCursor asm("$19");
@@ -194,43 +196,43 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
     do {
         byteCursor = workState + i;
         randomValue = func_80071A54();
-        *(u8 *)(byteCursor + 0x1E) = 0;
-        *(u8 *)(byteCursor + 0x1A) = (randomValue % 10) + 1;
-        *(s16 *)(timerCursor + 0x22) = *func_800C2B28(2);
-        *(s32 *)(positionCursor + 0x3C) = *(s32 *)(clock + 0x18) << 16;
-        *(s32 *)(positionCursor + 0x40) = *(s32 *)(clock + 0x1C) << 16;
-        *(s32 *)(positionCursor + 0x44) = *(s32 *)(clock + 0x20) << 16;
-        *(s16 *)(velocityCursor + 0x6C) = 0;
-        *(s16 *)(velocityCursor + 0x6E) = 0;
-        *(s16 *)(velocityCursor + 0x70) = 0;
-        *(s16 *)(timerCursor + 0x2A) = 0;
-        *(u8 *)(byteCursor + 0x0E) = 1;
-        *(u8 *)(byteCursor + 0x16) = 0;
-        *(u8 *)(byteCursor + 0x12) = 0;
+        ((RoomDebrisTriplet *)byteCursor)->size[0] = 0;
+        ((RoomDebrisTriplet *)byteCursor)->countdown[0] = (randomValue % 10) + 1;
+        ((RoomDebrisTriplet *)timerCursor)->life[0] = *func_800C2B28(2);
+        ((RoomDebrisTriplet *)positionCursor)->position[0].x = *(s32 *)(clock + 0x18) << 16;
+        ((RoomDebrisTriplet *)positionCursor)->position[0].y = *(s32 *)(clock + 0x1C) << 16;
+        ((RoomDebrisTriplet *)positionCursor)->position[0].z = *(s32 *)(clock + 0x20) << 16;
+        ((RoomDebrisTriplet *)velocityCursor)->rotation[0].x = 0;
+        ((RoomDebrisTriplet *)velocityCursor)->rotation[0].y = 0;
+        ((RoomDebrisTriplet *)velocityCursor)->rotation[0].z = 0;
+        ((RoomDebrisTriplet *)timerCursor)->swing[0] = 0;
+        ((RoomDebrisTriplet *)byteCursor)->mode[0] = 1;
+        ((RoomDebrisTriplet *)byteCursor)->active[0] = 0;
+        ((RoomDebrisTriplet *)byteCursor)->landed[0] = 0;
         i++;
         velocityCursor += 8;
         positionCursor += 0x10;
         timerCursor += 2;
     } while (i < 3);
 
-    *(s16 *)(workState + 0x00) = 3;
-    *(s16 *)(workState + 0x02) = *func_800C2B28(0);
-    *(s16 *)(workState + 0x04) = *func_800C2B28(1);
-    *(s16 *)(workState + 0x06) = *func_800C2B28(5);
-    *(u8 *)(workState + 0x0A) = *func_800C2B28(4);
-    *(s16 *)(workState + 0x08) = *func_800C2B10(1);
+    ((RoomDebrisTriplet *)workState)->remaining = 3;
+    ((RoomDebrisTriplet *)workState)->speed = *func_800C2B28(0);
+    ((RoomDebrisTriplet *)workState)->acceleration = *func_800C2B28(1);
+    ((RoomDebrisTriplet *)workState)->swingLimit = *func_800C2B28(5);
+    ((RoomDebrisTriplet *)workState)->keepAlive = *func_800C2B28(4);
+    ((RoomDebrisTriplet *)workState)->reserved08 = *func_800C2B10(1);
 
     stack.projectionSeed.x = 0;
     stack.projectionSeed.y = 0;
     stack.projectionSeed.z = 0x1000;
     ApplyMatrixSV(&stack.firstMatrix, &stack.projectionSeed,
                   (GteShortVector *)(workState + 0x9C));
-    byteCursor = clock + 4;
-    ApplyMatrixSV((RoomSpriteMatrix *)byteCursor, &stack.projectionSeed,
+    projectionMatrix = clock + 4;
+    ApplyMatrixSV((RoomSpriteMatrix *)projectionMatrix, &stack.projectionSeed,
                   (GteShortVector *)(workState + 0xA4));
     ApplyMatrixSV(&stack.secondMatrix, &stack.projectionSeed,
                   (GteShortVector *)(workState + 0xAC));
-    func_800C66C8(callOwner, 0x573, byteCursor);
+    func_800C66C8(callOwner, 0x573, projectionMatrix);
 }
 
 typedef GteShortVector RoomDrawThreeVec;
@@ -289,25 +291,25 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
     do {
         element = workState + i;
         positionOffset = i << 3;
-        if (*(s8 *)(element + 0x16) >= 0) {
+        if (((RoomDebrisTriplet *)element)->active[0] >= 0) {
             arg0 = (void *)(positionOffset + 0x6C);
             arg0 = workState + (int)arg0;
             RotMatrixYXZ(arg0, &stack.primaryMatrix);
             func_80071A44(sourceScale, 0, 0x10);
-            stack.sourceScale.x = *(u16 *)(shortCursor + 0x2A) >> 1;
-            stack.sourceScale.y = *(u16 *)(shortCursor + 0x2A) >> 1;
-            stack.sourceScale.z = *(u16 *)(shortCursor + 0x2A) >> 1;
+            stack.sourceScale.x = ((RoomDebrisTriplet *)shortCursor)->swing[0] >> 1;
+            stack.sourceScale.y = ((RoomDebrisTriplet *)shortCursor)->swing[0] >> 1;
+            stack.sourceScale.z = ((RoomDebrisTriplet *)shortCursor)->swing[0] >> 1;
             stack.scale = stack.sourceScale;
             ScaleMatrix(&stack.primaryMatrix, &stack.scale);
 
-            stack.primaryMatrix.t[0] = *(s16 *)(positionCursor + 0x3E) +
-                                       *(s8 *)(workState + 0x0B);
-            stack.primaryMatrix.t[1] = *(s16 *)(positionCursor + 0x42) +
-                                       *(s8 *)(workState + 0x0C);
-            stack.primaryMatrix.t[2] = *(s16 *)(positionCursor + 0x46) +
-                                       *(s8 *)(workState + 0x0D);
+            stack.primaryMatrix.t[0] = (((RoomDebrisTriplet *)positionCursor)->position[0].x >> 16) +
+                                       ((RoomDebrisTriplet *)workState)->jitter[0];
+            stack.primaryMatrix.t[1] = (((RoomDebrisTriplet *)positionCursor)->position[0].y >> 16) +
+                                       ((RoomDebrisTriplet *)workState)->jitter[1];
+            stack.primaryMatrix.t[2] = (((RoomDebrisTriplet *)positionCursor)->position[0].z >> 16) +
+                                       ((RoomDebrisTriplet *)workState)->jitter[2];
             callArgs = stack.args;
-            computedScale = *(u8 *)(element + 0x1E);
+            computedScale = ((RoomDebrisTriplet *)element)->size[0];
             arg0 = RoomLib_ThreeParticleTable;
             RoomLib_ThreeParticleAlpha = computedScale;
             asm volatile("" ::: "memory");
@@ -319,15 +321,15 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
             arg0 = (unsigned char *)&RoomLib_ThreeParticlePacket;
             func_800C42A4(arg0, &stack.primaryMatrix, 1);
 
-            if (*(s16 *)(workState + 8) == 1) {
+            if (((RoomDebrisTriplet *)workState)->reserved08 == 1) {
                 callArgs = stack.args;
                 computedScale = rsin(callArgs[1] << 7) >> 3;
-                baseScale = *(u16 *)(shortCursor + 0x32);
+                baseScale = ((RoomDebrisTriplet *)shortCursor)->phase[0];
                 computedScale += baseScale;
                 scaleValue = computedScale;
                 asm("" : "=r"(scaleValue) : "0"(scaleValue));
-                if (*(u16 *)(shortCursor + 0x2A) < (s16)computedScale) {
-                    scaleValue = *(u16 *)(shortCursor + 0x2A);
+                if (((RoomDebrisTriplet *)shortCursor)->swing[0] < (s16)computedScale) {
+                    scaleValue = ((RoomDebrisTriplet *)shortCursor)->swing[0];
                 }
 
                 positionSource =
@@ -338,41 +340,41 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
                 asm("" : "=r"(arg0), "=r"(inputArg)
                     : "0"(arg0), "1"(inputArg));
                 scaleValue = (s16)scaleValue >> 1;
-                stack.position.z += *(u16 *)(shortCursor + 0x22) << 4;
+                stack.position.z += ((RoomDebrisTriplet *)shortCursor)->life[0] << 4;
                 RotMatrixYXZ(arg0, inputArg);
                 func_80071A44(sourceScale, 0, 0x10);
                 stack.sourceScale.x = scaleValue;
                 stack.sourceScale.y = scaleValue;
                 stack.sourceScale.z = scaleValue;
                 ScaleMatrix(&stack.primaryMatrix, sourceScale);
-                stack.primaryMatrix.t[0] = *(s16 *)(positionCursor + 0x3E) +
-                                           *(s8 *)(workState + 0x0B);
-                stack.primaryMatrix.t[1] = *(s16 *)(positionCursor + 0x42) +
-                                           *(s8 *)(workState + 0x0C);
-                stack.primaryMatrix.t[2] = *(s16 *)(positionCursor + 0x46) +
-                                           *(s8 *)(workState + 0x0D);
+                stack.primaryMatrix.t[0] = (((RoomDebrisTriplet *)positionCursor)->position[0].x >> 16) +
+                                           ((RoomDebrisTriplet *)workState)->jitter[0];
+                stack.primaryMatrix.t[1] = (((RoomDebrisTriplet *)positionCursor)->position[0].y >> 16) +
+                                           ((RoomDebrisTriplet *)workState)->jitter[1];
+                stack.primaryMatrix.t[2] = (((RoomDebrisTriplet *)positionCursor)->position[0].z >> 16) +
+                                           ((RoomDebrisTriplet *)workState)->jitter[2];
                 arg0 = (unsigned char *)&RoomLib_ThreeParticlePacket;
                 func_800C42A4(arg0, &stack.primaryMatrix, 1);
 
                 RotMatrix(&stack.seed.vector, secondaryMatrix);
                 func_80071A44(&stack.sourceFloorScale, 0, 0x10);
-                stack.sourceFloorScale.x = *(u16 *)(shortCursor + 0x2A);
-                stack.sourceFloorScale.y = *(u16 *)(shortCursor + 0x2A);
-                stack.sourceFloorScale.z = *(u16 *)(shortCursor + 0x2A);
+                stack.sourceFloorScale.x = ((RoomDebrisTriplet *)shortCursor)->swing[0];
+                stack.sourceFloorScale.y = ((RoomDebrisTriplet *)shortCursor)->swing[0];
+                stack.sourceFloorScale.z = ((RoomDebrisTriplet *)shortCursor)->swing[0];
                 stack.floorScale = stack.sourceFloorScale;
                 ScaleMatrix(secondaryMatrix, &stack.floorScale);
-                computedScale = *(s16 *)(positionCursor + 0x3E);
+                computedScale = (((RoomDebrisTriplet *)positionCursor)->position[0].x >> 16);
                 baseScale = g_RoomFloorY->y;
                                 arg0 = (void *)0x20;
                 stack.secondaryMatrix.t[0] = computedScale;
                 stack.secondaryMatrix.t[1] = baseScale;
-                computedScale = *(s16 *)(positionCursor + 0x46);
+                computedScale = (((RoomDebrisTriplet *)positionCursor)->position[0].z >> 16);
                 asm volatile("" : "=r"(computedScale)
                     : "0"(computedScale));
                 inputArg = (void *)0x20;
                 asm("" : "=r"(inputArg) : "0"(inputArg));
                 stack.secondaryMatrix.t[2] = computedScale;
-                computedScale = *(u8 *)(element + 0x1E);
+                computedScale = ((RoomDebrisTriplet *)element)->size[0];
                 scaleValue = (int)&RoomLib_ThreeParticleFloorPacket.depth;
                 *(s16 *)scaleValue = (unsigned int)computedScale >> 1;
                 func_800C2FF0((int)arg0, (int)inputArg);
@@ -386,40 +388,6 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
         shortCursor += 2;
     } while (i < 3);
 }
-
-/* 16.16 fixed-point position; the integer halves are read as `>> 16`,
- * which the compiler narrows to halfword loads as retail does. */
-typedef struct RoomDebrisPosition {
-    s32 x, y, z;
-    s32 reserved0C;
-} RoomDebrisPosition;
-
-typedef struct RoomDebrisVelocity {
-    s16 x, y, z, reserved06;
-} RoomDebrisVelocity;
-
-/* Three pieces of debris that fall, bounce on the floor, and fade. */
-typedef struct RoomDebrisTriplet {
-    s16 remaining;                /* 0x00 */
-    s16 speed;                    /* 0x02 */
-    s16 acceleration;             /* 0x04 */
-    s16 swingLimit;               /* 0x06 */
-    s16 reserved08;
-    u8 keepAlive;                 /* 0x0A */
-    s8 jitter[3];                 /* 0x0B */
-    u8 mode[4];                   /* 0x0E */
-    u8 landed[4];                 /* 0x12 */
-    s8 active[4];                 /* 0x16 */
-    s8 countdown[4];              /* 0x1A */
-    u8 size[4];                   /* 0x1E */
-    u16 life[4];                  /* 0x22 */
-    u16 swing[4];                 /* 0x2A */
-    u16 phase[4];                 /* 0x32 */
-    s16 reserved3A;
-    RoomDebrisPosition position[4]; /* 0x3C */
-    RoomDebrisVelocity reserved7C[4];
-    RoomDebrisVelocity velocity[4]; /* 0x9C */
-} RoomDebrisTriplet;
 
 typedef struct RoomDebrisOwner {
     u8 reserved00;
