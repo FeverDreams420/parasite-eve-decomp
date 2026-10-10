@@ -92,5 +92,6 @@ PE1_STATIC_ASSERT(sizeof(RoomM350TableShadeEntry) == 4,
 extern unsigned char D_8019A86E;
 extern unsigned char D_8019A82E;
 extern unsigned char D_8019A830;
+extern short D_8019A82A[];
 
 #endif /* ROOM_M350_SHARED_H */

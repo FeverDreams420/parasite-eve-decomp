@@ -20,7 +20,6 @@ typedef FieldActorState Owner;
 typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
 extern Instance *g_PlayerEntity;
-extern short D_8019A82A[];
 extern unsigned char D_8019A831, D_8019A82F;
 extern short D_800966EC[],D_800966EE[];
 extern Matrix D_8019A808;
@@ -46,7 +45,7 @@ case 0:
         func_800C6D5C(state->asset,0,0);
         state->size=0;
         {
-            int yaw=D_8019A82A[0];
+            int yaw=((short )D_8019A82A[0]);
             state->initialized=0;
             state->yaw=yaw<<8;
         }
