@@ -32,21 +32,12 @@ static const RoomOverlay024MatrixSeed8 s_EffectProjectSeed = {{0x00, 0x00, 0x10,
 static const RoomOverlay024VectorSeed s_EffectVectorSeed = {{0x1388, 0xC18, 0x1388, 0}};
 
 /* Class slot 3: registers the draw list. */
-int RoomFx_EffectSequenceRegister(void *o) {
-    FieldEng_Register(o, g_RoomDrawList);
-    return 0;
-}
+ROOMLIB_REGISTER_TABLE_ANY(RoomFx_EffectSequenceRegister, g_RoomDrawList)
 
 /* Class slot 4: registers the update handlers and spawns the module's
  * objects, closing the module when either call fails. */
-int RoomFx_EffectSequenceStart(void *o) {
-    if ((func_800C251C(o, g_RoomUpdateList) |
-         func_800C2758(o, g_RoomInitList, g_RoomSpawnLayout)) == -1) {
-        RoomFx_EffectSequenceNop5(o);
-    }
-
-    return 0;
-}
+ROOMLIB_START_ANY(RoomFx_EffectSequenceStart, g_RoomUpdateList, g_RoomInitList,
+                  g_RoomSpawnLayout, RoomFx_EffectSequenceNop5)
 
 /* Class slot 5: the module closes without touching its target. */
 s32 RoomFx_EffectSequenceNop5(void *o) {
