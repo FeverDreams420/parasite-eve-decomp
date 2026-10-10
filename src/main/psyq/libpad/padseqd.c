@@ -44,7 +44,7 @@ int func_80084B78(CardObj *obj) {
         goto high_state;
     }
     if (state == 0) {
-        goto done;
+        return 0;
     }
     goto dispatch;
 
@@ -55,19 +55,19 @@ high_state:
     }
     compare = 0xFF;
     if (state == compare) {
-        goto done;
+        return 0;
     }
     goto dispatch;
 
 emit_one:
     asm volatile("" : : "r"(compare));
     _padCmdParaMode(obj, 1);
-    goto done;
+    return 0;
 
 emit_zero:
     asm volatile("" : : "r"(compare));
     _padCmdParaMode(obj, 0);
-    goto done;
+    return 0;
 
 dispatch:
     if (obj->fn_14 != 0) {
@@ -133,7 +133,9 @@ void LIBPAD_PADSEQD_text_108(CardObj *port) {
             return;
         value = port->field_46;
         port->communicationState = one;
-        goto increment;
+        value++;
+        port->field_46 = value;
+        return;
     initial:
         value = port->field_46;
         port->infoRecordIndex = 0;

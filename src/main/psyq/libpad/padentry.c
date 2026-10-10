@@ -75,7 +75,7 @@ int PadInfoMode(int channel, int mode, int index) {
         if (index < obj->modeCount) {
             return obj->modeTable[index];
         }
-        goto late_fail;
+        break;
     case 100:
         return obj->field_4c;
     default:

@@ -309,7 +309,7 @@ s32 _padSioRW(CardObj *inObj, s32 inByte) {
         result = ~outgoing;
         D_8009B788->data = result;
         result = replyByte;
-        goto done;
+        return result;
     }
     {
         register int expected;
@@ -349,7 +349,7 @@ s32 _padSioRW(CardObj *inObj, s32 inByte) {
         waitAcknowledge:
             if (chkRC2wait() != 0) {
                 result = -20;
-                goto done;
+                return result;
             }
             {
                 if (D_8009B784->status & 0x80) {

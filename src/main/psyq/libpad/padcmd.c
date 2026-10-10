@@ -205,7 +205,7 @@ int LIBPAD_PADCMD_text_3A0(CardObj *inPort) {
         port->infoRecordIndex++;
         if (port->infoRecordIndex >= port->modeCount) {
             port->infoRecordIndex = 0;
-            goto complete;
+            break;
         }
         return 0;
     case 3: {
@@ -223,7 +223,7 @@ int LIBPAD_PADCMD_text_3A0(CardObj *inPort) {
         if (port->infoRecordIndex >= port->actuatorCount) {
             port->infoRecordIndex = 0;
             port->combinationBytesRemaining = 0;
-            goto complete;
+            break;
         }
         return 0;
     }
