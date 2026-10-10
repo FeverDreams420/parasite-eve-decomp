@@ -490,7 +490,7 @@ segments:
       - [0x42CD0, c, menu/Menu_SoundsAndBattleQueries]
       - [0x42F0C, c, akao/Akao_SetBgmVolumeFade]
       - [0x42F64, c, menu/Menu_ActionSubmenuSelection]
-      - [0x4308C, c, time/game_time]
+      - [0x4308C, c, time/GameTime_CounterSeconds]
       # Item-drop random table seeding and per-draw refresh share g_ItemDropRngIndex.
       - [0x430F0, c, item/Inv_DropRng]
       # Byte-string helpers, item grid rebuild and active-list selection share the
