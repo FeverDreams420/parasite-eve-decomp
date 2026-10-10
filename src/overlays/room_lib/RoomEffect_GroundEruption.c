@@ -351,26 +351,6 @@ void RoomEffect_GroundEruptionUpdateGlow(void *unused, char *state,
     }
 }
 
-typedef struct RoomEruptionRingDirection {
-    s16 x;
-    s16 pad02;
-    s16 z;
-    s16 pad06;
-} RoomEruptionRingDirection;
-
-/* The shock ring: sixteen points around the owner, each moving outwards
- * along its own direction. */
-typedef struct RoomEruptionRing {
-    GteShortVector point[16];
-    RoomEruptionRingDirection direction[16];
-    s16 radius;
-    s16 height;
-    u8 frame;
-    u8 phase;
-    s16 speed;
-    s16 acceleration;
-} RoomEruptionRing;
-
 void RoomEffect_GroundEruptionInitRing(void *arg0, void *arg1,
                                        RoomEruptionRing *ring) {
     RoomEruptionActor *owner;
@@ -388,7 +368,7 @@ void RoomEffect_GroundEruptionInitRing(void *arg0, void *arg1,
         ring->direction[i].z = rcos(angle);
     }
 
-    ring->height = 0x80;
+    ring->depth = 0x80;
     ring->radius = 0x400;
     ring->acceleration = -0x3C;
     ring->phase = 0;
@@ -397,7 +377,7 @@ void RoomEffect_GroundEruptionInitRing(void *arg0, void *arg1,
 
 /* Draws the ring's centre sprite, then each point twice: in the air and
  * as its shadow on the floor. */
-void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, char *state) {
+void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, RoomEruptionRing *state) {
     RoomSpriteMatrix matrix;
     RoomFxVec4 scale1;
     RoomFxVec4 scale2;
@@ -407,7 +387,7 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, char *state) {
     register GteShortVector *point asm("$18");
     s16 *packetDepth;
     RoomFxSpritePacket *packet;
-    char *workState;
+    RoomEruptionRing *workState;
     register char *packetTemp asm("$3");
     int ownerZ;
     u8 code;
@@ -423,7 +403,7 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, char *state) {
     packet = (RoomFxSpritePacket *)packetTemp;
     owner = rawOwner;
     PE1_COMPILER_USE(owner);
-    point = (GteShortVector *)workState;
+    point = workState->point;
     func_800C2EAC(owner[0x24]);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
@@ -448,7 +428,7 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, char *state) {
     ownerZ = *(int *)(owner + 0x20);
     packet->depth = 0x40;
     matrix.t[2] = ownerZ;
-    g_RoomEruptionRingPacket.code = *(u8 *)(workState + 0x104) * 2 + 0x20;
+    g_RoomEruptionRingPacket.code = workState->frame * 2 + 0x20;
     func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
 
     matrix.m[2][2] = 0x1000;
@@ -470,8 +450,8 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, char *state) {
         matrix.t[0] = point->x;
         matrix.t[1] = point->y;
         matrix.t[2] = point->z;
-        *packetDepth = *(u16 *)(workState + 0x102);
-        code = *(u8 *)(workState + 0x104);
+        *packetDepth = (u16)workState->depth;
+        code = workState->frame;
         asm("" : "=r"(i) : "0"(i), "r"(code));
         i++;
         *((u8 *)packetDepth - 6) = code * 2 + 0x20;
@@ -479,8 +459,8 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, char *state) {
         matrix.t[0] = point->x;
         matrix.t[1] = g_RoomFloorY->y;
         matrix.t[2] = point->z;
-        *packetDepth = (s16)*(u16 *)(workState + 0x102) >> 2;
-        code = *(u8 *)(workState + 0x104);
+        *packetDepth = workState->depth >> 2;
+        code = workState->frame;
         point++;
         *((u8 *)packetDepth - 6) = code * 2 + 0x20;
         func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
@@ -489,31 +469,31 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, char *state) {
 
 /* Spreads the ring and fades it out over seven steps. */
 void RoomEffect_GroundEruptionUpdateRing(void *arg0, unsigned char *signal,
-                                         char *rec) {
+                                         RoomEruptionRing *rec) {
     unsigned int i;
-    RoomFxTrajectoryParticle *cur;
+    GteShortVector *cur;
     unsigned char phase;
     int delta;
 
-    *(unsigned short *)(rec + 0x106) += *(unsigned short *)(rec + 0x108);
-    if (*(short *)(rec + 0x102) >= 0x11) {
-        *(unsigned short *)(rec + 0x102) -= 0x10;
+    rec->speed += rec->acceleration;
+    if (rec->depth >= 0x11) {
+        rec->depth -= 0x10;
     }
 
     for (i = 0; i < 0x10; i++) {
-        cur = (RoomFxTrajectoryParticle *)(rec + (i * sizeof(RoomFxTrajectoryParticle)));
-        delta = (*(short *)((char *)cur + 0x80) * *(short *)(rec + 0x106)) >> 16;
+        cur = &rec->point[i];
+        delta = (rec->direction[i].x * rec->speed) >> 16;
         cur->y += 8;
         cur->x += delta;
-        delta = (*(short *)((char *)cur + 0x84) * *(short *)(rec + 0x106)) >> 16;
+        delta = (rec->direction[i].z * rec->speed) >> 16;
         cur->z += delta;
     }
 
-    phase = *(unsigned char *)(rec + 0x105) + 6;
-    *(unsigned char *)(rec + 0x105) = phase;
-    *(unsigned char *)(rec + 0x104) = (phase >> 4) + 1;
+    phase = rec->phase + 6;
+    rec->phase = phase;
+    rec->frame = (phase >> 4) + 1;
     if ((phase >> 4) == 7) {
-        *(unsigned char *)(rec + 0x104) = 0;
+        rec->frame = 0;
         signal[1] = 2;
     }
 }

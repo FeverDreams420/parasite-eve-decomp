@@ -26,6 +26,33 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomEruptionDebrisState, gravityStep) == 0x60,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomEruptionDebrisState, visible) == 0x78,
                   room_eruption_debris_visible_offset);
 
+typedef struct RoomEruptionRingDirection {
+    s16 x;
+    s16 pad02;
+    s16 z;
+    s16 pad06;
+} RoomEruptionRingDirection;
+
+/* The shock ring: sixteen points around the owner, each moving outwards
+ * along its own direction. */
+typedef struct RoomEruptionRing {
+    GteShortVector point[16];
+    RoomEruptionRingDirection direction[16];
+    s16 radius;
+    s16 depth;
+    u8 frame;
+    u8 phase;
+    s16 speed;
+    s16 acceleration;
+} RoomEruptionRing;
+
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomEruptionRing, direction) == 0x80,
+                  room_eruption_ring_direction_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomEruptionRing, depth) == 0x102,
+                  room_eruption_ring_depth_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomEruptionRing, frame) == 0x104,
+                  room_eruption_ring_frame_offset);
+
 /* Per-room data: the four sprite packets the eruption draws with, named in
  * each overlay's symbol file. The glow is the flash at the owner's feet,
  * the debris the six flung particles, the shadow the floor sprite under
