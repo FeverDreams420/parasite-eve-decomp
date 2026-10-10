@@ -47,7 +47,7 @@ void Menu_DrawActionOptionRow(int arg0) {
     MenuWidget_DrawCenteredTableText(g_MenuActionTextBase + arg0);
 }
 
-void Menu_SoundTestSelect(void)
+void Menu_SoundTestSelect(int index)
 {
     int selected;
     int value;

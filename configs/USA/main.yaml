@@ -460,12 +460,9 @@ segments:
       # Item use panel creation, input and name header: helper calls join the pair.
       - [0x3FC90, c, menu/Menu_ItemUsePanel]
       - [0x3FFD8, c, menu/Menu_EquipItemIcon]
-      # The item, selectable-slot, and context-action renderers share one
-      # -G8 list-drawing object and its active-widget state.
+      # Item, equip-slot, context-action, action-option and action-code list
+      # renderers share the active widget and item list state.
       - [0x40038, c, menu/Menu_DrawListRenderers]
-      # Action-option and sound-test list adapters share one object.
-      - [0x40150, c, menu/Menu_DrawOptionListAdapters]
-      - [0x401A0, c, menu/Menu_ActionSubmenus]
       - [0x40348, c, menu/Menu_DrawEquipSelectionList]
       # Item-slot availability, modifier, armor and memory-card port list draws and
       # the port and save-slot selectability filters: contiguous list callbacks.
