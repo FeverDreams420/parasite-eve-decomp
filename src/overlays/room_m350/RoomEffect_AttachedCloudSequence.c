@@ -14,7 +14,8 @@ int func_80198860(int event,RoomM350CloudParticle *particle)
         int timer=D_800E27EC;
         int shade;
         int size;
-        register int product asm("$2");
+        int product;
+        int tripledProduct;
         if(timer>=8) return 1;
         shade=((TrigEntry *)((char *)D_800966EE-2+(((unsigned int)timer*3<<8)&0x3F00)))->high >> 5;
         particle->state.value.active.secondShade=128-((unsigned int)timer<<4);
@@ -23,9 +24,9 @@ int func_80198860(int event,RoomM350CloudParticle *particle)
         product=*(short *)((char *)D_800966EC+(((unsigned int)timer<<9)&0x3E00))*size;
         {
             int twice=(unsigned int)product<<1;
-            product=(unsigned int)twice+(unsigned int)product;
+            tripledProduct=(unsigned int)twice+(unsigned int)product;
         }
-        particle->state.value.active.animatedSize=product/4096;
+        particle->state.value.active.animatedSize=tripledProduct/4096;
     } else if(event==2) {
         GteShortVector world;
         /* Match note: original purpose of unused sp+0x30..0x37 is unknown. */
@@ -77,7 +78,8 @@ update:
         int i;
         if(D_8019A8BE) return 2;
         for(i=0;i<2;i++) {
-            register int random asm("$16");
+            int firstRandom;
+            int combinedRandom;
             int divisor;
             RoomM350CloudParticle *particle=func_800CE610(D_800F33E0->pool);
             if(!particle) return 0;
@@ -88,10 +90,10 @@ update:
             asm volatile("" : : "i"(&&offset_start));
 offset_start:
             vector.x=0; vector.y=0;
-            random=Inv_ScrambleGrid();
-            random=((unsigned int)random<<8)|(unsigned int)Inv_ScrambleGrid();
+            firstRandom=Inv_ScrambleGrid();
+            combinedRandom=((unsigned int)firstRandom<<8)|(unsigned int)Inv_ScrambleGrid();
             divisor=128;
-            vector.z=random%divisor;
+            vector.z=combinedRandom%divisor;
             ApplyMatrixSV(&matrix,&vector,(GteShortVector *)particle->position);
             particle->position[1]=(unsigned short)particle->position[1]*2+128;
             particle->size=((unsigned int)Inv_ScrambleGrid()<<4)+4096;
