@@ -1,11 +1,11 @@
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "common.h"
 #include "pe1/inventory.h"
 #include "pe1/menu_equipment.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/psyq_nop.h"
 #include "pe1/menu_sound.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
 
 #define NULL ((void *)0)
 
@@ -13,11 +13,13 @@
 
 void MenuWidget_NavScrollTo(s32 selected_base);
 
-extern s32 g_MenuEquipSwapSource;
+/* Equipment swap: picking the Aya inventory item to exchange records the
+ * swap source; returning from the equip screen reopens the inventory. */
+
+int g_MenuEquipSwapSource;
+int g_MenuSwapReturnPending;
 extern s32 D_8009CF9C;
 extern s16 g_AyaInventoryItems[];
-
-s32 Menu_HandleAyaInventorySelectionInput(s32 arg0, s32 arg1);
 
 s32 Menu_HandleAyaInventorySelectionInput(s32 arg0, s32 arg1)
 {
@@ -52,4 +54,17 @@ s32 Menu_HandleAyaInventorySelectionInput(s32 arg0, s32 arg1)
         Menu_PlayCancelSound();
     }
     return 1;
+}
+
+void Menu_SetSwapReturnFlag(void) {
+    if (g_MenuEquipSwapSource != 0) {
+        g_MenuSwapReturnPending = 1;
+    }
+}
+
+void Menu_ProcessSwapReturnIfPending(void) {
+    if (g_MenuSwapReturnPending != 0) {
+        Menu_OpenInventoryScreen();
+        g_MenuSwapReturnPending = 0;
+    }
 }
