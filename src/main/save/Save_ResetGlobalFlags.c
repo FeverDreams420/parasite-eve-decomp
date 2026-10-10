@@ -1,5 +1,7 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 
+#include "pe1/menu_flags.h"
+
 unsigned char g_BattleActionQueueCount;
 unsigned char g_BattleActionIndex;
 unsigned char g_BattleRemainingActions;

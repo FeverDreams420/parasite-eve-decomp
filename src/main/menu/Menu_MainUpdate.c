@@ -5,6 +5,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/akao.h"
 #include "pe1/entity_animation.h"
+#include "pe1/menu_flags.h"
 
 /* CC1_FLAGS: -g3 -G1 */
 /* MASPSX_FLAGS: --expand-div -G1 */
@@ -31,7 +32,6 @@ extern s32 draw_slot_status0 __asm__("D_8009CDDC");
 extern s32 draw_slot_status1 __asm__("D_8009CDDC");
 extern s32 draw_slot_status2 __asm__("D_8009CDDC");
 extern s8 D_8009CE30;
-extern s8 D_8009CE34;
 extern s32 D_8009D1A0;
 extern s32 D_8009D1AC;
 extern s8 D_8009D1CE[];

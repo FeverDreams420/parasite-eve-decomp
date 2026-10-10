@@ -4,6 +4,7 @@
 #include "pe1/textbox_open.h"
 #include "pe1/textbox.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/menu_flags.h"
 
 /* Each textbox entry is 0x38 bytes; preserve the retail field addresses. */
 extern u8 D_800BCEA8[];
@@ -289,7 +290,6 @@ extern TextboxNameGlyphs D_80091694;
 extern TextboxGlyphSpacing D_800916A0[256];
 
 extern s32 D_8009CDDC[];
-extern u8 D_8009CE94;
 /* Tentative small-data definition: stock maspsx must recognize this store
  * as GP-relative to retain its load-delay nop. The linker pins the COMMON
  * symbol to the retail address, as for other unplaced game globals. */

@@ -4,12 +4,12 @@
 #include "common.h"
 #include "pe1/battle_runtime.h"
 #include "pe1/inventory.h"
+#include "pe1/menu_flags.h"
 
 void Battle_ApplyDamage(s32);
 void Battle_SubActionStep(void);
 s32 Inv_CountByValue(s32);
 extern s32 D_8009CDDC;
-extern u8 D_8009CE34;
 extern u16 D_8009D228;
 
 void Entity_UpdateTimers(void) {

@@ -4,9 +4,8 @@
 #include "pe1/akao/init_state.h"
 #include "pe1/akao/voice_masks.h"
 #include "pe1/psyq_bios.h"
+#include "pe1/akao_counters.h"
 
-extern int D_8009D240;
-extern int D_8009D260;
 extern char D_8009B81C[0x40];
 int StopRCnt(unsigned int);
 int UnDeliverEvent(unsigned int, int);
@@ -301,8 +300,8 @@ void Spu_InitHardware(void) {
 }
 
 void Spu_SetSampleTableBase(int arg0) {
-    D_8009D240 = arg0;
-    D_8009D260 = arg0 + 0x800;
+    D_8009D240 = (unsigned short *)arg0;
+    D_8009D260 = (char *)(arg0 + 0x800);
 }
 
 void Spu_Shutdown(void) {

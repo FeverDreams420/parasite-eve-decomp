@@ -1,0 +1,19 @@
+#ifndef PE1_AKAO_COUNTERS_H
+#define PE1_AKAO_COUNTERS_H
+
+/* Sequencer-wide slide values and SPU sample-table pointers shared by the
+ * AKAO command handlers and the four-tick slide step. */
+
+/* 16.16 slide accumulators stepped by SPU_StepReverbLoad. */
+extern int D_8009D2B4;
+extern int D_8009D2CC;
+extern int D_8009D2D0;
+
+/* Sample offset table and sample data base set by the voice-bank loader. */
+extern unsigned short *D_8009D240;
+extern char *D_8009D260;
+
+/* BGM volume fade queued by the menu and sent with Akao_Cmd_21. */
+extern int g_AkaoPendingBgmVolumeFade;
+
+#endif

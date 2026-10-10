@@ -8,6 +8,7 @@
 #include "pe1/akao/tick.h"
 #include "pe1/akao/seq_param.h"
 #include "m2c_macros.h"
+#include "pe1/akao_counters.h"
 
 typedef unsigned short u16_1;
 extern AkaoTrack D_800BC000_tracks[] asm("D_800BC000");
@@ -647,8 +648,6 @@ exhausted:
     Seq_MarkTrack38MaskDirty();
     Seq_MarkTrack3CMaskDirty();
 }
-extern u16 *D_8009D240;
-extern char *D_8009D260;
 
 void func_8008AB1C(int *out0, int *out1, int sample_id) {
     u32 index;
@@ -957,7 +956,6 @@ void Spu_ManageVoices(int arg0, int arg1);
 void Seq_MarkDirtyTracks(char *arg0);
 
 extern short g_AkaoGlobalPitchSlideCounter;
-extern int D_8009D2B4;
 
 void Seq_ApplyGlobalPitch(void);
 
@@ -1137,7 +1135,6 @@ void Seq_SetGlobalPitchImmediate(void *arg0) {
 
 extern short g_AkaoGlobalPitchSlideCounter;
 extern int g_AkaoGlobalPitchSlideStep;
-extern int D_8009D2B4;
 
 extern u32 g_SpuActiveVoiceMask;
 
@@ -1712,7 +1709,6 @@ extern char D_800BC070[];
 extern u32 g_SpuActiveVoiceMask;
 
 extern short g_AkaoGlobalD2D0SlideCounter;
-extern int D_8009D2D0;
 
 void Spu_SlideAllVoicePitch(int *arg0) {
     u32 mask;
@@ -1757,10 +1753,8 @@ void Akao_SetGlobalD2D0Immediate(AkaoGlobalParamCommand *cmd) {
 
 extern short g_AkaoGlobalD2D0SlideCounter;
 extern int g_AkaoGlobalD2D0SlideStep;
-extern int D_8009D2D0;
 
 extern short g_AkaoGlobalD2CCSlideCounter;
-extern int D_8009D2CC;
 
 void Akao_SlideGlobalD2D0ToTarget(AkaoGlobalSlideCommand *cmd) {
     int raw_duration = cmd->duration;
@@ -1804,7 +1798,6 @@ void Akao_SetGlobalD2CCImmediate(AkaoGlobalParamCommand *cmd) {
 
 extern short g_AkaoGlobalD2CCSlideCounter;
 extern int g_AkaoGlobalD2CCSlideStep;
-extern int D_8009D2CC;
 
 void Akao_InitVoices(int arg0, char *arg1);
 

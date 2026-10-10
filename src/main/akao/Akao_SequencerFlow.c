@@ -7,6 +7,7 @@
 #include "pe1/akao.h"
 #include "pe1/akao/note_step.h"
 #include "pe1/akao_script.h"
+#include "pe1/akao_counters.h"
 
 extern unsigned short D_8009D2B6;
 /* These field aliases keep the retail absolute stores byte-identical. */
@@ -40,8 +41,8 @@ void Util_CopyWords(unsigned int *src, unsigned int *dst, unsigned int size)
 }
 extern u16 D_8009CDEC;
 extern s16 D_8009D2A2, D_8009D220, D_8009D21E;
-extern u32 D_8009D2B4, D_8009D284, D_8009D2D0, D_8009D214;
-extern u32 D_8009D2CC, D_8009D210, D_800BCD50;
+extern u32 D_8009D284, D_8009D214;
+extern u32 D_8009D210, D_800BCD50;
 /* These aliases share storage with AkaoTickBank/AkaoTickTrack in tick.h. */
 extern AkaoSequencerBank *volatile D_8009D2C8_Spu asm("D_8009D2C8");
 extern AkaoTrack D_800B8AC0_Spu[] asm("D_800B8AC0");

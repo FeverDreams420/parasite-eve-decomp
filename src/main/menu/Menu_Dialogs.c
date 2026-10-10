@@ -12,6 +12,7 @@
 #include "pe1/menu_sound.h"
 #include "pe1/menu_widget.h"
 #include "pe1/text.h"
+#include "pe1/menu_flags.h"
 
 /* Parasite-spell info and context help panels, notification and two-line
  * dialogs, the deferred confirm callback they run, and the memory-card port
@@ -28,8 +29,8 @@ s32 Menu_MemCardPortSelectHandler(void *node, s32 flags);
 int Menu_IsMemCardSlotSelectable(int arg0);
 void Menu_DrawMemCardPortList(int arg0);
 
-unsigned int g_McDialogMode;
-unsigned int g_MenuMemCardConfirmPending;
+int g_McDialogMode;
+int g_MenuMemCardConfirmPending;
 int D_8009CFF4;
 
 void Menu_DrawParasiteSpellInfoPanel(void);

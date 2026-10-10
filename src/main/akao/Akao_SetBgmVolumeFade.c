@@ -1,8 +1,9 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
+#include "pe1/akao_counters.h"
+
 extern void * g_AkaoBgmHandle[];
-extern int g_AkaoPendingBgmVolumeFade;
 int Akao_SendTableCommand(void *arg0, int arg1, int arg2, int arg3, int arg4);
 
 void Akao_SetBgmVolumeFade(void) {

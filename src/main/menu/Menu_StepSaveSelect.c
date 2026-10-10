@@ -6,6 +6,7 @@
 #include "pe1/menu_notification_dialog.h"
 #include "pe1/menu_sound.h"
 #include "pe1/text.h"
+#include "pe1/menu_flags.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --dont-expand-li */
 /* ASPSX_VERSION: 2.21 */
@@ -20,9 +21,7 @@ extern s32 g_MenuActionTextBase;
 extern s32 g_SaveSelectedSlot;
 extern s32 g_SaveSlotCellIndex;
 extern s32 D_8009CF4C;
-extern s32 g_McDialogMode;
 extern s32 g_MenuItemPrimListHandles;
-extern s32 g_MenuMemCardConfirmPending;
 extern struct { char _[16]; } D_800A1980_o __asm__("g_MenuItemLabelBuffer");
 #define g_MenuItemLabelBuffer (*(u8 *)&D_800A1980_o)
 extern struct { char _[16]; } Menu_DrawItemLabel_o __asm__("Menu_DrawItemLabel");
