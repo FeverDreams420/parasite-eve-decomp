@@ -13,6 +13,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_owner_actor.h"
+#include "pe1/field_anim_pool.h"
 
 /* Flare effects: a controller that orbits an anchor read from the scene
  * object and sheds drift particles, and a dropped flare particle that falls,
@@ -114,7 +115,6 @@ PE1_STATIC_ASSERT(sizeof(RoomOrbitFlareState) == 0x14, room_orbit_flare_state_si
 PE1_STATIC_ASSERT(sizeof(RoomDroppedFlare) == 0x14, room_dropped_flare_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomFlareAnchor, x) == 0x268, room_flare_anchor_x);
 
-extern RoomFlareChannel *D_800F32D0, *D_800F33E0;
 extern RoomFlareEventState *D_800E2368;
 extern RoomFlareBattleEntity *D_8009D254;
 extern RoomFlareTextureSlot D_800E11E8;

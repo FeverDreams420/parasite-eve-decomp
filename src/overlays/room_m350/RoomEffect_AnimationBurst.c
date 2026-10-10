@@ -1,6 +1,7 @@
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/field_anim_pool.h"
 typedef RoomM350TableShadeEntry TableEntry;
 typedef RoomM350SoundOwner Owner;
 typedef struct {
@@ -17,8 +18,6 @@ typedef struct { int reserved[2]; Animation *animation; } Actor;
 typedef struct { short remaining, delay; } State;
 
 extern int D_800966EC[], D_8019A3C8[], D_8019A4DC[], D_8019A4E0[];
-extern Actor *D_800F32D0;
-extern RoomM350Emitter *D_800F33E0;
 extern short D_8019A7A0[];
 extern int Asset_Find08w(int, int, short, short, short);
 
@@ -58,11 +57,11 @@ int func_80194654(int event, State *state)
     switch (event) {
     case 0:
         state->remaining = 0;
-        return func_800CE560(D_800F33E0->pool, 4, 4,
+        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 4, 4,
                              (FieldAnimCallbackListCallback)func_801944F0);
     case 1:
         {
-            Animation *animation = D_800F32D0->animation;
+            Animation *animation = ANIM_OWNER_AS(Actor)->animation;
             if (animation->id == 13) {
                 int frame = animation->frame;
                 if (frame >= 26) {
@@ -77,14 +76,14 @@ int func_80194654(int event, State *state)
                 }
             }
             if (state->remaining != 0 && state->delay-- <= 0) {
-                short **effect = func_800CE610(D_800F33E0->pool);
+                short **effect = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
                 if (effect == 0) {
                     return 0;
                 }
                 *effect = D_8019A7A0;
                 state->delay = 1;
                 state->remaining--;
-                Asset_Find08w(1479, D_800F32D0->animation->owner->soundMode,
+                Asset_Find08w(1479, ANIM_OWNER_AS(Actor)->animation->owner->soundMode,
                     (*effect)[0], (*effect)[1], (*effect)[2]);
             }
         }

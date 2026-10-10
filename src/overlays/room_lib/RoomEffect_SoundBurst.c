@@ -40,7 +40,7 @@ int RoomEffect_SoundBurstParticle(int mode, RoomSoundBurstParticle *particle,
                       0);
         if (func_800C6B90(world, 100) != 0) {
             if (D_800E2368->active) {
-                RoomSoundBurstChannel *channel = D_800F32D0;
+                RoomSoundBurstChannel *channel = ANIM_OWNER_AS(RoomSoundBurstChannel);
                 u32 *entry;
                 if ((**(u32 **)channel->pool & 0x3F000000) == 0x01000000) {
                     D_8009D254->actor->flags |= 0x4000;
@@ -93,20 +93,20 @@ int RoomEffect_SoundBurstController(int mode, RoomSoundBurstState *state) {
     switch (mode) {
     case 0:
         state->soundHandle = func_800D3F64(0x5A1, func_800D3FD8());
-        pool = D_800F33E0->pool;
+        pool = ANIM_POOL_AS(RoomSoundBurstChannel)->pool;
         return func_800CE560(pool, 24, 24,
                              (FieldAnimCallbackListCallback)RoomEffect_SoundBurstParticle);
     case 1:
         state->frame++;
         if (D_800E27EC < 0x47) {
-            pool = D_800F32D0->pool;
+            pool = ANIM_OWNER_AS(RoomSoundBurstChannel)->pool;
             func_800CE8F0(pool, 9, &template, position);
             angle = rsin((D_800E27EC << 11) / 70) / 32;
             if (D_800E27EC % 3 == 0) {
-                pool = D_800F33E0->pool;
+                pool = ANIM_POOL_AS(RoomSoundBurstChannel)->pool;
                 child = func_800CE610(pool);
                 if (child) {
-                    pool = D_800F32D0->pool;
+                    pool = ANIM_OWNER_AS(RoomSoundBurstChannel)->pool;
                     func_800CE9D4((struct RoomFxTransformOwner *)pool, 0,
                                   (GteShortVector *)target);
                     child->height = target[1];
@@ -121,7 +121,7 @@ int RoomEffect_SoundBurstController(int mode, RoomSoundBurstState *state) {
                 }
                 if (D_800E2368->active) {
                     RoomSoundBurstNode **slot =
-                        (RoomSoundBurstNode **)D_800F32D0->pool;
+                        (RoomSoundBurstNode **)ANIM_OWNER_AS(RoomSoundBurstChannel)->pool;
                     if (slot && *slot) {
                         u8 *flag = (*slot)->state;
                         if (*flag == 1) *flag = 2;

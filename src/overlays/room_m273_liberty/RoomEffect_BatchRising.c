@@ -33,7 +33,7 @@ int func_8019706C(int mode) {
     int stack_pad[2];
     switch(mode) {
     case 0:
-        return func_800CE560(D_800F33E0->pool,8,40,
+        return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,8,40,
                              (FieldAnimCallbackListCallback)func_80196F2C);
     case 1: {
         int i;
@@ -46,7 +46,7 @@ int func_8019706C(int mode) {
             x=batch->x;
             do {
                 int offset;
-                GteShortVector *out=func_800CE610(D_800F33E0->pool);
+                GteShortVector *out=func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
                 if(!out) break;
                 out->x=*x;
                 out->y=*y++-128;

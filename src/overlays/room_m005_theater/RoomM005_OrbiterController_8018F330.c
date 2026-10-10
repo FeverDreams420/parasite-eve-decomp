@@ -16,7 +16,7 @@ int func_8018F330(int mode, RoomM005OrbiterState *state) {
     case 0:
         state->armed = 0;
         state->frame = 0;
-        pool = D_800F33E0->pool;
+        pool = ANIM_POOL_AS(RoomM005Channel)->pool;
         return func_800CE560(pool, 16, 24,
                              (FieldAnimCallbackListCallback)RoomM005_FxOrbiter_8018F018);
     case 1:
@@ -32,9 +32,9 @@ int func_8018F330(int mode, RoomM005OrbiterState *state) {
             }
         }
         if (D_800E27EC < 25) {
-            pool = D_800F32D0->pool;
+            pool = ANIM_OWNER_AS(RoomM005Channel)->pool;
             func_800CE870(pool, 0, target);
-            pool = D_800F33E0->pool;
+            pool = ANIM_POOL_AS(RoomM005Channel)->pool;
             child = func_800CE610(pool);
             if (child) {
                 child->seed = func_80071A54();
@@ -54,9 +54,9 @@ int func_8018F330(int mode, RoomM005OrbiterState *state) {
         }
         break;
     case 2:
-        pool = D_800F32D0->pool;
+        pool = ANIM_OWNER_AS(RoomM005Channel)->pool;
         func_800CE870(pool, 0, (s16 *)D_80190B84);
-        pool = D_800F32D0->pool;
+        pool = ANIM_OWNER_AS(RoomM005Channel)->pool;
         func_800CE8F0(pool, 20, &seed, D_80190B8C);
         {
             int idx = D_800E11E8;

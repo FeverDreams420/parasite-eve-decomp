@@ -2,8 +2,8 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 
-extern RoomM350EffectActor *D_800F32D0;
 extern RenderColor D_8019A738, D_8019A734;
 extern int rsin(int);
 extern unsigned short GetClut(int, int);
@@ -27,7 +27,7 @@ int func_801996BC(int event, RoomM350SineParticle *object)
         func_800CEE20(&object->position, (GteRotation *)object->controls, object->size, object->size,
             128, handle, 1, object->brightness, 0);
         position.x = object->position.x;
-        position.y = D_800F32D0->instance->transform.t[1];
+        position.y = ANIM_OWNER_AS(RoomM350EffectActor)->instance->transform.t[1];
         position.z = object->position.z;
         texture.x = 1024;
         texture.y = D_800E27EC * 192;
@@ -40,7 +40,6 @@ int func_801996BC(int event, RoomM350SineParticle *object)
 }
 
 typedef struct { short count, delay; } EmissionState;
-extern RoomM350EffectEmitter *D_800F33E0;
 extern unsigned char D_8019A8C4;
 extern int Inv_ScrambleGrid(void);
 extern int rand(void);
@@ -52,7 +51,7 @@ int func_8019988C(int event, EmissionState *state)
 
         state->count = 0;
         state->delay = 0;
-        return func_800CE560(D_800F33E0->pool, 24, 8,
+        return func_800CE560(ANIM_POOL_AS(RoomM350EffectEmitter)->pool, 24, 8,
                              (FieldAnimCallbackListCallback)func_801996BC);
         case 1:
     if (state->count < 24) {
@@ -63,10 +62,10 @@ int func_8019988C(int event, EmissionState *state)
         register RoomM350EffectInstance *instance asm("$6");
         state->delay--;
         if (state->delay != -1) return 0;
-        effect = func_800CE610(D_800F33E0->pool);
+        effect = func_800CE610(ANIM_POOL_AS(RoomM350EffectEmitter)->pool);
         if (!effect) return 0;
         random = Inv_ScrambleGrid();
-        actor = D_800F32D0;
+        actor = ANIM_OWNER_AS(RoomM350EffectActor);
         instance = actor->instance;
         {
             register int byte asm("$4") = (unsigned char)random;

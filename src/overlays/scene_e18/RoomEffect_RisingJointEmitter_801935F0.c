@@ -8,7 +8,7 @@
 int func_801935F0(int mode, SceneE18EmitterState *state) {
     switch (mode) {
     case 0: {
-        SceneE18Instance *instance = D_800F32D0->instance;
+        SceneE18Instance *instance = ANIM_OWNER_AS(SceneE18Actor)->instance;
         GteMatrix *matrix = instance->transforms;
 
         func_8006DCE4(0x546, instance->owner->asset, (s16)matrix->t[0],
@@ -16,7 +16,7 @@ int func_801935F0(int mode, SceneE18EmitterState *state) {
         state->count = 0;
         state->delay = 60;
         D_801941D0 = 0;
-        return func_800CE560(D_800F33E0->pool, 12, 10,
+        return func_800CE560(ANIM_POOL_AS(SceneE18Emitter)->pool, 12, 10,
                              (FieldAnimCallbackListCallback)func_80193488);
     }
     case 1: {
@@ -32,13 +32,13 @@ int func_801935F0(int mode, SceneE18EmitterState *state) {
 
         if (D_801941D0) return 2;
         if (state->delay-- > 0) break;
-        particle = func_800CE610(D_800F33E0->pool);
+        particle = func_800CE610(ANIM_POOL_AS(SceneE18Emitter)->pool);
         if (particle == 0) break;
         count = state->count;
         particle->size = (count << 5) + 0x800;
-        particle->position.x = D_800F32D0->instance->transforms[func_80052B2C() % 38].t[0];
-        particle->position.y = D_800F32D0->instance->transforms[func_80052B2C() % 38].t[1];
-        particle->position.z = D_800F32D0->instance->transforms[func_80052B2C() % 38].t[2];
+        particle->position.x = ANIM_OWNER_AS(SceneE18Actor)->instance->transforms[func_80052B2C() % 38].t[0];
+        particle->position.y = ANIM_OWNER_AS(SceneE18Actor)->instance->transforms[func_80052B2C() % 38].t[1];
+        particle->position.z = ANIM_OWNER_AS(SceneE18Actor)->instance->transforms[func_80052B2C() % 38].t[2];
         random = func_80052B2C();
         particle->position.y -= ((random & 0x7F) * particle->size) >> 13;
         halfSize = particle->size >> 1;
@@ -70,7 +70,7 @@ int func_801935F0(int mode, SceneE18EmitterState *state) {
         particle->position.pad = 0;
         state->delay = 4;
         state->count++;
-        func_8006DCE4(0x5FD, D_800F32D0->instance->owner->asset,
+        func_8006DCE4(0x5FD, ANIM_OWNER_AS(SceneE18Actor)->instance->owner->asset,
                       particle->position.x, particle->position.y,
                       particle->position.z);
         break;

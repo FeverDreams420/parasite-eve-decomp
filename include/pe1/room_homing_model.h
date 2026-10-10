@@ -7,6 +7,7 @@
 #include "pe1/render_object.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_vector_math.h"
+#include "pe1/field_anim_pool.h"
 
 /* Room projectile that flies along its heading, bounces off the walkable
  * polygon's edges, drops onto the floor and finally hands its position to
@@ -101,8 +102,6 @@ typedef struct RoomHomingModelEntity {
 } RoomHomingModelEntity;
 
 extern RoomHomingModelEvent *D_800E2368;
-extern RoomHomingModelActorChannel *D_800F32D0;
-extern RoomHomingModelSparkChannel *D_800F33E0;
 extern RoomHomingModelEntity *D_8009D254;
 extern RoomHomingModelVertex *D_8009D248;
 extern u16 D_8009D1CC;

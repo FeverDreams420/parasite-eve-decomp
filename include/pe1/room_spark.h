@@ -11,6 +11,7 @@
 #include "pe1/field_model_draw.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/field_anim_pool.h"
 
 /* Room spark particles: damped velocity, gravity and a floor bounce against
  * the frame-count driven floor height. */
@@ -38,7 +39,6 @@ typedef struct RoomSparkChannel {
     char *pool;                   /* 0x08 */
 } RoomSparkChannel;
 
-extern RoomSparkChannel *D_800F32D0, *D_800F33E0;
 extern RoomSparkChannel *D_800942E4;
 extern u16 D_800E11EA;
 extern int func_80071A54(void);

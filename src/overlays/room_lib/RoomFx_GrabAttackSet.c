@@ -489,17 +489,17 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
         work.y = 0;
         work.x = (g_RoomGrabSweepSide - 1) * 350;
         work.z = -(func_80071A54() & 0xFF) - 400;
-        func_800CE8F0(D_800F32D0->pool, 4, &work, sweep);
+        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &work, sweep);
         sweep->y = g_RoomFloorY->y;
         sweep->x += (func_80071A54() & 0x1F) - 0x10;
         sweep->z += (func_80071A54() & 0x1F) - 0x10;
         sweep->heading.x = 0;
         sweep->heading.y = func_80071A54() & 0xFFF;
         sweep->heading.z = 0;
-        func_800CE8F0(D_800F32D0->pool, 4, &offset, &hand);
+        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &offset, &hand);
         func_800D1384(&hand, (GteShortVector *)sweep, 0x3F0, (unsigned char *)&colorA, (unsigned char *)&colorA, 0x8C, (struct FieldTrailPair *)sweep->trail, 1);
         if (D_800E2368->active) {
-            RoomSparkNode **slot = (RoomSparkNode **)D_800F32D0->pool;
+            RoomSparkNode **slot = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
             if (slot && *slot) {
                 u8 *flag = (*slot)->state;
                 if (*flag == 1) *flag = 2;
@@ -508,7 +508,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
         sweep->phase = 0;
         sweep->timer = 0;
         sweep->sweeps = 8;
-        return func_800CE560(D_800F33E0->pool, 0xC, 0x10,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0xC, 0x10,
                              (FieldAnimCallbackListCallback)RoomFx_GroundSweepMark);
     case 1:
         func_800CE870((char *)D_8009D254, 1, (s16 *)&hand);
@@ -538,7 +538,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
             sweep->y += step.y;
             sweep->z += step.z;
             sweep->y = g_RoomFloorY->y;
-            mark = (RoomGroundSweepMark *)func_800CE610(D_800F33E0->pool);
+            mark = (RoomGroundSweepMark *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (mark) {
                 mark->x = sweep->x;
                 mark->y = sweep->y;
@@ -548,7 +548,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
             }
             if (func_800C6B90(sweep, 50)) {
                 if (D_800E2368->active) {
-                    RoomSparkChannel *channel = D_800F32D0;
+                    RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if ((((RoomGroundSweepHitPool *)channel->pool)->object->flags & 0x3F000000) == 0x01000000) {
                         {
                             RoomSparkActor *player = D_8009D254->actor;
@@ -578,7 +578,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
             sweep->y += step.y;
             sweep->z += step.z;
             sweep->y = g_RoomFloorY->y;
-            mark = (RoomGroundSweepMark *)func_800CE610(D_800F33E0->pool);
+            mark = (RoomGroundSweepMark *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (mark) {
                 mark->x = sweep->x;
                 mark->y = sweep->y;
@@ -588,7 +588,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
             }
             if (func_800C6B90(sweep, 50)) {
                 if (D_800E2368->active) {
-                    RoomSparkChannel *channel = D_800F32D0;
+                    RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if ((((RoomGroundSweepHitPool *)channel->pool)->object->flags & 0x3F000000) == 0x01000000) {
                         {
                             RoomSparkActor *player = D_8009D254->actor;
@@ -621,7 +621,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
         break;
     case 2: {
         RenderColor *color;
-        func_800CE8F0(D_800F32D0->pool, 4, &offset, &hand);
+        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &offset, &hand);
         if (D_800E27EC & 1) color = &colorA;
         else color = &colorB;
         D_800F3368.parameter00 = 0x20;
@@ -852,12 +852,12 @@ int RoomFx_OrbitTrailBurst(int mode, RoomOrbitTrailBurst *burst) {
         burst->counterA = 0;
         func_800CE870((char *)D_8009D254, 0, (s16 *)burst);
         func_800D3F64(0x596, func_800D3FD8());
-        return func_800CE560(D_800F33E0->pool, 0x14, 0x28,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x28,
                              (FieldAnimCallbackListCallback)RoomFx_OrbitTrailParticle);
     case 1:
         if (D_800E27EC < 4) {
             for (i = 0; i < 3; i++) {
-                child = (RoomOrbitTrailParticle *)func_800CE610(D_800F33E0->pool);
+                child = (RoomOrbitTrailParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = burst->x;
                     child->y = burst->y;
@@ -870,7 +870,7 @@ int RoomFx_OrbitTrailBurst(int mode, RoomOrbitTrailBurst *burst) {
                 }
             }
             for (i = 0; i < 5; i++) {
-                child = (RoomOrbitTrailParticle *)func_800CE610(D_800F33E0->pool);
+                child = (RoomOrbitTrailParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = burst->x;
                     child->y = burst->y;
@@ -884,7 +884,7 @@ int RoomFx_OrbitTrailBurst(int mode, RoomOrbitTrailBurst *burst) {
                 }
             }
             for (i = 0; i < 4; i++) {
-                child = (RoomOrbitTrailParticle *)func_800CE610(D_800F33E0->pool);
+                child = (RoomOrbitTrailParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = burst->x;
                     child->y = burst->y;
@@ -990,7 +990,7 @@ int RoomFx_RisingSprayParticle(int mode, RoomSpraySpark *spark) {
             position.z += rsin(spark->swirl) / 128;
             if (func_800C6B90(&position, 100)) {
                 if (D_800E2368->active) {
-                    RoomSparkChannel *channel = D_800F32D0;
+                    RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if ((((RoomSprayHitPool *)channel->pool)->object->flags & 0x3F000000) == 0x01000000) {
                         {
                             RoomSparkActor *player = D_8009D254->actor;
@@ -1163,22 +1163,22 @@ int RoomFx_RisingSprayController(int mode, void *state,
     switch (mode) {
     case 0:
         if (D_800E2368->active) {
-            RoomSparkNode **slot = (RoomSparkNode **)D_800F32D0->pool;
+            RoomSparkNode **slot = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
             if (slot && *slot) {
                 u8 *flag = (*slot)->state;
                 if (*flag == 1) *flag = 2;
             }
         }
-        return func_800CE560(D_800F33E0->pool, 0x14, 0x37,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x37,
                              (FieldAnimCallbackListCallback)RoomFx_RisingSprayParticle);
     case 1:
-        func_800CE8F0(D_800F32D0->pool, 0, &offset, &position);
+        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &offset, &position);
         position.y -= 0x50;
-        func_800CE9D4((void *)D_800F32D0->pool, 0, &heading);
+        func_800CE9D4((void *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &heading);
         heading.z = 0;
         heading.x = 0;
         if ((D_800E27EC & 1) && D_800E27EC < 0x3C) {
-            child = func_800CE610(D_800F33E0->pool);
+            child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (child) {
                 child->x = position.x;
                 child->y = position.y;
@@ -1209,7 +1209,7 @@ int RoomFx_RisingSprayController(int mode, void *state,
             }
         }
         if ((u32)(D_800E27EC - 0x10) < 0x2D) {
-            child = func_800CE610(D_800F33E0->pool);
+            child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (child) {
                 child->x = position.x;
                 child->y = position.y;

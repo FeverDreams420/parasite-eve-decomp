@@ -48,14 +48,14 @@ int func_801939B4(int mode) {
     switch (mode) {
     case 0:
         D_8019AE5C = 0;
-        return func_800CE560(D_800F33E0->pool, 4, 1,
+        return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 4, 1,
                              (FieldAnimCallbackListCallback)func_80193870);
     case 1:
         if (D_800E27EC >= 20) return 2;
         if (D_8019AE5C) return 2;
         if (g_PlayerEntity->kind < 4) {
             RoomM273SpritePoolEffect *effect =
-                func_800CE610(D_800F33E0->pool);
+                func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
             if (effect) {
                 RoomM273PlayerTransform *transform = g_PlayerEntity->tail.transform;
                 D_8019AE5C = 1;

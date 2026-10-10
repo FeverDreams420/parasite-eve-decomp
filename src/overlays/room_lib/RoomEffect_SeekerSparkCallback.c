@@ -46,7 +46,7 @@ int RoomEffect_SeekerSparkCallback(int mode, RoomDampedSpark *spark,
             spark->y += delta.y;
             spark->z += delta.z;
             if ((spark->timer & 3) == 0) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child != 0) {
                     child->x = spark->x;
                     child->y = spark->y;
@@ -64,7 +64,7 @@ int RoomEffect_SeekerSparkCallback(int mode, RoomDampedSpark *spark,
             delta.z += spark->z;
             if (func_800C6B90(&delta, 0x32)) {
                 if (D_800E2368->active) {
-                    RoomSparkChannel *channel = D_800F32D0;
+                    RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if ((((RoomSeekerPool *)channel->pool)->object->flags & 0x3F000000) ==
                         0x01000000) {
                         D_8009D254->actor->flags |= 0x4000;

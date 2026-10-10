@@ -15,24 +15,24 @@ int func_801934AC(int mode, u16 *counter) {
         RoomOrbitPairEventState *event = D_800E2368;
         *counter = 0;
         if (event->active) {
-            RoomOrbitPairNode **slot = (RoomOrbitPairNode **)D_800F32D0->pool;
+            RoomOrbitPairNode **slot = (RoomOrbitPairNode **)ANIM_OWNER_AS(RoomOrbitPairChannel)->pool;
             if (slot && *slot) {
                 u8 *flag = (*slot)->state;
                 if (*flag == 1) *flag = 2;
             }
         }
     }
-    pool = D_800F33E0->pool;
+    pool = ANIM_POOL_AS(RoomOrbitPairChannel)->pool;
     return func_800CE560(pool, 20, 50,
                          (FieldAnimCallbackListCallback)func_80192844);
     case 1:
-    pool = D_800F32D0->pool;
+    pool = ANIM_OWNER_AS(RoomOrbitPairChannel)->pool;
     func_800CE8F0(pool, 4, &template, position);
-    pool = D_800F32D0->pool;
+    pool = ANIM_OWNER_AS(RoomOrbitPairChannel)->pool;
     func_800CE9D4((struct RoomFxTransformOwner *)pool, 4, (GteShortVector *)target);
     target[0] -= 0xDC;
     if (D_800E27EC < 110 && (D_800E27EC & 1)) {
-        pool = D_800F33E0->pool;
+        pool = ANIM_POOL_AS(RoomOrbitPairChannel)->pool;
         child = func_800CE610(pool);
         if (child) {
             distance = (func_80071A54() & 7) + 0x37;

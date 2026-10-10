@@ -5,6 +5,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/field_anim_pool.h"
 
 /* Scene e19_2 homing burst controller: anchored on the room actor, it
  * releases twenty homing particles (func_8019549C) on odd frames, then
@@ -54,7 +55,6 @@ typedef struct SceneHomingBurstPageIndex {
 } SceneHomingBurstPageIndex;
 
 extern SceneHomingBurstPageIndex D_800E11EA;
-extern SceneHomingBurstChannel *D_800F32D0, *D_800F33E0;
 extern SceneHomingBurstEvent *D_800E2368;
 
 int rsin(int angle);

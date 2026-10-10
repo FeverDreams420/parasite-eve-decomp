@@ -55,8 +55,8 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             trail->timer = 0;
             trail->state = 1;
             trail->fade = 0;
-            func_800CE8F0(D_800F32D0->pool, 7, &rotation, trail);
-            func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->pool, 0, &angles);
+            func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 7, &rotation, trail);
+            func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &angles);
             angles.x = 0;
             trail->ax = angles.x;
             trail->ay = angles.y;
@@ -64,7 +64,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             func_800D3AFC(&g_RoomSeekingTrailHistory[trail->slot], 0x18, trail, 1);
             trail->speed = 0x20;
             trail->turn = 0x200;
-            child = func_800CE610(D_800F33E0->pool);
+            child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (!child) return 0;
             child->x = trail->x;
             child->y = trail->y;
@@ -100,7 +100,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             point = g_RoomSeekingTrailHistory[trail->slot].point;
             for (i = 0; i < 0x18; i++, point++) {
                 if (func_800C6B90(point, 0x68) && D_800E2368->active) {
-                    RoomSparkChannel *channel = D_800F32D0;
+                    RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if (((*(RoomSeekingTrailPacket **)channel->pool)->code & 0x3F000000) ==
                         0x01000000) {
                         D_8009D254->actor->flags |= 0x4000;
@@ -111,7 +111,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             }
             point = g_RoomSeekingTrailHistory[trail->slot].point;
             if (trail->fade == 0) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     point += (func_80071A54() & 3) * 4;
                     child->x = point->x;
@@ -133,7 +133,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             }
             if (D_800E27EC < 0x20) return 0;
             if (trail->fade != 0) return 0;
-            child = func_800CE610(D_800F33E0->pool);
+            child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (child) {
                 child->x = trail->x;
                 child->y = trail->y;
@@ -257,7 +257,7 @@ int RoomEffect_SeekingTrailController(int mode, u16 *slot) {
         event = D_800E2368;
         *slot = 0;
         if (event->active != 0) {
-            RoomSparkNode **nodes = (RoomSparkNode **)D_800F32D0->pool;
+            RoomSparkNode **nodes = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
             if (nodes != 0 && *nodes != 0) {
                 u8 *state = (*nodes)->state;
                 if (*state == 1) {
@@ -265,11 +265,11 @@ int RoomEffect_SeekingTrailController(int mode, u16 *slot) {
                 }
             }
         }
-        return func_800CE560(D_800F33E0->pool, 0x18, 0x20,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x18, 0x20,
                              (FieldAnimCallbackListCallback)RoomEffect_SeekingTrailParticle);
     case 1:
         if (D_800E27EC == mode) {
-            trail = func_800CE610(D_800F33E0->pool);
+            trail = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (trail != 0) {
                 trail->slot = *slot;
                 trail->state = 0;
@@ -368,7 +368,7 @@ int RoomEffect_ModelBurstController(int mode, s16 *state) {
         func_800CF4B4(3, -1, g_RoomModelBurstLayer);
         handle = func_800D3FD8();
         func_800D3F64(0x5A4, handle);
-        return func_800CE560(D_800F33E0->pool, 0x10, 0x10,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x10, 0x10,
                              (FieldAnimCallbackListCallback)RoomEffect_ModelBurstParticle);
     case 1:
         if (*state < 0x80) *state += 8;
@@ -379,7 +379,7 @@ int RoomEffect_ModelBurstController(int mode, s16 *state) {
             D_800F3368.tpage = tpage;
             func_800CF4B4(3, D_800E27EC * 2, g_RoomModelBurstLayer);
         }
-        child = func_800CE610(D_800F33E0->pool);
+        child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
         if (child) {
             child->x = func_80071A54();
             child->y = func_80071A54();
@@ -405,7 +405,7 @@ int RoomEffect_ModelBurstController(int mode, s16 *state) {
             D_800F3368.depth = 0x18;
             D_800F3368.tpage = tpage;
         }
-        func_800CE8F0(D_800F32D0->pool, 7, &rotation, &position);
+        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 7, &rotation, &position);
         spin.x = rsin(D_800E27EC * 80) / 4;
         spin.y = rcos(D_800E27EC << 7) / 8;
         spin.flags = 0;
@@ -503,8 +503,8 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             trail->state = 1;
             trail->slot = D_800E2368->trailSlot;
             trail->fade = 0;
-            func_800CE8F0(D_800F32D0->pool, 5, &rotation, trail);
-            func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->pool, 0, &angles);
+            func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 5, &rotation, trail);
+            func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &angles);
             angles.x = 0;
             angles.y += (func_80071A54() & 0x1FF) - 0x100;
             trail->ax = angles.x;
@@ -513,7 +513,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             func_800D3AFC(&g_RoomScatterTrailHistory[trail->slot], 0x18, trail, 1);
             trail->speed = 0x20;
             trail->turn = 0x200;
-            child = func_800CE610(D_800F33E0->pool);
+            child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (!child) return 0;
             child->x = trail->x;
             child->y = trail->y;
@@ -546,7 +546,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             point = g_RoomScatterTrailHistory[trail->slot].point;
             for (i = 0; i < 0x18; i++, point++) {
                 if (func_800C6B90(point, 0x64) && D_800E2368->active) {
-                    RoomSparkChannel *channel = D_800F32D0;
+                    RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if (((*(RoomSeekingTrailPacket **)channel->pool)->code & 0x3F000000) ==
                         0x01000000) {
                         D_8009D254->actor->flags |= 0x4000;
@@ -557,7 +557,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             }
             point = g_RoomScatterTrailHistory[trail->slot].point;
             if (trail->fade == 0) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     point += (func_80071A54() & 3) * 4;
                     child->x = point->x;
@@ -579,7 +579,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             }
             if (D_800E27EC < 0x20) return 0;
             if (trail->fade != 0) return 0;
-            child = func_800CE610(D_800F33E0->pool);
+            child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (child) {
                 child->x = trail->x;
                 child->y = trail->y;
@@ -701,7 +701,7 @@ int RoomEffect_ScatterTrailController(int mode, u16 *slot) {
         event = D_800E2368;
         *slot = 0;
         if (event->active != 0) {
-            RoomSparkNode **nodes = (RoomSparkNode **)D_800F32D0->pool;
+            RoomSparkNode **nodes = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
             if (nodes != 0 && *nodes != 0) {
                 u8 *state = (*nodes)->state;
                 if (*state == 1) {
@@ -709,11 +709,11 @@ int RoomEffect_ScatterTrailController(int mode, u16 *slot) {
                 }
             }
         }
-        return func_800CE560(D_800F33E0->pool, 0x18, 0x20,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x18, 0x20,
                              (FieldAnimCallbackListCallback)RoomEffect_ScatterTrailParticle);
     case 1:
         if (D_800E27EC == mode) {
-            trail = func_800CE610(D_800F33E0->pool);
+            trail = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (trail != 0) {
                 trail->slot = *slot;
                 trail->state = 0;
@@ -808,7 +808,7 @@ int RoomEffect_ScatterBurstController(int mode, s16 *state) {
         func_800CF4B4(3, -1, g_RoomScatterBurstLayer);
         handle = func_800D3FD8();
         func_800D3F64(0x5A4, handle);
-        return func_800CE560(D_800F33E0->pool, 0x10, 0x10,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x10, 0x10,
                              (FieldAnimCallbackListCallback)RoomEffect_ScatterBurstParticle);
     case 1:
         if (*state < 0x80) *state += 8;
@@ -819,7 +819,7 @@ int RoomEffect_ScatterBurstController(int mode, s16 *state) {
             D_800F3368.tpage = tpage;
             func_800CF4B4(3, D_800E27EC * 2, g_RoomScatterBurstLayer);
         }
-        child = func_800CE610(D_800F33E0->pool);
+        child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
         if (child) {
             child->x = func_80071A54();
             child->y = func_80071A54();
@@ -845,7 +845,7 @@ int RoomEffect_ScatterBurstController(int mode, s16 *state) {
             D_800F3368.depth = 0x18;
             D_800F3368.tpage = tpage;
         }
-        func_800CE8F0(D_800F32D0->pool, 5, &rotation, &position);
+        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 5, &rotation, &position);
         spin.x = rsin(D_800E27EC * 80) / 4;
         spin.y = rcos(D_800E27EC << 7) / 8;
         spin.flags = 0;

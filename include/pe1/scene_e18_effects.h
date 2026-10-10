@@ -8,6 +8,7 @@
 #include "pe1/scene_e18_pulse.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_model_draw.h"
+#include "pe1/field_anim_pool.h"
 
 /* Particle emitters of the scene_e18 script: one rises from random model
  * joints and fades out, the other drops wave rings from random joints. */
@@ -78,8 +79,6 @@ typedef struct SceneE18WaveParticle {
     s16 amplitude;                /* 0x14 */
 } SceneE18WaveParticle;
 
-extern SceneE18Actor *D_800F32D0;
-extern SceneE18Emitter *D_800F33E0;
 extern u8 D_801941D0;
 
 extern int func_8006DCE4(int id, int channel, int x, int y, int z);

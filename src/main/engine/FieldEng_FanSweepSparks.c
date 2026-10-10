@@ -56,13 +56,13 @@ int func_800D751C(int mode, FieldFanSweep *sweep)
     switch (mode) {
     case 0:
         sweep->angle = rand();
-        handles = func_800CE560(D_800F33E0->pool, 0x10, 0x18,
+        handles = func_800CE560(ANIM_POOL_AS(RoomEmberBurstChannel)->pool, 0x10, 0x18,
                                 (FieldAnimCallbackListCallback)func_800D71B8);
         handles += func_800CE5AC(&sweep->pool, handles, 8, 0x12, func_800D70C0);
         return handles;
     case 1:
         if (D_800E27EC < 0x20 && (D_800E27EC & 1)) {
-            spark = (RoomFanSweepSpark *)func_800CE610(D_800F33E0->pool);
+            spark = (RoomFanSweepSpark *)func_800CE610(ANIM_POOL_AS(RoomEmberBurstChannel)->pool);
             if (spark) {
                 spark->angle = sweep->angle;
                 spark->radius = 0xC8;

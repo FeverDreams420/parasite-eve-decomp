@@ -34,12 +34,12 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
         fx->position.x = target->x;
         fx->position.y = target->y;
         fx->position.z = target->z;
-        return func_800CE560(D_800F33E0->pool, 0xC, 0x20,
+        return func_800CE560(ANIM_POOL_AS(SceneE22QuakeChannel)->pool, 0xC, 0x20,
                              (FieldAnimCallbackListCallback)func_801981B0);
     case 1:
         fx->timer++;
         if (fx->timer == 6 && func_800C6B90(fx, target->radius) && D_800E2368->active) {
-            channel = D_800F32D0;
+            channel = ANIM_OWNER_AS(SceneE22QuakeObjectChannel);
             if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                 (*RoomMain_ActorPtr)->flags |= 0x4000;
                 channel->pool->object->flags =
@@ -50,7 +50,7 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
         if (fx->timer < 7) {
             phase = 0x1000;
             for (i = 0; i < 4; i++) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(SceneE22QuakeChannel)->pool);
                 if (child) {
                     child->x = fx->position.x;
                     child->y = fx->position.y;

@@ -9,16 +9,16 @@ int func_80193A6C(int mode, RoomM404BurstOrigin *origin) {
 
     switch (mode) {
     case 0:
-        func_800CE870(D_800F32D0->pool, 0, (s16 *)origin);
-        func_800CE8F0(D_800F32D0->pool, 0, &template, origin);
+        func_800CE870(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, (s16 *)origin);
+        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &template, origin);
         func_800D3F64(0x5C0, func_800D3FD8());
         func_800D3F64(0x5C1, 0x80);
-        return func_800CE560(D_800F33E0->pool, 20, 32,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 32,
                              (FieldAnimCallbackListCallback)func_801935E0);
     case 1:
         if (D_800E27EC < 5) {
             for (i = 0; i < 6; i++) {
-                spark = func_800CE610(D_800F33E0->pool);
+                spark = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (spark != 0) {
                     spark->x = origin->x;
                     spark->y = origin->y;
@@ -31,7 +31,7 @@ int func_80193A6C(int mode, RoomM404BurstOrigin *origin) {
                 }
             }
             for (i = 0; i < 2; i++) {
-                spark = func_800CE610(D_800F33E0->pool);
+                spark = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (spark != 0) {
                     spark->x = origin->x;
                     spark->y = origin->y;

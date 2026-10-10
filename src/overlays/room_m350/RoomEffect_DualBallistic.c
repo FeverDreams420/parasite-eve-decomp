@@ -3,13 +3,12 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 typedef RoomM350TransformMatrix Matrix;
 typedef RoomM350TransformOwner Instance;
 typedef RoomM350Actor Actor;
 
 typedef struct { short x, y, z, velocityY, gravity, reserved; } Particle;
-extern Actor *D_800F32D0;
-extern RoomM350Emitter *D_800F33E0;
 extern Instance *g_PlayerEntity;
 extern unsigned char D_8019A82F;
 extern int D_800966EC[], D_8019A598[];
@@ -42,13 +41,13 @@ int func_80196A14(int event)
     switch (event) {
     case 0:
 
-        return func_800CE560(D_800F33E0->pool, 12, 16,
+        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 12, 16,
                              (FieldAnimCallbackListCallback)func_801968D8);
         case 1:
     if (D_800E27EC >= 107) return 2;
     if (D_800E27EC & 1) {
-        Matrix *matrices = ((Instance *)D_800F32D0->instance)->transforms;
-        Particle *particle = func_800CE610(D_800F33E0->pool);
+        Matrix *matrices = ((Instance *)ANIM_OWNER_AS(Actor)->instance)->transforms;
+        Particle *particle = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
         if (particle) {
             int random = Inv_ScrambleGrid();
             particle->x = (unsigned int)matrices[33].position[0] - (((unsigned int)random << 1) - 256);
@@ -61,7 +60,7 @@ int func_80196A14(int event)
     }
     if (D_8019A82F) {
         Matrix *matrices = g_PlayerEntity->transforms;
-        Particle *particle = func_800CE610(D_800F33E0->pool);
+        Particle *particle = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
         if (!particle) return 0;
         {
             int random = Inv_ScrambleGrid();

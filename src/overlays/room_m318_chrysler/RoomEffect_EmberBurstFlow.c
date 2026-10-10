@@ -152,7 +152,7 @@ int func_80194AAC(int mode, RoomEmberBurst *burst, RoomEmberBurstParams *params)
         RoomEffect_AttachToActor(params->subId, params->typeId, burst);
         func_800D3F64(0x5F5, func_800D3FD8());
         func_800D3F64(0x5F6, 0x80);
-        return func_800CE560(D_800F33E0->pool, 0x14, 0x28,
+        return func_800CE560(ANIM_POOL_AS(RoomEmberBurstChannel)->pool, 0x14, 0x28,
                              (FieldAnimCallbackListCallback)func_801944E8);
     case 1:
         switch (burst->state) {
@@ -166,7 +166,7 @@ int func_80194AAC(int mode, RoomEmberBurst *burst, RoomEmberBurstParams *params)
         case 1:
             burst->timer++;
             if (burst->timer < 0x19) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomEmberBurstChannel)->pool);
                 if (child) {
                     child->x = burst->x;
                     child->y = burst->y;
@@ -183,7 +183,7 @@ int func_80194AAC(int mode, RoomEmberBurst *burst, RoomEmberBurstParams *params)
                 }
             }
             if (burst->timer & 1) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomEmberBurstChannel)->pool);
                 if (child) {
                     child->x = burst->x;
                     child->y = burst->y;
@@ -199,7 +199,7 @@ int func_80194AAC(int mode, RoomEmberBurst *burst, RoomEmberBurstParams *params)
                 }
             }
             if (!(burst->timer & 1)) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomEmberBurstChannel)->pool);
                 if (child) {
                     child->x = burst->x;
                     child->y = burst->y;

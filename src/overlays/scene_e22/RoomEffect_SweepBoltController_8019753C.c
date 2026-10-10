@@ -28,7 +28,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
         D_80199500 = func_8006E498(D_800B0E64.channel, 0xC54C4704);
         func_800C6D5C(D_80199500, 0, 0);
         if (D_800E2368->active) {
-            SceneE22EmberSlot *pool = D_800F32D0->pool;
+            SceneE22EmberSlot *pool = ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool;
             if (pool) {
                 SceneE22EmberObject *object = pool->object;
                 if (object) {
@@ -42,7 +42,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
         bolt->heading.x = -0x320;
         bolt->heading.y = -0x200;
         bolt->heading.z = 0;
-        return func_800CE560(D_800F33E0->pool, 0x14, 0x20,
+        return func_800CE560(ANIM_POOL_AS(SceneE22EmberChannel)->pool, 0x14, 0x20,
                              (FieldAnimCallbackListCallback)func_8019702C);
     case 1:
         func_800CFB7C(&bolt->heading, -((0x10 - bolt->sweep) * 320), &bolt->position);
@@ -57,7 +57,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
         case 0:
             bolt->timer++;
             bolt->sweep++;
-            child = func_800CE610(D_800F33E0->pool);
+            child = func_800CE610(ANIM_POOL_AS(SceneE22EmberChannel)->pool);
             if (child) {
                 child->x = tip.x;
                 child->y = tip.y;
@@ -91,7 +91,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
             if (D_800E27EC & 1) bolt->position.y += rcos(angle) / 512;
             else bolt->position.y -= rcos(angle) / 512;
             if (bolt->timer < 0xD) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(SceneE22EmberChannel)->pool);
                 if (child) {
                     child->x = bolt->origin.x;
                     child->y = bolt->origin.y;
@@ -106,7 +106,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
             }
             if ((u16)(bolt->timer - 4) < 5) {
                 for (i = 0; i < 2; i++) {
-                    child = func_800CE610(D_800F33E0->pool);
+                    child = func_800CE610(ANIM_POOL_AS(SceneE22EmberChannel)->pool);
                     if (child) {
                         child->x = bolt->origin.x;
                         child->y = bolt->origin.y;

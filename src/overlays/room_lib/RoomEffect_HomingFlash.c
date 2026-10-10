@@ -44,7 +44,7 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
             spark->z += target.z;
             if (func_800C6B90(spark, 50)) {
                 if (D_800E2368->active) {
-                    RoomSoundBurstChannel *channel = D_800F32D0;
+                    RoomSoundBurstChannel *channel = ANIM_OWNER_AS(RoomSoundBurstChannel);
                     u32 *entry;
                     if ((**(u32 **)channel->pool & 0x3F000000) == 0x01000000) {
                         D_8009D254->actor->flags |= 0x4000;
@@ -61,7 +61,7 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
                 }
             }
             if (D_800E27EC & 1) {
-                pool = D_800F33E0->pool;
+                pool = ANIM_POOL_AS(RoomSoundBurstChannel)->pool;
                 child = (RoomHomingSpark *)func_800CE610(pool);
                 if (child) {
                     child->x = spark->x;
@@ -155,7 +155,7 @@ int RoomEffect_FlashSpriteController(int mode, RoomFlashSpriteState *state,
 
     switch (mode) {
     case 0:
-        pool = D_800F32D0->pool;
+        pool = ANIM_OWNER_AS(RoomSoundBurstChannel)->pool;
         func_800CE9D4((struct RoomFxTransformOwner *)pool, 0,
                       (GteShortVector *)&state->ax);
         state->soundHandle = -1;
@@ -175,7 +175,7 @@ int RoomEffect_FlashSpriteController(int mode, RoomFlashSpriteState *state,
             state->ay += spawn->lift;
             break;
         }
-        pool = D_800F32D0->pool;
+        pool = ANIM_OWNER_AS(RoomSoundBurstChannel)->pool;
         func_800CE8F0(pool, state->attachment, &rotation, state);
         state->y = g_RoomFloorY->y;
         func_800CFB7C((GteShortVector *)&state->ax, 0x12C, &target);
@@ -183,7 +183,7 @@ int RoomEffect_FlashSpriteController(int mode, RoomFlashSpriteState *state,
         state->y += target.y;
         state->z += target.z;
         if (D_800E2368->active) {
-            RoomSoundBurstNode **slot = (RoomSoundBurstNode **)D_800F32D0->pool;
+            RoomSoundBurstNode **slot = (RoomSoundBurstNode **)ANIM_OWNER_AS(RoomSoundBurstChannel)->pool;
             if (slot && *slot) {
                 u8 *flag = (*slot)->state;
                 if (*flag == 1) *flag = 2;
@@ -191,7 +191,7 @@ int RoomEffect_FlashSpriteController(int mode, RoomFlashSpriteState *state,
         }
         state->state = 0;
         state->frame = 0;
-        pool = D_800F33E0->pool;
+        pool = ANIM_POOL_AS(RoomSoundBurstChannel)->pool;
         return func_800CE560(pool, 24, 16,
                              (FieldAnimCallbackListCallback)RoomEffect_HomingSpark);
     case 1:
@@ -207,7 +207,7 @@ int RoomEffect_FlashSpriteController(int mode, RoomFlashSpriteState *state,
             if ((s16)state->frame < 4) break;
             state->state = 2;
             state->frame = 0;
-            pool = D_800F33E0->pool;
+            pool = ANIM_POOL_AS(RoomSoundBurstChannel)->pool;
             child = func_800CE610(pool);
             if (child) {
                 child->x = state->x;
@@ -221,7 +221,7 @@ int RoomEffect_FlashSpriteController(int mode, RoomFlashSpriteState *state,
                 child->timer = 0;
                 child->soundHandle = state->soundHandle;
             }
-            pool = D_800F33E0->pool;
+            pool = ANIM_POOL_AS(RoomSoundBurstChannel)->pool;
             child = func_800CE610(pool);
             if (child) {
                 child->x = state->x;
@@ -238,7 +238,7 @@ int RoomEffect_FlashSpriteController(int mode, RoomFlashSpriteState *state,
         }
         break;
     case 2:
-        pool = D_800F32D0->pool;
+        pool = ANIM_OWNER_AS(RoomSoundBurstChannel)->pool;
         func_800CE8F0(pool, state->attachment, &rotation, &target);
         {
             int index;

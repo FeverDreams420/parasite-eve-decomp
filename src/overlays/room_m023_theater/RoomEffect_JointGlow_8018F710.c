@@ -82,7 +82,7 @@ int func_8018F710(int mode, RoomM023JointGlow *glow) {
         rotation.y = 0;
         rotation.z = -D_800E27EC << 6;
         rotation.flags = 0;
-        func_800CE8F0(D_800F32D0->pool, glow->joint, &template, &position);
+        func_800CE8F0(ANIM_OWNER_AS(RoomM023Channel)->pool, glow->joint, &template, &position);
         {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];

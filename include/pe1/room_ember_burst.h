@@ -9,6 +9,7 @@
 #include "pe1/room_floor.h"
 #include "pe1/player_entity.h"
 #include "pe1/field_owner_actor.h"
+#include "pe1/field_anim_pool.h"
 
 /* Ember burst controller (room_m318): attaches to the actor named by its
  * parameters, glows up, bursts orbiting sparks, embers and smoke, then
@@ -30,7 +31,6 @@ typedef struct RoomEmberBurstParams {
 typedef RoomOrbitTrailPoolChannel RoomEmberBurstChannel;
 
 extern FieldActor *D_8009D20C;
-extern RoomEmberBurstChannel *D_800F33E0;
 extern char D_8018F1CC[];
 extern RenderColor D_8018F200;
 extern RenderColor D_8018F204;
@@ -57,7 +57,6 @@ typedef struct RoomEmberFountainChannel {
     void *pool;                   /* 0x08 */
 } RoomEmberFountainChannel;
 
-extern RoomEmberFountainChannel *D_800F32D0;
 extern GteShortVector D_8019993C;
 extern int func_80197618(int mode, RoomOrbitTrailParticle *p);
 

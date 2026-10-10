@@ -7,6 +7,7 @@
 #include "pe1/render_object.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_owner_actor.h"
+#include "pe1/field_anim_pool.h"
 
 /* The spark ring and spark burst effects linked by ten museum rooms
  * (src/overlays/room_lib/RoomEffect_SparkRingBurst.c). The ring controller
@@ -88,7 +89,6 @@ typedef struct RoomSparkTextureSlot {
     u16 index;
 } RoomSparkTextureSlot;
 
-extern RoomSparkChannel *D_800F32D0, *D_800F33E0;
 extern RoomSparkEventState *D_800E2368;
 extern RoomSparkBattleEntity *D_8009D254;
 extern RoomSparkTextureSlot D_800E11E8;

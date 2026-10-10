@@ -3,6 +3,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 typedef RoomM350Vector Vector;
 typedef struct { Vector position; short delay,reserved; } Particle;
 typedef struct RoomM350Instance { char reserved[0x3A]; unsigned short yaw; } Instance;
@@ -10,8 +11,6 @@ typedef RoomM350Actor Actor;
 typedef struct { Vector positions[8]; char reserved40[8]; short count; } Queue;
 
 typedef RoomM350SignedHalfPair SignedHalf;
-extern Actor *D_800F32D0;
-extern RoomM350Emitter *D_800F33E0;
 extern int D_8019A3D0[];
 extern short D_800966EE[];
 extern int GetClut(int, int);
@@ -48,7 +47,7 @@ int func_80195378(int event) {
     switch (event) {
     case 0:
 
-        return func_800CE560(D_800F33E0->pool,12,50,
+        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,12,50,
                              (FieldAnimCallbackListCallback)func_80195218);
         case 1:
     if (D_8019A804 && D_8019A802==0) return 2;
@@ -61,10 +60,10 @@ int func_80195378(int event) {
                 Vector *position=queue->positions;
                 do {
                     {
-                        Particle *particle=func_800CE610(D_800F33E0->pool);
+                        Particle *particle=func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
                         if (!particle) break;
                         particle->position=*position;
-                        particle->position.pad=D_800F32D0->instance->yaw;
+                        particle->position.pad=ANIM_OWNER_AS(Actor)->instance->yaw;
                         particle->delay=D_800E27EC & 7;
                     }
                     i++;

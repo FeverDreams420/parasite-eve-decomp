@@ -54,7 +54,7 @@ int func_80195BD0(int mode) {
     int unknownFrame[2];
     switch(mode) {
     case 0: {
-        int size=func_800CE560(D_800F33E0->pool,12,10,
+        int size=func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,12,10,
                                (FieldAnimCallbackListCallback)func_80195984);
         asm("" : : "r"(size));
         return size+func_800CE5AC(&D_8019AE7C,size,4,10,func_8019A290);
@@ -74,7 +74,7 @@ int func_80195BD0(int mode) {
             unsigned short *x=batch->x;
             int count;
             do {
-                RoomM273PulseEmitterView *effect=func_800CE610(D_800F33E0->pool);
+                RoomM273PulseEmitterView *effect=func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
                 RoomM273PulseEmitterView **pointer;
                 register int offset asm("$4");
                 unsigned short y;

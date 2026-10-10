@@ -12,25 +12,25 @@ int func_80193368(int mode, void *unused, char *state) {
             int handle = func_800D3FD8();
             func_800D3F64(0x5b9, handle);
             if (D_800E2368->active) {
-                RoomM404Node **slot = (RoomM404Node **)D_800F32D0->pool;
+                RoomM404Node **slot = (RoomM404Node **)ANIM_OWNER_AS(RoomM404Channel)->pool;
                 if (slot && *slot) {
                     u8 *flag = (*slot)->state;
                     if (*flag == 1) *flag = 2;
                 }
             }
-            pool = D_800F33E0->pool;
+            pool = ANIM_POOL_AS(RoomM404Channel)->pool;
             return func_800CE560(pool, 20, 55,
                                  (FieldAnimCallbackListCallback)func_80192540);
         }
     case 1:
     {
-        pool = D_800F32D0->pool;
+        pool = ANIM_OWNER_AS(RoomM404Channel)->pool;
         func_800CE8F0(pool, 3, &template, position);
-        pool = D_800F32D0->pool;
+        pool = ANIM_OWNER_AS(RoomM404Channel)->pool;
         func_800CE9D4((struct RoomFxTransformOwner *)pool, 0,
                       (GteShortVector *)target);
         if (D_800E27EC == 1) {
-            pool = D_800F33E0->pool;
+            pool = ANIM_POOL_AS(RoomM404Channel)->pool;
             child = func_800CE610(pool);
             if (child) {
                 child->x = position[0];

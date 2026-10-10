@@ -9,6 +9,7 @@
 #include "pe1/field_model_draw.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/field_anim_pool.h"
 
 /* Ember controllers (scene_e22): ride the room actor, wake the scene
  * object's status byte, spray ember drift particles and draw a halo and a
@@ -56,8 +57,6 @@ typedef struct SceneE22EmberEvent {
 
 extern SceneE22EmberActor **RoomMain_ActorPtr;
 extern SceneE22EmberEvent *D_800E2368;
-extern SceneE22EmberObjectChannel *D_800F32D0;
-extern SceneE22EmberChannel *D_800F33E0;
 /* Texture page index slot at 0x800E11EA, read as a record so the load
  * stays behind the first parameter block store through its base register. */
 typedef struct SceneE22TextureSlot {

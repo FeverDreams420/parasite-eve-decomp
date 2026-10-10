@@ -3,12 +3,12 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 typedef RoomM350Vector Vector;
 typedef struct { Vector rotation; Vector *position; int color; } Particle;
 typedef struct { short delay, count; } State;
 
 /* The spawner owns the particles rendered by this callback. */
-extern RoomM350Emitter *D_800F33E0;
 extern int D_8019A414[];
 extern short D_800966EE[];
 extern int D_800966EC[];
@@ -42,14 +42,14 @@ int func_801928D4(int event, State *state)
 
         state->delay = 0;
         state->count = 0;
-        return func_800CE560(D_800F33E0->pool, 16, 18,
+        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 16, 18,
                              (FieldAnimCallbackListCallback)func_801927A4);
         case 1:
     {
         int i;
         if (D_800E27EC >= 17) return 2;
         for (i = 0; i < 2; i++) {
-            Particle *particle = func_800CE610(D_800F33E0->pool);
+            Particle *particle = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
             if (!particle) break;
             particle->rotation.x = (unsigned int)Inv_ScrambleGrid() << 4;
             particle->rotation.y = (unsigned int)Inv_ScrambleGrid() << 4;

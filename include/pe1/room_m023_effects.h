@@ -6,6 +6,7 @@
 #include "pe1/render_object.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_owner_actor.h"
+#include "pe1/field_anim_pool.h"
 
 /* Room m023 controller that scatters particles around a model joint,
  * either at the joint itself or at a random point of a wide band. */
@@ -62,7 +63,6 @@ typedef struct RoomM023Template {
 } __attribute__((packed)) RoomM023Template;
 
 extern RoomM023EventState *D_800E2368;
-extern RoomM023Channel *D_800F32D0, *D_800F33E0;
 extern RoomM023Template D_8018EFF4;
 extern GteShortVector g_RoomScriptRecord;
 

@@ -2,6 +2,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 
 typedef RoomM350Vector Vector;
 typedef struct { Vector *position; short offset,reserved; } Particle;
@@ -10,7 +11,6 @@ typedef struct { Vector *positions[4]; char reserved10[0x46]; short count; } Que
 extern int D_800966EC[];
 extern RenderColor D_8019A4E8;
 extern int GetClut(int, int);
-extern RoomM350Emitter *D_800F33E0;
 extern short D_8019A7FE, D_8019A802;
 extern unsigned char D_8019A804;
 
@@ -41,7 +41,7 @@ int func_80195064(int event) {
     switch (event) {
     case 0:
 
-        return func_800CE560(D_800F33E0->pool,8,16,
+        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,8,16,
                              (FieldAnimCallbackListCallback)func_80194F04);
         case 1:
     if (D_8019A804 && D_8019A802==0) return 2;
@@ -56,7 +56,7 @@ int func_80195064(int event) {
                 for(;i<queue->count;i++,position++) {
 emit:
                     {
-                        Particle *particle=func_800CE610(D_800F33E0->pool);
+                        Particle *particle=func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
                         if (!particle) break;
                         particle->position=*position;
                         particle->offset=0;

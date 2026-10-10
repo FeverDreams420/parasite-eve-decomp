@@ -8,6 +8,7 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_model_draw.h"
 #include "pe1/field_owner_actor.h"
+#include "pe1/field_anim_pool.h"
 
 /* Scene e20 trail controller and its command/particle records.
  * Reserved members are observed offsets, not recovered field meanings. */
@@ -28,7 +29,6 @@ typedef struct SceneE20Actor { u8 reserved[0x4c]; u32 flags; } SceneE20Actor;
 typedef struct SceneE20Event { u8 reserved[13]; u8 active; } SceneE20Event;
 typedef struct SceneE20Pool { SceneE20Node *node; u8 reserved04[0x264]; SceneE20Vec position; } SceneE20Pool;
 typedef struct SceneE20Channel { int reserved[2]; SceneE20Pool *pool; } SceneE20Channel;
-extern SceneE20Channel *D_800F32D0, *D_800F33E0;
 extern SceneE20Color D_8018EFFC, D_8018F000, D_8018F004, D_8018F008;
 extern SceneE20Actor **D_8009D254;
 extern void *D_800B0E64;

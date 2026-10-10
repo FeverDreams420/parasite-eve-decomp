@@ -2,6 +2,7 @@
 #include "common.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/field_anim_pool.h"
 
 typedef struct Effect {
     s16 field00;
@@ -23,7 +24,6 @@ typedef struct SceneE18ObjectLink {
     SceneE18Object *object;
 } SceneE18ObjectLink;
 
-extern SceneE18ObjectLink *D_800F32D0;
 extern u16 D_801941CC;
 
 int func_80192E60(int mode, Effect *effect) {
@@ -45,7 +45,7 @@ int func_80192E60(int mode, Effect *effect) {
         return 0;
     }
 
-    object = D_800F32D0->object;
+    object = ANIM_OWNER_AS(SceneE18ObjectLink)->object;
     position[0] = object->x;
     position[1] = object->y;
     position[2] = object->z;

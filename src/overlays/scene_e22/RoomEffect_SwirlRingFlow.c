@@ -107,8 +107,8 @@ int func_80195B40(int mode, SceneE22SwirlRing *swirl) {
             if (*(void *volatile *)soundSlot != 0)
                 func_8006DF50(*soundSlot, 0x5D7, 0x80, 0x80, volume);
         }
-        func_800CE8F0(D_800F32D0->pool, 0, &offset, swirl);
-        return func_800CE560(D_800F33E0->pool, 0x14, 0x28,
+        func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, 0, &offset, swirl);
+        return func_800CE560(ANIM_POOL_AS(SceneE22EmberChannel)->pool, 0x14, 0x28,
                              (FieldAnimCallbackListCallback)func_801957CC);
     case 1:
         position.x = swirl->x;
@@ -122,7 +122,7 @@ int func_80195B40(int mode, SceneE22SwirlRing *swirl) {
             swirl->ring = rcos(angle) + 0x400;
             if (swirl->timer < 9) {
                 for (i = 0; i < 4; i++) {
-                    child = func_800CE610(D_800F33E0->pool);
+                    child = func_800CE610(ANIM_POOL_AS(SceneE22EmberChannel)->pool);
                     if (child) {
                         child->x = position.x;
                         child->y = position.y;
@@ -143,7 +143,7 @@ int func_80195B40(int mode, SceneE22SwirlRing *swirl) {
             swirl->timer = 0;
             swirl->state = 1;
             for (i = 0; i < 8; i++) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(SceneE22EmberChannel)->pool);
                 if (child) {
                     child->x = position.x;
                     child->y = position.y;

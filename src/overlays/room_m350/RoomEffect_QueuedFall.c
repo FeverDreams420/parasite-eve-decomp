@@ -2,6 +2,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 
 extern short D_800966EE[];
 extern RenderColor D_8019A62C;
@@ -28,7 +29,6 @@ int func_80197594(int event, short *position) {
     return 0;
 }
 
-extern RoomM350Emitter *D_800F33E0;
 extern unsigned char D_8019A86E, D_8019A857;
 extern short D_8019A864[3];
 
@@ -37,12 +37,12 @@ int func_801976C8(int event)
     switch (event) {
     case 0:
 
-        return func_800CE560(D_800F33E0->pool, 8, 4,
+        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 8, 4,
                              (FieldAnimCallbackListCallback)func_80197594);
         case 1:
     if (D_8019A86E) return 2;
     if (D_8019A857) {
-        short *effect = func_800CE610(D_800F33E0->pool);
+        short *effect = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
         if (!effect) return 0;
         do {
             effect[0] = D_8019A864[0];

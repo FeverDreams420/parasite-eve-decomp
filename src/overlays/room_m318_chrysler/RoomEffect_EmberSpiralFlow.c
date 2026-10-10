@@ -174,23 +174,23 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
         D_80199944 = (void *)func_8006E498(D_800B0E64, 0xC5509704);
         func_800C6D5C(D_80199944, 0, 0);
         if (D_800E2368->active) {
-            pool = D_800F32D0->pool;
+            pool = ANIM_OWNER_AS(RoomShakeBurstChannel)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
                 if (*object->status == 1)
                     *object->status = 2;
             }
         }
-        func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->pool, 0,
+        func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomShakeBurstChannel)->pool, 0,
                       (GteShortVector *)spiral);
-        return func_800CE560(D_800F33E0->pool, 0x14, 0x28,
+        return func_800CE560(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool, 0x14, 0x28,
                              (FieldAnimCallbackListCallback)func_80198268);
     case 1:
         spiral->timer++;
-        func_800CE870((char *)D_800F32D0->pool, 0, (s16 *)&position);
+        func_800CE870((char *)ANIM_OWNER_AS(RoomShakeBurstChannel)->pool, 0, (s16 *)&position);
         spiral->glow = rcos((spiral->timer << 10) / 24) / 32;
         if (spiral->timer < 0x19) {
-            child = (RoomOrbitTrailParticle *)func_800CE610(D_800F33E0->pool);
+            child = (RoomOrbitTrailParticle *)func_800CE610(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool);
             if (child) {
                 child->x = position.x;
                 child->y = position.y;
@@ -207,7 +207,7 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
                 child->timer = 0;
             }
             if (spiral->timer & 1) {
-                child = (RoomOrbitTrailParticle *)func_800CE610(D_800F33E0->pool);
+                child = (RoomOrbitTrailParticle *)func_800CE610(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool);
                 if (child) {
                     child->x = position.x;
                     child->y = position.y;
@@ -222,7 +222,7 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
                     child->timer = 0;
                 }
             }
-            child = (RoomOrbitTrailParticle *)func_800CE610(D_800F33E0->pool);
+            child = (RoomOrbitTrailParticle *)func_800CE610(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool);
             if (child) {
                 child->x = position.x;
                 child->y = position.y;
@@ -236,7 +236,7 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
         }
         if (func_800C6B90(&position, 0x19A)) {
             if (D_800E2368->active) {
-                channel = D_800F32D0;
+                channel = ANIM_OWNER_AS(RoomShakeBurstChannel);
                 if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                     (*D_8009D254)->flags |= 0x4000;
                     channel->pool->object->flags =
@@ -253,7 +253,7 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
-        func_800CE870((char *)D_800F32D0->pool, 0, (s16 *)&position);
+        func_800CE870((char *)ANIM_OWNER_AS(RoomShakeBurstChannel)->pool, 0, (s16 *)&position);
         if (spiral->timer < 0x19) {
             glow = spiral->glow;
             if (D_800E27EC & 1)

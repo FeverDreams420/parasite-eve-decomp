@@ -3,13 +3,13 @@
 #include "pe1/field_actor.h"
 #include "pe1/player_entity.h"
 #include "pe1/field_vector_math.h"
+#include "pe1/field_anim_pool.h"
 /* Dispatches frame-table events and the actor's turning/recoil motion. */
 typedef RoomM350Vector Vector;
 typedef struct { unsigned char frame,slot,value,pad; } Event;
 typedef struct { Event entries[8]; } Events;
 typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
-extern Actor *D_800F32D0;
 extern Events D_8018F1CC;
 extern unsigned char D_8019A854[],D_8019A859,D_8019A86E;
 extern int D_8019A858;
@@ -20,7 +20,7 @@ extern short D_800966EE[];
 int func_80197DA8(int event,short *cursor) {
     Events events=D_8018F1CC;
     Vector movement;
-    Instance *instance=(Instance *)D_800F32D0->instance;
+    Instance *instance=(Instance *)ANIM_OWNER_AS(Actor)->instance;
     int frame,previous;
     short phase;
     if (event==0) {

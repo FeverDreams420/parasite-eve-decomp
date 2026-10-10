@@ -5,8 +5,8 @@
 #include "pe1/room_floor.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_vector_math.h"
+#include "pe1/field_anim_pool.h"
 /* Moving effect with collision, queued trail positions and ground rendering. */
-extern RoomM350EffectActor *D_800F32D0;
 extern RoomM350EffectInstance *g_PlayerEntity;
 extern int D_800966EC[];
 extern short D_800966EE[],D_8019A7FE,D_8019A800,D_8019A802;
@@ -34,7 +34,7 @@ int func_801947BC(int event,RoomM350Particle *p)
             else {
                 int *trig=D_800966EC;
                 int speed=*(short *)((char *)trig+((timer<<6)&0x3FC0))/4;
-                int angle=FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->transform.t,(Vec3Fixed *)D_800F32D0->instance->transform.t);
+                int angle=FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->transform.t,(Vec3Fixed *)ANIM_OWNER_AS(RoomM350EffectActor)->instance->transform.t);
                 int yaw=FieldEng_TurnToward(p->motion.value.rotation.y,(short)angle,speed);
                 int sum,product;
                 p->motion.value.rotation.y=yaw;
@@ -65,7 +65,7 @@ int func_801947BC(int event,RoomM350Particle *p)
                 short n;
                 p->tail.value.active.hit=1;
                 g_PlayerEntity->owner->status|=0x4000;
-                if(D_800F32D0->instance->owner) D_800F32D0->instance->owner->flags|=0x80000000;
+                if(ANIM_OWNER_AS(RoomM350EffectActor)->instance->owner) ANIM_OWNER_AS(RoomM350EffectActor)->instance->owner->flags|=0x80000000;
                 p->tail.value.active.speed=0;
                 if(p->tail.value.active.frame<40) p->tail.value.active.frame=40;
                 count=&D_8019A7FE; n=*count;
@@ -115,14 +115,13 @@ int func_801947BC(int event,RoomM350Particle *p)
     return 0;
 }
 
-extern RoomM350EffectEmitter *D_800F33E0;
 extern GteShortVector D_8019A7A0;
 extern unsigned char D_8019A804;
 int func_80194CFC(int event) {
     switch (event) {
     case 0:
 
-        return func_800CE560(D_800F33E0->pool,28,3,
+        return func_800CE560(ANIM_POOL_AS(RoomM350EffectEmitter)->pool,28,3,
                              (FieldAnimCallbackListCallback)func_801947BC);
         case 1:
     {
@@ -130,17 +129,17 @@ int func_80194CFC(int event) {
         RoomM350Particle *particle;
         int frame, previous;
         if (D_8019A804) return 2;
-        instance=D_800F32D0->instance;
+        instance=ANIM_OWNER_AS(RoomM350EffectActor)->instance;
         if (instance->animation != 13) return 0;
         frame=instance->frame;
         previous=instance->previousFrame;
         if (frame<15 || previous>=15) return 0;
-        particle=func_800CE610(D_800F33E0->pool);
+        particle=func_800CE610(ANIM_POOL_AS(RoomM350EffectEmitter)->pool);
         *(GteShortVector *)particle=D_8019A7A0;
         particle->position.pad=16;
         particle->motion.value.spawn.speed=512;
         {
-            int yaw=D_800F32D0->instance->yaw;
+            int yaw=ANIM_OWNER_AS(RoomM350EffectActor)->instance->yaw;
             particle->motion.value.spawn.phase=0;
             particle->motion.value.spawn.yaw=yaw;
         }

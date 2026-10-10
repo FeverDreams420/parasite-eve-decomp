@@ -9,7 +9,7 @@ int func_801924E8(int mode, SceneE18SpinShell *shell) {
     GteMatrix matrix;
     GteVector scaleArg;
     GteVector scale;
-    SceneE18Instance *instance = D_800F32D0->instance;
+    SceneE18Instance *instance = ANIM_OWNER_AS(SceneE18Actor)->instance;
     int c;
     int s;
 

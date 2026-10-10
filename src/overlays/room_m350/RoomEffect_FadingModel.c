@@ -2,6 +2,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 
 extern int GetClut(int, int);
 
@@ -58,8 +59,6 @@ typedef struct RoomM350Instance {
 } Instance;
 typedef RoomM350Actor Actor;
 
-extern Actor *D_800F32D0;
-extern RoomM350Emitter *D_800F33E0;
 extern unsigned char D_8019A8C4;
 extern int Asset_Find08w(int,int,int,int,int);
 extern int func_80199148(int,Particle *);
@@ -74,11 +73,11 @@ int func_801992A0(int event,State *state)
     case 0:
 
         {
-            Instance *instance=D_800F32D0->instance;
+            Instance *instance=ANIM_OWNER_AS(Actor)->instance;
             Matrix *matrix=instance->transforms;
             Asset_Find08w(0x549,instance->owner->asset,(short)matrix->position[0],(short)matrix->position[1],(short)matrix->position[2]);
             state->count=0; state->delay=0; D_8019A8C4=0;
-            return func_800CE560(D_800F33E0->pool,20,10,
+            return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,20,10,
                                  (FieldAnimCallbackListCallback)func_80199148);
         }
         case 1:
@@ -98,7 +97,7 @@ int func_801992A0(int event,State *state)
         if(D_8019A8C4) return 2;
         state->delay=(unsigned short)state->delay+1;
         if(state->delay<4) return 0;
-        particle=func_800CE610(D_800F33E0->pool);
+        particle=func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
         if(!particle) return 0;
         rand();
         particle->brightness=64;
@@ -107,7 +106,7 @@ int func_801992A0(int event,State *state)
                         particle->size=((unsigned int)count<<7)+4096;
         }
         random=Inv_ScrambleGrid();
-        actor=D_800F32D0;
+        actor=ANIM_OWNER_AS(Actor);
         instance=actor->instance;
         {
             register int low asm("$5")=random&255;
@@ -177,7 +176,7 @@ int func_801992A0(int event,State *state)
         particle->x=(unsigned short)particle->x+(unsigned short)offset.x;
         particle->z=(unsigned short)particle->z+(unsigned short)offset.z;
         state->delay=0; state->count=(unsigned short)state->count+1;
-        Asset_Find08w(0x5FE,D_800F32D0->instance->owner->asset,particle->x,particle->y,particle->z);
+        Asset_Find08w(0x5FE,ANIM_OWNER_AS(Actor)->instance->owner->asset,particle->x,particle->y,particle->z);
     }
         break;
     case 2:

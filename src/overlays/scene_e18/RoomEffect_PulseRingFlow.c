@@ -12,7 +12,7 @@ int func_80193018(int mode, SceneE18PulseRing *ring) {
 
     switch (mode) {
     case 1:
-        instance = D_800F32D0->instance;
+        instance = ANIM_OWNER_AS(SceneE18Actor)->instance;
         if (*instance->owner->stage == 1)
             *instance->owner->stage = 2;
         ring->size -= ring->shrink;
@@ -38,7 +38,7 @@ int func_80193018(int mode, SceneE18PulseRing *ring) {
         }
         break;
     case 2:
-        instance = D_800F32D0->instance;
+        instance = ANIM_OWNER_AS(SceneE18Actor)->instance;
         brightness = (s16)(ring->size > 0x80 ? 0x80 : ring->size);
         if (ring->size > 0) {
             position.x = instance->transform.t[0];
@@ -84,7 +84,7 @@ int func_8019330C(int mode, SceneE18PulseState *state) {
         }
         state->stage = 0;
         state->ticks = 0;
-        return func_800CE560(D_800F33E0->pool, 8, 4,
+        return func_800CE560(ANIM_POOL_AS(SceneE18Emitter)->pool, 8, 4,
                              (FieldAnimCallbackListCallback)func_80193018);
 
     }
@@ -93,11 +93,11 @@ update:
     state->ticks++;
     if ((s16)state->ticks < 2) return 0;
 
-    particle = func_800CE610(D_800F33E0->pool);
+    particle = func_800CE610(ANIM_POOL_AS(SceneE18Emitter)->pool);
     if (!particle) return 0;
 
     if (state->stage == 0) {
-        FieldActor *actor = (FieldActor *)D_800F32D0->instance;
+        FieldActor *actor = (FieldActor *)ANIM_OWNER_AS(SceneE18Actor)->instance;
         RenderMatrix *matrix = actor->render_object.matrices;
         FieldActorState *owner = actor->state;
         func_8006DCE4(0x5C3, owner->progress,

@@ -27,15 +27,15 @@ int func_8018F7C4(int mode, RoomM349FlareTarget *target,
         target->position.y = params->y;
         target->position.z = params->z;
         target->position.y = g_RoomFloorY->y;
-        return func_800CE560(D_800F33E0->pool, 20, 70,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 70,
                              (FieldAnimCallbackListCallback)func_8018F010);
     case 1:
-        func_800CE870(D_800F32D0->pool, 0, (s16 *)&joint);
+        func_800CE870(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, (s16 *)&joint);
         radius = params->radius;
         period = params->period;
         if (D_800E27EC <= params->lastFrame) {
             if (D_800E27EC % period == 0) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = target->position.x;
                     child->y = target->position.y;
@@ -54,7 +54,7 @@ int func_8018F7C4(int mode, RoomM349FlareTarget *target,
                 }
             }
             if (D_800E27EC % period == period / 2) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = target->position.x;
                     child->y = target->position.y;
@@ -74,7 +74,7 @@ int func_8018F7C4(int mode, RoomM349FlareTarget *target,
             }
         }
         if (!(D_800E27EC & 1) && !(func_80071A54() & 1)) {
-            child = func_800CE610(D_800F33E0->pool);
+            child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (child) {
                 child->x = joint.x;
                 child->y = joint.y;
@@ -111,7 +111,7 @@ int func_8018F7C4(int mode, RoomM349FlareTarget *target,
         }
         size = 0x2AA;
         phase = (func_80071A54() & 0x1F) + 0x20;
-        func_800CE8F0(D_800F32D0->pool, 13, &rotation, &anchor);
+        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 13, &rotation, &anchor);
         {
             u16 clut;
             int kind;
@@ -124,7 +124,7 @@ int func_8018F7C4(int mode, RoomM349FlareTarget *target,
                           (s16)D_800F3368.parameter02 + 0xD8, clut, 1, phase,
                           &color);
         }
-        func_800CE8F0(D_800F32D0->pool, 13, &rotation2, &anchor);
+        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 13, &rotation2, &anchor);
         {
             u16 clut;
             int kind;

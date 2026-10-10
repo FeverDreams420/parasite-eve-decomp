@@ -24,7 +24,7 @@ int Memcard_RingBurstController(int mode, MemcardRingBurst *burst) {
         func_8006DDCC(0x4B7, 0, burst->x, burst->y, burst->z);
         burst->state = 0;
         burst->timer = 0;
-        return func_800CE560(D_800F33E0->pool, 20, 50,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 50,
                              (FieldAnimCallbackListCallback)Memcard_DriftGlowParticle);
     case 1:
         switch (burst->state) {
@@ -35,7 +35,7 @@ int Memcard_RingBurstController(int mode, MemcardRingBurst *burst) {
             burst->state = 1;
             burst->timer = 0;
             for (i = 0; i < 50; i++) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = burst->x;
                     child->y = burst->y;

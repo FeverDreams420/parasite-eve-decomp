@@ -4,9 +4,9 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_model_draw.h"
+#include "pe1/field_anim_pool.h"
 
 extern RoomM273PlayerActorView *g_PlayerEntity;
-extern RoomM273EffectStateContext *D_800F32D0;
 extern u8 D_8019AE9A;
 extern RoomM273PulseSeed D_8019AC20[2];
 extern u16 D_800E11FA;
@@ -22,7 +22,6 @@ typedef struct { void *asset,*pool; } AssetState;
 extern short D_8019AC18[];
 extern int D_8019AC0C[];
 extern unsigned short D_800E11FA;
-extern RoomM273EffectStateContext *D_800F32D0;
 extern AssetState D_8019AE8C;
 extern void *D_8019AE90,*D_800B0E64;
 extern unsigned char D_8019AE9A;
@@ -147,7 +146,7 @@ int func_80193F30(int mode) {
         int size;
         D_8019AE8C.asset=Asset_FindTable08ByU32Key(D_800B0E64,0xC5941704);
         func_800C6D5C(D_8019AE8C.asset,0,0);
-        size=func_800CE560(D_800F33E0->pool,16,6,
+        size=func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,16,6,
                            (FieldAnimCallbackListCallback)func_80193CB8);
         asm("" : : "r"(size));
         return size+func_800CE5AC(&D_8019AE8C.pool,size,4,2,func_80193B5C);
@@ -155,13 +154,13 @@ int func_80193F30(int mode) {
     case 1: {
         RoomM273ThresholdEntityState *state;
         if(D_8019AE9A) return 2;
-        state=D_800F32D0->state.threshold;
+        state=ANIM_OWNER_AS(RoomM273EffectStateContext)->state.threshold;
         if(state->mode.kind==9) {
             unsigned short value=state->mode.value26;
             if(state->mode.value22>0 && (short)value<=0) {
                 short i=0;
                 do {
-                    ThresholdTripleEffect *effect=func_800CE610(D_800F33E0->pool);
+                    ThresholdTripleEffect *effect=func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
                     if(!effect) break;
                     effect->x=state->transform->x;
                     asm("" : : : "memory");
@@ -217,19 +216,19 @@ int func_80194128(int mode, GteRotation *rotation) {
 int func_80194284(int mode) {
     switch (mode) {
     case 0:
-        return func_800CE560(D_800F33E0->pool, 8, 4,
+        return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 4,
                              (FieldAnimCallbackListCallback)func_80194128);
     case 1: {
         RoomM273EffectModeState *state;
         if (D_8019AE9A) return 2;
-        state = D_800F32D0->state.mode;
+        state = ANIM_OWNER_AS(RoomM273EffectStateContext)->state.mode;
         if (state->kind == 9) {
             unsigned short value = state->value26;
             if (state->value22 > 0 && (short)value <= 0) {
                 short i = 0;
                 int angle = Inv_ScrambleGrid() << 4;
                 do {
-                    RoomM273PulseSeed *seed = func_800CE610(D_800F33E0->pool);
+                    RoomM273PulseSeed *seed = func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
                     if (!seed) break;
                     *seed = D_8019AC20[i];
                     i++;
@@ -287,12 +286,12 @@ int func_801945A8(int mode) {
     switch(mode) {
     case 0:
         D_8019AE60=0; D_8019AE64=0;
-        return func_800CE560(D_800F33E0->pool,8,4,
+        return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,8,4,
                              (FieldAnimCallbackListCallback)func_80194470);
     case 1: {
         RoomM273EffectModeState *state;
         if(D_8019AE9A) return 2;
-        state=D_800F32D0->state.mode;
+        state=ANIM_OWNER_AS(RoomM273EffectStateContext)->state.mode;
         if(state->kind==9) {
             unsigned short value=state->value26;
             if(state->value22>=2 && (short)value<2) {
@@ -302,7 +301,7 @@ int func_801945A8(int mode) {
         if(D_8019AE60) {
             short old=D_8019AE64--;
             if(old<=0) {
-                Vector *position=func_800CE610(D_800F33E0->pool);
+                Vector *position=func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
                 if(position) {
                     RoomM273PlayerTransform *transform=g_PlayerEntity->tail.transform;
                     position->x=transform->position.x;
@@ -388,7 +387,7 @@ extern int func_800CE688(void *);
 int func_801949EC(int mode) {
     switch (mode) {
     case 0: {
-        int size = func_800CE560(D_800F33E0->pool, 8, 2,
+        int size = func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 2,
                                  (FieldAnimCallbackListCallback)func_801947CC);
         asm("" : : "r"(size));
         return size + func_800CE5AC(&D_8019AE94, size, 16, 9, func_80199F84);
@@ -396,11 +395,11 @@ int func_801949EC(int mode) {
     case 1: {
         RoomM273EffectModeState *state;
         if (D_8019AE9A) return 2;
-        state = D_800F32D0->state.mode;
+        state = ANIM_OWNER_AS(RoomM273EffectStateContext)->state.mode;
         if (state->kind == 9) {
             unsigned short value = state->value26;
             if (state->value22 >= 4 && (short)value < 4) {
-                RoomM273PointerPoolEffect *effect = (RoomM273PointerPoolEffect *)func_800CE610(D_800F33E0->pool);
+                RoomM273PointerPoolEffect *effect = (RoomM273PointerPoolEffect *)func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
                 if (effect) effect->position = g_PlayerEntity->tail.object + 20;
             }
         }

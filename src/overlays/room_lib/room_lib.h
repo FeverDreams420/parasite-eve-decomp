@@ -15,6 +15,7 @@
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_script_context.h"
 #include "pe1/field_vector_math.h"
+#include "pe1/field_anim_pool.h"
 
 typedef struct RoomObj {
     char pad0[0xC];
@@ -893,8 +894,6 @@ typedef struct RoomDlgState {
     short h12;                    /* 0x12 */
 } RoomDlgState;
 
-extern RoomChanCtx *D_800F32D0;
-extern RoomChanCtx *D_800F33E0;
 extern RoomDlgState *D_800E2368;
 extern void *RoomMain_ActorPtr2;
 extern int func_800CE8F0();
@@ -905,12 +904,12 @@ extern int func_800CFAA8();
         RoomBlob8 tmp = rect; \
         switch (mode) { \
         case 0: \
-            func_800CE8F0(D_800F32D0->w8, 0x13, &tmp, msg); \
+            func_800CE8F0(ANIM_OWNER_AS(RoomChanCtx)->w8, 0x13, &tmp, msg); \
             if (D_800E2368->h12 == 0) goto send_pos; \
             if (D_800E2368->h12 == 1) goto at_actor; \
             goto after; \
         send_pos: \
-            func_800CE9D4(D_800F32D0->w8, 0x13, &msg->sub); \
+            func_800CE9D4(ANIM_OWNER_AS(RoomChanCtx)->w8, 0x13, &msg->sub); \
             goto after; \
         at_actor: \
             { \
@@ -921,7 +920,7 @@ extern int func_800CFAA8();
             } \
         after: \
             if (D_800E2368->bD != 0) { \
-                RoomNodeB **q = D_800F32D0->w8; \
+                RoomNodeB **q = ANIM_OWNER_AS(RoomChanCtx)->w8; \
                 if (q != 0 && *q != 0) { \
                     unsigned char *st = (*q)->state; \
                     if (*st == 1) { \
@@ -929,10 +928,10 @@ extern int func_800CFAA8();
                     } \
                 } \
             } \
-            return func_800CE560(D_800F33E0->w8, 0x14, 0x18, &blob); \
+            return func_800CE560(ANIM_POOL_AS(RoomChanCtx)->w8, 0x14, 0x18, &blob); \
         case 1: \
             if (D_800E27EC == mode) { \
-                RoomQRec *p = func_800CE610(D_800F33E0->w8); \
+                RoomQRec *p = func_800CE610(ANIM_POOL_AS(RoomChanCtx)->w8); \
                 if (p != 0) { \
                     p->h0 = msg->h0; \
                     p->h2 = msg->h2; \
@@ -941,7 +940,7 @@ extern int func_800CFAA8();
                     p->h10 = 0; \
                     p->h12 = 0; \
                 } \
-                p = func_800CE610(D_800F33E0->w8); \
+                p = func_800CE610(ANIM_POOL_AS(RoomChanCtx)->w8); \
                 if (p != 0) { \
                     p->h0 = msg->h0; \
                     p->h2 = msg->h2; \

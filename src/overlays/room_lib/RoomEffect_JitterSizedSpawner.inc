@@ -17,15 +17,15 @@ int ROOMEFFECT_JITTER_SPAWNER_FUNC(int mode) {
 
     switch (mode) {
     case 0:
-        return func_800CE560(D_800F33E0->pool, 20, 10,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 10,
                              (FieldAnimCallbackListCallback)ROOMEFFECT_JITTER_SPAWNER_CALLBACK);
     case 1:
-        if (D_800F32D0 != D_800942E4) return 1;
-        if (((RoomSparkOwner *)D_800F32D0->pool)->state->frame < 11) return 1;
-        func_800CE870(D_800F32D0->pool, 0, (s16 *)&position);
+        if (ANIM_OWNER_AS(RoomSparkChannel) != D_800942E4) return 1;
+        if (((RoomSparkOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->state->frame < 11) return 1;
+        func_800CE870(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, (s16 *)&position);
         for (i = 0; i < 3; i++) {
             if (func_80071A54() & 1) {
-                child = (RoomJitterSpark *)func_800CE610(D_800F33E0->pool);
+                child = (RoomJitterSpark *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     position.y += 110;
                     child->x = position.x;

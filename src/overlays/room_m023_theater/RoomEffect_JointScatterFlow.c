@@ -123,16 +123,16 @@ int func_8018F3C8(int mode, RoomM023ScatterState *state) {
             state->joint = 16;
             break;
         }
-        return func_800CE560(D_800F33E0->pool, 16, 12,
+        return func_800CE560(ANIM_POOL_AS(RoomM023Channel)->pool, 16, 12,
                              (FieldAnimCallbackListCallback)func_8018F004);
     case 1:
-        func_800CE8F0(D_800F32D0->pool, state->joint, &template, position);
+        func_800CE8F0(ANIM_OWNER_AS(RoomM023Channel)->pool, state->joint, &template, position);
         state->timer++;
         if (D_800E2368->interval == 0) return 1;
         if (D_800E2368->interval < state->timer) {
             state->timer = 0;
-            func_800CE870(D_800F32D0->pool, 0, position);
-            particle = func_800CE610(D_800F33E0->pool);
+            func_800CE870(ANIM_OWNER_AS(RoomM023Channel)->pool, 0, position);
+            particle = func_800CE610(ANIM_POOL_AS(RoomM023Channel)->pool);
             if (particle == 0) return 0;
             if (func_80071A54() & 1) {
                 particle->x = (func_80071A54() & 0x7FF) - 0x400;
@@ -151,7 +151,7 @@ int func_8018F3C8(int mode, RoomM023ScatterState *state) {
         }
         break;
     case 2:
-        func_800CE8F0(D_800F32D0->pool, state->joint, &template, &g_RoomScriptRecord);
+        func_800CE8F0(ANIM_OWNER_AS(RoomM023Channel)->pool, state->joint, &template, &g_RoomScriptRecord);
         D_800F3368.parameter00 = 32;
         D_800F3368.parameter02 = 2;
         D_800F3368.extent_x = 32;

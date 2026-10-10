@@ -1,4 +1,5 @@
-extern void *D_800F32D0;
+#include "pe1/field_anim_pool.h"
+
 extern unsigned char D_8019AE9A;
 
 extern void func_8006DCE4(int arg0, void *arg1, int arg2, int arg3, int arg4);
@@ -23,7 +24,7 @@ int func_80194D54(int mode) {
 
     }
 mode_one:
-    obj = *(unsigned char **)((unsigned char *)D_800F32D0 + 8);
+    obj = *(unsigned char **)((unsigned char *)ANIM_OWNER_AS(void) + 8);
     state = *(unsigned char **)(*(unsigned char **)obj + 0x18);
     frame = *(unsigned short *)(obj + 0x16);
     timer = *(unsigned short *)(obj + 0x1A);

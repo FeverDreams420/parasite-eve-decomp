@@ -8,6 +8,7 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_model_draw.h"
 #include "pe1/field_vector_math.h"
+#include "pe1/field_anim_pool.h"
 
 /* Steers a rotating footprint, tests contact, and draws three model/sprite layers. */
 typedef RoomM350Vector Vector;
@@ -17,7 +18,6 @@ typedef struct { void *asset; int yaw; short size,brightness,unknown,turn; unsig
 typedef FieldActorState Owner;
 typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
-extern Actor *D_800F32D0;
 extern Instance *g_PlayerEntity;
 extern void *D_800B0E64;
 extern short D_8019A82A[];
@@ -39,7 +39,7 @@ int func_801960C4(int event,State *state)
     Matrix base;
     Vector position,rotation;
     Scale scale;
-    Instance *instance=(Instance *)D_800F32D0->instance;
+    Instance *instance=(Instance *)ANIM_OWNER_AS(Actor)->instance;
     switch (event) {
 case 0:
     {

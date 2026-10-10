@@ -2,6 +2,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 
 typedef struct { short x,y,z,frame; } Particle;
 typedef RoomM350TransformOwner Instance;
@@ -10,7 +11,6 @@ typedef RoomM350SignedHalfPair SignedHalf;
 
 /* The spawner owns the falling particles updated and rendered by this callback. */
 extern Instance *g_PlayerEntity;
-extern RoomM350Emitter *D_800F33E0;
 extern RenderColor D_8019A464;
 extern unsigned char D_8019A79A,D_8019A79C;
 extern short D_800966EE[];
@@ -39,12 +39,12 @@ int func_801938E4(int event) {
     switch (event) {
     case 0:
 
-        return func_800CE560(D_800F33E0->pool,8,4,
+        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,8,4,
                              (FieldAnimCallbackListCallback)func_801937B4);
         case 1:
     if(D_8019A79A) return 2;
     if(D_8019A79C) {
-        Particle *particle=func_800CE610(D_800F33E0->pool);
+        Particle *particle=func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
         Instance *player;
         if(!particle) return 0;
         do {

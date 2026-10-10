@@ -2,6 +2,7 @@
 #define ROOM_M318_EFFECTS_H
 
 #include "common.h"
+#include "pe1/field_anim_pool.h"
 
 typedef struct RoomM318Spark {
     u16 x;
@@ -15,7 +16,6 @@ typedef struct RoomM318Emitter {
     void *link;
 } RoomM318Emitter;
 
-extern RoomM318Emitter *D_800F33E0;
 
 PE1_STATIC_ASSERT(sizeof(RoomM318Spark) == 8, room_m318_spark_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM318Emitter, link) == 8,

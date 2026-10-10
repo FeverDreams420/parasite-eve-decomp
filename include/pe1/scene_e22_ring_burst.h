@@ -7,6 +7,7 @@
 #include "pe1/room_orbit_trail.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_owner_actor.h"
+#include "pe1/field_anim_pool.h"
 
 /* Ring burst controller (scene_e22): scene event gate, particle channel
  * and the helpers the burst and its orbit trail particles call. */
@@ -22,7 +23,6 @@ typedef struct SceneE22BurstChannel {
 } SceneE22BurstChannel;
 
 extern SceneE22BurstEvent *D_800E2368;
-extern SceneE22BurstChannel *D_800F33E0;
 extern char RoomMain_ActorPtr[];
 extern u16 D_800E11EA;
 extern u16 D_800E11FA;

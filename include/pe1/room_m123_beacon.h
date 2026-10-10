@@ -12,6 +12,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 
 /* room_m123 joint beacon (func_80193618): follows joint 0x17 of the actor,
  * swells, pulses and fades, tags the player once on contact, and draws a glow
@@ -78,7 +79,6 @@ typedef struct RoomM123BeaconColor {
     u8 r, g, b, code;
 } RoomM123BeaconColor;
 
-extern RoomM123BeaconChannel *D_800F32D0;
 extern RoomM123BeaconEvent *D_800E2368;
 extern RoomM123BeaconEntity *D_8009D254;
 extern RoomM123BeaconArchive D_800B0E64;

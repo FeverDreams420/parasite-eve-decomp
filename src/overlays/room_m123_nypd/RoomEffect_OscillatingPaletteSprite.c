@@ -59,15 +59,15 @@ int func_80195114(int mode, RoomM123Burst *burst, int *choice) {
     switch (mode) {
     case 0:
         value = *choice ? 34 : 40;
-        func_800CE8F0(D_800F32D0->pool, value, &position, &burst->x);
+        func_800CE8F0(ANIM_OWNER_AS(RoomM123Pool)->pool, value, &position, &burst->x);
         burst->frame = 0;
         burst->phase = 0;
         func_800D3F64(0x581, func_800D3FD8());
-        return func_800CE560(D_800F33E0->pool, 12, 24,
+        return func_800CE560(ANIM_POOL_AS(RoomM123Pool)->pool, 12, 24,
                              (FieldAnimCallbackListCallback)func_80194F68);
     case 1:
         if (D_800E27EC < 32) {
-            child = func_800CE610(D_800F33E0->pool);
+            child = func_800CE610(ANIM_POOL_AS(RoomM123Pool)->pool);
             if (child != 0) {
                 child->x = burst->x;
                 child->y = burst->y;

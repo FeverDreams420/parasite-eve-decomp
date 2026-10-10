@@ -25,13 +25,13 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
         glow->jointB = 0x12;
         glow->state = 0;
         glow->timer = 0;
-        return func_800CE560(D_800F33E0->pool, 0x14, 0x20, func_80199C28);
+        return func_800CE560(ANIM_POOL_AS(SceneTwinGlowChannel)->pool, 0x14, 0x20, func_80199C28);
     case 1:
         glow->timer++;
         if (glow->timer == 0xF) {
             for (i = 0; i < 16; i++) {
                 time = i << 8;
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(SceneTwinGlowChannel)->pool);
                 if (child) {
                     child->x = glow->position.x;
                     child->y = glow->position.y;
@@ -44,7 +44,7 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
                     child->state = 0;
                     child->timer = 0;
                 }
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(SceneTwinGlowChannel)->pool);
                 if (child) {
                     child->x = glow->position.x;
                     child->y = glow->position.y;
@@ -65,8 +65,8 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
-        func_800CE8F0(D_800F32D0->pool, glow->jointA, &offset, &jointA);
-        func_800CE8F0(D_800F32D0->pool, glow->jointB, &offset, &jointB);
+        func_800CE8F0(ANIM_OWNER_AS(SceneTwinGlowChannel)->pool, glow->jointA, &offset, &jointA);
+        func_800CE8F0(ANIM_OWNER_AS(SceneTwinGlowChannel)->pool, glow->jointB, &offset, &jointB);
         D_800F3368.parameter00 = 0x40;
         D_800F3368.parameter02 = 4;
         D_800F3368.extent_x = 0x40;

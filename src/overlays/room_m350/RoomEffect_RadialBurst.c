@@ -4,11 +4,11 @@
 #include "pe1/gte_types.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 typedef RoomM350OverlayTransform Transform;
 typedef struct RoomM350Instance { char reserved[0x238]; Transform *transform; } Instance;
 typedef RoomM350Actor Actor;
 
-extern Actor *D_800F32D0;
 extern int D_800966EC[], D_8019A634[];
 extern int GetClut(int, int);
 
@@ -22,7 +22,7 @@ int func_80197A04(int event, short *object)
     } else if (event == 2) {
         int scale = (4096 - *(short *)((char *)D_800966EC +
             (((unsigned int)(D_800E27EC - 1) << 9) & 0x3E00))) * 2;
-        int *origin = D_800F32D0->instance->transform->position;
+        int *origin = ANIM_OWNER_AS(Actor)->instance->transform->position;
         int i;
         int kind, palette, handle;
 
@@ -46,7 +46,6 @@ int func_80197A04(int event, short *object)
 
 typedef RoomM350TransformMatrix Matrix;
 typedef RoomM350Vector Vector;
-extern RoomM350Emitter *D_800F33E0;
 extern unsigned char D_8019A86E, D_8019A859;
 extern unsigned short D_800E11E8;
 /* Retail writes both fields twice during configuration. */
@@ -58,7 +57,7 @@ int func_80197B98(int event)
     switch (event) {
     case 0:
 
-        return func_800CE560(D_800F33E0->pool, 8, 16,
+        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 8, 16,
                              (FieldAnimCallbackListCallback)func_80197A04);
         case 1:
     if (D_8019A86E) return 2;
@@ -69,7 +68,7 @@ int func_80197B98(int event)
             Vector vector;
             register int random asm("$16");
             int divisor;
-            short *effect = func_800CE610(D_800F33E0->pool);
+            short *effect = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
             if (!effect) break;
             i++;
             vector.x = Inv_ScrambleGrid() << 4;

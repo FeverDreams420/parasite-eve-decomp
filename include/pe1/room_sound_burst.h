@@ -11,6 +11,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_owner_actor.h"
+#include "pe1/field_anim_pool.h"
 
 /* Room effect controllers that play a sound, then emit one particle every
  * third frame along an angle that sweeps half a turn over seventy frames. */
@@ -72,7 +73,6 @@ PE1_STATIC_ASSERT(sizeof(RoomSoundBurstParticle) == 0x18,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomSoundBurstState, soundHandle) == 0xC,
                   room_sound_burst_state_sound_handle);
 
-extern RoomSoundBurstChannel *D_800F32D0, *D_800F33E0;
 extern RoomSoundBurstEventState *D_800E2368;
 extern volatile u16 D_800E11E8;
 extern void func_800CE8F0(void *, int, void *, void *);

@@ -8,20 +8,20 @@ int Memcard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
 
     switch (mode) {
     case 0:
-        burst->x = ((MemcardGlintAnchor *)D_800F32D0->pool)->x;
-        burst->y = ((MemcardGlintAnchor *)D_800F32D0->pool)->y;
-        burst->z = ((MemcardGlintAnchor *)D_800F32D0->pool)->z;
+        burst->x = ((MemcardGlintAnchor *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->x;
+        burst->y = ((MemcardGlintAnchor *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->y;
+        burst->z = ((MemcardGlintAnchor *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->z;
         func_800CE9D4((struct RoomFxTransformOwner *)D_8009D254, 0, (GteShortVector *)&burst->rotation);
         burst->rotation.x = 0;
         func_800C6D5C((union FieldTexturedModel *)D_800E22D4, 0, 0);
-        return func_800CE560(D_800F33E0->pool, 20, 40,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 40,
                              (FieldAnimCallbackListCallback)Memcard_SpinRingParticle);
     case 1:
         if (D_800E27EC == 3) {
             func_8006DDCC(1201, 0, burst->x, burst->y, burst->z);
         }
         if (D_800E27EC == 2) {
-            child = (MemcardSpinParticle *)func_800CE610(D_800F33E0->pool);
+            child = (MemcardSpinParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (child) {
                 child->x = burst->x;
                 child->y = burst->y;
@@ -34,7 +34,7 @@ int Memcard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
                 child->timer = 0;
             }
             for (i = 0; i < 6; i++) {
-                child = (MemcardSpinParticle *)func_800CE610(D_800F33E0->pool);
+                child = (MemcardSpinParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = (func_80071A54() & 0x7F) - 64;
                     child->y = 0;
@@ -51,7 +51,7 @@ int Memcard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
             }
         }
         if (D_800E27EC == 8) {
-            child = (MemcardSpinParticle *)func_800CE610(D_800F33E0->pool);
+            child = (MemcardSpinParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (child) {
                 child->x = burst->x;
                 child->y = burst->y;
@@ -65,7 +65,7 @@ int Memcard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
                 child->timer = 0;
             }
             for (i = 0; i < 6; i++) {
-                child = (MemcardSpinParticle *)func_800CE610(D_800F33E0->pool);
+                child = (MemcardSpinParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = 0;
                     child->y = (func_80071A54() & 0x7F) - 64;
@@ -81,7 +81,7 @@ int Memcard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
             }
         }
         if (D_800E27EC == 2) {
-            child = (MemcardSpinParticle *)func_800CE610(D_800F33E0->pool);
+            child = (MemcardSpinParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (child) {
                 child->x = burst->x;
                 child->y = burst->y;

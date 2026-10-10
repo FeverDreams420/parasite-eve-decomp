@@ -4,8 +4,8 @@
 #include "pe1/gte.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 
-extern RoomM350EffectActor *D_800F32D0;
 extern GteMatrix D_8019A870;
 extern short D_8019A890[];
 extern int D_800966EC[], D_8019A690[];
@@ -38,7 +38,7 @@ int func_801981D0(int event, RoomM350FlareParticle *particle)
         position.y += D_8019A890[1];
         position.z += D_8019A890[2];
         rotation.x = (unsigned int)D_800E27EC * 384;
-        rotation.y = D_800F32D0->instance->yaw;
+        rotation.y = ANIM_OWNER_AS(RoomM350EffectActor)->instance->yaw;
         rotation.z = 0;
         rotation.pad = 1;
         kind = D_800F3368.palette;
@@ -60,7 +60,6 @@ int func_801981D0(int event, RoomM350FlareParticle *particle)
 }
 
 /* Spawns flares and tests the quad swept by the actor's two side endpoints. */
-extern RoomM350EffectEmitter *D_800F33E0;
 extern RoomM350EffectInstance *g_PlayerEntity;
 
 extern unsigned char D_8019A8C0;
@@ -77,16 +76,16 @@ extern int Inv_ScrambleGrid(void);
 int func_80198400(int event) {
     GteShortVector offset,vertices[4];
     int area;
-    RoomM350EffectInstance *instance=D_800F32D0->instance;
+    RoomM350EffectInstance *instance=ANIM_OWNER_AS(RoomM350EffectActor)->instance;
     switch (event) {
     case 0:
 
-        return func_800CE560(D_800F33E0->pool,8,4,
+        return func_800CE560(ANIM_POOL_AS(RoomM350EffectEmitter)->pool,8,4,
                              (FieldAnimCallbackListCallback)func_801981D0);
         case 1:
     if(instance->frame>=31) return 2;
     if(!(D_800E27EC&1)) {
-        RoomM350FlareParticle *particle=func_800CE610(D_800F33E0->pool);
+        RoomM350FlareParticle *particle=func_800CE610(ANIM_POOL_AS(RoomM350EffectEmitter)->pool);
         if(particle) {
             int random=Inv_ScrambleGrid()&255;
             particle->y=random;

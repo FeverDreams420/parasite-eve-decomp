@@ -69,12 +69,12 @@ int func_80194768(int mode)
 
     switch (mode) {
     case 0:
-        return func_800CE560(D_800F33E0->pool, 8, 24,
+        return func_800CE560(ANIM_POOL_AS(RoomM123Pool)->pool, 8, 24,
                              (FieldAnimCallbackListCallback)func_801945EC);
     case 1:
         if (D_800E27EC == 1) {
             for (i = 0; i < 24; i++) {
-                particle = func_800CE610(D_800F33E0->pool);
+                particle = func_800CE610(ANIM_POOL_AS(RoomM123Pool)->pool);
                 if (particle != 0) {
                     particle->frame = (i << 6) / 24;
                     particle->scale = (func_80071A54() & 63) + 64;
@@ -82,7 +82,7 @@ int func_80194768(int mode)
                 }
             }
         } else {
-            particle = func_800CE610(D_800F33E0->pool);
+            particle = func_800CE610(ANIM_POOL_AS(RoomM123Pool)->pool);
             if (particle != 0) {
                 particle->frame = 0;
                 particle->scale = (func_80071A54() & 63) + 64;
@@ -96,14 +96,14 @@ int func_80194768(int mode)
         if (time < 80) break;
         return 1;
     case 2:
-        func_800CE8F0(D_800F32D0->pool, 23, &seed, &output);
+        func_800CE8F0(ANIM_OWNER_AS(RoomM123Pool)->pool, 23, &seed, &output);
         scale = rsin((D_800E27EC << 11) / 80);
         if (scale < 0)
             scale += 31;
         outX = output.x;
         outY = output.y;
         outZ = output.z;
-        context = D_800F32D0;
+        context = ANIM_OWNER_AS(RoomM123Pool);
         /* Keep the context load ahead of the texture address. */
         asm volatile("" : : "r"(context) : "memory");
         texture = D_801956A8;

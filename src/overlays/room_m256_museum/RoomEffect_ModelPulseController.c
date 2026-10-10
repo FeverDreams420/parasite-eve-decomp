@@ -31,13 +31,13 @@ int func_80195728(int mode, s16 *state) {
         *state = 0;
         D_801960A8 = func_8006E498(D_800B0E64, 0xC5487704);
         func_800C6D5C(D_801960A8, 0, 0);
-        return func_800CE560(D_800F33E0->pool, 8, 0x10,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 8, 0x10,
                              (FieldAnimCallbackListCallback)func_8019552C);
     case 1:
         if (*state < 0x80) *state += 4;
         if (D_800E27EC == 1) {
             for (i = 0; i < 16; i++) {
-                slot = func_800CE610(D_800F33E0->pool);
+                slot = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 child = slot;
                 if (child) {
                     child->frame = 0;
@@ -60,7 +60,7 @@ int func_80195728(int mode, s16 *state) {
             D_800F3368.parameter0A = 0;
             D_800F3368.depth = 0x18;
         }
-        func_800CE8F0(D_800F32D0->pool, 2, &rotation, &position);
+        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 2, &rotation, &position);
         spin.x = 0;
         spin.y = 0;
         spin.flags = 0;
@@ -77,7 +77,7 @@ int func_80195728(int mode, s16 *state) {
         D_801960A0.x = position.x;
         D_801960A0.y = position.y;
         D_801960A0.z = position.z;
-        func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->pool, 2,
+        func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 2,
                       &D_80196098);
         D_80196098.x += 0x400;
         if (D_800E27EC >= 4) {

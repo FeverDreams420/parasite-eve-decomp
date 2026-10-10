@@ -86,16 +86,16 @@ int func_80196820(int mode, RoomCrossFlash *flash) {
     switch (mode) {
     case 0:
         func_800CE870((char *)D_8009D254, 0, (s16 *)flash);
-        func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->pool, 0,
+        func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomShakeBurstChannel)->pool, 0,
                       (GteShortVector *)&flash->rotation);
         flash->rotation.x = 0;
-        return func_800CE560(D_800F33E0->pool, 0x14, 0x28,
+        return func_800CE560(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool, 0x14, 0x28,
                              (FieldAnimCallbackListCallback)func_8019646C);
     case 1:
         if (D_800E2368->running == 0)
             return 1;
         if (D_800E27EC == 2) {
-            child = (RoomCrossFlashParticle *)func_800CE610(D_800F33E0->pool);
+            child = (RoomCrossFlashParticle *)func_800CE610(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool);
             if (child) {
                 child->x = flash->x;
                 child->y = flash->y;
@@ -108,7 +108,7 @@ int func_80196820(int mode, RoomCrossFlash *flash) {
                 child->timer = 0;
             }
             for (i = 0; i < 4; i++) {
-                child = (RoomCrossFlashParticle *)func_800CE610(D_800F33E0->pool);
+                child = (RoomCrossFlashParticle *)func_800CE610(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool);
                 if (child) {
                     child->x = (func_80071A54() & 0x7F) - 0x40;
                     child->y = 0;
@@ -125,7 +125,7 @@ int func_80196820(int mode, RoomCrossFlash *flash) {
             }
         }
         if (D_800E27EC == 8) {
-            child = (RoomCrossFlashParticle *)func_800CE610(D_800F33E0->pool);
+            child = (RoomCrossFlashParticle *)func_800CE610(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool);
             if (child) {
                 child->x = flash->x;
                 child->y = flash->y;
@@ -139,7 +139,7 @@ int func_80196820(int mode, RoomCrossFlash *flash) {
                 child->timer = 0;
             }
             for (i = 0; i < 4; i++) {
-                child = (RoomCrossFlashParticle *)func_800CE610(D_800F33E0->pool);
+                child = (RoomCrossFlashParticle *)func_800CE610(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool);
                 if (child) {
                     child->x = 0;
                     child->y = (func_80071A54() & 0x7F) - 0x40;

@@ -35,7 +35,7 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
         state->position.y = anchor->y;
         state->position.z = anchor->z;
         if (D_800E2368->active) {
-            RoomM089PulsePool *pool = D_800F32D0->pool;
+            RoomM089PulsePool *pool = ANIM_OWNER_AS(RoomM089PulseChannel)->pool;
             if (pool && pool->node) {
                 u8 *flag = pool->node->state;
                 if (*flag == 1) *flag = 2;
@@ -45,12 +45,12 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
         func_800C6D5C((union FieldTexturedModel *)D_8019416C, 0, 0);
         D_80194168 = func_8006E498(D_800B0E64.channel, 0xC5864704);
         func_800C6D5C((union FieldTexturedModel *)D_80194168, 0, 0);
-        return func_800CE560(D_800F33E0->pool, 0x10, 0x18,
+        return func_800CE560(ANIM_POOL_AS(RoomM089SpawnChannel)->pool, 0x10, 0x18,
                              (FieldAnimCallbackListCallback)func_80193200);
     case 1:
         if (D_800E27EC == 1) {
             for (i = 0; i < 16; i++) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomM089SpawnChannel)->pool);
                 if (child) {
                     child->phase = 0;
                     child->angle = (func_80071A54() & 0x7F) + (i << 8);
@@ -59,7 +59,7 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             }
         }
         if (D_800E27EC < 0x38 && (D_800E27EC & 1)) {
-            child = func_800CE610(D_800F33E0->pool);
+            child = func_800CE610(ANIM_POOL_AS(RoomM089SpawnChannel)->pool);
             if (child) {
                 child->phase = 1;
                 child->x = (func_80071A54() & 0x7F) + 0x200;
@@ -71,7 +71,7 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
         if (func_800C6B90(state, 0xF0) == 0) break;
         if (D_800E27EC >= 0x28) break;
         if (D_800E2368->active) {
-            channel = D_800F32D0;
+            channel = ANIM_OWNER_AS(RoomM089PulseChannel);
             if ((channel->pool->node->flags & 0x3F000000) == 0x01000000) {
                 D_8009D254->actor->flags |= 0x4000;
                 channel->pool->node->flags =

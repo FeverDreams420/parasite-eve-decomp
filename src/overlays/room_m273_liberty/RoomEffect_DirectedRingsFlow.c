@@ -33,8 +33,8 @@ int func_8019665C(int mode, RoomM273Drop *drop) {
                 D_8019AF04.hit = drop->position;
                 D_8019AF04.hit.pad = 1;
                 g_PlayerEntity->actor->flags |= 0x4000;
-                if (D_800F32D0->instance->owner)
-                    D_800F32D0->instance->owner->flags |= 0x80000000;
+                if (ANIM_OWNER_AS(RoomM273BossActor)->instance->owner)
+                    ANIM_OWNER_AS(RoomM273BossActor)->instance->owner->flags |= 0x80000000;
             }
         } else {
             if (drop->position.pad++ >= 8) return 1;
@@ -81,7 +81,7 @@ int func_801969D8(int mode) {
     Matrix matrix;
     switch(mode) {
     case 0:
-        return func_800CE560(D_800F33E0->pool,24,40,
+        return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,24,40,
                              (FieldAnimCallbackListCallback)func_8019665C);
     case 1: {
         register unsigned char *stopped asm("$17")=&D_8019AF69;
@@ -108,7 +108,7 @@ int func_801969D8(int mode) {
             register Matrix *transform asm("$16")=&matrix;
             matrix.t[0]=0; matrix.t[1]=0; matrix.t[2]=0;
             do {
-                RoomM273Drop *particle=func_800CE610(D_800F33E0->pool);
+                RoomM273Drop *particle=func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
                 short *wave;
                 if(!particle) break;
                 wave=(short *)&((int *)D_800966EC)[(i*4096/6)&4095];
@@ -132,7 +132,7 @@ int func_801969D8(int mode) {
             /* Failure in the six-particle ring does not skip this ring. */
             i=0; width=(short)spread/2; heading=&D_8019AF60;
             do {
-                RoomM273Drop *particle=func_800CE610(D_800F33E0->pool);
+                RoomM273Drop *particle=func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
                 short *wave;
                 if(!particle) break;
                 {
@@ -158,7 +158,7 @@ int func_801969D8(int mode) {
                 particle->position.pad=0; particle->touched=0;
                 i++;
             } while(i<4);
-            func_8006DCE4(0x5D1,((RoomM273EffectStateContext *)D_800F32D0)->state.directed_rings->owner->value,D_8019AEFC.x,D_8019AEFC.y,D_8019AEFC.z);
+            func_8006DCE4(0x5D1,((RoomM273EffectStateContext *)ANIM_OWNER_AS(RoomM273BossActor))->state.directed_rings->owner->value,D_8019AEFC.x,D_8019AEFC.y,D_8019AEFC.z);
         }
         break;
     }

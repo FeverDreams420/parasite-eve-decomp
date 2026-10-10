@@ -123,7 +123,7 @@ int func_80192AF0(int mode, RoomOrbitRingBurst *burst) {
         burst->counterA = 0;
         burst->sweep = 1;
         func_800CE870(*(char **)RoomMain_ActorPtr, 0, (s16 *)burst);
-        return func_800CE560(D_800F33E0->pool, 0x14, 0x18,
+        return func_800CE560(ANIM_POOL_AS(SceneE22BurstChannel)->pool, 0x14, 0x18,
                              (FieldAnimCallbackListCallback)func_80192548);
     case 1:
         if (D_800E2368->running == 0)
@@ -134,7 +134,7 @@ int func_80192AF0(int mode, RoomOrbitRingBurst *burst) {
         }
         if (D_800E27EC < 3) {
             for (i = 0; i < 2; i++) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(SceneE22BurstChannel)->pool);
                 if (child) {
                     child->x = burst->x;
                     child->y = burst->y;
@@ -148,7 +148,7 @@ int func_80192AF0(int mode, RoomOrbitRingBurst *burst) {
             }
             if (burst->sweep) {
                 for (i = 0; i < 5; i++) {
-                    child = func_800CE610(D_800F33E0->pool);
+                    child = func_800CE610(ANIM_POOL_AS(SceneE22BurstChannel)->pool);
                     if (child) {
                         child->x = burst->x;
                         child->y = burst->y;
@@ -163,7 +163,7 @@ int func_80192AF0(int mode, RoomOrbitRingBurst *burst) {
                 }
             }
             for (i = 0; i < 5; i++) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(SceneE22BurstChannel)->pool);
                 if (child) {
                     child->x = burst->x;
                     child->y = burst->y;

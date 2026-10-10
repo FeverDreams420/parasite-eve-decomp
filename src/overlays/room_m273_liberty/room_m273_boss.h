@@ -12,6 +12,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_model_draw.h"
 #include "pe1/field_vector_math.h"
+#include "pe1/field_anim_pool.h"
 
 /* Boss instance fields read by room_m273's animation controllers. */
 typedef struct RoomM273BossOwner {
@@ -98,7 +99,6 @@ typedef struct RoomM273BossPlayer {
     GteMatrix *transforms;
 } RoomM273BossPlayer;
 
-extern RoomM273BossActor *D_800F32D0;
 extern RoomM273BossPlayer *g_PlayerEntity;
 /* Packed sine/cosine table: the low half is the sine, the high half the cosine. */
 typedef struct RoomM273BossTrig {
@@ -207,7 +207,6 @@ typedef struct RoomM273SwayShard {
 
 typedef RoomM273PoolContext RoomM273EffectPools;
 
-extern RoomM273EffectPools *D_800F33E0;
 extern void *D_8019AF70;
 extern GteShortVector D_8019AE10;
 extern RenderColor D_8019AE04;

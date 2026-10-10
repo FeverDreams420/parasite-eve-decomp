@@ -5,6 +5,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
 #include "pe1/field_owner_actor.h"
+#include "pe1/field_anim_pool.h"
 
 typedef struct RoomOrbitPairTemplate8 {
     s32 word[2];
@@ -49,7 +50,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomOrbitPairEventState, active) == 0xD,
 PE1_STATIC_ASSERT(sizeof(RoomOrbitPairParticle) == 0x14,
                   room_orbit_pair_particle_size);
 
-extern RoomOrbitPairChannel *D_800F32D0, *D_800F33E0;
 extern RoomOrbitPairEventState *D_800E2368;
 extern volatile u16 D_800E11EA;
 extern void func_800CE8F0(void *, int, void *, void *);

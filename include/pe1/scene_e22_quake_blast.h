@@ -10,6 +10,7 @@
 #include "pe1/field_model_draw.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/field_anim_pool.h"
 
 /* Quake blast controller (scene_e22 func_80198348): a blast at the target
  * that lights the actor once it stands in reach, sprays sparks for six
@@ -84,8 +85,6 @@ typedef struct SceneE22QuakeSound {
 
 extern SceneE22QuakeSound D_800B0E64;
 extern SceneE22QuakeEvent *D_800E2368;
-extern SceneE22QuakeObjectChannel *D_800F32D0;
-extern SceneE22QuakeChannel *D_800F33E0;
 extern SceneE22QuakeActor **RoomMain_ActorPtr;
 /* Texture page indices: [0] the shared effect page, [8] this scene's. */
 extern u16 D_800E11EA[];

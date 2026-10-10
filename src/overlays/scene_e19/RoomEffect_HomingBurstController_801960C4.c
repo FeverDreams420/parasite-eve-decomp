@@ -18,11 +18,11 @@ int func_801960C4(int mode, SceneHomingBurst *burst)
 
     switch (mode) {
     case 0:
-        func_800CE8F0(D_800F32D0->pool, 0, &rotation, &burst->position);
+        func_800CE8F0(ANIM_OWNER_AS(SceneHomingBurstChannel)->pool, 0, &rotation, &burst->position);
         burst->timer = 0;
         burst->released = 0;
         if (D_800E2368->active) {
-            SceneHomingBurstPool *pool = D_800F32D0->pool;
+            SceneHomingBurstPool *pool = ANIM_OWNER_AS(SceneHomingBurstChannel)->pool;
             if (pool) {
                 SceneHomingBurstObject *object = pool->object;
                 if (object) {
@@ -30,11 +30,11 @@ int func_801960C4(int mode, SceneHomingBurst *burst)
                 }
             }
         }
-        return func_800CE560((char *)D_800F33E0->pool, 0x20, 0x20, func_8019549C);
+        return func_800CE560((char *)ANIM_POOL_AS(SceneHomingBurstChannel)->pool, 0x20, 0x20, func_8019549C);
     case 1:
         burst->timer++;
         if (burst->released < 0x14 && (burst->timer & 1)) {
-            child = func_800CE610((char *)D_800F33E0->pool);
+            child = func_800CE610((char *)ANIM_POOL_AS(SceneHomingBurstChannel)->pool);
             if (child) {
                 child->index = burst->released;
                 child->state = 0;

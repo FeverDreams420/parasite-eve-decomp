@@ -4,7 +4,7 @@
 /* Flashes the scene with the given code when the drop touches the player. */
 #define ROOM_M404_DROP_FLASH(code)                                            \
     {                                                                         \
-        RoomM404DropChannel *channel = D_800F32D0;                            \
+        RoomM404DropChannel *channel = ANIM_OWNER_AS(RoomM404DropChannel);                            \
         if ((channel->pool->node->flags & 0x3F000000) == 0x01000000) {        \
             D_8009D254->actor->flags |= 0x4000;                               \
             channel->pool->node->flags =                                      \
@@ -46,7 +46,7 @@ int func_80192540(int mode, RoomM404Drop *drop) {
                 drop->vz *= 2;
             }
             if (drop->timer & 1) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomM404DropSpawnChannel)->pool);
                 if (child) {
                     child->x = drop->x;
                     child->y = drop->y;
@@ -72,7 +72,7 @@ int func_80192540(int mode, RoomM404Drop *drop) {
             drop->x += (func_80071A54() & 0x1F) - 0x10;
             drop->z += (func_80071A54() & 0x1F) - 0x10;
             if (drop->timer & 1) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomM404DropSpawnChannel)->pool);
                 if (child) {
                     child->x = drop->x;
                     child->y = drop->y;
@@ -129,7 +129,7 @@ int func_80192540(int mode, RoomM404Drop *drop) {
                 ROOM_M404_DROP_FLASH(0x19000000);
             }
             if ((drop->timer & 1) && (func_80071A54() & 0xF) == 0) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomM404DropSpawnChannel)->pool);
                 if (child) {
                     child->x = drop->x;
                     child->y = drop->y;

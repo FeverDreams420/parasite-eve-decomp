@@ -1,6 +1,7 @@
 #include "pe1/render_object.h"
 #include "pe1/gte.h"
 #include "pe1/battle_runtime.h"
+#include "pe1/field_anim_pool.h"
 
 typedef struct RoomM318Node {
     char pad[8];
@@ -9,7 +10,6 @@ typedef struct RoomM318Node {
 
 extern int D_801995B8;
 extern char D_801995BC[], D_801995DC[];
-extern RoomM318Node *D_800F32D0;
 
 int func_80193D88(int mode, RenderSparkEmitter *state)
 {
@@ -20,7 +20,7 @@ int func_80193D88(int mode, RenderSparkEmitter *state)
     case 0:
         state->phase = D_801995B8;
         D_801995B8 += 1365;
-        func_800CE870(D_800F32D0->link, 0, &state->position.x);
+        func_800CE870(ANIM_OWNER_AS(RoomM318Node)->link, 0, &state->position.x);
         state->position.y -= 100;
         state->position.x += rcos(state->phase) * 300 / 4096;
         state->position.z += rsin(state->phase) * 300 / 4096;

@@ -27,7 +27,7 @@ int func_801928CC(int mode, SceneE18FlankParticle *particle) {
             range = particle->width / 4;
             if (distance < range) {
                 RoomMain_ActorPtr->owner->status |= 0x4000;
-                D_800F32D0->instance->owner->flags |= 0x80000000;
+                ANIM_OWNER_AS(SceneE18Actor)->instance->owner->flags |= 0x80000000;
                 particle->leader = 0;
             }
         }

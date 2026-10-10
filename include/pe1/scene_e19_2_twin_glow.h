@@ -6,6 +6,7 @@
 #include "pe1/gte.h"
 #include "pe1/room_orbit_trail.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_anim_pool.h"
 
 /* Scene e19_2 twin glow controller: glows on two actor joints that pulse,
  * burst into a ring of sparks at frame 15 and then fade while a ring and a
@@ -33,7 +34,6 @@ typedef struct SceneTwinGlowPageIndex {
 } SceneTwinGlowPageIndex;
 
 extern SceneTwinGlowPageIndex D_800E11EA;
-extern SceneTwinGlowChannel *D_800F32D0, *D_800F33E0;
 
 int rsin(int angle);
 int rcos(int angle);

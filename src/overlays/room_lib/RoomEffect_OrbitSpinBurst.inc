@@ -39,12 +39,12 @@ int ROOMEFFECT_ORBIT_SPIN_BURST_FUNC(int mode, RoomOrbitTrailBurst *burst) {
         func_800D3F64(0x5DF, func_800D3FD8());
         func_800D3F64(0x5E0, 0x80);
         func_800CE870((char *)D_8009D254, 0, (s16 *)burst);
-        return func_800CE560(D_800F33E0->pool, 0x14, 0x3C,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x3C,
                              (FieldAnimCallbackListCallback)ROOMEFFECT_ORBIT_SPIN_BURST_CALLBACK);
     case 1:
         if (D_800E27EC < 4) {
             for (i = 0; i < 4; i++) {
-                child = (RoomOrbitTrailParticle *)func_800CE610(D_800F33E0->pool);
+                child = (RoomOrbitTrailParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = burst->x;
                     child->y = burst->y;
@@ -57,7 +57,7 @@ int ROOMEFFECT_ORBIT_SPIN_BURST_FUNC(int mode, RoomOrbitTrailBurst *burst) {
                 }
             }
             for (i = 0; i < 7; i++) {
-                child = (RoomOrbitTrailParticle *)func_800CE610(D_800F33E0->pool);
+                child = (RoomOrbitTrailParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = burst->x;
                     child->y = burst->y;
@@ -71,7 +71,7 @@ int ROOMEFFECT_ORBIT_SPIN_BURST_FUNC(int mode, RoomOrbitTrailBurst *burst) {
                 }
             }
             for (i = 0; i < 5; i++) {
-                child = (RoomOrbitTrailParticle *)func_800CE610(D_800F33E0->pool);
+                child = (RoomOrbitTrailParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = burst->x;
                     child->y = burst->y;
@@ -124,7 +124,7 @@ int ROOMEFFECT_ORBIT_SPIN_BURST_FUNC(int mode, RoomOrbitTrailBurst *burst) {
             scale = rsin((D_800E27EC << 10) / 20) / 2 + 0x1000;
             func_800D0728((GteShortVector *)burst, 0x226, 0x320, 0x14, 0, scale,
                           scale, 0, &color, glow / 2, 1);
-            func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->pool, 0,
+            func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0,
                           &tilt.vector);
             scale = rsin((D_800E27EC << 10) / 20);
             tilt.rotation.flags = 1;

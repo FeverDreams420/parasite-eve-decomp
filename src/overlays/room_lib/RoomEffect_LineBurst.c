@@ -49,17 +49,17 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
         state->py = g_RoomFloorY->raw;
         func_800D3F64(0x57B, func_800D3FD8());
         if (D_800E2368->active) {
-            RoomSparkNode **slot = (RoomSparkNode **)D_800F32D0->pool;
+            RoomSparkNode **slot = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
             if (slot && *slot) {
                 u8 *flag = (*slot)->state;
                 if (*flag == 1) *flag = 2;
             }
         }
-        return func_800CE560(D_800F33E0->pool, 0x14, 0x18,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x18,
                              (FieldAnimCallbackListCallback)RoomEffect_LineBurstParticle);
     case 1:
-        func_800CE8F0(D_800F32D0->pool, 0x13, &template, state);
-        func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->pool, 0,
+        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0x13, &template, state);
+        func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0,
                       (GteShortVector *)target);
         angle = -target[1] + 0x400;
         switch (state->state) {
@@ -67,7 +67,7 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
             state->timer++;
             if (state->timer == 1) {
                 for (i = 0; i < 2; i++) {
-                    child = func_800CE610(D_800F33E0->pool);
+                    child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                     if (child) {
                         child->x = state->x;
                         child->y = state->y;
@@ -87,7 +87,7 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
             state->state = 1;
             state->timer = 0;
             for (i = 0; i < 8; i++) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     int speed;
                     child->x = state->px;
@@ -119,7 +119,7 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
             state->timer = 0;
             state->color = 0;
             for (i = 0; i < 12; i++) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     weight = func_80071A54() & 0xFFF;
                     LoadAverageShort12(state, &state->px, 0x1000 - weight, weight, child);
@@ -137,7 +137,7 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
             if (state->countdown != 0) state->countdown--;
             if (func_800C6B90(&state->px, 0x104) && state->countdown == 0) {
                 if (D_800E2368->active) {
-                    RoomSparkChannel *channel = D_800F32D0;
+                    RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     u32 *entry;
                     if ((**(u32 **)channel->pool & 0x3F000000) == 0x01000000) {
                         D_8009D254->actor->flags |= 0x4000;

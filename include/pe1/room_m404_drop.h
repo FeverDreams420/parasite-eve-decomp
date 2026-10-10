@@ -11,6 +11,7 @@
 #include "pe1/room_floor.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 
 /* room_m404 sinking drop (func_80192540): a drop that sinks and jitters,
  * spreads on the floor and sheds splash children, a lingering pool that
@@ -65,8 +66,6 @@ typedef struct RoomM404DropEvent {
     u8 active;
 } RoomM404DropEvent;
 
-extern RoomM404DropChannel *D_800F32D0;
-extern RoomM404DropSpawnChannel *D_800F33E0;
 extern RoomM404DropEvent *D_800E2368;
 extern RoomM404DropEntity *D_8009D254;
 extern RoomM404DropRotation D_8018F1CC;

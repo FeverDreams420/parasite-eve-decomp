@@ -14,6 +14,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_owner_actor.h"
+#include "pe1/field_anim_pool.h"
 
 /* The colour ramp table each room defines in its data. */
 extern char RoomLib_TimedRenderTable;
@@ -94,8 +95,6 @@ typedef struct RoomTimedSpawnSoundState {
     u16 z;
 } RoomTimedSpawnSoundState;
 
-extern void *D_800F32D0;
-extern void *D_800F33E0;
 extern RoomTimedSpawnEventState *D_800E2368;
 extern void *D_8009D254;
 extern void *g_PlayerEntity;
@@ -114,12 +113,12 @@ int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
     switch (mode) {
     case 0:
 
-        func_800CE870(((void **)D_800F32D0)[2], 0, (s16 *)&state->position);
+        func_800CE870(((void **)ANIM_OWNER_AS(void))[2], 0, (s16 *)&state->position);
         state->x = 0;
         state->y = 0;
 
         if (D_800E2368->active != 0) {
-            void *p = ((void **)D_800F32D0)[2];
+            void *p = ((void **)ANIM_OWNER_AS(void))[2];
             if (p != 0 && *(void **)p != 0) {
                 u8 *status = (*(RoomTimedSpawnNode **)p)->status;
                 if (*status == 1) {
@@ -132,13 +131,13 @@ int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
             value = func_800D3FD8();
             Akao_SendTableCommand(D_800B0E64.owner, 0x588, value, 0x80, 0x7F);
         }
-        return func_800CE560(((void **)D_800F33E0)[2], 0xC, 8,
+        return func_800CE560(((void **)ANIM_POOL_AS(void))[2], 0xC, 8,
                              (FieldAnimCallbackListCallback)RoomLib_UpdateTimedRender);
 
         case 1:
     tick = D_800E27EC;
     if (tick < 0x20 && tick % 6 == 0) {
-        actor = func_800CE610(((void **)D_800F33E0)[2]);
+        actor = func_800CE610(((void **)ANIM_POOL_AS(void))[2]);
         if (actor != 0) {
             *(u16 *)((char *)actor + 0) = state->position.x;
             *(u16 *)((char *)actor + 2) = state->position.y;
@@ -152,7 +151,7 @@ int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
 
     if (D_800E27EC == 7 && D_800E2368->active != 0) {
         void *root;
-        root = D_800F32D0;
+        root = ANIM_OWNER_AS(void);
         if ((*(u32 *)*(void **)((void **)root)[2] & 0x3F000000) ==
             0x01000000) {
             void *object;

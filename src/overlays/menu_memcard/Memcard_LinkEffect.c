@@ -24,7 +24,7 @@ s32 Memcard_LinkEffect(s32 mode, MemcardLinkState *state) {
         func_800CE8F0(entity, D_801F1D86, offsetPtr, firstPtr);
         func_800CE8F0(D_8009D254, D_801F1D88, &offset, &second);
         func_800D1384(&first, &second, 1016, (unsigned char *)&color2, (unsigned char *)&color1, 128, (struct FieldTrailPair *)&state->rotation, 1);
-        return func_800CE560(D_800F33E0->slots, 20, 22,
+        return func_800CE560(ANIM_POOL_AS(MemcardLinkChannel)->slots, 20, 22,
                              (FieldAnimCallbackListCallback)Memcard_PulseImage);
     }
     case 1:

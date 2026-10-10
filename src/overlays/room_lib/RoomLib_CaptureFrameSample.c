@@ -7,13 +7,13 @@
  */
 #include "common.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_anim_pool.h"
 
 typedef struct RoomCaptureContext {
     unsigned char pad00[8];
     unsigned char *object;
 } RoomCaptureContext;
 
-extern RoomCaptureContext *D_800F32D0;
 extern s16 D_80192C34;
 extern s16 D_80192C36;
 extern s16 D_80192C38;
@@ -32,7 +32,7 @@ void RoomLib_CaptureFrameSample(RoomCaptureContext *modeOrContext, int x, int y,
         D_80192C3C = x;
     }
 
-    modeOrContext = D_800F32D0;
+    modeOrContext = ANIM_OWNER_AS(RoomCaptureContext);
     captureX = &D_80192C34;
     object = modeOrContext->object;
     sample = *(u16 *)(object + 0x268);

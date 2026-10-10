@@ -74,13 +74,13 @@ int func_80192F0C(int mode, RoomM123GlowBurst *burst) {
     switch (mode) {
     case 0:
         burst->timer = 0;
-        return func_800CE560(D_800F33E0->pool, 8, 0x10,
+        return func_800CE560(ANIM_POOL_AS(RoomM123Pool)->pool, 8, 0x10,
                              (FieldAnimCallbackListCallback)func_80192BDC);
     case 1:
         if (burst->timer < 0x80) burst->timer += 4;
         if (D_800E27EC == 1) {
             for (i = 0; i < 16; i++) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomM123Pool)->pool);
                 if (child) {
                     child->frame = 0;
                     child->scale = (func_80071A54() & 0x1FF) + 0x200;
@@ -102,7 +102,7 @@ int func_80192F0C(int mode, RoomM123GlowBurst *burst) {
         D_800F3368.parameter06 = 1;
         D_800F3368.parameter0A = 0;
         D_800F3368.depth = 0x32;
-        func_800CE8F0(D_800F32D0->pool, 0x17, &template, &position);
+        func_800CE8F0(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x17, &template, &position);
         rotation.x = 0;
         rotation.y = 0;
         rotation.z = -D_800E27EC << 6;
@@ -167,7 +167,7 @@ int func_80192F0C(int mode, RoomM123GlowBurst *burst) {
         D_80195690.x = position.x;
         D_80195690.y = position.y;
         D_80195690.z = position.z;
-        func_800CE9D4(D_800F32D0->pool, 0, &D_80195688.vector);
+        func_800CE9D4(ANIM_OWNER_AS(RoomM123Pool)->pool, 0, &D_80195688.vector);
         step = D_800E27EC - 16;
         if ((unsigned int)step < 17) {
             fade = rcos(step << 6);

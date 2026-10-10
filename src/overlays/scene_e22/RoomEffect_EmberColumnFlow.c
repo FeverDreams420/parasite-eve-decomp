@@ -166,21 +166,21 @@ int func_80194F60(int mode, GteShortVector *anchor) {
         func_800D3F64(0x5DD, 0x80);
         func_800CE870((char *)RoomMain_ActorPtr, 0, (s16 *)anchor);
         if (D_800E2368->active) {
-            pool = D_800F32D0->pool;
+            pool = ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
                 if (*object->status == 1)
                     *object->status = 2;
             }
         }
-        return func_800CE560(D_800F33E0->pool, 0x14, 0x3C,
+        return func_800CE560(ANIM_POOL_AS(SceneE22EmberChannel)->pool, 0x14, 0x3C,
                              (FieldAnimCallbackListCallback)func_8019485C);
     case 1:
         if (D_800E27EC < 0x1C)
             func_80020D50();
         if (D_800E27EC < 0x11) {
             for (i = 0; i < 2; i++) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(SceneE22EmberChannel)->pool);
                 if (child) {
                     child->x = anchor->x;
                     child->y = anchor->y;
@@ -194,7 +194,7 @@ int func_80194F60(int mode, GteShortVector *anchor) {
             }
         }
         if (D_800E27EC < 0x21) {
-            child = func_800CE610(D_800F33E0->pool);
+            child = func_800CE610(ANIM_POOL_AS(SceneE22EmberChannel)->pool);
             if (child) {
                 child->x = anchor->x;
                 child->y = anchor->y;
@@ -206,7 +206,7 @@ int func_80194F60(int mode, GteShortVector *anchor) {
                 child->timer = 0;
             }
             if (D_800E27EC & 1) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(SceneE22EmberChannel)->pool);
                 if (child) {
                     child->x = anchor->x;
                     child->y = anchor->y;
@@ -222,7 +222,7 @@ int func_80194F60(int mode, GteShortVector *anchor) {
         if (D_800E27EC == 0x1C)
             func_80020DD0();
         if (D_800E27EC == 0x1D && D_800E2368->active) {
-            channel = D_800F32D0;
+            channel = ANIM_OWNER_AS(SceneE22EmberObjectChannel);
             if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                 (*RoomMain_ActorPtr)->flags |= 0x4000;
                 channel->pool->object->flags =
@@ -257,7 +257,7 @@ int func_80194F60(int mode, GteShortVector *anchor) {
             if (D_800E27EC & 1)
                 glow = glow * 15 / 16;
             size = rsin(D_800E27EC << 5) / 2 + 0x800;
-            func_800CE870((char *)D_800F32D0->pool, 0, (s16 *)&position);
+            func_800CE870((char *)ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, 0, (s16 *)&position);
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             func_800CEE20(&position, 0, size * 3 / 2, size * 3 / 2, 0x46,

@@ -13,6 +13,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 
 /* room_m023 joint beacon (func_8018FC14): follows a model joint, swells
  * and pulses through four phases, tags the player on contact and draws a
@@ -76,7 +77,6 @@ typedef struct RoomM023BeaconColor {
     u8 r, g, b, code;
 } RoomM023BeaconColor;
 
-extern RoomM023BeaconChannel *D_800F32D0;
 extern RoomM023BeaconEvent *D_800E2368;
 extern RoomM023BeaconEntity *D_8009D254;
 extern RoomM023BeaconArchive D_800B0E64;

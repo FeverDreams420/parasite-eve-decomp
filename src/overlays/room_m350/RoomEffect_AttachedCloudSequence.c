@@ -4,6 +4,7 @@
 
 typedef struct { signed int low:16; signed int high:16; } TrigEntry;
 #include "pe1/render_object.h"
+#include "pe1/field_anim_pool.h"
 
 extern short D_800966EC[],D_800966EE[];
 extern RenderColor D_8019A3D0;
@@ -55,8 +56,6 @@ int func_80198860(int event,RoomM350CloudParticle *particle)
 }
 
 /* MASPSX_FLAGS: --expand-div */
-extern RoomM350EffectActor *D_800F32D0;
-extern RoomM350EffectEmitter *D_800F33E0;
 extern unsigned char D_8019A8BE;
 extern int Inv_ScrambleGrid(void);
 int func_80198ABC(int event)
@@ -66,7 +65,7 @@ int func_80198ABC(int event)
     switch (event) {
     case 0:
 
-        return func_800CE560(D_800F33E0->pool,20,16,
+        return func_800CE560(ANIM_POOL_AS(RoomM350EffectEmitter)->pool,20,16,
                              (FieldAnimCallbackListCallback)func_80198860);
         case 1:
     {
@@ -76,7 +75,7 @@ int func_80198ABC(int event)
             int firstRandom;
             int combinedRandom;
             int divisor;
-            RoomM350CloudParticle *particle=func_800CE610(D_800F33E0->pool);
+            RoomM350CloudParticle *particle=func_800CE610(ANIM_POOL_AS(RoomM350EffectEmitter)->pool);
             if(!particle) return 0;
             vector.x=(unsigned int)Inv_ScrambleGrid()<<4;
             vector.y=(unsigned int)Inv_ScrambleGrid()<<4;
@@ -92,7 +91,7 @@ offset_start:
             ApplyMatrixSV(&matrix,&vector,(GteShortVector *)particle->position);
             particle->position[1]=(unsigned short)particle->position[1]*2+128;
             particle->size=((unsigned int)Inv_ScrambleGrid()<<4)+4096;
-            particle->anchor=D_800F32D0->instance->transforms[i ? 11:15].t;
+            particle->anchor=ANIM_OWNER_AS(RoomM350EffectActor)->instance->transforms[i ? 11:15].t;
         }
     }
         break;

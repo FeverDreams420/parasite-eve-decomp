@@ -4,6 +4,7 @@
 #include "pe1/room_bounce_glint.h"
 #include "pe1/room_fx.h"
 #include "pe1/field_owner_actor.h"
+#include "pe1/field_anim_pool.h"
 
 /* Bouncing glint particle callback for the room_m086 controller: mode 1
  * moves it (drift, then fall and bounce), mode 2 draws it. Both draws read
@@ -122,8 +123,6 @@ int func_801900CC(int mode, RoomBounceGlint *glint, int *size) {
 
 typedef RoomFxSeed8 RoomM086Blob8;
 
-extern void *D_800F32D0;
-extern void *D_800F33E0;
 extern char D_8018EFF4[];
 
 void func_800CE8F0(void *arg0, s32 arg1, void *arg2, void *arg3);
@@ -160,11 +159,11 @@ s32 func_80190574(s32 mode, RoomBounceGlint *ent) {
         goto ret0;
 
     mode0:
-        func_800CE8F0(((void **)D_800F32D0)[2], 7, &blob, ent);
+        func_800CE8F0(((void **)ANIM_OWNER_AS(void))[2], 7, &blob, ent);
         ent->y = g_RoomFloorY->y;
         value = func_800D3FD8();
         func_800D3F64(0x579, value);
-        func_800CE560(((void **)D_800F33E0)[2], 0x14, 0x18,
+        func_800CE560(((void **)ANIM_POOL_AS(void))[2], 0x14, 0x18,
                       (FieldAnimCallbackListCallback)func_801900CC);
         goto done;
 
@@ -175,7 +174,7 @@ mode1:
         angle = func_80071A54();
         i = 0;
         do {
-            actor = func_800CE610(((void **)D_800F33E0)[2]);
+            actor = func_800CE610(((void **)ANIM_POOL_AS(void))[2]);
             if (actor != 0) {
                 COPY_POS(actor, ent);
                 mag = (func_80071A54() & 0xF) + 7;
@@ -204,7 +203,7 @@ mode1:
         angle = func_80071A54();
         i = 0;
         do {
-            actor = func_800CE610(((void **)D_800F33E0)[2]);
+            actor = func_800CE610(((void **)ANIM_POOL_AS(void))[2]);
             if (actor != 0) {
                 COPY_POS(actor, ent);
                 mag = (func_80071A54() & 0x1F) + 0x18;
@@ -231,7 +230,7 @@ mode1:
     value = D_800E27EC - 2;
     if (value < 0x15U) {
         angle = func_80071A54();
-        actor = func_800CE610(((void **)D_800F33E0)[2]);
+        actor = func_800CE610(((void **)ANIM_POOL_AS(void))[2]);
         if (actor != 0) {
             COPY_POS(actor, ent);
             value = func_80071A54();

@@ -34,12 +34,12 @@ int func_8019251C(int mode, RoomM123JointTriangle *triangle) {
     case 2:
         gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldtransmatrix(D_800BCFA4.value);
-        FieldEng_TransformMatrixPoint(D_800F32D0->pool, 0x28, &offset, &corners[0]);
-        FieldEng_TransformMatrixPoint(D_800F32D0->pool, 0x22, &offset, &corners[1]);
-        FieldEng_TransformMatrixPoint(D_800F32D0->pool, 0x1D, &tip, &corners[2]);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x28, &offset, &corners[0]);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x22, &offset, &corners[1]);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x1D, &tip, &corners[2]);
         switch (triangle->state) {
         case 0:
-            FieldEng_TransformMatrixPoint(D_800F32D0->pool, 0x17, &tip, &corners[3]);
+            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x17, &tip, &corners[3]);
             weight = 0x5000 - rsin((triangle->frame << 10) / 24) * 4;
             LoadAverageShort12(&corners[3], &corners[0], 0x1000 - weight, weight, &corners[0]);
             LoadAverageShort12(&corners[3], &corners[1], 0x1000 - weight, weight, &corners[1]);
@@ -85,14 +85,14 @@ int func_801929FC(int mode) {
 
     switch (mode) {
     case 0:
-        return func_800CE560(D_800F33E0->pool, 8, 16,
+        return func_800CE560(ANIM_POOL_AS(RoomM123Pool)->pool, 8, 16,
                              (FieldAnimCallbackListCallback)func_8019251C);
     case 1:
         frame = D_800E27EC;
         if (frame == (frame / 6) * 6) {
             if (frame >= 40) return 2;
             for (index = 0; index < 3; index++) {
-                position = func_800CE610(D_800F33E0->pool);
+                position = func_800CE610(ANIM_POOL_AS(RoomM123Pool)->pool);
                 if (position != 0) {
                     position->x = 1;
                     position->y = 0;
@@ -100,7 +100,7 @@ int func_801929FC(int mode) {
                 }
             }
             if (D_800E27EC < 25) {
-                position = func_800CE610(D_800F33E0->pool);
+                position = func_800CE610(ANIM_POOL_AS(RoomM123Pool)->pool);
                 if (position != 0) {
                     position->x = 0;
                     position->y = 0;

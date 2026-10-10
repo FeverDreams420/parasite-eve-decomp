@@ -1,10 +1,10 @@
 #include "room_m273_effects.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/field_anim_pool.h"
 
 typedef RoomM273PointerPoolEffect Effect;
 typedef struct { unsigned char unknown[58]; unsigned short value; } Object;
 typedef struct { short zero; unsigned short value,phase,one; } Parameters;
-extern RoomM273EffectStateContext *D_800F32D0;
 extern int D_800966EC[];
 extern unsigned char D_8019ACDC[],D_8019ACE0[];
 
@@ -21,7 +21,7 @@ int func_8019A4CC(int mode,Effect *effect) {
         int size=*(short *)((char *)D_800966EC+sizeOffset)*2+4096;
         int shade=(short)*(int *)((char *)D_800966EC+shadeOffset)>>5;
         parameters.zero=0;
-        parameters.value=((Object *)D_800F32D0->state.mode)->value;
+        parameters.value=((Object *)ANIM_OWNER_AS(RoomM273EffectStateContext)->state.mode)->value;
         parameters.phase=(unsigned int)frame<<8;
         parameters.one=1;
         func_800D0728(effect->position,32,96,8,(GteRotation *)&parameters,size,size,
@@ -78,7 +78,7 @@ s32 func_8019A628(s32 arg0) {
         if (arg0 != 0) {
             return 0;
         }
-        return func_800CE560(D_800F33E0->pool, 8, 5,
+        return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 5,
                              (FieldAnimCallbackListCallback)func_8019A720);
     }
 
@@ -89,7 +89,7 @@ s32 func_8019A628(s32 arg0) {
         return 0;
     }
 
-    obj = func_800CE610(D_800F33E0->pool);
+    obj = func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
     if (obj != 0) {
         *(u16 *)(obj + 0) = D_8019AEFC;
         *(u16 *)(obj + 2) = D_8019AEFE;

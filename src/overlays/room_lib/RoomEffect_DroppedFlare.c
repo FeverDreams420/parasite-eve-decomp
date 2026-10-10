@@ -14,7 +14,7 @@
  * the first packet in the primary effect channel. */
 #define ROOMEFFECT_DROPPED_FLARE_FLASH()                                     \
     {                                                                        \
-        RoomFlareChannel *channel = D_800F32D0;                              \
+        RoomFlareChannel *channel = ANIM_OWNER_AS(RoomFlareChannel);                              \
         RoomFlarePacket *packet;                                             \
         if (((*(RoomFlarePacket **)channel->pool)->code & 0x3F000000) ==     \
             0x01000000) {                                                    \
@@ -59,7 +59,7 @@ int RoomEffect_DroppedFlareParticle(int mode, RoomDroppedFlare *flare,
             }
             if (D_800E27EC & 1) {
                 spread = lift * 48 / 4096;
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomFlareChannel)->pool);
                 if (child) {
                     child->x = flare->x;
                     child->y = flare->y;
@@ -227,10 +227,10 @@ int RoomEffect_DroppedFlareEmitter(int mode, RoomDroppedFlareEmitter *emitter,
 
     switch (mode) {
     case 0:
-        func_800CE8F0(D_800F32D0->pool, 0x13, &rect, emitter);
+        func_800CE8F0(ANIM_OWNER_AS(RoomFlareChannel)->pool, 0x13, &rect, emitter);
         switch (D_800E2368->phase) {
         case 0:
-            func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->pool, 0x13,
+            func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomFlareChannel)->pool, 0x13,
                           &emitter->angles);
             break;
         case 1:
@@ -243,7 +243,7 @@ int RoomEffect_DroppedFlareEmitter(int mode, RoomDroppedFlareEmitter *emitter,
             break;
         }
         if (D_800E2368->active != 0) {
-            RoomFlareNode **node = (RoomFlareNode **)D_800F32D0->pool;
+            RoomFlareNode **node = (RoomFlareNode **)ANIM_OWNER_AS(RoomFlareChannel)->pool;
             if (node != 0 && *node != 0) {
                 u8 *state = (*node)->state;
                 if (*state == 1) {
@@ -251,11 +251,11 @@ int RoomEffect_DroppedFlareEmitter(int mode, RoomDroppedFlareEmitter *emitter,
                 }
             }
         }
-        return func_800CE560(D_800F33E0->pool, 0x14, 0x18,
+        return func_800CE560(ANIM_POOL_AS(RoomFlareChannel)->pool, 0x14, 0x18,
                              (FieldAnimCallbackListCallback)RoomEffect_DroppedFlareParticle);
     case 1:
         if (D_800E27EC == mode) {
-            RoomDroppedFlare *flare = func_800CE610(D_800F33E0->pool);
+            RoomDroppedFlare *flare = func_800CE610(ANIM_POOL_AS(RoomFlareChannel)->pool);
             if (flare != 0) {
                 flare->x = emitter->x;
                 flare->y = emitter->y;
@@ -264,7 +264,7 @@ int RoomEffect_DroppedFlareEmitter(int mode, RoomDroppedFlareEmitter *emitter,
                 flare->state = 0;
                 flare->timer = 0;
             }
-            flare = func_800CE610(D_800F33E0->pool);
+            flare = func_800CE610(ANIM_POOL_AS(RoomFlareChannel)->pool);
             if (flare != 0) {
                 flare->x = emitter->x;
                 flare->y = emitter->y;

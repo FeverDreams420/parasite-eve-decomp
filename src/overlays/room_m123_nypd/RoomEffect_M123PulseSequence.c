@@ -79,11 +79,11 @@ int func_80194C04(int mode, RoomPulseParticle *particle)
 
     switch (mode) {
     case 0:
-        func_800CE870(D_800F32D0->pool, 1, &particle->z);
+        func_800CE870(ANIM_OWNER_AS(RoomM123Pool)->pool, 1, &particle->z);
         particle->x = 0;
         particle->y = 0;
         if (D_800E2368[13]) {
-            pool = D_800F32D0->pool;
+            pool = ANIM_OWNER_AS(RoomM123Pool)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
                 if (*object->status == 1)
@@ -98,11 +98,11 @@ int func_80194C04(int mode, RoomPulseParticle *particle)
             if (soundSlot->channel != 0)
                 func_8006DF50(soundSlot->channel, 0x5B1, 0x80, 0x80, volume);
         }
-        return func_800CE560(D_800F33E0->pool, 12, 8,
+        return func_800CE560(ANIM_POOL_AS(RoomM123Pool)->pool, 12, 8,
                              (FieldAnimCallbackListCallback)func_80194A70);
     case 1:
         if (D_800E27EC < 32 && D_800E27EC % 6 == 0) {
-            next = func_800CE610(D_800F33E0->pool);
+            next = func_800CE610(ANIM_POOL_AS(RoomM123Pool)->pool);
             if (next != 0) {
                 next->x = particle->z;
                 next->y = particle->pad;
@@ -113,7 +113,7 @@ int func_80194C04(int mode, RoomPulseParticle *particle)
             }
         }
         if (D_800E27EC == 32 && D_800E2368[13]) {
-            context = D_800F32D0;
+            context = ANIM_OWNER_AS(RoomM123Pool);
             if ((((RoomPulsePool *)context->pool)->object->flags & 0x3F000000) == 0x01000000) {
                 (*D_8009D254)->flags |= 0x4000;
                 ((RoomPulsePool *)context->pool)->object->flags =

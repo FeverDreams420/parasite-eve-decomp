@@ -16,15 +16,15 @@ int func_80192B8C(int mode, SceneE18EmitterState *state) {
         func_800C6D5C(D_801941C4, 0, 0);
         state->count = 0;
         state->delay = 0;
-        return func_800CE560(D_800F33E0->pool, 0x14, 4,
+        return func_800CE560(ANIM_POOL_AS(SceneE18Emitter)->pool, 0x14, 4,
                              (FieldAnimCallbackListCallback)func_801928CC);
     case 1:
         if (state->count < 4) {
             state->delay++;
             if (state->delay < 6) break;
-            particle = func_800CE610(D_800F33E0->pool);
+            particle = func_800CE610(ANIM_POOL_AS(SceneE18Emitter)->pool);
             if (particle == 0) break;
-            actor = D_800F32D0;
+            actor = ANIM_OWNER_AS(SceneE18Actor);
             particle->position = actor->instance->transform.t;
             particle->angle = 0;
             if (state->count & 1)
@@ -45,10 +45,10 @@ int func_80192B8C(int mode, SceneE18EmitterState *state) {
                               (s16)actor->instance->transforms->t[0],
                               (s16)actor->instance->transforms->t[1],
                               (s16)actor->instance->transforms->t[2]);
-                func_8006DCE4(0x5C5, D_800F32D0->instance->owner->asset,
-                              (s16)D_800F32D0->instance->transforms->t[0],
-                              (s16)D_800F32D0->instance->transforms->t[1],
-                              (s16)D_800F32D0->instance->transforms->t[2]);
+                func_8006DCE4(0x5C5, ANIM_OWNER_AS(SceneE18Actor)->instance->owner->asset,
+                              (s16)ANIM_OWNER_AS(SceneE18Actor)->instance->transforms->t[0],
+                              (s16)ANIM_OWNER_AS(SceneE18Actor)->instance->transforms->t[1],
+                              (s16)ANIM_OWNER_AS(SceneE18Actor)->instance->transforms->t[2]);
             }
             break;
         }

@@ -1,4 +1,5 @@
 #include "room_m273.h"
+#include "pe1/field_anim_pool.h"
 
 int func_8019320C(int mode, RoomM273SampledLayerEffect *effect) {
     RoomM273Vector position, rotation;
@@ -32,20 +33,19 @@ int func_8019320C(int mode, RoomM273SampledLayerEffect *effect) {
 }
 
 
-extern RoomPlacementStateContext *D_800F32D0;
 
 int func_801933A0(int mode) {
     switch(mode) {
     case 0:
-        return func_800CE560(D_800F33E0->pool,12,9,
+        return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,12,9,
                              (FieldAnimCallbackListCallback)func_8019320C);
     case 1: {
         RoomM273SampledLayerEffect *effect;
         RoomPlacementMap *transform;
         if(D_800E27EC>=12) return 2;
-        effect=func_800CE610(D_800F33E0->pool);
+        effect=func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
         if(!effect) break;
-        transform=D_800F32D0->owner->map;
+        transform=ANIM_OWNER_AS(RoomPlacementStateContext)->owner->map;
         effect->position.x=transform->x;
         asm("" : : : "memory");
         effect->position.y=transform->y;

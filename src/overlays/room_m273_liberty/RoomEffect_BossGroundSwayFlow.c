@@ -41,7 +41,7 @@ int func_80198B1C(int mode,Vector *input) {
 int func_80198CD4(int mode) {
     switch(mode) {
     case 0:
-        return func_800CE560(D_800F33E0->pool,8,4,
+        return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,8,4,
                              (FieldAnimCallbackListCallback)func_80198B1C);
     case 1: {
         Record *source;
@@ -53,7 +53,7 @@ int func_80198CD4(int mode) {
         i=0;
         source=(Record *)D_8019AF74.points;
         for(;i<2;++i) {
-            Record *output=func_800CE610(D_800F33E0->pool);
+            Record *output=func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
             if(!output) break;
             *output=*source;
             ++source;
@@ -110,8 +110,8 @@ int func_80198E94(int mode, GteShortVector *position) {
         }
         position->pad = 1;
         g_PlayerEntity->actor->flags |= 0x4000;
-        if (D_800F32D0->instance->owner) {
-            D_800F32D0->instance->owner->flags |= 0x80000000;
+        if (ANIM_OWNER_AS(RoomM273BossActor)->instance->owner) {
+            ANIM_OWNER_AS(RoomM273BossActor)->instance->owner->flags |= 0x80000000;
             D_8019AF74.cooldown = 0x28;
         }
         return 0;
@@ -203,7 +203,7 @@ int func_801993F0(int mode) {
     case 0:
         D_8019AF6C = Asset_FindTable08ByU32Key(D_800B0E64, 0xC5541704);
         func_800C6D5C(D_8019AF6C, 0, 0);
-        return func_800CE560(D_800F33E0->pool, 8, 4,
+        return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 4,
                              (FieldAnimCallbackListCallback)func_80198E94);
     case 1: {
         int i;
@@ -217,7 +217,7 @@ int func_801993F0(int mode) {
         for (; i < 2; ++i) {
             asm("" : "=r"(source) : "0"(source));
             if (*(unsigned short *)flags & 1) {
-                Entry *entry = func_800CE610(D_800F33E0->pool);
+                Entry *entry = func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
                 if (!entry) return 0;
                 entry->emitter.x = source->emitter.x;
                 entry->emitter.y = source->emitter.y;

@@ -4,6 +4,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 
 typedef RoomM273RisingParticle Particle;
 typedef struct { unsigned char r, g, b, unknown; } Color;
@@ -45,7 +46,7 @@ int func_80195E10(int mode, Particle *particle) {
 #include "room_m273_effects.h"
 
 #define ROOMLIB_POLL_RESET_POOL_CONTEXT_DECL
-#define ROOMLIB_POLL_RESET_POOL_EXPR D_800F33E0->pool
+#define ROOMLIB_POLL_RESET_POOL_EXPR ANIM_POOL_AS(RoomM273PoolContext)->pool
 #define ROOMLIB_POLL_RESET_FUNC func_80195F78
 #define ROOMLIB_POLL_RESET_CALLBACK func_80195E10
 #define ROOMLIB_POLL_RESET_FLAG D_8019AEF8
@@ -56,7 +57,6 @@ int func_80195E10(int mode, Particle *particle) {
 #include "room_m273_effects.h"
 typedef GteShortVector Vector;
 typedef RoomM273EffectModeState State;
-extern RoomM273EffectStateContext *D_800F32D0;
 extern unsigned char D_8019AEF8;
 extern Vector D_8019AE9C[];
 extern void *D_8019AE80;
@@ -69,7 +69,7 @@ int func_801960F4(int mode) {
     int unknownFrame[2];
     switch(mode) {
     case 0: {
-        int size=func_800CE560(D_800F33E0->pool,4,6,func_8019A398);
+        int size=func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,4,6,func_8019A398);
         asm("" : : "r"(size));
         return size+func_800CE5AC(&D_8019AE80,size,4,6,func_8019A4CC);
     }
@@ -77,7 +77,7 @@ int func_801960F4(int mode) {
         unsigned char *stopped=&D_8019AEF8;
         State *state;
         if(*stopped) return 2;
-        state=D_800F32D0->state.mode;
+        state=ANIM_OWNER_AS(RoomM273EffectStateContext)->state.mode;
         if(state->kind==11) {
             int count=state->value22;
             unsigned short value=*(volatile unsigned short *)&state->value22;
@@ -86,7 +86,7 @@ int func_801960F4(int mode) {
                 /* The shared positions start 0x5C bytes before the stop symbol. */
                 Vector *positions=(Vector *)(stopped-92);
                 do {
-                    Vector **out=func_800CE610(D_800F33E0->pool);
+                    Vector **out=func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
                     unsigned long address;
                     if(!out) break;
                     address=i*8;

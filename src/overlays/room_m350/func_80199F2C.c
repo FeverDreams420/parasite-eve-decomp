@@ -1,11 +1,11 @@
 #include "common.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_anim_pool.h"
 extern char D_8019A856;
 extern char D_8019A86E;
 extern u16 D_8019A860;
 extern u16 D_8019A862;
-extern char **D_800F33E0;
 
 extern void func_8019A21C(void);
 
@@ -19,12 +19,12 @@ s32 func_80199F2C(s32 arg0) {
         if (arg0 != 0) {
             return 0;
         }
-        return func_800CE560(D_800F33E0[2], 8, 6,
+        return func_800CE560(ANIM_POOL_AS(char *)[2], 8, 6,
                              (FieldAnimCallbackListCallback)func_8019A21C);
     } else if (D_8019A86E != 0) {
         return 2;
     } else if (D_8019A856 != 0) {
-        obj = func_800CE610(D_800F33E0[2]);
+        obj = func_800CE610(ANIM_POOL_AS(char *)[2]);
         if (obj != 0) {
             *(u16 *)(obj + 0) = D_8019A860;
             *(u16 *)(obj + 2) = g_RoomFloorY->raw;

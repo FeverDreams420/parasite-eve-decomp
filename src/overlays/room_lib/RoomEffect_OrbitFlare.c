@@ -60,7 +60,7 @@ ret0:
  * the first packet in the primary effect channel. */
 #define ROOMEFFECT_ORBIT_FLARE_FLASH()                                       \
     {                                                                        \
-        RoomFlareChannel *channel = D_800F32D0;                              \
+        RoomFlareChannel *channel = ANIM_OWNER_AS(RoomFlareChannel);                              \
         RoomFlarePacket *packet;                                             \
         if (((*(RoomFlarePacket **)channel->pool)->code & 0x3F000000) ==     \
             0x01000000) {                                                    \
@@ -91,9 +91,9 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
 
     switch (mode) {
     case 0:
-        state->x = ((RoomFlareAnchor *)D_800F32D0->pool)->x;
-        state->y = ((RoomFlareAnchor *)D_800F32D0->pool)->y;
-        state->z = ((RoomFlareAnchor *)D_800F32D0->pool)->z;
+        state->x = ((RoomFlareAnchor *)ANIM_OWNER_AS(RoomFlareChannel)->pool)->x;
+        state->y = ((RoomFlareAnchor *)ANIM_OWNER_AS(RoomFlareChannel)->pool)->y;
+        state->z = ((RoomFlareAnchor *)ANIM_OWNER_AS(RoomFlareChannel)->pool)->z;
         state->state = 0;
         state->frame = 0;
         state->soundHandle = -1;
@@ -109,7 +109,7 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
             state->angle = spawn->angle;
             break;
         }
-        pool = D_800F33E0->pool;
+        pool = ANIM_POOL_AS(RoomFlareChannel)->pool;
         return func_800CE560(pool, 12, 16,
                              (FieldAnimCallbackListCallback)RoomEffect_OrbitFlareDrift);
     case 1:
@@ -117,15 +117,15 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
         switch (state->state) {
         case 0:
             if (spawn->attached) {
-                func_800CE8F0(D_800F32D0->pool, 0, &rotation, state);
+                func_800CE8F0(ANIM_OWNER_AS(RoomFlareChannel)->pool, 0, &rotation, state);
             } else {
-                func_800CE8F0(D_800F32D0->pool, 0x19, &rotation, state);
+                func_800CE8F0(ANIM_OWNER_AS(RoomFlareChannel)->pool, 0x19, &rotation, state);
             }
             height = rsin(((s16)state->frame << 10) / 52) * 3 / 2;
             state->height = height;
             state->spread = (s16)height / 48;
             if (D_800E27EC % 3 == 0) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomFlareChannel)->pool);
                 if (child) {
                     child->x = state->x;
                     child->y = state->y;
@@ -136,11 +136,11 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
             if ((s16)state->frame < 52) break;
             state->state = 1;
             state->frame = 0;
-            func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->pool, 0,
+            func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomFlareChannel)->pool, 0,
                           (GteShortVector *)&spin);
             state->angle = (s16)(state->angle + 0x400) - spin.y;
             if (D_800E2368->active) {
-                RoomFlareNode **slot = (RoomFlareNode **)D_800F32D0->pool;
+                RoomFlareNode **slot = (RoomFlareNode **)ANIM_OWNER_AS(RoomFlareChannel)->pool;
                 if (slot && *slot) {
                     u8 *flag = (*slot)->state;
                     if (*flag == 1) *flag = 2;
@@ -157,7 +157,7 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
                 state->spread = 0x60;
             }
             if (D_800E27EC & 1) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomFlareChannel)->pool);
                 if (child) {
                     child->x = state->x;
                     child->y = state->y;

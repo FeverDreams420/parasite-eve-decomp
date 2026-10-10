@@ -5,12 +5,12 @@
 #include "pe1/player_entity.h"
 #include "pe1/field_vector_math.h"
 #include "pe1/akao/commands.h"
+#include "pe1/field_anim_pool.h"
 typedef RoomM350Vector Vector;
 typedef RenderMatrix Matrix;
 typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
 typedef struct { int asset; short speed,targetSpeed,heightPhase,mode; } State;
-extern Actor *D_800F32D0;
 extern unsigned char D_8019A8BE,D_8019A8C0;
 extern short D_8019A89E,D_8019A8B8,D_8019A8BA,D_8019A8BC;
 extern short D_800966EC[];
@@ -21,7 +21,7 @@ extern int rcos(int);
 extern int rsin(int);
 int func_80198CF8(int event,State *state)
 {
-    Instance *instance=(Instance *)D_800F32D0->instance;
+    Instance *instance=(Instance *)ANIM_OWNER_AS(Actor)->instance;
     Vector offset;
     /* Match note: original purpose of unused sp+0x20..0x2F is unknown. */
     char frameGap[16];

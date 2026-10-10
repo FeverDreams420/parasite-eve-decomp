@@ -24,15 +24,15 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
         bolt->reserved1C = 0;
         D_80199500 = func_8006E498(D_800B0E64.channel, 0xC54C4704);
         func_800C6D5C(D_80199500, 0, 0);
-        func_800CE8F0(D_800F32D0->pool, 0, &offset, &bolt->position);
+        func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, 0, &offset, &bolt->position);
         bolt->origin.x = bolt->position.x;
         bolt->origin.y = bolt->position.y;
         bolt->origin.z = bolt->position.z;
-        func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->pool, 0,
+        func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, 0,
                       &bolt->heading);
         bolt->heading.x -= 0x220;
         bolt->heading.y -= 0x80;
-        return func_800CE560(D_800F33E0->pool, 0x14, 0x18,
+        return func_800CE560(ANIM_POOL_AS(SceneE22EmberChannel)->pool, 0x14, 0x18,
                              (FieldAnimCallbackListCallback)func_801962FC);
     case 1:
         func_800CFB7C(&bolt->heading, 0x140, &position);
@@ -52,7 +52,7 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
             bolt->position.x += step.x;
             bolt->position.y += step.y;
             bolt->position.z += step.z;
-            child = func_800CE610(D_800F33E0->pool);
+            child = func_800CE610(ANIM_POOL_AS(SceneE22EmberChannel)->pool);
             if (child) {
                 child->x = position.x;
                 child->y = position.y;

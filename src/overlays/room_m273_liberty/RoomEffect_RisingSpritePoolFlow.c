@@ -31,7 +31,7 @@ int func_80197230(int mode, Vector *position) {
 }
 
 #define ROOMLIB_POLL_RESET_POOL_CONTEXT_DECL
-#define ROOMLIB_POLL_RESET_POOL_EXPR D_800F33E0->pool
+#define ROOMLIB_POLL_RESET_POOL_EXPR ANIM_POOL_AS(RoomM273PoolContext)->pool
 #define ROOMLIB_POLL_RESET_FUNC func_80197360
 #define ROOMLIB_POLL_RESET_CALLBACK func_80197230
 #define ROOMLIB_POLL_RESET_FLAG D_8019AF69
@@ -93,14 +93,14 @@ int func_80197648(int mode) {
     switch(mode) {
     case 0:
         D_8019AE84=0;
-        return func_800CE560(D_800F33E0->pool,8,12,
+        return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,8,12,
                              (FieldAnimCallbackListCallback)func_801974DC);
     case 1: {
         Particle *output;
         if(D_8019AF69) return 2;
         if(!D_8019AF6A) return 0;
         if(D_8019AE84-- > 0) return 0;
-        output=func_800CE610(D_800F33E0->pool);
+        output=func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
         if(!output) return 0;
         ((volatile Particle *)output)->x=D_8019AEFC.x;
         ((volatile Particle *)output)->y=D_8019AEFE-256;
@@ -172,13 +172,13 @@ int func_801977F8(int mode,Vector *input) {
 int func_80197A48(int mode) {
     switch(mode) {
     case 0:
-        return func_800CE560(D_800F33E0->pool,8,4,
+        return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,8,4,
                              (FieldAnimCallbackListCallback)func_801977F8);
     case 1: {
         Vector *output;
         if(D_8019AF69) return 2;
         if(!D_8019AF68) return 0;
-        output=func_800CE610(D_800F33E0->pool);
+        output=func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
         if(!output) return 0;
         ((volatile Vector *)output)->x=D_8019AEFC.x;
         ((volatile Vector *)output)->y=D_8019AEFE;

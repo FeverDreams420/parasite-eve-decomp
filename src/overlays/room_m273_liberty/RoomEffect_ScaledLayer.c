@@ -2,13 +2,13 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/field_anim_pool.h"
 typedef GteShortVector Vector;
 typedef struct { Vector position; unsigned char parameter[4]; } Effect;
 typedef RoomM273ThresholdTransform Transform;
 typedef RoomM273ScaledLayerOwner Owner;
 
 /* The emitter owns the twelve-byte records rendered by this callback. */
-extern RoomM273EffectStateContext *D_800F32D0;
 extern short D_800966EC[],D_800966EE[];
 extern unsigned char D_8019AB70[];
 
@@ -45,16 +45,16 @@ int func_801936F0(int mode) {
     int unknownFrame[2];
     switch(mode) {
     case 0:
-        return func_800CE560(D_800F33E0->pool,12,9,
+        return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,12,9,
                              (FieldAnimCallbackListCallback)func_8019353C);
     case 1: {
         Effect *effect;
         Transform *transform;
         int scale;
         if(D_800E27EC>=12) return 2;
-        effect=func_800CE610(D_800F33E0->pool);
+        effect=func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
         if(!effect) break;
-        transform=D_800F32D0->state.scaled_layer->transform;
+        transform=ANIM_OWNER_AS(RoomM273EffectStateContext)->state.scaled_layer->transform;
         effect->position.x=transform->x;
         asm("" : : : "memory");
         effect->position.y=transform->y;

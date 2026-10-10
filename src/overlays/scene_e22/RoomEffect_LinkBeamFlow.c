@@ -77,26 +77,26 @@ int func_80193414(int mode, SceneE22LinkBeam *beam) {
         beam->reserved00 = 0;
         beam->timer = 0;
         beam->jointSet = D_800E2368->jointSet;
-        func_800CE8F0(D_800F32D0->pool, D_801991B8[beam->jointSet].first,
+        func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].first,
                       &offset0, &first);
-        func_800CE8F0(D_800F32D0->pool, D_801991B8[beam->jointSet].middle,
+        func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].middle,
                       &offset0, &middle);
-        func_800CE8F0(D_800F32D0->pool, D_801991B8[beam->jointSet].last,
+        func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].last,
                       &offset1, &last);
         func_800D1384(&first, &middle, 0x3F2, (unsigned char *)&color2, (unsigned char *)&color1, 0x80,
                       (struct FieldTrailPair *)beam->trailA, 1);
         func_800D1384(&middle, &last, 0x3F2, (unsigned char *)&color1, (unsigned char *)&color0, 0x80,
                       (struct FieldTrailPair *)beam->trailB, 1);
-        return func_800CE560(D_800F33E0->pool, 0x14, 8,
+        return func_800CE560(ANIM_POOL_AS(SceneE22EmberChannel)->pool, 0x14, 8,
                              (FieldAnimCallbackListCallback)func_801931B8);
     case 1:
         beam->timer++;
-        func_800CE8F0(D_800F32D0->pool, D_801991B8[beam->jointSet].last,
+        func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].last,
                       &offset1, &first);
-        func_800CE9D4(D_800F32D0->pool, D_801991B8[beam->jointSet].last,
+        func_800CE9D4(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].last,
                       &heading);
         if (beam->timer < 0x21) {
-            spark = func_800CE610(D_800F33E0->pool);
+            spark = func_800CE610(ANIM_POOL_AS(SceneE22EmberChannel)->pool);
             if (spark != 0) {
                 spark->x = first.x;
                 spark->y = first.y;
@@ -114,11 +114,11 @@ int func_80193414(int mode, SceneE22LinkBeam *beam) {
         return 2;
     case 2:
         if (beam->alpha >= 0) {
-            func_800CE8F0(D_800F32D0->pool, D_801991B8[beam->jointSet].first,
+            func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].first,
                           &offset0, &first);
-            func_800CE8F0(D_800F32D0->pool, D_801991B8[beam->jointSet].middle,
+            func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].middle,
                           &offset0, &middle);
-            func_800CE8F0(D_800F32D0->pool, D_801991B8[beam->jointSet].last,
+            func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].last,
                           &offset1, &last);
             func_800D1384(&first, &middle, 10, (unsigned char *)&color2, (unsigned char *)&color1, beam->alpha,
                           (struct FieldTrailPair *)beam->trailA, 1);

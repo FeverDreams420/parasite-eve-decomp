@@ -20,15 +20,15 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
 
     switch (mode) {
     case 0:
-        func_800CE8F0(D_800F32D0->pool, 0x14, &offset, state);
-        func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->pool, 0,
+        func_800CE8F0(ANIM_OWNER_AS(RoomM005BeaconChannel)->pool, 0x14, &offset, state);
+        func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomM005BeaconChannel)->pool, 0,
                       &state->rotation);
         state->rotation.pad = 1;
         state->phase = 0;
         state->timer = 0;
         state->height = 0;
         if (D_800E2368->active) {
-            RoomM005BeaconPool *pool = D_800F32D0->pool;
+            RoomM005BeaconPool *pool = ANIM_OWNER_AS(RoomM005BeaconChannel)->pool;
             if (pool && pool->node) {
                 u8 *flag = pool->node->state;
                 if (*flag == 1) *flag = 2;
@@ -38,11 +38,11 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
         func_800C6D5C((union FieldTexturedModel *)D_80190B94, 0, 0);
         D_80190B98 = func_8006E498(D_800B0E64.channel, 0xC5862704);
         func_800C6D5C((union FieldTexturedModel *)D_80190B98, 0, 0);
-        return func_800CE560(D_800F33E0->pool, 0x10, 8,
+        return func_800CE560(ANIM_POOL_AS(RoomM005BeaconSpawnChannel)->pool, 0x10, 8,
                              (FieldAnimCallbackListCallback)func_8018FB84);
     case 1:
         if (D_800E27EC < 10) {
-            sprite = func_800CE610(D_800F33E0->pool);
+            sprite = func_800CE610(ANIM_POOL_AS(RoomM005BeaconSpawnChannel)->pool);
             if (sprite) {
                 sprite->x = (func_80071A54() & 0x3FF) - 0x200;
                 sprite->y = (func_80071A54() & 0x3FF) - 0x200;
@@ -77,7 +77,7 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
         state->target.z += position.z;
         if (func_800CEB8C(state, &state->target, 100) == 0) return 0;
         if (D_800E2368->active) {
-            RoomM005BeaconChannel *channel = D_800F32D0;
+            RoomM005BeaconChannel *channel = ANIM_OWNER_AS(RoomM005BeaconChannel);
             if ((channel->pool->node->flags & 0x3F000000) != 0x01000000) return 0;
             D_8009D254->actor->flags |= 0x4000;
             channel->pool->node->flags =
@@ -87,7 +87,7 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
         break;
     case 2:
         D_800F3368.depth = 8;
-        matrix = *D_800F32D0->pool->matrix;
+        matrix = *ANIM_OWNER_AS(RoomM005BeaconChannel)->pool->matrix;
         scale.x = scale.y = state->width / 40;
         scale.z = (state->height << 12) / 8680;
         ScaleMatrix(&matrix, &scale);

@@ -1,9 +1,9 @@
 #include "common.h"
 #include "pe1/field_anim_callback_list.h"
+#include "pe1/field_anim_pool.h"
 extern char *D_8009D254;
 extern char D_8019A82E;
 extern char D_8019A830;
-extern char **D_800F33E0;
 
 extern void func_80196C64(void);
 
@@ -18,13 +18,13 @@ s32 func_80199D50(s32 arg0) {
         if (arg0 != 0) {
             return 0;
         }
-        obj = D_800F33E0[2];
+        obj = ANIM_POOL_AS(char *)[2];
         return func_800CE560(obj, 8, 2,
                              (FieldAnimCallbackListCallback)func_80196C64);
     } else if (D_8019A82E != 0) {
         return 2;
     } else if (D_8019A830 != 0) {
-        obj = func_800CE610(D_800F33E0[2]);
+        obj = func_800CE610(ANIM_POOL_AS(char *)[2]);
         if (obj != 0) {
             actor = D_8009D254;
             *(short *)(obj + 0) = *(s32 *)(actor + 0x1FC);

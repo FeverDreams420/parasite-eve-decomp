@@ -25,7 +25,7 @@ int func_8019326C(int mode, RoomShakeSweepParticle *p) {
             p->size = rsin((D_800E27EC << 11) / 24) / 32;
             p->stretch = (D_800E27EC << 12) / 24;
             if (D_800E27EC & 1) {
-                child = (RoomShakeSweepParticle *)func_800CE610(D_800F33E0->pool);
+                child = (RoomShakeSweepParticle *)func_800CE610(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool);
                 if (child != 0) {
                     child->state = 1;
                     child->x = p->x;
@@ -120,7 +120,7 @@ int func_80193638(int mode, RoomShakeSweepAnchor *anchor) {
                 func_8006DF50(*soundSlot, 0x5F0, 0x80, 0x80, volume);
         }
         if (D_800E2368->active) {
-            pool = D_800F32D0->pool;
+            pool = ANIM_OWNER_AS(RoomShakeBurstChannel)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
                 if (*object->status == 1)
@@ -128,13 +128,13 @@ int func_80193638(int mode, RoomShakeSweepAnchor *anchor) {
             }
         }
         func_800C6D5C((union FieldTexturedModel *)D_800F32D8, 0, 0);
-        return func_800CE560(D_800F33E0->pool, 0x10, 0x18,
+        return func_800CE560(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool, 0x10, 0x18,
                              (FieldAnimCallbackListCallback)func_8019326C);
     case 1:
         if (D_800E27EC < 0x2B)
             func_80020D50();
         if (D_800E27EC < 0x28 && D_800E27EC % 6 == 0) {
-            next = (RoomShakeSweepParticle *)func_800CE610(D_800F33E0->pool);
+            next = (RoomShakeSweepParticle *)func_800CE610(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool);
             if (next != 0) {
                 next->angle = anchor->angle;
                 next->state = 0;
@@ -149,7 +149,7 @@ int func_80193638(int mode, RoomShakeSweepAnchor *anchor) {
         if (D_800E27EC == 0x2B)
             func_80020DD0();
         if (D_800E27EC == 0x2C && D_800E2368->active) {
-            channel = D_800F32D0;
+            channel = ANIM_OWNER_AS(RoomShakeBurstChannel);
             if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                 (*D_8009D254)->flags |= 0x4000;
                 channel->pool->object->flags =

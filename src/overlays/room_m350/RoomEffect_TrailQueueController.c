@@ -2,9 +2,9 @@
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 
 typedef RoomM350Vector Vector;
-extern RoomM350Emitter *D_800F33E0;
 extern unsigned char D_8019A86E;
 extern short D_8019A85C;
 extern Vector g_RoomEffectTrailPositions[4];
@@ -16,14 +16,14 @@ int func_8019784C(int event)
 {
     switch (event) {
     case 0:
-        return func_800CE560(D_800F33E0->pool, 8, 16,
+        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 8, 16,
                              (FieldAnimCallbackListCallback)func_8019A014);
     case 1:
     if (D_8019A86E) return 2;
     {
         int i;
         for (i = 0; i < D_8019A85C; i++) {
-            short *effect = func_800CE610(D_800F33E0->pool);
+            short *effect = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
             if (!effect) break;
             effect[0] = g_RoomEffectTrailPositions[i].x;
             effect[1] = g_RoomEffectTrailPositions[i].y;

@@ -108,11 +108,11 @@ int func_801955E4(int mode, RoomRisingColumn *column,
         column->counter = 0;
         column->timer = 0;
         func_800D3F64(0x5EA, func_800D3FD8());
-        return func_800CE560(D_800F33E0->pool, 0x14, 0x20,
+        return func_800CE560(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool, 0x14, 0x20,
                              (FieldAnimCallbackListCallback)func_80195190);
     case 1:
         column->timer++;
-        func_800CE870((char *)D_800F32D0->pool, 0, (s16 *)column);
+        func_800CE870((char *)ANIM_OWNER_AS(RoomShakeBurstChannel)->pool, 0, (s16 *)column);
         column->y = g_RoomFloorY->y - params->offset;
         rise = params->height * column->timer / params->duration;
         if (params->descend)
@@ -121,13 +121,13 @@ int func_801955E4(int mode, RoomRisingColumn *column,
             column->y -= params->height - rise;
         if (column->timer <= params->duration) {
             if ((column->timer & 3) == 0) {
-                child = (RoomOrbitTrailParticle *)func_800CE610(D_800F33E0->pool);
+                child = (RoomOrbitTrailParticle *)func_800CE610(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool);
                 if (child) {
                     child->state = 0;
                     child->timer = 0;
                 }
             }
-            child = (RoomOrbitTrailParticle *)func_800CE610(D_800F33E0->pool);
+            child = (RoomOrbitTrailParticle *)func_800CE610(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool);
             if (child) {
                 child->x = column->x;
                 child->y = column->y;

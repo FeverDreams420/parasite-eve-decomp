@@ -92,28 +92,28 @@ int func_80196E4C(int mode, RoomTwinRibbon *ribbon, RoomTwinRibbonParams *params
         ribbon->timer = 0;
         tip.x *= -1;
         fork.x *= -1;
-        func_800CE8F0(D_800F32D0->pool, 8, &root, &from);
-        func_800CE8F0(D_800F32D0->pool, 8, &tip, &to);
+        func_800CE8F0(ANIM_OWNER_AS(RoomEmberFountainChannel)->pool, 8, &root, &from);
+        func_800CE8F0(ANIM_OWNER_AS(RoomEmberFountainChannel)->pool, 8, &tip, &to);
         func_800D1384(&from, &to, 0x3EC, (unsigned char *)&colorA, (unsigned char *)&colorB, 0x80, (struct FieldTrailPair *)ribbon->trailA, 1);
-        func_800CE8F0(D_800F32D0->pool, 8, &fork, &from);
+        func_800CE8F0(ANIM_OWNER_AS(RoomEmberFountainChannel)->pool, 8, &fork, &from);
         func_800D1384(&from, &to, 0x3EE, (unsigned char *)&colorC, (unsigned char *)&colorB, 0x80, (struct FieldTrailPair *)ribbon->trailC, 1);
         tip.x *= -1;
         fork.x *= -1;
-        func_800CE8F0(D_800F32D0->pool, 0x15, &root, &from);
-        func_800CE8F0(D_800F32D0->pool, 0x15, &tip, &to);
+        func_800CE8F0(ANIM_OWNER_AS(RoomEmberFountainChannel)->pool, 0x15, &root, &from);
+        func_800CE8F0(ANIM_OWNER_AS(RoomEmberFountainChannel)->pool, 0x15, &tip, &to);
         func_800D1384(&from, &to, 0x3EC, (unsigned char *)&colorA, (unsigned char *)&colorB, 0x80, (struct FieldTrailPair *)ribbon->trailB, 1);
-        func_800CE8F0(D_800F32D0->pool, 0x15, &fork, &from);
+        func_800CE8F0(ANIM_OWNER_AS(RoomEmberFountainChannel)->pool, 0x15, &fork, &from);
         func_800D1384(&from, &to, 0x3EE, (unsigned char *)&colorC, (unsigned char *)&colorB, 0x80, (struct FieldTrailPair *)ribbon->trailD, 1);
-        return func_800CE560(D_800F33E0->pool, 0x14, 0x10,
+        return func_800CE560(ANIM_POOL_AS(RoomEmberBurstChannel)->pool, 0x14, 0x10,
                              (FieldAnimCallbackListCallback)func_80196C48);
     case 1:
         ribbon->timer++;
         if (params->stop) return 2;
         if (!(ribbon->timer & 1))
-            func_800CE8F0(D_800F32D0->pool, ribbon->boneA, &shed, &from);
+            func_800CE8F0(ANIM_OWNER_AS(RoomEmberFountainChannel)->pool, ribbon->boneA, &shed, &from);
         else
-            func_800CE8F0(D_800F32D0->pool, ribbon->boneB, &shed, &from);
-        pulse = func_800CE610(D_800F33E0->pool);
+            func_800CE8F0(ANIM_OWNER_AS(RoomEmberFountainChannel)->pool, ribbon->boneB, &shed, &from);
+        pulse = func_800CE610(ANIM_POOL_AS(RoomEmberBurstChannel)->pool);
         if (!pulse) return 0;
         pulse->x = from.x;
         pulse->y = from.y;
@@ -146,7 +146,7 @@ int func_80196E4C(int mode, RoomTwinRibbon *ribbon, RoomTwinRibbonParams *params
             D_800F3368.tpage = tpage;
         }
         root.z = 0;
-        func_800CE8F0(D_800F32D0->pool, 0, &root, &from);
+        func_800CE8F0(ANIM_OWNER_AS(RoomEmberFountainChannel)->pool, 0, &root, &from);
         {
             u16 clut;
             int kind;
@@ -158,17 +158,17 @@ int func_80196E4C(int mode, RoomTwinRibbon *ribbon, RoomTwinRibbonParams *params
         }
         tip.x *= -1;
         fork.x *= -1;
-        func_800CE8F0(D_800F32D0->pool, 8, &root, &from);
-        func_800CE8F0(D_800F32D0->pool, 8, &tip, &to);
+        func_800CE8F0(ANIM_OWNER_AS(RoomEmberFountainChannel)->pool, 8, &root, &from);
+        func_800CE8F0(ANIM_OWNER_AS(RoomEmberFountainChannel)->pool, 8, &tip, &to);
         func_800D1384(&from, &to, 4, (unsigned char *)&colorA, (unsigned char *)&colorB, 0x80, (struct FieldTrailPair *)ribbon->trailA, 1);
-        func_800CE8F0(D_800F32D0->pool, 8, &fork, &from);
+        func_800CE8F0(ANIM_OWNER_AS(RoomEmberFountainChannel)->pool, 8, &fork, &from);
         func_800D1384(&from, &to, 6, (unsigned char *)&colorC, (unsigned char *)&colorB, 0x80, (struct FieldTrailPair *)ribbon->trailC, 1);
         tip.x *= -1;
         fork.x *= -1;
-        func_800CE8F0(D_800F32D0->pool, 0x15, &root, &from);
-        func_800CE8F0(D_800F32D0->pool, 0x15, &tip, &to);
+        func_800CE8F0(ANIM_OWNER_AS(RoomEmberFountainChannel)->pool, 0x15, &root, &from);
+        func_800CE8F0(ANIM_OWNER_AS(RoomEmberFountainChannel)->pool, 0x15, &tip, &to);
         func_800D1384(&from, &to, 4, (unsigned char *)&colorA, (unsigned char *)&colorB, 0x80, (struct FieldTrailPair *)ribbon->trailB, 1);
-        func_800CE8F0(D_800F32D0->pool, 0x15, &fork, &from);
+        func_800CE8F0(ANIM_OWNER_AS(RoomEmberFountainChannel)->pool, 0x15, &fork, &from);
         func_800D1384(&from, &to, 6, (unsigned char *)&colorC, (unsigned char *)&colorB, 0x80, (struct FieldTrailPair *)ribbon->trailD, 1);
         D_800F3368.parameter00 = 0x20;
         D_800F3368.parameter02 = 2;

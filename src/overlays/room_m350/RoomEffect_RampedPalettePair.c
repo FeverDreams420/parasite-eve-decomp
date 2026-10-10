@@ -3,6 +3,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 typedef RoomM350Vector Vector;
 typedef struct { Vector *position; short scale, reserved; } Particle;
 typedef struct { short target, current; } State;
@@ -11,8 +12,6 @@ typedef struct RoomM350Instance { char reserved[22]; unsigned short frame; } Ins
 typedef RoomM350Actor Actor;
 
 /* The spawner owns the scaled particles rendered by this callback. */
-extern RoomM350Emitter *D_800F33E0;
-extern Actor *D_800F32D0;
 extern int D_800966EC[], D_8019A3D0[];
 extern Vector D_8019A778[];
 extern unsigned short D_800E11E8;
@@ -50,12 +49,12 @@ int func_80192C34(int event, State *state)
 
         state->target = 16384;
         state->current = 0;
-        return func_800CE560(D_800F33E0->pool, 8, 6,
+        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 8, 6,
                              (FieldAnimCallbackListCallback)func_80192ADC);
         case 1:
     if (!state->target) {
         if (state->current <= 0) return 2;
-    } else if (D_800F32D0->instance->frame >= 41) state->target = 0;
+    } else if (ANIM_OWNER_AS(Actor)->instance->frame >= 41) state->target = 0;
     if (D_800E27EC & 7) return 0;
     if (state->current < state->target) state->current += 4096;
     else if (state->target < state->current) state->current -= 4096;
@@ -63,7 +62,7 @@ int func_80192C34(int event, State *state)
         int i;
         register Vector *position asm("$16") = D_8019A778;
         for (i = 0; i < 2; i++, position++) {
-            Particle *particle = func_800CE610(D_800F33E0->pool);
+            Particle *particle = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
             if (!particle) return 0;
             particle->position = position;
             particle->scale = state->current;

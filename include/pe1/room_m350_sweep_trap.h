@@ -5,6 +5,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/render_object.h"
 #include "pe1/room_floor.h"
+#include "pe1/field_anim_pool.h"
 
 /* room_m350 sweeping beam trap (func_80192E4C): a column of sprites swept
  * down from the actor's head, a flare and two fan blades towards the
@@ -52,7 +53,6 @@ typedef struct RoomM350Trig {
 } RoomM350Trig;
 
 extern RoomM350Trig D_800966EC[];
-extern RoomM350TrapChannel *D_800F32D0;
 extern RoomM350Player *g_PlayerEntity;
 extern RenderColor D_8019A434[];
 extern RenderColor D_8019A3C8;

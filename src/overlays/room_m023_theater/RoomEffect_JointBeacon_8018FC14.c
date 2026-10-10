@@ -30,7 +30,7 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
         state->height = 0;
         state->glow = 0;
         if (D_800E2368->active) {
-            RoomM023BeaconPool *pool = D_800F32D0->pool;
+            RoomM023BeaconPool *pool = ANIM_OWNER_AS(RoomM023BeaconChannel)->pool;
             if (pool && pool->node) {
                 u8 *flag = pool->node->state;
                 if (*flag == 1) *flag = 2;
@@ -41,8 +41,8 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
         func_800C6D5C((union FieldTexturedModel *)D_80190760, 0, 0);
         return 0;
     case 1:
-        func_800CE8F0(D_800F32D0->pool, state->joint, &offset, state);
-        func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->pool, 0,
+        func_800CE8F0(ANIM_OWNER_AS(RoomM023BeaconChannel)->pool, state->joint, &offset, state);
+        func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomM023BeaconChannel)->pool, 0,
                       &state->rotation);
         switch (state->phase) {
         case 0:
@@ -94,7 +94,7 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
         if (func_800CEB8C(state, &state->target, 0x50) == 0) return 0;
         if (state->armed == 0) return 0;
         if (D_800E2368->active) {
-            RoomM023BeaconChannel *channel = D_800F32D0;
+            RoomM023BeaconChannel *channel = ANIM_OWNER_AS(RoomM023BeaconChannel);
             if ((channel->pool->node->flags & 0x3F000000) == 0x01000000) {
                 D_8009D254->actor->flags |= 0x4000;
                 channel->pool->node->flags =
@@ -150,7 +150,7 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
         rotation.y = 0;
         rotation.z = D_800E27EC << 7;
         RotMatrix(&rotation, &spin);
-        matrix = *D_800F32D0->pool->matrix;
+        matrix = *ANIM_OWNER_AS(RoomM023BeaconChannel)->pool->matrix;
         MulMatrix0(&matrix, &spin, &matrix);
         scale.x = scale.y = state->width / 16;
         scale.z = (state->height << 12) / 8000;

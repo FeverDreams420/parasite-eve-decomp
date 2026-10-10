@@ -58,7 +58,7 @@ int func_80194164(int mode, RoomShakeBurstPoint *anchor) {
     case 0:
         func_800CE870((char *)D_8009D254, 0, (s16 *)anchor);
         if (D_800E2368->active) {
-            pool = D_800F32D0->pool;
+            pool = ANIM_OWNER_AS(RoomShakeBurstChannel)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
                 if (*object->status == 1)
@@ -75,13 +75,13 @@ int func_80194164(int mode, RoomShakeBurstPoint *anchor) {
             if (*(void *volatile *)soundSlot != 0)
                 func_8006DF50(*soundSlot, 0x5F2, 0x80, 0x80, volume);
         }
-        return func_800CE560(D_800F33E0->pool, 8, 0x14,
+        return func_800CE560(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool, 8, 0x14,
                              (FieldAnimCallbackListCallback)func_80193FC4);
     case 1:
         if (D_800E27EC < 0x27)
             func_80020D50();
         if (D_800E27EC < 0x15) {
-            next = func_800CE610(D_800F33E0->pool);
+            next = func_800CE610(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool);
             if (next != 0) {
                 next->x = anchor->x + (func_80071A54() & 0x1FF) - 0x100;
                 next->y = anchor->y + (func_80071A54() & 0x1FF) - 0x100;
@@ -91,7 +91,7 @@ int func_80194164(int mode, RoomShakeBurstPoint *anchor) {
         if (D_800E27EC == 0x27)
             func_80020DD0();
         if (D_800E27EC == 0x28 && D_800E2368->active) {
-            channel = D_800F32D0;
+            channel = ANIM_OWNER_AS(RoomShakeBurstChannel);
             if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                 (*D_8009D254)->flags |= 0x4000;
                 channel->pool->object->flags =

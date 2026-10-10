@@ -58,8 +58,8 @@ int func_80194E6C(int mode, RoomM273FallingTrail *trail) {
                 }
                 D_8019AE9C.hit_flag = 1;
                 g_PlayerEntity->actor->flags |= 0x4000;
-                if (D_800F32D0->instance->owner) {
-                    D_800F32D0->instance->owner->flags |= 0x80000000;
+                if (ANIM_OWNER_AS(RoomM273BossActor)->instance->owner) {
+                    ANIM_OWNER_AS(RoomM273BossActor)->instance->owner->flags |= 0x80000000;
                 }
             }
         }
@@ -185,7 +185,7 @@ int func_801955E8(int mode) {
         D_8019AE70 = 0;
         D_8019AE74 = (Inv_ScrambleGrid() & 7) + 4;
         D_8019AE78 = (Inv_ScrambleGrid() & 7) + 4;
-        return func_800CE560(D_800F33E0->pool, 100, 10,
+        return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 100, 10,
                              (FieldAnimCallbackListCallback)func_80194E6C);
     }
     case 1: {
@@ -194,7 +194,7 @@ int func_801955E8(int mode) {
 
         if (D_8019AEF8)
             return 2;
-        candidate = ((RoomM273RingController *)D_800F32D0)->actor;
+        candidate = ((RoomM273RingController *)ANIM_OWNER_AS(RoomM273BossActor))->actor;
         if (candidate->mode != 11)
             return 0;
         actor = candidate;
@@ -275,7 +275,7 @@ phasePattern: {
 particleSetup:
         i = 0;
         do {
-            RoomM273FallingTrail *particle = func_800CE610(D_800F33E0->pool);
+            RoomM273FallingTrail *particle = func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
             if (particle == 0)
                 break;
             particle->position.x = D_8019AE9C.hands[i].x;

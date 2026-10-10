@@ -3,8 +3,8 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 
-extern RoomM350EffectActor *D_800F32D0;
 extern int D_800966EC[], D_8019A56C[];
 extern int GetClut(int, int);
 
@@ -19,7 +19,7 @@ int func_80195B64(int event, GteShortVector *object)
         int entry = D_800966EC[((unsigned int)D_800E27EC << 7) & 0xF80];
         int scale = entry >> 16;
         int shade = (short)entry >> 5;
-        int *origin = D_800F32D0->instance->transforms[33].t;
+        int *origin = ANIM_OWNER_AS(RoomM350EffectActor)->instance->transforms[33].t;
         int i;
         int kind, palette, handle;
 
@@ -41,7 +41,6 @@ int func_80195B64(int event, GteShortVector *object)
 /* MASPSX_FLAGS: --expand-div */
 /* Event state: rotation, emission count, brightness, fade phase and size. */
 typedef struct { GteShortVector rotation; short count,brightness,fade,size; } State;
-extern RoomM350EffectEmitter *D_800F33E0;
 extern unsigned char D_8019A82E;
 
 extern unsigned short D_800E11E8;
@@ -57,12 +56,12 @@ int func_80195CE0(int event,State *inputState)
     case 0:
 
         {
-            RoomM350EffectInstance *instance=D_800F32D0->instance;
+            RoomM350EffectInstance *instance=ANIM_OWNER_AS(RoomM350EffectActor)->instance;
             int *position=instance->transforms[33].t;
             RoomM350EffectEmitter *emitter;
             Asset_Find08w(0x5C9,instance->owner->asset,(short)position[0],(short)position[1],(short)position[2]);
             *(int *)&state->rotation=0;
-            emitter=D_800F33E0;
+            emitter=ANIM_POOL_AS(RoomM350EffectEmitter);
             *(int *)((char *)&state->rotation+4)=0;
             state->count=0; state->fade=0;
             return func_800CE560(emitter->pool,8,18,
@@ -87,7 +86,7 @@ int func_80195CE0(int event,State *inputState)
         if(state->count>=16) return 0;
         i=0;
         do {
-            register GteShortVector *particle asm("$17")=func_800CE610(D_800F33E0->pool);
+            register GteShortVector *particle asm("$17")=func_800CE610(ANIM_POOL_AS(RoomM350EffectEmitter)->pool);
             register int random asm("$16");
             int divisor;
             if(!particle) break;
@@ -123,7 +122,7 @@ radial:
         D_800F3368.extent_x=16; D_800F3368.extent_y=16; D_800F3368.extent_x=16; D_800F3368.extent_y=16;
         palette=D_800E2850[index];
         asm volatile("" : "=r"(palette) : "0"(palette) : "memory");
-        actor=D_800F32D0;
+        actor=ANIM_OWNER_AS(RoomM350EffectActor);
         D_800F3368.palette=2; D_800F3368.parameter06=0; D_800F3368.parameter0A=0; D_800F3368.depth=0; D_800F3368.tpage=palette;
         asm volatile("" : "=r"(actor) : "0"(actor) : "memory");
         i=0;

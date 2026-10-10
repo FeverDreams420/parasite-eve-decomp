@@ -14,15 +14,15 @@ int Memcard_GlintBurstController(int mode, MemcardGlintBurst *burst) {
 
     switch (mode) {
     case 0:
-        burst->x = ((MemcardGlintAnchor *)D_800F32D0->pool)->x;
-        burst->y = ((MemcardGlintAnchor *)D_800F32D0->pool)->y;
-        burst->z = ((MemcardGlintAnchor *)D_800F32D0->pool)->z;
-        return func_800CE560(D_800F33E0->pool, 20, 22,
+        burst->x = ((MemcardGlintAnchor *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->x;
+        burst->y = ((MemcardGlintAnchor *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->y;
+        burst->z = ((MemcardGlintAnchor *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->z;
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 22,
                              (FieldAnimCallbackListCallback)Memcard_FadingGlintParticle);
     case 1:
         if (D_800E27EC == 3) {
             for (i = 0; i < 6; i++) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = burst->x;
                     child->y = burst->y;
@@ -37,7 +37,7 @@ int Memcard_GlintBurstController(int mode, MemcardGlintBurst *burst) {
         }
         if (D_800E27EC < 5) {
             for (i = 0; i < 4; i++) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = burst->x;
                     child->y = burst->y;

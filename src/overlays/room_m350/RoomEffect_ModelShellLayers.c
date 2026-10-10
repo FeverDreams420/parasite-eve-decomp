@@ -4,6 +4,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 /* MASPSX_FLAGS: --expand-div */
 typedef RoomM350Vector Vector;
 typedef RoomM350TransformMatrix Matrix;
@@ -11,7 +12,6 @@ typedef struct { int color; short x, y, z, size; } Particle;
 typedef RoomM350TransformOwner Instance;
 typedef RoomM350TableShadeEntry TrigEntry;
 
-extern RoomM350Emitter *D_800F33E0;
 extern Instance *D_8019A7F8;
 extern int D_800966EC[];
 extern short D_800966EE[];
@@ -48,7 +48,7 @@ int func_8019421C(int event)
     switch (event) {
     case 0:
 
-        return func_800CE560(D_800F33E0->pool, 12, 64,
+        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 12, 64,
                              (FieldAnimCallbackListCallback)func_8019404C);
         case 1:
     {
@@ -60,7 +60,7 @@ int func_8019421C(int event)
             register int random asm("$16");
             int r, g, b, divisor;
             int j, *position;
-            Particle *particle = func_800CE610(D_800F33E0->pool);
+            Particle *particle = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
             if (!particle) return 0;
             vector.x = (unsigned int)Inv_ScrambleGrid() << 4;
             vector.y = (unsigned int)Inv_ScrambleGrid() << 4;

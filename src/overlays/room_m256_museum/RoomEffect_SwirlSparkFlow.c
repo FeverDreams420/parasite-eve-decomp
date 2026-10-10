@@ -119,13 +119,13 @@ int func_80193BFC(int mode, s16 *counter) {
             if (*(void *volatile *)soundSlot != 0)
                 func_8006DF50(*soundSlot, 0x5BF, 0x80, 0x80, volume);
         }
-        return func_800CE560(D_800F33E0->pool, 0x14, 0x20,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x20,
                              (FieldAnimCallbackListCallback)func_8019377C);
     case 1:
-        func_800CE8F0(D_800F32D0->pool, 4, &template, &position);
-        func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->pool, 4, &base);
+        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &template, &position);
+        func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &base);
         if (D_800E27EC < 0x6F) {
-            child = (RoomM256SwirlSpark *)func_800CE610(D_800F33E0->pool);
+            child = (RoomM256SwirlSpark *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (child) {
                 child->x = position.x;
                 child->y = position.y;
@@ -157,7 +157,7 @@ int func_80193BFC(int mode, s16 *counter) {
                 child->state = 0;
                 child->timer = 0;
             }
-            child = (RoomM256SwirlSpark *)func_800CE610(D_800F33E0->pool);
+            child = (RoomM256SwirlSpark *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (child) {
                 child->x = position.x;
                 child->y = position.y;

@@ -9,7 +9,7 @@ extern char D_8019AE00[];
  * the sweep window while loops remain, publishes the sweep attack angle and
  * transforms the sweep point. */
 int func_80197BBC(int mode) {
-    RoomM273BossInstance *instance = D_800F32D0->instance;
+    RoomM273BossInstance *instance = ANIM_OWNER_AS(RoomM273BossActor)->instance;
     RoomM273SweepStep *step;
     GteShortVector offset;
     s16 frame;
@@ -58,7 +58,7 @@ int func_80197BBC(int mode) {
             if (frame >= step->loop_start) D_8019AF04.started = 1;
             D_8019AF04.in_window = frame >= step->loop_start && frame <= step->loop_end;
             {
-                RoomM273BossInstance *current = D_800F32D0->instance;
+                RoomM273BossInstance *current = ANIM_OWNER_AS(RoomM273BossActor)->instance;
                 s16 previous;
                 frame = current->time.bits.frame;
                 previous = current->previous.bits.frame;
@@ -139,13 +139,13 @@ int func_801981A4(int mode, RoomM273SwayShard *shard) {
             if ((s16)Math_IntSqrt(dx * dx + dz * dz) < 0x80) {
                 shard->state = 1;
                 g_PlayerEntity->actor->flags |= 0x4000;
-                if (D_800F32D0->instance->owner)
-                    D_800F32D0->instance->owner->flags |= 0x80000000;
+                if (ANIM_OWNER_AS(RoomM273BossActor)->instance->owner)
+                    ANIM_OWNER_AS(RoomM273BossActor)->instance->owner->flags |= 0x80000000;
                 D_8019AF74.hits[shard->side].x = shard->position.x;
                 D_8019AF74.hits[shard->side].y = shard->position.y;
                 D_8019AF74.hits[shard->side].z = shard->position.z;
                 D_8019AF74.hits[shard->side].pad = 2;
-                Asset_Find08w(0x5FC, D_800F32D0->instance->owner->sound, shard->position.x,
+                Asset_Find08w(0x5FC, ANIM_OWNER_AS(RoomM273BossActor)->instance->owner->sound, shard->position.x,
                               shard->position.y, shard->position.z);
                 D_8019AF74.cooldown = 0x28;
                 return 1;
@@ -159,7 +159,7 @@ int func_801981A4(int mode, RoomM273SwayShard *shard) {
             D_8019AF74.hits[shard->side].y = shard->position.y;
             D_8019AF74.hits[shard->side].z = shard->position.z;
             D_8019AF74.hits[shard->side].pad = 3;
-            Asset_Find08w(0x5FC, D_800F32D0->instance->owner->sound, shard->position.x,
+            Asset_Find08w(0x5FC, ANIM_OWNER_AS(RoomM273BossActor)->instance->owner->sound, shard->position.x,
                           shard->position.y, shard->position.z);
             return 1;
         } else {
@@ -187,7 +187,7 @@ int func_801981A4(int mode, RoomM273SwayShard *shard) {
                       (s16)D_800F3368.parameter02 * shard->frame,
                       GetClut(0x10, palette), 1, 0x80, 0);
         spin.x = D_800E27EC * 0x300;
-        spin.y = D_800F32D0->instance->yaw;
+        spin.y = ANIM_OWNER_AS(RoomM273BossActor)->instance->yaw;
         spin.z = 0;
         spin.flags = 1;
         for (i = 0; i < 2; i++) {
@@ -219,17 +219,17 @@ int func_801986E8(int mode) {
 
     switch (mode) {
     case 0:
-        count = func_800CE560(D_800F33E0->pool, 0x14, 4,
+        count = func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 0x14, 4,
                               (FieldAnimCallbackListCallback)func_801981A4);
         count += func_800CE5AC(&D_8019AF70, count, 8, 0x14, func_80198060);
         return count;
     case 1:
         if (D_8019AF74.done) return 2;
-        if (D_800F32D0->instance->animation == 15 && D_8019AF74.frame >= 4 &&
+        if (ANIM_OWNER_AS(RoomM273BossActor)->instance->animation == 15 && D_8019AF74.frame >= 4 &&
             D_8019AF74.frame_1A < 4) {
             int i;
             for (i = 0; i < 2; i++) {
-                RoomM273SwayShard *shard = func_800CE610(D_800F33E0->pool);
+                RoomM273SwayShard *shard = func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
                 RoomM273BossPlayer *player;
                 int dx;
                 int dy;
@@ -248,7 +248,7 @@ int func_801986E8(int mode) {
                 dz = target.z - shard->position.z;
                 dy = target.y - shard->position.y;
                 angles.x = (ratan2(dy, Math_IntSqrt(dx * dx + dz * dz)) & 0xFFF) - 0x30;
-                angles.y = D_800F32D0->instance->yaw;
+                angles.y = ANIM_OWNER_AS(RoomM273BossActor)->instance->yaw;
                 angles.z = 0;
                 if (angles.x < 0x100) angles.x = 0x100;
                 if (angles.x > 0x280) angles.x = 0x280;
@@ -258,7 +258,7 @@ int func_801986E8(int mode) {
             target.x = (D_8019AF74.points[0].x + D_8019AF74.points[1].x) / 2;
             target.y = (D_8019AF74.points[0].y + D_8019AF74.points[1].y) / 2;
             target.z = (D_8019AF74.points[0].z + D_8019AF74.points[1].z) / 2;
-            Asset_Find08w(0x5D2, D_800F32D0->instance->owner->sound, target.x, target.y,
+            Asset_Find08w(0x5D2, ANIM_OWNER_AS(RoomM273BossActor)->instance->owner->sound, target.x, target.y,
                           target.z);
         }
         func_800CE688(D_8019AF70);

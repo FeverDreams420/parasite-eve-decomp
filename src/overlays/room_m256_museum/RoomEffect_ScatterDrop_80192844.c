@@ -4,7 +4,7 @@
 /* Flashes the scene when the drop touches the player. */
 #define ROOM_M256_DROP_FLASH(radius)                                          \
     if (func_800C6B90(drop, radius) && drop->hazard && D_800E2368->active) {  \
-        RoomM256DropChannel *channel = D_800F32D0;                            \
+        RoomM256DropChannel *channel = ANIM_OWNER_AS(RoomM256DropChannel);                            \
         if ((channel->pool->node->flags & 0x3F000000) == 0x01000000) {        \
             D_8009D254->actor->flags |= 0x4000;                               \
             channel->pool->node->flags =                                      \
@@ -44,7 +44,7 @@ int func_80192844(int mode, RoomM256Drop *drop) {
             }
             if (drop->timer & 1) {
                 if ((func_80071A54() & 7) == 0) {
-                    child = func_800CE610(D_800F33E0->pool);
+                    child = func_800CE610(ANIM_POOL_AS(RoomM256DropSpawnChannel)->pool);
                     if (child) {
                         child->x = drop->x;
                         child->y = drop->y;
@@ -57,7 +57,7 @@ int func_80192844(int mode, RoomM256Drop *drop) {
                     }
                 }
                 if ((func_80071A54() & 7) == 1) {
-                    child = func_800CE610(D_800F33E0->pool);
+                    child = func_800CE610(ANIM_POOL_AS(RoomM256DropSpawnChannel)->pool);
                     if (child) {
                         child->x = drop->x;
                         child->y = drop->y;
@@ -70,7 +70,7 @@ int func_80192844(int mode, RoomM256Drop *drop) {
                     }
                 }
                 if ((func_80071A54() & 0xF) == 2) {
-                    child = func_800CE610(D_800F33E0->pool);
+                    child = func_800CE610(ANIM_POOL_AS(RoomM256DropSpawnChannel)->pool);
                     if (child) {
                         child->x = drop->x;
                         child->y = drop->y;

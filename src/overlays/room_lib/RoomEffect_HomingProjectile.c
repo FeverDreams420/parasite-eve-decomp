@@ -68,11 +68,11 @@ int RoomEffect_HomingProjectile(int mode) {
     switch (mode) {
     case 0:
         model->state = 0;
-        model->angle = D_800F32D0->actor->heading;
-        return func_800CE560(D_800F33E0->pool, 8, 4,
+        model->angle = ANIM_OWNER_AS(RoomHomingModelActorChannel)->actor->heading;
+        return func_800CE560(ANIM_POOL_AS(RoomHomingModelSparkChannel)->pool, 8, 4,
                              (FieldAnimCallbackListCallback)RoomEffect_HomingProjectileSpark);
     case 1:
-        actor = D_800F32D0->actor;
+        actor = ANIM_OWNER_AS(RoomHomingModelActorChannel)->actor;
         switch (model->state) {
         case 0: {
             GteMatrix *transform;
@@ -192,7 +192,7 @@ int RoomEffect_HomingProjectile(int mode) {
                     if (model->lift <= 0x2FFFFF) {
                         model->gravity = 0;
                     } else {
-                        RoomHomingModelSpark *spark = func_800CE610(D_800F33E0->pool);
+                        RoomHomingModelSpark *spark = func_800CE610(ANIM_POOL_AS(RoomHomingModelSparkChannel)->pool);
                         if (spark != 0) {
                             spark->x = model->position[0].part.integer;
                             spark->y = g_RoomFloorY->raw;
@@ -303,7 +303,7 @@ int RoomEffect_HomingProjectile(int mode) {
  * follows the actor's throw animation until it either releases the
  * projectile (the cue reaches the last frame) or is interrupted. */
 int RoomEffect_HomingProjectileThrow(int mode, RoomHomingModel *model) {
-    RoomHomingModelActor *actor = D_800F32D0->actor;
+    RoomHomingModelActor *actor = ANIM_OWNER_AS(RoomHomingModelActorChannel)->actor;
     u8 *cue;
     int motion;
     u16 frame;

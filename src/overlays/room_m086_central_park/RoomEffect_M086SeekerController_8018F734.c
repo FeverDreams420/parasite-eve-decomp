@@ -26,15 +26,15 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
         slot = &D_800BCFA4;
         gte_ldrotmatrix(slot->value);
         gte_ldtransmatrix(slot->value);
-        func_800CE8F0(D_800F32D0->pool, 7, &anchor, state);
-        func_800CEAE8(D_800F32D0->pool->bone, &drift, &state->velocity);
+        func_800CE8F0(ANIM_OWNER_AS(RoomM086Channel)->pool, 7, &anchor, state);
+        func_800CEAE8(ANIM_OWNER_AS(RoomM086Channel)->pool->bone, &drift, &state->velocity);
         state->state = 0;
         state->timer = 0;
         state->velocity.y -= 0x18;
-        func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->pool, 0,
+        func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomM086Channel)->pool, 0,
                       &state->rotation);
         if (D_800E2368->active) {
-            RoomM086Pool *pool = D_800F32D0->pool;
+            RoomM086Pool *pool = ANIM_OWNER_AS(RoomM086Channel)->pool;
             if (pool && pool->object) {
                 u8 *flag = pool->object->state;
                 if (*flag == 1) *flag = 2;
@@ -45,7 +45,7 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
         D_80190B84 = func_8006E498(D_800B0E64.base, 0xC5865704);
         func_800C6D5C((union FieldTexturedModel *)D_80190B84, 0, 0);
         func_800D3F64(0x577, func_800D3FD8());
-        return func_800CE560(D_800F33E0->pool, 0x14, 0xE,
+        return func_800CE560(ANIM_POOL_AS(RoomM086SpawnChannel)->pool, 0x14, 0xE,
                              (FieldAnimCallbackListCallback)func_8018F004);
     case 1:
         switch (state->state) {
@@ -59,7 +59,7 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
             state->velocity.y += 5;
             if (D_800E27EC == 1) {
                 for (i = 0; i < 6; i++) {
-                    child = func_800CE610(D_800F33E0->pool);
+                    child = func_800CE610(ANIM_POOL_AS(RoomM086SpawnChannel)->pool);
                     if (child) {
                         child->position.x = state->position.x;
                         child->position.y = state->position.y;
@@ -75,7 +75,7 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
             if (state->position.y < g_RoomFloorY->y - 0x202) return 0;
             angle = func_80071A54();
             for (i = 0; i < 6; i++) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomM086SpawnChannel)->pool);
                 if (child) {
                     child->position.x = state->position.x;
                     child->position.y = state->position.y;
@@ -91,7 +91,7 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
             }
             angle = state->rotation.y - (params->spacing * params->count) / 2;
             for (i = 0; i < params->count; i++) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomM086SpawnChannel)->pool);
                 if (child) {
                     child->position.x = state->position.x;
                     child->position.y = state->position.y;

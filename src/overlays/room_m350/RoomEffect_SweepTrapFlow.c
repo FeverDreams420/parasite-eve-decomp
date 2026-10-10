@@ -3,6 +3,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte.h"
 #include "pe1/room_m350_sweep_trap.h"
+#include "pe1/field_anim_pool.h"
 
 
 typedef union RoomM350Angles {
@@ -47,7 +48,7 @@ int func_80192E4C(int mode, RoomM350SweepTrap *trap) {
         if (intensity) i = phase;
         trig = D_800966EC;
         rotation.angles.x = -D_800966EC[(i * 128) & 0xFFF].sin * 0x260 / 4096 - 0x500;
-        rotation.angles.y = D_800F32D0->actor->heading;
+        rotation.angles.y = ANIM_OWNER_AS(RoomM350TrapChannel)->actor->heading;
         rotation.angles.z = 0x400;
         RotMatrixYXZ(&rotation.angles, &matrix);
         matrix.t[0] = 0;
@@ -119,8 +120,8 @@ int func_80192E4C(int mode, RoomM350SweepTrap *trap) {
         if (trap->done) return 0;
         if (g_PlayerEntity->stance < 4) return 0;
         D_8019A444[2].z = D_8019A444[3].z = -dist;
-        c = rcos(D_800F32D0->actor->heading);
-        s = rsin(D_800F32D0->actor->heading);
+        c = rcos(ANIM_OWNER_AS(RoomM350TrapChannel)->actor->heading);
+        s = rsin(ANIM_OWNER_AS(RoomM350TrapChannel)->actor->heading);
         frame.m[0][2] = s;
         frame.m[2][0] = -s;
         frame.m[1][1] = 0x1000;
@@ -162,7 +163,7 @@ int func_80192E4C(int mode, RoomM350SweepTrap *trap) {
         if (k < 4) return 0;
         g_PlayerEntity->actor->flags |= 0x4000;
         {
-            RoomM350TrapNode *node = D_800F32D0->actor->node;
+            RoomM350TrapNode *node = ANIM_OWNER_AS(RoomM350TrapChannel)->actor->node;
             GteShortVector unused;
             if (node) node->flags |= 0x80000000;
         }
@@ -188,18 +189,17 @@ typedef struct RoomM350Instance {
 } Instance;
 typedef RoomM350Actor RoomM350ControllerChannel;
 
-extern RoomM350Emitter *D_800F33E0;
 extern GteShortVector D_8019A778[];
 extern int Asset_Find08w(int,int,int,int,int);
 int func_8019360C(int event) {
     switch (event) {
     case 0:
 
-        return func_800CE560(((RoomM350Emitter *)D_800F33E0)->pool,8,2,
+        return func_800CE560(((RoomM350Emitter *)ANIM_POOL_AS(RoomM350Emitter))->pool,8,2,
                              (FieldAnimCallbackListCallback)func_80192E4C);
         case 1:
     {
-        Instance *instance = ((RoomM350ControllerChannel *)D_800F32D0)->instance;
+        Instance *instance = ((RoomM350ControllerChannel *)ANIM_OWNER_AS(RoomM350TrapChannel))->instance;
         int frame;
         int previous;
         int i;
@@ -212,13 +212,13 @@ int func_8019360C(int event) {
         if (previous < 8) {
             position = D_8019A778;
             for (i=0;i<2;i++,position++) {
-                RoomM350SweepTrap *particle = func_800CE610(((RoomM350Emitter *)D_800F33E0)->pool);
+                RoomM350SweepTrap *particle = func_800CE610(((RoomM350Emitter *)ANIM_POOL_AS(RoomM350Emitter))->pool);
                 if (!particle) break;
                 particle->anchor = position;
                 particle->done = 0;
             }
             {
-                Instance *current = ((RoomM350ControllerChannel *)D_800F32D0)->instance;
+                Instance *current = ((RoomM350ControllerChannel *)ANIM_OWNER_AS(RoomM350TrapChannel))->instance;
                 Asset_Find08w(0x5C6,current->owner->soundMode,
                     *(short *)&current->transforms->position[0],
                     *(short *)&current->transforms->position[1],

@@ -24,11 +24,11 @@ int func_80196CCC(int mode, SceneSpinRayBurst *burst)
         burst->blades = 0x10;
         func_800D3F64(0x5E1, func_800D3FD8());
         func_800D3F64(0x5E2, 0x80);
-        return func_800CE560(D_800F33E0->pool, 0x10, 0x32,
+        return func_800CE560(ANIM_POOL_AS(SceneSpinRayChannel)->pool, 0x10, 0x32,
                              (FieldAnimCallbackListCallback)func_80196748);
     case 1:
         if (++burst->timer & 1) {
-            child = func_800CE610(D_800F33E0->pool);
+            child = func_800CE610(ANIM_POOL_AS(SceneSpinRayChannel)->pool);
             if (child) {
                 child->spin.angles.x = func_80071A54();
                 child->spin.angles.y = func_80071A54();
@@ -38,7 +38,7 @@ int func_80196CCC(int mode, SceneSpinRayBurst *burst)
             }
         }
         if (!(burst->timer & 3) && burst->blades > 0) {
-            child = func_800CE610(D_800F33E0->pool);
+            child = func_800CE610(ANIM_POOL_AS(SceneSpinRayChannel)->pool);
             if (child) {
                 func_800CFFAC(child);
                 child->timer = 0;
@@ -50,7 +50,7 @@ int func_80196CCC(int mode, SceneSpinRayBurst *burst)
         }
         if ((s16)burst->timer == 1) {
             for (i = 0; i < 26; i++) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(SceneSpinRayChannel)->pool);
                 if (child) {
                     func_800CFFAC(child);
                     child->timer = 0;
@@ -75,7 +75,7 @@ int func_80196CCC(int mode, SceneSpinRayBurst *burst)
             D_800F3368.depth = 0x18;
             D_800F3368.tpage = tpage;
         }
-        func_800CE8F0(D_800F32D0->pool, 0, &tilt, &position);
+        func_800CE8F0(ANIM_OWNER_AS(SceneSpinRayChannel)->pool, 0, &tilt, &position);
         D_8019B670.x = position.x;
         D_8019B670.y = position.y;
         D_8019B670.z = position.z;

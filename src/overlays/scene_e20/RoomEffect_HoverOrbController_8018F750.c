@@ -90,9 +90,9 @@ initialize:
             effect->timer = 0;
             effect->alpha = 0x80;
             command->pending = 0;
-            effect->target.x = (s16) (u16) D_800F32D0->pool->position.x;
-            effect->target.y = (s16) (u16) D_800F32D0->pool->position.y;
-            effect->target.z = (s16) (u16) D_800F32D0->pool->position.z;
+            effect->target.x = (s16) (u16) ANIM_OWNER_AS(SceneE20Channel)->pool->position.x;
+            effect->target.y = (s16) (u16) ANIM_OWNER_AS(SceneE20Channel)->pool->position.y;
+            effect->target.z = (s16) (u16) ANIM_OWNER_AS(SceneE20Channel)->pool->position.z;
             assetKey = 0xC5540000U;
             effect->previousPosition.x = (s16) (u16) effect->target.x;
             effect->previousPosition.y = (s16) (u16) effect->target.y;
@@ -105,7 +105,7 @@ initialize:
             D_8019085C = temp_v0;
             func_800C6D5C(temp_v0, 0, 0);
             func_800D1384(&effect->position, &effect->position, 0x3EE, (unsigned char *)initColor0, (unsigned char *)initColor1, 0x80, (struct FieldTrailPair *)effect->history, initialMode);
-            return func_800CE560((char *)D_800F33E0->pool, 0x14, 0x20,
+            return func_800CE560((char *)ANIM_POOL_AS(SceneE20Channel)->pool, 0x14, 0x20,
                                  (FieldAnimCallbackListCallback)func_8018F028);
 update: {
     temp_v1_2 = effect->phase;
@@ -188,7 +188,7 @@ update: {
         temp_v0_9 = (u16) effect->timer + 1;
         effect->timer = temp_v0_9;
         if (temp_v0_9 == 1) {
-            temp_v0_10 = func_800CE610((char *)D_800F33E0->pool);
+            temp_v0_10 = func_800CE610((char *)ANIM_POOL_AS(SceneE20Channel)->pool);
             if (temp_v0_10 != NULL) {
                 temp_v0_10->velocity.x = (s16) (u16) effect->rotation.x;
                 temp_v0_10->velocity.y = (s16) (u16) effect->rotation.y;
@@ -207,7 +207,7 @@ update: {
         if (effect->timer >= 4) {
             effect->phase = 5;
             effect->timer = 0;
-            temp_v0_10 = func_800CE610((char *)D_800F33E0->pool);
+            temp_v0_10 = func_800CE610((char *)ANIM_POOL_AS(SceneE20Channel)->pool);
             if (temp_v0_10 != NULL) {
                 temp_v0_10->position.x = (s16) (u16) effect->endpoint.x;
                 temp_v0_10->position.y = (s16) (u16) effect->endpoint.y;
@@ -220,7 +220,7 @@ update: {
                 temp_v0_10->velocity.z = temp_v0_14;
             }
             for (particleIndex = 0; particleIndex < 12; ++particleIndex) {
-            temp_v0_12 = func_800CE610((char *)D_800F33E0->pool);
+            temp_v0_12 = func_800CE610((char *)ANIM_POOL_AS(SceneE20Channel)->pool);
             if (temp_v0_12 != NULL) {
                 temp_v0_12->position.x = (s16) (u16) effect->endpoint.x;
                 temp_v0_12->position.y = (s16) (u16) effect->endpoint.y;
@@ -239,15 +239,15 @@ update: {
     case 5:                                         /* switch 1 */
         effect->timer = (u16) effect->timer + 1;
         if ((func_800C6B90(&effect->endpoint, 0x42) != 0) && (D_80190800 == 0)) {
-            temp_v1_3 = D_800F32D0->pool->node;
+            temp_v1_3 = ANIM_OWNER_AS(SceneE20Channel)->pool->node;
             *(u8 *)((u8 *)temp_v1_3 + ((temp_v1_3->flags >> 17) & 0x70) + 0x1C) = 2;
             if (D_800E2368->active != 0) {
-                if ((D_800F32D0->pool->node->flags & 0x3F000000) == 0x01000000) {
+                if ((ANIM_OWNER_AS(SceneE20Channel)->pool->node->flags & 0x3F000000) == 0x01000000) {
                     temp_v1_4 = *D_8009D254;
                     temp_v1_4->flags |= 0x4000;
-                    temp_a0 = D_800F32D0->pool->node;
+                    temp_a0 = ANIM_OWNER_AS(SceneE20Channel)->pool->node;
                     temp_a0->flags = (temp_a0->flags & 0xC0FFFFFF) | 0x2F000000;
-                    temp_a0_2 = D_800F32D0->pool->node;
+                    temp_a0_2 = ANIM_OWNER_AS(SceneE20Channel)->pool->node;
                     temp_a0_2->flags |= 0x80000000;
                 }
             }
@@ -285,7 +285,7 @@ update: {
         effect->trailTail.x = (u16) effect->trailTail.x + (u16) effect->position.x;
         effect->trailTail.y = (u16) effect->trailTail.y + (u16) effect->position.y;
         effect->trailTail.z = (u16) effect->trailTail.z + (u16) effect->position.z;
-        if ((D_800F32D0->pool->node->progress <= 0x7A11F) && (effect->phase != 6)) {
+        if ((ANIM_OWNER_AS(SceneE20Channel)->pool->node->progress <= 0x7A11F) && (effect->phase != 6)) {
             effect->phase = 6;
             effect->timer = 0;
         }

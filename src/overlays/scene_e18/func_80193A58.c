@@ -3,13 +3,13 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 
 typedef struct SceneE18WaveEffect {
     s16 x, y, z, field06;
     s16 field08, field0a, field0c, field0e;
     s16 size, wave, amplitude;
 } SceneE18WaveEffect;
-extern void *D_800F32D0;
 extern u32 D_80194180[], D_80194184[];
 int rsin(int);
 int func_80077AA4(int,int);
@@ -33,7 +33,7 @@ int func_80193A58(int mode, SceneE18WaveEffect *effect) {
     func_800CEE20((struct GteShortVector *)effect, (struct GteRotation *)&effect->field08, effect->wave, effect->wave,
                   0x40, palette & 0xffff, 3, effect->size, 0);
     position[0] = effect->x;
-    position[1] = *(int *)(*(char **)((char *)D_800F32D0 + 8) + 0x200);
+    position[1] = *(int *)(*(char **)((char *)ANIM_OWNER_AS(void) + 8) + 0x200);
     position[2] = effect->z;
     params[0] = 0x400;
     params[1] = (D_800E27EC * 3) << 6;

@@ -3,7 +3,7 @@
 /* Tracks the boss's two hand positions, turns it toward the player (or by
  * a scripted spin) during animation 11 and bobs its height. */
 int func_80196348(int mode) {
-    RoomM273BossInstance *instance = D_800F32D0->instance;
+    RoomM273BossInstance *instance = ANIM_OWNER_AS(RoomM273BossActor)->instance;
     int frame;
     int value;
     GteShortVector *hand;

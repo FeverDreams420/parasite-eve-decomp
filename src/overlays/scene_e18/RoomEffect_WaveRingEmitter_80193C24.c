@@ -7,7 +7,7 @@ int func_80193C24(int mode, SceneE18EmitterState *state) {
     case 0:
         state->count = 0;
         state->delay = 0;
-        return func_800CE560(D_800F33E0->pool, 24, 8,
+        return func_800CE560(ANIM_POOL_AS(SceneE18Emitter)->pool, 24, 8,
                              (FieldAnimCallbackListCallback)func_80193A58);
     case 1:
         if (state->count < 24) {
@@ -21,11 +21,11 @@ int func_80193C24(int mode, SceneE18EmitterState *state) {
             int tilt;
 
             if (--state->delay == -1) {
-                particle = func_800CE610(D_800F33E0->pool);
+                particle = func_800CE610(ANIM_POOL_AS(SceneE18Emitter)->pool);
                 if (particle != 0) {
                     random = func_80071A54();
                     index = (random >> 2) % 38;
-                    actor = D_800F32D0;
+                    actor = ANIM_OWNER_AS(SceneE18Actor);
                     particle->position.x = actor->instance->transforms[index].t[0];
                     particle->position.y = actor->instance->transforms[index].t[1];
                     particle->position.z = actor->instance->transforms[index].t[2];
@@ -47,7 +47,7 @@ int func_80193C24(int mode, SceneE18EmitterState *state) {
                     particle->controls[3] = 0;
                 }
             }
-            instance = D_800F32D0->instance;
+            instance = ANIM_OWNER_AS(SceneE18Actor)->instance;
             if (instance->animation.part.frame >= instance->frameLimit) {
                 instance->animation.word = 0x30000;
             }

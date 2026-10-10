@@ -8,7 +8,7 @@ int func_80192A30(int mode, unsigned short *dst, unsigned short *src) {
 
     switch (mode) {
     case 0:
-    channel = D_800F33E0;
+    channel = ANIM_POOL_AS(RoomChanCtx);
     dst[0] = src[0];
     dst[1] = src[1];
     dst[2] = src[2];
@@ -17,7 +17,7 @@ int func_80192A30(int mode, unsigned short *dst, unsigned short *src) {
 
     case 1:
     if (D_800E27EC < 9) {
-        effect = func_800CE610((char *)D_800F33E0->w8);
+        effect = func_800CE610((char *)ANIM_POOL_AS(RoomChanCtx)->w8);
         if (effect != 0) {
             effect[2] = 0;
             effect[1] = 0;

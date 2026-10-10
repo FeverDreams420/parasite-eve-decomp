@@ -2,6 +2,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_anim_pool.h"
 
 typedef RoomM350Vector Vector;
 typedef struct { Vector *position; } Particle;
@@ -16,8 +17,6 @@ typedef struct RoomM350Instance {
 typedef RoomM350Actor Actor;
 
 /* The controller owns the position pointers rendered by this callback. */
-extern Actor *D_800F32D0;
-extern RoomM350Emitter *D_800F33E0;
 extern int D_800966EC[];
 extern Vector D_8019A778[];
 extern int GetClut(int, int);
@@ -47,18 +46,18 @@ int func_80193BCC(int event) {
     switch (event) {
     case 0:
 
-        return func_800CE560(D_800F33E0->pool,4,2,
+        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,4,2,
                              (FieldAnimCallbackListCallback)func_80193A80);
         case 1:
     {
-        Instance *instance = D_800F32D0->instance;
+        Instance *instance = ANIM_OWNER_AS(Actor)->instance;
         int frame, previous, i;
         if (instance->animation != 11) return 0;
         frame = instance->frame;
         previous = instance->previousFrame;
         if (frame >= 5 && previous < 5) {
             for (i=0;i<2;i++) {
-                Particle *particle = func_800CE610(D_800F33E0->pool);
+                Particle *particle = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
                 if (!particle) break;
                 particle->position = &D_8019A778[i];
             }

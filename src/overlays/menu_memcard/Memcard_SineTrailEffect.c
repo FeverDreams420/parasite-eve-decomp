@@ -12,13 +12,13 @@ s32 Memcard_SineTrailEffect(s32 mode, MemcardTrailState *state) {
         state->attachment = 25;
         state->phase = 0;
         state->timer = 0;
-        return func_800CE560(D_800F33E0->slots, 20, 24,
+        return func_800CE560(ANIM_POOL_AS(MemcardLinkChannel)->slots, 20, 24,
                              (FieldAnimCallbackListCallback)Memcard_SineRotatingImage);
     case 1:
         state->timer++;
         func_800CE8F0(D_8009D254, state->attachment, &offset, &position);
         if (state->timer < 33 && (state->timer & 1)) {
-            MemcardPulseState *image = func_800CE610(D_800F33E0->slots);
+            MemcardPulseState *image = func_800CE610(ANIM_POOL_AS(MemcardLinkChannel)->slots);
             if (image) {
                 image->position.x = position.x;
                 image->position.y = position.y;

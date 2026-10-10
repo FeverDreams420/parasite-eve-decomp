@@ -71,11 +71,11 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
         func_800C6D5C(D_8019B690, 0, 0);
         blast->state = 0;
         blast->timer = 0;
-        func_800CE870((char *)D_800F32D0->pool, 1, &blast->position.x);
+        func_800CE870((char *)ANIM_OWNER_AS(SceneE19BlastChannel)->pool, 1, &blast->position.x);
         blast->position.y = g_RoomFloorY->raw;
-        func_800CE870((char *)D_800F32D0->pool, 0, &blast->target.x);
-        func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->pool, 0, &blast->origin);
-        return func_800CE560((char *)D_800F33E0->pool, 0xC, 8, func_80192E08);
+        func_800CE870((char *)ANIM_OWNER_AS(SceneE19BlastChannel)->pool, 0, &blast->target.x);
+        func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(SceneE19BlastChannel)->pool, 0, &blast->origin);
+        return func_800CE560((char *)ANIM_POOL_AS(SceneE19BlastChannel)->pool, 0xC, 8, func_80192E08);
     case 1:
         switch (blast->state) {
         case 0:
@@ -117,18 +117,18 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 && (func_800C6B90(&blast->position, 0x4B0) != 0
                     || func_800C6B90(&blast->position, 0x6A4) == 0)
                 && D_800E2368->active != 0
-                && ((*D_800F32D0->pool)->flags & 0x3F000000) == 0x01000000) {
+                && ((*ANIM_OWNER_AS(SceneE19BlastChannel)->pool)->flags & 0x3F000000) == 0x01000000) {
                 (*D_8009D254)->flags |= 0x4000;
-                actor = *D_800F32D0->pool;
+                actor = *ANIM_OWNER_AS(SceneE19BlastChannel)->pool;
                 actor->flags = (actor->flags & 0xC0FFFFFF) | 0x2D000000;
-                actor = *D_800F32D0->pool;
+                actor = *ANIM_OWNER_AS(SceneE19BlastChannel)->pool;
                 actor->flags |= 0x80000000;
             }
             if (blast->timer < 0x11) {
                 func_800D1D24(2, 0x10, blast->timer);
             }
             spread = 0x200;
-            spark = func_800CE610((char *)D_800F33E0->pool);
+            spark = func_800CE610((char *)ANIM_POOL_AS(SceneE19BlastChannel)->pool);
             if (spark != 0) {
                 spark->x = blast->position.x;
                 spark->y = blast->position.y;
@@ -150,7 +150,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
         case 4:
             blast->timer++;
             spread = 0x200;
-            spark = func_800CE610((char *)D_800F33E0->pool);
+            spark = func_800CE610((char *)ANIM_POOL_AS(SceneE19BlastChannel)->pool);
             if (spark != 0) {
                 spark->x = blast->position.x;
                 spark->y = blast->position.y;

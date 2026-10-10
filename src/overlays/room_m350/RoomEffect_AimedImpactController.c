@@ -3,6 +3,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/field_actor.h"
 #include "pe1/player_entity.h"
+#include "pe1/field_anim_pool.h"
 typedef RoomM350Vector Vector;
 typedef RenderMatrix Matrix;
 typedef struct { Vector velocity; short x, y, z; unsigned char stopped, pad; } Particle;
@@ -11,8 +12,6 @@ typedef RenderMatrix Transform;
 typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
 typedef FieldActor Player;
-extern RoomM350Emitter *D_800F33E0;
-extern Actor *D_800F32D0;
 extern unsigned char D_8019A86E, D_8019A855;
 extern short D_8019A86A;
 extern int func_80196F2C(int, Particle *);
@@ -32,7 +31,7 @@ int func_80197364(int event)
         } else {
         goto done;
         }
-        return func_800CE560(D_800F33E0->pool, 16, 4,
+        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 16, 4,
                              (FieldAnimCallbackListCallback)func_80196F2C);
     }
 update:
@@ -45,9 +44,9 @@ update:
         int angle;
         if (D_8019A86E) return 2;
         if (!D_8019A855) return 0;
-        effect = func_800CE610(D_800F33E0->pool);
+        effect = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
         if (!effect) return 0;
-        instance = (Instance *)D_800F32D0->instance;
+        instance = (Instance *)ANIM_OWNER_AS(Actor)->instance;
         transform = instance->render_object.matrices;
         player = g_PlayerEntity;
         effect->x = transform[7].translation[0];
@@ -81,7 +80,7 @@ update:
         vector.z = 128;
         ApplyMatrixSV(&matrix, &vector, &effect->velocity);
         {
-            Actor *actor = D_800F32D0;
+            Actor *actor = ANIM_OWNER_AS(Actor);
             D_8019A855 = 0;
             /* Publish consumption before loading the sound's position and owner. */
             asm volatile("" : : : "memory");

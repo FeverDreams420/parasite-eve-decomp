@@ -36,7 +36,7 @@ int func_80199A90(int mode) {
     switch(mode) {
     case 0:
         D_8019AE88=0;
-        return func_800CE560(D_800F33E0->pool,4,6,
+        return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,4,6,
                              (FieldAnimCallbackListCallback)func_80199950);
     case 1: {
         int i;
@@ -50,7 +50,7 @@ int func_80199A90(int mode) {
         i=0;
         position=D_8019AF74.points;
         for(;i<2;++i) {
-            Effect *output=func_800CE610(D_800F33E0->pool);
+            Effect *output=func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
             if(!output) break;
             output->position=position;
             ++position;
@@ -82,7 +82,7 @@ int func_80199A90(int mode) {
 /* Animation 15 controller: transforms two model points, then sways the
  * boss toward or away from the player for eight frames. */
 int func_80199C50(int mode) {
-    RoomM273BossInstance *instance = D_800F32D0->instance;
+    RoomM273BossInstance *instance = ANIM_OWNER_AS(RoomM273BossActor)->instance;
     GteShortVector offset;
     int value; /* loop index, then the player heading */
     int frame;

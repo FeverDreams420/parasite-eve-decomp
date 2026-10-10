@@ -162,14 +162,14 @@ int func_8019408C(int mode, SceneE22EmberBurst *burst) {
         func_800CE870((char *)RoomMain_ActorPtr, 1, (s16 *)burst);
         burst->y = g_RoomFloorY->y;
         if (D_800E2368->active) {
-            pool = D_800F32D0->pool;
+            pool = ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
                 if (*object->status == 1)
                     *object->status = 2;
             }
         }
-        return func_800CE560(D_800F33E0->pool, 0x14, 0x28,
+        return func_800CE560(ANIM_POOL_AS(SceneE22EmberChannel)->pool, 0x14, 0x28,
                              (FieldAnimCallbackListCallback)func_80193940);
     case 1:
         switch (burst->state) {
@@ -185,7 +185,7 @@ int func_8019408C(int mode, SceneE22EmberBurst *burst) {
             burst->timer++;
             if (burst->timer < 0x18)
                 func_80020D50();
-            child = func_800CE610(D_800F33E0->pool);
+            child = func_800CE610(ANIM_POOL_AS(SceneE22EmberChannel)->pool);
             if (child) {
                 child->x = burst->x;
                 child->y = burst->y;
@@ -197,7 +197,7 @@ int func_8019408C(int mode, SceneE22EmberBurst *burst) {
                 child->timer = 0;
             }
             if (burst->timer & 1) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(SceneE22EmberChannel)->pool);
                 if (child) {
                     child->x = burst->x;
                     child->y = burst->y;
@@ -213,7 +213,7 @@ int func_8019408C(int mode, SceneE22EmberBurst *burst) {
                 }
             }
             if (burst->timer % 6 == 0) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(SceneE22EmberChannel)->pool);
                 if (child) {
                     child->x = burst->x;
                     child->y = burst->y;
@@ -225,7 +225,7 @@ int func_8019408C(int mode, SceneE22EmberBurst *burst) {
             if (burst->timer == 0x18)
                 func_80020DD0();
             if (burst->timer == 0x19 && D_800E2368->active) {
-                channel = D_800F32D0;
+                channel = ANIM_OWNER_AS(SceneE22EmberObjectChannel);
                 if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                     (*RoomMain_ActorPtr)->flags |= 0x4000;
                     channel->pool->object->flags =

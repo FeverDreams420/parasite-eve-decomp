@@ -52,7 +52,7 @@ int func_801996C4(int mode)
 
     switch (mode) {
     case 0:
-        return func_800CE560(D_800F33E0->pool, 8, 24, (int (*)())func_80199568);
+        return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 24, (int (*)())func_80199568);
     case 1:
         stop = &D_8019AFA2;
         if (*stop) return 2;
@@ -66,7 +66,7 @@ int func_801996C4(int mode)
                 flagOffset = offset;
                 source = template;
                 do {
-                    particle = (RoomM273DelayedBurstRecord *)func_800CE610(D_800F33E0->pool);
+                    particle = (RoomM273DelayedBurstRecord *)func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
                     if (!particle) break;
                     particle->emitter = *source;
                     angle = ((j << 12) / 6) & 0xFFF;

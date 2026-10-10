@@ -38,7 +38,7 @@ typedef struct RoomSparkBarrageOwner {
  * the first packet in the primary effect channel. */
 #define ROOMEFFECT_SPARK_BARRAGE_FLASH()                                      \
     {                                                                        \
-        RoomSparkChannel *channel = D_800F32D0;                              \
+        RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);                              \
         RoomSparkBarragePacket *packet;                                             \
         if (((*(RoomSparkBarragePacket **)channel->pool)->code & 0x3F000000) ==     \
             0x01000000) {                                                    \
@@ -92,7 +92,7 @@ int RoomEffect_PhasedSparkParticle(int mode, RoomPhasedSpark *spark) {
             }
             if (spark->phase < 2 && (D_800E27EC & 1)) {
                 if (func_80071A54() & 1) {
-                    child = func_800CE610(D_800F33E0->pool);
+                    child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                     if (child) {
                         child->x = spark->x;
                         child->y = spark->y;
@@ -102,7 +102,7 @@ int RoomEffect_PhasedSparkParticle(int mode, RoomPhasedSpark *spark) {
                         child->phase = 0;
                     }
                 } else {
-                    child = func_800CE610(D_800F33E0->pool);
+                    child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                     if (child) {
                         child->x = spark->x;
                         child->y = spark->y;
@@ -123,7 +123,7 @@ int RoomEffect_PhasedSparkParticle(int mode, RoomPhasedSpark *spark) {
         case 1:
             spark->timer++;
             if (D_800E27EC & 1) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = spark->x;
                     child->y = spark->y;
@@ -277,7 +277,7 @@ int RoomEffect_PhasedSparkController(int mode, s16 *counter)
         RoomSparkEventState *event = D_800E2368;
         *counter = 6;
         if (event->active != 0) {
-            RoomSparkNode **nodes = (RoomSparkNode **)D_800F32D0->pool;
+            RoomSparkNode **nodes = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
             if (nodes != 0) {
                 RoomSparkNode *node = *nodes;
                 if (node != 0) {
@@ -286,13 +286,13 @@ int RoomEffect_PhasedSparkController(int mode, s16 *counter)
                 }
             }
         }
-        return func_800CE560(D_800F33E0->pool, 24, 32,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 24, 32,
                              (FieldAnimCallbackListCallback)RoomEffect_PhasedSparkParticle);
     }
     case 1:
-        func_800CE8F0(D_800F32D0->pool, 6, &position, &output);
+        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 6, &position, &output);
         if (D_800E27EC % 6 == 0 && *counter > 0) {
-            particle = func_800CE610(D_800F33E0->pool);
+            particle = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (particle != 0) {
                 particle->x = output.x;
                 particle->y = output.y;
@@ -429,7 +429,7 @@ int RoomEffect_BouncingSparkController(int mode)
     switch (mode) {
     case 0:
         if (D_800E2368->active != 0) {
-            RoomSparkNode **nodes = (RoomSparkNode **)D_800F32D0->pool;
+            RoomSparkNode **nodes = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
             if (nodes != 0) {
                 RoomSparkNode *node = *nodes;
                 if (node != 0) {
@@ -438,14 +438,14 @@ int RoomEffect_BouncingSparkController(int mode)
                 }
             }
         }
-        return func_800CE560(D_800F33E0->pool, 20, 32,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 32,
                              (FieldAnimCallbackListCallback)RoomEffect_BouncingSparkParticle);
     case 1:
-        func_800CE8F0(D_800F32D0->pool, 7, &position, &output);
+        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 7, &position, &output);
         if (D_800E27EC == 8)
             func_800D3F64(0x593, func_800D3FD8());
         if (D_800E27EC < 74) {
-            particle = func_800CE610(D_800F33E0->pool);
+            particle = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (particle != 0) {
                 particle->x = output.x;
                 particle->y = output.y;
@@ -459,7 +459,7 @@ int RoomEffect_BouncingSparkController(int mode)
                     motion[1] = motion[1] * 3 / 2;
                     motion[2] = motion[2] * 3 / 2;
                 }
-                func_800CEAE8(((RoomSparkBarrageOwner *)D_800F32D0->pool)->bone + 0xE0,
+                func_800CEAE8(((RoomSparkBarrageOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->bone + 0xE0,
                               motion, &particle->vx);
                 particle->state = kind;
                 particle->timer = 0;
@@ -561,22 +561,22 @@ int RoomEffect_WaveSparkParticle(int mode, RoomPhasedSpark *spark) {
         case 0:
             phase = spark->phase;
             if (phase < 7) {
-                func_800CE8F0(D_800F32D0->pool, phase + 1, &rotationA, &position);
+                func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, phase + 1, &rotationA, &position);
                 ROOMEFFECT_WAVE_SPARK_FLASH();
                 ROOMEFFECT_WAVE_SPARK_BLOOM(1);
-                func_800CE8F0(D_800F32D0->pool, spark->phase + 1, &rotationB, &position);
+                func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, spark->phase + 1, &rotationB, &position);
             } else {
-                func_800CE8F0(D_800F32D0->pool, phase + 9, &rotationC, &position);
+                func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, phase + 9, &rotationC, &position);
                 ROOMEFFECT_WAVE_SPARK_FLASH();
                 ROOMEFFECT_WAVE_SPARK_BLOOM(1);
-                func_800CE8F0(D_800F32D0->pool, spark->phase + 13, &rotationC, &position);
+                func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, spark->phase + 13, &rotationC, &position);
             }
             ROOMEFFECT_WAVE_SPARK_FLASH();
             ROOMEFFECT_WAVE_SPARK_BLOOM(0);
             break;
         case 1:
-            func_800CE8F0(D_800F32D0->pool, 11, &rotationC, &position);
-            func_800CE8F0(D_800F32D0->pool, 15, &rotationC, &second);
+            func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 11, &rotationC, &position);
+            func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 15, &rotationC, &second);
             {
                 u16 clut;
                 int kind;
@@ -643,7 +643,7 @@ int RoomEffect_WaveSparkController(int mode, s16 *counter)
         *counter = 0;
         func_800D3F64(0x594, func_800D3FD8());
         if (D_800E2368->active != 0) {
-            RoomSparkNode **nodes = (RoomSparkNode **)D_800F32D0->pool;
+            RoomSparkNode **nodes = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
             if (nodes != 0) {
                 RoomSparkNode *node = *nodes;
                 if (node != 0) {
@@ -652,11 +652,11 @@ int RoomEffect_WaveSparkController(int mode, s16 *counter)
                 }
             }
         }
-        return func_800CE560(D_800F33E0->pool, 24, 14,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 24, 14,
                              (FieldAnimCallbackListCallback)RoomEffect_WaveSparkParticle);
     case 1:
         if (*counter < 11) {
-            particle = func_800CE610(D_800F33E0->pool);
+            particle = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (particle != 0) {
                 particle->x = seed[0];
                 particle->y = seed[1];
@@ -708,8 +708,8 @@ int RoomEffect_CometSparkParticle(int mode, RoomCometSpark *spark) {
         switch (spark->state) {
         case 0:
             spark->timer++;
-            func_800CE8F0(D_800F32D0->pool, 11, slot, &first);
-            func_800CE8F0(D_800F32D0->pool, 15, slot, &second);
+            func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 11, slot, &first);
+            func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 15, slot, &second);
             spark->x = (first.x + second.x) / 2;
             spark->y = (first.y + second.y) / 2;
             spark->z = (first.z + second.z) / 2;
@@ -726,7 +726,7 @@ int RoomEffect_CometSparkParticle(int mode, RoomCometSpark *spark) {
         case 1:
             spark->timer++;
             if (func_800C6B90(spark, 0x190) && D_800E2368->active) {
-                RoomSparkChannel *channel = D_800F32D0;
+                RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                 RoomSparkBarragePacket *packet;
                 if (((*(RoomSparkBarragePacket **)channel->pool)->code & 0x3F000000) ==
                     0x01000000) {
@@ -889,21 +889,21 @@ int RoomEffect_CometSparkController(int mode, RoomCometSparkAnchor *anchor) {
     switch (mode) {
     case 0:
         anchor->count = 6;
-        func_800CE870(D_800F32D0->pool, 0, (s16 *)anchor);
+        func_800CE870(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, (s16 *)anchor);
         if (D_800E2368->active) {
-            if (D_800F32D0->pool) {
-                node = *(RoomSparkNode **)D_800F32D0->pool;
+            if (ANIM_OWNER_AS(RoomSparkChannel)->pool) {
+                node = *(RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
                 if (node) {
                     if (node->state[0] == 1) node->state[0] = 2;
                 }
             }
         }
-        return func_800CE560(D_800F33E0->pool, 0x24, 22,
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x24, 22,
                              (FieldAnimCallbackListCallback)RoomEffect_CometSparkParticle);
     case 1:
         if ((D_800E27EC & 3) == 0) {
             if (anchor->count <= 0) return 2;
-            func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->pool, 0, &direction);
+            func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &direction);
             direction.z = 0;
             direction.x = 0;
             direction.y += (func_80071A54() & 0x1FF) - 0x100;
@@ -912,7 +912,7 @@ int RoomEffect_CometSparkController(int mode, RoomCometSparkAnchor *anchor) {
             origin.y += anchor->y;
             origin.z += anchor->z;
             origin.y = g_RoomFloorY->y;
-            child = func_800CE610(D_800F33E0->pool);
+            child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (child) {
                 child->vx = origin.x;
                 child->vy = origin.y;
@@ -920,7 +920,7 @@ int RoomEffect_CometSparkController(int mode, RoomCometSparkAnchor *anchor) {
                 child->state = 0;
                 child->timer = 0;
             }
-            child = func_800CE610(D_800F33E0->pool);
+            child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (child) {
                 child->x = origin.x;
                 child->y = origin.y;
@@ -929,7 +929,7 @@ int RoomEffect_CometSparkController(int mode, RoomCometSparkAnchor *anchor) {
                 child->timer = 0;
             }
             for (i = 0; i < 8; i++) {
-                child = func_800CE610(D_800F33E0->pool);
+                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = origin.x;
                     child->y = origin.y;
@@ -1059,14 +1059,14 @@ int RoomEffect_LiftedSparkController(int mode) {
 
     switch (mode) {
     case 0:
-        pool = D_800F33E0->pool;
+        pool = ANIM_POOL_AS(RoomSparkChannel)->pool;
         return func_800CE560(pool, 20, 32,
                              (FieldAnimCallbackListCallback)RoomEffect_LiftedSparkParticle);
     case 1:
-        pool = D_800F32D0->pool;
+        pool = ANIM_OWNER_AS(RoomSparkChannel)->pool;
         func_800CE870(pool, 0, (s16 *)&target);
         if ((D_800E27EC & 1) && D_800E27EC < 60) {
-            pool = D_800F33E0->pool;
+            pool = ANIM_POOL_AS(RoomSparkChannel)->pool;
             child = func_800CE610(pool);
             if (child) {
                 child->x = target.x;
@@ -1081,7 +1081,7 @@ int RoomEffect_LiftedSparkController(int mode) {
         }
         if (D_800E27EC == 48) {
             for (i = 0; i < 16; i++) {
-                pool = D_800F33E0->pool;
+                pool = ANIM_POOL_AS(RoomSparkChannel)->pool;
                 child = func_800CE610(pool);
                 if (child) {
                     child->x = target.x;
