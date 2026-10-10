@@ -21,7 +21,8 @@ void func_801942FC(void)
     s16 resourceResult;
     s32 rowIndex;
     /* Raw halfword is loaded before the blend duration, then sign-extended. */
-    register u16 phaseBits asm("$2");
+    u16 phase0;
+    u16 phase1;
     s16 nextMode;
     s16 remaining0;
     s16 remaining1;
@@ -225,9 +226,9 @@ void func_801942FC(void)
                         func_80195994(nextIndex0, 4, 5, 0);
                         motionIndex0 = 0;
                         motionSlot0 = 0;
-                        phaseBits = D_8019CC52;
+                        phase0 = D_8019CC52;
                         D_8019C058 = 0x20;
-                        motionBase0 = (s16)phaseBits;
+                        motionBase0 = (s16)phase0;
                         do {
                             func_8018F55C(motionIndex0 << 8, motionBase0 + 0x40, func_8006EC6C((&D_801D0260), 2), &motionSample, &motionExtra);
                             motionIndex0 += 1;
@@ -256,9 +257,9 @@ void func_801942FC(void)
                         func_80195994(nextIndex1, 4, 5, 0);
                         motionIndex1 = 0;
                         motionSlot1 = 0;
-                        phaseBits = D_8019CC52;
+                        phase1 = D_8019CC52;
                         D_8019C058 = 0x20;
-                        motionBase1 = (s16)phaseBits;
+                        motionBase1 = (s16)phase1;
                         do {
                             func_8018F55C(motionIndex1 << 8, motionBase1 + 0x40, func_8006EC6C((&D_801D0260), 2), &motionSample, &motionExtra);
                             motionIndex1 += 1;
