@@ -1,11 +1,70 @@
 #include "common.h"
+#include "pe1/memcard.h"
 #include "pe1/inventory_slots.h"
 #include "pe1/save.h"
-#include "pe1/memcard.h"
 #include "pe1/save_blob.h"
 #include "pe1/memcard_save_state.h"
 #include "pe1/menu_notification_dialog.h"
 #include "pe1/psyq_bios.h"
+
+void Save_SetTitleStyleFlag(int value) {
+    D_800A1704 = value;
+}
+
+extern int g_SaveTitleStyleFlag;
+
+int Save_GetTitleStyleFlag(void) {
+    return g_SaveTitleStyleFlag;
+}
+
+int MemCard_HasAnyPresentFile(void) {
+    unsigned char *base;
+    unsigned char *port;
+    register unsigned char *end;
+    unsigned char *outer_end;
+    register unsigned char *entry;
+    unsigned char *entry_end;
+    int found;
+    int state_full;
+    int entry_active;
+    int present;
+
+    base = (unsigned char *)g_MemCardPortStates;
+    end = base + 0x830;
+    found = 0;
+
+    if (base < end) {
+        state_full = 15;
+        entry_active = 1;
+        outer_end = end;
+        port = base + 0x418;
+        do {
+            if (port[-0x417] == state_full) {
+                entry = base + PE1_OFFSETOF(MemCardPortState, slots);
+                if (entry < port) {
+                    entry_end = port;
+                    do {
+                        found = 0;
+                        if (((MemCardSaveSlot *)entry)->state == entry_active) {
+                            present = ((MemCardSaveSlot *)entry)->titleStyleFlag;
+                            found = present != 0;
+                        }
+                        if (found != 0) {
+                            break;
+                        }
+                        entry += sizeof(MemCardSaveSlot);
+                    } while (entry < entry_end);
+                }
+            }
+            base += sizeof(MemCardPortState);
+            port += sizeof(MemCardPortState);
+            if (base >= outer_end) {
+                break;
+            }
+        } while (found == 0);
+    }
+    return found;
+}
 
 void Save_SprintfSjis(unsigned char *dst, unsigned char *fmt)
 {
@@ -66,12 +125,10 @@ void Save_SprintfSjis(unsigned char *dst, unsigned char *fmt)
 }
 
 extern u8 g_SaveTitleBuffer[];
-extern int g_SaveTitleStyleFlag;
 extern int g_PlayTimeFrameCounter;
 extern u8 *g_SaveTitleFormatLongPtr;
 extern u8 *g_SaveTitleFormatShortPtr;
 
-void bzero(void *dst, int len);
 int Save_ClassifyPlaytime(int arg0);
 int Save_GetCurrentMapNumber(void);
 u8 *Tbl_FindNthNonEmpty(int arg0);
@@ -1075,7 +1132,6 @@ void Save_StartWriteSlot(int port, int arg_slot) {
     slot_state->state = MEMCARD_SLOT_OCCUPIED;
 }
 extern u8 g_MemCardFileBuffer[];
-void MemCard_CloseAll(void);
 
 void MenuWidget_NavScrollTo(int selected_base);
 
@@ -1115,10 +1171,8 @@ extern SaveBytes12E4 g_MemCardSaveStateBuffer;
 
 void Save_DeserializeTail(void);
 void Save_RestoreHeader(void);
-void Menu_DestroyMemCardProgressWidget(void);
 void Menu_CreateNotificationDialog(int arg0, int arg1);
 void Menu_SetDeferredCallback(void (*callback)(void));
-void Save_CancelUiFlow(void);
 
 void Save_LoadCardFileIntoRuntime(void) {
     SaveBytes4 expected_crc;
@@ -1227,8 +1281,6 @@ extern int g_McOpPending;
 extern int g_MemCardSavePollTimeout;
 extern int g_MemCardReadContext;
 
-void bzero(void *ptr, int size);
-
 void MemCard_InitState(void) {
     bzero(g_MemCardPortStates, sizeof(MemCardPortState) * 2);
     D_800A12F8 = -1;
@@ -1252,7 +1304,6 @@ extern u8 g_Slot2QuickerSave[];
 void MemCard_StepPortState(int arg0);
 void Menu_CloseNotificationDialogs(void);
 void Menu_NavToSaveConfirmDialog(void);
-void MemCard_UpdateSaveState(int port);
 void MemCard_ClearActivePrompt(void);
 void MemCard_StartActivePortRead(void);
 
@@ -1338,8 +1389,6 @@ void MemCard_UpdateSavePolling(void)
 int MemCard_IsPortPresent(int port) {
     return g_MemCardPortStates[port].present & 1;
 }
-
-int close(int fd);
 
 void MemCard_CloseAll(void) {
     unsigned char *base;
