@@ -259,13 +259,11 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
     RoomSpriteMatrix *secondaryMatrix;
     register char *positionCursor asm("$19");
     register char *shortCursor asm("$17");
-    char *element;
-    int positionOffset;
     s16 scaleValue;
-    register void *arg0 asm("$4");
+    void *arg0;
     void *inputArg;
+    int frame;
     register s16 *callArgs asm("$7");
-    register char *positionSource asm("$2");
     char *clock;
     int computedScale;
     int alpha;
@@ -284,11 +282,8 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
     func_800C3098(0x10);
 
     for (; i < 3; i++) {
-        element = (char *)workState + i;
-        positionOffset = i << 3;
-        if (((RoomDebrisTriplet *)element)->active[0] >= 0) {
-            arg0 = (void *)(positionOffset + 0x6C);
-            arg0 = (char *)workState + (int)arg0;
+        if (workState->active[i] >= 0) {
+            arg0 = &workState->rotation[i];
             RotMatrixYXZ(arg0, &stack.primaryMatrix);
             func_80071A44(sourceScale, 0, 0x10);
             stack.sourceScale.x = ((RoomDebrisTriplet *)shortCursor)->swing[0] >> 1;
@@ -304,12 +299,12 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
             stack.primaryMatrix.t[2] = (((RoomDebrisTriplet *)positionCursor)->position[0].z >> 16) +
                                        workState->jitter[2];
             callArgs = stack.args;
-            alpha = ((RoomDebrisTriplet *)element)->size[0];
+            alpha = workState->size[i];
             arg0 = RoomLib_ThreeParticleTable;
             RoomLib_ThreeParticleAlpha = alpha;
             asm volatile("" ::: "memory");
-            inputArg = (void *)(int)callArgs[1];
-            func_800C3134(arg0, (int)inputArg, (unsigned char *)&RoomLib_ThreeParticlePacket);
+            frame = callArgs[1];
+            func_800C3134(arg0, frame, (unsigned char *)&RoomLib_ThreeParticlePacket);
             func_800C2FF0(0x40, 0x40);
             func_800C3238(2);
             func_800C42A4((FieldGlowSprite *)&RoomLib_ThreeParticlePacket,
@@ -325,9 +320,7 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
                     scaleValue = ((RoomDebrisTriplet *)shortCursor)->swing[0];
                 }
 
-                positionSource =
-                    (char *)((int)positionOffset + (int)workState);
-                stack.position = *(RoomDrawThreeVec *)(positionSource + 0x6C);
+                stack.position = workState->rotation[i];
                 arg0 = &stack.position;
                 inputArg = &stack.primaryMatrix;
                 asm("" : "=r"(arg0), "=r"(inputArg)
@@ -358,16 +351,14 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
                 ScaleMatrix(secondaryMatrix, &stack.floorScale);
                 computedScale = (((RoomDebrisTriplet *)positionCursor)->position[0].x >> 16);
                 baseScale = g_RoomFloorY->y;
-                                arg0 = (void *)0x20;
                 stack.secondaryMatrix.t[0] = computedScale;
                 stack.secondaryMatrix.t[1] = baseScale;
                 computedScale = (((RoomDebrisTriplet *)positionCursor)->position[0].z >> 16);
                 
-                inputArg = (void *)0x20;
                 stack.secondaryMatrix.t[2] = computedScale;
-                alpha = ((RoomDebrisTriplet *)element)->size[0];
+                alpha = workState->size[i];
                 RoomLib_ThreeParticleFloorPacket.depth = (unsigned int)alpha >> 1;
-                func_800C2FF0((int)arg0, (int)inputArg);
+                func_800C2FF0(0x20, 0x20);
                 func_800C3238(3);
                 func_800C42A4((FieldGlowSprite *)&RoomLib_ThreeParticleFloorPacket,
                               secondaryMatrix, 0);
