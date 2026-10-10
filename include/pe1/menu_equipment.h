@@ -2,6 +2,7 @@
 #define PE1_MENU_EQUIPMENT_H
 
 #include "pe1/menu_state.h"
+#include "pe1/menu_context_help.h"
 
 #include "pe1/menu_dialog.h"
 #include "pe1/inventory_slots.h"
@@ -27,7 +28,7 @@ void Menu_OpenEquipScreen(int mode);
 int Menu_StepInventoryCategory(MenuWidgetNode *node, unsigned int flags);
 void Menu_DrawEquipListContainer(void *node);
 void Menu_DrawContextHelpText(void);
-extern int D_8009CF0C, D_8009CEFC;
+extern int D_8009CEFC;
 
 int Menu_EquipOptionsInputHandler(int node, int flags);
 void Menu_DrawEquipOptionsList(int node);

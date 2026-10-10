@@ -3,8 +3,8 @@
 #include "pe1/menu_widget.h"
 #include "pe1/text.h"
 #include "pe1/inventory.h"
+#include "pe1/menu_context_help.h"
 
-extern int D_8009CF0C;
 extern int D_800A1888[], D_800A188C[], D_800A1890[], D_800A1894[];
 int MenuWidget_IsCursorYClear(MenuWidgetNode *ptr);
 int MenuWidget_GridCellIndex(MenuWidgetNode *);

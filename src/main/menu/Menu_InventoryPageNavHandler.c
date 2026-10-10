@@ -2,8 +2,9 @@
 /* MASPSX_FLAGS: -G8 */
 #include "pe1/menu_widget.h"
 #include "pe1/menu_sound.h"
+#include "pe1/menu_context_help.h"
 
-extern int D_8009CF0C, D_8009CF30, D_8009CF34, D_8009CF1C;
+extern int D_8009CF30, D_8009CF34, D_8009CF1C;
 void MenuWidget_OffsetPosition(MenuWidgetNode *, int, int);
 void MenuWidget_ClearCursorY(MenuWidgetNode *);
 void MenuWidget_ClampScroll(MenuWidgetNode *);

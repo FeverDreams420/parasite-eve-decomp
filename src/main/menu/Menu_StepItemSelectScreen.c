@@ -2,11 +2,12 @@
 #include "pe1/menu_widget.h"
 #include "pe1/inventory_queries.h"
 #include "pe1/menu_sound.h"
+#include "pe1/menu_context_help.h"
 
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-extern int D_8009CEF0, D_8009CF18, D_8009CF1C, D_8009CF0C;
+extern int D_8009CEF0, D_8009CF18, D_8009CF1C;
 extern int D_8009CF30, D_8009CEF8;
 extern int D_800A1888[], D_800A188C[], D_800A1890[], D_800A1894[];
 

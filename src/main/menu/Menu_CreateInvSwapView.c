@@ -1,5 +1,6 @@
 #include "pe1/menu_inventory.h"
 #include "common.h"
+#include "pe1/menu_context_help.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --dont-expand-li */
 /* ASPSX_VERSION: 2.21 */
@@ -9,7 +10,6 @@ void MenuWidget_SetCursorY(MenuWidgetNode *node);
 void Menu_EquipOptionsInputHandler(void);
 void Menu_DrawEquipOptionsList(void);
 
-extern u32 D_8009CF0C;
 extern u32 D_8009CFB8;
 
 void Menu_CreateInvSwapView(MenuWidgetNode *parent, int mode) {
@@ -28,7 +28,7 @@ void Menu_CreateInvSwapView(MenuWidgetNode *parent, int mode) {
     if (mode_offset != 0) {
         u32 value;
 
-        value = D_8009CF0C;
+        value = (unsigned int)D_8009CF0C;
         D_8009CFB8 = value;
     } else {
         D_8009CFB8 = 0;

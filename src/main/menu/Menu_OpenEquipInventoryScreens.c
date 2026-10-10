@@ -1,5 +1,6 @@
 #include "pe1/menu_state.h"
 #include "pe1/inventory_queries.h"
+#include "pe1/menu_context_help.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "pe1/menu_equipment.h"
@@ -16,7 +17,6 @@
  * draw. Contiguous at 0x8004E704 (main_tu_evidence G0462). */
 
 extern int g_MenuEquipMode;
-extern int D_8009CF0C;
 extern s32 g_MenuItemContextFlag;
 extern s32 g_MenuBattleStatusOverlayActive;
 extern s32 g_MenuSelectionLocked;

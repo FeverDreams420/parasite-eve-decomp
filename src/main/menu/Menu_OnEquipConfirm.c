@@ -1,4 +1,5 @@
 #include "pe1/menu_state.h"
+#include "pe1/menu_context_help.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 #include "pe1/menu_inventory.h"
@@ -42,7 +43,6 @@ void Menu_OnEquipConfirm(MenuWidgetNode *unused, int confirmed)
 }
 
 /* Confirmation input handling shares the callback's equip-selection flow. */
-extern int D_8009CF0C;
 extern int D_8009CF10;
 extern int D_8009CF14;
 extern int D_8009CF1C;
