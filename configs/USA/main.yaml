@@ -542,8 +542,9 @@ segments:
       - [0x44720, c, item/Inv_ActiveListQueries]
       # Filtered active-list builders share one 0x280-byte -G8 inventory object.
       - [0x44AA0, c, item/Inv_FilteredList]
-      - [0x44D20, c, item/Inv_RandomSelectionText]
-      - [0x454F8, c, item/Inv_CompactActiveListSlots]
+      # Eligible-slot count, random item pick, pick message text and active-list
+      # compaction work on the same active inventory list.
+      - [0x44D20, c, item/Inv_RandomPickAndCompact]
       # Capacity check and equip modifier validation share one -G4 inventory flow.
       - [0x4564C, c, item/Inv_EquipmentCapacityFlow]
       - [0x45BA4, c, item/Inv_RollRandomItemType]
