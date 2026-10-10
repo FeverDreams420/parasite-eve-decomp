@@ -1246,19 +1246,11 @@ void RoomLib_AdvanceArcToTarget(RoomEnt *obj) {
             count++;
         } while (y < targetY);
         {
-            /* Both horizontal divisions share the v0 numerator lifetime. */
-            register int value asm("$2");
-            int base;
-            value = RW32(state, 0x30);
-            base = link->pos[0];
-            value -= base;
-            value /= count;
-            RVW32(state, 0x78) = value;
-            value = RW32(state, 0x38);
-            base = link->pos[2];
-            value -= base;
-            value /= count;
-            RVW32(state, 0x7C) = value;
+            int xVelocity = (RW32(state, 0x30) - link->pos[0]) / count;
+            int zVelocity;
+            RVW32(state, 0x78) = xVelocity;
+            zVelocity = (RW32(state, 0x38) - link->pos[2]) / count;
+            RVW32(state, 0x7C) = zVelocity;
         }
     }
 
@@ -1690,19 +1682,11 @@ void RoomLib_AdvanceArcToTargetY(RoomEnt *obj) {
             count++;
         } while (y < targetY);
         {
-            /* Both horizontal divisions share the v0 numerator lifetime. */
-            register int value asm("$2");
-            int base;
-            value = RW32(state, 0x40);
-            base = link->pos[0];
-            value -= base;
-            value /= count;
-            RVW32(state, 0x80) = value;
-            value = RW32(state, 0x48);
-            base = link->pos[2];
-            value -= base;
-            value /= count;
-            RVW32(state, 0x84) = value;
+            int xVelocity = (RW32(state, 0x40) - link->pos[0]) / count;
+            int zVelocity;
+            RVW32(state, 0x80) = xVelocity;
+            zVelocity = (RW32(state, 0x48) - link->pos[2]) / count;
+            RVW32(state, 0x84) = zVelocity;
         }
     }
 
