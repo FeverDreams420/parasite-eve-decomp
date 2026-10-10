@@ -1110,7 +1110,7 @@ void RoomFx_InitBeamPair(void *unused0, void *unused1, void *output_arg) {
     int primary_color;
     int blue;
     register int extent asm("$19");
-    register char *params asm("$4");
+    register RoomFxEmitterParams *params asm("$4");
     register int white asm("$2");
     int primary_extent;
     RoomBeamPairActor **context;
@@ -1119,7 +1119,7 @@ void RoomFx_InitBeamPair(void *unused0, void *unused1, void *output_arg) {
 
     context = func_800C2B50();
     anchor = &g_RoomDropFieldRings[2].mode;
-    params = (char *)anchor - 12;
+    params = &g_RoomDropFieldRings[2];
     mode = 0x10;
     offset = -500;
     intensity = 0x80;
@@ -1146,10 +1146,10 @@ void RoomFx_InitBeamPair(void *unused0, void *unused1, void *output_arg) {
     g_RoomDropFieldRings[2].color0[2] = 0;
     g_RoomDropFieldRings[2].extent0 = primary_extent;
     g_RoomDropFieldRings[2].extent1 = extent;
-    *(unsigned char **)params = image;
+    params->source = image;
     func_800C4E50(params);
 
-    params = (char *)anchor + 12;
+    params = &g_RoomDropFieldRings[3];
     PE1_COMPILER_USE(params);
     white = 255;
     image += 0x100;
@@ -1164,7 +1164,7 @@ void RoomFx_InitBeamPair(void *unused0, void *unused1, void *output_arg) {
     g_RoomDropFieldRings[3].color0[2] = blue;
     g_RoomDropFieldRings[3].extent1 = 0;
     g_RoomDropFieldRings[3].extent0 = extent;
-    *(unsigned char **)params = image;
+    params->source = image;
     func_800C4E50(params);
 }
 
@@ -1456,13 +1456,13 @@ void RoomFx_UpdateIdleSlot2(void) {
 
 
 
-void RoomFx_InitEightParticles(void* arg0, void* arg1, unsigned char* arg2) {
+void RoomFx_InitEightParticles(void* arg0, void* arg1, RoomEightParticleState *state) {
     unsigned int i;
 
-    *(int*)arg2 = 0;
+    state->activeCount = 0;
 
     for (i = 0; i < 8; i++) {
-        *(arg2 + i + 0xB4) = 0;
+        state->active[i] = 0;
     }
 }
 
@@ -1473,8 +1473,8 @@ void RoomFx_InitEightParticles(void* arg0, void* arg1, unsigned char* arg2) {
 
 
 void RoomFx_DrawEightParticles(
-    void *unused0, void *unused1, char *stateArg) {
-    char *state;
+    void *unused0, void *unused1, RoomEightParticleState *stateArg) {
+    RoomEightParticleState *state;
     unsigned int i;
     int unitScale;
     u16 *depthOut;
@@ -1497,7 +1497,7 @@ void RoomFx_DrawEightParticles(
     depthOut = &g_RoomDropFieldParticleSprite.depth;
     packet = (char *)depthOut - 10;
     asm volatile("" ::: "memory");
-    scalarCursor = state;
+    scalarCursor = (char *)state;
     positionCursor = scalarCursor;
 
     func_800C2EAC((u8)context[0x44]);
@@ -1506,7 +1506,7 @@ void RoomFx_DrawEightParticles(
     func_800C3238(2);
 
     do {
-        if (*(state + i + 0xB4) != 0) {
+        if (state->active[i] != 0) {
             matrix.m[2][2] = unitScale;
             matrix.m[1][1] = unitScale;
             matrix.m[0][0] = unitScale;
@@ -1521,10 +1521,10 @@ void RoomFx_DrawEightParticles(
             matrix.m[0][1] = 0;
 
             memset((void *)sourceScale, 0, sizeof(sourceScale));
-            sourceScale[0] = *(s16 *)(scalarCursor + 0x84);
+            sourceScale[0] = (s16)((RoomEightParticleState *)scalarCursor)->scale[0];
             matrixArg = &matrix;
             asm volatile("" : "=r"(matrixArg) : "0"(matrixArg));
-            secondScale = *(s16 *)(scalarCursor + 0x84);
+            secondScale = (s16)((RoomEightParticleState *)scalarCursor)->scale[0];
             sourceScale[2] = unitScale;
             sourceScale[1] = secondScale;
             scaleArg[0] = sourceScale[0];
@@ -1536,12 +1536,12 @@ void RoomFx_DrawEightParticles(
             asm volatile("" ::: "$5");
             ScaleMatrix(matrixArg, (const GteVector *)scaleArg);
 
-            *depthOut = *(u16 *)(scalarCursor + 0x94);
-            matrix.t[0] = *(s16 *)(positionCursor + 4);
-            matrix.t[1] = *(s16 *)(positionCursor + 6);
-            matrix.t[2] = *(s16 *)(positionCursor + 8);
+            *depthOut = (u16)((RoomEightParticleState *)scalarCursor)->fade[0];
+            matrix.t[0] = (s16)((RoomEightParticleState *)positionCursor)->position[0].x;
+            matrix.t[1] = (s16)((RoomEightParticleState *)positionCursor)->position[0].y;
+            matrix.t[2] = (s16)((RoomEightParticleState *)positionCursor)->position[0].z;
             func_800C3134(g_RoomDropFieldParticleFrames,
-                          *(s16 *)(scalarCursor + 0xA4), packet);
+                          (s16)((RoomEightParticleState *)scalarCursor)->angle[0], packet);
             func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
         }
         positionCursor += 8;
@@ -1611,11 +1611,11 @@ void RoomFx_UpdateEightParticles(void *unused,
                               (const GteShortVector *)&seed2,
                               (GteShortVector *)&transformed2);
 
-                *(u16 *)(positionCursor + 4) =
+                ((RoomEightParticleState *)positionCursor)->position[0].x =
                     *(u16 *)&transformed0.bytes[0] + context->baseX;
-                *(u16 *)(positionCursor + 6) =
+                ((RoomEightParticleState *)positionCursor)->position[0].y =
                     *(u16 *)&transformed0.bytes[2] + context->baseY;
-                *(u16 *)(positionCursor + 8) =
+                ((RoomEightParticleState *)positionCursor)->position[0].z =
                     *(u16 *)&transformed0.bytes[4] + context->baseZ;
 
                 random = rand();
@@ -1624,9 +1624,9 @@ void RoomFx_UpdateEightParticles(void *unused,
                 } else {
                     *(RoomFxSeed8 *)(positionCursor + 0x44) = transformed1;
                 }
-                *(u16 *)(scalarCursor + 0x84) = 0x800;
-                *(s16 *)(scalarCursor + 0x94) = 0x80;
-                *(u16 *)(scalarCursor + 0xA4) = 0;
+                ((RoomEightParticleState *)scalarCursor)->scale[0] = 0x800;
+                ((RoomEightParticleState *)scalarCursor)->fade[0] = 0x80;
+                ((RoomEightParticleState *)scalarCursor)->angle[0] = 0;
             }
         } else {
             int randomValue;
@@ -1635,26 +1635,26 @@ void RoomFx_UpdateEightParticles(void *unused,
             int zPosition;
             int zValue;
 
-            *(u16 *)(positionCursor + 4) +=
+            ((RoomEightParticleState *)positionCursor)->position[0].x +=
                 *(u16 *)(positionCursor + 0x44);
             randomValue = rand();
             randomValue %= 20;
-            zPosition = *(u16 *)(positionCursor + 8);
+            zPosition = ((RoomEightParticleState *)positionCursor)->position[0].z;
             zVelocity = *(u16 *)(positionCursor + 0x48);
             asm("" : "=r"(zPosition), "=r"(zVelocity)
                    : "0"(zPosition), "1"(zVelocity));
-            yValue = *(u16 *)(positionCursor + 6);
+            yValue = ((RoomEightParticleState *)positionCursor)->position[0].y;
             yValue -= 20;
             zValue = zPosition + zVelocity;
             asm("" : "=r"(yValue), "=r"(zValue)
                    : "0"(yValue), "1"(zValue));
-            *(u16 *)(positionCursor + 8) = zValue;
+            ((RoomEightParticleState *)positionCursor)->position[0].z = zValue;
             yValue -= randomValue;
-            *(u16 *)(positionCursor + 6) = yValue;
-            *(s16 *)(scalarCursor + 0x94) -= 8;
-            (*(u16 *)(scalarCursor + 0xA4))++;
-            if (*(s16 *)(scalarCursor + 0x94) <= 0) {
-                *(s16 *)(scalarCursor + 0x94) = 0;
+            ((RoomEightParticleState *)positionCursor)->position[0].y = yValue;
+            ((RoomEightParticleState *)scalarCursor)->fade[0] -= 8;
+            (((RoomEightParticleState *)scalarCursor)->angle[0])++;
+            if (((RoomEightParticleState *)scalarCursor)->fade[0] <= 0) {
+                ((RoomEightParticleState *)scalarCursor)->fade[0] = 0;
                 activeCursor[0xB4] = 0;
                 state->activeCount--;
             }
