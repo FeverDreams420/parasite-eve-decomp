@@ -1,6 +1,7 @@
 #define PE1_PM_LEGACY_RAW_VIEWS
 #include "pe1/pm.h"
 #include "pe1/psyq_bios.h"
+#include "pe1/scene_room_load.h"
 #undef PE1_PM_LEGACY_RAW_VIEWS
 extern int g_GameState;
 
@@ -97,7 +98,6 @@ extern void *D_80011618;
 extern u8 D_801F1BD8[], D_801F1C58[], D_801F1D00[], D_801F1D8C[];
 extern u8 D_801F1E18[], D_801F1EA4[], D_801F1EF0[];
 void FlushCache(void);
-void Asset_LoadTimTextures(int);
 void func_800CE49C(PmSlotHeader *, int);
 
 /* Matching debt: the retry jump preserves the two CD retry loops;

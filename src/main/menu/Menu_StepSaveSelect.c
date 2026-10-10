@@ -17,7 +17,6 @@ M2C_UNK MenuWidget_SetCurrentNode();
 M2C_UNK Save_SetTitleStyleFlag();
 s32 func_80042964();
 M2C_UNK func_80042B50();
-s32 Draw_MeasureTextWidth();
 M2C_UNK MenuWidget_NavScrollTo();
 extern s32 g_MenuActiveItemList;
 extern s32 g_MenuActionTextBase;

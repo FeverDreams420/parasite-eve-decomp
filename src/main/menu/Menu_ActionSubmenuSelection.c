@@ -1,6 +1,7 @@
 #include "pe1/menu_state.h"
 #include "pe1/inventory_slots.h"
 #include "pe1/menu_queue.h"
+#include "pe1/akao/commands.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
@@ -8,8 +9,6 @@
 #include "pe1/menu_inventory.h"
 
 extern unsigned int g_AkaoPendingBgmVolumeFade;
-
-extern void Akao_Cmd_21(unsigned int arg0, int arg1);
 
 extern unsigned int g_MenuActionSubmenuSel;
 

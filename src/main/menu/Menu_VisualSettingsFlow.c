@@ -4,6 +4,7 @@
 #include "pe1/menu_inventory.h"
 #include "pe1/menu_sound.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/text.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
@@ -43,9 +44,7 @@ void Menu_OpenBlendColorScreen(MenuWidgetNode *arg0) {
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
 s32 MenuInput_GetStatusFlags();
-void Draw_OffsetCursor(int x, int y);
 void Draw_SetTextDimmed(int dimmed);
-void Draw_AllocSprite(int sprite);
 
 void Menu_DrawBlendColorChannelListUnk(MenuWidgetNode *arg0) {
     M2C_UNK var_a0;
@@ -215,11 +214,9 @@ void Menu_OpenScreenAdjustView(int arg0) {
     MenuWidget_SetCurrentNode(node);
     D_8009CFE4 = Draw_GetBaseY();
 }
-void Draw_OffsetCursor(int arg0, int arg1);
 int Draw_GetBaseY(void);
 void Draw_PrintSignedNumberWidth3(int arg0);
 void Draw_SetTextDimmed(int arg0);
-void Draw_AllocSprite(int arg0);
 void Draw_EmitGlyph(int arg0, int arg1);
 
 void Menu_DrawScreenAdjustPanel(void) {

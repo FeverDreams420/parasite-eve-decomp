@@ -6,6 +6,7 @@
 #include "pe1/menu_widget.h"
 #include "pe1/inventory_queries.h"
 #include "pe1/menu_sound.h"
+#include "pe1/text.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
@@ -89,7 +90,6 @@ clear_cursor:
 
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
-void Draw_OffsetCursor(int, int);
 extern u8 D_800922B8[];
 extern u8 D_800922BC[];
 extern u8 D_800922C4[];

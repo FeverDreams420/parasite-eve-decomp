@@ -3,6 +3,8 @@
 #include "pe1/menu_inventory.h"
 #include "pe1/inventory.h"
 #include "pe1/inventory_queries.h"
+#include "pe1/draw_state.h"
+#include "pe1/text.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 
@@ -112,8 +114,6 @@ s32 Menu_AmmoSpendInputHandler(s32 arg0, s32 arg1) {
 
 int g_MenuSpendArrowDirection;
 
-void Draw_OffsetCursor(int x, int y);
-void Draw_AllocSprite(int arg0);
 void Menu_DrawWeaponComparisonPanel(void);
 
 void Menu_DrawAmmoSpendPanel(void) {

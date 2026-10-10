@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/game_state.h"
 #include "pe1/pm_types.h"
+#include "pe1/scene_room_load.h"
 
 /* Scene startup and teardown callbacks; other handlers remain unidentified. */
 typedef PmCommand SceneAssetHandler;
@@ -229,7 +230,6 @@ int CD_ReadSectors(unsigned int kind, unsigned int index, int channel,
 int CD_FindNextDataSector(void);
 
 int Asset_UnloadTableEntries(void);
-int Asset_LoadTimTextures(int force);
 int Gpu_LoadTimAsset(TimUploadRecord *record, void *base);
 extern u16 D_800930E2, D_800930E4;
 

@@ -1,3 +1,5 @@
+#include "pe1/draw_state.h"
+#include "pe1/text.h"
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 
 int g_MenuActiveWidget;
@@ -5,8 +7,6 @@ int g_MenuActiveWidget;
 void Menu_DrawArmorListItem(int arg0);
 void MenuWidget_DrawList(int arg0, void (*callback)(void));
 void Draw_SetTextDimmed(int value);
-void Draw_AllocSprite(int arg0);
-void Draw_OffsetCursor(int x, int y);
 
 void Menu_DrawArmorListContainer(int arg0) {
     int count;

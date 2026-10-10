@@ -1,9 +1,7 @@
 #include "pe1/aya.h"
 #include "pe1/text.h"
+#include "pe1/draw_state.h"
 void Inv_ShowItemDescriptionPanel(void);
-
-void Draw_OffsetCursor(int, int);
-void Draw_AllocSprite(int);
 
 void MenuWidget_DrawCenteredTableText(int arg0);
 
@@ -64,8 +62,6 @@ extern int g_BonusPointBarAnimProgress;
 extern int g_BonusPointStatDeltas[];
 extern int g_BonusPointStatMultipliers[];
 
-void Draw_OffsetCursor(int x, int y);
-void Draw_AllocSprite(int);
 void Draw_PrintNumberWidth2(int arg0);
 
 void Menu_DrawStatAllocationItem(int arg0) {
@@ -82,10 +78,8 @@ void Menu_DrawStatAllocationItem(int arg0) {
     Draw_PrintNumberWidth2(local + 1);
 }
 
-
 extern int g_StatBaseTable[];
 
-void Draw_OffsetCursor(int, int);
 void Draw_StatePush(void);
 void Draw_StatePop(void);
 void Draw_PrintNumberWidth2Unk(int);
@@ -109,8 +103,6 @@ void Menu_DrawScreenModeItem(int arg0) {
 extern int D_800A18EC[];
 
 void Menu_UpdateStatBarAnimation(int);
-void Draw_OffsetCursor(int, int);
-void Draw_AllocSprite(int);
 void Draw_PrintNumberWidth2(int);
 
 void Menu_DrawParasiteAbilityItem(int arg0) {
@@ -135,7 +127,6 @@ void Menu_DrawParasiteAbilityItem(int arg0) {
 
 unsigned char *g_MenuItemIconGlyphTable;
 
-void Draw_OffsetCursor(int x, int y);
 void Draw_StatePush(void);
 void Draw_StatePop(void);
 void Draw_AllocTexturedQuad(int);

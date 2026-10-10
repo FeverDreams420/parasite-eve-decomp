@@ -1,8 +1,7 @@
+#include "pe1/draw_state.h"
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 
 int g_InvItemUsableFlag;
-
-void Draw_AllocSprite(int arg0);
 
 void Menu_DrawEquipInfoOptionRow(int arg0);
 

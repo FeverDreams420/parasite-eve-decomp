@@ -75,4 +75,6 @@ void Draw_SetStatCompareColor(int current, int candidate);
 void Draw_PrintNumberWidth4(int value);
 void Draw_SetColor(int color);
 
+void Draw_EmitWipeBarRect(int width, int height, int mode);
+
 #endif /* PE1_DRAW_STATE_H */

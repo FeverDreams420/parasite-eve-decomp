@@ -12,6 +12,7 @@
 #include "pe1/task_node.h"
 #include "pe1/game_audio_state.h"
 #include "pe1/game_state_types.h"
+#include "pe1/akao/commands.h"
 
 extern Pe1GameState g_GameState;
 extern int g_SceneDataTable0;
@@ -212,8 +213,6 @@ typedef struct AkaoStackLocals {
     u8 pad12[8];
 } AkaoStackLocals;
 
-
-
 extern u8 D_800944A8[];
 extern u8 *D_8009CE00;
 extern u8 *D_8009D20C[];
@@ -221,7 +220,6 @@ extern u8 *D_8009D254[];
 extern u8 *D_8009D2F0[];
 
 void Akao_Cmd_11(int slot);
-void Akao_Cmd_21(int command, int arg1);
 void Akao_Cmd_90(int command);
 void Akao_Cmd_92(int command);
 void Akao_Cmd_98_9A_9C(int command);

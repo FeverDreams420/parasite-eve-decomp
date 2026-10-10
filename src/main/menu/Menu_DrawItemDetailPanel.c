@@ -12,7 +12,6 @@ int Inv_GetPackedListItem(int);
 int Inv_RestoreSelection(unsigned int);
 int Inv_GetPackedListCount(void);
 void MenuWidget_OffsetPosition(MenuWidgetNode *, int, int);
-void Draw_OffsetCursor(int, int);
 void Draw_PrintNumberWidth2Unk(int);
 void Draw_PrintNumberWidth3Unk(int value);
 

@@ -1,6 +1,9 @@
 #include "pe1/menu_item_record.h"
 #include "pe1/menu_queue.h"
 #include "pe1/menu_sound.h"
+#include "pe1/draw_state.h"
+#include "pe1/menu_equipment.h"
+#include "pe1/text.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "common.h"
@@ -68,11 +71,11 @@ void Menu_CreateItemUsePanel(int itemId) {
     Queue_Init();
 }
 
-M2C_UNK Menu_DrawEquipStatsDelta(void *);                      /* extern */
-M2C_UNK Draw_OffsetCursor(M2C_UNK, M2C_UNK);            /* extern */
-M2C_UNK Draw_AllocSprite(M2C_UNK);                     /* extern */
-M2C_UNK Draw_PrintNumberWidth4Unk(u8);                          /* extern */
-M2C_UNK Draw_PrintSignedNumberWidth4(s16);                         /* extern */
+                      /* extern */
+            /* extern */
+                     /* extern */
+                          /* extern */
+                         /* extern */
 
 void Menu_DrawEquipStatsPanel(void) {
     ItemDataRecord *temp_s0;

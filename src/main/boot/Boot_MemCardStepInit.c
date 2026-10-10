@@ -2,6 +2,7 @@
 #include "pe1/memcard.h"
 #include "pe1/task_node.h"
 #include "pe1/game_state_types.h"
+#include "pe1/scene_room_load.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
@@ -9,7 +10,6 @@
 #include "../../../tools/m2c/m2c_macros.h"
 M2C_UNK Battle_StartEncounter();
 M2C_UNK func_80042F20();
-s32 Asset_LoadTimTextures();
 s32 CD_StepReadState();
 extern s32 g_SceneDataTable0;
 extern struct { char _[16]; } D_8009D1A0_o __asm__("g_GameStateFlags");

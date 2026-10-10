@@ -9,6 +9,7 @@
 #include "pe1/menu_inventory.h"
 #include "pe1/menu_widget.h"
 #include "../../../tools/m2c/m2c_macros.h"
+#include "pe1/draw_state.h"
 
 /* Inventory/equip list screen: creation, list input, the item-count header,
  * the per-item action submenu and its input step. Contiguous at 0x80044274
@@ -27,10 +28,8 @@ int func_80057D18(int);
 void func_800451D0(MenuWidgetNode *);
 void Menu_OpenItemActionSubmenu(MenuWidgetNode *, int, int);
 void MenuWidget_OffsetPosition(MenuWidgetNode *node, int dx, int dy);
-void Draw_OffsetCursor(int x, int y);
 int Inv_CountTotal(void);
 void Draw_PrintNumberWidth2Unk(int value);
-void Draw_AllocSprite(int sprite);
 
 extern s32 g_MenuActionSubmenuOpen;
 extern s32 g_InvSelectedItemIndex;

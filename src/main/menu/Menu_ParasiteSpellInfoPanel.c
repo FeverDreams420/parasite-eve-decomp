@@ -9,8 +9,6 @@ int D_8009CFF4;
 
 void Menu_DrawParasiteSpellInfoPanel(void);
 
-void Draw_OffsetCursor(int arg0, int arg1);
-
 void Menu_CreateParasiteSpellInfoPanel(int arg0) {
     void *widget;
 

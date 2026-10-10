@@ -1,11 +1,11 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 #include "pe1/menu_inventory.h"
+#include "pe1/draw_state.h"
+#include "pe1/text.h"
 
 int g_MenuActiveWidget;
 
-void Draw_OffsetCursor(int x, int y);
 void Draw_SetTextDimmed(int value);
-void Draw_AllocSprite(int);
 
 void Menu_DrawArmorListItem(int arg0) {
     if (arg0 != MenuWidget_GridCellIndex(g_MenuActiveWidget)) {

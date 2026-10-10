@@ -1,3 +1,4 @@
+#include "pe1/text.h"
 typedef struct {
     char pad[0x24];
     int value;
@@ -8,7 +9,6 @@ typedef struct {
     Inner *inner;
 } Outer;
 
-void Draw_OffsetCursor(int x, int y);
 void Draw_FlushPrimList(int arg0);
 
 void Menu_DrawSaveSlotPortLabel(Outer *arg0) {

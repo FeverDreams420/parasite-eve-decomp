@@ -1,9 +1,8 @@
+#include "pe1/draw_state.h"
+#include "pe1/text.h"
 extern void Inv_RebuildSelectableMask(void);
 
 extern short D_800922D0[];
-
-void Draw_OffsetCursor(int x, int y);
-void Draw_AllocSprite(int arg0);
 
 void Menu_RebuildSelectableMask(void) {
     Inv_RebuildSelectableMask();

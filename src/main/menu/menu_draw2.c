@@ -1,12 +1,11 @@
 #include "pe1/menu_item_record.h"
+#include "pe1/draw_state.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 #include "pe1/menu_context_help.h"
 #include "pe1/text.h"
 
 extern int g_InvItemUsableFlag;
-
-void Draw_AllocSprite(int);
 
 int Inv_GetPackedListCount(void);
 int Inv_GetPackedListItem(int);

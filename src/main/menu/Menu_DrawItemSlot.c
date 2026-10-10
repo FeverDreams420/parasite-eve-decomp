@@ -1,4 +1,6 @@
 #include "pe1/menu_state.h"
+#include "pe1/draw_state.h"
+#include "pe1/text.h"
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 #include "pe1/menu_inventory.h"
 
@@ -7,8 +9,6 @@ int g_MenuActiveWidget;
 
 int Battle_IsActiveWrapped(void);
 void Draw_SetTextDimmed(int value);
-void Draw_OffsetCursor(int x, int y);
-void Draw_AllocSprite(int arg0);
 
 void Menu_DrawItemSlot(int arg0) {
     int var_s0;

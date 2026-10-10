@@ -29,17 +29,12 @@ void Menu_DrawItemActionSubmenu(void);
 int g_InvItemUsableFlag;
 int g_MenuSelectedItemList;
 int g_MenuSelectedItemSlot;
-void Draw_OffsetCursor(int arg0, int arg1);
 void Draw_StatePush(void);
-void Draw_AllocSprite(int arg0);
 void Draw_StatePop(void);
 void Sfx_DrawActiveListSlot(int arg0);
 #define NULL ((void *)0)
 s32 func_80052F0C();
 void Menu_DrawEquipStats(void);
-extern void Menu_DrawEquipStatsDelta(ItemDataRecord *data);
-extern void Draw_PrintNumberWidth4Unk(int arg0);
-extern void Draw_PrintSignedNumberWidth4(int arg0);
 /* Inlined into Menu_OpenItemList, like Menu_CreateItemActionSubmenu; no
  * out-of-line copy exists in retail. */
 static inline void Menu_CreateScreenModeSubmenu(void) {

@@ -2,14 +2,14 @@
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
 #include "pe1/memcard.h"
+#include "pe1/draw_state.h"
+#include "pe1/text.h"
 
 int g_MenuActiveWidget;
 
 void Menu_DrawMemCardPortItem(int arg0);
 void MenuWidget_DrawList(int arg0, void (*callback)(void));
 void Draw_SetTextDimmed(int value);
-void Draw_AllocSprite(int arg0);
-void Draw_OffsetCursor(int x, int y);
 
 int g_McDialogMode;
 int g_MenuActiveWidget;

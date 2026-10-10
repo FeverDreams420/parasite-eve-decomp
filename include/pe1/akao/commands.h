@@ -139,4 +139,6 @@ int Akao_EnqueueStagedCommand(void);
 /* Returns the header validation difference, or the queued sequence number. */
 int Akao_Cmd_24(void *header, int arg1, int arg2, int arg3);
 
+void Akao_Cmd_21(int arg0, int arg1);
+
 #endif

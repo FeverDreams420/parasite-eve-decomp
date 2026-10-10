@@ -3,7 +3,6 @@ void MenuWidget_RestoreSavedCurrentNode(void);
 extern char g_MenuItemLabelBuffer[];
 extern int g_MenuItemPrimListHandles[];
 
-void Draw_OffsetCursor(int arg0, int arg1);
 void Draw_SetTextDimmed(int arg0);
 void Draw_FlushPrimList(int arg0);
 

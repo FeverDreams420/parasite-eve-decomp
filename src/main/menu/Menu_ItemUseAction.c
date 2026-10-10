@@ -5,6 +5,7 @@
 #include "pe1/menu_inventory.h"
 #include "pe1/menu_confirm_callback.h"
 #include "pe1/menu_item_record.h"
+#include "pe1/text.h"
 
 int g_MenuEquipMode;
 int g_MenuItemRenameMode;
@@ -13,11 +14,9 @@ int Inv_GetPackedListItem(int arg0);
 void Menu_CloseContextHelpPanel(void);
 int Inv_GetActiveListItem(int arg0);
 
-void Draw_OffsetCursor(int arg0, int arg1);
 void Draw_StatePush(void);
 void Draw_StatePop(void);
 void Draw_SetColor(int arg0);
-void Draw_PrintTextById(int arg0);
 void Draw_PrintNumberWidth3Unk(int value);
 int Draw_GetBlendColor(void);
 

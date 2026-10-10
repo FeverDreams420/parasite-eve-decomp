@@ -1,5 +1,7 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 #include "pe1/menu_inventory.h"
+#include "pe1/draw_state.h"
+#include "pe1/text.h"
 
 int g_MenuActiveWidget;
 
@@ -8,8 +10,6 @@ void Menu_DrawSaveSlot2Item(int arg0);
 void Menu_DrawSaveSlot3Item(int arg0);
 void MenuWidget_DrawList(int arg0, void (*callback)(void));
 void Draw_SetTextDimmed(int arg0);
-void Draw_AllocSprite(int arg0);
-void Draw_OffsetCursor(int arg0, int arg1);
 
 void Menu_DrawMemCardSlot1List(int arg0) {
     g_MenuActiveWidget = arg0;

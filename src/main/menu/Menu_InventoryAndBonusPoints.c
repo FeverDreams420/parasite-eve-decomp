@@ -6,6 +6,8 @@
 #include "pe1/menu_inventory_root.h"
 #include "common.h"
 #include "pe1/menu_inventory.h"
+#include "pe1/draw_state.h"
+#include "pe1/text.h"
 #include "include_asm.h"
 
 /* The inventory root step, equip panel alignment, the bonus-point slot
@@ -198,8 +200,6 @@ void Menu_SetEquipPanelsCursorY(void) {
 int g_MenuItemUseMode;
 int g_BonusPointDisplayValue;
 
-void Draw_OffsetCursor(int x, int y);
-void Draw_AllocSprite(int arg0);
 void Draw_PrintNumberWidth5(int arg0);
 
 void Menu_DrawBonusPointSlotValue(void) {
@@ -795,12 +795,8 @@ extern int g_BonusPointSpendStat;
 extern int g_BonusPointSpendWorkingValue;
 extern int g_BonusPointSpendCurrentValue;
 extern int D_8009CF18;
-void Draw_OffsetCursor(int, int);
-void Draw_AllocSprite(int);
 void Draw_PrintNumberWidth5(int);
 void Draw_PrintNumberWidth4(int);
-void Draw_PrintNumberWidth4Unk(int);
-void Draw_PrintSignedNumberWidth4(int);
 void Draw_PrintNumberWidth2(int);
 void Draw_AllocTexturedRectAlt(int, int);
 void Stat_QueryLevelAndSubLevel(int, int, int *, int *);

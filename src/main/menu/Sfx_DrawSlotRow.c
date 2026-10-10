@@ -2,12 +2,12 @@
 #include "pe1/inventory.h"
 #include "pe1/text.h"
 #include "pe1/save.h"
+#include "pe1/draw_state.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
 void Draw_StatePush(void);
 void Draw_StatePop(void);
-void Draw_AllocSprite(int glyph);
 void Draw_PrintRawText(u8 *text);
 void Draw_PrintNumberWidth3Unk(int value);
 

@@ -1,4 +1,6 @@
 #include "pe1/inventory_queries.h"
+#include "pe1/draw_state.h"
+#include "pe1/text.h"
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 
 int g_MenuActiveWidget;
@@ -7,8 +9,6 @@ int g_MenuBattleStatusOverlayActive;
 void Menu_DrawItemSlot(int arg0);
 void MenuWidget_DrawList();
 void Draw_SetTextDimmed(int value);
-void Draw_AllocSprite(int arg0);
-void Draw_OffsetCursor(int x, int y);
 int Battle_GetStateFlag1(void);
 void Battle_DrawActiveStatus(void);
 

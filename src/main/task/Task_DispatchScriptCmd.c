@@ -3,11 +3,11 @@
 #include "pe1/task_node.h"
 #include "pe1/vector_types.h"
 #include "pe1/render_lighting.h"
+#include "pe1/scene_room_load.h"
 
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* ASPSX_VERSION: 2.70 */
-
 
 #define U8_AT(ptr, off) (*(u8 *)((u8 *)(ptr) + (off)))
 #define U32_AT(ptr, off) (*(u32 *)((u8 *)(ptr) + (off)))
@@ -44,7 +44,6 @@ void func_800E00CC(Pe1Vec3s *position, int mode, int arg2, int arg3,
 u8 *Scene_LoadMap(char *map_id, u8 *entity, int mode);
 void Battle_DrawActiveStatus(void);
 void Window_SetBoundsByMode(int mode);
-int Asset_LoadTimTextures(int mode);
 
 int Task_DispatchScriptCmd(TaskScriptArgs *args)
 {

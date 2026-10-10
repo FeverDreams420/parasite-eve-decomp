@@ -13,7 +13,6 @@ void Menu_StepInventoryRoot(int arg0, int arg1, int arg2);
 
 int g_MenuEquipMode;
 
-void Draw_OffsetCursor(int arg0, int arg1);
 void Draw_FlushPrimList(int arg0);
 void Draw_SetColor(int arg0);
 

@@ -83,7 +83,6 @@ void Sfx_CursorRenderData(ItemDataRecord *record);
 #include "pe1/text.h"
 #include "pe1/draw_state.h"
 void Draw_PrintRawText(u8 *text);
-void Draw_EmitWipeBarRect(int width, int height, int mode);
 
 void Menu_DrawSaveMetadataPreview(void);
 

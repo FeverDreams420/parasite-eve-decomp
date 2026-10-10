@@ -1,12 +1,12 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "pe1/menu_inventory.h"
+#include "pe1/draw_state.h"
+#include "pe1/text.h"
 
 extern int D_8009CEF4;
 
 void Draw_SetTextDimmed(int enable);
-void Draw_OffsetCursor(int x, int y);
-void Draw_AllocSprite(int sprite);
 
 void func_80050F64(int index) {
     if (index != MenuWidget_GridCellIndex(D_8009CEF4)) {
