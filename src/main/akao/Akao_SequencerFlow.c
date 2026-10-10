@@ -360,7 +360,8 @@ void Akao_TimerCallback(void) {
     D_8009CDE4 = old_f0;
 }
 
-extern AkaoU8 D_8009B7BC[];
+/* Argument lengths of opcodes 0xA0-0xFF, zero for opcodes handled below. */
+extern AkaoU8 D_8009B85C[];
 extern AkaoU8 D_8009B8BC[];
 
 int Akao_LookupSampleBankByte(AkaoTrack *track)
@@ -386,7 +387,7 @@ check_code:
         if (code < 0xA0) {
             return 0xA0;
         }
-        skip = D_8009B7BC[code];
+        skip = D_8009B85C[code - 0xA0];
         if (skip) goto advance_by_table;
         switch (code) {
         case 0xFC:

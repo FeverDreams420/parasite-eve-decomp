@@ -285,7 +285,6 @@ int Menu_GetEquipSlotIndex(void) {
 
 extern TextboxFontPage D_80091644[4];
 
-extern TextboxNameGlyphs D_80091694;
 
 extern TextboxGlyphSpacing D_800916A0[256];
 

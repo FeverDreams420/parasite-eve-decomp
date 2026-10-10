@@ -897,7 +897,7 @@ int MenuWidget_GetCellIndex(MenuWidgetNode *ptr) {
 void Draw_AllocColorTri(int, int, int);
 
 typedef DrawTextCursorPair CursorPair;
-extern CursorPair D_800A2270[], D_800A22B0[];
+extern CursorPair D_800A2270[];
 
 static inline MenuWidgetNode *FindOwner(MenuWidgetNode *node)
 {
@@ -988,7 +988,7 @@ void MenuWidget_DrawListRow(MenuWidgetNode *node,
     CursorPair *stack = (CursorPair *)g_TextCursorStack;
     int (*select_callback)(int);
 
-    if ((u32)stack < (u32)D_800A22B0) {
+    if ((u32)stack < (u32)g_TextCursorStackTop) {
         g_TextCursorStack = (int *)(stack + 1);
         stack->x = D_8009D124;
         stack->y = D_8009D128;

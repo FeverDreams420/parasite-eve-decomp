@@ -263,7 +263,7 @@ done:
 /* Empty constraints preserve the retail schedule. */
 
 /* Word-offset views of the eight 16-byte history records. */
-extern int D_800A3610[], D_800A3614[], D_800A3618[], D_800A361C[];
+extern int D_800A3614[], D_800A3618[], D_800A361C[];
 extern int D_800A3690;
 extern DsResult D_800A3500;
 
@@ -287,7 +287,7 @@ s32 DsSync(s32 inId, void *inResult) {
         scanned = 0;
         entryIdOrOffset = forward * 0x10;
     scanForward:
-        entryIdOrOffset = *(int *)((char *)D_800A3610 + entryIdOrOffset);
+        entryIdOrOffset = *(int *)((char *)g_DsReadCallbackSlots + entryIdOrOffset);
         forward += 1;
         if (entryIdOrOffset != id) {
             if (forward >= 8) {
@@ -296,7 +296,7 @@ s32 DsSync(s32 inId, void *inResult) {
             scanned += 1;
             if (scanned >= 8) {
                 readiness = 0;
-                if (id < *(int *)((char *)D_800A3610 + (D_800A3690 * 0x10))) {
+                if (id < *(int *)((char *)g_DsReadCallbackSlots + (D_800A3690 * 0x10))) {
                     goto completed;
                 }
             } else {
@@ -322,7 +322,7 @@ s32 DsSync(s32 inId, void *inResult) {
                 offset = backward * 0x10;
                 while (1) {
                     backward -= 1;
-                    if (*(int *)((char *)D_800A3610 + offset) != id) {
+                    if (*(int *)((char *)g_DsReadCallbackSlots + offset) != id) {
                         if (backward < 0) {
                             backward = 7;
                         }
@@ -341,7 +341,7 @@ s32 DsSync(s32 inId, void *inResult) {
             } else {
                 offset = backward * 0x10;
                 selected = 0;
-                if (*(int *)((char *)D_800A3610 + offset) == 0) {
+                if (*(int *)((char *)g_DsReadCallbackSlots + offset) == 0) {
 
                 } else {
                     goto publishResult;
@@ -358,7 +358,7 @@ s32 DsSync(s32 inId, void *inResult) {
         offset = cursor * 0x10;
     }
     selected = 0;
-    if (*(int *)((char *)D_800A3610 + offset) != 0) {
+    if (*(int *)((char *)g_DsReadCallbackSlots + offset) != 0) {
     publishResult:
         {
             register int *dst = D_800A3500.words;
@@ -366,7 +366,7 @@ s32 DsSync(s32 inId, void *inResult) {
             register int second asm("$3");
             register int third asm("$4");
             asm("" : "=r"(dst) : "0"(dst) : "memory");
-            first = *(int *)((char *)D_800A3610 + offset);
+            first = *(int *)((char *)g_DsReadCallbackSlots + offset);
             second = *(int *)((char *)D_800A3614 + offset);
             third = *(int *)((char *)D_800A3618 + offset);
             asm(""

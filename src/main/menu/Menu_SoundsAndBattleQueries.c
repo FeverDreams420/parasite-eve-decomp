@@ -1,6 +1,7 @@
 #include "include_asm.h"
 #include "pe1/akao.h"
 #include "pe1/aya.h"
+#include "pe1/textbox.h"
 
 extern unsigned int *g_PlayerEntity;
 
@@ -14,7 +15,6 @@ int Pad_IsMenuConfirmAvailable(void);
 extern unsigned int g_GameStateFlags;
 
 extern void * g_AkaoBgmHandle;
-extern unsigned char D_80091694[];
 extern unsigned char D_8009169D;
 
 int Battle_GetEnemyEscapeFlag(void)
@@ -61,7 +61,7 @@ void Menu_CopyPromptCodes(unsigned char *src) {
     unsigned char *end;
     int value;
 
-    dst = D_80091694;
+    dst = D_80091694.glyphs;
     end = dst + 8;
     while (dst < end) {
         value = *src;

@@ -1,6 +1,7 @@
 #include "common.h"
 #include "pe1/entity_allocation.h"
 #include "pe1/player_entity.h"
+#include "pe1/task_node.h"
 /* CC1_FLAGS: -fno-strength-reduce */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 
@@ -16,7 +17,6 @@ FieldActor *g_PlayerEntity;
 void *D_8009D224;
 
 extern char g_EntityWorkBuffer[];
-extern char g_TaskNodeActiveFlags[];
 extern char D_800BEA90[];
 extern char D_800BEA94[];
 extern int D_800C0B14[];
@@ -42,7 +42,7 @@ void Entity_ResetAllPools(void)
     } while (i < 0x200);
 
     i = 0;
-    ptr = g_TaskNodeActiveFlags;
+    ptr = (char *)g_TaskNodeActiveFlags;
     do {
         i++;
         *(int *)ptr = 0;

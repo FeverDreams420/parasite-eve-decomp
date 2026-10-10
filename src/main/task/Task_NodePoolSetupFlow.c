@@ -13,7 +13,6 @@ extern TaskNode *g_TaskNodeFreeListHead;
 extern int g_SceneDataTable0;
 extern TaskNode *g_TaskNodePool;
 extern unsigned short g_TaskNodeSeqCounter;
-extern int g_TaskNodeActiveFlags[64];
 extern int g_TaskScriptOperandTable[16];
 
 void Scene_LoadMap();

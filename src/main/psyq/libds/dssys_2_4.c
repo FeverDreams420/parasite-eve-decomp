@@ -10,7 +10,6 @@
  * DsInit at 0x8007EC14 and DsReset at
  * 0x8007ED58. Their combined GNU 2.8.1 object preserves both code ranges. */
 extern unsigned char D_800A3515[], D_800A3525[], D_800A3535[];
-extern DsReadCallbackSlot D_800A3610[];
 extern int D_800A3604, D_800A3600, g_CdPendingReadCount, D_800A3690;
 extern void DS_stop(void);
 int DsInit(void) {
@@ -40,7 +39,7 @@ int DsInit(void) {
     D_800A3600 = 0;
     g_CdPendingReadCount = 0;
     for (k = 7, offset = 112; k >= 0; --k, offset -= 16)
-        ((DsReadCallbackSlot *)((unsigned char *)D_800A3610 + offset))->value = 0;
+        ((DsReadCallbackSlot *)((unsigned char *)g_DsReadCallbackSlots + offset))->value = 0;
     D_800A3690 = 0;
     DS_init();
     DS_sync_callback((unsigned int)CQ_sync_system);
@@ -79,7 +78,7 @@ int DsReset(void) {
     D_800A3600 = 0;
     g_CdPendingReadCount = 0;
     for (k = 7, offset = 112; k >= 0; --k, offset -= 16)
-        *(int *)((unsigned char *)D_800A3610 + offset) = 0;
+        *(int *)((unsigned char *)g_DsReadCallbackSlots + offset) = 0;
     D_800A3690 = 0;
     ER_clear();
     DsReadySystemMode(0);
