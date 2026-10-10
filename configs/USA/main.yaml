@@ -536,7 +536,7 @@ segments:
       - [0x45BA4, c, item/Inv_RollRandomItemType]
       - [0x45E10, c, item/Item_PackParasiteSpells]
       - [0x45E68, c, aya/Aya_UnlockParasiteSpellById]
-      - [0x45EE8, c, item/inv3]
+      - [0x45EE8, c, item/Inv_PackedListItem]
       # Selection masks, ammo transfer, comparison panels, item actions and
       # the active-list controller share records and direct calls (-G8).
       - [0x45F60, c, item/Inv_ItemActions]
