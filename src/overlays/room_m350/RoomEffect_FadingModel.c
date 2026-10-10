@@ -88,7 +88,8 @@ update:
         Particle *particle;
         Actor *actor;
         Instance *instance;
-        register int random asm("$7");
+        int random;
+        int scatterRandom;
         int index;
         int halfSize;
         int cosine,divisor;
@@ -131,7 +132,7 @@ update:
         particle->y=next->transforms[index].position[1];
         asm volatile("" : : : "$2");
         {
-            register int low7 asm("$2")=random&127;
+            u8 low7=random&127;
             product=low7*size;
         }
         next=actor->instance;
@@ -152,8 +153,8 @@ update:
             particle->y=y-(product>>13);
         }
         offset.x=0;
-        random=rand(); divisor=96;
-        offset.z=((random%divisor+64)*halfSize)>>12;
+        scatterRandom=rand(); divisor=96;
+        offset.z=((scatterRandom%divisor+64)*halfSize)>>12;
         cosine=rcos(rand());
         sine=rsin(rand());
         rotation.rotation[0][2]=sine;
