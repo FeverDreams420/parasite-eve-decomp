@@ -187,7 +187,7 @@ def norm_param(p: str) -> str:
     return norm_ws(p)
 
 
-DECL_SKIP = re.compile(r"^\s*(typedef|static|inline|__inline|INCLUDE_ASM|INCLUDE_RODATA)\b")
+DECL_SKIP = re.compile(r"^\s*(typedef|static|inline|__inline|INCLUDE_ASM|INCLUDE_RODATA|PSYQ_ASM_FUNCTION)\b")
 ASM_ALIAS = re.compile(r"\s*(?:__asm__|asm)\s*\(\s*\"[^\"]*\"\s*\)")
 ATTR = re.compile(r"__attribute__\s*\(\(.*?\)\)")
 
@@ -205,6 +205,15 @@ def parse_decls(stmt: str):
     s = ATTR.sub("", s)
     s = re.sub(r"^\s*extern\s+", "", s)
     s = s.strip()
+    # Several declarators after one base type (`int f(int), g(void);`):
+    # parse each with the base type.
+    m = re.match(r"^((?:(?:const|volatile|signed|unsigned|struct|union|enum)\s+)*[A-Za-z_]\w*)\s+(.*)$", s, re.S)
+    if m and m.group(1).split()[-1] not in ("struct", "union", "enum"):
+        parts = split_top(m.group(2))
+        if len(parts) > 1 and all(p.strip() for p in parts):
+            for part in parts:
+                yield from parse_decls(f"{m.group(1)} {part.strip()}")
+            return
     # Function prototype: <ret> <name>(<params>), possibly returning a pointer.
     m = re.match(r"^(.*?)\b([A-Za-z_]\w*)\s*\(([^()]*(?:\([^()]*\)[^()]*)*)\)\s*$", s, re.S)
     if m and not re.search(r"\(\s*\*", s.split(m.group(2))[0] + m.group(2)):
