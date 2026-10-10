@@ -6,7 +6,6 @@
 #include "pe1/menu_inventory.h"
 #include "pe1/draw_level_bar.h"
 
-
 #include "pe1/draw_state.h"
 
 int g_TextCursorX;
@@ -42,7 +41,6 @@ void Draw_StatePush(void) {
         BoundsCheck_AssertStub(2);
     }
 }
-
 
 void Draw_StatePop(void) {
     DrawTextCursorPair *cursor;
@@ -231,8 +229,6 @@ void Draw_AllocSprite(int index) {
     }
 }
 
-
-
 void Draw_EmitGlyph(s32 arg0, s32 arg1) {
     DrawGlyphDescriptor *glyph;
     u8 *oldPacket;
@@ -343,8 +339,6 @@ void Draw_SetGlyphAdvance(int arg0) {
 
 extern int D_8009CDB0;
 extern int D_8009D0D8;
-
-u16 GetTPage(int tp, int abr, int x, int y);
 
 void Draw_AllocTexturedQuad(int code) {
     int low;
@@ -496,8 +490,6 @@ void Draw_AllocTexturedQuad(int code) {
     }
 }
 
-
-
 int Draw_MeasureTextWidth(u8 *text) {
     u8 *cursor;
     int width;
@@ -547,7 +539,6 @@ int Draw_MeasureTextWidth(u8 *text) {
     asm volatile("" : : "r"(cursor));
     return width;
 }
-
 
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
@@ -732,7 +723,6 @@ void Draw_PrintTextById(unsigned int textId) {
     }
 }
 
-
 void Draw_PrintTextWrapped(u8 *text, int width) {
     while (*text != 0xFF) {
         int used;
@@ -785,7 +775,6 @@ void Draw_PrintTextWrapped(u8 *text, int width) {
     }
 }
 
-
 extern int D_8009D13C;
 extern int D_8009D140;
 extern int D_8009D144;
@@ -795,7 +784,6 @@ void func_8005F844(int variant) {
     D_8009D140 = variant != 0 ? 0xCC : 0x84;
     D_8009D144 = 0xA4;
 }
-
 
 void Draw_EmitDigitSprite(int digit) {
     RenderTexturedQuad *quad = 0;

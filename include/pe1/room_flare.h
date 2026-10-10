@@ -15,6 +15,7 @@
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/floor_polygon.h"
+#include "pe1/psyq_gpu.h"
 
 /* Flare effects: a controller that orbits an anchor read from the scene
  * object and sheds drift particles, and a dropped flare particle that falls,
@@ -120,10 +121,7 @@ extern RoomFlareBattleEntity *D_8009D254;
 extern RoomFlareTextureSlot D_800E11E8;
 extern u16 D_800E1208;
 
-extern int rsin(int angle);
-extern int rcos(int angle);
 extern int rand(void);
-extern u16 GetClut(int x, int y);
 extern void func_800866A4(int, int);
 extern void func_800CE8F0(void *, int, void *, void *);
 extern int func_800C6B90(void *position, int radius);

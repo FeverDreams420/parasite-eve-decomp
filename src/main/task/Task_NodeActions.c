@@ -346,8 +346,6 @@ extern u8 *D_8009D2F0[];
 extern int *D_8009CE00;
 
 int Math_FixedMul(int a, int b);
-int rsin(int angle);
-int rcos(int angle);
 
 int Task_MoveTowardPoint(int **args) {
     u8 *speed_entity;
@@ -483,8 +481,6 @@ extern u8 *D_8009D2F0[];
 extern int *D_8009CE00;
 
 int Math_FixedMul(int a, int b);
-int rsin(int angle);
-int rcos(int angle);
 
 int Camera_TrackEntityAngle(int **args) {
     int **script_args;

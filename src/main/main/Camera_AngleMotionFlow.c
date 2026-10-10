@@ -25,8 +25,6 @@ extern FieldActor *D_8009D2F0[];
 extern int *D_8009CE00;
 
 int Math_FixedMul(int a, int b);
-int rsin(int angle);
-int rcos(int angle);
 
 int Camera_TrackRelativeOffset(int **args) {
     FieldActor *speed_entity;

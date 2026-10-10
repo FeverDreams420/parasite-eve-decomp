@@ -10,6 +10,7 @@
 #include "pe1/field_anim_particle.h"
 #include "pe1/field_engine_slot.h"
 #include "pe1/field_billboard.h"
+#include "pe1/psyq_libc.h"
 
 static __inline__ void identity_matrix(GteMatrix *matrix)
 {
@@ -228,8 +229,6 @@ void func_800CD2DC(void) {
 
 void func_800CD2E4(void) {
 }
-
-void *memset(void *dest, int value, unsigned int count);
 
 extern GteShortVector D_800C223C;
 

@@ -13,8 +13,6 @@ extern s32 D_8019956C, D_8019957C;
 
 void func_800C2FF0(int, int);
 void func_800C3098(int);
-int rsin(int);
-int rcos(int);
 void func_80071A44(SceneE08Vector *, int, int);
 void func_80192D90(void *unused0, void *unused1, SceneE08OrbitParticles *effect) {
     SceneE08Matrix matrix;

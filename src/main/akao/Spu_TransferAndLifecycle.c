@@ -3,6 +3,7 @@
 #include "pe1/akao.h"
 #include "pe1/akao/init_state.h"
 #include "pe1/akao/voice_masks.h"
+#include "pe1/psyq_bios.h"
 
 extern int D_8009D240;
 extern int D_8009D260;
@@ -11,7 +12,6 @@ int StopRCnt(unsigned int);
 int UnDeliverEvent(unsigned int, int);
 int DisableEvent(int);
 int CloseEvent(int);
-
 
 #define U16(base, off) (*(u16 *)((u8 *)(base) + (off)))
 #define U32(base, off) (*(u32 *)((u8 *)(base) + (off)))
@@ -258,7 +258,6 @@ void Spu_InitVoiceState(void) {
 }
 
 s32 EnableEvent(s32);
-s32 OpenEvent(s32, s32, s32, void *);
 s32 SetRCnt(s32, s32, s32);
 void SpuInitMalloc(s32, void *);
 void SpuSetIRQ(s32);
@@ -293,7 +292,7 @@ void Spu_InitHardware(void) {
 
     } while (StartRCnt(0xF2000002) == 0);
     do {
-        eventDesc = OpenEvent(0xF2000002, 2, 0x1000, &Akao_TimerCallback);
+        eventDesc = OpenEvent(0xF2000002, 2, 0x1000, (int (*)(void))&Akao_TimerCallback);
         g_AkaoTimerEventDesc = eventDesc;
     } while (eventDesc == -1);
     do {

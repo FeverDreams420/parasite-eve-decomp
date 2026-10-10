@@ -3,13 +3,13 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/psyq_gpu.h"
 
 extern volatile unsigned short D_800E11E8, D_800E1208;
 extern short D_800966EC[], D_800966EE[];
 extern int D_8019A59C[];
 /* Signed high-half view avoids LHU followed by explicit sign extension. */
 typedef RoomM350SignedHalfPair SignedHalf;
-extern unsigned short GetClut(int, int);
 
 int func_80196C64(int event, void *object)
 {

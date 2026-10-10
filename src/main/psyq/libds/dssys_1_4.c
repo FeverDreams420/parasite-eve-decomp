@@ -4,9 +4,7 @@
 #include "pe1/psyq_ds.h"
 #include "pe1/cdrom.h"
 
-s32 LIBDS_DSSYS_1_text_368(s32 arg0);
-
-s32 DS_cw(s32 arg0) {
+int DS_cw(u8 command, void *parameter) {
     register int *base asm("$6");
     register int *prev asm("$7");
 
@@ -26,7 +24,7 @@ s32 DS_cw(s32 arg0) {
     }
     prev[7] = 0x1F;
     base[-9] = 2;
-    return LIBDS_DSSYS_1_text_368((prev[9] = 0xB, arg0 & 0xFF));
+    return LIBDS_DSSYS_1_text_368((prev[9] = 0xB, command), parameter);
 }
 
 extern unsigned int D_800A36A0;
@@ -100,9 +98,7 @@ int DS_shell_open(void) {
     return g_CdDiscType;
 }
 
-int LIBDS_DSSYS_1_text_368(int arg0);
-
-int DS_cw_system(int arg0) {
+int DS_cw_system(int arg0, void *parameter) {
     volatile int *ptr;
     ptr = &g_CdRomCmdTimeout;
     if (*ptr > 0) {
@@ -115,5 +111,5 @@ int DS_cw_system(int arg0) {
                 PE1_OFFSETOF(CdRomCommandState, read.readyResult));
         command->eventValue = 0x20;
     }
-    return LIBDS_DSSYS_1_text_368(arg0 & 0xFF);
+    return LIBDS_DSSYS_1_text_368(arg0, parameter);
 }

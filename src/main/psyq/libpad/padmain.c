@@ -63,8 +63,6 @@ void _padSetVsyncParam(void) {
 }
 
 extern int (*D_8009B74C)(void);
-typedef int (*MemCardStepFn)(void);
-typedef void (*MemCardErrorFn)(int);
 
 extern int g_MemCardCallbackPending;
 extern int D_8009B75C;
@@ -74,8 +72,6 @@ extern int D_8009B76C;
 extern int D_8009B774;
 extern int D_8009B778;
 extern int D_8009B78C;
-extern MemCardStepFn D_8009B7A8[];
-extern MemCardErrorFn D_8009B724;
 
 void SysDeqIntRP(int index, void *queue);
 void SysEnqIntRP(int index, void *queue);

@@ -71,8 +71,6 @@ extern RenderColor D_8018F204;
 extern u8 D_80199388[];
 
 extern int func_80071A54(void);
-extern int rsin(int angle);
-extern int rcos(int angle);
 extern u16 func_80077AA4(int, int);
 extern void func_80020D50(void);
 extern void func_80020DD0(void);

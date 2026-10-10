@@ -7,6 +7,8 @@
 #include "pe1/render_prim.h"
 #include "pe1/render_tint.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/psyq_libc.h"
+#include "pe1/psyq_gpu.h"
 
 /* Flat colour tiles linked straight into the active ordering table. */
 
@@ -39,10 +41,7 @@ typedef struct FieldTilePoint {
 
 /* Matches render_object.h, for includers that do not include that header. */
 
-void *memset(void *dst, int value, unsigned int size);
-void SetTile(RenderTintTile *tile);
 void SetSemiTrans(void *packet, int dither);
-void AddPrim(unsigned int *orderingEntry, unsigned int *primitive);
 void SetTile1(FieldTilePoint *tile);
 
 #endif

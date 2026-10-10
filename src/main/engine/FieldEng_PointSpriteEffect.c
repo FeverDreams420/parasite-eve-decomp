@@ -258,9 +258,6 @@ int func_800CBFC4(void *arg0, void *arg1, u8 *anim) {
     *(u16 *)(anim + 0xA) = z_base_a1 + (z_rand % 201);
 }
 
-int rsin(int angle);
-int rcos(int angle);
-
 extern u8 D_800E2280;
 extern u8 D_800E2281;
 extern u8 D_800E2282;

@@ -68,6 +68,4 @@ typedef struct FieldProjectionSlot {
 
 extern FieldProjectionSlot D_800BCFA8;
 
-int RotTransPers(GteShortVector *vector, s32 *sxy, s32 *p, s32 *flag);
-
 #endif

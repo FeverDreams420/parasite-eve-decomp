@@ -48,7 +48,6 @@ int LIBDS_DSSYS_1_text_368(unsigned char command, void *param) {
     }
 }
 s32 LIBDS_DSSYS_1_text_774(void);
-int LIBDS_DSSYS_1_text_368(unsigned char, void *);
 #define READ(p)                                                                        \
     ((DsReadStatusBlock *)((u8 *)(p) - PE1_OFFSETOF(DsReadStatusBlock, syncResult)))
 #define CMD(p)                                                                         \
@@ -208,7 +207,6 @@ s32 LIBDS_DSSYS_1_text_774(void) {
 }
 
 extern int D_8009B598[];
-extern void LIBDS_DSSYS_1_text_EA4(int);
 extern void LIBDS_DSSYS_1_text_8B8(int, void *);
 extern void LIBDS_DSSYS_1_text_A9C(int, void *);
 
@@ -217,7 +215,7 @@ void LIBDS_DSSYS_1_text_7FC(int inputEvent, void *inputResult) {
     int event = inputEvent;
     int *state;
 
-    LIBDS_DSSYS_1_text_EA4((unsigned char)event);
+    LIBDS_DSSYS_1_text_EA4((unsigned char)event, result);
     /* The timeout symbol anchors the surrounding CD command state. */
     state = D_8009B598;
     state[1] = 0;

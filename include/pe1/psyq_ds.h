@@ -145,6 +145,8 @@ void DS_vsync_callback(unsigned int value);
 void CQ_sync_system(int event, u8 *result);
 int CQ_ready_system(int command, u8 *payload);
 void LIBDS_DSSYS_2_text_13CC(int event);
+int LIBDS_DSSYS_1_text_368(unsigned char command, void *param);
+void LIBDS_DSSYS_1_text_EA4(int event, u8 *data);
 void CQ_vsync_system(void);
 extern CdDsReadQueueEntry g_CdDsReadQueue[];
 extern int g_CdDsReadQueueState;

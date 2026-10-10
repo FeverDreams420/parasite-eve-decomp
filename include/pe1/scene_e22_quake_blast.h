@@ -90,8 +90,6 @@ extern GteRotation D_8018F1FC;
 extern RenderColor D_8018F228;
 
 extern int func_80071A54(void);
-extern int rsin(int angle);
-extern int rcos(int angle);
 extern u16 func_80077AA4(int, int);
 extern s32 func_80077A64(s32, s32, s32, s32);
 extern void func_8006DF50(void *channel, int id, int value, int volume, int pan);

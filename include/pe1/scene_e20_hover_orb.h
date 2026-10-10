@@ -38,8 +38,6 @@ extern SceneEffectSlot D_80190860[];
 int func_80071A54(void);
 void *func_8006E498(void *archive, unsigned key);
 void func_8006DCE4(int sound, int volume, s16 x, s16 y, int z);
-int rsin(int angle);
-int rcos(int angle);
 u16 func_80077A64(int tp, int abr, int x, int y);
 u16 func_80077AA4(int x, int y);
 #include "pe1/gte_types.h"

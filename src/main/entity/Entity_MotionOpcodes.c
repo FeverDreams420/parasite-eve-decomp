@@ -1,11 +1,10 @@
 #include "common.h"
 #include "pe1/player_entity.h"
+#include "pe1/gte_types.h"
 
 extern FieldActor *g_CurrentEntity;
 
 int Math_FixedMul(int arg0, int arg1);
-int rsin(int arg0);
-int rcos(int arg0);
 
 int Entity_ClearMotionVectors(void) {
     g_CurrentEntity->motion_x = 0;

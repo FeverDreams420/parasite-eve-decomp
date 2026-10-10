@@ -76,4 +76,14 @@ typedef struct GteRotation {
     s16 flags;
 } GteRotation;
 
+int rcos(int angle);
+
+int rsin(int angle);
+
+GteMatrix *CompMatrix(GteMatrix *m0, GteMatrix *m1, GteMatrix *m2);
+
+void RotTrans(const GteShortVector *v, GteVector *out, int *flag);
+
+int RotTransPers(const GteShortVector *v, int *sxy, int *p, int *flag);
+
 #endif

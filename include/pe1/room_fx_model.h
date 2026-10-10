@@ -43,8 +43,6 @@ typedef struct RoomFxModelOwner {
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomFxModelOwner, geom) == 0x1B4, room_fx_model_geom_offset);
 
 int abs(int value);
-int rsin(int angle);
-int rcos(int angle);
 void func_80039B74(RoomFxModelGeom *geom, void *animation, int count, int mode);
 
 /* The mirror room controller (src/overlays/room_lib/RoomFx_MirrorModel.c),

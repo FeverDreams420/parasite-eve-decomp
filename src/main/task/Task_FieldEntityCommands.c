@@ -1,4 +1,5 @@
 #include "pe1/field_collision.h"
+#include "pe1/gte_types.h"
 extern int g_GameState;
 
 #include "pe1/field_actor.h"
@@ -64,8 +65,6 @@ int Task_ClearInputFlagBit2(void) {
     return 1;
 }
 
-
-
 void Task_EnableMovement(void);
 
 void Task_DisableMovement(void);
@@ -90,8 +89,6 @@ int Task_ClearMoveFlag(void) {
     return 1;
 }
 
-int rsin(int arg0);
-int rcos(int arg0);
 int Math_FixedMul(int arg0, int arg1);
 int Entity_PolarToPosition2(int **arg0)
 {
@@ -124,8 +121,6 @@ int Entity_PolarToPosition2(int **arg0)
 }
 
 /* Contiguous animation-entry commands share the current actor. */
-
-
 
 void Render_SetEntryScrolled(int arg0, int arg1, int arg2, int arg3);
 void Render_SetEntryMirrored(int arg0, int arg1, int arg2, int arg3);

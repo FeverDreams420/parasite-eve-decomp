@@ -8,7 +8,6 @@
 #include "pe1/render_prim.h"
 #include "pe1/psyq_gpu.h"
 
-u_short GetClut(int x, int y);
 int GetVideoMode(void);
 
 u32 LoadTPage(u_long *pixels, int mode, int blend,

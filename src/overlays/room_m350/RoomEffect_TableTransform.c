@@ -3,6 +3,7 @@
 #include "pe1/render_object.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/psyq_gpu.h"
 
 typedef struct { short position[3]; short size; } Particle;
 typedef RoomM350TransformMatrix Transform;
@@ -16,7 +17,6 @@ extern Entry D_8019A4D4[][2];
 extern int D_800966EC[];
 extern unsigned char D_8019A4EC[];
 extern RenderColor D_8019A3D0;
-extern int GetClut(int, int);
 
 int func_80195564(int event, short *position) {
     if (event == 1) {

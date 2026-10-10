@@ -453,7 +453,6 @@ void MemCard_StepPortState(int port) {
 
 extern int D_800A1850;
 
-int OpenEvent(int desc, int spec, int mode, int (*func)(void));
 int EnableEvent(int event);
 void InitCARD(int arg0);
 long StartCARD(void);

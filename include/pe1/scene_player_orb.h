@@ -82,8 +82,6 @@ extern SceneLimbBeamShape D_801994D8[10];
 extern u16 D_80199658[10];
 extern u8 D_801989BC[];
 extern u8 D_801989D0[];
-int rsin(int angle);
-int rcos(int angle);
 
 /* Scene e08 arm glow: a ribbon from the player's hand bone (matrix 32) to
  * the elbow bone (matrix 22) with a scaled glow sprite on each end. */

@@ -4,6 +4,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/psyq_gpu.h"
 typedef RoomM350Vector Vector;
 typedef struct { Vector *position; short scale, reserved; } Particle;
 typedef struct { short target, current; } State;
@@ -15,7 +16,6 @@ typedef RoomM350Actor Actor;
 extern int D_800966EC[], D_8019A3D0[];
 extern Vector D_8019A778[];
 extern unsigned short D_800E11E8;
-extern int GetClut(int, int);
 
 int func_80192ADC(int event, Particle *object)
 {

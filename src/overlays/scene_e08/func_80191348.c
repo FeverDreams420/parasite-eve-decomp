@@ -1,5 +1,5 @@
 #include "common.h"
-s32 rcos(s32 arg0);
+#include "pe1/gte_types.h"
 
 void func_80191348(s32 arg0, s16 *rec, u16 *p) {
     u16 *q;

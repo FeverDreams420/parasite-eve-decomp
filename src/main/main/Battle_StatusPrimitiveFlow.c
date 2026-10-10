@@ -1,6 +1,7 @@
 #include "pe1/battle_runtime.h"
 #include "pe1/battle_status.h"
 #include "pe1/render_prim.h"
+#include "pe1/psyq_gpu.h"
 
 /* Builds the rotating target pointer and the two connector lines that tie
  * the floating status panel to the selected combatant. */
@@ -186,8 +187,6 @@ void Battle_DrawTargetHighlight(void)
 }
 
 #define NULL ((void *)0)
-
-s16 GetClut(s32, s32);
 
 extern struct { char _[16]; } D_8009CDDC_oa __asm__("g_ActiveDrawSlot");
 extern struct { char _[16]; } D_8009CDDC_og __asm__("g_ActiveDrawSlot");

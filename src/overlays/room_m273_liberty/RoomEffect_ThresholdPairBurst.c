@@ -6,6 +6,8 @@
 #include "pe1/field_model_draw.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/scene_archive.h"
+#include "pe1/psyq_libc.h"
+#include "pe1/gte_types.h"
 
 extern RoomM273PlayerActorView *g_PlayerEntity;
 extern u8 D_8019AE9A;
@@ -24,10 +26,7 @@ extern int D_8019AC0C[];
 extern AssetState D_8019AE8C;
 extern void *D_8019AE90;
 extern unsigned char D_8019AE9A;
-extern int GetTPage(int,int,int,int),rcos(int),rsin(int);
-extern unsigned short GetClut(int,int);
 extern void GsSetOrign(int,int);
-void *memset(void *dst, int value, unsigned int size);
 void *Asset_FindTable08ByU32Key(void *base, s32 key);
 
 extern int func_80193CB8(),func_80193B5C();
@@ -106,7 +105,7 @@ int func_80193CB8(int mode,ThresholdTripleEffect *effect) {
             effect->parameter12=parameter>>6;
         }
     } else if(mode==2) {
-        int flags=GetTPage(0,1,0,0);
+        int flags=((int (*)(int,int,int,int))GetTPage)(0,1,0,0);
         int page=(unsigned short)(D_800E2850[D_800E11FA]|flags);
         int kind=D_800F3368.palette,palette;
         int cosine,sine;

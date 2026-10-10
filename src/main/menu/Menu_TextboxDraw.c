@@ -3,6 +3,7 @@
 #include "common.h"
 #include "pe1/textbox_open.h"
 #include "pe1/textbox.h"
+#include "pe1/psyq_gpu.h"
 
 /* Each textbox entry is 0x38 bytes; preserve the retail field addresses. */
 extern u8 D_800BCEA8[];
@@ -23,8 +24,6 @@ void SetDrawTPage(void *, int, int, int);
 void SetSprt(void *);
 int MargePrim(void *, void *);
 void SetShadeTex(void *, int);
-u16 GetTPage(int tp, int abr, int x, int y);
-void SetTile(void *);
 void SetSemiTrans(void *, int);
 void exit(int);
 
@@ -194,7 +193,6 @@ s8 Tbl_LookupEntry(int arg0) {
     return value;
 }
 
-
 void Task_EnableMovement(void) {
     D_8009CED0 = 1;
 }
@@ -280,12 +278,10 @@ void Render_SetupColorTable(int inputIndex, int inputStyle, short *inputValues)
     }
 }
 
-
 int Menu_GetEquipSlotIndex(void) {
     return D_8009CEA4;
 }
 
-void AddPrim(u32 *, void *);
 extern TextboxFontPage D_80091644[4];
 
 extern TextboxNameGlyphs D_80091694;
@@ -306,7 +302,6 @@ extern u8 D_8009CEC8;
 extern u8 D_8009CECC;
 extern s32 D_8009D1F4[];
 extern RenderBufferPrefix D_800B0E38;
-
 
 void Menu_DrawTextboxEntries(void) {
     TextboxPoint cursor;
@@ -381,7 +376,7 @@ void Menu_DrawTextboxEntries(void) {
     asm("" : "=r"(initialBufferTable) : "0"(initialBufferTable), "r"(nextPacket));
     if (D_8009CED4 != 0) {
         AddPrim((*(u32 **)((u8 *)initialBufferTable + temp_a0 - 0xC)) + 2,
-                (D_8009CDDC[0] * 0x18) + (u8 *)D_8009ECA8);
+                (unsigned int *)((D_8009CDDC[0] * 0x18) + (u8 *)D_8009ECA8));
     }
     textboxIndex = 0;
     sectionMask = 0xFFF0FFFF;
@@ -442,7 +437,7 @@ void Menu_DrawTextboxEntries(void) {
                 if ((textbox->background != 0) && (backgroundDrawn == 0) && (D_8009CED4 == 0)) {
                     backgroundDrawn = 1;
                     AddPrim(((u32 *)D_800B0E38.ordering[D_8009CDDC[0]]) + 2,
-                            (D_8009CDDC[0] * 0x18) + (u8 *)D_8009ECA8);
+                            (unsigned int *)((D_8009CDDC[0] * 0x18) + (u8 *)D_8009ECA8));
                 }
             }
             numberStart = textbox->numbers;
@@ -559,7 +554,7 @@ void Menu_DrawTextboxEntries(void) {
                         currentPacket->sprite.color.bytes.b = (u8)D_8009CEB0;
                         currentPacket->sprite.clut = (u16)D_80091644[2].clut;
                         stream++;
-                        AddPrim(linkOrdering, linkPacket);
+                        AddPrim(linkOrdering, (unsigned int *)linkPacket);
                         currentPacket++;
                         var_v0_3 = cursor.x + glyphAdvance;
                         cursor.x = var_v0_3;
@@ -731,7 +726,7 @@ void Menu_DrawTextboxEntries(void) {
                         currentPacket->sprite.color.bytes.b = (u8)D_8009CEB0;
                         currentPacket->sprite.clut = (u16)font->clut;
                         stream++;
-                        AddPrim(linkOrdering, linkPacket);
+                        AddPrim(linkOrdering, (unsigned int *)linkPacket);
                         currentPacket++;
                         var_v0_3 = cursor.x + glyphAdvance;
                         cursor.x = var_v0_3;
@@ -763,7 +758,7 @@ void Menu_DrawTextboxEntries(void) {
                     currentPacket->sprite.color.bytes.b = (u8)D_8009CEB0;
                     currentPacket->sprite.clut = (u16)D_80091644[1].clut;
                     stream++;
-                    AddPrim(linkOrdering, linkPacket);
+                    AddPrim(linkOrdering, (unsigned int *)linkPacket);
                     currentPacket++;
                     var_v0_3 = cursor.x + glyphAdvance;
                     cursor.x = var_v0_3;
@@ -791,7 +786,7 @@ void Menu_DrawTextboxEntries(void) {
                     currentPacket->sprite.color.bytes.b = (u8)D_8009CEB0;
                     currentPacket->sprite.clut = (u16)D_80091644[1].clut;
                     stream++;
-                    AddPrim(linkOrdering, linkPacket);
+                    AddPrim(linkOrdering, (unsigned int *)linkPacket);
                     currentPacket++;
                     var_v0_3 = cursor.x + glyphAdvance;
                     cursor.x = var_v0_3;
@@ -828,7 +823,7 @@ void Menu_DrawTextboxEntries(void) {
                     currentPacket->sprite.color.bytes.b = (u8)D_8009CEB0;
                     currentPacket->sprite.clut = (u16)font->clut;
 
-                    AddPrim(orderingTable, currentPacket++);
+                    AddPrim(orderingTable, (unsigned int *)(currentPacket++));
                     temp_v1_11 = D_800916A0[*stream].right;
                     stream += 1;
                     var_v0_3 = cursor.x + temp_v1_11;

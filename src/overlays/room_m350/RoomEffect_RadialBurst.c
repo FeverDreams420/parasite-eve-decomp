@@ -5,12 +5,12 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/psyq_gpu.h"
 typedef RoomM350OverlayTransform Transform;
 typedef struct RoomM350Instance { char reserved[0x238]; Transform *transform; } Instance;
 typedef RoomM350Actor Actor;
 
 extern int D_800966EC[], D_8019A634[];
-extern int GetClut(int, int);
 
 int func_80197A04(int event, short *object)
 {

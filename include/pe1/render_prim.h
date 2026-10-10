@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/render_packets.h"
 #include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
 
 /* A render primitive list and its 0x10-byte color records (Render_SetPrimColour).
  * The stride 0x10 is load-bearing (code indexes entries with i<<4). */
@@ -148,7 +149,6 @@ PE1_STATIC_ASSERT(sizeof(RenderBufferPrefix) == 0x28,
 extern RenderBufferPrefix D_800B0E38;
 extern int D_8009CDD8, D_8009CDDC;
 void SetLineF2(RenderLinePacket *packet);
-u16 GetTPage(int tp, int abr, int x, int y);
 void SetDrawTPage(void *packet, int drawTexture, int dither, int tpage);
 void func_800CF6F8(void *ordering, void *packet, int mode);
 struct RenderColor;

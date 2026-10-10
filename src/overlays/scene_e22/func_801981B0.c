@@ -4,6 +4,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/psyq_gpu.h"
 
 typedef struct SceneE22Effect {
     u16 x, y, z;
@@ -13,8 +14,6 @@ typedef struct SceneE22Effect {
 } SceneE22Effect;
 
 extern GteShortVector D_8018F1F4;
-extern int rcos(int);
-extern u16 GetClut(int, int);
 
 int func_801981B0(int mode, SceneE22Effect *effect) {
     GteShortVector position = D_8018F1F4;

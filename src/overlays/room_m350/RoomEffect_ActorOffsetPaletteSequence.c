@@ -5,9 +5,9 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
 #include "room_m350_shared.h"
+#include "pe1/psyq_gpu.h"
 
 extern int D_800966EC[], D_8019A56C[];
-extern int GetClut(int, int);
 
 int func_80195B64(int event, GteShortVector *object)
 {
@@ -45,7 +45,7 @@ typedef struct { GteShortVector rotation; short count,brightness,fade,size; } St
 
 extern unsigned short D_800E11E8;
 extern char D_8019A570[];
-extern int Asset_Find08w(int,void *,int,int,int),Inv_ScrambleGrid(void),GetClut(int,int);
+extern int Asset_Find08w(int,void *,int,int,int), Inv_ScrambleGrid(void);
 
 int func_80195CE0(int event,State *inputState)
 {

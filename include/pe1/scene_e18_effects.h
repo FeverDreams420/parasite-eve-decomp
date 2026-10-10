@@ -85,8 +85,6 @@ extern u8 D_801941D0;
 extern int func_8006DCE4(int id, int channel, int x, int y, int z);
 extern int func_80052B2C(void);
 extern int func_80071A54(void);
-extern int rcos(int angle);
-extern int rsin(int angle);
 extern int func_80193488(int mode, SceneE18RisingParticle *particle);
 extern int func_80193A58(int mode, SceneE18WaveParticle *particle);
 
@@ -117,8 +115,6 @@ extern int func_801928CC(int mode, SceneE18FlankParticle *particle);
  * to the model releases the actor, and the model draw helpers. */
 extern SceneE18Instance *RoomMain_ActorPtr;
 extern int func_8005186C(int value);
-extern int rsin(int angle);
-extern int rcos(int angle);
 extern void func_80071A44(void *data, int value, int size);
 
 /* Pulse ring particle (func_80193018): shrinking light rings around the

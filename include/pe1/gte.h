@@ -1,8 +1,6 @@
 #ifndef PE1_GTE_H
 #define PE1_GTE_H
-
-int rcos(int angle);
-int rsin(int angle);
+#include "pe1/gte_types.h"
 
 /*
  * PSY-Q-style GTE operations.  Keep these macros limited to COP2 state and
@@ -597,7 +595,6 @@ int rsin(int angle);
 #define gte_dpcl() \
     asm volatile("nop\n\t" \
                  ".word 0x4A680029")
-
 
 #define gte_intpl() \
     asm volatile("nop\n\t" \

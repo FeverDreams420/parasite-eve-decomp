@@ -1,14 +1,14 @@
 #include "pe1/room_twin_ribbon.h"
 #include "pe1/gte.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
 
 typedef RoomTwinRibbonPulse RoomM318Pulse;
 
 extern u16 D_800E11EA;
 
 int func_80071A54(void);
-int rcos(int);
-u16 GetClut(int, int);
 
 int func_80196C48(int mode, RoomM318Pulse *pulse) {
     int angle, sine, cosine, size, clut, random;

@@ -13,6 +13,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/scene_archive.h"
+#include "pe1/psyq_gpu.h"
 
 /* Shake burst controller (room_m318): shakes the camera while it scatters
  * debris particles around its anchor, then flags the actor for the
@@ -101,8 +102,6 @@ extern int func_8019326C(int mode, RoomShakeSweepParticle *particle);
 extern GteShortVector D_80199904;
 
 /* Sweep particle draw: model asset, matrix helpers and clut lookups. */
-extern u16 GetClut(int x, int y);
-extern int rsin(int angle);
 extern int func_80077A64(int, int, int, int);
 #include "pe1/gte_types.h"
 extern void func_800C6EC0(int tpage, int clut);
@@ -112,7 +111,6 @@ extern void func_800C6EC0(int tpage, int clut);
 extern int func_80195904(int mode, RoomOrbitTrailParticle *p);
 extern RenderColor D_8018F210;
 extern u8 D_80199770[];
-extern int rcos(int angle);
 
 /* Rising column controller (func_801955E4): the anchor rises from the
  * floor over the configured duration while sparks fall off it. */

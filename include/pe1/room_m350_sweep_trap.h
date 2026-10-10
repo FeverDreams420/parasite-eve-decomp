@@ -7,6 +7,7 @@
 #include "pe1/room_floor.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/psyq_gpu.h"
 
 /* room_m350 sweeping beam trap (func_80192E4C): a column of sprites swept
  * down from the actor's head, a flare and two fan blades towards the
@@ -62,9 +63,6 @@ extern RenderColor D_8019A440;
 extern GteShortVector D_8019A444[];
 extern u8 D_8019A79C;
 extern u16 D_800E11EA;
-u16 GetClut(int x, int y);
 int Math_IntSqrt(int value);
-int rsin(int angle);
-int rcos(int angle);
 
 #endif

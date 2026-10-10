@@ -11,7 +11,6 @@
  * a brightness, a fixed four-corner shape transformed by a placed matrix
  * and drawn as a POLY_G4 (semi-transparent when D_800F337A is set). */
 
-
 typedef struct FieldShadedQuadColors {
     /* 0x00 */ u8 rgb[4][4];
     /* 0x10 */ s16 depth;
@@ -50,8 +49,6 @@ typedef union FieldShadedQuadLink {
 #define SHADED_QUAD_OT(depth) \
     ((RenderGpuTag *)(D_800B0E38.ordering[D_8009CDDC] + (depth)))
 
-
 void func_800C608C(int scale, u8 *src, u8 *dst);
-void RotTrans(const GteShortVector *v, GteVector *out, s32 *flag);
 
 #endif

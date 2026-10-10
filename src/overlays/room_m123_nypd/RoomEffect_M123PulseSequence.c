@@ -12,7 +12,6 @@
 #include "pe1/field_anim_pool.h"
 
 extern GteShortVector D_8018F1F0;
-extern int rsin(int);
 
 int func_80194A70(int mode, RoomPulseParticle *particle, int *reference)
 {

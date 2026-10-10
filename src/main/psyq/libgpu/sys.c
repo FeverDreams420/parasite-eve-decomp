@@ -28,7 +28,6 @@ extern char D_800117E0[], D_80011800[];
 extern unsigned short D_800957CC[][2], D_800957D8[][2];
 extern GpuCallbacks *D_80095744;
 extern GpuDebugPrintf D_80095748;
-void GPU_memset(void *, int, int);
 void GPU_cw(unsigned int);
 int Gpu_InitDmaQueue(int);
 
@@ -50,7 +49,7 @@ int ResetGraph(int mode) {
     case 5:
         state = (GpuSystemState *)&D_8009574C;
         gpuType = &state->status.type;
-        GPU_memset(state, 0, sizeof(*state));
+        GPU_memset((unsigned char *)state, 0, sizeof(*state));
         ResetCallback();
         GPU_cw((unsigned int)D_80095744 & 0xFFFFFF);
         *gpuType = Gpu_InitDmaQueue(mode);
@@ -59,7 +58,7 @@ int ResetGraph(int mode) {
         state->status.width = D_800957CC[*gpuType][0];
         state->status.height = D_800957D8[*gpuType][0];
         GPU_memset(drawCache, -1, sizeof(state->drawCache));
-        GPU_memset(&state->displayCache, -1, sizeof(state->displayCache));
+        GPU_memset((unsigned char *)&state->displayCache, -1, sizeof(state->displayCache));
         return *gpuType;
     default:
         if (D_8009574E >= 2) D_80095748(D_80011800, mode);
@@ -142,8 +141,6 @@ extern char D_80011870[];
 extern GpuCallbacks *g_GpuCallbacks[];
 extern GpuDebugPrintf g_GpuDebugPrintf[];
 extern u8 g_GraphDebug[];
-
-void GPU_memset(void *destination, int value, int size);
 
 void SetDispMask(int mask) {
     u8 *debug = g_GraphDebug;

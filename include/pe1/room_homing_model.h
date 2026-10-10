@@ -123,8 +123,6 @@ typedef struct RoomHomingModelTextureSlot {
 extern RoomHomingModelTextureSlot D_800E11E8;
 
 extern int func_8006DCE4(int id, int channel, int x, int y, int z);
-extern int rcos(int angle);
-extern int rsin(int angle);
 extern void func_800866A4(int handle, int arg);
 extern int func_8006F39C(int id, void *actor);
 extern void func_8006F6D4(int handle, int, int index, int value, int, int);

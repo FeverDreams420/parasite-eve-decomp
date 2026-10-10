@@ -6,6 +6,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/field_anim_particle.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/psyq_libc.h"
 
 extern int D_800E0A50;
 
@@ -205,8 +206,6 @@ int func_800C91A8(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
 void func_800C9260(void) {
 }
 
-void *memset(void *dest, int value, unsigned int count);
-
 extern s16 D_800E09F0[];
 
 int func_800C9268(void *arg0, void *arg1, u8 *anim) {
@@ -249,7 +248,6 @@ int func_800C9268(void *arg0, void *arg1, u8 *anim) {
 #define FIELD_GLOW_LAYERS_SCALE D_800C2194
 #define FIELD_GLOW_LAYERS_SPRITE D_800F34A8
 #include "FieldEng_GlowLayers.inc"
-
 
 int func_800C9868(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
     u16 *field_s3 = &D_800E2332;

@@ -6,13 +6,14 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_vector_math.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/psyq_gpu.h"
 /* Moving effect with collision, queued trail positions and ground rendering. */
 extern RoomM350EffectInstance *g_PlayerEntity;
 extern int D_800966EC[];
 extern short D_800966EE[],D_8019A7FE,D_8019A800,D_8019A802;
 extern GteRotation D_8019A3C0;
 extern RenderColor D_8019A4E4,D_8019A3C8;
-extern int Math_IntSqrt(int),GetClut(int,int);
+extern int Math_IntSqrt(int);
 int func_801947BC(int event,RoomM350Particle *p)
 {
     GteMatrix matrix;

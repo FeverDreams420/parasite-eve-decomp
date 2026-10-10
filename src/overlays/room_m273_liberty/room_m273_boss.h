@@ -14,6 +14,8 @@
 #include "pe1/field_vector_math.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/psyq_libc.h"
+#include "pe1/psyq_gpu.h"
 
 /* Boss instance fields read by room_m273's animation controllers. */
 typedef struct RoomM273BossOwner {
@@ -187,9 +189,7 @@ extern RoomM273SweepStep D_8019AD80[];
 
 /* Ground ring (func_80198E94): model draw helpers and the ring colours. */
 extern RenderColor D_8019AE1C[2];
-u16 GetTPage(int tp, int abr, int x, int y);
 void GsSetOrign(int tpage, int clut);
-void *memset(void *dst, int value, unsigned int size);
 int func_8005186C(int value);
 extern GteRotation D_8019AB68;
 extern RenderColor D_8019AD54;
@@ -227,7 +227,6 @@ int func_801981A4(int mode, RoomM273SwayShard *shard);
 int func_80198060(int mode, GteShortVector *position);
 
 int Math_IntSqrt(int value);
-u16 GetClut(int x, int y);
 
 /* Falling trail (func_80194E6C): 100-byte pool record that spins down to
  * the floor and keeps an eight-entry ring of two-point trail samples. */

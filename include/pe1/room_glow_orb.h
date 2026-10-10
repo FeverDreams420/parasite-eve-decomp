@@ -9,6 +9,7 @@
 #include "pe1/field_sprite_state.h"
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_script_context.h"
+#include "pe1/psyq_libc.h"
 
 /* The glow orb (src/overlays/room_lib/RoomEffect_GlowOrb.c, rooms m034,
  * m174 and m383): a camera-facing glow placed by the owner's matrix,
@@ -82,7 +83,6 @@ extern RoomFxSpritePacket g_RoomGlowOrbFlashSprite;
 
 int RoomEffect_GlowOrbSetup(void);
 
-void *memset(void *dst, int value, unsigned int size);
 int func_800C61A8(GteShortVector *point, GteMatrix *matrix);
 int FieldEng_GetStatus(void *object);
 void **FieldEng_GetSlot(void);

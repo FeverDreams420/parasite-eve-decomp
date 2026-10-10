@@ -30,8 +30,6 @@ typedef struct RoomDampedSpark {
 
 PE1_STATIC_ASSERT(sizeof(RoomDampedSpark) == 0x14, room_damped_spark_size);
 
-extern int rsin(int angle);
-extern int rcos(int angle);
 extern u16 func_80077AA4(int, int);
 
 /* Particle pools reached through the two effect channels. */

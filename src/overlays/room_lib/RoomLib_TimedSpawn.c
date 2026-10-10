@@ -16,11 +16,10 @@
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/scene_archive.h"
+#include "pe1/gte_types.h"
 
 /* The colour ramp table each room defines in its data. */
 extern char RoomLib_TimedRenderTable;
-
-extern int rsin(int angle);
 
 int RoomLib_UpdateTimedRender(int mode, RoomFxTimedRenderState *state) {
     RoomFxSeed8 work;

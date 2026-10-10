@@ -7,6 +7,7 @@
 #include "pe1/field_sprite_state.h"
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_script_context.h"
+#include "pe1/psyq_libc.h"
 
 /* Work area of the paired beam effect (rooms m174, m348, m383): the
  * anchor matrix copied from the script actor, a scale and a brightness. */
@@ -82,6 +83,5 @@ typedef struct RoomDropActor {
 } RoomDropActor;
 
 int func_800C6B90(void *position, int radius);
-void *memset(void *dst, int value, unsigned int size);
 
 #endif

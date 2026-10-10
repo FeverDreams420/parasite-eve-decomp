@@ -5,12 +5,12 @@
 #include "pe1/gte_types.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/psyq_gpu.h"
 
 extern s16 D_801956A4, D_801956A0;
 extern u16 D_801956B0, D_801956B2, D_801956B4;
 extern u8 D_801956A8[];
 extern void func_800CF844(void *, void *, int, void *, int, int);
-extern u16 GetClut(int, int);
 
 int func_801945EC(int mode, RoomM123Particle *particle) {
     GteShortVector position;
@@ -52,7 +52,6 @@ extern u16 D_800E11EA;
 extern int func_801945EC(int, RoomM123Particle *);
 extern void func_800CE8F0(void *, int, GteShortVector *, GteShortVector *);
 extern int func_80071A54(void);
-extern int rsin(int);
 
 int func_80194768(int mode)
 {

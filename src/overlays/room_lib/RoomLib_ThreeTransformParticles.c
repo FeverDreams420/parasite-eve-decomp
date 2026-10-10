@@ -18,6 +18,7 @@
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_sprite_state.h"
 #include "pe1/floor_polygon.h"
+#include "pe1/gte_types.h"
 
 extern void func_800C2B40(void *arg0);
 extern void *func_8006DC18(int type);
@@ -250,7 +251,6 @@ typedef struct RoomDrawThreeStack {
 void func_800C3098(int depth);
 void func_80071A44(RoomFxVec4 *vec, int value, int shift);
 void func_800C2FF0(int width, int height);
-int rsin(int angle);
 
 void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
     RoomDrawThreeStack stack;
@@ -387,7 +387,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomDebrisTriplet, velocity) == 0x9C,
                   room_debris_triplet_velocity_offset);
 
 extern int func_80071A54(void);
-extern int rsin(int);
 extern int func_8001CAB0(int, int, void *, int);
 extern int func_800C6B90(void *position, int radius);
 

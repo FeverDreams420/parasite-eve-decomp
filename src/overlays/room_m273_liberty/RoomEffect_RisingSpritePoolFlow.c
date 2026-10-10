@@ -6,9 +6,9 @@
 #include "pe1/room_floor.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/psyq_gpu.h"
 typedef GteShortVector Vector;
 extern int D_800966EC[];
-extern unsigned short GetClut(int, int);
 
 int func_80197230(int mode, Vector *position) {
     if (mode == 1) {
@@ -48,7 +48,6 @@ extern short D_8019AE84;
 extern unsigned char D_8019AD70[],D_8019AF6A,D_8019AF69;
 extern unsigned short D_800E11E8;
 extern volatile unsigned short D_8019AEFE,D_8019AF00;
-extern unsigned short GetClut(int, int);
 
 int func_801974DC(int mode, Particle *input) {
     Particle *particle = input;
@@ -135,7 +134,6 @@ extern int D_800966EC[];
 extern unsigned char D_8019AB70[],D_8019AD74[],D_8019AD78[],D_8019AF68,D_8019AF69;
 extern unsigned short D_800E11EA;
 extern volatile unsigned short D_8019AEFE,D_8019AF00;
-extern unsigned short GetClut(int,int);
 
 int func_801977F8(int mode,Vector *input) {
     Vector rotation,position;

@@ -15,8 +15,6 @@ extern FieldActor *g_FieldActorListHead;
 extern FieldActor *g_PlayerEntity;
 #include "pe1/game_timers.h"
 
-int rsin(int arg0);
-int rcos(int arg0);
 int Math_IntSqrt(int value);
 void Task_SignalExit(void);
 void Menu_SetTextCursorRect(int arg0, int arg1, int arg2, int arg3);

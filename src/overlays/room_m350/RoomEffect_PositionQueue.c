@@ -4,6 +4,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/psyq_gpu.h"
 typedef RoomM350Vector Vector;
 typedef struct { Vector position; short delay,reserved; } Particle;
 typedef struct RoomM350Instance { char reserved[0x3A]; unsigned short yaw; } Instance;
@@ -13,7 +14,6 @@ typedef struct { Vector positions[8]; char reserved40[8]; short count; } Queue;
 typedef RoomM350SignedHalfPair SignedHalf;
 extern int D_8019A3D0[];
 extern short D_800966EE[];
-extern int GetClut(int, int);
 extern short D_8019A800, D_8019A802;
 extern unsigned char D_8019A804;
 extern unsigned short D_800E11EA;

@@ -14,7 +14,7 @@ extern void (*D_8009B728)(CardObj *);
 /* Per-port idle counters that PadEnableCom and the VSync timer age. */
 extern int D_800A5AC0[2];
 extern int (*D_8009B7A8[])(void);
-extern void (*D_8009B724)(int);
+extern int (*D_8009B724)(int);
 extern u32 D_800BD02C, D_800A76D0;
 void setRC2wait(int);
 int MemCard_WaitReadyForTransfer(void);

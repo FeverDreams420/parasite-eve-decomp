@@ -26,8 +26,6 @@ typedef struct RoomM005_Dialog {
 
 extern RoomM005_Dialog g_RoomScriptRecord;
 extern char RoomM005_Rec2[];
-extern int rsin();
-extern int rcos();
 extern int func_80077AA4();
 #include "pe1/gte_types.h"
 

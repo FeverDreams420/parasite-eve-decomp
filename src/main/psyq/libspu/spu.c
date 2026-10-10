@@ -136,8 +136,6 @@ void _spu_FwriteByIO(void *address, u32 size) {
     }
 }
 
-int DeliverEvent(u32 event, u32 spec);
-
 void _spu_FiDMA(void)
 {
     u32 count;

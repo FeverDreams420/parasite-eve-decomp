@@ -4,6 +4,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/gte_types.h"
 
 typedef struct SceneE18WaveEffect {
     s16 x, y, z, field06;
@@ -11,7 +12,6 @@ typedef struct SceneE18WaveEffect {
     s16 size, wave, amplitude;
 } SceneE18WaveEffect;
 extern u32 D_80194180[], D_80194184[];
-int rsin(int);
 int func_80077AA4(int,int);
 
 int func_80193A58(int mode, SceneE18WaveEffect *effect) {

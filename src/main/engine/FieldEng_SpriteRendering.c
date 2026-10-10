@@ -12,6 +12,7 @@
 #include "pe1/field_textured_strip.h"
 #include "pe1/field_shaded_ring.h"
 #include "pe1/field_particle_chain.h"
+#include "pe1/gte_types.h"
 
 /* Field engine sprite rendering (0x800C2EAC..0x800C5EB0): the draw state
  * (texture page, CLUT origin, blend mode, cell quad, colour ramps) and the
@@ -669,9 +670,6 @@ void func_800C499C(FieldShadedQuadColors *colors, GteMatrix *placement,
         D_8009CDD8 += sizeof(FieldShadedQuadPacket);
     }
 }
-
-int rsin(int angle);
-int rcos(int angle);
 
 /* Draw an annulus from paired inner/outer vertices.
  * Matching debt: seven register pins and eleven empty barriers. Matrix CPU

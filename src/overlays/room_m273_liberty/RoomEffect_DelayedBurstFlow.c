@@ -2,8 +2,7 @@
 #include "room_m273.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_texture_tables.h"
-
-extern unsigned short GetClut(int, int);
+#include "pe1/psyq_gpu.h"
 
 int func_80199568(int mode, RoomM273RisingParticle *particle) {
     if (mode == 1) {

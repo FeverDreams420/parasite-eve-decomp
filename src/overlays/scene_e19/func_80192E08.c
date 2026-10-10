@@ -3,6 +3,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/psyq_gpu.h"
 
 typedef struct SceneE19Effect {
     u16 x, y, z, pad;
@@ -12,8 +13,6 @@ typedef struct SceneE19Effect {
 
 extern GteShortVector D_8018F1CC;
 extern int D_8019B668;
-extern int rsin(int), rcos(int);
-extern u16 GetClut(int, int);
 
 int func_80192E08(int mode, SceneE19Effect *effect) {
     GteShortVector position = D_8018F1CC;

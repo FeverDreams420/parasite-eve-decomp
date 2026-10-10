@@ -27,6 +27,5 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomBounceGlint, phase) == 0x12,
 
 extern u16 D_800E11EA;
 int func_80077AA4(int, int);
-int rcos(int angle);
 
 #endif

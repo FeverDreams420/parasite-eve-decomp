@@ -46,7 +46,6 @@ void _SpuInit(int mode) {
     D_8009B3E8 = 0;
 }
 
-extern s32 OpenEvent(u32 event, s32 spec, s32 mode, s32 (*callback)(void));
 extern s32 EnableEvent(s32 event);
 
 void SpuStart(void) {

@@ -34,8 +34,6 @@ extern RoomM256TrailPalettes D_800E11E8;
 int func_80071A54(void);
 int func_80077A64(int,int,int,int);
 int func_80077AA4(int,int);
-int rsin(int);
-int rcos(int);
 #include "pe1/gte_types.h"
 #include "pe1/player_entity.h"
 int func_800C6B90(void *,int);

@@ -48,4 +48,8 @@ int ChangeClearRCnt(int counter, int enabled);
 
 void bzero(void *destination, int length);
 
+int DeliverEvent(unsigned int event, int spec);
+
+int OpenEvent(unsigned int desc, int spec, int mode, int (*func)(void));
+
 #endif

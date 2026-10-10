@@ -3,6 +3,7 @@
 #include "pe1/render_object.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/psyq_gpu.h"
 
 typedef struct { short x,y,z,frame; } Particle;
 typedef RoomM350TransformOwner Instance;
@@ -14,7 +15,6 @@ extern Instance *g_PlayerEntity;
 extern RenderColor D_8019A464;
 extern unsigned char D_8019A79A,D_8019A79C;
 extern short D_800966EE[];
-extern int GetClut(int, int);
 
 int func_801937B4(int event, short *position) {
     if (event == 1) {

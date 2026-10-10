@@ -2,10 +2,10 @@
 /* PSY-Q LIBMATH FERR: _err_math. */
 #include "common.h"
 #include "pe1/math64.h"
+#include "pe1/psyq_bios.h"
 
 extern s32 D_80094564;
 extern s32 D_80094568;
-void DeliverEvent(unsigned int arg0, int arg1);
 
 int _err_math(int arg0, int arg1) {
     D_80094564 = arg0;

@@ -17,8 +17,6 @@ extern short D_800966EC[];
 extern short D_8019A870,D_8019A872,D_8019A874,D_8019A876,D_8019A878,D_8019A87A,D_8019A87C,D_8019A87E,D_8019A880;
 extern int D_8019A884,D_8019A888,D_8019A88C;
 extern int Asset_Find08w(int,int,int,int,int);
-extern int rcos(int);
-extern int rsin(int);
 int func_80198CF8(int event,State *state)
 {
     Instance *instance=(Instance *)ANIM_OWNER_AS(Actor)->instance;

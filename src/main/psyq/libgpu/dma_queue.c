@@ -9,13 +9,13 @@
  */
 #include "pe1/gpu_state.h"
 #include "pe1/gpu_dma_state.h"
+#include "pe1/psyq_gpu.h"
 
 extern volatile u32 D_80095874, D_80095878;
 extern u32 D_8009587C;
 extern u32 *D_80095860, *D_80095854;
 void Gpu_ResetDmaWaitTimer(void);
 int Gpu_DmaTimeoutCheck(void);
-int Gpu_SetDisplayBuffer(void);
 int SetIntrMask(int);
 
 /* LIBGPU command submission: execute immediately when possible, otherwise
@@ -179,7 +179,6 @@ extern u32 *D_80095860, *D_80095854;
 extern unsigned char D_800A3348[];
 
 int SetIntrMask(int mask);
-void GPU_memset(unsigned char *dst, int value, int count);
 int Gpu_QueryStatus(int arg0);
 
 int Gpu_InitDmaQueue(int mode) {
@@ -221,7 +220,6 @@ int Gpu_InitDmaQueue(int mode) {
 }
 
 void Gpu_ResetDmaWaitTimer(void);
-int Gpu_SetDisplayBuffer(void);
 int Gpu_DmaTimeoutCheck(void);
 
 static __inline__ unsigned int readGpuStatus(void) {

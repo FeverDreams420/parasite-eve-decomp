@@ -6,7 +6,6 @@
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_ds.h"
 
-void LIBDS_DSSYS_1_text_EA4(int event, u8 *data);
 
 void LIBDS_DSSYS_1_text_E10(int event, u8 *data) {
     int event_reg;

@@ -3,6 +3,7 @@
 
 #include "pe1/render_object.h"
 #include "pe1/room_floor.h"
+#include "pe1/psyq_gpu.h"
 
 /* Falling drop moved by room_m350's splash callback. */
 typedef struct RoomM350Drop {
@@ -34,7 +35,6 @@ extern RoomM350TrailQueue g_RoomEffectTrailPositions;
 extern GteRotation D_8019A3C0;
 extern RenderColor D_8019A61C[3];
 
-u16 GetClut(int x, int y);
 int func_8019721C(short *point, int radius);
 
 #endif

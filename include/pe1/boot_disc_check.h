@@ -7,6 +7,7 @@
 #include "pe1/render_packets.h"
 #include "pe1/cdrom.h"
 #include "pe1/textbox.h"
+#include "pe1/psyq_ds_queue.h"
 
 /*
  * Render_InitDisplayLists: boot notice screen. Streams the notice TIM and
@@ -32,8 +33,6 @@ void DrawOTag(u32 *table);
 void Boot_BuildRenderFlagTable(void);
 void Render_SetupFogLayer(void *source);
 void ResetGraph(int mode);
-int DsCommand(int command, void *parameter, void *callback,
-                             int count);
 int DsSync(int id, void *result);
 int DsStatus(void);
 int OpenPeImage(void);

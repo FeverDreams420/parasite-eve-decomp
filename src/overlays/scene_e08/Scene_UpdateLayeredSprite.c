@@ -1,11 +1,11 @@
 #include "scene_e08.h"
 #include "pe1/room_floor.h"
 #include "pe1/floor_polygon.h"
+#include "pe1/gte_types.h"
 
 
 int func_8001CAB0(int, int, int, int);
 int func_80071A54(void);
-int rsin(int);
 int func_800C6B90(s16 *, int);
 
 void func_801946D4(void *unused, char *control, char *state)

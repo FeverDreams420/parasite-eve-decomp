@@ -103,7 +103,7 @@ CdReadCompleteCallback DsReadCallback(CdReadCompleteCallback callback) {
 }
 
 void DsFlush(void);
-int DS_cw_system(int mode, int unused);
+int DS_cw_system(int mode, void *parameter);
 
 void DsReadBreak(void) {
     int *readInProgress;

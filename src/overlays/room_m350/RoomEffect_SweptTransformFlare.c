@@ -5,11 +5,11 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/psyq_gpu.h"
 
 extern GteMatrix D_8019A870;
 extern short D_8019A890[];
 extern int D_800966EC[], D_8019A690[];
-extern int GetClut(int, int);
 
 int func_801981D0(int event, RoomM350FlareParticle *particle)
 {

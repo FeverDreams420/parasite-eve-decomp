@@ -1,7 +1,6 @@
 #include "pe1/psyq_callbacks.h"
-
-void Gpu_SetDisplayBuffer(void);
+#include "pe1/psyq_gpu.h"
 
 void Gpu_RestoreDmaCallback(void) {
-    DMACallback(2, Gpu_SetDisplayBuffer);
+    DMACallback(2, (PsyqInterruptHandler)Gpu_SetDisplayBuffer);
 }

@@ -6,6 +6,7 @@
  * script dispatcher; the screen-position opcode touches no data, so -G8
  * leaves it unchanged. */
 #include "pe1/scene_transition.h"
+#include "pe1/psyq_cd.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/menu_item_record.h"
 #include "common.h"
@@ -248,7 +249,6 @@ void Akao_Cmd_D9(int command, int arg1);
 void Akao_Cmd_DA(int command, int arg1, int arg2);
 void Akao_Cmd_F1(void);
 void Akao_ResetPositionalState(void);
-void DsMix(s8 *volumes);
 int Akao_Cmd_10(u8 *data, int status);
 int Akao_Cmd_19_Then_C0(u8 *data, int value);
 int Akao_SendTableCommand(u8 *base, int command, int arg1, int arg2,
@@ -571,7 +571,7 @@ store_audio_slot:
         D_800B0CE8.cd_volume = volume;
         locals.volumes[2] = volume;
         locals.volumes[0] = volume;
-        DsMix(locals.volumes);
+        DsMix((CdlATV *)locals.volumes);
         break;
 archive_match:
         D_800B0CE8.selected_id = current->id;

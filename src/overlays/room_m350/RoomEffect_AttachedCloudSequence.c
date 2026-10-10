@@ -1,6 +1,7 @@
 #include "pe1/room_m350_effects.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/psyq_gpu.h"
 
 typedef struct { signed int low:16; signed int high:16; } TrigEntry;
 #include "pe1/render_object.h"
@@ -8,7 +9,6 @@ typedef struct { signed int low:16; signed int high:16; } TrigEntry;
 
 extern short D_800966EC[],D_800966EE[];
 extern RenderColor D_8019A3D0;
-extern unsigned short GetClut(int,int);
 int func_80198860(int event,RoomM350CloudParticle *particle)
 {
     if(event==1) {

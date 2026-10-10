@@ -3,12 +3,12 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/psyq_gpu.h"
 /* The batch emitter fills the eight-byte records rendered by this callback. */
 extern unsigned short D_800E11EA;
 extern short D_8019AD68[];
 extern int D_800966EC[];
 extern RoomM273RisingBatchBuffer D_8019AF0C;
-extern unsigned short GetClut(int, int);
 
 int func_80196F2C(int mode, GteShortVector *position) {
     if (mode == 1) {

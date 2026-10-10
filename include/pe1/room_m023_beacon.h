@@ -15,6 +15,7 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/scene_archive.h"
+#include "pe1/psyq_gpu.h"
 
 /* room_m023 joint beacon (func_8018FC14): follows a model joint, swells
  * and pulses through four phases, tags the player on contact and draws a
@@ -84,8 +85,6 @@ u8 *func_8006E498(void *channel, int id);
 void func_800C70EC(u8 *data, int r, int g, int b);
 void func_800CE8F0(void *pool, int index, void *offset, void *position);
 int func_800CEB8C(void *position, GteShortVector *target, int radius);
-u16 GetClut(int x, int y);
 GteMatrix *MulMatrix0(GteMatrix *first, GteMatrix *second, GteMatrix *out);
-int rcos(int angle);
 
 #endif

@@ -4,6 +4,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/psyq_gpu.h"
 typedef RoomM350Vector Vector;
 typedef struct { Vector rotation; Vector *position; int color; } Particle;
 typedef struct { short delay, count; } State;
@@ -14,7 +15,6 @@ extern short D_800966EE[];
 extern int D_800966EC[];
 extern Vector D_8019A778[];
 extern unsigned short D_800E11EA;
-extern int GetClut(int, int);
 extern int Inv_ScrambleGrid(void);
 
 int func_801927A4(int event, Particle *effect) {

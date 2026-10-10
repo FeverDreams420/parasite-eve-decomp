@@ -11,6 +11,8 @@
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
 
 /* Ember burst controller (room_m318): attaches to the actor named by its
  * parameters, glows up, bursts orbiting sparks, embers and smoke, then
@@ -38,8 +40,6 @@ extern RenderColor D_8018F204;
 extern u16 D_800E11EA;
 
 extern int func_80071A54(void);
-extern int rsin(int angle);
-extern int rcos(int angle);
 extern int func_801944E8(int mode, RoomOrbitTrailParticle *p);
 
 /* Ember fountain controller (func_80197CBC): follows its actor for 141
@@ -66,7 +66,6 @@ extern u16 D_800E11E8;
 extern GteRotation D_8018F1F4;
 extern RenderColor D_8018F240;
 extern u8 D_80199868[];
-extern u16 GetClut(int x, int y);
 
 /* Twisting ember particle (func_80198268): its glow track and the bent
  * trail renderer it draws the orbiting sparks with. */

@@ -6,6 +6,7 @@
 #include "pe1/gte.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/gte_types.h"
 
 /* Scene e19_2 homing burst controller: anchored on the room actor, it
  * releases twenty homing particles (func_8019549C) on odd frames, then
@@ -56,7 +57,6 @@ typedef struct SceneHomingBurstPageIndex {
 
 extern SceneHomingBurstPageIndex D_800E11EA;
 
-int rsin(int angle);
 u16 func_80077AA4(int x, int y);
 void func_800CE8F0(void *pool, int index, GteRotation *rotation, GteShortVector *position);
 int func_8019549C(int mode, void *particle);

@@ -151,6 +151,4 @@ extern u16 D_800F3414;
 extern u16 D_800F33E4;
 extern s16 D_800F3420;
 
-GteMatrix *CompMatrix(GteMatrix *m0, GteMatrix *m1, GteMatrix *m2);
-
 #endif

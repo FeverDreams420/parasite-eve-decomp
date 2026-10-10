@@ -2,6 +2,7 @@
 #include "pe1/scene_transition.h"
 #include "pe1/textbox.h"
 #include "pe1/menu_widget.h"
+#include "pe1/gte_types.h"
 
 /* CC1_FLAGS: -g3 -G1 */
 /* MASPSX_FLAGS: --expand-div -G1 */
@@ -21,8 +22,6 @@ M2C_UNK Asset_Find08w(u16, M2C_UNK, s16, s16, s32); /* extern */
 M2C_UNK Asset_Find08Alt(M2C_UNK, M2C_UNK, s16, s16, s32); /* extern */
 M2C_UNK Akao_SendTableCommand(s32, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 M2C_UNK Pm_SendCmd(s32, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
-s32 rcos(s16, void *);                              /* extern */
-s32 rsin(s16, void *);                              /* extern */
 M2C_UNK Entity_ResolveDropTable(void *);                      /* static */
 s16 Entity_ApplyHitAndSetAnim(void *);                 /* static */
 void Entity_UpdateTimers(void);
@@ -730,8 +729,8 @@ block_61:
                 D_8009D278->knockbackFrames = 0;
                 D_8009D278->knockbackDistance = 0U;
             } else {
-                D_8009D254->posX.fixed = D_8009D254->baseX + (D_8009D278->knockbackDistance * rsin(D_8009D278->knockbackAngle, D_8009D254) * 0x10);
-                D_8009D254->posZ.fixed = D_8009D254->baseZ + (D_8009D278->knockbackDistance * rcos(D_8009D278->knockbackAngle, D_8009D278) * 0x10);
+                D_8009D254->posX.fixed = D_8009D254->baseX + (D_8009D278->knockbackDistance * rsin(D_8009D278->knockbackAngle) * 0x10);
+                D_8009D254->posZ.fixed = D_8009D254->baseZ + (D_8009D278->knockbackDistance * rcos(D_8009D278->knockbackAngle) * 0x10);
                 temp_v1_12 = D_8009D278->knockbackDistance;
                 D_8009D278->knockbackDistance = (u8) (temp_v1_12 - (temp_v1_12 / D_8009D278->knockbackFrames));
                 D_8009D278->knockbackFrames = (s8) ((u8) D_8009D278->knockbackFrames - 1);

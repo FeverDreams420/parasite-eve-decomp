@@ -5,6 +5,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/render_prim.h"
 #include "pe1/render_object.h"
+#include "pe1/psyq_gpu.h"
 
 /* Field engine rotated quad (func_800D2370): a gouraud textured rectangle
  * spanned in the local XZ plane, turned by a YXZ rotation about a projected
@@ -38,6 +39,5 @@ extern RenderColor D_800C22A0;
 
 void SetPolyGT4(FieldGt4Packet *packet);
 void MulRotMatrix(GteMatrix *matrix);
-void AddPrim(unsigned int *orderingEntry, unsigned int *primitive);
 
 #endif /* PE1_FIELD_ROTATED_QUAD_H */

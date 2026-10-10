@@ -6,6 +6,8 @@
 #include "pe1/field_effect_pool.h"
 #include "pe1/field_tile.h"
 #include "pe1/player_entity.h"
+#include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
 
 /* Field engine flash burst (func_800DE0A8): two screen flashes, a model
  * swelling on the actor's point 19 and a star fan, ring band and shape
@@ -19,9 +21,6 @@ typedef struct FieldFlashBurst {
 extern u8 *D_800F3474;
 extern u8 D_800E20CC[];
 
-int rsin(int angle);
-int rcos(int angle);
-u16 GetClut(int x, int y);
 GteMatrix *ScaleMatrix(GteMatrix *matrix, const GteVector *scale);
 
 #endif /* PE1_FIELD_FLASH_BURST_H */

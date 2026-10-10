@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/scene_assets.h"
 #include "pe1/psyq_bios.h"
+#include "pe1/psyq_libc.h"
 
 /*
  * Room archive loaded by Scene_LoadRoom. The archive starts with a
@@ -109,7 +110,6 @@ extern SceneRoomSectorRange D_80093378[];
 extern u16 D_80094494[];
 extern unsigned int g_PeImageBaseLba;
 
-void *memset(void *dst, int value, unsigned int size);
 int Str_EncodeBase32(char *out, unsigned int value);
 int Str_ParseMapNumber(char *name);
 void *Task_RelocBlock(void *block);

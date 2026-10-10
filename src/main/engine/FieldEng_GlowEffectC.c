@@ -5,6 +5,7 @@
 #include "pe1/field_glow_sprite.h"
 #include "pe1/gte_types.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/psyq_libc.h"
 
 extern int D_800E0B38;
 
@@ -147,8 +148,6 @@ int func_800C9D9C(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
 
 void func_800C9EA0(void) {
 }
-
-void *memset(void *dest, int value, unsigned int count);
 
 extern s16 D_800E0AD8[];
 

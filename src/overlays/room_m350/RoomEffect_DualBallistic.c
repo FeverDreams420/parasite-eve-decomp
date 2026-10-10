@@ -4,6 +4,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/psyq_gpu.h"
 typedef RoomM350TransformMatrix Matrix;
 typedef RoomM350TransformOwner Instance;
 typedef RoomM350Actor Actor;
@@ -13,7 +14,6 @@ extern Instance *g_PlayerEntity;
 extern unsigned char D_8019A82F;
 extern int D_800966EC[], D_8019A598[];
 extern unsigned short D_800E11E8;
-extern int GetClut(int, int);
 extern int Inv_ScrambleGrid(void);
 
 int func_801968D8(int event, short *position) {

@@ -5,6 +5,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/psyq_gpu.h"
 /* MASPSX_FLAGS: --expand-div */
 typedef RoomM350Vector Vector;
 typedef RoomM350TransformMatrix Matrix;
@@ -17,7 +18,6 @@ extern int D_800966EC[];
 extern short D_800966EE[];
 extern int D_8019A3CC[], D_8019A3C8[];
 extern unsigned short D_800E11E8;
-extern unsigned short GetClut(int, int);
 extern int Inv_ScrambleGrid(void);
 
 int func_8019404C(int event, Particle *particle)

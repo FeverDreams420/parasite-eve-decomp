@@ -86,7 +86,6 @@ extern GteVector D_8019CBB0, D_8019CBD0, D_8019CBF0, D_8019CB50;
 extern s32 D_8019CB48, D_8019CB4C, D_8019CBA8, D_8019CA90;
 extern s32 D_8019CC04, D_8019CC0C, D_8019CC10, D_8019CBC4;
 extern s32 D_8019CBC8, D_8019CC00, D_8019CC08, D_8019CBAC;
-void RotTrans(GteShortVector *in, GteVector *out, s32 *flag);
 void OuterProduct0(GteVector *a, GteVector *b, GteVector *out);
 s16 func_80194108(s16 value);
 void func_80192740(void);

@@ -3,6 +3,7 @@
 #include "pe1/card_obj.h"
 #include "common.h"
 #include "../../../../tools/m2c/m2c_macros.h"
+#include "pe1/psyq_pad_main.h"
 
 void CardObj_EmitCommand45(CardObj *arg0);
 void CardObj_EmitCommand4C(CardObj *arg0, unsigned char arg1);
@@ -431,7 +432,6 @@ void CardObj_EmitReadIdCommand(CardObj *arg0) {
         break;
     }
 }
-extern int (*D_8009B728)(void *);
 
 int CardObj_CheckAbortOrDispatch(CardObj *arg0) {
     if (arg0->modeAlreadySelected != 0) {

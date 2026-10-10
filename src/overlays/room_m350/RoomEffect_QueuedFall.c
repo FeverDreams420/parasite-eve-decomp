@@ -3,11 +3,11 @@
 #include "pe1/render_object.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/psyq_gpu.h"
 
 extern short D_800966EE[];
 extern RenderColor D_8019A62C;
 typedef RoomM350SignedHalfPair SignedHalf;
-extern int GetClut(int, int);
 
 int func_80197594(int event, short *position) {
     if (event == 1) {

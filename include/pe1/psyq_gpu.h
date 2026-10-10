@@ -91,4 +91,14 @@ int DrawSync(int mode);
 
 int VSync(int mode);
 
+void GPU_memset(unsigned char *dst, int value, int count);
+
+int Gpu_SetDisplayBuffer(void);
+
+void SetTile(void *tile);
+
+void AddPrim(unsigned int *ot, unsigned int *prim);
+
+u_short GetTPage(int tp, int abr, int x, int y);
+
 #endif

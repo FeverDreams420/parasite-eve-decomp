@@ -3,10 +3,10 @@
 #include "pe1/render_object.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
 
 extern RenderColor D_8019A738, D_8019A734;
-extern int rsin(int);
-extern unsigned short GetClut(int, int);
 
 int func_801996BC(int event, RoomM350SineParticle *object)
 {

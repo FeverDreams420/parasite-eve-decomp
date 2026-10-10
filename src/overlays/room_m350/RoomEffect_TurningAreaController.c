@@ -10,6 +10,9 @@
 #include "pe1/field_vector_math.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/scene_archive.h"
+#include "pe1/psyq_libc.h"
+#include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
 
 /* Steers a rotating footprint, tests contact, and draws three model/sprite layers. */
 typedef RoomM350Vector Vector;
@@ -27,10 +30,7 @@ extern short D_8019A80A,D_8019A80C,D_8019A80E,D_8019A810,D_8019A812,D_8019A814,D
 extern int D_8019A81C,D_8019A820,D_8019A824;
 extern Vector D_8019A574[];
 extern char D_8019A594[],D_8019A3C8[];
-extern int rcos(int), rsin(int);
-extern int GetTPage(int,int,int,int),GetClut(int,int);
 extern void GsSetOrign(int,int);
-extern void memset(void *,int,int);
 int func_801960C4(int event,State *state)
 {
     union { struct { Vector vertices[4]; int area; } collision; Matrix matrix; } local;
@@ -169,7 +169,7 @@ case 2:
         transforms=(Matrix *)instance->render_object.matrices;
         out=base.position; in=transforms[33].position;
         for(;i<3;i++) *out++=*in++;
-        rawPage=GetTPage(0,1,0,0);
+        rawPage=((int (*)(int,int,int,int))GetTPage)(0,1,0,0);
         page=(unsigned short)(D_800E2850[D_800E11FA]|rawPage);
         kind=D_800F3368.palette;
         palette=D_800E1204[kind];

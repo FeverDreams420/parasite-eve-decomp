@@ -5,12 +5,12 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/psyq_gpu.h"
 
 typedef RoomM273RisingParticle Particle;
 typedef struct { unsigned char r, g, b, unknown; } Color;
 extern Color D_8018F1E4;
 extern int D_800966EC[];
-extern unsigned short GetClut(int, int);
 
 int func_80195E10(int mode, Particle *particle) {
     Color color = D_8018F1E4;

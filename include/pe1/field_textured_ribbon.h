@@ -6,6 +6,7 @@
 #include "pe1/render_prim.h"
 #include "pe1/render_tint.h"
 #include "pe1/render_object.h"
+#include "pe1/psyq_gpu.h"
 
 /* Field engine textured ribbon (func_800D3114): a strip of POLY_GT4 quads
  * along a point list, each joint widened across the screen-space direction
@@ -57,7 +58,5 @@ typedef struct FieldRibbonPacket {
 
 PE1_STATIC_ASSERT(sizeof(FieldRibbonColor) == 4, field_ribbon_color_size);
 PE1_STATIC_ASSERT(sizeof(FieldRibbonPacket) == 0x34, field_ribbon_packet_size);
-
-void AddPrim(unsigned int *orderingEntry, unsigned int *primitive);
 
 #endif /* PE1_FIELD_TEXTURED_RIBBON_H */

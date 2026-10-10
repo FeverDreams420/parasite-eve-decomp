@@ -7,6 +7,7 @@
 #include "pe1/room_floor.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/gte_types.h"
 
 /* Scene e19_2 spin ray: a spinning ray anchored at the scene origin that
  * grows, sweeps out as a textured blade and closes as a glow sprite. The
@@ -44,8 +45,6 @@ extern u8 D_8019B404[];
 extern GteShortVector D_8019B670;
 extern u16 D_800E11EA;
 
-int rsin(int angle);
-int rcos(int angle);
 u16 func_80077AA4(int x, int y);
 int func_80071A54(void);
 void func_800CE8F0(void *pool, int index, GteRotation *rotation, GteShortVector *position);

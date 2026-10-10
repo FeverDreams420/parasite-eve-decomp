@@ -10,6 +10,7 @@
 #include "pe1/field_anim.h"
 #include "pe1/field_engine_state.h"
 #include "pe1/battle.h"
+#include "pe1/psyq_libc.h"
 
 extern int D_800E0C88;
 
@@ -260,8 +261,6 @@ int func_800CABC8(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
 
 void func_800CACD4(void) {
 }
-
-void *memset(void *dest, int value, unsigned int count);
 
 extern s16 D_800E0BE8[];
 

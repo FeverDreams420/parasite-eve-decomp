@@ -140,7 +140,7 @@ int Akao_Calc3DPan(AkaoPackedRect3 *pos, int *pan, int *volume)
     gte_ldrotmatrix(D_800BCFA4.value);
     gte_ldtransmatrix(D_800BCFA4.value);
     gte_ctc2_26(*D_800BCFA8);
-    depth = RotTransPers(pos, &sxy, &x, &y);
+    depth = RotTransPers((GteShortVector *)pos, (int *)&sxy, (int *)&x, (int *)&y);
     x = (short)sxy;
     y = sxy >> 16;
     Render_ResetGteScreenOffset();

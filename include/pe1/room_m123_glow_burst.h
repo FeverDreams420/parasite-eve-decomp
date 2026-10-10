@@ -34,7 +34,6 @@ extern u8 D_801954BC[];
 extern u8 D_801954E4[];
 extern u16 D_800E11E8;
 
-int rcos(int angle);
 u16 func_80077AA4(int, int);
 void func_800CE8F0(void *pool, int index, void *rotation, void *position);
 int func_80071A54(void);

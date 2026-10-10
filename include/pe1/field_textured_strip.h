@@ -7,6 +7,7 @@
 #include "pe1/render_tint.h"
 #include "pe1/field_engine_scratch.h"
 #include "pe1/field_sprite_state.h"
+#include "pe1/psyq_gpu.h"
 
 /* Field engine textured strip (func_800C5A40): consecutive nodes joined by
  * POLY_FT4 segments, each node's two edge points projected with
@@ -55,6 +56,5 @@ extern char *D_800B0E58[];
 void func_800C608C(int scale, u8 *src, u8 *dst);
 long RotTransPers4(void *v0, void *v1, void *v2, void *v3, void *sxy0,
                    void *sxy1, void *sxy2, void *sxy3, void *p, void *flag);
-u16 GetClut(int x, int y);
 
 #endif

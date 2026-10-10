@@ -5,12 +5,11 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_owner_actor.h"
+#include "pe1/psyq_gpu.h"
 
 extern GteShortVector D_8018F1F8;
 extern GteShortVector D_8018F1CC;
 extern char D_80195624[];
-extern int rcos(int);
-extern u16 GetClut(int, int);
 extern u16 D_800E11E8;
 extern void func_800CE8F0(void *, int, void *, void *);
 extern int func_80071A54(void);

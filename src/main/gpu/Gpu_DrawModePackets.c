@@ -1,4 +1,5 @@
 #include "common.h"
+#include "pe1/psyq_gpu.h"
 
 /* A draw-mode word pair followed by the sprite primitive it prefixes. */
 typedef struct GpuModeSprtPacket {
@@ -21,8 +22,6 @@ void Gpu_InitDrawModeSprtPacket(GpuModeSprtPacket *packet, int tpage) {
         exit(-1);
     }
 }
-
-void SetTile(unsigned char *arg0);
 
 void Gpu_InitDrawModeTilePacket(void *packet, int tpage) {
     void *prim = (char *)packet + 8;

@@ -1,5 +1,6 @@
 #include "common.h"
 #include "pe1/render_packets.h"
+#include "pe1/psyq_gpu.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
@@ -55,8 +56,6 @@ extern char D_8009EC38[];
 extern char D_8009EC4A[];
 extern char *g_OtBufferTable[];
 
-void AddPrim(unsigned int *ot, unsigned int *prim);
-
 void Gpu_QueuePrimitive(void) {
     int index;
     int prim_offset;
@@ -88,8 +87,6 @@ extern char D_8009EA80[];
 extern char D_8009EA9C[];
 extern char D_8009EAB8[];
 extern char *g_OtBufferTable[];
-
-void AddPrim(unsigned int *ot, unsigned int *prim);
 
 #define INDEX_STRIDE(i) ((((((i) << 1) + (i)) << 3) - (i)) << 2) - (i)
 
