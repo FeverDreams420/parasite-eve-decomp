@@ -1,10 +1,16 @@
+/* CC1_FLAGS: -fno-schedule-insns */
 #include "common.h"
+#include "pe1/akao/commands.h"
+#include "pe1/field_anim.h"
+#include "pe1/game_audio_state.h"
+#include "pe1/field_engine_state.h"
+#include "pe1/field_sprite_draw.h"
 #include "pe1/field_sprite_state.h"
 #include "pe1/field_glow_sprite.h"
-#include "pe1/field_anim.h"
-/* CC1_FLAGS: -fno-schedule-insns */
-
-
+#include "pe1/gte_types.h"
+#include "pe1/field_anim_particle.h"
+#include "pe1/field_engine_slot.h"
+#include "pe1/field_billboard.h"
 
 int func_800CD404(void *arg0, void *arg1, u8 *anim) {
     u8 *anim_s2 = anim;

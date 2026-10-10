@@ -1,8 +1,15 @@
+#include "common.h"
 #include "pe1/akao/commands.h"
 #include "pe1/field_anim.h"
 #include "pe1/game_audio_state.h"
 #include "pe1/field_engine_state.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/field_sprite_state.h"
+#include "pe1/field_glow_sprite.h"
+#include "pe1/gte_types.h"
+#include "pe1/field_anim_particle.h"
+#include "pe1/field_engine_slot.h"
+#include "pe1/field_billboard.h"
 
 static __inline__ void identity_matrix(GteMatrix *matrix)
 {
@@ -61,9 +68,6 @@ int func_800CCBA8(char *object)
     return 0;
 }
 
-#include "pe1/field_anim.h"
-#include "pe1/game_audio_state.h"
-
 extern u16 D_800E27FA;
 extern u16 D_800E27FC;
 
@@ -103,7 +107,6 @@ int func_800CCF10(void *obj) {
     return 0;
 }
 
-#include "common.h"
 int func_800CCF80(u8 *state) {
     state[0] = 4;
     return 0;
@@ -117,7 +120,6 @@ int func_800CCF98(void) {
     return 0;
 }
 
-#include "common.h"
 int *func_800C2B10(int index);
 int *func_800C2B28(int index);
 
@@ -156,7 +158,6 @@ int func_800CCFA0(void) {
     func_800CEDA8(0);
 }
 
-#include "common.h"
 extern char *D_8009D254;
 
 int func_800CD07C(void *arg0, void *arg1, u8 *anim) {
@@ -173,10 +174,6 @@ int func_800CD07C(void *arg0, void *arg1, u8 *anim) {
     *(u16 *)(anim + 6) = 0x60C;
     *(u16 *)(anim + 0xC) = z;
 }
-
-#include "common.h"
-#include "pe1/field_anim.h"
-#include "pe1/game_audio_state.h"
 
 int rand(void);
 
@@ -214,9 +211,6 @@ void FieldAnim_InitRandomOffsetPairs(void *arg0, void *arg1,
     } while (((unsigned int)i & 0xFFFF) < 2);
 }
 
-#include "common.h"
-int rand(void);
-
 int func_800CD1FC(void *arg0, void *arg1, u8 *anim) {
     u16 z;
 
@@ -226,4 +220,46 @@ int func_800CD1FC(void *arg0, void *arg1, u8 *anim) {
     *(u16 *)(anim + 0x4) = 0x7F;
     *(u16 *)(anim + 0x6) = 0x544;
     *(u16 *)(anim + 0xC) = z;
+}
+
+/* Two empty field effect callbacks. */
+void func_800CD2DC(void) {
+}
+
+void func_800CD2E4(void) {
+}
+
+void *memset(void *dest, int value, unsigned int count);
+
+extern GteShortVector D_800C223C;
+
+int func_800CD2EC(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
+    s16 *field = (s16 *)&D_800E2298.depth;
+    GteMatrix matrix;
+    GteShortVector rot;
+    GteVector scaleCopy;
+    GteVector scale;
+
+    rot = D_800C223C;
+
+    func_800C2EAC(3);
+    func_800C3098(0x100);
+    func_800C2FF0(0x20, 0x20);
+    func_800C3238(2);
+
+    *field = anim->brightness;
+    RotMatrix(&rot, &matrix);
+
+    matrix.t[0] = (s16)anim->position.x;
+    matrix.t[1] = (s16)anim->position.y;
+    matrix.t[2] = (s16)anim->position.z;
+
+    memset(&scale, 0, sizeof(scale));
+    scale.x = anim->scale;
+    scale.y = anim->scale;
+    scale.z = anim->scale;
+    scaleCopy = scale;
+
+    ScaleMatrix(&matrix, &scaleCopy);
+    func_800C42A4((FieldGlowSprite *)((u8 *)field - PE1_OFFSETOF(FieldGlowSprite, depth)), &matrix, 0);
 }

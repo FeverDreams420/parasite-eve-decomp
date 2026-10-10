@@ -1128,25 +1128,22 @@ segments:
       # private data D_800F346C, D_800F3414, D_800F33E4, D_800F3420).
       - [0xB755C, c, engine/FieldEng_TexturedModel]
       - [0xB82E0, c, engine/FieldEng_TransformPackedVertex]
-      - [0xB83A0, c, engine/FieldEng_ShadeStateInit]
-      - [0xB8500, c, engine/FieldEng_UpdateEffects]
-      - [0xB8BA0, c, engine/FieldEng_GlowLayers_800C83A0]
-      - [0xB9070, c, engine/FieldEng_EffectRender]
-      - [0xB9644, c, engine/FieldEng_UpdateEffects2]
-      - [0xB9B98, c, engine/FieldEng_GlowLayers_800C9398]
-      - [0xBA068, c, engine/FieldEng_UpdateEffects3]
-      - [0xBA7D8, c, engine/FieldEng_GlowLayers_800C9FD8]
-      - [0xBACA8, c, engine/FieldEng_UpdateEffects4]
-      - [0xBB60C, c, engine/FieldEng_GlowFourLayers]
-      - [0xBBF50, c, engine/FieldEng_UpdateEffects5]
-      - [0xBCAC4, c, engine/FieldAnim_ScatteredParticles]
-      - [0xBCC40, c, engine/FieldAnim_UpdateWindows]
-      - [0xBD3A8, c, engine/FieldAnim_BurstEffects]
-      # Two adjacent empty effect callbacks.
-      - [0xBDADC, c, engine/FieldAnim_EmptyCallbacks]
-      - [0xBDAEC, c, engine/FieldAnim_ScaledGlowDraw]
-      - [0xBDC04, c, engine/FieldAnim_GlowTrioDraw]
-      - [0xBDD0C, c, engine/FieldAnim_BurstLifecycle]
+      # Eight field effect objects, one module each. The descriptor table D_80094188 lists
+      # them; each descriptor names a setup function, the spawn/register/update entry points
+      # and the particle and state callback lists. Every module starts with its setup
+      # function and ends with its state callbacks, and the data each setup function points
+      # at sits after that module's own lists, so the setups open the following unit. The
+      # burst module is split in three where -fno-schedule-insns differs (_2 only).
+      - [0xB83A0, c, engine/FieldEng_GlowEffect]
+      - [0xB9534, c, engine/FieldEng_GlowEffectB]
+      - [0xBA270, c, engine/FieldEng_GlowEffectC]
+      - [0xBAD74, c, engine/FieldEng_FourLayerGlowEffect]
+      - [0xBC4A4, c, engine/FieldEng_PointSpriteEffect]
+      - [0xBD3A8, c, engine/FieldEng_BurstEffect]
+      - [0xBDC04, c, engine/FieldEng_BurstEffect_2]
+      - [0xBDD0C, c, engine/FieldEng_BurstEffect_3]
+      - [0xBDF28, c, engine/FieldEng_BurstEffectB]
+      - [0xBE884, c, engine/FieldEng_BurstEffectC]
       - [0xBEC9C, c, engine/FieldAnim_BindTaskProgram]
       # Setup, allocation, ticking and callback dispatch share the same task-list record.
       - [0xBECF8, c, engine/FieldAnim_TaskList]
