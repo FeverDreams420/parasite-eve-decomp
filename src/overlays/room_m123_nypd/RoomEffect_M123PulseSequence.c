@@ -127,7 +127,7 @@ int func_80194C04(int mode, RoomPulseParticle *particle)
                 ((RoomPulsePool *)context->pool)->object->flags |= 0x80000000;
             }
         }
-        if (D_800E27EC < 8) goto ret0;
+        if (D_800E27EC < 8) break;
         return 2;
     case 2:
         D_800F3368.parameter00 = 32;

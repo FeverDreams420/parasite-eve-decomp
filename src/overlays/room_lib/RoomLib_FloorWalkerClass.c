@@ -57,7 +57,7 @@ int RoomLib_ConfigureHandlerG(RoomEnt *o, int mode, unsigned int op,
 
 case4:
     RW32(o, 0x20) = arg0;
-    goto ret;
+    return 0;
 
 case0:
     RW32(o, 0x1C) = (int)D_8009D20C;
@@ -78,7 +78,7 @@ case0:
     } else {
         RoomLib_ReleaseHandlerG(o);
     }
-    goto ret;
+    return 0;
 
 case12:
     RW32(o, 0x24) = arg0;

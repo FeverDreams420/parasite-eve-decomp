@@ -38,7 +38,7 @@ int RoomLib_UpdateTimedRender(int mode, RoomFxTimedRenderState *state) {
         }
         state->frame++;
         if ((short)state->frame < 24) {
-            goto ret0;
+            break;
         }
         return 1;
     case 2:

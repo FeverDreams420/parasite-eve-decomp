@@ -135,7 +135,7 @@ s32 func_8019A720(s32 mode, RoomM273ArcCallbackState *state) {
     if (mode == 1) {
         if (D_800E27EC >= 0x10) {
             result = 1;
-            goto epilogue;
+            return result;
         }
         obj->value -= obj->step;
         obj->step++;
@@ -143,7 +143,7 @@ s32 func_8019A720(s32 mode, RoomM273ArcCallbackState *state) {
     }
     if (mode != 2) {
         result = 0;
-        goto epilogue;
+        return result;
     }
     {
         rotationX = 0;

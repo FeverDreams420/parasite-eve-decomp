@@ -159,7 +159,8 @@ int func_8019549C(int mode, SceneE19HomingParticle *particle)
             D_800F32D0->actor->state->core_flags |= 0x80000000;
         }
         returnTest = particle->timer < 24;
-        goto test_timer;
+        if (returnTest) return 0;
+        return 1;
 
     case 3:
         returnTest = (unsigned short)particle->timer + 1;

@@ -95,7 +95,7 @@ int func_80194768(int mode)
         D_801956A4 = 0x1000;
         if (time >= 50)
             D_801956A4 = 0x1000 - ((time - 50) << 12) / 30;
-        if (time < 80) goto ret0;
+        if (time < 80) break;
         return 1;
     case 2:
         func_800CE8F0(D_800F32D0->pool, 23, &seed, &output);

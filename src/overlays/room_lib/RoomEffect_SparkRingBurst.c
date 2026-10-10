@@ -54,7 +54,7 @@ int RoomEffect_SparkRingParticle(int mode, RoomSparkRingParticle *state) {
             }
         }
         if (state->timer < 24) {
-            goto ret0;
+            break;
         }
         return 1;
     }

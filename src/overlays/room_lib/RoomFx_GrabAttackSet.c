@@ -55,7 +55,7 @@ op19:
         *(int *)(obj + 0x10) = arg3;
         *(int *)arg3 = arg1;
     }
-    goto done;
+    return 0;
 
 op200:
     next = (int)D_8009D20C;
@@ -216,35 +216,40 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
     g->pos_z = arg0->saved_z;
     s4 = s0;
 
-    if (s1->state != 0) {
-        if (func_8003010C(s1, 0x2C) > 0) {
-            goto L478;
+    if (s1->state == 0 || func_8003010C(s1, 0x2C) <= 0) {
+        if (GRAB_PLAYER->state->amount <= 0) {
+            goto L59C;
         }
+        func_80020CE4();
+        RoomFx_GrabResetPlayer(s1, s3v);
+        RoomFx_GrabRelease(arg0);
+        return;
     }
-    if (GRAB_PLAYER->state->amount <= 0) {
-        goto L59C;
-    }
-    goto L594;
 
 L478:
     if (GRAB_PLAYER->state->amount <= 0) {
-        goto L59C;
-    }
-    kind = s1->mode;
-    if (kind == 7) {
-        goto L4F8;
-    }
-    if (kind >= 8) {
-        goto L4C4;
-    }
-    if (kind == 6) {
+        RoomFx_GrabResetPlayer(s1, s3v);
+        RoomFx_GrabRelease(arg0);
         return;
     }
-    goto L594;
+    kind = s1->mode;
+    if (kind != 7) {
+    if (kind < 8) {
+        if (kind == 6) {
+            return;
+        }
+        func_80020CE4();
+        RoomFx_GrabResetPlayer(s1, s3v);
+        RoomFx_GrabRelease(arg0);
+        return;
+    }
 
 L4C4:
     if (kind != 0x10) {
-        goto L594;
+        func_80020CE4();
+        RoomFx_GrabResetPlayer(s1, s3v);
+        RoomFx_GrabRelease(arg0);
+        return;
     }
     if ((s16)s0 < 0x12) {
         return;
@@ -254,8 +259,8 @@ L4C4:
         *p = 2;
     }
     return;
+    }
 
-L4F8:
     val = ((u16 *)&s1->anim_prev)[1];
     /* The barrier retains the raw load and the two separate sign extensions;
      * its memory clobber makes the flag store below reload the player and
