@@ -146,14 +146,13 @@ typedef struct RoomLibSpriteQuadStack {
  * sprite twice at each of two map anchors: once unrotated at the anchor
  * height and once rotated on the shared floor height. Retail marks this
  * function handwritten; only its COP2 windows remain ASM. Like
- * RoomLib_DrawAnchoredSpritePair.inc, the four pointers are pinned to
- * s0..s3 and the seed argument is pinned behind one empty barrier because
- * the GTE operands give the matrix pointer the most references, which
- * otherwise hands it s0 and hoists its address above the seed load. */
+ * RoomFx_DrawAnchoredSpritePair, the matrix pointer is still pinned.
+ * RotMatrix receives the stack addresses directly; the pointer used by
+ * the following GTE operations starts its lifetime after that call. */
 void RoomFx_DrawAnchoredSpriteQuad(void *unused0, void *unused1,
                                             char *params) {
     RoomLibSpriteQuadStack stack;
-    /* Retail keeps these in s0..s3; fx is reused for the packet pointers. */
+    /* The params and packet pointers share one pinned variable. */
     register char *fx asm("$16");
     RoomMotionInitModel *map;
     RoomSpriteMatrix *scaleMatrix;
@@ -190,12 +189,8 @@ void RoomFx_DrawAnchoredSpriteQuad(void *unused0, void *unused1,
     stack.sourceScale.z = *(s16 *)(fx + 0x10);
     stack.scale = stack.sourceScale;
     ScaleMatrix(&stack.scaleMatrix, &stack.scale);
-    {
-        register RoomFxSeed8 *seedArg asm("$4") = &stack.seed;
-        asm("" : : "r"(seedArg));
-        matrix = &stack.matrix;
-        RotMatrix(seedArg, matrix);
-    }
+    RotMatrix(&stack.seed, &stack.matrix);
+    matrix = &stack.matrix;
 
     scaleMatrix = &stack.scaleMatrix;
     gte_ldrotmatrix(scaleMatrix);
@@ -296,10 +291,9 @@ void func_80071A44(RoomFxVec4 *vec, int value, int shift);
 void RoomFx_DrawAnchoredSpritePair(void *unused0, void *unused1,
                                             char *params) {
     RoomLibSpriteTransformStack stack;
-    /* Retail keeps these in s0..s3; the later locals reuse the same slots. */
+    /* The GTE and draw matrix pointer still needs its register pin. */
     RoomSpriteMatrix *scaleMatrix;
     register RoomSpriteMatrix *matrix asm("$17");
-    char *fx;
     RoomMotionContext *root;
     RoomMotionInitModel *map;
     short *floorY;
@@ -309,7 +303,6 @@ void RoomFx_DrawAnchoredSpritePair(void *unused0, void *unused1,
     int secondX;
     int secondY;
 
-    fx = params;
     root = func_800C2B50();
     stack.seed = s_MotionQuadSeed;
 
@@ -327,18 +320,14 @@ void RoomFx_DrawAnchoredSpritePair(void *unused0, void *unused1,
     stack.scaleMatrix.m[0][1] = 0;
     func_80071A44(&stack.sourceScale, 0, 0x10);
 
-    stack.sourceScale.x = *(s16 *)(fx + 0x10);
-    stack.sourceScale.y = *(s16 *)(fx + 0x10);
-    stack.sourceScale.z = *(s16 *)(fx + 0x10);
+    stack.sourceScale.x = *(s16 *)(params + 0x10);
+    stack.sourceScale.y = *(s16 *)(params + 0x10);
+    stack.sourceScale.z = *(s16 *)(params + 0x10);
     stack.scale = stack.sourceScale;
     scaleMatrix = &stack.scaleMatrix;
     ScaleMatrix(scaleMatrix, &stack.scale);
-    {
-        register RoomFxSeed8 *seedArg asm("$4") = &stack.seed;
-        asm("" : : "r"(seedArg));
-        matrix = &stack.matrix;
-        RotMatrix(seedArg, matrix);
-    }
+    RotMatrix(&stack.seed, &stack.matrix);
+    matrix = &stack.matrix;
 
     gte_ldrotmatrix(scaleMatrix);
     gte_ldrtir12_matrix_column(&stack.matrix.m[0][0]);
@@ -361,8 +350,8 @@ void RoomFx_DrawAnchoredSpritePair(void *unused0, void *unused1,
 
     func_800C3238(2);
     map = ((RoomMotionInitLink *)root->link)->model;
-    renderState = (FieldRingGeometry *)(fx + 0x114);
-    renderState->intensity = *(u16 *)(fx + 0x12);
+    renderState = (FieldRingGeometry *)(params + 0x114);
+    renderState->intensity = *(u16 *)(params + 0x12);
     /* Both anchors sit on the shared floor height; the first block stores
      * the height before the x coordinate, which fixes retail's register
      * choice. */
