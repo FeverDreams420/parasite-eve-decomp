@@ -462,7 +462,9 @@ skip_two:
             return 0xA0;
         case 0xCA:
             if (track->flags & AKAO_TRACK_FLAG_KEY_OFF_PENDING) {
-                goto stop;
+                track->tremolo_duration = 0;
+                track->tremolo_phase &= ~5;
+                return 0xA0;
             }
 load_stack:
             cursor = track->call_stack[repeat];
@@ -522,20 +524,10 @@ void Akao_SetVoiceLoopAddr(AkaoTrack *track, u32 arg1) {
     }
     temp_v1 = var_s0->note;
     temp_a0 = track->note_pitch;
-    if (temp_v1 < 0x20U) {
-        if (temp_a0 != temp_v1) {
-            goto block_10;
-        }
-    } else if (temp_a0 != (temp_v1 + temp_a2)) {
-block_10:
+    if ((temp_v1 < 0x20U) ? (temp_a0 != temp_v1) : (temp_a0 != (temp_v1 + temp_a2))) {
         temp_v1_2 = var_s0[1].note;
         temp_a0_2 = track->note_pitch;
-        if (temp_v1_2 < 0x20U) {
-            if (temp_a0_2 != temp_v1_2) {
-                goto block_14;
-            }
-        } else if (temp_a0_2 != (temp_v1_2 + temp_a2)) {
-block_14:
+        if ((temp_v1_2 < 0x20U) ? (temp_a0_2 != temp_v1_2) : (temp_a0_2 != (temp_v1_2 + temp_a2))) {
             temp_v0 = var_s0->note;
             var_a1 = temp_v0 & 0xFF;
             if (temp_v0 >= 0x20U) {
@@ -591,24 +583,12 @@ void Akao_SetVoiceLoopAddrAlt(AkaoTrack *track, u32 arg1) {
     }
     count_or_note = var_s0->note;
     temp_a1 = track->note_pitch;
-    if (count_or_note < 0x20U) {
-        if (temp_a1 != count_or_note) {
-            goto block_10;
-        }
-    } else if (temp_a1 != (count_or_note + temp_a2)) {
-block_10:
+    if ((count_or_note < 0x20U) ? (temp_a1 != count_or_note) : (temp_a1 != (count_or_note + temp_a2))) {
         if (var_v1 != 0) {
             temp_v1 = var_s0[-1].note;
             temp_a0_2 = track->note_pitch;
-            if (temp_v1 < 0x20U) {
-                if (temp_a0_2 != temp_v1) {
-                    goto block_15;
-                }
-            } else if (temp_a0_2 != (temp_v1 + temp_a2)) {
-                goto block_15;
-            }
-        } else {
-block_15:
+        }
+        if (var_v1 == 0 || ((temp_v1 < 0x20U) ? (temp_a0_2 != temp_v1) : (temp_a0_2 != (temp_v1 + temp_a2)))) {
             temp_v0 = var_s0->note;
             var_a1 = temp_v0 & 0xFF;
             if (temp_v0 >= 0x20U) {
