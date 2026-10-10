@@ -20,7 +20,7 @@ int _err_math(int arg0, int arg1) {
 
 event301:
     DeliverEvent(0xF4000002, 0x301);
-    goto done;
+    return 0;
 
 event302:
     DeliverEvent(0xF4000002, 0x302);

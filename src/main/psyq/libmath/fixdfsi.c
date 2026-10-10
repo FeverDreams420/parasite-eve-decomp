@@ -16,7 +16,7 @@ s32 __fixdfsi(register double value)
     input.value = value;
     if (((input.bits.hi & 0x7FFFFFFF) == 0) && (input.bits.lo == 0)) {
         result = input.bits.hi & 0x80000000;
-        goto done;
+        return result;
     }
 
     exponent = 20;
@@ -28,7 +28,7 @@ s32 __fixdfsi(register double value)
         if ((s32)input.bits.hi < 0) {
             result = 0x80000000;
         }
-        goto done;
+        return result;
     }
 
     parts.hi = (input.bits.hi & 0xFFFFF) | 0x100000;
@@ -42,7 +42,7 @@ s32 __fixdfsi(register double value)
 
 zero:
     result = 0;
-    goto done;
+    return result;
 applySign:
     result = mantissa;
     if ((s32)input.bits.hi < 0) {
