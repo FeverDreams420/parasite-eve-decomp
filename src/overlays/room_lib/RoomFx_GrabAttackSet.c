@@ -173,15 +173,15 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
     /* PIN-DEBT: retail stores -cf4 from $a0 and emits the 0x1EA store first. */
     register s32 neg asm("$4");
     s32 s0;
-    /* PIN-DEBT: retail keeps a second live copy of the angle in $s4; without the
+    /* PIN-DEBT: retail keeps a second live copy of the animation frame in $s4; without the
      * pin GCC copy-propagates s4=s0 away and drops the callee-saved slot. */
     register s32 s4 asm("$20");
     s32 kind;
     s32 val;
-    /* PIN-DEBT: preserve the raw 16-bit angle in $v1 across both comparisons. */
-    register s32 raw_val asm("$3");
-    /* PIN-DEBT: the sign-extended comparisons use $v0 in retail. */
-    register s32 signed_val asm("$2");
+    /* Keep the previous animation frame unsigned until each comparison. */
+    u16 raw_val;
+    s32 signed_val;
+    /* PIN-DEBT: the current-frame comparison still needs $v0. */
     register s32 signed_s4 asm("$2");
     FieldActor *matrix_arg;
     s32 *p;
