@@ -59,20 +59,7 @@ typedef struct RoomParticleEmitter {
 #define ROOMLIB_V0_PTR_DECL(name) void *name
 #define ROOMLIB_V1_INT_DECL(name) int name
 #define ROOMLIB_A0_INT_DECL(name) int name
-typedef struct RoomLibTick12Rec {
-    char pad00[0x20];
-    unsigned short frameStep;     /* 0x20 */
-    short timerLimit;             /* 0x22 */
-    char pad24[0x2];
-    unsigned short repeatCount;   /* 0x26 */
-    short phaseLimit;             /* 0x28 */
-    unsigned short phaseStep;     /* 0x2A */
-    signed char state[12];        /* 0x2C */
-    signed char timer[12];        /* 0x38 */
-    unsigned short phase[12];     /* 0x44 */
-    char pad5C[0x4];
-    unsigned short frame[12][4];  /* 0x60 */
-} RoomLibTick12Rec;
+#include "pe1/room_twelve_effect.h"
 
 #define ROOMLIB_TICK_12_COUNTERS(name) \
     void name(void *arg0, unsigned char *signal, RoomLibTick12Rec *rec) { \
@@ -88,8 +75,8 @@ typedef struct RoomLibTick12Rec {
                         rec->phase[i] = limit; \
                     } \
                 } \
-                rec->frame[i][0] -= rec->frameStep; \
-                if ((short)rec->frame[i][0] < 10) { \
+                rec->position[i].z -= rec->frameStep; \
+                if ((short)rec->position[i].z < 10) { \
                     rec->state[i] = 1; \
                 } \
             } \

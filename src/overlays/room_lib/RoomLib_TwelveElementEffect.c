@@ -116,14 +116,14 @@ void RoomLib_InitTwelveElementEffect(void *owner, void *unused, char *state) {
     stack.seed = s_TwelveEffectInitSeed;
     stack.sourceMatrix = *(RoomSpriteMatrix *)(clock + 4);
 
-    *(s16 *)(workState + 0x26) = 0xC;
-    *(s16 *)(workState + 0x20) = *func_800C2B28(0);
-    *(s16 *)(workState + 0x22) = *func_800C2B28(1);
-    *(s16 *)(workState + 0x24) = *func_800C2B28(2);
+    ((RoomLibTick12Rec *)workState)->repeatCount = 0xC;
+    ((RoomLibTick12Rec *)workState)->frameStep = *func_800C2B28(0);
+    ((RoomLibTick12Rec *)workState)->timerLimit = *func_800C2B28(1);
+    ((RoomLibTick12Rec *)workState)->initialPhase = *func_800C2B28(2);
     spacing = *func_800C2B28(3);
     *(s16 *)&stack.seed = *func_800C2B28(4);
-    *(s16 *)(workState + 0x2A) = *func_800C2B28(5);
-    *(s16 *)(workState + 0x28) = *func_800C2B28(6);
+    ((RoomLibTick12Rec *)workState)->phaseStep = *func_800C2B28(5);
+    ((RoomLibTick12Rec *)workState)->phaseLimit = *func_800C2B28(6);
 
     localMatrix = &stack.localMatrix;
     localMatrix->m[2][2] = 0x1000;
@@ -157,20 +157,20 @@ void RoomLib_InitTwelveElementEffect(void *owner, void *unused, char *state) {
     gte_swc2_10_4(stack.sourceMatrix.t);
     gte_swc2_11_8(stack.sourceMatrix.t);
 
-    *(RoomSpriteMatrix *)workState = stack.sourceMatrix;
+    ((RoomLibTick12Rec *)workState)->matrix = stack.sourceMatrix;
     i = 0;
     initialValue = 0x64;
     depth = 0;
     vector = workState;
     values = (s16 *)workState;
     do {
-        *(workState + i + 0x2C) = 0;
-        *(workState + i + 0x38) = 0;
-        *(s16 *)((char *)values + 0x44) = initialValue;
-        *(s16 *)(vector + 0x60) = depth;
+        ((RoomLibTick12Rec *)workState)->state[i] = 0;
+        ((RoomLibTick12Rec *)workState)->timer[i] = 0;
+        ((RoomLibTick12Rec *)values)->phase[0] = initialValue;
+        ((RoomLibTick12Rec *)vector)->position[0].z = depth;
         depth += spacing;
-        *(s16 *)(vector + 0x5C) = 0;
-        *(s16 *)(vector + 0x5E) = 0;
+        ((RoomLibTick12Rec *)vector)->position[0].x = 0;
+        ((RoomLibTick12Rec *)vector)->position[0].y = 0;
         vector += 8;
         values++;
         i++;
@@ -246,8 +246,8 @@ void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
 
     do {
         element = workState + i;
-        if (*(s8 *)(element + 0x2C) == 1) {
-            stack.primaryMatrix = *(RoomSpriteMatrix *)workState;
+        if (((RoomLibTick12Rec *)element)->state[0] == 1) {
+            stack.primaryMatrix = ((RoomLibTick12Rec *)workState)->matrix;
             transformArg = primaryMatrix;
             asm("" : "=r"(transformArg) : "0"(transformArg));
             positionOffset = i << 3;
@@ -256,9 +256,9 @@ void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
                           stack.primaryMatrix.t);
 
             func_80071A44(sourceScale, 0, 0x10);
-            stack.sourceScale.x = *(s16 *)(valueCursor + 0x44);
-            stack.sourceScale.y = *(s16 *)(valueCursor + 0x44);
-            stack.sourceScale.z = *(s16 *)(valueCursor + 0x44);
+            stack.sourceScale.x = (s16)((RoomLibTick12Rec *)valueCursor)->phase[0];
+            stack.sourceScale.y = (s16)((RoomLibTick12Rec *)valueCursor)->phase[0];
+            stack.sourceScale.z = (s16)((RoomLibTick12Rec *)valueCursor)->phase[0];
             stack.scale = stack.sourceScale;
             ScaleMatrix((GteMatrix *)primaryMatrix, (GteVector *)&stack.scale);
 
@@ -266,7 +266,7 @@ void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
             stack.primaryMatrix.t[1] += *(int *)(clock + 0x1C);
             stack.primaryMatrix.t[2] += *(int *)(clock + 0x20);
             func_800C3134(RoomLib_TwelveEffectTable,
-                          *(s8 *)(element + 0x38),
+                          ((RoomLibTick12Rec *)element)->timer[0],
                           (unsigned char *)&RoomLib_TwelveEffectPrimaryPacket);
 
             stack.secondaryMatrix = stack.primaryMatrix;
@@ -294,7 +294,7 @@ void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
             stack.secondaryMatrix.t[1] = g_RoomFloorY->y;
             secondPacket = (unsigned char *)&RoomLib_TwelveEffectSecondaryPacket;
             func_800C3134(RoomLib_TwelveEffectTable,
-                          *(s8 *)(element + 0x38), secondPacket);
+                          ((RoomLibTick12Rec *)element)->timer[0], secondPacket);
             func_800C42A4((FieldGlowSprite *)secondPacket, secondaryMatrix, 0);
 
             stack.collision[0] = stack.secondaryMatrix.t[0];
@@ -303,7 +303,7 @@ void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
             if (func_8001CAB0(stack.secondaryMatrix.t[0] << 16,
                               stack.secondaryMatrix.t[2] << 16,
                               D_8009D248, D_8009D1CC) == 0) {
-                *(s8 *)(element + 0x2C) = -1;
+                ((RoomLibTick12Rec *)element)->state[0] = -1;
             }
 
             pointValue = *(s16 *)(D_8009D254 + 0x2A);
