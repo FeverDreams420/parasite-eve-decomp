@@ -285,7 +285,7 @@ void RoomLib_HandlerD(RoomEnt *o) {
     scratch[0x01] = 0;
     scratch[0x16] = rot_word;
     {
-        register int negated asm("$3");
+        unsigned short negated;
         negated = *(volatile unsigned short *)&scratch[0x16];
         scratch[0x18] = 0x1000;
         scratch[0x1C] = rot_x;
