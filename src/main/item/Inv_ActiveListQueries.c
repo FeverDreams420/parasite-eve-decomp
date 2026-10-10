@@ -1,14 +1,25 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
+#include "pe1/inventory.h"
 #include "pe1/inventory_slots.h"
 
-/* Contiguous inventory counts, removal-by-ID, and active-item kind lookup. */
+/* Contiguous inventory counts, removal-by-ID, active-item kind lookup, base
+ * item kinds, the equipped-slot reservation test and the packed-list
+ * accessors. */
 s16 *g_InvItemPtr;
 int g_InvSlotLimit;
 u32 *g_InvSelectionBits;
 int g_InvSelectionBitWords;
 
 extern short g_WayneStorageItems[];
+/* The equipped-slot bytes live at 0x800C0E20/0x800C0E22, outside the gp
+ * window; incomplete array types keep -G8 from making them small data. */
+extern signed char g_AyaEquippedWeaponSlot[];
+extern signed char g_AyaEquippedArmorSlot[];
+
+int g_InvPackedListCount;
+
+int g_InvPackedListCursor;
 
 
 
@@ -134,4 +145,28 @@ int Inv_GetActiveListItemType(int index)
         return 0;
     }
     return entry->kind;
+}
+
+int Item_GetBaseType(int index) {
+    return Item_LookupBaseData(index - 1)->kind;
+}
+
+int Inv_IsAyaInventorySlotReserved(int arg0) {
+    int result = 0;
+
+    if (g_InvItemPtr == g_AyaInventoryItems) {
+        if (g_AyaEquippedWeaponSlot[0] == arg0 || g_AyaEquippedArmorSlot[0] == arg0) {
+            result = 1;
+        }
+    }
+
+    return result;
+}
+
+int Inv_GetPackedListCount(void) {
+    return g_InvPackedListCount;
+}
+
+int Inv_GetPackedListCursor(void) {
+    return g_InvPackedListCursor;
 }
