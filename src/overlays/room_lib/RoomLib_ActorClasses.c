@@ -217,7 +217,6 @@ void RoomLib_HandlerD(RoomEnt *o) {
     short *scratch;
     RoomLink *link = o->link;
     char *left;
-    register char *right asm("$16");
     int value;
     int product;
     int *rot;
@@ -241,14 +240,15 @@ void RoomLib_HandlerD(RoomEnt *o) {
         RoomLib_HandlerDTransformTarget((struct RoomLibMotionState *)state,
                                         (void *)scratch);
         {
+            Vec3Fixed *targetPosition;
             int initial_speed;
-            register char *left_arg asm("$4");
+            char *left_arg;
             int initial_velocity;
 
             left = state + 0x50;
             left_arg = left;
-            right = state + 0x40;
-            initial_speed = func_800DFC80((Vec3Fixed *)left_arg, (Vec3Fixed *)right);
+            targetPosition = (Vec3Fixed *)((RoomLibMotionState *)state)->position;
+            initial_speed = func_800DFC80((Vec3Fixed *)left_arg, targetPosition);
             initial_speed += (RW32(state, 0x8C) * 0x70) >> 21;
             if (initial_speed < 0x148) {
                 initial_speed = 0x148;
@@ -256,9 +256,8 @@ void RoomLib_HandlerD(RoomEnt *o) {
             initial_velocity = (0x5160000 / initial_speed) << 8;
             RW32(state, 0x94) = initial_velocity;
             RW32(state, 0x98) = initial_velocity >> 3;
-            func_800DFE94((Vec3Fixed *)left, (Vec3Fixed *)right, (short *)(state + 0x78));
-            right = state + 0x78;
-            RotMatrixYXZ(right, state + 0x10);
+            func_800DFE94((Vec3Fixed *)left, targetPosition, (short *)(state + 0x78));
+            RotMatrixYXZ((short *)(state + 0x78), state + 0x10);
         }
     }
 
@@ -378,12 +377,11 @@ void RoomLib_HandlerD(RoomEnt *o) {
             RoomLib_HandlerDTransformTarget((struct RoomLibMotionState *)state,
                                         (void *)scratch);
             scratch[1] = RW16(state, 0x7A);
-            func_800DFE94((Vec3Fixed *)(state + 0x50), (Vec3Fixed *)(state + 0x40), (short *)(state + 0x78));
-            right = state + 0x78;
+            func_800DFE94((Vec3Fixed *)(state + 0x50), (Vec3Fixed *)((RoomLibMotionState *)state)->position, (short *)(state + 0x78));
             RW16(state, 0x7A) = FieldEng_TurnToward(
                 (short)*(volatile unsigned short *)&scratch[1],
                 RW16(state, 0x7A), RW16(state, 0x9C)) & 0xFFF;
-            RotMatrixYXZ(right, state + 0x10);
+            RotMatrixYXZ((short *)(state + 0x78), state + 0x10);
         }
     }
     if (RW8(state, 0xAA) == 0) {
