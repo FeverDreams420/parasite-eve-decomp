@@ -134,7 +134,7 @@ void Entity_FrameUpdate(void) {
                     if (entity->flags & 0x8800) {
                         entity->render_object.flags_9C |= 1;
                     }
-                    Render_DrawRoom(entity);
+                    Render_DrawRoom((RenderShadowActor *)entity);
                 }
             }
         }

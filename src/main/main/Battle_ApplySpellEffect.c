@@ -1,5 +1,7 @@
 #include "common.h"
 #include "pe1/battle.h"
+#include "pe1/akao.h"
+#include "pe1/entity_animation.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
@@ -12,8 +14,6 @@
 
 extern BattleActionSoundTable D_80010760;
 
-void Entity_SetActionMode(void *, s32, s32, s32);
-s32 Akao_SendPositionalCmdStereo(s32 arg0, s32 arg1, s16 arg2, s16 arg3, s16 arg4);
 s32 rand(void);
 
 extern struct { char _[16]; } D_8009D1A0_o __asm__("g_GameStateFlags");
@@ -284,7 +284,7 @@ conf10:
                     s32 nv = *(s32 *)&e->coreFlags & ~0xE;
                     nv |= (((r % 3) + 3) & 7) * 2;
                     *(s32 *)&e->coreFlags = nv;
-                    Entity_SetActionMode(ent, 4, r / 3, nv);
+                    Entity_SetActionMode(ent, 4);
                     ent->entityFlags = ent->entityFlags | 0x1000;
                 }
             }

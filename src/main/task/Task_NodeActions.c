@@ -1,5 +1,6 @@
 #include "common.h"
 #include "pe1/gte_types.h"
+#include "pe1/entity_animation.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --expand-div */
 
@@ -105,8 +106,6 @@ extern FieldActor *g_CurrentEntity[];
 /* Same symbol; keep the post-call address calculation independent in GCC. */
 extern FieldActor *g_CurrentEntityAfterAction[] asm("g_CurrentEntity");
 
-void Entity_SetActionMode(char *arg0, int arg1);
-
 int Task_SetEntityActionAndWait(int **arg0) {
     TaskNode *node = g_TaskNodePool;
     int flags = node->flags;
@@ -121,7 +120,7 @@ int Task_SetEntityActionAndWait(int **arg0) {
             FieldActor *state;
             state = g_CurrentEntity[0];
             mode = *(u16 *)ptr;
-            Entity_SetActionMode((char *)state, mode);
+            Entity_SetActionMode((BattleEntity *)state, mode);
         }
         {
             FieldActor *state;

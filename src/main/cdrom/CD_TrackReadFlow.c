@@ -14,7 +14,6 @@ extern u32 D_8009D178;
 extern u32 D_8009D17C;
 extern int Spu_SetStreamModeA(void);
 extern int Spu_SetStreamModeB(void);
-extern int Spu_UploadSampleBlockBlocking(void *, int);
 extern int Spu_GetTransferStatus(void);
 /* Matching debt: register pins and empty barriers retain the index,
 * zero extension and callback state. The duplicated ready branch preserves
@@ -399,7 +398,6 @@ extern int D_8009CDA4[];
 extern int D_8009D188, D_8009D18C, D_8009D190;
 void Akao_Cmd_F1(void);
 void Akao_Cmd_40(void);
-int Akao_Cmd_10();
 void Akao_Cmd_C1_WithSlot(int, int, int);
 void Akao_Cmd_C0_WithSlot(int, int);
 void Overlay_RegisterAudioSlot(int, int, int, int);
@@ -557,7 +555,7 @@ retry:
         case 51:
             if (CD_SeekToTrack(state->scene_audio.tracks.keys[0][0], 1, 0, &slot, 0) == 1)
                 return 1;
-            voice = Akao_Cmd_10(state->bank_work_base);
+            voice = Akao_Cmd_10((void *)state->bank_work_base);
             if (voice == -1) {
                 state->cd_transition_phase = 62;
                 return 1;

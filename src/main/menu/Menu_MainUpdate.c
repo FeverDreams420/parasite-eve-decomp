@@ -3,6 +3,8 @@
 #include "pe1/textbox.h"
 #include "pe1/menu_widget.h"
 #include "pe1/gte_types.h"
+#include "pe1/akao.h"
+#include "pe1/entity_animation.h"
 
 /* CC1_FLAGS: -g3 -G1 */
 /* MASPSX_FLAGS: --expand-div -G1 */
@@ -12,7 +14,6 @@
 #include "pe1/battle.h"
 #include <m2c_macros.h>
 
-M2C_UNK Entity_SetActionMode();                            /* extern */
 M2C_UNK Battle_ReturnToIdle();                            /* extern */
 s8 Pad_GetMenuPressedBitOrDisabled();                                 /* extern */
 M2C_UNK Battle_FlushScriptSounds();                            /* extern */
@@ -20,7 +21,6 @@ struct BattleStatusPanel;
 void Battle_DrawStatusPanel(s32, struct BattleStatusPanel *);
 M2C_UNK Asset_Find08w(u16, M2C_UNK, s16, s16, s32); /* extern */
 M2C_UNK Asset_Find08Alt(M2C_UNK, M2C_UNK, s16, s16, s32); /* extern */
-M2C_UNK Akao_SendTableCommand(s32, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 M2C_UNK Pm_SendCmd(s32, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK Entity_ResolveDropTable(void *);                      /* static */
 s16 Entity_ApplyHitAndSetAnim(void *);                 /* static */
@@ -212,7 +212,7 @@ void Menu_MainUpdate(s32 arg0) {
                     temp_a1_2->atbGauge = 0xF0;
                     callback = &D_800B0E08;
                     if (*callback != 0) {
-                        Akao_SendTableCommand(*callback, 0x455, 0, 0x80, 0x7F);
+                        Akao_SendTableCommand((void *)*callback, 0x455, 0, 0x80, 0x7F);
                     }
                 }
             }
@@ -351,7 +351,7 @@ block_after_d2e8:
         }
         }
         if (D_8009D254->actionMode != 0x12) {
-            Entity_SetActionMode(D_8009D254, 0x12U, var_a2);
+            ((void (*)(BattleEntity *, int, int))Entity_SetActionMode)(D_8009D254, 0x12U, var_a2);
         }
         if (D_8009CE30 == 0x5A) {
             s32 reset_flags;
@@ -1015,7 +1015,7 @@ block_61:
         }
         D_8009D1A0 &= minus5;
         D_8009D2E8 |= 1;
-        Entity_SetActionMode(D_8009D254, 0x13U, minus5);
+        ((void (*)(BattleEntity *, int, int))Entity_SetActionMode)(D_8009D254, 0x13U, minus5);
         }
             D_8009D278->curHP = 0;
     }

@@ -34,7 +34,7 @@ extern RoomModuleHandler g_RoomInitList[];
 extern int g_RoomSpawnLayout[];
 
 int RoomLib_ClassNop0(void);
-int RoomLib_PlantScript(void);
+int RoomLib_PlantScript(void *object);
 int RoomLib_Spawn6(int a, int b, int c, int d, int e, int f);
 int RoomLib_RegisterDrawList(void *o);
 int RoomLib_RegisterPairedTables(void *o);

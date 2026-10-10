@@ -1,4 +1,5 @@
 #include "include_asm.h"
+#include "pe1/akao.h"
 
 extern unsigned int *g_PlayerEntity;
 
@@ -13,7 +14,6 @@ int Pad_IsMenuConfirmAvailable(void);
 extern unsigned int g_GameStateFlags;
 
 extern void * g_AkaoBgmHandle;
-int Akao_SendTableCommand(void *arg0, int arg1, int arg2, int arg3, int arg4);
 extern unsigned char D_80091694[];
 extern unsigned char D_8009169D;
 

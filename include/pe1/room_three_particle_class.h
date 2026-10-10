@@ -15,7 +15,7 @@ extern RoomModuleHandler g_RoomThreeParticleUpdateList[];
 extern RoomModuleHandler g_RoomThreeParticleInitList[];
 extern int g_RoomThreeParticleSpawnLayout[];
 
-int RoomLib_ThreeParticlePlantScript(void);
+int RoomLib_ThreeParticlePlantScript(void *object);
 int RoomLib_ThreeParticleSpawn6(int a, int b, int c, int d, int e, int f);
 int RoomLib_ThreeParticleRegister(void *o);
 int RoomLib_ThreeParticleStart(void *o);

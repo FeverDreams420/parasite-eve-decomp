@@ -5,6 +5,9 @@
 #include "pe1/battle.h"
 #include "pe1/gte_types.h"
 #include "pe1/inventory.h"
+#include "pe1/akao.h"
+#include "pe1/entity_animation.h"
+#include "pe1/pm.h"
 
 #define NULL ((void *)0)
 typedef struct { u8 bytes[0x14]; } __attribute__((packed)) Tbl20;
@@ -14,7 +17,6 @@ typedef struct { u8 bytes[8]; } __attribute__((packed)) PackedCopy8;
 typedef struct { u8 bytes[0x10]; } LargeSymbol;
 typedef union { s32 value; } FlagValue;
 
-void Akao_SendPositionalCmdStereo();
 void BattleCmd_CommitAmmoAndUpdate();
 s16 Battle_CalcAngleToTarget();
 s32 Battle_CalcDistToPlayer();
@@ -23,9 +25,7 @@ void Battle_HaltOnPositiveX();
 s32 Battle_StepAyaAction();
 void Battle_StepCharacterAction();
 void Battle_UpdateEntityFacing();
-void Entity_SetActionMode();
 void Pm_StopAll();
-s32 Scene_LoadRoomAssets();
 extern volatile struct { Combatant *value; char pad[12]; } D_8009D278_absolute __asm__("D_8009D278");
 #define ACTIVE (D_8009D278_absolute.value)
 extern const Tbl20 D_8001074C;
@@ -238,7 +238,7 @@ block_35:
                 if (!temp_v1_3 || ((u8) ((BattleEntity *)D254(14))->actionMode < 4U)) {
                     D1A0_W1 = D1A0_R1 & ~0x100;
                 }
-                Entity_SetActionMode(D254(15), ((Combatant *)D278(13))->actionMode12, var_a2, targetFound);
+                Entity_SetActionMode(D254(15), ((Combatant *)D278(13))->actionMode12);
                 *(s32 *)((char *)D278(10) + PE1_OFFSETOF(Combatant, stateFlags)) = (s32) (*(s32 *)((char *)D278(10) + PE1_OFFSETOF(Combatant, stateFlags)) | 0x200000);
                 return;
             }
@@ -287,7 +287,7 @@ block_39:
             var_a3_2 = ((BattleEntity *)D254(15))->posY.parts.integer;
             var_v0_5 = ((BattleEntity *)D254(15))->posZ.parts.integer;
         }
-        Akao_SendPositionalCmdStereo(var_a0_3, 0, var_a2_2, var_a3_2, var_v0_5);
+        ((int (*)(int, int, int, int, int))Akao_SendPositionalCmdStereo)(var_a0_3, 0, var_a2_2, var_a3_2, var_v0_5);
         var_a1 = (void *)0xFFDFFFFF;
         var_a0_4 = D278(13);
         actor_flags = ((Combatant *)var_a0_4)->stateFlags;

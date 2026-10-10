@@ -863,7 +863,6 @@ void Akao_StepSampleLoader(AkaoTrack *track, u32 voice_mask)
 
 extern unsigned int g_SpuActiveVoiceMask;
 
-
 extern int g_AkaoVoiceMaskScratch;
 extern unsigned int g_AkaoTrack34Mask;
 extern unsigned int g_AkaoTrack38Mask;
@@ -1369,7 +1368,6 @@ void Akao_TieNote(AkaoTrack *track, unsigned int mask) {
     track->flags &= ~AKAO_TRACK_FLAG_PENDING_NOTE_PITCH;
 }
 
-
 void SeqOp_SetReturnPoint(AkaoTrack *track) {
     unsigned char *cursor;
     unsigned char *next_cursor;
@@ -1781,7 +1779,6 @@ void SeqOp_ClearTrack3CMask(AkaoTrack *track, u32 mask) {
     track->key_off_delay = 0;
 }
 
-
 extern u32_1 g_AkaoVoiceUpdateFlags;
 extern u16 g_AkaoTrack5ATransposeValue;
 
@@ -2174,8 +2171,6 @@ extern u32 D_800B89D8;
 extern u32 D_800B89DC;
 extern u32 D_800B89E0;
 
-void Seq_StartNestedStreams(void *ptr, void *first, void *second);
-
 void SeqOp_ReadAdsrDecayAndSustain(void *ptr, int arg) {
     sndTrackReadAdsrDecayRate(ptr);
     ((void (*)())sndTrackReadAdsrSustainLevel)(ptr, arg);
@@ -2289,7 +2284,7 @@ void SeqOp_LoadNestedStreams(AkaoTrack *track) {
     D_800B89D8 = 0;
     D_800B89DC = *(u16 *)((char *)track + 0x76) >> 8;
     D_800B89E0 = *(int *)((char *)track + 0x44) >> 23;
-    Seq_StartNestedStreams(&D_800B89D0, first, second);
+    Seq_StartNestedStreams((AkaoNestedSource *)&D_800B89D0, first, second);
     *(u8 **)track += 4;
 }
 

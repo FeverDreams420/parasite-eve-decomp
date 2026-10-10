@@ -6,10 +6,10 @@
 #include "pe1/akao/voice_masks.h"
 #include "pe1/psyq_spu_internal.h"
 
-void Akao_Cmd_10(int arg0) {
+int Akao_Cmd_10(void *bank) {
     g_AkaoCmd.opcode = 0x10;
-    g_AkaoCmd.arg0.value = arg0;
-    Akao_EnqueueStagedCommand();
+    g_AkaoCmd.arg0.value = (int)bank;
+    return Akao_EnqueueStagedCommand();
 }
 
 void Akao_Cmd_11(int arg0) {
@@ -380,9 +380,12 @@ int Spu_PollOrWaitSeqBusy(int mode) {
 
 int func_800851A8(void *arg0, int arg1);
 
-void Spu_UploadSampleBlockBlocking(void *arg0, int arg1) {
-    while (func_800851A8(arg0, arg1) == 1) {
+int Spu_UploadSampleBlockBlocking(void *arg0, int arg1) {
+    int result;
+
+    while ((result = func_800851A8(arg0, arg1)) == 1) {
     }
+    return result;
 }
 
 extern int D_8009D24C;

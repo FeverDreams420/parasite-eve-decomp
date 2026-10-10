@@ -3,6 +3,7 @@
 #include "pe1/cdrom.h"
 #include "pe1/asset_tim.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/entity_animation.h"
 extern s8 D_800B0CE0;
 extern s8 g_LoadedTexturePageId;
 extern u16 g_EntityTexLbaStartTbl[];
@@ -205,7 +206,6 @@ retry:
     goto retry;
 }
 
-void Entity_SetActionMode(void *entity, int mode);
 /* Keep independent C lvalues for the retail flag loads across switch cases. */
 extern struct { char _[16]; } D_800B0CE2_o __asm__("g_SceneAreaType");
 extern struct { char _[16]; } D_800B0CE2_w __asm__("g_SceneAreaType");
@@ -329,7 +329,7 @@ block_21:
         playerForActionMode = g_PlayerEntity;
         M2C_FIELD(playerForActionMode, s32 *, 0x1AC) = g_SceneMapPrimBaseTable;
         playerForActionMode->action_data = (void *)D_800B0EEC;
-        Entity_SetActionMode(playerForActionMode, 0x15);
+        Entity_SetActionMode((BattleEntity *)playerForActionMode, 0x15);
         playerForRenderSetup = g_PlayerEntity;
         Render_SetupEntityPrims(&playerForRenderSetup->render_object, playerForRenderSetup->model_state.model_header, (u8 *)(playerForRenderSetup->allocation_block + 0x50), 0x3C0, 0x100, 0, 0x1C0, 2, (s8 **)&sp28, 1);
         playerForRoomPrims = g_PlayerEntity;

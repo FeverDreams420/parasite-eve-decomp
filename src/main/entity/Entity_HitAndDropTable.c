@@ -2,6 +2,7 @@
 /* MASPSX_FLAGS: -G8 --expand-div */
 #include "common.h"
 #include "pe1/battle.h"
+#include "pe1/entity_animation.h"
 
 extern char *g_ActiveActor[];
 extern char *g_ActiveActor_late2[] asm("g_ActiveActor");
@@ -129,7 +130,6 @@ extern u8 g_BattleHitActionSubmode[];
 extern u32 g_BattleHitActionParam[];
 
 int Battle_CalcRelativeAngle(BattleEntity *arg0, BattleEntity *actor);
-void Entity_SetActionMode(void *actor, s32 bucket);
 void Asset_Find08Alt(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
 static inline char *CurrentPlayer(void) {
@@ -203,7 +203,7 @@ s16 Entity_ApplyHitAndSetAnim(void *arg0) {
             bucket = 0;
         }
 
-        Entity_SetActionMode(CurrentPlayer(), bucket);
+        Entity_SetActionMode((BattleEntity *)CurrentPlayer(), bucket);
 
         {
             char *effect_actor;

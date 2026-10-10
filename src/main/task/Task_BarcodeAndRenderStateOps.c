@@ -1,12 +1,11 @@
 #include "pe1/geom_state.h"
 #include "pe1/field_actor.h"
+#include "pe1/game_state.h"
 
-extern int g_GameStateFlags;
 extern int g_SceneDispatchToken;
 extern int g_PlayTimeFrameCounter;
 
 int Str_EncodeBase32(char *out, unsigned int value);
-void Sys_Shutdown(int *arg0);
 
 int Task_EncodeBarcode(int **arg0) {
     int tmp[2];
@@ -23,7 +22,7 @@ int Task_EncodeBarcode(int **arg0) {
         if (*counter == 0x7D0) {
             *counter = 0;
         } else {
-            Sys_Shutdown(counter);
+            Sys_Shutdown();
         }
     }
     return 0;

@@ -209,7 +209,6 @@ void Render_ResetGteScreenOffset(void);
 int Render_SetCDDCSlot(void);
 void Gpu_RenderFrame(void);
 int Render_SetFadeColour(unsigned int arg0);
-void Sys_Shutdown(void);
 void Akao_StepVoiceTable(void);
 void ClearImage(RECT *rect, int r, int g, int b);
 void Akao_Cmd_F1(void);

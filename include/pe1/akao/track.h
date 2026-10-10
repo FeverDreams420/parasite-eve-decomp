@@ -304,4 +304,6 @@ typedef struct AkaoVoiceBank {
 
 typedef void (*AkaoTrackHandler)(AkaoTrack *track);
 
+void Seq_StartNestedStreams(AkaoNestedSource *source, void *first, void *second);
+
 #endif

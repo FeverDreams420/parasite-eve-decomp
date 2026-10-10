@@ -14,6 +14,7 @@
 #include "pe1/game_audio_state.h"
 #include "pe1/game_state_types.h"
 #include "pe1/akao/commands.h"
+#include "pe1/akao.h"
 
 extern Pe1GameState g_GameState;
 extern int g_SceneDataTable0;
@@ -249,10 +250,7 @@ void Akao_Cmd_D9(int command, int arg1);
 void Akao_Cmd_DA(int command, int arg1, int arg2);
 void Akao_Cmd_F1(void);
 void Akao_ResetPositionalState(void);
-int Akao_Cmd_10(u8 *data, int status);
 int Akao_Cmd_19_Then_C0(u8 *data, int value);
-int Akao_SendTableCommand(u8 *base, int command, int arg1, int arg2,
-                          int arg3);
 int Asset_Find08w(int id, int mode, int x, int y, int z);
 int CD_SeekToTrack(int key, int mode, int group, int *slot, int immediate);
 int CD_SeekTrack0(int key, int mode, int group, int *slot, int immediate)
@@ -303,7 +301,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         if ((u32)(locals.slot + 2) < 2) {
             break;
         }
-        *args->result = Akao_Cmd_10(D_800B0CE8.voice_banks[locals.slot], status);
+        *args->result = Akao_Cmd_10(D_800B0CE8.voice_banks[locals.slot]);
         Akao_Cmd_C0_WithSlot(0, 0x7F);
         Overlay_RegisterAudioSlot(locals.slot, *args->arg1, *args->result, 0x7F);
         break;

@@ -5,6 +5,7 @@
 #include "pe1/psyq_nop.h"
 #include "pe1/scene_room_load.h"
 #include "pe1/scene_archive.h"
+#include "pe1/entity_animation.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
@@ -25,7 +26,6 @@ extern u8 D_800B89F8[];
 extern u8 D_800BEA40[];
 
 void Battle_InitEquipLists();
-void Entity_SetActionMode();
 void *Entity_AllocBlock();
 void Render_DrawWithAnim();
 
@@ -132,13 +132,13 @@ FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
 
     if (actor->model_state.allocation_active) {
     if (actor == g_PlayerEntity) {
-        Entity_SetActionMode(actor, 0x15);
+        Entity_SetActionMode((BattleEntity *)actor, 0x15);
     } else {
         baseRows = (u8 *)D_800B161C - 0x784;
         row = (u32 *)(baseRows + actor->type_id * 0xC0);
         for (i = 0; i < 0x30; ++i) {
             if (row[i]) {
-                Entity_SetActionMode(actor, i & 0xFFFF);
+                Entity_SetActionMode((BattleEntity *)actor, i & 0xFFFF);
                 break;
             }
         }

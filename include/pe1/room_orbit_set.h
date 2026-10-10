@@ -43,7 +43,7 @@ extern RoomModuleHandler g_RoomOrbitSetInitList[];
 extern int g_RoomOrbitSetSpawnLayout[];
 
 int RoomFx_OrbitSetNop0(void);
-int RoomFx_OrbitSetPlantScript(void);
+int RoomFx_OrbitSetPlantScript(void *object);
 int RoomFx_OrbitSetSpawn6(int a, int b, int c, int d, int e, int f);
 int RoomFx_OrbitSetRegister(void *o);
 int RoomFx_OrbitSetStart(void *o);

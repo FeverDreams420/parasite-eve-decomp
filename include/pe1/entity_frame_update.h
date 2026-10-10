@@ -8,6 +8,7 @@
 #include "pe1/player_entity.h"
 #include "pe1/scene_room_load.h"
 #include "pe1/scene_transition.h"
+#include "pe1/render_shadow.h"
 
 extern FieldActor *g_FieldActorListHead;
 /* Global game-state flags (bit 4 = menu open, 2 = battle, 0x100 =
@@ -39,7 +40,6 @@ void Render_TransformVertices(RenderObjectEntity *object);
 void Render_TransformSkinnedVertices(RenderObjectEntity *object, u32 *view_matrix);
 void Render_TransformMorphVertices(RenderObjectEntity *object, u32 *view_matrix);
 void Render_DrawEntity(RenderObjectEntity *object, u32 *view_matrix);
-int Render_DrawRoom(void *actor);
 void func_80069594(void);
 void Scene_UpdateEntityPositions(void);
 void func_80012774(void);

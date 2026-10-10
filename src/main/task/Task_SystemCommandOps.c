@@ -7,13 +7,14 @@
 #include "pe1/field_actor.h"
 #include "pe1/field_collision.h"
 #include "pe1/task_anim.h"
+#include "pe1/geom_state.h"
+#include "pe1/pm.h"
 
 extern FieldActor *g_CurrentEntity;
 extern FieldActor *g_PlayerEntity;
 extern int g_CombatModeFlags;
 extern int D_800A76C8;
 extern int D_800A76CC;
-extern char * volatile g_GeomState;
 /* Camera base angles at 0x800BD020. As a record, the second argument load
  * stays behind the first store: GCC 2.7 lets a varying array load pass a
  * store to a fixed scalar, but not to a structure member. */
@@ -26,13 +27,10 @@ extern CameraBaseAngles D_800BD020;
 extern unsigned char g_ScreenTransitionState;
 extern short D_800BCFFE;
 
-int Scene_LoadRoomAssets(int arg0, void *arg1);
 int Pm_SendCmd();
 int Pm_SetGetState(int arg0, int arg1, int arg2);
 void Entity_AllocSlot(void *arg0);
-void Geo_TransformPoint(void *arg0, int arg1, int arg2, int arg3);
 void Render_SetEntryVisible(int arg0, int arg1);
-void Geo_ClipPoint(int arg0, int arg1, int arg2);
 void Obj_SetEntryLimit(int arg0, int arg1);
 void Sys_SetFlagSlot(int arg0, int arg1);
 int Obj_GetEntryField6(int arg0);
@@ -202,12 +200,12 @@ int Task_SetEntityAnim5Args(char **arg0) {
 }
 
 int Task_SetSceneEntryAnim(int **arg0) {
-    char *header = g_GeomState;
-    char *base = g_GeomState;
+    char *header = (char *)g_GeomState;
+    char *base = (char *)g_GeomState;
     int index = *arg0[0];
 
     Geo_TransformPoint(
-        base + *(int *)(header + 0x14) + (index * 56),
+        (GeomEntry *)(base + *(int *)(header + 0x14) + (index * 56)),
         *(short *)arg0[1],
         *(short *)arg0[2],
         *(short *)arg0[3]);

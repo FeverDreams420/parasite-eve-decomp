@@ -16,6 +16,7 @@
 #include "pe1/field_script_context.h"
 #include "pe1/field_vector_math.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/field_engine_slot.h"
 
 typedef struct RoomObj {
     char pad0[0xC];
@@ -107,7 +108,6 @@ extern void FieldEng_Spawn6(int a, int b, int c, int d, int e, int f);
 extern void FieldEng_Register(void *o, void *table);
 extern int func_800C251C(void *o, void *table);
 extern int func_800C2758(void *o, void *tableA, void *tableB);
-extern void **FieldEng_GetSlot(void);
 extern int func_8003010C(void *o, int arg);
 extern void func_80030220(void *o, int arg, int value);
 extern int func_80192BFC();
@@ -766,8 +766,8 @@ extern char RoomLib_TableB[];
 
 /* plant the room table pointer into the engine slot */
 #define ROOMLIB_PLANT_TABLE(name, table) \
-    int name(void) { \
-        *FieldEng_GetSlot() = table; \
+    int name(void *object) { \
+        *FieldEng_GetSlot(object) = table; \
         return 0; \
     }
 

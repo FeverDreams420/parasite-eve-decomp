@@ -17,6 +17,7 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/scene_archive.h"
 #include "pe1/gte_types.h"
+#include "pe1/akao.h"
 
 /* The colour ramp table each room defines in its data. */
 extern char RoomLib_TimedRenderTable;
@@ -92,8 +93,6 @@ extern void *D_8009D254;
 extern void *g_PlayerEntity;
 extern void *RoomMain_ActorPtr2;
 extern u16 D_800E11EA;
-
-void Akao_SendTableCommand(void *owner, int id, int value, int volume, int pan);
 
 int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
     void *actor;
