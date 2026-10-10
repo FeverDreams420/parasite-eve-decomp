@@ -85,7 +85,7 @@ int Battle_ProcessActionSlot(BattleEntity *actor)
                         /* Preserve the core flag reload across iterations. */
                                             }
                 }
-                goto done;
+                return result;
             }
             if (state->hpAlive <= 0) goto done;
             if (color <= 0x80) {
@@ -345,7 +345,10 @@ finishInterruptedAction:
             }
             if (enemy->field04.bytes.kind == 4) {
                 if (enemy->coreFlags & 0x6000) goto saveHpSnapshot;
-                goto stepDeathAnimation;
+                actor->motionX = 0;
+                actor->motionY = 0;
+                actor->motionZ = 0;
+                Battle_StepEntityAnimState(actor);
             } else if (enemy->field04.bytes.kind != 1 && enemy->field04.bytes.kind != 3) {
 stepDeathAnimation:
                 actor->motionX = 0;

@@ -41,16 +41,15 @@ void Battle_UpdateEntityFacing(BattleEntity *entity)
     FacingMotion *motion;
 
     if (core->status05 != 0 || (core->flags & 0xE)) return;
-    if (D_8009D278->stateFlags & 0x80000) {
-        if (core->actions[(core->flags >> 17) & 0x70]) goto update_angle;
-    }
-    if (core->mode == 1) {
-        core->mode++;
-        core->previous_mode = entity->actionMode;
-        core->step_flag = (entity->entityFlags >> 9) & 1;
-        core->previous_frame = entity->animFrame;
-        core->previous_step = entity->animPrev.fixed;
-        core->previous_delta = entity->animStep;
+    if (!((D_8009D278->stateFlags & 0x80000) && core->actions[(core->flags >> 17) & 0x70])) {
+        if (core->mode == 1) {
+            core->mode++;
+            core->previous_mode = entity->actionMode;
+            core->step_flag = (entity->entityFlags >> 9) & 1;
+            core->previous_frame = entity->animFrame;
+            core->previous_step = entity->animPrev.fixed;
+            core->previous_delta = entity->animStep;
+        }
     }
 update_angle:
     direction = (s16)Battle_CalcRelativeAngle(D_8009D254, entity);

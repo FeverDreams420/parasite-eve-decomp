@@ -184,7 +184,8 @@ void Battle_ApplySpellEffect(u32 idx, BattleEntity *ent) {
         }
         pshared = (Combatant *)D278_10;
         dmg = 0x02580000;
-        goto clear1000;
+        pshared->stateFlags = pshared->stateFlags & ~0x1000;
+        break;
     case 5:
         {
             Combatant *p = (Combatant *)D278_11;
