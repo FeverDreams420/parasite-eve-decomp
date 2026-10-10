@@ -11,11 +11,10 @@ int Battle_IsActive(void) {
     if (g_BattleActionQueueCount != 0) {
         return 0;
     }
-    if ((g_GameStateFlags[0] & 2) == 0) {
-        goto yes;
-    }
+    if ((g_GameStateFlags[0] & 2) != 0) {
     if ((g_ActiveActor[0]->stateFlags & 0x10000) != 0) {
         goto no;
+    }
     }
 yes:
     return 1;
@@ -27,11 +26,10 @@ int Pad_IsMenuConfirmAvailable(void) {
     if (g_BattleActionQueueCount != 0) {
         return 0;
     }
-    if ((g_GameStateFlags[0] & 2) == 0) {
-        goto yes;
-    }
+    if ((g_GameStateFlags[0] & 2) != 0) {
     if ((g_ActiveActor[0]->stateFlags & 0x10000) != 0) {
         goto no;
+    }
     }
 yes:
     return 1;

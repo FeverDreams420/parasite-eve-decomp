@@ -444,7 +444,7 @@ void Menu_OpenItemList(void)
 
     item = Inv_LookupActiveListData(Inv_RestoreSelection(list));
     /* slot == -1 selects tailCount; add the offset before forming a pointer. */
-    if (!*(u8 *)((unsigned int)item + slot + 0x15)) goto error;
+    if (*(u8 *)((unsigned int)item + slot + 0x15)) {
 
     D_8009CF24 = list;
     D_8009CF28 = slot;
@@ -480,6 +480,7 @@ void Menu_OpenItemList(void)
     }
     Menu_CreateNotificationDialog(kind, 0);
     return;
+    }
 error:
     Menu_PlayErrorSound();
 }

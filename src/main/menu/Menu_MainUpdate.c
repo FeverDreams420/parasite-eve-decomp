@@ -223,13 +223,11 @@ void Menu_MainUpdate(s32 arg0) {
         if ((arg0 & 0xFF) == 1) {
             temp_a0 = D_8009D254->actionMode;
             if ((temp_a0 == D_8009D278->actionMode12) || (temp_a0 == 5)) {
-                if (!(D_8009D278->attributes->effectFlags & 0x4000) || !(D_8009D278->stateFlags & 0x4000)) {
-                    goto block_clear_bit0;
-                }
-                if ((Pad_GetMenuPressedBitOrDisabled(temp_a0) << 0x18) <= 0) {
-                    goto block_clear_bit0;
-                }
+                if ((D_8009D278->attributes->effectFlags & 0x4000) && (D_8009D278->stateFlags & 0x4000)) {
+                if ((Pad_GetMenuPressedBitOrDisabled(temp_a0) << 0x18) > 0) {
                 goto block_range_check;
+                }
+                }
 block_clear_bit0:
                 D_8009D2E8 &= ~1;
                 goto block_after_d2e8;

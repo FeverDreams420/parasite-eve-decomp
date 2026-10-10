@@ -620,10 +620,10 @@ void Menu_DrawTextboxEntries(void) {
                                                      (((((temp_v0_3 >> 16) & 15) + 1) & 15) << 16);
                             goto section_delay_again;
                         }
-                        if (textbox->control.parts.elapsed == 0)
-                            goto section_next;
+                        if (textbox->control.parts.elapsed != 0) {
                     section_skip:
                         stream++;
+                        }
                     section_next:
                         sectionIndex++;
                         break;

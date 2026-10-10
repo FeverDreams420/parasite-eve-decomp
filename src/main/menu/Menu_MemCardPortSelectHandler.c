@@ -23,13 +23,12 @@ s32 Menu_MemCardPortSelectHandler(void *node, s32 flags) {
     cellIndex = MenuWidget_GetCellIndex(MenuWidget_GetChild(node, 0));
     if (flags & 0x10000) {
         if (cellIndex >= 0) {
-            if (cellIndex < 2) {
-                goto read_card;
-            }
+            if (cellIndex >= 2) {
             if (cellIndex == 2) {
                 goto close_dialog;
             }
             goto error_sound;
+            }
 read_card:
             if ((MemCard_CheckPresent(cellIndex) != 0) && (MemCard_IsPortPresent(cellIndex) != 0) && (MemCard_IsOperationPending() == 0)) {
                 MemCard_CloseAllAndResetState();

@@ -89,17 +89,16 @@ int Menu_StepEquipConfirm(MenuWidgetNode *node, int input) {
             Inv_RememberSelection(1, item);
             MenuWidget_NavScrollTo(0x36);
             Menu_ConfigureScreen();
-            goto confirm;
+        } else {
+            goto reserved;
         }
-
-        goto reserved;
 confirm:
         handled = 1;
         Menu_PlayConfirmSound();
         goto done;
 reserved:
-        if (Inv_IsAyaInventorySlotReserved(item) != 0) goto error;
-        if (Menu_GetBattleEquipMode() == 0) goto simple_confirm;
+        if (Inv_IsAyaInventorySlotReserved(item) == 0) {
+        if (Menu_GetBattleEquipMode() != 0) {
 
         {
             MenuWidgetNode *result = MenuWidget_CreateSimpleNode(0x29, child, 0, 1);
@@ -154,9 +153,11 @@ reserved:
         option_node = MenuWidget_FindByModeAndSelectedBase(2, 0x29);
         option_node->x = (second_parent->grid_width - 0x80) >> 1;
         goto confirm;
+        }
 simple_confirm:
         Menu_OnEquipConfirm(node, 1);
         goto confirm;
+        }
 error:
         handled = 1;
         Menu_PlayErrorSound();

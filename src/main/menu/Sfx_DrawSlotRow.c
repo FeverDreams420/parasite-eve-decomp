@@ -39,14 +39,12 @@ void Sfx_DrawSlotRow(ItemDataRecord *entry, u8 *text) {
 
     type = entry->kind;
     if (type != 0 && (unsigned int)type < 8) {
-        if (type - 4 <= 0) {
-            goto draw_ammo;
+        if (type - 4 > 0) {
+            if (type == 4) {
+                Draw_StatePop();
+                return;
+            }
         }
-        if (type != 4) {
-            goto draw_ammo;
-        }
-        Draw_StatePop();
-        return;
     } else {
         int cmp;
         if ((unsigned int)type < 0x13 || (cmp = type - 0x12) == 0) {

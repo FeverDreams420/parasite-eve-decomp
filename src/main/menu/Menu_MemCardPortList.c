@@ -41,12 +41,11 @@ int Menu_IsMemCardSlotCompatible(int arg0) {
         ptr = MemCard_GetSlot(*(int *)(g_MenuActiveWidget + 0x24) - 0x25, arg0);
         if (ptr->state != MEMCARD_SLOT_OCCUPIED) {
             result = 0;
-            goto done;
+        } else {
+            result = ptr->titleStyleFlag;
+            result ^= Save_GetTitleStyleFlag();
+            result = (unsigned int)result < 1;
         }
-
-        result = ptr->titleStyleFlag;
-        result ^= Save_GetTitleStyleFlag();
-        result = (unsigned int)result < 1;
     }
 
 done:

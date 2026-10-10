@@ -127,9 +127,7 @@ s32 Menu_StepColorSelect(MenuWidgetNode *arg0, s32 arg1) {
 
     temp_s0 = MenuWidget_GridCellIndex(MenuWidget_GetChild(arg0, 0)) * 8;
     temp_v1 = Draw_GetBlendColor();
-    if (!(arg1 & 0x1000)) {
-        goto check4000;
-    }
+    if (arg1 & 0x1000) {
     var_a0 = temp_v1 & ~(0xFF << temp_s0);
     temp_v1_2 = ((temp_v1 >> temp_s0) & 0xFF) + 2;
     if (temp_v1_2 < 0xE9) {
@@ -138,10 +136,9 @@ s32 Menu_StepColorSelect(MenuWidgetNode *arg0, s32 arg1) {
     }
     clamp = 0xE8;
     goto clampshift;
-check4000:
-    if (!(arg1 & 0x4000)) {
-        goto check10000;
     }
+check4000:
+    if (arg1 & 0x4000) {
     var_a0 = temp_v1 & ~(0xFF << temp_s0);
     temp_v1_3 = ((temp_v1 >> temp_s0) & 0xFF) - 2;
     if (temp_v1_3 >= 0x20) {
@@ -155,6 +152,7 @@ blend:
     Draw_BlendColor(var_a0 | var_v0);
     Menu_PlayMoveSound();
     return 1;
+    }
 check10000:
     if (arg1 & 0x10000) {
         temp_v0 = MenuWidget_GetChild(arg0, 1);
