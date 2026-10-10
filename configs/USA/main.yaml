@@ -71,8 +71,7 @@ segments:
       # Expression and FieldActor Vec3 getter/setter switch tables.
       - [0x800, .rodata, task/Task_ValueOps]
       - [0x89C, rodata, main/rodata_00089C]
-      - [0x8A0, .rodata, boot/Boot_MemCardStepInit]
-      - [0x990, .rodata, entity/Entity_GetPositionByType]
+      - [0x8A0, .rodata, task/Task_MemCardPositionCameraOps]
       - [0x9AC, rodata, main/rodata_0009AC]
       - [0x9B0, .rodata, task/Task_ItemAndSoundOps]
       - [0xE8C, rodata, main/rodata_000E8C]
@@ -165,9 +164,9 @@ segments:
       - [0x39E8, c, task/Task_NodeActions]
       # Field-actor query and distance routines share their actor globals.
       - [0x4A28, c, entity/Entity_QueryAndDistance]
-      - [0x4CFC, c, boot/Boot_MemCardStepInit]
-      - [0x4E94, c, entity/Entity_GetPositionByType]
-      - [0x50E0, c, main/Camera_AngleMotionFlow]
+      # -G8 opcodes: memory-card init step, position by actor type, relative
+      # camera offset tracking and camera angle fade.
+      - [0x4CFC, c, task/Task_MemCardPositionCameraOps]
       - [0x55A0, c, task/Task_PolyAndSceneLoadOps]
       - [0x57D8, c, task/Task_PlayEntityAnim]
       - [0x5908, c, task/Task_CopyEntityRenderObject]

@@ -1,8 +1,161 @@
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 */
 #include "common.h"
-#include "pe1/global_slot.h"
+#include "pe1/memcard.h"
 #include "pe1/task_node.h"
+#include "pe1/game_state_types.h"
+#include "pe1/scene_room_load.h"
+#include "../../../tools/m2c/m2c_macros.h"
 #include "pe1/field_actor.h"
+#include "pe1/global_slot.h"
 #include "pe1/gte_types.h"
+
+#define NULL ((void *)0)
+M2C_UNK Battle_StartEncounter();
+M2C_UNK func_80042F20();
+s32 CD_StepReadState();
+extern s32 g_SceneDataTable0;
+extern struct { char _[16]; } D_8009D1A0_o __asm__("g_GameStateFlags");
+extern s32 D_8009D1A0_rd[] __asm__("g_GameStateFlags");
+#define g_GameStateFlags (*(s32 *)&D_8009D1A0_o)
+extern TaskNode *g_TaskNodePool;
+extern Pe1GameState g_GameState;
+
+PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, memcard_init_phase) == 0xF4,
+                  memcard_init_phase_offset);
+
+s32 Boot_MemCardStepInit(u8 **arg0) {
+    Pe1GameState *base;
+
+    base = &g_GameState;
+    loop_1:
+    switch (base->memcard_init_phase) {
+    case 0x0:
+        if (!(base->story_day_flags & 3)) {
+            base->memcard_init_phase = 0x37U;
+        }
+        base->flags = base->flags | 0x800000;
+        break;
+    case 0x37:
+        if (!(g_GameState.flags & 0x400000)) {
+            MemCard_InitSlotState();
+        }
+        base->memcard_init_phase = 0x38U;
+        goto loop_1;
+    case 0x38:
+        if (CD_StepReadState(1) != 1) {
+            if (!(g_GameState.flags & 0x400000)) {
+                func_80042F20();
+            }
+            base->memcard_init_phase = 0x39U;
+            goto loop_1;
+        }
+        break;
+    case 0x39:
+        if (Asset_LoadTimTextures(1) != 1) {
+            base->memcard_init_phase = 0x3AU;
+            goto loop_1;
+        }
+        break;
+    case 0x3A:
+        {
+            s32 t1a0 = D_8009D1A0_rd[0] | 2;
+            g_GameStateFlags = t1a0;
+        }
+        Battle_StartEncounter(**arg0);
+        base->memcard_init_phase = 0x3BU;
+        break;
+    case 0x3B:
+        if (!(base->story_day_flags & 3)) {
+            base->memcard_init_phase = 0U;
+            base->flags = base->flags & 0xFF7FFFFF;
+            __asm__ volatile("");
+            return 1;
+        }
+        break;
+    default:
+        return 1;
+    }
+block_19:
+    g_SceneDataTable0 -= 0xC;
+    g_TaskNodePool->active = 1;
+    return 0;
+}
+
+extern u8 *D_8009D20C[];
+extern Pe1GlobalSlot D_8009D254;
+
+int Entity_GetPositionByType(int **args) {
+    FieldActor *entity;
+    FieldActor *player;
+    int selector;
+    int entity_id;
+
+    selector = *args[1];
+    if (selector == 0) {
+        player = (FieldActor *)D_8009D254.value.pointer;
+        if (player == 0) {
+            *args[6] = -1;
+            return 1;
+        }
+        entity = player;
+    } else {
+        entity = (FieldActor *)D_8009D20C[0];
+        entity_id = selector;
+        while (entity != 0) {
+            if (entity->type_id == entity_id &&
+                entity->sub_id == *args[2] &&
+                (entity->flags & 0x10) == 0) {
+                break;
+            }
+            entity = entity->next;
+        }
+        if (entity == 0) {
+            *args[6] = -1;
+            return 1;
+        }
+    }
+
+    *args[6] = 1;
+    switch (*args[0]) {
+    case 0:
+        *args[3] = entity->pos_x;
+        *args[4] = entity->pos_y;
+        *args[5] = entity->pos_z;
+        break;
+    case 1:
+        *args[3] = entity->base_x;
+        *args[4] = entity->base_y;
+        *args[5] = entity->base_z;
+        break;
+    case 2:
+        *args[3] = entity->motion_x;
+        *args[4] = entity->motion_y;
+        *args[5] = entity->motion_z;
+        break;
+    case 3:
+        *args[3] = entity->accel_x;
+        *args[4] = entity->accel_y;
+        *args[5] = entity->accel_z;
+        break;
+    case 4:
+        *args[3] = entity->gravity_x;
+        *args[4] = entity->gravity_y;
+        *args[5] = entity->gravity_z;
+        break;
+    case 5:
+        *args[3] = entity->rot_x;
+        *args[4] = entity->rot_y;
+        *args[5] = entity->rot_z;
+        break;
+    case 6:
+        *args[3] = entity->delta_x;
+        *args[4] = entity->delta_y;
+        *args[5] = entity->delta_z;
+        break;
+    }
+    return 1;
+}
 
 PE1_STATIC_ASSERT(sizeof(TaskNode) == 0x2C, camera_task_node_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, flags) == 0x08,
@@ -15,12 +168,9 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, target18) == 0x18,
                   camera_task_node_target18_offset);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, target1c) == 0x1C,
                   camera_task_node_target1c_offset);
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
 
 #define S16_AT(ptr, off) (*(s16 *)((u8 *)(ptr) + (off)))
 
-extern Pe1GlobalSlot D_8009D254;
 extern FieldActor *D_8009D2F0[];
 extern int *D_8009CE00;
 
@@ -147,14 +297,9 @@ int Camera_TrackRelativeOffset(int **args) {
         return 0;
     }
 }
-#include "common.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
 
-extern s32 g_SceneDataTable0;
 extern FieldActor *g_CurrentEntity[];
 #define g_CurrentEntity (g_CurrentEntity[0])
-extern TaskNode *g_TaskNodePool;
 
 s32 Camera_StepAngleFade(s32 **arg0) {
     register s32 temp_a1 asm("$5");
