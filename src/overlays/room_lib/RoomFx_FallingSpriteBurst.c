@@ -11,6 +11,7 @@
 #include "pe1/room_falling_burst.h"
 #include "pe1/field_actor.h"
 #include "pe1/render_object.h"
+#include "pe1/room_rearm_timer.h"
 
 static const RoomFxSeed8 s_FallingSpritePositionSeed = {
     { 0x00, 0x00, 0x14, 0x00, 0xD8, 0xFF, 0x00, 0x00 }
@@ -92,27 +93,7 @@ void RoomFx_FallingBurstNop(void) {
 
 /* Counts the hold timer down and re-sends the burst when it is rearmed; ends
  * the effect when the script reports completion. */
-void RoomFx_FallingBurstTick(int arg0, char *arg1, char *arg2) {
-    short *state = (short *)arg2;
-
-    if (state[3] != 0) {
-        state[3]--;
-    }
-
-    if (state[4] == 1) {
-        int timer = state[3];
-
-        state[4] = 0;
-        if (timer == 0) {
-            state[3] = *(unsigned short *)(arg2 + 4);
-            func_800C6C18(arg0);
-        }
-    }
-
-    if (func_800C2B68() == 1) {
-        arg1[1] = 2;
-    }
-}
+ROOM_REARM_TIMER_TICK(RoomFx_FallingBurstTick, 4)
 
 
 
