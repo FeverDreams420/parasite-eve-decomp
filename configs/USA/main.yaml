@@ -110,7 +110,7 @@ segments:
       - [0x17F4, .rodata, menu/Menu_InventoryAndBonusPoints]
       - [0x1830, rodata, main/rodata_001830]
       - [0x1834, .rodata, menu/Menu_CreateMainMenuView]
-      - [0x184C, .rodata, menu/Menu_ContextHelpFlow]
+      - [0x184C, .rodata, menu/Menu_Dialogs]
       - [0x1940, rodata, main/rodata_001940]
       - [0x1944, .rodata, menu/Menu_StepInventoryCategory]
       - [0x1958, .rodata, battle/BattleCmd_StackFlow]
@@ -434,11 +434,10 @@ segments:
       - [0x3B93C, c, menu/Menu_VisualSettingsFlow]
       - [0x3BF0C, c, menu/Menu_LevelUpFlow]
       - [0x3CB4C, c, menu/Menu_OpenEquipSlotSwap]
-      - [0x3CCB4, c, menu/Menu_ParasiteSpellInfoPanel]
-      - [0x3CD94, c, menu/Menu_ContextHelpFlow]
-      # Notification and two-line dialogs, their deferred confirm callback and the
-      # memory-card port dialog with its error prompt share dialog state (g_McDialogMode).
-      - [0x3D450, c, menu/Menu_Dialogs]
+      # Spell info and context help panels, notification and two-line dialogs, their
+      # deferred confirm callback and the memory-card port dialog with its error
+      # prompt share the widget panel helpers and dialog state (g_McDialogMode).
+      - [0x3CCB4, c, menu/Menu_Dialogs]
       - [0x3DCC4, c, menu/Menu_SaveSlotListView]
       - [0x3DE90, c, menu/Menu_DrawSaveSlotPortLabel]
       - [0x3DED4, c, menu/Menu_StepSaveSelect]
