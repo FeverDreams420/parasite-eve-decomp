@@ -1,4 +1,5 @@
 #include "pe1/field_sprite_params.h"
+#include "pe1/field_actor.h"
 #include "room_m350_shared.h"
 #include "pe1/scene_assets.h"
 #include "pe1/gte.h"
@@ -13,11 +14,8 @@ typedef RoomM350Vector Vector;
 typedef RoomM350TransformMatrix Matrix;
 typedef struct { int x,y,z,pad; } Scale;
 typedef struct { void *asset; int yaw; short size,brightness,unknown,turn; unsigned char initialized; } State;
-typedef struct { unsigned int flags; char reserved04[0x48]; unsigned int status; } Owner;
-typedef struct RoomM350Instance {
-    Owner *owner; char reserved04[0x24]; int localPosition[3];
-    char reserved34[0x1C8]; int position[3]; char reserved208[0x30]; Matrix *transforms;
-} Instance;
+typedef FieldActorState Owner;
+typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
 extern Actor *D_800F32D0;
 extern Instance *g_PlayerEntity;
@@ -41,7 +39,7 @@ int func_801960C4(int event,State *state)
     Matrix base;
     Vector position,rotation;
     Scale scale;
-    Instance *instance=D_800F32D0->instance;
+    Instance *instance=(Instance *)D_800F32D0->instance;
     switch (event) {
 case 0:
     {
@@ -79,8 +77,8 @@ case 1:
         state->brightness=size<=2048 ? size>>4:(4096-size)>>4;
         if(!state->initialized) {
             if(D_8019A831) {
-                int distance=func_800DFE20((Vec3Fixed *)g_PlayerEntity->localPosition,(Vec3Fixed *)instance->localPosition);
-                int angle=FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->localPosition,(Vec3Fixed *)instance->localPosition);
+                int distance=func_800DFE20((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x);
+                int angle=FieldEng_VecToAngle((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x);
                 int yaw=state->yaw;
                 int rawDelta=((unsigned int)angle-(yaw>>8))&4095;
                 register int delta asm("$4")=rawDelta;
@@ -114,7 +112,7 @@ case 1:
             D_8019A80C=sine; D_8019A814=0u-sine; D_8019A818=cosine;
             D_8019A824=0; D_8019A820=0; D_8019A81C=0;
             D_8019A816=0; D_8019A812=0; D_8019A80E=0; D_8019A80A=0; D_8019A810=4096;
-            for(;i<3;i++) { *out++=source->position[0]; source=(Instance *)((char *)source+4); }
+            for(;i<3;i++) { *out++=source->render_object.model_matrix.translation[0]; source=(Instance *)((char *)source+4); }
         }
         if(state->brightness<64) return 0;
         {
@@ -139,7 +137,7 @@ case 1:
             int *area;
             i=0; area=&local.collision.area; out=local.collision.vertices;
             previous=((unsigned int)local.collision.vertices[3].z<<16)|(unsigned short)local.collision.vertices[3].x;
-            point=((unsigned int)g_PlayerEntity->position[2]<<16)|(unsigned short)g_PlayerEntity->position[0];
+            point=((unsigned int)g_PlayerEntity->render_object.model_matrix.translation[2]<<16)|(unsigned short)g_PlayerEntity->render_object.model_matrix.translation[0];
             for(;i<4;i++) {
                 int current=((unsigned int)out->z<<16)|(unsigned short)out->x;
                 gte_ldsxy0(point); gte_ldsxy2(previous); gte_ldsxy1(current);
@@ -151,9 +149,9 @@ case 1:
                 unsigned char *inside=&D_8019A82F;
                 if(!*inside) {
                     Owner *owner;
-                    g_PlayerEntity->owner->status|=0x4000;
-                    owner=instance->owner;
-                    if(owner) owner->flags|=0x80000000;
+                    g_PlayerEntity->state->flags|=0x4000;
+                    owner=instance->state;
+                    if(owner) owner->core_flags|=0x80000000;
                     *inside=1; D_8019A830=1;
                 }
             } else D_8019A82F=0;
@@ -170,7 +168,7 @@ case 2:
         Matrix *transforms;
         i=0;
         base=D_8019A808;
-        transforms=instance->transforms;
+        transforms=(Matrix *)instance->render_object.matrices;
         out=base.position; in=transforms[33].position;
         for(;i<3;i++) *out++=*in++;
         rawPage=GetTPage(0,1,0,0);
@@ -212,7 +210,7 @@ case 2:
         }
         func_800C6F4C(state->asset);
         i=0;
-        position.x=instance->position[0]; position.y=instance->position[1]; position.z=instance->position[2];
+        position.x=instance->render_object.model_matrix.translation[0]; position.y=instance->render_object.model_matrix.translation[1]; position.z=instance->render_object.model_matrix.translation[2];
         {
             int yaw;
             rotation.x=0;
