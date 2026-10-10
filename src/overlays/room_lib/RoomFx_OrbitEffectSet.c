@@ -26,8 +26,8 @@ void RoomFx_OrbitSetInit(char *object, void *unused, char *state) {
     RoomOrbitInitWords *source;
     register int callObject asm("$4");
     register int value asm("$2");
-    int value128a;
-    int value128b;
+    u16 value128a;
+    u8 value128b;
     int value32;
     register int value1 asm("$7");
     register int valueNeg42 asm("$5");
@@ -156,7 +156,7 @@ void RoomFx_DrawOrbitParticles(
     unsigned int i;
 
     owner = func_800C2B50();
-    PE1_COMPILER_USE(owner);
+
     i = 0;
     depthSlot = (unsigned short *)&g_RoomOrbitParticlePacket.depth;
     func_800C2EAC(owner[0x24]);
@@ -277,7 +277,7 @@ void RoomFx_DrawOrbitBurst(
     unsigned int i;
 
     owner = func_800C2B50();
-    PE1_COMPILER_USE(owner);
+
     i = 0;
     configA = &g_RoomOrbitBurstPacket.code;
     configB = &g_RoomOrbitShadowPacket.code;
