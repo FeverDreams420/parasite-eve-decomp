@@ -165,7 +165,7 @@ void RoomFx_DrawAnchoredSpriteQuad(void *unused0, void *unused1,
     fx = params;
     root = func_800C2B50();
     stack.seed = s_MotionQuadSeed;
-    map = *(RoomMotionInitModel **)((char *)root->link + 0x238);
+    map = ((RoomMotionInitLink *)root->link)->model;
     func_800C2EAC(root->owner);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
@@ -360,7 +360,7 @@ void RoomFx_DrawAnchoredSpritePair(void *unused0, void *unused1,
     }
 
     func_800C3238(2);
-    map = *(RoomMotionInitModel **)((char *)root->link + 0x238);
+    map = ((RoomMotionInitLink *)root->link)->model;
     renderState = fx + 0x114;
     *(s16 *)(fx + 0x128) = *(u16 *)(fx + 0x12);
     /* Both anchors sit on the shared floor height; the first block stores
