@@ -63,15 +63,12 @@ int func_80198ABC(int event)
 {
     GteMatrix matrix;
     GteShortVector vector;
-    if (event != 1) {
-        if(event<2) { if(event==0) goto setup; return 0; }
-        if(event==2) goto configure;
-        return 0;
-    setup:
+    switch (event) {
+    case 0:
+
         return func_800CE560(D_800F33E0->pool,20,16,
                              (FieldAnimCallbackListCallback)func_80198860);
-    }
-update:
+        case 1:
     {
         int i;
         if(D_8019A8BE) return 2;
@@ -98,8 +95,9 @@ offset_start:
             particle->anchor=D_800F32D0->instance->transforms[i ? 11:15].t;
         }
     }
-    goto done;
-configure:
+        break;
+    case 2:
+
     D_800F3368.parameter0A = 0;
     D_800F3368.parameter00 = 16;
     D_800F3368.parameter02 = 1;
@@ -111,6 +109,6 @@ configure:
     D_800F3368.palette = 2;
     D_800F3368.parameter06 = 0;
     D_800F3368.depth = 16;
-done:
+    }
     return 0;
 }

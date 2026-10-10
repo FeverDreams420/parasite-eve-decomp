@@ -15,7 +15,7 @@ s32 func_80199B94(s32 mode, void *ctx) {
         if (D_800E27EC < 8) {
             goto ret0;
         }
-        goto ret1;
+        return 1;
     }
 
     if (mode != 2) {
@@ -32,6 +32,4 @@ s32 func_80199B94(s32 mode, void *ctx) {
 ret0:
     return 0;
 
-ret1:
-    return 1;
 }

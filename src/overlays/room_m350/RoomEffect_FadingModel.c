@@ -70,11 +70,9 @@ int func_801992A0(int event,State *state)
     Matrix rotation;
     /* Match note: original purpose of unused sp+0x40..0x47 is unknown. */
     char frameGap[8];
-    if (event != 1) {
-        if(event<2) { if(event==0) goto setup; return 0; }
-        if(event==2) goto configure;
-        return 0;
-    setup:
+    switch (event) {
+    case 0:
+
         {
             Instance *instance=D_800F32D0->instance;
             Matrix *matrix=instance->transforms;
@@ -83,8 +81,7 @@ int func_801992A0(int event,State *state)
             return func_800CE560(D_800F33E0->pool,20,10,
                                  (FieldAnimCallbackListCallback)func_80199148);
         }
-    }
-update:
+        case 1:
     {
         Particle *particle;
         Actor *actor;
@@ -182,8 +179,9 @@ update:
         state->delay=0; state->count=(unsigned short)state->count+1;
         Asset_Find08w(0x5FE,D_800F32D0->instance->owner->asset,particle->x,particle->y,particle->z);
     }
-    goto done;
-configure:
+        break;
+    case 2:
+
     D_800F3368.parameter00 = 32;
     D_800F3368.parameter02 = 2;
     D_800F3368.extent_x = 32;
@@ -193,6 +191,6 @@ configure:
     D_800F3368.parameter06 = 1;
     D_800F3368.parameter0A = 0;
     D_800F3368.depth = 32;
-done:
+    }
     return 0;
 }

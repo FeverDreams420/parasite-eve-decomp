@@ -45,15 +45,12 @@ int func_8019421C(int event)
     Vector offset;
     Matrix matrix;
     Vector vector;
-    if (event != 1) {
-        if (event < 2) { if (event == 0) goto setup; return 0; }
-        if (event == 2) goto configure;
-        return 0;
-    setup:
+    switch (event) {
+    case 0:
+
         return func_800CE560(D_800F33E0->pool, 12, 64,
                              (FieldAnimCallbackListCallback)func_8019404C);
-    }
-update:
+        case 1:
     {
         int i = 0;
         Vector *out;
@@ -84,8 +81,9 @@ offset_start:
             particle->color = (r >> 1) | ((unsigned int)(g >> 1) << 8) | ((unsigned int)(b >> 1) << 16);
         }
     }
-    goto done;
-configure:
+        break;
+    case 2:
+
     {
         int index = D_800E11E8;
         int palette;
@@ -96,6 +94,6 @@ configure:
         D_800F3368.palette = 2; D_800F3368.parameter06 = 0;
         D_800F3368.parameter0A = 0; D_800F3368.depth = 0; D_800F3368.tpage = palette;
     }
-done:
+    }
     return 0;
 }

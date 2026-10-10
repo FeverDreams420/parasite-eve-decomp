@@ -26,11 +26,12 @@ int func_80197364(int event)
     Vector vector;
     if (event != 1) {
         if (event < 2) {
-            if (event == 0) goto setup;
-            return 0;
-        }
+            if (event != 0) {
+                return 0;
+            }
+        } else {
         goto done;
-    setup:
+        }
         return func_800CE560(D_800F33E0->pool, 16, 4,
                              (FieldAnimCallbackListCallback)func_80196F2C);
     }

@@ -53,11 +53,9 @@ int func_80195CE0(int event,State *inputState)
     State *state=inputState;
     union { GteMatrix matrix; GteShortVector position; } local;
     GteShortVector vector;
-    if (event != 1) {
-        if(event<2) { if(event==0) goto setup; return 0; }
-        if(event==2) goto draw;
-        return 0;
-    setup:
+    switch (event) {
+    case 0:
+
         {
             RoomM350EffectInstance *instance=D_800F32D0->instance;
             int *position=instance->transforms[33].t;
@@ -70,8 +68,7 @@ int func_80195CE0(int event,State *inputState)
             return func_800CE560(emitter->pool,8,18,
                                  (FieldAnimCallbackListCallback)func_80195B64);
         }
-    }
-update:
+        case 1:
     {
         int phase,sample;
         register int i asm("$19");
@@ -110,8 +107,9 @@ radial:
         } while(i<2);
         state->count=(unsigned short)state->count+1;
     }
-    goto done;
-draw:
+        break;
+    case 2:
+
     {
         int index=D_800E11E8;
         int i;
@@ -145,6 +143,6 @@ draw:
             state->rotation.z=0u-(unsigned short)state->rotation.z;
         } while(++i<2);
     }
-done:
+    }
     return 0;
 }

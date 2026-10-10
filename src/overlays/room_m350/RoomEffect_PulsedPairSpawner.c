@@ -21,15 +21,12 @@ int func_80192508(int event)
     Vector vector;
     /* Match note: original purpose of unused sp+0x40..0x47 is unknown. */
     char frameGap[8];
-    if (event != 1) {
-        if(event<2) { if(event==0) goto setup; return 0; }
-        if(event==2) goto configure;
-        return 0;
-    setup:
+    switch (event) {
+    case 0:
+
         return func_800CE560(D_800F33E0->pool,8,64,
                              (FieldAnimCallbackListCallback)func_80199B94);
-    }
-update:
+        case 1:
     {
         int timer=D_800E27EC;
         int count;
@@ -65,8 +62,9 @@ offset_start:
             i++;
         } while(i<count*2);
     }
-    goto done;
-configure:
+        break;
+    case 2:
+
     {
         int index=D_800E11E8;
         int palette;
@@ -77,6 +75,6 @@ configure:
         D_800F3368.palette=2; D_800F3368.parameter06=0;
         D_800F3368.parameter0A=0; D_800F3368.depth=0; D_800F3368.tpage=palette;
     }
-done:
+    }
     return 0;
 }

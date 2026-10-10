@@ -37,17 +37,14 @@ int func_801927A4(int event, Particle *effect) {
 
 int func_801928D4(int event, State *state)
 {
-    if (event != 1) {
-        if (event < 2) { if (event == 0) goto setup; return 0; }
-        if (event == 2) goto configure;
-        return 0;
-    setup:
+    switch (event) {
+    case 0:
+
         state->delay = 0;
         state->count = 0;
         return func_800CE560(D_800F33E0->pool, 16, 18,
                              (FieldAnimCallbackListCallback)func_801927A4);
-    }
-update:
+        case 1:
     {
         int i;
         if (D_800E27EC >= 17) return 2;
@@ -68,8 +65,9 @@ update:
             if (state->delay <= 0) state->delay = 1;
         }
     }
-    goto done;
-configure:
+        break;
+    case 2:
+
     {
         int index = D_800E11EA;
         int palette;
@@ -80,6 +78,6 @@ configure:
         D_800F3368.palette = 3; D_800F3368.parameter06 = 0;
         D_800F3368.parameter0A = 0; D_800F3368.depth = 0; D_800F3368.tpage = palette;
     }
-done:
+    }
     return 0;
 }

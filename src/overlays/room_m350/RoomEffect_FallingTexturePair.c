@@ -36,15 +36,12 @@ int func_801937B4(int event, short *position) {
 }
 
 int func_801938E4(int event) {
-    if (event != 1) {
-        if(event<2) { if(event==0) goto setup; return 0; }
-        if(event==2) goto configure;
-        return 0;
-    setup:
+    switch (event) {
+    case 0:
+
         return func_800CE560(D_800F33E0->pool,8,4,
                              (FieldAnimCallbackListCallback)func_801937B4);
-    }
-update:
+        case 1:
     if(D_8019A79A) return 2;
     if(D_8019A79C) {
         Particle *particle=func_800CE610(D_800F33E0->pool);
@@ -59,8 +56,9 @@ update:
         } while (0);
         D_8019A79C=0;
     }
-    goto done;
-configure:
+        break;
+    case 2:
+
     D_800F3368.parameter00 = 32;
     D_800F3368.parameter02 = 2;
     D_800F3368.extent_x = 32;
@@ -72,6 +70,6 @@ configure:
     D_800F3368.parameter06 = 1;
     D_800F3368.parameter0A = 0;
     D_800F3368.depth = 0;
-done:
+    }
     return 0;
 }

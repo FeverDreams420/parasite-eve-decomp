@@ -78,18 +78,12 @@ int func_80198400(int event) {
     GteShortVector offset,vertices[4];
     int area;
     RoomM350EffectInstance *instance=D_800F32D0->instance;
-    if (event != 1) {
-        if(event<2) {
-            if(event==0) goto setup;
-            return 0;
-        }
-        if(event==2) goto configure;
-        return 0;
-    setup:
+    switch (event) {
+    case 0:
+
         return func_800CE560(D_800F33E0->pool,8,4,
                              (FieldAnimCallbackListCallback)func_801981D0);
-    }
-update:
+        case 1:
     if(instance->frame>=31) return 2;
     if(!(D_800E27EC&1)) {
         RoomM350FlareParticle *particle=func_800CE610(D_800F33E0->pool);
@@ -161,8 +155,9 @@ update:
             }
         }
     }
-    goto done;
-configure:
+        break;
+    case 2:
+
     {
         short i=0;
         int index,color;
@@ -179,6 +174,6 @@ configure:
         D_800F3368.parameter0A=0; D_800F3368.depth=0;
         D_800F3368.tpage=color;
     }
-done:
+    }
     return 0;
 }

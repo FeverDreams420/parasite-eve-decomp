@@ -37,15 +37,12 @@ int func_80195564(int event, short *position) {
 }
 
 int func_8019569C(int event) {
-    if (event != 1) {
-        if (event<2) { if(event==0) goto setup; return 0; }
-        if(event==2) goto configure;
-        return 0;
-    setup:
+    switch (event) {
+    case 0:
+
         return func_800CE560(D_800F33E0->pool,8,10,
                              (FieldAnimCallbackListCallback)func_80195564);
-    }
-update:
+        case 1:
     if(D_8019A804) return 2;
     {
         int frame=D_800F32D0->instance->frame;
@@ -69,8 +66,9 @@ update:
             particle->size=D_800966EC[(relative<<7)&0xF80]+2048;
         }
     }
-    goto done;
-configure:
+        break;
+    case 2:
+
     D_800F3368.parameter00 = 32;
     D_800F3368.parameter02 = 2;
     D_800F3368.extent_x = 32;
@@ -82,6 +80,6 @@ configure:
     D_800F3368.parameter06 = 1;
     D_800F3368.parameter0A = 0;
     D_800F3368.depth = 0;
-done:
+    }
     return 0;
 }

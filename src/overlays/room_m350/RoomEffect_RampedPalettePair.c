@@ -45,17 +45,14 @@ int func_80192ADC(int event, Particle *object)
 
 int func_80192C34(int event, State *state)
 {
-    if (event != 1) {
-        if (event < 2) { if (event == 0) goto setup; return 0; }
-        if (event == 2) goto configure;
-        return 0;
-    setup:
+    switch (event) {
+    case 0:
+
         state->target = 16384;
         state->current = 0;
         return func_800CE560(D_800F33E0->pool, 8, 6,
                              (FieldAnimCallbackListCallback)func_80192ADC);
-    }
-update:
+        case 1:
     if (!state->target) {
         if (state->current <= 0) return 2;
     } else if (D_800F32D0->instance->frame >= 41) state->target = 0;
@@ -72,8 +69,9 @@ update:
             particle->scale = state->current;
         }
     }
-    goto done;
-configure:
+        break;
+    case 2:
+
     {
         int unit = 16;
         int palette;
@@ -85,6 +83,6 @@ configure:
         D_800F3368.extent_x = unit; D_800F3368.extent_y = unit;
         D_800F3368.parameter0A = 0; D_800F3368.depth = 0; D_800F3368.tpage = palette;
     }
-done:
+    }
     return 0;
 }

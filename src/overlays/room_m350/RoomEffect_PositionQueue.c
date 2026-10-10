@@ -45,15 +45,12 @@ int func_80195218(int event, Particle *object)
 
 int func_80195378(int event) {
     char frameGap[8];
-    if (event != 1) {
-        if (event < 2) { if (event == 0) goto setup; return 0; }
-        if (event == 2) goto configure;
-        return 0;
-    setup:
+    switch (event) {
+    case 0:
+
         return func_800CE560(D_800F33E0->pool,12,50,
                              (FieldAnimCallbackListCallback)func_80195218);
-    }
-update:
+        case 1:
     if (D_8019A804 && D_8019A802==0) return 2;
     {
         short *count=&D_8019A800;
@@ -77,8 +74,9 @@ update:
             D_8019A800=0;
         }
     }
-    goto done;
-configure:
+        break;
+    case 2:
+
     {
         int index=D_800E11EA, palette;
         D_800F3368.parameter00=32; D_800F3368.parameter02=2;
@@ -86,6 +84,6 @@ configure:
         palette=D_800E2850[index];
         D_800F3368.palette=3; D_800F3368.parameter06=0; D_800F3368.parameter0A=0; D_800F3368.depth=0; D_800F3368.tpage=palette;
     }
-done:
+    }
     return 0;
 }

@@ -47,20 +47,14 @@ extern int rand(void);
 
 int func_8019988C(int event, EmissionState *state)
 {
-    if (event != 1) {
-        if (event < 2) {
-            if (event == 0) goto setup;
-            return 0;
-        }
-        if (event == 2) goto configure;
-        return 0;
-    setup:
+    switch (event) {
+    case 0:
+
         state->count = 0;
         state->delay = 0;
         return func_800CE560(D_800F33E0->pool, 24, 8,
                              (FieldAnimCallbackListCallback)func_801996BC);
-    }
-update:
+        case 1:
     if (state->count < 24) {
         RoomM350SineParticle *effect;
         int random;
@@ -125,8 +119,9 @@ update:
         D_8019A8C4 = 1;
         return 2;
     }
-    goto done;
-configure:
+        break;
+    case 2:
+
     D_800F3368.parameter00 = 64;
     D_800F3368.parameter02 = 4;
     D_800F3368.extent_x = 64;
@@ -136,6 +131,6 @@ configure:
     D_800F3368.parameter06 = 1;
     D_800F3368.parameter0A = 5;
     D_800F3368.depth = 0;
-done:
+    }
     return 0;
 }
