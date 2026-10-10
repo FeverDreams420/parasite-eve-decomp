@@ -56,8 +56,9 @@ void RoomFx_UpdateParticleMotion(int arg0, char *control, char *state) {
     register RoomParticleMotionView *motionCursor asm("$6");
     char *controlReg = control;
     char *stateReg = state;
-    int loaded;
-    int value;
+    int count;
+    int amplitude;
+    s16 value;
     char scratch[0x18];
 
     PE1_COMPILER_LAUNDER_MEM(controlReg);
@@ -68,19 +69,19 @@ void RoomFx_UpdateParticleMotion(int arg0, char *control, char *state) {
         do {
             randomCursor->x = func_80071A54() % 8;
             randomCursor->z = func_80071A54() % 8;
-            loaded = *(s16 *)(stateReg + 0x182);
+            count = *(s16 *)(stateReg + 0x182);
             PE1_COMPILER_MEMORY_BARRIER();
             i++;
             randomCursor =
                 (RoomRandomMotionView *)((char *)randomCursor + 4);
-        } while ((u32)i < loaded);
+        } while ((u32)i < count);
     }
 
     if (*(s16 *)(controlReg + 2) >= 31) {
-        loaded = *(s16 *)(stateReg + 0x180);
-        value = loaded;
+        amplitude = *(s16 *)(stateReg + 0x180);
+        value = amplitude;
         PE1_COMPILER_LAUNDER(value);
-        if (loaded >= 5) {
+        if (amplitude >= 5) {
             *(s16 *)(stateReg + 0x180) = value - 4;
         } else {
             *(s16 *)(stateReg + 0x180) = 0;
