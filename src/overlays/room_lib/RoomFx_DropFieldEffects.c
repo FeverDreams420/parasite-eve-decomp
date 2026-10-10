@@ -164,7 +164,7 @@ void RoomFx_DrawStageSpawn(void) {
 
 
 void RoomFx_UpdateStageSpawn(void *effect, char *state, RoomFxSeed8 *seed) {
-    char *owner = func_800C2B50();
+    RoomDropFieldState *owner = func_800C2B50();
     char *slot;
 
     if (*(s16 *)(state + 2) == 0) {
@@ -196,21 +196,21 @@ void RoomFx_UpdateStageSpawn(void *effect, char *state, RoomFxSeed8 *seed) {
     if (*(s16 *)(state + 2) == 6) {
         slot = func_800C2B90(effect, 5, (unsigned short *)g_RoomDropFieldSpawnScript, (int (**)(void *, void *, void *))g_RoomDropFieldSpawnData);
         if (slot != 0) {
-            int i;
+            unsigned int i;
 
             *(RoomFxSeed8 *)slot = *seed;
-            if (((RoomDropFieldState *)owner)->particlePattern == 0) {
-                *(s16 *)(slot + 0xE8) = 8;
-                *(s16 *)(slot + 0xEC) = 8;
+            if (owner->particlePattern == 0) {
+                ((RoomStagedMotionState *)slot)->count = 8;
+                ((RoomStagedMotionState *)slot)->remaining = 8;
                 /* The original loop compares the signed halfword count as unsigned. */
-                for (i = 0; i < (u32)*(s16 *)(slot + 0xE8); i++) {
-                    *(s16 *)(slot + 0x98 + i * 2) = i << 9;
+                for (i = 0; i < ((RoomStagedMotionState *)slot)->count; i++) {
+                    ((RoomStagedMotionState *)slot)->angle[i] = i << 9;
                 }
             } else {
-                *(s16 *)(slot + 0xE8) = 6;
-                *(s16 *)(slot + 0xEC) = 6;
-                for (i = 0; i < (u32)*(s16 *)(slot + 0xE8); i++) {
-                    *(s16 *)(slot + 0x98 + i * 2) = i * 0x2A8;
+                ((RoomStagedMotionState *)slot)->count = 6;
+                ((RoomStagedMotionState *)slot)->remaining = 6;
+                for (i = 0; i < ((RoomStagedMotionState *)slot)->count; i++) {
+                    ((RoomStagedMotionState *)slot)->angle[i] = i * 0x2A8;
                 }
             }
         }
@@ -535,21 +535,21 @@ void RoomFx_UpdateRingPair(void *unused, u8 *signal, RoomRingPairState *state) {
 
 
 
-void RoomFx_InitStagedMotion(void *unused0, void *unused1, char *state) {
-    char *owner;
+void RoomFx_InitStagedMotion(void *unused0, void *unused1, RoomStagedMotionState *state) {
+    RoomDropFieldState *owner;
     unsigned int i;
 
     owner = func_800C2B50();
-    RWU16(state, 0xEA) = 0x80;
-    RW32(state, 0xE0) = 0xFFEC0000;
-    RW32(state, 0xE4) = ((RoomDropFieldState *)owner)->initialFallStep << 8;
+    state->size = 0x80;
+    state->fallStep = 0xFFEC0000;
+    state->radiusStep = owner->initialFallStep << 8;
 
     for (i = 0; i < 8; i++) {
-        RWU16(state, 0x88 + i * 2) = 0;
-        RW32(state, 0xA8 + i * 4) = 0;
-        RW32(state, 0x0C + i * 0x10) = RW16(state, 2) << 16;
-        RW8(state + i, 0xC8) = 1;
-        RWU16(state, 0xD0 + i * 2) = 0x80;
+        state->phase[i] = 0;
+        state->radius[i] = 0;
+        state->record[i].y = state->y << 16;
+        state->kind[i] = 1;
+        state->depth[i] = 0x80;
     }
 }
 
