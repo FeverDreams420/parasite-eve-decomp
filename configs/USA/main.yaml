@@ -1141,10 +1141,8 @@ segments:
       - [0xBDD0C, c, engine/FieldEng_BurstEffect_3]
       - [0xBDF28, c, engine/FieldEng_BurstEffectB]
       - [0xBE884, c, engine/FieldEng_BurstEffectC]
-      - [0xBEC9C, c, engine/FieldAnim_BindTaskProgram]
-      # Setup, allocation, ticking and callback dispatch share the same task-list record.
-      - [0xBECF8, c, engine/FieldAnim_TaskList]
-      - [0xBF070, c, engine/FieldEng_AnchorPosition]
+      # Task program binding, task-list setup/allocation/ticking/callback dispatch and the anchor position query.
+      - [0xBEC9C, c, engine/FieldAnim_TaskList]
       # Transform, direction and colour helpers with the shape builders that use them (G1558).
       - [0xBF0F0, c, engine/FieldEng_GeometryAndShapes]
       # Effect primitive builders: rotated triangle, history trail, fade tile, point tiles, rotated quad

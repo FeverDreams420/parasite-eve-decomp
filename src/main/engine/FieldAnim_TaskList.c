@@ -1,4 +1,20 @@
 #include "pe1/field_anim.h"
+#include "pe1/scene_assets.h"
+#include "pe1/psyq_bios.h"
+
+/* Binds task program `index` to the owner's task context. */
+int func_800CE49C(FieldAnimTaskOwner *owner, int index)
+{
+    FieldAnimTaskProgram *program = D_800E1044[index];
+
+    if (program == 0) {
+        printf(D_800C2244, index);
+        return -1;
+    }
+    owner->tasks.table = &program->table;
+    owner->tasks.pc.script = program->script;
+    return 0;
+}
 
 extern int D_800B0E18;
 extern int D_800B0E1C;
@@ -51,9 +67,6 @@ int func_800CE560(char *out, int stride, int count, FieldAnimTaskCallback callba
 
   return (stride * count) + 0xC;
 }
-
-
-
 
 int func_800CE5AC(void *arg0, int arg1, int arg2, int arg3, void *arg4) {
     char *header;
@@ -205,4 +218,30 @@ int func_800CE78C(char *list)
   }
   D_800E27EC = old_context;
   return active;
+}
+
+void func_800CE870(char *arg0, int arg1, s16 *arg2) {
+    char *ptr;
+
+    switch (arg1) {
+    case 0:
+        ptr = *(char **)(arg0 + 0x238);
+        arg2[0] = *(int *)(ptr + 0x14);
+        ptr = *(char **)(arg0 + 0x238);
+        arg2[1] = *(int *)(ptr + 0x18);
+        ptr = *(char **)(arg0 + 0x238);
+        arg2[2] = *(int *)(ptr + 0x1C);
+        break;
+    case 1: {
+        int value;
+
+        value = *(s16 *)(arg0 + 0x2A);
+        arg2[0] = value;
+        value = *(s16 *)(arg0 + 0x2E);
+        arg2[1] = value;
+        value = *(s16 *)(arg0 + 0x32);
+        arg2[2] = value;
+        break;
+    }
+    }
 }
