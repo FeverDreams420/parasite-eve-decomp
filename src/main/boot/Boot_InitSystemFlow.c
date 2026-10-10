@@ -9,6 +9,7 @@
 #include "../../../tools/m2c/m2c_macros.h"
 #include "pe1/font.h"
 #include "pe1/field_sfx.h"
+#include "pe1/scene_dispatch.h"
 
 void Render_ResetScene(int arg0, int arg1);
 void InitGeom(void);
@@ -46,8 +47,6 @@ M2C_UNK Task_InitGpuHwRegs();
 extern int g_ActiveDrawSlot;
 extern s32 g_GameStateFlags[];
 #define g_GameStateFlags (g_GameStateFlags[0])
-extern s32 g_SceneDispatchCur[];
-#define g_SceneDispatchCur (g_SceneDispatchCur[0])
 extern s32 g_FrameRngCounter[];
 #define g_FrameRngCounter (g_FrameRngCounter[0])
 extern s32 g_SceneDispatchToken[];

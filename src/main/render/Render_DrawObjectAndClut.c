@@ -3,6 +3,7 @@
 #include "common.h"
 #include "pe1/gte.h"
 #include "pe1/render_object.h"
+#include "pe1/render_matrix_copy.h"
 
 /* Matching debt: register pins, empty barriers, volatile shade reads,
  * gotos, and an artificial 16-byte local frame reservation. */
@@ -214,7 +215,6 @@ void Render_DrawObject(RenderObjectEntity *input, union RenderLightingMatrix *vi
 }
 
 #define NULL ((void *)0)
-extern u32 g_RenderClutLookupTable[];
 
 void Render_UpdateClutTable(RenderObjectEntity *arg0, s16 arg1, s16 arg2) {
     RenderObjectHeader *hdr;

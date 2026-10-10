@@ -21,7 +21,6 @@ int g_InvItemUsableFlag;
 int g_MenuLayoutLocked;
 MenuWidgetNode *g_MenuActiveWidget;
 unsigned char *g_MenuItemIconGlyphTable;
-extern signed char g_AyaEquippedWeaponSlot[];
 extern signed char g_AyaEquippedArmorSlot[];
 extern int g_BonusPointBarAnimProgress;
 extern int g_BonusPointStatDeltas[];

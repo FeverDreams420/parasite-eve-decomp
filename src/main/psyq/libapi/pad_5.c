@@ -3,8 +3,8 @@
 /* PSY-Q LIBAPI PAD, part 5 of 6: Sys_SetInterruptHandler. */
 #include "common.h"
 #include "pe1/psyq_bios.h"
+#include "pe1/psyq_pad_main.h"
 
-extern int D_800A34B0;
 extern void (*D_800A34B4[2])(void);
 extern int D_800A34BC;
 

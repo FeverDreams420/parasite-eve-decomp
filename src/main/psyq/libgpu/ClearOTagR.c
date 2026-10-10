@@ -52,7 +52,6 @@ int DrawPrim(void *primitive) {
 }
 
 extern char D_80011928[];
-extern unsigned char D_8009574E[];
 extern char D_8001193C[];
 extern char D_80011954[];
 void Gpu_SetDrawEnvBack(DR_ENV *, DRAWENV *);

@@ -8,11 +8,8 @@ void Battle_SyncEquipSlots(void);
 void *Aya_GetLevelExpTable(void);
 extern u16 g_AyaHpMax[];
 #define g_AyaHpMax (g_AyaHpMax[0])
-extern u16 g_AyaHpCurrent[];
 #define g_AyaHpCurrent (g_AyaHpCurrent[0])
-extern s8 g_AyaInventorySlotCount[];
 #define g_AyaInventorySlotCount (g_AyaInventorySlotCount[0])
-extern s32 g_AyaParasiteSpellFlags[];
 #define g_AyaParasiteSpellFlags (g_AyaParasiteSpellFlags[0])
 extern u8 g_AyaSaveLevel[];
 extern u8 g_AyaSaveLevel_read[] asm("g_AyaSaveLevel");

@@ -1,5 +1,5 @@
 #include "common.h"
-extern unsigned char g_AyaInventorySlotCount[];
+#include "pe1/aya.h"
 
 int Inv_GetBonusSlotCount(void);
 

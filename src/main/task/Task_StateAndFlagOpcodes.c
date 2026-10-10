@@ -4,16 +4,16 @@
 #include "pe1/field_actor.h"
 #include "pe1/game_state.h"
 #include "pe1/battle_context.h"
+#include "pe1/game_timers.h"
 
 extern int g_SceneDispatchToken;
-extern int g_PlayTimeFrameCounter;
 
 int Str_EncodeBase32(char *out, unsigned int value);
 
 int Task_EncodeBarcode(int **arg0) {
     int tmp[2];
     int value;
-    int *counter;
+    unsigned int *counter;
 
     Str_EncodeBase32(&tmp[0], *arg0[0]);
     value = *arg0[0];

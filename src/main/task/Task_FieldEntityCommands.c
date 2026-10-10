@@ -1,5 +1,6 @@
 #include "pe1/field_collision.h"
 #include "pe1/gte_types.h"
+#include "pe1/collision_database.h"
 extern int g_GameState;
 
 #include "pe1/field_actor.h"
@@ -42,7 +43,6 @@ int Entity_ClearCurrentFlag4000(void) {
     return 1;
 }
 
-extern short *g_EntityCollisionWallSlot;
 extern short g_EntityCollisionWallParam;
 
 extern int g_FieldMoveLock;

@@ -22,7 +22,6 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/psyq_bios.h"
 
-extern unsigned char D_8009574E;
 extern unsigned char D_80095704[];
 extern char D_800117E0[], D_80011800[];
 extern unsigned short D_800957CC[][2], D_800957D8[][2];
@@ -61,7 +60,7 @@ int ResetGraph(int mode) {
         GPU_memset((unsigned char *)&state->displayCache, -1, sizeof(state->displayCache));
         return *gpuType;
     default:
-        if (D_8009574E >= 2) D_80095748(D_80011800, mode);
+        if (D_8009574E[0] >= 2) D_80095748(D_80011800, mode);
         return D_80095744->reset(1);
     }
 }

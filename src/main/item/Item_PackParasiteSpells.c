@@ -1,6 +1,7 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 
-extern unsigned int g_AyaParasiteSpellFlags[];
+#include "pe1/aya.h"
+
 extern short g_InvPackedList[];
 int g_InvPackedListCursor;
 int g_InvPackedListCount;

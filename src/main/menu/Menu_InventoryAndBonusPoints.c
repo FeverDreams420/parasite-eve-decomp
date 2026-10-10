@@ -217,8 +217,6 @@ void Menu_CreateBonusPointAllocationView(void);
 extern s32 g_MenuBattleStatusOverlayActive;
 extern s32 g_MenuEquipMode;
 extern s32 g_MenuItemRenameMode;
-extern u16 g_AyaStatAgility[];
-#define g_AyaStatAgility (g_AyaStatAgility[0])
 extern s32 g_AyaBonusPoints[];
 #define g_AyaBonusPoints (g_AyaBonusPoints[0])
 
@@ -228,7 +226,7 @@ void Menu_ExitBonusPointAllocation(void) {
     u8 *src;
     u16 value;
 
-    dst = (u8 *)&g_AyaStatAgility;
+    dst = (u8 *)g_AyaStatAgility;
     index = 0;
     src = (u8 *)&g_BonusPointStatDeltas;
     do {
@@ -337,7 +335,7 @@ s32 Menu_BonusPointCancelHandler(void *arg0, s32 arg1) {
             MenuWidget_ClearCursorY(MenuWidget_FindByModeAndSelectedBase(1, 0x1B));
         }
         g_MenuItemRenameMode = 0;
-        var_a1 = &g_AyaStatAgility;
+        var_a1 = g_AyaStatAgility;
         var_a0 = 0;
         var_v1 = (u16 *)&g_BonusPointStatDeltas;
         do {

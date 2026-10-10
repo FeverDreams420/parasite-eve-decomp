@@ -16,7 +16,6 @@ extern short D_8009CE24;
 extern short D_8009CE28;
 extern short g_EntityCollisionMoveDelta;
 extern short g_EntityCollisionWallParam;
-extern int g_EntityCollisionWallSlot;
 extern int D_8009DFB0[];
 
 extern char D_8009CE0C[];

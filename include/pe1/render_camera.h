@@ -22,4 +22,7 @@ int func_800655D4(void);
 void SetGeomScreen(int distance);
 int Render_PrepareFrame(void);
 
+/* Camera Y after clamping to the room bounds. */
+extern u16 g_CameraClampedY[];
+
 #endif

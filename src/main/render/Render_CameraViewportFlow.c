@@ -41,7 +41,6 @@ int Render_InitViewState(void *matrix, void *screen) {
 }
 
 extern s16 g_CameraClampMinX __asm__("D_800BCF8C");
-extern s16 g_CameraClampedY;
 
 /* Several shapes below are load-bearing for the byte-match (permuter zero):
  * the unused[1] pad keeps retail's empty 0x20 stack frame, `unsigned short sx`
@@ -80,14 +79,14 @@ s32 Render_ClampCameraPosition(s32 x, s32 y)
 
         sy = (s16)y;
         if (sy < bounds->minY) {
-            clamped = (g_CameraClampedY = bounds->minY);
+            clamped = (g_CameraClampedY[0] = bounds->minY);
             return 0;
         }
         if (bounds->maxY < sy) {
-            g_CameraClampedY = bounds->maxY;
+            g_CameraClampedY[0] = bounds->maxY;
             return 0;
         }
-        g_CameraClampedY = y;
+        g_CameraClampedY[0] = y;
     }
     return 0;
 }

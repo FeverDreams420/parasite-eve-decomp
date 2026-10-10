@@ -1,5 +1,5 @@
 #include "common.h"
-extern unsigned int g_AyaParasiteSpellFlags;
+#include "pe1/aya.h"
 void *Aya_GetParasiteSpellUnlockTable(void);
 void Menu_CreateParasiteSpellInfoPanel(int arg0);
 int Aya_UnlockParasiteSpellById(int arg0)
@@ -33,7 +33,7 @@ int Aya_UnlockParasiteSpellById(int arg0)
   new_var2 = found;
   if (new_var2)
   {
-    new_var = &g_AyaParasiteSpellFlags;
+    new_var = g_AyaParasiteSpellFlags;
     bit = 1;
     flags = new_var;
     *flags |= bit << i;

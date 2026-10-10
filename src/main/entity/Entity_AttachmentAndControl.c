@@ -2,7 +2,6 @@
 #include "pe1/render_setup.h"
 #include "pe1/pm.h"
 extern FieldActor *g_CurrentEntity;
-extern RenderObjectEntity g_PlayerBattleEntity[];
 extern unsigned short D_800B0D88;
 
 
@@ -30,7 +29,7 @@ int Task_SetAnimInterpRate(short **arg0) {
     current->render_object.flags_9C = flags | 2;
 
     if (current == selected) {
-        Anim_SetInterpRate(g_PlayerBattleEntity, *args[0]);
+        Anim_SetInterpRate(&g_PlayerBattleEntity, *args[0]);
         D_800B0D88 |= 2;
     }
 

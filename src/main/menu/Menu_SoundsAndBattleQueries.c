@@ -1,9 +1,9 @@
 #include "include_asm.h"
 #include "pe1/akao.h"
+#include "pe1/aya.h"
 
 extern unsigned int *g_PlayerEntity;
 
-extern unsigned short g_AyaStatAgility;
 
 extern unsigned short g_AyaStatActiveTimeRate;
 
@@ -33,7 +33,7 @@ int Battle_GetEnemyEscapeFlag(void)
 
 int Battle_GetAgilityBonus(void)
 {
-    return g_AyaStatAgility;
+    return g_AyaStatAgility[0];
 }
 
 unsigned int Aya_GetActiveTimeRate(void)

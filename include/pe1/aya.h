@@ -94,6 +94,13 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(AyaSaveState, stats.levels) == 0x28,
                   aya_stat_allocations_offset);
 PE1_STATIC_ASSERT(sizeof(AyaSaveState) == 0xAC, aya_save_state_prefix_size);
 extern AyaSaveState D_800C0E00;
+/* Interior names for single AyaSaveState fields. Incomplete arrays keep
+ * their accesses absolute in -G8 units; scalar readers index element 0. */
+extern u16 g_AyaHpCurrent[];
+extern u8 g_AyaInventorySlotCount[];
+extern s8 g_AyaEquippedWeaponSlot[];
+extern u32 g_AyaParasiteSpellFlags[];
+extern u16 g_AyaStatAgility[];
 extern u16 D_800C0E28[7];
 /* Growth tables have multiple consumers: 32-bit thresholds and initial u16. */
 void *Stat_GetGrowthTable(int category);

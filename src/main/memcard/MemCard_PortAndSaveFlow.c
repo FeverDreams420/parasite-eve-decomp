@@ -7,6 +7,7 @@
 #include "pe1/menu_notification_dialog.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/menu_widget.h"
+#include "pe1/game_timers.h"
 
 void Save_SetTitleStyleFlag(int value) {
     D_800A1704 = value;
@@ -126,7 +127,6 @@ void Save_SprintfSjis(unsigned char *dst, unsigned char *fmt)
 }
 
 extern u8 g_SaveTitleBuffer[];
-extern int g_PlayTimeFrameCounter;
 extern u8 *g_SaveTitleFormatLongPtr;
 extern u8 *g_SaveTitleFormatShortPtr;
 

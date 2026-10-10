@@ -146,7 +146,6 @@ void MenuWidget_DestroyNodeRecursive(MenuWidgetNode *node) {
 #include "pe1/bounds_check.h"
 extern s32 g_TextCursorX;
 extern int g_TextCursorY;
-extern int *g_TextCursorStackPtr;
 
 void Draw_PushPrimToList(void *arg0) {
     s32 temp_a2;
@@ -279,7 +278,6 @@ MenuWidgetNode *MenuWidget_FindByModeAndSelectedBase(int mode, int selected_base
 
 extern int g_TextCursorX;
 extern int g_TextCursorY;
-extern int *g_TextCursorStackPtr;
 extern int D_8009CDB0;
 extern int D_8009D0D8;
 extern int D_8009D138;

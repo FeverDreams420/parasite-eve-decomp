@@ -1,6 +1,7 @@
 #include "common.h"
 #include "pe1/map_selection.h"
 #include "pe1/font.h"
+#include "pe1/scene_dispatch.h"
 
 extern u8 D_8009CD78[];
 extern u8 D_8009CD80[];
@@ -72,7 +73,6 @@ int Scene_SelectMapById(int **args) {
 extern u8 g_MapNameOverrideA[];
 extern u8 g_MapNameOverrideB[];
 extern int g_SceneDispatchToken;
-extern int g_SceneDispatchCur;
 extern u32 g_GameStateFlags;
 extern u32 g_GameState[];
 

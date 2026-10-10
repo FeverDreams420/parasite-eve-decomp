@@ -1,12 +1,12 @@
 #include "pe1/menu_state.h"
 #include "pe1/menu_sound.h"
+#include "pe1/aya.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
 #include "pe1/inventory_slots.h"
 
 extern unsigned char D_800C1EAC[];
-extern signed char g_AyaEquippedWeaponSlot[];
 extern signed char g_AyaEquippedArmorSlot[];
 
 SavedMenuMode g_SavedMenuMode;

@@ -6,10 +6,9 @@
 #include "pe1/psyq_ds.h"
 #include "pe1/cdrom.h"
 
-extern int D_8009B708;
 
 void LIBDS_DSREADY_text_3D8(unsigned char arg0, unsigned char *arg1) {
-    int *state;
+    DsCallback *state;
     int status;
     void *data;
     DsAsyncReadCallback callback;

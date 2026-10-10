@@ -1,7 +1,6 @@
 #include "common.h"
 #include "pe1/inventory_category.h"
 #include "pe1/game_timers.h"
-extern int g_PlayTimeFrameCounter;
 extern u16 D_800C1EAC[];
 extern int g_SavedDrawBlendColor;
 extern short g_AyaMenuClampValue;

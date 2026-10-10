@@ -330,7 +330,6 @@ int Util_ReturnTrue(void *unused) {
 
 #define NULL ((void *)0)
 
-extern RenderMatrix g_IdentityMatrixSource;
 extern struct { char _[16]; } D_8009CDDC_lh_o __asm__("g_ActiveDrawSlot");
 extern struct { char _[16]; } D_8009CDDC_lw0_o __asm__("g_ActiveDrawSlot");
 extern struct { char _[16]; } D_8009CDDC_sw0_o __asm__("g_ActiveDrawSlot");
@@ -341,7 +340,6 @@ extern struct { char _[16]; } D_8009CDDC_sw1_o __asm__("g_ActiveDrawSlot");
 #define D_8009CDDC_sw0 (*(s32 *)&D_8009CDDC_sw0_o)
 #define D_8009CDDC_lw1 (*(s32 *)&D_8009CDDC_lw1_o)
 #define D_8009CDDC_sw1 (*(s32 *)&D_8009CDDC_sw1_o)
-extern RenderMatrix g_RenderClutLookupTable;
 
 void Render_DrawWithAnim(RenderObjectEntity *arg0, s32 arg1, s16 arg2, M2C_UNK arg3) {
     RenderMatrix *temp_s0;
@@ -350,12 +348,12 @@ void Render_DrawWithAnim(RenderObjectEntity *arg0, s32 arg1, s16 arg2, M2C_UNK a
     if (arg1 != 0) {
         arg0->animation_data = (void *)arg1;
         temp_s0 = &arg0->model_matrix;
-        Render_CopyMatrixBlock(temp_s0, &g_RenderClutLookupTable, 1);
-        Render_CopyMatrixBlock(&g_IdentityMatrixSource, temp_s0, 1);
+        Render_CopyMatrixBlock(temp_s0, (RenderMatrix *)g_RenderClutLookupTable, 1);
+        Render_CopyMatrixBlock((RenderMatrix *)g_IdentityMatrixSource, temp_s0, 1);
         Anim_BuildRotationMatrices(arg0, arg1, arg2, 0);
     }
     Render_TransformVertices(arg0);
-    Render_CopyMatrixBlock(&g_RenderClutLookupTable, &arg0->model_matrix, 1);
+    Render_CopyMatrixBlock((RenderMatrix *)g_RenderClutLookupTable, &arg0->model_matrix, 1);
     Render_DrawObject(arg0, arg3);
     Render_UpdateClutTable(arg0, 1, D_8009CDDC_lh);
     temp_v0 = D_8009CDDC_lw0 ^ 1;

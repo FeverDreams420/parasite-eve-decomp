@@ -4,6 +4,8 @@
 #include "pe1/boot_stack.h"
 #include "pe1/game_state.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/game_timers.h"
+#include "pe1/scene_dispatch.h"
 extern void InitSystem(void);
 extern void Sys_SyncShutdown(void);
 extern int OpenPeImage(void);
@@ -21,8 +23,6 @@ extern void Boot_RunFrame(void);
 extern void SetDispMask(int arg0);
 
 extern u32 g_SceneDispatchToken;
-extern u32 g_SceneDispatchCur;
-extern u32 g_PlayTimeFrameCounter;
 
 #define STATE_FLAG_IMAGE_BUSY 0x00100000U
 #define STATE_FLAG_READY 0x00000100U

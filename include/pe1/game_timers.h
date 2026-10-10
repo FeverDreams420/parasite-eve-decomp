@@ -20,4 +20,7 @@ extern int g_PlayTimeSeconds;
     (((GameTimerEntry *)((char *)&g_GameTimeTable - \
         PE1_OFFSETOF(GameTimerEntry, current)))[index].current)
 
+/* Frames played; Save_ClassifyPlaytime buckets it for the save header. */
+extern unsigned int g_PlayTimeFrameCounter;
+
 #endif

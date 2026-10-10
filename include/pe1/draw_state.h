@@ -47,6 +47,7 @@ extern int D_8009D128;
 #define g_DrawSpriteY D_8009D128
 
 extern int g_TextCursorStackBottom[], g_TextCursorStackTop[];
+extern int *g_TextCursorStackPtr;
 
 /* Byte (x, y) pairs terminated by 0xFF, followed by polygon edges. */
 void Draw_AllocColorGradient(int width, int height, u8 *points, int textured);

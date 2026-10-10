@@ -21,7 +21,6 @@ void Draw_OffsetCursor(int x, int y) {
     g_TextCursorY += y;
 }
 
-extern int *g_TextCursorStackPtr;
 
 #include "pe1/bounds_check.h"
 

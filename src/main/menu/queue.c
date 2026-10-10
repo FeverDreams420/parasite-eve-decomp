@@ -431,7 +431,6 @@ void Draw_SetFontVariant();
 
 extern s32 g_TextCursorX;
 extern s32 g_TextCursorY;
-extern void *g_TextCursorStackPtr;
 extern s32 g_DrawGradientBlendColor;
 extern s32 g_DrawPresentImage;
 extern s8 D_800A2198[];

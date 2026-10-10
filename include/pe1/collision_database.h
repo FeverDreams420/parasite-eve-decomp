@@ -132,4 +132,7 @@ PE1_STATIC_ASSERT(sizeof(CollisionDatabase) == 0x28, collision_database_header_s
 PE1_STATIC_ASSERT(PE1_OFFSETOF(CollisionDatabase, regions) == 0x28,
                   collision_database_regions_offset);
 
+/* Script word that receives the wall slot hit by the current entity. */
+extern short *g_EntityCollisionWallSlot;
+
 #endif

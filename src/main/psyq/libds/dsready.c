@@ -53,7 +53,6 @@ void DsEndReadySystem(void) {
     DS_ASYNC_READ_FIELD(state, active) = 0;
 }
 
-extern DsCallback D_8009B708;
 
 DsCallback DsReadySystemMode(DsCallback callback) {
     DsCallback *slot;

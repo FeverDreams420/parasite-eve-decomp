@@ -23,4 +23,7 @@ void _padStartCom(void);
 void MemCard_RunCommandStep(CardObj *port);
 int _padSioRW(CardObj *, int);
 
+/* Pad interrupt queue entry removed by StopPAD. */
+extern int D_800A34B0;
+
 #endif

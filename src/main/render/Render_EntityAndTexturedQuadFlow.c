@@ -5,6 +5,7 @@
 #include "pe1/gte.h"
 #include "pe1/render_tint.h"
 #include "pe1/field_actor.h"
+#include "pe1/render_matrix_copy.h"
 
 void Render_DrawObjectVariant(RenderObjectEntity *, s16, void *);
 void Render_DrawTexturedQuads(RenderObjectEntity *);
@@ -237,8 +238,6 @@ typedef union RenderMatrixWords {
     s32 words[8];
 } RenderMatrixWords;
 
-extern s32 g_IdentityMatrixSource[8];
-extern RenderObjectEntity g_PlayerBattleEntity;
 extern s32 *g_PlayerMatrixPtr;
 
 void Render_BuildEntityMatrix(RenderObjectEntity *object, s16 bufferIndex)

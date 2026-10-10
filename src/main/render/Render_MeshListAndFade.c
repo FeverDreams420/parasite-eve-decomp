@@ -368,7 +368,6 @@ int Geo_RenderMeshList(void *buffer, void **end)
 
 /* Camera y read through an array view: the scalar form schedules the load
  * before the preceding store. */
-extern u16 g_CameraClampedY[];
 
 
 int Geo_ClipPoint(int x, int y, int z) {

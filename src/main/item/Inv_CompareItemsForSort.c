@@ -4,6 +4,7 @@
 #include "pe1/inventory_sort.h"
 #include "pe1/psyq_libc.h"
 #include "pe1/inventory_queries.h"
+#include "pe1/aya.h"
 
 int Inv_CompareItemsForSort(const void *leftElement, const void *rightElement) {
     const short *leftIndex = leftElement;
@@ -256,7 +257,6 @@ extern u16 *g_InvSortListBase;
 extern s32 g_InvSortListCount;
 extern M2C_UNK *g_InvSortRankTable;
 extern M2C_UNK *g_InvSortTypeRankTable;
-extern s8 g_AyaEquippedWeaponSlot[];
 #define g_AyaEquippedWeaponSlot (g_AyaEquippedWeaponSlot[0])
 extern s8 g_AyaEquippedArmorSlot[];
 #define g_AyaEquippedArmorSlot (g_AyaEquippedArmorSlot[0])

@@ -1,7 +1,7 @@
 #include "pe1/psyq_bios.h"
+#include "pe1/psyq_pad_main.h"
 /* PSY-Q LIBAPI PAD, part 6 of 6: RemovePatchPad, func_8007E0F8, func_8007E160. */
 
-extern void D_800A34B0;
 
 void SysDeqIntRP(int index, void *queue);
 
@@ -12,7 +12,6 @@ int RemovePatchPad(void) {
     return 1;
 }
 
-typedef short s16;
 
 typedef struct PadWork {
     char pad[0xA];

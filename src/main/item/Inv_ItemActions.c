@@ -656,7 +656,6 @@ void Battle_UseItem(s32 arg0) {
 
 /* Active-list removal and tracked equipped slots. The two armor aliases
  * preserve independent address reads across the slot write. */
-extern s8 g_AyaEquippedWeaponSlot[];
 extern s8 g_AyaEquippedArmorSlot[];
 extern struct { char _[16]; } D_800C0E22_l1_o __asm__("g_AyaEquippedArmorSlot");
 extern struct { char _[16]; } D_800C0E22_s0_o __asm__("g_AyaEquippedArmorSlot");
@@ -699,7 +698,6 @@ int Inv_SwapSlots(int unused, int from, int unused2, int to) {
     return 1;
 }
 
-
 int Inv_ClearActiveListSlot(int arg0) {
     int value;
 
@@ -707,7 +705,6 @@ int Inv_ClearActiveListSlot(int arg0) {
     g_InvItemPtr[arg0] = 0;
     return value;
 }
-
 
 s32 Inv_RemoveActiveListItem(s32 arg0) {
     s32 sp10;
@@ -742,7 +739,6 @@ s32 Inv_RemoveActiveListItem(s32 arg0) {
 
     return removed;
 }
-
 
 int Inv_LoadWayneItemsAsOverride(short *items) {
     int count = 0;

@@ -773,4 +773,6 @@ extern u8 D_800E213C[];
 int func_800DEFFC(int mode, RenderFadeParticle *particle);
 int func_800DF6AC(int mode, RenderFadeEmitter *state);
 
+extern RenderObjectEntity g_PlayerBattleEntity;
+
 #endif
