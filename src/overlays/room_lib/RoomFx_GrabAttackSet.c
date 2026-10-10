@@ -113,6 +113,7 @@ void RoomFx_GrabStartOnProximity(RoomMotionTrigger *arg) {
         /* Retain the negated sine in the call-argument register. */
         register s32 neg asm("$4");
         FieldActor *p;
+        RenderMatrix *rotationMatrix;
         FieldActor *actor;
 
         func_8003E0FC(&arg->source_actor->render_object, 6, sp);
@@ -135,24 +136,25 @@ void RoomFx_GrabStartOnProximity(RoomMotionTrigger *arg) {
         neg = -v;
 
         p = GRAB_PLAYER;
-        p->render_object.model_matrix.rotation[1][0] = v;
+        rotationMatrix = &p->render_object.model_matrix;
+        rotationMatrix->rotation[1][0] = v;
         v = 0x1000;
-        p->render_object.model_matrix.rotation[2][2] = v;
-        *(volatile s32 *)&p->render_object.model_matrix.translation[0] = 0;
+        rotationMatrix->rotation[2][2] = v;
+        *(volatile s32 *)&rotationMatrix->translation[0] = 0;
         v = 0x100;
-        p->render_object.model_matrix.translation[0] = v;
-        *(volatile s32 *)&p->render_object.model_matrix.translation[2] = 0;
+        rotationMatrix->translation[0] = v;
+        *(volatile s32 *)&rotationMatrix->translation[2] = 0;
         v = -0xC0;
-        p->render_object.model_matrix.translation[2] = v;
-        p->render_object.model_matrix.rotation[0][0] = s;
-        p->render_object.model_matrix.rotation[0][1] = neg;
-        p->render_object.model_matrix.rotation[1][1] = s;
-        p->render_object.model_matrix.translation[1] = 0;
-        p->render_object.model_matrix.rotation[2][1] = 0;
-        p->render_object.model_matrix.rotation[2][0] = 0;
-        p->render_object.model_matrix.rotation[1][2] = 0;
-        p->render_object.model_matrix.rotation[0][2] = 0;
-        p->render_object.model_matrix.translation[1] = 0;
+        rotationMatrix->translation[2] = v;
+        rotationMatrix->rotation[0][0] = s;
+        rotationMatrix->rotation[0][1] = neg;
+        rotationMatrix->rotation[1][1] = s;
+        rotationMatrix->translation[1] = 0;
+        rotationMatrix->rotation[2][1] = 0;
+        rotationMatrix->rotation[2][0] = 0;
+        rotationMatrix->rotation[1][2] = 0;
+        rotationMatrix->rotation[0][2] = 0;
+        rotationMatrix->translation[1] = 0;
         arg->activated = 1;
 
         p = GRAB_PLAYER;
@@ -168,6 +170,7 @@ static const RoomFxVec4 s_GrabHoldScale = { 0x1400, 0x1400, 0x1400, 0 };
 void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
     FieldActor *s1 = arg0->probe_actor;
     FieldActor *g;
+    RenderMatrix *rotationMatrix;
     RoomFxVec4 scale;
     s32 dc4, cf4;
     /* PIN-DEBT: retail stores -cf4 from $a0 and emits the 0x1EA store first. */
@@ -190,19 +193,20 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
     dc4 = rcos(0xC00);
     cf4 = rsin(0xC00);
     g = GRAB_PLAYER;
+    rotationMatrix = &g->render_object.model_matrix;
     neg = -cf4;
-    g->render_object.model_matrix.rotation[0][1] = neg;
-    g->render_object.model_matrix.rotation[1][0] = cf4;
-    g->render_object.model_matrix.rotation[0][0] = dc4;
-    g->render_object.model_matrix.rotation[1][1] = dc4;
-    g->render_object.model_matrix.translation[2] = 0;
-    g->render_object.model_matrix.translation[1] = 0;
-    g->render_object.model_matrix.translation[0] = 0;
-    g->render_object.model_matrix.rotation[2][1] = 0;
-    g->render_object.model_matrix.rotation[2][0] = 0;
-    g->render_object.model_matrix.rotation[1][2] = 0;
-    g->render_object.model_matrix.rotation[0][2] = 0;
-    g->render_object.model_matrix.rotation[2][2] = 0x1000;
+    rotationMatrix->rotation[0][1] = neg;
+    rotationMatrix->rotation[1][0] = cf4;
+    rotationMatrix->rotation[0][0] = dc4;
+    rotationMatrix->rotation[1][1] = dc4;
+    rotationMatrix->translation[2] = 0;
+    rotationMatrix->translation[1] = 0;
+    rotationMatrix->translation[0] = 0;
+    rotationMatrix->rotation[2][1] = 0;
+    rotationMatrix->rotation[2][0] = 0;
+    rotationMatrix->rotation[1][2] = 0;
+    rotationMatrix->rotation[0][2] = 0;
+    rotationMatrix->rotation[2][2] = 0x1000;
     scale = s_GrabHoldScale;
     matrix_arg = GRAB_PLAYER;
     ScaleMatrix(&matrix_arg->render_object.model_matrix, &scale);
