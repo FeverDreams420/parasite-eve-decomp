@@ -4,6 +4,9 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
+/* Text byte-string helpers, the item grid rebuild and the active inventory
+ * list selection (Aya's list or a storage override) with its slot limit. */
+
 s16 *g_InvItemPtr;
 s16 *g_InvActiveListOverride;
 int g_InvSlotLimit;
@@ -17,9 +20,9 @@ extern s16 D_800C1F7E[];
 extern s16 D_800C2022[];
 extern u8 D_800A1E6D[][32];
 extern s16 D_800A1E76[][16];
+extern unsigned char g_AyaInventorySlotCount[];
 
 extern ItemDataRecord D_800A1E64[];
-
 void Util_CopyFFTerminatedBytes(u8 *dst, u8 *src)
 {
     u8 first;
@@ -141,5 +144,34 @@ void Inv_SelectActiveList(int useOverride) {
         g_InvSlotLimit = Inv_GetAyaSlotLimit();
         g_InvSelectionBits = g_AyaItemSelectionBits;
         g_InvSelectionBitWords = 2;
+    }
+}
+
+void Inv_SetActiveListOverride(s16 *items, int count) {
+    g_InvActiveListOverride = items;
+    g_InvOverrideSlotLimit = count;
+}
+
+void Inv_ResetActiveList(void) {
+    g_InvActiveListOverride = 0;
+    g_InvOverrideSlotLimit = 0;
+    g_InvItemPtr = g_AyaInventoryItems;
+    g_InvSlotLimit = Inv_GetAyaSlotLimit();
+    g_InvSelectionBits = g_AyaItemSelectionBits;
+    g_InvSelectionBitWords = 2;
+}
+
+int Inv_IsActiveListOverrideSelected(void) {
+    return g_InvItemPtr != g_AyaInventoryItems;
+}
+
+void Inv_SetAyaSlotCount(int count) {
+    if (count >= 0x33) {
+        count = 0x32;
+    }
+
+    g_AyaInventorySlotCount[0] = count;
+    if (g_InvItemPtr == (s16 *)(g_AyaInventorySlotCount + 0x3C)) {
+        g_InvSlotLimit = Inv_GetAyaSlotLimit();
     }
 }

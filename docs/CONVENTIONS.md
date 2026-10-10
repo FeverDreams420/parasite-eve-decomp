@@ -121,7 +121,7 @@ edge, as `akao/Spu_TransferAndLifecycle` did before LIBPAD WAITRC2's
 | `audio` | `Sfx_` | misnamed: both files are menu item-list code | dissolved: both `Sfx_` units are in `menu` |
 | `time` | `GameTime_` | play-time counters and timers | keep |
 | `table` | `Tbl_`, `Str_` | text and textbox lookup tables | rename to `text` (`Text_`) |
-| `util` | `Util_` | vague | dissolved: `util.c` is `item/Inv_ItemGridAndActiveList.c` |
+| `util` | `Util_` | vague | dissolved: `util.c` is `item/Inv_ActiveListSelection.c` |
 | `main` | mixed | splat's default bucket, not a subsystem | dissolve by prefix into the rows above; what remains is battle code (to `battle`) and three units still being edited (`Camera_AngleMotionFlow`, `MapSelectionFlow`, `Scene_UpdateEntityPositions`) |
 
 ## Overlays

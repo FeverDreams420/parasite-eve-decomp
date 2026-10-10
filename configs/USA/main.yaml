@@ -524,10 +524,9 @@ segments:
       - [0x4308C, c, time/game_time]
       # Item-drop random table seeding and per-draw refresh share g_ItemDropRngIndex.
       - [0x430F0, c, item/Inv_DropRng]
-      - [0x433CC, c, item/Inv_ItemGridAndActiveList]
-      - [0x436B0, c, item/inv]
-      - [0x4370C, c, item/Inv_IsActiveListOverrideSelected]
-      - [0x43724, c, item/Inv_SetAyaSlotCount]
+      # Byte-string helpers, item grid rebuild and active-list selection share the
+      # active-list pointer, override and slot limit.
+      - [0x433CC, c, item/Inv_ActiveListSelection]
       - [0x43770, c, item/inv2]
       - [0x43868, c, item/Inv_LookupActiveListDisplayData]
       - [0x43928, c, item/Inv_RebuildSelectionBitset]
