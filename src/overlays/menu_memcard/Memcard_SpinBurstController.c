@@ -105,8 +105,11 @@ int Memcard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
         D_801F1F28.x = burst->x;
         D_801F1F28.y = burst->y;
         D_801F1F28.z = burst->z;
-        D_800F336C = 1;
-        D_800F3368.tpage = D_800E2850[D_800E11E6];
+        {
+            u16 tpage = D_800E2850[D_800E11E6];
+            D_800F3368.palette = 1;
+            D_800F3368.tpage = tpage;
+        }
         func_800CEDA8(1);
         D_800F3368.parameter06 = 0;
         D_800F3368.parameter0A = 0;

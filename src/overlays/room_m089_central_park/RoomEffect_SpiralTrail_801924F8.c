@@ -85,7 +85,7 @@ int func_801924F8(int mode, RoomM089SpiralTrail *trail, GteShortVector *anchor) 
             rotation.z = trail->timer * 128;
             rotation.flags = 1;
             intensity = rcos(trail->timer << 7) / 32;
-            kind = D_800F336C;
+            kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             func_800CEE20(&trail->points[0], &rotation, 0x1000, 0x1000, 6,
                           (u16)func_80077AA4(0, (kind == 4 && D_800F3428) ? palette + 8 : palette + 4),

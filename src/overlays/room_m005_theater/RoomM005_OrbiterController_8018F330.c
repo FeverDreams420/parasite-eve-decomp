@@ -62,16 +62,16 @@ int func_8018F330(int mode, RoomM005OrbiterState *state) {
             int idx = D_800E11E8;
             int palette;
             D_800F3368.parameter00 = 16;
-            D_800F336A = 1;
-            D_800F3376 = 16;
-            D_800F3378 = 16;
+            D_800F3368.parameter02 = 1;
+            D_800F3368.extent_x = 16;
+            D_800F3368.extent_y = 16;
             palette = D_800E2850[idx];
             PE1_COMPILER_MEMORY_BARRIER();
-            D_800F336C = 2;
-            D_800F336E = 0;
-            D_800F3372 = 0;
-            D_800F3374 = 8;
-            D_800F3370 = palette;
+            D_800F3368.palette = 2;
+            D_800F3368.parameter06 = 0;
+            D_800F3368.parameter0A = 0;
+            D_800F3368.depth = 8;
+            D_800F3368.tpage = palette;
         }
         break;
     }

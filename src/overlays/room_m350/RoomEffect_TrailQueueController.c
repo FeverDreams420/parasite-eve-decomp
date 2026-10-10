@@ -1,3 +1,4 @@
+#include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
 
@@ -7,13 +8,7 @@ extern unsigned char D_8019A86E;
 extern short D_8019A85C;
 extern Vector g_RoomEffectTrailPositions[4];
 extern unsigned short D_800E11E8, D_800E2850[];
-extern short D_800F3368, D_800F336A, D_800F3374;
-extern unsigned short D_800F3372;
-extern unsigned short D_800F336E;
-extern unsigned short D_800F336C, D_800F3370;
 /* Retail writes both fields twice during configuration. */
-extern unsigned short D_800F3378;
-extern unsigned short D_800F3376;
 extern int func_8019A014(int, short *);
 
 int func_8019784C(int event)
@@ -49,18 +44,18 @@ configure:
         int unit = 16;
         int index = D_800E11E8;
         int palette;
-        D_800F3368 = unit;
-        D_800F336A = 1;
-        D_800F3376 = unit;
-        D_800F3378 = unit;
-        D_800F3376 = unit;
-        D_800F3378 = unit;
+        D_800F3368.parameter00 = unit;
+        D_800F3368.parameter02 = 1;
+        D_800F3368.extent_x = unit;
+        D_800F3368.extent_y = unit;
+        D_800F3368.extent_x = unit;
+        D_800F3368.extent_y = unit;
         palette = D_800E2850[index];
-        D_800F336C = 2;
-        D_800F336E = 0;
-        D_800F3372 = 0;
-        D_800F3374 = 0;
-        D_800F3370 = palette;
+        D_800F3368.palette = 2;
+        D_800F3368.parameter06 = 0;
+        D_800F3368.parameter0A = 0;
+        D_800F3368.depth = 0;
+        D_800F3368.tpage = palette;
     }
 done:
     return 0;

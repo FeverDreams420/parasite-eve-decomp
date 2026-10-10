@@ -2,13 +2,13 @@
 #define PE1_ROOM_M123_BEACON_H
 
 #include "common.h"
+#include "pe1/field_sprite_params.h"
 #include "pe1/field_transform_point.h"
 #include "pe1/gte.h"
 #include "pe1/gte_types.h"
 #include "pe1/render_matrix_slot.h"
 #include "pe1/render_prim.h"
 #include "pe1/field_model_draw.h"
-
 
 /* room_m123 joint beacon (func_80193618): follows joint 0x17 of the actor,
  * swells, pulses and fades, tags the player once on contact, and draws a glow
@@ -71,24 +71,10 @@ typedef struct RoomM123BeaconArchive {
     void *channel;
 } RoomM123BeaconArchive;
 
-/* The sprite parameter block at 0x800F3368 (RenderEffectParameters). */
-typedef struct RoomM123BeaconParams {
-    u16 parameter00;
-    u16 parameter02;
-    u16 palette;
-    u16 parameter06;
-    u16 tpage;
-    u16 parameter0A;
-    s16 depth;
-    u16 extent_x;
-    u16 extent_y;
-} RoomM123BeaconParams;
-
 typedef struct RoomM123BeaconColor {
     u8 r, g, b, code;
 } RoomM123BeaconColor;
 
-extern RoomM123BeaconParams D_800F3368;
 extern u16 D_800E1204[];
 extern u16 D_800E2850[];
 extern int D_800F3428;

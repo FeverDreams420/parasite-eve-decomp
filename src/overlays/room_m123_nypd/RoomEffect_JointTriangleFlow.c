@@ -76,18 +76,6 @@ int func_8019251C(int mode, RoomM123JointTriangle *triangle) {
     return 0;
 }
 
-/* Preserve this controller's direct halfword accesses alongside the
- * callback's structured RenderEffectParameters view. */
-#define D_800F3368 (*(u16 *)0x800F3368)
-#define D_800F336A (*(u16 *)0x800F336A)
-#define D_800F336C (*(u16 *)0x800F336C)
-#define D_800F336E (*(u16 *)0x800F336E)
-#define D_800F3370 (*(u16 *)0x800F3370)
-#define D_800F3372 (*(u16 *)0x800F3372)
-#define D_800F3374 (*(u16 *)0x800F3374)
-#define D_800F3376 (*(u16 *)0x800F3376)
-#define D_800F3378 (*(u16 *)0x800F3378)
-
 extern int D_800E27EC;
 extern u16 D_800E11EA;
 extern u16 D_800E2850[];
@@ -126,17 +114,16 @@ int func_801929FC(int mode) {
     case 2: {
         int paletteIndex = D_800E11EA;
         int palette;
-        D_800F3368 = 16;
-        D_800F336A = 1;
-        D_800F3376 = 16;
-        D_800F3378 = 16;
+        D_800F3368.parameter00 = 16;
+        D_800F3368.parameter02 = 1;
+        D_800F3368.extent_x = 16;
+        D_800F3368.extent_y = 16;
         palette = D_800E2850[paletteIndex];
-        asm volatile("" ::: "memory");
-        D_800F336C = 3;
-        D_800F336E = 0;
-        D_800F3372 = 0;
-        D_800F3374 = 12;
-        D_800F3370 = palette;
+        D_800F3368.palette = 3;
+        D_800F3368.parameter06 = 0;
+        D_800F3368.parameter0A = 0;
+        D_800F3368.depth = 12;
+        D_800F3368.tpage = palette;
         break;
     }
     }

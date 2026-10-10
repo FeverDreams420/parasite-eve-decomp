@@ -2,6 +2,7 @@
 #define PE1_ROOM_M404_DROP_H
 
 #include "common.h"
+#include "pe1/field_sprite_params.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte.h"
 #include "pe1/gte_types.h"
@@ -62,20 +63,6 @@ typedef struct RoomM404DropEvent {
     u8 active;
 } RoomM404DropEvent;
 
-/* The sprite parameter block at 0x800F3368 (RenderEffectParameters). */
-typedef struct RoomM404DropParams {
-    u16 parameter00;
-    u16 parameter02;
-    u16 palette;
-    u16 parameter06;
-    u16 tpage;
-    u16 parameter0A;
-    s16 depth;
-    u16 extent_x;
-    u16 extent_y;
-} RoomM404DropParams;
-
-extern RoomM404DropParams D_800F3368;
 extern RoomM404DropChannel *D_800F32D0;
 extern RoomM404DropSpawnChannel *D_800F33E0;
 extern RoomM404DropEvent *D_800E2368;

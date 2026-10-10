@@ -137,7 +137,7 @@ int func_800D7764(int mode, FieldFanSweepGlow *glow)
         D_800F3368.parameter0A = 0;
         D_800F3368.depth = 100;
         intensity = rsin((D_800E27EC << 11) / 60) / 32;
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         scale = 0x2800;
         func_800CEE20(&glow->position, 0, scale, scale, 4,

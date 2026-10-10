@@ -1,13 +1,10 @@
+#include "pe1/field_sprite_params.h"
 #include "room_m273_effects.h"
 #include "pe1/field_anim_callback_list.h"
 /* The batch emitter fills the eight-byte records rendered by this callback. */
 extern int D_800E27EC, D_800F3428;
 extern unsigned short D_800E11EA,D_800E2850[];
-extern unsigned short D_800F3368,D_800F336C,D_800F336E,D_800E1204[];
-extern short D_800F336A;
-extern unsigned short D_800F3370, D_800F3372;
-extern short D_800F3374;
-extern unsigned short D_800F3376,D_800F3378;
+extern unsigned short D_800E1204[];
 extern short D_8019AD68[];
 extern int D_800966EC[];
 extern RoomM273RisingBatchBuffer D_8019AF0C;
@@ -20,13 +17,13 @@ int func_80196F2C(int mode, GteShortVector *position) {
         position->y -= 6;
     } else if (mode == 2) {
         int frame = D_800E27EC - 1;
-        int kind = D_800F336C;
+        int kind = D_800F3368.palette;
         int palette = D_800E1204[kind];
         int clut;
         if (kind == 4 && D_800F3428) palette += 4;
         clut = GetClut(64, palette);
         func_800CEE20(position, 0, 4096, 4096,
-            44 + D_800F336A * D_8019AD68[frame / 4], clut, 1,
+            44 + (s16)D_800F3368.parameter02 * D_8019AD68[frame / 4], clut, 1,
             (short)D_800966EC[(((unsigned int)frame << 9) & 0x3E00) / 4] >> 5, 0);
     }
     return 0;
@@ -68,12 +65,12 @@ int func_8019706C(int mode) {
     case 2: {
         unsigned int index=D_800E11EA;
         unsigned short palette;
-        D_800F3368=32; D_800F336A=2;
-        D_800F3376=32; D_800F3378=32;
-        D_800F3376=32; D_800F3378=32;
+        D_800F3368.parameter00=32; D_800F3368.parameter02=2;
+        D_800F3368.extent_x=32; D_800F3368.extent_y=32;
+        D_800F3368.extent_x=32; D_800F3368.extent_y=32;
         palette=D_800E2850[index];
-        D_800F336C=3; D_800F336E=0; D_800F3372=0; D_800F3374=0;
-        D_800F3370=palette;
+        D_800F3368.palette=3; D_800F3368.parameter06=0; D_800F3368.parameter0A=0; D_800F3368.depth=0;
+        D_800F3368.tpage=palette;
         break;
     }
     }

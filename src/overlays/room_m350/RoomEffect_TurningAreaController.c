@@ -1,3 +1,4 @@
+#include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
 #include "pe1/scene_assets.h"
 #include "pe1/gte.h"
@@ -25,7 +26,7 @@ extern short D_8019A80A,D_8019A80C,D_8019A80E,D_8019A810,D_8019A812,D_8019A814,D
 extern int D_8019A81C,D_8019A820,D_8019A824;
 extern Vector D_8019A574[];
 extern char D_8019A594[],D_8019A3C8[];
-extern unsigned short D_800E11FA,D_800E2850[],D_800F336C,D_800E1204[];
+extern unsigned short D_800E11FA, D_800E2850[], D_800E1204[];
 extern void func_800C6D5C(void *,int,int);
 extern int func_800DFE20(int *,int *),FieldEng_VecToAngle(int *,int *),rcos(int),rsin(int);
 extern int GetTPage(int,int,int,int),GetClut(int,int);
@@ -177,7 +178,7 @@ draw:
         for(;i<3;i++) *out++=*in++;
         rawPage=GetTPage(0,1,0,0);
         page=(unsigned short)(D_800E2850[D_800E11FA]|rawPage);
-        kind=D_800F336C;
+        kind=D_800F3368.palette;
         palette=D_800E1204[kind];
         palette=GetClut(0,(kind==4 && D_800F3428!=0) ? palette+7 : palette+3);
         GsSetOrign(page,(unsigned short)palette);

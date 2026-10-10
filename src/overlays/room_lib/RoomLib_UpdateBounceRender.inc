@@ -131,13 +131,13 @@ drawBounce:
         }
         fade >>= 7;
         saved0 = fade + 0x28;
-        texture = D_800E1204[D_800F336C];
-        if (D_800F336C == 4 && D_800F3428 != 0) {
+        texture = D_800E1204[D_800F3368.palette];
+        if (D_800F3368.palette == 4 && D_800F3428 != 0) {
             texture += 4;
         }
         texture = func_80077AA4(ROOMLIB_BOUNCE_CLUT_X, texture);
         func_800CEE20((GteShortVector *)fx, 0, saved2, saved2,
-                      D_800F336A * (fx->timer / 6) + ROOMLIB_BOUNCE_FRAME_BASE,
+                      (s16)D_800F3368.parameter02 * (fx->timer / 6) + ROOMLIB_BOUNCE_FRAME_BASE,
                       (unsigned short)texture, 1, saved0, 0);
         goto ret0;
     }

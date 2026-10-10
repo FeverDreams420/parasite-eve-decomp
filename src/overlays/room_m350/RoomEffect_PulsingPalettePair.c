@@ -1,3 +1,4 @@
+#include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
 typedef RoomM350Vector Vector;
@@ -12,14 +13,7 @@ extern unsigned short D_800E1204[], D_800E2850[];
 extern short D_800966EE[];
 extern int D_800966EC[];
 extern Vector D_8019A778[];
-extern short D_800F3368, D_800F336A;
-extern unsigned short D_800F3378;
-extern unsigned short D_800F3376;
-extern unsigned short D_800F336C;
-extern short D_800F3374;
-extern unsigned short D_800F3372;
-extern unsigned short D_800F336E;
-extern unsigned short D_800E11EA, D_800F3370;
+extern unsigned short D_800E11EA;
 extern int GetClut(int, int);
 extern int Inv_ScrambleGrid(void);
 extern void func_800CEE20(void *, void *, int, int, int, unsigned int, int, int, void *);
@@ -29,7 +23,7 @@ int func_801927A4(int event, Particle *effect) {
         if (D_800E27EC >= 16) return 1;
     } else if (event == 2) {
         int scale = D_800966EE[((unsigned int)(D_800E27EC - 1) << 8) & 0x1F00] * 4 + 2048;
-        int kind = D_800F336C;
+        int kind = D_800F3368.palette;
         int palette = D_800E1204[kind];
         int handle;
         if (kind == 4 && D_800F3428) palette += 4;
@@ -79,12 +73,12 @@ configure:
     {
         int index = D_800E11EA;
         int palette;
-        D_800F3368 = 32; D_800F336A = 2;
-        D_800F3376 = 32; D_800F3378 = 32;
-        D_800F3376 = 32; D_800F3378 = 32;
+        D_800F3368.parameter00 = 32; D_800F3368.parameter02 = 2;
+        D_800F3368.extent_x = 32; D_800F3368.extent_y = 32;
+        D_800F3368.extent_x = 32; D_800F3368.extent_y = 32;
         palette = D_800E2850[index];
-        D_800F336C = 3; D_800F336E = 0;
-        D_800F3372 = 0; D_800F3374 = 0; D_800F3370 = palette;
+        D_800F3368.palette = 3; D_800F3368.parameter06 = 0;
+        D_800F3368.parameter0A = 0; D_800F3368.depth = 0; D_800F3368.tpage = palette;
     }
 done:
     return 0;

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "pe1/field_sprite_params.h"
 #include "pe1/gte_types.h"
 
 typedef struct SceneE19Effect {
@@ -9,7 +10,7 @@ typedef struct SceneE19Effect {
 
 extern GteShortVector D_8018F1CC;
 extern int D_800F3428, D_8019B668;
-extern u16 D_800F336C, D_800E1204[];
+extern u16 D_800E1204[];
 extern int rsin(int), rcos(int);
 extern u16 GetClut(int, int);
 extern void func_800CEE20(void *, void *, int, int, int, int, int, int, void *);
@@ -34,7 +35,7 @@ int func_80192E08(int mode, SceneE19Effect *effect) {
         cosine = rsin(angle);
         sine = rcos(angle);
         brightness = (D_8019B668 * sine) / 4096;
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428) palette += 4;
         clut = GetClut(144, palette);

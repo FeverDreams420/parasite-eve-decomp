@@ -105,8 +105,11 @@ int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
         D_800F3368.parameter02 = 2;
         D_800F3368.extent_x = 32;
         D_800F3368.extent_y = 32;
-        D_800F336C = 1;
-        D_800F3368.tpage = D_800E2850[D_800E11E6];
+        {
+            u16 tpage = D_800E2850[D_800E11E6];
+            D_800F3368.palette = 1;
+            D_800F3368.tpage = tpage;
+        }
         func_800CEDA8(1);
         alpha = 140;
         size = 0x1000;
@@ -121,7 +124,7 @@ int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
             int kind;
             int palette;
             func_800CE8F0(D_800F32D0->pool, flash->attachA, &center, &from);
-            kind = D_800F336C;
+            kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800CEE20(&from, 0, size / 4, size / 4, 128,
@@ -131,7 +134,7 @@ int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
             int kind;
             int palette;
             func_800CE8F0(D_800F32D0->pool, flash->attachB, &center, &from);
-            kind = D_800F336C;
+            kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800CEE20(&from, 0, size / 2, size / 2, 128,

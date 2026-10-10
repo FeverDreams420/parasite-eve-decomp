@@ -162,7 +162,7 @@ int ROOMEFFECT_DROPPED_FLARE_FUNC(int mode, RoomDroppedFlare *flare,
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = GetClut(0, palette);
             func_800CEE20(flare, 0, lift, lift,
-                          D_800F3368.parameter02 * (s16)flare->timer, clut, 1,
+                          (s16)D_800F3368.parameter02 * (s16)flare->timer, clut, 1,
                           0x80, &color);
             }
             return 0;
@@ -176,7 +176,7 @@ int ROOMEFFECT_DROPPED_FLARE_FUNC(int mode, RoomDroppedFlare *flare,
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = GetClut(0, palette);
             func_800CEE20(flare, &rotation, lift, lift,
-                          D_800F3368.parameter02 * ((s16)flare->timer / 2),
+                          (s16)D_800F3368.parameter02 * ((s16)flare->timer / 2),
                           clut, 0, 0x80, &color);
             }
             break;
@@ -204,7 +204,7 @@ int ROOMEFFECT_DROPPED_FLARE_FUNC(int mode, RoomDroppedFlare *flare,
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = GetClut(0x80, palette);
             func_800CEE20(flare, &rotation, scale, scale,
-                          D_800F3368.parameter02 * 2 + 0xFD, clut, 1, fade, 0);
+                          (s16)D_800F3368.parameter02 * 2 + 0xFD, clut, 1, fade, 0);
             }
             return 0;
         case 4:

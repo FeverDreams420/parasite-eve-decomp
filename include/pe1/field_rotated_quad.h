@@ -35,7 +35,6 @@ PE1_STATIC_ASSERT(sizeof(FieldGt4Packet) == 0x34, field_gt4_packet_size);
 /* Black default for a missing corner colour. */
 extern RenderColor D_800C22A0;
 /* Texture page of the current sprite parameter block. */
-extern u16 D_800F3370;
 
 void SetPolyGT4(FieldGt4Packet *packet);
 void MulRotMatrix(GteMatrix *matrix);

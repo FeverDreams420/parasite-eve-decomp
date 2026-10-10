@@ -52,7 +52,7 @@ int func_8018F004(int mode, RoomDriftPulseState *state) {
                 origin.x = state->x;
                 origin.y = state->y;
                 origin.z = state->z;
-                kind = D_800F336C;
+                kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 fade = (D_800E27EC - 1) << 4;
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
@@ -65,14 +65,14 @@ int func_8018F004(int mode, RoomDriftPulseState *state) {
             rotation.z = state->z;
             rotation.flags = 1;
             {
-                int kind = D_800F336C;
+                int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 u16 clut;
 
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 clut = func_80077AA4(0x20, palette);
                 func_800CEE20(&g_RoomScriptRecord, &rotation, 0x1000, 0x1000,
-                              (D_800F336A << 1) * (D_800E27EC - 1) + 0x60, clut,
+                              ((s16)D_800F3368.parameter02 << 1) * (D_800E27EC - 1) + 0x60, clut,
                               3, 0x80, 0);
             }
             break;
@@ -83,14 +83,14 @@ int func_8018F004(int mode, RoomDriftPulseState *state) {
             rotation.z = D_800E27EC << 6;
             {
                 int scale = rcos((D_800E27EC - 1) << 7) / 32;
-                int kind = D_800F336C;
+                int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 u16 clut;
 
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 clut = func_80077AA4(0x10, palette);
                 func_800CEE20((GteShortVector *)state, &rotation, 0x1000, 0x1000,
-                              D_800F336A * D_800E27EC + 0x40, clut, 1, scale, 0);
+                              (s16)D_800F3368.parameter02 * D_800E27EC + 0x40, clut, 1, scale, 0);
             }
             break;
         default:

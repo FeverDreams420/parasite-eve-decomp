@@ -61,7 +61,7 @@ void func_800D2B58(GteShortVector *from, GteShortVector *to, u8 *color0,
         gte_stszotz(out);
     }
     gte_stsxy2(&line->x1);
-    depth[0] = (int)(depth[0] + depth[1]) / 2 - (u16)D_800F3374;
+    depth[0] = (int)(depth[0] + depth[1]) / 2 - (u16)D_800F3368.depth;
     if (depth[0] < 0x1000) {
         char **drawBuffers = packetBuffers;
         TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[D_8009CDDC], depth[0]);

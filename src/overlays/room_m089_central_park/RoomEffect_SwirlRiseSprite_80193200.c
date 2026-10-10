@@ -63,12 +63,12 @@ int RoomEffect_SwirlRiseSprite_80193200(int mode, RoomSwirlRiseState *state,
             rotation.flags = 0;
             intensity = 0x80 - D_800E27EC * 2;
             scale = rsin(D_800E27EC << 4) + 0x800;
-            kind = D_800F336C;
+            kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = (u16)func_80077AA4(0x20, palette);
             func_800CEE20((GteShortVector *)state, &rotation, scale, scale,
-                          D_800F336A * (D_800E27EC / 16) + 0x24, clut, 1,
+                          (s16)D_800F3368.parameter02 * (D_800E27EC / 16) + 0x24, clut, 1,
                           intensity, 0);
             return 0;
         }
@@ -85,7 +85,7 @@ int RoomEffect_SwirlRiseSprite_80193200(int mode, RoomSwirlRiseState *state,
             intensity = rcos((D_800E27EC << 10) / 6) / 32;
             *(int *)&color = 0x808080;
             spin = (GteRotation *)state;
-            kind = D_800F336C;
+            kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             v = ((D_800E27EC & 1) << 4) + 0x80;
             if (kind == 4 && D_800F3428 != 0) palette += 4;

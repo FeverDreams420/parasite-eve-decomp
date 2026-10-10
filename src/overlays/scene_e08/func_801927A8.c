@@ -1,7 +1,7 @@
 #include "common.h"
+#include "pe1/field_sprite_params.h"
 
 extern u8 D_80198820[];
-extern s16 D_800F3374;
 
 void *func_800C2B50(void);
 void func_800C2EAC(u8);
@@ -44,7 +44,7 @@ void func_801927A8(void *unused0, void *unused1, char *effect) {
             scratchB[0] = 0;
             scratchB[1] = 0;
             scratchB[2] = 0;
-            D_800F3374 = 0;
+            D_800F3368.depth = 0;
             retA = func_80077A64(1, 0, 0x340, 0x100) & 0xffff;
             retB = func_80077AA4(0, 0x1D9) & 0xffff;
             func_800D3114(dst, 2, *(s16 *)(frame + 0x240), 0x20, 0x90,

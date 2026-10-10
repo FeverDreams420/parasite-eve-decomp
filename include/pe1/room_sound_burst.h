@@ -2,6 +2,7 @@
 #define PE1_ROOM_SOUND_BURST_H
 
 #include "common.h"
+#include "pe1/field_sprite_params.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_transform_point.h"
 #include "pe1/gte_types.h"
@@ -73,20 +74,6 @@ extern RoomSoundBurstEventState *D_800E2368;
 extern s32 D_800E27EC;
 extern volatile u16 D_800E11E8;
 extern u16 D_800E2850[];
-/* Halfword parameter block at 0x800F3368. The controller writes it through
- * volatile scalars; the particle reads it as this struct so the compiler
- * keeps the reads ordered after the particle stores, as retail does. */
-typedef struct RoomSoundBurstParams {
-    u16 parameter00;
-    u16 parameter02;
-    u16 palette;
-    u16 parameter06;
-    u16 tpage;
-    u16 parameter0A;
-    s16 depth;
-    u16 extent_x;
-    u16 extent_y;
-} RoomSoundBurstParams;
 extern void func_800CE8F0(void *, int, void *, void *);
 extern int rsin(int);
 extern int func_800D3FD8(void);

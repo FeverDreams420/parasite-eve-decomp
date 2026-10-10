@@ -23,8 +23,8 @@ int func_800D7E78(int mode, GteShortVector *state)
         position.z = state->z;
         func_800CF3AC(D_800E1988, &color, D_800E27EC);
         scale = 4096 - (D_800E27EC << 12) / 6;
-        clut_y = D_800E1204[D_800F336C];
-        if (D_800F336C == 4 && D_800F3428)
+        clut_y = D_800E1204[D_800F3368.palette];
+        if (D_800F3368.palette == 4 && D_800F3428)
             clut_y += 4;
         func_800CEE20(&position, 0, scale, scale, 0x8A,
                      GetClut(0x70, clut_y), 1, 128, &color);
@@ -91,7 +91,7 @@ int func_800D7FBC(int mode, RenderOrbitingEffect *state)
         rotation.z = D_800E27EC << 7;
         rotation.flags = 0;
         scale *= 2;
-        interval = D_800F336C;
+        interval = D_800F3368.palette;
         palette = D_800E1204[interval];
         func_800CEE20(&position, &rotation, scale, scale, 36,
                      GetClut(0, (interval == 4 && D_800F3428) ? palette + 7
@@ -269,7 +269,7 @@ int func_800D8978(int mode, RenderVerticalEffect *state)
         rotation.flags = 1;
         func_800CF3AC(D_800E1A14, &color, D_800E27EC);
         scale *= 2;
-        selector = D_800F336C;
+        selector = D_800F3368.palette;
         palette = D_800E1204[selector];
         func_800CEE20(&position, &rotation, scale, scale, 68,
                      GetClut(0, (selector == 4 && D_800F3428) ? palette + 7
@@ -341,8 +341,8 @@ int func_800D8D14(int mode, GteShortVector *state)
         rotation.flags = 0;
         func_800CF3AC(D_800E1AA0, &color, D_800E27EC);
         scale = 4096 - (D_800E27EC << 12) / 12;
-        palette = D_800E1204[D_800F336C];
-        if (D_800F336C == 4 && D_800F3428)
+        palette = D_800E1204[D_800F3368.palette];
+        if (D_800F3368.palette == 4 && D_800F3428)
             palette += 4;
         func_800CEE20(&position, &rotation, scale, scale, 138,
                      GetClut(112, palette), 1, 128, &color);
@@ -410,7 +410,7 @@ int func_800D8E74(int mode, RenderHelicalEffect *state)
         rotation.z = D_800E27EC << 7;
         rotation.flags = 0;
         scale *= 2;
-        interval = D_800F336C;
+        interval = D_800F3368.palette;
         palette = D_800E1204[interval];
         func_800CEE20(&position, &rotation, scale, scale, 228,
                      GetClut(0, (interval == 4 && D_800F3428) ? palette + 6 : palette + 2),

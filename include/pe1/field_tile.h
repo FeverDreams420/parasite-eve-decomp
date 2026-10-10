@@ -2,6 +2,7 @@
 #define PE1_FIELD_TILE_H
 
 #include "common.h"
+#include "pe1/field_sprite_params.h"
 #include "pe1/gte_types.h"
 #include "pe1/render_prim.h"
 #include "pe1/render_tint.h"
@@ -36,7 +37,6 @@ typedef struct FieldTilePoint {
 } FieldTilePoint;
 
 /* Matches render_object.h, for includers that do not include that header. */
-extern s16 D_800F3374;
 
 void *memset(void *dst, int value, unsigned int size);
 void SetTile(RenderTintTile *tile);

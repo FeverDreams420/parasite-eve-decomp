@@ -54,7 +54,7 @@ void func_800D27FC(int x, int y, void *color, int scale, int mode)
         s32 *out = (s32 *)&depth;
         gte_stszotz(out);
     }
-    depth -= (u16)D_800F3374;
+    depth -= (u16)D_800F3368.depth;
     if (depth < 0x1000) {
         glow->x = point->x - 1;
         glow->y = point->y - 1;

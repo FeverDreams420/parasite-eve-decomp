@@ -1,3 +1,4 @@
+#include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
 typedef RoomM350Vector Vector;
@@ -11,16 +12,9 @@ typedef RoomM350Actor Actor;
 extern RoomM350Emitter *D_800F33E0;
 extern Actor *D_800F32D0;
 extern int D_800E27EC, D_800F3428, D_800966EC[], D_8019A3D0[];
-extern unsigned short D_800F336C, D_800E1204[], D_800E2850[];
-extern short D_800F336A;
+extern unsigned short D_800E1204[], D_800E2850[];
 extern Vector D_8019A778[];
-extern short D_800F3368;
-extern unsigned short D_800F3378;
-extern unsigned short D_800F3376;
-extern short D_800F3374;
-extern unsigned short D_800F3372;
-extern unsigned short D_800F336E;
-extern unsigned short D_800E11E8, D_800F3370;
+extern unsigned short D_800E11E8;
 extern int GetClut(int, int);
 extern void func_800CEE20(void *, int, int, int, int, unsigned int, int, int, void *);
 
@@ -33,7 +27,7 @@ int func_80192ADC(int event, Particle *object)
     } else if (event == 2) {
         int size = *(short *)((char *)D_800966EC +
             (((unsigned int)(D_800E27EC - 1) << 8) & 0x3F00)) * object->scale / 4096;
-        int kind = D_800F336C;
+        int kind = D_800F3368.palette;
         int palette = D_800E1204[kind];
         int handle;
 
@@ -41,7 +35,7 @@ int func_80192ADC(int event, Particle *object)
             palette += 4;
         }
         handle = GetClut(32, palette);
-        func_800CEE20(object->position, 0, size, size, D_800F336A + 216,
+        func_800CEE20(object->position, 0, size, size, (s16)D_800F3368.parameter02 + 216,
             (unsigned short)handle, 1,
             (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80] >> 5,
             D_8019A3D0);
@@ -84,11 +78,11 @@ configure:
         int palette;
                 palette = D_800E2850[D_800E11E8];
         asm("" : "=r"(palette) : "0"(palette) : "memory");
-        D_800F336C = 2; D_800F336E = 0;
-        D_800F3368 = unit; D_800F336A = 1;
-        D_800F3376 = unit; D_800F3378 = unit;
-        D_800F3376 = unit; D_800F3378 = unit;
-        D_800F3372 = 0; D_800F3374 = 0; D_800F3370 = palette;
+        D_800F3368.palette = 2; D_800F3368.parameter06 = 0;
+        D_800F3368.parameter00 = unit; D_800F3368.parameter02 = 1;
+        D_800F3368.extent_x = unit; D_800F3368.extent_y = unit;
+        D_800F3368.extent_x = unit; D_800F3368.extent_y = unit;
+        D_800F3368.parameter0A = 0; D_800F3368.depth = 0; D_800F3368.tpage = palette;
     }
 done:
     return 0;

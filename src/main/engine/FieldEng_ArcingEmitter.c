@@ -22,8 +22,8 @@ int func_800D7A1C(int mode, RenderArcingEffect *state)
         position.x = state->x;
         position.y = state->y;
         position.z = state->z;
-        palette = D_800E1204[D_800F336C];
-        if (D_800F336C == 4 && D_800F3428)
+        palette = D_800E1204[D_800F3368.palette];
+        if (D_800F3368.palette == 4 && D_800F3428)
             palette += 4;
         func_800CEE20(&position, 0, 4096, 4096, 0x8B,
                      GetClut(0x20, palette), 1, 128, &color);

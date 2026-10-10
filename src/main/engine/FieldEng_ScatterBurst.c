@@ -120,7 +120,7 @@ int func_800D5290(int mode, RenderArcingEmitter *state)
         i = (D_800E27EC << 3) / 12;
         if (i > 7)
             i = 7;
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         func_800CEE20(&state->position, &rotation, scale, scale,
                       (s16)D_800F3368.parameter02 * i,

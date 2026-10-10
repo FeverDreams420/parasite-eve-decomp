@@ -1,10 +1,11 @@
+#include "pe1/field_sprite_params.h"
 #include "room_m123_effects.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_transform_point.h"
 #include "pe1/gte_types.h"
 
-extern s16 D_801956A4, D_801956A0, D_800F336A;
-extern u16 D_800F336C, D_800E1204[];
+extern s16 D_801956A4, D_801956A0;
+extern u16 D_800E1204[];
 extern int D_800F3428;
 extern u16 D_801956B0, D_801956B2, D_801956B4;
 extern u8 D_801956A8[];
@@ -35,11 +36,11 @@ int func_801945EC(int mode, RoomM123Particle *particle) {
         sampleFrame = (s16)particle->frame;
         func_800CF844(&D_801956B0, &position, sampleFrame << 6, D_801956A8,
                       scale / 4096, (s16)particle->offset);
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428) palette += 4;
         clut = GetClut(0x20, palette);
-        textureFrame = D_800F336A * (particle->frame & 7) + 0x40;
+        textureFrame = (s16)D_800F3368.parameter02 * (particle->frame & 7) + 0x40;
         func_800CEE20(&position, 0, 0x555, 0x555, textureFrame, clut, 1,
                       D_801956A0, 0);
     } break;
@@ -50,10 +51,6 @@ int func_801945EC(int mode, RoomM123Particle *particle) {
 extern GteShortVector D_8018F1E0;
 extern int D_800E27EC;
 extern u16 D_800E11EA, D_800E2850[];
-extern u16 D_800F3368, D_800F336C, D_800F336E;
-extern s16 D_800F336A;
-extern u16 D_800F3370, D_800F3372, D_800F3376, D_800F3378;
-extern s16 D_800F3374;
 extern int func_801945EC(int, RoomM123Particle *);
 extern void func_800CE8F0(void *, int, GteShortVector *, GteShortVector *);
 extern int func_80071A54(void);
@@ -119,18 +116,18 @@ int func_80194768(int mode)
         asm volatile("" : : : "memory");
         D_801956A0 = scale >> 5;
         func_800CE9D4(context->pool, 0, texture);
-        D_800F3368 = 16;
-        D_800F336A = 1;
-        D_800F3376 = 16;
-        D_800F3378 = 16;
+        D_800F3368.parameter00 = 16;
+        D_800F3368.parameter02 = 1;
+        D_800F3368.extent_x = 16;
+        D_800F3368.extent_y = 16;
         palette = D_800E2850[D_800E11EA];
         /* Keep the palette lookup before the remaining effect-register writes. */
         asm volatile("" : : "r"(palette) : "memory");
-        D_800F336C = 3;
-        D_800F336E = 0;
-        D_800F3372 = 0;
-        D_800F3374 = 12;
-        D_800F3370 = palette;
+        D_800F3368.palette = 3;
+        D_800F3368.parameter06 = 0;
+        D_800F3368.parameter0A = 0;
+        D_800F3368.depth = 12;
+        D_800F3368.tpage = palette;
         break;
     }
 ret0:

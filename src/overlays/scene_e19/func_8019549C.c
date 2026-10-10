@@ -35,8 +35,6 @@ int func_800CFE94(s16 *from, s16 *to);
 void func_800CFD50(u16 *from, u16 *to, u16 speed);
 int func_800C6B90(s16 *position, int extraRadius);
 
-extern u16 D_800F3378;
-extern u16 D_800F3376;
 extern RenderColor D_8018F218;
 /* Not declared in production headers; parameter order inferred from both
  * call sites and the ABI. The eighth argument is zero at both sites. */
@@ -187,25 +185,25 @@ test_timer:
         rotation.z = signedValue << 7;
         sum = 64;
         D_800F3368.parameter00 = sum;
-        D_800F3376 = sum;
-        D_800F3378 = sum;
+        D_800F3368.extent_x = sum;
+        D_800F3368.extent_y = sum;
         rotation.pad = 0;
-        D_800F336A = 4;
-        palette = D_800E1204[D_800F336C];
-        if (D_800F336C == 4 && D_800F3428)
+        D_800F3368.parameter02 = 4;
+        palette = D_800E1204[D_800F3368.palette];
+        if (D_800F3368.palette == 4 && D_800F3428)
             palette += 4;
         clut = func_80077AA4(16, palette);
         func_800CEE20(&particle->position, &rotation, 6144, 6144,
                      68, clut, 1, intensity / 2, 0);
-        D_800F336A = 2;
+        D_800F3368.parameter02 = 2;
         asm volatile("" : : : "memory");
         D_800F3368.parameter00 = 32;
-        D_800F3376 = 32;
-        D_800F3378 = 32;
+        D_800F3368.extent_x = 32;
+        D_800F3368.extent_y = 32;
         negValue = rotation.z;
         rotation.z = -negValue;
-        palette = D_800E1204[D_800F336C];
-        if (D_800F336C == 4 && D_800F3428)
+        palette = D_800E1204[D_800F3368.palette];
+        if (D_800F3368.palette == 4 && D_800F3428)
             palette += 4;
         clut = func_80077AA4(16, palette);
         func_800CEE20(&particle->position, &rotation, 8192, 8192,
@@ -216,7 +214,7 @@ test_timer:
                      0, 4096, 4096, &color, 0, 70, 1);
         if (particle->timer < 24 && (particle->position.pad & 1)) {
             intensity = rcos((particle->timer << 10) / 24) / 64;
-floorIndex = D_800F336C;
+floorIndex = D_800F3368.palette;
 temporaryPosition.x = particle->position.x;
 temporaryPosition.y = particle->position.y;
 pulseSum = 64;
@@ -224,21 +222,21 @@ floorZ = particle->position.z;
 asm volatile("" : : : "memory");
 
 temporaryPosition.z = floorZ;
-D_800F336A = 4;
+D_800F3368.parameter02 = 4;
 D_800F3368.parameter00 = pulseSum;
-D_800F3376 = pulseSum;
-D_800F3378 = pulseSum;
+D_800F3368.extent_x = pulseSum;
+D_800F3368.extent_y = pulseSum;
 palette = D_800E1204[floorIndex];
 if (floorIndex == 4 && D_800F3428) palette += 4;
             clut = func_80077AA4(160, palette);
             func_800D3BC8(&temporaryPosition, 6144, 6144, 12,
                          clut, 1, intensity / 2, 0, 3072);
             D_800F3368.parameter00 = 32;
-            D_800F336A = 2;
-            D_800F3376 = 32;
-            D_800F3378 = 32;
-            palette = D_800E1204[D_800F336C];
-            if (D_800F336C == 4 && D_800F3428)
+            D_800F3368.parameter02 = 2;
+            D_800F3368.extent_x = 32;
+            D_800F3368.extent_y = 32;
+            palette = D_800E1204[D_800F3368.palette];
+            if (D_800F3368.palette == 4 && D_800F3428)
                 palette += 4;
             clut = func_80077AA4(176, palette);
             func_800D3BC8(&temporaryPosition, 6144, 6144, 154,
@@ -256,21 +254,21 @@ if (floorIndex == 4 && D_800F3428) palette += 4;
         divider = 0x2aaa0000;
 asm("" : : "r"(divider));
         D_800F3368.parameter00 = 64;
-        D_800F336A = 4;
-        D_800F3376 = 64;
-        D_800F3378 = 64;
+        D_800F3368.parameter02 = 4;
+        D_800F3368.extent_x = 64;
+        D_800F3368.extent_y = 64;
         asm volatile("" : : : "memory");
         intensity = rcos((particle->timer << 10) / 24) / 32;
         scale = rcos((particle->timer << 10) / 24) * 2;
         if (particle->timer & 1)
             intensity = intensity * 2 / 3;
-        palette = D_800E1204[D_800F336C];
-        if (D_800F336C == 4 && D_800F3428)
+        palette = D_800E1204[D_800F3368.palette];
+        if (D_800F3368.palette == 4 && D_800F3428)
             palette += 4;
         clut = func_80077AA4(16, palette);
         func_800CEE20(&particle->position, 0, scale, scale,
                      8, clut, 1, intensity, 0);
-        floorIndex = D_800F336C;
+        floorIndex = D_800F3368.palette;
         floor_rotation.x = 1024;
         floor_rotation.y = 0;
         floorTimer = particle->timer;
@@ -290,9 +288,9 @@ asm("" : : "r"(divider));
                      8192 - scale, 8192 - scale,
                      64, clut, 1, intensity / 2, 0);
         D_800F3368.parameter00 = 32;
-        D_800F336A = 2;
-        D_800F3376 = 32;
-        D_800F3378 = 32;
+        D_800F3368.parameter02 = 2;
+        D_800F3368.extent_x = 32;
+        D_800F3368.extent_y = 32;
         break;
 
         }

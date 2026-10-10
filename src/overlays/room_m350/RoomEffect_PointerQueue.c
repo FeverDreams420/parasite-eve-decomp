@@ -24,7 +24,7 @@ int func_80194F04(int event, Particle *object)
         int frame,kind,palette,handle;
         position = *object->position;
         position.y += object->offset;
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         frame = D_800E27EC - 1;
         palette = D_800E1204[kind];
         handle = GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 6 : palette + 2);

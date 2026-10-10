@@ -57,17 +57,17 @@ configure:
     {
         int idx = D_800E11EA;
         int palette;
-        D_800F3368 = 32;
-        D_800F336A = 2;
-        D_800F3376 = 32;
-        D_800F3378 = 32;
+        D_800F3368.parameter00 = 32;
+        D_800F3368.parameter02 = 2;
+        D_800F3368.extent_x = 32;
+        D_800F3368.extent_y = 32;
         palette = D_800E2850[idx];
         PE1_COMPILER_MEMORY_BARRIER();
-        D_800F336C = 3;
-        D_800F336E = 0;
-        D_800F3372 = 0;
-        D_800F3374 = 8;
-        D_800F3370 = palette;
+        D_800F3368.palette = 3;
+        D_800F3368.parameter06 = 0;
+        D_800F3368.parameter0A = 0;
+        D_800F3368.depth = 8;
+        D_800F3368.tpage = palette;
     }
 done:
     return 0;

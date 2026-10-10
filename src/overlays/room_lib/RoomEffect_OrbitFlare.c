@@ -50,7 +50,7 @@ mode2:
             tex += 4;
         }
         func_800CEE20(rec, 0, scale, scale,
-                      (D_800F3368.parameter02 * ((D_800E27EC << 3) / 14)) + 0xE0,
+                      ((s16)D_800F3368.parameter02 * ((D_800E27EC << 3) / 14)) + 0xE0,
                       (u16)GetClut(0x40, tex), 1, fade, 0);
     }
 
@@ -219,7 +219,7 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = GetClut(0x40, palette);
             func_800CEE20(state, &spin, state->height, state->height,
-                          D_800F3368.parameter02 * 2 + 0xDC, clut, 1,
+                          (s16)D_800F3368.parameter02 * 2 + 0xDC, clut, 1,
                           state->spread, 0);
             }
             {
@@ -231,7 +231,7 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = GetClut(0x40, palette);
             func_800CEE20(state, 0, state->height * 2, state->height * 2,
-                          D_800F3368.parameter02 * 2 + 0xD8, clut, 3,
+                          (s16)D_800F3368.parameter02 * 2 + 0xD8, clut, 3,
                           state->spread, 0);
             }
             {
@@ -250,7 +250,7 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = GetClut(0x40, palette);
             func_800CEE20(&floorPos, &floorSpin, state->height, state->height,
-                          D_800F3368.parameter02 * 2 + 0xD8, clut, 3,
+                          (s16)D_800F3368.parameter02 * 2 + 0xD8, clut, 3,
                           state->spread, 0);
             }
             break;
@@ -266,7 +266,7 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = GetClut(0x40, palette);
             func_800CEE20(state, 0, scale, scale,
-                          D_800F3368.parameter02 + 0xFD, clut, 1, fade, 0);
+                          (s16)D_800F3368.parameter02 + 0xFD, clut, 1, fade, 0);
             }
             {
             u16 clut;
@@ -284,7 +284,7 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = GetClut(0x40, palette);
             func_800CEE20(&floorPos2, &floorSpin2, scale, scale,
-                          D_800F3368.parameter02 + 0xFD, clut, 3, fade, 0);
+                          (s16)D_800F3368.parameter02 + 0xFD, clut, 3, fade, 0);
             }
             break;
         }

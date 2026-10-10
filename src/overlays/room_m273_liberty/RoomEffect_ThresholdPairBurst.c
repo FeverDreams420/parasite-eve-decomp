@@ -1,3 +1,4 @@
+#include "pe1/field_sprite_params.h"
 #include "room_m273.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/psyq_gpu.h"
@@ -7,8 +8,6 @@ extern RoomM273EffectStateContext *D_800F32D0;
 extern u8 D_8019AE9A;
 extern RoomM273PulseSeed D_8019AC20[2];
 extern u16 D_800E11FA, D_800E2850[];
-extern u16 D_800F336E, D_800F3370, D_800F3372;
-extern u16 D_800F3376, D_800F3378;
 extern int D_800E27EC;
 extern int func_800CE5AC(void *, int, int, int, int (*)());
 extern int func_800CE688(void *);
@@ -26,7 +25,7 @@ extern int D_800E27EC;
 extern short D_8019AC18[];
 extern int D_8019AC0C[];
 extern int D_800F3428;
-extern unsigned short D_800E11FA,D_800E2850[],D_800F336C,D_800E1204[];
+extern unsigned short D_800E11FA, D_800E2850[], D_800E1204[];
 extern RoomM273EffectStateContext *D_800F32D0;
 extern AssetState D_8019AE8C;
 extern void *D_8019AE90,*D_800B0E64;
@@ -121,7 +120,7 @@ int func_80193CB8(int mode,ThresholdTripleEffect *effect) {
     } else if(mode==2) {
         int flags=GetTPage(0,1,0,0);
         int page=(unsigned short)(D_800E2850[D_800E11FA]|flags);
-        int kind=D_800F336C,palette;
+        int kind=D_800F3368.palette,palette;
         int cosine,sine;
         register void **asset asm("$17");
         palette=D_800E1204[kind];
@@ -212,7 +211,7 @@ int func_80194128(int mode, GteRotation *rotation) {
         }
 
         frame = D_800E27EC - 1;
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         size = *(s16 *)((char *)D_800966EC + ((frame << 8) & 0x3F00));
         palette = D_800E1204[kind];
 
@@ -251,14 +250,15 @@ int func_80194284(int mode) {
         break;
     }
     case 2: {
+        int index;
         int palette;
         D_800F3368.parameter00 = 16;
-        D_800F3376 = 16; D_800F3378 = 16; D_800F3376 = 16;
-        palette = D_800E2850[D_800E11FA];
-        D_800F336A = 1; D_800F3378 = 64;
-        asm("" : : : "memory");
-        D_800F336C = 3; D_800F336E = 1; D_800F3372 = 3; D_800F3374 = 0;
-        D_800F3370 = palette;
+        D_800F3368.extent_x = 16; D_800F3368.extent_y = 16; D_800F3368.extent_x = 16;
+        index = D_800E11FA;
+        D_800F3368.parameter02 = 1; D_800F3368.extent_y = 64;
+        palette = D_800E2850[index];
+        D_800F3368.palette = 3; D_800F3368.parameter06 = 1; D_800F3368.parameter0A = 3; D_800F3368.depth = 0;
+        D_800F3368.tpage = palette;
         break;
     }
     }
@@ -266,11 +266,6 @@ int func_80194284(int mode) {
 }
 
 extern short D_8019AE60, D_8019AE64;
-extern u16 D_800F3370, D_800F3372;
-
-/* Keep this controller's scalar halfword views to preserve its retail register schedule. */
-extern u16 RoomM273BurstParameter00 asm("D_800F3368");
-extern u16 RoomM273BurstParameter02 asm("D_800F336A");
 
 typedef GteShortVector Vector;
 
@@ -282,7 +277,7 @@ int func_80194470(int mode, Vector *input) {
         int firstFrame = D_800E27EC - 1;
         int frame;
         unsigned int offset;
-        int kind = D_800F336C;
+        int kind = D_800F3368.palette;
         int size, palette;
         unsigned short clut;
         asm("" : : "r"(firstFrame), "r"(position));
@@ -331,12 +326,13 @@ int func_801945A8(int mode) {
         break;
     }
     case 2: {
-        int palette=D_800E2850[D_800E11FA];
-        RoomM273BurstParameter00=32; RoomM273BurstParameter02=2;
-        D_800F3376=32; D_800F3378=32; D_800F3376=32; D_800F3378=32;
-        asm("" : : : "memory", "$2");
-        D_800F336C=3; D_800F336E=1; D_800F3372=0; D_800F3374=32;
-        D_800F3370=palette;
+        int index=D_800E11FA;
+        int palette;
+        D_800F3368.parameter00=32; D_800F3368.parameter02=2;
+        D_800F3368.extent_x=32; D_800F3368.extent_y=32; D_800F3368.extent_x=32; D_800F3368.extent_y=32;
+        palette=D_800E2850[index];
+        D_800F3368.palette=3; D_800F3368.parameter06=1; D_800F3368.parameter0A=0; D_800F3368.depth=32;
+        D_800F3368.tpage=palette;
         break;
     }
     }

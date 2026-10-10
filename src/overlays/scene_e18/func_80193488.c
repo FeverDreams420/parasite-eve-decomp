@@ -7,7 +7,6 @@ typedef struct {
 } SceneE18PaletteEffect;
 
 extern s32 D_800966EC[];
-extern s16 D_800F336A;
 
 int func_80193488(int mode, SceneE18PaletteEffect *effect) {
     int size, kind, palette, texture, base;
@@ -24,13 +23,13 @@ int func_80193488(int mode, SceneE18PaletteEffect *effect) {
         sample = D_800966EC[(((unsigned int)firstFrame << 8) & 0x3F00) / 4];
         base = effect->base;
 
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         size = base + sample;
         palette = D_800E1204[kind];
 
         clut = GetClut(0, (kind == 4 && D_800F3428) ? palette + 6 : palette + 2);
         secondFrame = D_800E27EC - 1;
-        texture = D_800F336A * ((secondFrame >> 1) & 7);
+        texture = (s16)D_800F3368.parameter02 * ((secondFrame >> 1) & 7);
         func_800CEE20(&effect->position, 0, (s16)size, (s16)size,
                        texture, clut, 1,
                        (s16)D_800966EC[(((unsigned int)secondFrame << 9) & 0x3E00) / 4] >> 5,

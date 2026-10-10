@@ -1,4 +1,5 @@
 #include "common.h"
+#include "pe1/field_sprite_params.h"
 
 typedef struct SceneE18WaveEffect {
     s16 x, y, z, field06;
@@ -6,7 +7,6 @@ typedef struct SceneE18WaveEffect {
     s16 size, wave, amplitude;
 } SceneE18WaveEffect;
 extern s32 D_800E27EC;
-extern u16 D_800F336C;
 extern u16 D_800E1204[];
 extern s32 D_800F3428;
 extern void *D_800F32D0;
@@ -29,7 +29,7 @@ int func_80193A58(int mode, SceneE18WaveEffect *effect) {
         return 1;
     }
     if (mode != 2) return 0;
-    index = D_800F336C;
+    index = D_800F3368.palette;
     palette = D_800E1204[index];
     palette = func_80077AA4(0, (index == 4 && D_800F3428 != 0) ? palette + 7 : palette + 3);
     func_800CEE20(effect, &effect->field08, effect->wave, effect->wave,

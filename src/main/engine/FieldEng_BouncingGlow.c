@@ -31,9 +31,9 @@ int func_800D6C58(int mode, RenderBouncingSprite *state)
         intensity = 128;
         angle = state->angle;
         rotation.z = (angle << 8) + (frame << 7);
-        palette = D_800E1204[D_800F336C];
+        palette = D_800E1204[D_800F3368.palette];
         scale = (state->angle & 0x7FF) + 0x400;
-        if (D_800F336C == 4 && D_800F3428)
+        if (D_800F3368.palette == 4 && D_800F3428)
             palette += 4;
         func_800CEE20(&position, &rotation, scale, scale, 0xBC,
             GetClut(128, palette), 255, intensity, &color);

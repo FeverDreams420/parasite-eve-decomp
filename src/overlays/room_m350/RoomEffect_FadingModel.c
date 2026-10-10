@@ -34,7 +34,7 @@ int func_80199148(int event, Particle *object)
             object->velocity += object->acceleration;
         }
     } else if (event == 2) {
-        int kind = D_800F336C;
+        int kind = D_800F3368.palette;
         int palette = D_800E1204[kind];
         int handle;
         handle = GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 6 : palette + 2);

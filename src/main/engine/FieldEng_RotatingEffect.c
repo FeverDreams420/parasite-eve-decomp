@@ -16,7 +16,7 @@ int FieldEng_RotatingEffect(int mode) {
             return 1;
         break;
     case 2:
-        D_800F3374 = 0;
+        D_800F3368.depth = 0;
         func_800CE870((char *)D_8009D254, 1, &position.x);
         position.y -= 300;
         func_800CF3AC(D_800E1494, &color, D_800E27EC);

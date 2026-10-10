@@ -305,17 +305,17 @@ render: {
             gte_ldtransmatrix((const GteMatrixWords *)matrixWords);
         }
         textureIndex = D_800E11EA;
-        D_800F3368 = 0x20;
-        D_800F336A = 2;
-        D_800F3376 = 0x20;
-        D_800F3378 = 0x20;
+        D_800F3368.parameter00 = 0x20;
+        D_800F3368.parameter02 = 2;
+        D_800F3368.extent_x = 0x20;
+        D_800F3368.extent_y = 0x20;
         texturePage = D_800E2850[textureIndex];
         asm volatile("" : : "r"(texturePage));
-        D_800F336C = 3;
-        D_800F336E = 0;
-        D_800F3372 = 0;
-        D_800F3374 = 4;
-        D_800F3370 = texturePage;
+        D_800F3368.palette = 3;
+        D_800F3368.parameter06 = 0;
+        D_800F3368.parameter0A = 0;
+        D_800F3368.depth = 4;
+        D_800F3368.tpage = texturePage;
         {
             u32 *matrixWords;
             asm volatile("" : "=r"(matrixWords) : "0"((u32 *)*matrixAddress) : "$2", "$3", "$4", "$7");
@@ -351,9 +351,9 @@ block_63:
             asm volatile("" : "=r"(pageIndex) : "0"(pageIndex));
             texturePage = firstPageTable[*pageIndex];
             asm volatile("" : : "r"(texturePage));
-            D_800F336C = 3;
-            D_800F336E = 1;
-            D_800F3370 = texturePage;
+            D_800F3368.palette = 3;
+            D_800F3368.parameter06 = 1;
+            D_800F3368.tpage = texturePage;
             temp_s0 = (D_800E2850[*pageIndex] | func_80077A64(pageArg0, pageArg1, pageArg2, 0)) & 0xFFFF;
             modelScale = 0x400;
             temp_a1 = D_800E1204[D_800F336C];
@@ -390,8 +390,7 @@ block_63:
             func_800C71E4(D_8019085C, &matrix);
             func_800C6F4C(D_8019085C);
             func_800D1384(&effect->trailHead, &effect->trailTail, 6, &beamColor, &edgeColor, (s32) effect->alpha, effect->history, 1);
-            D_800F3374 = 0x33;
-            asm volatile("" : : "m"(D_800F3374));
+            D_800F3368.depth = 0x33;
             var_s0 = effect->alpha;
             if (D_800E27EC & 1) {
                 temp_v0_4 = var_s0 * 3;
@@ -405,12 +404,12 @@ block_63:
             asm volatile("" : : "r"(paletteX), "r"(paletteY));
             texturePage = D_800E2850[D_800E11FA];
             asm volatile("" : : "r"(texturePage));
-            D_800F336C = 3;
-            D_800F336E = 1;
-            D_800F3370 = texturePage;
+            D_800F3368.palette = 3;
+            D_800F3368.parameter06 = 1;
+            D_800F3368.tpage = texturePage;
             func_800CEE20(&effect->position, NULL, 0x2000, 0x2000, 6, func_80077AA4(paletteX, paletteY + 5) & 0xFFFF, 3, (s32) var_s0, &beamColor);
         }
-        D_800F3374 = 0xB;
+        D_800F3368.depth = 0xB;
         return 0;
     }
 }

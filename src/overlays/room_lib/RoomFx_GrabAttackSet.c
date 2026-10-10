@@ -445,22 +445,22 @@ int RoomFx_GroundSweepMark(int mode, RoomGroundSweepMark *state) {
 
     if ((s16)state->frame < 8) {
         int first_kind;
-        first_kind = D_800F336C;
+        first_kind = D_800F3368.palette;
         palette = D_800E1204[first_kind];
         if (first_kind == 4 && D_800F3428) palette += 4;
         clut = func_80077AA4(16, palette);
         func_800CEE20(&position, &seed, 4096, 4096,
-                        D_800F336A * (s16)state->frame + 32,
+                        (s16)D_800F3368.parameter02 * (s16)state->frame + 32,
                         clut, 1, (unsigned)shade >> 1, 0);
     }
 
     position.y -= 40;
-    kind = D_800F336C;
+    kind = D_800F3368.palette;
     palette = D_800E1204[kind];
     if (kind == 4 && D_800F3428) palette += 4;
     clut = func_80077AA4(48, palette);
     func_800CEE20(&position, 0, 4096, 4096,
-                    D_800F336A * ((s16)state->frame / 2) + 96,
+                    (s16)D_800F3368.parameter02 * ((s16)state->frame / 2) + 96,
                     clut, 1, (unsigned)shade >> 1, 0);
     return 0;
 }

@@ -2,6 +2,7 @@
 #define PE1_ROOM_HOMING_FLASH_H
 
 #include "common.h"
+#include "pe1/field_sprite_params.h"
 #include "pe1/room_sound_burst.h"
 
 /* The homing flash (src/overlays/room_lib/RoomEffect_HomingFlash.c): a
@@ -37,7 +38,6 @@ typedef struct RoomFlashSpriteChild {
 extern u8 g_RoomFlashColorRamp[];
 
 /* The sprite parameter block at 0x800F3368. */
-extern RoomSoundBurstParams D_800F3368;
 extern u16 D_800E11EC;
 
 int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,

@@ -1,3 +1,4 @@
+#include "pe1/field_sprite_params.h"
 #include "room_m123_effects.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte_types.h"
@@ -13,10 +14,6 @@ extern u16 GetClut(int, int);
 extern void func_800CEE20(void *, void *, int, int, int, int, int, int, void *);
 extern u16 D_800E11E8;
 extern u16 D_800E2850[];
-extern u16 D_800F3368, D_800F336C, D_800F336E;
-extern s16 D_800F336A;
-extern u16 D_800F3370, D_800F3372, D_800F3376, D_800F3378;
-extern s16 D_800F3374;
 extern void func_800CE8F0(void *, int, void *, void *);
 extern int func_800D3FD8(void);
 extern void func_800D3F64(int, int);
@@ -40,12 +37,12 @@ int func_80194F68(int mode, RoomM123Wave *wave) {
         result = rcos((D_800E27EC << 10) / 24);
         position.z = D_800E27EC << 5;
         scale = result / 2 + 2048;
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428) palette += 4;
         clut = GetClut(48, palette);
         func_800CEE20(wave, &position, scale, scale,
-                      *(s16 *)&D_800F336A + 220, clut, 1, 128, color);
+                      (s16)D_800F3368.parameter02 + 220, clut, 1, 128, color);
         break;
     }
     return 0;
@@ -103,16 +100,16 @@ int func_80195114(int mode, RoomM123Burst *burst, int *choice) {
     case 2: {
         int paletteIndex = D_800E11E8;
         int palette;
-        D_800F3368 = 16;
-        D_800F336A = 1;
-        D_800F3376 = 16;
-        D_800F3378 = 16;
+        D_800F3368.parameter00 = 16;
+        D_800F3368.parameter02 = 1;
+        D_800F3368.extent_x = 16;
+        D_800F3368.extent_y = 16;
         palette = D_800E2850[paletteIndex];
-        D_800F336C = 2;
-        D_800F336E = 0;
-        D_800F3372 = 0;
-        D_800F3374 = 0;
-        D_800F3370 = palette;
+        D_800F3368.palette = 2;
+        D_800F3368.parameter06 = 0;
+        D_800F3368.parameter0A = 0;
+        D_800F3368.depth = 0;
+        D_800F3368.tpage = palette;
         break;
     }
     }

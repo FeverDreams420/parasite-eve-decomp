@@ -1,7 +1,8 @@
+#include "pe1/field_sprite_params.h"
 #include "room_m273.h"
 
 extern int D_800E27EC, D_800F3428;
-extern unsigned short D_800F336C, D_800E1204[];
+extern unsigned short D_800E1204[];
 extern unsigned short GetClut(int, int);
 
 int func_80199568(int mode, RoomM273RisingParticle *particle) {
@@ -21,12 +22,12 @@ int func_80199568(int mode, RoomM273RisingParticle *particle) {
         int frame = D_800E27EC - 5;
         int kind, palette, clut;
         if (frame < 0) return 0;
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428) palette += 4;
         clut = GetClut(16, palette);
         func_800CEE20((GteShortVector *)particle, 0, 12288, 12288,
-            D_800F336A * (frame / 4) + 200, clut, 1,
+            (s16)D_800F3368.parameter02 * (frame / 4) + 200, clut, 1,
             (short)((int *)D_800966EC)[(((unsigned int)frame << 8) & 0x3F00) / 4] >> 5, 0);
     }
     return 0;
@@ -87,10 +88,10 @@ int func_801996C4(int mode)
         sixteen = 16;
         D_800F3368.parameter00 = sixteen;
         D_800F3368.parameter02 = 1;
-        D_800F3376 = sixteen;
-        D_800F3378 = sixteen;
-        D_800F3376 = sixteen;
-        D_800F3378 = sixteen;
+        D_800F3368.extent_x = sixteen;
+        D_800F3368.extent_y = sixteen;
+        D_800F3368.extent_x = sixteen;
+        D_800F3368.extent_y = sixteen;
         palette = D_800E2850[paletteIndex];
         D_800F3368.palette = 2;
         D_800F3368.parameter06 = 0;

@@ -1,4 +1,5 @@
 /* Paired ground sprites and the boss ground ring share sway points and pool records. */
+#include "pe1/field_sprite_params.h"
 #include "room_m273_boss.h"
 #include "pe1/scene_assets.h"
 #include "pe1/gte.h"
@@ -9,8 +10,6 @@ typedef RoomM273PairPoolRecord Record;
 /* The emitter owns the eight-byte pool whose entries this callback renders. */
 
 extern short D_800966EE[];
-extern unsigned short D_800F336E, D_800F3370;
-extern unsigned short D_800F3372;
 extern unsigned char D_8019AE18[], D_8019AB70[];
 
 int func_80198B1C(int mode,Vector *input) {
@@ -25,7 +24,7 @@ int func_80198B1C(int mode,Vector *input) {
         int size,kind,palette;
         unsigned short clut;
         position=*input;
-        kind=D_800F336C;
+        kind=D_800F3368.palette;
         shade=(unsigned int)(shadeSample+4096)>>5;
         size=sizeSample*2+4096;
         palette=D_800E1204[kind];
@@ -64,18 +63,18 @@ int func_80198CD4(int mode) {
         unsigned int index=D_800E11FA;
         unsigned short palette;
         D_800F3368.parameter00=32;
-        D_800F336A=2;
-        D_800F3376=32;
-        D_800F3378=32;
-        D_800F3376=32;
-        D_800F3378=32;
+        D_800F3368.parameter02=2;
+        D_800F3368.extent_x=32;
+        D_800F3368.extent_y=32;
+        D_800F3368.extent_x=32;
+        D_800F3368.extent_y=32;
         palette=D_800E2850[index];
         asm("" : : "r"(palette) : "memory", "$2");
-        D_800F336C=3;
-        D_800F336E=1;
-        D_800F3372=0;
-        D_800F3374=32;
-        D_800F3370=palette;
+        D_800F3368.palette=3;
+        D_800F3368.parameter06=1;
+        D_800F3368.parameter0A=0;
+        D_800F3368.depth=32;
+        D_800F3368.tpage=palette;
         break;
     }
     }
@@ -197,7 +196,6 @@ typedef RoomM273PairPoolRecord Entry;
 typedef struct { Entry entries[2]; unsigned char unknown[14]; unsigned char stopped; } EmitterState;
 extern void *D_800B0E64, *D_8019AF6C;
 extern EmitterState D_8019AF84;
-extern short D_800F3374;
 extern void func_800C6D5C(void *, int, int);
 
 int func_801993F0(int mode) {
@@ -233,8 +231,8 @@ int func_801993F0(int mode) {
         break;
     }
     case 2:
-        D_800F3372 = 0;
-        D_800F3374 = 0;
+        D_800F3368.parameter0A = 0;
+        D_800F3368.depth = 0;
         break;
     }
     return 0;

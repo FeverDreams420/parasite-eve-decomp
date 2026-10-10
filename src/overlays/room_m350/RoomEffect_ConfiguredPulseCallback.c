@@ -1,15 +1,7 @@
+#include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
 
-typedef struct { short unit, scale; } RenderState;
 extern int D_800E27EC;
-extern RenderState D_800F3368;
-extern short D_800F336A, D_800F3374;
-extern unsigned short D_800F3372;
-extern unsigned short D_800F336E;
-extern unsigned short D_800F336C;
-extern unsigned short D_800F3370;
-extern unsigned short D_800F3378;
-extern unsigned short D_800F3376;
 extern volatile unsigned short D_800E11E8, D_800E1208;
 extern unsigned short D_800E2850[];
 extern short D_800966EC[], D_800966EE[];
@@ -26,7 +18,7 @@ int func_80196C64(int event, void *object)
     if (event == 1) {
         if (D_800E27EC >= 8) return 1;
     } else if (event == 2) {
-        volatile RenderState *state = &D_800F3368;
+        volatile RenderEffectParameters *state = &D_800F3368;
         int unit = 32;
         register int size asm("$16");
         int index;
@@ -36,26 +28,26 @@ int func_80196C64(int event, void *object)
         register int clutX asm("$4");
         unsigned short handle;
         asm("" : "=r"(state) : "0"(state));
-        state->unit = unit;
+        state->parameter00 = unit;
         index = D_800E11E8;
         mode = 2;
-        D_800F336A = mode;
-        D_800F3376 = unit;
-        D_800F3378 = unit;
-        D_800F3376 = unit;
-        D_800F3378 = unit;
+        D_800F3368.parameter02 = mode;
+        D_800F3368.extent_x = unit;
+        D_800F3368.extent_y = unit;
+        D_800F3368.extent_x = unit;
+        D_800F3368.extent_y = unit;
         palette = D_800E2850[index];
         /* Capture the palette before reading the animation frame. */
         asm volatile("" : "=r"(palette) : "0"(palette) : "memory");
         frame = D_800E27EC;
         clutX = 0;
-        D_800F336C = mode;
-        D_800F336E = 0;
-        D_800F3372 = 0;
-        D_800F3374 = unit;
+        D_800F3368.palette = mode;
+        D_800F3368.parameter06 = 0;
+        D_800F3368.parameter0A = 0;
+        D_800F3368.depth = unit;
         index = ((unsigned int)(frame - 1) << 9) & 0x3E00;
         asm("" : "=r"(index) : "0"(index) : "memory");
-        D_800F3370 = palette;
+        D_800F3368.tpage = palette;
         size = *(short *)((char *)D_800966EC + index);
         asm volatile("" : : : "memory");
         size = size * 2 + 4096;
@@ -67,7 +59,7 @@ int func_80196C64(int event, void *object)
             frame = ((unsigned int)frame << 9) & 0x3E00;
             colors = D_8019A59C;
             func_800CEE20(object, 0, (short)size, (short)size,
-                ((RenderState *)state)->scale * phase + 192,
+                (s16)((RenderEffectParameters *)state)->parameter02 * phase + 192,
                 handle, 1, ((SignedHalf *)((char *)D_800966EE - 2 +
                     frame))->value >> 5, colors);
         }

@@ -6,11 +6,8 @@
  * and the controller's spawn template.
  */
 #include "common.h"
+#include "pe1/field_sprite_params.h"
 #include "pe1/room_sound_burst.h"
-
-extern RoomSoundBurstParams D_800F3368;
-extern u16 D_800F336C;
-extern s16 D_800F336A;
 
 /* Particle emitted by the sound burst controller: it swings on a sine
  * while rising, lights the battle actor when it lands near it, and draws a
@@ -61,12 +58,12 @@ int RoomEffect_SoundBurstParticle(int mode, RoomSoundBurstParticle *particle,
         scale = particle->spread * scale / 128;
         base = (D_800E27EC << 8) + 0x1000;
         size = (rcos(particle->tilt) / 4 + 0x1000) * base / 4096;
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428 != 0) palette += 4;
         clut = func_80077AA4(0x80, palette);
         func_800CEE20(&particle->wx, 0, size, size,
-                      D_800F336A * ((D_800E27EC / 4) & 1) + 0xFD, clut, 1,
+                      (s16)D_800F3368.parameter02 * ((D_800E27EC / 4) & 1) + 0xFD, clut, 1,
                       scale, &color);
         position.x = 0x400;
         position.y = 0;
@@ -78,7 +75,7 @@ int RoomEffect_SoundBurstParticle(int mode, RoomSoundBurstParticle *particle,
         if (kind == 4 && D_800F3428 != 0) palette += 4;
         clut2 = func_80077AA4(0x80, palette);
         func_800CEE20(&particle->wx, &position, size, size,
-                      D_800F336A * ((D_800E27EC / 4) & 1) + 0xFD, clut2, 2,
+                      (s16)D_800F3368.parameter02 * ((D_800E27EC / 4) & 1) + 0xFD, clut2, 2,
                       scale / 4, 0);
         break;
     }

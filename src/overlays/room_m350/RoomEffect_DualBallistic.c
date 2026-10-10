@@ -1,3 +1,4 @@
+#include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
 typedef RoomM350TransformMatrix Matrix;
@@ -10,15 +11,8 @@ extern RoomM350Emitter *D_800F33E0;
 extern Instance *g_PlayerEntity;
 extern unsigned char D_8019A82F;
 extern int D_800E27EC, D_800F3428, D_800966EC[], D_8019A598[];
-extern unsigned short D_800F336C, D_800E1204[];
-extern short D_800F336A;
-extern short D_800F3368;
-extern unsigned short D_800F3378;
-extern unsigned short D_800F3376;
-extern short D_800F3374;
-extern unsigned short D_800F3372;
-extern unsigned short D_800F336E;
-extern unsigned short D_800E11E8, D_800F3370;
+extern unsigned short D_800E1204[];
+extern unsigned short D_800E11E8;
 extern unsigned short D_800E2850[];
 extern int GetClut(int, int);
 extern void func_800CEE20(void *, int, int, int, int, unsigned int, int, int, void *);
@@ -30,13 +24,13 @@ int func_801968D8(int event, short *position) {
         position[1] += position[3];
         position[3] -= position[4];
     } else if (event == 2) {
-        int kind = D_800F336C;
+        int kind = D_800F3368.palette;
         int palette = D_800E1204[kind];
         int handle;
         if (kind == 4 && D_800F3428) palette += 4;
         handle = GetClut(16, palette);
         func_800CEE20(position, 0, 12288, 12288,
-            D_800F336A * (((D_800E27EC - 1) >> 1) & 7) + 200,
+            (s16)D_800F3368.parameter02 * (((D_800E27EC - 1) >> 1) & 7) + 200,
             (unsigned short)handle, 1,
             (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80] >> 5,
             D_8019A598);
@@ -87,12 +81,12 @@ configure:
     {
         int index = D_800E11E8;
         int palette;
-        D_800F3368 = 16; D_800F336A = 1;
-        D_800F3376 = 16; D_800F3378 = 16;
-        D_800F3376 = 16; D_800F3378 = 16;
+        D_800F3368.parameter00 = 16; D_800F3368.parameter02 = 1;
+        D_800F3368.extent_x = 16; D_800F3368.extent_y = 16;
+        D_800F3368.extent_x = 16; D_800F3368.extent_y = 16;
         palette = D_800E2850[index];
-        D_800F336C = 2; D_800F336E = 0;
-        D_800F3372 = 0; D_800F3374 = 0; D_800F3370 = palette;
+        D_800F3368.palette = 2; D_800F3368.parameter06 = 0;
+        D_800F3368.parameter0A = 0; D_800F3368.depth = 0; D_800F3368.tpage = palette;
     }
 done:
     return 0;

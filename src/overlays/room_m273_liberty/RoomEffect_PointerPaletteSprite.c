@@ -1,3 +1,4 @@
+#include "pe1/field_sprite_params.h"
 #include "room_m273_effects.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/psyq_gpu.h"
@@ -10,11 +11,6 @@ extern void func_800CEE20(void *, void *, int, int, int, int, int, int, void *);
 extern RoomM273PlayerActorView *g_PlayerEntity;
 extern unsigned char D_8019AE5C;
 extern unsigned short D_800E11FA, D_800E2850[];
-extern unsigned short D_800F3368, D_800F336E;
-extern short D_800F336A;
-extern unsigned short D_800F3370, D_800F3372;
-extern short D_800F3374;
-extern unsigned short D_800F3376, D_800F3378;
 
 int func_80193870(int mode, RoomM273SpritePoolEffect *state) {
     if (mode == 1) {
@@ -39,7 +35,7 @@ int func_80193870(int mode, RoomM273SpritePoolEffect *state) {
         sprite.y = p->y;
         sprite.z = p->z;
         sprite.x = x;
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         func_800CEE20(&sprite, D_8019AB68, (short)size, (short)size, 102,
                         GetClut(0, (kind == 4 && D_800F3428) ? palette + 9 : palette + 5), 1, (short)shade, 0);
@@ -68,19 +64,20 @@ int func_801939B4(int mode) {
         break;
     case 2:
         if (D_8019AE5C) {
-            int palette = D_800E2850[D_800E11FA];
-            D_800F3368 = 32;
-            D_800F336A = 2;
-            D_800F3376 = 32;
-            D_800F3378 = 32;
-            D_800F3376 = 32;
-            D_800F3378 = 32;
-            asm("" : : : "memory", "$2");
-            D_800F336C = 3;
-            D_800F336E = 1;
-            D_800F3372 = 0;
-            D_800F3374 = 0;
-            D_800F3370 = palette;
+            int index = D_800E11FA;
+            int palette;
+            D_800F3368.parameter00 = 32;
+            D_800F3368.parameter02 = 2;
+            D_800F3368.extent_x = 32;
+            D_800F3368.extent_y = 32;
+            D_800F3368.extent_x = 32;
+            D_800F3368.extent_y = 32;
+            palette = D_800E2850[index];
+            D_800F3368.palette = 3;
+            D_800F3368.parameter06 = 1;
+            D_800F3368.parameter0A = 0;
+            D_800F3368.depth = 0;
+            D_800F3368.tpage = palette;
         }
         break;
     }

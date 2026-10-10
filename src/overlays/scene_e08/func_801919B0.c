@@ -1,6 +1,6 @@
 #include "common.h"
+#include "pe1/field_sprite_params.h"
 
-extern s16 D_800F3374;
 extern u8 D_8019880C[];
 
 void *func_800C2B50(void);
@@ -34,7 +34,7 @@ void func_801919B0(s32 arg0, s32 arg1, u8 *base) {
             buf40[0] = 0;
             buf40[1] = 0;
             buf40[2] = 0;
-            D_800F3374 = 0x1F4;
+            D_800F3368.depth = 0x1F4;
             v64 = func_80077A64(0, 0, 0x340, 0x100) & 0xFFFF;
             vAA = func_80077AA4(0, 0x1D7) & 0xFFFF;
             func_800D3114(base + i * 0x18, 2, *(s16 *)(base + i * 2 + 0x240), 0x40,

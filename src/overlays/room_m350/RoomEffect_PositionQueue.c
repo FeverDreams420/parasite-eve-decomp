@@ -1,3 +1,4 @@
+#include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
 typedef RoomM350Vector Vector;
@@ -10,18 +11,13 @@ typedef RoomM350SignedHalfPair SignedHalf;
 extern Actor *D_800F32D0;
 extern RoomM350Emitter *D_800F33E0;
 extern int D_800E27EC, D_800F3428, D_8019A3D0[];
-extern unsigned short D_800F336C, D_800E1204[];
-extern short D_800F336A, D_800966EE[];
+extern unsigned short D_800E1204[];
+extern short D_800966EE[];
 extern int GetClut(int, int);
 extern void func_800CEE20(void *, void *, int, int, int, unsigned int, int, int, void *);
 extern short D_8019A800, D_8019A802;
 extern unsigned char D_8019A804;
-extern short D_800F3368, D_800F3374;
-extern unsigned short D_800F3378;
-extern unsigned short D_800F3376;
-extern unsigned short D_800F3372;
-extern unsigned short D_800F336E;
-extern unsigned short D_800E11EA,D_800F3370;
+extern unsigned short D_800E11EA;
 extern unsigned short D_800E2850[];
 
 int func_80195218(int event, Particle *object)
@@ -36,10 +32,10 @@ int func_80195218(int event, Particle *object)
             vector[0] = 1024; vector[1] = object->position.pad;
             vector[2] = 1024; vector[3] = 1;
             size = D_800966EE[((unsigned int)frame << 7) & 0x1F80];
-            kind = D_800F336C; palette = D_800E1204[kind];
+            kind = D_800F3368.palette; palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428) palette += 4;
             handle = GetClut(0, palette);
-            func_800CEE20(object, vector, size, size * 2, D_800F336A * object->delay + 64,
+            func_800CEE20(object, vector, size, size * 2, (s16)D_800F3368.parameter02 * object->delay + 64,
                 (unsigned short)handle, 1,
                 ((SignedHalf *)((char *)D_800966EE - 2 + (((unsigned int)frame << 8) & 0x3F00)))->value >> 5,
                 D_8019A3D0);
@@ -85,10 +81,10 @@ emit:
 configure:
     {
         int index=D_800E11EA, palette;
-        D_800F3368=32; D_800F336A=2;
-        D_800F3376=32; D_800F3378=32; D_800F3376=32; D_800F3378=32;
+        D_800F3368.parameter00=32; D_800F3368.parameter02=2;
+        D_800F3368.extent_x=32; D_800F3368.extent_y=32; D_800F3368.extent_x=32; D_800F3368.extent_y=32;
         palette=D_800E2850[index];
-        D_800F336C=3; D_800F336E=0; D_800F3372=0; D_800F3374=0; D_800F3370=palette;
+        D_800F3368.palette=3; D_800F3368.parameter06=0; D_800F3368.parameter0A=0; D_800F3368.depth=0; D_800F3368.tpage=palette;
     }
 done:
     return 0;

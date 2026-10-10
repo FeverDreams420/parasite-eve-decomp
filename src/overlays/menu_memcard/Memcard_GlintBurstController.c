@@ -66,8 +66,11 @@ int Memcard_GlintBurstController(int mode, MemcardGlintBurst *burst) {
         D_800F3368.parameter02 = 2;
         D_800F3368.extent_x = 32;
         D_800F3368.extent_y = 32;
-        D_800F336C = 1;
-        D_800F3368.tpage = D_800E2850[D_800E11E6];
+        {
+            u16 tpage = D_800E2850[D_800E11E6];
+            D_800F3368.palette = 1;
+            D_800F3368.tpage = tpage;
+        }
         func_800CEDA8(1);
         D_800F3368.parameter06 = 0;
         D_800F3368.parameter0A = 0;
@@ -82,7 +85,7 @@ int Memcard_GlintBurstController(int mode, MemcardGlintBurst *burst) {
             int palette;
             angle = D_800E27EC << 5;
             fade = rcos(angle) / 32;
-            kind = D_800F336C;
+            kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800CEE20((GteShortVector *)burst, 0, 0x2000, 0x2000,
@@ -100,8 +103,11 @@ int Memcard_GlintBurstController(int mode, MemcardGlintBurst *burst) {
             func_800D0728((GteShortVector *)burst, 1100, 1700, 18, 0, scale, scale,
                           0, &color, fade / 2, 1);
         }
-        D_800F336C = 1;
-        D_800F3368.tpage = D_800E2850[D_800E11F6];
+        {
+            u16 tpage = D_800E2850[D_800E11F6];
+            D_800F3368.palette = 1;
+            D_800F3368.tpage = tpage;
+        }
         func_800CEDA8(1);
         D_800F3368.parameter06 = 1;
         D_800F3368.parameter0A = 0;

@@ -30,7 +30,7 @@ void func_800D0E88(GteShortVector *position, GteRotation *rotation, int length,
     int bias;
 
     black = D_800C22A0;
-    bias = (u16)D_800F3374;
+    bias = (u16)D_800F3368.depth;
     /* Keep intensity in s6 without pinning the later draw-mode lifetime. */
     
     packet = (FieldG3Packet *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
@@ -170,7 +170,7 @@ void func_800D1384(GteShortVector *head, GteShortVector *tail, u32 countArg,
     s16 fade1;
 
     view = D_800BCFA4.value;
-    bias = (u16)D_800F3374;
+    bias = (u16)D_800F3368.depth;
     if (count >= 1000) {
         count -= 999;
         for (i = 0; i < count; i++) {
@@ -405,7 +405,7 @@ void func_800D1DEC(void *position, void *colorArg, int scale, int abr)
         s32 *out = (s32 *)&depth;
         gte_stszotz(out);
     }
-    depth -= (u16)D_800F3374;
+    depth -= (u16)D_800F3368.depth;
     if (depth < 0x1000) {
         glow->x = point->x - 1;
         glow->y = point->y - 1;
@@ -456,7 +456,7 @@ void func_800D2104(GteShortVector *position, u8 *color, int scale, int abr)
         s32 *out = (s32 *)&depth;
         gte_stszotz(out);
     }
-    depth -= (u16)D_800F3374;
+    depth -= (u16)D_800F3368.depth;
     if (depth < 0x1000) {
         TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[D_8009CDDC], depth);
         if (abr != 0xFF) {
@@ -496,17 +496,17 @@ void func_800D2370(GteShortVector *position, GteRotation *rotation,
 
     view = D_800BCFA4.value;
     scale = intensity;
-    bias = (u16)D_800F3374;
+    bias = (u16)D_800F3368.depth;
     black = D_800C22A0;
     packet = (FieldGt4Packet *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
     D_8009CDD8 += sizeof(FieldGt4Packet);
     SetPolyGT4(packet);
     if (mode == 0xFF) {
         packet->code &= ~2;
-        packet->tpage = D_800F3370;
+        packet->tpage = D_800F3368.tpage;
     } else {
         packet->code |= 2;
-        packet->tpage = D_800F3370 | GetTPage(0, mode, 0, 0);
+        packet->tpage = D_800F3368.tpage | GetTPage(0, mode, 0, 0);
     }
     /* Keep rotation and length in registers across the packet setup calls. */
     asm("" : : "r"(rotation), "r"(length));

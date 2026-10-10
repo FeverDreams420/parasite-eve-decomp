@@ -34,7 +34,7 @@ int func_80198860(int event,RoomM350CloudParticle *particle)
         world.y=(unsigned int)particle->anchor[1]+(unsigned short)particle->position[1];
         world.z=(unsigned int)particle->anchor[2]+(unsigned short)particle->position[2];
         if(particle->state.value.active.firstShade>0) {
-            int kind=D_800F336C;
+            int kind=D_800F3368.palette;
             int palette=D_800E1204[kind];
             unsigned short clut;
             if(kind==4 && D_800F3428) palette+=4;
@@ -42,7 +42,7 @@ int func_80198860(int event,RoomM350CloudParticle *particle)
             func_800CEE20(&world,0,particle->size,particle->size,(s16)D_800F3368.parameter02*2+216,clut,1,particle->state.value.active.firstShade,&D_8019A3D0);
         }
         {
-            int kind=D_800F336C;
+            int kind=D_800F3368.palette;
             int palette=D_800E1204[kind];
             unsigned short clut;
             if(kind==4 && D_800F3428) palette+=4;

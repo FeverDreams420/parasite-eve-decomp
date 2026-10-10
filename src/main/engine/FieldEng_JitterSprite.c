@@ -23,8 +23,8 @@ int func_800DBCD8(int mode, GteShortVector *state)
         rotation.flags = 0;
         func_800CF3AC(D_800E1DA4, &color, D_800E27EC);
         scale = 6144 + (D_800E27EC << 7);
-        palette = D_800E1204[D_800F336C];
-        if (D_800F336C == 4 && D_800F3428) palette += 4;
+        palette = D_800E1204[D_800F3368.palette];
+        if (D_800F3368.palette == 4 && D_800F3428) palette += 4;
         func_800CEE20(state, &rotation, scale, scale,
                      192 + (s16)D_800F3368.parameter02 * (D_800E27EC / 8 + 2),
                      GetClut(192, palette), 1, 128, &color);

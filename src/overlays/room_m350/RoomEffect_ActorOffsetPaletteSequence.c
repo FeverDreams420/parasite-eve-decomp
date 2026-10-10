@@ -1,11 +1,11 @@
+#include "pe1/field_sprite_params.h"
 #include "pe1/room_m350_effects.h"
 #include "pe1/field_anim_callback_list.h"
 
 
 extern RoomM350EffectActor *D_800F32D0;
 extern int D_800E27EC, D_800F3428, D_800966EC[], D_8019A56C[];
-extern unsigned short D_800F336C, D_800E1204[];
-extern short D_800F336A;
+extern unsigned short D_800E1204[];
 extern int GetClut(int, int);
 extern void func_800CEE20(void *, void *, int, int, int, unsigned int, int, int, void *);
 
@@ -27,13 +27,13 @@ int func_80195B64(int event, GteShortVector *object)
         for (i = 0; i < 3; i++) {
             position[i] = ((short *)object)[i] * scale / 4096 + origin[i];
         }
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428) {
             palette += 4;
         }
         handle = GetClut(32, palette);
-        func_800CEE20(position, 0, object->pad, object->pad, D_800F336A + 216,
+        func_800CEE20(position, 0, object->pad, object->pad, (s16)D_800F3368.parameter02 + 216,
             (unsigned short)handle, 1, shade, D_8019A56C);
     }
     return 0;
@@ -47,12 +47,7 @@ extern RoomM350EffectEmitter *D_800F33E0;
 extern unsigned char D_8019A82E;
 
 extern unsigned short D_800E2850[];
-extern unsigned short D_800E11E8,D_800F3370;
-extern short D_800F3368, D_800F3374;
-extern unsigned short D_800F3378;
-extern unsigned short D_800F3376;
-extern unsigned short D_800F3372;
-extern unsigned short D_800F336E;
+extern unsigned short D_800E11E8;
 extern char D_8019A570[];
 extern int Asset_Find08w(int,void *,int,int,int),Inv_ScrambleGrid(void),GetClut(int,int);
 
@@ -128,12 +123,12 @@ draw:
         register unsigned short *palettes asm("$19");
         volatile int *position;
         short *out;
-        D_800F3368=16; D_800F336A=1;
-        D_800F3376=16; D_800F3378=16; D_800F3376=16; D_800F3378=16;
+        D_800F3368.parameter00=16; D_800F3368.parameter02=1;
+        D_800F3368.extent_x=16; D_800F3368.extent_y=16; D_800F3368.extent_x=16; D_800F3368.extent_y=16;
         palette=D_800E2850[index];
         asm volatile("" : "=r"(palette) : "0"(palette) : "memory");
         actor=D_800F32D0;
-        D_800F336C=2; D_800F336E=0; D_800F3372=0; D_800F3374=0; D_800F3370=palette;
+        D_800F3368.palette=2; D_800F3368.parameter06=0; D_800F3368.parameter0A=0; D_800F3368.depth=0; D_800F3368.tpage=palette;
         asm volatile("" : "=r"(actor) : "0"(actor) : "memory");
         i=0;
         position=actor->instance->transforms[33].t;
@@ -144,11 +139,11 @@ draw:
         state->rotation.z=(unsigned int)D_800E27EC<<8;
         specialKind=4;
         do {
-            int kind=D_800F336C;
+            int kind=D_800F3368.palette;
             int clut,pal=palettes[kind];
             if(kind==specialKind && D_800F3428) pal+=4;
             clut=GetClut(32,pal);
-            func_800CEE20(&local.position,state,state->size,state->size,D_800F336A+216,(unsigned short)clut,1,state->brightness,D_8019A570);
+            func_800CEE20(&local.position,state,state->size,state->size,(s16)D_800F3368.parameter02+216,(unsigned short)clut,1,state->brightness,D_8019A570);
             state->rotation.z=0u-(unsigned short)state->rotation.z;
         } while(++i<2);
     }

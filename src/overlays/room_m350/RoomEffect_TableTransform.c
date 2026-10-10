@@ -23,7 +23,7 @@ int func_80195564(int event, short *position) {
     if (event == 1) {
         if (D_800E27EC >= 8) return 1;
     } else if (event == 2) {
-        int kind = D_800F336C;
+        int kind = D_800F3368.palette;
         int texture = D_800E1204[kind];
         int handle;
         handle = GetClut(0, (kind == 4 && D_800F3428 != 0) ? texture + 8 : texture + 4);

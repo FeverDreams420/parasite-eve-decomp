@@ -28,8 +28,8 @@ int func_800DA780(int mode, RenderArcingEffect *state)
         rotation.z = state->y + state->x + (D_800E27EC << 5);
         rotation.flags = 0;
         intensity = rsin((D_800E27EC << 11) / 24) / 128;
-        palette = D_800E1204[D_800F336C];
-        if (D_800F336C == 4 && D_800F3428)
+        palette = D_800E1204[D_800F3368.palette];
+        if (D_800F3368.palette == 4 && D_800F3428)
             palette += 4;
         func_800CEE20(&position, &rotation, 4096, 4096,
                      96 + (s16)D_800F3368.parameter02 * (D_800E27EC / 6),

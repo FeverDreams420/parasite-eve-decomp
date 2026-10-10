@@ -1,6 +1,7 @@
 #ifndef PE1_ROOM_M256_TRAIL_H
 #define PE1_ROOM_M256_TRAIL_H
 
+#include "pe1/field_sprite_params.h"
 #include "pe1/field_actor.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_anim.h"
@@ -24,12 +25,7 @@ extern RenderColor D_8018F218, D_8018F21C;
 extern GteRotation D_8018F220,D_8018F1CC;
 extern char D_80195EFC[],D_80195F1C[],D_80195F1E[],D_80195F20[];
 extern s32 D_80195EF0,D_80195EF8,D_800E27EC,D_800F3428;
-extern s16 D_800F336A, D_800F3374;
-extern u16 D_800F3378;
-extern u16 D_800F3376;
-extern u16 D_800F3372;
-extern u16 D_800F336E;
-extern u16 D_800E11EA,D_800E1204[],D_800E1208,D_800E2850[],D_800F336C,D_800F3370;
+extern u16 D_800E11EA, D_800E1204[], D_800E1208, D_800E2850[];
 typedef struct RoomM256TrailPalettes { u16 first, second; } RoomM256TrailPalettes;
 extern RoomM256TrailPalettes D_800E11E8;
 int func_80071A54(void);

@@ -26,7 +26,7 @@ int func_80192DA0(int mode, volatile RoomSpiralDropSparkRecord *record) {
         int z;
         unsigned short clut;
         func_800CF3AC(D_8019948C, color, D_800E27EC);
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         position.x = particle->x;
         position.y = particle->y;
         z = particle->z;

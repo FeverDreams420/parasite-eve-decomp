@@ -58,11 +58,14 @@ int Memcard_RisingEmberParticle(int mode, RoomDampedSpark *spark) {
             D_800F3368.parameter02 = 1;
             D_800F3368.extent_x = 16;
             D_800F3368.extent_y = 16;
-            D_800F336C = 1;
-            D_800F3368.tpage = D_800E2850[D_800E11E6];
+            {
+                u16 tpage = D_800E2850[D_800E11E6];
+                D_800F3368.palette = 1;
+                D_800F3368.tpage = tpage;
+            }
             func_800CEDA8(1);
             D_800F3368.parameter06 = 0;
-            kind = D_800F336C;
+            kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800CEE20((GteShortVector *)spark, &rotation, size, size * 3 / 2, 141,
@@ -80,11 +83,14 @@ int Memcard_RisingEmberParticle(int mode, RoomDampedSpark *spark) {
             D_800F3368.parameter02 = 2;
             D_800F3368.extent_x = 32;
             D_800F3368.extent_y = 32;
-            D_800F336C = 1;
-            D_800F3368.tpage = D_800E2850[D_800E11E6];
+            {
+                u16 tpage = D_800E2850[D_800E11E6];
+                D_800F3368.palette = 1;
+                D_800F3368.tpage = tpage;
+            }
             func_800CEDA8(1);
             D_800F3368.parameter06 = 0;
-            kind = D_800F336C;
+            kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800CEE20((GteShortVector *)spark, 0, size / 2, size / 2,
@@ -102,8 +108,11 @@ int Memcard_RisingEmberParticle(int mode, RoomDampedSpark *spark) {
             D_800F3368.parameter02 = 2;
             D_800F3368.extent_x = 32;
             D_800F3368.extent_y = 32;
-            D_800F336C = 1;
-            D_800F3368.tpage = D_800E2850[D_800E11F6];
+            {
+                u16 tpage = D_800E2850[D_800E11F6];
+                D_800F3368.palette = 1;
+                D_800F3368.tpage = tpage;
+            }
             func_800CEDA8(1);
             D_800F3368.parameter06 = 1;
             tilt.x = 0x400;
@@ -113,7 +122,7 @@ int Memcard_RisingEmberParticle(int mode, RoomDampedSpark *spark) {
             position.x = spark->x;
             position.z = spark->z;
             position.y = g_RoomFloorY->y;
-            kind = D_800F336C;
+            kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             func_800CEE20(&position, &tilt, size * 3, size * 3, 68,
                           func_80077AA4(0, (kind == 4 && D_800F3428) ? palette + 7 : palette + 3),

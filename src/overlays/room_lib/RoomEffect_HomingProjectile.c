@@ -32,7 +32,7 @@ int RoomEffect_HomingProjectileSpark(int mode, GteShortVector *spark) {
         }
     } else if (mode == 2) {
         frame = D_800E27EC - 1;
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         size = D_800966EC[((frame << 9) & 0x3E00) >> 2].word + 0x200;
         palette = D_800E1204[kind];
         /* The pulse reads the cosine half through its own copy of the
@@ -43,7 +43,7 @@ int RoomEffect_HomingProjectileSpark(int mode, GteShortVector *spark) {
         }
         clut = GetClut(0x80, palette);
         func_800CEE20(spark, &g_RoomHomingSparkRotation, (s16)size, (s16)size,
-                      D_800F336A * 2 + 0xFD, clut, 1,
+                      (s16)D_800F3368.parameter02 * 2 + 0xFD, clut, 1,
                       (s16)(D_800966EC[((pulse << 9) & 0x3E00) >> 2].word >> 16) >> 5,
                       &g_RoomHomingSparkColor);
     }

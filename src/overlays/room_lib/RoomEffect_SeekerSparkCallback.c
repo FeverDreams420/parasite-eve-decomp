@@ -129,7 +129,7 @@ int RoomEffect_SeekerSparkCallback(int mode, RoomDampedSpark *spark,
             /* The kind is re-read through its own label after the call, so
              * it is not addressed off a saved parameter block base. */
             func_800D2370((GteShortVector *)spark, (GteRotation *)&spark->vx, 0x140, 0x78, 0,
-                          (D_800F336C == 4 && D_800F3428 != 0) ? 0x60 : 0, 0x40, 0x10,
+                          (D_800F3368.palette == 4 && D_800F3428 != 0) ? 0x60 : 0, 0x40, 0x10,
                           clut, &color, &glow, (s16)intensity, 1);
             if (D_800E27EC & 3) {
                 return 0;

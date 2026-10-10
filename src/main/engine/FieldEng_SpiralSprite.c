@@ -28,12 +28,12 @@ int func_800D629C(int mode, RenderSpiralSprite *state)
         intensity = 128 - (D_800E27EC << 7) / 24;
         state->position.y = D_800E21D8.y - (rand() & 31);
         scale = scale * (((state->phase + D_800E27EC / 2) & 7) * 128 + 0x1000) / 4096;
-        palette = D_800E1204[D_800F336C];
-        if (D_800F336C == 4 && D_800F3428)
+        palette = D_800E1204[D_800F3368.palette];
+        if (D_800F3368.palette == 4 && D_800F3428)
             palette += 4;
         clut = GetClut(64, palette);
         func_800CEE20(&state->position, 0, scale * 2, scale,
-                      D_800F336A * ((state->phase + D_800E27EC / 2) & 7) + 128,
+                      (s16)D_800F3368.parameter02 * ((state->phase + D_800E27EC / 2) & 7) + 128,
                       clut, 1, intensity, &color);
         break;
     }
@@ -112,7 +112,7 @@ int func_800D6514(int mode, RenderArcingEmitter *state)
         gte_ldtransmatrix(D_800BCFA4.value);
         {
             int tpage = (u16)(tpages[slots[0]] | GetTPage(0, 1, 0, 0));
-            int kind = D_800F336C;
+            int kind = D_800F3368.palette;
             int palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428)
                 palette += 4;

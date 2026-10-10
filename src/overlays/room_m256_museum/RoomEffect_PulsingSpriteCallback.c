@@ -21,12 +21,12 @@ int func_8019552C(int mode, RoomModelPulseParticle *particle) {
         func_800CF844(D_801960A0, &position, scale, D_80196098,
                       scale, (s16)particle->offset);
         func_800CF3AC(D_80195E64, &color, 0x30 - (scale * 48) / 1024);
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428 != 0) palette += 4;
         clut = func_80077AA4(0x20, palette);
         func_800CEE20(&position, 0, 0x1000, 0x1000,
-                       D_800F336A * 2 + 0xD8, clut, 3,
+                       (s16)D_800F3368.parameter02 * 2 + 0xD8, clut, 3,
                        D_80196094, &color);
         gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldtransmatrix(D_800BCFA4.value);

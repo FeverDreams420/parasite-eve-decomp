@@ -1,4 +1,5 @@
 #include "common.h"
+#include "pe1/field_sprite_params.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/room_fx.h"
 
@@ -27,15 +28,6 @@
 ROOMLIB_POLL_RESET_POOL_CONTEXT_DECL;
 extern u16 D_800E11FA;
 extern u16 D_800E2850[];
-extern u16 D_800F3368;
-extern s16 D_800F336A;
-extern u16 D_800F336C;
-extern u16 D_800F336E;
-extern u16 D_800F3370;
-extern u16 D_800F3372;
-extern s16 D_800F3374;
-extern u16 D_800F3376;
-extern u16 D_800F3378;
 extern u8 ROOMLIB_POLL_RESET_FLAG;
 extern s16 ROOMLIB_POLL_RESET_COUNTER;
 extern RoomFxSeed8 ROOMLIB_POLL_RESET_SEED;
@@ -71,22 +63,22 @@ s32 ROOMLIB_POLL_RESET_FUNC(s32 state) {
     case 2:
         index = D_800E11FA;
         size = 0x20;
-        D_800F3368 = size;
+        D_800F3368.parameter00 = size;
         value2 = 2;
-        D_800F336A = value2;
-        D_800F3376 = size;
-        D_800F3378 = size;
-        D_800F3376 = size;
-        D_800F3378 = size;
+        D_800F3368.parameter02 = value2;
+        D_800F3368.extent_x = size;
+        D_800F3368.extent_y = size;
+        D_800F3368.extent_x = size;
+        D_800F3368.extent_y = size;
         index <<= 1;
         tableValue = *(u16 *)((u8 *)D_800E2850 + index);
         value3 = 3;
-        D_800F336C = value3;
+        D_800F3368.palette = value3;
         value1 = 1;
-        D_800F336E = value1;
-        D_800F3372 = 0;
-        D_800F3374 = 0;
-        D_800F3370 = tableValue;
+        D_800F3368.parameter06 = value1;
+        D_800F3368.parameter0A = 0;
+        D_800F3368.depth = 0;
+        D_800F3368.tpage = tableValue;
         break;
     }
     return 0;

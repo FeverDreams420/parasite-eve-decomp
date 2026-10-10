@@ -1,3 +1,4 @@
+#include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte_types.h"
@@ -10,14 +11,7 @@ extern RoomM350Emitter *D_800F33E0;
 extern Vector D_8019A778[];
 extern int D_800E27EC;
 extern short D_800966EE[];
-extern short D_800F3368, D_800F336A;
-extern unsigned short D_800F3378;
-extern unsigned short D_800F3376;
-extern unsigned short D_800F336C;
-extern short D_800F3374;
-extern unsigned short D_800F3372;
-extern unsigned short D_800F336E;
-extern unsigned short D_800E11E8,D_800F3370;
+extern unsigned short D_800E11E8;
 extern unsigned short D_800E2850[];
 extern int func_80199B94(int,Particle *);
 extern int Inv_ScrambleGrid(void);
@@ -76,12 +70,12 @@ configure:
     {
         int index=D_800E11E8;
         int palette;
-        D_800F3368=16; D_800F336A=1;
-        D_800F3376=16; D_800F3378=16;
-        D_800F3376=16; D_800F3378=16;
+        D_800F3368.parameter00=16; D_800F3368.parameter02=1;
+        D_800F3368.extent_x=16; D_800F3368.extent_y=16;
+        D_800F3368.extent_x=16; D_800F3368.extent_y=16;
         palette=D_800E2850[index];
-        D_800F336C=2; D_800F336E=0;
-        D_800F3372=0; D_800F3374=0; D_800F3370=palette;
+        D_800F3368.palette=2; D_800F3368.parameter06=0;
+        D_800F3368.parameter0A=0; D_800F3368.depth=0; D_800F3368.tpage=palette;
     }
 done:
     return 0;

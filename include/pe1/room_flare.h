@@ -2,6 +2,7 @@
 #define PE1_ROOM_FLARE_H
 
 #include "common.h"
+#include "pe1/field_sprite_params.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_transform_point.h"
 #include "pe1/gte_types.h"
@@ -61,19 +62,6 @@ typedef struct RoomFlareTextureSlot {
     u16 index;
 } RoomFlareTextureSlot;
 
-/* Sprite parameter block at 0x800F3368. */
-typedef struct RoomFlareParams {
-    u16 parameter00;
-    s16 parameter02;
-    u16 palette;
-    u16 parameter06;
-    u16 tpage;
-    u16 parameter0A;
-    s16 depth;
-    u16 extent_x;
-    u16 extent_y;
-} RoomFlareParams;
-
 /* Orbit flare controller: anchor, state, timer, sound, sweep angle. */
 typedef struct RoomOrbitFlareState {
     s16 x, y, z, reserved06;
@@ -126,7 +114,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomFlareAnchor, x) == 0x268, room_flare_anchor_x
 extern RoomFlareChannel *D_800F32D0, *D_800F33E0;
 extern RoomFlareEventState *D_800E2368;
 extern RoomFlareBattleEntity *D_8009D254;
-extern RoomFlareParams D_800F3368;
 extern int D_800E27EC;
 extern u16 D_800E1204[];
 extern u16 D_800E2850[];

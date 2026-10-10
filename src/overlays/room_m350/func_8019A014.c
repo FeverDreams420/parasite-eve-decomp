@@ -1,7 +1,7 @@
 #include "common.h"
+#include "pe1/field_sprite_params.h"
 extern s32 D_800E27EC;
 extern u16 D_800E1204[];
-extern u16 D_800F336C;
 extern s32 D_800F3428;
 extern void D_8019A630;
 
@@ -26,8 +26,8 @@ s32 func_8019A014(s32 mode, void *ctx) {
         return 0;
     }
 
-    tex = D_800E1204[D_800F336C];
-    if (D_800F336C == 4 && D_800F3428 != 0) {
+    tex = D_800E1204[D_800F3368.palette];
+    if (D_800F3368.palette == 4 && D_800F3428 != 0) {
         tex += 4;
     }
 

@@ -1,3 +1,4 @@
+#include "pe1/field_sprite_params.h"
 #include "pe1/room_m350_effects.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte.h"
@@ -7,8 +8,7 @@ extern RoomM350EffectActor *D_800F32D0;
 extern GteMatrix D_8019A870;
 extern short D_8019A890[];
 extern int D_800E27EC, D_800966EC[], D_800F3428, D_8019A690[];
-extern unsigned short D_800F336C, D_800E1204[];
-extern short D_800F336A;
+extern unsigned short D_800E1204[];
 extern int GetClut(int, int);
 extern void func_800CEE20(void *, void *, int, int, int, int, int, int, void *);
 
@@ -42,13 +42,13 @@ int func_801981D0(int event, RoomM350FlareParticle *particle)
         rotation.y = D_800F32D0->instance->yaw;
         rotation.z = 0;
         rotation.pad = 1;
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428) palette += 4;
         clut = GetClut(0, palette);
         {
             int timer = D_800E27EC;
-            register int scale asm("$4") = D_800F336A;
+            register int scale asm("$4") = (s16)D_800F3368.parameter02;
             register int phase asm("$3") = timer & 7;
             register int product asm("$8") = scale * phase;
             int texture = product + 64;
@@ -73,13 +73,6 @@ extern volatile short leftX asm("D_8019A8A0");
 extern GteShortVector D_8019A8A8,D_8019A8B0;
 extern volatile short D_8019A89C,D_8019A89E,D_8019A8A4;
 extern short D_8019A8AE;
-extern short D_800F3368, D_800F336A;
-extern unsigned short D_800F3378;
-extern unsigned short D_800F3376;
-extern short D_800F3374;
-extern unsigned short D_800F3372;
-extern unsigned short D_800F3370;
-extern unsigned short D_800F336E;
 extern unsigned short D_800E11EA,D_800E2850[];
 extern int Inv_ScrambleGrid(void);
 
@@ -179,13 +172,13 @@ configure:
         transforms=instance->transforms;
         for(;i<3;i++) destination[i]=(transforms[11].t[i]+transforms[15].t[i])>>1;
         index=D_800E11EA;
-        D_800F3368=32; D_800F336A=2;
-        D_800F3376=32; D_800F3378=32;
-        D_800F3376=32; D_800F3378=32;
+        D_800F3368.parameter00=32; D_800F3368.parameter02=2;
+        D_800F3368.extent_x=32; D_800F3368.extent_y=32;
+        D_800F3368.extent_x=32; D_800F3368.extent_y=32;
         color=D_800E2850[index];
-        D_800F336C=3; D_800F336E=0;
-        D_800F3372=0; D_800F3374=0;
-        D_800F3370=color;
+        D_800F3368.palette=3; D_800F3368.parameter06=0;
+        D_800F3368.parameter0A=0; D_800F3368.depth=0;
+        D_800F3368.tpage=color;
     }
 done:
     return 0;

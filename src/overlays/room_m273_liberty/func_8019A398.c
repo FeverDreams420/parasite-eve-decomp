@@ -28,7 +28,7 @@ int func_8019A398(int mode, RoomM273PaletteSpriteState *state) {
         asm volatile("" : "=r"(sample) : "0"(sample));
         size = sizeSample * 2 + 4096;
         shade = (s16)sample >> 5;
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == special && D_800F3428) {
             palette += 8;

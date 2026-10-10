@@ -1,4 +1,5 @@
 /* Pointer sprite pool and boss sway state share D_8019AF74 points. */
+#include "pe1/field_sprite_params.h"
 #include "room_m273_boss.h"
 #include "pe1/gte.h"
 typedef GteShortVector Position;
@@ -6,7 +7,6 @@ typedef RoomM273PointerPoolEffect Effect;
 
 /* The emitter owns the pointer entries rendered by this callback. */
 extern short D_8019AE88;
-extern unsigned short D_800F336E, D_800F3370, D_800F3372;
 
 int func_80199950(int mode, Effect *effect) {
     /* Layout only: the original purpose of these eight frame bytes is unknown. */
@@ -15,7 +15,7 @@ int func_80199950(int mode, Effect *effect) {
         if (D_800E27EC >= 16) return 1;
     } else if (mode == 2) {
         int frame = (short)(D_800E27EC - 1);
-        int kind = D_800F336C;
+        int kind = D_800F3368.palette;
         unsigned int sizeOffset, shadeOffset;
         int size, shade, palette;
         unsigned short clut;
@@ -61,18 +61,18 @@ int func_80199A90(int mode) {
         unsigned int index=D_800E11FA;
         unsigned short palette;
         D_800F3368.parameter00=64;
-        D_800F336A=4;
-        D_800F3376=64;
-        D_800F3378=64;
-        D_800F3376=64;
-        D_800F3378=64;
+        D_800F3368.parameter02=4;
+        D_800F3368.extent_x=64;
+        D_800F3368.extent_y=64;
+        D_800F3368.extent_x=64;
+        D_800F3368.extent_y=64;
         palette=D_800E2850[index];
         asm("" : : "r"(palette) : "memory", "$2");
-        D_800F336C=3;
-        D_800F336E=1;
-        D_800F3372=0;
-        D_800F3374=32;
-        D_800F3370=palette;
+        D_800F3368.palette=3;
+        D_800F3368.parameter06=1;
+        D_800F3368.parameter0A=0;
+        D_800F3368.depth=32;
+        D_800F3368.tpage=palette;
         break;
     }
     }

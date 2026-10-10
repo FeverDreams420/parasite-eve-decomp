@@ -57,8 +57,8 @@ int func_800DD380(int mode, RenderConvergingSprite *state)
         rotation.y = 0;
         rotation.flags = 0;
         rotation.z = D_800E27EC * 12;
-        palette = D_800E1204[D_800F336C];
-        if (D_800F336C == 4 && D_800F3428) palette += 4;
+        palette = D_800E1204[D_800F3368.palette];
+        if (D_800F3368.palette == 4 && D_800F3428) palette += 4;
         func_800CEE20(&position, &rotation, scale, scale, 128, GetClut(32,palette), 1, 128, &color);
         break;
     }

@@ -41,8 +41,11 @@ s32 Memcard_SineTrailEffect(s32 mode, MemcardTrailState *state) {
         D_800F3368.parameter02 = 2;
         D_800F3368.extent_x = 32;
         D_800F3368.extent_y = 32;
-        D_800F336C = 1;
-        D_800F3368.tpage = D_800E2850[D_800E11F6];
+        {
+            u16 tpage = D_800E2850[D_800E11F6];
+            D_800F3368.palette = 1;
+            D_800F3368.tpage = tpage;
+        }
         func_800CEDA8(1);
         D_800F3368.parameter06 = 1;
         D_800F3368.parameter0A = 5;
@@ -50,7 +53,7 @@ s32 Memcard_SineTrailEffect(s32 mode, MemcardTrailState *state) {
         if (state->timer < 33) {
             func_800CF3AC(D_801F1E74, &color, state->timer);
             scale = rsin(state->timer << 6) / 2 + 2048;
-            kind = D_800F336C;
+            kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             func_800CEE20(&position, 0, scale, scale, 64,
                           func_80077AA4(0, (kind == 4 && D_800F3428) ? palette + 8 : palette + 4),

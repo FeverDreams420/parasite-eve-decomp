@@ -2,6 +2,7 @@
 #define PE1_ROOM_M404_H
 
 #include "common.h"
+#include "pe1/field_sprite_params.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_transform_point.h"
 
@@ -27,15 +28,6 @@ extern RoomTemplate8 D_8018F208;
 extern s32 D_800E27EC;
 extern volatile u16 D_800E11EA;
 extern u16 D_800E2850[];
-extern volatile s16 D_800F3368;
-extern u16 D_800F3378;
-extern u16 D_800F3376;
-extern s16 D_800F336A;
-extern u16 D_800F336C;
-extern s16 D_800F3374;
-extern u16 D_800F3372;
-extern u16 D_800F3370;
-extern u16 D_800F336E;
 extern RoomM404Channel *D_800F32D0, *D_800F33E0;
 extern RoomM404EventState *D_800E2368;
 extern int func_800D3FD8(void);

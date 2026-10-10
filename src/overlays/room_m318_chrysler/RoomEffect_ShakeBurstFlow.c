@@ -30,12 +30,12 @@ int func_80193FC4(int mode, RoomShakeBurstParticleCallbackView *particle) {
         position.z = D_800E27EC * 12;
         position.pad = 0;
         func_800CF3AC(D_801995FC, color, D_800E27EC);
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         scale = D_800E27EC * 128 + 4096;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428) palette += 4;
         clut = GetClut(48, palette);
-        frame = D_800F336A * (D_800E27EC / 6 + 2) + 160;
+        frame = (s16)D_800F3368.parameter02 * (D_800E27EC / 6 + 2) + 160;
         func_800CEE20(particle, &position, scale, scale, frame, clut, 1, 128, color);
         break;
     }

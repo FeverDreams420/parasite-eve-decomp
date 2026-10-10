@@ -1,6 +1,7 @@
 #ifndef PE1_ROOM_M256_H
 #define PE1_ROOM_M256_H
 
+#include "pe1/field_sprite_params.h"
 #include "pe1/room_m256_trail.h"
 #include "pe1/room_model_pulse_particle.h"
 
@@ -9,11 +10,6 @@ extern int D_800B0E64;
 extern u16 D_800E11EA;
 extern int D_800E27EC;
 extern u16 D_800E2850[];
-extern u16 D_800F336C;
-extern short D_800F3374;
-extern unsigned short D_800F3372;
-extern unsigned short D_800F336E;
-extern u16 D_800F3370;
 extern int D_80195EF8;
 extern int func_801940B0(int mode, void *state);
 
@@ -27,7 +23,6 @@ extern char D_801960A0[];
 extern char D_80196098[];
 extern char D_80195E64[];
 extern s16 D_80196094;
-extern s16 D_800F336A;
 extern u16 D_800E1204[];
 extern int D_800F3428;
 

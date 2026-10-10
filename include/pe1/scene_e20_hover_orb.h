@@ -1,6 +1,7 @@
 #ifndef PE1_SCENE_E20_HOVER_ORB_H
 #define PE1_SCENE_E20_HOVER_ORB_H
 
+#include "pe1/field_sprite_params.h"
 #include "pe1/scene_e20_flare.h"
 #include "pe1/field_anim_callback_list.h"
 
@@ -64,15 +65,6 @@ extern u16 D_800E11EA;
 extern u16 D_800E11FA;
 extern u16 D_800E120A;
 extern s32 D_800E27EC;
-extern s16 D_800F3368;
-extern s16 D_800F336A;
-extern u16 D_800F336C;
-extern u16 D_800F336E;
-extern u16 D_800F3370;
-extern u16 D_800F3372;
-extern s16 D_800F3374;
-extern u16 D_800F3376;
-extern u16 D_800F3378;
 extern s32 D_800F3428;
 extern s32 D_80190800;
 

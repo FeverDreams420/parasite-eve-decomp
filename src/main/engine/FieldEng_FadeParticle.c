@@ -94,9 +94,9 @@ int func_800DEFFC(int mode, RenderFadeParticle *particle)
                 intensity = D_800E2244;
             func_800CEE20((GteShortVector *)particle, 0, scale / 2, scale / 2,
                           (s16)D_800F3368.parameter02 * (particle->timer & 3) + 0x68,
-                          GetClut(16, (D_800F336C == 4 && D_800F3428)
-                                      ? D_800E1204[D_800F336C] + 4
-                                      : D_800E1204[D_800F336C]),
+                          GetClut(16, (D_800F3368.palette == 4 && D_800F3428)
+                                      ? D_800E1204[D_800F3368.palette] + 4
+                                      : D_800E1204[D_800F3368.palette]),
                           1, intensity, 0);
             break;
         case 1:
@@ -107,15 +107,15 @@ int func_800DEFFC(int mode, RenderFadeParticle *particle)
                 intensity = D_800E2244;
             func_800CEE20((GteShortVector *)particle, 0, scale, scale,
                           (s16)D_800F3368.parameter02 * (particle->timer & 3) + 0x68,
-                          GetClut(16, (D_800F336C == 4 && D_800F3428)
-                                      ? D_800E1204[D_800F336C] + 4
-                                      : D_800E1204[D_800F336C]),
+                          GetClut(16, (D_800F3368.palette == 4 && D_800F3428)
+                                      ? D_800E1204[D_800F3368.palette] + 4
+                                      : D_800E1204[D_800F3368.palette]),
                           1, intensity / 2, 0);
             break;
         case 2:
             scale = rsin((particle->timer << 10) / 24) + 0x1000;
             func_800CF3AC(D_800E213C, &color, particle->timer);
-            kind = D_800F336C;
+            kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428)
                 palette += 4;

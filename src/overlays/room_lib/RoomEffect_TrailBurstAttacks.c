@@ -164,7 +164,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             gte_ldrotmatrix(D_800BCFA4.value);
             gte_ldtransmatrix(D_800BCFA4.value);
             {
-                u16 kind = D_800F336C;
+                u16 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
             }
@@ -202,7 +202,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
 
                 scale = rcos((trail->timer << 10) / 12) / 64;
                 D_800F3368.parameter00 = 0x20;
-                D_800F336A = 2;
+                D_800F3368.parameter02 = 2;
                 D_800F3368.extent_x = 0x20;
                 D_800F3368.extent_y = 0x20;
                 kind = D_800F3368.palette;
@@ -210,7 +210,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 clut = func_80077AA4(0x40, palette);
                 func_800CEE20((GteShortVector *)trail, 0, 0x1000, 0x1000,
-                              D_800F336A * (trail->timer * 2 / 3) + 0x90, clut, 1,
+                              (s16)D_800F3368.parameter02 * (trail->timer * 2 / 3) + 0x90, clut, 1,
                               scale, 0);
             }
             break;
@@ -227,12 +227,12 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             target.x += -0x10 + (func_80071A54() & 0x1F);
             target.y += -0x10 + (func_80071A54() & 0x1F);
             target.z += -0x10 + (func_80071A54() & 0x1F);
-            kind = D_800F336C;
+            kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = func_80077AA4(0x40, palette);
             func_800CEE20(&target, 0, 0x1000, 0x1000,
-                          D_800F336A * (trail->timer & 7) + 0x90, clut, 1, scale, 0);
+                          (s16)D_800F3368.parameter02 * (trail->timer & 7) + 0x90, clut, 1, scale, 0);
             break;
         default:
             return 0;
@@ -320,18 +320,18 @@ int RoomEffect_ModelBurstParticle(int mode, RoomModelBurstParticle *state) {
         matrixSlot = &D_800BCFA4;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428 != 0) palette += 4;
         clut = func_80077AA4(0x10, palette);
         func_800D2370(&g_RoomModelBurstAnchor, (GteRotation *)state, 0x1FE, 0x6E, u, 0,
                       0x80, 0x20, clut, &color, &color, (short)scale, 1);
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428 != 0) palette += 4;
         clut = func_80077AA4(0x40, palette);
         func_800CEE20(&g_RoomModelBurstAnchor, 0, 0x1000, 0x1000,
-                      D_800F336A * ((short)state->frame / 2) + 0x90, clut, 1, scale / 2, 0);
+                      (s16)D_800F3368.parameter02 * ((short)state->frame / 2) + 0x90, clut, 1, scale / 2, 0);
         break;
     }
     return 0;
@@ -610,7 +610,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             gte_ldrotmatrix(D_800BCFA4.value);
             gte_ldtransmatrix(D_800BCFA4.value);
             {
-                u16 kind = D_800F336C;
+                u16 kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
             }
@@ -648,7 +648,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
 
                 scale = rcos((trail->timer << 10) / 12) / 64;
                 D_800F3368.parameter00 = 0x20;
-                D_800F336A = 2;
+                D_800F3368.parameter02 = 2;
                 D_800F3368.extent_x = 0x20;
                 D_800F3368.extent_y = 0x20;
                 kind = D_800F3368.palette;
@@ -656,7 +656,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 clut = func_80077AA4(0x40, palette);
                 func_800CEE20((GteShortVector *)trail, 0, 0x1000, 0x1000,
-                              D_800F336A * (trail->timer * 2 / 3) + 0x90, clut, 1,
+                              (s16)D_800F3368.parameter02 * (trail->timer * 2 / 3) + 0x90, clut, 1,
                               scale, 0);
             }
             break;
@@ -673,12 +673,12 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             target.x += -0x10 + (func_80071A54() & 0x1F);
             target.y += -0x10 + (func_80071A54() & 0x1F);
             target.z += -0x10 + (func_80071A54() & 0x1F);
-            kind = D_800F336C;
+            kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = func_80077AA4(0x40, palette);
             func_800CEE20(&target, 0, 0x1000, 0x1000,
-                          D_800F336A * (trail->timer & 7) + 0x90, clut, 1, scale, 0);
+                          (s16)D_800F3368.parameter02 * (trail->timer & 7) + 0x90, clut, 1, scale, 0);
             break;
         default:
             return 0;
@@ -762,18 +762,18 @@ int RoomEffect_ScatterBurstParticle(int mode, RoomModelBurstParticle *state) {
         matrixSlot = &D_800BCFA4;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428 != 0) palette += 4;
         clut = func_80077AA4(0x10, palette);
         func_800D2370(&g_RoomScatterBurstAnchor, (GteRotation *)state, 0x1FE, 0x64, u, 0,
                       0x80, 0x20, clut, &color, &color, (short)scale, 1);
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428 != 0) palette += 4;
         clut = func_80077AA4(0x40, palette);
         func_800CEE20(&g_RoomScatterBurstAnchor, 0, 0x1000, 0x1000,
-                      D_800F336A * ((short)state->frame / 2) + 0x90, clut, 1, scale / 2, 0);
+                      (s16)D_800F3368.parameter02 * ((short)state->frame / 2) + 0x90, clut, 1, scale / 2, 0);
         break;
     }
     return 0;

@@ -1,3 +1,4 @@
+#include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte_types.h"
@@ -12,16 +13,10 @@ typedef RoomM350TableShadeEntry TrigEntry;
 extern RoomM350Emitter *D_800F33E0;
 extern Instance *D_8019A7F8;
 extern int D_800E27EC, D_800F3428, D_800966EC[];
-extern unsigned short D_800F336C, D_800E1204[], D_800E2850[];
-extern short D_800F336A, D_800966EE[];
+extern unsigned short D_800E1204[], D_800E2850[];
+extern short D_800966EE[];
 extern int D_8019A3CC[], D_8019A3C8[];
-extern short D_800F3368;
-extern unsigned short D_800F3378;
-extern unsigned short D_800F3376;
-extern short D_800F3374;
-extern unsigned short D_800F3372;
-extern unsigned short D_800F336E;
-extern unsigned short D_800E11E8, D_800F3370;
+extern unsigned short D_800E11E8;
 extern unsigned short GetClut(int, int);
 extern void func_800CEE20(void *, int, int, int, int, int, int, int, void *);
 extern void func_800D004C(void *, int, int, int, void *, int, int, void *, void *, int, int);
@@ -34,12 +29,12 @@ int func_8019404C(int event, Particle *particle)
         if (D_800E27EC >= 8) return 1;
     } else if (event == 2) {
         int size = *(short *)((char *)D_800966EC + ((((unsigned int)D_800E27EC - 1) << 9) & 0x3E00)) * particle->size / 4096;
-        int kind = D_800F336C;
+        int kind = D_800F3368.palette;
         int palette = D_800E1204[kind];
         unsigned short clut;
         if (kind == 4 && D_800F3428) palette += 4;
         clut = GetClut(48, palette);
-        func_800CEE20(&particle->x, 0, size, size, D_800F336A * 5 + 216, clut, 1,
+        func_800CEE20(&particle->x, 0, size, size, (s16)D_800F3368.parameter02 * 5 + 216, clut, 1,
             ((TrigEntry *)((char *)D_800966EE - 2 + ((((unsigned int)D_800E27EC - 1) << 9) & 0x3E00)))->shade >> 5, particle);
         func_800D004C(&particle->x, 96, 96, 8, 0, size, size, D_8019A3CC, D_8019A3C8,
             (short)D_800966EC[(((unsigned int)D_800E27EC - 1) << 8) & 0xF00] >> 5, 1);
@@ -95,12 +90,12 @@ configure:
     {
         int index = D_800E11E8;
         int palette;
-        D_800F3368 = 16; D_800F336A = 1;
-        D_800F3376 = 16; D_800F3378 = 16;
-        D_800F3376 = 16; D_800F3378 = 16;
+        D_800F3368.parameter00 = 16; D_800F3368.parameter02 = 1;
+        D_800F3368.extent_x = 16; D_800F3368.extent_y = 16;
+        D_800F3368.extent_x = 16; D_800F3368.extent_y = 16;
         palette = D_800E2850[index];
-        D_800F336C = 2; D_800F336E = 0;
-        D_800F3372 = 0; D_800F3374 = 0; D_800F3370 = palette;
+        D_800F3368.palette = 2; D_800F3368.parameter06 = 0;
+        D_800F3368.parameter0A = 0; D_800F3368.depth = 0; D_800F3368.tpage = palette;
     }
 done:
     return 0;

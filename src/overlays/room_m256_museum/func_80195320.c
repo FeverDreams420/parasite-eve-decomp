@@ -58,11 +58,11 @@ mode2:
         palette = D_800E2850[palette_index];
         /* The palette lookup precedes every parameter write in retail. */
         asm volatile("" ::: "memory");
-        D_800F336C = 3;
-        D_800F336E = 0;
-        D_800F3372 = 0;
-        D_800F3374 = 8;
-        D_800F3370 = palette;
+        D_800F3368.palette = 3;
+        D_800F3368.parameter06 = 0;
+        D_800F3368.parameter0A = 0;
+        D_800F3368.depth = 8;
+        D_800F3368.tpage = palette;
         /* Emit the zero result after the final write, not before it. */
         asm volatile("" : "=r"(ret) : : "memory");
     }

@@ -333,13 +333,14 @@ checkLifetime:
             asm("" : "=r"(palettes) : "0"(palettes));
             params->parameter00 = spriteExtent;
             spritePalette = palettes->first;
-            D_800F336A = 1;
-            D_800F3376 = spriteExtent;
-            D_800F3378 = spriteExtent;
-            asm volatile("" : "=r"(spritePalette) : "0"(spritePalette), "m"(D_800F3378));
+            D_800F3368.parameter02 = 1;
+            D_800F3368.extent_x = spriteExtent;
+            D_800F3368.extent_y = spriteExtent;
+            asm volatile("" : "=r"(spritePalette) : "0"(spritePalette) : "memory");
+            renderPalette = D_800E2850[spritePalette];
             D_800F336C = 2;
-            D_800F336E = 0;
-            D_800F3370 = D_800E2850[spritePalette];
+            D_800F3368.parameter06 = 0;
+            D_800F3368.tpage = renderPalette;
             {
                 register RoomM256TrailEffect *callState asm("$4");
                 register void *callRotation asm("$5");
@@ -376,8 +377,8 @@ checkLifetime:
             renderPalette = D_800E2850[palettes->second];
             asm("" : "=r"(renderPalette) : "0"(renderPalette) : "memory");
             D_800F336C = 3;
-            D_800F336E = 0;
-            D_800F3370 = renderPalette;
+            D_800F3368.parameter06 = 0;
+            D_800F3368.tpage = renderPalette;
             goto done;
         case 2:
             renderScale = rsin(((state->frame << 0xA) / 10)) / 4;
@@ -393,8 +394,8 @@ checkLifetime:
             renderPalette = D_800E2850[*paletteIndex];
             asm volatile("" : "=r"(renderPalette) : "0"(renderPalette));
             D_800F336C = 3;
-            D_800F336E = 0;
-            D_800F3370 = renderPalette;
+            D_800F3368.parameter06 = 0;
+            D_800F3368.tpage = renderPalette;
             tpage = func_80077A64(pageDepth, pageBlend, pageX, 0);
             }
             modelPage = (*(u16 *)((char *)D_800E2850 + ((unsigned)*paletteIndex << 1)) | tpage) & 0xFFFF;
@@ -431,24 +432,24 @@ checkLifetime:
             }
             pulseExtent = 0x40;
             D_800F3368.parameter00 = pulseExtent;
-            D_800F3376 = pulseExtent;
-            D_800F3378 = pulseExtent;
-            D_800F336A = 4;
-            D_800F3374 = 0x18;
+            D_800F3368.extent_x = pulseExtent;
+            D_800F3368.extent_y = pulseExtent;
+            D_800F3368.parameter02 = 4;
+            D_800F3368.depth = 0x18;
             pulseClutY = D_800E1204[D_800F336C];
             if ((D_800F336C == 4) && (D_800F3428 != 0)) {
                 pulseClutY += 4;
             }
             func_800CEE20(state, 0, renderScale, renderScale, 0x7C, func_80077AA4(0x60, pulseClutY) & 0xFFFF, 1, fade, 0);
-            D_800F3374 = 8;
+            D_800F3368.depth = 8;
             goto done;
         case 4:
             renderScale = rsin(state->frame << 6) + 0x1000;
             rsin((state->frame << 11) / 24);
             D_800F3368.parameter00 = 0x20;
-            D_800F336A = 2;
-            D_800F3376 = 0x20;
-            D_800F3378 = 0x20;
+            D_800F3368.parameter02 = 2;
+            D_800F3368.extent_x = 0x20;
+            D_800F3368.extent_y = 0x20;
             impactClutY = D_800E1204[D_800F336C];
             if ((D_800F336C == 4) && (D_800F3428 != 0)) {
                 impactClutY += 4;
@@ -456,7 +457,7 @@ checkLifetime:
             clut = func_80077AA4(0x10, impactClutY) & 0xFFFF;
             tripledScale = renderScale * 3;
             impactScale = (s32) (tripledScale + (tripledScale >> 0x1F)) >> 1;
-            spriteFrame = &D_800F336A;
+            spriteFrame = (s16 *)&D_800F3368.parameter02;
             func_800CEE20(state, &spriteRotation, impactScale, impactScale, (*spriteFrame * (s16) (state->frame / 3)) + 0x20, clut, 1, 0x80, 0);
             impactFrame = state->frame;
             if (impactFrame < 0xD) {
@@ -468,15 +469,15 @@ checkLifetime:
                 }
                 D_800F3368.parameter00 = 0x20;
                 *spriteFrame = 2;
-                D_800F3376 = 0x20;
-                D_800F3378 = 0x20;
-                D_800F3372 = 5;
+                D_800F3368.extent_x = 0x20;
+                D_800F3368.extent_y = 0x20;
+                D_800F3368.parameter0A = 5;
                 ringClutY = D_800E1204[D_800F336C];
                 if ((D_800F336C == 4) && (D_800F3428 != 0)) {
                     ringClutY += 4;
                 }
                 func_800CEE20(state, &spriteRotation, renderScale, renderScale, 0x92, func_80077AA4(0x80, ringClutY) & 0xFFFF, 1, fade, &darkColor.r);
-                D_800F3372 = 0;
+                D_800F3368.parameter0A = 0;
             }
             return 0;
         }

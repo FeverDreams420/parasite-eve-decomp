@@ -1,11 +1,12 @@
 /* Sprite callback and poll/reset controller share one pool and layout. */
+#include "pe1/field_sprite_params.h"
 #include "room_m273_effects.h"
 #include "pe1/field_anim_callback_list.h"
 #include "room_m273_sweep.h"
 #include "pe1/room_floor.h"
 typedef GteShortVector Vector;
 extern int D_800E27EC, D_800F3428, D_800966EC[];
-extern unsigned short D_800F336C, D_800E1204[];
+extern unsigned short D_800E1204[];
 extern unsigned short GetClut(int, int);
 extern void func_800CEE20(void *, void *, int, int, int, int, int, int, void *);
 
@@ -19,7 +20,7 @@ int func_80197230(int mode, Vector *position) {
         int sample;
         unsigned short clut;
         sample = D_800966EC[(((unsigned int)frame << 9) & 0x3E00) / 4];
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         size = sample + 2048;
         palette = D_800E1204[kind];
         clut = GetClut(0, (kind == 4 && D_800F3428) ? palette + 9 : palette + 5);
@@ -43,11 +44,8 @@ typedef RoomM273RisingParticle Particle;
 
 /* The timed emitter fills the eight-byte records rendered by this callback. */
 extern int D_800E27EC, D_800F3428, D_800966EC[];
-extern short D_800F336A,D_8019AE84;
-extern unsigned short D_800F3368,D_800F336C,D_800F336E,D_800E1204[];
-extern unsigned short D_800F3370, D_800F3372;
-extern short D_800F3374;
-extern unsigned short D_800F3376,D_800F3378;
+extern short D_8019AE84;
+extern unsigned short D_800E1204[];
 extern unsigned char D_8019AD70[],D_8019AF6A,D_8019AF69;
 extern unsigned short D_800E11E8,D_800E2850[];
 extern volatile unsigned short D_8019AEFE,D_8019AF00;
@@ -70,7 +68,7 @@ int func_801974DC(int mode, Particle *input) {
         }
     } else if (mode == 2) {
         int frame = D_800E27EC - 1;
-        int kind = D_800F336C;
+        int kind = D_800F3368.palette;
         int sample, palette, size, shade;
         int paletteOffset, sizeOffset;
         unsigned int sampleOffset;
@@ -86,7 +84,7 @@ int func_801974DC(int mode, Particle *input) {
         size = *(short *)((char *)D_800966EC + sizeOffset) + 8192;
         if (kind == 4 && D_800F3428) palette += 4;
         clut = GetClut(16, palette);
-        func_800CEE20(particle, 0, size, size, D_800F336A * (frame / 4) + 200,
+        func_800CEE20(particle, 0, size, size, (s16)D_800F3368.parameter02 * (frame / 4) + 200,
             clut, 1, shade, D_8019AD70);
     }
     return 0;
@@ -115,18 +113,18 @@ int func_80197648(int mode) {
     case 2: {
         unsigned int index=D_800E11E8;
         unsigned short palette;
-        D_800F3368=16;
-        D_800F336A=1;
-        D_800F3376=16;
-        D_800F3378=16;
-        D_800F3376=16;
-        D_800F3378=16;
+        D_800F3368.parameter00=16;
+        D_800F3368.parameter02=1;
+        D_800F3368.extent_x=16;
+        D_800F3368.extent_y=16;
+        D_800F3368.extent_x=16;
+        D_800F3368.extent_y=16;
         palette=D_800E2850[index];
-        D_800F336C=2;
-        D_800F336E=0;
-        D_800F3372=0;
-        D_800F3374=0;
-        D_800F3370=palette;
+        D_800F3368.palette=2;
+        D_800F3368.parameter06=0;
+        D_800F3368.parameter0A=0;
+        D_800F3368.depth=0;
+        D_800F3368.tpage=palette;
         break;
     }
     }
@@ -136,10 +134,7 @@ int func_80197648(int mode) {
 
 /* The position emitter fills the eight-byte records rendered by this callback. */
 extern int D_800E27EC,D_800F3428,D_800966EC[];
-extern unsigned short D_800F3368, D_800F336C, D_800F336E, D_800E1204[];
-extern unsigned short D_800F3370, D_800F3372;
-extern short D_800F3374;
-extern unsigned short D_800F3376,D_800F3378;
+extern unsigned short D_800E1204[];
 extern unsigned char D_8019AB70[],D_8019AD74[],D_8019AD78[],D_8019AF68,D_8019AF69;
 extern unsigned short D_800E11EA,D_800E2850[];
 extern volatile unsigned short D_8019AEFE,D_8019AF00;
@@ -153,7 +148,7 @@ int func_801977F8(int mode,Vector *input) {
     } else if(mode==2) {
         register int counter asm("$2")=D_800E27EC;
         register int frame asm("$22")=counter-1;
-        int kind=D_800F336C;
+        int kind=D_800F3368.palette;
         register int sample asm("$3")=*(int *)((char *)D_800966EC+(((unsigned int)frame<<8)&0x3F00));
         int shade,size,palette;
         unsigned short clut;
@@ -197,19 +192,19 @@ int func_80197A48(int mode) {
     case 2: {
         unsigned int index=D_800E11EA;
         unsigned short palette;
-        D_800F3368=32;
-        D_800F336A=2;
-        D_800F3376=32;
-        D_800F3378=32;
-        D_800F3376=32;
-        D_800F3378=32;
+        D_800F3368.parameter00=32;
+        D_800F3368.parameter02=2;
+        D_800F3368.extent_x=32;
+        D_800F3368.extent_y=32;
+        D_800F3368.extent_x=32;
+        D_800F3368.extent_y=32;
         palette=D_800E2850[index];
         asm("" : : "r"(palette) : "memory", "$2");
-        D_800F336C=3;
-        D_800F336E=0;
-        D_800F3372=0;
-        D_800F3374=64;
-        D_800F3370=palette;
+        D_800F3368.palette=3;
+        D_800F3368.parameter06=0;
+        D_800F3368.parameter0A=0;
+        D_800F3368.depth=64;
+        D_800F3368.tpage=palette;
         break;
     }
     }

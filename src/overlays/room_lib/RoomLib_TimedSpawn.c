@@ -5,6 +5,7 @@
  * callback's seed initialiser.
  */
 #include "common.h"
+#include "pe1/field_sprite_params.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte.h"
 #include "pe1/room_fx.h"
@@ -107,15 +108,6 @@ extern s32 D_800E27EC;
 extern u16 D_800E11EA;
 extern u16 D_800E2850[];
 extern RoomTimedSpawnSoundState D_800B0E64;
-extern s16 D_800F3368;
-extern s16 D_800F336A;
-extern u16 D_800F336C;
-extern u16 D_800F336E;
-extern u16 D_800F3370;
-extern u16 D_800F3372;
-extern s16 D_800F3374;
-extern u16 D_800F3376;
-extern u16 D_800F3378;
 
 void func_800CE870(void *arg0, int arg1, void *arg2);
 int func_800D3FD8(void);
@@ -200,16 +192,20 @@ mode1:
     }
     return 2;
 
-mode2:
-    D_800F3368 = 0x20;
-    D_800F336A = 2;
-    D_800F3376 = 0x20;
-    D_800F3378 = 0x20;
-    D_800F336C = 3;
-    D_800F336E = 0;
-    D_800F3372 = 0;
-    D_800F3374 = 0;
-    D_800F3370 = D_800E2850[D_800E11EA];
+mode2: {
+    int index = D_800E11EA;
+    u16 tpage;
+    D_800F3368.parameter00 = 0x20;
+    D_800F3368.parameter02 = 2;
+    D_800F3368.extent_x = 0x20;
+    D_800F3368.extent_y = 0x20;
+    tpage = D_800E2850[index];
+    D_800F3368.palette = 3;
+    D_800F3368.parameter06 = 0;
+    D_800F3368.parameter0A = 0;
+    D_800F3368.depth = 0;
+    D_800F3368.tpage = tpage;
+}
 ret0:
     return 0;
 }

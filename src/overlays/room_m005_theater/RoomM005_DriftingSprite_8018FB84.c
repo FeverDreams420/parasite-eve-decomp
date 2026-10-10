@@ -36,7 +36,7 @@ int func_8018FB84(int mode, RoomM005DriftingSpriteState *state) {
         u = (D_800E27EC & 1) << 7;
         v = ((D_800E27EC << 3) & 0x10) + 0x20;
         scale = rcos((D_800E27EC << 10) / 6) / 24;
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428 != 0) palette += 4;
         clut = func_80077AA4(0, palette);

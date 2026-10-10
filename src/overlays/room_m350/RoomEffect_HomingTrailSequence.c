@@ -104,8 +104,8 @@ int func_801947BC(int event,RoomM350Particle *p)
     } else if(event==2) {
         int clut,palette;
         if(p->tail.value.active.frame>=48) return 0;
-        palette=D_800E1204[D_800F336C];
-        if(D_800F336C==4 && D_800F3428) palette+=4;
+        palette=D_800E1204[D_800F3368.palette];
+        if(D_800F3368.palette==4 && D_800F3428) palette+=4;
         clut=GetClut(32,palette);
         func_800CEE20(&p->position,0,4096,4096,108,(unsigned short)clut,1,p->tail.value.active.brightness,0);
         ground.x=p->position.x; ground.y=g_RoomFloorY->raw; ground.z=p->position.z;

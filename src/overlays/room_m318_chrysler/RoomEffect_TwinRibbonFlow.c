@@ -4,14 +4,6 @@
 typedef RoomTwinRibbonPulse RoomM318Pulse;
 
 extern u16 D_800E11EA, D_800E120A, D_800E2850[];
-/* Keep legacy pulse accesses distinct from the controller's structured view. */
-#define D_800F336A (*(u16 *)0x800F336A)
-#define D_800F336C (*(u16 *)0x800F336C)
-#define D_800F336E (*(u16 *)0x800F336E)
-#define D_800F3370 (*(u16 *)0x800F3370)
-#define D_800F3376 (*(u16 *)0x800F3376)
-#define D_800F3378 (*(u16 *)0x800F3378)
-
 
 int func_80071A54(void);
 int rcos(int);
@@ -56,12 +48,15 @@ int func_80196C48(int mode, RoomM318Pulse *pulse) {
         width = 32;
         settings[0] = width;
         paletteIndex = D_800E11EA;
-        D_800F336A = 2;
-        D_800F3376 = width;
-        D_800F3378 = width;
-        D_800F336C = 3;
-        D_800F336E = 0;
-        D_800F3370 = D_800E2850[paletteIndex];
+        D_800F3368.parameter02 = 2;
+        D_800F3368.extent_x = width;
+        D_800F3368.extent_y = width;
+        {
+            int tpage = D_800E2850[paletteIndex];
+            D_800F3368.palette = 3;
+            D_800F3368.parameter06 = 0;
+            D_800F3368.tpage = tpage;
+        }
         clut = GetClut(clutX, clutY);
         size = (int)cosine / 2;
         func_800CEE20(pulse, 0, size, size, 104 + settings[1] * (pulse->age & 3), clut, 1, (sine >> 5) / 2, 0);
@@ -69,13 +64,6 @@ int func_80196C48(int mode, RoomM318Pulse *pulse) {
     }
     return 0;
 }
-
-#undef D_800F336A
-#undef D_800F336C
-#undef D_800F336E
-#undef D_800F3370
-#undef D_800F3376
-#undef D_800F3378
 
 /* Twin ribbon controller: two mirrored pairs of ribbons between bone
  * offsets on bones 8 and 21; every frame a pulse is shed from one of the

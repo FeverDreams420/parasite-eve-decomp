@@ -2,6 +2,7 @@
 #define PE1_ROOM_M086_SEEKER_H
 
 #include "common.h"
+#include "pe1/field_sprite_params.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_transform_point.h"
 #include "pe1/gte_types.h"
@@ -56,23 +57,8 @@ typedef struct RoomM086EventState {
     u8 active;
 } RoomM086EventState;
 
-
 extern int D_800E27EC;
 
-/* The sprite parameter block at 0x800F3368 (RenderEffectParameters). */
-typedef struct RoomM086EffectParams {
-    u16 parameter00;
-    u16 parameter02;
-    u16 palette;
-    u16 parameter06;
-    u16 tpage;
-    u16 parameter0A;
-    s16 depth;
-    u16 extent_x;
-    u16 extent_y;
-} RoomM086EffectParams;
-
-extern RoomM086EffectParams D_800F3368;
 extern u16 D_800E11E4[];
 extern u16 D_800E1204[];
 extern u16 D_800E2850[];

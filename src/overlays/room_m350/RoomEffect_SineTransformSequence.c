@@ -20,7 +20,7 @@ int func_801996BC(int event, RoomM350SineParticle *object)
             if (object->brightness < 16) return 1;
         }
     } else if (event == 2) {
-        int kind = D_800F336C;
+        int kind = D_800F3368.palette;
         int palette = D_800E1204[kind];
         unsigned short handle;
         handle = GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7 : palette + 3);

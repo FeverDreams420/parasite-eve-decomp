@@ -33,18 +33,18 @@ int func_800DE7A8(int mode, FieldSpinGlow *state)
         rotation.y = 0;
         rotation.z = state->angle + D_800E27EC * 8;
         scale = rsin(D_800E27EC * 32) + 0x2800;
-        palette = D_800E1204[D_800F336C];
-        if (D_800F336C == 4 && D_800F3428)
+        palette = D_800E1204[D_800F3368.palette];
+        if (D_800F3368.palette == 4 && D_800F3428)
             palette += 4;
         func_800CEE20(&position, &rotation, scale, scale,
-                      D_800F336A * (D_800E27EC / 4) + 0xC0, GetClut(64, palette), 1,
+                      (s16)D_800F3368.parameter02 * (D_800E27EC / 4) + 0xC0, GetClut(64, palette), 1,
                       intensity, 0);
         scale = 0x1800;
-        palette = D_800E1204[D_800F336C];
-        if (D_800F336C == 4 && D_800F3428)
+        palette = D_800E1204[D_800F3368.palette];
+        if (D_800F3368.palette == 4 && D_800F3428)
             palette += 4;
         func_800CEE20(&position, &rotation, scale, scale,
-                      D_800F336A * (D_800E27EC / 8) + 0x60, GetClut(0, palette), 3,
+                      (s16)D_800F3368.parameter02 * (D_800E27EC / 8) + 0x60, GetClut(0, palette), 3,
                       intensity, 0);
         break;
     }
@@ -122,7 +122,7 @@ int func_800DEA30(int mode, FieldGlowFountain *state)
             rotation.flags = 0;
             rotation.z = D_800E27EC << 4;
             scale = 0x3000 - rcos((D_800E27EC << 10) / 12);
-            kind = D_800F336C;
+            kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             func_800CEE20((GteShortVector *)state, &rotation, scale, scale, 0x40,
                           GetClut(0, (kind == 4 && D_800F3428) ? palette + 8 : palette + 4),

@@ -1,3 +1,4 @@
+#include "pe1/field_sprite_params.h"
 #include "../room_lib/room_lib.h"
 
 typedef struct RoomM005_OrbRec {
@@ -24,8 +25,6 @@ typedef struct RoomM005_Dialog {
 extern RoomM005_Dialog g_RoomScriptRecord;
 extern char RoomM005_Rec2[];
 extern int D_800E27EC;
-extern unsigned short D_800F336C;
-extern short D_800F336A;
 extern int D_800F3428;
 extern unsigned short D_800E1204[];
 extern int rsin();
@@ -80,19 +79,19 @@ burst:
     q[3] = 0;
     func_800CF3AC(RoomM005_Rec2, out, (r->h2 + D_800E27EC) & 0x3F);
     {
-        int a = D_800E1204[D_800F336C];
-        if (D_800F336C == 4 && D_800F3428 != 0) {
+        int a = D_800E1204[D_800F3368.palette];
+        if (D_800F3368.palette == 4 && D_800F3428 != 0) {
             a += 4;
         }
-        func_800CEE20((GteShortVector *)r, (GteRotation *)q, 0x800, 0x800, D_800F336A + 0xD8,
+        func_800CEE20((GteShortVector *)r, (GteRotation *)q, 0x800, 0x800, (s16)D_800F3368.parameter02 + 0xD8,
                       (unsigned short)func_80077AA4(0x20, a), 3, r->h6, (RenderColor *)out);
     }
     {
-        int a = D_800E1204[D_800F336C];
-        if (D_800F336C == 4 && D_800F3428 != 0) {
+        int a = D_800E1204[D_800F3368.palette];
+        if (D_800F3368.palette == 4 && D_800F3428 != 0) {
             a += 4;
         }
-        func_800CEE20((GteShortVector *)r, (GteRotation *)q, 0x1000, 0x1000, (D_800F336A << 1) + 0xD8,
+        func_800CEE20((GteShortVector *)r, (GteRotation *)q, 0x1000, 0x1000, ((s16)D_800F3368.parameter02 << 1) + 0xD8,
                       (unsigned short)func_80077AA4(0x20, a), 3, r->h6, (RenderColor *)out);
     }
 ret0:

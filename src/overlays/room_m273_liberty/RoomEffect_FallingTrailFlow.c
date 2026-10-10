@@ -1,3 +1,4 @@
+#include "pe1/field_sprite_params.h"
 #include "room_m273_boss.h"
 #include "pe1/gte.h"
 #include "pe1/field_actor.h"
@@ -162,8 +163,6 @@ int func_80194E6C(int mode, RoomM273FallingTrail *trail) {
     return 0;
 }
 
-extern u16 D_800F3372;
-extern u16 D_800F3376, D_800F3378;
 extern s16 D_8019ACA8;
 extern s16 D_8019AE6C, D_8019AE70, D_8019AE74, D_8019AE78;
 extern u8 D_8019AEF8, D_8019AEFA;
@@ -306,11 +305,11 @@ particleSetup:
         return 0;
     }
     case 2: {
-        u16 drawSize = *(u16 *)&D_800F3368;
-        D_800F3372 = 0;
-        D_800F3374 = 0;
-        D_800F3376 = drawSize;
-        D_800F3378 = drawSize;
+        u16 drawSize = D_800F3368.parameter00;
+        D_800F3368.parameter0A = 0;
+        D_800F3368.depth = 0;
+        D_800F3368.extent_x = drawSize;
+        D_800F3368.extent_y = drawSize;
         break;
     }
     }

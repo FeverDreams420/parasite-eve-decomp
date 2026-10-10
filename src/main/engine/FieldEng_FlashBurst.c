@@ -56,7 +56,7 @@ int func_800DE0A8(int mode, FieldFlashBurst *state)
             gte_ldtransmatrix(D_800BCFA4.value);
             {
                 int tpage = (u16)(tpages[slots[0]] | GetTPage(0, 1, 0, 0));
-                int kind = D_800F336C;
+                int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428)
                     palette += 4;
@@ -72,7 +72,7 @@ int func_800DE0A8(int mode, FieldFlashBurst *state)
             func_800C7098(D_800F3474, color.r, color.g >> 1, 0);
             {
                 int tpage = (u16)(D_800E2850[D_800E11E6] | GetTPage(0, 1, 0, 0));
-                int kind = D_800F336C;
+                int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428)
                     palette += 4;
@@ -105,7 +105,7 @@ int func_800DE0A8(int mode, FieldFlashBurst *state)
             D_800F3368.parameter06 = 1;
             D_800F3368.parameter0A = 0;
             {
-                int kind = D_800F336C;
+                int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 func_800CEE20((GteShortVector *)state, 0, 0x2000, 0x2000, 0x42,
                               GetClut(0, (kind == 4 && D_800F3428) ? palette + 7 : palette + 3),

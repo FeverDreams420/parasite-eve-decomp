@@ -241,8 +241,8 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
             page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
-            palette = D_800E1204[D_800F336C];
-            if (D_800F336C == 4 && D_800F3428 != 0) {
+            palette = D_800E1204[D_800F3368.palette];
+            if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
             func_800C6EC0(page, func_80077AA4(0x20, palette));
@@ -273,11 +273,11 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             params = &D_800F3368;
             asm("" : "=r"(params) : "0"(params));
             params->parameter00 = 0x40;
-            D_800F336A = 4;
-            D_800F3376 = 0x40;
-            D_800F3378 = 0x40;
+            D_800F3368.parameter02 = 4;
+            D_800F3368.extent_x = 0x40;
+            D_800F3368.extent_y = 0x40;
             asm("" : "=r"(pageSelector) : "0"(&D_800E11EA[8]) : "$16");
-            D_800F3370 = D_800E2850[pageSelector[0]];
+            D_800F3368.tpage = D_800E2850[pageSelector[0]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 1;
             if (D_800E27EC & 1) {
@@ -394,8 +394,8 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
             page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
-            palette = D_800E1204[D_800F336C];
-            if (D_800F336C == 4 && D_800F3428 != 0) {
+            palette = D_800E1204[D_800F3368.palette];
+            if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
             func_800C6EC0(page, func_80077AA4(0x20, palette));
@@ -425,8 +425,8 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
             page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
-            palette = D_800E1204[D_800F336C];
-            if (D_800F336C == 4 && D_800F3428 != 0) {
+            palette = D_800E1204[D_800F3368.palette];
+            if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
             func_800C6EC0(page, func_80077AA4(0x20, palette));
@@ -457,8 +457,8 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
             page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
-            palette = D_800E1204[D_800F336C];
-            if (D_800F336C == 4 && D_800F3428 != 0) {
+            palette = D_800E1204[D_800F3368.palette];
+            if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
             func_800C6EC0(page, func_80077AA4(0x20, palette));
@@ -503,8 +503,8 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
             page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
-            palette = D_800E1204[D_800F336C];
-            if (D_800F336C == 4 && D_800F3428 != 0) {
+            palette = D_800E1204[D_800F3368.palette];
+            if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
             func_800C6EC0(page, func_80077AA4(0x60, palette));
@@ -534,8 +534,8 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
             page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
-            palette = D_800E1204[D_800F336C];
-            if (D_800F336C == 4 && D_800F3428 != 0) {
+            palette = D_800E1204[D_800F3368.palette];
+            if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
             func_800C6EC0(page, func_80077AA4(0x60, palette));
@@ -568,8 +568,8 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
             page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
-            palette = D_800E1204[D_800F336C];
-            if (D_800F336C == 4 && D_800F3428 != 0) {
+            palette = D_800E1204[D_800F3368.palette];
+            if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
             func_800C6EC0(page, func_80077AA4(0x20, palette));
@@ -600,8 +600,8 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
             page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
-            palette = D_800E1204[D_800F336C];
-            if (D_800F336C == 4 && D_800F3428 != 0) {
+            palette = D_800E1204[D_800F3368.palette];
+            if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
             func_800C6EC0(page, func_80077AA4(0x20, palette));
@@ -634,8 +634,8 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
             page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
-            palette = D_800E1204[D_800F336C];
-            if (D_800F336C == 4 && D_800F3428 != 0) {
+            palette = D_800E1204[D_800F3368.palette];
+            if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
             func_800C6EC0(page, func_80077AA4(0x60, palette));
@@ -665,8 +665,8 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
             page = (u16)(D_800E2850[D_800E11EA[0]] | func_80077A64(0, 1, 0, 0));
-            palette = D_800E1204[D_800F336C];
-            if (D_800F336C == 4 && D_800F3428 != 0) {
+            palette = D_800E1204[D_800F3368.palette];
+            if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
             }
             func_800C6EC0(page, func_80077AA4(0x60, palette));

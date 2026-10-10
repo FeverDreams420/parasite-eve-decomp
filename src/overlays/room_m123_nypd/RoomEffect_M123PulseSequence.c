@@ -1,3 +1,4 @@
+#include "pe1/field_sprite_params.h"
 #include "room_m123_effects.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte.h"
@@ -66,20 +67,6 @@ extern RoomPulseGlobal **D_8009D254;
 extern u8 *D_800E2368;
 extern int D_800E27EC;
 extern u16 D_800E11EA, D_800E2850[];
-/* The sprite parameter block at 0x800F3368 (RenderEffectParameters in
- * pe1/render_object.h, whose prototypes conflict with this unit's). */
-typedef struct RoomM123EffectParameters {
-    u16 parameter00;
-    u16 parameter02;
-    u16 palette;
-    u16 parameter06;
-    u16 tpage;
-    u16 parameter0A;
-    s16 depth;
-    u16 extent_x;
-    u16 extent_y;
-} RoomM123EffectParameters;
-extern RoomM123EffectParameters D_800F3368;
 extern int func_80194A70(int, RoomPulseParticle *, int *);
 extern void func_800CE870(void *, int, void *);
 extern int func_800D3FD8(void);

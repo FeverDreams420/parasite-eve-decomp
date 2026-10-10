@@ -27,12 +27,12 @@ int func_80192BDC(int mode, RoomM123PulsingParticle *particle) {
                       scale, (s16)particle->offset);
         if ((s16)particle->frame < 16) {
             func_800CF3AC(D_801954BC, &color, 0x30 - (scale * 48) / 1024);
-            kind = D_800F336C;
+            kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428) palette += 4;
             clut = func_80077AA4(0x20, palette);
             func_800CEE20(&position, 0, 0x1000, 0x1000,
-                          D_800F336A * 2 + 0xD8, clut, 3, g_RoomScriptRecord,
+                          (s16)D_800F3368.parameter02 * 2 + 0xD8, clut, 3, g_RoomScriptRecord,
                           &color);
             matrixSlot = &D_800BCFA4;
             gte_ldrotmatrix(matrixSlot->value);

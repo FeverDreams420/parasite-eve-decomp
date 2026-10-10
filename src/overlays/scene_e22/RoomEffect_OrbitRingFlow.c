@@ -202,7 +202,7 @@ int func_80192AF0(int mode, RoomOrbitRingBurst *burst) {
             int palette;
             int glow = rcos((D_800E27EC << 10) / 20) / 32;
             int size = rsin((D_800E27EC << 10) / 20) + 0x1000;
-            kind = D_800F336C;
+            kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             palette = func_80077AA4(0, (kind == 4 && D_800F3428 != 0) ? palette + 7 : palette + 3);
             func_800CEE20((GteShortVector *)burst, 0, size, size, 4, (u16)palette, 1,

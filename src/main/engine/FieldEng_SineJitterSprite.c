@@ -24,7 +24,7 @@ int func_800DC5BC(int mode, GteShortVector *state)
         rotation.flags = 0;
         func_800CF3AC(D_800E1E64, &color, D_800E27EC);
         scale = rsin((D_800E27EC << 11) / 14);
-        selector = D_800F336C;
+        selector = D_800F3368.palette;
         palette = D_800E1204[selector];
         func_800CEE20(state, &rotation, scale, scale, 226,
                       GetClut(0, (selector == 4 && D_800F3428) ? palette + 6

@@ -5,6 +5,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/render_matrix_slot.h"
 #include "pe1/field_transform_point.h"
+#include "pe1/field_sprite_params.h"
 
 struct RenderColor;
 
@@ -72,28 +73,6 @@ PE1_STATIC_ASSERT(sizeof(RenderCosineEffect) == 8, render_cosine_effect_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RenderCosineEffect, duration) == 6,
                   render_cosine_effect_duration);
 int func_800D5898(int mode, RenderCosineEffect *state);
-
-/* Observed halfword parameter block at 0x800F3368. Individual legacy
- * declarations still exist in other units; this declaration owns no storage. */
-typedef struct RenderEffectParameters {
-    u16 parameter00;
-    u16 parameter02;
-    u16 palette;
-    u16 parameter06;
-    u16 tpage;
-    u16 parameter0A;
-    s16 depth;
-    u16 extent_x;
-    u16 extent_y;
-} RenderEffectParameters;
-
-PE1_STATIC_ASSERT(sizeof(RenderEffectParameters) == 0x12,
-                  render_effect_parameters_size);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(RenderEffectParameters, palette) == 4,
-                  render_effect_parameters_palette);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(RenderEffectParameters, depth) == 0xC,
-                  render_effect_parameters_depth);
-extern RenderEffectParameters D_800F3368;
 
 typedef struct RenderArcingEmitter {
     GteShortVector position;
@@ -270,7 +249,6 @@ void func_800CF3AC(void *track, void *color, int time);
 void func_800D27FC(int x, int y, void *color, int scale, int mode);
 int FieldEng_CosineEffect(int mode, RenderCosineEffect *effect);
 
-extern s16 D_800F3374;
 extern u8 D_800E1494[];
 void func_800CE870(char *object, int mode, s16 *position);
 void func_800D0728(GteShortVector *position, int inner, int outer, int segments,
@@ -404,7 +382,6 @@ void LoadAverageCol(void *first, void *second, int first_scale,
 
 extern u8 D_800E1988[];
 extern u8 D_800E1EE8[];
-extern u16 D_800F336C;
 extern u16 D_800E1204[];
 extern int D_800F3428;
 void func_800CEE20(GteShortVector *position, GteRotation *rotation,
@@ -792,7 +769,6 @@ PE1_STATIC_ASSERT(sizeof(RenderRisingEffect) == 14, render_rising_effect_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RenderRisingEffect, angle) == 12,
                   render_rising_effect_angle);
 extern u8 D_800E1694[];
-extern s16 D_800F336A;
 int func_800D5CE4(int mode, RenderRisingEffect *state);
 int func_800D5EB4(int mode, RenderArcingEmitter *state);
 

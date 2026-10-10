@@ -76,13 +76,10 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM273TemplatePoint, flags) ==
 extern RoomM273TrigEntry D_800966EC[];
 extern s16 D_8019AE98;
 extern int D_8019ABFC[];
-extern s16 D_800F336A;
 extern s16 D_8019ACC0[];
 extern u8 D_8019AFA2;
 extern u8 D_8019AF8A[];
 extern u16 D_800E11E8;
-extern u16 D_800F3376;
-extern u16 D_800F3378;
 extern void *D_8019AE94;
 extern RoomM273PaletteWord D_8019AC30[];
 extern char D_8019AB70[];

@@ -21,8 +21,8 @@ int func_800DCCCC(int mode, RenderTiltingSprite *state)
         func_800CF3AC(D_800E1F18, &color, D_800E27EC);
         u = ((D_800E27EC / 2) & 3) * 64;
         v = (((D_800E27EC / 2) & 7) / 4) * 16 + 160;
-        palette = D_800E1204[D_800F336C];
-        if (D_800F336C == 4 && D_800F3428) palette += 4;
+        palette = D_800E1204[D_800F3368.palette];
+        if (D_800F3368.palette == 4 && D_800F3428) palette += 4;
         func_800D2370(&D_800E222C, &state->rotation, state->width, state->height,
                      u, v, 64, 16, GetClut(176, palette), 0, &color, 128, 1);
         break;

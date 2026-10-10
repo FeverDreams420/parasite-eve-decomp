@@ -32,7 +32,7 @@ int func_80193A80(int event, void **object)
     } else if (event == 2) {
         int sample = *(short *)((char *)D_800966EC +
             (((unsigned int)(D_800E27EC - 1) << 8) & 0x3F00));
-        int kind = D_800F336C;
+        int kind = D_800F3368.palette;
         int size = sample * 3;
         int palette = D_800E1204[kind];
         int handle;

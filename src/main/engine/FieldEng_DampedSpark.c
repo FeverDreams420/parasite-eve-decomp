@@ -89,7 +89,7 @@ int func_800D96F4(int mode, RenderSparkEmitter *state)
             rotation.z = D_800E27EC << 4;
             rotation.flags = 0;
             scale = rsin(D_800E27EC << 5) + 4096;
-            selector = D_800F336C;
+            selector = D_800F3368.palette;
             palette = D_800E1204[selector];
             func_800CEE20(&state->position, &rotation, scale, scale, 66,
                          GetClut(0, (selector == 4 && D_800F3428) ? palette + 7 : palette + 3),

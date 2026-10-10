@@ -25,7 +25,7 @@ s32 Memcard_SineRotatingImage(s32 mode, MemcardPulseState *state) {
         cosine = rcos(angle);
         if (cosine < 0) cosine += 31;
         rotation.x = state->rotation.x;
-        index = D_800F336C;
+        index = D_800F3368.palette;
         rotation.y = state->rotation.y;
         rotation.z = state->rotation.z;
         intensity = cosine >> 5;

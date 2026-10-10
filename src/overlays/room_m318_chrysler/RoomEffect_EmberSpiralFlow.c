@@ -295,7 +295,7 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
                 int palette;
                 int rawPage = func_80077A64(0, 1, 0, 0);
                 page = (u16)(tpages[*index] | rawPage);
-                kind = D_800F336C;
+                kind = D_800F3368.palette;
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 palette = GetClut(0x40, palette);

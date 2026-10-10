@@ -52,12 +52,12 @@ int func_800D4928(int mode, RenderBouncingSprite *state)
         rotation.z = state->angle + (D_800E27EC << 7);
         rotation.flags = 0;
         scale = (D_800E27EC << 11) / state->duration + 0x400;
-        palette = D_800E1204[D_800F336C];
-        if (D_800F336C == 4 && D_800F3428)
+        palette = D_800E1204[D_800F3368.palette];
+        if (D_800F3368.palette == 4 && D_800F3428)
             palette += 4;
         clut = GetClut(32, palette);
         func_800CEE20(&position, &rotation, scale, scale,
-                      D_800F336A * (D_800E27EC % 7) + 0xE8, clut, 1, 128, &color);
+                      (s16)D_800F3368.parameter02 * (D_800E27EC % 7) + 0xE8, clut, 1, 128, &color);
         break;
     }
     return 0;

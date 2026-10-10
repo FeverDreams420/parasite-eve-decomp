@@ -42,12 +42,12 @@ int func_800D5CE4(int mode, RenderRisingEffect *state)
         rotation.z = state->angle + (frame << 5);
         phase = frame << 10;
         scale = rsin(phase / 24) + 0x1000;
-        y = D_800E1204[D_800F336C];
-        if (D_800F336C == 4 && D_800F3428)
+        y = D_800E1204[D_800F3368.palette];
+        if (D_800F3368.palette == 4 && D_800F3428)
             y += 4;
         clut = GetClut(32, y);
         func_800CEE20(&position, &rotation, scale, scale,
-            TextureIndex(D_800F336A, D_800E27EC / 3),
+            TextureIndex((s16)D_800F3368.parameter02, D_800E27EC / 3),
             clut, 1, 128, &color);
         break;
     }
@@ -121,7 +121,7 @@ int func_800D5EB4(int mode, RenderArcingEmitter *state)
         rotation.y = 0;
         rotation.z = -0x200;
         rotation.flags = 0;
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         scale = 0x2400;
         if (kind == 4 && D_800F3428)

@@ -2,6 +2,7 @@
 #define PE1_ROOM_M023_BEACON_H
 
 #include "common.h"
+#include "pe1/field_sprite_params.h"
 #include "pe1/field_transform_point.h"
 #include "pe1/gte.h"
 #include "pe1/gte_types.h"
@@ -9,7 +10,6 @@
 #include "pe1/render_prim.h"
 #include "pe1/field_model_draw.h"
 #include "pe1/room_floor.h"
-
 
 /* room_m023 joint beacon (func_8018FC14): follows a model joint, swells
  * and pulses through four phases, tags the player on contact and draws a
@@ -69,24 +69,10 @@ typedef struct RoomM023BeaconArchive {
     void *channel;
 } RoomM023BeaconArchive;
 
-/* The sprite parameter block at 0x800F3368 (RenderEffectParameters). */
-typedef struct RoomM023BeaconParams {
-    u16 parameter00;
-    u16 parameter02;
-    u16 palette;
-    u16 parameter06;
-    u16 tpage;
-    u16 parameter0A;
-    s16 depth;
-    u16 extent_x;
-    u16 extent_y;
-} RoomM023BeaconParams;
-
 typedef struct RoomM023BeaconColor {
     u8 r, g, b, code;
 } RoomM023BeaconColor;
 
-extern RoomM023BeaconParams D_800F3368;
 extern u16 D_800E1204[];
 extern u16 D_800E2850[];
 extern int D_800F3428;

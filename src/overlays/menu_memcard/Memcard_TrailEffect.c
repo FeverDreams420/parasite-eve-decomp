@@ -33,8 +33,11 @@ s32 Memcard_TrailEffect(s32 mode, MemcardTrailState *state) {
         D_800F3368.parameter00 = 32;
         D_800F3368.parameter02 = 2;
         D_800F3368.extent_x = 32; D_800F3368.extent_y = 32;
-        D_800F336C = 1;
-        D_800F3368.tpage = D_800E2850[D_800E11F6];
+        {
+            u16 tpage = D_800E2850[D_800E11F6];
+            D_800F3368.palette = 1;
+            D_800F3368.tpage = tpage;
+        }
         func_800CEDA8(1);
         D_800F3368.parameter06 = 1;
         D_800F3368.parameter0A = 5;
@@ -43,7 +46,7 @@ s32 Memcard_TrailEffect(s32 mode, MemcardTrailState *state) {
             func_800CF3AC(D_801F1DE8, &color, state->timer);
             scale = rsin(state->timer << 6) + 4096;
             __asm__("" : "=r"(scale) : "0"(scale) : "memory");
-            index = D_800F336C;
+            index = D_800F3368.palette;
 
             four = 4;
 
@@ -51,7 +54,7 @@ s32 Memcard_TrailEffect(s32 mode, MemcardTrailState *state) {
             if (index == four && D_800F3428) palette += 8;
             else palette += 4;
             func_800CEE20(&position, 0, scale, scale, 64, func_80077AA4(0,palette), 1, 128, &color);
-            index = D_800F336C;
+            index = D_800F3368.palette;
             __asm__("" : "=r"(index) : "0"(index) : "$3", "memory");
             four = 4;
 

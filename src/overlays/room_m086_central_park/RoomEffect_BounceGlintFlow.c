@@ -1,4 +1,5 @@
 #include "common.h"
+#include "pe1/field_sprite_params.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/room_bounce_glint.h"
 #include "pe1/room_fx.h"
@@ -73,7 +74,7 @@ int func_801900CC(int mode, RoomBounceGlint *glint, int *size) {
                 palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 func_800CEE20((GteShortVector *)glint, 0, extent, extent,
-                              D_800F336A * (s16)(glint->timer / 6),
+                              (s16)D_800F3368.parameter02 * (s16)(glint->timer / 6),
                               (u16)func_80077AA4(0, palette), 2, intensity, 0);
             } else {
                 int kind;
@@ -84,7 +85,7 @@ int func_801900CC(int mode, RoomBounceGlint *glint, int *size) {
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 func_800CEE20((GteShortVector *)glint, 0, extent * 3 / 2,
                               extent * 3 / 2,
-                              D_800F336A * ((glint->timer / 2) & 3),
+                              (s16)D_800F3368.parameter02 * ((glint->timer / 2) & 3),
                               (u16)func_80077AA4(0, palette), 1, intensity, 0);
             }
             break;
@@ -122,11 +123,6 @@ typedef RoomFxSeed8 RoomM086Blob8;
 
 extern void *D_800F32D0;
 extern void *D_800F33E0;
-extern u16 D_800F336E;
-extern u16 D_800F3370;
-extern u16 D_800F3372;
-extern u16 D_800F3376;
-extern u16 D_800F3378;
 extern char D_8018EFF4[];
 
 void func_800CE8F0(void *arg0, s32 arg1, void *arg2, void *arg3);
@@ -278,16 +274,20 @@ mode1:
     }
     return 1;
 
-mode2:
-    D_800F3374 = 0x10;
+mode2: {
+    int index = D_800E11EA;
+    u16 tpage;
+    D_800F3368.depth = 0x10;
     D_800F3368.parameter00 = 0x20;
-    D_800F336A = 2;
-    D_800F3376 = 0x20;
-    D_800F3378 = 0x20;
-    D_800F336C = 3;
-    D_800F336E = 0;
-    D_800F3372 = 0;
-    D_800F3370 = D_800E2850[D_800E11EA];
+    D_800F3368.parameter02 = 2;
+    D_800F3368.extent_x = 0x20;
+    D_800F3368.extent_y = 0x20;
+    tpage = D_800E2850[index];
+    D_800F3368.palette = 3;
+    D_800F3368.parameter06 = 0;
+    D_800F3368.parameter0A = 0;
+    D_800F3368.tpage = tpage;
+}
 
 ret0:
     return 0;

@@ -1,4 +1,5 @@
 /* The rising-sprite callback and its poll/reset controller share one TU. */
+#include "pe1/field_sprite_params.h"
 #include "room_m273_particles.h"
 #include "pe1/field_anim_callback_list.h"
 
@@ -6,7 +7,7 @@ typedef RoomM273RisingParticle Particle;
 typedef struct { unsigned char r, g, b, unknown; } Color;
 extern Color D_8018F1E4;
 extern int D_800E27EC, D_800F3428, D_800966EC[];
-extern unsigned short D_800F336C, D_800E1204[];
+extern unsigned short D_800E1204[];
 extern unsigned short GetClut(int, int);
 extern void func_800CEE20(Particle *, void *, int, int, int, int, int, int, Color *);
 
@@ -28,7 +29,7 @@ int func_80195E10(int mode, Particle *particle) {
         int size, kind, palette;
         register int specialKind asm("$3") = 4;
         unsigned short clut;
-        kind = D_800F336C;
+        kind = D_800F3368.palette;
         size = sample * 2;
         asm("" : : "r"(size) : "memory");
         palette = D_800E1204[kind];
@@ -60,11 +61,6 @@ extern unsigned char D_8019AEF8;
 extern Vector D_8019AE9C[];
 extern void *D_8019AE80;
 extern unsigned short D_800E11FA,D_800E2850[];
-extern unsigned short D_800F3368,D_800F336C,D_800F336E;
-extern short D_800F336A;
-extern unsigned short D_800F3370, D_800F3372;
-extern short D_800F3374;
-extern unsigned short D_800F3376,D_800F3378;
 extern int func_8019A398(),func_8019A4CC();
 extern int func_800CE5AC(void **,int,int,int,int (*)());
 extern void func_800CE688(void *),func_800CE78C(void *);
@@ -120,13 +116,13 @@ int func_801960F4(int mode) {
         unsigned short palette;
         func_800CE78C(D_8019AE80);
         index=D_800E11FA;
-        D_800F3368=32; D_800F336A=2;
-        D_800F3376=32; D_800F3378=32;
-        D_800F3376=32; D_800F3378=32;
+        D_800F3368.parameter00=32; D_800F3368.parameter02=2;
+        D_800F3368.extent_x=32; D_800F3368.extent_y=32;
+        D_800F3368.extent_x=32; D_800F3368.extent_y=32;
         palette=D_800E2850[index];
         asm("" : : : "memory", "$2");
-        D_800F336C=3; D_800F336E=1; D_800F3372=0; D_800F3374=0;
-        D_800F3370=palette;
+        D_800F3368.palette=3; D_800F3368.parameter06=1; D_800F3368.parameter0A=0; D_800F3368.depth=0;
+        D_800F3368.tpage=palette;
         break;
     }
     }

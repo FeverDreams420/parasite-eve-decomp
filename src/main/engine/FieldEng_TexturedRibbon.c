@@ -37,7 +37,7 @@ void func_800D3114(GteShortVector *points, s16 count, int width, int u, int v,
 
     packet = (FieldRibbonPacket *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
     D_8009CDD8 += count * sizeof(FieldRibbonPacket);
-    bias = (u16)D_800F3374;
+    bias = (u16)D_800F3368.depth;
     color0Scaled.bytes.rgb[0] = color0->r * scale / 128;
     color0Scaled.bytes.rgb[1] = color0->g * scale / 128;
     color0Scaled.bytes.rgb[2] = color0->b * scale / 128;

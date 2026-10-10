@@ -88,7 +88,7 @@ int func_800DC058(int mode, FieldAnimTwinModel *state)
         }
         {
             int tpage = (u16)(D_800E2850[D_800E11E4[9]] | GetTPage(0, 3, 0, 0));
-            int kind = D_800F336C;
+            int kind = D_800F3368.palette;
             int palette = D_800E1204[kind];
             GsSetOrign(tpage, GetClut(0, (kind == 4 && D_800F3428) ? palette + 10 : palette + 6));
         }
@@ -129,7 +129,7 @@ int func_800DC058(int mode, FieldAnimTwinModel *state)
             matrix.t[2] = position.z;
             {
                 int tpage = (u16)(D_800E2850[D_800E11E4[9]] | GetTPage(0, 1, 0, 0));
-                int kind = D_800F336C;
+                int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 GsSetOrign(tpage, GetClut(0, (kind == 4 && D_800F3428) ? palette + 10 : palette + 6));
             }

@@ -56,8 +56,8 @@ int func_800DD9E4(int mode, RenderSettlingSprite *state)
         gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldtransmatrix(D_800BCFA4.value);
         func_800D1DEC(&position, &color, 128, 1);
-        palette = D_800E1204[D_800F336C];
-        if (D_800F336C == 4 && D_800F3428)
+        palette = D_800E1204[D_800F3368.palette];
+        if (D_800F3368.palette == 4 && D_800F3428)
             palette += 4;
         func_800CEE20(&position, 0, scale, scale, 128, GetClut(32, palette), 3,
                       128, &color);

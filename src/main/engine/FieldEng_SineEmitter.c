@@ -54,7 +54,7 @@ int func_800DB0D0(int mode, RenderSineEmitter *state)
         D_800E221C.x = state->position.x;
         D_800E221C.y = state->position.y;
         D_800E221C.z = state->position.z;
-        D_800F3374 = 8;
+        D_800F3368.depth = 8;
         break;
     }
     return 0;
