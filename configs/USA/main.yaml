@@ -310,8 +310,8 @@ segments:
       - [0x25838, c, scene/Scene_LoadMap]
       # Per-frame entity driver and the actor list passes it runs: position integration, rollback, parent following, garbage collection, callbacks and animation sequences (G0296).
       - [0x25D58, c, entity/Entity_FrameUpdate]
-      - [0x26AB8, c, entity/Entity_AllocationBlocks]
-      - [0x26C48, c, main/Scene_UpdateEntityPositions]
+      # Scratch block allocator and the actor position/contact pass that closes the entity frame module.
+      - [0x26AB8, c, entity/Entity_AllocationAndContacts]
 
       # PSYQ 4.0 object signature matches.
       - [0x275C8, c, psyq/libsnd/ssinit_c]
