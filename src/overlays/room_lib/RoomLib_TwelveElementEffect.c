@@ -100,18 +100,17 @@ int func_800C66C8(void *object, int message, void *state);
 void RoomLib_InitTwelveElementEffect(void *owner, void *unused, char *state) {
     RoomTwelveEffectStack stack;
     void *effectOwner;
-    register RoomLibTick12Rec *workState asm("$17");
+    RoomLibTick12Rec *workState;
     int spacing;
     RoomSpriteMatrix *localMatrix;
-    register char *vector asm("$3");
-    s16 *values;
     unsigned int i;
     int depth;
     int initialValue;
     char *clock;
     register RoomSpriteMatrix *sourceMatrix asm("$3");
 
-    asm("" : "=r"(effectOwner), "=r"(workState) : "0"(owner), "1"(state));
+    effectOwner = owner;
+    workState = (RoomLibTick12Rec *)state;
     clock = func_800C2B50();
     stack.seed = s_TwelveEffectInitSeed;
     stack.sourceMatrix = *(RoomSpriteMatrix *)(clock + 4);
@@ -161,18 +160,14 @@ void RoomLib_InitTwelveElementEffect(void *owner, void *unused, char *state) {
     i = 0;
     initialValue = 0x64;
     depth = 0;
-    vector = (char *)workState;
-    values = (s16 *)workState;
     for (; i < 12; i++) {
         workState->state[i] = 0;
         workState->timer[i] = 0;
-        ((RoomLibTick12Rec *)values)->phase[0] = initialValue;
-        ((RoomLibTick12Rec *)vector)->position[0].z = depth;
+        workState->phase[i] = initialValue;
+        workState->position[i].z = depth;
         depth += spacing;
-        ((RoomLibTick12Rec *)vector)->position[0].x = 0;
-        ((RoomLibTick12Rec *)vector)->position[0].y = 0;
-        vector += 8;
-        values++;
+        workState->position[i].x = 0;
+        workState->position[i].y = 0;
     }
     *(int *)((char *)workState + 0x11C) =
         func_800C66C8(effectOwner, 0x58F, &stack.sourceMatrix);
