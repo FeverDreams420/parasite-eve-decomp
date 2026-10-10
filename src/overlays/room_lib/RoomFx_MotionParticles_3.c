@@ -26,11 +26,11 @@
 extern int func_80071A54(void);
 
 
-void RoomFx_UpdateParticleMotion(int arg0, char *control, char *state) {
+void RoomFx_UpdateParticleMotion(int arg0, RoomStatePair *control, RoomMotionState *state) {
     unsigned int i;
-    char *controlReg = control;
-    RoomMotionState *stateReg = (RoomMotionState *)state;
-    int count;
+    RoomStatePair *controlReg = control;
+    RoomMotionState *stateReg = state;
+    s16 count;
     int amplitude;
     s16 value;
     char scratch[0x18];
@@ -44,10 +44,10 @@ void RoomFx_UpdateParticleMotion(int arg0, char *control, char *state) {
             stateReg->lookup[i].pad = func_80071A54() % 8;
             count = stateReg->count;
             i++;
-        } while ((u32)i < count);
+        } while (i < count);
     }
 
-    if (*(s16 *)(controlReg + 2) >= 31) {
+    if (controlReg->h2 >= 31) {
         amplitude = (s16)stateReg->depth;
         value = amplitude;
         PE1_COMPILER_LAUNDER(value);
@@ -67,15 +67,15 @@ void RoomFx_UpdateParticleMotion(int arg0, char *control, char *state) {
                 stateReg->particle[i].secondaryY += stateReg->velocity[i].secondaryY;
                 stateReg->particle[i].secondaryZ += stateReg->velocity[i].secondaryZ;
                 i++;
-            } while ((u32)i < stateReg->count);
+            } while (i < stateReg->count);
         }
     }
 
-    if ((u32)(*(u16 *)(controlReg + 2) - 1) < 31) {
+    if ((u32)((u16)controlReg->h2 - 1) < 31) {
         stateReg->depth += 4;
     }
-    if (*(s16 *)(controlReg + 2) == 65) {
-        controlReg[1] = 2;
+    if (controlReg->h2 == 65) {
+        controlReg->b1 = 2;
     }
 }
 
