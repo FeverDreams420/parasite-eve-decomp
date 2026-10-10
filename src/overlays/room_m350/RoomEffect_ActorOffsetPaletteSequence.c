@@ -4,6 +4,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
+#include "room_m350_shared.h"
 
 extern int D_800966EC[], D_8019A56C[];
 extern int GetClut(int, int);
@@ -41,7 +42,6 @@ int func_80195B64(int event, GteShortVector *object)
 /* MASPSX_FLAGS: --expand-div */
 /* Event state: rotation, emission count, brightness, fade phase and size. */
 typedef struct { GteShortVector rotation; short count,brightness,fade,size; } State;
-extern unsigned char D_8019A82E;
 
 extern unsigned short D_800E11E8;
 extern char D_8019A570[];
