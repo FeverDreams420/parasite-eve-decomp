@@ -1247,7 +1247,6 @@ void RoomFx_InitQuadSprites(void *unused0, void *unused1, void *output_arg) {
     int mid;
     register char *color asm("$20");
     register char *scale asm("$21");
-    register char *motion asm("$18");
     char *clock;
     unsigned int speed;
     int value;
@@ -1262,21 +1261,20 @@ void RoomFx_InitQuadSprites(void *unused0, void *unused1, void *output_arg) {
     PE1_COMPILER_USE(mid);
     scale = base;
     color = scale;
-    motion = scale;
 
     do {
         speed = (int)rand() % 40 + 10;
         rand();
 
         value = -200;
-        ((RoomFourSpriteState *)motion)->position[0].y = value;
-        ((RoomFourSpriteState *)motion)->position[0].z = value;
+        ((RoomFourSpriteState *)base)->position[index].y = value;
+        ((RoomFourSpriteState *)base)->position[index].z = value;
         value = -(speed >> 1);
         speed <<= 6;
-        ((RoomFourSpriteState *)motion)->velocity[0].x = value;
-        ((RoomFourSpriteState *)motion)->velocity[0].y = value;
+        ((RoomFourSpriteState *)base)->velocity[index].x = value;
+        ((RoomFourSpriteState *)base)->velocity[index].y = value;
         value = 160;
-        ((RoomFourSpriteState *)motion)->position[0].x = 0;
+        ((RoomFourSpriteState *)base)->position[index].x = 0;
         ((RoomFourSpriteState *)scale)->depth[0] = value;
         ((RoomFourSpriteState *)scale)->scale[0] = speed;
 
@@ -1312,7 +1310,6 @@ advance_color:
         color += 4;
 advance_scale:
         scale += 2;
-        motion += 8;
         index++;
     } while ((unsigned int)index < 4);
 }
