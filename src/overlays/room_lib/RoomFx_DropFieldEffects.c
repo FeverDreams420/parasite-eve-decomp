@@ -1274,20 +1274,20 @@ void RoomFx_InitQuadSprites(void *unused0, void *unused1, void *output_arg) {
                 if (index == 2) goto color2;
                 if (index == 3) goto color3;
                 color += 4;
-                goto advance_scale;
-
+                scale += 2;
+                continue;
+            } else {
+                color[0x20] = red;
+                color[0x21] = 138;
+                color[0x22] = blue;
+                goto advance_color;
             }
-    color0:
-            color[0x20] = red;
-            color[0x21] = 138;
-            color[0x22] = blue;
+        } else {
+            base[0x24] = mid;
+            base[0x25] = 76;
+            base[0x26] = 6;
             goto advance_color;
         }
-color1:
-        base[0x24] = mid;
-        base[0x25] = 76;
-        base[0x26] = 6;
-        goto advance_color;
 color2:
         base[0x28] = 18;
         base[0x29] = 32;
@@ -1299,7 +1299,6 @@ color3:
         base[0x2E] = blue;
 advance_color:
         color += 4;
-advance_scale:
         scale += 2;
     }
 }
