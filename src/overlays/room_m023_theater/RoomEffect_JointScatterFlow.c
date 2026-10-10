@@ -115,7 +115,7 @@ int func_8018F3C8(int mode, RoomM023ScatterState *state) {
         state->unused08 = 0;
         state->unused0A = 0;
         state->timer = 0;
-        switch (D_800E2368->variant) {
+        switch (ANIM_TASK_AS(RoomM023EventState)->variant) {
         case 0:
             state->joint = 8;
             break;
@@ -128,8 +128,8 @@ int func_8018F3C8(int mode, RoomM023ScatterState *state) {
     case 1:
         func_800CE8F0(ANIM_OWNER_AS(RoomM023Channel)->pool, state->joint, &template, position);
         state->timer++;
-        if (D_800E2368->interval == 0) return 1;
-        if (D_800E2368->interval < state->timer) {
+        if (ANIM_TASK_AS(RoomM023EventState)->interval == 0) return 1;
+        if (ANIM_TASK_AS(RoomM023EventState)->interval < state->timer) {
             state->timer = 0;
             func_800CE870(ANIM_OWNER_AS(RoomM023Channel)->pool, 0, position);
             particle = func_800CE610(ANIM_POOL_AS(RoomM023Channel)->pool);

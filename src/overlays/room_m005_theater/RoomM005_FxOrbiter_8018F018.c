@@ -58,7 +58,7 @@ init:
     if (r->h6 < 0x81) {
         r->h6 += 8;
     }
-    if (D_800E2368->h12 == mode) {
+    if (ANIM_TASK_AS(RoomDlgState)->h12 == mode) {
         r->hC = 1;
         r->hE = 0;
     }

@@ -130,7 +130,6 @@ typedef struct FieldFanSweepEvent {
     s16 stage;                    /* 0x1E */
 } FieldFanSweepEvent;
 
-extern FieldFanSweepEvent *D_800E2368;
 extern RenderColor D_800C22D8;
 extern int rand(void);
 extern int func_80192620(int mode, s16 *position);

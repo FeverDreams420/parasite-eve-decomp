@@ -84,7 +84,6 @@ typedef struct SceneE22QuakeSound {
 } SceneE22QuakeSound;
 
 extern SceneE22QuakeSound D_800B0E64;
-extern SceneE22QuakeEvent *D_800E2368;
 extern SceneE22QuakeActor **RoomMain_ActorPtr;
 /* Texture page indices: [0] the shared effect page, [8] this scene's. */
 extern u16 D_800E11EA[];

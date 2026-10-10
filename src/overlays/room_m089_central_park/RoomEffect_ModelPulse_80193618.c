@@ -34,7 +34,7 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
         state->position.x = anchor->x;
         state->position.y = anchor->y;
         state->position.z = anchor->z;
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(RoomM089PulseEvent)->active) {
             RoomM089PulsePool *pool = ANIM_OWNER_AS(RoomM089PulseChannel)->pool;
             if (pool && pool->node) {
                 u8 *flag = pool->node->state;
@@ -70,7 +70,7 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
         if (D_800E27EC >= 0x40) return 1;
         if (func_800C6B90(state, 0xF0) == 0) break;
         if (D_800E27EC >= 0x28) break;
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(RoomM089PulseEvent)->active) {
             channel = ANIM_OWNER_AS(RoomM089PulseChannel);
             if ((channel->pool->node->flags & 0x3F000000) == 0x01000000) {
                 D_8009D254->actor->flags |= 0x4000;

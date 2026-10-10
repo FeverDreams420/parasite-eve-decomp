@@ -9,6 +9,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_owner_actor.h"
+#include "pe1/field_anim_pool.h"
 
 extern GteShortVector D_8018F1F0;
 extern int rsin(int);
@@ -61,7 +62,6 @@ typedef struct RoomPulseGlobal {
 } RoomPulseGlobal;
 
 extern RoomPulseGlobal **D_8009D254;
-extern u8 *D_800E2368;
 extern u16 D_800E11EA;
 extern int func_80194A70(int, RoomPulseParticle *, int *);
 extern void func_8006DF50(void *, int, int, int, int);
@@ -82,7 +82,7 @@ int func_80194C04(int mode, RoomPulseParticle *particle)
         func_800CE870(ANIM_OWNER_AS(RoomM123Pool)->pool, 1, &particle->z);
         particle->x = 0;
         particle->y = 0;
-        if (D_800E2368[13]) {
+        if (ANIM_TASK_AS(u8)[13]) {
             pool = ANIM_OWNER_AS(RoomM123Pool)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
@@ -112,7 +112,7 @@ int func_80194C04(int mode, RoomPulseParticle *particle)
                 next->frame = 0;
             }
         }
-        if (D_800E27EC == 32 && D_800E2368[13]) {
+        if (D_800E27EC == 32 && ANIM_TASK_AS(u8)[13]) {
             context = ANIM_OWNER_AS(RoomM123Pool);
             if ((((RoomPulsePool *)context->pool)->object->flags & 0x3F000000) == 0x01000000) {
                 (*D_8009D254)->flags |= 0x4000;

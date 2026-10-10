@@ -1,6 +1,6 @@
 #include "common.h"
 #include "pe1/field_anim_callback_list.h"
-extern s16 *D_800E2368;
+#include "pe1/field_anim_pool.h"
 extern char **D_8009D254;
 
 s32 func_801992A4(s32 arg0, void *arg1, s32 *arg2) {
@@ -13,8 +13,8 @@ s32 func_801992A4(s32 arg0, void *arg1, s32 *arg2) {
         if (arg0 != 0) {
             return 0;
         }
-        D_800E2368[10] = 0;
-        D_800E2368[11] = 0;
+        ANIM_TASK_AS(s16)[10] = 0;
+        ANIM_TASK_AS(s16)[11] = 0;
         {
             char *actor0 = *D_8009D254;
             s32 mask = 0xEFFFFFFF;
@@ -24,15 +24,15 @@ s32 func_801992A4(s32 arg0, void *arg1, s32 *arg2) {
     } else {
         actor = *D_8009D254;
         if (*(s32 *)(actor + 0x4C) & 0x10000000) {
-            D_800E2368[10] = 1;
-            D_800E2368[11] = 1;
+            ANIM_TASK_AS(s16)[10] = 1;
+            ANIM_TASK_AS(s16)[11] = 1;
             return 1;
         }
         if (D_800E27EC < *arg2) {
             return 0;
         }
-        D_800E2368[10] = 1;
-        D_800E2368[11] = 0;
+        ANIM_TASK_AS(s16)[10] = 1;
+        ANIM_TASK_AS(s16)[11] = 0;
         return 1;
     }
 }

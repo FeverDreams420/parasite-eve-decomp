@@ -48,7 +48,7 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
         state->pz = params->z;
         state->py = g_RoomFloorY->raw;
         func_800D3F64(0x57B, func_800D3FD8());
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(RoomSparkEventState)->active) {
             RoomSparkNode **slot = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
             if (slot && *slot) {
                 u8 *flag = (*slot)->state;
@@ -136,7 +136,7 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
             state->intensity = rsin((state->timer << 14) / params->duration) / 128 + 0x80;
             if (state->countdown != 0) state->countdown--;
             if (func_800C6B90(&state->px, 0x104) && state->countdown == 0) {
-                if (D_800E2368->active) {
+                if (ANIM_TASK_AS(RoomSparkEventState)->active) {
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     u32 *entry;
                     if ((**(u32 **)channel->pool & 0x3F000000) == 0x01000000) {

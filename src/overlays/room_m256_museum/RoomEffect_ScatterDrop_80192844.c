@@ -3,7 +3,7 @@
 
 /* Flashes the scene when the drop touches the player. */
 #define ROOM_M256_DROP_FLASH(radius)                                          \
-    if (func_800C6B90(drop, radius) && drop->hazard && D_800E2368->active) {  \
+    if (func_800C6B90(drop, radius) && drop->hazard && ANIM_TASK_AS(RoomM256DropEvent)->active) {  \
         RoomM256DropChannel *channel = ANIM_OWNER_AS(RoomM256DropChannel);                            \
         if ((channel->pool->node->flags & 0x3F000000) == 0x01000000) {        \
             D_8009D254->actor->flags |= 0x4000;                               \

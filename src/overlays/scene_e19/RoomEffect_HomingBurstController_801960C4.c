@@ -21,7 +21,7 @@ int func_801960C4(int mode, SceneHomingBurst *burst)
         func_800CE8F0(ANIM_OWNER_AS(SceneHomingBurstChannel)->pool, 0, &rotation, &burst->position);
         burst->timer = 0;
         burst->released = 0;
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(SceneHomingBurstEvent)->active) {
             SceneHomingBurstPool *pool = ANIM_OWNER_AS(SceneHomingBurstChannel)->pool;
             if (pool) {
                 SceneHomingBurstObject *object = pool->object;

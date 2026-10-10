@@ -119,7 +119,7 @@ int func_80193638(int mode, RoomShakeSweepAnchor *anchor) {
             if (*(void *volatile *)soundSlot != 0)
                 func_8006DF50(*soundSlot, 0x5F0, 0x80, 0x80, volume);
         }
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(RoomShakeBurstEvent)->active) {
             pool = ANIM_OWNER_AS(RoomShakeBurstChannel)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
@@ -148,7 +148,7 @@ int func_80193638(int mode, RoomShakeSweepAnchor *anchor) {
         }
         if (D_800E27EC == 0x2B)
             func_80020DD0();
-        if (D_800E27EC == 0x2C && D_800E2368->active) {
+        if (D_800E27EC == 0x2C && ANIM_TASK_AS(RoomShakeBurstEvent)->active) {
             channel = ANIM_OWNER_AS(RoomShakeBurstChannel);
             if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                 (*D_8009D254)->flags |= 0x4000;

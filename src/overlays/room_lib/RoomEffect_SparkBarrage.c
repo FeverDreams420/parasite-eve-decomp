@@ -117,7 +117,7 @@ int RoomEffect_PhasedSparkParticle(int mode, RoomPhasedSpark *spark) {
             }
             if (func_800C6B90(spark, 0x6E) == 0) break;
             if (spark->y < g_RoomFloorY->y - 0x202) break;
-            if (D_800E2368->active == 0) break;
+            if (ANIM_TASK_AS(RoomSparkEventState)->active == 0) break;
             ROOMEFFECT_SPARK_BARRAGE_FLASH();
             break;
         case 1:
@@ -138,7 +138,7 @@ int RoomEffect_PhasedSparkParticle(int mode, RoomPhasedSpark *spark) {
                 }
             }
             if (func_800C6B90(spark, 0xC8) && (s16)spark->timer < 9 &&
-                D_800E2368->active) {
+                ANIM_TASK_AS(RoomSparkEventState)->active) {
                 ROOMEFFECT_SPARK_BARRAGE_FLASH();
             }
             if ((s16)spark->timer < 16) break;
@@ -274,7 +274,7 @@ int RoomEffect_PhasedSparkController(int mode, s16 *counter)
 
     switch (mode) {
     case 0: {
-        RoomSparkEventState *event = D_800E2368;
+        RoomSparkEventState *event = ANIM_TASK_AS(RoomSparkEventState);
         *counter = 6;
         if (event->active != 0) {
             RoomSparkNode **nodes = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
@@ -428,7 +428,7 @@ int RoomEffect_BouncingSparkController(int mode)
 
     switch (mode) {
     case 0:
-        if (D_800E2368->active != 0) {
+        if (ANIM_TASK_AS(RoomSparkEventState)->active != 0) {
             RoomSparkNode **nodes = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
             if (nodes != 0) {
                 RoomSparkNode *node = *nodes;
@@ -642,7 +642,7 @@ int RoomEffect_WaveSparkController(int mode, s16 *counter)
     case 0:
         *counter = 0;
         func_800D3F64(0x594, func_800D3FD8());
-        if (D_800E2368->active != 0) {
+        if (ANIM_TASK_AS(RoomSparkEventState)->active != 0) {
             RoomSparkNode **nodes = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
             if (nodes != 0) {
                 RoomSparkNode *node = *nodes;
@@ -725,7 +725,7 @@ int RoomEffect_CometSparkParticle(int mode, RoomCometSpark *spark) {
             return 1;
         case 1:
             spark->timer++;
-            if (func_800C6B90(spark, 0x190) && D_800E2368->active) {
+            if (func_800C6B90(spark, 0x190) && ANIM_TASK_AS(RoomSparkEventState)->active) {
                 RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                 RoomSparkBarragePacket *packet;
                 if (((*(RoomSparkBarragePacket **)channel->pool)->code & 0x3F000000) ==
@@ -890,7 +890,7 @@ int RoomEffect_CometSparkController(int mode, RoomCometSparkAnchor *anchor) {
     case 0:
         anchor->count = 6;
         func_800CE870(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, (s16 *)anchor);
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(RoomSparkEventState)->active) {
             if (ANIM_OWNER_AS(RoomSparkChannel)->pool) {
                 node = *(RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
                 if (node) {

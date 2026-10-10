@@ -165,7 +165,7 @@ int func_80194F60(int mode, GteShortVector *anchor) {
         func_800D3F64(0x5DC, func_800D3FD8());
         func_800D3F64(0x5DD, 0x80);
         func_800CE870((char *)RoomMain_ActorPtr, 0, (s16 *)anchor);
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(SceneE22EmberEvent)->active) {
             pool = ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
@@ -221,7 +221,7 @@ int func_80194F60(int mode, GteShortVector *anchor) {
         }
         if (D_800E27EC == 0x1C)
             func_80020DD0();
-        if (D_800E27EC == 0x1D && D_800E2368->active) {
+        if (D_800E27EC == 0x1D && ANIM_TASK_AS(SceneE22EmberEvent)->active) {
             channel = ANIM_OWNER_AS(SceneE22EmberObjectChannel);
             if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                 (*RoomMain_ActorPtr)->flags |= 0x4000;

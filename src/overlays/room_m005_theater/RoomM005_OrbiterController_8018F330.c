@@ -49,7 +49,7 @@ int func_8018F330(int mode, RoomM005OrbiterState *state) {
         if (state->armed == 1) {
             state->frame++;
             if ((s16)state->frame >= 32) return 1;
-        } else if (D_800E2368->triggered != 0) {
+        } else if (ANIM_TASK_AS(RoomM005EventState)->triggered != 0) {
             state->armed = 1;
         }
         break;

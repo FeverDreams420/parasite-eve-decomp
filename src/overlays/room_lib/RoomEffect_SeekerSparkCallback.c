@@ -63,7 +63,7 @@ int RoomEffect_SeekerSparkCallback(int mode, RoomDampedSpark *spark,
             delta.y += spark->y;
             delta.z += spark->z;
             if (func_800C6B90(&delta, 0x32)) {
-                if (D_800E2368->active) {
+                if (ANIM_TASK_AS(RoomSparkEventState)->active) {
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if ((((RoomSeekerPool *)channel->pool)->object->flags & 0x3F000000) ==
                         0x01000000) {

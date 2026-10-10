@@ -11,7 +11,7 @@ int func_80193368(int mode, void *unused, char *state) {
         {
             int handle = func_800D3FD8();
             func_800D3F64(0x5b9, handle);
-            if (D_800E2368->active) {
+            if (ANIM_TASK_AS(RoomM404EventState)->active) {
                 RoomM404Node **slot = (RoomM404Node **)ANIM_OWNER_AS(RoomM404Channel)->pool;
                 if (slot && *slot) {
                     u8 *flag = (*slot)->state;

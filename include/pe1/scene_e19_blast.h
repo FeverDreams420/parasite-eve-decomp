@@ -54,7 +54,6 @@ typedef struct SceneE19BlastSound {
 
 extern SceneE19BlastSound D_800B0E64;
 extern SceneE19BlastPlayer **D_8009D254;
-extern SceneE19BlastScript *D_800E2368;
 extern u16 D_800E11EA[];
 extern s32 D_8019B668;
 extern void *D_8019B680, *D_8019B684, *D_8019B688, *D_8019B68C, *D_8019B690;

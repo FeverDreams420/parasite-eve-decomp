@@ -57,7 +57,7 @@ int func_80194164(int mode, RoomShakeBurstPoint *anchor) {
     switch (mode) {
     case 0:
         func_800CE870((char *)D_8009D254, 0, (s16 *)anchor);
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(RoomShakeBurstEvent)->active) {
             pool = ANIM_OWNER_AS(RoomShakeBurstChannel)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
@@ -90,7 +90,7 @@ int func_80194164(int mode, RoomShakeBurstPoint *anchor) {
         }
         if (D_800E27EC == 0x27)
             func_80020DD0();
-        if (D_800E27EC == 0x28 && D_800E2368->active) {
+        if (D_800E27EC == 0x28 && ANIM_TASK_AS(RoomShakeBurstEvent)->active) {
             channel = ANIM_OWNER_AS(RoomShakeBurstChannel);
             if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                 (*D_8009D254)->flags |= 0x4000;

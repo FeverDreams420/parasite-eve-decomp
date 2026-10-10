@@ -102,7 +102,6 @@ typedef struct RoomHomingModelEntity {
     s32 position[3];              /* 0x28 */
 } RoomHomingModelEntity;
 
-extern RoomHomingModelEvent *D_800E2368;
 extern RoomHomingModelEntity *D_8009D254;
 extern RoomHomingModelVertex *D_8009D248;
 extern u16 D_8009D1CC;

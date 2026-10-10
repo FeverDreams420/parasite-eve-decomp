@@ -79,7 +79,6 @@ typedef struct RoomM123BeaconColor {
     u8 r, g, b, code;
 } RoomM123BeaconColor;
 
-extern RoomM123BeaconEvent *D_800E2368;
 extern RoomM123BeaconEntity *D_8009D254;
 extern RoomM123BeaconArchive D_800B0E64;
 extern RoomM123BeaconOffset D_8018F1E8;

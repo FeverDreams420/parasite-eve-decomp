@@ -26,7 +26,7 @@ int func_801978EC(int mode, SceneE22EmberBurst *burst) {
         burst->state = 0;
         burst->timer = 0;
         burst->glow = 0;
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(SceneE22EmberEvent)->active) {
             pool = ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
@@ -105,7 +105,7 @@ int func_801978EC(int mode, SceneE22EmberBurst *burst) {
         case 2:
             burst->timer++;
             burst->glow = rcos((burst->timer << 10) / 24) / 32;
-            if (burst->timer == 1 && D_800E2368->active) {
+            if (burst->timer == 1 && ANIM_TASK_AS(SceneE22EmberEvent)->active) {
                 channel = ANIM_OWNER_AS(SceneE22EmberObjectChannel);
                 if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                     (*RoomMain_ActorPtr)->flags |= 0x4000;

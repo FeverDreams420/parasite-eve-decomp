@@ -113,7 +113,7 @@ int func_80195D20(int mode, RoomShakeBurstPoint *burst) {
         return func_800CE560(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool, 0x14, 0x10,
                              (FieldAnimCallbackListCallback)func_80195904);
     case 1:
-        if (D_800E2368->running == 0)
+        if (ANIM_TASK_AS(RoomShakeBurstEvent)->running == 0)
             return 1;
         if (D_800E27EC == 2) {
             soundSlot = &D_800B0E64;

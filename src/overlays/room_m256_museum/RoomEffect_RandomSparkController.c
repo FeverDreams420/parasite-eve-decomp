@@ -12,7 +12,7 @@ int func_801934AC(int mode, u16 *counter) {
     switch (mode) {
     case 0:
     {
-        RoomOrbitPairEventState *event = D_800E2368;
+        RoomOrbitPairEventState *event = ANIM_TASK_AS(RoomOrbitPairEventState);
         *counter = 0;
         if (event->active) {
             RoomOrbitPairNode **slot = (RoomOrbitPairNode **)ANIM_OWNER_AS(RoomOrbitPairChannel)->pool;

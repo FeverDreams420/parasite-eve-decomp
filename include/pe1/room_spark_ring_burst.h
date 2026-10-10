@@ -90,7 +90,6 @@ typedef struct RoomSparkTextureSlot {
     u16 index;
 } RoomSparkTextureSlot;
 
-extern RoomSparkEventState *D_800E2368;
 extern RoomSparkBattleEntity *D_8009D254;
 extern RoomSparkTextureSlot D_800E11E8;
 extern void *D_8009D248;

@@ -57,7 +57,6 @@ typedef struct SceneE22EmberEvent {
 } SceneE22EmberEvent;
 
 extern SceneE22EmberActor **RoomMain_ActorPtr;
-extern SceneE22EmberEvent *D_800E2368;
 /* Texture page index slot at 0x800E11EA, read as a record so the load
  * stays behind the first parameter block store through its base register. */
 typedef struct SceneE22TextureSlot {

@@ -24,7 +24,7 @@ int func_80193618(int mode, RoomM123Beacon *state) {
         state->glow = 0;
         state->width = 0;
         state->depth = 0x1000;
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(RoomM123BeaconEvent)->active) {
             RoomM123BeaconPool *pool = ANIM_OWNER_AS(RoomM123BeaconChannel)->pool;
             if (pool && pool->node) {
                 u8 *flag = pool->node->state;
@@ -84,7 +84,7 @@ int func_80193618(int mode, RoomM123Beacon *state) {
         state->target.z += position.z;
         if (func_800CEB8C(state, &state->target, 0x140) == 0) return 0;
         if (state->armed == 0) return 0;
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(RoomM123BeaconEvent)->active) {
             RoomM123BeaconChannel *channel = ANIM_OWNER_AS(RoomM123BeaconChannel);
             if ((channel->pool->node->flags & 0x3F000000) == 0x01000000) {
                 D_8009D254->actor->flags |= 0x4000;

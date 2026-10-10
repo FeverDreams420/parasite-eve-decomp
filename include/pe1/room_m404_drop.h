@@ -66,7 +66,6 @@ typedef struct RoomM404DropEvent {
     u8 active;
 } RoomM404DropEvent;
 
-extern RoomM404DropEvent *D_800E2368;
 extern RoomM404DropEntity *D_8009D254;
 extern RoomM404DropRotation D_8018F1CC;
 extern RoomM404DropColor D_8018F1D4;

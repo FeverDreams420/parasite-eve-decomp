@@ -23,6 +23,8 @@ typedef struct FieldAnimObjectPrefix {
 PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldAnimObjectPrefix, actor) == 8,
                   field_anim_object_actor_offset);
 
+/* The running task context (FieldAnimTaskContext in field_anim.h). */
+extern struct FieldAnimTaskContext *D_800E2368;
 extern FieldAnimTaskSlot *D_800F33E0;
 extern FieldAnimObjectPrefix *D_800F32D0;
 
@@ -30,5 +32,8 @@ extern FieldAnimObjectPrefix *D_800F32D0;
  * the record; the cast is free (a pointer copy). */
 #define ANIM_POOL_AS(type) ((type *)D_800F33E0)
 #define ANIM_OWNER_AS(type) ((type *)D_800F32D0)
+/* The same for the running task context, which effects read as their own
+ * event state. */
+#define ANIM_TASK_AS(type) ((type *)D_800E2368)
 
 #endif

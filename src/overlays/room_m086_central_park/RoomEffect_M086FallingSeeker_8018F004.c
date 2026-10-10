@@ -30,7 +30,7 @@ int func_8018F004(int mode, RoomM086Seeker *seeker, RoomM086SeekerParams *params
             }
             if (func_800C6B90(&seeker->position, size * 41 / 512) == 0) break;
             if (seeker->position.y < floor->y - 0x202) break;
-            if (D_800E2368->active) {
+            if (ANIM_TASK_AS(RoomM086EventState)->active) {
                 channel = ANIM_OWNER_AS(RoomM086Channel);
                 if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                     D_8009D254->actor->flags |= 0x4000;

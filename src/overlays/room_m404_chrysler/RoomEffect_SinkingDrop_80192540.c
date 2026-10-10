@@ -59,7 +59,7 @@ int func_80192540(int mode, RoomM404Drop *drop) {
                 }
             }
             if (func_800C6B90(drop, 0x6E) && drop->y >= g_RoomFloorY->y - 0x202 &&
-                D_800E2368->active) {
+                ANIM_TASK_AS(RoomM404DropEvent)->active) {
                 ROOM_M404_DROP_FLASH(0x3D000000);
             }
             if (func_8001CAB0(drop->x << 16, drop->z << 16, D_8009D248, D_8009D1CC) == 0) return 1;
@@ -84,7 +84,7 @@ int func_80192540(int mode, RoomM404Drop *drop) {
                     child->timer = 0;
                 }
             }
-            if (func_800C6B90(drop, 0x6E) && D_800E2368->active) {
+            if (func_800C6B90(drop, 0x6E) && ANIM_TASK_AS(RoomM404DropEvent)->active) {
                 ROOM_M404_DROP_FLASH(0x19000000);
             }
             if (func_8001CAB0(drop->x << 16, drop->z << 16, D_8009D248, D_8009D1CC) == 0) return 1;
@@ -125,7 +125,7 @@ int func_80192540(int mode, RoomM404Drop *drop) {
             break;
         case 4:
             drop->timer++;
-            if (func_800C6B90(drop, 0x6E) && D_800E2368->active) {
+            if (func_800C6B90(drop, 0x6E) && ANIM_TASK_AS(RoomM404DropEvent)->active) {
                 ROOM_M404_DROP_FLASH(0x19000000);
             }
             if ((drop->timer & 1) && (func_80071A54() & 0xF) == 0) {

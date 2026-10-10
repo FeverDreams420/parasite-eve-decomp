@@ -99,7 +99,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             func_800D3AFC(point, 0x18, trail, 0);
             point = g_RoomSeekingTrailHistory[trail->slot].point;
             for (i = 0; i < 0x18; i++, point++) {
-                if (func_800C6B90(point, 0x68) && D_800E2368->active) {
+                if (func_800C6B90(point, 0x68) && ANIM_TASK_AS(RoomSparkEventState)->active) {
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if (((*(RoomSeekingTrailPacket **)channel->pool)->code & 0x3F000000) ==
                         0x01000000) {
@@ -254,7 +254,7 @@ int RoomEffect_SeekingTrailController(int mode, u16 *slot) {
 
     switch (mode) {
     case 0:
-        event = D_800E2368;
+        event = ANIM_TASK_AS(RoomSparkEventState);
         *slot = 0;
         if (event->active != 0) {
             RoomSparkNode **nodes = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
@@ -501,7 +501,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
         case 0:
             trail->timer = 0;
             trail->state = 1;
-            trail->slot = D_800E2368->trailSlot;
+            trail->slot = ANIM_TASK_AS(RoomSparkEventState)->trailSlot;
             trail->fade = 0;
             func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 5, &rotation, trail);
             func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &angles);
@@ -545,7 +545,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             func_800D3AFC(point, 0x18, trail, 0);
             point = g_RoomScatterTrailHistory[trail->slot].point;
             for (i = 0; i < 0x18; i++, point++) {
-                if (func_800C6B90(point, 0x64) && D_800E2368->active) {
+                if (func_800C6B90(point, 0x64) && ANIM_TASK_AS(RoomSparkEventState)->active) {
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if (((*(RoomSeekingTrailPacket **)channel->pool)->code & 0x3F000000) ==
                         0x01000000) {
@@ -698,7 +698,7 @@ int RoomEffect_ScatterTrailController(int mode, u16 *slot) {
 
     switch (mode) {
     case 0:
-        event = D_800E2368;
+        event = ANIM_TASK_AS(RoomSparkEventState);
         *slot = 0;
         if (event->active != 0) {
             RoomSparkNode **nodes = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;

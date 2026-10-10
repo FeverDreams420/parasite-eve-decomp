@@ -78,7 +78,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldAnimTaskContext, arena) == 0x84,
 PE1_STATIC_ASSERT(sizeof(FieldAnimTaskContext) == 0xA00,
                   field_anim_task_context_size);
 
-extern FieldAnimTaskContext *D_800E2368;
 int func_800D401C(int id);
 
 int func_800CE688(void *arg0);

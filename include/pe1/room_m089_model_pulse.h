@@ -50,7 +50,6 @@ typedef struct RoomM089PulseEvent {
     u8 active;
 } RoomM089PulseEvent;
 
-extern RoomM089PulseEvent *D_800E2368;
 extern RoomM089PulseEntity *D_8009D254;
 extern u8 *D_8019416C;
 extern u8 D_801940F8[];

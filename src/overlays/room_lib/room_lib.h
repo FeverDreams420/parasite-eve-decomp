@@ -894,7 +894,6 @@ typedef struct RoomDlgState {
     short h12;                    /* 0x12 */
 } RoomDlgState;
 
-extern RoomDlgState *D_800E2368;
 extern void *RoomMain_ActorPtr2;
 extern int func_800CE8F0();
 extern int func_800CFAA8();
@@ -905,8 +904,8 @@ extern int func_800CFAA8();
         switch (mode) { \
         case 0: \
             func_800CE8F0(ANIM_OWNER_AS(RoomChanCtx)->w8, 0x13, &tmp, msg); \
-            if (D_800E2368->h12 == 0) goto send_pos; \
-            if (D_800E2368->h12 == 1) goto at_actor; \
+            if (ANIM_TASK_AS(RoomDlgState)->h12 == 0) goto send_pos; \
+            if (ANIM_TASK_AS(RoomDlgState)->h12 == 1) goto at_actor; \
             goto after; \
         send_pos: \
             func_800CE9D4(ANIM_OWNER_AS(RoomChanCtx)->w8, 0x13, &msg->sub); \
@@ -919,7 +918,7 @@ extern int func_800CFAA8();
                 msg->sub.h0 = 0x180; \
             } \
         after: \
-            if (D_800E2368->bD != 0) { \
+            if (ANIM_TASK_AS(RoomDlgState)->bD != 0) { \
                 RoomNodeB **q = ANIM_OWNER_AS(RoomChanCtx)->w8; \
                 if (q != 0 && *q != 0) { \
                     unsigned char *st = (*q)->state; \

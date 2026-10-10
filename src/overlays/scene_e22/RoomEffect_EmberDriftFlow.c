@@ -161,7 +161,7 @@ int func_8019408C(int mode, SceneE22EmberBurst *burst) {
         func_800D3F64(0x5DB, func_800D3FD8());
         func_800CE870((char *)RoomMain_ActorPtr, 1, (s16 *)burst);
         burst->y = g_RoomFloorY->y;
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(SceneE22EmberEvent)->active) {
             pool = ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
@@ -224,7 +224,7 @@ int func_8019408C(int mode, SceneE22EmberBurst *burst) {
             }
             if (burst->timer == 0x18)
                 func_80020DD0();
-            if (burst->timer == 0x19 && D_800E2368->active) {
+            if (burst->timer == 0x19 && ANIM_TASK_AS(SceneE22EmberEvent)->active) {
                 channel = ANIM_OWNER_AS(SceneE22EmberObjectChannel);
                 if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                     (*RoomMain_ActorPtr)->flags |= 0x4000;

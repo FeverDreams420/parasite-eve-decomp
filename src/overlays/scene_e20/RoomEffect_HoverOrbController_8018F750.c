@@ -241,7 +241,7 @@ update: {
         if ((func_800C6B90(&effect->endpoint, 0x42) != 0) && (D_80190800 == 0)) {
             temp_v1_3 = ANIM_OWNER_AS(SceneE20Channel)->pool->node;
             *(u8 *)((u8 *)temp_v1_3 + ((temp_v1_3->flags >> 17) & 0x70) + 0x1C) = 2;
-            if (D_800E2368->active != 0) {
+            if (ANIM_TASK_AS(SceneE20Event)->active != 0) {
                 if ((ANIM_OWNER_AS(SceneE20Channel)->pool->node->flags & 0x3F000000) == 0x01000000) {
                     temp_v1_4 = *D_8009D254;
                     temp_v1_4->flags |= 0x4000;

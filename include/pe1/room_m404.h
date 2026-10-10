@@ -30,7 +30,6 @@ typedef struct RoomM404Particle {
 } RoomM404Particle;
 extern RoomTemplate8 D_8018F208;
 extern volatile u16 D_800E11EA;
-extern RoomM404EventState *D_800E2368;
 extern void func_800CE8F0(void *, int, void *, void *);
 extern void func_80192540(void);
 

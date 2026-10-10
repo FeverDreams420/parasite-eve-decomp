@@ -27,7 +27,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
         D_80199504 = 0;
         D_80199500 = func_8006E498(D_800B0E64.channel, 0xC54C4704);
         func_800C6D5C(D_80199500, 0, 0);
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(SceneE22EmberEvent)->active) {
             SceneE22EmberSlot *pool = ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool;
             if (pool) {
                 SceneE22EmberObject *object = pool->object;

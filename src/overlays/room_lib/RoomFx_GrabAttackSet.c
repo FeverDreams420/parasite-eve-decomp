@@ -498,7 +498,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
         sweep->heading.z = 0;
         func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &offset, &hand);
         func_800D1384(&hand, (GteShortVector *)sweep, 0x3F0, (unsigned char *)&colorA, (unsigned char *)&colorA, 0x8C, (struct FieldTrailPair *)sweep->trail, 1);
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(RoomSparkEventState)->active) {
             RoomSparkNode **slot = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
             if (slot && *slot) {
                 u8 *flag = (*slot)->state;
@@ -547,7 +547,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
                 mark->frame = 0;
             }
             if (func_800C6B90(sweep, 50)) {
-                if (D_800E2368->active) {
+                if (ANIM_TASK_AS(RoomSparkEventState)->active) {
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if ((((RoomGroundSweepHitPool *)channel->pool)->object->flags & 0x3F000000) == 0x01000000) {
                         {
@@ -587,7 +587,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
                 mark->frame = 0;
             }
             if (func_800C6B90(sweep, 50)) {
-                if (D_800E2368->active) {
+                if (ANIM_TASK_AS(RoomSparkEventState)->active) {
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if ((((RoomGroundSweepHitPool *)channel->pool)->object->flags & 0x3F000000) == 0x01000000) {
                         {
@@ -989,7 +989,7 @@ int RoomFx_RisingSprayParticle(int mode, RoomSpraySpark *spark) {
             position.x += rcos(spark->swirl) / 128;
             position.z += rsin(spark->swirl) / 128;
             if (func_800C6B90(&position, 100)) {
-                if (D_800E2368->active) {
+                if (ANIM_TASK_AS(RoomSparkEventState)->active) {
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if ((((RoomSprayHitPool *)channel->pool)->object->flags & 0x3F000000) == 0x01000000) {
                         {
@@ -1162,7 +1162,7 @@ int RoomFx_RisingSprayController(int mode, void *state,
 
     switch (mode) {
     case 0:
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(RoomSparkEventState)->active) {
             RoomSparkNode **slot = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
             if (slot && *slot) {
                 u8 *flag = (*slot)->state;

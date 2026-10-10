@@ -76,7 +76,7 @@ int func_80193414(int mode, SceneE22LinkBeam *beam) {
         beam->alpha = 0x80;
         beam->reserved00 = 0;
         beam->timer = 0;
-        beam->jointSet = D_800E2368->jointSet;
+        beam->jointSet = ANIM_TASK_AS(SceneE22EmberEvent)->jointSet;
         func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].first,
                       &offset0, &first);
         func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].middle,

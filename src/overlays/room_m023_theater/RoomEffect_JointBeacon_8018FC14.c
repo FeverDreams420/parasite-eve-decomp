@@ -17,7 +17,7 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
 
     switch (mode) {
     case 0:
-        switch (D_800E2368->variant) {
+        switch (ANIM_TASK_AS(RoomM023BeaconEvent)->variant) {
         case 0:
             state->joint = 8;
             break;
@@ -29,7 +29,7 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
         state->timer = 0;
         state->height = 0;
         state->glow = 0;
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(RoomM023BeaconEvent)->active) {
             RoomM023BeaconPool *pool = ANIM_OWNER_AS(RoomM023BeaconChannel)->pool;
             if (pool && pool->node) {
                 u8 *flag = pool->node->state;
@@ -93,7 +93,7 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
         state->target.z += position.z;
         if (func_800CEB8C(state, &state->target, 0x50) == 0) return 0;
         if (state->armed == 0) return 0;
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(RoomM023BeaconEvent)->active) {
             RoomM023BeaconChannel *channel = ANIM_OWNER_AS(RoomM023BeaconChannel);
             if ((channel->pool->node->flags & 0x3F000000) == 0x01000000) {
                 D_8009D254->actor->flags |= 0x4000;

@@ -55,7 +55,6 @@ typedef struct SceneHomingBurstPageIndex {
 } SceneHomingBurstPageIndex;
 
 extern SceneHomingBurstPageIndex D_800E11EA;
-extern SceneHomingBurstEvent *D_800E2368;
 
 int rsin(int angle);
 u16 func_80077AA4(int x, int y);

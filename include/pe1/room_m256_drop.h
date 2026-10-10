@@ -65,7 +65,6 @@ typedef struct RoomM256DropEvent {
     u8 active;
 } RoomM256DropEvent;
 
-extern RoomM256DropEvent *D_800E2368;
 extern RoomM256DropEntity *D_8009D254;
 extern RoomM256DropRotation D_8018F1CC;
 extern RoomM256DropColor D_8018F1D4;

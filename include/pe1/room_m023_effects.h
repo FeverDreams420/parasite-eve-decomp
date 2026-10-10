@@ -62,7 +62,6 @@ typedef struct RoomM023Template {
     s32 word[2];
 } __attribute__((packed)) RoomM023Template;
 
-extern RoomM023EventState *D_800E2368;
 extern RoomM023Template D_8018EFF4;
 extern GteShortVector g_RoomScriptRecord;
 

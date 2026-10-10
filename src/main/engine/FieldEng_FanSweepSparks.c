@@ -141,7 +141,7 @@ int func_800D7764(int mode, FieldFanSweepGlow *glow)
         func_800CEE20(&glow->position, 0, scale, scale, 4,
                       GetClut(0, (kind == 4 && D_800F3428) ? palette + 6 : palette + 2),
                       3, intensity, 0);
-        if (D_800E2368->stage != 11) {
+        if (ANIM_TASK_AS(FieldFanSweepEvent)->stage != 11) {
             position.x = glow->position.x;
             position.y = glow->position.y;
             position.z = glow->position.z;
@@ -150,7 +150,7 @@ int func_800D7764(int mode, FieldFanSweepGlow *glow)
             rotation.z = D_800E27EC * 8;
             rotation.flags = 0;
             scale = (D_800E27EC & 1) * 60 + 0x1000;
-            ring = D_800E2368->stage == 10 ? 1 : 3;
+            ring = ANIM_TASK_AS(FieldFanSweepEvent)->stage == 10 ? 1 : 3;
             func_800D0728(&position, 400, 500, 20, &rotation, scale, scale, 0,
                           &color, intensity, ring);
         }

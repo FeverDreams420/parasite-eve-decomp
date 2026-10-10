@@ -33,7 +33,7 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
         state->velocity.y -= 0x18;
         func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomM086Channel)->pool, 0,
                       &state->rotation);
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(RoomM086EventState)->active) {
             RoomM086Pool *pool = ANIM_OWNER_AS(RoomM086Channel)->pool;
             if (pool && pool->object) {
                 u8 *flag = pool->object->state;

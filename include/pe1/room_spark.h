@@ -143,7 +143,6 @@ typedef struct RoomSparkNode {
     u8 *state;
 } RoomSparkNode;
 
-extern RoomSparkEventState *D_800E2368;
 
 /* The active battle entity: a spark that reaches it flags its actor. */
 typedef struct RoomSparkActor {

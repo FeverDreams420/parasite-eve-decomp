@@ -16,7 +16,7 @@ int func_8018F710(int mode, RoomM023JointGlow *glow) {
 
     switch (mode) {
     case 0:
-        switch (D_800E2368->variant) {
+        switch (ANIM_TASK_AS(RoomM023EventState)->variant) {
         case 0:
             glow->joint = 8;
             func_800D3F64(0x5AE, func_800D3FD8());

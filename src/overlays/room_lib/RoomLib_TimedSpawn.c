@@ -95,7 +95,6 @@ typedef struct RoomTimedSpawnSoundState {
     u16 z;
 } RoomTimedSpawnSoundState;
 
-extern RoomTimedSpawnEventState *D_800E2368;
 extern void *D_8009D254;
 extern void *g_PlayerEntity;
 extern void *RoomMain_ActorPtr2;
@@ -117,7 +116,7 @@ int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
         state->x = 0;
         state->y = 0;
 
-        if (D_800E2368->active != 0) {
+        if (ANIM_TASK_AS(RoomTimedSpawnEventState)->active != 0) {
             void *p = ((void **)ANIM_OWNER_AS(void))[2];
             if (p != 0 && *(void **)p != 0) {
                 u8 *status = (*(RoomTimedSpawnNode **)p)->status;
@@ -149,7 +148,7 @@ int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
         }
     }
 
-    if (D_800E27EC == 7 && D_800E2368->active != 0) {
+    if (D_800E27EC == 7 && ANIM_TASK_AS(RoomTimedSpawnEventState)->active != 0) {
         void *root;
         root = ANIM_OWNER_AS(void);
         if ((*(u32 *)*(void **)((void **)root)[2] & 0x3F000000) ==

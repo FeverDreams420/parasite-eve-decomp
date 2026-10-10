@@ -126,7 +126,7 @@ int func_80192AF0(int mode, RoomOrbitRingBurst *burst) {
         return func_800CE560(ANIM_POOL_AS(SceneE22BurstChannel)->pool, 0x14, 0x18,
                              (FieldAnimCallbackListCallback)func_80192548);
     case 1:
-        if (D_800E2368->running == 0)
+        if (ANIM_TASK_AS(SceneE22BurstEvent)->running == 0)
             return 1;
         if (D_800E27EC == 2) {
             func_800D3F64(0x5D4, func_800D3FD8());

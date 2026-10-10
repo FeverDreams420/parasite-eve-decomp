@@ -173,7 +173,7 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
         }
         D_80199944 = (void *)func_8006E498(D_800B0E64, 0xC5509704);
         func_800C6D5C(D_80199944, 0, 0);
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(RoomShakeBurstEvent)->active) {
             pool = ANIM_OWNER_AS(RoomShakeBurstChannel)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
@@ -235,7 +235,7 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
             }
         }
         if (func_800C6B90(&position, 0x19A)) {
-            if (D_800E2368->active) {
+            if (ANIM_TASK_AS(RoomShakeBurstEvent)->active) {
                 channel = ANIM_OWNER_AS(RoomShakeBurstChannel);
                 if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                     (*D_8009D254)->flags |= 0x4000;

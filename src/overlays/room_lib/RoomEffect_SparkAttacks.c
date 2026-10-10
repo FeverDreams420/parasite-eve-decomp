@@ -33,7 +33,7 @@ static const RenderColor s_BurstOrbColor = { 0xC8, 0x46, 0x08, 0 };
 /* Hit the player: flag the battle actor and retarget the primary channel
  * object, as the other room sparks do. */
 #define ROOMEFFECT_BURST_ORB_HIT()                                                    \
-    if (D_800E2368->active) {                                                         \
+    if (ANIM_TASK_AS(RoomSparkEventState)->active) {                                                         \
         RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);                                       \
         if ((((RoomBurstOrbPool *)channel->pool)->object->flags & 0x3F000000) ==      \
             0x01000000) {                                                             \
@@ -394,7 +394,7 @@ int RoomEffect_BurstOrbController(int mode, void *unused, s32 *state) {
     switch (mode) {
     case 0:
 
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(RoomSparkEventState)->active) {
             RoomSparkNode **slot = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
             if (slot && *slot) {
                 u8 *flag = (*slot)->state;
@@ -694,7 +694,7 @@ int RoomEffect_BeamSparkController(int mode, RoomBeamSpark *fx,
         func_800C6D5C(g_RoomBeamSparkAsset, 0, 0);
         handle = func_800D3FD8();
         func_800D3F64(0x58A, handle);
-        if (D_800E2368->active) {
+        if (ANIM_TASK_AS(RoomSparkEventState)->active) {
             pool = (RoomBeamSparkPool *)ANIM_OWNER_AS(RoomSparkChannel)->pool;
             if (pool) {
                 object = pool->object;
@@ -781,7 +781,7 @@ int RoomEffect_BeamSparkController(int mode, RoomBeamSpark *fx,
             fx->glow = rsin(((s16)fx->timer << 14) / params->duration) / 128 + 0x80;
             if (fx->countdown != 0) fx->countdown--;
             if (func_800C6B90(&fx->tx, 0x258) && fx->countdown == 0) {
-                if (D_800E2368->active) {
+                if (ANIM_TASK_AS(RoomSparkEventState)->active) {
                     channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if ((((RoomBeamSparkPool *)channel->pool)->object->flags & 0x3F000000) ==
                         0x01000000) {

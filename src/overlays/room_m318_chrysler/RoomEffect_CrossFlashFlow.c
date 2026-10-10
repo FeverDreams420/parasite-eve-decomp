@@ -92,7 +92,7 @@ int func_80196820(int mode, RoomCrossFlash *flash) {
         return func_800CE560(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool, 0x14, 0x28,
                              (FieldAnimCallbackListCallback)func_8019646C);
     case 1:
-        if (D_800E2368->running == 0)
+        if (ANIM_TASK_AS(RoomShakeBurstEvent)->running == 0)
             return 1;
         if (D_800E27EC == 2) {
             child = (RoomCrossFlashParticle *)func_800CE610(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool);
