@@ -479,8 +479,8 @@ segments:
       - [0x40CBC, c, menu/Menu_DrawBlendColorOptionRow]
       # Selected-slot write/read starts and both write confirmation handlers.
       - [0x40CF4, c, save/SaveWriteFlow]
-      - [0x40E18, c, menu/Menu_DrawEquipSlotListItem]
-      - [0x40E90, c, menu/menu_draw]
+      # Equip-slot, inventory, armor, battle-command and skill row drawers.
+      - [0x40E18, c, menu/Menu_DrawListRows]
       - [0x40F48, c, menu/Menu_DrawItemSlot]
       - [0x41004, c, menu/Menu_DrawSelectableEquipSlotRow]
       - [0x41078, c, menu/Sfx_ContextPick]
