@@ -1,9 +1,11 @@
-/* Script opcodes from 0x80018660 to 0x80018FDC: combat timer and mode flags,
- * process-manager commands, actor animation and collision helpers, object
- * entry setters, camera/CD/fog settings and actor move speed. All are
- * default-profile handlers that reach the current actor through absolute
- * addresses. */
+/* Script opcodes from 0x8001856C to 0x80018FDC: motion reset and velocity,
+ * combat timer and mode flags, process-manager commands, actor animation and
+ * collision helpers, object entry setters, camera/CD/fog settings and actor
+ * move speed. All are default-profile handlers that reach the current actor
+ * through absolute addresses. */
 #include "common.h"
+#include "pe1/player_entity.h"
+#include "pe1/gte_types.h"
 #include "pe1/field_actor.h"
 #include "pe1/field_collision.h"
 #include "pe1/task_anim.h"
@@ -11,6 +13,37 @@
 #include "pe1/pm.h"
 
 extern FieldActor *g_CurrentEntity;
+
+int Math_FixedMul(int arg0, int arg1);
+
+int Entity_ClearMotionVectors(void) {
+    g_CurrentEntity->motion_x = 0;
+    g_CurrentEntity->motion_y = 0;
+    g_CurrentEntity->motion_z = 0;
+    g_CurrentEntity->accel_x = 0;
+    g_CurrentEntity->accel_y = 0;
+    g_CurrentEntity->accel_z = 0;
+    return 1;
+}
+
+int Entity_ComputeVelocity(void) {
+    FieldActor *state = g_CurrentEntity;
+    int temp;
+
+    if (state == g_PlayerEntity) {
+        temp = Math_FixedMul(0x50000, state->move_factor);
+    } else {
+        temp = state->move_factor;
+    }
+
+    temp = Math_FixedMul(temp, g_CurrentEntity->move_speed << 4);
+    g_CurrentEntity->motion_x = Math_FixedMul(-temp, rsin(g_CurrentEntity->rot_y) << 4);
+    g_CurrentEntity->motion_z = Math_FixedMul(-temp, rcos(g_CurrentEntity->rot_y) << 4);
+
+    return 1;
+}
+
+
 extern FieldActor *g_PlayerEntity;
 extern int g_CombatModeFlags;
 extern int D_800A76C8;
