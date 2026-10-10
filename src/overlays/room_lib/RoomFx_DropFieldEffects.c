@@ -56,13 +56,13 @@ void RoomFx_DropFieldInit(RoomDropFieldEntity *ent, void *unused, RoomDropFieldS
     state->matrix1 = *matrix;
     state->asset = func_8006DC18(9);
 
-    RW16(state, 0x4A) = 0;
-    RW16(state, 0x4C) = 0;
-    RW16(state, 0x48) = 0x96;
-    RW16(state, 0x4E) = *func_800C2B28(0);
-    RW32(state, 0x50) = *func_800C2B28(1);
-    RW32(state, 0x54) = *func_800C2B28(2);
-    RW32(state, 0x58) = *func_800C2B28(3);
+    state->holdTimer = 0;
+    state->hit = 0;
+    state->holdFrames = 0x96;
+    state->particlePattern = *func_800C2B28(0);
+    state->radiusRate = *func_800C2B28(1);
+    state->fallRate = *func_800C2B28(2);
+    state->initialFallStep = *func_800C2B28(3);
 
     g_RoomDropFieldSpinSprite.code = 0x22;
     g_RoomDropFieldSpinSprite.mode = 0x30;
@@ -128,18 +128,18 @@ void RoomFx_DropFieldNop(void) {
 
 
 void RoomFx_DropFieldTick(int arg0, char* arg1, char* arg2) {
-    short* state = (short*)arg2;
+    RoomDropFieldState *state = (RoomDropFieldState *)arg2;
 
-    if (state[0x25] != 0) {
-        state[0x25]--;
+    if (state->holdTimer != 0) {
+        state->holdTimer--;
     }
 
-    if (state[0x26] == 1) {
-        int timer = state[0x25];
+    if (state->hit == 1) {
+        int timer = state->holdTimer;
 
-        state[0x26] = 0;
+        state->hit = 0;
         if (timer == 0) {
-            state[0x25] = *(unsigned short*)(arg2 + 0x48);
+            state->holdTimer = state->holdFrames;
             func_800C6C18(arg0);
         }
     }
@@ -199,7 +199,7 @@ void RoomFx_UpdateStageSpawn(void *effect, char *state, RoomFxSeed8 *seed) {
             int i;
 
             *(RoomFxSeed8 *)slot = *seed;
-            if (*(s16 *)(owner + 0x4E) == 0) {
+            if (((RoomDropFieldState *)owner)->particlePattern == 0) {
                 *(s16 *)(slot + 0xE8) = 8;
                 *(s16 *)(slot + 0xEC) = 8;
                 /* The original loop compares the signed halfword count as unsigned. */
@@ -542,7 +542,7 @@ void RoomFx_InitStagedMotion(void *unused0, void *unused1, char *state) {
     owner = func_800C2B50();
     RWU16(state, 0xEA) = 0x80;
     RW32(state, 0xE0) = 0xFFEC0000;
-    RW32(state, 0xE4) = RW32((char *)owner, 0x58) << 8;
+    RW32(state, 0xE4) = ((RoomDropFieldState *)owner)->initialFallStep << 8;
 
     for (i = 0; i < 8; i++) {
         RWU16(state, 0x88 + i * 2) = 0;
@@ -730,14 +730,6 @@ void RoomFx_DrawStagedMotion(void *unused,
 
 
 
-typedef struct RoomStagedMotionUpdateOwner {
-    u8 pad00[0x4C];
-    s16 hit;                          /* 0x4C: set when a record is in range */
-    u8 pad4E[2];
-    s32 radiusRate;                   /* 0x50: 4.12 radius growth factor */
-    s32 fallRate;                     /* 0x54: fall step, in 8.8 */
-} RoomStagedMotionUpdateOwner;
-
 typedef struct RoomStagedMotionControl {
     u8 pad00;
     u8 state;                         /* 0x01: 2 once every record is spent */
@@ -759,11 +751,11 @@ void RoomFx_UpdateStagedMotion(void *entity,
 {
     RoomStagedMotionPoint radiusPoint;
     RoomStagedMotionPoint spawnPoint;
-    RoomStagedMotionUpdateOwner *owner;
+    RoomDropFieldState *owner;
     char *spawn;
     int i;
 
-    owner = (RoomStagedMotionUpdateOwner *)func_800C2B50();
+    owner = (RoomDropFieldState *)func_800C2B50();
     state->fallStep += owner->fallRate << 8;
     state->radiusStep += (state->radiusStep * owner->radiusRate) >> 12;
     for (i = 0; (unsigned int)i < state->count; i++) {

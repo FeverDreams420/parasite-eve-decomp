@@ -42,8 +42,20 @@ typedef struct RoomDropFieldState {
     RoomDropFieldLink *link;
     RoomDropFieldMatrixWords matrix0;
     RoomDropFieldMatrixWords matrix1;
-    void *asset;
+    void *asset;                  /* 0x44 */
+    u16 holdFrames;               /* 0x48 */
+    s16 holdTimer;                /* 0x4A */
+    s16 hit;                      /* 0x4C */
+    s16 particlePattern;          /* 0x4E */
+    s32 radiusRate;               /* 0x50 */
+    s32 fallRate;                 /* 0x54 */
+    s32 initialFallStep;          /* 0x58, converted to 8.8 at spawn */
 } RoomDropFieldState;
+
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomDropFieldState, holdFrames) == 0x48,
+                  room_drop_field_hold_offset);
+PE1_STATIC_ASSERT(sizeof(RoomDropFieldState) == 0x5C,
+                  room_drop_field_state_size);
 
 typedef struct RoomDropFieldQuad {
     s32 x;
