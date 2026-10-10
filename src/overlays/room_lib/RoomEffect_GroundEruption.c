@@ -381,8 +381,8 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, RoomEruptionRing 
     RoomSpriteMatrix matrix;
     RoomFxVec4 scale1;
     RoomFxVec4 scale2;
-    char *rawOwner;
-    register char *owner asm("$17");
+    RoomEruptionActor *rawOwner;
+    register RoomEruptionActor *owner asm("$17");
     register unsigned int i asm("$21");
     register GteShortVector *point asm("$18");
     s16 *packetDepth;
@@ -404,7 +404,7 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, RoomEruptionRing 
     owner = rawOwner;
     PE1_COMPILER_USE(owner);
     point = workState->point;
-    func_800C2EAC(owner[0x24]);
+    func_800C2EAC((s8)owner->owner);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
@@ -423,9 +423,9 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, RoomEruptionRing 
     matrix.m[0][1] = 0;
     scale1 = s_EruptionRingScale;
     ScaleMatrix(&matrix, &scale1);
-    matrix.t[0] = *(int *)(owner + 0x18);
-    matrix.t[1] = *(int *)(owner + 0x1C);
-    ownerZ = *(int *)(owner + 0x20);
+    matrix.t[0] = owner->x;
+    matrix.t[1] = owner->y;
+    ownerZ = owner->z;
     packet->depth = 0x40;
     matrix.t[2] = ownerZ;
     g_RoomEruptionRingPacket.code = workState->frame * 2 + 0x20;

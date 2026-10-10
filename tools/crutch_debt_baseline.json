@@ -45,7 +45,7 @@
     "pins": 341,
     "pointer_integer_casts": 71,
     "postpass": 0,
-    "raw_offset_dereferences": 614,
+    "raw_offset_dereferences": 611,
     "stack_reserves": 0,
     "stack_switch_macros": 0,
     "statement_expressions": 3,
