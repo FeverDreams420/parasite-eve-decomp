@@ -42,11 +42,8 @@ int func_801960C4(int event,State *state)
     Vector position,rotation;
     Scale scale;
     Instance *instance=D_800F32D0->instance;
-    if(event==1) goto update;
-    if(event<2) { if(event==0) goto setup; goto done; }
-    if(event==2) goto draw;
-    goto done;
-setup:
+    switch (event) {
+case 0:
     {
         state->asset=Asset_FindTable08ByU32Key(D_800B0E64,0xC54E0704);
         func_800C6D5C(state->asset,0,0);
@@ -58,7 +55,7 @@ setup:
         }
         return 0;
     }
-update:
+case 1:
     {
         int timer=D_800E27EC,size;
         register int high asm("$9");
@@ -162,8 +159,8 @@ update:
             } else D_8019A82F=0;
         }
     }
-    goto done;
-draw:
+    break;
+case 2:
     {
         int page,palette;
         int rawPage;
@@ -186,7 +183,7 @@ draw:
         func_800C6EF8(state->asset);
         func_800C6FA0(state->asset,(unsigned short)state->brightness);
         i=0;
-        do {
+        for (;i<3;) {
             register int size asm("$17");
             register int next asm("$7");
             register int product asm("$3");
@@ -212,7 +209,7 @@ draw:
             scale.x=size; scale.y=size; scale.z=2048;
             ScaleMatrix((GteMatrix *)&local.matrix, (const GteVector *)&scale);
             func_800C71E4(state->asset,(GteMatrix *)&local.matrix);
-        } while(i<3);
+        }
         func_800C6F4C(state->asset);
         i=0;
         position.x=instance->position[0]; position.y=instance->position[1]; position.z=instance->position[2];
@@ -228,12 +225,12 @@ draw:
             register int size asm("$17");
             asm("" : "=r"(triple) : "0"(triple));
             size=triple*2;
-            do {
+            for (;i<3;i++) {
                 func_800D0E88(&position,(GteRotation *)&rotation,size,512,(RenderColor *)D_8019A594,(RenderColor *)D_8019A3C8,(RenderColor *)D_8019A3C8,state->brightness,1);
                 rotation.y=(unsigned short)rotation.y+24;
-            } while(++i<3);
+            }
         }
     }
-done:
+    }
     return 0;
 }
