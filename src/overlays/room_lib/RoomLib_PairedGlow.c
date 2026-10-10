@@ -19,6 +19,7 @@
 #include "room_lib.h"
 #include "RoomLib_RenderLayouts.h"
 #include "pe1/room_paired_glow.h"
+#include "pe1/field_actor.h"
 
 /* Copied into the emitter transforms' stack frames. */
 static const RoomFxSeed8 s_PairedGlowSeed = {{0x00, 0x04, 0, 0, 0, 0, 0, 0}};
@@ -224,29 +225,29 @@ typedef struct RoomScaledSpriteStack {
     RoomFxVec4 sourceScale;
 } RoomScaledSpriteStack;
 
-void RoomLib_DrawPairedGlowSprite(char *object, void *unused, char *state) {
+void RoomLib_DrawPairedGlowSprite(char *object, void *unused, RoomDoubleSpriteFxParams *state) {
     RoomScaledSpriteStack stack;
-    char *entity;
-    char *workState;
+    RoomEnt *entity;
+    RoomDoubleSpriteFxParams *workState;
     char *clock;
     register int callArg0 asm("$4");
     register int callArg1 asm("$5");
     int handleA;
     int handleB;
 
-    entity = object;
+    entity = (RoomEnt *)object;
     workState = state;
     clock = func_800C2B50();
-    RotMatrix((GteShortVector *)(workState + 8), &stack.matrix);
+    RotMatrix(&workState->seed.vector, &stack.matrix);
 
-    stack.matrix.t[0] = *(s16 *)(*(char **)(entity + 8) + 0x2A);
-    stack.matrix.t[1] = *(s16 *)(*(char **)(entity + 8) + 0x2E);
-    stack.matrix.t[2] = *(s16 *)(*(char **)(entity + 8) + 0x32);
+    stack.matrix.t[0] = (s16)(entity->link->pos[0] >> 16);
+    stack.matrix.t[1] = (s16)(entity->link->pos[1] >> 16);
+    stack.matrix.t[2] = (s16)(entity->link->pos[2] >> 16);
 
     func_80071A44(&stack.sourceScale, 0, 0x10);
-    stack.sourceScale.x = *(s16 *)(workState + 0x10);
+    stack.sourceScale.x = workState->scale;
     stack.sourceScale.y = 0xC8;
-    stack.sourceScale.z = *(s16 *)(workState + 0x10);
+    stack.sourceScale.z = workState->scale;
     stack.scale = stack.sourceScale;
     ScaleMatrix(&stack.matrix, &stack.scale);
 
@@ -272,23 +273,23 @@ void RoomLib_DrawPairedGlowSprite(char *object, void *unused, char *state) {
     func_800C6ED8(1);
     func_800C6EF8(g_RoomPairedGlowPacket);
     func_800C7098(g_RoomPairedGlowPacket, 0x60, 0x10, 0x80);
-    func_800C6FA0(g_RoomPairedGlowPacket, *(u16 *)(workState + 0x12));
+    func_800C6FA0(g_RoomPairedGlowPacket, workState->depth);
     func_800C71E4(g_RoomPairedGlowPacket, &stack.matrix);
     func_800C6F4C(g_RoomPairedGlowPacket);
 }
 
 /* Grows the glow sprite and fades it in for sixteen frames, then out. */
-void RoomLib_UpdatePairedGlowSprite(void *unused, char *state, char *work) {
-    *(unsigned short *)(work + 0x10) += 0xF;
+void RoomLib_UpdatePairedGlowSprite(void *unused, char *state, RoomDoubleSpriteFxParams *work) {
+    work->scale += 0xF;
 
     if (*(short *)(state + 2) < 0x10) {
-        *(unsigned short *)(work + 0x12) += 8;
+        work->depth += 8;
     } else {
-        *(unsigned short *)(work + 0x12) -= 4;
+        work->depth -= 4;
     }
 
-    *(unsigned short *)(work + 0xA) += 0x64;
-    if (*(short *)(work + 0x12) <= 0) {
+    work->seed.vector.y += 0x64;
+    if ((s16)work->depth <= 0) {
         state[1] = 2;
     }
 }
@@ -351,16 +352,16 @@ void RoomLib_InitPairedEmitter(void *unused0, void *unused1,
 }
 
 /* Retail marks this function handwritten; only its COP2 windows remain ASM. */
-void RoomLib_TransformPairedEmitter(void *unused, char *params,
-                                    char *state) {
+void RoomLib_TransformPairedEmitter(void *unused, RoomFxControl *params,
+                                    RoomFxPairedEmitterState *state) {
     RoomLibSpriteTransformStack stack;
     RoomSpriteMatrix *scaleMatrix;
     unsigned char *table;
-    register char *workState asm("$18");
+    register RoomFxPairedEmitterState *workState asm("$18");
     register RoomSpriteMatrix *matrix asm("$19");
-    char *root;
-    register char *renderParams asm("$21");
-    char *owner;
+    FieldActor **root;
+    register RoomFxControl *renderParams asm("$21");
+    RenderMatrix *owner;
 
     renderParams = params;
     workState = state;
@@ -381,9 +382,9 @@ void RoomLib_TransformPairedEmitter(void *unused, char *params,
     stack.scaleMatrix.m[0][1] = 0;
     func_80071A44(&stack.sourceScale, 0, 0x10);
 
-    stack.sourceScale.x = *(s16 *)(workState + 0x138) * 2;
-    stack.sourceScale.y = *(s16 *)(workState + 0x138) * 2;
-    stack.sourceScale.z = *(s16 *)(workState + 0x138) * 2;
+    stack.sourceScale.x = workState->timer * 2;
+    stack.sourceScale.y = workState->timer * 2;
+    stack.sourceScale.z = workState->timer * 2;
     stack.scale = stack.sourceScale;
     scaleMatrix = &stack.scaleMatrix;
     ScaleMatrix(scaleMatrix, &stack.scale);
@@ -415,14 +416,14 @@ void RoomLib_TransformPairedEmitter(void *unused, char *params,
 
     func_800C3238(2);
     table = g_RoomPairedGlowColorTable;
-    owner = *(char **)(*(char **)root + 0x238);
-    func_800C3134(table, *(s16 *)(renderParams + 2), workState + 0x10C);
-    func_800C3134(table, *(s16 *)(renderParams + 2), workState + 0x124);
-    *(s16 *)(workState + 0x11C) = *(u16 *)(workState + 0x13A);
-    stack.matrix.t[0] = *(int *)(owner + 0x14);
-    stack.matrix.t[1] = *(int *)(owner + 0x18) - 0x64;
-    stack.matrix.t[2] = *(int *)(owner + 0x1C);
-    func_800C4FC4(workState + 0x108, matrix, 0);
+    owner = (*root)->render_object.matrices;
+    func_800C3134(table, renderParams->frame, workState->primary.color0);
+    func_800C3134(table, renderParams->frame, workState->secondary.color0);
+    workState->primary.intensity = workState->intensity;
+    stack.matrix.t[0] = owner->translation[0];
+    stack.matrix.t[1] = owner->translation[1] - 0x64;
+    stack.matrix.t[2] = owner->translation[2];
+    func_800C4FC4(&workState->primary, matrix, 0);
 }
 
 ROOMLIB_PARTICLE_TICK_A(RoomLib_TickPairedGlowB)
