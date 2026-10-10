@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "pe1/room_fx.h"
+#include "pe1/render_object.h"
 #include "pe1/field_script_context.h"
 #include "pe1/field_sprite_state.h"
 #include "pe1/room_module.h"
@@ -13,6 +14,16 @@
  * (src/overlays/room_lib/RoomFx_OrbitEffectSet.c): eight orbiting
  * particles, a burst of eight falling sprites with floor shadows and one
  * drifting sprite, sharing four sprite records the set's init fills. */
+
+/* Owner matrix copied by the module init and passed to its spawn handler. */
+typedef struct RoomOrbitSetState {
+    struct FieldActor *owner;
+    RenderMatrix matrix;
+    void *allocation;
+} RoomOrbitSetState;
+
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomOrbitSetState, allocation) == 0x24,
+                  room_orbit_set_allocation_offset);
 
 /* Per-room data: the four sprite records, at different addresses and with
  * different gaps in each room. */

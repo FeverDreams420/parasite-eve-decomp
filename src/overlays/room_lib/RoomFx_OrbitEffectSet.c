@@ -12,19 +12,17 @@
  */
 #include "pe1/room_orbit_set.h"
 #include "RoomLib_RenderLayouts.h"
+#include "pe1/field_actor.h"
 
-typedef struct RoomOrbitInitWords {
-    int words[8];
-} RoomOrbitInitWords;
 
 /* Copies the owner's eight words into the state, allocates the set's
  * buffer and fills the four sprite records. The register pins and launders
  * reproduce retail's assignment of the shared constants. */
 void RoomFx_OrbitSetInit(char *object, void *unused, char *state) {
-    char *owner;
+    FieldActor *owner;
     void *allocation;
-    RoomOrbitInitWords *source;
-    register int callObject asm("$4");
+    RenderMatrix *source;
+    register void *callObject asm("$4");
     register int value asm("$2");
     u16 value128a;
     u8 value128b;
@@ -33,14 +31,14 @@ void RoomFx_OrbitSetInit(char *object, void *unused, char *state) {
     register int valueNeg42 asm("$5");
 
     func_800C2B40(state);
-    owner = *(char **)(object + 8);
-    *(char **)state = owner;
-    source = *(RoomOrbitInitWords **)(owner + 0x238);
-    *(RoomOrbitInitWords *)(state + 4) = *source;
+    owner = *(FieldActor **)(object + 8);
+    ((RoomOrbitSetState *)state)->owner = owner;
+    source = owner->render_object.matrices;
+    ((RoomOrbitSetState *)state)->matrix = *source;
     allocation = func_8006DC18(0x24);
 
-    callObject = (int)object;
-    *(void **)(state + 0x24) = allocation;
+    callObject = object;
+    ((RoomOrbitSetState *)state)->allocation = allocation;
     value = -0x29;
     value128a = 0x80;
     value128b = 0x80;
