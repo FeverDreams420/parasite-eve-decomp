@@ -53,6 +53,22 @@ typedef struct RoomFallingBurstVec {
     s16 pad6;
 } RoomFallingBurstVec;
 
+/* Sprite position and velocity use wrapping halfword storage. The vertical
+ * step at 0x14 is integrated as a signed 8.8 value by the update pass. */
+typedef struct RoomFallingSpriteState {
+    u16 x, y, z;
+    s16 pad6;
+    u16 velocityX, velocityY, velocityZ;
+    s16 padE;
+    u16 scale;
+    u16 depth;
+    u16 verticalStep;
+    u8 active;
+} RoomFallingSpriteState;
+
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomFallingSpriteState, verticalStep) == 0x14,
+                  room_falling_sprite_vertical_step);
+
 /* The six impact particles. */
 typedef struct RoomFallingBurstParticles {
     RoomSpriteMatrix matrix;          /* 0x00 */

@@ -125,20 +125,6 @@ typedef struct RoomFallingSpriteRoot {
     RoomFallingSpriteView *view;
 } RoomFallingSpriteRoot;
 
-typedef struct RoomFallingSpriteState {
-    short x;
-    short y;
-    short z;
-    unsigned char pad6[2];
-    short velocityX;
-    short velocityY;
-    short velocityZ;
-    unsigned char padE[2];
-    short scale;
-    unsigned short depth;
-    short phase;
-    unsigned char active;
-} RoomFallingSpriteState;
 
 /* Places the sprite at the actor's offset and gives it a random sideways
  * drift, or the actor's facing when script register 1 is set. */
@@ -163,7 +149,7 @@ void RoomFx_InitFallingSprite(void *entity, void *unused,
     state->z = position[2] + view->baseZ;
     state->scale = 0x100;
     state->depth = 0x80;
-    state->phase = 0;
+    state->verticalStep = 0;
     state->active = 0;
 
     if (*func_800C2B10(1) == 0) {
@@ -189,7 +175,6 @@ void RoomFx_DrawFallingSprite(void *unused0, void *unused1,
     RoomFxVec4 scratchScale;
     RoomFxVec4 scale;
     char *owner;
-    unsigned short *depthSlot;
 
     owner = func_800C2B50();
     func_800C2EAC(owner[0x10]);
@@ -217,12 +202,11 @@ void RoomFx_DrawFallingSprite(void *unused0, void *unused1,
     scratchScale = scale;
     ScaleMatrix(&matrix, &scratchScale);
 
-    depthSlot = &g_RoomFallingBurstSprite.depth;
-    *depthSlot = fx->depth;
+    g_RoomFallingBurstSprite.depth = fx->depth;
     matrix.t[0] = fx->x;
     matrix.t[1] = fx->y - ((fx->scale - 0x100) >> 4);
     matrix.t[2] = fx->z;
-    func_800C42A4((FieldGlowSprite *)((char *)depthSlot - 0xA), &matrix, 1);
+    func_800C42A4((FieldGlowSprite *)&g_RoomFallingBurstSprite, &matrix, 1);
 
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -246,29 +230,14 @@ void RoomFx_DrawFallingSprite(void *unused0, void *unused1,
     func_800C42A4((FieldGlowSprite *)&g_RoomFallingBurstShadow, &matrix, 1);
 }
 
-typedef struct RoomFallingSpriteMotion {
-    unsigned short x;
-    unsigned short y;
-    unsigned short z;
-    unsigned char pad6[2];
-    unsigned short velocityX;
-    unsigned char padA[2];
-    unsigned short velocityZ;
-    unsigned char padE[2];
-    unsigned short scale;
-    unsigned char phase;
-    unsigned char pad13;
-    unsigned short verticalStep;
-    unsigned char active;
-} RoomFallingSpriteMotion;
 
 /* Moves the sprite until it reaches the floor; there it shrinks away and,
  * once, spawns the impact shimmer (kind 3), the ground pulse (kind 2) and
  * the six particles (kind 4) at the landing point. */
 void RoomFx_UpdateFallingSprite(void *entity, RoomFallingBurstControl *control,
-                                RoomFallingSpriteMotion *effect) {
+                                RoomFallingSpriteState *effect) {
     void *self = entity;
-    RoomFallingSpriteMotion *state;
+    RoomFallingSpriteState *state;
     RoomFallingBurstParticles *burst;
     unsigned short *frame;
     unsigned int i;
@@ -323,15 +292,13 @@ void RoomFx_UpdateFallingSprite(void *entity, RoomFallingBurstControl *control,
             }
         }
     } else {
-        register RoomFallingSpriteMotion *motion asm("$16") = state;
-        unsigned short *motionWords;
+        register RoomFallingSpriteState *motion asm("$16") = state;
         PE1_COMPILER_LAUNDER(motion);
-        motionWords = (unsigned short *)motion;
-        motionWords[0] += motionWords[4];
-        motionWords[2] += motionWords[6];
-        motionWords[1] += (short)motionWords[10] >> 8;
-        motionWords[8] += 0x28;
-        motionWords[10] += 0x64;
+        motion->x += motion->velocityX;
+        motion->z += motion->velocityZ;
+        motion->y += (short)motion->verticalStep >> 8;
+        motion->scale += 0x28;
+        motion->verticalStep += 0x64;
     }
 }
 
@@ -348,7 +315,6 @@ void RoomFx_DrawImpactShimmer(void *arg0, void *arg1, RoomSpriteFxParams *fx) {
     RoomFxVec4 scratch_scale;
     RoomFxVec4 scale;
     char *owner;
-    u16 *depth_slot;
 
     owner = func_800C2B50();
     seed = s_FloorDecalRotation;
@@ -365,13 +331,12 @@ void RoomFx_DrawImpactShimmer(void *arg0, void *arg1, RoomSpriteFxParams *fx) {
     scratch_scale = scale;
     ScaleMatrix(&matrix, &scratch_scale);
 
-    depth_slot = &g_RoomFallingBurstShimmer.depth;
-    *depth_slot = fx->depth;
+    g_RoomFallingBurstShimmer.depth = fx->depth;
     matrix.t[0] = fx->x;
     matrix.t[1] = fx->y;
     matrix.t[2] = fx->z;
     g_RoomFallingBurstShimmer.code = fx->alpha << 1;
-    func_800C42A4((FieldGlowSprite *)((char *)depth_slot - 0xA), &matrix, 0);
+    func_800C42A4((FieldGlowSprite *)&g_RoomFallingBurstShimmer, &matrix, 0);
 }
 
 /* Grows the shimmer; in its last thirty ticks it fades in and ends. */
@@ -403,7 +368,6 @@ void RoomFx_DrawGroundPulse(void *unused0, void *unused1,
     RoomFxVec4 scratchScale;
     RoomFxVec4 scale;
     char *owner;
-    u16 *depthSlot;
 
     owner = func_800C2B50();
     matrixPtr = &matrix;
@@ -421,12 +385,11 @@ void RoomFx_DrawGroundPulse(void *unused0, void *unused1,
     scratchScale = scale;
     ScaleMatrix(matrixPtr, &scratchScale);
 
-    depthSlot = &g_RoomFallingBurstPulse.depth;
-    *depthSlot = fx->depth;
+    g_RoomFallingBurstPulse.depth = fx->depth;
     matrixPtr->t[0] = fx->x;
     matrixPtr->t[1] = fx->y;
     matrixPtr->t[2] = fx->z;
-    func_800C42A4((FieldGlowSprite *)((char *)depthSlot - 0xA), matrixPtr, 0);
+    func_800C42A4((FieldGlowSprite *)&g_RoomFallingBurstPulse, matrixPtr, 0);
 }
 
 /* Expands the pulse with the clock, fades it in its last sixty ticks and
