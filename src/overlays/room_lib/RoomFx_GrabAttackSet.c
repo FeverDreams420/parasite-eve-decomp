@@ -37,44 +37,40 @@ int RoomFx_GrabInit(RoomMotionTrigger *obj) {
 /* Message handler: message 0x19 hands the class a completion flag, message
  * 0x200 finds the actor it grabs with. */
 int RoomFx_GrabConfigure(char *obj, int arg1, int op, int arg3, int arg4) {
-    char *node;
-    char *base;
-    int next;
+    FieldActor *node;
+    RoomGrabStateTail *base;
+    FieldActor *next;
 
-    base = obj + 0xC;
+    base = (RoomGrabStateTail *)(obj + 0xC);
     if (op != 0x19) {
-        if (op == 0x200) {
-            goto op200;
+        if (op != 0x200) {
+            return 0;
+        }
+    } else {
+        if (arg1 == 1) {
+            ((RoomMotionTrigger *)obj)->completion_state = (s32 *)arg3;
+            *(int *)arg3 = arg1;
         }
         return 0;
-
     }
-op19:
-    if (arg1 == 1) {
-        *(int *)(obj + 0x10) = arg3;
-        *(int *)arg3 = arg1;
-    }
-    return 0;
 
-op200:
-    next = (int)D_8009D20C;
-    *(int *)(obj + 0x1C) = next;
+    next = D_8009D20C;
+    ((RoomMotionTrigger *)obj)->source_actor = next;
     if (next != 0) {
         do {
-            node = *(char **)(base + 0x10);
-            if (*(unsigned char *)(node + 0xC) == arg3) {
-                if (*(unsigned char *)(node + 0xD) == arg4) {
-                    if ((*(int *)(node + 0x98) & 0x10) == 0) {
+            node = base->source_actor;
+            if (node->type_id == arg3) {
+                if (node->sub_id == arg4) {
+                    if ((node->flags & 0x10) == 0) {
                         return 0;
                     }
                 }
             }
-            next = *(int *)(*(char **)(base + 0x10) + 4);
-            *(int *)(base + 0x10) = next;
+            next = base->source_actor->next;
+            base->source_actor = next;
         } while (next != 0);
     }
 
-done:
     return 0;
 }
 
