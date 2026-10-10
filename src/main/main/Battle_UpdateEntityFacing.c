@@ -54,8 +54,9 @@ void Battle_UpdateEntityFacing(BattleEntity *entity)
 update_angle:
     direction = (s16)Battle_CalcRelativeAngle(D_8009D254, entity);
     call_entity = entity;
-    if (direction < 0x401) goto straight;
+    if (direction >= 0x401) {
     if (direction < 0xC00) goto turn;
+    }
 straight:
     mode = 0;
     goto set_mode;

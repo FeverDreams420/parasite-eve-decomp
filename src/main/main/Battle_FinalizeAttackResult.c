@@ -215,10 +215,11 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
             {
                 EnemyCombatant *enemy = (EnemyCombatant *)D_800BE830[indexAlt].actor->core;
                 int nextRetry;
-                if (enemy->hpAlive <= 0) goto target_dead;
+                if (enemy->hpAlive > 0) {
 asm volatile("" : : "r"(enemy));
                 nextRetry = retryCount - 1;
                 if (enemy) goto target_alive;
+                }
             target_dead:
             Entity_SetActionMode(caseEntity, active->actionMode12);
             (*(Combatant **)battle_actor_group_16)->stateFlags |= 0x200000;

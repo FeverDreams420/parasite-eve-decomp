@@ -14,9 +14,7 @@ void Battle_CheckEvasion(BattleEntity *actor, BattleEvasionOutcome *outcome,
     int hit;
 
     outcome->reaction = 0;
-    if (actor->entityFlags & 0x4000) {
-        goto invalid;
-    }
+    if (!(actor->entityFlags & 0x4000)) {
     if (D_8009D278->stateFlags & 0x100000) {
         outcome->status = 1;
         goto forced;
@@ -65,15 +63,17 @@ forced:
     }
 
     if (distance >= 1801) return;
-    if (distance < 1501) goto below_1501;
+    if (distance >= 1501) {
     hit = (s16)roll < 25;
     goto check_evasion;
+    }
 below_1501:
-    if (distance < 1201) goto below_1201;
+    if (distance >= 1201) {
     hit = (s16)roll < 50;
     goto check_evasion;
+    }
 below_1201:
-    if (distance < 1001) goto close_range;
+    if (distance >= 1001) {
     hit = (s16)roll < 80;
 check_evasion:
     if (!hit) return;
@@ -81,6 +81,7 @@ check_evasion:
     outcome->reaction = 1;
     return;
 
+    }
 close_range:
     special = (D_8009D278->action->turnWord >> 17) & 1;
     threshold = special * 20;
@@ -91,6 +92,7 @@ close_range:
     outcome->status = 1;
     return;
 
+    }
 invalid:
     outcome->status = -1;
 done:

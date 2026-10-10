@@ -393,9 +393,7 @@ check_code:
             argument = *cursor;
             skip = D_8009B8BC[argument];
             if (skip) goto advance_by_table;
-            if (argument == 7) {
-                goto check_bank;
-            }
+            if (argument != 7) {
             if (argument < 8) {
                 if (argument != 6) {
                     code = argument;
@@ -420,11 +418,12 @@ check_code:
 handle_6:
             cursor++;
             goto read_displacement;
+            }
 check_bank:
             cursor++;
             bank_byte = *cursor;
             cursor++;
-            if (D_8009D2C8->bank.field_56 < bank_byte) goto skip_two;
+            if (D_8009D2C8->bank.field_56 >= bank_byte) {
 read_displacement:
             argument = *cursor++;
             displacement = *cursor++;
@@ -436,6 +435,7 @@ apply_displacement:
 advance_by_table:
             cursor += skip;
             break;
+            }
 skip_two:
             cursor += 2;
             break;

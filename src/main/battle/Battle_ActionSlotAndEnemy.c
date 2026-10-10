@@ -50,54 +50,54 @@ int Battle_ProcessActionSlot(BattleEntity *actor)
             result = 0;
             if (state->field04.bytes.kind == 0 || state->hpAlive <= 0) goto done;
             D_8009CE68 = 0xFF;
-            goto done;
-        }
-        if (phase != 0x4000 || state->field04.bytes.kind == 0) goto done;
+        } else {
+            if (phase != 0x4000 || state->field04.bytes.kind == 0) goto done;
 
-        {
+            {
             register int one asm("$2") = 1;
             u8 color = D_8009CE68 - 8;
             D_8009CE68 = color;
             if (state->field04.bytes.kind == one) {
-                if (color <= 0x80) {
-                    actor->parent->renderObject.flags_9C |= 0x20;
-                    state->coreFlags &= ~0x6000;
-                    goto done;
-                } else {
-                    Render_FadeEntityColor(&actor->parent->renderObject, color, color, color);
-                    result = 0;
-                    goto done;
-                }
+            if (color <= 0x80) {
+            actor->parent->renderObject.flags_9C |= 0x20;
+            state->coreFlags &= ~0x6000;
+            goto done;
+            } else {
+            Render_FadeEntityColor(&actor->parent->renderObject, color, color, color);
+            result = 0;
+            goto done;
+            }
             }
             if (state->field04.bytes.kind == 4) {
-                BattleEntity *iter = D_8009D20C_absolute.value;
-                for (; iter != 0; iter = iter->next) {
-                    if (iter != D_8009D254_absolute.value && iter->core != 0 &&
-                        ((EnemyCombatant *)iter->core)->field04.bytes.kind == 4) {
-                        int shade = D_8009CE68;
-                        if ((u8)shade <= 0x80) {
-                            iter->renderObject.flags_9C |= 0x20;
-                            state->coreFlags &= ~0x6000;
-                        } else {
-                            Render_FadeEntityColor(&iter->renderObject, shade, shade, shade);
-                            result = 0;
-                        }
-                        /* Preserve the core flag reload across iterations. */
-                                            }
-                }
-                return result;
+            BattleEntity *iter = D_8009D20C_absolute.value;
+            for (; iter != 0; iter = iter->next) {
+            if (iter != D_8009D254_absolute.value && iter->core != 0 &&
+            ((EnemyCombatant *)iter->core)->field04.bytes.kind == 4) {
+            int shade = D_8009CE68;
+            if ((u8)shade <= 0x80) {
+            iter->renderObject.flags_9C |= 0x20;
+            state->coreFlags &= ~0x6000;
+            } else {
+            Render_FadeEntityColor(&iter->renderObject, shade, shade, shade);
+            result = 0;
+            }
+            /* Preserve the core flag reload across iterations. */
+            }
+            }
+            return result;
             }
             if (state->hpAlive <= 0) goto done;
             if (color <= 0x80) {
-                actor->renderObject.flags_9C |= 0x20;
-                state->coreFlags &= ~0x6000;
-                goto done;
-            }
-            {
+            actor->renderObject.flags_9C |= 0x20;
+            state->coreFlags &= ~0x6000;
+            } else {
+                {
                 int green = color;
                 /* Keep the green channel in a2 at the call boundary. */
-                                Render_FadeEntityColor(&actor->renderObject, color, green, color);
+                Render_FadeEntityColor(&actor->renderObject, color, green, color);
                 result = 0;
+                }
+            }
             }
         }
     done:

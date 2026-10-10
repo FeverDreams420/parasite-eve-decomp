@@ -251,23 +251,25 @@ s32 Camera_StepAngleFade(s32 **arg0) {
     __asm__("" : "=r"(desiredAngle) : "0"(desiredAngle));
     sv0 = (s16) phaseValue;
     turnIncrement = temp_a1_2;
-    if (ta1d < sv0) goto chk2;
+    if (ta1d >= sv0) {
     sa12a = (s16) temp_a1_2;
-    if (sv0 < (ta1d + sa12a)) goto chk2;
+    if (sv0 >= (ta1d + sa12a)) {
     goto block_24;
+    }
+    }
 chk2:
     __asm__("" : "=r"(turnIncrement) : "0"(turnIncrement));
     if (sv0 < ta1d) {
         tve = turnIncrement << 0x10;
-        goto inner;
-    }
-    sa12b = temp_a1_2 << 0x10;
-    phaseValue = ta1d + (sa12b >> 0x10);
+    } else {
+        sa12b = temp_a1_2 << 0x10;
+        phaseValue = ta1d + (sa12b >> 0x10);
         if (phaseValue < sv0) {
         tve = turnIncrement << 0x10;
-        goto inner;
+        } else {
+            goto block_24;
+        }
     }
-    goto block_24;
 inner:
     {
         temp_v0_2 = tve >> 0x10;
