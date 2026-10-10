@@ -7,6 +7,25 @@
 
 /* The ground eruption (src/overlays/room_lib/RoomEffect_GroundEruption.c). */
 
+/* Six eight-byte point/velocity records followed by gravity increments
+ * and trail visibility flags, shared by debris setup and drawing. */
+typedef struct RoomEruptionDebrisState {
+    GteShortVector position[6];
+    GteShortVector velocity[6];
+    s32 gravityStep[6];
+    s16 visible[6];
+    s16 scale;
+    s16 depth;
+    s16 speed;
+} RoomEruptionDebrisState;
+
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomEruptionDebrisState, velocity) == 0x30,
+                  room_eruption_debris_velocity_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomEruptionDebrisState, gravityStep) == 0x60,
+                  room_eruption_debris_gravity_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomEruptionDebrisState, visible) == 0x78,
+                  room_eruption_debris_visible_offset);
+
 /* Per-room data: the four sprite packets the eruption draws with, named in
  * each overlay's symbol file. The glow is the flash at the owner's feet,
  * the debris the six flung particles, the shadow the floor sprite under

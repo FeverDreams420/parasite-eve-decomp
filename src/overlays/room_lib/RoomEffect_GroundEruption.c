@@ -606,41 +606,40 @@ void RoomEffect_GroundEruptionInitDebris(void *arg0, void *arg1, char *state) {
     flag = (short *)state;
     life = (int *)state;
     particle = state;
-    do {
+    for (; i < 6; i++) {
         PE1_COMPILER_LAUNDER(particle);
-        *(short *)(particle + 0x0) = *(int *)(owner + 0x18);
-        *(short *)(particle + 0x2) = *(int *)(owner + 0x1C);
-        *(short *)(particle + 0x4) = *(int *)(owner + 0x20);
+        ((RoomEruptionDebrisState *)particle)->position[0].x = *(int *)(owner + 0x18);
+        ((RoomEruptionDebrisState *)particle)->position[0].y = *(int *)(owner + 0x1C);
+        ((RoomEruptionDebrisState *)particle)->position[0].z = *(int *)(owner + 0x20);
 
         wave = rsin(angle);
-        *(short *)(particle + 0x30) =
+        ((RoomEruptionDebrisState *)particle)->velocity[0].x =
             (wave * (rand() % 0x800 + 0x800)) >> 12;
-        *(short *)(particle + 0x32) = -(rand() % 6096 + 3000);
+        ((RoomEruptionDebrisState *)particle)->velocity[0].y = -(rand() % 6096 + 3000);
         wave = rcos(angle);
-        *(short *)(particle + 0x34) =
+        ((RoomEruptionDebrisState *)particle)->velocity[0].z =
             (wave * (rand() % 0x800 + 0x800)) >> 12;
 
-        i++;
-        life[0x18] = 500;
-        flag[0x3C] = 1;
+        ((RoomEruptionDebrisState *)life)->gravityStep[0] = 500;
+        ((RoomEruptionDebrisState *)flag)->visible[0] = 1;
         flag++;
         life++;
         particle += 8;
-    } while (i < 6);
+    }
 
-    *(short *)(state + 0x86) = 0x80;
-    *(short *)(state + 0x84) = 0x400;
-    *(short *)(state + 0x88) = 0x320;
+    ((RoomEruptionDebrisState *)state)->depth = 0x80;
+    ((RoomEruptionDebrisState *)state)->scale = 0x400;
+    ((RoomEruptionDebrisState *)state)->speed = 0x320;
 }
 
 /* Draws the live debris; the first particle also leaves a floor shadow. */
-void RoomEffect_GroundEruptionDrawDebris(void *arg0, void *arg1, char *state) {
+void RoomEffect_GroundEruptionDrawDebris(void *arg0, void *arg1, RoomEruptionDebrisState *state) {
     RoomSpriteMatrix matrix;
     RoomFxVec4 scale;
     char *owner;
     int depth;
     unsigned int i;
-    char *particle;
+    GteShortVector *particle;
     u8 *packetFields;
     RoomFxSpritePacket *packet;
     u8 code;
@@ -674,12 +673,12 @@ void RoomEffect_GroundEruptionDrawDebris(void *arg0, void *arg1, char *state) {
     ScaleMatrix(&matrix, &scale);
 
     for (; i < 6; i++) {
-        particle = state + i * 8;
+        particle = &state->position[i];
         depth -= 20;
-        if (*(short *)(state + 0x78 + i * 2) == 1) {
-            matrix.t[0] = *(short *)(particle + 0);
-            matrix.t[1] = *(short *)(particle + 2);
-            matrix.t[2] = *(short *)(particle + 4);
+        if (state->visible[i] == 1) {
+            matrix.t[0] = particle->x;
+            matrix.t[1] = particle->y;
+            matrix.t[2] = particle->z;
             if (i == 0) {
                 func_800C3238(2);
                 packetFields[0] = code;
@@ -693,9 +692,9 @@ void RoomEffect_GroundEruptionDrawDebris(void *arg0, void *arg1, char *state) {
             }
             func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
             if (i == 0) {
-                matrix.t[0] = *(short *)(state + 0);
+                matrix.t[0] = state->position[0].x;
                 matrix.t[1] = g_RoomFloorY->y;
-                matrix.t[2] = *(short *)(state + 4);
+                matrix.t[2] = state->position[0].z;
                 g_RoomEruptionDebrisDepth = 0x40;
                 g_RoomEruptionDebrisPacket.code = code;
                 g_RoomEruptionDebrisPacket.mode = mode;
@@ -724,19 +723,7 @@ typedef struct RoomEruptionTrailCursor {
 } RoomEruptionTrailCursor;
 
 typedef union RoomEruptionDebris {
-    struct {
-        u8 x[2];
-        u8 y[2];
-        u8 z[2];
-        u8 pad06[0x2A];
-        u8 deltaX[2];
-        u8 deltaY[2];
-        u8 deltaZ[2];
-        u8 pad36[0x2A];
-        u8 deltaYStep[4];
-        u8 pad64[0x14];
-        u8 trailValues[12];
-    } storage;
+    RoomEruptionDebrisState state;
     RoomEruptionTrailEntry history[6];
     struct {
         u8 pad00[0x0A];
@@ -765,13 +752,13 @@ shiftTrail:
         goto shiftTrail;
     }
 
-    *(u16 *)object->storage.x += (s16)*(u16 *)object->storage.deltaX >> 8;
-    *(u16 *)object->storage.y += (s16)*(u16 *)object->storage.deltaY >> 8;
-    *(u16 *)object->storage.z += (s16)*(u16 *)object->storage.deltaZ >> 8;
-    *(u16 *)object->storage.deltaY += *(s32 *)object->storage.deltaYStep;
+    *(u16 *)&object->state.position[0].x += (s16)*(u16 *)&object->state.velocity[0].x >> 8;
+    *(u16 *)&object->state.position[0].y += (s16)*(u16 *)&object->state.velocity[0].y >> 8;
+    *(u16 *)&object->state.position[0].z += (s16)*(u16 *)&object->state.velocity[0].z >> 8;
+    *(u16 *)&object->state.velocity[0].y += object->state.gravityStep[0];
 
-    if (*(s16 *)object->storage.y > g_RoomFloorY->y) {
-        *(u16 *)object->storage.trailValues = 0;
+    if (object->state.position[0].y > g_RoomFloorY->y) {
+        *(u16 *)&object->state.visible[0] = 0;
     }
     if (trigger->timer == 60) {
         trigger->state = 2;
