@@ -192,14 +192,10 @@ segments:
       # stop-anim; g_CurrentEntity stays absolute through the array declaration.
       - [0x7AE0, c, task/Task_NodeAndFlowOpcodes]
       - [0x7C44, c, entity/Entity_ComputeVelocityToTarget]
-      # Movement wait, script selection and actor/node flag opcodes.
-      - [0x7D40, c, entity/Entity_ScriptControlOps]
-      # Random-range and field-sfx opcodes: contiguous default-profile pair.
-      - [0x7EFC, c, task/Task_RandomAndFieldSfx]
-      # Table opcodes share the current TaskNode field ABI.
-      - [0x7FAC, c, task/Task_NodeLookupOps]
-      - [0x8128, c, task/Task_EntityByteFieldOps]
-      - [0x8188, c, entity/Entity_MarkNodeFree]
+      # -G8 opcodes: movement wait, field-setter selection, actor flags, node
+      # id, random range, field sfx, node table lookups, actor byte fields and
+      # node free; g_CurrentEntity stays absolute through the array declaration.
+      - [0x7D40, c, task/Task_ActorAndNodeFieldOps]
       - [0x81F8, c, entity/Entity_BitOpcodes]
       - [0x82E8, c, task/Task_EntityActionAnimation]
       - [0x8374, c, task/Task_WaitAnimFrameMatch]
