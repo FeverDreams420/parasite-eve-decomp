@@ -5,7 +5,7 @@ void Akao_LoadVoiceBankAlt(void)
     Pe1GameState *state = &g_GameState;
     int i, j;
     u32 base;
-    SceneBankResetPair *pair;
+    AkaoVoiceBankEntry *pair;
 
     for (i = 9; i >= 0; --i)
         state->bank_slots[i] = 0;
@@ -37,8 +37,8 @@ void Akao_LoadVoiceBankAlt(void)
     state->flags &= ~0x400000;
 
     for (i = 0, pair = D_80094488; i < 4; ++i, ++pair) {
-        pair->second = 0;
-        D_80094488[i].first = 0;
+        pair->ids[1] = 0;
+        D_80094488[i].ids[0] = 0;
     }
     state->bank_value_f6 = 0x30;
     state->bank_value_f7 = 0x7F;

@@ -233,12 +233,16 @@ int Asset_UnloadTableEntries(void);
 int Gpu_LoadTimAsset(TimUploadRecord *record, void *base);
 extern u16 D_800930E2, D_800930E4;
 
-/* The initializer clears each record's halfwords at offsets 6 and 4. */
-typedef struct SceneBankResetPair {
-    u32 reserved;
-    u16 first, second;
-} SceneBankResetPair;
-extern SceneBankResetPair D_80094488[4];
+/* Scene voice-bank entries: actor animation key and two voice ids; the
+ * game-state initializer clears both ids. */
+typedef struct AkaoVoiceBankEntry {
+    u8 group;
+    u8 set;
+    u8 index;
+    u8 frame;
+    u16 ids[2];
+} AkaoVoiceBankEntry;
+extern AkaoVoiceBankEntry D_80094488[];
 void *Asset_FindTable08ByU32Key(void *base, s32 key);
 void *Asset_FindTable2CByU16Key(char *base, int key);
 void *Asset_FindTable30ByU16Key(char *base, int key);
@@ -256,6 +260,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, bank_rows) == 0x1C0,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, bank_reset_940) == 0x940,
                   game_state_bank_reset_offset);
 PE1_STATIC_ASSERT(sizeof(Pe1GameState) == 0x95C, game_state_size);
-PE1_STATIC_ASSERT(sizeof(SceneBankResetPair) == 8, scene_bank_reset_pair_size);
+PE1_STATIC_ASSERT(sizeof(AkaoVoiceBankEntry) == 8, akao_voice_bank_entry_size);
 
 #endif

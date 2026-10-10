@@ -10,7 +10,8 @@ ROOT = Path(__file__).resolve().parents[2]
 
 class LoadVoiceBankTests(unittest.TestCase):
     def test_redundant_constraints_are_gone(self):
-        source = (ROOT/'src/main/akao/Akao_LoadVoiceBank.c').read_text()
+        source = (ROOT/'src/main/sys/Sys_GameStateAndVoiceBanks.c').read_text()
+        source = source[source.index('typedef struct AkaoVoiceActor'):source.index('void func_8006A5BC(')]
         self.assertNotIn('__asm__', source)
         self.assertLessEqual(source.count('asm("$'), 1)
         self.assertIn('extern AkaoVoiceActor *D_8009D254;', source)

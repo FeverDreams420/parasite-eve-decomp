@@ -1,14 +1,197 @@
+#include "common.h"
+#include "pe1/draw_buffers.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/game_state.h"
+#include "pe1/font.h"
 #include "pe1/cdrom.h"
 #include "pe1/scene_assets.h"
-#include "pe1/game_state.h"
-#include "common.h"
 #include "pe1/cdrom_buffers.h"
-#include "pe1/psyq_gpu.h"
 
-void func_80085644(void);
+/* End-of-frame overlay pass (draw the game-state primitives into the
+ * current draw buffer with background clear off and send the queued AKAO
+ * commands), soft-reset shutdown and screen vertical-offset update. These
+ * contiguous routines share the default compiler profile and display state. */
+
+extern s32 g_ActiveDrawSlot;
+extern int g_SceneDispatchToken;
+extern int D_800A77F4;
+
+void Akao_Cmd_98_9A_9C(int arg0);
+void Akao_Cmd_99_9B_9D(int arg0);
+void DrawPrim(void *prim);
+void DsReadBreak(void);
+void Akao_Cmd_D8(int arg0);
 void Akao_Cmd_F0(void);
 void Akao_Cmd_F1(void);
-void Akao_Cmd_98_9A_9C(int arg0);
+void Spu_Shutdown(void);
+
+void Akao_StepVoiceTable(void) {
+    s32 one;
+
+    if (!(g_GameState.flags & 0x200) && (g_GameStateFlags & 0x10)) {
+        one = 1;
+        g_RenderDrawEnvArray[g_ActiveDrawSlot].isbg = 0;
+        g_RenderDrawEnvArray[g_ActiveDrawSlot].dfe = one;
+        PutDrawEnv(&g_RenderDrawEnvArray[g_ActiveDrawSlot]);
+        DrawPrim(g_GameState.draw_prim_c);
+        DrawPrim(g_GameState.draw_prim_b);
+        g_RenderDrawEnvArray[g_ActiveDrawSlot].isbg = one;
+        g_RenderDrawEnvArray[g_ActiveDrawSlot].dfe = 0;
+        Akao_Cmd_99_9B_9D(0);
+    }
+    if (g_GameStateFlags & 0x20) {
+        Akao_Cmd_98_9A_9C(0);
+    }
+}
+
+void Sys_Shutdown(void) {
+    int old;
+
+    DsReadBreak();
+    Akao_Cmd_D8(0);
+    Akao_Cmd_F0();
+    Akao_Cmd_F1();
+    Spu_Shutdown();
+
+    if (Menu_IsEquipSlotActive() & 0xFF) {
+        Menu_ResetEquipSlotState();
+    }
+
+    old = g_SceneDispatchToken;
+    g_SceneDispatchToken = 0xA9400048;
+    D_800A77F4 = old;
+    g_GameState.flags |= 0x100;
+}
+
+/* Shared draw-environment vertical offset (0..15). */
+
+extern u16 D_800BCE9E;
+extern u16 D_800BCE8A;
+extern u8 D_800B0DB1;
+int func_8006A2E8(int arg0, u32 value)
+{
+  register u32 v;
+  if (value < 16)
+  {
+    v = value;
+    D_800B0DB1 = (D_800BCE8A = (D_800BCE9E = v));
+  }
+  return 0;
+}
+
+void Asset_Find08w(int arg0, int arg1, int arg2, int arg3, int arg4);
+
+typedef struct AkaoVoiceActor {
+    u8 pad_00[0x0C];
+    u8 animGroup;
+    u8 animSet;
+    u8 animIndex;
+    u8 frameSkip;
+    u8 pad_10[0x06];
+    u16 frame;
+    u8 pad_18[0x02];
+    u16 targetFrame;
+    int frameStep;
+    u8 pad_20[0x0A];
+    s16 posXInteger; /* integer halves of the 16.16 position */
+    u8 pad_2c[0x02];
+    s16 posYInteger;
+    u8 pad_30[0x02];
+    s16 posZInteger;
+} AkaoVoiceActor;
+
+typedef struct AkaoVoiceBankState {
+    int flags;
+    u8 pad_04[0x0D];
+    u8 first_dynamic_entry;
+    u8 active_id_slot;
+} AkaoVoiceBankState;
+
+extern AkaoVoiceBankState D_800B0CD8;
+extern AkaoVoiceActor *D_8009D254;
+extern int D_8009D1A0;
+
+int Akao_LoadVoiceBank(AkaoVoiceActor *actor) {
+    AkaoVoiceActor *actor_reg = actor;
+    int frame;
+    int step;
+    int target;
+    int i;
+    int entry;
+    AkaoVoiceBankState *state;
+    int id;
+
+    if (actor_reg == 0) {
+        return -1;
+    }
+
+    state = &D_800B0CD8;
+    frame = actor_reg->frame;
+    step = actor_reg->frameStep;
+    target = actor_reg->targetFrame;
+
+    if (step > 0 && frame < target) {
+        int next_frame;
+        int extra;
+        next_frame = frame + 1;
+        extra = actor_reg->frameSkip;
+        frame = next_frame + extra;
+    } else if (step < 0 && target < frame) {
+        int next_frame;
+        int extra;
+        next_frame = frame - 1;
+        extra = actor_reg->frameSkip;
+        frame = next_frame - extra;
+    }
+
+    if (actor_reg == D_8009D254 && (D_8009D1A0 & 2) == 0 && (state->flags & 0x800000) == 0) {
+        u16 *entry_ids;
+        entry_ids = D_80094488[0].ids;
+        entry = 0;
+        for (i = 0; i < 4; entry_ids += 4, i++, entry++) {
+            if (D_80094488[entry].index == actor_reg->animIndex) {
+                int entry_frame = D_80094488[entry].frame;
+                if ((step > 0 && entry_frame >= target && entry_frame < frame) ||
+                    (step < 0 && frame < entry_frame && entry_frame <= target)) {
+                    id = entry_ids[state->active_id_slot];
+                    if (id != 0) {
+                        Asset_Find08w(id, 0, actor_reg->posXInteger,
+                                      actor_reg->posYInteger, actor_reg->posZInteger);
+                    }
+                }
+            }
+        }
+    }
+
+    i = 4;
+    if (i >= state->first_dynamic_entry + 4) {
+        return 0;
+    }
+
+    entry = 4;
+    do {
+        if (D_80094488[entry].group == actor_reg->animGroup &&
+            D_80094488[entry].set == actor_reg->animSet &&
+            D_80094488[entry].index == actor_reg->animIndex) {
+            int entry_frame = D_80094488[entry].frame;
+            if ((step > 0 && entry_frame >= target && entry_frame < frame) ||
+                (step < 0 && frame < entry_frame && entry_frame <= target)) {
+                id = D_80094488[entry].ids[state->active_id_slot];
+                if (id != 0) {
+                    Asset_Find08w(id, 0, actor_reg->posXInteger,
+                                  actor_reg->posYInteger, actor_reg->posZInteger);
+                }
+            }
+        }
+
+        entry++;
+        i++;
+    } while (i < state->first_dynamic_entry + 4);
+
+    return 0;
+}
+
+void func_80085644(void);
 
 extern s16 D_800B0DD4;
 
@@ -48,7 +231,7 @@ void Akao_ClearVoiceBank(void)
     int minusOne;
     int shortMinusOne;
     register u8 *q asm("$3");
-    SceneBankResetPair *pair;
+    AkaoVoiceBankEntry *pair;
     int pairOffset;
     register int j asm("$5");
     u8 flags;
@@ -111,7 +294,7 @@ void Akao_ClearVoiceBank(void)
     base[0xEB] = 0;
     base[0xEA] = 0;
     for (; pairOffset < 32; pairOffset += 8, pair++) {
-        pair->second = 0;
+        pair->ids[1] = 0;
         *(u16 *)((u8 *)D_80094488 + 4 + pairOffset) = 0;
     }
     drawMode = 0xE1000440;

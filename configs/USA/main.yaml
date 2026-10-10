@@ -635,14 +635,13 @@ segments:
       - [0x59EF0, c, asset/Asset_UnloadTableEntries]
       # Disc-image discovery and boot notice use the same mount state.
       - [0x5A0D4, c, render/Render_InitDisplayLists]
-      # End-of-frame overlay pass, soft-reset shutdown and vertical-offset
-      # update: contiguous default-profile display-state routines.
-      - [0x5A8E8, c, sys/Sys_FrameOverlayAndShutdown]
-      - [0x5AB18, c, akao/Akao_LoadVoiceBank]
-      # Boot game-state init: the sound and DS shell reset, Boot_InitGameState (called
-      # from main), the memory layout and the scene voice-bank reset defined beside it
-      # (private evidence into the reset; helper/call/private evidence over the rest).
-      - [0x5ADBC, c, boot/Boot_GameStateInit]
+      # End-of-frame overlay pass, soft-reset shutdown, vertical-offset update,
+      # the actor voice-bank loader, the sound and DS shell reset,
+      # Boot_InitGameState (called from main), the memory layout and the scene
+      # voice-bank reset: one default-profile unit; the voice-bank table
+      # D_80094488 is read by the loader and cleared by the reset (private
+      # evidence into the reset; helper/call/private evidence over the rest).
+      - [0x5A8E8, c, sys/Sys_GameStateAndVoiceBanks]
       # Startup data and field background loading share scene resource state.
       - [0x5B1E4, c, scene/Scene_LoadSceneData]
       - [0x5BB5C, c, akao/Akao_LoadVoiceBankAlt]
