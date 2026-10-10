@@ -1186,7 +1186,7 @@ segments:
       - [0xD007C, c, engine/FieldEng_RotatingEffect]
       - [0xD01B0, c, engine/FieldEng_PointEmitter]
       - [0xD0320, c, engine/FieldEng_CursorCounterTrigger]
-      - [0xD0378, c, engine/engine_800D4860_D0378]
+      - [0xD0378, c, engine/FieldEng_ObjectWaitCondition]
       - [0xD0444, c, engine/FieldEng_VectorMath]
       - [0xD07B8, c, engine/FieldEng_AngleMath]
       - [0xD0860, data, main/dtail_0D0860]

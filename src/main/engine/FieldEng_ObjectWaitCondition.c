@@ -1,4 +1,9 @@
 #include "common.h"
+
+/* Wait condition for a field object: nonzero while the object is still busy.
+ * A pending one-shot flag (0x80000 or 0x40000 at +0x98, selected by the
+ * state bits) is consumed and reported once; otherwise the object waits while
+ * its child is mid-animation. */
 int func_800DFB78(u8 *arg0)
 {
   register u8 *state;
