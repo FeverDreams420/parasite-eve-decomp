@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "pe1/field_anim_callback_list.h"
+#include "pe1/field_anim_pool.h"
 #include "pe1/gte_types.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_oriented_sprite.h"
@@ -16,13 +17,6 @@ extern char D_800E0EB8[];
 int func_800CCBA8(char *object);
 
 typedef FieldAnimCallbackListCallback FieldAnimTaskCallback;
-
-typedef struct FieldAnimTaskSlot {
-    u16 id;              /* 0xFFFF marks a free slot. */
-    u16 age;
-    char *start;
-    char *end;
-} FieldAnimTaskSlot;
 
 /* Task dispatch prefix; the owning table also has later lifecycle callbacks. */
 typedef struct FieldAnimTaskTable {
@@ -87,7 +81,6 @@ PE1_STATIC_ASSERT(sizeof(FieldAnimTaskContext) == 0xA00,
 extern FieldAnimTaskContext *D_800E2368;
 int func_800D401C(int id);
 
-extern FieldAnimTaskSlot *D_800F33E0;
 int func_800CE688(void *arg0);
 
 typedef struct FieldAnimEmitter {
@@ -103,15 +96,6 @@ typedef struct FieldAnimEmittedPoint {
     s16 phase;
 } FieldAnimEmittedPoint;
 
-/* Observed prefix of the active effect owner; actor is at +0x08. */
-typedef struct FieldAnimObjectPrefix {
-    u8 reserved00;
-    u8 asset_type;
-    u8 reserved02[6];
-    struct FieldActor *actor;
-} FieldAnimObjectPrefix;
-PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldAnimObjectPrefix, actor) == 8,
-                  field_anim_object_actor_offset);
 /* Task context embedded immediately after the observed owner prefix. */
 typedef struct FieldAnimTaskOwner {
     FieldAnimObjectPrefix prefix;
@@ -131,7 +115,6 @@ int func_800D4620(FieldAnimTaskOwner *owner);
 int func_800D4698(FieldAnimTaskOwner *owner, int skip,
                   int arg2, int arg3, int arg4, int arg5);
 int func_800D4704(FieldAnimTaskOwner *owner);
-extern FieldAnimObjectPrefix *D_800F32D0;
 extern s16 D_800E2214[3];
 int func_800DA5D4(int mode, FieldAnimEmitter *state);
 
