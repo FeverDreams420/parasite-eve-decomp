@@ -1033,6 +1033,8 @@ void RoomLib_HandlerB(RoomEnt *obj) {
     if (self->t1A == 0) {
         register int v0 asm("$2");
         int v1;
+        unsigned short matrixComponent;
+        RoomLink *player;
         register int a0 asm("$4");
 
         self->t1A = 1;
@@ -1057,15 +1059,15 @@ void RoomLib_HandlerB(RoomEnt *obj) {
         v0 = 0x1000;
         *(volatile short *)(state + 0x18) = 0x1000;
         *(volatile short *)(state + 0x14) = a0;
-        v0 = RWU16(state, 0x14);
+        matrixComponent = RWU16(state, 0x14);
         *(short *)(state + 0x16) = 0;
         *(volatile short *)(state + 0x1A) = 0;
         *(volatile short *)(state + 0x1E) = 0;
         *(short *)(state + 0x20) = v1;
-        v1 = (int)D_8009D254;
-        v0 = -v0;
-        *(short *)(state + 0x1C) = v0;
-        v0 = RW16(v1, 0x2E);
+        player = (RoomLink *)D_8009D254;
+        matrixComponent = -matrixComponent;
+        *(short *)(state + 0x1C) = matrixComponent;
+        v0 = ((short *)&player->pos[1])[1];
         RW16(state, 0x84) = v0;
     }
 
