@@ -1110,38 +1110,40 @@ typedef struct RoomRenderWords8 {
 
 
 void RoomFx_InitBeamPair(void *unused0, void *unused1, void *output_arg) {
-    char *work = output_arg;
-    register short *anchor asm("$18");
-    register int mode asm("$22");
+    RoomBeamPair *beam = output_arg;
+    unsigned char *image;
+    short *anchor;
+    int mode;
     register int offset asm("$21");
     register int intensity asm("$20");
-    register int primary_color asm("$17");
-    register int blue asm("$23");
+    int primary_color;
+    int blue;
     register int extent asm("$19");
     register char *params asm("$4");
     register int white asm("$2");
     int primary_extent;
-    char *root;
+    RoomBeamPairActor **context;
+    RoomBeamPairActor *actor;
+    u8 *model;
 
-    root = (char *)func_800C2B50();
-    PE1_COMPILER_LAUNDER(work);
+    context = func_800C2B50();
     anchor = &g_RoomDropFieldRings[2].mode;
     params = (char *)anchor - 12;
     mode = 0x10;
     offset = -500;
     intensity = 0x80;
     primary_color = 250;
-    root = *(char **)root;
+    actor = *context;
     blue = 120;
-    root = *(char **)(root + 0x238);
+    model = actor->model;
     extent = 1400;
-    *(RoomRenderWords8 *)work = *(RoomRenderWords8 *)(root + 0xA0);
-    RW16(work, 0x30) = 1200;
-    RW16(work, 0x34) = 255;
+    beam->matrix = *(GteMatrix *)(model + 0xA0);
+    beam->scale = 1200;
+    beam->brightness = 255;
 
     primary_extent = 3200;
     PE1_COMPILER_USE(primary_extent);
-    work = g_RoomDropFieldBeamImages;
+    image = g_RoomDropFieldBeamImages;
     *anchor = mode;
     g_RoomDropFieldRings[2].offset = offset;
     g_RoomDropFieldRings[2].intensity = intensity;
@@ -1153,13 +1155,13 @@ void RoomFx_InitBeamPair(void *unused0, void *unused1, void *output_arg) {
     g_RoomDropFieldRings[2].color0[2] = 0;
     g_RoomDropFieldRings[2].extent0 = primary_extent;
     g_RoomDropFieldRings[2].extent1 = extent;
-    *(char **)params = work;
+    *(unsigned char **)params = image;
     func_800C4E50(params);
 
     params = (char *)anchor + 12;
     PE1_COMPILER_USE(params);
     white = 255;
-    work += 0x100;
+    image += 0x100;
     g_RoomDropFieldRings[3].mode = mode;
     g_RoomDropFieldRings[3].offset = offset;
     g_RoomDropFieldRings[3].intensity = intensity;
@@ -1171,7 +1173,7 @@ void RoomFx_InitBeamPair(void *unused0, void *unused1, void *output_arg) {
     g_RoomDropFieldRings[3].color0[2] = blue;
     g_RoomDropFieldRings[3].extent1 = 0;
     g_RoomDropFieldRings[3].extent0 = extent;
-    *(char **)params = work;
+    *(unsigned char **)params = image;
     func_800C4E50(params);
 }
 
@@ -1221,21 +1223,21 @@ void RoomFx_DrawBeamPair(void *object, void *slot, RoomBeamPair *beam) {
 
 
 
-void RoomFx_UpdateBeamPair(s32 arg0, char *arg1, char *arg2) {
-    char *obj = arg2;
+void RoomFx_UpdateBeamPair(s32 arg0, char *arg1, RoomBeamPair *beam) {
+    RoomBeamPair *obj = beam;
     u16 value;
 
-    value = *(u16 *)(arg2 + 0x30) - 0x96;
-    *(u16 *)(arg2 + 0x30) = value;
+    value = beam->scale - 0x96;
+    beam->scale = value;
     if ((s16)value < 0x190) {
-        *(u16 *)(arg2 + 0x30) = 0x190;
+        beam->scale = 0x190;
     }
 
     if (*(s16 *)(arg1 + 2) >= 8) {
-        value = *(u16 *)(obj + 0x34) - 0x10;
-        *(u16 *)(obj + 0x34) = value;
+        value = obj->brightness - 0x10;
+        obj->brightness = value;
         if ((s16)value < 0) {
-            *(u16 *)(obj + 0x34) = 0;
+            obj->brightness = 0;
             arg1[1] = 2;
         }
     }
