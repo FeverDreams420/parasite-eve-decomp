@@ -53,7 +53,7 @@ int func_801958DC(int event) {
         repetitions=*repeat;
         frame=*(unsigned short *)((char *)&instance->frame+2);
         if(repetitions>0) {
-            register int speed asm("$16");
+            s16 speed;
             int angle;
             frame=(short)frame;
             if(frame>=25) {
