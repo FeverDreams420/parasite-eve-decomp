@@ -219,8 +219,8 @@ typedef struct RoomLibMotionState {
     } mode;                       /* 0x4C */
     int anchor[3];                /* 0x50 */
     char pad5C[0x14];
-    int localStep[3];             /* 0x70 */
-    char pad7C[0x4];
+    short localStep[3];           /* 0x70: packed GTE V0, shared with rotation */
+    char pad76[0xA];
     RoomLink *target;             /* 0x80 */
 } RoomLibMotionState;
 
