@@ -38,13 +38,14 @@ int func_80194F04(int event, Particle *object)
 
 int func_80195064(int event) {
     char frameGap[8];
-    if (event == 1) goto update;
-    if (event < 2) { if (event == 0) goto setup; return 0; }
-    if (event == 2) goto configure;
-    return 0;
-setup:
-    return func_800CE560(D_800F33E0->pool,8,16,
-                         (FieldAnimCallbackListCallback)func_80194F04);
+    if (event != 1) {
+        if (event < 2) { if (event == 0) goto setup; return 0; }
+        if (event == 2) goto configure;
+        return 0;
+    setup:
+        return func_800CE560(D_800F33E0->pool,8,16,
+                             (FieldAnimCallbackListCallback)func_80194F04);
+    }
 update:
     if (D_8019A804 && D_8019A802==0) return 2;
     {

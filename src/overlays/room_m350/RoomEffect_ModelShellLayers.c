@@ -45,13 +45,14 @@ int func_8019421C(int event)
     Vector offset;
     Matrix matrix;
     Vector vector;
-    if (event == 1) goto update;
-    if (event < 2) { if (event == 0) goto setup; return 0; }
-    if (event == 2) goto configure;
-    return 0;
-setup:
-    return func_800CE560(D_800F33E0->pool, 12, 64,
-                         (FieldAnimCallbackListCallback)func_8019404C);
+    if (event != 1) {
+        if (event < 2) { if (event == 0) goto setup; return 0; }
+        if (event == 2) goto configure;
+        return 0;
+    setup:
+        return func_800CE560(D_800F33E0->pool, 12, 64,
+                             (FieldAnimCallbackListCallback)func_8019404C);
+    }
 update:
     {
         int i = 0;

@@ -14,16 +14,17 @@ extern int func_8019A014(int, short *);
 
 int func_8019784C(int event)
 {
-    if (event == 1) goto update;
-    if (event < 2) {
-        if (event == 0) goto setup;
+    if (event != 1) {
+        if (event < 2) {
+            if (event == 0) goto setup;
+            return 0;
+        }
+        if (event == 2) goto configure;
         return 0;
-    }
-    if (event == 2) goto configure;
-    return 0;
 setup:
-    return func_800CE560(D_800F33E0->pool, 8, 16,
-                         (FieldAnimCallbackListCallback)func_8019A014);
+        return func_800CE560(D_800F33E0->pool, 8, 16,
+                             (FieldAnimCallbackListCallback)func_8019A014);
+    }
 update:
     if (D_8019A86E) return 2;
     {

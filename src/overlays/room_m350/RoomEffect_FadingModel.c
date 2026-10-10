@@ -70,18 +70,19 @@ int func_801992A0(int event,State *state)
     Matrix rotation;
     /* Match note: original purpose of unused sp+0x40..0x47 is unknown. */
     char frameGap[8];
-    if(event==1) goto update;
-    if(event<2) { if(event==0) goto setup; return 0; }
-    if(event==2) goto configure;
-    return 0;
-setup:
-    {
-        Instance *instance=D_800F32D0->instance;
-        Matrix *matrix=instance->transforms;
-        Asset_Find08w(0x549,instance->owner->asset,(short)matrix->position[0],(short)matrix->position[1],(short)matrix->position[2]);
-        state->count=0; state->delay=0; D_8019A8C4=0;
-        return func_800CE560(D_800F33E0->pool,20,10,
-                             (FieldAnimCallbackListCallback)func_80199148);
+    if (event != 1) {
+        if(event<2) { if(event==0) goto setup; return 0; }
+        if(event==2) goto configure;
+        return 0;
+    setup:
+        {
+            Instance *instance=D_800F32D0->instance;
+            Matrix *matrix=instance->transforms;
+            Asset_Find08w(0x549,instance->owner->asset,(short)matrix->position[0],(short)matrix->position[1],(short)matrix->position[2]);
+            state->count=0; state->delay=0; D_8019A8C4=0;
+            return func_800CE560(D_800F33E0->pool,20,10,
+                                 (FieldAnimCallbackListCallback)func_80199148);
+        }
     }
 update:
     {

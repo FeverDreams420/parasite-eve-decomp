@@ -53,22 +53,23 @@ int func_80195CE0(int event,State *inputState)
     State *state=inputState;
     union { GteMatrix matrix; GteShortVector position; } local;
     GteShortVector vector;
-    if(event==1) goto update;
-    if(event<2) { if(event==0) goto setup; return 0; }
-    if(event==2) goto draw;
-    return 0;
-setup:
-    {
-        RoomM350EffectInstance *instance=D_800F32D0->instance;
-        int *position=instance->transforms[33].t;
-        RoomM350EffectEmitter *emitter;
-        Asset_Find08w(0x5C9,instance->owner->asset,(short)position[0],(short)position[1],(short)position[2]);
-        *(int *)&state->rotation=0;
-        emitter=D_800F33E0;
-        *(int *)((char *)&state->rotation+4)=0;
-        state->count=0; state->fade=0;
-        return func_800CE560(emitter->pool,8,18,
-                             (FieldAnimCallbackListCallback)func_80195B64);
+    if (event != 1) {
+        if(event<2) { if(event==0) goto setup; return 0; }
+        if(event==2) goto draw;
+        return 0;
+    setup:
+        {
+            RoomM350EffectInstance *instance=D_800F32D0->instance;
+            int *position=instance->transforms[33].t;
+            RoomM350EffectEmitter *emitter;
+            Asset_Find08w(0x5C9,instance->owner->asset,(short)position[0],(short)position[1],(short)position[2]);
+            *(int *)&state->rotation=0;
+            emitter=D_800F33E0;
+            *(int *)((char *)&state->rotation+4)=0;
+            state->count=0; state->fade=0;
+            return func_800CE560(emitter->pool,8,18,
+                                 (FieldAnimCallbackListCallback)func_80195B64);
+        }
     }
 update:
     {

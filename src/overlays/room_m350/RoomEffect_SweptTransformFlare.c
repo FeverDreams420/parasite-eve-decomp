@@ -78,16 +78,17 @@ int func_80198400(int event) {
     GteShortVector offset,vertices[4];
     int area;
     RoomM350EffectInstance *instance=D_800F32D0->instance;
-    if(event==1) goto update;
-    if(event<2) {
-        if(event==0) goto setup;
+    if (event != 1) {
+        if(event<2) {
+            if(event==0) goto setup;
+            return 0;
+        }
+        if(event==2) goto configure;
         return 0;
+    setup:
+        return func_800CE560(D_800F33E0->pool,8,4,
+                             (FieldAnimCallbackListCallback)func_801981D0);
     }
-    if(event==2) goto configure;
-    return 0;
-setup:
-    return func_800CE560(D_800F33E0->pool,8,4,
-                         (FieldAnimCallbackListCallback)func_801981D0);
 update:
     if(instance->frame>=31) return 2;
     if(!(D_800E27EC&1)) {

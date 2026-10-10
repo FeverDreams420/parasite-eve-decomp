@@ -65,10 +65,11 @@ int func_80198CF8(int event,State *state)
         D_8019A8BC=angle;
         asm volatile("" : : : "memory");
         delta=(angle-(unsigned short)instance->rot_y)&4095;
-        if(state->mode==0) goto accelerate;
-        if(state->mode==1) goto steer;
-        state->targetSpeed=0;
-        goto adjust;
+        if (state->mode != 0) {
+            if(state->mode==1) goto steer;
+            state->targetSpeed=0;
+            goto adjust;
+        }
 accelerate:
         {
             if(state->speed<=1280) instance->rot_y=FieldEng_TurnToward(instance->rot_y,angle,80);
