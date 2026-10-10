@@ -147,6 +147,8 @@ ALIASES = [
     (r"\bs16\b", "short"), (r"\bu16\b", "unsigned short"),
     (r"\bs32\b", "int"), (r"\bu32\b", "unsigned int"),
     (r"\bM2C_UNK\b", "int"),
+    (r"\bu_char\b", "unsigned char"), (r"\bu_short\b", "unsigned short"),
+    (r"\bu_int\b", "unsigned int"), (r"\bu_long\b", "unsigned long"),
     # A tag and its typedef usually share a name (typedef struct X {..} X).
     (r"\b(?:struct|union|enum) ", ""),
     (r"\bsigned (char)\b", "signed char"),
@@ -187,7 +189,7 @@ def norm_param(p: str) -> str:
     return norm_ws(p)
 
 
-DECL_SKIP = re.compile(r"^\s*(typedef|static|inline|__inline|INCLUDE_ASM|INCLUDE_RODATA|PSYQ_ASM_FUNCTION)\b")
+DECL_SKIP = re.compile(r"^\s*(typedef|static|inline|__inline|INCLUDE_ASM|INCLUDE_RODATA|PSYQ_ASM_FUNCTION|PSYQ_ASM_OBJECT)\b")
 ASM_ALIAS = re.compile(r"\s*(?:__asm__|asm)\s*\(\s*\"[^\"]*\"\s*\)")
 ATTR = re.compile(r"__attribute__\s*\(\(.*?\)\)")
 
