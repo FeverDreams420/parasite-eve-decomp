@@ -23,17 +23,21 @@ class GpuLoadTimAssetTests(unittest.TestCase):
         except ImportError:
             self.skipTest('unicorn unavailable')
         ENTRY,EXIT,STACK,ASSET,UPLOAD=0x8006E1C0,0x80010000,0x801F0000,0x80100000,0x8007506C
-        source = 'src/main/asset/Asset_TimAndKeyLookup.c'
+        source = 'src/main/asset/Asset_SceneTablesAndSound.c'
+        SLICE=0x5A8
         retail=(ROOT/'assets/USA/main.exe').read_bytes()[0x5E9C0:0x5EB38]
         with tempfile.TemporaryDirectory() as directory:
          work=Path(directory)
          subprocess.run([str(ROOT/'tools/scripts/cc.sh'),str(ROOT/source),str(work/'test.o')],check=True,capture_output=True)
-         (work/'test.ld').write_text('SECTIONS { .text 0x8006E1C0 : SUBALIGN(4) { *(.text) } /DISCARD/ : { *(.reginfo) *(.mdebug) *(.pdr) *(.MIPS.abiflags) } }\nLoadImage = 0x8007506C; g_Base32CharTable = 0x800930B4;\n')
+         # Symbols used only by the unit's other functions get in-range stubs.
+         undefined=subprocess.run(['mipsel-none-elf-nm','-u',str(work/'test.o')],check=True,capture_output=True,text=True).stdout.split()
+         stubs=''.join(f'{name} = 0x80060000;\n' for name in undefined if name not in ('U','LoadImage','g_Base32CharTable'))
+         (work/'test.ld').write_text(stubs+'SECTIONS { .text 0x8006DC18 : SUBALIGN(4) { *(.text) } /DISCARD/ : { *(.reginfo) *(.mdebug) *(.pdr) *(.MIPS.abiflags) } }\nLoadImage = 0x8007506C; g_Base32CharTable = 0x800930B4;\n')
          subprocess.run(['mipsel-none-elf-ld','-EL','-T',str(work/'test.ld'),str(work/'test.o'),'-o',str(work/'test.elf')],check=True,capture_output=True)
          subprocess.run(['mipsel-none-elf-objcopy','-O','binary','-j','.text',str(work/'test.elf'),str(work/'test.bin')],check=True,capture_output=True)
-         # The unit opens with the TIM upload and the base-32 encoder; the
-         # decoder after them is not part of this slice.
-         compiled=(work/'test.bin').read_bytes()[:len(retail)]
+         # The TIM upload and the base-32 encoder sit SLICE bytes into the
+         # unit; the decoder after them is not part of this slice.
+         compiled=(work/'test.bin').read_bytes()[SLICE:SLICE+len(retail)]
         self.assertEqual(compiled, retail, 'TIM upload and encoder must match retail')
         rng=random.Random(ENTRY)
         for case in range(1024):
