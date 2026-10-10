@@ -167,14 +167,18 @@ void RoomFx_GrabStartOnProximity(RoomMotionTrigger *arg) {
 
 static const RoomFxVec4 s_GrabHoldScale = { 0x1400, 0x1400, 0x1400, 0 };
 
+/* The grab animation uses the field actor view of the player record. */
+static __inline__ FieldActor *RoomGrab_PlayerView(RoomSparkBattleEntity *player) {
+    return (FieldActor *)player;
+}
+
 void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
     FieldActor *s1 = arg0->probe_actor;
     FieldActor *g;
     RenderMatrix *rotationMatrix;
     RoomFxVec4 scale;
     s32 dc4, cf4;
-    /* PIN-DEBT: retail stores -cf4 from $a0 and emits the 0x1EA store first. */
-    register s32 neg asm("$4");
+    s32 neg;
     s32 s0;
     /* PIN-DEBT: retail keeps a second live copy of the animation frame in $s4; without the
      * pin GCC copy-propagates s4=s0 away and drops the callee-saved slot. */
@@ -192,7 +196,7 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
 
     dc4 = rcos(0xC00);
     cf4 = rsin(0xC00);
-    g = GRAB_PLAYER;
+    g = RoomGrab_PlayerView(D_8009D254);
     rotationMatrix = &g->render_object.model_matrix;
     neg = -cf4;
     rotationMatrix->rotation[0][1] = neg;
@@ -208,9 +212,9 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
     rotationMatrix->rotation[0][2] = 0;
     rotationMatrix->rotation[2][2] = 0x1000;
     scale = s_GrabHoldScale;
-    matrix_arg = GRAB_PLAYER;
+    matrix_arg = RoomGrab_PlayerView(D_8009D254);
     ScaleMatrix(&matrix_arg->render_object.model_matrix, &scale);
-    g = GRAB_PLAYER;
+    g = RoomGrab_PlayerView(D_8009D254);
     g->render_object.model_matrix.translation[0] = 0x100;
     g->render_object.model_matrix.translation[1] = -0x20;
     g->render_object.model_matrix.translation[2] = -0xC0;
@@ -220,7 +224,7 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
     s4 = s0;
 
     if (s1->state == 0 || func_8003010C(s1, 0x2C) <= 0) {
-        if (GRAB_PLAYER->state->amount > 0) {
+        if (RoomGrab_PlayerView(D_8009D254)->state->amount > 0) {
             func_80020CE4();
         }
         RoomFx_GrabResetPlayer(s1, s3v);
@@ -228,7 +232,7 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
         return;
     }
 
-    if (GRAB_PLAYER->state->amount <= 0) {
+    if (RoomGrab_PlayerView(D_8009D254)->state->amount <= 0) {
         RoomFx_GrabResetPlayer(s1, s3v);
         RoomFx_GrabRelease(arg0);
         return;
@@ -278,7 +282,7 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
         }
         {
             /* One load of the player's state for the read and the write. */
-            FieldActorState *state = GRAB_PLAYER->state;
+            FieldActorState *state = RoomGrab_PlayerView(D_8009D254)->state;
 
             state->flags |= 0x4000;
         }
