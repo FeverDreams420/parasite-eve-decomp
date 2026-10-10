@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 class BouncingGlowTests(unittest.TestCase):
     def test_plain_source(self):
-        source = (ROOT/'src/main/engine/FieldEng_BouncingGlow.c').read_text()
+        source = (ROOT/'src/main/engine/FieldEng_SpiralSpriteEffect.c').read_text()
         self.assertNotRegex(source, r'\b(?:asm|__asm__|INCLUDE_ASM|REGALLOC_BARRIER)\b')
 
     @unittest.skipUnless((ROOT/'assets/USA/main.exe').is_file() and

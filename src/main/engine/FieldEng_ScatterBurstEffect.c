@@ -49,7 +49,6 @@ int func_800D5010(int mode, RenderBouncingSprite *state)
     return 0;
 }
 
-/* MASPSX_FLAGS: --expand-div */
 
 /* Scatter burst at the actor target: opens a pool of bouncing sprites
  * (func_800D5010), throws two per frame for six frames on a turning angle,
@@ -179,7 +178,6 @@ int func_800D5898(int mode, RenderCosineEffect *state)
     return 0;
 }
 
-/* MASPSX_FLAGS: --expand-div */
 
 /* Matching debt: 3 GTE transfer pins, 4 empty constraints, and the four
  * TU-local register reservations above. The matrix pointer remains unpinned
