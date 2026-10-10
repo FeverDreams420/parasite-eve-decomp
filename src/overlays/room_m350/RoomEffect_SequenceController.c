@@ -15,8 +15,6 @@ extern short D_8019A7FC;
 extern short D_8019A7FE,D_8019A800,D_8019A802;
 extern unsigned char D_8019A804,D_8019A805,D_8019A806;
 extern int D_800966EC[];
-extern int FieldEng_VecToAngle(int *,int *);
-extern int FieldEng_TurnToward(int,int,int);
 int func_801958DC(int event) {
     Instance *instance=(Instance *)D_800F32D0->instance;
     Vector offset;
@@ -65,7 +63,7 @@ int func_801958DC(int event) {
             if(frame<19) return 0;
             speed=*(short *)&D_800966EC[((frame-19)*341)&4095];
             speed/=32;
-            angle=FieldEng_VecToAngle(g_PlayerEntity->render_object.model_matrix.translation,instance->render_object.model_matrix.translation);
+            angle=FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation,(Vec3Fixed *)instance->render_object.model_matrix.translation);
             instance->rot_y=FieldEng_TurnToward(instance->rot_y,(short)angle,speed);
         } else {
             if((short)frame>=instance->action-1) {

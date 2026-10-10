@@ -60,8 +60,8 @@ int func_80198CF8(int event,State *state)
             return 1;
         }
         }
-        D_8019A8BA=func_800DFE20(&g_PlayerEntity->pos_x,&instance->pos_x);
-        angle=FieldEng_VecToAngle(&g_PlayerEntity->pos_x,&instance->pos_x)&4095;
+        D_8019A8BA=func_800DFE20((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x);
+        angle=FieldEng_VecToAngle((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x)&4095;
         D_8019A8BC=angle;
         asm volatile("" : : : "memory");
         delta=(angle-(unsigned short)instance->rot_y)&4095;

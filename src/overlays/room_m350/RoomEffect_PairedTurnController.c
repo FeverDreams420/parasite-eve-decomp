@@ -14,8 +14,6 @@ extern Instance *D_8019A774;
 extern Vector D_8019A778[];
 extern short D_8019A77E[],D_8019A798,D_800966EC[];
 extern unsigned char D_8019A79A,D_8019A79C;
-extern int FieldEng_VecToAngle(int *,int *);
-extern int FieldEng_TurnToward(int,int,int);
 int func_80193D6C(int event)
 {
     register Instance *instance asm("$16")=(Instance *)D_800F32D0->instance;
@@ -103,7 +101,7 @@ int func_80193D6C(int event)
             speed=*(short *)((char *)D_800966EC+(((signedFrame-28)*680)&0x3FF8))/32;
             bias=-128;
             if(*(unsigned short *)repeat&1) bias=128;
-            angle=FieldEng_VecToAngle(g_PlayerEntity->render_object.model_matrix.translation,instance->render_object.model_matrix.translation);
+            angle=FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation,(Vec3Fixed *)instance->render_object.model_matrix.translation);
             instance->rot_y=FieldEng_TurnToward(instance->rot_y,(short)(bias+angle),speed);
         } else if((short)frame>=instance->action-1) {
             register Owner *owner asm("$4")=instance->state;
