@@ -589,12 +589,9 @@ segments:
       - [0x4E140, c, save/Save_GetCurrentMapNumber]
       - [0x4E170, c, menu/Menu_InitScrollDirection]
       - [0x4E194, c, item/Inv_InitMaxLevelInventory]
-      # Shared default-profile menu descriptor, glyph, item and stat table lookups.
-      - [0x4E28C, c, table/Tbl_DescriptorLookups]
-      - [0x4E3AC, c, aya/aya]
-      # Shared string-table lookup family.
-      - [0x4E44C, c, table/Str_LookupTables]
-      - [0x4E608, c, table/Tbl_FindNthNonEmpty]
+      # Default-profile lookups into the resident data tables: menu descriptors,
+      # glyphs, items, stats, Aya level/EXP/spell tables and the string tables.
+      - [0x4E28C, c, table/Tbl_DataTableLookups]
       # Event queue, input dispatch and frame presentation share -G8/common.
       - [0x4E688, c, menu/queue]
       # Base-offset setter and Y accessor share one default-profile object.
