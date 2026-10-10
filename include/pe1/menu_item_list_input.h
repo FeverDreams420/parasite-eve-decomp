@@ -1,7 +1,7 @@
 #ifndef PE1_MENU_ITEM_LIST_INPUT_H
 #define PE1_MENU_ITEM_LIST_INPUT_H
 
-/* Declarations used only by Menu_ItemListInputHandler. */
+/* Item list, skill screen and inventory page input declarations. */
 #include "pe1/menu_equipment.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/inventory.h"
@@ -9,11 +9,11 @@
 
 int Menu_ItemListInputHandler(MenuWidgetNode *node, unsigned int flags);
 int Menu_InventoryPageInputHandler(MenuWidgetNode *root, unsigned int flags);
-int Menu_StepSkillScreen(void *node, int flags);
-void Menu_DrawUsableItemActionList();
-void Menu_DrawSoundTestList(void *node);
-void Menu_DrawItemListInvPanel(int node);
-void Menu_SetupSkillSubmenu(int node);
+int Menu_StepSkillScreen(MenuWidgetNode *node, int flags);
+void Menu_DrawUsableItemActionList(MenuWidgetNode *node);
+void Menu_DrawSoundTestList(MenuWidgetNode *node);
+void Menu_DrawItemListInvPanel(MenuWidgetNode *node);
+void Menu_SetupSkillSubmenu(MenuWidgetNode *node);
 void Menu_StepSkillList(MenuWidgetNode *panel, int refresh);
 void Menu_OpenRenameScreen(int item);
 void Menu_ReopenEquipScreen(void);
