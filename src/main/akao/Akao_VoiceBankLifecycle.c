@@ -1096,6 +1096,7 @@ void Seq_TrackPitchSetup(AkaoBankPitchRangeCommand *arg0) {
     AkaoSequencerBank *track;
     int start;
     register int delta asm("$6");
+    AkaoSequencerState *state;
     char *base;
     AkaoSequencerBank *next_track;
 
@@ -1116,10 +1117,9 @@ void Seq_TrackPitchSetup(AkaoBankPitchRangeCommand *arg0) {
         raw &= 0x7F;
         delta = raw << 16;
         delta -= start;
-        delta = delta / duration;
         base = g_AkaoVoiceStateTableBytes;
         track->pitch_slide_duration = duration;
-        track->pitch_delta = delta;
+        track->pitch_delta = delta / duration;
         Seq_MarkDirtyTracks(base);
     } else {
         if (selector != 0) {
@@ -1130,14 +1130,14 @@ void Seq_TrackPitchSetup(AkaoBankPitchRangeCommand *arg0) {
                 ((AkaoSequencerState *)track)->secondary.pitch_current = start;
                 raw = arg0->target;
                 raw &= 0x7F;
+                state = (AkaoSequencerState *)track;
                 delta = raw << 16;
                 delta -= start;
-                delta = delta / duration;
                 base = g_AkaoVoiceStateTable2Bytes;
-                ((AkaoSequencerState *)track)->secondary.pitch_slide_duration = duration;
+                state->secondary.pitch_slide_duration = duration;
                 next_track = track + 1;
                 g_AkaoCurTrack = (AkaoSequencerBank *)next_track;
-                ((AkaoSequencerState *)track)->secondary.pitch_delta = delta;
+                state->secondary.pitch_delta = delta / duration;
                 Seq_MarkDirtyTracks(base);
                 g_AkaoCurTrack--;
             }
