@@ -16,6 +16,3 @@ u32 SpuRead(void *address, u32 size) {
     }
     return size;
 }
-
-/* S_R.OBJ ends with a zero alignment word before S_W.OBJ. */
-static unsigned int SpuRead_alignment __attribute__((section(".text"))) = 0;

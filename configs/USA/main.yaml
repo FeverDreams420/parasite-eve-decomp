@@ -1033,6 +1033,7 @@ segments:
       - [0x765E8, pad]
       # SPU read/upload APIs share transfer limits, callback state, and DMA status.
       - [0x765F4, c, psyq/libspu/s_r]
+      - [0x76650, pad]
       - [0x76654, c, psyq/libspu/s_w]
       - [0x766B0, pad]
       - [0x766B4, c, psyq/libspu/s_stsa]

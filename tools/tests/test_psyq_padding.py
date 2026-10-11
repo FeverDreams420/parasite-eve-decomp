@@ -9,11 +9,10 @@ import yaml
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 PROVENANCE = json.loads((ROOT / "configs/USA/psyq_provenance.json").read_text())
 
-# Approved SDK padding that a unit currently emits itself instead of a `pad`
-# row. Known regression, kept visible by an expected failure below: merging
+# SDK padding that a unit once emitted itself instead of a `pad` row: merging
 # Spu_ReadFromSpu/Spu_UploadToSpu (642bcc1bd) moved the S_R.OBJ tail word into
 # the unit, and the later split into psyq/libspu/s_r + s_w (e5da83a14) kept it
-# as SpuRead_alignment in .text instead of restoring [0x76650, pad].
+# in .text until the [0x76650, pad] row was restored.
 ABSORBED = {0x80085E50}
 
 
@@ -32,7 +31,6 @@ def pad_manifest():
 
 
 class PsyqPaddingTests(unittest.TestCase):
-    @unittest.expectedFailure
     def test_absorbed_padding_is_restored_as_pad_rows(self):
         manifest = pad_manifest()
         approved = {int(p["address"], 16): p["size"] for p in PROVENANCE["padding"]}
