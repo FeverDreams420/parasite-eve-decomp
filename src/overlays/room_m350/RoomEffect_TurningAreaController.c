@@ -17,7 +17,7 @@
 
 /* Steers a rotating footprint, tests contact, and draws three model/sprite layers. */
 typedef RoomM350Vector Vector;
-typedef RoomM350TransformMatrix Matrix;
+typedef GteMatrix Matrix;
 typedef struct { int x,y,z,pad; } Scale;
 typedef struct { void *asset; int yaw; short size,brightness,unknown,turn; unsigned char initialized; } State;
 typedef FieldActorState Owner;
@@ -99,8 +99,8 @@ case 1:
             state->yaw=(unsigned int)state->yaw+state->turn;
             cosine=rcos(state->yaw>>8);
             sine=rsin(state->yaw>>8);
-            i=0; matrix=&D_8019A808; out=matrix->position; source=instance;
-            matrix->rotation[0][0]=cosine;
+            i=0; matrix=&D_8019A808; out=matrix->t; source=instance;
+            matrix->m[0][0]=cosine;
             asm volatile("" : : : "memory");
             D_8019A80C=sine; D_8019A814=0u-sine; D_8019A818=cosine;
             D_8019A824=0; D_8019A820=0; D_8019A81C=0;
@@ -162,7 +162,7 @@ case 2:
         i=0;
         base=D_8019A808;
         transforms=(Matrix *)instance->render_object.matrices;
-        out=base.position; in=transforms[33].position;
+        out=base.t; in=transforms[33].t;
         for(;i<3;i++) *out++=*in++;
         rawPage=((int (*)(int,int,int,int))GetTPage)(0,1,0,0);
         page=(unsigned short)(D_800E2850[D_800E11FA]|rawPage);
