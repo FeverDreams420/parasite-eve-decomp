@@ -6,6 +6,7 @@
 #include "pe1/akao/track.h"
 #include "pe1/akao/voice_masks.h"
 #include "pe1/psyq_spu_internal.h"
+#include "pe1/akao/tick.h"
 
 int Akao_Cmd_10(void *bank) {
     g_AkaoCmd.opcode = 0x10;
@@ -456,8 +457,6 @@ int Akao_StepNoteSequencer(unsigned char *input, unsigned available)
     unsigned *dest;
     unsigned *dest_base;
     unsigned result;
-    register unsigned mode asm("$3");
-    register unsigned clear_bits asm("$4");
 
     if (D_8009D270 & 1) {
         if (Spu_ValidateSampleHeader(input)) return -1;
@@ -527,21 +526,16 @@ int Akao_StepNoteSequencer(unsigned char *input, unsigned available)
             *dest++ = *(unsigned *)instruments;
             instruments += 4;
         } while (upload_size);
-        clear_bits = ~1U;
-        mode = D_8009D270;
-        result = D_8009D2E4;
-        mode &= clear_bits;
-        D_8009D270 = mode;
-    } else {
-        SpuSetTransferStartAddr(D_8009D2BC);
-        upload_size = available;
-        if (upload_size >= D_8009D2E4) upload_size = D_8009D2E4;
-        Spu_UploadWithPrepare((int)input, upload_size);
-        D_8009D2BC += upload_size;
-        D_8009D2E4 -= upload_size;
-        result = D_8009D2E4;
+        D_8009D270 &= ~1U;
+        return D_8009D2E4;
     }
-    return result;
+    SpuSetTransferStartAddr(D_8009D2BC);
+    upload_size = available;
+    if (upload_size >= D_8009D2E4) upload_size = D_8009D2E4;
+    Spu_UploadWithPrepare((int)input, upload_size);
+    D_8009D2BC += upload_size;
+    D_8009D2E4 -= upload_size;
+    return D_8009D2E4;
 }
 
 int Spu_SetStreamModeB(void) {
@@ -549,26 +543,16 @@ int Spu_SetStreamModeB(void) {
     return 0;
 }
 
-int Spu_UploadStreamBlockA(unsigned bank, unsigned char *cursor, unsigned size)
+int Spu_UploadStreamBlockA(unsigned bank, unsigned char *input, unsigned available)
 {
-    register unsigned char *input asm("$16") = cursor;
-    register unsigned available asm("$18") = size;
     unsigned char *instruments;
     unsigned payload_size;
     unsigned count;
     unsigned address;
     unsigned upload_size;
-    register unsigned uploadValue asm("$2");
-    unsigned address_base;
-    unsigned address_offset;
-    register unsigned char *rebase_instruments asm("$4");
-    register unsigned rebase_address asm("$5");
     unsigned start;
+    unsigned after_header;
     unsigned *dest;
-    register unsigned *dest_base asm("$2");
-    unsigned result;
-    register unsigned mode asm("$3");
-    register unsigned clear_bits asm("$4");
 
     if (D_8009D270 & 2) {
         if (Spu_ValidateSampleHeader(input)) return -1;
@@ -587,47 +571,35 @@ int Spu_UploadStreamBlockA(unsigned bank, unsigned char *cursor, unsigned size)
         instruments = input;
         upload_size = count << 6;
         input += upload_size;
-        uploadValue = available - 0x40;
-        available = uploadValue - upload_size;
+        after_header = available - 0x40;
+        available = after_header - upload_size;
         asm volatile("" : "=r"(available) : "0"(available));
         upload_size = available;
         if (upload_size >= payload_size) upload_size = payload_size;
-        address_base = 0x4f000;
-        address_offset = ((bank * 5) << 13);
-        address = address_offset + address_base;
+        address = ((bank * 5) << 13) + 0x4f000;
         SpuSetTransferStartAddr(address);
         Spu_UploadWithPrepare((int)input, upload_size);
-        rebase_instruments = instruments;
-        rebase_address = address;
-        uploadValue = rebase_address + upload_size;
-        D_8009D1EC = uploadValue;
-        uploadValue = payload_size - upload_size;
-        D_8009D204 = uploadValue;
-        Spu_RebaseStreamAddrs(rebase_instruments, rebase_address, count);
+        D_8009D1EC = address + upload_size;
+        D_8009D204 = payload_size - upload_size;
+        Spu_RebaseStreamAddrs(instruments, address, count);
         address = bank << 10;
-        dest_base = D_800B4D00;
-        dest = (unsigned *)(address + (unsigned)dest_base);
+        dest = (unsigned *)((unsigned char *)D_800B4D00 + address);
         upload_size = count << 4;
         do {
             --upload_size;
             *dest++ = *(unsigned *)instruments;
             instruments += 4;
         } while (upload_size);
-        clear_bits = ~2U;
-        mode = D_8009D270;
-        result = D_8009D204;
-        mode &= clear_bits;
-        D_8009D270 = mode;
-    } else {
-        SpuSetTransferStartAddr(D_8009D1EC);
-        upload_size = available;
-        if (upload_size >= D_8009D204) upload_size = D_8009D204;
-        Spu_UploadWithPrepare((int)input, upload_size);
-        D_8009D1EC += upload_size;
-        D_8009D204 -= upload_size;
-        result = D_8009D204;
+        D_8009D270 &= ~2U;
+        return D_8009D204;
     }
-    return result;
+    SpuSetTransferStartAddr(D_8009D1EC);
+    upload_size = available;
+    if (upload_size >= D_8009D204) upload_size = D_8009D204;
+    Spu_UploadWithPrepare((int)input, upload_size);
+    D_8009D1EC += upload_size;
+    D_8009D204 -= upload_size;
+    return D_8009D204;
 }
 
 int Spu_UploadStreamBlockB(unsigned bank, unsigned char *cursor)
@@ -874,26 +846,9 @@ void Akao_WriteVoiceParam(voice_index, params)
     }
 }
 
-#define S16(base, off) (*(s16 *)((char *)(base) + (off)))
-#define U32(base, off) (*(u32 *)((char *)(base) + (off)))
-
-extern void *D_8009D2C8;
-extern u32 D_8009D2C4;
-
-
-static inline int compute_volume(AkaoTrack *voice, s16 *table) {
-    int value = (((S16(voice, 0x46) * (voice->volume_base >> 8)) >> 7) *
-                 (voice->volume_lfo_target >> 8));
-    register int shifted asm("$2");
-    register int sample asm("$5");
-    shifted = value << 9;
-    sample = shifted >> 16;
-    value = sample * table[0];
-    return value >> 15;
-}
 
 void Spu_UpdateVoiceRegisters(AkaoTrack *voice, u32 voice_mask) {
-    u32 new_value;
+    int new_value;
     int value;
     int scaled;
     s16 *table;
@@ -960,7 +915,10 @@ void Spu_UpdateVoiceRegisters(AkaoTrack *voice, u32 voice_mask) {
     if (voice->key_on_delay != 0) {
         voice->key_on_delay--;
         if (voice->key_on_delay == 0) {
-            U32(D_8009D2C8, 0x34) ^= voice_mask;
+            /* Updated through a plain word pointer: a direct member store
+             * would let the scheduler move it past the flag update below. */
+            AkaoU32 *mask = &D_8009D2C8->bank.key_off_dirty_mask;
+            *mask ^= voice_mask;
             D_8009D2C4 |= 0x10;
             Seq_MarkTrack34MaskDirty();
         }
@@ -969,7 +927,8 @@ void Spu_UpdateVoiceRegisters(AkaoTrack *voice, u32 voice_mask) {
     if (voice->key_off_delay != 0) {
         voice->key_off_delay--;
         if (voice->key_off_delay == 0) {
-            U32(D_8009D2C8, 0x3C) ^= voice_mask;
+            AkaoU32 *mask = &D_8009D2C8->bank.adsr_dirty_mask;
+            *mask ^= voice_mask;
             Seq_MarkTrack3CMaskDirty();
         }
     }
@@ -986,19 +945,16 @@ void Spu_UpdateVoiceRegisters(AkaoTrack *voice, u32 voice_mask) {
         voice->pitch_lfo_depth = scaled;
 
         if (voice->pitch_lfo_counter == 0 && voice->pitch_lfo_phase != 1) {
-            register int lfo_value asm("$5");
             table = (s16 *)voice->pitch_lfo_table;
             if (table[0] == 0 && table[1] == 0) {
                 table += table[2];
             }
-            lfo_value = (voice->pitch_lfo_depth * table[0]) >> 16;
-            if (lfo_value != voice->pitch_lfo_value) {
-                voice->pitch_lfo_value = lfo_value;
+            new_value = (voice->pitch_lfo_depth * table[0]) >> 16;
+            if (new_value != voice->pitch_lfo_value) {
+                voice->pitch_lfo_value = new_value;
                 voice->update_flags |= 0x10;
-                if (lfo_value >= 0) {
-                    register int doubled asm("$2");
-                    doubled = lfo_value << 1;
-                    voice->pitch_lfo_value = doubled;
+                if (new_value >= 0) {
+                    voice->pitch_lfo_value = new_value << 1;
                 }
             }
         }
@@ -1008,14 +964,15 @@ void Spu_UpdateVoiceRegisters(AkaoTrack *voice, u32 voice_mask) {
         voice->volume_lfo_slide_duration--;
         voice->volume_lfo_target += (u16)voice->volume_lfo_delta;
         if (voice->volume_lfo_counter == 0 && voice->volume_lfo_phase != 1) {
-            register int lfo_value asm("$5");
             table = (s16 *)voice->volume_lfo_table;
             if (table[0] == 0 && table[1] == 0) {
                 table += table[2];
             }
-            lfo_value = compute_volume(voice, table);
-            if (lfo_value != voice->volume_lfo_value) {
-                voice->volume_lfo_value = lfo_value;
+            { int product = (((s16)(voice->expression_value >> 16) * (voice->volume_base >> 8)) >> 7) * (voice->volume_lfo_target >> 8);
+              new_value = (product << 9) >> 16;
+              new_value = (new_value * table[0]) >> 15; }
+            if (new_value != voice->volume_lfo_value) {
+                voice->volume_lfo_value = new_value;
                 voice->update_flags |= 3;
             }
         }
@@ -1025,14 +982,13 @@ void Spu_UpdateVoiceRegisters(AkaoTrack *voice, u32 voice_mask) {
         voice->aux_lfo_slide_duration--;
         voice->aux_lfo_target += (u16)voice->aux_lfo_delta;
         if (voice->aux_lfo_phase != 1) {
-            register int lfo_value asm("$5");
             table = (s16 *)voice->aux_lfo_table;
             if (table[0] == 0 && table[1] == 0) {
                 table += table[2];
             }
-            lfo_value = ((voice->aux_lfo_target >> 8) * table[0]) >> 15;
-            if (lfo_value != voice->aux_lfo_value) {
-                voice->aux_lfo_value = lfo_value;
+            new_value = ((voice->aux_lfo_target >> 8) * table[0]) >> 15;
+            if (new_value != voice->aux_lfo_value) {
+                voice->aux_lfo_value = new_value;
                 voice->update_flags |= 3;
             }
         }
@@ -1052,501 +1008,416 @@ void Spu_UpdateVoiceRegisters(AkaoTrack *voice, u32 voice_mask) {
 
 void Spu_TickVoiceEnvelopes(AkaoTrack *track, unsigned voice_mask)
 {
-    register unsigned old_value asm("$3");
-    unsigned new_value;
-    unsigned delta;
-    register int scaled asm("$5");
-    unsigned product;
-    unsigned pitch_depth;
-    unsigned pitch_masked;
-    register int doubled_pitch asm("$2");
-    int volume_stage;
-    register int shifted_volume asm("$2");
-    int wave_sample;
-    short *wave;
+    int new_value;
+    int value;
+    u32 depth;
+    u32 product;
+    s16 *table;
 
-    if (track->expression_duration) {
+    if (track->expression_duration != 0) {
+        u32 old_value;
         old_value = track->expression_value;
-        delta = track->expression_delta;
+        new_value = old_value + track->expression_delta;
         track->expression_duration--;
-        new_value = old_value + delta;
-        if ((new_value & 0xFFE00000) != (old_value & 0xFFE00000))
+        if ((new_value & 0xFFE00000) != (old_value & 0xFFE00000)) {
             track->update_flags |= 3;
+        }
         track->expression_value = new_value;
     }
 
-    if (track->key_on_delay) {
-        if (--track->key_on_delay == 0) {
+    if (track->key_on_delay != 0) {
+        track->key_on_delay--;
+        if (track->key_on_delay == 0) {
             D_800BCD6C ^= voice_mask;
             g_AkaoVoiceUpdateFlags |= 0x10;
             Seq_MarkTrack34MaskDirty();
         }
     }
-    if (track->key_off_delay) {
-        if (--track->key_off_delay == 0) {
+
+    if (track->key_off_delay != 0) {
+        track->key_off_delay--;
+        if (track->key_off_delay == 0) {
             D_800BCD74 ^= voice_mask;
             Seq_MarkTrack3CMaskDirty();
         }
     }
 
-    if (track->pitch_lfo_slide_duration) {
-        unsigned pitch_weight;
-        --track->pitch_lfo_slide_duration;
-        track->pitch_lfo_target += track->pitch_lfo_delta;
-        pitch_masked = track->pitch_lfo_target & 0x7F00;
-        pitch_weight = pitch_masked >> 8;
-        if (track->pitch_lfo_target & 0x8000)
-            product = pitch_weight * track->pitch_base;
-        else
-            product = pitch_weight * (((track->pitch_base << 4) - track->pitch_base) >> 8);
-        pitch_depth = product >> 7;
-        asm volatile("" : "=r"(pitch_depth) : "0"(pitch_depth));
-        track->pitch_lfo_depth = pitch_depth;
+    if (track->pitch_lfo_slide_duration != 0) {
+        track->pitch_lfo_slide_duration--;
+        track->pitch_lfo_target += (u16)track->pitch_lfo_delta;
+        value = (track->pitch_lfo_target & 0x7F00) >> 8;
+        if ((track->pitch_lfo_target & 0x8000) != 0) {
+            product = value * track->pitch_base;
+        } else {
+            product = value * (((track->pitch_base << 4) - track->pitch_base) >> 8);
+        }
+        depth = product >> 7;
+        asm volatile("" : "=r"(depth) : "0"(depth));
+        track->pitch_lfo_depth = depth;
+
         if (track->pitch_lfo_phase != 1) {
-            wave = (short *)track->pitch_lfo_table;
-            if (wave[0] == 0 && wave[1] == 0) wave += wave[2];
-            scaled = ((int)track->pitch_lfo_depth * wave[0]) >> 16;
-            if (scaled != track->pitch_lfo_value) {
-                track->pitch_lfo_value = scaled;
+            table = (s16 *)track->pitch_lfo_table;
+            if (table[0] == 0 && table[1] == 0) {
+                table += table[2];
+            }
+            new_value = (track->pitch_lfo_depth * table[0]) >> 16;
+            if (new_value != track->pitch_lfo_value) {
+                track->pitch_lfo_value = new_value;
                 track->update_flags |= 0x10;
-                if (scaled >= 0) {
-                    doubled_pitch = scaled << 1;
-                    track->pitch_lfo_value = doubled_pitch;
+                if (new_value >= 0) {
+                    track->pitch_lfo_value = new_value << 1;
                 }
             }
         }
     }
 
-    if (track->volume_lfo_slide_duration) {
-        --track->volume_lfo_slide_duration;
-        track->volume_lfo_target += track->volume_lfo_delta;
+    if (track->volume_lfo_slide_duration != 0) {
+        track->volume_lfo_slide_duration--;
+        track->volume_lfo_target += (u16)track->volume_lfo_delta;
         if (track->volume_lfo_phase != 1) {
-            wave = (short *)track->volume_lfo_table;
-            if (wave[0] == 0 && wave[1] == 0) wave += wave[2];
-            volume_stage = ((short)(track->expression_value >> 16) *
-                            (track->volume_base >> 8)) >> 7;
-            product = volume_stage * (track->volume_lfo_target >> 8);
-            wave_sample = wave[0];
-            shifted_volume = product << 9;
-            scaled = shifted_volume >> 16;
-            scaled = (scaled * wave_sample) >> 15;
-            if (scaled != track->volume_lfo_value) {
-                track->volume_lfo_value = scaled;
+            table = (s16 *)track->volume_lfo_table;
+            if (table[0] == 0 && table[1] == 0) {
+                table += table[2];
+            }
+            {
+                int product = (((s16)(track->expression_value >> 16) * (track->volume_base >> 8)) >> 7) *
+                              (track->volume_lfo_target >> 8);
+                new_value = (product << 9) >> 16;
+                new_value = (new_value * table[0]) >> 15;
+            }
+            if (new_value != track->volume_lfo_value) {
+                track->volume_lfo_value = new_value;
                 track->update_flags |= 3;
             }
         }
     }
 
-    if (track->aux_lfo_slide_duration) {
-        --track->aux_lfo_slide_duration;
-        track->aux_lfo_target += track->aux_lfo_delta;
+    if (track->aux_lfo_slide_duration != 0) {
+        track->aux_lfo_slide_duration--;
+        track->aux_lfo_target += (u16)track->aux_lfo_delta;
         if (track->aux_lfo_phase != 1) {
-            wave = (short *)track->aux_lfo_table;
-            if (wave[0] == 0 && wave[1] == 0) wave += wave[2];
-            scaled = ((track->aux_lfo_target >> 8) * wave[0]) >> 15;
-            if (scaled != track->aux_lfo_value) {
-                track->aux_lfo_value = scaled;
+            table = (s16 *)track->aux_lfo_table;
+            if (table[0] == 0 && table[1] == 0) {
+                table += table[2];
+            }
+            new_value = ((track->aux_lfo_target >> 8) * table[0]) >> 15;
+            if (new_value != track->aux_lfo_value) {
+                track->aux_lfo_value = new_value;
                 track->update_flags |= 3;
             }
         }
     }
 
-    if (track->pitch_slide_steps) {
+    if (track->pitch_slide_steps != 0) {
+        u32 old_value;
         old_value = track->voice_mask_a;
-        delta = track->pitch_slide_step;
+        new_value = old_value + track->pitch_slide_step;
         track->pitch_slide_steps--;
-        new_value = old_value + delta;
-        if ((new_value & 0xFFFF0000) != (old_value & 0xFFFF0000))
+        if ((new_value & 0xFFFF0000) != (old_value & 0xFFFF0000)) {
             track->update_flags |= 0x10;
+        }
         track->voice_mask_a = new_value;
     }
 }
 
-#define U16(base, off) (*(u16 *)((char *)(base) + (off)))
-#define ADVANCE_ENV_PTR(voice, off, timer, reset) do { \
-    u16 reset_value = U16((voice), (reset)); \
-    table = (s16 *)U32((voice), (off)); \
-    U16((voice), (timer)) = reset_value; \
-    if (table[0] == 0 && table[1] == 0) { \
-        register s16 *next asm("$2") = table + table[2]; \
-        U32((voice), (off)) = (u32)next; \
-    } \
-    table = (s16 *)U32((voice), (off)); \
-    U32((voice), (off)) = (u32)(table + 1); \
-    sample = *table; \
-} while (0)
-#define MIX_PAN_DISPATCH(voice, volume, pan_value, mask_value, label, mode_value, one_value) do { \
-    int left_value; \
-    if ((mode_value) == (one_value)) goto label##_case1; \
-    if ((mode_value) == 4) goto label##_case4; \
-    goto label##_default; \
-    label##_case1: \
-        S16((voice), 0x118) = ((volume) * D_8009B8F8[(pan_value)]) >> 15; \
-        S16((voice), 0x11A) = ((volume) * D_8009B8F8[(pan_value) ^ 0xFF]) >> 15; \
-        break; \
-    label##_case4: { \
-        register int right asm("$3"); \
-        S16((voice), 0x118) = ((volume) * D_8009B8F8[(pan_value)]) >> 15; \
-        right = ((volume) * D_8009B8F8[(pan_value) ^ 0xFF]) >> 15; \
-        S16((voice), 0x11A) = right; \
-        if (((mask_value) & 0x00AAAAAA) != 0) { \
-            register int flip asm("$2") = ~right; \
-            S16((voice), 0x11A) = flip; \
-            do { } while (0); \
-        } else { \
-            left_value = ~U16((voice), 0x118); \
-            S16((voice), 0x118) = left_value; \
-        } \
-        break; \
-    } \
-    label##_default: { \
-        left_value = (u32)((volume) * D_8009B9F8[0]) >> 15; \
-        S16((voice), 0x11A) = left_value; \
-        label##_store_left: \
-        S16((voice), 0x118) = left_value; \
-        break; \
-    } \
-    label##_done:; \
-} while (0)
-#define MIX_PAN_MODE(voice, volume, pan_value, mask_value, label, mode_value) do { \
-    int left_value; \
-    switch (mode_value) { \
-    case 1: \
-        S16((voice), 0x118) = ((volume) * D_8009B8F8[(pan_value)]) >> 15; \
-        S16((voice), 0x11A) = ((volume) * D_8009B8F8[(pan_value) ^ 0xFF]) >> 15; \
-        break; \
-    case 4: { \
-        register int right asm("$3"); \
-        S16((voice), 0x118) = ((volume) * D_8009B8F8[(pan_value)]) >> 15; \
-        right = ((volume) * D_8009B8F8[(pan_value) ^ 0xFF]) >> 15; \
-        S16((voice), 0x11A) = right; \
-        if (((mask_value) & 0x00AAAAAA) != 0) { \
-            register int flip asm("$2") = ~right; \
-            S16((voice), 0x11A) = flip; \
-            do { } while (0); \
-        } else { \
-            left_value = ~U16((voice), 0x118); \
-            S16((voice), 0x118) = left_value; \
-        } \
-        break; \
-    } \
-    default: { \
-        left_value = (u32)((volume) * D_8009B9F8[0]) >> 15; \
-        S16((voice), 0x11A) = left_value; \
-        label##_store_left: \
-        S16((voice), 0x118) = left_value; \
-        break; \
-    } \
-    } \
-} while (0)
-#define SCALE_GLOBAL_DEPTH(value, depth) do { \
-if (depth != 0) { \
-    do { \
-        if (depth < 0x80) { \
-            (value) += ((value) * depth) >> 7; \
-            break; \
-        } \
-        (value) = ((value) * depth) >> 8; \
-    } while (0); \
-} \
-} while (0)
-
 extern unsigned char D_8009D2CE;
 
-void Akao_SetVoiceKeyOff(AkaoTrack *cursor, u32 voice_mask, int index) {
-    register void *voice = cursor;
+void Akao_SetVoiceKeyOff(AkaoTrack *voice, u32 voice_mask, int index) {
     u32 flags;
-    register int base_volume asm("$4");
+    int base_volume;
     int value;
     int sample;
-    int pan;
-    void *target_voice;
-    register s16 *table asm("$3");
+    s16 *table;
+    AkaoTrack *target;
 
-    base_volume = (S16(voice, 0x46) * (U16(voice, 0x6C) >> 8)) >> 7;
-    flags = U32(voice, 0x38);
+    base_volume = ((s16)(voice->expression_value >> 16) * (voice->volume_base >> 8)) >> 7;
+    flags = voice->flags;
 
-    if ((flags & 1) != 0 && U16(voice, 0x8A) == 0) {
-        U16(voice, 0x8E)--;
-        if (U16(voice, 0x8E) == 0) {
-            ADVANCE_ENV_PTR(voice, 0x1C, 0x8E, 0x8C);
-            { register int final_value asm("$7") = (U16(voice, 0x92) * sample) >> 16;
-              if (final_value != S16(voice, 0xE8)) {
-                  U16(voice, 0xE8) = final_value;
-                  U32(voice, 0xF4) |= 0x10;
-                  if (final_value >= 0) {
-                      register int doubled asm("$2") = final_value << 1;
-                      U16(voice, 0xE8) = doubled;
-                  }
-              }
+    if ((flags & AKAO_TRACK_FLAG_PITCH_LFO) != 0 && voice->pitch_lfo_counter == 0) {
+        if (--voice->pitch_lfo_phase == 0) {
+            voice->pitch_lfo_phase = voice->pitch_lfo_duration;
+            table = voice->pitch_lfo_table;
+            if (table[0] == 0 && table[1] == 0) {
+                voice->pitch_lfo_table = table + table[2];
             }
-        }
-    }
-
-    if ((flags & 2) != 0 && U16(voice, 0x9E) == 0) {
-        U16(voice, 0xA2)--;
-        if (U16(voice, 0xA2) == 0) {
-            { u16 reset_value = U16(voice, 0xA0);
-              table = (s16 *)U32(voice, 0x20);
-              U16(voice, 0xA2) = reset_value;
-              if (table[0] == 0 && table[1] == 0) {
-                  { register s16 *next asm("$2") = table + table[2]; U32(voice, 0x20) = (u32)next; }
-              }
-            }
-            value = base_volume * (U16(voice, 0xA6) >> 8);
-            table = (s16 *)U32(voice, 0x20);
-            U32(voice, 0x20) = (u32)(table + 1);
+            table = voice->pitch_lfo_table;
+            voice->pitch_lfo_table = table + 1;
             sample = *table;
-            { register int shifted asm("$2") = value << 9; register int upper asm("$7") = shifted >> 16;
-              register int final_value = (upper * sample) >> 15;
-              if (final_value != S16(voice, 0xEA)) {
-                  U16(voice, 0xEA) = final_value;
-                  U32(voice, 0xF4) |= 3;
-              }
-            }
-        }
-    }
-
-    if ((flags & 4) != 0) {
-        U16(voice, 0xB0)--;
-        if (U16(voice, 0xB0) == 0) {
-            { u16 reset_value = U16(voice, 0xAE);
-              table = (s16 *)U32(voice, 0x24);
-              U16(voice, 0xB0) = reset_value;
-              if (table[0] == 0 && table[1] == 0) {
-                  register s16 *next asm("$2") = table + table[2];
-                  U32(voice, 0x24) = (u32)next;
-              }
-            }
-            table = (s16 *)U32(voice, 0x24);
-            U32(voice, 0x24) = (u32)(table + 1);
-            { register int scale = U16(voice, 0xB4) >> 8;
-              sample = *table;
-              { register int final_value = (scale * sample) >> 15;
-                if (final_value != S16(voice, 0xEC)) {
-                    U16(voice, 0xEC) = final_value;
-                    U32(voice, 0xF4) |= 3;
+            value = (voice->pitch_lfo_depth * sample) >> 16;
+            if (value != voice->pitch_lfo_value) {
+                voice->pitch_lfo_value = value;
+                voice->update_flags |= AKAO_VOICE_PARAM_PITCH;
+                if (value >= 0) {
+                    voice->pitch_lfo_value = value << 1;
                 }
-              }
             }
         }
     }
 
-    if ((flags & 0x20) != 0) {
-        base_volume = (((int)(U16(voice, -0x10) << 17) >> 16) *
-                       (U16(voice, 0x6C) >> 8)) >> 7;
-        U32(voice, 0xF4) |= 3;
-    }
-
-    if ((U32(voice, 0xF4) & 3) != 0) {
-        { int product; int mode; register int one;
-          base_volume += S16(voice, 0xEA);
-          product = base_volume * (U16(D_8009D2C8, 0x4A) & 0x7F);
-          { register int raw_pan = U16(voice, 0x76); register int bias = S16(voice, 0xEC); register int shifted asm("$2") = raw_pan >> 8; int sum = shifted + bias; pan = sum & 0xFF; }
-          one = 1;
-          mode = D_8009D2C0;
-
-          base_volume = product >> 7;
-          MIX_PAN_DISPATCH(voice, base_volume, pan, voice_mask, primary, mode, one);
-        }
-
-        if ((flags & 0x800) != 0) {
-            target_voice = (char *)&D_800B8AC0[U16(voice, 0x5C)];
-            S16(target_voice, 0x118) = U16(voice, 0x118);
-            S16(target_voice, 0x11A) = U16(voice, 0x11A);
-
-            { register int raw asm("$2") = U16(voice, 0x5E);
-              int mode = D_8009D2C0;
-              base_volume = raw >> 1;
-              MIX_PAN_MODE(voice, base_volume, pan, voice_mask, secondary, mode);
+    if ((flags & AKAO_TRACK_FLAG_VOLUME_LFO) != 0 && voice->volume_lfo_counter == 0) {
+        if (--voice->volume_lfo_phase == 0) {
+            int product;
+            voice->volume_lfo_phase = voice->volume_lfo_duration;
+            table = voice->volume_lfo_table;
+            if (table[0] == 0 && table[1] == 0) {
+                voice->volume_lfo_table = table + table[2];
             }
-            U16(target_voice, 0x118) -= U16(voice, 0x118);
-            U16(target_voice, 0x11A) -= U16(voice, 0x11A);
+            product = base_volume * (voice->volume_lfo_target >> 8);
+            table = voice->volume_lfo_table;
+            voice->volume_lfo_table = table + 1;
+            sample = *table;
+            value = (product << 9) >> 16;
+            value = (value * sample) >> 15;
+            if (value != voice->volume_lfo_value) {
+                voice->volume_lfo_value = value;
+                voice->update_flags |= AKAO_VOICE_PARAM_VOLUME;
+            }
         }
     }
 
-    if ((flags & 0x10) != 0) {
-        register int depth asm("$7") = D_8009D2CE;
-        int pitch = U16(voice, -0x10) + S16(voice, 0xE8) + S16(voice, 0x36);
-        SCALE_GLOBAL_DEPTH(pitch, depth);
-        U16(voice, 0x10C) = pitch & 0x3FFF;
-        U32(voice, 0xF4) |= 0x10;
-    } else if ((U32(voice, 0xF4) & 0x10) != 0) {
-        register int depth asm("$7") = D_8009D2CE;
-        register int pitch = U32(voice, 0x30) + S16(voice, 0xE8) + S16(voice, 0x36);
-        SCALE_GLOBAL_DEPTH(pitch, depth);
-        { int masked = pitch & 0x3FFF; U16(voice, 0x10C) = masked; }
+    if ((flags & AKAO_TRACK_FLAG_AUX_LFO) != 0) {
+        if (--voice->aux_lfo_phase == 0) {
+            voice->aux_lfo_phase = voice->aux_lfo_duration;
+            table = voice->aux_lfo_table;
+            if (table[0] == 0 && table[1] == 0) {
+                voice->aux_lfo_table = table + table[2];
+            }
+            table = voice->aux_lfo_table;
+            voice->aux_lfo_table = table + 1;
+            sample = *table;
+            value = ((voice->aux_lfo_target >> 8) * sample) >> 15;
+            if (value != voice->aux_lfo_value) {
+                voice->aux_lfo_value = value;
+                voice->update_flags |= AKAO_VOICE_PARAM_VOLUME;
+            }
+        }
+    }
+
+    if ((flags & AKAO_TRACK_FLAG_20) != 0) {
+        base_volume = (((int)(voice[-1].pitch << 17) >> 16) * (voice->volume_base >> 8)) >> 7;
+        voice->update_flags |= AKAO_VOICE_PARAM_VOLUME;
+    }
+
+    if ((voice->update_flags & AKAO_VOICE_PARAM_VOLUME) != 0) {
+        int product;
+        base_volume += voice->volume_lfo_value;
+        product = base_volume * (D_8009D2C8->timing.pitch_integer & 0x7F);
+        value = ((voice->panpot >> 8) + voice->aux_lfo_value) & 0xFF;
+        base_volume = product >> 7;
+        switch (D_8009D2C0) {
+        case 1:
+            voice->volume_left = (base_volume * D_8009B8F8[value]) >> 15;
+            voice->volume_right = (base_volume * D_8009B8F8[value ^ 0xFF]) >> 15;
+            break;
+        case 4:
+            voice->volume_left = (base_volume * D_8009B8F8[value]) >> 15;
+            voice->volume_right = (base_volume * D_8009B8F8[value ^ 0xFF]) >> 15;
+            if ((voice_mask & 0x00AAAAAA) != 0) {
+                voice->volume_right = ~voice->volume_right;
+            } else {
+                voice->volume_left = ~voice->volume_left;
+            }
+            break;
+        default:
+            voice->volume_right = (unsigned int)(base_volume * D_8009B9F8[0]) >> 15;
+            voice->volume_left = voice->volume_right;
+            break;
+        }
+
+        if ((flags & AKAO_TRACK_FLAG_VOICE_ALLOCATED) != 0) {
+            target = &D_800B8AC0[voice->voice_index].track;
+            target->volume_left = voice->volume_left;
+            target->volume_right = voice->volume_right;
+            base_volume = voice->pitch_slide_current >> 1;
+            switch (D_8009D2C0) {
+        case 1:
+            voice->volume_left = (base_volume * D_8009B8F8[value]) >> 15;
+            voice->volume_right = (base_volume * D_8009B8F8[value ^ 0xFF]) >> 15;
+            break;
+        case 4:
+            voice->volume_left = (base_volume * D_8009B8F8[value]) >> 15;
+            voice->volume_right = (base_volume * D_8009B8F8[value ^ 0xFF]) >> 15;
+            if ((voice_mask & 0x00AAAAAA) != 0) {
+                voice->volume_right = ~voice->volume_right;
+            } else {
+                voice->volume_left = ~voice->volume_left;
+            }
+            break;
+        default:
+            voice->volume_right = (unsigned int)(base_volume * D_8009B9F8[0]) >> 15;
+            voice->volume_left = voice->volume_right;
+            break;
+        }
+            target->volume_left -= voice->volume_left;
+            target->volume_right -= voice->volume_right;
+        }
+    }
+
+    if ((flags & AKAO_TRACK_FLAG_10) != 0) {
+        int pitch;
+        value = D_8009D2CE;
+        pitch = voice[-1].pitch + voice->pitch_lfo_value + (s16)(voice->voice_mask_a >> 16);
+        if (value != 0) {
+            if (value < 0x80) {
+                pitch += (pitch * value) >> 7;
+            } else {
+                pitch = (pitch * value) >> 8;
+            }
+        }
+        voice->pitch = pitch & 0x3FFF;
+        voice->update_flags |= AKAO_VOICE_PARAM_PITCH;
+    } else if ((voice->update_flags & AKAO_VOICE_PARAM_PITCH) != 0) {
+        int pitch;
+        value = D_8009D2CE;
+        pitch = voice->pitch_base + voice->pitch_lfo_value + (s16)(voice->voice_mask_a >> 16);
+        if (value != 0) {
+            if (value < 0x80) {
+                pitch += (pitch * value) >> 7;
+            } else {
+                pitch = (pitch * value) >> 8;
+            }
+        }
+        voice->pitch = pitch & 0x3FFF;
     }
 }
 
-#undef ADVANCE_ENV_PTR
-#define ADVANCE_ENV_PTR(voice, off)                                  \
-    do {                                                            \
-        if (table[0] == 0 && table[1] == 0) {                        \
-            register s16 *next = table + table[2];        \
-            U32((voice), (off)) = (u32)next;                         \
-        }                                                           \
-        table = (s16 *)U32((voice), (off));                          \
-        U32((voice), (off)) = (u32)(table + 1);                      \
-        { int raw = *table;                      \
-           sample = raw; }             \
-    } while (0)
 void Akao_SetVoiceKeyOn(AkaoTrack *voice, u32 voice_mask) {
-    register u32 flags;
-    register int base_volume;
-    u32 later_flags;
+    u32 flags;
+    int base_volume;
+    /* Two scratch values cover every stage, as in the retail register use:
+     * value holds LFO results, the pan index and the pitch depth, operand
+     * holds the wave sample and the pitch sum. */
     int value;
-    int sample;
-    int pan;
-    register int mode asm("$4");
+    int operand;
     s16 *table;
 
-    base_volume = (S16(voice, 0x46) * (U16(voice, 0x6C) >> 8)) >> 7;
-    flags = U32(voice, 0x38);
+    base_volume = ((s16)(voice->expression_value >> 16) * (voice->volume_base >> 8)) >> 7;
+    flags = voice->flags;
 
-    if ((flags & 1) != 0) {
-        U16(voice, 0x8E)--;
-        if (U16(voice, 0x8E) == 0) {
-            register int value;
-            table = (s16 *)U32(voice, 0x1C);
-            U16(voice, 0x8E) = U16(voice, 0x8C);
-            ADVANCE_ENV_PTR(voice, 0x1C);
-            value = (U16(voice, 0x92) * sample) >> 16;
-            if (value != S16(voice, 0xE8)) {
-                U16(voice, 0xE8) = value;
-                U32(voice, 0xF4) |= 0x10;
+    if ((flags & AKAO_TRACK_FLAG_PITCH_LFO) != 0) {
+        if (--voice->pitch_lfo_phase == 0) {
+            voice->pitch_lfo_phase = voice->pitch_lfo_duration;
+            table = voice->pitch_lfo_table;
+            if (table[0] == 0 && table[1] == 0) {
+                voice->pitch_lfo_table = table + table[2];
+            }
+            table = voice->pitch_lfo_table;
+            voice->pitch_lfo_table = table + 1;
+            operand = *table;
+            value = (voice->pitch_lfo_depth * operand) >> 16;
+            if (value != voice->pitch_lfo_value) {
+                voice->pitch_lfo_value = value;
+                voice->update_flags |= AKAO_VOICE_PARAM_PITCH;
                 if (value >= 0) {
-                    int doubled = value << 1;
-                    U16(voice, 0xE8) = doubled;
+                    voice->pitch_lfo_value = value << 1;
                 }
             }
         }
     }
 
-    if ((flags & 2) != 0) {
-        U16(voice, 0xA2)--;
-        if (U16(voice, 0xA2) == 0) {
-            int volume_product;
-            table = (s16 *)U32(voice, 0x20);
-            U16(voice, 0xA2) = U16(voice, 0xA0);
+    if ((flags & AKAO_TRACK_FLAG_VOLUME_LFO) != 0) {
+        if (--voice->volume_lfo_phase == 0) {
+            int product;
+            voice->volume_lfo_phase = voice->volume_lfo_duration;
+            table = voice->volume_lfo_table;
             if (table[0] == 0 && table[1] == 0) {
-                register s16 *next = table + table[2];
-                U32(voice, 0x20) = (u32)next;
+                voice->volume_lfo_table = table + table[2];
             }
-
-            volume_product = base_volume * (U16(voice, 0xA6) >> 8);
-            table = (s16 *)U32(voice, 0x20);
-            U32(voice, 0x20) = (u32)(table + 1);
-            sample = *table;
-            { register int shifted asm("$2") = volume_product << 9;
-              register int upper asm("$3") = shifted >> 16;
-              value = (upper * sample) >> 15; }
-            { register int final_value asm("$3") = value;
-              if (final_value != S16(voice, 0xEA)) {
-                  U16(voice, 0xEA) = final_value;
-                  U32(voice, 0xF4) |= 3;
-              }
+            product = base_volume * (voice->volume_lfo_target >> 8);
+            table = voice->volume_lfo_table;
+            voice->volume_lfo_table = table + 1;
+            operand = *table;
+            value = (product << 9) >> 16;
+            value = (value * operand) >> 15;
+            if (value != voice->volume_lfo_value) {
+                voice->volume_lfo_value = value;
+                voice->update_flags |= AKAO_VOICE_PARAM_VOLUME;
             }
         }
     }
 
-    later_flags = flags;
-    if ((later_flags & 4) != 0) {
-        U16(voice, 0xB0)--;
-        if (U16(voice, 0xB0) == 0) {
-            register int value;
-            int scale;
-            table = (s16 *)U32(voice, 0x24);
-            U16(voice, 0xB0) = U16(voice, 0xAE);
+    if ((flags & AKAO_TRACK_FLAG_AUX_LFO) != 0) {
+        if (--voice->aux_lfo_phase == 0) {
+            voice->aux_lfo_phase = voice->aux_lfo_duration;
+            table = voice->aux_lfo_table;
             if (table[0] == 0 && table[1] == 0) {
-                register s16 *next = table + table[2];
-                U32(voice, 0x24) = (u32)next;
+                voice->aux_lfo_table = table + table[2];
             }
-
-            table = (s16 *)U32(voice, 0x24);
-            U32(voice, 0x24) = (u32)(table + 1);
-            scale = U16(voice, 0xB4) >> 8;
-            { int raw = *table;  sample = raw; }
-            value = (scale * sample) >> 15;
-            if (value != S16(voice, 0xEC)) {
-                U16(voice, 0xEC) = value;
-                U32(voice, 0xF4) |= 3;
+            table = voice->aux_lfo_table;
+            voice->aux_lfo_table = table + 1;
+            operand = *table;
+            value = ((voice->aux_lfo_target >> 8) * operand) >> 15;
+            if (value != voice->aux_lfo_value) {
+                voice->aux_lfo_value = value;
+                voice->update_flags |= AKAO_VOICE_PARAM_VOLUME;
             }
         }
     }
 
-    if ((later_flags & 0x20) != 0) {
-        base_volume = (((int)(U16(voice, -0x10) << 17) >> 16) *
-                       (U16(voice, 0x6C) >> 8)) >> 7;
-        U32(voice, 0xF4) |= 3;
+    if ((flags & AKAO_TRACK_FLAG_20) != 0) {
+        base_volume = (((int)(voice[-1].pitch << 17) >> 16) * (voice->volume_base >> 8)) >> 7;
+        voice->update_flags |= AKAO_VOICE_PARAM_VOLUME;
     }
 
-    if ((U32(voice, 0xF4) & 3) != 0) {
-        base_volume += S16(voice, 0xEA);
-        if ((U32(voice, 0x2C) & 0x02000000) != 0) {
-            pan = 0x80;
+    if ((voice->update_flags & AKAO_VOICE_PARAM_VOLUME) != 0) {
+        base_volume += voice->volume_lfo_value;
+        if ((voice->key_on_mask & 0x02000000) != 0) {
+            value = 0x80;
         } else {
-            base_volume = (base_volume * (s8)(U16(voice, 0xD8) >> 8)) >> 7;
-            pan = ((U16(voice, 0x76) >> 8) + S16(voice, 0xEC)) & 0xFF;
+            base_volume = (base_volume * (s8)(voice->pan_target >> 8)) >> 7;
+            value = ((voice->panpot >> 8) + voice->aux_lfo_value) & 0xFF;
         }
 
-        mode = D_8009D2C0;
-        switch (mode) {
+        switch (D_8009D2C0) {
         case 1:
-            S16(voice, 0x118) = (base_volume * D_8009B8F8[pan]) >> 15;
-            S16(voice, 0x11A) = (base_volume * D_8009B8F8[pan ^ 0xFF]) >> 15;
+            voice->volume_left = (base_volume * D_8009B8F8[value]) >> 15;
+            voice->volume_right = (base_volume * D_8009B8F8[value ^ 0xFF]) >> 15;
             break;
-        case 4: {
-            int right;
-            S16(voice, 0x118) = (base_volume * D_8009B8F8[pan]) >> 15;
-            right = (base_volume * D_8009B8F8[pan ^ 0xFF]) >> 15;
-            S16(voice, 0x11A) = right;
+        case 4:
+            voice->volume_left = (base_volume * D_8009B8F8[value]) >> 15;
+            voice->volume_right = (base_volume * D_8009B8F8[value ^ 0xFF]) >> 15;
             if ((voice_mask & 0x00AAAAAA) != 0) {
-                int flip = ~right;
-                S16(voice, 0x11A) = flip;
+                voice->volume_right = ~voice->volume_right;
             } else {
-                S16(voice, 0x118) = ~U16(voice, 0x118);
+                voice->volume_left = ~voice->volume_left;
             }
             break;
-        }
         default:
-            value = (S16(voice, 0x11A) =
-                (u32)(base_volume * D_8009B9F8[0]) >> 15);
-            S16(voice, 0x118) = value;
+            voice->volume_right = (unsigned int)(base_volume * D_8009B9F8[0]) >> 15;
+            voice->volume_left = voice->volume_right;
             break;
         }
     }
 
-    if ((later_flags & 0x10) != 0) {
-        value = U16(voice, -0x10) + S16(voice, 0xE8) + S16(voice, 0x36);
-        if ((U32(voice, 0x2C) & 0x02000000) == 0) {
-            int depth = *(u8 *)((char *)voice + 0x3D);
-            if (depth != 0) {
-                if (depth < 0x80) {
-                    value += (value * depth) >> 7;
+    if ((flags & AKAO_TRACK_FLAG_10) != 0) {
+        operand = voice[-1].pitch + voice->pitch_lfo_value + (s16)(voice->voice_mask_a >> 16);
+        if ((voice->key_on_mask & 0x02000000) == 0) {
+            value = (u8)(voice->pitch_offset >> 8);
+            if (value != 0) {
+                if (value < 0x80) {
+                    operand += (operand * value) >> 7;
                 } else {
-                    value = (value * depth) >> 8;
+                    operand = (operand * value) >> 8;
                 }
             }
         }
-        U16(voice, 0x10C) = value & 0x3FFF;
-        U32(voice, 0xF4) |= 0x10;
-    } else if ((U32(voice, 0xF4) & 0x10) != 0) {
-        value = U32(voice, 0x30) + S16(voice, 0xE8) + S16(voice, 0x36);
-        if ((U32(voice, 0x2C) & 0x02000000) == 0) {
-            int depth = *(u8 *)((char *)voice + 0x3D);
-            if (depth != 0) {
-                if (depth < 0x80) {
-                    value += (value * depth) >> 7;
+        voice->pitch = operand & 0x3FFF;
+        voice->update_flags |= AKAO_VOICE_PARAM_PITCH;
+    } else if ((voice->update_flags & AKAO_VOICE_PARAM_PITCH) != 0) {
+        operand = voice->pitch_base + voice->pitch_lfo_value + (s16)(voice->voice_mask_a >> 16);
+        if ((voice->key_on_mask & 0x02000000) == 0) {
+            value = (u8)(voice->pitch_offset >> 8);
+            if (value != 0) {
+                if (value < 0x80) {
+                    operand += (operand * value) >> 7;
                 } else {
-                    value = (value * depth) >> 8;
+                    operand = (operand * value) >> 8;
                 }
             }
         }
-        U16(voice, 0x10C) = value & 0x3FFF;
+        voice->pitch = operand & 0x3FFF;
     }
 }
-
 
 void Spu_CopyVoiceToStereoSlot(AkaoTrack *track, int stereo_voice_index) {
     int left;
@@ -1754,9 +1625,8 @@ void Akao_ProcessVoiceQueue(void)
   {
     Akao_StepVoiceNote(g_AkaoVoiceStateTable, primary & g_AkaoCurTrack->pending_voice_mask, excluded, &result);
     bank = g_AkaoCurTrack;
+    bank->key_on_request_mask &= ~bank->pending_voice_mask;
     primary &= ~bank->pending_voice_mask;
-    /* Retail reloads the pending mask for this independent flag update. */
-    bank->key_on_request_mask &= ~*(volatile unsigned *)&bank->pending_voice_mask;
   }
   asm("" : : "r"(secondary));
   if (secondary)
@@ -1870,10 +1740,8 @@ void Akao_SetVoicePitch(void) {
     if (primary & g_AkaoCurTrack->pending_voice_mask) {
         Spu_VoiceMaskCompose(g_AkaoVoiceStateTable, &result, primary & g_AkaoCurTrack->pending_voice_mask, keep);
         bank = g_AkaoCurTrack;
-        primary &= ~bank->pending_voice_mask;
-        /* Preserve the retail reload before clearing the bank requests. */
-        __asm__("" ::: "memory");
         bank->key_off_request_mask &= ~bank->pending_voice_mask;
+        primary &= ~bank->pending_voice_mask;
     }
     if (secondary) {
         g_AkaoCurTrack++;

@@ -33,7 +33,9 @@ typedef union AkaoTickBank {
         /* 0x2C */ unsigned char pad_2C[0x14];
         /* 0x40 */ AkaoU32 volume;
         /* 0x44 */ AkaoU32 volume_delta;
-        /* 0x48 */ unsigned char pad_48[0x0A];
+        /* 0x48 */ AkaoU16 pitch_fraction; /* halves of the 16.16 bank pitch */
+        /* 0x4A */ AkaoU16 pitch_integer;
+        /* 0x4C */ unsigned char pad_4C[0x06];
         /* 0x52 */ AkaoU16 tempo_slide_duration;
         /* 0x54 */ AkaoU16 bank_id;
         /* 0x56 */ AkaoU16 pad_56;
