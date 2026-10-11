@@ -1,5 +1,7 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G4 --expand-div --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
+/* ASPSX_VERSION: 2.70 */
 #include "common.h"
 #include "pe1/field_collision.h"
 #include "pe1/battle.h"
@@ -194,8 +196,8 @@ void Entity_UpdateAndRender(BattleEntity *actor)
     oldX = actor->baseX >> 16;
     oldZ = actor->baseZ >> 16;
     if (oldX == x && oldZ == z && actor->posY.fixed == actor->baseY) {
-        if (actor == D_8009D254.actor)
-            D_8009D2E8.flags &= ~8;
+        if (actor == D_8009D254)
+            D_8009D2E8 &= ~8;
         return;
     }
 
@@ -205,8 +207,8 @@ void Entity_UpdateAndRender(BattleEntity *actor)
     D_8009CE2C = radius;
     D_8009CE2C = radius * actor->moveSpeed / 4096;
 
-    if (actor == D_8009D254.actor) {
-        if (D_8009D2E8.flags & 8) {
+    if (actor == D_8009D254) {
+        if (D_8009D2E8 & 8) {
             int area, oldArea, a, b;
             int sxy;
 
@@ -257,13 +259,13 @@ void Entity_UpdateAndRender(BattleEntity *actor)
                 }
             }
         }
-        D_8009D2E8.flags &= ~8;
+        D_8009D2E8 &= ~8;
     }
 
     for (i = 0; i < D_8009D1FC->visitedWordCount; i++)
         D_8009DFB0[i] = 0;
     if (!Geo_ClipToFloorBoundary(x, z, face)) {
-        if (actor != D_8009D254.actor) {
+        if (actor != D_8009D254) {
             Entity_RevertMove(actor);
             return;
         }
@@ -357,9 +359,21 @@ void Entity_UpdateAndRender(BattleEntity *actor)
 }
 
 /* Tentative COMMON declarations preserve small-data metadata for stock
- * maspsx. Storage remains at the existing data/linker addresses. */
+ * maspsx: with MASPSX_FORCE_G0 only these words are $gp-relative and the
+ * other extern words stay absolute. Storage remains at the existing
+ * data/linker addresses. */
 FloorEdgePoint D_8009CE0C;
+FloorEdgePoint D_8009CE10;
+RampEdge *D_8009CE14;
 u16 D_8009CE18;
+u16 D_8009CE1C, D_8009CE20, D_8009CE24, D_8009CE28;
+unsigned short D_8009CE2C;
+CollisionDatabase *D_8009D1FC;
+CollisionPlane *volatile D_8009D1D8;
+CollisionRegionEntry *D_8009CE08;
+struct CollisionPlane *g_CollisionPlaneTable;
+CollisionDatabase *g_CollisionDb;
+CollisionRegionEntry *g_RegionHeightTable;
 
 /* Tests the circle of radius D_8009CE2C around (x, z) against the edges of
  * a walkable triangle (flat XZ format when there is no plane table, sloped

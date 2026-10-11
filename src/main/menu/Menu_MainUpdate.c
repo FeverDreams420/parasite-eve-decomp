@@ -48,7 +48,7 @@ extern u8 D_8009D244;
 extern BattleEntity *D_8009D254;
 extern Combatant *D_8009D278;
 extern s32 D_8009D28C;
-extern s32 D_8009D2E8;
+extern u32 D_8009D2E8;
 extern s32 D_8009D2FC;
 extern void *D_800B0E08[];
 

@@ -1,4 +1,4 @@
-extern int D_8009D2E8;
+extern unsigned int D_8009D2E8;
 
 int Task_GetPlayerInputFlag(int **args) {
     if (D_8009D2E8 & 1) {

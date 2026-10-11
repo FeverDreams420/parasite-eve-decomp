@@ -2,7 +2,7 @@
 /* CC1_FLAGS: -G2 */
 /* MASPSX_FLAGS: -G2 */
 
-extern int D_8009D2E8;
+extern unsigned int D_8009D2E8;
 extern struct BattleEntity *D_8009D254;
 extern Combatant *D_8009D278;
 extern short D_8009D298;
