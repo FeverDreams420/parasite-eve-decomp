@@ -9,7 +9,7 @@ void func_801923D8(void *unused0, void *unused1, SceneE08RingEffectState *effect
     u8 *mid = (u8 *)&D_80199604;
     u8 *source;
     FieldRingGeometry *ring;
-    FieldRingGeometry *third;
+    FieldRingGeometry *record = (FieldRingGeometry *)((u8 *)&D_80199604 - PE1_OFFSETOF(FieldRingGeometry, mode));
     int intensity = 0x80;
     register int span asm("$19");
     asm("" : "=r"(mid) : "0"(mid));
@@ -22,19 +22,19 @@ void func_801923D8(void *unused0, void *unused1, SceneE08RingEffectState *effect
     effect->secondScale = 0;
 
     ring->mode = 0x20;
-    D_8019960A = 0x1F4;
+    record->offset = 0x1F4;
     asm volatile("" : : "r"(intensity));
-    D_80199600 = 0xF0;
-    D_80199601 = 0xC8;
+    record->color1[0] = 0xF0;
+    record->color1[1] = 0xC8;
     span = 0x960;
-    D_8019960C = intensity;
-    D_80199602 = 0x78;
+    record->intensity = intensity;
+    record->color1[2] = 0x78;
     asm volatile("" : "=r"(source) : "0"(D_80198C90));
-    D_801995FC = 0;
-    D_801995FD = 0;
-    D_801995FE = 0;
-    D_80199606 = span;
-    D_80199608 = 0;
+    record->color0[0] = 0;
+    record->color0[1] = 0;
+    record->color0[2] = 0;
+    record->extent0 = span;
+    record->extent1 = 0;
     ring->source = source;
     func_800C4E50(ring);
 
@@ -54,20 +54,20 @@ void func_801923D8(void *unused0, void *unused1, SceneE08RingEffectState *effect
     ring->source = source + 0x200;
     func_800C4E50(ring);
 
-    third = ring + 1;
-    asm ("" : : "r"(third));
-    third->mode = 0x20;
-    third->offset = 0x5DC;
-    third->intensity = intensity;
-    third->color1[0] = 0;
-    third->color1[1] = 0;
-    third->color1[2] = 0;
-    third->color0[0] = 0xFF;
-    third->color0[1] = 0xFF;
-    third->color0[2] = 0xFF;
-    third->extent0 = span;
-    third->extent1 = 0;
+    record = ring + 1;
+    asm ("" : : "r"(record));
+    record->mode = 0x20;
+    record->offset = 0x5DC;
+    record->intensity = intensity;
+    record->color1[0] = 0;
+    record->color1[1] = 0;
+    record->color1[2] = 0;
+    record->color0[0] = 0xFF;
+    record->color0[1] = 0xFF;
+    record->color0[2] = 0xFF;
+    record->extent0 = span;
+    record->extent1 = 0;
     source += 0x400;
-    third->source = source;
-    func_800C4E50(third);
+    record->source = source;
+    func_800C4E50(record);
 }
