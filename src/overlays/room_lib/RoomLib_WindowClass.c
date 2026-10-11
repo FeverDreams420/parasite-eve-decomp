@@ -50,7 +50,7 @@ int RoomLib_ConfigureWindowClass(RoomWindowObject *obj, int query, unsigned int 
                                   int a, int b, int c) {
     RoomWindowState *state = &obj->state;
     FieldActorNode *node;
-    register int callback asm("$3");
+    register void (*callback)(void) asm("$3");
     int sentinel;
 
     switch (op) {
@@ -98,12 +98,11 @@ int RoomLib_ConfigureWindowClass(RoomWindowObject *obj, int query, unsigned int 
         state->flags = a | b | c;
         break;
     case 10:
-        callback = (int)RoomLib_ArmWindowClass;
+        callback = (void (*)(void))RoomLib_ArmWindowClass;
         sentinel = -1;
         state->variant = a;
         state->active = b;
-        PE1_COMPILER_MEMORY_BARRIER();
-        state->callback = (void (*)(void))callback;
+        state->callback = callback;
         if (a != sentinel) {
             PE1_COMPILER_MEMORY_BARRIER();
             break;
