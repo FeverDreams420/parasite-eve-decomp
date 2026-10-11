@@ -117,10 +117,7 @@ s32 func_8019A720(s32 mode, RoomM273ArcCallbackState *state) {
     s32 result;
     RoomM273ArcCallbackState *callState;
     s32 count;
-    volatile s16 rotationX;
-    volatile s16 rotationY;
-    volatile s16 rotationZ;
-    volatile s16 rotationPad;
+    volatile GteRotation rotation;
 
     if (mode == 1) {
         if (D_800E27EC >= 0x10) {
@@ -135,16 +132,16 @@ s32 func_8019A720(s32 mode, RoomM273ArcCallbackState *state) {
         return result;
         }
         {
-        rotationX = 0;
-        rotationY = 0;
-        rotationPad = 0;
+        rotation.x = 0;
+        rotation.y = 0;
+        rotation.flags = 0;
         callState = obj;
         day = D_800E27EC - 1;
         count = 0x10;
         rotationValue = day << 7;
-        rotationZ = rotationValue;
+        rotation.z = rotationValue;
         packed = D_800966EC[(day << 6) & 0xFC0];
-        func_800D004C((GteShortVector *)callState, 0x100, 0x100, count, (GteRotation *)&rotationX,
+        func_800D004C((GteShortVector *)callState, 0x100, 0x100, count, (GteRotation *)&rotation,
         ((packed << 16) >> 16) + 0x400,
         ((packed << 16) >> 16) + 0x400,
         (struct RenderColor *)D_8019AB70, (struct RenderColor *)D_8019AD7C, packed >> 21, 1);
