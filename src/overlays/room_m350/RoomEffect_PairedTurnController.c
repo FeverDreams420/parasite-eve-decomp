@@ -47,28 +47,28 @@ int func_80193D6C(int event)
                 register int x asm("$12");
                 register int y asm("$13");
                 register int z asm("$14");
-                int *words=(int *)matrix;
+                const GteMatrixWords *words=(const GteMatrixWords *)matrix;
                 /* Separate transfers and barriers keep GCC from hoisting the
                  * pad-array address. These are not GTE hardware hazards. */
-                x=words[0];
-                y=words[1];
+                x=words->r11_r12;
+                y=words->r13_r21;
                 gte_ctc2_0(x);
                 gte_ctc2_1(y);
-                x=words[2];
-                y=words[3];
-                z=words[4];
+                x=words->r22_r23;
+                y=words->r31_r32;
+                z=words->r33_pad;
                 gte_ctc2_2(x);
                 gte_ctc2_3(y);
                 asm volatile("" ::: "memory");
                 gte_ctc2_4(z);
                 asm volatile("" ::: "memory");
-                x=words[5];
+                x=words->tx;
                 asm volatile("" ::: "memory");
-                y=words[6];
+                y=words->ty;
                 asm volatile("" ::: "memory");
                 gte_ctc2_5(x);
                 asm volatile("" ::: "memory");
-                z=words[7];
+                z=words->tz;
                 asm volatile("" ::: "memory");
                 gte_ctc2_6(y);
                 asm volatile("" ::: "memory");
