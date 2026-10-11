@@ -100,7 +100,6 @@ int func_801947BC(int event,RoomM350Particle *p)
             int next=n+1;
             int shifted=(unsigned int)n<<16;
             *count=next;
-            asm volatile("" : : "r"(count));
             {
                 RoomM350PositionQueue *queue=(RoomM350PositionQueue *)((char *)count-PE1_OFFSETOF(RoomM350PositionQueue,count));
                 queue->positions[shifted>>16]=p->position;
