@@ -44,7 +44,7 @@ int func_80197A04(int event, short *object)
 }
 /* MASPSX_FLAGS: --expand-div */
 
-typedef RoomM350TransformMatrix Matrix;
+typedef GteMatrix Matrix;
 typedef RoomM350Vector Vector;
 #include "RoomEffect_RadialBurst_externs_1.h"
 /* Retail writes both fields twice during configuration. */
