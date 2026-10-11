@@ -133,7 +133,7 @@ int func_800CCFA0(void) {
     int *table;
     int *entry;
     int *next;
-    u8 *data;
+    FieldActor *data;
 
     index = *func_800C2B10(0xD);
     table = (int *)*func_800C2B28(1);
@@ -148,10 +148,10 @@ int func_800CCFA0(void) {
 
     *func_800C2B10(0xD) = index;
 
-    data = (u8 *)D_800E2810;
-    D_800E27F8.x = *(u16 *)(data + 0x268);
-    D_800E27FA = *(u16 *)(data + 0x26A);
-    D_800E27FC = *(u16 *)(data + 0x26C);
+    data = (FieldActor *)D_800E2810;
+    D_800E27F8.x = *(u16 *)&data->render_object.target_x;
+    D_800E27FA = *(u16 *)&data->render_object.target_y;
+    D_800E27FC = *(u16 *)&data->render_object.target_z;
 
     if (D_800B0CE8.reset_pending != 0) {
         Akao_Cmd_24((void *)D_800B0E14, 0, 0x80, 0x7F);

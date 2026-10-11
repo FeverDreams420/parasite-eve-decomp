@@ -8,6 +8,7 @@
 #include "pe1/game_audio_state.h"
 #include "pe1/field_anim_particle.h"
 #include "pe1/field_billboard.h"
+#include "pe1/field_actor.h"
 
 extern int D_800E0FFC;
 extern int D_800E22B8;
@@ -97,7 +98,7 @@ int func_800CE1FC(void) {
     int *table;
     int *entry;
     int *next;
-    u8 *data;
+    FieldActor *data;
 
     index = *func_800C2B10(0xD);
     table = (int *)*func_800C2B28(1);
@@ -112,10 +113,10 @@ int func_800CE1FC(void) {
 
     *func_800C2B10(0xD) = index;
 
-    data = (u8 *)D_800E2848;
-    D_800E2808.x = *(u16 *)(data + 0x268);
-    D_800E2808.y = *(u16 *)(data + 0x26A);
-    D_800E2808.z = *(u16 *)(data + 0x26C);
+    data = (FieldActor *)D_800E2848;
+    D_800E2808.x = data->render_object.target_x;
+    D_800E2808.y = data->render_object.target_y;
+    D_800E2808.z = data->render_object.target_z;
 
     func_800CEDA8(0);
 }

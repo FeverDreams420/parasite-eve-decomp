@@ -8,6 +8,7 @@
 #include "pe1/game_audio_state.h"
 #include "pe1/field_anim_particle.h"
 #include "pe1/field_billboard.h"
+#include "pe1/field_actor.h"
 
 extern int D_800E0F6C;
 
@@ -145,7 +146,7 @@ int func_800CD980(void) {
     int *table;
     int *entry;
     int *next;
-    u8 *data;
+    FieldActor *data;
 
     index = *func_800C2B10(0xD);
     table = (int *)*func_800C2B28(1);
@@ -160,10 +161,10 @@ int func_800CD980(void) {
 
     *func_800C2B10(0xD) = index;
 
-    data = (u8 *)D_800E2804;
-    D_800E27F0.x = *(u16 *)(data + 0x268);
-    D_800E27F0.y = *(u16 *)(data + 0x26A);
-    D_800E27F0.z = *(u16 *)(data + 0x26C);
+    data = (FieldActor *)D_800E2804;
+    D_800E27F0.x = data->render_object.target_x;
+    D_800E27F0.y = data->render_object.target_y;
+    D_800E27F0.z = data->render_object.target_z;
 
     if (D_800B0CE8.reset_pending != 0) {
         Akao_Cmd_24((void *)D_800B0E14, 0, 0x80, 0x7F);
