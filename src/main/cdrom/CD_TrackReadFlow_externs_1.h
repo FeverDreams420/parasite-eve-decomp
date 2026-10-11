@@ -1,5 +1,0 @@
-#ifndef PE1_EXT_757726D1AA12
-#define PE1_EXT_757726D1AA12
-extern SceneTrackRecord *D_8009D180;
-extern s16 D_8009D184;
-#endif /* PE1_EXT_757726D1AA12 */

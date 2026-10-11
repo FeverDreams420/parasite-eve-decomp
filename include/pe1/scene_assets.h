@@ -156,7 +156,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, transition_volume) == 0xFE,
                   scene_transition_volume_offset);
 
 /* Range-table cursor used by CD_FindNextDataSector. */
-extern int D_8009CDCC;
+extern int g_CdRangeIndex;
 
 /* Scene containers encode byte offsets relative to their loaded base. */
 static inline void *SceneAsset_ResolveOffset(void *base, unsigned int offset)

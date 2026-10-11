@@ -31,6 +31,9 @@ void Spu_RebaseStreamAddrs(unsigned char *instruments, int address, int count);
 int Spu_UploadStreamBlockA(unsigned bank, unsigned char *cursor, unsigned size);
 int Spu_UploadStreamBlockB(unsigned bank, unsigned char *cursor);
 int Akao_StepNoteSequencer(unsigned char *cursor, unsigned size);
+int Spu_SetStreamModeA(void);
+int Spu_SetStreamModeB(void);
+int Spu_GetTransferStatus(void);
 /* Stream instrument scratch table; bank selection advances by 0x400 bytes. */
 extern unsigned D_800B4900[];
 extern unsigned D_800B4D00[];

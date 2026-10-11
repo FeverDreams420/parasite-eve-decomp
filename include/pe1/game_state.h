@@ -18,4 +18,7 @@ extern u32 D_800B0CD8;
 
 void Sys_Shutdown(void);
 
+/* Records a started scene track in g_GameState.scene_audio. */
+int Overlay_RegisterAudioSlot(int slot, int key, int bank, int volume);
+
 #endif

@@ -168,6 +168,10 @@ void Akao_Cmd_F1(void);
 
 void Akao_Cmd_21(int arg0, int arg1);
 void Akao_Cmd_F0(void);
+void Akao_Cmd_F1(void);
+void Akao_Cmd_40(void);
+void Akao_Cmd_C0_WithSlot(int slot, int volume);
+void Akao_Cmd_C1_WithSlot(int slot, int duration, int volume);
 
 /* Sound ids the scene and image loaders reset to -1 (none loaded); the
  * effect overlays pass D_800B0DB5 to Akao_Cmd_C1_WithSlot. */

@@ -52,6 +52,7 @@ void FlushCache(void);
                      : "1"(selector) : "memory")
 
 void bzero(void *destination, int length);
+void *memcpy(void *destination, const void *source, unsigned int length);
 
 int DeliverEvent(unsigned int event, int spec);
 
