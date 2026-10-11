@@ -279,7 +279,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                                 scratchpad->screenCoordinates[2];
                             ((FxCommonG4Packet *)(var_s1 - 0x1c))->xy3 =
                                 scratchpad->screenCoordinates[3];
-                            asm volatile("" : "=r"(var_s3) : "0"(var_s3));
+                            asm("" : "=r"(var_s3) : "0"(var_s3));
                             ((FxCommonG4Packet *)(var_s1 - 0x1c))->color0 = var_s7->colors[0];
                             ((FxCommonG4Packet *)(var_s1 - 0x1c))->color1 =
                                 ((FxCommonColoredQuad *)(var_s3 - 12))->colors[1];
@@ -419,7 +419,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                                      : "=r"(triangleMidpointOutput0)
                                      : "0"(triangleMidpointOutput0));
                         triangleMidpointOutput2 = &scratchpad->midpointScreenCoordinates[3];
-                        asm volatile(""
+                        asm(""
                                      : "=r"(triangleMidpointOutput2)
                                      : "0"(triangleMidpointOutput2));
                         gte_stsxy0_precise(triangleMidpointOutput0);
@@ -508,7 +508,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                                       .uv1.packed);
                         ++trianglePacketCursor;
                         *((u16 *)(triangleUv2Cursor)) = (u16)scratchpad->midpointUv[3].packed;
-                        asm volatile("" : "=r"(triangleUv2Cursor) : "0"(triangleUv2Cursor));
+                        asm("" : "=r"(triangleUv2Cursor) : "0"(triangleUv2Cursor));
                         triangleUv2Cursor += 16;
                         temp_a0 = trianglePacketCursor->tag.packed;
                         orderBuffer = D_8019C9C0;
@@ -893,7 +893,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                     quadCombinedIn0 = &scratchpad->midpoints[4];
                     asm volatile("" : : "r"(quadCombinedIn0));
                     quadCenterGteAddress = &scratchpad->midpoints[2];
-                    asm volatile("" : "=r"(quadCenterGteAddress) : "0"(quadCenterGteAddress));
+                    asm("" : "=r"(quadCenterGteAddress) : "0"(quadCenterGteAddress));
                     gte_ldvxy0_precise(quadCombinedIn0);
                     gte_ldvz0_precise(quadCombinedIn0);
                     gte_ldvxy1_precise(quadCenterGteAddress);
