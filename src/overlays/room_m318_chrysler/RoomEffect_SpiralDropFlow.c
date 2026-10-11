@@ -10,7 +10,7 @@ int func_80192DA0(int mode, volatile RoomSpiralDropSparkRecord *record) {
     switch (mode) {
     case 1: {
         int speed = particle->speed - 1;
-        register int y asm("$2") = particle->y;
+        s16 y = particle->y;
         s16 delta = particle->speed;
         int frame = D_800E27EC;
         /* Preserve the retail read order and register lifetimes. */
