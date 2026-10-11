@@ -157,6 +157,7 @@ g_AkaoTimerDeltaHist3 = 0x8009B7EC;
 g_AkaoTimerDeltaSum = 0x8009CDE4;
 g_AkaoOpcodeArgLengths = 0x8009B85C;
 g_AkaoExtOpcodeArgLengths = 0x8009B8BC;
+g_AkaoCdVolume = 0x8009D1C8;
 
 // PSYQ 4.0 object signature matches.
 __SN_ENTRY_POINT = 0x80072534; // type:func

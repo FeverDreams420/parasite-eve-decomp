@@ -9,7 +9,7 @@
 #include "pe1/menu_flags.h"
 #include "pe1/asset_find.h"
 #include "pe1/pm.h"
-#include "pe1/akao/init_state.h"
+#include "pe1/battle_runtime.h"
 
 /* CC1_FLAGS: -g3 -G1 */
 /* MASPSX_FLAGS: --expand-div -G1 --use-comm-section */

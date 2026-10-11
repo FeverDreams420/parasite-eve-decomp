@@ -3,10 +3,12 @@
 #include "pe1/akao.h"
 #include "pe1/akao/track.h"
 #include "pe1/akao/voice_state.h"
-#include "pe1/akao/track.h"
 #include "pe1/akao/voice_masks.h"
 #include "pe1/psyq_spu_internal.h"
 #include "pe1/akao/tick.h"
+#include "pe1/akao/globals.h"
+#include "pe1/akao/spu_registers.h"
+#include "pe1/psyq_cd.h"
 
 int Akao_Cmd_10(void *bank) {
     g_AkaoCmd.opcode = 0x10;
@@ -368,8 +370,6 @@ void Akao_Cmd_F1(void) {
     Akao_EnqueueStagedCommand();
 }
 
-extern volatile int D_8009D2E0;
-
 int Spu_PollOrWaitSeqBusy(int mode) {
     if (mode == 0) {
         while (D_8009D2E0 & 1) {
@@ -380,28 +380,17 @@ int Spu_PollOrWaitSeqBusy(int mode) {
     return D_8009D2E0 & 1;
 }
 
-int func_800851A8(void *arg0, int arg1);
-
 int Spu_UploadSampleBlockBlocking(void *arg0, int arg1) {
     int result;
 
-    while ((result = func_800851A8(arg0, arg1)) == 1) {
+    while ((result = Spu_UploadSampleBlock(arg0, arg1)) == 1) {
     }
     return result;
 }
 
-extern int D_8009D24C;
-
 int Spu_GetTransferStatus(void) {
-    return D_8009D24C;
+    return g_SpuTransferStatus;
 }
-
-extern unsigned char D_8009D1C8;
-extern unsigned char D_8009D1C9;
-extern unsigned char D_8009D1CA;
-extern unsigned char D_8009D1CB;
-
-void func_8007A88C(void *arg0);
 
 static inline unsigned char ScaleVolume(int volume) {
     unsigned int value = volume;
@@ -421,18 +410,18 @@ void Spu_SetVoiceVolume(int arg0) {
 
     if (D_8009D2C0 & 2) {
         value = ScaleVolume(arg0);
-        D_8009D1CB = value;
-        D_8009D1C9 = value;
-        D_8009D1CA = value;
-        D_8009D1C8 = value;
+        g_AkaoCdVolume.val3 = value;
+        g_AkaoCdVolume.val1 = value;
+        g_AkaoCdVolume.val2 = value;
+        g_AkaoCdVolume.val0 = value;
     } else {
         value = arg0;
-        D_8009D1CA = value;
-        D_8009D1C8 = value;
-        D_8009D1CB = 0;
-        D_8009D1C9 = 0;
+        g_AkaoCdVolume.val2 = value;
+        g_AkaoCdVolume.val0 = value;
+        g_AkaoCdVolume.val3 = 0;
+        g_AkaoCdVolume.val1 = 0;
     }
-    func_8007A88C(&D_8009D1C8);
+    CdMix(&g_AkaoCdVolume);
 }
 
 int Spu_SetStreamModeA(void) {
@@ -638,17 +627,11 @@ int Spu_UploadStreamBlockB(unsigned bank, unsigned char *cursor)
     return 0;
 }
 
-extern volatile u16 D_1F801D88;
-extern volatile u16 D_1F801D8A;
-
 void Spu_WriteKeyOn(u32 value) {
     D_1F801D88 = value;
     value >>= 16;
     D_1F801D8A = value;
 }
-
-extern volatile u16 D_1F801D8C;
-extern volatile u16 D_1F801D8E;
 
 void Spu_WriteKeyOff(u32 value) {
     D_1F801D8C = value;
@@ -656,26 +639,17 @@ void Spu_WriteKeyOff(u32 value) {
     D_1F801D8E = value;
 }
 
-extern volatile u16 D_1F801D98;
-extern volatile u16 D_1F801D9A;
-
 void Spu_WriteReverbEnable(u32 value) {
     D_1F801D98 = value;
     value >>= 16;
     D_1F801D9A = value;
 }
 
-extern volatile u16 D_1F801D94;
-extern volatile u16 D_1F801D96;
-
 void Spu_WriteNoiseEnable(u32 value) {
     D_1F801D94 = value;
     value >>= 16;
     D_1F801D96 = value;
 }
-
-extern volatile u16 D_1F801D90;
-extern volatile u16 D_1F801D92;
 
 void Spu_WriteFmEnable(u32 value) {
     D_1F801D90 = value;
@@ -845,7 +819,6 @@ void Akao_WriteVoiceParam(voice_index, params)
         params->flags = 0;
     }
 }
-
 
 void Spu_UpdateVoiceRegisters(AkaoTrack *voice, u32 voice_mask) {
     int new_value;
@@ -1119,8 +1092,6 @@ void Spu_TickVoiceEnvelopes(AkaoTrack *track, unsigned voice_mask)
         track->voice_mask_a = new_value;
     }
 }
-
-extern unsigned char D_8009D2CE;
 
 void Akao_SetVoiceKeyOff(AkaoTrack *voice, u32 voice_mask, int index) {
     u32 flags;
@@ -1578,14 +1549,6 @@ void Akao_UpdateVoiceEnvelopes(s32 protectedMask) {
         envelope++;
     } while (voiceIndex < 0x18U);
 }
-
-extern unsigned D_800BCD58, g_AkaoVoiceMaskScratch;
-extern unsigned short g_AkaoTrack5ATransposeValue;
-void SpuSetReverbModeDepth(short, short);
-void Spu_WriteReverbEnable(unsigned);
-void Spu_WriteNoiseEnable(unsigned);
-void Spu_WriteFmEnable(unsigned);
-void Spu_WriteKeyOn(unsigned);
 void Akao_ProcessVoiceQueue(void)
 {
   unsigned *active = &g_SpuActiveVoiceMask;

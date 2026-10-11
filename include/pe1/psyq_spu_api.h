@@ -24,6 +24,7 @@ typedef char SpuCommonAttrSizeCheck[(sizeof(SpuCommonAttr) == 40) ? 1 : -1];
 void SpuSetCommonAttr(SpuCommonAttr *attr);
 int SpuSetReverb(int on_off);
 int SpuSetReverbModeType(unsigned int mode);
+void SpuSetReverbModeDepth(short left, short right);
 void SpuInit(void);
 void SpuStart(void);
 void SpuQuit(void);

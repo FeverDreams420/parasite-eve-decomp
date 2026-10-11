@@ -16,6 +16,11 @@ extern AkaoSequencerBank *g_AkaoCurTrack;
 /* Set while the voice driver is busy; the sequencer polls it. */
 extern volatile int D_8009D2E0;
 
+/* CD audio mix volume passed to CdMix (a CdlATV). */
+extern struct CdlATV g_AkaoCdVolume;
+/* High byte of the global pitch depth word D_8009D2CC. */
+extern unsigned char D_8009D2CE;
+
 /* Global slides stepped every fourth tick: counters, 16.16 steps and the
  * integer half of the pitch accumulator D_8009D2B4. */
 extern u16 D_8009CDEC; /* tick divider */
@@ -52,7 +57,7 @@ extern unsigned int g_AkaoTrack34Mask;
 extern unsigned int g_AkaoTrack38Mask;
 extern unsigned int g_AkaoTrack3CMask;
 extern unsigned int g_AkaoVoiceUpdateFlags;
-extern int g_AkaoVoiceMaskScratch;
+extern unsigned int g_AkaoVoiceMaskScratch;
 extern u16 g_AkaoTrack5ATransposeValue;
 extern int g_AkaoSeqLoopCounter;
 
