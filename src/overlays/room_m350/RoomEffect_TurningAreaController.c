@@ -18,7 +18,7 @@
 /* Steers a rotating footprint, tests contact, and draws three model/sprite layers. */
 typedef RoomM350Vector Vector;
 typedef GteMatrix Matrix;
-typedef struct { int x,y,z,pad; } Scale;
+typedef GteVector Scale;
 typedef struct { void *asset; int yaw; short size,brightness,unknown,turn; unsigned char initialized; } State;
 typedef FieldActorState Owner;
 typedef FieldActor Instance;
@@ -85,7 +85,7 @@ case 1:
                 speed=D_800966EE[((speed/4)&4095)*2]*factor/4096;
                 if(speed<0) speed=0;
                 speed+=(short)delta;
-                asm volatile("" : : "r"(delta), "r"(speed));
+                asm volatile("" : : "r"(delta));
                 if(((short)angle-(state->yaw>>8))&2048) speed=-speed;
                 state->turn=((int)((unsigned int)speed<<8))/128;
             } else state->turn=0;
@@ -213,7 +213,7 @@ case 2:
         {
             register int triple asm("$2")=state->size*3;
             register int size asm("$17");
-            asm("" : "=r"(triple) : "0"(triple));
+            asm("" : : "r"(triple));
             size=triple*2;
             for (;i<3;i++) {
                 func_800D0E88(&position,(GteRotation *)&rotation,size,512,(RenderColor *)D_8019A594,&D_8019A3C8,&D_8019A3C8,state->brightness,1);
