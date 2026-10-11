@@ -15,15 +15,13 @@ void func_80125364(void)
             u32 bits = *source;
             if (bits) {
                 s16 column;
-                register u8 *green_pixel asm("$7");
                 column = 0;
-                green_pixel = pixel + 1;
                 for (; column < 4; column++) {
                     int index = bits & 15;
                     if (index) {
                         int brightness = (((u16 *)D_80172C9C)[index] & 31) << 3;
-                        u32 blue = green_pixel[1];
-                        register u32 green asm("$5") = green_pixel[0];
+                        u32 blue = pixel[2];
+                        register u32 green asm("$5") = pixel[1];
                         u32 red = pixel[0];
                         blue += brightness;
                         if (blue >= 256)
@@ -34,12 +32,11 @@ void func_80125364(void)
                         red += brightness;
                         if (red >= 256)
                             red = 255;
-                        green_pixel[1] = blue;
-                        green_pixel[0] = green;
+                        pixel[2] = blue;
+                        pixel[1] = green;
                         pixel[0] = red;
                     }
                     bits >>= 4;
-                    green_pixel += 3;
                     pixel += 3;
                 }
             } else {
