@@ -5,7 +5,14 @@
 #include "pe1/scene_player_orb.h"
 extern FieldGlowSprite D_80199580;
 extern FieldGlowSprite D_80199540;
-extern FieldGlowSprite D_80199560;
+extern u8 D_80199560;
+extern u8 D_80199561;
+extern u8 D_80199562;
+extern u8 D_80199564;
+extern u8 D_80199565;
+extern u8 D_80199566;
+extern s16 D_80199568;
+extern s16 D_8019956A;
 extern FieldGlowSprite D_80199570;
 typedef struct WordBlock32 { s32 words[8]; } WordBlock32;
 void func_800C2B40(void *);
@@ -69,9 +76,9 @@ void func_80193C68(char *actor, void *unused, char *state) {
     D_80199580.offset = -100;
     D_80199580.g = 16;
     D_80199580.b = 5;
-    D_80199560.cell = 70;
-    D_80199560.clut = 3;
-    D_80199560.offset = 1;
+    D_80199564 = 70;
+    D_80199565 = 3;
+    D_80199568 = 1;
     D_80199540.cell = 96;
     D_80199555 = one;
     D_80199580.clut = one;
@@ -86,11 +93,11 @@ void func_80193C68(char *actor, void *unused, char *state) {
     D_80199580.depth = half128;
     D_80199580.r = thirtyTwo;
     D_80199580.flip = two;
-    D_80199560.depth = half128;
-    D_80199560.r = byte128;
-    D_80199560.g = byte128;
-    D_80199560.b = byte128;
-    D_80199560.flip = 0;
+    D_8019956A = half128;
+    D_80199560 = byte128;
+    D_80199561 = byte128;
+    D_80199562 = byte128;
+    D_80199566 = 0;
     D_80199540.clut = 7;
     D_80199540.offset = 0;
     D_80199540.depth = half128;
