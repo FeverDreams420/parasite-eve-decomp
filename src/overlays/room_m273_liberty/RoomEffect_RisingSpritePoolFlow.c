@@ -192,7 +192,7 @@ int func_80197A48(int mode) {
         D_800F3368.extent_x=32;
         D_800F3368.extent_y=32;
         palette=D_800E2850[index];
-        asm("" : : "r"(palette) : "memory", "$2");
+
         D_800F3368.palette=3;
         D_800F3368.parameter06=0;
         D_800F3368.parameter0A=0;
