@@ -17,7 +17,7 @@
  */
 
 extern u8 g_SceneAreaType;
-extern s8 D_800B0CE4;
+extern s8 D_800B0CE4[];
 extern u32 g_PeImageBaseLba;
 extern u16 D_800930D8[], D_800930DA[];
 extern u8 D_800BEA40[];

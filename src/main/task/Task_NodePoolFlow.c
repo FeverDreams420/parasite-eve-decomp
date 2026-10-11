@@ -5,7 +5,7 @@
 #include "pe1/task_node.h"
 
 extern TaskNode *g_TaskNodeFreeListHead;
-extern unsigned short g_TaskNodeSeqCounter;
+extern unsigned short g_TaskNodeSeqCounter[1];
 
 TaskNode *Task_AllocNode(unsigned int *script, TaskNode *arg1) {
     TaskNode *node;
@@ -30,7 +30,7 @@ TaskNode *Task_AllocNode(unsigned int *script, TaskNode *arg1) {
         node->next = 0;
     }
 
-    seq = g_TaskNodeSeqCounter;
+    seq = g_TaskNodeSeqCounter[0];
     value = 1;
     node->trigger_value = 0;
     node->current.script = script;
@@ -39,7 +39,7 @@ TaskNode *Task_AllocNode(unsigned int *script, TaskNode *arg1) {
     node->flags = 0;
     value = seq + 1;
     node->seq = seq;
-    g_TaskNodeSeqCounter = value;
+    g_TaskNodeSeqCounter[0] = value;
 
     return node;
 }

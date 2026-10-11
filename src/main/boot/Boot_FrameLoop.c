@@ -12,8 +12,8 @@
 extern s32 g_GlobalFrameCounter;
 extern char D_8009D224[];
 extern s32 g_SceneDispatchToken;
-extern char g_TaskNodeSeqCounter[];
-extern char D_800B0CE4[];
+extern u16 g_TaskNodeSeqCounter[];
+extern s8 D_800B0CE4[];
 extern char D_800B1628[];
 extern char D_800B162C[];
 extern char D_800B8A18[];

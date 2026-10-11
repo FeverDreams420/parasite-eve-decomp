@@ -13,7 +13,7 @@
 extern TaskNode *g_TaskNodeFreeListHead;
 extern int g_SceneDataTable0;
 extern TaskNode *g_TaskNodePool;
-extern unsigned short g_TaskNodeSeqCounter;
+extern unsigned short g_TaskNodeSeqCounter[1];
 extern int g_TaskScriptOperandTable[16];
 
 
@@ -29,7 +29,7 @@ void Task_InitNodePool(void) {
     rowOffset = 0;
 
     g_TaskNodePool = 0;
-    g_TaskNodeSeqCounter = 0;
+    g_TaskNodeSeqCounter[0] = 0;
     g_TaskNodeFreeListHead = 0;
 
     for (; i < 72; i++, rowOffset += 0x2C) {

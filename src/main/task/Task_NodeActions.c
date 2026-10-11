@@ -18,7 +18,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, target18) == 0x18,
 
 extern TaskNode *g_TaskNodePool;
 extern TaskNode *g_TaskNodeFreeListHead;
-extern u16 g_TaskNodeSeqCounter;
+extern u16 g_TaskNodeSeqCounter[1];
 extern FieldActor *g_CurrentEntity[];
 extern FieldActor *g_CurrentEntityForDirection[] asm("g_CurrentEntity");
 
@@ -38,7 +38,7 @@ int Task_SpawnChildNode(int **args) {
         value_ptr = args[0];
         state = g_CurrentEntity[0];
         entry = g_TaskNodeFreeListHead;
-        seq = g_TaskNodeSeqCounter;
+        seq = g_TaskNodeSeqCounter[0];
         scriptValue = *value_ptr;
         base = (int)state->script_base;
         asm volatile("" : "=r"(entry) : "0"(entry));
@@ -55,7 +55,7 @@ int Task_SpawnChildNode(int **args) {
         {
             TaskNode *head = state->task_node_lists[2];
             seq++;
-            g_TaskNodeSeqCounter = seq;
+            g_TaskNodeSeqCounter[0] = seq;
             g_TaskNodeFreeListHead = next;
             entry->next = head;
             if (head != 0) {
@@ -88,12 +88,12 @@ int Task_SpawnChildNode(int **args) {
         }
         entry->current.script = (unsigned int *)value;
         {
-            u16 seq = g_TaskNodeSeqCounter;
+            u16 seq = g_TaskNodeSeqCounter[0];
             entry->trigger_value = 0;
             entry->next_value = 0;
             entry->active = 1;
             entry->flags = 0;
-            g_TaskNodeSeqCounter = seq + 1;
+            g_TaskNodeSeqCounter[0] = seq + 1;
             entry->seq = seq;
         }
     }

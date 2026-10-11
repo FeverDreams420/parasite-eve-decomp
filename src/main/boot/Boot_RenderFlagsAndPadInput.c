@@ -17,7 +17,7 @@ extern s32 D_8009D1A0w[] __asm__("g_GameStateFlags");
 extern s32 g_SceneFlagBits;
 extern s32 g_BattleControlFlags;
 extern s32 g_FieldRenderFlags;
-extern s32 g_FieldPadBits;
+extern s32 g_FieldPadBits[1];
 extern u32 D_8009D2D4;
 extern s32 g_FieldRenderFlagTable[];
 extern u32 D_800A76F0[];
@@ -34,7 +34,7 @@ void Boot_BuildRenderFlagTable(void) {
     g_BattleControlFlags = 0;
     D_8009D2D4 = 0;
     g_FieldRenderFlags = 0;
-    g_FieldPadBits = 0;
+    g_FieldPadBits[0] = 0;
     do {
         *entry = 0;
         i += 1;

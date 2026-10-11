@@ -381,7 +381,7 @@ int Scene_SetStoryDay(s32 storyDay) {
         pending = D_800B0CE5;
         storyFlags = D_800B0CE6;
         storyDay = (s8)pending;
-        D_800B0CE4 = pending;
+        D_800B0CE4[0] = pending;
         D_800B0CE6 = storyFlags | 3;
     }
 
@@ -413,7 +413,7 @@ int Scene_SetStoryDay(s32 storyDay) {
 int Scene_LoadEntityTextures(void)
 {
     int area = g_SceneAreaType;
-    int day = D_800B0CE4;
+    int day = D_800B0CE4[0];
     u32 lba = g_PeImageBaseLba;
     Pe1GameState *state = &g_GameState;
     SceneAssetView *view;
