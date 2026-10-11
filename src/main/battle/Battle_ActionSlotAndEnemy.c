@@ -91,8 +91,8 @@ int Battle_ProcessActionSlot(BattleEntity *actor)
 }
 
 /* Advance enemy charge/status timers, movement, damage panels and death state.
-* Matching debt: register pins and empty compiler barriers retain retail
-* register lifetimes and the distinct core/statusCore aliases. No instruction ASM.
+* Matching debt: the statusCore pin and the actor/statusCore barriers keep
+* retail's separate copies of the entity and its core.
 * curHP is the existing name for the 0..9000 charge gauge in this core view.
 */
 void Battle_UpdateEnemy(BattleEntity *entity) {

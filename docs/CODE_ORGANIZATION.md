@@ -656,6 +656,66 @@ Still open:
     counter and `addiu` base (lev 11). `Entity_ResetAllPools` clears the
     allocation slots by byte offset under `-fno-strength-reduce`.
 
+- Battle (`src/main/battle`, 2026-10-12 pass). The local extern lists, the
+  asm symbol aliases (except the one pair below) and the byte-offset field
+  macros are gone; the recipes that replaced crutches without changing a
+  byte, for the next battle or HUD function:
+  - GCC 2.7 CSE drops a cached global after a store through a pointer that
+    is not a structure field (`u32 *flags = &core->coreFlags; *flags = ...`)
+    and after a QImode store, but not after a structure field store. Retail
+    reloads that look like volatile or need a memory barrier usually come
+    from one of those two (`Battle_SubActionStep`, `Battle_ActionLifecycle`,
+    `Battle_InitEntityColors`, `Battle_ResolveHitOnTimer`).
+  - Field-by-field copies of packed words are bitfield assignments
+    (`BattleAttackBits`, `BattleTurnBits`, `BattleEffectBits` in
+    `battle.h`): a 1-bit field at bit 16 is read through its halfword, which
+    is the `lhu` retail has (`Battle_PadStateSyncFlow`,
+    `Inv_BuildWeaponList`).
+  - Units that read small words absolutely take `-G8` with
+    `MASPSX_FORCE_G0` and COMMON definitions of the `$gp` words, plus
+    `ASPSX_VERSION: 2.70` when a `$gp` word is a record read at an offset
+    (`g_HudOrigin`) or a byte array stored at nonzero offsets
+    (`Battle_SetupEntityTarget`, three `PE1_NOP_DEP` barriers retired).
+  - `(u16)(s8)byte` at the call reproduces the enemy action-mode argument;
+    `(s16)(word >> 16)` and `(u16)(word >> 16)` read the integer half of a
+    16.16 field with one `lh`/`lhu`.
+  - A base pointer local (`BattleTileSlot *tiles = D_8009E070`) keeps a
+    packet base in a register where retail loads it early.
+  Crutches left, each removed and rebuilt (lev without it):
+  - `Battle_DrawActiveStatus`: the background pointer and the index of the
+    last `AddPrim` are both born in `v0`; as pseudos they take `a0`/`v1`
+    and the index load moves above the background store (lev 33 and 13).
+  - `Battle_DrawEnemyHP` (14 pins, 9 barriers): retail adds the frame and
+    digit offsets before the sprite base, which neither typed indexing nor
+    a sprite-slot view reproduces (lev 136, byte arithmetic lev 160).
+  - `Battle_ProcessActionSlot`: the room argument is set in the delay slot
+    of the actor test (lev 1) and the kind is compared against a fresh 1
+    where GCC reuses the result register (lev 21). `Battle_UpdateEnemy`:
+    a plain copy of the core is folded into `enemy`, swapping the saved
+    registers of actor and enemy (lev 129); the shared death step is laid
+    out as its own block when duplicated (goto, lev 19).
+  - `Battle_StepEscapeOrDeath`: see the `D_800B0D88` views above (lev 42).
+  - `Battle_SetupPlayerPalette`: `c2`/`c7` are single-set constants, so
+    sched1 launches them late (lev 35). `Battle_MarkActiveEntities`: the
+    hoisted kind constant 4 lands after the active-entity load (lev 2).
+  - `Battle_AdvanceTurnSlot`: retail shares the queue-index store between
+    the loop entry and the loop body; a `while` loop rotates the other way
+    (goto and barriers, lev 27).
+  - `Inv_BuildWeaponList`: retail computes the attack sum twice, which CSE
+    merges without the pin (lev 7); the 8-byte frame pad stays.
+  - `Battle_StepAyaAction` case 9: the core-flag inserts match through a
+    word pointer, but the queue index and the mask constants are allocated
+    the other way (lev 30). `Battle_ResolveHitOnTimer` keeps the `$3` pin
+    on the same insert sequence (lev 107 without).
+  - `Battle_StepEnemyMovement`: `enemy` and its copy swap `s4`/`s5` (lev 22).
+  - `Battle_StepVictory` (brightness folded into separate pseudos, lev 81),
+    `Battle_Update` (gauge recolor: the four cases cross-jump differently,
+    lev 286), `Battle_TargetAndEnemyTurnFlow` (the AKAO handle is reloaded
+    after the test where a plain read is CSE'd, lev 10 per site),
+    `Battle_DrawStatusPanel` (typed digit packets lev 294),
+    `Battle_DrawHPBar`, `Battle_StepPostBattle` and the four phase steps of
+    `Battle_EscapeAndPhaseInitFlow` (70 pins) were not reduced further.
+
 ## Link ownership
 
 Splat's `undefined_syms_auto` and `undefined_funcs_auto` files are address/name

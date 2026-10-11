@@ -6,8 +6,8 @@
 
 /* Legacy name: this computes enemy damage, applies attack/status resistances,
  * subtracts HP, and starts the hit reaction. The double arithmetic calls the
- * LIBMATH soft-float entry points directly. Matching debt: 2 pins and 1 empty
- * barrier retain the core alias and signed action-mode argument sequence. */
+ * LIBMATH soft-float entry points directly. Matching debt: the s4 pin keeps
+ * enemy and its flagCore copy in retail's saved registers. */
 void Battle_StepEnemyMovement(BattleEntity *entity)
 {
     BattleAction *weaponAction;

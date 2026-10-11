@@ -14,8 +14,8 @@ u8 D_8009CE70, D_8009CE74;
 s32 D_8009D28C;
 
 /* End-of-battle sequence: retire enemy actors, fade sound and animate the
- * textured panel before completing the battle phase. Matching debt: 16 register pins,
- * 5 empty barriers, two volatile packet views and 24 reserved stack bytes.
+ * textured panel before completing the battle phase. Matching debt: register
+ * pins, empty barriers, two volatile packet views and 24 reserved stack bytes.
  * Countdown and stage stores remain local to their switch cases. */
 void Battle_StepPostBattle(void)
 {

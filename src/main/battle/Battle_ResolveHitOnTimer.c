@@ -12,10 +12,9 @@ u8 D_8009D274, D_8009D1D4, D_8009D294;
 s8 D_8009CE54, D_8009CE55;
 
 /* Resolve the timed hit for stealing, chained targets, cone attacks or a single
- * target. Matching debt: 8 pins and 5 empty compiler barriers. Pins retain
- * retail register allocation; empty memory barriers keep
- * the attack-class store ahead of the reaction load. The resultCore barrier
- * preserves the separate steal-result branch. No instruction ASM. */
+ * target. Matching debt: 8 pins and 1 empty compiler barrier. Pins retain
+ * retail register allocation (the core-flag inserts need $3); the
+ * resultCore barrier preserves the separate steal-result branch. */
 void Battle_ResolveHitOnTimer(void)
 {
     register BattleEntity *resultActor;
