@@ -1,4 +1,5 @@
 #include "pe1/room_m350_effects.h"
+#include "pe1/field_actor.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
 #include "pe1/field_texture_tables.h"
@@ -59,17 +60,17 @@ int func_8019988C(int event, EmissionState *state)
         int random;
         register int index asm("$3");
         register RoomM350EffectActor *actor asm("$5");
-        register RoomM350EffectInstance *instance asm("$6");
+        register FieldActor *instance asm("$6");
         state->delay--;
         if (state->delay != -1) return 0;
         effect = func_800CE610(ANIM_POOL_AS(RoomM350EffectEmitter)->pool);
         if (!effect) return 0;
         random = Inv_ScrambleGrid();
         actor = ANIM_OWNER_AS(RoomM350EffectActor);
-        instance = actor->instance;
+        instance = (FieldActor *)actor->instance;
         {
             register int byte asm("$4") = (unsigned char)random;
-            int count = instance->model->transformCount;
+            int count = instance->render_object.header->part_count;
             register int range asm("$3") = count - 1;
             register int product asm("$2");
             asm("" : "=r"(range) : "0"(range), "r"(count));
@@ -78,9 +79,9 @@ int func_8019988C(int event, EmissionState *state)
             index = product + 1;
         }
         asm("" : "=r"(index) : "0"(index));
-        effect->position.x = instance->transforms[index].t[0];
-        effect->position.y = actor->instance->transforms[index].t[1];
-        effect->position.z = actor->instance->transforms[index].t[2];
+        effect->position.x = instance->render_object.matrices[index].translation[0];
+        effect->position.y = ((FieldActor *)actor->instance)->render_object.matrices[index].translation[1];
+        effect->position.z = ((FieldActor *)actor->instance)->render_object.matrices[index].translation[2];
         {
             int count = state->count;
             effect->brightness = 128;
