@@ -342,27 +342,20 @@ s32 _padSioRW(CardObj *inObj, s32 inByte) {
         replyByte = received;
         sio->baud = baud;
         if (!(irq->status & 0x80)) {
-        waitAcknowledge:
-            if (chkRC2wait() != 0) {
-                result = -20;
-                return result;
-            }
-            {
-                if (D_8009B784->status & 0x80) {
-                    goto writeByte;
+            do {
+                if (chkRC2wait() != 0) {
+                    result = -20;
+                    return result;
                 }
-                goto waitAcknowledge;
-            }
-        } else {
-        writeByte:
-            D_8009B788->data = (u8)outgoing;
-            port->payload_index += 1;
-            port->response_3c[port->response_index] = replyByte;
-            result = port->response_index;
-            result++;
-            port->response_index = result;
-            result = replyByte;
+            } while ((D_8009B784->status & 0x80) == 0);
         }
+        D_8009B788->data = (u8)outgoing;
+        port->payload_index += 1;
+        port->response_3c[port->response_index] = replyByte;
+        result = port->response_index;
+        result++;
+        port->response_index = result;
+        result = replyByte;
     }
 done:
     return result;

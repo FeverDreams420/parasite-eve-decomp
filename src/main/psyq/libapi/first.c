@@ -32,8 +32,11 @@ void *firstfile(const char *inName, void *inResult) {
     if (entry < end) {
         register BiosDeviceEntry *limit = end;
         do {
-            if (entry->name && strcmp(entry->name, D_800A32D8) == 0)
-                goto save;
+            if (entry->name && strcmp(entry->name, D_800A32D8) == 0) {
+                D_800A32D0 = entry->firstFile;
+                found = 1;
+                goto check;
+            }
             entry++;
         } while (entry < limit);
     }
@@ -41,13 +44,6 @@ void *firstfile(const char *inName, void *inResult) {
 check:
     if (!(found)) {
     return 0;
-save:
-    D_800A32D0 = entry->firstFile;
-    found = 1;
-    goto check;
-install:
-    entry->firstFile = Sys_FirstFileHookCallback;
-    goto call;
     }
 second:
     count = BIOS_DEVICE_DIRECTORY->byteLength;
@@ -57,8 +53,10 @@ second:
     if (entry < end) {
         register BiosDeviceEntry *limit = end;
         do {
-            if (entry->name && strcmp(entry->name, D_800A32D8) == 0)
-                goto install;
+            if (entry->name && strcmp(entry->name, D_800A32D8) == 0) {
+                entry->firstFile = Sys_FirstFileHookCallback;
+                break;
+            }
             entry++;
         } while (entry < limit);
     }

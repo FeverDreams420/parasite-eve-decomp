@@ -94,12 +94,14 @@ setup:
                     if (value != 4)
                         goto call_transfer;
                     *count = three;
-                    goto call_transfer;
                     }
+                    else
+                    {
                 paired:
+                    do {
                     D_8009B744(other - 1);
                     result = 1;
-                    goto save_count;
+                    break;
                 primary:
                     {
                         register CardObj *base asm("$2") = D_8009B758;
@@ -108,11 +110,12 @@ setup:
                     D_8009B744(other);
                     D_8009B748(other);
                     result = -1;
-                save_count:
+                    } while (0);
                     *count = result;
                 }
             transfer:
                 arg = port;
+                    }
             call_transfer:
                 result = _padSioRW(port, (u8)D_8009B72C(arg, mode));
                 if (result < 0)

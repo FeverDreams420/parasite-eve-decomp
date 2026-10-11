@@ -91,7 +91,7 @@ int MemCard_WriteByteWithAckCheck(CardObj *obj) {
     asm volatile("" : "=r"(ret) : "0"(ret));
     if (result == ret) {
         ret = result + zero;
-        goto done;
+        return ret;
     }
     ret = result + zero;
     asm volatile("" : "=r"(result), "=r"(ret) : "0"(result), "1"(ret));

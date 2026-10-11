@@ -62,10 +62,12 @@ void LIBDS_DSSYS_1_text_8B8(int inEvent, u8 *inResult) {
         }
         if (command == 3) {
             state->command.read.command = 16;
-            goto readCommand;
+            state->command.read.status = two;
+            state->command.read.commandParam = pending;
+            state->command.reserved34 = 1200;
+            goto dispatch;
         } else if (command == 6 || command == 27) {
             state->command.read.command = 17;
-        readCommand:
             state->command.read.status = two;
             state->command.read.commandParam = pending;
             state->command.reserved34 = 1200;

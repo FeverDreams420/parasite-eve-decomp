@@ -553,7 +553,10 @@ int CQ_ready_system(int command, u8 *payload) {
         copy_destination = slot->payload;
         break;
     default:
-        goto callback;
+        callbackFn = D_800B8AB4;
+        if (callbackFn != 0)
+            return callbackFn(command_byte, payload);
+        return 0;
     }
 
     slot->state = 1;

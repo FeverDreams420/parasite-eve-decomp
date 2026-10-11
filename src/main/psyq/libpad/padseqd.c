@@ -54,9 +54,10 @@ high_state:
     if (state == compare) {
         return 0;
     }
-    goto dispatch;
 
     }
+    else
+    {
 emit_one:
     asm volatile("" : : "r"(compare));
     _padCmdParaMode(obj, 1);
@@ -67,6 +68,7 @@ emit_zero:
     _padCmdParaMode(obj, 0);
     return 0;
 
+    }
 dispatch:
     if (obj->fn_14 != 0) {
         obj->fn_14(obj);
@@ -93,14 +95,11 @@ void LIBPAD_PADSEQD_text_108(CardObj *port) {
         for (i = 2; i < port->response_index; i++)
             port->output_30[i] = port->response_3c[i];
     }
-    if (port->response_3c[1] == 0 && (port->field_46 != 1 || port->fn_14 != 0) &&
-        port->pad_50[0] == 0)
-        goto reset;
-    if (!CardObj_IsTransferActive(port) && !port->saved_command && !port->field_4a &&
-        port->field_e8 != old) {
-    reset:
+    if ((port->response_3c[1] == 0 && (port->field_46 != 1 || port->fn_14 != 0) &&
+        port->pad_50[0] == 0) ||
+        (!CardObj_IsTransferActive(port) && !port->saved_command && !port->field_4a &&
+        port->field_e8 != old))
         D_8009B728(port);
-    }
     port->field_4a = 0;
     if ((u8)(port->field_46 - 2) < 252 && port->response_3c[0] != 0xf3)
         D_8009B728(port);

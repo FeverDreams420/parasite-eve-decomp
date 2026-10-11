@@ -24,9 +24,10 @@ int CardObj_ReadPayloadByte(CardObj *arg0, int needsAck) {
         if (mode == 0x4D) {
             goto mode4D;
         }
-        goto other;
 
     }
+    else
+    {
 mode0:
     if (index < 6) {
         if (arg0->actuatorEnabled[index] == 0) {
@@ -50,6 +51,7 @@ mode4D:
     }
     return 0xFF;
 
+    }
 other:
     if (index >= arg0->payload_2c_len) {
         return 0;
