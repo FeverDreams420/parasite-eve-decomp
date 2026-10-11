@@ -133,9 +133,8 @@ typedef struct RoomLink {
     char pad1C[0xA];
     unsigned short h26;           /* 0x26 */
     int pos[4];                   /* 0x28: 16.16 x/y/z plus copied trailing word */
-    char pad38[0x2];
-    unsigned short h3A;           /* 0x3A */
-    char pad3C[0x4];
+    short rotation[3];            /* 0x38: x/y/z angles, y is the heading */
+    char pad3E[0x2];
     int posMirror[4];             /* 0x40: optional position snapshot */
     char pad50[0x18];
     int vel[3];                   /* 0x68 */
@@ -231,7 +230,9 @@ typedef struct RoomLibMotionWork {
     short input[3];               /* 0x00 */
     short pad06;
     int rotated[3];               /* 0x08 */
-    char pad14[0x14];
+    char pad14[0x4];
+    int displacement[3];          /* 0x18: second transform result */
+    char pad24[0x4];
     short matrix[9];              /* 0x28 */
     short pad3A;
 } RoomLibMotionWork;
@@ -313,8 +314,14 @@ typedef struct RoomLibHandlerDState {
     int value88;                  /* 0x88 */
     int value8C;                  /* 0x8C */
     int value90;                  /* 0x90 */
-    char pad94[0x6];
-    short stateValue;             /* 0x9A */
+    char pad94[0x4];
+    union {
+        int word;                 /* 0x98: 16.16 progress */
+        struct {
+            short fraction;
+            short whole;          /* 0x9A: reported state value */
+        } half;
+    } progress;
     short range[3];               /* 0x9C */
     short heading;                /* 0xA2 */
     short duration;               /* 0xA4 */

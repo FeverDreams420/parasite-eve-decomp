@@ -61,7 +61,7 @@ int RoomLib_ConfigureHandlerD(RoomEnt *o, int query, unsigned int op, int arg0, 
             o->flag3 = arg0;
         } else {
             *(int *)arg0 = o->flag3;
-            *(int *)arg1 = state->stateValue;
+            *(int *)arg1 = state->progress.half.whole;
         }
         break;
     case 25:
@@ -297,9 +297,9 @@ void RoomLib_HandlerD(RoomEnt *o) {
     gte_ldv0((void *)scratch);
     gte_mvmva();
     asm("" : "=r"(scratch) : "0"(scratch));
-    gte_stmac((char *)scratch + 8);
-    RW32(state, 0x30) += *(int *)((char *)scratch + 8) << 12;
-    RW32(state, 0x38) += *(int *)((char *)scratch + 0x10) << 12;
+    gte_stmac(((RoomLibMotionWork *)scratch)->rotated);
+    RW32(state, 0x30) += ((RoomLibMotionWork *)scratch)->rotated[0] << 12;
+    RW32(state, 0x38) += ((RoomLibMotionWork *)scratch)->rotated[2] << 12;
 
     if (RW32(state, 0x98) > 0x08000000) {
         ent->flag3 = 2;
@@ -307,7 +307,7 @@ void RoomLib_HandlerD(RoomEnt *o) {
     {
         register int work asm("$3");
 
-        if (*(int *)((char *)scratch + 0x10) >= 0) {
+        if (((RoomLibMotionWork *)scratch)->rotated[2] >= 0) {
             int position;
             position = RW32(state, 0x88);
             position += RW32(state, 0x8C);
@@ -336,9 +336,9 @@ void RoomLib_HandlerD(RoomEnt *o) {
     {
         int bias = 0x8000;
         if (RW16(state, 0x9A) >= 0xC01 && RW32(state, 0x30) <= 0) {
-            *(int *)((char *)scratch + 0x18) = 0;
-            *(int *)((char *)scratch + 0x1C) = 0;
-            *(int *)((char *)scratch + 0x20) = 0;
+            ((RoomLibMotionWork *)scratch)->displacement[0] = 0;
+            ((RoomLibMotionWork *)scratch)->displacement[1] = 0;
+            ((RoomLibMotionWork *)scratch)->displacement[2] = 0;
             RoomLib_ReleaseHandlerD(ent);
         } else {
             scratch[0] = ((((RW32(state, 0x30) + bias) >> 16) *
@@ -348,7 +348,7 @@ void RoomLib_HandlerD(RoomEnt *o) {
             gte_ldrotmatrix(state + 0x10);
             gte_ldv0((void *)scratch);
             gte_mvmva();
-            gte_stmac((char *)scratch + 0x18);
+            gte_stmac(((RoomLibMotionWork *)scratch)->displacement);
         }
     }
 
@@ -356,21 +356,21 @@ void RoomLib_HandlerD(RoomEnt *o) {
         RoomLib_ReleaseHandlerD(ent);
     }
     RW32(link, 0x28) = RW32(state, 0x50) +
-                       (*(int *)((char *)scratch + 0x18) << 16);
+                       (((RoomLibMotionWork *)scratch)->displacement[0] << 16);
     RW32(link, 0x30) = RW32(state, 0x58) +
-                       (*(int *)((char *)scratch + 0x20) << 16);
+                       (((RoomLibMotionWork *)scratch)->displacement[2] << 16);
     {
         RW32(link, 0x1FC) = (RW32(link, 0x28) + 0x8000) >> 16;
         RW32(link, 0x204) = (RW32(link, 0x30) + 0x8000) >> 16;
         if (RW8(state, 0xAB) == 0) {
             value = RW32(state, 0x54) +
-                    (*(int *)((char *)scratch + 0x1C) << 16);
+                    (((RoomLibMotionWork *)scratch)->displacement[1] << 16);
             RW32(link, 0x2C) = value;
             RW32(link, 0x200) = (value + 0x8000) >> 16;
         }
     }
     if (RW16(state, 0x9C) != 0 &&
-        *(int *)((char *)scratch + 0x10) >= 0) {
+        ((RoomLibMotionWork *)scratch)->rotated[2] >= 0) {
         if (ent->w04 >= (unsigned int)RW16(state, 0x9E) &&
             (RW16(state, 0xA0) == 0 ||
              ent->w04 <= (unsigned int)RW16(state, 0xA0))) {
@@ -391,30 +391,30 @@ void RoomLib_HandlerD(RoomEnt *o) {
 }
 
 void RoomLib_FxNotify(RoomLink *arg0, struct RoomSub *arg1, int scratch) {
-    char *ent = (char *)arg0;
-    char *rec = (char *)arg1;
-    if (*(short *)(rec + 0xA2) > 0) {
-        int *dst = (int *)(rec + 0x60);
-        char *v = *(char **)(rec + 0x84);
+    RoomLink *ent = arg0;
+    RoomLibHandlerDState *rec = (RoomLibHandlerDState *)arg1;
+    if (rec->heading > 0) {
+        int *dst = &rec->positionX;
+        RoomLink *v = rec->secondaryLink;
         if (v != 0) {
-            dst[0] = *(int *)(v + 0x28);
-            dst[2] = *(int *)(v + 0x30);
+            dst[0] = v->pos[0];
+            dst[2] = v->pos[2];
         }
-        *(short *)(ent + 0x3A) = FieldEng_TurnToward(
-            *(short *)(ent + 0x3A),
-            (short)FieldEng_VecToAngle((Vec3Fixed *)dst, (Vec3Fixed *)(ent + 0x28)),
-            *(short *)(rec + 0xA2)) & 0xFFF;
-        if ((*(unsigned char *)(rec + 0xA9) != 0)
-            && (0x07FFFFFF < *(int *)(rec + 0x98))) {
-            *(short *)(rec + 0xA2) = 0;
-            *(short *)(rec + 0xA4) = 0;
+        ent->rotation[1] = FieldEng_TurnToward(
+            ent->rotation[1],
+            (short)FieldEng_VecToAngle((Vec3Fixed *)dst, (Vec3Fixed *)ent->pos),
+            rec->heading) & 0xFFF;
+        if ((rec->reverse != 0)
+            && (0x07FFFFFF < rec->progress.word)) {
+            rec->heading = 0;
+            rec->duration = 0;
         }
     } else {
-        func_800DFE94((Vec3Fixed *)(ent + 0x28), (Vec3Fixed *)(ent + 0x40), (short *)(ent + 0x38));
-        *(short *)(ent + 0x3A) = FieldEng_TurnToward(
-            *(short *)(ent + 0x3A),
-            *(short *)(ent + 0x3A),
-            *(short *)(rec + 0xA4)) & 0xFFF;
+        func_800DFE94((Vec3Fixed *)ent->pos, (Vec3Fixed *)ent->posMirror, ent->rotation);
+        ent->rotation[1] = FieldEng_TurnToward(
+            ent->rotation[1],
+            ent->rotation[1],
+            rec->duration) & 0xFFF;
     }
 }
 void RoomLib_HandlerDTransformTarget(RoomLibMotionState *state, RoomLibMotionWork *work) {
@@ -809,18 +809,20 @@ void RoomLib_HandlerE(RoomEnt *o) {
     RoomLib_HandlerESteerToward(link, state);
     func_800DFB20(o);
 }
-void RoomLib_HandlerESteerToward(char *ent, char *rec) {
-    if (*(short *)(rec + 0x6E) > 0) {
-        int *dst = (int *)(rec + 0x50);
-        char *v = *(char **)(rec + 0x64);
+void RoomLib_HandlerESteerToward(char *entArg, char *recArg) {
+    RoomLink *ent = (RoomLink *)entArg;
+    RoomLibHandlerEState *rec = (RoomLibHandlerEState *)recArg;
+    if (rec->secondaryHeading > 0) {
+        int *dst = rec->secondary;
+        RoomLink *v = rec->secondaryLink;
         if (v != 0) {
-            dst[0] = *(int *)(v + 0x28);
-            dst[2] = *(int *)(v + 0x30);
+            dst[0] = v->pos[0];
+            dst[2] = v->pos[2];
         }
-        *(short *)(ent + 0x3A) = FieldEng_TurnToward(
-            *(short *)(ent + 0x3A),
-            (short)FieldEng_VecToAngle((Vec3Fixed *)dst, (Vec3Fixed *)(ent + 0x28)),
-            *(short *)(rec + 0x6E));
+        ent->rotation[1] = FieldEng_TurnToward(
+            ent->rotation[1],
+            (short)FieldEng_VecToAngle((Vec3Fixed *)dst, (Vec3Fixed *)ent->pos),
+            rec->secondaryHeading);
     }
 }
 int RoomLib_ReleaseHandlerE(RoomEnt *o) {
