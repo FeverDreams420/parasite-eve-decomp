@@ -60,9 +60,6 @@ s32 Entity_QueryField(s32 *args[]) {
     return 1;
 }
 
-/* Same symbol; do not share the X-read address calculation with Y and Z. */
-extern FieldActor *g_CurrentEntityForDistanceX[] asm("g_CurrentEntity");
-
 s32 Entity_GetDistanceComponents(s32 *args[]) {
     s32 *temp_a0;
     s32 *temp_t0;
@@ -113,7 +110,7 @@ s32 Entity_GetDistanceComponents(s32 *args[]) {
         FieldActor *state;
         s32 node_x;
         s32 *out;
-        state = g_CurrentEntityForDistanceX[0];
+        state = g_CurrentEntity;
         sourceX = state->pos_x;
         node_x = node->pos_x;
         out = args[2];

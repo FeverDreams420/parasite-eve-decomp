@@ -7,7 +7,6 @@
 #include "pe1/asset_find.h"
 
 extern Combatant *g_ActiveActor;
-extern char *g_ActiveActor_late2[] asm("g_ActiveActor");
 extern FieldActor *g_PlayerEntity;
 extern void *g_BattlePendingEnemySpawn[];
 
@@ -75,7 +74,7 @@ void Entity_ResolveDropTable(void *arg0) {
     {
         Combatant *after_state;
 
-        after_state = (Combatant *)g_ActiveActor_late2[0];
+        after_state = g_ActiveActor;
         if (!(after_state->stateFlags & 0x200)) {
             if (after_state->atbGauge > 0) {
                 value = (s32)(value + ((u32)value >> 31)) >> 1;
