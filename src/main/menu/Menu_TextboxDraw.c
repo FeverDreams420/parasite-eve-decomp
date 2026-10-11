@@ -61,22 +61,20 @@ void Render_SetupFogLayer(void *source) {
     mask5 =0xFDFFFFFF;
     sentinel = -1;
     for (; (u8)i < 4; ++i) {
-        offset = ((((u8)i << 3) - (u8)i) << 3);
-        *(u8 *)(D_800BCEB4 + offset) = 0;
-        *(u8 *)(D_800BCEB5 + offset) = 0;
-        asm volatile("" ::: "memory");
-        flags = *(u32 *)(D_800BCEB4 + offset);
-        *(u8 *)(D_800BCEA8 + offset) = 0;
-        *(u32 *)(D_800BCEAC + offset) = 0;
-        *(u8 *)(D_800BCEB0 + offset) = 0;
-        *(u8 *)(D_800BCEB1 + offset) = 0;
-        *(s16 *)((u8 *)D_800BCEB8 + offset) = sentinel;
+        g_TextboxEntries[(u8)i].control.parts.delay = 0;
+        g_TextboxEntries[(u8)i].control.parts.elapsed = 0;
+        flags = g_TextboxEntries[(u8)i].control.flags;
+        g_TextboxEntries[(u8)i].state = 0;
+        g_TextboxEntries[(u8)i].message = 0;
+        g_TextboxEntries[(u8)i].style = 0;
+        g_TextboxEntries[(u8)i].background = 0;
+        g_TextboxEntries[(u8)i].page_id = sentinel;
         flags &= mask1;
         flags &= mask2;
         flags &= mask3;
         flags &= mask4;
         flags &= mask5;
-        *(u32 *)(D_800BCEB4 + offset) = flags;
+        g_TextboxEntries[(u8)i].control.flags = flags;
     }
     i = 0;
     page_source = D_80091680;
