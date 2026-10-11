@@ -26,6 +26,17 @@
 
 static const RoomFxSeed8 s_MotionQuadSeed = { { 0, 4, 0, 0, 0, 0, 0, 0 } };
 
+/* Work area of the anchored sprite quad and pair: the uniform scale, the
+ * sprite depth (the pair's ring intensity), the ring image source and the
+ * ring the pair draws. */
+typedef struct RoomAnchoredSpriteState {
+    u8 pad00[0x10];
+    s16 scale;                    /* 0x10 */
+    u16 depth;                    /* 0x12 */
+    u8 sourceData[0x100];         /* 0x14 */
+    FieldRingGeometry ring;       /* 0x114 */
+} RoomAnchoredSpriteState;
+
 /* Motion particle setup: the two trails of ten particles and the four
  * glyphs. */
 void RoomFx_MotionParticlesInit(RoomMotionInitOwner *owner, void *unused, RoomMotionInitState *state) {
@@ -183,9 +194,9 @@ void RoomFx_DrawAnchoredSpriteQuad(void *unused0, void *unused1,
     stack.scaleMatrix.m[0][1] = 0;
     memset(&stack.sourceScale, 0, 0x10);
 
-    stack.sourceScale.x = *(s16 *)(fx + 0x10);
-    stack.sourceScale.y = *(s16 *)(fx + 0x10);
-    stack.sourceScale.z = *(s16 *)(fx + 0x10);
+    stack.sourceScale.x = ((RoomAnchoredSpriteState *)fx)->scale;
+    stack.sourceScale.y = ((RoomAnchoredSpriteState *)fx)->scale;
+    stack.sourceScale.z = ((RoomAnchoredSpriteState *)fx)->scale;
     stack.scale = stack.sourceScale;
     ScaleMatrix(&stack.scaleMatrix, &stack.scale);
     RotMatrix(&stack.seed, &stack.matrix);
@@ -212,7 +223,7 @@ void RoomFx_DrawAnchoredSpriteQuad(void *unused0, void *unused1,
     }
 
     /* Retail reuses the params register for the packet pointers. */
-    sprite = *(u16 *)(fx + 0x12);
+    sprite = ((RoomAnchoredSpriteState *)fx)->depth;
     fx = (char *)&g_RoomMotionQuadDepth;
     *(s16 *)fx = sprite;
     stack.scaleMatrix.t[0] = map->primary.t[0];
@@ -255,14 +266,14 @@ void RoomFx_UpdateTimedFade(void *arg0, char *state, char *obj) {
 
 extern void func_800C4E50(void *arg0);
 
-void RoomFx_InitSpritePair(void *arg0, void *arg1, char *obj) {
-    FieldRingGeometry *ring = (FieldRingGeometry *)(obj + 0x114);
+void RoomFx_InitSpritePair(void *arg0, void *arg1, RoomAnchoredSpriteState *obj) {
+    FieldRingGeometry *ring = &obj->ring;
     int c80 = 0x80;
     int v = 0x10;
 
     ring->mode = v;
     v = 0xC8;
-    RW16(obj, 0x12) = c80;
+    obj->depth = c80;
     ring->intensity = c80;
     c80 = 0xFF;
     ring->offset = v;
@@ -272,13 +283,13 @@ void RoomFx_InitSpritePair(void *arg0, void *arg1, char *obj) {
     ring->color0[1] = v;
     v = 0x4B0;
     ring->extent0 = v;
-    RW16(obj, 0x10) = 0;
+    obj->scale = 0;
     ring->color1[0] = c80;
     ring->color1[1] = c80;
     ring->color1[2] = c80;
     ring->color0[2] = c80;
     ring->extent1 = 0;
-    ring->source = obj + 0x14;
+    ring->source = obj->sourceData;
     func_800C4E50(ring);
 }
 
@@ -286,7 +297,7 @@ void RoomFx_InitSpritePair(void *arg0, void *arg1, char *obj) {
  * sprite at two map anchors. Retail marks this function handwritten; only
  * its COP2 windows remain ASM. */
 void RoomFx_DrawAnchoredSpritePair(void *unused0, void *unused1,
-                                            char *params) {
+                                            RoomAnchoredSpriteState *params) {
     RoomLibSpriteTransformStack stack;
     /* The GTE and draw matrix pointer still needs its register pin. */
     RoomSpriteMatrix *scaleMatrix;
@@ -317,9 +328,9 @@ void RoomFx_DrawAnchoredSpritePair(void *unused0, void *unused1,
     stack.scaleMatrix.m[0][1] = 0;
     memset(&stack.sourceScale, 0, 0x10);
 
-    stack.sourceScale.x = *(s16 *)(params + 0x10);
-    stack.sourceScale.y = *(s16 *)(params + 0x10);
-    stack.sourceScale.z = *(s16 *)(params + 0x10);
+    stack.sourceScale.x = params->scale;
+    stack.sourceScale.y = params->scale;
+    stack.sourceScale.z = params->scale;
     stack.scale = stack.sourceScale;
     scaleMatrix = &stack.scaleMatrix;
     ScaleMatrix(scaleMatrix, &stack.scale);
@@ -347,8 +358,8 @@ void RoomFx_DrawAnchoredSpritePair(void *unused0, void *unused1,
 
     func_800C3238(2);
     map = ((RoomMotionInitLink *)root->link)->model;
-    renderState = (FieldRingGeometry *)(params + 0x114);
-    renderState->intensity = *(u16 *)(params + 0x12);
+    renderState = &params->ring;
+    renderState->intensity = params->depth;
     /* Both anchors sit on the shared floor height; the first block stores
      * the height before the x coordinate, which fixes retail's register
      * choice. */
