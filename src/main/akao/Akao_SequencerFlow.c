@@ -10,7 +10,6 @@
 #include "pe1/akao_counters.h"
 
 extern unsigned short D_8009D2B6;
-/* These field aliases keep the retail absolute stores byte-identical. */
 
 void Seq_GetGlobalPitch(unsigned int *out)
 {
@@ -43,11 +42,7 @@ extern u16 D_8009CDEC;
 extern s16 D_8009D2A2, D_8009D220, D_8009D21E;
 extern u32 D_8009D284, D_8009D214;
 extern u32 D_8009D210, D_800BCD50;
-/* These aliases share storage with AkaoTickBank/AkaoTickTrack in tick.h. */
-extern AkaoSequencerBank *volatile D_8009D2C8_Spu asm("D_8009D2C8");
-extern AkaoTrack D_800B8AC0_Spu[] asm("D_800B8AC0");
 extern AkaoTrack D_800BA560[];
-extern AkaoTrack D_800BC000_Spu[] asm("D_800BC000");
 void Seq_ApplyGlobalPitch(void);
 void func_8008AB9C(AkaoTrack *);
 
@@ -84,37 +79,37 @@ void SPU_StepReverbLoad(void)
         D_8009D21E--;
         value = oldGlobalParam + D_8009D210;
         if ((value & 0xFF0000) != (oldGlobalParam & 0xFF0000)) {
-            track = D_800B8AC0_Spu;
+            track = (AkaoTrack *)D_800B8AC0;
             for (count = 24; count != 0; --count, ++track)
                 track->update_flags |= 0x10;
         }
         D_8009D2CC = value;
     }
-    bank = D_8009D2C8_Spu;
+    bank = (AkaoSequencerBank *)D_8009D2C8;
     if (bank->active_voice_mask && bank->pitch_slide_duration) {
         oldPrimaryPitch = bank->pitch_current;
         bank->pitch_slide_duration--;
         value = oldPrimaryPitch + bank->pitch_delta;
         if ((value & 0x7F0000) != (oldPrimaryPitch & 0x7F0000))
-            func_8008AB9C(D_800B8AC0_Spu);
-        D_8009D2C8_Spu->pitch_current = value;
+            func_8008AB9C((AkaoTrack *)D_800B8AC0);
+        ((AkaoSequencerBank *)D_8009D2C8)->pitch_current = value;
         asm volatile("" ::: "memory");
-        bank = D_8009D2C8_Spu;
+        bank = (AkaoSequencerBank *)D_8009D2C8;
     }
-    D_8009D2C8_Spu = bank + 1;
+    D_8009D2C8 = (AkaoTickBank *)(bank + 1);
     if (bank[1].active_voice_mask && bank[1].pitch_slide_duration) {
         oldSecondaryPitch = bank[1].pitch_current;
         bank[1].pitch_slide_duration--;
         value = oldSecondaryPitch + bank[1].pitch_delta;
         if ((value & 0x7F0000) != (oldSecondaryPitch & 0x7F0000))
             func_8008AB9C(D_800BA560);
-        D_8009D2C8_Spu->pitch_current = value;
+        ((AkaoSequencerBank *)D_8009D2C8)->pitch_current = value;
     }
-    D_8009D2C8_Spu = D_8009D2C8_Spu - 1;
+    D_8009D2C8 = D_8009D2C8 - 1;
     pending = D_800BCD50;
     if (pending) {
         count = 0x1000;
-        track = D_800BC000_Spu;
+        track = (AkaoTrack *)D_800BC000;
         do {
             if (pending & count) {
                 if (track->panpot_duration) {

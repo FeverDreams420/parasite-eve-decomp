@@ -11,7 +11,6 @@
 #include "pe1/akao_counters.h"
 
 typedef unsigned short u16_1;
-extern AkaoTrack D_800BC000_tracks[] asm("D_800BC000");
 
 void Akao_SetNotePitch(AkaoTrack *track, int arg);
 
@@ -531,7 +530,7 @@ void Seq_StartNestedTrack(AkaoTrack *track, AkaoNestedSource *source, unsigned i
         int count;
 
         mask = 0x1000;
-        track_reg = (AkaoTrack *)D_800BC000_tracks;
+        track_reg = (AkaoTrack *)D_800BC000;
         count = 0xC;
         busy_mask = 0x02000000;
         active_loop_mask = active_mask;
@@ -704,7 +703,7 @@ void func_8008ABF0(void) {
     AkaoTrack *track;
     unsigned int *flags;
     mask = D_800BCD50;
-    track = D_800BC000_tracks;
+    track = (AkaoTrack *)D_800BC000;
         if (mask != 0) {
         bit = 0x1000;
         flags = (unsigned int *)track + 0x3D;
