@@ -120,10 +120,8 @@ question, not a real conflict:
 `python3 tools/scripts/decl_conflicts.py --count` lists symbols declared more
 than once with different types (629 at the start of the header unification,
 232 after it, 99 after the battle pass, 65 after the small-data pass, 12
-after the actor and overlay view pass). What remains falls into these
-groups; each is left open on purpose, because one declaration would change
-the generated code or needs a decision about code that is not part of this
-pass.
+after the actor and overlay view pass, 1 after the scalar view pass). The
+one left is listed under "Still open".
 
 How the earlier groups were closed, for the next symbols of the same kind:
 
@@ -162,34 +160,45 @@ How the earlier groups were closed, for the next symbols of the same kind:
 - `BattleCmd_CommitAmmoAndUpdate` is called with the queued action and
   without it, as retail does, so its call sites declare it without a
   prototype.
+- Scalar versus record access of one word: cc1 reads a scalar `extern`
+  straight from its symbol, but any record, union, array or cast view goes
+  through `memory_address`, which puts the symbol's address in a register
+  when it is not small data, and CSE keeps it there for a read-modify-write
+  or a reload. A record declaration and a record view cast from the scalar
+  (`(*(T *)&sym)`) produce the same code, so the word is declared as the
+  scalar and the record users read it through a view: `D_800BCF88` is the
+  scroll state's flags word (`volatile int`, the grab effects' absolute
+  read-modify-write) and `g_GeomScroll` the record view; `D_800B0CD8` is
+  `g_GameState.flags` as a `u32` (the frame loop, process manager and CD
+  boot read), while every record and array user reads `g_GameState`;
+  `D_800B0CE6` is `g_GameState.story_day_flags` as a `u8`. The opposite
+  case, a unit that needs the scalar to read like a register-held record,
+  takes cc1 `-G0` (`Battle_EncounterInitializationFlow`); a unit that needs
+  a record or volatile cast of a small word to read absolutely takes cc1
+  `-G8`, which makes the small symbol a cheap address (`FxCommon_*`
+  with the projection slot record `D_800BCFA8`,
+  `RoomEffect_ConfiguredPulseCallback` with `*(volatile u16 *)&D_800E11E8`).
+  The cc1 `-G8` trick needs a unit without small data definitions of its
+  own: in `RoomFx_GrabAttackSet` its `.sdata` is discarded by the overlay
+  link.
+- The texture slot words `D_800E11E8`/`D_800E11EA` are declared once as
+  `u16` entries of the slot table (`field_texture_tables.h`); the one-field
+  record views became `TEXTURE_SLOT_RECORD`, the array views index
+  `D_800E11E4`, and the volatile reads were not needed except in the one
+  above.
+- `g_RoomScriptRecord` is declared once (`room_script_record.h`) by the
+  leading halfword every room's record starts with: room_m123 reads it as
+  that scalar, room_m005 and room_m023 take its address through their own
+  view macros, and `RoomLib_SetTaskVar0` returns its address.
+- A unit in a shared overlay directory (room_lib) now counts towards the
+  rooms whose splat config links it, so `RoomLib_CaptureFrameSample`
+  (m156/m291/m380) and `RoomFx_EffectSequence` (other rooms) no longer
+  collide at `D_80192C34`/`D_80192C38`/`D_80192C3C`.
 
 Still open:
 
-- Scalar versus record access of one word in different functions, where
-  the record view keeps the address in a register (a read-modify-write or
-  a reload) and the scalar view reloads it: `D_800B0CD8`/`g_GameState`
-  (`Boot_FrameLoop`, `Pm_ProcessManager` and `CdRom_BootReadFlow` need the
-  scalar, `Entity_FrameUpdate`, `CD_TrackReadFlow` and `Pm_ProcessManager`
-  the record), `D_800BCF88` (the room grab effects update it as a volatile
-  word), `D_800BCFA8` (fx_common saves and restores it as a scalar), and
-  `D_800B0CE6` (`Battle_EncounterInitializationFlow` needs the record view
-  for its `lbu`/`ori`/`sb` sequence, `Scene_SetStoryDay` a plain byte).
-- `D_800E11E8` and `D_800E11EA` (texture page words): the room and scene
-  headers read them as plain `u16`, as `volatile u16` (store order), as
-  one-member records (a record load stays behind the stores through the
-  particle pointer, a scalar load does not) and as arrays. Each group
-  needs its alias class, so one type changes the code of another group.
-- `g_RoomScriptRecord`: the record `RoomLib_SetTaskVar0` returns is each
-  room's own data; room_m123's glow burst reads its intensity as a scalar
-  `s16` (as a union member the address stays in a register), room_m005 and
-  room_m023 read records.
-- `D_80192C34`, `D_80192C38`, `D_80192C3C`: two room_lib units linked into
-  different rooms (`RoomLib_CaptureFrameSample` into m156/m291/m380,
-  `RoomFx_EffectSequence` into others) name different data at these
-  addresses. The checker scopes room_lib as one overlay, so it reports
-  them.
-- `room_m350/RoomEffect_FadingModel.c` keeps its own `GetClut`, `rsin` and
-  `rcos` declarations while that file is being edited.
+- `GetClut`: `room_m350/RoomEffect_FadingModel.c` keeps its own `GetClut`,
+  `rsin` and `rcos` declarations while that file is being edited.
 - Translation units that cannot merge: `Entity_CollisionDatabase` with
   `Entity_UpdateList` (`-G8` against default) and
   `Render_EntityAndTexturedQuadFlow` with `Render_DrawObjectAndClut` (GPREL
