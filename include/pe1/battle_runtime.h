@@ -34,6 +34,10 @@ extern u8 D_8009D1DC;
 extern u8 D_8009CE38[4];
 extern unsigned int D_8009D1AC;
 extern u8 D_8009D1CE;
+/* D_8009D1CE read as the signed save-overlay flag, and the actor effect
+ * timer at 0x8009D228 read as a signed count. */
+extern s8 g_BattleSaveOverlayActive;
+extern s16 g_ActorEffectFlag100Timer;
 extern u8 D_8009CE60;
 extern u8 D_8009D1D4;
 extern u8 D_8009CE3C;

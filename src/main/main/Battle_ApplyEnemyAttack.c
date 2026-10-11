@@ -1,47 +1,19 @@
 #include "common.h"
 #include "pe1/battle.h"
 #include "pe1/inventory.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/game_state.h"
 #define NULL ((void *)0)
 
-#define COMBATANT_ATTRIBUTES(base) \
-    ((Combatant *)(base))->attributes
-#define ATTRIBUTE_EFFECT_FLAGS(base) \
-    ((BattleAttributes *)(base))->effectFlags
-
-#define D278_0 (*(u8 **)&D278_o16)
-#define D278_1 (*(u8 **)&D278_o16)
-#define D278_2 (*(u8 **)&D278_o17)
-#define D278_3 ((u8 *)g_ActiveActor)
-#define D278_4 (*(u8 **)&D278_o16)
-#define D278_5 (*(u8 **)&D278_o17)
-#define D278_6 ((u8 *)g_ActiveActor)
-#define D278_7 (*(u8 **)&D278_o16)
-#define D278_8 (*(u8 **)&D278_o17)
-#define D278_9 ((u8 *)g_ActiveActor)
-#define D278_10 (*(u8 **)&D278_o16)
-#define D278_11 (*(u8 **)&D278_o17)
-#define D278_12 ((u8 *)g_ActiveActor)
-#define D278_13 (*(u8 **)&D278_o16)
-#define D278_14 (*(u8 **)&D278_o17)
-#include "Battle_ApplyEnemyAttack_externs.h"
-#define D278_15 ((u8 *)g_ActiveActor)
-#define D278_16 (*(u8 **)&D278_o16)
-#define D278_17 (*(u8 **)&D278_o17)
-
-#define g_ActorEffectFlag100Timer (*(s16 *)&D228_o)
-#define g_BattleSaveOverlayActive (*(s8 *)&D1CE_o)
-#define D2E8A (*(s32 *)&D2E8_oa)
-#define D2E8B (*(s32 *)&D2E8_ob)
-
 void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
-    s32 *ps = (s32 *)(D278_0 + 0x4C);
+    s32 *ps = &g_ActiveActor->stateFlags;
 
     switch (ent->effect->effectType) {
     case ENEMY_EFFECT_POISON:
         if ((*ps & AYA_POISON_MASK) == AYA_POISON) {
             break;
         }
-        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_1)) & EFFECT_RESIST_POISON) {
+        if (g_ActiveActor->attributes->effectFlags & EFFECT_RESIST_POISON) {
             if ((rand() % 100) < AYA_POISON_RESIST_CHANCE) {
                 break;
             }
@@ -53,7 +25,7 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
                 break;
             }
             {
-                Combatant *pD = (Combatant *)D278_2;
+                Combatant *pD = g_ActiveActor;
                 u8 lvl;
                 *ps = (f & ~AYA_POISON_MASK) | AYA_POISON;
                 pD->statusTimer40 = 0x2328;
@@ -63,13 +35,13 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
             }
         }
         {
-            Combatant *pD = (Combatant *)D278_3;
+            Combatant *pD = g_ActiveActor;
             pD->subActionPeriod = ent->effectDuration;
         }
         break;
     case ENEMY_EFFECT_CLEAR_BUFFS:
         {
-            Combatant *pD = (Combatant *)D278_4;
+            Combatant *pD = g_ActiveActor;
             s32 flags;
             flags = pD->stateFlags;
             g_ActorEffectFlag100Timer = 0;
@@ -87,7 +59,7 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
         if ((*ps & AYA_CONFUSION_MASK) == AYA_CONFUSION) {
             break;
         }
-        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_5)) & EFFECT_RESIST_CONFUSION) {
+        if (g_ActiveActor->attributes->effectFlags & EFFECT_RESIST_CONFUSION) {
             if ((rand() % 100) < AYA_CONFUSION_RESIST_CHANCE) {
                 break;
             }
@@ -102,11 +74,11 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
                 *ps = f & ~AYA_CONFUSION_MASK;
                 break;
             }
-            d = D2E8A;
+            d = g_FieldMoveLock;
             *ps = (f & ~AYA_CONFUSION_MASK) | AYA_CONFUSION;
-            D2E8B = d | FIELD_MOVE_CONFUSED;
+            g_FieldMoveLock = d | FIELD_MOVE_CONFUSED;
             r = rand();
-            pD = (Combatant *)D278_6;
+            pD = g_ActiveActor;
             a3v = r;
             if (r < 0) {
                 a3v = r + 3;
@@ -119,7 +91,7 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
         if ((*ps & AYA_DARKNESS_MASK) == AYA_DARKNESS) {
             break;
         }
-        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_7)) & EFFECT_RESIST_DARKNESS) {
+        if (g_ActiveActor->attributes->effectFlags & EFFECT_RESIST_DARKNESS) {
             if ((rand() % 100) < AYA_DARKNESS_RESIST_CHANCE) {
                 break;
             }
@@ -131,7 +103,7 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
                 *ps = f & ~AYA_DARKNESS_MASK;
                 break;
             }
-            pD = (Combatant *)D278_8;
+            pD = g_ActiveActor;
             *ps = (f & ~AYA_DARKNESS_MASK) | AYA_DARKNESS;
             pD->statusTimer44 = 0x2328;
         }
@@ -140,7 +112,7 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
         if ((*ps & AYA_STIFFNESS_MASK) == AYA_STIFFNESS_LOCK) {
             break;
         }
-        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_9)) & EFFECT_RESIST_STIFFNESS) {
+        if (g_ActiveActor->attributes->effectFlags & EFFECT_RESIST_STIFFNESS) {
             if ((rand() % 100) < AYA_STIFFNESS_LOCK_RESIST_CHANCE) {
                 break;
             }
@@ -156,7 +128,7 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
             }
             {
                 s32 nf = (*ps & ~AYA_STIFFNESS_MASK) | AYA_STIFFNESS_LOCK;
-                Combatant *pD = (Combatant *)D278_10;
+                Combatant *pD = g_ActiveActor;
                 *ps = nf;
                 pD->statusTimer46 = 0x2328;
             }
@@ -172,7 +144,7 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
                 break;
             }
         }
-        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_11)) & EFFECT_RESIST_STIFFNESS) {
+        if (g_ActiveActor->attributes->effectFlags & EFFECT_RESIST_STIFFNESS) {
             if ((rand() % 100) < AYA_STIFFNESS_SLOW_RESIST_CHANCE) {
                 break;
             }
@@ -188,7 +160,7 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
             }
             {
                 s32 nf = (*ps & ~AYA_STIFFNESS_MASK) | AYA_STIFFNESS_SLOW;
-                Combatant *pD = (Combatant *)D278_12;
+                Combatant *pD = g_ActiveActor;
                 *ps = nf;
                 pD->statusTimer46 = 0x2328;
             }
@@ -199,7 +171,7 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
         break;
     case ENEMY_EFFECT_HALVE_HP:
         if (!(*ps & AYA_BARRIER)) {
-            Combatant *pD = (Combatant *)D278_13;
+            Combatant *pD = g_ActiveActor;
             s32 tmp = pD->curHP << 16;
             if ((tmp >> 16) >= 2) {
                 *(s16 *)&pD->curHP = tmp >> 17;
@@ -208,7 +180,7 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
         break;
     case ENEMY_EFFECT_REDUCE_HP_TO_1:
         {
-            Combatant *pD = (Combatant *)D278_14;
+            Combatant *pD = g_ActiveActor;
             s32 hp;
             s32 f;
             g_ActorEffectFlag100Timer = 0;
@@ -228,7 +200,7 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
         break;
     case ENEMY_EFFECT_STEAL_ITEM:
     case ENEMY_EFFECT_STEAL_ITEM_ALT:
-        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_15)) & EFFECT_RESIST_STEAL) {
+        if (g_ActiveActor->attributes->effectFlags & EFFECT_RESIST_STEAL) {
             s32 r = rand();
             if ((r % 100) >= ENEMY_STEAL_RESIST_CHANCE) {
                 ent->lootItemId = Inv_PickRandomItem(r / 100);
@@ -244,7 +216,7 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
         break;
     case ENEMY_EFFECT_STEAL_AMMO:
     case ENEMY_EFFECT_STEAL_AMMO_ALT:
-        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_16)) & EFFECT_RESIST_STEAL) {
+        if (g_ActiveActor->attributes->effectFlags & EFFECT_RESIST_STEAL) {
             if ((rand() % 100) >= ENEMY_STEAL_RESIST_CHANCE) {
                 Inv_RollRandomItemType(&ent->lootItemId,
                                        &ent->lootItemAux);
@@ -259,7 +231,7 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
         break;
     case ENEMY_EFFECT_HP_TO_THREE_QUARTERS:
         if (!(*ps & AYA_BARRIER)) {
-            Combatant *pD = (Combatant *)D278_17;
+            Combatant *pD = g_ActiveActor;
             s16 t = *(s16 *)&pD->curHP;
             if (t >= 2) {
                 *(s16 *)&pD->curHP = (t * 3) / 4;
@@ -269,5 +241,3 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
     }
 }
 
-#undef ATTRIBUTE_EFFECT_FLAGS
-#undef COMBATANT_ATTRIBUTES
