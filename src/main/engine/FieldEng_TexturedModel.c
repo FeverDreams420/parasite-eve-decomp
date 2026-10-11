@@ -141,85 +141,55 @@ void func_800C6FA0(char *data, u16 factor)
 }
 
 void func_800C7098(char *data, u8 r, u8 g, u8 b) {
-    int i = 0;
     FieldModelHeader *table = (FieldModelHeader *)data;
     FieldModelColor *entry = (FieldModelColor *)(data + table->colorOffset);
-    int count;
-    /* Keeps the empty 8-byte frame emitted by the original. */
-    volatile int pad;
+    int i;
 
-    count = table->colorCount;
-    if (count > 0) {
-        do {
-            i++;
-            entry->rgb.r = r;
-            entry->rgb.g = g;
-            entry->rgb.b = b;
-            entry++;
-        } while (i < table->colorCount);
+    for (i = 0; i < table->colorCount;) {
+        i++;
+        entry->rgb.r = r;
+        entry->rgb.g = g;
+        entry->rgb.b = b;
+        entry++;
     }
 }
 
 void func_800C70EC(char *data, int rDelta, int gDelta, int bDelta) {
     FieldModelHeader *table = (FieldModelHeader *)data;
-    int frame;
-    int offset;
-    int count;
+    FieldModelColor *entry = (FieldModelColor *)(data + table->colorOffset);
     int i;
-    FieldModelColor *entry;
-    register u8 *bluePtr asm("$9");
+    s16 value;
+    s16 blue;
 
-    i = 0;
-    offset = table->colorOffset;
-    count = table->colorCount;
-    entry = (FieldModelColor *)(data + offset);
-    if (count > 0) {
-        bluePtr = &entry->rgb.b;
-        do {
-            register s16 value asm("$3");
-            int calc;
-            int blueValue;
-            register int blue asm("$8");
-
-            value = entry->rgb.r;
-            calc = value + rDelta;
-            value = calc;
-            if ((s16)calc >= 0x100) {
-                value = 0xFF;
-            }
-            if (value < 0) {
-                value = 0;
-            }
-            entry->rgb.r = value;
-
-            value = bluePtr[-1];
-            calc = value + gDelta;
-            value = calc;
-            if ((s16)calc >= 0x100) {
-                value = 0xFF;
-            }
-            if (value < 0) {
-                value = 0;
-            }
-
-            blue = bluePtr[0];
-            blueValue = blue + bDelta;
-            blue = blueValue;
-            asm volatile("" : "=r"(blueValue) : "0"(blueValue));
-            bluePtr[-1] = value;
-            if ((s16)blueValue >= 0x100) {
-                blue = 0xFF;
-            }
-            if ((s16)blue < 0) {
-                blue = 0;
-            }
-            i++;
-            bluePtr[0] = blue;
-            bluePtr += 4;
-            entry++;
-        } while (i < table->colorCount);
+    for (i = 0; i < table->colorCount; i++, entry++) {
+        value = entry->rgb.r;
+        value += rDelta;
+        if (value >= 0x100) {
+            value = 0xFF;
+        }
+        if (value < 0) {
+            value = 0;
+        }
+        entry->rgb.r = value;
+        value = entry->rgb.g;
+        value += gDelta;
+        if (value >= 0x100) {
+            value = 0xFF;
+        }
+        if (value < 0) {
+            value = 0;
+        }
+        entry->rgb.g = value;
+        blue = entry->rgb.b;
+        blue += bDelta;
+        if (blue >= 0x100) {
+            blue = 0xFF;
+        }
+        if (blue < 0) {
+            blue = 0;
+        }
+        entry->rgb.b = blue;
     }
-    asm volatile("" : : "r"(&frame));
 }
 
 /* Composes the placement onto the view matrix, then walks the flat and
