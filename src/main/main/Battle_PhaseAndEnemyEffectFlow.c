@@ -8,9 +8,10 @@
 #include "pe1/akao.h"
 #include "pe1/entity_animation.h"
 #include "pe1/pm.h"
+#include "pe1/battle_main.h"
+#include "pe1/battle_runtime.h"
 
 #define NULL ((void *)0)
-typedef struct { u8 bytes[0x14]; } __attribute__((packed)) Tbl20;
 typedef struct { s32 words[4]; } Copy16;
 typedef struct { u8 bytes[0x10]; } __attribute__((packed)) PackedCopy16;
 typedef struct { u8 bytes[8]; } __attribute__((packed)) PackedCopy8;

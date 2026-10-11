@@ -3,12 +3,13 @@
 #include "pe1/map_selection.h"
 #include "pe1/font.h"
 #include "pe1/scene_dispatch.h"
+#include "pe1/asset_table.h"
+#include "pe1/battle_entity_anim.h"
+#include "pe1/battle_runtime.h"
 
-#include "MapSelectionFlow_externs.h"
 
 int Menu_GetEquipSlotStateOrIndex(void);
 int Task_GpuPackPrimColor(int start, int end);
-int Str_ParseBase32Id(u8 *text);
 
 int Scene_SelectMapById(int **args) {
     int raw_selection;
@@ -65,7 +66,6 @@ int Scene_SelectMapById(int **args) {
     return raw_selection;
 }
 
-#include "MapSelectionFlow_externs_1.h"
 
 int Task_SetFloorByEntityRoll(u8 **args) {
     int selection;

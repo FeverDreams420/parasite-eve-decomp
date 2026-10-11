@@ -2,6 +2,8 @@
 #include "pe1/battle.h"
 #include "pe1/akao.h"
 #include "pe1/entity_animation.h"
+#include "pe1/battle_main.h"
+#include "pe1/battle_entity_anim.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */

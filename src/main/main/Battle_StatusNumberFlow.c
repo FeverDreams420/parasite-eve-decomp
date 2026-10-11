@@ -2,6 +2,7 @@
 #include "pe1/global_slot.h"
 
 #include "Battle_StatusNumberFlow_externs.h"
+#include "pe1/battle_main.h"
 
 void Battle_DrawStatusValue(int value, int yOffset)
 {

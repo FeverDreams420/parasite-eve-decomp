@@ -2,6 +2,8 @@
 #include "pe1/battle_status.h"
 #include "pe1/render_prim.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/battle_main.h"
+#include "pe1/render_buffers.h"
 
 /* Builds the rotating target pointer and the two connector lines that tie
  * the floating status panel to the selected combatant. */
@@ -360,14 +362,10 @@ void Battle_DrawSpellName(void) {
     }
 }
 
-typedef struct StatusSymbolTemplate {
-    u8 bytes[18];
-} StatusSymbolTemplate;
 typedef struct StatusSymbolSlot {
     StatusSymbolTemplate data;
     u8 padding[6];
 } StatusSymbolSlot;
-#include "Battle_StatusPrimitiveFlow_externs_1.h"
 
 void Battle_DrawStatusSymbol(s8 which) {
     StatusSymbolSlot first;

@@ -4,6 +4,7 @@
 #include "pe1/battle_runtime.h"
 #include "pe1/psyq_nop.h"
 #include "pe1/gte_types.h"
+#include "pe1/battle_main.h"
 
 typedef struct BattleGlobalSlot {
     char storage[16];

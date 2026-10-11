@@ -1,5 +1,6 @@
 #include "pe1/battle.h"
 #include "pe1/textbox.h"
+#include "pe1/battle_runtime.h"
 
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */

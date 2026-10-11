@@ -4,6 +4,7 @@
 #include "pe1/gte_types.h"
 
 #include "Battle_PlayerTurnFlow_externs.h"
+#include "pe1/battle_main.h"
 #define PLAYER (D_8009D254_absolute.value)
 #define ACTIVE (D_8009D278_absolute.value)
 #define SECOND_SOUND (D_8009D2FC_absolute.value)

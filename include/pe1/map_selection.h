@@ -19,4 +19,13 @@ typedef char MapSelectionName_size_must_be_8_bytes[
 extern MapSelectionIndexRow g_MapSelectIndexTable[];
 extern MapSelectionName g_MapFilenameTable[];
 
+/* Map id strings parsed by MapSelectionFlow: the debug overrides, the
+ * fixed start maps and the per-entry id table (8 bytes per map). */
+extern s8 D_8009CD78[];
+extern s8 D_8009CD80[];
+extern s8 g_MapIdTable[];
+extern s8 g_MapNameOverrideA[];
+extern s8 g_MapNameOverrideB[];
+extern unsigned int D_8009D280; /* selected map id */
+
 #endif

@@ -1,5 +1,7 @@
 #include "pe1/entity_animation.h"
 #include "pe1/gte.h"
+#include "pe1/battle_reset_stats.h"
+#include "pe1/battle_entity_anim.h"
 
 typedef struct FacingMotion {
     u8 state;
@@ -26,7 +28,6 @@ typedef struct FacingCore {
     s32 previous_delta;
 } FacingCore;
 
-#include "Battle_UpdateEntityFacing_externs.h"
 int Battle_CalcRelativeAngle(BattleEntity *, BattleEntity *);
 
 void Battle_UpdateEntityFacing(BattleEntity *entity)
