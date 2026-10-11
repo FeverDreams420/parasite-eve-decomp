@@ -42,12 +42,44 @@ void Battle_DrawEnemyHP(s16 maximum, s16 current);
 void Gpu_DrawStatusIcons(void);
 int Menu_GetItemContextFlag(void);
 
-/* Shared HUD packet arenas; interior symbols retain independent relocations. */
-extern u8 D_8009E068[], D_8009E070[], D_8009E098[], D_8009E0C0[];
+/* Active menu window origin (Menu_ActiveWindowMode): x at D_8009CE84 and y
+ * in the next halfword. The HUD reads it as one record, so the stores to the
+ * packets make GCC reload it. */
+typedef struct BattleHudOrigin {
+    u16 x;
+    u16 y;
+} BattleHudOrigin;
+
+extern volatile u16 D_8009CE84;
+#define g_HudOrigin (*(BattleHudOrigin *)&D_8009CE84)
+
+/* Per draw buffer HUD packets (Battle_DrawHPBar fills them once). */
+typedef struct BattleModeTilePacket {
+    RenderDrawModePacket mode;
+    RenderColorTilePacket tile;
+} BattleModeTilePacket;
+
+PE1_STATIC_ASSERT(sizeof(BattleModeTilePacket) == 0x18,
+                  battle_mode_tile_packet_size);
+
+extern BattleModeTilePacket D_8009E068[2];      /* status background */
+/* The background tiles seen from the tile: each is followed by the mode
+ * words of the next packet. Battle_DrawActiveStatus addresses them this way,
+ * keeping the tile base in a register. */
+typedef struct BattleTileSlot {
+    RenderColorTilePacket tile;
+    RenderDrawModePacket nextMode;
+} BattleTileSlot;
+extern BattleTileSlot D_8009E070[2];
+extern RenderColorTilePacket D_8009E098[2];     /* ATB gauge track */
+extern RenderPagedSpritePacket D_8009E0B8[2];   /* ATB label */
+extern RenderPagedSpritePacket D_8009E320[2];   /* PE label */
+extern RenderGouraudQuad D_800B00E8[2];         /* ATB gauge fill */
+extern RenderGouraudQuad D_800B0130[2][2];      /* PE gauge fill, remainder */
+extern RenderPagedSpritePacket D_800B6920[2];   /* ATB gauge marker */
+/* HP digit packets: interior symbols retain independent relocations. */
 extern u8 D_8009E0F0[], D_8009E0F8[], D_8009E1D0[], D_8009E1D8[];
 extern u8 D_8009E2F0[];
-extern u8 D_8009E328[], D_800B00E8[], D_800B00F8[], D_800B00FA[];
-extern u8 D_800B0130[], D_800B0140[], D_800B6928[];
 /* End-of-battle panel; color bytes also have independent retail symbols. */
 extern RenderTexturedQuad D_800BE9F0[2];
 extern u8 D_800BE9F4[], D_800BE9F5[], D_800BE9F6[];

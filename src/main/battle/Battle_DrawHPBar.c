@@ -182,32 +182,30 @@ void Battle_DrawHPBar(void) {
             }
         }
         pageCode = GetTPage(0, 0, 0, 0);
-        temp_s0_3 = bufferIndex * 0x18;
-        Gpu_InitDrawModeTilePacket(temp_s0_3 + D_8009E068, pageCode);
-        temp_s0_4 = temp_s0_3 + (D_8009E068 + 8);
+        Gpu_InitDrawModeTilePacket(&D_8009E068[bufferIndex], pageCode);
+        temp_s0_4 = &D_8009E068[bufferIndex].tile;
         temp_s0_4->r0 = 0x30;
         temp_s0_4->g0 = 0x30;
         temp_s0_4->b0 = 0x30;
         SetSemiTrans(temp_s0_4, 1);
-        temp_s1_3 = (bufferIndex * 0x10) + D_8009E098;
+        temp_s1_3 = &D_8009E098[bufferIndex];
         SetTile(temp_s1_3);
-        primaryGradient = (bufferIndex * 0x24) + D_800B00E8;
+        primaryGradient = &D_800B00E8[bufferIndex];
         temp_s1_3->r0 = 0x1D;
         temp_s1_3->g0 = 0x3E;
         temp_s1_3->b0 = 0x32;
         temp_s1_3->w = 0x38;
         temp_s1_3->h = 3;
         SetPolyG4(primaryGradient);
-        temp_s2 = bufferIndex * 0x1C;
-        Gpu_InitDrawModeSprtPacket(temp_s2 + D_800B6920, hudPage);
+        Gpu_InitDrawModeSprtPacket(&D_800B6920[bufferIndex], hudPage);
         i = 0;
         temp_s3_2 = bufferIndex * 0x70;
         base0 = (u32)D_8009E0F0;
         body0 = base0 + 8;
-        temp_s1_4 = temp_s2 + (D_800B6920 + 8);
+        temp_s1_4 = &D_800B6920[bufferIndex].sprite;
         temp_s1_4->u = 0xC8;
         temp_s1_4->v = 0xE0;
-        *(u16 *)(D_800B6936 + temp_s2) = hudClut;
+        D_800B6920[bufferIndex].sprite.clut = hudClut;
         temp_s1_4->width = 4;
         temp_s1_4->height = 8;
         primaryGradient->b0 = highBlue;
@@ -257,10 +255,9 @@ loop_8:
         if ((u32) (i & 0xFF) < 5U) {
             goto loop_8;
         }
-        temp_s2_2 = bufferIndex * 0x48;
-        greenGradient = temp_s2_2 + D_800B0130;
+        greenGradient = &D_800B0130[bufferIndex][0];
         SetPolyG4(greenGradient);
-        pinkGradient = temp_s2_2 + (D_800B0130 + 0x24);
+        pinkGradient = &D_800B0130[bufferIndex][1];
         SetPolyG4(pinkGradient);
         temp_s4 = bufferIndex * 0x1C;
         {
@@ -293,8 +290,8 @@ loop_8:
         pinkGradient->r3 = 0x83;
         pinkGradient->g3 = 0x13;
         pinkGradient->b3 = 1;
-        Gpu_InitDrawModeSprtPacket(temp_s4 + D_8009E0B8, hudPage);
-        temp_s3_3 = temp_s4 + (D_8009E0B8 + 8);
+        Gpu_InitDrawModeSprtPacket(&D_8009E0B8[bufferIndex], hudPage);
+        temp_s3_3 = &D_8009E0B8[bufferIndex].sprite;
         SetShadeTex(temp_s3_3, 1);
         markerV = 0xF4;
         temp_s3_3->u = 0x50;
@@ -302,7 +299,7 @@ loop_8:
         temp_s3_3->color.bytes.r = 0x80;
         temp_s3_3->color.bytes.g = 0x80;
         temp_s3_3->color.bytes.b = 0x80;
-        *(u16 *)(D_8009E0CE + temp_s4) = hudClut;
+        D_8009E0B8[bufferIndex].sprite.clut = hudClut;
         temp_s3_3->width = 8;
         temp_s3_3->height = 4;
         Gpu_InitDrawModeSprtPacket(temp_s4 + D_8009E2E8, hudPage);
@@ -316,8 +313,8 @@ loop_8:
         *(u16 *)(D_8009E2FE + temp_s4) = hudClut;
         temp_s0_12->width = 8;
         temp_s0_12->height = 4;
-        Gpu_InitDrawModeSprtPacket(temp_s4 + D_8009E320, hudPage);
-        temp_s1_7 = temp_s4 + (D_8009E320 + 8);
+        Gpu_InitDrawModeSprtPacket(&D_8009E320[bufferIndex], hudPage);
+        temp_s1_7 = &D_8009E320[bufferIndex].sprite;
         SetShadeTex(temp_s1_7, 1);
         i = 0;
         temp_s3_4 = bufferIndex * 0x30;
@@ -327,7 +324,7 @@ loop_8:
         temp_s1_7->color.bytes.r = 0x80;
         temp_s1_7->color.bytes.g = 0x80;
         temp_s1_7->color.bytes.b = 0x80;
-        *(u16 *)(D_8009E336 + temp_s4) = hudClut;
+        D_8009E320[bufferIndex].sprite.clut = hudClut;
         temp_s1_7->width = 8;
         temp_s1_7->height = 4;
 
