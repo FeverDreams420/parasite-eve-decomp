@@ -285,7 +285,7 @@ void Entity_RollbackPositionHierarchy(FieldActor *arg0)
                     cur->pos_x = cur->base_x;
                     cur->pos_y = cur->base_y;
                     cur->pos_z = cur->base_z;
-                    cur->field_1a4 = cur->field_1a8;
+                    cur->collision_face = cur->collision_face_mirror;
                 }
                 cur = cur->next;
             } while (cur != 0);
@@ -294,7 +294,7 @@ void Entity_RollbackPositionHierarchy(FieldActor *arg0)
         arg0->pos_x = arg0->base_x;
         arg0->pos_y = arg0->base_y;
         arg0->pos_z = arg0->base_z;
-        arg0->field_1a4 = arg0->field_1a8;
+        arg0->collision_face = arg0->collision_face_mirror;
         arg0->flags |= 0x40000;
     }
 }

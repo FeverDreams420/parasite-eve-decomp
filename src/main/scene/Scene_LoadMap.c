@@ -108,7 +108,7 @@ FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
     actor->action_data = 0;
     actor->anim.fixed = 0;
     actor->parent = 0;
-    actor->field_1a4 = 0;
+    actor->collision_face = 0;
     actor->script_cursor_19c = 0;
     actor->script_cursor_1a0 = 0;
     W(actor, 0x198) = 0;

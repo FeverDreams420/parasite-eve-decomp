@@ -72,8 +72,8 @@ typedef struct FieldActor {
     /* 0x198 */ unsigned char pad_198[0x04];
     /* 0x19C */ unsigned int *script_cursor_19c; /* entry for queued field-sfx tasks */
     /* 0x1A0 */ unsigned int *script_cursor_1a0; /* entry for actor-contact tasks */
-    /* 0x1A4 */ int field_1a4;          /* rolled back from field_1a8 alongside pos */
-    /* 0x1A8 */ int field_1a8;
+    /* 0x1A4 */ int collision_face;        /* floor face under the actor; rolled back with pos */
+    /* 0x1A8 */ int collision_face_mirror; /* face recorded before the move */
     /* A model-header address; the integer view is also tested before using
      * or releasing the actor's render allocation. */
     /* 0x1AC */ union {
