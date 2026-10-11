@@ -119,51 +119,51 @@ question, not a real conflict:
 
 `python3 tools/scripts/decl_conflicts.py --count` lists symbols declared more
 than once with different types (629 at the start of the header unification,
-232 after it, 99 after the battle pass). What remains falls into these
+232 after it, 99 after the battle pass, 65 after the small-data pass). What
+remains falls into these
 groups; each is left open on purpose, because one declaration would change
 the generated code or needs a decision about code that is not part of this
 pass.
 
-- Battle small data versus absolute access: `D_8009D1A8`, `D_8009D1AC`,
-  `D_8009D1CE`, `D_8009D1D4`, `D_8009D244`, `D_8009D278`, `D_8009D294`,
-  `D_8009D298`, `D_8009D2A4`, `D_8009D2B0`. Some `-G8` (or `-G1`/`-G2`)
-  battle and menu units reach each of them through `$gp` and others through
-  an absolute address, so one needs a sized scalar and the other an
-  incomplete array. Turning a scalar into an array element lets GCC keep the
-  array address in a register and reorders or reallocates the accesses
-  (tried for `D_8009D294`, `D_8009D2B0` and `D_8009D1AC`).
-- `D_800B0CE6`: the scene loader's scalar `u8` and the battle units' wide
-  view; as an array element `Scene_SetStoryDay` changes.
-- `D_8009CE84`: the menu window definition needs `volatile` for its store
-  order and the battle status flow reads it plainly.
-- `BattleCmd_CommitAmmoAndUpdate(void *out)`: `Battle_FinalizeAttackResult`
-  calls it without an argument, and passing the action that is already in
-  `$a0` in `Battle_DispatchEntityEffect` changes its register allocation.
+- Small data versus absolute access is solved per unit, not per symbol: a
+  `-G8` unit that reads a small word absolutely while its own small data is
+  `$gp`-relative takes `/* MASPSX_FORCE_G0: 1 */` with
+  `--use-comm-section`, and tentative (COMMON) definitions of the words it
+  does reach through `$gp`. MASPSX then emits `$gp` loads only for that
+  COMMON metadata and every extern stays absolute, whatever its declared
+  size. This retired the wide, unsized and aliased views of the battle,
+  task, boot and menu words (`D_8009D1A8`..`D_8009D2B0`, `g_TaskNodePool`,
+  `g_CurrentEntity`, `g_SceneDispatchToken`, `D_8009D2F0`, the frame-loop
+  blobs). A unit that also needs cc1 to treat a small word as expensive
+  (address kept in a register) gets `-G0` for cc1 instead; that is why
+  `Gpu_InitPipeline` is its own unit, ahead of the `-G8` frame loop.
+- `D_800B0CE6`: `Battle_EncounterInitializationFlow` needs a view larger
+  than the `-G8` limit (cc1 then keeps `la` in a register for the
+  `lbu`/`ori`/`sb` sequence), while `Scene_SetStoryDay` needs a plain byte:
+  through a record view its registers are allocated differently.
+- `BattleCmd_CommitAmmoAndUpdate(void *out)`: the definition passes `out` on,
+  but `Battle_FinalizeAttackResult` and `Battle_DispatchEntityEffect` call it
+  without an argument; passing the action that is already in `$a0` moves the
+  actor pointer of `Battle_DispatchEntityEffect` from `$v0` to `$a0`.
 - Actor and state words shared by battle, field and room code with many
   views: `D_8009D254`/`g_PlayerEntity` (one address, two names, more than
   twenty room view types), `g_ActiveActor`, `D_8009D20C`,
   `g_FieldActorListHead`, `g_ActiveDrawSlot`. These need the overlay views
   unified first and mix small data with absolute access.
-- Small data versus absolute access: `g_TaskNodePool`, `g_CurrentEntity`,
-  `g_RenderStateFlags`, `g_GameStateFlags`, `D_8009D1F4`, `D_8009D1A0`,
-  `g_SceneDispatchToken`, `D_8009D2E8`. A `-G8` unit reaches them through
-  `$gp`, another needs an absolute address; changing a symbol between scalar
-  and array changes how GCC orders the accesses (seen in
+- Small data versus absolute access: `g_GameStateFlags`, `D_8009D1F4`,
+  `D_8009D1A0`, `D_8009D2E8`. A `-G8` unit reaches them through `$gp`,
+  another needs an absolute address; changing a symbol between scalar and
+  array changes how GCC orders the accesses (seen in
   `Render_CameraViewportFlow` and `Entity_PoolInit`).
-- Raw views in pinned `-G8` units: `Boot_FrameLoop` (`D_800BEA40`..`D_800BEA50`,
-  `D_800BCFE8`, `D_8009D224`) needs absolute byte views, and some symbols are
-  separate on purpose so GCC does not merge their addresses.
-- `volatile` or store order that really differs between users: `D_800A76A0`
-  (a double store only `volatile` keeps), `g_GpuGp0Ptr` and `g_GpuGp1Ptr`
-  (`vram_transfer` needs plain stores), `D_800BD020`, `D_800E11E8`,
-  `D_800E1208`, `D_800E11EA` (two scene units index it as an array).
+- `D_800E11E8` and `D_800E11EA` (texture page words): the room and scene
+  headers read them as plain `u16`, as `volatile u16` (store order), as
+  one-member records (a record load stays behind the stores through the
+  particle pointer, a scalar load does not) and as arrays. Each group
+  needs its alias class, so one type changes the code of another group.
 - `D_800966EC` (trigonometry table): bitfield, union and `short[]` readers
   index it differently.
 - Per-room struct views shared through overlay headers (`D_8018EFF4`,
   `D_8018F1CC`, `RoomMain_ActorPtr`, the m350 and scene_e08 glow records).
-- Retail calls the same function with and without an argument:
-  `func_80020DD0`, `func_8001AA78`.
-- `g_AkaoCurTrack` is still used as a raw byte pointer by the sequencer.
 - `room_m350/RoomEffect_FadingModel.c` keeps its own `GetClut`, `rsin` and
   `rcos` declarations while that file is being edited.
 - Translation units that cannot merge: `Entity_CollisionDatabase` with
