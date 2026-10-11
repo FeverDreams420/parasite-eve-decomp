@@ -652,6 +652,10 @@ PE1_STATIC_ASSERT(sizeof(RenderObjectEntity) == 0xBC, render_object_entity_size)
 
 union RenderLightingMatrix;
 void Render_DrawObject(RenderObjectEntity *object, union RenderLightingMatrix *matrix);
+void Render_DrawObjectVariant(RenderObjectEntity *object, s16 limit, s32 *projectionMatrix);
+void Render_DrawObjectAlt(RenderObjectEntity *object, s16 limit, u8 red, u8 green, u8 blue);
+void Render_DrawTexturedQuads(RenderObjectEntity *object);
+void Render_BuildEntityMatrix(RenderObjectEntity *object, s16 bufferIndex);
 extern u32 D_8009CDA0;
 int Render_TickObject(RenderObjectEntity *object);
 int Render_ColorEntity(RenderObjectEntity *object);
@@ -664,12 +668,16 @@ void Render_SetObjectAnim(RenderObjectEntity *object, RenderObjectEntity *source
                           short animation_id);
 void Render_ClearObjectAnim(RenderObjectEntity *object);
 void Render_SetupBoneTransforms(RenderObjectEntity *object, s32 *view_matrix);
+void Render_TransformVertices(RenderObjectEntity *object);
 void Render_TransformSkinnedVertices(RenderObjectEntity *object, u32 *view_matrix);
 void Render_TransformMorphVertices(RenderObjectEntity *object, u32 *view_matrix);
 /* Word lookup/work buffers also used for GTE screen/depth output. */
 extern u32 D_800A6360[], D_800B1638[];
 /* Unit vertex normals indexed by RenderVec3s.pad of a model vertex. */
 extern RenderVec3s g_RenderNormalTable[];
+/* Projected screen XY and view depth of the transformed model vertices. */
+extern u32 D_800B1644[];
+extern s32 D_800A636C[];
 extern u8 D_8009CD98[];
 extern s16 D_8009CD9A;
 void Render_CopyFrameData(RenderObjectEntity *dst, RenderObjectEntity *src, s32 frame);
