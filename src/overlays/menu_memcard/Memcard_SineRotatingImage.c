@@ -29,7 +29,7 @@ s32 Memcard_SineRotatingImage(s32 mode, MemcardPulseState *state) {
         rotation.y = state->rotation.y;
         rotation.z = state->rotation.z;
         intensity = cosine >> 5;
-        __asm__("" : : "r"(intensity) : "memory");
+        __asm__ volatile("" ::: "memory");
         twist = state->timer;
         rotation.flags = 1;
         rotation.z = twist * 50;
