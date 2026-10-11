@@ -1,3 +1,4 @@
+#include "pe1/room_m350_effects.h"
 #include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
@@ -10,8 +11,8 @@ typedef RoomM350Vector Vector;
 typedef struct { Vector *position; short scale, reserved; } Particle;
 typedef struct { short target, current; } State;
 
-typedef struct RoomM350Instance { char reserved[22]; unsigned short frame; } Instance;
-typedef RoomM350Actor Actor;
+typedef RoomM350EffectInstance Instance;
+typedef RoomM350EffectActor Actor;
 
 /* The spawner owns the scaled particles rendered by this callback. */
 #include "pe1/gte_sine_table.h"

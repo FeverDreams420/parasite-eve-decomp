@@ -10,8 +10,8 @@
 #include "pe1/gte_sine_table.h"
 typedef RoomM350Vector Vector;
 typedef struct { Vector position; short delay,reserved; } Particle;
-typedef struct RoomM350Instance { char reserved[0x3A]; unsigned short yaw; } Instance;
-typedef RoomM350Actor Actor;
+typedef RoomM350EffectInstance Instance;
+typedef RoomM350EffectActor Actor;
 typedef RoomM350PositionQueue Queue;
 
 #include "RoomEffect_PositionQueue_externs.h"

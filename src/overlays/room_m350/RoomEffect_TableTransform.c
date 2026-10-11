@@ -1,3 +1,4 @@
+#include "pe1/room_m350_effects.h"
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
@@ -7,9 +8,9 @@
 #include "room_m350_data.h"
 
 typedef struct { short position[3]; short size; } Particle;
-typedef RoomM350TransformMatrix Transform;
-typedef struct RoomM350Instance { char reserved[22]; unsigned short frame; char reserved18[0x220]; Transform *transforms; } Instance;
-typedef RoomM350Actor Actor;
+typedef GteMatrix Transform;
+typedef RoomM350EffectInstance Instance;
+typedef RoomM350EffectActor Actor;
 
 typedef struct { unsigned char index, alternate; } Entry;
 #include "RoomEffect_TableTransform_externs.h"
@@ -57,7 +58,7 @@ int func_8019569C(int event) {
             if(entry->alternate) instance=(Instance *)D_8019A7F8;
             else instance=ANIM_OWNER_AS(Actor)->instance;
             {
-                int *source=instance->transforms[entry->index].position;
+                int *source=instance->transforms[entry->index].t;
                 for(j=0;j<3;j++) particle->position[j]=source[j];
             }
             particle->size=((int *)D_800966EC)[(relative<<7)&0xF80]+2048;
