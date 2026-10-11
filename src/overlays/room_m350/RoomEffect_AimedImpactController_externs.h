@@ -2,7 +2,6 @@
 #define PE1_EXT_57DD7A376697
 extern unsigned char D_8019A855;
 extern short D_8019A86A;
-extern int func_80196F2C(int, Particle *);
 extern int Math_IntSqrt(int);
 extern int Inv_ScrambleGrid(void);
 #endif /* PE1_EXT_57DD7A376697 */

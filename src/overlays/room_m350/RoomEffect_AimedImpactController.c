@@ -1,3 +1,4 @@
+#include "pe1/room_m350_drop.h"
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte_types.h"
@@ -7,7 +8,7 @@
 #include "pe1/asset_find.h"
 typedef RoomM350Vector Vector;
 typedef GteMatrix Matrix;
-typedef struct { Vector velocity; short x, y, z; unsigned char stopped, pad; } Particle;
+typedef RoomM350Drop Particle;
 
 typedef RenderMatrix Transform;
 typedef FieldActor Instance;
@@ -48,7 +49,7 @@ update:
         effect->x = transform[7].translation[0];
         effect->y = transform[7].translation[1];
         effect->z = transform[7].translation[2];
-        effect->stopped = 0;
+        effect->landed = 0;
         dx = transform[7].translation[0] - player->render_object.model_matrix.translation[0];
         dz = transform[7].translation[2] - player->render_object.model_matrix.translation[2];
         dy = transform[7].translation[1] - player->render_object.model_matrix.translation[1];
