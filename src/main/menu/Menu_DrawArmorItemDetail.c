@@ -1,13 +1,12 @@
-#include "common.h"
-#include "pe1/inventory.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
-
-#include "Menu_DrawArmorItemDetail_externs.h"
-
-void Draw_SetTextDimmed(int value);
-void *Str_LookupTable8(unsigned int index);
-void Sfx_DrawSlotRow(ItemDataRecord *entry, u8 *text);
+#include "common.h"
+#include "pe1/inventory.h"
+#include "pe1/inventory_slots.h"
+#include "pe1/draw_state.h"
+#include "pe1/menu_item_rows.h"
+#include "pe1/save.h"
+#include "pe1/text.h"
 
 void Menu_DrawArmorItemDetail(int slot) {
     void *display;

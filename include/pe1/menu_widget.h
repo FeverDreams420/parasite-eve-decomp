@@ -205,6 +205,7 @@ void MenuWidget_InitPool(void);
 void MenuWidget_NavScrollTo(int selectedBase);
 void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
 void MenuWidget_SetCursorY(MenuWidgetNode *node);
+int MenuWidget_IsCursorYClear(MenuWidgetNode *node);
 
 /* List node being drawn by the list renderers and row callbacks. */
 extern MenuWidgetNode *g_MenuActiveWidget;

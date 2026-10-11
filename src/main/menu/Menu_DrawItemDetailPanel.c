@@ -4,15 +4,9 @@
 #include "pe1/text.h"
 #include "pe1/inventory.h"
 #include "pe1/menu_context_help.h"
-
-#include "Menu_DrawItemDetailPanel_externs.h"
-int MenuWidget_IsCursorYClear(MenuWidgetNode *ptr);
-int Inv_GetPackedListItem(int);
-int Inv_RestoreSelection(unsigned int);
-int Inv_GetPackedListCount(void);
-void MenuWidget_OffsetPosition(MenuWidgetNode *, int, int);
-void Draw_PrintNumberWidth2Unk(int);
-void Draw_PrintNumberWidth3Unk(int value);
+#include "pe1/menu_equipment.h"
+#include "pe1/draw_level_bar.h"
+#include "pe1/draw_state.h"
 
 void Menu_DrawItemDetailPanel(MenuWidgetNode *panel) {
     MenuWidgetNode *selection;
@@ -20,6 +14,9 @@ void Menu_DrawItemDetailPanel(MenuWidgetNode *panel) {
     int index;
     int base;
     int panel_y;
+    /* Match debt: retail computes dx right after its two loads, in the
+     * argument registers; unpinned it is scheduled after the tail-count
+     * chain (lev 5). */
     register int dx asm("$5");
     register int dy asm("$6");
     int sum;

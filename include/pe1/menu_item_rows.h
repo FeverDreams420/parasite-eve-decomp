@@ -3,6 +3,7 @@
 
 #include "pe1/menu_widget.h"
 #include "pe1/menu_draw_list.h"
+#include "pe1/inventory.h"
 
 void Menu_DrawWeaponList(MenuWidgetNode *node);
 void Menu_DrawArmorList(MenuWidgetNode *node);
@@ -19,6 +20,11 @@ void Menu_DrawBlendColorOptionRow(int index);
 void Menu_DrawStatAllocationList(MenuWidgetNode *node);
 void Menu_UpdateStatBarAnimation(int stat);
 void Menu_DrawWeaponComparisonPanel(void);
+void Sfx_DrawSlotRow(ItemDataRecord *entry, u8 *text);
+/* List adapters binding a widget list to its row drawer. */
+void Menu_DrawMainMenuList(MenuWidgetNode *node);
+void Menu_DrawActionSubmenuList(MenuWidgetNode *node);
+void Menu_DrawCursorModeList(MenuWidgetNode *node);
 
 /* The equip list node whose grid cell the row drawers compare against. */
 extern int D_8009CEF4;

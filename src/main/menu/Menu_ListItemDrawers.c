@@ -135,7 +135,7 @@ void Menu_DrawActionSubmenuItem(int arg0) {
     }
 }
 
-void Menu_DrawBlendOptionItem(int arg0) {
+void Menu_DrawCursorModeItem(int arg0) {
     MenuWidget_DrawCenteredTableText(arg0 + 0x31);
 
     if (MenuWidget_GetColumnLayoutMode() == arg0) {

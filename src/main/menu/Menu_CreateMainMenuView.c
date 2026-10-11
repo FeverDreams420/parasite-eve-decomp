@@ -1,10 +1,15 @@
 
 #include "pe1/menu_widget.h"
 #include "pe1/menu_dialog.h"
+#include "pe1/menu_inventory.h"
+#include "pe1/menu_item_rows.h"
 #include "pe1/menu_sound.h"
+#include "pe1/inventory_slots.h"
 
 int Menu_MainMenuInputHandler(MenuWidgetNode *arg0, u32 arg1);
-void Menu_DrawMainMenuList(void);
+void Menu_OpenCursorModeMenu(MenuWidgetNode *parent);
+int Menu_ActionSubmenuInputHandler(MenuWidgetNode *arg0, u32 arg1);
+int Menu_CursorModeInputHandler(MenuWidgetNode *arg0, u32 arg1);
 
 void Menu_CreateMainMenuView(int arg0) {
     MenuWidgetNode *parent;
@@ -18,9 +23,6 @@ void Menu_CreateMainMenuView(int arg0) {
     Draw_SetPrimCallback(child, 4);
 }
 
-#include "pe1/menu_widget.h"
-
-#include "Menu_CreateMainMenuView_externs.h"
 
 int Menu_MainMenuInputHandler(MenuWidgetNode *arg0, u32 arg1) {
     MenuWidgetNode *child = MenuWidget_GetChild(arg0, 0);
@@ -31,7 +33,7 @@ int Menu_MainMenuInputHandler(MenuWidgetNode *arg0, u32 arg1) {
             Menu_CreateActionSubmenu(child);
             break;
         case 1:
-            func_8004B03C(child);
+            Menu_OpenCursorModeMenu(child);
             break;
         case 2:
             Menu_OpenBlendColorScreen(child);
@@ -59,12 +61,6 @@ int Menu_MainMenuInputHandler(MenuWidgetNode *arg0, u32 arg1) {
     return 1;
 }
 
-#include "pe1/menu_widget.h"
-
-#include "Menu_CreateMainMenuView_externs_1.h"
-
-int func_8004AFA4(MenuWidgetNode *arg0, u32 arg1);
-int func_8004B0A4(MenuWidgetNode *arg0, u32 arg1);
 
 void Menu_CreateActionSubmenu(MenuWidgetNode *arg0) {
     MenuWidgetNode *created;
@@ -72,12 +68,12 @@ void Menu_CreateActionSubmenu(MenuWidgetNode *arg0) {
 
     created = MenuWidget_CreateSimpleNode(0x21, arg0, 0, 0);
     node = MenuWidget_CreateNode(0x21, created, created);
-    created->update = func_8004AFA4;
+    created->update = Menu_ActionSubmenuInputHandler;
     node->draw = Menu_DrawActionSubmenuList;
     MenuWidget_SetCurrentNode(node);
 }
 
-int func_8004AFA4(MenuWidgetNode *arg0, u32 arg1) {
+int Menu_ActionSubmenuInputHandler(MenuWidgetNode *arg0, u32 arg1) {
     MenuWidgetNode *base;
 
     base = MenuWidget_GetChild(arg0, 0);
@@ -94,18 +90,18 @@ int func_8004AFA4(MenuWidgetNode *arg0, u32 arg1) {
     return 1;
 }
 
-void func_8004B03C(MenuWidgetNode *arg0) {
+void Menu_OpenCursorModeMenu(MenuWidgetNode *arg0) {
     MenuWidgetNode *created;
     MenuWidgetNode *node;
 
     created = MenuWidget_CreateSimpleNode(0x23, arg0, 0, 0);
     node = MenuWidget_CreateNode(0x23, created, created);
-    created->update = func_8004B0A4;
-    node->draw = Menu_DrawBlendColorOptionListUnk;
+    created->update = Menu_CursorModeInputHandler;
+    node->draw = Menu_DrawCursorModeList;
     MenuWidget_SetCurrentNode(node);
 }
 
-int func_8004B0A4(MenuWidgetNode *arg0, u32 arg1) {
+int Menu_CursorModeInputHandler(MenuWidgetNode *arg0, u32 arg1) {
     MenuWidgetNode *base;
 
     base = MenuWidget_GetChild(arg0, 0);

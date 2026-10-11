@@ -36,10 +36,10 @@ void Menu_DrawActionSubmenuList(MenuWidgetNode *node) {
     MenuWidget_DrawList(node, Menu_DrawActionSubmenuItem);
 }
 
-void Menu_DrawBlendOptionItem(int arg0);
+void Menu_DrawCursorModeItem(int arg0);
 
-void Menu_DrawBlendColorOptionListUnk(MenuWidgetNode *node) {
-    MenuWidget_DrawList(node, Menu_DrawBlendOptionItem);
+void Menu_DrawCursorModeList(MenuWidgetNode *node) {
+    MenuWidget_DrawList(node, Menu_DrawCursorModeItem);
 }
 
 void Menu_DrawNotificationItem(int index);

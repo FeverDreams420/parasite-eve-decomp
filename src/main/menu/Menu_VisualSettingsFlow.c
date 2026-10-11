@@ -176,10 +176,10 @@ void Menu_DrawBlendColorOptionList(int node) {
     MenuWidget_DrawList((MenuWidgetNode *)node, Menu_DrawBlendColorOptionRow);
 }
 
-void Menu_OpenScreenAdjustView(int parent) {
+void Menu_OpenScreenAdjustView(MenuWidgetNode *parent) {
     MenuWidgetNode *node;
 
-    node = MenuWidget_CreateSimpleNode(0x38, (MenuWidgetNode *)parent, 0, 1);
+    node = MenuWidget_CreateSimpleNode(0x38, parent, 0, 1);
     node->draw = (void (*)())Menu_DrawScreenAdjustPanel;
     node->update = (void (*)())Menu_ScreenAdjustInputHandler;
     MenuWidget_SetCurrentNode(node);
