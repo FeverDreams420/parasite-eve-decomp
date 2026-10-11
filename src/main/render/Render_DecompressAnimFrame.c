@@ -10,7 +10,7 @@
 /* MASPSX_FLAGS: -G8 */
 
 typedef struct RenderAnimFrame {
-    u8 unk0;
+    u8 reserved0;
     u8 vertex_count;
     u8 pad02[4];
     u16 data_offset_words;
@@ -39,7 +39,7 @@ typedef struct RenderAnimVertex {
     s16 y;
     s16 z;
     u8 material_index;
-    u8 unk7;
+    u8 pad7;
 } RenderAnimVertex;
 
 typedef struct RenderAnimMaterialRecord {
@@ -73,7 +73,7 @@ typedef struct RenderAnimFace {
     u8 vertex0;
     u8 vertex1;
     u8 vertex2;
-    u8 unk3;
+    u8 pad3;
 } RenderAnimFace;
 
 PE1_STATIC_ASSERT(sizeof(RenderAnimFrame) == 0x1C, render_anim_frame_size);
@@ -353,7 +353,7 @@ block_22:
                         } else {
                             special_code = 0x52;
                         }
-                        M2C_FIELD(var_s2, u8 *, 7) = special_code;
+                        ((RenderAnimLineG2 *)var_s2)->code = special_code;
                     }
                     negative_line->r0 = 0;
                     negative_line->g0 = var_t9;
@@ -388,7 +388,7 @@ block_22:
                         }
                     }
                 } else {
-                    M2C_FIELD(var_s2, s32 *, 0) = 0;
+                    ((RenderAnimLineG2 *)var_s2)->tag.raw = 0;
                     var_s2 += 4;
                 }
             } else {
@@ -444,13 +444,13 @@ block_22:
                     vertex_record = (RenderAnimVertex *)((var_v1 * 8) + (u32)var_t7);
                     temp_a3_2 = ((RenderAnimMaterialRecord *)(material_base +
                                     vertex_record->material_index * 4))->flags;
-                    M2C_FIELD(var_s3, s8 *, -4) = 4;
-                    M2C_FIELD(var_s3, s8 *, 0) = primitive_code;
+                    var_s3[-4] = 4; /* tag length byte, var_s3 tracks the code byte */
+                    *var_s3 = primitive_code;
                     if (temp_a3_2 & 0x20) {
                         if (var_t3) {
-                            M2C_FIELD(var_s3, u8 *, 0) = 0x52;
+                            *var_s3 = 0x52;
                         } else {
-                            M2C_FIELD(var_s3, u8 *, 0) = 0x52;
+                            *var_s3 = 0x52;
                         }
                     }
                     if ((var_t7[var_v1].y == 0) && (var_t7[var_t0].y == 0)) {

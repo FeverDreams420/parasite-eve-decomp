@@ -214,7 +214,7 @@ int Camera_TrackRelativeOffset(int **args) {
         target_x = current_x + *args[0];
         target_z = current_z + *args[1];
         init_state->flags |= 0x20;
-        init_state->field_20 = 0;
+        init_state->target20 = 0;
         init_state->target14 = turn_speed;
         init_state->target1c = target_z;
         init_state->target18.coordinate = target_x;

@@ -1867,18 +1867,18 @@ void Spu_StopActiveVoices(void) {
     unsigned int mask = AKAO_SPU_VOICE_SFX_START_MASK;
     unsigned int i = 0;
     unsigned int skip_flag = 0x02000000;
-    char *field_38 = voice + 0x38;
+    char *track_flags = voice + 0x38;
 
     do {
         if (g_SpuActiveVoiceMask & mask) {
-            if ((*(int *)(field_38 - 0xC) & skip_flag) == 0) {
+            if ((*(int *)(track_flags - 0xC) & skip_flag) == 0) {
                 g_SpuPendingKeyOffMask |= mask;
                 SeqOp_DeactivateVoice((AkaoTrack *)voice, mask);
-                *(int *)field_38 = 0;
+                *(int *)track_flags = 0;
             }
         }
         i++;
-        field_38 += sizeof(AkaoTrack);
+        track_flags += sizeof(AkaoTrack);
         voice += sizeof(AkaoTrack);
         mask <<= 1;
     } while (i < 0xC);

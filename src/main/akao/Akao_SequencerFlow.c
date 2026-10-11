@@ -1235,7 +1235,7 @@ void Akao_SetPanTarget(AkaoTrack *track)
 
 void Akao_SetPanTargetSlide(AkaoTrack *track) {
     int duration;
-    int field_d8;
+    int pan_base;
     int next;
     int delta;
 
@@ -1245,10 +1245,10 @@ void Akao_SetPanTargetSlide(AkaoTrack *track) {
         track->panpot_duration = duration;
     }
 
-    field_d8 = (unsigned short)track->pan_target & 0xFF00;
+    pan_base = (unsigned short)track->pan_target & 0xFF00;
     next = *track->pc++;
-    delta = ((next << 8) - (short)field_d8) / track->panpot_duration;
-    track->pan_target = field_d8;
+    delta = ((next << 8) - (short)pan_base) / track->panpot_duration;
+    track->pan_target = pan_base;
     track->pan_delta = delta;
 }
 
@@ -1268,7 +1268,7 @@ void Akao_SetPanpot(AkaoTrack *track)
 
 void Akao_SetPanSlide(AkaoTrack *track) {
     int duration;
-    int field_76;
+    int panpot_base;
     int next;
     int delta;
 
@@ -1278,10 +1278,10 @@ void Akao_SetPanSlide(AkaoTrack *track) {
         track->panpot_slide_duration = duration;
     }
 
-    field_76 = track->panpot & 0xFF00;
+    panpot_base = track->panpot & 0xFF00;
     next = *track->pc++;
-    delta = ((((next + 0x40) & 0xFF) << 8) - field_76) / track->panpot_slide_duration;
-    track->panpot = field_76;
+    delta = ((((next + 0x40) & 0xFF) << 8) - panpot_base) / track->panpot_slide_duration;
+    track->panpot = panpot_base;
     track->panpot_delta = delta;
 }
 

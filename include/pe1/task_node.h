@@ -25,7 +25,7 @@ typedef struct TaskNode {
     /* 0x14 */ int target14;
     /* 0x18 */ TaskNodeTarget18 target18;
     /* 0x1C */ int target1c;
-    /* 0x20 */ int field_20;
+    /* 0x20 */ int target20;   /* fourth operand slot, cleared when a move-to task starts */
     /* 0x24 */ struct TaskNode *next;
     /* 0x28 */ struct TaskNode *prev;
 } TaskNode;
