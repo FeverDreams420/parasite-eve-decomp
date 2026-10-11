@@ -1,6 +1,6 @@
 #include "menu_memcard_image.h"
 
-/* Empty barriers and two pins preserve the original scheduling and frame. */
+/* Matching debt: the workspace operand preserves the retail stack frame. */
 MemcardImageNode *Memcard_CreateImageNode(s32 kind) {
     s32 workspace[1];
     MemcardImageNode *node = D_801D136C;
@@ -20,11 +20,10 @@ MemcardImageNode *Memcard_CreateImageNode(s32 kind) {
     node->kind = kind;
     node->image = imageData;
     {
-        register MemcardImage *image asm("$3") = node->image;
+        MemcardImage *image = node->image;
         node->x = preset->x; node->y = preset->y;
         node->width = image->width * 2 / 3;
-        image = node->image;
-        node->height = image->height;
+        node->height = node->image->height;
     }
     {
         s32 y = node->y;
