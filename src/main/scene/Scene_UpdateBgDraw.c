@@ -1,33 +1,18 @@
 #include "common.h"
-#include "pe1/game_state_types.h"
+#include "pe1/game_state.h"
 #include "pe1/entity_frame_update.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
 
-#include "Scene_UpdateBgDraw_externs.h"
-
-#define D_800B0CD8 (*(u32 *)&D_800B0CD8_o)
-#define D_8009D254 (*(FieldActor **)&D_8009D254_o)
-#define D_8009D1A0 (*(u32 *)&D_8009D1A0_o)
-#define D_8009D2E8 (*(u32 *)&D_8009D2E8_o)
-#define D_800B0D10_READ (*(u8 **)&D_800B0D10_r)
-#define D_800B0D10_WRITE (*(u8 **)&D_800B0D10_w)
-#define D_800B0D14 (*(u16 *)&D_800B0D14_o)
-#define D_800B0D16 (*(u16 *)&D_800B0D16_o)
-#define D_800B0CEC ((u8 *)&((Pe1GameState *)&D_800B0CD8_o)->scene_object)
-#define D_800B89F8 ((u32 *)&D_800B89F8_o)
-
-void Render_SetGteScreenOffset(void);
-void Render_ResetGteScreenOffset(void);
-
+/* Draws the scene's background object animated from the player's render
+ * object. */
 int Scene_UpdateBgDraw(void) {
+    Pe1GameState *state = &g_GameState;
     FieldActor *entity;
-    u8 *gameState = (u8 *)&D_800B0CD8_o;
-    if (((Pe1GameState *)gameState)->flags & 0xC0000) {
+
+    if (state->flags & 0xC0000) {
         return 0;
     }
 
-    entity = D_8009D254;
+    entity = g_PlayerEntity;
     if (entity == 0) {
         return 0;
     }
@@ -36,25 +21,22 @@ int Scene_UpdateBgDraw(void) {
         return 0;
     }
 
-    if (!(D_8009D1A0 & 2) && (D_8009D2E8 & 2)) {
+    if (!(g_GameStateFlags & 2) && (g_FieldMoveLock & 2)) {
         return 0;
     }
 
-    if (D_800B0D10_READ == 0) {
-        u8 *bgInit;
-        bgInit = (u8 *)&entity->render_object;
-        D_800B0D10_WRITE = bgInit;
-        D_800B0D14 = 3;
-        D_800B0D16 = 0x12;
+    if (g_SceneObjectAnimationSource == 0) {
+        g_SceneObjectAnimationSource = &entity->render_object;
+        g_GameState.scene_object.animation_state = 3;
+        g_GameState.scene_object.animation_id = 0x12;
     }
 
-    gameState = (u8 *)&((Pe1GameState *)gameState)->scene_object;
     Render_SetGteScreenOffset();
-    Render_TransformVertices(gameState);
-    Render_TransformMorphVertices(gameState, D_800B89F8);
+    Render_TransformVertices(&state->scene_object);
+    Render_TransformMorphVertices(&state->scene_object, D_800B89F8);
 
-    if ((D_8009D1A0 & 2) || D_8009D254->render_object.variant_visible != 0) {
-        Render_DrawEntity(gameState, D_800B89F8);
+    if ((g_GameStateFlags & 2) || g_PlayerEntity->render_object.variant_visible != 0) {
+        Render_DrawEntity(&state->scene_object, D_800B89F8);
     }
 
     Render_ResetGteScreenOffset();
