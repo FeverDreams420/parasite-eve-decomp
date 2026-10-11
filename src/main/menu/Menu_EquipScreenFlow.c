@@ -328,7 +328,7 @@ void Menu_OpenItemActionSubmenu(MenuWidgetNode *arg0, s32 arg1, s32 arg2) {
         var_s2 = 0;
         temp_s0 = g_MenuActiveItemSlot;
         temp_s0_2 = Inv_LookupActiveListData(temp_s0);
-        if ((Inv_TestSelectionBit(temp_s0) != 0) && ((g_MenuEquipMode != 1) || (temp_s0_2->kind != 0xA) || ((u8) M2C_FIELD(temp_s0_2, u8 *, 0xE) < 4U))) {
+        if ((Inv_TestSelectionBit(temp_s0) != 0) && ((g_MenuEquipMode != 1) || (temp_s0_2->kind != 0xA) || (*(u8 *)temp_s0_2->bonusStats < 4U))) { /* kind 0xA keeps a level in the low bonus byte */
             var_s2 = 1;
         }
         if (var_s2 == 0) {
