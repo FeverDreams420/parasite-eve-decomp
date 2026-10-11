@@ -266,13 +266,14 @@ int func_80194470(int mode, Vector *input) {
         int frame;
         unsigned int offset;
         int kind = D_800F3368.palette;
-        int size, palette;
+        s16 size;
+        int palette;
         unsigned short clut;
         asm("" : : "r"(firstFrame), "r"(position));
         offset = ((unsigned int)firstFrame << 9) & 0x3E00;
         frame = firstFrame;
         size = *(short *)((char *)D_800966EC + offset) * 2 + 4096;
-        asm("" : : "r"(size), "r"(frame) : "memory");
+        asm("" : : "r"(frame));
         palette = D_800E1204[kind];
         clut = GetClut(0, (kind == 4 && D_800F3428) ? palette + 9 : palette + 5);
         func_800CEE20(position, 0, (short)size, (short)size, 102, clut, 1,
