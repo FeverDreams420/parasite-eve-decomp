@@ -334,7 +334,7 @@ void Menu_DrawBonusPointAnimFrame(void) {
     }
     temp_v1 = g_BonusPointDisplayValue;
     var_a0_3 = 0x808080;
-    if ((s32)D_800C0E00.bonus_points < temp_v1) {
+    if ((int)D_800C0E00.bonus_points < temp_v1) {
         var_a0_3 = 0x8080;
     }
     Draw_SetColor(var_a0_3);
