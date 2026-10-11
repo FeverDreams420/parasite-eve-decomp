@@ -66,6 +66,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
         scratchpad = (FxCommonRenderScratchpad *)0x1F800000;
         primitiveCount = var_t8->counts[0];
         if (primitiveCount > 0) {
+            FxCommonFlatTriangle *triangle=(FxCommonFlatTriangle *)var_s3;
             u32 temp_a0_2;
             s32 temp_v1;
             u32 var_t1;
@@ -78,9 +79,9 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
             do {
                 for (;;) {
                     temp_v1 = RotAverageNclip3(
-                        &((FxCommonFlatTriangle *)var_s3)->vertices[0],
-                        &((FxCommonFlatTriangle *)var_s3)->vertices[1],
-                        &((FxCommonFlatTriangle *)var_s3)->vertices[2],
+                        &triangle->vertices[0],
+                        &triangle->vertices[1],
+                        &triangle->vertices[2],
                         &scratchpad->screenCoordinates[0], &scratchpad->screenCoordinates[1],
                         &scratchpad->screenCoordinates[2], &scratchpad->perspective,
                         &scratchpad->orderingDepth, &scratchpad->transformFlags);
@@ -96,7 +97,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                             ((FxCommonF3Packet *)(var_s1 - 0x4))->xy2 =
                                 scratchpad->screenCoordinates[2];
                             *((u32 *)&((FxCommonF3Packet *)(var_s1 - 0x4))->color) =
-                                ((FxCommonFlatTriangle *)var_s3)->color;
+                                triangle->color;
                             var_s1 += 0x14;
                             temp_a0_2 = ((FxCommonPacketTag *)var_s2)->packed;
                             orderBuffer = D_8019C9C0;
@@ -117,7 +118,8 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                     break;
                 }
                 var_s4 += 1;
-                var_s3 += 0x1C;
+                ++triangle;
+                var_s3=(u8 *)triangle;
             } while (var_s4 < var_t8->counts[0]);
         }
         {
