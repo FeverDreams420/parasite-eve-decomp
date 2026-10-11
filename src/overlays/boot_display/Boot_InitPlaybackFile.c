@@ -14,13 +14,13 @@ s32 Boot_InitPlaybackFile(void) {
     func_80080CC8(0);
     for (;;) {
         ready = 1;
-        asm("" : "=r"(ready) : "0"(ready));
+        asm volatile("" : : "r"(ready));
         if (func_8007F72C() != ready || func_8007F778() != 0)
             return func_80073A44(0);
         found = (s32)DsSearchFile(&file, D_80125B48);
         if (found == 0) continue;
         failure = -1;
-        asm volatile("" : "=r"(ready) : "0"(ready));
+        asm volatile("" : : "r"(ready));
         if (found != failure) break;
     }
     start = &D_80172CE8;
