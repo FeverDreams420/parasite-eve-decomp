@@ -1,6 +1,7 @@
 #include "common.h"
 #include "pe1/akao/commands.h"
 #include "pe1/akao.h"
+#include "pe1/akao/track.h"
 #include "pe1/akao/voice_state.h"
 #include "pe1/akao/track.h"
 #include "pe1/akao/voice_masks.h"
@@ -1251,7 +1252,6 @@ if (depth != 0) { \
 } while (0)
 
 extern unsigned char D_8009D2CE;
-extern char D_800B8AC0[];
 
 void Akao_SetVoiceKeyOff(AkaoTrack *cursor, u32 voice_mask, int index) {
     register void *voice = cursor;
@@ -1351,7 +1351,7 @@ void Akao_SetVoiceKeyOff(AkaoTrack *cursor, u32 voice_mask, int index) {
         }
 
         if ((flags & 0x800) != 0) {
-            target_voice = D_800B8AC0 + U16(voice, 0x5C) * 0x11C;
+            target_voice = (char *)&D_800B8AC0[U16(voice, 0x5C)];
             S16(target_voice, 0x118) = U16(voice, 0x118);
             S16(target_voice, 0x11A) = U16(voice, 0x11A);
 

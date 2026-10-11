@@ -183,7 +183,7 @@ void Spu_InitVoiceState(void) {
     SpuSetCommonAttr((SpuCommonAttr *)D_800C0D90);
 
     i = 0;
-    voice_base = D_800B8AC0;
+    voice_base = (u8 *)D_800B8AC0;
     voice_count = 24;
     G9_U32(0x68) = 0;
     G9_U32(0x2C) = 0;

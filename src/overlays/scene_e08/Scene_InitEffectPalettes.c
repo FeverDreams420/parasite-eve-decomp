@@ -3,17 +3,11 @@
 #include "pe1/akao_send.h"
 #include "pe1/pe_image.h"
 #include "pe1/scene_player_orb.h"
-extern FieldGlowSprite D_80199580;
-extern FieldGlowSprite D_80199540;
-extern u8 D_80199560;
-extern u8 D_80199561;
-extern u8 D_80199562;
-extern u8 D_80199564;
-extern u8 D_80199565;
-extern u8 D_80199566;
-extern s16 D_80199568;
-extern s16 D_8019956A;
-extern FieldGlowSprite D_80199570;
+extern FieldGlowSprite D_80199540, D_80199570, D_80199580;
+/* The 0x80199560 glow sprite, field by field as Scene_DrawLayeredSprite
+ * stores its colour. */
+extern u8 D_80199560, D_80199561, D_80199562, D_80199564, D_80199565, D_80199566;
+extern s16 D_80199568, D_8019956A;
 typedef struct WordBlock32 { s32 words[8]; } WordBlock32;
 void func_800C2B40(void *);
 extern s16 D_80199558;

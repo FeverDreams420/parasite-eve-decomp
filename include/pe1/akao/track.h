@@ -307,6 +307,26 @@ typedef struct AkaoVoiceBank {
 
 typedef void (*AkaoTrackHandler)(AkaoTrack *track);
 
+/* Track record as the timer tick and the voice driver see it: the whole
+ * record, its words, and the timing fields AkaoTrack leaves anonymous. */
+typedef union AkaoTickTrack {
+    AkaoTrack track;
+    AkaoU32 words[sizeof(AkaoTrack) / 4];
+    struct {
+        /* 0x000 */ unsigned char pad_000[0x2C];
+        /* 0x02C */ AkaoU32 key_on_mask;
+        /* 0x030 */ unsigned char pad_030[0x20];
+        /* 0x050 */ AkaoU32 tick_count;
+        /* 0x054 */ AkaoU16 parent_track_id;
+        /* 0x056 */ AkaoU16 note_length;
+        /* 0x058 */ AkaoU16 gate_length;
+    } timing;
+} AkaoTickTrack;
+typedef char AkaoTickTrackSizeCheck[sizeof(AkaoTickTrack) == 0x11C ? 1 : -1];
+
+/* The 48 sequencer tracks: 24 for music, 24 saved or for sound effects. */
+extern AkaoTickTrack D_800B8AC0[48];
+
 void Seq_StartNestedStreams(AkaoNestedSource *source, void *first, void *second);
 
 #endif

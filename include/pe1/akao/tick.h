@@ -48,25 +48,9 @@ typedef union AkaoTickBank {
     } timing;
 } AkaoTickBank;
 
-typedef union AkaoTickTrack {
-    AkaoTrack track;
-    AkaoU32 words[sizeof(AkaoTrack) / 4];
-    struct {
-        /* 0x000 */ unsigned char pad_000[0x2C];
-        /* 0x02C */ AkaoU32 key_on_mask;
-        /* 0x030 */ unsigned char pad_030[0x20];
-        /* 0x050 */ AkaoU32 tick_count;
-        /* 0x054 */ AkaoU16 parent_track_id;
-        /* 0x056 */ AkaoU16 note_length;
-        /* 0x058 */ AkaoU16 gate_length;
-    } timing;
-} AkaoTickTrack;
-
 PE1_STATIC_ASSERT(sizeof(AkaoTickBank) == 0x68, akao_tick_bank_size);
-PE1_STATIC_ASSERT(sizeof(AkaoTickTrack) == 0x11C, akao_tick_track_size);
 
 extern AkaoTickBank *D_8009D2C8;
-extern AkaoTickTrack D_800B8AC0[48];
 extern AkaoTickTrack D_800BC000[];
 extern u8 D_8009D2D2;
 extern u32 D_8009D2DC;

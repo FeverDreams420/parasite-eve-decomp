@@ -40,7 +40,7 @@ typedef struct RoomSparkChannel {
     char *pool;                   /* 0x08 */
 } RoomSparkChannel;
 
-extern RoomSparkChannel *D_800942E4;
+extern struct PmPrimarySlot *D_800942E4; /* running process slot (Pm_ProcessManager) */
 extern u16 D_800E11EA;
 extern int func_80071A54(void);
 
