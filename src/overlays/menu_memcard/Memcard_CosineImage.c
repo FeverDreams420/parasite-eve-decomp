@@ -24,13 +24,13 @@ s32 Memcard_CosineImage(s32 mode, MemcardPulseState *state) {
         cosine = rcos(angle);
         __asm__("" : "=r"(cosine) : "0"(cosine));
         intensity = cosine / 32;
-        __asm__("" : "=r"(intensity) : "0"(intensity) : "memory");
+        __asm__("" : : "r"(intensity));
         rotation.x = 0; rotation.y = 0;
         twist = state->timer;
         index = D_800F3368.palette;
         __asm__("" : "=r"(index) : "0"(index) : "$3", "memory");
         four = 4;
-        __asm__("" : "=r"(four) : "0"(four) : "memory");
+        __asm__("" : : "r"(four));
         rotation.flags = 0;
         __asm__("" : "=r"(twist) : "0"(twist) : "memory");
         rotation.z = twist << 5;
