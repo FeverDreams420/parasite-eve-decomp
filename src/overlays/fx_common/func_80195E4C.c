@@ -1,15 +1,13 @@
 #include "fx_common_vectors.h"
 #include "pe1/gte_types.h"
 #include "pe1/asset_tim.h"
+#include "fx_common.h"
 
-extern char D_801D0260[];
 extern int D_8019C810, D_8019C814, D_8019C818;
 extern int D_8019C330, D_8019C334, D_8019C338;
 extern short D_8019C054, D_8019C050, D_8019C02C;
 extern unsigned char D_8019C040;
 extern unsigned char D_8019C041, D_8019C042;
-
-extern int func_8018F55C(int, int, int, FxCommonVec3 *, GteShortVector *);
 
 void func_80195E4C(int index, int unused1, int unused2, int source)
 {
@@ -20,7 +18,7 @@ void func_80195E4C(int index, int unused1, int unused2, int source)
     int result;
     int shortIndex;
 
-    lookup = Gpu_GetTimTableEntry(D_801D0260, 2);
+    lookup = Gpu_GetTimTableEntry(&D_801D0260, 2);
     shortIndex = savedIndex;
     func_8018F55C(source, shortIndex + 1, lookup, &point, &scratch);
     D_8019C054 = 0;
@@ -28,7 +26,7 @@ void func_80195E4C(int index, int unused1, int unused2, int source)
     D_8019C814 = point.y;
     D_8019C818 = point.z;
 
-    lookup = Gpu_GetTimTableEntry(D_801D0260, 2);
+    lookup = Gpu_GetTimTableEntry(&D_801D0260, 2);
     result = func_8018F55C(source, shortIndex, lookup, &point, &scratch);
     D_8019C040 = result - 2;
     D_8019C050 = 0;
