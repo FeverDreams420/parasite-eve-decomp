@@ -18,8 +18,8 @@ int func_8019A4CC(int mode,Effect *effect) {
         register int frame asm("$4")=D_800E27EC-1;
         unsigned int sizeOffset=((unsigned int)frame<<8)&0x3F00;
         unsigned int shadeOffset=((unsigned int)frame<<9)&0x3E00;
-        int size=*(short *)((char *)D_800966EC+sizeOffset)*2+4096;
-        int shade=(short)*(int *)((char *)D_800966EC+shadeOffset)>>5;
+        int size=((GteSineWord *)((char *)D_800966EC+sizeOffset))->part.sin*2+4096;
+        int shade=(short)((GteSineWord *)((char *)D_800966EC+shadeOffset))->word>>5;
         parameters.x=0;
         parameters.y=((Object *)ANIM_OWNER_AS(RoomM273EffectStateContext)->state.mode)->value;
         parameters.z=(unsigned int)frame<<8;
