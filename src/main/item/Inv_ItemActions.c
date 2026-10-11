@@ -9,6 +9,7 @@
 #include "pe1/inventory.h"
 #include "pe1/battle_cmd.h"
 #include "pe1/menu_inventory.h"
+#include "pe1/inventory_state.h"
 
 /* Item selection masks, ammunition transfer between compared weapons, the
  * weapon comparison panel and the per-slot item actions and active-list controller. Contiguous at
@@ -17,7 +18,6 @@
 u32 *D_8009D058;
 void *Str_LookupTable8(unsigned int index);
 void Sfx_DrawSlotRow(ItemDataRecord *entry, u8 *text);
-#include "Inv_ItemActions_externs.h"
 
 static inline ItemDataRecord *LookupItem(int value) {
     int saved = value;

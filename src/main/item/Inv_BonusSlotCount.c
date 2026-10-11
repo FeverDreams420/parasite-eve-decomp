@@ -2,8 +2,8 @@
 /* MASPSX_FLAGS: -G8 */
 
 #include "pe1/stat_modifiers.h"
+#include "pe1/inventory_state.h"
 
-#include "Inv_BonusSlotCount_externs.h"
 
 int *Battle_GetModifierTable(void) {
     return g_StatScaleBase;

@@ -1,6 +1,8 @@
 #include "common.h"
 #include "pe1/inventory.h"
 #include "pe1/inventory_queries.h"
+#include "pe1/inventory_state.h"
+#include "pe1/inventory_slots.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 

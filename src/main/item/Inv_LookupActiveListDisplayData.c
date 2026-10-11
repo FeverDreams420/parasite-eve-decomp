@@ -1,6 +1,7 @@
 #include "pe1/inventory.h"
 #include "pe1/inventory_slots.h"
 #include "pe1/text.h"
+#include "pe1/inventory_state.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
@@ -8,7 +9,6 @@
 
 
 
-#include "Inv_LookupActiveListDisplayData_externs.h"
 
 void *Inv_LookupActiveListDisplayData(s32 index);
 

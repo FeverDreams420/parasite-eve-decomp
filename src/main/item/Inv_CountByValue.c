@@ -1,11 +1,11 @@
 #include "common.h"
+#include "pe1/inventory_state.h"
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 
 int g_InvCategoryBaseItemId;
 s16 *g_InvItemPtr;
 int g_InvSlotLimit;
 #include "pe1/inventory_category.h"
-#include "Inv_CountByValue_externs.h"
 
 int Inv_CountByValue(int arg0) {
     int count;

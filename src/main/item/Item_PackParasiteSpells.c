@@ -1,8 +1,8 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 
 #include "pe1/aya.h"
+#include "pe1/inventory_state.h"
 
-#include "Item_PackParasiteSpells_externs.h"
 int g_InvPackedListCursor;
 int g_InvPackedListCount;
 

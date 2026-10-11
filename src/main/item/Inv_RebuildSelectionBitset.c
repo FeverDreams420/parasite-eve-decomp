@@ -1,11 +1,6 @@
 #include "pe1/inventory_slots.h"
 #include "pe1/task_queue.h"
-#include "Inv_RebuildSelectionBitset_externs.h"
-typedef struct InventorySlotRange {
-    s16 start;
-    s16 stop;
-} InventorySlotRange;
-#include "Inv_RebuildSelectionBitset_externs_1.h"
+#include "pe1/inventory_state.h"
 
 void Inv_RebuildSelectionBitset(void) {
     ItemDataRecord *entry;

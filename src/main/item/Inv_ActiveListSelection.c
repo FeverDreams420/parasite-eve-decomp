@@ -2,6 +2,7 @@
 #include "pe1/inventory_slots.h"
 #include "pe1/inventory_queries.h"
 #include "pe1/aya.h"
+#include "pe1/inventory_state.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
@@ -14,7 +15,6 @@ int g_InvSlotLimit;
 int g_InvOverrideSlotLimit;
 u32 *g_InvSelectionBits;
 int g_InvSelectionBitWords;
-#include "Inv_ActiveListSelection_externs.h"
 
 void Util_CopyFFTerminatedBytes(u8 *dst, u8 *src)
 {

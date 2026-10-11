@@ -1,5 +1,6 @@
 #include "pe1/menu_state.h"
 #include "pe1/menu_widget.h"
+#include "pe1/battle_entity_anim.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
@@ -10,7 +11,6 @@
 /* Active-list commands from the item menus and the pending command result
  * (D_8009D010) that the menu loop polls and clears. */
 
-#include "Inv_ActiveListCommand_externs.h"
 /* COMMON supplies small-data metadata to MASPSX; the extern words stay
  * absolute. */
 u8 *D_8009D1E0;

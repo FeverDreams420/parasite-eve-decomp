@@ -2,12 +2,12 @@
 #include "pe1/menu_sound.h"
 #include "pe1/aya.h"
 #include "pe1/save.h"
+#include "pe1/inventory_state.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
 #include "pe1/inventory_slots.h"
 
-#include "Inv_FindItem_externs.h"
 
 SavedMenuMode g_SavedMenuMode;
 

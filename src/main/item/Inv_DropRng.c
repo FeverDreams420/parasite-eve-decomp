@@ -1,4 +1,6 @@
 #include "common.h"
+#include "pe1/save.h"
+#include "pe1/inventory_state.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
@@ -6,7 +8,6 @@
  * lagged-xor refresh of the 0x209-byte table. */
 
 int g_ItemDropRngIndex;
-#include "Inv_DropRng_externs.h"
 
 #define D_800A76A4_VALUE (D_800A76A4[0])
 
