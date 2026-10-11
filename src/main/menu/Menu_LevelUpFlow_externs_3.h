@@ -3,5 +3,4 @@
 extern s32 D_8009CF7C;
 extern u16 g_AyaHpMax[];
 extern s32 g_AyaBonusPoints[];
-extern u8 g_AyaSaveLevel[];
 #endif /* PE1_EXT_5FC9E6731F00 */

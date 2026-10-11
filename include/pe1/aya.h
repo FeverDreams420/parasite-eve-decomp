@@ -102,6 +102,7 @@ extern s8 g_AyaEquippedWeaponSlot[];
 extern u32 g_AyaParasiteSpellFlags[];
 extern u16 g_AyaStatAgility[];
 extern u16 D_800C0E28[7];
+extern u8 g_AyaSaveLevel[];
 /* Growth tables have multiple consumers: 32-bit thresholds and initial u16. */
 void *Stat_GetGrowthTable(int category);
 void Stat_QueryLevelAndSubLevel(int category, int value, int *level, int *sublevel);

@@ -16,6 +16,7 @@ void *Aya_GetLevelExpTable(void);
 #define g_AyaHpCurrent (g_AyaHpCurrent[0])
 #define g_AyaInventorySlotCount (g_AyaInventorySlotCount[0])
 #define g_AyaParasiteSpellFlags (g_AyaParasiteSpellFlags[0])
+#define g_AyaSaveLevel (g_AyaSaveLevel[0])
 #define g_AyaSaveTotalExp (g_AyaSaveTotalExp[0])
 
 void Inv_InitMaxLevelInventory(s32 arg0) {
@@ -39,7 +40,7 @@ void Inv_InitMaxLevelInventory(s32 arg0) {
     }
     g_AyaSaveLevel = 0x62;
     expTable = (s32 *)Aya_GetLevelExpTable();
-    g_AyaSaveTotalExp = expTable[g_AyaSaveLevel];
+    g_AyaSaveTotalExp = expTable[D_800C0E00.level];
     levelStats = Aya_LookupLevelStats(0x62);
     unlockedSpells = 0xFFFFF;
     save = (AyaSaveState *)((u8 *)items - PE1_OFFSETOF(AyaSaveState, inventory_items));
