@@ -1,21 +1,18 @@
+#include "fx_common_motion.h"
 /* MASPSX_FLAGS: --expand-div */
 extern int D_8019CA90;
 extern int D_8019CB48;
 extern int D_8019CB4C;
-extern int D_8019CB50;
 extern int D_8019CB54;
 extern int D_8019CB58;
 extern int D_8019CBA8;
 extern int D_8019CBAC;
-extern int D_8019CBB0;
 extern int D_8019CBB4;
 extern int D_8019CBB8;
 extern int D_8019CBC4;
 extern int D_8019CBC8;
-extern int D_8019CBD0;
 extern int D_8019CBD4;
 extern int D_8019CBD8;
-extern int D_8019CBF0;
 extern int D_8019CBF4;
 extern int D_8019CBF8;
 extern int D_8019CC00;
@@ -28,13 +25,13 @@ int FxCommon_CheckFourBoundsWithMargin(int *point, int margin) {
     int limit;
     int fourthVisible = 0, thirdVisible = 0, secondVisible = 0, firstVisible = 0;
     int threshold = margin;
-    first = D_8019CBB0 * point[0] + D_8019CBB4 * point[1]
+    first = D_8019CBB0.x * point[0] + D_8019CBB4 * point[1]
           + D_8019CBB8 * point[2] + D_8019CB48;
-    second = D_8019CBD0 * point[0] + D_8019CBD4 * point[1]
+    second = D_8019CBD0.x * point[0] + D_8019CBD4 * point[1]
           + D_8019CBD8 * point[2] + D_8019CB4C;
-    third = D_8019CBF0 * point[0] + D_8019CBF4 * point[1]
+    third = D_8019CBF0.x * point[0] + D_8019CBF4 * point[1]
           + D_8019CBF8 * point[2] + D_8019CBA8;
-    fourth = D_8019CB50 * point[0] + D_8019CB54 * point[1]
+    fourth = D_8019CB50.x * point[0] + D_8019CB54 * point[1]
           + D_8019CB58 * point[2] + D_8019CA90;
     if (D_8019CC04 > 0 && first >= 0)
         firstVisible = 1;

@@ -2,8 +2,9 @@
 #include "pe1/gte_types.h"
 #include "pe1/asset_tim.h"
 #include "fx_common.h"
+#include "fx_common_setup.h"
 
-extern unsigned char D_8019C040, D_8019C041, D_8019C042;
+extern unsigned char D_8019C040, D_8019C042;
 extern int D_8019C810, D_8019C814, D_8019C818;
 extern int D_8019C330, D_8019C334, D_8019C338;
 

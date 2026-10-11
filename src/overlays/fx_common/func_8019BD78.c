@@ -1,13 +1,12 @@
 #include "common.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/gpu_image.h"
+#include "fx_common.h"
 
-extern char D_8019C1F8[];
 extern void *D_800B0E38, *D_800B0E3C;
 extern void *D_8019C1FC, *D_8019C274;
 extern u8 D_8019C218, D_8019C219, D_8019C21A, D_8019C21B;
 extern u8 D_8019C290, D_8019C291, D_8019C292, D_8019C293;
-extern void *D_8019C9C0;
 
 void func_80074D28(int);
 void SetBackColor(int, int, int);
@@ -20,7 +19,7 @@ void func_800752AC(void *, int);
 void func_80074DC0(int);
 
 void func_8019BD78(void) {
-    char *base = D_8019C1F8;
+    char *base = (char *)&D_8019C1F8;
     s16 rect[4];
 
     func_80074D28(0);
@@ -65,5 +64,5 @@ void func_8019BD78(void) {
 
     func_80074DC0(0);
     func_80074D28(1);
-    D_8019C9C0 = base;
+    D_8019C9C0 = (FxCommonBuffer *)base;
 }

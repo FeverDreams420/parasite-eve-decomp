@@ -1,15 +1,12 @@
+#include "fx_common.h"
 extern char D_801E4E6C[];
-extern char D_8019C340[];
 extern char D_801EA5E8[];
 extern char D_8019CC58[];
 extern short D_8019C39C;
-extern short D_8019CBC0;
 extern short D_8019C830[];
-extern void *D_8019CCBC[];
 extern void *D_801EA650[];
 extern int D_801EA64C[];
 extern int D_8019CCC0[];
-extern short D_801E4A88[];
 extern short D_8019C9D0;
 extern short D_801E4DA8;
 extern short D_801E4DAA;
@@ -28,7 +25,7 @@ void func_80190998(void)
     for (; i < 200; i++, slot += 108)
         func_80191580(slot);
 
-    func_80191580(D_8019C340);
+    func_80191580(&D_8019C340);
     D_8019C39C = 0;
     D_8019CBC0 = 0;
     for (i = 0; i < 200; i++)

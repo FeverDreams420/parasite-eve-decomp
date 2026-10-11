@@ -1,9 +1,8 @@
+#include "fx_common_motion.h"
 /* MASPSX_FLAGS: --expand-div */
 
-extern int D_8019CBB0;
 extern int D_8019CBB4;
 extern int D_8019CBB8;
-extern int D_8019CBD0;
 extern int D_8019CBD4;
 extern int D_8019CBD8;
 extern int D_8019CB48;
@@ -21,9 +20,9 @@ int FxCommon_CheckBoundsWithMargin(int *point, int margin)
     int secondVisible = 0;
     int firstVisible = 0;
     int threshold = margin;
-    first = D_8019CBB0 * point[0] + D_8019CBB4 * point[1]
+    first = D_8019CBB0.x * point[0] + D_8019CBB4 * point[1]
           + D_8019CBB8 * point[2] + D_8019CB48;
-    second = D_8019CBD0 * point[0] + D_8019CBD4 * point[1]
+    second = D_8019CBD0.x * point[0] + D_8019CBD4 * point[1]
            + D_8019CBD8 * point[2] + D_8019CB4C;
     if (D_8019CC04 > 0 && first >= 0)
     {

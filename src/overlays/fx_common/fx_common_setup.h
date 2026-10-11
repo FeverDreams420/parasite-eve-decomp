@@ -37,7 +37,7 @@ extern s32 D_8019C020;
 extern s16 D_8019C02E;
 extern s16 D_8019C034;
 extern u8 D_8019C040;
-extern s8 D_8019C041;
+extern u8 D_8019C041;
 extern u8 D_8019C042;
 extern u8 D_8019C044;
 extern u8 D_8019C045;

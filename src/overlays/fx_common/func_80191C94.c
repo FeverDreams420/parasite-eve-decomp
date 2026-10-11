@@ -1,5 +1,7 @@
 #include "common.h"
 #include "pe1/cdrom.h"
+#include "fx_common.h"
+#include "fx_common_setup.h"
 
 typedef struct FxAssetSource {
     u8 reserved[0x100];
@@ -10,8 +12,6 @@ extern FxAssetSource D_800B0CD8;
 extern u16 D_80093170[];
 extern u16 D_80093174[];
 extern u16 D_80093172[];
-extern char D_801D0260[];
-extern char D_8019CE10[];
 extern u8 D_8019C1F0;
 
 int func_8006E7E8(void);
@@ -25,7 +25,7 @@ first:
     range = D_80093170;
     do {
         result = CdRom_ReadSectorsFromLba(resource->data + range[0],
-                               D_801D0260, range[1] - range[0]);
+                               &D_801D0260, range[1] - range[0]);
     } while (result == -1);
     for (;;) {
         result = func_8006E7E8();
@@ -39,7 +39,7 @@ second:
     range = D_80093174;
     do {
         result = CdRom_ReadSectorsFromLba(resource->data + range[0],
-                               D_8019CE10, range[1] - range[0]);
+                               &D_8019CE10, range[1] - range[0]);
     } while (result == -1);
     for (;;) {
         result = func_8006E7E8();
@@ -52,7 +52,7 @@ third:
     range = D_80093172;
     do {
         result = CdRom_ReadSectorsFromLba(resource->data + range[0],
-                               D_8019CE10, range[1] - range[0]);
+                               &D_8019CE10, range[1] - range[0]);
     } while (result == -1);
     for (;;) {
         result = func_8006E7E8();
