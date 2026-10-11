@@ -476,7 +476,7 @@ typedef struct RenderAnimationLookupEntry {
 typedef struct RenderAnimationDataHeader {
     /* 0x00 */ u8 encoding_flags;
     /* 0x01 */ u8 last_bone_index;
-    /* 0x02 */ u8 packing_flags;
+    /* 0x02 */ u8 frame_count;  /* samples per channel; sets the channel stride */
     /* 0x03 */ u8 reserved03;
     /* 0x04 */ u16 object_value74;
     /* 0x06 */ u16 object_value76;

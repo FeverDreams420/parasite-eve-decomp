@@ -98,7 +98,7 @@ void Anim_DecodeBoneRotationsByte(RenderObjectEntity *arg0, RenderAnimationDataH
     var_s4 = (char *)arg0->matrices;
     arg0->active_matrix = (RenderMatrix *)var_s4;
     var_a1 = (s32 *) (var_s4 + 0x14);
-    temp_v1 = (arg1->packing_flags >> 1) + 1;
+    temp_v1 = (arg1->frame_count >> 1) + 1;
     temp_v1 = temp_v1 * 4;
     do {
         var_a0 = var_s0 + 2;
@@ -114,7 +114,7 @@ void Anim_DecodeBoneRotationsByte(RenderObjectEntity *arg0, RenderAnimationDataH
         var_a1 += 1;
     } while (var_s2 < 3);
     var_s2 = 0;
-    temp_v1 = (arg1->packing_flags >> 2) + 1;
+    temp_v1 = (arg1->frame_count >> 2) + 1;
     if (arg1->last_bone_index >= var_s2) {
         temp_s6 = arg2;
         temp_s5 = temp_v1 * 4;
@@ -184,7 +184,7 @@ void Anim_DecodeBoneRotationsShort(RenderObjectEntity *arg0, RenderAnimationData
     var_s4 = (char *)arg0->matrices;
     arg0->active_matrix = (RenderMatrix *)var_s4;
     var_a0 = (s32 *) (var_s4 + 0x14);
-    temp_a3 = (arg1->packing_flags >> 1) + 1;
+    temp_a3 = (arg1->frame_count >> 1) + 1;
     do {
         var_v1 = var_s0 + 2;
         if (((RenderAnimShortChannel *)var_s0)->constant_marker != 0) {

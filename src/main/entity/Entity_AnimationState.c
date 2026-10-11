@@ -116,7 +116,7 @@ void Entity_SetActionMode(BattleEntity *arg0, int arg1) {
     entity->animPrev.fixed = 0;
     entity->actionData = action;
     entity->entityFlags &= -0x201;
-    entity->animLastFrame = *((u8 *)entity->actionData + 2) - 1;
+    entity->animLastFrame = ((RenderAnimationDataHeader *)entity->actionData)->frame_count - 1;
 
     if (entity->entityFlags & 0x100000) {
         it = (BattleEntity *)g_FieldActorListHead;
@@ -139,7 +139,7 @@ void Entity_SetAction(BattleEntity *arg0, int arg1) {
     EntityActionTable *base;
     BattleEntity *it;
     void **table;
-    void *action;
+    RenderAnimationDataHeader *action;
 
     entity = arg0;
     raw_mode = arg1;
@@ -153,7 +153,7 @@ void Entity_SetAction(BattleEntity *arg0, int arg1) {
         entity->actionMode = raw_mode;
         action = table[mode];
         entity->actionData = action;
-        entity->animLastFrame = *((u8 *)action + 2) - 1;
+        entity->animLastFrame = action->frame_count - 1;
     }
 
     entity->entityFlags &= -0x201;
