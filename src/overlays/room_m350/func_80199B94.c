@@ -1,4 +1,5 @@
 #include "common.h"
+#include "room_m350_data.h"
 #include "pe1/field_sprite_params.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
@@ -7,7 +8,7 @@
 #include "pe1/gte_sine_table.h"
 #include "func_80199B94_externs.h"
 
-s32 func_80199B94(s32 mode, void *ctx) {
+s32 func_80199B94(s32 mode, GteShortVector *ctx) {
     s32 tex;
 
     if (mode == 1) {

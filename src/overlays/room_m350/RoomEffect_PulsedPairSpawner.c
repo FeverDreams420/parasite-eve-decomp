@@ -9,7 +9,7 @@
 /* MASPSX_FLAGS: --expand-div */
 typedef RoomM350Vector Vector;
 typedef GteMatrix Matrix;
-typedef struct { short position[3],reserved; } Particle;
+typedef GteShortVector Particle;
 
 #include "RoomEffect_PulsedPairSpawner_externs.h"
 int func_80192508(int event)
@@ -55,9 +55,9 @@ offset_start:
             vector.z=random%divisor+64;
             ApplyMatrixSV(&matrix,&vector,out);
             base=&D_8019A778[i&1];
-            particle->position[0]=(unsigned short)offset.x+(unsigned short)base->x;
-            particle->position[1]=(unsigned short)offset.y+(unsigned short)base->y;
-            particle->position[2]=(unsigned short)offset.z+(unsigned short)base->z;
+            particle->x=(unsigned short)offset.x+(unsigned short)base->x;
+            particle->y=(unsigned short)offset.y+(unsigned short)base->y;
+            particle->z=(unsigned short)offset.z+(unsigned short)base->z;
             i++;
         } while(i<count*2);
     }

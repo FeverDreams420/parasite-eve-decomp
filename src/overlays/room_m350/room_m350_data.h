@@ -49,4 +49,7 @@ typedef struct RoomM350TrailSequence {
 } RoomM350TrailSequence;
 extern RoomM350TrailSequence D_8019A7FC;
 
+/* Draw callback for position-only particles emitted by the pulsed pair. */
+s32 func_80199B94(s32 mode, GteShortVector *position);
+
 #endif /* ROOM_M350_DATA_H */
