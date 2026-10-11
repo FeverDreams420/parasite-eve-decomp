@@ -75,7 +75,6 @@ int Gpu_InitDisplay(int mode) {
     D_800B0E44 = ptr;
     ptr += 0x4800;
     g_RenderScratchBufferBase[0] = ptr;
-    asm volatile("" : "=r"(ptr) : "0"(ptr));
     ptr += const_48000;
     D_800B0E48 = ptr2;
     ptr2 = ptr + 0x4000;

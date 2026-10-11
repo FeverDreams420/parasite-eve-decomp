@@ -10,9 +10,9 @@ s32 Entity_AllocBlock(u32 arg0) {
     u32 var_v0;
     s32 var_a1;
     s32 var_a2;
-    register s32 var_a3 asm("$7");
-    register u32 temp_t0 asm("$8");
-    register s32 *temp_t1 asm("$9");
+    s32 var_a3;
+    u32 temp_t0;
+    s32 *temp_t1;
     u32 var_a0;
     register u32 var_v1 asm("$3");
 

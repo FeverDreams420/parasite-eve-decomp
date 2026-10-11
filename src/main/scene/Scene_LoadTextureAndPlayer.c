@@ -217,7 +217,7 @@ retry:
 
 s32 Scene_InitEntityPlayer(s32 arg0) {
     Pe1GameState *gameState;
-    register s32 arg0v asm("$17");
+    s32 arg0v;
     M2C_UNK sp28;
     s32 var_v0_2;
     u32 temp_a1;

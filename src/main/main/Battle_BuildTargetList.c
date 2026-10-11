@@ -19,8 +19,8 @@ void Battle_BuildTargetList(void) {
     s32 pad_[2];
     s32 distance;
     s16 angle;
-    register EnemyCombatant *candidateCore asm("$6");
-    register BattleEntity *player asm("$5");
+    EnemyCombatant *candidateCore;
+    BattleEntity *player;
     BattleEntity *candidate;
 
     candidate = g_FieldActorListHead;
