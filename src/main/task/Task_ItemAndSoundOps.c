@@ -42,19 +42,21 @@ int Task_SetActorScreenPos(int **arg0) {
 
 int Task_OpenMemCardDialog(void) {
     Pe1GameState *state = &g_GameState;
-    int *node;
+    TaskNode *node;
+    unsigned short *node_flags;
     int flags;
     int cursor;
 
     if ((state->flags & 0x1000) == 0) {
-        node = (int *)g_TaskNodePool;
-        flags = *(unsigned short *)(node + 2);
+        node = g_TaskNodePool;
+        node_flags = &node->flags;
+        flags = *node_flags;
         if (flags & 0x20) {
             goto finish;
         }
-        *(unsigned short *)(node + 2) = flags | 0x20;
+        *node_flags = flags | 0x20;
         cursor = g_SceneDataTable0;
-        node[4] = 1;
+        node->active = 1;
         cursor -= 8;
         g_SceneDataTable0 = cursor;
         return 0;
@@ -82,18 +84,20 @@ finish:
 int Task_ShowReceivedItem(int **arg0) {
     Pe1GameState *state = &g_GameState;
     int **saved = arg0;
-    int *node;
+    TaskNode *node;
+    unsigned short *node_flags;
     int flags;
     int cursor;
 
     if (!(state->flags & 0x1000)) {
 
-    node = (int *)g_TaskNodePool;
-    flags = *(unsigned short *)(node + 2);
+    node = g_TaskNodePool;
+    node_flags = &node->flags;
+    flags = *node_flags;
     if (!(flags & 0x20)) {
-    *(unsigned short *)(node + 2) = flags | 0x20;
+    *node_flags = flags | 0x20;
     cursor = g_SceneDataTable0;
-    node[4] = 1;
+    node->active = 1;
     cursor -= 0xC;
     g_SceneDataTable0 = cursor;
     return 0;

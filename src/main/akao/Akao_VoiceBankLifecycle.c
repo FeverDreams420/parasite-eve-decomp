@@ -231,7 +231,7 @@ void Akao_StepSequencerVoice(void *arg0) {
 }
 
 void Spu_ManageVoices(int arg0, int arg1);
-void SeqOp_DeactivateVoice(char *ptr, int mask);
+void SeqOp_DeactivateVoice(AkaoTrack *ptr, int mask);
 void Seq_MarkTrack34MaskDirty(void);
 void Seq_MarkTrack38MaskDirty(void);
 void Seq_MarkTrack3CMaskDirty(void);
@@ -323,7 +323,7 @@ void Spu_ManageVoices(int arg0, int arg1)
                     else
                     {
                         g_SpuPendingKeyOffMask |= mask;
-                        SeqOp_DeactivateVoice((char *) voice, mask);
+                        SeqOp_DeactivateVoice(voice, mask);
                         parameters->flags = 0;
                     }
                 }
@@ -414,7 +414,7 @@ void Spu_ManageVoices(int arg0, int arg1)
                     else
                     {
                         g_SpuPendingKeyOffMask |= mask;
-                        SeqOp_DeactivateVoice((char *) voice, mask);
+                        SeqOp_DeactivateVoice(voice, mask);
                         parameters->flags = 0;
                     }
                 }
@@ -451,7 +451,7 @@ void Spu_ManageVoices(int arg0, int arg1)
                     else
                     {
                         g_SpuPendingKeyOffMask |= mask;
-                        SeqOp_DeactivateVoice((char *) voice, mask);
+                        SeqOp_DeactivateVoice(voice, mask);
                         parameters->flags = 0;
                     }
                 }
@@ -1804,7 +1804,6 @@ extern unsigned int g_SpuActiveVoiceMask;
 extern unsigned int g_SpuPendingKeyOffMask;
 extern unsigned int g_AkaoVoiceUpdateFlags;
 
-void SeqOp_DeactivateVoice(char *ptr, int mask);
 void Seq_MarkTrack34MaskDirty(void);
 void Seq_MarkTrack38MaskDirty(void);
 void Seq_MarkTrack3CMaskDirty(void);
@@ -1874,7 +1873,7 @@ void Spu_StopActiveVoices(void) {
         if (g_SpuActiveVoiceMask & mask) {
             if ((*(int *)(field_38 - 0xC) & skip_flag) == 0) {
                 g_SpuPendingKeyOffMask |= mask;
-                SeqOp_DeactivateVoice(voice, mask);
+                SeqOp_DeactivateVoice((AkaoTrack *)voice, mask);
                 *(int *)field_38 = 0;
             }
         }

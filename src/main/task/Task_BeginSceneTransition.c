@@ -18,18 +18,20 @@ void Menu_OpenEquipScreen(int arg0);
 int Task_BeginSceneTransition(int **arg0) {
     Pe1GameState *state = &g_GameState;
     int **saved = arg0;
-    int *node;
+    TaskNode *node;
+    unsigned short *node_flags;
     int flags;
     int cursor;
 
     if (!(state->flags & 0x1000)) {
 
-    node = (int *)g_TaskNodePool;
-    flags = *(unsigned short *)(node + 2);
+    node = g_TaskNodePool;
+    node_flags = &node->flags;
+    flags = *node_flags;
     if ((flags & 0x20) == 0) {
-        *(unsigned short *)(node + 2) = flags | 0x20;
+        *node_flags = flags | 0x20;
         cursor = g_SceneDataTable0;
-        ((TaskNode *)node)->active = 1;
+        node->active = 1;
         cursor -= 0xC;
         g_SceneDataTable0 = cursor;
         return 0;

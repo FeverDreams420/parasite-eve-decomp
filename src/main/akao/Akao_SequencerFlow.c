@@ -916,8 +916,10 @@ void Akao_SetNotePitch(AkaoTrack *track, int arg1) {
     SeqOp_SetVoiceInstrument(track, instrument, instrument->start_address);
 }
 
-void SeqOp_DeactivateVoice(char *ptr, int mask) {
+void SeqOp_DeactivateVoice(AkaoTrack *ptr, int mask) {
     int *first = &g_SpuActiveVoiceMask;
+    AkaoU32 *key_on = &ptr->key_on_mask;
+    AkaoU32 *key_off = &ptr->key_off_mask;
 
     mask = ~mask;
     *first &= mask;
@@ -925,8 +927,8 @@ void SeqOp_DeactivateVoice(char *ptr, int mask) {
     g_AkaoTrack38Mask &= mask;
     g_AkaoTrack3CMask &= mask;
     g_AkaoVoiceMaskScratch &= mask;
-    *(int *)(ptr + 0x2C) = 0;
-    *(int *)(ptr + 0x28) = 0;
+    *key_on = 0;
+    *key_off = 0;
 }
 
 void SeqOp_SetTempo(void *ptr)
@@ -994,17 +996,22 @@ extern unsigned int g_AkaoVoiceUpdateFlags;
 void SeqOp_SetTempoSlide(void *ptr)
 {
     unsigned char *stream = *(unsigned char **)ptr;
-    char *track;
+    AkaoSequencerBank *track;
     unsigned int value;
 
     *(unsigned char **)ptr = stream + 1;
     value = *stream << 16;
     *(unsigned char **)ptr = stream + 2;
-    track = (char *)g_AkaoCurTrack;
+    track = g_AkaoCurTrack;
     value |= stream[1] << 24;
-    *(short *)(track + 0x58) = 0;
-    g_AkaoVoiceUpdateFlags |= AKAO_GLOBAL_UPDATE_TEMPO;
-    *(unsigned int *)(track + 0x40) = value;
+    {
+        AkaoU16 *slide = &track->volume_slide_duration;
+        AkaoU32 *volume = &track->volume;
+
+        *slide = 0;
+        g_AkaoVoiceUpdateFlags |= AKAO_GLOBAL_UPDATE_TEMPO;
+        *volume = value;
+    }
 }
 
 static inline u8 **SetDuration(u8 **cursor) {
@@ -2283,8 +2290,13 @@ void SeqOp_LoadNestedStreams(AkaoTrack *track) {
 
     D_800B89D4 = 0;
     D_800B89D8 = 0;
-    D_800B89DC = *(u16 *)((char *)track + 0x76) >> 8;
-    D_800B89E0 = *(int *)((char *)track + 0x44) >> 23;
+    {
+        AkaoU16 *panpot = &track->panpot;
+        int *expression = &track->expression_value;
+
+        D_800B89DC = *panpot >> 8;
+        D_800B89E0 = *expression >> 23;
+    }
     Seq_StartNestedStreams((AkaoNestedSource *)&D_800B89D0, first, second);
     *(u8 **)track += 4;
 }
@@ -2436,10 +2448,13 @@ void SeqOp_StopVoice(AkaoTrack *track, u32 arg1) {
             state->reserved_voice_mask &= ~(1 << track->voice_index);
         }
     } else {
-        ((void (*)())SeqOp_DeactivateVoice)((char *)track);
+        ((void (*)())SeqOp_DeactivateVoice)(track);
     }
 
-    *(u32 *)((char *)track + 0x38) = 0;
+    {
+        AkaoU32 *flags = &track->flags;
+        *flags = 0;
+    }
     g_AkaoVoiceUpdateFlags |= AKAO_VOICE_PARAM_PITCH;
     Seq_MarkTrack34MaskDirty();
     Seq_MarkTrack38MaskDirty();

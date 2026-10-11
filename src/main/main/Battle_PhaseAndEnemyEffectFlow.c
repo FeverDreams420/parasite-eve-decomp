@@ -264,7 +264,10 @@ block_39:
                 }
             }
             Entity_SetActionMode(D254(15), *(var_v1 + ((Combatant *)D278(13))->targetAngleActionModes));
-            *(s32 *)((char *)D278(10) + PE1_OFFSETOF(Combatant, stateFlags)) = (s32) (*(s32 *)((char *)D278(10) + PE1_OFFSETOF(Combatant, stateFlags)) & 0xFFDFFFFF);
+            {
+                s32 *stateFlags = &((Combatant *)D278(10))->stateFlags;
+                *stateFlags &= 0xFFDFFFFF;
+            }
             D_8009CE39 = 0x58;
             D_8009CE38[0] = 0;
             D_8009CE3A = 0x18;

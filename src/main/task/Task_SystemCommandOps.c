@@ -236,7 +236,7 @@ int Task_SetSceneEntryAnim(int **arg0) {
     int index = *arg0[0];
 
     Geo_TransformPoint(
-        (GeomEntry *)(base + *(int *)(header + 0x14) + (index * 56)),
+        (GeomEntry *)(base + ((GeomState *)header)->entry_offset + (index * 56)),
         *(short *)arg0[1],
         *(short *)arg0[2],
         *(short *)arg0[3]);

@@ -45,9 +45,9 @@ void Battle_Init(void)
 {
     u8 index;
     BattleInitSlot *records;
-    u8 *root;
-    u8 *config0;
-    u8 *config1;
+    BattleAction **action;
+    BattleAction *config0;
+    BattleAction *config1;
     volatile u8 *config2;
     volatile u8 *config3;
     volatile u8 *config4;
@@ -68,21 +68,21 @@ void Battle_Init(void)
         index++;
     } while (index < 45);
 
-    root = D_8009D278_o.root;
-    config0 = *(u8 **)(root + 0x68);
+    action = &((Combatant *)D_8009D278_o.root)->action;
+    config0 = *action;
     D_8009CE44 = 0;
     D_8009CE40 = 0;
     D_8009D294 = 0;
-    config1 = *(u8 **)(root + 0x68);
-    D_8009D2D8 = (*(u32 *)(config0 + 0x10) >> 4) & 3;
-    config2 = *(u8 **)(root + 0x68);
-    D_8009D1DC = *(u32 *)(config1 + 0x10) & 0xF;
+    config1 = *action;
+    D_8009D2D8 = (config0->turnWord >> 4) & 3;
+    config2 = (u8 *)*action;
+    D_8009D1DC = config1->turnWord & 0xF;
     D_8009CE38[0] = config2[0x14];
-    config3 = *(u8 **)(root + 0x68);
+    config3 = (u8 *)*action;
     D_8009CE39 = config3[0x15];
-    config4 = *(u8 **)(root + 0x68);
+    config4 = (u8 *)*action;
     D_8009CE3A = config4[0x16];
-    config5 = *(u8 **)(root + 0x68);
+    config5 = (u8 *)*action;
     D_8009CE3B = config5[0x17];
 
     Tbl_ResetAll();
