@@ -1,4 +1,5 @@
 #include "common.h"
+#include "pe1/field_ring_geometry.h"
 
 extern u16 D_80199604;
 extern u16 D_8019960A, D_8019960C, D_80199606, D_80199608;
@@ -40,33 +41,33 @@ void func_801923D8(void *unused0, void *unused1, u8 *effect) {
     *(u8 **)base = source;
     func_800C4E50(base);
 
-    *(u16 *)(mid + 24) = 0x20;
-    *(u16 *)(mid + 30) = 0x5DC;
-    *(u16 *)(mid + 32) = intensity;
-    mid[20] = 0;
-    mid[21] = 0;
-    mid[22] = 0;
-    mid[16] = 0xFF;
-    mid[17] = 0xFF;
-    mid[18] = 0xFF;
-    *(u16 *)(mid + 26) = span;
-    *(u16 *)(mid + 28) = 0;
+    ((FieldRingGeometry *)(mid + 12))->mode = 0x20;
+    ((FieldRingGeometry *)(mid + 12))->offset = 0x5DC;
+    ((FieldRingGeometry *)(mid + 12))->intensity = intensity;
+    ((FieldRingGeometry *)(mid + 12))->color1[0] = 0;
+    ((FieldRingGeometry *)(mid + 12))->color1[1] = 0;
+    ((FieldRingGeometry *)(mid + 12))->color1[2] = 0;
+    ((FieldRingGeometry *)(mid + 12))->color0[0] = 0xFF;
+    ((FieldRingGeometry *)(mid + 12))->color0[1] = 0xFF;
+    ((FieldRingGeometry *)(mid + 12))->color0[2] = 0xFF;
+    ((FieldRingGeometry *)(mid + 12))->extent0 = span;
+    ((FieldRingGeometry *)(mid + 12))->extent1 = 0;
     *(u8 **)(mid + 12) = source + 0x200;
     func_800C4E50(mid + 12);
 
     third = mid + 36;
     asm ("" : : "r"(third));
-    *(u16 *)(mid + 48) = 0x20;
-    *(u16 *)(mid + 54) = 0x5DC;
-    *(u16 *)(mid + 56) = intensity;
-    mid[44] = 0;
-    mid[45] = 0;
-    mid[46] = 0;
-    mid[40] = 0xFF;
-    mid[41] = 0xFF;
-    mid[42] = 0xFF;
-    *(u16 *)(mid + 50) = span;
-    *(u16 *)(mid + 52) = 0;
+    ((FieldRingGeometry *)(mid + 36))->mode = 0x20;
+    ((FieldRingGeometry *)(mid + 36))->offset = 0x5DC;
+    ((FieldRingGeometry *)(mid + 36))->intensity = intensity;
+    ((FieldRingGeometry *)(mid + 36))->color1[0] = 0;
+    ((FieldRingGeometry *)(mid + 36))->color1[1] = 0;
+    ((FieldRingGeometry *)(mid + 36))->color1[2] = 0;
+    ((FieldRingGeometry *)(mid + 36))->color0[0] = 0xFF;
+    ((FieldRingGeometry *)(mid + 36))->color0[1] = 0xFF;
+    ((FieldRingGeometry *)(mid + 36))->color0[2] = 0xFF;
+    ((FieldRingGeometry *)(mid + 36))->extent0 = span;
+    ((FieldRingGeometry *)(mid + 36))->extent1 = 0;
     source += 0x400;
     *(u8 **)third = source;
     func_800C4E50(third);
