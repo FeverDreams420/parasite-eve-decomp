@@ -106,18 +106,18 @@ s32 CdRom_InitScreenState(void) {
     valueE0 = 0xE0;
     value1 = 1;
     command = 0xE1000400;
-    base = &D_800BCF88.state;
+    base = &g_GeomScroll.state;
     q = (u8 *)base;
     p = (u8 *)base;
 
-    D_800BCF88.state.position.tint.target_b = 0xFF;
-    D_800BCF88.state.position.tint.target_g = 0xFF;
-    D_800BCF88.state.position.tint.target_r = 0xFF;
-    D_800BCF88.state.position.tint.fade_mode = 1;
-    D_800BCF88.state.position.tint.start_b = 0;
-    D_800BCF88.state.position.tint.start_g = 0;
-    D_800BCF88.state.position.tint.start_r = 0;
-    D_800BCF88.state.position.tint.blend_mode = 2;
+    g_GeomScroll.state.position.tint.target_b = 0xFF;
+    g_GeomScroll.state.position.tint.target_g = 0xFF;
+    g_GeomScroll.state.position.tint.target_r = 0xFF;
+    g_GeomScroll.state.position.tint.fade_mode = 1;
+    g_GeomScroll.state.position.tint.start_b = 0;
+    g_GeomScroll.state.position.tint.start_g = 0;
+    g_GeomScroll.state.position.tint.start_r = 0;
+    g_GeomScroll.state.position.tint.blend_mode = 2;
 
     for (; i < 2; i++) {
         p[0x33] = value3;
@@ -155,7 +155,7 @@ s32 CdRom_InitScreenState(void) {
 }
 
 int Render_SetCDDCSlot(void) {
-    GeomScrollState *state = &D_800BCF88.state;
+    GeomScrollState *state = &g_GeomScroll.state;
     int mode = D_800BCFEE & 3;
     int stop = D_800BCFEE & 4;
     int divisor, frame;

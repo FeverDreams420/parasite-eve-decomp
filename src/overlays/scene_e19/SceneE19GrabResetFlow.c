@@ -125,8 +125,8 @@ void func_80192878(SceneE19Selection *selection) {
 }
 
 #include "scene_e19_shared.h"
+#include "pe1/geom_state.h"
 
-extern volatile int D_800BCF88;
 extern u32 SceneE19FlagsWord asm("D_800BCF88");
 extern struct BattleEntity *D_8009D254;
 

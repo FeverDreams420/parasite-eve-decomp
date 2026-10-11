@@ -38,7 +38,7 @@ void func_80192C00(RoomPlacementOwner *owner, RoomPlacementState *state) {
         GeomScrollState *scrollState;
 
         updatedPlayer->base_x = updatedPlayer->pos_x;
-        scrollState = &D_800BCF88.state;
+        scrollState = &g_GeomScroll.state;
         updatedPlayer->base_y = updatedPlayer->pos_y;
         updatedPlayer->base_z = updatedPlayer->pos_z;
         updatedPlayer->motion_x = 0;

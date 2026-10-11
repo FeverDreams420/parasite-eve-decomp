@@ -138,8 +138,8 @@ cmd_898:
                                     ARG_WORD(args->arg1), ARG_WORD(args->arg2));
         return 1;
 cmd_899:
-        D_800BCF88.state.position.originX = ARG_WORD(args->arg1);
-        D_800BCF88.state.position.originY = ARG_WORD(args->arg2);
+        g_GeomScroll.state.position.originX = ARG_WORD(args->arg1);
+        g_GeomScroll.state.position.originY = ARG_WORD(args->arg2);
         goto done;
 cmd_8fc:
         Task_SetCollisionFlag(ARG_WORD(args->arg1) != 0);

@@ -13,6 +13,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_vector_math.h"
 #include "pe1/field_collision.h"
+#include "pe1/geom_state.h"
 
 /* The grab attack set (src/overlays/room_lib/RoomFx_GrabAttackSet.c, in
  * room_m269 and scene_e01). */
@@ -50,8 +51,6 @@ extern int RoomLib_PairA;
 extern int RoomLib_PairB;
 
 extern FieldActor *D_8009D20C;
-/* Read and written as a volatile word by the release. */
-extern volatile int D_800BCF88;
 
 int RoomFx_GrabNop0(void);
 int RoomFx_GrabInit(RoomMotionTrigger *obj);

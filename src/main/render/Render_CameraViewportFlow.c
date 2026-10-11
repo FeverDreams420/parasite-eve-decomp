@@ -16,28 +16,28 @@
  * scroll and camera words, the light colour, the mesh group and depth, and
  * points the view at the given matrix and projection distance. */
 int Render_InitViewState(void *matrix, void *screen) {
-    D_800BCF88.words.flags = 0x70;
+    g_GeomScroll.words.flags = 0x70;
     D_800BCFFC = 0x60;
     D_800BCFFE[0] = 0x180;
     D_800BD025.b = 0xFF;
     D_800BD025.g = 0xFF;
     D_800BD025.r = 0xFF;
-    D_800BCF88.words.position = 0;
-    D_800BCF88.words.saved = 0;
-    D_800BCF88.words.screenOffset = 0;
-    D_800BCF88.words.start = 0;
-    D_800BCF88.words.target = 0;
-    D_800BCF88.words.timer = 0;
-    D_800BCF88.words.viewMatrix = matrix;
-    D_800BCF88.words.projectionDistance = screen;
-    D_800BCF88.words.savedBoundsX = 0;
-    D_800BCF88.words.savedBoundsY = 0;
-    D_800BCF88.words.cameraOffset = 0;
+    g_GeomScroll.words.position = 0;
+    g_GeomScroll.words.saved = 0;
+    g_GeomScroll.words.screenOffset = 0;
+    g_GeomScroll.words.start = 0;
+    g_GeomScroll.words.target = 0;
+    g_GeomScroll.words.timer = 0;
+    g_GeomScroll.words.viewMatrix = matrix;
+    g_GeomScroll.words.projectionDistance = screen;
+    g_GeomScroll.words.savedBoundsX = 0;
+    g_GeomScroll.words.savedBoundsY = 0;
+    g_GeomScroll.words.cameraOffset = 0;
     g_GeomGroupSel = 0;
     D_800BD022 = 0;
     D_800BD020 = 0;
     D_800BD024 = 0;
-    D_800BCF88.words.origin = 0;
+    g_GeomScroll.words.origin = 0;
     return 0;
 }
 
@@ -131,7 +131,7 @@ int Render_SetViewport(s16 *position) {
         s16 projected[2];
         unsigned reserved[10];
     } local;
-    GeomScrollState *camera = &D_800BCF88.state;
+    GeomScrollState *camera = &g_GeomScroll.state;
     register GeomState *geometry;
     register CameraViewport *view;
     register unsigned int cx asm("$11");
@@ -256,7 +256,7 @@ int Render_SetViewport(s16 *position) {
     D_800BCF94 = view_x;
     D_800BCF96 = view_y;
     selected_x = target_x;
-    if (D_800BCF88.state.flags & 64) {
+    if (g_GeomScroll.state.flags & 64) {
         register int signed_y;
         s16 chosen_bound;
         register int upper_y;
@@ -447,7 +447,7 @@ int Render_UpdateScrollPosition(void *positionArg, int duration, int mode)
     int *position = positionArg;
     short vector[4];
     short projected[2];
-    GeomScrollState *camera = &D_800BCF88.state;
+    GeomScrollState *camera = &g_GeomScroll.state;
     CameraViewport *view;
     int x, y;
 

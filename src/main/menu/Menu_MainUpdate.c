@@ -932,7 +932,7 @@ block_61:
         {
         register s32 minus5;
 
-        if (D_800BCF88.state.flags & 0x2000) {
+        if (g_GeomScroll.state.flags & 0x2000) {
             Render_BeginSceneLoad();
             minus5 = -5;
         } else {

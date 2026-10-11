@@ -321,11 +321,11 @@ int Geo_RenderMeshList(void *buffer, void **end)
     x = (view->minX + view->maxX) / 2;
     {
         register short centerX = x;
-        D_800BCF88.state.position.originX = centerX;
+        g_GeomScroll.state.position.originX = centerX;
         D_800BCF8C.x = centerX;
     }
     minY = &view->minY;
-    D_800BCF8E = D_800BCF88.state.position.originY = (*minY + view->maxY) / 2;
+    D_800BCF8E = g_GeomScroll.state.position.originY = (*minY + view->maxY) / 2;
     asm volatile("":::"memory");
     D_800BCFAC = view->minX;
     asm volatile("":::"memory");
@@ -357,7 +357,7 @@ int Geo_RenderMeshList(void *buffer, void **end)
         } while (++i < count);
     }
     D_800BCFFA = D_800BCFFB = 0;
-    *(u32 *)&D_800BCF88.state.flags &= ~0xc00;
+    *(u32 *)&g_GeomScroll.state.flags &= ~0xc00;
     return 0;
 }
 
@@ -753,9 +753,9 @@ int Scene_IsBattleMode(void)
             entry++;
             } while (++i < count);
         }
-        if (D_800BCF88.state.flags & 0x80) {
+        if (g_GeomScroll.state.flags & 0x80) {
             unsigned short x = D_800BCF8C.x, y = D_800BCF8E;
-            D_800BCF88.state.flags &= ~0x80;
+            g_GeomScroll.state.flags &= ~0x80;
             D_800BCF90 = x;
             D_800BCF92 = y;
         }
