@@ -1031,12 +1031,17 @@ void RoomLib_ArmHandlerB(RoomEnt *o) {
         gte_ldv0(((RoomLibArcWork *)(base))->input); \
     } while (0)
 
+static inline int RoomLib_ArcPhaseSpeed(int phase) {
+    return phase >> 12;
+}
+
 void RoomLib_HandlerB(RoomEnt *obj) {
     RoomEnt *self = obj;
     char *state = (char *)&self->sub;
     RoomLink *link = self->link;
+    int previousY;
     short *scratch;
-    int angle;
+    int result;
 
     asm("" : : "r"(state) : "$19");
     scratch = (short *)0x1F800000;
@@ -1116,19 +1121,21 @@ void RoomLib_HandlerB(RoomEnt *obj) {
         scratch[0x11] = 0;
         speedRaw = ((RoomLibHandlerBState *)state)->speed;
         speed = speedRaw >> 12;
+        previousY = y;
         scratch[0x12] = speed;
         phaseAgain = ((RoomLibHandlerBState *)state)->phaseValue;
-        nextY = y - phase;
+        nextY = previousY - phase;
         if (phaseAgain < 0 && (nextY >> 16) >= ((RoomLibHandlerBState *)state)->floorY) {
-            register int numerator asm("$3");
-            register int divisor asm("$2");
+            int numerator;
+            int divisor;
 
             nextY = ((RoomLibHandlerBState *)state)->floorY << 16;
             numerator = (short)speed;
-            divisor = (y - nextY) >> 12;
+            divisor = (previousY - nextY) >> 12;
             numerator *= divisor;
-            divisor = phaseAgain >> 12;
-            scratch[0x12] = numerator / divisor;
+            divisor = RoomLib_ArcPhaseSpeed(phaseAgain);
+            result = numerator;
+            scratch[0x12] = result / divisor;
             ((RoomLibArcWork *)scratch)->landed = 1;
         }
         link->pos[1] = nextY;
@@ -1171,9 +1178,9 @@ void RoomLib_HandlerB(RoomEnt *obj) {
             ((RoomLibHandlerBState *)state)->secondaryX = secondary->pos[0];
             ((RoomLibHandlerBState *)state)->secondaryZ = secondary->pos[2];
         }
-        angle = FieldEng_VecToAngle((Vec3Fixed *)(state + 0x50), (Vec3Fixed *)link->pos);
+        result = FieldEng_VecToAngle((Vec3Fixed *)(state + 0x50), (Vec3Fixed *)link->pos);
         link->rotation[1] = FieldEng_TurnToward(
-            link->rotation[1], (short)angle, ((RoomLibHandlerBState *)state)->secondaryHeading);
+            link->rotation[1], (short)result, ((RoomLibHandlerBState *)state)->secondaryHeading);
     }
     func_800DFB20(self);
     if (((RoomLibArcWork *)scratch)->landed != 0) {
