@@ -69,8 +69,7 @@ s32 ROOMLIB_POLL_RESET_FUNC(s32 state) {
         D_800F3368.extent_y = size;
         D_800F3368.extent_x = size;
         D_800F3368.extent_y = size;
-        index <<= 1;
-        tableValue = *(u16 *)((u8 *)D_800E2850 + index);
+        tableValue = D_800E2850[index];
         value3 = 3;
         D_800F3368.palette = value3;
         value1 = 1;
