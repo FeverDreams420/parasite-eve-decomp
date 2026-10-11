@@ -3,6 +3,9 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/render_buffers.h"
 #include "pe1/battle.h"
+#include "pe1/draw_state.h"
+#include "pe1/battle_status.h"
+#include "pe1/battle_entity_anim.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
@@ -11,7 +14,6 @@
  * absolute. */
 u8 g_BattleSpritePrimCountdown;
 u8 g_MenuActiveMode;
-#include "Gpu_SetupSprites_externs.h"
 
 void Gpu_SetupSprites(BattleEntity *arg0, int arg1, int arg2) {
     BattleEntity *obj;
@@ -52,7 +54,6 @@ void Gpu_SetupSprites(BattleEntity *arg0, int arg1, int arg2) {
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-#include "Gpu_SetupSprites_externs_1.h"
 
 void Gpu_QueuePrimitive(void) {
     int index;
@@ -75,7 +76,6 @@ void Gpu_QueuePrimitive(void) {
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-#include "Gpu_SetupSprites_externs_2.h"
 
 #define INDEX_STRIDE(i) ((((((i) << 1) + (i)) << 3) - (i)) << 2) - (i)
 

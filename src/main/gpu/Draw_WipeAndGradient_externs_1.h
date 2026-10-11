@@ -1,5 +1,0 @@
-#ifndef PE1_EXT_305E840A18BB
-#define PE1_EXT_305E840A18BB
-extern DrawVertexPair D_800A22B0[];
-extern u32 D_8009D14C[];
-#endif /* PE1_EXT_305E840A18BB */

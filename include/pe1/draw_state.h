@@ -15,6 +15,18 @@ typedef struct DrawTextCursorPair {
     u32 y;
 } DrawTextCursorPair;
 
+/* The draw-enabled byte is read signed by the display queries and unsigned
+ * by the sequence-elapsed query. */
+typedef union GpuDrawEnabledFlag {
+    signed char value;
+    unsigned char bits;
+} GpuDrawEnabledFlag;
+
+/* Wipe bar vertex coordinates, stored y first. */
+typedef struct {
+    s16 y, x;
+} __attribute__((packed)) DrawVertexPair;
+
 PE1_STATIC_ASSERT(sizeof(DrawTextCursorPair) == 8, draw_text_cursor_pair_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(DrawTextCursorPair, y) == 4,
                   draw_text_cursor_pair_y_offset);
@@ -94,5 +106,33 @@ void Draw_PrintSignedNumberWidth3(int value);
 void Draw_EmitGlyph(int glyph, int mode);
 
 void Draw_EmitWipeBarRect(int width, int height, int mode);
+
+extern signed char D_800B0DB0[];
+extern s32 g_DrawBufferIndex;
+extern int D_8009CDB0;
+extern int D_8009D0D8;
+extern int g_DrawTextBoxWidth;
+extern int D_8009D13C;
+extern int D_8009D140;
+extern int D_8009D144;
+extern DrawVertexPair D_800A22B0[];
+extern u32 D_8009D14C[];
+extern GpuDrawEnabledFlag g_DrawEnabled;
+extern short g_SeqElapsed;
+extern volatile unsigned char D_800B0DC6;
+extern signed char D_800B0DBB;
+extern char D_8009E974[];
+extern char D_8009E975[];
+extern u8 D_8009E976[];
+extern char D_8009EC40[];
+extern char D_8009EC4E[];
+extern u8 D_8009EC38[];
+extern char D_8009EC4A[];
+extern char D_8009E968[];
+extern char D_8009EA48[];
+extern char D_8009EA64[];
+extern char D_8009EA80[];
+extern char D_8009EA9C[];
+extern char D_8009EAB8[];
 
 #endif /* PE1_DRAW_STATE_H */

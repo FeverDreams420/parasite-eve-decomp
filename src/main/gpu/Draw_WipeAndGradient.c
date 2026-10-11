@@ -8,7 +8,6 @@
 #include "pe1/psyq_gpu.h"
 
 int g_DrawBlendColor;
-#include "Draw_WipeAndGradient_externs.h"
 
 int Draw_GetBlendColor(void) {
     return g_DrawBlendColor;
@@ -42,9 +41,6 @@ void Draw_BlendColor(int arg0) {
 
 typedef RenderColorTrianglePacket ColorTriPrim;
 
-typedef struct {
-    s16 y, x;
-} __attribute__((packed)) DrawVertexPair;
 
 typedef DrawWipeVertex DrawVertexCoord;
 
@@ -54,7 +50,6 @@ typedef struct ColorTriPair {
     ColorTriPrim first, second;
 } ColorTriPair;
 
-#include "Draw_WipeAndGradient_externs_1.h"
 #include "pe1/bounds_check.h"
 
 void Draw_AllocColorRect(int firstVertex, int secondVertex, int width, int mode) {

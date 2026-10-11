@@ -2,6 +2,7 @@
 #include "pe1/game_state.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/render_packets.h"
+#include "pe1/battle_status.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
@@ -12,7 +13,6 @@ void SetDispMask(int arg0);
 void ResetGraph(int arg0);
 int Gpu_CheckDrawStatus(void);
 
-#include "Gpu_RenderFrame_externs.h"
 
 static inline DISPENV *DispAddress(int index) {
     return &g_RenderDispEnvArray[index];

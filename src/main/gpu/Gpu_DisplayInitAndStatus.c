@@ -7,6 +7,12 @@
 #include "pe1/asset_tim.h"
 #include "pe1/font.h"
 #include "pe1/render_buffers.h"
+#include "pe1/draw_state.h"
+#include "pe1/battle_status.h"
+#include "pe1/save_tail_state.h"
+#include "pe1/scene_dispatch.h"
+#include "pe1/sys.h"
+#include "pe1/render_camera.h"
 
 void SetDispMask(int arg0);
 void ClearImage(RECT *rect, int r, int g, int b);
@@ -14,14 +20,8 @@ void Draw_InitBuffers(void);
 int CdRom_SetSeekPos(unsigned int arg0);
 void Gpu_RenderFrame(void);
 
-/* The draw-enabled byte is read signed by the display queries and unsigned
- * by the sequence-elapsed query. */
-typedef union GpuDrawEnabledFlag {
-    signed char value;
-    unsigned char bits;
-} GpuDrawEnabledFlag;
 
-#include "Gpu_DisplayInitAndStatus_externs.h"
+#include "pe1/sys.h"
 
 
 int Gpu_InitDisplay(int mode) {
@@ -122,7 +122,6 @@ inline short Seq_GetElapsed(void) {
     return -1;
 }
 
-#include "Gpu_DisplayInitAndStatus_externs_1.h"
 
 /* Both queries are integrated here; the inlined calls leave retail's
  * otherwise empty eight-byte frame and the repeated enabled test. */
