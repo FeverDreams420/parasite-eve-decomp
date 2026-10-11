@@ -30,4 +30,11 @@ extern unsigned char D_8019A854;
 /* Rotation matrix the cloud controller builds and the swept flare uses. */
 extern GteMatrix D_8019A870;
 
+/* Repeat budget and player distance used by the cloud controller. */
+typedef struct RoomM350CloudTracking {
+    short repeats;
+    short playerDistance;
+} RoomM350CloudTracking;
+extern RoomM350CloudTracking D_8019A8B8;
+
 #endif /* ROOM_M350_DATA_H */

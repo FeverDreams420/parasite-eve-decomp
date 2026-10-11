@@ -1,4 +1,0 @@
-#ifndef PE1_EXT_738B675D522F
-#define PE1_EXT_738B675D522F
-extern short D_8019A8B8;
-#endif /* PE1_EXT_738B675D522F */

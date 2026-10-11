@@ -34,19 +34,17 @@ int func_80198CF8(int event,State *state)
         int phase;
         int target;
         register int speed asm("$5");
-        short *repeat;
         if(instance->mode!=9) return 0;
         if(instance->state && instance->state->action_state[0]==1)
             instance->state->action_state[0]=2;
-        repeat=&D_8019A8B8;
         {
             register int current asm("$3")=instance->anim.parts.integer;
             frame=current;
-        if(*repeat>0) {
+        if(D_8019A8B8.repeats>0) {
             register int signedFrame asm("$2")=(short)current;
             if(signedFrame>=30) {
                 instance->anim.fixed=0x50000;
-                *repeat=*(volatile unsigned short *)repeat-1;
+                D_8019A8B8.repeats=*(volatile unsigned short *)&D_8019A8B8.repeats-1;
             }
         } else if((short)current>=instance->action-1) {
             if(instance->state) instance->state->action_state[0]=4;
@@ -56,7 +54,7 @@ int func_80198CF8(int event,State *state)
             return 1;
         }
         }
-        D_8019A8BA=func_800DFE20((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x);
+        D_8019A8B8.playerDistance=func_800DFE20((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x);
         angle=FieldEng_VecToAngle((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x)&4095;
         D_8019A8BC=angle;
         asm volatile("" : : : "memory");
