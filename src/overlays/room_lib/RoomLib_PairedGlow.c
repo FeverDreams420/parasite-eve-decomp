@@ -230,10 +230,9 @@ void RoomLib_DrawPairedGlowSprite(char *object, void *unused, RoomDoubleSpriteFx
     RoomEnt *entity;
     RoomDoubleSpriteFxParams *workState;
     RoomLibFxMatrixState *clock;
-    register int callArg0 asm("$4");
-    register int callArg1 asm("$5");
     int handleA;
     int handleB;
+    int textureWord;
 
     entity = (RoomEnt *)object;
     workState = state;
@@ -252,23 +251,18 @@ void RoomLib_DrawPairedGlowSprite(char *object, void *unused, RoomDoubleSpriteFx
     ScaleMatrix(&stack.matrix, &stack.scale);
 
     func_800C6D5C(g_RoomPairedGlowPacket, 0, 0);
+    textureWord = 0;
     if (clock->asset.index == 0) {
-        handleA = GetTPage(0, 1, 0x340, 0x100);
-        callArg0 = 0;
-        callArg1 = 0x1D7;
-        asm("" : : "r"(callArg0), "r"(callArg1));
+        handleA = GetTPage(textureWord, 1, 0x340, 0x100);
         handleA = (u16)handleA;
-        handleB = GetClut(callArg0, callArg1);
+        handleB = GetClut(0, 0x1D7);
         func_800C6EC0((u16)handleA, (u16)handleB);
     }
     if (clock->asset.index == 1) {
-        handleA = GetTPage(0, 1, 0x340, 0x160);
-        callArg0 = 0;
-        callArg1 = 0x1DB;
-        asm("" : : "r"(callArg0), "r"(callArg1));
-        handleA = (u16)handleA;
-        handleB = GetClut(callArg0, callArg1);
-        func_800C6EC0((u16)handleA, (u16)handleB);
+        handleA = GetTPage(textureWord, 1, 0x340, 0x160);
+        textureWord = (u16)handleA;
+        handleB = GetClut(0, 0x1DB);
+        func_800C6EC0(textureWord, (u16)handleB);
     }
     func_800C6ED8(1);
     func_800C6EF8(g_RoomPairedGlowPacket);
