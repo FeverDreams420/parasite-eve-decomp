@@ -121,18 +121,14 @@ int func_800C689C(GteShortVector *tri)
 int func_800C6B20(GteShortVector *arg0) {
     GteShortVector pos;
     FieldActor *entity = (FieldActor *)D_8009D254;
+    GteShortVector *point = &pos;
     int first;
-    register int value asm("$2");
-    GteShortVector *ptr;
-    value = Pe1Fixed_Integer(&entity->pos_x);
-    ptr = &pos;
-    pos.x = value;
-    value = Pe1Fixed_Integer(&entity->pos_y);
-    pos.y = value;
-    value = Pe1Fixed_Integer(&entity->pos_z);
-    pos.z = value;
-    first = func_800C62DC(ptr, arg0);
-    return first | func_800C62DC(ptr, arg0 + 1);
+
+    point->x = entity->pos_x >> 16;
+    point->y = entity->pos_y >> 16;
+    point->z = entity->pos_z >> 16;
+    first = func_800C62DC(point, arg0);
+    return first | func_800C62DC(point, arg0 + 1);
 }
 
 int func_800C6B90(s16 *pos, int extraRadius) {
