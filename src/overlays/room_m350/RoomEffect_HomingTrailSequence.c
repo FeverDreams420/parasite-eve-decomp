@@ -24,8 +24,7 @@ int func_801947BC(int event,RoomM350Particle *p)
         int brightness;
         if(timer>=48) {
             int result=1;
-            unsigned short *count=(unsigned short *)&D_8019A7FC.activeCount;
-            *count=*count-1;
+            D_8019A7FC.activeCount=(unsigned short)D_8019A7FC.activeCount-1;
             return result;
         }
         if(p->tail.value.active.frame>=48) return 0;
@@ -38,7 +37,7 @@ int func_801947BC(int event,RoomM350Particle *p)
                 int yaw=FieldEng_TurnToward(p->motion.value.rotation.y,(short)angle,speed);
                 int sum,product;
                 p->motion.value.rotation.y=yaw;
-                product=(short)trig[(D_800E27EC+2048)&4095].word*160;
+                product=trig[(D_800E27EC+2048)&4095].part.sin*160;
                 sum=yaw+80;
                 p->motion.value.rotation.y=sum-product/4096;
             }

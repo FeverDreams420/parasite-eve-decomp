@@ -23,7 +23,6 @@ int func_801958DC(int event) {
             flags |= 0x40000000;
             owner->core_flags=flags;
         }
-        asm volatile("" : : : "memory");
         one=2;
         D_8019A7FC.repeats=one;
         D_8019A7FC.completionFlags[0]=0; D_8019A7FC.completionFlags[1]=0; D_8019A7FC.completionFlags[2]=0;
