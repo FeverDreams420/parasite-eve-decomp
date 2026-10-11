@@ -6,7 +6,7 @@
 #include "pe1/akao/spu_common.h"
 #include "pe1/akao/seq_param.h"
 
-extern u32 D_8009D200;
+extern int D_8009D200;
 extern u32 D_800BCD50;
 extern u8 D_800B6980[];
 extern u8 D_800B8AC0[];
