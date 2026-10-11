@@ -14,11 +14,6 @@
 
 #define NULL ((void *)0)
 
-#include "Menu_EquipItemSelectionFlow_externs.h"
-int MenuWidget_IsCursorYClear(MenuWidgetNode *ptr);
-void Menu_InitCategoryTabs(void);
-void Menu_OpenItemList(void);
-int Battle_IsInputAllowedWrapped(void);
 
 void Menu_CreateEquipItemSelectionView(MenuWidgetNode *parent)
 {
@@ -223,27 +218,20 @@ void Menu_StepEquipSlotSelect(void)
     }
 }
 
-s32 Menu_StepSkillScreen(MenuWidgetNode *arg0, s32 arg1) {
-    MenuWidgetNode *parg0;
-    s32 parg1;
-    s32 tv4k;
-    MenuWidgetNode *temp_v0;
-    register MenuWidgetNode *node asm("$16");
-    register MenuWidgetNode *temp_v0_3 asm("$18");
-    register s32 cm1 asm("$17");
+s32 Menu_StepSkillScreen(MenuWidgetNode *panel, s32 flags) {
+    MenuWidgetNode *node;
+    MenuWidgetNode *root;
 
-    parg0 = arg0;
-    parg1 = arg1;
-    node = MenuWidget_GetChild(arg0, NULL);
-    if (parg1 & 0x10000) {
+    node = MenuWidget_GetChild(panel, 0);
+    if (flags & 0x10000) {
         if (Inv_GetPackedListCount() != 0) {
             if (g_MenuLayoutLocked != 0) {
                 Menu_OpenItemList();
                 return 1;
             }
             if (Battle_IsInputAllowedWrapped() != 0) {
-                temp_v0 = MenuWidget_CreateSimpleNode(0x35, 0, 0, 0);
-                (MenuWidget_CreateNode(0x35, temp_v0, temp_v0))->draw = Menu_SetupSkillSubmenu;
+                root = MenuWidget_CreateSimpleNode(0x35, 0, 0, 0);
+                MenuWidget_CreateNode(0x35, root, root)->draw = Menu_SetupSkillSubmenu;
                 node = MenuWidget_FindByModeAndSelectedBase(2, 7);
                 node->cursor_x = 0;
                 MenuWidget_SetCurrentNode(node);
@@ -254,30 +242,26 @@ s32 Menu_StepSkillScreen(MenuWidgetNode *arg0, s32 arg1) {
         Menu_PlayErrorSound();
         return 1;
     }
-    if (parg1 & 0x40) {
+    if (flags & 0x40) {
         if (g_MenuLayoutLocked != 0) {
             Menu_InitCategoryTabs();
             return 1;
         }
         MenuWidget_NavScrollTo(7);
-        MenuWidget_DestroyNode(parg0);
-        temp_v0_3 = MenuWidget_FindByModeAndSelectedBase(1, 6);
-        if (temp_v0_3 != NULL) {
-            MenuWidget_DestroyNode(temp_v0_3);
+        MenuWidget_DestroyNode(panel);
+        panel = MenuWidget_FindByModeAndSelectedBase(1, 6);
+        if (panel != NULL) {
+            MenuWidget_DestroyNode(panel);
             Menu_CreateBonusPointAllocationView();
             Menu_PlayCancelSound();
-            return 1;
         }
-        /* Duplicate return node #20. Try simplifying control flow for better match */
         return 1;
     }
-    tv4k = parg1 & 0x4000;
-    if (tv4k && (MenuWidget_IsCursorYClear(MenuWidget_FindByModeAndSelectedBase(1, 6)) != 0)) {
-        cm1 = -1;
-        node->cursor_x = cm1;
-        node = MenuWidget_GetChild(parg0, 1);
+    if ((flags & 0x4000) && MenuWidget_IsCursorYClear(MenuWidget_FindByModeAndSelectedBase(1, 6)) != 0) {
+        node->cursor_x = -1;
+        node = MenuWidget_GetChild(panel, 1);
         if (node != NULL) {
-            node->cursor_x = cm1;
+            node->cursor_x = -1;
         }
         node = MenuWidget_FindByModeAndSelectedBase(2, 6);
         if (node != NULL) {

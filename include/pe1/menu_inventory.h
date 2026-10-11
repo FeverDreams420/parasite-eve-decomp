@@ -21,6 +21,8 @@ void Menu_OpenItemUsePanelAtIndex(int index);
 void Menu_OpenSkillSelectionView(void);
 void Menu_OpenInventoryOrSwapView(int showList);
 void Menu_ConfigureScreen(void);
+void Menu_InitCategoryTabs(void);
+void Menu_OpenItemList(void);
 void Menu_CreateActionSubmenu(MenuWidgetNode *parent);
 void Menu_OpenBlendColorScreen(MenuWidgetNode *parent);
 void Menu_OpenScreenAdjustView(MenuWidgetNode *parent);
