@@ -33,6 +33,6 @@ typedef struct FieldG4Packet {
 PE1_STATIC_ASSERT(sizeof(FieldTrailPair) == 0x10, field_trail_pair_size);
 PE1_STATIC_ASSERT(sizeof(FieldG4Packet) == 0x24, field_g4_packet_size);
 
-void SetPolyG4(FieldG4Packet *packet);
+void SetPolyG4(void *packet);
 
 #endif /* PE1_FIELD_HISTORY_TRAIL_H */

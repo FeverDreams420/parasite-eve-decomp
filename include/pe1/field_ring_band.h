@@ -22,7 +22,7 @@ typedef struct FieldG4Packet {
 
 PE1_STATIC_ASSERT(sizeof(FieldG4Packet) == 0x24, field_g4_packet_size);
 
-void SetPolyG4(FieldG4Packet *packet);
+void SetPolyG4(void *packet);
 
 /* TILE_OT_ADDPRIM through an ordering-table entry held as a plain tag
  * pointer: retail keeps that pointer in one register for every link. */

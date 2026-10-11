@@ -27,7 +27,7 @@ extern s16 D_800BCFFE[];       /* camera height (integer part) */
 
 void Battle_Update(void);
 void Inventory_OpenAyaItemList(unsigned int mode);
-int Menu_RunFrameWithArg(u8 *arg);
+int Menu_RunFrameWithArg(int arg);
 void func_80069660(void);
 void func_8001A9F8(void);
 void Entity_CopyParentPosition(void);

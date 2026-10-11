@@ -17,7 +17,7 @@ extern u32 battle_step_game_word[4] __asm__("D_800B0CD8");
 
 void Pm_StopAllBoth(void);
 void Aya_SetTotalExp(u32 exp, u16 pe_bonus, void *rewards);
-void Render_BeginSceneLoad(void);
+int Render_BeginSceneLoad(void);
 int CD_StepReadState(int mode);
 void Battle_SetupPlayerPalette(void);
 void Battle_StepLevelUp(void);

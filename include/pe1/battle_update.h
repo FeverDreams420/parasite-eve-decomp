@@ -28,7 +28,7 @@ void Menu_SaveOverlayDraw(void);
 void Menu_SetItemContext(int);
 s8 Pad_GetMenuPressedBitOrDisabled(void);
 int Pm_SendCmd(int, int, int, int, int, int);
-void Render_BeginSceneLoad(void);
+int Render_BeginSceneLoad(void);
 void Save_DrawSlotMetadata(void);
 void srand(unsigned int);
 /* Signed retail LB; battle_palette.h also exposes an unsigned view. */

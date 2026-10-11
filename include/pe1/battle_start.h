@@ -25,7 +25,7 @@ extern struct { char bytes[16]; } battle_start_seed_storage __asm__("D_8009D250"
 extern struct { char bytes[16]; } battle_start_camera_storage __asm__("D_8009D27C");
 
 void Save_ResetGlobalFlags(void);
-void srand(int seed);
+void srand(unsigned int seed);
 void Battle_ResetEnemyStats(int mode);
 void Battle_SetupEnemyAnims(void);
 void Battle_CheckDropChance(void);
