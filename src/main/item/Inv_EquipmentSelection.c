@@ -32,12 +32,12 @@ int g_SaveMetadataWindowLength;
 static inline ItemDataRecord *LookupItem(int value) {
     int saved = value;
     ItemDataRecord *result;
-    if ((unsigned)(value - 0x100) < 0x80) {
+    if (value - 0x100U < 0x80U) {
         result = &D_800C0E20.equipment[value - 0x100];
     } else {
-        if ((unsigned)(value - 1) < 0xFF) {
+        if (value - 1U < 0xFFU) {
             result = Item_LookupBaseData(value - 1);
-        } else if ((unsigned)(saved - 0x200) < 9) {
+        } else if (saved - 0x200U < 9U) {
             int shifted = saved << 5;
             result = (ItemDataRecord *)(D_8009DE64 + shifted);
         } else {
@@ -227,7 +227,7 @@ void Inv_MergeStorageToSlot(void) {
     D_8009D064 = 2;
     for (i = 0; i < D_8009D050; i++) {
         unsigned short id = D_8009D048[i];
-        if ((unsigned)(id - 256) < 128 &&
+        if (id - 256U < 128U &&
             D_800C0E20.equipment[(short)id - 256].itemId == 0x61) break;
     }
     if (i < D_8009D050) RemoveItem(i);
@@ -279,7 +279,7 @@ int Inv_DispatchCommand(int command, int value, int other, int *unused) {
             count = D_800A1E64[value - D_8009D03C].ammo;
         else for (p = D_8009D048; p < D_8009D048 + D_8009D050; p++) {
             unsigned short id = *p;
-            if ((unsigned)(id - 256) < 128)
+            if (id - 256U < 128U)
                 count += (D_800C0E20.equipment[(short)id - 256].itemId == value);
             else
                 count += ((short)id == value);

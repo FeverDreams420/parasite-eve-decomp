@@ -78,11 +78,11 @@ int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
         int scaled_id;
         item_id = D_8009D048[selected_a];
         saved_id = (s16)item_id;
-        if ((unsigned int)(item_id - 0x100) < 0x80) {
+        if (item_id - 0x100U < 0x80U) {
             resolved = (ItemDataRecord *)(g_EquipItemDataTable + (item_id << 5));
-        } else if ((unsigned int)(item_id - 1) < 0xFF) {
+        } else if (item_id - 1U < 0xFFU) {
             resolved = Item_LookupBaseData(item_id - 1);
-        } else if ((unsigned int)(saved_id - 0x200) < 9) {
+        } else if (saved_id - 0x200U < 9U) {
             resolved = &((ItemDataRecord *)D_8009DE64)[saved_id];
         } else {
             resolved = 0;
@@ -98,12 +98,12 @@ int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
         int scaled_id;
         item_id = D_8009D048[selected_b];
         saved_id = (s16)item_id;
-        if ((unsigned int)(item_id - 0x100) < 0x80) {
+        if (item_id - 0x100U < 0x80U) {
             scaled_id = item_id << 5;
             resolved = (ItemDataRecord *)(g_EquipItemDataTable + scaled_id);
-        } else if ((unsigned int)(item_id - 1) < 0xFF) {
+        } else if (item_id - 1U < 0xFFU) {
             resolved = Item_LookupBaseData(item_id - 1);
-        } else if ((unsigned int)(saved_id - 0x200) < 9) {
+        } else if (saved_id - 0x200U < 9U) {
             resolved = &((ItemDataRecord *)D_8009DE64)[saved_id];
         } else {
             resolved = 0;

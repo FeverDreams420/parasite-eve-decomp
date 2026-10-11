@@ -57,7 +57,7 @@ void Inv_InitMaxLevelInventory(s32 arg0) {
         if (mode == 0) {
             allocation = 0x3E8;
         } else {
-            allocation = (u32)(category - 1) < 2;
+            allocation = category - 1U < 2U;
             if (allocation != 0) {
                 allocation = 0;
             } else {

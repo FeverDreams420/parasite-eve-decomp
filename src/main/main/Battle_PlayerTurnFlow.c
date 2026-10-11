@@ -141,7 +141,7 @@ void Battle_ApplyPlayerHit(void) {
             D_8009D1D4 = nextIndex;
         }
 
-        if ((unsigned int)(action - 3) >= 0x194 || D_8009D254->actionMode < 4) {
+        if (action - 3U >= 0x194U || D_8009D254->actionMode < 4) {
             D_8009D1A0 = D_8009D1A0 & ~0x100;
         }
     }

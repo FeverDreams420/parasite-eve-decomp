@@ -22,12 +22,12 @@ void Sfx_DrawSlotRow(ItemDataRecord *entry, u8 *text);
 static inline ItemDataRecord *LookupItem(int value) {
     int saved = value;
     ItemDataRecord *result;
-    if ((unsigned)(value - 0x100) < 0x80) {
+    if (value - 0x100U < 0x80U) {
         result = &D_800C0E20.equipment[value - 0x100];
     } else {
-        if ((unsigned)(value - 1) < 0xFF) {
+        if (value - 1U < 0xFFU) {
             result = Item_LookupBaseData(value - 1);
-        } else if ((unsigned)(saved - 0x200) < 9) {
+        } else if (saved - 0x200U < 9U) {
             int shifted = saved << 5;
             result = (ItemDataRecord *)(D_8009DE64 + shifted);
         } else {
@@ -106,7 +106,7 @@ void Inv_RebuildSelectableMask(void) {
                     int flags = item->flags;
                     u32 selected = g_MenuBattleEquipMode ? ((flags >> 1) & 1) : (flags & 1);
                     if (item->kind == 10 && ConsumableEffect(item) == 2) selected = 0;
-                    if ((unsigned)(item->itemId - 6) < 5 && D_800C0E00.current_hp >= D_800C0E00.max_hp) selected = 0;
+                    if (item->itemId - 6U < 5U && D_800C0E00.current_hp >= D_800C0E00.max_hp) selected = 0;
                     D_8009D058[i >> 5] |= selected << (i & 31);
                 }
             }
@@ -119,10 +119,10 @@ void Inv_RebuildSelectableMask(void) {
                     u32 selected = g_MenuBattleEquipMode ? ((flags >> 1) & 1) : (flags & 1);
                     if (item->kind == 10) {
                         unsigned effect = ConsumableEffect(item);
-                        if ((unsigned)(effect - 4) < 3) selected &= hasWeapon;
-                        else if ((unsigned)(effect - 12) < 3) selected &= hasArmor;
+                        if (effect - 4U < 3U) selected &= hasWeapon;
+                        else if (effect - 12U < 3U) selected &= hasArmor;
                     }
-                    if ((unsigned)(item->itemId - 6) < 5 && D_800C0E00.current_hp >= D_800C0E00.max_hp) selected = 0;
+                    if (item->itemId - 6U < 5U && D_800C0E00.current_hp >= D_800C0E00.max_hp) selected = 0;
                     D_8009D058[i >> 5] |= selected << (i & 31);
                 }
             }
@@ -196,7 +196,7 @@ int Inv_BuildCompatibleWeaponBitset(int sourceIndex) {
         else category = 0;
     }
     ClearBits();
-    if ((unsigned)(kind - 19) < 3) {
+    if (kind - 19U < 3U) {
         for (i = 0; i < D_8009D050; i++) {
             if (i != sourceIndex) {
                 if (i >= 0 && i < D_8009D050) item = LookupItem(D_8009D048[i]);
@@ -215,7 +215,7 @@ int Inv_BuildCompatibleWeaponBitset(int sourceIndex) {
                 else item = 0;
                 if (item) {
                     u16 candidateKind = item->kind;
-                    D_8009D058[i >> 5] |= ((unsigned)(candidateKind - 19) < 3 &&
+                    D_8009D058[i >> 5] |= (candidateKind - 19U < 3U &&
                         category == (item->kind && item->kind < 8
                         ? ((int)item->kind - 4 > 0 ? (int)item->kind - 4 : 1)
                         : item->kind >= 19 ? item->kind - 18 : 0)) << (i & 31);
@@ -228,7 +228,7 @@ int Inv_BuildCompatibleWeaponBitset(int sourceIndex) {
     if (wasStorage || ListCount() == 2) {
         RestoreList(!wasStorage);
         ClearBits();
-        if ((unsigned)(kind - 19) < 3) {
+        if (kind - 19U < 3U) {
             for (i = 0; i < D_8009D050; i++) {
                 if (i >= 0 && i < D_8009D050) item = LookupItem(D_8009D048[i]);
                 else item = 0;
@@ -244,7 +244,7 @@ int Inv_BuildCompatibleWeaponBitset(int sourceIndex) {
                 else item = 0;
                 if (item) {
                     u16 candidateKind = item->kind;
-                    D_8009D058[i >> 5] |= ((unsigned)(candidateKind - 19) < 3 &&
+                    D_8009D058[i >> 5] |= (candidateKind - 19U < 3U &&
                         category == (item->kind && item->kind < 8
                         ? ((int)item->kind - 4 > 0 ? (int)item->kind - 4 : 1)
                         : item->kind >= 19 ? item->kind - 18 : 0)) << (i & 31);
@@ -365,12 +365,12 @@ void Menu_DrawWeaponComparisonPanel(void) {
 static inline ItemDataRecord *LookupComparisonItem(int value) {
     int saved = value;
     ItemDataRecord *result;
-    if ((unsigned)(value - 0x100) < 0x80) {
+    if (value - 0x100U < 0x80U) {
         result = &D_800C0E20.equipment[value - 0x100];
     } else {
-        if ((unsigned)(value - 1) < 0xFF) {
+        if (value - 1U < 0xFFU) {
             result = Item_LookupBaseData(value - 1);
-        } else if ((unsigned)(saved - 0x200) < 9) {
+        } else if (saved - 0x200U < 9U) {
             int shifted = saved << 5;
             result = (ItemDataRecord *)(D_8009DE64 + shifted);
         } else {
@@ -454,12 +454,12 @@ void Inv_StepScrollDisplay(void) {
 static inline ItemDataRecord *LookupSlotItem(int value) {
     int saved = value;
     ItemDataRecord *result;
-    if ((unsigned)(value - 0x100) < 0x80) {
+    if (value - 0x100U < 0x80U) {
         result = &D_800C0E20.equipment[value - 0x100];
     } else {
-        if ((unsigned)(value - 1) < 0xFF) {
+        if (value - 1U < 0xFFU) {
             result = Item_LookupBaseData(value - 1);
-        } else if ((unsigned)(saved - 0x200) < 9) {
+        } else if (saved - 0x200U < 9U) {
             result = &D_800A1E64[saved - 512];
         } else {
             result = 0;
@@ -510,13 +510,13 @@ static inline ItemDataRecord *LookupTrackedItem(int index) {
     if (index >= 0 && index < D_8009D050) {
         value = D_8009D048[index];
         saved = value;
-        if ((unsigned)(value - 0x100) < 0x80) {
+        if (value - 0x100U < 0x80U) {
             result = &D_800C0E20.equipment[value - 0x100];
         } else {
-            if ((unsigned)(value - 1) < 0xFF) {
+            if (value - 1U < 0xFFU) {
                 return Item_LookupBaseData(value - 1);
             }
-            if ((unsigned)(saved - 0x200) < 9) {
+            if (saved - 0x200U < 9U) {
                 int shifted = saved << 5;
                 result = (ItemDataRecord *)(D_8009DE64 + shifted);
             } else {

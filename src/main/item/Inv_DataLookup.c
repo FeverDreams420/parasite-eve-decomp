@@ -33,11 +33,11 @@ ItemDataRecord *Inv_LookupActiveListData(int index) {
     if (index >= 0 && index < g_InvSlotLimit) {
         value = g_InvItemPtr[index];
         saved_value = value;
-        if ((unsigned int)(value - 0x100) < 0x80) {
+        if (value - 0x100U < 0x80U) {
             entry = &D_800C0E20.equipment[value - 0x100];
-        } else if ((unsigned int)(value - 1) < 0xFF) {
+        } else if (value - 1U < 0xFFU) {
             entry = Item_LookupBaseData(value - 1);
-        } else if ((unsigned int)(saved_value - 0x200) < 9) {
+        } else if (saved_value - 0x200U < 9U) {
             entry = (ItemDataRecord *)(g_KeyItemDataTable + (saved_value << 5));
         } else {
             entry = 0;
@@ -67,13 +67,13 @@ int Inv_FindIndexByData(void *needle) {
             } else {
                 item_id = g_InvItemPtr[index];
                 saved_item_id = (s16)item_id;
-                if ((unsigned int)(item_id - 0x100) < 0x80) {
+                if (item_id - 0x100U < 0x80U) {
                     data = &D_800C0E20.equipment[item_id - 0x100];
                 } else {
                     offset = item_id - 1;
                     if ((unsigned int)offset < 0xFF) {
                         data = Item_LookupBaseData(offset);
-                    } else if ((unsigned int)(saved_item_id - 0x200) < 9) {
+                    } else if (saved_item_id - 0x200U < 9U) {
                         int shifted;
 
                         shifted = saved_item_id << 5;

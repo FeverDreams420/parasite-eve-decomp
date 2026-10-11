@@ -195,7 +195,7 @@ int Pm_Start(int slot) {
         return -16;
     }
     entry = SlotHeader(slot);
-    if ((unsigned int)(entry->state - 1) >= 2) {
+    if (entry->state - 1U >= 2U) {
         return 0;
     }
     cmd = entry->command;
@@ -249,7 +249,7 @@ int Pm_Exec(int slot) {
     }
     entry = SlotHeader(slot);
     state = entry->state;
-    if ((unsigned int)(state - 1) >= 2 && (unsigned int)(state - 4) >= 2) {
+    if (state - 1U >= 2U && state - 4U >= 2U) {
         return 0;
     }
     /* Matching debt: retail re-reads the state here; without the barrier

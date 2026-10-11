@@ -20,12 +20,12 @@ s32 g_InvOverrideSlotLimit;
 static inline ItemDataRecord *LookupItem(int value) {
     int saved = value;
     ItemDataRecord *result;
-    if ((unsigned)(value - 0x100) < 0x80) {
+    if (value - 0x100U < 0x80U) {
         result = &D_800C0E20.equipment[value - 0x100];
     } else {
-        if ((unsigned)(value - 1) < 0xFF) {
+        if (value - 1U < 0xFFU) {
             result = Item_LookupBaseData(value - 1);
-        } else if ((unsigned)(saved - 0x200) < 9) {
+        } else if (saved - 0x200U < 9U) {
             result = &D_800A1E64[saved - 0x200];
         } else {
             result = 0;

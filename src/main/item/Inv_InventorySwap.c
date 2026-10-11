@@ -13,11 +13,11 @@ u8 *Inv_LookupItemData(int index) {
     int saved_value = value;
     u8 *entry;
 
-    if ((unsigned int)(value - 0x100) < 0x80) {
+    if (value - 0x100U < 0x80U) {
         entry = g_EquipItemDataTable + (value << 5);
-    } else if ((unsigned int)(value - 1) < 0xFF) {
+    } else if (value - 1U < 0xFFU) {
         entry = Item_LookupBaseData(value - 1);
-    } else if ((unsigned int)(saved_value - 0x200) < 9) {
+    } else if (saved_value - 0x200U < 9U) {
         entry = D_8009DE64 + (saved_value << 5);
     } else {
         entry = 0;
@@ -29,11 +29,11 @@ u8 *Inv_LookupItemData(int index) {
 static inline ItemDataRecord *LookupItem(int value) {
     int saved = value;
     ItemDataRecord *result;
-    if ((unsigned)(value - 0x100) < 0x80) {
+    if (value - 0x100U < 0x80U) {
         result = &D_800C0E20.equipment[value - 0x100];
     } else {
-        if ((unsigned)(value - 1) < 0xFF) return Item_LookupBaseData(value - 1);
-        if ((unsigned)(saved - 0x200) < 9) {
+        if (value - 1U < 0xFFU) return Item_LookupBaseData(value - 1);
+        if (saved - 0x200U < 9U) {
             int shifted = saved << 5;
             result = (ItemDataRecord *)(D_8009DE64 + shifted);
         } else result = 0;
@@ -67,13 +67,13 @@ static inline ItemDataRecord *LookupTrackedItem(int index) {
     if (index >= 0 && index < D_8009D050) {
         value = D_8009D048[index];
         saved = value;
-        if ((unsigned)(value - 0x100) < 0x80) {
+        if (value - 0x100U < 0x80U) {
             result = &D_800C0E20.equipment[value - 0x100];
         } else {
-            if ((unsigned)(value - 1) < 0xFF) {
+            if (value - 1U < 0xFFU) {
                 return Item_LookupBaseData(value - 1);
             }
-            if ((unsigned)(saved - 0x200) < 9) {
+            if (saved - 0x200U < 9U) {
                 int shifted = saved << 5;
                 result = (ItemDataRecord *)(D_8009DE64 + shifted);
             } else {

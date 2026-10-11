@@ -25,14 +25,14 @@ void Inv_BuildFilteredPackedList(int mask) {
             } else {
                 item_id = g_InvItemPtr[index];
                 saved_item_id = (s16)item_id;
-                if ((unsigned int)(item_id - 0x100) < 0x80) {
+                if (item_id - 0x100U < 0x80U) {
                     data = (ItemDataRecord *)(g_EquipItemDataTable +
                                               (item_id << 5));
                 } else {
                     offset = item_id - 1;
                     if ((unsigned int)offset < 0xFF) {
                         data = Item_LookupBaseData(offset);
-                    } else if ((unsigned int)(saved_item_id - 0x200) < 9) {
+                    } else if (saved_item_id - 0x200U < 9U) {
                         int shifted;
 
                         shifted = saved_item_id << 5;
@@ -82,14 +82,14 @@ void Inv_BuildFilteredPackedListExcluding(int mask, int excluded) {
             if (index >= 0 && index < limit) {
                 item_id = g_InvItemPtr[index];
                 saved_item_id = item_id;
-                if ((unsigned int)(item_id - 0x100) < 0x80) {
+                if (item_id - 0x100U < 0x80U) {
                     lookup = (ItemDataRecord *)(g_EquipItemDataTable +
                                                (item_id << 5));
                 } else {
                     offset = item_id - 1;
                     if ((unsigned int)offset < 0xFF) {
                         lookup = Item_LookupBaseData(offset);
-                    } else if ((unsigned int)(saved_item_id - 0x200) < 9) {
+                    } else if (saved_item_id - 0x200U < 9U) {
                         int shifted;
                         shifted = saved_item_id << 5;
                         lookup = (ItemDataRecord *)(g_KeyItemDataTable + shifted);

@@ -216,7 +216,7 @@ int Str_EncodeBase32(char *out, unsigned int value) {
         u8 c = g_Base32CharTable[(value >> shift) & 0x1F];
 
         *dst = c;
-        if ((unsigned int)(c - 0x61) < 0x1A) {
+        if (c - 0x61U < 0x1AU) {
             *dst = c - 0x20;
         }
         i++;

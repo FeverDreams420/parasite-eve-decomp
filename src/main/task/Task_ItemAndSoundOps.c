@@ -297,7 +297,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
             D_8009D300->active = status;
             return 0;
         }
-        if ((u32)(locals.slot + 2) < 2) {
+        if (locals.slot + 2U < 2U) {
             break;
         }
         *args->result = Akao_Cmd_10(D_800B0CE8.voice_banks[locals.slot]);
@@ -312,7 +312,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
             D_8009D300->active = status;
             return 0;
         }
-        if ((u32)(locals.slot + 2) < 2) {
+        if (locals.slot + 2U < 2U) {
             break;
         }
         *args->result = Akao_Cmd_19_Then_C0(

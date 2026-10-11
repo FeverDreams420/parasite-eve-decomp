@@ -28,13 +28,13 @@ static inline ItemDataRecord *LookupOldArmor(int index) {
     if (index >= 0 && index < D_8009D050) {
         value = D_8009D048[index];
         saved = value;
-        if ((unsigned)(value - 0x100) < 0x80) {
+        if (value - 0x100U < 0x80U) {
             result = &D_800C0E20.equipment[value - 0x100];
         } else {
-            if ((unsigned)(value - 1) < 0xFF) {
+            if (value - 1U < 0xFFU) {
                 return Item_LookupBaseData(value - 1);
             }
-            if ((unsigned)(saved - 0x200) < 9) {
+            if (saved - 0x200U < 9U) {
                 result = &((ItemDataRecord *)D_8009DE64)[saved];
             } else {
                 result = 0;
@@ -55,12 +55,12 @@ static inline ItemDataRecord *LookupTrackedItem(int index) {
     if (index >= 0 && index < D_8009D050) {
         value = D_8009D048[index];
         saved = value;
-        if ((unsigned)(value - 0x100) < 0x80) {
+        if (value - 0x100U < 0x80U) {
             result = &D_800C0E20.equipment[value - 0x100];
         } else {
-            if ((unsigned)(value - 1) < 0xFF) {
+            if (value - 1U < 0xFFU) {
                 result = Item_LookupBaseData(value - 1);
-            } else if ((unsigned)(saved - 0x200) < 9) {
+            } else if (saved - 0x200U < 9U) {
                 result = &((ItemDataRecord *)D_8009DE64)[saved];
             } else {
                 result = 0;
@@ -80,12 +80,12 @@ static inline ItemDataRecord *LookupArmorTrackedItem(int index) {
     if (index >= 0 && index < D_8009D050) {
         value = D_8009D048[index];
         saved = value;
-        if ((unsigned)(value - 0x100) < 0x80) {
+        if (value - 0x100U < 0x80U) {
             result = &D_800C0E20.equipment[value - 0x100];
         } else {
-            if ((unsigned)(value - 1) < 0xFF) {
+            if (value - 1U < 0xFFU) {
                 result = Item_LookupBaseData(value - 1);
-            } else if ((unsigned)(saved - 0x200) < 9) {
+            } else if (saved - 0x200U < 9U) {
                 result = &((ItemDataRecord *)D_8009DE64)[saved];
             } else {
                 result = 0;
@@ -251,13 +251,13 @@ static inline ItemDataRecord *LookupActiveItem(int index) {
     if (index >= 0 && index < D_8009D050) {
         value = D_8009D048[index];
         saved = value;
-        if ((unsigned)(value - 0x100) < 0x80) {
+        if (value - 0x100U < 0x80U) {
             result = &D_800C0E20.equipment[value - 0x100];
         } else {
-            if ((unsigned)(value - 1) < 0xFF) {
+            if (value - 1U < 0xFFU) {
                 return Item_LookupBaseData(value - 1);
             }
-            if ((unsigned)(saved - 0x200) < 9) {
+            if (saved - 0x200U < 9U) {
                 result = &((ItemDataRecord *)D_8009DE64)[saved];
             } else {
                 result = 0;
@@ -288,11 +288,11 @@ static inline int ItemKind(int slot) {
 static inline ItemDataRecord *LookupItem(int value) {
     int saved = value;
     ItemDataRecord *result;
-    if ((unsigned)(value - 0x100) < 0x80) {
+    if (value - 0x100U < 0x80U) {
         result = &D_800C0E20.equipment[value - 0x100];
     } else {
-        if ((unsigned)(value - 1) < 0xFF) return Item_LookupBaseData(value - 1);
-        if ((unsigned)(saved - 0x200) < 9) {
+        if (value - 1U < 0xFFU) return Item_LookupBaseData(value - 1);
+        if (saved - 0x200U < 9U) {
             int shifted = saved << 5;
             result = (ItemDataRecord *)(D_8009DE64 + shifted);
         } else result = 0;

@@ -126,11 +126,11 @@ int Inv_GetActiveListItemType(int index)
     if (index >= 0 && index < g_InvSlotLimit) {
         value = g_InvItemPtr[index];
         saved_value = value;
-        if ((unsigned int)(value - 0x100) < 0x80) {
+        if (value - 0x100U < 0x80U) {
             entry = (ItemDataRecord *)(g_EquipItemDataTable + (value << 5));
-        } else if ((unsigned int)(value - 1) < 0xFF) {
+        } else if (value - 1U < 0xFFU) {
             entry = Item_LookupBaseData(value - 1);
-        } else if ((unsigned int)(saved_value - 0x200) < 9) {
+        } else if (saved_value - 0x200U < 9U) {
             entry = (ItemDataRecord *)(g_KeyItemDataTable + (saved_value << 5));
         } else {
             entry = 0;

@@ -27,7 +27,7 @@ int Inv_CountByValue(int arg0) {
             iter_end = end;
             do {
                 value = *ptr;
-                if ((unsigned int)(value - 0x100) < 0x80) {
+                if (value - 0x100U < 0x80U) {
                     temp = g_ItemCodeRemapTable[(value << 16) >> 11];
                 } else {
                     temp = (value << 16) >> 16;

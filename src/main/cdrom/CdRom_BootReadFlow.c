@@ -78,7 +78,7 @@ int CdRom_PollReady(void) {
     Pe1GameState *state;
 
     status = DsReadSync(&scratch);
-    if ((unsigned int)(status + 1) < 2U) {
+    if (status + 1U < 2U) {
         state = &g_GameState;
         state->flags &= 0xFEFFBFFF;
     }

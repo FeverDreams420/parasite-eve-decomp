@@ -29,7 +29,7 @@ void Inv_RollRandomItemType(s16 *type, s16 *amount) {
         }
         {
             u16 chosen = *type;
-            if ((unsigned)(chosen - 1) < 3) {
+            if (chosen - 1U < 3U) {
                 stock = &D_800A1E64[(s16)chosen - 1].ammo;
                 if (!*amount) *amount = (*stock * RandomByte()) >> 8;
                 else if (*amount < 0) *amount = (*stock * -*amount) / 100;

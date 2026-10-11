@@ -12,15 +12,15 @@ int Inv_CanAddActiveListItemToAya(int index) {
     if (slot_index >= 0 && slot_index < g_InvActiveListCount) {
         item_id = g_InvActiveListItems[slot_index];
         saved_item_id = item_id;
-        if ((unsigned int)(item_id - 0x100) < 0x80) {
+        if (item_id - 0x100U < 0x80U) {
             int shifted;
             u8 *base;
             shifted = item_id << 5;
             base = g_EquipItemDataTable;
             data = (ItemDataRecord *)(shifted + base);
-        } else if ((unsigned int)(item_id - 1) < 0xFF) {
+        } else if (item_id - 1U < 0xFFU) {
             data = Item_LookupBaseData(item_id - 1);
-        } else if ((unsigned int)(saved_item_id - 0x200) < 9) {
+        } else if (saved_item_id - 0x200U < 9U) {
             int shifted;
             u8 *base;
             shifted = saved_item_id << 5;
@@ -48,12 +48,12 @@ int Inv_CanAddActiveListItemToAya(int index) {
 static inline ItemDataRecord *LookupItem(int value) {
     int saved = value;
     ItemDataRecord *result;
-    if ((unsigned)(value - 0x100) < 0x80) {
+    if (value - 0x100U < 0x80U) {
         result = &D_800C0E20.equipment[value - 0x100];
     } else {
-        if ((unsigned)(value - 1) < 0xFF) {
+        if (value - 1U < 0xFFU) {
             result = Item_LookupBaseData(value - 1);
-        } else if ((unsigned)(saved - 0x200) < 9) {
+        } else if (saved - 0x200U < 9U) {
             result = &D_800A1E64[saved - 512];
         } else {
             result = 0;

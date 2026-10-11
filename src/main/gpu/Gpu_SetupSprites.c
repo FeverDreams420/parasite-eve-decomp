@@ -154,7 +154,7 @@ void Gpu_DrawStatusIcons(void) {
     mode = g_MenuActiveMode;
     s0 = 0xF;
     s4 = &s1->stateFlags;
-    if ((u32)(mode - 1) < 2) {
+    if (mode - 1U < 2U) {
         s0 = 0x121;
     }
     if (mode < 2) {

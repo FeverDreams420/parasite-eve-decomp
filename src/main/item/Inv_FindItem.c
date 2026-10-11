@@ -76,11 +76,11 @@ int Inv_FindItem(unsigned int arg0) {
                     value = g_InvItemPtr[result];
                     asm volatile("" : "=r"(value) : "0"(value));
                     savedValue = value;
-                    if ((unsigned int)(value - 0x100) < 0x80) {
+                    if (value - 0x100U < 0x80U) {
                         entry = &((ItemDataRecord *)g_EquipItemDataTable)[value];
-                    } else if ((unsigned int)(value - 1) < 0xFF) {
+                    } else if (value - 1U < 0xFFU) {
                         entry = Item_LookupBaseData(value - 1);
-                    } else if ((unsigned int)(savedValue - 0x200) < 9) {
+                    } else if (savedValue - 0x200U < 9U) {
                         value = savedValue << 5;
                         entry = (ItemDataRecord *)(g_KeyItemDataTable + value);
                     } else {

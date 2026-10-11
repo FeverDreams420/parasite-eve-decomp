@@ -221,7 +221,7 @@ int MemCard_PollTransferDelay(void) {
     g_MemCardConnectDebounce = value - (value > 0);
 
     do {
-        if ((unsigned int)(g_MemCardPortStates[count].cardState - 2) < 2) {
+        if (g_MemCardPortStates[count].cardState - 2U < 2U) {
             g_MemCardConnectDebounce = reset;
             *pending = one;
         }
