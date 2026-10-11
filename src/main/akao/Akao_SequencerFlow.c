@@ -46,10 +46,16 @@ extern AkaoTrack D_800BA560[];
 void Seq_ApplyGlobalPitch(void);
 void func_8008AB9C(AkaoTrack *);
 
+/* The bank cursor is one field of the sequencer state block. Read as a
+ * member, the reload after the bank store stays a separate load: GCC 2.7.2
+ * lets a structure store clobber structure reads but not scalar ones. */
+typedef struct AkaoBankCursor {
+    AkaoTickBank *bank;
+} AkaoBankCursor;
+
 /* Advance global, bank and voice slides every fourth tick.
  * Each slide keeps its own previous value so stock GCC can allocate its
- * registers without a pin. The empty memory barrier preserves the cursor
- * reload after the callback-dependent bank store. */
+ * registers without a pin. */
 void SPU_StepReverbLoad(void)
 {
     u32 value;
@@ -93,8 +99,7 @@ void SPU_StepReverbLoad(void)
         if ((value & 0x7F0000) != (oldPrimaryPitch & 0x7F0000))
             func_8008AB9C((AkaoTrack *)D_800B8AC0);
         ((AkaoSequencerBank *)D_8009D2C8)->pitch_current = value;
-        asm volatile("" ::: "memory");
-        bank = (AkaoSequencerBank *)D_8009D2C8;
+        bank = (AkaoSequencerBank *)((AkaoBankCursor *)&D_8009D2C8)->bank;
     }
     D_8009D2C8 = (AkaoTickBank *)(bank + 1);
     if (bank[1].active_voice_mask && bank[1].pitch_slide_duration) {
@@ -327,12 +332,13 @@ extern s32 g_AkaoTimerDeltaHist1;
 extern s32 g_AkaoTimerDeltaHist0;
 extern s32 D_8009CDE4;
 
-void Akao_TimerCallback(void) {
+/* Timer event handler (OpenEvent takes an int-returning handler): runs one
+ * sequencer tick, records how long it took and returns that duration. */
+int Akao_TimerCallback(void) {
     s32 delta;
     s32 old_f0;
     s32 old_f4;
     s32 old_f8;
-    register s32 value asm("$2");
 
     delta = GetRCnt(0xF2000002);
     Akao_Tick();
@@ -343,16 +349,16 @@ void Akao_TimerCallback(void) {
     old_f0 = g_AkaoTimerDeltaHist2;
     old_f4 = g_AkaoTimerDeltaHist1;
     old_f8 = g_AkaoTimerDeltaHist0;
-    value = delta;
-    g_AkaoTimerDeltaHist0 = value;
+    g_AkaoTimerDeltaHist0 = delta;
     D_8009B7EC = old_f0;
     old_f0 = old_f0 + old_f4;
     old_f0 = old_f0 + old_f8;
-    old_f0 = old_f0 + value;
+    old_f0 = old_f0 + delta;
 
     g_AkaoTimerDeltaHist2 = old_f4;
     g_AkaoTimerDeltaHist1 = old_f8;
     D_8009CDE4 = old_f0;
+    return delta;
 }
 
 /* Argument lengths of opcodes 0xA0-0xFF, zero for opcodes handled below. */
@@ -362,7 +368,7 @@ extern AkaoU8 D_8009B8BC[];
 int Akao_LookupSampleBankByte(AkaoTrack *track)
 {
     AkaoU8 *cursor = track->pc;
-    register unsigned repeat __asm__("$6") = track->call_stack_index;
+    unsigned repeat = track->call_stack_index;
     unsigned code;
     int argument;
     int displacement;
@@ -371,118 +377,114 @@ int Akao_LookupSampleBankByte(AkaoTrack *track)
 
     for (;;) {
         code = *cursor;
-check_code:
-        if (code < 0x9A) {
-            if (code >= 0x8F) {
-                track->tremolo_duration = 0;
-                track->tremolo_phase &= ~5;
-            }
-            return *cursor;
-        }
-        if (code < 0xA0) {
-            return 0xA0;
-        }
-        skip = D_8009B85C[code - 0xA0];
-        if (skip) goto advance_by_table;
-        switch (code) {
-        case 0xFC:
-            cursor++;
-            argument = *cursor;
-            skip = D_8009B8BC[argument];
-            if (skip) goto advance_by_table;
-            if (argument != 7) {
-            if (argument < 8) {
-                if (argument != 6) {
-                    code = argument;
-                    goto check_code;
+        for (;;) {
+            if (code < 0x9A) {
+                if (code >= 0x8F) {
+                    track->tremolo_duration = 0;
+                    track->tremolo_phase &= ~5;
                 }
+                return *cursor;
             }
-            else
-            {
-            if (argument < 10) {
+            if (code < 0xA0) {
+                return 0xA0;
+            }
+            skip = D_8009B85C[code - 0xA0];
+            if (skip) {
+                cursor += skip;
+                break;
+            }
+            switch (code) {
+            case 0xFC:
                 cursor++;
-                if (*cursor == track->repeat_counters[repeat] + 1) {
+                argument = *cursor;
+                skip = D_8009B8BC[argument];
+                if (skip) {
+                    cursor += skip;
+                    break;
+                }
+                if (argument != 7) {
+                    if (argument < 8) {
+                        if (argument != 6) {
+                            /* Re-dispatch the sub-opcode as a plain opcode. */
+                            code = argument;
+                            continue;
+                        }
+                    } else {
+                        if (argument < 10) {
+                            cursor++;
+                            if (*cursor == track->repeat_counters[repeat] + 1) {
+                                cursor++;
+                                argument = *cursor++;
+                                displacement = *cursor++;
+                                repeat--;
+                    repeat &= 3;
+                                argument += displacement << 8;
+                                displacement = (short)argument;
+                                cursor += displacement;
+                            } else {
+                                cursor += 3;
+                            }
+                        }
+                        break;
+                    }
                     cursor++;
                     argument = *cursor++;
                     displacement = *cursor++;
-                    repeat = (repeat - 1) & 3;
                     argument += displacement << 8;
                     displacement = (short)argument;
                     cursor += displacement;
                     break;
+                }
+                cursor++;
+                bank_byte = *cursor;
+                cursor++;
+                if (D_8009D2C8->bank.condition_value >= bank_byte) {
+                    argument = *cursor++;
+                    displacement = *cursor++;
+                    argument += displacement << 8;
+                    displacement = (short)argument;
+                    cursor += displacement;
                 } else {
-                    cursor += 3;
+                    cursor += 2;
                 }
                 break;
-            }
-            break;
-            }
-handle_6:
-            cursor++;
-            argument = *cursor++;
-            displacement = *cursor++;
-            argument += displacement << 8;
-            displacement = (short)argument;
-            cursor += displacement;
-            break;
-            }
-check_bank:
-            cursor++;
-            bank_byte = *cursor;
-            cursor++;
-            if (D_8009D2C8->bank.condition_value >= bank_byte) {
-read_displacement:
-            argument = *cursor++;
-            displacement = *cursor++;
-apply_displacement:
-            argument += displacement << 8;
-            displacement = (short)argument;
-            cursor += displacement;
-            break;
-advance_by_table:
-            cursor += skip;
-            break;
-            }
-skip_two:
-            cursor += 2;
-            break;
-        case 0xC9:
-            cursor++;
-            if (*cursor == track->repeat_counters[repeat] + 1) {
+            case 0xC9:
                 cursor++;
-                repeat = (repeat - 1) & 3;
-            } else {
-                goto load_stack;
-            }
-            break;
-        case 0xCB:
-        case 0xCD:
-        case 0xD1:
-        case 0xDB:
-            cursor++;
-            track->tremolo_duration = 0;
-            track->tremolo_phase &= ~5;
-            break;
-        case 0xCC:
-        case 0xD0:
-            track->tremolo_phase &= ~5;
-            return 0xA0;
-        case 0xCA:
-            if (track->flags & AKAO_TRACK_FLAG_KEY_OFF_PENDING) {
+                if (*cursor == track->repeat_counters[repeat] + 1) {
+                    cursor++;
+                    repeat--;
+                    repeat &= 3;
+                } else {
+                    cursor = track->call_stack[repeat];
+                }
+                break;
+            case 0xCB:
+            case 0xCD:
+            case 0xD1:
+            case 0xDB:
+                cursor++;
+                track->tremolo_duration = 0;
+                track->tremolo_phase &= ~5;
+                break;
+            case 0xCC:
+            case 0xD0:
+                track->tremolo_phase &= ~5;
+                return 0xA0;
+            case 0xCA:
+                if (track->flags & AKAO_TRACK_FLAG_KEY_OFF_PENDING) {
+                    track->tremolo_duration = 0;
+                    track->tremolo_phase &= ~5;
+                    return 0xA0;
+                }
+                cursor = track->call_stack[repeat];
+                break;
+            default:
                 track->tremolo_duration = 0;
                 track->tremolo_phase &= ~5;
                 return 0xA0;
             }
-load_stack:
-            cursor = track->call_stack[repeat];
             break;
-        default:
-stop:
-            track->tremolo_duration = 0;
-            track->tremolo_phase &= ~5;
-            return 0xA0;
         }
-        continue;
     }
 }
 #define NULL ((void *)0)
@@ -492,7 +494,6 @@ extern AkaoSequencerBank *g_AkaoCurTrack;
 extern AkaoInstrument g_AkaoInstrumentTable[];
 
 void Akao_SetVoiceLoopAddr(AkaoTrack *track, u32 arg1) {
-    s32 temp_a1;
     s32 temp_a2;
     s32 temp_a0;
     s32 temp_a0_2;
@@ -539,8 +540,8 @@ void Akao_SetVoiceLoopAddr(AkaoTrack *track, u32 arg1) {
                 var_a1 += temp_a2;
             }
             track->note_pitch = var_a1;
-            temp_a1 = var_a1 << 6;
-            SeqOp_SetVoiceInstrument(track, (AkaoInstrument *)((u8 *)&g_AkaoInstrumentTable + temp_a1), *(s32 *)((u8 *)&g_AkaoInstrumentTable + temp_a1));
+            SeqOp_SetVoiceInstrument(track, &g_AkaoInstrumentTable[var_a1],
+                                     g_AkaoInstrumentTable[var_a1].start_address);
             track->adsr_attack_rate = var_s0->adsr_attack_rate;
             track->adsr_sustain_rate = var_s0->adsr_sustain_rate;
             track->adsr_sustain = var_s0->adsr_sustain_mode;
@@ -552,7 +553,7 @@ void Akao_SetVoiceLoopAddr(AkaoTrack *track, u32 arg1) {
 }
 
 void Akao_SetVoiceLoopAddrAlt(AkaoTrack *track, u32 arg1) {
-    s32 temp_a1_2;
+    s32 last_index;
     s32 temp_a2;
     s32 count_or_note;
     s32 var_v1;
@@ -573,7 +574,8 @@ void Akao_SetVoiceLoopAddrAlt(AkaoTrack *track, u32 arg1) {
     }
     var_s0 = (AkaoVoiceLoopRange *)track->repeat_target;
     var_v1 = count_or_note;
-    var_s0 = (AkaoVoiceLoopRange *)((u8 *)var_s0 + ((var_v1 - 1) * 8));
+    last_index = var_v1 - 1;
+    var_s0 += last_index;
     if (var_v1 != 0) {
         while (1) {
             if (arg1 < var_s0->min_value) {
@@ -600,8 +602,8 @@ void Akao_SetVoiceLoopAddrAlt(AkaoTrack *track, u32 arg1) {
                 var_a1 += temp_a2;
             }
             track->note_pitch = var_a1;
-            temp_a1_2 = var_a1 << 6;
-            SeqOp_SetVoiceInstrument(track, (AkaoInstrument *)((u8 *)&g_AkaoInstrumentTable + temp_a1_2), *(s32 *)((u8 *)&g_AkaoInstrumentTable + temp_a1_2));
+            SeqOp_SetVoiceInstrument(track, &g_AkaoInstrumentTable[var_a1],
+                                     g_AkaoInstrumentTable[var_a1].start_address);
             track->adsr_attack_rate = var_s0->adsr_attack_rate;
             track->adsr_sustain_rate = var_s0->adsr_sustain_rate;
             track->adsr_sustain = var_s0->adsr_sustain_mode;
@@ -624,36 +626,39 @@ void Akao_SetNotePitchBounded(AkaoTrack *track, int arg1) {
     }
 }
 
-int Akao_LookupPitchPeriod(int arg0, int arg1, int arg2) {
+int Akao_LookupPitchPeriod(int instrument, int note, int detune) {
     int offset;
-    int row;
-    register int shift asm("$5");
-    int address_or_period;
+    int octave;
+    int shift;
+    int period;
     int row_offset;
 
-    arg1 = (u8)arg1;
-    row_offset = arg0 << 6;
-    address_or_period = (int)g_AkaoPitchPeriodTable;
-    row = (unsigned int)arg1 / 12;
-    offset = arg1 - (row * 12);
+    note = (u8)note;
+    row_offset = instrument << 6;
+    period = (int)g_AkaoPitchPeriodTable;
+    octave = (unsigned int)note / 12;
+    offset = note - (octave * 12);
     offset <<= 2;
-    row_offset += address_or_period;
+    row_offset += period;
     offset += row_offset;
-    address_or_period = *(int *)offset;
-    shift = row;
+    period = *(int *)offset;
+    shift = octave;
 
-    if (arg2 != 0) {
-        address_or_period += (unsigned int)(address_or_period * arg2) >> 7;
+    /* Both paths leave the octave in its own register for the upward shift,
+     * so the copy is restated on the detune path. */
+    if (detune != 0) {
+        period += (unsigned int)(period * detune) >> 7;
+        shift = octave;
     }
 
     if ((unsigned int)shift >= 7) {
         offset = shift - 6;
-        address_or_period <<= offset;
-    } else if ((unsigned int)row < 6) {
-        offset = 6 - row;
-        address_or_period = (unsigned int)address_or_period >> offset;
+        period <<= offset;
+    } else if ((unsigned int)octave < 6) {
+        offset = 6 - octave;
+        period = (unsigned int)period >> offset;
     }
-    return address_or_period & 0xFFFF;
+    return period & 0xFFFF;
 }
 
 /* Switches the track to a drum kit sample's instrument; ids from 0x20 are
@@ -1066,44 +1071,30 @@ void SeqOp_SetVolumeSlideTarget(void *ptr) {
 
 #define READ_S16(addr) ((short)(*(addr)++ | (*(addr)++ << 8)))
 
-typedef struct TrackLike
-{
-  char pad[0x56];
-  unsigned short limit;
-} TrackLike;
-
 void sndTrackJumpRelative(unsigned char **stream) {
     *stream += READ_S16(*stream);
 }
 
-void SeqOp_BranchIfLoopLimitReached(unsigned char **stream)
+void SeqOp_BranchIfLoopLimitReached(AkaoTrack *track)
 {
-  register unsigned char **cursor;
-  unsigned char *ptr;
-  unsigned char *target;
-  int value;
-  int lo;
-  unsigned char **new_var;
-  int offset;
-  cursor = stream;
-  ptr = *cursor;
-  *cursor = ptr + 1;
-  value = ptr[0];
-  new_var = cursor;
-  if (((int) ((TrackLike *)g_AkaoCurTrack)->limit) >= value)
-  {
-    *cursor = ptr + 2;
-    lo = ptr[1];
-    target = ptr + 3;
-    *cursor = target;
-    offset = lo | (ptr[2] << 8);
-    target += (short) offset;
-    *cursor = target;
-  }
-  else
-  {
-    *new_var = ptr + 3;
-  }
+    AkaoU8 *pc;
+    AkaoU8 *target;
+    int value;
+    int lo;
+
+    pc = track->pc;
+    track->pc = pc + 1;
+    value = pc[0];
+    if (g_AkaoCurTrack->condition_value >= value) {
+        track->pc = pc + 2;
+        lo = pc[1];
+        target = pc + 3;
+        track->pc = target;
+        target += (short)(lo | (pc[2] << 8));
+        track->pc = target;
+    } else {
+        track->pc = pc + 3;
+    }
 }
 
 void sndTrackReadVolume(AkaoTrack *track) {
@@ -1580,9 +1571,9 @@ void SeqOp_UpdatePitchLFOTarget(AkaoTrack *track) {
 
     pc = track->pc;
     track->pc = pc + 1;
-    value = pc[0] << 8;
+    value = pc[0];
+    value <<= 8;
     masked = value & 0x7F00;
-    asm volatile("" : "=r"(masked) : "0"(masked));
     depth = masked >> 8;
     track->pitch_lfo_target = value;
     use_base_scale = value & 0x8000;
@@ -1797,8 +1788,6 @@ extern u16 g_AkaoTrack5ATransposeValue;
 
 extern u8_2 D_800B290C[];
 
-typedef unsigned char u8_3;
-typedef unsigned short u16_3;
 
 void SeqOp_SetTrack38Mask(AkaoTrack *track, u32 mask) {
     if (track->parent_track_id == 0) {
@@ -2024,68 +2013,54 @@ void SeqOp_LoopCounter(AkaoTrack *track) {
     }
 }
 
-void SeqOp_JumpIfLoopCount(AkaoTrack *ptr) {
-    AkaoTrack *track;
-    u8_3 *cursor;
-    register int value asm("$3");
-    u8_3 *target;
-    int offset;
+void SeqOp_JumpIfLoopCount(AkaoTrack *track) {
+    AkaoU8 *cursor;
+    AkaoU8 *target;
+    int count;
+    int low;
 
-    track = ptr;
-    asm volatile("" : "=r"(track) : "0"(track));
     cursor = track->pc;
     track->pc = cursor + 1;
-    value = cursor[0];
-    if (value == 0) {
-        value = 0x100;
+    count = cursor[0];
+    if (count == 0) {
+        count = 0x100;
     }
 
-    if (track->repeat_counters[track->call_stack_index] + 1 != value) {
-        u8_3 *skip;
-
-        skip = cursor + 3;
-        track->pc = skip;
+    if (track->repeat_counters[track->call_stack_index] + 1 != count) {
+        track->pc = cursor + 3;
         return;
     }
 
-    *(u8_3 **)&track->pc = cursor + 2;
-    value = cursor[1];
+    track->pc = cursor + 2;
+    low = cursor[1];
     target = cursor + 3;
     track->pc = target;
-    offset = (s16)(value | (cursor[2] << 8));
-    track->pc = target + offset;
+    track->pc = target + (s16)(low | (cursor[2] << 8));
 }
 
-void SeqOp_JumpIfLoopCountPop(AkaoTrack *ptr) {
-    AkaoTrack *track;
-    u8_3 *cursor;
-    register int value asm("$3");
-    u8_3 *target;
-    int offset;
+void SeqOp_JumpIfLoopCountPop(AkaoTrack *track) {
+    AkaoU8 *cursor;
+    AkaoU8 *target;
+    int count;
+    int low;
 
-    track = ptr;
-    asm volatile("" : "=r"(track) : "0"(track));
     cursor = track->pc;
     track->pc = cursor + 1;
-    value = cursor[0];
-    if (value == 0) {
-        value = 0x100;
+    count = cursor[0];
+    if (count == 0) {
+        count = 0x100;
     }
 
-    if (track->repeat_counters[track->call_stack_index] + 1 != value) {
-        u8_3 *skip;
-
-        skip = cursor + 3;
-        track->pc = skip;
+    if (track->repeat_counters[track->call_stack_index] + 1 != count) {
+        track->pc = cursor + 3;
         return;
     }
 
-    *(u8_3 **)&track->pc = cursor + 2;
-    value = cursor[1];
+    track->pc = cursor + 2;
+    low = cursor[1];
     target = cursor + 3;
     track->pc = target;
-    offset = (s16)(value | (cursor[2] << 8));
-    track->pc = target + offset;
+    track->pc = target + (s16)(low | (cursor[2] << 8));
     track->call_stack_index = (track->call_stack_index - 1) & 3;
 }
 
@@ -2306,33 +2281,27 @@ void SeqOp_LoadNestedStreams(AkaoTrack *track) {
     *(u8 **)track += 4;
 }
 
-void SeqOp_NoteOnWithVoiceAlloc(AkaoTrack *track, s32 arg1, s32 arg2, s16 arg3) {
-    register s16 voice_index asm("$7");
-    register s32 voice_mask asm("$6");
+void SeqOp_NoteOnWithVoiceAlloc(AkaoTrack *track, u32 mask) {
+    s16 voice_index;
+    s32 voice_mask;
     s32 used_mask;
-    register s32 valid_mask asm("$8");
-    s32 flags;
+    s32 valid_mask;
     unsigned char *cursor;
 
-    voice_mask = arg2;
-    voice_index = arg3;
     cursor = track->pc;
     track->pc = cursor + 1;
-    flags = track->flags;
     track->pitch_slide_current = *cursor << 8;
     track->pitch_slide_duration = 0;
-    if (!(flags & AKAO_TRACK_FLAG_VOICE_ALLOCATED)) {
+    if (!(track->flags & AKAO_TRACK_FLAG_VOICE_ALLOCATED)) {
         voice_index = 0;
         voice_mask = 1;
         valid_mask = 0xFFFFFF;
         used_mask = g_AkaoCurTrack->active_voice_mask | g_AkaoCurTrack->reserved_voice_mask;
-        while (1) {
+        for (;;) {
             if (used_mask & voice_mask) {
                 voice_mask *= 2;
                 voice_index += 1;
-                if (!(voice_mask & valid_mask)) {
-
-                } else {
+                if (voice_mask & valid_mask) {
                     continue;
                 }
             }
@@ -2344,67 +2313,58 @@ void SeqOp_NoteOnWithVoiceAlloc(AkaoTrack *track, s32 arg1, s32 arg2, s16 arg3) 
             track->flags |= AKAO_TRACK_FLAG_VOICE_ALLOCATED;
         }
     }
-    ((void (*)())SeqOp_SetTrack38Mask)();
+    SeqOp_SetTrack38Mask(track, mask);
 }
 
-void SeqOp_NoteOnWithPitchSlide(void *track) {
-    register AkaoTrack *base asm("$6");
-    register u8 *seq_first asm("$2");
-    u8 *seq;
-    int value;
+void SeqOp_NoteOnWithPitchSlide(AkaoTrack *track, u32 voice_mask) {
+    AkaoU8 *cursor;
+    AkaoU8 *first;
     int step_count;
     int pitch_base;
+    int delta;
+    int voice_index;
     int mask;
-    register int voice_index asm("$7");
-    int check;
-    base = (AkaoTrack *)track;
-    asm volatile("" : "=r"(base) : "0"(base));
+    u32 used_mask;
+    u32 valid_mask;
 
-    seq_first = base->pc;
-    base->pc = seq_first + 1;
-    step_count = seq_first[0];
-    base->pitch_slide_duration = step_count;
+    first = track->pc;
+    track->pc = first + 1;
+    step_count = first[0];
+    track->pitch_slide_duration = step_count;
     if (step_count == 0) {
-        step_count = 0x100;
-        base->pitch_slide_duration = step_count;
+        track->pitch_slide_duration = 0x100;
     }
 
-    seq = base->pc;
-    pitch_base = base->pitch_slide_current & 0xFF00;
-    base->pc = seq + 1;
-    value = ((int)(seq[0] << 24) >> 16) - pitch_base;
-    base->pitch_slide_current = pitch_base;
-    base->pitch_slide_delta = value / base->pitch_slide_duration;
+    cursor = track->pc;
+    pitch_base = track->pitch_slide_current & 0xFF00;
+    track->pc = cursor + 1;
+    delta = ((int)(cursor[0] << 24) >> 16) - pitch_base;
+    track->pitch_slide_current = pitch_base;
+    track->pitch_slide_delta = delta / track->pitch_slide_duration;
 
-    if ((base->flags & AKAO_TRACK_FLAG_VOICE_ALLOCATED) == 0) {
+    if ((track->flags & AKAO_TRACK_FLAG_VOICE_ALLOCATED) == 0) {
         voice_index = 0;
         mask = 1;
-        check = (int)D_8009D2C8;
-        {
-            register unsigned int limit asm("$8");
-            unsigned int used = ((u32 *)check)[1] | ((u32 *)check)[12];
-            limit = 0xFFFFFF;
-            while (1) {
-                if ((used & mask) != 0) {
-                    mask <<= 1;
-                    voice_index++;
-                    if ((mask & limit) != 0) {
-                        continue;
-                    }
+        valid_mask = 0xFFFFFF;
+        used_mask = D_8009D2C8->bank.active_voice_mask | D_8009D2C8->bank.reserved_voice_mask;
+        for (;;) {
+            if (used_mask & mask) {
+                mask <<= 1;
+                voice_index++;
+                if (mask & valid_mask) {
+                    continue;
                 }
-                break;
             }
-            check = mask & 0xFFFFFF;
+            break;
         }
-
-        if (check != 0) {
-            D_8009D2C8->words[0xC] |= mask;
-            base->voice_index = voice_index;
-            base->flags |= AKAO_TRACK_FLAG_VOICE_ALLOCATED;
+        if (mask & 0xFFFFFF) {
+            D_8009D2C8->bank.reserved_voice_mask |= mask;
+            track->voice_index = voice_index;
+            track->flags |= AKAO_TRACK_FLAG_VOICE_ALLOCATED;
         }
     }
 
-    ((void (*)())SeqOp_SetTrack38Mask)(base);
+    SeqOp_SetTrack38Mask(track, voice_mask);
 }
 
 extern int g_AkaoSeqLoopCounter;
