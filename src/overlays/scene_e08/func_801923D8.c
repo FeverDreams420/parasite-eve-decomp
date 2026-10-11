@@ -8,20 +8,20 @@ void func_800C4E50(void *);
 void func_801923D8(void *unused0, void *unused1, SceneE08RingEffectState *effect) {
     u8 *mid = (u8 *)&D_80199604;
     u8 *source;
-    FieldRingGeometry *base;
+    FieldRingGeometry *ring;
     FieldRingGeometry *third;
     int intensity = 0x80;
     register int span asm("$19");
     asm("" : "=r"(mid) : "0"(mid));
 
-    base = (FieldRingGeometry *)(mid - PE1_OFFSETOF(FieldRingGeometry, mode));
-    asm ("" : : "r"(base));
+    ring = (FieldRingGeometry *)(mid - PE1_OFFSETOF(FieldRingGeometry, mode));
+    asm ("" : : "r"(ring));
     effect->rotation[0] = 0;
     effect->rotation[1] = 0;
     effect->rotation[2] = 0;
     effect->secondScale = 0;
 
-    base->mode = 0x20;
+    ring->mode = 0x20;
     D_8019960A = 0x1F4;
     asm volatile("" : : "r"(intensity));
     D_80199600 = 0xF0;
@@ -35,24 +35,26 @@ void func_801923D8(void *unused0, void *unused1, SceneE08RingEffectState *effect
     D_801995FE = 0;
     D_80199606 = span;
     D_80199608 = 0;
-    base->source = source;
-    func_800C4E50(base);
+    ring->source = source;
+    func_800C4E50(ring);
 
-    ((FieldRingGeometry *)(mid + 12))->mode = 0x20;
-    ((FieldRingGeometry *)(mid + 12))->offset = 0x5DC;
-    ((FieldRingGeometry *)(mid + 12))->intensity = intensity;
-    ((FieldRingGeometry *)(mid + 12))->color1[0] = 0;
-    ((FieldRingGeometry *)(mid + 12))->color1[1] = 0;
-    ((FieldRingGeometry *)(mid + 12))->color1[2] = 0;
-    ((FieldRingGeometry *)(mid + 12))->color0[0] = 0xFF;
-    ((FieldRingGeometry *)(mid + 12))->color0[1] = 0xFF;
-    ((FieldRingGeometry *)(mid + 12))->color0[2] = 0xFF;
-    ((FieldRingGeometry *)(mid + 12))->extent0 = span;
-    ((FieldRingGeometry *)(mid + 12))->extent1 = 0;
-    ((FieldRingGeometry *)(mid + 12))->source = source + 0x200;
-    func_800C4E50(mid + 12);
+    ++ring;
 
-    third = (FieldRingGeometry *)(mid + 36);
+    ring->mode = 0x20;
+    ring->offset = 0x5DC;
+    ring->intensity = intensity;
+    ring->color1[0] = 0;
+    ring->color1[1] = 0;
+    ring->color1[2] = 0;
+    ring->color0[0] = 0xFF;
+    ring->color0[1] = 0xFF;
+    ring->color0[2] = 0xFF;
+    ring->extent0 = span;
+    ring->extent1 = 0;
+    ring->source = source + 0x200;
+    func_800C4E50(ring);
+
+    third = ring + 1;
     asm ("" : : "r"(third));
     third->mode = 0x20;
     third->offset = 0x5DC;
