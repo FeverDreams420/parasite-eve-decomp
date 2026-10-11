@@ -113,7 +113,7 @@ void Akao_StepSequencerVoice(void *arg0) {
     kFFFa = 0xFFFFFF;
     p2c8a = g_AkaoCurTrack;
     ((AkaoSequencerBank *)p2c8a)->sequence_base = arg0v;
-    tld = M2C_FIELD(arg0v, s32 *, 0);
+    tld = *(s32 *)arg0v; /* sequence header word 0: channel mask */
     mask = tld & kFFFa;
     tret = Akao_ForEachVoiceMasked(g_AkaoVoiceStateTable2, ((AkaoSequencerState *)p2c8a)->secondary.active_voice_mask);
     tnor = ~tret;
@@ -205,20 +205,20 @@ void Akao_StepSequencerVoice(void *arg0) {
     } while (kFFF5 != 0);
         pend = g_AkaoCurTrack;
     pend->tempo = 0xFFFF0000;
-    pend->field_28 = 1;
+    pend->tick_accumulator = 1;
     pend->tempo_slide_duration = 0;
     pend->volume = 0;
     pend->volume_slide_duration = 0;
     *(s32 *)&pend->volume_delta = 0;
     g_AkaoVoiceUpdateFlags = 0;
-    M2C_FIELD(pend, s16 *, 0x62) = 0;
-    M2C_FIELD(pend, s16 *, 0x60) = 0;
-    M2C_FIELD(pend, s16 *, 0x5E) = 0;
-    M2C_FIELD(pend, s16 *, 0x64) = 0;
+    pend->tick = 0;
+    pend->ticks_per_beat = 0;
+    pend->beat = 0;
+    pend->measure = 0;
     pend->key_off_dirty_mask = 0;
     pend->volume_dirty_mask = 0;
     pend->adsr_dirty_mask = 0;
-    pend->field_56 = 0;
+    pend->condition_value = 0;
     pend->key_on_request_mask = 0;
     kffe = 0xFFFFFF;
     __asm__ __volatile__("");
@@ -1852,12 +1852,12 @@ void Akao_InitPrimarySecondaryVoices(void) {
 
 void Akao_InitPrimarySecondaryVoicesWithMode(AkaoValueCommand *cmd) {
     AkaoTrack *base = g_AkaoVoiceStateTable;
-    int value = cmd->field_4;
+    int value = cmd->value;
 
     Akao_InitVoices(value, (char *)&base[0]);
-    if (cmd->field_4 != 0) {
+    if (cmd->value != 0) {
         g_AkaoCurTrack++;
-        Akao_InitVoices(cmd->field_4, (char *)&base[AKAO_VOICE_COUNT]);
+        Akao_InitVoices(cmd->value, (char *)&base[AKAO_VOICE_COUNT]);
         g_AkaoCurTrack--;
     }
 }
@@ -1932,7 +1932,7 @@ void Seq_SetPlaybackMode2AndRefreshVoices(void) {
 
 void Seq_SetGlobalD2B8AndDirtyAllTracks(AkaoValueCommand *cmd) {
     unsigned int i = 0;
-    int value = cmd->field_4;
+    int value = cmd->value;
     AkaoTrackUpdateSlot *slot;
 
     slot = g_AkaoTrackStateArray;
@@ -1943,7 +1943,7 @@ void Seq_SetGlobalD2B8AndDirtyAllTracks(AkaoValueCommand *cmd) {
 }
 
 void Seq_SetCurrentTrackField56(AkaoValueCommand *arg0) {
-    ((AkaoTrack *)g_AkaoCurTrack)->note_length = arg0->field_4;
+    g_AkaoCurTrack->condition_value = arg0->value;
 }
 extern unsigned int g_SpuActiveVoiceMask;
 extern unsigned int g_AkaoSeqPendingFlags;

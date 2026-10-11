@@ -85,7 +85,7 @@ void Seq_TrackPitchSetup(AkaoBankPitchRangeCommand *command);
 
 typedef struct AkaoValueCommand {
     int pad_0;
-    int field_4;
+    int value;
 } AkaoValueCommand;
 
 typedef struct AkaoGlobalSlideCommand {

@@ -430,7 +430,7 @@ check_bank:
             cursor++;
             bank_byte = *cursor;
             cursor++;
-            if (D_8009D2C8->bank.field_56 >= bank_byte) {
+            if (D_8009D2C8->bank.condition_value >= bank_byte) {
 read_displacement:
             argument = *cursor++;
             displacement = *cursor++;
