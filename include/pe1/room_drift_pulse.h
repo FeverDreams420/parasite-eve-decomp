@@ -14,6 +14,4 @@ typedef RoomM023DriftPulseCallbackView RoomDriftPulseState;
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomDriftPulseState, vz) == 0x0C,
                   room_drift_pulse_vz_offset);
 
-extern GteShortVector g_RoomScriptRecord;
-
 #endif

@@ -42,7 +42,7 @@ int func_8018F004(int mode, RoomDriftPulseState *state) {
         switch (state->phase) {
         case 0:
             {
-                GteShortVector *anchor = &g_RoomScriptRecord;
+                GteShortVector *anchor = &RoomM023_ScriptAnchor;
                 int kind;
                 int palette;
                 int fade;
@@ -71,7 +71,7 @@ int func_8018F004(int mode, RoomDriftPulseState *state) {
 
                 if (kind == 4 && D_800F3428 != 0) palette += 4;
                 clut = GetClut(0x20, palette);
-                func_800CEE20(&g_RoomScriptRecord, &rotation, 0x1000, 0x1000,
+                func_800CEE20(&RoomM023_ScriptAnchor, &rotation, 0x1000, 0x1000,
                               ((s16)D_800F3368.parameter02 << 1) * (D_800E27EC - 1) + 0x60, clut,
                               3, 0x80, 0);
             }
@@ -151,7 +151,7 @@ int func_8018F3C8(int mode, RoomM023ScatterState *state) {
         }
         break;
     case 2:
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM023Channel)->pool, state->joint, &template, &g_RoomScriptRecord);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM023Channel)->pool, state->joint, &template, &RoomM023_ScriptAnchor);
         D_800F3368.parameter00 = 32;
         D_800F3368.parameter02 = 2;
         D_800F3368.extent_x = 32;

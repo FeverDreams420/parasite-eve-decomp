@@ -14,7 +14,6 @@
 typedef RoomM123BurstParticle RoomM123PulsingParticle;
 
 extern u8 D_801954BC[];
-extern s16 g_RoomScriptRecord;
 
 void func_800CF844(void *, void *, int, void *, int, int);
 void LoadAverageShort12(void *, void *, int, int, void *);

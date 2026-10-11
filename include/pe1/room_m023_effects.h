@@ -9,6 +9,7 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/field_engine_calls.h"
+#include "pe1/room_script_record.h"
 
 /* Room m023 controller that scatters particles around a model joint,
  * either at the joint itself or at a random point of a wide band. */
@@ -65,7 +66,8 @@ typedef struct RoomM023Template {
 } __attribute__((packed)) RoomM023Template;
 
 extern RoomM023Template D_8018EFF4;
-extern GteShortVector g_RoomScriptRecord;
+/* Anchor vector room_m023 keeps in its scene script record. */
+#define RoomM023_ScriptAnchor (*(GteShortVector *)&g_RoomScriptRecord)
 
 extern int func_80071A54(void);
 extern int func_8018F004(int mode,

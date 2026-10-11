@@ -9,6 +9,7 @@
 #include "pe1/field_owner_actor.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/field_engine_calls.h"
+#include "pe1/room_script_record.h"
 
 /* room_m123 glow burst (func_80192F0C): spawns pulsing particles at frame
  * 1, then layers four glow sprites, two flash rings and a swept flare on a
@@ -18,7 +19,6 @@ typedef struct RoomM123GlowBurst {
 } RoomM123GlowBurst;
 
 extern GteShortVector D_8018F1E0;
-extern s16 g_RoomScriptRecord;
 /* Joint angles published for the pulsing particles: written by the joint
  * transform as a vector, read back by the flare sweep as a rotation. */
 typedef union RoomM123JointAngles {

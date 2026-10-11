@@ -1,5 +1,6 @@
 #include "pe1/field_sprite_params.h"
 #include "../room_lib/room_lib.h"
+#include "pe1/room_script_record.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/psyq_gpu.h"
@@ -25,7 +26,8 @@ typedef struct RoomM005_Dialog {
     short hC[1];                  /* 0x0C: fade target block */
 } RoomM005_Dialog;
 
-extern RoomM005_Dialog g_RoomScriptRecord;
+/* Dialog anchor room_m005 keeps in its scene script record. */
+#define RoomM005_ScriptDialog (*(RoomM005_Dialog *)&g_RoomScriptRecord)
 extern char RoomM005_Rec2[];
 #include "pe1/gte_types.h"
 
@@ -46,9 +48,9 @@ tick:
 
     }
 init:
-    anchor[0] = g_RoomScriptRecord.h4;
-    anchor[1] = g_RoomScriptRecord.h6;
-    anchor[2] = g_RoomScriptRecord.h8;
+    anchor[0] = RoomM005_ScriptDialog.h4;
+    anchor[1] = RoomM005_ScriptDialog.h6;
+    anchor[2] = RoomM005_ScriptDialog.h8;
     r->h2 += rsin(D_800E27EC << 6) / 512;
     r->h0 = anchor[0] + rcos(r->h8) * r->hA / 4096;
     r->h4 = anchor[2] + rsin(r->h8) * r->hA / 4096;
@@ -66,7 +68,7 @@ fade:
     {
         short n = r->hE + 1;
         r->hE = n;
-        LoadAverageShort12(r, g_RoomScriptRecord.hC, 0x1000 - (n << 7), n << 7, r);
+        LoadAverageShort12(r, RoomM005_ScriptDialog.hC, 0x1000 - (n << 7), n << 7, r);
     }
     if (r->hE >= 0x20) {
         return 1;
