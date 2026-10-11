@@ -1,5 +1,4 @@
-extern int D_80195EF0;
-extern char D_80195EF4[];
+#include "func_80195CD8_externs.h"
 
 void *func_80195CD8(void *arg0, int value) {
     if (value < 0x200) {

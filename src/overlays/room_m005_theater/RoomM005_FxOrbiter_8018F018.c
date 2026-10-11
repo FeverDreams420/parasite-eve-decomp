@@ -28,7 +28,7 @@ typedef struct RoomM005_Dialog {
 
 /* Dialog anchor room_m005 keeps in its scene script record. */
 #define RoomM005_ScriptDialog (*(RoomM005_Dialog *)&g_RoomScriptRecord)
-extern char RoomM005_Rec2[];
+#include "RoomM005_FxOrbiter_8018F018_externs.h"
 #include "pe1/gte_types.h"
 
 int RoomM005_FxOrbiter_8018F018(int mode, RoomM005_OrbRec *r) {

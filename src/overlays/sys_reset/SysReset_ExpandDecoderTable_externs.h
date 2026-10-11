@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_E74C5A70D958
+#define PE1_EXT_E74C5A70D958
+extern const u8 D_8010CBFC[];
+#endif /* PE1_EXT_E74C5A70D958 */

@@ -13,7 +13,7 @@ typedef struct SceneE18WaveEffect {
     s16 field08, field0a, field0c, field0e;
     s16 size, wave, amplitude;
 } SceneE18WaveEffect;
-extern u32 D_80194180[], D_80194184[];
+#include "func_80193A58_externs.h"
 
 int func_80193A58(int mode, SceneE18WaveEffect *effect) {
     s16 position[4];

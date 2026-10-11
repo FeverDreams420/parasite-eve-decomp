@@ -67,7 +67,7 @@ typedef struct SceneE18PulseState {
     u16 ticks;
 } SceneE18PulseState;
 
-extern int func_80193018(int mode, SceneE18PulseRing *ring);
+#include "RoomEffect_PulseRingFlow_externs.h"
 
 int func_8019330C(int mode, SceneE18PulseState *state) {
     SceneE18PulseParticle *particle;

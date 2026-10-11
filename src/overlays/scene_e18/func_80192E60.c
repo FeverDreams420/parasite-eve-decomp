@@ -24,7 +24,7 @@ typedef struct SceneE18ObjectLink {
     SceneE18Object *object;
 } SceneE18ObjectLink;
 
-extern u16 D_801941CC;
+#include "func_80192E60_externs.h"
 
 int func_80192E60(int mode, Effect *effect) {
     s16 position[4];

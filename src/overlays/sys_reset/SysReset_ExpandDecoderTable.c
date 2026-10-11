@@ -1,5 +1,5 @@
 #include "common.h"
-extern const u8 D_8010CBFC[];
+#include "SysReset_ExpandDecoderTable_externs.h"
 void SysReset_ExpandDecoderTable(u16 *table) {
     s32 distance = 0;
     const u8 *source = D_8010CBFC;

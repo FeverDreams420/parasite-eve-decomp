@@ -1,9 +1,8 @@
 /* MASPSX_FLAGS: --expand-div */
 #include "pe1/room_m256_swing.h"
 /* Cosine halves of the packed sine table words (pe1/gte_sine_table.h). */
-extern short D_800966EE[];
+#include "func_80192654_externs.h"
 
-extern int func_80192808(RoomM256Swing *state);
 
 void func_80192680(RoomM256Swing *state);
 

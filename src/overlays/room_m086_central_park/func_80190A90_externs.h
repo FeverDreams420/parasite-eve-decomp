@@ -1,0 +1,6 @@
+#ifndef PE1_EXT_BCF8E311E4E3
+#define PE1_EXT_BCF8E311E4E3
+extern int D_80190B8C;
+extern int D_80190B90;
+extern int D_80190B94;
+#endif /* PE1_EXT_BCF8E311E4E3 */

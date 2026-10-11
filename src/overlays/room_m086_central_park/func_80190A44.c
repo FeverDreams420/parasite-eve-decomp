@@ -1,7 +1,4 @@
-extern int D_80190B74;
-extern int D_80190B78;
-extern int D_80190B7C;
-extern int D_80190B80;
+#include "func_80190A44_externs.h"
 
 int *func_80190A44(int arg0, int arg1, int arg2, int arg3) {
     if (arg0 == 1) {

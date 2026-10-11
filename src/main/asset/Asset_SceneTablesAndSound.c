@@ -172,7 +172,7 @@ int Akao_Calc3DPan(AkaoPackedRect3 *pos, int *pan, int *volume)
 
 typedef unsigned char u8_1;
 
-extern signed char g_Base32CharTable[];
+#include "Asset_SceneTablesAndSound_externs.h"
 
 int Gpu_LoadTimAsset(TimUploadRecord *asset, void *base) {
     RECT rect;

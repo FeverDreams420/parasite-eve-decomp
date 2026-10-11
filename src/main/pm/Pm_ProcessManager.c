@@ -90,13 +90,7 @@ int Pm_FreeSlot(int arg0) {
     return 0;
 }
 #include "pe1/cdrom.h"
-extern PmCommand **D_800942E0;
-extern PmPrimarySlot *D_800942E4;
-extern PmSecondarySlot *D_800942E8;
-extern u16 D_80093162[];
-extern void *D_80011618;
-extern u8 D_801F1BD8[], D_801F1C58[], D_801F1D00[], D_801F1D8C[];
-extern u8 D_801F1E18[], D_801F1EA4[], D_801F1EF0[];
+#include "Pm_ProcessManager_externs.h"
 void FlushCache(void);
 void func_800CE49C(PmSlotHeader *, int);
 
@@ -577,7 +571,7 @@ int Scene_FreeEntityTable(void *owner)
     return result;
 }
 
-extern struct FieldActor *g_PlayerEntity;
+#include "Pm_ProcessManager_externs_1.h"
 s32 Pm_StopAll(void) {
     u8 *clear_base;
     u8 *base_v0;

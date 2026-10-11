@@ -5,13 +5,10 @@
 #include "pe1/inventory.h"
 #include "pe1/aya.h"
 
-extern MenuWidgetSimpleDescriptor D_80092478[];
+#include "Tbl_DataTableLookups_externs.h"
 
-extern MenuWidgetGridDescriptor D_80092888[];
 
-extern int D_800A8030;
 
-extern int g_StrLookupTableOffset;
 
 MenuWidgetSimpleDescriptor *MenuWidget_LookupSimpleDescriptor(unsigned int index) {
     if (index >= 0x41) {
@@ -52,8 +49,7 @@ void *Str_LookupTable0(unsigned int arg0) {
     return 0;
 }
 
-extern int D_800A8034[];
-extern int D_800A8038[];
+#include "Tbl_DataTableLookups_externs_1.h"
 
 ItemDataRecord *Item_LookupBaseData(unsigned int index)
 {
@@ -74,20 +70,16 @@ ItemDataRecord *Item_LookupBaseData(unsigned int index)
     return (ItemDataRecord *)((char *)D_800A8038 - 0x10 + base + offset);
 }
 
-extern int g_StatGrowthTable[];
+#include "Tbl_DataTableLookups_externs_2.h"
 
 void *Stat_GetGrowthTable(int arg0) {
     return (void *)(g_StatGrowthTable[0] + (int)((char *)g_StatGrowthTable - 0x10) + (arg0 << 9));
 }
 
-extern int D_800A803C[];
+#include "Tbl_DataTableLookups_externs_3.h"
 
-extern int D_800A8040;
 
-extern int D_800A8048;
 
-extern u8 g_GlyphMetricsTable[];
-extern int D_800A8050;
 
 AyaLevelStats *Aya_LookupLevelStats(int arg0) {
     if (arg0 < 0) {
@@ -179,7 +171,7 @@ void *Str_LookupTable10(unsigned int arg0) {
     offset = table->offsets[arg0];
     return (u8 *)table + offset;
 }
-extern int D_800A804C;
+#include "Tbl_DataTableLookups_externs_4.h"
 
 void *Str_LookupTableEntry(int arg0) {
     TextTableDirectory *directory;
@@ -203,9 +195,8 @@ void *Str_LookupTableEntry(int arg0) {
     return (u8 *)table + offset;
 }
 
-extern int D_800A8054;
+#include "Tbl_DataTableLookups_externs_5.h"
 
-extern int D_800A8044;
 
 u8 *Tbl_FindNthNonEmpty(int arg0) {
     u8 *end;

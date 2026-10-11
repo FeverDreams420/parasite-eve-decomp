@@ -1,6 +1,4 @@
-extern int D_80190B8C;
-extern int D_80190B90;
-extern int D_80190B94;
+#include "func_80190A90_externs.h"
 
 int *func_80190A90(int arg0, int arg1, int arg2, int arg3) {
     if (arg0 == 1) {
