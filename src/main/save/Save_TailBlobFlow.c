@@ -38,8 +38,8 @@ void Save_SerializeTail(void) {
         cursor = g_SaveIoCursor;
         g_SaveIoCursor = cursor + 2;
         asm volatile("" : "=m"(g_SaveIoCursorRead) : "m"(g_SaveIoCursorRead));
-        b0 = g_SceneAreaType;
-        b1 = g_SavedSceneAreaType;
+        b0 = (s8)g_SceneAreaType;
+        b1 = (s8)g_SavedSceneAreaType;
         cursor[2] = b0;
         cursor[3] = b1;
         cursor = g_SaveIoCursor;

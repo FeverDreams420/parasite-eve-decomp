@@ -7,7 +7,6 @@
 /* Geometry animation control: reset, update and script setup commands. */
 
 
-extern GeomState * D_800B1624;
 
 int Obj_ResetAllEntries(void) __asm__("func_800655D4");
 
