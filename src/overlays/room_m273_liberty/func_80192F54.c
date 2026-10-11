@@ -14,30 +14,29 @@ int func_80192F54(void) {
 }
 
 int func_80192F5C(RoomOscillationEffect *effect) {
-    register RoomOscillationEffect *e asm("$5") = effect;
-    int **outs = &e->angleOut;
-    FieldActor *actor = e->actor;
+    int **outs = &effect->angleOut;
+    FieldActor *actor = effect->actor;
 
-    if (e->active) {
-        int frame = e->frame;
-        int period = e->period;
+    if (effect->active) {
+        int frame = effect->frame;
+        int period = effect->period;
         int phase = ((frame << 12) / period - 2048) & 4095;
         register int sine asm("$2");
         register int displacement asm("$2");
         register int half asm("$4");
         FieldActor *target;
 
-        e->frame = frame + 1;
+        effect->frame = frame + 1;
         sine = *(s16 *)((char *)D_800966EE + phase * 4);
         half = (sine + 4096) / 2;
-        displacement = (half * e->amplitude) / 4096 + 8;
-        target = ((RoomOscillationEffect *)e)->actor;
+        displacement = (half * effect->amplitude) / 4096 + 8;
+        target = ((RoomOscillationEffect *)effect)->actor;
         {
             int height;
             register int scaled asm("$4");
 
             scaled = displacement << 12;
-            height = e->baseHeight - scaled;
+            height = effect->baseHeight - scaled;
             target->pos_y = height;
         }
     }
