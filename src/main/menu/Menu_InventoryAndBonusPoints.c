@@ -424,7 +424,7 @@ static inline int Menu_CanEquipSelection(int selection)
     int usable;
 
     usable = 0;
-    if (D_800A1888[0] + D_800A188C[0] + D_800A1890[0] + D_800A1894[0] != 0
+    if (g_StatBaseTable[0] + g_StatBaseTable[1] + g_StatBaseTable[2] + g_StatBaseTable[3] != 0
         && !(Inv_LookupActiveListData(selection)->flags & 0x40)) {
         if (Inv_SetupSlotDisplay(Inv_GetActiveListItemType(selection) >= 6
                                      ? 1 << Inv_GetActiveListItemType(selection)

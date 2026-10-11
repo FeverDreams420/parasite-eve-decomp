@@ -37,10 +37,11 @@ extern int D_8009CF1C;
 /* Equipment selection state and stat preview. */
 extern int D_8009CF30, D_8009CF34, D_8009CF38;
 extern int D_8009CFC4, D_8009CFC8, D_8009CFCC;
+/* Ammo counts of the four ammo categories (999 when a category is
+ * unlimited); a nonzero sum enables the ammo transfer actions. */
 extern int g_StatBaseTable[4];
 extern int D_8009CF24, D_8009CF28, D_8009CFBC, D_8009CF2C;
 extern int D_8009CF14;
-extern int D_800A1888[], D_800A188C[], D_800A1890[], D_800A1894[];
 
 void Menu_DrawEquipScreenHeader(void);
 int Menu_InventoryItemHandler(MenuWidgetNode *node, int flags);

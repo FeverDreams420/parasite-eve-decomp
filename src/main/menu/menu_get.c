@@ -1,21 +1,15 @@
-#include "common.h"
-#include "pe1/inventory.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
+#include "common.h"
+#include "pe1/inventory.h"
+#include "pe1/menu_item_rows.h"
+#include "pe1/save.h"
+#include "pe1/text.h"
 
 int g_MenuBattleCount;
 
 int g_MenuBattleCount;
 short g_BattleCountTable[];
-
-typedef s32 M2C_UNK;
-typedef s8 M2C_UNK8;
-typedef s16 M2C_UNK16;
-typedef s32 M2C_UNK32;
-typedef s64 M2C_UNK64;
-void Sfx_DrawSlotRow(ItemDataRecord *entry, u8 *text);
-void *Str_LookupTable8(unsigned int arg0);
-#include "menu_get_externs.h"
 
 int Menu_GetBattleCount(void) {
     return g_MenuBattleCount;
@@ -28,67 +22,35 @@ int Menu_GetBattleCountEntry(int arg0) {
     return 0;
 }
 
-void Inv_ShowItemDescriptionPanel(s32 arg0)
-{
-  int new_var;
-  M2C_UNK *var_a1;
-  M2C_UNK *new_var3;
-  s16 temp_v1;
-  u32 temp_a0;
-  s16 *new_var2;
-  void *temp_s0;
-  void *var_a0;
-  void *var_s0;
-  new_var2 = (&g_BattleCountTable[0]) + arg0;
-  temp_v1 = *new_var2;
-  if (temp_v1 < 0x200)
-  {
-    temp_a0 = temp_v1 - 1;
-    new_var = ((temp_v1 - 0x100)) < 0x80U;
-    if (new_var)
-    {
-      var_s0 = (temp_v1 << 5) + (&g_EquipItemDataTable[0]);
-    }
-    else
-      if (temp_a0 < 0xFFU)
-    {
-      var_s0 = Item_LookupBaseData(temp_a0);
-    }
-    else
-      if (((temp_v1 - 0x200)) < 9U)
-    {
-      var_s0 = (temp_v1 << 5) + (&g_KeyItemDataTable[0]);
-    }
-    else
-    {
-      var_s0 = (void *) 0;
-    }
-    if (var_s0 != ((void *) 0))
-    {
-      new_var3 = Str_LookupTable8(((ItemDataRecord *)var_s0)->itemId - 1);
-      var_a0 = var_s0;
-      var_a1 = new_var3;
-      Sfx_DrawSlotRow(var_a0, var_a1);
-    }
-  }
-  else
-  {
-    temp_s0 = (temp_v1 << 5) + (&g_KeyItemDataTable[0]);
-    if (((ItemDataRecord *)temp_s0)->flags & 0x10)
-    {
-      var_a1 = &g_CursorRenderDataBlock[0];
-      var_a0 = temp_s0;
-      if (((ItemDataRecord *)temp_s0)->kind == 9)
-      {
-        var_a1 = (&g_CursorRenderDataBlock[0]) + 0x10;
-      }
-    }
-    else
-    {
-      var_a1 = Str_LookupTable8(((ItemDataRecord *)temp_s0)->itemId - 1);
-      var_a0 = temp_s0;
-    }
-    Sfx_DrawSlotRow(var_a0, var_a1);
+void Inv_ShowItemDescriptionPanel(s32 index) {
+    int value;
+    ItemDataRecord *entry;
+    u8 *text;
 
-  }
+    value = g_BattleCountTable[index];
+    if (value < 0x200) {
+        if ((unsigned int)(value - 0x100) < 0x80U) {
+            entry = (ItemDataRecord *)(g_EquipItemDataTable + (value << 5));
+        } else if ((unsigned int)(value - 1) < 0xFFU) {
+            entry = Item_LookupBaseData(value - 1);
+        } else if ((unsigned int)(value - 0x200) < 9U) {
+            entry = (ItemDataRecord *)(g_KeyItemDataTable + (value << 5));
+        } else {
+            entry = 0;
+        }
+        if (entry != 0) {
+            Sfx_DrawSlotRow(entry, Str_LookupTable8(entry->itemId - 1));
+        }
+    } else {
+        entry = (ItemDataRecord *)(g_KeyItemDataTable + (value << 5));
+        if (entry->flags & ITEM_DATA_FLAG_GENERIC_DESCRIPTION) {
+            text = D_800C20A4;
+            if (entry->kind == 9) {
+                text = D_800C20A4 + 0x10;
+            }
+        } else {
+            text = Str_LookupTable8(entry->itemId - 1);
+        }
+        Sfx_DrawSlotRow(entry, text);
+    }
 }

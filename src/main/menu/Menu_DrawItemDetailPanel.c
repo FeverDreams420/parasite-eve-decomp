@@ -62,7 +62,7 @@ void Menu_DrawItemDetailPanel(MenuWidgetNode *panel) {
     Draw_OffsetCursor(0x3C, 0);
     Draw_PrintTextById(0x6B);
 
-    sum = D_800A1888[0] + D_800A1890[0];
+    sum = g_StatBaseTable[0] + g_StatBaseTable[2];
     if (sum < 100 && !D_8009CF0C) {
         Draw_OffsetCursor(-0xF, 3);
         Draw_PrintNumberWidth2Unk(sum);
@@ -73,7 +73,7 @@ void Menu_DrawItemDetailPanel(MenuWidgetNode *panel) {
         Draw_PrintNumberWidth3Unk(displayed);
     }
 
-    sum = D_800A188C[0] + D_800A1894[0];
+    sum = g_StatBaseTable[1] + g_StatBaseTable[3];
     if (sum < 100 && !D_8009CF0C) {
         Draw_OffsetCursor(0x32, 0);
         Draw_PrintNumberWidth2Unk(sum);

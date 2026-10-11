@@ -55,6 +55,9 @@ extern int g_MenuSpendArrowDirection;
 /* Set while the list column layout must not be restored from the saved
  * cursor table. */
 extern int g_MenuLayoutLocked;
+/* Item list modes: rename and discard dim the entries they cannot act on. */
+extern int g_MenuItemRenameMode;
+extern int g_MenuItemDiscardMode;
 
 /* Window X and Y offset per menu window mode (Window_SetBoundsByMode). */
 typedef struct {

@@ -85,6 +85,7 @@ g_MenuLevelUpPanelPoints = 0x80092314;
 g_MenuSelectedSpell = 0x8009CFB4;
 g_MenuWindowModeBounds = 0x80010E38;
 g_MenuEquipSlotGlyphs = 0x800923B8;
+g_StatBaseTable = 0x800A1888; // size:0x10
 Render_InitViewState = 0x80065B70; // type:func
 Asset_GetTimImageRect = 0x80071964; // type:func
 Scene_Init = 0x80071034; // type:func

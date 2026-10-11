@@ -3,6 +3,7 @@
 #include "pe1/inventory_queries.h"
 #include "pe1/menu_sound.h"
 #include "pe1/menu_context_help.h"
+#include "pe1/menu_equipment.h"
 
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
@@ -93,14 +94,14 @@ int Menu_StepItemSelectScreen(MenuWidgetNode *node, unsigned int buttons)
             CLOSE_SELECT_VIEWS();
             D_8009CF1C = 1;
             Inv_SelectActiveList(0);
-            D_800A1888[0] = Inv_CountByCategory(0xe) ? 999 : Inv_CountByCategory(0xc);
-            D_800A188C[0] = Inv_CountByCategory(0xf) ? 999 : Inv_CountByCategory(0xd);
+            g_StatBaseTable[0] = Inv_CountByCategory(0xe) ? 999 : Inv_CountByCategory(0xc);
+            g_StatBaseTable[1] = Inv_CountByCategory(0xf) ? 999 : Inv_CountByCategory(0xd);
             if (D_8009CF0C) {
-                D_800A1890[0] = WayneStorage_CountItemType(0xe) ? 999 : WayneStorage_CountItemType(0xc);
-                D_800A1894[0] = WayneStorage_CountItemType(0xf) ? 999 : WayneStorage_CountItemType(0xd);
+                g_StatBaseTable[2] = WayneStorage_CountItemType(0xe) ? 999 : WayneStorage_CountItemType(0xc);
+                g_StatBaseTable[3] = WayneStorage_CountItemType(0xf) ? 999 : WayneStorage_CountItemType(0xd);
             } else {
-                D_800A1894[0] = 0;
-                D_800A1890[0] = 0;
+                g_StatBaseTable[3] = 0;
+                g_StatBaseTable[2] = 0;
             }
             Menu_StepInventoryRoot(0x33e, -1, -1);
             D_8009CEF8 = 0;

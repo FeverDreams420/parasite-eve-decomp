@@ -1,19 +1,12 @@
-#include "pe1/inventory.h"
-#include "pe1/menu_widget.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
-
-#include "Menu_HandleInput_externs.h"
-
-int Inv_GetPackedListCount(void);
-int Inv_TestSelectionBit(int arg0);
-void Draw_SetTextDimmed(int arg0);
-int Inv_GetPackedListItem(int arg0);
-int Inv_IsAyaInventorySlotReserved(int arg0);
-int Inv_GetActiveListItemType(int arg0);
-int Inv_SetupSlotDisplay(int arg0);
-void Sfx_DrawActiveListSlot(int arg0);
-void Draw_DropShadow(void);
+#include "pe1/inventory.h"
+#include "pe1/inventory_slots.h"
+#include "pe1/menu_equipment.h"
+#include "pe1/menu_inventory_root.h"
+#include "pe1/menu_item_rows.h"
+#include "pe1/menu_widget.h"
+#include "pe1/draw_state.h"
 
 void Menu_HandleInput(int arg0) {
     register int value;
@@ -43,8 +36,8 @@ void Menu_HandleInput(int arg0) {
 
     if (g_MenuLayoutLocked != 0) {
     flag = 0;
-    if (g_StatBaseTable[0] + g_ItemCategoryCount1[0] + g_ItemCategoryCount2[0] + g_ItemCategoryCount3[0] != 0) {
-        if ((((u8 *)Inv_LookupActiveListData(value))[5] & 0x40) == 0) {
+    if (g_StatBaseTable[0] + g_StatBaseTable[1] + g_StatBaseTable[2] + g_StatBaseTable[3] != 0) {
+        if ((Inv_LookupActiveListData(value)->flags & 0x40) == 0) {
             int mask;
 
             if (Inv_GetActiveListItemType(value) >= 6) {

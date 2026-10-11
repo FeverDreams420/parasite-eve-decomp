@@ -489,14 +489,14 @@ void Menu_OpenItemList(void)
     if (status == 1 || status == 2 || status == 5) {
         kind = Inv_GetActiveListItemType(Inv_RestoreSelection(list));
         D_8009CF18 = kind != 9;
-        i = (D_800A1888[0] > 0) + (D_800A188C[0] > 0) + (D_800A1890[0] > 0);
-        if (D_800A1894[0] > 0 ? i + 1 >= 2 : i >= 2) {
+        i = (g_StatBaseTable[0] > 0) + (g_StatBaseTable[1] > 0) + (g_StatBaseTable[2] > 0);
+        if (g_StatBaseTable[3] > 0 ? i + 1 >= 2 : i >= 2) {
             Menu_CreateScreenModeSubmenu();
         }
         else
         {
 
-        for (i = 0; i < 4 && D_800A1888[i] == 0; ++i) {}
+        for (i = 0; i < 4 && g_StatBaseTable[i] == 0; ++i) {}
         D_8009CF2C = i < 4 ? i : 0;
         item = Inv_LookupActiveListData(Inv_RestoreSelection(list));
         kind = item->tailData[slot] & 0x1f;

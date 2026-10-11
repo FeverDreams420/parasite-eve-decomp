@@ -69,7 +69,7 @@ int Menu_StepEquipConfirm(MenuWidgetNode *node, int input) {
                 MenuWidget_FindByModeAndSelectedBase(2, 0x36)) == 1);
 
             allowed = 0;
-            if ((D_800A1888[0] + D_800A188C[0] + D_800A1890[0] + D_800A1894[0]) != 0) {
+            if ((g_StatBaseTable[0] + g_StatBaseTable[1] + g_StatBaseTable[2] + g_StatBaseTable[3]) != 0) {
                 unsigned mask = Inv_LookupActiveListData(item)->flags & 0x40;
                 allowed = mask < 1U;
             }
