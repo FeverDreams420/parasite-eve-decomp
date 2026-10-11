@@ -1,4 +1,4 @@
-/* CC1_FLAGS: -G8 */
+/* CC1_FLAGS: -G0 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 /* MASPSX_FORCE_G0: 1 */
 #include "pe1/battle_reset_stats.h"
@@ -7,7 +7,9 @@
 #include "pe1/battle_start.h"
 
 /* COMMON supplies small-data metadata to MASPSX; the other battle words
- * stay absolute. */
+ * stay absolute. cc1 runs at -G0 so the story-day flags byte (D_800B0CE6)
+ * counts as an expensive address and stays in a register for its
+ * read-modify-write, as retail has it. */
 u8 D_8009CE74, D_8009CE78, D_8009CE7C;
 int D_8009D1D0;
 int D_8009D1E8;

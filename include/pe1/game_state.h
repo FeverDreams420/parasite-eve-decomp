@@ -10,6 +10,10 @@ extern Pe1GameState g_GameState;
 extern unsigned int g_GameStateFlags;
 #endif
 
+/* g_GameState.story_day_flags as its own byte symbol: Scene_SetStoryDay and
+ * the battle update read and set it with absolute byte loads and stores. */
+extern u8 D_800B0CE6;
+
 void Sys_Shutdown(void);
 
 #endif

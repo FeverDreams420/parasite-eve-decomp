@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "pe1/battle_hud_colors.h"
+#include "pe1/game_state.h"
 
 /* Wide declarations keep palette bytes out of GCC -G8 small-data lowering. */
 typedef struct BattlePaletteSymbol {
@@ -13,7 +14,6 @@ typedef struct BattlePaletteSymbol {
 
 extern BattlePaletteSymbol D_8009D254_palette_view __asm__("D_8009D254");
 extern u32 D_800915E0[];
-extern BattlePaletteSymbol D_800B0CE6;
 extern BattlePaletteSymbol D_8009D1A0_read __asm__("D_8009D1A0");
 extern BattlePaletteSymbol D_8009D1A0_write __asm__("D_8009D1A0");
 extern BattlePaletteSymbol D_8009D2E8_read __asm__("D_8009D2E8");

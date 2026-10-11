@@ -217,7 +217,7 @@ void Battle_Update(void) {
         if ((player->animLastFrame == player->animPrev.parts.integer) && ((u8)player->actionMode < 4U)) {
             if ((g_BattleTurnResumeCountRead[0]) == 0) {
                 Entity_SetActionMode(player, D_8009D278->actionMode12);
-                if (!((D_800B0CE6.bytes[0]) & 1) && ((Pad_GetMenuPressedBitOrDisabled() << 0x18) == 0) && (D_8009D28C == 0) && (D_8009D278->action->turnWord & 0x8000) && (D_8009D1D0 != 0)) {
+                if (!(D_800B0CE6 & 1) && ((Pad_GetMenuPressedBitOrDisabled() << 0x18) == 0) && (D_8009D28C == 0) && (D_8009D278->action->turnWord & 0x8000) && (D_8009D1D0 != 0)) {
                     Battle_RollEnemySpawn(D_8009D1D0);
                     D_8009D1D0 = 0;
                 }
@@ -232,7 +232,7 @@ void Battle_Update(void) {
                 player->animPrev.fixed = g_BattleTurnResumeFrameView[0] + 0xFFFF0000;
             }
         }
-        if (((g_BattleTurnPlayerView[0])->actionMode == 0xD) && !((D_800B0CE6.bytes[0]) & 1)) {
+        if (((g_BattleTurnPlayerView[0])->actionMode == 0xD) && !(D_800B0CE6 & 1)) {
             D_8009D278->actionMode12 = 4U;
             if ((g_BattleTurnPlayerView[0])->entityFlags & 0x100) {
                 Asset_Find08Alt(0x453, 0, (g_BattleTurnPlayerView[0])->posX.parts.integer, (g_BattleTurnPlayerView[0])->posY.parts.integer, (s32) (g_BattleTurnPlayerView[0])->posZ.parts.integer);

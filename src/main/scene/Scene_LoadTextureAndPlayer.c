@@ -369,7 +369,6 @@ extern u32 D_8009D2E8;
 /* Existing byte symbols for the shared state's pending/current day and flags.
  * Preserve the unsigned pending-byte read before its signed-day conversion. */
 extern volatile u8 D_800B0CE5;
-extern u8 D_800B0CE6;
 
 int Scene_SetStoryDay(s32 storyDay) {
     Pe1GameState *gameState = &g_GameState;
