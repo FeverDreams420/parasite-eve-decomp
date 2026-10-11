@@ -111,6 +111,11 @@ def _match_brace(text: str, i: int) -> int:
     raise ValueError("unbalanced braces")
 
 
+def _blank(text: str) -> bool:
+    """True when `text` holds only whitespace and comments."""
+    return re.sub(r"/\*.*?\*/|//[^\n]*", "", text, flags=re.S).strip() == ""
+
+
 def _items(text: str):
     """Yield (kind, header, body, start, end) for each top-level item.
 
@@ -132,7 +137,7 @@ def _items(text: str):
             j = text.find("\n", i)
             i = n if j < 0 else j
             continue
-        if c == "#" and text[start:i].strip() == "":
+        if c == "#" and _blank(text[start:i]):
             j = text.find("\n", i)
             while j > 0 and text[j - 1] == "\\":
                 j = text.find("\n", j + 1)
@@ -181,6 +186,35 @@ def function_text(name: str, path: pathlib.Path | None = None) -> str:
     raise LookupError(f"{name} not defined in {path}")
 
 
+def functions_text(*names: str) -> str:
+    """Concatenated raw definitions of several functions, wherever they live."""
+    return "".join(function_text(name) for name in names)
+
+
+def function_closure(name: str, path: pathlib.Path | None = None) -> str:
+    """Raw text of `name` plus the static functions of its unit it reaches.
+
+    Use this for "this function is plain C" checks: static inline helpers
+    that the function calls are part of what it compiles to.
+    """
+    path = path or find_definition(name)
+    texts = {}
+    for kind, header, body, _, _ in _items(_read(path)):
+        if kind == "function":
+            texts[_function_name(header)] = (header, body)
+    if name not in texts:
+        raise LookupError(f"{name} not defined in {path}")
+    keep, work = [name], [name]
+    while work:
+        body = texts[work.pop()][1]
+        for ident in sorted(set(_IDENT.findall(body))):
+            if ident in texts and ident not in keep \
+                    and re.search(r"\bstatic\b", texts[ident][0]):
+                keep.append(ident)
+                work.append(ident)
+    return "".join(texts[n][0].lstrip("\n") + texts[n][1] + "\n" for n in keep)
+
+
 def defined_functions(path: pathlib.Path) -> list[str]:
     return [_function_name(h) for k, h, _, _, _ in _items(_read(path))
             if k == "function"]
@@ -192,6 +226,40 @@ _STATIC_ASSERT = re.compile(
     r"typedef\s+char\s+\w+\s*\[[^;]*?\?\s*1\s*:\s*-\s*1\s*\]\s*;")
 _REGISTER_PIN = re.compile(r"\b(?:asm|__asm__)\s*\(\s*\"\$?\w+\"\s*\)")
 _TOP_ASM = re.compile(r"^\s*(?:asm|__asm__)\b")
+# ELF section placement (e.g. PSY-Q padding words) is invalid on Mach-O hosts.
+_SECTION_ATTR = re.compile(r"__attribute__\s*\(\(\s*section\s*\([^()]*\)\s*\)\)")
+# Empty-template scheduling barriers may name MIPS-only constraints ("=l" for
+# LO, "=h" for HI) or clobber MIPS registers ("$2"); neither exists on the
+# host, where the barrier only needs to stay a no-op.
+_EMPTY_ASM = re.compile(r"\b(?:asm|__asm__)\s*(?:volatile|__volatile__)?\s*\(\s*\"\"\s*:")
+_MIPS_CLOBBER = re.compile(r"\"\$\w+\"\s*,?\s*")
+
+
+def _host_barriers(text: str) -> str:
+    out = []
+    pos = 0
+    for m in _EMPTY_ASM.finditer(text):
+        if m.start() < pos:
+            continue
+        depth = 0
+        i = m.end() - 1
+        while i < len(text):
+            if text[i] == "(":
+                depth += 1
+            elif text[i] == ")":
+                depth -= 1
+                if depth < 0:
+                    break
+            i += 1
+        stmt = text[m.start():i]
+        stmt = re.sub(r"\"=[lh]\"", "\"=r\"", stmt)
+        stmt = _MIPS_CLOBBER.sub("", stmt)
+        stmt = re.sub(r",\s*$", "", stmt)
+        out.append(text[pos:m.start()])
+        out.append(stmt)
+        pos = i
+    out.append(text[pos:])
+    return "".join(out)
 
 
 def preprocess(path: pathlib.Path, prefix: str = "", include_dirs=()) -> str:
@@ -223,8 +291,11 @@ def host_unit(*names: str, path: pathlib.Path | None = None, prefix: str = "",
     """
     path = path or find_definition(names[0])
     text = preprocess(path, prefix, include_dirs)
+    text = _HOST_U_LONG.sub("typedef unsigned int u_long;", text)
     text = _STATIC_ASSERT.sub("", text)
     text = _REGISTER_PIN.sub("", text)
+    text = _SECTION_ATTR.sub("", text)
+    text = _host_barriers(text)
 
     items = list(_items(text))
     functions = {}
@@ -255,6 +326,10 @@ def host_unit(*names: str, path: pathlib.Path | None = None, prefix: str = "",
                 out.append(header.rstrip() + ";")
         elif _TOP_ASM.match(header):
             continue
+        elif re.match(r"\s*register\b", header):
+            # A file-scope global register variable lost its asm("$N") pin
+            # above; on the host it is just a private global.
+            out.append(re.sub(r"\bregister\b", "static", header, count=1))
         else:
             out.append(header)
     return "".join(out) + "\n"
@@ -272,4 +347,89 @@ def psx_compile(source: str, out: pathlib.Path, like: pathlib.Path,
     return subprocess.run(
         [str(ROOT / "tools/scripts/cc.sh"), str(path), str(out),
          "-I" + str(like.parent), *cflags],
-        cwd=ROOT, capture_output=True, text=True)
+        cwd=ROOT, capture_output=True, text=True, errors="replace")
+
+
+# PSX `long` is 32 bits; on an LP64 host the PSY-Q `u_long` packet words
+# would double in size and break every DR_ENV/OT layout a test inspects.
+_HOST_U_LONG = re.compile(r"typedef\s+unsigned\s+long\s+u_long\s*;")
+
+
+def host_source(source: str, include_dirs=(), cwd: pathlib.Path | None = None) -> str:
+    """Preprocess arbitrary harness text for the host like host_unit does.
+
+    For harnesses that #include project headers directly: applies the
+    project include path, host_psyq.h, PSX-width u_long, and drops the
+    pointer-size static asserts, register pins and MIPS-only barriers a
+    64-bit host compiler rejects.  System headers may be included too.
+    """
+    args = ["cc", "-E", "-P", "-std=gnu11", "-DPERMUTER",
+            "-include", str(HOST_PSYQ),
+            "-I", str(ROOT / "include"), "-I", str(ROOT)]
+    for d in include_dirs:
+        args += ["-I", str(d)]
+    result = subprocess.run(args + ["-x", "c", "-"], input=source, text=True,
+                            capture_output=True, cwd=cwd or ROOT)
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr)
+    text = _HOST_U_LONG.sub("typedef unsigned int u_long;", result.stdout)
+    text = _STATIC_ASSERT.sub("", text)
+    text = _REGISTER_PIN.sub("", text)
+    text = _SECTION_ATTR.sub("", text)
+    return _host_barriers(text)
+
+
+def object_symbols(obj: pathlib.Path) -> dict[str, int]:
+    """Defined .text symbol offsets in a relocatable object (nm)."""
+    out = subprocess.run(["mipsel-none-elf-nm", "--defined-only", str(obj)],
+                         check=True, capture_output=True, text=True).stdout
+    symbols = {}
+    for line in out.splitlines():
+        fields = line.split()
+        if len(fields) == 3 and fields[1] in "tT":
+            symbols[fields[2]] = int(fields[0], 16)
+    return symbols
+
+
+def linked_function_bytes(name: str, address: int, size: int, symbols: str,
+                          work: pathlib.Path, path: pathlib.Path | None = None,
+                          *cflags: str) -> bytes:
+    """Compile the unit defining `name` and return its `size` linked bytes.
+
+    Units are merged and split over time, so the object may hold more than
+    the function under test.  The whole .text is linked so that `name` lands
+    at `address` (in-unit calls therefore resolve to their real neighbours),
+    `symbols` (linker-script assignments such as "VSync = 0x80073A44;")
+    resolves the external references, references only the unit's other
+    functions make are parked at a dummy address, and only [address, address + size) is
+    returned.
+    """
+    path = path or find_definition(name)
+    obj, elf, data = work / "unit.o", work / "unit.elf", work / "unit.bin"
+    result = subprocess.run([str(ROOT / "tools/scripts/cc.sh"), str(path),
+                             str(obj), *cflags], cwd=ROOT,
+                            capture_output=True, text=True)
+    if result.returncode != 0:
+        raise RuntimeError(result.stdout + result.stderr)
+    offset = object_symbols(obj)[name]
+    base = address - offset
+    # References only the unit's other functions make are parked at the
+    # base so their jal/hi16 relocations fit; they do not reach the range.
+    undefined = subprocess.run(["mipsel-none-elf-nm", "-u", str(obj)],
+                               check=True, capture_output=True,
+                               text=True).stdout.split()
+    provide = "".join(f"PROVIDE({u} = 0x{base:x});\n"
+                      for u in undefined if u != "U")
+    script = work / "unit.ld"
+    script.write_text(
+        symbols + "\n" + provide + "SECTIONS { .text 0x%x : SUBALIGN(4) { *(.text .text.*) } "
+        "/DISCARD/ : { *(.reginfo) *(.mdebug) } }\n" % base)
+    result = subprocess.run(["mipsel-none-elf-ld", "-T", str(script),
+                             "--no-warn-mismatch", str(obj), "-o", str(elf)],
+                            capture_output=True, text=True)
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr)
+    subprocess.run(["mipsel-none-elf-objcopy", "-O", "binary",
+                    "--only-section=.text", str(elf), str(data)],
+                   check=True, capture_output=True)
+    return data.read_bytes()[offset:offset + size]
