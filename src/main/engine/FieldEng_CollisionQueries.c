@@ -5,6 +5,7 @@
 #include "pe1/field_tri_test.h"
 #include "pe1/gte.h"
 #include "pe1/field_shaded_quad.h"
+#include "pe1/field_actor.h"
 
 int rand(void);
 int func_800C6B20(void *arg0);
@@ -114,15 +115,15 @@ void func_800C608C(int scale, u8 *src, u8 *dst) {
     }
 }
 
-int func_800C6148(char *obj, s16 *pos, unsigned short radius) {
+int func_800C6148(FieldActor *obj, s16 *pos, unsigned short radius) {
     volatile int delta[3];
-    int x = *(s16 *)(obj + 0x2A) - pos[0];
+    int x = Pe1Fixed_Integer(&obj->pos_x) - pos[0];
     int z;
     int x_sq = x * x;
     int z_sq;
     int radius_sq;
     delta[0] = x;
-    z = *(s16 *)(obj + 0x32) - pos[2];
+    z = Pe1Fixed_Integer(&obj->pos_z) - pos[2];
     z_sq = z * z;
     radius_sq = radius * radius;
     delta[2] = z;
@@ -132,7 +133,7 @@ int func_800C6148(char *obj, s16 *pos, unsigned short radius) {
 int func_800C653C(void *arg0, GteShortVector *verts);
 
 
-int func_800C61A8(void *arg0, char *matrix) {
+int func_800C61A8(void *arg0, GteMatrix *matrix) {
     GteShortVector verts[4];
 
     ApplyMatrixSV(matrix, &D_800F3310[0], &verts[0]);
@@ -140,20 +141,20 @@ int func_800C61A8(void *arg0, char *matrix) {
     ApplyMatrixSV(matrix, &D_800F3310[2], &verts[2]);
     ApplyMatrixSV(matrix, &D_800F3310[3], &verts[3]);
 
-    verts[0].x += *(int *)(matrix + 0x14);
-    verts[1].x += *(int *)(matrix + 0x14);
-    verts[2].x += *(int *)(matrix + 0x14);
-    verts[3].x += *(int *)(matrix + 0x14);
+    verts[0].x += matrix->t[0];
+    verts[1].x += matrix->t[0];
+    verts[2].x += matrix->t[0];
+    verts[3].x += matrix->t[0];
 
     verts[0].y = 0;
     verts[1].y = 0;
     verts[2].y = 0;
     verts[3].y = 0;
 
-    verts[0].z += *(int *)(matrix + 0x1C);
-    verts[1].z += *(int *)(matrix + 0x1C);
-    verts[2].z += *(int *)(matrix + 0x1C);
-    verts[3].z += *(int *)(matrix + 0x1C);
+    verts[0].z += matrix->t[2];
+    verts[1].z += matrix->t[2];
+    verts[2].z += matrix->t[2];
+    verts[3].z += matrix->t[2];
 
     return func_800C653C(arg0, verts) != 0;
 }
