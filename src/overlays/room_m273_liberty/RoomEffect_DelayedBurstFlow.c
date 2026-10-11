@@ -10,10 +10,9 @@ int func_80199568(int mode, RoomM273RisingParticle *particle) {
         if (frame >= 36) return 1;
         if (frame >= 4) {
             unsigned short y = ((volatile RoomM273RisingParticle *)particle)->y;
-            register int speed asm("$3") = ((volatile RoomM273RisingParticle *)particle)->speed;
+            s16 speed = ((volatile RoomM273RisingParticle *)particle)->speed;
             int delta = ((RoomM273RisingParticle *)particle)->speed;
             speed += 1;
-            asm("" : "=r"(y) : "0"(y), "r"(speed));
             particle->y = y - delta;
             particle->speed = speed;
         }
