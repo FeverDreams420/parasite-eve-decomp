@@ -389,24 +389,12 @@ int func_800CC878(void *arg0, void *arg1, FieldAnimPointSprite *anim) {
     func_800C3324(output);
 }
 
-int func_800CC92C(void *arg0, FieldEngSlot *state, FieldAnimPointSprite *anim) {
-    u16 value;
-    register int frame asm("$3");
-
-    value = anim->point.x;
-    frame = anim->scale;
-    anim->point.x = value;
-    value = anim->point.y;
-    frame -= 2;
-    anim->scale = frame;
-    value -= 0xA;
-    anim->point.y = value;
-    value = (u16)anim->extent;
-    frame = (s8)anim->scale;
-    frame = frame < 0x1E;
-    value += 0x1E;
-    anim->extent = value;
-    if (frame) {
+void func_800CC92C(void *arg0, FieldEngSlot *state, FieldAnimPointSprite *anim) {
+    anim->point.x += 0; /* no horizontal drift, but the record is rewritten */
+    anim->point.y -= 10;
+    anim->scale -= 2;
+    anim->extent += 0x1E;
+    if ((s8)anim->scale < 0x1E) {
         state->flag = 2;
     }
 }
