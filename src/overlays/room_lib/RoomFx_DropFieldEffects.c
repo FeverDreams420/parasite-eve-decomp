@@ -1280,7 +1280,9 @@ void RoomFx_InitQuadSprites(void *unused0, void *unused1, void *output_arg) {
                 color[0x20] = red;
                 color[0x21] = 138;
                 color[0x22] = blue;
-                goto advance_color;
+                color += 4;
+                scale += 2;
+                continue;
             }
         } else {
             base[0x24] = mid;
