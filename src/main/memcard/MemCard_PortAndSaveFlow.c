@@ -1311,30 +1311,14 @@ int MemCard_IsPortPresent(int port) {
 }
 
 void MemCard_CloseAll(void) {
-    unsigned char *base;
-    unsigned char *state;
-    unsigned char *end;
-    int stateOpen;
-    int stateBusy;
-    int closedFd;
-    int stateClosed;
+    MemCardPortState *state;
 
-    base = (unsigned char *)g_MemCardPortStates;
-    if (base < base + 0x830) {
-        stateOpen = 8;
-        stateBusy = 10;
-        closedFd = -1;
-        stateClosed = 12;
-        state = base + 1;
-        end = base + 0x831;
-        do {
-            if ((*state == stateOpen) || (*state == stateBusy)) {
-                close(*(volatile int *)(state + 0xB));
-                *(volatile int *)(state + 0xB) = closedFd;
-                *state = stateClosed;
-            }
-            state += 0x418;
-        } while (state < end);
+    for (state = g_MemCardPortStates; state < &g_MemCardPortStates[2]; state++) {
+        if (state->managerState == 8 || state->managerState == 10) {
+            close(state->fileDescriptor);
+            state->fileDescriptor = -1;
+            state->managerState = 12;
+        }
     }
 }
 
@@ -1395,30 +1379,14 @@ void MemCard_StartRead(int port, int arg1) {
 #include "MemCard_PortAndSaveFlow_externs_12.h"
 
 void MemCard_CloseAllAndResetState(void) {
-    unsigned char *base;
-    unsigned char *state;
-    unsigned char *end;
-    int stateOpen;
-    int stateBusy;
-    int closedFd;
-    int stateClosed;
+    MemCardPortState *state;
 
-    base = (unsigned char *)g_MemCardPortStates;
-    if (base < base + 0x830) {
-        stateOpen = 8;
-        stateBusy = 10;
-        closedFd = -1;
-        stateClosed = 12;
-        state = base + 1;
-        end = base + 0x831;
-        do {
-            if ((*state == stateOpen) || (*state == stateBusy)) {
-                close(*(volatile int *)(state + 0xB));
-                *(volatile int *)(state + 0xB) = closedFd;
-                *state = stateClosed;
-            }
-            state += 0x418;
-        } while (state < end);
+    for (state = g_MemCardPortStates; state < &g_MemCardPortStates[2]; state++) {
+        if (state->managerState == 8 || state->managerState == 10) {
+            close(state->fileDescriptor);
+            state->fileDescriptor = -1;
+            state->managerState = 12;
+        }
     }
 
     D_800A12ED = 0;
