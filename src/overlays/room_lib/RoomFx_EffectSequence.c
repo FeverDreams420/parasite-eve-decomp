@@ -1393,7 +1393,7 @@ void RoomFx_DrawScaledEffect(void *unused0, void *unused1, RoomLibScaledEffect *
     scaleSeed.words[2] = scale * 3;
     ScaleMatrix((RoomSpriteMatrix *)&matrix, (RoomFxVec4 *)&scaleSeed);
 
-    depth = (unsigned short *)&D_80192C28.depth;
+    depth = &D_80192C28.depth;
     matrix.t[0] = effect->x;
     matrix.t[1] = effect->y;
     matrix.t[2] = effect->z;

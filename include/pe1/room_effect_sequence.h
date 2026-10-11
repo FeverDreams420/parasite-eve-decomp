@@ -19,7 +19,7 @@ typedef struct RoomEffectSequenceSprite {
     u8 r, g, b, reserved03;
     u8 cell, clut, flip, reserved07;
     s16 offset;
-    s16 depth;
+    u16 depth;
 } RoomEffectSequenceSprite;
 PE1_STATIC_ASSERT(sizeof(RoomEffectSequenceSprite) == 0xC, effect_sequence_sprite_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomEffectSequenceSprite, depth) == 0xA, effect_sequence_sprite_depth);
