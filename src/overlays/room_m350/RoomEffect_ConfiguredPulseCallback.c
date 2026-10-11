@@ -56,7 +56,7 @@ int func_80196C64(int event, void *object)
         {
             int frame = D_800E27EC - 1;
             int phase = (frame >> 2) & 3;
-            register int *colors asm("$3");
+            int *colors;
             unsigned int drawSampleOffset;
             drawSampleOffset = ((unsigned int)frame << 9) & 0x3E00;
             colors = D_8019A59C;
