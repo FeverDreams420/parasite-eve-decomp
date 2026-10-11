@@ -285,25 +285,11 @@ static inline int ItemKind(int slot) {
     if (item) return item->kind;
     return 0;
 }
-static inline ItemDataRecord *LookupItem(int value) {
-    int saved = value;
-    ItemDataRecord *result;
-    if (value - 0x100U < 0x80U) {
-        result = &D_800C0E20.equipment[value - 0x100];
-    } else {
-        if (value - 1U < 0xFFU) return Item_LookupBaseData(value - 1);
-        if (saved - 0x200U < 9U) {
-            int shifted = saved << 5;
-            result = (ItemDataRecord *)(D_8009DE64 + shifted);
-        } else result = 0;
-    }
-    return result;
-}
 static inline int FindWeapon(int kind, int excluded) {
     s16 *slot = D_8009D048;
     s16 *skip = slot + excluded;
     while (slot < D_8009D048 + D_8009D050) {
-        if (slot != skip && LookupItem(*slot)->kind == kind) break;
+        if (slot != skip && Inv_LookupItemRecordScaled(*slot)->kind == kind) break;
         ++slot;
     }
     if (slot < D_8009D048 + D_8009D050) return slot - D_8009D048;
@@ -329,14 +315,14 @@ void Inv_TransferItemBetweenLists(unsigned selection, int modifier, int flags, i
         int index = RestoreSelection(selection);
         source = 0;
         if (index >= 0 && index < D_8009D050) {
-            source = LookupItem(D_8009D048[index]);
+            source = Inv_LookupItemRecordScaled(D_8009D048[index]);
         }
     }
     {
         int index = RestoreSelection(!selection);
         dest = 0;
         if (index >= 0 && index < D_8009D050) {
-            dest = LookupItem(D_8009D048[index]);
+            dest = Inv_LookupItemRecordScaled(D_8009D048[index]);
         }
     }
     if (modifier >= 0) {

@@ -29,26 +29,9 @@ ItemDataRecord *g_SaveMetadataSourceRecord;
 int g_SaveMetadataWindowIndex;
 int g_SaveMetadataWindowLength;
 
-static inline ItemDataRecord *LookupItem(int value) {
-    int saved = value;
-    ItemDataRecord *result;
-    if (value - 0x100U < 0x80U) {
-        result = &D_800C0E20.equipment[value - 0x100];
-    } else {
-        if (value - 1U < 0xFFU) {
-            result = Item_LookupBaseData(value - 1);
-        } else if (saved - 0x200U < 9U) {
-            int shifted = saved << 5;
-            result = (ItemDataRecord *)(D_8009DE64 + shifted);
-        } else {
-            result = 0;
-        }
-    }
-    return result;
-}
 
 static inline ItemDataRecord *LookupActiveItem(int index) {
-    if (index >= 0 && index < D_8009D050) return LookupItem(D_8009D048[index]);
+    if (index >= 0 && index < D_8009D050) return Inv_LookupItemRecordScaled(D_8009D048[index]);
     return 0;
 }
 
@@ -212,7 +195,7 @@ static inline int FindKind(int kind, int excluded) {
     unsigned long skip = (unsigned long)D_8009D048 + excluded * sizeof(s16);
     s16 *p = D_8009D048;
     while (p < D_8009D048 + D_8009D050) {
-        if ((unsigned long)p != skip && LookupItem(*p)->kind == kind) break;
+        if ((unsigned long)p != skip && Inv_LookupItemRecordScaled(*p)->kind == kind) break;
         p++;
     }
     if (p < D_8009D048 + D_8009D050) return p - D_8009D048;

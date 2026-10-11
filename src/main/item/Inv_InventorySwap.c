@@ -26,20 +26,6 @@ u8 *Inv_LookupItemData(int index) {
     return entry;
 }
 
-static inline ItemDataRecord *LookupItem(int value) {
-    int saved = value;
-    ItemDataRecord *result;
-    if (value - 0x100U < 0x80U) {
-        result = &D_800C0E20.equipment[value - 0x100];
-    } else {
-        if (value - 1U < 0xFFU) return Item_LookupBaseData(value - 1);
-        if (saved - 0x200U < 9U) {
-            int shifted = saved << 5;
-            result = (ItemDataRecord *)(D_8009DE64 + shifted);
-        } else result = 0;
-    }
-    return result;
-}
 static inline int WayneSlot(int index) {
     int result;
     if (index >= 0 && index < D_8009D044) result = D_800A1E00[index];
@@ -89,7 +75,7 @@ static inline ItemDataRecord *LookupTrackedItem(int index) {
 
 
 static inline ItemDataRecord *LookupActiveItem(int index) {
-    if (index >= 0 && index < D_8009D050) return LookupItem(D_8009D048[index]);
+    if (index >= 0 && index < D_8009D050) return Inv_LookupItemRecordScaled(D_8009D048[index]);
     return 0;
 }
 
@@ -175,8 +161,8 @@ int Inv_RebuildWithSlotLimit(int fromMode, int fromIndex, int toMode, int toInde
     } else if (fromMode == 0x34) {
         from = WayneSlot(toIndex);
         if (Inv_IsSlotEquipped(from) &&
-            (LookupItem(D_8009D07C[fromIndex])->kind < 19 ||
-             LookupItem(D_8009D07C[fromIndex])->kind >= 22)) {
+            (Inv_LookupItemRecordScaled(D_8009D07C[fromIndex])->kind < 19 ||
+             Inv_LookupItemRecordScaled(D_8009D07C[fromIndex])->kind >= 22)) {
             SwapSlots(&D_8009D07C[fromIndex], &D_8009D048[from]);
             Menu_SetSwapReturnFlag();
             Inv_RebuildSelectableMask();
@@ -184,8 +170,8 @@ int Inv_RebuildWithSlotLimit(int fromMode, int fromIndex, int toMode, int toInde
     } else {
         from = WayneSlot(fromIndex);
         if (Inv_IsSlotEquipped(from) &&
-            (LookupItem(D_8009D07C[toIndex])->kind < 19 ||
-             LookupItem(D_8009D07C[toIndex])->kind >= 22)) {
+            (Inv_LookupItemRecordScaled(D_8009D07C[toIndex])->kind < 19 ||
+             Inv_LookupItemRecordScaled(D_8009D07C[toIndex])->kind >= 22)) {
             SwapSlots(&D_8009D048[from], &D_8009D07C[toIndex]);
             Menu_SetSwapReturnFlag();
             Inv_RebuildSelectableMask();

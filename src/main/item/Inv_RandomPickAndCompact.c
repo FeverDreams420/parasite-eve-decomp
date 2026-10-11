@@ -17,25 +17,9 @@ s32 D_8009D06C;
 int D_8009D218;
 s16 *g_InvActiveListOverride;
 s32 g_InvOverrideSlotLimit;
-static inline ItemDataRecord *LookupItem(int value) {
-    int saved = value;
-    ItemDataRecord *result;
-    if (value - 0x100U < 0x80U) {
-        result = &D_800C0E20.equipment[value - 0x100];
-    } else {
-        if (value - 1U < 0xFFU) {
-            result = Item_LookupBaseData(value - 1);
-        } else if (saved - 0x200U < 9U) {
-            result = &D_800A1E64[saved - 0x200];
-        } else {
-            result = 0;
-        }
-    }
-    return result;
-}
 
 static inline ItemDataRecord *LookupActiveItem(int index) {
-    if (index >= 0 && index < D_8009D050) return LookupItem(D_8009D048[index]);
+    if (index >= 0 && index < D_8009D050) return Inv_LookupItemRecord(D_8009D048[index]);
     return 0;
 }
 static inline void RestoreList(int storage) {
@@ -60,7 +44,7 @@ static inline int ListCount(void) {
 
 static inline int Eligible(int index,int mask) {
     ItemDataRecord *item;
-    if (index >= 0 && index < D_8009D050) item=LookupItem(D_8009D048[index]);
+    if (index >= 0 && index < D_8009D050) item=Inv_LookupItemRecord(D_8009D048[index]);
     else item=0;
     return item && ((mask >> item->kind) & 1) && item->tailCount != 0;
 }

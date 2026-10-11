@@ -45,22 +45,6 @@ int Inv_CanAddActiveListItemToAya(int index) {
     return result;
 }
 
-static inline ItemDataRecord *LookupItem(int value) {
-    int saved = value;
-    ItemDataRecord *result;
-    if (value - 0x100U < 0x80U) {
-        result = &D_800C0E20.equipment[value - 0x100];
-    } else {
-        if (value - 1U < 0xFFU) {
-            result = Item_LookupBaseData(value - 1);
-        } else if (saved - 0x200U < 9U) {
-            result = &D_800A1E64[saved - 512];
-        } else {
-            result = 0;
-        }
-    }
-    return result;
-}
 
 static inline int FindFreeActiveSlot(void) {
     s16 *p = D_8009D048, *end = p + D_8009D050;
@@ -87,7 +71,7 @@ void Inv_TransferItemAlt(void) {
     D_8009D064 = 2;
     for (; i < D_8009D078; i++) {
         int id = D_800A1FD4[i];
-        if (LookupItem(id)->kind >= 16 && LookupItem(id)->kind < 19) {
+        if (Inv_LookupItemRecord(id)->kind >= 16 && Inv_LookupItemRecord(id)->kind < 19) {
             if (!Inv_CanAddActiveListItemToAya(i))
                 D_800A1FD4[i] = 0;
         } else if (id < 512) {
@@ -104,7 +88,7 @@ void Inv_TransferItemAlt(void) {
 static inline int ActiveItemKind(int index) {
     ItemDataRecord *item;
     if (index >= 0 && index < D_8009D050)
-        item = LookupItem(D_8009D048[index]);
+        item = Inv_LookupItemRecord(D_8009D048[index]);
     else
         item = 0;
     return item ? item->kind : 0;
@@ -170,7 +154,7 @@ int Inv_StepScrollDisplay2(int special) {
             for (i = 0; i < D_8009D050; i++) {
                 ItemDataRecord *item;
                 if (i >= 0 && i < D_8009D050)
-                    item = LookupItem(D_8009D048[i]);
+                    item = Inv_LookupItemRecord(D_8009D048[i]);
                 else
                     item = 0;
                 if (item && item->kind == 6)

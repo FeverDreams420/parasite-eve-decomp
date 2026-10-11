@@ -120,4 +120,43 @@ int Inv_GetPackedListItem(int index);
 int Menu_GetCommandResult(void);
 void Menu_ClearCommandResult(void);
 
+/* Item record of an inventory value: 0x100..0x17F equipment records,
+ * 1..0xFF base item data, 0x200..0x208 the key item records at D_800A1E64
+ * (32 bytes each). Retail units spell the key item address two ways: as a
+ * record index, or scaled from the key item table base D_8009DE64. */
+static inline ItemDataRecord *Inv_LookupItemRecord(int value) {
+    int saved = value;
+    ItemDataRecord *result;
+    if (value - 0x100U < 0x80U) {
+        result = &D_800C0E20.equipment[value - 0x100];
+    } else {
+        if (value - 1U < 0xFFU) {
+            result = Item_LookupBaseData(value - 1);
+        } else if (saved - 0x200U < 9U) {
+            result = &D_800A1E64[saved - 0x200];
+        } else {
+            result = 0;
+        }
+    }
+    return result;
+}
+
+static inline ItemDataRecord *Inv_LookupItemRecordScaled(int value) {
+    int saved = value;
+    ItemDataRecord *result;
+    if (value - 0x100U < 0x80U) {
+        result = &D_800C0E20.equipment[value - 0x100];
+    } else {
+        if (value - 1U < 0xFFU) {
+            result = Item_LookupBaseData(value - 1);
+        } else if (saved - 0x200U < 9U) {
+            int shifted = saved << 5;
+            result = (ItemDataRecord *)(D_8009DE64 + shifted);
+        } else {
+            result = 0;
+        }
+    }
+    return result;
+}
+
 #endif
