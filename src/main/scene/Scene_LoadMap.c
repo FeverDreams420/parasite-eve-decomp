@@ -7,6 +7,7 @@
 #include "pe1/scene_archive.h"
 #include "pe1/entity_animation.h"
 #include "pe1/scene_entity_textures.h"
+#include "pe1/render_camera.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
@@ -23,7 +24,6 @@ extern u32 D_800915E0[];
 extern u32 D_800B0E70[];
 extern u8 D_800B0CE2[];
 extern u8 D_800B161C[];
-extern u8 D_800B89F8[];
 extern u8 D_800BEA40[];
 
 void Battle_InitEquipLists();

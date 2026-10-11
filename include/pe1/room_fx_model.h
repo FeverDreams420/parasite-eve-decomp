@@ -61,7 +61,7 @@ typedef struct RoomFxMirror {
     /* 0x19 */ u8 active;
 } RoomFxMirror;
 
-extern void *g_GeomVramPacketDst;
+extern unsigned short *volatile g_GeomVramPacketDst;
 extern void *g_RoomFxMirrorHandlers[7];
 extern GteMatrix g_RoomFxMirrorAxes;
 

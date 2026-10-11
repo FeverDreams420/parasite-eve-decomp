@@ -58,7 +58,6 @@ typedef struct CameraBaseAngles {
 extern CameraBaseAngles D_800BD020;
 
 extern unsigned char g_ScreenTransitionState;
-extern short D_800BCFFE;
 
 int Pm_SetGetState(int arg0, int arg1, int arg2);
 void Entity_AllocSlot(void *arg0);
@@ -429,7 +428,7 @@ int Task_SetEntityMoveSpeed(int **arg0) {
         if (scaled < 0) {
             scaled += 0xFFF;
         }
-        D_800BCFFE = scaled >> 12;
+        D_800BCFFE[0] = scaled >> 12;
     }
     return 1;
 }

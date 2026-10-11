@@ -17,7 +17,7 @@
 int Render_InitViewState(void *matrix, void *screen) {
     D_800BCF88.words.flags = 0x70;
     D_800BCFFC = 0x60;
-    D_800BCFFE = 0x180;
+    D_800BCFFE[0] = 0x180;
     D_800BD025.b = 0xFF;
     D_800BD025.g = 0xFF;
     D_800BD025.r = 0xFF;
@@ -456,7 +456,7 @@ int Render_UpdateScrollPosition(void *positionArg, int duration, int mode)
     D_800BCF98 = D_800BCF8C.x;
     D_800BCF9A = D_800BCF8E;
     vector[0] = position[0]>>16;
-    vector[1] = (position[1]>>16)-(u16)D_800BCFFE;
+    vector[1] = (position[1]>>16)-(u16)D_800BCFFE[0];
     vector[2] = position[2]>>16;
     {
         /* Narrow volatile register retains GCC's retail 24-byte frame.

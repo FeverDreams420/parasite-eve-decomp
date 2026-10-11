@@ -326,7 +326,7 @@ typedef union GeomStateAddress {
      (address).word = (base).word + (address).state->field + (extra))
 
 int Render_UpdateScrollPosition(void *position, int duration, int mode);
-extern s16 D_800BCFFE;
+extern s16 D_800BCFFE[];
 extern int g_RenderStateFlags;
 extern u16 D_800BCF94, D_800BCF96, D_800BCF98, D_800BCF9A;
 extern u16 D_800BCF9C, D_800BCF9E, D_800BCFA0, D_800BCFA2;
