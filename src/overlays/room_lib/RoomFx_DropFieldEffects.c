@@ -400,7 +400,7 @@ void RoomFx_InitRingPair(int unused0, int unused1,
     int secondaryExtent;
 
     anchor = &g_RoomDropFieldRings[0].mode;
-    params = (RoomFxEmitterParams *)(anchor - 6);
+    params = &g_RoomDropFieldRings[0];
 
     bounds->scale = 10;
     bounds->secondaryScale = 10;
