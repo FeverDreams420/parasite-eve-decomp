@@ -145,13 +145,11 @@ typedef struct RoomLink {
     char pad84[0x4];
     int accel[3];                 /* 0x88 */
     char pad94[0x4];
-    void *node98;                 /* 0x98 */
+    unsigned int flags;           /* 0x98 */
     char pad9C[0xF0];
     struct RoomLink *link18C;     /* 0x18C: nested link record */
     char pad190[0x6C];
-    int w1FC;                     /* 0x1FC */
-    int w200;
-    int w204;
+    int modelTranslation[3];      /* 0x1FC: integer position of the model matrix */
     char pad208[0x30];
     void *p238;                   /* 0x238 */
     char pad23C[0x14];
@@ -316,23 +314,28 @@ typedef struct RoomLibHandlerDState {
     unsigned char optionB;        /* 0x0B */
     unsigned char optionC;        /* 0x0C */
     unsigned char flags;          /* 0x0D */
-    char pad0E[0x22];
+    char pad0E[0x2];
+    short matrix[9];              /* 0x10: travel rotation */
+    char pad22[0xE];
     int motion[3];                /* 0x30: local x/y/z travel */
     char pad3C[0x4];
     int target[4];                /* 0x40 */
-    char pad50[0x10];
+    int anchor[3];                /* 0x50: start position */
+    char pad5C[0x4];
     int positionX;                /* 0x60 */
     char pad64[0x4];
     int positionZ;                /* 0x68 */
     char pad6C[0x4];
     short rotation[3];            /* 0x70 */
-    char pad76[0xA];
+    char pad76[0x2];
+    short angles[3];              /* 0x78: travel direction */
+    char pad7E[0x2];
     RoomLink *targetLink;         /* 0x80 */
     RoomLink *secondaryLink;      /* 0x84 */
     int value88;                  /* 0x88 */
     int value8C;                  /* 0x8C */
     int value90;                  /* 0x90 */
-    char pad94[0x4];
+    int speed;                    /* 0x94 */
     union {
         int word;                 /* 0x98: 16.16 progress */
         struct {

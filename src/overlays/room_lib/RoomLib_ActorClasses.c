@@ -232,13 +232,13 @@ void RoomLib_HandlerD(RoomEnt *o) {
     if (ent->t1A == 0) {
         ent->t1A = 1;
         ent->w04 = 0;
-        RW32(link, 0x98) &= 0xFFF3FFFF;
+        link->flags &= 0xFFF3FFFF;
         if (ent->active != 0 && link->target != 0) {
             link->target->flags |= 0x40000000;
         }
-        RW32(state, 0x50) = RW32(link, 0x28);
-        RW32(state, 0x54) = RW32(link, 0x2C);
-        RW32(state, 0x58) = RW32(link, 0x30);
+        ((RoomLibHandlerDState *)state)->anchor[0] = link->pos[0];
+        ((RoomLibHandlerDState *)state)->anchor[1] = link->pos[1];
+        ((RoomLibHandlerDState *)state)->anchor[2] = link->pos[2];
         RoomLib_HandlerDTransformTarget((struct RoomLibMotionState *)state,
                                         (void *)scratch);
         {
@@ -247,19 +247,19 @@ void RoomLib_HandlerD(RoomEnt *o) {
             char *left_arg;
             int initial_velocity;
 
-            left = state + 0x50;
+            left = (char *)((RoomLibHandlerDState *)state)->anchor;
             left_arg = left;
             targetPosition = (Vec3Fixed *)((RoomLibMotionState *)state)->position;
             initial_speed = func_800DFC80((Vec3Fixed *)left_arg, targetPosition);
-            initial_speed += (RW32(state, 0x8C) * 0x70) >> 21;
+            initial_speed += (((RoomLibHandlerDState *)state)->value8C * 0x70) >> 21;
             if (initial_speed < 0x148) {
                 initial_speed = 0x148;
             }
             initial_velocity = (0x5160000 / initial_speed) << 8;
-            RW32(state, 0x94) = initial_velocity;
-            RW32(state, 0x98) = initial_velocity >> 3;
-            func_800DFE94((Vec3Fixed *)left, targetPosition, (short *)(state + 0x78));
-            RotMatrixYXZ((short *)(state + 0x78), state + 0x10);
+            ((RoomLibHandlerDState *)state)->speed = initial_velocity;
+            ((RoomLibHandlerDState *)state)->progress.word = initial_velocity >> 3;
+            func_800DFE94((Vec3Fixed *)left, targetPosition, ((RoomLibHandlerDState *)state)->angles);
+            RotMatrixYXZ(((RoomLibHandlerDState *)state)->angles, ((RoomLibHandlerDState *)state)->matrix);
         }
     }
 
@@ -270,7 +270,7 @@ void RoomLib_HandlerD(RoomEnt *o) {
     scratch[0x34] = 0;
     {
         int angle;
-        angle = ((RW32(state, 0x98) + bias) >> 16) - 0x400;
+        angle = ((((RoomLibHandlerDState *)state)->progress.word + bias) >> 16) - 0x400;
         scratch[0x35] = angle;
         rot = table + (angle & 0xFFF);
     }
@@ -294,16 +294,16 @@ void RoomLib_HandlerD(RoomEnt *o) {
         negated = -negated;
         scratch[0x1A] = negated;
     }
-    scratch[0x02] = RW32(state, 0x88) >> 12;
+    scratch[0x02] = ((RoomLibHandlerDState *)state)->value88 >> 12;
     gte_ldrotmatrix((void *)((int)scratch | 0x28));
     gte_ldv0((void *)scratch);
     gte_mvmva();
     asm("" : "=r"(scratch) : "0"(scratch));
     gte_stmac(((RoomLibMotionWork *)scratch)->rotated);
-    RW32(state, 0x30) += ((RoomLibMotionWork *)scratch)->rotated[0] << 12;
-    RW32(state, 0x38) += ((RoomLibMotionWork *)scratch)->rotated[2] << 12;
+    ((RoomLibHandlerDState *)state)->motion[0] += ((RoomLibMotionWork *)scratch)->rotated[0] << 12;
+    ((RoomLibHandlerDState *)state)->motion[2] += ((RoomLibMotionWork *)scratch)->rotated[2] << 12;
 
-    if (RW32(state, 0x98) > 0x08000000) {
+    if (((RoomLibHandlerDState *)state)->progress.word > 0x08000000) {
         ent->flag3 = 2;
     }
     {
@@ -311,82 +311,82 @@ void RoomLib_HandlerD(RoomEnt *o) {
 
         if (((RoomLibMotionWork *)scratch)->rotated[2] >= 0) {
             int position;
-            position = RW32(state, 0x88);
-            position += RW32(state, 0x8C);
+            position = ((RoomLibHandlerDState *)state)->value88;
+            position += ((RoomLibHandlerDState *)state)->value8C;
             work = (position + bias) >> 16;
-            product = work * (RW32(state, 0x94) >> 12);
+            product = work * (((RoomLibHandlerDState *)state)->speed >> 12);
             PE1_COMPILER_MEMORY_BARRIER();
-            RW32(state, 0x88) = position;
+            ((RoomLibHandlerDState *)state)->value88 = position;
             PE1_COMPILER_MEMORY_BARRIER();
-            work = RW32(state, 0x98);
+            work = ((RoomLibHandlerDState *)state)->progress.word;
         } else {
             int updated;
-            work = RW32(state, 0x88);
+            work = ((RoomLibHandlerDState *)state)->value88;
             work = (work + bias) >> 16;
-            product = work * (RW32(state, 0x94) >> 12);
+            product = work * (((RoomLibHandlerDState *)state)->speed >> 12);
             PE1_COMPILER_MEMORY_BARRIER();
-            updated = RW32(state, 0x88);
-            updated -= RW32(state, 0x8C);
+            updated = ((RoomLibHandlerDState *)state)->value88;
+            updated -= ((RoomLibHandlerDState *)state)->value8C;
             PE1_COMPILER_USE(updated);
-            work = RW32(state, 0x98);
-            RW32(state, 0x88) = updated;
+            work = ((RoomLibHandlerDState *)state)->progress.word;
+            ((RoomLibHandlerDState *)state)->value88 = updated;
         }
-        RW32(state, 0x98) = work + ((product >> 8) << 12);
+        ((RoomLibHandlerDState *)state)->progress.word = work + ((product >> 8) << 12);
     }
     }
 
     {
         int bias = 0x8000;
-        if (RW16(state, 0x9A) >= 0xC01 && RW32(state, 0x30) <= 0) {
+        if (((RoomLibHandlerDState *)state)->progress.half.whole >= 0xC01 && ((RoomLibHandlerDState *)state)->motion[0] <= 0) {
             ((RoomLibMotionWork *)scratch)->displacement[0] = 0;
             ((RoomLibMotionWork *)scratch)->displacement[1] = 0;
             ((RoomLibMotionWork *)scratch)->displacement[2] = 0;
             RoomLib_ReleaseHandlerD(ent);
         } else {
-            scratch[0] = ((((RW32(state, 0x30) + bias) >> 16) *
-                           RW32(state, 0x90)) >> 12);
+            scratch[0] = ((((((RoomLibHandlerDState *)state)->motion[0] + bias) >> 16) *
+                           ((RoomLibHandlerDState *)state)->value90) >> 12);
             scratch[1] = 0;
-            scratch[2] = (RW32(state, 0x38) + bias) >> 16;
-            gte_ldrotmatrix(state + 0x10);
+            scratch[2] = (((RoomLibHandlerDState *)state)->motion[2] + bias) >> 16;
+            gte_ldrotmatrix(((RoomLibHandlerDState *)state)->matrix);
             gte_ldv0((void *)scratch);
             gte_mvmva();
             gte_stmac(((RoomLibMotionWork *)scratch)->displacement);
         }
     }
 
-    if (RW16(state, 0xA6) != 0 && RW16(state, 0xA6) < RW16(state, 0x9A)) {
+    if (((RoomLibHandlerDState *)state)->rate != 0 && ((RoomLibHandlerDState *)state)->rate < ((RoomLibHandlerDState *)state)->progress.half.whole) {
         RoomLib_ReleaseHandlerD(ent);
     }
-    RW32(link, 0x28) = RW32(state, 0x50) +
+    link->pos[0] = ((RoomLibHandlerDState *)state)->anchor[0] +
                        (((RoomLibMotionWork *)scratch)->displacement[0] << 16);
-    RW32(link, 0x30) = RW32(state, 0x58) +
+    link->pos[2] = ((RoomLibHandlerDState *)state)->anchor[2] +
                        (((RoomLibMotionWork *)scratch)->displacement[2] << 16);
     {
-        RW32(link, 0x1FC) = (RW32(link, 0x28) + 0x8000) >> 16;
-        RW32(link, 0x204) = (RW32(link, 0x30) + 0x8000) >> 16;
-        if (RW8(state, 0xAB) == 0) {
-            value = RW32(state, 0x54) +
+        link->modelTranslation[0] = (link->pos[0] + 0x8000) >> 16;
+        link->modelTranslation[2] = (link->pos[2] + 0x8000) >> 16;
+        if (((RoomLibHandlerDState *)state)->copyPosition == 0) {
+            value = ((RoomLibHandlerDState *)state)->anchor[1] +
                     (((RoomLibMotionWork *)scratch)->displacement[1] << 16);
-            RW32(link, 0x2C) = value;
-            RW32(link, 0x200) = (value + 0x8000) >> 16;
+            link->pos[1] = value;
+            link->modelTranslation[1] = (value + 0x8000) >> 16;
         }
     }
-    if (RW16(state, 0x9C) != 0 &&
+    if (((RoomLibHandlerDState *)state)->range[0] != 0 &&
         ((RoomLibMotionWork *)scratch)->rotated[2] >= 0) {
-        if (ent->w04 >= (unsigned int)RW16(state, 0x9E) &&
-            (RW16(state, 0xA0) == 0 ||
-             ent->w04 <= (unsigned int)RW16(state, 0xA0))) {
+        if (ent->w04 >= (unsigned int)((RoomLibHandlerDState *)state)->range[1] &&
+            (((RoomLibHandlerDState *)state)->range[2] == 0 ||
+             ent->w04 <= (unsigned int)((RoomLibHandlerDState *)state)->range[2])) {
             RoomLib_HandlerDTransformTarget((struct RoomLibMotionState *)state,
                                         (void *)scratch);
-            scratch[1] = RW16(state, 0x7A);
-            func_800DFE94((Vec3Fixed *)(state + 0x50), (Vec3Fixed *)((RoomLibMotionState *)state)->position, (short *)(state + 0x78));
-            RW16(state, 0x7A) = FieldEng_TurnToward(
+            scratch[1] = ((RoomLibHandlerDState *)state)->angles[1];
+            func_800DFE94((Vec3Fixed *)((RoomLibHandlerDState *)state)->anchor, (Vec3Fixed *)((RoomLibMotionState *)state)->position, ((RoomLibHandlerDState *)state)->angles);
+            ((RoomLibHandlerDState *)state)->angles[1] = FieldEng_TurnToward(
                 (short)*(volatile unsigned short *)&scratch[1],
-                RW16(state, 0x7A), RW16(state, 0x9C)) & 0xFFF;
-            RotMatrixYXZ((short *)(state + 0x78), state + 0x10);
+                ((RoomLibHandlerDState *)state)->angles[1], ((RoomLibHandlerDState *)state)->range[0]) & 0xFFF;
+            RotMatrixYXZ(((RoomLibHandlerDState *)state)->angles, ((RoomLibHandlerDState *)state)->matrix);
         }
     }
-    if (RW8(state, 0xAA) == 0) {
+    if (((RoomLibHandlerDState *)state)->lockY == 0) {
         RoomLib_FxNotify(link, (struct RoomSub *)state, (int)scratch);
     }
     func_800DFB20(ent);
