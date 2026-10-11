@@ -11,7 +11,6 @@ extern Pe1GameState g_GameState;
 int g_SceneDataTable0;
 TaskNode *g_TaskNodePool;
 extern unsigned int g_GameStateFlags;
-extern int g_GameStateFlagsWrite[] asm("g_GameStateFlags");
 
 void Menu_OpenEquipScreen(int arg0);
 
@@ -45,7 +44,7 @@ int Task_BeginSceneTransition(int **arg0) {
 
         state->flags |= 0x9000;
         tail_flags = tail_node->flags;
-        g_GameStateFlagsWrite[0] = g_GameStateFlags | 4;
+        g_GameStateFlags |= 4;
         tail_flags &= 0xFFDF;
         tail_node->flags = tail_flags;
     }
@@ -77,7 +76,7 @@ int Task_OpenSaveLoadMenu(int **arg0) {
 
             state->flags |= 0x9000;
             tail_flags = tail_node->flags;
-            g_GameStateFlagsWrite[0] = g_GameStateFlags | 4;
+            g_GameStateFlags |= 4;
             tail_flags &= 0xFFDF;
             tail_node->flags = tail_flags;
         }
