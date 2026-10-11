@@ -18,6 +18,18 @@ extern int D_8009CFE8;
 extern int D_8009CFEC;
 extern int D_8009CFF0;
 
+/* Selection state shared by the inventory, equipment and item-action screens. */
+extern int g_MenuActionSubmenuOpen;
+extern int g_InvSelectedItemIndex;
+extern int g_InvSwapTargetIndex;
+/* One-based packed cursor (bit 0 column, bits 1-7 row, bits 8+ scroll) of the
+ * equipment slot a swap started from; zero when none. */
+extern int g_MenuEquipSwapSource;
+/* Which list the equipment options act on: 0 sorts Aya's inventory, any
+ * other value sorts Wayne's storage. */
+extern int g_MenuInventoryViewMode;
+extern int g_InvItemUsableFlag;
+
 #define g_MenuLevelUpAnimTimer D_8009CF78
 #define g_MenuPendingTotalExp D_8009CFE8
 #define g_MenuExpAllocTarget D_8009CFEC

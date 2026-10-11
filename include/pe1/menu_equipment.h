@@ -60,5 +60,14 @@ extern int D_8009CF10, D_8009CF04, D_8009CF08, D_8009CDA8;
 extern int D_80092234[][3];
 
 void Menu_DrawAmmoTypeHeader(MenuWidgetNode *node);
+void Menu_DrawEquipSortToggleRow(int index);
+void Menu_DrawEquipInfoOptionRow(int index);
+
+/* Sort option rows: the first row index per view mode, then the first,
+ * second and third glyph of each row. */
+extern u8 D_800922B8[];
+extern u8 D_800922BC[];
+extern u8 D_800922C4[];
+extern u8 D_800922CC[];
 
 #endif

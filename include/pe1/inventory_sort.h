@@ -14,6 +14,10 @@ extern unsigned char *D_8009D0BC;
 int Inv_CompareItemsByStatForSort(const void *leftElement, const void *rightElement);
 int Inv_CompareItemsForSort(const void *leftElement, const void *rightElement);
 
+void Inv_SortInventoryByMode(int mode, int key);
+void Sort_ContainerItems(int key);
+void Sort_InventoryItems(int mode, int key);
+
 /* Wayne storage item IDs, sorted in place with qsort. */
 extern s16 g_WayneStorageItems[];
 
