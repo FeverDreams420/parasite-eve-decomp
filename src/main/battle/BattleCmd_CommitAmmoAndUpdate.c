@@ -3,9 +3,7 @@
 #include "pe1/aya.h"
 #include "pe1/inventory.h"
 #include "pe1/inventory_slots.h"
-
-int Inv_IsActiveListOverrideSelected(void);
-void Inv_SelectActiveList(int mode);
+#include "pe1/inventory_queries.h"
 #include "pe1/weapon_list_output.h"
 
 int BattleCmd_CommitAmmoAndUpdate(void *out) {

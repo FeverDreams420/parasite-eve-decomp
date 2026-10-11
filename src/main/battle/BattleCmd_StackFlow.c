@@ -5,10 +5,7 @@
 #include "pe1/battle_cmd.h"
 #include "pe1/inventory.h"
 #include "pe1/inventory_slots.h"
-
-#include "BattleCmd_StackFlow_externs.h"
-
-int Inv_AddItem(int data);
+#include "pe1/battle_modifiers.h"
 
 BattleCmdEntry *BattleCmd_AllocSlot(void) {
     BattleCmdEntry *top;
@@ -16,11 +13,11 @@ BattleCmdEntry *BattleCmd_AllocSlot(void) {
     BattleCmdEntry *limit;
     BattleCmdEntry *next;
 
-    top = D_8009D014;
+    top = g_BattleCmdStackTop;
     end = (BattleCmdEntry *)D_800A1B30;
     if (top < end) {
         next = top + 1;
-        D_8009D014 = next;
+        g_BattleCmdStackTop = next;
     } else {
         top = end - 4;
         end = end - 1;
@@ -45,11 +42,11 @@ void BattleCmd_UndoPending(void) {
     ItemDataRecord *data;
     int index;
 
-    top = D_8009D014;
-    if (D_800A1AA0 < top) {
+    top = g_BattleCmdStackTop;
+    if (g_BattleCmdStack < top) {
         entry_tmp = top - 1;
         opcode = (top - 1)->header.word;
-        D_8009D014 = entry_tmp;
+        g_BattleCmdStackTop = entry_tmp;
         entry = entry_tmp;
 
         switch (opcode) {
@@ -91,32 +88,16 @@ void BattleCmd_UndoPending(void) {
     }
 }
 
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
-
-#include "pe1/battle_cmd.h"
-
-#include "BattleCmd_StackFlow_externs_1.h"
-
 void BattleCmd_ResetTableCursor(void) {
-    D_8009D014 = D_800A1AA0;
+    g_BattleCmdStackTop = g_BattleCmdStack;
 }
 
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
-
-#include "pe1/battle_cmd.h"
-
-#include "BattleCmd_StackFlow_externs_2.h"
-
-void BattleCmd_UndoPending(void);
-
-void func_80051258(void) {
-    if (D_800A1AA0 < D_8009D014) {
-        BattleCmdEntry *base = D_800A1AA0;
+void BattleCmd_UndoAllPending(void) {
+    if (g_BattleCmdStack < g_BattleCmdStackTop) {
+        BattleCmdEntry *base = g_BattleCmdStack;
 
         do {
             BattleCmd_UndoPending();
-        } while (base < D_8009D014);
+        } while (base < g_BattleCmdStackTop);
     }
 }

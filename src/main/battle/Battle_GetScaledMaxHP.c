@@ -1,6 +1,5 @@
-#include "Battle_GetScaledMaxHP_externs.h"
-
 #include "pe1/aya.h"
+#include "pe1/battle_modifiers.h"
 
 int Battle_GetScaledMaxHP(int level) {
     unsigned short maxHp;

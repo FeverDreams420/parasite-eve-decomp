@@ -1,37 +1,29 @@
 #include "pe1/battle.h"
 #include "pe1/inventory.h"
+#include "pe1/inventory_queries.h"
+#include "pe1/aya.h"
+#include "pe1/player_entity.h"
 
 /* g_PlayerEntity points at the player-side field actor; its core is the
  * Combatant record used by the command paths below. */
-#include "BattleCmd_ActiveStats_externs.h"
-
-int Inv_IsActiveListOverrideSelected(void);
-void Inv_SelectActiveList(int useOverride);
-#define COMBATANT_FIELD(base, type, member) \
-    (*(type)((char *)(base) + PE1_OFFSETOF(Combatant, member)))
-#define ACTION_FIELD(base, type, member) \
-    (*(type)((char *)(base) + PE1_OFFSETOF(BattleAction, member)))
-#define ITEM_FIELD(base, type, member) \
-    (*(type)((char *)(base) + PE1_OFFSETOF(ItemDataRecord, member)))
 
 void BattleCmd_SyncActiveAmmo(void) {
     BattleEntity *entity;
-    void *current;
-    void *entry;
+    Combatant *current;
+    ItemDataRecord *entry;
     int saved;
 
     entity = (BattleEntity *)g_PlayerEntity;
     if (entity != 0) {
         current = entity->core;
         if (current != 0) {
-            g_AyaHpCurrent[0] = COMBATANT_FIELD(current, unsigned short *, curHP);
-            if (COMBATANT_FIELD(current, void **, action) != 0) {
+            g_AyaHpCurrent[0] = current->curHP;
+            if (current->action != 0) {
                 saved = Inv_IsActiveListOverrideSelected();
                 Inv_SelectActiveList(0);
                 entry = Inv_LookupActiveListData(g_AyaEquippedWeaponSlot[0]);
                 if (entry != 0) {
-                    ITEM_FIELD(entry, short *, ammo) = ACTION_FIELD(
-                        COMBATANT_FIELD(current, void **, action), int *, attackWord) & 0x3FF;
+                    entry->ammo = current->action->attackWord & 0x3FF;
                 }
                 Inv_SelectActiveList(saved);
             }
@@ -39,9 +31,6 @@ void BattleCmd_SyncActiveAmmo(void) {
     }
 }
 
-#undef ACTION_FIELD
-#undef COMBATANT_FIELD
-#undef ITEM_FIELD
 
 void BattleCmd_SetCurrentHP(int arg0) {
     Combatant *current;

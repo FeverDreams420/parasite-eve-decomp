@@ -2,24 +2,25 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
+#include "pe1/battle.h"
 #include "pe1/battle_cmd.h"
+#include "pe1/player_entity.h"
 
 /* MASPSX_FORCE_G0 keeps the player pointer absolute, as retail; the COMMON
  * stack top supplies the small-data metadata of the one $gp-relative word. */
-#include "BattleCmd_GetRemainingAmmo_externs.h"
 BattleCmdEntry *g_BattleCmdStackTop;
 
 int BattleCmd_GetRemainingAmmo(int *out) {
     BattleCmdEntry *cursor;
-    void **entity;
-    void *current;
+    BattleEntity *entity;
+    Combatant *current;
     int remaining = 0;
 
-    entity = (void **)g_PlayerEntity;
+    entity = (BattleEntity *)g_PlayerEntity;
     if (entity != 0) {
-        if (entity[0] != 0) {
-            current = entity[0];
-            remaining = *(short *)((char *)current + 0xA);
+        if (entity->core != 0) {
+            current = entity->core;
+            remaining = (s16)(current->exp_or_acc >> 16);
             cursor = g_BattleCmdStack;
 
             while (cursor < g_BattleCmdStackTop) {
@@ -31,7 +32,7 @@ int BattleCmd_GetRemainingAmmo(int *out) {
             }
 
             if (out != 0) {
-                *out = *(short *)((char *)current + 0x2A);
+                *out = (s16)(current->maxAtk >> 16);
             }
         }
     }

@@ -3,8 +3,6 @@
 
 #include "pe1/battle_cmd.h"
 
-#include "BattleCmd_InitTableCursor_externs.h"
-
 void BattleCmd_InitTableCursor(void) {
-    D_8009D014 = D_800A1AA0;
+    g_BattleCmdStackTop = g_BattleCmdStack;
 }
