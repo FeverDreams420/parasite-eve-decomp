@@ -1,14 +1,14 @@
 {
   "main": {
-    "aliases": 59,
-    "asm_bodies": 23,
+    "aliases": 47,
+    "asm_bodies": 21,
     "asm_constrained_units": 0,
     "barriers": 927,
     "byte_pointer_arithmetic": 260,
     "dead_code": 0,
     "declaration_overrides": 0,
     "directives": 0,
-    "externs_in_c": 2040,
+    "externs_in_c": 1925,
     "field_macros": 92,
     "game_asm_units": 4,
     "gotos": 333,
@@ -19,11 +19,11 @@
     "pins": 1105,
     "pointer_integer_casts": 533,
     "postpass": 0,
-    "raw_offset_dereferences": 479,
+    "raw_offset_dereferences": 430,
     "stack_reserves": 8,
     "stack_switch_macros": 1,
     "statement_expressions": 2,
-    "unknown_fields": 111
+    "unknown_fields": 106
   },
   "overlays": {
     "aliases": 3,
