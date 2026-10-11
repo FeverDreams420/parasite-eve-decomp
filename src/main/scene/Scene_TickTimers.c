@@ -1,7 +1,6 @@
 #include "pe1/game_timers.h"
 
 extern u32 g_GameStateFlags;
-extern GameTimerEntry D_800A76A0[4];
 
 int Gpu_CheckDrawStatus(void);
 
@@ -23,7 +22,7 @@ void Scene_TickTimers(void) {
     }
 
     i = 0;
-    flags_p = &D_800A76A0[0].flags;
+    flags_p = (u32 *)&D_800A76A0;
     entry = (GameTimerEntry *)flags_p;
     limit_p = &entry->limit;
     current_p = &entry->current;

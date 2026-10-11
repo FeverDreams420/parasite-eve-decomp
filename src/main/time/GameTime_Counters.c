@@ -1,7 +1,6 @@
 #include "pe1/game_timers.h"
 #include "pe1/save.h"
 
-extern volatile int D_800A76A0;
 extern volatile int D_800A76A8;
 
 extern int D_800A76B8;

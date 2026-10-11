@@ -12,6 +12,10 @@ typedef struct GameTimerEntry {
 
 PE1_STATIC_ASSERT(sizeof(GameTimerEntry) == 0x0C, game_timer_entry_size);
 
+/* Interior symbol naming timer zero's flags word; its reset stores both the
+ * cleared and the running value. */
+extern volatile u32 D_800A76A0;
+
 /* Interior symbol naming timer zero's current word. Counter words follow
  * the three-word stride of GameTimerEntry, rather than a packed int array. */
 extern int g_GameTimeTable;

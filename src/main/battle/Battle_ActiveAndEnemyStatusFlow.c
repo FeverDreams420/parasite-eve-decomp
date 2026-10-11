@@ -6,7 +6,7 @@
 
 /* COMMON metadata selects GP-relative position loads in stock MASPSX.
  * Existing retail linker symbols supply storage. */
-volatile u16 D_8009CE84_active_view __asm__("D_8009CE84"), D_8009CE86;
+volatile u16 D_8009CE84, D_8009CE86;
 
 /* Clamp active combatant gauges, draw ATB/PE bars and their background, then
  * draw HP and status icons. Matching debt: 12 pins and 6 empty barriers retain
@@ -63,24 +63,24 @@ void Battle_DrawActiveStatus(void)
     if (D_8009D1A0 & 2)
     {
         atbTrack = (volatile RenderColorTilePacket *)(void *)((D_8009CDDC * 0x10) + D_8009E098);
-        atbTrack->x0 = (s16) (D_8009CE84_active_view + 8);
+        atbTrack->x0 = (s16) (D_8009CE84 + 8);
         gradientOffset = D_8009CDDC * 0x24;
         atbTrack->y0 = (s16) (D_8009CE86 + 4);
         atbFill = (volatile RenderGouraudQuad *)(void *)(gradientOffset + D_800B00E8);
-        atbFill->x0 = (s16) (D_8009CE84_active_view + 8);
+        atbFill->x0 = (s16) (D_8009CE84 + 8);
         atbFill->y0 = (s16) (D_8009CE86 + 4);
-        atbFill->x1 = (s16) (D_8009CE84_active_view + 8 + atbWidth);
+        atbFill->x1 = (s16) (D_8009CE84 + 8 + atbWidth);
         atbFill->y1 = (s16) (D_8009CE86 + 4);
-        atbFill->x2 = (s16) (D_8009CE84_active_view + 8);
+        atbFill->x2 = (s16) (D_8009CE84 + 8);
         spriteOffset = D_8009CDDC * 0x1C;
         atbFill->y2 = (s16) (D_8009CE86 + 7);
-        atbFill->x3 = (s16) (D_8009CE84_active_view + 8 + atbWidth);
+        atbFill->x3 = (s16) (D_8009CE84 + 8 + atbWidth);
         atbFill->y3 = (s16) (D_8009CE86 + 7);
         atbMarker = (volatile RenderSpritePacket *)(void *)(spriteOffset + D_800B6928);
         atbMarker->x = (u16) *(u16 *)(D_800B00F8 + gradientOffset);
         atbMarker->y = (s16) (*(u16 *)(D_800B00FA + gradientOffset) - 2);
         atbLabel = (volatile RenderSpritePacket *)(void *)(spriteOffset + D_8009E0C0);
-        atbLabel->x = (s16) (D_8009CE84_active_view + 0x44);
+        atbLabel->x = (s16) (D_8009CE84 + 0x44);
         atbLabel->y = (s16) (D_8009CE86 + 3);
         AddPrim((u32 *) (D_800B0E38.ordering[D_8009CDDC] + 6), atbTrack);
         AddPrim((u32 *) (D_800B0E38.ordering[D_8009CDDC] + 5), (D_8009CDDC * 0x24) + D_800B00E8);
@@ -91,13 +91,13 @@ void Battle_DrawActiveStatus(void)
     {
         gradientPairOffset = D_8009CDDC * 0x48;
         peFill = (volatile RenderGouraudQuad *)(void *)(gradientPairOffset + D_800B0130);
-        peFill->x0 = (s16) (D_8009CE84_active_view + 8);
+        peFill->x0 = (s16) (D_8009CE84 + 8);
         peFill->y0 = (s16) (D_8009CE86 + 0x19);
-        peFill->x1 = (s16) (D_8009CE84_active_view + 8 + peWidth);
+        peFill->x1 = (s16) (D_8009CE84 + 8 + peWidth);
         peFill->y1 = (s16) (D_8009CE86 + 0x19);
-        peFill->x2 = (s16) (D_8009CE84_active_view + 8);
+        peFill->x2 = (s16) (D_8009CE84 + 8);
         peFill->y2 = (s16) (D_8009CE86 + 0x1C);
-        peFill->x3 = (s16) (D_8009CE84_active_view + 8 + peWidth);
+        peFill->x3 = (s16) (D_8009CE84 + 8 + peWidth);
         peRemainderBase = D_800B0130 + 0x24;
         peFill->y3 = (s16) (D_8009CE86 + 0x1C);
         peRemainder = (volatile RenderGouraudQuad *)(void *)(gradientPairOffset + peRemainderBase);
@@ -110,7 +110,7 @@ void Battle_DrawActiveStatus(void)
         peLabel = (volatile RenderSpritePacket *)(void *)((D_8009CDDC * 0x1C) + D_8009E328);
         peRemainder->x3 = (s16) ((*(u16 *)(D_800B0140 + gradientPairOffset) + 0x38) - peWidth);
         peRemainder->y3 = (s16) (D_8009CE86 + 0x1C);
-        peLabel->x = (s16) (D_8009CE84_active_view + 0x44);
+        peLabel->x = (s16) (D_8009CE84 + 0x44);
         peLabel->y = (s16) (D_8009CE86 + 0x18);
         AddPrim((u32 *) (D_800B0E38.ordering[D_8009CDDC] + 5), peFill);
         AddPrim((u32 *) (D_800B0E38.ordering[D_8009CDDC] + 5), (D_8009CDDC * 0x48) + peRemainderBase);
@@ -120,7 +120,7 @@ void Battle_DrawActiveStatus(void)
             register s32 index asm("$3") = D_8009CDDC;
             register u8 *base asm("$4") = D_8009E070;
             background = (RenderColorTilePacket *)(base + index * 0x18);
-            backgroundHeight = D_8009CE84_active_view;
+            backgroundHeight = D_8009CE84;
             background->x0 = backgroundHeight;
             asm("" : : : "memory");
             backgroundY = D_8009CE86;
@@ -134,7 +134,7 @@ void Battle_DrawActiveStatus(void)
             register s32 index asm("$3") = D_8009CDDC;
             register u8 *base asm("$4") = D_8009E070;
             background = (RenderColorTilePacket *)(base + index * 0x18);
-            backgroundHeight = D_8009CE84_active_view;
+            backgroundHeight = D_8009CE84;
             background->x0 = backgroundHeight;
             asm("" : : : "memory");
             backgroundY = D_8009CE86;
@@ -151,7 +151,7 @@ void Battle_DrawActiveStatus(void)
         register s32 index asm("$3") = D_8009CDDC;
         register u8 *base asm("$4") = D_8009E070;
         background = (RenderColorTilePacket *)(base + index * 0x18);
-        backgroundHeight = D_8009CE84_active_view;
+        backgroundHeight = D_8009CE84;
         background->x0 = backgroundHeight;
         asm("" : : : "memory");
         backgroundY = D_8009CE86;
@@ -165,7 +165,7 @@ void Battle_DrawActiveStatus(void)
         register s32 index asm("$3") = D_8009CDDC;
         register u8 *base asm("$4") = D_8009E070;
         background = (RenderColorTilePacket *)(base + index * 0x18);
-        backgroundHeight = D_8009CE84_active_view;
+        backgroundHeight = D_8009CE84;
         background->x0 = backgroundHeight;
         asm("" : : : "memory");
         backgroundY = D_8009CE86;
@@ -187,7 +187,6 @@ void Battle_DrawActiveStatus(void)
 
 /* COMMON metadata selects GP-relative loads;
  * retail symbols supply storage. */
-u16 D_8009CE84;
 volatile u16 D_8009CE86;
 extern s32 D_8009D1E8;
 
