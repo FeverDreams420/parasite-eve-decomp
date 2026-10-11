@@ -2,6 +2,7 @@
 #define PE1_MEMCARD_H
 
 #include "common.h"
+#include "pe1/save_blob.h"
 
 typedef struct MemCardSaveSupportData {
     u16 cardProductCode;
@@ -150,7 +151,6 @@ extern int g_MemCardActiveBytesRemaining;
 extern int g_MemCardActivePromptPending;
 extern int g_MemCardLoadSucceeded;
 
-extern int D_800A1838;
 extern char D_8009EE70[];
 /* Separate declaration keeps the retail address load at the card-file call. */
 extern char g_MemCardPathForCardFile[] asm("D_8009EE70");
@@ -173,5 +173,52 @@ void Save_StartWriteSlot(int port, int slot);
 void MemCard_CloseAllAndResetState(void);
 
 MemCardSaveSlot *MemCard_GetSlot(unsigned int port, int slot);
+
+/* Card manager state (MemCard_PortAndSaveFlow.c). */
+extern unsigned int g_MemCardServicedPort;
+extern int g_MemCardInfoPollCountdown;
+extern int g_MemCardConnectDebounce;
+/* Per port: a card was seen connecting and still has to be serviced. */
+extern int g_MemCardConnectPending[2];
+extern int D_800A184C;
+/* MemCard_InitManager has opened the card events and started LIBCARD. */
+extern int g_MemCardManagerReady;
+extern int g_McOpPending;
+extern int g_MemCardSavePollTimeout;
+extern int g_MemCardReadContext;
+extern void (*g_MemCardDelayedCallback)(void);
+extern int g_MemCardDelayedCallbackTimer;
+extern int D_800A5D50;
+
+/* BIOS events MemCard_InitManager opens: hardware card class 0xF4000001
+ * then software card class 0xF0000011, each for the IO end (0x0004),
+ * error (0x8000), timeout (0x0100) and new card (0x2000) specs. */
+enum MemCardEventIndex {
+    MEMCARD_EVENT_HW_IO_END,
+    MEMCARD_EVENT_HW_ERROR,
+    MEMCARD_EVENT_HW_TIMEOUT,
+    MEMCARD_EVENT_HW_NEW_CARD,
+    MEMCARD_EVENT_SW_IO_END,
+    MEMCARD_EVENT_SW_ERROR,
+    MEMCARD_EVENT_SW_TIMEOUT,
+    MEMCARD_EVENT_SW_NEW_CARD,
+    MEMCARD_EVENT_COUNT
+};
+extern int g_MemCardEventHandles[MEMCARD_EVENT_COUNT];
+/* Set by the event handlers, cleared after the manager services them. */
+extern int g_MemCardEventF400Spec0004Flag;
+extern int g_MemCardRemovedEventPending;
+extern int g_MemCardEventF400Spec2000Flag;
+extern int g_MemCardEventF000Spec0004Flag;
+extern int g_MemCardEventF000Spec8000Flag;
+extern int g_MemCardEventF000Spec2000Flag;
+
+/* Card file being written: the 0x100-byte directory/icon header (its
+ * 16-colour icon palette at +0x60), then the whole image. */
+extern u8 g_MemCardIconHeader[];
+extern u8 g_MemCardIconPalette[];
+extern u8 g_MemCardFileBuffer[];
+/* Runtime save state as read back from the card file. */
+extern SaveBytes12E4 g_MemCardSaveStateBuffer;
 
 #endif

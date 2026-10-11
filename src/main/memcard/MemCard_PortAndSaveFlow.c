@@ -1,5 +1,6 @@
 #include "common.h"
 #include "pe1/memcard.h"
+#include "pe1/resident_tables.h"
 #include "pe1/inventory_slots.h"
 #include "pe1/save.h"
 #include "pe1/save_blob.h"
@@ -13,8 +14,6 @@
 void Save_SetTitleStyleFlag(int value) {
     D_800A1704 = value;
 }
-
-#include "MemCard_PortAndSaveFlow_externs.h"
 
 int Save_GetTitleStyleFlag(void) {
     return g_SaveTitleStyleFlag;
@@ -124,20 +123,7 @@ void Save_SprintfSjis(unsigned char *dst, unsigned char *fmt)
     *out = 0;
 }
 
-#include "MemCard_PortAndSaveFlow_externs_1.h"
-
-int Save_ClassifyPlaytime(int arg0);
-int Save_GetCurrentMapNumber(void);
-
 typedef unsigned char u8_1;
-
-#include "MemCard_PortAndSaveFlow_externs_2.h"
-
-
-int TestEvent(int event);
-
-
-
 
 u8 *Save_FormatTitle(int chapter, int playtime_seconds) {
     int minutes_total;
@@ -199,27 +185,26 @@ u32 Save_CalcCrc16(u32 size, u8_1 *data) {
 }
 
 void MemCard_ClearPort1Events(void) {
-    TestEvent(g_MemCardEventPort1Spec0004);
-    TestEvent(g_MemCardEventPort1Spec8000);
-    TestEvent(g_MemCardEventPort1Spec0100);
-    TestEvent(g_MemCardEventPort1Spec2000);
+    TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_HW_IO_END]);
+    TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_HW_ERROR]);
+    TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_HW_TIMEOUT]);
+    TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_HW_NEW_CARD]);
     g_MemCardEventF400Spec2000Flag = 0;
     g_MemCardRemovedEventPending = 0;
     g_MemCardEventF400Spec0004Flag = 0;
 }
 
 void Evt_ClearEvents(void) {
-    TestEvent(g_MemCardEventF000Spec0004);
-    TestEvent(g_MemCardEventF000Spec8000);
-    TestEvent(g_MemCardEventF000Spec0100);
-    TestEvent(g_MemCardEventF000Spec2000);
+    TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_SW_IO_END]);
+    TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_SW_ERROR]);
+    TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_SW_TIMEOUT]);
+    TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_SW_NEW_CARD]);
     g_MemCardEventF000Spec2000Flag = 0;
     g_MemCardEventF000Spec8000Flag = 0;
     g_MemCardEventF000Spec0004Flag = 0;
 }
 
 int MemCard_PollTransferDelay(void) {
-    int offset;
     int *pending;
     int count;
     int one;
@@ -231,25 +216,23 @@ int MemCard_PollTransferDelay(void) {
     count = 0;
     reset = 12;
     one = 1;
-    pending = D_800A1848;
+    pending = g_MemCardConnectPending;
     value = g_MemCardConnectDebounce;
-    offset = 0;
     g_MemCardConnectDebounce = value - (value > 0);
 
     do {
-        if ((unsigned int)(D_800A0EDC[offset] - 2) < 2) {
+        if ((unsigned int)(g_MemCardPortStates[count].cardState - 2) < 2) {
             g_MemCardConnectDebounce = reset;
             *pending = one;
         }
         pending++;
         count++;
-        offset += 0x418;
     } while (count < 2);
 
-    pending = D_800A1848;
+    pending = g_MemCardConnectPending;
     __asm__ volatile("" : "=r"(pending) : "0"(pending));
-    if (pending[0] != 0 && D_800A0EDC[0] != 4) {
-    } else if (*(pending + 1) != 0 && D_800A12F4 != 4) {
+    if (pending[0] != 0 && g_MemCardPortStates[0].cardState != 4) {
+    } else if (*(pending + 1) != 0 && g_MemCardPortStates[1].cardState != 4) {
     } else {
         final_value = g_MemCardConnectDebounce;
         clamped = 4;
@@ -263,8 +246,6 @@ int MemCard_PollTransferDelay(void) {
     return g_MemCardConnectDebounce > 0;
 }
 
-#include "MemCard_PortAndSaveFlow_externs_3.h"
-
 void _card_clear(int arg0);
 void _card_info(int arg0);
 void _card_load(int arg0);
@@ -275,7 +256,7 @@ void MemCard_StepPortState(int port) {
     MemCardPortState *state;
     int value;
 
-    state = &D_800A0ED4[port];
+    state = &g_MemCardPortStates[port];
 
     switch (state->cardState) {
     case 0:
@@ -283,102 +264,102 @@ void MemCard_StepPortState(int port) {
         break;
 
     case 1:
-        if (D_800A1820 != 0) {
-            D_800A1820 = 0;
+        if (g_MemCardEventF400Spec0004Flag != 0) {
+            g_MemCardEventF400Spec0004Flag = 0;
             if ((state->present & 1) == 0) {
-                TestEvent(D_800BCDB8);
-                TestEvent(D_800BCDBC);
-                TestEvent(D_800BCDC0);
-                TestEvent(D_800BCDC4);
-                D_800A1834 = 0;
-                D_800A1830 = 0;
-                D_800A182C = 0;
+                TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_SW_IO_END]);
+                TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_SW_ERROR]);
+                TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_SW_TIMEOUT]);
+                TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_SW_NEW_CARD]);
+                g_MemCardEventF000Spec2000Flag = 0;
+                g_MemCardEventF000Spec8000Flag = 0;
+                g_MemCardEventF000Spec0004Flag = 0;
                 _card_clear(port << 4);
                 state->cardState = 2;
                 return;
             }
             state->cardState = 4;
-            D_800A1840 = 0;
-            D_800A183C = D_800A183C < 1;
+            g_MemCardInfoPollCountdown = 0;
+            g_MemCardServicedPort = g_MemCardServicedPort < 1;
             return;
         }
-        if (D_800A1824 != 0) {
-            D_800A1824 = 0;
+        if (g_MemCardRemovedEventPending != 0) {
+            g_MemCardRemovedEventPending = 0;
             state->cardState = 0;
             state->present &= ~4;
-            D_800A1840 = 0;
-            D_800A183C = D_800A183C < 1;
+            g_MemCardInfoPollCountdown = 0;
+            g_MemCardServicedPort = g_MemCardServicedPort < 1;
             return;
         }
-        if (D_800A1828 == 0) {
+        if (g_MemCardEventF400Spec2000Flag == 0) {
             return;
         }
-        D_800A1828 = 0;
-        TestEvent(D_800BCDB8);
-        TestEvent(D_800BCDBC);
-        TestEvent(D_800BCDC0);
-        TestEvent(D_800BCDC4);
-        D_800A1834 = 0;
-        D_800A1830 = 0;
-        D_800A182C = 0;
+        g_MemCardEventF400Spec2000Flag = 0;
+        TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_SW_IO_END]);
+        TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_SW_ERROR]);
+        TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_SW_TIMEOUT]);
+        TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_SW_NEW_CARD]);
+        g_MemCardEventF000Spec2000Flag = 0;
+        g_MemCardEventF000Spec8000Flag = 0;
+        g_MemCardEventF000Spec0004Flag = 0;
         _card_clear(port << 4);
         state->cardState = 2;
         return;
 
     case 2:
-        if (D_800A182C != 0) {
-            D_800A182C = 0;
-            TestEvent(D_800BCDA8);
-            TestEvent(D_800BCDAC);
-            TestEvent(D_800BCDB0);
-            TestEvent(D_800BCDB4);
-            D_800A1828 = 0;
-            D_800A1824 = 0;
-            D_800A1820 = 0;
+        if (g_MemCardEventF000Spec0004Flag != 0) {
+            g_MemCardEventF000Spec0004Flag = 0;
+            TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_HW_IO_END]);
+            TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_HW_ERROR]);
+            TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_HW_TIMEOUT]);
+            TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_HW_NEW_CARD]);
+            g_MemCardEventF400Spec2000Flag = 0;
+            g_MemCardRemovedEventPending = 0;
+            g_MemCardEventF400Spec0004Flag = 0;
             _card_load(port << 4);
             state->cardState = 3;
             return;
         }
-        if (D_800A1830 == 0 && D_800A1834 == 0) {
+        if (g_MemCardEventF000Spec8000Flag == 0 && g_MemCardEventF000Spec2000Flag == 0) {
             return;
         }
-        D_800A1830 = 0;
-        D_800A1834 = 0;
+        g_MemCardEventF000Spec8000Flag = 0;
+        g_MemCardEventF000Spec2000Flag = 0;
         state->cardState = 0;
-        D_800A1840 = 0;
-        D_800A183C = D_800A183C < 1;
+        g_MemCardInfoPollCountdown = 0;
+        g_MemCardServicedPort = g_MemCardServicedPort < 1;
         return;
 
     case 3:
-        if (D_800A1820 != 0) {
-            D_800A1820 = 0;
+        if (g_MemCardEventF400Spec0004Flag != 0) {
+            g_MemCardEventF400Spec0004Flag = 0;
             state->cardState = 4;
             if (Menu_IsMemCardDialogOpen() != 0) {
-                D_800A1840 = 0;
-                D_800A183C = D_800A183C < 1;
+                g_MemCardInfoPollCountdown = 0;
+                g_MemCardServicedPort = g_MemCardServicedPort < 1;
                 return;
             }
             state->present |= 1;
             MemCard_StartRead(port, 0);
-            D_800A1840 = 0;
-            D_800A183C = D_800A183C < 1;
+            g_MemCardInfoPollCountdown = 0;
+            g_MemCardServicedPort = g_MemCardServicedPort < 1;
             return;
         }
-        if (D_800A1824 != 0) {
-            D_800A1824 = 0;
+        if (g_MemCardRemovedEventPending != 0) {
+            g_MemCardRemovedEventPending = 0;
             state->cardState = 0;
-            D_800A1840 = 0;
-            D_800A183C = D_800A183C < 1;
+            g_MemCardInfoPollCountdown = 0;
+            g_MemCardServicedPort = g_MemCardServicedPort < 1;
             return;
         }
-        if (D_800A1828 == 0) {
+        if (g_MemCardEventF400Spec2000Flag == 0) {
             return;
         }
-        D_800A1828 = 0;
+        g_MemCardEventF400Spec2000Flag = 0;
         state->cardState = 4;
         state->present |= 4;
-        D_800A1840 = 0;
-        D_800A183C = D_800A183C < 1;
+        g_MemCardInfoPollCountdown = 0;
+        g_MemCardServicedPort = g_MemCardServicedPort < 1;
         return;
 
     case 4:
@@ -389,33 +370,30 @@ void MemCard_StepPortState(int port) {
         return;
     }
 
-    if (D_800A1838 != 0) {
+    if (g_McOpPending != 0) {
         return;
     }
-    if (port != D_800A183C) {
+    if (port != g_MemCardServicedPort) {
         return;
     }
 
-    value = D_800A1840;
-    D_800A1840 = value - 1;
+    value = g_MemCardInfoPollCountdown;
+    g_MemCardInfoPollCountdown = value - 1;
     if (value > 0) {
         return;
     }
 
-    TestEvent(D_800BCDA8);
-    TestEvent(D_800BCDAC);
-    TestEvent(D_800BCDB0);
-    TestEvent(D_800BCDB4);
-    D_800A1828 = 0;
-    D_800A1824 = 0;
-    D_800A1820 = 0;
+    TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_HW_IO_END]);
+    TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_HW_ERROR]);
+    TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_HW_TIMEOUT]);
+    TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_HW_NEW_CARD]);
+    g_MemCardEventF400Spec2000Flag = 0;
+    g_MemCardRemovedEventPending = 0;
+    g_MemCardEventF400Spec0004Flag = 0;
     _card_info(port << 4);
     state->cardState = 1;
 }
 
-#include "MemCard_PortAndSaveFlow_externs_4.h"
-
-int EnableEvent(int event);
 void InitCARD(int arg0);
 long StartCARD(void);
 void _bu_init(void);
@@ -439,8 +417,8 @@ void MemCard_InitManager(void) {
     register int spec asm("$5");
     register int mode asm("$6");
     void (*callback)(void);
-    if (D_800A1850 == 0) {
-        D_800A1850 = 1;
+    if (g_MemCardManagerReady == 0) {
+        g_MemCardManagerReady = 1;
         i = 0;
         EnterCriticalSection();
 
@@ -451,15 +429,15 @@ void MemCard_InitManager(void) {
         callback = MemCard_OnEventF400Spec8000;
         /* Keep the event table base load after the second OpenEvent arguments. */
         asm volatile("" ::: "$16");
-        events = &D_800BCDA8;
+        events = g_MemCardEventHandles;
         events[0] = event;
-        D_800BCDAC = OpenEvent(desc, spec, mode, callback);
-        D_800BCDB0 = OpenEvent(0xF4000001, 0x0100, 0x1000, MemCard_OnEventF400Spec0100);
-        D_800BCDB4 = OpenEvent(0xF4000001, 0x2000, 0x1000, MemCard_OnEventF400Spec2000);
-        D_800BCDB8 = OpenEvent(0xF0000011, 0x0004, 0x1000, MemCard_OnEventF000Spec0004);
-        D_800BCDBC = OpenEvent(0xF0000011, 0x8000, 0x1000, MemCard_OnEventF000Spec8000);
-        D_800BCDC0 = OpenEvent(0xF0000011, 0x0100, 0x1000, MemCard_OnEventF000Spec0100);
-        D_800BCDC4 = OpenEvent(0xF0000011, 0x2000, 0x1000, MemCard_OnEventF000Spec2000);
+        g_MemCardEventHandles[MEMCARD_EVENT_HW_ERROR] = OpenEvent(desc, spec, mode, callback);
+        g_MemCardEventHandles[MEMCARD_EVENT_HW_TIMEOUT] = OpenEvent(0xF4000001, 0x0100, 0x1000, MemCard_OnEventF400Spec0100);
+        g_MemCardEventHandles[MEMCARD_EVENT_HW_NEW_CARD] = OpenEvent(0xF4000001, 0x2000, 0x1000, MemCard_OnEventF400Spec2000);
+        g_MemCardEventHandles[MEMCARD_EVENT_SW_IO_END] = OpenEvent(0xF0000011, 0x0004, 0x1000, MemCard_OnEventF000Spec0004);
+        g_MemCardEventHandles[MEMCARD_EVENT_SW_ERROR] = OpenEvent(0xF0000011, 0x8000, 0x1000, MemCard_OnEventF000Spec8000);
+        g_MemCardEventHandles[MEMCARD_EVENT_SW_TIMEOUT] = OpenEvent(0xF0000011, 0x0100, 0x1000, MemCard_OnEventF000Spec0100);
+        g_MemCardEventHandles[MEMCARD_EVENT_SW_NEW_CARD] = OpenEvent(0xF0000011, 0x2000, 0x1000, MemCard_OnEventF000Spec2000);
 
         InitCARD(0);
         StartCARD();
@@ -478,18 +456,15 @@ void MemCard_InitManager(void) {
         ExitCriticalSection();
     }
 
-    value = 0x418;
+    /* Clear each port's present flag, walking byte offsets downwards. */
+    value = sizeof(MemCardPortState);
     do {
-        ((u8 *)D_800A0ED4)[value] = 0;
-        value -= 0x418;
+        ((u8 *)g_MemCardPortStates)[value] = 0;
+        value -= sizeof(MemCardPortState);
     } while (value >= 0);
 }
 
-#include "MemCard_PortAndSaveFlow_externs_5.h"
-
-char *strcpy(char *dst, char *src);
-u8 *Save_FormatTitle(int chapter, int playtime_seconds);
-void Save_SerializeTail(void);
+u8 *Str_ResolveDataPtr(char *path);
 
 const MemCardSaveSupportData g_MemCardSaveSupportData __attribute__((used)) = {
     0x4353,
@@ -505,8 +480,8 @@ int Save_BuildCardFile(char *path) {
     u8 *file;
     u32 crc;
 
-    resolved = Tbl_GetSaveIconData();
-    file = D_800B8868;
+resolved = Tbl_GetSaveIconData();
+    file = g_MemCardIconHeader;
 
     D_800A5D50 = 0x2000;
     bzero(file, 0x100);
@@ -514,14 +489,14 @@ int Save_BuildCardFile(char *path) {
     *(short *)(file + 0) = g_MemCardSaveSupportData.cardProductCode;
     file[2] = 0x11;
     file[3] = 1;
-    strcpy((char *)(file + 4), (char *)Save_FormatTitle(path[0x18] - 0x40, D_800C0DE8));
+    strcpy((char *)(file + 4), (char *)Save_FormatTitle(path[0x18] - 0x40, g_SaveRuntimeState.windows.header.playTimeMinutes));
 
-    __builtin_memcpy(D_800B88C8, resolved + 0x14, 0x20);
+    __builtin_memcpy(g_MemCardIconPalette, resolved + 0x14, 0x20);
     __builtin_memcpy(file + 0x80, resolved + 0x40, 0x80);
 
-    bzero(D_8009EED0, 0x2000);
-    g_SaveIoCursor = D_8009EED0;
-    __builtin_memcpy(g_SaveIoCursor, D_800B8868, 0x100);
+    bzero(g_MemCardFileBuffer, 0x2000);
+    g_SaveIoCursor = g_MemCardFileBuffer;
+    __builtin_memcpy(g_SaveIoCursor, g_MemCardIconHeader, 0x100);
     g_SaveIoCursor += 0x100;
     __builtin_memcpy(g_SaveIoCursor, (u8 *)&g_SaveRuntimeState, 0x12E4);
     g_SaveIoCursor += 0x12E4;
@@ -529,7 +504,7 @@ int Save_BuildCardFile(char *path) {
     Save_SerializeTail();
 
     {
-        u8 *data = D_8009EED0;
+        u8 *data = g_MemCardFileBuffer;
         u32 checksum = 0xFFFF;
         u32 i = 0;
         do {
@@ -607,7 +582,7 @@ void MemCard_AbortActiveOperation(MemCardPortState *state) {
     state->managerState = 0;
     state->hasFiles = 0;
     g_MemCardActiveState = 0;
-    D_800A1838 = 0;
+    g_McOpPending = 0;
     MenuWidget_RestoreSavedCurrentNode();
 }
 
@@ -718,7 +693,7 @@ void MemCard_UpdateSaveState(int port) {
         if (current == 4) {
             other = g_MemCardPortStates[port == 0].cardState;
             if (other == 0 || other == current) {
-                D_800A1838 = 1;
+                g_McOpPending = 1;
                 state->managerState = state->nextState;
             }
         }
@@ -730,7 +705,7 @@ void MemCard_UpdateSaveState(int port) {
             if (current == 4) {
                 other = g_MemCardPortStates[port == 0].cardState;
                 if (other == 0 || other == current) {
-                    D_800A1838 = 1;
+                    g_McOpPending = 1;
                     state->managerState = 14;
                 }
             }
@@ -744,7 +719,7 @@ void MemCard_UpdateSaveState(int port) {
         sprintf(device, g_MemCardSaveSupportData.deviceFormat, port);
         D_800A1864 = format(device) ? 12 : -1;
         state->present &= ~4;
-        D_800A1838 = 0;
+        g_McOpPending = 0;
         state->managerState = 0;
         break;
 
@@ -796,7 +771,7 @@ void MemCard_UpdateSaveState(int port) {
         state->fileCount = 15;
         if (D_800A186C == 0) {
             state->managerState = 15;
-            D_800A1838 = 0;
+            g_McOpPending = 0;
             break;
         }
         if (MemCard_CanStartSave(port)) {
@@ -810,7 +785,7 @@ void MemCard_UpdateSaveState(int port) {
         MenuWidget_RestoreSavedCurrentNode();
         Menu_ShowMemCardErrorDialog(port);
         state->managerState = 12;
-        D_800A1838 = 0;
+        g_McOpPending = 0;
         break;
 
     case 3:
@@ -856,7 +831,7 @@ void MemCard_UpdateSaveState(int port) {
             }
         } else {
             state->managerState = 12;
-            D_800A1838 = 0;
+            g_McOpPending = 0;
         }
         break;
 
@@ -899,7 +874,7 @@ void MemCard_UpdateSaveState(int port) {
         MemCard_FormatSlotFileName(state, state->selectedSlot);
         if ((state->fileDescriptor = open(D_8009EE70, 2)) >= 0) {
             state->managerState = 9;
-            state->transferData = D_8009EED0;
+            state->transferData = g_MemCardFileBuffer;
             state->retryCount = 30;
         } else {
             MEMCARD_RETRY_OR_FAIL(state);
@@ -946,7 +921,7 @@ void MemCard_UpdateSaveState(int port) {
                 state->managerState = 12;
                 state->pendingError = 0;
                 D_800A1854 = 0;
-                D_800A1838 = 0;
+                g_McOpPending = 0;
                 Save_LoadCardFileIntoRuntime();
             }
         } else {
@@ -994,7 +969,7 @@ void MemCard_UpdateSaveState(int port) {
         state->managerState =
             state->scanCursor < state->fileCount * 2 ? 3 : 12;
         if (state->managerState == 12) {
-            D_800A1838 = 0;
+            g_McOpPending = 0;
         }
         break;
 
@@ -1088,7 +1063,6 @@ void Save_StartWriteSlot(int port, int arg_slot) {
     state->nextState = next_state;
     slot_state->state = MEMCARD_SLOT_OCCUPIED;
 }
-#include "MemCard_PortAndSaveFlow_externs_6.h"
 
 int Save_StartReadSlot(int port, int slot)
 {
@@ -1122,10 +1096,6 @@ void Save_CancelUiFlow(void) {
     Inv_SetActiveList(0xC, 0);
 }
 
-#include "MemCard_PortAndSaveFlow_externs_7.h"
-
-void Save_DeserializeTail(void);
-void Save_RestoreHeader(void);
 void Menu_CreateNotificationDialog(int arg0, int arg1);
 void Menu_SetDeferredCallback(void (*callback)(void));
 
@@ -1176,15 +1146,13 @@ void Save_LoadCardFileIntoRuntime(void) {
     }
 }
 
-#include "MemCard_PortAndSaveFlow_externs_8.h"
-
 int MemCard_GetActiveProgressBlocks(void) {
     int blocks;
     int result;
     MemCardPortState *active = g_MemCardActiveState;
 
     if (active != 0) {
-        blocks = (D_800A1858 - active->transferSize + 0x400) >> 10;
+        blocks = (g_MemCardActiveBytesRemaining - active->transferSize + 0x400) >> 10;
         result = 8;
         if (blocks < 9) {
             result = blocks;
@@ -1197,45 +1165,32 @@ int MemCard_GetActiveProgressBlocks(void) {
 }
 
 /* Byte aliases map fileCount and the first slot fields in MemCardPortState. */
-#include "MemCard_PortAndSaveFlow_externs_9.h"
 
 MemCardSaveSlot *MemCard_GetSlot(unsigned int port, int slot) {
-    int port_offset;
-    int slot_offset;
-    u8 *base;
-
     if (port >= 2U) {
         return 0;
     }
     if (slot < 0) {
         return 0;
     }
-
-    port_offset = ((((port << 5) + port) << 2) - port) << 3;
-    if (slot >= D_800A0ED6[port_offset]) {
+    if (slot >= g_MemCardPortStates[port].fileCount) {
         return 0;
     }
-
-    slot_offset = ((slot << 4) + slot) << 2;
-    if (D_800A0EF1[slot_offset + port_offset] == 0) {
+    if (g_MemCardPortStates[port].slots[slot].metadataReady == 0) {
         return 0;
     }
-
-    base = D_800A0EF0 + port_offset;
-    return (MemCardSaveSlot *)(base + slot_offset);
+    return &g_MemCardPortStates[port].slots[slot];
 }
-
-#include "MemCard_PortAndSaveFlow_externs_10.h"
 
 void MemCard_InitState(void) {
     bzero(g_MemCardPortStates, sizeof(MemCardPortState) * 2);
-    D_800A12F8 = -1;
-    D_800A0EE0 = -1;
+    g_MemCardPortStates[1].fileDescriptor = -1;
+    g_MemCardPortStates[0].fileDescriptor = -1;
     g_MemCardServicedPort = 0;
     g_MemCardInfoPollCountdown = 0;
     g_MemCardConnectDebounce = 0;
     D_800A184C = 0;
-    D_800A1848[0] = 0;
+    g_MemCardConnectPending[0] = 0;
     g_McOpPending = 0;
     g_MemCardActiveState = 0;
     g_MemCardActivePortOneBased = 0;
@@ -1246,7 +1201,6 @@ void MemCard_InitState(void) {
     g_MemCardReadContext = 0;
 }
 
-#include "MemCard_PortAndSaveFlow_externs_11.h"
 void MemCard_StepPortState(int arg0);
 void Menu_CloseNotificationDialogs(void);
 void Menu_NavToSaveConfirmDialog(void);
@@ -1376,8 +1330,6 @@ void MemCard_StartRead(int port, int arg1) {
     }
 }
 
-#include "MemCard_PortAndSaveFlow_externs_12.h"
-
 void MemCard_CloseAllAndResetState(void) {
     MemCardPortState *state;
 
@@ -1389,12 +1341,10 @@ void MemCard_CloseAllAndResetState(void) {
         }
     }
 
-    D_800A12ED = 0;
+    g_MemCardPortStates[1].managerState = 0;
     g_MemCardPortStates[0].managerState = 0;
     g_McOpPending = 0;
 }
-
-#include "MemCard_PortAndSaveFlow_externs_13.h"
 
 int MemCard_IsPortTransferState(int arg0) {
     u8 value = g_MemCardPortStates[arg0].managerState;

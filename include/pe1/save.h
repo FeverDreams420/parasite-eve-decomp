@@ -83,4 +83,20 @@ void Save_SprintfSjis(unsigned char *dst, unsigned char *fmt);
  * item search uses its address as the end of the item records. */
 extern u16 D_800C1EAC[];
 
+/* Save title and card file assembly (MemCard_PortAndSaveFlow.c). */
+extern u8 g_SaveTitleBuffer[];
+extern u8 *g_SaveTitleFormatLongPtr;
+extern u8 *g_SaveTitleFormatShortPtr;
+extern int g_SaveTitleStyleFlag;
+/* Write/read cursor of the card file image being built or parsed. */
+extern u8 *g_SaveIoCursor;
+
+int Save_ClassifyPlaytime(int frames);
+int Save_GetCurrentMapNumber(void);
+u8 *Save_FormatTitle(int chapter, int playtime_seconds);
+void Save_BuildHeader(void);
+void Save_RestoreHeader(void);
+void Save_SerializeTail(void);
+void Save_DeserializeTail(void);
+
 #endif /* PE1_SAVE_H */

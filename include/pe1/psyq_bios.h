@@ -53,12 +53,14 @@ void FlushCache(void);
 
 void bzero(void *destination, int length);
 void *memcpy(void *destination, const void *source, unsigned int length);
+char *strcpy(char *destination, char *source);
 
 int DeliverEvent(unsigned int event, int spec);
 
 int OpenEvent(unsigned int desc, int spec, int mode, int (*func)(void));
 int CloseEvent(int event);
 int EnableEvent(int event);
+int TestEvent(int event);
 int DisableEvent(int event);
 int UnDeliverEvent(unsigned int event, int spec);
 
