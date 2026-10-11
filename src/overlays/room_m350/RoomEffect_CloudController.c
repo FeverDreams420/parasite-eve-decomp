@@ -96,14 +96,13 @@ int func_80198CF8(int event,State *state)
         cosine=rcos(instance->rot_y+2048);
         sine=rsin(instance->rot_y+2048);
         {
-        register GteMatrix *matrix asm("$4")=&D_8019A870;
-        register Vector *vector asm("$5")=&offset;
+        GteMatrix *matrix=&D_8019A870;
+        Vector *vector=&offset;
         matrix->m[0][0]=cosine; D_8019A870.m[0][2]=sine; D_8019A870.m[2][0]=0u-(unsigned int)sine;
         D_8019A870.m[2][2]=cosine;
         D_8019A870.t[2]=0; D_8019A870.t[1]=0; D_8019A870.t[0]=0;
         D_8019A870.m[2][1]=0; D_8019A870.m[1][2]=0; D_8019A870.m[1][0]=0; D_8019A870.m[0][1]=0;
         D_8019A870.m[1][1]=4096;
-        asm volatile("" : : "r"(matrix), "r"(vector));
         offset.x=0; offset.y=0; offset.z=state->speed;
         ApplyMatrixSV(matrix,vector,vector);
         }
