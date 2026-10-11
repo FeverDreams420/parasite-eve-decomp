@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "common.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/gte.h"
@@ -14,11 +15,12 @@
 
 extern s32 g_GameStateFlags[];
 extern s32 D_8009D1A0w[] __asm__("g_GameStateFlags");
-extern s32 g_SceneFlagBits;
-extern s32 g_BattleControlFlags;
-extern s32 g_FieldRenderFlags;
-extern s32 g_FieldPadBits[1];
-extern u32 D_8009D2D4;
+/* COMMON supplies small-data metadata to MASPSX. */
+s32 g_SceneFlagBits;
+s32 g_BattleControlFlags;
+s32 g_FieldRenderFlags;
+s32 g_FieldPadBits[1];
+u32 D_8009D2D4;
 extern s32 g_FieldRenderFlagTable[];
 extern u32 D_800A76F0[];
 
@@ -92,11 +94,12 @@ extern struct { char _[16]; } D_800B0DBF_o __asm__("D_800B0DBF");
 #define D_800BE9A7 (*(u8 *)&D_800BE9A7_o)
 #define D_800B0DBF (*(s8 *)&D_800B0DBF_o)
 
-extern u32 D_8009D1F4;
-extern u32 D_8009D238;
+u32 D_8009D1F4;
+unsigned int D_8009D1E4;
+u32 D_8009D238;
 extern u32 D_8009D26C __asm__("g_FieldPadBits");
-extern u32 g_SceneDispatchToken[];
-extern u32 D_8009D2A8;
+extern int g_SceneDispatchToken;
+u32 D_8009D2A8;
 extern u8 D_8009D1C0[];
 extern u8 D_800921F8[];
 extern u32 D_80092200[];
@@ -193,7 +196,7 @@ void Field_HandleStateTransition(void) {
                 if ((mask & sequence_mask) == sequence_mask) {
                     D_8009D2A8++;
                     if (D_8009D2A8 == 9) {
-                        g_SceneDispatchToken[0] = 0xAA108448;
+                        g_SceneDispatchToken = 0xAA108448;
                         field_flags_write[0] = flags | 0x12000;
                     }
                 } else {

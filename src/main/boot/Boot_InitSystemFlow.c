@@ -49,8 +49,7 @@ extern s32 g_GameStateFlags[];
 #define g_GameStateFlags (g_GameStateFlags[0])
 extern s32 g_FrameRngCounter[];
 #define g_FrameRngCounter (g_FrameRngCounter[0])
-extern s32 g_SceneDispatchToken[];
-#define g_SceneDispatchToken (g_SceneDispatchToken[0])
+extern int g_SceneDispatchToken;
 void Boot_VsyncCallback(void);
 
 void Boot_InitSubsystems(void) {

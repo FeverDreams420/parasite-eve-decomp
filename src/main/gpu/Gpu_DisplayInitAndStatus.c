@@ -30,7 +30,7 @@ extern char D_801ED800[];
 extern int g_ActiveDrawSlot;
 extern unsigned char g_ScreenTransitionState[];
 extern volatile unsigned char D_800B0DC6;
-extern volatile int g_SceneDispatchToken;
+extern int g_SceneDispatchToken;
 
 extern volatile int D_800B0E24;
 extern volatile int D_800B0E28;

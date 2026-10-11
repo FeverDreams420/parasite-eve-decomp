@@ -22,7 +22,7 @@ extern void Gpu_InitDisplay(int arg0);
 extern void Boot_RunFrame(void);
 extern void SetDispMask(int arg0);
 
-extern u32 g_SceneDispatchToken;
+extern int g_SceneDispatchToken;
 
 #define STATE_FLAG_IMAGE_BUSY 0x00100000U
 #define STATE_FLAG_READY 0x00000100U
