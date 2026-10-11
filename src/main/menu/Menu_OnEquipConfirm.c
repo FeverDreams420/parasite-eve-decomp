@@ -1,11 +1,13 @@
-#include "pe1/menu_state.h"
-#include "pe1/menu_context_help.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
+#include "pe1/menu_state.h"
+#include "pe1/menu_context_help.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/text.h"
 #include "pe1/inventory.h"
 #include "pe1/menu_dialog.h"
+#include "pe1/menu_equipment.h"
+#include "pe1/menu_item_list_input.h"
 
 void Menu_OnEquipConfirm(MenuWidgetNode *unused, int confirmed)
 {
@@ -43,10 +45,6 @@ void Menu_OnEquipConfirm(MenuWidgetNode *unused, int confirmed)
 }
 
 /* Confirmation input handling shares the callback's equip-selection flow. */
-#include "Menu_OnEquipConfirm_externs.h"
-
-void Menu_StepInventoryRoot(int flags, int arg1, int arg2);
-void Menu_ConfigureScreen(void);
 
 int Menu_StepEquipConfirm(MenuWidgetNode *node, int input) {
     register MenuWidgetNode *child asm("$16");
@@ -125,7 +123,7 @@ reserved:
         option_node->x = (parent->grid_width - 0x80) >> 1;
         {
             int height = parent->visible_rows;
-            D_8009CFA8 = callback;
+            g_MenuConfirmCallback = callback;
             option_node->y = height - 0x14;
         }
 

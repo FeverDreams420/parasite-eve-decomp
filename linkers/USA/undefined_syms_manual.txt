@@ -1162,7 +1162,6 @@ g_MemCardWriteBlockCount = 0x8009B79C;
 g_MenuActiveListTarget = 0x8009D1E0;
 g_MenuBonusPointBarAnimActive = 0x8009CF80;
 g_MenuBonusPointDisplayTarget = 0x8009CF74;
-g_MenuConfirmCallback = 0x8009CFA8;
 g_MenuExpAllocTarget = 0x8009CFEC;
 g_MenuHpMaxDisplayTarget = 0x8009CF70;
 g_MenuHpMaxDisplayValue = 0x8009CF64;

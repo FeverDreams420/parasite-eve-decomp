@@ -20,6 +20,7 @@ extern int D_8009CF18, D_8009CFB0;
 void Menu_OpenItemUsePanelAtIndex(int index);
 void Menu_OpenSkillSelectionView(void);
 void Menu_OpenInventoryOrSwapView(int showList);
+void Menu_ConfigureScreen(void);
 void Menu_StepInventoryRoot(int mode, int index, int arg);
 void Menu_CreateNotificationDialog(int message, int arg);
 void MenuInput_SetPollingPaused(int paused);

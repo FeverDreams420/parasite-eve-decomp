@@ -70,6 +70,7 @@ g_MenuBlendColorPanelPoints = 0x800922D4;
 g_MenuBlendColorBackup = 0x8009CFE0;
 g_MenuScreenBaseYBackup = 0x8009CFE4;
 g_MenuSpellInfoId = 0x8009CFF4;
+g_MenuConfirmCallback = 0x8009CFA8;
 Render_InitViewState = 0x80065B70; // type:func
 Asset_GetTimImageRect = 0x80071964; // type:func
 Scene_Init = 0x80071034; // type:func

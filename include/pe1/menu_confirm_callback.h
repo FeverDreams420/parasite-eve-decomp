@@ -4,8 +4,7 @@
 struct MenuWidgetNode;
 typedef void (*MenuConfirmCallback)(struct MenuWidgetNode *node, int confirmed);
 
-/* Two linker names for the callback invoked by the yes/no dialog handler. */
-extern MenuConfirmCallback D_8009CFA8;
+/* Callback invoked by the yes/no dialog handler. */
 extern MenuConfirmCallback g_MenuConfirmCallback;
 
 void Menu_ItemUseAction(struct MenuWidgetNode *node, int confirmed);

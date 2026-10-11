@@ -576,7 +576,7 @@ int Menu_ItemListInputHandler(MenuWidgetNode *node, unsigned int flags)
                 dialog->visible_rows = 0x32;
                 dialog->x = (300 - width) >> 1;
                 options->x = (dialog->grid_width - 0x80) >> 1;
-                D_8009CFA8 = action;
+                g_MenuConfirmCallback = action;
                 options->y = dialog->visible_rows - 0x14;
                 Menu_PlayConfirmSound();
                 return 1;

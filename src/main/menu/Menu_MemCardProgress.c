@@ -131,7 +131,7 @@ void Menu_StepItemGrid2(void) {
         panel->x = (0x12C - width) >> 1;
         option_node->x = (panel->grid_width - 0x80) >> 1;
         height = panel->visible_rows;
-        D_8009CFA8 = callback;
+        g_MenuConfirmCallback = callback;
         option_node->y = height - 0x14;
         return;
     }
