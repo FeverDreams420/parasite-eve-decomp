@@ -56,7 +56,7 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     D_8019C09C = 0;
     D_8019C0A0 = 0;
     D_8019C0A4 = 0;
-    D_8019C054 = firstMask;
+    g_FxCommonMotionRemaining0 = firstMask;
     D_8019C08C = px - bx;
     D_8019C090 = py - by;
     D_8019C094 = pz - bz;
@@ -89,7 +89,7 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     D_8019C070 = 0;
     D_8019C074 = 0;
     D_8019C052 = secondValue;
-    D_8019C050 = secondMask;
+    g_FxCommonMotionRemaining1 = secondMask;
     D_8019C05C = qx - ax;
     D_8019C060 = qy - ay;
     D_8019C064 = qz - az;
