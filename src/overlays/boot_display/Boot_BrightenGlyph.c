@@ -6,15 +6,15 @@
         u32 brightness = (((u16 *)D_80172C9C)[index >> (shift)] & 31) << 3; \
         register u32 blue asm("$5") = greenPixel[1]; \
         register u32 green asm("$4") = greenPixel[0]; \
-        register u32 red asm("$3") = pixel[0]; \
+        register u32 red asm("$3") = pixel->red; \
         blue += brightness; if (blue >= 256) blue = 255; \
         green += brightness; if (green >= 256) green = 255; \
         red += brightness; if (red >= 256) red = 255; \
-        greenPixel[1] = blue; greenPixel[0] = green; pixel[0] = red; \
+        greenPixel[1] = blue; greenPixel[0] = green; pixel->red = red; \
     } \
     greenPixel += 3; \
     asm("" : "=r"(greenPixel) : "0"(greenPixel)); \
-    pixel += 3; \
+    ++pixel; \
 } while (0)
 void Boot_BrightenGlyph(s32 x, s32 y, u8 character) {
     s32 savedX = x;
@@ -44,13 +44,13 @@ void Boot_BrightenGlyph(s32 x, s32 y, u8 character) {
         endY = computedEnd;
         do {
             u16 *source = (u16 *)image;
-            u8 *pixel = (u8 *)screen;
+            BootRgb24Pixel *pixel = (BootRgb24Pixel *)screen;
             s16 chunk;
             u8 *greenPixel;
             if ((s16)row >= 0) {
                 if ((s16)row >= 224) break;
                 chunk = 0;
-                greenPixel = pixel + 1;
+                greenPixel = &pixel->green;
                 for (; chunk < 4; ++chunk) {
                     u32 bits = *source;
                     if (bits) {
@@ -60,7 +60,7 @@ void Boot_BrightenGlyph(s32 x, s32 y, u8 character) {
                         BRIGHTEN_NIBBLE(0xF000, 12);
                     } else {
                         greenPixel += 12;
-                        pixel += 12;
+                        pixel += 4;
                     }
                     ++source;
                 }

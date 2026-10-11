@@ -7,6 +7,13 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/gpu_image.h"
 
+/* Three byte channels in the boot screen image buffer. */
+typedef struct BootRgb24Pixel {
+    u8 red, green, blue;
+} BootRgb24Pixel;
+
+PE1_STATIC_ASSERT(sizeof(BootRgb24Pixel) == 3, boot_rgb24_pixel_size);
+
 typedef struct {
     s32 tag;
     s32 code;

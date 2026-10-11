@@ -9,7 +9,7 @@ void func_80125364(void)
     for (line = 110; line < 134; line++) {
         s16 row;
         u16 *source = (u16 *)image;
-        u8 *pixel = screen;
+        BootRgb24Pixel *pixel = (BootRgb24Pixel *)screen;
 
         for (row = 0; row < 24; row++) {
             u32 bits = *source;
@@ -20,9 +20,9 @@ void func_80125364(void)
                     int index = bits & 15;
                     if (index) {
                         int brightness = (((u16 *)D_80172C9C)[index] & 31) << 3;
-                        u32 blue = pixel[2];
-                        register u32 green asm("$5") = pixel[1];
-                        u32 red = pixel[0];
+                        u32 blue = pixel->blue;
+                        register u32 green asm("$5") = pixel->green;
+                        u32 red = pixel->red;
                         blue += brightness;
                         if (blue >= 256)
                             blue = 255;
@@ -32,15 +32,15 @@ void func_80125364(void)
                         red += brightness;
                         if (red >= 256)
                             red = 255;
-                        pixel[2] = blue;
-                        pixel[1] = green;
-                        pixel[0] = red;
+                        pixel->blue = blue;
+                        pixel->green = green;
+                        pixel->red = red;
                     }
                     bits >>= 4;
-                    pixel += 3;
+                    ++pixel;
                 }
             } else {
-                pixel += 12;
+                pixel += 4;
             }
             source++;
         }
