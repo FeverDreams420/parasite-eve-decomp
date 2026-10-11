@@ -21,17 +21,18 @@ void Gte_SetBackColor(u16 *dst, int r, int g, int b) {
     dst[7] = 0;
     dst[8] = 0;
 }
-#include "common.h"
-void Gte_SetLightColor(u8 *state, int index, int r, int g, u16 b) {
+#include "pe1/render_lighting.h"
+void Gte_SetLightColor(RenderLightingState *lighting, int index, int r, int g, u16 b) {
+    u8 *state = (u8 *)lighting;
     u8 *byte_slot;
     register u32 m0 asm("t4");
     register u32 m1 asm("t5");
     register u32 m2 asm("t6");
 
     if ((unsigned int)index < 3) {
-        *(u16 *)(state + 0x20 + index * 2) = r;
-        *(u16 *)(state + 0x26 + index * 2) = g;
-        *(u16 *)(state + 0x2C + index * 2) = b;
+        lighting->color.matrix.m[0][index] = r;
+        lighting->color.matrix.m[1][index] = g;
+        lighting->color.matrix.m[2][index] = b;
     }
 
     byte_slot = state + index * 4;
@@ -41,7 +42,7 @@ void Gte_SetLightColor(u8 *state, int index, int r, int g, u16 b) {
 
     asm volatile("" : : : "memory");
     {
-        u32 *matrix = (u32 *)(state + 0x20);
+        u32 *matrix = lighting->color.words;
 
         asm volatile("" : "=r"(matrix) : "0"(matrix));
         m0 = matrix[0];

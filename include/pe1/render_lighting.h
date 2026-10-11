@@ -11,6 +11,14 @@ typedef union RenderLightingMatrix {
 } RenderLightingMatrix;
 
 extern RenderLightingMatrix D_800BEA40, D_800BEA60;
+
+/* Lighting block at D_800BEA40: the light-direction matrix, the light
+ * color matrix (one column per light) and the per-light 8-bit colors. */
+typedef struct RenderLightingState {
+    RenderLightingMatrix light;  /* 0x00 */
+    RenderLightingMatrix color;  /* 0x20 */
+    u8 light_colors[3][4];       /* 0x40: r, g, b per light */
+} RenderLightingState;
 /* Existing absolute symbols expose individual matrix elements. */
 extern s16 D_800BEA42, D_800BEA44, D_800BEA46, D_800BEA48, D_800BEA4A;
 extern s16 D_800BEA4C, D_800BEA4E, D_800BEA50;

@@ -246,7 +246,7 @@ void Akao_ClearVoiceBank(void)
     PE1_COMPILER_USE(p);
     ((Pe1GameState *)base)->flags = 3;
     *(u16 *)(base + 4) = 10;
-    *(s16 *)(base + 6) = -1;
+    ((Pe1GameState *)base)->field_bg_cache_id = -1;
     base[8] = 2;
     PE1_COMPILER_LAUNDER_AFTER_MEM(minusOne, -1, base[8]);
     base[10] = 11;
