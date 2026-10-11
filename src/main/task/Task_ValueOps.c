@@ -12,7 +12,7 @@
 extern FieldActor *g_CurrentEntity;
 extern FieldActor *g_PlayerEntity;
 extern int g_RenderStateFlags[];
-extern u32 D_8009D26C[];
+extern u32 D_8009D26C;
 extern u32 D_8009D1F4[];
 extern u32 D_800A7770[];
 
@@ -206,7 +206,7 @@ int Task_DispatchCmd(int **args) {
     case 0: {
         u32 mask;
         u32 state;
-        state = D_8009D26C[0];
+        state = D_8009D26C;
         mask = *args[1];
         if ((state & mask) == mask) {
             *args[2] = 1;
@@ -245,7 +245,7 @@ int Task_DispatchCmd(int **args) {
         int index;
 
         index = (int)args[1];
-        state = D_8009D26C[0];
+        state = D_8009D26C;
         mask = *(u32 *)index;
         state &= mask;
         if (state == mask) {

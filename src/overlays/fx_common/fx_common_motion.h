@@ -18,7 +18,7 @@ extern FxCommonShortVec3 g_FxCommonMotionTarget0 __asm__("D_8019C0B4");
 extern s16 g_FxCommonMotionRemaining0 __asm__("D_8019C054");
 extern s16 g_FxCommonMotionRemaining1 __asm__("D_8019C050");
 extern s32 D_8009D1F4;
-extern s32 D_8009D26C;
+extern u32 D_8009D26C;
 extern s8 D_800B0DB5;
 extern void *D_800B0E08[1];
 extern s32 D_8019C018;

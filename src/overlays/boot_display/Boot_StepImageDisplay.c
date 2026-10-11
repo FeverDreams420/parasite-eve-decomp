@@ -1,7 +1,8 @@
 #include "pe1/boot_display.h"
 #include "pe1/psyq_gpu.h"
 extern void *D_80125BA4[];
-extern s32 D_8009D26C, D_8009D1F4;
+extern u32 D_8009D26C;
+extern s32 D_8009D1F4;
 extern u32 g_BootDisplayFrameCounter;
 extern char *g_BootDisplayTransferCursor;
 extern u32 func_8010BF94(void *);
@@ -18,7 +19,7 @@ void Boot_StepImageDisplay(void) {
     rect[3] = 224;
     StoreImage(rect, g_BootDisplayImageBuffers[g_BootDisplayBufferIndex].pixels);
     func_80074DC0(0);
-    if (D_8009D26C < 0) {
+    if ((int)D_8009D26C < 0) {
         if (D_8009D1F4 & 0x1000000) {
             u16 timer = (u16)g_BootDisplayStateTimer;
             if (timer != 0) {
