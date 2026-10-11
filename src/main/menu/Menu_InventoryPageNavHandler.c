@@ -11,9 +11,9 @@
 int Menu_InventoryPageNavHandler(MenuWidgetNode *root, unsigned int flags) {
     MenuWidgetNode *node;
     MenuWidgetNode *other;
-    /* Match debt: retail keeps the x shift in s2 and builds the target x in
-     * v0 from the popup pointer; unpinned, the saved registers shift
-     * (lev 40). */
+    /* Match debt: retail keeps the x shift in s2 and the target node in s1.
+     * The pin-free form of Menu_AlignEquipPanels gives the shift the
+     * higher global-alloc priority here and swaps them (lev 12). */
     register int offset asm("$18");
     int present;
     MenuWidgetNode *current;
