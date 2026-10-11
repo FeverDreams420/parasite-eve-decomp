@@ -88,7 +88,7 @@ void Battle_SetupEntityTarget(BattleEntity *actor) {
     }
     target = 0;
     if ((actor->entityFlags & 0x40000000) && !((EnemyCombatant *)actor->core)->deathPersist) {
-        for (target = D_8009D20C; target; target = target->next) {
+        for (target = (BattleEntity *)D_8009D20C; target; target = target->next) {
             EnemyCombatant *enemy;
             if (target == D_8009D254 || target == actor) continue;
             enemy = target->core;
@@ -97,7 +97,7 @@ void Battle_SetupEntityTarget(BattleEntity *actor) {
                 target->teamId == actor->teamId && !(actor->entityFlags & 0x40000000)) break;
         }
     } else if ((actor->entityFlags & 0x6000) && ((EnemyCombatant *)actor->core)->field04.bytes.kind == 3) {
-        for (target = D_8009D20C; target; target = target->next) {
+        for (target = (BattleEntity *)D_8009D20C; target; target = target->next) {
             EnemyCombatant *enemy;
             if (target == D_8009D254 || target == actor) continue;
             enemy = target->core;

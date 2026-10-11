@@ -7,7 +7,7 @@
  * D_8009CE6C below is gp-relative. */
 extern s8 D_8009D2B0;
 extern Combatant *D_8009D278;
-extern BattleEntity *D_8009D20C[];
+extern FieldActor *D_8009D20C;
 extern BattleEntity *D_8009D254[];
 /* COMMON supplies small-data metadata to MASPSX. */
 s8 D_8009CE6C;
@@ -23,7 +23,7 @@ inline static void Mark(BattleEntity *entity)
     if (kind == 4)
   {
     BattleEntity *active;
-    entity = D_8009D20C[0];
+    entity = (BattleEntity *)D_8009D20C;
     if (!entity)
       return;
     active = D_8009D254[0];
@@ -51,7 +51,7 @@ inline static void MarkCached(BattleEntity *entity, BattleEntity *active)
   else
     if (kind == 4)
   {
-    entity = D_8009D20C[0];
+    entity = (BattleEntity *)D_8009D20C;
     while (entity != 0)
     {
       if (((entity != active) && ((entity->core) != 0)) && ((((Combatant *)entity->core)->field04.bytes.kind) == 4))
@@ -71,7 +71,7 @@ inline static void MarkKinds(BattleEntity *entity, int group_kind, int linked_ki
   int kind = ((Combatant *)entity->core)->field04.bytes.kind;
   if (kind == linked_kind) entity = entity->parent;
   else if (kind == group_kind) {
-    entity = D_8009D20C[0];
+    entity = (BattleEntity *)D_8009D20C;
     while (entity != 0) {
       if (entity != active && entity->core != 0 && ((Combatant *)entity->core)->field04.bytes.kind == group_kind)
         entity->renderObject.flags_9C |= 0x20;

@@ -132,7 +132,7 @@ void Battle_ResolveHitOnTimer(void)
             savedReaction = (s8) (u8) D_8009CE55;
             if (D_8009CE54 == 1)
             {
-                multiTarget = D_8009D20C;
+                multiTarget = (BattleEntity *)D_8009D20C;
                 if (multiTarget != 0)
                 {
                 nextMultiTarget:
@@ -211,7 +211,7 @@ void Battle_ResolveHitOnTimer(void)
                     upperBound = playerAngle - 0xA00;
                 }
             }
-            coneTarget = D_8009D20C;
+            coneTarget = (BattleEntity *)D_8009D20C;
             if (coneTarget != 0)
             {
                 register s32 upper asm("$18");

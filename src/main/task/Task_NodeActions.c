@@ -469,7 +469,7 @@ int Task_MoveTowardPoint(int **args) {
 #define U32_AT(ptr, off) (*(u32 *)((u8 *)(ptr) + (off)))
 #define PTR_AT(ptr, off) (*(u8 **)((u8 *)(ptr) + (off)))
 
-extern u8 *D_8009D20C[];
+extern FieldActor *D_8009D20C;
 extern Pe1GlobalSlot D_8009D254;
 
 int Math_FixedMul(int a, int b);
@@ -605,7 +605,7 @@ int Camera_SnapToEntity(int **args) {
             }
             target = D_8009D254.value.pointer;
         } else {
-            target = D_8009D20C[0];
+            target = (u8 *)D_8009D20C;
             while (target != 0) {
                 if (U8_AT(target, 0xC) == *args[0] &&
                     U8_AT(target, 0xD) == *args[1] &&
@@ -716,7 +716,7 @@ int Camera_TrackEntityZoom(int **args) {
             }
             target = D_8009D254.value.pointer;
         } else {
-            target = D_8009D20C[0];
+            target = (u8 *)D_8009D20C;
             while (target != 0) {
                 if (U8_AT(target, 0xC) == *args[0] &&
                     U8_AT(target, 0xD) == *args[1] &&

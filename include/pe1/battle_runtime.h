@@ -41,7 +41,7 @@ extern unsigned int D_8009D2E8;
 extern int D_8009D28C;
 extern BattleAction D_800A76D8;
 extern s8 D_8009D2B0;
-extern BattleEntity *D_8009D20C;
+extern struct FieldActor *D_8009D20C; /* actor list head */
 extern void *D_8009D1F8;
 extern u8 D_8009159C[];
 extern u8 D_800915C0[];

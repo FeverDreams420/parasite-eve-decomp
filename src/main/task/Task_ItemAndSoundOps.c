@@ -221,7 +221,7 @@ typedef struct AkaoStackLocals {
 
 extern u8 D_800944A8[];
 u8 *D_8009CE00;
-extern u8 *D_8009D20C[];
+extern FieldActor *D_8009D20C;
 extern u8 *D_8009D254[];
 
 void Akao_Cmd_11(int slot);
@@ -476,7 +476,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
             actor = player;
             goto find_actor_asset;
         } else {
-            actor = D_8009D20C[0];
+            actor = (u8 *)D_8009D20C;
             while (actor != 0) {
                 if (U8_AT(actor, 0xC) == *args->arg2 &&
                     U8_AT(actor, 0xD) == *args->arg3 &&

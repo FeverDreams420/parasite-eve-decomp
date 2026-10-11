@@ -31,7 +31,7 @@ typedef struct TaskScriptArgs {
 #define ARG_WORD(ptr) (*(int *)(ptr))
 #define ARG_BYTE(ptr) (*(u8 *)(ptr))
 
-extern u8 *D_8009D20C[];
+extern FieldActor *D_8009D20C;
 extern u8 *D_8009D254[];
 /* COMMON supplies small-data metadata to MASPSX. */
 int D_8009CE00;
@@ -198,7 +198,7 @@ find_entity:
         if (initial_entity_id == 0) {
             return 1;
         }
-        entity = D_8009D20C[0];
+        entity = (u8 *)D_8009D20C;
         entity_id = initial_entity_id;
         if (entity == 0) {
             return 1;

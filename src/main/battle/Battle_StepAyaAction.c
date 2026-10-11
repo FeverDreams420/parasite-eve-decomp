@@ -125,7 +125,7 @@ s32 Battle_StepAyaAction(void)
     case 4:
       if (D_8009D254->animLastFrame == ((u16 *) (&D_8009D254->animFrame))[1])
     {
-      entity = D_8009D20C;
+      entity = (BattleEntity *)D_8009D20C;
       if (entity != 0)
       {
         do

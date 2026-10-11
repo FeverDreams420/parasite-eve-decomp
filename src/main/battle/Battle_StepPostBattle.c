@@ -47,7 +47,7 @@ void Battle_StepPostBattle(void)
             player = D_8009D254;
         }
         if (player->animLastFrame == (u16)(player->animFrame >> 16)) {
-            entity = D_8009D20C;
+            entity = (BattleEntity *)D_8009D20C;
             if (entity != 0) {
                 do {
                         if (entity != D_8009D254) {
@@ -91,7 +91,7 @@ void Battle_StepPostBattle(void)
                 Render_StartFadeIn(0x3C);
                 Akao_Cmd_C1_WithSlot(0, 0x3C, 0);
                 exemptKind = 1;
-                fadingEntity = D_8009D20C;
+                fadingEntity = (BattleEntity *)D_8009D20C;
                 if (fadingEntity != 0) {
                     do {
                     if (fadingEntity != D_8009D254) {
@@ -105,7 +105,7 @@ void Battle_StepPostBattle(void)
             }
         }
         else {
-            hiddenEntity = D_8009D20C;
+            hiddenEntity = (BattleEntity *)D_8009D20C;
             if (hiddenEntity != 0) {
                 do {
                     if ((hiddenEntity != D_8009D254) && ((hiddenEntity->core != 0) || !(hiddenEntity->entityFlags & 0x40)) && (hiddenEntity->renderObject.variant_visible == 0)) {

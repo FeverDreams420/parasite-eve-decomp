@@ -5,7 +5,7 @@
 #include "pe1/save.h"
 
 int Battle_RollEscapeChance(void) {
-    BattleEntity *entity = D_8009D20C;
+    BattleEntity *entity = (BattleEntity *)D_8009D20C;
     s16 highestRank = 0;
     /* Retail narrows the probability after every multiplier. */
     s8 result = 0;

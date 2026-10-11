@@ -266,7 +266,7 @@ finishInterruptedAction:
                         } else if (effectKind == 4) {
                             int linkedKind = 4;
                             BattleEntity *player;
-                            linkedActor = D_8009D20C;
+                            linkedActor = (BattleEntity *)D_8009D20C;
                             if (linkedActor != 0) {
                                 player = D_8009D254;
                                 do {
@@ -356,7 +356,7 @@ stepDeathAnimation:
                 actor->motionZ = 0;
                 Battle_StepEntityAnimState(actor);
             } else {
-                livingLink = D_8009D20C;
+                livingLink = (BattleEntity *)D_8009D20C;
                 for (;;) {
                     if (livingLink == 0) {
                         deadKind = enemy->field04.bytes.kind;

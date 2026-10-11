@@ -394,7 +394,7 @@ extern short D_800966EE[];
 extern short D_800966EC[][2];
 extern char *D_8009D254;
 struct FieldActorNode;
-extern struct FieldActorNode *D_8009D20C;
+extern struct FieldActor *D_8009D20C;
 extern int RoomLib_ResetAndSignal_801914B0(RoomEnt *obj);
 extern int RoomLib_Set4ClearSignal_80192510(RoomEnt *obj);
 extern void RoomLib_ArmWindowA_80190D0C(RoomEnt *obj);

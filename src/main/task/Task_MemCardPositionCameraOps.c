@@ -82,7 +82,7 @@ block_19:
     return 0;
 }
 
-extern u8 *D_8009D20C[];
+extern FieldActor *D_8009D20C;
 extern Pe1GlobalSlot D_8009D254;
 
 int Entity_GetPositionByType(int **args) {
@@ -100,7 +100,7 @@ int Entity_GetPositionByType(int **args) {
         }
         entity = player;
     } else {
-        entity = (FieldActor *)D_8009D20C[0];
+        entity = D_8009D20C;
         entity_id = selector;
         while (entity != 0) {
             if (entity->type_id == entity_id &&

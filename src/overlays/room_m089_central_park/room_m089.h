@@ -9,7 +9,7 @@
 
 extern short D_800966EC[][2];
 
-extern FieldActorNode *D_8009D20C;
+extern struct FieldActor *D_8009D20C;
 
 extern int func_80071A54(void);
 extern void func_801924F8(void);
