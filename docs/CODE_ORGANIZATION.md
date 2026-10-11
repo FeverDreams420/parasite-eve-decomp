@@ -119,11 +119,13 @@ question, not a real conflict:
 
 `python3 tools/scripts/decl_conflicts.py --count` lists symbols declared more
 than once with different types (629 at the start of the header unification,
-232 after it, 99 after the battle pass, 65 after the small-data pass). What
-remains falls into these
+232 after it, 99 after the battle pass, 65 after the small-data pass, 12
+after the actor and overlay view pass). What remains falls into these
 groups; each is left open on purpose, because one declaration would change
 the generated code or needs a decision about code that is not part of this
 pass.
+
+How the earlier groups were closed, for the next symbols of the same kind:
 
 - Small data versus absolute access is solved per unit, not per symbol: a
   `-G8` unit that reads a small word absolutely while its own small data is
@@ -131,45 +133,67 @@ pass.
   `--use-comm-section`, and tentative (COMMON) definitions of the words it
   does reach through `$gp`. MASPSX then emits `$gp` loads only for that
   COMMON metadata and every extern stays absolute, whatever its declared
-  size. This retired the wide, unsized and aliased views of the battle,
-  task, boot and menu words (`D_8009D1A8`..`D_8009D2B0`, `g_TaskNodePool`,
-  `g_CurrentEntity`, `g_SceneDispatchToken`, `D_8009D2F0`, the frame-loop
-  blobs). A unit that also needs cc1 to treat a small word as expensive
-  (address kept in a register) gets `-G0` for cc1 instead; that is why
-  `Gpu_InitPipeline` is its own unit, ahead of the `-G8` frame loop.
-- `D_800B0CE6`: `Battle_EncounterInitializationFlow` needs a view larger
-  than the `-G8` limit (cc1 then keeps `la` in a register for the
-  `lbu`/`ori`/`sb` sequence), while `Scene_SetStoryDay` needs a plain byte:
-  through a record view its registers are allocated differently.
-- `BattleCmd_CommitAmmoAndUpdate(void *out)`: the definition passes `out` on,
-  but `Battle_FinalizeAttackResult` and `Battle_DispatchEntityEffect` call it
-  without an argument; passing the action that is already in `$a0` moves the
-  actor pointer of `Battle_DispatchEntityEffect` from `$v0` to `$a0`.
-- Actor and state words shared by battle, field and room code with many
-  views: `D_8009D254`/`g_PlayerEntity` (one address, two names, more than
-  twenty room view types), `g_ActiveActor`, `D_8009D20C`,
-  `g_FieldActorListHead`, `g_ActiveDrawSlot`. These need the overlay views
-  unified first and mix small data with absolute access.
-- Small data versus absolute access: `g_GameStateFlags`, `D_8009D1F4`,
-  `D_8009D1A0`, `D_8009D2E8`. A `-G8` unit reaches them through `$gp`,
-  another needs an absolute address; changing a symbol between scalar and
-  array changes how GCC orders the accesses (seen in
-  `Render_CameraViewportFlow` and `Entity_PoolInit`).
+  size. A unit whose `$gp` words are records read at a field offset also
+  takes `/* ASPSX_VERSION: 2.70 */`, which lets MASPSX keep those offset
+  accesses `$gp`-relative (`Geo_ActorFloorResolution`, `Menu_TextboxDraw`).
+  A unit that also needs cc1 to treat a small word as expensive (address
+  kept in a register) gets `-G0` for cc1 instead; that is why
+  `Gpu_InitPipeline` is its own unit, ahead of the `-G8` frame loop. This
+  retired the array, record and aliased views of the battle, task, boot,
+  menu and field words, the actor list head (`D_8009D20C`,
+  `g_FieldActorListHead`), the player (`D_8009D254` as a `BattleEntity`
+  pointer, `g_PlayerEntity` as a `FieldActor` pointer), `g_ActiveActor`,
+  `g_ActiveDrawSlot`/`D_8009CDDC`, `g_GameStateFlags`/`D_8009D1A0`,
+  `D_8009D1F4`, `D_8009D2E8` and the task script cursor `D_8009CE00`.
+- Pointee views of one pointer (the room and scene records of the player,
+  the actor list, the matrix and projection slots) became casts at the use
+  to the view each unit reads, or the `FieldActor` field when it has the
+  same offset and type; the generated code does not change.
+- Element views of one table became a union element type
+  (`GteSineWord` for the sine table `D_800966EC`) or the record the data is
+  (`FieldGlowSprite` for the scene_e08 sprites, `DISPENV`/`DRAWENV` for
+  `D_800BCE80`/`D_800BCDC8`, `AkaoTickTrack` for `D_800B8AC0`,
+  `FontGlyphLoadState` for `D_800B0DD8`). Where a function needs the old
+  array arithmetic, it casts the table at the use.
+- Per-overlay data declared differently by two headers of one overlay got
+  one owner header in the overlay directory (`room_m350_data.h`,
+  `room_m273_boss_state.h`, `scene_e22_ember_data.h`,
+  `menu_memcard_offset.h`).
+- `BattleCmd_CommitAmmoAndUpdate` is called with the queued action and
+  without it, as retail does, so its call sites declare it without a
+  prototype.
+
+Still open:
+
+- Scalar versus record access of one word in different functions, where
+  the record view keeps the address in a register (a read-modify-write or
+  a reload) and the scalar view reloads it: `D_800B0CD8`/`g_GameState`
+  (`Boot_FrameLoop`, `Pm_ProcessManager` and `CdRom_BootReadFlow` need the
+  scalar, `Entity_FrameUpdate`, `CD_TrackReadFlow` and `Pm_ProcessManager`
+  the record), `D_800BCF88` (the room grab effects update it as a volatile
+  word), `D_800BCFA8` (fx_common saves and restores it as a scalar), and
+  `D_800B0CE6` (`Battle_EncounterInitializationFlow` needs the record view
+  for its `lbu`/`ori`/`sb` sequence, `Scene_SetStoryDay` a plain byte).
 - `D_800E11E8` and `D_800E11EA` (texture page words): the room and scene
   headers read them as plain `u16`, as `volatile u16` (store order), as
   one-member records (a record load stays behind the stores through the
   particle pointer, a scalar load does not) and as arrays. Each group
   needs its alias class, so one type changes the code of another group.
-- `D_800966EC` (trigonometry table): bitfield, union and `short[]` readers
-  index it differently.
-- Per-room struct views shared through overlay headers (`D_8018EFF4`,
-  `D_8018F1CC`, `RoomMain_ActorPtr`, the m350 and scene_e08 glow records).
+- `g_RoomScriptRecord`: the record `RoomLib_SetTaskVar0` returns is each
+  room's own data; room_m123's glow burst reads its intensity as a scalar
+  `s16` (as a union member the address stays in a register), room_m005 and
+  room_m023 read records.
+- `D_80192C34`, `D_80192C38`, `D_80192C3C`: two room_lib units linked into
+  different rooms (`RoomLib_CaptureFrameSample` into m156/m291/m380,
+  `RoomFx_EffectSequence` into others) name different data at these
+  addresses. The checker scopes room_lib as one overlay, so it reports
+  them.
 - `room_m350/RoomEffect_FadingModel.c` keeps its own `GetClut`, `rsin` and
   `rcos` declarations while that file is being edited.
 - Translation units that cannot merge: `Entity_CollisionDatabase` with
-  `Entity_UpdateList` (`-G8` against default, plus a `D_8009CE1C`
-  conflict) and `Render_EntityAndTexturedQuadFlow` with
-  `Render_DrawObjectAndClut` (GPREL relocation overflow).
+  `Entity_UpdateList` (`-G8` against default) and
+  `Render_EntityAndTexturedQuadFlow` with `Render_DrawObjectAndClut` (GPREL
+  relocation overflow).
 
 ## Link ownership
 
