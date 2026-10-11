@@ -103,12 +103,12 @@ int func_8019988C(int event, EmissionState *state)
             int rawHigh;
             int bit;
             effect->controls[0] = (random & 255) + 512;
-            asm volatile("" : : : "memory");
+            asm volatile("" : :);
             rawHigh = random >> 8;
             high = rawHigh & 255;
-            asm("" : "=r"(high) : "0"(high), "r"(rawHigh), "r"(random));
+            asm("" : : "r"(high), "r"(rawHigh), "r"(random));
             bit = random & 2;
-            asm("" : "=r"(bit) : "0"(bit), "r"(random));
+            asm("" : : "r"(bit), "r"(random));
             if (bit) y = high + 768;
             else y = high - 1024;
             effect->controls[1] = y;
