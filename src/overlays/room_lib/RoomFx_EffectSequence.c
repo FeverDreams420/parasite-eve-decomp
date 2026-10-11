@@ -59,7 +59,7 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     int c40;
     int value;
     register int c2 asm("$2");
-    RoomEffectSequencePrimarySprite *primary;
+    RoomEffectSequenceSprite *primary;
 
     func_800C2B40(state);
     D_80192C34 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0x498704);
