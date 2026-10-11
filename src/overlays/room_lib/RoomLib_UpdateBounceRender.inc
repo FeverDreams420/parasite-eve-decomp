@@ -29,7 +29,6 @@ int ROOMLIB_UPDATE_BOUNCE_RENDER_NAME(int mode, RoomLineBurstParticle *fx) {
     int saved2;
 
     blob = ROOMLIB_BOUNCE_RENDER_BLOB;
-    saved2 = (int)&blob;
     switch (mode) {
     case 1:
 
@@ -61,7 +60,7 @@ int ROOMLIB_UPDATE_BOUNCE_RENDER_NAME(int mode, RoomLineBurstParticle *fx) {
         }
         rawVy = (unsigned short)fx->vy;
         fx->vz = vz >> 9;
-        PE1_COMPILER_MEMORY_BARRIER();
+        asm volatile("" : : "m"(fx->vy));
         y = fx->y;
         nextVy = rawVy - ROOMLIB_BOUNCE_GRAVITY;
         fx->vy = nextVy;
@@ -137,7 +136,7 @@ int ROOMLIB_UPDATE_BOUNCE_RENDER_NAME(int mode, RoomLineBurstParticle *fx) {
         matrixSlot = &D_800BCFA4;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
-        func_800D2104((GteShortVector *)fx, (u8 *)saved2, saved0, 1);
+        func_800D2104((GteShortVector *)fx, (u8 *)&blob, saved0, 1);
     }
     default:
         break;
