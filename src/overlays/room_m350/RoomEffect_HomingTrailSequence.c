@@ -72,7 +72,7 @@ int func_801947BC(int event,RoomM350Particle *p)
                     register int next asm("$4")=n;
                     asm volatile("" : "=r"(next) : "0"(next));
                     *count=next+1;
-                    asm volatile("" : : "r"(count), "r"(next));
+                    asm volatile("" : : "r"(next));
                     {
                         RoomM350PointerQueue *queue=(RoomM350PointerQueue *)((char *)count-PE1_OFFSETOF(RoomM350PointerQueue,count));
                         queue->positions[n]=&p->position;
@@ -87,7 +87,7 @@ int func_801947BC(int event,RoomM350Particle *p)
                 register int next asm("$4")=n;
                 asm volatile("" : "=r"(next) : "0"(next));
                 *count=next+1;
-                asm volatile("" : : "r"(count), "r"(next));
+                asm volatile("" : : "r"(next));
                 {
                     RoomM350PointerQueue *queue=(RoomM350PointerQueue *)((char *)count-PE1_OFFSETOF(RoomM350PointerQueue,count));
                     queue->positions[n]=&p->position;
@@ -101,8 +101,10 @@ int func_801947BC(int event,RoomM350Particle *p)
             int shifted=(unsigned int)n<<16;
             *count=next;
             asm volatile("" : : "r"(count));
-            count-=0x24;
-            *(GteShortVector *)((shifted>>13)+(unsigned int)count)=p->position;
+            {
+                RoomM350PositionQueue *queue=(RoomM350PositionQueue *)((char *)count-PE1_OFFSETOF(RoomM350PositionQueue,count));
+                queue->positions[shifted>>16]=p->position;
+            }
         }
         p->tail.value.active.frame=(unsigned short)p->tail.value.active.frame+1;
     } else if(event==2) {
