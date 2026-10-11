@@ -1,3 +1,4 @@
+#include "pe1/room_m350_effects.h"
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
@@ -8,15 +9,8 @@
 
 typedef RoomM350Vector Vector;
 typedef struct { Vector *position; } Particle;
-typedef struct RoomM350Instance {
-    char reserved[14];
-    unsigned char animation;
-    char reserved0F[7];
-    unsigned short frame;
-    short reserved18;
-    unsigned short previousFrame;
-} Instance;
-typedef RoomM350Actor Actor;
+typedef RoomM350EffectInstance Instance;
+typedef RoomM350EffectActor Actor;
 
 /* The controller owns the position pointers rendered by this callback. */
 #include "pe1/gte_sine_table.h"

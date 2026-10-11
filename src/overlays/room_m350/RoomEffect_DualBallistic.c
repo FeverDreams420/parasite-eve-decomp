@@ -1,3 +1,4 @@
+#include "pe1/room_m350_effects.h"
 #include "pe1/field_sprite_params.h"
 #include "pe1/field_actor.h"
 #include "room_m350_shared.h"
@@ -6,9 +7,9 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/psyq_gpu.h"
-typedef RoomM350TransformMatrix Matrix;
-typedef RoomM350TransformOwner Instance;
-typedef RoomM350Actor Actor;
+typedef GteMatrix Matrix;
+typedef RoomM350EffectInstance Instance;
+typedef RoomM350EffectActor Actor;
 
 typedef struct { short x, y, z, velocityY, gravity, reserved; } Particle;
 #include "RoomEffect_DualBallistic_externs.h"
@@ -49,10 +50,10 @@ int func_80196A14(int event)
         Particle *particle = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
         if (particle) {
             int random = Inv_ScrambleGrid();
-            particle->x = (unsigned int)matrices[33].position[0] - (((unsigned int)random << 1) - 256);
-            particle->y = matrices[33].position[1];
+            particle->x = (unsigned int)matrices[33].t[0] - (((unsigned int)random << 1) - 256);
+            particle->y = matrices[33].t[1];
             random = Inv_ScrambleGrid();
-            particle->z = (unsigned int)matrices[33].position[2] - (((unsigned int)random << 1) - 256);
+            particle->z = (unsigned int)matrices[33].t[2] - (((unsigned int)random << 1) - 256);
             particle->velocityY = 0;
             particle->gravity = ((D_800E27EC >> 1) & 1) + 2;
         }
@@ -63,10 +64,10 @@ int func_80196A14(int event)
         if (!particle) return 0;
         {
             int random = Inv_ScrambleGrid();
-            particle->x = (unsigned int)matrices[0].position[0] - (((unsigned int)random << 1) - 256);
-            particle->y = matrices[0].position[1];
+            particle->x = (unsigned int)matrices[0].t[0] - (((unsigned int)random << 1) - 256);
+            particle->y = matrices[0].t[1];
             random = Inv_ScrambleGrid();
-            particle->z = (unsigned int)matrices[0].position[2] - (((unsigned int)random << 1) - 256);
+            particle->z = (unsigned int)matrices[0].t[2] - (((unsigned int)random << 1) - 256);
             particle->velocityY = 0;
             particle->gravity = ((D_800E27EC >> 1) & 1) + 2;
         }

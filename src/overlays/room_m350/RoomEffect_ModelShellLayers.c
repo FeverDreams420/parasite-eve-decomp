@@ -1,3 +1,4 @@
+#include "pe1/room_m350_effects.h"
 #include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
@@ -9,9 +10,9 @@
 #include "room_m350_data.h"
 /* MASPSX_FLAGS: --expand-div */
 typedef RoomM350Vector Vector;
-typedef RoomM350TransformMatrix Matrix;
+typedef GteMatrix Matrix;
 typedef struct { int color; short x, y, z, size; } Particle;
-typedef RoomM350TransformOwner Instance;
+typedef RoomM350EffectInstance Instance;
 
 #include "pe1/gte_sine_table.h"
 #include "RoomEffect_ModelShellLayers_externs.h"
