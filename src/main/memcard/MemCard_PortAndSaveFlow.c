@@ -413,25 +413,15 @@ void MemCard_InitManager(void) {
     int *events;
     int value;
     int event;
-    register int desc asm("$4");
-    register int spec asm("$5");
-    register int mode asm("$6");
-    void (*callback)(void);
     if (g_MemCardManagerReady == 0) {
         g_MemCardManagerReady = 1;
         i = 0;
         EnterCriticalSection();
 
         event = OpenEvent(0xF4000001, 0x0004, 0x1000, MemCard_OnEventF400Spec0004);
-        desc = 0xF4000001;
-        spec = 0x8000;
-        mode = 0x1000;
-        callback = MemCard_OnEventF400Spec8000;
-        /* Keep the event table base load after the second OpenEvent arguments. */
-        asm volatile("" ::: "$16");
         events = g_MemCardEventHandles;
         events[0] = event;
-        g_MemCardEventHandles[MEMCARD_EVENT_HW_ERROR] = OpenEvent(desc, spec, mode, callback);
+        g_MemCardEventHandles[MEMCARD_EVENT_HW_ERROR] = OpenEvent(0xF4000001, 0x8000, 0x1000, MemCard_OnEventF400Spec8000);
         g_MemCardEventHandles[MEMCARD_EVENT_HW_TIMEOUT] = OpenEvent(0xF4000001, 0x0100, 0x1000, MemCard_OnEventF400Spec0100);
         g_MemCardEventHandles[MEMCARD_EVENT_HW_NEW_CARD] = OpenEvent(0xF4000001, 0x2000, 0x1000, MemCard_OnEventF400Spec2000);
         g_MemCardEventHandles[MEMCARD_EVENT_SW_IO_END] = OpenEvent(0xF0000011, 0x0004, 0x1000, MemCard_OnEventF000Spec0004);
@@ -445,11 +435,7 @@ void MemCard_InitManager(void) {
         _card_auto(0);
 
         do {
-            int loop_event;
-            loop_event = *events;
-            events++;
-            /* Keep the table pointer increment before the EnableEvent call. */
-                        EnableEvent(loop_event);
+            EnableEvent(events[i]);
             i++;
         } while (i < 8);
 

@@ -658,10 +658,6 @@ Still open:
     an absolute address (`lui`/`lw 4`) where retail indexes `$a1` (lev 4);
     `&pending[count - 2]` and `pending -= 2` change the allocation (lev 10
     and 17). The pin is only needed with the barrier.
-  - `MemCard_InitManager` keeps three argument pins and the `$16` clobber:
-    retail sets the event table base `$s0` after the second `OpenEvent`
-    arguments, while sched1 places the address load first in every plain
-    form, including the first store inside the call's arguments (lev 4).
   - `MemCard_AbortActiveOperation` keeps the barrier that separates
     `name_buf` from `D_8009EE70`: with one value CSE keeps the buffer
     address in `$s0` across `sprintf` instead of rebuilding it (lev 31), the
