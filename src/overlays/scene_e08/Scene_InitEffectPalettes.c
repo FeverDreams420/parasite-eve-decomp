@@ -63,7 +63,7 @@ void func_80193C68(char *actor, void *unused, char *state) {
     byte128 = 128;
     thirtyTwo = 32;
     two = 2;
-    asm volatile("" : : "r"(byte128), "r"(two));
+    asm volatile("" : : "r"(two));
     *(s16 *)(state + 0x2A) = 0;
     *(s16 *)(state + 0x2C) = 0;
     D_80199558 = scratch;
