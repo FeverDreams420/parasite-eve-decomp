@@ -378,7 +378,7 @@ void Menu_DrawTextboxEntries(void) {
             if (textbox->state == 1) {
                 textbox->control.parts.delay = 0U;
                 textbox->control.parts.elapsed = 0U;
-                textbox->control.flags = (s32)((s32)textbox->control.flags & sectionMask);
+                textbox->control.flags = textbox->control.flags & sectionMask;
                 textbox->message = (u8 *)D_8009CE90;
                 while (1) {
                     temp_a0_2 = textbox->message;
@@ -411,7 +411,7 @@ void Menu_DrawTextboxEntries(void) {
                     temp_t1 = textbox->x;
                     baseX = temp_t1;
                     cursor.x = temp_t1;
-                    if (!((s32)textbox->control.flags & 0x02000000)) {
+                    if (!(textbox->control.flags & 0x02000000)) {
                         var_v0 = textbox->y + 6;
                     } else {
                         var_v0 = textbox->y;
@@ -462,7 +462,7 @@ void Menu_DrawTextboxEntries(void) {
                     break;
                 case 0xFF:
                     if ((textbox->state == 2) && (D_8009D1F4 & 0x100) &&
-                        !((s32)textbox->control.flags & 0x02000000)) {
+                        !(textbox->control.flags & 0x02000000)) {
                         textbox->state = 0U;
                     }
                     stopDrawing = 1;
@@ -478,7 +478,7 @@ void Menu_DrawTextboxEntries(void) {
                             nameGlyph = D_80091694.glyphs[(s8)nameIndex];
                             spacingOffset = nameGlyph * 2;
 
-                            fontRow = (u32)nameGlyph / 21;
+                            fontRow = nameGlyph / 21;
                             nameU = ((nameGlyph - (fontRow * 0x15)) & 0xFF) * 0xC;
                             nameV = (fontRow & 0xFF) * 0xC;
                             uv.x = nameU;
@@ -564,7 +564,7 @@ void Menu_DrawTextboxEntries(void) {
                         s32 sectionTerminator = 6;
                         if (D_8009D1F4 & 0x100) {
                         section_again:
-                            workingValue = (u32)textbox->control.flags;
+                            workingValue = textbox->control.flags;
                             if (sectionIndex == ((workingValue >> 16) & 15)) {
                                 stream++;
                                 textbox->control.flags = (workingValue & sectionMask) |
@@ -654,7 +654,7 @@ void Menu_DrawTextboxEntries(void) {
                         TextboxPoint *selectionCursor = &cursor;
                         s32 selectionOrderingOffset;
                         stream++;
-                        temp_v1_7 = (s32)textbox->control.flags | 0x200000;
+                        temp_v1_7 = textbox->control.flags | 0x200000;
                         textbox->control.flags = temp_v1_7;
                         workingValue = (temp_v1_7 & 0xFE3FFFFF) | ((*stream & 7) << 0x16);
                         textbox->control.flags = workingValue;
@@ -695,7 +695,7 @@ void Menu_DrawTextboxEntries(void) {
                         temp_v1_10 = ((*stream + 0xED) / 21) * 0xC;
                         uv.y = temp_v1_10;
                         asm("" : "=r"(divisionHintfb) : "0"(divisionHintfb));
-                        if ((u32)(temp_v1_10 & 0xFFFF) >= 0xF1U) {
+                        if ((temp_v1_10 & 0xFFFF) >= 0xF1U) {
                             uv.y = temp_v1_10 - 0xFC;
                             font = &D_80091644[1];
                         }
@@ -791,10 +791,10 @@ void Menu_DrawTextboxEntries(void) {
                 default:
                     temp_a0_5 = *stream;
 
-                    uv.x = (u8)((u32)temp_a0_5 % 21) * 12;
+                    uv.x = (u8)((unsigned int)temp_a0_5 % 21) * 12;
                     temp_v0_7 = *stream;
 
-                    workingValue = (u8)((u32)temp_v0_7 / 21);
+                    workingValue = (u8)((unsigned int)temp_v0_7 / 21);
                     uv.y = workingValue * 12;
                     cursor.x -= D_800916A0[*stream].left;
                     SetDrawTPage(nextPacket, 0, 1, font->tpage);
