@@ -45,7 +45,7 @@ void func_80194498(void *unused, u16 *phase, SceneLayeredSpriteState *state) {
         D_80199561 = 0xFF;
     }
     D_80199562 = 0x60;
-    PE1_COMPILER_MEMORY_BARRIER();
+    asm("" : : "m"(D_80199562));
 
     alphaBase = &D_8019956A;
     alpha = alphaBase;
