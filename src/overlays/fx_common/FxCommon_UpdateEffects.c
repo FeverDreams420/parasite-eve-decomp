@@ -110,7 +110,7 @@ void func_801942FC(void)
                         func_8018F55C(D_8019C038 + 0x20, 0x4B, Gpu_GetTimTableEntry((&D_801D0260), 2), &mode1NextSample, &sampleExtra);
                         copyX = mode1Sample.x;
                         copyZ = mode1Sample.z;
-                        currentX = *(s32 *)&g_FxCommonMotionPosition0.x;
+                        currentX = g_FxCommonMotionPosition0.x;
                         currentY = g_FxCommonMotionPosition0.y;
                         currentZ = g_FxCommonMotionPosition0.z;
                         shortA.x = (s16)copyX;
@@ -383,9 +383,9 @@ void func_801942FC(void)
         accumZ0 = g_FxCommonMotionAccum0.z + D_8019C094;
         g_FxCommonMotionAccum0.y = accumY0;
         g_FxCommonMotionAccum0.z = accumZ0;
-        g_FxCommonMotionPosition0.x = g_FxCommonMotionOrigin0.x + (accumX0 >> (*(s16 *)&D_8019C056));
-        g_FxCommonMotionPosition0.y = g_FxCommonMotionOrigin0.y + (accumY0 >> (*(s16 *)&D_8019C056));
-        g_FxCommonMotionPosition0.z = g_FxCommonMotionOrigin0.z + (accumZ0 >> (*(s16 *)&D_8019C056));
+        g_FxCommonMotionPosition0.x = g_FxCommonMotionOrigin0.x + (accumX0 >> D_8019C056);
+        g_FxCommonMotionPosition0.y = g_FxCommonMotionOrigin0.y + (accumY0 >> D_8019C056);
+        g_FxCommonMotionPosition0.z = g_FxCommonMotionOrigin0.z + (accumZ0 >> D_8019C056);
         if ((remaining0 << 0x10) == 0) {
             g_FxCommonMotionPosition0.x = g_FxCommonMotionTarget0.x;
             g_FxCommonMotionPosition0.y = g_FxCommonMotionTarget0.y;
@@ -401,9 +401,9 @@ void func_801942FC(void)
         accumZ1 = g_FxCommonMotionAccum1.z + D_8019C064;
         g_FxCommonMotionAccum1.y = accumY1;
         g_FxCommonMotionAccum1.z = accumZ1;
-        g_FxCommonMotionPosition1.x = g_FxCommonMotionOrigin1.x + (accumX1 >> (*(s16 *)&D_8019C052));
-        g_FxCommonMotionPosition1.y = g_FxCommonMotionOrigin1.y + (accumY1 >> (*(s16 *)&D_8019C052));
-        g_FxCommonMotionPosition1.z = g_FxCommonMotionOrigin1.z + (accumZ1 >> (*(s16 *)&D_8019C052));
+        g_FxCommonMotionPosition1.x = g_FxCommonMotionOrigin1.x + (accumX1 >> D_8019C052);
+        g_FxCommonMotionPosition1.y = g_FxCommonMotionOrigin1.y + (accumY1 >> D_8019C052);
+        g_FxCommonMotionPosition1.z = g_FxCommonMotionOrigin1.z + (accumZ1 >> D_8019C052);
         if ((remaining1 << 0x10) == 0) {
             g_FxCommonMotionPosition1.x = g_FxCommonMotionTarget1.x;
             g_FxCommonMotionPosition1.y = g_FxCommonMotionTarget1.y;
