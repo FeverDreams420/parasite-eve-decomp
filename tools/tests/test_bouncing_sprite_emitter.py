@@ -3,14 +3,17 @@ from importlib.util import find_spec
 from pathlib import Path
 import itertools
 import struct
+import sys
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'tools/tests'))
+from csource import function_text  # noqa: E402
 
 
 class BouncingSpriteEmitterTests(unittest.TestCase):
     def test_plain_source(self):
-        source = (ROOT / "src/main/engine/FieldEng_BouncingSpriteEmitter.c").read_text()
+        source = function_text("func_800D6E3C")
         self.assertNotRegex(source, r'\b(?:INCLUDE_ASM|REGALLOC_BARRIER)\b')
         self.assertNotRegex(source, r'asm\s+volatile\s*\(\s*"[^\"]+')
 

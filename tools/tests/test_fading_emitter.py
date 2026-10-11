@@ -6,15 +6,18 @@ no claim about arbitrary negative table indices or physical rendering.
 from pathlib import Path
 import itertools
 import struct
+import sys
 import unittest
 from importlib.util import find_spec
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'tools/tests'))
+from csource import function_text  # noqa: E402
 
 
 class FadingEmitterTests(unittest.TestCase):
     def test_plain_source(self):
-        source = (ROOT/'src/main/engine/FieldEng_FadingEmitter.c').read_text()
+        source = function_text('func_800DF6AC')
         self.assertNotRegex(source, r'\b(?:asm|__asm__|INCLUDE_ASM|REGALLOC_BARRIER)\b')
 
     @unittest.skipUnless((ROOT/'assets/USA/main.exe').is_file() and

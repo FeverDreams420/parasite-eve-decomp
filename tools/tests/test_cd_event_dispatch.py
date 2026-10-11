@@ -2,18 +2,18 @@ import pathlib
 import shutil
 import subprocess
 import tempfile
+import sys
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'tools/tests'))
+from csource import host_unit  # noqa: E402
 
 
 class CdEventDispatchTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_dispatch_and_callback_state_updates(self):
-        source = (ROOT / "src/main/psyq/libds/dssys_1_5.c").read_text()
-        # Keep the unit's includes and LIBDS_DSSYS_1_text_7FC, which closes it.
-        source = (source[:source.index("extern void parcpy")] +
-                  source[source.index("extern int D_8009B598[];"):])
+        source = host_unit("LIBDS_DSSYS_1_text_7FC")
         # The retail symbol points inside a larger allocation; model its prefix.
         source = source.replace("extern int D_8009B598[];",
             "static int stateWords[13];\n#define D_8009B598 (stateWords + 11)")
@@ -30,7 +30,7 @@ static void dispatched(int handler, int event, void *data) {
     stateWords[12] = 789;
     stateWords[1] = 123;
 }
-void LIBDS_DSSYS_1_text_EA4(int event) {
+void LIBDS_DSSYS_1_text_EA4(int event, u8 *data) {
     assert(step++ == 0 && event == (eventValue & 255));
     stateWords[11] = 456; stateWords[12] = 456;
     ((unsigned char *)stateWords)[0] = flagsValue;
