@@ -31,7 +31,7 @@ void func_801927A8(void *unused0, void *unused1, char *effect) {
     asm("" : : "r"(dst));
     frame = dst;
     step = frame;
-    do {
+    while (i < 16) {
         asm("" : "=r"(step), "=r"(frame) : "0"(step), "1"(frame));
         if (*(s16 *)(frame + 0x1C0)) {
             func_800C3134(table, *(int *)(step + 0x180), scratchA);
@@ -50,5 +50,5 @@ void func_801927A8(void *unused0, void *unused1, char *effect) {
         step += 4;
         ++i;
         frame += 2;
-    } while (i < 16);
+    }
 }
