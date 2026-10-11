@@ -1,4 +1,3 @@
-/* CC1_FLAGS: -ffixed-21 -ffixed-22 -ffixed-23 */
 #include "pe1/render_object.h"
 #include "pe1/field_anim.h"
 #include "pe1/field_model_draw.h"
@@ -75,17 +74,8 @@ int func_800DC058(int mode, FieldAnimTwinModel *state)
         D_800F3368.palette = 1;
         func_800CEDA8(1);
         D_800F3368.parameter06 = 1;
-        asm volatile("" : : : "memory");
-        {
-            GteMatrix **slot;
-            const GteMatrixWords *matrix;
-            slot = &D_800BCFA4.value;
-            asm volatile("" : "=r"(slot) : "0"(slot));
-            matrix = (const GteMatrixWords *)*slot;
-            asm volatile("" : "=r"(matrix) : "0"(matrix) : "$2", "$3", "$4", "$5", "$6", "$7", "$8");
-            gte_ldrotmatrix(matrix);
-            gte_ldtransmatrix(matrix);
-        }
+        gte_ldrotmatrix((const GteMatrixWords *)D_800BCFA4.value);
+        gte_ldtransmatrix((const GteMatrixWords *)D_800BCFA4.value);
         {
             int tpage = (u16)(D_800E2850[D_800E11E4[9]] | GetTPage(0, 3, 0, 0));
             int kind = D_800F3368.palette;
@@ -139,8 +129,6 @@ int func_800DC058(int mode, FieldAnimTwinModel *state)
             func_800C71E4((union FieldTexturedModel *)D_800F342C, &matrix);
             func_800C6F4C(D_800F342C);
         }
-        /* Exclude other reload temporaries without emitting instructions. */
-        asm volatile("" : : : "$10", "$11", "$15", "$24", "$25", "$17", "$18", "$19", "$20");
         break;
     }
     return 0;
