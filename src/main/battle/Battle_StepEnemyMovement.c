@@ -49,7 +49,7 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
     else if (activeState & 0x100000)
     {
         basePower = (((u16)D_8009D278->stat1E / 5U) & 0xFFFF) + (s16) D_8009D278->action->field00;
-        attackPower = ((s32) (basePower * (((D_8009D278->field04.fieldId04 * 7) + 0x78) / 160) * (s16)(D_8009D278->exp_or_acc >> 16)) / (s16) (s16)(D_8009D278->maxAtk >> 16)) + basePower;
+        attackPower = ((basePower * (((D_8009D278->field04.fieldId04 * 7) + 0x78) / 160) * (s16)(D_8009D278->exp_or_acc >> 16)) / (s16) (s16)(D_8009D278->maxAtk >> 16)) + basePower;
     }
     else
     {
@@ -59,7 +59,7 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
     }
     if (!(D_8009D278->stateFlags & 0x180000) && (defenseAction = D_8009D278->action, (defenseAction->actionCode.actionId != 8)))
     {
-        damage = attackPower - ((s32) enemy->field8C / (s32) (defenseAction->turnWord & 0xF));
+        damage = attackPower - (enemy->field8C / (s32) (defenseAction->turnWord & 0xF));
     }
     else
     {
@@ -76,7 +76,7 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
             if (hitReaction == 0x8000) damage = damage * 3 / 10;
             else if (hitReaction == 0x18000) damage = damage * 3 / 2;
             else if (hitReaction == 0x20000) damage /= 10;
-            attackClass = ((u32) flagCore->coreFlags >> 0x12) & 3;
+            attackClass = (flagCore->coreFlags >> 0x12) & 3;
             if (attackClass != 2)
             {
                 if (attackClass == 3)
@@ -103,7 +103,7 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
                 {
                     if (*turnFlags & 0x100)
                     {
-                        firstResistance = ((u32) (*statusFlags) >> 0xE) & 3;
+                        firstResistance = ((*statusFlags) >> 0xE) & 3;
                         switch (firstResistance)
                         {
                             case 1: resistanceMode = 1;
@@ -127,7 +127,7 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
                     }
                     if (*turnFlags & 0x800)
                     {
-                        poisonResistance = ((u32) (*statusFlags) >> 2) & 3;
+                        poisonResistance = ((*statusFlags) >> 2) & 3;
                         switch (poisonResistance)
                         {
                         case 0:
@@ -141,7 +141,7 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
                     }
                     if (*turnFlags & 0x1000)
                     {
-                        stopResistance = ((u32) (*statusFlags) >> 4) & 3;
+                        stopResistance = ((*statusFlags) >> 4) & 3;
                         if (stopResistance != 0)
                         {
                             if (stopResistance != 2)
@@ -180,7 +180,7 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
                 damage /= 5;
                 break;
             case 2:
-                damage = (s32) (damage * 3) / 2;
+                damage = (damage * 3) / 2;
                 break;
             }
         }

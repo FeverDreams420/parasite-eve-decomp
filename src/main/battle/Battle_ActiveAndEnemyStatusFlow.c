@@ -204,7 +204,7 @@ void Battle_DrawEnemyHP(s16 maximum, s16 current)
         u32 gray = 128;
         sprites = D_8009E1D8;
         asm volatile("" : "=r"(maximumIndex) : "0"(maximumIndex), "r"(gray));
-        shiftedIndex = (u32)maximumIndex << 24;
+        shiftedIndex = maximumIndex << 24;
         do {
             s32 frame = D_8009CDDC;
             s32 frameOffset;
@@ -251,14 +251,14 @@ void Battle_DrawEnemyHP(s16 maximum, s16 current)
             nextMaximumIndex = maximumIndex - 1;
             maximumIndex = nextMaximumIndex;
             asm volatile("" : "=r"(maximumIndex) : "0"(maximumIndex));
-            shiftedIndex = (u32)maximumIndex << 24;
+            shiftedIndex = maximumIndex << 24;
         } while (nextMaximumIndex >= 0);
     }
 
     /* Align current HP against the maximum field and draw it from left to right. */
     currentIndex = 0;
     {
-        s16 x = g_HudOrigin.x - ((((s32) ((u32)maximumLastIndex << 24) >> 23) + 1) * 6);
+        s16 x = g_HudOrigin.x - ((((maximumLastIndex << 24) >> 23) + 1) * 6);
         screenX = x + 62;
     }
     {

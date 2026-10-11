@@ -344,13 +344,13 @@ void Battle_PhaseInitEnemyTurn(void) {
                     if (entity->animLastFrame == entity->animPrev.parts.integer) {
                         if (((u8) entity->actionMode < 4U) && (D_8009D298 != 0)) {
                             if (D_8009D298 >= 2U) {
-                                entity->entityFlags = (s32) (entityFlags | 0x100);
+                                entity->entityFlags = (entityFlags | 0x100);
                             }
                             D_8009D298 = 0;
                             Entity_SetActionMode(D_8009D254, D_8009D29A);
                             player = D_8009D254;
-                            player->animFrame = (s32) (D_8009D29C[0]);
-                            player->animPrev.fixed = (s32) (D_8009D29C[0] + 0xFFFF0000);
+                            player->animFrame = (D_8009D29C[0]);
+                            player->animPrev.fixed = (D_8009D29C[0] + 0xFFFF0000);
                         } else {
                             Entity_SetActionMode(entity, D_8009D278->actionMode12);
                         }
@@ -359,8 +359,8 @@ void Battle_PhaseInitEnemyTurn(void) {
             } else {
                 enemy = entity->core;
                 if ((enemy != 0) && (enemy->field04.bytes.kind != 1)) {
-                    if ((u32) (entity->actionMode - 2) >= 2U) {
-                        entity->entityFlags = (s32) (entity->entityFlags & ~0x1000);
+                    if ((entity->actionMode - 2) >= 2U) {
+                        entity->entityFlags = (entity->entityFlags & ~0x1000);
                         Entity_TickAnimSequences(entity);
                         ready = 0;
                         if (entity->animLastFrame == entity->animPrev.parts.integer) {
@@ -835,7 +835,7 @@ void Battle_PhaseEndTurn(void) {
                 if (entity != D_8009D254) {
                     enemy = entity->core;
                     if ((enemy != 0) && (enemy->field04.bytes.kind != 1)) {
-                        if ((u32) (entity->actionMode - 2) >= 2U) {
+                        if ((entity->actionMode - 2) >= 2U) {
                             if (entity->animLastFrame == entity->animPrev.parts.integer) {
                                 Entity_SetActionMode(entity, (u16)(s8)enemy->field06.bytes.low);
                             } else if (entity->animStep != 0x10000) {
@@ -1166,7 +1166,7 @@ void Battle_StartDeathAnim(void) {
         {
             u8 *q;
             q = (u8 *)D_8009D254;
-            Asset_Find08Alt(0x45B, 0, ((BattleEntity *)q)->posX.parts.integer, ((BattleEntity *)q)->posY.parts.integer, (s32)((BattleEntity *)q)->posZ.parts.integer);
+            Asset_Find08Alt(0x45B, 0, ((BattleEntity *)q)->posX.parts.integer, ((BattleEntity *)q)->posY.parts.integer, ((BattleEntity *)q)->posZ.parts.integer);
         }
     }
 }

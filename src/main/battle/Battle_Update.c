@@ -47,7 +47,7 @@ void Battle_Update(void) {
         previousPhase = D_8009CE7C;
         if (previousPhase == 6) {
             D_8009CE7C = 0;
-            D_8009D28C = (s32) previousPhase;
+            D_8009D28C = previousPhase;
         }
     }
     active = D_8009D254->core;
@@ -235,8 +235,8 @@ void Battle_Update(void) {
         if ((D_8009D254->actionMode == 0xD) && !(D_800B0CE6 & 1)) {
             D_8009D278->actionMode12 = 4U;
             if (D_8009D254->entityFlags & 0x100) {
-                Asset_Find08Alt(0x453, 0, D_8009D254->posX.parts.integer, D_8009D254->posY.parts.integer, (s32) D_8009D254->posZ.parts.integer);
-                D_8009D254->entityFlags = (s32) (D_8009D254->entityFlags & ~0x100);
+                Asset_Find08Alt(0x453, 0, D_8009D254->posX.parts.integer, D_8009D254->posY.parts.integer, D_8009D254->posZ.parts.integer);
+                D_8009D254->entityFlags = (D_8009D254->entityFlags & ~0x100);
             }
             player = D_8009D254;
             if (player->animLastFrame == player->animPrev.parts.integer) {
@@ -249,7 +249,7 @@ void Battle_Update(void) {
         phase = D_8009D28C;
         if (phase == 1) {
             menuResult = Battle_HandleItemMenu();
-            D_8009D28C = (s32) menuResult;
+            D_8009D28C = menuResult;
             if (menuResult == 0) {
                 D_8009D1A0 = D_8009D1A0 & ~4;
             }
@@ -260,7 +260,7 @@ void Battle_Update(void) {
         } else if (phase == 3) {
             if (D_8009D278->stateFlags & 0x800) {
                 if (Battle_StepVictory() & 0xFF) {
-                    D_8009D278->stateFlags = (s32) (D_8009D278->stateFlags & ~0x800);
+                    D_8009D278->stateFlags = (D_8009D278->stateFlags & ~0x800);
                 }
             } else if (Inv_CountByValue(0x12) != 0) {
                 if (Battle_StepVictory() & 0xFF) {

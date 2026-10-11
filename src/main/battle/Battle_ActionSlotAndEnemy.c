@@ -196,7 +196,7 @@ void Battle_UpdateEnemy(BattleEntity *entity) {
         actionPhase = actionFlags & 0x6000;
         if (actionPhase == 0x2000) {
             Battle_StepEnemyMovement(actor);
-            Asset_Find08w((s32) enemy->attackAssetId, 0, (s32) actor->renderObject.target_x, (s32) actor->renderObject.target_y, (s32) actor->renderObject.target_z);
+            Asset_Find08w(enemy->attackAssetId, 0, actor->renderObject.target_x, actor->renderObject.target_y, actor->renderObject.target_z);
         } else if (actionPhase == 0x4000) {
             s32 kind = enemy->field04.bytes.kind;
             if (kind == 0 && (actionFlags & 0xE) == 0) {
@@ -204,7 +204,7 @@ void Battle_UpdateEnemy(BattleEntity *entity) {
                     if (actor->animLastFrame == actor->animPrev.parts.integer) {
                         if ((enemy->resumePhase == 2) && !(enemy->coreFlags & 0x1800)) {
                             enemy->resumePhase--;
-                            Entity_SetActionMode(actor, (s32) enemy->savedActionMode);
+                            Entity_SetActionMode(actor, enemy->savedActionMode);
                             if (enemy->savedInterpolation != 0) {
                                 actor->entityFlags |= 0x200;
                             }
@@ -226,8 +226,8 @@ void Battle_UpdateEnemy(BattleEntity *entity) {
                             Entity_TickAnimSequences(actor);
                         }
                     } else if (((u8) enemy->motionPhase >= 2U) && (enemy->motionFrames != 0)) {
-                        actor->posX.fixed += enemy->motionAmplitude * rsin((s32) enemy->motionAngle) * 0x10;
-                        actor->posZ.fixed += enemy->motionAmplitude * rcos((s32) enemy->motionAngle) * 0x10;
+                        actor->posX.fixed += enemy->motionAmplitude * rsin(enemy->motionAngle) * 0x10;
+                        actor->posZ.fixed += enemy->motionAmplitude * rcos(enemy->motionAngle) * 0x10;
                         enemy->motionFrames -= 1;
                     }
                 }

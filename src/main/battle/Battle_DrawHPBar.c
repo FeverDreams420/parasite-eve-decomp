@@ -227,7 +227,7 @@ loop_6:
         temp_s0_8->width = 6;
         temp_s0_8->height = 0xA;
 
-        if ((u32) (i & 0xFF) < 4U) {
+        if ((i & 0xFF) < 4U) {
             goto loop_6;
         }
         i = 0;
@@ -245,7 +245,7 @@ loop_8:
         temp_s0_11->width = 6;
         temp_s0_11->height = 0xA;
 
-        if ((u32) (i & 0xFF) < 5U) {
+        if ((i & 0xFF) < 5U) {
             goto loop_8;
         }
         greenGradient = &D_800B0130[bufferIndex][0];
@@ -332,7 +332,7 @@ loop_10:
         temp_s0_14->g0 = temp_v0;
         temp_s0_14->b0 = temp_v0;
 
-        if ((u32) (i & 0xFF) < 3U) {
+        if ((i & 0xFF) < 3U) {
             goto loop_10;
         }
         temp_s1_8 = bufferIndex * 0x1C;
@@ -371,7 +371,7 @@ loop_12:
         temp_s0_18->color.bytes.r = 0x80;
         temp_s0_18->color.bytes.g = 0x80;
         temp_s0_18->color.bytes.b = 0x80;
-        if ((u32) (i & 0xFF) < 3U) {
+        if ((i & 0xFF) < 3U) {
             goto loop_12;
         }
         i = 0;
@@ -386,7 +386,7 @@ loop_12:
             temp_s0_20->color.bytes.r = 0x80;
             temp_s0_20->color.bytes.g = 0x80;
             temp_s0_20->color.bytes.b = 0x80;
-        } while ((u32) (i & 0xFF) < 0xAU);
+        } while ((i & 0xFF) < 0xAU);
         temp_s2_6 = bufferIndex * 0x1C;
         Gpu_InitDrawModeSprtPacket(temp_s2_6 + ((u8 *)D_8009E768), hudPage);
         i = 0;
@@ -414,7 +414,7 @@ loop_16:
         temp_s0_24->color.bytes.r = 0x80;
         temp_s0_24->color.bytes.g = 0x80;
         temp_s0_24->color.bytes.b = 0x80;
-        if ((u32) (i & 0xFF) < 4U) {
+        if ((i & 0xFF) < 4U) {
             goto loop_16;
         }
         temp_s2_7 = bufferIndex * 0x1C;
@@ -453,7 +453,7 @@ loop_18:
         temp_s0_28->width = 6;
         temp_s0_28->height = 6;
 
-        if ((u32) (i & 0xFF) < 2U) {
+        if ((i & 0xFF) < 2U) {
             goto loop_18;
         }
         temp_s0_29 = bufferIndex * 0x1C;
@@ -486,7 +486,7 @@ loop_18:
             temp_v1->color.bytes.b = 0x80;
             temp_v1->height = (s16) glyphHeight;
 
-        } while ((u32) (i & 0xFF) < 0xDU);
+        } while ((i & 0xFF) < 0xDU);
         pageCode = GetTPage(0, 0, 0x1C0, 0);
         temp_s0_33 = bufferIndex * 0x1C;
         Gpu_InitDrawModeSprtPacket(temp_s0_33 + D_8009EC38, pageCode);

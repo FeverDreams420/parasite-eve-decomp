@@ -243,11 +243,11 @@ void Battle_StartEncounter(int mode) {
     {
         BattleEntity *post_entity;
         RenderMatrix *post_actor;
-        u32 callback;
+        void *callback;
         post_entity = D_8009D254;
         post_actor = post_entity->renderObject.matrices;
-        callback = (u32)Entity_CheckActionIdMatch;
-        post_entity->actionCheckFn = (void *)callback;
+        callback = Entity_CheckActionIdMatch;
+        post_entity->actionCheckFn = callback;
         D_8009D27C = post_actor->translation[1] - 0x64;
     }
     Window_SetBoundsByMode(mode_reg & 0xFF);

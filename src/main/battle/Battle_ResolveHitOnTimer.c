@@ -50,10 +50,10 @@ void Battle_ResolveHitOnTimer(void)
             if (D_8009CE54 == 1)
             {
                 effectTarget = selectedSlot->actor;
-                Asset_Find08Alt(0x46D, 0, (s32) effectTarget->renderObject.target_x, (s32) effectTarget->renderObject.target_y, (s32) effectTarget->renderObject.target_z);
+                Asset_Find08Alt(0x46D, 0, effectTarget->renderObject.target_x, effectTarget->renderObject.target_y, effectTarget->renderObject.target_z);
                 if (D_8009D278->action->turnWord & 0x6000)
                 {
-                    stealMode = ((u32) ((EnemyCombatant *)selectedSlot->actor->core)->statusFlags2 >> 0xC) & 3;
+                    stealMode = (((EnemyCombatant *)selectedSlot->actor->core)->statusFlags2 >> 0xC) & 3;
                     switch (stealMode)
                     {
                         /* Retail switch shares the steal body with case 0. */
@@ -61,18 +61,18 @@ void Battle_ResolveHitOnTimer(void)
                         if (!(rand() & 1))
                         {
                         case 2:
-                            if (Inv_AddItem((s32) ((EnemyCombatant *)selectedSlot->actor->core)->stealItemId) != 0)
+                            if (Inv_AddItem(((EnemyCombatant *)selectedSlot->actor->core)->stealItemId) != 0)
                             {
                                 EnemyCombatant *enemy = selectedSlot->actor->core;
                                 D_8009D1CE = 1;
-                                D_8009D1F8 = Inv_GetItemEffectData((s32) enemy->stealItemId, 2);
+                                D_8009D1F8 = Inv_GetItemEffectData(enemy->stealItemId, 2);
                             }
                             else
                             {
                                 EnemyCombatant *enemy = selectedSlot->actor->core;
                                 D_8009D1CE = 1;
                                 {
-                                    void *effect = Inv_GetItemEffectData((s32) enemy->stealItemId, 1);
+                                    void *effect = Inv_GetItemEffectData(enemy->stealItemId, 1);
                                     EnemyCombatant *enemyAfter = selectedSlot->actor->core;
                                     D_8009D1F8 = effect;
                                     enemyAfter->stealItemId = 0;
@@ -144,7 +144,7 @@ void Battle_ResolveHitOnTimer(void)
                             multiFlags = multiTarget->entityFlags;
                             if (((multiFlags & 0x2040) != 0x40) && !(multiFlags & 0x4000) && (multiCandidate->hpAlive > 0) && (multiTarget != selectedSlot->actor))
                             {
-                                Battle_CheckEvasion(multiTarget, (BattleEvasionOutcome *)&D_8009CE54, (s32) (s16) savedReaction);
+                                Battle_CheckEvasion(multiTarget, (BattleEvasionOutcome *)&D_8009CE54, (s16) savedReaction);
                                 multiCore = multiTarget->core;
                                 if (D_8009CE54 == 1)
                                 {
@@ -191,7 +191,7 @@ void Battle_ResolveHitOnTimer(void)
             playerAngle = (u16) D_8009D254->facingAngle;
             upperBound = playerAngle - 0x800;
             centeredAngle = upperBound;
-            upperBound = (u32)upperBound << 16;
+            upperBound = upperBound << 16;
             lowerBound = upperBound >> 16;
             if (lowerBound < -0x600)
             {
@@ -219,11 +219,11 @@ void Battle_ResolveHitOnTimer(void)
                 register s32 facing;
                 register int upperRange;
                 register s32 shifted;
-                shifted = (u32)upperBound << 16;
+                shifted = upperBound << 16;
                 upper = shifted >> 16;
-                shifted = (u32)lowerBound << 16;
+                shifted = lowerBound << 16;
                 lower = shifted >> 16;
-                shifted = (u32)centeredAngle << 16;
+                shifted = centeredAngle << 16;
                 facing = shifted >> 16;
                 upperRange = facing < 0x600;
             testConeTarget:
