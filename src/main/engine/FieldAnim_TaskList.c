@@ -88,7 +88,7 @@ void *func_800CE610(char *list) {
     char frame[8];
     FieldAnimCallbackList *base;
     char *entry;
-    register int slot_or_count asm("$5");
+    register int slot_or_count;
     register int count asm("$6");
     register int stride asm("$7");
     int i;

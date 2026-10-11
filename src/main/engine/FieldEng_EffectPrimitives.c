@@ -231,10 +231,6 @@ void func_800D1384(GteShortVector *head, GteShortVector *tail, u32 countArg,
         gte_ldtransmatrix((const GteMatrixWords *)view);
     }
     for (i = 0; i < count; i++, history++, packet++) {
-        u32 *depthOut = &depth;
-        /* Non-volatile so GCC can hoist the opaque address out of the loop,
-         * while retaining the indirect depth store and retail spill layout. */
-        asm("" : "=r"(depthOut) : "0"(depthOut));
         if (history[0].head.vector.pad & history[0].tail.vector.pad & history[1].head.vector.pad &
             history[1].tail.vector.pad) {
             {
@@ -252,7 +248,7 @@ void func_800D1384(GteShortVector *head, GteShortVector *tail, u32 countArg,
             gte_cop2_hazard_slot();
             gte_cop2_hazard_slot();
             gte_rtpt_command();
-            gte_stmac0(depthOut);
+            gte_stmac0(&depth);
             if (depth == 0) {
                 return;
             }
@@ -266,7 +262,7 @@ void func_800D1384(GteShortVector *head, GteShortVector *tail, u32 countArg,
             gte_cop2_hazard_slot();
             gte_avsz3_command();
             {
-                gte_stszotz(depthOut);
+                gte_stszotz(&depth);
             }
             depth -= bias;
             if (depth >= 0x1000) {
@@ -1093,7 +1089,7 @@ void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,
     height = height * scale_y / 8192;
     {
         s32 *depthOut = &depth;
-        gte_stszotz(depthOut);
+        gte_stszotz(&depth);
 
     }
     depth -= (u16)D_800F3368.depth;
