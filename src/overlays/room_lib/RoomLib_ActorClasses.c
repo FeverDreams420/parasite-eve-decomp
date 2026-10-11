@@ -222,7 +222,8 @@ void RoomLib_HandlerD(RoomEnt *o) {
     int value;
     int product;
     int *rot;
-    int rot_y;
+    int result;
+    int work;
     int rot_word;
     int rot_x;
 
@@ -274,9 +275,9 @@ void RoomLib_HandlerD(RoomEnt *o) {
         scratch[0x35] = angle;
         rot = table + (angle & 0xFFF);
     }
-    rot_y = ((short *)rot)[1];
+    result = ((short *)rot)[1];
     scratch[0x15] = 0;
-    scratch[0x14] = rot_y;
+    scratch[0x14] = result;
     PE1_COMPILER_MEMORY_BARRIER();
     rot_word = *rot;
     rot_x = (unsigned short)scratch[0x14];
@@ -307,31 +308,34 @@ void RoomLib_HandlerD(RoomEnt *o) {
         ent->flag3 = 2;
     }
     {
-        register int work asm("$3");
+        int projected;
+        int progress;
 
         if (((RoomLibMotionWork *)scratch)->rotated[2] >= 0) {
             int position;
             position = ((RoomLibHandlerDState *)state)->value88;
             position += ((RoomLibHandlerDState *)state)->value8C;
-            work = (position + bias) >> 16;
+            projected = (position + bias) >> 16;
+            work = projected;
             product = work * (((RoomLibHandlerDState *)state)->speed >> 12);
             PE1_COMPILER_MEMORY_BARRIER();
             ((RoomLibHandlerDState *)state)->value88 = position;
             PE1_COMPILER_MEMORY_BARRIER();
-            work = ((RoomLibHandlerDState *)state)->progress.word;
+            progress = ((RoomLibHandlerDState *)state)->progress.word;
         } else {
             int updated;
-            work = ((RoomLibHandlerDState *)state)->value88;
-            work = (work + bias) >> 16;
-            product = work * (((RoomLibHandlerDState *)state)->speed >> 12);
+            projected = ((RoomLibHandlerDState *)state)->value88;
+            projected = (projected + bias) >> 16;
+            product = projected * (((RoomLibHandlerDState *)state)->speed >> 12);
             PE1_COMPILER_MEMORY_BARRIER();
             updated = ((RoomLibHandlerDState *)state)->value88;
             updated -= ((RoomLibHandlerDState *)state)->value8C;
             PE1_COMPILER_USE(updated);
-            work = ((RoomLibHandlerDState *)state)->progress.word;
+            progress = work = ((RoomLibHandlerDState *)state)->progress.word;
             ((RoomLibHandlerDState *)state)->value88 = updated;
         }
-        ((RoomLibHandlerDState *)state)->progress.word = work + ((product >> 8) << 12);
+        result = progress + ((product >> 8) << 12);
+        ((RoomLibHandlerDState *)state)->progress.word = result;
     }
     }
 
