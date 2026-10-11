@@ -20,14 +20,6 @@ extern u8 D_80192C0C;
 extern u8 D_80192C0D;
 extern u8 D_80192C0E;
 extern s16 D_80192C10;
-extern u8 D_80192C18;
-extern u8 D_80192C19;
-extern u8 D_80192C1A;
-extern u8 D_80192C1C;
-extern u8 D_80192C1D;
-extern u8 D_80192C1E;
-extern s16 D_80192C20;
-extern s16 D_80192C22;
 extern u8 D_80192C28;
 extern u8 D_80192C29;
 extern u8 D_80192C2A;
@@ -47,7 +39,7 @@ typedef struct RoomEffectSequenceSprite {
 } RoomEffectSequenceSprite;
 PE1_STATIC_ASSERT(sizeof(RoomEffectSequenceSprite) == 0x10, effect_sequence_sprite_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomEffectSequenceSprite, depth) == 0xA, effect_sequence_sprite_depth);
-extern RoomEffectSequenceSprite D_80192C38;
+extern RoomEffectSequenceSprite D_80192C18, D_80192C38;
 
 extern int *func_800C2B28(int index);
 extern int *func_800C2B10(int index);

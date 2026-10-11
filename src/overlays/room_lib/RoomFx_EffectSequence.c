@@ -79,13 +79,13 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     c40 = 0x40;
     c20 = 0x20;
     PE1_COMPILER_USE(c20);
-    D_80192C1D = 3;
-    D_80192C20 = -100;
+    D_80192C18.clut = 3;
+    D_80192C18.offset = -100;
     D_80192C2C = 8;
     PE1_COMPILER_MEMORY_BARRIER();
     c2 = 2;
     D_80192C09 = c40;
-    D_80192C19 = c40;
+    D_80192C18.g = c40;
     c40 = 2;
     D_80192C2D = c2;
     D_80192C28 = 0x90;
@@ -95,11 +95,11 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     D_80192C0E = 0;
     D_80192C08 = c80b;
     D_80192C0A = c20;
-    D_80192C1C = c80b;
-    D_80192C22 = c80a;
-    D_80192C1E = 0;
-    D_80192C18 = c80b;
-    D_80192C1A = c20;
+    D_80192C18.cell = c80b;
+    D_80192C18.depth = c80a;
+    D_80192C18.flip = 0;
+    D_80192C18.r = c80b;
+    D_80192C18.b = c20;
     D_80192C30 = c40;
     D_80192C32 = c80a;
     D_80192C2E = 0;
@@ -1064,7 +1064,6 @@ void RoomFx_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, Room
     RoomOverlay024Vec4 scratch_scale;
     RoomOverlay024Vec4 draw_scale;
     RoomOverlay024Vec4 second_scale;
-    s16 *fade_slot;
     s32 scale;
 
     owner_ptr = func_800C2B50();
@@ -1106,16 +1105,15 @@ void RoomFx_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, Room
     scratch_scale = draw_scale;
     ScaleMatrix(&matrix, &scratch_scale);
 
-    fade_slot = &D_80192C22;
-    *fade_slot = state->fade_alpha;
+    D_80192C18.depth = state->fade_alpha;
 
     matrix.t[0] = transform->x + projected[0] + (func_80071A54() % 20) - 10;
     matrix.t[1] = transform->y + projected[1] - (((s16)state->vertical_offset) >> 4);
     matrix.t[2] = transform->z + projected[2] + (func_80071A54() % 20) - 10;
 
-    func_800C3134(&D_80192BFC, state->field30, (char *)fade_slot - 0xA);
-    D_80192C1C = state->phase * 2;
-    func_800C42A4((FieldGlowSprite *)((char *)fade_slot - 0xA), (GteMatrix *)&matrix, 1);
+    func_800C3134(&D_80192BFC, state->field30, (char *)&D_80192C18);
+    D_80192C18.cell = state->phase * 2;
+    func_800C42A4((FieldGlowSprite *)&D_80192C18, (GteMatrix *)&matrix, 1);
 
     func_800C2FF0(0x20, 0x20);
     RotMatrix(&base_seed, &matrix);
@@ -1127,12 +1125,12 @@ void RoomFx_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, Room
     draw_scale = second_scale;
     ScaleMatrix(&matrix, &draw_scale);
 
-    *fade_slot = state->fade_alpha >> 2;
+    D_80192C18.depth = state->fade_alpha >> 2;
     matrix.t[0] = transform->x + projected[0];
     matrix.t[1] = -0x457;
     matrix.t[2] = transform->z + projected[2];
-    D_80192C1C = 8;
-    func_800C42A4((FieldGlowSprite *)((char *)fade_slot - 0xA), (GteMatrix *)&matrix, 0);
+    D_80192C18.cell = 8;
+    func_800C42A4((FieldGlowSprite *)&D_80192C18, (GteMatrix *)&matrix, 0);
 
     if (control->frame < 0x5B) {
         return;
