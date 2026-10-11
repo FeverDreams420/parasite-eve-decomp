@@ -143,6 +143,16 @@ How the earlier groups were closed, for the next symbols of the same kind:
   pointer, `g_PlayerEntity` as a `FieldActor` pointer), `g_ActiveActor`,
   `g_ActiveDrawSlot`/`D_8009CDDC`, `g_GameStateFlags`/`D_8009D1A0`,
   `D_8009D1F4`, `D_8009D2E8` and the task script cursor `D_8009CE00`.
+  The symbol alias pass applied it to `Battle_EscapeAndPhaseInitFlow`,
+  `Battle_DrawStatusPanel`, `Battle_InitEntityColors`,
+  `Inv_InitMaxLevelInventory`, the three `-G8` capacity units and the `-G4`
+  `Inv_CheckFreeSlotCapacity`, which retired the `battle_turn.h`,
+  `battle_status.h` and `inventory_slots.h` views and the per-byte HUD color
+  views. Where retail reloads a word after a field store, the plain scalar is
+  not enough: GCC 2.7 lets a store to a structure field skip a fixed scalar,
+  so `D_8009D29C` stays a one-element array and the `Combatant` flag store in
+  `Battle_InitEntityColors` stays a byte-offset access. A field store that
+  `g_GameState` and `D_800B0CEC` already describe is written as that field.
 - Pointee views of one pointer (the room and scene records of the player,
   the actor list, the matrix and projection slots) became casts at the use
   to the view each unit reads, or the `FieldActor` field when it has the
@@ -201,6 +211,21 @@ Still open:
   `Entity_UpdateList` (`-G8` against default) and
   `Render_EntityAndTexturedQuadFlow` with `Render_DrawObjectAndClut` (GPREL
   relocation overflow).
+- Symbol aliases that `MASPSX_FORCE_G0` cannot remove, because cc1 decides
+  them before MASPSX runs:
+  - `CD_StepReadState` reads the sound table pointer `D_800B0E08` four
+    times with no store or call between the check and the use; one symbol
+    lets CSE merge those loads, so its three views stay.
+  - `Menu_MemCardProgress` (`D_800A19C0`, two views), `Save_StartWriteSlot`
+    (`D_8009EE70` in `memcard.h`) and the scene_e20 hover orb
+    (`D_800E2850`) rebuild a buffer or table address after a call or a
+    store. With one symbol GCC keeps the address in a register (or, in the
+    hover orb, an 8-byte spill slot). The text buffer matches only when it
+    is declared at 8 bytes or less, which would misstate its 0x40 bytes.
+  - `Battle_StepEscapeOrDeath` keeps the read and write views of
+    `D_800B0D88` (`D_800B0CEC.flags_9C`): the player's flags load must stay
+    after that store, which needs a non-small store address, and writing
+    the field through `D_800B0CEC` makes the loop keep its address in `s1`.
 
 ## Link ownership
 
