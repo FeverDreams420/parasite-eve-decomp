@@ -417,7 +417,7 @@ void RoomFx_InitRingPair(int unused0, int unused1,
     asm volatile("" ::: "memory");
     source = g_RoomDropFieldRingImages;
 
-    *anchor = mode;
+    g_RoomDropFieldRings[0].mode = mode;
     g_RoomDropFieldRings[0].offset = 0;
     g_RoomDropFieldRings[0].intensity = intensity;
     g_RoomDropFieldRings[0].color1[0] = color1_0;
