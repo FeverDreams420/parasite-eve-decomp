@@ -13,11 +13,11 @@ void func_801942FC(void)
     FxCommonMotionVec motionSample;
     GteShortVector motionExtra;
     s32 copyX;
+    s32 copyY;
     s32 copyZ;
     s32 currentX;
     s32 currentY;
-    /* Retains the retail register order for the short-vector copy. */
-    register s32 currentZ asm("$10");
+    s32 currentZ;
     s16 resourceResult;
     s32 rowIndex;
     /* Raw halfword is loaded before the blend duration, then sign-extended. */
@@ -109,12 +109,13 @@ void func_801942FC(void)
                         func_8018F55C(D_8019C038 + 0x20, 0x4A, Gpu_GetTimTableEntry((&D_801D0260), 2), &mode1Sample, &sampleExtra);
                         func_8018F55C(D_8019C038 + 0x20, 0x4B, Gpu_GetTimTableEntry((&D_801D0260), 2), &mode1NextSample, &sampleExtra);
                         copyX = mode1Sample.x;
+                        copyY = mode1Sample.y;
                         copyZ = mode1Sample.z;
                         currentX = g_FxCommonMotionPosition0.x;
                         currentY = g_FxCommonMotionPosition0.y;
                         currentZ = g_FxCommonMotionPosition0.z;
                         shortA.x = (s16)copyX;
-                        shortA.y = mode1Sample.y - 0x64;
+                        shortA.y = copyY - 0x64;
                         shortA.z = (s16)copyZ;
                         shortB.x = (s16)currentX;
                         shortB.y = (s16)currentY;
