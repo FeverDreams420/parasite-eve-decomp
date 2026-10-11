@@ -48,7 +48,10 @@ typedef struct RoomDropFieldState {
     RoomDropFieldLink *link;
     RoomDropFieldMatrixWords matrix0;
     RoomDropFieldMatrixWords matrix1;
-    void *asset;                  /* 0x44 */
+    union {
+        int index;
+        u8 page;                  /* texture page the draws select */
+    } asset;                      /* 0x44 */
     u16 holdFrames;               /* 0x48 */
     s16 holdTimer;                /* 0x4A */
     s16 hit;                      /* 0x4C */

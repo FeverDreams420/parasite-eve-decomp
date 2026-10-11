@@ -50,7 +50,7 @@ void RoomFx_DropFieldInit(RoomDropFieldEntity *ent, void *unused, RoomDropFieldS
     state->matrix0 = *matrix;
     matrix = &state->link->view[5];
     state->matrix1 = *matrix;
-    state->asset = Asset_SearchByKeyType(9);
+    state->asset.index = Asset_SearchByKeyType(9);
 
     state->holdTimer = 0;
     state->hit = 0;
@@ -239,7 +239,7 @@ void RoomFx_DrawSpinSprite(s32 arg0, s32 arg1, RoomDropFieldSprite *sprite) {
     RoomDropFieldSpinFrame stack;
     s16 *ptr;
 
-    func_800C2EAC((u8)((char *)func_800C2B50())[0x44]);
+    func_800C2EAC(((RoomDropFieldState *)func_800C2B50())->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x100);
     func_800C3238(2);
@@ -316,12 +316,12 @@ void RoomFx_DrawDoubleSprite(void *arg0, void *arg1, RoomDoubleSpriteFxParams *f
     RoomFxVec4 scratch;
     RoomFxVec4 scale;
     RoomFxVec4 second_scale;
-    char *owner;
+    RoomDropFieldState *owner;
     u16 *depth_slot;
 
     owner = func_800C2B50();
     seed = *(RoomFxSeed8 *)&s_DropFieldTiltX;
-    func_800C2EAC((u8)owner[0x44]);
+    func_800C2EAC(owner->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
@@ -852,7 +852,7 @@ void RoomFx_DrawModelSprite(s32 arg0, s32 arg1, RoomDropFieldSprite *sprite) {
     RoomDropFieldSpinFrame stack;
     s16 *ptr;
 
-    func_800C2EAC((u8)((char *)func_800C2B50())[0x44]);
+    func_800C2EAC(((RoomDropFieldState *)func_800C2B50())->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
@@ -1316,7 +1316,7 @@ typedef struct RoomFourSpriteStack {
 void RoomFx_DrawQuadSprites(void *unused0, void *unused1,
                                     RoomFourSpriteState *state) {
     RoomFourSpriteStack stack;
-    char *clock;
+    RoomDropFieldState *clock;
     unsigned int i;
     /* Retail keeps the matrix base in s3 and the second column in s7; the
      * three sprite-array cursors are strength-reduced copies the compiler
@@ -1334,7 +1334,7 @@ void RoomFx_DrawQuadSprites(void *unused0, void *unused1,
     matrix = &stack.matrix;
     column1 = &stack.matrix.m[0][1];
     depthSlot = &g_RoomDropFieldQuadSprite.depth;
-    func_800C2EAC((u8)clock[0x44]);
+    func_800C2EAC(clock->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x100);
     func_800C3238(2);
@@ -1463,7 +1463,7 @@ void RoomFx_DrawEightParticles(
     RoomSpriteMatrix *matrixArg;
     register int scale2 asm("$6");
     register int scale3 asm("$7");
-    char *context;
+    RoomDropFieldState *context;
     int secondScale;
 
     state = stateArg;
@@ -1473,7 +1473,7 @@ void RoomFx_DrawEightParticles(
     depthOut = &g_RoomDropFieldParticleSprite.depth;
     packet = (char *)depthOut - 10;
 
-    func_800C2EAC((u8)context[0x44]);
+    func_800C2EAC(context->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
