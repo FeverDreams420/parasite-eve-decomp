@@ -247,7 +247,15 @@ s32 Render_DrawWireframeModel(RenderAnimFrame *frame, void *position, s32 scale,
             gte_ldv0(vertex);
             gte_rtps();
             gte_stsxy2(&g_WireScratch.screenXY[i]);
-            gte_stsz3_short(&g_WireScratch.depth[i]);
+            {
+                /* Matching debt: retail reads SZ3 into t4 and stores it
+                 * through v0 (lev 5 unpinned). */
+                register s16 *depth asm("$2") = &g_WireScratch.depth[i];
+                register int z asm("$12");
+
+                gte_getsz3_for_store(z, depth);
+                *depth = z;
+            }
             vertex++;
             i += 1;
         } while (i < count);
