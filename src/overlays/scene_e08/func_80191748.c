@@ -4,7 +4,7 @@ extern void *D_8009D254;
 
 int *func_800C2B28(int arg0);
 void func_80020D50(void);
-void func_80020DD0(void *arg0);
+void func_80020DD0(void);
 int FieldEng_GetStatus(void *arg0);
 
 void func_80191748(char *arg0, unsigned char *arg1) {
@@ -25,7 +25,7 @@ void func_80191748(char *arg0, unsigned char *arg1) {
 
                 objectFlags = *(int **)*(int **)(arg0 + 8);
                 *objectFlags |= 0x80000000;
-                func_80020DD0(objectFlags);
+                func_80020DD0();
             }
         }
     }
