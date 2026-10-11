@@ -2,6 +2,8 @@
 #include "common.h"
 #include "pe1/gte_types.h"
 #include "pe1/asset_find.h"
+#include "pe1/field_anim_pool.h"
+#include "pe1/field_actor.h"
 
 /* Floor-placement basis vectors and the asset lookups at a field
  * position; func_800C66C8 reads the normals func_800C65E4 writes. */
@@ -12,14 +14,14 @@ int FieldEng_GetStatus(void *obj);
 
 extern int D_800C213C[];
 
-void func_800C65E4(s16 *from, s16 *to, char *out) {
+void func_800C65E4(s16 *from, s16 *to, GteMatrix *out) {
     int crossA[4];
     int crossB[4];
     int delta[4];
     GteVector basis;
     s16 *from_t0;
     s16 *to_a3;
-    char *out_s2;
+    GteMatrix *out_s2;
     register int *basis_src asm("$5");
     int *delta_s1;
     int *crossB_s0;
@@ -61,39 +63,39 @@ void func_800C65E4(s16 *from, s16 *to, char *out) {
     crossB_s0 = crossB;
     OuterProduct12(call_delta_a0, call_basis_a1, crossB_s0);
 
-    VectorNormalS(crossA, out_s2 + 0x14);
-    VectorNormalS(crossB_s0, out_s2 + 0x18);
-    VectorNormalS(delta_s1, out_s2 + 0x1C);
+    VectorNormalS(crossA, &out_s2->t[0]);
+    VectorNormalS(crossB_s0, &out_s2->t[1]);
+    VectorNormalS(delta_s1, &out_s2->t[2]);
 }
 
-void *func_800C66C8(char *obj, void *asset, char *pos) {
+void *func_800C66C8(char *obj, void *asset, GteMatrix *pos) {
     void *result = 0;
 
     if (FieldEng_GetStatus(obj) == 3 || FieldEng_GetStatus(obj) == 4) {
-        result = (void *)Asset_Find08w((int)asset, *(int *)(*(char **)(*(char **)(obj + 8) + 0) + 8),
-                               *(s16 *)(pos + 0x14), *(s16 *)(pos + 0x18), *(s16 *)(pos + 0x1C));
+        result = (void *)Asset_Find08w((int)asset, ((FieldAnimObjectPrefix *)obj)->actor->state->progress,
+                               (s16)pos->t[0], (s16)pos->t[1], (s16)pos->t[2]);
     }
 
     return result;
 }
 
-void *func_800C6764(char *obj, void *asset, char *pos) {
+void *func_800C6764(char *obj, void *asset, GteVector *pos) {
     void *result = 0;
 
     if (FieldEng_GetStatus(obj) == 3 || FieldEng_GetStatus(obj) == 4) {
-        result = (void *)Asset_Find08w((int)asset, *(int *)(*(char **)(*(char **)(obj + 8) + 0) + 8),
-                               *(s16 *)(pos + 0), *(s16 *)(pos + 4), *(s16 *)(pos + 8));
+        result = (void *)Asset_Find08w((int)asset, ((FieldAnimObjectPrefix *)obj)->actor->state->progress,
+                               (s16)pos->x, (s16)pos->y, (s16)pos->z);
     }
 
     return result;
 }
 
-void *func_800C6800(char *obj, void *asset, char *pos) {
+void *func_800C6800(char *obj, void *asset, GteShortVector *pos) {
     void *result = 0;
 
     if (FieldEng_GetStatus(obj) == 3 || FieldEng_GetStatus(obj) == 4) {
-        result = (void *)Asset_Find08w((int)asset, *(int *)(*(char **)(*(char **)(obj + 8) + 0) + 8),
-                               *(s16 *)(pos + 0), *(s16 *)(pos + 2), *(s16 *)(pos + 4));
+        result = (void *)Asset_Find08w((int)asset, ((FieldAnimObjectPrefix *)obj)->actor->state->progress,
+                               pos->x, pos->y, pos->z);
     }
 
     return result;
