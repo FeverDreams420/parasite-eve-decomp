@@ -11,7 +11,7 @@ extern struct { s32 value; char pad[12]; } D_8009D2FC_absolute __asm__("D_8009D2
 #define SECOND_SOUND (D_8009D2FC_absolute.value)
 
 extern s16 D_8009D27C;
-extern volatile u8 D_8009CE39, D_8009CE3B;
+extern u8 D_8009CE39, D_8009CE3B;
 int Battle_CalcDistToPlayer(BattleEntity *actor, BattleEntity *player);
 s16 Battle_CalcAngleToTarget(RenderObjectEntity *object, void *target);
 int Battle_StepCharacterAction(BattleInitSlot *slot);
