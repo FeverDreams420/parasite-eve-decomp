@@ -1533,8 +1533,6 @@ void RoomFx_UpdateEightParticles(void *unused,
     RoomEightParticleControl *clock;
     register RoomEightParticleState *state asm("$19");
     unsigned int i;
-    register char *positionCursor asm("$16");
-    register char *scalarCursor asm("$17");
     RoomEightParticleContext *context;
     const GteMatrix *matrix;
     RoomFxSeed8 seed0;
@@ -1548,27 +1546,27 @@ void RoomFx_UpdateEightParticles(void *unused,
     int frame;
     s16 slot;
     int random;
+    RoomEightParticleState *particles;
 
     clock = control;
     state = stateArg;
     contextResult = func_800C2B50();
     i = 0;
-    scalarCursor = (char *)state;
     context = contextResult;
     matrixBase = context->root->transforms;
-    positionCursor = (char *)state;
     seed0 = *(RoomFxSeed8 *)&s_EightParticleOffset;
     seed1 = *(RoomFxSeed8 *)&s_EightParticleStepRight;
     seed2 = *(RoomFxSeed8 *)&s_EightParticleStepLeft;
     matrix = (const GteMatrix *)&matrixBase[5];
 
+    particles = state;
     for (; i < 8;) {
-        if (state->active[i] == 0) {
+        if (particles->active[i] == 0) {
             frame = clock->frame;
             slot = frame % 8;
             if (slot == i && frame < 90) {
-                state->active[i] = 1;
-                state->activeCount++;
+                particles->active[i] = 1;
+                particles->activeCount++;
                 ApplyMatrixSV(matrix,
                               (const GteShortVector *)&seed0,
                               (GteShortVector *)&transformed0);
@@ -1579,22 +1577,22 @@ void RoomFx_UpdateEightParticles(void *unused,
                               (const GteShortVector *)&seed2,
                               (GteShortVector *)&transformed2);
 
-                ((RoomEightParticleState *)positionCursor)->position[0].x =
+                particles->position[i].x =
                     (u16)transformed0.vector.x + context->baseX;
-                ((RoomEightParticleState *)positionCursor)->position[0].y =
+                particles->position[i].y =
                     (u16)transformed0.vector.y + context->baseY;
-                ((RoomEightParticleState *)positionCursor)->position[0].z =
+                particles->position[i].z =
                     (u16)transformed0.vector.z + context->baseZ;
 
                 random = rand();
                 if ((random & 1) == 0) {
-                    ((RoomEightParticleState *)positionCursor)->velocity[0] = transformed2;
+                    particles->velocity[i] = transformed2;
                 } else {
-                    ((RoomEightParticleState *)positionCursor)->velocity[0] = transformed1;
+                    particles->velocity[i] = transformed1;
                 }
-                ((RoomEightParticleState *)scalarCursor)->scale[0] = 0x800;
-                ((RoomEightParticleState *)scalarCursor)->fade[0] = 0x80;
-                ((RoomEightParticleState *)scalarCursor)->angle[0] = 0;
+                particles->scale[i] = 0x800;
+                particles->fade[i] = 0x80;
+                particles->angle[i] = 0;
             }
         } else {
             int randomValue;
@@ -1603,37 +1601,35 @@ void RoomFx_UpdateEightParticles(void *unused,
             s16 zPosition;
             s16 zValue;
 
-            ((RoomEightParticleState *)positionCursor)->position[0].x +=
-                (u16)((RoomEightParticleState *)positionCursor)->velocity[0].vector.x;
+            particles->position[i].x +=
+                (u16)particles->velocity[i].vector.x;
             randomValue = rand();
             randomValue %= 20;
-            zPosition = ((RoomEightParticleState *)positionCursor)->position[0].z;
-            zVelocity = (u16)((RoomEightParticleState *)positionCursor)->velocity[0].vector.z;
+            zPosition = particles->position[i].z;
+            zVelocity = (u16)particles->velocity[i].vector.z;
             asm("" : "=r"(zPosition), "=r"(zVelocity)
                    : "0"(zPosition), "1"(zVelocity));
-            yValue = ((RoomEightParticleState *)positionCursor)->position[0].y;
+            yValue = particles->position[i].y;
             yValue -= 20;
             zValue = zPosition + zVelocity;
             asm("" : "=r"(yValue), "=r"(zValue)
                    : "0"(yValue), "1"(zValue));
-            ((RoomEightParticleState *)positionCursor)->position[0].z = zValue;
+            particles->position[i].z = zValue;
             yValue -= randomValue;
-            ((RoomEightParticleState *)positionCursor)->position[0].y = yValue;
-            ((RoomEightParticleState *)scalarCursor)->fade[0] -= 8;
-            (((RoomEightParticleState *)scalarCursor)->angle[0])++;
-            if (((RoomEightParticleState *)scalarCursor)->fade[0] <= 0) {
-                ((RoomEightParticleState *)scalarCursor)->fade[0] = 0;
-                state->active[i] = 0;
-                state->activeCount--;
+            particles->position[i].y = yValue;
+            particles->fade[i] -= 8;
+            (particles->angle[i])++;
+            if (particles->fade[i] <= 0) {
+                particles->fade[i] = 0;
+                particles->active[i] = 0;
+                particles->activeCount--;
             }
         }
 
-        scalarCursor += 2;
         i++;
-        positionCursor += 8;
     }
 
-    if (state->activeCount == 0 && clock->frame >= 91) {
+    if (particles->activeCount == 0 && clock->frame >= 91) {
         clock->state = 2;
     }
 }
