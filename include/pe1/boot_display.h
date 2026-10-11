@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/cdrom_buffers.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/gpu_image.h"
 
 typedef struct {
     s32 tag;
@@ -96,7 +97,6 @@ extern char g_RenderDrawEnvArray[] __asm__("D_800BCDC8");
 
 void func_80077AC4(void *ordering_table, void *primitive);
 void func_80077B04(void *primitive, s32 code);
-void func_80077C84(void *primitive, s32 x, s32 y, u16 tpage);
 void func_80077CB4(void *primitive, void *next);
 void func_80074A44(s32 value);
 s32 func_80073A44(s32 value);
@@ -121,7 +121,6 @@ s32 Boot_InitPlaybackFile(void);
 void func_80074BB8(s32 value);
 void func_80074D28(s32 value);
 void func_80074DC0(s32 value);
-void func_80074F44(void *rect, s32 x, s32 y, s32 mode);
 s32 func_800718D0(void *resource);
 s32 func_800719C4(void *resource);
 s32 func_80071994(void *resource);
@@ -129,8 +128,6 @@ s16 *func_80071964(void *resource);
 s16 *func_80071944(void *resource);
 void func_8010BE3C(s32 value);
 void func_8010BD4C(void *address);
-void func_800755F0(void *entry);
-void func_8007506C(void *rect, void *image);
 void func_80075424(void *draw_env);
 void Boot_PresentFrame(void);
 void func_800754E4(void *dst, void *src);

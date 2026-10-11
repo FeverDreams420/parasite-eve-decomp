@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/game_state.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/gpu_image.h"
 #include "pe1/render_packets.h"
 #include "pe1/cdrom.h"
 #include "pe1/textbox.h"
@@ -26,8 +27,6 @@ extern u8 D_800B0DCD;
 extern u16 D_800B0DD4;
 
 void SetDispMask(int mask);
-void ClearImage(RECT *rect, int r, int g, int b);
-void MoveImage(RECT *rect, int x, int y);
 void ClearOTagR(u32 *table, int length);
 void DrawOTag(u32 *table);
 void Boot_BuildRenderFlagTable(void);

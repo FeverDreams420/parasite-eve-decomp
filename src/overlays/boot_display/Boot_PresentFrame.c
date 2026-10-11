@@ -13,7 +13,7 @@ void Boot_PresentFrame(void) {
         rect[2] = 480;
         rect[3] = 224;
     }
-    func_8007506C(rect, D_80125B88[g_BootDisplayBufferIndex * 4]);
+    LoadImage(rect, D_80125B88[g_BootDisplayBufferIndex * 4]);
     if (g_BootDisplayState == 6) {
         timer = g_BootDisplayStateTimer + 1;
         g_BootDisplayStateTimer = timer;
@@ -25,7 +25,7 @@ void Boot_PresentFrame(void) {
     }
     func_80074DC0(0);
     func_80073A44(2);
-    func_800755F0(g_RenderDisplayEnvArray + g_ActiveDrawSlot * 20);
+    PutDispEnv(g_RenderDisplayEnvArray + g_ActiveDrawSlot * 20);
     func_80075424(g_RenderDrawEnvArray + g_ActiveDrawSlot * 92);
     g_ActiveDrawSlot ^= 1;
 }

@@ -14,7 +14,6 @@ extern int D_80193258;
 extern char D_80193268[];
 
 void func_80074A44(int);
-void func_800755F0(void *);
 
 void func_80127848(void) {
     int i;
@@ -33,7 +32,7 @@ void func_80127848(void) {
         main_rect.w = 0x1E0;
         main_rect.h = 0xCC;
         main_rect.y = y;
-        func_8007506C(&main_rect, D_80193268 + D_80193258);
+        LoadImage(&main_rect, D_80193268 + D_80193258);
         DrawSync(0);
 
         env = D_801D11C4;
@@ -43,12 +42,12 @@ void func_80127848(void) {
             clipped.x = (clipped.x * 3) >> 1;
             if (D_801D11C8 == 0) clipped.y = (u16)clipped.y + 0xF0;
             clipped.w = (clipped.w * 3) >> 1;
-            func_8007506C(&clipped, D_801D11C4 + 0x8080);
+            LoadImage(&clipped, D_801D11C4 + 0x8080);
         }
 
         VSync(0);
         func_80074A44(1);
         PutDrawEnv(D_801D11C4);
-        func_800755F0(D_801D11C4 + 0x5C);
+        PutDispEnv(D_801D11C4 + 0x5C);
     }
 }

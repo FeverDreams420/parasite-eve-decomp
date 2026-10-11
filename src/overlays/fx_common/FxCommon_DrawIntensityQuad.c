@@ -48,7 +48,7 @@ void func_801941A4(int intensity)
     packet++;
     quadBuffer->data = packet;
 
-    func_80077C84(&packet->mode.packet, 0, 0, 0x40);
+    SetDrawTPage(&packet->mode.packet, 0, 0, 0x40);
     modeBuffer = D_8019C9C0;
     packet->mode.packet.tag.packed = (packet->mode.packet.tag.packed & commandMask) |
                               (*(u32 *)modeBuffer->allocation & addressMask);

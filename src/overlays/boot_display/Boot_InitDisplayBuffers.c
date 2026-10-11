@@ -39,7 +39,7 @@ void Boot_InitDisplayBuffers(void) {
     D_80125B90 = end;
     D_80125B98 = end;
     D_80125BA0 = start;
-    func_80074F44(rect, 0, 0, 0);
+    ClearImage(rect, 0, 0, 0);
     func_80074DC0(0);
     func_8010BE3C(0);
     offset = 0x43000;
@@ -54,6 +54,6 @@ void Boot_InitDisplayBuffers(void) {
     g_BootDisplayClut = GetClut(D_80172C94[0], D_80172C94[1]);
     func_80124F40(0);
     func_80124F40(1);
-    func_800755F0(g_RenderDisplayEnvArray + (g_ActiveDrawSlot * 20));
+    PutDispEnv(g_RenderDisplayEnvArray + (g_ActiveDrawSlot * 20));
     func_80074D28(1);
 }

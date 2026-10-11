@@ -3,6 +3,8 @@
 
 #include "menu_memcard_screen.h"
 #include "menu_memcard_image.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/gpu_image.h"
 
 /* Matching views of the existing two pointer slots, not extra storage.
  * Separate names retain retail's reloads instead of caching their addresses. */
@@ -18,10 +20,6 @@ extern s32 D_8009D1BC, D_8009CDDC;
 extern u8 *D_80011610, *D_800B0E38, *D_800B0E3C, *D_800B0E50, *D_800B0E54;
 extern u8 D_8019319C[];
 
-void func_80074924(DRAWENV *, int, int, int, int); /* SetDefDrawEnv */
-void func_800749D8(DISPENV *, int, int, int, int); /* SetDefDispEnv */
-void func_80074F44(RECT *, int, int, int); /* ClearImage */
-void func_8007512C(RECT *, int, int); /* MoveImage */
 void func_80190660(void);
 void Draw_InitBuffers(void);
 void func_80036DF8(void);

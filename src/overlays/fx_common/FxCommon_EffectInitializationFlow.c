@@ -71,9 +71,9 @@ void func_80195F6C(void)
         g_FxCommonTopFadeQuads[i].x3 = 320;
         g_FxCommonTopFadeQuads[i].y3 = 40;
 
-        func_80077C84(&g_FxCommonDrawModes0[i], 0, 0, 0);
-        func_80077C84(&g_FxCommonDrawModes1[i], 0, 0, 0x20);
-        func_80077C84(&g_FxCommonDrawModes2[i], 0, 0, 0x40);
+        SetDrawTPage(&g_FxCommonDrawModes0[i], 0, 0, 0);
+        SetDrawTPage(&g_FxCommonDrawModes1[i], 0, 0, 0x20);
+        SetDrawTPage(&g_FxCommonDrawModes2[i], 0, 0, 0x40);
     }
 }
 

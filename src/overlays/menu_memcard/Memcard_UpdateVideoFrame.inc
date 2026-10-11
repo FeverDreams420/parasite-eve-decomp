@@ -65,7 +65,7 @@ void *MEMCARD_UPDATE_VIDEO_FRAME_NAME(VideoDisplay *display) {
             local.clear.w = 320;
             local.clear.h = 480;
         }
-        func_80074F44(&local.clear, 0, 0, 0);
+        ClearImage(&local.clear, 0, 0, 0);
         MEMCARD_VIDEO_SIZE[0] = local.frame->width;
         MEMCARD_VIDEO_SIZE[1] = local.frame->height;
     }

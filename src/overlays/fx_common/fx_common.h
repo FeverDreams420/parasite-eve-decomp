@@ -6,6 +6,7 @@
 #include "pe1/room_fx.h"
 #include "pe1/gte_types.h"
 #include "pe1/render_matrix_slot.h"
+#include "pe1/psyq_gpu.h"
 
 typedef struct FxCommonSelection {
     s16 record;
@@ -258,7 +259,6 @@ extern void *volatile D_800BCFA8;
 void func_800868AC(int mode, int arg1);
 void func_80077BC4(FxCommonGradientQuad *packet);
 void func_80077B04(void *packet, int enabled);
-void func_80077C84(FxCommonDrawModePacket *packet, int x, int y, int tpage);
 void func_800752AC(void *allocation, int size);
 s16 func_80193B5C(s16 value);
 void *func_8006EC6C(void *data, int count);

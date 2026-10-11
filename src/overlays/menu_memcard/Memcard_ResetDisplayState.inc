@@ -1,4 +1,5 @@
 #include "pe1/psyq_gpu.h"
+#include "pe1/gpu_image.h"
 #ifndef MEMCARD_RESET_DISPLAY_STATE_NAME
 #define MEMCARD_RESET_DISPLAY_STATE_NAME func_8012A848
 #endif
@@ -42,7 +43,6 @@ extern MemcardSlot92 D_800BCDC8[2];
 extern MemcardSlot92 MEMCARD_SLOT92_SOURCE[2];
 
 void SetDispMask(s32 enabled);
-void func_8007512C(MemcardRect *rect, s32 x, s32 y);
 
 void MEMCARD_RESET_DISPLAY_STATE_NAME(void) {
     s8 i;
@@ -74,14 +74,14 @@ void MEMCARD_RESET_DISPLAY_STATE_NAME(void) {
         rect.y = 0;
         rect.w = 0xC0;
         rect.h = 0x100;
-        func_8007512C(&rect, 0x140, 0);
+        MoveImage(&rect, 0x140, 0);
 
         if ((D_800B0CD8 & 0x8000000) == 0) {
             rect.x = 0x200;
             rect.y = 0x100;
             rect.w = 0x140;
             rect.h = 0x40;
-            func_8007512C(&rect, 0, 0x1C0);
+            MoveImage(&rect, 0, 0x1C0);
         }
     }
 }

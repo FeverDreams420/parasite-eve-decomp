@@ -71,13 +71,13 @@ s32 MEMCARD_INIT_VIDEO_BUFFERS_NAME(s8 count, u8 **buffers) {
     rectangle.y = 0;
     rectangle.w = 192;
     rectangle.h = 256;
-    func_8007512C(&rectangle, 512, 0);
+    MoveImage(&rectangle, 512, 0);
     if (!(D_800B0CD8 & 0x08000000)) {
         rectangle.x = 0;
         rectangle.y = 448;
         rectangle.w = 320;
         rectangle.h = 64;
-        func_8007512C(&rectangle, 512, 256);
+        MoveImage(&rectangle, 512, 256);
     }
     return 1;
 }

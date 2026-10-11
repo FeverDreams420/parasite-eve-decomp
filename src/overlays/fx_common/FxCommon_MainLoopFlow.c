@@ -103,9 +103,9 @@ void func_80192030(void)
     area.y = 0;
     area.w = 0x140;
     area.h = 0x1C0;
-    func_80074F44(&area, 0, 0, 0);
+    ClearImage(&area, 0, 0, 0);
     func_80074DC0(0);
-    func_800755F0(D_800BCE80);
+    PutDispEnv(D_800BCE80);
     if (fade == 1)
         func_80086C5C(D_800B0DB5, 0x1E, 0);
     func_800868AC(0x1E, 0);
@@ -199,7 +199,7 @@ void func_8019234C(void)
         func_80193AB0();
         func_80074A44(1);
         func_80075424(((FxCommonFrame *)D_8019C9C0)->drawEnv);
-        func_800755F0(((FxCommonFrame *)D_8019C9C0)->dispEnv);
+        PutDispEnv(((FxCommonFrame *)D_8019C9C0)->dispEnv);
         func_800753B4(&D_8019C9C0->allocation[0xFFF]);
         next = &g_FxCommonFrames[0].buffer;
         if (D_8019C9C0 == next)

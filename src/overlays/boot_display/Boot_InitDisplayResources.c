@@ -18,7 +18,7 @@ void Boot_InitDisplayResources(void) {
     rect[1] = 0;
     rect[3] = 0x1FF;
     g_BootDisplayBufferIndex ^= 1;
-    func_80074F44(rect, 0, 0, 0);
+    ClearImage(rect, 0, 0, 0);
     func_80074DC0(0);
 
     resource = D_8012682C;

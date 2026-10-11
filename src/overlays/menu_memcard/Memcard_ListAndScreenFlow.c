@@ -112,16 +112,16 @@ void func_80190660(void) {
     s32 shade;
 
     tim = (MemcardTim *)&D_80193254[D_80193278];
-    func_8007506C(&tim->clut.rect, tim->clut.data);
+    LoadImage(&tim->clut.rect, tim->clut.data);
     block = &tim->clut;
     block = (MemcardTimBlock *)((u32 *)block + (block->size >> 2));
-    func_8007506C(&block->rect, block->data);
+    LoadImage(&block->rect, block->data);
     DrawSync(0);
 
     for (i = 0; i < 2; i++) {
         sprite = sprites[i & 1];
         tpage = tpages[i & 1];
-        func_80077C84(tpage, 0, 0, 0x18);
+        SetDrawTPage(tpage, 0, 0, 0x18);
         sprite->len = 4;
         sprite->code = 0x64;
         sprite->x0 = 0x20;
@@ -131,7 +131,7 @@ void func_80190660(void) {
         sprite->w = 0x100;
         sprite->h = 0x40;
         sprite++;
-        func_80077C84(tpage + 1, 0, 0, 0x19);
+        SetDrawTPage(tpage + 1, 0, 0, 0x19);
         sprite->len = 4;
         sprite->code = 0x64;
         sprite->x0 = 0x11C;
@@ -181,12 +181,12 @@ void func_80190660(void) {
                 overlay.y += 240;
             }
             overlay.w = overlay.w * 3 >> 1;
-            func_8007506C(&overlay, D_801D11C4->overlayImage);
+            LoadImage(&overlay, D_801D11C4->overlayImage);
         }
         VSync(0);
         func_80074A44(1);
         PutDrawEnv(&D_801D11C4->draw);
-        func_800755F0(&D_801D11C4->disp);
+        PutDispEnv(&D_801D11C4->disp);
     }
 
     SetDispMask(0);
@@ -259,14 +259,14 @@ s32 func_801909B4(void) {
         rect.w = 0xA0;
         rect.y = 0;
         rect.h = 0x100;
-        func_8007512C(&rect, 0x2C0, 0);
+        MoveImage(&rect, 0x2C0, 0);
         DrawSync(0);
         VSync(0);
         VSync(0);
-        func_80074924(&firstDrawScreen->draw, 0, 0, 0x140, 0xF0);
-        func_80074924(&D_801D11C0->draw, 0, 0xF0, 0x140, 0xF0);
-        func_800749D8(&D_801D11BC[0]->disp, 0, 0xF0, 0x140, 0xF0);
-        func_800749D8(&secondScreen.value->disp, 0, 0, 0x140, 0xF0);
+        SetDefDrawEnv(&firstDrawScreen->draw, 0, 0, 0x140, 0xF0);
+        SetDefDrawEnv(&D_801D11C0->draw, 0, 0xF0, 0x140, 0xF0);
+        SetDefDispEnv(&D_801D11BC[0]->disp, 0, 0xF0, 0x140, 0xF0);
+        SetDefDispEnv(&secondScreen.value->disp, 0, 0, 0x140, 0xF0);
         D_801D11BC[0]->disp.screen.y = secondScreen.value->disp.screen.y = 0;
         D_801D11BC[0]->disp.screen.h = secondScreen.value->disp.screen.h = 0xF0;
         D_801D11BC[0]->disp.isrgb24 = secondScreen.value->disp.isrgb24 = 1;
@@ -276,7 +276,7 @@ s32 func_801909B4(void) {
         rect.y = 0;
         rect.w = 0x1E0;
         rect.h = 0x1E0;
-        func_80074F44(&rect, 0, 0, 0);
+        ClearImage(&rect, 0, 0, 0);
         DrawSync(0);
         VSync(0);
         VSync(0);
@@ -306,22 +306,22 @@ s32 func_801909B4(void) {
             rect.y = 0;
             rect.w = 0x1E0;
             rect.h = 0x14;
-            func_80074F44(&rect, 0, 0, 0);
+            ClearImage(&rect, 0, 0, 0);
             rect.x = 0;
             rect.y = 0xE0;
             rect.w = 0x1E0;
             rect.h = 0x10;
-            func_80074F44(&rect, 0, 0, 0);
+            ClearImage(&rect, 0, 0, 0);
             rect.x = 0;
             rect.y = 0xF0;
             rect.w = 0x1E0;
             rect.h = 0x14;
-            func_80074F44(&rect, 0, 0, 0);
+            ClearImage(&rect, 0, 0, 0);
             rect.x = 0;
             rect.y = 0x1D0;
             rect.w = 0x1E0;
             rect.h = 0x10;
-            func_80074F44(&rect, 0, 0, 0);
+            ClearImage(&rect, 0, 0, 0);
             initialPage = D_801D11C8 == 0;
             D_801D11C8 = initialPage;
             D_801D11C4 = D_801D11BC[initialPage];
@@ -333,12 +333,12 @@ s32 func_801909B4(void) {
                     overlay.y += 0xF0;
                 }
                 overlay.w = (s16) ((s32) (overlay.w * 3) >> 1);
-                func_8007506C(&overlay, D_801D11C4->overlayImage);
+                LoadImage(&overlay, D_801D11C4->overlayImage);
             }
             VSync(0);
             func_80074A44(1);
             PutDrawEnv(&D_801D11C4->draw);
-            func_800755F0(&D_801D11C4->disp);
+            PutDispEnv(&D_801D11C4->disp);
         }
         func_8018F2F4();
         VSync(0);
@@ -423,12 +423,12 @@ s32 func_801909B4(void) {
                         overlay.y += 0xF0;
                     }
                     overlay.w = (s16) ((s32) (overlay.w * 3) >> 1);
-                    func_8007506C(&overlay, D_801D11C4->overlayImage);
+                    LoadImage(&overlay, D_801D11C4->overlayImage);
                 }
                 VSync(2);
                 func_80074A44(1);
                 PutDrawEnv(&D_801D11C4->draw);
-                func_800755F0(&D_801D11C4->disp);
+                PutDispEnv(&D_801D11C4->disp);
                 elapsed = D_801D1380 + titleMode;
                 D_801D1380 = elapsed;
             } while (elapsed < 0x3E8);
@@ -438,12 +438,12 @@ s32 func_801909B4(void) {
         rect.w = 0xA0;
         rect.y = 0;
         rect.h = 0x100;
-        func_8007512C(&rect, 0x140, 0);
+        MoveImage(&rect, 0x140, 0);
         rect.x = 0;
         rect.y = 0;
         rect.w = 0x140;
         rect.h = 0x1E0;
-        func_80074F44(&rect, 0, 0, 0);
+        ClearImage(&rect, 0, 0, 0);
         DrawSync(0);
         VSync(0);
         VSync(0);
@@ -514,7 +514,7 @@ s32 func_801909B4(void) {
                 rect.y = 0;
                 rect.w = 0x140;
                 rect.h = 0x1E0;
-                func_80074F44(&rect, 0, 0, 0);
+                ClearImage(&rect, 0, 0, 0);
                 DrawSync(0);
                 screenYRestore = D_800BCE8A;
             }

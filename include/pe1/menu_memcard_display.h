@@ -12,7 +12,5 @@ extern DRAWENV D_800BCDC8[2];
 extern u8 D_801D0DBE;
 extern u8 D_801223F6;
 
-DISPENV *func_800749D8(DISPENV *env, s32 x, s32 y, s32 w, s32 h); /* SetDefDispEnv */
-DRAWENV *func_80074924(DRAWENV *env, s32 x, s32 y, s32 w, s32 h); /* SetDefDrawEnv */
 
 #endif

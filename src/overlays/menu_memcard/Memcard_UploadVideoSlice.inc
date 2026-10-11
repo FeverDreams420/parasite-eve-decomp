@@ -44,5 +44,5 @@ void MEMCARD_UPLOAD_VIDEO_SLICE_NAME(void) {
             MEMCARD_VIDEO_FLIP = 2;
         }
     }
-    func_8007506C(&rectangle, MEMCARD_VIDEO_DISPLAY.buffers[old]);
+    LoadImage(&rectangle, MEMCARD_VIDEO_DISPLAY.buffers[old]);
 }

@@ -7,6 +7,7 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/psyq_press.h"
 #include "pe1/cdrom.h"
+#include "pe1/gpu_image.h"
 
 typedef struct VideoFrame { u32 reserved[2], time, reserved0c; u16 width, height; } VideoFrame;
 /* One entry of a video table: file name, colour depth and playback layout. */
@@ -31,7 +32,7 @@ typedef struct VideoDisplay {
     u8 done;              /* 0x30 frame fully uploaded */
 } VideoDisplay;
 extern s32 func_8007F72C(void),func_8007F7A8(void);
-extern void func_800719E4(s32),func_800870F0(s32),func_80074F44(VideoRect *,s32,s32,s32);
+extern void func_800719E4(s32),func_800870F0(s32);
 extern s32 func_8007C484(void **,VideoFrame **);
 extern u16 D_800B0DD4;
 extern VideoEntry *D_801D11AC;
@@ -50,7 +51,6 @@ extern u8 D_801223F5;
 extern u8 D_801D0DC0;
 extern s32 D_8009CDDC;
 extern void func_8007C564(void),func_8010C01C(void *,s32),func_801918F8(s8,s8);
-extern void func_8007506C(void *,void *);
 
 void Memcard_UploadVideoSlice(void);
 
@@ -63,7 +63,6 @@ extern u8 D_800B0DBA;
 typedef struct VideoFrameCount { s16 value; } VideoFrameCount;
 extern VideoFrameCount D_800B0DBC;
 extern u32 D_800B0CD8;
-extern void func_8007512C(VideoRect *,s32,s32);
 
 s32 Memcard_InitVideoBuffers(s8 count, u8 **buffers);
 s32 func_801216C4(s8 count, u8 **buffers);

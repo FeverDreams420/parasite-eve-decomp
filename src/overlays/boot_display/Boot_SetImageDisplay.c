@@ -1,7 +1,5 @@
 #include "pe1/boot_display.h"
 #include "pe1/psyq_gpu.h"
-extern void func_800749D8(DISPENV *, s32, s32, s32, s32);
-extern void func_80074924(DRAWENV *, s32, s32, s32, s32);
 /* Pins retain the retail address calculations and call setup. */
 void Boot_SetImageDisplay(u16 index) {
     s32 displayY, drawY;
@@ -20,7 +18,7 @@ void Boot_SetImageDisplay(u16 index) {
         drawY = 0;
     }
     displayOffset = index * sizeof(DISPENV);
-    func_800749D8((DISPENV *)(displayOffset + g_RenderDisplayEnvArray), 0, displayY, 320, 224);
+    SetDefDispEnv((DISPENV *)(displayOffset + g_RenderDisplayEnvArray), 0, displayY, 320, 224);
     drawOffset = index * sizeof(DRAWENV);
     drawArg = (DRAWENV *)(drawOffset + g_RenderDrawEnvArray);
     zeroArg = 0;
@@ -31,7 +29,7 @@ void Boot_SetImageDisplay(u16 index) {
     ((DISPENV *)(g_RenderDisplayEnvArray + displayOffset))->screen.y = 8;
     ((DISPENV *)(g_RenderDisplayEnvArray + displayOffset))->screen.h = 224;
     ((DISPENV *)(g_RenderDisplayEnvArray + displayOffset))->disp.w = savedWidth;
-    func_80074924(drawArg, zeroArg, yArg, widthArg, 224);
+    SetDefDrawEnv(drawArg, zeroArg, yArg, widthArg, 224);
     ((DRAWENV *)(g_RenderDrawEnvArray + drawOffset))->dtd = 0;
     ((DRAWENV *)(g_RenderDrawEnvArray + drawOffset))->isbg = 0;
     ((DRAWENV *)(g_RenderDrawEnvArray + drawOffset))->clip.w = ((DRAWENV *)(g_RenderDrawEnvArray + drawOffset))->clip.w * 2 / 3;

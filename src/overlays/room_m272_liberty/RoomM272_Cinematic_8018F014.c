@@ -1,5 +1,7 @@
 #include "../room_lib/room_lib.h"
 #include "pe1/boot_display.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/gpu_image.h"
 
 extern RoomBlob8 RoomM272_BlobA;
 extern RoomBlob8 RoomM272_BlobB;
@@ -8,8 +10,6 @@ extern char RoomM272_Rec[];
 extern int D_801991C8;
 extern char D_800BCE80[];
 extern int D_8009CDDC;
-extern int func_800750CC();
-extern int func_8007512C();
 
 int RoomM272_Cinematic_8018F014(void) {
     RoomBlob8 b1 = RoomM272_BlobA;
@@ -17,16 +17,16 @@ int RoomM272_Cinematic_8018F014(void) {
     RoomBlob8 b3 = RoomM272_BlobC;
 
     if (D_801991C8 == 0) {
-        func_800750CC(&b1, RoomM272_Rec);
-        func_8007512C(&b2, 0x300, 0x100);
+        StoreImage(&b1, RoomM272_Rec);
+        MoveImage(&b2, 0x300, 0x100);
         func_80074DC0(0);
     }
     if (D_801991C8 == 1) {
-        func_8007506C(&b1, RoomM272_Rec);
-        func_8007512C(&b3, 0x140, 0x100);
+        LoadImage(&b1, RoomM272_Rec);
+        MoveImage(&b3, 0x140, 0x100);
         func_80074DC0(0);
         func_80073A44(2);
-        func_800755F0(&D_800BCE80[D_8009CDDC * 20]);
+        PutDispEnv(&D_800BCE80[D_8009CDDC * 20]);
         func_80074D28(1);
     }
     return 0;

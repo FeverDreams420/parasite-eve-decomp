@@ -3,6 +3,8 @@
 
 #include "fx_common_setup.h"
 #include "pe1/signed_rect.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/gpu_image.h"
 
 extern FxCommonVec3 g_FxCommonMotionPosition1 __asm__("D_8019C330");
 extern FxCommonVec3 g_FxCommonMotionPosition0 __asm__("D_8019C810");
@@ -111,14 +113,12 @@ void func_80074DC0(s32 value);
 void func_80193AB0(void);
 void func_80074A44(s32 value);
 void func_80075424(void *draw_env);
-void func_800755F0(void *entry);
 void func_800753B4(void *ordering_table);
 void func_80192030(void);
 int SquareRoot0(int value);
 #include "pe1/gte_types.h"
 void func_8018F344(GteMatrix *out, GteShortVector *eye,
                    GteShortVector *target, GteVector *up);
-void func_80074F44(void *rect, s32 x, s32 y, s32 mode);
 void func_80086FF8(void);
 void func_80087024(void);
 void func_80038D48(void);

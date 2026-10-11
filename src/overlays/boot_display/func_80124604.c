@@ -3,7 +3,7 @@
 void func_80124604(s32 color) {
     BootDisplaySpritePacket *primitive = (BootDisplaySpritePacket *)g_BootDisplayPrimitiveCursor;
 
-    func_80077C84(&primitive->draw_mode, 0, 0, g_BootDisplayTPage);
+    SetDrawTPage(&primitive->draw_mode, 0, 0, g_BootDisplayTPage);
     ((u8 *)&primitive->sprite.tag)[3] = 4;
     primitive->sprite.code = 100;
     func_80077B04(&primitive->sprite, 1);
