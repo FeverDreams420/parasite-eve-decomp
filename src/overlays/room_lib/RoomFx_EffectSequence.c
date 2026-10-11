@@ -103,14 +103,14 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     D_80192C30 = c40;
     D_80192C32 = c80a;
     D_80192C2E = 0;
-    D_80192C3C = 0;
-    D_80192C3D = 0;
-    D_80192C40 = c40;
-    D_80192C3E = 0;
-    D_80192C42 = c80a;
-    D_80192C38 = c80b;
-    D_80192C39 = c20;
-    D_80192C3A = 0x10;
+    D_80192C38.cell = 0;
+    D_80192C38.clut = 0;
+    D_80192C38.offset = c40;
+    D_80192C38.flip = 0;
+    D_80192C38.depth = c80a;
+    D_80192C38.r = c80b;
+    D_80192C38.g = c20;
+    D_80192C38.b = 0x10;
     ent->pad1[1] = *func_800C2B28(0);
 }
 
@@ -432,7 +432,7 @@ void RoomFx_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control, Roo
         matrix.t[0] = state->sparkle_x;
         matrix.t[1] = state->sparkle_y;
         matrix.t[2] = state->sparkle_z;
-        sparkle_alpha_slot = &D_80192C42;
+        sparkle_alpha_slot = &D_80192C38.depth;
         *sparkle_alpha_slot = state->sparkle_alpha;
         func_800C42A4((FieldGlowSprite *)((char *)sparkle_alpha_slot - 0xA), (GteMatrix *)&matrix, 0);
     }
@@ -694,7 +694,7 @@ void RoomFx_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *control
         matrix.t[0] = state->sparkle_x;
         matrix.t[1] = state->sparkle_y;
         matrix.t[2] = state->sparkle_z;
-        sparkle_alpha_slot = &D_80192C42;
+        sparkle_alpha_slot = &D_80192C38.depth;
         *sparkle_alpha_slot = state->sparkle_alpha;
         func_800C42A4((FieldGlowSprite *)((char *)sparkle_alpha_slot - 0xA), (GteMatrix *)&matrix, 0);
     }
@@ -959,7 +959,7 @@ void RoomFx_DrawVariant290(void *arg0, RoomOverlay024VariantControl *control, Ro
     matrix.t[0] = state->sparkle_x;
     matrix.t[1] = state->sparkle_y;
     matrix.t[2] = state->sparkle_z;
-    sparkle_alpha_slot = &D_80192C42;
+    sparkle_alpha_slot = &D_80192C38.depth;
     *sparkle_alpha_slot = state->sparkle_alpha;
     func_800C42A4((FieldGlowSprite *)((char *)sparkle_alpha_slot - 0xA), (GteMatrix *)&matrix, 0);
 }
@@ -1167,7 +1167,7 @@ void RoomFx_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, Room
     matrix.t[0] = state->sparkle_x;
     matrix.t[1] = state->sparkle_y;
     matrix.t[2] = state->sparkle_z;
-    sparkle_alpha_slot = &D_80192C42;
+    sparkle_alpha_slot = &D_80192C38.depth;
     *sparkle_alpha_slot = state->sparkle_alpha;
     func_800C42A4((FieldGlowSprite *)((char *)sparkle_alpha_slot - 0xA), (GteMatrix *)&matrix, 0);
 }

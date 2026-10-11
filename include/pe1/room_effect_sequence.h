@@ -37,14 +37,18 @@ extern u8 D_80192C2E;
 extern s16 D_80192C30;
 extern s16 D_80192C32;
 extern void *D_80192C34;
-extern u8 D_80192C38;
-extern u8 D_80192C39;
-extern u8 D_80192C3A;
-extern u8 D_80192C3C;
-extern u8 D_80192C3D;
-extern u8 D_80192C3E;
-extern s16 D_80192C40;
-extern s16 D_80192C42;
+/* The sparkle sprite preset consumed by the sequence draw passes. */
+typedef struct RoomEffectSequenceSprite {
+    u8 r, g, b, reserved03;
+    u8 cell, clut, flip, reserved07;
+    s16 offset;
+    s16 depth;
+    u8 reserved0C[4];
+} RoomEffectSequenceSprite;
+PE1_STATIC_ASSERT(sizeof(RoomEffectSequenceSprite) == 0x10, effect_sequence_sprite_size);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomEffectSequenceSprite, depth) == 0xA, effect_sequence_sprite_depth);
+extern RoomEffectSequenceSprite D_80192C38;
+
 extern int *func_800C2B28(int index);
 extern int *func_800C2B10(int index);
 /* Per-command handler table and state size table for func_800C2B90. */
