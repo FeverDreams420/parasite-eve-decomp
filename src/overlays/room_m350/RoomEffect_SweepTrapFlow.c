@@ -4,6 +4,7 @@
 #include "pe1/gte.h"
 #include "pe1/room_m350_sweep_trap.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/asset_find.h"
 
 
 typedef union RoomM350Angles {
@@ -190,7 +191,6 @@ typedef struct RoomM350Instance {
 typedef RoomM350Actor RoomM350ControllerChannel;
 
 extern GteShortVector D_8019A778[];
-extern int Asset_Find08w(int,int,int,int,int);
 int func_8019360C(int event) {
     switch (event) {
     case 0:

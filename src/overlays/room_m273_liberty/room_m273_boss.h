@@ -16,6 +16,7 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/psyq_libc.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/asset_find.h"
 
 /* Boss instance fields read by room_m273's animation controllers. */
 typedef struct RoomM273BossOwner {
@@ -222,7 +223,6 @@ typedef struct RoomM273PageIndex {
 extern RoomM273PageIndex D_800E11EA;
 
 int func_800CE688(void *list);
-void Asset_Find08w(int id, int sound, int x, int y, int z);
 int func_801981A4(int mode, RoomM273SwayShard *shard);
 int func_80198060(int mode, GteShortVector *position);
 

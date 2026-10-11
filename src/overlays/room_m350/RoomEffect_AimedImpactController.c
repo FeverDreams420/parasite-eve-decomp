@@ -4,6 +4,7 @@
 #include "pe1/field_actor.h"
 #include "pe1/player_entity.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/asset_find.h"
 typedef RoomM350Vector Vector;
 typedef RenderMatrix Matrix;
 typedef struct { Vector velocity; short x, y, z; unsigned char stopped, pad; } Particle;
@@ -17,7 +18,6 @@ extern short D_8019A86A;
 extern int func_80196F2C(int, Particle *);
 extern int Math_IntSqrt(int);
 extern int Inv_ScrambleGrid(void);
-extern int Asset_Find08w(int, int, short, short, short);
 
 int func_80197364(int event)
 {

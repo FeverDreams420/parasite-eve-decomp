@@ -6,8 +6,8 @@
 #include "pe1/pe_image.h"
 #include "pe1/gte.h"
 #include "pe1/scene_assets.h"
+#include "pe1/asset_find.h"
 
-int Asset_Find08w(int arg0, int arg1, int arg2, int arg3, int arg4);
 
 int func_800D3F64(int arg0, int arg1) {
     FieldAnimObjectPrefix *ctx;

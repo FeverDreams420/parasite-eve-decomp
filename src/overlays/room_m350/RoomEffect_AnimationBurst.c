@@ -2,6 +2,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/asset_find.h"
 typedef RoomM350TableShadeEntry TableEntry;
 typedef RoomM350SoundOwner Owner;
 typedef struct {
@@ -19,7 +20,6 @@ typedef struct { short remaining, delay; } State;
 
 extern int D_800966EC[], D_8019A3C8[], D_8019A4DC[], D_8019A4E0[];
 extern short D_8019A7A0[];
-extern int Asset_Find08w(int, int, short, short, short);
 
 int func_801944F0(int event, void **object)
 {

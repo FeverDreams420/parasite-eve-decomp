@@ -7,6 +7,7 @@
 #include "pe1/scene_assets.h"
 #include "pe1/cdrom_buffers.h"
 #include "pe1/render_buffers.h"
+#include "pe1/asset_find.h"
 
 /* End-of-frame overlay pass (draw the game-state primitives into the
  * current draw buffer with background clear off and send the queued AKAO
@@ -80,7 +81,6 @@ int func_8006A2E8(int arg0, u32 value)
   return 0;
 }
 
-void Asset_Find08w(int arg0, int arg1, int arg2, int arg3, int arg4);
 
 typedef struct AkaoVoiceActor {
     u8 pad_00[0x0C];

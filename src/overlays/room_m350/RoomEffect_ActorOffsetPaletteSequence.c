@@ -6,6 +6,7 @@
 #include "pe1/field_anim_pool.h"
 #include "room_m350_shared.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/asset_find.h"
 
 extern int D_800966EC[], D_8019A56C[];
 
@@ -45,7 +46,7 @@ typedef struct { GteShortVector rotation; short count,brightness,fade,size; } St
 
 extern unsigned short D_800E11E8;
 extern char D_8019A570[];
-extern int Asset_Find08w(int,void *,int,int,int), Inv_ScrambleGrid(void);
+extern int Inv_ScrambleGrid(void);
 
 int func_80195CE0(int event,State *inputState)
 {
@@ -59,7 +60,7 @@ int func_80195CE0(int event,State *inputState)
             RoomM350EffectInstance *instance=ANIM_OWNER_AS(RoomM350EffectActor)->instance;
             int *position=instance->transforms[33].t;
             RoomM350EffectEmitter *emitter;
-            Asset_Find08w(0x5C9,instance->owner->asset,(short)position[0],(short)position[1],(short)position[2]);
+            Asset_Find08w(0x5C9,(int)instance->owner->asset,(short)position[0],(short)position[1],(short)position[2]);
             *(int *)&state->rotation=0;
             emitter=ANIM_POOL_AS(RoomM350EffectEmitter);
             *(int *)((char *)&state->rotation+4)=0;

@@ -15,6 +15,7 @@
 #include "pe1/game_state_types.h"
 #include "pe1/akao/commands.h"
 #include "pe1/akao.h"
+#include "pe1/asset_find.h"
 
 extern Pe1GameState g_GameState;
 extern int g_SceneDataTable0;
@@ -251,7 +252,6 @@ void Akao_Cmd_DA(int command, int arg1, int arg2);
 void Akao_Cmd_F1(void);
 void Akao_ResetPositionalState(void);
 int Akao_Cmd_19_Then_C0(u8 *data, int value);
-int Asset_Find08w(int id, int mode, int x, int y, int z);
 int CD_SeekToTrack(int key, int mode, int group, int *slot, int immediate);
 int CD_SeekTrack0(int key, int mode, int group, int *slot, int immediate)
     __asm__("CD_SeekToTrack");

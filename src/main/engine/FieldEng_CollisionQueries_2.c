@@ -1,6 +1,7 @@
 /* CC1_FLAGS: -fno-schedule-insns */
 #include "common.h"
 #include "pe1/gte_types.h"
+#include "pe1/asset_find.h"
 
 /* Floor-placement basis vectors and the asset lookups at a field
  * position; func_800C66C8 reads the normals func_800C65E4 writes. */
@@ -8,7 +9,6 @@
 void OuterProduct12(int *a, int *b, int *out);
 void VectorNormalS(int *in, void *out);
 int FieldEng_GetStatus(void *obj);
-void *Asset_Find08w(void *asset, void *table, int x, int y, int z);
 
 extern int D_800C213C[];
 
@@ -70,7 +70,7 @@ void *func_800C66C8(char *obj, void *asset, char *pos) {
     void *result = 0;
 
     if (FieldEng_GetStatus(obj) == 3 || FieldEng_GetStatus(obj) == 4) {
-        result = Asset_Find08w(asset, *(void **)(*(char **)(*(char **)(obj + 8) + 0) + 8),
+        result = (void *)Asset_Find08w((int)asset, *(int *)(*(char **)(*(char **)(obj + 8) + 0) + 8),
                                *(s16 *)(pos + 0x14), *(s16 *)(pos + 0x18), *(s16 *)(pos + 0x1C));
     }
 
@@ -81,7 +81,7 @@ void *func_800C6764(char *obj, void *asset, char *pos) {
     void *result = 0;
 
     if (FieldEng_GetStatus(obj) == 3 || FieldEng_GetStatus(obj) == 4) {
-        result = Asset_Find08w(asset, *(void **)(*(char **)(*(char **)(obj + 8) + 0) + 8),
+        result = (void *)Asset_Find08w((int)asset, *(int *)(*(char **)(*(char **)(obj + 8) + 0) + 8),
                                *(s16 *)(pos + 0), *(s16 *)(pos + 4), *(s16 *)(pos + 8));
     }
 
@@ -92,7 +92,7 @@ void *func_800C6800(char *obj, void *asset, char *pos) {
     void *result = 0;
 
     if (FieldEng_GetStatus(obj) == 3 || FieldEng_GetStatus(obj) == 4) {
-        result = Asset_Find08w(asset, *(void **)(*(char **)(*(char **)(obj + 8) + 0) + 8),
+        result = (void *)Asset_Find08w((int)asset, *(int *)(*(char **)(*(char **)(obj + 8) + 0) + 8),
                                *(s16 *)(pos + 0), *(s16 *)(pos + 2), *(s16 *)(pos + 4));
     }
 

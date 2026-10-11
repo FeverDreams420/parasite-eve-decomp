@@ -3,6 +3,7 @@
 #include "common.h"
 #include "pe1/battle.h"
 #include "pe1/entity_animation.h"
+#include "pe1/asset_find.h"
 
 extern char *g_ActiveActor[];
 extern char *g_ActiveActor_late2[] asm("g_ActiveActor");
@@ -130,7 +131,6 @@ extern u8 g_BattleHitActionSubmode[];
 extern u32 g_BattleHitActionParam[];
 
 int Battle_CalcRelativeAngle(BattleEntity *arg0, BattleEntity *actor);
-void Asset_Find08Alt(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
 static inline char *CurrentPlayer(void) {
     return g_PlayerEntity[0];

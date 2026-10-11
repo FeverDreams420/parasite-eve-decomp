@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "pe1/render_anim_position.h"
+#include "pe1/asset_find.h"
 
 typedef struct RenderAnimVramCounter {
     int value;
@@ -59,7 +60,6 @@ extern void *D_800B0DF8[3];
 extern u8 *g_OtBufferTable[];
 extern u8 *g_RenderAnimBufferBase[];
 
-void Asset_Find08Alt(int id, int zero, int x, int y, int z);
 void Render_SetGteScreenOffset(void);
 int Render_DecompressAnimFrame(void *anim, void *entity, int size, int width,
                                void *ot, void *buffer);
