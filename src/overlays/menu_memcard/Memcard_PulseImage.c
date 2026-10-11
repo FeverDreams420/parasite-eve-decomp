@@ -23,9 +23,9 @@ s32 Memcard_PulseImage(s32 mode, MemcardPulseState *state) {
         scale = rsin(angle) + 2048;
         rcos(angle);
         rotation.x = 0; rotation.y = 0; twist = state->timer;
-        __asm__("" : "=r"(twist) : "0"(twist) : "$4", "memory");
+        __asm__("" : : "r"(twist));
         track = D_801F1D5C;
-        __asm__("" : "=r"(track) : "0"(track) : "memory");
+        __asm__("" : : "r"(track));
         rotation.flags = 0;
         __asm__("" : "=r"(twist) : "0"(twist) : "memory");
         rotation.z = twist << 5;
