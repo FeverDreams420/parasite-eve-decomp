@@ -69,7 +69,7 @@ int func_801947BC(int event,RoomM350Particle *p)
                 n=D_8019A7FC.pointerCount;
                 if(n<4) {
                     int next=n;
-                    asm volatile("" : "=r"(next) : "0"(next));
+                    asm("" : "=r"(next) : "0"(next));
                     D_8019A7FC.pointerCount=next+1;
                     {
                         RoomM350PointerQueue *queue=(RoomM350PointerQueue *)((char *)&D_8019A7FC.pointerCount-PE1_OFFSETOF(RoomM350PointerQueue,count));
@@ -83,7 +83,7 @@ int func_801947BC(int event,RoomM350Particle *p)
             short n=D_8019A7FC.pointerCount;
             if(n<4) {
                 int next=n;
-                asm volatile("" : "=r"(next) : "0"(next));
+                asm("" : "=r"(next) : "0"(next));
                 D_8019A7FC.pointerCount=next+1;
                 {
                     RoomM350PointerQueue *queue=(RoomM350PointerQueue *)((char *)&D_8019A7FC.pointerCount-PE1_OFFSETOF(RoomM350PointerQueue,count));

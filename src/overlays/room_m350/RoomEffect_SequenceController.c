@@ -52,7 +52,7 @@ int func_801958DC(int event) {
             frame=(short)frame;
             if(frame>=25) {
                 instance->anim.fixed=0x60000;
-                D_8019A7FC.repeats=*(volatile unsigned short *)&D_8019A7FC.repeats-1;
+                D_8019A7FC.repeats=(unsigned short)D_8019A7FC.repeats-1;
             }
             if(frame<19) return 0;
             speed=D_800966EC[((frame-19)*341)&4095].part.sin;
