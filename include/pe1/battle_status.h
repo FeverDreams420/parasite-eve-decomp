@@ -80,6 +80,22 @@ extern RenderPagedSpritePacket D_800B6920[2];   /* ATB gauge marker */
 /* HP digit packets: interior symbols retain independent relocations. */
 extern u8 D_8009E0F0[], D_8009E0F8[], D_8009E1D0[], D_8009E1D8[];
 extern u8 D_8009E2F0[];
+/* Packet arenas Battle_DrawHPBar initializes; the clut halfwords of the
+ * sprites have their own retail symbols. */
+extern u8 D_8009E106[], D_8009E1E6[], D_8009E2E8[], D_8009E2FE[];
+extern u8 D_8009E3CE[], D_8009E476[], D_8009E500[], D_8009E746[];
+extern u8 D_8009E77E[], D_8009E7B6[], D_8009E880[], D_8009E896[];
+extern u8 D_8009E8CE[], D_8009E928[], D_8009E93E[], D_8009E960[];
+extern u8 D_8009E976[], D_8009EC38[];
+/* Gray levels of the three status-bar tiles (Battle_DrawHPBar). */
+typedef struct BattleHudShades {
+    s8 values[3];
+} BattleHudShades;
+extern u8 D_8009CD90[];
+/* Status-panel digit sprites: two draw buffers, ten panels of five digits. */
+extern RenderPagedSpritePacket D_800B01C0[2][10][5];
+/* Clut and texture page halfwords of the end-of-battle panel quads. */
+extern u8 D_800BE9FE[], D_800BEA06[];
 /* End-of-battle panel; color bytes also have independent retail symbols. */
 extern RenderTexturedQuad D_800BE9F0[2];
 extern u8 D_800BE9F4[], D_800BE9F5[], D_800BE9F6[];

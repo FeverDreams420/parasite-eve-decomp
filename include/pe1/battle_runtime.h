@@ -139,6 +139,13 @@ extern s32 D_8009E054, D_8009E058, D_8009E05C;
 extern u16 D_8009CE58[2];
 extern u16 D_8009CE5C;
 extern RenderObjectEntity D_800B0CEC;
+/* D_800B0D88 is D_800B0CEC.flags_9C. Battle_StepEscapeOrDeath reloads the
+ * player's flags only after this store, so the store must look like it may
+ * alias them: a non-small view keeps the address in a register, and separate
+ * read and write views keep GCC from sharing one LUI between the load and
+ * the store. Matching debt (see docs/CODE_ORGANIZATION.md). */
+extern struct { u16 value; char pad[14]; } D_800B0D88_read __asm__("D_800B0D88");
+extern struct { u16 value; char pad[14]; } D_800B0D88_write __asm__("D_800B0D88");
 extern u16 D_800B0D88;
 extern u8 D_800B0D8A;
 extern u16 D_801F1F38;

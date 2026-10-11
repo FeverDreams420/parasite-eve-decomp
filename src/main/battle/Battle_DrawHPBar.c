@@ -15,20 +15,13 @@ void SetPolyFT4(RenderTexturedQuad *);
 void SetTile(void *);
 u16 GetClut(int, int);
 
-typedef struct {
-    s8 values[3];
-} HudShades;
-
-#include "Battle_DrawHPBar_externs.h"
-typedef RenderPagedSpritePacket HudSprite;
-#include "Battle_DrawHPBar_externs_1.h"
 
 /* Initialize the HUD packet pools for both draw buffers. The legacy symbol
  * name is retained; this routine sets up more than the HP bar.
  * Register constraints and address views are recorded in ASM_AND_GTE_POLICY.md.
  */
 void Battle_DrawHPBar(void) {
-    HudShades shades;
+    BattleHudShades shades;
     s32 i;
     s32 j;
     u32 base0;
@@ -122,7 +115,7 @@ void Battle_DrawHPBar(void) {
     RenderSpritePacket *temp_s3_3;
     RenderSpritePacket *temp_v1;
 
-    shades = *(const HudShades *)D_8009CD90;
+    shades = *(const BattleHudShades *)D_8009CD90;
     hudPage = GetTPage(0, 1, 0x100, 0x1E0);
     hudClut = GetClut(0x130, 0x1F8);
     bufferIndex = 0;

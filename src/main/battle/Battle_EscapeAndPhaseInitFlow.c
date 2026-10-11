@@ -3,7 +3,6 @@
 /* MASPSX_FORCE_G0: 1 */
 #include "pe1/battle_runtime.h"
 #include "pe1/battle_turn.h"
-#include "../../../tools/m2c/m2c_macros.h"
 
 /* COMMON supplies small-data metadata to MASPSX; the other battle words
  * stay absolute. */
@@ -12,9 +11,6 @@ u8 D_8009D244;
 Combatant *D_8009D278;
 s32 D_8009D28C;
 
-#include "Battle_EscapeAndPhaseInitFlow_externs.h"
-s32 Pm_StopUpperHalf(void);
-void Akao_Cmd_21(int arg0, int arg1);
 
 void Battle_StepEscapeOrDeath(void)
 {
@@ -975,7 +971,6 @@ void Battle_PhaseEndTurn(void) {
 }
 
 /* Finish entity death animations and restore the player for the next phase. */
-#include "Battle_EscapeAndPhaseInitFlow_externs_1.h"
 void Battle_StepEntityDeath(void)
 {
     BattleEntity *entity;
@@ -1048,7 +1043,6 @@ void Battle_StepEntityDeath(void)
 
 /* Start the player and battle-HUD death sequence after death cleanup. */
 
-M2C_UNK func_8006DE80();
 
 void Battle_StartDeathAnim(void) {
     s32 c2;
@@ -1172,7 +1166,7 @@ void Battle_StartDeathAnim(void) {
         {
             u8 *q;
             q = (u8 *)D_8009D254;
-            func_8006DE80(0x45B, 0, ((BattleEntity *)q)->posX.parts.integer, ((BattleEntity *)q)->posY.parts.integer, (s32)((BattleEntity *)q)->posZ.parts.integer);
+            Asset_Find08Alt(0x45B, 0, ((BattleEntity *)q)->posX.parts.integer, ((BattleEntity *)q)->posY.parts.integer, (s32)((BattleEntity *)q)->posZ.parts.integer);
         }
     }
 }
