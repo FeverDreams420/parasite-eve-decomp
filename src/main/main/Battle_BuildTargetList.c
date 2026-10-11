@@ -5,7 +5,7 @@
 /* MASPSX_FLAGS: -G8 */
 
 #define NULL ((void *)0)
-s32 Battle_CalcDistToPlayer();
+int Battle_CalcDistToPlayer(BattleEntity *actor, BattleEntity *player);
 extern s8 g_BattleTargetIndex;
 extern struct { char _[16]; } D_8009D20C_o __asm__("g_FieldActorListHead");
 #define g_FieldActorListHead (*(void **)&D_8009D20C_o)
@@ -38,7 +38,7 @@ void Battle_BuildTargetList(void) {
                     if (((entityFlags & 0x2040) != 0x40) && !(entityFlags & 0x4000) &&
                         (candidateCore->hpAlive > 0)) {
                         g_BattleTargetList[g_BattleTargetIndex].actor = candidate;
-                        distance = Battle_CalcDistToPlayer(candidate);
+                        distance = Battle_CalcDistToPlayer(candidate, player);
                         g_BattleTargetList[g_BattleTargetIndex].dist = distance;
                         angle = ratan2(
                             candidate->renderObject.target_x -

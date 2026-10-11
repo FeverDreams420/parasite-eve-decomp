@@ -18,14 +18,14 @@ typedef struct { u8 bytes[0x10]; } LargeSymbol;
 typedef union { s32 value; } FlagValue;
 
 void BattleCmd_CommitAmmoAndUpdate();
-s16 Battle_CalcAngleToTarget();
-s32 Battle_CalcDistToPlayer();
-void Battle_DispatchEntityEffect();
-void Battle_HaltOnPositiveX();
-s32 Battle_StepAyaAction();
-void Battle_StepCharacterAction();
-void Battle_UpdateEntityFacing();
-void Pm_StopAll();
+s16 Battle_CalcAngleToTarget(RenderObjectEntity *object, void *target);
+int Battle_CalcDistToPlayer(BattleEntity *actor, BattleEntity *player);
+void Battle_DispatchEntityEffect(void);
+void Battle_HaltOnPositiveX(void);
+int Battle_StepAyaAction(void);
+int Battle_StepCharacterAction(BattleInitSlot *slot);
+void Battle_UpdateEntityFacing(BattleEntity *entity);
+void Pm_StopAll(void);
 extern volatile struct { Combatant *value; char pad[12]; } D_8009D278_absolute __asm__("D_8009D278");
 #define ACTIVE (D_8009D278_absolute.value)
 extern const Tbl20 D_8001074C;
@@ -180,7 +180,7 @@ after_command:
         var_a0_2 = (s32)temp_s2->actor;
         var_a1 = D254(14);
         if (var_a0_2 != var_a1) {
-            temp_v0 = Battle_CalcAngleToTarget(var_a0_2 + 0x1B4, var_a1 + 0x28);
+            temp_v0 = Battle_CalcAngleToTarget((RenderObjectEntity *)(var_a0_2 + 0x1B4), (u8 *)var_a1 + 0x28);
             var_a0_2 = (s32) D_8009D1D4;
             var_a1 = (void *) (var_a0_2 & 0xFF);
             queueOffset = (s32)var_a1 * 8;
