@@ -11,10 +11,10 @@ int func_80071A54(void);
 void func_801946D4(void *unused, char *control, char *state)
 {
     char *owner = (char *)func_800C2B50();
-    /* Keeps the two descending seed-copy loops based at their original offsets. */
+    /* Keeps the later history-copy loop based at its original offset. */
     register char *cursor asm("$6");
     s16 point[3];
-    int count;
+    u32 count;
     int random;
     int x;
     int y;
@@ -33,11 +33,10 @@ void func_801946D4(void *unused, char *control, char *state)
     int pointValue;
     s16 *ground;
     count = 4;
-    cursor = state + 0x20;
-    for (; count != 0; --count, cursor -= 8)
+    for (; count != 0; --count)
     {
-        *((RoomFxSeed8 *) (cursor + 0x30)) = *((RoomFxSeed8 *) (cursor + 0x28));
-        *((RoomFxSeed8 *) (cursor + 0x58)) = *((RoomFxSeed8 *) (cursor + 0x50));
+        ((SceneLayeredSpriteState *)state)->layers[count] = ((SceneLayeredSpriteState *)state)->layers[count - 1];
+        ((SceneLayeredSpriteState *)state)->layerSeeds[count] = ((SceneLayeredSpriteState *)state)->layerSeeds[count - 1];
     }
 
     count = 7;
@@ -45,10 +44,10 @@ void func_801946D4(void *unused, char *control, char *state)
     y = ((SceneLayeredSpriteState *)state)->center[1].parts.integer;
     z = ((SceneLayeredSpriteState *)state)->center[2].parts.integer;
     cursor = state + 0x38;
-    *((s16 *) (state + 0x30)) = x;
-    *((s16 *) (state + 0x32)) = y;
-    *((s16 *) (state + 0x34)) = z;
-    *((RoomFxSeed8 *) (state + 0x58)) = *((RoomFxSeed8 *) (state + 0x20));
+    ((SceneLayeredSpriteState *)state)->layers[0].x = x;
+    ((SceneLayeredSpriteState *)state)->layers[0].y = y;
+    ((SceneLayeredSpriteState *)state)->layers[0].z = z;
+    ((SceneLayeredSpriteState *)state)->layerSeeds[0] = ((SceneLayeredSpriteState *)state)->initialSeed;
     for (; count != 0; --count, cursor -= 8)
     {
         *((RoomFxSeed8 *) (cursor + 0x86)) = *((RoomFxSeed8 *) (cursor + 0x7E));
