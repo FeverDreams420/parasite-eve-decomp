@@ -14,20 +14,9 @@ extern void *g_BattlePendingEnemySpawn[];
 int rand(void);
 s16 Entity_ApplyHitAndSetAnim(void *arg0);
 
-#define U8(base, off) (*(u8 *)((char *)(base) + (off)))
-#define U16(base, off) (*(u16 *)((char *)(base) + (off)))
-#define S16(base, off) (*(s16 *)((char *)(base) + (off)))
-#define U32(base, off) (*(u32 *)((char *)(base) + (off)))
-#define S32(base, off) (*(s32 *)((char *)(base) + (off)))
-#define PTR(base, off) (*(char **)((char *)(base) + (off)))
-#define ENEMY_FIELD(base, type, member) \
-    (*(type *)((char *)(base) + PE1_OFFSETOF(EnemyCombatant, member)))
-#define EFFECT_FIELD(base, type, member) \
-    (*(type *)((char *)(base) + PE1_OFFSETOF(EnemyActionEffect, member)))
-
 void Entity_ResolveDropTable(void *arg0) {
     Combatant *state;
-    char *entry;
+    EnemyCombatant *entry;
     u16 scale;
     u32 flags;
     u32 word;
@@ -38,7 +27,7 @@ void Entity_ResolveDropTable(void *arg0) {
 
     state = g_ActiveActor;
     scale = (u16)state->stat20 / 5U;
-    entry = *(char **)arg0;
+    entry = *(EnemyCombatant **)arg0;
     flags = state->stateFlags;
 
     if (flags & 0x1000) {
@@ -48,83 +37,79 @@ void Entity_ResolveDropTable(void *arg0) {
         scale = (u16)(((u16)scale * 3) / 10);
     }
 
-    word = ENEMY_FIELD(entry, u32, coreFlags);
+    word = entry->coreFlags;
     if ((int)((word >> 21) & 7) < 3) {
-        char *action;
+        EnemyActionEffect *action;
 
-        action = ENEMY_FIELD(entry, char *, effect);
+        action = entry->effect;
         masked = state->attributes->parameterWord.fields.first;
-        if (EFFECT_FIELD(action, u8, category) == 0) {
-            EFFECT_FIELD(action, u8, state) = 4;
-        } else if (EFFECT_FIELD(action, u8, category) != 1) {
-            EFFECT_FIELD(action, u8, state) = 3;
+        if (action->category == 0) {
+            action->state = 4;
+        } else if (action->category != 1) {
+            action->state = 3;
         }
     } else {
         int secondaryParameter = state->attributes->parameterWord.fields.second;
         masked = secondaryParameter;
     }
 
-    value = EFFECT_FIELD(ENEMY_FIELD(entry, char *, effect), u16, power) -
-            (u16)scale - masked;
+    value = entry->effect->power - (u16)scale - masked;
     roll = rand();
 
     {
-        char *chance_state;
+        Combatant *chance_state;
         int chance;
 
         roll %= 100;
-        chance_state = (char *)g_ActiveActor;
-        chance = ((int)ENEMY_FIELD(entry, u8, effectChance) *
-                  (100 - (int)((Combatant *)chance_state)->attributes->parameterWord.fields.third)) /
+        chance_state = g_ActiveActor;
+        chance = ((int)entry->effectChance *
+                  (100 - (int)chance_state->attributes->parameterWord.fields.third)) /
                  100;
         if (roll < chance) {
             tmp = value * 3;
             value = (s32)(tmp + ((u32)tmp >> 31)) >> 1;
-            U32(chance_state, 0x4C) |= 0x8000;
+            chance_state->stateFlags |= 0x8000;
         }
     }
 
     {
-        char *after_state;
+        Combatant *after_state;
 
-        after_state = g_ActiveActor_late2[0];
-        if (!(U32(after_state, 0x4C) & 0x200)) {
-            if (S32(after_state, 0x34) > 0) {
+        after_state = (Combatant *)g_ActiveActor_late2[0];
+        if (!(after_state->stateFlags & 0x200)) {
+            if (after_state->atbGauge > 0) {
                 value = (s32)(value + ((u32)value >> 31)) >> 1;
             }
             if (value > 0) {
-                char *action;
+                EnemyActionEffect *action;
 
-                action = ENEMY_FIELD(entry, char *, effect);
-                if (EFFECT_FIELD(action, u8, effectType) == 0xA) {
+                action = entry->effect;
+                if (action->effectType == 0xA) {
                     value = (s32)(value + ((u32)value >> 31)) >> 1;
                 }
-                U16(after_state, 0xC) = U16(after_state, 0xC) - value;
+                after_state->curHP = after_state->curHP - value;
             }
-            if (S16(g_ActiveActor, 0xC) != 0) {
+            if ((s16)g_ActiveActor->curHP != 0) {
                 Entity_ApplyHitAndSetAnim(arg0);
-                if (!(U32(g_PlayerEntity, 0x98) & 0x100)) {
+                if (!(g_PlayerEntity->flags & 0x100)) {
                     g_BattlePendingEnemySpawn[0] = arg0;
                 }
             }
         } else if (value > 0) {
-            char *action;
+            EnemyActionEffect *action;
 
-            action = ENEMY_FIELD(entry, char *, effect);
-            if (EFFECT_FIELD(action, u8, effectType) == 0xA) {
+            action = entry->effect;
+            if (action->effectType == 0xA) {
                 value = (s32)(value + ((u32)value >> 31)) >> 1;
             }
-            U32(after_state, 8) -= value * ((S32(after_state, 0x28) * 4) / S16(after_state, 0x1C));
+            after_state->exp_or_acc -= value * ((after_state->maxAtk * 4) / (s16)after_state->maxHP);
         }
     }
 
-    if (EFFECT_FIELD(ENEMY_FIELD(entry, char *, effect), u8, effectType) != 0) {
-        Battle_ApplyEnemyAttack((EnemyCombatant *)entry);
+    if (entry->effect->effectType != 0) {
+        Battle_ApplyEnemyAttack(entry);
     }
 }
-
-#undef EFFECT_FIELD
-#undef ENEMY_FIELD
 
 /* COMMON supplies small-data metadata to MASPSX; the extern words stay
  * absolute. */
@@ -135,16 +120,16 @@ extern u32 g_BattleHitActionParam[];
 
 int Battle_CalcRelativeAngle(BattleEntity *arg0, BattleEntity *actor);
 
-static inline char *CurrentPlayer(void) {
-    return (char *)g_PlayerEntity;
+static inline FieldActor *CurrentPlayer(void) {
+    return g_PlayerEntity;
 }
 
 s16 Entity_ApplyHitAndSetAnim(void *arg0) {
     void *saved_arg;
     s32 value;
-    char *switch_actor;
-    char *actor;
-    char *state;
+    FieldActor *switch_actor;
+    FieldActor *actor;
+    Combatant *state;
     short bucket;
     u32 flags;
 
@@ -152,7 +137,7 @@ s16 Entity_ApplyHitAndSetAnim(void *arg0) {
     value = 0;
     switch_actor = CurrentPlayer();
 
-    switch (U8(switch_actor, 0xE)) {
+    switch (switch_actor->mode) {
     case 6:
     case 8:
     case 10:
@@ -160,39 +145,39 @@ s16 Entity_ApplyHitAndSetAnim(void *arg0) {
     case 13:
     case 14:
     case 15: {
-        char *case_actor;
+        FieldActor *case_actor;
         u8 mode;
         u8 submode;
 
         case_actor = CurrentPlayer();
-        mode = U8(case_actor, 0xE);
+        mode = case_actor->mode;
         g_BattleHitActionMode[0] = mode;
-        submode = U8(case_actor, 0xF);
+        submode = case_actor->action;
         D_8009D298 = 1;
         g_BattleHitActionSubmode[0] = submode;
-        g_BattleHitActionParam[0] = U32(case_actor, 0x14);
+        g_BattleHitActionParam[0] = *(u32 *)&case_actor->anim;
         break;
     }
     case 7:
     case 9:
     case 11: {
-        char *case_actor;
+        FieldActor *case_actor;
         u8 mode;
         u8 submode;
 
         case_actor = CurrentPlayer();
-        mode = U8(case_actor, 0xE);
+        mode = case_actor->mode;
         g_BattleHitActionMode[0] = mode;
-        submode = U8(case_actor, 0xF);
+        submode = case_actor->action;
         D_8009D298 = 1;
         g_BattleHitActionSubmode[0] = submode;
-        g_BattleHitActionParam[0] = U8(case_actor, 0xF) << 16;
+        g_BattleHitActionParam[0] = case_actor->action << 16;
         break;
     }
     }
 
-    state = (char *)g_ActiveActor;
-    if ((U32(state, 0x4C) & 0x12000) == 0) {
+    state = g_ActiveActor;
+    if ((state->stateFlags & 0x12000) == 0) {
         value = Battle_CalcRelativeAngle(saved_arg, CurrentPlayer());
         if ((s16)value < 0x200) {
             bucket = 0;
@@ -209,21 +194,21 @@ s16 Entity_ApplyHitAndSetAnim(void *arg0) {
         Entity_SetActionMode((BattleEntity *)CurrentPlayer(), bucket);
 
         {
-            char *effect_actor;
+            FieldActor *effect_actor;
 
             effect_actor = CurrentPlayer();
-            Asset_Find08Alt(0x46A, 0, S16(effect_actor, 0x2A), S16(effect_actor, 0x2E), S16(effect_actor, 0x32));
+            Asset_Find08Alt(0x46A, 0, Pe1Fixed_Integer(&effect_actor->pos_x), Pe1Fixed_Integer(&effect_actor->pos_y), Pe1Fixed_Integer(&effect_actor->pos_z));
         }
 
         {
-            char *flag_actor;
+            FieldActor *flag_actor;
 
             flag_actor = CurrentPlayer();
-            flags = U32(flag_actor, 0x98);
+            flags = flag_actor->flags;
             actor = flag_actor;
         }
         if (flags & 0x100) {
-            U32(actor, 0x98) = flags & ~0x100;
+            actor->flags = flags & ~0x100;
             D_8009D298 = 2;
         }
     }
