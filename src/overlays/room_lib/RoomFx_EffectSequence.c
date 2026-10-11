@@ -390,12 +390,12 @@ void RoomFx_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control, Roo
     matrix.t[2] = transform->z;
 
     if (state->resource_selector == -1) {
-        func_800C3134(&D_80192BF0, state->field30, (char *)fade_slot - 0xA);
+        func_800C3134(&D_80192BF0, state->field30, (char *)&D_80192C08);
     } else {
-        func_800C3134(&D_80192BFC, state->field30, (char *)fade_slot - 0xA);
+        func_800C3134(&D_80192BFC, state->field30, (char *)&D_80192C08);
     }
     phase_slot = &D_80192C08.cell;
-    draw_slot = (char *)phase_slot - 4;
+    draw_slot = (char *)&D_80192C08;
     *phase_slot = state->phase * 2;
     func_800C42A4((FieldGlowSprite *)draw_slot, (GteMatrix *)&matrix, 1);
     RotMatrix(&base_seed, &matrix);
@@ -650,12 +650,12 @@ void RoomFx_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *control
     matrix.t[2] = transform->z + (func_80071A54() % 20) - 10;
 
     if (state->resource_selector == -1) {
-        func_800C3134(&D_80192BF0, state->field30, (char *)fade_slot - 0xA);
+        func_800C3134(&D_80192BF0, state->field30, (char *)&D_80192C08);
     } else {
-        func_800C3134(&D_80192BFC, state->field30, (char *)fade_slot - 0xA);
+        func_800C3134(&D_80192BFC, state->field30, (char *)&D_80192C08);
     }
     phase_slot = &D_80192C08.cell;
-    draw_slot = (char *)phase_slot - 4;
+    draw_slot = (char *)&D_80192C08;
     *phase_slot = state->phase * 2;
     func_800C42A4((FieldGlowSprite *)draw_slot, (GteMatrix *)&matrix, 1);
     RotMatrix(&base_seed, &matrix);
@@ -914,9 +914,9 @@ void RoomFx_DrawVariant290(void *arg0, RoomOverlay024VariantControl *control, Ro
     matrix.t[1] = transform->y;
     matrix.t[2] = transform->z + (func_80071A54() % 20) - 10;
 
-    func_800C3134(&D_80192BFC, state->field30, (char *)fade_slot - 0xA);
+    func_800C3134(&D_80192BFC, state->field30, (char *)&D_80192C08);
     D_80192C08.cell = state->phase * 2;
-    func_800C42A4((FieldGlowSprite *)((char *)fade_slot - 0xA), (GteMatrix *)&matrix, 1);
+    func_800C42A4((FieldGlowSprite *)((char *)&D_80192C08), (GteMatrix *)&matrix, 1);
     RotMatrix(&base_seed, &matrix);
 
     memset(&second_scale, 0, 0x10);
@@ -931,7 +931,7 @@ void RoomFx_DrawVariant290(void *arg0, RoomOverlay024VariantControl *control, Ro
     matrix.t[1] = g_RoomFloorY->y;
     matrix.t[2] = transform->z;
     D_80192C08.cell = 8;
-    func_800C42A4((FieldGlowSprite *)((char *)fade_slot - 0xA), (GteMatrix *)&matrix, 0);
+    func_800C42A4((FieldGlowSprite *)((char *)&D_80192C08), (GteMatrix *)&matrix, 0);
 
     if (control->frame < 0x5B) {
         return;
