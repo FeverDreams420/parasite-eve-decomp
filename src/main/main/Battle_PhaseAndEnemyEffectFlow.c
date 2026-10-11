@@ -17,7 +17,7 @@ typedef struct { u8 bytes[8]; } __attribute__((packed)) PackedCopy8;
 typedef struct { u8 bytes[0x10]; } LargeSymbol;
 typedef union { s32 value; } FlagValue;
 
-int BattleCmd_CommitAmmoAndUpdate(void *out);
+int BattleCmd_CommitAmmoAndUpdate(); /* no prototype: retail calls it with and without the action */
 s16 Battle_CalcAngleToTarget(RenderObjectEntity *object, void *target);
 int Battle_CalcDistToPlayer(BattleEntity *actor, BattleEntity *player);
 void Battle_DispatchEntityEffect(void);

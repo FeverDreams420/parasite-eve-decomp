@@ -17,7 +17,7 @@ extern struct { char _[16]; } D_8009D2FC_o __asm__("D_8009D2FC");
 
 extern int D_8009D200;
 
-int BattleCmd_CommitAmmoAndUpdate(void);
+int BattleCmd_CommitAmmoAndUpdate(); /* no prototype: retail calls it with and without the action */
 int Scene_LoadRoomAssets(u32 command, void *owner);
 
 void Battle_DispatchEntityEffect(void) {

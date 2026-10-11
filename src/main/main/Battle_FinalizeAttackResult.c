@@ -81,7 +81,7 @@ extern char battle_sfx_slot_large[16] __asm__("D_8009D2FC");
 extern u8 D_8009D274, D_8009CE39, D_8009CE3A;
 extern s16 D_8009D27C;
 extern int D_8009D2FC;
-int BattleCmd_CommitAmmoAndUpdate(void);
+int BattleCmd_CommitAmmoAndUpdate(); /* no prototype: retail calls it with and without the action */
 
 #define D_8009D254 (*(BattleEntity **)battle_entity_alias_0)
 #define D_8009D278 ACTIVE_COMBATANT_FIRST
