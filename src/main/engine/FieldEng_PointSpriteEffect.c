@@ -15,117 +15,81 @@
 #include "pe1/field_actor.h"
 #include "pe1/fixed_point.h"
 
-#define S16(base, off) (*(s16 *)((u8 *)(base) + (off)))
 
 #include "FieldEng_PointSpriteEffect_externs.h"
 
 
-int func_800CBCA4(u8 *arg0) {
-    u8 *obj;
-    register int tmp asm("$2");
-    int y_scale;
-    int color;
-    register int z asm("$6");
-    register int setupValue asm("$4");
+int func_800CBCA4(char *object) {
+    FieldActor *actor;
     void **slot;
 
-    slot = FieldEng_GetSlot((char *)arg0);
+    slot = FieldEng_GetSlot(object);
     *slot = D_800E0D6C;
-    obj = (u8 *)((FieldAnimObjectPrefix *)arg0)->actor;
+    actor = ((FieldAnimObjectPrefix *)object)->actor;
 
-    tmp = S16(obj, 0x2A);
-    setupValue = -0x64;
-    D_800E2290.x = tmp;
-    tmp = S16(obj, 0x2E);
-    y_scale = 0x400;
-    D_800F3470 = obj;
-    D_800E2292 = tmp;
+    D_800E2290.x = actor->pos_x >> 16;
+    D_800E2290.y = actor->pos_y >> 16;
+    D_800E2290.z = actor->pos_z >> 16;
+    D_800F3470 = actor;
 
-    tmp = 0;
-    asm volatile("" : "=r"(tmp) : "0"(tmp) : "memory");
-    z = S16(obj, 0x32);
-    color = 0x68;
-    D_800F3454 = color;
-    D_800E2284 = color;
-    D_800F3304 = color;
+    D_800F3430.oriented.rotation.x = 0;
+    D_800F3430.oriented.rotation.y = 0;
+    D_800F3430.oriented.rotation.z = 0;
+    D_800F3430.oriented.cell = 0x68;
+    D_800F3430.oriented.clut = 0;
+    D_800F3430.oriented.depth = -100;
 
-    color = 0xA0;
-    D_800F3300 = color;
-    D_800F3301 = color;
-    D_800F3302 = color;
+    D_800E2260.oriented.rotation.x = 0x400;
+    D_800E2260.oriented.rotation.y = 0;
+    D_800E2260.oriented.rotation.z = 0;
+    D_800E2260.oriented.cell = 0x68;
+    D_800E2260.oriented.clut = 0;
+    D_800E2260.oriented.depth = 0;
 
-    color = 0x46;
-    D_800F3456 = setupValue;
-    D_800F3306 = setupValue;
+    D_800F32E0.oriented.rotation.x = 0x400;
+    D_800F32E0.oriented.rotation.y = 0;
+    D_800F32E0.oriented.rotation.z = 0;
+    D_800F32E0.oriented.cell = 0x68;
+    D_800F32E0.oriented.clut = 0;
+    D_800F32E0.oriented.depth = -100;
+    D_800F32E0.oriented.rgb[0] = 0xA0;
+    D_800F32E0.oriented.rgb[1] = 0xA0;
+    D_800F32E0.oriented.rgb[2] = 0xA0;
 
-    setupValue = 0x80;
-    D_800F3438 = 0;
-    D_800F343A = 0;
-    D_800F343C = 0;
-    D_800F3455 = 0;
+    D_800F3380.oriented.rotation.x = 0x400;
+    D_800F3380.oriented.rotation.y = 0;
+    D_800F3380.oriented.rotation.z = 0;
+    D_800F3380.oriented.cell = 0x46;
+    D_800F3380.oriented.clut = 0x30;
+    D_800F3380.oriented.depth = -0x50;
+    D_800F3380.oriented.rgb[0] = 0x80;
+    D_800F3380.oriented.rgb[1] = 0x80;
+    D_800F3380.oriented.rgb[2] = 0x80;
 
-    D_800E2268 = y_scale;
-    D_800E226A = 0;
-    D_800E226C = 0;
-    D_800E2285 = 0;
-    D_800E2286 = 0;
+    D_800E2818.oriented.scale.x = 0x1A8;
+    D_800E2818.oriented.scale.y = 0x1A8;
+    D_800E2818.oriented.scale.z = 0x1A8;
+    D_800E2818.oriented.rotation.x = 0;
+    D_800E2818.oriented.rotation.y = 0;
+    D_800E2818.oriented.rotation.z = 0;
+    D_800E2818.oriented.cell = 0xBC;
+    D_800E2818.oriented.clut = 8;
+    D_800E2818.oriented.depth = 0;
+    D_800E2818.oriented.rgb[0] = 0x80;
+    D_800E2818.oriented.rgb[1] = 0x80;
+    D_800E2818.oriented.rgb[2] = 0x80;
 
-    D_800F32E8 = y_scale;
-    D_800F32EA = 0;
-    D_800F32EC = 0;
-    D_800F3305 = 0;
+    D_800F3338.oriented.rotation.x = 0x400;
+    D_800F3338.oriented.rotation.y = 0;
+    D_800F3338.oriented.rotation.z = 0;
+    D_800F3338.oriented.cell = 0x42;
+    D_800F3338.oriented.clut = 0x20;
+    D_800F3338.oriented.depth = 0x32;
+    D_800F3338.oriented.rgb[0] = 0x80;
+    D_800F3338.oriented.rgb[1] = 0x80;
+    D_800F3338.oriented.rgb[2] = 0x80;
 
-    D_800F3388 = y_scale;
-    D_800F338A = 0;
-    D_800F338C = 0;
-
-    D_800E2294_state = z;
-    D_800F33A4 = color;
-
-    color = 0x30;
-    D_800F33A5 = color;
-
-    color = -0x50;
-    D_800F33A6 = color;
-
-    color = 0x1A8;
-    D_800E2828 = color;
-    D_800E282C = color;
-    D_800E2830 = color;
-
-    color = 0xBC;
-    D_800E283C = color;
-
-    color = 8;
-    D_800E283D = color;
-
-    color = 0x42;
-    D_800F335C = color;
-
-    color = 0x20;
-    D_800F335D = color;
-
-    color = 0x32;
-    D_800F33A0 = setupValue;
-    D_800F33A1 = setupValue;
-    D_800F33A2 = setupValue;
-
-    D_800E2820 = 0;
-    D_800E2822 = 0;
-    D_800E2824 = 0;
-    D_800E283E = 0;
-    D_800E2838 = setupValue;
-    D_800E2839 = setupValue;
-    D_800E283A = setupValue;
-
-    D_800F3340 = y_scale;
-    D_800F3342 = 0;
-    D_800F3344 = 0;
-    D_800F335E = color;
-    D_800F3358 = setupValue;
-    D_800F3359 = setupValue;
-    D_800F335A = setupValue;
-    return tmp;
+    return 0;
 }
 
 #include "FieldEng_PointSpriteEffect_externs_1.h"
