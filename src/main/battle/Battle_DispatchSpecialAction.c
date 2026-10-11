@@ -2,7 +2,7 @@
 #include "pe1/battle.h"
 #include "pe1/asset_find.h"
 
-extern int g_GameStateFlags;
+extern unsigned int g_GameStateFlags;
 extern BattleEntity *g_PlayerEntity;
 extern int g_ActiveActor;
 

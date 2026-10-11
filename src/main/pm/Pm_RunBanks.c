@@ -3,7 +3,7 @@
  * pair sharing the game-state gating flags. */
 #include "pe1/pm.h"
 
-extern int g_GameStateFlags;
+extern unsigned int g_GameStateFlags;
 
 void Render_SetGteScreenOffset(void);
 void Render_ResetGteScreenOffset(void);

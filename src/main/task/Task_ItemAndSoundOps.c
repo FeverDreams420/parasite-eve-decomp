@@ -26,7 +26,7 @@ TaskNode *g_TaskNodePool;
 TaskNode *D_8009D300;
 
 extern s16 D_8009D2A4; /* menu frame result */
-extern int g_GameStateFlags[];
+extern unsigned int g_GameStateFlags;
 extern int g_GameStateFlagsWrite[] asm("g_GameStateFlags");
 
 void Menu_OpenStartupMemCardDialog(void);
@@ -71,7 +71,7 @@ finish:
 
         state->flags |= 0x9000;
         tail_flags = tail_node->flags;
-        g_GameStateFlagsWrite[0] = g_GameStateFlags[0] | 4;
+        g_GameStateFlagsWrite[0] = g_GameStateFlags | 4;
         tail_flags &= 0xFFDF;
         tail_node->flags = tail_flags;
         asm volatile("" : : : "$2", "memory");
@@ -108,7 +108,7 @@ finish:
 
         state->flags |= 0x9000;
         tail_flags = tail_node->flags;
-        g_GameStateFlagsWrite[0] = g_GameStateFlags[0] | 4;
+        g_GameStateFlagsWrite[0] = g_GameStateFlags | 4;
         tail_flags &= 0xFFDF;
         tail_node->flags = tail_flags;
     }
@@ -152,7 +152,7 @@ int Task_RunInvCommand(TaskInvCommandArgs *arg0) {
             state->flags |= 0x9000;
             Render_BeginSceneLoad();
         } else {
-            g_GameStateFlagsWrite[0] = g_GameStateFlags[0] | 4;
+            g_GameStateFlagsWrite[0] = g_GameStateFlags | 4;
         }
 
         cursor = g_SceneDataTable0;

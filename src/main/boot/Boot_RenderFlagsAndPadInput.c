@@ -13,7 +13,7 @@
  * at the bit index of a single-bit mask. The helper's only caller is the
  * table builder that precedes it (main_tu_evidence G0344). */
 
-extern s32 g_GameStateFlags[];
+extern unsigned int g_GameStateFlags;
 extern s32 D_8009D1A0w[] __asm__("g_GameStateFlags");
 /* COMMON supplies small-data metadata to MASPSX. */
 s32 g_SceneFlagBits;
@@ -62,7 +62,7 @@ void Boot_BuildRenderFlagTable(void) {
     Gte_StoreTableEntry(0x20000000, 0x2000);
     Gte_StoreTableEntry(0x40000000, 0x4000);
     Gte_StoreTableEntry(0x80000000, 0x8000);
-    D_8009D1A0w[0] = g_GameStateFlags[0] | 0x4000;
+    D_8009D1A0w[0] = g_GameStateFlags | 0x4000;
 }
 
 void Gte_StoreTableEntry(u32 mask, int value) {

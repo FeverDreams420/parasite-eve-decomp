@@ -46,8 +46,7 @@ M2C_UNK Save_PostInitStub();
 M2C_UNK CdRom_InitScreenState();
 M2C_UNK Task_InitGpuHwRegs();
 extern int g_ActiveDrawSlot;
-extern s32 g_GameStateFlags[];
-#define g_GameStateFlags (g_GameStateFlags[0])
+extern unsigned int g_GameStateFlags;
 extern s32 g_FrameRngCounter[];
 #define g_FrameRngCounter (g_FrameRngCounter[0])
 extern int g_SceneDispatchToken;
