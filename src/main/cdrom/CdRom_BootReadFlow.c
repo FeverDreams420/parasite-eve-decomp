@@ -5,6 +5,7 @@
 #include "pe1/render_camera.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/cdrom.h"
+#include "pe1/cd_poll.h"
 #include "pe1/cdrom_buffers.h"
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_bios.h"
@@ -71,7 +72,7 @@ int CdRom_ReadSectors(u32 lba, u32 offset, void *destination, u32 size) {
     printf(g_CdReadErrorFormat, lba, size);
     return -1;
 }
-inline int CdRom_PollReady(void) {
+int CdRom_PollReady(void) {
     int scratch;
     int status;
     Pe1GameState *state;

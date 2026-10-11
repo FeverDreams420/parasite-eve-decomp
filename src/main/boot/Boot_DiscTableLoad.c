@@ -3,6 +3,7 @@
 #include "pe1/disc_load_state.h"
 #include "common.h"
 #include "pe1/cdrom.h"
+#include "pe1/cd_poll.h"
 #include "pe1/cdrom_buffers.h"
 #include "pe1/asset_tim.h"
 #include "pe1/scene_assets.h"
@@ -22,7 +23,6 @@ void FlushCache(void);
 void Akao_Cmd_F0(void);
 
 int Overlay_LoadTables(void) {
-    int scratch;
     int status;
     int imageBase;
     Pe1GameState *state;
@@ -43,25 +43,9 @@ retry_first_load:
     do {
         status = CdRom_ReadSectors(imageBase + range[0], 0, (int)state->scene_object_work, range[1] - range[0]);
     } while (status == -1);
-    while (1) {
-        status = DsReadSync(&scratch);
-        {
-            int poll;
-            poll = status + 1;
-            if ((unsigned int)poll < 2U) {
-                poll = status;
-                D_800B0CD8 &= 0xFEFFBFFF;
-                asm volatile("" : "=r"(status) : "0"(status));
-                poll = status;
-            } else {
-                poll = status;
-            }
-            if (poll == 0) {
-                break;
-            }
-            if (poll == -1) {
-                goto retry_first_load;
-            }
+    while ((status = CdRom_PollReady()) != 0) {
+        if (status == -1) {
+            goto retry_first_load;
         }
     }
 
@@ -76,25 +60,9 @@ retry_large_load_a:
         do {
             status = CdRom_ReadSectors(imageBase + range[0], 0, (int)state->object_texture_blob, range[1] - range[0]);
         } while (status == -1);
-        while (1) {
-            status = DsReadSync(&scratch);
-            {
-                int poll;
-                poll = status + 1;
-                if ((unsigned int)poll < 2U) {
-                    poll = status;
-                    D_800B0CD8 &= 0xFEFFBFFF;
-                    asm volatile("" : "=r"(status) : "0"(status));
-                    poll = status;
-                } else {
-                    poll = status;
-                }
-                if (poll == 0) {
-                    break;
-                }
-                if (poll == -1) {
-                    goto retry_large_load_a;
-                }
+        while ((status = CdRom_PollReady()) != 0) {
+            if (status == -1) {
+                goto retry_large_load_a;
             }
         }
     } else {
@@ -103,25 +71,9 @@ retry_large_load_b:
         do {
             status = CdRom_ReadSectors(imageBase + range[0], 0, (int)state->object_texture_blob, range[1] - range[0]);
         } while (status == -1);
-        while (1) {
-            status = DsReadSync(&scratch);
-            {
-                int poll;
-                poll = status + 1;
-                if ((unsigned int)poll < 2U) {
-                    poll = status;
-                    D_800B0CD8 &= 0xFEFFBFFF;
-                    asm volatile("" : "=r"(status) : "0"(status));
-                    poll = status;
-                } else {
-                    poll = status;
-                }
-                if (poll == 0) {
-                    break;
-                }
-                if (poll == -1) {
-                    goto retry_large_load_b;
-                }
+        while ((status = CdRom_PollReady()) != 0) {
+            if (status == -1) {
+                goto retry_large_load_b;
             }
         }
     }
@@ -138,25 +90,9 @@ retry_final_load:
     do {
         status = CdRom_ReadSectors(g_PeImageBaseLba + range[0], 0, g_StrFileDirBuffer, range[1] - range[0]);
     } while (status == -1);
-    while (1) {
-        status = DsReadSync(&scratch);
-        {
-            register int poll asm("$2");
-            poll = status + 1;
-            if ((unsigned int)poll < 2U) {
-                poll = status;
-                D_800B0CD8 &= 0xFEFFBFFF;
-                asm volatile("" : "=r"(status) : "0"(status));
-                poll = status;
-            } else {
-                poll = status;
-            }
-            if (poll == 0) {
-                break;
-            }
-            if (poll == -1) {
-                goto retry_final_load;
-            }
+    while ((status = CdRom_PollReady()) != 0) {
+        if (status == -1) {
+            goto retry_final_load;
         }
     }
 
@@ -167,10 +103,8 @@ retry_final_load:
 }
 
 int CD_LoadBootAudio(void) {
-    int scratch;
     int status;
     u16 *range;
-    int clear_mask;
     int retry;
 
     D_800B0DB5 = -1;
@@ -189,28 +123,9 @@ retry_first:
         status = CdRom_ReadSectors(D_800B0DD8.baseLba + range[0], 0, D_8001160C, range[1] - range[0]);
     } while (status == retry);
 
-    clear_mask = 0xFEFFBFFF;
-    retry = -1;
-    while (1) {
-        status = DsReadSync(&scratch);
-        {
-            int poll;
-            poll = status + 1;
-            if ((unsigned int)poll < 2U) {
-                poll = status;
-                D_800B0CD8 &= clear_mask;
-                asm volatile("" : "=r"(status) : "0"(status));
-                poll = status;
-            } else {
-                poll = status;
-            }
-
-            if (poll == 0) {
-                break;
-            }
-            if (poll == retry) {
-                goto retry_first;
-            }
+    while ((status = CdRom_PollReady()) != 0) {
+        if (status == -1) {
+            goto retry_first;
         }
     }
 
@@ -219,34 +134,15 @@ retry_first:
     ExitCriticalSection();
 
 retry_second:
-    range = (unsigned short  *)&D_80093166;
+    range = &D_80093166;
     retry = -1;
     do {
         status = CdRom_ReadSectors(D_800B0DD8.baseLba + range[0], 0, D_80011610, range[1] - range[0]);
     } while (status == retry);
 
-    clear_mask = 0xFEFFBFFF;
-    retry = -1;
-    while (1) {
-        status = DsReadSync(&scratch);
-        {
-            register int poll asm("$2");
-            poll = status + 1;
-            if ((unsigned int)poll < 2U) {
-                poll = status;
-                D_800B0CD8 &= clear_mask;
-                asm volatile("" : "=r"(status) : "0"(status));
-                poll = status;
-            } else {
-                poll = status;
-            }
-
-            if (poll == 0) {
-                break;
-            }
-            if (poll == retry) {
-                goto retry_second;
-            }
+    while ((status = CdRom_PollReady()) != 0) {
+        if (status == -1) {
+            goto retry_second;
         }
     }
 
