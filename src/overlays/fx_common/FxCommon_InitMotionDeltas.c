@@ -71,7 +71,7 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     base = Gpu_GetTimTableEntry(nextTable, 2);
     func_8018F55C(sourceValue, D_801EA378[offset + 1], base, &point, extraPtr);
 
-    asm volatile("" : "=r"(secondValue) : "0"(secondValue));
+    asm volatile("" : : "r"(secondValue));
     secondValue &= 0xff;
     qx = point.x;
     ax = g_FxCommonMotionPosition1.x;
