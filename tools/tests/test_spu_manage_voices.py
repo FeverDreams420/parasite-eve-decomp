@@ -20,10 +20,8 @@ class SpuManageVoicesTests(unittest.TestCase):
     def test_function_uses_typed_fields(self):
         self.assertRegex(self.body(),r'\w+->key_on_mask')
 
-    # Known debt: merging the unit into Akao_VoiceBankLifecycle.c (92e54cdf9)
-    # reintroduced two register pins and a barrier to keep the match. This
-    # turns into an unexpected success once they are removed again.
-    @unittest.expectedFailure
+    # Merging the unit into Akao_VoiceBankLifecycle.c (92e54cdf9) once brought
+    # back two register pins and a barrier; keep them from returning.
     def test_function_has_no_asm_constraints(self):
         self.assertNotRegex(self.body(),r'\b(?:asm|__asm__|INCLUDE_ASM|CC_POSTPASS)\b')
 
