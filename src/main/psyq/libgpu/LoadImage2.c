@@ -8,7 +8,7 @@
 #include "pe1/gpu_dma_timeout_state.h"
 extern char D_800119BC[];
 void checkRECT(char *, RECT *);
-extern volatile unsigned int *g_GpuGp1Ptr;
+extern unsigned int *g_GpuGp1Ptr;
 int Gpu_DmaTimeoutCheck(void);
 void Gpu_RestoreDmaCallback(void);
 
@@ -18,7 +18,7 @@ int LoadImage2(RECT *rect, unsigned int *data)
     g_GpuDmaTimeoutDeadline = VSync(-1) + 240;
     g_GpuDmaWaitLoopCounter = 0;
     /* Read GPU readiness only after the volatile DMA status reports idle. */
-    while ((*g_GpuDmaChcrPtr & 0x01000000) || !(*g_GpuGp1Ptr & 0x04000000)) {
+    while ((*g_GpuDmaChcrPtr & 0x01000000) || !(*(volatile unsigned int *)g_GpuGp1Ptr & 0x04000000)) {
         if (Gpu_DmaTimeoutCheck()) return -1;
     }
     DMACallback(2, Gpu_RestoreDmaCallback);
@@ -34,7 +34,7 @@ int StoreImage2(RECT *rect, unsigned int *data)
     g_GpuDmaTimeoutDeadline = VSync(-1) + 240;
     g_GpuDmaWaitLoopCounter = 0;
     /* Read GPU readiness only after the volatile DMA status reports idle. */
-    while ((*g_GpuDmaChcrPtr & 0x01000000) || !(*g_GpuGp1Ptr & 0x04000000)) {
+    while ((*g_GpuDmaChcrPtr & 0x01000000) || !(*(volatile unsigned int *)g_GpuGp1Ptr & 0x04000000)) {
         if (Gpu_DmaTimeoutCheck()) return -1;
     }
     DMACallback(2, Gpu_RestoreDmaCallback);
@@ -51,7 +51,7 @@ int MoveImage2(RECT *rect, int x, int y)
     g_GpuDmaTimeoutDeadline = VSync(-1) + 240;
     g_GpuDmaWaitLoopCounter = 0;
     /* Read GPU readiness only after the volatile DMA status reports idle. */
-    while ((*g_GpuDmaChcrPtr & 0x01000000) || !(*g_GpuGp1Ptr & 0x04000000)) {
+    while ((*g_GpuDmaChcrPtr & 0x01000000) || !(*(volatile unsigned int *)g_GpuGp1Ptr & 0x04000000)) {
         if (Gpu_DmaTimeoutCheck()) return -1;
     }
     DMACallback(2, Gpu_RestoreDmaCallback);
@@ -71,7 +71,7 @@ int DrawOTag2(void *packet)
     g_GpuDmaTimeoutDeadline = VSync(-1) + 240;
     g_GpuDmaWaitLoopCounter = 0;
     /* Read GPU readiness only after the volatile DMA status reports idle. */
-    while ((*g_GpuDmaChcrPtr & 0x01000000) || !(*g_GpuGp1Ptr & 0x04000000)) {
+    while ((*g_GpuDmaChcrPtr & 0x01000000) || !(*(volatile unsigned int *)g_GpuGp1Ptr & 0x04000000)) {
         if (Gpu_DmaTimeoutCheck()) return -1;
     }
     DMACallback(2, Gpu_RestoreDmaCallback);

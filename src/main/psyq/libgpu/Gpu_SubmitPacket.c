@@ -2,8 +2,8 @@
 
 typedef unsigned long u_long;
 
-extern volatile u_long *g_GpuGp0Ptr;
-extern volatile u_long *g_GpuGp1Ptr;
+extern unsigned int *g_GpuGp0Ptr;
+extern unsigned int *g_GpuGp1Ptr;
 
 
 int _param(int x) {

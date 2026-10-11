@@ -52,7 +52,7 @@ u32 Gpu_BuildTexWindowCmd(GpuTextureWindowRectBytes *tw) {
     return result;
 }
 
-extern volatile u_long *g_GpuGp1Ptr;
+extern unsigned int *g_GpuGp1Ptr;
 
 u_long _status(void) {
     return *g_GpuGp1Ptr;

@@ -166,7 +166,7 @@ int Gpu_SetDisplayBuffer(void) {
     return (D_80095874 - D_80095878) & 63;
 }
 
-extern u32 *g_GpuGp1Ptr;
+extern unsigned int *g_GpuGp1Ptr;
 extern volatile u32 g_GpuDmaQueueHead;
 extern volatile u32 g_GpuDmaQueueTail;
 extern u32 D_80095884;

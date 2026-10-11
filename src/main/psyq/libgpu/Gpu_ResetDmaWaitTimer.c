@@ -4,8 +4,8 @@
 
 int SetIntrMask(int mask);
 
-extern volatile u32 *g_GpuGp0Ptr;
-extern u32 *g_GpuGp1Ptr;
+extern unsigned int *g_GpuGp0Ptr;
+extern unsigned int *g_GpuGp1Ptr;
 /* Queue indices can change asynchronously; preserve ordered status reads. */
 extern volatile u32 g_GpuDmaQueueHead;
 extern volatile u32 g_GpuDmaQueueTail;
@@ -70,10 +70,10 @@ int Gpu_QueryStatus(int arg0) {
     u32 status;
 
     *g_GpuGp1Ptr = 0x10000007;
-    status = *g_GpuGp0Ptr & 0xFFFFFF;
+    status = *(volatile unsigned int *)g_GpuGp0Ptr & 0xFFFFFF;
     if (status != 2) {
-        *g_GpuGp0Ptr = (*g_GpuGp1Ptr & 0x3FFF) | 0xE1001000;
-        (void)*g_GpuGp0Ptr;
+        *(volatile unsigned int *)g_GpuGp0Ptr = (*g_GpuGp1Ptr & 0x3FFF) | 0xE1001000;
+        (void)*(volatile unsigned int *)g_GpuGp0Ptr;
         return 0;
     }
     if ((arg0 & 8) == 0) {
