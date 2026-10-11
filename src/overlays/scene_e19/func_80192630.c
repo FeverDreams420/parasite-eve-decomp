@@ -1,6 +1,8 @@
-int func_80192630(char *obj, int mode, int event, int arg3) {
+#include "pe1/scene_grab_trigger.h"
+
+int func_80192630(SceneGrabTrigger *obj, int mode, int event, int arg3) {
     if (event == 0x19 && mode == 1) {
-        *(int *)(obj + 0x10) = arg3;
+        obj->control.signal = (int *)arg3;
         *(int *)arg3 = mode;
     }
 

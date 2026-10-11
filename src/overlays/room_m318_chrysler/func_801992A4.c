@@ -1,10 +1,11 @@
 #include "common.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/field_actor.h"
 extern struct BattleEntity *D_8009D254;
 
 s32 func_801992A4(s32 arg0, void *arg1, s32 *arg2) {
-    char *actor;
+    FieldActorState *actor;
 
     if (arg0 != 1) {
         if (arg0 >= 2) {
@@ -16,14 +17,15 @@ s32 func_801992A4(s32 arg0, void *arg1, s32 *arg2) {
         ANIM_TASK_AS(s16)[10] = 0;
         ANIM_TASK_AS(s16)[11] = 0;
         {
-            char *actor0 = *((char **)D_8009D254);
+            /* The player battle entity, read as its field actor record. */
+            FieldActorState *actor0 = ((FieldActor *)D_8009D254)->state;
             s32 mask = 0xEFFFFFFF;
-            *(s32 *)(actor0 + 0x4C) &= mask;
+            actor0->flags &= mask;
         }
         return 0;
     } else {
-        actor = *((char **)D_8009D254);
-        if (*(s32 *)(actor + 0x4C) & 0x10000000) {
+        actor = ((FieldActor *)D_8009D254)->state;
+        if (actor->flags & 0x10000000) {
             ANIM_TASK_AS(s16)[10] = 1;
             ANIM_TASK_AS(s16)[11] = 1;
             return 1;

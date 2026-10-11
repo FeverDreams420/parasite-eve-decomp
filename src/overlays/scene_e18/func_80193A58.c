@@ -6,6 +6,7 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/gte_types.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/field_actor.h"
 
 typedef struct SceneE18WaveEffect {
     s16 x, y, z, field06;
@@ -33,7 +34,7 @@ int func_80193A58(int mode, SceneE18WaveEffect *effect) {
     func_800CEE20((struct GteShortVector *)effect, (struct GteRotation *)&effect->field08, effect->wave, effect->wave,
                   0x40, palette & 0xffff, 3, effect->size, 0);
     position[0] = effect->x;
-    position[1] = *(int *)(*(char **)((char *)ANIM_OWNER_AS(void) + 8) + 0x200);
+    position[1] = ANIM_OWNER_AS(FieldAnimObjectPrefix)->actor->render_object.model_matrix.translation[1];
     position[2] = effect->z;
     params[0] = 0x400;
     params[1] = (D_800E27EC * 3) << 6;
