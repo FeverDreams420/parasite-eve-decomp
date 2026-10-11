@@ -29,15 +29,15 @@ int main(void) {
     TimFile *tim = (TimFile *)raw;
     TimBlock *image;
     tim->flags = 0;
-    assert(Asset_LoadTimImage(tim) == tim->first_block.pixels);
-    assert(calls == 1 && rects[0] == &tim->first_block.rect);
+    assert(Asset_LoadTimImage(tim) == tim->first_block.header.pixels);
+    assert(calls == 1 && rects[0] == &tim->first_block.header.rect);
     calls = 0;
     tim->flags = 8;
-    tim->first_block.length = 16;
-    image = (TimBlock *)((char *)&tim->first_block + 16);
+    tim->first_block.header.length = 16;
+    image = (TimBlock *)&tim->first_block.bytes[16];
     Asset_LoadTimImage(tim);
-    assert(calls == 2 && rects[0] == &image->rect && payloads[0] == image->pixels);
-    assert(rects[1] == &tim->first_block.rect && payloads[1] == tim->first_block.pixels);
+    assert(calls == 2 && rects[0] == &image->header.rect && payloads[0] == image->header.pixels);
+    assert(rects[1] == &tim->first_block.header.rect && payloads[1] == tim->first_block.header.pixels);
     return 0;
 }
 '''

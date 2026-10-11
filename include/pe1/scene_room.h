@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "pe1/scene_assets.h"
+#include "pe1/asset_table.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/psyq_libc.h"
 
@@ -110,8 +111,6 @@ extern SceneRoomSectorRange D_80093378[];
 extern u16 D_80094494[];
 extern unsigned int g_PeImageBaseLba;
 
-int Str_EncodeBase32(char *out, unsigned int value);
-int Str_ParseMapNumber(char *name);
 void *Task_RelocBlock(void *block);
 void FlushCache(void);
 

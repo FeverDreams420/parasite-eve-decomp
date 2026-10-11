@@ -179,7 +179,10 @@ typedef struct TimUploadRecord {
     u32 secondary_rectangle;
 } TimUploadRecord;
 typedef struct TimPackedImage {
-    u32 key;
+    union {
+        u32 value;
+        struct { u8 reserved[3]; u8 type; } bytes;
+    } key;
     TimUploadSource source;
     u32 geometry;
 } TimPackedImage;

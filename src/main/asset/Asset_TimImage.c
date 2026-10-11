@@ -12,34 +12,32 @@ int *Asset_LoadTimImage(TimFile *tim) {
     clut = 0;
     if ((tim->flags & 8) != 0) {
         clut = &tim->first_block;
-        image = (TimBlock *)((char *)clut + clut->length);
+        image = (TimBlock *)&clut->bytes[clut->header.length];
     } else {
         image = &tim->first_block;
     }
 
-    pixels = image->pixels;
-    LoadImage(&image->rect, pixels);
+    pixels = image->header.pixels;
+    LoadImage(&image->header.rect, pixels);
     if (clut != 0) {
-        LoadImage(&clut->rect, clut->pixels);
+        LoadImage(&clut->header.rect, clut->header.pixels);
     }
     return pixels;
 }
 
 RECT *Asset_GetTimClutRect(TimFile *tim) {
     if (tim->flags & 8) {
-        return &tim->first_block.rect;
+        return &tim->first_block.header.rect;
     }
     return 0;
 }
 
 static inline TimBlock *ImageBlock(TimFile *tim) {
     TimBlock *image;
-    register int length asm("$3");
 
     if (tim->flags & 8) {
-        length = tim->first_block.length;
-        image = &tim->first_block;
-        image = (TimBlock *)((char *)image + length);
+        TimBlock *clut = &tim->first_block;
+        image = (TimBlock *)&clut->bytes[clut->header.length];
     } else {
         image = &tim->first_block;
     }
@@ -47,16 +45,16 @@ static inline TimBlock *ImageBlock(TimFile *tim) {
 }
 
 RECT *Asset_GetTimImageRect(TimFile *tim) {
-    return &ImageBlock(tim)->rect;
+    return &ImageBlock(tim)->header.rect;
 }
 
 int *Asset_GetTimImagePixels(TimFile *tim) {
-    return ImageBlock(tim)->pixels;
+    return ImageBlock(tim)->header.pixels;
 }
 
 int *Asset_GetTimClutPixels(TimFile *tim) {
     if (tim->flags & 8) {
-        return tim->first_block.pixels;
+        return tim->first_block.header.pixels;
     }
     return 0;
 }

@@ -13,42 +13,31 @@
 #include "pe1/render_buffers.h"
 #include "pe1/akao.h"
 
-int Asset_SearchByKeyType(int arg0)
+/* Returns whether the TIM image of `type` placed at VRAM x = 832 sits off
+ * row 256, or -1 when the scene has no such image. */
+int Asset_SearchByKeyType(int type)
 {
-  u32 key;
-  u32 mask;
-  int wanted;
-  register void *base;
-  u32 type_mask;
-  u32 high_mask;
-  u32 high_value;
-  u8 *entry;
-  u32 value;
-  base = (void *)g_LoadedSceneAssetBlock[0];
-  wanted = arg0;
-  key = 0x73DECD80;
-  mask = 0x1FFC00;
-  type_mask = 0xD0000;
-  high_mask = 0xFFE00000;
-  high_value = 0x20000000;
-  while (1)
-  {
-    entry = (u8 *) Asset_FindTable08ByU32Key(base, key);
-    if (entry == 0)
-    {
-      return -1;
-    }
-    if (entry[3] == wanted)
-    {
-      value = *((u32 *) (entry + 8));
-      if ((value & mask) == type_mask)
-      {
-        return ((value & high_mask) ^ high_value) != 0;
-      }
-    }
-    key += 4;
-  }
+    void *blob;
+    u32 key;
+    TimPackedImage *image;
+    u32 xMask, x832, yMask, y256;
 
+    blob = (void *)g_LoadedSceneAssetBlock[0];
+    key = 0x73DECD80;
+    xMask = 0x7FF << 10;
+    x832 = 832 << 10;
+    yMask = 0x7FF << 21;
+    y256 = 256 << 21;
+    for (;;) {
+        image = Asset_FindTable08ByU32Key(blob, key);
+        if (image == 0) {
+            return -1;
+        }
+        if (image->key.bytes.type == type && (image->geometry & xMask) == x832) {
+            return (image->geometry & yMask) != y256;
+        }
+        key += 4;
+    }
 }
 
 typedef struct AkaoPosPanWork {
@@ -57,9 +46,6 @@ typedef struct AkaoPosPanWork {
     s32 out2;
 } AkaoPosPanWork;
 
-
-int Akao_Calc3DPan(AkaoPackedRect3 *pos, int *pan, int *volume);
-s32 Akao_SendPositionalCmd(void *arg0, s32 arg1, s32 arg2, AkaoPosCoord arg3, AkaoPosCoord arg4, AkaoPosCoord arg5);
 
 s32 Asset_Find08w(s32 arg0, s32 arg1, s16 arg2, s16 arg3, s16 arg4) {
     return Akao_SendPositionalCmd((void *)g_LoadedSceneAssetBlock[0], arg0, arg1, arg2, arg3, arg4);
@@ -170,10 +156,6 @@ int Akao_Calc3DPan(AkaoPackedRect3 *pos, int *pan, int *volume)
 
 /* Contiguous scene-container helpers: TIM upload, key encoding and lookup. */
 
-typedef unsigned char u8_1;
-
-#include "Asset_SceneTablesAndSound_externs.h"
-
 int Gpu_LoadTimAsset(TimUploadRecord *asset, void *base) {
     RECT rect;
     int mask;
@@ -231,7 +213,7 @@ int Str_EncodeBase32(char *out, unsigned int value) {
     dst = out;
     while (i < 6) {
         int shift = ((last - i) * 5) + 2;
-        u8_1 c = ((u8_1 *)g_Base32CharTable)[(value >> shift) & 0x1F];
+        u8 c = g_Base32CharTable[(value >> shift) & 0x1F];
 
         *dst = c;
         if ((unsigned int)(c - 0x61) < 0x1A) {
@@ -252,12 +234,14 @@ int Str_DecodeBase32(unsigned int a0) {
     for (i = 1; i < 5; i++) {
         int factor = 1;
         int j;
+        s8 digit;
 
         for (j = 0; j < 4 - i; j++) {
             factor *= 10;
         }
 
-        total += (g_Base32CharTable[(a0 >> ((5 * (5 - i)) + 2)) & 0x1F] - 0x30) * factor;
+        digit = g_Base32CharTable[(a0 >> ((5 * (5 - i)) + 2)) & 0x1F];
+        total += (digit - '0') * factor;
     }
 
     return total;
@@ -299,77 +283,34 @@ int Str_ParseMapNumber(signed char *arg0) {
     return result + arg0[4];
 }
 
-void *Asset_FindTable08ByU32Key(void *arg0, s32 arg1) {
-    u32 mask;
-    register u8 *table asm("$2");
-    u32 descriptor;
-    register AssetU32KeyRecord *record asm("$6");
-    register s32 none asm("$7");
-    register u32 i asm("$8");
-    u32 data_mask;
-    char frame[1];
-
-    asm volatile("" : : "r"(frame));
-
-    mask = 0x3FFFFF;
-    descriptor = ((SceneAssetDirectory *)SceneAsset_ResolveOffset(arg0,
-        ((SceneAssetBlob *)arg0)->directoryOffset))->keyEntries;
-    i = 0;
-    none = 0;
-    table = (u8 *)arg0 + (descriptor & mask);
-    descriptor >>= 22;
-
-    if (descriptor != 0) {
-        data_mask = 0xFFFFFF;
-        record = (AssetU32KeyRecord *)table;
-        do {
-            if (record->key == arg1) {
-                return (u8 *)arg0 + (record->packedOffset & data_mask);
-            }
-            i++;
-            if (i >= descriptor)
-                break;
-            record++;
-        } while (1);
-    }
-
-    return (void *)none;
-}
-
-#define DEFINE_ASSET_SEARCHER(name, table_member, record_type) \
-void *name(char *base, int key) { \
-    u32 mask; \
-    register char *table asm("$2"); \
+/* Keyed record tables: SceneAssetDirectory word = 22-bit byte offset of the
+ * records from the blob plus a 10-bit record count; each record holds the
+ * 24-bit byte offset of its payload. Retail reserves an 8-byte frame for an
+ * unused local in each lookup. */
+#define DEFINE_ASSET_SEARCHER(name, base_type, key_type, table_member, record_type, offset_member) \
+void *name(base_type base, key_type key) { \
+    SceneAssetDirectory *directory; \
+    record_type *records; \
     u32 descriptor; \
-    register record_type *record asm("$6"); \
-    register void *none asm("$7"); \
-    register int i asm("$8"); \
-    u32 data_mask; \
-    char frame[1]; \
+    u32 count; \
+    u32 i; \
+    void *found; \
+    char unused[1]; \
  \
-    asm volatile("" : : "r"(frame)); \
-    mask = 0x3FFFFF; \
-    descriptor = ((SceneAssetDirectory *)(base + \
-        ((SceneAssetBlob *)base)->directoryOffset))->table_member; \
-    i = 0; \
-    none = 0; \
-    table = base + (descriptor & mask); \
-    descriptor >>= 22; \
-    if (descriptor != 0) { \
-        data_mask = 0xFFFFFF; \
-        record = (record_type *)table; \
-        do { \
-            if (record->key == key) { \
-                return base + (record->offset & data_mask); \
-            } \
-            i++; \
-            if (i >= descriptor) \
-                break; \
-            record++; \
-        } while (1); \
+    directory = SceneAsset_ResolveOffset(base, ((SceneAssetBlob *)base)->directoryOffset); \
+    descriptor = directory->table_member; \
+    records = SceneAsset_ResolveOffset(base, descriptor & 0x3FFFFF); \
+    count = descriptor >> 22; \
+    found = 0; \
+    for (i = 0; i < count; i++) { \
+        if (records[i].key == key) { \
+            found = SceneAsset_ResolveOffset(base, records[i].offset_member & 0xFFFFFF); \
+            return found; \
+        } \
     } \
-    return none; \
+    return found; \
 }
 
-DEFINE_ASSET_SEARCHER(Asset_FindTable2CByU16Key, streamEntries, SceneCdStreamRecord)
-DEFINE_ASSET_SEARCHER(Asset_FindTable30ByU16Key, trackEntries, SceneTrackRecord)
+DEFINE_ASSET_SEARCHER(Asset_FindTable08ByU32Key, void *, int, keyEntries, AssetU32KeyRecord, packedOffset)
+DEFINE_ASSET_SEARCHER(Asset_FindTable2CByU16Key, char *, int, streamEntries, SceneCdStreamRecord, offset)
+DEFINE_ASSET_SEARCHER(Asset_FindTable30ByU16Key, char *, int, trackEntries, SceneTrackRecord, offset)
