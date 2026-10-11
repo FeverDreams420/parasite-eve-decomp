@@ -1,4 +1,5 @@
 /* MASPSX_FLAGS: --expand-div */
+#include "pe1/projection_slot.h"
 #include "common.h"
 #include "pe1/geom_state.h"
 #include "pe1/render_camera.h"
@@ -123,7 +124,6 @@ int Render_RestoreBounds(void) {
 /* Matching debt: register pins, empty scheduling constraints, a $v1 clobber,
  * explicit signed-halving steps, gotos and 40 bytes of frame padding. */
 
-extern int *D_800BCFA8;
 
 int Render_SetViewport(s16 *position) {
     struct {
@@ -191,7 +191,7 @@ int Render_SetViewport(s16 *position) {
         }
     }
     {
-        register int distance = *D_800BCFA8;
+        register int distance = *D_800BCFA8.distance;
         gte_ctc2_26(distance);
     }
     gte_lwc2_0_0(local.point);
@@ -546,7 +546,7 @@ int Gpu_LoadGeomState(int index) {
 
     GEOM_STATE_OFFSET(table, base, entry_offset_1C, index * 52);
     entry = table.viewport;
-    *D_800BCFA8 = entry->prefix.gpu.geom_screen;
+    *D_800BCFA8.distance = entry->prefix.gpu.geom_screen;
     SetGeomScreen(entry->prefix.gpu.geom_screen);
 
     dst = g_GeomVramPacketDst;

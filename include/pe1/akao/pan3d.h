@@ -5,7 +5,6 @@
 #include "pe1/akao/pos.h"
 #include "pe1/gte_types.h"
 
-/* Projection distance (GTE H) shared with the field renderer. */
-extern int *D_800BCFA8;
+#include "pe1/projection_slot.h"
 
 #endif /* PE1_AKAO_PAN3D_H */

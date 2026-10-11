@@ -138,7 +138,7 @@ int Akao_Calc3DPan(AkaoPackedRect3 *pos, int *pan, int *volume)
     state = &g_GameState;
     gte_ldrotmatrix(D_800BCFA4.value);
     gte_ldtransmatrix(D_800BCFA4.value);
-    gte_ctc2_26(*D_800BCFA8);
+    gte_ctc2_26(*D_800BCFA8.distance);
     depth = RotTransPers((GteShortVector *)pos, (int *)&sxy, (int *)&x, (int *)&y);
     x = (short)sxy;
     y = sxy >> 16;

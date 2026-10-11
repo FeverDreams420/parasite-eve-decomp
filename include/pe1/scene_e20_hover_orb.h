@@ -44,7 +44,7 @@ void func_800D2B58(void *from, void *to, void *color0, void *color1, int scale0,
                   int scale1, int mode);
 
 void func_800C6EC0(int tpage,int clut);
-extern SceneE20Matrix *D_800BCFA4;
+#include "pe1/render_matrix_slot.h"
 
 extern u16 firstPageTable[] asm("D_800E2850"); /* Same linker symbol, distinct compiler name. */
 extern u16 D_800E11EA;

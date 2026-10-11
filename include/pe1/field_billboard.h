@@ -60,12 +60,6 @@ typedef struct FieldBillboard {
 
 void func_800C3B04(FieldBillboard *board);
 
-/* Points at the projection distance (H) of the current view; read as a
- * one-field record so the load stays below the scratch stores. */
-typedef struct FieldProjectionSlot {
-    s32 *distance;
-} FieldProjectionSlot;
-
-extern FieldProjectionSlot D_800BCFA8;
+#include "pe1/projection_slot.h"
 
 #endif
