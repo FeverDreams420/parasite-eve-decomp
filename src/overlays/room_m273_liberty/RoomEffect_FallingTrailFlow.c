@@ -251,7 +251,7 @@ randomPattern: {
         }
 phasePattern: {
             u16 phase = D_8019AE6C;
-            register int offset asm("$3");
+            s16 offset;
             offset = (phase & 3) * 24;
                 if (phase & 1) {
                     s16 pathValue;
