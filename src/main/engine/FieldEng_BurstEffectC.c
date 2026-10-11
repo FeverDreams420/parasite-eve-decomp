@@ -11,26 +11,22 @@
 #include "pe1/field_actor.h"
 
 #include "FieldEng_BurstEffectC_externs.h"
-int func_800CE084(char *object)
-{
-  void **slot = FieldEng_GetSlot(object);
-  register int value;
-  register void *slotData;
-  slotData = &D_800E0FFC;
- do { *slot = slotData; value = 0x300; D_800E22B8 = value; D_800E22BC = value; } while (0);
-  D_800E22C0 = value;
-  value = 5;
-  D_800E22CD = value;
-  value = -0x64;
-  D_800E22CE = value;
-  value = 0x80;
-  D_800E22B0 = 0;
-  D_800E22B2 = 0;
-  D_800E22B4 = 0;
-  D_800E22C8 = value;
-  D_800E22C9 = value;
-  D_800E22CA = value;
-  return 0;
+int func_800CE084(char *object) {
+    void **slot = FieldEng_GetSlot(object);
+
+    *slot = &D_800E0FFC;
+    D_800E22A8.oriented.scale.x = 0x300;
+    D_800E22A8.oriented.scale.y = 0x300;
+    D_800E22A8.oriented.scale.z = 0x300;
+    D_800E22A8.oriented.clut = 5;
+    D_800E22A8.oriented.depth = -100;
+    D_800E22A8.oriented.rotation.x = 0;
+    D_800E22A8.oriented.rotation.y = 0;
+    D_800E22A8.oriented.rotation.z = 0;
+    D_800E22A8.oriented.rgb[0] = 0x80;
+    D_800E22A8.oriented.rgb[1] = 0x80;
+    D_800E22A8.oriented.rgb[2] = 0x80;
+    return 0;
 }
 
 int func_800CE118(int a, int b, int c, int d, int e, int f) {
@@ -136,21 +132,21 @@ void func_800CE3AC(void) {
 
 #include "FieldEng_BurstEffectC_externs_4.h"
 
-int func_800CE3B4(void *arg0, void *arg1, u8 *anim) {
-    u16 value_v0;
+int func_800CE3B4(void *arg0, void *arg1, FieldAnimTimedSpark *anim) {
+    u16 x;
     FieldBillboard *output;
     func_800C2EAC(3);
     func_800C3098(0x10);
     func_800C2FF0(0x20, 0x20);
     func_800C3238(2);
 
-    value_v0 = *(u16 *)(anim + 0x6);
-    output = (FieldBillboard *)&D_800E22A8;
-    output->position.x = value_v0;
-    D_800E22AA = *(u16 *)(anim + 0x8);
-    D_800E22AC = *(u16 *)(anim + 0xA);
-    D_800E22D0 = (signed char)anim[1];
-    D_800E22CC = (anim[3] * 2) - 0x60;
+    x = anim->position.x;
+    output = &D_800E22A8.billboard;
+    output->position.x = x;
+    D_800E22A8.billboard.position.y = anim->position.y;
+    D_800E22A8.billboard.position.z = anim->position.z;
+    D_800E22A8.billboard.brightness = (s8)anim->brightness;
+    D_800E22A8.billboard.cell = (anim->age * 2) - 0x60;
 
     func_800C3B04(output);
     func_800C3098(0x10);
