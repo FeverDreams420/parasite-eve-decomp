@@ -6,8 +6,9 @@
 void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     FxCommonMotionVec point;
     GteShortVector extra;
-    s32 rawIndex = index;
+    s32 secondMask;
     s32 offset;
+    s32 firstMask;
     register s32 firstValue asm("$18");
     s32 secondValue;
     u8 *table = &D_801D0260;
@@ -37,7 +38,7 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     /* The tied operand copies second unchanged after the other call arguments. */
     asm("" : "=r"(secondValue) : "0"(second), "r"(lookupTable), "r"(lookupCount), "r"(sourceValue));
     base = Gpu_GetTimTableEntry(lookupTable, lookupCount);
-    offset = (s16)rawIndex * 52;
+    offset = (s16)index * 52;
     extraPtr = &extra;
     func_8018F55C(sourceValue, D_801EA378[offset], base, &point, extraPtr);
 
@@ -50,13 +51,12 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     by = g_FxCommonMotionPosition0.y;
     pz = point.z;
     bz = g_FxCommonMotionPosition0.z;
-    rawIndex = 1;
     D_8019C056 = firstValue;
-    firstValue = rawIndex << firstValue;
+    firstMask = 1 << firstValue;
     D_8019C09C = 0;
     D_8019C0A0 = 0;
     D_8019C0A4 = 0;
-    D_8019C054 = firstValue;
+    D_8019C054 = firstMask;
     D_8019C08C = px - bx;
     D_8019C090 = py - by;
     D_8019C094 = pz - bz;
@@ -67,7 +67,7 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     D_8019C0B6 = py;
     D_8019C0B8 = pz;
 
-    asm volatile("" : : : "5");
+
     base = Gpu_GetTimTableEntry(nextTable, 2);
     func_8018F55C(sourceValue, D_801EA378[offset + 1], base, &point, extraPtr);
 
@@ -84,13 +84,12 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     asm volatile("" : : "r"(qz) : "memory");
     az = g_FxCommonMotionPosition1.z;
     asm volatile("" : : "r"(az) : "memory");
-    rawIndex = 1;
-    rawIndex <<= secondValue;
+    secondMask = 1 << secondValue;
     D_8019C06C = 0;
     D_8019C070 = 0;
     D_8019C074 = 0;
     D_8019C052 = secondValue;
-    D_8019C050 = rawIndex;
+    D_8019C050 = secondMask;
     D_8019C05C = qx - ax;
     D_8019C060 = qy - ay;
     D_8019C064 = qz - az;
