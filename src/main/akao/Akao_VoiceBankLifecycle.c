@@ -972,7 +972,7 @@ void Seq_StartRelativeNestedStream(AkaoRelativeNestedCommand *cmd) {
         arg1 = 0;
     }
 
-    offset = *(u16 *)(base + 2);
+    offset = ((u16 *)base)[1];
     arg2 = 0;
     if (offset != 0xFFFF) {
         arg2 = (char *)(offset + (int)(char *)cmd->source.key_off_mask) + 4;

@@ -481,8 +481,8 @@ void Menu_OpenItemList(void)
     }
 
     item = Inv_LookupActiveListData(Inv_RestoreSelection(list));
-    /* slot == -1 selects tailCount; add the offset before forming a pointer. */
-    if (*(u8 *)((unsigned int)item + slot + 0x15)) {
+    /* slot == -1 reads tailCount, the byte just before tailData. */
+    if (item->tailData[slot]) {
 
     D_8009CF24 = list;
     D_8009CF28 = slot;
@@ -500,7 +500,7 @@ void Menu_OpenItemList(void)
         for (i = 0; i < 4 && D_800A1888[i] == 0; ++i) {}
         D_8009CF2C = i < 4 ? i : 0;
         item = Inv_LookupActiveListData(Inv_RestoreSelection(list));
-        kind = *(u8 *)((unsigned int)item + slot + 0x15) & 0x1f;
+        kind = item->tailData[slot] & 0x1f;
         if (status == 1 || (!(D_8009CF2C & 1) && status == 2) ||
             ((D_8009CF2C & 1) && status == 5 && (unsigned)(kind - 8) >= 3)) {
             Menu_CreateItemActionSubmenu();
