@@ -269,7 +269,7 @@ int Pm_SetGetState(int arg0, int arg1, int arg2) {
         arg0 = (int)((char *)g_PmSlotTable + offset);
     }
 
-    cmd = *(u8 *)(arg0 + 1);
+    cmd = ((PmSlotHeader *)arg0)->command;
     if ((unsigned int)cmd >= 0x55) {
         cmd = 0x55;
     }
@@ -318,7 +318,7 @@ int Pm_Start(int arg0) {
         return 0;
     }
 
-    cmd = *(u8 *)(arg0 + 1);
+    cmd = ((PmSlotHeader *)arg0)->command;
     if ((unsigned int)cmd >= 0xC0) {
         return -0x11;
     }
@@ -470,12 +470,12 @@ int Pm_Stop(int arg0, int arg1, int arg2) {
         return 0;
     }
     if (arg2 == 0) {
-        if (*(int *)(arg0 + 8) != arg1) {
+        if (((PmSlotHeader *)arg0)->owner != (void *)arg1) {
             return 0;
         }
     }
 
-    arg1 = *(u8 *)(arg0 + 1);
+    arg1 = ((PmSlotHeader *)arg0)->command;
     if ((unsigned int)arg1 >= 0xC0) {
         return -0x17;
     }
@@ -507,18 +507,18 @@ int Pm_Stop(int arg0, int arg1, int arg2) {
         } else {
             arg1 = (int)&g_PmSlotTableTyped[orig];
         }
-        if (*(u8 *)(arg1 + 1) == 0x72) {
+        if (((PmSlotHeader *)arg1)->command == 0x72) {
             for (i = 0x6C; i < 0x73; i++) {
                 g_PmAuxiliaryPointerTable.entries[i - 0x6C] = 0;
             }
             D_800B0CD8 &= 0xFFFEFFFF;
         }
-        *(u8 *)arg1 = 0;
-        *(u8 *)(arg1 + 1) = -1;
-        *(u8 *)(arg1 + 2) = -1;
-        *(u8 *)(arg1 + 3) = -1;
-        *(int *)(arg1 + 4) = 0;
-        *(int *)(arg1 + 8) = 0;
+        ((PmSlotHeader *)arg1)->state = 0;
+        ((PmSlotHeader *)arg1)->command = -1;
+        ((PmSlotHeader *)arg1)->field02 = -1;
+        ((PmSlotHeader *)arg1)->field03 = -1;
+        ((PmSlotHeader *)arg1)->ticks = 0;
+        ((PmSlotHeader *)arg1)->owner = 0;
     }
 
     return result;

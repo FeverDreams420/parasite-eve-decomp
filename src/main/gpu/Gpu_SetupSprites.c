@@ -2,6 +2,7 @@
 #include "pe1/render_packets.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/render_buffers.h"
+#include "pe1/battle.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
@@ -16,8 +17,8 @@ extern u8 D_8009E976[];
 extern char D_8009EC40[];
 extern char D_8009EC4E[];
 
-void Gpu_SetupSprites(void *arg0, int arg1, int arg2) {
-    void *obj;
+void Gpu_SetupSprites(BattleEntity *arg0, int arg1, int arg2) {
+    BattleEntity *obj;
     int i;
     char *dst_base;
     int src_base;
@@ -43,8 +44,8 @@ void Gpu_SetupSprites(void *arg0, int arg1, int arg2) {
 
         dst[0xC] = *(u8 *)(D_8009E974 + src_offset);
         dst[0xD] = *(u8 *)(D_8009E975 + src_offset);
-        *(u16 *)(dst + 0x8) = *(u16 *)((char *)obj + 0x210) - 8;
-        *(u16 *)(dst + 0xA) = *(u16 *)((char *)obj + 0x212) - 0x10;
+        *(u16 *)(dst + 0x8) = obj->renderObject.projected_x - 8;
+        *(u16 *)(dst + 0xA) = obj->renderObject.projected_y - 0x10;
         val = *(u16 *)(D_8009E976 + src_offset);
         i++;
         *(u16 *)(D_8009EC4E + dst_offset) = val;
@@ -152,19 +153,19 @@ extern char D_8009EAB8[];
 } while (0)
 
 void Gpu_DrawStatusIcons(void) {
-    char *s1;
+    Combatant *s1;
     int s0;
     register int s2 asm("$18");
     register int s3 asm("$19");
-    char *s4;
+    s32 *s4;
     u8 mode;
     int bits;
     register int code asm("$5");
 
-    s1 = (char *)g_ActiveActor;
+    s1 = g_ActiveActor;
     mode = g_MenuActiveMode;
     s0 = 0xF;
-    s4 = s1 + 0x4C;
+    s4 = &s1->stateFlags;
     if ((u32)(mode - 1) < 2) {
         s0 = 0x121;
     }
@@ -181,7 +182,7 @@ void Gpu_DrawStatusIcons(void) {
 
     {
         int bits0;
-        bits0 = *(int *)(s1 + 0x4C) & 0xC;
+        bits0 = s1->stateFlags & 0xC;
         if (bits0 != 0) {
             code = bits0 ^ 0xC;
             code = code < 1;
@@ -192,7 +193,7 @@ void Gpu_DrawStatusIcons(void) {
 
     {
         int tmp;
-        tmp = *(int *)(s1 + 0x4C);
+        tmp = s1->stateFlags;
         bits = tmp & 0x30;
     }
     if (bits != 0) {
@@ -205,7 +206,7 @@ void Gpu_DrawStatusIcons(void) {
 
     {
         int tmp;
-        tmp = *(int *)s4;
+        tmp = *s4;
         bits = tmp & 0xC0;
     }
     if (bits != 0) {
@@ -218,7 +219,7 @@ void Gpu_DrawStatusIcons(void) {
 
     {
         int tmp;
-        tmp = *(int *)s4;
+        tmp = *s4;
         bits = tmp & 3;
     }
     if (bits != 0) {
@@ -229,19 +230,19 @@ void Gpu_DrawStatusIcons(void) {
         EMIT_CODED(code);
     }
 
-    if (*(int *)s4 & 0x1000) {
+    if (*s4 & 0x1000) {
         EMIT_BASE(D_8009EA48);
     }
-    if (*(int *)s4 & 0x100) {
+    if (*s4 & 0x100) {
         EMIT_BASE(D_8009EA64);
     }
-    if (*(int *)s4 & 0x400) {
+    if (*s4 & 0x400) {
         EMIT_BASE(D_8009EA80);
     }
-    if (*(int *)s4 & 0x800) {
+    if (*s4 & 0x800) {
         EMIT_BASE(D_8009EA9C);
     }
-    if (*(int *)s4 & 0x200) {
+    if (*s4 & 0x200) {
         EMIT_BASE_LAST(D_8009EAB8);
     }
 }

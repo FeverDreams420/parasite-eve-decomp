@@ -2,7 +2,7 @@
 #include "pe1/field_movement.h"
 
 void Aya_DeriveStats(int *first, int *second);
-void Gpu_SetupSprites(void *actor, int unused, int kind);
+void Gpu_SetupSprites(BattleEntity *actor, int unused, int kind);
 
 void Battle_ApplyDamage(int damageKind) {
     int effect;
