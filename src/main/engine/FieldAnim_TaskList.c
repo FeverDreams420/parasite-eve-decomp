@@ -24,30 +24,20 @@ extern int D_800B1630;
 int func_800CE4F8(int index) {
     int ret;
 
-    if (index != 1) {
-    if (index < 2) {
-        if (index == 0) {
-            goto ret0;
-        }
-        ret = 0;
-        return ret;
-    }
-    if (index != 2) {
-        ret = 0;
-        return ret;
-
-    ret0:
+    switch (index) {
+    case 0:
         ret = (int)D_800B0E18;
         return ret;
-    }
-    } else {
+    case 1:
         ret = (int)D_800B0E1C;
         return ret;
+    case 2:
+        ret = D_800B1630;
+        return ret;
+    default:
+        ret = 0;
+        return ret;
     }
-ret2:
-    ret = D_800B1630;
-done:
-    return ret;
 }
 int func_800CE560(char *out, int stride, int count, FieldAnimTaskCallback callback)
 {

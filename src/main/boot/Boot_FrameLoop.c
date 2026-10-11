@@ -139,11 +139,9 @@ void Boot_RunFrame(void)
                     Render_SetFadeColour(15);
                 }
             }
-            goto after_vsync;
-            }
-do_vsync:
+            } else {
             VSync(2);
-after_vsync:;
+            }
 
             if (!(D_800B0CD8 & 0x4200) &&
                 (D_8009D26C & 0x0F000006u) == 0x0F000006u) {

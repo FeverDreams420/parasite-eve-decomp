@@ -184,10 +184,10 @@ check_owner:
         if (count >= 2)
             state->core_flags = (flags & 0xC0FFFFFF) | (((count - 1) & 0x3F) << 24);
         if ((int)((state->core_flags >> 24) & 0x3F) > 0) {
-            if (*state->action_state != 0)
-                goto step_tasks;
-            if (state->control10.command_value <= 0)
-                owner->prefix.reserved00 = 4;
+            if (*state->action_state == 0) {
+                if (state->control10.command_value <= 0)
+                    owner->prefix.reserved00 = 4;
+            }
         }
         if (*state->action_state == 0) {
             if (state->core_flags & 0x180E)
@@ -196,7 +196,6 @@ check_owner:
                 return 0;
         }
     }
-step_tasks:
     if (context->flags)
         D_800F3428 = Asset_SearchByKeyType(owner->prefix.asset_type);
     slot = context->slots;

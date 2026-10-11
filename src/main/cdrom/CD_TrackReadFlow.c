@@ -214,12 +214,12 @@ dispatch:
                 state->cd_range_state = 0x29;
                 return 1;
             }
-            goto set_scan_state;
+            state->cd_range_state = 0x2a;
+            goto dispatch;
         }
         case 0x29:
         {
             if (CD_ReadSectors(1, state->cd_range_read_mode, 0, state->scene_load_scratch, 0x21, 0) == 1) return 1;
-set_scan_state:
             state->cd_range_state = 0x2a;
             goto dispatch;
         }

@@ -101,7 +101,7 @@ retry_large_load_a:
                     poll = status;
                 }
                 if (poll == 0) {
-                    goto large_load_done;
+                    break;
                 }
                 if (poll == -1) {
                     goto retry_large_load_a;
@@ -137,7 +137,6 @@ retry_large_load_b:
         }
     }
 
-large_load_done:
     large_table = (TimRelativeTable *)state->object_texture_blob;
     for (i = 0; i < 0x106; i++) {
         Asset_LoadTimImage((TimFile *)((u8 *)large_table + large_table->offsets[(s16)i]));
