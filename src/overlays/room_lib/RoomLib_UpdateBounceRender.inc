@@ -30,14 +30,9 @@ int ROOMLIB_UPDATE_BOUNCE_RENDER_NAME(int mode, RoomLineBurstParticle *fx) {
 
     blob = ROOMLIB_BOUNCE_RENDER_BLOB;
     saved2 = (int)&blob;
-    if (mode != 1) {
-    if (mode == 2) {
-        goto mode2;
-    }
-    return 0;
+    switch (mode) {
+    case 1:
 
-    }
-mode1:
     if (fx->state != 0) {
         if (fx->state != 1) {
             return 0;
@@ -82,7 +77,6 @@ mode1:
         }
         return 1;
     }
-updateRise:
     {
         fx->timer++;
         fx->y += fx->vy;
@@ -96,7 +90,7 @@ updateRise:
         return 1;
     }
 
-mode2:
+    case 2:
     if (fx->state != 0) {
         if (fx->state != 1) {
             return 0;
@@ -132,7 +126,6 @@ mode2:
                       (unsigned short)texture, 1, saved0, 0);
         return 0;
     }
-drawRise:
     {
         int angle;
         RenderMatrixSlot *matrixSlot;
@@ -146,6 +139,9 @@ drawRise:
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
         func_800D2104((GteShortVector *)fx, (u8 *)saved2, saved0, 1);
+    }
+    default:
+        break;
     }
 ret0:
     return 0;
