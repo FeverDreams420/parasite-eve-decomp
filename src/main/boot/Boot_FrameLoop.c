@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "common.h"
 #include "pe1/scene_transition.h"
 #include "pe1/render_camera.h"
@@ -8,174 +9,22 @@
 #include "pe1/room_floor.h"
 #include "pe1/scene_room_load.h"
 #include "pe1/scene_dispatch.h"
-
-extern s32 g_GlobalFrameCounter;
-extern char D_8009D224[];
-extern s32 g_SceneDispatchToken;
-extern u16 g_TaskNodeSeqCounter[];
-extern s8 D_800B0CE4[];
-extern char D_800B1628[];
-extern char D_800B162C[];
-extern char D_800B8A18[];
-extern unsigned char g_ScreenTransitionState[];
-extern char D_800BEA40[];
-extern char D_800BEA42[];
-extern char D_800BEA44[];
-extern char D_800BEA46[];
-extern char D_800BEA48[];
-extern char D_800BEA4A[];
-extern char D_800BEA4C[];
-extern char D_800BEA4E[];
-extern char D_800BEA50[];
-
-#define W(sym) (*(s32 *)(sym))
-#define H(sym) (*(s16 *)(sym))
-#define B(sym) (*(s8 *)(sym))
-#define UB(sym) (*(u8 *)(sym))
-#define LAUNDER(x) asm volatile("" : "=r"(x) : "0"(x))
-#define BARRIER() 
-
-void Akao_LoadVoiceBankAlt(void);
-void Scene_LoadRoom(int arg0);
-s32 Overlay_StreamTexturePage(void);
-void Entity_InitFreePool(void);
-void Task_InitNodeFreeList(void);
-void Gte_SetBackColor(void *arg0, int arg1, int arg2, int arg3);
-void Gte_SetLightColor(void *arg0, int arg1, int arg2, int arg3, int arg4);
-int CdRom_DetectDiscChange(void);
-int Scene_LoadEntityTexture(void);
-void Entity_RelocateSceneData(void);
-void Render_SetupFogLayer(void *source);
-void Task_DrawSyncAndFlush(void);
-void func_800E0060(void);
-void SetDispMask(int arg0);
-
-void Gpu_InitPipeline(void) {
-    int one;
-    int v1;
-    register int t0 asm("$8");
-    register int t1 asm("$9");
-    char *p;
-    char *a0p;
-    int geom;
-    int frame_pad[6];
-
-    Akao_LoadVoiceBankAlt();
-    Scene_LoadRoom(g_SceneDispatchToken);
-    Overlay_StreamTexturePage();
-    W(D_8009D224) = 1;
-    H(g_TaskNodeSeqCounter) = 1;
-    Entity_InitFreePool();
-    Task_InitNodeFreeList();
-
-    Gte_SetBackColor(D_800BEA42 - 2, 0x28, 0x28, 0x28);
-    BARRIER();
-
-    v1 = 0;
-    t1 = 0;
-    LAUNDER(v1);
-    if (v1 < -0x7FFF) {
-        v1 = -0x7FFF;
-    }
-    t0 = 0x7FFF;
-    a0p = D_800BEA40;
-    *(s16 *)a0p = t0;
-    H(D_800BEA42) = t1;
-    H(D_800BEA44) = v1;
-    Gte_SetLightColor(a0p, 0, 0xFF, 0xFF, 0xFF);
-
-    v1 = 0;
-    t0 = 0;
-    LAUNDER(v1);
-    t1 = 0x7FFF;
-    if (v1 < -0x7FFF) {
-        v1 = -0x7FFF;
-    }
-    p = D_800BEA46;
-    *(s16 *)p = t0;
-    H(D_800BEA48) = t1;
-    H(D_800BEA4A) = v1;
-    Gte_SetLightColor(p - 6, 1, 0x80, 0x80, 0x80);
-
-    v1 = 0x10000;
-    t0 = 0;
-    {
-        register int cond asm("$2");
-        cond = 1;
-        LAUNDER(cond);
-        t1 = 0;
-        if (cond != 0) {
-            v1 = 0x7FFF;
-        } else {
-            LAUNDER(v1);
-            if (v1 < -0x7FFF) {
-                v1 = -0x7FFF;
-            }
-        }
-    }
-    p = D_800BEA4C;
-    *(s16 *)p = t0;
-    H(D_800BEA4E) = t1;
-    H(D_800BEA50) = v1;
-    Gte_SetLightColor(p - 0xC, 2, 0x60, 0x60, 0x60);
-
-    one = 1;
-    Render_PrepareFrame();
-    SetGeomScreen(W(D_800B8A18));
-    UB(g_ScreenTransitionState) |= 0x40;
-    CdRom_DetectDiscChange();
-    while (Scene_LoadEntityTexture() == one) {
-    }
-
-    one = 1;
-    Scene_SetStoryDay(B(D_800B0CE4));
-    while (Scene_LoadEntityTextures() == one) {
-    }
-
-    Entity_RelocateSceneData();
-    if (g_GameState.flags & 0x40000000) {
-        geom = W(D_800B162C);
-    } else {
-        geom = W(D_800B1628);
-    }
-    Render_SetupFogLayer(geom);
-    Task_DrawSyncAndFlush();
-    func_800E0060();
-    g_GlobalFrameCounter = 0;
-    g_RoomFloorY->y = 0;
-    DrawSync(0);
-    SetDispMask(1);
-    {
-        int tmp;
-        v1 = ~0x40;
-        tmp = g_GameStateFlags;
-        a0p = (char *)&g_GameState;
-        g_GameStateFlags = tmp & v1;
-    }
-    asm volatile("" : : : "memory");
-    {
-        /* g_FieldMoveLock is at 0x8009D2E8 in the USA image. */
-        u32 load_page = 0x800A0000u;
-        u32 store_page;
-        u32 flags;
-        flags = *(volatile u32 *)(load_page - 0x2D18u);
-        flags &= ~0xCu;
-        store_page = 0x800A0000u;
-        *(volatile u32 *)(store_page - 0x2D18u) = flags;
-    }
-    W(a0p) &= ~0x402;
-}
+#include "pe1/render_tint.h"
 
 /* Field frame loop and its scene flush: Boot_FlushSceneFast is the exit tail
  * that Boot_RunFrame repeats after its loop. Contiguous -G8 pair. */
-extern u32 D_8009D280;
+/* COMMON supplies small-data metadata to MASPSX; the other words stay
+ * absolute. */
+u32 D_8009D280;
+int D_8009D1C4;
+unsigned int g_GameStateFlags;
 extern u8 D_8009CDD8_blob[] asm("D_8009CDD8");
 #define D_8009CDD8 (*(u32 *)D_8009CDD8_blob)
-extern u32 D_8009D1A0;
+u32 D_8009D1A0;
 /* Frame counter word: CD_TrackReadFlow reads it through an absolute
  * address, this -G8 unit through the small-data area, so the size
  * is given here only. */
-extern u32 D_8009CDA4[1];
+u32 D_8009CDA4[1];
 extern u8 D_8009D1F4_blob[] asm("D_8009D1F4");
 #define D_8009D1F4 (*(u32 *)D_8009D1F4_blob)
 extern u8 D_8009D238_blob[] asm("D_8009D238");
@@ -193,7 +42,6 @@ extern u32 D_800B0CD8_read[3] asm("D_800B0CD8");
 extern u32 D_800B0CD8_write1[3] asm("D_800B0CD8");
 extern u32 D_800B0CD8_write2[3] asm("D_800B0CD8");
 extern u8 D_800B0CEA[];
-extern u8 D_800BCFE8[];
 
 void Gpu_InitPipeline(void);
 void Field_HandleStateTransition(void);
@@ -256,7 +104,7 @@ void Boot_RunFrame(void)
     if (D_8009D1C4 == D_8009D280) {
         scene_flags = D_800B0CEA;
         game_flags = (u32 *)(scene_flags - 0x12);
-        fade = D_800BCFE8;
+        fade = (u8 *)&D_800BCFE8;
         do {
             D_8009CDD8 = 0;
             *scene_flags = 0;
