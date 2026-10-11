@@ -1,7 +1,12 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 
 #include "pe1/render_animation_frame.h"
+
+/* COMMON supplies small-data metadata to MASPSX; the extern words stay
+ * absolute. */
+int g_BattleAttackAnimFrame;
 
 void Render_AnimationFrame(void) {
     int size;
@@ -24,7 +29,7 @@ void Render_AnimationFrame(void) {
 
     frame = g_BattleAttackAnimFrame;
     if (frame < 10U) {
-        early_actor = g_ActiveActor[0];
+        early_actor = (RenderAnimActor *)g_ActiveActor;
         if ((early_actor->modeFlags & 0x30) == 0x10) {
             scaled_frame = (frame << 2) + frame;
             size = scaled_frame << 18;
@@ -34,7 +39,7 @@ void Render_AnimationFrame(void) {
         current_frame = g_BattleAttackAnimFrame;
         width = current_frame << 6;
     } else {
-        late_actor = g_ActiveActor[0];
+        late_actor = (RenderAnimActor *)g_ActiveActor;
         size = 0xC80000;
         if ((late_actor->modeFlags & 0x30) != 0x10) {
             size = late_actor->frameData->frameCount << 16;
@@ -47,7 +52,7 @@ void Render_AnimationFrame(void) {
 
     animation_id = 0x457;
     if (current_frame == 0) {
-        player = g_PlayerEntity[0];
+        player = (RenderAnimPlayer *)g_PlayerEntity;
         x = player->x;
         y = player->y;
         z = player->z;
@@ -57,9 +62,9 @@ void Render_AnimationFrame(void) {
 
     Render_SetGteScreenOffset();
 
-    draw_index = g_ActiveDrawSlot[0];
+    draw_index = g_ActiveDrawSlot;
     delta = Render_DecompressAnimFrame(D_800B0DF8[0],
-                                       g_PlayerEntity[0]->decoderData,
+                                       ((RenderAnimPlayer *)g_PlayerEntity)->decoderData,
                                        size, width & 0xFFFE,
                                        g_OtBufferTable[draw_index] + 8,
                                        g_RenderAnimBufferBase[draw_index] +

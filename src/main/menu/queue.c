@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
+/* MASPSX_FORCE_G0: 1 */
 
 #include "pe1/menu_queue.h"
 #include "pe1/psyq_gpu.h"
@@ -114,8 +115,10 @@ void Queue_DequeueByMask(int mask, MenuQueueEntry *out_arg) {
 
 typedef MenuWidgetNode MenuInputWidget;
 
-extern int D_8009D0F4;
-extern int D_8009D0F8;
+/* COMMON supplies small-data metadata to MASPSX for the words this unit
+ * reaches through $gp; the other extern words stay absolute. */
+int D_8009D0F4;
+int D_8009D0F8;
 
 extern int g_FieldPadBits[];
 #define g_FieldPadBits (g_FieldPadBits[0])
@@ -430,9 +433,15 @@ DISPENV *SetDefDispEnv(DISPENV *env, int x, int y, int w, int h);
 DRAWENV *SetDefDrawEnv(DRAWENV *env, int x, int y, int w, int h);
 void Draw_SetFontVariant();
 
-extern s32 g_TextCursorX;
-extern s32 g_TextCursorY;
-extern s32 g_DrawGradientBlendColor;
+int g_TextCursorX;
+int g_TextCursorY;
+int g_DrawGradientBlendColor;
+int *g_TextCursorStackPtr;
+DrawFrameBuffer *D_8009D0FC;
+u8 *D_8009D100;
+u8 *D_8009D104;
+u32 *D_8009D118;
+u32 *D_8009D11C;
 extern s32 g_DrawPresentImage;
 extern s8 D_800A2198[];
 #define D_800A2198 (D_800A2198[0])
@@ -506,8 +515,8 @@ void Draw_InitBuffers(void) {
 
 int g_DrawPresentImage;
 
-extern int g_ActiveDrawSlot[];
-extern int g_DrawBufferIndex;
+extern int g_ActiveDrawSlot;
+int g_DrawBufferIndex;
 
 void Draw_SetPresentImage(int arg0) {
     g_DrawPresentImage = arg0;
@@ -523,7 +532,7 @@ void Draw_SelectBuffer(void) {
     if (g_DrawPresentEnabled != 0) {
         index = (u32)g_DrawBufferIndex < 1;
     } else {
-        index = g_ActiveDrawSlot[0];
+        index = g_ActiveDrawSlot;
     }
 
     offset = ((index << 4) - index) << 3;

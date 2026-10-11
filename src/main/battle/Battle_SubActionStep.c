@@ -1,7 +1,7 @@
 #include "common.h"
 #include "pe1/battle.h"
 
-extern volatile char *g_ActiveActor;
+extern Combatant *g_ActiveActor;
 extern volatile char *g_PlayerEntity;
 
 #define COMBATANT_FIELD(ptr, type, member) \
@@ -12,7 +12,7 @@ extern volatile char *g_PlayerEntity;
 void Battle_SubActionStep(void) {
     volatile char *state;
 
-    state = g_ActiveActor;
+    state = (char *)g_ActiveActor;
     if (COMBATANT_FIELD(state, u8, subActionCounter) >=
         COMBATANT_FIELD(state, u8, subActionPeriod)) {
         register volatile char *actor asm("$4");
@@ -32,14 +32,14 @@ void Battle_SubActionStep(void) {
         COMBATANT_FIELD(state, u16, panelAux_val) = copy;
         actor = g_PlayerEntity;
         value -= step;
-        state_v1 = g_ActiveActor;
+        state_v1 = (char *)g_ActiveActor;
         COMBATANT_FIELD(state, u16, hpMirror) = value;
         value = ENTITY_FIELD(actor, u16, renderObject.projected_x);
         COMBATANT_FIELD(state_v1, u16, panelAux_x) = value;
         copy = ENTITY_FIELD(actor, u16, renderObject.projected_y);
         COMBATANT_FIELD(state_v1, u8, panelAux_timer) = 0x1E;
         COMBATANT_FIELD(state_v1, u16, panelAux_y) = copy;
-        state_v1 = g_ActiveActor;
+        state_v1 = (char *)g_ActiveActor;
         COMBATANT_FIELD(state_v1, u8, panelAux_mode) = 3;
     }
 
@@ -47,7 +47,7 @@ void Battle_SubActionStep(void) {
         Combatant *state_v1;
         u8 value;
 
-        state_v1 = (Combatant *)g_ActiveActor;
+        state_v1 = g_ActiveActor;
         value = *(u8 *)&state_v1->subActionCounter;
         value++;
         *(u8 *)&state_v1->subActionCounter = value;

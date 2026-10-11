@@ -50,9 +50,9 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RenderAnimPlayer, z) - 0x28 ==
                   render_anim_player_position_z_view);
 
 extern int g_BattleAttackAnimFrame;
-extern RenderAnimActor *g_ActiveActor[3];
-extern RenderAnimPlayer *g_PlayerEntity[3];
-extern int g_ActiveDrawSlot[3];
+extern struct Combatant *g_ActiveActor;
+extern struct FieldActor *g_PlayerEntity;
+extern int g_ActiveDrawSlot;
 extern RenderAnimVramCounter g_RenderAnimVramOffset;
 /* Distinct views reproduce the original load and later update. */
 extern RenderAnimVramCounter g_RenderAnimVramOffsetLoad asm("g_RenderAnimVramOffset");

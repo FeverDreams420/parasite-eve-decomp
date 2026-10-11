@@ -1,11 +1,12 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 --expand-div */
+/* MASPSX_FLAGS: -G8 --expand-div --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "common.h"
 #include "pe1/battle.h"
 #include "pe1/entity_animation.h"
 #include "pe1/asset_find.h"
 
-extern char *g_ActiveActor[];
+extern Combatant *g_ActiveActor;
 extern char *g_ActiveActor_late2[] asm("g_ActiveActor");
 extern char *g_PlayerEntity[];
 extern void *g_BattlePendingEnemySpawn[];
@@ -35,7 +36,7 @@ void Entity_ResolveDropTable(void *arg0) {
     int roll;
     int tmp;
 
-    state = (Combatant *)g_ActiveActor[0];
+    state = g_ActiveActor;
     scale = (u16)state->stat20 / 5U;
     entry = *(char **)arg0;
     flags = state->stateFlags;
@@ -72,7 +73,7 @@ void Entity_ResolveDropTable(void *arg0) {
         int chance;
 
         roll %= 100;
-        chance_state = g_ActiveActor[0];
+        chance_state = (char *)g_ActiveActor;
         chance = ((int)ENEMY_FIELD(entry, u8, effectChance) *
                   (100 - (int)((Combatant *)chance_state)->attributes->parameterWord.fields.third)) /
                  100;
@@ -100,7 +101,7 @@ void Entity_ResolveDropTable(void *arg0) {
                 }
                 U16(after_state, 0xC) = U16(after_state, 0xC) - value;
             }
-            if (S16(g_ActiveActor[0], 0xC) != 0) {
+            if (S16(g_ActiveActor, 0xC) != 0) {
                 Entity_ApplyHitAndSetAnim(arg0);
                 if (!(U32(g_PlayerEntity[0], 0x98) & 0x100)) {
                     g_BattlePendingEnemySpawn[0] = arg0;
@@ -125,7 +126,9 @@ void Entity_ResolveDropTable(void *arg0) {
 #undef EFFECT_FIELD
 #undef ENEMY_FIELD
 
-extern s16 D_8009D298;
+/* COMMON supplies small-data metadata to MASPSX; the extern words stay
+ * absolute. */
+s16 D_8009D298;
 extern u8 g_BattleHitActionMode[];
 extern u8 g_BattleHitActionSubmode[];
 extern u32 g_BattleHitActionParam[];
@@ -188,7 +191,7 @@ s16 Entity_ApplyHitAndSetAnim(void *arg0) {
     }
     }
 
-    state = g_ActiveActor[0];
+    state = (char *)g_ActiveActor;
     if ((U32(state, 0x4C) & 0x12000) == 0) {
         value = Battle_CalcRelativeAngle(saved_arg, CurrentPlayer());
         if ((s16)value < 0x200) {

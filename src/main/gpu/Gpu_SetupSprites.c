@@ -3,9 +3,13 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/render_buffers.h"
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 
-extern u8 g_BattleSpritePrimCountdown;
+/* COMMON supplies small-data metadata to MASPSX; the extern words stay
+ * absolute. */
+u8 g_BattleSpritePrimCountdown;
+u8 g_MenuActiveMode;
 extern char D_8009E974[];
 extern char D_8009E975[];
 extern u8 D_8009E976[];
@@ -51,8 +55,7 @@ void Gpu_SetupSprites(void *arg0, int arg1, int arg2) {
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-extern int g_ActiveDrawSlot[];
-extern u8 g_BattleSpritePrimCountdown;
+extern int g_ActiveDrawSlot;
 extern u8 D_8009EC38[];
 extern char D_8009EC4A[];
 
@@ -63,7 +66,7 @@ void Gpu_QueuePrimitive(void) {
     void *prim;
     char *ot;
 
-    index = g_ActiveDrawSlot[0];
+    index = g_ActiveDrawSlot;
     prim_offset = ((index << 3) - index) << 2;
     ot_offset = index << 2;
     *(volatile u16 *)(D_8009EC4A + prim_offset) = *(volatile u16 *)(D_8009EC4A + prim_offset) - 2;
@@ -77,9 +80,7 @@ void Gpu_QueuePrimitive(void) {
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-extern char *g_ActiveActor[];
-extern u8 g_MenuActiveMode;
-extern int g_ActiveDrawSlot[];
+extern struct Combatant *g_ActiveActor;
 extern char D_8009E968[];
 extern char D_8009EA48[];
 extern char D_8009EA64[];
@@ -103,7 +104,7 @@ extern char D_8009EAB8[];
     code_off = ((packet_code << 3) - packet_code) << 2; \
     prim = base - 8; \
      \
-    idx = g_ActiveDrawSlot[0]; \
+    idx = g_ActiveDrawSlot; \
     prim = (char *)(code_off + (int)prim); \
     idx_off = INDEX_STRIDE(idx) << 2; \
     prim = (char *)(idx_off + (int)prim); \
@@ -122,7 +123,7 @@ extern char D_8009EAB8[];
     void *prim; \
     void *packet; \
     base = (base_sym); \
-    idx = g_ActiveDrawSlot[0]; \
+    idx = g_ActiveDrawSlot; \
     prim = base - 8; \
     packet = (char *)(INDEX_STRIDE(idx) << 2); \
     prim = (char *)packet + (int)prim; \
@@ -139,7 +140,7 @@ extern char D_8009EAB8[];
     char *base; \
     int idx_off; \
     register void *packet asm("$3"); \
-    idx = g_ActiveDrawSlot[0]; \
+    idx = g_ActiveDrawSlot; \
     base = (base_sym); \
     idx_off = INDEX_STRIDE(idx) << 2; \
     packet = (char *)(idx_off + (int)base); \
@@ -160,7 +161,7 @@ void Gpu_DrawStatusIcons(void) {
     int bits;
     register int code asm("$5");
 
-    s1 = g_ActiveActor[0];
+    s1 = (char *)g_ActiveActor;
     mode = g_MenuActiveMode;
     s0 = 0xF;
     s4 = s1 + 0x4C;

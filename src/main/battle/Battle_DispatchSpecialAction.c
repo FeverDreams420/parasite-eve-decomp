@@ -4,7 +4,7 @@
 
 extern unsigned int g_GameStateFlags;
 extern BattleEntity *g_PlayerEntity;
-extern int g_ActiveActor;
+extern Combatant *g_ActiveActor;
 
 void Battle_CopyPadStateToRecord(void);
 void Battle_SetupEnemyAnims(void);
@@ -15,7 +15,7 @@ void Battle_DispatchSpecialAction(int arg0) {
 
     if ((g_GameStateFlags & 2) == 0) {
         actor = g_PlayerEntity;
-        g_ActiveActor = (int)actor->core;
+        g_ActiveActor = actor->core;
         Asset_Find08Alt(0x453, 1, actor->posX.parts.integer,
                        actor->posY.parts.integer, actor->posZ.parts.integer);
     }
@@ -24,7 +24,7 @@ void Battle_DispatchSpecialAction(int arg0) {
     case 0x197:
         Battle_CopyPadStateToRecord();
         Battle_SetupEnemyAnims();
-        ((Combatant *)g_ActiveActor)->actionMode12 = 0xD;
+        g_ActiveActor->actionMode12 = 0xD;
         break;
     case 0x198:
         Battle_SyncEnemyAttributes();
@@ -37,7 +37,7 @@ void Battle_DispatchInit(int arg0) {
         return;
     }
 
-    g_ActiveActor = (int)g_PlayerEntity->core;
+    g_ActiveActor = g_PlayerEntity->core;
 
     switch (arg0) {
     case 0x197:

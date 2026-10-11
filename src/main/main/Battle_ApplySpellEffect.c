@@ -3,7 +3,8 @@
 #include "pe1/akao.h"
 #include "pe1/entity_animation.h"
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 
 #define NULL ((void *)0)
 
@@ -18,7 +19,9 @@ s32 rand(void);
 
 extern struct { char _[16]; } D_8009D1A0_o __asm__("g_GameStateFlags");
 #define g_GameStateFlags (*(s32 *)&D_8009D1A0_o)
-extern void *g_BattleActiveEntity;
+/* COMMON supplies small-data metadata to MASPSX; the extern words stay
+ * absolute. */
+void *g_BattleActiveEntity;
 #define D1AC_1 (*(s32 *)&D1AC_o22)
 #define D1AC_2 (*(s32 *)&D1AC_o22)
 #define D1AC_3 (*(s32 *)&D1AC_o22)
@@ -52,64 +55,64 @@ extern struct { char _[16]; } D1AC_o24 __asm__("g_BattleResultFlags");
 #define D1AC_24 (*(s32 *)&D1AC_o24)
 extern struct { char _[16]; } D1AC_o25 __asm__("g_BattleResultFlags");
 #define D1AC_25 (*(s32 *)&D1AC_o25)
-extern s16 g_ActorEffectFlag100Timer;
+s16 g_ActorEffectFlag100Timer;
 extern struct { char _[16]; } g_PlayerEntity_oa __asm__("g_PlayerEntity");
 extern struct { char _[16]; } g_PlayerEntity_ob __asm__("g_PlayerEntity");
 #define D254A (*(u8 **)&g_PlayerEntity_oa)
 #define D254B (*(u8 **)&g_PlayerEntity_ob)
-#define D278_1 ((u8 *)g_ActiveActor[0])
-#define D278_2 ((u8 *)g_ActiveActor[0])
-#define D278_3 ((u8 *)g_ActiveActor[0])
-#define D278_4 ((u8 *)g_ActiveActor[0])
-#define D278_5 ((u8 *)g_ActiveActor[0])
-#define D278_6 ((u8 *)g_ActiveActor[0])
+#define D278_1 ((u8 *)g_ActiveActor)
+#define D278_2 ((u8 *)g_ActiveActor)
+#define D278_3 ((u8 *)g_ActiveActor)
+#define D278_4 ((u8 *)g_ActiveActor)
+#define D278_5 ((u8 *)g_ActiveActor)
+#define D278_6 ((u8 *)g_ActiveActor)
 #define D278_7 (*(u8 **)&D278_o54)
 #define D278_8 (*(u8 **)&D278_o54)
 #define D278_9 (*(u8 **)&D278_o53)
 #define D278_10 (*(u8 **)&D278_o53)
-#define D278_11 ((u8 *)g_ActiveActor[0])
+#define D278_11 ((u8 *)g_ActiveActor)
 #define D278_12 (*(u8 **)&D278_o54)
 #define D278_13 (*(u8 **)&D278_o53)
-#define D278_14 ((u8 *)g_ActiveActor[0])
+#define D278_14 ((u8 *)g_ActiveActor)
 #define D278_15 (*(u8 **)&D278_o54)
 #define D278_16 (*(u8 **)&D278_o53)
-#define D278_17 ((u8 *)g_ActiveActor[0])
+#define D278_17 ((u8 *)g_ActiveActor)
 #define D278_18 (*(u8 **)&D278_o54)
 #define D278_19 (*(u8 **)&D278_o53)
 #define D278_20 (*(u8 **)&D278_o54)
 #define D278_21 (*(u8 **)&D278_o54)
-#define D278_22 ((u8 *)g_ActiveActor[0])
+#define D278_22 ((u8 *)g_ActiveActor)
 #define D278_23 (*(u8 **)&D278_o53)
 #define D278_24 (*(u8 **)&D278_o54)
-#define D278_25 ((u8 *)g_ActiveActor[0])
+#define D278_25 ((u8 *)g_ActiveActor)
 #define D278_26 (*(u8 **)&D278_o53)
 #define D278_27 (*(u8 **)&D278_o54)
-#define D278_28 ((u8 *)g_ActiveActor[0])
+#define D278_28 ((u8 *)g_ActiveActor)
 #define D278_29 (*(u8 **)&D278_o53)
 #define D278_30 (*(u8 **)&D278_o54)
-#define D278_31 ((u8 *)g_ActiveActor[0])
+#define D278_31 ((u8 *)g_ActiveActor)
 #define D278_32 (*(u8 **)&D278_o53)
 #define D278_33 (*(u8 **)&D278_o54)
-#define D278_34 ((u8 *)g_ActiveActor[0])
+#define D278_34 ((u8 *)g_ActiveActor)
 #define D278_35 (*(u8 **)&D278_o53)
 #define D278_36 (*(u8 **)&D278_o54)
-#define D278_37 ((u8 *)g_ActiveActor[0])
+#define D278_37 ((u8 *)g_ActiveActor)
 #define D278_38 (*(u8 **)&D278_o53)
 #define D278_39 (*(u8 **)&D278_o54)
-#define D278_40 ((u8 *)g_ActiveActor[0])
+#define D278_40 ((u8 *)g_ActiveActor)
 #define D278_41 (*(u8 **)&D278_o53)
 #define D278_42 (*(u8 **)&D278_o54)
-#define D278_43 ((u8 *)g_ActiveActor[0])
+#define D278_43 ((u8 *)g_ActiveActor)
 #define D278_44 (*(u8 **)&D278_o53)
 #define D278_45 (*(u8 **)&D278_o54)
-#define D278_46 ((u8 *)g_ActiveActor[0])
+#define D278_46 ((u8 *)g_ActiveActor)
 #define D278_47 (*(u8 **)&D278_o53)
 #define D278_48 (*(u8 **)&D278_o54)
-#define D278_49 ((u8 *)g_ActiveActor[0])
+#define D278_49 ((u8 *)g_ActiveActor)
 #define D278_50 (*(u8 **)&D278_o53)
 #define D278_51 (*(u8 **)&D278_o54)
-extern Combatant *g_ActiveActor[];
-#define D278_52 ((u8 *)g_ActiveActor[0])
+extern Combatant *g_ActiveActor;
+#define D278_52 ((u8 *)g_ActiveActor)
 extern struct { char _[16]; } D278_o53 __asm__("g_ActiveActor");
 #define D278_53 (*(u8 **)&D278_o53)
 extern struct { char _[16]; } D278_o54 __asm__("g_ActiveActor");

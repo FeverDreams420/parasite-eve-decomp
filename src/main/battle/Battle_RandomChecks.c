@@ -1,7 +1,7 @@
 #include "common.h"
 #include "pe1/battle.h"
 
-extern void *g_ActiveActor;
+extern Combatant *g_ActiveActor;
 int rand(void);
 int Battle_GetAgilityBonus(void);
 void Battle_SetupEntityTarget(BattleEntity *actor);
@@ -18,7 +18,7 @@ void Battle_CheckDropChance(void)
     if (flags & 0x10000) {
         chance = ctx->stat22;
         if ((rand() % 100) < chance) {
-            ((Combatant *)g_ActiveActor)->hpAlive = 0x2328;
+            g_ActiveActor->hpAlive = 0x2328;
         }
     }
 }
@@ -37,7 +37,7 @@ void Battle_RollEnemySpawn(void *arg0)
         return;
     }
 
-    diff = (s8)(((Combatant *)g_ActiveActor)->field04.bytes.rank -
+    diff = (s8)(g_ActiveActor->field04.bytes.rank -
                 ctx->field04.bytes.rank);
     if (diff > 0) {
         threshold = Battle_GetAgilityBonus();
