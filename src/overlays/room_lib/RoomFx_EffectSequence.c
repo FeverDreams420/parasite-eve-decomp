@@ -1178,13 +1178,12 @@ void RoomFx_UpdateTransformedSparkle(
                           transform->y;
         {
             int random;
-            int z;
+            u16 z;
             int transformZ;
 
             random = rand();
             transformZ = transform->z;
             z = (u16)transformed.vector.z;
-            asm("" : "=r"(transformZ) : "0"(transformZ));
             state->sparkleAlpha = 0xFF;
             state->sparkleLife = 20;
             z += transformZ;
