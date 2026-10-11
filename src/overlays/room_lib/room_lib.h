@@ -589,21 +589,26 @@ extern void func_80193E68(void);
 extern void func_8019649C(struct RoomEnt *obj);
 extern int RoomLib_Set4ClearSignal_801924D4(RoomEnt *o);
 
-typedef struct RoomLibFxMatrixWords {
-    int w0;
-    int w1;
-    int w2;
-    int w3;
-    int w4;
-    int w5;
-    int w6;
-    int w7;
+/* A view matrix copied as eight words. */
+typedef union RoomLibFxMatrixWords {
+    int words[8];
+    GteMatrix matrix;
 } RoomLibFxMatrixWords;
 
+/* Effect owner state set up by the room effect Init methods: the owner's
+ * link, a copy of its view matrix (the translation is where the effect
+ * stands), the sprite asset whose low byte selects the texture page, and
+ * the reload timer and hit flag the owner tick polls. */
 typedef struct RoomLibFxMatrixState {
-    RoomLink *link;
-    RoomLibFxMatrixWords matrix;
-    void *asset;
+    RoomLink *link;               /* 0x00 */
+    RoomLibFxMatrixWords matrix;  /* 0x04 */
+    union {
+        void *handle;
+        unsigned char page;
+    } asset;                      /* 0x24 */
+    unsigned short reload;        /* 0x28 */
+    short cooldown;               /* 0x2A */
+    short hit;                    /* 0x2C */
 } RoomLibFxMatrixState;
 
 typedef struct RoomLibPacked8 {
