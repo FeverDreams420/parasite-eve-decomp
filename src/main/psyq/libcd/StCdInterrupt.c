@@ -103,7 +103,6 @@ void StCdInterrupt(void) {
                 *port = control;
             }
             *D_8009B340 = 0x1325;
-            do {
             if ((D_800C0DC0 == 1) && (D_800B6918 != 0)) {
                 if (D_800B6918 != ST_FRAME_INDEX(D_800A34A0)) {
                     D_800A34A0->id = 0;
@@ -111,7 +110,7 @@ void StCdInterrupt(void) {
                     if (D_800C0DB8 != 0) {
                         D_800BCD7C += 1;
                     }
-                    break;
+                    return;
                 } else {
                     D_800C0DC0 = 0;
                 }
@@ -249,7 +248,6 @@ void StCdInterrupt(void) {
                 if ((D_800C0DB8 != 0) && (D_800B89F4 != 0)) {
                     data_ready_callback();
                 }
-            } while (0);
         }
     }
 }
