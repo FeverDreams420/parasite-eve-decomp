@@ -72,10 +72,9 @@ int MemCard_HasAnyPresentFile(void) {
 void Save_SprintfSjis(unsigned char *dst, unsigned char *fmt)
 {
     SaveSjisFormatArgument *args;
-    int ch;
+    int ch; /* also holds each Shift-JIS digit ch */
     unsigned char *out;
     int value;
-    unsigned int code;
     unsigned char *text;
     int byte;
 
@@ -83,8 +82,6 @@ void Save_SprintfSjis(unsigned char *dst, unsigned char *fmt)
     ch = *fmt;
     args = (SaveSjisFormatArgument *)&g_SaveSjisFormatArguments;
     while (ch != 0) {
-        /* lbu already zero-extends; this keeps the retail andi on v1. */
-        asm volatile("" : "=r"(ch) : "0"(ch));
         ch &= 0xFF;
         fmt++;
         if (ch == '%') {
@@ -92,18 +89,18 @@ void Save_SprintfSjis(unsigned char *dst, unsigned char *fmt)
             switch (ch) {
             case 'd':
                 value = args++->number;
-                code = (value / 10) % 10 + 0x824Fu;
-                *out++ = code >> 8;
-                *out++ = (unsigned char)code;
-                code = value % 10 + 0x824Fu;
-                *out++ = code >> 8;
-                *out++ = (unsigned char)code;
+                ch = (value / 10) % 10 + 0x824Fu;
+                *out++ = (unsigned int)ch >> 8;
+                *out++ = (unsigned char)ch;
+                ch = value % 10 + 0x824Fu;
+                *out++ = (unsigned int)ch >> 8;
+                *out++ = (unsigned char)ch;
                 break;
             case 'D':
                 value = args++->number;
-                code = value % 10 + 0x824Fu;
-                *out++ = code >> 8;
-                *out++ = (unsigned char)code;
+                ch = value % 10 + 0x824Fu;
+                *out++ = (unsigned int)ch >> 8;
+                *out++ = (unsigned char)ch;
                 break;
             case 's':
                 text = args++->text;
