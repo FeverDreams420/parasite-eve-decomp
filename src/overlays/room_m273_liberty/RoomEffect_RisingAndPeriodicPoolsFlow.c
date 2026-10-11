@@ -118,7 +118,6 @@ int func_801960F4(int mode) {
         D_800F3368.extent_x=32; D_800F3368.extent_y=32;
         D_800F3368.extent_x=32; D_800F3368.extent_y=32;
         palette=D_800E2850[index];
-        asm("" : : : "$2");
         D_800F3368.palette=3; D_800F3368.parameter06=1; D_800F3368.parameter0A=0; D_800F3368.depth=0;
         D_800F3368.tpage=palette;
         break;
