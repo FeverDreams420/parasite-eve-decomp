@@ -3,13 +3,7 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/display_env.h"
 #include "pe1/gpu_image.h"
-
-extern RoomBlob8 RoomM272_BlobA;
-extern RoomBlob8 RoomM272_BlobB;
-extern RoomBlob8 RoomM272_BlobC;
-extern char RoomM272_Rec[];
-extern int D_801991C8;
-extern int D_8009CDDC;
+#include "room_m272.h"
 
 int RoomM272_Cinematic_8018F014(void) {
     RoomBlob8 b1 = RoomM272_BlobA;

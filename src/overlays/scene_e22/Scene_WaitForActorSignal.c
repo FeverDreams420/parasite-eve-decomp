@@ -1,8 +1,8 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/field_actor.h"
+#include "scene_e22_shared.h"
 typedef struct { char reserved[0x14]; short complete, signaled; } WaitState;
-extern struct FieldActor *RoomMain_ActorPtr; /* the player actor (0x8009D254) */
 
 int func_80198F54(int mode) {
     switch (mode) {

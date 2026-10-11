@@ -2,6 +2,7 @@
 #define SCENE_E22_SHARED_H
 
 #include "common.h"
+#include "pe1/gte_short_vector.h"
 
 typedef struct SceneE22CallbackRecord {
     char pad00[0xC];
@@ -32,5 +33,10 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneE22RangeCallbackState, range_value) == 0x17,
                   scene_e22_range_callback_range_value_offset);
 PE1_STATIC_ASSERT(sizeof(SceneE22RangeCallbackState) == 0x18,
                   scene_e22_range_callback_state_size);
+
+extern struct FieldActor *RoomMain_ActorPtr; /* the player actor (0x8009D254) */
+extern GteShortVector D_801994EC;
+extern s16 D_801994F4, D_801994F6, D_801994F8;
+extern int D_801994FC;
 
 #endif /* SCENE_E22_SHARED_H */

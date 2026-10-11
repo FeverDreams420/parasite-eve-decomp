@@ -5,6 +5,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/psyq_gpu.h"
+#include "scene_e22_ember_data.h"
 
 typedef struct SceneE22Effect {
     u16 x, y, z;
@@ -12,8 +13,6 @@ typedef struct SceneE22Effect {
     s16 state;
     s16 frame;
 } SceneE22Effect;
-
-extern GteRotation D_8018F1F4;
 
 int func_801981B0(int mode, SceneE22Effect *effect) {
     GteRotation position = D_8018F1F4;

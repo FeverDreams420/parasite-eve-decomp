@@ -1,9 +1,6 @@
 #include "pe1/room_floor.h"
 #include "pe1/field_sprite_draw.h"
-
-extern struct FieldActor *RoomMain_ActorPtr; /* the player actor (0x8009D254) */
-extern s16 D_801994F4, D_801994F6, D_801994F8;
-extern int D_801994FC;
+#include "scene_e22_shared.h"
 
 s16 *func_80199048(int mode, int value, int unused, int extra)
 {

@@ -1,6 +1,4 @@
-#include "pe1/gte_short_vector.h"
-
-extern GteShortVector D_801994EC;
+#include "scene_e22_shared.h"
 
 int *func_80199038(void) {
     return (int *)&D_801994EC;

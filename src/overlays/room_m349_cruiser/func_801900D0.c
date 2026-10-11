@@ -1,9 +1,4 @@
-extern short D_80190194;
-extern short D_80190196;
-extern short D_80190198;
-extern int D_8019019C;
-extern int D_801901A0;
-extern int D_801901A4;
+#include "room_m349.h"
 
 short *func_801900D0(int arg0, int arg1, int arg2, int arg3) {
     if (arg0 == 1) {
