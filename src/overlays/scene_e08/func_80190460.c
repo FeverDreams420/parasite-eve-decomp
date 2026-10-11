@@ -16,6 +16,7 @@ void func_800C3098(int);
 void func_80190460(void *unused0, void *unused1, char *effect) {
     Matrix matrix;
     Vec4 scratch, draw;
+    FieldGlowSprite *sprite;
     char *owner;
     SceneE08GlowSprites *base = (SceneE08GlowSprites *)effect;
     register GteShortVector *position asm("$18");
@@ -60,9 +61,10 @@ void func_80190460(void *unused0, void *unused1, char *effect) {
             matrix.t[2] = position->z;
             *slot = *(u16 *)(scale + 0x28);
             func_800C2FF0(0x10, 0x10);
-            *(u8 *)((char *)slot - 6) = base->cell[i] + (base->frame[i] >> 1);
-            *(u8 *)((char *)slot - 5) = base->clut[i];
-            func_800C42A4((FieldGlowSprite *)((char *)slot - 10), &matrix, 1);
+            sprite = (FieldGlowSprite *)((char *)slot - 10);
+            sprite->cell = base->cell[i] + (base->frame[i] >> 1);
+            sprite->clut = base->clut[i];
+            func_800C42A4(sprite, &matrix, 1);
         }
     }
 }
