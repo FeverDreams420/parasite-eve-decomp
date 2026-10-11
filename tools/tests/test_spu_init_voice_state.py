@@ -14,7 +14,7 @@ class SpuInitVoiceStateTests(unittest.TestCase):
     def test_redundant_constraints_are_gone(self):
         source = function_text('Spu_InitVoiceState')
         self.assertNotRegex(source, r'\b(?:asm|__asm__|INCLUDE_ASM|REGALLOC_BARRIER)\b')
-        self.assertIn('track = (u8 *)g_AkaoVoiceChannelTable;', source)
+        self.assertNotIn('(u8 *)', source)
         for name in ('voice_base', 'voice_count', 'track_enabled', 'track_volume'):
             self.assertNotRegex(source, name+r'\s+asm')
 

@@ -15,8 +15,12 @@ class AkaoTimerCallbackTests(unittest.TestCase):
         source = re.sub(r'/\*.*?\*/|//[^\n]*', '', function_text('Akao_TimerCallback'), flags=re.S)
         self.assertNotIn('__asm__',source)
         self.assertNotIn('char _[16]',unit)
-        for name in ('D_8009B7EC','g_AkaoTimerDeltaHist2','g_AkaoTimerDeltaHist1','g_AkaoTimerDeltaHist0','D_8009CDE4'):
-            self.assertIn('extern s32 '+name+';',unit)
+        header = (ROOT / 'include/pe1/akao/globals.h').read_text()
+        for name in ('g_AkaoTimerDeltaHist3','g_AkaoTimerDeltaHist2','g_AkaoTimerDeltaHist1',
+                     'g_AkaoTimerDeltaHist0','g_AkaoTimerDeltaSum'):
+            self.assertIn(name, source)
+            self.assertIn('extern s32 '+name+';',header)
+            self.assertNotRegex(unit, r'\b'+name+r'\s*__asm__')
         # Partial cleanup, not a claim that the remaining pin is required.
         self.assertLessEqual(len(re.findall(r'\basm\s*\(',source)),1)
 
