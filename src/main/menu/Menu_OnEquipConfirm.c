@@ -49,6 +49,7 @@ void Menu_OnEquipConfirm(MenuWidgetNode *unused, int confirmed)
 int Menu_StepEquipConfirm(MenuWidgetNode *node, int input) {
     register MenuWidgetNode *child asm("$16");
     MenuWidgetNode *parent;
+    MenuWidgetNode *dialog;
     MenuWidgetNode *option_node;
     int item;
     register int handled asm("$18");
@@ -90,16 +91,10 @@ reserved:
         if (Inv_IsAyaInventorySlotReserved(item) == 0) {
         if (Menu_GetBattleEquipMode() != 0) {
 
-        {
-            MenuWidgetNode *result = MenuWidget_CreateSimpleNode(0x29, child, 0, 1);
-            register int mode asm("$4") = 0x29;
-            /* Keep the mode argument ready before copying the returned node. */
-            asm volatile("" : : "r"(mode));
-            parent = result;
-            option_node = MenuWidget_CreateNode(mode, parent, parent);
-        }
-        parent->draw = Menu_DrawItemLabel;
-        parent->update = Menu_ConfirmDialogHandler;
+        dialog = MenuWidget_CreateSimpleNode(0x29, child, 0, 1);
+        option_node = MenuWidget_CreateNode(0x29, dialog, dialog);
+        dialog->draw = Menu_DrawItemLabel;
+        dialog->update = Menu_ConfirmDialogHandler;
         option_node->draw = Menu_DrawActionOptionList;
         D_8009CF14 = 5;
         MenuWidget_SetCurrentNode(option_node);
@@ -117,12 +112,12 @@ reserved:
             first_width = Draw_MeasureTextWidth(dialog_text);
         }
 
-        parent->grid_width = first_width + 0x14;
-        parent->visible_rows = 0x32;
-        parent->x = (0x12C - first_width) >> 1;
-        option_node->x = (parent->grid_width - 0x80) >> 1;
+        dialog->grid_width = first_width + 0x14;
+        dialog->visible_rows = 0x32;
+        dialog->x = (0x12C - first_width) >> 1;
+        option_node->x = (dialog->grid_width - 0x80) >> 1;
         {
-            int height = parent->visible_rows;
+            int height = dialog->visible_rows;
             g_MenuConfirmCallback = callback;
             option_node->y = height - 0x14;
         }
