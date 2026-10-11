@@ -21,7 +21,7 @@ int func_80196C64(int event, void *object)
     } else if (event == 2) {
         volatile RenderEffectParameters *state = &D_800F3368;
         int unit = 32;
-        register int size asm("$16");
+        s16 size;
         int index;
         int palette;
         int frame;
@@ -50,7 +50,6 @@ int func_80196C64(int event, void *object)
         asm("" : "=r"(index) : "0"(index) : "memory");
         D_800F3368.tpage = palette;
         size = *(short *)((char *)D_800966EC + index);
-        asm volatile("" : : : "memory");
         size = size * 2 + 4096;
         handle = GetClut(clutX, D_800E1208);
         {
