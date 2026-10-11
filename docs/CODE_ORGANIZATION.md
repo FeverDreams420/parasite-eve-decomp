@@ -175,6 +175,14 @@ permuter and by hand):
   83, and the barriers add the cursor references that flip the order. A
   separate copy-loop counter removes the cursor barriers but lands the counter
   in a2 (lev 3); reusing the size as the counter flips priority back (lev 31).
+  Clamping the continuation upload into its own block-scope size takes the
+  size's continuation references out (`Spu_UploadStreamBlockA` then differs
+  only by the s0/s1 swap: cursor 18 refs over 42 insns, size 16 over 31,
+  priority 1.71 against 2.06). One size reference fewer flips the order, but
+  every plain C shape that drops one (the clamp as `if`/`else`, the counter
+  in its own variable, the size advance inlined) changes the clamp branch or
+  the counter register; permuter runs found only invalid or duplicated-code
+  shapes.
 - `Akao_ProcessVoiceQueue` (pin on `bit`, 1 barrier): `secondary_new` must be
   allocated before `excluded`; its extra references come only from a copy that
   CSE deletes unless `bit` is a hard register (lev 24, lev 11 with a
@@ -574,6 +582,10 @@ Still open:
     first and gives it `$s2`. Starting the counter first fixes the
     allocation, but sched2 then moves `move s3,zero` above the `lui`. No
     statement order of the first four assignments matches without the pin.
+    Storing the Y sample through `angle->y` instead of `angleZ[-1]` gives
+    the pointer the extra reference that fixes the allocation, but then the
+    store is addressed from `$s2` instead of `$s1` (lev 1); splitting the
+    two loop counters moves other registers (lev 26).
     The frame byte offset is added through the `AnimSampleAddress`
     pointer/word union. Indexing the halfword samples by frame hoists the
     `<<1` below the `angleZ` setup, and `(u8 *)` arithmetic swaps the
@@ -598,9 +610,19 @@ Still open:
     offset to the table address as integers, through the
     `CollisionRegionTable` address/entries union (no casts). Indexing
     `D_8009CE08.entries` or starting the sum from the table pointer swaps
-    `$v0`/`$v1` in both floor modes. The `$v1` pin in `Entity_ResolvePosition` (947 lines
-    differ), the `$t3` parity pin in `Geo_PointInPoly` (22) and the ramp
-    `goto slide` stay, as their comments record.
+    `$v0`/`$v1` in both floor modes.
+    `Entity_ResolvePosition` keeps the `$v1` pin on its index copy: retail
+    copies the index to `$v1` before the plane-table test and masks it in
+    each branch. Unpinned, CSE folds the copy into the parameter and both
+    branches mask `$a1` (lev 5); reusing the copy for the Z argument in the
+    sloped branch keeps it in the flat branch only (lev 1), and a `u16`
+    parameter changes nothing.
+    `Geo_PointInPoly` keeps the `$t3` pin on the parity flag: unpinned, the
+    flag (10 references over 52 insns) ranks below the current Z (11 over
+    42) and the two swap `$t3`/`$t4` (lev 10). Only a duplicated toggle adds
+    the references that flip them.
+    The ramp `goto slide` enters the slide code past the first floor search;
+    a flag variable instead keeps a register and a test (lev 61).
 - Crutches left in `src/main/memcard`, `src/main/save`, `src/main/entity`
   and `src/main/cdrom` (2026-10-11 pass). `src/main/save` is clean. Each
   site below was removed and rebuilt; lev is the Levenshtein distance over
