@@ -294,8 +294,7 @@ void RoomLib_UpdatePairedGlowSprite(void *unused, RoomFxControl *state, RoomDoub
     }
 }
 
-extern int *func_800C2B10(int index);
-extern void func_800C4E50(void *params);
+#include "RoomLib_PairedGlow_externs.h"
 
 void RoomLib_InitPairedEmitter(void *unused0, void *unused1,
                                RoomFxPairedEmitterState *state) {

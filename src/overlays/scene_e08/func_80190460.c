@@ -9,7 +9,7 @@
 typedef GteMatrix Matrix;
 typedef GteVector Vec4;
 
-extern s16 D_801994C2;
+#include "func_80190460_externs.h"
 
 void func_800C2FF0(int, int);
 void func_800C3098(int);

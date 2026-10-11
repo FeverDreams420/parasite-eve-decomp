@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_C0D4C6AA3200
+#define PE1_EXT_C0D4C6AA3200
+extern SaveWindowModeBounds D_80010E38;
+#endif /* PE1_EXT_C0D4C6AA3200 */

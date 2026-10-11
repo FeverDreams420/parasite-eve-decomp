@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_C8F5A49A3774
+#define PE1_EXT_C8F5A49A3774
+extern FieldActor *D_800E27A0;
+#endif /* PE1_EXT_C8F5A49A3774 */

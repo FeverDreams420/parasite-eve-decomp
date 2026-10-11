@@ -1,11 +1,7 @@
 #include "common.h"
 #include "room_m273_boss_state.h"
 
-extern s16 D_8019AEEA;
-extern s16 D_8019AEEE;
-extern s16 D_8019AEF2;
-extern s16 D_8019AEF6;
-extern u8 D_8019AEFA;
+#include "func_8019A1A0_externs.h"
 
 int func_80052B2C(void);
 

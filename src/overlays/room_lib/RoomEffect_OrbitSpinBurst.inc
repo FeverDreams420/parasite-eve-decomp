@@ -16,10 +16,7 @@
 #error "ROOMEFFECT_ORBIT_SPIN_BURST_ORIGIN must name the shared orbit centre"
 #endif
 
-extern RenderColor ROOMEFFECT_ORBIT_SPIN_BURST_COLOR0;
-extern RenderColor ROOMEFFECT_ORBIT_SPIN_BURST_COLOR1;
-extern GteShortVector ROOMEFFECT_ORBIT_SPIN_BURST_ORIGIN;
-extern int ROOMEFFECT_ORBIT_SPIN_BURST_CALLBACK(int mode, RoomOrbitTrailParticle *p);
+#include "RoomEffect_OrbitSpinBurst_externs.h"
 
 /* Controller that bursts orbit spin particles from the actor during the
  * first four frames (falling sparks, sweeping trails and drifting rings),

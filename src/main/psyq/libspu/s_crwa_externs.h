@@ -1,0 +1,6 @@
+#ifndef PE1_EXT_41F3C13E1416
+#define PE1_EXT_41F3C13E1416
+extern s32 D_8009B418;
+extern s32 D_8009B384;
+extern s32 D_8009C4C0[];
+#endif /* PE1_EXT_41F3C13E1416 */

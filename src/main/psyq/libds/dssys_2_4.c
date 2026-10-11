@@ -10,9 +10,7 @@
 /* These adjacent retail functions share DS queue reset state:
  * DsInit at 0x8007EC14 and DsReset at
  * 0x8007ED58. Their combined GNU 2.8.1 object preserves both code ranges. */
-extern unsigned char D_800A3515[], D_800A3525[], D_800A3535[];
-extern int D_800A3604, g_CdPendingReadCount, D_800A3690;
-extern void DS_stop(void);
+#include "dssys_2_4_externs.h"
 int DsInit(void) {
     int i, j, k, offset;
     CdQueuedCmdSlot *state;

@@ -5,7 +5,7 @@
 #include "pe1/menu_context_help.h"
 #include "pe1/menu_item_list_input.h"
 
-extern int D_8009CF30, D_8009CF34, D_8009CF1C;
+#include "Menu_InventoryPageNavHandler_externs.h"
 void MenuWidget_OffsetPosition(MenuWidgetNode *, int, int);
 void MenuWidget_ClearCursorY(MenuWidgetNode *);
 void MenuWidget_ClampScroll(MenuWidgetNode *);

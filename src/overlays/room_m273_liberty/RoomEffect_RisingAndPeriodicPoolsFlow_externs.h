@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_DD3051E11E9C
+#define PE1_EXT_DD3051E11E9C
+extern Color D_8018F1E4;
+#endif /* PE1_EXT_DD3051E11E9C */

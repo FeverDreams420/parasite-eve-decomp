@@ -10,18 +10,7 @@
 #include "pe1/render_prim.h"
 
 /* Each textbox entry is 0x38 bytes; preserve the retail field addresses. */
-extern u8 D_800BCEA8[];
-extern u8 D_800BCEAC[];
-extern u8 D_800BCEB0[];
-extern u8 D_800BCEB1[];
-extern u8 D_800BCEB4[];
-extern u8 D_800BCEB5[];
-extern u16 D_800BCEB8[];
-extern u8 D_8009EC86[];
-extern u8 D_8009EC78[];
-extern u8 D_8009EC70[];
-extern u8 D_8009ECA8[];
-extern u16 D_80091680[];
+#include "Menu_TextboxDraw_externs.h"
 /* COMMON supplies small-data metadata to MASPSX for the textbox words this
  * unit reaches through $gp; the other extern words stay absolute. */
 int D_8009CED4;
@@ -292,12 +281,10 @@ int Menu_GetEquipSlotIndex(void) {
     return D_8009CEA4;
 }
 
-extern TextboxFontPage D_80091644[4];
+#include "Menu_TextboxDraw_externs_1.h"
 
 
-extern TextboxGlyphSpacing D_800916A0[256];
 
-extern int D_8009CDDC;
 /* Tentative small-data definition: stock maspsx must recognize this store
  * as GP-relative to retain its load-delay nop. The linker pins the COMMON
  * symbol to the retail address, as for other unplaced game globals. */
@@ -305,11 +292,7 @@ signed char D_8009CEA4;
 u8 D_8009CEA8;
 u8 D_8009CEAC;
 u8 D_8009CEB0;
-extern u8 D_8009CEC4;
-extern u8 D_8009CEC8;
-extern u8 D_8009CECC;
-extern u32 D_8009D1F4;
-extern RenderBufferPrefix D_800B0E38;
+#include "Menu_TextboxDraw_externs_2.h"
 
 void Menu_DrawTextboxEntries(void) {
     TextboxPoint cursor;

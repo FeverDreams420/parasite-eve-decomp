@@ -214,10 +214,7 @@ void Menu_DrawBonusPointSlotValue(void) {
 
 void Menu_CreateBonusPointAllocationView(void);
 
-extern s32 g_MenuBattleStatusOverlayActive;
-extern s32 g_MenuEquipMode;
-extern s32 g_MenuItemRenameMode;
-extern s32 g_AyaBonusPoints[];
+#include "Menu_InventoryAndBonusPoints_externs.h"
 #define g_AyaBonusPoints (g_AyaBonusPoints[0])
 
 void Menu_ExitBonusPointAllocation(void) {
@@ -303,9 +300,7 @@ int Menu_StatSlotInputHandler(MenuWidgetNode *node, unsigned int flags) {
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
 #include "pe1/menu_inventory.h"
-extern s32 g_MenuEquipMode;
-extern s32 g_MenuItemRenameMode;
-extern s32 g_BonusPointDisplayValue;
+#include "Menu_InventoryAndBonusPoints_externs_1.h"
 
 s32 Menu_BonusPointCancelHandler(void *arg0, s32 arg1) {
     s32 temp_s0;
@@ -749,11 +744,7 @@ void Menu_StepEquipSlotSelect2(void) {
 #include "pe1/inventory.h"
 #include "pe1/menu_inventory.h"
 
-extern s32 g_BonusPointDisplayValue;
-extern s32 g_MenuSpendArrowDirection;
-extern s32 g_BonusPointSpendStat;
-extern s32 g_BonusPointSpendWorkingValue;
-extern s32 g_BonusPointSpendCurrentValue;
+#include "Menu_InventoryAndBonusPoints_externs_2.h"
 void MenuWidget_OffsetPosition(MenuWidgetNode *ptr, int dx, int dy);
 s32 Inv_RestoreSelection(u32 index);
 void Menu_DrawBonusPointSpendPanel(void);
@@ -785,11 +776,7 @@ void Menu_OpenBonusPointSpendDialog(MenuWidgetNode *arg0, s32 arg1) {
 }
 #include "pe1/inventory.h"
 
-extern int g_MenuSpendArrowDirection;
-extern int g_BonusPointSpendStat;
-extern int g_BonusPointSpendWorkingValue;
-extern int g_BonusPointSpendCurrentValue;
-extern int D_8009CF18;
+#include "Menu_InventoryAndBonusPoints_externs_3.h"
 void Draw_PrintNumberWidth5(int);
 void Draw_PrintNumberWidth4(int);
 void Draw_PrintNumberWidth2(int);
@@ -884,16 +871,8 @@ void Menu_DrawBonusPointSpendPanel(void) {
 }
 #include "pe1/inventory.h"
 
-extern int D_8009CFAC;
-extern int D_8009CFD0;
-extern int D_8009CFD8;
-extern int D_8009CFDC;
-extern int D_8009CF68;
-extern signed char D_800C0E22[];
+#include "Menu_InventoryAndBonusPoints_externs_4.h"
 
-extern int Inv_RestoreSelection(unsigned int index);
-extern void Stat_QueryDistanceAndSubLevel(int kind, int value, int *distance_out, int *sublevel_out);
-extern int Stat_OverflowQuery(int kind, int value);
 
 int Spend_BonusPoints(void *node, unsigned int buttons)
 {

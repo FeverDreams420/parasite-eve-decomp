@@ -3,7 +3,7 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 
 MenuWidgetNode *g_MenuActiveWidget;
-extern int g_SavedDrawBlendColor[];
+#include "Menu_DrawSaveSlotList_externs.h"
 
 void Menu_DrawSaveSlotEntry(void);
 void Draw_BlendColor(int arg0);

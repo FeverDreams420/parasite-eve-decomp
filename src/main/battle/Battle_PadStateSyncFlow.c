@@ -1,15 +1,7 @@
 #include "common.h"
 #include "pe1/battle.h"
 
-extern Combatant *D_8009D278;
-extern BattleAction D_800A76D8;
-extern u16 D_800A76DA;
-extern u16 D_800A76DC;
-extern u16 D_800A76DE;
-extern u32 D_800A76E0;
-extern volatile u32 D_800A76E4;
-extern volatile u32 D_800A76E8;
-extern volatile u16 D_800A76EA;
+#include "Battle_PadStateSyncFlow_externs.h"
 
 void Battle_CopyPadStateToRecord(void) {
     BattleAction *record = D_8009D278->action;
@@ -75,26 +67,11 @@ void Battle_CopyPadStateToRecord(void) {
 #include "pe1/battle.h"
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
-extern struct { char _[16]; } g_ActiveActor_o __asm__("g_ActiveActor");
+#include "Battle_PadStateSyncFlow_externs_1.h"
 #define g_ActiveActor (*(void **)&g_ActiveActor_o)
-extern struct { char _[16]; } D_800A76D8_o __asm__("D_800A76D8");
 #define D_800A76D8 (*(u32 *)&D_800A76D8_o)
 #define D_800A76DC (*(s32 *)&D_800A76DC_o)
-extern struct { char _[16]; } D_800A76DC_o __asm__("D_800A76DC");
-extern struct { char _[16]; } D_800A76DC_s1 __asm__("D_800A76DC");
-extern struct { char _[16]; } D_800A76DC_s2 __asm__("D_800A76DC");
-extern struct { char _[16]; } D_800A76DC_s3 __asm__("D_800A76DC");
-extern struct { char _[16]; } D_800A76DC_s4 __asm__("D_800A76DC");
-extern struct { char _[16]; } D_800A76DC_s5 __asm__("D_800A76DC");
-extern struct { char _[16]; } D_800A76DC_s6 __asm__("D_800A76DC");
-extern struct { char _[16]; } D_800A76DC_s7 __asm__("D_800A76DC");
-extern struct { char _[16]; } D_800A76DC_s8 __asm__("D_800A76DC");
-extern struct { char _[16]; } D_800A76DC_s9 __asm__("D_800A76DC");
-extern struct { char _[16]; } D_800A76DC_s10 __asm__("D_800A76DC");
-extern struct { char _[16]; } D_800A76DC_s11 __asm__("D_800A76DC");
-extern struct { char _[16]; } D_800A76DC_s12 __asm__("D_800A76DC");
-extern struct { char _[16]; } D_800A76DC_s13 __asm__("D_800A76DC");
-extern struct { char _[16]; } D_800A76DE_o __asm__("g_PadStateMirrorWord3");
+#include "Battle_PadStateSyncFlow_externs_2.h"
 #define g_PadStateMirrorWord3 (*(u16 *)&D_800A76DE_o)
 #define COMBATANT_FIELD(base, type, member) \
     (*(type)((char *)(base) + PE1_OFFSETOF(Combatant, member)))

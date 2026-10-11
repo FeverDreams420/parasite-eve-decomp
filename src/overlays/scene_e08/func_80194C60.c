@@ -8,7 +8,7 @@
 typedef GteMatrix Overlay178Matrix;
 typedef GteVector Overlay178Vec4;
 
-extern s16 D_801994D2;
+#include "func_80194C60_externs.h"
 
 void func_800C2FF0(s32 arg0, s32 arg1);
 void func_800C3098(s32 arg0);

@@ -13,8 +13,7 @@ typedef struct {
     int reserved10;
     union { int word; short halves[2]; } frame;
 } Animation;
-extern short D_8019A828;
-extern unsigned char D_8019A82F;
+#include "RoomAnimation_RepeatFourTimesCallback_externs.h"
 
 int func_80196E04(int event) {
     Animation *animation = ANIM_OWNER_AS(Animation *)[2];

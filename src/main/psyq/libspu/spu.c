@@ -81,7 +81,7 @@ int _spu_init(int hot) {
     return 0;
 }
 
-extern char D_80011C4C[], D_80011C6C[], D_80011C80[];
+#include "spu_externs.h"
 
 void _spu_FwriteByIO(void *address, u32 size) {
     u16 *source = address;

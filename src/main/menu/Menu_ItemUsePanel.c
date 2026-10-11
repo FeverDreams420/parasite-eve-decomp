@@ -16,7 +16,7 @@
 
 #define NULL ((void *)0)
 void MenuWidget_OffsetPosition(MenuWidgetNode *node, int dx, int dy);
-extern s32 g_InvItemUsableFlag;
+#include "Menu_ItemUsePanel_externs.h"
 ItemDataRecord *g_MenuSelectedItemData;
 void Menu_DrawEquipStatsPanel(void);
 int Menu_HandleItemInput(int arg0, int arg1);

@@ -144,8 +144,7 @@ void MenuWidget_DestroyNodeRecursive(MenuWidgetNode *node) {
 
 #define NULL ((void *)0)
 #include "pe1/bounds_check.h"
-extern s32 g_TextCursorX;
-extern int g_TextCursorY;
+#include "MenuWidget_Lifecycle_externs.h"
 
 void Draw_PushPrimToList(void *arg0) {
     s32 temp_a2;
@@ -276,11 +275,7 @@ MenuWidgetNode *MenuWidget_FindByModeAndSelectedBase(int mode, int selected_base
 #include "pe1/draw_state.h"
 #include "pe1/text.h"
 
-extern int g_TextCursorX;
-extern int g_TextCursorY;
-extern int D_8009CDB0;
-extern int D_8009D0D8;
-extern int D_8009D138;
+#include "MenuWidget_Lifecycle_externs_1.h"
 
 int Draw_LookupGlyphMetrics(int glyph);
 void Draw_AllocTexturedQuad(int glyph);
@@ -607,8 +602,7 @@ void MenuWidget_InitPool(void) {
 
 void Draw_PushPrimToList(void *arg0);
 
-extern int g_DrawTextDimmed;
-extern int g_DrawTextBoxWidth;
+#include "MenuWidget_Lifecycle_externs_2.h"
 
 int g_TextCursorX;
 int g_TextCursorY;
@@ -897,7 +891,7 @@ int MenuWidget_GetCellIndex(MenuWidgetNode *ptr) {
 void Draw_AllocColorTri(int, int, int);
 
 typedef DrawTextCursorPair CursorPair;
-extern CursorPair D_800A2270[];
+#include "MenuWidget_Lifecycle_externs_3.h"
 
 static inline MenuWidgetNode *FindOwner(MenuWidgetNode *node)
 {

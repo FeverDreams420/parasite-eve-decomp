@@ -18,7 +18,7 @@ void Draw_PrintNumberWidth3Unk(int value);
 M2C_UNK func_800605F8();
 M2C_UNK func_800614AC();
 M2C_UNK func_80064C54();
-extern s32 g_SavedDrawBlendColor[];
+#include "Menu_DrawSaveSlotEntry_externs.h"
 #define g_SavedDrawBlendColor (g_SavedDrawBlendColor[0])
 
 void Menu_DrawSaveSlotEntry(s32 arg0) {

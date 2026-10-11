@@ -5,7 +5,7 @@
 #include "pe1/psyq_cd.h"
 /* CC1_FLAGS: -fno-schedule-insns -fno-schedule-insns2 */
 
-extern u16 *volatile D_8009B290;
+#include "bios_externs.h"
 
 typedef struct CdInitVolFrame {
     u8 packet[4];

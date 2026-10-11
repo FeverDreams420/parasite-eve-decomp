@@ -10,8 +10,7 @@ typedef RoomM273ScaledLayerOwner Owner;
 
 /* The emitter owns the twelve-byte records rendered by this callback. */
 #include "pe1/gte_sine_table.h"
-extern short D_800966EE[];
-extern unsigned char D_8019AB70[];
+#include "RoomEffect_ScaledLayer_externs.h"
 
 int func_8019353C(int mode,Effect *effect) {
     Vector position,rotation;

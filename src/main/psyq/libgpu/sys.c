@@ -22,11 +22,7 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/psyq_bios.h"
 
-extern unsigned char D_80095704[];
-extern char D_800117E0[], D_80011800[];
-extern unsigned short D_800957CC[][2], D_800957D8[][2];
-extern GpuCallbacks *D_80095744;
-extern GpuDebugPrintf D_80095748;
+#include "sys_externs.h"
 void GPU_cw(unsigned int);
 int Gpu_InitDmaQueue(int);
 
@@ -65,7 +61,7 @@ int ResetGraph(int mode) {
     }
 }
 
-extern char D_80011814[];
+#include "sys_externs_1.h"
 
 int SetGraphDebug(int debugLevel) {
     u8 *currentDebugLevel;
@@ -122,7 +118,7 @@ int GetGraphDebug(void) {
     return D_8009574C.queueState.debugLevel;
 }
 
-extern char D_80011854[];
+#include "sys_externs_2.h"
 
 void *DrawSyncCallback(void *callback) {
     void *previous;
@@ -136,10 +132,7 @@ void *DrawSyncCallback(void *callback) {
     return previous;
 }
 
-extern char D_80011870[];
-extern GpuCallbacks *g_GpuCallbacks[];
-extern GpuDebugPrintf g_GpuDebugPrintf[];
-extern u8 g_GraphDebug[];
+#include "sys_externs_3.h"
 
 void SetDispMask(int mask) {
     u8 *debug = g_GraphDebug;
@@ -167,7 +160,7 @@ void SetDispMask(int mask) {
     callbacks->callback10(command);
 }
 
-extern char D_80011884[];
+#include "sys_externs_4.h"
 
 int DrawSync(int arg0) {
     void (*fn)(char *, int);
@@ -182,7 +175,7 @@ int DrawSync(int arg0) {
     return callbacks->callback3C(arg0);
 }
 
-extern char D_800118B8[], D_800118A4[], D_80011898[];
+#include "sys_externs_5.h"
 
 void checkRECT(char *name, RECT *rect) {
     char *format;
@@ -211,8 +204,7 @@ void checkRECT(char *name, RECT *rect) {
     }
 }
 
-extern char D_800118BC[];
-extern char D_800118C8[];
+#include "sys_externs_6.h"
 
 void checkRECT(char *message, RECT *rect);
 
@@ -236,11 +228,7 @@ int ClearImage2(RECT *rect, u8 r, u8 g, u8 b) {
     return callbacks->addque2(callbacks->clr, rect, 8, color);
 }
 
-extern char D_800118D4[];
-extern char D_800118E0[];
-extern char D_800118EC[];
-extern GpuCallbacks *D_80095744;
-extern u32 D_800957EC[];
+#include "sys_externs_7.h"
 
 void checkRECT(char *message, RECT *rect);
 

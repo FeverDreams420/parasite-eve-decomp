@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_E2279AEF098E
+#define PE1_EXT_E2279AEF098E
+extern u8 D_801996A0[];
+#endif /* PE1_EXT_E2279AEF098E */

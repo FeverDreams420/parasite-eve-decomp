@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_F6C199F90D2F
+#define PE1_EXT_F6C199F90D2F
+extern char D_800E0C48[];
+#endif /* PE1_EXT_F6C199F90D2F */

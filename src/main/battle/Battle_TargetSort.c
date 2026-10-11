@@ -1,6 +1,6 @@
 #include "pe1/battle.h"
 
-extern BattleTargetWords D_8009E004[];
+#include "Battle_TargetSort_externs.h"
 
 void Battle_SwapRecords(BattleTargetWords *records, int from, int to);
 

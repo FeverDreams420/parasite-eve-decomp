@@ -6,7 +6,7 @@
 #error "ROOMEFFECT_GLINT_SPARK_COLOR must name the tint seed"
 #endif
 
-extern RenderColor ROOMEFFECT_GLINT_SPARK_COLOR;
+#include "RoomEffect_GlintSparkParticle_externs.h"
 
 /* Spark that drifts with damped velocity and bounces off the floor
  * height; state 0 draws a spinning glint that pulses with a sine of its

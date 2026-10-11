@@ -20,7 +20,7 @@ typedef struct { int reserved[2]; Animation *animation; } Actor;
 typedef struct { short remaining, delay; } State;
 
 #include "pe1/gte_sine_table.h"
-extern int D_8019A4DC[], D_8019A4E0[];
+#include "RoomEffect_AnimationBurst_externs.h"
 
 int func_801944F0(int event, void **object)
 {

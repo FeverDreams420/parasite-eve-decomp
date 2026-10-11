@@ -1,0 +1,13 @@
+#ifndef PE1_EXT_528865EB8A2B
+#define PE1_EXT_528865EB8A2B
+extern void func_800C2B40(void *);
+extern struct FieldActor *g_PlayerEntity;
+extern int D_8019956C, D_8019957C;
+extern u8 *D_80199528;
+extern u8 D_80199680, D_80199681, D_80199682, D_80199684, D_80199685, D_80199686;
+extern s16 D_80199688, D_8019968A;
+extern u8 D_801996A0[];
+extern u8 D_801996A1, D_801996A2, D_801996A4, D_801996A5, D_801996A6;
+extern s16 D_801996A8, D_801996AA;
+extern FieldGlowSprite D_801996B0;
+#endif /* PE1_EXT_528865EB8A2B */

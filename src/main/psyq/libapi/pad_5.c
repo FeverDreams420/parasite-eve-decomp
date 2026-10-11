@@ -5,8 +5,7 @@
 #include "pe1/psyq_bios.h"
 #include "pe1/psyq_pad_main.h"
 
-extern void (*D_800A34B4[2])(void);
-extern int D_800A34BC;
+#include "pad_5_externs.h"
 
 void SysDeqIntRP(int index, void *queue);
 void SysEnqIntRP(int index, void *queue);

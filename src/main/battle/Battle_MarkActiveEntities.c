@@ -5,10 +5,7 @@
 
 /* MASPSX_FORCE_G0 keeps these extern reads absolute; only the COMMON
  * D_8009CE6C below is gp-relative. */
-extern s8 D_8009D2B0;
-extern Combatant *D_8009D278;
-extern FieldActor *D_8009D20C;
-extern BattleEntity *D_8009D254;
+#include "Battle_MarkActiveEntities_externs.h"
 /* COMMON supplies small-data metadata to MASPSX. */
 s8 D_8009CE6C;
 

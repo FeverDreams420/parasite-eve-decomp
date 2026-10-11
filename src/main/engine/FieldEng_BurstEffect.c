@@ -70,30 +70,22 @@ int func_800CCBA8(char *object)
     return 0;
 }
 
-extern u16 D_800E27FA;
-extern u16 D_800E27FC;
+#include "FieldEng_BurstEffect_externs.h"
 
-extern void FieldEng_Spawn6(int a, int b, int c, int d, int e, int f);
 
 int func_800CCEBC(int a, int b, int c, int d, int e, int f) {
     FieldEng_Spawn6(a, b, c, d, e, f);
     return 0;
 }
 
-extern char D_800E0E60[];
-extern void FieldEng_Register(void *o, void *table);
+#include "FieldEng_BurstEffect_externs_1.h"
 
 int func_800CCEE8(void *o) {
     FieldEng_Register(o, D_800E0E60);
     return 0;
 }
 
-extern char D_800E0E78[];
-extern char D_800E0E48[];
-extern char D_800E0E90[];
-extern int func_800C251C(void *obj, void *table);
-extern int func_800C2758(void *obj, void *table, void *extra);
-extern int func_800CCF80(u8 *state);
+#include "FieldEng_BurstEffect_externs_2.h"
 
 int func_800CCF10(void *obj) {
     int first;
@@ -125,8 +117,7 @@ int func_800CCF98(void) {
 int *func_800C2B10(int index);
 int *func_800C2B28(int index);
 
-extern int D_800E2810;
-extern int D_800B0E14;
+#include "FieldEng_BurstEffect_externs_3.h"
 
 int func_800CCFA0(void) {
     int index;
@@ -160,7 +151,7 @@ int func_800CCFA0(void) {
     func_800CEDA8(0);
 }
 
-extern struct BattleEntity *D_8009D254;
+#include "FieldEng_BurstEffect_externs_4.h"
 
 int func_800CD07C(void *arg0, void *arg1, u8 *anim) {
     u16 x = D_800E27F8.x;
@@ -231,7 +222,7 @@ void func_800CD2DC(void) {
 void func_800CD2E4(void) {
 }
 
-extern GteShortVector D_800C223C;
+#include "FieldEng_BurstEffect_externs_5.h"
 
 int func_800CD2EC(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
     s16 *field = (s16 *)&D_800E2298.depth;

@@ -9,13 +9,8 @@
 #include "pe1/card_obj.h"
 #include "pe1/psyq_pad_main.h"
 
-extern CardObj D_800A5B70[];
-extern u8 D_800A5AE0[];
-extern u8 D_800A5B28[];
+#include "padportd_externs.h"
 
-extern void (*D_8009B730)(CardObj *);
-extern int (*D_8009B734)(CardObj *);
-extern void (*D_8009B748)(CardObj *);
 
 void _padInitDirSeq(void);
 int MemCard_DmaCompleteCallback(int result);

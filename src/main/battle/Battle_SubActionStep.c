@@ -1,8 +1,7 @@
 #include "common.h"
 #include "pe1/battle.h"
 
-extern Combatant *g_ActiveActor;
-extern FieldActor *g_PlayerEntity;
+#include "Battle_SubActionStep_externs.h"
 
 #define COMBATANT_FIELD(ptr, type, member) \
     (*(volatile type *)((ptr) + PE1_OFFSETOF(Combatant, member)))

@@ -21,8 +21,7 @@ typedef struct {
 } Overlay178InitState;
 
 
-extern FieldGlowSprite D_801994A8;
-extern FieldGlowSprite D_80199670;
+#include "func_8018F3C4_externs.h"
 
 void func_800C2B40(void *arg0);
 

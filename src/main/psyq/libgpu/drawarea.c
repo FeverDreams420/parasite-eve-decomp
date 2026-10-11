@@ -2,8 +2,7 @@
 #include "common.h"
 /* CC1_FLAGS: -O1 */
 
-extern s16 D_80095750;
-extern s16 D_80095752;
+#include "drawarea_externs.h"
 
 int Gpu_BuildDrawAreaTopLeftCmd(int x, int y) {
     register int clamped_x asm("$2");

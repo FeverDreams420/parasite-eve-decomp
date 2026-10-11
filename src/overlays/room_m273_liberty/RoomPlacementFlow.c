@@ -6,8 +6,7 @@
 #include "pe1/field_collision.h"
 #include "pe1/field_engine_calls.h"
 
-extern FieldActor *g_PlayerEntity;
-extern struct BattleEntity *D_8009D254;
+#include "RoomPlacementFlow_externs.h"
 void func_80020CE4(void);
 
 

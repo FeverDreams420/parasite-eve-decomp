@@ -4,7 +4,7 @@
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
 void Menu_DrawSkillSelectionList(int arg0);
-extern M2C_UNK Menu_HandleAyaInventorySelectionInput[];
+#include "Menu_OpenSkillSelectionView_externs.h"
 #define Menu_HandleAyaInventorySelectionInput (Menu_HandleAyaInventorySelectionInput[0])
 
 void Menu_OpenSkillSelectionView(void) {

@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_CF0DA66995B8
+#define PE1_EXT_CF0DA66995B8
+extern CdRomEventCommandState D_8009B558;
+#endif /* PE1_EXT_CF0DA66995B8 */

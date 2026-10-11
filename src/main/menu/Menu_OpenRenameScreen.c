@@ -8,9 +8,7 @@
 
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
-extern u8 D_80092354[];
-extern u8 D_80092380[];
-extern u8 D_800923A0[];
+#include "Menu_OpenRenameScreen_externs.h"
 void Menu_DrawSaveMetadataPreview(void);
 int Menu_StepNameEntry(MenuWidgetNode *parent, unsigned int flags);
 int Menu_StepNameEntryAlt(MenuWidgetNode *parent, unsigned int flags);

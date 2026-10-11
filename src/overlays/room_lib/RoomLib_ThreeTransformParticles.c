@@ -23,7 +23,7 @@
 #include "pe1/pe_image.h"
 #include "pe1/field_engine_calls.h"
 
-extern void func_800C2B40(void *arg0);
+#include "RoomLib_ThreeTransformParticles_externs.h"
 
 int *func_800C2B28(int index);
 
@@ -411,7 +411,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomDebrisTriplet, position) == 0x3C,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomDebrisTriplet, velocity) == 0x9C,
                   room_debris_triplet_velocity_offset);
 
-extern int func_80071A54(void);
+#include "RoomLib_ThreeTransformParticles_externs_1.h"
 
 void RoomLib_UpdateDebrisTriplet(void *unused, RoomDebrisOwner *owner,
                                         RoomDebrisTriplet *state) {

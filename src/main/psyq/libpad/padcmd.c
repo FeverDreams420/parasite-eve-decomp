@@ -195,7 +195,7 @@ void CardObj_EmitReadTransferCommand(CardObj *arg0) {
 
 /* Psy-Q LIBPAD/PADCMD.OBJ private text_3A0.
  * Provenance: configs/USA/psyq_provenance.json (LIBPAD PADCMD). */
-extern u8 *D_800A5AD0;
+#include "padcmd_externs.h"
 int LIBPAD_PADCMD_text_3A0(CardObj *inPort) {
     register CardObj *port = inPort;
     switch (port->sequenceStep) {
@@ -302,7 +302,7 @@ complete:
     return 1;
 }
 
-extern int (*D_8009B740)(CardObj *obj);
+#include "padcmd_externs_1.h"
 
 void func_80083C20(void *obj);
 int func_80083C3C(CardObj *obj);

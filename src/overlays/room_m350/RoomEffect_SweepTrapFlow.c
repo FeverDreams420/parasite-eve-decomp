@@ -190,7 +190,7 @@ typedef struct RoomM350Instance {
 } Instance;
 typedef RoomM350Actor RoomM350ControllerChannel;
 
-extern GteShortVector D_8019A778[];
+#include "RoomEffect_SweepTrapFlow_externs.h"
 int func_8019360C(int event) {
     switch (event) {
     case 0:

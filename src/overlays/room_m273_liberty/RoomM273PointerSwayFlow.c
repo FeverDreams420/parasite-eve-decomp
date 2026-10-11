@@ -6,7 +6,7 @@ typedef GteShortVector Position;
 typedef RoomM273PointerPoolEffect Effect;
 
 /* The emitter owns the pointer entries rendered by this callback. */
-extern short D_8019AE88;
+#include "RoomM273PointerSwayFlow_externs.h"
 
 int func_80199950(int mode, Effect *effect) {
     /* Layout only: the original purpose of these eight frame bytes is unknown. */

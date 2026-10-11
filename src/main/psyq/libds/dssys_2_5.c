@@ -263,9 +263,7 @@ done:
 /* Empty constraints preserve the retail schedule. */
 
 /* Word-offset views of the eight 16-byte history records. */
-extern int D_800A3614[], D_800A3618[], D_800A361C[];
-extern int D_800A3690;
-extern DsResult D_800A3500;
+#include "dssys_2_5_externs.h"
 
 s32 DsSync(s32 inId, void *inResult) {
     register s32 id = inId;
@@ -391,8 +389,7 @@ done:
     return status;
 }
 
-extern CdQueuedCmdSlot D_800A3520;
-extern CdQueuedCmdSlot D_800A3530;
+#include "dssys_2_5_externs_1.h"
 
 
 int DsReady(u8 *destination) {
@@ -423,12 +420,8 @@ int DsReady(u8 *destination) {
     return slot->result;
 }
 
-extern void DS_stop(void);
+#include "dssys_2_5_externs_2.h"
 
-extern int g_CdDsReadQueueState;
-extern int g_CdDsReadIndex;
-extern int g_CdPendingReadCount;
-extern CdDsReadQueueEntry g_CdDsReadQueue[];
 
 void DsFlush(void) {
     int i;
@@ -495,7 +488,7 @@ int DsLastCom(void) {
     return DS_lastcom() & 0xFF;
 }
 
-extern s32 D_800A3604;
+#include "dssys_2_5_externs_3.h"
 
 int DS_system_status(int mode);
 
@@ -527,7 +520,7 @@ void CQ_vsync_system(void) {
     }
 }
 
-extern int (*D_800B8AB4)(u8 command, u8 *payload);
+#include "dssys_2_5_externs_4.h"
 
 void CQ_error_flush(int command);
 
@@ -570,7 +563,7 @@ callback:
     return 0;
 }
 
-extern void (*g_DsStartCallback)(int);
+#include "dssys_2_5_externs_5.h"
 
 void LIBDS_DSSYS_2_text_13CC(int arg0) {
     if (g_DsStartCallback != 0) {

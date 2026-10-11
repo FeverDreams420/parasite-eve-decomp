@@ -7,8 +7,7 @@
 #include "pe1/field_sprite_state.h"
 #include "pe1/psyq_libc.h"
 
-extern s16 D_8019955A;
-extern FieldGlowSprite D_80199580;
+#include "func_80194090_externs.h"
 
 void func_800C2FF0(int, int);
 void func_800C3098(int);

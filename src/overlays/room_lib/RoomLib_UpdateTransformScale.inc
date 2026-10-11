@@ -11,9 +11,7 @@ typedef struct RoomTransformScaleOwner {
     s16 duration;
 } RoomTransformScaleOwner;
 
-extern s32 Scratch_1F800008 asm("0x1F800008");
-extern s32 Scratch_1F80000C asm("0x1F80000C");
-extern s32 Scratch_1F800010 asm("0x1F800010");
+#include "RoomLib_UpdateTransformScale_externs.h"
 
 
 int ROOMLIB_UPDATE_TRANSFORM_SCALE_NAME(RoomTransformScaleOwner *owner) {

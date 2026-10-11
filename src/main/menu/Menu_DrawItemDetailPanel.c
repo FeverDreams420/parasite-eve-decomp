@@ -5,7 +5,7 @@
 #include "pe1/inventory.h"
 #include "pe1/menu_context_help.h"
 
-extern int D_800A1888[], D_800A188C[], D_800A1890[], D_800A1894[];
+#include "Menu_DrawItemDetailPanel_externs.h"
 int MenuWidget_IsCursorYClear(MenuWidgetNode *ptr);
 int Inv_GetPackedListItem(int);
 int Inv_RestoreSelection(unsigned int);

@@ -1,8 +1,7 @@
 #include "common.h"
 #include "pe1/room_liberty_choice.h"
-extern u8 D_8019A8C8[];
+#include "func_80193114_externs.h"
 
-extern s32 func_80052B2C(void);
 
 s32 func_80193114(s32 arg0, RoomLibertyChoiceInputs *inputs) {
     s32 variant;

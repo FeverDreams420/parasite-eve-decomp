@@ -3,7 +3,7 @@
 /* Psy-Q LIBDS DSSYS_1.OBJ, part 3 of 11: DS_close. */
 #include "pe1/psyq_cd.h"
 
-extern void CD_flush(void);
+#include "dssys_1_3_externs.h"
 PsyqInterruptHandler VSyncCallbacks(unsigned int channel, PsyqInterruptHandler callback);
 
 

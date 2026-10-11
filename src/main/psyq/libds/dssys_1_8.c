@@ -4,7 +4,7 @@
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_ds_queue.h"
 
-extern u32 D_8009B624[];
+#include "dssys_1_8_externs.h"
 
 void LIBDS_DSSYS_1_text_EA4(int event, u8 *data) {
     u8 *data_reg;

@@ -21,15 +21,8 @@ int MemCard_GetActivePort(void);
 void Menu_CreateNotificationDialog(int arg0, int arg1);
 void MemCard_ClearActivePrompt(void);
 
-extern int D_8009CF50;
-extern int D_8009CF14;
-extern int D_8009CF10;
-extern int D_8009CFA4;
-extern int D_8009CFFC;
-extern unsigned char D_800A19C0[];
+#include "pe1/Menu_MemCardProgress_externs.h"
 /* Separate compiler identities preserve address reloads across text calls. */
-extern unsigned char D_800A19C0_measure[] asm("D_800A19C0");
-extern unsigned char D_800A19C0_remeasure[] asm("D_800A19C0");
 
 void Menu_CreateMemCardProgressWidget(int arg0) {
     void *node;

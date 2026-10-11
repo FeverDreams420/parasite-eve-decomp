@@ -10,9 +10,7 @@ typedef struct { Vector *position; short offset,reserved; } Particle;
 typedef struct { Vector *positions[4]; char reserved10[0x46]; short count; } Queue;
 
 #include "pe1/gte_sine_table.h"
-extern RenderColor D_8019A4E8;
-extern short D_8019A7FE, D_8019A802;
-extern unsigned char D_8019A804;
+#include "RoomEffect_PointerQueue_externs.h"
 
 int func_80194F04(int event, Particle *object)
 {

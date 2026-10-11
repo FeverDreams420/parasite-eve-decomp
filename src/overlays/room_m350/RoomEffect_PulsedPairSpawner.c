@@ -10,9 +10,7 @@ typedef RoomM350Vector Vector;
 typedef RoomM350TransformMatrix Matrix;
 typedef struct { short position[3],reserved; } Particle;
 
-extern short D_800966EE[];
-extern int func_80199B94(int,Particle *);
-extern int Inv_ScrambleGrid(void);
+#include "RoomEffect_PulsedPairSpawner_externs.h"
 int func_80192508(int event)
 {
     Vector offset;

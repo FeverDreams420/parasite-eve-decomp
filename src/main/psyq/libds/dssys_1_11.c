@@ -5,15 +5,7 @@
 #include "pe1/psyq_ds.h"
 #include "pe1/psyq_bios.h"
 
-extern char D_80011D74[];
-extern char D_80011D94[];
-extern char D_80011DB0[];
-extern char D_80011DD8[];
-extern char D_80011DF8[];
-extern char D_80011E0C[];
-extern char D_80011E3C[];
-extern char D_80011E44[];
-extern char D_80011E4C[];
+#include "dssys_1_11_externs.h"
 
 void tipDsSystem(void) {
     enum {

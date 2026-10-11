@@ -15,10 +15,7 @@ typedef struct RoomCaptureContext {
     FieldActor *object;
 } RoomCaptureContext;
 
-extern s16 D_80192C34;
-extern s16 D_80192C36;
-extern s16 D_80192C38;
-extern s32 D_80192C3C;
+#include "RoomLib_CaptureFrameSample_externs.h"
 
 void RoomLib_CaptureFrameSample(RoomCaptureContext *modeOrContext, int x, int y, int z) {
     unsigned int sample;

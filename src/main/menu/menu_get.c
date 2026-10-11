@@ -15,10 +15,7 @@ typedef s32 M2C_UNK32;
 typedef s64 M2C_UNK64;
 void Sfx_DrawSlotRow(ItemDataRecord *entry, u8 *text);
 void *Str_LookupTable8(unsigned int arg0);
-extern u8 g_KeyItemDataTable[];
-extern s16 g_BattleCountTable[];
-extern u8 g_EquipItemDataTable[];
-extern u8 g_CursorRenderDataBlock[];
+#include "menu_get_externs.h"
 
 int Menu_GetBattleCount(void) {
     return g_MenuBattleCount;

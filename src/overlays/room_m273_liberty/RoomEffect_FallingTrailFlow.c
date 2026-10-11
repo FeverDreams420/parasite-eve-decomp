@@ -164,10 +164,7 @@ int func_80194E6C(int mode, RoomM273FallingTrail *trail) {
     return 0;
 }
 
-extern s16 D_8019ACA8;
-extern s16 D_8019AE6C, D_8019AE70, D_8019AE74, D_8019AE78;
-extern u8 D_8019AEF8, D_8019AEFA;
-extern int Inv_ScrambleGrid(void);
+#include "RoomEffect_FallingTrailFlow_externs.h"
 
 int func_801955E8(int mode) {
     s16 nextIndex;

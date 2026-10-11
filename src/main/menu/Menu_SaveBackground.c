@@ -12,7 +12,7 @@
 
 /* g_GeomOtZ lives at 0x800BD024, outside the gp window; the incomplete
  * array type keeps -G8 from treating the 1-byte extern as small data. */
-extern unsigned char g_GeomOtZ[];
+#include "Menu_SaveBackground_externs.h"
 
 int g_MenuSaveBgFadeState;
 int g_MenuSaveBgFadeStep;

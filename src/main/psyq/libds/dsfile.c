@@ -53,7 +53,7 @@ int D_8009B6DC = 0;
 int D_8009B6E0 = 0;
 int dsfile_data_padding[2] = {0, 0};
 
-extern char D_800A36B8[DSL_MAX_FILE][sizeof(DslFILE)];
+#include "dsfile_externs.h"
 DslFILE *DsSearchFile(DslFILE *output, char *input_name) {
     register DslFILE *out asm("$22") = output;
     char *name = input_name;

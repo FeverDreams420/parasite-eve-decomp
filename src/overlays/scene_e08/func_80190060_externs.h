@@ -1,0 +1,5 @@
+#ifndef PE1_EXT_04ACF0E13600
+#define PE1_EXT_04ACF0E13600
+extern FieldGlowSprite D_801994B8, D_801995A8, D_801995B8, D_80199690;
+extern void func_800C2B40(void *);
+#endif /* PE1_EXT_04ACF0E13600 */

@@ -5,7 +5,7 @@
 #include "room_m350_shared.h"
 #include "room_m350_data.h"
 
-extern void func_8019A134(void);
+#include "func_80199E50_externs.h"
 
 s32 func_80199E50(s32 arg0) {
     char *obj;

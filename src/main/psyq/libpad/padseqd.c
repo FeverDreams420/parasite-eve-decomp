@@ -8,7 +8,7 @@ int CardObj_IsTransferActive(CardObj *obj);
 void LIBPAD_PADSEQD_text_108(CardObj *port);
 
 /* LIBPAD hook slots that _padInitDirSeq points at this object's routines. */
-extern void (*g_MemCardResponseHandler)(CardObj *port);
+#include "padseqd_externs.h"
 
 void _padInitDirSeq(void) {
     void (*response_handler)(CardObj *);

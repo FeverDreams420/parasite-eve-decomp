@@ -1,0 +1,5 @@
+#ifndef PE1_EXT_677FE63F7F62
+#define PE1_EXT_677FE63F7F62
+extern u8 D_80198AD4;
+extern FieldGlowSprite D_80199570;
+#endif /* PE1_EXT_677FE63F7F62 */

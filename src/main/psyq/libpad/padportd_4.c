@@ -60,7 +60,7 @@ other:
 }
 
 void bzero(void *, int);
-extern int D_8009B76C;
+#include "padportd_4_externs.h"
 void LIBPAD_PADPORTD_text_388(CardObj *port) {
     register int limit, i, j, mask asm("$7"), active asm("$6");
     register int count;
@@ -164,7 +164,7 @@ void LIBPAD_PADPORTD_text_388(CardObj *port) {
     }
 }
 
-extern CardObj D_800A5B70[];
+#include "padportd_4_externs_1.h"
 
 int CardObj_GetChannelId(CardObj *entry) {
     CardObj *candidate;

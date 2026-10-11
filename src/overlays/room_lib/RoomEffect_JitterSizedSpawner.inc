@@ -6,7 +6,7 @@
 #error "ROOMEFFECT_JITTER_SPAWNER_CALLBACK must name the jitter sized spark"
 #endif
 
-extern int ROOMEFFECT_JITTER_SPAWNER_CALLBACK(int mode, RoomJitterSpark *spark);
+#include "RoomEffect_JitterSizedSpawner_externs.h"
 
 /* Spawner that, while the primary scene object is past frame 10, scatters
  * up to three jitter sized sparks a frame up the object's anchor. */

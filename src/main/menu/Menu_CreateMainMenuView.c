@@ -20,13 +20,7 @@ void Menu_CreateMainMenuView(int arg0) {
 
 #include "pe1/menu_widget.h"
 
-extern MenuWidgetNode *MenuWidget_GetChild(MenuWidgetNode *arg0, int arg1);
-extern void Menu_CreateActionSubmenu(MenuWidgetNode *arg0);
-extern void func_8004B03C(MenuWidgetNode *arg0);
-extern void Menu_OpenBlendColorScreen(MenuWidgetNode *arg0);
-extern void Menu_OpenScreenAdjustView(MenuWidgetNode *arg0);
-extern void Inv_InitMaxLevelInventory(int arg0);
-extern void Menu_CreateBonusPointAllocationView(void);
+#include "Menu_CreateMainMenuView_externs.h"
 
 int Menu_MainMenuInputHandler(MenuWidgetNode *arg0, u32 arg1) {
     MenuWidgetNode *child = MenuWidget_GetChild(arg0, 0);
@@ -67,11 +61,7 @@ int Menu_MainMenuInputHandler(MenuWidgetNode *arg0, u32 arg1) {
 
 #include "pe1/menu_widget.h"
 
-extern MenuWidgetNode *MenuWidget_GetChild(MenuWidgetNode *arg0, int arg1);
-extern void Menu_SetActionSubmenuSelection(int arg0);
-extern void MenuWidget_SetColumnLayoutMode(int arg0);
-extern void Menu_DrawActionSubmenuList(void);
-extern void Menu_DrawBlendColorOptionListUnk(void);
+#include "Menu_CreateMainMenuView_externs_1.h"
 
 int func_8004AFA4(MenuWidgetNode *arg0, u32 arg1);
 int func_8004B0A4(MenuWidgetNode *arg0, u32 arg1);

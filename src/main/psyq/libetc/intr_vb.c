@@ -2,7 +2,7 @@
 /* Psy-Q LIBETC INTR_VB.OBJ: startIntrVSync, trapIntrVSync, setIntrVSync, memclrIntrVSync. */
 #include "pe1/psyq_api_internal.h"
 
-extern int *D_800956B0;
+#include "intr_vb_externs.h"
 
 void memclrIntrVSync(void *ptr, int count);
 

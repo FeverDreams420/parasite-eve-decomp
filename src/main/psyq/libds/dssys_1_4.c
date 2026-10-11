@@ -27,10 +27,7 @@ int DS_cw(u8 command, void *parameter) {
     return LIBDS_DSSYS_1_text_368((prev[9] = 0xB, command), parameter);
 }
 
-extern unsigned int D_800A36A0;
-extern unsigned int D_800A36A4;
-extern unsigned int D_800A36A8;
-extern unsigned int D_800A36AC;
+#include "dssys_1_4_externs.h"
 
 void DS_vsync_callback(unsigned int value) {
     D_800A36A0 = value;
@@ -52,13 +49,13 @@ u32 DS_system_status(u32 mode) {
     return ((u32 *)&g_DsReadStatusBlock)[mode];
 }
 
-extern unsigned char g_CdLastCmd;
+#include "dssys_1_4_externs_1.h"
 
 int DS_lastcom(void) {
     return g_CdLastCmd;
 }
 
-extern unsigned char g_CdCmdMode;
+#include "dssys_1_4_externs_2.h"
 
 int DS_lastmode(void) {
     return g_CdCmdMode;
@@ -68,13 +65,13 @@ CdlLOC *DS_lastpos(void) {
     return &g_CdCurPosPtr;
 }
 
-extern unsigned char g_CdRetryCount;
+#include "dssys_1_4_externs_3.h"
 
 int DS_lastseek(void) {
     return g_CdRetryCount;
 }
 
-extern unsigned char g_CdCmdParam;
+#include "dssys_1_4_externs_4.h"
 
 int DS_lastread(void) {
     return g_CdCmdParam;
@@ -92,7 +89,7 @@ void DS_ready(u8 *result) {
     CD_ready(1, result);
 }
 
-extern int g_CdDiscType;
+#include "dssys_1_4_externs_5.h"
 
 int DS_shell_open(void) {
     return g_CdDiscType;

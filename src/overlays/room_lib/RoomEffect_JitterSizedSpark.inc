@@ -6,7 +6,7 @@
 #error "ROOMEFFECT_JITTER_SIZED_ROTATION must name the initial rotation"
 #endif
 
-extern GteRotation ROOMEFFECT_JITTER_SIZED_ROTATION;
+#include "RoomEffect_JitterSizedSpark_externs.h"
 
 /* Spark that drifts with damped velocity, jitters and spins for 8 frames
  * while drawing an animated sprite scaled by its size field. */

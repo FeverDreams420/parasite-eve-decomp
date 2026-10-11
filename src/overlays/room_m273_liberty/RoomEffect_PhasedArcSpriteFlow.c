@@ -6,7 +6,7 @@
 typedef RoomM273PointerPoolEffect Effect;
 typedef struct { unsigned char unknown[58]; unsigned short value; } Object;
 #include "pe1/gte_sine_table.h"
-extern unsigned char D_8019ACDC[],D_8019ACE0[];
+#include "RoomEffect_PhasedArcSpriteFlow_externs.h"
 
 int func_8019A4CC(int mode,Effect *effect) {
     GteRotation parameters;
@@ -36,14 +36,8 @@ int func_8019A4CC(int mode,Effect *effect) {
 #include "pe1/scene_fx.h"
 
 #include "pe1/gte_sine_table.h"
-extern unsigned char D_8019AB70[];
-extern char D_8019AD7C[];
+#include "RoomEffect_PhasedArcSpriteFlow_externs_1.h"
 
-extern short D_8019AF56;
-extern short D_8019AF58;
-extern short D_8019AF5A;
-extern short D_8019AF5C;
-extern short D_8019AF64;
 
 void *func_8019A5D4(int unused, int value, int flag) {
     D_8019AF56 = value;
@@ -60,11 +54,8 @@ void *func_8019A5D4(int unused, int value, int flag) {
 #include "pe1/field_anim_callback_list.h"
 
 #include "room_m273_effects.h"
-extern u8 D_8019AF6B;
-extern volatile u16 D_8019AEFE;
-extern volatile u16 D_8019AF00;
+#include "RoomEffect_PhasedArcSpriteFlow_externs_2.h"
 
-extern s32 func_8019A720(s32 mode, RoomM273ArcCallbackState *state);
 
 s32 func_8019A628(s32 arg0) {
     char *obj;
@@ -98,7 +89,7 @@ s32 func_8019A628(s32 arg0) {
     return 0;
 }
 
-extern short D_8019AF9A;
+#include "RoomEffect_PhasedArcSpriteFlow_externs_3.h"
 
 short *func_8019A70C(void *arg0, short arg1) {
     short *ptr = &D_8019AF9A;

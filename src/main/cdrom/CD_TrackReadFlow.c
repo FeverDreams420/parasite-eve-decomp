@@ -381,7 +381,7 @@ int CD_SeekToTrack(int key, int mode, int group, int *slot, int blocking)
     return busy;
 }
 
-#include "CD_TrackReadFlow_externs_2.h"
+#include "pe1/CD_TrackReadFlow_externs_2.h"
 void Akao_Cmd_F1(void);
 void Akao_Cmd_40(void);
 void Akao_Cmd_C1_WithSlot(int, int, int);

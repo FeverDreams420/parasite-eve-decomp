@@ -14,8 +14,7 @@
 
 #define NULL ((void *)0)
 
-extern s32 g_InvItemUsableFlag;
-extern s32 g_MenuLayoutLocked;
+#include "Menu_EquipItemSelectionFlow_externs.h"
 int MenuWidget_IsCursorYClear(MenuWidgetNode *ptr);
 void Menu_InitCategoryTabs(void);
 void Menu_OpenItemList(void);

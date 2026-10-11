@@ -3,10 +3,7 @@
  * CdReady, CdSyncCallback, CdReadyCallback. */
 #include "pe1/psyq_cd.h"
 
-extern void CD_flush(void);
-extern char func_800119CC[];
-extern char *g_CdCmdNameTable[];
-extern char *g_CdIntrStringTable[];
+#include "sys_externs.h"
 
 void CdFlush(void) {
     CD_flush();

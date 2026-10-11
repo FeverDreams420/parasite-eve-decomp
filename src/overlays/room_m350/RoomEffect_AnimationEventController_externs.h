@@ -1,0 +1,7 @@
+#ifndef PE1_EXT_3E517977AF75
+#define PE1_EXT_3E517977AF75
+extern Events D_8018F1CC;
+extern unsigned char D_8019A859;
+extern int D_8019A858;
+extern short D_8019A85C,D_8019A85E,D_8019A86A,D_8019A86C;
+#endif /* PE1_EXT_3E517977AF75 */

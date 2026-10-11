@@ -10,7 +10,7 @@ typedef struct SceneE08RandomEntries {
 
 typedef SceneE08EffectState SceneE08RandomState;
 
-extern int func_80071A54(void);
+#include "func_801938FC_externs.h"
 
 void func_801938FC(int unused, SceneE08RandomState *state, SceneE08RandomEntries *entries) {
     unsigned int i;

@@ -17,22 +17,12 @@
 M2C_UNK Save_SetTitleStyleFlag();
 s32 func_80042964();
 M2C_UNK func_80042B50();
-extern s32 g_MenuActiveItemList;
-extern s32 g_MenuActionTextBase;
-extern s32 g_SaveSelectedSlot;
-extern s32 g_SaveSlotCellIndex;
-extern s32 D_8009CF4C;
-extern struct { char _[16]; } D_800A1980_o __asm__("g_MenuItemLabelBuffer");
+#include "Menu_StepSaveSelect_externs.h"
 #define g_MenuItemLabelBuffer (*(u8 *)&D_800A1980_o)
-extern struct { char _[16]; } Menu_DrawItemLabel_o __asm__("Menu_DrawItemLabel");
 #define Menu_DrawItemLabel (*(M2C_UNK *)&Menu_DrawItemLabel_o)
-extern struct { char _[16]; } func_80044E98_o __asm__("Menu_ConfirmDialogHandler");
 #define Menu_ConfirmDialogHandler (*(M2C_UNK *)&func_80044E98_o)
-extern struct { char _[16]; } func_8004F950_o __asm__("Menu_DrawActionOptionList");
 #define Menu_DrawActionOptionList (*(M2C_UNK *)&func_8004F950_o)
-extern struct { char _[16]; } func_800504F4_o __asm__("Save_StartSelectedWriteSlot");
 #define func_800504F4 (*(M2C_UNK *)&func_800504F4_o)
-extern struct { char _[16]; } func_8005051C_o __asm__("Save_StartSelectedReadSlot");
 #define func_8005051C (*(M2C_UNK *)&func_8005051C_o)
 
 s32 Menu_StepSaveSelect(MenuWidgetNode *arg0, s32 arg1) {

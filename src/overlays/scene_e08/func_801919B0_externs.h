@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_F870820C960F
+#define PE1_EXT_F870820C960F
+extern u8 D_8019880C[];
+#endif /* PE1_EXT_F870820C960F */

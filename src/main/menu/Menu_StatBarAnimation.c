@@ -2,14 +2,8 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
-extern void Stat_QueryDistanceAndSubLevel(s32 arg0, s32 arg1, s32 *out0, s32 *out1);
-extern void Draw_AllocTexturedRectAlt(s32 arg0, s32 arg1);
+#include "Menu_StatBarAnimation_externs.h"
 
-extern s32 g_BonusPointBarAnimProgress;
-extern s32 g_BonusPointStatDeltas[];
-extern s32 g_BonusPointStatMultipliers[];
-extern s32 g_MenuStatBarWidths[];
-extern s32 g_MenuStatBarSettleTimers[];
 
 int g_MenuItemContextFlag;
 

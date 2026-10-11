@@ -8,12 +8,8 @@ CdlLOC *DsIntToPos(int sector, CdlLOC *position);
 void *memcpy(void *, const void *, unsigned int);
 int strcmp(const char *, const char *);
 
-extern const char D_80011EF8[], D_80011F24[], D_80011F2C[], D_80011F5C[];
-extern const char D_80011F80[], D_80011FA0[], D_80011FB4[];
-extern const char D_80011FD8[], D_80011FF8[], D_8001201C[], D_80012038[];
+#include "dsfile_2_externs.h"
 /* These two strings are word-aligned in dsfile.c, permitting halfword copies. */
-extern const char D_80012014[] __attribute__((aligned(4)));
-extern const char D_80012018[] __attribute__((aligned(4)));
 
 int DS_newmedia(void) {
     u8 *cursor;

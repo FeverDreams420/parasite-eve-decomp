@@ -19,41 +19,9 @@ typedef struct {
     s8 values[3];
 } HudShades;
 
-extern u8 D_8009CD90[];
-extern u8 D_8009E068[];
-extern u8 D_8009E098[];
-extern u8 D_8009E0B8[];
-extern u8 D_8009E0CE[];
-extern u8 D_8009E0F0[];
-extern u8 D_8009E106[];
-extern u8 D_8009E1D0[];
-extern u8 D_8009E1E6[];
-extern u8 D_8009E2E8[];
-extern u8 D_8009E2FE[];
-extern u8 D_8009E320[];
-extern u8 D_8009E336[];
-extern u8 D_8009E3CE[];
-extern u8 D_8009E476[];
-extern u8 D_8009E500[];
-extern u8 D_8009E746[];
-extern u8 D_8009E77E[];
-extern u8 D_8009E7B6[];
-extern u8 D_8009E880[];
-extern u8 D_8009E896[];
-extern u8 D_8009E8CE[];
-extern u8 D_8009E928[];
-extern u8 D_8009E93E[];
-extern u8 D_8009E960[];
-extern u8 D_8009E976[];
-extern u8 D_8009EC38[];
-extern u8 D_800B00E8[];
-extern u8 D_800B0130[];
+#include "Battle_DrawHPBar_externs.h"
 typedef RenderPagedSpritePacket HudSprite;
-extern HudSprite D_800B01C0[2][10][5];
-extern u8 D_800B6920[];
-extern u8 D_800B6936[];
-extern u8 D_800BE9FE[];
-extern u8 D_800BEA06[];
+#include "Battle_DrawHPBar_externs_1.h"
 
 /* Initialize the HUD packet pools for both draw buffers. The legacy symbol
  * name is retained; this routine sets up more than the HP bar.

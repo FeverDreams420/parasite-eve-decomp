@@ -6,10 +6,7 @@
 #include "pe1/inventory.h"
 #include "pe1/inventory_slots.h"
 
-extern BattleCmdEntry *D_8009D014;
-extern int D_800A1B30[7];
-extern BattleCmdEntry D_800A1AA0[];
-extern s8 D_800C0E22[];
+#include "BattleCmd_StackFlow_externs.h"
 
 int Inv_AddItem(int data);
 
@@ -99,8 +96,7 @@ void BattleCmd_UndoPending(void) {
 
 #include "pe1/battle_cmd.h"
 
-extern BattleCmdEntry D_800A1AA0[];
-extern BattleCmdEntry *D_8009D014;
+#include "BattleCmd_StackFlow_externs_1.h"
 
 void BattleCmd_ResetTableCursor(void) {
     D_8009D014 = D_800A1AA0;
@@ -111,8 +107,7 @@ void BattleCmd_ResetTableCursor(void) {
 
 #include "pe1/battle_cmd.h"
 
-extern BattleCmdEntry *D_8009D014;
-extern BattleCmdEntry D_800A1AA0[];
+#include "BattleCmd_StackFlow_externs_2.h"
 
 void BattleCmd_UndoPending(void);
 

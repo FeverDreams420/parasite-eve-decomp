@@ -2,9 +2,7 @@
 #include "pe1/field_actor.h"
 #include "room_m273.h"
 
-extern FieldActor *g_PlayerEntity;
-extern void func_80020CE4(void);
-extern void func_80192C00(RoomPlacementOwner *owner, RoomPlacementState *state);
+#include "func_80192838_externs.h"
 
 void func_80192838(RoomSelectionState *state) {
     FieldActor *actor = state->actor;

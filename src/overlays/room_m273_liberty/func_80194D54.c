@@ -2,7 +2,7 @@
 #include "pe1/asset_find.h"
 #include "pe1/field_actor.h"
 
-extern unsigned char D_8019AE9A;
+#include "func_80194D54_externs.h"
 
 
 int func_80194D54(int mode) {

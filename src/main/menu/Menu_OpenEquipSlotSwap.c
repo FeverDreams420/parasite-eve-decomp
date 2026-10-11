@@ -11,12 +11,7 @@
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
 void Menu_CreateContextHelpPanel(void);
-extern s32 g_MenuSelectionLocked;
-extern s32 g_MenuActionSubmenuOpen;
-extern s32 D_8009CF5C;
-extern s32 g_InvSelectedItemIndex;
-extern s32 g_InvSwapTargetIndex;
-extern s32 g_MenuEquipSwapSource;
+#include "Menu_OpenEquipSlotSwap_externs.h"
 
 s32 Menu_OpenEquipSlotSwap(s32 arg0) {
     s32 temp_s2;

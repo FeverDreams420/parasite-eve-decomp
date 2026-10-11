@@ -5,8 +5,7 @@
 #include "pe1/psyq_nop.h"
 #include "pe1/psyq_pad_main.h"
 
-extern int g_MemCardPort1Present;
-extern int g_MemCardPort2Present;
+#include "padmain_externs.h"
 
 int PadEnableCom(int portMask) {
     int currentMask;
@@ -49,7 +48,7 @@ int PadEnableCom(int portMask) {
 
 int MemCard_TimerCallback(void);
 int MemCard_TimerReadyCallback(void);
-extern void *D_800A5AB4[];
+#include "padmain_externs_1.h"
 
 void _padSetVsyncParam(void) {
     void **table;
@@ -62,20 +61,11 @@ void _padSetVsyncParam(void) {
     table[2] = 0;
 }
 
-extern int (*D_8009B74C)(void);
+#include "padmain_externs_2.h"
 
-extern int g_MemCardCallbackPending;
-extern int D_8009B75C;
-extern int D_8009B764;
-extern int D_8009B768;
-extern int D_8009B76C;
-extern int D_8009B774;
-extern int D_8009B778;
-extern int D_8009B78C;
 
 void SysDeqIntRP(int index, void *queue);
 void SysEnqIntRP(int index, void *queue);
-extern int g_MemCardCounterIrqQueueNode;
 
 int chkRC2wait(void);
 int _padInitSioMode(CardObj *port);
@@ -185,8 +175,7 @@ void _padStopCom(void) {
     ExitCriticalSection();
 }
 
-extern int D_8009B77C[];
-extern void (*D_8009B744)(CardObj *), (*D_8009B748)(CardObj *);
+#include "padmain_externs_3.h"
 void MemCard_WaitStatusBit2(void);
 int _padInitSioMode(CardObj *port) {
     register MemCardSioRegisters *sio = D_8009B788;

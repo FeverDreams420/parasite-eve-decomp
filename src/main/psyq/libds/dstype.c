@@ -4,7 +4,7 @@
 #include "pe1/psyq_cd.h"
 #include "pe1/cdrom.h"
 
-extern char D_8001205C[];
+#include "dstype_externs.h"
 
 CdlLOC *DsIntToPos(int sector, CdlLOC *position);
 void GD_cbsync(unsigned char event);

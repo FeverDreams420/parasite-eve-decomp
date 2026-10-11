@@ -13,9 +13,7 @@ typedef struct RoomM350Instance { char reserved[0x3A]; unsigned short yaw; } Ins
 typedef RoomM350Actor Actor;
 typedef struct { Vector positions[8]; char reserved40[8]; short count; } Queue;
 
-extern short D_800966EE[];
-extern short D_8019A800, D_8019A802;
-extern unsigned char D_8019A804;
+#include "RoomEffect_PositionQueue_externs.h"
 
 int func_80195218(int event, Particle *object)
 {

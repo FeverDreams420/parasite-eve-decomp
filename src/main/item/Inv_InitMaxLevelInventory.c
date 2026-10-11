@@ -11,7 +11,7 @@ s32 D_8009D050;
 
 void Battle_SyncEquipSlots(void);
 void *Aya_GetLevelExpTable(void);
-#include "Inv_InitMaxLevelInventory_externs.h"
+#include "pe1/Inv_InitMaxLevelInventory_externs.h"
 #define g_AyaHpMax (g_AyaHpMax[0])
 #define g_AyaHpCurrent (g_AyaHpCurrent[0])
 #define g_AyaInventorySlotCount (g_AyaInventorySlotCount[0])

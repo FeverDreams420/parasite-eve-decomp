@@ -4,8 +4,7 @@
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_ds.h"
 
-extern unsigned char *D_8009AF1C;
-extern unsigned char *D_8009AF28;
+#include "c_003_externs.h"
 
 void StUnSetRing(void) {
     unsigned char *interrupt_enable;

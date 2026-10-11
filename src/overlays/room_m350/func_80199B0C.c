@@ -1,7 +1,7 @@
 #include "common.h"
 #include "room_m350_data.h"
 
-extern FieldActor *D_8009D20C;
+#include "func_80199B0C_externs.h"
 
 /* Walks the actor list for the first live actor of the given type and sub
  * id and leaves it in D_8019A774. */

@@ -10,18 +10,7 @@
 #include "pe1/field_billboard.h"
 #include "pe1/field_actor.h"
 
-extern int D_800E0FFC;
-extern int D_800E22B8;
-extern int D_800E22BC;
-extern int D_800E22C0;
-extern short D_800E22B0;
-extern short D_800E22B2;
-extern short D_800E22B4;
-extern u8 D_800E22C8;
-extern u8 D_800E22C9;
-extern u8 D_800E22CA;
-extern u8 D_800E22CD;
-extern short D_800E22CE;
+#include "FieldEng_BurstEffectC_externs.h"
 int func_800CE084(char *object)
 {
   void **slot = FieldEng_GetSlot(object);
@@ -49,17 +38,14 @@ int func_800CE118(int a, int b, int c, int d, int e, int f) {
     return 0;
 }
 
-extern char D_800E0FC0[];
+#include "FieldEng_BurstEffectC_externs_1.h"
 
 int func_800CE144(void *o) {
     FieldEng_Register(o, D_800E0FC0);
     return 0;
 }
 
-extern char D_800E0FCC[];
-extern char D_800E0FB4[];
-extern char D_800E0FD8[];
-extern int func_800CE1DC(char *arg0);
+#include "FieldEng_BurstEffectC_externs_2.h"
 
 int func_800CE16C(void *obj) {
     int first;
@@ -91,7 +77,7 @@ int func_800CE1F4(void) {
 int *func_800C2B10(int index);
 int *func_800C2B28(int index);
 
-extern int D_800E2848;
+#include "FieldEng_BurstEffectC_externs_3.h"
 
 int func_800CE1FC(void) {
     int index;
@@ -148,11 +134,7 @@ int func_800CE2B4(void *arg0, void *arg1, FieldAnimTimedSpark *anim) {
 void func_800CE3AC(void) {
 }
 
-extern u16 D_800E22A8;
-extern u16 D_800E22AA;
-extern u16 D_800E22AC;
-extern short D_800E22D0;
-extern signed char D_800E22CC;
+#include "FieldEng_BurstEffectC_externs_4.h"
 
 int func_800CE3B4(void *arg0, void *arg1, u8 *anim) {
     u16 value_v0;

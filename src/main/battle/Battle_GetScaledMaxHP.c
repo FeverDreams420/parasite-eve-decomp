@@ -1,4 +1,4 @@
-extern int D_800A1B30[7];
+#include "Battle_GetScaledMaxHP_externs.h"
 
 #include "pe1/aya.h"
 

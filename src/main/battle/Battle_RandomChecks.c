@@ -1,7 +1,7 @@
 #include "common.h"
 #include "pe1/battle.h"
 
-extern Combatant *g_ActiveActor;
+#include "Battle_RandomChecks_externs.h"
 int rand(void);
 int Battle_GetAgilityBonus(void);
 void Battle_SetupEntityTarget(BattleEntity *actor);

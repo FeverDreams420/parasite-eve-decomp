@@ -158,9 +158,7 @@ void func_800CECAC(void) {
 
 int LoadImage(RECT *rect, void *pixels);
 
-extern void *D_800B0E18;
-extern void *D_800B0E1C;
-extern s16 D_800F34E4;
+#include "FieldEng_GeometryAndShapes_externs.h"
 
 void func_800CED3C(int index) {
     RECT rect;
@@ -372,7 +370,7 @@ void func_800CEE20(GteShortVector *position, GteRotation *rotation,
 /* Field colour animation: colour-key interpolation and the rotating
  * 16-entry CLUT row upload. */
 
-extern u16 D_800E21A8[];
+#include "FieldEng_GeometryAndShapes_externs_1.h"
 
 int StoreImage(RECT *rect, void *pixels);
 
@@ -650,7 +648,7 @@ void func_800CFB7C(GteShortVector *input, s16 distance, GteShortVector *out)
 /* Direction helpers for field effects: shortest turn between two angles,
  * eased turning, point distance and the alternating scatter offsets. */
 
-extern u16 D_800E21C8;
+#include "FieldEng_GeometryAndShapes_externs_2.h"
 
 int func_800CFCF4(int from, int to, s16 *distance)
 {

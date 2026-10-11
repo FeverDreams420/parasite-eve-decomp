@@ -6,9 +6,8 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/gpu_state.h"
 #include "pe1/gpu_dma_timeout_state.h"
-extern char D_800119BC[];
+#include "LoadImage2_externs.h"
 void checkRECT(char *, RECT *);
-extern unsigned int *g_GpuGp1Ptr;
 /* GPU status read through the GP1 port; it must be re-read on every poll. */
 #define GPU_STATUS_READY() (*(volatile unsigned int *)g_GpuGp1Ptr & 0x04000000)
 int Gpu_DmaTimeoutCheck(void);
@@ -28,7 +27,7 @@ int LoadImage2(RECT *rect, unsigned int *data)
     return 0;
 }
 
-extern char D_800118E0[];
+#include "LoadImage2_externs_1.h"
 
 int StoreImage2(RECT *rect, unsigned int *data)
 {
@@ -44,8 +43,7 @@ int StoreImage2(RECT *rect, unsigned int *data)
     return 0;
 }
 
-extern char D_800118EC[];
-extern unsigned int D_800957EC[3];
+#include "LoadImage2_externs_2.h"
 
 int MoveImage2(RECT *rect, int x, int y)
 {
@@ -65,7 +63,7 @@ int MoveImage2(RECT *rect, int x, int y)
     return 0;
 }
 
-extern char D_80011928[];
+#include "LoadImage2_externs_3.h"
 
 int DrawOTag2(void *packet)
 {

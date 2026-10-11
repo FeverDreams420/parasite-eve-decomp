@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_A1FEA3C0A332
+#define PE1_EXT_A1FEA3C0A332
+extern CardObj D_800A5B70[];
+#endif /* PE1_EXT_A1FEA3C0A332 */

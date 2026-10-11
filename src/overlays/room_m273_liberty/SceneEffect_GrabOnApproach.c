@@ -4,10 +4,7 @@
 #include "room_m273.h"
 #include "pe1/field_vector_math.h"
 
-extern FieldActor *g_PlayerEntity;
-extern void func_80020C74(void);
-extern void func_80192838(RoomSelectionState *);
-extern void func_80192D50(struct RoomEnt *);
+#include "SceneEffect_GrabOnApproach_externs.h"
 
 void SceneEffect_GrabOnApproach(SceneGrabHead *head) {
     RoomSelectionState *typedState = (RoomSelectionState *)head;

@@ -6,7 +6,7 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/gte_sine_table.h"
 
-extern RenderColor D_8019A62C;
+#include "RoomEffect_QueuedFall_externs.h"
 
 int func_80197594(int event, short *position) {
     if (event == 1) {
@@ -27,8 +27,7 @@ int func_80197594(int event, short *position) {
     return 0;
 }
 
-extern unsigned char D_8019A857;
-extern short D_8019A864[3];
+#include "RoomEffect_QueuedFall_externs_1.h"
 
 int func_801976C8(int event)
 {

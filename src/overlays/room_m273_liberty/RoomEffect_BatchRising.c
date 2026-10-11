@@ -5,9 +5,9 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/psyq_gpu.h"
 /* The batch emitter fills the eight-byte records rendered by this callback. */
-extern short D_8019AD68[];
+#include "RoomEffect_BatchRising_externs.h"
 #include "pe1/gte_sine_table.h"
-extern RoomM273RisingBatchBuffer D_8019AF0C;
+#include "RoomEffect_BatchRising_externs_1.h"
 
 int func_80196F2C(int mode, GteShortVector *position) {
     if (mode == 1) {

@@ -2,9 +2,7 @@
 #include "pe1/battle.h"
 #include "pe1/asset_find.h"
 
-extern unsigned int g_GameStateFlags;
-extern FieldActor *g_PlayerEntity;
-extern Combatant *g_ActiveActor;
+#include "Battle_DispatchSpecialAction_externs.h"
 
 void Battle_CopyPadStateToRecord(void);
 void Battle_SetupEnemyAnims(void);

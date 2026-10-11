@@ -4,9 +4,7 @@
 /* CC1_FLAGS: -mno-split-addresses */
 
 #include "pe1/psyq_spu_internal.h"
-extern volatile u32 D_8009B450;
-extern u32 D_8009B454;
-extern s32 D_8009B418;
+#include "spu_3_externs.h"
 
 void _spu_Fr_(void *address, u16 spuAddress, u32 blocks)
 {

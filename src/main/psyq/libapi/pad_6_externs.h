@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_E8591F53AC1B
+#define PE1_EXT_E8591F53AC1B
+extern PadWork *D_8009B4B0;
+#endif /* PE1_EXT_E8591F53AC1B */

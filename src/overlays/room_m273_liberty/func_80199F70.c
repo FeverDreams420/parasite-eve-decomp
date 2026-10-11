@@ -1,4 +1,4 @@
-extern short D_8019AE98;
+#include "func_80199F70_externs.h"
 
 short *func_80199F70(void *arg0, void *arg1, short arg2) {
     short *ptr = &D_8019AE98;

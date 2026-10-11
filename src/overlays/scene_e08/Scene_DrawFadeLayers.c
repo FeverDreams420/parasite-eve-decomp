@@ -23,9 +23,7 @@ typedef union SceneFadeSeed {
     } fields;
 } SceneFadeSeed;
 
-extern RoomFxSeed8 D_8018EFF4;
-extern FieldGlowSprite D_80199670;
-extern u8 D_801986F8[], D_80198708[];
+#include "Scene_DrawFadeLayers_externs.h"
 void func_800C2FF0(int, int);
 void func_800C3098(int);
 

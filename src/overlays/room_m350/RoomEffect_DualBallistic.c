@@ -11,11 +11,9 @@ typedef RoomM350TransformOwner Instance;
 typedef RoomM350Actor Actor;
 
 typedef struct { short x, y, z, velocityY, gravity, reserved; } Particle;
-extern FieldActor *g_PlayerEntity;
-extern unsigned char D_8019A82F;
+#include "RoomEffect_DualBallistic_externs.h"
 #include "pe1/gte_sine_table.h"
-extern int D_8019A598[];
-extern int Inv_ScrambleGrid(void);
+#include "RoomEffect_DualBallistic_externs_1.h"
 
 int func_801968D8(int event, short *position) {
     if (event == 1) {

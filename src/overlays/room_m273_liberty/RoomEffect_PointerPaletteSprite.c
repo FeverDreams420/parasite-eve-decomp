@@ -9,9 +9,7 @@
 typedef struct { short x, y, z, pad; } Sprite;
 
 #include "pe1/gte_sine_table.h"
-extern GteRotation D_8019AB68;
-extern FieldActor *g_PlayerEntity;
-extern unsigned char D_8019AE5C;
+#include "RoomEffect_PointerPaletteSprite_externs.h"
 
 int func_80193870(int mode, RoomM273SpritePoolEffect *state) {
     if (mode == 1) {

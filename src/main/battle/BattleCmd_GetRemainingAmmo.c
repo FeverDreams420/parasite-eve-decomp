@@ -6,8 +6,7 @@
 
 /* MASPSX_FORCE_G0 keeps the player pointer absolute, as retail; the COMMON
  * stack top supplies the small-data metadata of the one $gp-relative word. */
-extern struct FieldActor *g_PlayerEntity;
-extern BattleCmdEntry g_BattleCmdStack[];
+#include "BattleCmd_GetRemainingAmmo_externs.h"
 BattleCmdEntry *g_BattleCmdStackTop;
 
 int BattleCmd_GetRemainingAmmo(int *out) {

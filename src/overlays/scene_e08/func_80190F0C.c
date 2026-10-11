@@ -1,10 +1,6 @@
 #include "pe1/scene_ring_sprites.h"
 
-extern u8 D_801995D4[];
-extern u8 D_80198B90[];
-extern u8 D_801995D0, D_801995D1, D_801995D2;
-extern u8 D_801995CC, D_801995CD, D_801995CE;
-extern u16 D_801995DA, D_801995DC, D_801995D6, D_801995D8;
+#include "func_80190F0C_externs.h"
 void func_800C4E50(void *item);
 
 void func_80190F0C(void *unused0, void *unused1, SceneRingSpritesState *effect) {

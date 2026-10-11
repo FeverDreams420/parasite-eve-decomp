@@ -3,9 +3,7 @@
 
 /* g_PlayerEntity points at the player-side field actor; its core is the
  * Combatant record used by the command paths below. */
-extern FieldActor *g_PlayerEntity;
-extern u16 g_AyaHpCurrent[];
-extern s8 g_AyaEquippedWeaponSlot[];
+#include "BattleCmd_ActiveStats_externs.h"
 
 int Inv_IsActiveListOverrideSelected(void);
 void Inv_SelectActiveList(int useOverride);

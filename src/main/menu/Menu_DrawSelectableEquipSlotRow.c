@@ -1,6 +1,6 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
-extern int D_8009CEFC;
+#include "Menu_DrawSelectableEquipSlotRow_externs.h"
 
 int Inv_TestSelectionBit(int slot);
 void Draw_SetTextDimmed(int dimmed);

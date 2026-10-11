@@ -3,11 +3,7 @@
 
 #include "pe1/battle.h"
 
-extern unsigned char D_8009D1D4;
-extern unsigned char D_8009CE3C;
-extern unsigned short D_800BE834[];
-extern BattleGameStateWindow D_8009D1A0_r __asm__("D_8009D1A0");
-extern BattleGameStateWindow D_8009D1A0_w __asm__("D_8009D1A0");
+#include "Battle_FlushScriptSounds_externs.h"
 
 #define D_8009D1A0_R (D_8009D1A0_r.flags)
 #define D_8009D1A0_W (D_8009D1A0_w.flags)

@@ -2,9 +2,7 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 #include "pe1/battle.h"
-extern BattleInitSlot D_800BE830[45];
-extern Combatant *D_8009D278;
-extern s8 D_8009D2B0;
+#include "Battle_AdvanceTurnSlot_externs.h"
 
 /* COMMON supplies small-data metadata to MASPSX. */
 u8 D_8009CE3C, D_8009CE44, D_8009CE60;

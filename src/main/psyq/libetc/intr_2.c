@@ -7,11 +7,7 @@
 #include "pe1/psyq_api_internal.h"
 #include "pe1/psyq_bios.h"
 
-extern u16 D_800945E4[];
-extern u16 D_80094620[];
-extern u16 *D_80095670;
-extern volatile u16 *D_80095674;
-extern u32 *D_80095678;
+#include "intr_2_externs.h"
 
 void Sys_ClearWordBuf(void *dst, int count);
 int setjmp(void *env);

@@ -17,8 +17,7 @@
 
 int g_MenuEquipSwapSource;
 int g_MenuSwapReturnPending;
-extern s32 D_8009CF9C;
-extern s16 g_AyaInventoryItems[];
+#include "Menu_EquipSwap_externs.h"
 
 s32 Menu_HandleAyaInventorySelectionInput(s32 arg0, s32 arg1)
 {

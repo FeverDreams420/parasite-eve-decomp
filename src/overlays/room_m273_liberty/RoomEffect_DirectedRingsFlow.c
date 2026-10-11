@@ -69,10 +69,7 @@ int func_8019665C(int mode, RoomM273Drop *drop) {
 typedef GteShortVector Vector;
 typedef GteMatrix Matrix;
 typedef FieldActor Player;
-extern unsigned char D_8019AF69,D_8019AF68;
-extern unsigned short D_8019AF60;
-extern Vector D_8019AD60;
-extern int func_8005186C(int);
+#include "RoomEffect_DirectedRingsFlow_externs.h"
 #include "pe1/gte_types.h"
 
 int func_801969D8(int mode) {

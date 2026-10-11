@@ -24,13 +24,7 @@
 #error "ROOMEFFECT_GLINT_RIBBON_COLOR2 must name the last ribbon colour"
 #endif
 
-extern s16 ROOMEFFECT_GLINT_RIBBON_JOINTS[3];
-extern GteShortVector ROOMEFFECT_GLINT_RIBBON_OFFSET0;
-extern GteShortVector ROOMEFFECT_GLINT_RIBBON_OFFSET1;
-extern RenderColor ROOMEFFECT_GLINT_RIBBON_COLOR0;
-extern RenderColor ROOMEFFECT_GLINT_RIBBON_COLOR1;
-extern RenderColor ROOMEFFECT_GLINT_RIBBON_COLOR2;
-extern int ROOMEFFECT_GLINT_RIBBON_CALLBACK(int mode, RoomDampedSpark *spark);
+#include "RoomEffect_GlintRibbonController_externs.h"
 
 /* Strings two light ribbons across three actor joints.  For twelve frames
  * the last joint and its floor shadow each shed a glint spark per frame,

@@ -197,7 +197,7 @@ typedef struct RoomTwelveEffectDrawStack {
 void ApplyMatrix(RoomSpriteMatrix *matrix, void *position, int *translation);
 int func_800C61A8(GteShortVector *point, GteMatrix *matrix);
 
-extern struct BattleEntity *D_8009D254;
+#include "RoomLib_TwelveElementEffect_externs.h"
 
 /* Retail marks this function handwritten; only its COP2 windows remain ASM. */
 void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,

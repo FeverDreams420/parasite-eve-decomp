@@ -11,12 +11,9 @@ typedef struct { unsigned char frame,slot,value,pad; } Event;
 typedef struct { Event entries[8]; } Events;
 typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
-extern Events D_8018F1CC;
-extern unsigned char D_8019A859;
-extern int D_8019A858;
-extern short D_8019A85C,D_8019A85E,D_8019A86A,D_8019A86C;
+#include "RoomEffect_AnimationEventController_externs.h"
 #include "pe1/gte_sine_table.h"
-extern short D_800966EE[];
+#include "RoomEffect_AnimationEventController_externs_1.h"
 
 int func_80197DA8(int event,short *cursor) {
     Events events=D_8018F1CC;

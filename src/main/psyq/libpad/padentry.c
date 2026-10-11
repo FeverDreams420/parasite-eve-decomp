@@ -4,7 +4,7 @@
 
 int _padChkVsync(void);
 
-extern void _padStartCom(void);
+#include "padentry_externs.h"
 
 void _padStopCom(void);
 

@@ -13,7 +13,7 @@ typedef struct SceneParticleOwner {
     u8 drawMode;
 } SceneParticleOwner;
 
-extern s16 D_801994B2;
+#include "Scene_DrawParticleCluster_externs.h"
 void func_800C2FF0(int, int);
 void func_800C3098(int);
 

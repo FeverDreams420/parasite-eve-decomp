@@ -9,7 +9,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/psyq_libc.h"
 
-extern int D_800E0B38;
+#include "FieldEng_GlowEffectC_externs.h"
 
 int func_800C9A70(char *object) {
     int half;
@@ -49,25 +49,19 @@ int func_800C9A70(char *object) {
 
     return 0;
 }
-extern void FieldEng_Spawn6(int a, int b, int c, int d, int e, int f);
+#include "FieldEng_GlowEffectC_externs_1.h"
 
 int func_800C9B3C(int a, int b, int c, int d, int e, int f) {
     FieldEng_Spawn6(a, b, c, d, e, f);
     return 0;
 }
-extern char D_800E0A94[];
-extern void FieldEng_Register(void *o, void *table);
+#include "FieldEng_GlowEffectC_externs_2.h"
 
 int func_800C9B68(void *o) {
     FieldEng_Register(o, D_800E0A94);
     return 0;
 }
-extern char D_800E0AA4[];
-extern char D_800E0A84[];
-extern char D_800E0AB4[];
-extern int func_800C251C(void *obj, void *table);
-extern int func_800C2758(void *obj, void *table, void *extra);
-extern int func_800C9C00(char *obj);
+#include "FieldEng_GlowEffectC_externs_3.h"
 
 int func_800C9B90(void *obj) {
     int first;
@@ -93,7 +87,7 @@ int func_800C9C18(void) {
     return 0;
 }
 
-extern FieldActor *D_800E27A4;
+#include "FieldEng_GlowEffectC_externs_4.h"
 
 int func_800C9C20(FieldAnimObjectPrefix *obj) {
     FieldActor *data = obj->actor;
@@ -125,8 +119,7 @@ int func_800C9C8C(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
     anim->age = 0;
 }
 
-extern struct BattleEntity *D_8009D254;
-extern char D_800E0AF8[];
+#include "FieldEng_GlowEffectC_externs_5.h"
 
 int func_800C9D9C(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
     FieldAnimMatrixGlow *anim_s0 = anim;
@@ -151,7 +144,7 @@ int func_800C9D9C(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
 void func_800C9EA0(void) {
 }
 
-extern s16 D_800E0AD8[];
+#include "FieldEng_GlowEffectC_externs_6.h"
 
 int func_800C9EA8(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
     GteMatrix matrix;

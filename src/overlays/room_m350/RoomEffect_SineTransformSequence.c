@@ -7,7 +7,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/psyq_gpu.h"
 
-extern RenderColor D_8019A738, D_8019A734;
+#include "RoomEffect_SineTransformSequence_externs.h"
 
 int func_801996BC(int event, RoomM350SineParticle *object)
 {
@@ -41,9 +41,7 @@ int func_801996BC(int event, RoomM350SineParticle *object)
 }
 
 typedef struct { short count, delay; } EmissionState;
-extern unsigned char D_8019A8C4;
-extern int Inv_ScrambleGrid(void);
-extern int rand(void);
+#include "RoomEffect_SineTransformSequence_externs_1.h"
 
 int func_8019988C(int event, EmissionState *state)
 {

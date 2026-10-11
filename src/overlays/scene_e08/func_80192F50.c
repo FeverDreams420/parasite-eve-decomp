@@ -2,7 +2,7 @@
 #include "common.h"
 #include "pe1/room_fx.h"
 
-extern int func_80071A54(void);
+#include "func_80192F50_externs.h"
 
 void func_80192F50(void *unused, RoomFxControl *condition_arg, SceneE08OrbitParticles *effect) {
     /* The byte cursor and loop-limit base remain pinned for matching. */

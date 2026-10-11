@@ -5,7 +5,7 @@
 /* Rising ember sparks: the drifting ember callback and the fan-sweep
  * spark template instance. */
 
-extern char D_800E17E0;
+#include "FieldEng_FanSweepSparks_externs.h"
 
 int func_800D70C0(int mode, s16 *state) {
     s16 sp10[3];

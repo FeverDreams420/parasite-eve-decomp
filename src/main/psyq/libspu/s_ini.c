@@ -46,7 +46,7 @@ void _SpuInit(int mode) {
     D_8009B3E8 = 0;
 }
 
-extern s32 EnableEvent(s32 event);
+#include "s_ini_externs.h"
 
 void SpuStart(void) {
     if (_spu_isCalled == 0) {

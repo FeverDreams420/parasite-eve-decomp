@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_041D596E855C
+#define PE1_EXT_041D596E855C
+extern CursorPair D_800A2270[];
+#endif /* PE1_EXT_041D596E855C */

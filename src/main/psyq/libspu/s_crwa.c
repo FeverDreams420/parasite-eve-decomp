@@ -6,9 +6,7 @@
 #include "common.h"
 #include "pe1/psyq_spu_internal.h"
 
-extern s32 D_8009B418;
-extern s32 D_8009B384;
-extern s32 D_8009C4C0[];
+#include "s_crwa_externs.h"
 int _spu_t(int, ...);
 int WaitEvent(int);
 

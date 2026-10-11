@@ -6,15 +6,13 @@
 #include "pe1/player_entity.h"
 
 
-extern unsigned short g_AyaStatActiveTimeRate;
+#include "Menu_SoundsAndBattleQueries_externs.h"
 
 int Battle_IsActive(void);
 
 int Pad_IsMenuConfirmAvailable(void);
 
-extern unsigned int g_GameStateFlags;
 
-extern unsigned char D_8009169D;
 
 int Battle_GetEnemyEscapeFlag(void)
 {

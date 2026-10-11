@@ -10,11 +10,7 @@
 #include "pe1/psyq_libc.h"
 #include "pe1/gte_types.h"
 
-extern FieldActor *g_PlayerEntity;
-extern u8 D_8019AE9A;
-extern RoomM273PulseSeed D_8019AC20[2];
-extern int func_800CE688(void *);
-extern int Inv_ScrambleGrid(void);
+#include "RoomEffect_ThresholdPairBurst_externs.h"
 
 /* Threshold model triple callbacks and controller. */
 typedef struct { short x,y,z,phase,scaleXZ,scaleY; unsigned short parameter12,unknown14; } ThresholdTripleEffect;
@@ -24,15 +20,9 @@ typedef struct { void *asset,*pool; } AssetState;
 /* Ring band record the pair callback draws: anchor, scale and intensity. */
 typedef struct { GteShortVector position; short scale; short pad0A; short intensity; } ThresholdPairBand;
 
-extern short D_8019AC18[];
-extern int D_8019AC0C[];
-extern AssetState D_8019AE8C;
-extern void *D_8019AE90;
-extern unsigned char D_8019AE9A;
-extern void GsSetOrign(int,int);
+#include "RoomEffect_ThresholdPairBurst_externs_1.h"
 void *Asset_FindTable08ByU32Key(void *base, s32 key);
 
-extern int func_80193CB8(),func_80193B5C();
 
 int func_80193B5C(int mode, ThresholdPairBand **arg1) {
     short params[4];
@@ -254,7 +244,7 @@ int func_80194284(int mode) {
     return 0;
 }
 
-extern short D_8019AE60, D_8019AE64;
+#include "RoomEffect_ThresholdPairBurst_externs_2.h"
 
 typedef GteShortVector Vector;
 
@@ -382,8 +372,7 @@ int func_801947CC(int mode, RoomM273PaletteInput *input)
     return 0;
 }
 
-extern int func_80199F84();
-extern int func_800CE688(void *);
+#include "RoomEffect_ThresholdPairBurst_externs_3.h"
 
 int func_801949EC(int mode) {
     switch (mode) {

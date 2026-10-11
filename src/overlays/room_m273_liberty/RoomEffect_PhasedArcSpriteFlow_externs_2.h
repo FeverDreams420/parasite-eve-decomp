@@ -1,0 +1,7 @@
+#ifndef PE1_EXT_28C411744D1E
+#define PE1_EXT_28C411744D1E
+extern u8 D_8019AF6B;
+extern volatile u16 D_8019AEFE;
+extern volatile u16 D_8019AF00;
+extern s32 func_8019A720(s32 mode, RoomM273ArcCallbackState *state);
+#endif /* PE1_EXT_28C411744D1E */

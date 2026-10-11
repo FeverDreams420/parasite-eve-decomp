@@ -8,9 +8,9 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/psyq_gpu.h"
 
-extern unsigned short D_800E1208;
+#include "RoomEffect_ConfiguredPulseCallback_externs.h"
 #include "pe1/gte_sine_table.h"
-extern int D_8019A59C[];
+#include "RoomEffect_ConfiguredPulseCallback_externs_1.h"
 /* Signed high-half view avoids LHU followed by explicit sign extension. */
 
 int func_80196C64(int event, void *object)

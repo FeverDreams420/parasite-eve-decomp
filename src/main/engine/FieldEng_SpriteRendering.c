@@ -21,7 +21,7 @@
  * draw state and scratch pointers private to this range (main_tu_evidence
  * G1390). */
 
-extern char D_800C2110[];
+#include "FieldEng_SpriteRendering_externs.h"
 
 void func_800C2EAC(u8 mode) {
     if (mode == 0) {

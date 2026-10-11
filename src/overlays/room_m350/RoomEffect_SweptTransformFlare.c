@@ -8,10 +8,9 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/psyq_gpu.h"
 
-extern GteMatrix D_8019A870;
-extern short D_8019A890[];
+#include "RoomEffect_SweptTransformFlare_externs.h"
 #include "pe1/gte_sine_table.h"
-extern int D_8019A690[];
+#include "RoomEffect_SweptTransformFlare_externs_1.h"
 
 int func_801981D0(int event, RoomM350FlareParticle *particle)
 {
@@ -63,13 +62,8 @@ int func_801981D0(int event, RoomM350FlareParticle *particle)
 
 /* Spawns flares and tests the quad swept by the actor's two side endpoints. */
 
-extern unsigned char D_8019A8C0;
+#include "RoomEffect_SweptTransformFlare_externs_2.h"
 /* The endpoint records' X words, read whole through GteShortVector views. */
-extern volatile short D_8019A898,D_8019A8A0;
-extern GteShortVector D_8019A8A8,D_8019A8B0;
-extern volatile short D_8019A89C,D_8019A89E,D_8019A8A4;
-extern short D_8019A8AE;
-extern int Inv_ScrambleGrid(void);
 
 int func_80198400(int event) {
     GteShortVector offset,vertices[4];

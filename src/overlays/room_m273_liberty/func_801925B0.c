@@ -1,6 +1,6 @@
 #include "../room_lib/room_lib.h"
 
-extern unsigned char D_8019A8E0[];
+#include "func_801925B0_externs.h"
 
 int func_801925B0(void *obj, int mode, int event, int arg3, int index) {
     switch (event) {

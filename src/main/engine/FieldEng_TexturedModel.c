@@ -8,7 +8,7 @@
  * semi-transparency and depth state the draw reads, the colour-table
  * save/restore and fades, and the draw itself. */
 
-extern u32 D_800E2370[];
+#include "FieldEng_TexturedModel_externs.h"
 
 #define MODEL_VERTEX(model, offset) ((FieldModelVertex *)&(model)->bytes[offset])
 #define MODEL_COLOR(model, offset) (((FieldModelColor *)&(model)->bytes[offset])->word)

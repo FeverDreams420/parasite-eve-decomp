@@ -10,9 +10,7 @@ typedef RenderMatrix Matrix;
 typedef FieldActorState Owner;
 typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
-extern short D_8019A7FC;
-extern short D_8019A7FE,D_8019A800,D_8019A802;
-extern unsigned char D_8019A804,D_8019A805,D_8019A806;
+#include "RoomEffect_SequenceController_externs.h"
 #include "pe1/gte_sine_table.h"
 int func_801958DC(int event) {
     Instance *instance=(Instance *)ANIM_OWNER_AS(Actor)->instance;

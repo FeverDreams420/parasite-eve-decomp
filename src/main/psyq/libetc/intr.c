@@ -5,8 +5,7 @@
  * the interrupt manager in intr_2.c only with GCC 2.8.1 and
  * -mno-split-addresses. */
 #include "pe1/psyq_api_internal.h"
-extern unsigned short D_800945E6;
-extern unsigned short *g_IntrMaskRegPtr;
+#include "intr_externs.h"
 
 int ResetCallback(void) {
     return g_EventCallbackTable->reset();

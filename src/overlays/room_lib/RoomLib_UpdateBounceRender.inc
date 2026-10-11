@@ -21,7 +21,7 @@
 #define ROOMLIB_BOUNCE_FRAME_BASE 0xC8
 #endif
 
-extern const RoomLineBurstColor ROOMLIB_BOUNCE_RENDER_BLOB;
+#include "RoomLib_UpdateBounceRender_externs.h"
 
 int ROOMLIB_UPDATE_BOUNCE_RENDER_NAME(int mode, RoomLineBurstParticle *fx) {
     RoomLineBurstColor blob;

@@ -11,7 +11,7 @@ typedef struct RoomM350Instance { char reserved[0x238]; Transform *transform; } 
 typedef RoomM350Actor Actor;
 
 #include "pe1/gte_sine_table.h"
-extern int D_8019A634[];
+#include "RoomEffect_RadialBurst_externs.h"
 
 int func_80197A04(int event, short *object)
 {
@@ -46,10 +46,8 @@ int func_80197A04(int event, short *object)
 
 typedef RoomM350TransformMatrix Matrix;
 typedef RoomM350Vector Vector;
-extern unsigned char D_8019A859;
+#include "RoomEffect_RadialBurst_externs_1.h"
 /* Retail writes both fields twice during configuration. */
-extern int func_80197A04(int, short *);
-extern int Inv_ScrambleGrid(void);
 
 int func_80197B98(int event)
 {

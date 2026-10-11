@@ -5,8 +5,7 @@
 #include "pe1/psyq_ds_queue.h"
 #include "pe1/cdrom.h"
 
-extern int func_8007FC44(void);
-extern void func_8008227C(void);
+#include "dsready_4_externs.h"
 
 int ER_retry(void) {
     int mode;

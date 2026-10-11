@@ -331,7 +331,7 @@ int func_800D4850(u8 *state) {
     return 0;
 }
 
-extern void *D_800B0E20;
+#include "FieldEng_TaskSpawn_externs.h"
 
 void func_800CECAC(void);
 void func_800CED3C(int arg0);

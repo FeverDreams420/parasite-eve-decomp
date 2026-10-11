@@ -1,0 +1,5 @@
+#ifndef PE1_EXT_DDA80C812304
+#define PE1_EXT_DDA80C812304
+extern u8 D_800922D4[];
+extern s32 D_8009CFE0;
+#endif /* PE1_EXT_DDA80C812304 */

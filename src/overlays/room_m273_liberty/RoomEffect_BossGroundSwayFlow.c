@@ -12,8 +12,7 @@ typedef RoomM273PairPoolRecord Record;
 
 /* The emitter owns the eight-byte pool whose entries this callback renders. */
 
-extern short D_800966EE[];
-extern unsigned char D_8019AE18[], D_8019AB70[];
+#include "RoomEffect_BossGroundSwayFlow_externs.h"
 
 int func_80198B1C(int mode,Vector *input) {
     Vector position;
@@ -197,8 +196,7 @@ int func_80198E94(int mode, GteShortVector *position) {
 /* Partial storage views; the fourth halfword carries the emitter flag. */
 typedef RoomM273PairPoolRecord Entry;
 typedef struct { Entry entries[2]; unsigned char unknown[14]; unsigned char stopped; } EmitterState;
-extern void *D_8019AF6C;
-extern EmitterState D_8019AF84;
+#include "RoomEffect_BossGroundSwayFlow_externs_1.h"
 
 int func_801993F0(int mode) {
     switch (mode) {

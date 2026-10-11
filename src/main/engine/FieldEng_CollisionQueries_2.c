@@ -12,7 +12,7 @@ void OuterProduct12(int *a, int *b, int *out);
 void VectorNormalS(int *in, void *out);
 int FieldEng_GetStatus(void *obj);
 
-extern int D_800C213C[];
+#include "FieldEng_CollisionQueries_2_externs.h"
 
 void func_800C65E4(s16 *from, s16 *to, GteMatrix *out) {
     int crossA[4];

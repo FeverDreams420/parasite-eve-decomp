@@ -1,10 +1,7 @@
 /* ASSEMBLER: GNU */
 /* PSY-Q LIBPAD PADIF, part 3 of 3: LIBPAD_PADIF_text_26C. */
 #include "pe1/psyq_pad_main.h"
-extern void (*D_8009B730)(CardObj *);
-extern void (*D_8009B744)(CardObj *), (*D_8009B748)(CardObj *);
-extern int D_8009B770, D_8009B764, D_8009B79C, D_8009B77C[];
-extern volatile u8 *D_8009B7A0;
+#include "padif_3_externs.h"
 int MemCard_WriteByte(CardObj *, int);
 void MemCard_WaitStatusBit2(void);
 int LIBPAD_PADIF_text_26C(CardObj *inPort) {

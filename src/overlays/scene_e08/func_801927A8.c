@@ -5,7 +5,7 @@
 #include "pe1/field_sprite_state.h"
 #include "pe1/psyq_gpu.h"
 
-extern u8 D_80198820[];
+#include "func_801927A8_externs.h"
 
 void func_800C3098(int);
 

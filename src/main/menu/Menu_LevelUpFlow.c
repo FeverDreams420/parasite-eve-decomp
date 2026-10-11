@@ -29,20 +29,10 @@ void Draw_PrintNumberWidth2(s32 value);
 void Draw_PrintNumberWidth5(s32 value);
 void Draw_PrintNumberWidth6(int value);
 
-extern int g_MenuLevelDisplayValue, g_MenuLevelDisplayTarget;
-extern int g_MenuHpMaxDisplayValue, g_MenuHpMaxDisplayTarget;
-extern int g_BonusPointDisplayValue, g_MenuBonusPointDisplayTarget;
-extern int g_BonusPointBarAnimStep, g_BonusPointBarAnimProgress;
-extern int g_MenuBonusPointBarAnimActive;
-extern u8 D_800922F4[];
-extern s32 g_AyaSaveTotalExp[];
+#include "Menu_LevelUpFlow_externs.h"
 #define g_AyaSaveTotalExp (g_AyaSaveTotalExp[0])
 /* Distinct views preserve the original loads and store around the bonus update. */
-extern u16 D1E_read[16] __asm__("D_800C0E1E");
-extern u16 D1E_write[16] __asm__("D_800C0E1E");
-extern u16 D1E_bonus[16] __asm__("D_800C0E1E");
 /* This loop sign-extends the stat allocations (lh in the original). */
-extern s16 D_800C0E28_signed[7] __asm__("D_800C0E28");
 
 
 void Aya_SetTotalExp(s32 exp_delta, s32 pe_bonus_delta, void *wayne_items) {
@@ -270,7 +260,7 @@ void Menu_InitBonusPointAllocState(int gained_points) {
 void Menu_DrawBonusPointAnimFrame(void);
 s32 Menu_StepParasiteScreen(MenuWidgetNode *node, s32 flags);
 void Menu_DrawStatAllocationList();
-extern u8 D_80092314[];
+#include "Menu_LevelUpFlow_externs_1.h"
 
 void Menu_CreateLevelUpResultPanel(void) {
     MenuWidgetNode *root;
@@ -292,8 +282,7 @@ void Menu_CreateLevelUpResultPanel(void) {
 }
 
 
-extern int g_MenuStatBarWidths[8];
-extern int g_MenuStatBarSettleTimers[8];
+#include "Menu_LevelUpFlow_externs_2.h"
 
 void Menu_InitStateTables(void) {
     int i;
@@ -304,12 +293,9 @@ void Menu_InitStateTables(void) {
     }
 }
 
-extern s32 D_8009CF7C;
-extern u16 g_AyaHpMax[];
+#include "Menu_LevelUpFlow_externs_3.h"
 #define g_AyaHpMax (g_AyaHpMax[0])
-extern s32 g_AyaBonusPoints[];
 #define g_AyaBonusPoints (g_AyaBonusPoints[0])
-extern u8 g_AyaSaveLevel[];
 #define g_AyaSaveLevel (g_AyaSaveLevel[0])
 
 void Menu_DrawBonusPointAnimFrame(void) {

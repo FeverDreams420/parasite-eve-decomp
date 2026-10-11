@@ -12,11 +12,9 @@ typedef struct RoomM350Instance { char reserved[22]; unsigned short frame; char 
 typedef RoomM350Actor Actor;
 
 typedef struct { unsigned char index, alternate; } Entry;
-extern unsigned char D_8019A804;
-extern Entry D_8019A4D4[][2];
+#include "RoomEffect_TableTransform_externs.h"
 #include "pe1/gte_sine_table.h"
-extern unsigned char D_8019A4EC[];
-extern RenderColor D_8019A3D0;
+#include "RoomEffect_TableTransform_externs_1.h"
 
 int func_80195564(int event, short *position) {
     if (event == 1) {

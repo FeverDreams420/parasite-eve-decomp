@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_38DF8168A55F
+#define PE1_EXT_38DF8168A55F
+extern int D_8019A634[];
+#endif /* PE1_EXT_38DF8168A55F */

@@ -5,8 +5,7 @@ void EnablePAD(void);
 #include "pe1/pad_internal.h"
 #include "pe1/psyq_bios.h"
 
-extern void DisablePAD(void);
-extern void StopPAD2(void);
+#include "pad_4_externs.h"
 int RemovePatchPad(void);
 
 long StartPAD(void) {

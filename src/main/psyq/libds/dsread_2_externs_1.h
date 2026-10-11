@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_7D154BA06517
+#define PE1_EXT_7D154BA06517
+extern unsigned int D_8009B6B8;
+#endif /* PE1_EXT_7D154BA06517 */

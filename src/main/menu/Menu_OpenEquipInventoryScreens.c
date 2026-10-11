@@ -17,23 +17,11 @@
  * inventory swap screen, the equip-mode getter and the equip list container
  * draw. Contiguous at 0x8004E704 (main_tu_evidence G0462). */
 
-extern int g_MenuEquipMode;
-extern s32 g_MenuItemContextFlag;
-extern s32 g_MenuBattleStatusOverlayActive;
-extern s32 g_MenuSelectionLocked;
-extern s32 g_MenuActionSubmenuOpen;
-extern s32 g_InvSelectedItemIndex;
-extern s32 g_InvSwapTargetIndex;
-extern s32 g_MenuEquipSwapSource;
-extern s32 D_8009CF9C;
-extern s32 D_8009D008;
-extern short D_800C0E46[];
+#include "Menu_OpenEquipInventoryScreens_externs.h"
 void Inv_ResetActiveList(void);
 void Menu_CreateBonusPointAllocationView(void);
 void Menu_CreateContextHelpPanel(void);
 void Inv_RebuildSelectableMask(void);
-extern int Menu_StepItemSelectScreen(MenuWidgetNode *node, unsigned int flags);
-extern void Menu_DrawItemList(void *node);
 
 void Menu_OpenEquipScreen(int mode)
 {

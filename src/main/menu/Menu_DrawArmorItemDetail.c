@@ -3,11 +3,7 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-extern s16 *D_8009D07C;
-extern unsigned int *D_8009D058;
-extern u8 g_EquipItemDataTable[];
-extern u8 g_KeyItemDataTable[];
-extern u8 D_800C20A4[];
+#include "Menu_DrawArmorItemDetail_externs.h"
 
 void Draw_SetTextDimmed(int value);
 void *Str_LookupTable8(unsigned int index);

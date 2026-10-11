@@ -3,11 +3,7 @@
 #include "pe1/scene_grab_head.h"
 #include "pe1/field_actor.h"
 #include "room_m273.h"
-extern char D_8019A8B8;
-extern int D_8019A8CC;
-extern int D_8019A8D0;
-extern int D_8019A8D4;
-extern char D_8019A8D8;
+#include "func_8019250C_externs.h"
 
 
 int func_8019250C(RoomSelectionState *obj) {

@@ -7,14 +7,10 @@
 
 #define NULL ((void *)0)
 #include "m2c_macros.h"
-extern s32 g_SaveSelectedSlot;
-extern M2C_UNK Menu_DrawSaveSlotPortLabel[];
+#include "Menu_SaveSlotListView_externs.h"
 #define Menu_DrawSaveSlotPortLabel (Menu_DrawSaveSlotPortLabel[0])
-extern M2C_UNK Menu_StepSaveSelect[];
 #define Menu_StepSaveSelect (Menu_StepSaveSelect[0])
-extern M2C_UNK Menu_IsMemCardSlotCompatible[];
 #define Menu_IsMemCardSlotCompatible (Menu_IsMemCardSlotCompatible[0])
-extern M2C_UNK Menu_DrawSaveSlotList[];
 #define Menu_DrawSaveSlotList (Menu_DrawSaveSlotList[0])
 
 s32 Menu_CreateSaveSlotListView(s32 arg0, M2C_UNK arg1) {

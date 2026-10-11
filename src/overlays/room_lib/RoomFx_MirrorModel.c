@@ -207,8 +207,7 @@ void RoomFx_ModelUpdate(RoomFxModelGeom *geom) {
 }
 
 /* Projected screen XY and view depth of the transformed model vertices. */
-extern u32 D_800B1644[];
-extern s32 D_800A636C[];
+#include "RoomFx_MirrorModel_externs.h"
 
 /* PSY-Q libgpu style ordering-table link through the 24-bit tag address. */
 #define ROOMFX_SETADDR(p, a) (((RenderGpuTag *)(p))->address = (u32)(a))

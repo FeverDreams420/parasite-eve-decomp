@@ -3,7 +3,7 @@
 #include "room_m350_data.h"
 #include "pe1/gte_sine_table.h"
 typedef struct { signed int scale:16; signed int shade:16; } EffectEntry;
-extern int D_8019A628[];
+#include "RoomEffect_Threshold16RotationCallback_externs.h"
 
 int func_8019A21C(int event, void *context) {
     short rotation[4];

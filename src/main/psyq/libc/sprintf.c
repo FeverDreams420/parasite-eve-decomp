@@ -39,9 +39,7 @@ FormatSpec D_80094528 = {{0}, 0, 0};
 const u8 D_8001161C[] = "0123456789ABCDEF";
 const u8 D_80011630[] = "0123456789abcdef";
 
-extern s32 strlen(u8 *);
-extern u8 *memchr(u8 *, s32, s32);
-extern void *memmove(void *, const void *, int);
+#include "sprintf_externs.h"
 
 s32 sprintf(char *dest, s8 *format, ...)
 {

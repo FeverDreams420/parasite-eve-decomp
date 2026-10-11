@@ -18,8 +18,7 @@ void Menu_DrawBlendColorChannelListUnk(MenuWidgetNode *arg0);
 s32 Menu_StepColorSelect(MenuWidgetNode *arg0, s32 arg1);
 void Menu_DrawBlendColorChannelList(s32 arg0);
 void Menu_DrawBlendColorOptionList(s32 arg0);
-extern u8 D_800922D4[];
-extern s32 D_8009CFE0;
+#include "Menu_VisualSettingsFlow_externs.h"
 
 void Menu_OpenBlendColorScreen(MenuWidgetNode *arg0) {
     MenuWidgetNode *parent;
@@ -110,8 +109,7 @@ void Menu_DrawBlendColorChannelListUnk(MenuWidgetNode *arg0) {
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
 int Draw_GetBlendColor(void);
-extern s32 D_8009CFE0;
-extern s32 g_SavedDrawBlendColor[];
+#include "Menu_VisualSettingsFlow_externs_1.h"
 #define g_SavedDrawBlendColor (g_SavedDrawBlendColor[0])
 
 s32 Menu_StepColorSelect(MenuWidgetNode *arg0, s32 arg1) {
@@ -230,7 +228,7 @@ void Menu_DrawScreenAdjustPanel(void) {
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-extern int D_8009CFE4;
+#include "Menu_VisualSettingsFlow_externs_2.h"
 
 void Draw_SetBaseOffsetPosition(int x, int y);
 int Draw_GetBaseY(void);

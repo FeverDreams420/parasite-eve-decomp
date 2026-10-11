@@ -9,7 +9,7 @@
 #include "pe1/asset_find.h"
 
 #include "pe1/gte_sine_table.h"
-extern int D_8019A56C[];
+#include "RoomEffect_ActorOffsetPaletteSequence_externs.h"
 
 int func_80195B64(int event, GteShortVector *object)
 {
@@ -45,8 +45,7 @@ int func_80195B64(int event, GteShortVector *object)
 /* Event state: rotation, emission count, brightness, fade phase and size. */
 typedef struct { GteShortVector rotation; short count,brightness,fade,size; } State;
 
-extern char D_8019A570[];
-extern int Inv_ScrambleGrid(void);
+#include "RoomEffect_ActorOffsetPaletteSequence_externs_1.h"
 
 int func_80195CE0(int event,State *inputState)
 {

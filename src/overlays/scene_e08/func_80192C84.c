@@ -4,7 +4,7 @@ typedef struct {
     char bytes[4];
 } Ovl178_FourBytes;
 
-extern Ovl178_FourBytes D_8018F04C;
+#include "func_80192C84_externs.h"
 
 void func_80192C84(void *arg0, void *arg1, SceneE08ScreenFade *fade) {
     Ovl178_FourBytes local;

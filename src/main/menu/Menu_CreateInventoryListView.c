@@ -7,8 +7,7 @@
 
 #define NULL ((void *)0)
 
-extern s32 g_InvItemUsableFlag;
-extern s32 g_MenuLayoutLocked;
+#include "Menu_CreateInventoryListView_externs.h"
 int Menu_InventoryPageInputHandler(MenuWidgetNode *root, u32 flags);
 
 void Menu_CreateInventoryListView(MenuWidgetNode *parent) {

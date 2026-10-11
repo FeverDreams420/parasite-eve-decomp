@@ -18,7 +18,7 @@ typedef struct PadWork {
     s16 unk_a;
 } PadWork;
 
-extern PadWork *D_8009B4B0;
+#include "pad_6_externs.h"
 
 int func_8007E0F8(void) {
     volatile int delay[4];
@@ -36,7 +36,7 @@ int func_8007E0F8(void) {
     return 0;
 }
 
-extern int *D_8009B4B4;
+#include "pad_6_externs_1.h"
 int func_8007E160(void)
 {
   register int *state;

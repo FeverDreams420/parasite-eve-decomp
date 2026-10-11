@@ -2,7 +2,7 @@
 /* Psy-Q LIBDS DSREAD2.OBJ: DsRead2, StCdInterrupt2. */
 #include "pe1/psyq_ds_queue.h"
 
-extern int g_DsStreamNoLocFlag;
+#include "dsread2_externs.h"
 
 void data_ready_callback(void);
 void StCdInterrupt2(u_char event, u_char *result);

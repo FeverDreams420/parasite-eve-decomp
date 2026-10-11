@@ -7,8 +7,7 @@
 /* COMMON supplies small-data metadata to MASPSX; the extern words stay
  * absolute. */
 unsigned char g_BattleActionQueueCount;
-extern unsigned int g_GameStateFlags;
-extern Combatant *g_ActiveActor;
+#include "Menu_BattleActiveQuery_externs.h"
 
 int Battle_IsActive(void) {
     if (g_BattleActionQueueCount != 0) {

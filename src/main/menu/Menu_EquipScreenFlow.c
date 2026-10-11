@@ -29,16 +29,7 @@ void MenuWidget_OffsetPosition(MenuWidgetNode *node, int dx, int dy);
 int Inv_CountTotal(void);
 void Draw_PrintNumberWidth2Unk(int value);
 
-extern s32 g_MenuActionSubmenuOpen;
-extern s32 g_InvSelectedItemIndex;
-extern s32 g_InvSwapTargetIndex;
-extern s32 g_MenuEquipSwapSource;
-extern s32 g_InvAmmoSpendActiveList;
-extern s32 g_InvSwapSourceList;
-extern int D_8009CF5C, D_8009CF90;
-extern s32 g_MenuItemActionContext;
-extern s32 g_MenuItemActionDisabled;
-extern s32 g_MenuEquipMode;
+#include "Menu_EquipScreenFlow_externs.h"
 
 void Menu_CreateEquipScreen(s32 arg0) {
     s32 entryIndex;

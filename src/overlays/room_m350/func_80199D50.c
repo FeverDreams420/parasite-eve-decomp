@@ -2,9 +2,8 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_anim_pool.h"
 #include "room_m350_shared.h"
-extern struct BattleEntity *D_8009D254;
+#include "func_80199D50_externs.h"
 
-extern void func_80196C64(void);
 
 s32 func_80199D50(s32 arg0) {
     char *obj;

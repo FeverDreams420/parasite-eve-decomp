@@ -3,11 +3,7 @@
 /* CC1_FLAGS: -mno-split-addresses */
 #include "pe1/psyq_gpu.h"
 
-extern short D_80095750;
-extern short D_80095752;
-extern unsigned int D_800A3300[];
-extern unsigned int D_800A3328[];
-extern unsigned int *g_GpuGp1Ptr;
+#include "Gpu_DmaVramTransfer_externs.h"
 unsigned int _param(int parameter);
 void Gpu_StartDmaTransfer(unsigned int packet);
 

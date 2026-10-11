@@ -23,7 +23,7 @@
 #include "pe1/room_floor.h"
 
 
-extern int func_80071A54(void);
+#include "RoomFx_MotionParticles_3_externs.h"
 
 
 void RoomFx_UpdateParticleMotion(int arg0, RoomStatePair *control, RoomMotionState *state) {
@@ -161,7 +161,7 @@ void RoomFx_InitParticleRenderPair(
     func_800C66C8(callOwner, 0x576, &firstMatrix);
 }
 
-extern void func_800C5A40(void *arg0);
+#include "RoomFx_MotionParticles_3_externs_1.h"
 
 void RoomFx_DrawParticleRenderPair(void *arg0, void *arg1, char *sys) {
     char *sysp = sys;
@@ -176,7 +176,7 @@ void RoomFx_DrawParticleRenderPair(void *arg0, void *arg1, char *sys) {
     func_800C5A40(sysp + 0x78);
 }
 
-extern int func_800C5EB0(void *obj, s16 *values, int *result);
+#include "RoomFx_MotionParticles_3_externs_2.h"
 
 void RoomFx_UpdateParticleRenderPair(void *arg0, char *state, char *sys) {
     char *statep = state;

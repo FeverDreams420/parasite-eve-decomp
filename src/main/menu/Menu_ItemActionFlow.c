@@ -59,10 +59,7 @@ static inline void Menu_CreateScreenModeSubmenu(void) {
 void Menu_OpenItemList(void);
 void Menu_StepInventoryRoot(s32 arg0, s32 arg1, s32 arg2);
 void Inv_BuildStorageDisplay(void);
-extern void Menu_DrawUsableItemActionList2(void);
-extern MenuWidgetNode *MenuWidget_FindByModeAndSelectedBase(int mode, int selectedBase);
-extern void Inv_InitWayneStorage(void);
-extern MenuWidgetNode *MenuWidget_GetChild(MenuWidgetNode *arg0, int arg1);
+#include "Menu_ItemActionFlow_externs.h"
 void Menu_DrawItemListHeader(void);
 int D_8009CFC0;
 

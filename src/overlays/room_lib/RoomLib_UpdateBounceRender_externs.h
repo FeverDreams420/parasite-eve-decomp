@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_EAECC7A75095
+#define PE1_EXT_EAECC7A75095
+extern const RoomLineBurstColor ROOMLIB_BOUNCE_RENDER_BLOB;
+#endif /* PE1_EXT_EAECC7A75095 */

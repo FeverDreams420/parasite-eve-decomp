@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_491DA2F76D1F
+#define PE1_EXT_491DA2F76D1F
+extern int D_8019A56C[];
+#endif /* PE1_EXT_491DA2F76D1F */

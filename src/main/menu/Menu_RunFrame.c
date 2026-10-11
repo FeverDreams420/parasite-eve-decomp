@@ -13,7 +13,7 @@ void MemCard_DelayedCallback(void);
 void Evt_DeferredExec(void);
 void Menu_ProcessSwapReturnIfPending(void);
 u32 g_MenuErrorSoundPending;
-extern s32 g_MenuActiveListTarget[];
+#include "Menu_RunFrame_externs.h"
 #define g_MenuActiveListTarget (g_MenuActiveListTarget[0])
 
 /* Queued by frontend commands, consumed by either frame entry point. */

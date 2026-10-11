@@ -22,8 +22,7 @@ typedef struct {
 
 
 
-extern char D_801995F8[];
-extern s32 D_8019956C, D_8019957C;
+#include "func_80192544_externs.h"
 
 void func_80192544(void *unused, RoomFxControl *time, SceneE08RingEffectState *record) {
     Matrix matrix;

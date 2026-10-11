@@ -7,7 +7,7 @@
  * objects own the storage; these retain the matching COMMON metadata. */
 u8 g_BattleFadeLevel;
 s8 D_8009CE6C;
-extern s8 g_BattleTargetCount[];
+#include "Battle_TargetFade_externs.h"
 
 void Battle_InitFadeVars(void) {
     if (g_BattleTargetCount[0] != 0) {

@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_1BA02FE1D97D
+#define PE1_EXT_1BA02FE1D97D
+extern int D_8009CFE4;
+#endif /* PE1_EXT_1BA02FE1D97D */

@@ -18,11 +18,7 @@ void Inv_ClearSelectionBitset(void);
 #define ITEM_FIELD(base, type, member) \
     (*(type)((char *)(base) + PE1_OFFSETOF(ItemDataRecord, member)))
 
-extern s32 g_InvAmmoSpendActiveList;
-extern s32 g_InvSelectedItemIndex;
-extern s32 g_InvSwapSourceList;
-extern s32 g_InvSwapTargetIndex;
-extern s32 g_MenuSpendArrowDirection;
+#include "Menu_AmmoSpendPanel_externs.h"
 
 int Menu_AmmoSpendInputHandler(s32 arg0, s32 arg1);
 void Menu_DrawAmmoSpendPanel(void);
@@ -73,9 +69,7 @@ void Menu_CreateAmmoSpendPanel(s32 parent) {
 #include "../../../tools/m2c/m2c_macros.h"
 s32 Spend_Ammo();
 s32 func_8005E120();
-extern s32 g_InvSelectedItemIndex;
-extern s32 g_InvSwapTargetIndex;
-extern s32 g_MenuSpendArrowDirection;
+#include "Menu_AmmoSpendPanel_externs_1.h"
 
 s32 Menu_AmmoSpendInputHandler(s32 arg0, s32 arg1) {
     if (arg1 & 0x1000) {

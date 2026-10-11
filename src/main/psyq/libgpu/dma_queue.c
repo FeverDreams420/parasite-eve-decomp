@@ -12,9 +12,7 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/gpu_dma_register_window.h"
 
-extern volatile u32 D_80095874, D_80095878;
-extern u32 D_8009587C;
-extern u32 *D_80095860;
+#include "dma_queue_externs.h"
 void Gpu_ResetDmaWaitTimer(void);
 int Gpu_DmaTimeoutCheck(void);
 int SetIntrMask(int);
@@ -86,9 +84,7 @@ queued:
     return (D_80095874 - D_80095878) & 63;
 }
 
-extern u32 *D_80095860;
-extern volatile u32 D_80095878;
-extern u32 D_80095880;
+#include "dma_queue_externs_1.h"
 int SetIntrMask(int);
 
 /* LIBGPU queue drain (_exeque); the existing project name is retained.
@@ -166,13 +162,7 @@ int Gpu_SetDisplayBuffer(void) {
     return (D_80095874 - D_80095878) & 63;
 }
 
-extern unsigned int *g_GpuGp1Ptr;
-extern volatile u32 g_GpuDmaQueueHead;
-extern volatile u32 g_GpuDmaQueueTail;
-extern u32 D_80095884;
-extern volatile u32 D_80095878;
-extern u32 *D_80095860;
-extern unsigned char D_800A3348[];
+#include "dma_queue_externs_2.h"
 
 int SetIntrMask(int mask);
 int Gpu_QueryStatus(int arg0);

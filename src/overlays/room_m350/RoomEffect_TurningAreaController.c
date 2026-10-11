@@ -23,16 +23,9 @@ typedef struct { void *asset; int yaw; short size,brightness,unknown,turn; unsig
 typedef FieldActorState Owner;
 typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
-extern FieldActor *g_PlayerEntity;
-extern unsigned char D_8019A831, D_8019A82F;
+#include "RoomEffect_TurningAreaController_externs.h"
 #include "pe1/gte_sine_table.h"
-extern short D_800966EE[];
-extern Matrix D_8019A808;
-extern short D_8019A80A,D_8019A80C,D_8019A80E,D_8019A810,D_8019A812,D_8019A814,D_8019A816,D_8019A818;
-extern int D_8019A81C,D_8019A820,D_8019A824;
-extern Vector D_8019A574[];
-extern char D_8019A594[];
-extern void GsSetOrign(int,int);
+#include "RoomEffect_TurningAreaController_externs_1.h"
 int func_801960C4(int event,State *state)
 {
     union { struct { Vector vertices[4]; int area; } collision; Matrix matrix; } local;

@@ -14,11 +14,7 @@
 
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
-extern s32 g_MenuActionSubmenuOpen;
-extern s32 g_InvSelectedItemIndex;
-extern s32 g_InvSwapTargetIndex;
-extern s32 g_MenuEquipSwapSource;
-extern s32 g_MenuInventoryViewMode;
+#include "Menu_InventoryWeaponModFlow_externs.h"
 
 void Menu_OpenInventoryOrSwapView(s32 arg0) {
     s32 mode;
@@ -86,11 +82,7 @@ clear_cursor:
 
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
-extern u8 D_800922B8[];
-extern u8 D_800922BC[];
-extern u8 D_800922C4[];
-extern u8 D_800922CC[];
-extern s32 g_MenuInventoryViewMode;
+#include "Menu_InventoryWeaponModFlow_externs_1.h"
 
 void Menu_DrawWeaponModSlots(s32 arg0) {
     s32 temp_s0;
@@ -147,7 +139,7 @@ void Menu_DrawEquipOptionsList(int arg0) {
 void Menu_OpenInventoryOrSwapView(s32 arg0);
 void Menu_CreateEquipInfoPanel(int arg0, unsigned int arg1);
 void Sort_ContainerItems(int arg0);
-extern s32 g_MenuInventoryViewMode;
+#include "Menu_InventoryWeaponModFlow_externs_2.h"
 void Menu_DrawEquipSortToggleList(int arg0);
 int Menu_EquipGridHandler(void *arg0, int arg1);
 
@@ -257,12 +249,8 @@ void Menu_CreateEquipInfoPanel(int arg0, unsigned int arg1) {
 
 void Menu_DrawEquipInfoOptionRow(int arg0);
 
-extern int g_InvItemUsableFlag;
-extern int g_MenuInventoryViewMode;
+#include "Menu_InventoryWeaponModFlow_externs_3.h"
 
-extern void Inv_SortInventoryByMode(int arg0, int arg1);
-extern void Sort_InventoryItems(int arg0, int arg1);
-extern void Menu_OpenInventoryOrSwapView(int arg0);
 
 void Menu_DrawEquipInfoOptionList(int arg0) {
     MenuWidget_DrawList((MenuWidgetNode *)arg0, Menu_DrawEquipInfoOptionRow);

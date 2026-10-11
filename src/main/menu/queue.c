@@ -120,7 +120,7 @@ typedef MenuWidgetNode MenuInputWidget;
 int D_8009D0F4;
 int D_8009D0F8;
 
-extern int g_FieldPadBits[];
+#include "queue_externs.h"
 #define g_FieldPadBits (g_FieldPadBits[0])
 
 int Draw_RemapStatusFlags(void)
@@ -442,30 +442,17 @@ u8 *D_8009D100;
 u8 *D_8009D104;
 u32 *D_8009D118;
 u32 *D_8009D11C;
-extern s32 g_DrawPresentImage;
-extern s8 D_800A2198[];
+#include "queue_externs_1.h"
 #define D_800A2198 (D_800A2198[0])
-extern s8 D_800A2199[];
 #define D_800A2199 (D_800A2199[0])
-extern s8 D_800A219A[];
 #define D_800A219A (D_800A219A[0])
-extern s8 D_800A219B[];
 #define D_800A219B (D_800A219B[0])
-extern u8 *g_DrawBufferOtBases[];
-extern s32 g_DrawBufferFrontBases[];
-extern s8 D_800A2210[];
 #define D_800A2210 (D_800A2210[0])
-extern s8 D_800A2211[];
 #define D_800A2211 (D_800A2211[0])
-extern s8 D_800A2212[];
 #define D_800A2212 (D_800A2212[0])
-extern s8 D_800A2213[];
 #define D_800A2213 (D_800A2213[0])
-extern s32 D_800A2268[];
 #define D_800A2268 (D_800A2268[0])
-extern s32 D_800A226C[];
 #define D_800A226C (D_800A226C[0])
-extern s32 g_TextCursorStackBottom[];
 
 void Draw_InitBuffers(void);
 
@@ -515,7 +502,7 @@ void Draw_InitBuffers(void) {
 
 int g_DrawPresentImage;
 
-extern int g_ActiveDrawSlot;
+#include "queue_externs_2.h"
 int g_DrawBufferIndex;
 
 void Draw_SetPresentImage(int arg0) {

@@ -2,8 +2,7 @@
 
 typedef unsigned long u_long;
 
-extern unsigned int *g_GpuGp0Ptr;
-extern unsigned int *g_GpuGp1Ptr;
+#include "Gpu_SubmitPacket_externs.h"
 
 
 int _param(int x) {

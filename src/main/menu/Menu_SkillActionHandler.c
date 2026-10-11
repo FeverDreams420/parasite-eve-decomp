@@ -15,11 +15,7 @@ void Menu_StepItemDetailPanel2(void);
 int Inv_GetPackedListItem(int index);
 
 int g_MenuBattleSelectedItem;
-extern int D_8009CFB4;
-extern int D_8009CF14;
-extern int D_8009CF10;
-extern int D_8009CFA0;
-extern unsigned char D_800A1980[];
+#include "Menu_SkillActionHandler_externs.h"
 
 void Battle_UseItem(int arg0);
 

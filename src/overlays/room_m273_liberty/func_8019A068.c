@@ -4,7 +4,7 @@
 #include "room_m273_effects.h"
 #include "pe1/field_anim_pool.h"
 
-extern u8 D_8019AE68;
+#include "func_8019A068_externs.h"
 
 void func_80194B5C(void);
 

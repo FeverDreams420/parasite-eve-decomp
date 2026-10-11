@@ -3,11 +3,7 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-extern struct { char _[16]; } D_8009D254_a __asm__("D_8009D254");
-extern struct { char _[16]; } D_8009D254_f __asm__("D_8009D254");
-extern struct { char _[16]; } D_8009D278_a __asm__("D_8009D278");
-extern struct { char _[16]; } D_8009D278_b __asm__("D_8009D278");
-extern struct { char _[16]; } D_8009D2FC_o __asm__("D_8009D2FC");
+#include "Battle_DispatchEntityEffect_externs.h"
 
 #define D_8009D254_A (*(BattleEntity **)&D_8009D254_a)
 #define D_8009D254_F (*(BattleEntity **)&D_8009D254_f)
@@ -15,7 +11,6 @@ extern struct { char _[16]; } D_8009D2FC_o __asm__("D_8009D2FC");
 #define D_8009D278_B (*(Combatant **)&D_8009D278_b)
 #define D_8009D2FC (*(int *)&D_8009D2FC_o)
 
-extern int D_8009D200;
 
 int BattleCmd_CommitAmmoAndUpdate(); /* no prototype: retail calls it with and without the action */
 int Scene_LoadRoomAssets(u32 command, void *owner);

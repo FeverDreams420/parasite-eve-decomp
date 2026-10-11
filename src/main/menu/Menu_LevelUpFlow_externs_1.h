@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_92B477DB47D0
+#define PE1_EXT_92B477DB47D0
+extern u8 D_80092314[];
+#endif /* PE1_EXT_92B477DB47D0 */

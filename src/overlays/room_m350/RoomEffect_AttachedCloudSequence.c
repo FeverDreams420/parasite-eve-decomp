@@ -7,7 +7,7 @@
 #include "pe1/field_anim_pool.h"
 
 #include "pe1/gte_sine_table.h"
-extern RenderColor D_8019A3D0;
+#include "RoomEffect_AttachedCloudSequence_externs.h"
 int func_80198860(int event,RoomM350CloudParticle *particle)
 {
     if(event==1) {
@@ -55,8 +55,7 @@ int func_80198860(int event,RoomM350CloudParticle *particle)
 }
 
 /* MASPSX_FLAGS: --expand-div */
-extern unsigned char D_8019A8BE;
-extern int Inv_ScrambleGrid(void);
+#include "RoomEffect_AttachedCloudSequence_externs_1.h"
 int func_80198ABC(int event)
 {
     GteMatrix matrix;

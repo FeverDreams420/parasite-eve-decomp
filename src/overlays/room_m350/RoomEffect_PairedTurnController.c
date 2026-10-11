@@ -12,8 +12,7 @@ typedef FieldActorState Owner;
 typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
 #include "pe1/gte_sine_table.h"
-extern short D_8019A77E[], D_8019A798;
-extern unsigned char D_8019A79A,D_8019A79C;
+#include "RoomEffect_PairedTurnController_externs.h"
 int func_80193D6C(int event)
 {
     register Instance *instance asm("$16")=(Instance *)ANIM_OWNER_AS(Actor)->instance;

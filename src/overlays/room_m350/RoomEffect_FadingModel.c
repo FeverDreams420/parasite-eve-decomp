@@ -55,10 +55,7 @@ typedef struct { short count,delay; } State;
 typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
 
-extern unsigned char D_8019A8C4;
-extern int Asset_Find08w(int,int,int,int,int);
-extern int func_80199148(int,Particle *);
-extern int rand(void),Inv_ScrambleGrid(void),rcos(int),rsin(int);
+#include "RoomEffect_FadingModel_externs.h"
 int func_801992A0(int event,State *state)
 {
     Vector offset;

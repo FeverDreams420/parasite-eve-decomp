@@ -139,7 +139,7 @@ void CQ_error_flush(int event, u8 *data) {
     }
 }
 
-extern s32 g_CdDsReadIndexBase[] __asm__("D_800A3604");
+#include "dssys_2_3_externs.h"
 
 
 int CQ_execute(void) {

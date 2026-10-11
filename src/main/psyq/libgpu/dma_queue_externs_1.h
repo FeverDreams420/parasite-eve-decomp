@@ -1,0 +1,6 @@
+#ifndef PE1_EXT_9653A8058DC1
+#define PE1_EXT_9653A8058DC1
+extern u32 *D_80095860;
+extern volatile u32 D_80095878;
+extern u32 D_80095880;
+#endif /* PE1_EXT_9653A8058DC1 */

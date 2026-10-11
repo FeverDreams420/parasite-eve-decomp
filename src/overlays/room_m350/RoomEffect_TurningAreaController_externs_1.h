@@ -1,0 +1,10 @@
+#ifndef PE1_EXT_0FFD9E65C4D9
+#define PE1_EXT_0FFD9E65C4D9
+extern short D_800966EE[];
+extern Matrix D_8019A808;
+extern short D_8019A80A,D_8019A80C,D_8019A80E,D_8019A810,D_8019A812,D_8019A814,D_8019A816,D_8019A818;
+extern int D_8019A81C,D_8019A820,D_8019A824;
+extern Vector D_8019A574[];
+extern char D_8019A594[];
+extern void GsSetOrign(int,int);
+#endif /* PE1_EXT_0FFD9E65C4D9 */

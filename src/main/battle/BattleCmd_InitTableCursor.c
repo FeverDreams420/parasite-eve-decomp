@@ -3,8 +3,7 @@
 
 #include "pe1/battle_cmd.h"
 
-extern BattleCmdEntry D_800A1AA0[];
-extern BattleCmdEntry *D_8009D014;
+#include "BattleCmd_InitTableCursor_externs.h"
 
 void BattleCmd_InitTableCursor(void) {
     D_8009D014 = D_800A1AA0;

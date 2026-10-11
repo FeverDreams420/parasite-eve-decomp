@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_2B6F4A7DE71C
+#define PE1_EXT_2B6F4A7DE71C
+extern short D_8019A85E;
+#endif /* PE1_EXT_2B6F4A7DE71C */

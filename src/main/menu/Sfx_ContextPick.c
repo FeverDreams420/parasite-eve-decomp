@@ -7,7 +7,7 @@ int g_MenuItemActionContext;
 int g_MenuActiveItemSlot;
 int g_MenuItemActionDisabled;
 int g_MenuEquipMode;
-extern int g_MenuItemActionStateTable[][3];
+#include "Sfx_ContextPick_externs.h"
 
 int Inv_IsSlotSelectable(int arg0);
 void Draw_SetTextDimmed(int value);

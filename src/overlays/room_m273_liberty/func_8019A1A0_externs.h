@@ -1,0 +1,8 @@
+#ifndef PE1_EXT_977F71A09DDB
+#define PE1_EXT_977F71A09DDB
+extern s16 D_8019AEEA;
+extern s16 D_8019AEEE;
+extern s16 D_8019AEF2;
+extern s16 D_8019AEF6;
+extern u8 D_8019AEFA;
+#endif /* PE1_EXT_977F71A09DDB */

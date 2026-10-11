@@ -9,8 +9,7 @@
 typedef GteMatrix SceneE08Matrix;
 typedef GteVector SceneE08Vector;
 
-extern u8 D_801996A0[];
-extern char D_80198848[];
+#include "func_80192D90_externs.h"
 
 void func_800C2FF0(int, int);
 void func_800C3098(int);

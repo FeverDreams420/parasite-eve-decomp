@@ -10,25 +10,9 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/psyq_libc.h"
 
-extern int D_800E0A50;
+#include "FieldEng_GlowEffectB_externs.h"
 
-extern u8 D_800E22E8;
-extern u8 D_800E22E9;
-extern u8 D_800E22EA;
-extern u8 D_800E22EC;
-extern u8 D_800E22ED;
-extern u8 D_800E22EE;
-extern s16 D_800E22F0;
-extern s16 D_800E22F2;
 
-extern u8 D_800E2328;
-extern u8 D_800E2329;
-extern u8 D_800E232A;
-extern u8 D_800E232C;
-extern u8 D_800E232D;
-extern u8 D_800E232E;
-extern s16 D_800E2330;
-extern u16 D_800E2332;
 
 int func_800C8D34(char *object) {
     int half;
@@ -80,25 +64,19 @@ int func_800C8D34(char *object) {
     return 0;
 }
 
-extern void FieldEng_Spawn6(int a, int b, int c, int d, int e, int f);
+#include "FieldEng_GlowEffectB_externs_1.h"
 
 int func_800C8E44(int a, int b, int c, int d, int e, int f) {
     FieldEng_Spawn6(a, b, c, d, e, f);
     return 0;
 }
-extern char D_800E09A0[];
-extern void FieldEng_Register(void *o, void *table);
+#include "FieldEng_GlowEffectB_externs_2.h"
 
 int func_800C8E70(void *o) {
     FieldEng_Register(o, D_800E09A0);
     return 0;
 }
-extern char D_800E09B4[];
-extern char D_800E098C[];
-extern char D_800E09C8[];
-extern int func_800C251C(void *obj, void *table);
-extern int func_800C2758(void *obj, void *table, void *extra);
-extern int func_800C8F08(char *obj);
+#include "FieldEng_GlowEffectB_externs_3.h"
 
 int func_800C8E98(void *obj) {
     int first;
@@ -124,7 +102,7 @@ int func_800C8F20(void) {
     return 0;
 }
 
-extern FieldActor *D_800E27A0;
+#include "FieldEng_GlowEffectB_externs_4.h"
 
 int func_800C8F28(FieldAnimObjectPrefix *obj) {
     FieldActor *data = obj->actor;
@@ -159,8 +137,7 @@ int func_800C8F94(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
     }
 }
 
-extern struct BattleEntity *D_8009D254;
-extern char D_800E0A10[];
+#include "FieldEng_GlowEffectB_externs_5.h"
 
 int func_800C90A4(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
     FieldAnimMatrixGlow *anim_s0 = anim;
@@ -182,7 +159,7 @@ int func_800C90A4(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
     anim_s0->brightness = 0x7F;
 }
 
-extern GteShortVector D_800C217C;
+#include "FieldEng_GlowEffectB_externs_6.h"
 
 int func_800C91A8(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
     GteShortVector in;
@@ -208,7 +185,7 @@ int func_800C91A8(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
 void func_800C9260(void) {
 }
 
-extern s16 D_800E09F0[];
+#include "FieldEng_GlowEffectB_externs_7.h"
 
 int func_800C9268(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
     GteMatrix matrix;

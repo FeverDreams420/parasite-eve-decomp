@@ -15,61 +15,8 @@
 
 #define S16(base, off) (*(s16 *)((u8 *)(base) + (off)))
 
-extern u8 D_800E0D6C[];
-extern volatile s16 D_800E2294_state __asm__("D_800E2294");
-extern u8 D_800E2284;
-extern u8 D_800E2285;
-extern s16 D_800E2286;
-extern s16 D_800E2268;
-extern s16 D_800E226A;
-extern s16 D_800E226C;
-extern s16 D_800E2820;
-extern s16 D_800E2822;
-extern s16 D_800E2824;
-extern u32 D_800E2828;
-extern u32 D_800E282C;
-extern u32 D_800E2830;
-extern u8 D_800E2838;
-extern u8 D_800E2839;
-extern u8 D_800E283A;
-extern u8 D_800E283C;
-extern u8 D_800E283D;
-extern s16 D_800E283E;
+#include "FieldEng_PointSpriteEffect_externs.h"
 
-extern u8 *D_800F3470;
-extern u8 D_800F3454;
-extern u8 D_800F3455;
-extern s16 D_800F3456;
-extern s16 D_800F3438;
-extern s16 D_800F343A;
-extern s16 D_800F343C;
-extern s16 D_800F32E8;
-extern s16 D_800F32EA;
-extern s16 D_800F32EC;
-extern u8 D_800F3300;
-extern u8 D_800F3301;
-extern u8 D_800F3302;
-extern u8 D_800F3304;
-extern u8 D_800F3305;
-extern s16 D_800F3306;
-extern s16 D_800F3388;
-extern s16 D_800F338A;
-extern s16 D_800F338C;
-extern volatile u8 D_800F33A4;
-extern u8 D_800F33A5;
-extern s16 D_800F33A6;
-extern u8 D_800F335C;
-extern u8 D_800F335D;
-extern s16 D_800F335E;
-extern u8 D_800F33A0;
-extern u8 D_800F33A1;
-extern u8 D_800F33A2;
-extern s16 D_800F3340;
-extern s16 D_800F3342;
-extern s16 D_800F3344;
-extern u8 D_800F3358;
-extern u8 D_800F3359;
-extern u8 D_800F335A;
 
 int func_800CBCA4(u8 *arg0) {
     u8 *obj;
@@ -179,27 +126,21 @@ int func_800CBCA4(u8 *arg0) {
     return tmp;
 }
 
-extern void FieldEng_Spawn6(int a, int b, int c, int d, int e, int f);
+#include "FieldEng_PointSpriteEffect_externs_1.h"
 
 int func_800CBEE0(int a, int b, int c, int d, int e, int f) {
     FieldEng_Spawn6(a, b, c, d, e, f);
     return 0;
 }
 
-extern char D_800E0D08[];
-extern void FieldEng_Register(void *o, void *table);
+#include "FieldEng_PointSpriteEffect_externs_2.h"
 
 int func_800CBF0C(void *o) {
     FieldEng_Register(o, D_800E0D08);
     return 0;
 }
 
-extern char D_800E0D24[];
-extern char D_800E0CEC[];
-extern char D_800E0D40[];
-extern int func_800C251C(void *obj, void *table);
-extern int func_800C2758(void *obj, void *table, void *extra);
-extern int func_800CBFA4(char *obj);
+#include "FieldEng_PointSpriteEffect_externs_3.h"
 
 int func_800CBF34(void *obj) {
     int first;
@@ -231,9 +172,7 @@ int func_800CBFBC(void) {
 int rand(void);
 int *func_800C2B10(int index);
 
-extern u8 D_800F3450;
-extern u8 D_800F3451;
-extern u8 D_800F3452;
+#include "FieldEng_PointSpriteEffect_externs_4.h"
 
 int func_800CBFC4(void *arg0, void *arg1, u8 *anim) {
     int x_base_a1;
@@ -257,9 +196,7 @@ int func_800CBFC4(void *arg0, void *arg1, u8 *anim) {
     *(u16 *)(anim + 0xA) = z_base_a1 + (z_rand % 201);
 }
 
-extern u8 D_800E2280;
-extern u8 D_800E2281;
-extern u8 D_800E2282;
+#include "FieldEng_PointSpriteEffect_externs_5.h"
 
 void FieldAnim_InitRadialEntries(void *arg0, void *arg1, FieldAnimRadialParticles *anim) {
     u16 *base_s5;

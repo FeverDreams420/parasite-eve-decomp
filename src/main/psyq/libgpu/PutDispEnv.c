@@ -2,9 +2,7 @@
 #include "common.h"
 #include "pe1/gpu_state.h"
 #include "pe1/psyq_gpu.h"
-extern unsigned char D_80095848[];
-extern unsigned short D_80095820[], D_80095822[];
-extern char D_80011970[];
+#include "PutDispEnv_externs.h"
 int GetVideoMode(void);
 void *memcpy(void *, const void *, unsigned);
 #define SIGNED_HALF(p) ((short)*(volatile unsigned short *)(p))

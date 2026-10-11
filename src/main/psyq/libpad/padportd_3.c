@@ -6,12 +6,7 @@
 #include "pe1/card_obj.h"
 #include "pe1/memcard_state.h"
 
-extern CardObj D_800A5B70[];
-extern int D_8009B764;
-extern int D_8009B768;
-extern int g_MemCardPort2Present;
-extern int D_8009B77C[];
-extern MemCardSioRegisters *D_8009B7BC;
+#include "padportd_3_externs.h"
 
 void _dirFailAuto(CardObj *obj);
 int _padInitSioMode(CardObj *obj);

@@ -94,9 +94,7 @@ void Sfx_CursorRenderData(ItemDataRecord *record) {
 
 #define NULL ((void *)0)
 
-extern s32 g_InvCategoryBaseItemId;
-extern s16 *g_InvItemPtr;
-extern s32 g_InvSlotLimit;
+#include "Sfx_DrawSlotRow_externs.h"
 
 void Sfx_DrawActiveListSlot(s32 arg0) {
     s16 temp_v1;

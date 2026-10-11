@@ -14,8 +14,7 @@ typedef struct { int color; short x, y, z, size; } Particle;
 typedef RoomM350TransformOwner Instance;
 
 #include "pe1/gte_sine_table.h"
-extern int D_8019A3CC[];
-extern int Inv_ScrambleGrid(void);
+#include "RoomEffect_ModelShellLayers_externs.h"
 
 int func_8019404C(int event, Particle *particle)
 {

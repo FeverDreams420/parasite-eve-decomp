@@ -10,7 +10,7 @@
 
 typedef RoomM273RisingParticle Particle;
 typedef struct { unsigned char r, g, b, unknown; } Color;
-extern Color D_8018F1E4;
+#include "RoomEffect_RisingAndPeriodicPoolsFlow_externs.h"
 #include "pe1/gte_sine_table.h"
 
 int func_80195E10(int mode, Particle *particle) {
@@ -58,10 +58,7 @@ int func_80195E10(int mode, Particle *particle) {
 #include "room_m273_effects.h"
 typedef GteShortVector Vector;
 typedef RoomM273EffectModeState State;
-extern unsigned char D_8019AEF8;
-extern void *D_8019AE80;
-extern int func_8019A398(),func_8019A4CC();
-extern int func_800CE688(void *);
+#include "RoomEffect_RisingAndPeriodicPoolsFlow_externs_1.h"
 
 int func_801960F4(int mode) {
     /* Layout only: purpose of these eight original frame bytes is unknown. */

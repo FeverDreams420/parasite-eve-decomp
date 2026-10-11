@@ -10,9 +10,8 @@
 #include "pe1/save.h"
 #include "pe1/menu_inventory.h"
 
-extern unsigned int g_MenuActionSubmenuSel;
+#include "Menu_ActionSubmenuSelection_externs.h"
 
-extern void Akao_Cmd_80_81_82(int arg0);
 
 
 void Save_ResetMetadataWindow(int);

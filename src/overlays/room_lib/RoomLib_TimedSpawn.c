@@ -20,7 +20,7 @@
 #include "pe1/akao.h"
 
 /* The colour ramp table each room defines in its data. */
-extern char RoomLib_TimedRenderTable;
+#include "RoomLib_TimedSpawn_externs.h"
 
 int RoomLib_UpdateTimedRender(int mode, RoomFxTimedRenderState *state) {
     RoomFxSeed8 work;
@@ -96,9 +96,7 @@ typedef struct RoomTimedSpawnEngine {
     u32 flags;                        /* 0x4C */
 } RoomTimedSpawnEngine;
 
-extern struct BattleEntity *D_8009D254;
-extern struct FieldActor *g_PlayerEntity;
-extern void *RoomMain_ActorPtr2;
+#include "RoomLib_TimedSpawn_externs_1.h"
 
 int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
     RoomFxTimedRenderState *actor;

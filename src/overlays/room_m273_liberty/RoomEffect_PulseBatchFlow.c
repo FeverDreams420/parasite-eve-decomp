@@ -42,11 +42,7 @@ int func_80195984(int mode, RoomM273PulseInput *input)
     return 0;
 }
 
-extern unsigned char D_8019AEF8;
-extern short D_8019AEE8;
-extern void *D_8019AE7C;
-extern int func_80195984(),func_8019A290();
-extern int func_800CE688(void *);
+#include "RoomEffect_PulseBatchFlow_externs.h"
 
 int func_80195BD0(int mode) {
     /* Layout only: purpose of these eight original frame bytes is unknown. */

@@ -8,7 +8,7 @@
 #include "common.h"
 #include "pe1/psyq_pad_main.h"
 
-extern int g_MemCardDispatchResult;
+#include "padif_externs.h"
 
 int MemCard_ReadByteWithCallbackValue(CardObj *port) {
     g_MemCardDispatchResult = g_MemCardStateDispatchFn(port);

@@ -4,7 +4,7 @@
 #include "room_m273.h"
 #include "pe1/gte_types.h"
 
-extern FieldActor *g_PlayerEntity;
+#include "func_80192F54_externs.h"
 
 int func_8005186C(int squaredDistance);
 

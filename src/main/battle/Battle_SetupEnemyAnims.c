@@ -8,8 +8,7 @@ typedef struct EnemyOffenseScaleTable {
     u8 values[9];
 } EnemyOffenseScaleTable;
 
-extern const EnemyAnimTable D_800106A4;
-extern const EnemyOffenseScaleTable D_800106D4;
+#include "Battle_SetupEnemyAnims_externs.h"
 
 void Battle_SetupEnemyAnims(void) {
     EnemyAnimTable animTable;

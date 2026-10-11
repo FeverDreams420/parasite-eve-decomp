@@ -5,9 +5,7 @@
 #include "pe1/battle_cmd.h"
 #include "pe1/inventory.h"
 
-extern FieldActor *g_PlayerEntity;
-extern u16 g_AyaHpCurrent[];
-extern s8 g_AyaEquippedWeaponSlot[];
+#include "BattleCmd_CommitAndSyncAmmo_externs.h"
 
 int Inv_IsActiveListOverrideSelected(void);
 void Inv_SelectActiveList(int useOverride);

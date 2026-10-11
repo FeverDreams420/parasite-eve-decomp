@@ -1,0 +1,5 @@
+#ifndef PE1_EXT_F0FDF75E2B2B
+#define PE1_EXT_F0FDF75E2B2B
+extern short D_8019A77E[], D_8019A798;
+extern unsigned char D_8019A79A,D_8019A79C;
+#endif /* PE1_EXT_F0FDF75E2B2B */

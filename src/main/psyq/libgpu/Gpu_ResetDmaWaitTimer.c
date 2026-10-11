@@ -4,15 +4,10 @@
 
 int SetIntrMask(int mask);
 
-extern unsigned int *g_GpuGp0Ptr;
+#include "Gpu_ResetDmaWaitTimer_externs.h"
 /* The status query reads and writes the GP0 port as device memory. */
 #define GPU_GP0_PORT (*(volatile unsigned int *)g_GpuGp0Ptr)
-extern unsigned int *g_GpuGp1Ptr;
 /* Queue indices can change asynchronously; preserve ordered status reads. */
-extern volatile u32 g_GpuDmaQueueHead;
-extern volatile u32 g_GpuDmaQueueTail;
-extern u32 D_80095884;
-extern char D_80011988[];
 
 void Gpu_ResetDmaWaitTimer(void) {
     g_GpuDmaTimeoutDeadline = VSync(-1) + 0xF0;

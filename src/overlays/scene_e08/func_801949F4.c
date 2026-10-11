@@ -7,8 +7,7 @@
 void func_800C2FF0(s32, s32);
 void func_800C3098(s32);
 
-extern u8 D_80198AD4;
-extern FieldGlowSprite D_80199570;
+#include "func_801949F4_externs.h"
 
 void func_801949F4(s32 arg0, RoomFxControl *arg1, Ovl178MotionState *rec) {
     Ovl178Position *ctx;

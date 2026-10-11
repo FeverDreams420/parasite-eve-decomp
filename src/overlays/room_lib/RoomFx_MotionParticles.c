@@ -264,7 +264,7 @@ void RoomFx_UpdateTimedFade(void *arg0, RoomFxControl *state, RoomAnchoredSprite
     }
 }
 
-extern void func_800C4E50(void *arg0);
+#include "RoomFx_MotionParticles_externs.h"
 
 void RoomFx_InitSpritePair(void *arg0, void *arg1, RoomAnchoredSpriteState *obj) {
     FieldRingGeometry *ring = &obj->ring;

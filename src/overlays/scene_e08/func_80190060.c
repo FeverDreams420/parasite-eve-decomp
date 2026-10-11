@@ -16,8 +16,7 @@ typedef struct SceneE08State {
     u16 flag;
 } SceneE08State;
 
-extern FieldGlowSprite D_801994B8, D_801995A8, D_801995B8, D_80199690;
-extern void func_800C2B40(void *);
+#include "func_80190060_externs.h"
 
 void func_80190060(RoomEnt *ent, void *unused, SceneE08State *state) {
     SceneE08MatrixWords *matrix;

@@ -12,9 +12,7 @@ typedef RoomM350TransformOwner Instance;
 
 
 /* The spawner owns the falling particles updated and rendered by this callback. */
-extern FieldActor *g_PlayerEntity;
-extern RenderColor D_8019A464;
-extern unsigned char D_8019A79A,D_8019A79C;
+#include "RoomEffect_FallingTexturePair_externs.h"
 
 int func_801937B4(int event, short *position) {
     if (event == 1) {

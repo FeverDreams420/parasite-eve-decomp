@@ -53,8 +53,7 @@ void DS_read_cbready(int status, void *data, void *detail) {
 
 #undef CD_READ_FIELD
 
-extern int D_8009B6B0[];
-extern void DsReadBreak(void);
+#include "dsread_2_externs.h"
 
 void DS_read_cbdata(void) {
     int *state = D_8009B6B0;
@@ -133,7 +132,7 @@ void DsReadBreak(void) {
     asm volatile("" : : : "memory");
 }
 
-extern unsigned int D_8009B6B8;
+#include "dsread_2_externs_1.h"
 
 void DsReadMode(unsigned int mode) {
     if (mode < 2) {

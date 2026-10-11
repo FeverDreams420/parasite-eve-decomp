@@ -4,7 +4,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/psyq_gpu.h"
-extern void D_8019A630;
+#include "func_8019A014_externs.h"
 
 s32 func_8019A014(s32 mode, void *ctx) {
     s32 tex;

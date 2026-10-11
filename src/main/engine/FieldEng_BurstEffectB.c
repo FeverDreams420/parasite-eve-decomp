@@ -10,7 +10,7 @@
 #include "pe1/field_billboard.h"
 #include "pe1/field_actor.h"
 
-extern int D_800E0F6C;
+#include "FieldEng_BurstEffectB_externs.h"
 
 int func_800CD728(char *object) {
     void **slot = FieldEng_GetSlot(object);
@@ -86,27 +86,21 @@ int func_800CD728(char *object) {
     return 0;
 }
 
-extern void FieldEng_Spawn6(int a, int b, int c, int d, int e, int f);
+#include "FieldEng_BurstEffectB_externs_1.h"
 
 int func_800CD89C(int a, int b, int c, int d, int e, int f) {
     FieldEng_Spawn6(a, b, c, d, e, f);
     return 0;
 }
 
-extern char D_800E0F28[];
-extern void FieldEng_Register(void *o, void *table);
+#include "FieldEng_BurstEffectB_externs_2.h"
 
 int func_800CD8C8(void *o) {
     FieldEng_Register(o, D_800E0F28);
     return 0;
 }
 
-extern char D_800E0F38[];
-extern char D_800E0F18[];
-extern char D_800E0F48[];
-extern int func_800C251C(void *obj, void *table);
-extern int func_800C2758(void *obj, void *table, void *extra);
-extern int func_800CD960(u8 *state);
+#include "FieldEng_BurstEffectB_externs_3.h"
 
 int func_800CD8F0(void *obj) {
     int first;
@@ -138,8 +132,7 @@ int func_800CD978(void) {
 int *func_800C2B10(int index);
 int *func_800C2B28(int index);
 
-extern int D_800E2804;
-extern int D_800B0E14;
+#include "FieldEng_BurstEffectB_externs_4.h"
 
 int func_800CD980(void) {
     int index;

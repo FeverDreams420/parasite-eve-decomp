@@ -13,9 +13,7 @@ void Inv_BuildFilteredPackedList(int mask);
 void Inv_BuildFilteredPackedListExcluding(int mask, int excluded);
 int Inv_RestoreSelection(unsigned int index);
 M2C_UNK func_80064B74();
-extern s32 g_MenuEquipMode;
-extern s32 g_InvItemUsableFlag;
-extern s32 g_MenuLayoutLocked;
+#include "Menu_StepSkillList_externs.h"
 int Menu_StepEquipConfirm(MenuWidgetNode *node, int input);
 void Menu_DrawEquipSelectionList(MenuWidgetNode *node);
 

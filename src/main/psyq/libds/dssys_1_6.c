@@ -18,9 +18,8 @@
 #define STATE_FROM_PARAM(p)                                                            \
     ((CdRomEventCommandState *)((u8 *)(p) - PE1_OFFSETOF(CdRomEventCommandState,       \
                                                          command.read.commandParam)))
-extern CdlLOC D_8009B582;
+#include "dssys_1_6_externs.h"
 
-extern u32 D_8009B578;
 #define STATE(p)                                                                       \
     ((CdRomCommandState *)((u8 *)(p) - PE1_OFFSETOF(CdRomCommandState, read.command)))
 #define SYSTEM(p)                                                                      \
@@ -228,7 +227,7 @@ void LIBDS_DSSYS_1_text_A9C(int event, u8 *inResult) {
 done:;
 }
 
-extern CdRomEventCommandState D_8009B558;
+#include "dssys_1_6_externs_1.h"
 
 void LIBDS_DSSYS_1_text_D24(int event, u8 *result) {
     u32 event_reg;

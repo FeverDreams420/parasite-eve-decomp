@@ -2,11 +2,7 @@
 #include "pe1/scene_e08_ring_effect.h"
 #include "pe1/field_ring_geometry.h"
 
-extern u16 D_80199604;
-extern u16 D_8019960A, D_8019960C, D_80199606, D_80199608;
-extern u8 D_80199600, D_80199601, D_80199602;
-extern u8 D_801995FC, D_801995FD, D_801995FE;
-extern u8 D_80198C90[];
+#include "func_801923D8_externs.h"
 void func_800C4E50(void *);
 
 void func_801923D8(void *unused0, void *unused1, SceneE08RingEffectState *effect) {

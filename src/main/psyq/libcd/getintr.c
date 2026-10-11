@@ -10,9 +10,7 @@
 #include "bios_internal.h"
 #include "pe1/psyq_bios.h"
 
-extern int D_8009AFCC;
-extern int D_8009B17C[], D_8009B07C[];
-extern char D_80011B44[], D_80011B50[], D_80011B6C[], D_80011B80[];
+#include "getintr_externs.h"
 
 int getintr(void) {
     volatile u8 interrupt;

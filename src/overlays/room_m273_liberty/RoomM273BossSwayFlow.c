@@ -3,7 +3,7 @@
 #include "pe1/gte.h"
 #include "pe1/psyq_gpu.h"
 
-extern char D_8019AE00[];
+#include "RoomM273BossSwayFlow_externs.h"
 
 /* Animation 13 controller: turns the boss toward the player on entry, loops
  * the sweep window while loops remain, publishes the sweep attack angle and

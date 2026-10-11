@@ -4,18 +4,8 @@
  * dma_execute only with GCC 2.8.1, -mno-split-addresses and
  * -fno-schedule-insns. */
 #include "pe1/psyq_cd.h"
-extern volatile u8 *D_8009B334;
-extern volatile u8 *D_8009B338;
-extern volatile u32 *D_8009B33C;
-extern volatile u32 *D_8009B340;
-extern volatile u32 *D_8009B34C;
-extern volatile u32 *D_8009B35C;
-extern s32 D_8009B374;
-extern StHEADER *D_800A34A0;
-extern s32 D_800B89F4, D_800BCD7C, D_800BE9E4;
+#include "StCdInterrupt_externs.h"
 /* Separate aliases retain the retail handler's address-load schedule. */
-extern s32 D_800C0DC0;
-extern u8 *D_800C0DC4;
 
 /* Streaming comparisons deliberately use only the low 16 bits of frameCount. */
 #define ST_FRAME_INDEX(header) (*(u16 *)&(header)->frameCount)

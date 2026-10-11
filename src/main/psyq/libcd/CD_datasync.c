@@ -6,9 +6,7 @@
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_bios.h"
 
-extern char D_80011B18[];
-extern char D_80011B28[];
-extern char D_80011C20[];
+#include "CD_datasync_externs.h"
 void CD_flush(void);
 
 static inline int data_timed_out(char **commands, char **events, int limit,

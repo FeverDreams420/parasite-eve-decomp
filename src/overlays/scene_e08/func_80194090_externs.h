@@ -1,0 +1,5 @@
+#ifndef PE1_EXT_4812E590439C
+#define PE1_EXT_4812E590439C
+extern s16 D_8019955A;
+extern FieldGlowSprite D_80199580;
+#endif /* PE1_EXT_4812E590439C */

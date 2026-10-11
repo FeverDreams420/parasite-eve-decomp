@@ -11,8 +11,7 @@
 #error "ROOMEFFECT_DROPPED_FLARE_COLOR must name the colour seed"
 #endif
 
-extern GteRotation ROOMEFFECT_DROPPED_FLARE_ROTATION;
-extern RoomFlareColor ROOMEFFECT_DROPPED_FLARE_COLOR;
+#include "RoomEffect_DroppedFlareParticle_externs.h"
 
 /* Flashes the scene: marks the battle actor and rewrites the colour code of
  * the first packet in the primary effect channel. */

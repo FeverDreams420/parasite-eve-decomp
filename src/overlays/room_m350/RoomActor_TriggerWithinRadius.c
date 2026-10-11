@@ -8,9 +8,7 @@ typedef struct {
     int x, y, z;
 } WorldActor;
 typedef struct { unsigned int *actor; } RoomActor;
-extern FieldActor *g_PlayerEntity;
-extern short D_8019A86C;
-extern int Math_IntSqrt(int);
+#include "RoomActor_TriggerWithinRadius_externs.h"
 
 int func_8019721C(short *point, int radius) {
     short *gate = &D_8019A86C;

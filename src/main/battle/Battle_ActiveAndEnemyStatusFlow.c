@@ -188,7 +188,7 @@ void Battle_DrawActiveStatus(void)
 /* COMMON metadata selects GP-relative loads;
  * retail symbols supply storage. */
 volatile u16 D_8009CE86;
-extern s32 D_8009D1E8;
+#include "Battle_ActiveAndEnemyStatusFlow_externs.h"
 
 /* Draw current/maximum HP from reversed decimal digits and the HP label.
  * Matching debt: 14 register pins and 9 empty barriers preserve retail scheduling;

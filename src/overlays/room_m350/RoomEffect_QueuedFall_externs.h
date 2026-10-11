@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_832D46A1B7CE
+#define PE1_EXT_832D46A1B7CE
+extern RenderColor D_8019A62C;
+#endif /* PE1_EXT_832D46A1B7CE */

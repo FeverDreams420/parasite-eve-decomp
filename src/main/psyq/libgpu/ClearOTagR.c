@@ -12,9 +12,7 @@
 #include "pe1/gpu_state.h"
 #include "pe1/psyq_gpu.h"
 
-extern char D_80011910[];
-extern u32 D_800957F8;
-extern u32 D_8009580C;
+#include "ClearOTagR_externs.h"
 
 u32 *ClearOTagR(u32 *ot, int count) {
     u32 mask;
@@ -51,9 +49,7 @@ int DrawPrim(void *primitive) {
     return D_80095744->cb14(bytes + 4, word_count);
 }
 
-extern char D_80011928[];
-extern char D_8001193C[];
-extern char D_80011954[];
+#include "ClearOTagR_externs_1.h"
 void Gpu_SetDrawEnvBack(DR_ENV *, DRAWENV *);
 void *memcpy(void *, const void *, unsigned int);
 
@@ -105,7 +101,7 @@ void DrawOTagEnv(void *next, DRAWENV *environment)
     copy(state + 14, environment, sizeof(DRAWENV));
 }
 
-extern void *memcpy(void *dest, const void *src, unsigned int n);
+#include "ClearOTagR_externs_2.h"
 
 DRAWENV *GetDrawEnv(DRAWENV *arg0) {
     void *(*fn)(void *, const void *, unsigned int);

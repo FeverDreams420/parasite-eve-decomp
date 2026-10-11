@@ -2,10 +2,7 @@
 /* CC1_FLAGS: -G2 */
 /* MASPSX_FLAGS: -G2 */
 
-extern unsigned int D_8009D2E8;
-extern struct BattleEntity *D_8009D254;
-extern Combatant *D_8009D278;
-extern u16 D_8009D298;
+#include "Battle_ActionLifecycle_externs.h"
 
 void Entity_SetActionMode(BattleEntity *entity, int mode);
 void Battle_FlushScriptSounds(void);
@@ -37,9 +34,7 @@ void Battle_BeginPlayerAction(void) {
 #undef ENTITY_FIELD
 #undef COMBATANT_FIELD
 
-extern int g_FieldMoveLock;
-extern Combatant *g_ActiveActor;
-extern FieldActor *g_PlayerEntity;
+#include "Battle_ActionLifecycle_externs_1.h"
 
 
 #define COMBATANT_FIELD(ptr, type, member) \

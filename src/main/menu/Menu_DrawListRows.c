@@ -10,7 +10,7 @@
 
 MenuWidgetNode *g_MenuActiveWidget;
 int g_MenuEquipMode;
-extern unsigned char D_800923B8[][8];
+#include "Menu_DrawListRows_externs.h"
 
 void Menu_DrawEquipSlotListItem(int arg0) {
     if (arg0 != MenuWidget_GridCellIndex(g_MenuActiveWidget)) {

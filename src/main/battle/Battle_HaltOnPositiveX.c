@@ -3,9 +3,7 @@
 /* CC1_FLAGS: -G1 */
 /* MASPSX_FLAGS: -G1 */
 
-extern Combatant *g_ActiveActor;
-extern FieldActor *g_PlayerEntity;
-extern s8 D_8009CE30;
+#include "Battle_HaltOnPositiveX_externs.h"
 
 void Entity_SetActionMode(BattleEntity *entity, int mode);
 void Battle_FlushScriptSounds(void);

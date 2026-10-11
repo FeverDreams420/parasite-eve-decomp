@@ -6,9 +6,8 @@
 #include "pe1/field_anim_pool.h"
 
 typedef RoomM350Vector Vector;
-extern short D_8019A85C;
+#include "RoomEffect_TrailQueueController_externs.h"
 /* Retail writes both fields twice during configuration. */
-extern int func_8019A014(int, short *);
 
 int func_8019784C(int event)
 {

@@ -1,0 +1,6 @@
+#ifndef PE1_EXT_83F0717C207F
+#define PE1_EXT_83F0717C207F
+extern void *D_800B0E18;
+extern void *D_800B0E1C;
+extern s16 D_800F34E4;
+#endif /* PE1_EXT_83F0717C207F */

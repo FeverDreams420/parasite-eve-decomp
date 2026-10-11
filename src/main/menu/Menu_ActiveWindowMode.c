@@ -12,7 +12,7 @@ typedef struct {
     u16 values[8];
 } SaveWindowModeBounds;
 
-extern SaveWindowModeBounds D_80010E38;
+#include "Menu_ActiveWindowMode_externs.h"
 
 void Window_SetBoundsByMode(int mode) {
     SaveWindowModeBounds bounds;

@@ -1,9 +1,6 @@
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses */
-extern volatile unsigned int *D_80095870;
-extern volatile unsigned int *D_8009586C;
-extern volatile unsigned int *D_80095864;
-extern volatile unsigned int *D_80095868;
+#include "Gpu_SendOtChain_externs.h"
 void Gpu_ResetDmaWaitTimer(void);
 int Gpu_DmaTimeoutCheck(void);
 

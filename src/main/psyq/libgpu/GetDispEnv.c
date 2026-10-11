@@ -14,8 +14,7 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/draw_area.h"
 
-extern void *memcpy(void *dest, const void *src, unsigned int n);
-extern char g_GpuActiveDispEnv[];
+#include "GetDispEnv_externs.h"
 
 void *GetDispEnv(void *arg0) {
     void *(*fn)(void *, const void *, unsigned int);

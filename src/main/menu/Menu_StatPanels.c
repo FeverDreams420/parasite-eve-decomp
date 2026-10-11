@@ -15,9 +15,7 @@
 /* Inventory stat-panel setup and its adjacent draw callbacks. */
 
 
-extern s32 g_MenuItemContextFlag;
-extern s32 g_MenuBattleStatusOverlayActive;
-extern s32 g_MenuSelectionLocked;
+#include "Menu_StatPanels_externs.h"
 int Menu_StepItemSelectScreen(MenuWidgetNode *node, unsigned int flags);
 void Menu_DrawItemList(void *node);
 
@@ -57,9 +55,7 @@ void Menu_CreateInventoryTabView(void) {
 }
 
 
-extern u8 D_80092258[];
-extern u8 D_80092298[];
-extern s32 g_BonusPointDisplayValue;
+#include "Menu_StatPanels_externs_1.h"
 void Menu_DrawStatusPanel(void);
 void Menu_DrawStatsList(void);
 void Menu_DrawBonusPointSlotValue(void);
@@ -154,10 +150,8 @@ void Menu_DrawStatusPanel(void) {
 
 
 void Draw_PrintNumberWidth2(int value);
-extern s32 g_BonusPointBarAnimProgress;
-extern s32 D_800A18DC[];
+#include "Menu_StatPanels_externs_2.h"
 #define D_800A18DC (D_800A18DC[0])
-extern s32 g_BonusPointStatMultipliers[];
 
 void Menu_DrawStatsList(void) {
     s32 sp10;

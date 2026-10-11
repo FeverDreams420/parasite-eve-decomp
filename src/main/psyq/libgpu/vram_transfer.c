@@ -10,9 +10,7 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/gpu_dma_register_window.h"
 
-extern short D_80095750;
-extern short D_80095752;
-extern unsigned int *g_GpuGp0Ptr;
+#include "vram_transfer_externs.h"
 void Gpu_ResetDmaWaitTimer(void);
 int Gpu_DmaTimeoutCheck(void);
 
@@ -153,8 +151,7 @@ int Gpu_FlushDisplayBuffer(RECT *rect, unsigned int *data)
     return 0;
 }
 
-extern unsigned int *g_GpuGp1Ptr;
-extern unsigned char D_800A3348[];
+#include "vram_transfer_externs_1.h"
 
 void Gpu_WriteControlAndMirror(unsigned int value) {
     unsigned int index;
@@ -164,9 +161,7 @@ void Gpu_WriteControlAndMirror(unsigned int value) {
     D_800A3348[index] = value;
 }
 
-extern unsigned char g_GpuControlRegMirror[];
-extern unsigned int *g_GpuGp0Ptr;
-extern unsigned int *g_GpuGp1Ptr;
+#include "vram_transfer_externs_2.h"
 
 int Gpu_GetControlMirrorByte(int index) {
     return g_GpuControlRegMirror[index];
@@ -185,8 +180,7 @@ int Gpu_WriteDataWords(unsigned int *src, int count) {
     return 0;
 }
 
-extern unsigned int *g_GpuGp1Ptr;
-extern unsigned int *g_GpuDmaBcrPtr;
+#include "vram_transfer_externs_3.h"
 
 void Gpu_StartDmaTransfer(unsigned int value) {
     *g_GpuGp1Ptr = 0x4000002;

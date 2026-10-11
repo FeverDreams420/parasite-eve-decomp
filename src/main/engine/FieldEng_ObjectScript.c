@@ -10,13 +10,7 @@
 int FieldEng_GetStatus(void *obj);
 int func_800C2DA0(u16 slot);
 
-extern char *D_800E2248;
-extern u8 *D_800F34F4;
-extern char *D_800F32A8;
-extern char *D_800F3330;
-extern char *D_800F33B0;
-extern char D_800C20C8[];
-extern char D_800C20EC[];
+#include "FieldEng_ObjectScript_externs.h"
 
 void **FieldEng_GetSlot(char *obj) {
     char *p;

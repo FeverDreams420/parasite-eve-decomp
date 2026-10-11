@@ -43,15 +43,7 @@ void Menu_OnEquipConfirm(MenuWidgetNode *unused, int confirmed)
 }
 
 /* Confirmation input handling shares the callback's equip-selection flow. */
-extern int D_8009CF10;
-extern int D_8009CF14;
-extern int D_8009CF1C;
-extern int D_8009CFA0;
-extern int D_800A1888[];
-extern int D_800A188C[];
-extern int D_800A1890[];
-extern int D_800A1894[];
-extern u8 D_800A1980[];
+#include "Menu_OnEquipConfirm_externs.h"
 
 void Menu_StepInventoryRoot(int flags, int arg1, int arg2);
 void Menu_ConfigureScreen(void);

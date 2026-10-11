@@ -1,7 +1,6 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
-extern short D_800966EE[];
-extern int D_8019A614[];
+#include "RoomEffect_Threshold4Callback_externs.h"
 
 int func_8019A134(int event, int **position) {
     short point[4];

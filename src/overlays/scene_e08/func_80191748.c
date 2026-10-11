@@ -3,7 +3,7 @@
 #include "pe1/room_fx.h"
 #include "pe1/scene_grab_head.h"
 
-extern struct BattleEntity *D_8009D254;
+#include "func_80191748_externs.h"
 
 int *func_800C2B28(int arg0);
 void func_80020D50(void);

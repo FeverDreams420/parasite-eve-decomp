@@ -3,11 +3,8 @@
 #include "pe1/room_floor.h"
 #include "pe1/field_anim_pool.h"
 #include "room_m350_shared.h"
-extern char D_8019A856;
-extern u16 D_8019A860;
-extern u16 D_8019A862;
+#include "func_80199F2C_externs.h"
 
-extern void func_8019A21C(void);
 
 s32 func_80199F2C(s32 arg0) {
     char *obj;

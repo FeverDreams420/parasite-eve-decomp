@@ -5,7 +5,7 @@
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_ds.h"
 
-extern void parcpy(void *, const void *);
+#include "dssys_1_5_externs.h"
 
 int LIBDS_DSSYS_1_text_368(unsigned char command, void *param) {
     CdRomEventCommandState *state;
@@ -174,7 +174,7 @@ done:;
 
 void CD_flush(void);
 
-extern s32 D_8009B59C[];
+#include "dssys_1_5_externs_1.h"
 #define D_8009B59C (D_8009B59C[0])
 
 s32 LIBDS_DSSYS_1_text_774(void) {
@@ -206,9 +206,7 @@ s32 LIBDS_DSSYS_1_text_774(void) {
     return 0;
 }
 
-extern int D_8009B598[];
-extern void LIBDS_DSSYS_1_text_8B8(int, void *);
-extern void LIBDS_DSSYS_1_text_A9C(int, void *);
+#include "dssys_1_5_externs_2.h"
 
 void LIBDS_DSSYS_1_text_7FC(int inputEvent, void *inputResult) {
     void *result = inputResult;

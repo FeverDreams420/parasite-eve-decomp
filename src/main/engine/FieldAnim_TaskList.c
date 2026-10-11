@@ -17,9 +17,7 @@ int func_800CE49C(FieldAnimTaskOwner *owner, int index)
     return 0;
 }
 
-extern void *D_800B0E18;
-extern void *D_800B0E1C;
-extern int D_800B1630;
+#include "FieldAnim_TaskList_externs.h"
 
 int func_800CE4F8(int index) {
     int ret;

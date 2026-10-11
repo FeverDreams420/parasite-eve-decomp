@@ -2,15 +2,7 @@
 /* MASPSX_FLAGS: -G8 */
 #include "pe1/battle_runtime.h"
 
-extern struct { Combatant *value; char pad[12]; } D_8009D278_absolute __asm__("D_8009D278");
-extern struct { BattleEntity *value; char pad[12]; } D_8009D20C_absolute __asm__("D_8009D20C");
-extern struct { BattleEntity *value; char pad[12]; } D_8009D254_absolute __asm__("D_8009D254");
-extern struct { u8 value; char pad[15]; } D_8009D1D4_absolute __asm__("D_8009D1D4");
-extern struct { u8 value; char pad[15]; } D_8009D23C_read __asm__("D_8009D23C");
-extern struct { u8 value; char pad[15]; } D_8009D23C_write __asm__("D_8009D23C");
-extern struct { s32 value; char pad[12]; } D_8009D208_absolute __asm__("D_8009D208");
-extern u8 D_8009CE68;
-extern BattleEntity *D_800B8A90[];
+#include "Battle_ActionSlotAndEnemy_externs.h"
 #define INDEX (D_8009D1D4_absolute.value)
 #define QUEUE_COUNT_READ (D_8009D23C_read.value)
 #define QUEUE_COUNT_WRITE (D_8009D23C_write.value)

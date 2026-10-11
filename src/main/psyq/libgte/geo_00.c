@@ -1,6 +1,5 @@
 /* PSY-Q LIBGTE GEO_00: rsin and sin_1. */
-extern short D_8009489C[];
-extern short D_8009589C[];
+#include "geo_00_externs.h"
 
 int sin_1(int angle);
 

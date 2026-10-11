@@ -9,12 +9,9 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/psyq_gpu.h"
 /* Moving effect with collision, queued trail positions and ground rendering. */
-extern FieldActor *g_PlayerEntity;
+#include "RoomEffect_HomingTrailSequence_externs.h"
 #include "pe1/gte_sine_table.h"
-extern short D_8019A7FE,D_8019A800,D_8019A802;
-extern GteRotation D_8019A3C0;
-extern RenderColor D_8019A4E4,D_8019A3C8;
-extern int Math_IntSqrt(int);
+#include "RoomEffect_HomingTrailSequence_externs_1.h"
 int func_801947BC(int event,RoomM350Particle *p)
 {
     GteMatrix matrix;
@@ -117,8 +114,7 @@ int func_801947BC(int event,RoomM350Particle *p)
     return 0;
 }
 
-extern GteShortVector D_8019A7A0;
-extern unsigned char D_8019A804;
+#include "RoomEffect_HomingTrailSequence_externs_2.h"
 int func_80194CFC(int event) {
     switch (event) {
     case 0:

@@ -11,10 +11,9 @@ typedef struct { Vector rotation; Vector *position; int color; } Particle;
 typedef struct { short delay, count; } State;
 
 /* The spawner owns the particles rendered by this callback. */
-extern int D_8019A414[];
-extern short D_800966EE[];
+#include "RoomEffect_PulsingPalettePair_externs.h"
 #include "pe1/gte_sine_table.h"
-extern int Inv_ScrambleGrid(void);
+#include "RoomEffect_PulsingPalettePair_externs_1.h"
 
 int func_801927A4(int event, Particle *effect) {
     if (event == 1) {

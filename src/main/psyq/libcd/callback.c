@@ -5,7 +5,7 @@
 
 #include "pe1/psyq_cd.h"
 
-extern volatile u8 cd_ready_event __asm__("D_8009B295");
+#include "callback_externs.h"
 
 int getintr(void);
 

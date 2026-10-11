@@ -29,28 +29,12 @@ void Battle_DrawStatusPanel(s32, struct BattleStatusPanel *);
 M2C_UNK Entity_ResolveDropTable(void *);                      /* static */
 s16 Entity_ApplyHitAndSetAnim(void *);                 /* static */
 void Entity_UpdateTimers(void);
-extern s32 D_8009CDDC;
+#include "Menu_MainUpdate_externs.h"
 /* Separate declarations preserve the original GCC quantities for each tail. */
-extern s32 draw_slot_status0 __asm__("D_8009CDDC");
-extern s32 draw_slot_status1 __asm__("D_8009CDDC");
-extern s32 draw_slot_status2 __asm__("D_8009CDDC");
 /* COMMON supplies small-data metadata to MASPSX. */
 s8 D_8009CE30;
 unsigned char D_8009CE34;
-extern u32 D_8009D1A0;
-extern unsigned int D_8009D1AC;
-extern u8 D_8009D1CE;
-extern u8 D_8009D1D4;
-extern s32 D_8009D1E8;
-extern struct FieldActor *D_8009D20C;
-extern u8 D_8009D234[];
-extern u8 D_8009D244;
-extern BattleEntity *D_8009D254;
-extern Combatant *D_8009D278;
-extern s32 D_8009D28C;
-extern u32 D_8009D2E8;
-extern s32 D_8009D2FC;
-extern void *D_800B0E08[];
+#include "Menu_MainUpdate_externs_1.h"
 
 static inline u8 Battle_GetReactionTimer(void) {
     return D_8009D234[0];

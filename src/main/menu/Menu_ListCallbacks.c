@@ -14,8 +14,7 @@
 MenuWidgetNode *g_MenuActiveWidget;
 ItemDataRecord *g_MenuActionItemData;
 int g_InvItemUsableFlag;
-extern unsigned char *g_MenuItemIconGlyphTable;
-extern short D_800922D0[];
+#include "Menu_ListCallbacks_externs.h"
 
 void Menu_DrawItemIcon(int index);
 void Menu_DrawSaveSlot1Item(int index);
@@ -56,7 +55,7 @@ void Menu_DrawItemListInvPanel(MenuWidgetNode *node) {
 }
 
 void Menu_DrawStatAllocationItem(int arg0);
-extern int g_StatBaseTable[];
+#include "Menu_ListCallbacks_externs_1.h"
 
 void Menu_DrawStatAllocationList(MenuWidgetNode *node) {
     MenuWidget_DrawList(node, Menu_DrawStatAllocationItem);

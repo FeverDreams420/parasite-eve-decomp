@@ -5,14 +5,7 @@
 
 #include "pe1/card_obj.h"
 
-extern void (*D_8009B750)(void);
-extern void (*D_8009B754)(void);
-extern int D_8009B760;
-extern int D_8009B764;
-extern int g_MemCardPort1Present;
-extern int g_MemCardDispatchResult;
-extern int g_MemCardCommandByte;
-extern int g_MemCardWriteBlockCount;
+#include "padif_2_externs.h"
 
 int MemCard_WriteByte(CardObj *obj, int value);
 
