@@ -7,7 +7,7 @@
 
 #include "include_asm.h"
 void Menu_DrawSaveBg(void);
-int Seq_GetElapsed(void);
+short Seq_GetElapsed(void);
 void SetDispMask(int arg0);
 void ResetGraph(int arg0);
 int Gpu_CheckDrawStatus(void);
@@ -36,7 +36,7 @@ void Gpu_RenderFrame(void) {
     displayFlags = g_GameState.flags & 0x200;
     if (displayFlags) {
         VSync(4);
-        if ((short)Seq_GetElapsed() >= 3) {
+        if (Seq_GetElapsed() >= 3) {
             SetDispMask(1);
         }
     } else {

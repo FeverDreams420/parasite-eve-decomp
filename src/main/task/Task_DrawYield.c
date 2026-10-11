@@ -5,11 +5,11 @@
 
 extern int g_SceneDataTable0;
 
-int Seq_GetElapsed(void);
+short Seq_GetElapsed(void);
 int Gpu_CheckDrawStatus(void);
 
 int Task_WaitFrameOrDraw(int **arg0) {
-    if ((short)Seq_GetElapsed() == *arg0[0]) {
+    if (Seq_GetElapsed() == *arg0[0]) {
         return 1;
     }
     if ((Gpu_CheckDrawStatus() << 24) != 0) {

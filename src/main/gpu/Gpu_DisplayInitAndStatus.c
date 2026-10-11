@@ -132,11 +132,11 @@ int Gpu_InitDisplay(int mode) {
     return 0;
 }
 
-int Draw_GetDrawEnabled(void) {
+inline int Draw_GetDrawEnabled(void) {
     return g_DrawEnabled.value;
 }
 
-int Seq_GetElapsed(void) {
+inline short Seq_GetElapsed(void) {
     if (g_DrawEnabled.bits != 0) {
         return g_SeqElapsed;
     }
@@ -145,41 +145,18 @@ int Seq_GetElapsed(void) {
 
 extern signed char D_800B0DBB;
 
+/* Both queries are integrated here; the inlined calls leave retail's
+ * otherwise empty eight-byte frame and the repeated enabled test. */
 int Gpu_CheckDrawStatus(void) {
-    int enabled = g_DrawEnabled.value;
-    int value;
-    int result;
-    register int flag asm("$3");
-
-    /* Matching debt: retail reserves an otherwise unused eight-byte frame. */
-    volatile int matchingStackReserve[2];
-    /* Preserve retail's second comparison of the enabled snapshot. */
-    flag = enabled;
-    if (enabled != 0) {
-        asm volatile("" : "=r"(flag) : "0"(flag));
-        value = -1;
-        if (flag != 0) {
-            value = (u16)g_SeqElapsed;
-            value = (unsigned int)value << 16;
-        } else {
-            asm("" : "=r"(value) : "0"(value));
-            value = (unsigned int)value << 16;
-        }
-        if (value > 0) {
-            flag = D_800B0DBB;
-            if (flag != 0) {
-                result = 2;
-            } else {
-                result = 1;
+    if (Draw_GetDrawEnabled()) {
+        if (Seq_GetElapsed() > 0) {
+            if (D_800B0DBB != 0) {
+                return 2;
             }
-        } else {
-            result = 0;
+            return 1;
         }
-    } else {
-        result = 0;
     }
-
-    return result;
+    return 0;
 }
 
 TimFile *Gpu_GetTimTableEntry(TimRelativeTable *table, int index) {
