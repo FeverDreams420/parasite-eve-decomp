@@ -38,7 +38,8 @@ int func_80192508(int event)
         i=0;
         out=&offset;
         do {
-            register int random asm("$16");
+            int random;
+            int highByte;
             int divisor;
             Vector *base;
             Particle *particle=func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
@@ -50,8 +51,8 @@ int func_80192508(int event)
             asm volatile("" : : "i"(&&offset_start));
 offset_start:
             vector.x=0; vector.y=0;
-            random=Inv_ScrambleGrid();
-            random=((unsigned int)random<<8)|(unsigned int)Inv_ScrambleGrid();
+            highByte=Inv_ScrambleGrid();
+            random=((unsigned int)highByte<<8)|(unsigned int)Inv_ScrambleGrid();
             divisor=192;
             vector.z=random%divisor+64;
             ApplyMatrixSV(&matrix,&vector,out);
