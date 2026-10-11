@@ -12,7 +12,6 @@
 
 typedef unsigned short u16_1;
 extern AkaoTrack D_800BC000_tracks[] asm("D_800BC000");
-extern char *D_8009D2C8_bytes asm("D_8009D2C8");
 
 void Akao_SetNotePitch(AkaoTrack *track, int arg);
 
@@ -560,19 +559,19 @@ void Seq_ClearTrackVoiceId(AkaoTrack *track, unsigned int voice_id) {
     unsigned int i;
     int bit;
     int reset;
-    char *state;
+    AkaoTickBank *state;
     int *assigned;
 
     if (voice_id < 24) {
         i = 0;
         reset = 24;
-        state = D_8009D2C8_bytes;
+        state = D_8009D2C8;
         bit = 1;
         assigned = (int *)track + 0x3C;
         do {
             if (*assigned == voice_id) {
                 *assigned = reset;
-                *(u32 *)(state + 0x14) &= ~(bit << i);
+                state->timing.allocated_voice_mask &= ~(bit << i);
             }
             i++;
             assigned += 0x47;
@@ -1124,10 +1123,10 @@ void Seq_TrackPitchSetup(AkaoBankPitchRangeCommand *arg0) {
     }
 }
 
-void Seq_SetGlobalPitchImmediate(void *arg0) {
+void Seq_SetGlobalPitchImmediate(AkaoGlobalPitchCommand *arg0) {
     int value;
 
-    value = *(u16 *)((char *)arg0 + 4);
+    value = arg0->pitch;
     g_AkaoGlobalPitchSlideCounter = 0;
     D_8009D2B4 = value << 16;
     Seq_ApplyGlobalPitch();
@@ -1138,36 +1137,36 @@ extern int g_AkaoGlobalPitchSlideStep;
 
 extern u32 g_SpuActiveVoiceMask;
 
-void Seq_SlideGlobalPitchToTarget(void *arg0) {
+void Seq_SlideGlobalPitchToTarget(AkaoGlobalPitchSlideCommand *arg0) {
     int duration;
     int raw_duration;
     int value;
 
-    raw_duration = *(int *)((char *)arg0 + 4);
+    raw_duration = arg0->duration;
     duration = 1;
     if (raw_duration != 0) {
         duration = raw_duration;
     }
 
-    value = *(u16 *)((char *)arg0 + 8) << 16;
+    value = arg0->target << 16;
     g_AkaoGlobalPitchSlideCounter = duration;
     g_AkaoGlobalPitchSlideStep = (value - D_8009D2B4) / duration;
 }
 
-void Seq_SlideGlobalPitchFromStartToTarget(void *arg0) {
+void Seq_SlideGlobalPitchFromStartToTarget(AkaoGlobalPitchRangeCommand *arg0) {
     int duration;
     int raw_duration;
     int start;
     int target;
 
-    raw_duration = *(int *)((char *)arg0 + 4);
+    raw_duration = arg0->duration;
     duration = 1;
     if (raw_duration != 0) {
         duration = raw_duration;
     }
 
-    target = *(u16 *)((char *)arg0 + 0xC) << 16;
-    start = *(u16 *)((char *)arg0 + 8) << 16;
+    target = arg0->target << 16;
+    start = arg0->start << 16;
     g_AkaoGlobalPitchSlideCounter = duration;
     D_8009D2B4 = start;
     g_AkaoGlobalPitchSlideStep = (target - start) / duration;

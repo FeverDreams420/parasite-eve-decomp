@@ -1835,7 +1835,7 @@ unsigned int SeqOp_SetTrack5AValue(void *ptr)
   pc = *((u8 **) ptr);
   *((u8 **) ptr) = pc + 1;
   value = pc[0];
-  if ((*((u16 *) (((char *) ptr) + 0x54))) == 0)
+  if (((AkaoTrack *)ptr)->parent_track_id == 0)
   {
     if ((value & 0xC0) != 0)
     {

@@ -106,6 +106,26 @@ typedef struct AkaoGlobalParamCommand {
     AkaoCommandS8 value;
 } AkaoGlobalParamCommand;
 
+/* Global pitch messages carry the pitch in the low half of each word. */
+typedef struct AkaoGlobalPitchCommand {
+    int opcode;
+    unsigned short pitch;
+} AkaoGlobalPitchCommand;
+
+typedef struct AkaoGlobalPitchSlideCommand {
+    int opcode;
+    int duration;
+    unsigned short target;
+} AkaoGlobalPitchSlideCommand;
+
+typedef struct AkaoGlobalPitchRangeCommand {
+    int opcode;
+    int duration;
+    unsigned short start;
+    unsigned short start_high;
+    unsigned short target;
+} AkaoGlobalPitchRangeCommand;
+
 /*
  * Staging area for the public AKAO command wrappers at 0x800864xx..0x800870xx
  * (0x800BCD80). The wrappers fill it, then Akao_EnqueueStagedCommand turns it
