@@ -155,12 +155,10 @@ int Menu_StepItemSelectScreen(MenuWidgetNode *node, unsigned int buttons)
         asm volatile("" : "=r"(index) : "0"(index));
         return index;
     }
-    if (({
-            int down = buttons & 2;
-            asm volatile("" : "=r"(index) : "0"(index));
-            down;
-        })) {
-        Menu_InitScrollDirection();
+    {
+        int down = buttons & 2;
+        asm volatile("" : "=r"(index) : "0"(index));
+        if (down) Menu_InitScrollDirection();
     }
     return index;
 }
