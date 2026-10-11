@@ -12,7 +12,7 @@ void func_80020CE4(void);
 
 
 void func_80192C00(RoomPlacementOwner *owner, RoomPlacementState *state) {
-    register FieldActor *player asm("$4") = g_PlayerEntity;
+    FieldActor *player = g_PlayerEntity;
     RoomPlacementMap *placement;
     int *script = D_8009D248;
 
@@ -31,8 +31,7 @@ void func_80192C00(RoomPlacementOwner *owner, RoomPlacementState *state) {
         g_PlayerEntity->pos_z = state->fallback_z;
     }
 
-    player = g_PlayerEntity;
-    Entity_FindFloor(player);
+    Entity_FindFloor(g_PlayerEntity);
 
     {
         FieldActor *updatedPlayer = g_PlayerEntity;
