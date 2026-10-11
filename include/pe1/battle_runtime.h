@@ -142,7 +142,6 @@ extern RenderObjectEntity D_800B0CEC;
 extern u16 D_800B0D88;
 extern u8 D_800B0D8A;
 extern u16 D_801F1F38;
-extern BattleGameStateWindow g_BattleGameStateWindow __asm__("D_8009D1A0");
 extern u32 D_8009D1A0;
 int Scene_InitEntityPlayer(int mode);
 void Pm_StopLowerHalf(void);

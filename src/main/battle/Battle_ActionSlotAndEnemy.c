@@ -1,102 +1,95 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "pe1/battle_runtime.h"
+#include "pe1/battle_update.h"
 
-#include "Battle_ActionSlotAndEnemy_externs.h"
-#define INDEX (D_8009D1D4_absolute.value)
-#define QUEUE_COUNT_READ (D_8009D23C_read.value)
-#define QUEUE_COUNT_WRITE (D_8009D23C_write.value)
-#define LOAD_RESULT (D_8009D208_absolute.value)
+/* MASPSX_FORCE_G0 keeps the battle words absolute, as retail; the COMMON
+ * fade level supplies the small-data metadata of the one $gp-relative byte. */
+u8 D_8009CE68;
+
 int Battle_ProcessActionSlot(BattleEntity *actor)
 {
-    {
-        EnemyCombatant *state = (EnemyCombatant *)actor->core;
-        int phase = state->coreFlags & 0x6000;
-        int result = 1;
+    EnemyCombatant *state = (EnemyCombatant *)actor->core;
+    int phase = state->coreFlags & 0x6000;
+    int result = 1;
 
-        if (phase == 0x2000) {
-            int index = INDEX;
-            s16 command = D_800BE830[index].command;
-            if (command != 0x196 && command != 0x189) {
-                if (D_8009D278_absolute.value->action->actionCode.actionId != 6) {
-                    if (QUEUE_COUNT_READ == 0 && D_800B8A90[0] != 0) {
-                        int i = 0;
-                        do {
-                            D_800B8A90[(u8)i] = 0;
-                            i++;
-                        } while (D_800B8A90[(u8)i] != 0);
-                    }
-                    {
-                        u8 count = QUEUE_COUNT_READ;
-                        QUEUE_COUNT_WRITE = count + 1;
-                        D_800B8A90[count] = actor;
-                    }
-                } else {
-                    register int room asm("$4") = 0x5B;
-                    if (actor == D_800BE830[index].actor) {
-                        LOAD_RESULT = Scene_LoadRoomAssets(room, actor);
-                        QUEUE_COUNT_WRITE = 0;
-                    }
+    if (phase == 0x2000) {
+        int index = D_8009D1D4;
+        s16 command = D_800BE830[index].command;
+        if (command != 0x196 && command != 0x189) {
+            if (D_8009D278->action->actionCode.actionId != 6) {
+                if (D_8009D23C == 0 && D_800B8A90[0] != 0) {
+                    int i = 0;
+                    do {
+                        D_800B8A90[(u8)i] = 0;
+                        i++;
+                    } while (D_800B8A90[(u8)i] != 0);
+                }
+                {
+                    u8 count = D_8009D23C;
+                    D_8009D23C = count + 1;
+                    D_800B8A90[count] = actor;
+                }
+            } else {
+                /* Matching debt: retail sets the room argument before the
+                 * test, in the branch delay slot. */
+                register int room asm("$4") = 0x5B;
+                if (actor == D_800BE830[index].actor) {
+                    D_8009D208 = Scene_LoadRoomAssets(room, actor);
+                    D_8009D23C = 0;
                 }
             }
-            result = 0;
-            if (state->field04.bytes.kind == 0 || state->hpAlive <= 0) goto done;
+        }
+        result = 0;
+        if (state->field04.bytes.kind != 0 && state->hpAlive > 0) {
             D_8009CE68 = 0xFF;
-        } else {
-            if (phase != 0x4000 || state->field04.bytes.kind == 0) goto done;
-
-            {
-            register int one asm("$2") = 1;
-            u8 color = D_8009CE68 - 8;
-            D_8009CE68 = color;
-            if (state->field04.bytes.kind == one) {
+        }
+    } else if (phase == 0x4000 && state->field04.bytes.kind != 0) {
+        /* Matching debt: retail compares the kind against a fresh 1, where
+         * GCC would reuse the result register that already holds 1. */
+        register int one asm("$2") = 1;
+        u8 color = D_8009CE68 - 8;
+        D_8009CE68 = color;
+        if (state->field04.bytes.kind == one) {
             if (color <= 0x80) {
-            actor->parent->renderObject.flags_9C |= 0x20;
-            state->coreFlags &= ~0x6000;
-            goto done;
+                actor->parent->renderObject.flags_9C |= 0x20;
+                state->coreFlags &= ~0x6000;
             } else {
-            Render_FadeEntityColor(&actor->parent->renderObject, color, color, color);
-            result = 0;
-            goto done;
+                Render_FadeEntityColor(&actor->parent->renderObject, color, color, color);
+                result = 0;
             }
-            }
-            if (state->field04.bytes.kind == 4) {
-            BattleEntity *iter = D_8009D20C_absolute.value;
-            for (; iter != 0; iter = iter->next) {
-            if (iter != D_8009D254_absolute.value && iter->core != 0 &&
-            ((EnemyCombatant *)iter->core)->field04.bytes.kind == 4) {
-            int shade = D_8009CE68;
-            if ((u8)shade <= 0x80) {
-            iter->renderObject.flags_9C |= 0x20;
-            state->coreFlags &= ~0x6000;
-            } else {
-            Render_FadeEntityColor(&iter->renderObject, shade, shade, shade);
-            result = 0;
-            }
-            /* Preserve the core flag reload across iterations. */
-            }
+        } else if (state->field04.bytes.kind == 4) {
+            BattleEntity *iter;
+            for (iter = (BattleEntity *)D_8009D20C; iter != 0; iter = iter->next) {
+                if (iter != D_8009D254 && iter->core != 0 &&
+                    ((EnemyCombatant *)iter->core)->field04.bytes.kind == 4) {
+                    int shade = D_8009CE68;
+                    if ((u8)shade <= 0x80) {
+                        iter->renderObject.flags_9C |= 0x20;
+                        state->coreFlags &= ~0x6000;
+                    } else {
+                        Render_FadeEntityColor(&iter->renderObject, shade, shade, shade);
+                        result = 0;
+                    }
+                }
             }
             return result;
-            }
-            if (!(state->hpAlive <= 0)) {
+        } else {
+            if (state->hpAlive > 0) {
             if (color <= 0x80) {
-            actor->renderObject.flags_9C |= 0x20;
-            state->coreFlags &= ~0x6000;
+                actor->renderObject.flags_9C |= 0x20;
+                state->coreFlags &= ~0x6000;
             } else {
-                {
-                int green = color;
-                /* Keep the green channel in a2 at the call boundary. */
-                Render_FadeEntityColor(&actor->renderObject, color, green, color);
+                Render_FadeEntityColor(&actor->renderObject, color, color, color);
                 result = 0;
-                }
-            }
             }
             }
         }
-    done:
-        return result;
     }
+    return result;
 }
+
 /* Advance enemy charge/status timers, movement, damage panels and death state.
 * Matching debt: register pins and empty compiler barriers retain retail
 * register lifetimes and the distinct core/statusCore aliases. No instruction ASM.
@@ -130,7 +123,6 @@ void Battle_UpdateEnemy(BattleEntity *entity) {
     u32 nextFlags;
     u32 nextStatusFlags;
     u32 actionFlags;
-    register u32 resumePhase asm("$4");
 
     asm("" : "=r"(actor) : "0"(actor));
     enemy = actor->core;
@@ -141,7 +133,7 @@ void Battle_UpdateEnemy(BattleEntity *entity) {
         statusCore = enemy;
         asm("" : "=r"(statusCore) : "0"(statusCore));
     }
-    if (!(g_BattleGameStateWindow.flags & 0x100)) {
+    if (!(D_8009D1A0 & 0x100)) {
         if (enemy->curHP == 0) {
             initialFlags = enemy->coreFlags;
             if (initialFlags & 0xE) {
@@ -207,16 +199,11 @@ void Battle_UpdateEnemy(BattleEntity *entity) {
             Asset_Find08w((s32) enemy->attackAssetId, 0, (s32) actor->renderObject.target_x, (s32) actor->renderObject.target_y, (s32) actor->renderObject.target_z);
         } else if (actionPhase == 0x4000) {
             s32 kind = enemy->field04.bytes.kind;
-            u32 actionBits;
-            if (kind == 0) {
-                actionBits = actionFlags & 0xE;
-                if (actionBits == 0) {
+            if (kind == 0 && (actionFlags & 0xE) == 0) {
+                {
                     if (actor->animLastFrame == actor->animPrev.parts.integer) {
-                        register int resumeKind asm("$2") = 2;
-                        resumePhase = enemy->resumePhase;
-                        asm("" : "=r"(resumePhase) : "0"(resumePhase));
-                        if (((resumePhase & 0xFF) == resumeKind) && !(enemy->coreFlags & 0x1800)) {
-                            enemy->resumePhase = resumePhase - 1;
+                        if ((enemy->resumePhase == 2) && !(enemy->coreFlags & 0x1800)) {
+                            enemy->resumePhase--;
                             Entity_SetActionMode(actor, (s32) enemy->savedActionMode);
                             if (enemy->savedInterpolation != 0) {
                                 actor->entityFlags |= 0x200;
@@ -243,13 +230,9 @@ void Battle_UpdateEnemy(BattleEntity *entity) {
                         actor->posZ.fixed += enemy->motionAmplitude * rcos((s32) enemy->motionAngle) * 0x10;
                         enemy->motionFrames -= 1;
                     }
-                } else {
-                    goto finishInterruptedAction;
                 }
             } else {
-                actionBits = actionFlags & 0xE;
-                if (actionBits != 0) {
-finishInterruptedAction:
+                if ((actionFlags & 0xE) != 0) {
                     statusCore->coreFlags &= ~0x6000;
                     if ((enemy->field04.bytes.kind != 0) && (enemy->hpAlive > 0)) {
                         effectKind = ((EnemyCombatant *)actor->core)->field04.bytes.kind;
@@ -286,7 +269,7 @@ finishInterruptedAction:
         }
     }
     if ((statusCore->coreFlags & 0xE) && (enemy->hpAlive > 0)) {
-        int contextFlags = g_BattleGameStateWindow.flags;
+        int contextFlags = D_8009D1A0;
         actor->motionX = 0;
         actor->motionY = 0;
         actor->motionZ = 0;
@@ -331,7 +314,7 @@ finishInterruptedAction:
         enemy->panelC_timer -= 1;
     }
     if (enemy->hpAlive <= 0) {
-        if (!(g_BattleGameStateWindow.flags & 0x100)) {
+        if (!(D_8009D1A0 & 0x100)) {
             if ((enemy->field04.bytes.kind == 1) && !(enemy->coreFlags & 0x6000)) {
                 actor->entityFlags |= 0x10;
                 Battle_SlotFree(actor);
@@ -344,6 +327,9 @@ finishInterruptedAction:
                     Battle_StepEntityAnimState(actor);
                 }
             } else if (enemy->field04.bytes.kind != 1 && enemy->field04.bytes.kind != 3) {
+                /* Matching debt: retail reaches this step from the kind-3
+                 * search below; a copy there is laid out as its own block
+                 * (lev 19). */
 stepDeathAnimation:
                 actor->motionX = 0;
                 actor->motionY = 0;
