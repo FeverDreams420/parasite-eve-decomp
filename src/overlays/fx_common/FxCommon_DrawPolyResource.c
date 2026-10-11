@@ -127,6 +127,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
             primitiveIndex1 = 0;
             primitiveCount = var_t8->counts[1];
             if (primitiveCount > 0) {
+                FxCommonFlatQuad *quad;
                 s32 temp_a0_3;
                 u32 temp_a0_4;
                 register s32 temp_v1_3 asm("$3");
@@ -138,11 +139,12 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                 var_s1 = var_s2 + 4;
                 do {
                     for (;;) {
+                        quad=(FxCommonFlatQuad *)var_s5;
                         temp_v1_3 = RotAverageNclip4(
-                            &((FxCommonFlatQuad *)var_s5)->vertices[0],
-                            &((FxCommonFlatQuad *)var_s5)->vertices[1],
-                            &((FxCommonFlatQuad *)var_s5)->vertices[2],
-                            &((FxCommonFlatQuad *)var_s5)->vertices[3],
+                            &quad->vertices[0],
+                            &quad->vertices[1],
+                            &quad->vertices[2],
+                            &quad->vertices[3],
                             &scratchpad->screenCoordinates[0], &scratchpad->screenCoordinates[1],
                             &scratchpad->screenCoordinates[2], &scratchpad->screenCoordinates[3],
                             &scratchpad->perspective, &scratchpad->orderingDepth,
@@ -161,7 +163,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                                 ((FxCommonF4Packet *)(var_s1 - 0x4))->xy3 =
                                     scratchpad->screenCoordinates[3];
                                 *((u32 *)&((FxCommonF4Packet *)(var_s1 - 0x4))->color) =
-                                    ((FxCommonFlatQuad *)var_s5)->color;
+                                    quad->color;
                                 var_s1 += 0x18;
                                 temp_a0_4 = ((FxCommonPacketTag *)var_s2)->packed;
                                 orderBuffer = D_8019C9C0;
