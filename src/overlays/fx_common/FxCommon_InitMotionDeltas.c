@@ -27,7 +27,7 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     s32 py;
     s32 pz;
     s32 qx;
-    register s32 qy asm("$6");
+    s32 qy;
     s32 qz;
     register void *nextTable asm("$4");
 
@@ -75,7 +75,6 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     secondValue &= 0xff;
     qx = point.x;
     ax = g_FxCommonMotionPosition1.x;
-    asm volatile("" : : "r"(ax));
     qy = point.y;
     asm volatile("" : : "r"(qy));
     ay = g_FxCommonMotionPosition1.y;
