@@ -67,11 +67,11 @@ int func_801947BC(int event,RoomM350Particle *p)
                 if(ANIM_OWNER_AS(RoomM350EffectActor)->instance->owner) ANIM_OWNER_AS(RoomM350EffectActor)->instance->owner->flags|=0x80000000;
                 p->tail.value.active.speed=0;
                 if(p->tail.value.active.frame<40) p->tail.value.active.frame=40;
-                count=&D_8019A7FC.pointerCount; n=*count;
+                count=&D_8019A7FC.pointerCount; n=D_8019A7FC.pointerCount;
                 if(n<4) {
                     int next=n;
                     asm volatile("" : "=r"(next) : "0"(next));
-                    *count=next+1;
+                    D_8019A7FC.pointerCount=next+1;
                     {
                         RoomM350PointerQueue *queue=(RoomM350PointerQueue *)((char *)count-PE1_OFFSETOF(RoomM350PointerQueue,count));
                         queue->positions[n]=&p->position;
@@ -82,11 +82,11 @@ int func_801947BC(int event,RoomM350Particle *p)
         }
         if(p->tail.value.active.frame>=36 && !(p->tail.value.active.frame&3)) {
             short *count=&D_8019A7FC.pointerCount;
-            short n=*count;
+            short n=D_8019A7FC.pointerCount;
             if(n<4) {
                 int next=n;
                 asm volatile("" : "=r"(next) : "0"(next));
-                *count=next+1;
+                D_8019A7FC.pointerCount=next+1;
                 {
                     RoomM350PointerQueue *queue=(RoomM350PointerQueue *)((char *)count-PE1_OFFSETOF(RoomM350PointerQueue,count));
                     queue->positions[n]=&p->position;
