@@ -1,7 +1,9 @@
 #include "pe1/room_m256.h"
 
 int func_80195320(int mode, u16 *out) {
-    char *p, *q, *r;
+    FieldActor *actor;
+    FieldActorState *state;
+    u8 *action;
     /* Keep the return register available for the retail mode dispatch. */
     register int ret asm("$2");
     RoomM256TrailEffect *task;
@@ -14,12 +16,12 @@ int func_80195320(int mode, u16 *out) {
         D_80195EF8 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5887704);
         func_800C6D5C((union FieldTexturedModel *)D_80195EF8, 0, 0);
         if (D_800E2368->flags) {
-            p = (char *)D_800F32D0->actor;
-            if (p) {
-                q = *(char **)p;
-                if (q) {
-                    r = *(char **)(q + 0x18);
-                    if (*r == 1) *r = 2;
+            actor = (FieldActor *)D_800F32D0->actor;
+            if (actor) {
+                state = actor->state;
+                if (state) {
+                    action = state->action_state;
+                    if (*action == 1) *action = 2;
                 }
             }
         }
