@@ -68,7 +68,7 @@ void Inv_ShowItemDescriptionPanel(s32 arg0)
     }
     if (var_s0 != ((void *) 0))
     {
-      new_var3 = Str_LookupTable8((*((u8 *) (((s8 *) var_s0) + 4))) - 1);
+      new_var3 = Str_LookupTable8(((ItemDataRecord *)var_s0)->itemId - 1);
       var_a0 = var_s0;
       var_a1 = new_var3;
       Sfx_DrawSlotRow(var_a0, var_a1);
@@ -77,18 +77,18 @@ void Inv_ShowItemDescriptionPanel(s32 arg0)
   else
   {
     temp_s0 = (temp_v1 << 5) + (&g_KeyItemDataTable[0]);
-    if ((*((u8 *) (((s8 *) temp_s0) + 5))) & 0x10)
+    if (((ItemDataRecord *)temp_s0)->flags & 0x10)
     {
       var_a1 = &g_CursorRenderDataBlock[0];
       var_a0 = temp_s0;
-      if ((*((u8 *) (6 + ((s8 *) temp_s0)))) == 9)
+      if (((ItemDataRecord *)temp_s0)->kind == 9)
       {
         var_a1 = (&g_CursorRenderDataBlock[0]) + 0x10;
       }
     }
     else
     {
-      var_a1 = Str_LookupTable8((*((u8 *) (((s8 *) temp_s0) + 4))) - 1);
+      var_a1 = Str_LookupTable8(((ItemDataRecord *)temp_s0)->itemId - 1);
       var_a0 = temp_s0;
     }
     Sfx_DrawSlotRow(var_a0, var_a1);

@@ -230,20 +230,20 @@ int Menu_EquipGridHandler(void *arg0, int arg1) {
 }
 
 void Menu_CreateEquipInfoPanel(int arg0, unsigned int arg1) {
-    void *node;
-    void *child;
+    MenuWidgetNode *node;
+    MenuWidgetNode *child;
 
     node = MenuWidget_CreateSimpleNode(0x3C, arg0, 0, 0);
     child = MenuWidget_CreateNode(0x3C, node, node);
-    *(void **)((char *)node + 0x2C) = Menu_EquipSelectInput;
-    *(void **)((char *)child + 0x30) = Menu_DrawEquipInfoOptionList;
+    node->update = Menu_EquipSelectInput;
+    child->draw = Menu_DrawEquipInfoOptionList;
     MenuWidget_SetCurrentNode(child);
 
     if (g_MenuInventoryViewMode == 0) {
         MenuWidget_OffsetPosition(
             node,
-            0x70 - *(int *)((char *)node + 0x18),
-            0x20 - *(int *)((char *)node + 0x1C)
+            0x70 - node->x,
+            0x20 - node->y
         );
     }
 

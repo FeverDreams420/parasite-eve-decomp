@@ -333,7 +333,7 @@ void Render_TransformVertices(RenderObjectEntity *input) {
     {                                                                                              \
         int index = (s16)actor->table_index;                                    \
         u16 *src;                                                               \
-        src = (u16 *)((u8 *)actor->matrices + index * 32);                                         \
+        src = (u16 *)&actor->matrices[index];                                         \
         Skinned_LoadAxis(src);                                                                     \
     }
 #define Render_SkinnedBuildMatrix(view_matrix, bone_expr, out_matrix, first_axis)                  \
@@ -407,7 +407,7 @@ void Render_TransformSkinnedVertices(RenderObjectEntity *input, u32 *view_input)
     {
         int index = header->anchor_matrix_index;
         s32 *matrix;
-        matrix = (s32 *)((u8 *)actor->matrices + index * 32);
+        matrix = (s32 *)&actor->matrices[index];
         Render_SkinnedLoadFullMatrix(matrix);
     }
         {
@@ -429,10 +429,10 @@ void Render_TransformSkinnedVertices(RenderObjectEntity *input, u32 *view_input)
     Render_SkinnedTransformVec(scratch_vec, &actor->hit_body.value0);
     {
         int index = (s16)actor->table_index;
-        s32 *matrix = (s32 *)((u8 *)actor->matrices + index * 32);
+        s32 *matrix = (s32 *)&actor->matrices[index];
         u8 *point;
         Render_SkinnedLoadFullMatrix(matrix);
-        point = (u8 *)actor->bounds_vertices + index * 16;
+        point = (u8 *)&actor->bounds_vertices[index * 2];
         Render_SkinnedTransformVec(point, &actor->target_x);
     }
     Render_SkinnedBuildMatrix(view_matrix, (s32 *)(u8 *)actor->matrices, scratch_matrix,
@@ -443,13 +443,13 @@ void Render_TransformSkinnedVertices(RenderObjectEntity *input, u32 *view_input)
         Render_SkinnedProject(inputVector, &actor->projected_x);
     }
     Render_SkinnedBuildMatrix(view_matrix,
-                              (s32 *)((u8 *)actor->matrices + (s16)actor->table_index * 32),
+                              (s32 *)&actor->matrices[(s16)actor->table_index],
                               scratch_matrix, Skinned_SelectedAxis(actor));
     Render_SkinnedLoadFullMatrix(scratch_matrix);
     {
         int index = (s16)actor->table_index;
         u8 *point;
-        point = (u8 *)actor->bounds_vertices + index * 16;
+        point = (u8 *)&actor->bounds_vertices[index * 2];
         Render_SkinnedProject(point, &actor->projected_target_x);
     }
 }

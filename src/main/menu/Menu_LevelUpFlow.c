@@ -206,7 +206,7 @@ s32 Menu_ConfirmExpAllocation(MenuWidgetNode *node, s32 flags) {
 }
 
 void Menu_CreateLevelUpBanner(void) {
-    *(void **)((char *)MenuWidget_CreateSimpleNode(0x16, 0, 0, 0) + 0x30) = Menu_DrawLevelUpBanner;
+    MenuWidget_CreateSimpleNode(0x16, 0, 0, 0)->draw = Menu_DrawLevelUpBanner;
 }
 
 void Menu_DrawLevelUpBanner(void) {

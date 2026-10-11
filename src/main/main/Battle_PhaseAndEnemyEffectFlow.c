@@ -239,7 +239,7 @@ block_35:
                     D1A0_W1 = D1A0_R1 & ~0x100;
                 }
                 Entity_SetActionMode(D254(15), ((Combatant *)D278(13))->actionMode12);
-                *(s32 *)((char *)D278(10) + PE1_OFFSETOF(Combatant, stateFlags)) = (s32) (*(s32 *)((char *)D278(10) + PE1_OFFSETOF(Combatant, stateFlags)) | 0x200000);
+                ((Combatant *)D278(10))->stateFlags |= 0x200000;
                 return;
             }
         }
@@ -251,7 +251,7 @@ block_39:
             if (!(*(s32 *)&queuedAction->attackWord & 0x3FF)) {
                 BattleCmd_CommitAmmoAndUpdate(queuedAction);
             }
-            *(s32 *)((char *)D278(10) + PE1_OFFSETOF(Combatant, stateFlags)) = (s32) (*(s32 *)((char *)D278(10) + PE1_OFFSETOF(Combatant, stateFlags)) | 0x100000);
+            ((Combatant *)D278(10))->stateFlags |= 0x100000;
             attackTarget = temp_s2->actor;
             temp_s0 = attackTarget->renderObject.target_y - D_8009D27C;
             temp_v0_2 = ratan2(temp_s0, Battle_CalcDistToPlayer(attackTarget, D254(14)));
@@ -263,7 +263,7 @@ block_39:
                     var_v1 = 1;
                 }
             }
-            Entity_SetActionMode(D254(15), *(u8 *)((char *)((void *)((s32)var_v1 + (s32)D278(13))) + PE1_OFFSETOF(Combatant, targetAngleActionModes)));
+            Entity_SetActionMode(D254(15), *(var_v1 + ((Combatant *)D278(13))->targetAngleActionModes));
             *(s32 *)((char *)D278(10) + PE1_OFFSETOF(Combatant, stateFlags)) = (s32) (*(s32 *)((char *)D278(10) + PE1_OFFSETOF(Combatant, stateFlags)) & 0xFFDFFFFF);
             D_8009CE39 = 0x58;
             D_8009CE38[0] = 0;
@@ -334,7 +334,7 @@ block_55:
                     var_a0_4 = ((BattleEntity *)var_a0_4)->next;
                 } while (var_a0_4 != NULL);
             }
-            *(s32 *)((char *)D278(10) + PE1_OFFSETOF(Combatant, stateFlags)) = (s32) (*(s32 *)((char *)D278(10) + PE1_OFFSETOF(Combatant, stateFlags)) & 0xFFF7FFFF);
+            ((Combatant *)D278(10))->stateFlags &= 0xFFF7FFFF;
             Battle_HaltOnPositiveX();
         }
     } else if (actor_flags & 0x100000) {

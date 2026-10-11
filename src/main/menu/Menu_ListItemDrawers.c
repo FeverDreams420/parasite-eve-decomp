@@ -50,7 +50,7 @@ void Menu_SoundTestSelect(int index)
 {
     int selected;
     int value;
-    void *node;
+    MenuWidgetNode *node;
 
     if (g_MenuLayoutLocked != 0) {
         selected = Inv_RestoreSelection(0);
@@ -72,10 +72,10 @@ void Menu_SoundTestSelect(int index)
 
     MenuWidget_SetCursorY(MenuWidget_FindByModeAndSelectedBase(1, 6));
     node = MenuWidget_FindByModeAndSelectedBase(2, 6);
-    if (*(int *)((char *)node + 0x44) >= 0) {
-        *(int *)((char *)node + 0x44) = -1;
+    if (node->cursor_x >= 0) {
+        node->cursor_x = -1;
         node = MenuWidget_FindByModeAndSelectedBase(2, 5);
-        *(int *)((char *)node + 0x44) = 0;
+        node->cursor_x = 0;
         MenuWidget_SetCurrentNode(node);
     }
     Draw_PrintTextById(0x39);

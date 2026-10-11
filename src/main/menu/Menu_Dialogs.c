@@ -36,11 +36,11 @@ int D_8009CFF4;
 void Menu_DrawParasiteSpellInfoPanel(void);
 
 void Menu_CreateParasiteSpellInfoPanel(int arg0) {
-    void *widget;
+    MenuWidgetNode *widget;
 
     if (MenuWidget_FindByModeAndSelectedBase(1, 0x1E) == 0) {
         widget = MenuWidget_CreateSimpleNode(0x1E, 0, 0, 0);
-        *(void **)((char *)widget + 0x30) = Menu_DrawParasiteSpellInfoPanel;
+        widget->draw = Menu_DrawParasiteSpellInfoPanel;
         MenuWidget_CreateSimpleNode(0x1C, 0, 0, 0);
     }
 
@@ -60,7 +60,7 @@ void Menu_CreateContextHelpPanel(void) {
     void *node = MenuWidget_FindByModeAndSelectedBase(1, 0x13);
 
     if (node == 0) {
-        *(void **)((char *)MenuWidget_CreateSimpleNode(0x13, 0, 0, 0) + 0x30) = Menu_DrawContextHelpText;
+        MenuWidget_CreateSimpleNode(0x13, 0, 0, 0)->draw = Menu_DrawContextHelpText;
     }
 }
 

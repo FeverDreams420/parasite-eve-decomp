@@ -33,12 +33,12 @@ extern unsigned char D_800A19C0_remeasure[] asm("D_800A19C0");
 
 void Menu_CreateMemCardProgressWidget(int arg0) {
     void *node;
-    void *widget;
+    MenuWidgetNode *widget;
 
     node = MenuWidget_GetCurrentNode();
     widget = MenuWidget_CreateSimpleNode(0x27, node, 0, 1);
-    *(void **)((char *)widget + 0x30) = MemCard_DrawProgress;
-    *(void **)((char *)widget + 0x2C) = Menu_MemCardProgressInputHandler;
+    widget->draw = MemCard_DrawProgress;
+    widget->update = Menu_MemCardProgressInputHandler;
     MenuWidget_SetCurrentNode(widget);
     g_MemCardProgressPrimList = arg0;
 }
