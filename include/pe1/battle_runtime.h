@@ -48,7 +48,7 @@ extern u8 D_800915C0[];
 extern const EnemyCombatant D_800109B0;
 extern BattleEnemySlot D_800A5D58[7];
 extern u8 D_8009D2EC;
-extern u8 D_8009D2A0;
+extern s8 D_8009D2A0;
 extern u8 D_8009CE74;
 extern u8 D_8009D244;
 

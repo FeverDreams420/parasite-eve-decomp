@@ -7,12 +7,12 @@
 u8 D_8009CE70, D_8009CE74;
 Combatant *D_8009D278;
 int D_8009D28C;
-u8 D_8009D2A0;
+s8 D_8009D2A0;
 void Aya_DeriveStats(int *maximum, int *current);
 void Battle_StartDeathAnim(void);
 /* Eight-stage transition: model fades, an effect spawn, stat recovery and
- * HUD reset. Matching debt: fixed-register pins, a shared fade tail,
- * interior HUD symbols, and a signed byte view of D_8009D2A0.
+ * HUD reset. Matching debt: fixed-register pins, a shared fade tail and
+ * interior HUD symbols.
  * The object pointer is recovered from its known variant_visible field. */
 int Battle_StepVictory(void)
 {
@@ -197,7 +197,7 @@ fade:
         D_8009CE74 = 0;
         D_8009D28C = 0;
         result = 1;
-        if (*(s8 *)&D_8009D2A0 == 0)
+        if (D_8009D2A0 == 0)
             Battle_StartDeathAnim();
         break;
     }
