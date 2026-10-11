@@ -673,6 +673,9 @@ PE1_STATIC_ASSERT(sizeof(BattleEntity) == sizeof(FieldActor),
 
 int Battle_RollEscapeChance(void);
 
+/* Restoring integer square root (battle/Math_IntSqrt.c). */
+int Math_IntSqrt(int value);
+
 /* ============================================================================
  * ENTITY TINT COLOR PACKETS (battle/menu)  -- documented, not yet symbol-named.
  *

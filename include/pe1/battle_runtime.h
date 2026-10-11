@@ -100,6 +100,7 @@ void Battle_InitFadeVars(void);
 void Battle_UpdatePlayerTurn(void);
 void Battle_ApplyPlayerHit(void);
 int Battle_CalcDistToPlayer(BattleEntity *actor, BattleEntity *player);
+int Battle_CalcRelativeAngle(BattleEntity *target, BattleEntity *viewer);
 void Battle_CheckEvasion(BattleEntity *actor, BattleEvasionOutcome *outcome,
                          int attackType);
 void Battle_AdvancePhase(void);

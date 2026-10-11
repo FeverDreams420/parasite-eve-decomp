@@ -1,7 +1,5 @@
 #include "pe1/battle_entity_anim.h"
 
-#define U16_AT(ptr, offset) (*(u16 *)((u8 *)(ptr) + (offset)))
-
 void Battle_StepEntityAnimState(BattleEntity *entity) {
     EnemyCombatant *state;
     BattleEntity *iter;
@@ -20,7 +18,7 @@ void Battle_StepEntityAnimState(BattleEntity *entity) {
         /* fallthrough */
     case 1:
         if (state->deathPersist != 0) {
-            if (U16_AT(entity, 0x16) < state->deathAnimFrame &&
+            if ((u16)(entity->animFrame >> 16) < state->deathAnimFrame &&
                 entity->actionMode == 0 &&
                 state->field04.bytes.kind < 2) {
                 return;
