@@ -3,7 +3,6 @@
 #include "pe1/field_anim.h"
 #include "pe1/field_actor.h"
 #include "pe1/gte.h"
-#include "pe1/psyq_nop.h"
 
 void func_800DB25C(GteShortVector *position, int x, int y, int angle,
                    int radius, int depth, int intensity, RenderColor *color)
@@ -15,9 +14,7 @@ void func_800DB25C(GteShortVector *position, int x, int y, int angle,
     D_8009CDD8 += 64;
     gte_lwc2_0_0(position);
     gte_lwc2_1_4(position);
-    PE1_NOP();
-    PE1_NOP();
-    gte_rtps_command();
+    gte_rtps();
     r = color->r * intensity / 128;
     g = color->g * intensity / 128;
     b = color->b * intensity / 128;
