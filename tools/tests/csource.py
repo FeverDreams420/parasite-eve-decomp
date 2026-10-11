@@ -198,12 +198,17 @@ def function_closure(name: str, path: pathlib.Path | None = None) -> str:
     that the function calls are part of what it compiles to.
     """
     path = path or find_definition(name)
+    return text_function_closure(_read(path), name, path)
+
+
+def text_function_closure(text: str, name: str, origin=None) -> str:
+    """function_closure over C text, e.g. a unit's preprocessed output."""
     texts = {}
-    for kind, header, body, _, _ in _items(_read(path)):
+    for kind, header, body, _, _ in _items(text):
         if kind == "function":
             texts[_function_name(header)] = (header, body)
     if name not in texts:
-        raise LookupError(f"{name} not defined in {path}")
+        raise LookupError(f"{name} not defined in {origin or 'text'}")
     keep, work = [name], [name]
     while work:
         body = texts[work.pop()][1]
@@ -282,14 +287,16 @@ def _identifiers(text: str) -> set[str]:
 
 
 def host_unit(*names: str, path: pathlib.Path | None = None, prefix: str = "",
-              keep_all: bool = False, include_dirs=()) -> str:
+              keep_all: bool = False, include_dirs=(), under: str = "src") -> str:
     """Preprocessed host-ready C for the unit that defines `names[0]`.
 
     Only the definitions in `names` (and static functions they reach) are kept
     unless `keep_all`; other non-static functions become prototypes.
     `prefix` is inserted before the unit during preprocessing (for #defines).
+    Pass `under` (an overlay directory) for address-named overlay functions:
+    the same func_ address can be defined by several overlays.
     """
-    path = path or find_definition(names[0])
+    path = path or find_definition(names[0], under)
     text = preprocess(path, prefix, include_dirs)
     text = _HOST_U_LONG.sub("typedef unsigned int u_long;", text)
     text = _STATIC_ASSERT.sub("", text)
@@ -432,16 +439,23 @@ def _link_unit(name: str, address: int, symbols: str, work: pathlib.Path,
     undefined = [(f[-1], f[-2]) for f in map(str.split, listing.splitlines())
                  if len(f) >= 2 and f[-2] in ("U", "C")]
     pinned = set(re.findall(r"(\w+)\s*=", symbols))
+    provided = dict(re.findall(
+        r"PROVIDE\(\s*(\w+)\s*=\s*(0x[0-9A-Fa-f]+)\s*\)", symbols))
     known = main_symbol_addresses()
     provide = ""
     if "_gp" in known:
-        provide += f"PROVIDE(_gp = 0x{known['_gp']:x});\n"
+        # The MIPS backend defines _gp itself, so a PROVIDE never applies
+        # once the unit has small data; assign the retail value directly.
+        provide += f"_gp = 0x{known['_gp']:x};\n"
     for u, kind in undefined:
         encoded = re.fullmatch(r"(?:D|func)_([0-9A-Fa-f]{8})", u)
         value = known.get(u, int(encoded.group(1), 16) if encoded else base)
         if kind == "C":
-            # PROVIDE never overrides a COMMON definition; assign directly.
-            if u not in pinned:
+            # PROVIDE never overrides a COMMON definition; assign directly,
+            # preferring an address the caller offered through PROVIDE.
+            if u in provided:
+                provide += f"{u} = {provided[u]};\n"
+            elif u not in pinned:
                 provide += f"{u} = 0x{value:x};\n"
         else:
             provide += f"PROVIDE({u} = 0x{value:x});\n"
