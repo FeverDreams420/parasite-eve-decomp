@@ -52,9 +52,9 @@ void RoomEffect_GroundEruptionInit(char *owner, void *arg1, char *state) {
     *(char **)workState = entity;
     *(RoomSpriteMatrix *)(workState + 4) =
         **(RoomSpriteMatrix **)(entity + 0x238);
-    *(s32 *)(workState + 0x18) = *func_800C2B28(1);
-    *(s32 *)(workState + 0x1C) = *func_800C2B28(2);
-    *(s32 *)(workState + 0x20) = *func_800C2B28(3);
+    ((RoomSpriteMatrix *)(workState + 4))->t[0] = *func_800C2B28(1);
+    ((RoomSpriteMatrix *)(workState + 4))->t[1] = *func_800C2B28(2);
+    ((RoomSpriteMatrix *)(workState + 4))->t[2] = *func_800C2B28(3);
     asset = Asset_SearchByKeyType(0xA6);
     callOwner = owner;
     *(int *)(workState + 0x24) = asset;
