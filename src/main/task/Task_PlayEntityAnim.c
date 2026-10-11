@@ -5,11 +5,11 @@
 #include "pe1/render_setup.h"
 #include "pe1/battle_entity_anim.h"
 #include "pe1/battle_runtime.h"
+#include "pe1/game_state.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-#include "Task_PlayEntityAnim_externs.h"
 /* COMMON supplies small-data metadata to MASPSX. */
 u32 *D_8009CE00;
 TaskNode *D_8009D300;
@@ -39,9 +39,9 @@ int Task_PlayEntityAnim(s16 **args) {
         post_actor->render_object.flags_9C |= 4;
 
         if (post_actor == player) {
-            control_flags = entity_control_load.value.unsigned_value;
+            control_flags = g_FieldMoveLock;
             control_flags &= ~2;
-            entity_control_store.value.unsigned_value = control_flags;
+            g_FieldMoveLock = control_flags;
             Anim_SetInterpRate(&D_800B0CEC, *args[0]);
             D_800B0CEC.flags_9C |= 4;
         }

@@ -19,8 +19,6 @@ void Battle_StartEncounter(int mode);
 M2C_UNK func_80042F20();
 int CD_StepReadState(int active);
 s32 g_SceneDataTable0;
-#include "Task_MemCardPositionCameraOps_externs.h"
-#define g_GameStateFlags (*(s32 *)&D_8009D1A0_o)
 
 PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, memcard_init_phase) == 0xF4,
                   memcard_init_phase_offset);
@@ -60,7 +58,7 @@ s32 Boot_MemCardStepInit(u8 **arg0) {
         break;
     case 0x3A:
         {
-            s32 t1a0 = D_8009D1A0_rd[0] | 2;
+            s32 t1a0 = g_GameStateFlags | 2;
             g_GameStateFlags = t1a0;
         }
         Battle_StartEncounter(**arg0);

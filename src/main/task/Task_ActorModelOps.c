@@ -25,7 +25,6 @@
 #define S32_AT(ptr, off) (*(s32 *)((u8 *)(ptr) + (off)))
 #define PTR_AT(ptr, off) (*(u8 **)((u8 *)(ptr) + (off)))
 
-#include "Task_ActorModelOps_externs.h"
 /* COMMON supplies small-data metadata to MASPSX. */
 u32 *D_8009CE00;
 TaskNode *D_8009D300;
@@ -118,15 +117,15 @@ int Task_SetGteMatrix(int **args) {
 
     flags = (flag_actor = g_CurrentEntity)->flags;
     if ((flags & 0x10000000) != 0) {
-        first_draw_slot = CDDC_toggle0_load.value.signed_value;
+        first_draw_slot = D_8009CDDC;
         first_draw_slot ^= 1;
-        CDDC_toggle0_store.value.signed_value = first_draw_slot;
+        D_8009CDDC = first_draw_slot;
         Render_DrawObject(&flag_actor->render_object, D_800BEA40.words);
         Render_UpdateClutTable(&g_CurrentEntity->render_object, 1,
-                               (s16)CDDC_draw1.value.signed_value);
-        second_draw_slot = CDDC_toggle1_load.value.signed_value;
+                               (s16)D_8009CDDC);
+        second_draw_slot = D_8009CDDC;
         second_draw_slot ^= 1;
-        CDDC_toggle1_store.value.signed_value = second_draw_slot;
+        D_8009CDDC = second_draw_slot;
     } else {
         if ((flags & 0x08000000) == 0) {
         result = 0;
