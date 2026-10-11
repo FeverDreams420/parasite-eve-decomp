@@ -1,20 +1,24 @@
 /* CC1_FLAGS: -fno-force-mem -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 
 #include "pe1/battle_runtime.h"
-#include "pe1/psyq_nop.h"
 #include "pe1/gte_types.h"
 #include "pe1/battle_main.h"
 
-typedef struct BattleGlobalSlot {
-    char storage[16];
-} BattleGlobalSlot;
-
-#include "Battle_FinalizeAttackResult_externs.h"
-
-#define ACTIVE_COMBATANT_FIRST (*(Combatant **)&D_8009D278_first)
-#define ACTIVE_COMBATANT_SECOND (*(Combatant **)&D_8009D278_second)
-#define PLAYER_ENTITY (*(BattleEntity **)&D_8009D254_large)
+/* COMMON supplies the small-data sizes of the turn queue words to MASPSX,
+ * which then keeps the load delay before each $gp store; every other word
+ * stays absolute. */
+u8 D_8009CE38[4];
+u8 D_8009CE39;
+u8 D_8009CE3A;
+u8 D_8009CE3C;
+u8 D_8009D1D4;
+u8 D_8009D1DC;
+int D_8009D200;
+u8 D_8009D274;
+s16 D_8009D27C;
+u8 D_8009D294;
 
 void Battle_FinalizeAttackResult(void)
 {
@@ -22,14 +26,14 @@ void Battle_FinalizeAttackResult(void)
     BattleAction *action;
     u32 attack_word;
 
-    combatant = ACTIVE_COMBATANT_FIRST;
+    combatant = D_8009D278;
     action = combatant->action;
 
     if (action->actionCode.actionId == 8) {
         BattleEntity *player;
 
         D_8009D294 = 1;
-        player = PLAYER_ENTITY;
+        player = D_8009D254;
         Asset_Find08Alt(0x46C, 0, player->posX.parts.integer,
                         player->posY.parts.integer, player->posZ.parts.integer);
         return;
@@ -42,7 +46,7 @@ void Battle_FinalizeAttackResult(void)
             BattleEntity *player;
 
             Pm_SendCmd(D_8009D200, 0, 0, 1, 0, 0);
-            player = PLAYER_ENTITY;
+            player = D_8009D254;
             Akao_SetPos3D(0, 0, player->posX.parts.integer,
                           player->posY.parts.integer, player->posZ.parts.integer);
         }
@@ -52,7 +56,7 @@ void Battle_FinalizeAttackResult(void)
             BattleAction *next_action;
             u32 next_attack_word;
 
-            next_combatant = ACTIVE_COMBATANT_SECOND;
+            next_combatant = D_8009D278;
             next_action = next_combatant->action;
             next_attack_word = next_action->attackWord;
             next_action->attackWord = (next_attack_word & ~0x3FF) |
@@ -65,22 +69,17 @@ void Battle_FinalizeAttackResult(void)
         BattleEntity *player;
 
         D_8009D294 = 0;
-        player = PLAYER_ENTITY;
+        player = D_8009D254;
         Asset_Find08Alt(0x46E, 0, player->posX.parts.integer,
                         player->posY.parts.integer, player->posZ.parts.integer);
     }
 }
 
-#include "Battle_FinalizeAttackResult_externs_1.h"
 
 
 int BattleCmd_CommitAmmoAndUpdate(); /* no prototype: retail calls it with and without the action */
 
-#define D_8009D254 (*(BattleEntity **)battle_entity_alias_0)
-#define D_8009D278 ACTIVE_COMBATANT_FIRST
-#define D_8009D2FC (*(int *)battle_sfx_slot_large)
 
-#include "Battle_FinalizeAttackResult_externs_2.h"
 int Battle_StepCharacterAction(BattleInitSlot *slot)
 {
     BattleInitSlot * turnSlot = slot;
@@ -120,14 +119,14 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
     ready:
         }
         D_8009D274 = 0;
-        { u8 animMode = (*(Combatant **)battle_actor_group_16)->action->animMode[1]; PE1_NOP(); D_8009CE39 = animMode; }
+        { u8 animMode = D_8009D278->action->animMode[1]; D_8009CE39 = animMode; }
         asm volatile("");
         { height = turnSlot->actor->renderObject.target_y; angle = height - D_8009D27C; }
         { facingAngle = ratan2(angle, Battle_CalcDistToPlayer(turnSlot->actor, D_8009D254));
         if (facingAngle < -0xAB) direction = 0; else { predicate = facingAngle < 0xE4; if (predicate) direction = 1; else direction = 2; } }
-        Entity_SetActionMode(D_8009D254, *((u8 *)(*(Combatant **)battle_actor_group_16) + 0x17 + direction));
-        (*(BattleEntity **)battle_entity_alias_6)->entityFlags &= ~0x100;
-        D_8009D1DC = (*(volatile u32 *)&(*(Combatant **)battle_actor_group_17)->action->turnWord) & 0xF;
+        Entity_SetActionMode(D_8009D254, *((u8 *)D_8009D278 + 0x17 + direction));
+        D_8009D254->entityFlags &= ~0x100;
+        D_8009D1DC = (*(volatile u32 *)&D_8009D278->action->turnWord) & 0xF;
         Battle_FinalizeAttackResult();
         break;
 
@@ -139,12 +138,12 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
             break;
         indexB = D_8009D1D4;
         if (D_800BE830[indexB].command == 0x189) {
-            idleActor = (*(Combatant **)battle_actor_group_16);
+            idleActor = D_8009D278;
             idleEntity = D_8009D254;
         }
         else
         {
-        { active = (*(Combatant **)battle_actor_group_17);
+        { active = D_8009D278;
         activeAction = active->action;
         if ((activeAction->turnWord & 0xC0) == 0xC0) {
             int pending = D_8009D1DC;
@@ -161,15 +160,15 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
         D_8009D1DC = 0;
         if (nextCode >= 3 || nextIndexB == D_8009CE3C) {
             Entity_SetActionMode(D_8009D254, active->actionMode12);
-            (*(Combatant **)battle_actor_group_16)->stateFlags |= 0x200000;
-            { u8 animMode = (*(Combatant **)battle_actor_group_16)->action->animMode[0]; PE1_NOP(); D_8009CE38[0] = animMode; }
+            D_8009D278->stateFlags |= 0x200000;
+            { u8 animMode = D_8009D278->action->animMode[0]; D_8009CE38[0] = animMode; }
             result = 1; break;
         }
         }
         { EnemyCombatant *enemy = (EnemyCombatant *)((BattleInitSlot *)((u8 *)D_800BE830 + offset))->actor->core; if (!(enemy->hpAlive > 0 && enemy)) {
             Entity_SetActionMode(D_8009D254, active->actionMode12);
             D_8009D1D4++;
-            (*(Combatant **)battle_actor_group_16)->stateFlags |= 0x200000;
+            D_8009D278->stateFlags |= 0x200000;
             goto action_done;
         }
         }
@@ -180,12 +179,12 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
             { height = turnSlot->actor->renderObject.target_y; angle = height - D_8009D27C; }
             { facingAngle = ratan2(angle, Battle_CalcDistToPlayer(turnSlot->actor, D_8009D254));
         if (facingAngle < -0xAB) direction = 0; else { predicate = facingAngle < 0xE4; if (predicate) direction = 1; else direction = 2; } }
-            Entity_SetActionMode((*(BattleEntity **)battle_entity_alias_7), *((u8 *)(*(Combatant **)battle_actor_group_17) + 0x14 + direction));
+            Entity_SetActionMode(D_8009D254, *((u8 *)D_8009D278 + 0x14 + direction));
             result = 1;
-            { register Combatant *postActor = (*(Combatant **)battle_actor_group_16);
-              { register BattleEntity *postEntity = (*(BattleEntity **)battle_entity_alias_0);
-                postEntity->animFrame = (u32)(*(BattleEntity **)battle_entity_alias_0)->animLastFrame << 16;
-                (*(BattleEntity **)battle_entity_alias_0)->entityFlags |= 0x100; }
+            { register Combatant *postActor = D_8009D278;
+              { register BattleEntity *postEntity = D_8009D254;
+                postEntity->animFrame = (u32)D_8009D254->animLastFrame << 16;
+                D_8009D254->entityFlags |= 0x100; }
               { register BattleAction *postAction = postActor->action;
                 { u32 turnWord = postAction->turnWord;
                 D_8009CE39 += D_8009CE3A;
@@ -194,9 +193,9 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
         }
         }
         if (BattleCmd_CommitAmmoAndUpdate()) {
-            Entity_SetActionMode((*(BattleEntity **)battle_entity_alias_6), 0xC);
-            Akao_SetPos3D(1, 0, (*(BattleEntity **)battle_entity_alias_7)->posX.parts.integer,
-                          (*(BattleEntity **)battle_entity_alias_7)->posY.parts.integer, (*(BattleEntity **)battle_entity_alias_7)->posZ.parts.integer);
+            Entity_SetActionMode(D_8009D254, 0xC);
+            Akao_SetPos3D(1, 0, D_8009D254->posX.parts.integer,
+                          D_8009D254->posY.parts.integer, D_8009D254->posZ.parts.integer);
         action_done:
             result = 1; asm volatile(""); break;
         }
@@ -215,8 +214,8 @@ asm volatile("" : : "r"(enemy));
                 }
             target_dead:
             Entity_SetActionMode(caseEntity, active->actionMode12);
-            (*(Combatant **)battle_actor_group_16)->stateFlags |= 0x200000;
-            D_8009D1DC = (*(volatile u32 *)&(*(Combatant **)battle_actor_group_16)->action->turnWord) & 0xF;
+            D_8009D278->stateFlags |= 0x200000;
+            D_8009D1DC = (*(volatile u32 *)&D_8009D278->action->turnWord) & 0xF;
             result = 1; break;
             target_alive:
             D_8009D1DC = nextRetry;
@@ -225,13 +224,13 @@ asm volatile("" : : "r"(enemy));
             }
         }
         if (BattleCmd_CommitAmmoAndUpdate()) {
-            Entity_SetActionMode((*(BattleEntity **)battle_entity_alias_6), 0xC);
-            Akao_SetPos3D(1, 0, (*(BattleEntity **)battle_entity_alias_7)->posX.parts.integer,
-                          (*(BattleEntity **)battle_entity_alias_7)->posY.parts.integer, (*(BattleEntity **)battle_entity_alias_7)->posZ.parts.integer);
+            Entity_SetActionMode(D_8009D254, 0xC);
+            Akao_SetPos3D(1, 0, D_8009D254->posX.parts.integer,
+                          D_8009D254->posY.parts.integer, D_8009D254->posZ.parts.integer);
             break;
         }
-        idleActor = (*(Combatant **)battle_actor_group_16);
-        idleEntity = (*(BattleEntity **)battle_entity_alias_6);
+        idleActor = D_8009D278;
+        idleEntity = D_8009D254;
         }
     set_idle:
         result = 1;
@@ -246,7 +245,7 @@ asm volatile("" : : "r"(enemy));
             break;
         if (D_8009D200 < 0)
             break;
-        if ((*(Combatant **)battle_actor_group_17)->action->actionCode.actionId != 8)
+        if (D_8009D278->action->actionCode.actionId != 8)
             Pm_SendCmd(D_8009D200, 0, 0, 2, 0, 0);
         Pm_SendCmd(D_8009D2FC, 0, 0, 2, 0, 0);
         break;
