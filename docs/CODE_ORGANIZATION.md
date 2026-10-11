@@ -143,6 +143,11 @@ exist for the bytes, and why:
 - `Spu_UploadSampleBlock` walks the header words with `*header++` on its
   parameter. A separate cursor lets CSE fold every word into an offset from
   the untouched parameter, while retail advances the pointer.
+- `Spu_TickVoiceEnvelopes` computes the pitch LFO depth inside both
+  branches of the speed test, into a `u16`. Retail shifts the depth before
+  loading `pitch_lfo_phase`: a depth assigned once after the branches is a
+  single-set pseudo that sched1 places late, and a `u32` depth assigned in
+  both branches is allocated to `$v1`.
 - `Akao_LookupPitchPeriod` assigns the octave copy again inside
   `if (detune)`; without it CSE substitutes the octave for the copy and the
   two values share a register. `SeqOp_LoadInstrumentFromIndex` and
@@ -164,9 +169,6 @@ permuter and by hand):
   83, and the barriers add the cursor references that flip the order. A
   separate copy-loop counter removes the cursor barriers but lands the counter
   in a2 (lev 3); reusing the size as the counter flips priority back (lev 31).
-- `Spu_TickVoiceEnvelopes` (1 barrier): retail shifts the LFO depth before
-  loading `pitch_lfo_phase`; sched1 places a single-set pseudo late, so every
-  plain order loads first (lev 2-21).
 - `Spu_RestoreVoiceFromStereoSlot` (3 pins, 2 barriers): retail keeps
   0x1FF93 in a3 for both the `or` and the fourth call argument and copies the
   stereo index to a0 before indexing. A constant costs 0 on MIPS, so CSE

@@ -983,8 +983,7 @@ void Spu_TickVoiceEnvelopes(AkaoTrack *track, unsigned voice_mask)
 {
     int new_value;
     int value;
-    u32 depth;
-    u32 product;
+    u16 depth;
     s16 *table;
 
     if (track->expression_duration != 0) {
@@ -1020,12 +1019,10 @@ void Spu_TickVoiceEnvelopes(AkaoTrack *track, unsigned voice_mask)
         track->pitch_lfo_target += (u16)track->pitch_lfo_delta;
         value = (track->pitch_lfo_target & 0x7F00) >> 8;
         if ((track->pitch_lfo_target & 0x8000) != 0) {
-            product = value * track->pitch_base;
+            depth = (value * track->pitch_base) >> 7;
         } else {
-            product = value * (((track->pitch_base << 4) - track->pitch_base) >> 8);
+            depth = (value * (((track->pitch_base << 4) - track->pitch_base) >> 8)) >> 7;
         }
-        depth = product >> 7;
-        asm volatile("" : "=r"(depth) : "0"(depth));
         track->pitch_lfo_depth = depth;
 
         if (track->pitch_lfo_phase != 1) {
