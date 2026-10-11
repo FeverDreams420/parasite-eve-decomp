@@ -125,7 +125,7 @@ void Entity_ResolveDropTable(void *arg0) {
 #undef EFFECT_FIELD
 #undef ENEMY_FIELD
 
-extern u16 D_8009D298;
+extern s16 D_8009D298;
 extern u8 g_BattleHitActionMode[];
 extern u8 g_BattleHitActionSubmode[];
 extern u32 g_BattleHitActionParam[];

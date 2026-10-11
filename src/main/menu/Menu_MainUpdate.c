@@ -11,7 +11,8 @@
 #include "pe1/akao/init_state.h"
 
 /* CC1_FLAGS: -g3 -G1 */
-/* MASPSX_FLAGS: --expand-div -G1 */
+/* MASPSX_FLAGS: --expand-div -G1 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 
 #define NULL ((void *)0)
 
@@ -32,15 +33,17 @@ extern s32 D_8009CDDC;
 extern s32 draw_slot_status0 __asm__("D_8009CDDC");
 extern s32 draw_slot_status1 __asm__("D_8009CDDC");
 extern s32 draw_slot_status2 __asm__("D_8009CDDC");
-extern s8 D_8009CE30;
+/* COMMON supplies small-data metadata to MASPSX. */
+s8 D_8009CE30;
+unsigned char D_8009CE34;
 extern s32 D_8009D1A0;
-extern s32 D_8009D1AC;
-extern s8 D_8009D1CE[];
-extern u8 D_8009D1D4[];
+extern unsigned int D_8009D1AC;
+extern u8 D_8009D1CE;
+extern u8 D_8009D1D4;
 extern s32 D_8009D1E8;
 extern void *D_8009D20C;
 extern u8 D_8009D234[];
-extern s8 D_8009D244[];
+extern u8 D_8009D244;
 extern BattleEntity *D_8009D254;
 extern Combatant *D_8009D278;
 extern s32 D_8009D28C;
@@ -705,7 +708,7 @@ block_61:
     D_8009D278->hpMirror = (u16) D_8009D278->curHP;
     if (temp_a0_4 <= 0) {
         *temp_s2 |= 0x2000;
-        if (Pad_GetMenuPressedBitOrDisabled() != D_8009D1D4[0]) {
+        if (Pad_GetMenuPressedBitOrDisabled() != D_8009D1D4) {
             if (D_8009D200 != -1) {
                 Pm_SendCmd(D_8009D200, 0, 0, 2, 0, 0);
                 D_8009D200 = -1;
@@ -887,7 +890,7 @@ block_61:
             Battle_ReturnToIdle();
         }
         Tbl_ResetAll();
-        if (Pad_GetMenuPressedBitOrDisabled() != D_8009D1D4[0]) {
+        if (Pad_GetMenuPressedBitOrDisabled() != D_8009D1D4) {
             if (D_8009D200 != -1) {
                 Pm_SendCmd(D_8009D200, 0, 0, 2, 0, 0);
                 D_8009D200 = -1;
@@ -920,11 +923,11 @@ block_61:
             D_8009D28C = 3;
             tail_sp = M2C_FIELD((void *) var_t0, s16 *, 0x32);
             tail_a1 = 0;
-            D_8009D1CE[0] = 0;
+            D_8009D1CE = 0;
             Asset_Find08Alt(tail_a0, tail_a1, tail_a2, tail_a3, tail_sp);
         }
         }
-        D_8009D244[0] = 0;
+        D_8009D244 = 0;
         MenuWidget_InitPool();
         {
         register s32 minus5;

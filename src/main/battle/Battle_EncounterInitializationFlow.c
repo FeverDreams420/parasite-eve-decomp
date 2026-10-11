@@ -210,7 +210,7 @@ void Battle_StartEncounter(int mode) {
     asm volatile("" : : : "memory");
     { register u32 initial_flags asm("$3");
     initial_flags = battle_start_flags_read[0];
-    D_8009D1A8[0] = 0;
+    D_8009D1A8.summary = 0;
     D_8009D1CE = 0;
     D_8009D235[0] = 0;
     D_8009D304 = 0;
