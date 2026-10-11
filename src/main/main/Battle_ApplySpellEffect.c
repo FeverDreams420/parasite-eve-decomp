@@ -12,7 +12,7 @@
 #define ATTRIBUTE_EFFECT_FLAGS(base) \
     ((BattleAttributes *)(base))->effectFlags
 
-extern BattleActionSoundTable D_80010760;
+extern const BattleActionSoundTable D_80010760;
 
 s32 rand(void);
 
