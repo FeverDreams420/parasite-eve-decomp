@@ -16,8 +16,6 @@
 
 
 #include "Menu_StatPanels_externs.h"
-int Menu_StepItemSelectScreen(MenuWidgetNode *node, unsigned int flags);
-void Menu_DrawItemList(void *node);
 
 void Menu_CreateInventoryTabView(void) {
     s32 var_a0;

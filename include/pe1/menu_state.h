@@ -25,10 +25,23 @@ extern int g_InvSwapTargetIndex;
 /* One-based packed cursor (bit 0 column, bits 1-7 row, bits 8+ scroll) of the
  * equipment slot a swap started from; zero when none. */
 extern int g_MenuEquipSwapSource;
+/* Inventory item picked to swap into the equipment slot. */
+extern int g_MenuEquipSwapItem;
+/* When set, reopening the inventory does not put the swap item back. */
+extern int g_MenuEquipSwapSkipRestore;
+/* 1 + equipment mode while the equip screen runs from the item menu. */
+extern int g_MenuEquipMode;
+/* Item-category mask the item menu lists. */
+extern int g_MenuItemContextFlag;
+extern int g_MenuBattleStatusOverlayActive;
+extern int g_MenuSelectionLocked;
 /* Which list the equipment options act on: 0 sorts Aya's inventory, any
  * other value sorts Wayne's storage. */
 extern int g_MenuInventoryViewMode;
 extern int g_InvItemUsableFlag;
+/* Set while the list column layout must not be restored from the saved
+ * cursor table. */
+extern int g_MenuLayoutLocked;
 
 /* Visual settings: the blend colour and screen base Y in effect when the
  * colour and screen adjust panels opened, restored on cancel, and the

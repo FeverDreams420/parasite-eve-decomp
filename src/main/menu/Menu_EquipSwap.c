@@ -2,6 +2,7 @@
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "common.h"
 #include "pe1/inventory.h"
+#include "pe1/inventory_slots.h"
 #include "pe1/menu_equipment.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/psyq_nop.h"
@@ -10,14 +11,11 @@
 
 #define NULL ((void *)0)
 
-#include "../../../tools/m2c/m2c_macros.h"
-
 /* Equipment swap: picking the Aya inventory item to exchange records the
  * swap source; returning from the equip screen reopens the inventory. */
 
 int g_MenuEquipSwapSource;
 int g_MenuSwapReturnPending;
-#include "Menu_EquipSwap_externs.h"
 
 s32 Menu_HandleAyaInventorySelectionInput(s32 arg0, s32 arg1)
 {
@@ -30,8 +28,10 @@ s32 Menu_HandleAyaInventorySelectionInput(s32 arg0, s32 arg1)
             s32 item_id;
 
             item_id = g_AyaInventoryItems[MenuWidget_GridCellIndex(temp_v0)];
+            /* Match debt: MASPSX does not fill the load delay after the
+             * indexed halfword load ahead of a $gp store; ASPSX did. */
             PE1_NOP();
-            D_8009CF9C = item_id;
+            g_MenuEquipSwapItem = item_id;
         }
         temp_v0_2 = MenuWidget_GridCellIndex(temp_v0) | (((MenuWidgetNode *)temp_v0)->scroll_y << 8);
         g_MenuEquipSwapSource = temp_v0_2 + 1;

@@ -1,9 +1,10 @@
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "pe1/menu_state.h"
 #include "pe1/inventory_queries.h"
 #include "pe1/menu_context_help.h"
 #include "pe1/inventory.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: --use-comm-section -G8 */
+#include "pe1/inventory_slots.h"
 #include "pe1/menu_equipment.h"
 #include "pe1/menu_item_rows.h"
 #include "pe1/menu_queue.h"
@@ -17,11 +18,6 @@
  * inventory swap screen, the equip-mode getter and the equip list container
  * draw. Contiguous at 0x8004E704 (main_tu_evidence G0462). */
 
-#include "Menu_OpenEquipInventoryScreens_externs.h"
-void Inv_ResetActiveList(void);
-void Menu_CreateBonusPointAllocationView(void);
-void Menu_CreateContextHelpPanel(void);
-void Inv_RebuildSelectableMask(void);
 
 void Menu_OpenEquipScreen(int mode)
 {
@@ -101,6 +97,8 @@ void Menu_OpenInventoryScreen(void) {
     MenuWidgetNode *root1;
     MenuWidgetNode *node;
     MenuWidgetNode *current;
+    /* Match debt: retail loads the 9 once into a0 ahead of the branch, for
+     * both MenuWidget_InitPool(9) and Inv_SetActiveList(9, 0). */
     register s32 nine asm("$4");
 
     nine = 9;
@@ -109,7 +107,7 @@ void Menu_OpenInventoryScreen(void) {
 
     if (g_MenuEquipSwapSource != 0) {
         /* The retail caller passes 9 although the pool initializer ignores it. */
-        ((void (*)())MenuWidget_InitPool)(nine);
+        ((void (*)(int))MenuWidget_InitPool)(nine);
 
         if (MenuWidget_FindByModeAndSelectedBase(1, 0) == 0) {
             root0 = MenuWidget_CreateSimpleNode(0, 0, 0, 0);
@@ -168,10 +166,10 @@ void Menu_OpenInventoryScreen(void) {
             node->scroll_y = equip_entry >> 8;
         }
 
-        if (D_8009D008 != 0) {
-            D_8009D008 = 0;
+        if (g_MenuEquipSwapSkipRestore != 0) {
+            g_MenuEquipSwapSkipRestore = 0;
         } else {
-            D_800C0E46[g_MenuEquipSwapSource] = D_8009CF9C;
+            g_AyaInventoryItems[g_MenuEquipSwapSource - 1] = g_MenuEquipSwapItem;
             Inv_RebuildSelectableMask();
         }
 

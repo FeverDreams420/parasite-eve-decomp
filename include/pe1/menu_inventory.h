@@ -21,6 +21,8 @@ void Menu_OpenItemUsePanelAtIndex(int index);
 void Menu_OpenSkillSelectionView(void);
 void Menu_OpenInventoryOrSwapView(int showList);
 void Menu_ConfigureScreen(void);
+int Menu_StepItemSelectScreen(MenuWidgetNode *node, unsigned int buttons);
+void Menu_DrawItemList(MenuWidgetNode *node);
 void Menu_StepInventoryRoot(int mode, int index, int arg);
 void Menu_CreateNotificationDialog(int message, int arg);
 void MenuInput_SetPollingPaused(int paused);
