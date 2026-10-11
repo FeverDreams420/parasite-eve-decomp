@@ -9,12 +9,10 @@ int func_80192DA0(int mode, volatile RoomSpiralDropSparkRecord *record) {
     GteShortVector position;
     switch (mode) {
     case 1: {
-        int speed = particle->speed - 1;
+        s16 speed = particle->speed - 1;
         s16 y = particle->y;
         s16 delta = particle->speed;
         int frame = D_800E27EC;
-        /* Keep the decremented speed live before updating the particle. */
-        PE1_COMPILER_USE(speed);
         ((RoomSpiralDropSparkCallbackView *)particle)->y = y - delta;
         ((RoomSpiralDropSparkCallbackView *)particle)->speed = speed;
         if (frame >= 24) return 1;
