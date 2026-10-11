@@ -24,14 +24,14 @@ void _padSetCmd(CardObj *arg0, unsigned char arg1, u8 *arg2, unsigned char arg3)
 
 void _padSendAtLoadInfo(CardObj *arg0)
 {
-    int state = arg0->field_46;
+    int state = arg0->sequenceStep;
 
     switch (state) {
     case 2:
         CardObj_EmitCommand45(arg0);
         break;
     case 3:
-        CardObj_EmitCommand4C(arg0, arg0->field_e4);
+        CardObj_EmitCommand4C(arg0, arg0->currentModeIndex);
         break;
     case 4:
         CardObj_EmitCommand47(arg0, arg0->infoRecordIndex);
@@ -49,11 +49,11 @@ int _padRecvAtLoadInfo(CardObj *obj) {
     unsigned int chunk;
     register unsigned int next asm("$2");
     unsigned int responseValue;
-    switch (obj->field_46) {
+    switch (obj->sequenceStep) {
     case 2:
         obj->modeCount = CARD_RESPONSE(obj)[3];
-        obj->field_e4 = CARD_RESPONSE(obj)[4];
-        obj->field_e6 = 0;
+        obj->currentModeIndex = CARD_RESPONSE(obj)[4];
+        obj->currentExtendedId = 0;
         obj->actuatorCount = CARD_RESPONSE(obj)[5];
         obj->combinationCount = CARD_RESPONSE(obj)[6];
         obj->combinationStorageBytes = 0;
@@ -63,7 +63,7 @@ int _padRecvAtLoadInfo(CardObj *obj) {
         responseValue = obj->response_3c[4];
         next = obj->response_3c[5];
         obj->infoRecordIndex = 0;
-        obj->field_e6 = (responseValue << 8) + next;
+        obj->currentExtendedId = (responseValue << 8) + next;
         break;
 
     case 4:
@@ -81,14 +81,14 @@ return_zero:
         }
 
         if (_padGetActSize(obj) >= 0x81) {
-            obj->field_46 = 0xFE;
+            obj->sequenceStep = 0xFE;
             obj->communicationState = 2;
             goto return_zero;
         }
 
-        obj->field_46 = 0xFF;
+        obj->sequenceStep = 0xFF;
         _padLoadActInfo(obj, (unsigned char *)obj + 0x63);
-        obj->field_46 = 2;
+        obj->sequenceStep = 2;
         goto return_zero;
     }
 
@@ -149,7 +149,7 @@ initialize:
     cursor = ((int)buffer + 3) >> 2;
     obj->communicationState = state;
     state = 1;
-    obj->field_46 = state;
+    obj->sequenceStep = state;
     obj->fn_14 = (void (*)(void *))CardObj_EmitReadTransferCommand;
     asm volatile("" ::: "memory");
     rowCount = obj->modeCount;
@@ -174,7 +174,7 @@ void CardObj_EmitCommand46(CardObj *arg0, unsigned char arg1);
 void CardObj_EmitCommand4B(CardObj *arg0);
 
 void CardObj_EmitReadTransferCommand(CardObj *arg0) {
-    int state = arg0->field_46;
+    int state = arg0->sequenceStep;
 
     switch (state) {
     case 2:
@@ -198,7 +198,7 @@ void CardObj_EmitReadTransferCommand(CardObj *arg0) {
 extern u8 *D_800A5AD0;
 int LIBPAD_PADCMD_text_3A0(CardObj *inPort) {
     register CardObj *port = inPort;
-    switch (port->field_46) {
+    switch (port->sequenceStep) {
     case 2:
         port->modeTable[port->infoRecordIndex] =
             port->response_3c[5] + (port->response_3c[4] << 8);
@@ -288,7 +288,7 @@ int LIBPAD_PADCMD_text_3A0(CardObj *inPort) {
             port->infoRecordIndex++;
             if (port->infoRecordIndex >= port->combinationCount) {
                 port->communicationState = 6;
-                port->field_46 = 254;
+                port->sequenceStep = 254;
                 return 0;
             }
             port->combinationBytesRemaining = 0;
@@ -316,7 +316,7 @@ int _padSetActAlign(CardObj *obj, u8 *command) {
         return 0;
     } else {
         active = 1;
-        obj->field_46 = active;
+        obj->sequenceStep = active;
         obj->fn_14 = func_80083C20;
         obj->requestedActuatorMap = command;
         obj->fn_18 = func_80083C3C;
@@ -384,7 +384,7 @@ s32 Render_CheckParticleBounds(CardObj *arg0) {
             offset += 5;
         } while (i < limit);
     }
-    arg0->field_46 = 0xFE;
+    arg0->sequenceStep = 0xFE;
     return 0;
 }
 
@@ -405,19 +405,19 @@ int _padSetMainMode(CardObj *obj, int byte1, int byte2) {
     result = 1;
     asm("" : "=r"(result) : "0"(result));
     flag = 1;
-    obj->field_46 = flag;
+    obj->sequenceStep = flag;
     obj->fn_14 = (void (*)(void *))CardObj_EmitReadIdCommand;
     obj->fn_18 = CardObj_CheckAbortOrDispatch;
-    obj->field_51 = byte1;
-    obj->field_52 = byte2;
-    flag = (compareByte & 0xFF) ^ obj->field_e4;
+    obj->requestedModeIndex = byte1;
+    obj->requestedModeLock = byte2;
+    flag = (compareByte & 0xFF) ^ obj->currentModeIndex;
     flag = (unsigned int)flag < 1;
     obj->modeAlreadySelected = flag;
     return result;
 }
 
 void CardObj_EmitReadIdCommand(CardObj *arg0) {
-    int state = arg0->field_46;
+    int state = arg0->sequenceStep;
 
     switch (state) {
     case 2:
@@ -435,11 +435,11 @@ void CardObj_EmitReadIdCommand(CardObj *arg0) {
 
 int CardObj_CheckAbortOrDispatch(CardObj *arg0) {
     if (arg0->modeAlreadySelected != 0) {
-        if (arg0->field_46 == 2) {
+        if (arg0->sequenceStep == 2) {
             return 1;
         }
 
-        arg0->field_46 = 0xFE;
+        arg0->sequenceStep = 0xFE;
         return 0;
     }
 

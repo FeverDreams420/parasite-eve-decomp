@@ -68,7 +68,7 @@ void LIBPAD_PADPORTD_text_388(CardObj *port) {
     register int one;
     register u8 *map, *data;
     bzero(port->actuatorEnabled, 6);
-    if (port->field_e6 && port->payload_28) {
+    if (port->currentExtendedId && port->payload_28) {
         limit = 6;
         if (port->payload_28_len < 7) {
             asm("" ::: "memory");
@@ -138,8 +138,8 @@ void LIBPAD_PADPORTD_text_388(CardObj *port) {
             } while (i < count);
         }
     } else {
-        if (((unsigned)(port->field_e8 - 4) < 2 || port->field_e8 == 7) &&
-            !port->field_e6 && port->payload_28_len >= 2) {
+        if (((unsigned)(port->currentId - 4) < 2 || port->currentId == 7) &&
+            !port->currentExtendedId && port->payload_28_len >= 2) {
             if ((port->payload_28[0] & 192) == 64 && (port->payload_28[1] & 1) &&
                 D_8009B76C + 10 < 61) {
                 port->actuatorEnabled[1] = 1;
@@ -148,9 +148,9 @@ void LIBPAD_PADPORTD_text_388(CardObj *port) {
             }
         } else {
             asm("" ::: "memory");
-            if (port->field_e8 == 3)
+            if (port->currentId == 3)
                 port->actuatorEnabled[0] = 1;
-            else if (!port->field_e6) {
+            else if (!port->currentExtendedId) {
                 register int value = 1;
                 register int k asm("$3") = 5;
                 register u8 *cursor = (u8 *)port + 5;

@@ -56,7 +56,7 @@ int PadInitDirect(u8 *output0, u8 *output1) {
     bzero(clearObj, sizeof(CardObj) * 2);
     i = 0;
     fill = 0xFF;
-    field40 = (u8 *)&obj->field_40;
+    field40 = (u8 *)&obj->statusBuffer;
     table40 = D_800A5B28;
     table3c = D_800A5AE0;
     obj[0].output_30 = savedOutput0;

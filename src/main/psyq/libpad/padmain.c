@@ -194,7 +194,7 @@ int _padInitSioMode(CardObj *port) {
     sio->control = 0;
     sio->mode = 13;
     sio->baud = 136;
-    setRC2wait(port->field_e8 == 8 ? 80 : 145);
+    setRC2wait(port->currentId == 8 ? 80 : 145);
     {
         int index = D_8009B764;
         {
@@ -292,7 +292,7 @@ s32 _padSioRW(CardObj *inObj, s32 inByte) {
         received = D_8009B788->data;
         port->response_index = 0xFF;
         port->payload_index = 1;
-        *port->field_40 = ~outgoing;
+        *port->statusBuffer = ~outgoing;
         replyByte = received;
         if (!(D_8009B788->status & 1)) {
             do {
@@ -426,7 +426,7 @@ int MemCard_WriteByte(CardObj *obj, int value)
         } while (!(poll_irq->status & 0x80));
     }
 
-    if (obj->field_e8 != 8 && D_8009B768 == 2) {
+    if (obj->currentId != 8 && D_8009B768 == 2) {
         setRC2wait(60);
         while (!chkRC2wait()) { }
     }

@@ -30,7 +30,7 @@ int PadChkMtap(int arg0)
   if (g_MemCardCommandByte != 0)
   {
     index = arg0 >> 4;
-    return g_MemCardObjArray[index].field_e8 == 8;
+    return g_MemCardObjArray[index].currentId == 8;
   }
   return 0;
 }
@@ -40,7 +40,7 @@ int PadGetState(int channel) {
 
     obj = g_MemCardObjLookupFn(channel);
     if ((*(u32 *)&obj->payload_28_len & 0xFFFF0000) == 0
-        && (obj == obj->field_10 || obj->pad_38[0] == 0)
+        && (obj == obj->ownerPort || obj->pad_38[0] == 0)
         && obj->output_30[0] == 0) {
         return obj->communicationState;
     }
@@ -63,11 +63,11 @@ int PadInfoMode(int channel, int mode, int index) {
     obj = g_MemCardObjLookupFn(channel);
     switch (mode) {
     case 1:
-        return obj->field_e8;
+        return obj->currentId;
     case 2:
-        return obj->field_e6;
+        return obj->currentExtendedId;
     case 3:
-        return obj->field_e4;
+        return obj->currentModeIndex;
     case 4:
         if (index < 0) {
             return obj->modeCount;
@@ -77,7 +77,7 @@ int PadInfoMode(int channel, int mode, int index) {
         }
         break;
     case 100:
-        return obj->field_4c;
+        return obj->frameCounter;
     default:
         return 0;
     }

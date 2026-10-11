@@ -11,13 +11,13 @@ void CardObj_ResetFields(CardObj *arg0) {
         value = 0xFF;
         count = 5;
         arg0->communicationState = 0;
-        arg0->field_46 = 0;
-        arg0->field_e6 = 0;
+        arg0->sequenceStep = 0;
+        arg0->currentExtendedId = 0;
         arg0->fn_14 = 0;
         arg0->fn_18 = 0;
         arg0->modeCount = 0;
-        arg0->field_e4 = 0;
-        arg0->field_e6 = 0;
+        arg0->currentModeIndex = 0;
+        arg0->currentExtendedId = 0;
         arg0->actuatorCount = 0;
         arg0->combinationCount = 0;
         arg0->modeTable = 0;

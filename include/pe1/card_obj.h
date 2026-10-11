@@ -23,14 +23,14 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(PadCapabilityRecord, high_bit) == 4,
 PE1_STATIC_ASSERT(sizeof(PadCombinationRecord) == 8, pad_data_record_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(PadCombinationRecord, data) == 4, pad_data_record_pointer);
 
-/* LIBPAD per-port command object (legacy CardObj_* names). field_46 is unsigned char: stored as 1
+/* LIBPAD per-port command object (legacy CardObj_* names). sequenceStep is unsigned char: stored as 1
  * by BeginCommand4D and compared ==0xFF (lbu) by IsTransferActive. */
 typedef struct CardObj {
     u16 *modeTable;                   /* 0x00 */
     PadCapabilityRecord *capabilities; /* 0x04 */
     PadCombinationRecord *combinations; /* 0x08 */
     struct CardObj *subPorts;         /* 0x0C: four multitap port objects */
-    struct CardObj *field_10;          /* 0x10 */
+    struct CardObj *ownerPort;         /* 0x10: owning port object, self for a direct port */
     void (*fn_14)(void *);            /* 0x14 */
     int (*fn_18)(struct CardObj *);            /* 0x18 */
     unsigned char pad_1C[0x04];
@@ -45,29 +45,29 @@ typedef struct CardObj {
     unsigned char saved_command;       /* 0x37 */
     unsigned char pad_38[0x04];
     unsigned char *response_3c;        /* 0x3C */
-    unsigned char *field_40;           /* 0x40 */
+    unsigned char *statusBuffer;       /* 0x40: receives the inverted first exchanged byte */
     unsigned char response_index;     /* 0x44: received-byte cursor */
     unsigned char payload_index;       /* 0x45 */
-    unsigned char field_46;           /* 0x46 */
+    unsigned char sequenceStep;        /* 0x46: command sequence step, 0xFE/0xFF terminal */
     unsigned char infoRecordIndex;           /* 0x47: cursor shared by mode, capability and combination reads */
     unsigned char combinationBytesRemaining;           /* 0x48: bytes still to copy for the current combination */
     unsigned char communicationState; /* 0x49: internal PadGetState status */
-    unsigned char field_4a;           /* 0x4A */
+    unsigned char retryCount;          /* 0x4A: retries spent in the current step */
     unsigned char pad_4B[0x01];
-    int field_4c;                     /* 0x4C */
+    int frameCounter;                  /* 0x4C: sequence ticks, PadInfoMode term 100 */
     unsigned char pad_50[0x01];
-    unsigned char field_51;           /* 0x51 */
-    unsigned char field_52;           /* 0x52 */
+    unsigned char requestedModeIndex;  /* 0x51: PadSetMainMode offset */
+    unsigned char requestedModeLock;   /* 0x52: PadSetMainMode lock */
     unsigned char modeAlreadySelected;           /* 0x53: requested mode equals the current mode */
     unsigned char pad_54[0x03];
     unsigned char actuatorEnabled[0x06]; /* 0x57: payload-byte activation flags */
     unsigned char actuatorMap[0x06]; /* 0x5D: capability index per payload byte, 0xFF = unused */
     unsigned char pad_63[0x80];
     unsigned char modeCount;           /* 0xE3 */
-    unsigned char field_e4;           /* 0xE4 */
+    unsigned char currentModeIndex;    /* 0xE4: PadInfoMode InfoModeCurExOffs */
     unsigned char pad_e5[0x01];
-    unsigned short field_e6;          /* 0xE6 */
-    unsigned char field_e8;           /* 0xE8 */
+    unsigned short currentExtendedId;  /* 0xE6: PadInfoMode InfoModeCurExID */
+    unsigned char currentId;           /* 0xE8: PadInfoMode InfoModeCurID, 8 = multitap */
     unsigned char actuatorCount;           /* 0xE9 */
     unsigned char combinationCount;           /* 0xEA */
     unsigned char pad_eb[0x01];
