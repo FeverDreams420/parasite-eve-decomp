@@ -141,8 +141,8 @@ int func_800CCFA0(void) {
 
     data = (FieldActor *)D_800E2810;
     D_800E27F8.x = *(u16 *)&data->render_object.target_x;
-    D_800E27FA = *(u16 *)&data->render_object.target_y;
-    D_800E27FC = *(u16 *)&data->render_object.target_z;
+    D_800E27F8.y = *(u16 *)&data->render_object.target_y;
+    D_800E27F8.z = *(u16 *)&data->render_object.target_z;
 
     if (D_800B0CE8.reset_pending != 0) {
         Akao_Cmd_24((void *)D_800B0E14, 0, 0x80, 0x7F);
@@ -153,19 +153,19 @@ int func_800CCFA0(void) {
 
 #include "FieldEng_BurstEffect_externs_4.h"
 
-int func_800CD07C(void *arg0, void *arg1, u8 *anim) {
+int func_800CD07C(void *arg0, void *arg1, FieldAnimBurstData *anim) {
     u16 x = D_800E27F8.x;
     BattleEntity *entity = D_8009D254;
     int y;
     u16 z;
 
-    *(u16 *)(anim + 8) = x;
+    anim->header.origin_x = x;
     y = entity->posY.parts.integer;
-    *(u16 *)(anim + 0xA) = y;
-    z = D_800E27FC;
-    *(u16 *)(anim + 4) = 0x7F;
-    *(u16 *)(anim + 6) = 0x60C;
-    *(u16 *)(anim + 0xC) = z;
+    anim->header.origin_y = y;
+    z = D_800E27F8.z;
+    anim->header.scale = 0x7F;
+    anim->header.duration = 0x60C;
+    anim->header.origin_z = z;
 }
 
 int rand(void);
@@ -204,15 +204,15 @@ void FieldAnim_InitRandomOffsetPairs(void *arg0, void *arg1,
     } while (((unsigned int)i & 0xFFFF) < 2);
 }
 
-int func_800CD1FC(void *arg0, void *arg1, u8 *anim) {
+int func_800CD1FC(void *arg0, void *arg1, FieldAnimBurstData *anim) {
     u16 z;
 
-    *(u16 *)(anim + 0x8) = (D_800E27F8.x + (rand() % 201)) - 0x64;
-    *(u16 *)(anim + 0xA) = (D_800E27FA + (rand() % 101)) - 0x32;
-    z = D_800E27FC;
-    *(u16 *)(anim + 0x4) = 0x7F;
-    *(u16 *)(anim + 0x6) = 0x544;
-    *(u16 *)(anim + 0xC) = z;
+    anim->header.origin_x = (D_800E27F8.x + (rand() % 201)) - 0x64;
+    anim->header.origin_y = (D_800E27F8.y + (rand() % 101)) - 0x32;
+    z = D_800E27F8.z;
+    anim->header.scale = 0x7F;
+    anim->header.duration = 0x544;
+    anim->header.origin_z = z;
 }
 
 /* Two empty field effect callbacks. */
