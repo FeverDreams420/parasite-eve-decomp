@@ -5,12 +5,11 @@
 
 typedef RoomM273PointerPoolEffect Effect;
 typedef struct { unsigned char unknown[58]; unsigned short value; } Object;
-typedef struct { short zero; unsigned short value,phase,one; } Parameters;
 #include "pe1/gte_sine_table.h"
 extern unsigned char D_8019ACDC[],D_8019ACE0[];
 
 int func_8019A4CC(int mode,Effect *effect) {
-    Parameters parameters;
+    GteRotation parameters;
     /* Layout only: purpose of these eight original frame bytes is unknown. */
     int stack_pad[2];
     if(mode==1) {
@@ -21,11 +20,11 @@ int func_8019A4CC(int mode,Effect *effect) {
         unsigned int shadeOffset=((unsigned int)frame<<9)&0x3E00;
         int size=*(short *)((char *)D_800966EC+sizeOffset)*2+4096;
         int shade=(short)*(int *)((char *)D_800966EC+shadeOffset)>>5;
-        parameters.zero=0;
-        parameters.value=((Object *)ANIM_OWNER_AS(RoomM273EffectStateContext)->state.mode)->value;
-        parameters.phase=(unsigned int)frame<<8;
-        parameters.one=1;
-        func_800D0728(effect->position,32,96,8,(GteRotation *)&parameters,size,size,
+        parameters.x=0;
+        parameters.y=((Object *)ANIM_OWNER_AS(RoomM273EffectStateContext)->state.mode)->value;
+        parameters.z=(unsigned int)frame<<8;
+        parameters.flags=1;
+        func_800D0728(effect->position,32,96,8,&parameters,size,size,
             (struct RenderColor *)D_8019ACDC,(struct RenderColor *)D_8019ACE0,shade,1);
     }
     return 0;
