@@ -7,20 +7,16 @@
 /* COMMON supplies small-data metadata to MASPSX; the extern words stay
  * absolute. */
 unsigned char g_BattleActionQueueCount;
-#include "Menu_BattleActiveQuery_externs.h"
+#include "pe1/game_state.h"
+#include "pe1/battle_entity_anim.h"
 
 int Battle_IsActive(void) {
     if (g_BattleActionQueueCount != 0) {
         return 0;
     }
-    if ((g_GameStateFlags & 2) != 0) {
-    if ((g_ActiveActor->stateFlags & 0x10000) != 0) {
-        goto no;
+    if ((g_GameStateFlags & 2) == 0 || (g_ActiveActor->stateFlags & 0x10000) == 0) {
+        return 1;
     }
-    }
-yes:
-    return 1;
-no:
     return 0;
 }
 
@@ -28,13 +24,8 @@ int Pad_IsMenuConfirmAvailable(void) {
     if (g_BattleActionQueueCount != 0) {
         return 0;
     }
-    if ((g_GameStateFlags & 2) != 0) {
-    if ((g_ActiveActor->stateFlags & 0x10000) != 0) {
-        goto no;
+    if ((g_GameStateFlags & 2) == 0 || (g_ActiveActor->stateFlags & 0x10000) == 0) {
+        return 1;
     }
-    }
-yes:
-    return 1;
-no:
     return 0;
 }
