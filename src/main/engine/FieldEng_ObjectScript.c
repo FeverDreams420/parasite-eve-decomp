@@ -31,10 +31,10 @@ void **FieldEng_GetSlot(char *obj) {
     obj[2] = 0;
     obj[3] = 0;
 
-    D_800E2248 = obj + 0xC;
-    D_800F34F4 = (u8 *)(obj + 0x80);
+    D_800E2248 = (char *)&((FieldEngObject *)obj)->state;
+    D_800F34F4 = (u8 *)((FieldEngObject *)obj)->slots;
     D_800F32A8 = obj;
-    D_800F3330 = obj + 0x200;
+    D_800F3330 = (char *)((FieldEngObject *)obj)->data;
 
     ((FieldEngObject *)obj)->state.wait = 0;
     ((FieldEngObject *)obj)->state.pc = 0;
@@ -68,9 +68,9 @@ int FieldEng_Register(char *obj, int (**handlers)(char *obj, void *entry, void *
   char *table;
   i = 0;
   table = (char *) ((FieldEngObject *) obj_s0)->state.commands;
-  D_800E2248 = obj_s0 + 0xC;
-  D_800F34F4 = (u8 *) (obj_s0 + 0x80);
-  D_800F3330 = obj_s0 + 0x200;
+  D_800E2248 = (char *)&((FieldEngObject *)obj_s0)->state;
+  D_800F34F4 = (u8 *)((FieldEngObject *)obj_s0)->slots;
+  D_800F3330 = (char *)((FieldEngObject *)obj_s0)->data;
   D_800F33B0 = table;
   for (; i < 0x40; i++)
   {
@@ -102,10 +102,10 @@ int func_800C251C(char *obj, int (**handlers)(char *obj, void *entry, void *data
     table = (char *)((FieldEngObject *)obj)->state.commands;
     data = ((FieldAnimObjectPrefix *)obj)->actor;
 
-    D_800E2248 = obj + 0xC;
-    D_800F34F4 = (u8 *)(obj + 0x80);
+    D_800E2248 = (char *)&((FieldEngObject *)obj)->state;
+    D_800F34F4 = (u8 *)((FieldEngObject *)obj)->slots;
     D_800F32A8 = obj;
-    D_800F3330 = obj + 0x200;
+    D_800F3330 = (char *)((FieldEngObject *)obj)->data;
     D_800F33B0 = table;
 
     obj[3] = obj[0x12];
