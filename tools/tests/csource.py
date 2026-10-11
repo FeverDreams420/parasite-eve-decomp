@@ -19,7 +19,9 @@ from __future__ import annotations
 import functools
 import pathlib
 import re
+import shutil
 import subprocess
+import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 HOST_PSYQ = ROOT / "tools/tests/host_psyq.h"
@@ -342,6 +344,20 @@ def host_unit(*names: str, path: pathlib.Path | None = None, prefix: str = "",
     return "".join(out) + "\n"
 
 
+def require_psx_tools() -> None:
+    """Skip the calling test when the PSX cross toolchain is not installed.
+
+    cc.sh fails silently without mipsel-none-elf-as on PATH (the build needs
+    it too, e.g. tools/binutils-2.45/bin), so report it as an environment
+    skip rather than an opaque compile failure.
+    """
+    missing = [tool for tool in ("mipsel-none-elf-as", "mipsel-none-elf-ld")
+               if shutil.which(tool) is None]
+    if missing or not (ROOT / "tools/psyq-gcc-2.7.2/cpp").exists():
+        raise unittest.SkipTest("PSX cross toolchain unavailable: "
+                                + ", ".join(missing or ["tools/psyq-gcc-2.7.2"]))
+
+
 def psx_compile(source: str, out: pathlib.Path, like: pathlib.Path,
                 *cflags: str) -> subprocess.CompletedProcess:
     """Compile `source` text with tools/scripts/cc.sh as if it were `like`.
@@ -349,6 +365,7 @@ def psx_compile(source: str, out: pathlib.Path, like: pathlib.Path,
     The text is written next to `out`, so quoted includes of headers that
     live beside the original unit are resolved through an extra -I.
     """
+    require_psx_tools()
     path = out.with_suffix(".c")
     path.write_text(source)
     return subprocess.run(
@@ -420,6 +437,7 @@ def _link_unit(name: str, address: int, symbols: str, work: pathlib.Path,
                path: pathlib.Path | None, cflags) -> tuple[bytes, int]:
     """Linked .text of the unit defining `name`, placed so `name` is at
     `address`; returns (text, offset of `name` within it)."""
+    require_psx_tools()
     path = path or find_definition(name)
     obj, elf, data = work / "unit.o", work / "unit.elf", work / "unit.bin"
     result = subprocess.run([str(ROOT / "tools/scripts/cc.sh"), str(path),

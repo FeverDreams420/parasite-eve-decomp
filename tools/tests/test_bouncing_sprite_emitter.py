@@ -2,6 +2,7 @@
 from importlib.util import find_spec
 from pathlib import Path
 import itertools
+import shutil
 import struct
 import sys
 import unittest
@@ -20,7 +21,8 @@ class BouncingSpriteEmitterTests(unittest.TestCase):
     @unittest.skipUnless(
         (ROOT / "assets/USA/main.exe").is_file()
         and (ROOT / "build/USA/main.exe").is_file()
-        and find_spec("unicorn"), "images or Unicorn unavailable"
+        and find_spec("unicorn") and shutil.which("mipsel-none-elf-nm"),
+        "images, Unicorn or mipsel-none-elf-nm unavailable"
     )
     def test_behavior(self):
         from unicorn import Uc, UC_ARCH_MIPS, UC_MODE_MIPS32, UC_MODE_LITTLE_ENDIAN, UC_HOOK_CODE

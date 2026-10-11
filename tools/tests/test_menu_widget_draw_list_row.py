@@ -2,6 +2,7 @@
 from importlib.util import find_spec
 from pathlib import Path
 import itertools
+import shutil
 import struct
 import subprocess
 import unittest
@@ -10,7 +11,8 @@ import unittest
 class MenuWidgetDrawListRowTests(unittest.TestCase):
     @unittest.skipUnless((Path(__file__).resolve().parents[2] / "assets/USA/main.exe").is_file() and
                          (Path(__file__).resolve().parents[2] / "build/USA/main.exe").is_file() and
-                         find_spec("unicorn"), "images or unicorn unavailable")
+                         find_spec("unicorn") and shutil.which("mipsel-none-elf-nm"),
+                         "images, unicorn or mipsel-none-elf-nm unavailable")
     def test_exact_bytes_and_state_model(self):
         from unicorn import Uc, UC_ARCH_MIPS, UC_MODE_MIPS32, UC_MODE_LITTLE_ENDIAN, UC_HOOK_CODE
         from unicorn import mips_const as R
