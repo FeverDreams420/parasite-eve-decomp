@@ -161,12 +161,7 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
                                 entity->entityFlags |= 0x1000;
                                 if (enemy->field04.bytes.kind != 0)
                                 {
-                                    {
-                                        register BattleEntity *callEntity asm("$4") = entity;
-                                        register u32 mode = enemy->field06.bytes.low;
-                                        asm("" : "=r"(mode) : "0"(mode), "r"(callEntity));
-                                        Entity_SetActionMode(callEntity, (s8)mode & 0xFFFF);
-                                    }
+                                    Entity_SetActionMode(entity, (u16)(s8)enemy->field06.bytes.low);
                                 }
                             }
                         }
