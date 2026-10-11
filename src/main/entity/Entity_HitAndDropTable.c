@@ -20,7 +20,6 @@ void Entity_ResolveDropTable(void *arg0) {
     int masked;
     int value;
     int roll;
-    int tmp;
 
     state = g_ActiveActor;
     scale = (u16)state->stat20 / 5U;
@@ -63,8 +62,7 @@ void Entity_ResolveDropTable(void *arg0) {
                   (100 - (int)chance_state->attributes->parameterWord.fields.third)) /
                  100;
         if (roll < chance) {
-            tmp = value * 3;
-            value = (s32)(tmp + ((u32)tmp >> 31)) >> 1;
+            value = value * 3 / 2;
             chance_state->stateFlags |= 0x8000;
         }
     }
@@ -75,14 +73,14 @@ void Entity_ResolveDropTable(void *arg0) {
         after_state = g_ActiveActor;
         if (!(after_state->stateFlags & 0x200)) {
             if (after_state->atbGauge > 0) {
-                value = (s32)(value + ((u32)value >> 31)) >> 1;
+                value /= 2;
             }
             if (value > 0) {
                 EnemyActionEffect *action;
 
                 action = entry->effect;
                 if (action->effectType == 0xA) {
-                    value = (s32)(value + ((u32)value >> 31)) >> 1;
+                    value /= 2;
                 }
                 after_state->curHP = after_state->curHP - value;
             }
@@ -97,7 +95,7 @@ void Entity_ResolveDropTable(void *arg0) {
 
             action = entry->effect;
             if (action->effectType == 0xA) {
-                value = (s32)(value + ((u32)value >> 31)) >> 1;
+                value /= 2;
             }
             after_state->exp_or_acc -= value * ((after_state->maxAtk * 4) / (s16)after_state->maxHP);
         }

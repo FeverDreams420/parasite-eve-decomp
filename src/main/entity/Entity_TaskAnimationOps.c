@@ -20,7 +20,7 @@ int Entity_MarkAnimPending(void) {
     skip = g_TaskNodePool;
     entity = g_CurrentEntity;
     do {
-        node = entity->task_node_lists[0];
+        node = entity->task_node_lists[i];
         if (node != 0) {
             do {
                 if (node != skip) {
@@ -30,7 +30,6 @@ int Entity_MarkAnimPending(void) {
             } while (node != 0);
         }
         i++;
-        entity = (FieldActor *)((char *)entity + 4);
     } while (i < 3U);
     return 1;
 }
@@ -46,7 +45,7 @@ int Entity_AdvancePendingAnim(void) {
     active = 1;
     entity = g_CurrentEntity;
     do {
-        node = entity->task_node_lists[0];
+        node = entity->task_node_lists[i];
         if (node != 0) {
             do {
                 if (node->flags & 0x40) {
@@ -61,7 +60,6 @@ int Entity_AdvancePendingAnim(void) {
             } while (node != 0);
         }
         i++;
-        entity = (FieldActor *)((char *)entity + 4);
     } while (i < 3U);
     return 1;
 }
@@ -75,7 +73,7 @@ int Entity_MarkNodeAnimPendingById(int **arg0) {
     i = 0;
     entity = g_CurrentEntity;
     do {
-        node = entity->task_node_lists[0];
+        node = entity->task_node_lists[i];
         if (node != 0) {
             do {
                 if (node->seq == **arg0) {
@@ -86,7 +84,6 @@ int Entity_MarkNodeAnimPendingById(int **arg0) {
             } while (node != 0);
         }
         i++;
-        entity = (FieldActor *)((char *)entity + 4);
     } while (i < 3U);
 
     return 1;
@@ -104,7 +101,7 @@ int Entity_AdvanceNodeById(int **arg0) {
     active_value = 1;
     entity = g_CurrentEntity;
     do {
-        node = entity->task_node_lists[0];
+        node = entity->task_node_lists[i];
         if (node != 0) {
             do {
                 if (node->seq == **arg0) {
@@ -120,7 +117,6 @@ int Entity_AdvanceNodeById(int **arg0) {
             } while (node != 0);
         }
         i++;
-        entity = (FieldActor *)((char *)entity + 4);
     } while (i < 3U);
 
     return 1;
