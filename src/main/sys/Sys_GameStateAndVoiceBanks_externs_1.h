@@ -1,6 +1,0 @@
-#ifndef PE1_EXT_1DB90F344A6B
-#define PE1_EXT_1DB90F344A6B
-extern u16 D_800BCE9E;
-extern u16 D_800BCE8A;
-extern u8 D_800B0DB1;
-#endif /* PE1_EXT_1DB90F344A6B */

@@ -76,6 +76,7 @@ PE1_GPU_STATIC_ASSERT(sizeof(DISPENV) == 0x14, dispenv_size);
 
 DRAWENV *GetDrawEnv(DRAWENV *env);
 DRAWENV *PutDrawEnv(DRAWENV *env);
+int DrawPrim(void *primitive);
 void DrawOTagEnv(void *next, DRAWENV *env);
 DISPENV *PutDispEnv(DISPENV *env);
 DRAWENV *SetDefDrawEnv(DRAWENV *env, int x, int y, int w, int h);

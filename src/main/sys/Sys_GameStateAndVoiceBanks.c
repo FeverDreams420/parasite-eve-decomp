@@ -9,21 +9,15 @@
 #include "pe1/render_buffers.h"
 #include "pe1/asset_find.h"
 #include "pe1/akao.h"
+#include "pe1/sys.h"
+#include "pe1/task_queue.h"
+#include "pe1/boot_disc_check.h"
+#include "pe1/render_animation_frame.h"
 
 /* End-of-frame overlay pass (draw the game-state primitives into the
  * current draw buffer with background clear off and send the queued AKAO
  * commands), soft-reset shutdown and screen vertical-offset update. These
  * contiguous routines share the default compiler profile and display state. */
-
-#include "Sys_GameStateAndVoiceBanks_externs.h"
-
-void Akao_Cmd_98_9A_9C(int arg0);
-void Akao_Cmd_99_9B_9D(int arg0);
-void DrawPrim(void *prim);
-void DsReadBreak(void);
-void Akao_Cmd_D8(int arg0);
-void Akao_Cmd_F0(void);
-void Akao_Cmd_F1(void);
 
 void Akao_StepVoiceTable(void) {
     s32 one;
@@ -65,14 +59,13 @@ void Sys_Shutdown(void) {
 
 /* Shared draw-environment vertical offset (0..15). */
 
-#include "Sys_GameStateAndVoiceBanks_externs_1.h"
-int func_8006A2E8(int arg0, u32 value)
+int Draw_SetBaseY(int unused, u32 y)
 {
   register u32 v;
-  if (value < 16)
+  if (y < 16)
   {
-    v = value;
-    D_800B0DB1 = (D_800BCE8A = (D_800BCE9E = v));
+    v = y;
+    g_DrawBaseY = (g_RenderDispEnvArray[0].screen.y = (g_RenderDispEnvArray[1].screen.y = v));
   }
   return 0;
 }
@@ -104,7 +97,6 @@ typedef struct AkaoVoiceBankState {
     u8 active_id_slot;
 } AkaoVoiceBankState;
 
-#include "Sys_GameStateAndVoiceBanks_externs_2.h"
 
 int Akao_LoadVoiceBank(AkaoVoiceActor *actor) {
     AkaoVoiceActor *actor_reg = actor;
@@ -187,9 +179,8 @@ int Akao_LoadVoiceBank(AkaoVoiceActor *actor) {
 }
 
 
-#include "Sys_GameStateAndVoiceBanks_externs_3.h"
 
-void func_8006A5BC(void)
+void Sys_SyncShutdown(void)
 {
     Spu_InitHardware();
     Akao_Cmd_F0();
@@ -206,8 +197,6 @@ void func_8006A5BC(void)
 
     D_800B0DD4 = DsShellOpen();
 }
-
-void Boot_InitMemoryLayout(void);
 
 /* Lay out the memory buffers, then reset the scene voice-bank state. */
 void Boot_InitGameState(void)
@@ -339,7 +328,6 @@ void Akao_ClearVoiceBank(void)
     ((Pe1GameState *)base)->startup_resource_blob = 0;
 }
 
-#include "Sys_GameStateAndVoiceBanks_externs_4.h"
 
 
 void Boot_InitMemoryLayout(void) {

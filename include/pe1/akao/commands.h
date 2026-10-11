@@ -160,6 +160,11 @@ int Akao_Cmd_10(void *bank);
 
 /* Returns the header validation difference, or the queued sequence number. */
 int Akao_Cmd_24(void *header, int arg1, int arg2, int arg3);
+void Akao_Cmd_98_9A_9C(int command);
+void Akao_Cmd_99_9B_9D(int command);
+void Akao_Cmd_D8(int command);
+void Akao_Cmd_F0(void);
+void Akao_Cmd_F1(void);
 
 void Akao_Cmd_21(int arg0, int arg1);
 

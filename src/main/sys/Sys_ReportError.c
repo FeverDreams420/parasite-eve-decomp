@@ -1,11 +1,11 @@
 #include "pe1/psyq_bios.h"
-#include "Sys_ReportError_externs.h"
+#include "pe1/sys.h"
 
-void func_80038954(char *arg0, char *arg1, int arg2, unsigned char arg3) {
-    int index = arg3 & 0xFF;
+void Sys_ReportError(char *message, char *detail, int value, unsigned char severity) {
+    int index = severity & 0xFF;
 
-    printf(D_80010EB0, D_80091A2C[index], arg0);
-    printf(D_80010EC8, arg1, arg2);
+    printf(D_80010EB0, D_80091A2C[index], message);
+    printf(D_80010EC8, detail, value);
 
     if (index == 1) {
         while (1) {
