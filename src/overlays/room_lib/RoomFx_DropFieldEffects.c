@@ -1277,28 +1277,28 @@ void RoomFx_InitQuadSprites(void *unused0, void *unused1, void *output_arg) {
                 scale += 2;
                 continue;
             } else {
-                color[0x20] = red;
-                color[0x21] = 138;
-                color[0x22] = blue;
+                ((RoomFourSpriteState *)color)->color[0].r = red;
+                ((RoomFourSpriteState *)color)->color[0].g = 138;
+                ((RoomFourSpriteState *)color)->color[0].b = blue;
                 color += 4;
                 scale += 2;
                 continue;
             }
         } else {
-            base[0x24] = mid;
-            base[0x25] = 76;
-            base[0x26] = 6;
+            ((RoomFourSpriteState *)base)->color[1].r = mid;
+            ((RoomFourSpriteState *)base)->color[1].g = 76;
+            ((RoomFourSpriteState *)base)->color[1].b = 6;
             goto advance_color;
         }
 color2:
-        base[0x28] = 18;
-        base[0x29] = 32;
-        base[0x2A] = mid;
+        ((RoomFourSpriteState *)base)->color[2].r = 18;
+        ((RoomFourSpriteState *)base)->color[2].g = 32;
+        ((RoomFourSpriteState *)base)->color[2].b = mid;
         goto advance_color;
 color3:
-        base[0x2C] = red;
-        base[0x2D] = 98;
-        base[0x2E] = blue;
+        ((RoomFourSpriteState *)base)->color[3].r = red;
+        ((RoomFourSpriteState *)base)->color[3].g = 98;
+        ((RoomFourSpriteState *)base)->color[3].b = blue;
 advance_color:
         color += 4;
         scale += 2;
