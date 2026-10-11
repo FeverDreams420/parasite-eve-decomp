@@ -1,6 +1,22 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "pe1/battle_update.h"
+
+/* COMMON supplies small-data metadata to MASPSX; the other battle words
+ * stay absolute. */
+u8 D_8009CE7C;
+s32 D_8009D1D0;
+s32 D_8009D1E8;
+u8 D_8009D23C;
+u8 D_8009D244;
+Combatant *D_8009D278;
+u8 D_8009D288;
+int D_8009D28C;
+s8 D_8009D2A0;
+s16 D_8009D2A4;
+s8 D_8009D2B0;
+s32 D_8009D2FC;
 
 #define BATTLE_HUD_SLOT_BYTE(symbol, stride) \
     (*(&(symbol)[0] +(g_BattleTurnDrawSlotView[0] * (stride))))
@@ -172,11 +188,11 @@ void Battle_Update(void) {
                 menuMode = 2;
                 Battle_StepScriptEntry();
             }
-            if ((D_8009D294[0]) != 0) {
+            if ((D_8009D294) != 0) {
                 Battle_ResolveHitOnTimer();
             }
         }
-        if ((D_8009D1AC[0]) & 0x300) {
+        if ((D_8009D1AC) & 0x300) {
             Save_DrawSlotMetadata();
         }
         Menu_MainUpdate(menuMode);
@@ -290,7 +306,7 @@ void Battle_Update(void) {
 
         }
     }
-    if (((D_8009D1CE[0]) != 0) && (D_8009D28C == 0)) {
+    if (((D_8009D1CE) != 0) && (D_8009D28C == 0)) {
         Menu_SaveOverlayDraw();
     }
     if (D_8009D244 != 0) {

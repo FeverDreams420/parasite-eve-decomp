@@ -36,8 +36,8 @@ extern s8 g_BattleUpdatePaletteEnabled asm("D_8009D2A0");
 
 /* Only element zero is accessed in the wide matching views below. */
 extern u8 D_8009CE7C;
-extern s32 D_8009D1AC[16];
-extern u8 D_8009D1CE[16];
+extern unsigned int D_8009D1AC;
+extern u8 D_8009D1CE;
 extern s32 D_8009D1D0;
 extern s32 D_8009D1E8;
 extern s8 D_8009D1F0[16];
@@ -48,7 +48,7 @@ extern u8 D_8009D23C;
 extern u8 D_8009D244;
 extern u8 D_8009D288;
 extern s32 D_8009D290[16];
-extern u8 D_8009D294[16];
+extern u8 D_8009D294;
 extern s16 D_8009D2A4;
 extern s8 D_8009D2B0;
 extern s32 D_8009D2FC;

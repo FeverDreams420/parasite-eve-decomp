@@ -1,9 +1,24 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
+/* MASPSX_FORCE_G0: 1 */
 #include "pe1/battle_reset_stats.h"
 #include "pe1/battle_palette.h"
 #include "pe1/battle.h"
 #include "pe1/battle_start.h"
+
+/* COMMON supplies small-data metadata to MASPSX; the other battle words
+ * stay absolute. */
+u8 D_8009CE74, D_8009CE78, D_8009CE7C;
+int D_8009D1D0;
+int D_8009D1E8;
+u16 D_8009D21C;
+u8 D_8009D244;
+Combatant *D_8009D278;
+u8 D_8009D288;
+int D_8009D28C;
+s8 D_8009D2A0;
+u8 D_8009D2EC;
+u32 D_8009D304;
 
 
 void Battle_ResetEnemyStats(int mode) {
@@ -70,7 +85,7 @@ void Battle_ResetEnemyStats(int mode) {
     }
     Battle_FlushScriptSounds();
     Tbl_ResetAll();
-    D_8009D298[0] = 0;
+    D_8009D298 = 0;
     D_8009D29A[0] = 0;
     D_8009D29B[0] = 0;
     D_8009D29C[0] = 0;
@@ -196,7 +211,7 @@ void Battle_StartEncounter(int mode) {
     { register u32 initial_flags asm("$3");
     initial_flags = battle_start_flags_read[0];
     D_8009D1A8[0] = 0;
-    D_8009D1CE[0] = 0;
+    D_8009D1CE = 0;
     D_8009D235[0] = 0;
     D_8009D304 = 0;
     D_8009D21C = 0;
