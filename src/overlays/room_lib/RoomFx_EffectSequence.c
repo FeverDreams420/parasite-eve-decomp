@@ -342,7 +342,6 @@ void RoomFx_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control, Roo
     RoomOverlay024Vec4 second_scale;
     RoomOverlay024Vec4 third_scale;
     s32 draw_zero;
-    volatile RoomOverlay024Transform *ordered_transform;
 
     owner_ptr = func_800C2B50();
     owner = *owner_ptr;
@@ -400,12 +399,11 @@ void RoomFx_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control, Roo
     draw_scale = second_scale;
     ScaleMatrix(&matrix, &draw_scale);
 
-    ordered_transform = transform;
     D_80192C08.depth = state->fade_alpha >> 2;
-    matrix.t[0] = ordered_transform->x;
+    matrix.t[0] = transform->x;
     matrix.t[1] = g_RoomFloorY->y;
     draw_zero = 0;
-    matrix.t[2] = ordered_transform->z;
+    matrix.t[2] = transform->z;
     D_80192C08.cell = 8;
     func_800C42A4((FieldGlowSprite *)&D_80192C08, (GteMatrix *)&matrix, draw_zero);
 
@@ -594,7 +592,6 @@ void RoomFx_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *control
     RoomOverlay024Vec4 second_scale;
     RoomOverlay024Vec4 third_scale;
     s32 draw_zero;
-    volatile RoomOverlay024Transform *ordered_transform;
 
     owner_ptr = func_800C2B50();
     owner = *owner_ptr;
@@ -652,12 +649,11 @@ void RoomFx_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *control
     draw_scale = second_scale;
     ScaleMatrix(&matrix, &draw_scale);
 
-    ordered_transform = transform;
     D_80192C08.depth = state->fade_alpha >> 2;
-    matrix.t[0] = ordered_transform->x;
+    matrix.t[0] = transform->x;
     matrix.t[1] = g_RoomFloorY->y;
     draw_zero = 0;
-    matrix.t[2] = ordered_transform->z;
+    matrix.t[2] = transform->z;
     D_80192C08.cell = 8;
     func_800C42A4((FieldGlowSprite *)&D_80192C08, (GteMatrix *)&matrix, draw_zero);
 
