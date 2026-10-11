@@ -1,6 +1,7 @@
 #include "pe1/battle_context.h"
 #include "common.h"
 #include "pe1/battle.h"
+#include "pe1/room_floor.h"
 
 extern BattleEntity *g_PlayerEntity;
 
@@ -73,7 +74,6 @@ int Battle_GetContextField(int arg0) {
 #include "pe1/battle.h"
 
 extern BattleEntity *g_PlayerEntity;
-extern s16 g_RoomRenderYOverride __asm__("D_800942EC");
 
 void Battle_SetContextField(int arg0, int arg1) {
     Combatant *ctx;
@@ -134,7 +134,7 @@ void Battle_SetContextField(int arg0, int arg1) {
         ctx->panelB_timer = arg1;
         break;
     case 255:
-        g_RoomRenderYOverride = arg1;
+        g_RoomFloorY->y = arg1;
         break;
     }
 }
