@@ -66,7 +66,8 @@ int func_80197B98(int event)
         do {
             Matrix matrix;
             Vector vector;
-            register int random asm("$16");
+            int random;
+            int highByte;
             int divisor;
             short *effect = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
             if (!effect) break;
@@ -80,8 +81,8 @@ int func_80197B98(int event)
 offset:
             vector.x = 0;
             vector.y = 0;
-            random = Inv_ScrambleGrid();
-            random = (random << 8) | Inv_ScrambleGrid();
+            highByte = Inv_ScrambleGrid();
+            random = (highByte << 8) | Inv_ScrambleGrid();
             divisor = 64;
             vector.z = random % divisor + 256;
             ApplyMatrixSV(&matrix, &vector, (Vector *)effect);
@@ -105,7 +106,7 @@ offset:
         D_800F3368.extent_y = unit;
         D_800F3368.extent_x = unit;
         D_800F3368.extent_y = unit;
-        asm volatile("" : "=r"(index) : "0"(index));
+
         palette = D_800E2850[index];
         D_800F3368.palette = 2;
         D_800F3368.parameter06 = 0;

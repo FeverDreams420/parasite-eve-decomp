@@ -88,7 +88,8 @@ int func_80195CE0(int event,State *inputState)
         i=0;
         do {
             register GteShortVector *particle asm("$17")=func_800CE610(ANIM_POOL_AS(RoomM350EffectEmitter)->pool);
-            register int random asm("$16");
+            int random;
+            int highByte;
             int divisor;
             if(!particle) break;
             i++;
@@ -98,8 +99,8 @@ int func_80195CE0(int event,State *inputState)
             asm volatile("" : : "i"(&&radial));
 radial:
             vector.x=0; vector.y=0;
-            random=Inv_ScrambleGrid();
-            random=((unsigned int)random<<8)|Inv_ScrambleGrid();
+            highByte=Inv_ScrambleGrid();
+            random=((unsigned int)highByte<<8)|Inv_ScrambleGrid();
             divisor=44;
             vector.z=random%divisor+320;
             ApplyMatrixSV(&local.matrix,&vector,particle);
@@ -125,7 +126,7 @@ radial:
         asm volatile("" : "=r"(palette) : "0"(palette) : "memory");
         actor=ANIM_OWNER_AS(RoomM350EffectActor);
         D_800F3368.palette=2; D_800F3368.parameter06=0; D_800F3368.parameter0A=0; D_800F3368.depth=0; D_800F3368.tpage=palette;
-        asm volatile("" : "=r"(actor) : "0"(actor) : "memory");
+
         i=0;
         position=actor->instance->transforms[33].t;
         out=&local.position.x;
