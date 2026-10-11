@@ -1,16 +1,11 @@
 /* CC1_FLAGS: -fno-schedule-insns */
-
-extern unsigned int D_800C0E24;
+#include "pe1/aya.h"
 
 void Aya_UnlockParasiteSpell(int spell) {
-    unsigned int *flags;
-    unsigned int mask;
-    unsigned int value;
+    u32 *flags = &D_800C0E00.parasite_spell_flags;
+    u32 mask = 1;
+    u32 value = *flags;
 
-    flags = &D_800C0E24;
-    value = (unsigned int)flags;
-    mask = 1;
-    value = *flags;
     mask <<= spell;
     value |= mask;
     *flags = value;

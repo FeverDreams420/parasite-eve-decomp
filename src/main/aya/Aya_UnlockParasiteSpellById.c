@@ -1,43 +1,24 @@
-#include "common.h"
 #include "pe1/aya.h"
-void *Aya_GetParasiteSpellUnlockTable(void);
-void Menu_CreateParasiteSpellInfoPanel(int arg0);
-int Aya_UnlockParasiteSpellById(int arg0)
-{
-  u16 *entry;
-  int i;
-  int found;
-  unsigned int *flags;
-  int new_var2;
-  unsigned int *new_var;
-  int bit;
-  u16 *start;
-  start = Aya_GetParasiteSpellUnlockTable();
-  i = 0;
-  entry = start;
-  while (1)
-  {
-    if ((*entry) == arg0)
-    {
-      break;
-    }
-    i++;
-    if (i >= 20)
-    {
-      break;
-    }
-    entry += 2;
-  }
-  found = i < 20;
+#include "pe1/menu_dialog.h"
 
-  new_var2 = found;
-  if (new_var2)
-  {
-    new_var = g_AyaParasiteSpellFlags;
-    bit = 1;
-    flags = new_var;
-    *flags |= bit << i;
-    Menu_CreateParasiteSpellInfoPanel(i);
-  }
-  return new_var2;
+/* Learns the parasite spell whose unlock key matches and announces it.
+ * Returns whether the key named one of the 20 spells. */
+int Aya_UnlockParasiteSpellById(int key)
+{
+    ParasiteSpellEntry *table;
+    int spell;
+    int found;
+
+    table = Aya_GetParasiteSpellUnlockTable();
+    for (spell = 0; spell < 20; spell++) {
+        if (table[spell].unlockKey == key) {
+            break;
+        }
+    }
+    found = spell < 20;
+    if (found) {
+        g_AyaParasiteSpellFlags[0] |= 1 << spell;
+        Menu_CreateParasiteSpellInfoPanel(spell);
+    }
+    return found;
 }

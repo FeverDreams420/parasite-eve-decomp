@@ -10,6 +10,8 @@ void Menu_DrawTwoLineDialogText(void);
 void Menu_DrawNotificationDialogContent(void);
 int Menu_HandleDeferredCallbackInput(MenuWidgetNode *node, int flags);
 void Menu_SetDeferredCallback(void (*callback)(void));
+/* Opens the info panel announcing a newly learned parasite spell. */
+void Menu_CreateParasiteSpellInfoPanel(int spell);
 
 /* Two adjacent 64-byte, 0xFF-terminated notification text buffers. */
 extern u8 D_800A1A20[2][64];
