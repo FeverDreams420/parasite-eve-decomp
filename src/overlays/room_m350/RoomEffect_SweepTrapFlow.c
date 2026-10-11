@@ -203,18 +203,16 @@ int func_8019360C(int event) {
         int frame;
         int previous;
         int i;
-        register Vector *position asm("$16");
         if (instance->animation != 11) return 0;
         frame = instance->frame;
         if (frame >= 50) return 2;
         previous = instance->previousFrame;
         if (frame < 8) return 0;
         if (previous < 8) {
-            position = D_8019A778;
-            for (i=0;i<2;i++,position++) {
+            for (i=0;i<2;i++) {
                 RoomM350SweepTrap *particle = func_800CE610(((RoomM350Emitter *)ANIM_POOL_AS(RoomM350Emitter))->pool);
                 if (!particle) break;
-                particle->anchor = position;
+                particle->anchor = &D_8019A778[i];
                 particle->done = 0;
             }
             {
