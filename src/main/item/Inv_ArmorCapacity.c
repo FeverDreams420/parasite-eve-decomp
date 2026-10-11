@@ -1,8 +1,25 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "pe1/battle_cmd.h"
 #include "pe1/inventory.h"
 #include "pe1/inventory_slots.h"
+
+/* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
+s32 D_8009D040;
+s16 *D_8009D048;
+s32 D_8009D050;
+u32 *D_8009D058;
+s32 D_8009D064;
+u8 *D_8009D084;
+s32 D_8009D088;
+s32 D_8009D08C;
+s32 D_8009D090;
+s32 D_8009D094;
+s32 D_8009D098;
+s32 D_8009D09C;
+s16 *g_InvActiveListOverride;
+s32 g_InvOverrideSlotLimit;
 
 static inline ItemDataRecord *LookupOldArmor(int index) {
     int value, saved;
@@ -143,10 +160,10 @@ int Inv_GetActiveSlotCount(int *out) {
         else reserve = 0;
     }
     bonusSlots = Inv_GetBonusSlotCount();
-    if (g_InvBaseCapacityForLimit[0] + bonusSlots < 51) {
+    if (D_800C0E0C + bonusSlots < 51) {
         used = 0;
         bonusSlots = Inv_GetBonusSlotCount();
-        capacityBeforeScan = g_InvBaseCapacityForResult[0] + bonusSlots;
+        capacityBeforeScan = D_800C0E0C + bonusSlots;
     } else {
         used = 0;
         capacityBeforeScan = 50;

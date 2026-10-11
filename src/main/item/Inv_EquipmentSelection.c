@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "pe1/inventory_slots.h"
 #include "pe1/aya.h"
 #include "pe1/menu_inventory.h"
@@ -11,6 +12,22 @@
 #include "pe1/text.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/draw_state.h"
+
+/* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
+int D_8009D03C;
+s32 D_8009D040;
+s16 *D_8009D048;
+s32 D_8009D050;
+u32 *D_8009D058;
+s32 D_8009D064;
+s32 D_8009D068;
+s32 D_8009D0CC;
+s32 D_8009D0D0;
+int g_MenuBattleEquipMode;
+u8 *g_SaveMetadataCursor;
+ItemDataRecord *g_SaveMetadataSourceRecord;
+int g_SaveMetadataWindowIndex;
+int g_SaveMetadataWindowLength;
 
 static inline ItemDataRecord *LookupItem(int value) {
     int saved = value;
@@ -249,9 +266,9 @@ int Inv_DispatchCommand(int command, int value, int other, int *unused) {
     }
     case INV_CMD_GET_CAPACITY: {
         int bonus = Inv_GetBonusSlotCount();
-        if (g_InvBaseCapacityForLimit[0] + bonus < 51) {
+        if (D_800C0E0C + bonus < 51) {
             bonus = Inv_GetBonusSlotCount();
-            return g_InvBaseCapacityForResult[0] + bonus;
+            return D_800C0E0C + bonus;
         }
         return 50;
     }

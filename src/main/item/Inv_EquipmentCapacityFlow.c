@@ -1,10 +1,15 @@
+/* CC1_FLAGS: -G4 */
+/* MASPSX_FLAGS: -G4 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
+#include "pe1/battle_modifiers.h"
 #include "pe1/inventory_slots.h"
 
-/* CC1_FLAGS: -G4 */
-/* MASPSX_FLAGS: -G4 */
-
-extern struct { char _[16]; } D_800C0E22_obj __asm__("D_800C0E22");
-#define D_800C0E22 (*(s8 *)&D_800C0E22_obj)
+/* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
+s16 *D_8009D048;
+s32 D_8009D050;
+u32 *D_8009D058;
+s32 D_8009D064;
+s32 D_8009D06C;
 
 int Inv_CheckFreeSlotCapacity(int requested_slots) {
     s16 *slot;
@@ -21,10 +26,10 @@ int Inv_CheckFreeSlotCapacity(int requested_slots) {
     g_InvSelectionBitWords = 2;
 
     bonus_slots = Inv_GetBonusSlotCount();
-    if (g_InvBaseCapacityForLimit[0] + bonus_slots < 51) {
+    if (D_800C0E0C + bonus_slots < 51) {
         used_slots = 0;
         capacity_before_scan =
-            g_InvBaseCapacityForResult[0] + Inv_GetBonusSlotCount();
+            D_800C0E0C + Inv_GetBonusSlotCount();
     } else {
         used_slots = 0;
         capacity_before_scan = 50;
@@ -163,7 +168,7 @@ int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
     }
 
     Inv_RestoreSelection(list_index);
-    if (D_8009D048 == D_800C0E48 && selected_a == D_800C0E22) {
+    if (D_8009D048 == D_800C0E48 && selected_a == D_800C0E22[0]) {
         {
             int raw_count;
             int loop_count;
@@ -198,7 +203,7 @@ int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
 
     Inv_RestoreSelection(list_index < 1);
     if (D_8009D048 == D_800C0E48) {
-        if (selected_b == D_800C0E22) {
+        if (selected_b == D_800C0E22[0]) {
             if (mod_index >= 0) {
 
                 {

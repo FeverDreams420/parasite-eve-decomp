@@ -1,8 +1,22 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "pe1/inventory_slots.h"
 #include "pe1/random.h"
 #include "pe1/text.h"
+
+/* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
+s32 D_8009D038;
+s32 D_8009D040;
+s16 *D_8009D048;
+s32 D_8009D050;
+u32 *D_8009D058;
+s32 D_8009D064;
+s32 D_8009D068;
+s32 D_8009D06C;
+int D_8009D218;
+s16 *g_InvActiveListOverride;
+s32 g_InvOverrideSlotLimit;
 static inline ItemDataRecord *LookupItem(int value) {
     int saved = value;
     ItemDataRecord *result;
@@ -142,8 +156,8 @@ void Inv_CompactActiveListSlots(void) {
         }
         index = slot;
         if (index >= 0) {
-            if (g_InvBaseCapacityForLimit[0] + Inv_GetBonusSlotCount() < 51) {
-                limit = g_InvBaseCapacityForResult[0] + Inv_GetBonusSlotCount();
+            if (D_800C0E0C + Inv_GetBonusSlotCount() < 51) {
+                limit = D_800C0E0C + Inv_GetBonusSlotCount();
             } else {
                 limit = 50;
             }
