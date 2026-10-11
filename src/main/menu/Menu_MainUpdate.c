@@ -1,3 +1,4 @@
+#include "pe1/geom_state.h"
 #include "common.h"
 #include "pe1/scene_transition.h"
 #include "pe1/textbox.h"
@@ -50,7 +51,6 @@ extern s32 D_8009D28C;
 extern s32 D_8009D2E8;
 extern s32 D_8009D2FC;
 extern void *D_800B0E08[];
-extern s32 D_800BCF88;
 
 static inline u8 Battle_GetReactionTimer(void) {
     return D_8009D234[0];
@@ -932,7 +932,7 @@ block_61:
         {
         register s32 minus5;
 
-        if (D_800BCF88 & 0x2000) {
+        if (D_800BCF88.state.flags & 0x2000) {
             Render_BeginSceneLoad();
             minus5 = -5;
         } else {
