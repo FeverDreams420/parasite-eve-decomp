@@ -83,7 +83,7 @@ int CdRom_DetectDiscChange(void) {
 #include "pe1/field_actor.h"
 #include "pe1/player_entity.h"
 #include "../../../tools/m2c/m2c_macros.h"
-extern u8 D_800B0CE2[], D_8009D25C[];
+extern u8 D_800B0CE2[], D_8009D25C;
 extern u32 D_800B0DD8[];
 /* Matching debt: pins, empty barriers, one retry jump, and a
  * 32-byte unused stack reserve retain retail allocation and scheduling.
@@ -130,7 +130,7 @@ retry:
         if (result != 0)
             return 1;
         if (state->flags & 0x20000) {
-            if (!(state->flags & 0x80000) && *D_8009D25C < 2)
+            if (!(state->flags & 0x80000) && D_8009D25C < 2)
                 return 1;
             state->flags |= 0x40000;
         }
