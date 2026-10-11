@@ -6,7 +6,8 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/game_timers.h"
 #include "pe1/scene_dispatch.h"
-#include "Boot_MainLoop_externs.h"
+#include "pe1/boot.h"
+#include "pe1/sys.h"
 
 
 #define STATE_FLAG_IMAGE_BUSY 0x00100000U

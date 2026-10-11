@@ -6,21 +6,23 @@
 #include "pe1/gte.h"
 #include "pe1/card_obj.h"
 #include "pe1/game_state_types.h"
-#include "pe1/psyq_nop.h"
 #include "pe1/scene_flags.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/boot.h"
+#include "pe1/game_state.h"
+#include "pe1/scene_dispatch.h"
+#include "pe1/pad_state.h"
 
 /* Field render-flag table setup and the helper that stores one table entry
  * at the bit index of a single-bit mask. The helper's only caller is the
  * table builder that precedes it (main_tu_evidence G0344). */
 
-#include "Boot_RenderFlagsAndPadInput_externs.h"
 /* COMMON supplies small-data metadata to MASPSX. */
 s32 g_SceneFlagBits;
 s32 g_BattleControlFlags;
 s32 g_FieldRenderFlags;
-s32 g_FieldPadBits[1];
+u32 D_8009D26C;
 u32 D_8009D2D4;
-#include "Boot_RenderFlagsAndPadInput_externs_1.h"
 
 void Gte_StoreTableEntry(u32 mask, int value);
 
@@ -34,7 +36,7 @@ void Boot_BuildRenderFlagTable(void) {
     g_BattleControlFlags = 0;
     D_8009D2D4 = 0;
     g_FieldRenderFlags = 0;
-    g_FieldPadBits[0] = 0;
+    D_8009D26C = 0;
     do {
         *entry = 0;
         i += 1;
@@ -60,7 +62,7 @@ void Boot_BuildRenderFlagTable(void) {
     Gte_StoreTableEntry(0x20000000, 0x2000);
     Gte_StoreTableEntry(0x40000000, 0x4000);
     Gte_StoreTableEntry(0x80000000, 0x8000);
-    D_8009D1A0w[0] = g_GameStateFlags | 0x4000;
+    g_GameStateFlags = g_GameStateFlags | 0x4000;
 }
 
 void Gte_StoreTableEntry(u32 mask, int value) {
@@ -75,20 +77,12 @@ void Gte_StoreTableEntry(u32 mask, int value) {
     D_800A76F0[index] = value;
 }
 
-#include "Boot_RenderFlagsAndPadInput_externs_2.h"
 
-#define D_800BE9A0 (*(u16 *)&D_800BE9A0_o)
-#define D_800BE9A2 (*(u16 *)&D_800BE9A2_o)
-#define D_800BE9A6 (*(u8 *)&D_800BE9A6_o)
-#define D_800BE9A7 (*(u8 *)&D_800BE9A7_o)
-#define D_800B0DBF (*(s8 *)&D_800B0DBF_o)
 
 u32 D_8009D1F4;
 unsigned int D_8009D1E4;
 u32 D_8009D238;
-#include "Boot_RenderFlagsAndPadInput_externs_3.h"
 u32 D_8009D2A8;
-#include "Boot_RenderFlagsAndPadInput_externs_4.h"
 
 int PadGetState();
 int PadInfoMode(int arg0, int mode, int index);
@@ -115,33 +109,33 @@ void Field_HandleStateTransition(void) {
     u8 analog;
 
     if (PadGetState(0) == 0) {
-        u32 initial_flags = field_flags_read_6[0];
+        u32 initial_flags = g_GameStateFlags;
         if ((initial_flags & 0x4001) == 0) {
             D_8009D1F4 = 4;
             D_8009D26C = 4;
             D_8009D1E4 = 0;
-            field_flags_write[0] = initial_flags | 0x4000;
+            g_GameStateFlags = initial_flags | 0x4000;
             return;
         }
-        field_flags_write[0] = initial_flags | 0x4000;
+        g_GameStateFlags = initial_flags | 0x4000;
     }
 
     mode = D_800BE9A0 & 0xF000;
     if (!((mode != 0x4000) && (mode != 0x7000))) {
 
-    if (field_flags_read_6[0] & 0x4000) {
+    if (g_GameStateFlags & 0x4000) {
         mode = PadGetState(0);
         if (mode == 2) {
-            field_flags_write[0] = field_flags_read_5[0] & ~0x4000;
+            g_GameStateFlags = g_GameStateFlags & ~0x4000;
         } else if (mode == 1) {
             PadSetAct(0, D_8009D1C0, 2);
         } else if (mode == 6 && PadInfoMode(0, 2, 0) != 0) {
-            if ((field_flags_read_3[0] & 0x8000) == 0) {
+            if ((g_GameStateFlags & 0x8000) == 0) {
                 PadSetMainMode(0, 1, 0);
-                field_flags_write[0] = field_flags_read_5[0] | 0x8000;
+                g_GameStateFlags = g_GameStateFlags | 0x8000;
             } else {
                 PadSetActAlign(0, D_800921F8);
-                field_flags_write[0] = field_flags_read_5[0] & ~0x4000;
+                g_GameStateFlags = g_GameStateFlags & ~0x4000;
             }
         }
     }
@@ -171,7 +165,7 @@ void Field_HandleStateTransition(void) {
         }
     }
 
-    flags = field_flags_read_6[0];
+    flags = g_GameStateFlags;
     if ((flags & 1) != 0) {
         active_pad = D_8009D26C;
         if ((int)active_pad < 0) {
@@ -182,7 +176,7 @@ void Field_HandleStateTransition(void) {
                     D_8009D2A8++;
                     if (D_8009D2A8 == 9) {
                         g_SceneDispatchToken = 0xAA108448;
-                        field_flags_write[0] = flags | 0x12000;
+                        g_GameStateFlags = flags | 0x12000;
                     }
                 } else {
                     D_8009D2A8 = 0;
@@ -201,7 +195,7 @@ void Field_HandleStateTransition(void) {
     }
     if (menu_open & 0x200) {
         D_8009D26C &= 0x60FFDB04;
-        if (D_800B0DBF != 1) {
+        if (g_GameState.scene_audio.tracks.movie_index != 1) {
             D_8009D26C &= 0xDFFFFCFF;
         }
     }

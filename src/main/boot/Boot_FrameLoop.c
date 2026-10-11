@@ -10,6 +10,12 @@
 #include "pe1/scene_room_load.h"
 #include "pe1/scene_dispatch.h"
 #include "pe1/render_tint.h"
+#include "pe1/render_animation_frame.h"
+#include "pe1/boot_disc_check.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/pad_state.h"
+#include "pe1/battle_status.h"
+#include "pe1/field_movement.h"
 
 /* Field frame loop and its scene flush: Boot_FlushSceneFast is the exit tail
  * that Boot_RunFrame repeats after its loop. Contiguous -G8 pair. */
@@ -22,7 +28,7 @@ unsigned int g_GameStateFlags;
 u32 D_8009D1A0;
 u32 D_8009CDA4[1];
 
-#include "Boot_FrameLoop_externs.h"
+#include "pe1/boot.h"
 
 void Gpu_InitPipeline(void);
 void Field_HandleStateTransition(void);

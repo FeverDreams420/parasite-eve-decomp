@@ -10,6 +10,10 @@
 #include "pe1/scene_room_load.h"
 #include "pe1/scene_dispatch.h"
 #include "pe1/render_lighting.h"
+#include "pe1/entity_allocation.h"
+#include "pe1/boot.h"
+#include "pe1/scene_entity_textures.h"
+#include "pe1/save_tail_state.h"
 
 /* GPU pipeline start-up: voice bank, first room, light matrix and colours,
  * entity textures and fog. Retail compiles it without small-data address
@@ -19,7 +23,6 @@
 s32 g_GlobalFrameCounter;
 int g_SceneDispatchToken;
 unsigned int g_GameStateFlags;
-#include "Gpu_InitPipeline_externs.h"
 
 #define W(sym) (*(s32 *)(sym))
 #define H(sym) (*(s16 *)(sym))

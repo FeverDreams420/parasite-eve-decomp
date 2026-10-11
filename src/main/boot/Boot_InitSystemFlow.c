@@ -11,6 +11,9 @@
 #include "pe1/font.h"
 #include "pe1/field_sfx.h"
 #include "pe1/scene_dispatch.h"
+#include "pe1/battle_status.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/boot.h"
 
 void Render_ResetScene(int arg0, int arg1);
 void InitGeom(void);
@@ -45,7 +48,6 @@ void Boot_BuildRenderFlagTable(void);
 M2C_UNK Save_PostInitStub();
 M2C_UNK CdRom_InitScreenState();
 M2C_UNK Task_InitGpuHwRegs();
-#include "Boot_InitSystemFlow_externs.h"
 #define g_FrameRngCounter (g_FrameRngCounter[0])
 void Boot_VsyncCallback(void);
 
@@ -77,7 +79,6 @@ void Boot_InitSubsystems(void) {
 }
 
 
-#include "Boot_InitSystemFlow_externs_1.h"
 
 void ResetGraph(int arg0);
 void SetGraphDebug(int level);
@@ -138,7 +139,6 @@ void Render_ResetScene(int width, int height)
 
 void Scene_TickTimers(void);
 
-#include "Boot_InitSystemFlow_externs_2.h"
 
 void PadInitDirect(char *arg0, char *arg1);
 void PadStartCom(void);

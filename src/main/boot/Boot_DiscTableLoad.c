@@ -12,11 +12,12 @@
 #include "pe1/boot_display.h"
 #include "pe1/render_buffers.h"
 #include "pe1/pe_image.h"
+#include "pe1/boot.h"
+#include "pe1/akao/commands.h"
 
 void SetDispMask(int arg0);
 void FlushCache(void);
 
-#include "Boot_DiscTableLoad_externs.h"
 
 void Akao_Cmd_F0(void);
 
@@ -49,7 +50,7 @@ retry_first_load:
             poll = status + 1;
             if ((unsigned int)poll < 2U) {
                 poll = status;
-                D_800B0CD8_word &= 0xFEFFBFFF;
+                D_800B0CD8 &= 0xFEFFBFFF;
                 asm volatile("" : "=r"(status) : "0"(status));
                 poll = status;
             } else {
@@ -82,7 +83,7 @@ retry_large_load_a:
                 poll = status + 1;
                 if ((unsigned int)poll < 2U) {
                     poll = status;
-                    D_800B0CD8_word &= 0xFEFFBFFF;
+                    D_800B0CD8 &= 0xFEFFBFFF;
                     asm volatile("" : "=r"(status) : "0"(status));
                     poll = status;
                 } else {
@@ -109,7 +110,7 @@ retry_large_load_b:
                 poll = status + 1;
                 if ((unsigned int)poll < 2U) {
                     poll = status;
-                    D_800B0CD8_word &= 0xFEFFBFFF;
+                    D_800B0CD8 &= 0xFEFFBFFF;
                     asm volatile("" : "=r"(status) : "0"(status));
                     poll = status;
                 } else {
@@ -144,7 +145,7 @@ retry_final_load:
             poll = status + 1;
             if ((unsigned int)poll < 2U) {
                 poll = status;
-                D_800B0CD8_word &= 0xFEFFBFFF;
+                D_800B0CD8 &= 0xFEFFBFFF;
                 asm volatile("" : "=r"(status) : "0"(status));
                 poll = status;
             } else {
@@ -178,7 +179,7 @@ int CD_LoadBootAudio(void) {
     D_800B0DB6 = -1;
     D_800B0DB3 = -1;
     D_800B0DB2 = -1;
-    D_800B0CD8_word &= -0xF1;
+    D_800B0CD8 &= -0xF1;
     Akao_Cmd_F0();
 
 retry_first:
@@ -197,7 +198,7 @@ retry_first:
             poll = status + 1;
             if ((unsigned int)poll < 2U) {
                 poll = status;
-                D_800B0CD8_word &= clear_mask;
+                D_800B0CD8 &= clear_mask;
                 asm volatile("" : "=r"(status) : "0"(status));
                 poll = status;
             } else {
@@ -233,7 +234,7 @@ retry_second:
             poll = status + 1;
             if ((unsigned int)poll < 2U) {
                 poll = status;
-                D_800B0CD8_word &= clear_mask;
+                D_800B0CD8 &= clear_mask;
                 asm volatile("" : "=r"(status) : "0"(status));
                 poll = status;
             } else {
