@@ -264,7 +264,7 @@ void RoomFx_UpdateFallingSprite(void *entity, RoomFallingBurstControl *control,
         }
     } else {
         register RoomFallingSpriteState *motion asm("$16") = state;
-        PE1_COMPILER_LAUNDER(motion);
+        asm("" : "=r"(motion) : "0"(motion));
         motion->x += motion->velocityX;
         motion->z += motion->velocityZ;
         motion->y += motion->verticalStep >> 8;
