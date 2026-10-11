@@ -21,7 +21,7 @@ int Render_PrepareFrame(void) {
     Render_InitViewState(state, state + 8);
     if (Geo_RenderMeshList((void *)D_800B0E40, &local.result)) return -2;
     SetGeomScreen(state[8]);
-    func_800655D4();
+    Obj_ResetAllEntries();
     if (D_8009D254) {
         int x = D_8009D254->posX.parts.integer;
         int y, z;
@@ -68,7 +68,6 @@ int Render_PrepareFrame(void) {
     }
 }
 
-int Scene_CheckBattleFlag(void);
 int Scene_IsBattleMode(void);
 int Geo_BuildMeshList(void);
 int Render_StepFade(void);
@@ -76,7 +75,7 @@ int Render_ApplyScreenTint(void);
 
 int Render_Update(void) {
     Render_DrawSprite();
-    Scene_CheckBattleFlag();
+    Geom_StepGroupAnimations();
     Scene_IsBattleMode();
     Geo_BuildMeshList();
     Render_StepFade();

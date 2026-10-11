@@ -8,85 +8,71 @@
 
 
 
-int Obj_ResetAllEntries(void) __asm__("func_800655D4");
 
 int Obj_ResetAllEntries(void) {
     GeomState *state;
-    register GeomStateAddress cursor asm("a0");
-    u8 *entryBase;
-    GeomEntry *renderEntries;
+    GeomStateAddress base, controls, slots;
+    GeomEntry *entries;
     unsigned int i;
     unsigned int count;
-    unsigned int value100;
-    unsigned int value1;
-    int framePad[2];
-
 
     state = D_800B1624;
-    cursor.state = D_800B1624;
-    entryBase = cursor.bytes + state->ctrl_offset;
-    renderEntries = (GeomEntry *)(cursor.bytes + state->entry_offset);
+    base.state = D_800B1624;
+    controls.word = base.word + state->ctrl_offset;
+    base.word += state->entry_offset;
+    entries = base.entry;
     count = state->entry_count;
-    i = 0;
+    for (i = 0; i < count; i++) {
+        GeomCtrlEntry *control = &controls.ctrl[i];
+        u8 group = control->position.parts.groupFraction;
 
-    if (count != 0) {
-        value100 = 0x100;
-        value1 = 1;
-        cursor.bytes = entryBase;
-        do {
-            register unsigned int oldValue asm("v1") = (u8)cursor.ctrl->position.parts.groupFraction;
-            u8 *indexedPtr = cursor.bytes + cursor.ctrl->slot_offset;
-            unsigned int renderIndex;
-
-            cursor.ctrl->step = value100;
-            cursor.ctrl->elapsed = 0;
-            cursor.ctrl->head.b.flags = value1;
-            cursor.ctrl->position.packed = oldValue;
-            renderIndex = *indexedPtr;
-            renderEntries[renderIndex].head.b.flags |= 2;
-            i++;
-            cursor.ctrl++;
-        } while (i < count);
+        slots.ctrl = control;
+        slots.word += control->slot_offset;
+        control->step = 0x100;
+        control->elapsed = 0;
+        control->head.b.flags = 1;
+        control->position.packed = group;
+        entries[*slots.bytes].head.b.flags |= 2;
     }
-
-
     return 0;
 }
 
 
 
-/* Historical name: advances the current group's geometry animations. */
-int Scene_CheckBattleFlag(void)
+/* Advances the geometry animations of the selected group. */
+int Geom_StepGroupAnimations(void)
 {
-    GeomState *state;
-    GeomCtrlEntry *controls;
-    GeomEntry *entries;
+    GeomStateAddress state, controls, entries;
     unsigned int i, count;
 
     if (!(g_GameStateFlags & 0x104) &&
         (g_GameState.flags & 0xC00000) != 0x800000) {
-        state = D_800B1624;
-        controls = (GeomCtrlEntry *)((u8 *)state + state->ctrl_offset);
-        entries = (GeomEntry *)((u8 *)state + state->entry_offset);
-        count = state->entry_count;
+        state.state = D_800B1624;
+        controls.word = state.word + state.state->ctrl_offset;
+        entries.word = state.word + state.state->entry_offset;
+        count = state.state->entry_count;
         for (i = 0; i < count; i++) {
-            GeomCtrlEntry *control = &controls[i];
+            GeomCtrlEntry *control = &controls.ctrl[i];
             int position = control->position.bits.value;
 
             if ((control->head.b.flags & 2) &&
                 (control->head.b.flags & 0x14) &&
                 control->position.bits.group == g_GeomGroupSel) {
                 unsigned int j;
-                GeomAnimationSlot *slots =
-                    (GeomAnimationSlot *)((u8 *)control + control->slot_offset);
-                unsigned int frames = control->head.packed >> 8;
+                GeomStateAddress slotTable;
+                GeomAnimationSlot *slots;
+                unsigned int frames;
                 GeomAnimationSlot *slot;
 
+                slotTable.ctrl = control;
+                slotTable.word += control->slot_offset;
+                slots = slotTable.slots;
+                frames = control->head.packed >> 8;
                 for (j = 0; j < frames; j++)
-                    entries[slots[j].entry].head.b.flags &= ~2;
+                    entries.entry[slots[j].entry].head.b.flags &= ~2;
                 /* Subtraction retains retail's address-add operand order. */
                 slot = slots - (-(position >> 8));
-                entries[slot->entry].head.b.flags |= 2;
+                entries.entry[slot->entry].head.b.flags |= 2;
                 if (slot->duration < 0) {
                     slot->duration = 0;
                     control->elapsed = 0;
@@ -129,15 +115,19 @@ int Scene_CheckBattleFlag(void)
 
 /* Contiguous commands update the shared geometry animation control table. */
 
+#define GEOM_CTRL_ENTRY(address, base, index) \
+    (GEOM_STATE_OFFSET(address, base, ctrl_offset, (index) << 4), (address).ctrl)
+
 
 int Obj_SetEntryLimit(int arg0, int arg1)
 {
+  GeomStateAddress address, base;
   GeomCtrlEntry *entry;
   u32 positionWord;
   register u32 flags;
   u32 hi;
   int ret;
-  entry = (GeomCtrlEntry *) ((((u8 *) g_GeomState) + g_GeomState->ctrl_offset) + (arg0 << 4));
+  entry = GEOM_CTRL_ENTRY(address, base, arg0);
   positionWord = entry->position.packed;
   positionWord &= 0xFF;
   ret = entry->head.b.flags;
@@ -169,9 +159,6 @@ int Sys_SetFlagSlot(int arg0, int arg1) {
 }
 
 
-#define GEOM_CTRL_ENTRY(address, base, index) \
-    (GEOM_STATE_OFFSET(address, base, ctrl_offset, (index) << 4), (address).ctrl)
-
 s16 Obj_GetEntryField6(int index) {
     GeomStateAddress address, base;
 
@@ -187,28 +174,19 @@ int Obj_SetEntryField8(int index, unsigned int value) {
 
 int Obj_FillEntrySlotValues(int index, u8 value)
 {
-  GeomStateAddress address, base;
-  GeomCtrlEntry *entry;
-  u8 *ptr;
-  int count;
-  int i;
-  int framePad[2];
-  i = 0;
-  entry = GEOM_CTRL_ENTRY(address, base, index);
-  address.word += entry->slot_offset;
-  count = entry->head.packed >> 8;
-  if (count != 0)
-  {
-    ptr = address.bytes;
-    do
-    {
-      ptr[1] = value;
-      i++;
-      ptr += 2;
+    GeomStateAddress address, base, slots;
+    GeomCtrlEntry *entry;
+    int count;
+    int i;
+
+    entry = GEOM_CTRL_ENTRY(address, base, index);
+    slots.ctrl = entry;
+    slots.word += entry->slot_offset;
+    count = entry->head.packed >> 8;
+    for (i = 0; i < count; i++) {
+        slots.slots[i].duration = value;
     }
-    while (i < count);
-  }
-  return 0;
+    return 0;
 }
 
 int Obj_SetEntrySlotValue(int index, int slot, u8 value) {
@@ -219,7 +197,7 @@ int Obj_SetEntrySlotValue(int index, int slot, u8 value) {
     entry = GEOM_CTRL_ENTRY(address, base, index);
     address.word += entry->slot_offset;
     ret = 0;
-    address.bytes[slot * 2 + 1] = value;
+    address.slots[slot].duration = value;
     return ret;
 }
 
@@ -241,7 +219,7 @@ int Menu_SetSlotEntry(int index, unsigned int limit, unsigned int slot)
     u32 positionWord;
     register u32 flags;
     u32 hi;
-    u8 *slotbase;
+    GeomAnimationSlot *slots;
     s32 offset;
     int neg;
     s16 f8;
@@ -258,13 +236,13 @@ int Menu_SetSlotEntry(int index, unsigned int limit, unsigned int slot)
         do {
             flags = entry->head.b.flags;
             table.word += offset;
-            slotbase = table.bytes;
+            slots = table.slots;
             entry->position.packed = positionWord;
         } while (0);
         neg = -1;
         flags |= 6;
         entry->head.b.flags = flags;
-        slotbase[(slot << 1) + 1] = neg;
+        slots[slot].duration = neg;
         f8 = entry->step;
         if ((f8 > 0 && slot < limit) || (f8 < 0 && limit < slot)) {
             entry->step = -(u16)entry->step;

@@ -255,7 +255,7 @@ extern GeomState * volatile g_GeomState;
 extern GeomState * volatile D_800B1624;
 
 extern u8 g_GeomGroupSel;
-int Scene_CheckBattleFlag(void);
+int Geom_StepGroupAnimations(void);
 int Scene_IsBattleMode(void);
 int Scene_IsNotBattleMode(void);
 
@@ -315,6 +315,7 @@ typedef union GeomStateAddress {
     GeomEntry *entry;
     GeomEntryView *views;
     CameraViewport *viewport;
+    GeomAnimationSlot *slots;
     u8 *bytes;
     u32 word;
 } GeomStateAddress;
