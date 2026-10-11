@@ -587,12 +587,7 @@ void Render_SetupBoneTransforms(RenderObjectEntity *actor, s32 *view) {
     gte_stsv(&actor->rotation_overrides[0].x);
     gte_stsv(&actor->hit_cylinder.value0);
     gte_stsv(&actor->target_x);
-    /* PSY-Q gte_CompMatrix(view, matrix, scratch). */
-    gte_MulMatrix0(view, matrix, scratch);
-    BoneLoadTrans(view);
-    gte_ldlv0(matrix->translation);
-    gte_rt();
-    gte_stlvnl(scratch->translation);
+    gte_CompMatrixMac(view, matrix, scratch);
     BoneLoadFullMatrix(scratch);
     /* In this mode the halfwords at +0x2C form the projection input vector. */
     gte_ldv0(&actor->table_value2c);

@@ -921,6 +921,17 @@
         gte_stlvl((char *)(r3) + 20); \
     }
 
+/* gte_CompMatrix storing the composed translation from MAC1..3
+ * (gte_stlvnl) instead of IR1..3; the skinned and bone transforms use it. */
+#define gte_CompMatrixMac(r1, r2, r3) \
+    { \
+        gte_MulMatrix0(r1, r2, r3); \
+        gte_ldtransmatrix(r1); \
+        gte_ldlv0((char *)(r2) + 20); \
+        gte_rt(); \
+        gte_stlvnl((char *)(r3) + 20); \
+    }
+
 /* Stock PSY-Q inline_c.h (DMPSX version 3) forms, copied register for
  * register and instruction for instruction.  The SDK writes the COP2 commands
  * as DMPSX placeholder words; the real command words DMPSX substitutes are
@@ -997,6 +1008,49 @@
     asm volatile("swc2 $25,0(%0)\n\t" \
                  "swc2 $26,4(%0)\n\t" \
                  "swc2 $27,8(%0)" \
+                 : : "r"(r0) : "memory")
+
+/* Store the whole GTE matrix: R11..R33 as five packed words (PSY-Q
+ * gte_ReadRotMatrix) followed by TRX, TRY, TRZ at +20. */
+#define gte_ReadMatrix(r0) \
+    asm volatile("cfc2 $12,$0\n\t" \
+                 "cfc2 $13,$1\n\t" \
+                 "sw $12,0(%0)\n\t" \
+                 "sw $13,4(%0)\n\t" \
+                 "cfc2 $12,$2\n\t" \
+                 "cfc2 $13,$3\n\t" \
+                 "cfc2 $14,$4\n\t" \
+                 "sw $12,8(%0)\n\t" \
+                 "sw $13,12(%0)\n\t" \
+                 "sw $14,16(%0)\n\t" \
+                 "cfc2 $12,$5\n\t" \
+                 "cfc2 $13,$6\n\t" \
+                 "cfc2 $14,$7\n\t" \
+                 "sw $12,20(%0)\n\t" \
+                 "sw $13,24(%0)\n\t" \
+                 "sw $14,28(%0)" \
+                 : : "r"(r0) : "$12", "$13", "$14", "memory")
+
+/* PSY-Q gte_ldv3c: V0..V2 from three consecutive short vectors. */
+#define gte_ldv3c(r0) \
+    asm volatile("lwc2 $0,0(%0)\n\t" \
+                 "lwc2 $1,4(%0)\n\t" \
+                 "lwc2 $2,8(%0)\n\t" \
+                 "lwc2 $3,12(%0)\n\t" \
+                 "lwc2 $4,16(%0)\n\t" \
+                 "lwc2 $5,20(%0)" \
+                 : : "r"(r0) : "memory")
+
+/* PSY-Q gte_stsxy3c / gte_stsz3c: SXY0..2 and SZ1..3 to consecutive words. */
+#define gte_stsxy3c(r0) \
+    asm volatile("swc2 $12,0(%0)\n\t" \
+                 "swc2 $13,4(%0)\n\t" \
+                 "swc2 $14,8(%0)" \
+                 : : "r"(r0) : "memory")
+#define gte_stsz3c(r0) \
+    asm volatile("swc2 $17,0(%0)\n\t" \
+                 "swc2 $18,4(%0)\n\t" \
+                 "swc2 $19,8(%0)" \
                  : : "r"(r0) : "memory")
 
 #endif
