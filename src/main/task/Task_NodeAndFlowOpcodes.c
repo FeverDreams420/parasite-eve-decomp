@@ -27,7 +27,6 @@ int Task_JumpIfZero(int **arg0) {
     return 1;
 }
 
-FieldActor *Scene_LoadMap(char *arg0, FieldActor *arg1, int arg2);
 
 int Task_SpawnEntityAt(int **arg0) {
     char local[2];
@@ -35,7 +34,7 @@ int Task_SpawnEntityAt(int **arg0) {
 
     local[0] = arg0[0][0];
     local[1] = arg0[1][0];
-    entity = Scene_LoadMap(local, g_CurrentEntity[0], 1);
+    entity = Scene_LoadMap((u8 *)local, g_CurrentEntity[0], 1);
     entity->pos_x = arg0[2][0];
     entity->pos_y = arg0[3][0];
     entity->pos_z = arg0[4][0];

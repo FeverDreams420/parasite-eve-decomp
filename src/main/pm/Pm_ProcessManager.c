@@ -605,7 +605,7 @@ loop_1:
     base_v0 = (u8 *)g_PmSlotTableRaw;
     temp_v1 = ((PmSlotHeader *)(base_v0 + var_s1))->command;
     if ((temp_v1 < 8U) || ((temp_v1 - 0x55) < 0x1EU)) {
-        var_v0 = Pm_Stop(var_s0, g_PlayerEntity, 1);
+        var_v0 = Pm_Stop(var_s0, (int)g_PlayerEntity, 1);
         var_a2 = var_v0;
         asm volatile("" : "=r"(var_a2) : "0"(var_a2));
         if (var_a2 == 0) {

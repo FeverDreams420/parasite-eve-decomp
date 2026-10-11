@@ -6,6 +6,7 @@
 #include "pe1/scene_room_load.h"
 #include "pe1/scene_archive.h"
 #include "pe1/entity_animation.h"
+#include "pe1/scene_entity_textures.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
@@ -27,7 +28,6 @@ extern u8 D_800BEA40[];
 
 void Battle_InitEquipLists();
 void *Entity_AllocBlock();
-void Render_DrawWithAnim();
 
 FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
 {

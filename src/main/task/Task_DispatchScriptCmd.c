@@ -4,6 +4,7 @@
 #include "pe1/vector_types.h"
 #include "pe1/render_lighting.h"
 #include "pe1/scene_room_load.h"
+#include "pe1/field_actor.h"
 
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
@@ -41,7 +42,6 @@ extern RenderLightColor g_ScriptLightColor[] __asm__("D_800BD025");
 void Task_SetCollisionFlag(int value);
 void func_800E00CC(Pe1Vec3s *position, int mode, int arg2, int arg3,
                    int arg4, int arg5, int arg6);
-u8 *Scene_LoadMap(char *map_id, u8 *entity, int mode);
 void Battle_DrawActiveStatus(void);
 void Window_SetBoundsByMode(int mode);
 
@@ -167,7 +167,7 @@ cmd_962:
 cmd_9c4:
         map_id[0] = ARG_WORD(args->arg1);
         map_id[1] = ARG_WORD(args->arg2);
-        loaded = Scene_LoadMap(map_id, D_8009D2F0[0], 0);
+        loaded = (u8 *)Scene_LoadMap((u8 *)map_id, (FieldActor *)D_8009D2F0[0], 0);
         U32_AT(loaded, 0x28) = ARG_WORD(args->arg3);
         U32_AT(loaded, 0x2C) = ARG_WORD(args->arg4);
         U32_AT(loaded, 0x30) = ARG_WORD(args->arg5);

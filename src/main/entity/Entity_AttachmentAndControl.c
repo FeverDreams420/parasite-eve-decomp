@@ -118,7 +118,7 @@ void Pm_StopAllBoth(void);
 int Menu_SetSlotEntry(int index, unsigned int limit, unsigned int slot);
 
 int Pm_ScriptStopCurrentEntity(int **arg0) {
-    Pm_Stop(*arg0[0], g_CurrentEntity, 0);
+    Pm_Stop(*arg0[0], (int)g_CurrentEntity, 0);
     return 1;
 }
 

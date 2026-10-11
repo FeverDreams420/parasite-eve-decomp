@@ -274,4 +274,7 @@ void Entity_WriteFieldByCmd(FieldActor *actor, int command, int value);
  * migrated and build-checked.
  */
 
+/* Spawns the actors of a scene record after an existing actor. */
+FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull);
+
 #endif

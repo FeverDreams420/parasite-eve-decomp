@@ -7,6 +7,7 @@
 #include "pe1/entity_animation.h"
 #include "pe1/menu_flags.h"
 #include "pe1/asset_find.h"
+#include "pe1/pm.h"
 
 /* CC1_FLAGS: -g3 -G1 */
 /* MASPSX_FLAGS: --expand-div -G1 */
@@ -21,7 +22,6 @@ s8 Pad_GetMenuPressedBitOrDisabled();                                 /* extern 
 M2C_UNK Battle_FlushScriptSounds();                            /* extern */
 struct BattleStatusPanel;
 void Battle_DrawStatusPanel(s32, struct BattleStatusPanel *);
-M2C_UNK Pm_SendCmd(s32, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK Entity_ResolveDropTable(void *);                      /* static */
 s16 Entity_ApplyHitAndSetAnim(void *);                 /* static */
 void Entity_UpdateTimers(void);

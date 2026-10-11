@@ -60,7 +60,6 @@ extern CameraBaseAngles D_800BD020;
 extern unsigned char g_ScreenTransitionState;
 extern short D_800BCFFE;
 
-int Pm_SendCmd();
 int Pm_SetGetState(int arg0, int arg1, int arg2);
 void Entity_AllocSlot(void *arg0);
 void Render_SetEntryVisible(int arg0, int arg1);
