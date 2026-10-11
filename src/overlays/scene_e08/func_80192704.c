@@ -1,11 +1,12 @@
 #include "common.h"
-void func_80192704(s32 arg0, s16 *rec, s16 *p) {
+#include "pe1/scene_e08_ring_effect.h"
+void func_80192704(s32 arg0, s16 *rec, SceneE08RingEffectState *p) {
     u16 *q;
     s16 pad;
 
     q = (u16 *)p;
-    if (p[8] < 0x960) {
-        p[8] += 0x28;
+    if (p->firstScale < 0x960) {
+        p->firstScale += 0x28;
     }
     if (rec[1] >= 0x3D) {
         q[9] += 0x190;

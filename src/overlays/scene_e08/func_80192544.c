@@ -1,4 +1,5 @@
 #include "common.h"
+#include "pe1/scene_e08_ring_effect.h"
 #include "pe1/field_flash_burst.h"
 #include "pe1/gte_types.h"
 #include "pe1/field_ring_geometry.h"
@@ -18,18 +19,12 @@ typedef struct {
     s32 w;
 } Vec4;
 
-typedef struct {
-    u8 pad00[8];
-    s16 rotation[3];
-    s16 pad0E;
-    s16 firstScale;
-    s16 secondScale;
-} EffectGeometry;
+
 
 extern char D_801995F8[];
 extern s32 D_8019956C, D_8019957C;
 
-void func_80192544(void *unused, char *time, EffectGeometry *record) {
+void func_80192544(void *unused, char *time, SceneE08RingEffectState *record) {
     Matrix matrix;
     Vec4 scratchScale, firstScale, secondScale;
 

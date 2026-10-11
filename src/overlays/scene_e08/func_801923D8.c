@@ -1,4 +1,5 @@
 #include "common.h"
+#include "pe1/scene_e08_ring_effect.h"
 #include "pe1/field_ring_geometry.h"
 
 extern u16 D_80199604;
@@ -8,7 +9,7 @@ extern u8 D_801995FC, D_801995FD, D_801995FE;
 extern u8 D_80198C90[];
 void func_800C4E50(void *);
 
-void func_801923D8(void *unused0, void *unused1, u8 *effect) {
+void func_801923D8(void *unused0, void *unused1, SceneE08RingEffectState *effect) {
     u8 *mid = (u8 *)&D_80199604;
     u8 *source;
     u8 *base;
@@ -19,10 +20,10 @@ void func_801923D8(void *unused0, void *unused1, u8 *effect) {
 
     base = mid - 12;
     asm ("" : : "r"(base));
-    *(u16 *)(effect + 8) = 0;
-    *(u16 *)(effect + 10) = 0;
-    *(u16 *)(effect + 12) = 0;
-    *(u16 *)(effect + 18) = 0;
+    effect->rotation[0] = 0;
+    effect->rotation[1] = 0;
+    effect->rotation[2] = 0;
+    effect->secondScale = 0;
 
     *(u16 *)mid = 0x20;
     D_8019960A = 0x1F4;
