@@ -1,19 +1,13 @@
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 */
 #include "common.h"
 #include "pe1/menu_widget.h"
 #include "pe1/menu_queue.h"
 #include "pe1/menu_dialog.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
 
 #define NULL ((void *)0)
-#include "m2c_macros.h"
-#include "Menu_SaveSlotListView_externs.h"
-#define Menu_DrawSaveSlotPortLabel (Menu_DrawSaveSlotPortLabel[0])
-#define Menu_StepSaveSelect (Menu_StepSaveSelect[0])
-#define Menu_IsMemCardSlotCompatible (Menu_IsMemCardSlotCompatible[0])
-#define Menu_DrawSaveSlotList (Menu_DrawSaveSlotList[0])
 
-s32 Menu_CreateSaveSlotListView(s32 arg0, M2C_UNK arg1) {
+s32 Menu_CreateSaveSlotListView(s32 arg0, s32 arg1) {
     s32 temp_s0;
     s32 temp_s0_2;
     void *temp_a0;
@@ -24,9 +18,9 @@ s32 Menu_CreateSaveSlotListView(s32 arg0, M2C_UNK arg1) {
     temp_v0 = MenuWidget_CreateSimpleNode(temp_s0_2, MenuWidget_FindByModeAndSelectedBase(2, 0x24), 0, 0);
     temp_s2 = MenuWidget_CreateNode(temp_s0_2, temp_v0, temp_v0);
     temp_a0 = temp_s2;
-    temp_v0->update = (void (*)())&Menu_StepSaveSelect;
-    temp_s2->draw = (void (*)())&Menu_DrawSaveSlotList;
-    temp_s2->selectionAvailable = (int (*)(int))&Menu_IsMemCardSlotCompatible;
+    temp_v0->update = (void (*)())Menu_StepSaveSelect;
+    temp_s2->draw = (void (*)())Menu_DrawSaveSlotList;
+    temp_s2->selectionAvailable = Menu_IsMemCardSlotCompatible;
     Draw_SetPrimCallback(temp_a0, arg1);
     temp_s0 = MenuWidget_GridCellIndex(temp_s2);
     if (MenuWidget_FindLastMode1WithCursorX() == 0) {
@@ -35,7 +29,7 @@ s32 Menu_CreateSaveSlotListView(s32 arg0, M2C_UNK arg1) {
     } else {
         temp_s2->cursor_x = -1;
     }
-    MenuWidget_CreateSimpleNode(0x3F, temp_s2, 0, 0)->draw = (void (*)())&Menu_DrawSaveSlotPortLabel;
+    MenuWidget_CreateSimpleNode(0x3F, temp_s2, 0, 0)->draw = (void (*)())Menu_DrawSaveSlotPortLabel;
     Queue_Init();
     g_SaveSelectedSlot = arg0;
     return temp_s0;

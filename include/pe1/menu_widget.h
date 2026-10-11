@@ -207,6 +207,8 @@ void MenuWidget_SetCurrentNode(MenuWidgetNode *node);
 void MenuWidget_SetCursorY(MenuWidgetNode *node);
 int MenuWidget_IsCursorYClear(MenuWidgetNode *node);
 int MenuWidget_GetColumnLayoutMode(void);
+/* Draws the text-table entry's primitive list (0 clears). */
+void Draw_FlushPrimList(int text_id);
 
 /* List node being drawn by the list renderers and row callbacks. */
 extern MenuWidgetNode *g_MenuActiveWidget;

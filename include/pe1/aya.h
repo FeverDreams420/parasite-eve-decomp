@@ -102,6 +102,7 @@ extern s8 g_AyaEquippedWeaponSlot[];
 extern s8 g_AyaEquippedArmorSlot[];
 extern u32 g_AyaParasiteSpellFlags[];
 extern u16 g_AyaStatAgility[];
+extern u16 g_AyaStatActiveTimeRate[];
 extern u16 D_800C0E28[7];
 extern u8 g_AyaSaveLevel[];
 /* Growth tables have multiple consumers: 32-bit thresholds and initial u16. */
@@ -153,6 +154,8 @@ void *Aya_GetLevelExpTable(void);
 
 void Inv_RecalcSlotStats(void);
 int Stat_BinarySearch(int value, int *table);
+void Stat_QueryDistanceAndSubLevel(int kind, int value, int *distance_out, int *sublevel_out);
+int Stat_OverflowQuery(int kind, int value);
 int Battle_GetScaledMaxHP(int level);
 int Aya_UnlockParasiteSpellById(int key);
 

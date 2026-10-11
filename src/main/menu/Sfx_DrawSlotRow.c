@@ -1,15 +1,12 @@
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 */
 #include "common.h"
 #include "pe1/inventory.h"
+#include "pe1/inventory_slots.h"
+#include "pe1/menu_context_help.h"
 #include "pe1/text.h"
 #include "pe1/save.h"
 #include "pe1/draw_state.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
-
-void Draw_StatePush(void);
-void Draw_StatePop(void);
-void Draw_PrintRawText(u8 *text);
-void Draw_PrintNumberWidth3Unk(int value);
 
 void Sfx_DrawSlotRow(ItemDataRecord *entry, u8 *text) {
     int type;
@@ -53,7 +50,6 @@ void Sfx_DrawSlotRow(ItemDataRecord *entry, u8 *text) {
         }
     }
 
-draw_ammo:
     Draw_OffsetCursor(0x56, 0);
 
     type = entry->kind;
@@ -73,7 +69,6 @@ draw_ammo:
     Draw_OffsetCursor(0, 5);
     Draw_PrintNumberWidth3Unk(entry->ammo);
 
-done:
     Draw_StatePop();
 }
 
@@ -94,11 +89,12 @@ void Sfx_CursorRenderData(ItemDataRecord *record) {
 
 #define NULL ((void *)0)
 
-#include "Sfx_DrawSlotRow_externs.h"
 
 void Sfx_DrawActiveListSlot(s32 arg0) {
     s16 temp_v1;
     s32 temp_v1_3;
+    /* Match debt: retail copies the item ID into a1 before the range
+     * tests and reads the key-item range from that copy (lev 12 without). */
     register s32 temp_a1 asm("$5");
     u32 temp_a0;
     u32 var_a0;
@@ -124,7 +120,7 @@ void Sfx_DrawActiveListSlot(s32 arg0) {
         var_a0 = temp_v1 - 1;
         if (var_a0 >= 0xFFU) {
             if ((temp_v1 - 0x200) < 9U) {
-                var_a0 = (g_InvCategoryBaseItemId + temp_v1) - 0x201;
+                var_a0 = (D_8009D03C + temp_v1) - 0x201;
                 var_a1 = Str_LookupTable8(var_a0);
             }
         } else {

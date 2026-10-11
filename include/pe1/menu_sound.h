@@ -14,5 +14,8 @@ unsigned int Aya_GetActiveTimeRate(void);
 int Battle_IsActiveWrapped(void);
 int Battle_IsInputAllowedWrapped(void);
 int Battle_GetStateFlag1(void);
+/* Unwrapped forms (menu/Menu_BattleActiveQuery.c). */
+int Battle_IsActive(void);
+int Pad_IsMenuConfirmAvailable(void);
 
 #endif /* PE1_MENU_SOUND_H */

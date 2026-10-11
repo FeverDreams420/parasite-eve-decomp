@@ -35,6 +35,12 @@ void Menu_StepItemDetailPanel(void);
 void Menu_DrawContextHelpText(MenuWidgetNode *panel);
 int Menu_IsMemCardSlotSelectable(int port);
 void Menu_DrawMemCardPortList(MenuWidgetNode *node);
+/* Save slot list of the memory card screen. */
+extern int g_SaveSelectedSlot;
+int Menu_StepSaveSelect(MenuWidgetNode *node, int flags);
+void Menu_DrawSaveSlotList(int node);
+void Menu_DrawSaveSlotPortLabel(MenuWidgetNode *node);
+int Menu_IsMemCardSlotCompatible(int slot);
 extern void (*g_MenuDeferredCallback)(void);
 
 #endif

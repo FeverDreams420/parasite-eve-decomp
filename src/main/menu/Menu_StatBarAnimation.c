@@ -1,9 +1,9 @@
-#include "common.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
-
-#include "Menu_StatBarAnimation_externs.h"
-
+#include "common.h"
+#include "pe1/aya.h"
+#include "pe1/draw_level_bar.h"
+#include "pe1/menu_bonus_stats.h"
 
 int g_MenuItemContextFlag;
 

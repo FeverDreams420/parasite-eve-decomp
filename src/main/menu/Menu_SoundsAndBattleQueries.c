@@ -1,27 +1,20 @@
-#include "include_asm.h"
 #include "pe1/akao.h"
 #include "pe1/aya.h"
+#include "pe1/battle.h"
+#include "pe1/game_state.h"
+#include "pe1/menu_sound.h"
 #include "pe1/textbox.h"
-
 #include "pe1/player_entity.h"
-
-
-#include "Menu_SoundsAndBattleQueries_externs.h"
-
-int Battle_IsActive(void);
-
-int Pad_IsMenuConfirmAvailable(void);
-
 
 
 int Battle_GetEnemyEscapeFlag(void)
 {
-    unsigned int *ptr;
+    Combatant *state;
 
     if (g_PlayerEntity != 0) {
-        ptr = (unsigned int *)g_PlayerEntity->state;
-        if (ptr != 0) {
-            return (ptr[0x13] >> 9) & 1;
+        state = (Combatant *)g_PlayerEntity->state;
+        if (state != 0) {
+            return ((unsigned int)state->stateFlags >> 9) & 1;
         }
     }
 
@@ -35,7 +28,7 @@ int Battle_GetAgilityBonus(void)
 
 unsigned int Aya_GetActiveTimeRate(void)
 {
-    return g_AyaStatActiveTimeRate;
+    return g_AyaStatActiveTimeRate[0];
 }
 
 int Battle_IsActiveWrapped(void)
@@ -69,16 +62,7 @@ void Menu_CopyPromptCodes(unsigned char *src) {
         src++;
     }
 
-    {
-        unsigned char *len_slot;
-        unsigned char *base;
-        int length;
-
-        len_slot = &D_8009169D;
-        base = len_slot - 9;
-        length = dst - base;
-        *len_slot = length;
-    }
+    D_80091694.count = dst - D_80091694.glyphs;
 }
 
 void Menu_PlayConfirmSound(void) {

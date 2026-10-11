@@ -1,17 +1,9 @@
 #include "pe1/text.h"
-typedef struct {
-    char pad[0x24];
-    int value;
-} Inner;
+#include "pe1/menu_widget.h"
 
-typedef struct {
-    char pad[4];
-    Inner *inner;
-} Outer;
-
-void Draw_FlushPrimList(int arg0);
-
-void Menu_DrawSaveSlotPortLabel(Outer *arg0) {
+/* The port label under a save slot list; the list's parent selects the
+ * port (selected_base 0x25 or 0x26). */
+void Menu_DrawSaveSlotPortLabel(MenuWidgetNode *node) {
     Draw_OffsetCursor(0, 2);
-    Draw_FlushPrimList(arg0->inner->value - 0x11);
+    Draw_FlushPrimList(node->parent->selected_base - 0x11);
 }
