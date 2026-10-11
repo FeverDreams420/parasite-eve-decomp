@@ -1,5 +1,4 @@
 /* MASPSX_FLAGS: --expand-div */
-/* CC1_FLAGS: -ffixed-20 -ffixed-21 -ffixed-22 -ffixed-23 */
 #include "pe1/render_object.h"
 #include "pe1/gte.h"
 #include "pe1/psyq_gpu.h"
@@ -179,9 +178,9 @@ int func_800D5898(int mode, RenderCosineEffect *state)
 }
 
 
-/* Matching debt: 3 GTE transfer pins, 4 empty constraints, and the four
- * TU-local register reservations above. The matrix pointer remains unpinned
- * so GCC can also use t0 for the multiply-high result in division by 12. */
+/* Arcing emitter: spawns three cosine sparks per frame between frames 4
+ * and 10, draws the expanding ring for 13 frames and anchors the effect at
+ * its position under the current view matrix. */
 int func_800D5A00(int mode, RenderArcingEmitter *state)
 {
     GteShortVector position;
@@ -227,20 +226,9 @@ int func_800D5A00(int mode, RenderArcingEmitter *state)
                           &color, 128, 1);
         }
         D_800F3368.depth = 64;
-        {
-            GteMatrix **slot;
-            const GteMatrixWords *matrix;
-            asm volatile("" : : : "memory");
-            slot = &D_800BCFA4.value;
-            asm volatile("" : "=r"(slot) : "0"(slot));
-            matrix = (const GteMatrixWords *)*slot;
-            asm("" : "=r"(matrix) : "0"(matrix) : "$2", "$3", "$4", "$5", "$6", "$7");
-            gte_ldrotmatrix(matrix);
-            gte_ldtransmatrix(matrix);
-        }
+        gte_ldrotmatrix((const GteMatrixWords *)D_800BCFA4.value);
+        gte_ldtransmatrix((const GteMatrixWords *)D_800BCFA4.value);
         FieldEng_TransformTranslation(&state->position, 0);
-        /* Exclude other reload temporaries without emitting instructions. */
-        asm volatile("" : : : "$9", "$10", "$11", "$15", "$24", "$25", "$16", "$17", "$18", "$19");
         break;
     }
     return 0;
