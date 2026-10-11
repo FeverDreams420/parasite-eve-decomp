@@ -29,14 +29,20 @@ typedef union RoomWindowTrig {
     } part;
 } RoomWindowTrig;
 
+/* The anchor's render marker: flag word and the state byte the release
+ * closes. */
 typedef struct RoomWindowFlags {
-    s32 flags;
+    s32 flags;                    /* 0x00 */
+    u8 pad04[0x14];
+    u8 *state;                    /* 0x18 */
 } RoomWindowFlags;
 
 /* The anchor record reached through RoomWindowActor.anchor. */
 typedef struct RoomWindowAnchor {
     RoomWindowFlags *marker;      /* 0x00 */
-    u8 pad04[0x10];
+    u8 pad04[0xB];
+    u8 frameCount;                /* 0x0F */
+    u8 pad10[0x4];
     s32 speed;                    /* 0x14 */
     u8 pad18[0x2];
     u16 frame;                    /* 0x1A */
@@ -82,7 +88,12 @@ typedef struct RoomWindowPlayer {
  * RoomLib_ConfigureWindowClass for the configuration ops). */
 typedef struct RoomWindowState {
     void (*callback)(void);       /* 0x00 */
-    u8 pad04[0xA];
+    int *signal;                  /* 0x04 */
+    s16 active;                   /* 0x08 */
+    s8 variant;                   /* 0x0A */
+    s8 optionB;                   /* 0x0B */
+    s8 optionC;                   /* 0x0C */
+    u8 flags;                     /* 0x0D */
     u8 started;                   /* 0x0E (object + 0x1A) */
     u8 pad0F;
     GteMatrix rotation;           /* 0x10 */
@@ -104,7 +115,9 @@ typedef struct RoomWindowState {
 } RoomWindowState;
 
 typedef struct RoomWindowObject {
-    u8 pad00[0x4];
+    u8 status;                    /* 0x00: 4 = closed */
+    u8 pad01[0x2];
+    u8 enabled;                   /* 0x03 */
     s32 index;                    /* 0x04 */
     RoomWindowActor *actor;       /* 0x08 */
     RoomWindowState state;        /* 0x0C */

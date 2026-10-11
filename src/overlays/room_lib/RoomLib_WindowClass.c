@@ -17,38 +17,38 @@ int RoomLib_WindowClassNop0(void) {
     return 0;
 }
 
-int RoomLib_InitWindowClass(char *ctx) {
+int RoomLib_InitWindowClass(RoomWindowObject *ctx) {
     int value;
 
-    ctx[3] = 1;
+    ctx->enabled = 1;
     value = -1;
-    ctx[0x16] = value;
-    ctx[0x17] = value;
-    ctx[0x18] = value;
-    ctx[0x19] = 3;
-    *(int *)(ctx + 0x88) = 0x400;
-    *(void (**)(void))(ctx + 0xC) = RoomLib_WindowHandler;
-    *(int *)(ctx + 0x10) = 0;
-    *(short *)(ctx + 0x14) = 0;
-    ctx[0x1A] = 0;
-    *(short *)(ctx + 0x94) = 0;
-    *(int *)(ctx + 0x80) = 0;
-    *(int *)(ctx + 0x84) = 0;
-    *(int *)(ctx + 0x7C) = 0;
-    *(int *)(ctx + 0x3C) = 0;
-    *(int *)(ctx + 0x40) = 0;
-    *(int *)(ctx + 0x44) = 0;
-    *(short *)(ctx + 0x6C) = 0;
-    *(short *)(ctx + 0x6E) = 0;
-    *(short *)(ctx + 0x70) = 0;
-    ctx[0x19] = 0;
+    ctx->state.variant = value;
+    ctx->state.optionB = value;
+    ctx->state.optionC = value;
+    ctx->state.flags = 3;
+    ctx->state.scale = 0x400;
+    ctx->state.callback = (void (*)(void))RoomLib_WindowHandler;
+    ctx->state.signal = 0;
+    ctx->state.active = 0;
+    ctx->state.started = 0;
+    ctx->state.touched = 0;
+    ctx->state.travel = 0;
+    ctx->state.step = 0;
+    ctx->state.targetNode = 0;
+    ctx->state.pos[0].value = 0;
+    ctx->state.pos[1].value = 0;
+    ctx->state.pos[2].value = 0;
+    ctx->state.offset.x = 0;
+    ctx->state.offset.y = 0;
+    ctx->state.offset.z = 0;
+    ctx->state.flags = 0;
 
     return 0;
 }
 
-int RoomLib_ConfigureWindowClass(char *obj, int query, unsigned int op,
+int RoomLib_ConfigureWindowClass(RoomWindowObject *obj, int query, unsigned int op,
                                   int a, int b, int c) {
-    char *state = obj + 0xC;
+    RoomWindowState *state = &obj->state;
     FieldActorNode *node;
     register int callback asm("$3");
     int sentinel;
@@ -56,66 +56,66 @@ int RoomLib_ConfigureWindowClass(char *obj, int query, unsigned int op,
     switch (op) {
     case 19:
         if (query == 0) {
-            RW8(obj, 0x3) = a;
+            obj->enabled = a;
         } else {
-            *(int *)a = RW8(obj, 0x3);
+            *(int *)a = obj->enabled;
         }
         break;
     case 0:
-        RW32(state, 0x70) = (int)g_FieldActorListHead;
-        while (RW32(state, 0x70) != 0) {
-            node = (FieldActorNode *)RW32(state, 0x70);
+        state->targetNode = (RoomWindowTarget *)g_FieldActorListHead;
+        while (state->targetNode != 0) {
+            node = (FieldActorNode *)state->targetNode;
             if (node->b0C == a && node->b0D == b && !(node->w98 & 0x10)) {
                 break;
             }
-            RW32(state, 0x70) =
-                (int)((FieldActorNode *)RW32(state, 0x70))->next;
+            state->targetNode =
+                (RoomWindowTarget *)((FieldActorNode *)state->targetNode)->next;
         }
         break;
     case 17:
-        RW32(state, 0x40) = a;
-        RW32(state, 0x48) = c;
+        state->target[0] = a;
+        state->target[2] = c;
         if (b == -1) {
-            RW32(state, 0x44) = RW32(g_PlayerEntity, 0x2C);
+            state->target[1] = RW32(g_PlayerEntity, 0x2C);
         } else {
-            RW32(state, 0x44) = b;
+            state->target[1] = b;
         }
-        RW32(state, 0x70) = 0;
+        state->targetNode = 0;
         break;
     case 4:
-        RW32(state, 0x74) = a;
+        state->travel = a;
         break;
     case 2:
-        RW32(state, 0x78) = a;
+        state->step = a;
         break;
     case 3:
-        RW32(state, 0x7C) = a;
+        state->scale = a;
         break;
     case 23:
         a = a != 0;
         b = (b != 0) << 1;
         c = (c != 0) << 2;
-        RW8(state, 0xD) = a | b | c;
+        state->flags = a | b | c;
         break;
     case 10:
         callback = (int)RoomLib_ArmWindowClass;
         sentinel = -1;
-        RW8(state, 0xA) = a;
-        RW16(state, 0x8) = b;
+        state->variant = a;
+        state->active = b;
         PE1_COMPILER_MEMORY_BARRIER();
-        RW32(state, 0x0) = callback;
+        state->callback = (void (*)(void))callback;
         if (a != sentinel) {
             PE1_COMPILER_MEMORY_BARRIER();
             break;
         }
         return 0;
     case 11:
-        RW8(state, 0xB) = a;
+        state->optionB = a;
         break;
     case 6:
-        RW16(state, 0x60) = a >> 16;
-        RW16(state, 0x62) = b >> 16;
-        RW16(state, 0x64) = c >> 16;
+        state->offset.x = a >> 16;
+        state->offset.y = b >> 16;
+        state->offset.z = c >> 16;
         break;
     }
     return 0;
@@ -384,30 +384,32 @@ void RoomLib_WindowHandler(RoomWindowObject *obj) {
 }
 
 void RoomLib_WindowArrived(void *ctx) {
-    char *obj = *(char **)((char *)ctx + 8);
-    char *window = *(char **)(obj + 0x18C);
-    unsigned int limit = (unsigned char)window[0xF];
+    RoomWindowActor *obj = ((RoomWindowObject *)ctx)->actor;
+    RoomWindowAnchor *window = obj->anchor;
+    unsigned int limit = window->frameCount;
 
     limit--;
-    if (*(unsigned short *)(window + 0x1A) >= limit) {
+    if (window->frame >= limit) {
         RoomLib_ReleaseWindowClass(ctx);
     }
 }
 
-int RoomLib_ReleaseWindowClass(char *ctx) {
-    char *node;
+int RoomLib_ReleaseWindowClass(char *ctxArg) {
+    RoomWindowObject *ctx = (RoomWindowObject *)ctxArg;
+    RoomWindowAnchor *anchor;
+    RoomWindowFlags *marker;
 
-    ctx[0] = 4;
-    ctx[3] = 0;
+    ctx->status = 4;
+    ctx->enabled = 0;
 
-    *(int *)(*(char **)(ctx + 8) + 0x98) &= 0xFFFEFFFF;
-    *(unsigned short *)(*(char **)(ctx + 8) + 0x250) &= 0xFBFF;
+    ctx->actor->flags &= 0xFFFEFFFF;
+    ctx->actor->drawFlags &= 0xFBFF;
 
-    node = *(char **)(*(char **)(ctx + 8) + 0x18C);
-    if (node != 0) {
-        node = *(char **)node;
-        if (node != 0) {
-            (*(char **)(node + 0x18))[0] = 4;
+    anchor = ctx->actor->anchor;
+    if (anchor != 0) {
+        marker = anchor->marker;
+        if (marker != 0) {
+            marker->state[0] = 4;
         }
     }
 
