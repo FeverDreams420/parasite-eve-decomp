@@ -6,6 +6,7 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/display_env.h"
 #include "pe1/gpu_image.h"
+#include "pe1/render_packets.h"
 
 /* Matching views of the existing two pointer slots, not extra storage.
  * Separate names retain retail's reloads instead of caching their addresses. */
@@ -18,7 +19,8 @@ extern DRAWENV D_800BCE24, D_801D1498, D_801D14F4;
 extern u16 D_800BCE8A, D_800BCE9E;
 extern u8 D_800B0DCD;
 extern s32 D_8009D1BC, D_8009CDDC;
-extern u8 *D_80011610, *D_800B0E38, *D_800B0E3C, *D_800B0E50, *D_800B0E54;
+extern u8 *D_80011610, *D_800B0E3C, *D_800B0E50, *D_800B0E54;
+extern RenderBufferPrefix D_800B0E38;
 extern u8 D_8019319C[];
 
 void func_80190660(void);

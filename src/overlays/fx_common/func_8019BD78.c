@@ -2,8 +2,10 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/gpu_image.h"
 #include "fx_common.h"
+#include "pe1/render_packets.h"
 
-extern void *D_800B0E38;
+extern RenderBufferPrefix D_800B0E38;
+
 extern unsigned char *D_800B0E3C;
 extern void *D_8019C1FC, *D_8019C274;
 extern u8 D_8019C218, D_8019C219, D_8019C21A, D_8019C21B;
@@ -32,7 +34,7 @@ void func_8019BD78(void) {
 
     func_8019BF8C((void **)base);
     func_8019BF8C((void **)(base + 0x78));
-    D_8019C1FC = D_800B0E38;
+    D_8019C1FC = D_800B0E38.ordering[0];
     D_8019C274 = D_800B0E3C;
     func_800752AC(D_8019C1FC, 0x1000);
     func_800752AC(D_8019C274, 0x1000);

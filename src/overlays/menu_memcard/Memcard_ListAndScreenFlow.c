@@ -247,7 +247,7 @@ s32 func_801909B4(void) {
     D_801D11BC[0] = (MemcardScreenBuffer *) firstMemory;
     secondScreen.value = (MemcardScreenBuffer *) secondMemory;
     D_800B0E54 = secondMemory + 0x4080;
-    D_800B0E38 = firstMemory + 0x80;
+    D_800B0E38.ordering[0] = (u32 *)(firstMemory + 0x80);
     D_800B0E3C = secondMemory + 0x80;
     func_8005E57C(1);
     result = -1;
