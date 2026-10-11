@@ -1,19 +1,21 @@
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'tools/tests'))
+from csource import host_unit  # noqa: E402
 
 
 class SpuInitTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_cold_warm_init_and_reverb_reset_order(self):
-        source = (ROOT / "src/main/psyq/libspu/s_ini.c").read_text()
         # Exercise _SpuInit with a checked SpuStart stub; the complete TU is
         # covered separately by the linked-byte lifecycle regression.
-        source = source.split("\nvoid SpuStart(void) {", 1)[0]
+        source = host_unit("_SpuInit")
         harness = source + r'''
 #include <assert.h>
 unsigned short D_8009B3B8[24];
@@ -40,8 +42,8 @@ void _spu_FsetRXX(u32 reg, u32 area, u32 flag) {
     assert(phase == 3 && reg == 0xD1 && area == 0xF800 && flag == 0);
     assert(_spu_rev_flag == 0 && _spu_rev_reserve_wa == 0 &&
            _spu_rev_offsetaddr == area);
-    assert(D_8009B3A0.mode == 0 && D_8009B3A0.depth[0] == 0);
-    assert(D_8009B3A0.depth[1] == 0 && D_8009B3A0.delay == 0);
+    assert(D_8009B3A0.mode == 0 && D_8009B3A0.depth.left == 0);
+    assert(D_8009B3A0.depth.right == 0 && D_8009B3A0.delay == 0);
     assert(D_8009B3A0.feedback == 0);
     for (i = 0; i < 9; ++i) assert(*late[i] == 9);
     phase = 4;
@@ -55,7 +57,7 @@ int main(void) {
         _spu_rev_flag = _spu_rev_reserve_wa = _spu_rev_offsetaddr = 9;
         D_8009B46C = 0xF800;
         D_8009B3A0.mode = D_8009B3A0.delay = D_8009B3A0.feedback = 9;
-        D_8009B3A0.depth[0] = D_8009B3A0.depth[1] = 9;
+        D_8009B3A0.depth.left = D_8009B3A0.depth.right = 9;
         _SpuInit(mode);
         assert(phase == 4 && D_8009B46C == 0xF800);
         for (i = 0; i < 9; ++i) assert(*late[i] == 0);
@@ -66,8 +68,7 @@ int main(void) {
         with tempfile.TemporaryDirectory() as directory:
             exe = pathlib.Path(directory) / "spu-init-test"
             result = subprocess.run(
-                ["cc", "-I", str(ROOT / "include"), "-include",
-                 str(ROOT / "tools/tests/host_psyq.h"), "-std=gnu11", "-O2", "-x", "c", "-", "-o", str(exe)],
+                ["cc", "-std=gnu11", "-O2", "-x", "c", "-", "-o", str(exe)],
                 input=harness, text=True, capture_output=True,
             )
             self.assertEqual(result.returncode, 0, result.stderr)

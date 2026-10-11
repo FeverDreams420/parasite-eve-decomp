@@ -3,14 +3,17 @@ from pathlib import Path
 import itertools
 import random
 import struct
+import sys
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'tools/tests'))
+from csource import function_text  # noqa: E402
 
 
 class VoiceQueueTests(unittest.TestCase):
     def test_global_memory_barrier_is_removed(self):
-        source = (ROOT/'src/main/akao/Akao_ProcessVoiceQueue.c').read_text()
+        source = function_text('Akao_ProcessVoiceQueue')
         self.assertNotIn('asm("" : : : "memory")',source)
         self.assertLessEqual(source.count('asm("$'),1)
 
