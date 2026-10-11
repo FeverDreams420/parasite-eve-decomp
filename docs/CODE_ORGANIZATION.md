@@ -119,14 +119,31 @@ question, not a real conflict:
 
 `python3 tools/scripts/decl_conflicts.py --count` lists symbols declared more
 than once with different types (629 at the start of the header unification,
-232 after it). What remains falls into these groups; each is left open on
-purpose, because one declaration would change the generated code or needs a
-decision about code that is not part of this pass.
+232 after it, 99 after the battle pass). What remains falls into these
+groups; each is left open on purpose, because one declaration would change
+the generated code or needs a decision about code that is not part of this
+pass.
 
-- Battle: about 145 symbols are declared with conflicting types inside
-  `src/main/battle`, `src/main/main/Battle_*` and `include/pe1/battle_*`
-  (`D_8009D254`, `g_PlayerEntity`, `Pm_SendCmd`, `Pm_StopAll`,
-  `Asset_Find08w`, `Asset_Find08Alt`). Battle sources were out of scope.
+- Battle small data versus absolute access: `D_8009D1A8`, `D_8009D1AC`,
+  `D_8009D1CE`, `D_8009D1D4`, `D_8009D244`, `D_8009D278`, `D_8009D294`,
+  `D_8009D298`, `D_8009D2A4`, `D_8009D2B0`. Some `-G8` (or `-G1`/`-G2`)
+  battle and menu units reach each of them through `$gp` and others through
+  an absolute address, so one needs a sized scalar and the other an
+  incomplete array. Turning a scalar into an array element lets GCC keep the
+  array address in a register and reorders or reallocates the accesses
+  (tried for `D_8009D294`, `D_8009D2B0` and `D_8009D1AC`).
+- `D_800B0CE6`: the scene loader's scalar `u8` and the battle units' wide
+  view; as an array element `Scene_SetStoryDay` changes.
+- `D_8009CE84`: the menu window definition needs `volatile` for its store
+  order and the battle status flow reads it plainly.
+- `BattleCmd_CommitAmmoAndUpdate(void *out)`: `Battle_FinalizeAttackResult`
+  calls it without an argument, and passing the action that is already in
+  `$a0` in `Battle_DispatchEntityEffect` changes its register allocation.
+- Actor and state words shared by battle, field and room code with many
+  views: `D_8009D254`/`g_PlayerEntity` (one address, two names, more than
+  twenty room view types), `g_ActiveActor`, `D_8009D20C`,
+  `g_FieldActorListHead`, `g_ActiveDrawSlot`. These need the overlay views
+  unified first and mix small data with absolute access.
 - Small data versus absolute access: `g_TaskNodePool`, `g_CurrentEntity`,
   `g_RenderStateFlags`, `g_GameStateFlags`, `D_8009D1F4`, `D_8009D1A0`,
   `g_SceneDispatchToken`, `D_8009D2E8`. A `-G8` unit reaches them through
@@ -147,10 +164,8 @@ decision about code that is not part of this pass.
 - Retail calls the same function with and without an argument:
   `func_80020DD0`, `func_8001AA78`.
 - `g_AkaoCurTrack` is still used as a raw byte pointer by the sequencer.
-- `room_m350/RoomEffect_FadingModel.c` keeps its own `GetClut`, `rsin`, `rcos`
-  and `Asset_Find08w` declarations while that file is being edited.
-- `g_RoomFloorY`: `src/main/battle/Battle_ContextAccess.c` still reaches it
-  through a local `__asm__("D_800942EC")` alias.
+- `room_m350/RoomEffect_FadingModel.c` keeps its own `GetClut`, `rsin` and
+  `rcos` declarations while that file is being edited.
 - Translation units that cannot merge: `Entity_CollisionDatabase` with
   `Entity_UpdateList` (`-G8` against default, plus a `D_8009CE1C`
   conflict) and `Render_EntityAndTexturedQuadFlow` with
