@@ -27,17 +27,17 @@ static const RoomFxVec4 s_ImpactParticleScale = { 0x190, 0x190, 0x190, 0 };
 
 /* Sets up the burst state and the room's five sprite records. */
 void RoomFx_FallingBurstInit(void *arg0, int unused, void *arg2) {
-    char *state = arg2;
-    char *self = arg0;
+    RoomFallingBurstClock *state = arg2;
+    RoomFallingBurstEntity *self = arg0;
 
     func_800C2B40(state);
-    *(int *)(state + 0x10) = (int)Asset_SearchByKeyType(0x28);
-    *(short *)(state + 0x6) = 0;
-    *(short *)(state + 0x8) = 0;
-    *(int *)(state + 0x0) = *(int *)(self + 0x8);
-    *(short *)(state + 0xA) = *func_800C2B28(1);
-    *(short *)(state + 0xC) = *func_800C2B28(2);
-    *(short *)(state + 0x4) = *func_800C2B28(3);
+    state->asset.index = Asset_SearchByKeyType(0x28);
+    state->cooldown = 0;
+    state->hit = 0;
+    state->actor = self->actor;
+    state->step = *func_800C2B28(1);
+    state->tick = *func_800C2B28(2);
+    state->reload = *func_800C2B28(3);
 
     g_RoomFallingBurstSprite.offset = 0xA;
     g_RoomFallingBurstShimmer.offset = 0x64;
@@ -145,10 +145,10 @@ void RoomFx_DrawFallingSprite(void *unused0, void *unused1,
     RoomSpriteMatrix matrix;
     RoomFxVec4 scratchScale;
     RoomFxVec4 scale;
-    char *owner;
+    RoomFallingBurstClock *owner;
 
     owner = func_800C2B50();
-    func_800C2EAC(owner[0x10]);
+    func_800C2EAC(owner->asset.page);
     func_800C2FF0(0x10, 0x10);
     func_800C3098(0x10);
     func_800C3238(0);
@@ -285,11 +285,11 @@ void RoomFx_DrawImpactShimmer(void *arg0, void *arg1, RoomSpriteFxParams *fx) {
     RoomFxSeed8 seed;
     RoomFxVec4 scratch_scale;
     RoomFxVec4 scale;
-    char *owner;
+    RoomFallingBurstClock *owner;
 
     owner = func_800C2B50();
     seed = s_FloorDecalRotation;
-    func_800C2EAC(owner[0x10]);
+    func_800C2EAC(owner->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(1);
@@ -338,12 +338,12 @@ void RoomFx_DrawGroundPulse(void *unused0, void *unused1,
     RoomSpriteMatrix *matrixPtr;
     RoomFxVec4 scratchScale;
     RoomFxVec4 scale;
-    char *owner;
+    RoomFallingBurstClock *owner;
 
     owner = func_800C2B50();
     matrixPtr = &matrix;
     seed = s_FloorDecalRotation;
-    func_800C2EAC(owner[0x10]);
+    func_800C2EAC(owner->asset.page);
     func_800C2FF0(0x40, 0x40);
     func_800C3098(0x10);
     func_800C3238(1);
@@ -421,7 +421,7 @@ void RoomFx_DrawImpactParticles(int unused, void *state,
                                 RoomFallingBurstParticles *fx) {
     RoomFallingBurstClock *clock = func_800C2B50();
     unsigned int i;
-    func_800C2EAC(clock->renderOwner);
+    func_800C2EAC(clock->asset.page);
     func_800C2FF0(0x10, 0x10);
     func_800C3098(0x10);
     func_800C3238(1);

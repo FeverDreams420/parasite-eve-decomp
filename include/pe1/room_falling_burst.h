@@ -24,14 +24,27 @@ typedef struct RoomFallingBurstControl {
     s16 endTick;                  /* 0x02 */
 } RoomFallingBurstControl;
 
-/* Shared scene clock returned by func_800C2B50. */
+/* The script object the burst belongs to and its owner actor. */
+typedef struct RoomFallingBurstEntity {
+    u8 pad00[0x8];
+    struct FieldActor *actor;     /* 0x08 */
+} RoomFallingBurstEntity;
+
+/* Shared scene clock returned by func_800C2B50: the owner's actor, the
+ * re-arm reload and timer, the hit request, the clock step and tick, and
+ * the sprite asset whose low byte selects the texture page. */
 typedef struct RoomFallingBurstClock {
-    u8 pad0[0x8];
+    struct FieldActor *actor;     /* 0x00 */
+    s16 reload;                   /* 0x04 */
+    s16 cooldown;                 /* 0x06 */
     s16 hit;                      /* 0x08 */
     s16 step;                     /* 0x0A */
     s16 tick;                     /* 0x0C */
     u8 padE[0x2];
-    u8 renderOwner;               /* 0x10 */
+    union {
+        int index;
+        u8 page;
+    } asset;                      /* 0x10 */
 } RoomFallingBurstClock;
 
 /* Parameter block of the floor decals: the ground pulse uses the scale and
