@@ -387,19 +387,20 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, RoomEruptionRing 
     s16 *packetDepth;
     RoomFxSpritePacket *packet;
     RoomEruptionRing *workState;
-    register char *packetTemp asm("$3");
+    char *depthAddress;
+    char *packetAddress;
     int ownerZ;
     u8 code;
 
     workState = state;
     rawOwner = func_800C2B50();
     i = 0;
-    packetTemp = (char *)&g_RoomEruptionRingPacket.depth;
-    PE1_COMPILER_USE(packetTemp);
-    packetDepth = (s16 *)packetTemp;
-    packetTemp = (char *)packetDepth - 10;
-    PE1_COMPILER_USE(packetTemp);
-    packet = (RoomFxSpritePacket *)packetTemp;
+    depthAddress = (char *)&g_RoomEruptionRingPacket.depth;
+    PE1_COMPILER_USE(depthAddress);
+    packetDepth = (s16 *)depthAddress;
+    packetAddress = (char *)packetDepth - 10;
+    PE1_COMPILER_USE(packetAddress);
+    packet = (RoomFxSpritePacket *)packetAddress;
     owner = rawOwner;
     PE1_COMPILER_USE(owner);
     func_800C2EAC((s8)owner->owner);
