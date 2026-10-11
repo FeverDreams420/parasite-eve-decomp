@@ -64,10 +64,8 @@ int func_801981D0(int event, RoomM350FlareParticle *particle)
 /* Spawns flares and tests the quad swept by the actor's two side endpoints. */
 
 extern unsigned char D_8019A8C0;
-extern short D_8019A898[4],D_8019A8A0[4];
-/* Separate field-store views preserve reloads of the complete records. */
-extern volatile short rightX asm("D_8019A898");
-extern volatile short leftX asm("D_8019A8A0");
+/* The endpoint records' X words, read whole through GteShortVector views. */
+extern volatile short D_8019A898,D_8019A8A0;
 extern GteShortVector D_8019A8A8,D_8019A8B0;
 extern volatile short D_8019A89C,D_8019A89E,D_8019A8A4;
 extern short D_8019A8AE;
@@ -114,12 +112,12 @@ int func_80198400(int event) {
         int positionZ;
         x=offset.x;
         z=offset.z;
-        rightX=x+positionX;
+        D_8019A898=x+positionX;
         positionZ=((volatile FieldActor *)instance)->render_object.model_matrix.translation[2];
         D_8019A89E=1;
         positionZ=z+positionZ;
         D_8019A89C=positionZ;
-        leftX=((volatile FieldActor *)instance)->render_object.model_matrix.translation[0]-x;
+        D_8019A8A0=((volatile FieldActor *)instance)->render_object.model_matrix.translation[0]-x;
         D_8019A8A4=((volatile FieldActor *)instance)->render_object.model_matrix.translation[2]-z;
     }
     asm volatile("" ::: "memory");
