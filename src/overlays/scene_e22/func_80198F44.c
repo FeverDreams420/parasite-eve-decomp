@@ -1,5 +1,7 @@
-extern int D_801994EC;
+#include "pe1/gte_short_vector.h"
+
+extern GteShortVector D_801994EC;
 
 int *func_80198F44(void) {
-    return &D_801994EC;
+    return (int *)&D_801994EC;
 }

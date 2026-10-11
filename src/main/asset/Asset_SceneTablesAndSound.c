@@ -11,6 +11,7 @@
 #include "pe1/asset_key_record.h"
 #include "pe1/psyq_tim.h"
 #include "pe1/render_buffers.h"
+#include "pe1/akao.h"
 
 int Asset_SearchByKeyType(int arg0)
 {
@@ -56,7 +57,6 @@ typedef struct AkaoPosPanWork {
     s32 out2;
 } AkaoPosPanWork;
 
-extern void *g_AkaoBgmHandle[];
 
 int Akao_Calc3DPan(AkaoPackedRect3 *pos, int *pan, int *volume);
 s32 Akao_SendPositionalCmd(void *arg0, s32 arg1, s32 arg2, AkaoPosCoord arg3, AkaoPosCoord arg4, AkaoPosCoord arg5);

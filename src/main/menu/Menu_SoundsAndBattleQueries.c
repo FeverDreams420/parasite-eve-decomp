@@ -14,7 +14,6 @@ int Pad_IsMenuConfirmAvailable(void);
 
 extern unsigned int g_GameStateFlags;
 
-extern void * g_AkaoBgmHandle;
 extern unsigned char D_8009169D;
 
 int Battle_GetEnemyEscapeFlag(void)
@@ -87,7 +86,7 @@ void Menu_CopyPromptCodes(unsigned char *src) {
 void Menu_PlayConfirmSound(void) {
     void * volatile *slot;
 
-    slot = &g_AkaoBgmHandle;
+    slot = g_AkaoBgmHandle;
     if (*slot != 0) {
         Akao_SendTableCommand(*slot, 0x44C, 0x100, 0x80, 0x7F);
     }
@@ -96,7 +95,7 @@ void Menu_PlayConfirmSound(void) {
 void Menu_PlayCancelSound(void) {
     void * volatile *slot;
 
-    slot = &g_AkaoBgmHandle;
+    slot = g_AkaoBgmHandle;
     if (*slot != 0) {
         Akao_SendTableCommand(*slot, 0x44D, 0x100, 0x80, 0x7F);
     }
@@ -105,7 +104,7 @@ void Menu_PlayCancelSound(void) {
 void Menu_PlayMoveSound(void) {
     void * volatile *slot;
 
-    slot = &g_AkaoBgmHandle;
+    slot = g_AkaoBgmHandle;
     if (*slot != 0) {
         Akao_SendTableCommand(*slot, 0x44E, 0x100, 0x80, 0x7F);
     }
@@ -114,7 +113,7 @@ void Menu_PlayMoveSound(void) {
 void Menu_PlayErrorSound(void) {
     void * volatile *slot;
 
-    slot = &g_AkaoBgmHandle;
+    slot = g_AkaoBgmHandle;
     if (*slot != 0) {
         Akao_SendTableCommand(*slot, 0x44F, 0x100, 0x80, 0x7F);
     }
