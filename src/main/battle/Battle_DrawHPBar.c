@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/render_prim.h"
 #include "pe1/draw_state.h"
+#include "pe1/battle_status.h"
 void Gpu_InitDrawModeSprtPacket(void *, int);
 void Gpu_InitDrawModeTilePacket(void *, int);
 void SetSemiTrans(void *, int);
@@ -31,23 +32,14 @@ extern u8 D_8009E2E8[];
 extern u8 D_8009E2FE[];
 extern u8 D_8009E320[];
 extern u8 D_8009E336[];
-extern u8 D_8009E358[];
-extern u8 D_8009E3B8[];
 extern u8 D_8009E3CE[];
-extern u8 D_8009E460[];
 extern u8 D_8009E476[];
-extern u8 D_8009E498[];
-extern u8 D_8009E4D8[];
 extern u8 D_8009E500[];
-extern u8 D_8009E730[];
 extern u8 D_8009E746[];
-extern u8 D_8009E768[];
 extern u8 D_8009E77E[];
-extern u8 D_8009E7A0[];
 extern u8 D_8009E7B6[];
 extern u8 D_8009E880[];
 extern u8 D_8009E896[];
-extern u8 D_8009E8B8[];
 extern u8 D_8009E8CE[];
 extern u8 D_8009E928[];
 extern u8 D_8009E93E[];
@@ -60,7 +52,6 @@ typedef RenderPagedSpritePacket HudSprite;
 extern HudSprite D_800B01C0[2][10][5];
 extern u8 D_800B6920[];
 extern u8 D_800B6936[];
-extern u8 D_800BE9F0[];
 extern u8 D_800BE9FE[];
 extern u8 D_800BEA06[];
 
@@ -170,7 +161,7 @@ void Battle_DrawHPBar(void) {
     do {
         glyph = Draw_LookupGlyphDescriptor(0x8B);
         temp_s1 = bufferIndex * 0x28;
-        labelQuad = temp_s1 + D_800BE9F0;
+        labelQuad = temp_s1 + ((u8 *)D_800BE9F0);
         SetPolyFT4(labelQuad);
         {
             register s32 pa0 asm("$4");
@@ -387,17 +378,17 @@ loop_10:
             goto loop_10;
         }
         temp_s1_8 = bufferIndex * 0x1C;
-        Gpu_InitDrawModeSprtPacket(temp_s1_8 + D_8009E460, hudPage);
+        Gpu_InitDrawModeSprtPacket(temp_s1_8 + ((u8 *)D_8009E460), hudPage);
         temp_s2_4 = (bufferIndex << 1) << 4;
-        temp_s4_2 = temp_s2_4 + D_8009E498;
-        temp_s0_15 = temp_s1_8 + (D_8009E460 + 8);
+        temp_s4_2 = temp_s2_4 + ((u8 *)D_8009E498);
+        temp_s0_15 = temp_s1_8 + (((u8 *)D_8009E460) + 8);
         temp_s0_15->u = 0xE8;
         temp_s0_15->v = 0xE0;
         *(u16 *)(D_8009E476 + temp_s1_8) = hudClut;
         temp_s0_15->width = 0x18;
         temp_s0_15->height = 0x18;
         SetLineF2(temp_s4_2);
-        temp_s2_5 = temp_s2_4 + (D_8009E498 + 0x10);
+        temp_s2_5 = temp_s2_4 + (((u8 *)D_8009E498) + 0x10);
         SetLineF2(temp_s2_5);
         temp_s4_2->r = 0xE0;
         temp_s4_2->g = 0xE0;
@@ -405,7 +396,7 @@ loop_10:
         temp_s2_5->r = 0x60;
         temp_s2_5->g = 0x60;
         temp_s2_5->b = 0x60;
-        SetPolyF3((bufferIndex * 0x14) + D_8009E4D8);
+        SetPolyF3((bufferIndex * 0x14) + ((u8 *)D_8009E4D8));
         i = 0;
         temp_s1_9 = bufferIndex * 0x54;
         base2 = (u32)D_8009E3B8;
@@ -439,12 +430,12 @@ loop_12:
             temp_s0_20->color.bytes.b = 0x80;
         } while ((u32) (i & 0xFF) < 0xAU);
         temp_s2_6 = bufferIndex * 0x1C;
-        Gpu_InitDrawModeSprtPacket(temp_s2_6 + D_8009E768, hudPage);
+        Gpu_InitDrawModeSprtPacket(temp_s2_6 + ((u8 *)D_8009E768), hudPage);
         i = 0;
         temp_s1_11 = bufferIndex * 0x70;
         base4 = (u32)D_8009E7A0;
         body4 = base4 + 8;
-        temp_s0_21 = temp_s2_6 + (D_8009E768 + 8);
+        temp_s0_21 = temp_s2_6 + (((u8 *)D_8009E768) + 8);
         temp_s0_21->u = 0x58;
         temp_s0_21->v = 0xEF;
         *(u16 *)(D_8009E77E + temp_s2_6) = hudClut;
@@ -469,8 +460,8 @@ loop_16:
             goto loop_16;
         }
         temp_s2_7 = bufferIndex * 0x1C;
-        Gpu_InitDrawModeSprtPacket(temp_s2_7 + D_8009E730, hudPage);
-        temp_s0_25 = temp_s2_7 + (D_8009E730 + 8);
+        Gpu_InitDrawModeSprtPacket(temp_s2_7 + ((u8 *)D_8009E730), hudPage);
+        temp_s0_25 = temp_s2_7 + (((u8 *)D_8009E730) + 8);
         temp_s0_25->u = 0x68;
         temp_s0_25->v = 0xF4;
         *(u16 *)(D_8009E746 + temp_s2_7) = GetClut(0x130, 0x1F9);

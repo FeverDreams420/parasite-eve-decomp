@@ -8,7 +8,7 @@
 extern u8 g_BattleSpritePrimCountdown;
 extern char D_8009E974[];
 extern char D_8009E975[];
-extern char D_8009E976[];
+extern u8 D_8009E976[];
 extern char D_8009EC40[];
 extern char D_8009EC4E[];
 
@@ -53,7 +53,7 @@ void Gpu_SetupSprites(void *arg0, int arg1, int arg2) {
 
 extern int g_ActiveDrawSlot[];
 extern u8 g_BattleSpritePrimCountdown;
-extern char D_8009EC38[];
+extern u8 D_8009EC38[];
 extern char D_8009EC4A[];
 
 void Gpu_QueuePrimitive(void) {
