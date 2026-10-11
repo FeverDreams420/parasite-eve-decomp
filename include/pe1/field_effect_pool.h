@@ -21,4 +21,7 @@ typedef int (*FieldEffectCallback)(int mode, void *state);
 
 extern u8 *D_800F32D4;
 
+/* Effect model used by the memory-card spin ring. */
+extern u8 *D_800E22D4;
+
 #endif

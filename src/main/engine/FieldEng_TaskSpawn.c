@@ -334,7 +334,6 @@ int func_800D4850(u8 *state) {
 }
 
 extern void *D_800B0E20;
-extern int D_800E22D4;
 
 void func_800CECAC(void);
 void func_800CED3C(int arg0);
