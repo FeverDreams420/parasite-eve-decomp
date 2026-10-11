@@ -27,7 +27,7 @@ int func_80196C64(int event, void *object)
         int sampleOffset;
         u16 palette;
         int frame;
-        register int mode asm("$5");
+        s16 mode;
         int clutX;
         unsigned short handle;
         asm("" : "=r"(state) : "0"(state));
