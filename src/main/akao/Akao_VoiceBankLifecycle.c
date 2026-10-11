@@ -206,12 +206,12 @@ void Akao_StepSequencerVoice(void *arg0) {
         bit *= 2;
     } while (kFFF5 != 0);
         pend = g_AkaoCurTrack;
-    pend->field_20[0] = 0xFFFF0000;
-    pend->field_20[2] = 1;
-    pend->field_52 = 0;
-    pend->field_40[0] = 0;
+    pend->tempo = 0xFFFF0000;
+    pend->field_28 = 1;
+    pend->tempo_slide_duration = 0;
+    pend->volume = 0;
     pend->volume_slide_duration = 0;
-    *(s32 *)&pend->field_40[1] = 0;
+    *(s32 *)&pend->volume_delta = 0;
     g_AkaoVoiceUpdateFlags = 0;
     M2C_FIELD(pend, s16 *, 0x62) = 0;
     M2C_FIELD(pend, s16 *, 0x60) = 0;
@@ -225,7 +225,7 @@ void Akao_StepSequencerVoice(void *arg0) {
     kffe = 0xFFFFFF;
     __asm__ __volatile__("");
     pend->allocated_voice_mask = kffe;
-    pend->field_30 = 0;
+    pend->reserved_voice_mask = 0;
     func_80089960(kffe);
     func_80089B28();
     func_80089CF0();

@@ -1798,7 +1798,7 @@ void Akao_ProcessVoiceQueue(void)
   primary = g_AkaoVoiceUpdateFlags;
   if (primary & 0x80)
   {
-    short volume = ((short *) g_AkaoCurTrack->field_40)[1];
+    short volume = ((short *) &g_AkaoCurTrack->volume)[1];
     SpuSetReverbModeDepth(volume, volume);
     g_AkaoVoiceUpdateFlags &= ~0x80;
   }
@@ -1811,7 +1811,7 @@ void Akao_ProcessVoiceQueue(void)
     }
     else
     {
-      clock = g_AkaoCurTrack->field_5A;
+      clock = g_AkaoCurTrack->noise_clock;
     }
     SpuSetNoiseClock(clock);
     g_AkaoVoiceUpdateFlags &= ~0x10;

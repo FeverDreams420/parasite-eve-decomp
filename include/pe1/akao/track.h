@@ -156,21 +156,24 @@ typedef struct AkaoSequencerBank {
     /* 0x14 */ AkaoU32 allocated_voice_mask;
     /* 0x18 */ AkaoU32 key_off_request_mask;
     /* 0x1C */ AkaoU32 pending_restore_mask;
-    /* 0x20 */ AkaoU32 field_20[3];
+    /* 0x20 */ AkaoU32 tempo;       /* 16.16; SeqOp_SetTempo */
+    /* 0x24 */ AkaoU32 tempo_delta; /* per-tick step while tempo_slide_duration runs */
+    /* 0x28 */ AkaoU32 field_28;
     /* 0x2C */ AkaoU8 *sequence_base; /* rebased along with voice program pointers */
-    /* 0x30 */ AkaoU32 field_30;
+    /* 0x30 */ AkaoU32 reserved_voice_mask; /* voices taken by parent-track notes */
     /* 0x34 */ AkaoU32 key_off_dirty_mask;
     /* 0x38 */ AkaoU32 volume_dirty_mask;
     /* 0x3C */ AkaoU32 adsr_dirty_mask;
-    /* 0x40 */ AkaoU32 field_40[2];
+    /* 0x40 */ AkaoU32 volume;       /* 16.16 master volume */
+    /* 0x44 */ AkaoU32 volume_delta; /* per-tick step while volume_slide_duration runs */
     /* 0x48 */ int pitch_current; /* 16.16 bank pitch, set from a 7-bit command value */
     /* 0x4C */ int pitch_delta;   /* signed per-tick increment for rising or falling slides */
     /* 0x50 */ AkaoS16 pitch_slide_duration; /* signed countdown in SPU_StepReverbLoad */
-    /* 0x52 */ AkaoU16 field_52;
+    /* 0x52 */ AkaoU16 tempo_slide_duration;
     /* 0x54 */ AkaoU16 bank_id;
     /* 0x56 */ AkaoU16 field_56;
     /* 0x58 */ AkaoU16 volume_slide_duration;
-    /* 0x5A */ AkaoU16 field_5A;
+    /* 0x5A */ AkaoU16 noise_clock; /* SpuSetNoiseClock value */
     /* 0x5C */ AkaoU32 field_5C[3];
 } AkaoSequencerBank;
 typedef char AkaoSequencerBankSizeCheck[
