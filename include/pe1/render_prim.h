@@ -23,6 +23,11 @@ typedef struct PrimObj {
     PrimEntry *entries;               /* 0x30 */
 } PrimObj;
 
+/* Grid cursor state of Render_MoveGridCursor: the selected entry, the one
+ * selected before it, and the selected entry's unpacked position. */
+extern int g_GridCursorPrevious, g_GridCursorIndex, g_GridCursorX, g_GridCursorY;
+int Render_MoveGridCursor(PrimObj *obj, u32 *entries, u8 ascending, u8 restart);
+
 /* Flat-color GPU line packet: tag, RGB/code, and two screen points. */
 typedef struct RenderLinePacket {
     u32 tag;
