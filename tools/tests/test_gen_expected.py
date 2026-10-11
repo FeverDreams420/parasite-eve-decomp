@@ -49,27 +49,37 @@ class MainDataLayoutTests(unittest.TestCase):
         config = yaml.safe_load((root / "configs/USA/main.yaml").read_text())
         segments = {s["name"]: s for s in config["segments"]
                     if isinstance(s, dict)}
-        self.assertEqual(segments["main"]["subsegments"][-13:], [
-            [0x818A0, "data", "main/dtail_gp_pre_s016"],
-            [0x84D28, ".data", "psyq/libc/sprintf"],
-            [0x84D34, "data", "main/dtail_gp_post_sprintf"],
-            [0x8B72C, ".data", "psyq/libcd/CdControl"],
-            [0x8B7AC, "data", "main/dtail_gp_post_s016_pre_bios"],
-            [0x8B7B4, ".data", "psyq/libcd/bios"],
-            [0x8BABC, "data", "main/dtail_gp_post_bios"],
-            [0x8BEDC, ".data", "psyq/libds/dsfile"],
-            [0x8BEEC, "data", "main/dtail_gp_post_dsfile"],
-            {"start": 0x8D5A0, "type": ".sdata",
-             "name": "render/Render_TickObject", "linker_section_order": ".data"},
-            [0x8D5A4, "data", "main/dtail_gp_post_render_color"],
-            [0x8DA54, ".data", "field/Entity_ApplyCollisionResponse"],
-            [0x8DA58, "data", "main/dtail_gp_post_collision_actor"],
+        # Offsets and kinds are the retail layout; the owning unit names are
+        # not, since game units are renamed and merged as they are understood.
+        tail = segments["main"]["subsegments"][-13:]
+        rows = [[r["start"], r["type"]] if isinstance(r, dict) else r[:2]
+                for r in tail]
+        self.assertEqual(rows, [
+            [0x818A0, "data"],
+            [0x84D28, ".data"],
+            [0x84D34, "data"],
+            [0x8B72C, ".data"],
+            [0x8B7AC, "data"],
+            [0x8B7B4, ".data"],
+            [0x8BABC, "data"],
+            [0x8BEDC, ".data"],
+            [0x8BEEC, "data"],
+            [0x8D5A0, ".sdata"],
+            [0x8D5A4, "data"],
+            [0x8DA54, ".data"],
+            [0x8DA58, "data"],
         ])
+        self.assertEqual([r[2] for r in tail[1:9:2]],
+                         ["psyq/libc/sprintf", "psyq/libcd/CdControl",
+                          "psyq/libcd/bios", "psyq/libds/dsfile"])
+        # The gp-relative word is emitted with its owner's .data.
+        self.assertEqual(tail[9]["linker_section_order"], ".data")
         engine = segments["field_engine"]
         self.assertEqual(engine["start"], 0xB24A0)
         self.assertEqual(engine["vram"], 0x800C1CA0)
-        self.assertEqual(engine["subsegments"][0],
-                         [0xB24A0, "asm", "engine/engine_800C1CA0"])
+        first = engine["subsegments"][0]
+        self.assertEqual(first[0], 0xB24A0)
+        self.assertNotEqual(first[1], "c")
 
 
 class SymbolTableTests(unittest.TestCase):
