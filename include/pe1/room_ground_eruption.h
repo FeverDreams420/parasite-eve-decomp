@@ -8,6 +8,45 @@
 
 /* The ground eruption (src/overlays/room_lib/RoomEffect_GroundEruption.c). */
 
+/* The eruption's owner state: the owner's actor link, its view matrix (the
+ * translation is where the eruption stands), the sprite asset whose low
+ * byte selects the texture page, and the hit timer and radius. */
+typedef struct RoomEruptionActor {
+    void *entity;                 /* 0x00 */
+    GteMatrix matrix;             /* 0x04 */
+    union {
+        int handle;
+        unsigned char page;
+    } asset;                      /* 0x24 */
+    s16 reload;                   /* 0x28 */
+    s16 cooldown;                 /* 0x2A */
+    s16 collisionState;           /* 0x2C */
+    s16 collisionRadius;          /* 0x2E */
+} RoomEruptionActor;
+
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomEruptionActor, asset) == 0x24,
+                  room_eruption_actor_asset_offset);
+
+/* The rising column: the emitter's image source, the emitter, the
+ * column's scale and depth, and its rise speed. */
+typedef struct RoomEruptionColumn {
+    u8 header[8];
+    u8 sourceData[0x100];         /* 0x008 */
+    FieldRingGeometry emitter;    /* 0x108 */
+    union {
+        u16 unsignedValue;
+        s16 signedValue;
+    } scale;                      /* 0x120 */
+    s16 depth;                    /* 0x122 */
+    union {
+        u16 unsignedValue;
+        s16 signedValue;
+    } speed;                      /* 0x124 */
+} RoomEruptionColumn;
+
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomEruptionColumn, scale) == 0x120,
+                  room_eruption_column_scale_offset);
+
 /* Six eight-byte point/velocity records followed by gravity increments
  * and trail visibility flags, shared by debris setup and drawing. */
 typedef struct RoomEruptionDebrisState {

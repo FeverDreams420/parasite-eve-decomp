@@ -32,8 +32,8 @@ static const RoomFxVec4 s_EruptionDebrisScale = { 0x226, 0x226, 0x226, 0 };
 
 /* Sets up the four packets and the column's work area, then hands the work
  * area to the field engine's effect handler 0x587. */
-void RoomEffect_GroundEruptionInit(char *owner, void *arg1, char *state) {
-    char *entity;
+void RoomEffect_GroundEruptionInit(RoomEnt *owner, void *arg1, char *state) {
+    RoomLink *entity;
     int asset;
     register char *callOwner asm("$4");
     int depth;
@@ -44,20 +44,19 @@ void RoomEffect_GroundEruptionInit(char *owner, void *arg1, char *state) {
 
     asm("" : "=r"(workState) : "0"(state));
     func_800C2B40(workState);
-    *(s16 *)(workState + 0x2A) = 0;
-    *(s16 *)(workState + 0x2C) = 0;
-    *(s16 *)(workState + 0x28) = *func_800C2B28(5);
-    *(s16 *)(workState + 0x2E) = *func_800C2B28(4);
-    entity = *(char **)(owner + 8);
-    *(char **)workState = entity;
-    *(RoomSpriteMatrix *)(workState + 4) =
-        **(RoomSpriteMatrix **)(entity + 0x238);
-    ((RoomSpriteMatrix *)(workState + 4))->t[0] = *func_800C2B28(1);
-    ((RoomSpriteMatrix *)(workState + 4))->t[1] = *func_800C2B28(2);
-    ((RoomSpriteMatrix *)(workState + 4))->t[2] = *func_800C2B28(3);
+    ((RoomEruptionActor *)workState)->cooldown = 0;
+    ((RoomEruptionActor *)workState)->collisionState = 0;
+    ((RoomEruptionActor *)workState)->reload = *func_800C2B28(5);
+    ((RoomEruptionActor *)workState)->collisionRadius = *func_800C2B28(4);
+    entity = owner->link;
+    ((RoomEruptionActor *)workState)->entity = entity;
+    ((RoomEruptionActor *)workState)->matrix = *(RoomSpriteMatrix *)entity->p238;
+    ((RoomEruptionActor *)workState)->matrix.t[0] = *func_800C2B28(1);
+    ((RoomEruptionActor *)workState)->matrix.t[1] = *func_800C2B28(2);
+    ((RoomEruptionActor *)workState)->matrix.t[2] = *func_800C2B28(3);
     asset = Asset_SearchByKeyType(0xA6);
-    callOwner = owner;
-    *(int *)(workState + 0x24) = asset;
+    callOwner = (char *)owner;
+    ((RoomEruptionActor *)workState)->asset.handle = asset;
 
     g_RoomEruptionGlowPacket.code = 0x42;
     g_RoomEruptionGlowPacket.mode = 3;
@@ -152,32 +151,32 @@ void RoomEffect_GroundEruptionTick(RoomEnt *ent, unsigned char *signal,
 
 /* Emitter parameters of the rising column. */
 void RoomEffect_GroundEruptionInitColumn(void *ent, void *unused,
-                                         unsigned char *state) {
-    *(short *)(state + 0x120) = 0x5DC;
-    *(short *)(state + 0x122) = 0xFF;
-    *(short *)(state + 0x114) = 0x10;
-    state[0x10C] = 0x40;
-    state[0x10D] = 0x20;
-    state[0x10E] = 0x10;
-    state[0x110] = 0x80;
-    state[0x111] = 0x80;
-    state[0x112] = 0x80;
-    *(short *)(state + 0x116) = 0xF0;
-    *(short *)(state + 0x118) = 0xA;
-    *(short *)(state + 0x124) = 0;
-    *(short *)(state + 0x11A) = 0;
-    *(void **)(state + 0x108) = state + 8;
-    func_800C4E50(state + 0x108);
+                                         RoomEruptionColumn *state) {
+    state->scale.signedValue = 0x5DC;
+    state->depth = 0xFF;
+    state->emitter.mode = 0x10;
+    state->emitter.color0[0] = 0x40;
+    state->emitter.color0[1] = 0x20;
+    state->emitter.color0[2] = 0x10;
+    state->emitter.color1[0] = 0x80;
+    state->emitter.color1[1] = 0x80;
+    state->emitter.color1[2] = 0x80;
+    state->emitter.extent0 = 0xF0;
+    state->emitter.extent1 = 0xA;
+    state->speed.signedValue = 0;
+    state->emitter.offset = 0;
+    state->emitter.source = state->sourceData;
+    func_800C4E50(&state->emitter);
 }
 
 /* The retail function is marked handwritten and uses four explicit GTE windows. */
 void RoomEffect_GroundEruptionTransformColumn(void *arg0, void *arg1,
-                                              char *state) {
+                                              RoomEruptionColumn *state) {
     RoomLibSpriteTransformStack stack;
     RoomSpriteMatrix *matrix;
     RoomSpriteMatrix *scaleMatrix;
-    char *workState;
-    char *owner;
+    RoomEruptionColumn *workState;
+    RoomEruptionActor *owner;
 
     workState = state;
     owner = func_800C2B50();
@@ -197,9 +196,9 @@ void RoomEffect_GroundEruptionTransformColumn(void *arg0, void *arg1,
     stack.scaleMatrix.m[0][1] = 0;
     memset(&stack.sourceScale, 0, 0x10);
 
-    stack.sourceScale.x = *(s16 *)(workState + 0x120);
-    stack.sourceScale.y = *(s16 *)(workState + 0x120);
-    stack.sourceScale.z = *(s16 *)(workState + 0x120);
+    stack.sourceScale.x = workState->scale.signedValue;
+    stack.sourceScale.y = workState->scale.signedValue;
+    stack.sourceScale.z = workState->scale.signedValue;
     stack.scale = stack.sourceScale;
     scaleMatrix = &stack.scaleMatrix;
     ScaleMatrix(scaleMatrix, &stack.scale);
@@ -226,11 +225,11 @@ void RoomEffect_GroundEruptionTransformColumn(void *arg0, void *arg1,
     }
 
     func_800C3238(2);
-    *(s16 *)(workState + 0x11C) = *(u16 *)(workState + 0x122);
-    stack.matrix.t[0] = *(int *)(owner + 0x18);
-    stack.matrix.t[1] = *(int *)(owner + 0x1C);
-    stack.matrix.t[2] = *(int *)(owner + 0x20);
-    func_800C4FC4((FieldRingGeometry *)(workState + 0x108), matrix, 0);
+    workState->emitter.intensity = (u16)workState->depth;
+    stack.matrix.t[0] = owner->matrix.t[0];
+    stack.matrix.t[1] = owner->matrix.t[1];
+    stack.matrix.t[2] = owner->matrix.t[2];
+    func_800C4FC4(&workState->emitter, matrix, 0);
 }
 
 typedef struct RoomEruptionRiseScript {
@@ -239,56 +238,33 @@ typedef struct RoomEruptionRiseScript {
     s16 frame;
 } RoomEruptionRiseScript;
 
-typedef struct RoomEruptionRise {
-    unsigned char pad00[0x120];
-    union {
-        u16 unsignedValue;
-        s16 signedValue;
-    } horizontal;
-    s16 vertical;
-    union {
-        u16 unsignedValue;
-        s16 signedValue;
-    } speed;
-} RoomEruptionRise;
-
-typedef struct RoomEruptionActor {
-    unsigned char pad00[0x18];
-    s32 x;
-    s32 y;
-    s32 z;
-    unsigned char owner;
-    unsigned char pad25[7];
-    s16 collisionState;
-    s16 collisionRadius;
-} RoomEruptionActor;
 
 /* Grows the column and fades it after eight frames; the column's base hits
  * the owner when the owner stands inside its radius. */
 void RoomEffect_GroundEruptionUpdateColumn(
-    int unused, RoomEruptionRiseScript *script, RoomEruptionRise *effect) {
+    int unused, RoomEruptionRiseScript *script, RoomEruptionColumn *effect) {
     s16 position[3];
     RoomEruptionActor *actor;
     s16 value;
 
     actor = func_800C2B50();
     if (script->frame >= 9) {
-        value = effect->vertical;
+        value = effect->depth;
         if (value >= 0x21) {
-            effect->vertical = value - 0x20;
+            effect->depth = value - 0x20;
         }
     }
 
-    effect->horizontal.signedValue = effect->horizontal.unsignedValue +
+    effect->scale.signedValue = effect->scale.unsignedValue +
         (effect->speed.signedValue >> 4);
     effect->speed.signedValue = effect->speed.unsignedValue + 0x320;
     if (script->frame == 0x10) {
         script->result = 2;
     }
 
-    position[0] = actor->x;
+    position[0] = actor->matrix.t[0];
     position[1] = g_RoomFloorY->y;
-    position[2] = actor->z;
+    position[2] = actor->matrix.t[2];
     if (func_800C6B90(position, actor->collisionRadius) != 0) {
         actor->collisionState = 1;
     }
@@ -318,7 +294,7 @@ void RoomEffect_GroundEruptionDrawGlow(void) {
     RoomEruptionActor *owner;
 
     owner = func_800C2B50();
-    func_800C2EAC(owner->owner);
+    func_800C2EAC(owner->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
@@ -338,9 +314,9 @@ void RoomEffect_GroundEruptionDrawGlow(void) {
     scale = s_EruptionGlowScale;
     ScaleMatrix(&matrix, &scale);
 
-    matrix.t[0] = owner->x;
+    matrix.t[0] = owner->matrix.t[0];
     matrix.t[1] = g_RoomFloorY->y;
-    matrix.t[2] = owner->z;
+    matrix.t[2] = owner->matrix.t[2];
     func_800C42A4((FieldGlowSprite *)&g_RoomEruptionGlowPacket, &matrix, 1);
 }
 
@@ -360,9 +336,9 @@ void RoomEffect_GroundEruptionInitRing(void *arg0, void *arg1,
     owner = func_800C2B50();
     for (i = 0; i < 0x10; i++) {
         angle = i << 9;
-        ring->point[i].x = owner->x;
-        ring->point[i].y = owner->y - 0x64;
-        ring->point[i].z = owner->z;
+        ring->point[i].x = owner->matrix.t[0];
+        ring->point[i].y = owner->matrix.t[1] - 0x64;
+        ring->point[i].z = owner->matrix.t[2];
         ring->direction[i].x = rsin(angle);
         ring->direction[i].pad02 = 0;
         ring->direction[i].z = rcos(angle);
@@ -403,7 +379,7 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, RoomEruptionRing 
     packet = (RoomFxSpritePacket *)packetAddress;
     owner = rawOwner;
     PE1_COMPILER_USE(owner);
-    func_800C2EAC((s8)owner->owner);
+    func_800C2EAC((s8)owner->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
@@ -422,9 +398,9 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, RoomEruptionRing 
     matrix.m[0][1] = 0;
     scale1 = s_EruptionRingScale;
     ScaleMatrix(&matrix, &scale1);
-    matrix.t[0] = owner->x;
-    matrix.t[1] = owner->y;
-    ownerZ = owner->z;
+    matrix.t[0] = owner->matrix.t[0];
+    matrix.t[1] = owner->matrix.t[1];
+    ownerZ = owner->matrix.t[2];
     packet->depth = 0x40;
     matrix.t[2] = ownerZ;
     g_RoomEruptionRingPacket.code = workState->frame * 2 + 0x20;
@@ -581,9 +557,9 @@ void RoomEffect_GroundEruptionInitDebris(void *arg0, void *arg1, char *state) {
     particle = state;
     for (; i < 6; i++) {
         PE1_COMPILER_LAUNDER(particle);
-        ((RoomEruptionDebrisState *)particle)->position[0].x = *(int *)(owner + 0x18);
-        ((RoomEruptionDebrisState *)particle)->position[0].y = *(int *)(owner + 0x1C);
-        ((RoomEruptionDebrisState *)particle)->position[0].z = *(int *)(owner + 0x20);
+        ((RoomEruptionDebrisState *)particle)->position[0].x = ((RoomEruptionActor *)owner)->matrix.t[0];
+        ((RoomEruptionDebrisState *)particle)->position[0].y = ((RoomEruptionActor *)owner)->matrix.t[1];
+        ((RoomEruptionDebrisState *)particle)->position[0].z = ((RoomEruptionActor *)owner)->matrix.t[2];
 
         wave = rsin(angle);
         ((RoomEruptionDebrisState *)particle)->velocity[0].x =
