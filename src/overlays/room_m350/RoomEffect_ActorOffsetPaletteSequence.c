@@ -124,7 +124,7 @@ radial:
         D_800F3368.parameter00=16; D_800F3368.parameter02=1;
         D_800F3368.extent_x=16; D_800F3368.extent_y=16; D_800F3368.extent_x=16; D_800F3368.extent_y=16;
         palette=D_800E2850[index];
-        asm volatile("" : "=r"(palette) : "0"(palette) : "memory");
+
         actor=ANIM_OWNER_AS(RoomM350EffectActor);
         D_800F3368.palette=2; D_800F3368.parameter06=0; D_800F3368.parameter0A=0; D_800F3368.depth=0; D_800F3368.tpage=palette;
 
