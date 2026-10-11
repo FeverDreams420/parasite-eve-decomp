@@ -1,21 +1,20 @@
 #include "pe1/menu_state.h"
 #include "pe1/menu_bonus_stats.h"
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "common.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/aya.h"
-#include "pe1/psyq_nop.h"
-#include "../../../tools/m2c/m2c_macros.h"
 #include "pe1/save.h"
 #include "pe1/draw_state.h"
 #include "pe1/text.h"
 #include "pe1/stat_modifiers.h"
+#include "pe1/menu_inventory_root.h"
+#include "pe1/menu_item_rows.h"
 
 /* Inventory stat-panel setup and its adjacent draw callbacks. */
 
 
-#include "Menu_StatPanels_externs.h"
 
 void Menu_CreateInventoryTabView(void) {
     s32 var_a0;
@@ -53,31 +52,26 @@ void Menu_CreateInventoryTabView(void) {
 }
 
 
-#include "Menu_StatPanels_externs_1.h"
+/* COMMON tells MASPSX that the shown bonus points are a $gp word, so it
+ * keeps the load delay slot before storing them. */
+int g_BonusPointDisplayValue;
 void Menu_DrawStatusPanel(void);
 void Menu_DrawStatsList(void);
-void Menu_DrawBonusPointSlotValue(void);
 
 
 void Menu_CreateBonusPointAllocationView(void) {
-    register int *temp_a2 asm("$6");
     int *var_s3;
     int *var_s0;
     int *var_s2;
-    register s32 temp_a0 asm("$4");
-    int *temp_a3;
-    s32 temp_a1;
     s32 var_s1;
     u16 *var_s4;
-    u16 temp_v0_3;
-    s32 temp_v0_final;
     MenuWidgetNode *temp_v0;
     MenuWidgetNode *temp_v0_2;
     MenuWidgetNode *temp_v1_reg;
 
     temp_v0 = temp_v1_reg = MenuWidget_CreateSimpleNode(0x12, 0, 0, 0);
     temp_v1_reg->draw = Menu_DrawStatusPanel;
-    temp_v1_reg->appearance.gradientPoints = D_80092258;
+    temp_v1_reg->appearance.gradientPoints = g_MenuStatusPanelPoints;
     ((MenuWidgetNode *)MenuWidget_CreateSimpleNode(0x18, 0, 0, 0))->draw =
         Menu_DrawBonusPointSlotValue;
     temp_v0_2 = temp_v1_reg = MenuWidget_CreateSimpleNode(0x2D, 0, 0, 0);
@@ -87,32 +81,18 @@ void Menu_CreateBonusPointAllocationView(void) {
     var_s3 = g_BonusPointStatQueryResults;
     var_s2 = g_BonusPointStatMultipliers;
     temp_v1_reg->draw = Menu_DrawStatsList;
-    temp_v1_reg->appearance.gradientPoints = D_80092298;
+    temp_v1_reg->appearance.gradientPoints = g_MenuStatsListPanelPoints;
     for (; var_s1 < 7; ++var_s1) {
-        temp_v0_3 = *var_s4;
-        var_s4 += 1;
-        temp_a0 = var_s1;
-        temp_a2 = var_s3;
-        temp_a3 = 0;
-        __asm__ volatile("" : "=r"(temp_a3) : "0"(temp_a3));
-        var_s3 += 1;
-        *var_s0 = temp_v0_3;
+        *var_s0 = *var_s4++;
         *var_s2 = 0;
-        temp_a1 = *var_s0;
-        var_s0 += 1;
-        var_s2 += 1;
-        Stat_QueryLevelAndSubLevel(temp_a0, temp_a1, temp_a2, temp_a3);
+        Stat_QueryLevelAndSubLevel(var_s1, *var_s0, var_s3, 0);
+        var_s3++;
+        var_s0++;
+        var_s2++;
     }
-    temp_v0_final = D_800C0E00.bonus_points;
-    PE1_NOP();
-    g_BonusPointDisplayValue = temp_v0_final;
+    g_BonusPointDisplayValue = D_800C0E00.bonus_points;
 }
 
-void Sfx_DrawActiveListSlot(int slot);
-void *Aya_GetLevelExpTable(void);
-void Draw_PrintRawText(u8 *text);
-void Draw_PrintNumberWidth6(int value);
-void Draw_PrintNumberWidth3(int value);
 
 void Menu_DrawStatusPanel(void) {
     s32 var_a0;
@@ -147,15 +127,15 @@ void Menu_DrawStatusPanel(void) {
 }
 
 
-void Draw_PrintNumberWidth2(int value);
-#include "Menu_StatPanels_externs_2.h"
-#define D_800A18DC (D_800A18DC[0])
 
 void Menu_DrawStatsList(void) {
     s32 sp10;
-    M2C_UNK var_a0;
-    M2C_UNK var_a1;
+    int var_a0;
+    int var_a1;
     s32 *var_s3;
+    /* Match debt: with either pin gone loop.c strength-reduces the
+     * multiplier index into a sixth saved pointer; retail indexes it
+     * (lev 20-25). */
     register s32 *var_s4 asm("$20");
     s32 temp_s0;
     s32 temp_s1;
@@ -165,7 +145,7 @@ void Menu_DrawStatsList(void) {
     var_s4 = Battle_GetModifierTable() + 1;
     Draw_OffsetCursor(4, 5);
     var_s2 = 1;
-    var_s3 = &D_800A18DC;
+    var_s3 = &g_BonusPointStatDeltas[1];
     do {
         temp_s1 = *var_s4;
         temp_s0 = *var_s3 + ((g_BonusPointBarAnimProgress * g_BonusPointStatMultipliers[var_s2]) >> 7);

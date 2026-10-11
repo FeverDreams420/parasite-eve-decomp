@@ -39,5 +39,8 @@ extern int g_MenuStatBarSettleTimers[8];
 /* Panel outlines of the EXP review and the level-up result. */
 extern unsigned char g_MenuExpReviewPanelPoints[];
 extern unsigned char g_MenuLevelUpPanelPoints[];
+/* Outlines of the status panel and the stat list beside it. */
+extern unsigned char g_MenuStatusPanelPoints[];
+extern unsigned char g_MenuStatsListPanelPoints[];
 
 #endif
