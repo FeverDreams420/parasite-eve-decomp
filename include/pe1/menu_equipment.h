@@ -65,6 +65,8 @@ void Menu_DrawEquipInfoOptionRow(int index);
 
 /* Sort option rows: the first row index per view mode, then the first,
  * second and third glyph of each row. */
+/* Equipment slot glyphs per equip mode. */
+extern unsigned char g_MenuEquipSlotGlyphs[][8];
 extern u8 D_800922B8[];
 extern u8 D_800922BC[];
 extern u8 D_800922C4[];

@@ -3,6 +3,7 @@
 #include "pe1/inventory.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/menu_item_rows.h"
+#include "pe1/menu_equipment.h"
 #include "pe1/text.h"
 
 /* Row drawers for the equip-slot, inventory, armor, battle-command and
@@ -10,7 +11,6 @@
 
 MenuWidgetNode *g_MenuActiveWidget;
 int g_MenuEquipMode;
-#include "Menu_DrawListRows_externs.h"
 
 void Menu_DrawEquipSlotListItem(int arg0) {
     if (arg0 != MenuWidget_GridCellIndex(g_MenuActiveWidget)) {
@@ -20,7 +20,7 @@ void Menu_DrawEquipSlotListItem(int arg0) {
     Draw_OffsetCursor(-2, -2);
 
     if (g_MenuEquipMode != 0) {
-        Draw_AllocSprite(D_800923B8[g_MenuEquipMode][arg0]);
+        Draw_AllocSprite(g_MenuEquipSlotGlyphs[g_MenuEquipMode][arg0]);
     }
 }
 

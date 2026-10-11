@@ -1,12 +1,9 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
-#include "Menu_DrawSelectableEquipSlotRow_externs.h"
-
-int Inv_TestSelectionBit(int slot);
-void Draw_SetTextDimmed(int dimmed);
-void Sfx_DrawActiveListSlot(int slot);
-int Inv_IsAyaInventorySlotReserved(int slot);
-void Draw_DropShadow(void);
+#include "pe1/draw_state.h"
+#include "pe1/inventory.h"
+#include "pe1/menu_equipment.h"
+#include "pe1/menu_item_rows.h"
 
 void Menu_DrawSelectableEquipSlotRow(int slot) {
     int dimmed = 0;
