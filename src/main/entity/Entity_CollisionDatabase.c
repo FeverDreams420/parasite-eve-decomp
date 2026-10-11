@@ -1,23 +1,30 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "common.h"
 #include "pe1/collision_database.h"
 #include "pe1/floor_polygon.h"
+#include "pe1/floor_edge_point.h"
 
 /* The room collision database: clearing the per-room collision state and
  * relocating the loaded database's offsets into pointers. */
 
 extern char *D_800B1620[];
-extern char *g_SceneDataTable2;
-extern short g_FieldCollisionTriIndex;
-/* Same declarations as field_collision.h, which this -G8 unit cannot
- * include: it clears the edge points through absolute byte views. */
-extern unsigned short D_8009CE1C, D_8009CE20, D_8009CE24, D_8009CE28;
-extern short g_EntityCollisionMoveDelta;
-extern short g_EntityCollisionWallParam;
+/* COMMON supplies small-data metadata to MASPSX for the words this unit
+ * reaches through $gp; the edge points stay absolute. */
+char *g_SceneDataTable2;
+short g_FieldCollisionTriIndex;
+unsigned short D_8009CE1C, D_8009CE20, D_8009CE24, D_8009CE28;
+short g_EntityCollisionMoveDelta;
+short g_EntityCollisionWallParam;
+CollisionRegionEntry *g_RegionHeightTable;
+struct CollisionPlane *g_CollisionPlaneTable;
+CollisionDatabase *g_CollisionDb;
+short *g_EntityCollisionWallSlot;
+PolygonVertex *D_8009D248;
+u16 D_8009D1CC;
 extern unsigned int D_8009DFB0[];
 
-extern char D_8009CE0C[];
 extern char D_8009CE0E[];
 
 void Entity_ResetStateGlobals(void) {
@@ -28,7 +35,7 @@ void Entity_ResetStateGlobals(void) {
     g_RegionHeightTable = 0;
 
     for (i = 0; i < 8; i += 4) {
-        *(short *)&D_8009CE0C[i] = 0;
+        *(short *)&((char *)&D_8009CE0C)[i] = 0;
         *(short *)&D_8009CE0E[i] = 0;
     }
 

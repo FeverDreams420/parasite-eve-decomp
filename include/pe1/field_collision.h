@@ -30,15 +30,7 @@ typedef struct RampEdge {
     s32 directionZ;
 } RampEdge;
 
-/* Endpoints of the edge the player last crossed onto a ramp, as screen
- * style XY pairs: the GTE normal clip reads each point as one packed word. */
-typedef union FloorEdgePoint {
-    struct {
-        s16 x, z;
-    } point;
-    u32 packed;
-} FloorEdgePoint;
-extern FloorEdgePoint D_8009CE0C, D_8009CE10;
+#include "pe1/floor_edge_point.h"
 extern RampEdge *D_8009CE14;
 extern u16 D_8009CE18;
 void Entity_SlideOnRamp(struct BattleEntity *entity);
