@@ -86,7 +86,7 @@ int Battle_ProcessActionSlot(BattleEntity *actor)
             }
             return result;
             }
-            if (state->hpAlive <= 0) goto done;
+            if (!(state->hpAlive <= 0)) {
             if (color <= 0x80) {
             actor->renderObject.flags_9C |= 0x20;
             state->coreFlags &= ~0x6000;
@@ -97,6 +97,7 @@ int Battle_ProcessActionSlot(BattleEntity *actor)
                 Render_FadeEntityColor(&actor->renderObject, color, green, color);
                 result = 0;
                 }
+            }
             }
             }
         }
@@ -344,11 +345,12 @@ finishInterruptedAction:
                 Battle_SlotFree(actor);
             }
             if (enemy->field04.bytes.kind == 4) {
-                if (enemy->coreFlags & 0x6000) goto saveHpSnapshot;
-                actor->motionX = 0;
-                actor->motionY = 0;
-                actor->motionZ = 0;
-                Battle_StepEntityAnimState(actor);
+                if (!(enemy->coreFlags & 0x6000)) {
+                    actor->motionX = 0;
+                    actor->motionY = 0;
+                    actor->motionZ = 0;
+                    Battle_StepEntityAnimState(actor);
+                }
             } else if (enemy->field04.bytes.kind != 1 && enemy->field04.bytes.kind != 3) {
 stepDeathAnimation:
                 actor->motionX = 0;
@@ -385,6 +387,5 @@ stepDeathAnimation:
             }
         }
     }
-saveHpSnapshot:
     enemy->previousHP = enemy->hpAlive;
 }

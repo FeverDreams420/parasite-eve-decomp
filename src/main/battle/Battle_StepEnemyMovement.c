@@ -82,8 +82,9 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
                 if (attackClass == 3)
                 {
                     (*statusFlags) |= 0x01000000;
-                    goto scaleResistance;
                 }
+                else
+                {
                 if (*turnFlags & 0x400)
                 {
                     disableResistance = (*statusFlags) & 3;
@@ -171,8 +172,8 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
                         }
                     }
                 }
+                }
             }
-        scaleResistance:
             switch (resistanceMode & 0xFF)
             {
             case 1:

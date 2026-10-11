@@ -159,8 +159,9 @@ void Battle_AdvancePhase(void) {
             } while (copy_src != copy_end);
             *(PackedCopy8 *)copy_dst = *(const PackedCopy8 *)copy_src;
             command_value = temp_s2->command;
-            goto after_command;
         }
+        else
+        {
         goto aligned_copy;
 block_found:
         var_a2 = temp_v1_2;
@@ -175,6 +176,7 @@ aligned_copy:
 copy_tail:
         *(PackedCopy8 *)copy_dst = *(const PackedCopy8 *)copy_src;
         command_value = temp_s2->command;
+        }
 after_command:
         action = command_value - 0x183;
         var_a0_2 = (s32)temp_s2->actor;
@@ -205,7 +207,18 @@ after_command:
 block_search_done:
                 if (!(targetFound & 0xFF)) {
                     var_v0_3 = D_8009D1D4 + 7;
-                    goto block_35;
+                temp_v1_3 = var_v0_3 & 0xFF;
+                temp_v1_3 <<= 3;
+                temp_v1_3 = *(u16 *)((u8 *)&D_800BE830[0].command + temp_v1_3);
+                D_8009D1D4 = var_v0_3;
+                temp_v1_3 -= 3;
+                temp_v1_3 = (u32) temp_v1_3 < 0x194U;
+                if (!temp_v1_3 || ((u8) ((BattleEntity *)D254(14))->actionMode < 4U)) {
+                    D1A0_W1 = D1A0_R1 & ~0x100;
+                }
+                Entity_SetActionMode(D254(15), ((Combatant *)D278(13))->actionMode12);
+                *(s32 *)((char *)D278(10) + PE1_OFFSETOF(Combatant, stateFlags)) = (s32) (*(s32 *)((char *)D278(10) + PE1_OFFSETOF(Combatant, stateFlags)) | 0x200000);
+                return;
                 }
                 if (var_a2 != NULL) {
                     var_s0 = D_8009D1D4;
@@ -223,8 +236,9 @@ block_search_done:
                         } while (temp_v1_3 < (s32) var_a1);
                     }
                 }
-                goto block_39;
             }
+            else
+            {
             temp_v1_6 = ((BattleInitSlot *)(D_800BE830_BYTES + queueOffset))->actor;
             if ((temp_v1_6 == NULL) || (((EnemyCombatant *)temp_v1_6->core)->hpAlive <= 0) || (*(s32 *)&temp_v1_6->entityFlags & 0x4000)) {
                 var_v0_3 = D_8009D1D4 + 1;
@@ -243,6 +257,7 @@ block_35:
                 return;
             }
         }
+            }
 block_39:
         Pm_StopAll();
         if (action == 6) {

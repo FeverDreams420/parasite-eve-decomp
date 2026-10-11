@@ -43,7 +43,10 @@ int Battle_StepVictory(void)
         brightness = D_8009CE70;
         if (brightness != 0) {
             brightness = ~(brightness << 3);
-            goto fade;
+            Render_FadeEntityColor(&D_8009D254->renderObject, brightness, brightness, brightness);
+            Render_FadeEntityColor(&D_800B0CEC, brightness, brightness, brightness);
+            D_8009CE70--;
+            break;
         }
         Render_FadeEntityColor(&D_8009D254->renderObject, 255, 255, 255);
         object = &D_800B0CEC;

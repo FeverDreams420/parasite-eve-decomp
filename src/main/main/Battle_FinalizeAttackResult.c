@@ -149,8 +149,9 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
         if (D_800BE830[indexB].command == 0x189) {
             idleActor = (*(Combatant **)battle_actor_group_16);
             idleEntity = D_8009D254;
-            goto set_idle;
         }
+        else
+        {
         { active = (*(Combatant **)battle_actor_group_17);
         activeAction = active->action;
         if ((activeAction->turnWord & 0xC0) == 0xC0) {
@@ -239,6 +240,7 @@ asm volatile("" : : "r"(enemy));
         }
         idleActor = (*(Combatant **)battle_actor_group_16);
         idleEntity = (*(BattleEntity **)battle_entity_alias_6);
+        }
     set_idle:
         result = 1;
         Entity_SetActionMode(idleEntity, idleActor->actionMode12);

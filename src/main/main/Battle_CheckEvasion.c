@@ -17,7 +17,8 @@ void Battle_CheckEvasion(BattleEntity *actor, BattleEvasionOutcome *outcome,
     if (!(actor->entityFlags & 0x4000)) {
     if (D_8009D278->stateFlags & 0x100000) {
         outcome->status = 1;
-        goto forced;
+        outcome->reaction = 2;
+        return;
     }
 
     outcome->status = 0;
@@ -51,8 +52,6 @@ void Battle_CheckEvasion(BattleEntity *actor, BattleEvasionOutcome *outcome,
             outcome->reaction = 1;
             break;
         case 3:
-            /* The early forced result shares this output path. */
-forced:
             outcome->reaction = 2;
             break;
         default:
@@ -65,17 +64,22 @@ forced:
     if (distance >= 1801) return;
     if (distance >= 1501) {
     hit = (s16)roll < 25;
-    goto check_evasion;
+    if (!hit) return;
+    outcome->status = 1;
+    outcome->reaction = 1;
+    return;
     }
 below_1501:
     if (distance >= 1201) {
     hit = (s16)roll < 50;
-    goto check_evasion;
+    if (!hit) return;
+    outcome->status = 1;
+    outcome->reaction = 1;
+    return;
     }
 below_1201:
     if (distance >= 1001) {
     hit = (s16)roll < 80;
-check_evasion:
     if (!hit) return;
     outcome->status = 1;
     outcome->reaction = 1;
