@@ -38,7 +38,7 @@ void RoomLib_InitTwelveEffectPackets(RoomEnt *obj, void *unused, RoomLibFxMatrix
     RoomLibFxMatrixWords *words;
 
     func_800C2B40(state);
-    state->asset.handle = Asset_SearchByKeyType(0xB);
+    state->asset.index = Asset_SearchByKeyType(0xB);
     owner = obj->link;
     state->link = owner;
     words = (RoomLibFxMatrixWords *)owner->p238;

@@ -65,7 +65,7 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     state->link = link;
     matrix = (RoomLibFxMatrixWords *)link->p238;
     state->matrix = *matrix;
-    state->asset.handle = Asset_SearchByKeyType(0xE);
+    state->asset.index = Asset_SearchByKeyType(0xE);
 
     D_80192C0C = 0;
     D_80192C0D = 0;

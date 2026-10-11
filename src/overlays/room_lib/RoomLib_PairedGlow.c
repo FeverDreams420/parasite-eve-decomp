@@ -34,19 +34,19 @@ int RoomLib_PairedGlowNop0(void) {
 
 /* Init of the glow sprite: binds the state to the owner's matrix words,
  * fills the room's sprite record and loads its packet. */
-void *RoomLib_InitPairedGlowSprite(char *obj, s32 arg1, char *state) {
-    char *owner;
-    RoomEffectWords8 *src;
+void *RoomLib_InitPairedGlowSprite(RoomEnt *obj, s32 arg1, RoomLibFxMatrixState *state) {
+    RoomLink *owner;
+    RoomLibFxMatrixWords *src;
 
     func_800C2B40(state);
-    owner = *(char **)(obj + 0x8);
-    *(char **)(state + 0x0) = owner;
-    src = *(RoomEffectWords8 **)(owner + 0x238);
-    *(RoomEffectWords8 *)(state + 0x4) = *src;
-    *(s16 *)(state + 0x2A) = 0;
-    *(s16 *)(state + 0x2C) = 0;
-    *(s16 *)(state + 0x28) = 0x1E;
-    *(void **)(state + 0x24) = Asset_SearchByKeyType(0x23);
+    owner = obj->link;
+    state->link = owner;
+    src = (RoomLibFxMatrixWords *)owner->p238;
+    state->matrix = *src;
+    state->cooldown = 0;
+    state->hit = 0;
+    state->reload = 0x1E;
+    state->asset.index = Asset_SearchByKeyType(0x23);
 
     g_RoomPairedGlowSprite.offset = -0x12C;
     g_RoomPairedGlowSprite.depth = 0x80;
@@ -64,25 +64,25 @@ void RoomLib_PairedGlowNopA(void) {
 
 /* Counts the state's timer down and re-arms it when the owner asks; ends
  * the object when the engine reports the effect done. */
-void RoomLib_TickPairedGlowTimer(int arg0, char *arg1, char *arg2) {
-    short *state = (short *)arg2;
+void RoomLib_TickPairedGlowTimer(int arg0, RoomFxControl *arg1, char *arg2) {
+    RoomLibFxMatrixState *state = (RoomLibFxMatrixState *)arg2;
 
-    if (state[0x15] != 0) {
-        state[0x15]--;
+    if (state->cooldown != 0) {
+        state->cooldown--;
     }
 
-    if (state[0x16] == 1) {
-        int timer = state[0x15];
+    if (state->hit == 1) {
+        int timer = state->cooldown;
 
-        state[0x16] = 0;
+        state->hit = 0;
         if (timer == 0) {
-            state[0x15] = *(unsigned short *)(arg2 + 0x28);
+            state->cooldown = state->reload;
             func_800C6C18(arg0);
         }
     }
 
     if (func_800C2B68() == 1) {
-        arg1[1] = 2;
+        arg1->state = 2;
     }
 }
 
@@ -139,7 +139,7 @@ typedef struct RoomPairedEmitterStack {
     RoomFxVec4 scale;
 } RoomPairedEmitterStack;
 
-void RoomLib_UpdatePairedEmitter(void *arg0, char *arg1,
+void RoomLib_UpdatePairedEmitter(void *arg0, RoomFxControl *arg1,
                                         RoomFxPairedEmitterState *state) {
     RoomPairedEmitterStack stack;
     RoomClock *owner;
@@ -190,8 +190,8 @@ void RoomLib_UpdatePairedEmitter(void *arg0, char *arg1,
 
     table = g_RoomPairedGlowColorTable;
     link = (*(RoomLink **)owner)->p238;
-    func_800C3134(table, *(s16 *)(arg1 + 2), (unsigned char *)&state->primary.color0);
-    func_800C3134(table, *(s16 *)(arg1 + 2), (unsigned char *)&state->secondary.color0);
+    func_800C3134(table, arg1->frame, (unsigned char *)&state->primary.color0);
+    func_800C3134(table, arg1->frame, (unsigned char *)&state->secondary.color0);
     state->primary.intensity = state->intensity;
     stack.matrix.t[0] = RW32(link, 0x14);
     stack.matrix.t[1] = RW32(link, 0x18) - 0x64;
@@ -229,7 +229,7 @@ void RoomLib_DrawPairedGlowSprite(char *object, void *unused, RoomDoubleSpriteFx
     RoomScaledSpriteStack stack;
     RoomEnt *entity;
     RoomDoubleSpriteFxParams *workState;
-    char *clock;
+    RoomLibFxMatrixState *clock;
     register int callArg0 asm("$4");
     register int callArg1 asm("$5");
     int handleA;
@@ -252,7 +252,7 @@ void RoomLib_DrawPairedGlowSprite(char *object, void *unused, RoomDoubleSpriteFx
     ScaleMatrix(&stack.matrix, &stack.scale);
 
     func_800C6D5C(g_RoomPairedGlowPacket, 0, 0);
-    if (*(int *)(clock + 0x24) == 0) {
+    if (clock->asset.index == 0) {
         handleA = GetTPage(0, 1, 0x340, 0x100);
         callArg0 = 0;
         callArg1 = 0x1D7;
@@ -261,7 +261,7 @@ void RoomLib_DrawPairedGlowSprite(char *object, void *unused, RoomDoubleSpriteFx
         handleB = GetClut(callArg0, callArg1);
         func_800C6EC0((u16)handleA, (u16)handleB);
     }
-    if (*(int *)(clock + 0x24) == 1) {
+    if (clock->asset.index == 1) {
         handleA = GetTPage(0, 1, 0x340, 0x160);
         callArg0 = 0;
         callArg1 = 0x1DB;
@@ -279,10 +279,10 @@ void RoomLib_DrawPairedGlowSprite(char *object, void *unused, RoomDoubleSpriteFx
 }
 
 /* Grows the glow sprite and fades it in for sixteen frames, then out. */
-void RoomLib_UpdatePairedGlowSprite(void *unused, char *state, RoomDoubleSpriteFxParams *work) {
+void RoomLib_UpdatePairedGlowSprite(void *unused, RoomFxControl *state, RoomDoubleSpriteFxParams *work) {
     work->scale += 0xF;
 
-    if (*(short *)(state + 2) < 0x10) {
+    if (state->frame < 0x10) {
         work->depth += 8;
     } else {
         work->depth -= 4;
@@ -290,7 +290,7 @@ void RoomLib_UpdatePairedGlowSprite(void *unused, char *state, RoomDoubleSpriteF
 
     work->seed.vector.y += 0x64;
     if ((s16)work->depth <= 0) {
-        state[1] = 2;
+        state->state = 2;
     }
 }
 

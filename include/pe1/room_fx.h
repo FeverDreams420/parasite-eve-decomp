@@ -272,8 +272,11 @@ typedef struct RoomFxTransformOwner {
     RoomFxTransform *transforms;
 } RoomFxTransformOwner;
 
+/* The field engine slot an effect method runs in: setting state to 2 ends
+ * the effect; frame counts the frames it has run. */
 typedef struct RoomFxControl {
-    unsigned char pad00[2];
+    unsigned char handler;
+    unsigned char state;
     short frame;
 } RoomFxControl;
 

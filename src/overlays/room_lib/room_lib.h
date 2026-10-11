@@ -603,7 +603,7 @@ typedef struct RoomLibFxMatrixState {
     RoomLink *link;               /* 0x00 */
     RoomLibFxMatrixWords matrix;  /* 0x04 */
     union {
-        void *handle;
+        int index;
         unsigned char page;
     } asset;                      /* 0x24 */
     unsigned short reload;        /* 0x28 */
