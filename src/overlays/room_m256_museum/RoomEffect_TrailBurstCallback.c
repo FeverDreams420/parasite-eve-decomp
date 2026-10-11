@@ -153,13 +153,12 @@ s32 func_801940B0(int mode, void *effect) {
                 state->x = (s16) ((u16) state->x + delta.x);
                 state->y = (s16) ((u16) state->y + delta.y);
                 state->z = (s16) ((u16) state->z + delta.z);
-                goto updateHistory;
+            } else {
+                nextEnding = ending + 1;
+                state->ending = nextEnding;
+                if (nextEnding >= 0x10) return 1;
             }
-            nextEnding = ending + 1;
-            state->ending = nextEnding;
-            if (nextEnding >= 0x10) return 1;
-            if (nextEnding < 0x10) {
-updateHistory:
+            {
                 func_800D3AFC(history, 0x10, state, 0);
                 if ((func_800C6B90(state, 0x64) != 0) && (state->y >= (g_RoomFloorY->y - 0x202)) && (D_800E2368->flags != 0) && ((D_800F32D0->actor->state->core_flags & 0x3F000000) == 0x01000000)) {
                     trailPlayerState = g_PlayerEntity->state;
@@ -264,7 +263,7 @@ updateHistory:
                 { int positionY;
                 positionY = state->y;
                 state->motionY = vy;
-                asm volatile("" ::: "memory");
+
                 if (positionY >= g_RoomFloorY->y) {
                     int signedY = (s16)vy;
                     state->motionY = -signedY;
@@ -302,7 +301,7 @@ checkLifetime:
                 return 1;
             }
 
-            goto done;
+            break;
         }
         break;
     case 2:
@@ -336,7 +335,7 @@ checkLifetime:
             D_800F3368.parameter02 = 1;
             D_800F3368.extent_x = spriteExtent;
             D_800F3368.extent_y = spriteExtent;
-            asm volatile("" : "=r"(spritePalette) : "0"(spritePalette) : "memory");
+
             renderPalette = D_800E2850[spritePalette];
             D_800F336C = 2;
             D_800F3368.parameter06 = 0;
@@ -375,11 +374,11 @@ checkLifetime:
                     })));
             }
             renderPalette = D_800E2850[palettes->second];
-            asm("" : "=r"(renderPalette) : "0"(renderPalette) : "memory");
+
             D_800F336C = 3;
             D_800F3368.parameter06 = 0;
             D_800F3368.tpage = renderPalette;
-            goto done;
+            break;
         case 2:
             renderScale = rsin(((state->frame << 0xA) / 10)) / 4;
             fade = (rsin((state->frame << 0xB) / 10) / 48);
@@ -392,7 +391,7 @@ checkLifetime:
                 asm volatile("" : "=r"(pageDepth), "=r"(pageBlend), "=r"(pageX) : "0"(pageDepth), "1"(pageBlend), "2"(pageX));
             paletteIndex = &D_800E11EA;
             renderPalette = D_800E2850[*paletteIndex];
-            asm volatile("" : "=r"(renderPalette) : "0"(renderPalette));
+
             D_800F336C = 3;
             D_800F3368.parameter06 = 0;
             D_800F3368.tpage = renderPalette;
@@ -442,7 +441,7 @@ checkLifetime:
             }
             func_800CEE20((GteShortVector *)state, 0, renderScale, renderScale, 0x7C, GetClut(0x60, pulseClutY) & 0xFFFF, 1, fade, 0);
             D_800F3368.depth = 8;
-            goto done;
+            break;
         case 4:
             renderScale = rsin(state->frame << 6) + 0x1000;
             rsin((state->frame << 11) / 24);
@@ -485,6 +484,5 @@ checkLifetime:
     default:
         break;
     }
-done:
     return 0;
 }
