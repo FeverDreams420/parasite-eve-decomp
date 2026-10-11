@@ -5,7 +5,6 @@
 #include "pe1/inventory_slots.h"
 #include "pe1/menu_equipment.h"
 #include "pe1/menu_inventory.h"
-#include "pe1/psyq_nop.h"
 #include "pe1/menu_sound.h"
 #include "pe1/menu_widget.h"
 
@@ -16,6 +15,9 @@
 
 int g_MenuEquipSwapSource;
 int g_MenuSwapReturnPending;
+/* COMMON tells MASPSX that the swap item is a $gp word, so it keeps the
+ * load delay slot before storing it. */
+int g_MenuEquipSwapItem;
 
 s32 Menu_HandleAyaInventorySelectionInput(s32 arg0, s32 arg1)
 {
@@ -24,15 +26,7 @@ s32 Menu_HandleAyaInventorySelectionInput(s32 arg0, s32 arg1)
 
     if (arg1 & 0x10000) {
         temp_v0 = MenuWidget_FindByModeAndSelectedBase(2, 1);
-        {
-            s32 item_id;
-
-            item_id = g_AyaInventoryItems[MenuWidget_GridCellIndex(temp_v0)];
-            /* Match debt: MASPSX does not fill the load delay after the
-             * indexed halfword load ahead of a $gp store; ASPSX did. */
-            PE1_NOP();
-            g_MenuEquipSwapItem = item_id;
-        }
+        g_MenuEquipSwapItem = g_AyaInventoryItems[MenuWidget_GridCellIndex(temp_v0)];
         temp_v0_2 = MenuWidget_GridCellIndex(temp_v0) | (((MenuWidgetNode *)temp_v0)->scroll_y << 8);
         g_MenuEquipSwapSource = temp_v0_2 + 1;
         Inv_RemoveActiveListItem(temp_v0_2 & 0xFF);

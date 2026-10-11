@@ -33,7 +33,7 @@ extern int D_8009CEFC;
 int Menu_EquipOptionsInputHandler(void *node, int flags);
 void Menu_DrawEquipOptionsList(int node);
 void Menu_OpenInventoryScreen(void);
-extern int D_8009CFB8, D_8009CF1C;
+extern int D_8009CF1C;
 /* Equipment selection state and stat preview. */
 extern int D_8009CF30, D_8009CF34, D_8009CF38;
 extern int D_8009CFC4, D_8009CFC8, D_8009CFCC;

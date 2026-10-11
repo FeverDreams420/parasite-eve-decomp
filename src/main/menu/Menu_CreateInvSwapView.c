@@ -27,8 +27,8 @@ void Menu_CreateInvSwapView(MenuWidgetNode *parent, int mode) {
         u32 value;
 
         value = (unsigned int)D_8009CF0C;
-        D_8009CFB8 = value;
+        g_MenuInventoryViewMode = value;
     } else {
-        D_8009CFB8 = 0;
+        g_MenuInventoryViewMode = 0;
     }
 }

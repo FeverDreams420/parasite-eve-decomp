@@ -1,15 +1,18 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "pe1/battle_modifiers.h"
 #include "pe1/menu_equipment.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/menu_item_rows.h"
-#include "pe1/psyq_nop.h"
 
 /* Weapon and armor list draws, the inventory category step and the battle
  * command list draw. */
 
 void Menu_DrawBattleCommandItem(int index);
+
+/* COMMON tells MASPSX that the view mode is a $gp word, so it keeps the
+ * load delay slot before storing it. */
+int g_MenuInventoryViewMode;
 
 void Menu_DrawWeaponList(MenuWidgetNode *node) {
     Inv_SelectActiveList(0);
@@ -42,9 +45,7 @@ int Menu_StepInventoryCategory(MenuWidgetNode *node, unsigned int flags)
             child->draw = Menu_DrawEquipOptionsList;
             MenuWidget_SetCurrentNode(child);
             MenuWidget_SetCursorY(MenuWidget_FindByModeAndSelectedBase(1, 51));
-            mode = D_8009CF0C;
-            PE1_NOP();
-            D_8009CFB8 = mode;
+            g_MenuInventoryViewMode = D_8009CF0C;
             break;
         case 2:
             MenuWidget_NavScrollTo(51);
