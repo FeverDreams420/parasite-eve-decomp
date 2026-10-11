@@ -1,12 +1,11 @@
 #include "fx_common.h"
 extern char D_801E4E6C[];
-extern char D_801EA5E8[];
-extern char D_8019CC58[];
+/* Sentinel nodes of the three node lists: each head node links back to
+ * its tail node, each tail node on to its head. */
+extern FxCommonNode D_801EA5E8[];
+extern FxCommonNode D_8019CC58[];
 extern short D_8019C39C;
 extern short D_8019C830[];
-extern void *D_801EA650[];
-extern int D_801EA64C[];
-extern int D_8019CCC0[];
 extern short D_8019C9D0;
 extern short D_801E4DA8;
 extern short D_801E4DAA;
@@ -33,17 +32,16 @@ void func_80190998(void)
 
     i = 0;
     {
-        char *source = D_801EA5E8;
-        char *dest = D_8019CC58;
+        FxCommonNode *source = D_801EA5E8;
+        FxCommonNode *dest = D_8019CC58;
 
         for (; i < 3;) {
-            offset = i * 108;
-            *(void **)((char *)D_8019CCBC + offset) = source;
-            source += 108;
-            *(void **)((char *)D_801EA650 + offset) = dest;
-            dest += 108;
-            *(int *)((char *)D_801EA64C + offset) = 0;
-            *(int *)((char *)D_8019CCC0 + offset) = 0;
+            D_8019CC58[i].previous = source;
+            source++;
+            D_801EA5E8[i].next = dest;
+            dest++;
+            D_801EA5E8[i].previous = 0;
+            D_8019CC58[i].next = 0;
             i++;
         }
     }
