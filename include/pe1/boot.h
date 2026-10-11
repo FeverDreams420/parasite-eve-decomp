@@ -34,9 +34,6 @@ extern u16 D_8009316C[];
 extern u16 g_FontUiLbaTbl[];
 extern u16 D_8009315E[];
 
-/* Frame loop (Boot_FrameLoop.c): the scene flag bytes of g_GameState. */
-extern u8 D_800B0CEA[];
-
 /* System start-up (Boot_InitSystemFlow.c). */
 extern s32 g_FrameRngCounter[];
 /* Display and draw environment bytes and halfwords set for each buffer:

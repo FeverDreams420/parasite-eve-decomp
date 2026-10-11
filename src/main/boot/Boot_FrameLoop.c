@@ -89,8 +89,8 @@ void Boot_RunFrame(void)
 
     Gpu_InitPipeline();
     if (D_8009D1C4 == D_8009D280) {
-        scene_flags = D_800B0CEA;
-        game_flags = (u32 *)(scene_flags - 0x12);
+        scene_flags = &g_GameState.bank_state_12;
+        game_flags = &g_GameState.flags;
         fade = (u8 *)&D_800BCFE8;
         do {
             D_8009CDD8 = 0;
@@ -168,14 +168,8 @@ loop_end_check:
     Akao_Cmd_F1();
     Render_Noop(1);
     Asset_UnloadTableEntries();
-    {
-        u32 mask = ~0x3800u;
-        register u32 final_flags asm("$2");
-        final_flags = (D_8009D1A0 | 0x40) & mask;
-        status = D_800B0CD8 | 2;
-        flags = final_flags;
-    }
-    D_8009D1A0 = flags;
+    D_8009D1A0 = (D_8009D1A0 | 0x40) & ~0x3800u;
+    status = D_800B0CD8 | 2;
     {
         u32 first_status = status & ~0x800u;
         D_800B0CD8 = first_status;
