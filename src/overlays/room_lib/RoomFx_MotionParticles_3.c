@@ -103,26 +103,36 @@ typedef struct RoomParticleRenderPairState {
 
 void func_800C5538(RoomParticleRenderRecord *record);
 
+/* The effect owner: its actor (whose joint transforms place the two
+ * records), the hit flag the update raises and the texture page. */
+typedef struct RoomParticlePairOwner {
+    RoomFxTransformOwner *actor;  /* 0x00 */
+    u8 pad04[0x64];
+    s16 hit;                      /* 0x68 */
+    s16 pad6A;
+    u8 page;                      /* 0x6C */
+} RoomParticlePairOwner;
+
 void RoomFx_InitParticleRenderPair(
     void *owner, void *unused, RoomParticleRenderPairState *state) {
     RoomSpriteMatrix secondMatrix;
     RoomSpriteMatrix firstMatrix;
     void *callOwner;
     RoomParticleRenderPairState *workState;
-    void **root;
+    RoomParticlePairOwner *root;
 
     callOwner = owner;
     workState = state;
     root = func_800C2B50();
-    firstMatrix = *(RoomSpriteMatrix *)(*(char **)((char *)*root + 0x238));
-    secondMatrix = *(RoomSpriteMatrix *)(*(char **)((char *)*root + 0x238));
+    firstMatrix = *(RoomSpriteMatrix *)root->actor->transforms;
+    secondMatrix = *(RoomSpriteMatrix *)root->actor->transforms;
 
-    firstMatrix.t[0] = *(s32 *)(*(char **)((char *)*root + 0x238) + 0x134);
+    firstMatrix.t[0] = root->actor->transforms[9].x;
     firstMatrix.t[1] = g_RoomFloorY->y;
-    firstMatrix.t[2] = *(s32 *)(*(char **)((char *)*root + 0x238) + 0x13C);
-    secondMatrix.t[0] = *(s32 *)(*(char **)((char *)*root + 0x238) + 0x1B4);
+    firstMatrix.t[2] = root->actor->transforms[9].z;
+    secondMatrix.t[0] = root->actor->transforms[13].x;
     secondMatrix.t[1] = g_RoomFloorY->y;
-    secondMatrix.t[2] = *(s32 *)(*(char **)((char *)*root + 0x238) + 0x1BC);
+    secondMatrix.t[2] = root->actor->transforms[13].z;
 
     workState->second.field04 = 10;
     workState->second.packet = g_RoomMotionTrailB;
@@ -155,10 +165,10 @@ extern void func_800C5A40(void *arg0);
 
 void RoomFx_DrawParticleRenderPair(void *arg0, void *arg1, char *sys) {
     char *sysp = sys;
-    char *root;
+    RoomParticlePairOwner *root;
 
     root = func_800C2B50();
-    func_800C2EAC((u8)root[0x6C]);
+    func_800C2EAC(root->page);
     func_800C2FF0(0x10, 0x40);
     func_800C3098(0x10);
     func_800C3238(2);
@@ -172,7 +182,7 @@ void RoomFx_UpdateParticleRenderPair(void *arg0, char *state, char *sys) {
     char *statep = state;
     char *sysp = sys;
     int *resultp;
-    char *root;
+    RoomParticlePairOwner *root;
     RoomSharedGlobalState *global;
     int value0;
     int value1;
@@ -195,7 +205,7 @@ void RoomFx_UpdateParticleRenderPair(void *arg0, char *state, char *sys) {
     ret = func_800C5EB0(sysp + 0x78, values, resultp);
 
     if (result == 1) {
-        *(s16 *)(root + 0x68) = 1;
+        root->hit = 1;
     }
 
     if (ret == 1) {
