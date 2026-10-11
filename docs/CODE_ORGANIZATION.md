@@ -591,9 +591,10 @@ Still open:
     four bound barriers are gone; loading the bound before the y add gives
     the retail order.
   - `Geo_ActorFloorResolution`: `Entity_FindFloor` adds the region slot
-    offset to the table word as integers (two `(u32)` casts). Indexing
-    `D_8009CE08` or a pointer/word union of it swaps `$v0`/`$v1` in both
-    floor modes. The `$v1` pin in `Entity_ResolvePosition` (947 lines
+    offset to the table address as integers, through the
+    `CollisionRegionTable` address/entries union (no casts). Indexing
+    `D_8009CE08.entries` or starting the sum from the table pointer swaps
+    `$v0`/`$v1` in both floor modes. The `$v1` pin in `Entity_ResolvePosition` (947 lines
     differ), the `$t3` parity pin in `Geo_PointInPoly` (22) and the ramp
     `goto slide` stay, as their comments record.
 - Crutches left in `src/main/memcard`, `src/main/save`, `src/main/entity`

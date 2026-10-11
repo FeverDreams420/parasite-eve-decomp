@@ -29,7 +29,7 @@ void Entity_FindFloor(BattleEntity *actor)
     s16 z;
     int x_height;
     int z_height;
-    u32 floor_table_offset;
+    CollisionRegionTable slot;
     u8 scratch[8];
 
     if ((actor->entityFlags & 0x80) != 0) {
@@ -45,12 +45,11 @@ void Entity_FindFloor(BattleEntity *actor)
     floor_index = 0;
     do {
         if (D_8009D1D8 == 0) {
-            /* The slot offset is summed with the table word as integers;
-             * D_8009CE08[floor_index] or a pointer/word union swaps $v0 and
-             * $v1 in both modes. */
-            floor_table_offset = floor_index << 2;
-            floor_table_offset += (u32)D_8009CE08;
-            floor_data = *(u8 **)floor_table_offset;
+            /* The slot offset is summed with the table address as integers;
+             * D_8009CE08.entries[floor_index] swaps $v0 and $v1. */
+            slot.address = floor_index << 2;
+            slot.address += D_8009CE08.address;
+            floor_data = (u8 *)slot.entries->flat;
             triangle_index = 0;
             floor_value = ((CollisionFlatRegion *)floor_data)->height;
             triangle_count = ((CollisionFlatRegion *)floor_data)->triangleCount;
@@ -70,9 +69,9 @@ void Entity_FindFloor(BattleEntity *actor)
                     }
             }
         } else {
-            floor_table_offset = floor_index << 2;
-            floor_table_offset += (u32)D_8009CE08;
-            floor_data = *(u8 **)floor_table_offset;
+            slot.address = floor_index << 2;
+            slot.address += D_8009CE08.address;
+            floor_data = (u8 *)slot.entries->plane;
             triangle_index = 0;
             triangle_count = ((CollisionPlaneRegion *)floor_data)->triangleCount;
             initial_indices = ((CollisionPlaneRegion *)floor_data)->triangleIndices;
@@ -330,7 +329,7 @@ void Entity_UpdateAndRender(BattleEntity *actor)
         CollisionTriangleHeader *floor = face;
         u8 region = floor->region;
         u32 flags = actor->entityFlags;
-        int height = D_8009CE08[region].flat->height;
+        int height = D_8009CE08.entries[region].flat->height;
 
         if (flags & 2) {
             if (actor->posY.fixed >= height && actor->baseY < height) {
@@ -369,7 +368,7 @@ u16 D_8009CE1C, D_8009CE20, D_8009CE24, D_8009CE28;
 unsigned short g_CollisionRadius;
 CollisionDatabase *D_8009D1FC;
 CollisionPlane *volatile D_8009D1D8;
-CollisionRegionEntry *D_8009CE08;
+CollisionRegionTable D_8009CE08;
 struct CollisionPlane *g_CollisionPlaneTable;
 CollisionDatabase *g_CollisionDb;
 CollisionRegionEntry *g_RegionHeightTable;
