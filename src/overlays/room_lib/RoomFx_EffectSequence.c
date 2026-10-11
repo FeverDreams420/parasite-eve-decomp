@@ -349,7 +349,7 @@ void RoomFx_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control, Roo
     transform = &((RoomOverlay024Transform *)owner->view)[state->transform_index];
     base_seed = s_EffectBaseSeed;
 
-    func_800C2EAC(*(u8 *)((char *)owner_ptr + 0x24));
+    func_800C2EAC(((RoomLibFxMatrixState *)owner_ptr)->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
@@ -611,7 +611,7 @@ void RoomFx_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *control
     transform = &((RoomOverlay024Transform *)owner->view)[state->transform_index];
     base_seed = s_EffectBaseSeed;
 
-    func_800C2EAC(*(u8 *)((char *)owner_ptr + 0x24));
+    func_800C2EAC(((RoomLibFxMatrixState *)owner_ptr)->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
@@ -878,7 +878,7 @@ void RoomFx_DrawVariant290(void *arg0, RoomOverlay024VariantControl *control, Ro
     transform = &((RoomOverlay024Transform *)owner->view)[state->transform_index];
     base_seed = s_EffectBaseSeed;
 
-    func_800C2EAC(*(u8 *)((char *)owner_ptr + 0x24));
+    func_800C2EAC(((RoomLibFxMatrixState *)owner_ptr)->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
@@ -1080,7 +1080,7 @@ void RoomFx_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, Room
     base_seed = s_EffectBaseSeed;
     project_seed = s_EffectProjectSeed;
 
-    func_800C2EAC(*(u8 *)((char *)owner_ptr + 0x24));
+    func_800C2EAC(((RoomLibFxMatrixState *)owner_ptr)->asset.page);
     func_800C2FF0(0x40, 0x40);
     func_800C3098(0x10);
     func_800C3238(2);
@@ -1292,7 +1292,7 @@ void RoomFx_DrawEffectGlow(void) {
     matrix.ty += out[1];
     matrix.tz += out[2];
 
-    func_800C2EAC(*(u8 *)((char *)root + 0x24));
+    func_800C2EAC(((RoomLibFxMatrixState *)root)->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
