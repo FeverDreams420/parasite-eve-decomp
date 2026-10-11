@@ -3,6 +3,7 @@
 #include "common.h"
 #include "pe1/menu_background.h"
 #include "pe1/menu_inventory.h"
+#include "pe1/render_buffers.h"
 
 /* Save-screen background fade: gamma curve, per-frame darkening of the
  * captured frame and the fade state machine setters. Contiguous at
@@ -16,8 +17,6 @@ extern unsigned char g_GeomOtZ[];
 int g_MenuSaveBgFadeState;
 int g_MenuSaveBgFadeStep;
 int g_MenuSaveBgFadeHeight;
-extern u16 *g_RenderFrontBufferBase[];
-extern u16 *g_RenderBackBufferBase[];
 
 int StoreImage(RECT *rect, void *p);
 
@@ -186,7 +185,7 @@ void Menu_SaveBgAdvanceFade(void) {
         rect.x = 0;
         rect.w = 0x100;
         rect.h = g_MenuSaveBgFadeHeight;
-        StoreImage(&rect, g_RenderFrontBufferBase[0]);
+        StoreImage(&rect, (void *)g_RenderFrontBufferBase[0]);
         next = 4;
         break;
 
@@ -218,6 +217,6 @@ void Menu_DrawSaveBg(void) {
         rect.h = g_MenuSaveBgFadeHeight;
         rect.x = 0;
         rect.w = 0x100;
-        LoadImage(&rect, g_RenderBackBufferBase[0]);
+        LoadImage(&rect, (u_long *)g_RenderBackBufferBase[0]);
     }
 }

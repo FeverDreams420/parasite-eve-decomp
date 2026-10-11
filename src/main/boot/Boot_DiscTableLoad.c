@@ -9,12 +9,12 @@
 #include "pe1/psyq_bios.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/boot_display.h"
+#include "pe1/render_buffers.h"
 
 void SetDispMask(int arg0);
 void FlushCache(void);
 
 extern int g_PeImageBaseLba;
-extern int g_SceneLoadScratchBuffer;
 extern int D_800A77FC;
 extern int D_800B0CD8_word __asm__("g_GameState");
 extern u16 g_MainAssetLbaTbl[];
@@ -47,7 +47,7 @@ int Overlay_LoadTables(void) {
     VSync(0);
     SetDispMask(0);
     state = &g_GameState;
-    CD_ReadSectors(1, 0xCC, 0, g_SceneLoadScratchBuffer, 0x21, 1);
+    CD_ReadSectors(1, 0xCC, 0, g_SceneLoadScratchBuffer[0], 0x21, 1);
 
 retry_first_load:
     range = g_MainAssetLbaTbl;

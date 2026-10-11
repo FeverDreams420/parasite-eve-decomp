@@ -3,6 +3,7 @@
 
 #include "pe1/menu_queue.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/render_buffers.h"
 
 MenuQueueEntry *g_MenuEventQueueFreeList;
 MenuQueueEntry *g_MenuEventQueueHead;
@@ -458,12 +459,6 @@ extern s32 D_800A226C[];
 extern s32 g_TextCursorStackBottom[];
 extern s32 g_OtBufferTable[];
 #define g_OtBufferTable (g_OtBufferTable[0])
-extern s32 g_RenderOtBufferBaseAlt[];
-#define g_RenderOtBufferBaseAlt (g_RenderOtBufferBaseAlt[0])
-extern s32 g_RenderFrontBufferBase[];
-#define g_RenderFrontBufferBase (g_RenderFrontBufferBase[0])
-extern s32 g_RenderBackBufferBase[];
-#define g_RenderBackBufferBase (g_RenderBackBufferBase[0])
 
 void Draw_InitBuffers(void);
 
@@ -473,10 +468,10 @@ void Draw_InitBuffers(void) {
         (DrawFrameBuffer *)(bufferBase -
                             PE1_OFFSETOF(DrawFrameBuffer, frontBufferBase));
 
-    bufferRecord->frontBufferBase = (u8 *)g_RenderFrontBufferBase;
-    D_800A226C = g_RenderBackBufferBase;
+    bufferRecord->frontBufferBase = (u8 *)g_RenderFrontBufferBase[0];
+    D_800A226C = g_RenderBackBufferBase[0];
     g_DrawBufferOtBases[0] = g_OtBufferTable;
-    D_800A2268 = g_RenderOtBufferBaseAlt;
+    D_800A2268 = g_RenderOtBufferBaseAlt[0];
     SetDefDrawEnv(&bufferRecord->draw, 0, 0, 0x140, 0xE0);
     SetDefDrawEnv(&bufferRecord[1].draw, 0, 0xE0, 0x140, 0xE0);
     D_800A2210 = 1;

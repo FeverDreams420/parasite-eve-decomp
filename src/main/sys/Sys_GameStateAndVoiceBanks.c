@@ -6,6 +6,7 @@
 #include "pe1/cdrom.h"
 #include "pe1/scene_assets.h"
 #include "pe1/cdrom_buffers.h"
+#include "pe1/render_buffers.h"
 
 /* End-of-frame overlay pass (draw the game-state primitives into the
  * current draw buffer with background clear off and send the queued AKAO
@@ -356,19 +357,13 @@ extern volatile s32 D_800B0E2C;
 extern volatile s32 D_800B0E30;
 extern volatile s32 D_800B0E34;
 extern volatile s32 g_OtBufferTable;
-extern volatile s32 g_RenderOtBufferBaseAlt;
 extern volatile s32 D_800B0E40;
 extern volatile s32 D_800B0E44;
 extern volatile s32 D_800B0E48;
-extern volatile s32 g_RenderScratchBufferBase;
-extern volatile s32 g_RenderFrontBufferBase;
-extern volatile s32 g_RenderBackBufferBase;
 extern volatile s32 g_RenderAnimBufferBase;
 extern volatile s32 D_800B0E5C;
 extern volatile s32 D_800B0E60;
-extern volatile s32 g_LoadedSceneAssetBlock;
 extern volatile s32 D_800B0E68;
-extern volatile s32 g_SceneLoadScratchBuffer;
 
 void Boot_InitMemoryLayout(void) {
     register s32 ptr asm("$2");
@@ -397,24 +392,24 @@ void Boot_InitMemoryLayout(void) {
     const_8000 = 0x8000;
     g_OtBufferTable = ptr;
     ptr += const_8000;
-    g_RenderOtBufferBaseAlt = ptr2;
+    g_RenderOtBufferBaseAlt[0] = ptr2;
     ptr2 = ptr + 0x2400;
     D_800B0E44 = ptr;
     ptr += 0x4800;
-    g_RenderScratchBufferBase = ptr;
+    g_RenderScratchBufferBase[0] = ptr;
     ptr += const_48000;
     D_800B0E48 = ptr2;
     ptr2 = ptr + 0x4000;
-    g_RenderFrontBufferBase = ptr;
+    g_RenderFrontBufferBase[0] = ptr;
     ptr += const_8000;
-    g_RenderBackBufferBase = ptr2;
+    g_RenderBackBufferBase[0] = ptr2;
     ptr2 = ptr + 0x3800;
     D_800B0E5C = ptr2;
     tmp = g_StrFileDirBuffer;
     g_RenderAnimBufferBase = ptr;
     ptr += 0x7000;
     D_800B0E60 = ptr;
-    g_SceneLoadScratchBuffer = (s32)D_801ED800;
-    g_LoadedSceneAssetBlock = tmp - 8;
+    g_SceneLoadScratchBuffer[0] = (s32)D_801ED800;
+    g_LoadedSceneAssetBlock[0] = tmp - 8;
     D_800B0E68 = tmp;
 }

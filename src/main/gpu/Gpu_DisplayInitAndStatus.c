@@ -6,6 +6,7 @@
 #include "common.h"
 #include "pe1/asset_tim.h"
 #include "pe1/font.h"
+#include "pe1/render_buffers.h"
 
 void SetDispMask(int arg0);
 void ClearImage(RECT *rect, int r, int g, int b);
@@ -37,19 +38,13 @@ extern volatile int D_800B0E2C;
 extern volatile int D_800B0E30;
 extern volatile int D_800B0E34;
 extern volatile int g_OtBufferTable;
-extern volatile int g_RenderOtBufferBaseAlt;
 extern volatile int D_800B0E40;
 extern volatile int D_800B0E44;
 extern volatile int D_800B0E48;
-extern volatile int g_RenderScratchBufferBase;
-extern volatile int g_RenderFrontBufferBase;
-extern volatile int g_RenderBackBufferBase;
 extern volatile int g_RenderAnimBufferBase;
 extern volatile int D_800B0E5C;
 extern volatile int D_800B0E60;
-extern volatile int g_LoadedSceneAssetBlock;
 extern volatile int D_800B0E68;
-extern volatile int g_SceneLoadScratchBuffer;
 
 int Gpu_InitDisplay(int mode) {
     int mode_reg;
@@ -97,26 +92,26 @@ int Gpu_InitDisplay(int mode) {
     const_8000 = 0x8000;
     g_OtBufferTable = ptr;
     ptr += const_8000;
-    g_RenderOtBufferBaseAlt = ptr2;
+    g_RenderOtBufferBaseAlt[0] = ptr2;
     ptr2 = ptr + 0x2400;
     D_800B0E44 = ptr;
     ptr += 0x4800;
-    g_RenderScratchBufferBase = ptr;
+    g_RenderScratchBufferBase[0] = ptr;
     asm volatile("" : "=r"(ptr) : "0"(ptr));
     ptr += const_48000;
     D_800B0E48 = ptr2;
     ptr2 = ptr + 0x4000;
-    g_RenderFrontBufferBase = ptr;
+    g_RenderFrontBufferBase[0] = ptr;
     ptr += const_8000;
-    g_RenderBackBufferBase = ptr2;
+    g_RenderBackBufferBase[0] = ptr2;
     ptr2 = ptr + 0x3800;
     D_800B0E5C = ptr2;
     tmp = g_StrFileDirBuffer;
     g_RenderAnimBufferBase = ptr;
     ptr += 0x7000;
     D_800B0E60 = ptr;
-    g_SceneLoadScratchBuffer = (int)D_801ED800;
-    g_LoadedSceneAssetBlock = tmp - 8;
+    g_SceneLoadScratchBuffer[0] = (int)D_801ED800;
+    g_LoadedSceneAssetBlock[0] = tmp - 8;
     D_800B0E68 = tmp;
 
     Draw_InitBuffers();

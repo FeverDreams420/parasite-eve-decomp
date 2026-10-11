@@ -10,8 +10,8 @@
 #include "pe1/render_object.h"
 #include "pe1/asset_key_record.h"
 #include "pe1/psyq_tim.h"
+#include "pe1/render_buffers.h"
 
-extern void *g_LoadedSceneAssetBlock[];
 int Asset_SearchByKeyType(int arg0)
 {
   u32 key;
@@ -23,7 +23,7 @@ int Asset_SearchByKeyType(int arg0)
   u32 high_value;
   u8 *entry;
   u32 value;
-  base = g_LoadedSceneAssetBlock[0];
+  base = (void *)g_LoadedSceneAssetBlock[0];
   wanted = arg0;
   key = 0x73DECD80;
   mask = 0x1FFC00;
@@ -62,7 +62,7 @@ int Akao_Calc3DPan(AkaoPackedRect3 *pos, int *pan, int *volume);
 s32 Akao_SendPositionalCmd(void *arg0, s32 arg1, s32 arg2, AkaoPosCoord arg3, AkaoPosCoord arg4, AkaoPosCoord arg5);
 
 s32 Asset_Find08w(s32 arg0, s32 arg1, s16 arg2, s16 arg3, s16 arg4) {
-    return Akao_SendPositionalCmd(g_LoadedSceneAssetBlock[0], arg0, arg1, arg2, arg3, arg4);
+    return Akao_SendPositionalCmd((void *)g_LoadedSceneAssetBlock[0], arg0, arg1, arg2, arg3, arg4);
 }
 
 s32 Akao_SetPos3D(s32 arg0, s32 arg1, u16 arg2, u16 arg3, u16 arg4) {

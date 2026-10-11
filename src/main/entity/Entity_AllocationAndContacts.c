@@ -2,8 +2,8 @@
 #include "pe1/entity_allocation.h"
 #include "pe1/entity_frame_update.h"
 #include "pe1/task_node.h"
+#include "pe1/render_buffers.h"
 
-extern s32 g_RenderScratchBufferBase;
 
 s32 Entity_AllocBlock(u32 arg0) {
     s32 temp_a0;
@@ -32,7 +32,7 @@ block_6:
         var_a1 = 0;
     }
     temp_t0 = var_a3 & 0xFF;
-    temp_t1 = &g_RenderScratchBufferBase;
+    temp_t1 = g_RenderScratchBufferBase;
     var_a0 = var_a1 & 0xFF;
     while (1) {
     var_v1 = var_a0 << 3;
