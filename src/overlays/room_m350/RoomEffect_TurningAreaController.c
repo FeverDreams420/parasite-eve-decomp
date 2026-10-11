@@ -101,10 +101,9 @@ case 1:
             sine=rsin(state->yaw>>8);
             i=0; matrix=&D_8019A808; out=matrix->t; source=instance;
             matrix->m[0][0]=cosine;
-            asm volatile("" : : : "memory");
-            D_8019A80C=sine; D_8019A814=0u-sine; D_8019A818=cosine;
+            D_8019A808.m[0][2]=sine; D_8019A808.m[2][0]=0u-sine; D_8019A808.m[2][2]=cosine;
             D_8019A824=0; D_8019A820=0; D_8019A81C=0;
-            D_8019A816=0; D_8019A812=0; D_8019A80E=0; D_8019A80A=0; D_8019A810=4096;
+            D_8019A808.m[2][1]=0; D_8019A808.m[1][2]=0; D_8019A808.m[1][0]=0; D_8019A808.m[0][1]=0; D_8019A808.m[1][1]=4096;
             for(;i<3;i++) { *out++=source->render_object.model_matrix.translation[0]; source=(Instance *)((char *)source+4); }
         }
         if(state->brightness<64) return 0;
