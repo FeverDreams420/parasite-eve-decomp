@@ -941,7 +941,9 @@ block_after_d2e8:
             register s32 tail_sp;
 
             var_t0 = (s32) D_8009D254;
-            tail_a2 = M2C_FIELD((void *) var_t0, s16 *, 0x2A);
+            /* posX/posY/posZ integer halves. Struct member reads let the
+             * scheduler hoist the D_8009D28C store above them. */
+            tail_a2 =M2C_FIELD((void *) var_t0, s16 *, 0x2A);
             tail_a3 = M2C_FIELD((void *) var_t0, s16 *, 0x2E);
             D_8009D28C = 3;
             tail_sp = M2C_FIELD((void *) var_t0, s16 *, 0x32);
