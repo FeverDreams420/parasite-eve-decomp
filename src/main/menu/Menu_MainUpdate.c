@@ -20,8 +20,8 @@
 #include <m2c_macros.h>
 
 M2C_UNK Battle_ReturnToIdle();                            /* extern */
-s8 Pad_GetMenuPressedBitOrDisabled();                                 /* extern */
-M2C_UNK Battle_FlushScriptSounds();                            /* extern */
+s8 Pad_GetMenuPressedBitOrDisabled(void);
+void Battle_FlushScriptSounds(void);
 struct BattleStatusPanel;
 void Battle_DrawStatusPanel(s32, struct BattleStatusPanel *);
 M2C_UNK Entity_ResolveDropTable(void *);                      /* static */
@@ -143,7 +143,7 @@ void Menu_MainUpdate(s32 arg0) {
             temp_a0 = D_8009D254->actionMode;
             if ((temp_a0 == D_8009D278->actionMode12) || (temp_a0 == 5)) {
                 if ((D_8009D278->attributes->effectFlags & 0x4000) && (D_8009D278->stateFlags & 0x4000)) {
-                if ((Pad_GetMenuPressedBitOrDisabled(temp_a0) << 0x18) > 0) {
+                if ((Pad_GetMenuPressedBitOrDisabled() << 0x18) > 0) {
                 goto block_range_check;
                 }
                 }
@@ -705,7 +705,7 @@ block_61:
     D_8009D278->hpMirror = (u16) D_8009D278->curHP;
     if (temp_a0_4 <= 0) {
         *temp_s2 |= 0x2000;
-        if (Pad_GetMenuPressedBitOrDisabled(temp_a0_4) != D_8009D1D4[0]) {
+        if (Pad_GetMenuPressedBitOrDisabled() != D_8009D1D4[0]) {
             if (D_8009D200 != -1) {
                 Pm_SendCmd(D_8009D200, 0, 0, 2, 0, 0);
                 D_8009D200 = -1;

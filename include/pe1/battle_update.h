@@ -26,7 +26,7 @@ void Menu_MainUpdate(int);
 int Menu_RunFrameWithArg(int);
 void Menu_SaveOverlayDraw(void);
 void Menu_SetItemContext(int);
-int Pad_GetMenuPressedBitOrDisabled(void);
+s8 Pad_GetMenuPressedBitOrDisabled(void);
 int Pm_SendCmd(int, int, int, int, int, int);
 void Render_BeginSceneLoad(void);
 void Save_DrawSlotMetadata(void);

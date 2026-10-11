@@ -98,7 +98,7 @@ void Battle_SetupEnemyAnims(void);
 void Battle_StartEnemyAttackEffect(BattleEntity *entity);
 void Battle_DrawATBGauge(void);
 int Inv_GetWeaponCategoryAmmoBase(unsigned int category);
-int Pad_GetMenuPressedBitOrDisabled(void);
+s8 Pad_GetMenuPressedBitOrDisabled(void);
 
 PE1_STATIC_ASSERT(PE1_OFFSETOF(BattleEnemySlot, active) == 0, battle_enemy_slot_active_offset);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(BattleEnemySlot, combatant) == 4, battle_enemy_slot_combatant_offset);
