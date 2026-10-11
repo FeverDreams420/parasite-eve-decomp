@@ -1,4 +1,5 @@
 #include "scene_e08.h"
+#include "pe1/scene_e08_layered_sprite.h"
 #include "pe1/room_floor.h"
 #include "pe1/floor_polygon.h"
 #include "pe1/gte_types.h"
@@ -40,9 +41,9 @@ void func_801946D4(void *unused, char *control, char *state)
     }
 
     count = 7;
-    x = *((s16 *) (state + 2));
-    y = *((s16 *) (state + 6));
-    z = *((s16 *) (state + 10));
+    x = ((SceneLayeredSpriteState *)state)->center[0].parts.integer;
+    y = ((SceneLayeredSpriteState *)state)->center[1].parts.integer;
+    z = ((SceneLayeredSpriteState *)state)->center[2].parts.integer;
     cursor = state + 0x38;
     *((s16 *) (state + 0x30)) = x;
     *((s16 *) (state + 0x32)) = y;
@@ -68,47 +69,47 @@ void func_801946D4(void *unused, char *control, char *state)
     *((s32 *) (state + 4)) = nextY;
     *((s32 *) (state + 8)) = nextZ;
     zArg = (unsigned)(nextZ >> 16) << 16;
-    if (Geo_PointInPoly(((unsigned)*((s16 *) (state + 2))) << 16, zArg, D_8009D248, screenLimit) == 0)
+    if (Geo_PointInPoly(((unsigned)((SceneLayeredSpriteState *)state)->center[0].parts.integer) << 16, zArg, D_8009D248, screenLimit) == 0)
     {
         *((u8 *) (control + 1)) = 2;
     }
     if ((*((s16 *) (control + 2))) < 50)
     {
         random = func_80071A54();
-        *((s16 *) (state + 0x22)) = (random % 1024) - 0x200;
+        ((SceneLayeredSpriteState *)state)->initialSeed.vector.y = (random % 1024) - 0x200;
         ground = &g_RoomFloorY->y;
-        *((s16 *) (state + 0x20)) = 0x400;
+        ((SceneLayeredSpriteState *)state)->initialSeed.vector.x = 0x400;
         *((u16 *) (state + 0x24)) += 0x270;
-        if ((*((s32 *) (state + 4))) < (*ground))
+        if ((((SceneLayeredSpriteState *)state)->center[1].fixed) < (*ground))
         {
             int gravity;
             gravity = 0xC350;
-            *((s32 *) (state + 0x14)) += gravity;
+            ((SceneLayeredSpriteState *)state)->velocity[1] += gravity;
         }
         else
         {
             /* Preserve the second ground-height read after clearing velocity. */
             PE1_COMPILER_MEMORY_BARRIER();
-            *((s32 *) (state + 0x10)) = 0;
-            *((s32 *) (state + 0x14)) = 0;
-            *((s32 *) (state + 0x18)) = 0;
-            *((s32 *) (state + 4)) = *ground;
+            ((SceneLayeredSpriteState *)state)->velocity[0] = 0;
+            ((SceneLayeredSpriteState *)state)->velocity[1] = 0;
+            ((SceneLayeredSpriteState *)state)->velocity[2] = 0;
+            ((SceneLayeredSpriteState *)state)->center[1].fixed = *ground;
         }
     }
     else
     {
-        *((s16 *) (state + 0x20)) = 0x400;
-        *((s16 *) (state + 0x22)) = 0;
-        ++(*((s32 *) (state + 0x2C)));
+        ((SceneLayeredSpriteState *)state)->initialSeed.vector.x = 0x400;
+        ((SceneLayeredSpriteState *)state)->initialSeed.vector.y = 0;
+        ++(((SceneLayeredSpriteState *)state)->phase);
         *((u16 *) (state + 0x24)) += 0x270;
-        *((s32 *) (state + 0x10)) -= (*((u16 *) (state + 0x2A))) * 8;
-        *((s32 *) (state + 0x18)) = rsin((*((s32 *) (state + 0x2C))) << 6) * 1500;
+        ((SceneLayeredSpriteState *)state)->velocity[0] -= (((SceneLayeredSpriteState *)state)->drift) * 8;
+        ((SceneLayeredSpriteState *)state)->velocity[2] = rsin((((SceneLayeredSpriteState *)state)->phase) << 6) * 1500;
     }
-    pointValue = *((s16 *) (state + 2));
+    pointValue = ((SceneLayeredSpriteState *)state)->center[0].parts.integer;
     point[0] = pointValue;
-    pointValue = *((s16 *) (state + 6));
+    pointValue = ((SceneLayeredSpriteState *)state)->center[1].parts.integer;
     point[1] = pointValue;
-    pointValue = *((s16 *) (state + 10));
+    pointValue = ((SceneLayeredSpriteState *)state)->center[2].parts.integer;
     point[2] = pointValue;
     if (func_800C6B90(point, 0xC8))
     {
