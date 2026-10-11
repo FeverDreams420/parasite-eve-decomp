@@ -15,7 +15,6 @@ void Render_AnimationFrame(void) {
     RenderAnimActor *early_actor;
     RenderAnimActor *late_actor;
     RenderAnimPlayer *player;
-    int current_frame;
     int draw_index;
     int delta;
     int scaled_frame;
@@ -36,8 +35,7 @@ void Render_AnimationFrame(void) {
         } else {
             size = ((early_actor->frameData->frameCount << 16) * frame) / 10U;
         }
-        current_frame = g_BattleAttackAnimFrame;
-        width = current_frame << 6;
+        width = g_BattleAttackAnimFrame << 6;
     } else {
         late_actor = (RenderAnimActor *)g_ActiveActor;
         size = 0xC80000;
@@ -46,12 +44,10 @@ void Render_AnimationFrame(void) {
         }
         frame = 10;
         width = (g_BattleAttackAnimFrame << 4) + frame;
-        asm volatile("" : "=m"(g_BattleAttackAnimFrame) : "m"(g_BattleAttackAnimFrame));
-        current_frame = g_BattleAttackAnimFrame;
     }
 
     animation_id = 0x457;
-    if (current_frame == 0) {
+    if (g_BattleAttackAnimFrame == 0) {
         player = (RenderAnimPlayer *)g_PlayerEntity;
         x = player->x;
         y = player->y;
