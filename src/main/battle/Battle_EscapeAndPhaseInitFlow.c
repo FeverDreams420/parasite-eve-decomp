@@ -108,7 +108,7 @@ void Battle_StepEscapeOrDeath(void)
     }
 }
 
-#define BATTLE_HUD_BYTE(symbol) ((symbol).bytes[0])
+#define BATTLE_HUD_BYTE(symbol) ((symbol)[0])
 #define BATTLE_HUD_SLOT_BYTE(symbol, stride) \
     (*(&BATTLE_HUD_BYTE(symbol) + (g_BattleTurnDrawSlotView[0] * (stride))))
 

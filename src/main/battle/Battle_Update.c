@@ -3,7 +3,7 @@
 #include "pe1/battle_update.h"
 
 #define BATTLE_HUD_SLOT_BYTE(symbol, stride) \
-    (*(&(symbol).bytes[0] + (g_BattleTurnDrawSlotView[0] * (stride))))
+    (*(&(symbol)[0] +(g_BattleTurnDrawSlotView[0] * (stride))))
 
 void Battle_Update(void) {
     /* Retail reserves 0x1A0 unused bytes; original local layout is unknown. */
