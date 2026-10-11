@@ -140,7 +140,6 @@ void Battle_DrawActiveStatus(void)
             backgroundY = D_8009CE86;
             backgroundHeight = 0x54;
             background->w = backgroundHeight;
-            asm("" : : : "memory");
             backgroundHeight = 0x19;
             background->h = backgroundHeight;
             backgroundY += 7;
@@ -171,7 +170,6 @@ void Battle_DrawActiveStatus(void)
         backgroundY = D_8009CE86;
         backgroundHeight = 0x54;
         background->w = backgroundHeight;
-        asm("" : : : "memory");
         backgroundHeight = 0x12;
         background->h = backgroundHeight;
         backgroundY += 7;

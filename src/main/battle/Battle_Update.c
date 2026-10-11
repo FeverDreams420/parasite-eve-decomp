@@ -110,9 +110,9 @@ void Battle_Update(void) {
                     asm("" : : "i"(1));
                     BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = blue;
                 } else if ((D_8009D250 & 3) == 2) {
-                    register int topRed asm("$7") = 0x9F;
+                    int topRed = 0x9F;
                     register int topGreen asm("$8") = 0xFF;
-                    register int topBlue asm("$6") = 0xF9;
+                    int topBlue = 0xF9;
                     int bottomGreen = 0x46;
                     int bottomBlue = 0x82;
                     BATTLE_HUD_SLOT_BYTE(D_800B00EC, 0x24) = topRed;

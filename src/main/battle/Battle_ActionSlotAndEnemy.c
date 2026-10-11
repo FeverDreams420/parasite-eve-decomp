@@ -103,7 +103,7 @@ int Battle_ProcessActionSlot(BattleEntity *actor)
 * curHP is the existing name for the 0..9000 charge gauge in this core view.
 */
 void Battle_UpdateEnemy(BattleEntity *entity) {
-    register BattleEntity *actor asm("$16") = entity;
+    BattleEntity *actor = entity;
     register EnemyCombatant *statusCore asm("$18");
     BattleEntity *parent;
     BattleEntity *livingLink;
