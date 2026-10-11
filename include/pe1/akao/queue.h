@@ -29,7 +29,7 @@ typedef void (*AkaoMessageHandler)(AkaoQueueEntry *entry);
 
 extern AkaoQueueEntry D_800B8628[];
 extern int g_AkaoMessageQueueCount;
-extern AkaoMessageHandler Akao_MessageHandlers[] asm("D_8009C0C0");
+extern AkaoMessageHandler Akao_MessageHandlers[];
 
 void Akao_MessageNoop(AkaoQueueEntry *entry);
 void Akao_AllocMessageSlot(AkaoQueueEntry **out_msg);

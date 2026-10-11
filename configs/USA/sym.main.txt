@@ -141,6 +141,7 @@ StSetMask = 0x8007C544; // type:func
 // AKAO message queue.
 Akao_MessageNoop = 0x8008CA7C; // type:func
 Akao_ProcessMessageQueue = 0x8008CA84; // type:func
+Akao_MessageHandlers = 0x8009C0C0; // size:0x400
 
 // PSYQ 4.0 object signature matches.
 __SN_ENTRY_POINT = 0x80072534; // type:func
