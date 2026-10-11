@@ -99,9 +99,9 @@ int ROOMLIB_UPDATE_BOUNCE_RENDER_NAME(int mode, RoomLineBurstParticle *fx) {
     {
         int sinValue;
         int scale;
-        /* Pinned: unpinned, the angle and fade take other registers than retail's. */
+        /* Matching debt: the angle still needs retail's argument register. */
         register int angle asm("$4");
-        register int fade asm("$2");
+        int cosine;
         int texture;
 
         sinValue = rsin((fx->timer << 10) / 24);
@@ -110,12 +110,11 @@ int ROOMLIB_UPDATE_BOUNCE_RENDER_NAME(int mode, RoomLineBurstParticle *fx) {
         scale = ((unsigned int)sinValue >> 31) + sinValue;
         scale >>= 1;
         saved2 = scale + 0x1000;
-        fade = rcos(angle);
-        if (fade < 0) {
-            fade += 0x7F;
+        cosine = rcos(angle);
+        if (cosine < 0) {
+            cosine += 0x7F;
         }
-        fade >>= 7;
-        saved0 = fade + 0x28;
+        saved0 = (cosine >> 7) + 0x28;
         texture = D_800E1204[D_800F3368.palette];
         if (D_800F3368.palette == 4 && D_800F3428 != 0) {
             texture += 4;
