@@ -43,6 +43,12 @@ extern int g_MenuSelectionLocked;
 extern int g_MenuSelectedSpell;
 /* Row of the action submenu last picked (Menu_SetActionSubmenuSelection). */
 extern unsigned int g_MenuActionSubmenuSel;
+/* Scroll step chosen from D_8009CDAC: +4 below 300, -4 from 300 on. */
+extern int D_8009CDAC;
+extern int g_MenuScrollStep;
+/* List target handed to Menu_RunFrameWithArg; incomplete so -G8 units keep
+ * retail's absolute accesses. */
+extern int g_MenuActiveListTarget[];
 /* Which list the equipment options act on: 0 sorts Aya's inventory, any
  * other value sorts Wayne's storage. */
 extern int g_MenuInventoryViewMode;
@@ -64,6 +70,8 @@ typedef struct {
     u16 values[8];
 } SaveWindowModeBounds;
 extern SaveWindowModeBounds g_MenuWindowModeBounds;
+void Window_SetBoundsByMode(int mode);
+unsigned int Menu_GetActiveMode(void);
 
 /* Visual settings: the blend colour and screen base Y in effect when the
  * colour and screen adjust panels opened, restored on cancel, and the

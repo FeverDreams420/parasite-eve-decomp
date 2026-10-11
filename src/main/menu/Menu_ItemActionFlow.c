@@ -12,6 +12,7 @@
 #include "pe1/draw_state.h"
 #include "pe1/inventory_queries.h"
 #include "pe1/menu_sound.h"
+#include "pe1/menu_item_rows.h"
 
 /* Category tab reset and equip screen header, item action submenu,
  * skill/stat point use, the equip stats panel and the item detail and item
@@ -58,7 +59,6 @@ static inline void Menu_CreateScreenModeSubmenu(void) {
 void Menu_OpenItemList(void);
 void Menu_StepInventoryRoot(s32 arg0, s32 arg1, s32 arg2);
 void Inv_BuildStorageDisplay(void);
-#include "Menu_ItemActionFlow_externs.h"
 void Menu_DrawItemListHeader(void);
 int D_8009CFC0;
 

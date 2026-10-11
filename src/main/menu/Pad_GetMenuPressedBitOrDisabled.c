@@ -2,7 +2,7 @@
 #include "pe1/menu_flags.h"
 #include "pe1/battle.h"
 
-#include "Pad_GetMenuPressedBitOrDisabled_externs.h"
+#include "pe1/battle_entity_anim.h"
 unsigned char g_BattleActionQueueCount;
 
 signed char Pad_GetMenuPressedBitOrDisabled(void) {

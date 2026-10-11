@@ -95,7 +95,7 @@ void Menu_StepItemDetailPanel(void) {
     g_MenuConfirmCallback = confirm;
 }
 
-#include "Menu_ItemDetailPanel_externs.h"
+#include "pe1/menu_state.h"
 
 /* Discard confirmation: on "yes" remove the selected item, close the
  * dialog and refresh the slot counts of the open inventory panels. */

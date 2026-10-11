@@ -15,6 +15,7 @@ int Menu_InventoryNavigate(MenuWidgetNode *current, MenuWidgetNode *node,
                            u32 flags);
 void Menu_CreateBonusPointAllocationView(void);
 void Menu_SetSwapReturnFlag(void);
+void Menu_ProcessSwapReturnIfPending(void);
 
 extern int D_8009CF18, D_8009CFB0;
 void Menu_OpenItemUsePanelAtIndex(int index);

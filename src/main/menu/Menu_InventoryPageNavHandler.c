@@ -5,17 +5,15 @@
 #include "pe1/menu_context_help.h"
 #include "pe1/menu_item_list_input.h"
 
-#include "Menu_InventoryPageNavHandler_externs.h"
-void MenuWidget_OffsetPosition(MenuWidgetNode *, int, int);
-void MenuWidget_ClearCursorY(MenuWidgetNode *);
-void MenuWidget_ClampScroll(MenuWidgetNode *);
-int Inv_GetPackedListCount(void);
-void Menu_StepInventoryRoot(int, int, int);
-void Menu_OpenEquipScreen(int);
+#include "pe1/menu_equipment.h"
+#include "pe1/menu_inventory.h"
 
 int Menu_InventoryPageNavHandler(MenuWidgetNode *root, unsigned int flags) {
     MenuWidgetNode *node;
     MenuWidgetNode *other;
+    /* Match debt: retail keeps the x shift in s2 and builds the target x in
+     * v0 from the popup pointer; unpinned, the saved registers shift
+     * (lev 40). */
     register int offset asm("$18");
     int present;
     MenuWidgetNode *current;

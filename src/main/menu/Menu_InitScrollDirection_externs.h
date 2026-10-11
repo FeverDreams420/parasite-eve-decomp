@@ -1,5 +1,0 @@
-#ifndef PE1_EXT_4F70362B191C
-#define PE1_EXT_4F70362B191C
-extern int D_8009CDAC;
-extern int D_8009D0D4;
-#endif /* PE1_EXT_4F70362B191C */

@@ -16,7 +16,7 @@
 
 #define NULL ((void *)0)
 void MenuWidget_OffsetPosition(MenuWidgetNode *node, int dx, int dy);
-#include "Menu_ItemUsePanel_externs.h"
+#include "pe1/menu_state.h"
 ItemDataRecord *g_MenuSelectedItemData;
 void Menu_DrawEquipStatsPanel(void);
 int Menu_HandleItemInput(int arg0, int arg1);

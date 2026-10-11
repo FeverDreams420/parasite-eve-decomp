@@ -1,20 +1,14 @@
-#include "pe1/menu_state.h"
-#include "pe1/menu_background.h"
-#include "pe1/inventory_slots.h"
-#include "pe1/menu_queue.h"
-#include "pe1/menu_widget.h"
-#include "common.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
-
-void Window_SetBoundsByMode(int mode);
-void MemCard_UpdateSavePolling(void);
-void MemCard_DelayedCallback(void);
-void Evt_DeferredExec(void);
-void Menu_ProcessSwapReturnIfPending(void);
+#include "common.h"
+#include "pe1/menu_state.h"
+#include "pe1/menu_background.h"
+#include "pe1/menu_inventory.h"
+#include "pe1/inventory_slots.h"
+#include "pe1/memcard.h"
+#include "pe1/menu_queue.h"
+#include "pe1/menu_widget.h"
 u32 g_MenuErrorSoundPending;
-#include "Menu_RunFrame_externs.h"
-#define g_MenuActiveListTarget (g_MenuActiveListTarget[0])
 
 /* Queued by frontend commands, consumed by either frame entry point. */
 void Menu_RequestErrorSound(void) {
@@ -23,7 +17,7 @@ void Menu_RequestErrorSound(void) {
 
 s32 Menu_RunFrameWithArg(s32 arg0) {
     if (Menu_SaveBgIsFadeActive() == 0) {
-        g_MenuActiveListTarget = arg0;
+        g_MenuActiveListTarget[0] = arg0;
         Menu_ClearCommandResult();
         Draw_SelectBuffer();
         Evt_DeferredExec();
@@ -52,7 +46,7 @@ s32 Menu_RunFrameWithArg(s32 arg0) {
 
 s32 Menu_RunFrame(void) {
     if (Menu_SaveBgIsFadeActive() == 0) {
-        g_MenuActiveListTarget = 0;
+        g_MenuActiveListTarget[0] = 0;
         Menu_ClearCommandResult();
         Draw_SelectBuffer();
         Evt_DeferredExec();

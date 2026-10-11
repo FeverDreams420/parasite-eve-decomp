@@ -4,21 +4,17 @@
 #include "pe1/menu_background.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/render_buffers.h"
+#include "pe1/psyq_gpu.h"
 
 /* Save-screen background fade: gamma curve, per-frame darkening of the
  * captured frame and the fade state machine setters. Contiguous at
  * 0x80042C78 and joined by the fade state words. MemCard_InitSlotState
  * (historical name) arms the fade-in. */
 
-/* g_GeomOtZ lives at 0x800BD024, outside the gp window; the incomplete
- * array type keeps -G8 from treating the 1-byte extern as small data. */
-#include "Menu_SaveBackground_externs.h"
 
 int g_MenuSaveBgFadeState;
 int g_MenuSaveBgFadeStep;
 int g_MenuSaveBgFadeHeight;
-
-int StoreImage(RECT *rect, void *p);
 
 void Menu_SaveBgInitFade(void) {
     g_MenuSaveBgFadeState = 0;

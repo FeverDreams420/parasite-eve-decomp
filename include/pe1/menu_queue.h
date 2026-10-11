@@ -46,6 +46,8 @@ void MenuInput_DispatchQueuedEvents(void);
 int MenuInput_GetStatusFlags(void);
 int MenuInput_GetRepeatStep(void);
 void Menu_ResetInputState(void);
+/* Releases the paused input polling once a disc change settles. */
+void Evt_DeferredExec(void);
 void Draw_SelectBuffer(void);
 void Draw_PresentFrame(int mode);
 

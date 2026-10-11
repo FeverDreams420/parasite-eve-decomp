@@ -24,6 +24,7 @@ void Sfx_DrawSlotRow(ItemDataRecord *entry, u8 *text);
 void Menu_DrawSaveSlotEntry(int index);
 void Menu_DrawContextActionList(MenuWidgetNode *node);
 void Menu_DrawEquipModList(MenuWidgetNode *node);
+void Menu_DrawUsableItemActionList2(MenuWidgetNode *node);
 /* List adapters binding a widget list to its row drawer. */
 void Menu_DrawMainMenuList(MenuWidgetNode *node);
 void Menu_DrawActionSubmenuList(MenuWidgetNode *node);

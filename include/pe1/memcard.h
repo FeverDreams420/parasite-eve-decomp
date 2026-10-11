@@ -176,6 +176,8 @@ int MemCard_IsPortPresent(int port);
 int MemCard_CheckPresent(int port);
 void MemCard_StartRead(int port, int slot);
 int MemCard_IsOperationPending(void);
+void MemCard_UpdateSavePolling(void);
+void MemCard_DelayedCallback(void);
 
 MemCardSaveSlot *MemCard_GetSlot(unsigned int port, int slot);
 
