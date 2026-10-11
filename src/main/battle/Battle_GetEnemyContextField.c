@@ -3,8 +3,6 @@
 #include "pe1/battle.h"
 #include "pe1/battle_entity_anim.h"
 #include "pe1/field_actor.h"
-#define NULL ((void *)0)
-#include "../../../tools/m2c/m2c_macros.h"
 
 s32 Battle_GetEnemyContextField(FieldActor *arg0, s32 arg1) {
     EnemyCombatant *ctx = (EnemyCombatant *)arg0->state;
@@ -20,7 +18,7 @@ s32 Battle_GetEnemyContextField(FieldActor *arg0, s32 arg1) {
         ret = ctx->curHP;
         break;
     case 3:
-        ret = *(s32 *)&ctx->hpAlive;
+        ret = ctx->hpAlive;
         if (ret < 0) {
             ret = 0;
         }
@@ -46,7 +44,7 @@ s32 Battle_GetEnemyContextField(FieldActor *arg0, s32 arg1) {
         ret &= 3;
         break;
     case 41:
-        ret = *((u8 *)ctx + 3);
+        ret = ctx->coreFlags >> 24;
         ret &= 0x3F;
         break;
     case 89:

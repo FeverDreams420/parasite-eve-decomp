@@ -2,8 +2,7 @@
 #include "common.h"
 #include "pe1/battle.h"
 #include "pe1/room_floor.h"
-
-#include "Battle_ContextAccess_externs.h"
+#include "pe1/player_entity.h"
 
 int Battle_GetContextField(int arg0) {
     Combatant *ctx;
@@ -70,10 +69,6 @@ int Battle_GetContextField(int arg0) {
 
     return ret;
 }
-#include "common.h"
-#include "pe1/battle.h"
-
-#include "Battle_ContextAccess_externs_1.h"
 
 void Battle_SetContextField(int arg0, int arg1) {
     Combatant *ctx;

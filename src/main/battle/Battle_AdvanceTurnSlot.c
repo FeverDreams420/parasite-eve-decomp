@@ -2,12 +2,11 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 #include "pe1/battle.h"
-#include "Battle_AdvanceTurnSlot_externs.h"
+#include "pe1/battle_runtime.h"
 
 /* COMMON supplies small-data metadata to MASPSX. */
 u8 D_8009CE3C, D_8009CE44, D_8009CE60;
 u8 D_8009D2D8, D_8009D1DC;
-void BattleCmd_UndoPending(void);
 
 /* Matching debt: the empty memory barriers preserve repeated slot-index
  * reads; the register barriers keep the two entry calculations distinct.

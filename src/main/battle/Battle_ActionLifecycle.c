@@ -1,65 +1,52 @@
-#include "pe1/battle.h"
 /* CC1_FLAGS: -G2 */
 /* MASPSX_FLAGS: -G2 */
 
-#include "Battle_ActionLifecycle_externs.h"
-
-void Entity_SetActionMode(BattleEntity *entity, int mode);
-void Battle_FlushScriptSounds(void);
-
-#define COMBATANT_FIELD(ptr, type, member) \
-    (*(type *)((ptr) + PE1_OFFSETOF(Combatant, member)))
-#define ENTITY_FIELD(ptr, type, member) \
-    (*(type *)((ptr) + PE1_OFFSETOF(BattleEntity, member)))
+#include "pe1/battle.h"
+#include "pe1/battle_entity_anim.h"
+#include "pe1/battle_reset_stats.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/player_entity.h"
 
 void Battle_BeginPlayerAction(void) {
-    char *player;
-    char *actor;
+    BattleEntity *player;
+    Combatant *actor;
     int mask;
     int flags;
+    u32 *entityFlags;
+    s32 *stateFlags;
 
     mask = -0x101;
     D_8009D2E8 |= 1;
-    player = (char *)D_8009D254;
-    flags = ENTITY_FIELD(player, int, entityFlags);
-    actor = (char *)D_8009D278;
+    player = D_8009D254;
+    entityFlags = &player->entityFlags;
+    flags = *entityFlags;
+    actor = D_8009D278;
     flags &= mask;
-    ENTITY_FIELD(player, int, entityFlags) = flags;
-    COMBATANT_FIELD(actor, int, stateFlags) |= 0x10000;
+    *entityFlags = flags;
+    stateFlags = &actor->stateFlags;
+    *stateFlags |= 0x10000;
     D_8009D298 = 0;
-    Entity_SetActionMode((BattleEntity *)player, 0x12);
+    Entity_SetActionMode(player, 0x12);
     Battle_FlushScriptSounds();
 }
 
-#undef ENTITY_FIELD
-#undef COMBATANT_FIELD
-
-#include "Battle_ActionLifecycle_externs_1.h"
-
-
-#define COMBATANT_FIELD(ptr, type, member) \
-    (*(type *)((ptr) + PE1_OFFSETOF(Combatant, member)))
-#define ENTITY_FIELD(ptr, type, member) \
-    (*(type *)((ptr) + PE1_OFFSETOF(BattleEntity, member)))
-
 void Battle_ReturnToIdle(void) {
-    char *state;
-    char *actor;
+    Combatant *state;
+    BattleEntity *actor;
     int mask_state;
     int flags;
+    s32 *stateFlags;
 
     mask_state = 0xFFFEFFFF;
-    g_FieldMoveLock &= -2;
-    state = (char *)g_ActiveActor;
-    actor = (char *)g_PlayerEntity;
-    flags = COMBATANT_FIELD(state, int, stateFlags);
+    D_8009D2E8 &= -2;
+    state = g_ActiveActor;
+    actor = (BattleEntity *)g_PlayerEntity;
+    stateFlags = &state->stateFlags;
+    flags = *stateFlags;
     flags &= mask_state;
-    COMBATANT_FIELD(state, int, stateFlags) = flags;
-    ENTITY_FIELD(actor, int, motionX) = 0;
-    ENTITY_FIELD(actor, int, motionY) = 0;
-    ENTITY_FIELD(actor, int, motionZ) = 0;
-    Entity_SetActionMode((BattleEntity *)actor, COMBATANT_FIELD(state, unsigned char, actionMode12));
+    *stateFlags = flags;
+    actor->motionX = 0;
+    actor->motionY = 0;
+    actor->motionZ = 0;
+    Entity_SetActionMode(actor, state->actionMode12);
 }
-
-#undef ENTITY_FIELD
-#undef COMBATANT_FIELD
