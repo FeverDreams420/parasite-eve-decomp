@@ -28,7 +28,7 @@ extern char D_8010BD00[];
 extern char D_80120D08[];
 extern char D_801ED800[];
 extern int g_ActiveDrawSlot;
-extern unsigned char g_ScreenTransitionState;
+extern unsigned char g_ScreenTransitionState[];
 extern volatile unsigned char D_800B0DC6;
 extern volatile int g_SceneDispatchToken;
 
@@ -119,7 +119,7 @@ int Gpu_InitDisplay(int mode) {
         ClearOTagR(slots[g_ActiveDrawSlot], 0x1000);
         Render_SetCDDCSlot();
         Gpu_RenderFrame();
-    } while ((g_ScreenTransitionState & 3) != one);
+    } while ((g_ScreenTransitionState[0] & 3) != one);
 
     D_800B0DC6 = 0;
     Menu_ConsumeEquipSlotFlag();

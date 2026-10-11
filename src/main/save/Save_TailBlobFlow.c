@@ -55,7 +55,7 @@ void Save_SerializeTail(void) {
         cursor[2] = u0;
         cursor = g_SaveIoCursor;
         g_SaveIoCursor = cursor + 1;
-        screenByte = g_ScreenTransitionState;
+        screenByte = g_ScreenTransitionState[0];
         asm volatile("" : : "r"(screenByte));
         cursor[1] = screenByte;
     }
@@ -161,7 +161,7 @@ void Save_DeserializeTail(void) {
     g_SaveIoCursor = third_cur + 3;
     screen_byte = third_cur[3];
     asm volatile("" : : "r"(screen_byte));
-    g_ScreenTransitionState = screen_byte;
+    g_ScreenTransitionState[0] = screen_byte;
     g_SaveIoCursor = bulk_src;
 
     *aya_dest = *(SaveBytes70 *)bulk_src;

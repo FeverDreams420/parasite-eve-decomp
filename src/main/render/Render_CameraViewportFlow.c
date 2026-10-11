@@ -645,7 +645,7 @@ int Render_InitRoomPrimState(void *objectArg)
 }
 
 extern unsigned short g_ScreenTransitionTargetY;
-extern unsigned char g_ScreenTransitionState;
+extern unsigned char g_ScreenTransitionState[];
 extern unsigned char g_ScreenTransitionMode;
 extern unsigned short g_ScreenTransitionStartY;
 extern unsigned short g_ScreenTransitionFadeColor;
@@ -662,7 +662,7 @@ int CdRom_SetSeekPos(unsigned int arg0) {
     D_800BCFE8 = 0xFF;
     g_ScreenTransitionTargetY = 0xFF;
     D_800BCFEC = 0xFF;
-    g_ScreenTransitionState = 2;
+    g_ScreenTransitionState[0] = 2;
     g_ScreenTransitionMode = 2;
     g_ScreenTransitionFadeColor = arg0;
     D_800BCFF8 = 0;
@@ -686,7 +686,7 @@ int CdRom_SetScreenPos(int arg0, int arg1, int arg2, int arg3, unsigned short ar
     D_800BCFE8 = arg1;
     g_ScreenTransitionTargetY = arg2;
     D_800BCFEC = arg3;
-    g_ScreenTransitionState = 2;
+    g_ScreenTransitionState[0] = 2;
     g_ScreenTransitionFadeColor = arg0;
     D_800BCFF8 = 0;
     D_800BCFF0 = old0;
@@ -722,7 +722,7 @@ int Render_SetFadeColour(unsigned int arg0) {
     old1 = g_ScreenTransitionTargetY;
     old2 = (u16)D_800BCFEC;
 
-    g_ScreenTransitionState = 6;
+    g_ScreenTransitionState[0] = 6;
     D_800BCFE8 = 0;
     g_ScreenTransitionTargetY = 0;
     D_800BCFEC = 0;

@@ -17,7 +17,7 @@ extern s8 D_800B0CE4[];
 extern char D_800B1628[];
 extern char D_800B162C[];
 extern char D_800B8A18[];
-extern char g_ScreenTransitionState[];
+extern unsigned char g_ScreenTransitionState[];
 extern char D_800BEA40[];
 extern char D_800BEA42[];
 extern char D_800BEA44[];

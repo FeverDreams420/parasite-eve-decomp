@@ -57,7 +57,7 @@ typedef struct CameraBaseAngles {
 } CameraBaseAngles;
 extern CameraBaseAngles D_800BD020;
 
-extern unsigned char g_ScreenTransitionState;
+extern unsigned char g_ScreenTransitionState[];
 
 int Pm_SetGetState(int arg0, int arg1, int arg2);
 void Entity_AllocSlot(void *arg0);
@@ -407,7 +407,7 @@ int Task_SetCdRomScreenPos(unsigned short **arg0) {
 }
 
 int Task_ClearEntityFlag40(void) {
-    unsigned char *ptr = &g_ScreenTransitionState;
+    unsigned char *ptr = g_ScreenTransitionState;
 
     *ptr &= 0xBF;
     return 1;

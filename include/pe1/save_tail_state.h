@@ -19,7 +19,7 @@ extern u8 g_SavedSceneAreaType __asm__("D_800B0CE3");
 extern s8 g_PendingStoryDay __asm__("D_800B0CE5");
 extern s8 g_CurrentStoryDay __asm__("D_800B0CE4");
 extern u8 g_DiscChangeFlags __asm__("D_800B0CE6");
-extern u8 g_ScreenTransitionState __asm__("D_800BCFEE");
+extern u8 g_ScreenTransitionState[] __asm__("D_800BCFEE");
 extern u8 *g_SaveIoCursor __asm__("D_800A0ED0");
 extern u32 g_GameStateFlagsWord __asm__("D_8009D1A0");
 extern u32 g_FieldMoveLockWord __asm__("D_8009D2E8");
