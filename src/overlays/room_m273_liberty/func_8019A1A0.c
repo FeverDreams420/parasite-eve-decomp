@@ -1,6 +1,6 @@
 #include "common.h"
+#include "room_m273_boss_state.h"
 
-extern char D_8019AE9C[];
 extern s16 D_8019AEEA;
 extern s16 D_8019AEEE;
 extern s16 D_8019AEF2;
@@ -38,5 +38,5 @@ void *func_8019A1A0(void *unused, int mode) {
         D_8019AEF6 = value;
         break;
     }
-    return D_8019AE9C;
+    return &D_8019AE9C;
 }

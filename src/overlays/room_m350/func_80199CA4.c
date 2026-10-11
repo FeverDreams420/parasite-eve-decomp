@@ -1,23 +1,25 @@
 #include "common.h"
-extern char *D_8009D20C;
-extern char *D_8019A7F8;
-extern char D_8019A7A0;
+#include "room_m350_data.h"
 
-char *func_80199CA4(s32 arg0, s32 arg1, s32 arg2) {
-    char **slot;
-    char **iter;
-    char *node;
+extern FieldActor *D_8009D20C;
+
+/* Walks the actor list for the first live actor of the given type and sub
+ * id, leaves it in D_8019A7F8 and returns the joint position slot. */
+GteShortVector *func_80199CA4(s32 arg0, s32 arg1, s32 arg2) {
+    FieldActor **slot;
+    FieldActor **iter;
+    FieldActor *node;
 
     slot = &D_8019A7F8;
     if ((*slot = D_8009D20C) != 0) {
         iter = slot;
         while (1) {
             node = D_8019A7F8;
-            if ((node[0xC] == arg1) && (node[0xD] == arg2) && ((*(s32 *)(node + 0x98) & 0x10) == 0)) {
+            if ((node->type_id == arg1) && (node->sub_id == arg2) && ((node->flags & 0x10) == 0)) {
                 break;
             }
 
-            if ((*iter = *(char **)(D_8019A7F8 + 4)) == 0) {
+            if ((*iter = D_8019A7F8->next) == 0) {
                 break;
             }
         }

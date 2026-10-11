@@ -4,13 +4,12 @@
 #include "pe1/gte.h"
 #include "pe1/field_vector_math.h"
 #include "pe1/field_anim_pool.h"
+#include "room_m350_data.h"
 typedef RoomM350Vector Vector;
 typedef RenderMatrix Matrix;
 typedef FieldActorState Owner;
 typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
-extern Instance *D_8019A7F8;
-extern Vector D_8019A7A0;
 extern short D_8019A7FC;
 extern short D_8019A7FE,D_8019A800,D_8019A802;
 extern unsigned char D_8019A804,D_8019A805,D_8019A806;

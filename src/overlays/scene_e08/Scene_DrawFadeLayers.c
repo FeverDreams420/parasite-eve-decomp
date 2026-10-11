@@ -14,11 +14,6 @@ typedef struct SceneFadeOwner {
     u8 drawMode;
 } SceneFadeOwner;
 
-typedef struct SceneDrawColor {
-    u8 r, g, b, pad3, t4, t5, t6, pad7;
-    s16 h8, hA;
-} SceneDrawColor;
-
 typedef union SceneFadeSeed {
     RoomFxSeed8 raw;
     struct {
@@ -29,7 +24,7 @@ typedef union SceneFadeSeed {
 } SceneFadeSeed;
 
 extern RoomFxSeed8 D_8018EFF4;
-extern SceneDrawColor D_80199670;
+extern FieldGlowSprite D_80199670;
 extern u8 D_801986F8[], D_80198708[];
 void func_800C2FF0(int, int);
 void func_800C3098(int);
@@ -63,8 +58,8 @@ void func_8018F640(void *unused, s16 *args, Ovl178FadeState *state) {
         matrix.t[0] = ownerCursor->x;
         matrix.t[1] = ownerCursor->y;
         matrix.t[2] = ownerCursor->z;
-        D_80199670.hA = state->field_264;
-        func_800C42A4((FieldGlowSprite *)&D_80199670, &matrix, 1);
+        D_80199670.depth = state->field_264;
+        func_800C42A4(&D_80199670, &matrix, 1);
     }
     for (i = 0; i < 2; ++i) {
         matrix.m[2][2] = 0x1000;

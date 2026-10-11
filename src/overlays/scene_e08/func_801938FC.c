@@ -1,8 +1,5 @@
 #include "scene_particle_slots.h"
-
-typedef struct SceneE08RandomOffset {
-    s16 x, y, z, phase;
-} SceneE08RandomOffset;
+#include "pe1/scene_player_orb.h"
 
 typedef struct SceneE08RandomEntries {
     u8 pad00[12];
@@ -14,17 +11,16 @@ typedef struct SceneE08RandomEntries {
 typedef SceneE08EffectState SceneE08RandomState;
 
 extern int func_80071A54(void);
-extern SceneE08RandomOffset D_801994D8[];
 
 void func_801938FC(int unused, SceneE08RandomState *state, SceneE08RandomEntries *entries) {
     unsigned int i;
     for (i = 0; i < 10; ++i) {
         if (entries->active[i] == 1) {
             ++entries->counter[i];
-            D_801994D8[i].x = func_80071A54() % 160 - 80;
-            D_801994D8[i].y = func_80071A54() % 160 - 80;
-            D_801994D8[i].z = func_80071A54() % 160 - 80;
-            D_801994D8[i].phase = func_80071A54() % 512 - 256;
+            D_801994D8[i].rise = func_80071A54() % 160 - 80;
+            D_801994D8[i].bend = func_80071A54() % 160 - 80;
+            D_801994D8[i].reach = func_80071A54() % 160 - 80;
+            D_801994D8[i].swing = func_80071A54() % 512 - 256;
         } else if (func_80071A54() % 20 == 0) {
             entries->active[i] = 1;
         }

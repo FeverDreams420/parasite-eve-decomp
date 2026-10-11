@@ -1,6 +1,7 @@
 #include "common.h"
 #include "../room_lib/room_lib.h"
 #include "pe1/pe_image.h"
+#include "pe1/field_glow_sprite.h"
 
 typedef struct {
     s32 w0;
@@ -19,21 +20,9 @@ typedef struct {
     void *asset;
 } Overlay178InitState;
 
-typedef struct {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-    unsigned char pad3;
-    unsigned char t4;
-    unsigned char t5;
-    unsigned char t6;
-    unsigned char pad7;
-    short h8;
-    short hA;
-} Overlay178FxColor;
 
-extern Overlay178FxColor D_801994A8;
-extern Overlay178FxColor D_80199670;
+extern FieldGlowSprite D_801994A8;
+extern FieldGlowSprite D_80199670;
 
 void func_800C2B40(void *arg0);
 
@@ -47,20 +36,20 @@ void func_8018F3C4(RoomEnt *ent, void *arg1, Overlay178InitState *state) {
     state->matrix = *matrix;
     state->asset = Asset_SearchByKeyType(0x2E);
 
-    D_80199670.t4 = 0x46;
-    D_80199670.t5 = 3;
-    D_80199670.h8 = -0x1E;
-    D_80199670.hA = 0x80;
+    D_80199670.cell = 0x46;
+    D_80199670.clut = 3;
+    D_80199670.offset = -0x1E;
+    D_80199670.depth = 0x80;
     D_80199670.r = 0xA0;
     D_80199670.g = 0x80;
     D_80199670.b = 0xF0;
-    D_80199670.t6 = 0;
-    D_801994A8.t4 = 0x46;
-    D_801994A8.t5 = 3;
-    D_801994A8.h8 = -0x190;
-    D_801994A8.hA = 0x80;
+    D_80199670.flip = 0;
+    D_801994A8.cell = 0x46;
+    D_801994A8.clut = 3;
+    D_801994A8.offset = -0x190;
+    D_801994A8.depth = 0x80;
     D_801994A8.r = 0xA0;
     D_801994A8.g = 0x80;
     D_801994A8.b = 0xF0;
-    D_801994A8.t6 = 0;
+    D_801994A8.flip = 0;
 }

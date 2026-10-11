@@ -8,6 +8,7 @@
 #include "room_m273_effects.h"
 #include "room_m273_sway.h"
 #include "room_m273_sweep.h"
+#include "room_m273_boss_state.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_model_draw.h"
@@ -111,30 +112,6 @@ typedef struct RoomM273BossTrig {
 } RoomM273BossTrig;
 
 extern RoomM273BossTrig D_800966EC[];
-
-/* Boss controller state at 0x8019AE9C. */
-typedef struct RoomM273BossState {
-    GteShortVector hands[2];
-    s16 hit[3];       /* 0x10: where a falling trail touched the player */
-    s16 hit_flag;
-    s32 base_height;
-    s16 landing_x[8]; /* 0x1C: trail landing positions */
-    s16 landing_y[8];
-    s16 landing_z[8];
-    s16 landing_count;
-    s16 repeat;
-    s16 floor;
-    s16 spin_target;
-    s16 spin;
-    s16 spin_step;
-    s16 tick;
-    s16 tick_limit;
-    u8 done;
-    u8 reserved_5D;
-    u8 spinning;
-} RoomM273BossState;
-
-extern RoomM273BossState D_8019AE9C;
 
 /* Falling drop: position (the pad halfword counts frames after landing),
  * ring position, velocity and the player-contact flag. */

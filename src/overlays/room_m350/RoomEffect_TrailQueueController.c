@@ -1,12 +1,12 @@
 #include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
+#include "room_m350_data.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
 
 typedef RoomM350Vector Vector;
 extern short D_8019A85C;
-extern Vector g_RoomEffectTrailPositions[4];
 extern unsigned short D_800E11E8;
 /* Retail writes both fields twice during configuration. */
 extern int func_8019A014(int, short *);
@@ -24,9 +24,9 @@ int func_8019784C(int event)
         for (i = 0; i < D_8019A85C; i++) {
             short *effect = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
             if (!effect) break;
-            effect[0] = g_RoomEffectTrailPositions[i].x;
-            effect[1] = g_RoomEffectTrailPositions[i].y;
-            effect[2] = g_RoomEffectTrailPositions[i].z;
+            effect[0] = g_RoomEffectTrailPositions.points[i].x;
+            effect[1] = g_RoomEffectTrailPositions.points[i].y;
+            effect[2] = g_RoomEffectTrailPositions.points[i].z;
             /* Finish the copy before reloading the possibly aliased count. */
             asm("" : "=m"(D_8019A85C) : "m"(D_8019A85C), "m"(effect[2]));
         }

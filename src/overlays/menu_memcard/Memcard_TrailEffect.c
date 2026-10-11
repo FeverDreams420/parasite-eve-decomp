@@ -2,7 +2,7 @@
 
 s32 Memcard_TrailEffect(s32 mode, MemcardTrailState *state) {
     GteShortVector position;
-    MemcardLinkOffset offset = D_801ED818;
+    MemcardJointOffset offset = D_801ED818;
     RenderColor color;
     s32 scale, palette;
     s32 index;

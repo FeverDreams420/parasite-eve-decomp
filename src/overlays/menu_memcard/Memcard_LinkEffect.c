@@ -4,11 +4,11 @@ s32 Memcard_LinkEffect(s32 mode, MemcardLinkState *state) {
     GteShortVector unused;
     GteShortVector first;
     GteShortVector second;
-    MemcardLinkOffset offset = D_801ED818;
+    MemcardJointOffset offset = D_801ED818;
     RenderColor color;
     MemcardLinkColor color1 = D_801ED850;
     MemcardLinkColor color2 = D_801ED854;
-    register MemcardLinkOffset *offsetPtr asm("$6");
+    register MemcardJointOffset *offsetPtr asm("$6");
     switch (mode) {
     case 0: {
         s32 opacity;

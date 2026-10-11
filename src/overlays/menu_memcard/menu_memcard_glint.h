@@ -6,6 +6,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_engine_calls.h"
 #include "pe1/field_effect_pool.h"
+#include "menu_memcard_offset.h"
 
 /* Scene object reached through the primary channel pool. */
 typedef struct MemcardGlintAnchor {
@@ -72,11 +73,7 @@ typedef struct MemcardCrossFlash {
     u8 trailD[0x90];              /* 0x1D8 */
 } MemcardCrossFlash;
 
-typedef struct MemcardFlashOffset {
-    s16 x, y, z, reserved06;
-} MemcardFlashOffset;
-
-extern MemcardFlashOffset D_801ED818, D_801ED820, D_801ED828, D_801ED830;
+extern MemcardJointOffset D_801ED820, D_801ED828, D_801ED830;
 extern RenderColor D_801ED838, D_801ED83C, D_801ED840;
 extern void func_8006DDCC(int sound, int mode, int x, int y, int z);
 extern u8 D_801F1CB0[];

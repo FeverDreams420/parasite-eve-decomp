@@ -13,6 +13,7 @@
 #include "pe1/psyq_libc.h"
 #include "pe1/gte_types.h"
 #include "pe1/psyq_gpu.h"
+#include "room_m350_data.h"
 
 /* Steers a rotating footprint, tests contact, and draws three model/sprite layers. */
 typedef RoomM350Vector Vector;
@@ -29,7 +30,7 @@ extern Matrix D_8019A808;
 extern short D_8019A80A,D_8019A80C,D_8019A80E,D_8019A810,D_8019A812,D_8019A814,D_8019A816,D_8019A818;
 extern int D_8019A81C,D_8019A820,D_8019A824;
 extern Vector D_8019A574[];
-extern char D_8019A594[],D_8019A3C8[];
+extern char D_8019A594[];
 extern void GsSetOrign(int,int);
 int func_801960C4(int event,State *state)
 {
@@ -222,7 +223,7 @@ case 2:
             asm("" : "=r"(triple) : "0"(triple));
             size=triple*2;
             for (;i<3;i++) {
-                func_800D0E88(&position,(GteRotation *)&rotation,size,512,(RenderColor *)D_8019A594,(RenderColor *)D_8019A3C8,(RenderColor *)D_8019A3C8,state->brightness,1);
+                func_800D0E88(&position,(GteRotation *)&rotation,size,512,(RenderColor *)D_8019A594,&D_8019A3C8,&D_8019A3C8,state->brightness,1);
                 rotation.y=(unsigned short)rotation.y+24;
             }
         }

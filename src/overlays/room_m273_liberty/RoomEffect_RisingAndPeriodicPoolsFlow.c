@@ -1,6 +1,7 @@
 /* The rising-sprite callback and its poll/reset controller share one TU. */
 #include "pe1/field_sprite_params.h"
 #include "room_m273_particles.h"
+#include "room_m273_boss_state.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
@@ -58,7 +59,6 @@ int func_80195E10(int mode, Particle *particle) {
 typedef GteShortVector Vector;
 typedef RoomM273EffectModeState State;
 extern unsigned char D_8019AEF8;
-extern Vector D_8019AE9C[];
 extern void *D_8019AE80;
 extern int func_8019A398(),func_8019A4CC();
 extern int func_800CE688(void *);
@@ -94,7 +94,7 @@ int func_801960F4(int mode) {
                     i++;
                 } while(i<2);
                 i=0;
-                positions=D_8019AE9C;
+                positions=D_8019AE9C.hands;
                 do {
                     Vector **out=func_800CE610(D_8019AE80);
                     unsigned long address;

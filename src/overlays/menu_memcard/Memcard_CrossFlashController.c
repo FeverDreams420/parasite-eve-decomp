@@ -6,10 +6,10 @@
 int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
     GteShortVector from;
     GteShortVector to;
-    MemcardFlashOffset hand = D_801ED818;
-    MemcardFlashOffset tipA = D_801ED820;
-    MemcardFlashOffset tipB = D_801ED828;
-    MemcardFlashOffset center = D_801ED830;
+    MemcardJointOffset hand = D_801ED818;
+    MemcardJointOffset tipA = D_801ED820;
+    MemcardJointOffset tipB = D_801ED828;
+    MemcardJointOffset center = D_801ED830;
     RenderColor inner = D_801ED838;
     RenderColor outer = D_801ED83C;
     RenderColor edge = D_801ED840;

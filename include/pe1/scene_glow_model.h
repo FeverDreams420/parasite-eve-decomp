@@ -42,7 +42,7 @@ extern u8 *D_80199528;
 extern int D_8019956C;
 extern int D_8019957C;
 extern u8 D_80198860[];
-extern u8 D_801996B0[];
+extern FieldGlowSprite D_801996B0;
 
 void func_800C6EC0(int tpage, int clut);
 

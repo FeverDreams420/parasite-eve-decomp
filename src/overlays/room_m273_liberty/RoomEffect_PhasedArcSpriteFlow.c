@@ -1,6 +1,7 @@
 #include "room_m273_effects.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_anim_pool.h"
+#include "room_m273_sweep.h"
 
 typedef RoomM273PointerPoolEffect Effect;
 typedef struct { unsigned char unknown[58]; unsigned short value; } Object;
@@ -44,7 +45,6 @@ extern short D_8019AF58;
 extern short D_8019AF5A;
 extern short D_8019AF5C;
 extern short D_8019AF64;
-extern u16 D_8019AEFC;
 
 void *func_8019A5D4(int unused, int value, int flag) {
     D_8019AF56 = value;
@@ -62,7 +62,6 @@ void *func_8019A5D4(int unused, int value, int flag) {
 
 #include "room_m273_effects.h"
 extern u8 D_8019AF6B;
-extern u16 D_8019AEFC;
 extern volatile u16 D_8019AEFE;
 extern volatile u16 D_8019AF00;
 
@@ -91,7 +90,7 @@ s32 func_8019A628(s32 arg0) {
 
     obj = func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
     if (obj != 0) {
-        *(u16 *)(obj + 0) = D_8019AEFC;
+        *(u16 *)(obj + 0) = D_8019AEFC.x;
         *(u16 *)(obj + 2) = D_8019AEFE;
         *(u16 *)(obj + 4) = D_8019AF00;
         *(u16 *)(obj + 6) = 0;

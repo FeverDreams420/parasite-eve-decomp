@@ -4,14 +4,13 @@
 #include "pe1/gte.h"
 #include "pe1/field_vector_math.h"
 #include "pe1/field_anim_pool.h"
+#include "room_m350_data.h"
 /* Animation 11 controller: paired model points and alternating player-facing turn. */
 typedef RoomM350Vector Vector;
 typedef RenderMatrix Matrix;
 typedef FieldActorState Owner;
 typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
-extern Instance *D_8019A774;
-extern Vector D_8019A778[];
 extern short D_8019A77E[],D_8019A798,D_800966EC[];
 extern unsigned char D_8019A79A,D_8019A79C;
 int func_80193D6C(int event)

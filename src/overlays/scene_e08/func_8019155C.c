@@ -1,4 +1,5 @@
 #include "common.h"
+#include "pe1/field_glow_sprite.h"
 #include "../room_lib/room_lib.h"
 #include "pe1/scene_archive.h"
 #include "pe1/akao_send.h"
@@ -24,8 +25,7 @@ extern s16 D_80199688, D_8019968A;
 extern u8 D_801996A0[];
 extern u8 D_801996A1, D_801996A2, D_801996A4, D_801996A5, D_801996A6;
 extern s16 D_801996A8, D_801996AA;
-extern u8 D_801996B0, D_801996B1, D_801996B2, D_801996B4, D_801996B5, D_801996B6;
-extern s16 D_801996B8, D_801996BA;
+extern FieldGlowSprite D_801996B0;
 
 void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
     SceneE08MatrixWords *matrix;
@@ -59,8 +59,8 @@ void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
     D_80199685 = mode;
     D_801996A4 = 0x44;
     D_801996A5 = 2;
-    D_801996B4 = 0x60;
-    D_801996B5 = 0x40;
+    D_801996B0.cell = 0x60;
+    D_801996B0.clut = 0x40;
     D_80199684 = intensity;
     D_8019968A = half;
     D_80199680 = intensity;
@@ -72,12 +72,12 @@ void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
     D_801996A1 = intensity;
     D_801996A2 = intensity;
     D_801996A6 = 0;
-    D_801996B8 = -500;
-    D_801996BA = half;
-    D_801996B0 = intensity;
-    D_801996B1 = intensity;
-    D_801996B2 = intensity;
-    D_801996B6 = 0;
+    D_801996B0.offset = -500;
+    D_801996B0.depth = half;
+    D_801996B0.r = intensity;
+    D_801996B0.g = intensity;
+    D_801996B0.b = intensity;
+    D_801996B0.flip = 0;
 
     handle = *sound;
     /* Keep the handle load ahead of the two player-coordinate loads. */

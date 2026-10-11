@@ -4,6 +4,7 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/psyq_gpu.h"
+#include "room_m350_data.h"
 
 typedef RoomM350Vector Vector;
 typedef struct { Vector *position; } Particle;
@@ -19,7 +20,6 @@ typedef RoomM350Actor Actor;
 
 /* The controller owns the position pointers rendered by this callback. */
 extern int D_800966EC[];
-extern Vector D_8019A778[];
 
 int func_80193A80(int event, void **object)
 {

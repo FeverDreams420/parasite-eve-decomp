@@ -57,7 +57,7 @@ extern GteRotation D_8018EFFC;
 extern RenderColor D_8018F004;
 extern GteVector D_8018F008;
 extern u8 D_801987E4[];
-extern u8 D_80199690[];
+extern FieldGlowSprite D_80199690;
 
 int *func_800C2B10(int index);
 int func_80071A54(void);
@@ -92,12 +92,8 @@ typedef struct SceneArmGlow {
     /* 0x0C */ u16 offsets[5][3];
 } SceneArmGlow;
 
-typedef struct SceneArmGlowSprite {
-    /* 0x00 */ u8 pad00[0xA];
-    /* 0x0A */ u16 frame;
-} SceneArmGlowSprite;
 
-extern SceneArmGlowSprite D_801994C8;
+extern FieldGlowSprite D_801994C8;
 extern RenderColor D_8018F060;
 extern RenderColor D_8018F064;
 

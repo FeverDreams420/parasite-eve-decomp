@@ -1,6 +1,7 @@
 #include "common.h"
 #include "../room_lib/room_lib.h"
 #include "pe1/pe_image.h"
+#include "pe1/field_glow_sprite.h"
 
 typedef struct SceneE08MatrixWords {
     int words[8];
@@ -15,13 +16,7 @@ typedef struct SceneE08State {
     u16 flag;
 } SceneE08State;
 
-typedef struct SceneE08Color {
-    u8 r, g, b, pad3;
-    u8 texture, mode, extra, pad7;
-    s16 offset, intensity;
-} SceneE08Color;
-
-extern SceneE08Color D_801994B8, D_801995A8, D_801995B8, D_80199690;
+extern FieldGlowSprite D_801994B8, D_801995A8, D_801995B8, D_80199690;
 extern void func_800C2B40(void *);
 
 void func_80190060(RoomEnt *ent, void *unused, SceneE08State *state) {
@@ -36,39 +31,39 @@ void func_80190060(RoomEnt *ent, void *unused, SceneE08State *state) {
     state->counter = 0;
     state->flag = 0;
 
-    D_801994B8.texture = 0x46;
-    D_801994B8.mode = 3;
+    D_801994B8.cell = 0x46;
+    D_801994B8.clut = 3;
     D_801994B8.offset = -400;
-    D_801994B8.intensity = 128;
+    D_801994B8.depth = 128;
     D_801994B8.r = 240;
     D_801994B8.g = 64;
     D_801994B8.b = 64;
-    D_801994B8.extra = 0;
+    D_801994B8.flip = 0;
 
-    D_801995A8.texture = 0xA4;
-    D_801995A8.mode = 10;
+    D_801995A8.cell = 0xA4;
+    D_801995A8.clut = 10;
     D_801995A8.offset = -30;
-    D_801995A8.intensity = 128;
+    D_801995A8.depth = 128;
     D_801995A8.r = 160;
     D_801995A8.g = 128;
     D_801995A8.b = 240;
-    D_801995A8.extra = 0;
+    D_801995A8.flip = 0;
 
-    D_801995B8.texture = 0x44;
-    D_801995B8.mode = 2;
+    D_801995B8.cell = 0x44;
+    D_801995B8.clut = 2;
     D_801995B8.offset = -30;
-    D_801995B8.intensity = 128;
+    D_801995B8.depth = 128;
     D_801995B8.r = 160;
     D_801995B8.g = 128;
     D_801995B8.b = 240;
-    D_801995B8.extra = 0;
+    D_801995B8.flip = 0;
 
-    D_80199690.texture = 0x4C;
-    D_80199690.mode = 5;
+    D_80199690.cell = 0x4C;
+    D_80199690.clut = 5;
     D_80199690.offset = -30;
-    D_80199690.intensity = 128;
+    D_80199690.depth = 128;
     D_80199690.r = 160;
     D_80199690.g = 128;
     D_80199690.b = 240;
-    D_80199690.extra = 0;
+    D_80199690.flip = 0;
 }

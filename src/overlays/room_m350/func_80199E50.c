@@ -3,7 +3,7 @@
 #include "pe1/field_actor.h"
 #include "pe1/field_anim_pool.h"
 #include "room_m350_shared.h"
-extern char D_8019A854;
+#include "room_m350_data.h"
 
 extern void func_8019A134(void);
 

@@ -26,15 +26,6 @@ typedef struct SceneRingSpritesState {
     /* 0x0C */ u8 ticks;
 } SceneRingSpritesState;
 
-/* Sprite parameter block drawn by func_800C42A4. */
-typedef struct SceneRingSprite {
-    /* 0x00 */ u8 r, g, b, pad3;
-    /* 0x04 */ u8 texture, mode, extra, pad7;
-    /* 0x08 */ s16 offset;
-    /* 0x0A */ s16 depth;
-    /* 0x0C */ u8 pad0C[4];
-} SceneRingSprite;
-
 /* Shaded ring parameter block drawn by func_800C4FC4. */
 typedef struct SceneRingShade {
     /* 0x00 */ u8 pad00[0x14];
@@ -45,8 +36,8 @@ typedef struct SceneRingShade {
 extern GteRotation D_8018F018;
 extern GteVector D_8018F020;
 extern GteVector D_8018F030;
-extern SceneRingSprite D_801995A8;
-extern SceneRingSprite D_801995B8;
+extern FieldGlowSprite D_801995A8;
+extern FieldGlowSprite D_801995B8;
 extern SceneRingShade D_801995C8[2];
 
 #endif

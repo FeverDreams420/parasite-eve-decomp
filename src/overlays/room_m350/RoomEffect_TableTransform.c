@@ -4,6 +4,7 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/psyq_gpu.h"
+#include "room_m350_data.h"
 
 typedef struct { short position[3]; short size; } Particle;
 typedef RoomM350TransformMatrix Transform;
@@ -11,7 +12,6 @@ typedef struct RoomM350Instance { char reserved[22]; unsigned short frame; char 
 typedef RoomM350Actor Actor;
 
 typedef struct { unsigned char index, alternate; } Entry;
-extern Instance *D_8019A7F8;
 extern unsigned char D_8019A804;
 extern Entry D_8019A4D4[][2];
 extern int D_800966EC[];
@@ -56,7 +56,7 @@ int func_8019569C(int event) {
             if(!entry->index) return 0;
             particle=func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
             if(!particle) return 0;
-            if(entry->alternate) instance=D_8019A7F8;
+            if(entry->alternate) instance=(Instance *)D_8019A7F8;
             else instance=ANIM_OWNER_AS(Actor)->instance;
             {
                 int *source=instance->transforms[entry->index].position;

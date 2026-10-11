@@ -3,6 +3,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/asset_find.h"
+#include "room_m350_data.h"
 typedef RoomM350TableShadeEntry TableEntry;
 typedef RoomM350SoundOwner Owner;
 typedef struct {
@@ -18,8 +19,7 @@ typedef struct { int reserved[2]; Animation *animation; } Actor;
 
 typedef struct { short remaining, delay; } State;
 
-extern int D_800966EC[], D_8019A3C8[], D_8019A4DC[], D_8019A4E0[];
-extern short D_8019A7A0[];
+extern int D_800966EC[], D_8019A4DC[], D_8019A4E0[];
 
 int func_801944F0(int event, void **object)
 {
@@ -40,12 +40,12 @@ int func_801944F0(int event, void **object)
         vector[2] = counter * 128;
         vector[3] = 0;
         func_800D004C(*object, 320, 320, 16, (struct GteRotation *)vector, size, size,
-            (struct RenderColor *)D_8019A4DC, (struct RenderColor *)D_8019A3C8, entry->shade >> 5, 1);
+            (struct RenderColor *)D_8019A4DC, &D_8019A3C8, entry->shade >> 5, 1);
         {
             int nextCounter = D_800E27EC;
             size = nextCounter * 512 + 2048;
             func_800D0728(*object, 256, 512, 16, (struct GteRotation *)vector, size, size,
-                (struct RenderColor *)D_8019A3C8, (struct RenderColor *)D_8019A4E0,
+                &D_8019A3C8, (struct RenderColor *)D_8019A4E0,
                 (short)base[((unsigned int)(nextCounter - 1) << 8) & 0xF00] >> 5, 1);
         }
     }
@@ -80,7 +80,7 @@ int func_80194654(int event, State *state)
                 if (effect == 0) {
                     return 0;
                 }
-                *effect = D_8019A7A0;
+                *effect = &D_8019A7A0.x;
                 state->delay = 1;
                 state->remaining--;
                 Asset_Find08w(1479, ANIM_OWNER_AS(Actor)->animation->owner->soundMode,
