@@ -22,7 +22,7 @@ TaskNode *g_TaskNodeFreeListHead;
 u16 g_TaskNodeSeqCounter[1];
 TaskNode *g_TaskNodePool;
 TaskNode *D_8009D300;
-int *D_8009CE00;
+u32 *D_8009CE00;
 int g_SceneDataTable0;
 
 int Task_SpawnChildNode(int **args) {

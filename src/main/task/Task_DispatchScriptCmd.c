@@ -34,7 +34,7 @@ typedef struct TaskScriptArgs {
 extern FieldActor *D_8009D20C;
 extern u8 *D_8009D254[];
 /* COMMON supplies small-data metadata to MASPSX. */
-int D_8009CE00;
+u32 *D_8009CE00;
 TaskNode *D_8009D300;
 u8 g_ScriptCameraBytes[3] __asm__("D_8009CDF8");
 extern u32 D_800B0CD8[];
@@ -220,7 +220,7 @@ find_entity:
 cmd_c1c:
         status = Asset_LoadTimTextures(1);
         if (status == 1) {
-            D_8009CE00 -= 0x28;
+            D_8009CE00 -= 10;
             D_8009D300->active = status;
             return 0;
         }

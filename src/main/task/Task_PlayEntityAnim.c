@@ -11,7 +11,7 @@ extern FieldActor *D_8009D254[];
 extern Pe1GlobalSlot entity_control_load __asm__("D_8009D2E8");
 extern Pe1GlobalSlot entity_control_store __asm__("D_8009D2E8");
 /* COMMON supplies small-data metadata to MASPSX. */
-s16 *D_8009CE00;
+u32 *D_8009CE00;
 TaskNode *D_8009D300;
 extern RenderObjectEntity D_800B0CEC;
 
@@ -48,7 +48,7 @@ int Task_PlayEntityAnim(s16 **args) {
         }
     }
 
-    D_8009CE00 -= 6;
+    D_8009CE00 -= 3;
     D_8009D300->active = 1;
     return 0;
 }

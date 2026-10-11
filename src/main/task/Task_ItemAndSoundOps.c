@@ -220,7 +220,7 @@ typedef struct AkaoStackLocals {
 } AkaoStackLocals;
 
 extern u8 D_800944A8[];
-u8 *D_8009CE00;
+u32 *D_8009CE00;
 extern FieldActor *D_8009D20C;
 extern u8 *D_8009D254[];
 
@@ -298,7 +298,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         status = CD_SeekToTrack(*args->arg1, 1, 0, &locals.slot,
                                 *args->arg2 == 0);
         if (status == 1) {
-            D_8009CE00 -= 0x20;
+            D_8009CE00 -= 8;
             D_8009D300->active = status;
             return 0;
         }
@@ -313,7 +313,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         status = CD_SeekToTrack(*args->arg1, 1, 1, &locals.slot,
                                 *args->arg3 == 0);
         if (status == 1) {
-            D_8009CE00 -= 0x20;
+            D_8009CE00 -= 8;
             D_8009D300->active = status;
             return 0;
         }
@@ -336,7 +336,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         if (status != wait_one) {
             break;
         }
-        D_8009CE00 -= 0x20;
+        D_8009CE00 -= 8;
         D_8009D300->active = status;
         return 0;
     case 0xCC:
@@ -531,14 +531,14 @@ find_actor_asset:
         status = CD_SeekTrack1(*args->arg1, 1, 1, &locals.slot,
                                *args->arg2 == 0);
         if (status == 1) {
-            D_8009CE00 -= 0x20;
+            D_8009CE00 -= 8;
             D_8009D300->active = status;
             return 0;
         }
         goto store_audio_slot;
         }
 wait_for_cd:
-        D_8009CE00 -= 0x20;
+        D_8009CE00 -= 8;
         D_8009D300->active = status;
         return 0;
 store_audio_slot:

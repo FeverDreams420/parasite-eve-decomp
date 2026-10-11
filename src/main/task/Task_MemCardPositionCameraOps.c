@@ -172,7 +172,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, target1c) == 0x1C,
 #define S16_AT(ptr, off) (*(s16 *)((u8 *)(ptr) + (off)))
 
 /* COMMON supplies small-data metadata to MASPSX. */
-int *D_8009CE00;
+u32 *D_8009CE00;
 TaskNode *D_8009D300;
 TaskNode *g_TaskNodePool;
 

@@ -27,7 +27,7 @@ extern Pe1GlobalSlot CDDC_draw1 __asm__("D_8009CDDC");
 extern Pe1GlobalSlot CDDC_toggle1_load __asm__("D_8009CDDC");
 extern Pe1GlobalSlot CDDC_toggle1_store __asm__("D_8009CDDC");
 /* COMMON supplies small-data metadata to MASPSX. */
-int *D_8009CE00;
+u32 *D_8009CE00;
 TaskNode *D_8009D300;
 TaskNode *g_TaskNodePool;
 extern u32 D_800B89F8[];
@@ -50,7 +50,7 @@ int Task_SetGteMatrix(int **args) {
     int first_draw_slot;
     int second_draw_slot;
     int result;
-    int *script_ptr;
+    u32 *script_ptr;
     TaskNode *task_state;
     u32 flags;
 
