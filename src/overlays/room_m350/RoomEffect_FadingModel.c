@@ -3,8 +3,8 @@
 #include "pe1/render_object.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/psyq_gpu.h"
 
-extern int GetClut(int, int);
 
 typedef struct {
     short x, y, z, unused;

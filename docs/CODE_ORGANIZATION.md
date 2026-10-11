@@ -120,8 +120,8 @@ question, not a real conflict:
 `python3 tools/scripts/decl_conflicts.py --count` lists symbols declared more
 than once with different types (629 at the start of the header unification,
 232 after it, 99 after the battle pass, 65 after the small-data pass, 12
-after the actor and overlay view pass, 1 after the scalar view pass). The
-one left is listed under "Still open".
+after the actor and overlay view pass, 1 after the scalar view pass, 0 after
+`GetClut` took its header declaration).
 
 How the earlier groups were closed, for the next symbols of the same kind:
 
@@ -197,8 +197,6 @@ How the earlier groups were closed, for the next symbols of the same kind:
 
 Still open:
 
-- `GetClut`: `room_m350/RoomEffect_FadingModel.c` keeps its own `GetClut`,
-  `rsin` and `rcos` declarations while that file is being edited.
 - Translation units that cannot merge: `Entity_CollisionDatabase` with
   `Entity_UpdateList` (`-G8` against default) and
   `Render_EntityAndTexturedQuadFlow` with `Render_DrawObjectAndClut` (GPREL
