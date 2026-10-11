@@ -2,6 +2,7 @@
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 /* MASPSX_FORCE_G0: 1 */
 #include "pe1/battle_level_up.h"
+#include "pe1/game_state.h"
 
 /* COMMON supplies small-data metadata to MASPSX; the extern words stay
  * absolute. */
@@ -20,7 +21,7 @@ void Battle_StepLevelUp(void) {
     switch (step) {
     case 0:
         entity = D_8009D254;
-        if (((u16 *)&entity->animFrame)[1] != 0xA && (battle_step_flags_read[0] & 0x800) == 0) {
+        if ((u16)(entity->animFrame >> 16) != 0xA && (D_8009D1A0 & 0x800) == 0) {
             break;
         }
         {
@@ -45,13 +46,13 @@ void Battle_StepLevelUp(void) {
     case 2:
         entity = D_8009D254;
         if (entity->animLastFrame == entity->animPrev.parts.integer) {
-            flags = battle_step_flags_read[0];
+            flags = D_8009D1A0;
             if ((flags & 0x1800) == 0) {
                 Entity_SetActionMode(entity, 0x15);
             } else {
                 u32 cleared_flags;
                 cleared_flags = flags & -0x1801;
-                battle_step_flags_write[0] = cleared_flags;
+                D_8009D1A0 = cleared_flags;
                 Entity_SetActionMode(entity, 0x18);
             }
             D_8009CE74++;
@@ -62,7 +63,7 @@ void Battle_StepLevelUp(void) {
         if (CD_StepReadState(0) != 1) {
             Battle_SetupPlayerPalette();
             D_8009D28C = 9;
-            battle_step_game_word[0] &= 0xFFFF7FFF;
+            g_GameState.flags &= 0xFFFF7FFF;
         }
         break;
     }

@@ -11,9 +11,7 @@ extern u32 D_8009D304;
 extern u16 D_8009D21C;
 extern int D_8009D28C;
 
-extern u32 battle_step_flags_read[4] __asm__("D_8009D1A0");
-extern u32 battle_step_flags_write[4] __asm__("D_8009D1A0");
-extern u32 battle_step_game_word[4] __asm__("D_800B0CD8");
+extern u32 D_8009D1A0;
 
 void Pm_StopAllBoth(void);
 void Aya_SetTotalExp(u32 exp, u16 pe_bonus, void *rewards);

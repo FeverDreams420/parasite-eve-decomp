@@ -27,7 +27,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(AyaBattleState, action) == 0x68,
 extern AyaBattleState D_80010928;
 extern BattleStateTail D_80010998;
 
-extern AyaBattleState g_AyaBattleState __asm__("D_800B8A20");
-extern BattleStateTail g_SavedBattleStateTail __asm__("D_800B0CB0");
+extern AyaBattleState g_AyaBattleState;
+extern BattleStateTail g_SavedBattleStateTail;
 
 #endif /* PE1_BATTLE_SAVED_STATE_H */
