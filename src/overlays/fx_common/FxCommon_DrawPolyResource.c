@@ -671,7 +671,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
             quadLength = 9;
             quadAddressMask = 0xFFFFFF;
             quadLengthMask = 0xFF000000;
-            asm volatile(
+            asm(
                 ""
                 : "=r"(scratchpad), "=r"(quadLength), "=r"(quadAddressMask), "=r"(quadLengthMask)
                 : "0"(scratchpad), "1"(quadLength), "2"(quadAddressMask), "3"(quadLengthMask));
