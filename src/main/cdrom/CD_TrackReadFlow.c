@@ -194,63 +194,56 @@ int CD_FindNextDataSector(void)
     CdArchiveHeader *header = (CdArchiveHeader *)(base + ((CdArchiveRoot *)base)->directoryOffset);
     CdRange *ranges = (CdRange *)(base + (header->range_info & 0x3fffff));
 
+    /* Each state falls back to this dispatch until a read is pending (1)
+     * or the archive's ranges are exhausted (0). */
 dispatch:
     switch (state->cd_range_state) {
-        case 0:
-            D_8009CDCC = 0;
-            state->cd_range_state = 0x28;
-            goto dispatch;
-        case 0x28:
-        {
-            if (CD_ReadSectors(1, 1, 0, state->scene_load_scratch, 0x21, 0) == 1) return 1;
-            if (state->cd_range_read_mode >= 2) {
-                state->cd_range_state = 0x29;
-                return 1;
-            }
-            state->cd_range_state = 0x2a;
-            goto dispatch;
+    case 0:
+        D_8009CDCC = 0;
+        state->cd_range_state = 0x28;
+        break;
+    case 0x28:
+        if (CD_ReadSectors(1, 1, 0, state->scene_load_scratch, 0x21, 0) == 1) return 1;
+        if (state->cd_range_read_mode >= 2) {
+            state->cd_range_state = 0x29;
+            return 1;
         }
-        case 0x29:
-        {
-            if (CD_ReadSectors(1, state->cd_range_read_mode, 0, state->scene_load_scratch, 0x21, 0) == 1) return 1;
-            state->cd_range_state = 0x2a;
-            goto dispatch;
-        }
-        case 0x2a:
-        {
-            int index;
-            CdRange *entry;
-            int byte_offset;
-            index = D_8009CDCC;
-            if (index < (int)(header->range_info >> 22)) {
-                byte_offset = index * sizeof(CdRange);
-                entry = (CdRange *)(byte_offset + (u32)ranges);
-                if (entry->flags & 0x10) {
-                    if (entry->first >= 2) goto read_range;
-                }
+        state->cd_range_state = 0x2a;
+        break;
+    case 0x29:
+        if (CD_ReadSectors(1, state->cd_range_read_mode, 0, state->scene_load_scratch, 0x21, 0) == 1) return 1;
+        state->cd_range_state = 0x2a;
+        break;
+    case 0x2a:
+    {
+        int index = D_8009CDCC;
+        CdRange *entry;
+
+        if (index < (int)(header->range_info >> 22)) {
+            entry = (CdRange *)(index * sizeof(CdRange) + (u32)ranges);
+            if (!(entry->flags & 0x10) || entry->first < 2) {
                 D_8009CDCC = index + 1;
-                goto dispatch;
-read_range:
-                state->cd_range_state = 0x2b;
-                goto dispatch;
             } else {
-                state->cd_range_state = 0;
-                return 0;
+                state->cd_range_state = 0x2b;
             }
-        }
-        case 0x2b:
-        {
-            CdRange *entry = (CdRange *)(D_8009CDCC * sizeof(CdRange) + (u32)ranges);
-            if (CD_ReadSectors(3, entry->first, entry->last, state->scene_load_scratch, 0x21, 0) == 1) return 1;
-            {
-                state->cd_range_state = 0x2a;
-                D_8009CDCC = D_8009CDCC + 1;
-            }
-            goto dispatch;
-        }
-        default:
+        } else {
+            state->cd_range_state = 0;
             return 0;
+        }
+        break;
     }
+    case 0x2b:
+    {
+        CdRange *entry = (CdRange *)(D_8009CDCC * sizeof(CdRange) + (u32)ranges);
+        if (CD_ReadSectors(3, entry->first, entry->last, state->scene_load_scratch, 0x21, 0) == 1) return 1;
+        state->cd_range_state = 0x2a;
+        D_8009CDCC = D_8009CDCC + 1;
+        break;
+    }
+    default:
+        return 0;
+    }
+    goto dispatch;
 }
 
 void Akao_Cmd_F0(void);
