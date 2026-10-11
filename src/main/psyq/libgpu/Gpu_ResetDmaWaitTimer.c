@@ -5,6 +5,8 @@
 int SetIntrMask(int mask);
 
 extern unsigned int *g_GpuGp0Ptr;
+/* The status query reads and writes the GP0 port as device memory. */
+#define GPU_GP0_PORT (*(volatile unsigned int *)g_GpuGp0Ptr)
 extern unsigned int *g_GpuGp1Ptr;
 /* Queue indices can change asynchronously; preserve ordered status reads. */
 extern volatile u32 g_GpuDmaQueueHead;
@@ -70,10 +72,10 @@ int Gpu_QueryStatus(int arg0) {
     u32 status;
 
     *g_GpuGp1Ptr = 0x10000007;
-    status = *(volatile unsigned int *)g_GpuGp0Ptr & 0xFFFFFF;
+    status = GPU_GP0_PORT & 0xFFFFFF;
     if (status != 2) {
-        *(volatile unsigned int *)g_GpuGp0Ptr = (*g_GpuGp1Ptr & 0x3FFF) | 0xE1001000;
-        (void)*(volatile unsigned int *)g_GpuGp0Ptr;
+        GPU_GP0_PORT = (*g_GpuGp1Ptr & 0x3FFF) | 0xE1001000;
+        (void)GPU_GP0_PORT;
         return 0;
     }
     if ((arg0 & 8) == 0) {
