@@ -25,7 +25,7 @@ int func_80196C64(int event, void *object)
         s16 size;
         int paletteIndex;
         int sampleOffset;
-        int palette;
+        u16 palette;
         int frame;
         register int mode asm("$5");
         int clutX;
@@ -41,7 +41,7 @@ int func_80196C64(int event, void *object)
         D_800F3368.extent_y = unit;
         palette = D_800E2850[paletteIndex];
         /* Capture the palette before reading the animation frame. */
-        asm volatile("" : "=r"(palette) : "0"(palette) : "memory");
+        asm volatile("" : : "r"(palette));
         frame = D_800E27EC;
         clutX = 0;
         D_800F3368.palette = mode;
