@@ -122,7 +122,7 @@ int func_801992A0(int event,State *state)
                 ySource=(Instance *)actor->instance;
         asm volatile("" : : "r"(ySource));
         size=particle->size;
-        asm volatile("" : : "r"(size) : "memory");
+        asm volatile("" ::: "memory");
         sizeBits=(unsigned short)particle->size;
         particle->y=ySource->render_object.matrices[index].translation[1];
         asm volatile("" : : : "$2");
