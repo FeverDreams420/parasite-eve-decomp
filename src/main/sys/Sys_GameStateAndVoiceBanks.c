@@ -35,8 +35,8 @@ void Akao_StepVoiceTable(void) {
         g_RenderDrawEnvArray[g_ActiveDrawSlot].isbg = 0;
         g_RenderDrawEnvArray[g_ActiveDrawSlot].dfe = one;
         PutDrawEnv(&g_RenderDrawEnvArray[g_ActiveDrawSlot]);
-        DrawPrim(g_GameState.draw_prim_c);
-        DrawPrim(g_GameState.draw_prim_b);
+        DrawPrim(&g_GameState.fade_tpage);
+        DrawPrim(&g_GameState.fade_tile);
         g_RenderDrawEnvArray[g_ActiveDrawSlot].isbg = one;
         g_RenderDrawEnvArray[g_ActiveDrawSlot].dfe = 0;
         Akao_Cmd_99_9B_9D(0);
@@ -264,8 +264,8 @@ void Akao_ClearVoiceBank(void)
         *(u32 *)(p + 0x14) = 0;
     base[0xD9] = 8;
     base[0xD8] = 0;
-    *(s8 *)(base + 0xDB) = -1;
-    *(s8 *)(base + 0xDA) = -1;
+    ((Pe1GameState *)base)->scene_audio.tracks.banks[1] = -1;
+    ((Pe1GameState *)base)->scene_audio.tracks.banks[0] = -1;
     j = 0;
     secondMinusOne = -1;
     q = base;
@@ -288,9 +288,9 @@ void Akao_ClearVoiceBank(void)
     PE1_COMPILER_LAUNDER_AFTER_MEM(shortMinusOne, -1, base[0xE3]);
     base[0xE6] = 0x98;
     base[0xE2] = 0;
-    *(s16 *)(base + 0xE4) = shortMinusOne;
-    *(s8 *)(base + 0xE7) = -1;
-    *(s16 *)(base + 0xE8) = shortMinusOne;
+    ((Pe1GameState *)base)->scene_audio.tracks.movie_frame = shortMinusOne;
+    ((Pe1GameState *)base)->scene_audio.tracks.movie_index = -1;
+    ((Pe1GameState *)base)->pending_sample_bank = shortMinusOne;
     base[0xEB] = 0;
     base[0xEA] = 0;
     for (; pairOffset < 32; pairOffset += 8, pair++) {
@@ -307,8 +307,8 @@ void Akao_ClearVoiceBank(void)
     ((Pe1GameState *)base)->bank_value_fa = 0x800;
     base[0x107] = 3;
     base[0x10B] = 0x60;
-    *(u16 *)(base + 0x110) = 0x140;
-    *(u16 *)(base + 0x112) = 0xE0;
+    ((Pe1GameState *)base)->fade_tile.w = 0x140;
+    ((Pe1GameState *)base)->fade_tile.h = 0xE0;
     base[0x117] = 1;
     PE1_COMPILER_MEMORY_BARRIER();
     flags = base[0x10B];
@@ -328,12 +328,12 @@ void Akao_ClearVoiceBank(void)
     base[0xF4] = 0;
     base[0xF2] = 0;
     base[0xF4] = 0;
-    *(u16 *)(base + 0x10C) = 0;
-    *(u16 *)(base + 0x10E) = 0;
-    *(u32 *)(base + 0x118) = drawMode;
-    *(u32 *)(base + 0x11C) = 0;
-    *(u32 *)(base + 0x120) = 0;
-    *(u32 *)(base + 0x124) = 0;
+    ((Pe1GameState *)base)->fade_tile.x = 0;
+    ((Pe1GameState *)base)->fade_tile.y = 0;
+    ((Pe1GameState *)base)->fade_tpage.mode = drawMode;
+    ((Pe1GameState *)base)->scene_object_model = 0;
+    ((Pe1GameState *)base)->room_geometry_table = 0;
+    ((Pe1GameState *)base)->bank_asset_table = 0;
     base[0x10B] = flags | 2;
     ((Pe1GameState *)base)->bank_work_base = voiceBase;
     ((Pe1GameState *)base)->bank_work_end = voiceBase + 0x1400;
@@ -342,7 +342,7 @@ void Akao_ClearVoiceBank(void)
         *(u32 *)(tailPtr + 0x134) = 0;
     for (i = 1, tailPtr2 = base + 4; i >= 0; i--, tailPtr2 -= 4)
         *(u32 *)(tailPtr2 + 0x140) = 0;
-    *(u32 *)(base + 0x148) = 0;
+    ((Pe1GameState *)base)->startup_resource_blob = 0;
 }
 
 extern char D_800F34F8[];

@@ -26,9 +26,27 @@ typedef union Pe1SceneAudioState {
         Pe1S8 banks[2];
         Pe1S8 keys[2][2];
         Pe1S8 pending_key, pending_bank; /* 0xE0, 0xE1 in game state */
-        Pe1U8 trailing[6];
+        /* Movie playback state (menu_memcard video player). */
+        Pe1U8 movie_active;      /* 0xE2: frame countdown while playing */
+        Pe1S8 movie_wide;        /* 0xE3: wide-screen movie flag */
+        short movie_frame;       /* 0xE4 */
+        Pe1U8 movie_volume;      /* 0xE6: fade scale, reset to 0x98 */
+        Pe1S8 movie_index;       /* 0xE7 */
     } tracks;
 } Pe1SceneAudioState;
+
+/* Full-screen fade primitive pair drawn by the end-of-frame pass. */
+typedef struct Pe1FadeTile {
+    Pe1U32 tag;
+    Pe1U8 r, g, b, code;
+    short x, y;
+    unsigned short w, h;
+} Pe1FadeTile;
+
+typedef struct Pe1FadeTpage {
+    Pe1U32 tag;
+    Pe1U32 mode;
+} Pe1FadeTpage;
 
 typedef struct Pe1GameState {
     Pe1U32 flags;                    /* 0x000 */
@@ -66,8 +84,8 @@ typedef struct Pe1GameState {
     Pe1U8 transition_volume;        /* 0x0FE */
     Pe1U8 unk_0ff;
     Pe1U32 pe_image_base_lba;        /* 0x100: g_PeImageBaseLba */
-    Pe1U8 draw_prim_b[0x10];         /* 0x104 */
-    Pe1U8 draw_prim_c[8];            /* 0x114 */
+    Pe1FadeTile fade_tile;           /* 0x104: full-screen fade TILE */
+    Pe1FadeTpage fade_tpage;         /* 0x114: draw mode for the fade tile */
     RenderObjectHeader *scene_object_model;        /* 0x11C */
     void *room_geometry_table;       /* 0x120: key 0xCAAD0704 */
     void *bank_asset_table;           /* 0x124: resolved bank asset table */
