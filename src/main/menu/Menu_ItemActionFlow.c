@@ -134,20 +134,20 @@ int Menu_InventoryItemHandler(MenuWidgetNode *arg0, int arg1) {
 
 /* Also inlined into Menu_OpenItemList, which follows in this unit. */
 inline void Menu_CreateItemActionSubmenu(void) {
-    void *node;
-    void *child;
+    MenuWidgetNode *node;
+    MenuWidgetNode *child;
 
     node = MenuWidget_CreateSimpleNode(4, MenuWidget_GetCurrentNode(), 0, 1);
     child = MenuWidget_CreateNode(4, node, node);
-    *(void **)((char *)node + 0x30) = Menu_DrawItemActionSubmenu;
-    *(void **)((char *)node + 0x2C) = Menu_StepSkillSelect;
-    *(void **)((char *)child + 0x30) = Menu_DrawActionOptionList;
+    node->draw = Menu_DrawItemActionSubmenu;
+    node->update = Menu_StepSkillSelect;
+    child->draw = Menu_DrawActionOptionList;
     g_MenuActionTextBase = 5;
     MenuWidget_SetCurrentNode(child);
 
     if (g_MenuSelectedItemIndex & 1) {
-        *(int *)((char *)node + 0x38) -= 0x1C;
-        *(int *)((char *)child + 0x1C) -= 0x1C;
+        node->visible_rows -= 0x1C;
+        child->y -= 0x1C;
     }
 }
 

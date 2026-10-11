@@ -7,6 +7,7 @@
 #include "pe1/textbox.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/menu_flags.h"
+#include "pe1/render_prim.h"
 
 /* Each textbox entry is 0x38 bytes; preserve the retail field addresses. */
 extern u8 D_800BCEA8[];
@@ -135,10 +136,10 @@ void Render_SetupFogLayer(void *source) {
             payload[4] = two;
             payload[5] = two;
             payload[6] = two;
-            *(u16 *)(payload + 0xC) = 0x140;
-            *(u16 *)(payload + 0xE) = 0x36;
-            *(u16 *)(payload + 8) = 0;
-            *(u16 *)(payload + 0xA) = 0xAA;
+            ((RenderColorTilePacket *)payload)->w = 0x140;
+            ((RenderColorTilePacket *)payload)->h = 0x36;
+            ((RenderColorTilePacket *)payload)->x0 = 0;
+            ((RenderColorTilePacket *)payload)->y0 = 0xAA;
             SetSemiTrans(payload, dither_enabled);
         }
     }

@@ -259,8 +259,8 @@ void Battle_DrawSpellName(void) {
             t3 = cC * 0x118;
             tE = *(u16 *)(D_8009E360 + cC * 0x30);
             t3 = t3 + (s32)q508;
-            *(s16 *)((u8 *)t3 + 0xA) = ys;
-            *(s16 *)((u8 *)t3 + 8) = tE + 0x3C;
+            ((RenderSpritePacket *)t3)->y = ys;
+            ((RenderSpritePacket *)t3)->x = tE + 0x3C;
             clut = GetClut(r130, rFD);
         }
         {
@@ -355,8 +355,8 @@ void Battle_DrawSpellName(void) {
                 a2v = t2 + a2v;
                 t2 = t2 + j7;
                 t2 = t2 + (s32)e508;
-                *(s16 *)((u8 *)t2 + 8) = xs;
-                *(s16 *)((u8 *)t2 + 0xA) = ys;
+                ((RenderSpritePacket *)t2)->x = xs;
+                ((RenderSpritePacket *)t2)->y = ys;
                 xs -= 6;
                 AddPrim(g_OtBufferTable[cJ] + 0x10, (void *)a2v);
             }
@@ -410,10 +410,10 @@ void Battle_DrawStatusSymbol(s8 which) {
     slot = D_8009CDDC;
     packetOffset = slot * 28;
     packet = packetBase + packetOffset;
-    *(u16 *)(packet + 16) = b[0];
-    *(u16 *)(packet + 18) = b[1];
-    *(u16 *)(packet + 8) = *(u16 *)(D_8009E360 + slot * 48) + c[0];
-    *(u16 *)(packet + 10) = *(u16 *)(D_8009E360 + slot * 48 + 2) + c[1];
+    ((RenderSpritePacket *)packet)->width = b[0];
+    ((RenderSpritePacket *)packet)->height = b[1];
+    ((RenderSpritePacket *)packet)->x = *(u16 *)(D_8009E360 + slot * 48) + c[0];
+    ((RenderSpritePacket *)packet)->y = *(u16 *)(D_8009E360 + slot * 48 + 2) + c[1];
     packetBase -= 8;
     AddPrim((u8 *)D_800B0E38.ordering[slot] + 16, packetBase + packetOffset);
 }
