@@ -88,7 +88,7 @@ int func_80193CB8(int mode,ThresholdTripleEffect *effect) {
         if(frame>=32) return 1;
         frame*=32;
         index=frame&0xFFF;
-        asm("" : "=r"(index) : "0"(index) : "$6");
+        asm("" : : "r"(index) : "$6");
         table=(int *)D_800966EC;
         wave=&table[index];
         shifted=&table[(frame+1024)&0xFFF];
