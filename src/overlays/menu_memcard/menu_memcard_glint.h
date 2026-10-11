@@ -4,6 +4,7 @@
 #include "pe1/room_spark.h"
 #include "pe1/gte.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/field_engine_calls.h"
 
 /* Scene object reached through the primary channel pool. */
 typedef struct MemcardGlintAnchor {
@@ -76,7 +77,6 @@ typedef struct MemcardFlashOffset {
 
 extern MemcardFlashOffset D_801ED818, D_801ED820, D_801ED828, D_801ED830;
 extern RenderColor D_801ED838, D_801ED83C, D_801ED840;
-extern void func_800CE8F0(void *pool, int index, void *offset, void *position);
 extern u8 *D_800E22D4;
 extern void func_8006DDCC(int sound, int mode, int x, int y, int z);
 extern u8 D_801F1CB0[];

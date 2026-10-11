@@ -28,17 +28,17 @@ int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
         D_801F1F38 = 0;
         tipA.x *= -1;
         tipB.x *= -1;
-        func_800CE8F0(D_8009D254, 8, &hand, &from);
-        func_800CE8F0(D_8009D254, 8, &tipA, &to);
+        FieldEng_TransformMatrixPoint(D_8009D254, 8, &hand, &from);
+        FieldEng_TransformMatrixPoint(D_8009D254, 8, &tipA, &to);
         func_800D1384(&from, &to, 0x3F0, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailA, 1);
-        func_800CE8F0(D_8009D254, 8, &tipB, &from);
+        FieldEng_TransformMatrixPoint(D_8009D254, 8, &tipB, &from);
         func_800D1384(&from, &to, 0x3F2, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailC, 1);
         tipA.x *= -1;
         tipB.x *= -1;
-        func_800CE8F0(D_8009D254, 21, &hand, &from);
-        func_800CE8F0(D_8009D254, 21, &tipA, &to);
+        FieldEng_TransformMatrixPoint(D_8009D254, 21, &hand, &from);
+        FieldEng_TransformMatrixPoint(D_8009D254, 21, &tipA, &to);
         func_800D1384(&from, &to, 0x3F0, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailB, 1);
-        func_800CE8F0(D_8009D254, 21, &tipB, &from);
+        FieldEng_TransformMatrixPoint(D_8009D254, 21, &tipB, &from);
         func_800D1384(&from, &to, 0x3F2, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailD, 1);
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 36,
                              (FieldAnimCallbackListCallback)Memcard_RisingEmberParticle);
@@ -48,7 +48,7 @@ int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
         if (D_801F1F38 == 0) {
             int phase = (s16)flash->timer % 3;
             if (phase == 0) {
-                func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, flash->attachA, &center, &from);
+                FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, flash->attachA, &center, &from);
                 child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = from.x;
@@ -58,7 +58,7 @@ int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
                     child->timer = 0;
                 }
             } else if (phase == 2) {
-                func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, flash->attachB, &center, &from);
+                FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, flash->attachB, &center, &from);
                 child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = from.x;
@@ -71,7 +71,7 @@ int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
             if (flash->timer & 1) index = 8;
             else index = 21;
             hand.z = -(func_80071A54() & 0x1FF);
-            func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, index, &hand, &from);
+            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, index, &hand, &from);
             child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (child) {
                 child->x = from.x;
@@ -123,7 +123,7 @@ int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
         {
             int kind;
             int palette;
-            func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, flash->attachA, &center, &from);
+            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, flash->attachA, &center, &from);
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
@@ -133,7 +133,7 @@ int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
         {
             int kind;
             int palette;
-            func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, flash->attachB, &center, &from);
+            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, flash->attachB, &center, &from);
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
@@ -142,17 +142,17 @@ int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
         }
         tipA.x *= -1;
         tipB.x *= -1;
-        func_800CE8F0(D_8009D254, 8, &hand, &from);
-        func_800CE8F0(D_8009D254, 8, &tipA, &to);
+        FieldEng_TransformMatrixPoint(D_8009D254, 8, &hand, &from);
+        FieldEng_TransformMatrixPoint(D_8009D254, 8, &tipA, &to);
         func_800D1384(&from, &to, 8, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailA, 1);
-        func_800CE8F0(D_8009D254, 8, &tipB, &from);
+        FieldEng_TransformMatrixPoint(D_8009D254, 8, &tipB, &from);
         func_800D1384(&from, &to, 10, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailC, 1);
         tipA.x *= -1;
         tipB.x *= -1;
-        func_800CE8F0(D_8009D254, 21, &hand, &from);
-        func_800CE8F0(D_8009D254, 21, &tipA, &to);
+        FieldEng_TransformMatrixPoint(D_8009D254, 21, &hand, &from);
+        FieldEng_TransformMatrixPoint(D_8009D254, 21, &tipA, &to);
         func_800D1384(&from, &to, 8, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailB, 1);
-        func_800CE8F0(D_8009D254, 21, &tipB, &from);
+        FieldEng_TransformMatrixPoint(D_8009D254, 21, &tipB, &from);
         func_800D1384(&from, &to, 10, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailD, 1);
         D_800F3368.depth = 16;
         break;

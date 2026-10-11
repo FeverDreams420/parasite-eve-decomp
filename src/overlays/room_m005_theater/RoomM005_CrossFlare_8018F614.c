@@ -40,7 +40,7 @@ int func_8018F614(int mode) {
         break;
     case 2:
         D_800F3368.depth = 0x40;
-        func_800CE8F0(ANIM_OWNER_AS(RoomM005Channel)->pool, 9, &inner, &position);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM005Channel)->pool, 9, &inner, &position);
         if (D_800E27EC < 35) {
             D_800F3368.parameter00 = 0x20;
             D_800F3368.parameter02 = 2;
@@ -73,7 +73,7 @@ int func_8018F614(int mode) {
             }
         }
         D_800F3368.depth = 0x18;
-        func_800CE8F0(ANIM_OWNER_AS(RoomM005Channel)->pool, 0x14, &outer, &position);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM005Channel)->pool, 0x14, &outer, &position);
         if (D_800E27EC < 35) {
             step = D_800E27EC - 18;
             if ((unsigned int)step < 17) {

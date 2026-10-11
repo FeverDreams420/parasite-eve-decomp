@@ -58,7 +58,7 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x18,
                              (FieldAnimCallbackListCallback)RoomEffect_LineBurstParticle);
     case 1:
-        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0x13, &template, state);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0x13, &template, state);
         func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0,
                       (GteShortVector *)target);
         angle = -target[1] + 0x400;
@@ -102,7 +102,7 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
                 }
                 angle += 0x200;
             }
-            if (func_8001CAB0(state->px << 16, state->pz << 16, D_8009D248,
+            if (Geo_PointInPoly(state->px << 16, state->pz << 16, D_8009D248,
                               D_8009D1CC)) {
                 break;
             }

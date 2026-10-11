@@ -84,7 +84,7 @@ s32 func_801940B0(int mode, void *effect) {
             state->frame = 0;
             state->kind = 1U;
             state->ending = 0;
-            func_800CE8F0(D_800F32D0->actor, 2, &initialRotation, state);
+            FieldEng_TransformMatrixPoint(D_800F32D0->actor, 2, &initialRotation, state);
             func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->actor, 0,
                           (GteShortVector *)&angles.x);
             historyCount = 16;
@@ -122,7 +122,7 @@ s32 func_801940B0(int mode, void *effect) {
             state->frame = (s16) ((u16) state->frame + 1);
             history = (state->index * 0x88) + D_80195EFC;
             func_800CE870((char *)g_PlayerEntity, 1, &delta.x);
-            func_800CFAA8(state, &delta.x, &angles.x);
+            FieldEng_CalculateLookAngles(state, &delta.x, &angles.x);
             ending = state->ending;
             if (ending == 0) {
                 if (state->speed >= 0x1B) {

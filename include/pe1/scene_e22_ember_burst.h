@@ -15,6 +15,7 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/akao_send.h"
 #include "pe1/asset_find.h"
+#include "pe1/field_engine_calls.h"
 
 /* Ember controllers (scene_e22): ride the room actor, wake the scene
  * object's status byte, spray ember drift particles and draw a halo and a
@@ -100,7 +101,6 @@ extern GteShortVector D_8018F1E0;
 extern RenderColor D_8018F1E8;
 extern RenderColor D_8018F1EC;
 extern RenderColor D_8018F1F0;
-extern void func_800CE8F0(void *pool, int index, void *offset, void *position);
 extern int func_801931B8(int mode, RoomOrbitTrailParticle *p);
 
 /* Swirl ring controller (func_80195B40): rides an actor joint, swells a

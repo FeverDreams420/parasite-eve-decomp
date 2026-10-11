@@ -27,7 +27,7 @@ int func_801934AC(int mode, u16 *counter) {
                          (FieldAnimCallbackListCallback)func_80192844);
     case 1:
     pool = ANIM_OWNER_AS(RoomOrbitPairChannel)->pool;
-    func_800CE8F0(pool, 4, &template, position);
+    FieldEng_TransformMatrixPoint(pool, 4, &template, position);
     pool = ANIM_OWNER_AS(RoomOrbitPairChannel)->pool;
     func_800CE9D4((struct RoomFxTransformOwner *)pool, 4, (GteShortVector *)target);
     target[0] -= 0xDC;

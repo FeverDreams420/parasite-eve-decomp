@@ -100,7 +100,7 @@ int RoomEffect_SoundBurstController(int mode, RoomSoundBurstState *state) {
         state->frame++;
         if (D_800E27EC < 0x47) {
             pool = ANIM_OWNER_AS(RoomSoundBurstChannel)->pool;
-            func_800CE8F0(pool, 9, &template, position);
+            FieldEng_TransformMatrixPoint(pool, 9, &template, position);
             angle = rsin((D_800E27EC << 11) / 70) / 32;
             if (D_800E27EC % 3 == 0) {
                 pool = ANIM_POOL_AS(RoomSoundBurstChannel)->pool;

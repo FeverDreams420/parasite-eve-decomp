@@ -18,7 +18,7 @@ int func_801960C4(int mode, SceneHomingBurst *burst)
 
     switch (mode) {
     case 0:
-        func_800CE8F0(ANIM_OWNER_AS(SceneHomingBurstChannel)->pool, 0, &rotation, &burst->position);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneHomingBurstChannel)->pool, 0, &rotation, &burst->position);
         burst->timer = 0;
         burst->released = 0;
         if (ANIM_TASK_AS(SceneHomingBurstEvent)->active) {

@@ -62,7 +62,7 @@ int func_80192540(int mode, RoomM404Drop *drop) {
                 ANIM_TASK_AS(RoomM404DropEvent)->active) {
                 ROOM_M404_DROP_FLASH(0x3D000000);
             }
-            if (func_8001CAB0(drop->x << 16, drop->z << 16, D_8009D248, D_8009D1CC) == 0) return 1;
+            if (Geo_PointInPoly(drop->x << 16, drop->z << 16, D_8009D248, D_8009D1CC) == 0) return 1;
             break;
         case 1:
             drop->timer++;
@@ -87,7 +87,7 @@ int func_80192540(int mode, RoomM404Drop *drop) {
             if (func_800C6B90(drop, 0x6E) && ANIM_TASK_AS(RoomM404DropEvent)->active) {
                 ROOM_M404_DROP_FLASH(0x19000000);
             }
-            if (func_8001CAB0(drop->x << 16, drop->z << 16, D_8009D248, D_8009D1CC) == 0) return 1;
+            if (Geo_PointInPoly(drop->x << 16, drop->z << 16, D_8009D248, D_8009D1CC) == 0) return 1;
             if (drop->timer >= 0x20) return 1;
             break;
         case 2:

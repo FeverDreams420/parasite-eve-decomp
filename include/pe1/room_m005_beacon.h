@@ -18,6 +18,7 @@
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/asset_find.h"
+#include "pe1/field_engine_calls.h"
 
 /* room_m005 joint beacon (func_8018FDC4): follows joint 0x14 of the actor,
  * sheds drifting sprites, swells and shrinks, tags the player on contact and
@@ -94,7 +95,6 @@ extern GteShortVector D_80190BA8;
 extern u16 D_800E11EA;
 
 void func_800C70EC(u8 *data, int r, int g, int b);
-void func_800CE8F0(void *pool, int index, void *offset, void *position);
 int func_800CEB8C(void *position, GteShortVector *target, int radius);
 int func_80071A54(void);
 

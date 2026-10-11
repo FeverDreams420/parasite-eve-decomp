@@ -6,12 +6,12 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/field_engine_calls.h"
 
 extern GteShortVector D_8018F1F8;
 extern GteShortVector D_8018F1CC;
 extern char D_80195624[];
 extern u16 D_800E11E8;
-extern void func_800CE8F0(void *, int, void *, void *);
 extern int func_80071A54(void);
 
 int func_80194F68(int mode, RoomM123Wave *wave) {
@@ -58,7 +58,7 @@ int func_80195114(int mode, RoomM123Burst *burst, int *choice) {
     switch (mode) {
     case 0:
         value = *choice ? 34 : 40;
-        func_800CE8F0(ANIM_OWNER_AS(RoomM123Pool)->pool, value, &position, &burst->x);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, value, &position, &burst->x);
         burst->frame = 0;
         burst->phase = 0;
         func_800D3F64(0x581, func_800D3FD8());

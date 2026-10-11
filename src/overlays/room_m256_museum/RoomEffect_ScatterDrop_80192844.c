@@ -84,7 +84,7 @@ int func_80192844(int mode, RoomM256Drop *drop) {
                 }
             }
             ROOM_M256_DROP_FLASH(0x19A);
-            if (func_8001CAB0(drop->x << 16, drop->z << 16, D_8009D248, D_8009D1CC) == 0) return 1;
+            if (Geo_PointInPoly(drop->x << 16, drop->z << 16, D_8009D248, D_8009D1CC) == 0) return 1;
             if (drop->timer >= 0x20) return 1;
             break;
         case 1:
@@ -95,7 +95,7 @@ int func_80192844(int mode, RoomM256Drop *drop) {
             drop->x += (func_80071A54() & 0x1F) - 0x10;
             drop->z += (func_80071A54() & 0x1F) - 0x10;
             ROOM_M256_DROP_FLASH(0x26C);
-            if (func_8001CAB0(drop->x << 16, drop->z << 16, D_8009D248, D_8009D1CC) == 0) return 1;
+            if (Geo_PointInPoly(drop->x << 16, drop->z << 16, D_8009D248, D_8009D1CC) == 0) return 1;
             if (drop->timer >= 0x20) return 1;
             break;
         case 2:

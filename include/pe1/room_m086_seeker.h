@@ -17,6 +17,7 @@
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/asset_find.h"
+#include "pe1/field_engine_calls.h"
 
 /* room_m086 falling seeker (func_8018F004): a turning model that flies
  * along its heading until it lands, bursts on the player (flagging the
@@ -68,7 +69,6 @@ extern RoomM086BattleEntity *D_8009D254;
 extern u8 *D_80190B84;
 extern u16 D_800E11E8;
 extern u16 D_800E11EA;
-int func_800C6B90(void *position, int radius);
 
 /* room_m086 seeker controller (func_8018F734): follows joint 7 of the
  * actor, drifts and falls, then bursts into three seeker rings. */
@@ -102,8 +102,6 @@ extern u8 *D_80190B88;
 extern u16 D_800E1208;
 
 int func_8018F004(int mode, RoomM086Seeker *seeker, RoomM086SeekerParams *params);
-void func_800CE8F0(void *owner, int joint, RoomM086Offset *offset, void *out);
-void func_800CEAE8(void *bone, RoomM086Offset *offset, void *out);
 int func_80071A54(void);
 
 #endif

@@ -16,6 +16,7 @@
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/asset_find.h"
+#include "pe1/field_engine_calls.h"
 
 /* room_m123 joint beacon (func_80193618): follows joint 0x17 of the actor,
  * swells, pulses and fades, tags the player once on contact, and draws a glow
@@ -87,7 +88,6 @@ extern u16 D_800E11EA;
 
 void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y, int texture,
                    int clut, int page, int intensity, int unused, int angle);
-void func_800CE8F0(void *pool, int index, void *offset, void *position);
 int func_800CEB8C(void *position, GteShortVector *target, int radius);
 GteMatrix *MulMatrix0(GteMatrix *first, GteMatrix *second, GteMatrix *out);
 

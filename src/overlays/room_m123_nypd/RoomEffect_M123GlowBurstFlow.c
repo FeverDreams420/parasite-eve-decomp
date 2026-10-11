@@ -102,7 +102,7 @@ int func_80192F0C(int mode, RoomM123GlowBurst *burst) {
         D_800F3368.parameter06 = 1;
         D_800F3368.parameter0A = 0;
         D_800F3368.depth = 0x32;
-        func_800CE8F0(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x17, &template, &position);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x17, &template, &position);
         rotation.x = 0;
         rotation.y = 0;
         rotation.z = -D_800E27EC << 6;

@@ -61,7 +61,7 @@ extern unsigned char D_8019AEF8;
 extern Vector D_8019AE9C[];
 extern void *D_8019AE80;
 extern int func_8019A398(),func_8019A4CC();
-extern void func_800CE688(void *);
+extern int func_800CE688(void *);
 
 int func_801960F4(int mode) {
     /* Layout only: purpose of these eight original frame bytes is unknown. */

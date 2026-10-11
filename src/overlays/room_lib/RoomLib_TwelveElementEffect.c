@@ -15,6 +15,7 @@
 #include "pe1/room_floor.h"
 #include "pe1/floor_polygon.h"
 #include "pe1/psyq_libc.h"
+#include "pe1/field_engine_calls.h"
 
 /* Seeds copied into the stack frames; file-scope so the all-zero rotation
  * stays a rodata copy. */
@@ -186,7 +187,6 @@ typedef struct RoomTwelveEffectDrawStack {
 } RoomTwelveEffectDrawStack;
 
 void ApplyMatrix(RoomSpriteMatrix *matrix, void *position, int *translation);
-int func_8001CAB0(int x, int z, int arg2, int arg3);
 int func_800C61A8(GteShortVector *point, GteMatrix *matrix);
 
 extern char *D_8009D254;
@@ -283,7 +283,7 @@ void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
             stack.collision[0] = stack.secondaryMatrix.t[0];
             stack.collision[1] = 0;
             stack.collision[2] = stack.secondaryMatrix.t[2];
-            if (func_8001CAB0(stack.secondaryMatrix.t[0] << 16,
+            if (Geo_PointInPoly(stack.secondaryMatrix.t[0] << 16,
                               stack.secondaryMatrix.t[2] << 16,
                               D_8009D248, D_8009D1CC) == 0) {
                 ((RoomLibTick12Rec *)element)->state[0] = -1;

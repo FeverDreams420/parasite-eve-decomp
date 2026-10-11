@@ -16,6 +16,7 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/akao_send.h"
 #include "pe1/asset_find.h"
+#include "pe1/field_engine_calls.h"
 
 /* Room spark particles: damped velocity, gravity and a floor bounce against
  * the frame-count driven floor height. */
@@ -46,10 +47,8 @@ extern int func_80071A54(void);
 /* Heading helpers and the trail history: turn the angles towards a target,
  * record a position into a history of points and draw the history as a
  * ribbon. */
-extern void func_800CFAA8(void *from, void *to, void *angles);
 extern void func_800D3AFC(void *history, int count, void *position, int reset);
 /* Rotates an offset by a bone's matrix. */
-extern void func_800CEAE8(void *bone, s16 *offset, s16 *out);
 /* Fades a colour layer record in or out. */
 extern void func_800CF4B4(int kind, int value, void *layer);
 
@@ -103,7 +102,6 @@ typedef struct RoomPhasedSpark {
 
 PE1_STATIC_ASSERT(sizeof(RoomPhasedSpark) == 0x18, room_phased_spark_size);
 
-extern void func_800CE8F0(void *pool, int index, void *rotation, void *position);
 
 /* Comet spark: a damped spark that carries two steering rotations. */
 typedef struct RoomCometSpark {
@@ -164,9 +162,7 @@ typedef struct RoomSparkBattleEntity {
 } RoomSparkBattleEntity;
 
 extern RoomSparkBattleEntity *D_8009D254;
-/* Walkable floor polygons and their count, for func_8001CAB0. */
-extern int func_8001CAB0(int x, int z, void *map, int flags);
-extern int func_800C6B90(void *position, int radius);
+/* Walkable floor polygons and their count, for Geo_PointInPoly. */
 
 /* Bouncing spark: the damped spark layout with a rise acceleration in the
  * word the damped spark leaves reserved. */

@@ -122,7 +122,7 @@ int func_80193BFC(int mode, s16 *counter) {
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x20,
                              (FieldAnimCallbackListCallback)func_8019377C);
     case 1:
-        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &template, &position);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &template, &position);
         func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &base);
         if (D_800E27EC < 0x6F) {
             child = (RoomM256SwirlSpark *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);

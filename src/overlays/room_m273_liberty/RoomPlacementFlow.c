@@ -4,12 +4,12 @@
 #include "room_m273.h"
 #include "pe1/floor_polygon.h"
 #include "pe1/field_collision.h"
+#include "pe1/field_engine_calls.h"
 
 extern FieldActor *g_PlayerEntity;
 extern void **D_8009D254;
 void func_80020CE4(void);
 
-int func_8001CAB0(int x, int z, int *script, u16 mode);
 
 void func_80192C00(RoomPlacementOwner *owner, RoomPlacementState *state) {
     register FieldActor *player asm("$4") = g_PlayerEntity;
@@ -22,7 +22,7 @@ void func_80192C00(RoomPlacementOwner *owner, RoomPlacementState *state) {
     player->render_object.flags_9C &= ~0x400;
 
     placement = owner->map;
-    if (func_8001CAB0(placement->x << 16, placement->z << 16,
+    if (Geo_PointInPoly(placement->x << 16, placement->z << 16,
                       script, D_8009D1CC)) {
         g_PlayerEntity->pos_x = owner->map->x << 16;
         g_PlayerEntity->pos_z = owner->map->z << 16;

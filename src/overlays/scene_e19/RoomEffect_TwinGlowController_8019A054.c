@@ -65,8 +65,8 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
-        func_800CE8F0(ANIM_OWNER_AS(SceneTwinGlowChannel)->pool, glow->jointA, &offset, &jointA);
-        func_800CE8F0(ANIM_OWNER_AS(SceneTwinGlowChannel)->pool, glow->jointB, &offset, &jointB);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneTwinGlowChannel)->pool, glow->jointA, &offset, &jointA);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneTwinGlowChannel)->pool, glow->jointB, &offset, &jointB);
         D_800F3368.parameter00 = 0x40;
         D_800F3368.parameter02 = 4;
         D_800F3368.extent_x = 0x40;

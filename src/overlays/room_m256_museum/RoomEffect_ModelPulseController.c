@@ -60,7 +60,7 @@ int func_80195728(int mode, s16 *state) {
             D_800F3368.parameter0A = 0;
             D_800F3368.depth = 0x18;
         }
-        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 2, &rotation, &position);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 2, &rotation, &position);
         spin.x = 0;
         spin.y = 0;
         spin.flags = 0;

@@ -121,7 +121,7 @@ void func_8018F344(GteMatrix *out, GteShortVector *eye,
                    GteShortVector *target, GteVector *up);
 void func_80086FF8(void);
 void func_80087024(void);
-void func_80038D48(void);
+int func_80038D48(void);
 s16 func_801958D4(s16 resourceId, u8 action);
 void func_80195BC8(FxCommonShortVec3 *a, FxCommonShortVec3 *b, int bi, int ai);
 void func_80195D3C(void);

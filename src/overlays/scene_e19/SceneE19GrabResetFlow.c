@@ -131,7 +131,6 @@ extern u32 SceneE19FlagsWord asm("D_800BCF88");
 extern char *D_8009D254;
 
 s32 func_8001AA78();
-s32 func_80020CE4();
 
 void func_80192B10(void *arg0, unsigned char *state) {
     {

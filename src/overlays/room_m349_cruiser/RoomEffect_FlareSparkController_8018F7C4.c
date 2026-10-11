@@ -111,7 +111,7 @@ int func_8018F7C4(int mode, RoomM349FlareTarget *target,
         }
         size = 0x2AA;
         phase = (func_80071A54() & 0x1F) + 0x20;
-        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 13, &rotation, &anchor);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 13, &rotation, &anchor);
         {
             u16 clut;
             int kind;
@@ -124,7 +124,7 @@ int func_8018F7C4(int mode, RoomM349FlareTarget *target,
                           (s16)D_800F3368.parameter02 + 0xD8, clut, 1, phase,
                           &color);
         }
-        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 13, &rotation2, &anchor);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 13, &rotation2, &anchor);
         {
             u16 clut;
             int kind;

@@ -6,6 +6,7 @@
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/gte_types.h"
+#include "pe1/field_engine_calls.h"
 
 /* Bouncing glint particle callback for the room_m086 controller: mode 1
  * moves it (drift, then fall and bounce), mode 2 draws it. Both draws read
@@ -126,7 +127,6 @@ typedef RoomFxSeed8 RoomM086Blob8;
 
 extern char D_8018EFF4[];
 
-void func_800CE8F0(void *arg0, s32 arg1, void *arg2, void *arg3);
 s32 func_80071A54(void);
 
 #define COPY_POS(dst, src) \
@@ -158,7 +158,7 @@ s32 func_80190574(s32 mode, RoomBounceGlint *ent) {
         goto ret0;
 
     mode0:
-        func_800CE8F0(((void **)ANIM_OWNER_AS(void))[2], 7, &blob, ent);
+        FieldEng_TransformMatrixPoint(((void **)ANIM_OWNER_AS(void))[2], 7, &blob, ent);
         ent->y = g_RoomFloorY->y;
         value = func_800D3FD8();
         func_800D3F64(0x579, value);

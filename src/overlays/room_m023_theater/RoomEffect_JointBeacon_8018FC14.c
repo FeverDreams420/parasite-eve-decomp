@@ -41,7 +41,7 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
         func_800C6D5C((union FieldTexturedModel *)D_80190760, 0, 0);
         return 0;
     case 1:
-        func_800CE8F0(ANIM_OWNER_AS(RoomM023BeaconChannel)->pool, state->joint, &offset, state);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM023BeaconChannel)->pool, state->joint, &offset, state);
         func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomM023BeaconChannel)->pool, 0,
                       &state->rotation);
         switch (state->phase) {

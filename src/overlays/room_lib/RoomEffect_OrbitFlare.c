@@ -117,9 +117,9 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
         switch (state->state) {
         case 0:
             if (spawn->attached) {
-                func_800CE8F0(ANIM_OWNER_AS(RoomFlareChannel)->pool, 0, &rotation, state);
+                FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomFlareChannel)->pool, 0, &rotation, state);
             } else {
-                func_800CE8F0(ANIM_OWNER_AS(RoomFlareChannel)->pool, 0x19, &rotation, state);
+                FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomFlareChannel)->pool, 0x19, &rotation, state);
             }
             height = rsin(((s16)state->frame << 10) / 52) * 3 / 2;
             state->height = height;
@@ -165,7 +165,7 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
                     child->radius = state->height;
                 }
             }
-            if (func_8001CAB0(state->x << 16, state->z << 16, D_8009D248,
+            if (Geo_PointInPoly(state->x << 16, state->z << 16, D_8009D248,
                               D_8009D1CC) == 0) {
                 state->state = 2;
                 state->frame = 0;

@@ -25,7 +25,7 @@ int func_80193368(int mode, void *unused, char *state) {
     case 1:
     {
         pool = ANIM_OWNER_AS(RoomM404Channel)->pool;
-        func_800CE8F0(pool, 3, &template, position);
+        FieldEng_TransformMatrixPoint(pool, 3, &template, position);
         pool = ANIM_OWNER_AS(RoomM404Channel)->pool;
         func_800CE9D4((struct RoomFxTransformOwner *)pool, 0,
                       (GteShortVector *)target);

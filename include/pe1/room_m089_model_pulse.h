@@ -6,6 +6,7 @@
 #include "pe1/room_m089_spin_model.h"
 #include "pe1/room_swirl_rise.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/field_engine_calls.h"
 
 /* room_m089 pulsing model burst (func_80193618): three turning layers of
  * one model and a fourth model over a glow strip, while swirl/rise sprites
@@ -56,7 +57,6 @@ extern u8 D_801940F8[];
 extern u16 D_800E11EA;
 
 int func_80193200(int mode, RoomSwirlRiseState *state);
-int func_800C6B90(void *position, int radius);
 int func_80071A54(void);
 
 #endif

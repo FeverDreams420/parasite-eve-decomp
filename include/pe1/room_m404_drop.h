@@ -14,6 +14,7 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/floor_polygon.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/field_engine_calls.h"
 
 /* room_m404 sinking drop (func_80192540): a drop that sinks and jitters,
  * spreads on the floor and sheds splash children, a lingering pool that
@@ -75,7 +76,5 @@ extern RoomM404DropColor D_8018F1D8;
 extern u8 D_80193EFC[];
 
 int func_80071A54(void);
-int func_800C6B90(void *position, int radius);
-int func_8001CAB0(int x, int z, int floor, int count);
 
 #endif

@@ -15,6 +15,7 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/psyq_libc.h"
 #include "pe1/akao_send.h"
+#include "pe1/field_engine_calls.h"
 
 /* Scene e08 player orb: an effect spawned at a random spot around the
  * player, swung around the scene anchor by the anchor's facing, then drawn
@@ -59,7 +60,6 @@ extern u8 D_801987E4[];
 extern u8 D_80199690[];
 
 int *func_800C2B10(int index);
-int func_800C6B90(GteShortVector *position, int radius);
 int func_80071A54(void);
 
 /* Scene e08 limb beams: ten ribbons fanned from the player's chest bone to

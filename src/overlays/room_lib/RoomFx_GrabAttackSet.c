@@ -489,14 +489,14 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
         work.y = 0;
         work.x = (g_RoomGrabSweepSide - 1) * 350;
         work.z = -(func_80071A54() & 0xFF) - 400;
-        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &work, sweep);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &work, sweep);
         sweep->y = g_RoomFloorY->y;
         sweep->x += (func_80071A54() & 0x1F) - 0x10;
         sweep->z += (func_80071A54() & 0x1F) - 0x10;
         sweep->heading.x = 0;
         sweep->heading.y = func_80071A54() & 0xFFF;
         sweep->heading.z = 0;
-        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &offset, &hand);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &offset, &hand);
         func_800D1384(&hand, (GteShortVector *)sweep, 0x3F0, (unsigned char *)&colorA, (unsigned char *)&colorA, 0x8C, (struct FieldTrailPair *)sweep->trail, 1);
         if (ANIM_TASK_AS(RoomSparkEventState)->active) {
             RoomSparkNode **slot = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
@@ -570,7 +570,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
         case 2:
             sweep->timer++;
             scale = (s16)sweep->timer * 650;
-            func_800CFAA8(sweep, &hand, &angles);
+            FieldEng_CalculateLookAngles(sweep, &hand, &angles);
             angles.x = 0;
             func_800CFD50((unsigned short *)&angles, (unsigned short *)&sweep->heading, (u16)scale);
             func_800CFB7C(&sweep->heading, (s16)(params->distance / 2), &step);
@@ -621,7 +621,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
         break;
     case 2: {
         RenderColor *color;
-        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &offset, &hand);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &offset, &hand);
         if (D_800E27EC & 1) color = &colorA;
         else color = &colorB;
         D_800F3368.parameter00 = 0x20;
@@ -1015,7 +1015,7 @@ int RoomFx_RisingSprayParticle(int mode, RoomSpraySpark *spark) {
                 spark->vy /= 2;
                 spark->vz /= 2;
             }
-            if (func_8001CAB0(spark->x << 16, spark->z << 16, D_8009D248, D_8009D1CC)) break;
+            if (Geo_PointInPoly(spark->x << 16, spark->z << 16, D_8009D248, D_8009D1CC)) break;
             return 1;
         case 1:
             spark->timer++;
@@ -1172,7 +1172,7 @@ int RoomFx_RisingSprayController(int mode, void *state,
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x37,
                              (FieldAnimCallbackListCallback)RoomFx_RisingSprayParticle);
     case 1:
-        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &offset, &position);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &offset, &position);
         position.y -= 0x50;
         func_800CE9D4((void *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &heading);
         heading.z = 0;

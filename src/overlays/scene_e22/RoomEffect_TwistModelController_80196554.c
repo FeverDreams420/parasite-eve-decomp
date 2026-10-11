@@ -24,7 +24,7 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
         bolt->reserved1C = 0;
         D_80199500 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54C4704);
         func_800C6D5C(D_80199500, 0, 0);
-        func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, 0, &offset, &bolt->position);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, 0, &offset, &bolt->position);
         bolt->origin.x = bolt->position.x;
         bolt->origin.y = bolt->position.y;
         bolt->origin.z = bolt->position.z;

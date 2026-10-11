@@ -26,8 +26,8 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
         slot = &D_800BCFA4;
         gte_ldrotmatrix(slot->value);
         gte_ldtransmatrix(slot->value);
-        func_800CE8F0(ANIM_OWNER_AS(RoomM086Channel)->pool, 7, &anchor, state);
-        func_800CEAE8(ANIM_OWNER_AS(RoomM086Channel)->pool->bone, &drift, &state->velocity);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM086Channel)->pool, 7, &anchor, state);
+        FieldEng_RotateVector(ANIM_OWNER_AS(RoomM086Channel)->pool->bone, &drift, &state->velocity);
         state->state = 0;
         state->timer = 0;
         state->velocity.y -= 0x18;

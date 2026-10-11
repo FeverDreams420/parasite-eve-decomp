@@ -12,6 +12,7 @@
 #include "pe1/field_script_context.h"
 #include "pe1/psyq_libc.h"
 #include "pe1/pe_image.h"
+#include "pe1/field_engine_calls.h"
 
 /* The drop field effect set linked by room_m174, room_m348 and room_m383
  * (src/overlays/room_lib/RoomFx_DropFieldEffects.c): a controller and
@@ -130,8 +131,6 @@ extern u8 g_RoomDropFieldParticleFrames[];
 int rand(void);
 s32 *func_800C2B10(s32 index);
 void func_800C4E50(void *params);
-void func_800C6800(s32 arg0, s32 arg1, void *arg2);
-void func_800C6C18(int arg0);
 void func_800C6EE8(int arg0);
 
 #endif

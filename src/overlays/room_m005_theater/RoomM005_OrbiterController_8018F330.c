@@ -57,7 +57,7 @@ int func_8018F330(int mode, RoomM005OrbiterState *state) {
         pool = ANIM_OWNER_AS(RoomM005Channel)->pool;
         func_800CE870(pool, 0, (s16 *)D_80190B84);
         pool = ANIM_OWNER_AS(RoomM005Channel)->pool;
-        func_800CE8F0(pool, 20, &seed, D_80190B8C);
+        FieldEng_TransformMatrixPoint(pool, 20, &seed, D_80190B8C);
         {
             int idx = D_800E11E8;
             int palette;

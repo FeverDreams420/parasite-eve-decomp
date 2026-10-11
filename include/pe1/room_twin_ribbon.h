@@ -5,6 +5,7 @@
 #include "pe1/render_object.h"
 #include "pe1/room_ember_burst.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/field_engine_calls.h"
 
 /* Twin ribbon controller (room_m318 func_80196E4C): two mirrored pairs of
  * light ribbons hang between the actor's bones 8 and 21; a pulse is shed
@@ -58,6 +59,5 @@ extern RenderColor D_8018F234;
 extern RenderColor D_8018F238;
 extern RenderColor D_8018F23C;
 extern int func_80196C48(int mode, RoomTwinRibbonPulse *p);
-extern void func_800CE8F0(void *pool, int index, void *offset, void *position);
 
 #endif

@@ -2,11 +2,10 @@
 #include "pe1/room_floor.h"
 #include "pe1/floor_polygon.h"
 #include "pe1/gte_types.h"
+#include "pe1/field_engine_calls.h"
 
 
-int func_8001CAB0(int, int, int, int);
 int func_80071A54(void);
-int func_800C6B90(s16 *, int);
 
 void func_801946D4(void *unused, char *control, char *state)
 {
@@ -69,7 +68,7 @@ void func_801946D4(void *unused, char *control, char *state)
     *((s32 *) (state + 4)) = nextY;
     *((s32 *) (state + 8)) = nextZ;
     zArg = (unsigned)(nextZ >> 16) << 16;
-    if (func_8001CAB0(((unsigned)*((s16 *) (state + 2))) << 16, zArg, D_8009D248, screenLimit) == 0)
+    if (Geo_PointInPoly(((unsigned)*((s16 *) (state + 2))) << 16, zArg, D_8009D248, screenLimit) == 0)
     {
         *((u8 *) (control + 1)) = 2;
     }

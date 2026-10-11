@@ -55,7 +55,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             trail->timer = 0;
             trail->state = 1;
             trail->fade = 0;
-            func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 7, &rotation, trail);
+            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 7, &rotation, trail);
             func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &angles);
             angles.x = 0;
             trail->ax = angles.x;
@@ -76,7 +76,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             trail->timer++;
             point = g_RoomSeekingTrailHistory[trail->slot].point;
             func_800CE870((char *)D_8009D254, 1, &target.x);
-            func_800CFAA8(trail, &target, &angles);
+            FieldEng_CalculateLookAngles(trail, &target, &angles);
             angles.x = 0;
             if (trail->fade == 0) {
                 func_800CFD50((unsigned short *)&angles, &trail->ax, trail->turn);
@@ -405,7 +405,7 @@ int RoomEffect_ModelBurstController(int mode, s16 *state) {
             D_800F3368.depth = 0x18;
             D_800F3368.tpage = tpage;
         }
-        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 7, &rotation, &position);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 7, &rotation, &position);
         spin.x = rsin(D_800E27EC * 80) / 4;
         spin.y = rcos(D_800E27EC << 7) / 8;
         spin.flags = 0;
@@ -503,7 +503,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             trail->state = 1;
             trail->slot = ANIM_TASK_AS(RoomSparkEventState)->trailSlot;
             trail->fade = 0;
-            func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 5, &rotation, trail);
+            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 5, &rotation, trail);
             func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &angles);
             angles.x = 0;
             angles.y += (func_80071A54() & 0x1FF) - 0x100;
@@ -525,7 +525,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             trail->timer++;
             point = g_RoomScatterTrailHistory[trail->slot].point;
             func_800CE870((char *)D_8009D254, 1, &target.x);
-            func_800CFAA8(trail, &target, &angles);
+            FieldEng_CalculateLookAngles(trail, &target, &angles);
             angles.x = 0;
             if (trail->fade == 0) {
                 func_800CFD50((unsigned short *)&angles, &trail->ax, trail->turn);
@@ -845,7 +845,7 @@ int RoomEffect_ScatterBurstController(int mode, s16 *state) {
             D_800F3368.depth = 0x18;
             D_800F3368.tpage = tpage;
         }
-        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 5, &rotation, &position);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 5, &rotation, &position);
         spin.x = rsin(D_800E27EC * 80) / 4;
         spin.y = rcos(D_800E27EC << 7) / 8;
         spin.flags = 0;

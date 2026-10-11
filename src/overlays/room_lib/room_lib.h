@@ -18,6 +18,7 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/field_engine_slot.h"
 #include "pe1/pe_image.h"
+#include "pe1/field_engine_calls.h"
 
 typedef struct RoomObj {
     char pad0[0xC];
@@ -895,15 +896,13 @@ typedef struct RoomDlgState {
 } RoomDlgState;
 
 extern void *RoomMain_ActorPtr2;
-extern int func_800CE8F0();
-extern int func_800CFAA8();
 
 #define ROOMLIB_MSG_DISPATCH(name, rect, blob) \
     int name(int mode, RoomMsg *msg, short *pitch) { \
         RoomBlob8 tmp = rect; \
         switch (mode) { \
         case 0: \
-            func_800CE8F0(ANIM_OWNER_AS(RoomChanCtx)->w8, 0x13, &tmp, msg); \
+            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomChanCtx)->w8, 0x13, &tmp, msg); \
             if (ANIM_TASK_AS(RoomDlgState)->h12 == 0) goto send_pos; \
             if (ANIM_TASK_AS(RoomDlgState)->h12 == 1) goto at_actor; \
             goto after; \
@@ -914,7 +913,7 @@ extern int func_800CFAA8();
             { \
                 short vec[4]; \
                 func_800CE870(RoomMain_ActorPtr2, 0, vec); \
-                func_800CFAA8(msg, vec, &msg->sub); \
+                FieldEng_CalculateLookAngles(msg, vec, &msg->sub); \
                 msg->sub.h0 = 0x180; \
             } \
         after: \
@@ -985,7 +984,6 @@ typedef struct RoomTimer2 {
     short h2C;                    /* 0x2C: fire request */
 } RoomTimer2;
 
-extern int func_800C6C18();
 
 #define ROOMLIB_PARTICLE_TICK_A(name) \
     void name(RoomEnt *o, unsigned char *state, char *sys) { \
@@ -1047,7 +1045,6 @@ typedef struct RoomClock {
     unsigned char renderOwner;   /* 0x10 */
 } RoomClock;
 
-extern int func_800C6B90(void *position, int radius);
 #include "pe1/gte_types.h"
 #include "pe1/field_glow_sprite.h"
 extern int func_80071A54(void);

@@ -1,14 +1,13 @@
 #include "common.h"
 #include "pe1/field_script_context.h"
 #include "pe1/floor_polygon.h"
+#include "pe1/field_engine_calls.h"
 
 typedef struct SceneE08PositionSample {
     s32 x, y, z, extra;
 } SceneE08PositionSample;
 
 
-int func_8001CAB0(int, int, int, int);
-int func_800C6B90(void *, int);
 
 void func_80194214(void *unused, char *phase, char *effect) {
     char *owner;
@@ -48,7 +47,7 @@ void func_80194214(void *unused, char *phase, char *effect) {
     point[1] = *(s32 *)(effect + 4);
     z = *(s32 *)(effect + 8);
     point[2] = z;
-    if (func_8001CAB0(x << 16, z << 16, D_8009D248, D_8009D1CC) == 0) {
+    if (Geo_PointInPoly(x << 16, z << 16, D_8009D248, D_8009D1CC) == 0) {
         *(u8 *)(phase + 1) = 2;
     }
     if (func_800C6B90(point, 0x320) != 0) {

@@ -7,6 +7,7 @@
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/gte_types.h"
+#include "pe1/field_engine_calls.h"
 
 typedef struct RoomOrbitPairTemplate8 {
     s32 word[2];
@@ -52,7 +53,6 @@ PE1_STATIC_ASSERT(sizeof(RoomOrbitPairParticle) == 0x14,
                   room_orbit_pair_particle_size);
 
 extern volatile u16 D_800E11EA;
-extern void func_800CE8F0(void *, int, void *, void *);
 extern int func_80071A54(void);
 
 extern RoomOrbitPairTemplate8 D_8018F208;

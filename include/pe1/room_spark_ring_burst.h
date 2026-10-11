@@ -11,6 +11,7 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/floor_polygon.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/field_engine_calls.h"
 
 /* The spark ring and spark burst effects linked by ten museum rooms
  * (src/overlays/room_lib/RoomEffect_SparkRingBurst.c). The ring controller
@@ -96,9 +97,6 @@ extern RoomSparkBattleEntity *D_8009D254;
 extern RoomSparkTextureSlot D_800E11E8;
 
 int func_80071A54(void);
-void func_800CE8F0(char *pool, int joint, void *offset, void *out);
-int func_800C6B90(void *position, int radius);
-int func_8001CAB0(int x, int z, void *vertices, int count);
 
 /* Per-room data: the colour ramp of the ring sprite and the damped sparks,
  * and the word the room's slot setter writes. */

@@ -30,8 +30,6 @@ PE1_STATIC_ASSERT(sizeof(RenderPackedGeometry) == 16,
 void FieldEng_TransformPackedVertex(RenderPackedGeometry *geometry,
                                    GteMatrix *matrix, u16 index,
                                    GteShortVector *out);
-void FieldEng_CalculateLookAngles(GteShortVector *from, GteShortVector *to,
-                                 GteShortVector *out);
 
 /* History entries use halfword XYZ writes when filled, but aligned word
  * copies (including padding) when shifted or replaced. */
@@ -335,8 +333,6 @@ extern u8 D_800E1FCC[];
 int func_800DD19C(int mode, RenderSparkEmitter *state);
 int func_800D7E78(int mode, GteShortVector *state);
 
-void FieldEng_RotateVector(const GteMatrixWords *matrix,
-                           const GteShortVector *input, GteShortVector *output);
 
 void FieldEng_TransformTranslation(const GteShortVector *input,
                                   GteMatrixWords *output);

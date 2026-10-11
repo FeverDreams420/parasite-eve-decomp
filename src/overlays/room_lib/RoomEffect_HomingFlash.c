@@ -35,7 +35,7 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
         switch (spark->state) {
         case 0:
             func_800CE870((char *)D_8009D254, 0, (s16 *)&target);
-            func_800CFAA8(spark, &target, &angles);
+            FieldEng_CalculateLookAngles(spark, &target, &angles);
             angles.x = 0;
             func_800CFD50((unsigned short *)&angles, &spark->hx, params->speed);
             func_800CFB7C((GteShortVector *)&spark->hx, params->distance, &target);
@@ -176,7 +176,7 @@ int RoomEffect_FlashSpriteController(int mode, RoomFlashSpriteState *state,
             break;
         }
         pool = ANIM_OWNER_AS(RoomSoundBurstChannel)->pool;
-        func_800CE8F0(pool, state->attachment, &rotation, state);
+        FieldEng_TransformMatrixPoint(pool, state->attachment, &rotation, state);
         state->y = g_RoomFloorY->y;
         func_800CFB7C((GteShortVector *)&state->ax, 0x12C, &target);
         state->x += target.x;
@@ -239,7 +239,7 @@ int RoomEffect_FlashSpriteController(int mode, RoomFlashSpriteState *state,
         break;
     case 2:
         pool = ANIM_OWNER_AS(RoomSoundBurstChannel)->pool;
-        func_800CE8F0(pool, state->attachment, &rotation, &target);
+        FieldEng_TransformMatrixPoint(pool, state->attachment, &rotation, &target);
         {
             int index;
             int tpage;

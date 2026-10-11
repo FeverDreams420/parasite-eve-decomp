@@ -16,7 +16,7 @@ s32 Memcard_SineTrailEffect(s32 mode, MemcardTrailState *state) {
                              (FieldAnimCallbackListCallback)Memcard_SineRotatingImage);
     case 1:
         state->timer++;
-        func_800CE8F0(D_8009D254, state->attachment, &offset, &position);
+        FieldEng_TransformMatrixPoint(D_8009D254, state->attachment, &offset, &position);
         if (state->timer < 33 && (state->timer & 1)) {
             MemcardPulseState *image = func_800CE610(ANIM_POOL_AS(MemcardLinkChannel)->slots);
             if (image) {
@@ -36,7 +36,7 @@ s32 Memcard_SineTrailEffect(s32 mode, MemcardTrailState *state) {
         matrixSlot = &D_800BCFA4;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
-        func_800CE8F0(D_8009D254, state->attachment, &offset, &position);
+        FieldEng_TransformMatrixPoint(D_8009D254, state->attachment, &offset, &position);
         D_800F3368.parameter00 = 32;
         D_800F3368.parameter02 = 2;
         D_800F3368.extent_x = 32;

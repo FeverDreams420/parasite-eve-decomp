@@ -80,7 +80,7 @@ int RoomEffect_SeekerSparkCallback(int mode, RoomDampedSpark *spark,
                 spark->state = 2;
                 spark->timer = 0;
             }
-            if (func_8001CAB0(spark->x << 16, spark->z << 16, D_8009D248, D_8009D1CC) == 0) {
+            if (Geo_PointInPoly(spark->x << 16, spark->z << 16, D_8009D248, D_8009D1CC) == 0) {
                 return 1;
             }
             break;

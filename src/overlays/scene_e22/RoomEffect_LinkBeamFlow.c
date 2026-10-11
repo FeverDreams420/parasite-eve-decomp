@@ -77,11 +77,11 @@ int func_80193414(int mode, SceneE22LinkBeam *beam) {
         beam->reserved00 = 0;
         beam->timer = 0;
         beam->jointSet = ANIM_TASK_AS(SceneE22EmberEvent)->jointSet;
-        func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].first,
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].first,
                       &offset0, &first);
-        func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].middle,
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].middle,
                       &offset0, &middle);
-        func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].last,
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].last,
                       &offset1, &last);
         func_800D1384(&first, &middle, 0x3F2, (unsigned char *)&color2, (unsigned char *)&color1, 0x80,
                       (struct FieldTrailPair *)beam->trailA, 1);
@@ -91,7 +91,7 @@ int func_80193414(int mode, SceneE22LinkBeam *beam) {
                              (FieldAnimCallbackListCallback)func_801931B8);
     case 1:
         beam->timer++;
-        func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].last,
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].last,
                       &offset1, &first);
         func_800CE9D4(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].last,
                       &heading);
@@ -114,11 +114,11 @@ int func_80193414(int mode, SceneE22LinkBeam *beam) {
         return 2;
     case 2:
         if (beam->alpha >= 0) {
-            func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].first,
+            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].first,
                           &offset0, &first);
-            func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].middle,
+            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].middle,
                           &offset0, &middle);
-            func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].last,
+            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].last,
                           &offset1, &last);
             func_800D1384(&first, &middle, 10, (unsigned char *)&color2, (unsigned char *)&color1, beam->alpha,
                           (struct FieldTrailPair *)beam->trailA, 1);

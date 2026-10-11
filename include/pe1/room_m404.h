@@ -9,6 +9,7 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/field_engine_calls.h"
 
 typedef struct { s32 word[2]; } __attribute__((packed)) RoomTemplate8;
 typedef struct RoomM404Node {
@@ -30,7 +31,6 @@ typedef struct RoomM404Particle {
 } RoomM404Particle;
 extern RoomTemplate8 D_8018F208;
 extern volatile u16 D_800E11EA;
-extern void func_800CE8F0(void *, int, void *, void *);
 extern void func_80192540(void);
 
 #endif

@@ -7,6 +7,7 @@
 #include "pe1/random.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/field_engine_calls.h"
 
 /* Full callback reconstruction; source-level register constraints are tracked
  * in crutch debt because stock GCC needs them to reproduce the retail code. */
@@ -33,7 +34,6 @@ typedef struct SceneE19PackedPoint {
 extern SceneE19PackedPoint D_8018F210;
 extern FieldActor *D_8009D254;
 int func_800CFE94(s16 *from, s16 *to);
-int func_800C6B90(s16 *position, int extraRadius);
 
 extern RenderColor D_8018F218;
 /* Not declared in production headers; parameter order inferred from both
@@ -71,7 +71,7 @@ int func_8019549C(int mode, SceneE19HomingParticle *particle)
         particle->timer = 0;
         particle->state = 1;
         particle->angles.pad = 0;
-        func_800CE8F0(
+        FieldEng_TransformMatrixPoint(
             (struct RoomFxTransformOwner *)D_800F32D0->actor,
             0, &templatePoint.vector, &particle->position);
         func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->actor,
@@ -102,7 +102,7 @@ int func_8019549C(int mode, SceneE19HomingParticle *particle)
 
     case 1:
         particle->timer++;
-        func_800CFAA8(&particle->position, &particle->target,
+        FieldEng_CalculateLookAngles(&particle->position, &particle->target,
                                     &rotation);
         func_800CFD50((u16 *)&rotation, (u16 *)&particle->angles,
                      (u16)(rsin(particle->turnPhase) / 5));

@@ -156,7 +156,7 @@ int RoomEffect_BurstOrbParticle(int mode, RoomDampedSpark *spark) {
             if (func_800C6B90(spark, 0x96)) {
                 ROOMEFFECT_BURST_ORB_HIT();
             }
-            if (func_8001CAB0(spark->x << 16, spark->z << 16, D_8009D248, D_8009D1CC)) {
+            if (Geo_PointInPoly(spark->x << 16, spark->z << 16, D_8009D248, D_8009D1CC)) {
                 return 0;
             }
             spark->state = 5;
@@ -406,7 +406,7 @@ int RoomEffect_BurstOrbController(int mode, void *unused, s32 *state) {
                              (FieldAnimCallbackListCallback)RoomEffect_BurstOrbParticle);
         case 1:
     pool = ANIM_OWNER_AS(RoomSparkChannel)->pool;
-    func_800CE8F0(pool, 7, &template, position);
+    FieldEng_TransformMatrixPoint(pool, 7, &template, position);
     pool = ANIM_OWNER_AS(RoomSparkChannel)->pool;
     func_800CE9D4((struct RoomFxTransformOwner *)pool, 0,
                   (GteShortVector *)target);
@@ -557,7 +557,7 @@ int RoomEffect_DampedSparkController(int mode, void *unused, void *state) {
         }
         case 1:
     pool = ANIM_OWNER_AS(RoomSparkChannel)->pool;
-    func_800CE8F0(pool, 7, &template, position);
+    FieldEng_TransformMatrixPoint(pool, 7, &template, position);
     pool = ANIM_OWNER_AS(RoomSparkChannel)->pool;
     func_800CE9D4((struct RoomFxTransformOwner *)pool, 0,
                   (GteShortVector *)target);
@@ -706,7 +706,7 @@ int RoomEffect_BeamSparkController(int mode, RoomBeamSpark *fx,
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x20,
                              (FieldAnimCallbackListCallback)RoomEffect_BeamBounceParticle);
     case 1:
-        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0x1F, &rotation, fx);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0x1F, &rotation, fx);
         func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0,
                       &actor);
         angle = -actor.y + 0x400;
@@ -749,7 +749,7 @@ int RoomEffect_BeamSparkController(int mode, RoomBeamSpark *fx,
                 }
                 angle += 0x200;
             }
-            if (func_8001CAB0(fx->tx << 16, fx->tz << 16, D_8009D248, D_8009D1CC)) break;
+            if (Geo_PointInPoly(fx->tx << 16, fx->tz << 16, D_8009D248, D_8009D1CC)) break;
             return 1;
         case 1:
             fx->timer++;

@@ -6,6 +6,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/field_engine_calls.h"
 
 extern s16 D_801956A4, D_801956A0;
 extern u16 D_801956B0, D_801956B2, D_801956B4;
@@ -50,7 +51,6 @@ int func_801945EC(int mode, RoomM123Particle *particle) {
 extern GteShortVector D_8018F1E0;
 extern u16 D_800E11EA;
 extern int func_801945EC(int, RoomM123Particle *);
-extern void func_800CE8F0(void *, int, GteShortVector *, GteShortVector *);
 extern int func_80071A54(void);
 
 int func_80194768(int mode)
@@ -95,7 +95,7 @@ int func_80194768(int mode)
         if (time < 80) break;
         return 1;
     case 2:
-        func_800CE8F0(ANIM_OWNER_AS(RoomM123Pool)->pool, 23, &seed, &output);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 23, &seed, &output);
         scale = rsin((D_800E27EC << 11) / 80);
         if (scale < 0)
             scale += 31;

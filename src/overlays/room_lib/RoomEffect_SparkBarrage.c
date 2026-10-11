@@ -290,7 +290,7 @@ int RoomEffect_PhasedSparkController(int mode, s16 *counter)
                              (FieldAnimCallbackListCallback)RoomEffect_PhasedSparkParticle);
     }
     case 1:
-        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 6, &position, &output);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 6, &position, &output);
         if (D_800E27EC % 6 == 0 && *counter > 0) {
             particle = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (particle != 0) {
@@ -441,7 +441,7 @@ int RoomEffect_BouncingSparkController(int mode)
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 32,
                              (FieldAnimCallbackListCallback)RoomEffect_BouncingSparkParticle);
     case 1:
-        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 7, &position, &output);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 7, &position, &output);
         if (D_800E27EC == 8)
             func_800D3F64(0x593, func_800D3FD8());
         if (D_800E27EC < 74) {
@@ -459,7 +459,7 @@ int RoomEffect_BouncingSparkController(int mode)
                     motion[1] = motion[1] * 3 / 2;
                     motion[2] = motion[2] * 3 / 2;
                 }
-                func_800CEAE8(((RoomSparkBarrageOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->bone + 0xE0,
+                FieldEng_RotateVector(((RoomSparkBarrageOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->bone + 0xE0,
                               motion, &particle->vx);
                 particle->state = kind;
                 particle->timer = 0;
@@ -561,22 +561,22 @@ int RoomEffect_WaveSparkParticle(int mode, RoomPhasedSpark *spark) {
         case 0:
             phase = spark->phase;
             if (phase < 7) {
-                func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, phase + 1, &rotationA, &position);
+                FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, phase + 1, &rotationA, &position);
                 ROOMEFFECT_WAVE_SPARK_FLASH();
                 ROOMEFFECT_WAVE_SPARK_BLOOM(1);
-                func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, spark->phase + 1, &rotationB, &position);
+                FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, spark->phase + 1, &rotationB, &position);
             } else {
-                func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, phase + 9, &rotationC, &position);
+                FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, phase + 9, &rotationC, &position);
                 ROOMEFFECT_WAVE_SPARK_FLASH();
                 ROOMEFFECT_WAVE_SPARK_BLOOM(1);
-                func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, spark->phase + 13, &rotationC, &position);
+                FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, spark->phase + 13, &rotationC, &position);
             }
             ROOMEFFECT_WAVE_SPARK_FLASH();
             ROOMEFFECT_WAVE_SPARK_BLOOM(0);
             break;
         case 1:
-            func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 11, &rotationC, &position);
-            func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 15, &rotationC, &second);
+            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 11, &rotationC, &position);
+            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 15, &rotationC, &second);
             {
                 u16 clut;
                 int kind;
@@ -708,8 +708,8 @@ int RoomEffect_CometSparkParticle(int mode, RoomCometSpark *spark) {
         switch (spark->state) {
         case 0:
             spark->timer++;
-            func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 11, slot, &first);
-            func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 15, slot, &second);
+            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 11, slot, &first);
+            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 15, slot, &second);
             spark->x = (first.x + second.x) / 2;
             spark->y = (first.y + second.y) / 2;
             spark->z = (first.z + second.z) / 2;

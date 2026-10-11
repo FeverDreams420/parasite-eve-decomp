@@ -20,7 +20,7 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
 
     switch (mode) {
     case 0:
-        func_800CE8F0(ANIM_OWNER_AS(RoomM005BeaconChannel)->pool, 0x14, &offset, state);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM005BeaconChannel)->pool, 0x14, &offset, state);
         func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomM005BeaconChannel)->pool, 0,
                       &state->rotation);
         state->rotation.pad = 1;

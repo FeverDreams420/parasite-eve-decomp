@@ -10,6 +10,7 @@
 #include "pe1/field_glow_sprite.h"
 #include "pe1/psyq_libc.h"
 #include "pe1/pe_image.h"
+#include "pe1/field_engine_calls.h"
 
 /* The falling sprite burst linked by ten hospital and Chrysler rooms
  * (src/overlays/room_lib/RoomFx_FallingSpriteBurst.c): a sprite and its
@@ -96,9 +97,6 @@ extern RoomFxSpritePacket g_RoomFallingBurstParticle;
 
 int *func_800C2B10(int index);
 int *func_800C2B28(int index);
-void func_800C6800(void *entity, int effectId, void *state);
-void func_800C6C18(int entity);
-int func_800C6B90(void *position, int radius);
 int func_80071A54(void);
 
 #endif

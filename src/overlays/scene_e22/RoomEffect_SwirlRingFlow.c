@@ -107,7 +107,7 @@ int func_80195B40(int mode, SceneE22SwirlRing *swirl) {
             if (*(void *volatile *)soundSlot != 0)
                 Akao_SendTableCommand(*soundSlot, 0x5D7, 0x80, 0x80, volume);
         }
-        func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, 0, &offset, swirl);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, 0, &offset, swirl);
         return func_800CE560(ANIM_POOL_AS(SceneE22EmberChannel)->pool, 0x14, 0x28,
                              (FieldAnimCallbackListCallback)func_801957CC);
     case 1:

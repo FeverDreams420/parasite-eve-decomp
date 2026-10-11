@@ -126,7 +126,7 @@ int func_8018F3C8(int mode, RoomM023ScatterState *state) {
         return func_800CE560(ANIM_POOL_AS(RoomM023Channel)->pool, 16, 12,
                              (FieldAnimCallbackListCallback)func_8018F004);
     case 1:
-        func_800CE8F0(ANIM_OWNER_AS(RoomM023Channel)->pool, state->joint, &template, position);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM023Channel)->pool, state->joint, &template, position);
         state->timer++;
         if (ANIM_TASK_AS(RoomM023EventState)->interval == 0) return 1;
         if (ANIM_TASK_AS(RoomM023EventState)->interval < state->timer) {
@@ -151,7 +151,7 @@ int func_8018F3C8(int mode, RoomM023ScatterState *state) {
         }
         break;
     case 2:
-        func_800CE8F0(ANIM_OWNER_AS(RoomM023Channel)->pool, state->joint, &template, &g_RoomScriptRecord);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM023Channel)->pool, state->joint, &template, &g_RoomScriptRecord);
         D_800F3368.parameter00 = 32;
         D_800F3368.parameter02 = 2;
         D_800F3368.extent_x = 32;

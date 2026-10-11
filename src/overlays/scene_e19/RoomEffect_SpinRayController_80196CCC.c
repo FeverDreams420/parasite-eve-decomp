@@ -75,7 +75,7 @@ int func_80196CCC(int mode, SceneSpinRayBurst *burst)
             D_800F3368.depth = 0x18;
             D_800F3368.tpage = tpage;
         }
-        func_800CE8F0(ANIM_OWNER_AS(SceneSpinRayChannel)->pool, 0, &tilt, &position);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneSpinRayChannel)->pool, 0, &tilt, &position);
         D_8019B670.x = position.x;
         D_8019B670.y = position.y;
         D_8019B670.z = position.z;

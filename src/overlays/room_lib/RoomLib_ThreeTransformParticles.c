@@ -21,6 +21,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/psyq_libc.h"
 #include "pe1/pe_image.h"
+#include "pe1/field_engine_calls.h"
 
 extern void func_800C2B40(void *arg0);
 
@@ -74,7 +75,6 @@ void RoomLib_InitThreeParticlePackets(char *arg0, void *arg1, char *state) {
 void RoomLib_ThreeParticleNop3(void) {
 }
 
-extern void func_800C6C18(int arg0);
 
 void RoomLib_UpdateThreeParticleTimer(int arg0, char *arg1, char *arg2) {
     short *state = (short *)arg2;
@@ -387,8 +387,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomDebrisTriplet, velocity) == 0x9C,
                   room_debris_triplet_velocity_offset);
 
 extern int func_80071A54(void);
-extern int func_8001CAB0(int, int, void *, int);
-extern int func_800C6B90(void *position, int radius);
 
 void RoomLib_UpdateDebrisTriplet(void *unused, RoomDebrisOwner *owner,
                                         RoomDebrisTriplet *state) {
@@ -425,7 +423,7 @@ void RoomLib_UpdateDebrisTriplet(void *unused, RoomDebrisOwner *owner,
             if (state->size[i] >= 7) state->size[i] -= 6;
         }
         if (state->landed[i] == 0) {
-            if (!func_8001CAB0((state->position[i].x >> 16) << 16,
+            if (!Geo_PointInPoly((state->position[i].x >> 16) << 16,
                                (state->position[i].z >> 16) << 16,
                                D_8009D248, D_8009D1CC)) {
                 state->landed[i] = 1;

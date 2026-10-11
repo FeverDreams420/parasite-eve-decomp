@@ -10,6 +10,7 @@
 #include "pe1/field_model_draw.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/field_engine_calls.h"
 
 /* Shared 24-byte pool record: steering trail, damped sparks, model burst,
  * expanding sprite and floor impact. Modes 1 and 2 update and draw it. */
@@ -35,10 +36,7 @@ extern RoomM256TrailPalettes D_800E11E8;
 int func_80071A54(void);
 #include "pe1/gte_types.h"
 #include "pe1/player_entity.h"
-int func_800C6B90(void *,int);
 void func_800C6EC0(int,int);
-void func_800CE8F0(void *,int,void *,void *);
-void func_800CFAA8(void *,void *,void *);
 void func_800D3AFC(void *,int,void *,int);
 
 int func_801940B0(int mode, void *effect);

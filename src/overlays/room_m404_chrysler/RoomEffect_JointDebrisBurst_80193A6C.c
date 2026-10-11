@@ -10,7 +10,7 @@ int func_80193A6C(int mode, RoomM404BurstOrigin *origin) {
     switch (mode) {
     case 0:
         func_800CE870(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, (s16 *)origin);
-        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &template, origin);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &template, origin);
         func_800D3F64(0x5C0, func_800D3FD8());
         func_800D3F64(0x5C1, 0x80);
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 32,

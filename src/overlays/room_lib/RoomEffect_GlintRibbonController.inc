@@ -51,11 +51,11 @@ int ROOMEFFECT_GLINT_RIBBON_FUNC(int mode, RoomGlintRibbon *ribbon) {
         ribbon->alpha = 0x80;
         ribbon->reserved00 = 0;
         ribbon->timer = 0;
-        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, ROOMEFFECT_GLINT_RIBBON_JOINTS[0],
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, ROOMEFFECT_GLINT_RIBBON_JOINTS[0],
                       &offset0, &first);
-        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, ROOMEFFECT_GLINT_RIBBON_JOINTS[1],
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, ROOMEFFECT_GLINT_RIBBON_JOINTS[1],
                       &offset0, &middle);
-        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, ROOMEFFECT_GLINT_RIBBON_JOINTS[2],
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, ROOMEFFECT_GLINT_RIBBON_JOINTS[2],
                       &offset1, &last);
         func_800D1384(&first, &middle, 0x3F2, (unsigned char *)&color0, (unsigned char *)&color1, 0x80,
                       (struct FieldTrailPair *)ribbon->trailA, 1);
@@ -65,7 +65,7 @@ int ROOMEFFECT_GLINT_RIBBON_FUNC(int mode, RoomGlintRibbon *ribbon) {
                              (FieldAnimCallbackListCallback)ROOMEFFECT_GLINT_RIBBON_CALLBACK);
     case 1:
         ribbon->timer++;
-        func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, ROOMEFFECT_GLINT_RIBBON_JOINTS[2],
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, ROOMEFFECT_GLINT_RIBBON_JOINTS[2],
                       &offset0, &first);
         middle.x = first.x;
         middle.y = first.y;
@@ -101,11 +101,11 @@ int ROOMEFFECT_GLINT_RIBBON_FUNC(int mode, RoomGlintRibbon *ribbon) {
         return 2;
     case 2:
         if (ribbon->alpha >= 0) {
-            func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, ROOMEFFECT_GLINT_RIBBON_JOINTS[0],
+            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, ROOMEFFECT_GLINT_RIBBON_JOINTS[0],
                           &offset0, &first);
-            func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, ROOMEFFECT_GLINT_RIBBON_JOINTS[1],
+            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, ROOMEFFECT_GLINT_RIBBON_JOINTS[1],
                           &offset0, &middle);
-            func_800CE8F0(ANIM_OWNER_AS(RoomSparkChannel)->pool, ROOMEFFECT_GLINT_RIBBON_JOINTS[2],
+            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, ROOMEFFECT_GLINT_RIBBON_JOINTS[2],
                           &offset1, &last);
             func_800D1384(&first, &middle, 10, (unsigned char *)&color0, (unsigned char *)&color1, ribbon->alpha,
                           (struct FieldTrailPair *)ribbon->trailA, 1);
