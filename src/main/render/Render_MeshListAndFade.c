@@ -302,53 +302,46 @@ int Render_SetEntryPosition(int index, int x, int y) {
 
 #include "Render_MeshListAndFade_externs.h"
 int Gpu_LoadGeomState(int);
+/* Loads the selected group's viewport, centres the camera on it and builds
+ * every mesh entry's packets into `buffer`; *end returns the free space. */
 int Geo_RenderMeshList(void *buffer, void **end)
 {
-    s16 *minY;
-    /* Reserve the otherwise unused slot in the retail 56-byte stack frame. */
-    char frame_pad[2];
-    u16 highY;
-    u16 lowY;
     GeomState *state = D_800B1624;
-    register u8 *group asm("$17") = &g_GeomGroupSel;
+    u8 *group = &g_GeomGroupSel;
+    GeomStateAddress address;
     CameraViewport *view;
-    GeomEntry *entries;
-    register unsigned int count asm("$19");
+    GeomEntry *entry;
+    unsigned int count;
     unsigned int i;
     int x;
+
     Gpu_LoadGeomState(*group);
-    view = (CameraViewport *)((u8 *)state + state->entry_offset_1C) + *group;
+    address.state = state;
+    address.word += state->entry_offset_1C;
+    view = &address.viewport[*group];
     x = (view->minX + view->maxX) / 2;
-    {
-        register short centerX = x;
-        g_GeomScroll.state.position.originX = centerX;
-        D_800BCF8C.x = centerX;
-    }
-    minY = &view->minY;
-    D_800BCF8E = g_GeomScroll.state.position.originY = (*minY + view->maxY) / 2;
-    asm volatile("":::"memory");
-    D_800BCFAC = view->minX;
-    asm volatile("":::"memory");
-    D_800BCFAE = view->maxX;
-    lowY = *minY;
+    g_GeomScroll.state.position.x = g_GeomScroll.state.position.originX = x;
+    g_GeomScroll.state.position.y = g_GeomScroll.state.position.originY =
+        (view->minY + view->maxY) / 2;
+    g_GeomScroll.state.position.boundsMinX = view->minX;
+    g_GeomScroll.state.position.boundsMaxX = view->maxX;
     i = 0;
-    D_800BCFB0 = lowY;
-    asm volatile("":::"memory");
-    highY = view->maxY;
+    g_GeomScroll.state.position.boundsMinY = view->minY;
+    g_GeomScroll.state.position.boundsMaxY = view->maxY;
     x -= 160;
-    D_800BCFB2 = highY;
-    asm volatile("":::"memory");
     count = state->entry_count06;
     state->out_disp_x = state->disp_src_x - x;
-    asm("" ::: "memory");
-    state->out_disp_y = state->disp_src_y - (D_800BCF8E - 112);
-    entries = (GeomEntry *)((u8 *)state + state->entry_offset);
+    state->out_disp_y = state->disp_src_y - ((u16)g_GeomScroll.state.position.y - 112);
+    address.state = state;
+    address.word += state->entry_offset;
     *end = buffer;
-    if (count) {
+    if (i < count) {
         int min = -32768, max = 32767;
-        GeomEntry *entry = entries;
+
+        entry = address.entry;
         do {
-            if (Geo_LoadMeshEntry(entry, *end, end)) return -18;
+            if (Geo_LoadMeshEntry(entry, *end, end))
+                return -18;
             entry->bounds.minX = min;
             entry->bounds.maxX = max;
             entry->bounds.minY = min;
@@ -356,8 +349,12 @@ int Geo_RenderMeshList(void *buffer, void **end)
             entry++;
         } while (++i < count);
     }
-    D_800BCFFA = D_800BCFFB = 0;
-    *(u32 *)&g_GeomScroll.state.flags &= ~0xc00;
+    {
+        int *flags = &g_RenderStateFlags;
+
+        g_RenderFadeFrameCount = g_RenderFadeFrameCounter = 0;
+        *flags &= ~0xC00;
+    }
     return 0;
 }
 
@@ -424,44 +421,32 @@ int Geo_ClipPoint(int x, int y, int z) {
     return 0;
 }
 
+/* Re-derives the display offsets from the camera and draws the sprite
+ * entries of the selected group. */
 s32 Geo_BuildMeshList(void) {
-    register GeomStateAddress base asm("$4");
+    GeomStateAddress base;
     GeomEntry *entry;
+    s32 count;
     s32 i;
-    register u16 count asm("$18");
-    s32 temp;
-    register s32 value asm("$3");
-    s32 stack_pad[2];
 
     base.state = g_GeomState;
-    temp = (u16)D_800BCF8C.x;
-    temp -= 0xA0;
-    value = base.state->disp_src_x;
+    base.state->out_disp_x = base.state->disp_src_x - ((u16)D_800BCF8C.x - 160);
     count = base.state->entry_count06;
-    value -= temp;
-    base.state->out_disp_x = value;
-    temp = g_CameraClampedY[0];
-    value = base.state->disp_src_y;
-    temp -= 0x70;
-    value -= temp;
-    temp = base.state->entry_offset;
+    base.state->out_disp_y = base.state->disp_src_y - (g_CameraClampedY[0] - 112);
+    base.word += base.state->entry_offset;
     i = 0;
-    base.state->out_disp_y = value;
-    base.word += temp;
-    if (count != 0) {
+    if (i < count) {
         entry = base.entry;
         do {
-            if ((entry->head.b.flags & 2) && (entry->group == g_GeomGroupSel)) {
+            if ((entry->head.b.flags & 2) && entry->group == g_GeomGroupSel)
                 Render_DrawSpriteEntry(entry);
-            }
-            i += 1;
+            i++;
             entry++;
         } while (i < count);
     }
     return 0;
 }
 
-#include "Render_MeshListAndFade_externs_1.h"
 int Render_StartFadeIn(int arg0)
 {
   int new_var;

@@ -152,7 +152,11 @@ typedef struct GeomScrollCoordinates {
     u16 targetX, targetY;
     u16 elapsed, duration;
     u32 *matrixWords;
-    u8 reserved1C[0x10];
+    s32 *projectionDistance;
+    /* Viewport bounds saved by Geo_RenderMeshList (D_800BCFAC..B2). */
+    s16 boundsMinX, boundsMaxX, boundsMinY, boundsMaxY;
+    /* Projected screen position of the active actor (D_800BCFB4/B6). */
+    s16 cameraOffsetX, cameraOffsetY;
     RenderTintState tint;
     u8 reserved70[0x2C];
     s16 originX, originY;
@@ -341,6 +345,9 @@ extern u16 D_800BCF9C, D_800BCF9E, D_800BCFA0, D_800BCFA2;
 extern volatile int D_800BCF88;
 #define g_GeomScroll (*(GeomScrollRecord *)&D_800BCF88)
 extern char D_800BCFFC;
+/* Screen fade length and elapsed frames (Render_StartFadeIn/StepFade). */
+extern u8 g_RenderFadeFrameCount;
+extern u8 g_RenderFadeFrameCounter;
 extern GeomScrollCoordinates D_800BCF8C;
 extern u16 D_800BCF8E, D_800BCF90, D_800BCF92;
 
