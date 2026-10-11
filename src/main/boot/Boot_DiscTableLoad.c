@@ -15,7 +15,7 @@
 void SetDispMask(int arg0);
 void FlushCache(void);
 
-extern int D_800A77FC;
+extern unsigned int D_800A77FC;
 extern int D_800B0CD8_word __asm__("g_GameState");
 extern u16 g_MainAssetLbaTbl[];
 extern u16 g_LargeTexLbaTbl[];

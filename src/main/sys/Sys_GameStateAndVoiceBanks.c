@@ -194,7 +194,7 @@ int Akao_LoadVoiceBank(AkaoVoiceActor *actor) {
 
 void func_80085644(void);
 
-extern s16 D_800B0DD4;
+extern u16 D_800B0DD4;
 
 void func_8006A5BC(void)
 {

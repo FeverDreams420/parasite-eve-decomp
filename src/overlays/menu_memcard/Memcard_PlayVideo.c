@@ -12,7 +12,7 @@ s32 Memcard_PlayVideo(s32 index) {
     SetDispMask(0); DrawSync(0); func_80074A44(1);
 retry:
     {
-        VideoDiscRange *range = &D_8009315E;
+        VideoDiscRange *range = (VideoDiscRange *)D_8009315E;
         s32 readError = -1;
         s32 pollError;
         do {} while(CdRom_ReadSectorsFromLba(D_800B0DD8+range->start,D_8001160C,range->end-range->start)==readError);
@@ -24,7 +24,7 @@ retry:
         }
     }
     func_80072714(); func_800726C4(); func_80072724();
-    buffer=D_80011610+((D_80093162-D_80093160)<<11);
+    buffer=D_80011610+((D_80093162[0]-D_80093160)<<11);
     Memcard_InitVideoBuffers(1,&buffer);
     Memcard_OpenVideo((s16)entry);
     {

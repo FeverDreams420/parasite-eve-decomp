@@ -57,10 +57,10 @@ extern const u8 g_BootDisplayLowercaseWidths[][4];
 extern const u8 *D_80125C88[];
 extern const u8 **g_BootDisplayTextCursor;
 
-extern char *g_BootDisplayOrderingTable;
+extern char *volatile g_BootDisplayOrderingTable;
 extern u16 g_BootDisplayTPage;
 extern u16 g_BootDisplayClut;
-extern char *g_BootDisplayPrimitiveCursor;
+extern char *volatile g_BootDisplayPrimitiveCursor;
 extern s32 g_BootDisplayTextScrollX;
 extern s32 g_BootDisplayTextScrollStepX;
 extern s32 g_BootDisplayTransition;

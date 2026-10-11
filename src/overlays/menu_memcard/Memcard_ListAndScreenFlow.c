@@ -516,7 +516,7 @@ s32 func_801909B4(void) {
                 rect.h = 0x1E0;
                 ClearImage(&rect, 0, 0, 0);
                 DrawSync(0);
-                screenYRestore = D_800BCE8A;
+                screenYRestore = (s16)D_800BCE8A;
             }
         }
     } while (result < 0);

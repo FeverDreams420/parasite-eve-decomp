@@ -117,7 +117,7 @@ extern u8 D_800B01B2[];
 extern u8 D_800B01B8[];
 extern u8 D_800B01B9[];
 extern u8 D_800B01BA[];
-extern s32 D_800B0E08;
+extern void *D_800B0E08[];
 extern u8 D_800B692C[];
 extern u8 D_800B692D[];
 extern u8 D_800B692E[];
@@ -209,7 +209,7 @@ void Menu_MainUpdate(s32 arg0) {
                     volatile s32 *callback;
 
                     temp_a1_2->atbGauge = 0xF0;
-                    callback = &D_800B0E08;
+                    callback = (volatile s32 *)D_800B0E08;
                     if (*callback != 0) {
                         Akao_SendTableCommand((void *)*callback, 0x455, 0, 0x80, 0x7F);
                     }

@@ -3,7 +3,8 @@
 #include "pe1/gpu_image.h"
 #include "fx_common.h"
 
-extern void *D_800B0E38, *D_800B0E3C;
+extern void *D_800B0E38;
+extern unsigned char *D_800B0E3C;
 extern void *D_8019C1FC, *D_8019C274;
 extern u8 D_8019C218, D_8019C219, D_8019C21A, D_8019C21B;
 extern u8 D_8019C290, D_8019C291, D_8019C292, D_8019C293;
