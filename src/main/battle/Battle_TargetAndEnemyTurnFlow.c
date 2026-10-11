@@ -1,9 +1,9 @@
 /* CC1_FLAGS: -G0 */
 /* MASPSX_FLAGS: -G8 --use-comm-section --expand-div */
+/* ASPSX_VERSION: 2.70 */
 #include "pe1/battle_runtime.h"
 #include "pe1/akao.h"
 #include "pe1/render_object.h"
-#include "pe1/psyq_nop.h"
 #include "pe1/battle_cmd.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/scene_transition.h"
@@ -70,22 +70,9 @@ void Battle_SetupEntityTarget(BattleEntity *actor) {
     D_8009D294 = 0;
     D_8009D1DC = D_8009D278->action->turnWord & 15;
     D_8009CE38[0] = D_8009D278->action->animMode[0];
-    /* Preserve retail load delays for byte stores at nonzero GP offsets. */
-    {
-        u8 value = D_8009D278->action->animMode[1];
-        PE1_NOP_DEP("r", value);
-        D_8009CE38[1] = value;
-    }
-    {
-        u8 value = D_8009D278->action->animMode[2];
-        PE1_NOP_DEP("r", value);
-        D_8009CE38[2] = value;
-    }
-    {
-        u8 value = D_8009D278->action->animMode[3];
-        PE1_NOP_DEP("r", value);
-        D_8009CE38[3] = value;
-    }
+    D_8009CE38[1] = D_8009D278->action->animMode[1];
+    D_8009CE38[2] = D_8009D278->action->animMode[2];
+    D_8009CE38[3] = D_8009D278->action->animMode[3];
     target = 0;
     if ((actor->entityFlags & 0x40000000) && !((EnemyCombatant *)actor->core)->deathPersist) {
         for (target = (BattleEntity *)D_8009D20C; target; target = target->next) {
@@ -237,7 +224,7 @@ int Battle_HandleItemMenu(void) {
 
 u8 D_8009D2D8, D_8009CE3C, D_8009D1DC;
 u8 D_8009CE60, D_8009D25C;
-s8 g_ItemTargetMode asm("D_8009CE40");
+s8 D_8009CE40;
 u16 D_8009CE50;
 s8 g_BattleTargetIndex;
 
@@ -293,28 +280,28 @@ int Battle_StepEnemyTurn(s8 mode) {
                 SetSlot(D_8009CE3C, D_8009D254, queuedCommand, (s8)D_8009D2D8);
                 D_8009CE3C++;
                 D_8009D2D8--;
-                g_ItemTargetMode = 0;
+                D_8009CE40 = 0;
                 mode = 0;
             } else if (command < 407) {
                 switch (command) {
                 case 393:
                     Battle_InitFadeVars();
-                    g_ItemTargetMode = 4;
+                    D_8009CE40 = 4;
                     mode++;
                     break;
                 case 394:
                     Battle_InitFadeVars();
-                    g_ItemTargetMode = 5;
+                    D_8009CE40 = 5;
                     mode++;
                     break;
                 case 395:
                     Battle_InitFadeVars();
-                    g_ItemTargetMode = 6;
+                    D_8009CE40 = 6;
                     mode++;
                     break;
                 case 397:
                     Battle_InitFadeVars();
-                    g_ItemTargetMode = 7;
+                    D_8009CE40 = 7;
                     mode++;
                     break;
                 case 406:
@@ -328,14 +315,14 @@ int Battle_StepEnemyTurn(s8 mode) {
                         D_8009CE3C++;
                     }
                     D_8009D2D8--;
-                    g_ItemTargetMode = 0;
+                    D_8009CE40 = 0;
                     mode = 0;
                     break;
                 default:
                     SetSlot(D_8009CE3C, D_8009D254, D_8009D2A4, (s8)D_8009D2D8);
                     D_8009D2D8--;
                     D_8009CE3C++;
-                    g_ItemTargetMode = 0;
+                    D_8009CE40 = 0;
                     mode = 0;
                     break;
                 }
@@ -359,29 +346,29 @@ int Battle_StepEnemyTurn(s8 mode) {
                 }
                 D_8009CE3C++;
                 D_8009D2D8 = 0;
-                g_ItemTargetMode = 0;
+                D_8009CE40 = 0;
                 mode = -1;
             } else {
                 SetSlot(D_8009CE3C, D_8009D254, queuedCommand, (s8)D_8009D2D8);
                 D_8009CE3C++;
                 D_8009D2D8 = 0;
-                g_ItemTargetMode = 0;
+                D_8009CE40 = 0;
                 mode = -1;
             }
-            if (!g_ItemTargetMode)
+            if (!D_8009CE40)
                 Sound(0x44C);
             D_8009CE50 = D_8009D2A4;
         } else if (command == -1) {
             mode = 0;
         }
     } else if (mode == 2) {
-        Battle_CycleTarget(g_ItemTargetMode);
+        Battle_CycleTarget(D_8009CE40);
         if (D_8009D1F4 & 0x200) {
             SetSlot(D_8009CE3C, g_BattleTargetList[g_BattleTargetIndex].actor, D_8009CE50,
                     (s8)D_8009D2D8);
             D_8009D2D8--;
             D_8009CE3C++;
-            g_ItemTargetMode = 0;
+            D_8009CE40 = 0;
             mode = 0;
             {
                 void *volatile *slot = &g_AkaoBgmHandle;

@@ -28,7 +28,7 @@ extern int D_8009D2FC;
 extern int D_8009D258;
 extern int D_8009D208;
 extern u8 D_8009CE44;
-extern u8 D_8009CE40;
+extern s8 D_8009CE40; /* item target mode: 0, or 4..7 while picking */
 extern u8 D_8009D2D8;
 extern u8 D_8009D1DC;
 extern u8 D_8009CE38[4];
