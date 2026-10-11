@@ -51,20 +51,18 @@ int Task_OpenMemCardDialog(void) {
         node = g_TaskNodePool;
         node_flags = &node->flags;
         flags = *node_flags;
-        if (flags & 0x20) {
-            goto finish;
+        if ((flags & 0x20) == 0) {
+            *node_flags = flags | 0x20;
+            cursor = g_SceneDataTable0;
+            node->active = 1;
+            cursor -= 8;
+            g_SceneDataTable0 = cursor;
+            return 0;
         }
-        *node_flags = flags | 0x20;
-        cursor = g_SceneDataTable0;
-        node->active = 1;
-        cursor -= 8;
-        g_SceneDataTable0 = cursor;
-        return 0;
+    } else {
+        return 1;
     }
 
-    return 1;
-
-finish:
     Render_BeginSceneLoad();
     Menu_OpenStartupMemCardDialog();
     {
@@ -478,7 +476,6 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
                 break;
             }
             actor = player;
-            goto find_actor_asset;
         } else {
             actor = (u8 *)D_8009D20C;
             while (actor != 0) {
@@ -489,14 +486,13 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
                 }
                 actor = PTR_AT(actor, 4);
             }
-            if (actor != 0) {
-find_actor_asset:
-                *args->result = Asset_Find08w(
-                    *args->arg1, 0, S16_AT(actor, 0x2A),
-                    S16_AT(actor, 0x2E), S16_AT(actor, 0x32));
+            if (actor == 0) {
                 break;
             }
         }
+        *args->result = Asset_Find08w(
+            *args->arg1, 0, S16_AT(actor, 0x2A),
+            S16_AT(actor, 0x2E), S16_AT(actor, 0x32));
         break;
     case 0x161:
         *args->result = Asset_Find08w(*args->arg1, 0,
@@ -530,7 +526,8 @@ find_actor_asset:
         status = CD_SeekTrack0(*args->arg1, 1, 0, &locals.slot,
                                *args->arg2 == 0);
         if (status != 1) {
-        goto store_audio_slot;
+            *args->result = locals.slot;
+            break;
     case 0x192:
         status = CD_SeekTrack1(*args->arg1, 1, 1, &locals.slot,
                                *args->arg2 == 0);
@@ -539,12 +536,14 @@ find_actor_asset:
             D_8009D300->active = status;
             return 0;
         }
-        goto store_audio_slot;
         }
+        else
+        {
 wait_for_cd:
         D_8009CE00 -= 8;
         D_8009D300->active = status;
         return 0;
+        }
 store_audio_slot:
         *args->result = locals.slot;
         break;

@@ -160,7 +160,7 @@ void Render_DrawObject(RenderObjectEntity *input, union RenderLightingMatrix *vi
                                 gte_ncct_command();
                                 normalIndex += 12;
                                 Draw_StoreColours(mainColours);
-                                {
+                                do {
                                     register s32 index asm("$2") = first + vertexIndex;
                                     u32 *colours = entity->vertex_colours;
                                     register s32 byteOffset asm("$4");
@@ -170,7 +170,6 @@ void Render_DrawObject(RenderObjectEntity *input, union RenderLightingMatrix *vi
                                     colour = (RenderColor *)(byteOffset + (u32)colours);
                                     if (colour[0].code) {
                                         gte_lwc2_6_0(colour);
-                                        goto shade_override;
                                     } else if (colour[1].code) {
                                         s32 selectedOffset = byteOffset + 4;
                                         {
@@ -178,7 +177,6 @@ void Render_DrawObject(RenderObjectEntity *input, union RenderLightingMatrix *vi
                                                 (u32 *)((u8 *)colours + selectedOffset);
                                             gte_lwc2_6_0(colourPointer);
                                         }
-                                        goto shade_override;
                                     } else if (colour[2].code) {
                                         s32 selectedOffset = byteOffset + 8;
                                         {
@@ -187,13 +185,12 @@ void Render_DrawObject(RenderObjectEntity *input, union RenderLightingMatrix *vi
                                             gte_lwc2_6_0(colourPointer);
                                         }
                                     } else
-                                        goto no_override;
-                                }
-                            shade_override:
-                                gte_cop2_hazard_slot();
-                                gte_cop2_hazard_slot();
-                                gte_ncct_command();
-                                Draw_StoreColours(altColours);
+                                        break;
+                                    gte_cop2_hazard_slot();
+                                    gte_cop2_hazard_slot();
+                                    gte_ncct_command();
+                                    Draw_StoreColours(altColours);
+                                } while (0);
                             no_override:;
                                 vertexIndex += 3;
                                 mainColours += 3;

@@ -191,8 +191,9 @@ cmd_af1:
         return 1;
 cmd_b54:
         g_GameState.flags |= 0x400000;
-        goto done;
     }
+    else
+    {
 find_entity:
         initial_entity_id = ARG_WORD(args->arg1);
         if (initial_entity_id == 0) {
@@ -227,6 +228,7 @@ cmd_c1c:
         return 1;
 cmd_c80:
         g_GameState.flags |= 0x8000000;
+    }
 done:
     return 1;
 }

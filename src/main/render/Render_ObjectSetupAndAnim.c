@@ -36,7 +36,10 @@ void Field_GetMapEntry(RenderObjectEntity *arg0, s32 arg1) {
             a2 = t0->primitive_buffer;
             if (v0 != 0) {
                 v0 = a3 * 0x34;
-                goto has_entry;
+                v0 = (s32) ((u8 *) v0 + (s32) a2);
+                v0 = ((RenderPacketState *)v0)->page_bits;
+                v0 &= 0x7F;
+                a0 = (u32) v0 >> 5;
             } else {
                 v0 = t0->header->packet28_count;
                 if (v0 != 0) {

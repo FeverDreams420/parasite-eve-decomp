@@ -150,16 +150,14 @@ int g_SceneDataTable0;
 int Boot_CheckModeSwitch(void) {
     int mode = g_RenderStateFlags & 7;
 
-    if (mode != 4) {
-    if (mode != 0) {
-        goto pop_state;
-    }
-
-    }
-ret_one:
-    return 1;
-
-pop_state:
+    do {
+        if (mode != 4) {
+            if (mode != 0) {
+                break;
+            }
+        }
+        return 1;
+    } while (0);
     {
         int cursor = g_SceneDataTable0;
         TaskNode *node = g_TaskNodePool;
@@ -195,7 +193,6 @@ s32 Task_GetAngleToEntity(s32 *args[]) {
             return 1;
         }
         node = tmp;
-        goto found;
     } else {
         key2 = key;
         node = g_FieldActorListHead;
@@ -212,16 +209,12 @@ s32 Task_GetAngleToEntity(s32 *args[]) {
                 break;
             }
         } while (node != NULL);
-        if (node != NULL) {
-            goto found;
+        if (node == NULL) {
+            *args[2] = -1;
+            return 1;
         }
     }
 
-fail:
-    *args[2] = -1;
-    return 1;
-
-found:
     {
         FieldActor *state = g_CurrentEntity;
         dx = state->pos_x - node->pos_x;

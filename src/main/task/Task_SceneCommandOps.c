@@ -137,14 +137,13 @@ s32 Task_SetEntityParentLink(s32 *args[]) {
                     break;
                 }
             } while (node != NULL);
-            if (node != NULL) {
-                goto link;
+            if (node == NULL) {
+                return 1;
             }
+        } else {
+            return 1;
         }
     }
-done:
-    return 1;
-link:
     {
         FieldActor *cur = g_CurrentEntity;
         cur->parent = node;
