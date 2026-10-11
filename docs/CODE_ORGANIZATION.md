@@ -143,6 +143,12 @@ exist for the bytes, and why:
 - `Spu_UploadSampleBlock` walks the header words with `*header++` on its
   parameter. A separate cursor lets CSE fold every word into an offset from
   the untouched parameter, while retail advances the pointer.
+- `Spu_RestoreVoiceFromStereoSlot` reads the stereo slot's right volume
+  into a halfword before the `update_flags` read-modify-write and stores it
+  after. Copying the field directly reorders the loads and stores around the
+  flag update and loads the index from `$s1` instead of the argument
+  register (lev 12). The 0x1FF93 that retail keeps in `$a3` is the mask
+  register, not a fourth argument.
 - `Spu_TickVoiceEnvelopes` computes the pitch LFO depth inside both
   branches of the speed test, into a `u16`. Retail shifts the depth before
   loading `pitch_lfo_phase`: a depth assigned once after the branches is a
@@ -169,10 +175,6 @@ permuter and by hand):
   83, and the barriers add the cursor references that flip the order. A
   separate copy-loop counter removes the cursor barriers but lands the counter
   in a2 (lev 3); reusing the size as the counter flips priority back (lev 31).
-- `Spu_RestoreVoiceFromStereoSlot` (3 pins, 2 barriers): retail keeps
-  0x1FF93 in a3 for both the `or` and the fourth call argument and copies the
-  stereo index to a0 before indexing. A constant costs 0 on MIPS, so CSE
-  rebuilds it, and the index and record swap s1/s2 (best lev 11).
 - `Akao_ProcessVoiceQueue` (pin on `bit`, 1 barrier): `secondary_new` must be
   allocated before `excluded`; its extra references come only from a copy that
   CSE deletes unless `bit` is a hard register (lev 24, lev 11 with a

@@ -1414,37 +1414,16 @@ void Spu_CopyVoiceToStereoSlot(AkaoTrack *track, int stereo_voice_index) {
 }
 
 void Spu_RestoreVoiceFromStereoSlot(AkaoTrack *track, int stereo_voice_index) {
-    AkaoTrack *track_reg;
-    int index_reg;
-    AkaoVoiceParams *params;
-    register int mask asm("$7");
-    int idx_arg;
-    int flags_arg;
-    AkaoVoiceParams *call_params;
-    register u32 left asm("$3");
-    u32 right;
-    register u32 flags asm("$3");
     AkaoTrack *stereo;
+    AkaoS16 right;
 
-    track_reg = track;
-    index_reg = stereo_voice_index;
-    params = &AKAO_TRACK_VOICE(track_reg);
-    Akao_WriteVoiceParam(track_reg->assigned_voice_index, params, track_reg->flags);
-    mask = 0x1FF93;
-    idx_arg = index_reg;
-    asm volatile("" : "=r"(idx_arg) : "0"(idx_arg));
-    stereo = &g_AkaoVoiceStateTable[idx_arg];
-    flags_arg = track_reg->flags;
-    asm volatile("" : "=r"(flags_arg) : "0"(flags_arg));
-    left = (unsigned short)stereo->volume_left;
-    call_params = params;
-    track_reg->volume_left = left;
-    flags = track_reg->update_flags;
-    right = (unsigned short)stereo->volume_right;
-    flags = flags | mask;
-    track_reg->update_flags = flags;
-    track_reg->volume_right = right;
-    Akao_WriteVoiceParam(idx_arg, call_params, flags_arg, mask);
+    Akao_WriteVoiceParam(track->assigned_voice_index, &AKAO_TRACK_VOICE(track), track->flags);
+    stereo = &g_AkaoVoiceStateTable[stereo_voice_index];
+    track->volume_left = stereo->volume_left;
+    right = stereo->volume_right;
+    track->update_flags |= 0x1FF93;
+    track->volume_right = right;
+    Akao_WriteVoiceParam(stereo_voice_index, &AKAO_TRACK_VOICE(track), track->flags);
 }
 
 void Akao_StepVoiceNote(AkaoTrack *track, unsigned mask, unsigned direct, unsigned *output) {
