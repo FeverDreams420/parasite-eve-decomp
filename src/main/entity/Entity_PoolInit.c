@@ -14,7 +14,7 @@ void *g_FieldActorListHead;
 FieldActor *g_CurrentEntity;
 u16 g_EntityFreePoolCount;
 FieldActor *g_PlayerEntity;
-void *D_8009D224;
+u32 D_8009D224;
 
 extern char g_EntityWorkBuffer[];
 extern char D_800BEA90[];
