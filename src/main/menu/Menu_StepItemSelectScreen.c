@@ -18,7 +18,6 @@ extern void Menu_CreateInventoryListView(MenuWidgetNode *node);
 extern void Menu_CreateEquipItemSelectionView(MenuWidgetNode *node);
 extern MenuWidgetNode *MenuWidget_FindByModeAndSelectedBase(int mode, int base);
 void Menu_StepSkillList(MenuWidgetNode *panel, int refresh);
-extern int Menu_StepSkillList3(MenuWidgetNode *, int) asm("Menu_StepSkillList");
 extern int Battle_IsActiveWrapped(void);
 void Inv_SetActiveList(int mode, int *slot);
 extern void Menu_CreateMainMenuView(MenuWidgetNode *node);
@@ -83,7 +82,9 @@ int Menu_StepItemSelectScreen(MenuWidgetNode *node, unsigned int buttons)
             D_8009CF18 = 0;
             Menu_CreateInventoryListView(child);
             Menu_CreateEquipItemSelectionView(child);
-            Menu_StepSkillList3(MenuWidget_FindByModeAndSelectedBase(2, 5), 0);
+            /* An int-returning call keeps cross-jumping from merging this
+             * case into case 2, which retail keeps separate. */
+            ((int (*)(MenuWidgetNode *, int))Menu_StepSkillList)(MenuWidget_FindByModeAndSelectedBase(2, 5), 0);
             break;
         case 4:
             if (Battle_IsActiveWrapped()) {
