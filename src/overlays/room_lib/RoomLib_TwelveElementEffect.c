@@ -89,6 +89,14 @@ void RoomLib_UpdateTwelveElementTimer(int arg0, char *arg1, char *arg2) {
     }
 }
 
+/* The element records followed, past the spawn work area, by the handle
+ * of the effect the init hands to the field engine. */
+typedef struct RoomTwelveEffectWork {
+    RoomLibTick12Rec rec;
+    u8 padBC[0x60];
+    int effectHandle;             /* 0x11C */
+} RoomTwelveEffectWork;
+
 typedef struct RoomTwelveEffectStack {
     RoomFxSeed8 seed;
     RoomSpriteMatrix sourceMatrix;
@@ -171,7 +179,7 @@ void RoomLib_InitTwelveElementEffect(void *owner, void *unused, char *state) {
         workState->position[i].x = 0;
         workState->position[i].y = 0;
     }
-    *(int *)((char *)workState + 0x11C) =
+    ((RoomTwelveEffectWork *)workState)->effectHandle =
         func_800C66C8(effectOwner, 0x58F, &stack.sourceMatrix);
 }
 

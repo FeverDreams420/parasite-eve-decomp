@@ -880,11 +880,11 @@ typedef struct RoomDlgAnimState {
     short x;                     /* 0x00 */
     short y;                     /* 0x02 */
     short z;                     /* 0x04 */
-    short field_06;              /* 0x06 */
+    short pad06;                 /* 0x06 */
     short velocityX;             /* 0x08 */
     short velocityY;             /* 0x0A */
     short velocityZ;             /* 0x0C */
-    short field_0E;              /* 0x0E */
+    short pad0E;                 /* 0x0E */
     short state;                 /* 0x10 */
     short timer;                 /* 0x12 */
 } RoomDlgAnimState;
