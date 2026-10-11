@@ -28,7 +28,7 @@ extern u8 D_8009CE40;
 extern u8 D_8009D294;
 extern u8 D_8009D2D8;
 extern u8 D_8009D1DC;
-u8 D_8009CE38;
+u8 D_8009CE38[4];
 u8 D_8009CE39;
 u8 D_8009CE3A;
 u8 D_8009CE3B;
@@ -77,7 +77,7 @@ void Battle_Init(void)
     D_8009D2D8 = (*(u32 *)(config0 + 0x10) >> 4) & 3;
     config2 = *(u8 **)(root + 0x68);
     D_8009D1DC = *(u32 *)(config1 + 0x10) & 0xF;
-    D_8009CE38 = config2[0x14];
+    D_8009CE38[0] = config2[0x14];
     config3 = *(u8 **)(root + 0x68);
     D_8009CE39 = config3[0x15];
     config4 = *(u8 **)(root + 0x68);

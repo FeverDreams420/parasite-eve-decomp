@@ -31,10 +31,10 @@ extern volatile struct { Combatant *value; char pad[12]; } D_8009D278_absolute _
 extern const Tbl20 D_8001074C;
 extern const BattleActionSoundTable D_80010760;
 extern LargeSymbol D_800942E4_o __asm__("D_800942E4");
-extern s8 D_8009CE38;
-extern s8 D_8009CE39;
-extern s8 D_8009CE3A;
-extern s8 D_8009CE3B;
+extern u8 D_8009CE38[4];
+extern u8 D_8009CE39;
+extern u8 D_8009CE3A;
+extern u8 D_8009CE3B;
 extern u8 D_8009CE3C;
 extern BattleGameStateWindow D_8009D1A0_r4 __asm__("D_8009D1A0");
 extern BattleGameStateWindow D_8009D1A0_w4 __asm__("D_8009D1A0");
@@ -266,7 +266,7 @@ block_39:
             Entity_SetActionMode(D254(15), *(u8 *)((char *)((void *)((s32)var_v1 + (s32)D278(13))) + PE1_OFFSETOF(Combatant, targetAngleActionModes)));
             *(s32 *)((char *)D278(10) + PE1_OFFSETOF(Combatant, stateFlags)) = (s32) (*(s32 *)((char *)D278(10) + PE1_OFFSETOF(Combatant, stateFlags)) & 0xFFDFFFFF);
             D_8009CE39 = 0x58;
-            D_8009CE38 = 0;
+            D_8009CE38[0] = 0;
             D_8009CE3A = 0x18;
             D_8009CE3B = 0;
         } else {
