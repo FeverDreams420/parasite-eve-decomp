@@ -12,33 +12,14 @@
 
 
 int func_800D3F64(int arg0, int arg1) {
-    FieldAnimObjectPrefix *ctx;
-    register FieldActor *child asm("$3");
-    register RenderMatrix *node asm("$2");
-    volatile short sx;
-    volatile short sy;
-    volatile short sz;
-    int x;
-    int y;
-    int z;
+    FieldActor *actor;
+    s16 position[3];
 
-    ctx = D_800F32D0;
-    child = ctx->actor;
-    node = child->render_object.matrices;
-    x = node->translation[0];
-    sx = x;
-    asm volatile("" ::: "memory");
-    x = (short)x;
-    node = child->render_object.matrices;
-    y = node->translation[1];
-    sy = y;
-    asm volatile("" ::: "memory");
-    y = (short)y;
-    node = child->render_object.matrices;
-    z = node->translation[2];
-    sz = z;
-    z = (short)z;
-    return Asset_Find08w(arg0, arg1, x, y, z);
+    actor = D_800F32D0->actor;
+    position[0] = actor->render_object.matrices->translation[0];
+    position[1] = actor->render_object.matrices->translation[1];
+    position[2] = actor->render_object.matrices->translation[2];
+    return Asset_Find08w(arg0, arg1, position[0], position[1], position[2]);
 }
 
 int func_800D3FD8(void) {
@@ -112,10 +93,10 @@ int func_800D413C(FieldAnimTaskOwner *owner)
 
     D_800F32D0 = &owner->prefix;
     D_800E2368 = context;
-    do {
+    while (running) {
         if (context->delay != 0) {
             if (--context->delay != 0)
-                goto check_owner;
+                break;
             context->delay = 0;
         }
         op = *context->pc.script;
@@ -175,8 +156,7 @@ int func_800D413C(FieldAnimTaskOwner *owner)
             }
             break;
         }
-    } while (running);
-check_owner:
+    }
     if (D_800E2368->flags && D_800F32D0->actor && D_800F32D0->actor->state) {
         state = D_800F32D0->actor->state;
         flags = state->core_flags;
@@ -224,41 +204,29 @@ check_owner:
 
 int func_800D4620(FieldAnimTaskOwner *owner)
 {
-  register FieldAnimTaskContext *base;
-  int i;
-  register char *p;
-  register char *q;
-  int sentinel;
-  base = &owner->tasks;
-  i = 6;
-  p = (char *)&owner->tasks.count;
-  owner->prefix.reserved02[0] = 1;
-  owner->prefix.reserved02[1] = 0;
-  owner->tasks.delay = 0;
-  owner->tasks.used = 0;
-  owner->tasks.cursor = owner->tasks.arena;
-  owner->tasks.count = 0;
-  owner->tasks.flags = 0;
-  for (; i >= 0; i--)
-  {
-    *((short *) (p + 0x12)) = 0;
-    p -= 2;
-  }
+    FieldAnimTaskContext *context = &owner->tasks;
+    FieldAnimTaskSlot *slot;
+    int i;
 
-  p = (char *)base->slots;
-  i = 0;
-  sentinel = 0xFFFF;
-  q = (char *)&base->slots[0].start;
-  for (; i < 8; p += 0xC)
-  {
-    i++;
-    *((short *) p) = sentinel;
-    *((short *) (q - 2)) = 0;
-    *((int *) q) = 0;
-    q += 0xC;
-  }
+    owner->prefix.reserved02[0] = 1;
+    owner->prefix.reserved02[1] = 0;
+    context->delay = 0;
+    context->used = 0;
+    context->cursor = context->arena;
+    context->count = 0;
+    context->flags = 0;
+    for (i = 6; i >= 0; i--) {
+        context->variables[i] = 0;
+    }
 
-  return 0;
+    slot = context->slots;
+    for (i = 0; i < 8; i++, slot++) {
+        slot->id = 0xFFFF;
+        slot->age = 0;
+        slot->start = 0;
+    }
+
+    return 0;
 }
 
 int func_800D4698(FieldAnimTaskOwner *owner, int skip, int arg2, int arg3, int arg4, int arg5) {
@@ -284,38 +252,15 @@ int func_800D4704(FieldAnimTaskOwner *owner)
     FieldAnimTaskContext *context = &owner->tasks;
     FieldAnimTaskSlot *slot = context->slots;
     int i;
-    GteMatrix **matrixSlot;
+
     D_800F32D0 = &owner->prefix;
     D_800E2368 = context;
     if (context->flags)
         D_800F3428 = Asset_SearchByKeyType(owner->prefix.asset_type);
-    i = 0;
-    matrixSlot = &D_800BCFA4.value;
-    for (; i < 8; i++, slot++) {
-        if (slot->id != 65535) {
-            {
-                register const GteMatrixWords *matrix asm("$7");
-                register u32 a asm("$12");
-                register u32 b asm("$13");
-                register u32 c asm("$14");
-                matrix = (const GteMatrixWords *)*matrixSlot;
-                a = matrix->r11_r12;
-                b = matrix->r13_r21;
-                gte_ctc2_0(a);
-                gte_ctc2_1(b);
-                a = matrix->r22_r23;
-                b = matrix->r31_r32;
-                c = matrix->r33_pad;
-                gte_ctc2_2(a);
-                gte_ctc2_3(b);
-                gte_ctc2_4(c);
-                a = matrix->tx;
-                b = matrix->ty;
-                gte_ctc2_5(a);
-                c = matrix->tz;
-                gte_ctc2_6(b);
-                gte_ctc2_7(c);
-            }
+    for (i = 0; i < 8; i++, slot++) {
+        if (slot->id != 0xFFFF) {
+            gte_ldrotmatrix((const GteMatrixWords *)D_800BCFA4.value);
+            gte_ldtransmatrix((const GteMatrixWords *)D_800BCFA4.value);
             D_800F33E0 = slot;
             D_800E27EC = slot->age;
             context->table->callbacks[slot->id](2, slot->start, context->argument);
