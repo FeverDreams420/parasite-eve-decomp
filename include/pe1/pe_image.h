@@ -88,6 +88,11 @@
 extern unsigned int   g_PeImageBaseLba;    /* =0x800B0DD8: PE.IMG start sector, found at boot */
 extern signed char    g_PeImageMountFlags; /* =0x800B0DCD: bit0 CD1 (FMV1), bit1 CD2 (FMV2) */
 
+/* ISO9660 paths searched by OpenPeImage. */
+extern char g_PeDisc1MarkerPath[]; /* "\FMV1\PEDISC01.IDF;1" */
+extern char g_PeImagePath[];       /* "\PE.IMG;1" */
+extern char g_PeDisc2MarkerPath[]; /* "\FMV2\PEDISC02.IDF;1" */
+
 int Asset_SearchByKeyType(int type);
 
 #endif /* PE1_PE_IMAGE_H */

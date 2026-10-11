@@ -3,7 +3,6 @@
 #include "pe1/cdrom.h"
 #include "pe1/psyq_gpu.h"
 
-#include "Render_InitDisplayLists_externs.h"
 int DsPosToInt(CdlLOC *position);
 
 int OpenPeImage(void)
@@ -23,11 +22,11 @@ int OpenPeImage(void)
 
     while (DsSystemStatus() != 1 || DsQueueLen() != 0)
         VSync(0);
-    found = DsSearchFile(&file, D_80011330);
+    found = DsSearchFile(&file, g_PeDisc1MarkerPath);
     if (found != 0 && found != (DslFILE *)-1) {
         while (DsSystemStatus() != 1 || DsQueueLen() != 0)
             VSync(0);
-        found = DsSearchFile(&file, D_80011348);
+        found = DsSearchFile(&file, g_PeImagePath);
         if (found != 0 && found != (DslFILE *)-1) {
             g_PeImageBaseLba = DsPosToInt(&file.pos);
             g_PeImageMountFlags = (u8)g_PeImageMountFlags | 1;
@@ -35,13 +34,13 @@ int OpenPeImage(void)
     }
     while (DsSystemStatus() != 1 || DsQueueLen() != 0)
         VSync(0);
-    found = DsSearchFile(&file, D_80011354);
+    found = DsSearchFile(&file, g_PeDisc2MarkerPath);
     if (found != 0) {
         asm volatile("" : : "r"(found));
         if (found != (DslFILE *)-1) {
             while (DsSystemStatus() != 1 || DsQueueLen() != 0)
                 VSync(0);
-            found = DsSearchFile(&file, D_80011348);
+            found = DsSearchFile(&file, g_PeImagePath);
             if (found != 0) {
                 asm volatile("" : : "r"(found));
                 if (found != (DslFILE *)-1) {
