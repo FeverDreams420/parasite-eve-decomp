@@ -1536,7 +1536,7 @@ void RoomFx_UpdateEightParticles(void *unused,
     register char *positionCursor asm("$16");
     register char *scalarCursor asm("$17");
     RoomEightParticleContext *context;
-    char *matrix;
+    const GteMatrix *matrix;
     RoomFxSeed8 seed0;
     RoomFxSeed8 seed1;
     RoomFxSeed8 seed2;
@@ -1544,7 +1544,7 @@ void RoomFx_UpdateEightParticles(void *unused,
     RoomFxSeed8 transformed1;
     RoomFxSeed8 transformed2;
     RoomEightParticleContext *contextResult;
-    char *matrixBase;
+    RoomFxTransform *matrixBase;
     int frame;
     s16 slot;
     int random;
@@ -1555,12 +1555,12 @@ void RoomFx_UpdateEightParticles(void *unused,
     i = 0;
     scalarCursor = (char *)state;
     context = contextResult;
-    matrixBase = (char *)context->root->transforms;
+    matrixBase = context->root->transforms;
     positionCursor = (char *)state;
     seed0 = *(RoomFxSeed8 *)&s_EightParticleOffset;
     seed1 = *(RoomFxSeed8 *)&s_EightParticleStepRight;
     seed2 = *(RoomFxSeed8 *)&s_EightParticleStepLeft;
-    matrix = matrixBase + 0xA0;
+    matrix = (const GteMatrix *)&matrixBase[5];
 
     for (; i < 8;) {
         if (state->active[i] == 0) {
@@ -1569,13 +1569,13 @@ void RoomFx_UpdateEightParticles(void *unused,
             if (slot == i && frame < 90) {
                 state->active[i] = 1;
                 state->activeCount++;
-                ApplyMatrixSV((const GteMatrix *)matrix,
+                ApplyMatrixSV(matrix,
                               (const GteShortVector *)&seed0,
                               (GteShortVector *)&transformed0);
-                ApplyMatrixSV((const GteMatrix *)matrix,
+                ApplyMatrixSV(matrix,
                               (const GteShortVector *)&seed1,
                               (GteShortVector *)&transformed1);
-                ApplyMatrixSV((const GteMatrix *)matrix,
+                ApplyMatrixSV(matrix,
                               (const GteShortVector *)&seed2,
                               (GteShortVector *)&transformed2);
 
