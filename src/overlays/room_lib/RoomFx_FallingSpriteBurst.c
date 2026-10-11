@@ -42,12 +42,11 @@ void RoomFx_FallingBurstInit(void *arg0, int unused, void *arg2) {
     g_RoomFallingBurstSprite.offset = 0xA;
     g_RoomFallingBurstShimmer.offset = 0x64;
     g_RoomFallingBurstPulse.code = 0x20;
-    g_RoomFallingBurstPulse.offset = 0xA0;
     {
         int value24 = 0x24;
         int value1 = 1;
         int value80arg = 0x80;
-        register unsigned char value80 asm("$3") = 0x80;
+        unsigned char value80 = 0x80;
         int value6e = 0x6E;
         g_RoomFallingBurstSprite.code = value24;
         g_RoomFallingBurstSprite.mode = value1;
@@ -58,6 +57,7 @@ void RoomFx_FallingBurstInit(void *arg0, int unused, void *arg2) {
         g_RoomFallingBurstSprite.zero = 0;
         g_RoomFallingBurstShimmer.code = 0;
         g_RoomFallingBurstShimmer.mode = 0;
+        g_RoomFallingBurstPulse.offset = 0xA0;
         g_RoomFallingBurstShimmer.depth = value80arg;
         g_RoomFallingBurstShimmer.r = value80;
         g_RoomFallingBurstShimmer.g = value80;
