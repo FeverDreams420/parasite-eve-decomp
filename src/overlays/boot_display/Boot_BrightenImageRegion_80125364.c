@@ -4,7 +4,7 @@ void func_80125364(void)
 {
     s16 line;
     register u8 *image asm("$14") = (u8 *)D_80172C98 + 0x4000;
-    register u8 *screen asm("$13") = *(u8 **)((u8 *)&D_80125B88 + g_BootDisplayBufferIndex * 16) + 0x19DAC;
+    register u8 *screen asm("$13") = (u8 *)D_80125B88[g_BootDisplayBufferIndex * 4] + 0x19DAC;
 
     for (line = 110; line < 134; line++) {
         s16 row;
