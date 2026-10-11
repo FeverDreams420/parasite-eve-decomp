@@ -201,7 +201,6 @@ void Battle_DrawTargetHighlight(void)
 #define CDDCH (*(s32 *)&D_8009CDDC_oh)
 #define CDDCI (*(s32 *)&D_8009CDDC_oi)
 
-#define g_BattleRemainingActions (*(u8 *)&D_8009D1DC_o)
 
 
 void Battle_DrawSpellName(void) {

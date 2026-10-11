@@ -31,6 +31,8 @@ extern u8 D_8009CE44;
 extern s8 D_8009CE40; /* item target mode: 0, or 4..7 while picking */
 extern u8 D_8009D2D8;
 extern u8 D_8009D1DC;
+/* Actions left in the battle turn (Save_ResetGlobalFlags clears it). */
+extern unsigned char g_BattleRemainingActions;
 extern u8 D_8009CE38[4];
 extern unsigned int D_8009D1AC;
 extern u8 D_8009D1CE;
