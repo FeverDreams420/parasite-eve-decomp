@@ -1,12 +1,9 @@
 
 #include "pe1/battle.h"
 #include "pe1/asset_find.h"
-
-#include "Battle_DispatchSpecialAction_externs.h"
-
-void Battle_CopyPadStateToRecord(void);
-void Battle_SetupEnemyAnims(void);
-void Battle_SyncEnemyAttributes(void);
+#include "pe1/battle_entity_anim.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/player_entity.h"
 
 void Battle_DispatchSpecialAction(int arg0) {
     BattleEntity *actor;

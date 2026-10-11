@@ -1,14 +1,17 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 
 #include "pe1/battle.h"
 
-#include "Battle_FlushScriptSounds_externs.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/inventory.h"
 
-#define D_8009D1A0_R (D_8009D1A0_r.flags)
-#define D_8009D1A0_W (D_8009D1A0_w.flags)
-
-int Inv_AddItem(int slot);
+/* MASPSX_FORCE_G0 keeps the game-state flags absolute, as retail; the COMMON
+ * script sound cursor and count supply the small-data metadata of the two
+ * $gp-relative bytes. */
+u8 D_8009D1D4;
+u8 D_8009CE3C;
 
 void Battle_FlushScriptSounds(void) {
     unsigned int index;
@@ -18,7 +21,7 @@ void Battle_FlushScriptSounds(void) {
 
     index = D_8009D1D4;
     while ((index & 0xFF) < D_8009CE3C) {
-        item = *(unsigned short *)((char *)D_800BE834 + ((index & 0xFF) << 3));
+        item = (u16)D_800BE830[index & 0xFF].command;
         if ((unsigned int)(item - 3) < 0x180) {
             Inv_AddItem((short)item - 3);
         }
@@ -26,9 +29,9 @@ void Battle_FlushScriptSounds(void) {
         index++;
     }
 
-    flags = D_8009D1A0_R;
+    flags = g_GameStateFlags;
     mask = -0x101;
     D_8009CE3C = 0;
     D_8009D1D4 = 0;
-    D_8009D1A0_W = flags & mask;
+    g_GameStateFlags = flags & mask;
 }

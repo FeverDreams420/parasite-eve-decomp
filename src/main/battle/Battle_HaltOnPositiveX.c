@@ -1,43 +1,33 @@
-#include "pe1/battle.h"
-
 /* CC1_FLAGS: -G1 */
 /* MASPSX_FLAGS: -G1 */
 
-#include "Battle_HaltOnPositiveX_externs.h"
-
-void Entity_SetActionMode(BattleEntity *entity, int mode);
-void Battle_FlushScriptSounds(void);
-
-#define COMBATANT_FIELD(ptr, type, member) \
-    (*(type *)((ptr) + PE1_OFFSETOF(Combatant, member)))
-#define ENTITY_FIELD(ptr, type, member) \
-    (*(type *)((ptr) + PE1_OFFSETOF(BattleEntity, member)))
+#include "pe1/battle.h"
+#include "pe1/battle_entity_anim.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/player_entity.h"
 
 void Battle_HaltOnPositiveX(void) {
-    char *state;
-    char *actor;
-    char *state2;
-    char *actor2;
+    Combatant *state;
+    BattleEntity *actor;
+    Combatant *state2;
+    BattleEntity *actor2;
     int flags;
 
-    state = (char *)g_ActiveActor;
-    if (COMBATANT_FIELD(state, s16, curHP) > 0) {
-        actor = (char *)g_PlayerEntity;
-        ENTITY_FIELD(actor, int, motionX) = 0;
-        ENTITY_FIELD(actor, int, motionY) = 0;
-        ENTITY_FIELD(actor, int, motionZ) = 0;
-        Entity_SetActionMode((BattleEntity *)actor, 0x12);
+    state = g_ActiveActor;
+    if ((s16)state->curHP > 0) {
+        actor = (BattleEntity *)g_PlayerEntity;
+        actor->motionX = 0;
+        actor->motionY = 0;
+        actor->motionZ = 0;
+        Entity_SetActionMode(actor, 0x12);
 
-        state2 = (char *)g_ActiveActor;
-        actor2 = (char *)g_PlayerEntity;
-        flags = COMBATANT_FIELD(state2, int, stateFlags);
+        state2 = g_ActiveActor;
+        actor2 = (BattleEntity *)g_PlayerEntity;
+        flags = state2->stateFlags;
         D_8009CE30 = 0;
         flags |= 0x2000;
-        COMBATANT_FIELD(state2, int, stateFlags) = flags;
-        ENTITY_FIELD(actor2, int, entityFlags) &= ~0x100;
+        state2->stateFlags = flags;
+        actor2->entityFlags &= ~0x100;
         Battle_FlushScriptSounds();
     }
 }
-
-#undef ENTITY_FIELD
-#undef COMBATANT_FIELD

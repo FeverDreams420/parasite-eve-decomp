@@ -1,4 +1,0 @@
-#ifndef PE1_EXT_FF48CEA2EEA2
-#define PE1_EXT_FF48CEA2EEA2
-extern BattleTargetWords D_8009E004[];
-#endif /* PE1_EXT_FF48CEA2EEA2 */

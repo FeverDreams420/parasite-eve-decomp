@@ -1,15 +1,5 @@
 #include "pe1/battle_runtime.h"
 
-typedef struct EnemyAnimTable {
-    u8 rows[9][5];
-} EnemyAnimTable;
-
-typedef struct EnemyOffenseScaleTable {
-    u8 values[9];
-} EnemyOffenseScaleTable;
-
-#include "Battle_SetupEnemyAnims_externs.h"
-
 void Battle_SetupEnemyAnims(void) {
     EnemyAnimTable animTable;
     EnemyOffenseScaleTable scaleTable;
@@ -18,8 +8,8 @@ void Battle_SetupEnemyAnims(void) {
     u8 *animRow;
     unsigned int actionId;
 
-    animTable = D_800106A4;
-    scaleTable = D_800106D4;
+    animTable = g_BattleActionAnimRows;
+    scaleTable = g_BattleActionOffenseScale;
 
     combatant = D_8009D278;
     action = combatant->action;

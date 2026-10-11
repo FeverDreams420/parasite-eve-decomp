@@ -1,10 +1,9 @@
 #include "common.h"
 #include "pe1/battle.h"
 
-#include "Battle_RandomChecks_externs.h"
-int rand(void);
-int Battle_GetAgilityBonus(void);
-void Battle_SetupEntityTarget(BattleEntity *actor);
+#include "pe1/battle_entity_anim.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/psyq_libc.h"
 
 
 void Battle_CheckDropChance(void)
@@ -28,9 +27,8 @@ void Battle_RollEnemySpawn(void *arg0)
 {
     EnemyCombatant *ctx;
     int diff;
-    register int threshold asm("$16");
-    register int roll asm("$2");
-    register int scaled asm("$3");
+    int threshold;
+    int bonus;
 
     ctx = ((BattleEntity *)arg0)->core;
     if (ctx->hpAlive <= 0) {
@@ -41,25 +39,27 @@ void Battle_RollEnemySpawn(void *arg0)
                 ctx->field04.bytes.rank);
     if (diff > 0) {
         threshold = Battle_GetAgilityBonus();
-        roll = rand() % 100;
-        scaled = roll * 10;
+        if ((rand() % 100) * 10 < threshold) {
+            Battle_SetupEntityTarget((BattleEntity *)arg0);
+        }
     } else if (diff == 0) {
-        threshold = Battle_GetAgilityBonus() * 3;
-        roll = rand() % 100;
-        scaled = roll * 50;
+        bonus = Battle_GetAgilityBonus();
+        threshold = bonus * 2;
+        threshold += bonus;
+        if ((rand() % 100) * 50 < threshold) {
+            Battle_SetupEntityTarget((BattleEntity *)arg0);
+        }
     } else if (diff == -1) {
-        threshold = Battle_GetAgilityBonus() * 3;
-        roll = rand() % 100;
-        scaled = roll * 100;
+        bonus = Battle_GetAgilityBonus();
+        threshold = bonus * 2;
+        threshold += bonus;
+        if ((rand() % 100) * 100 < threshold) {
+            Battle_SetupEntityTarget((BattleEntity *)arg0);
+        }
     } else if (diff < -1) {
         threshold = Battle_GetAgilityBonus();
-        roll = rand() % 100;
-        scaled = roll * 50;
-    } else {
-        return;
-    }
-
-    if (scaled < threshold) {
-        Battle_SetupEntityTarget((BattleEntity *)arg0);
+        if ((rand() % 100) * 50 < threshold) {
+            Battle_SetupEntityTarget((BattleEntity *)arg0);
+        }
     }
 }

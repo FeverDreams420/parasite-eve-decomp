@@ -1,8 +1,5 @@
 #include "pe1/battle.h"
 
-#include "Battle_TargetSort_externs.h"
-
-void Battle_SwapRecords(BattleTargetWords *records, int from, int to);
 
 void Battle_SortTargets(BattleTargetWords *records, signed char first, signed char last)
 {
@@ -13,7 +10,7 @@ void Battle_SortTargets(BattleTargetWords *records, signed char first, signed ch
         Battle_SwapRecords(records, first, (signed char)((first + last) / 2));
         pivot = first;
         for (scan = pivot; scan <= last; scan++) {
-            if (D_8009E004[(signed char)scan].word_00 < D_8009E004[first].word_00) {
+            if (g_BattleTargetList[(signed char)scan].dist < g_BattleTargetList[first].dist) {
                 pivot++;
                 Battle_SwapRecords(records, (signed char)pivot, (signed char)scan);
             }

@@ -1,57 +1,24 @@
 #include "common.h"
 #include "pe1/battle.h"
-
-#include "Battle_SubActionStep_externs.h"
-
-#define COMBATANT_FIELD(ptr, type, member) \
-    (*(volatile type *)((ptr) + PE1_OFFSETOF(Combatant, member)))
-#define ENTITY_FIELD(ptr, type, member) \
-    (*(volatile type *)((ptr) + PE1_OFFSETOF(BattleEntity, member)))
+#include "pe1/battle_entity_anim.h"
+#include "pe1/player_entity.h"
 
 void Battle_SubActionStep(void) {
-    volatile char *state;
+    Combatant *state;
+    BattleEntity *actor;
 
-    state = (char *)g_ActiveActor;
-    if (COMBATANT_FIELD(state, u8, subActionCounter) >=
-        COMBATANT_FIELD(state, u8, subActionPeriod)) {
-        register volatile char *actor asm("$4");
-        register volatile char *state_v1 asm("$3");
-        u16 value;
-        register u16 step asm("$3");
-        u16 copy;
-
-        value = COMBATANT_FIELD(state, u16, curHP);
-        step = COMBATANT_FIELD(state, u16, subActionStep);
-        copy = COMBATANT_FIELD(state, u16, subActionStep);
-        value -= step;
-        COMBATANT_FIELD(state, u16, curHP) = value;
-        value = COMBATANT_FIELD(state, u16, hpMirror);
-        step = COMBATANT_FIELD(state, u16, subActionStep);
-        COMBATANT_FIELD(state, u8, subActionCounter) = 0;
-        COMBATANT_FIELD(state, u16, panelAux_val) = copy;
-        actor = (char *)g_PlayerEntity;
-        value -= step;
-        state_v1 = (char *)g_ActiveActor;
-        COMBATANT_FIELD(state, u16, hpMirror) = value;
-        value = ENTITY_FIELD(actor, u16, renderObject.projected_x);
-        COMBATANT_FIELD(state_v1, u16, panelAux_x) = value;
-        copy = ENTITY_FIELD(actor, u16, renderObject.projected_y);
-        COMBATANT_FIELD(state_v1, u8, panelAux_timer) = 0x1E;
-        COMBATANT_FIELD(state_v1, u16, panelAux_y) = copy;
-        state_v1 = (char *)g_ActiveActor;
-        COMBATANT_FIELD(state_v1, u8, panelAux_mode) = 3;
+    state = g_ActiveActor;
+    if (state->subActionCounter >= state->subActionPeriod) {
+        state->curHP -= state->subActionStep;
+        state->hpMirror -= state->subActionStep;
+        state->subActionCounter = 0;
+        state->panelAux_val = state->subActionStep;
+        actor = (BattleEntity *)g_PlayerEntity;
+        g_ActiveActor->panelAux_x = actor->renderObject.projected_x;
+        g_ActiveActor->panelAux_y = actor->renderObject.projected_y;
+        g_ActiveActor->panelAux_timer = 0x1E;
+        g_ActiveActor->panelAux_mode = 3;
     }
 
-    {
-        Combatant *state_v1;
-        u8 value;
-
-        state_v1 = g_ActiveActor;
-        value = *(u8 *)&state_v1->subActionCounter;
-        value++;
-        *(u8 *)&state_v1->subActionCounter = value;
-    }
+    g_ActiveActor->subActionCounter++;
 }
-
-#undef ENTITY_FIELD
-#undef COMBATANT_FIELD

@@ -51,10 +51,28 @@ extern u8 D_8009D2EC;
 extern s8 D_8009D2A0;
 extern u8 D_8009CE74;
 extern u8 D_8009D244;
+/* Frames since the player halted at battle end; Menu_MainUpdate counts it up
+ * to 0x5A. */
+extern s8 D_8009CE30;
+
+/* Per-action tables Battle_SetupEnemyAnims copies to the stack: four facing
+ * animation modes plus the action frame word, and the offense scale (x/10). */
+typedef struct EnemyAnimTable {
+    u8 rows[9][5];
+} EnemyAnimTable;
+
+typedef struct EnemyOffenseScaleTable {
+    u8 values[9];
+} EnemyOffenseScaleTable;
+
+extern const EnemyAnimTable g_BattleActionAnimRows;
+extern const EnemyOffenseScaleTable g_BattleActionOffenseScale;
 
 void Battle_FinalizeAttackResult(void);
 void Battle_Init(void);
 void Battle_StepScriptEntry(void);
+void Battle_FlushScriptSounds(void);
+int Battle_GetAgilityBonus(void);
 void Pm_StopAll(void);
 int Pm_SendCmd(int command, int arg1, int arg2, int arg3, int arg4, int arg5);
 int Akao_SetPos3D(int arg0, int arg1, int x, int y, int z);
