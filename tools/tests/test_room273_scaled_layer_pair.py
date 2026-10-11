@@ -1,68 +1,65 @@
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-SOURCE = ROOT / 'src/overlays/room_m273_liberty/RoomEffect_ScaledLayer.c'
+sys.path.insert(0, str(ROOT / 'tools/tests'))
+from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
-
-def callback_source():
-    source = SOURCE.read_text()
-    callback = source.index('int func_8019353C')
-    emitter = source.index('int func_801936F0')
-    return source[:callback] + source[callback:emitter]
+ROOM = 'src/overlays/room_m273_liberty'
+FUNCTION = 'func_8019353C'
 
 
 class ScaledLayerPair(unittest.TestCase):
     def test_target_layout(self):
-        source = callback_source() + r'''
+        unit = find_definition(FUNCTION, ROOM)
+        source = unit.read_text() + r'''
 typedef char layout[sizeof(Vector)==8 && sizeof(Effect)==12 && sizeof(int)==4 &&
     (unsigned long)&((Vector *)0)->x==0 &&
     (unsigned long)&((Vector *)0)->y==2 &&
     (unsigned long)&((Vector *)0)->z==4 &&
-    (unsigned long)&((Vector *)0)->w==6 &&
+    (unsigned long)&((Vector *)0)->pad==6 &&
     (unsigned long)&((Effect *)0)->parameter==8 ? 1:-1];
 '''
         with tempfile.TemporaryDirectory() as directory:
-            path = pathlib.Path(directory) / 'layout.c'
-            path.write_text(source)
-            result = subprocess.run([str(ROOT / 'tools/scripts/cc.sh'), str(path),
-                                     str(path.with_suffix('.o'))], cwd=ROOT,
-                                    capture_output=True, text=True)
+            result = psx_compile(source, pathlib.Path(directory) / 'layout.o', unit)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_behavior(self):
-        source = '#include <assert.h>\n#include <string.h>\n#include <limits.h>\n' + callback_source() + r'''
+        source = '#include <assert.h>\n#include <string.h>\n#include <limits.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
 int D_800E27EC;
-short D_800966EC[8192];
-unsigned short D_800942EC;
+GteSineWord D_800966EC[4096];
+RoomFloorY g_RoomFloorY[1];
 unsigned char D_8019AB70[4];
 static Effect input,original;
 static Vector *savedPosition,*savedRotation;
 static int calls,frame,wantedSize,wantedShade;
-void func_800D004C(Vector *p,int w,int h,int count,Vector *r,int sx,int sy,void *a,void *b,int shade,int flag) {
+void func_800D004C(struct GteShortVector *p,int w,int h,int count,struct GteRotation *rotation,int sx,int sy,
+                  struct RenderColor *a,struct RenderColor *b,int shade,int flag) {
+    Vector *r=(Vector *)rotation;
     assert(w==128 && h==128 && count==12 && flag==1);
-    assert(a==D_8019AB70 && b==input.parameter);
+    assert((void *)a==D_8019AB70 && (void *)b==input.parameter);
     assert(sx==wantedSize && sy==sx && shade==wantedShade);
     if(calls++==0) {
         assert(p!=&input.position && r!=p);
         assert(memcmp(p,&original.position,sizeof(Vector))==0);
-        assert(r->x==1024 && r->y==0 && r->z==(short)(frame*170) && r->w==-1);
+        assert(r->x==1024 && r->y==0 && r->z==(short)(frame*170) && r->pad==-1);
         savedPosition=p; savedRotation=r;
-        p->x=21; p->y=22; p->z=23; p->w=24;
-        r->x=31; r->y=32; r->z=33; r->w=34;
-        D_800942EC=0x8123;
+        p->x=21; p->y=22; p->z=23; p->pad=24;
+        r->x=31; r->y=32; r->z=33; r->pad=34;
+        g_RoomFloorY->raw=0x8123;
         D_800E27EC=7;
         memset(D_800966EC,0x55,sizeof(D_800966EC));
         wantedSize=(short)(wantedSize*3/2); wantedShade>>=1;
     } else {
         assert(calls==2 && p==savedPosition && r==savedRotation);
-        assert(p->x==21 && p->y==(short)0x8123 && p->z==23 && p->w==24);
-        assert(r->x==31 && r->y==32 && r->z==33 && r->w==34);
-        D_800942EC=0x7654;
+        assert(p->x==21 && p->y==(short)0x8123 && p->z==23 && p->pad==24);
+        assert(r->x==31 && r->y==32 && r->z==33 && r->pad==34);
+        g_RoomFloorY->raw=0x7654;
     }
 }
 int main(void) {
@@ -80,7 +77,7 @@ int main(void) {
         memcpy((char *)D_800966EC + index * 4,&bits,4);
         memset(&input,0xA5,sizeof(input));
         input.position.x=-32768; input.position.y=32767; input.position.z=-1;
-        input.position.w=scales[l]; original=input;
+        input.position.pad=scales[l]; original=input;
         wantedSize=(short)(((long long)lows[j]*2+4096)*scales[l]/4096);
         wantedShade=highs[k]>>5;
         calls=0;
@@ -100,6 +97,6 @@ int main(void) {
             path = pathlib.Path(directory) / 'behavior.c'
             path.write_text(source)
             exe = path.with_suffix('')
-            subprocess.run(['cc', '-std=c99', '-O2', '-fno-strict-aliasing',
+            subprocess.run(['cc', '-std=gnu11', '-O2', '-fno-strict-aliasing',
                             str(path), '-o', str(exe)], check=True)
             subprocess.run([str(exe)], check=True)

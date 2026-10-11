@@ -1,17 +1,22 @@
 import pathlib
-import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-SOURCE = ROOT / 'src/overlays/room_m273_liberty/RoomEffect_ColoredRisingSprite.c'
+sys.path.insert(0, str(ROOT / 'tools/tests'))
+from csource import find_definition, host_unit, psx_compile  # noqa: E402
+
+ROOM = 'src/overlays/room_m273_liberty'
+FUNCTION = 'func_80195E10'
 
 
 class ColoredRisingSprite(unittest.TestCase):
     def test_target_layout(self):
-        source = SOURCE.read_text() + r'''
+        unit = find_definition(FUNCTION, ROOM)
+        source = unit.read_text() + r'''
 typedef char layout[sizeof(Particle)==8 && sizeof(Color)==4 &&
     (unsigned long)&((Particle *)0)->y==2 &&
     (unsigned long)&((Particle *)0)->z==4 &&
@@ -19,36 +24,34 @@ typedef char layout[sizeof(Particle)==8 && sizeof(Color)==4 &&
     (unsigned long)&((Color *)0)->unknown==3 ? 1:-1];
 '''
         with tempfile.TemporaryDirectory() as directory:
-            path = pathlib.Path(directory) / 'layout.c'
-            path.write_text(source)
-            result = subprocess.run([str(ROOT / 'tools/scripts/cc.sh'), str(path),
-                                     str(path.with_suffix('.o'))], cwd=ROOT,
-                                    capture_output=True, text=True)
+            result = psx_compile(source, pathlib.Path(directory) / 'layout.o', unit)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_behavior(self):
-        source = re.sub(r' asm\("\$\d+"\)', '', SOURCE.read_text())
-        source = re.sub(r'asm\(""[^;]*;', '', source)
-        source = '#include <assert.h>\n#include <limits.h>\n#include <string.h>\n' + source + r'''
+        source = '#include <assert.h>\n#include <limits.h>\n#include <string.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
 Color D_8018F1E4;
-int D_800E27EC, D_800F3428, D_800966EC[4096];
-unsigned short D_800F336C, D_800E1204[8];
+int D_800E27EC, D_800F3428;
+GteSineWord D_800966EC[4096];
+unsigned short D_800E1204[8];
+RenderEffectParameters D_800F3368;
 static Particle particle;
 static Color wantColor;
 static int draws,cluts,wantPalette,wantSize,wantShade;
 static unsigned int shadeOffset;
-unsigned short GetClut(int x, int y) {
+u_short GetClut(int x, int y) {
     assert(cluts++==0 && !draws && x==0 && y==wantPalette);
     D_800E27EC=999;
     memset(D_800966EC,0,sizeof(D_800966EC));
-    D_800966EC[shadeOffset/4]=0x12348001;
+    D_800966EC[shadeOffset/4].word=0x12348001;
     memset(&D_8018F1E4,0,sizeof(D_8018F1E4));
     return 0xF123;
 }
-void func_800CEE20(Particle *p, void *rotation, int w, int h, int tile,
-                  int clut, int flag, int shade, Color *color) {
-    assert(cluts==1 && draws++==0 && p==&particle && rotation==0);
+void func_800CEE20(struct GteShortVector *point, struct GteRotation *rotation,
+                  int w, int h, int tile, int clut, int flag, int shade,
+                  struct RenderColor *colorArg) {
+    Color *color=(Color *)colorArg;
+    assert(cluts==1 && draws++==0 && (void *)point==&particle && rotation==0);
     assert(w==wantSize && h==wantSize && tile==102);
     assert(clut==0xF123 && flag==1 && shade==wantShade);
     assert(color!=&D_8018F1E4 && memcmp(color,&wantColor,4)==0);
@@ -78,7 +81,7 @@ int main(void) {
             D_800E27EC=frames[f]+1;
             wantSize=sizeSample*2;
             wantShade=(short)0x8001>>6;
-            D_800F336C=kind; D_800F3428=variant;
+            D_800F3368.palette=kind; D_800F3428=variant;
             D_800E1204[kind]=65535;
             wantPalette=65535+(kind==4 && variant ? 9:5);
             D_8018F1E4.r=1; D_8018F1E4.g=128;
@@ -100,6 +103,6 @@ int main(void) {
             path = pathlib.Path(directory) / 'behavior.c'
             path.write_text(source)
             exe = path.with_suffix('')
-            subprocess.run(['cc', '-std=c99', '-O2', '-fno-strict-aliasing',
+            subprocess.run(['cc', '-std=gnu11', '-O2', '-fno-strict-aliasing',
                             str(path), '-o', str(exe)], check=True)
             subprocess.run([str(exe)], check=True)

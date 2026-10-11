@@ -1,70 +1,66 @@
 import pathlib
-import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-SOURCE = ROOT / 'src/overlays/room_m273_liberty/RoomEffect_GatedGroundPair.c'
+sys.path.insert(0, str(ROOT / 'tools/tests'))
+from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
-
-def callback_source():
-    source = SOURCE.read_text()
-    callback = source.index('int func_80198B1C')
-    emitter = source.index('int func_80198CD4')
-    return source[:callback] + source[callback:emitter]
+ROOM = 'src/overlays/room_m273_liberty'
+FUNCTION = 'func_80198B1C'
 
 
 class GroundLayerSprite(unittest.TestCase):
     def test_target_layout(self):
-        source = callback_source() + r'''
+        unit = find_definition(FUNCTION, ROOM)
+        source = unit.read_text() + r'''
 typedef char layout[sizeof(Vector)==8 && __alignof__(Vector)==2 &&
     (unsigned long)&((Vector *)0)->y==2 &&
     (unsigned long)&((Vector *)0)->pad==6 ? 1:-1];
 '''
         with tempfile.TemporaryDirectory() as directory:
-            path = pathlib.Path(directory) / 'layout.c'
-            path.write_text(source)
-            result = subprocess.run([str(ROOT / 'tools/scripts/cc.sh'), str(path),
-                                     str(path.with_suffix('.o'))], cwd=ROOT,
-                                    capture_output=True, text=True)
+            result = psx_compile(source, pathlib.Path(directory) / 'layout.o', unit)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_behavior(self):
-        source = re.sub(r' asm\("\$\d+"\)', '', callback_source())
-        source = re.sub(r'asm\(""[^;]*;', '', source)
-        source = '#include <assert.h>\n#include <limits.h>\n' + source + r'''
+        source = '#include <assert.h>\n#include <limits.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
 int D_800E27EC,D_800F3428;
 short D_800966EE[8192];
-unsigned short D_800F336C,D_800E1204[8],D_800942EC;
-Vector D_8019AB68;
+unsigned short D_800E1204[8];
+RoomFloorY g_RoomFloorY[1];
+RenderEffectParameters D_800F3368;
+GteRotation D_8019AB68;
 unsigned char D_8019AE18[8],D_8019AB70[8];
 static Vector input={12,-34,56,78};
 static Vector *local;
 static int stage,expectedPalette,expectedSize,expectedShade,sizeIndex,shadeIndex;
-unsigned short GetClut(int x,int y) {
+u_short GetClut(int x,int y) {
     assert(stage++==0 && x==0 && y==expectedPalette);
     D_800E27EC=999;
     D_800966EE[sizeIndex]=111; D_800966EE[shadeIndex]=222;
     return 0xF123;
 }
-void func_800CEE20(Vector *p,void *rotation,int w,int h,int tile,
-                  int clut,int flag,int shade,void *color) {
+void func_800CEE20(struct GteShortVector *p, struct GteRotation *rotation,
+                  int w, int h, int tile, int clut, int flag, int shade,
+                  struct RenderColor *color) {
     assert(stage++==1 && p!=&input && !rotation);
     assert(p->x==12 && p->y==-34 && p->z==56 && p->pad==78);
     assert(w==expectedSize && h==expectedSize && tile==100 && clut==0xF123);
     assert(flag==1 && shade==expectedShade && !color);
     local=p; p->x=-111; p->y=222; p->z=-333; p->pad=444;
-    D_800942EC=0xFEDC;
+    g_RoomFloorY->raw=0xFEDC;
 }
-void func_800D004C(Vector *p,int w,int h,int mode,Vector *rotation,int sx,int sy,
-                  void *a,void *b,int shade,int flag) {
+void func_800D004C(struct GteShortVector *p,int w,int h,int mode,
+                  struct GteRotation *rotation,int sx,int sy,
+                  struct RenderColor *a,struct RenderColor *b,int shade,int flag) {
     assert(stage++==2 && p==local && w==384 && h==384 && mode==8);
     assert(p->x==-111 && p->y==(short)0xFEDC && p->z==-333 && p->pad==444);
     assert(rotation==&D_8019AB68 && sx==4096 && sy==4096);
-    assert(a==D_8019AE18 && b==D_8019AB70 && shade==expectedShade && flag==1);
+    assert((void *)a==D_8019AE18 && (void *)b==D_8019AB70 && shade==expectedShade && flag==1);
 }
 int main(void) {
     int times[]={INT_MIN,-1,0,31,32,INT_MAX};
@@ -84,9 +80,9 @@ int main(void) {
             D_800966EE[sizeIndex]=samples[j]; D_800966EE[shadeIndex]=samples[k];
             expectedSize=(short)(samples[j]*2+4096);
             expectedShade=(short)((unsigned int)(samples[k]+4096)>>5);
-            D_800F336C=kind; D_800F3428=variant; D_800E1204[kind]=65535;
+            D_800F3368.palette=kind; D_800F3428=variant; D_800E1204[kind]=65535;
             expectedPalette=65535+(kind==4 && variant ?8:4);
-            stage=0; D_800942EC=123;
+            stage=0; g_RoomFloorY->raw=123;
             assert(func_80198B1C(2,&input)==0 && stage==3);
             assert(input.x==12 && input.y==-34 && input.z==56 && input.pad==78);
         }
@@ -99,6 +95,6 @@ int main(void) {
             path = pathlib.Path(directory) / 'behavior.c'
             path.write_text(source)
             exe = path.with_suffix('')
-            subprocess.run(['cc', '-std=c99', '-O2', str(path), '-o', str(exe)],
+            subprocess.run(['cc', '-std=gnu11', '-O2', str(path), '-o', str(exe)],
                            check=True)
             subprocess.run([str(exe)], check=True)

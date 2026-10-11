@@ -1,57 +1,51 @@
 import pathlib
-import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-SOURCE = ROOT / 'src/overlays/room_m273_liberty/RoomEffect_TimedRising.c'
+sys.path.insert(0, str(ROOT / 'tools/tests'))
+from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
-
-def callback_source():
-    source = SOURCE.read_text()
-    callback = source.index('int func_801974DC')
-    emitter = source.index('int func_80197648')
-    return source[:callback] + source[callback:emitter]
+ROOM = 'src/overlays/room_m273_liberty'
+FUNCTION = 'func_801974DC'
 
 
 class GrowingRisingSprite(unittest.TestCase):
     def test_target_layout(self):
-        source = callback_source() + r'''
+        unit = find_definition(FUNCTION, ROOM)
+        source = unit.read_text() + r'''
 typedef char layout[sizeof(Particle)==8 &&
     (unsigned long)&((Particle *)0)->y==2 &&
     (unsigned long)&((Particle *)0)->z==4 &&
     (unsigned long)&((Particle *)0)->speed==6 ? 1:-1];
 '''
         with tempfile.TemporaryDirectory() as directory:
-            path = pathlib.Path(directory) / 'layout.c'
-            path.write_text(source)
-            result = subprocess.run([str(ROOT / 'tools/scripts/cc.sh'), str(path),
-                                     str(path.with_suffix('.o'))], cwd=ROOT,
-                                    capture_output=True, text=True)
+            result = psx_compile(source, pathlib.Path(directory) / 'layout.o', unit)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_behavior(self):
-        source = re.sub(r' asm\("\$\d+"\)', '', callback_source())
-        source = re.sub(r'asm\(""[^;]*;', '', source)
-        source = '#include <assert.h>\n#include <limits.h>\n#include <string.h>\n' + source + r'''
-int D_800E27EC, D_800F3428, D_800966EC[4096];
-short D_800F336A;
-unsigned short D_800F336C, D_800E1204[8];
+        source = '#include <assert.h>\n#include <limits.h>\n#include <string.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
+int D_800E27EC, D_800F3428;
+GteSineWord D_800966EC[4096];
+unsigned short D_800E1204[8];
+RenderEffectParameters D_800F3368;
 unsigned char D_8019AD70[4];
 static Particle particle;
 static int draws,cluts,wantPalette,wantSize,wantShade,wantTile;
-unsigned short GetClut(int x, int y) {
+u_short GetClut(int x, int y) {
     assert(cluts++==0 && !draws && x==16 && y==wantPalette);
     D_800E27EC=999;
-    D_800F336A=-7;
+    D_800F3368.parameter02=-7;
     memset(D_800966EC,0,sizeof(D_800966EC));
     return 0xF123;
 }
-void func_800CEE20(Particle *p, void *rotation, int w, int h, int tile,
-                  int clut, int flag, int shade, void *color) {
+void func_800CEE20(struct GteShortVector *p, struct GteRotation *rotation,
+                  int w, int h, int tile, int clut, int flag, int shade,
+                  struct RenderColor *color) {
     assert(cluts==1 && draws++==0 && p==&particle && rotation==0);
     assert(w==wantSize && h==wantSize && tile==wantTile);
     assert(clut==0xF123 && flag==1 && shade==wantShade && color==D_8019AD70);
@@ -76,13 +70,13 @@ int main(void) {
             unsigned int sizeOffset=((unsigned int)frames[f]<<7)&0x3F80;
             short sizeSample=(short)values[k];
             D_800E27EC=frames[f]+1;
-            D_800966EC[shadeOffset/4]=0x12340000|values[j];
+            D_800966EC[shadeOffset/4].word=0x12340000|values[j];
             memcpy((char *)D_800966EC+sizeOffset,&sizeSample,2);
             /* The two sample locations coincide for some wrapped frames. */
-            wantShade=(short)D_800966EC[shadeOffset/4]>>5;
+            wantShade=(short)D_800966EC[shadeOffset/4].word>>5;
             wantSize=sizeSample+8192;
             wantTile=-7*(frames[f]/4)+200;
-            D_800F336A=123; D_800F336C=kind; D_800F3428=variant;
+            D_800F3368.parameter02=123; D_800F3368.palette=kind; D_800F3428=variant;
             D_800E1204[kind]=65535;
             wantPalette=65535+(kind==4 && variant ? 4:0);
             particle.x=12; particle.y=65530; particle.z=-34; particle.speed=8;
@@ -101,6 +95,6 @@ int main(void) {
             path = pathlib.Path(directory) / 'behavior.c'
             path.write_text(source)
             exe = path.with_suffix('')
-            subprocess.run(['cc', '-std=c99', '-O2', '-fno-strict-aliasing',
+            subprocess.run(['cc', '-std=gnu11', '-O2', '-fno-strict-aliasing',
                             str(path), '-o', str(exe)], check=True)
             subprocess.run([str(exe)], check=True)

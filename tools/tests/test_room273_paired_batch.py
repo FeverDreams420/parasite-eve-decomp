@@ -1,66 +1,72 @@
 import pathlib
-import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-SOURCE = ROOT / 'src/overlays/room_m273_liberty/RoomEffect_PairedBatchEmitter.c'
+sys.path.insert(0, str(ROOT / 'tools/tests'))
+from csource import find_definition, host_unit, psx_compile  # noqa: E402
+
+ROOM = 'src/overlays/room_m273_liberty'
+FUNCTION = 'func_80195BD0'
 
 
 class PairedBatch(unittest.TestCase):
     def test_target_layout(self):
-        source = SOURCE.read_text() + r'''
+        unit = find_definition(FUNCTION, ROOM)
+        source = unit.read_text() + r'''
+typedef RoomM273PulseEmitterView Effect;
+typedef RoomM273PairedPulseBatch Batch;
 typedef char layout[sizeof(Effect)==12 &&
     (unsigned long)&((Effect *)0)->size==6 &&
     (unsigned long)&((Effect *)0)->phase==8 &&
     (unsigned long)&((Effect *)0)->unknown10==10 &&
-    (unsigned long)&((Context *)0)->pool==8 &&
+    (unsigned long)&((RoomM273PoolContext *)0)->pool==8 &&
     (unsigned long)&((Batch *)0)->y==16 &&
     (unsigned long)&((Batch *)0)->z==32 &&
     (unsigned long)&((Batch *)0)->count==48 &&
     (unsigned long)&((Batch *)0)->stopped==64 ? 1:-1];
 '''
         with tempfile.TemporaryDirectory() as directory:
-            path = pathlib.Path(directory) / 'layout.c'
-            path.write_text(source)
-            result = subprocess.run([str(ROOT / 'tools/scripts/cc.sh'), str(path),
-                                     str(path.with_suffix('.o'))], cwd=ROOT,
-                                    capture_output=True, text=True)
+            result = psx_compile(source, pathlib.Path(directory) / 'layout.o', unit)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_behavior(self):
-        source = re.sub(r'asm\(""[^;]*;', '', SOURCE.read_text())
-        source = re.sub(r'\s+asm\("\$\d+"\)', '', source)
         # These linker symbols alias members of a single PSX allocation.
-        source = source.replace('extern unsigned char D_8019AEF8;',
-                                'static Batch storage;\n#define D_8019AEF8 storage.stopped')
-        source = source.replace('extern short D_8019AEE8;',
-                                '#define D_8019AEE8 storage.count')
+        source = host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM))
+        for old, new in (('extern unsigned char D_8019AEF8;',
+                          'static RoomM273PairedPulseBatch storage;\n'
+                          '#define D_8019AEF8 storage.stopped'),
+                         ('extern short D_8019AEE8;',
+                          '#define D_8019AEE8 storage.count')):
+            self.assertIn(old, source)
+            source = source.replace(old, new)
         source = '#include <assert.h>\n#include <string.h>\n#include <limits.h>\n' + source + r'''
-static Context context;
-Context *D_800F33E0=&context;
+typedef RoomM273PulseEmitterView Effect;
+static RoomM273PoolContext context;
+FieldAnimTaskSlot *D_800F33E0=(FieldAnimTaskSlot *)&context;
 static unsigned char primary[128],otherPrimary[128],secondary[128],otherSecondary[128];
 void *D_8019AE7C=secondary;
 unsigned short D_800E11EA,D_800E2850[8];
-unsigned short D_800F3368,D_800F336A,D_800F336C,D_800F336E;
-unsigned short D_800F3370,D_800F3372,D_800F3374;
-volatile unsigned short D_800F3376,D_800F3378;
+RenderEffectParameters D_800F3368;
 static Effect records[8],*links[8];
 static int init,attempts,aux,updates,renders,failAt,mutateCount;
-int func_80195984(void) { assert(0); return 0; }
+int func_80195984(int mode, RoomM273PulseInput *input) { assert(0); return 0; }
 int func_8019A290(void) { assert(0); return 0; }
-int func_800CE560(void *p,int stride,int count,int (*callback)()) {
-    assert(init++==0 && p==primary && stride==12 && count==10 && callback==func_80195984);
+int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback callback) {
+    assert(init++==0 && p==(char *)primary && stride==12 && count==10 &&
+           callback==(FieldAnimCallbackListCallback)func_80195984);
     return 120;
 }
-int func_800CE5AC(void **p,int offset,int stride,int count,int (*callback)()) {
-    assert(init++==1 && p==&D_8019AE7C && offset==120 && stride==4 && count==10 && callback==func_8019A290);
-    *p=secondary; return 40;
+int func_800CE5AC(void *p,int offset,int stride,int count,void *callback) {
+    assert(init++==1 && p==&D_8019AE7C && offset==120 && stride==4 && count==10 &&
+           callback==(void *)func_8019A290);
+    *(void **)p=secondary; return 40;
 }
-void *func_800CE610(void *p) {
+void *func_800CE610(char *p) {
     int n;
     if(p==secondary || p==otherSecondary) {
         n=aux++;
@@ -76,13 +82,15 @@ void *func_800CE610(void *p) {
     context.pool=otherPrimary;
     return n==failAt ? 0:&records[n];
 }
-void func_800CE688(void *p) {
+int func_800CE688(void *p) {
     assert(p==D_8019AE7C && updates++==0);
     if(!storage.stopped) assert(storage.count==0);
+    return 0;
 }
-void func_800CE78C(void *p) {
+int func_800CE78C(char *p) {
     assert(p==D_8019AE7C && renders++==0);
     D_800E11EA=3; D_800E2850[3]=0xFEDC;
+    return 0;
 }
 int main(void) {
     int counts[]={-32768,-1,0,1,3,8};
@@ -120,8 +128,8 @@ int main(void) {
         storage.stopped=stops[s]; renders=0;
         D_800E11EA=0; D_800E2850[0]=0;
         assert(func_80195BD0(2)==0 && renders==1);
-        assert(D_800F3368==32 && D_800F336A==2 && D_800F3376==32 && D_800F3378==32);
-        assert(D_800F336C==3 && D_800F336E==0 && D_800F3372==0 && D_800F3374==0 && D_800F3370==0xFEDC);
+        assert(D_800F3368.parameter00==32 && D_800F3368.parameter02==2 && D_800F3368.extent_x==32 && D_800F3368.extent_y==32);
+        assert(D_800F3368.palette==3 && D_800F3368.parameter06==0 && D_800F3368.parameter0A==0 && D_800F3368.depth==0 && D_800F3368.tpage==0xFEDC);
     }
     attempts=updates=renders=0;
     assert(func_80195BD0(-1)==0 && func_80195BD0(3)==0);
@@ -134,5 +142,5 @@ int main(void) {
             path = pathlib.Path(directory) / 'behavior.c'
             path.write_text(source)
             exe = path.with_suffix('')
-            subprocess.run(['cc', '-std=c99', '-O2', str(path), '-o', str(exe)], check=True)
+            subprocess.run(['cc', '-std=gnu11', '-O2', str(path), '-o', str(exe)], check=True)
             subprocess.run([str(exe)], check=True)
