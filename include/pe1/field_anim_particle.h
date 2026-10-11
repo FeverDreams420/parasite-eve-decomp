@@ -114,7 +114,9 @@ PE1_STATIC_ASSERT(sizeof(FieldAnimTwinGlow) == 0x18,
 
 /* Glow point with an emitter matrix copied at setup and rescaled at draw. */
 typedef struct FieldAnimMatrixGlow {
-    u8 reserved00[4];
+    u8 reserved00;
+    u8 age;
+    u8 reserved02[2];
     u16 brightness;
     s16 scale;
     FieldAnimParticlePosition position;
