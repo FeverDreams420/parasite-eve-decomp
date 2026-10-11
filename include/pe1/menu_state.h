@@ -30,6 +30,13 @@ extern int g_MenuEquipSwapSource;
 extern int g_MenuInventoryViewMode;
 extern int g_InvItemUsableFlag;
 
+/* Visual settings: the blend colour and screen base Y in effect when the
+ * colour and screen adjust panels opened, restored on cancel, and the
+ * colour panel outline. */
+extern int g_MenuBlendColorBackup;
+extern int g_MenuScreenBaseYBackup;
+extern unsigned char g_MenuBlendColorPanelPoints[];
+
 #define g_MenuLevelUpAnimTimer D_8009CF78
 #define g_MenuPendingTotalExp D_8009CFE8
 #define g_MenuExpAllocTarget D_8009CFEC

@@ -2091,7 +2091,6 @@ Pad_VBlankHandler = 0x8007E0F8;
 Pad_CheckTransferDone = 0x8007E160;
 func_8007B964 = 0x8007B964;
 Draw_PrintNumberWidth3 = 0x800605C4;
-Menu_StepScrollList = 0x8004B650;
 func_80050618 = 0x80050618;
 func_800451D0 = 0x800451D0;
 func_800471BC = 0x800471BC;

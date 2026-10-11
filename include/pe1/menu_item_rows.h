@@ -14,6 +14,8 @@ void Draw_SetTextDimmed(int dimmed);
 void Draw_DropShadow(void);
 void MenuWidget_DrawCenteredTableText(int textId);
 void Menu_DrawEquipSlotListItem(int index);
+void Menu_DrawBlendColorChannelRow(int index);
+void Menu_DrawBlendColorOptionRow(int index);
 
 /* The equip list node whose grid cell the row drawers compare against. */
 extern int D_8009CEF4;

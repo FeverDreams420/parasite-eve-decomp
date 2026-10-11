@@ -1,24 +1,24 @@
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "common.h"
 #include "pe1/draw_state.h"
+#include "pe1/draw_wipe_rect.h"
 #include "pe1/menu_dialog.h"
 #include "pe1/menu_inventory.h"
+#include "pe1/menu_item_rows.h"
+#include "pe1/menu_queue.h"
 #include "pe1/menu_sound.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/text.h"
 #include "pe1/menu_draw_list.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+#include "pe1/menu_widget.h"
 
-#define NULL ((void *)0)
-#include "../../../tools/m2c/m2c_macros.h"
-#include "../../../include/pe1/menu_widget.h"
-
-int Draw_GetBlendColor(void);
-void Menu_DrawBlendColorChannelListUnk(MenuWidgetNode *arg0);
-s32 Menu_StepColorSelect(MenuWidgetNode *arg0, s32 arg1);
-void Menu_DrawBlendColorChannelList(s32 arg0);
-void Menu_DrawBlendColorOptionList(s32 arg0);
-#include "Menu_VisualSettingsFlow_externs.h"
+void Menu_DrawBlendColorArrows(MenuWidgetNode *panel);
+s32 Menu_StepColorSelect(MenuWidgetNode *panel, s32 flags);
+void Menu_DrawBlendColorChannelList(int node);
+void Menu_DrawBlendColorOptionList(int node);
+void Menu_DrawScreenAdjustPanel(void);
+int Menu_ScreenAdjustInputHandler(void *node, int input);
 
 void Menu_OpenBlendColorScreen(MenuWidgetNode *arg0) {
     MenuWidgetNode *parent;
@@ -27,9 +27,9 @@ void Menu_OpenBlendColorScreen(MenuWidgetNode *arg0) {
 
     parent = MenuWidget_CreateSimpleNode(0x2E, arg0, 0, 0);
     panel = MenuWidget_CreateNode(0x2E, parent, parent);
-    parent->draw = (void (*)())Menu_DrawBlendColorChannelListUnk;
+    parent->draw = (void (*)())Menu_DrawBlendColorArrows;
     parent->update = (void (*)())Menu_StepColorSelect;
-    parent->appearance.gradientPoints = D_800922D4;
+    parent->appearance.gradientPoints = g_MenuBlendColorPanelPoints;
     parent->disabled = 1;
     panel->draw = (void (*)())Menu_DrawBlendColorChannelList;
     panel->flags = 1;
@@ -38,183 +38,153 @@ void Menu_OpenBlendColorScreen(MenuWidgetNode *arg0) {
     panel->linkedNext = options;
     options->linkedPrevious = panel;
     MenuWidget_SetCurrentNode(panel->cursor_x < 0 ? options : panel);
-    D_8009CFE0 = Draw_GetBlendColor();
+    g_MenuBlendColorBackup = Draw_GetBlendColor();
 }
-#include "common.h"
-#define NULL ((void *)0)
-#include "../../../tools/m2c/m2c_macros.h"
-s32 MenuInput_GetStatusFlags();
-void Draw_SetTextDimmed(int dimmed);
 
-void Menu_DrawBlendColorChannelListUnk(MenuWidgetNode *arg0) {
-    M2C_UNK var_a0;
-    M2C_UNK var_a0_2;
-    M2C_UNK var_a0_3;
-    M2C_UNK var_a0_4;
-    M2C_UNK var_a0_5;
-    M2C_UNK var_a0_6;
+/* Up/down arrows over the three colour channels; the pair over the selected
+ * channel lights up while that direction is held. */
+void Menu_DrawBlendColorArrows(MenuWidgetNode *panel) {
+    int dimmed0;
+    int dimmed1;
+    int dimmed2;
+    int dimmed3;
+    int dimmed4;
+    int dimmed5;
     u16 directionHeld;
     s32 selectedChannel;
 
-    selectedChannel = MenuWidget_GridCellIndex(MenuWidget_GetChild(arg0, 0));
+    selectedChannel = MenuWidget_GridCellIndex(MenuWidget_GetChild(panel, 0));
     directionHeld = MenuInput_GetStatusFlags() & 0x1000;
     Draw_OffsetCursor(0x12, 5);
-    var_a0 = 0;
+    dimmed0 = 0;
     if ((selectedChannel != 0) || (directionHeld == 0)) {
-        var_a0 = 1;
+        dimmed0 = 1;
     }
-    Draw_SetTextDimmed(var_a0);
+    Draw_SetTextDimmed(dimmed0);
     Draw_AllocSprite(0x4A);
     Draw_OffsetCursor(0x20, 0);
-    var_a0_2 = 0;
+    dimmed1 = 0;
     if ((selectedChannel != 1) || (directionHeld == 0)) {
-        var_a0_2 = 1;
+        dimmed1 = 1;
     }
-    Draw_SetTextDimmed(var_a0_2);
+    Draw_SetTextDimmed(dimmed1);
     Draw_AllocSprite(0x4A);
     Draw_OffsetCursor(0x20, 0);
-    var_a0_3 = 0;
+    dimmed2 = 0;
     if ((selectedChannel != 2) || (directionHeld == 0)) {
-        var_a0_3 = 1;
+        dimmed2 = 1;
     }
-    Draw_SetTextDimmed(var_a0_3);
+    Draw_SetTextDimmed(dimmed2);
     Draw_AllocSprite(0x4A);
     directionHeld = MenuInput_GetStatusFlags() & 0x4000;
     Draw_OffsetCursor(-0x40, 0x19);
-    var_a0_4 = 0;
+    dimmed3 = 0;
     if ((selectedChannel != 0) || (directionHeld == 0)) {
-        var_a0_4 = 1;
+        dimmed3 = 1;
     }
-    Draw_SetTextDimmed(var_a0_4);
+    Draw_SetTextDimmed(dimmed3);
     Draw_AllocSprite(0x4B);
     Draw_OffsetCursor(0x20, 0);
-    var_a0_5 = 0;
+    dimmed4 = 0;
     if ((selectedChannel != 1) || (directionHeld == 0)) {
-        var_a0_5 = 1;
+        dimmed4 = 1;
     }
-    Draw_SetTextDimmed(var_a0_5);
+    Draw_SetTextDimmed(dimmed4);
     Draw_AllocSprite(0x4B);
     Draw_OffsetCursor(0x20, 0);
-    var_a0_6 = 0;
+    dimmed5 = 0;
     if ((selectedChannel != 2) || (directionHeld == 0)) {
-        var_a0_6 = 1;
+        dimmed5 = 1;
     }
-    Draw_SetTextDimmed(var_a0_6);
+    Draw_SetTextDimmed(dimmed5);
     Draw_AllocSprite(0x4B);
 }
-#include "common.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
 
-#define NULL ((void *)0)
-#include "../../../tools/m2c/m2c_macros.h"
-int Draw_GetBlendColor(void);
-#include "Menu_VisualSettingsFlow_externs_1.h"
-#define g_SavedDrawBlendColor (g_SavedDrawBlendColor[0])
-
-s32 Menu_StepColorSelect(MenuWidgetNode *arg0, s32 arg1) {
-    s32 temp_s0;
-    s32 temp_v0_2;
-    s32 temp_v1;
-    s32 temp_v1_2;
-    s32 temp_v1_3;
-    s32 var_a0;
-    s32 var_v0;
+s32 Menu_StepColorSelect(MenuWidgetNode *panel, s32 flags) {
+    s32 shift;
+    s32 choice;
+    s32 color;
+    s32 raised;
+    s32 lowered;
+    s32 others;
+    s32 value;
     s32 clamp;
-    s32 var_v0_2;
-    MenuWidgetNode *temp_v0;
+    MenuWidgetNode *options;
 
-    temp_s0 = MenuWidget_GridCellIndex(MenuWidget_GetChild(arg0, 0)) * 8;
-    temp_v1 = Draw_GetBlendColor();
-    if (arg1 & 0x1000) {
-    var_a0 = temp_v1 & ~(0xFF << temp_s0);
-    temp_v1_2 = ((temp_v1 >> temp_s0) & 0xFF) + 2;
-    if (temp_v1_2 < 0xE9) {
-        var_v0 = temp_v1_2 << temp_s0;
-        goto blend;
+    shift = MenuWidget_GridCellIndex(MenuWidget_GetChild(panel, 0)) * 8;
+    color = Draw_GetBlendColor();
+    if (flags & 0x1000) {
+        others = color & ~(0xFF << shift);
+        raised = ((color >> shift) & 0xFF) + 2;
+        if (raised < 0xE9) {
+            value = raised << shift;
+            /* Match debt: both arms share one clamp shift and blend tail. */
+            goto blend;
+        }
+        clamp = 0xE8;
+        goto clamp_shift;
     }
-    clamp = 0xE8;
-    goto clampshift;
-    }
-check4000:
-    if (arg1 & 0x4000) {
-    var_a0 = temp_v1 & ~(0xFF << temp_s0);
-    temp_v1_3 = ((temp_v1 >> temp_s0) & 0xFF) - 2;
-    if (temp_v1_3 >= 0x20) {
-        var_v0 = temp_v1_3 << temp_s0;
-    }
-    else
-    {
-    clamp = 0x20;
-clampshift:
-    var_v0 = clamp << temp_s0;
-    }
-blend:
-    Draw_BlendColor(var_a0 | var_v0);
-    Menu_PlayMoveSound();
-    return 1;
-    }
-check10000:
-    if (arg1 & 0x10000) {
-        temp_v0 = MenuWidget_GetChild(arg0, 1);
-        temp_v0_2 = MenuWidget_GridCellIndex(temp_v0);
-        if (temp_v0_2 == 0) {
-            g_SavedDrawBlendColor = Draw_GetBlendColor();
-            MenuWidget_DestroyNode(arg0);
-        } else if (temp_v0_2 == 1) {
-            Draw_BlendColor(0x404040);
-            g_SavedDrawBlendColor = Draw_GetBlendColor();
-            MenuWidget_DestroyNode(arg0);
+    if (flags & 0x4000) {
+        others = color & ~(0xFF << shift);
+        lowered = ((color >> shift) & 0xFF) - 2;
+        if (lowered >= 0x20) {
+            value = lowered << shift;
         } else {
-            temp_v0->cursor_x = 0;
-            temp_v0->cursor_y = 0;
-            MenuWidget_SetCurrentNode(temp_v0);
-            MenuWidget_GetChild(arg0, 0)->cursor_x = -1;
+            clamp = 0x20;
+clamp_shift:
+            value = clamp << shift;
+        }
+blend:
+        Draw_BlendColor(others | value);
+        Menu_PlayMoveSound();
+        return 1;
+    }
+    if (flags & 0x10000) {
+        options = MenuWidget_GetChild(panel, 1);
+        choice = MenuWidget_GridCellIndex(options);
+        if (choice == 0) {
+            g_SavedDrawBlendColor[0] = Draw_GetBlendColor();
+            MenuWidget_DestroyNode(panel);
+        } else if (choice == 1) {
+            Draw_BlendColor(0x404040);
+            g_SavedDrawBlendColor[0] = Draw_GetBlendColor();
+            MenuWidget_DestroyNode(panel);
+        } else {
+            options->cursor_x = 0;
+            options->cursor_y = 0;
+            MenuWidget_SetCurrentNode(options);
+            MenuWidget_GetChild(panel, 0)->cursor_x = -1;
         }
         Menu_PlayConfirmSound();
         return 1;
     }
-    if (arg1 & 0x40) {
-        MenuWidget_DestroyNode(arg0);
-        Draw_BlendColor(D_8009CFE0);
+    if (flags & 0x40) {
+        MenuWidget_DestroyNode(panel);
+        Draw_BlendColor(g_MenuBlendColorBackup);
         Menu_PlayCancelSound();
     }
     return 1;
 }
 
-void Menu_DrawBlendColorChannelRow(int arg0);
-
-void Menu_DrawBlendColorChannelList(int arg0) {
-    MenuWidget_DrawList((MenuWidgetNode *)arg0, Menu_DrawBlendColorChannelRow);
-}
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: --use-comm-section -G8 */
-
-void Menu_DrawBlendColorOptionRow(void);
-
-int D_8009CFE4;
-
-void Menu_DrawScreenAdjustPanel(void);
-void Menu_StepScrollList(void);
-int Draw_GetBaseY(void);
-
-void Menu_DrawBlendColorOptionList(int arg0) {
-    MenuWidget_DrawList((MenuWidgetNode *)arg0, (void (*)(int))Menu_DrawBlendColorOptionRow);
+void Menu_DrawBlendColorChannelList(int node) {
+    MenuWidget_DrawList((MenuWidgetNode *)node, Menu_DrawBlendColorChannelRow);
 }
 
-void Menu_OpenScreenAdjustView(int arg0) {
-    void *node;
+int g_MenuScreenBaseYBackup;
 
-    node = MenuWidget_CreateSimpleNode(0x38, arg0, 0, 1);
-    ((MenuWidgetNode *)node)->draw = (void (*)())Menu_DrawScreenAdjustPanel;
-    ((MenuWidgetNode *)node)->update = (void (*)())Menu_StepScrollList;
+void Menu_DrawBlendColorOptionList(int node) {
+    MenuWidget_DrawList((MenuWidgetNode *)node, Menu_DrawBlendColorOptionRow);
+}
+
+void Menu_OpenScreenAdjustView(int parent) {
+    MenuWidgetNode *node;
+
+    node = MenuWidget_CreateSimpleNode(0x38, (MenuWidgetNode *)parent, 0, 1);
+    node->draw = (void (*)())Menu_DrawScreenAdjustPanel;
+    node->update = (void (*)())Menu_ScreenAdjustInputHandler;
     MenuWidget_SetCurrentNode(node);
-    D_8009CFE4 = Draw_GetBaseY();
+    g_MenuScreenBaseYBackup = Draw_GetBaseY();
 }
-int Draw_GetBaseY(void);
-void Draw_PrintSignedNumberWidth3(int arg0);
-void Draw_SetTextDimmed(int arg0);
-void Draw_EmitGlyph(int arg0, int arg1);
 
 void Menu_DrawScreenAdjustPanel(void) {
     Draw_OffsetCursor(0x10, 0xA);
@@ -225,27 +195,20 @@ void Menu_DrawScreenAdjustPanel(void) {
     Draw_OffsetCursor(0, 0xBE);
     Draw_EmitGlyph(0x7B, 2);
 }
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
 
-#include "Menu_VisualSettingsFlow_externs_2.h"
-
-void Draw_SetBaseOffsetPosition(int x, int y);
-int Draw_GetBaseY(void);
-
-int func_8004B650(void *node, int input) {
+int Menu_ScreenAdjustInputHandler(void *node, int input) {
     int zero_arg;
 
     do {
-    if ((input & 0x1000) != 0) {
-        zero_arg = 0;
-        input = -1;
-    } else if ((input & 0x4000) != 0) {
-        zero_arg = 0;
-        input = 1;
-    } else {
-        break;
-    }
+        if ((input & 0x1000) != 0) {
+            zero_arg = 0;
+            input = -1;
+        } else if ((input & 0x4000) != 0) {
+            zero_arg = 0;
+            input = 1;
+        } else {
+            break;
+        }
         Draw_SetBaseOffsetPosition(zero_arg, input);
         Menu_PlayMoveSound();
         return 1;
@@ -258,7 +221,7 @@ int func_8004B650(void *node, int input) {
     }
 
     if ((input & 0x40) != 0) {
-        Draw_SetBaseOffsetPosition(0, D_8009CFE4 - Draw_GetBaseY());
+        Draw_SetBaseOffsetPosition(0, g_MenuScreenBaseYBackup - Draw_GetBaseY());
         MenuWidget_DestroyNode(node);
         Menu_PlayCancelSound();
     }
