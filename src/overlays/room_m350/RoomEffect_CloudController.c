@@ -44,7 +44,7 @@ int func_80198CF8(int event,State *state)
             register int signedFrame asm("$2")=(short)current;
             if(signedFrame>=30) {
                 instance->anim.fixed=0x50000;
-                D_8019A8B8.repeats=*(volatile unsigned short *)&D_8019A8B8.repeats-1;
+                D_8019A8B8.repeats--;
             }
         } else if((short)current>=instance->action-1) {
             if(instance->state) instance->state->action_state[0]=4;
