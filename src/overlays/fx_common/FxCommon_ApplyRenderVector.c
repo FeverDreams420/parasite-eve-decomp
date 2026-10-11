@@ -1,3 +1,4 @@
+/* CC1_FLAGS: -G8 */
 #include "fx_common.h"
 
 void func_80191EFC(void *object, volatile FxCommonVec3 *input)
@@ -12,7 +13,7 @@ void func_80191EFC(void *object, volatile FxCommonVec3 *input)
     } scratch;
     GteMatrix **matrixSlot;
     GteMatrix *savedMatrix;
-    void *savedOutput;
+    s32 *savedOutput;
 
     scratch.size = 0x300;
     PushMatrix();
@@ -21,8 +22,8 @@ void func_80191EFC(void *object, volatile FxCommonVec3 *input)
     matrixSlot = &D_800BCFA4.value;
     savedMatrix = *matrixSlot;
     *matrixSlot = &D_8019CC30;
-    savedOutput = D_800BCFA8;
-    D_800BCFA8 = (void *)&scratch.size;
+    savedOutput = D_800BCFA8.distance;
+    D_800BCFA8.distance = &scratch.size;
     scratch.vector.x = input->x;
     scratch.vector.y = input->y;
     scratch.vector.z = input->z;
@@ -30,6 +31,6 @@ void func_80191EFC(void *object, volatile FxCommonVec3 *input)
     func_800868F0(object, 0, scratch.valueB);
     func_80086A28(object, 0, scratch.valueA);
     *matrixSlot = savedMatrix;
-    D_800BCFA8 = savedOutput;
+    D_800BCFA8.distance = savedOutput;
     PopMatrix();
 }

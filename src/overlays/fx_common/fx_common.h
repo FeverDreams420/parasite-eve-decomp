@@ -6,6 +6,7 @@
 #include "pe1/room_fx.h"
 #include "pe1/gte_types.h"
 #include "pe1/render_matrix_slot.h"
+#include "pe1/projection_slot.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/akao_send.h"
 #include "pe1/asset_tim.h"
@@ -256,7 +257,6 @@ extern RoomSpriteMatrix D_8019CC30;
 extern RoomSpriteMatrix *D_8019BFF0;
 extern u8 D_801D0260;
 extern u8 D_801EA378[];
-extern void *volatile D_800BCFA8;
 
 void func_800868AC(int mode, int arg1);
 void func_80077BC4(FxCommonGradientQuad *packet);
