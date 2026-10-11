@@ -13,7 +13,7 @@
 typedef struct FieldEngState {
     /* 0x00 */ short wait;              /* frames to sleep before the next command */
     /* 0x02 */ short pc;                /* index into the command table */
-    /* 0x04 */ unsigned char pad_04[2];
+    /* 0x04 */ short data_next;         /* next free slot-data offset (FieldEngDataState) */
     /* 0x06 */ signed char keep_alive;  /* halted scripts report -1 unless set */
     /* 0x07 */ signed char halted;      /* set by the -1 end command */
     /* 0x08 */ int regs[16];            /* regs[14] = abort flag (func_800C2B90) */
@@ -21,6 +21,13 @@ typedef struct FieldEngState {
     /* 0x6C */ int *commands;           /* command table (obj+0x78) */
     /* 0x70 */ void *current_context;   /* active field object or its effect context */
 } FieldEngState;
+
+/* Word view of the same work area: the halt tests compare keep_alive and
+ * halted (the high half of the word at +4) in one load. */
+typedef struct FieldEngStateWords {
+    /* 0x00 */ u32 timing;  /* wait and pc */
+    /* 0x04 */ u32 status;  /* data_next, keep_alive, halted */
+} FieldEngStateWords;
 
 /* Field engine object: header, script state, dispatch slots, slot data. */
 typedef struct FieldEngObject {

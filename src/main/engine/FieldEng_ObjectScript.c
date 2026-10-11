@@ -1,6 +1,8 @@
 #include "common.h"
 #include "pe1/field_engine_state.h"
 #include "pe1/psyq_bios.h"
+#include "pe1/field_anim_pool.h"
+#include "pe1/field_actor.h"
 
 /* Field engine objects: clearing an object's script state and dispatch
  * slots, and the two per-frame passes over the 0x40 dispatch slots. */
@@ -34,25 +36,25 @@ void **FieldEng_GetSlot(char *obj) {
     D_800F32A8 = obj;
     D_800F3330 = obj + 0x200;
 
-    *(s16 *)(obj + 0xC) = 0;
-    *(s16 *)(obj + 0xE) = 0;
-    *(s16 *)(obj + 0x10) = 0;
+    ((FieldEngObject *)obj)->state.wait = 0;
+    ((FieldEngObject *)obj)->state.pc = 0;
+    ((FieldEngObject *)obj)->state.data_next = 0;
 
     i = 0;
     offset = 0;
     do {
-        *(u8 *)(offset + (int)D_800F34F4) = 0;
-        *(u8 *)(offset + (int)D_800F34F4 + 1) = 0;
-        *(s16 *)(offset + (int)D_800F34F4 + 2) = 0;
-        *(s16 *)(offset + (int)D_800F34F4 + 4) = 0;
+        ((FieldEngSlot *)(offset + (int)D_800F34F4))->handler_id = 0;
+        ((FieldEngSlot *)(offset + (int)D_800F34F4))->flag = 0;
+        ((FieldEngSlot *)(offset + (int)D_800F34F4))->counter = 0;
+        ((FieldEngSlot *)(offset + (int)D_800F34F4))->data_offset = 0;
         i++;
         offset += 6;
     } while (i < 0x40);
 
     if (FieldEng_GetStatus(obj) == 3) {
-        char *inner = **(char ***)(obj + 8);
+        FieldActorState *inner = ((FieldAnimObjectPrefix *)obj)->actor->state;
 
-        *(int *)inner = (*(int *)inner & 0xC0FFFFFF) | 0x01000000;
+        inner->core_flags = (inner->core_flags & 0xC0FFFFFF) | 0x01000000;
     }
 
     return (void **)(D_800E2248 + 0x6C);
@@ -65,7 +67,7 @@ int FieldEng_Register(char *obj, int (**handlers)(char *obj, void *entry, void *
   s16 i;
   char *table;
   i = 0;
-  table = *((char **) (obj_s0 + 0x78));
+  table = (char *) ((FieldEngObject *) obj_s0)->state.commands;
   D_800E2248 = obj_s0 + 0xC;
   D_800F34F4 = (u8 *) (obj_s0 + 0x80);
   D_800F3330 = obj_s0 + 0x200;
@@ -93,12 +95,12 @@ int FieldEng_Register(char *obj, int (**handlers)(char *obj, void *entry, void *
 int func_800C251C(char *obj, int (**handlers)(char *obj, void *entry, void *data)) {
     int result;
     s16 i;
-    char *data;
+    FieldActor *data;
     char *table;
 
     result = 0;
-    table = *(char **)(obj + 0x78);
-    data = *(char **)(obj + 8);
+    table = (char *)((FieldEngObject *)obj)->state.commands;
+    data = ((FieldAnimObjectPrefix *)obj)->actor;
 
     D_800E2248 = obj + 0xC;
     D_800F34F4 = (u8 *)(obj + 0x80);
@@ -110,7 +112,7 @@ int func_800C251C(char *obj, int (**handlers)(char *obj, void *entry, void *data
 
     if (FieldEng_GetStatus(obj) == 3) {
         if ((u8)obj[1] != 0x24) {
-            char *state = *(char **)(**(char ***)(obj + 8) + 0x18);
+            u8 *state = ((FieldAnimObjectPrefix *)obj)->actor->state->action_state;
 
             if ((u8)state[0] == 1) {
                 state[0] = 2;
@@ -147,8 +149,8 @@ int func_800C251C(char *obj, int (**handlers)(char *obj, void *entry, void *data
     }
 
     if (FieldEng_GetStatus(obj) == 3) {
-        char *inner = *(char **)data;
-        u32 flags = *(u32 *)inner;
+        char *inner = (char *)data->state;
+        u32 flags = ((FieldActorState *)inner)->core_flags;
 
         if (*(u8 *)(inner + ((flags >> 17) & 0x70) + 0x1C) == 0 && (flags & 0x180E) != 0) {
             result = -1;
@@ -257,28 +259,16 @@ int func_800C2758(FieldEngObject *obj, int (**handlers)(void *, void *, void *),
 int FieldEng_Spawn6(char *base, int unused, int index, int value) {
     base += 0xC;
     g_FieldEngineScriptState = base;
-    *(int *)(base + index * 4 + 0x48) = value;
+    ((FieldEngState *)base)->vars[index] = value;
     return 0;
 }
 
 void *func_800C2B10(int index) {
-    int offset;
-    char *base;
-
-    offset = index << 2;
-    base = D_800E2248;
-    offset += 8;
-    return base + offset;
+    return &((FieldEngState *)D_800E2248)->regs[index];
 }
 
 void *func_800C2B28(int index) {
-    int offset;
-    char *base;
-
-    offset = index << 2;
-    base = D_800E2248;
-    offset += 0x48;
-    return base + offset;
+    return &((FieldEngState *)D_800E2248)->vars[index];
 }
 
 void func_800C2B40(void *context) {
@@ -290,7 +280,7 @@ void *func_800C2B50(void) {
 }
 
 int func_800C2B68(void) {
-    return ((*(unsigned int *)(g_FieldEngineScriptState + 4) & 0xFFFF0000U) ^ 0x01010000U) < 1;
+    return ((((FieldEngStateWords *)g_FieldEngineScriptState)->status & 0xFFFF0000U) ^ 0x01010000U) < 1;
 }
 
 void func_800C2D0C(u16 slot, u8 id, u16 size);
@@ -355,7 +345,7 @@ int func_800C2DA0(u16 slot) {
     ((FieldEngSlot *)D_800F34F4)[slot].flag = 0;
     D_800E2248[6]--;
 
-    return -((((*(int *)(D_800E2248 + 4) & 0xFFFF0000) ^ 0x01000000) < 1));
+    return -((((((FieldEngStateWords *)D_800E2248)->status & 0xFFFF0000) ^ 0x01000000) < 1));
 }
 
 int func_800C2E08(void) {
@@ -377,7 +367,7 @@ int func_800C2E08(void) {
             entry = (FieldEngSlot *)((u16)i * 6 + (int)D_800F34F4);
             entry->flag = 0;
             D_800E2248[6]--;
-            check = *(u32 *)(D_800E2248 + 4) & andMask;
+            check = ((FieldEngStateWords *)D_800E2248)->status & andMask;
             check = check == xorMask;
             result |= -check;
         }
