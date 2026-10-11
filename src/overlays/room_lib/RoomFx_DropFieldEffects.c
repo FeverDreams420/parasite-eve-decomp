@@ -1522,7 +1522,6 @@ void RoomFx_UpdateEightParticles(void *unused,
                                RoomEightParticleControl *control,
                                RoomEightParticleState *stateArg) {
     RoomEightParticleControl *clock;
-    register RoomEightParticleState *state asm("$19");
     unsigned int i;
     RoomEightParticleContext *context;
     const GteMatrix *matrix;
@@ -1540,7 +1539,7 @@ void RoomFx_UpdateEightParticles(void *unused,
     RoomEightParticleState *particles;
 
     clock = control;
-    state = stateArg;
+    particles = stateArg;
     contextResult = func_800C2B50();
     i = 0;
     context = contextResult;
@@ -1550,7 +1549,6 @@ void RoomFx_UpdateEightParticles(void *unused,
     seed2 = *(RoomFxSeed8 *)&s_EightParticleStepLeft;
     matrix = (const GteMatrix *)&matrixBase[5];
 
-    particles = state;
     for (; i < 8; i++) {
         if (particles->active[i] == 0) {
             frame = clock->frame;
