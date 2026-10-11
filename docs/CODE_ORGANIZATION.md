@@ -243,11 +243,16 @@ Crutches still in place (lev is the only metric):
   register and reloads it every iteration; plain stores use absolute
   addressing (lev 47), a `PmPrimarySlot **` local gives the register address
   but not retail's extra copy (lev 44).
-- `GameState_Reset` (3 pins, 11 barriers, 5 raw offsets, 1 byte-pointer
-  sum): a field-by-field rewrite through a `Pe1GameState *` gives retail's
-  absolute-then-relative addressing and loops, but sched1 launches the
-  shared -1 byte constant just before its first store while retail loads it
-  early into v1, which shifts every later register (best lev 92).
+- `GameState_Reset` (3 pins, 3 launders, byte offsets off `base`): the
+  eight ordering barriers were redundant and are gone. Each remaining
+  launder makes a -1 or the loop counter look like a fresh value after a
+  store so it is not merged with an earlier constant (lev 11, 2 and 14 when
+  removed one at a time); the `$3`/`$5` pins keep the fill cursor and loop
+  counter in retail's registers (lev 3, 76, 77). A field-by-field rewrite
+  through a `Pe1GameState *` gives retail's absolute-then-relative
+  addressing and loops, but sched1 launches the shared -1 byte constant
+  just before its first store while retail loads it early into v1, which
+  shifts every later register (best lev 92).
 - `Boot_InitMemoryLayout` (2 pins, 4 pointer-integer casts, volatile
   `D_800B0E24`..`D_800B0E68` views): without the pins the buffer cursors and
   the 0x8000/0x48000 constants trade registers in every declaration order
@@ -743,6 +748,100 @@ Still open:
     `Battle_DrawStatusPanel` (typed digit packets lev 294),
     `Battle_DrawHPBar`, `Battle_StepPostBattle` and the four phase steps of
     `Battle_EscapeAndPhaseInitFlow` (70 pins) were not reduced further.
+
+### Small-data recipes that replaced crutches (2026-10-12 pass)
+
+These apply to any unit, not only the ones they were found in:
+
+- A `PE1_NOP`/`PE1_NOP_IO2_DEP` slot between a load and a `$gp` store of
+  the loaded value stands in for the load-delay `nop` ASPSX emitted. A
+  tentative definition of the stored word in the unit plus
+  `--use-comm-section` gives MASPSX its size and it keeps the `nop`
+  (`CD_StepReadState`, `Scene_LoadMap`, `Battle_StepCharacterAction`).
+- 16-byte `struct { char _[16]; } X __asm__("sym")` views in a `-G8` unit
+  only make cc1 treat a small word as absolute. `MASPSX_FORCE_G0: 1` with
+  `--use-comm-section` and tentative definitions of the words retail reaches
+  through `$gp` makes every other word absolute, so plain declarations give
+  the same code (`Battle_BuildTargetList`, `Battle_Init`,
+  `Battle_PlayerTurnFlow`, `Battle_FinalizeAttackResult`,
+  `Battle_AdvancePhase`, the forced-G0 task units). Views that only separate
+  two reads of one word for CSE are a different crutch and stay
+  (`Battle_ApplySpellEffect`, `Battle_DrawSpellName`, `Inv_TransferItem`,
+  `Inv_ItemActions`).
+- Under `-G0` every extern is absolute anyway; the views in
+  `Scene_UpdateBgDraw` and `Scene_LoadSceneData` were unnecessary.
+- An array bound changes the small-data decision: `g_TaskNodeSeqCounter[1]`
+  is small, `[]` is not. Declaring a symbol as an incomplete array before
+  its tentative definition in the same unit also makes it large, so
+  `Boot_FrameLoop` includes `pe1/boot.h` after its definitions.
+- `CdRom_PollReady` is an `extern inline` in `pe1/cd_poll.h`: the boot disc
+  loaders inline it as retail does (the copy into the return register is
+  what the old `$v0` pins and status barriers imitated), and
+  `CdRom_BootReadFlow.c` keeps the out-of-line definition.
+- A loop that walks a table by index rather than an incremented pointer
+  leaves the table pointer single-set, and sched1 then places its address
+  load late (`MemCard_InitManager`, no pins).
+- Pointer/word unions (`CdRangeAddress`, `PeSectorTableAddress`,
+  `SceneCopyCursor`) replace `(u32)` casts where retail adds an index to a
+  table address with the index as the first `addu` operand.
+- Overlays link against their own symbol maps, so a header symbol whose
+  `__asm__` label is the name overlays use (`g_ActiveDrawSlot` in
+  `boot_display.h`) keeps the label until the overlays are renamed too.
+
+### Crutches left in scene, task, gpu, item, boot and main (2026-10-12 pass)
+
+Each site was removed on its own and rebuilt; the lev given is for that
+single removal (none was byte-identical):
+
+- scene: `Scene_LoadSceneData` keeps the `$t0` `copyEnd` pin (lev 5) and the
+  destination-word barrier (lev 2). `Scene_LoadEntityTexture` keeps the
+  `$s0` loop pin (lev 9), the record barrier (lev 3), the packed-word
+  barrier (lev 9) and its stack reserve. `Scene_TickTimers` keeps the `$a1`
+  entry pin (lev 30). `Scene_UpdatePlayerEntity`/`Scene_UpdateEntityFacing`/
+  `Scene_UpdateEntityFacingFromPad` keep their angle launders (lev 1 each:
+  CSE folds the masked angle into the previous one) and the pad memory
+  barrier (lev 7). Retry `goto`s in the room loaders stay for the loop.c
+  reason given for the CD loops.
+- task: `Task_GpuFlushPrimQueue` and `Task_InitGpuHwRegs` keep their
+  register-block pins and barriers (lev 2 to 9 each; retail hand-allocates
+  `$t0`..`$t6` for the GPU register words). `Camera_StepAngleFade` (m2c
+  pins, lev 4 to 57), `Task_SpawnChildNode` (lev 2 to 12),
+  `Task_SetObjEntryFlag80`/`Task_ClearObjEntryFlag80` (index/base `$v0`/`$v1`
+  swap, lev 4 to 15), `Task_WaitAnimRange` (lev 28),
+  `Task_TurnTowardPointStep` (lev 3, 14), `Task_SnapPosToSpawnPos` (lev 12),
+  `Task_SetGteMatrix` (lev 21), `Task_OpenMemCardDialog` (`$v0` clobber,
+  lev 13), `Task_RunInvCommand` (lev 16), `Boot_MemCardStepInit` (lev 15).
+  `Task_DispatchScriptCmd` keeps its `goto`s: the structured switch puts the
+  case-table pivot elsewhere (lev 80).
+- gpu: `Gte_SetBackColor`/`Gte_SetLightColor` keep `t4`..`t6`: these are
+  the registers the PSY-Q GTE macros name (lev 2 to 10). `Draw_AllocColorQuad`,
+  `Draw_AllocSprite`, `Draw_EmitGlyph`, `Draw_AllocTexturedQuad`,
+  `Draw_MeasureTextWidth`, `Draw_PrintCenteredTextInWidth`,
+  `Draw_AllocColorRect`, `Draw_AllocColorTri`, `Gpu_DrawStatusIcons` keep
+  m2c register pins (lev 1 to 78). `Draw_PrintTimeValue` keeps two memory
+  barriers (lev 52). `Gpu_InitDisplay` keeps the same pins as
+  `Boot_InitMemoryLayout` (lev 10 to 46).
+- item: `Inv_SetActiveList` (lev 9 to 36), `Inv_GetSlotItemData`/
+  `Inv_GetActiveSlotCount`/`Inv_IsSlotEquipped`/`Inv_IsSlotSelectable` empty
+  asm statements (lev 18 to 61: they stop the shared slot lookup being
+  cross-jumped), `Inv_ClearDisplaySlots` (lev 12),
+  `Inv_CompareItemsForSort` (two memory barriers, lev 22 and 4),
+  `Inv_CheckItemEquippable` (lev 5 to 40), `Inv_FindFirstEmptySlot`
+  (lev 16, 49), `Inv_FindItem` (lev 1 to 21), `Inv_InitMaxLevelInventory`
+  (lev 9), `Inv_RebuildSelectionBitset` (lev 17 to 36), `Inv_TransferItem`
+  (lev 4 to 8), `Stat_QueryLevelAndSubLevel` (lev 65). The six local item
+  record lookups became `Inv_LookupItemRecord`/`Inv_LookupItemRecordScaled`
+  in `pe1/inventory_slots.h`.
+- boot: `Field_HandleStateTransition` (lev 13 to 48), `Gpu_InitPipeline`
+  (pins lev 11 to 13, barrier lev 37: the constant clamps are not folded
+  without it). `Boot_DiscTableLoad` keeps its retry `goto`s (loop.c).
+- main: `Battle_ApplySpellEffect` (lev 3 to 48), `Battle_BuildTargetList`
+  `finalCount` pin and barrier (lev 5), `Battle_DrawStatusOverlay` (lev 2
+  to 7), `Battle_StepCharacterAction` (lev 2 to 47),
+  `Battle_UpdatePlayerTurn`/`Battle_ApplyPlayerHit` (lev 11 to 20),
+  `Battle_DrawTargetHighlight` (lev 2 to 24), `Battle_DrawSpellName` (lev 2
+  to 15). `Battle_PhaseAndEnemyEffectFlow` keeps its `(void *)D_8009D254`
+  casts: removing them changes the bytes.
 
 ## Link ownership
 
