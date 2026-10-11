@@ -38,7 +38,7 @@ s32 Memcard_LinkEffect(s32 mode, MemcardLinkState *state) {
         }
         if (state->timer >= 23 && state->opacity > 0) state->opacity -= 8;
         if (state->timer < 22) return 0;
-        __asm__ volatile("" : : : "memory");
+        __asm__ volatile("" : :);
         return 2;
     case 2:
         if (state->opacity >= 0) {
