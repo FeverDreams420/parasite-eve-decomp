@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: --use-comm-section -G8 */
+/* MASPSX_FORCE_G0: 1 */
 #include "common.h"
 #include "pe1/menu_context_help.h"
 #include "pe1/text.h"
@@ -8,8 +9,10 @@
 #include "pe1/menu_equipment.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/menu_widget.h"
-#include "../../../tools/m2c/m2c_macros.h"
 #include "pe1/draw_state.h"
+#include "pe1/draw_level_bar.h"
+#include "pe1/menu_item_rows.h"
+#include "pe1/menu_sound.h"
 
 /* Inventory/equip list screen: creation, list input, the item-count header,
  * the per-item action submenu and its input step. Contiguous at 0x80044274
@@ -17,19 +20,34 @@
 
 #define NULL ((void *)0)
 
-void Menu_CreateAmmoSpendPanel();
-s32 func_80052F0C();
-void Menu_DrawContextActionList();
-int Battle_IsInputAllowedWrapped(void);
-int Battle_GetStateFlag1(void);
 int func_80057D18(int);
 void func_800451D0(MenuWidgetNode *);
 void Menu_OpenItemActionSubmenu(MenuWidgetNode *, int, int);
-void MenuWidget_OffsetPosition(MenuWidgetNode *node, int dx, int dy);
-int Inv_CountTotal(void);
-void Draw_PrintNumberWidth2Unk(int value);
 
-#include "Menu_EquipScreenFlow_externs.h"
+/* COMMON supplies small-data metadata to MASPSX for the words this unit
+ * reaches through $gp; addresses taken with & stay absolute. */
+int D_8009CDA8;
+int D_8009CEFC;
+int D_8009CF00;
+int D_8009CF04;
+int D_8009CF08;
+int D_8009CF0C;
+int D_8009CF10;
+int D_8009CF5C;
+int D_8009CF8C;
+int D_8009CF90;
+int D_8009CF94;
+int g_InvAmmoSpendActiveList;
+int g_InvSelectedItemIndex;
+int g_InvSwapSourceList;
+int g_InvSwapTargetIndex;
+int g_MenuActionSubmenuOpen;
+int g_MenuActiveItemList;
+int g_MenuActiveItemSlot;
+int g_MenuEquipMode;
+int g_MenuEquipSwapSource;
+int g_MenuItemActionContext;
+int g_MenuItemActionDisabled;
 
 void Menu_CreateEquipScreen(s32 arg0) {
     s32 entryIndex;
@@ -68,7 +86,7 @@ void Menu_OnInventoryItemConfirm(s32 arg0) {
     MenuWidgetNode *temp_s1;
     MenuWidgetNode *temp_s1_2;
 
-    g_InvAmmoSpendActiveList = func_80052F0C();
+    g_InvAmmoSpendActiveList = Inv_IsActiveListOverrideSelected();
     g_InvSelectedItemIndex = arg0;
     temp_v0 = Inv_BuildCompatibleWeaponBitset(arg0);
     if (temp_v0 == 0) {
@@ -90,23 +108,8 @@ void Menu_OnInventoryItemConfirm(s32 arg0) {
             temp_s1->cursor_y = (var_s0 & -(var_s0 < Inv_GetAyaSlotLimit()));
             MenuWidget_SetCurrentNode(temp_s1);
         }
-        {
-            int *cf90_addr;
-            int *cf94_addr;
-            s32 cf88_value;
-
-            cf90_addr = (int *)0x800A0000;
-            __asm__ volatile("" : "=r"(cf90_addr) : "0"(cf90_addr));
-            cf90_addr -= 0x3070 / sizeof(*cf90_addr);
-            cf88_value = g_InvAmmoSpendActiveList;
-            __asm__ volatile("" : "=r"(cf88_value) : "0"(cf88_value));
-            cf94_addr = (int *)0x800A0000;
-            __asm__ volatile("" : "=r"(cf94_addr) : "0"(cf94_addr));
-            cf94_addr -= 0x306C / sizeof(*cf94_addr);
-            g_InvSwapSourceList = cf88_value;
-            __asm__ volatile("" : : "r"(cf90_addr), "r"(cf94_addr));
-            Inv_InitSlotDisplay(cf90_addr, cf94_addr);
-        }
+        g_InvSwapSourceList = g_InvAmmoSpendActiveList;
+        Inv_InitSlotDisplay(&D_8009CF90, &D_8009CF94);
         Menu_CreateAmmoSpendPanel(MenuWidget_GetCurrentNode());
         return;
     }

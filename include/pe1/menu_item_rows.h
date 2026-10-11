@@ -22,6 +22,7 @@ void Menu_UpdateStatBarAnimation(int stat);
 void Menu_DrawWeaponComparisonPanel(void);
 void Sfx_DrawSlotRow(ItemDataRecord *entry, u8 *text);
 void Menu_DrawSaveSlotEntry(int index);
+void Menu_DrawContextActionList(MenuWidgetNode *node);
 /* List adapters binding a widget list to its row drawer. */
 void Menu_DrawMainMenuList(MenuWidgetNode *node);
 void Menu_DrawActionSubmenuList(MenuWidgetNode *node);

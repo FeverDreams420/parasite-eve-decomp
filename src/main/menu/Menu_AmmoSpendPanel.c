@@ -16,7 +16,7 @@
 int Menu_AmmoSpendInputHandler(s32 arg0, s32 arg1);
 void Menu_DrawAmmoSpendPanel(void);
 
-void Menu_CreateAmmoSpendPanel(s32 parent) {
+void Menu_CreateAmmoSpendPanel(MenuWidgetNode *parent) {
     MenuWidgetNode *node;
     ItemDataRecord *item;
 

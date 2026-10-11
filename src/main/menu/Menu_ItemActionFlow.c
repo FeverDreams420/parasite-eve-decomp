@@ -33,7 +33,6 @@ void Draw_StatePush(void);
 void Draw_StatePop(void);
 void Sfx_DrawActiveListSlot(int arg0);
 #define NULL ((void *)0)
-s32 func_80052F0C();
 void Menu_DrawEquipStats(void);
 /* Inlined into Menu_OpenItemList, like Menu_CreateItemActionSubmenu; no
  * out-of-line copy exists in retail. */
@@ -227,7 +226,7 @@ int Menu_StepSkillSelect(MenuWidgetNode *arg0, int arg1) {
             Menu_StepInventoryRoot(0x33E, -1, Inv_RestoreSelection(g_MenuSelectedItemList == 0));
             do {
                 temp_s0 = Inv_RestoreSelection(var_s1);
-                if ((func_80052F0C() == 0) && ((var_a0 = 2, (temp_s0 == D_800C0E20.tracked[0])) || (var_a0 = 3, (temp_s0 == D_800C0E20.tracked[2])))) {
+                if ((Inv_IsActiveListOverrideSelected() == 0) && ((var_a0 = 2, (temp_s0 == D_800C0E20.tracked[0])) || (var_a0 = 3, (temp_s0 == D_800C0E20.tracked[2])))) {
                     Inv_SetActiveList(var_a0, 0);
                 }
                 var_s1 += 1;
