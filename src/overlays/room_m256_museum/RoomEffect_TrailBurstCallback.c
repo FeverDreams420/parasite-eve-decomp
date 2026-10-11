@@ -395,7 +395,7 @@ checkLifetime:
             gte_ldrotmatrix(D_800BCFA4.value);
             gte_ldtransmatrix(D_800BCFA4.value);
             {
-                register int pageDepth asm("$4") = 0;
+                int pageDepth = 0;
                 int pageBlend = 1;
                 int pageX = 0;
             paletteIndex = &D_800E11EA;
