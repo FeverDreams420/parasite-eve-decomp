@@ -279,7 +279,8 @@ typedef struct EnemyCombatant {
 /* 0x4C */ u32 stateFlags;
 /* 0x50 */ u8  pad_50[0x1C];
 /* 0x6C */ BattleAttributes *attributes;
-/* 0x70 */ u8  pad_70[0x18];
+/* 0x70 */ u8  pad_70[0x0C];
+/* 0x7C */ s8  contactActionIds[0x0C]; /* four ids per facing group (coreFlags >> 21), -1 ends a group (Entity_CheckActionIdMatch) */
 /* 0x88 */ s32 field88;
 /* 0x8C */ u16 field8C;
 /* 0x8E */ u16 chargeStep;
