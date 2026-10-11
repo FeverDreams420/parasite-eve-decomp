@@ -2,11 +2,11 @@
 /* MASPSX_FLAGS: -G8 --expand-div --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 #include "common.h"
+#include "pe1/player_entity.h"
 #include "pe1/battle.h"
 #include "pe1/entity_animation.h"
 #include "pe1/asset_find.h"
 
-#include "Entity_HitAndDropTable_externs.h"
 
 int rand(void);
 s16 Entity_ApplyHitAndSetAnim(void *arg0);
@@ -109,7 +109,6 @@ void Entity_ResolveDropTable(void *arg0) {
 /* COMMON supplies small-data metadata to MASPSX; the extern words stay
  * absolute. */
 u16 D_8009D298;
-#include "Entity_HitAndDropTable_externs_1.h"
 
 int Battle_CalcRelativeAngle(BattleEntity *arg0, BattleEntity *actor);
 

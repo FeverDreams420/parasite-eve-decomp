@@ -394,7 +394,7 @@ void Entity_TickAnimSequences(FieldActor *arg0) {
 
     i = 0;
     do {
-        node = (TaskNode *)arg0->task_node_lists[0];
+        node = (TaskNode *)arg0->task_node_lists[i];
         if (node != 0) {
             do {
                 if (node->next_value != 0) {
@@ -406,6 +406,5 @@ void Entity_TickAnimSequences(FieldActor *arg0) {
             } while (node != 0);
         }
         i++;
-        arg0 = (FieldActor *)((char *)arg0 + 4);
     } while (i < 3U);
 }

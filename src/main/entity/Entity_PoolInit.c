@@ -17,7 +17,6 @@ u16 g_EntityFreePoolCount;
 FieldActor *g_PlayerEntity;
 u32 D_8009D224;
 
-#include "Entity_PoolInit_externs.h"
 
 void Entity_ResetAllPools(void)
 {

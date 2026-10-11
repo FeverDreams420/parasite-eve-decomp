@@ -5,11 +5,12 @@
 #include "pe1/collision_database.h"
 #include "pe1/floor_polygon.h"
 #include "pe1/floor_edge_point.h"
+#include "pe1/scene_assets.h"
+#include "pe1/field_collision.h"
 
 /* The room collision database: clearing the per-room collision state and
  * relocating the loaded database's offsets into pointers. */
 
-#include "Entity_CollisionDatabase_externs.h"
 /* COMMON supplies small-data metadata to MASPSX for the words this unit
  * reaches through $gp; the edge points stay absolute. */
 char *g_SceneDataTable2;
@@ -23,7 +24,6 @@ CollisionDatabase *g_CollisionDb;
 short *g_EntityCollisionWallSlot;
 PolygonVertex *D_8009D248;
 u16 D_8009D1CC;
-#include "Entity_CollisionDatabase_externs_1.h"
 
 
 void Entity_ResetStateGlobals(void) {
@@ -84,11 +84,11 @@ void Entity_RelocateSceneData(void) {
         return;
     }
 
-    base->vertices.word = (u32)base + offset;
-    base->triangles.word = (u32)base + base->triangles.word;
-    base->rampEdges.word = (u32)base + base->rampEdges.word;
+    base->vertices.pointer = SceneAsset_ResolveOffset(base, offset);
+    base->triangles.pointer = SceneAsset_ResolveOffset(base, base->triangles.word);
+    base->rampEdges.pointer = SceneAsset_ResolveOffset(base, base->rampEdges.word);
     if (base->planes.word != 0) {
-        base->planes.word = (u32)base + base->planes.word;
+        base->planes.pointer = SceneAsset_ResolveOffset(base, base->planes.word);
     }
 
     {

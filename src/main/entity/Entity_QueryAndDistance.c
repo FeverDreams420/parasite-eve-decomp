@@ -5,7 +5,6 @@
 #include "pe1/field_actor.h"
 #include "pe1/player_entity.h"
 
-#include "Entity_QueryAndDistance_externs.h"
 
 /* Script op: look up an actor by (type id, sub id) script args and read one
  * of its fields into the out arg. args = script argument pointer array:

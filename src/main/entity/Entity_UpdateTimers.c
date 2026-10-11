@@ -6,11 +6,12 @@
 #include "pe1/inventory.h"
 #include "pe1/item_ids.h"
 #include "pe1/menu_flags.h"
+#include "pe1/game_timers.h"
+#include "pe1/render_prim.h"
 
 void Battle_ApplyDamage(s32);
 void Battle_SubActionStep(void);
 s32 Inv_CountByValue(s32);
-#include "Entity_UpdateTimers_externs.h"
 
 void Entity_UpdateTimers(void) {
     s32 status_item_0;

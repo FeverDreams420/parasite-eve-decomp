@@ -7,13 +7,13 @@
 #include "pe1/battle_modifiers.h"
 #include "pe1/game_state.h"
 #include "pe1/scene_dispatch.h"
+#include "pe1/entity_allocation.h"
 
 /* Save tail cursor: Save_SerializeTail/Save_DeserializeTail copy each
  * record below through it and advance it by the record size. */
 extern u8 *g_SaveIoCursor;
 
 /* Records the save tail copies as raw bytes besides the game state. */
-extern char g_EntityWorkBuffer[]; /* 0x800 bytes */
 extern u32 D_8009D2E8;           /* field movement lock flags */
 extern u8 g_ScreenTransitionState[];
 

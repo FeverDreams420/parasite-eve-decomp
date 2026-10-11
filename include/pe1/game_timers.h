@@ -36,4 +36,7 @@ extern int g_PlayTimeLimit;
 /* Frames played; Save_ClassifyPlaytime buckets it for the save header. */
 extern unsigned int g_PlayTimeFrameCounter;
 
+/* Frames left on the timed state that Entity_UpdateTimers clears with flag 0x100. */
+extern u16 D_8009D228;
+
 #endif

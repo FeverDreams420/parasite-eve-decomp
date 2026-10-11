@@ -120,6 +120,8 @@ typedef struct CollisionDatabase {
 
 
 extern CollisionDatabase *g_CollisionDb;
+/* Loaded scene blocks; entry 0 is the room collision database. */
+extern char *D_800B1620[];
 /* Active views published by the scene-data relocator. */
 extern struct CollisionPlane *g_CollisionPlaneTable;
 extern CollisionRegionEntry *g_RegionHeightTable;

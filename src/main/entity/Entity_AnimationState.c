@@ -1,4 +1,5 @@
 #include "pe1/entity_animation.h"
+#include "pe1/field_actor.h"
 /* MASPSX_FLAGS: --expand-div */
 
 
@@ -94,7 +95,6 @@ store_next:
 
 
 
-#include "Entity_AnimationState_externs.h"
 
 void Entity_SetActionMode(BattleEntity *arg0, int arg1) {
     BattleEntity *entity;

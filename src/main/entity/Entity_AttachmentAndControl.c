@@ -1,7 +1,9 @@
 #include "pe1/player_entity.h"
+#include "pe1/entity_animation.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/field_actor.h"
 #include "pe1/render_setup.h"
 #include "pe1/pm.h"
-#include "Entity_AttachmentAndControl_externs.h"
 
 
 
@@ -41,7 +43,6 @@ int Menu_GetModeState(int **arg0) {
 
 /* Attachment animation and control use the same current actor. */
 
-#include "Entity_AttachmentAndControl_externs_1.h"
 
 int Entity_CopyAttachmentData(int **arg0)
 {
