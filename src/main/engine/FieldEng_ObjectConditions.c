@@ -1,4 +1,6 @@
 #include "common.h"
+#include "pe1/field_anim.h"
+#include "pe1/field_actor.h"
 
 typedef struct {
     char pad0[0x8];
@@ -34,49 +36,47 @@ void func_800DFB20(Func800DFB20State *state)
  * A pending one-shot flag (0x80000 or 0x40000 at +0x98, selected by the
  * state bits) is consumed and reported once; otherwise the object waits while
  * its child is mid-animation. */
-int func_800DFB78(u8 *arg0)
+int func_800DFB78(FieldAnimTaskOwner *arg0)
 {
-  register u8 *state;
-  u8 *obj;
-  u8 *new_var;
+  register FieldAnimTaskContext *state;
+  FieldActor *obj;
   register u32 flags;
   register u32 masked;
-  register u8 *child;
+  register FieldActorState *child;
   u32 word;
   u32 byte;
   int phase;
-  byte = arg0[0x19];
-  obj = (u8 *) (*((u32 *) (((u8 *) arg0) + 0x8)));
-  state = arg0 + 0xC;
+  byte = arg0->tasks.flags;
+  obj = arg0->prefix.actor;
+  state = &arg0->tasks;
   word = 4;
-  if ((byte & word) && ((*((u8 *) (((u8 *) obj) + 0xE))) < 2))
+  if ((byte & word) && (obj->mode < 2))
   {
     return 1;
   }
-  if (state[0xD] & 2)
+  if (state->flags & 2)
   {
-    flags = *((u32 *) (((u8 *) obj) + 0x98));
+    flags = obj->flags;
     if (flags & 0x80000)
     {
       masked = flags & 0xFFF7FFFF;
-      *((u32 *) (((u8 *) obj) + 0x98)) = masked;
+      obj->flags = masked;
       return 1;
     }
   }
-  if (state[0xD] & 1)
+  if (state->flags & 1)
   {
-    flags = *((u32 *) (((u8 *) obj) + 0x98));
+    flags = obj->flags;
     if (flags & 0x40000)
     {
       masked = flags & 0xFFFBFFFF;
- do { *((u32 *) (((u8 *) obj) + 0x98)) = masked; return 1; } while (0);
+ do { obj->flags = masked; return 1; } while (0);
     }
   }
-  child = (u8 *) (*((u32 *) (((u8 *) obj) + 0x0)));
+  child = obj->state;
   if (child != 0)
   {
-    new_var = ((u8 *) child) + 0x0;
-    word = *((u32 *) new_var);
+    word = child->core_flags;
     if (word & 0x1800)
     {
       return 1;
