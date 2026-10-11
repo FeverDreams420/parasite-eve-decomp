@@ -113,7 +113,7 @@ case 1:
             Vector *in;
             Vector *out;
             int i;
-            asm volatile("" : "=r"(matrix) : "0"(matrix) : "$2", "$3", "$4", "$5", "$6", "$7", "$8");
+            asm("" : : "r"(matrix) : "$2", "$3", "$4", "$5", "$6", "$7", "$8");
             gte_ldrotmatrix(matrix);
             gte_ldtransmatrix(matrix);
             i=0; out=local.collision.vertices; in=D_8019A574;
