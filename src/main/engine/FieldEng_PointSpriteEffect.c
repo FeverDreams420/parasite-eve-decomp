@@ -14,7 +14,6 @@
 #include "pe1/field_sprite_draw.h"
 
 #define S16(base, off) (*(s16 *)((u8 *)(base) + (off)))
-#define PTR(base, off) (*(u8 **)((u8 *)(base) + (off)))
 
 extern u8 D_800E0D6C[];
 extern volatile s16 D_800E2294_state __asm__("D_800E2294");
@@ -83,7 +82,7 @@ int func_800CBCA4(u8 *arg0) {
 
     slot = FieldEng_GetSlot((char *)arg0);
     *slot = D_800E0D6C;
-    obj = PTR(arg0, 8);
+    obj = (u8 *)((FieldAnimObjectPrefix *)arg0)->actor;
 
     tmp = S16(obj, 0x2A);
     setupValue = -0x64;
