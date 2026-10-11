@@ -331,7 +331,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                 register u8 *var_a3 asm("$7");
                 register FxCommonVector *var_t4 asm("$12");
                 u32 temp_a0_13;
-                s32 temp_a0_9;
+
                 s32 temp_v1_9;
                 u16 *triangleUv2Cursor;
                 u16 var_v0;
@@ -356,13 +356,13 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                     if (scratchpad->normalClip > 0) {
                     gte_avsz3_padded();
                     gte_stotz_precise(&scratchpad->orderingDepth);
-                    temp_a0_9 = (scratchpad->orderingDepth + scratchpad->depthBias) >> 2;
-                    scratchpad->orderingDepth = temp_a0_9;
-                    if (((temp_a0_9 * 4) - scratchpad->depthBias) <= 0) {
+                    temp_a0 = (scratchpad->orderingDepth + scratchpad->depthBias) >> 2;
+                    scratchpad->orderingDepth = temp_a0;
+                    if (((temp_a0 * 4) - scratchpad->depthBias) <= 0) {
                     }
                     else
                     {
-                    if (temp_a0_9 < 0x1F4) {
+                    if (temp_a0 < 0x1F4) {
                         register FxCommonVector *triangleMidpoint01 asm("$4");
                         FxCommonVector *triangleNamedInput2;
                         FxCommonTextureSet *triangleTexture;
@@ -665,7 +665,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
             register u8 *quadTextureCursor asm("$10");
             u16 *quadUv3Cursor;
             FxCommonVector *quadVertex3;
-            s32 temp_a0_14;
+
             u32 quadLength;
             u32 quadAddressMask;
             ;
@@ -695,17 +695,17 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                 if (scratchpad->normalClip > 0) {
                 gte_avsz3_padded();
                 gte_stotz_precise(&scratchpad->orderingDepth);
-                temp_a0_14 = (scratchpad->orderingDepth + scratchpad->depthBias) >> 2;
-                scratchpad->orderingDepth = temp_a0_14;
-                if (((temp_a0_14 * 4) - scratchpad->depthBias) <= 0) {
+                temp_a0 = (scratchpad->orderingDepth + scratchpad->depthBias) >> 2;
+                scratchpad->orderingDepth = temp_a0;
+                if (((temp_a0 * 4) - scratchpad->depthBias) <= 0) {
                 }
                 else
                 {
-                if (temp_a0_14 >= 0x1F5) {
+                if (temp_a0 >= 0x1F5) {
                     register u32 *quadGteScreen0 asm("$4");
                     register u32 *quadGteScreen1 asm("$3");
                     u32 *quadGteScreen2;
-                    if (temp_a0_14 < 0x1FE) {
+                    if (temp_a0 < 0x1FE) {
                         *((s32 *)&((FxCommonFt4Packet *)(quadUv3Cursor - 18))->uv0) =
                             *((u32 *)&((FxCommonTexturedQuad *)(quadTextureCursor - 6))
                                   ->textures[0]
@@ -722,7 +722,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                             ((FxCommonTexturedQuad *)(quadTextureCursor - 6))
                                 ->textures[0]
                                 .uv3.packed;
-                    } else if (temp_a0_14 >= 0x2BD) {
+                    } else if (temp_a0 >= 0x2BD) {
                         *((s32 *)&((FxCommonFt4Packet *)(quadUv3Cursor - 18))->uv0) =
                             *((u32 *)&((FxCommonTexturedQuad *)(quadTextureCursor - 6))
                                   ->textures[2]
@@ -801,12 +801,12 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                     FxCommonVector *edgeY3;
                     s32 midpoint02Z;
                     u32 *midpointScreen2Address;
-                    if (temp_a0_14 < 0x1FE) {
+                    if (temp_a0 < 0x1FE) {
                         quadUv0 = &var_fp->textures[0].uv0;
                         var_t5 = (u8 *)&var_fp->textures[0].uv1;
                         var_t6 = (u8 *)&var_fp->textures[0].uv2;
                         quadUv3 = &var_fp->textures[0].uv3;
-                    } else if (temp_a0_14 >= 0x2BD) {
+                    } else if (temp_a0 >= 0x2BD) {
                         quadUv0 = &var_fp->textures[2].uv0;
                         var_t5 = (u8 *)&var_fp->textures[2].uv1;
                         var_t6 = (u8 *)&var_fp->textures[2].uv2;
