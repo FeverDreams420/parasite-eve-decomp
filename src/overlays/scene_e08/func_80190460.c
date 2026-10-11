@@ -19,20 +19,17 @@ void func_80190460(void *unused0, void *unused1, char *effect) {
     FieldGlowSprite *sprite;
     char *owner;
     SceneE08GlowSprites *base = (SceneE08GlowSprites *)effect;
-    register char *scale asm("$16");
     register unsigned i;
     int diag = 0x1000;
     s16 *slot = &D_801994C2;
     owner = func_800C2B50();
     i = 0;
         asm volatile("" : : "r"(slot));
-    scale = (char *)base;
-    asm volatile("" : : "r"(scale));
     func_800C2EAC(*(u8 *)(owner + 0x24));
     func_800C3098(0x10);
     func_800C3238(2);
 
-    for (; i < 4; i++, scale += 2) {
+    for (; i < 4; i++) {
         if (base->active[i] == 1) {
             matrix.m[2][2] = diag;
             matrix.m[1][1] = diag;
@@ -48,16 +45,16 @@ void func_80190460(void *unused0, void *unused1, char *effect) {
             matrix.m[0][1] = 0;
 
             memset(&draw, 0, 0x10);
-            draw.x = *(s16 *)(scale + 0x20);
-            draw.y = *(s16 *)(scale + 0x20);
-            draw.z = *(s16 *)(scale + 0x20);
+            draw.x = base->scale[i];
+            draw.y = base->scale[i];
+            draw.z = base->scale[i];
             scratch = draw;
             ScaleMatrix(&matrix, &scratch);
 
             matrix.t[0] = base->position[i].x;
             matrix.t[1] = base->position[i].y;
             matrix.t[2] = base->position[i].z;
-            *slot = *(u16 *)(scale + 0x28);
+            *slot = base->depth[i];
             func_800C2FF0(0x10, 0x10);
             sprite = (FieldGlowSprite *)((char *)slot - 10);
             sprite->cell = base->cell[i] + (base->frame[i] >> 1);
