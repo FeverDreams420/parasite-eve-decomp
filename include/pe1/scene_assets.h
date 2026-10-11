@@ -84,6 +84,13 @@ typedef struct CdRange {
     u16 last;
 } CdRange;
 
+/* Range table address as a pointer or a word: CD_FindNextDataSector adds
+ * the scaled index to the table address as an integer, index first. */
+typedef union CdRangeAddress {
+    CdRange *range;
+    u32 word;
+} CdRangeAddress;
+
 PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneSectorDirectory, offsets) == 4,
                   scene_sector_offsets_offset);
 PE1_STATIC_ASSERT(sizeof(CdArchiveRoot) == 8, cd_archive_root_size);

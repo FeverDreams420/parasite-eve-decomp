@@ -638,14 +638,15 @@ Still open:
     pass. GCC's loop optimizer only runs on syntactic loops, so a `do`/`for`
     form hoists them into `$s` registers (lev 27 and 63).
   - `CD_FindNextDataSector` adds the range index to the range table as
-    integers (two `(u32)` casts). `&ranges[i]` and `i + ranges` put the table
-    first in the `addu` (lev 2).
-  - `CD_StepReadState` keeps its two `PE1_NOP_IO2_DEP` slots and the `$a0`
-    pin. The slots are the load-delay `nop` between `lw D_8009CDA4` and the
-    gp-relative `sw` to `g_CdFadeStartTime`: MASPSX does not know an extern
-    `.sdata` symbol is gp-relative, assumes an `$at` expansion fills the
-    delay and drops the `nop` (lev 2). With the slot macro but no pin, CSE
-    reuses `active` (known zero there) for the first argument (lev 2).
+    integers, index first, through the `CdRangeAddress` pointer/word union
+    (`&ranges[i]` and `i + ranges` put the table first in the `addu`).
+  - `CD_StepReadState` needs no slot macro or pin: the load-delay `nop`
+    between `lw D_8009CDA4` and the gp-relative `sw` to `g_CdFadeStartTime`
+    is lost only because MASPSX does not know an extern `.sdata` symbol is
+    gp-relative. A tentative definition of `g_CdFadeStartTime` with
+    `--use-comm-section` gives MASPSX its size, and it keeps the `nop`.
+    The same recipe fixes any other `PE1_NOP` before a `$gp` store of a
+    just-loaded value.
   - `CD_ReadSectors` (pins on `state`, `finished`, `scaledIndex`, `start`,
     barriers on `blocking`/`kind`, the volatile sector-directory reads)
     rebuilds at lev 47 without them. `CD_SeekToTrack` keeps the `$s1` pin

@@ -1,14 +1,17 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
 #include "pe1/scene_assets.h"
 #include "pe1/cdrom.h"
 #include "pe1/akao.h"
 #include "pe1/game_state.h"
-#include "pe1/psyq_nop.h"
 #include "pe1/scene_archive.h"
 #include "pe1/boot.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/akao/commands.h"
+
+/* COMMON gives MASPSX the small-data size of the fade start word, so it
+ * keeps the load delay before the $gp store as ASPSX did. */
+int g_CdFadeStartTime;
 
 /* Matching debt: register pins and empty barriers retain the index,
 * zero extension and callback state. The duplicated ready branch preserves
@@ -44,7 +47,7 @@ int CD_ReadSectors(unsigned kind, unsigned int index, int channel, void *buffer,
                 entries = table + byteOffset;
                 first = *(u16 *)entry;
                 asm("" : "=r"(first) : "0"(first), "r"(entries) : "memory");
-                scaledIndex = *(volatile u16 *)(entries + 6);
+                scaledIndex = ((volatile SceneSectorDirectory *)entries)->offsets[1];
                 asm("" : "=r"(scaledIndex) : "0"(scaledIndex) : "memory");
                 scaledIndex -= entry[0];
                 transferValue = *archiveLba + first;
@@ -194,7 +197,9 @@ int CD_FindNextDataSector(void)
     Pe1GameState *state = &g_GameState;
     u8 *base = (u8 *)state->loaded_scene_assets;
     CdArchiveHeader *header = (CdArchiveHeader *)(base + ((CdArchiveRoot *)base)->directoryOffset);
-    CdRange *ranges = (CdRange *)(base + (header->range_info & 0x3fffff));
+    CdRangeAddress ranges;
+
+    ranges.range = (CdRange *)(base + (header->range_info & 0x3fffff));
 
     /* Each state falls back to this dispatch until a read is pending (1)
      * or the archive's ranges are exhausted (0). */
@@ -219,11 +224,11 @@ dispatch:
     case 0x2a:
     {
         int index = g_CdRangeIndex;
-        CdRange *entry;
+        CdRangeAddress entry;
 
         if (index < (int)(header->range_info >> 22)) {
-            entry = (CdRange *)(index * sizeof(CdRange) + (u32)ranges);
-            if (!(entry->flags & 0x10) || entry->first < 2) {
+            entry.word = index * sizeof(CdRange) + ranges.word;
+            if (!(entry.range->flags & 0x10) || entry.range->first < 2) {
                 g_CdRangeIndex = index + 1;
             } else {
                 state->cd_range_state = 0x2b;
@@ -236,8 +241,10 @@ dispatch:
     }
     case 0x2b:
     {
-        CdRange *entry = (CdRange *)(g_CdRangeIndex * sizeof(CdRange) + (u32)ranges);
-        if (CD_ReadSectors(3, entry->first, entry->last, state->scene_load_scratch, 0x21, 0) == 1) return 1;
+        CdRangeAddress entry;
+
+        entry.word = g_CdRangeIndex * sizeof(CdRange) + ranges.word;
+        if (CD_ReadSectors(3, entry.range->first, entry.range->last, state->scene_load_scratch, 0x21, 0) == 1) return 1;
         state->cd_range_state = 0x2a;
         g_CdRangeIndex = g_CdRangeIndex + 1;
         break;
@@ -374,8 +381,7 @@ int CD_SeekToTrack(int key, int mode, int group, int *slot, int blocking)
 }
 
 
-/* Matching debt: one argument pin, two individually
- * wrapped NOPs, three table aliases and the retry jump. The aliases preserve
+/* Matching debt: three table aliases and the retry jump. The aliases preserve
  * independent absolute reads of the table pointer around callbacks. */
 int CD_StepReadState(int active)
 {
@@ -401,10 +407,9 @@ retry:
                 state->cd_transition_phase = 44;
             } else {
                 if (state->flags & 4) {
-                    register int zero asm("$4") = 0;
+                    int zero = 0;
                     int duration = 60;
                     int now = *D_8009CDA4;
-                    PE1_NOP_IO2_DEP(zero, duration, now);
                     g_CdFadeStartTime = now;
                     Akao_Cmd_C1_WithSlot(zero, duration, 0);
                 }
@@ -417,7 +422,6 @@ retry:
                     int zero = 0;
                     int duration = 60;
                     int now = *D_8009CDA4;
-                    PE1_NOP_IO2_DEP(zero, duration, now);
                     g_CdFadeStartTime = now;
                     Akao_Cmd_C1_WithSlot(zero, duration, 0);
                 }
