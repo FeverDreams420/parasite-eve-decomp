@@ -29,7 +29,6 @@ void Entity_FindFloor(BattleEntity *actor)
     s16 z;
     int x_height;
     int z_height;
-    int floor_offset;
     u32 floor_table_offset;
     u8 scratch[8];
 
@@ -46,6 +45,9 @@ void Entity_FindFloor(BattleEntity *actor)
     floor_index = 0;
     do {
         if (D_8009D1D8 == 0) {
+            /* The slot offset is summed with the table word as integers;
+             * D_8009CE08[floor_index] or a pointer/word union swaps $v0 and
+             * $v1 in both modes. */
             floor_table_offset = floor_index << 2;
             floor_table_offset += (u32)D_8009CE08;
             floor_data = *(u8 **)floor_table_offset;
@@ -57,9 +59,7 @@ void Entity_FindFloor(BattleEntity *actor)
             for (triangle_index = 0; triangle_index < triangle_count;
                  triangle_index++, indices++) {
                     triangle_id = *indices;
-                    floor_offset = 11 * triangle_id;
-                    simple_triangle = (u8 *)D_8009D1FC->triangles.pointer +
-                                      floor_offset * 2;
+                    simple_triangle = (u8 *)&D_8009D1FC->triangles.xz[triangle_id];
                     if (Geo_PointInTri(simple_triangle, (s16)x, (s16)z)) {
                         actor->collisionFace = simple_triangle;
                         actor->collisionFaceMirror = simple_triangle;
@@ -80,8 +80,7 @@ void Entity_FindFloor(BattleEntity *actor)
             for (triangle_index = 0; triangle_index < triangle_count;
                  triangle_index++, indices++) {
                     triangle_id = *indices;
-                    floor_offset = triangle_id * 28;
-                    complex_triangle = (CollisionFace *)((u8 *)D_8009D1FC->triangles.pointer + floor_offset);
+                    complex_triangle = &D_8009D1FC->triangles.xyz[triangle_id].face;
                     if (Geo_PointInTri(complex_triangle, (s16)x, (s16)z)) {
                         actor->collisionFace = complex_triangle;
                         actor->collisionFaceMirror = complex_triangle;
