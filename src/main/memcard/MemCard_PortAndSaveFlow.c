@@ -1255,81 +1255,55 @@ void MemCard_StartActivePortRead(void);
 
 void MemCard_UpdateSavePolling(void)
 {
-  int port;
-  u8 *state;
-  int timeout;
-  int activePort;
-  int activeState;
-  MemCard_StepPortState(1);
-  MemCard_StepPortState(0);
-  if (g_MemCardSavePollTimeout != 0)
-  {
-    activePort = g_MemCardActivePortOneBased - 1;
-    activeState = D_800A0EDC[activePort * 0x418];
-    if (activeState != 4) {
-    {
-      register int activeStateReady;
-      activeStateReady = 1;
-      if (!(activeState == activeStateReady))
-      {
-        g_MemCardSavePollTimeout = -2;
-      }
+    int port;
+    MemCardPortState *state;
+    int timeout;
+    int activeState;
+
+    MemCard_StepPortState(1);
+    MemCard_StepPortState(0);
+    if (g_MemCardSavePollTimeout != 0) {
+        activeState = g_MemCardPortStates[g_MemCardActivePortOneBased - 1].cardState;
+        if (activeState != 4 && activeState != 1) {
+            g_MemCardSavePollTimeout = -2;
+        }
+        timeout = g_MemCardSavePollTimeout;
+        timeout -= timeout > 0;
+        g_MemCardSavePollTimeout = timeout;
+        if (timeout <= 0) {
+            Menu_DestroyMemCardProgressWidget();
+            switch (g_MemCardSavePollTimeout) {
+            case 0:
+                /* Timed out without an error: offer to read the card again. */
+                Menu_CreateNotificationDialog(0x52, 0);
+                Menu_SetDeferredCallback(MemCard_StartActivePortRead);
+                g_MemCardActivePromptPending = 1;
+                break;
+            case -1:
+                Menu_CreateNotificationDialog(0x3C, 0);
+                Menu_SetDeferredCallback(MemCard_ClearActivePrompt);
+                g_MemCardActivePromptPending = 1;
+                break;
+            default:
+                MemCard_ClearActivePrompt();
+                break;
+            }
+            g_MemCardSavePollTimeout = 0;
+        }
     }
-    }
-    timeout = g_MemCardSavePollTimeout;
 
-    timeout -= timeout > 0;
-    g_MemCardSavePollTimeout = timeout;
-    if (timeout <= 0)
-    {
-      Menu_DestroyMemCardProgressWidget();
-      if (g_MemCardSavePollTimeout != (-1)) {
-      if (g_MemCardSavePollTimeout != 0)
-      {
-        goto timeout_cancel;
-        port = 1;
-      }
-      Menu_CreateNotificationDialog(0x52, 0);
-      Menu_SetDeferredCallback(MemCard_StartActivePortRead);
-      g_MemCardActivePromptPending = 1;
-      }
-      else
-      {
-      timeout_expired:
-      Menu_CreateNotificationDialog(0x3C, 0);
-
-      Menu_SetDeferredCallback(MemCard_ClearActivePrompt);
-      g_MemCardActivePromptPending = 1;
-
-      goto timeout_clear;
-      timeout_cancel:
-      MemCard_ClearActivePrompt();
-
-      }
-      timeout_clear:
-      g_MemCardSavePollTimeout = 0;
-
-      port = 1;
-    }
-  }
-  port = 1;
-  state = g_Slot2QuickerSave;
-  do
-  {
-    if (g_MemCardActivePortOneBased == (port + 1))
-    {
-      if (((*state) & 1) == 0)
-      {
-        Menu_NavToSaveConfirmDialog();
-        Menu_CloseNotificationDialogs();
-        MemCard_ClearActivePrompt();
-      }
-    }
-    MemCard_UpdateSaveState(port);
-    port--;
-    state -= 0x418;
-  }
-  while (port >= 0);
+    port = 1;
+    state = &g_MemCardPortStates[1];
+    do {
+        if (g_MemCardActivePortOneBased == port + 1 && !(state->present & 1)) {
+            Menu_NavToSaveConfirmDialog();
+            Menu_CloseNotificationDialogs();
+            MemCard_ClearActivePrompt();
+        }
+        MemCard_UpdateSaveState(port);
+        port--;
+        state--;
+    } while (port >= 0);
 }
 
 int MemCard_IsPortPresent(int port) {
