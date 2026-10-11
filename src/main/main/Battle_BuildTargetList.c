@@ -1,16 +1,18 @@
 #include "common.h"
 #include "pe1/battle.h"
 #include "pe1/gte_types.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/battle_entity_anim.h"
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 
 #define NULL ((void *)0)
 int Battle_CalcDistToPlayer(BattleEntity *actor, BattleEntity *player);
-#include "Battle_BuildTargetList_externs.h"
-#define g_FieldActorListHead (*(void **)&D_8009D20C_o)
-#define g_PlayerEntity (*(void **)&g_PlayerEntity_o3)
-#define g_PlayerEntity_2 (*(void **)&g_PlayerEntity_o2)
-#define g_PlayerEntity_3 (*(void **)&g_PlayerEntity_o3)
+
+/* COMMON supplies the target count's small-data size to MASPSX; every
+ * other word stays absolute. */
+s8 g_BattleTargetIndex;
 
 void Battle_BuildTargetList(void) {
     s32 entityFlags;
@@ -23,11 +25,11 @@ void Battle_BuildTargetList(void) {
     BattleEntity *player;
     BattleEntity *candidate;
 
-    candidate = g_FieldActorListHead;
+    candidate = (BattleEntity *)D_8009D20C;
     g_BattleTargetIndex = 0;
     if (candidate != NULL) {
         do {
-            player = g_PlayerEntity;
+            player = D_8009D254;
             if (candidate != player) {
                 candidateCore = candidate->core;
                 if (candidateCore != NULL) {
@@ -39,9 +41,9 @@ void Battle_BuildTargetList(void) {
                         g_BattleTargetList[g_BattleTargetIndex].dist = distance;
                         angle = ratan2(
                             candidate->renderObject.target_x -
-                                ((BattleEntity *)g_PlayerEntity_2)->posX.parts.integer,
+                                D_8009D254->posX.parts.integer,
                             candidate->renderObject.target_z -
-                                ((BattleEntity *)g_PlayerEntity_2)->posZ.parts.integer);
+                                D_8009D254->posZ.parts.integer);
                         nextIndex = g_BattleTargetIndex + 1;
                         g_BattleTargetList[g_BattleTargetIndex].angle = angle;
                         g_BattleTargetIndex = nextIndex;
