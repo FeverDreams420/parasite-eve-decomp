@@ -882,7 +882,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                     } while (0);
                     quadMidpointGteScreen1 = &scratchpad->midpointScreenCoordinates[1];
                     quadLifetimeOutput1 = &scratchpad->midpointScreenCoordinates[3];
-                    asm volatile(""
+                    asm(""
                                  : "=r"(quadLifetimeOutput1)
                                  : "0"(quadLifetimeOutput1), "r"(quadMidpointGteScreen1));
 
