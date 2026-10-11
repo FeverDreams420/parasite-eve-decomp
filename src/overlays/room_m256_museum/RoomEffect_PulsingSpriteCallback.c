@@ -18,7 +18,7 @@ int func_8019552C(int mode, RoomModelPulseParticle *particle) {
         break;
     case 2:
         scale = particle->scale * rcos((s16)particle->frame << 6) / 4096;
-        func_800CF844(D_801960A0, &position, scale, D_80196098,
+        func_800CF844(&D_801960A0, &position, scale, &D_80196098,
                       scale, (s16)particle->offset);
         func_800CF3AC(D_80195E64, &color, 0x30 - (scale * 48) / 1024);
         kind = D_800F3368.palette;

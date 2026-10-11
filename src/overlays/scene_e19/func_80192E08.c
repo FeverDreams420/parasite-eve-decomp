@@ -11,11 +11,11 @@ typedef struct SceneE19Effect {
     s16 frame;
 } SceneE19Effect;
 
-extern GteShortVector D_8018F1CC;
+extern GteRotation D_8018F1CC;
 extern int D_8019B668;
 
 int func_80192E08(int mode, SceneE19Effect *effect) {
-    GteShortVector position = D_8018F1CC;
+    GteRotation position = D_8018F1CC;
     int angle, cosine, sine, brightness, palette, kind;
     u16 clut;
 
@@ -38,7 +38,7 @@ int func_80192E08(int mode, SceneE19Effect *effect) {
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428) palette += 4;
         clut = GetClut(144, palette);
-        func_800CEE20((GteShortVector *)effect, (GteRotation *)&position, 4096, cosine, 0x88, clut, 1, brightness, 0);
+        func_800CEE20((GteShortVector *)effect, &position, 4096, cosine, 0x88, clut, 1, brightness, 0);
         break;
     }
     }

@@ -17,7 +17,7 @@
  * flashes the scene on contact with the player and expires once it leaves
  * the walkable area; the splash children slow down and bounce. */
 int func_80192844(int mode, RoomM256Drop *drop) {
-    RoomM256DropRotation rotation = D_8018F1CC;
+    GteRotation rotation = D_8018F1CC;
     RoomM256DropColor color = D_8018F1D4;
     RoomM256Drop *child;
     RenderMatrixSlot *slot;
@@ -171,7 +171,7 @@ int func_80192844(int mode, RoomM256Drop *drop) {
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428) palette += 4;
-                func_800CEE20((GteShortVector *)drop, (GteRotation *)&rotation, width, width,
+                func_800CEE20((GteShortVector *)drop, &rotation, width, width,
                               (s16)D_800F3368.parameter02 * (drop->timer / 4) + 0x20,
                               GetClut(0x10, palette), 1, 0x80, 0);
             }

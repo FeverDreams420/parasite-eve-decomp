@@ -18,6 +18,7 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/asset_find.h"
 #include "pe1/field_engine_calls.h"
+#include "pe1/room_m023_effects.h"
 
 /* room_m023 joint beacon (func_8018FC14): follows a model joint, swells
  * and pulses through four phases, tags the player on contact and draws a
@@ -69,16 +70,11 @@ typedef struct RoomM023BeaconEvent {
     /* 0x12 */ s16 variant;
 } RoomM023BeaconEvent;
 
-typedef struct RoomM023BeaconOffset {
-    s32 word[2];
-} __attribute__((packed)) RoomM023BeaconOffset;
-
 typedef struct RoomM023BeaconColor {
     u8 r, g, b, code;
 } RoomM023BeaconColor;
 
 extern RoomM023BeaconEntity *D_8009D254;
-extern RoomM023BeaconOffset D_8018EFF4;
 extern u8 *D_80190760;
 extern u8 D_801906F0[];
 extern u16 D_800E11EA;

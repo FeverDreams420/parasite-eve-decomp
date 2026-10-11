@@ -1,4 +1,4 @@
-#include "pe1/scene_e22_ember_burst.h"
+#include "scene_e22_ember_data.h"
 #include "pe1/gte.h"
 
 /* Sweep bolt controller: the bolt swings out from its origin over sixteen

@@ -1,4 +1,4 @@
-#include "pe1/scene_e22_ember_burst.h"
+#include "scene_e22_ember_data.h"
 
 /* Damped glow particle: drifts with a slowing velocity and bounces on the
  * floor for 8 frames, drawing a pulsing glow sprite tinted by its colour

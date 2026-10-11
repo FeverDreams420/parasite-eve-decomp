@@ -69,15 +69,10 @@ typedef struct SceneE22TextureSlot {
 } SceneE22TextureSlot;
 
 extern SceneE22TextureSlot D_800E11EA;
-extern RenderColor D_8018F208;
-extern RenderColor D_8018F20C;
-extern RenderColor D_8018F204;
-extern u8 D_80199388[];
 
 extern int func_80071A54(void);
 extern void func_80020D50(void);
 extern void func_80020DD0(void);
-extern int func_80193940(int mode, RoomOrbitTrailParticle *p);
 
 /* Link beam controller (func_80193414): two light ribbons strung across
  * three actor joints picked by the scene event's joint set; the last joint
@@ -95,13 +90,6 @@ typedef struct SceneE22LinkJoints {
     s16 first, middle, last;
 } SceneE22LinkJoints;
 
-extern SceneE22LinkJoints D_801991B8[];
-extern GteShortVector D_8018F1D8;
-extern GteShortVector D_8018F1E0;
-extern RenderColor D_8018F1E8;
-extern RenderColor D_8018F1EC;
-extern RenderColor D_8018F1F0;
-extern int func_801931B8(int mode, RoomOrbitTrailParticle *p);
 
 /* Swirl ring controller (func_80195B40): rides an actor joint, swells a
  * glow while it sprays swirl ring particles, then fades a halo and ring. */
@@ -114,18 +102,9 @@ typedef struct SceneE22SwirlRing {
     s16 ring;                     /* 0x0E */
 } SceneE22SwirlRing;
 
-extern GteRotation D_8018F1F4;
-extern RenderColor D_8018F214;
-extern u8 D_80199434[];
-extern int func_801957CC(int mode, RoomOrbitTrailParticle *p);
 
 /* Ember column controller (func_80194F60): its spin template and halo
  * colour, and the rising ember particle it sprays. */
-extern GteRotation D_8018F1FC;
-extern u8 D_80199308[];
-extern u8 D_80199190[];
-extern RenderColor D_8018F210;
-extern int func_8019485C(int mode, RoomOrbitTrailParticle *p);
 
 /* Twist model controller (func_80196554): a model bolt that rides an
  * actor joint along its heading, sheds twisting trail particles, then
@@ -149,14 +128,11 @@ typedef struct SceneE22ModelScale {
     s32 x, y, z, reserved0C;
 } SceneE22ModelScale;
 
-extern void *D_80199500;
-extern RenderColor D_8018F218;
 extern void func_800C6EC0(int tpage, int clut);
 #include "pe1/gte_types.h"
 extern void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,
                           int texture, int clut, int page, int intensity, int arg7,
                           int size);
-extern int func_801962FC(int mode, RoomOrbitTrailParticle *p);
 
 /* Sweep bolt controller (func_8019753C): the twist model's sibling that
  * sweeps the bolt out from its origin, sheds twist beam particles, then
@@ -171,9 +147,6 @@ typedef struct SceneE22SweepBolt {
     s16 sweep;                    /* 0x1E */
 } SceneE22SweepBolt;
 
-extern RenderColor D_8018F224;
-extern s16 D_80199504;
 extern void func_800D1D24(int mode, int step, int time);
-extern int func_8019702C(int mode, RoomOrbitTrailParticle *p);
 
 #endif

@@ -1,4 +1,4 @@
-#include "pe1/scene_e22_ember_burst.h"
+#include "scene_e22_ember_data.h"
 #include "pe1/gte.h"
 
 /* Rising ember particle: an ember drifts on a slowly turning circle while

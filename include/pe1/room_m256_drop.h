@@ -28,10 +28,6 @@ typedef struct RoomM256Drop {
     /* 0x12 */ s16 timer;
 } RoomM256Drop;
 
-typedef struct RoomM256DropRotation {
-    s16 x, y, z, flags;
-} __attribute__((packed)) RoomM256DropRotation;
-
 typedef struct RoomM256DropColor {
     u8 r, g, b, code;
 } __attribute__((packed)) RoomM256DropColor;
@@ -69,7 +65,7 @@ typedef struct RoomM256DropEvent {
 } RoomM256DropEvent;
 
 extern RoomM256DropEntity *D_8009D254;
-extern RoomM256DropRotation D_8018F1CC;
+extern GteRotation D_8018F1CC;
 extern RoomM256DropColor D_8018F1D4;
 
 int func_80071A54(void);

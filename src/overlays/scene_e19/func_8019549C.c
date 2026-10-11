@@ -26,12 +26,7 @@ PE1_STATIC_ASSERT(sizeof(SceneE19HomingParticle) == 0x20,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneE19HomingParticle, state) == 0x1C,
                   scene_e19_homing_particle_state);
 
-/* The original copies all eight bytes using unaligned word transfers. */
-typedef struct SceneE19PackedPoint {
-    GteShortVector vector;
-} __attribute__((packed)) SceneE19PackedPoint;
-
-extern SceneE19PackedPoint D_8018F210;
+extern GteRotation D_8018F210;
 extern FieldActor *D_8009D254;
 int func_800CFE94(s16 *from, s16 *to);
 
@@ -43,7 +38,7 @@ extern void func_800D3BC8(GteShortVector *, int, int, int,
 
 int func_8019549C(int mode, SceneE19HomingParticle *particle)
 {
-    SceneE19PackedPoint templatePoint = D_8018F210;
+    GteRotation templatePoint = D_8018F210;
     GteShortVector temporaryPosition;
     GteShortVector rotation;
     RenderColor color = D_8018F218;
@@ -73,7 +68,7 @@ int func_8019549C(int mode, SceneE19HomingParticle *particle)
         particle->angles.pad = 0;
         FieldEng_TransformMatrixPoint(
             (struct RoomFxTransformOwner *)D_800F32D0->actor,
-            0, &templatePoint.vector, &particle->position);
+            0, (GteShortVector *)&templatePoint, &particle->position);
         func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->actor,
                      0, &rotation);
         rotation.x = 0;

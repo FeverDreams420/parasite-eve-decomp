@@ -17,11 +17,7 @@ typedef struct RoomM123GlowBurst {
     s16 timer;
 } RoomM123GlowBurst;
 
-typedef struct RoomM123BurstTemplate {
-    u8 bytes[8];
-} RoomM123BurstTemplate;
-
-extern RoomM123BurstTemplate D_8018F1E0;
+extern GteShortVector D_8018F1E0;
 extern s16 g_RoomScriptRecord;
 /* Joint angles published for the pulsing particles: written by the joint
  * transform as a vector, read back by the flare sweep as a rotation. */

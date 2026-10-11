@@ -1,4 +1,4 @@
-#include "pe1/scene_e22_ember_burst.h"
+#include "scene_e22_ember_data.h"
 #include "pe1/gte.h"
 
 /* Ember drift particle: embers drift and bounce off the floor while their

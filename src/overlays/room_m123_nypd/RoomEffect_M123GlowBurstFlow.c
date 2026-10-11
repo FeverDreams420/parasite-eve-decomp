@@ -61,7 +61,7 @@ int func_80192BDC(int mode, RoomM123PulsingParticle *particle) {
  * stores, and the palette read-back follows the block's stores. */
 
 int func_80192F0C(int mode, RoomM123GlowBurst *burst) {
-    RoomM123BurstTemplate template = D_8018F1E0;
+    GteShortVector template = D_8018F1E0;
     GteShortVector position;
     GteRotation rotation;
     RenderColor color;

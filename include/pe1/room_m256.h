@@ -21,8 +21,6 @@ extern int func_801940B0(int mode, void *state);
 
 int func_80195320(int mode, u16 *out);
 
-extern char D_801960A0[];
-extern char D_80196098[];
 extern char D_80195E64[];
 extern s16 D_80196094;
 

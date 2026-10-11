@@ -13,10 +13,10 @@ typedef struct SceneE22Effect {
     s16 frame;
 } SceneE22Effect;
 
-extern GteShortVector D_8018F1F4;
+extern GteRotation D_8018F1F4;
 
 int func_801981B0(int mode, SceneE22Effect *effect) {
-    GteShortVector position = D_8018F1F4;
+    GteRotation position = D_8018F1F4;
     int angle, sine, brightness, palette, kind;
     u16 clut;
 
@@ -38,7 +38,7 @@ int func_801981B0(int mode, SceneE22Effect *effect) {
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428) palette += 4;
         clut = GetClut(112, palette);
-        func_800CEE20((GteShortVector *)effect, (GteRotation *)&position, brightness, brightness, 0x22, clut, 255, 128, 0);
+        func_800CEE20((GteShortVector *)effect, &position, brightness, brightness, 0x22, clut, 255, 128, 0);
         break;
     }
     }

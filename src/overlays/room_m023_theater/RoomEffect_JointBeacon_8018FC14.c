@@ -8,7 +8,7 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
     GteVector scale;
     GteShortVector position;
     GteShortVector rotation;
-    RoomM023BeaconOffset offset = D_8018EFF4;
+    RoomM023Template offset = D_8018EFF4;
     GteMatrix matrix;
     GteMatrix spin;
     RoomM023BeaconColor color;

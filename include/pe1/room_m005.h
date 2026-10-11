@@ -52,9 +52,7 @@ extern void RoomM005_FxOrbiter_8018F018(void);
 int func_8018F330(int mode, RoomM005OrbiterState *state);
 
 extern RenderColor D_8018F00C;
-extern unsigned short D_80190BA0;
-extern unsigned short D_80190BA2;
-extern unsigned short D_80190BA4;
+extern GteShortVector D_80190BA0; /* drift offset, written by the joint beacon */
 extern GteShortVector D_80190BA8;
 
 /* Cross flare (func_8018F614): two joint templates and the flash track. */

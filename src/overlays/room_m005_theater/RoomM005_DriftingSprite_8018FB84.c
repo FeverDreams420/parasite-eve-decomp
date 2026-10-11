@@ -30,9 +30,9 @@ int func_8018FB84(int mode, RoomM005DriftingSpriteState *state) {
         position.x = state->x;
         position.y = state->y;
         position.z = state->z;
-        position.x += D_80190BA0;
-        position.y += D_80190BA2;
-        position.z += D_80190BA4;
+        position.x += D_80190BA0.x;
+        position.y += D_80190BA0.y;
+        position.z += D_80190BA0.z;
         u = (D_800E27EC & 1) << 7;
         v = ((D_800E27EC << 3) & 0x10) + 0x20;
         scale = rcos((D_800E27EC << 10) / 6) / 24;

@@ -2,6 +2,7 @@
 #include "pe1/field_sprite_params.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/room_bounce_glint.h"
+#include "pe1/room_m086_seeker.h"
 #include "pe1/room_fx.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_anim_pool.h"
@@ -123,10 +124,6 @@ int func_801900CC(int mode, RoomBounceGlint *glint, int *size) {
     return 0;
 }
 
-typedef RoomFxSeed8 RoomM086Blob8;
-
-extern char D_8018EFF4[];
-
 s32 func_80071A54(void);
 
 #define COPY_POS(dst, src) \
@@ -135,7 +132,7 @@ s32 func_80071A54(void);
     (dst)->z = (src)->z
 
 s32 func_80190574(s32 mode, RoomBounceGlint *ent) {
-    RoomM086Blob8 blob;
+    RoomM086Offset blob;
     RoomBounceGlint *actor;
     s32 phase;
     s32 angle;
@@ -143,7 +140,7 @@ s32 func_80190574(s32 mode, RoomBounceGlint *ent) {
     s32 i;
     s32 value;
 
-    blob = *(RoomM086Blob8 *)D_8018EFF4;
+    blob = D_8018EFF4;
 
     if (mode != 1) {
         if (mode < 2) {
