@@ -15,8 +15,8 @@ int func_8019A4CC(int mode,Effect *effect) {
     if(mode==1) {
         if(D_800E27EC>=16) return 1;
     } else if(mode==2) {
-        register int frame asm("$4")=D_800E27EC-1;
-        unsigned int sizeOffset=((unsigned int)frame<<8)&0x3F00;
+        int frame=D_800E27EC-1;
+        unsigned int sizeOffset=((unsigned int)(u8)frame<<8)&0x3F00;
         unsigned int shadeOffset=((unsigned int)frame<<9)&0x3E00;
         int size=((GteSineWord *)((char *)D_800966EC+sizeOffset))->part.sin*2+4096;
         int shade=(short)((GteSineWord *)((char *)D_800966EC+shadeOffset))->word>>5;
