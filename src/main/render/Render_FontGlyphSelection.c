@@ -8,8 +8,41 @@
 #include "pe1/cdrom.h"
 #include "pe1/psyq_libc.h"
 
-/* The slot-search tails store the selected byte and reload it through a
- * byte symbol after a memory barrier, as retail does. */
+/* The slot-search tails store the selected byte and reload it through the
+ * other symbol for that byte (g_FontSelectionState.selected or D_80091A1F)
+ * after a memory barrier, as retail does: without the barrier the reload is
+ * scheduled before the store (lev 10..25). */
+
+/* Slot of the first glyph group whose code matches, or 255. */
+static inline unsigned char Font_FindCodeSlot(FontGlyphTable *table, unsigned short code)
+{
+    unsigned char selected;
+    int i, count;
+    FontGlyphGroups *groups;
+    FontGlyphSlots *slots;
+
+    selected = 0;
+    i = 0;
+    count = table->groups.count;
+    groups = &table->groups;
+    if (i < count) {
+        int limit;
+        code &= 255;
+        limit = count;
+        do {
+            if (groups->codes[i] == code) {
+                selected = i;
+                i = groups->count;
+            }
+            ++i;
+        } while (i < limit);
+    }
+    slots = (FontGlyphSlots *)(groups + 1);
+    for (i = 0; i < slots->count; ++i) {
+        if (slots->indices[i] == selected) return i;
+    }
+    return 255;
+}
 
 unsigned char Render_DrawTextDigit(FontGlyphTable *table, unsigned char mode)
 {
@@ -18,9 +51,6 @@ unsigned char Render_DrawTextDigit(FontGlyphTable *table, unsigned char mode)
     int i, count;
     FontGlyphGroups *groups;
     FontGlyphSlots *slots;
-    /* Matching debt: retail reserves 16 stack bytes without accessing them.
-     * The original locals are unknown; this preserves that frame on GCC 2.7.2. */
-    int stack_pad[2];
 
     if (!table) table = g_FontSelectionState.table;
     switch (mode) {
@@ -33,7 +63,7 @@ unsigned char Render_DrawTextDigit(FontGlyphTable *table, unsigned char mode)
     i = 0;
     count = table->groups.count;
     groups = &table->groups;
-    if (count > 0) {
+    if (i < count) {
         int limit;
         code &= 255;
         limit = count;
@@ -222,16 +252,9 @@ u8 Render_StepFontLoad(void) {
     u8 state;
     u8 next;
     u8 code;
-    FontGlyphTable *table;
-    FontGlyphGroups *groups;
     FontGlyphTable *result;
-    s32 slot;
     u16 digit;
-    s32 i;
-    s32 count;
-    s32 found;
     u8 *statep;
-    int stack_pad[3];
 
     statep = &D_80091A1D;
     state = *statep;
@@ -248,46 +271,7 @@ u8 Render_StepFontLoad(void) {
 
     digit = (u8)(D_80091A1D % 10) != 0;
     asm("" : "=r"(digit) : "0"(digit));
-    found = 0;
-    i = 0;
-
-    table = g_FontSelectionState.table;
-    count = table->groups.count;
-    groups = &table->groups;
-    if (count > 0) {
-        digit &= 0xFF;
-        do {
-            if (groups->codes[i] == digit) {
-                found = i;
-                i = groups->count;
-            }
-            i++;
-        } while (i < count);
-        i = 0;
-    }
-
-    {
-        s32 count2;
-        s32 wanted;
-        FontGlyphSlots *slots;
-        slot = ((FontGlyphSlots *)(groups + 1))->count;
-        slots = (FontGlyphSlots *)(groups + 1);
-        if (slot > 0) {
-            wanted = found & 0xFF;
-            count2 = slot;
-            do {
-                if (slots->indices[i] == wanted) {
-                    slot = i;
-                    goto store;
-                }
-                i++;
-            } while (i < count2);
-        }
-    }
-    slot = 0xFF;
-
-store:
-        g_FontSelectionState.selected = slot;
+    g_FontSelectionState.selected = Font_FindCodeSlot(g_FontSelectionState.table, digit);
     __asm__ volatile("" : "=m"(g_FontSelectionState) : "m"(g_FontSelectionState));
     result = g_FontSelectionState.table;
     return result->groups.codes[result->slots.indices[D_80091A1F]];
@@ -302,45 +286,21 @@ int Menu_GetEquipSlotStateOrIndex(void) {
 }
 
 u8 Render_FindFontGlyphSlot(void) {
-    u8 temp_v0;
-    u8 temp_a0;
-    FontGlyphTable *table;
-    FontGlyphGroups *groups;
-    FontGlyphSlots *slots;
-    s32 i;
-    s32 found;
-    s32 slot;
+    u8 index;
+    u8 code;
     FontGlyphTable *result;
 
     if (g_FontSelectionState.codeIndex >= 0x46U) {
         g_FontSelectionState.loadFailed = 1;
         return 0xFFU;
     }
-    temp_v0 = g_FontSelectionState.codeIndex + 1;
-    g_FontSelectionState.codeIndex = temp_v0;
-    temp_a0 = D_8009EE22[temp_v0];
+    index = g_FontSelectionState.codeIndex + 1;
+    g_FontSelectionState.codeIndex = index;
+    code = D_8009EE22[index];
     g_FontSelectionState.loadFailed = 0;
-    g_FontSelectionState.code = temp_a0;
-    Render_LoadFontGlyph(temp_a0);
-    found = 0;
-    table = g_FontSelectionState.table;
-    groups = &table->groups;
-    for (i = 0; i < table->groups.count; i++) {
-        if (groups->codes[i] == 2) {
-            found = i;
-            i = groups->count;
-        }
-    }
-    slots = (FontGlyphSlots *)(groups + 1);
-    for (i = 0; i < ((FontGlyphSlots *)(groups + 1))->count; i++) {
-        if (slots->indices[i] == (found & 0xFF)) {
-            slot = i;
-            goto store;
-        }
-    }
-    slot = 0xFF;
-store:
-    D_80091A1F = slot;
+    g_FontSelectionState.code = code;
+    Render_LoadFontGlyph(code);
+    D_80091A1F = Font_FindCodeSlot(g_FontSelectionState.table, 2);
     __asm__ volatile("" : "=m"(g_FontSelectionState) : "m"(g_FontSelectionState));
     result = g_FontSelectionState.table;
     return result->groups.codes[result->slots.indices[g_FontSelectionState.selected]];
@@ -453,33 +413,9 @@ unsigned char Render_GetOrLoadFontGlyph(unsigned char action)
 }
 
 int Menu_FindSelectedEquipSlotItem(void) {
-    FontGlyphTable *table;
-    FontGlyphGroups *groups;
-    FontGlyphSlots *slots;
     FontGlyphTable *result;
-    int i;
-    int found;
-    int slot;
 
-    found = 0;
-    table = g_FontSelectionState.table;
-    groups = &table->groups;
-    for (i = 0; i < table->groups.count; i++) {
-        if (groups->codes[i] == 3) {
-            found = i;
-            i = groups->count;
-        }
-    }
-    slots = (FontGlyphSlots *)(groups + 1);
-    for (i = 0; i < ((FontGlyphSlots *)(groups + 1))->count; i++) {
-        if (slots->indices[i] == (found & 0xFF)) {
-            slot = i;
-            goto store;
-        }
-    }
-    slot = 0xFF;
-store:
-    g_FontSelectionState.selected = slot;
+    g_FontSelectionState.selected = Font_FindCodeSlot(g_FontSelectionState.table, 3);
     __asm__ volatile("" : "=m"(g_FontSelectionState) : "m"(g_FontSelectionState));
     result = g_FontSelectionState.table;
     return result->groups.codes[result->slots.indices[D_80091A1F]];

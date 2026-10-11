@@ -16,8 +16,8 @@ int Obj_ResetAllEntries(void) {
     unsigned int i;
     unsigned int count;
 
-    state = D_800B1624;
-    base.state = D_800B1624;
+    state = g_GeomState;
+    base.state = g_GeomState;
     controls.word = base.word + state->ctrl_offset;
     base.word += state->entry_offset;
     entries = base.entry;
@@ -47,7 +47,7 @@ int Geom_StepGroupAnimations(void)
 
     if (!(g_GameStateFlags & 0x104) &&
         (g_GameState.flags & 0xC00000) != 0x800000) {
-        state.state = D_800B1624;
+        state.state = g_GeomState;
         controls.word = state.word + state.state->ctrl_offset;
         entries.word = state.word + state.state->entry_offset;
         count = state.state->entry_count;

@@ -180,7 +180,7 @@ int Render_SetViewport(s16 *position) {
         D_800BCFB4 = screen_x;
         D_800BCFB6 = screen_y;
     }
-    geometry.state = D_800B1624;
+    geometry.state = g_GeomState;
     sum_x = D_800BCFB4 + screen_x;
     screen_x = sum_x / 2;
     D_800BCFB4 = screen_x;
@@ -188,7 +188,7 @@ int Render_SetViewport(s16 *position) {
     sum_y += (unsigned)sum_y >> 31;
     view_x = 320 - screen_x;
 
-    offset_geometry.state = D_800B1624;
+    offset_geometry.state = g_GeomState;
 
     screen_y = sum_y >> 1;
     D_800BCFB6 = screen_y;
@@ -235,7 +235,7 @@ int Render_SetViewport(s16 *position) {
         register int signed_y;
         s16 chosen_bound;
         register int upper_y;
-        geometry.state = D_800B1624;
+        geometry.state = g_GeomState;
         viewAddress.word = geometry.word + geometry.state->entry_offset_1C;
         view = viewAddress.viewport;
         view += g_GeomGroupSel;
@@ -414,10 +414,10 @@ int Render_UpdateScrollPosition(void *positionArg, int duration, int mode)
     gte_rtps();
     gte_stsxy2(projected);
     {
-        GeomState *state = D_800B1624;
+        GeomState *state = g_GeomState;
         GeomStateAddress table;
 
-        table.state = D_800B1624;
+        table.state = g_GeomState;
         table.word += state->entry_offset_1C;
         view = &table.viewport[g_GeomGroupSel];
     }
@@ -427,22 +427,14 @@ int Render_UpdateScrollPosition(void *positionArg, int duration, int mode)
         x = halfX+projected[0];
         y = halfY+projected[1];
     }
-    {
-        int min = view->minX;
-        if (x < min) x = min;
-        else {
-            int max = view->maxX;
-            if (x > max) x = max;
-        }
-    }
-    {
-        int min = view->minY;
-        if (y < min) y = min;
-        else {
-            int max = view->maxY;
-            if (y > max) y = max;
-        }
-    }
+    if (x < view->minX)
+        x = view->minX;
+    else if (x > view->maxX)
+        x = view->maxX;
+    if (y < view->minY)
+        y = view->minY;
+    else if (y > view->maxY)
+        y = view->maxY;
     D_800BCF9C = x;
     D_800BCF9E = y;
     if (duration == -1)

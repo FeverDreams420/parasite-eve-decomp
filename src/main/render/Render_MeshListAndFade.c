@@ -82,7 +82,7 @@ int Render_DrawSpriteEntry(GeomEntry *input)
     if (active != 0)
         page += count;
 
-    state = D_800B1624;
+    state = g_GeomState;
     {
         s32 screen_add;
         screen_src = entry->scr_x;
@@ -306,7 +306,7 @@ int Gpu_LoadGeomState(int);
  * every mesh entry's packets into `buffer`; *end returns the free space. */
 int Geo_RenderMeshList(void *buffer, void **end)
 {
-    GeomState *state = D_800B1624;
+    GeomState *state = g_GeomState;
     u8 *group = &g_GeomGroupSel;
     GeomStateAddress address;
     CameraViewport *view;
@@ -442,8 +442,8 @@ int Render_StepFade(void) {
     if (!(g_RenderStateFlags & 0x400))
         return 0;
     level = (g_RenderFadeFrameCounter << 7) / (g_RenderFadeFrameCount - 1);
-    state = D_800B1624;
-    entries.state = D_800B1624;
+    state = g_GeomState;
+    entries.state = g_GeomState;
     entries.word += state->entry_offset;
     count = state->entry_count06;
     level = 0x80 - level;
@@ -466,7 +466,7 @@ int Render_StepFade(void) {
     counter = &g_RenderFadeFrameCounter;
     if (++*counter >= g_RenderFadeFrameCount) {
         g_RenderStateFlags = (g_RenderStateFlags & ~0xC00) | 0x800;
-        D_800B1624->field26 = 0x1FF0;
+        g_GeomState->field26 = 0x1FF0;
     }
     return 0;
 }
@@ -511,8 +511,8 @@ int Render_ApplyScreenTint(void) {
     level = 0x80;
     if (g_RenderStateFlags & 0x2000)
         level = D_800BCFFC;
-    state = D_800B1624;
-    entries.state = D_800B1624;
+    state = g_GeomState;
+    entries.state = g_GeomState;
     entries.word += state->entry_offset;
     count = state->entry_count06;
     entry = entries.entry;
@@ -553,13 +553,13 @@ int Geom_ScrollEntries(void)
 {
     if (!(g_GameStateFlags & 0x104)) {
         int i;
-        GeomState *state = D_800B1624;
+        GeomState *state = g_GeomState;
         GeomStateAddress table;
         GeomEntryView *entries;
         int count;
         GeomScrollEntry *entry;
 
-        table.state = D_800B1624;
+        table.state = g_GeomState;
         table.word += state->entry_offset;
         entries = table.views;
         count = state->entry_count06;
