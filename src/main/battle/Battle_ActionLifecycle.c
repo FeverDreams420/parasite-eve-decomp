@@ -39,7 +39,7 @@ void Battle_BeginPlayerAction(void) {
 
 extern int g_FieldMoveLock;
 extern Combatant *g_ActiveActor;
-extern char *g_PlayerEntity;
+extern FieldActor *g_PlayerEntity;
 
 
 #define COMBATANT_FIELD(ptr, type, member) \
@@ -56,7 +56,7 @@ void Battle_ReturnToIdle(void) {
     mask_state = 0xFFFEFFFF;
     g_FieldMoveLock &= -2;
     state = (char *)g_ActiveActor;
-    actor = g_PlayerEntity;
+    actor = (char *)g_PlayerEntity;
     flags = COMBATANT_FIELD(state, int, stateFlags);
     flags &= mask_state;
     COMBATANT_FIELD(state, int, stateFlags) = flags;

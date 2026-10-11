@@ -582,8 +582,7 @@ int Scene_FreeEntityTable(void *owner)
     return result;
 }
 
-extern s32 g_PlayerEntity[];
-#define g_PlayerEntity (g_PlayerEntity[0])
+extern struct FieldActor *g_PlayerEntity;
 s32 Pm_StopAll(void) {
     u8 *clear_base;
     u8 *base_v0;

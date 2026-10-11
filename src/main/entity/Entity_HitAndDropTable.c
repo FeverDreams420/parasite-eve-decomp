@@ -8,7 +8,7 @@
 
 extern Combatant *g_ActiveActor;
 extern char *g_ActiveActor_late2[] asm("g_ActiveActor");
-extern char *g_PlayerEntity[];
+extern FieldActor *g_PlayerEntity;
 extern void *g_BattlePendingEnemySpawn[];
 
 int rand(void);
@@ -103,7 +103,7 @@ void Entity_ResolveDropTable(void *arg0) {
             }
             if (S16(g_ActiveActor, 0xC) != 0) {
                 Entity_ApplyHitAndSetAnim(arg0);
-                if (!(U32(g_PlayerEntity[0], 0x98) & 0x100)) {
+                if (!(U32(g_PlayerEntity, 0x98) & 0x100)) {
                     g_BattlePendingEnemySpawn[0] = arg0;
                 }
             }
@@ -136,7 +136,7 @@ extern u32 g_BattleHitActionParam[];
 int Battle_CalcRelativeAngle(BattleEntity *arg0, BattleEntity *actor);
 
 static inline char *CurrentPlayer(void) {
-    return g_PlayerEntity[0];
+    return (char *)g_PlayerEntity;
 }
 
 s16 Entity_ApplyHitAndSetAnim(void *arg0) {

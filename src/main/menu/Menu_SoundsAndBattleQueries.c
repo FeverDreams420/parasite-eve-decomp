@@ -3,7 +3,7 @@
 #include "pe1/aya.h"
 #include "pe1/textbox.h"
 
-extern unsigned int *g_PlayerEntity;
+#include "pe1/player_entity.h"
 
 
 extern unsigned short g_AyaStatActiveTimeRate;
@@ -21,7 +21,7 @@ int Battle_GetEnemyEscapeFlag(void)
     unsigned int *ptr;
 
     if (g_PlayerEntity != 0) {
-        ptr = (int *)g_PlayerEntity[0];
+        ptr = (unsigned int *)g_PlayerEntity->state;
         if (ptr != 0) {
             return (ptr[0x13] >> 9) & 1;
         }

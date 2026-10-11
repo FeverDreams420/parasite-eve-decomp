@@ -3,7 +3,7 @@
 #include "pe1/asset_find.h"
 
 extern unsigned int g_GameStateFlags;
-extern BattleEntity *g_PlayerEntity;
+extern FieldActor *g_PlayerEntity;
 extern Combatant *g_ActiveActor;
 
 void Battle_CopyPadStateToRecord(void);
@@ -14,7 +14,7 @@ void Battle_DispatchSpecialAction(int arg0) {
     BattleEntity *actor;
 
     if ((g_GameStateFlags & 2) == 0) {
-        actor = g_PlayerEntity;
+        actor = (BattleEntity *)g_PlayerEntity;
         g_ActiveActor = actor->core;
         Asset_Find08Alt(0x453, 1, actor->posX.parts.integer,
                        actor->posY.parts.integer, actor->posZ.parts.integer);
@@ -37,7 +37,7 @@ void Battle_DispatchInit(int arg0) {
         return;
     }
 
-    g_ActiveActor = g_PlayerEntity->core;
+    g_ActiveActor = ((BattleEntity *)g_PlayerEntity)->core;
 
     switch (arg0) {
     case 0x197:

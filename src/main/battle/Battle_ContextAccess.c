@@ -3,7 +3,7 @@
 #include "pe1/battle.h"
 #include "pe1/room_floor.h"
 
-extern BattleEntity *g_PlayerEntity;
+extern FieldActor *g_PlayerEntity;
 
 int Battle_GetContextField(int arg0) {
     Combatant *ctx;
@@ -11,7 +11,7 @@ int Battle_GetContextField(int arg0) {
     u32 word;
 
     arg0 = (u8)arg0;
-    ctx = g_PlayerEntity->core;
+    ctx = ((BattleEntity *)g_PlayerEntity)->core;
     ret = -1000;
 
     switch (arg0) {
@@ -73,13 +73,13 @@ int Battle_GetContextField(int arg0) {
 #include "common.h"
 #include "pe1/battle.h"
 
-extern BattleEntity *g_PlayerEntity;
+extern FieldActor *g_PlayerEntity;
 
 void Battle_SetContextField(int arg0, int arg1) {
     Combatant *ctx;
 
     arg0 = (u8)arg0;
-    ctx = g_PlayerEntity->core;
+    ctx = ((BattleEntity *)g_PlayerEntity)->core;
 
     switch (arg0) {
     case 0:

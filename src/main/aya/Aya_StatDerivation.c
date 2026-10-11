@@ -49,7 +49,7 @@ void Inv_RecalcSlotStats(void) {
 extern unsigned short g_AyaStatPeEnergyMax;
 extern int g_StatLevelOffsetType3;
 
-extern unsigned int *g_PlayerEntity;
+extern FieldActor *g_PlayerEntity;
 
 void Aya_DeriveStats(int *out_max, int *out_current) {
     int base;
@@ -72,7 +72,7 @@ void Battle_SyncEquipSlots(void) {
     unsigned short value;
 
     Inv_RecalcSlotStats();
-    outer = g_PlayerEntity;
+    outer = (unsigned int *)g_PlayerEntity;
     if (outer != 0) {
         ptr = (unsigned short *)outer[0];
         if (ptr != 0) {

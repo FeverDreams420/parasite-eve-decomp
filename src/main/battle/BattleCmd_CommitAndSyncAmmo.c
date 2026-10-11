@@ -5,7 +5,7 @@
 #include "pe1/battle_cmd.h"
 #include "pe1/inventory.h"
 
-extern BattleEntity *g_PlayerEntity;
+extern FieldActor *g_PlayerEntity;
 extern u16 g_AyaHpCurrent[];
 extern s8 g_AyaEquippedWeaponSlot[];
 
@@ -22,7 +22,7 @@ void BattleCmd_SetCurrentMP(int arg0) {
     void *current;
 
     if (g_PlayerEntity != 0) {
-        current = g_PlayerEntity->core;
+        current = ((BattleEntity *)g_PlayerEntity)->core;
         if (current != 0) {
             *(int *)((char *)current + 8) = arg0 << 16;
         }
@@ -36,7 +36,7 @@ void BattleCmd_CommitAndSyncAmmo(int item) {
     int saved;
 
     Battle_ApplyDamage(item);
-    entity = g_PlayerEntity;
+    entity = (BattleEntity *)g_PlayerEntity;
     if (entity != 0) {
         current = entity->core;
         if (current != 0) {

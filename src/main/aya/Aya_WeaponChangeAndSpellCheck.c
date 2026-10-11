@@ -3,7 +3,7 @@
 #include "pe1/inventory_queries.h"
 #include "pe1/aya.h"
 
-extern void **g_PlayerEntity;
+extern FieldActor *g_PlayerEntity;
 
 int Inv_IsActiveListOverrideSelected(void);
 
@@ -14,7 +14,7 @@ void BattleCmd_ChangeWeaponAndSync(int arg0) {
 
     Battle_ApplySpellEffect(arg0, (BattleEntity *)g_PlayerEntity);
     if (g_PlayerEntity != 0) {
-        current = g_PlayerEntity[0];
+        current = (Combatant *)g_PlayerEntity->state;
         if (current != 0) {
             g_AyaHpCurrent[0] = current->curHP;
             if (*(void **)&current->action != 0) {

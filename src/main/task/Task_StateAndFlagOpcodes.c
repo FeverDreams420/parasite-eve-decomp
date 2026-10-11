@@ -48,10 +48,10 @@ int Task_IsBattlePhase4(int **arg0) {
     return 1;
 }
 
-extern FieldActor *g_PlayerEntity[];
+extern FieldActor *g_PlayerEntity;
 
 int Task_ResetPlayerCameraPos(void) {
-    Render_UpdateScrollPosition(&g_PlayerEntity[0]->pos_x, -1, -1);
+    Render_UpdateScrollPosition(&g_PlayerEntity->pos_x, -1, -1);
     return 1;
 }
 

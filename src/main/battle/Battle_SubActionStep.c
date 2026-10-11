@@ -2,7 +2,7 @@
 #include "pe1/battle.h"
 
 extern Combatant *g_ActiveActor;
-extern volatile char *g_PlayerEntity;
+extern FieldActor *g_PlayerEntity;
 
 #define COMBATANT_FIELD(ptr, type, member) \
     (*(volatile type *)((ptr) + PE1_OFFSETOF(Combatant, member)))
@@ -30,7 +30,7 @@ void Battle_SubActionStep(void) {
         step = COMBATANT_FIELD(state, u16, subActionStep);
         COMBATANT_FIELD(state, u8, subActionCounter) = 0;
         COMBATANT_FIELD(state, u16, panelAux_val) = copy;
-        actor = g_PlayerEntity;
+        actor = (char *)g_PlayerEntity;
         value -= step;
         state_v1 = (char *)g_ActiveActor;
         COMBATANT_FIELD(state, u16, hpMirror) = value;

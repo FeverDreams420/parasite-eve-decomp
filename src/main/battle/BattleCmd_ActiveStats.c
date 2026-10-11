@@ -3,7 +3,7 @@
 
 /* g_PlayerEntity points at the player-side field actor; its core is the
  * Combatant record used by the command paths below. */
-extern BattleEntity *g_PlayerEntity;
+extern FieldActor *g_PlayerEntity;
 extern u16 g_AyaHpCurrent[];
 extern s8 g_AyaEquippedWeaponSlot[];
 
@@ -22,7 +22,7 @@ void BattleCmd_SyncActiveAmmo(void) {
     void *entry;
     int saved;
 
-    entity = g_PlayerEntity;
+    entity = (BattleEntity *)g_PlayerEntity;
     if (entity != 0) {
         current = entity->core;
         if (current != 0) {
@@ -49,7 +49,7 @@ void BattleCmd_SetCurrentHP(int arg0) {
     Combatant *current;
 
     if (g_PlayerEntity != 0) {
-        current = g_PlayerEntity->core;
+        current = ((BattleEntity *)g_PlayerEntity)->core;
         if (current != 0) {
             current->curHP = arg0;
         }
