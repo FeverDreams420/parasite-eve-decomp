@@ -36,15 +36,13 @@ void MenuWidget_InitPoolUnk(void) {
 
 #include "pe1/bounds_check.h"
 
-MenuWidgetNode *MenuWidget_AllocNode(MenuWidgetNode *arg0, MenuWidgetNode *arg1) {
+inline MenuWidgetNode *MenuWidget_AllocNode(MenuWidgetNode *arg0, MenuWidgetNode *arg1) {
     s32 var_a0;
-    s32 var_a0_2;
     s32 var_v0;
     MenuWidgetNode *temp_s0;
     MenuWidgetNode *temp_v1;
     MenuWidgetNode *temp_next;
     MenuWidgetNode **var_a1;
-    register MenuWidgetNode **var_v1 asm("$3");
     MenuWidgetNode *temp_s2;
     MenuWidgetNode *temp_s1;
 
@@ -75,15 +73,13 @@ MenuWidgetNode *MenuWidget_AllocNode(MenuWidgetNode *arg0, MenuWidgetNode *arg1)
     temp_s0->mode = 0;
     temp_s0->flags = 0;
     if (temp_s1 != NULL) {
-        var_a0_2 = 0;
-        var_v1 = (MenuWidgetNode **)temp_s1;
-        while (var_a0_2 < 4 && var_v1[2] != 0) {
-            var_a0_2 += 1;
-            var_v1++;
+        var_a0 = 0;
+        while (var_a0 < 4 && temp_s1->children[var_a0] != 0) {
+            var_a0 += 1;
         }
-        var_v0 = var_a0_2 < 4;
+        var_v0 = var_a0 < 4;
         if (var_v0 != 0) {
-            temp_s1->children[var_a0_2] = temp_s0;
+            temp_s1->children[var_a0] = temp_s0;
         } else {
             BoundsCheck_AssertStub(0xB, var_a1);
         }
@@ -144,20 +140,20 @@ void MenuWidget_DestroyNodeRecursive(MenuWidgetNode *node) {
 
 #define NULL ((void *)0)
 #include "pe1/bounds_check.h"
-#include "MenuWidget_Lifecycle_externs.h"
 
-void Draw_PushPrimToList(void *arg0) {
+/* Draws a widget and its children, each relative to its parent's origin,
+ * saving the text cursor on the cursor stack around it. */
+void Draw_PushPrimToList(MenuWidgetNode *node) {
     s32 temp_a2;
     s32 temp_v0;
     s32 temp_v0_2;
     s32 var_s1;
     u32 temp_a0;
     u32 temp_a0_3;
-    u32 temp_a1;
+    int *temp_a1;
     u32 temp_a1_2;
-    void *temp_a0_2;
-    register void *var_s0 asm("$16");
-    u8 *q;
+    MenuWidgetNode *child;
+    int *q;
     s32 t0;
     u32 t1;
     void (*f)();
@@ -165,39 +161,38 @@ void Draw_PushPrimToList(void *arg0) {
     s32 cursorX;
     u32 cursorY;
 
-    var_s0 = arg0;
-    temp_a1 = (u32)g_TextCursorStackPtr;
-    if (temp_a1 < (u32) g_TextCursorStackTop) {
+    temp_a1 = g_TextCursorStackPtr;
+    if (temp_a1 < g_TextCursorStackTop) {
         t0 = g_TextCursorX;
         t1 = g_TextCursorY;
-        g_TextCursorStackPtr = (int *)(temp_a1 + 8);
-        ((DrawTextCursorPair *)temp_a1)->x = t0;
-        ((DrawTextCursorPair *)temp_a1)->y = t1;
+        g_TextCursorStackPtr = temp_a1 + 2;
+        temp_a1[0] = t0;
+        temp_a1[1] = t1;
     } else {
         BoundsCheck_AssertStub(2, temp_a1);
     }
-    offsetX = ((MenuWidgetNode *)var_s0)->x;
+    offsetX = node->x;
     cursorX = g_TextCursorX;
-    f = ((MenuWidgetNode *)var_s0)->draw;
+    f = node->draw;
     temp_a2 = cursorX + offsetX;
-    offsetY = ((MenuWidgetNode *)var_s0)->y;
+    offsetY = node->y;
     cursorY = g_TextCursorY;
     g_TextCursorX = temp_a2;
     temp_a1_2 = cursorY + offsetY;
     g_TextCursorY = temp_a1_2;
     if (f != NULL) {
-        q = (u8 *) g_TextCursorStackPtr;
-        if ((u32) q < (u32) g_TextCursorStackTop) {
-            *(s32 *) q = temp_a2;
-            *(u32 *) (q + 4) = temp_a1_2;
-            g_TextCursorStackPtr = (int *)(q + 8);
+        q = g_TextCursorStackPtr;
+        if (q < g_TextCursorStackTop) {
+            q[0] = temp_a2;
+            q[1] = temp_a1_2;
+            g_TextCursorStackPtr = q + 2;
         } else {
             BoundsCheck_AssertStub(2, temp_a1_2, temp_a2);
         }
-        ((MenuWidgetNode *)var_s0)->draw(var_s0);
-        if ((u32) g_TextCursorStackBottom < (u32)g_TextCursorStackPtr) {
-            temp_v0 = ((DrawTextCursorPair *)g_TextCursorStackPtr)[-1].x;
-            temp_a0 = ((DrawTextCursorPair *)g_TextCursorStackPtr)[-1].y;
+        node->draw(node);
+        if (g_TextCursorStackBottom < g_TextCursorStackPtr) {
+            temp_v0 = g_TextCursorStackPtr[-2];
+            temp_a0 = g_TextCursorStackPtr[-1];
             g_TextCursorStackPtr -= 2;
             g_TextCursorX = temp_v0;
             g_TextCursorY = temp_a0;
@@ -207,16 +202,15 @@ void Draw_PushPrimToList(void *arg0) {
     }
     var_s1 = 0;
     do {
-        temp_a0_2 = ((MenuWidgetNode **)var_s0)[2];
-        if (temp_a0_2 != NULL) {
-            Draw_PushPrimToList(temp_a0_2);
+        child = node->children[var_s1];
+        if (child != NULL) {
+            Draw_PushPrimToList(child);
         }
         var_s1 += 1;
-        var_s0 += 4;
     } while (var_s1 < 4);
-    if ((u32) g_TextCursorStackBottom < (u32)g_TextCursorStackPtr) {
-        temp_v0_2 = ((DrawTextCursorPair *)g_TextCursorStackPtr)[-1].x;
-        temp_a0_3 = ((DrawTextCursorPair *)g_TextCursorStackPtr)[-1].y;
+    if (g_TextCursorStackBottom < g_TextCursorStackPtr) {
+        temp_v0_2 = g_TextCursorStackPtr[-2];
+        temp_a0_3 = g_TextCursorStackPtr[-1];
         g_TextCursorStackPtr -= 2;
         g_TextCursorX = temp_v0_2;
         g_TextCursorY = temp_a0_3;
@@ -275,21 +269,21 @@ MenuWidgetNode *MenuWidget_FindByModeAndSelectedBase(int mode, int selected_base
 #include "pe1/draw_state.h"
 #include "pe1/text.h"
 
-#include "MenuWidget_Lifecycle_externs_1.h"
 
 int Draw_LookupGlyphMetrics(int glyph);
 void Draw_AllocTexturedQuad(int glyph);
 #include "pe1/bounds_check.h"
 
+/* The text cursor stack holds (x, y) word pairs. */
 #define PUSH_CURSOR()                                                      \
     do {                                                                   \
-        DrawTextCursorPair *cursor = (DrawTextCursorPair *)g_TextCursorStackPtr;                                \
-        if ((u32)cursor < (u32)g_TextCursorStackTop) {                     \
+        int *cursor = g_TextCursorStackPtr;                                \
+        if (cursor < g_TextCursorStackTop) {                               \
             int x = g_TextCursorX;                                         \
             int y = g_TextCursorY;                                         \
-            g_TextCursorStackPtr = (int *)(cursor + 1);                             \
-            cursor->x = x;                                                 \
-            cursor->y = y;                                                 \
+            g_TextCursorStackPtr = cursor + 2;                             \
+            cursor[0] = x;                                                 \
+            cursor[1] = y;                                                 \
         } else {                                                           \
             BoundsCheck_AssertStub(2);                                     \
         }                                                                  \
@@ -297,14 +291,14 @@ void Draw_AllocTexturedQuad(int glyph);
 
 #define PUSH_CURSOR2()                                     \
     do {                                                   \
-        DrawTextCursorPair *cursor = (DrawTextCursorPair *)g_TextCursorStackPtr;                \
-        if ((u32)cursor < (u32)g_TextCursorStackTop) {     \
-            DrawTextCursorPair *next = cursor + 1;                        \
+        int *cursor = g_TextCursorStackPtr;                \
+        if (cursor < g_TextCursorStackTop) {               \
+            int *next = cursor + 2;                        \
             int x = g_TextCursorX;                         \
             int y = g_TextCursorY;                         \
-            cursor->x = x;                                 \
-            cursor->y = y;                                 \
-            g_TextCursorStackPtr = (int *)next;                   \
+            cursor[0] = x;                                 \
+            cursor[1] = y;                                 \
+            g_TextCursorStackPtr = next;                   \
         } else {                                           \
             BoundsCheck_AssertStub(2);                     \
         }                                                  \
@@ -312,12 +306,12 @@ void Draw_AllocTexturedQuad(int glyph);
 
 #define POP_CURSOR()                                       \
     do {                                                   \
-        DrawTextCursorPair *cursor = (DrawTextCursorPair *)g_TextCursorStackPtr;                \
+        int *cursor = g_TextCursorStackPtr;                \
                                                            \
-        if ((u32)g_TextCursorStackBottom < (u32)cursor) {  \
-            g_TextCursorX = cursor[-1].x;                    \
-            g_TextCursorY = cursor[-1].y;                    \
-            g_TextCursorStackPtr = (int *)(cursor - 1);             \
+        if (g_TextCursorStackBottom < cursor) {            \
+            g_TextCursorX = cursor[-2];                    \
+            g_TextCursorY = cursor[-1];                    \
+            g_TextCursorStackPtr = cursor - 2;             \
         } else {                                           \
             BoundsCheck_AssertStub(3);                     \
         }                                                  \
@@ -342,24 +336,24 @@ void Draw_FlushPrimList(int textId) {
         do {
             ch = *cursor++;
             glyph = ch & 0xFF;
-            if (D_8009D0D8 != 0) {
-                glyph += D_8009D0D8 << 8;
-                D_8009D0D8 = 0;
+            if (g_TextRenderMode != 0) {
+                glyph += g_TextRenderMode << 8;
+                g_TextRenderMode = 0;
             }
 
             ch &= 0xFF;
-            if ((u32)ch >= 0xFA) {
-                D_8009D0D8 = ch - 0xFA;
+            if ((unsigned int)ch >= 0xFA) {
+                g_TextRenderMode = ch - 0xFA;
                 glyph = -1;
             }
 
             ch = glyph;
             if (ch >= 0) {
-                D_8009CDB0 = ((ch < 10) || (ch == 15)) + 1;
+                g_DrawGlyphAdvance = ((ch < 10) || (ch == 15)) + 1;
                 if (ch >= 0x100) {
                     ch -= 0x13;
                 }
-                width += ((Draw_LookupGlyphMetrics(ch) >> 4) & 0xF) + D_8009CDB0;
+                width += ((Draw_LookupGlyphMetrics(ch) >> 4) & 0xF) + g_DrawGlyphAdvance;
             }
         } while (*cursor != 0xFF);
         cursor = text;
@@ -367,7 +361,7 @@ void Draw_FlushPrimList(int textId) {
 
     {
         int adjusted = width + 4;
-        int center = D_8009D138 - adjusted;
+        int center = g_DrawTextBoxWidth - adjusted;
         int y = g_TextCursorY;
         int x = g_TextCursorX;
         center >>= 1;
@@ -434,70 +428,16 @@ void MenuWidget_RestoreSavedCurrentNode(void) {
     g_MenuWidgetSavedNode = 0;
 }
 
-MenuWidgetNode *MenuWidget_CreateSimpleNode(s32 arg0, MenuWidgetNode *arg1, MenuWidgetNode *arg2, s32 arg3) {
-    s32 mode = arg0;
-    register MenuWidgetNode *parent_arg asm("$19") = arg1;
-    MenuWidgetNode *parent = arg2;
-    s32 arg_flag = arg3;
+MenuWidgetNode *MenuWidget_CreateSimpleNode(s32 mode, MenuWidgetNode *parent_arg, MenuWidgetNode *parent, s32 arg_flag) {
     MenuWidgetSimpleDescriptor *desc;
     MenuWidgetNode *node;
-    MenuWidgetNode *next;
-    MenuWidgetNode *old_head;
 
     desc = MenuWidget_LookupSimpleDescriptor(mode);
     if (desc == 0) {
         BoundsCheck_AssertStub(0xC);
     }
 
-    node = g_MenuWidgetFreeListHead;
-    if (node == 0) {
-        BoundsCheck_AssertStub(0xA);
-    }
-
-    next = node->next;
-    old_head = g_MenuWidgetActiveListHead;
-    g_MenuWidgetActiveListHead = node;
-    node->parent = parent_arg;
-    node->update = 0;
-    node->draw = 0;
-    g_MenuWidgetFreeListHead = next;
-    node->next = old_head;
-
-    {
-        int i;
-        register MenuWidgetNode **ptr asm("$5");
-
-        i = 3;
-        ptr = &node->children[1];
-        do {
-            ptr[2] = 0;
-            i--;
-            ptr--;
-        } while (i >= 0);
-    }
-
-    node->y = 0;
-    node->x = 0;
-    node->selected_base = 0;
-    node->mode = 0;
-    node->flags = 0;
-
-    if (parent != 0) {
-        int i;
-        register MenuWidgetNode **ptr asm("$3");
-
-        i = 0;
-        ptr = (MenuWidgetNode **)parent;
-        while (i < 4 && ptr[2] != 0) {
-            i++;
-            ptr++;
-        }
-        if (i < 4) {
-            parent->children[i] = node;
-        } else {
-            BoundsCheck_AssertStub(0xB);
-        }
-    }
+    node = MenuWidget_AllocNode(parent_arg, parent);
 
     if (node == 0) {
         BoundsCheck_AssertStub(0xD);
@@ -527,27 +467,8 @@ MenuWidgetNode *MenuWidget_CreateSimpleNode(s32 arg0, MenuWidgetNode *arg1, Menu
         node->x = desc->x;
         node->y = desc->y;
     } else {
-        register int x_base asm("$2");
-        int width;
-        int half_h;
-        int flag;
-
-        width = desc->width;
-        x_base = 0xA0;
-        width >>= 1;
-        x_base -= width;
-        node->x = x_base;
-
-        x_base = desc->height;
-        flag = desc->y;
-        half_h = x_base >> 1;
-        if (flag != 0) {
-            x_base = 0x50;
-        } else {
-            x_base = 0x78;
-        }
-        x_base -= half_h;
-        node->y = x_base;
+        node->x = 0xA0 - (desc->width >> 1);
+        node->y = (desc->y != 0 ? 0x50 : 0x78) - (desc->height >> 1);
     }
 
     node->grid_width = desc->width;
@@ -600,9 +521,8 @@ void MenuWidget_InitPool(void) {
     g_MenuWidgetActiveListHead = 0;
 }
 
-void Draw_PushPrimToList(void *arg0);
+void Draw_PushPrimToList(MenuWidgetNode *node);
 
-#include "MenuWidget_Lifecycle_externs_2.h"
 
 int g_TextCursorX;
 int g_TextCursorY;
@@ -715,14 +635,9 @@ MenuWidgetNode *MenuWidget_FindLastMode1WithCursorX(void) {
     return result;
 }
 
-MenuWidgetNode *MenuWidget_CreateNode(s32 arg0, MenuWidgetNode *arg1, MenuWidgetNode *arg2) {
-    s32 mode = arg0;
-    register MenuWidgetNode *parent_arg asm("$20") = arg1;
-    MenuWidgetNode *parent = arg2;
+MenuWidgetNode *MenuWidget_CreateNode(s32 mode, MenuWidgetNode *parent_arg, MenuWidgetNode *parent) {
     MenuWidgetGridDescriptor *desc;
     MenuWidgetNode *node;
-    MenuWidgetNode *next;
-    MenuWidgetNode *old_head;
     int tmp;
 
     desc = MenuWidget_LookupGridDescriptor(mode);
@@ -730,55 +645,7 @@ MenuWidgetNode *MenuWidget_CreateNode(s32 arg0, MenuWidgetNode *arg1, MenuWidget
         BoundsCheck_AssertStub(0xE);
     }
 
-    node = g_MenuWidgetFreeListHead;
-    if (node == 0) {
-        BoundsCheck_AssertStub(0xA);
-    }
-
-    next = node->next;
-    old_head = g_MenuWidgetActiveListHead;
-    g_MenuWidgetActiveListHead = node;
-    node->parent = parent_arg;
-    node->update = 0;
-    node->draw = 0;
-    g_MenuWidgetFreeListHead = next;
-    node->next = old_head;
-
-    {
-        int i;
-        register MenuWidgetNode **ptr asm("$5");
-
-        i = 3;
-        ptr = &node->children[1];
-        do {
-            ptr[2] = 0;
-            i--;
-            ptr--;
-        } while (i >= 0);
-    }
-
-    node->y = 0;
-    node->x = 0;
-    node->selected_base = 0;
-    node->mode = 0;
-    node->flags = 0;
-
-    if (parent != 0) {
-        int i;
-        register MenuWidgetNode **ptr asm("$3");
-
-        i = 0;
-        ptr = (MenuWidgetNode **)parent;
-        while (i < 4 && ptr[2] != 0) {
-            i++;
-            ptr++;
-        }
-        if (i < 4) {
-            parent->children[i] = node;
-        } else {
-            BoundsCheck_AssertStub(0xB);
-        }
-    }
+    node = MenuWidget_AllocNode(parent_arg, parent);
 
     if (node == 0) {
         BoundsCheck_AssertStub(0xF);
@@ -794,8 +661,7 @@ MenuWidgetNode *MenuWidget_CreateNode(s32 arg0, MenuWidgetNode *arg1, MenuWidget
         t = desc->x;
         node->x = t;
         u = desc->y;
-        t = (s32)Menu_StepScrollCursor;
-        node->update = (void (*)())t;
+        node->update = (void (*)())Menu_StepScrollCursor;
         node->y = u;
         t = desc->gridWidth;
         node->x_limit = t;
@@ -891,7 +757,6 @@ int MenuWidget_GetCellIndex(MenuWidgetNode *ptr) {
 void Draw_AllocColorTri(int, int, int);
 
 typedef DrawTextCursorPair CursorPair;
-#include "MenuWidget_Lifecycle_externs_3.h"
 
 static inline MenuWidgetNode *FindOwner(MenuWidgetNode *node)
 {
@@ -962,7 +827,7 @@ static inline void RowMoveCursor(u32 dx, u32 dy)
 static inline void RowPopCursor(void)
 {
     CursorPair *stack = (CursorPair *)g_TextCursorStack;
-    if ((u32)D_800A2270 < (u32)stack) {
+    if ((CursorPair *)g_TextCursorStackBottom < stack) {
         g_TextCursorStack = (int *)(stack - 1);
         D_8009D124 = stack[-1].x;
         D_8009D128 = stack[-1].y;
@@ -982,7 +847,7 @@ void MenuWidget_DrawListRow(MenuWidgetNode *node,
     CursorPair *stack = (CursorPair *)g_TextCursorStack;
     int (*select_callback)(int);
 
-    if ((u32)stack < (u32)g_TextCursorStackTop) {
+    if (stack < (CursorPair *)g_TextCursorStackTop) {
         g_TextCursorStack = (int *)(stack + 1);
         stack->x = D_8009D124;
         stack->y = D_8009D128;

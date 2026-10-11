@@ -63,6 +63,12 @@ void Draw_PrintTextWrapped(u8 *text, int width);
 void Draw_PrintCenteredTextInWidth(u8 *text, int width);
 void MenuWidget_DrawCenteredText(u8 *text);
 extern int g_TextRenderMode, g_DrawGlyphAdvance;
+/* Width the centred text routines centre within, and the dimmed flag the
+ * widget renderer sets per list row. */
+extern int g_DrawTextBoxWidth;
+extern int g_DrawTextDimmed;
+extern int g_TextCursorX;
+extern int g_TextCursorY;
 extern int g_DrawDigitFontBaseTexU, g_DrawDigitFontBaseTexV;
 extern int g_DrawDigitFontTpageClut;
 void Draw_BlendColor(int color);
