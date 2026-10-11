@@ -681,6 +681,7 @@ extern u32 D_800A6360[], D_800B1638[];
 /* Unit vertex normals indexed by RenderVec3s.pad of a model vertex. */
 extern RenderVec3s g_RenderNormalTable[];
 /* Projected screen XY and view depth of the transformed model vertices. */
+extern u32 D_800B1640[];
 extern u32 D_800B1644[];
 extern s32 D_800A636C[];
 extern u8 D_8009CD98[];

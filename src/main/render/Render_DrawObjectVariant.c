@@ -4,7 +4,7 @@
 #include "pe1/gte.h"
 #include "pe1/render_setup.h"
 
-#include "Render_DrawObjectVariant_externs.h"
+#include "pe1/render_object.h"
 #define Render_LoadObjectMatrix(matrix) \
     { \
         asm volatile("" : "=r"(matrix) : "0"(matrix)); \
