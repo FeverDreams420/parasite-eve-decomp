@@ -6,8 +6,6 @@
 
 typedef RoomTwinRibbonPulse RoomM318Pulse;
 
-extern u16 D_800E11EA;
-
 int func_80071A54(void);
 
 int func_80196C48(int mode, RoomM318Pulse *pulse) {

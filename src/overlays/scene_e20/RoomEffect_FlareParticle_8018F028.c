@@ -1,4 +1,5 @@
 #include "pe1/scene_e20_flare_draw.h"
+#include "pe1/field_texture_tables.h"
 
 /* Mode 1 ages the flare and, while it falls, moves and damps it and
  * bounces it off the floor; mode 2 draws a spinning glow with a streak,
@@ -62,7 +63,7 @@ int func_8018F028(int mode, SceneE20Particle *p)
             D_800F3368.extent_x = 0x20;
             D_800F3368.extent_y = 0x20;
             {
-                int tpage = D_800E2850[D_800E11EA[8]];
+                int tpage = D_800E2850[D_800E11E4[11]];
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 1;
                 D_800F3368.tpage = tpage;
@@ -108,7 +109,7 @@ int func_8018F028(int mode, SceneE20Particle *p)
             D_800F3368.extent_x = 0x20;
             D_800F3368.extent_y = 0x20;
             {
-                int tpage = D_800E2850[D_800E11EA[0]];
+                int tpage = D_800E2850[D_800E11E4[3]];
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 0;
                 D_800F3368.tpage = tpage;
@@ -122,7 +123,7 @@ int func_8018F028(int mode, SceneE20Particle *p)
             scale = rcos(angle) / 2 + 0x800;
             glow = rsin(time << 7) / 32;
             {
-                int tpage = D_800E2850[D_800E11EA[8]];
+                int tpage = D_800E2850[D_800E11E4[11]];
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 1;
                 D_800F3368.tpage = tpage;

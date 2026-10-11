@@ -75,7 +75,6 @@ PE1_STATIC_ASSERT(sizeof(RoomSoundBurstParticle) == 0x18,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomSoundBurstState, soundHandle) == 0xC,
                   room_sound_burst_state_sound_handle);
 
-extern volatile u16 D_800E11E8;
 extern void func_800866A4(int, int);
 extern int func_80071A54(void);
 extern struct BattleEntity *D_8009D254;

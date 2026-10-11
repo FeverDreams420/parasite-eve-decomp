@@ -1,3 +1,6 @@
+/* CC1_FLAGS: -G8 */
+/* cc1 -G8 makes the small texture slot word a cheap address, so its
+ * volatile read stays an absolute load. */
 #include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
@@ -5,7 +8,6 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/psyq_gpu.h"
 
-extern volatile unsigned short D_800E11E8;
 extern unsigned short D_800E1208;
 #include "pe1/gte_sine_table.h"
 extern short D_800966EE[];
@@ -32,7 +34,7 @@ int func_80196C64(int event, void *object)
         unsigned short handle;
         asm("" : "=r"(state) : "0"(state));
         state->parameter00 = unit;
-        paletteIndex = D_800E11E8;
+        paletteIndex = *(volatile u16 *)&D_800E11E8;
         mode = 2;
         D_800F3368.parameter02 = mode;
         D_800F3368.extent_x = unit;

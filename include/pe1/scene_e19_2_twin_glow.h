@@ -10,6 +10,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/field_engine_calls.h"
+#include "pe1/field_texture_tables.h"
 
 /* Scene e19_2 twin glow controller: glows on two actor joints that pulse,
  * burst into a ring of sparks at frame 15 and then fade while a ring and a
@@ -30,13 +31,6 @@ typedef struct SceneTwinGlowChannel {
 extern GteRotation D_8018F1D4;
 extern GteShortVector D_8018F264;
 extern RenderColor D_8018F26C;
-/* Texture page index read as a one-field record so the read stays behind
- * the first parameter block store through its base register. */
-typedef struct SceneTwinGlowPageIndex {
-    u16 value;
-} SceneTwinGlowPageIndex;
-
-extern SceneTwinGlowPageIndex D_800E11EA;
 
 int func_80071A54(void);
 int func_80199C28(int mode, void *spark);

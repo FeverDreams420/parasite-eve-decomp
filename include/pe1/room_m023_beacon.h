@@ -77,7 +77,6 @@ typedef struct RoomM023BeaconColor {
 extern struct BattleEntity *D_8009D254;
 extern u8 *D_80190760;
 extern u8 D_801906F0[];
-extern u16 D_800E11EA;
 
 void func_800C70EC(u8 *data, int r, int g, int b);
 int func_800CEB8C(void *position, GteShortVector *target, int radius);

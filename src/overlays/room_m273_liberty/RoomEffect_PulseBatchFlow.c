@@ -45,7 +45,6 @@ int func_80195984(int mode, RoomM273PulseInput *input)
 extern unsigned char D_8019AEF8;
 extern short D_8019AEE8;
 extern void *D_8019AE7C;
-extern unsigned short D_800E11EA;
 extern int func_80195984(),func_8019A290();
 extern int func_800CE688(void *);
 

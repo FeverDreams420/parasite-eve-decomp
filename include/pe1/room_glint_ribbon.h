@@ -3,6 +3,7 @@
 
 #include "pe1/room_spark.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
 
 /* Glint ribbon controller state: two light ribbons strung across three
  * actor joints that shed glint sparks from the last joint and its floor
@@ -18,7 +19,5 @@ typedef struct RoomGlintRibbon {
 
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomGlintRibbon, trailB) == 0xB8,
                   room_glint_ribbon_trail_b);
-
-extern u16 D_800E11E8;
 
 #endif

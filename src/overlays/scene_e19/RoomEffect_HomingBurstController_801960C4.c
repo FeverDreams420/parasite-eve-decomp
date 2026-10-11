@@ -1,4 +1,5 @@
 #include "pe1/scene_e19_2_homing_burst.h"
+#include "pe1/field_texture_tables.h"
 
 /* Mode 0 anchors the burst on the room actor and wakes the actor's
  * object; mode 1 releases a homing particle on odd frames (twenty in all)
@@ -71,7 +72,7 @@ int func_801960C4(int mode, SceneHomingBurst *burst)
                 D_800F3368.parameter02 = 2;
                 D_800F3368.extent_x = 0x20;
                 D_800F3368.extent_y = 0x20;
-                tpage = D_800E2850[D_800E11EA.value];
+                tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11EA)];
                 D_800F3368.palette = 3;
                 D_800F3368.depth = 0x32;
                 D_800F3368.parameter06 = 0;
@@ -128,7 +129,7 @@ int func_801960C4(int mode, SceneHomingBurst *burst)
         D_800F3368.extent_x = 0x20;
         D_800F3368.extent_y = 0x20;
         {
-            int tpage = D_800E2850[D_800E11EA.value];
+            int tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11EA)];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
             D_800F3368.parameter0A = 0;

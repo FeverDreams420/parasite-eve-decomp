@@ -17,6 +17,7 @@
 #include "pe1/akao_send.h"
 #include "pe1/asset_find.h"
 #include "pe1/field_engine_calls.h"
+#include "pe1/field_texture_tables.h"
 
 /* Quake blast controller (scene_e22 func_80198348): a blast at the target
  * that lights the actor once it stands in reach, sprays sparks for six
@@ -87,7 +88,6 @@ typedef struct SceneE22QuakeActor {
 
 extern struct FieldActor *RoomMain_ActorPtr; /* the player actor (0x8009D254) */
 /* Texture page indices: [0] the shared effect page, [8] this scene's. */
-extern u16 D_800E11EA[];
 extern void *D_80199508;
 extern void *D_8019950C;
 extern u8 D_8019948C[];

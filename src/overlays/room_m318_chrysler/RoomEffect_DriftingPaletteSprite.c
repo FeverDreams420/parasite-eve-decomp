@@ -5,6 +5,7 @@
 #include "pe1/battle_runtime.h"
 #include "pe1/random.h"
 #include "pe1/field_actor.h"
+#include "pe1/field_texture_tables.h"
 
 int func_801939AC(int mode, RenderArcingEffect *state)
 {
@@ -38,8 +39,6 @@ int func_801939AC(int mode, RenderArcingEffect *state)
     }
     return 0;
 }
-
-extern u16 D_800E11EA;
 
 int func_80193B60(int mode, GteShortVector *state)
 {

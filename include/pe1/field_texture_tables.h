@@ -9,12 +9,16 @@ extern u16 D_800E11E6;
 extern u16 D_800E11F6;
 /* Palette (CLUT) table indexed by effect kind. */
 extern u16 D_800E1204[];
+/* Slot table entries 2 and 3. */
+extern u16 D_800E11E8, D_800E11EA;
 /* Slot table entries 4 and 11 and palette table entry 3. */
 extern u16 D_800E11EC, D_800E11FA;
 extern u16 D_800E120A;
 
 /* View of one of those entries: a few effects read it as a one-field
- * record, which GCC orders after their particle-record stores. */
+ * record, which GCC orders after their particle-record stores. Effects that
+ * index past an entry read the slot table itself (D_800E11E4[3] for
+ * D_800E11EA). */
 typedef struct FieldTextureSlot {
     u16 value;
 } FieldTextureSlot;

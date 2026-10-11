@@ -9,6 +9,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/field_engine_calls.h"
+#include "pe1/field_texture_tables.h"
 
 /* Scene e19_2 homing burst controller: anchored on the room actor, it
  * releases twenty homing particles (func_8019549C) on odd frames, then
@@ -51,13 +52,6 @@ extern GteRotation D_8018F210;
 extern GteRotation D_8018F1CC;
 extern RenderColor D_8018F21C;
 extern RenderColor D_8018F220;
-/* The texture page index read as a one-field record so the read stays below
- * the parameter block store made through its base register. */
-typedef struct SceneHomingBurstPageIndex {
-    u16 value;
-} SceneHomingBurstPageIndex;
-
-extern SceneHomingBurstPageIndex D_800E11EA;
 
 int func_8019549C(int mode, void *particle);
 

@@ -49,7 +49,6 @@ int func_801945EC(int mode, RoomM123Particle *particle) {
 }
 
 extern GteShortVector D_8018F1E0;
-extern u16 D_800E11EA;
 extern int func_801945EC(int, RoomM123Particle *);
 extern int func_80071A54(void);
 

@@ -14,10 +14,8 @@
 #include "pe1/asset_find.h"
 
 /* ABI declarations used by the room_m256 effect dispatcher. */
-extern u16 D_800E11EA;
 extern int D_80195EF8;
 extern int func_801940B0(int mode, void *state);
-
 
 int func_80195320(int mode, u16 *out);
 

@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/render_object.h"
 #include "pe1/room_spark.h"
+#include "pe1/field_texture_tables.h"
 
 /* Room m349 flare spark: jitters its velocity (states 0 and 1) or its
  * position (state 2) while it falls and bounces off the floor height. */
@@ -34,7 +35,6 @@ typedef struct RoomM349FlareParams {
 extern GteRotation D_8018EFF4;
 extern GteRotation D_8018F000;
 extern GteRotation D_8018F008;
-extern u16 D_800E11E8;
 extern void func_800866A4(int handle, int arg);
 extern int func_8018F010(int mode, RoomM349FlareSpark *spark);
 extern RenderColor D_8018EFFC;

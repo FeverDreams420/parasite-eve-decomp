@@ -46,7 +46,6 @@ typedef struct RoomM005Seed8 {
 extern RoomM005Seed8 D_8018EFF4;
 extern u8 D_80190B84[];
 extern u8 D_80190B8C[];
-extern volatile u16 D_800E11E8;
 extern int func_80071A54(void);
 extern void RoomM005_FxOrbiter_8018F018(void);
 int func_8018F330(int mode, RoomM005OrbiterState *state);
@@ -59,6 +58,5 @@ extern GteShortVector D_80190BA8;
 extern RoomM005Seed8 D_8018EFFC;
 extern RoomM005Seed8 D_8018F004;
 extern u8 D_80190AF4[];
-extern u16 D_800E11EA;
 
 #endif

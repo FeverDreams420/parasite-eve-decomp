@@ -7,7 +7,6 @@
 
 typedef RoomM350Vector Vector;
 extern short D_8019A85C;
-extern unsigned short D_800E11E8;
 /* Retail writes both fields twice during configuration. */
 extern int func_8019A014(int, short *);
 

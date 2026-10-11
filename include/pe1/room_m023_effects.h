@@ -81,7 +81,6 @@ typedef struct RoomM023JointGlow {
     s16 state;
 } RoomM023JointGlow;
 
-extern u16 D_800E11EA;
 extern RenderColor D_8018EFFC;
 extern RenderColor D_8018F000;
 int func_8018F710(int mode, RoomM023JointGlow *glow);

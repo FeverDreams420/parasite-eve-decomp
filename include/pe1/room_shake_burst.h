@@ -88,7 +88,6 @@ PE1_STATIC_ASSERT(sizeof(RoomShakeSweepParticle) == 0x10,
                   room_shake_sweep_particle_size);
 
 extern struct BattleEntity *D_8009D254;
-extern u16 D_800E11EA;
 
 extern int func_80071A54(void);
 extern void func_80020D50(void);
@@ -131,7 +130,6 @@ extern GteShortVector D_80199924;
 extern int func_80195190(int mode, RoomOrbitTrailParticle *p);
 extern GteRotation D_8018F208;
 extern u8 D_801996EC[];
-extern u16 D_800E11E8;
 extern u16 D_800E11F8;
 
 /* Cross flash controller (func_80196820): an anchor with an orientation,

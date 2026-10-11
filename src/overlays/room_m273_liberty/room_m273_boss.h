@@ -191,14 +191,6 @@ extern RenderColor D_8019AE04;
 extern RenderColor D_8019AE08;
 extern RenderColor D_8019AE0C;
 extern u8 D_8019AB70[];
-extern u16 D_800E11E8;
-/* Texture page index at 0x800E11EA, read as a record so the load stays
- * behind the parameter block store through its base register. */
-typedef struct RoomM273PageIndex {
-    u16 index;
-} RoomM273PageIndex;
-
-extern RoomM273PageIndex D_800E11EA;
 
 int func_800CE688(void *list);
 int func_801981A4(int mode, RoomM273SwayShard *shard);

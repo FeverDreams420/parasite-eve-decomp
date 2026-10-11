@@ -5,7 +5,6 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/psyq_gpu.h"
 /* The batch emitter fills the eight-byte records rendered by this callback. */
-extern unsigned short D_800E11EA;
 extern short D_8019AD68[];
 #include "pe1/gte_sine_table.h"
 extern RoomM273RisingBatchBuffer D_8019AF0C;

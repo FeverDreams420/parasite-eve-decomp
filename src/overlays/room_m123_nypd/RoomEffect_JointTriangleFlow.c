@@ -77,8 +77,6 @@ int func_8019251C(int mode, RoomM123JointTriangle *triangle) {
     return 0;
 }
 
-extern u16 D_800E11EA;
-
 int func_801929FC(int mode) {
     int frame, index;
     RoomM123JointTriangleEmitterView *position;

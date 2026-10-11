@@ -15,7 +15,6 @@ typedef RoomM350Actor Actor;
 
 /* The spawner owns the scaled particles rendered by this callback. */
 #include "pe1/gte_sine_table.h"
-extern unsigned short D_800E11E8;
 
 int func_80192ADC(int event, Particle *object)
 {

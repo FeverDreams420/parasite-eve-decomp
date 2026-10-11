@@ -30,9 +30,8 @@ extern RenderColor D_8018F218, D_8018F21C;
 extern GteRotation D_8018F220,D_8018F1CC;
 extern char D_80195EFC[],D_80195F1C[],D_80195F1E[],D_80195F20[];
 extern s32 D_80195EF0, D_80195EF8;
-extern u16 D_800E11EA, D_800E1208;
+extern u16 D_800E1208;
 typedef struct RoomM256TrailPalettes { u16 first, second; } RoomM256TrailPalettes;
-extern RoomM256TrailPalettes D_800E11E8;
 int func_80071A54(void);
 #include "pe1/gte_types.h"
 #include "pe1/player_entity.h"

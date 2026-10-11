@@ -45,7 +45,6 @@ int func_80195B64(int event, GteShortVector *object)
 /* Event state: rotation, emission count, brightness, fade phase and size. */
 typedef struct { GteShortVector rotation; short count,brightness,fade,size; } State;
 
-extern unsigned short D_800E11E8;
 extern char D_8019A570[];
 extern int Inv_ScrambleGrid(void);
 

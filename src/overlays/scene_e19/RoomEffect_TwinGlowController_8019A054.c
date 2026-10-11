@@ -1,4 +1,5 @@
 #include "pe1/scene_e19_2_twin_glow.h"
+#include "pe1/field_texture_tables.h"
 
 /* Mode 0 picks the two joints; mode 1 sprays a ring of sixteen sparks and
  * sixteen falling sparks at frame 15 and reports 2 after frame 33; mode 2
@@ -72,7 +73,7 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
         D_800F3368.extent_x = 0x40;
         D_800F3368.extent_y = 0x40;
         {
-            int tpage = D_800E2850[D_800E11EA.value];
+            int tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11EA)];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
             D_800F3368.parameter0A = 0;

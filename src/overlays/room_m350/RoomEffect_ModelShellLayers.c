@@ -17,7 +17,6 @@ typedef RoomM350TableShadeEntry TrigEntry;
 #include "pe1/gte_sine_table.h"
 extern short D_800966EE[];
 extern int D_8019A3CC[];
-extern unsigned short D_800E11E8;
 extern int Inv_ScrambleGrid(void);
 
 int func_8019404C(int event, Particle *particle)

@@ -47,7 +47,6 @@ void func_800C6EC0(int tpage,int clut);
 #include "pe1/render_matrix_slot.h"
 
 extern u16 firstPageTable[] asm("D_800E2850"); /* Same linker symbol, distinct compiler name. */
-extern u16 D_800E11EA;
 extern s32 D_80190800;
 
 PE1_STATIC_ASSERT(sizeof(SceneEffectSlot) == 0x18, scene_e20_slot_size);

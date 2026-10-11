@@ -41,7 +41,6 @@ typedef struct RoomSparkChannel {
 } RoomSparkChannel;
 
 extern struct PmPrimarySlot *D_800942E4; /* running process slot (Pm_ProcessManager) */
-extern u16 D_800E11EA;
 extern int func_80071A54(void);
 
 /* Heading helpers and the trail history: turn the angles towards a target,
@@ -102,7 +101,6 @@ typedef struct RoomPhasedSpark {
 
 PE1_STATIC_ASSERT(sizeof(RoomPhasedSpark) == 0x18, room_phased_spark_size);
 
-
 /* Comet spark: a damped spark that carries two steering rotations. */
 typedef struct RoomCometSpark {
     s16 x, y, z, reserved06;      /* 0x00 */
@@ -136,7 +134,6 @@ typedef struct RoomSparkNode {
     u8 reserved[0x18];
     u8 *state;
 } RoomSparkNode;
-
 
 /* The active battle entity: a spark that reaches it flags its actor. */
 typedef struct RoomSparkActor {

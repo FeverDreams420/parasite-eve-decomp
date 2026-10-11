@@ -15,6 +15,7 @@
 #include "pe1/room_homing_model.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/gte.h"
+#include "pe1/field_texture_tables.h"
 
 /* Spark left where the projectile bounces: lives eight frames, drawn as a
  * pulsing sprite in the current palette. */
@@ -283,7 +284,7 @@ int RoomEffect_HomingProjectile(int mode) {
         }
         D_800F3368.parameter00 = 0x10;
         {
-            int index = D_800E11E8.index;
+            int index = TEXTURE_SLOT_RECORD(D_800E11E8);
             int tpage;
             D_800F3368.parameter02 = 1;
             D_800F3368.extent_x = 0x10;

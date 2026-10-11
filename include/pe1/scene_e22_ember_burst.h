@@ -63,13 +63,6 @@ typedef struct SceneE22EmberEvent {
 } SceneE22EmberEvent;
 
 extern struct FieldActor *RoomMain_ActorPtr; /* the player actor (0x8009D254) */
-/* Texture page index slot at 0x800E11EA, read as a record so the load
- * stays behind the first parameter block store through its base register. */
-typedef struct SceneE22TextureSlot {
-    u16 index;
-} SceneE22TextureSlot;
-
-extern SceneE22TextureSlot D_800E11EA;
 
 extern int func_80071A54(void);
 extern void func_80020D50(void);
@@ -91,7 +84,6 @@ typedef struct SceneE22LinkJoints {
     s16 first, middle, last;
 } SceneE22LinkJoints;
 
-
 /* Swirl ring controller (func_80195B40): rides an actor joint, swells a
  * glow while it sprays swirl ring particles, then fades a halo and ring. */
 typedef struct SceneE22SwirlRing {
@@ -102,7 +94,6 @@ typedef struct SceneE22SwirlRing {
     s16 glow;                     /* 0x0C */
     s16 ring;                     /* 0x0E */
 } SceneE22SwirlRing;
-
 
 /* Ember column controller (func_80194F60): its spin template and halo
  * colour, and the rising ember particle it sprays. */

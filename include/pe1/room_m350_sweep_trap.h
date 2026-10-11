@@ -63,7 +63,6 @@ extern RenderColor D_8019A43C;
 extern RenderColor D_8019A440;
 extern GteShortVector D_8019A444[];
 extern u8 D_8019A79C;
-extern u16 D_800E11EA;
 int Math_IntSqrt(int value);
 
 #endif

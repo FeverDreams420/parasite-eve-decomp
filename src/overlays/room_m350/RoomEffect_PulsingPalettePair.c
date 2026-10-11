@@ -14,7 +14,6 @@ typedef struct { short delay, count; } State;
 extern int D_8019A414[];
 extern short D_800966EE[];
 #include "pe1/gte_sine_table.h"
-extern unsigned short D_800E11EA;
 extern int Inv_ScrambleGrid(void);
 
 int func_801927A4(int event, Particle *effect) {

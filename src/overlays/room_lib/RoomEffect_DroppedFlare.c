@@ -9,6 +9,7 @@
 #include "common.h"
 #include "pe1/room_flare.h"
 #include "pe1/gte.h"
+#include "pe1/field_texture_tables.h"
 
 /* Flashes the scene: marks the battle actor and rewrites the colour code of
  * the first packet in the primary effect channel. */
@@ -183,7 +184,7 @@ int RoomEffect_DroppedFlareParticle(int mode, RoomDroppedFlare *flare,
             int kind;
             int palette;
             int unit2 = 0x10;
-            int index2 = D_800E11E8.index;
+            int index2 = TEXTURE_SLOT_RECORD(D_800E11E8);
             int tpage2;
             D_800F3368.parameter00 = unit2;
             D_800F3368.parameter02 = 1;

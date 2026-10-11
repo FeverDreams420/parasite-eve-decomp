@@ -1,5 +1,6 @@
 #include "scene_e22_ember_data.h"
 #include "pe1/gte.h"
+#include "pe1/field_texture_tables.h"
 
 /* Twist model controller: a model bolt that rides an actor joint along its
  * heading; it waits 16 frames, then for 16 frames advances and sheds a
@@ -208,7 +209,7 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
                 int kind;
                 int palette;
                 {
-                    int tpage = D_800E2850[D_800E11EA.index];
+                    int tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11EA)];
                     D_800F3368.palette = 3;
                     D_800F3368.parameter06 = 0;
                     D_800F3368.parameter00 = 0x20;

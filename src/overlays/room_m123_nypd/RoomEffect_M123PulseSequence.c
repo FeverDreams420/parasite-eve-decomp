@@ -62,7 +62,6 @@ typedef struct RoomPulseGlobal {
 } RoomPulseGlobal;
 
 extern struct BattleEntity *D_8009D254;
-extern u16 D_800E11EA;
 extern int func_80194A70(int, RoomPulseParticle *, int *);
 
 int func_80194C04(int mode, RoomPulseParticle *particle)

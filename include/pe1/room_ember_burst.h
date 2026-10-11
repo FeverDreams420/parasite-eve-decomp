@@ -37,7 +37,6 @@ extern FieldActor *D_8009D20C;
 extern char D_8018F1CC[];
 extern RenderColor D_8018F200;
 extern RenderColor D_8018F204;
-extern u16 D_800E11EA;
 
 extern int func_80071A54(void);
 extern int func_801944E8(int mode, RoomOrbitTrailParticle *p);
@@ -62,7 +61,6 @@ extern GteShortVector D_8019993C;
 extern int func_80197618(int mode, RoomOrbitTrailParticle *p);
 
 /* Ember fountain particle (func_80197618). */
-extern u16 D_800E11E8;
 extern GteRotation D_8018F1F4;
 extern RenderColor D_8018F240;
 extern u8 D_80199868[];

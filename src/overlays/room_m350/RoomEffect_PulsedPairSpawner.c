@@ -11,7 +11,6 @@ typedef RoomM350TransformMatrix Matrix;
 typedef struct { short position[3],reserved; } Particle;
 
 extern short D_800966EE[];
-extern unsigned short D_800E11E8;
 extern int func_80199B94(int,Particle *);
 extern int Inv_ScrambleGrid(void);
 int func_80192508(int event)

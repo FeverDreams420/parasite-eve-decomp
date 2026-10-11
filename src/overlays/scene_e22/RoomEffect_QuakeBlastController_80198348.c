@@ -1,5 +1,6 @@
 /* MASPSX_FLAGS: --expand-div */
 #include "pe1/scene_e22_quake_blast.h"
+#include "pe1/field_texture_tables.h"
 
 /* Quake blast controller: on frame 6 it lights the actor if it stands in
  * reach, sprays sparks for six frames and ends after 40. It flashes the
@@ -96,7 +97,7 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             D_800F3368.extent_x = 0x20;
             D_800F3368.extent_y = 0x20;
             {
-                int tpage = D_800E2850[D_800E11EA[8]];
+                int tpage = D_800E2850[D_800E11E4[11]];
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 1;
                 D_800F3368.tpage = tpage;
@@ -135,12 +136,12 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             rotation.y = rsin(phase);
             rotation.z = 0;
             {
-                int tpage = D_800E2850[D_800E11EA[0]];
+                int tpage = D_800E2850[D_800E11E4[3]];
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 0;
                 D_800F3368.tpage = tpage;
             }
-            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11E4[3]] | GetTPage(0, 1, 0, 0));
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
@@ -170,12 +171,12 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             rotation.y = rsin(phase) * 2;
             rotation.z = 0;
             {
-                int tpage = D_800E2850[D_800E11EA[0]];
+                int tpage = D_800E2850[D_800E11E4[3]];
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 0;
                 D_800F3368.tpage = tpage;
             }
-            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11E4[3]] | GetTPage(0, 1, 0, 0));
             kind = D_800F336C;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
@@ -207,12 +208,12 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             rotation.y = fx->timer * 40;
             rotation.z = 0;
             {
-                int tpage = D_800E2850[D_800E11EA[0]];
+                int tpage = D_800E2850[D_800E11E4[3]];
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 0;
                 D_800F3368.tpage = tpage;
             }
-            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11E4[3]] | GetTPage(0, 1, 0, 0));
             kind = D_800F336C;
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
@@ -236,7 +237,7 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
         D_800F3368.extent_x = 0x10;
         D_800F3368.extent_y = 0x10;
         {
-            int tpage = D_800E2850[D_800E11EA[0]];
+            int tpage = D_800E2850[D_800E11E4[3]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
             D_800F3368.parameter0A = 0;

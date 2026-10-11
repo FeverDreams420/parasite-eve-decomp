@@ -1,5 +1,6 @@
 #include "pe1/scene_e19_2_ember.h"
 #include "pe1/gte.h"
+#include "pe1/field_texture_tables.h"
 
 /* Ember flare controller: rides the room actor and glows up for 16
  * frames, then for 32 frames sprays orbiting sparks, embers on odd frames
@@ -160,7 +161,7 @@ int func_801978EC(int mode, SceneE22EmberBurst *burst) {
                               1, glow, 0);
             }
             {
-                int tpage = D_800E2850[D_800E11EA.index];
+                int tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11EA)];
                 D_800F3368.tpage = tpage;
                 D_800F3368.parameter06 = 0;
                 D_800F3368.palette = 3;
@@ -187,7 +188,7 @@ int func_801978EC(int mode, SceneE22EmberBurst *burst) {
                           &color, glow, 3);
         }
         {
-            int tpage = D_800E2850[D_800E11EA.index];
+            int tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11EA)];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
             D_800F3368.parameter0A = 0;

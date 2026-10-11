@@ -46,7 +46,6 @@ typedef RoomM273RisingParticle Particle;
 #include "pe1/gte_sine_table.h"
 extern short D_8019AE84;
 extern unsigned char D_8019AD70[],D_8019AF6A,D_8019AF69;
-extern unsigned short D_800E11E8;
 extern volatile unsigned short D_8019AEFE,D_8019AF00;
 
 int func_801974DC(int mode, Particle *input) {
@@ -131,7 +130,6 @@ int func_80197648(int mode) {
 /* The position emitter fills the eight-byte records rendered by this callback. */
 #include "pe1/gte_sine_table.h"
 extern unsigned char D_8019AB70[],D_8019AD74[],D_8019AD78[],D_8019AF68,D_8019AF69;
-extern unsigned short D_800E11EA;
 extern volatile unsigned short D_8019AEFE,D_8019AF00;
 
 int func_801977F8(int mode,Vector *input) {

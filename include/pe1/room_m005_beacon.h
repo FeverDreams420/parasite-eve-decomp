@@ -92,7 +92,6 @@ extern u8 *D_80190B94;
 extern u8 *D_80190B98;
 extern GteShortVector D_80190BA0;
 extern GteShortVector D_80190BA8;
-extern u16 D_800E11EA;
 
 void func_800C70EC(u8 *data, int r, int g, int b);
 int func_800CEB8C(void *position, GteShortVector *target, int radius);

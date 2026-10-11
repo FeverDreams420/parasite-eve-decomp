@@ -84,7 +84,6 @@ extern RoomM123BeaconOffset D_8018F1E8;
 extern u8 *D_80195698;
 extern u8 *D_8019569C;
 extern u8 D_8019550C[];
-extern u16 D_800E11EA;
 
 void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y, int texture,
                    int clut, int page, int intensity, int unused, int angle);

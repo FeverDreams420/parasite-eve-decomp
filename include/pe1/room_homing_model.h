@@ -108,13 +108,6 @@ typedef struct RoomHomingModelEntity {
 extern struct BattleEntity *D_8009D254;
 
 #include "pe1/gte_sine_table.h"
-/* Texture page index slots, read as records so they stay ordered with the
- * parameter-block stores, as retail does. */
-typedef struct RoomHomingModelTextureSlot {
-    u16 index;
-} RoomHomingModelTextureSlot;
-
-extern RoomHomingModelTextureSlot D_800E11E8;
 
 extern void func_800866A4(int handle, int arg);
 extern int func_8006F39C(int id, void *actor);

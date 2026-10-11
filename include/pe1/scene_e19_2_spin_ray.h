@@ -10,6 +10,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/field_engine_calls.h"
+#include "pe1/field_texture_tables.h"
 
 /* Scene e19_2 spin ray: a spinning ray anchored at the scene origin that
  * grows, sweeps out as a textured blade and closes as a glow sprite. The
@@ -45,7 +46,6 @@ extern RenderColor D_8018F230;
 extern u8 D_8019B3E4[];
 extern u8 D_8019B404[];
 extern GteShortVector D_8019B670;
-extern u16 D_800E11EA;
 
 int func_80071A54(void);
 void func_800CFFAC(SceneSpinRay *ray);

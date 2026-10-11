@@ -63,12 +63,6 @@ typedef struct RoomFlareColor {
     u8 r, g, b, code;
 } RoomFlareColor;
 
-/* Texture page index slot at 0x800E11E8, read as a record so the load
- * stays behind the first parameter block store through its base register. */
-typedef struct RoomFlareTextureSlot {
-    u16 index;
-} RoomFlareTextureSlot;
-
 /* Orbit flare controller: anchor, state, timer, sound, sweep angle. */
 typedef struct RoomOrbitFlareState {
     s16 x, y, z, reserved06;
@@ -119,7 +113,6 @@ PE1_STATIC_ASSERT(sizeof(RoomDroppedFlare) == 0x14, room_dropped_flare_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomFlareAnchor, x) == 0x268, room_flare_anchor_x);
 
 extern struct BattleEntity *D_8009D254;
-extern RoomFlareTextureSlot D_800E11E8;
 extern u16 D_800E1208;
 
 extern int rand(void);

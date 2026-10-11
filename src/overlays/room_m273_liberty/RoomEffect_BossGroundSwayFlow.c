@@ -6,6 +6,7 @@
 #include "room_m273_sway.h"
 #include "pe1/field_model_draw.h"
 #include "pe1/scene_archive.h"
+#include "pe1/field_texture_tables.h"
 typedef GteShortVector Vector;
 typedef RoomM273PairPoolRecord Record;
 
@@ -168,7 +169,7 @@ int func_80198E94(int mode, GteShortVector *position) {
     D_800F3368.extent_y = 0x20;
     D_800F3368.extent_x = 0x20;
     D_800F3368.extent_y = 0x20;
-    D_800F3368.tpage = D_800E2850[D_800E11EA.index];
+    D_800F3368.tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11EA)];
     D_800F3368.palette = 3;
     D_800F3368.parameter06 = 0;
     if (frame < 8) {

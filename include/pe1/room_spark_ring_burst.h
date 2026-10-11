@@ -87,14 +87,7 @@ typedef struct RoomSparkBattleEntity {
     RoomSparkActor *actor;
 } RoomSparkBattleEntity;
 
-/* Texture page index records (0x800E11E8, 0x800E11EC), read as records so
- * they stay ordered after stores through the particle pointer. */
-typedef struct RoomSparkTextureSlot {
-    u16 index;
-} RoomSparkTextureSlot;
-
 extern struct BattleEntity *D_8009D254;
-extern RoomSparkTextureSlot D_800E11E8;
 
 int func_80071A54(void);
 

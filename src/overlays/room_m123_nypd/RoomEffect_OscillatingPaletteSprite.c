@@ -11,7 +11,6 @@
 extern GteShortVector D_8018F1F8;
 extern GteShortVector D_8018F1CC;
 extern char D_80195624[];
-extern u16 D_800E11E8;
 extern int func_80071A54(void);
 
 int func_80194F68(int mode, RoomM123Wave *wave) {

@@ -1,5 +1,6 @@
 #include "scene_e22_ember_data.h"
 #include "pe1/gte.h"
+#include "pe1/field_texture_tables.h"
 
 /* Rising ember particle: an ember drifts on a slowly turning circle while
  * it bounces off the floor (state 0), sparks coast to rest (states 1 and
@@ -120,7 +121,7 @@ int func_8019485C(int mode, RoomOrbitTrailParticle *p) {
             D_800F3368.extent_x = 0x20;
             D_800F3368.extent_y = 0x20;
             {
-                int tpage = D_800E2850[D_800E11EA.index];
+                int tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11EA)];
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 0;
                 spin.x = 0;

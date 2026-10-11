@@ -3,6 +3,7 @@
 
 #include "pe1/room_spark.h"
 #include "pe1/room_model_pulse_particle.h"
+#include "pe1/field_texture_tables.h"
 
 /* room_m256 pulsing model effect: one controller (func_80195728) that seeds
  * sixteen ring particles on frame 1, draws a ring sprite at the slot-2
@@ -24,7 +25,6 @@ extern u8 D_80195E8C[];                 /* colour ramp table */
 extern s16 D_80196094;                  /* ring brightness */
 extern void *D_801960A8;                /* model asset */
 
-extern u16 D_800E11E8;
 int func_80195728(int mode, s16 *state);
 
 #endif /* PE1_ROOM_MODEL_PULSE_H */

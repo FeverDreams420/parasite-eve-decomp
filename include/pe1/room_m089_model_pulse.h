@@ -7,6 +7,7 @@
 #include "pe1/room_swirl_rise.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/field_engine_calls.h"
+#include "pe1/field_texture_tables.h"
 
 /* room_m089 pulsing model burst (func_80193618): three turning layers of
  * one model and a fourth model over a glow strip, while swirl/rise sprites
@@ -54,7 +55,6 @@ typedef struct RoomM089PulseEvent {
 extern struct BattleEntity *D_8009D254;
 extern u8 *D_8019416C;
 extern u8 D_801940F8[];
-extern u16 D_800E11EA;
 
 int func_80193200(int mode, RoomSwirlRiseState *state);
 int func_80071A54(void);

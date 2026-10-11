@@ -67,8 +67,6 @@ typedef struct RoomM086EventState {
 
 extern struct BattleEntity *D_8009D254;
 extern u8 *D_80190B84;
-extern u16 D_800E11E8;
-extern u16 D_800E11EA;
 
 /* room_m086 seeker controller (func_8018F734): follows joint 7 of the
  * actor, drifts and falls, then bursts into three seeker rings. */

@@ -12,6 +12,7 @@
  */
 #include "pe1/room_spark_ring_burst.h"
 #include "pe1/gte.h"
+#include "pe1/field_texture_tables.h"
 
 static const RoomSparkSeed s_SparkRingParticleSeed = {
     { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
@@ -419,7 +420,7 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
                 D_800F3368.parameter02 = 1;
                 D_800F3368.extent_x = 0x10;
                 D_800F3368.extent_y = 0x10;
-                D_800F3368.tpage = D_800E2850[D_800E11E8.index];
+                D_800F3368.tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11E8)];
                 D_800F3368.palette = 2;
                 D_800F3368.parameter06 = 0;
                 kind = D_800F3368.palette;
@@ -464,7 +465,7 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
             D_800F3368.parameter02 = 1;
             D_800F3368.extent_x = 0x10;
             D_800F3368.extent_y = 0x10;
-            D_800F3368.tpage = D_800E2850[D_800E11E8.index];
+            D_800F3368.tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11E8)];
             D_800F3368.palette = 2;
             D_800F3368.parameter06 = 0;
             kind = D_800F3368.palette;
@@ -510,7 +511,7 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
             D_800F3368.parameter02 = 1;
             D_800F3368.extent_x = 0x10;
             D_800F3368.extent_y = 0x10;
-            D_800F3368.tpage = D_800E2850[D_800E11E8.index];
+            D_800F3368.tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11E8)];
             D_800F3368.palette = 2;
             D_800F3368.parameter06 = 0;
             kind = D_800F3368.palette;
@@ -536,7 +537,7 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
             D_800F3368.parameter02 = 1;
             D_800F3368.extent_x = 0x10;
             D_800F3368.extent_y = 0x10;
-            D_800F3368.tpage = D_800E2850[D_800E11E8.index];
+            D_800F3368.tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11E8)];
             D_800F3368.palette = 2;
             D_800F3368.parameter06 = 0;
             kind = D_800F3368.palette;

@@ -8,6 +8,7 @@
  * unit is that object, compiled into each of them.
  */
 #include "pe1/room_flare.h"
+#include "pe1/field_texture_tables.h"
 
 static const GteRotation s_OrbitFlareRotation = { 0, 0, -60, 0 };
 static const GteRotation s_OrbitFlareSpin = { 0, 0, 0, 0 };
@@ -196,7 +197,7 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
         D_800F3368.parameter02 = 1;
         D_800F3368.extent_x = 0x10;
         D_800F3368.extent_y = 0x10;
-        tpage = D_800E2850[D_800E11E8.index];
+        tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11E8)];
         D_800F3368.palette = 2;
         D_800F3368.parameter06 = 0;
         D_800F3368.parameter0A = 0;
@@ -290,7 +291,7 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
         D_800F3368.parameter02 = 1;
         D_800F3368.extent_x = 0x10;
         D_800F3368.extent_y = 0x10;
-        tpage = D_800E2850[D_800E11E8.index];
+        tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11E8)];
         D_800F3368.palette = 2;
         D_800F3368.parameter06 = 0;
         D_800F3368.tpage = tpage;

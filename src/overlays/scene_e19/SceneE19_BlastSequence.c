@@ -1,6 +1,7 @@
 /* MASPSX_FLAGS: --expand-div */
 #include "pe1/scene_e19_blast.h"
 #include "pe1/gte_window.h"
+#include "pe1/field_texture_tables.h"
 
 int func_80192F9C(int mode, SceneE19Blast *blast)
 {
@@ -237,10 +238,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             rotation.x = -0x400;
             rotation.y = 0;
             rotation.z = D_800E27EC << 5;
-            D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
+            D_800F3368.tpage = D_800E2850[D_800E11E4[3]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11E4[3]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
@@ -276,7 +277,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             D_800F3368.parameter02 = 4;
             D_800F3368.extent_x = 0x40;
             D_800F3368.extent_y = 0x40;
-            asm("" : "=r"(pageSelector) : "0"(&D_800E11EA[8]) : "$16");
+            asm("" : "=r"(pageSelector) : "0"(&D_800E11E4[11]) : "$16");
             D_800F3368.tpage = D_800E2850[pageSelector[0]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 1;
@@ -390,10 +391,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             rotation.x = 0;
             rotation.y = D_800E27EC << 5;
             rotation.z = 0;
-            D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
+            D_800F3368.tpage = D_800E2850[D_800E11E4[3]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11E4[3]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
@@ -421,10 +422,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             rotation.x = 0;
             rotation.y = -D_800E27EC * 0x30;
             rotation.z = 0;
-            D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
+            D_800F3368.tpage = D_800E2850[D_800E11E4[3]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11E4[3]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
@@ -453,10 +454,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             rotation.x = 0;
             rotation.y = -D_800E27EC << 5;
             rotation.z = 0;
-            D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
+            D_800F3368.tpage = D_800E2850[D_800E11E4[3]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11E4[3]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
@@ -499,10 +500,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             rotation.x = 0;
             rotation.y = (D_800E27EC << 5) + 0x400;
             rotation.z = 0;
-            D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
+            D_800F3368.tpage = D_800E2850[D_800E11E4[3]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11E4[3]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
@@ -530,10 +531,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             rotation.x = 0;
             rotation.y = D_800E27EC << 5;
             rotation.z = 0;
-            D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
+            D_800F3368.tpage = D_800E2850[D_800E11E4[3]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11E4[3]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
@@ -564,10 +565,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             rotation.x = 0;
             rotation.y = D_800E27EC << 5;
             rotation.z = 0;
-            D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
+            D_800F3368.tpage = D_800E2850[D_800E11E4[3]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11E4[3]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
@@ -596,10 +597,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             rotation.x = 0;
             rotation.y = -D_800E27EC << 5;
             rotation.z = 0;
-            D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
+            D_800F3368.tpage = D_800E2850[D_800E11E4[3]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11E4[3]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
@@ -630,10 +631,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             rotation.x = 0;
             rotation.y = (D_800E27EC << 5) + 0x400;
             rotation.z = 0;
-            D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
+            D_800F3368.tpage = D_800E2850[D_800E11E4[3]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11E4[3]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
@@ -661,10 +662,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             rotation.x = 0;
             rotation.y = D_800E27EC << 5;
             rotation.z = 0;
-            D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
+            D_800F3368.tpage = D_800E2850[D_800E11E4[3]];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
-            page = (u16)(D_800E2850[D_800E11EA[0]] | GetTPage(0, 1, 0, 0));
+            page = (u16)(D_800E2850[D_800E11E4[3]] | GetTPage(0, 1, 0, 0));
             palette = D_800E1204[D_800F3368.palette];
             if (D_800F3368.palette == 4 && D_800F3428 != 0) {
                 palette += 4;
@@ -691,7 +692,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
         D_800F3368.extent_y = 0x10;
         D_800F3368.extent_x = 0x80;
         D_800F3368.extent_y = 0x10;
-        D_800F3368.tpage = D_800E2850[D_800E11EA[0]];
+        D_800F3368.tpage = D_800E2850[D_800E11E4[3]];
         D_800F3368.palette = 3;
         D_800F3368.parameter06 = 0;
         D_800F3368.parameter0A = 0;

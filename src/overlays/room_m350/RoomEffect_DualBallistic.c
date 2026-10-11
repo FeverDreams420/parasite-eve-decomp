@@ -15,7 +15,6 @@ extern FieldActor *g_PlayerEntity;
 extern unsigned char D_8019A82F;
 #include "pe1/gte_sine_table.h"
 extern int D_8019A598[];
-extern unsigned short D_800E11E8;
 extern int Inv_ScrambleGrid(void);
 
 int func_801968D8(int event, short *position) {

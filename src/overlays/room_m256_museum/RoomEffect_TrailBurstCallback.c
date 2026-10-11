@@ -1,5 +1,6 @@
 #include "pe1/room_m256_trail.h"
 #include "pe1/gte.h"
+#include "pe1/field_texture_tables.h"
 
 s32 func_801940B0(int mode, void *effect) {
     RoomM256TrailEffect *state = effect;
@@ -328,7 +329,7 @@ checkLifetime:
             spriteExtent = 0x10;
             spriteClutY = D_800E1208;
             asm("" : "=r"(params), "=r"(spriteExtent), "=r"(spriteClutY) : "0"(params), "1"(spriteExtent), "2"(spriteClutY));
-            palettes = &D_800E11E8;
+            palettes = (RoomM256TrailPalettes *)&D_800E11E8;
             asm("" : "=r"(palettes) : "0"(palettes));
             params->parameter00 = spriteExtent;
             spritePalette = palettes->first;

@@ -16,7 +16,6 @@ typedef RoomM350SignedHalfPair SignedHalf;
 extern short D_800966EE[];
 extern short D_8019A800, D_8019A802;
 extern unsigned char D_8019A804;
-extern unsigned short D_800E11EA;
 
 int func_80195218(int event, Particle *object)
 {

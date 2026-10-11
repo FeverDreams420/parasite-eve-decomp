@@ -3,7 +3,7 @@
 #include "pe1/gte.h"
 #include "pe1/field_actor.h"
 #include "pe1/asset_find.h"
-
+#include "pe1/field_texture_tables.h"
 
 typedef struct RoomM273RingController {
     u8 reserved_00[8];
@@ -91,7 +91,7 @@ int func_80194E6C(int mode, RoomM273FallingTrail *trail) {
         if (!trail->landed) {
             int kind;
             int palette;
-            int index = D_800E11EA.index;
+            int index = TEXTURE_SLOT_RECORD(D_800E11EA);
 
             D_800F3368.parameter00 = 0x20;
             D_800F3368.parameter02 = 2;

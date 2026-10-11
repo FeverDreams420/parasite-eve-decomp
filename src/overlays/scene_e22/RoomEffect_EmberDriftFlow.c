@@ -1,5 +1,6 @@
 #include "scene_e22_ember_data.h"
 #include "pe1/gte.h"
+#include "pe1/field_texture_tables.h"
 
 /* Ember drift particle: embers drift and bounce off the floor while their
  * sideways speed decays (state 0 slowly, state 1 quickly while falling),
@@ -65,7 +66,7 @@ int func_80193940(int mode, RoomOrbitTrailParticle *p) {
             D_800F3368.extent_x = 0x20;
             D_800F3368.extent_y = 0x20;
             {
-                int tpage = D_800E2850[D_800E11EA.index];
+                int tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11EA)];
                 D_800F3368.palette = 3;
                 D_800F3368.parameter06 = 0;
                 D_800F3368.tpage = tpage;
@@ -255,7 +256,7 @@ int func_8019408C(int mode, SceneE22EmberBurst *burst) {
         D_800F3368.extent_x = 0x20;
         D_800F3368.extent_y = 0x20;
         {
-            int tpage = D_800E2850[D_800E11EA.index];
+            int tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11EA)];
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 0;
             D_800F3368.parameter0A = 0;

@@ -54,7 +54,6 @@ typedef struct SceneE19BlastScript {
 } SceneE19BlastScript;
 
 extern struct BattleEntity *D_8009D254;
-extern u16 D_800E11EA[];
 extern s32 D_8019B668;
 extern void *D_8019B680, *D_8019B684, *D_8019B688, *D_8019B68C, *D_8019B690;
 
