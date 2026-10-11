@@ -1174,7 +1174,7 @@ void RoomFx_UpdateTransformedSparkle(
     ownerPtr = func_800C2B50();
     transform = &(*ownerPtr)->transforms[state->transformIndex];
     seed = s_EffectProjectSeed;
-    ApplyMatrixSV(transform, &seed, (unsigned short *)&transformed);
+    ApplyMatrixSV((const GteMatrix *)transform, &seed.vector, &transformed.vector);
 
     state->phase++;
     state->phase %= 4;
@@ -1191,9 +1191,9 @@ void RoomFx_UpdateTransformedSparkle(
     }
 
     if ((rand() % 400) == 0) {
-        state->sparkleX = *(unsigned short *)&transformed.bytes[0] +
+        state->sparkleX = (u16)transformed.vector.x +
                           transform->x + (rand() % 60) - 30;
-        state->sparkleY = *(unsigned short *)&transformed.bytes[2] +
+        state->sparkleY = (u16)transformed.vector.y +
                           transform->y;
         {
             int random;
@@ -1203,7 +1203,7 @@ void RoomFx_UpdateTransformedSparkle(
 
             random = rand();
             transformZ = transform->z;
-            z = *(unsigned short *)&transformed.bytes[4];
+            z = (u16)transformed.vector.z;
             asm("" : "=r"(transformZ), "=r"(z)
                    : "0"(transformZ), "1"(z));
             state->sparkleAlpha = 0xFF;
@@ -1225,7 +1225,7 @@ void RoomFx_UpdateTransformedSparkle(
         int y;
 
         random = rand();
-        life = *(unsigned short *)&state->sparkleLife;
+        life = (u16)state->sparkleLife;
         alpha = state->sparkleAlpha;
         y = state->sparkleY;
         life--;
