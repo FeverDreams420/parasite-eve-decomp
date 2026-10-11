@@ -226,6 +226,41 @@ Still open:
     `D_800B0D88` (`D_800B0CEC.flags_9C`): the player's flags load must stay
     after that store, which needs a non-small store address, and writing
     the field through `D_800B0CEC` makes the loop keep its address in `s1`.
+- Crutches left in `src/main/field` and `src/main/anim` (2026-10-11 pass).
+  Each was removed and rebuilt; the reason is what changed in the bytes:
+  - `Anim_DecodeBoneRotationsShort` keeps the `$s2` pin on the angle
+    pointer. The bone counter and the pointer both have 10 references, but
+    the counter is dead between the translation loop and the bone loop, so
+    its live range is two insns shorter. Global allocation then ranks it
+    first and gives it `$s2`. Starting the counter first fixes the
+    allocation, but sched2 then moves `move s3,zero` above the `lui`. No
+    statement order of the first four assignments matches without the pin.
+    The frame byte offset is added through the `AnimSampleAddress`
+    pointer/word union. Indexing the halfword samples by frame hoists the
+    `<<1` below the `angleZ` setup, and `(u8 *)` arithmetic swaps the
+    `addu` operands.
+  - `Entity_SlideOnWall` keeps the `$s3` pin and both empty asm statements.
+    Retail saves `s3` first and copies the entity from `$a0` in the
+    `bgtz` delay slot, after both vertex loads. Without the barriers, sched1
+    and sched2 put the two `lh` loads last for their load hazard. The
+    parameter copy is a fixed head insn before reload, so neither a
+    separate `entity = input` copy nor per-branch copies move it.
+  - `Geo_LoadMeshEntry` keeps the `$a1` palette pin. As a pseudo, the
+    single-set palette load gets LAUNCH priority and sinks next to its
+    `+479` use, while retail loads it before the frame is set up. It also
+    keeps the `disp_x` memory barrier (16 instructions differ without it)
+    and the byte-storage store to `u34` (12 differ).
+    `Geo_TransformPoint` keeps its three pins and the barrier on the x sum.
+    Without the pins, local allocation swaps `$t0`/`$a0` for the entry and
+    y. Without the barrier, the unclamped x copy merges with the sum. The
+    four bound barriers are gone; loading the bound before the y add gives
+    the retail order.
+  - `Geo_ActorFloorResolution`: `Entity_FindFloor` adds the region slot
+    offset to the table word as integers (two `(u32)` casts). Indexing
+    `D_8009CE08` or a pointer/word union of it swaps `$v0`/`$v1` in both
+    floor modes. The `$v1` pin in `Entity_ResolvePosition` (947 lines
+    differ), the `$t3` parity pin in `Geo_PointInPoly` (22) and the ramp
+    `goto slide` stay, as their comments record.
 
 ## Link ownership
 
