@@ -4,28 +4,23 @@
 
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 
-typedef struct GlobalWordObject {
-    s32 value;
-    u8 pad[12];
-} GlobalWordObject;
-
-typedef struct GlobalByteObject {
-    u8 value;
-    u8 pad[15];
-} GlobalByteObject;
-
-typedef struct BattleRootObject {
-    u8 *root;
-    u8 pad[12];
-} BattleRootObject;
-
-#include "Battle_Init_externs.h"
+/* COMMON supplies the small-data sizes of the battle queue words to
+ * MASPSX; every other word stays absolute. */
 u8 D_8009CE38[4];
 u8 D_8009CE39;
 u8 D_8009CE3A;
 u8 D_8009CE3B;
-#include "Battle_Init_externs_1.h"
+u8 D_8009CE40;
+u8 D_8009CE44;
+u8 D_8009CE60;
+u8 D_8009D1DC;
+int D_8009D200;
+s32 D_8009D208;
+s32 D_8009D258;
+u8 D_8009D294;
+u8 D_8009D2D8;
 
 void Pm_StopAll(void);
 void Battle_InitFadeVars(void);
@@ -37,16 +32,16 @@ void Battle_Init(void)
     BattleAction **action;
     BattleAction *config0;
     BattleAction *config1;
-    volatile u8 *config2;
-    volatile u8 *config3;
-    volatile u8 *config4;
-    volatile u8 *config5;
+    BattleAction *config2;
+    BattleAction *config3;
+    BattleAction *config4;
+    BattleAction *config5;
 
     Pm_StopAll();
     index = 0;
     records = D_800BE830;
     D_8009D200 = -1;
-    D_8009D2FC_o.value = -1;
+    D_8009D2FC = -1;
     D_8009D258 = -1;
     D_8009D208 = -1;
 
@@ -57,26 +52,26 @@ void Battle_Init(void)
         index++;
     } while (index < 45);
 
-    action = &((Combatant *)D_8009D278_o.root)->action;
+    action = &D_8009D278->action;
     config0 = *action;
     D_8009CE44 = 0;
     D_8009CE40 = 0;
     D_8009D294 = 0;
     config1 = *action;
     D_8009D2D8 = (config0->turnWord >> 4) & 3;
-    config2 = (u8 *)*action;
+    config2 = *action;
     D_8009D1DC = config1->turnWord & 0xF;
-    D_8009CE38[0] = config2[0x14];
-    config3 = (u8 *)*action;
-    D_8009CE39 = config3[0x15];
-    config4 = (u8 *)*action;
-    D_8009CE3A = config4[0x16];
-    config5 = (u8 *)*action;
-    D_8009CE3B = config5[0x17];
+    D_8009CE38[0] = config2->animMode[0];
+    config3 = *action;
+    D_8009CE39 = config3->animMode[1];
+    config4 = *action;
+    D_8009CE3A = config4->animMode[2];
+    config5 = *action;
+    D_8009CE3B = config5->animMode[3];
 
     Tbl_ResetAll();
-    D_8009D1CE_o.value = 0;
-    D_8009D1AC_write.value = D_8009D1AC_read.value & ~0x300;
+    D_8009D1CE = 0;
+    D_8009D1AC &= ~0x300;
     Battle_InitFadeVars();
     D_8009CE60 = 0;
 }
