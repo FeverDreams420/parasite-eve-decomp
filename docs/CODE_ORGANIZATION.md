@@ -596,11 +596,15 @@ Still open:
     and sched2 put the two `lh` loads last for their load hazard. The
     parameter copy is a fixed head insn before reload, so neither a
     separate `entity = input` copy nor per-branch copies move it.
-  - `Geo_LoadMeshEntry` keeps the `$a1` palette pin. As a pseudo, the
-    single-set palette load gets LAUNCH priority and sinks next to its
-    `+479` use, while retail loads it before the frame is set up. It also
-    keeps the `disp_x` memory barrier (16 instructions differ without it)
-    and the byte-storage store to `u34` (12 differ).
+  - `Geo_LoadMeshEntry` adds 479 to the palette start in place before
+    copying it to the running maximum. Retail loads the palette byte before
+    the frame is set up; computing the maximum as `paletteStart + 479` makes
+    the load a single-set pseudo that sched1 sinks next to its use (lev 6).
+    It keeps the `disp_x` memory barrier: GCC 2.7 lets the scalar reload of
+    the volatile `D_800B1624` pointer pass the `disp_x` field store, which
+    retail keeps in order (lev 7 without it; the pointer's declaration
+    belongs to the render headers). The byte-storage store to `u34` stays
+    for the same reason (12 instructions differ).
     `Geo_TransformPoint` keeps its three pins and the barrier on the x sum.
     Without the pins, local allocation swaps `$t0`/`$a0` for the entry and
     y. Without the barrier, the unclamped x copy merges with the sum. The

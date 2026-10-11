@@ -12,7 +12,7 @@ typedef union GeomEntryAddress {
 /* Build both frame buffers of room-tile sprites and texture-page packets. */
 int Geo_LoadMeshEntry(GeomEntry *entry, RenderTilePacket *buffer, void **end)
 {
-    register unsigned int paletteStart asm("$5") = D_800BD024;
+    unsigned int paletteStart = D_800BD024;
     GeomEntryAddress base;
     unsigned int count;
     u32 *positions;
@@ -28,8 +28,9 @@ int Geo_LoadMeshEntry(GeomEntry *entry, RenderTilePacket *buffer, void **end)
     textures = (RenderTileTexture *)(base.address + entry->u2C.uv_ptr);
     pass = 0;
     pages = (RenderTexturePagePacket *)(buffer + count * 2);
+    paletteStart += 479;
     shade = 128;
-    paletteMax = paletteStart + 479;
+    paletteMax = paletteStart;
 
     entry->u30.prim = buffer;
     /* Byte-storage view retains the retail alias scheduling for this pointer
