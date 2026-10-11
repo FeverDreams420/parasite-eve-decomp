@@ -291,7 +291,7 @@ int Render_SetEntryMirrored(int index, int enabled, unsigned int arg2, unsigned 
 int Render_SetEntryPosition(int index, int x, int y) {
     GeomStateAddress table, base;
     GeomEntry *entry = (GEOM_STATE_OFFSET(table, base, entry_offset, 0), table.entry) + index;
-    volatile int *flags = &g_RenderStateFlags;
+    int *flags = &g_RenderStateFlags;
 
     entry->scr_x = x;
     entry->base_x = x;
@@ -363,58 +363,22 @@ int Geo_RenderMeshList(void *buffer, void **end)
  * Contiguous default-profile pair on g_GeomState (main_tu_evidence G0836
  * joins them with the mesh renderer before and the fades after). */
 
-/* Camera y read through an array view: the scalar form schedules the load
- * before the preceding store. */
-
-
+/* Offsets a point by the display origin and clamps it into the clip
+ * window; the result becomes the display source point and depth. */
 int Geo_ClipPoint(int x, int y, int z) {
     GeomState *state = g_GeomState;
-    register int coordinate asm("$3");
-    register int bound asm("$2");
-    int clippedX;
-    int clippedY;
-    register int depth asm("$4");
-    int savedBound;
-    /* Retail reserves 32 bytes even though the function makes no calls.
-     * Pins and identity barriers preserve its separate comparison/copy values. */
-    int matchingStackReserve[8];
+    u16 clippedX = state->clip_offset_x + x;
+    u16 clippedY = state->clip_offset_y + y;
+    int depth = state->depth_offset + z;
 
-    coordinate = state->clip_offset_x + x;
-    asm("" : "=r"(clippedX) : "0"(coordinate));
-    bound = state->clip_offset_y;
-    clippedY = bound + y;
-    coordinate = (s16)coordinate;
-    depth = state->depth_offset;
-
-    bound = state->clip_min_x;
-    /* Preserve the original empty load-delay slot. */
-    PE1_NOP();
-    asm("" : "=r"(savedBound) : "0"(bound));
-    depth = depth + z;
-    if (coordinate < bound) {
-        clippedX = savedBound;
-    } else {
-        bound = state->clip_max_x;
-        asm("" : "=r"(savedBound) : "0"(bound));
-        if (bound < coordinate) {
-            clippedX = savedBound;
-        }
-    }
-
-    coordinate = clippedY << 16;
-    bound = state->clip_min_y;
-    coordinate = coordinate >> 16;
-    asm("" : "=r"(savedBound) : "0"(bound));
-    if (coordinate < bound) {
-        clippedY = savedBound;
-    } else {
-        bound = state->clip_max_y;
-        asm("" : "=r"(savedBound) : "0"(bound));
-        if (bound < coordinate) {
-            clippedY = savedBound;
-        }
-    }
-
+    if ((s16)clippedX < state->clip_min_x)
+        clippedX = state->clip_min_x;
+    else if (state->clip_max_x < (s16)clippedX)
+        clippedX = state->clip_max_x;
+    if ((s16)clippedY < state->clip_min_y)
+        clippedY = state->clip_min_y;
+    else if (state->clip_max_y < (s16)clippedY)
+        clippedY = state->clip_max_y;
     state->disp_src_x = clippedX;
     state->disp_src_y = clippedY;
     state->field26 = depth;
@@ -492,12 +456,11 @@ int Render_StepFade(void) {
 
         if (g_ActiveDrawSlot != 0)
             prim += primCount;
-        for (j = 0; j < primCount; j++, prim++) {
+        for (j = 0; j < primCount; j++) {
             prim->b = grey;
             prim->g = grey;
             prim->r = grey;
-            /* Matching debt: keeps the counter step below the stores. */
-            asm("" : : : "memory");
+            prim++;
         }
     }
     counter = &g_RenderFadeFrameCounter;
@@ -561,12 +524,11 @@ int Render_ApplyScreenTint(void) {
 
         if (g_ActiveDrawSlot != 0)
             prim += primCount;
-        for (j = 0; j < primCount; j++, prim++) {
+        for (j = 0; j < primCount; j++) {
             prim->b = grey;
             prim->g = grey;
             prim->r = grey;
-            /* Matching debt: keeps the counter step below the stores. */
-            asm("" : : : "memory");
+            prim++;
         }
     }
     flags = &g_RenderStateFlags;
@@ -608,35 +570,34 @@ int Geom_ScrollEntries(void)
 
             entry = &entries->scroll;
             do {
-            int position;
+                int position;
 
-            if (entry->flags & 4) {
-                int x, y, fracX;
+                if (entry->flags & 4) {
+                    int x, y, fracX;
 
-                position = (entry->x * 256) | entry->fractionX.byte;
-                position += entry->speedX;
-                x = (position >> 8) % entry->modulusX;
-                fracX = position & 255;
-                position = (entry->y * 256) | entry->fractionY.byte;
-                position += entry->speedY;
-                y = (position >> 8) % entry->modulusY;
-                entry->fractionX.word = fracX;
-                entry->fractionY.word = position & 255;
-                entry->x = x;
-                entry->y = y;
-            }
-            if (entry->flags & 8) {
-                /* The final fixed-point sum wraps at the target word width. */
-                position = (unsigned int)(entry->baseX * 256) +
-                    (camera->x - camera->originX) * entry->speedX;
-                entry->x = position >> 8;
-                entry->fractionX.word = position & 255;
-                position = (unsigned int)(entry->baseY * 256) +
-                    (camera->y - camera->originY) * entry->speedY;
-                entry->y = position >> 8;
-                entry->fractionY.word = position & 255;
-            }
-            entry++;
+                    position = (entry->x * 256) | entry->fractionX.byte;
+                    position += entry->speedX;
+                    x = (position >> 8) % entry->modulusX;
+                    fracX = position & 255;
+                    position = (entry->y * 256) | entry->fractionY.byte;
+                    position += entry->speedY;
+                    y = (position >> 8) % entry->modulusY;
+                    entry->fractionX.word = fracX;
+                    entry->fractionY.word = position & 255;
+                    entry->x = x;
+                    entry->y = y;
+                }
+                if (entry->flags & 8) {
+                    position = entry->baseX * 256 +
+                        (camera->x - camera->originX) * entry->speedX;
+                    entry->x = position >> 8;
+                    entry->fractionX.word = position & 255;
+                    position = entry->baseY * 256 +
+                        (camera->y - camera->originY) * entry->speedY;
+                    entry->y = position >> 8;
+                    entry->fractionY.word = position & 255;
+                }
+                entry++;
             } while (++i < count);
         }
         if (g_GeomScroll.state.flags & 0x80) {

@@ -112,10 +112,10 @@ int Render_SetViewport(s16 *position) {
         unsigned reserved[10];
     } local;
     GeomScrollState *camera = &g_GeomScroll.state;
-    register GeomState *geometry;
+    GeomStateAddress geometry, viewAddress;
     register CameraViewport *view;
     register unsigned int cx asm("$11");
-    register GeomState *offset_geometry;
+    GeomStateAddress offset_geometry;
     int flags = camera->flags;
     register int screen_x asm("$6");
     register int screen_y asm("$7");
@@ -180,7 +180,7 @@ int Render_SetViewport(s16 *position) {
         D_800BCFB4 = screen_x;
         D_800BCFB6 = screen_y;
     }
-    geometry = D_800B1624;
+    geometry.state = D_800B1624;
     sum_x = D_800BCFB4 + screen_x;
     screen_x = sum_x / 2;
     D_800BCFB4 = screen_x;
@@ -188,12 +188,13 @@ int Render_SetViewport(s16 *position) {
     sum_y += (unsigned)sum_y >> 31;
     view_x = 320 - screen_x;
 
-    offset_geometry = D_800B1624;
+    offset_geometry.state = D_800B1624;
 
     screen_y = sum_y >> 1;
     D_800BCFB6 = screen_y;
     asm volatile("" : : : "memory");
-    view = (CameraViewport *)((u8 *)geometry + offset_geometry->entry_offset_1C);
+    viewAddress.word = geometry.word + offset_geometry.state->entry_offset_1C;
+    view = viewAddress.viewport;
     view += g_GeomGroupSel;
     asm("" : : "r"(view) : "$3");
     viewportValue = 224;
@@ -234,8 +235,9 @@ int Render_SetViewport(s16 *position) {
         register int signed_y;
         s16 chosen_bound;
         register int upper_y;
-        geometry = D_800B1624;
-        view = (CameraViewport *)((u8 *)geometry + geometry->entry_offset_1C);
+        geometry.state = D_800B1624;
+        viewAddress.word = geometry.word + geometry.state->entry_offset_1C;
+        view = viewAddress.viewport;
         view += g_GeomGroupSel;
         viewportValue = (s16)target_x;
         axisValue = view->minX;
