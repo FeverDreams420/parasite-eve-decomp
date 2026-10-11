@@ -1465,7 +1465,7 @@ void RoomFx_DrawEightParticles(
     u16 *depthOut;
     char *packet;
     RoomSpriteMatrix matrix;
-    int scaleArg[4];
+    GteVector scaleArg;
     volatile int sourceScale[4];
     RoomSpriteMatrix *matrixArg;
     register int scale2 asm("$6");
@@ -1507,14 +1507,14 @@ void RoomFx_DrawEightParticles(
             secondScale = (s16)state->scale[i];
             sourceScale[2] = unitScale;
             sourceScale[1] = secondScale;
-            scaleArg[0] = sourceScale[0];
-            scaleArg[1] = sourceScale[1];
+            scaleArg.x = sourceScale[0];
+            scaleArg.y = sourceScale[1];
             scale2 = sourceScale[2];
             scale3 = sourceScale[3];
-            scaleArg[2] = scale2;
-            scaleArg[3] = scale3;
+            scaleArg.z = scale2;
+            scaleArg.pad = scale3;
             asm volatile("" ::: "$5");
-            ScaleMatrix(matrixArg, (const GteVector *)scaleArg);
+            ScaleMatrix(matrixArg, &scaleArg);
 
             *depthOut = (u16)state->fade[i];
             matrix.t[0] = (s16)state->position[i].x;
