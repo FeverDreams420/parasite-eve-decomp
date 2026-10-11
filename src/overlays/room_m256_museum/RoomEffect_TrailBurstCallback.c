@@ -333,11 +333,11 @@ checkLifetime:
         case 1:
             firstFade = rcos(state->frame << 6) / 32;
             renderScale = rcos(state->frame << 6);
-            asm volatile("" ::: "memory");
+            asm volatile("" : : "m"(D_800F3368));
             params = &D_800F3368;
             spriteExtent = 0x10;
             spriteClutY = D_800E1208;
-            asm("" : "=r"(params), "=r"(spriteClutY) : "0"(params), "1"(spriteClutY), "r"(spriteExtent));
+            asm("" : "=r"(params) : "0"(params), "r"(spriteClutY), "r"(spriteExtent));
             palettes = (RoomM256TrailPalettes *)&D_800E11E8;
             asm("" : "=r"(palettes) : "0"(palettes));
             params->parameter00 = spriteExtent;
