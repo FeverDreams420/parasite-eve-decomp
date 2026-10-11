@@ -100,7 +100,7 @@ initialize:
             effect->position.x = (s16) (u16) effect->target.x;
             effect->position.y = (s16) (u16) effect->target.y;
             effect->position.z = (s16) (u16) effect->target.z;
-            asm volatile("" : "=r"(assetKey) : "0"(assetKey) : "memory");
+
             temp_v0 = Asset_FindTable08ByU32Key(D_800B0E64[0], assetKey | 0x3704U);
             D_8019085C = temp_v0;
             func_800C6D5C(temp_v0, 0, 0);
@@ -310,7 +310,7 @@ render: {
         D_800F3368.extent_x = 0x20;
         D_800F3368.extent_y = 0x20;
         texturePage = D_800E2850[textureIndex];
-        asm volatile("" : : "r"(texturePage));
+
         D_800F3368.palette = 3;
         D_800F3368.parameter06 = 0;
         D_800F3368.parameter0A = 0;
@@ -350,7 +350,7 @@ block_63:
                         pageIndex = &D_800E11FA;
             asm volatile("" : "=r"(pageIndex) : "0"(pageIndex));
             texturePage = firstPageTable[*pageIndex];
-            asm volatile("" : : "r"(texturePage));
+
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 1;
             D_800F3368.tpage = texturePage;
@@ -401,9 +401,9 @@ block_63:
             }
             paletteX = 0;
             paletteY = D_800E120A;
-            asm volatile("" : : "r"(paletteX), "r"(paletteY));
+
             texturePage = D_800E2850[D_800E11FA];
-            asm volatile("" : : "r"(texturePage));
+
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 1;
             D_800F3368.tpage = texturePage;
