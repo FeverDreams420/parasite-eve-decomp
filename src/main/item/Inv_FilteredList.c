@@ -79,9 +79,7 @@ void Inv_BuildFilteredPackedListExcluding(int mask, int excluded) {
     index = 0;
     if (limit > 0) {
         do {
-            if (index < 0 || index >= limit) {
-                goto invalid_index;
-            } else {
+            if (index >= 0 && index < limit) {
                 item_id = g_InvItemPtr[index];
                 saved_item_id = item_id;
                 if ((unsigned int)(item_id - 0x100) < 0x80) {
@@ -100,12 +98,9 @@ void Inv_BuildFilteredPackedListExcluding(int mask, int excluded) {
                     }
                 }
                 data = lookup;
-                goto filter;
+            } else {
+                data = 0;
             }
-
-invalid_index:
-            data = 0;
-filter:
             if ((data != 0) &&
                     (((mask >> data->kind) & 1) != 0) &&
                     (data->tailCount != 0) &&

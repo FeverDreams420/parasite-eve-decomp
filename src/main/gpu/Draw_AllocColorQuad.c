@@ -82,12 +82,12 @@ void Draw_AllocColorQuad(int width, int height) {
         scaled = secondMinimum * 56;
         ratio = scaled / h;
     }
-    goto ratio_done;
+    } else {
+        ratio = 0;
     }
+    } else {
+        ratio = 0;
     }
-ratio_zero:
-    ratio = 0;
-ratio_done:
     firstY = shadeOffset + 0xAA;
     firstRight = ratio + 0xE5;
     asm volatile("" : "=r"(firstRight) : "0"(firstRight));

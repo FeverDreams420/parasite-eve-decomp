@@ -43,7 +43,9 @@ block_6:
             var_a0 = var_v0 << 3;
             while (1) {
                 if (((EntityAllocationBlock *)((u8 *)D_800A7620 + var_v1))->address != 0) {
-                    goto occupied_in_run;
+                    var_a2 = 0;
+                    var_a1 += var_a3;
+                    break;
                 }
                 var_v1 += 8;
                 if (var_v1 >= var_a0) {
@@ -62,12 +64,9 @@ after_empty_scan:
             ((EntityAllocationBlock *)((u8 *)D_800A7620 + temp_a0))->address = var_v0;
             return var_v0;
         }
-        goto block_20;
-occupied_in_run:
-        var_a2 = 0;
-        var_a1 += var_a3;
-        goto after_empty_scan;
     }
+    else
+    {
     var_v1 = ((EntityAllocationBlock *)((u8 *)D_800A7620 + var_v1))->blockCount;
     if (temp_t0 < var_v1) {
         var_a1 += var_v1;
@@ -75,6 +74,7 @@ occupied_in_run:
         var_a1 += var_a3;
     }
     var_v0 = var_a1 & 0xFF;
+    }
 block_20:
     var_a0 = var_a1 & 0xFF;
     if (var_v0 >= 0x10U) {

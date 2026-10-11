@@ -49,21 +49,19 @@ void Gpu_RenderFrame(void) {
     PutDispEnv(DispAddress(idx));
 
     status = Gpu_CheckDrawStatus();
-    if ((status << 24) != 0) {
-        goto draw_direct;
-    }
-
-    state_ptr = (RenderFrameState *)&g_GameState;
-    state = state_ptr->flags;
-    if ((state & 0x200) != 0) {
-
-    draw_direct:
+    do {
+        if ((status << 24) == 0) {
+            state_ptr = (RenderFrameState *)&g_GameState;
+            state = state_ptr->flags;
+            if ((state & 0x200) == 0) {
+                break;
+            }
+        }
         idx = g_ActiveDrawSlot;
         PutDrawEnv(DrawAddress(idx));
         g_ActiveDrawSlot = g_ActiveDrawSlot < 1U;
         return;
-
-    }
+    } while (0);
 draw_buffer:
     {
         int drawSlot;

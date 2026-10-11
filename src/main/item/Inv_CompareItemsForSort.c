@@ -26,9 +26,10 @@ int Inv_CompareItemsForSort(const void *leftElement, const void *rightElement) {
     leftItem = *leftIndex;
     rightItem = *rightIndex;
     lookup = g_InvSortLookup;
+    do {
     if (lookup != defaultLookup) {
         if (leftItem == 0) {
-            goto left_item_is_empty;
+            break;
         }
         if (rightItem == 0) {
             return -1;
@@ -71,7 +72,7 @@ int Inv_CompareItemsForSort(const void *leftElement, const void *rightElement) {
                ? 1
                : -((unsigned int)leftName < (unsigned int)rightName);
 
-left_item_is_empty:
+    } while (0);
     return rightItem != 0;
 }
 

@@ -628,18 +628,17 @@ loop_1:
                 var_a1->ticks = 0;
                 var_a1->owner = 0;
             }
-            goto block_13;
-        }
-    } else {
-block_13:
-        var_s2 += 0x10C;
-        var_s0 += 1;
-        var_s1 += 0xA0C;
-        if ((s32)var_s0 >= 0xB) {
-            var_v0 = var_a2;
         } else {
-            goto loop_1;
+            return var_v0;
         }
+    }
+    var_s2 += 0x10C;
+    var_s0 += 1;
+    var_s1 += 0xA0C;
+    if ((s32)var_s0 >= 0xB) {
+        var_v0 = var_a2;
+    } else {
+        goto loop_1;
     }
     return var_v0;
 }

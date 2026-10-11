@@ -1322,14 +1322,12 @@ void MemCard_UpdateSavePolling(void)
     {
       register int activeStateReady;
       activeStateReady = 1;
-      if (activeState == activeStateReady)
+      if (!(activeState == activeStateReady))
       {
-        goto active_state_ok;
+        g_MemCardSavePollTimeout = -2;
       }
     }
-    g_MemCardSavePollTimeout = -2;
     }
-    active_state_ok:
     timeout = g_MemCardSavePollTimeout;
 
     timeout -= timeout > 0;
@@ -1345,19 +1343,21 @@ void MemCard_UpdateSavePolling(void)
       }
       Menu_CreateNotificationDialog(0x52, 0);
       Menu_SetDeferredCallback(MemCard_StartActivePortRead);
-      goto timeout_prompt_pending;
+      g_MemCardActivePromptPending = 1;
       }
+      else
+      {
       timeout_expired:
       Menu_CreateNotificationDialog(0x3C, 0);
 
       Menu_SetDeferredCallback(MemCard_ClearActivePrompt);
-      timeout_prompt_pending:
       g_MemCardActivePromptPending = 1;
 
       goto timeout_clear;
       timeout_cancel:
       MemCard_ClearActivePrompt();
 
+      }
       timeout_clear:
       g_MemCardSavePollTimeout = 0;
 

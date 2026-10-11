@@ -87,7 +87,8 @@ s32 Inv_TransferItem(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
             } else if (te22 == arg3) {
                 (*(s8 *)&D_800C0E22_w2) = arg1;
             }
-            goto block_34;
+            Inv_RebuildSelectableMask();
+            return var_s4;
         }
     }
     if (arg0 == 0xD) {
@@ -109,12 +110,14 @@ s32 Inv_TransferItem(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
                     var_a0 = arg3 * 2;
                     goto block_33;
                 }
-                goto block_34;
+                Inv_RebuildSelectableMask();
+                return var_s4;
             }
             goto block_35;
         }
-        goto block_35;
     }
+    else
+    {
     if (Inv_IsSlotSelectable(arg1) != 0) {
         var_a0_3 = 0;
         if ((g_InvItemPtr == &g_AyaInventoryItems) && ((g_AyaEquippedWeaponSlot == arg1) || (g_AyaEquippedArmorSlot == arg1))) {
@@ -139,6 +142,7 @@ block_34:
             Inv_RebuildSelectableMask();
             goto return_result;
         }
+    }
     }
 block_35:
     var_s4 = 0;
