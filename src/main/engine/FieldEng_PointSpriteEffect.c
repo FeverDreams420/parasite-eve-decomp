@@ -12,6 +12,8 @@
 #include "pe1/akao/commands.h"
 #include "pe1/game_audio_state.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/field_actor.h"
+#include "pe1/fixed_point.h"
 
 #define S16(base, off) (*(s16 *)((u8 *)(base) + (off)))
 
@@ -172,31 +174,29 @@ int func_800CBFBC(void) {
 int rand(void);
 int *func_800C2B10(int index);
 
-#include "FieldEng_PointSpriteEffect_externs_4.h"
 
-int func_800CBFC4(void *arg0, void *arg1, u8 *anim) {
+int func_800CBFC4(void *arg0, void *arg1, FieldAnimPointSprite *anim) {
     int x_base_a1;
     int z_base_a1;
     int x_rand;
     int z_rand;
 
-    D_800F3450 = *func_800C2B10(0);
-    D_800F3451 = *func_800C2B10(1);
-    D_800F3452 = *func_800C2B10(2);
+    D_800F3430.oriented.rgb[0] = *func_800C2B10(0);
+    D_800F3430.oriented.rgb[1] = *func_800C2B10(1);
+    D_800F3430.oriented.rgb[2] = *func_800C2B10(2);
 
     x_rand = rand();
     x_base_a1 = D_800E2290.x - 0x64;
-    *(u16 *)(anim + 0x6) = x_base_a1 + (x_rand % 201);
-    *(u16 *)(anim + 0x8) = D_800E2292;
+    anim->point.x = x_base_a1 + (x_rand % 201);
+    anim->point.y = D_800E2290.y;
 
     z_rand = rand();
-    z_base_a1 = D_800E2294 - 0x64;
-    *(u16 *)(anim + 0x4) = 0x20C;
-    anim[3] = 0x7F;
-    *(u16 *)(anim + 0xA) = z_base_a1 + (z_rand % 201);
+    z_base_a1 = D_800E2290.z - 0x64;
+    anim->extent = 0x20C;
+    anim->scale = 0x7F;
+    anim->point.z = z_base_a1 + (z_rand % 201);
 }
 
-#include "FieldEng_PointSpriteEffect_externs_5.h"
 
 void FieldAnim_InitRadialEntries(void *arg0, void *arg1, FieldAnimRadialParticles *anim) {
     u16 *base_s5;
@@ -208,9 +208,9 @@ void FieldAnim_InitRadialEntries(void *arg0, void *arg1, FieldAnimRadialParticle
     Combatant *core;
     BattleAction *mode_data;
 
-    D_800E2280 = *func_800C2B10(3);
-    D_800E2281 = *func_800C2B10(4);
-    D_800E2282 = *func_800C2B10(5);
+    D_800E2260.oriented.rgb[0] = *func_800C2B10(3);
+    D_800E2260.oriented.rgb[1] = *func_800C2B10(4);
+    D_800E2260.oriented.rgb[2] = *func_800C2B10(5);
 
     anim->scale = 0x7F;
     entity = (BattleEntity *)D_8009D254;
@@ -246,26 +246,26 @@ void FieldAnim_InitRadialEntries(void *arg0, void *arg1, FieldAnimRadialParticle
     }
 }
 
-int func_800CC244(void *arg0, void *arg1, u8 *anim) {
+int func_800CC244(void *arg0, void *arg1, FieldAnimPointSprite *anim) {
     u16 z;
 
-    *(u16 *)(anim + 6) = D_800E2290.x;
-    *(u16 *)(anim + 8) = D_800E2292;
-    z = D_800E2294;
-    *(u16 *)(anim + 4) = 0xBE8;
-    anim[3] = 0x7F;
-    *(u16 *)(anim + 0xA) = z;
+    anim->point.x = D_800E2290.x;
+    anim->point.y = D_800E2290.y;
+    z = D_800E2290.z;
+    anim->extent = 0xBE8;
+    anim->scale = 0x7F;
+    anim->point.z = z;
 }
 
-int func_800CC284(void *arg0, void *arg1, u8 *anim) {
+int func_800CC284(void *arg0, void *arg1, FieldAnimPointSprite *anim) {
     u16 z;
 
-    *(u16 *)(anim + 6) = D_800E2290.x;
-    *(u16 *)(anim + 8) = D_800E2292 - 0x64;
-    z = D_800E2294;
-    *(u16 *)(anim + 4) = 0;
-    anim[3] = 0x7F;
-    *(u16 *)(anim + 0xA) = z;
+    anim->point.x = D_800E2290.x;
+    anim->point.y = D_800E2290.y - 0x64;
+    z = D_800E2290.z;
+    anim->extent = 0;
+    anim->scale = 0x7F;
+    anim->point.z = z;
 }
 
 void func_800CC2C4(void *arg0, void *arg1, FieldAnimScatteredParticles *state)
@@ -291,15 +291,15 @@ void func_800CC2C4(void *arg0, void *arg1, FieldAnimScatteredParticles *state)
 /* Point sprite setup, draw and update callbacks, including radial and
  * scattered particle arrays. Shared payloads are declared in field_anim.h. */
 
-int func_800CC440(void *arg0, void *arg1, u8 *anim) {
+int func_800CC440(void *arg0, void *arg1, FieldAnimPointSprite *anim) {
     u16 z;
 
-    *(u16 *)(anim + 6) = D_800E2290.x;
-    *(u16 *)(anim + 8) = D_800E2292;
-    z = D_800E2294;
-    *(u16 *)(anim + 4) = 0x224;
-    anim[3] = 0x7F;
-    *(u16 *)(anim + 0xA) = z;
+    anim->point.x = D_800E2290.x;
+    anim->point.y = D_800E2290.y;
+    z = D_800E2290.z;
+    anim->extent = 0x224;
+    anim->scale = 0x7F;
+    anim->point.z = z;
 }
 
 int func_800CC480(void *arg0, FieldEngSlot *params, FieldAnimPointSprite *anim) {

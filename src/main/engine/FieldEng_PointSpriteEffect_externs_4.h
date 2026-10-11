@@ -1,6 +1,0 @@
-#ifndef PE1_EXT_8FACCB35A362
-#define PE1_EXT_8FACCB35A362
-extern u8 D_800F3450;
-extern u8 D_800F3451;
-extern u8 D_800F3452;
-#endif /* PE1_EXT_8FACCB35A362 */
