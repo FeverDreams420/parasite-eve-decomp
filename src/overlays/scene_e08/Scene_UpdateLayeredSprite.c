@@ -56,16 +56,16 @@ void func_801946D4(void *unused, char *control, char *state)
 
     *((RoomFxSeed8 *) (state + 0x86)) = *((RoomFxSeed8 *) (state + 0x50));
     /* The volatile reads preserve the retail load order. */
-    zBase = *((s32 *)(state + 8));
-    zVelocity = *((s32 *)(state + 24));
-    xVelocity = *((volatile s32 *)(state + 16));
-    yBase = *((volatile s32 *)(state + 4));
-    yVelocity = *((volatile s32 *)(state + 20));
+    zBase = ((SceneLayeredSpriteState *)state)->center[2].fixed;
+    zVelocity = ((SceneLayeredSpriteState *)state)->velocity[2];
+    xVelocity = *((volatile s32 *)&((SceneLayeredSpriteState *)state)->velocity[0]);
+    yBase = *((volatile s32 *)&((SceneLayeredSpriteState *)state)->center[1].fixed);
+    yVelocity = *((volatile s32 *)&((SceneLayeredSpriteState *)state)->velocity[1]);
     nextZ = zBase + zVelocity;
     nextY = yBase + yVelocity;
-    nextX = *((s32 *) state) + xVelocity;
+    nextX = ((SceneLayeredSpriteState *)state)->center[0].fixed + xVelocity;
     screenLimit = D_8009D1CC;
-    *((s32 *) state) = nextX;
+    ((SceneLayeredSpriteState *)state)->center[0].fixed = nextX;
     *((s32 *) (state + 4)) = nextY;
     *((s32 *) (state + 8)) = nextZ;
     zArg = (unsigned)(nextZ >> 16) << 16;
