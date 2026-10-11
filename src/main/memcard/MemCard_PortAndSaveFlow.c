@@ -464,8 +464,6 @@ void MemCard_InitManager(void) {
     } while (value >= 0);
 }
 
-u8 *Str_ResolveDataPtr(char *path);
-
 const MemCardSaveSupportData g_MemCardSaveSupportData __attribute__((used)) = {
     0x4353,
     0,
