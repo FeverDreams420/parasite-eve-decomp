@@ -154,12 +154,10 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
     RoomDebrisClock *clock;
     int i;
     RoomSpriteMatrix *projectionMatrix;
-    register char *positionCursor asm("$17");
-    register char *velocityCursor asm("$18");
-    register char *timerCursor asm("$19");
     int parameterIndex;
     RoomDebrisClock *clockResult;
     int *value;
+    RoomDebrisTriplet *particles;
     int randomValue;
 
     callOwner = owner;
@@ -222,46 +220,41 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
     }
 
     i = 0;
-    velocityCursor = (char *)workState;
-    positionCursor = (char *)workState;
-    timerCursor = (char *)workState;
+    particles = workState;
     for (; i < 3; i++) {
         randomValue = func_80071A54();
-        workState->size[i] = 0;
-        workState->countdown[i] = (randomValue % 10) + 1;
-        ((RoomDebrisTriplet *)timerCursor)->life[0] = *func_800C2B28(2);
-        ((RoomDebrisTriplet *)positionCursor)->position[0].x = clock->view.matrix.t[0] << 16;
-        ((RoomDebrisTriplet *)positionCursor)->position[0].y = clock->view.matrix.t[1] << 16;
-        ((RoomDebrisTriplet *)positionCursor)->position[0].z = clock->view.matrix.t[2] << 16;
-        ((RoomDebrisTriplet *)velocityCursor)->rotation[0].x = 0;
-        ((RoomDebrisTriplet *)velocityCursor)->rotation[0].y = 0;
-        ((RoomDebrisTriplet *)velocityCursor)->rotation[0].z = 0;
-        ((RoomDebrisTriplet *)timerCursor)->swing[0] = 0;
-        workState->mode[i] = 1;
-        workState->active[i] = 0;
-        workState->landed[i] = 0;
-        velocityCursor += 8;
-        positionCursor += 0x10;
-        timerCursor += 2;
+        particles->size[i] = 0;
+        particles->countdown[i] = (randomValue % 10) + 1;
+        particles->life[i] = *func_800C2B28(2);
+        particles->position[i].x = clock->view.matrix.t[0] << 16;
+        particles->position[i].y = clock->view.matrix.t[1] << 16;
+        particles->position[i].z = clock->view.matrix.t[2] << 16;
+        particles->rotation[i].x = 0;
+        particles->rotation[i].y = 0;
+        particles->rotation[i].z = 0;
+        particles->swing[i] = 0;
+        particles->mode[i] = 1;
+        particles->active[i] = 0;
+        particles->landed[i] = 0;
     }
 
-    workState->remaining = 3;
-    workState->speed = *func_800C2B28(0);
-    workState->acceleration = *func_800C2B28(1);
-    workState->swingLimit = *func_800C2B28(5);
-    workState->keepAlive = *func_800C2B28(4);
-    workState->reserved08 = *func_800C2B10(1);
+    particles->remaining = 3;
+    particles->speed = *func_800C2B28(0);
+    particles->acceleration = *func_800C2B28(1);
+    particles->swingLimit = *func_800C2B28(5);
+    particles->keepAlive = *func_800C2B28(4);
+    particles->reserved08 = *func_800C2B10(1);
 
     stack.projectionSeed.x = 0;
     stack.projectionSeed.y = 0;
     stack.projectionSeed.z = 0x1000;
     ApplyMatrixSV(&stack.firstMatrix, &stack.projectionSeed,
-                  (GteShortVector *)&workState->velocity[0]);
+                  (GteShortVector *)&particles->velocity[0]);
     projectionMatrix = &clock->view.matrix;
     ApplyMatrixSV(projectionMatrix, &stack.projectionSeed,
-                  (GteShortVector *)&workState->velocity[1]);
+                  (GteShortVector *)&particles->velocity[1]);
     ApplyMatrixSV(&stack.secondMatrix, &stack.projectionSeed,
-                  (GteShortVector *)&workState->velocity[2]);
+                  (GteShortVector *)&particles->velocity[2]);
     func_800C66C8(callOwner, 0x573, projectionMatrix);
 }
 
