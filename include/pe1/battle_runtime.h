@@ -39,7 +39,13 @@ extern u8 D_8009D1D4;
 extern u8 D_8009CE3C;
 extern unsigned int D_8009D2E8;
 extern int D_8009D28C;
+/* Action record the battle menu fills in (Menu_RunFrameWithArg). Its packed
+ * words are also declared on their own: retail reads each of them through
+ * its own absolute address. */
 extern BattleAction D_800A76D8;
+extern BattleEffectBits D_800A76DC;
+extern BattleAttackBits D_800A76E4;
+extern BattleTurnBits D_800A76E8;
 extern s8 D_8009D2B0;
 extern struct FieldActor *D_8009D20C; /* actor list head */
 extern void *D_8009D1F8;

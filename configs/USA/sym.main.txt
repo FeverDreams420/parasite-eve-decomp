@@ -1165,6 +1165,7 @@ BattleCmd_SetCurrentMP = 0x80051684; // type:func
 BattleCmd_CommitAndSyncAmmo = 0x800516B4; // type:func
 BattleCmd_CommitAmmoAndUpdate = 0x800518A8; // type:func
 Inv_BuildWeaponList = 0x80051980; // type:func
+g_WeaponEffectCodes = 0x800923D0;
 BattleCmd_LoadWeaponModifiers = 0x80051CC4; // type:func
 Inv_BuildArmorList = 0x80051E64; // type:func
 Inv_RecalcSlotStats = 0x8005218C; // type:func

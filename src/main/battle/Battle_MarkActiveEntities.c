@@ -2,11 +2,10 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 #include "pe1/battle.h"
+#include "pe1/battle_runtime.h"
 
-/* MASPSX_FORCE_G0 keeps these extern reads absolute; only the COMMON
- * D_8009CE6C below is gp-relative. */
-#include "Battle_MarkActiveEntities_externs.h"
-/* COMMON supplies small-data metadata to MASPSX. */
+/* MASPSX_FORCE_G0 keeps the battle globals absolute; the COMMON fade step
+ * D_8009CE6C supplies the small-data metadata of the one $gp-relative byte. */
 s8 D_8009CE6C;
 
 inline static void Mark(BattleEntity *entity)

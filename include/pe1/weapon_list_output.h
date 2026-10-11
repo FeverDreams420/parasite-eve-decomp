@@ -21,6 +21,9 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(WeaponListOutput, packed) == 0xC,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(WeaponListOutput, effects) == 0x10,
                   weapon_list_output_effects_offset);
 
+/* Low four effect bits selected by the weapon mod codes 1..5. */
+extern u8 g_WeaponEffectCodes[];
+
 void Inv_BuildWeaponList(int unused, WeaponListOutput *out);
 
 #endif

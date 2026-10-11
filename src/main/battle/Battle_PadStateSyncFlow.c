@@ -1,189 +1,63 @@
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
+
 #include "common.h"
 #include "pe1/battle.h"
+#include "pe1/battle_entity_anim.h"
+#include "pe1/battle_runtime.h"
 
-#include "Battle_PadStateSyncFlow_externs.h"
-
+/* Copy the action the battle menu chose into the player's action record. */
 void Battle_CopyPadStateToRecord(void) {
     BattleAction *record = D_8009D278->action;
-    volatile u16 *buttons = &record->field00;
-    volatile s16 *range = &record->range;
-    volatile u16 *word04 = &record->field04;
-    volatile s16 *actionId = &record->actionCode.actionId;
-    volatile s32 *word08 = &record->field08;
-    volatile u32 *attackWord = &record->attackWord;
-    volatile u32 *turnWord = &record->turnWord;
-    register u32 word_c asm("$4");
-    register u32 word_10 asm("$3");
-    u32 middle_mask = 0x000FFC00;
-    u32 middle_keep = ~0x000FFC00U;
-    u32 high_keep = ~0x00300000U;
-    u32 bit15_keep = ~0x00008000U;
-    u32 bit16_keep = ~0x00010000U;
-    u32 bit17_keep = ~0x00020000U;
+    BattleAttackBits *attack = (BattleAttackBits *)&record->attackWord;
+    BattleTurnBits *turn = (BattleTurnBits *)&record->turnWord;
 
-    word_c = *attackWord;
-    word_10 = *turnWord;
-    *buttons = D_800A76D8.field00;
-    *range = D_800A76DA;
-    *word04 = D_800A76DC;
-    *actionId = D_800A76DE;
-    *word08 = D_800A76E0;
-
-    word_c = (word_c & ~0x000003FFU) | (D_800A76E4 & 0x000003FFU);
-    *attackWord = word_c;
-    word_c = (word_c & middle_keep) | (D_800A76E4 & middle_mask);
-    high_keep = word_c & high_keep;
-    *attackWord = word_c;
-    high_keep |= D_800A76E4 & 0x00300000U;
-    *attackWord = high_keep;
-
-    word_10 = (word_10 & ~0x0000000FU) | (D_800A76E8 & 0x0000000FU);
-    *turnWord = word_10;
-    word_10 = (word_10 & ~0x00000030U) | (D_800A76E8 & 0x00000030U);
-    *turnWord = word_10;
-    word_10 = (word_10 & ~0x000000C0U) | (D_800A76E8 & 0x000000C0U);
-    *turnWord = word_10;
-    word_10 = (word_10 & ~0x00000100U) | (D_800A76E8 & 0x00000100U);
-    *turnWord = word_10;
-    word_10 = (word_10 & ~0x00000200U) | (D_800A76E8 & 0x00000200U);
-    *turnWord = word_10;
-    word_10 = (word_10 & ~0x00000400U) | (D_800A76E8 & 0x00000400U);
-    *turnWord = word_10;
-    word_10 = (word_10 & ~0x00000800U) | (D_800A76E8 & 0x00000800U);
-    *turnWord = word_10;
-    word_10 = (word_10 & ~0x00001000U) | (D_800A76E8 & 0x00001000U);
-    *turnWord = word_10;
-    word_10 = (word_10 & ~0x00006000U) | (D_800A76E8 & 0x00006000U);
-    *turnWord = word_10;
-    word_10 = (word_10 & bit15_keep) | (D_800A76E8 & 0x00008000U);
-    *turnWord = word_10;
-    word_10 = (word_10 & bit16_keep) | ((D_800A76EA & 1) << 16);
-    bit17_keep = word_10 & bit17_keep;
-    *turnWord = word_10;
-    bit17_keep |= D_800A76E8 & 0x00020000U;
-    *(u32 *)turnWord = bit17_keep;
+    record->field00 = D_800A76D8.field00;
+    record->range = D_800A76D8.range;
+    record->field04 = D_800A76D8.field04;
+    record->actionCode.actionId = D_800A76D8.actionCode.actionId;
+    record->field08 = D_800A76D8.field08;
+    attack->count = D_800A76E4.count;
+    attack->power = D_800A76E4.power;
+    attack->category = D_800A76E4.category;
+    turn->actions = D_800A76E8.actions;
+    turn->slot = D_800A76E8.slot;
+    turn->mode = D_800A76E8.mode;
+    turn->element8 = D_800A76E8.element8;
+    turn->element9 = D_800A76E8.element9;
+    turn->element10 = D_800A76E8.element10;
+    turn->element11 = D_800A76E8.element11;
+    turn->element12 = D_800A76E8.element12;
+    turn->hitState = D_800A76E8.hitState;
+    turn->flag15 = D_800A76E8.flag15;
+    turn->flag16 = D_800A76E8.flag16;
+    turn->flag17 = D_800A76E8.flag17;
 }
 
-#include "pe1/battle.h"
-#define NULL ((void *)0)
-#include "../../../tools/m2c/m2c_macros.h"
-#include "Battle_PadStateSyncFlow_externs_1.h"
-#define g_ActiveActor (*(void **)&g_ActiveActor_o)
-#define D_800A76D8 (*(u32 *)&D_800A76D8_o)
-#define D_800A76DC (*(s32 *)&D_800A76DC_o)
-#include "Battle_PadStateSyncFlow_externs_2.h"
-#define g_PadStateMirrorWord3 (*(u16 *)&D_800A76DE_o)
-#define COMBATANT_FIELD(base, type, member) \
-    (*(type)((char *)(base) + PE1_OFFSETOF(Combatant, member)))
-#define ATTRIBUTE_FIELD(base, type, member) \
-    (*(type)((char *)(base) + PE1_OFFSETOF(BattleAttributes, member)))
-
+/* Copy the enemy attributes the menu record carries into the active actor. */
 void Battle_SyncEnemyAttributes(void) {
-    u32 *p76d8;
-    register u32 tdc asm("$3");
-    s32 kFF00000;
-    s32 tfinal;
-    s32 k20000;
-    register s32 effectWord asm("$2");
-    s32 kFFC00;
-    s32 kFFF003FF;
-    s32 kF00FFFFF;
-    s32 k0FFFFFFF;
-    s32 kFFFF7FFF;
-    s32 kFFFEFFFF;
-    register s32 kFFFDFFFF asm("$9");
-    s32 km400;
-    s32 temp_a0;
-    s32 temp_a0_2;
-    s32 temp_a2;
-    s32 temp_v0;
-    s32 temp_v0_10;
-    s32 temp_v0_11;
-    s32 temp_v0_12;
-    s32 temp_v0_13;
-    s32 temp_v0_2;
-    s32 temp_v0_3;
-    s32 temp_v0_4;
-    s32 temp_v0_5;
-    s32 temp_v0_6;
-    s32 temp_v0_7;
-    s32 temp_v0_8;
-    s32 temp_v0_9;
-    void *temp_a3;
+    BattleAttributes *source = (BattleAttributes *)&D_800A76D8;
+    BattleAttributes *attributes = g_ActiveActor->attributes;
+    BattleEffectBits *effects = (BattleEffectBits *)&attributes->effectFlags;
 
-    kFFC00 = 0xFFC00;
-    kFFF003FF = 0xFFF003FF;
-    kF00FFFFF = 0xF00FFFFF;
-    k0FFFFFFF = 0x0FFFFFFF;
-    kFFFF7FFF = 0xFFFF7FFF;
-    kFFFEFFFF = 0xFFFEFFFF;
-    kFFFDFFFF = 0xFFFDFFFF;
-    p76d8 = (u32 *)&D_800A76D8_o;
-    km400 = -0x400;
-    temp_a3 = COMBATANT_FIELD(g_ActiveActor, void **, attributes);
-    tdc = *p76d8;
-    temp_a0 = (ATTRIBUTE_FIELD(temp_a3, s32 *, parameterWord) & km400) | (tdc & 0x3FF);
-    effectWord = ATTRIBUTE_FIELD(temp_a3, s32 *, effectFlags);
-    ATTRIBUTE_FIELD(temp_a3, s32 *, parameterWord) = temp_a0;
-    tdc = *p76d8;
-    temp_a0_2 = (temp_a0 & kFFF003FF) | (tdc & kFFC00);
-    ATTRIBUTE_FIELD(temp_a3, s32 *, parameterWord) = temp_a0_2;
-    tdc = *p76d8;
-    temp_a2 = temp_a0_2 & kF00FFFFF;
-    kFF00000 = 0x0FF00000;
-    temp_a2 = temp_a2 | (tdc & kFF00000);
-    ATTRIBUTE_FIELD(temp_a3, s32 *, parameterWord) = temp_a2;
-    tdc = *p76d8;
-    ATTRIBUTE_FIELD(temp_a3, s32 *, parameterWord) = (s32)((temp_a2 & k0FFFFFFF) | ((tdc >> 0x1C) << 0x1C));
-    tdc = (*(s32 *)&D_800A76DC_o);
-    temp_v0 = (effectWord & ~1) | (tdc & 1);
-    ATTRIBUTE_FIELD(temp_a3, s32 *, effectFlags) = temp_v0;
-    tdc = (*(s32 *)&D_800A76DC_s1);
-    temp_v0_2 = (temp_v0 & ~2) | (tdc & 2);
-    ATTRIBUTE_FIELD(temp_a3, s32 *, effectFlags) = temp_v0_2;
-    tdc = (*(s32 *)&D_800A76DC_s2);
-    temp_v0_3 = (temp_v0_2 & ~4) | (tdc & 4);
-    ATTRIBUTE_FIELD(temp_a3, s32 *, effectFlags) = temp_v0_3;
-    tdc = (*(s32 *)&D_800A76DC_s3);
-    temp_v0_4 = (temp_v0_3 & ~8) | (tdc & 8);
-    ATTRIBUTE_FIELD(temp_a3, s32 *, effectFlags) = temp_v0_4;
-    tdc = (*(s32 *)&D_800A76DC_s4);
-    temp_v0_5 = (temp_v0_4 & ~0x10) | (tdc & 0x10);
-    ATTRIBUTE_FIELD(temp_a3, s32 *, effectFlags) = temp_v0_5;
-    tdc = (*(s32 *)&D_800A76DC_s5);
-    temp_v0_6 = (temp_v0_5 & ~0x1E0) | (tdc & 0x1E0);
-    ATTRIBUTE_FIELD(temp_a3, s32 *, effectFlags) = temp_v0_6;
-    tdc = (*(s32 *)&D_800A76DC_s6);
-    temp_v0_7 = (temp_v0_6 & ~0x200) | (tdc & 0x200);
-    ATTRIBUTE_FIELD(temp_a3, s32 *, effectFlags) = temp_v0_7;
-    tdc = (*(s32 *)&D_800A76DC_s7);
-    temp_v0_8 = (temp_v0_7 & ~0x400) | (tdc & 0x400);
-    ATTRIBUTE_FIELD(temp_a3, s32 *, effectFlags) = temp_v0_8;
-    tdc = (*(s32 *)&D_800A76DC_s8);
-    temp_v0_9 = (temp_v0_8 & ~0x800) | (tdc & 0x800);
-    ATTRIBUTE_FIELD(temp_a3, s32 *, effectFlags) = temp_v0_9;
-    tdc = (*(s32 *)&D_800A76DC_s9);
-    temp_v0_10 = (temp_v0_9 & ~0x1000) | (tdc & 0x1000);
-    ATTRIBUTE_FIELD(temp_a3, s32 *, effectFlags) = temp_v0_10;
-    tdc = (*(s32 *)&D_800A76DC_s10);
-    temp_v0_11 = (temp_v0_10 & ~0x2000) | (tdc & 0x2000);
-    ATTRIBUTE_FIELD(temp_a3, s32 *, effectFlags) = temp_v0_11;
-    tdc = (*(s32 *)&D_800A76DC_s11);
-    temp_v0_12 = (temp_v0_11 & ~0x4000) | (tdc & 0x4000);
-    ATTRIBUTE_FIELD(temp_a3, s32 *, effectFlags) = temp_v0_12;
-    tdc = (*(s32 *)&D_800A76DC_s12);
-    temp_v0_13 = temp_v0_12 & kFFFF7FFF;
-    temp_v0_13 = temp_v0_13 | (tdc & 0x8000);
-    ATTRIBUTE_FIELD(temp_a3, s32 *, effectFlags) = temp_v0_13;
-    tdc = g_PadStateMirrorWord3;
-    effectWord = temp_v0_13 & kFFFEFFFF;
-    effectWord = effectWord | ((tdc & 1) << 0x10);
-    tfinal = effectWord & kFFFDFFFF;
-    ATTRIBUTE_FIELD(temp_a3, s32 *, effectFlags) = effectWord;
-    effectWord = (*(s32 *)&D_800A76DC_s13);
-    k20000 = 0x20000;
-    ATTRIBUTE_FIELD(temp_a3, s32 *, effectFlags) = (s32)(tfinal | (effectWord & k20000));
+    attributes->parameterWord.fields.first = source->parameterWord.fields.first;
+    attributes->parameterWord.fields.second = source->parameterWord.fields.second;
+    attributes->parameterWord.fields.third = source->parameterWord.fields.third;
+    attributes->parameterWord.fields.reserved = source->parameterWord.fields.reserved;
+    effects->resistPoison = D_800A76DC.resistPoison;
+    effects->resistConfusion = D_800A76DC.resistConfusion;
+    effects->resistDarkness = D_800A76DC.resistDarkness;
+    effects->resistStiffness = D_800A76DC.resistStiffness;
+    effects->resistSteal = D_800A76DC.resistSteal;
+    effects->armorMode = D_800A76DC.armorMode;
+    effects->mod14 = D_800A76DC.mod14;
+    effects->mod16 = D_800A76DC.mod16;
+    effects->mod11 = D_800A76DC.mod11;
+    effects->mod17 = D_800A76DC.mod17;
+    effects->mod12 = D_800A76DC.mod12;
+    effects->autoMedicine = D_800A76DC.autoMedicine;
+    effects->autoCure = D_800A76DC.autoCure;
+    effects->mod13 = D_800A76DC.mod13;
+    effects->mod15 = D_800A76DC.mod15;
 }
-
-#undef ATTRIBUTE_FIELD
-#undef COMBATANT_FIELD

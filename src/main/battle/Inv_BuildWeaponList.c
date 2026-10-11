@@ -1,9 +1,9 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 #include "pe1/inventory_slots.h"
-void Inv_SelectActiveList(int);
-#include "Inv_BuildWeaponList_externs.h"
+#include "pe1/inventory_queries.h"
 #include "pe1/weapon_list_output.h"
+
 static inline int ClampStat(ItemDataRecord *item, int which) {
     int value = item->baseStats[which] + item->bonusStats[which];
     int result = 999;
@@ -65,7 +65,7 @@ void Inv_BuildWeaponList(int unused, WeaponListOutput *out) {
             {
                 register u32 mask asm("$4") = -16;
                 u32 flags = out->effects;
-                register u32 bits asm("$3") = D_800923D0[effect];
+                register u32 bits asm("$3") = g_WeaponEffectCodes[effect];
                 out->effects = (flags & mask) | (bits & 15);
             }
             break;

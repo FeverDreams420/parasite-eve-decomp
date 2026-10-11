@@ -346,6 +346,55 @@ typedef struct BattleAction {
                                /* ... continues; rest unmapped */
 } BattleAction;
 
+/* Bit layouts of the packed BattleAction and BattleAttributes words. Retail
+ * copies the menu's action record into the actor field by field, so the
+ * copies read and write these words through bitfield views. */
+typedef struct BattleAttackBits {
+    u32 count : 10;    /* shots/hits left, consumed per hit */
+    u32 power : 10;
+    u32 category : 2;  /* weapon category */
+    u32 reserved : 10;
+} BattleAttackBits;
+
+typedef struct BattleTurnBits {
+    u32 actions : 4;   /* remaining actions */
+    u32 slot : 2;      /* active turn slot */
+    u32 mode : 2;      /* target mode */
+    u32 element8 : 1;  /* 0x100..0x1000: attack elements */
+    u32 element9 : 1;
+    u32 element10 : 1;
+    u32 element11 : 1;
+    u32 element12 : 1;
+    u32 hitState : 2;
+    u32 flag15 : 1;
+    u32 flag16 : 1;
+    u32 flag17 : 1;
+    u32 reserved : 14;
+} BattleTurnBits;
+
+typedef struct BattleEffectBits {
+    u32 resistPoison : 1;
+    u32 resistConfusion : 1;
+    u32 resistDarkness : 1;
+    u32 resistStiffness : 1;
+    u32 resistSteal : 1;
+    u32 armorMode : 4; /* one bit per armor mod 8..10 */
+    u32 mod14 : 1;     /* bits 9..13 and 16..17: armor mod flags */
+    u32 mod16 : 1;
+    u32 mod11 : 1;
+    u32 mod17 : 1;
+    u32 mod12 : 1;
+    u32 autoMedicine : 1;
+    u32 autoCure : 1;
+    u32 mod13 : 1;
+    u32 mod15 : 1;
+    u32 reserved : 14;
+} BattleEffectBits;
+
+PE1_STATIC_ASSERT(sizeof(BattleAttackBits) == 4, battle_attack_bits_size);
+PE1_STATIC_ASSERT(sizeof(BattleTurnBits) == 4, battle_turn_bits_size);
+PE1_STATIC_ASSERT(sizeof(BattleEffectBits) == 4, battle_effect_bits_size);
+
 /* ----------------------------------------------------------------------------
  * BattleEntity -- the field-actor / linked-list node. g_PlayerEntity and every
  * g_FieldActorListHead node point here. This is very likely the same field-
