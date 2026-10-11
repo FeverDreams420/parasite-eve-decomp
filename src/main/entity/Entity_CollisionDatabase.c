@@ -10,13 +10,12 @@
 extern char *D_800B1620[];
 extern char *g_SceneDataTable2;
 extern short g_FieldCollisionTriIndex;
-extern short D_8009CE1C;
-extern short D_8009CE20;
-extern short D_8009CE24;
-extern short D_8009CE28;
+/* Same declarations as field_collision.h, which this -G8 unit cannot
+ * include: it clears the edge points through absolute byte views. */
+extern unsigned short D_8009CE1C, D_8009CE20, D_8009CE24, D_8009CE28;
 extern short g_EntityCollisionMoveDelta;
 extern short g_EntityCollisionWallParam;
-extern int D_8009DFB0[];
+extern unsigned int D_8009DFB0[];
 
 extern char D_8009CE0C[];
 extern char D_8009CE0E[];
@@ -24,7 +23,7 @@ extern char D_8009CE0E[];
 void Entity_ResetStateGlobals(void) {
     unsigned int i;
     unsigned int count;
-    int *ptr;
+    unsigned int *ptr;
 
     g_RegionHeightTable = 0;
 
