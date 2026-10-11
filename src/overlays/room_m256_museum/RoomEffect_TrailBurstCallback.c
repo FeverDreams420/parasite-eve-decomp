@@ -54,7 +54,7 @@ s32 func_801940B0(int mode, void *effect) {
     char *historySample;
     s16 *spriteFrame;
     register int pulseExtent asm("$3");
-    register int spriteExtent asm("$6");
+    int spriteExtent;
     unsigned spritePalette;
     int spriteClutY;
     int translationZ;
@@ -279,7 +279,7 @@ s32 func_801940B0(int mode, void *effect) {
         case 3:
             nextModelFrame = (u16) state->frame + 1;
             state->frame = nextModelFrame;
-            asm volatile("" : "=r"(nextModelFrame) : "0"(nextModelFrame), "m"(state->frame));
+            asm("" : "=r"(nextModelFrame) : "0"(nextModelFrame), "m"(state->frame));
             alive = (s16)nextModelFrame < 0xA;
             if (alive == 0) {
                 return 1;
@@ -288,7 +288,7 @@ s32 func_801940B0(int mode, void *effect) {
         case 4:
             nextSpriteFrame = (u16) state->frame + 1;
             state->frame = nextSpriteFrame;
-            asm volatile("" : "=r"(nextSpriteFrame) : "0"(nextSpriteFrame), "m"(state->frame));
+            asm("" : "=r"(nextSpriteFrame) : "0"(nextSpriteFrame), "m"(state->frame));
             alive = (s16)nextSpriteFrame < 0x10;
             if (alive == 0) {
                 return 1;
@@ -337,7 +337,7 @@ checkLifetime:
             params = &D_800F3368;
             spriteExtent = 0x10;
             spriteClutY = D_800E1208;
-            asm("" : "=r"(params), "=r"(spriteExtent), "=r"(spriteClutY) : "0"(params), "1"(spriteExtent), "2"(spriteClutY));
+            asm("" : "=r"(params), "=r"(spriteClutY) : "0"(params), "1"(spriteClutY), "r"(spriteExtent));
             palettes = (RoomM256TrailPalettes *)&D_800E11E8;
             asm("" : "=r"(palettes) : "0"(palettes));
             params->parameter00 = spriteExtent;
