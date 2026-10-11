@@ -6,11 +6,6 @@
 #include "pe1/asset_find.h"
 #include "pe1/render_buffers.h"
 
-typedef struct RenderAnimVramCounter {
-    int value;
-    char reserved[8];
-} RenderAnimVramCounter;
-
 typedef struct RenderAnimFrameData {
     u8 reserved00[2];
     s16 frameCount;
@@ -53,10 +48,8 @@ extern int g_BattleAttackAnimFrame;
 extern struct Combatant *g_ActiveActor;
 extern struct FieldActor *g_PlayerEntity;
 extern int g_ActiveDrawSlot;
-extern RenderAnimVramCounter g_RenderAnimVramOffset;
-/* Distinct views reproduce the original load and later update. */
-extern RenderAnimVramCounter g_RenderAnimVramOffsetLoad asm("g_RenderAnimVramOffset");
-extern RenderAnimVramCounter g_RenderAnimVramOffsetUpdate asm("g_RenderAnimVramOffset");
+/* Byte offset of the next free packet in the current draw buffer. */
+extern int D_8009CDD8;
 extern void *D_800B0DF8[3];
 
 void Render_SetGteScreenOffset(void);

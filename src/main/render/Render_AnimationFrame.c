@@ -68,8 +68,8 @@ void Render_AnimationFrame(void) {
                                        size, width & 0xFFFE,
                                        g_OtBufferTable[draw_index] + 8,
                                        g_RenderAnimBufferBase[draw_index] +
-                                           g_RenderAnimVramOffsetLoad.value);
-    g_RenderAnimVramOffset.value = g_RenderAnimVramOffsetUpdate.value + delta;
+                                           D_8009CDD8);
+    D_8009CDD8 += delta;
 
     Render_ResetGteScreenOffset();
     g_BattleAttackAnimFrame++;
