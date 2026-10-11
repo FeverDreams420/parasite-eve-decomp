@@ -87,7 +87,7 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     D_80192C18.offset = -100;
     D_80192C28.cell = 8;
     clut = 2;
-    PE1_COMPILER_MEMORY_BARRIER();
+    asm volatile("" : : "m"(D_80192C18));
     primary = &D_80192C08;
     primary->g = c40;
     D_80192C18.g = c40;
