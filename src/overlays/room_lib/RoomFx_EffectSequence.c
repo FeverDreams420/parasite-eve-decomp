@@ -123,100 +123,100 @@ void RoomFx_EffectSequenceNopA(void) {
     *func_800C2B10(index) = (value); \
     ROOMLIB_EFFECT_CALL(command)
 
-void RoomFx_ConfigureEffectSequence(int owner, void *signal)
+void RoomFx_ConfigureEffectSequence(int owner, RoomFxControl *signal)
 {
     short counter;
     int mode3;
     int mode4;
 
     if (*func_800C2B28(0) == 0) {
-        if (RW16(signal, 2) == 0) {
+        if (signal->frame == 0) {
             *func_800C2B10(1) = 0;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
-        counter = RW16(signal, 2);
+        counter = signal->frame;
         if (counter == 10) {
             *func_800C2B10(1) = counter;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
-        if (RW16(signal, 2) == 20) {
+        if (signal->frame == 20) {
             *func_800C2B10(1) = 8;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
-        if (RW16(signal, 2) == 30) {
+        if (signal->frame == 30) {
             *func_800C2B10(1) = 15;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
-        if (RW16(signal, 2) == 40) {
+        if (signal->frame == 40) {
             *func_800C2B10(1) = 4;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
-        if (RW16(signal, 2) == 50) {
+        if (signal->frame == 50) {
             *func_800C2B10(1) = 18;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
-        if (RW16(signal, 2) == 60) {
+        if (signal->frame == 60) {
             *func_800C2B10(1) = 2;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
-        if (RW16(signal, 2) == 70) {
+        if (signal->frame == 70) {
             *func_800C2B10(1) = 9;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
-        if (RW16(signal, 2) == 80) {
+        if (signal->frame == 80) {
             *func_800C2B10(1) = 3;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
-        if (RW16(signal, 2) == 90) {
+        if (signal->frame == 90) {
             *func_800C2B10(1) = 19;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
-        if (RW16(signal, 2) == 100) {
+        if (signal->frame == 100) {
             *func_800C2B10(1) = 20;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
-        if (RW16(signal, 2) == 110) {
+        if (signal->frame == 110) {
             *func_800C2B10(1) = 22;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
-        if (RW16(signal, 2) == 120) {
+        if (signal->frame == 120) {
             *func_800C2B10(1) = 12;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
-        if (RW16(signal, 2) == 130) {
+        if (signal->frame == 130) {
             *func_800C2B10(1) = 17;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
     }
 
     if (*func_800C2B28(0) == 1) {
-        if (RW16(signal, 2) == 0) {
+        if (signal->frame == 0) {
             *func_800C2B10(1) = 5;
             ROOMLIB_EFFECT_SET(2, 80, 1);
         }
-        if (RW16(signal, 2) == 3) {
+        if (signal->frame == 3) {
             *func_800C2B10(1) = 6;
             ROOMLIB_EFFECT_SET(2, 80, 1);
         }
-        if (RW16(signal, 2) == 6) {
+        if (signal->frame == 6) {
             *func_800C2B10(1) = 5;
             ROOMLIB_EFFECT_SET(2, 40, 1);
         }
-        if (RW16(signal, 2) == 9) {
+        if (signal->frame == 9) {
             *func_800C2B10(1) = 6;
             ROOMLIB_EFFECT_SET(2, 40, 1);
         }
-        if (RW16(signal, 2) == 12) {
+        if (signal->frame == 12) {
             *func_800C2B10(1) = 5;
             ROOMLIB_EFFECT_SET(2, 20, 1);
         }
-        if (RW16(signal, 2) == 15) {
+        if (signal->frame == 15) {
             *func_800C2B10(1) = 6;
             ROOMLIB_EFFECT_SET(2, 20, 1);
         }
     }
 
-    if (*func_800C2B28(0) == 2 && RW16(signal, 2) == 0) {
+    if (*func_800C2B28(0) == 2 && signal->frame == 0) {
         ROOMLIB_EFFECT_CALL(6);
         ROOMLIB_EFFECT_CALL(6);
         ROOMLIB_EFFECT_CALL(6);
@@ -234,7 +234,7 @@ void RoomFx_ConfigureEffectSequence(int owner, void *signal)
         ROOMLIB_EFFECT_SET(1, 100, 4);
     }
 
-    if (*func_800C2B28(0) == 5 && RW16(signal, 2) == 0) {
+    if (*func_800C2B28(0) == 5 && signal->frame == 0) {
         ROOMLIB_EFFECT_CALL(6);
         ROOMLIB_EFFECT_CALL(6);
         ROOMLIB_EFFECT_CALL(6);
@@ -253,7 +253,7 @@ void RoomFx_ConfigureEffectSequence(int owner, void *signal)
     }
 
     mode3 = *func_800C2B28(0);
-    if (mode3 == 3 && RW16(signal, 2) == 0) {
+    if (mode3 == 3 && signal->frame == 0) {
         *func_800C2B10(2) = -1;
         ROOMLIB_EFFECT_SET(1, 1, 3);
         ROOMLIB_EFFECT_SET(1, mode3, 3);
@@ -274,7 +274,7 @@ void RoomFx_ConfigureEffectSequence(int owner, void *signal)
     }
 
     mode4 = *func_800C2B28(0);
-    if (mode4 == 4 && RW16(signal, 2) == 0) {
+    if (mode4 == 4 && signal->frame == 0) {
         *func_800C2B10(2) = -1;
         ROOMLIB_EFFECT_SET(1, 2, 2);
         ROOMLIB_EFFECT_SET(1, mode4, 2);
@@ -302,7 +302,7 @@ void RoomFx_ConfigureEffectSequence(int owner, void *signal)
     }
 
     if (func_800C2B68() == 1) {
-        RW8(signal, 1) = 2;
+        signal->state = 2;
     }
 }
 

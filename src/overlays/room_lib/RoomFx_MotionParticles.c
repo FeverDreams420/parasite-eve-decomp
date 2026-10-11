@@ -132,14 +132,14 @@ void RoomFx_MotionParticlesNop(void) {
 ROOM_REARM_TIMER_TICK(RoomFx_MotionParticlesTick, 0x64)
 
 void RoomFx_MotionParticlesAnchor(int a0, int a1, short *out) {
-    char *ctx = (char *)func_800C2B50();
+    RoomMotionInitState *ctx = func_800C2B50();
 
-    out[0] = RW32(ctx, 0x58);
-    out[1] = RW32(ctx, 0x5C);
-    out[2] = RW32(ctx, 0x60);
-    out[4] = RW32(ctx, 0x38);
-    out[5] = RW32(ctx, 0x3C);
-    out[6] = RW32(ctx, 0x40);
+    out[0] = ctx->primary.t[0];
+    out[1] = ctx->primary.t[1];
+    out[2] = ctx->primary.t[2];
+    out[4] = ctx->secondary.t[0];
+    out[5] = ctx->secondary.t[1];
+    out[6] = ctx->secondary.t[2];
     out[9] = 0;
     out[8] = 0x400;
 }
@@ -248,19 +248,19 @@ void RoomFx_DrawAnchoredSpriteQuad(void *unused0, void *unused1,
     func_800C42A4((FieldGlowSprite *)fx, matrix, 1);
 }
 
-void RoomFx_UpdateTimedFade(void *arg0, char *state, char *obj) {
-    char *p = obj;
-    if ((unsigned short)(RWU16(state, 2) - 1) < 7U) {
-        RWU16(obj, 0x12) += 0x10;
+void RoomFx_UpdateTimedFade(void *arg0, RoomFxControl *state, RoomAnchoredSpriteState *obj) {
+    RoomAnchoredSpriteState *p = obj;
+    if ((unsigned short)((unsigned short)state->frame - 1) < 7U) {
+        obj->depth += 0x10;
     }
-    if ((unsigned short)(RWU16(state, 2) - 0x15) < 0x1DU) {
-        RWU16(obj, 0x10) += 0x28;
+    if ((unsigned short)((unsigned short)state->frame - 0x15) < 0x1DU) {
+        obj->scale += 0x28;
     }
-    if (RW16(state, 2) >= 0x33 && RW16(p, 0x12) >= 0x11) {
-        RWU16(p, 0x12) -= 0x10;
+    if (state->frame >= 0x33 && (s16)p->depth >= 0x11) {
+        p->depth -= 0x10;
     }
-    if (RW16(state, 2) == 0x3A) {
-        RW8(state, 1) = 2;
+    if (state->frame == 0x3A) {
+        state->state = 2;
     }
 }
 
@@ -378,15 +378,15 @@ void RoomFx_DrawAnchoredSpritePair(void *unused0, void *unused1,
     func_800C4FC4(renderState, matrix, 1);
 }
 
-void RoomFx_StepSpritePair(void *arg0, char *state, char *obj) {
-    if (RW16(state, 2) < 0x10) {
-        RWU16(obj, 0x10) += 0xF0;
-        if (RW16(state, 2) < 0x10) {
-            RWU16(obj, 0x12) -= 8;
+void RoomFx_StepSpritePair(void *arg0, RoomFxControl *state, RoomAnchoredSpriteState *obj) {
+    if (state->frame < 0x10) {
+        obj->scale += 0xF0;
+        if (state->frame < 0x10) {
+            obj->depth -= 8;
         }
     }
-    if (RW16(state, 2) == 0x10) {
-        RW8(state, 1) = 2;
+    if (state->frame == 0x10) {
+        state->state = 2;
     }
 }
 
