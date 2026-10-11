@@ -26,7 +26,7 @@ void Scene_LoadSceneData(void) {
     RECT rect;
     Pe1GameState *state;
     s32 lba;
-    u8 *p0;
+    u16 *p0;
     s32 t;
     s32 flag;
     u8 *src;
@@ -43,8 +43,8 @@ void Scene_LoadSceneData(void) {
     ClearImage(&rect, 0, 0, 1);
 
 restart1:
-    p0 = (u8 *)&D_800930DC_o;
-    while (CdRom_ReadSectorsFromLba(lba + *(u16 *)p0, (void *)(s32)&D_800A8028_o, *(u16 *)(p0 + 2) - *(u16 *)p0) == -1) {}
+    p0 = (u16 *)&D_800930DC_o;
+    while (CdRom_ReadSectorsFromLba(lba + p0[0], (void *)(s32)&D_800A8028_o, p0[1] - p0[0]) == -1) {}
     t = 1;
     do {
         if (t == -1) {
@@ -55,8 +55,8 @@ restart1:
 
     flag = 0;
 restart2:
-    p0 = (u8 *)&D_800930DE_o;
-    while (CdRom_ReadSectorsFromLba(lba + *(u16 *)p0, state->scene_load_scratch, *(u16 *)(p0 + 2) - *(u16 *)p0) == -1) {}
+    p0 = (u16 *)&D_800930DE_o;
+    while (CdRom_ReadSectorsFromLba(lba + p0[0], state->scene_load_scratch, p0[1] - p0[0]) == -1) {}
     t = 1;
     do {
         if (flag == 0) {
@@ -92,8 +92,8 @@ restart2:
     state->startup_resource_tables[1] = Asset_FindTable08ByU32Key(state->startup_resource_blob, 0x57D41D84);
 
 restart3:
-    p0 = (u8 *)&D_800930E4_o;
-    while (CdRom_ReadSectorsFromLba(lba + *(u16 *)p0, state->scene_load_scratch, *(u16 *)(p0 + 2) - *(u16 *)p0) == -1) {}
+    p0 = (u16 *)&D_800930E4_o;
+    while (CdRom_ReadSectorsFromLba(lba + p0[0], state->scene_load_scratch, p0[1] - p0[0]) == -1) {}
     t = 1;
     do {
         if (t == -1) {
@@ -105,8 +105,8 @@ restart3:
     Spu_UploadSampleBlockBlocking(*(s32 *)&D_800B0E6C_o, 1);
 
 restart4:
-    p0 = (u8 *)&D_800930E6_o;
-    while (CdRom_ReadSectorsFromLba(lba + *(u16 *)p0, state->scene_load_scratch, *(u16 *)(p0 + 2) - *(u16 *)p0) == -1) {}
+    p0 = (u16 *)&D_800930E6_o;
+    while (CdRom_ReadSectorsFromLba(lba + p0[0], state->scene_load_scratch, p0[1] - p0[0]) == -1) {}
     t = 1;
     do {
         if (t == -1) {

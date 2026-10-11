@@ -132,7 +132,7 @@ void Battle_ApplySpellEffect(u32 idx, BattleEntity *ent) {
     dmg = 0;
     if (!(g_GameStateFlags & 2)) {
         soundTable = D_80010760;
-        Akao_SendPositionalCmdStereo(soundTable.soundId[idx], 1, *(s16 *)(D254A + 0x2A), *(s16 *)(D254A + 0x2E), *(s16 *)(D254A + 0x32));
+        Akao_SendPositionalCmdStereo(soundTable.soundId[idx], 1, ((BattleEntity *)D254A)->posX.parts.integer, ((BattleEntity *)D254A)->posY.parts.integer, ((BattleEntity *)D254A)->posZ.parts.integer);
         D278_1 = *(u8 **)D254B;
     }
     switch (idx) {

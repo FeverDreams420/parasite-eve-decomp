@@ -1344,7 +1344,7 @@ void Battle_StartDeathAnim(void) {
         {
             u8 *q;
             q = D254_B;
-            func_8006DE80(0x45B, 0, *(s16 *) (q + 0x2A), *(s16 *) (q + 0x2E), (s32) *(s16 *) (q + 0x32));
+            func_8006DE80(0x45B, 0, ((BattleEntity *)q)->posX.parts.integer, ((BattleEntity *)q)->posY.parts.integer, (s32)((BattleEntity *)q)->posZ.parts.integer);
         }
     }
 }
