@@ -442,7 +442,7 @@ extern s8 D_800A219A[];
 #define D_800A219A (D_800A219A[0])
 extern s8 D_800A219B[];
 #define D_800A219B (D_800A219B[0])
-extern s32 g_DrawBufferOtBases[];
+extern u8 *g_DrawBufferOtBases[];
 extern s32 g_DrawBufferFrontBases[];
 extern s8 D_800A2210[];
 #define D_800A2210 (D_800A2210[0])
@@ -457,8 +457,6 @@ extern s32 D_800A2268[];
 extern s32 D_800A226C[];
 #define D_800A226C (D_800A226C[0])
 extern s32 g_TextCursorStackBottom[];
-extern s32 g_OtBufferTable[];
-#define g_OtBufferTable (g_OtBufferTable[0])
 
 void Draw_InitBuffers(void);
 
@@ -470,7 +468,7 @@ void Draw_InitBuffers(void) {
 
     bufferRecord->frontBufferBase = (u8 *)g_RenderFrontBufferBase[0];
     D_800A226C = g_RenderBackBufferBase[0];
-    g_DrawBufferOtBases[0] = g_OtBufferTable;
+    g_DrawBufferOtBases[0] = g_OtBufferTable[0];
     D_800A2268 = g_RenderOtBufferBaseAlt[0];
     SetDefDrawEnv(&bufferRecord->draw, 0, 0, 0x140, 0xE0);
     SetDefDrawEnv(&bufferRecord[1].draw, 0, 0xE0, 0x140, 0xE0);

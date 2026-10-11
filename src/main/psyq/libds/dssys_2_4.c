@@ -5,12 +5,13 @@
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_ds.h"
 #include "pe1/cdrom.h"
+#include "pe1/psyq_ds_queue.h"
 
 /* These adjacent retail functions share DS queue reset state:
  * DsInit at 0x8007EC14 and DsReset at
  * 0x8007ED58. Their combined GNU 2.8.1 object preserves both code ranges. */
 extern unsigned char D_800A3515[], D_800A3525[], D_800A3535[];
-extern int D_800A3604, D_800A3600, g_CdPendingReadCount, D_800A3690;
+extern int D_800A3604, g_CdPendingReadCount, D_800A3690;
 extern void DS_stop(void);
 int DsInit(void) {
     int i, j, k, offset;
@@ -36,7 +37,7 @@ int DsInit(void) {
     }
     for (j = 0; j < 8; ++j) CQ_clear_queue(&g_CdDsReadQueue[j]);
     D_800A3604 = 0;
-    D_800A3600 = 0;
+    D_800A3600.start = 0;
     g_CdPendingReadCount = 0;
     for (k = 7, offset = 112; k >= 0; --k, offset -= 16)
         ((DsReadCallbackSlot *)((unsigned char *)g_DsReadCallbackSlots + offset))->value = 0;
@@ -75,7 +76,7 @@ int DsReset(void) {
     }
     for (j = 0; j < 8; ++j) CQ_clear_queue(&g_CdDsReadQueue[j]);
     D_800A3604 = 0;
-    D_800A3600 = 0;
+    D_800A3600.start = 0;
     g_CdPendingReadCount = 0;
     for (k = 7, offset = 112; k >= 0; --k, offset -= 16)
         *(int *)((unsigned char *)g_DsReadCallbackSlots + offset) = 0;

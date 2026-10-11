@@ -37,11 +37,9 @@ extern volatile int D_800B0E28;
 extern volatile int D_800B0E2C;
 extern volatile int D_800B0E30;
 extern volatile int D_800B0E34;
-extern volatile int g_OtBufferTable;
 extern volatile int D_800B0E40;
 extern volatile int D_800B0E44;
 extern volatile int D_800B0E48;
-extern volatile int g_RenderAnimBufferBase;
 extern volatile int D_800B0E5C;
 extern volatile int D_800B0E60;
 extern volatile int D_800B0E68;
@@ -71,7 +69,7 @@ int Gpu_InitDisplay(int mode) {
     DrawSync(0);
 
     const_48000 = 0x48000;
-    slots = &g_OtBufferTable;
+    slots = (volatile int *)g_OtBufferTable;
     asm volatile("" : "=r"(slots) : "0"(slots));
 
     ptr = (int)D_800F34F8;
@@ -90,7 +88,7 @@ int Gpu_InitDisplay(int mode) {
     D_800B0E34 = ptr2;
     ptr2 += 0x5C98;
     const_8000 = 0x8000;
-    g_OtBufferTable = ptr;
+    g_OtBufferTable[0] = (u8 *)ptr;
     ptr += const_8000;
     g_RenderOtBufferBaseAlt[0] = ptr2;
     ptr2 = ptr + 0x2400;
@@ -107,7 +105,7 @@ int Gpu_InitDisplay(int mode) {
     ptr2 = ptr + 0x3800;
     D_800B0E5C = ptr2;
     tmp = g_StrFileDirBuffer;
-    g_RenderAnimBufferBase = ptr;
+    g_RenderAnimBufferBase[0] = (u8 *)ptr;
     ptr += 0x7000;
     D_800B0E60 = ptr;
     g_SceneLoadScratchBuffer[0] = (int)D_801ED800;

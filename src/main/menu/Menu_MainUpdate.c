@@ -8,6 +8,7 @@
 #include "pe1/menu_flags.h"
 #include "pe1/asset_find.h"
 #include "pe1/pm.h"
+#include "pe1/akao/init_state.h"
 
 /* CC1_FLAGS: -g3 -G1 */
 /* MASPSX_FLAGS: --expand-div -G1 */
@@ -36,7 +37,6 @@ extern s32 D_8009D1AC;
 extern s8 D_8009D1CE[];
 extern u8 D_8009D1D4[];
 extern s32 D_8009D1E8;
-extern s32 D_8009D200;
 extern void *D_8009D20C;
 extern u8 D_8009D234[];
 extern s8 D_8009D244[];

@@ -1781,7 +1781,6 @@ void SeqOp_ClearTrack3CMask(AkaoTrack *track, u32 mask) {
     track->key_off_delay = 0;
 }
 
-extern u32_1 g_AkaoVoiceUpdateFlags;
 extern u16 g_AkaoTrack5ATransposeValue;
 
 extern u8_2 D_800B290C[];

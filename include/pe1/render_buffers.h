@@ -10,5 +10,8 @@ extern int g_RenderFrontBufferBase[];
 extern int g_RenderBackBufferBase[];
 extern int g_LoadedSceneAssetBlock[];
 extern int g_SceneLoadScratchBuffer[];
+/* Per-slot ordering tables and animation buffers. */
+extern unsigned char *g_OtBufferTable[];
+extern unsigned char *g_RenderAnimBufferBase[];
 
 #endif

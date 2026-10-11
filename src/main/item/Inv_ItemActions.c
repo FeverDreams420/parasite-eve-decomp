@@ -662,7 +662,7 @@ extern struct { char _[16]; } D_800C0E22_s0_o __asm__("g_AyaEquippedArmorSlot");
 #define D_800C0E22_l0 (*(s8 *)&D_800C0E22_l1_o)
 #define D_800C0E22_l1 (*(s8 *)&D_800C0E22_l1_o)
 #define D_800C0E22_s0 (*(s8 *)&D_800C0E22_s0_o)
-extern u16 g_BattleCountTable[];
+extern s16 g_BattleCountTable[];
 extern int g_MenuBattleCount;
 
 void Inv_DropCurrentSelectionItem(void) {
@@ -745,7 +745,7 @@ int Inv_LoadWayneItemsAsOverride(short *items) {
 
     if (items != 0) {
         int base = D_8009D03C;
-        u16 *out = g_BattleCountTable;
+        u16 *out = (u16 *)g_BattleCountTable;
         int end = base + 3;
         int id;
         while (count < 10 && (id = items[0]) != 0) {
