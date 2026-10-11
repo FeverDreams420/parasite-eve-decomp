@@ -117,13 +117,44 @@ question, not a real conflict:
 
 ### Open declaration conflicts
 
-- `func_800C42A4`: the engine callers share `pe1/field_glow_sprite.h`; about
-  twenty overlay headers and files still declare it with their own packet and
-  matrix types (79 call sites, one passing a variable mode, so the `u8`
-  parameter has to be checked there).
+`python3 tools/scripts/decl_conflicts.py --count` lists symbols declared more
+than once with different types (629 at the start of the header unification,
+232 after it). What remains falls into these groups; each is left open on
+purpose, because one declaration would change the generated code or needs a
+decision about code that is not part of this pass.
+
+- Battle: about 145 symbols are declared with conflicting types inside
+  `src/main/battle`, `src/main/main/Battle_*` and `include/pe1/battle_*`
+  (`D_8009D254`, `g_PlayerEntity`, `Pm_SendCmd`, `Pm_StopAll`,
+  `Asset_Find08w`, `Asset_Find08Alt`). Battle sources were out of scope.
+- Small data versus absolute access: `g_TaskNodePool`, `g_CurrentEntity`,
+  `g_RenderStateFlags`, `g_GameStateFlags`, `D_8009D1F4`, `D_8009D1A0`,
+  `g_SceneDispatchToken`, `D_8009D2E8`. A `-G8` unit reaches them through
+  `$gp`, another needs an absolute address; changing a symbol between scalar
+  and array changes how GCC orders the accesses (seen in
+  `Render_CameraViewportFlow` and `Entity_PoolInit`).
+- Raw views in pinned `-G8` units: `Boot_FrameLoop` (`D_800BEA40`..`D_800BEA50`,
+  `D_800BCFE8`, `D_8009D224`) needs absolute byte views, and some symbols are
+  separate on purpose so GCC does not merge their addresses.
+- `volatile` or store order that really differs between users: `D_800A76A0`
+  (a double store only `volatile` keeps), `g_GpuGp0Ptr` and `g_GpuGp1Ptr`
+  (`vram_transfer` needs plain stores), `D_800BD020`, `D_800E11E8`,
+  `D_800E1208`, `D_800E11EA` (two scene units index it as an array).
+- `D_800966EC` (trigonometry table): bitfield, union and `short[]` readers
+  index it differently.
+- Per-room struct views shared through overlay headers (`D_8018EFF4`,
+  `D_8018F1CC`, `RoomMain_ActorPtr`, the m350 and scene_e08 glow records).
+- Retail calls the same function with and without an argument:
+  `func_80020DD0`, `func_8001AA78`.
+- `g_AkaoCurTrack` is still used as a raw byte pointer by the sequencer.
+- `room_m350/RoomEffect_FadingModel.c` keeps its own `GetClut`, `rsin`, `rcos`
+  and `Asset_Find08w` declarations while that file is being edited.
 - `g_RoomFloorY`: `src/main/battle/Battle_ContextAccess.c` still reaches it
-  through a local `__asm__("D_800942EC")` alias; battle sources were out of
-  scope for the unification.
+  through a local `__asm__("D_800942EC")` alias.
+- Translation units that cannot merge: `Entity_CollisionDatabase` with
+  `Entity_UpdateList` (`-G8` against default, plus a `D_8009CE1C`
+  conflict) and `Render_EntityAndTexturedQuadFlow` with
+  `Render_DrawObjectAndClut` (GPREL relocation overflow).
 
 ## Link ownership
 
