@@ -58,9 +58,9 @@ void Boot_RunDisplay(void) {
             if (fade < 0) state = 4;
             break;
         case 4: {
-            register s32 finished asm("$2");
-            finished = D_8009D1A0;
-            if (finished & 0x30000) finished = 1;
+            u32 flags = D_8009D1A0;
+            s32 finished;
+            if (flags & 0x30000) finished = 1;
             else finished = D_80172CE4;
             D_80172CE0 = finished;
             break;
