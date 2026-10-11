@@ -394,7 +394,7 @@ extern void *D_800B0E08[];
 extern void *tableCheck[] asm("D_800B0E08");
 extern void *tableCheckAgain[] asm("D_800B0E08");
 extern void *tableAgain[] asm("D_800B0E08");
-extern int D_8009CDA4[];
+extern unsigned int D_8009CDA4[];
 extern int D_8009D188, D_8009D18C, D_8009D190;
 void Akao_Cmd_F1(void);
 void Akao_Cmd_40(void);

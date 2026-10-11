@@ -172,7 +172,10 @@ extern u32 D_8009D280;
 extern u8 D_8009CDD8_blob[] asm("D_8009CDD8");
 #define D_8009CDD8 (*(u32 *)D_8009CDD8_blob)
 extern u32 D_8009D1A0;
-extern u32 D_8009CDA4;
+/* Frame counter word: CD_TrackReadFlow reads it through an absolute
+ * address, this -G8 unit through the small-data area, so the size
+ * is given here only. */
+extern u32 D_8009CDA4[1];
 extern u8 D_8009D1F4_blob[] asm("D_8009D1F4");
 #define D_8009D1F4 (*(u32 *)D_8009D1F4_blob)
 extern u8 D_8009D238_blob[] asm("D_8009D238");
@@ -261,7 +264,7 @@ void Boot_RunFrame(void)
             flags = D_8009D1A0;
             D_8009D1A0 = flags & ~0x30u;
 
-            if (!(*(u32 *)(scene_flags - 0x12) & 0x8000) && D_8009CDA4 &&
+            if (!(*(u32 *)(scene_flags - 0x12) & 0x8000) && D_8009CDA4[0] &&
                 (D_8009D1F4 & 4) &&
                 !(D_8009D238 & 0xB0002380u)) {
                 D_8009D1A0 =
@@ -294,7 +297,7 @@ void Boot_RunFrame(void)
                     Render_SetCDDCSlot();
                 }
                 Gpu_RenderFrame();
-                if (!D_8009CDA4 && *(u32 *)fade == 0xFF00FFu &&
+                if (!D_8009CDA4[0] && *(u32 *)fade == 0xFF00FFu &&
                     *(s16 *)(fade + 4) == 0xFF && (fade[6] & 0x40)) {
                     Render_SetFadeColour(15);
                 }
@@ -312,7 +315,7 @@ after_vsync:;
             if (!(*game_flags & 0x100)) {
                 Akao_StepVoiceTable();
             }
-            D_8009CDA4++;
+            D_8009CDA4[0]++;
             if ((D_8009D1A0 & 0x2000) && (*game_flags & 0x800)) {
                 break;
             }
