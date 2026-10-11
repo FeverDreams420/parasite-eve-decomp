@@ -9,7 +9,7 @@ extern u8 D_8019AE68;
 void func_80194B5C(void);
 
 s32 func_8019A068(s32 state) {
-    char *obj;
+    GteShortVector *obj;
     RoomM273PlayerActorView *root;
     RoomM273ThresholdTransform *source;
     u8 status;
@@ -43,9 +43,9 @@ s32 func_8019A068(s32 state) {
     if (obj != 0) {
         root = ANIM_OWNER_AS(RoomM273EffectStateContext)->state.player;
         source = (RoomM273ThresholdTransform *)root->tail.object;
-        *(u16 *)(obj + 0) = source->x;
-        *(u16 *)(obj + 2) = source->y;
-        *(u16 *)(obj + 4) = source->z;
+        obj->x = source->x;
+        obj->y = source->y;
+        obj->z = source->z;
     }
     return 0;
 }

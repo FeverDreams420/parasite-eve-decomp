@@ -140,7 +140,7 @@ int func_801977F8(int mode,Vector *input) {
         int counter=D_800E27EC;
         int frame=counter-1;
         int kind=D_800F3368.palette;
-        int firstSample=*(int *)((char *)D_800966EC+(((unsigned int)(u8)frame<<8)&0x3F00));
+        int firstSample=D_800966EC[((unsigned int)(u8)frame<<6)&0xFC0].word;
         int shade,size,palette;
         int secondSample;
         unsigned short clut;
@@ -153,7 +153,7 @@ int func_801977F8(int mode,Vector *input) {
         clut=GetClut(80,palette);
         func_800CEE20(&position,(GteRotation *)&rotation,size,size,74,clut,1,shade,0);
         rotation.z>>=1;
-        secondSample=*(int *)((char *)D_800966EC+(((unsigned int)(u8)frame<<8)&0x3F00));
+        secondSample=D_800966EC[((unsigned int)(u8)frame<<6)&0xFC0].word;
         shade=secondSample>>21;
         size=(short)secondSample+1024;
         func_800D004C(&position,512,512,16,(GteRotation *)&rotation,size,size,(struct RenderColor *)D_8019AB70,(struct RenderColor *)D_8019AD74,shade,1);

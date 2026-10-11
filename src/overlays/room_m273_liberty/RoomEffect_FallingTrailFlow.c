@@ -201,7 +201,7 @@ int func_801955E8(int mode) {
         {
             u16 previousFrame =
                 *(u16 *)((u8 *)actor + 0x1A);
-        if (*(s16 *)((u8 *)actor + 0x16) < 6 ||
+        if ((s16)actor->anim.parts.integer < 6 ||
             (s16)previousFrame >= 35)
             return 0;
         }

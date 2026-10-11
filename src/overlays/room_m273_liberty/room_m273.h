@@ -121,16 +121,22 @@ typedef struct RoomPlacementState {
 
 typedef struct RoomSelectionState RoomSelectionState;
 struct RoomSelectionState {
-    u8 pad_00[8];
+    u8 status;                  /* 4 = closed */
+    u8 pad_01[2];
+    u8 flag3;                   /* RoomEnt flag3, 0xFF while armed */
+    u8 pad_04[4];
     struct FieldActor *actor;
     void (*callback)(RoomSelectionState *);
     int *signal;
-    u8 pad_14[8];
-    RenderMatrix matrix;
+    u8 pad_14[6];
+    u8 started;                 /* 0x1A */
+    u8 pad_1B;
+    RenderMatrix matrix;        /* 0x1C: grab placement, translation at 0x30 */
     u8 pad_3c[4];
     int savedX;
     int savedZ;
-    u8 pad_48[3];
+    s16 verticalTicks;          /* 0x48: RoomPlacementState.vertical_ticks */
+    u8 placementChecked;        /* 0x4A */
     u8 activated;
 };
 
@@ -180,24 +186,34 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomPlacementState, placement_checked) == 0x3E,
 
 void func_80192C00(RoomPlacementOwner *owner, RoomPlacementState *state);
 
+/* The oscillation module object (class methods func_80192E4C, the
+ * command handler func_80192E64, func_80192F5C, func_801930E8): bobs the
+ * actor up and down and reports the player angle and distance through the
+ * two output words the script hands it (command 4). Its first two words
+ * double as the choice inputs of func_80193114 (command 3). */
+typedef struct RoomOscillationParams {
+    int *angleOut;          /* 0x00 */
+    int *distanceOut;       /* 0x04 */
+    int *signal;            /* 0x08: completion word (command 5) */
+    int frame;              /* 0x0C */
+    int baseHeight;         /* 0x10 */
+    s16 active;             /* 0x14 */
+    s16 amplitude;          /* 0x16 */
+    s16 period;             /* 0x18 */
+} RoomOscillationParams;
+
 typedef struct RoomOscillationEffect {
-    u8 pad_00[8];
+    u8 status;              /* 4 = closed */
+    u8 pad_01[7];
     struct FieldActor *actor;
-    int *angleOut;
-    int *distanceOut;
-    u8 pad_14[4];
-    int frame;
-    int baseHeight;
-    s16 active;
-    s16 amplitude;
-    s16 period;
+    RoomOscillationParams params;   /* 0x0C */
 } RoomOscillationEffect;
 
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomOscillationEffect, actor) == 0x08,
                   room_oscillation_actor_offset);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomOscillationEffect, frame) == 0x18,
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomOscillationEffect, params.frame) == 0x18,
                   room_oscillation_frame_offset);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomOscillationEffect, period) == 0x24,
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomOscillationEffect, params.period) == 0x24,
                   room_oscillation_period_offset);
 
 int func_80192F5C(RoomOscillationEffect *effect);

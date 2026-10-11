@@ -23,8 +23,8 @@ int func_80199950(int mode, Effect *effect) {
         unsigned short clut;
         sizeOffset = ((unsigned int)frame << 8) & 0x3F00;
         shadeOffset = ((unsigned int)frame << 9) & 0x3E00;
-        size = *(int *)((char *)D_800966EC + sizeOffset) + 2048;
-        shade = (short)*(int *)((char *)D_800966EC + shadeOffset) >> 6;
+        size = D_800966EC[sizeOffset / 4].word + 2048;
+        shade = (short)D_800966EC[shadeOffset / 4].word >> 6;
 
         palette = D_800E1204[kind];
         clut = GetClut(0, (kind == 4 && D_800F3428) ? palette + 7 : palette + 3);

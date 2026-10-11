@@ -21,6 +21,8 @@ typedef struct { short x,y,z,phase,scaleXZ,scaleY; unsigned short parameter12,un
 typedef GteMatrix ThresholdTripleMatrix;
 typedef GteVector ThresholdTripleVector;
 typedef struct { void *asset,*pool; } AssetState;
+/* Ring band record the pair callback draws: anchor, scale and intensity. */
+typedef struct { GteShortVector position; short scale; short pad0A; short intensity; } ThresholdPairBand;
 
 extern short D_8019AC18[];
 extern int D_8019AC0C[];
@@ -32,10 +34,10 @@ void *Asset_FindTable08ByU32Key(void *base, s32 key);
 
 extern int func_80193CB8(),func_80193B5C();
 
-int func_80193B5C(int mode, void **arg1) {
+int func_80193B5C(int mode, ThresholdPairBand **arg1) {
     short params[4];
     short i;
-    void **objp = arg1;
+    ThresholdPairBand **objp = arg1;
     short *x;
     short *x_next;
     int *z;
@@ -63,10 +65,10 @@ int func_80193B5C(int mode, void **arg1) {
     params[3] = 1;
 
     do {
-        func_800D0728(*objp, x[i], x_next[i], 0x10, (GteRotation *)params,
-                      *(short *)((char *)*objp + 8), *(short *)((char *)*objp + 8),
+        func_800D0728(&(*objp)->position, x[i], x_next[i], 0x10, (GteRotation *)params,
+                      (*objp)->scale, (*objp)->scale,
                       (RenderColor *)((((int)i * 4) + (int)z)), (RenderColor *)((((int)i * 4) + (int)z_next)),
-                      *(short *)((char *)*objp + 0xC), 1);
+                      (*objp)->intensity, 1);
         i++;
     } while ((short)i < 2);
 
@@ -200,14 +202,13 @@ int func_80194128(int mode, GteRotation *rotation) {
 
         frame = D_800E27EC - 1;
         kind = D_800F3368.palette;
-        size = *(s16 *)((char *)D_800966EC + ((frame << 8) & 0x3F00));
+        size = D_800966EC[(frame << 6) & 0xFC0].part.sin;
         palette = D_800E1204[kind];
 
         clut = GetClut(0, (kind == 4 && D_800F3428) ? palette + 11 : palette + 7);
         func_800CEE20(&position, rotation, 8192, size * 3, 5, clut, 1,
                        /* The upper half of the packed trig entry is signed. */
-                       (s16)(*(s32 *)((char *)D_800966EC +
-                           ((frame << 8) & 0x3F00)) >> 16) >> 5, 0);
+                       (s16)(D_800966EC[(frame << 6) & 0xFC0].word >> 16) >> 5, 0);
     }
     return 0;
 }
@@ -272,12 +273,12 @@ int func_80194470(int mode, Vector *input) {
 
         offset = ((unsigned int)firstFrame << 9) & 0x3E00;
         frame = firstFrame;
-        size = *(short *)((char *)D_800966EC + offset) * 2 + 4096;
+        size = D_800966EC[offset / 4].part.sin * 2 + 4096;
 
         palette = D_800E1204[kind];
         clut = GetClut(0, (kind == 4 && D_800F3428) ? palette + 9 : palette + 5);
         func_800CEE20(position, 0, (short)size, (short)size, 102, clut, 1,
-            (short)((int *)D_800966EC)[(((unsigned int)frame << 10) & 0x3C00) / 4] >> 6, 0);
+            (short)D_800966EC[((unsigned int)frame << 8) & 0xF00].word >> 6, 0);
     }
     return 0;
 }

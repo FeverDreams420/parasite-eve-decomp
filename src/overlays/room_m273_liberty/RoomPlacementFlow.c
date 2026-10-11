@@ -53,9 +53,9 @@ void func_80192C00(RoomPlacementOwner *owner, RoomPlacementState *state) {
 }
 
 void func_80192D50(char *obj) {
-    char *slot = *(char **)(obj + 8);
+    FieldActor *slot = ((RoomSelectionState *)obj)->actor;
 
-    if (*(unsigned short *)(slot + 0x16) >= 0x3B) {
+    if (slot->anim.parts.integer >= 0x3B) {
         func_80192D8C((RoomSelectionState *)obj);
     }
 }
@@ -63,17 +63,16 @@ void func_80192D50(char *obj) {
 s32 func_80192D8C(RoomSelectionState *selection) {
     RoomPlacementState *placementState;
     char *target;
-    char *state;
+    FieldActorState *actorState;
 
-    target = **(char ***)&selection->actor;
+    actorState = selection->actor->state;
     placementState = (RoomPlacementState *)&selection->callback;
-    if (target != 0) {
-        state = *(char **)(target + 0x18);
-        state[0] = 4;
+    if (actorState != 0) {
+        actorState->action_state[0] = 4;
     }
 
-    **(s32 ***)&selection->signal = 0;
-    selection->pad_00[0] = 4;
+    *selection->signal = 0;
+    selection->status = 4;
     if (selection->activated != 0) {
         target = *((void **)D_8009D254);
         if (target != 0) {

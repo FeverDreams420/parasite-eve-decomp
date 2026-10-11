@@ -105,7 +105,7 @@ int func_80198060(int mode, GteShortVector *position) {
         frame = D_800E27EC;
         if (frame - 2 < 0) return 0;
 
-        sample = *(s16 *)((char *)D_800966EC + (((frame - 1) << 9) & 0x3E00) + 2);
+        sample = D_800966EC[((frame - 1) << 7) & 0xF80].part.cos;
         size = sample * 2;
         kind = D_800F3368.palette;
         /* Keep the table read before the palette lookup. */
@@ -117,8 +117,7 @@ int func_80198060(int mode, GteShortVector *position) {
         func_800CEE20(position, 0, (s16)size, (s16)size,
                        (s16)D_800F3368.parameter02 + 216, clut, 1,
                        /* The upper half of each packed trig entry is signed. */
-                       (s16)(*(s32 *)((char *)D_800966EC +
-                           (((D_800E27EC - 1) << 9) & 0x3E00)) >> 16) >> 5,
+                       (s16)(D_800966EC[((D_800E27EC - 1) << 7) & 0xF80].word >> 16) >> 5,
                        (RenderColor *)D_8019AE00);
     }
     return 0;

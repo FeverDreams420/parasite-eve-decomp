@@ -27,7 +27,7 @@ int func_80195E10(int mode, Particle *particle) {
         }
     } else if (mode == 2) {
         int frame = D_800E27EC - 1;
-        int sample = *(short *)((char *)D_800966EC + (((unsigned int)frame << 8) & 0x3F00));
+        int sample = D_800966EC[((unsigned int)frame << 6) & 0xFC0].part.sin;
         int size, kind, palette;
         register int specialKind asm("$3") = 4;
         unsigned short clut;

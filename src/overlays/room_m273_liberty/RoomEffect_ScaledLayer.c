@@ -22,8 +22,8 @@ int func_8019353C(int mode,Effect *effect) {
     } else if(mode==2) {
         short frame=D_800E27EC-1;
         /* The input vector's fourth halfword supplies the initial scale. */
-        int product=(*(short *)((char *)D_800966EC+(((unsigned int)frame<<9)&0x3E00))*2+4096)*effect->position.pad;
-        int sample=*(int *)((char *)D_800966EC+(((unsigned int)frame<<9)&0x3E00));
+        int product=(D_800966EC[((unsigned int)frame<<7)&0xF80].part.sin*2+4096)*effect->position.pad;
+        int sample=D_800966EC[((unsigned int)frame<<7)&0xF80].word;
         short size=product/4096;
         short shade=sample>>21;
         short i;
