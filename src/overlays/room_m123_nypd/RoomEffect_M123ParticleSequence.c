@@ -104,7 +104,7 @@ int func_80194768(int mode)
         outZ = output.z;
         context = ANIM_OWNER_AS(RoomM123Pool);
         /* Keep the context load ahead of the texture address. */
-        asm volatile("" : : "r"(context) : "memory");
+        asm volatile("" : : "r"(context));
         texture = D_801956A8;
         D_801956B0 = outX;
         D_801956B2 = outY;
@@ -118,8 +118,6 @@ int func_80194768(int mode)
         D_800F3368.extent_x = 16;
         D_800F3368.extent_y = 16;
         palette = D_800E2850[D_800E11EA];
-        /* Keep the palette lookup before the remaining effect-register writes. */
-        asm volatile("" : : "r"(palette) : "memory");
         D_800F3368.palette = 3;
         D_800F3368.parameter06 = 0;
         D_800F3368.parameter0A = 0;
