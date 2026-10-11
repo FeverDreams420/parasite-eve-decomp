@@ -10,20 +10,20 @@ void func_8018F8B0(void *arg0, Ovl178FadeInput *input, Ovl178FadeState *state) {
     s16 value;
 
     for (i = 0; i < 4; i++) {
-        state->field_254[i] = (u16)state->field_254[i] + 0x3C;
-        state->field_25C[i] = (u16)state->field_25C[i] + 0x80;
+        state->glowScale[i] = (u16)state->glowScale[i] + 0x3C;
+        state->glowAngle[i] = (u16)state->glowAngle[i] + 0x80;
     }
 
     for (i = 0; i < 2; i++) {
-        if (state->field_230[i] < 0) {
-            state->field_230[i] = 0;
+        if (state->ringScale[i] < 0) {
+            state->ringScale[i] = 0;
         }
-        state->field_230[i] = (u16)state->field_230[i] - 0x1E;
+        state->ringScale[i] = (u16)state->ringScale[i] - 0x1E;
     }
 
-    value = state->field_264;
+    value = state->glowDepth;
     if (value >= 3) {
-        state->field_264 = value - 2;
+        state->glowDepth = value - 2;
     }
 
     if (input->target == 0x28) {

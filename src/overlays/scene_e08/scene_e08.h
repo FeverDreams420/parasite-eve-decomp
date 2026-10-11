@@ -9,11 +9,11 @@
 typedef struct {
     RoomFxEmitterParams emitters[2];
     char sourceData[2][0x100];
-    s16 field_230[2];
+    s16 ringScale[2];       /* 0x230: shrinks by 30 per frame */
     char pad_234[0x20];
-    s16 field_254[4];
-    s16 field_25C[4];
-    s16 field_264;
+    s16 glowScale[4];       /* 0x254 */
+    s16 glowAngle[4];       /* 0x25C */
+    s16 glowDepth;          /* 0x264: fades by 2 per frame */
 } Ovl178FadeState;
 
 /* The scene object func_800C2B50 returns while the e08 effects run: its
@@ -32,8 +32,8 @@ typedef struct {
 
 typedef struct {
     u8 pad_00[8];
-    s16 field_08;
-    s16 field_0A;
+    s16 extent;             /* 0x08: grows to 3000 */
+    s16 intensity;          /* 0x0A: grows to 128 */
     s16 offsets[12];
     union {
         s16 variation[3];

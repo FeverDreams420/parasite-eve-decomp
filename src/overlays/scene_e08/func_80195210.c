@@ -11,11 +11,11 @@ void func_80195210(void *unused, Ovl178EffectController *state,
                    Ovl178RandomizedEffect *effect) {
     unsigned i;
 
-    if (effect->field_08 < 3000) {
-        effect->field_08 += 50;
+    if (effect->extent < 3000) {
+        effect->extent += 50;
     }
-    if (effect->field_0A < 128) {
-        effect->field_0A += 8;
+    if (effect->intensity < 128) {
+        effect->intensity += 8;
     }
 
     for (i = 0; i < 12; i++) {

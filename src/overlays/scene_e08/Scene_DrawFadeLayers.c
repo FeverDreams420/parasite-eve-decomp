@@ -47,18 +47,18 @@ void func_8018F640(void *unused, s16 *args, Ovl178FadeState *state) {
     func_800C3238(2);
     func_800C3134(D_801986F8, args[1], (u8 *)&D_80199670);
     for (i = 0; i < 4; ++i) {
-        seed.fields.angle = state->field_25C[i];
+        seed.fields.angle = state->glowAngle[i];
         RotMatrix(&seed.raw.vector, &matrix);
         memset(&sourceScale, 0, 0x10);
-        sourceScale.x = state->field_254[i];
-        sourceScale.y = state->field_254[i];
-        sourceScale.z = state->field_254[i];
+        sourceScale.x = state->glowScale[i];
+        sourceScale.y = state->glowScale[i];
+        sourceScale.z = state->glowScale[i];
         scale = sourceScale;
         ScaleMatrix(&matrix, &scale);
         matrix.t[0] = ownerCursor->x;
         matrix.t[1] = ownerCursor->y;
         matrix.t[2] = ownerCursor->z;
-        D_80199670.depth = state->field_264;
+        D_80199670.depth = state->glowDepth;
         func_800C42A4(&D_80199670, &matrix, 1);
     }
     for (i = 0; i < 2; ++i) {
@@ -75,9 +75,9 @@ void func_8018F640(void *unused, s16 *args, Ovl178FadeState *state) {
         matrix.m[0][2] = 0;
         matrix.m[0][1] = 0;
         memset(&sourceScale, 0, 0x10);
-        sourceScale.x = state->field_230[i];
-        sourceScale.y = state->field_230[i];
-        sourceScale.z = state->field_230[i];
+        sourceScale.x = state->ringScale[i];
+        sourceScale.y = state->ringScale[i];
+        sourceScale.z = state->ringScale[i];
         scale = sourceScale;
         ScaleMatrix(&matrix, &scale);
         matrix.t[0] = ownerCursor->x;

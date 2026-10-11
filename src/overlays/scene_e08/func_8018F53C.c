@@ -5,19 +5,19 @@ void func_8018F53C(void *unused0, void *unused1, Ovl178FadeState *state)
     unsigned i;
     int offset;
 
-    state->field_264 = 0x80;
+    state->glowDepth = 0x80;
     i = 0;
     offset = 0;
     for (; i < 4; i++) {
-        state->field_254[i] = offset;
+        state->glowScale[i] = offset;
         offset += 0x12C;
-        state->field_25C[i] = i << 10;
+        state->glowAngle[i] = i << 10;
     }
 
     for (i = 0; i < 2; i++) {
         RoomFxEmitterParams *item = &state->emitters[i];
 
-        state->field_230[i] = (i + 1) * 700;
+        state->ringScale[i] = (i + 1) * 700;
         item->mode = 0x10;
         item->intensity = 0x80;
         item->color1[0] = 0xC8;
