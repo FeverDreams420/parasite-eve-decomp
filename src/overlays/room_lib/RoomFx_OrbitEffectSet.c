@@ -18,6 +18,12 @@
 /* Copies the owner's eight words into the state, allocates the set's
  * buffer and fills the four sprite records. The register pins and launders
  * reproduce retail's assignment of the shared constants. */
+/* The script object the set belongs to and its owner actor. */
+typedef struct RoomOrbitSetEntity {
+    u8 pad00[0x8];
+    FieldActor *owner;            /* 0x08 */
+} RoomOrbitSetEntity;
+
 void RoomFx_OrbitSetInit(char *object, void *unused, char *state) {
     FieldActor *owner;
     void *allocation;
@@ -31,7 +37,7 @@ void RoomFx_OrbitSetInit(char *object, void *unused, char *state) {
     register int valueNeg42 asm("$5");
 
     func_800C2B40(state);
-    owner = *(FieldActor **)(object + 8);
+    owner = ((RoomOrbitSetEntity *)object)->owner;
     ((RoomOrbitSetState *)state)->owner = owner;
     source = owner->render_object.matrices;
     ((RoomOrbitSetState *)state)->matrix = *source;
@@ -100,7 +106,7 @@ void RoomFx_OrbitSetUpdate(void *arg0, char *event) {
 }
 
 void RoomFx_InitOrbitParticles(void *unused, void *unused2, RoomOrbitParticleState *state) {
-    char *clock = func_800C2B50();
+    RoomOrbitSetState *clock = func_800C2B50();
     unsigned int i;
     RoomOrbitParticleLaneView *particle;
 
@@ -109,9 +115,9 @@ void RoomFx_InitOrbitParticles(void *unused, void *unused2, RoomOrbitParticleSta
     while (i < 8) {
         int angle;
 
-        *(u16 *)&particle->position.x = *(s32 *)(clock + 0x18);
+        *(u16 *)&particle->position.x = clock->matrix.translation[0];
         particle->position.y = (u16)g_RoomFloorY->y;
-        particle->position.z = *(s32 *)(clock + 0x20);
+        particle->position.z = clock->matrix.translation[2];
 
         angle = func_80071A54() % 0x1000;
         particle->velocity.x = rsin(angle);
@@ -301,6 +307,16 @@ void RoomFx_DrawOrbitBurst(
     }
 }
 
+/* One burst sprite's lane through the parallel position, velocity and
+ * spin arrays, read as unsigned halfwords. */
+typedef struct RoomOrbitBurstLaneView {
+    unsigned short position[4];   /* 0x00 */
+    unsigned char pad08[0x38];
+    unsigned short velocity[4];   /* 0x40 */
+    unsigned char pad48[0x38];
+    unsigned short secondary[4];  /* 0x80 */
+} RoomOrbitBurstLaneView;
+
 void RoomFx_UpdateOrbitBurst(
     void *unused, unsigned char *control, RoomOrbitBurstState *state) {
     unsigned char *particle;
@@ -314,20 +330,21 @@ void RoomFx_UpdateOrbitBurst(
     particle = (unsigned char *)state;
     while (i < 8) {
         if (state->active[i] == 1) {
+            RoomOrbitBurstLaneView *lane = (RoomOrbitBurstLaneView *)particle;
             int xStep =
-                (signed char)(*(unsigned short *)(particle + 0x40) >> 8);
+                (signed char)(lane->velocity[0] >> 8);
             int yStep =
-                (signed char)(*(unsigned short *)(particle + 0x42) >> 8);
+                (signed char)(lane->velocity[1] >> 8);
             int zStep =
-                (signed char)(*(unsigned short *)(particle + 0x44) >> 8);
+                (signed char)(lane->velocity[2] >> 8);
 
-            *(unsigned short *)(particle + 0) += xStep;
-            *(unsigned short *)(particle + 2) += yStep;
-            *(unsigned short *)(particle + 4) += zStep;
-            *(unsigned short *)(particle + 0x42) += 0x190;
-            *(unsigned short *)(particle + 0x84) +=
+            lane->position[0] += xStep;
+            lane->position[1] += yStep;
+            lane->position[2] += zStep;
+            lane->velocity[1] += 0x190;
+            lane->secondary[2] +=
                 func_80071A54() % 0x200;
-            if (*(short *)(particle + 2) > g_RoomFloorY->y) {
+            if ((short)lane->position[1] > g_RoomFloorY->y) {
                 state->count--;
                 state->active[i] = 0;
             }
@@ -429,7 +446,7 @@ void RoomFx_DrawOrbitSprite(
     func_800C42A4((FieldGlowSprite *)(drawSlot - 4), &matrix, 1);
 }
 
-void RoomFx_UpdateOrbitSprite(unsigned char *arg0, unsigned char *signal, RoomFxDriftState *state) {
+void RoomFx_UpdateOrbitSprite(unsigned char *arg0, RoomFxControl *signal, RoomFxDriftState *state) {
     RoomFxDriftState *p = state;
     unsigned short counter = state->counter16;
 
@@ -449,7 +466,7 @@ void RoomFx_UpdateOrbitSprite(unsigned char *arg0, unsigned char *signal, RoomFx
     p->x += (p->dx * p->phase14) >> 16;
     p->z += (p->dz * p->phase14) >> 16;
 
-    if (*(short *)(signal + 2) >= 21) {
-        signal[1] = 2;
+    if (signal->frame >= 21) {
+        signal->state = 2;
     }
 }
