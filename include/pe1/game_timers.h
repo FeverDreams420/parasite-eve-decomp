@@ -3,7 +3,11 @@
 
 #include "common.h"
 
-/* Three-word timer records beginning at D_800A76A0. */
+/* Four three-word frame timers beginning at 0x800A76A0, stepped once per
+ * frame by Scene_TickTimers and read and written by the scene scripts.
+ * flags bit 0 runs the timer, bit 1 counts down instead of up, bit 2 marks
+ * that the limit was reached. Timer 0 is the game clock, timer 2 the play
+ * time saved in the memory card header. */
 typedef struct GameTimerEntry {
     /* 0x00 */ u32 flags;
     /* 0x04 */ int current;
@@ -12,17 +16,22 @@ typedef struct GameTimerEntry {
 
 PE1_STATIC_ASSERT(sizeof(GameTimerEntry) == 0x0C, game_timer_entry_size);
 
+extern GameTimerEntry g_GameTimers[4];
+
 /* Interior symbol naming timer zero's flags word; its reset stores both the
  * cleared and the running value. */
 extern volatile u32 D_800A76A0;
 
-/* Interior symbol naming timer zero's current word. Counter words follow
- * the three-word stride of GameTimerEntry, rather than a packed int array. */
+/* Interior symbols for the single words the reset routines write. The game
+ * clock limit is stored twice on reset, so it stays volatile. */
 extern int g_GameTimeTable;
+extern volatile int g_GameClockLimit;
+extern u32 g_GameTimer1Flags;
+extern int g_GameTimer1Limit;
+extern u32 g_PlayTimeFlags;
 extern int g_PlayTimeSeconds;
-#define GAME_TIME_COUNTER(index) \
-    (((GameTimerEntry *)((char *)&g_GameTimeTable - \
-        PE1_OFFSETOF(GameTimerEntry, current)))[index].current)
+extern int g_PlayTimeLimit;
+#define GAME_TIME_COUNTER(index) (g_GameTimers[index].current)
 
 /* Frames played; Save_ClassifyPlaytime buckets it for the save header. */
 extern unsigned int g_PlayTimeFrameCounter;
