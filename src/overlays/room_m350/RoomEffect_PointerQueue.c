@@ -47,14 +47,14 @@ int func_80195064(int event) {
     if (D_8019A7FC.completionFlags[0] && D_8019A7FC.activeCount==0) return 2;
     {
         short *count=&D_8019A7FC.pointerCount;
-        if (*count) {
+        if (D_8019A7FC.pointerCount) {
             int i;
             firstIndex=0;
             i=firstIndex;
-            if (*count>firstIndex) {
+            if (D_8019A7FC.pointerCount>firstIndex) {
                 Queue *queue=(Queue *)((char *)count-(unsigned long)&((Queue *)0)->count);
                 Vector **position=queue->positions;
-                do {
+                while (i<queue->count) {
                     {
                         Particle *particle=func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
                         if (!particle) break;
@@ -63,7 +63,7 @@ int func_80195064(int event) {
                     }
                     i++;
                     position++;
-                } while (i<queue->count);
+                }
             }
             D_8019A7FC.pointerCount=0;
         }
