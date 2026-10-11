@@ -2,7 +2,6 @@
 #include "pe1/boot_disc_check.h"
 #include "pe1/scene_assets.h"
 #include "pe1/akao.h"
-#define NULL ((void *)0)
 
 #include "pe1/psyq_gpu.h"
 #include "pe1/cdrom.h"
@@ -10,9 +9,24 @@
 typedef struct { char b[16]; } __attribute__((aligned(1), packed)) Copy16u;
 typedef struct { u32 w[4]; } Copy16a;
 
-void Menu_FullInit(void);
+/* Block copy cursor: retail tests the two addresses' alignment as words. */
+typedef union SceneCopyCursor {
+    u8 *bytes;
+    Copy16u *unaligned;
+    Copy16a *aligned;
+    u32 word;
+} SceneCopyCursor;
 
-#include "Scene_LoadSceneData_externs.h"
+
+#include "pe1/game_state.h"
+#include "pe1/pe_image.h"
+#include "pe1/resident_tables.h"
+#include "pe1/gpu_image.h"
+#include "pe1/field_bg_load.h"
+#include "pe1/menu_state.h"
+
+/* Startup resource blob copied out of the scene scratch buffer. */
+extern u8 g_StartupResourceBlob[];
 
 void Scene_LoadSceneData(void) {
     RECT rect;
@@ -21,8 +35,8 @@ void Scene_LoadSceneData(void) {
     u16 *p0;
     s32 t;
     s32 flag;
-    u8 *src;
-    u8 *dst;
+    SceneCopyCursor src;
+    SceneCopyCursor dst;
     u8 *end;
     register u8 *copyEnd asm("$8");
 
@@ -30,13 +44,13 @@ void Scene_LoadSceneData(void) {
     rect.x = 0;
     rect.y = 0;
     rect.h = 0x1FF;
-    state = (Pe1GameState *)&D_800B0CD8_o;
-    lba = *(s32 *)&g_PeImageBaseLba_o;
+    state = &g_GameState;
+    lba = g_PeImageBaseLba;
     ClearImage(&rect, 0, 0, 1);
 
 restart1:
-    p0 = (u16 *)&D_800930DC_o;
-    while (CdRom_ReadSectorsFromLba(lba + p0[0], (void *)(s32)&D_800A8028_o, p0[1] - p0[0]) == -1) {}
+    p0 = &D_800930D8[2];
+    while (CdRom_ReadSectorsFromLba(lba + p0[0], &g_ResidentDataPack, p0[1] - p0[0]) == -1) {}
     t = 1;
     do {
         if (t == -1) {
@@ -47,7 +61,7 @@ restart1:
 
     flag = 0;
 restart2:
-    p0 = (u16 *)&D_800930DE_o;
+    p0 = &D_800930D8[3];
     while (CdRom_ReadSectorsFromLba(lba + p0[0], state->scene_load_scratch, p0[1] - p0[0]) == -1) {}
     t = 1;
     do {
@@ -61,30 +75,30 @@ restart2:
         t = CdRom_PollReady();
     } while (t != 0);
 
-    src = state->scene_load_scratch;
-    dst = (u8 *)&D_800E2858_o;
-    if (((u32)src | (u32)dst) & 3) {
-        copyEnd = src + 0x10A50;
+    src.bytes = state->scene_load_scratch;
+    dst.bytes = g_StartupResourceBlob;
+    if ((src.word | dst.word) & 3) {
+        copyEnd = src.bytes + 0x10A50;
         do {
-            *(Copy16u *)dst = *(Copy16u *)src;
-            src += 0x10;
-            dst += 0x10;
-        } while (src != copyEnd);
+            *dst.unaligned = *src.unaligned;
+            src.bytes += 0x10;
+            dst.bytes += 0x10;
+        } while (src.bytes != copyEnd);
     } else {
-        copyEnd = src + 0x10A50;
+        copyEnd = src.bytes + 0x10A50;
         do {
-            *(Copy16a *)dst = *(Copy16a *)src;
-            src += 0x10;
-            dst += 0x10;
-        } while (src != copyEnd);
+            *dst.aligned = *src.aligned;
+            src.bytes += 0x10;
+            dst.bytes += 0x10;
+        } while (src.bytes != copyEnd);
     }
 
-    state->startup_resource_blob = (u8 *)&D_800E2858_o;
-    state->startup_resource_tables[0] = Asset_FindTable08ByU32Key(&D_800E2858_o, 0x57D40D84);
+    state->startup_resource_blob = g_StartupResourceBlob;
+    state->startup_resource_tables[0] = Asset_FindTable08ByU32Key(g_StartupResourceBlob, 0x57D40D84);
     state->startup_resource_tables[1] = Asset_FindTable08ByU32Key(state->startup_resource_blob, 0x57D41D84);
 
 restart3:
-    p0 = (u16 *)&D_800930E4_o;
+    p0 = &D_800930D8[6];
     while (CdRom_ReadSectorsFromLba(lba + p0[0], state->scene_load_scratch, p0[1] - p0[0]) == -1) {}
     t = 1;
     do {
@@ -94,10 +108,10 @@ restart3:
         t = CdRom_PollReady() != 0;
     } while (t != 0);
 
-    Spu_UploadSampleBlockBlocking(*(s32 *)&D_800B0E6C_o, 1);
+    Spu_UploadSampleBlockBlocking(g_GameState.scene_load_scratch, 1);
 
 restart4:
-    p0 = (u16 *)&D_800930E6_o;
+    p0 = &D_800930D8[7];
     while (CdRom_ReadSectorsFromLba(lba + p0[0], state->scene_load_scratch, p0[1] - p0[0]) == -1) {}
     t = 1;
     do {
@@ -106,22 +120,25 @@ restart4:
         }
     } while ((t = (CdRom_PollReady() != 0)) != 0);
 
-    dst = (u8 *)state->bank_work_far_end;
-    __asm__ __volatile__("" : "=r"(dst) : "0"(dst));
-    src = state->scene_load_scratch;
-    end = src + 0x1400;
-    if (((u32)src | (u32)dst) & 3) {
-        do {
-            *(Copy16u *)dst = *(Copy16u *)src;
-            src += 0x10;
-            dst += 0x10;
-        } while (src != end);
-    } else {
-        do {
-            *(Copy16a *)dst = *(Copy16a *)src;
-            src += 0x10;
-            dst += 0x10;
-        } while (src != end);
+    {
+        SceneCopyCursor to, from;
+        to.word = state->bank_work_far_end;
+        __asm__ __volatile__("" : "=r"(to.word) : "0"(to.word));
+        from.bytes = state->scene_load_scratch;
+        end = from.bytes + 0x1400;
+        if ((from.word | to.word) & 3) {
+            do {
+                *to.unaligned = *from.unaligned;
+                from.bytes += 0x10;
+                to.bytes += 0x10;
+            } while (from.bytes != end);
+        } else {
+            do {
+                *to.aligned = *from.aligned;
+                from.bytes += 0x10;
+                to.bytes += 0x10;
+            } while (from.bytes != end);
+        }
     }
 }
 
@@ -132,6 +149,7 @@ restart4:
 #include "pe1/menu_memcard_display.h"
 #include "pe1/render_prim.h"
 #include "pe1/field_bg_load.h"
+#include "pe1/menu_state.h"
 
 /* Uploads every TIM listed in a scene blob's directory. */
 #define SCENE_BLOB_LOAD_TIMS(source)                                         \

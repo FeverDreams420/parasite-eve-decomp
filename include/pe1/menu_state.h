@@ -14,6 +14,8 @@ int Menu_GetBattleEquipMode(void);
 extern unsigned int g_MenuErrorSoundPending;
 void Menu_RequestErrorSound(void);
 int Menu_GetEquipMode(void);
+/* Menu start-up, run while the scene data loads (Menu_ActionSubmenuSelection.c). */
+void Menu_FullInit(void);
 
 /* EXP review: the total counting up toward the target, the level reached
  * so far and the frames left on the LEVEL UP banner. */

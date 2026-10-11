@@ -1901,3 +1901,4 @@ FieldEng_TransformMatrixPoint = 0x800CE8F0; // type:func
 g_EntitySerialCounter = 0x8009D224; // size:0x4
 g_FieldActorTypeCallbacks = 0x800915DC;
 g_SceneObjectAnimationSource = 0x800B0D10; // size:0x4
+g_StartupResourceBlob = 0x800E2858;
