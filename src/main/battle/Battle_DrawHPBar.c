@@ -381,14 +381,14 @@ loop_10:
         Gpu_InitDrawModeSprtPacket(temp_s1_8 + ((u8 *)D_8009E460), hudPage);
         temp_s2_4 = (bufferIndex << 1) << 4;
         temp_s4_2 = temp_s2_4 + ((u8 *)D_8009E498);
-        temp_s0_15 = temp_s1_8 + (((u8 *)D_8009E460) + 8);
+        temp_s0_15 = temp_s1_8 + ((u8 *)&D_8009E460[0].sprite);
         temp_s0_15->u = 0xE8;
         temp_s0_15->v = 0xE0;
         *(u16 *)(D_8009E476 + temp_s1_8) = hudClut;
         temp_s0_15->width = 0x18;
         temp_s0_15->height = 0x18;
         SetLineF2(temp_s4_2);
-        temp_s2_5 = temp_s2_4 + (((u8 *)D_8009E498) + 0x10);
+        temp_s2_5 = temp_s2_4 + ((u8 *)&D_8009E498[0][1]);
         SetLineF2(temp_s2_5);
         temp_s4_2->r = 0xE0;
         temp_s4_2->g = 0xE0;
@@ -435,7 +435,7 @@ loop_12:
         temp_s1_11 = bufferIndex * 0x70;
         base4 = (u32)D_8009E7A0;
         body4 = base4 + 8;
-        temp_s0_21 = temp_s2_6 + (((u8 *)D_8009E768) + 8);
+        temp_s0_21 = temp_s2_6 + ((u8 *)&D_8009E768[0].sprite);
         temp_s0_21->u = 0x58;
         temp_s0_21->v = 0xEF;
         *(u16 *)(D_8009E77E + temp_s2_6) = hudClut;
@@ -461,7 +461,7 @@ loop_16:
         }
         temp_s2_7 = bufferIndex * 0x1C;
         Gpu_InitDrawModeSprtPacket(temp_s2_7 + ((u8 *)D_8009E730), hudPage);
-        temp_s0_25 = temp_s2_7 + (((u8 *)D_8009E730) + 8);
+        temp_s0_25 = temp_s2_7 + ((u8 *)&D_8009E730[0].sprite);
         temp_s0_25->u = 0x68;
         temp_s0_25->v = 0xF4;
         *(u16 *)(D_8009E746 + temp_s2_7) = GetClut(0x130, 0x1F9);

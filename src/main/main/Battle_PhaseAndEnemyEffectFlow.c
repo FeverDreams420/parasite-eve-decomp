@@ -180,7 +180,7 @@ after_command:
         var_a0_2 = (s32)temp_s2->actor;
         var_a1 = D254(14);
         if (var_a0_2 != var_a1) {
-            temp_v0 = Battle_CalcAngleToTarget((RenderObjectEntity *)(var_a0_2 + 0x1B4), (u8 *)var_a1 + 0x28);
+            temp_v0 = Battle_CalcAngleToTarget((RenderObjectEntity *)(var_a0_2 + 0x1B4), var_a1 + 0x28);
             var_a0_2 = (s32) D_8009D1D4;
             var_a1 = (void *) (var_a0_2 & 0xFF);
             queueOffset = (s32)var_a1 * 8;
