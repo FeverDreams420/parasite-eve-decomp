@@ -24,7 +24,6 @@ extern u32 D_800915E0[];
 extern u32 D_800B0E70[];
 extern u8 D_800B0CE2[];
 extern u8 D_800B161C[];
-extern u8 D_800BEA40[];
 
 void Battle_InitEquipLists();
 void *Entity_AllocBlock();
@@ -188,7 +187,7 @@ render_done:
         actor->render_object.lightPositiveY = 0x18;
         Render_InitRoomPrimState(&actor->render_object);
         Render_DrawWithAnim(&actor->render_object, actor->action_data,
-                            (s16)actor->anim.parts.integer, D_800BEA40, D_800B89F8);
+                            (s16)actor->anim.parts.integer, &D_800BEA40, D_800B89F8);
         actor->render_object.header->shadow_radius = actor->render_object.hit_cylinder.radius * 2;
     }
     } else {

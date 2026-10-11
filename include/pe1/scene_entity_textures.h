@@ -5,6 +5,7 @@
 #include "pe1/render_setup.h"
 #include "pe1/scene_assets.h"
 #include "pe1/field_actor.h"
+#include "pe1/render_lighting.h"
 #include "pe1/player_entity.h"
 #include "pe1/scene_room_load.h"
 #include "pe1/cdrom.h"
@@ -20,7 +21,6 @@ extern u8 g_SceneAreaType;
 extern s8 D_800B0CE4[];
 extern u32 g_PeImageBaseLba;
 extern u16 D_800930D8[], D_800930DA[];
-extern u8 D_800BEA40[];
 extern u8 g_EntityRenderScratch[];
 
 int Scene_UpdateBgDraw(void);
