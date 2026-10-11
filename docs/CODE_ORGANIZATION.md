@@ -115,6 +115,81 @@ question, not a real conflict:
   guarded `do`/`while`, with the camera pointer taken before it, matches under
   `-fno-strength-reduce`.
 
+### AKAO driver (src/main/akao)
+
+The AKAO units have no offset macros, byte arithmetic or file-scope
+`extern`s: driver-wide state is declared once in `pe1/akao/globals.h`, the
+voice-mask SPU registers in `pe1/akao/spu_registers.h`, and the sequencer
+and transfer units carry no pins, barriers or gotos. C shapes that only
+exist for the bytes, and why:
+
+- `Spu_InitVoiceState` writes the request, volume and slide fields of the
+  two banks behind `g_AkaoCurTrack` through word views
+  (`*(int *)&bank[0].volume`). GCC 2.7 assumes a store to a structure field
+  through a pointer cannot alias a fixed scalar, so with plain field stores
+  the scheduler hoists the `g_AkaoVoiceUpdateFlags` read-modify-write and the
+  `D_800BCD54`..`D_800BCD68` stores across them. Retail keeps the source
+  order, which only non-structure stores give. Declaring the scalars as a
+  record instead fixes the stores but not the read-modify-write, which a
+  record view turns into a register-held address. `Akao_UpdateVoiceMask`
+  writes `key_off_request_mask` the same way, and `SPU_StepReverbLoad`
+  reads the bank cursor through the one-field `AkaoBankCursor` record for the
+  opposite reason: its reload after a bank store must stay.
+- `D_8009D268`, the message-queue lock the timer interrupt tests, and
+  `D_8009D2E0`, the busy flag `Spu_PollOrWaitSeqBusy` spins on, are
+  `volatile`: `Spu_InitVoiceState` clears the lock and reads it back before
+  copying it to the queue words, and only a volatile object keeps that
+  reload.
+- `Spu_UploadSampleBlock` walks the header words with `*header++` on its
+  parameter. A separate cursor lets CSE fold every word into an offset from
+  the untouched parameter, while retail advances the pointer.
+- `Akao_LookupPitchPeriod` assigns the octave copy again inside
+  `if (detune)`; without it CSE substitutes the octave for the copy and the
+  two values share a register. `SeqOp_LoadInstrumentFromIndex` and
+  `Akao_LookupPitchPeriod` keep integer table addresses, because retail
+  reuses that register for the release mode and the period (lev 15-24 with
+  `AkaoInstrument` pointers).
+- The `Spu_*AllVoice*`/`Spu_*VoiceMasked` loops of the voice-bank unit walk
+  a cursor biased to one field of the channel record (`voice - 0xF4`), as
+  retail does; a plain `AkaoTrack *` walk addresses the fields from the
+  record start (lev 6-12 per function).
+
+Crutches still in place (lev is the only metric; each was retried with the
+permuter and by hand):
+
+- `Akao_StepNoteSequencer` and `Spu_UploadStreamBlockA` (4 barriers each):
+  retail allocates the header cursor before the upload size (s0, s1).
+  Global-alloc priority is refs * floor_log2(refs) / live length; without the
+  barriers the size has 22 refs over 84 insns against the cursor's 18 over
+  83, and the barriers add the cursor references that flip the order. A
+  separate copy-loop counter removes the cursor barriers but lands the counter
+  in a2 (lev 3); reusing the size as the counter flips priority back (lev 31).
+- `Spu_TickVoiceEnvelopes` (1 barrier): retail shifts the LFO depth before
+  loading `pitch_lfo_phase`; sched1 places a single-set pseudo late, so every
+  plain order loads first (lev 2-21).
+- `Spu_RestoreVoiceFromStereoSlot` (3 pins, 2 barriers): retail keeps
+  0x1FF93 in a3 for both the `or` and the fourth call argument and copies the
+  stereo index to a0 before indexing. A constant costs 0 on MIPS, so CSE
+  rebuilds it, and the index and record swap s1/s2 (best lev 11).
+- `Akao_ProcessVoiceQueue` (pin on `bit`, 1 barrier): `secondary_new` must be
+  allocated before `excluded`; its extra references come only from a copy that
+  CSE deletes unless `bit` is a hard register (lev 24, lev 11 with a
+  `do { } while (0)` wrapper, which is no better a crutch).
+- `Akao_StepSequencerVoice` (pin on `all_voices`, 1 barrier): retail builds
+  0xFFFFFF once in a0 and stores it from a0; cse1 rewrites the argument copy
+  to the constant and builds it twice (lev 3-15).
+- `Seq_TrackPitchSetup` (2 pins): retail computes the pitch delta in place in
+  a2 (sll, subu, div, mflo), which gives it more weight than `track`; without
+  the pins the subtraction goes through v0 and the registers swap (lev 7).
+- `Akao_UpdateVoiceMask` (3 pins, 4 barriers): without the v0 pins loop.c
+  also hoists the constant 2 (its threshold of 52 equals the loop's 52
+  insns); with literals the hoist set matches but the bank copy and
+  `voice_mask` scheduling move. Best crutch-free version is lev 36.
+- `Seq_StartNestedStreams` (1 goto): retail tests `remaining` again after
+  the exhausted handler, which happens only when the handler starts at a
+  label CSE enters without knowing `remaining`; every goto-free shape lets
+  CSE drop that test (lev 69).
+
 ### Open declaration conflicts
 
 `python3 tools/scripts/decl_conflicts.py --count` lists symbols declared more
