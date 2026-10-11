@@ -15,7 +15,7 @@ s32 Memcard_LinkEffect(s32 mode, MemcardLinkState *state) {
         void *entity;
         register GteShortVector *firstPtr asm("$17");
         offsetPtr = &offset;
-        __asm__("" : : "r"(offsetPtr) : "$2", "$4", "$17", "memory");
+        __asm__("" : : "r"(offsetPtr));
         opacity = 128; entity = D_8009D254;
         __asm__("" : "=r"(entity), "=r"(opacity) : "0"(entity), "1"(opacity) : "$17");
         firstPtr = &first;
