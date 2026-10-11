@@ -3,6 +3,8 @@
 #include "pe1/gte.h"
 #include "pe1/gte_types.h"
 #include "pe1/field_actor.h"
+#include "pe1/field_anim_pool.h"
+#include "pe1/battle.h"
 
 /* func_800C62DC specialised for the player position (16.16 integer halves). */
 
@@ -116,7 +118,7 @@ int func_800C689C(GteShortVector *tri)
             (result->cross[1].y ^ result->cross[2].y)) > 0;
 }
 
-int func_800C6B20(void *arg0) {
+int func_800C6B20(GteShortVector *arg0) {
     GteShortVector pos;
     FieldActor *entity = (FieldActor *)D_8009D254;
     int first;
@@ -130,15 +132,15 @@ int func_800C6B20(void *arg0) {
     value = Pe1Fixed_Integer(&entity->pos_z);
     pos.z = value;
     first = func_800C62DC(ptr, arg0);
-    return first | func_800C62DC(ptr, (char *)arg0 + 8);
+    return first | func_800C62DC(ptr, arg0 + 1);
 }
 
 int func_800C6B90(s16 *pos, int extraRadius) {
     int delta[3];
     s16 local[4];
-    char *entity = (char *)D_8009D254;
-    int x = *(s16 *)(entity + 0x2A);
-    int radius = (s16)((FieldActor *)entity)->render_object.hit_cylinder.radius;
+    BattleEntity *entity = D_8009D254;
+    int x = entity->posX.parts.integer;
+    int radius = (s16)entity->renderObject.hit_cylinder.radius;
     int z;
     int x_sq;
     int z_sq;
@@ -146,10 +148,10 @@ int func_800C6B90(s16 *pos, int extraRadius) {
     local[0] = x;
     {
         int y;
-        y = *(s16 *)(entity + 0x2E);
+        y = entity->posY.parts.integer;
         local[1] = y;
     }
-    z = *(s16 *)(entity + 0x32);
+    z = entity->posZ.parts.integer;
     local[2] = z;
     x -= pos[0];
     x_sq = x * x;
@@ -168,15 +170,15 @@ int func_800C6C18(char *obj) {
     int enabled;
 
     if (FieldEng_GetStatus(obj) == 3) {
-        enabled = (*(u8 *)(*(char **)(*(char **)(*(char **)(obj + 8) + 0) + 0x18) + 0) == 2);
+        enabled = (((FieldAnimObjectPrefix *)obj)->actor->state->action_state[0] == 2);
     } else {
         enabled = 1;
     }
 
     if (enabled != 0) {
         if (FieldEng_GetStatus(obj) == 3) {
-            *(int *)(*(char **)D_8009D254 + 0x4C) |= 0x4000;
-            *(int *)(*(char **)(*(char **)(obj + 8) + 0) + 0) |= 0x80000000;
+            ((Combatant *)D_8009D254->core)->stateFlags |= 0x4000;
+            ((FieldAnimObjectPrefix *)obj)->actor->state->core_flags |= 0x80000000;
         }
     }
 
@@ -184,30 +186,31 @@ int func_800C6C18(char *obj) {
 }
 
 int FieldEng_GetStatus(void *object) {
-    char *obj = object;
-    char *data = *(char **)(obj + 8);
+    FieldAnimObjectPrefix *obj = object;
+    FieldActor *data = obj->actor;
     int status = 0;
 
     if (data != 0) {
-        char *inner = *(char **)data;
+        FieldActorState *inner = data->state;
 
         if (inner == 0) {
             status = 1;
         } else {
             status = 3;
-            if (*(int *)(inner + 0x10) <= 0) {
+            /* The enemy record keeps its signed alive HP here. */
+            if (inner->control10.command_value <= 0) {
                 status = 2;
             }
         }
     }
 
-    if ((u8)obj[1] == 7) {
+    if (obj->asset_type == 7) {
         status = 4;
     }
-    if ((u8)obj[1] == 0xE) {
+    if (obj->asset_type == 0xE) {
         status = 4;
     }
-    if (data == (char *)D_8009D254) {
+    if (data == (FieldActor *)D_8009D254) {
         status = 5;
     }
 
