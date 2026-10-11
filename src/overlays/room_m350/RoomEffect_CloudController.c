@@ -116,7 +116,7 @@ int func_80198CF8(int event,State *state)
         phase=state->heightPhase;
         {
         int nextPhase=phase;
-        asm volatile("" : "=r"(nextPhase) : "0"(nextPhase), "r"(phase));
+        asm volatile("" : "=r"(nextPhase) : "0"(nextPhase));
         if(phase<16) {
             int sample,floor;
             register int height asm("$2");
