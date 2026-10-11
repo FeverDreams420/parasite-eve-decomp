@@ -64,9 +64,9 @@ void Menu_StepItemDetailPanel2(void) {
     Inv_SelectActiveList(D_8009CF10);
 
     if (label != 0) {
-        Util_CopyFFTerminatedBytes(D_800A1980, label);
+        Util_CopyFFTerminatedBytes(g_MenuItemLabelBuffer, label);
     } else {
-        D_800A1980[0] = 0xFF;
+        g_MenuItemLabelBuffer[0] = 0xFF;
     }
 
     {
@@ -74,15 +74,15 @@ void Menu_StepItemDetailPanel2(void) {
         register u8 *text_buf asm("$4");
 
         suffix = Str_LookupTable4(0x1A);
-        text_buf = D_800A1980;
+        text_buf = g_MenuItemLabelBuffer;
         Util_AppendFFTerminatedBytes(text_buf, suffix);
         D_8009CFA0 = 0;
-        text_buf = D_800A1980;
+        text_buf = g_MenuItemLabelBuffer;
         width = Draw_MeasureTextWidth(text_buf);
         if (width < 0x78) {
             width = 0x78;
         } else {
-            text_buf = D_800A1980;
+            text_buf = g_MenuItemLabelBuffer;
             width = Draw_MeasureTextWidth(text_buf);
         }
     }

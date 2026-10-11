@@ -18,6 +18,10 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(SaveRuntimeState, categoryCounts) == 0x10CC,
                   save_category_counts_offset);
 extern SaveRuntimeState g_SaveRuntimeState;
 void Save_InitMetadataState(void);
+/* Slot cell picked on the save screen and the deferred read/write of it. */
+extern int g_SaveSlotCellIndex;
+void Save_StartSelectedWriteSlot(void);
+void Save_StartSelectedReadSlot(void);
 
 /* Save-slot metadata window selected by the current frontend operation. */
 extern int g_SaveMetadataWindowIndex;

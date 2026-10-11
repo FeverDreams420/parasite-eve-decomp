@@ -564,14 +564,14 @@ int Menu_ItemListInputHandler(MenuWidgetNode *node, unsigned int flags)
                 D_8009CF14 = 5;
                 MenuWidget_SetCurrentNode(options);
                 Inv_SelectActiveList(D_8009CF10);
-                D_800A1980[0] = 0xFF;
-                Util_AppendFFTerminatedBytes(D_800A1980, Str_LookupTable4(0x61));
+                g_MenuItemLabelBuffer[0] = 0xFF;
+                Util_AppendFFTerminatedBytes(g_MenuItemLabelBuffer, Str_LookupTable4(0x61));
                 D_8009CFA0 = 0;
                 action = Menu_ItemUseAction;
-                if (Draw_MeasureTextWidth(D_800A1980) < 0x78)
+                if (Draw_MeasureTextWidth(g_MenuItemLabelBuffer) < 0x78)
                     width = 0x78;
                 else
-                    width = Draw_MeasureTextWidth(D_800A1980);
+                    width = Draw_MeasureTextWidth(g_MenuItemLabelBuffer);
                 dialog->grid_width = width + 0x14;
                 dialog->visible_rows = 0x32;
                 dialog->x = (300 - width) >> 1;

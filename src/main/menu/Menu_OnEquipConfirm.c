@@ -105,7 +105,7 @@ reserved:
         MenuWidget_SetCurrentNode(option_node);
         Inv_SelectActiveList(D_8009CF10);
 
-        dialog_text = D_800A1980;
+        dialog_text = g_MenuItemLabelBuffer;
         dialog_text[0] = 0xFF;
         Util_AppendFFTerminatedBytes(dialog_text, (void *)Str_LookupTable4(0));
         D_8009CFA0 = 0;
@@ -127,10 +127,10 @@ reserved:
             option_node->y = height - 0x14;
         }
 
-        Util_CopyFFTerminatedBytes(D_800A1980, (void *)Str_LookupTable4(0x71));
-        Util_AppendFFTerminatedBytes(D_800A1980, Inv_LookupActiveListDisplayData(item));
-        if (Draw_MeasureTextWidth(D_800A1980) >= 0x78) {
-            width = Draw_MeasureTextWidth(D_800A1980);
+        Util_CopyFFTerminatedBytes(g_MenuItemLabelBuffer, (void *)Str_LookupTable4(0x71));
+        Util_AppendFFTerminatedBytes(g_MenuItemLabelBuffer, Inv_LookupActiveListDisplayData(item));
+        if (Draw_MeasureTextWidth(g_MenuItemLabelBuffer) >= 0x78) {
+            width = Draw_MeasureTextWidth(g_MenuItemLabelBuffer);
         } else {
             width = 0x78;
         }

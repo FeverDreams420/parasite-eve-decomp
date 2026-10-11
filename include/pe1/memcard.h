@@ -178,6 +178,9 @@ void MemCard_StartRead(int port, int slot);
 int MemCard_IsOperationPending(void);
 void MemCard_UpdateSavePolling(void);
 void MemCard_DelayedCallback(void);
+void MemCard_SetDelayedCallback(void (*callback)(void));
+int MemCard_GetPortSequence(int port);
+void Save_SetTitleStyleFlag(int value);
 
 MemCardSaveSlot *MemCard_GetSlot(unsigned int port, int slot);
 

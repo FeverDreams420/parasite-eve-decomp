@@ -28,7 +28,5 @@ extern int D_8009CFA0;
 extern int D_8009CFD4;
 /* Copy of the item record being modified. */
 extern ItemDataRecord D_800A1960;
-/* Confirmation dialog text buffer. */
-extern u8 D_800A1980[];
 
 #endif
