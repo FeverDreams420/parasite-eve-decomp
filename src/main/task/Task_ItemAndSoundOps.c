@@ -222,7 +222,7 @@ typedef struct AkaoStackLocals {
 extern u8 D_800944A8[];
 u32 *D_8009CE00;
 extern FieldActor *D_8009D20C;
-extern u8 *D_8009D254[];
+extern struct BattleEntity *D_8009D254;
 
 void Akao_Cmd_11(int slot);
 void Akao_Cmd_90(int command);
@@ -469,7 +469,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         break;
     case 0x160:
         if (*args->arg2 == 0) {
-            player = D_8009D254[0];
+            player = (u8 *)D_8009D254;
             if (player == 0) {
                 break;
             }

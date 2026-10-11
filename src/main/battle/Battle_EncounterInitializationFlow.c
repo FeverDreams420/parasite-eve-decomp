@@ -192,7 +192,7 @@ void Battle_StartEncounter(int mode) {
     Combatant *actor;
     u32 value;
     int mode_reg;
-    entity = D_8009D254[0];
+    entity = D_8009D254;
     D_8009D278 = (Combatant *)entity->core;
     D_8009D1E8 = 0;
     (*(u32 *)&battle_start_phase_storage) = 0;
@@ -250,7 +250,7 @@ void Battle_StartEncounter(int mode) {
         BattleEntity *post_entity;
         RenderMatrix *post_actor;
         u32 callback;
-        post_entity = D_8009D254[0];
+        post_entity = D_8009D254;
         post_actor = post_entity->renderObject.matrices;
         callback = (u32)Entity_CheckActionIdMatch;
         post_entity->actionCheckFn = (void *)callback;

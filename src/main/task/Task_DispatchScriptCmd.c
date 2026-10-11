@@ -32,7 +32,7 @@ typedef struct TaskScriptArgs {
 #define ARG_BYTE(ptr) (*(u8 *)(ptr))
 
 extern FieldActor *D_8009D20C;
-extern u8 *D_8009D254[];
+extern struct BattleEntity *D_8009D254;
 /* COMMON supplies small-data metadata to MASPSX. */
 u32 *D_8009CE00;
 TaskNode *D_8009D300;
@@ -134,7 +134,7 @@ cmd_835:
         D_800B0CD8[0] |= 0x800;
         goto done;
 cmd_898:
-        Render_UpdateScrollPosition(D_8009D254[0] + 0x28,
+        Render_UpdateScrollPosition(&((FieldActor *)D_8009D254)->pos_x,
                                     ARG_WORD(args->arg1), ARG_WORD(args->arg2));
         return 1;
 cmd_899:

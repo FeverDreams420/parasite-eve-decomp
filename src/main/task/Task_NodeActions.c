@@ -337,7 +337,7 @@ int Task_TurnTowardPointStep(int **arg0) {
 #define U16_AT(ptr, off) (*(u16 *)((u8 *)(ptr) + (off)))
 #define S32_AT(ptr, off) (*(s32 *)((u8 *)(ptr) + (off)))
 
-extern Pe1GlobalSlot D_8009D254;
+extern struct BattleEntity *D_8009D254;
 
 int Math_FixedMul(int a, int b);
 
@@ -363,7 +363,7 @@ int Task_MoveTowardPoint(int **args) {
     speed_entity = (u8 *)g_CurrentEntity;
     current_x = S32_AT(speed_entity, 0x28);
     current_z = S32_AT(speed_entity, 0x30);
-    if (speed_entity != D_8009D254.value.pointer) {
+    if (speed_entity != (u8 *)D_8009D254) {
         movement_speed = S32_AT(speed_entity, 0x20);
     } else {
         movement_speed = Math_FixedMul(0x50000, S32_AT(speed_entity, 0x20));
@@ -470,7 +470,7 @@ int Task_MoveTowardPoint(int **args) {
 #define PTR_AT(ptr, off) (*(u8 **)((u8 *)(ptr) + (off)))
 
 extern FieldActor *D_8009D20C;
-extern Pe1GlobalSlot D_8009D254;
+extern struct BattleEntity *D_8009D254;
 
 int Math_FixedMul(int a, int b);
 
@@ -500,7 +500,7 @@ int Camera_TrackEntityAngle(int **args) {
     current_x = S32_AT(args, 0x28);
     current_z = S32_AT(args, 0x30);
 
-    if ((u8 *)args != D_8009D254.value.pointer) {
+    if ((u8 *)args != (u8 *)D_8009D254) {
         base_speed = S32_AT(args, 0x20);
     } else {
         base_speed = Math_FixedMul(0x50000, S32_AT(args, 0x20));
@@ -600,10 +600,10 @@ int Camera_SnapToEntity(int **args) {
 
     if ((D_8009D300->flags & 0x20) == 0) {
         if (*args[0] == 0) {
-            if (D_8009D254.value.pointer == 0) {
+            if ((u8 *)D_8009D254 == 0) {
                 return 1;
             }
-            target = D_8009D254.value.pointer;
+            target = (u8 *)D_8009D254;
         } else {
             target = (u8 *)D_8009D20C;
             while (target != 0) {
@@ -711,10 +711,10 @@ int Camera_TrackEntityZoom(int **args) {
 
     if ((D_8009D300->flags & 0x20) == 0) {
         if (*args[0] == 0) {
-            if (D_8009D254.value.pointer == 0) {
+            if ((u8 *)D_8009D254 == 0) {
                 return 1;
             }
-            target = D_8009D254.value.pointer;
+            target = (u8 *)D_8009D254;
         } else {
             target = (u8 *)D_8009D20C;
             while (target != 0) {
@@ -755,7 +755,7 @@ int Camera_TrackEntityZoom(int **args) {
     }
 
     speed_entity = (u8 *)g_CurrentEntity;
-    if (speed_entity != D_8009D254.value.pointer) {
+    if (speed_entity != (u8 *)D_8009D254) {
         movement_speed = S32_AT(speed_entity, 0x20);
     } else {
         movement_speed = Math_FixedMul(0x50000, S32_AT(speed_entity, 0x20));

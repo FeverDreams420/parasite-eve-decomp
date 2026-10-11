@@ -83,7 +83,7 @@ block_19:
 }
 
 extern FieldActor *D_8009D20C;
-extern Pe1GlobalSlot D_8009D254;
+extern struct BattleEntity *D_8009D254;
 
 int Entity_GetPositionByType(int **args) {
     FieldActor *entity;
@@ -93,7 +93,7 @@ int Entity_GetPositionByType(int **args) {
 
     selector = *args[1];
     if (selector == 0) {
-        player = (FieldActor *)D_8009D254.value.pointer;
+        player = (FieldActor *)D_8009D254;
         if (player == 0) {
             *args[6] = -1;
             return 1;
@@ -201,7 +201,7 @@ int Camera_TrackRelativeOffset(int **args) {
     speed_entity = g_CurrentEntity;
     current_x = speed_entity->pos_x;
     current_z = speed_entity->pos_z;
-    if (speed_entity != D_8009D254.value.pointer) {
+    if (speed_entity != (u8 *)D_8009D254) {
         movement_speed = speed_entity->move_factor;
     } else {
         movement_speed = Math_FixedMul(0x50000, speed_entity->move_factor);

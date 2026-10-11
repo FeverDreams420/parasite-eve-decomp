@@ -7,7 +7,7 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-extern FieldActor *D_8009D254[];
+extern struct BattleEntity *D_8009D254;
 extern Pe1GlobalSlot entity_control_load __asm__("D_8009D2E8");
 extern Pe1GlobalSlot entity_control_store __asm__("D_8009D2E8");
 /* COMMON supplies small-data metadata to MASPSX. */
@@ -36,7 +36,7 @@ int Task_PlayEntityAnim(s16 **args) {
         task_state->flags |= 0x20;
         Anim_SetInterpRate(&actor->render_object, *args[0]);
         post_actor = g_CurrentEntity;
-        player = D_8009D254[0];
+        player = (FieldActor *)D_8009D254;
         post_actor->render_object.flags_9C |= 4;
 
         if (post_actor == player) {

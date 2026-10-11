@@ -1,6 +1,15 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
+/* MASPSX_FORCE_G0: 1 */
 #include "pe1/battle_level_up.h"
+
+/* COMMON supplies small-data metadata to MASPSX; the extern words stay
+ * absolute. */
+u8 D_8009CE74;
+s16 D_8009D2A4;
+u32 D_8009D304;
+u16 D_8009D21C;
+int D_8009D28C;
 
 void Battle_StepLevelUp(void) {
     u8 step;
@@ -10,7 +19,7 @@ void Battle_StepLevelUp(void) {
     step = D_8009CE74;
     switch (step) {
     case 0:
-        entity = D_8009D254[0];
+        entity = D_8009D254;
         if (((u16 *)&entity->animFrame)[1] != 0xA && (battle_step_flags_read[0] & 0x800) == 0) {
             break;
         }
@@ -27,14 +36,14 @@ void Battle_StepLevelUp(void) {
 
     case 1:
         if (D_8009D2A4 == 0x3E8) {
-            entity = D_8009D254[0];
+            entity = D_8009D254;
             D_8009CE74 = step + 1;
             entity->entityFlags &= -0x101;
         }
         break;
 
     case 2:
-        entity = D_8009D254[0];
+        entity = D_8009D254;
         if (entity->animLastFrame == entity->animPrev.parts.integer) {
             flags = battle_step_flags_read[0];
             if ((flags & 0x1800) == 0) {

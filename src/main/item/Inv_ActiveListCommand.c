@@ -1,7 +1,8 @@
 #include "pe1/menu_state.h"
 #include "pe1/menu_widget.h"
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "common.h"
 #include "pe1/battle.h"
 #include "pe1/inventory_slots.h"
@@ -9,9 +10,12 @@
 /* Active-list commands from the item menus and the pending command result
  * (D_8009D010) that the menu loop polls and clears. */
 
-extern BattleEntity *D_8009D254[];
-extern u8 *D_8009D1E0;
-extern int D_8009D010;
+extern BattleEntity *D_8009D254;
+/* COMMON supplies small-data metadata to MASPSX; the extern words stay
+ * absolute. */
+u8 *D_8009D1E0;
+int D_8009D010;
+int D_8009D018;
 #include "pe1/battle_modifiers.h"
 void Battle_DispatchSpecialAction(int);
 
@@ -22,7 +26,7 @@ void Inv_SetActiveList(int mode, int *slot) {
     int value;
     int present;
     selection = slot;
-    entity = D_8009D254[0];
+    entity = D_8009D254;
     active = 0;
     if (entity) {
         value = (int)entity->core;

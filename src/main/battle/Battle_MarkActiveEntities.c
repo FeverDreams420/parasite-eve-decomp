@@ -8,7 +8,7 @@
 extern s8 D_8009D2B0;
 extern Combatant *D_8009D278;
 extern FieldActor *D_8009D20C;
-extern BattleEntity *D_8009D254[];
+extern BattleEntity *D_8009D254;
 /* COMMON supplies small-data metadata to MASPSX. */
 s8 D_8009CE6C;
 
@@ -26,7 +26,7 @@ inline static void Mark(BattleEntity *entity)
     entity = (BattleEntity *)D_8009D20C;
     if (!entity)
       return;
-    active = D_8009D254[0];
+    active = D_8009D254;
     while (entity != 0)
     {
       if (((entity != active) && ((entity->core) != 0)) && ((((Combatant *)entity->core)->field04.bytes.kind) == 4))
@@ -142,7 +142,7 @@ void Battle_MarkActiveEntities(BattleTarget *table, int selected_index)
         register int range_group asm("$11") = 4;
         asm volatile("" : : "r"(range_group));
       }
-      active = D_8009D254[0];
+      active = D_8009D254;
       cached_active = active;
       for (; table[slot].actor != 0; slot++)
     {
@@ -179,7 +179,7 @@ void Battle_MarkActiveEntities(BattleTarget *table, int selected_index)
       linked_kind = 1;
       group_kind = 4;
       /* Match debt: materialize both kinds before loading the active actor. */
-            active = D_8009D254[0];
+            active = D_8009D254;
       for (; table[slot].actor != 0; slot++)
     {
       MarkKinds(table[slot].actor, group_kind, linked_kind, active);

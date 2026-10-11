@@ -5,7 +5,7 @@
 #include "pe1/save_slot_metadata.h"
 
 extern Combatant *D_8009D278;
-extern BattleEntity *D_8009D254[4];
+extern BattleEntity *D_8009D254;
 extern BattleRewardSlot D_800A7FF0[10];
 extern BattleEntity *D_800B8A90[7];
 extern int D_8009D1E8;

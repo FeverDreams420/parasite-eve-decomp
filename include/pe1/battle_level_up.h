@@ -3,7 +3,7 @@
 
 #include "pe1/entity_animation.h"
 
-extern BattleEntity *D_8009D254[4];
+extern BattleEntity *D_8009D254;
 extern BattleRewardSlot D_800A7FF0[10];
 extern u8 D_8009CE74;
 extern s16 D_8009D2A4;
