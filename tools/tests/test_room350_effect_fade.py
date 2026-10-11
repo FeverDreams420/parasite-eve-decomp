@@ -1,22 +1,26 @@
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+ROOM = 'src/overlays/room_m350'
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import host_unit  # noqa: E402
 
 
 class Room350EffectFadeTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_motion_fade_threshold_and_palette(self):
-        source = (ROOT / "src/overlays/room_m350/RoomEffect_FadingModel.c").read_text()
-        source = source[:source.index('/* MASPSX_FLAGS: --expand-div */')]
-        source = source.replace('asm("$2")', '').replace('asm("$4")', '')
+        source = host_unit("func_80199148", under=ROOM)
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <string.h>\n' + source + r'''
+RenderEffectParameters D_800F3368;
+#define D_800F336A D_800F3368.parameter02
+#define D_800F336C D_800F3368.palette
 int D_800F3428;
-unsigned short D_800F336C, D_800E1204[8];
-short D_800F336A;
+unsigned short D_800E1204[8];
 static Particle object;
 static int lookups, draws, handleValue;
 static short sizeValue, phaseValue, brightnessValue, scaleValue;
@@ -24,7 +28,7 @@ _Static_assert(sizeof(Particle) == 20, "particle size");
 _Static_assert(offsetof(Particle, velocity) == 8, "velocity offset");
 _Static_assert(offsetof(Particle, brightness) == 12, "brightness offset");
 _Static_assert(offsetof(Particle, phase) == 16, "phase offset");
-int GetClut(int x, int y) {
+u_short GetClut(int x, int y) {
     assert(lookups++ == 0 && draws == 0 && x == 0);
     assert(y == D_800E1204[D_800F336C] +
            (D_800F336C == 4 && D_800F3428 ? 6 : 2));
@@ -33,8 +37,9 @@ int GetClut(int x, int y) {
     object.brightness = brightnessValue; D_800F336A = scaleValue;
     return handleValue;
 }
-void func_800CEE20(void *p, int zero, int a, int b, int scale,
-                  unsigned int handle, int flag, int shade, void *colors) {
+void func_800CEE20(struct GteShortVector *p, struct GteRotation *zero, int a,
+                   int b, int scale, int handle, int flag, int shade,
+                   struct RenderColor *colors) {
     assert(lookups == 1 && draws++ == 0 && p == &object && zero == 0);
     assert(a == sizeValue && b == sizeValue && scale == scaleValue * phaseValue);
     assert(handle == (unsigned short)handleValue && flag == 1);

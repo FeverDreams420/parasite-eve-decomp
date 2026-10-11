@@ -1,45 +1,53 @@
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+ROOM = 'src/overlays/room_m350'
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import host_unit  # noqa: E402
 
 
 class Room350EffectRadialTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_burst_allocation_random_vectors_and_configuration(self):
-        source = (ROOT / "src/overlays/room_m350/RoomEffect_RadialBurst.c").read_text()
-        source = source[source.index('/* MASPSX_FLAGS: --expand-div */'):]
-        # Host tests check behavior; the MIPS build separately verifies register allocation.
-        source = source.replace(' asm("$16")', '').replace(' asm("$18")', '')
+        source = host_unit("func_80197B98", under=ROOM)
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <string.h>\n' + source + r'''
-Emitter *D_800F33E0;
+RenderEffectParameters D_800F3368;
+#define D_800F336A D_800F3368.parameter02
+#define D_800F336C D_800F3368.palette
+#define D_800F336E D_800F3368.parameter06
+#define D_800F3370 D_800F3368.tpage
+#define D_800F3372 D_800F3368.parameter0A
+#define D_800F3374 D_800F3368.depth
+#define D_800F3376 D_800F3368.extent_x
+#define D_800F3378 D_800F3368.extent_y
+FieldAnimTaskSlot *D_800F33E0;
 unsigned char D_8019A86E, D_8019A859;
 unsigned short D_800E11E8, D_800E2850[65536];
-short D_800F3368, D_800F336A, D_800F336E, D_800F3372, D_800F3374;
-unsigned short D_800F336C, D_800F3370;
-volatile short D_800F3376, D_800F3378;
-static Emitter emitters[2];
+static RoomM350Emitter emitters[2];
 static int pools[2], allocations, draws, rotations, randomCalls, setups;
 static int failAt, requestAfterAllocation, setupResult, randomValues[8];
 static Vector effects[2];
-_Static_assert(offsetof(Emitter, pool) == 8, "pool offset");
+_Static_assert(offsetof(RoomM350Emitter, pool) == 8, "pool offset");
 _Static_assert(sizeof(Matrix) == 32, "matrix size");
-_Static_assert(offsetof(Matrix, translation) == 20, "translation offset");
+_Static_assert(offsetof(Matrix, position) == 20, "translation offset");
 _Static_assert(sizeof(Vector) == 8, "vector size");
 int func_80197A04(int event, short *object) { return 0; }
-int func_800CE560(void *pool, int a, int b, int (*callback)(int, short *)) {
+int func_800CE560(char *pool, int a, int b,
+                  FieldAnimCallbackListCallback callback) {
     assert(setups++ == 0 && allocations == 0 && pool == &pools[0]);
-    assert(a == 8 && b == 16 && callback == func_80197A04);
+    assert(a == 8 && b == 16 && (void *)callback == (void *)func_80197A04);
     return setupResult;
 }
-short *func_800CE610(void *pool) {
+void *func_800CE610(char *pool) {
     assert(setups == 0 && allocations < 2);
     assert(pool == &pools[allocations & 1]);
     /* Mutations probe reload order, not the real allocator's side effects. */
-    D_800F33E0 = &emitters[1];
+    D_800F33E0 = (FieldAnimTaskSlot *)&emitters[1];
     D_8019A859 = requestAfterAllocation;
     D_8019A86E = 255;
     allocations++;
@@ -50,7 +58,7 @@ int Inv_ScrambleGrid(void) {
     assert(randomCalls < 8);
     return randomValues[randomCalls++];
 }
-Matrix *RotMatrixYXZ(Vector *vector, Matrix *matrix) {
+GteMatrix *RotMatrixYXZ(GteShortVector *vector, GteMatrix *matrix) {
     assert(rotations == draws && randomCalls == draws * 4 + 2);
     assert(vector->x == (short)(randomValues[draws * 4] * 16));
     assert(vector->y == (short)(randomValues[draws * 4 + 1] * 16));
@@ -61,7 +69,8 @@ Matrix *RotMatrixYXZ(Vector *vector, Matrix *matrix) {
     rotations++;
     return matrix;
 }
-Vector *ApplyMatrixSV(Matrix *matrix, Vector *vector, Vector *effect) {
+GteShortVector *ApplyMatrixSV(const GteMatrix *matrix, const GteShortVector *vector,
+                              GteShortVector *effect) {
     unsigned char expectedMatrix[32];
     int combined = randomValues[draws * 4 + 2] * 256 | randomValues[draws * 4 + 3];
     memset(expectedMatrix, 0x5A, sizeof(expectedMatrix));
@@ -75,7 +84,7 @@ Vector *ApplyMatrixSV(Matrix *matrix, Vector *vector, Vector *effect) {
 }
 static void reset(void) {
     setups = allocations = draws = rotations = randomCalls = 0;
-    D_800F33E0 = &emitters[0];
+    D_800F33E0 = (FieldAnimTaskSlot *)&emitters[0];
 }
 int main(void) {
     const int values[] = {0, 1, 63, 64, 127, 128, 254, 255};
@@ -103,7 +112,7 @@ int main(void) {
     for (i = 0; i < 5; ++i) {
         reset(); D_800E11E8 = indices[i]; D_800E2850[indices[i]] = 65535 - i;
         assert(func_80197B98(2) == 0 && allocations == 0 && setups == 0);
-        assert(D_800F3372 == 0 && D_800F3368 == 16 && D_800F336A == 1);
+        assert(D_800F3372 == 0 && D_800F3368.parameter00 == 16 && D_800F336A == 1);
         assert(D_800F3376 == 16 && D_800F3378 == 16 && D_800F336C == 2);
         assert(D_800F336E == 0 && D_800F3374 == 0 && D_800F3370 == 65535 - i);
     }

@@ -1,42 +1,57 @@
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+ROOM = 'src/overlays/room_m350'
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import host_unit  # noqa: E402
 
 
 class Room350EffectRequestTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_request_lifecycle_and_render_configuration(self):
-        source = (ROOT / "src/overlays/room_m350/RoomEffect_QueuedFall.c").read_text()
-        source = ('extern short D_800F336A;\n'
-                  'extern unsigned short D_800F336C;\n'
-                  'extern int func_80197594(int, short *);\n' +
-                  source[source.index('typedef struct { int reserved[2]; void *pool; } Emitter;'):])
+        # The fall callback is reduced to a prototype; the test stubs it.
+        source = host_unit("func_801976C8", under=ROOM)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-Emitter *D_800F33E0;
+FieldAnimTaskSlot *D_800F33E0;
 unsigned char D_8019A86E, D_8019A857;
-short D_8019A864, D_8019A866, D_8019A868;
-unsigned short D_800E11FA, D_800E2850[65536];
-short D_800F3368, D_800F336A, D_800F336E, D_800F3372, D_800F3374;
-unsigned short D_800F336C, D_800F3370;
-volatile short D_800F3376, D_800F3378;
-static Emitter emitter;
+short D_8019A864[3];
+#define D_8019A866 D_8019A864[1]
+#define D_8019A868 D_8019A864[2]
+unsigned short D_800E11E4[12], D_800E2850[65536];
+#define D_800E11FA D_800E11E4[11]
+/* The retail halfword names are fields of the sprite parameter block; the
+ * signed ones are read through signed views as the old globals were. */
+RenderEffectParameters D_800F3368;
+#define SIGNED(field) (*(short *)&D_800F3368.field)
+#define UNIT SIGNED(parameter00)
+#define D_800F336A SIGNED(parameter02)
+#define D_800F336C D_800F3368.palette
+#define D_800F336E SIGNED(parameter06)
+#define D_800F3370 D_800F3368.tpage
+#define D_800F3372 SIGNED(parameter0A)
+#define D_800F3374 D_800F3368.depth
+#define D_800F3376 SIGNED(extent_x)
+#define D_800F3378 SIGNED(extent_y)
+static RoomM350Emitter emitter;
 static int poolToken, setups, allocations, failAllocation, setupResult;
 static short effect[4], xValue, yValue, zValue;
 int func_80197594(int event, short *point) { return 0; }
-int func_800CE560(void *pool, int a, int b, int (*callback)(int, short *)) {
+int func_800CE560(char *pool, int a, int b,
+                  FieldAnimCallbackListCallback callback) {
     assert(setups++ == 0 && allocations == 0 && pool == &poolToken);
-    assert(a == 8 && b == 4 && callback == func_80197594);
+    assert(a == 8 && b == 4 && (void *)callback == (void *)func_80197594);
     return setupResult;
 }
-short *func_800CE610(void *pool) {
+void *func_800CE610(char *pool) {
     assert(allocations++ == 0 && setups == 0 && pool == &poolToken);
     assert(D_8019A857 != 0 && D_8019A86E == 0);
     /* Stub mutations verify that coordinates are fetched after allocation. */
-    D_8019A864 = xValue; D_8019A866 = yValue; D_8019A868 = zValue;
+    D_8019A864[0] = xValue; D_8019A866 = yValue; D_8019A868 = zValue;
     return failAllocation ? 0 : effect;
 }
 int main(void) {
@@ -45,7 +60,7 @@ int main(void) {
     const unsigned short indices[] = {0, 1, 255, 32768, 65535};
     short before[4];
     int event, stop, request, fail, x, y, z, i, ret;
-    emitter.pool = &poolToken; D_800F33E0 = &emitter;
+    emitter.pool = &poolToken; D_800F33E0 = (FieldAnimTaskSlot *)&emitter;
     for (ret = -2; ret <= 2; ++ret) {
         setups = allocations = 0; setupResult = ret;
         D_8019A857 = 128; D_8019A86E = 255;
@@ -58,7 +73,7 @@ int main(void) {
         int allocate = flags[stop] == 0 && flags[request] != 0;
         int emitted = allocate && !fail;
         D_8019A86E = flags[stop]; D_8019A857 = flags[request];
-        D_8019A864 = 123; D_8019A866 = 456; D_8019A868 = 789;
+        D_8019A864[0] = 123; D_8019A866 = 456; D_8019A868 = 789;
         xValue = values[x]; yValue = values[y]; zValue = values[z];
         memset(effect, 0x5A, sizeof(effect)); memcpy(before, effect, sizeof(effect));
         setups = allocations = 0; failAllocation = fail;
@@ -73,10 +88,10 @@ int main(void) {
     for (i = 0; i < 5; ++i) {
         D_800E11FA = indices[i]; setups = allocations = 0;
         D_8019A857 = 128; D_8019A86E = 255;
-        D_800F3368 = D_800F336A = D_800F336E = D_800F3372 = D_800F3374 = -7;
+        UNIT = D_800F336A = D_800F336E = D_800F3372 = D_800F3374 = -7;
         D_800F336C = D_800F3370 = 65535; D_800F3376 = D_800F3378 = -7;
         assert(func_801976C8(2) == 0 && setups == 0 && allocations == 0);
-        assert(D_800F3368 == 32 && D_800F336A == 2 && D_800F336C == 3 && D_800F336E == 1);
+        assert(UNIT == 32 && D_800F336A == 2 && D_800F336C == 3 && D_800F336E == 1);
         assert(D_800F3376 == 32 && D_800F3378 == 32 && D_800F3372 == 0 && D_800F3374 == 0);
         assert(D_800F3370 == D_800E2850[indices[i]]);
         assert(D_8019A857 == 128 && D_8019A86E == 255);

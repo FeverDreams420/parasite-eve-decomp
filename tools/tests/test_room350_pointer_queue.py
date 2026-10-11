@@ -2,74 +2,70 @@ import pathlib
 import shutil
 import subprocess
 import tempfile
+import sys
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-SOURCE = ROOT / "src/overlays/room_m350/RoomEffect_PointerQueue.c"
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
+# Overlay function addresses repeat across rooms; search this room only.
+ROOM = 'src/overlays/room_m350'
 
-def controller_source():
-    source = SOURCE.read_text()
-    callback = source.index('int func_80194F04')
-    controller = source.index('int func_80195064')
-    declarations = source[:callback]
-    declarations = declarations.replace('extern int D_800E27EC, D_800F3428, D_800966EC[], D_8019A4E8[];\n', '')
-    declarations = declarations.replace('extern unsigned short D_800F336C, D_800E1204[];\n', '')
-    declarations = declarations.replace('extern short D_800F336A;\n', '')
-    declarations = declarations.replace('extern int GetClut(int, int);\n', '')
-    declarations = declarations.replace('extern void func_800CEE20(void *, int, int, int, int, unsigned int, int, int, void *);\n', '')
-    return declarations + 'extern volatile short D_800F336A,D_800F336C;\nextern int func_80194F04(int, Particle *);\n' + source[controller:]
+CONTROLLER = 'func_80195064'
 
 
 class PointerQueueTests(unittest.TestCase):
     @unittest.skipUnless((ROOT / "tools/old-gcc/cc1").is_file() and shutil.which("mipsel-none-elf-as"), "PSX tools unavailable")
     def test_target_layout(self):
-        source = controller_source().split("extern Emitter", 1)[0] + r'''
+        unit = find_definition(CONTROLLER, under=ROOM)
+        source = unit.read_text() + r'''
 #define OFF(t,f) ((unsigned long)&((t *)0)->f)
 typedef char a[sizeof(Particle)==8 ? 1:-1];
 typedef char b[OFF(Particle,offset)==4 ? 1:-1];
 typedef char c[OFF(Queue,count)==0x56 ? 1:-1];
-typedef char d[OFF(Emitter,pool)==8 ? 1:-1];
+typedef char d[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
 '''
         with tempfile.TemporaryDirectory() as directory:
-            path = pathlib.Path(directory) / "layout.c"
-            path.write_text(source)
-            result = subprocess.run([str(ROOT / "tools/scripts/cc.sh"), str(path), str(path.with_suffix(".o"))], cwd=ROOT, capture_output=True, text=True)
+            result = psx_compile(source, pathlib.Path(directory) / "layout.o", unit)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     @unittest.skipUnless(shutil.which("cc"), "host compiler unavailable")
     def test_queue_mutation_and_failure(self):
-        source = controller_source().replace(' asm("$16")', '')
-        declarations, body = source.split("extern Emitter", 1)
-        body = ("extern Emitter" + body).replace("extern short D_8019A7FE, D_8019A802;", "extern short D_8019A802;")
+        source = host_unit(CONTROLLER, path=find_definition(CONTROLLER, under=ROOM))
+        source = source.replace("extern short D_8019A7FE, D_8019A802;", "extern short D_8019A802;")
         # Bind the interior count symbol to real storage, preserving aliasing.
-        harness = '#include <assert.h>\n#include <string.h>\n' + declarations + '\nstatic Queue pending;\n#define D_8019A7FE pending.count\n' + body + r'''
-Emitter *D_800F33E0;
+        head = 'int func_80195064(int event) {'
+        assert head in source
+        source = source.replace(head, 'static Queue pending;\n#define D_8019A7FE pending.count\n' + head)
+        harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
+FieldAnimTaskSlot *D_800F33E0;
 short D_8019A802;
 unsigned char D_8019A804;
-volatile short D_800F3368,D_800F336A,D_800F3376,D_800F3378,D_800F3372,D_800F3374,D_800F336C,D_800F336E;
-volatile unsigned short D_800E11FA,D_800F3370;
-unsigned short D_800E2850[65536];
-static Emitter emitters[2];
+RenderEffectParameters D_800F3368;
+u16 D_800E11E4[16];
+u16 D_800E2850[65536];
+static RoomM350Emitter emitters[2];
 static int pools[2], calls, setups, setupResult, failAt, nextCount;
 static Particle particles[4], expected[4];
 static Vector positions[8];
 int func_80194F04(int e, Particle *p) { return 0; }
-int func_800CE560(void *p,int stride,int count,int (*cb)(int,Particle *)) {
-    assert(p==&pools[0] && stride==8 && count==16 && cb==func_80194F04);
+int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback cb) {
+    assert(p==(char *)&pools[0] && stride==8 && count==16);
+    assert(cb==(FieldAnimCallbackListCallback)func_80194F04);
     setups++; return setupResult;
 }
-Particle *func_800CE610(void *p) {
+void *func_800CE610(char *p) {
     int index=calls++;
-    assert(index<4 && p==&pools[index ? 1:0]);
-    D_800F33E0=&emitters[1];
+    assert(index<4 && p==(char *)&pools[index ? 1:0]);
+    D_800F33E0=(FieldAnimTaskSlot *)&emitters[1];
     pending.count=nextCount;
     pending.positions[index]=&positions[index+4];
     return index==failAt ? 0:&particles[index];
 }
 static void reset(void) {
     int i;
-    calls=setups=0; D_800F33E0=&emitters[0];
+    calls=setups=0; D_800F33E0=(FieldAnimTaskSlot *)&emitters[0];
     memset(particles,0x5A,sizeof(particles)); memcpy(expected,particles,sizeof(particles));
     for(i=0;i<4;i++) pending.positions[i]=&positions[i];
 }
@@ -108,11 +104,15 @@ int main(void) {
         assert(func_80195064(0)==setupResult && setups==1 && calls==0 && pending.count==3);
     }
     for(i=0;i<65536;i++) {
-        reset(); pending.count=3; D_800E11FA=i; D_800E2850[i]=65535-i;
+        /* Texture slot 11 of D_800E11E4 is the halfword at 0x800E11FA. */
+        reset(); pending.count=3; D_800E11E4[11]=i; D_800E2850[i]=65535-i;
+        memset(&D_800F3368,0x9D,sizeof(D_800F3368));
         assert(func_80195064(2)==0 && calls==0 && setups==0 && pending.count==3);
-        assert(D_800F3368==32 && D_800F336A==2 && D_800F3376==32 && D_800F3378==32);
-        assert(D_800F3372==0 && D_800F3374==0 && D_800F336C==3 && D_800F336E==1);
-        assert(D_800F3370==65535-i);
+        assert(D_800F3368.parameter00==32 && D_800F3368.parameter02==2);
+        assert(D_800F3368.extent_x==32 && D_800F3368.extent_y==32);
+        assert(D_800F3368.parameter0A==0 && D_800F3368.depth==0);
+        assert(D_800F3368.palette==3 && D_800F3368.parameter06==1);
+        assert(D_800F3368.tpage==65535-i);
     }
     for(i=-3;i<=5;i++) if(i<0 || i>2) {
         reset(); pending.count=3;

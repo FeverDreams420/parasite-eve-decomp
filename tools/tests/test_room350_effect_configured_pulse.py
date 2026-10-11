@@ -1,80 +1,85 @@
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+ROOM = 'src/overlays/room_m350'
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import host_unit  # noqa: E402
 
 
 class Room350EffectConfiguredPulseTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_configuration_and_pre_post_clut_samples(self):
-        source = (ROOT / "src/overlays/room_m350/RoomEffect_ConfiguredPulseCallback.c").read_text()
-        for register in (3, 4, 5, 6, 16):
-            source = source.replace(f' asm("${register}")', '')
-        # Preserve the retail aliases on the host: scale is at state+2 and
-        # the two table names are low/high halfword views of one word table.
-        source = source.replace('extern volatile short D_800F336A, ', 'extern volatile short ')
-        source = source.replace(
-            'extern short D_800966EC[], D_800966EE[];',
-            'static union { int alignment; short halves[8192]; } tableStorage;\n'
-            '#define D_800966EC (tableStorage.halves)\n'
-            '#define D_800966EE (tableStorage.halves + 1)\n'
-            '#define D_800F336A (D_800F3368.scale)',
-        )
+        source = host_unit("func_80196C64", under=ROOM)
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <stdint.h>\n#include <string.h>\n' + source + r'''
-volatile int D_800E27EC;
-volatile RenderState D_800F3368;
-volatile short D_800F336E, D_800F3372, D_800F3374, D_800F3376, D_800F3378;
-volatile unsigned short D_800F336C, D_800E11E8, D_800E1208;
-unsigned short D_800F3370, D_800E2850[65536];
+int D_800E27EC;
+/* The retail halfword names are fields of the sprite parameter block; the
+ * signed ones are read through signed views as the old globals were. */
+RenderEffectParameters D_800F3368;
+#define SIGNED(field) (*(short *)&D_800F3368.field)
+#define UNIT SIGNED(parameter00)
+#define D_800F336A SIGNED(parameter02)
+#define D_800F336C D_800F3368.palette
+#define D_800F336E SIGNED(parameter06)
+#define D_800F3370 D_800F3368.tpage
+#define D_800F3372 SIGNED(parameter0A)
+#define D_800F3374 D_800F3368.depth
+#define D_800F3376 SIGNED(extent_x)
+#define D_800F3378 SIGNED(extent_y)
+unsigned short D_800E11E8, D_800E1208, D_800E2850[65536];
+/* Size samples are the low halfword, shades the high halfword of a word. */
+GteSineWord D_800966EC[4096];
+#define HALVES ((short *)D_800966EC)
 int D_8019A59C[4];
 static unsigned char object[16];
 static int cluts, draws, before, after, sample, shade, scale;
 static unsigned short handle, paletteIndex, clutY;
-_Static_assert(sizeof(RenderState) == 4, "render state prefix");
-_Static_assert(offsetof(RenderState, scale) == 2, "scale alias");
-_Static_assert(sizeof(SignedHalf) == 4, "signed high halfword view");
+_Static_assert(offsetof(RenderEffectParameters, parameter02) == 2, "scale alias");
+_Static_assert(sizeof(GteSineWord) == 4, "signed high halfword view");
 static unsigned tableIndex(int frame) { return (((uint32_t)frame - 1) << 9 & 0x3E00) / 2; }
 static int signedHalf(int value) {
     unsigned v = (unsigned)value & 65535;
     return v < 32768 ? (int)v : (int)v - 65536;
 }
-unsigned short GetClut(int x, int y) {
+u_short GetClut(int x, int y) {
     assert(cluts++ == 0 && draws == 0 && x == 0 && y == clutY);
-    assert(D_800F3368.unit == 32 && D_800F336A == 2);
+    assert(UNIT == 32 && D_800F336A == 2);
     assert(D_800F3376 == 32 && D_800F3378 == 32 && D_800F336C == 2);
     assert(D_800F336E == 0 && D_800F3372 == 0 && D_800F3374 == 32);
     assert(D_800F3370 == (unsigned short)(65535 - paletteIndex));
     /* These mutations test capture/reload order, not the actual helper's effects. */
     D_800E27EC = after;
     D_800F336A = scale;
-    tableStorage.halves[tableIndex(before)] = 12345;
-    tableStorage.halves[tableIndex(after) + 1] = shade;
+    HALVES[tableIndex(before)] = 12345;
+    HALVES[tableIndex(after) + 1] = shade;
     D_800E11E8 ^= 65535;
     D_800E1208 ^= 65535;
     return handle;
 }
-void func_800CEE20(void *position, int unused, int width, int height,
-                  int tile, unsigned int clut, int flag, int brightness, void *colors) {
+void func_800CEE20(struct GteShortVector *position, struct GteRotation *unused,
+                   int width, int height, int tile, int clut, int flag,
+                   int brightness, struct RenderColor *colors) {
     unsigned phase = (((uint32_t)after - 1) >> 2) & 3;
     int expectedShade = shade >= 0 ? shade / 32 : -((-shade + 31) / 32);
-    assert(draws++ == 0 && cluts == 1 && position == object && unused == 0);
+    assert(draws++ == 0 && cluts == 1 && (void *)position == object && unused == 0);
     assert(width == signedHalf(sample * 2 + 4096) && height == width);
     assert(tile == scale * (int)phase + 192 && clut == handle && flag == 1);
-    assert(brightness == expectedShade && colors == D_8019A59C);
+    assert(brightness == expectedShade && (int *)colors == D_8019A59C);
 }
 static void reset(void) {
     cluts = draws = 0;
     D_800E27EC = before;
-    D_800F3368.unit = -999; D_800F336A = -998;
+    UNIT = -999; D_800F336A = -998;
     D_800F336E = -997; D_800F3372 = -996; D_800F3374 = -995;
     D_800F3376 = -994; D_800F3378 = -993; D_800F336C = 65535; D_800F3370 = 65534;
     D_800E11E8 = paletteIndex; D_800E1208 = clutY;
     D_800E2850[paletteIndex] = 65535 - paletteIndex;
-    tableStorage.halves[tableIndex(before)] = sample;
-    tableStorage.halves[tableIndex(after) + 1] = 23456;
+    HALVES[tableIndex(before)] = sample;
+    HALVES[tableIndex(after) + 1] = 23456;
 }
 int main(void) {
     const int frames[] = {-1, 0, 1, 4, 7, 8, 16, 31, 32, 33, INT32_MIN, INT32_MAX};
@@ -87,7 +92,7 @@ int main(void) {
     for (i = 0; i < 12; ++i) {
         before = frames[i]; reset();
         assert(func_80196C64(1, object) == (before >= 8));
-        assert(cluts == 0 && draws == 0 && D_800F3368.unit == -999 && D_800F336A == -998);
+        assert(cluts == 0 && draws == 0 && UNIT == -999 && D_800F336A == -998);
     }
     for (i = 0; i < 12; ++i) for (j = 0; j < 12; ++j)
     for (k = 0; k < 9; ++k) for (l = 0; l < 9; ++l)
@@ -102,7 +107,7 @@ int main(void) {
         if (event == 1 || event == 2) continue;
         reset();
         assert(func_80196C64(event, object) == 0 && cluts == 0 && draws == 0);
-        assert(D_800F3368.unit == -999 && D_800F336A == -998);
+        assert(UNIT == -999 && D_800F336A == -998);
         assert(D_800F3370 == 65534 && D_800F3376 == -994 && D_800F3378 == -993);
     }
     return 0;

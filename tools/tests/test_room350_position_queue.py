@@ -2,75 +2,69 @@ import pathlib
 import shutil
 import subprocess
 import tempfile
+import sys
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-SOURCE = ROOT / "src/overlays/room_m350/RoomEffect_PositionQueue.c"
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
+# Overlay function addresses repeat across rooms; search this room only.
+ROOM = 'src/overlays/room_m350'
 
-def controller_source():
-    source = SOURCE.read_text()
-    callback = source.index('int func_80195218')
-    controller = source.index('int func_80195378')
-    declarations = source[:callback]
-    for line in (
-        'extern int D_800E27EC, D_800F3428, D_8019A3D0[];\n',
-        'extern unsigned short D_800F336C, D_800E1204[];\n',
-        'extern short D_800F336A, D_800966EE[];\n',
-        'extern int GetClut(int, int);\n',
-        'extern void func_800CEE20(void *, void *, int, int, int, unsigned int, int, int, void *);\n',
-    ):
-        declarations = declarations.replace(line, '')
-    return declarations + 'extern int D_800E27EC;\nextern volatile short D_800F336A,D_800F336C;\nextern int func_80195218(int, Particle *);\n' + source[controller:]
+CONTROLLER = 'func_80195378'
 
 
 class PositionQueueTests(unittest.TestCase):
     @unittest.skipUnless((ROOT / "tools/old-gcc/cc1").is_file() and shutil.which("mipsel-none-elf-as"), "PSX tools unavailable")
     def test_target_layout(self):
-        source = controller_source().split("extern Emitter", 1)[0] + r'''
+        unit = find_definition(CONTROLLER, under=ROOM)
+        source = unit.read_text() + r'''
 #define OFF(t,f) ((unsigned long)&((t *)0)->f)
 typedef char a[sizeof(Particle)==12 ? 1:-1];
 typedef char b[OFF(Particle,delay)==8 ? 1:-1];
 typedef char c[OFF(Queue,count)==0x48 ? 1:-1];
-typedef char d[OFF(Emitter,pool)==8 ? 1:-1];
+typedef char d[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
 typedef char e[OFF(Instance,yaw)==0x3A ? 1:-1];
 typedef char f[OFF(Actor,instance)==8 ? 1:-1];
 '''
         with tempfile.TemporaryDirectory() as directory:
-            path = pathlib.Path(directory) / "layout.c"
-            path.write_text(source)
-            result = subprocess.run([str(ROOT / "tools/scripts/cc.sh"), str(path), str(path.with_suffix(".o"))], cwd=ROOT, capture_output=True, text=True)
+            result = psx_compile(source, pathlib.Path(directory) / "layout.o", unit)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     @unittest.skipUnless(shutil.which("cc"), "host compiler unavailable")
     def test_queue_copy_and_helper_reloads(self):
-        source = controller_source().replace(' asm("$16")', '')
-        declarations, body = source.split("extern Emitter", 1)
-        body = ("extern Emitter" + body).replace("extern short D_8019A800, D_8019A802;", "extern short D_8019A802;")
-        harness = '#include <assert.h>\n#include <string.h>\n' + declarations + '\nstatic Queue pending;\n#define D_8019A800 pending.count\n' + body + r'''
-Emitter *D_800F33E0;
-Actor *D_800F32D0;
+        source = host_unit(CONTROLLER, path=find_definition(CONTROLLER, under=ROOM))
+        source = source.replace("extern short D_8019A800, D_8019A802;", "extern short D_8019A802;")
+        # Bind the interior count symbol to real storage, preserving aliasing.
+        head = 'int func_80195378(int event) {'
+        assert head in source
+        source = source.replace(head, 'static Queue pending;\n#define D_8019A800 pending.count\n' + head)
+        harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
+FieldAnimTaskSlot *D_800F33E0;
+FieldAnimObjectPrefix *D_800F32D0;
 int D_800E27EC;
 short D_8019A802;
 unsigned char D_8019A804;
-volatile short D_800F3368,D_800F336A,D_800F3376,D_800F3378,D_800F3372,D_800F3374,D_800F336C,D_800F336E;
-volatile unsigned short D_800E11EA,D_800F3370;
-unsigned short D_800E2850[65536];
-static Emitter emitters[2];
+RenderEffectParameters D_800F3368;
+u16 D_800E11EA;
+u16 D_800E2850[65536];
+static RoomM350Emitter emitters[2];
 static Actor actors[2];
 static Instance instances[2];
 static int pools[2], calls, setups, setupResult, failAt, nextCount, yaw, timer;
 static Particle particles[8], expected[8];
 static int half(int x) { unsigned int b=(unsigned int)x&65535; return b<32768 ? (int)b:(int)b-65536; }
 int func_80195218(int e, Particle *p) { return 0; }
-int func_800CE560(void *p,int stride,int count,int (*cb)(int,Particle *)) {
-    assert(p==&pools[0] && stride==12 && count==50 && cb==func_80195218);
+int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback cb) {
+    assert(p==(char *)&pools[0] && stride==12 && count==50);
+    assert(cb==(FieldAnimCallbackListCallback)func_80195218);
     setups++; return setupResult;
 }
-Particle *func_800CE610(void *p) {
+void *func_800CE610(char *p) {
     int index=calls++;
-    assert(index<8 && p==&pools[index ? 1:0]);
-    D_800F33E0=&emitters[1]; D_800F32D0=&actors[1];
+    assert(index<8 && p==(char *)&pools[index ? 1:0]);
+    D_800F33E0=(FieldAnimTaskSlot *)&emitters[1]; D_800F32D0=(FieldAnimObjectPrefix *)&actors[1];
     instances[1].yaw=yaw; D_800E27EC=timer;
     pending.count=nextCount;
     pending.positions[index].x=-32768+index;
@@ -80,7 +74,8 @@ Particle *func_800CE610(void *p) {
     return index==failAt ? 0:&particles[index];
 }
 static void reset(void) {
-    calls=setups=0; D_800F33E0=&emitters[0]; D_800F32D0=&actors[0];
+    calls=setups=0; D_800F33E0=(FieldAnimTaskSlot *)&emitters[0];
+    D_800F32D0=(FieldAnimObjectPrefix *)&actors[0];
     D_800E27EC=123; instances[0].yaw=123;
     memset(particles,0x5A,sizeof(particles)); memcpy(expected,particles,sizeof(particles));
     memset(pending.positions,0,sizeof(pending.positions));
@@ -125,10 +120,13 @@ int main(void) {
     }
     for(i=0;i<65536;i++) {
         reset(); pending.count=3; D_800E11EA=i; D_800E2850[i]=65535-i;
+        memset(&D_800F3368,0x9D,sizeof(D_800F3368));
         assert(func_80195378(2)==0 && calls==0 && setups==0 && pending.count==3);
-        assert(D_800F3368==32 && D_800F336A==2 && D_800F3376==32 && D_800F3378==32);
-        assert(D_800F3372==0 && D_800F3374==0 && D_800F336C==3 && D_800F336E==0);
-        assert(D_800F3370==65535-i);
+        assert(D_800F3368.parameter00==32 && D_800F3368.parameter02==2);
+        assert(D_800F3368.extent_x==32 && D_800F3368.extent_y==32);
+        assert(D_800F3368.parameter0A==0 && D_800F3368.depth==0);
+        assert(D_800F3368.palette==3 && D_800F3368.parameter06==0);
+        assert(D_800F3368.tpage==65535-i);
     }
     for(i=-3;i<=5;i++) if(i<0 || i>2) {
         reset(); pending.count=3;

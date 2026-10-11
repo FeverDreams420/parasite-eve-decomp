@@ -2,66 +2,74 @@ import pathlib
 import shutil
 import subprocess
 import tempfile
+import sys
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-SOURCE = ROOT / 'src/overlays/room_m350/RoomEffect_PulsedPairSpawner.c'
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import find_definition, host_unit, psx_compile  # noqa: E402
+
+# Overlay function addresses repeat across rooms; search this room only.
+ROOM = 'src/overlays/room_m350'
+
+SPAWNER = 'func_80192508'
 
 
 class PulsedPairTests(unittest.TestCase):
     @unittest.skipUnless((ROOT/'tools/old-gcc/cc1').is_file() and shutil.which('mipsel-none-elf-as'), 'PSX tools unavailable')
     def test_target_layout(self):
-        source = SOURCE.read_text().split('extern Emitter', 1)[0] + r'''
+        unit = find_definition(SPAWNER, under=ROOM)
+        source = unit.read_text() + r'''
 #define OFF(t,f) ((unsigned long)&((t *)0)->f)
 typedef char a[sizeof(Vector)==8 ? 1:-1];
 typedef char b[sizeof(Matrix)==32 && OFF(Matrix,position)==20 ? 1:-1];
 typedef char c[sizeof(Particle)==8 && OFF(Particle,reserved)==6 ? 1:-1];
-typedef char d[OFF(Emitter,pool)==8 ? 1:-1];
+typedef char d[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
 '''
         with tempfile.TemporaryDirectory() as directory:
-            path = pathlib.Path(directory)/'layout.c'
-            path.write_text(source)
-            result = subprocess.run([str(ROOT/'tools/scripts/cc.sh'), str(path), str(path.with_suffix('.o'))], cwd=ROOT, capture_output=True, text=True)
+            result = psx_compile(source, pathlib.Path(directory) / "layout.o", unit)
             self.assertEqual(result.returncode, 0, result.stdout+result.stderr)
 
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_emission_count_rng_and_reload(self):
-        source = SOURCE.read_text().replace(' asm("$16")', '')
+        source = host_unit(SPAWNER, path=find_definition(SPAWNER, under=ROOM))
         # Stubs validate CPU-side helper contracts, not rotation/GTE arithmetic.
         harness = '#include <assert.h>\n#include <stdint.h>\n#include <string.h>\n#include <limits.h>\n' + source + r'''
-Emitter *D_800F33E0;
-Vector D_8019A778[2];
+FieldAnimTaskSlot *D_800F33E0;
+GteShortVector D_8019A778[2];
 int D_800E27EC;
 short D_800966EE[8192];
-volatile short D_800F3368,D_800F336A,D_800F3376,D_800F3378,D_800F336C,D_800F336E,D_800F3372,D_800F3374;
-volatile unsigned short D_800E11E8,D_800F3370;
-unsigned short D_800E2850[65536];
-static Emitter emitters[2];
+RenderEffectParameters D_800F3368;
+u16 D_800E11E8;
+u16 D_800E2850[65536];
+static RoomM350Emitter emitters[2];
 static int pools[2],allocs,randoms,rotations,applications,failAt;
 static Particle particles[36],expected[36];
-static Matrix *rotation;
+static const GteMatrix *rotation;
 static uint32_t seed;
 static int word(uint32_t x) { int r; memcpy(&r,&x,4); return r; }
 static int half(uint32_t x) { x&=65535; return x<32768 ? (int)x:(int)x-65536; }
 static uint32_t rng(int n) { return seed+(uint32_t)n*0x87654321u; }
 int func_80199B94(int e,Particle *p) { return 0; }
-int func_800CE560(void *p,int stride,int count,int (*cb)(int,Particle *)) {
-    assert(p==&pools[0] && stride==8 && count==64 && cb==func_80199B94); return -123;
+int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback cb) {
+    assert(p==(char *)&pools[0] && stride==8 && count==64);
+    assert(cb==(FieldAnimCallbackListCallback)func_80199B94); return -123;
 }
-Particle *func_800CE610(void *p) {
+void *func_800CE610(char *p) {
     int i=allocs++;
-    assert(i<36 && p==&pools[i&1] && randoms==i*4 && applications==i);
+    assert(i<36 && p==(char *)&pools[i&1] && randoms==i*4 && applications==i);
     D_800E27EC=INT_MAX;
     return i==failAt ? 0:&particles[i];
 }
 int Inv_ScrambleGrid(void) { return word(rng(randoms++)); }
-void RotMatrixYXZ(Vector *v,Matrix *m) {
+GteMatrix *RotMatrixYXZ(GteShortVector *v,GteMatrix *m) {
     int i=rotations++;
     assert(randoms==i*4+2 && applications==i && allocs==i+1);
     assert(v->x==half(rng(i*4)<<4) && v->y==half(rng(i*4+1)<<4) && v->z==0);
     rotation=m;
+    return m;
 }
-void ApplyMatrixSV(Matrix *m,Vector *v,Vector *out) {
+GteShortVector *ApplyMatrixSV(const GteMatrix *m,const GteShortVector *v,GteShortVector *out) {
     int i=applications++,j;
     int combined=word((rng(i*4+2)<<8)|rng(i*4+3));
     assert(m==rotation && randoms==i*4+4 && rotations==i+1);
@@ -71,11 +79,12 @@ void ApplyMatrixSV(Matrix *m,Vector *v,Vector *out) {
         ((short *)&D_8019A778[i&1])[j]=half(seed*13+i*257+j);
         expected[i].position[j]=half((uint16_t)((short *)out)[j]+(uint16_t)((short *)&D_8019A778[i&1])[j]);
     }
-    D_800F33E0=&emitters[(i+1)&1];
+    D_800F33E0=(FieldAnimTaskSlot *)&emitters[(i+1)&1];
     memset(D_800966EE,0,sizeof(D_800966EE));
+    return out;
 }
 static void reset(void) {
-    allocs=randoms=rotations=applications=0; D_800F33E0=&emitters[0];
+    allocs=randoms=rotations=applications=0; D_800F33E0=(FieldAnimTaskSlot *)&emitters[0];
     memset(particles,0x5A,sizeof(particles)); memcpy(expected,particles,sizeof(particles));
 }
 static void run(int timer,int sample,int failure) {
@@ -102,9 +111,12 @@ int main(void) {
     for(n=0;n<65536;n++) {
         seed=(uint32_t)n*0x81234567u; run(half(n),4096,-1);
         D_800E11E8=n; D_800E2850[n]=n^0xA357;
-        assert(func_80192508(2)==0 && D_800F3370==(unsigned short)(n^0xA357));
-        assert(D_800F3368==16 && D_800F336A==1 && D_800F3376==16 && D_800F3378==16);
-        assert(D_800F336C==2 && D_800F336E==0 && D_800F3372==0 && D_800F3374==0);
+        memset(&D_800F3368,0x9D,sizeof(D_800F3368));
+        assert(func_80192508(2)==0 && D_800F3368.tpage==(unsigned short)(n^0xA357));
+        assert(D_800F3368.parameter00==16 && D_800F3368.parameter02==1);
+        assert(D_800F3368.extent_x==16 && D_800F3368.extent_y==16);
+        assert(D_800F3368.palette==2 && D_800F3368.parameter06==0);
+        assert(D_800F3368.parameter0A==0 && D_800F3368.depth==0);
     }
     reset(); assert(func_80192508(-1)==0 && func_80192508(3)==0 && allocs==0);
     return 0;

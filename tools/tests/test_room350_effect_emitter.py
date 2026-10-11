@@ -1,17 +1,19 @@
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+ROOM = 'src/overlays/room_m350'
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import host_unit  # noqa: E402
 
 
 def controller_source():
-    source = (ROOT / "src/overlays/room_m350/RoomEffect_AnimationBurst.c").read_text()
-    callback = source.index('int func_801944F0')
-    controller = source.index('int func_80194654')
-    return source[:callback] + 'extern int func_801944F0(int, void **);\n' + source[controller:]
+    # The burst callback is reduced to a prototype; the test stubs it.
+    return host_unit("func_80194654", under=ROOM)
 
 
 class Room350EffectEmitterTests(unittest.TestCase):
@@ -19,52 +21,54 @@ class Room350EffectEmitterTests(unittest.TestCase):
     def test_animation_crossing_burst_and_allocation_failure(self):
         source = controller_source()
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-Actor *D_800F32D0;
-Emitter *D_800F33E0;
-short D_8019A7A0[4];
+FieldAnimObjectPrefix *D_800F32D0;
+FieldAnimTaskSlot *D_800F33E0;
+GteShortVector D_8019A7A0;
+#define VEC (&D_8019A7A0.x)
 static Actor actor, replacementActor;
 static Animation animation, replacementAnimation;
 static Owner owner, replacementOwner;
-static Emitter emitter;
+static RoomM350Emitter emitter;
 static State state;
 static short *effect;
 static int poolToken, soundToken, replacementSound, setupCalls, allocations, sounds;
 static int failAllocation, setupResult, mutate, expectedRemaining, expectedDelay;
 int func_801944F0(int event, void **object) { return 0; }
-int func_800CE560(void *pool, int capacity, int size, int (*callback)(int, void **)) {
+int func_800CE560(char *pool, int capacity, int size,
+                  FieldAnimCallbackListCallback callback) {
     assert(setupCalls++ == 0 && pool == &poolToken && capacity == 4 && size == 4);
-    assert(callback == func_801944F0 && state.remaining == 0 && state.delay == expectedDelay);
+    assert((void *)callback == (void *)func_801944F0 && state.remaining == 0 && state.delay == expectedDelay);
     return setupResult;
 }
-short **func_800CE610(void *pool) {
+void *func_800CE610(char *pool) {
     assert(allocations++ == 0 && pool == &poolToken && sounds == 0);
     assert(state.delay == expectedDelay);
     if (failAllocation) return 0;
     /* Deliberate mutations verify reloads after allocation. */
     if (mutate) {
-        D_800F32D0 = &replacementActor;
+        D_800F32D0 = (FieldAnimObjectPrefix *)&replacementActor;
         state.remaining = -3;
     }
     return &effect;
 }
-int Asset_Find08w(int id, int sound, short x, short y, short z) {
+int Asset_Find08w(int id, int sound, int x, int y, int z) {
     assert(sounds++ == 0 && allocations == 1 && id == 1479);
     assert(sound == (mutate ? replacementSound : soundToken));
-    assert(effect == D_8019A7A0 && state.delay == 1);
+    assert(effect == VEC && state.delay == 1);
     assert(state.remaining == expectedRemaining);
-    assert(x == D_8019A7A0[0] && y == D_8019A7A0[1] && z == D_8019A7A0[2]);
+    assert(x == VEC[0] && y == VEC[1] && z == VEC[2]);
     return 0;
 }
 int main(void) {
     const unsigned short frames[] = {0, 7, 8, 9, 25, 26, 65535};
     const short values[] = {-32768, -1, 0, 1, 4, 32767};
     int id, f, p, r, d, fail, change, ret, event;
-    emitter.pool = &poolToken; D_800F33E0 = &emitter;
+    emitter.pool = &poolToken; D_800F33E0 = (FieldAnimTaskSlot *)&emitter;
     soundToken = 7; replacementSound = -9;
     actor.animation = &animation; animation.owner = &owner; owner.soundMode = soundToken;
     replacementActor.animation = &replacementAnimation;
     replacementAnimation.owner = &replacementOwner; replacementOwner.soundMode = replacementSound;
-    D_8019A7A0[0] = -32768; D_8019A7A0[1] = 123; D_8019A7A0[2] = 32767;
+    VEC[0] = -32768; VEC[1] = 123; VEC[2] = 32767;
     for (ret = -2; ret <= 2; ++ret) {
         state.remaining = 123; state.delay = -7; expectedDelay = -7;
         setupCalls = allocations = sounds = 0; setupResult = ret;
@@ -92,7 +96,7 @@ int main(void) {
                 }
             }
         }
-        D_800F32D0 = &actor; animation.id = id;
+        D_800F32D0 = (FieldAnimObjectPrefix *)&actor; animation.id = id;
         animation.frame = frames[f]; animation.previous = frames[p];
         state.remaining = values[r]; state.delay = values[d];
         expectedDelay = delay; expectedRemaining = remaining;
@@ -101,7 +105,7 @@ int main(void) {
         assert(func_80194654(1, &state) == result);
         assert(state.remaining == remaining && state.delay == (play ? 1 : delay));
         assert(allocations == allocate && sounds == play && setupCalls == 0);
-        assert(effect == (play ? D_8019A7A0 : 0));
+        assert(effect == (play ? VEC : 0));
     }
     return 0;
 }

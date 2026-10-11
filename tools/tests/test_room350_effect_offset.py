@@ -1,33 +1,37 @@
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+ROOM = 'src/overlays/room_m350'
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import host_unit  # noqa: E402
 
 
 def callback_source():
-    source = (ROOT / "src/overlays/room_m350/RoomEffect_PointerQueue.c").read_text()
-    callback = source[:source.index('int func_80195064')]
-    definition = callback.index('int func_80194F04')
-    return callback[:definition] + 'typedef Vector Position; typedef Particle Effect;\n' + callback[definition:]
+    return host_unit("func_80194F04", under=ROOM) + 'typedef Vector Position; typedef Particle Effect;\n'
 
 
 class Room350EffectOffsetTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_position_copy_offset_and_saved_frame(self):
         source = callback_source()
-        source = source.replace('asm("$3")', '')
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-int D_800E27EC, D_800F3428, D_800966EC[4096], D_8019A4E8[4];
-unsigned short D_800F336C, D_800E1204[8];
-short D_800F336A;
+RenderEffectParameters D_800F3368;
+GteSineWord D_800966EC[4096];
+RenderColor D_8019A4E8;
+#define D_800F336A D_800F3368.parameter02
+#define D_800F336C D_800F3368.palette
+int D_800E27EC, D_800F3428;
+unsigned short D_800E1204[8];
 static Position original, expectedPosition, replacement;
 static Effect object;
 static int lookups, draws, handleValue, savedFrame, scaleValue, shadeValue;
 _Static_assert(sizeof(Position) == 8, "position size");
-int GetClut(int x, int y) {
+u_short GetClut(int x, int y) {
     unsigned int index = ((unsigned int)savedFrame << 7) & 0xF80;
     assert(lookups++ == 0 && draws == 0 && x == 0);
     assert(y == D_800E1204[D_800F336C] +
@@ -36,17 +40,18 @@ int GetClut(int x, int y) {
     original.x = 777; original.y = 888; original.z = 999; original.pad = 1000;
     object.position = &replacement; object.offset = 123;
     D_800E27EC += 3; D_800F336A = scaleValue;
-    D_800966EC[index] = (int)(0x76540000U | (unsigned short)shadeValue);
+    D_800966EC[index].word = (int)(0x76540000U | (unsigned short)shadeValue);
     return handleValue;
 }
-void func_800CEE20(void *p, int zero, int a, int b, int scale,
-                  unsigned int handle, int flag, int shade, void *colors) {
+void func_800CEE20(struct GteShortVector *p, struct GteRotation *zero, int a,
+                   int b, int scale, int handle, int flag, int shade,
+                   struct RenderColor *colors) {
     assert(lookups == 1 && draws++ == 0 && p != &original && p != &replacement);
     assert(memcmp(p, &expectedPosition, sizeof(Position)) == 0);
     assert(zero == 0 && a == 8192 && b == 8192);
     assert(scale == scaleValue * (savedFrame >> 1));
     assert(handle == (unsigned short)handleValue && flag == 1);
-    assert(shade == shadeValue >> 5 && colors == D_8019A4E8);
+    assert(shade == shadeValue >> 5 && colors == &D_8019A4E8);
 }
 int main(void) {
     const short values[] = {-32768, -33, -1, 0, 32, 32767};

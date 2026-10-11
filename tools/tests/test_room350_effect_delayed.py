@@ -1,33 +1,39 @@
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+ROOM = 'src/overlays/room_m350'
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import host_unit  # noqa: E402
 
 
 def callback_source():
-    source = (ROOT / "src/overlays/room_m350/RoomEffect_PositionQueue.c").read_text()
-    return source[:source.index('int func_80195378')]
+    return host_unit("func_80195218", under=ROOM)
 
 
 class Room350EffectDelayedTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_delay_saved_size_and_reloaded_shade(self):
         source = callback_source()
-        source = source.replace('extern short D_800F336A, D_800966EE[];',
-            'extern short D_800F336A;\n'
-            'static union { int alignment; short values[8194]; } table;\n'
-            '#define D_800966EE (table.values + 1)')
+        # D_800966EE is the halfword view of the sine table at +2 bytes.
+        source = source.replace('extern short D_800966EE[];',
+            '#define D_800966EE ((short *)D_800966EC + 1)')
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-int D_800E27EC, D_800F3428, D_8019A3D0[4];
-unsigned short D_800F336C, D_800E1204[8];
-short D_800F336A;
+RenderEffectParameters D_800F3368;
+RenderColor D_8019A3D0;
+#define D_800F336A D_800F3368.parameter02
+#define D_800F336C D_800F3368.palette
+int D_800E27EC, D_800F3428;
+GteSineWord D_800966EC[4097];
+unsigned short D_800E1204[8];
 static short object[5];
 static int lookups, draws, handleValue, savedFrame, sizeValue, shadeValue;
 static short vectorY, scaleValue, objectScale;
-int GetClut(int x, int y) {
+u_short GetClut(int x, int y) {
     unsigned int index = ((unsigned int)savedFrame << 7) & 0x1F80;
     assert(lookups++ == 0 && draws == 0 && x == 0);
     assert(y == D_800E1204[D_800F336C] +
@@ -38,20 +44,21 @@ int GetClut(int x, int y) {
     object[3] = 123; object[4] = objectScale;
     return handleValue;
 }
-void func_800CEE20(void *p, void *v, int a, int b, int scale,
-                  unsigned int handle, int flag, int shade, void *colors) {
-    short *vector = v;
+void func_800CEE20(struct GteShortVector *p, struct GteRotation *v, int a,
+                   int b, int scale, int handle, int flag, int shade,
+                   struct RenderColor *colors) {
+    short *vector = (short *)v;
     assert(lookups == 1 && draws++ == 0 && p == object);
     assert(vector[0] == 1024 && vector[1] == vectorY && vector[2] == 1024 && vector[3] == 1);
     assert(a == sizeValue && b == sizeValue * 2);
     assert(scale == scaleValue * objectScale + 64);
     assert(handle == (unsigned short)handleValue && flag == 1);
-    assert(shade == shadeValue >> 5 && colors == D_8019A3D0);
+    assert(shade == shadeValue >> 5 && colors == &D_8019A3D0);
 }
 int main(void) {
     const short values[] = {-32768, -33, -1, 0, 32, 32767};
     int counter, event, kind, special, h, s, m, i;
-    assert(sizeof(SignedHalf) == 4);
+    assert(sizeof(GteSineWord) == 4);
     for (counter = -16; counter <= 80; ++counter)
     for (event = -1; event <= 3; ++event) {
         if (event == 2 && counter >= 2) continue;
@@ -64,7 +71,7 @@ int main(void) {
     for (h = 0; h < 2; ++h) for (s = 0; s < 6; ++s) for (m = 0; m < 6; ++m) {
         unsigned int index = ((unsigned int)(counter - 2) << 7) & 0x1F80;
         for (i = 0; i < 8; ++i) D_800E1204[i] = h ? 65535 : i * 100;
-        memset(&table, 0x5A, sizeof(table));
+        memset(D_800966EC, 0x5A, sizeof(D_800966EC));
         D_800E27EC = counter; savedFrame = counter - 2;
         D_800F336C = kind; D_800F3428 = special; D_800F336A = 999;
         sizeValue = values[s]; shadeValue = values[5-s];

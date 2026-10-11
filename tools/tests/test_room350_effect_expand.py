@@ -1,22 +1,28 @@
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+ROOM = 'src/overlays/room_m350'
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import host_unit  # noqa: E402
 
 
 class Room350EffectExpandTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_expansion_and_post_clut_reloads(self):
-        source = (ROOT / "src/overlays/room_m350/RoomEffect_RadialBurst.c").read_text()
-        source = source[:source.index('/* MASPSX_FLAGS: --expand-div */')]
+        source = host_unit("func_80197A04", under=ROOM)
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <stdint.h>\n#include <string.h>\n' + source + r'''
-Actor *D_800F32D0;
-int D_800E27EC, D_800F3428, D_800966EC[4096], D_8019A634[4];
-unsigned short D_800F336C, D_800E1204[8];
-short D_800F336A;
+RenderEffectParameters D_800F3368;
+GteSineWord D_800966EC[4096];
+#define D_800F336A D_800F3368.parameter02
+#define D_800F336C D_800F3368.palette
+FieldAnimObjectPrefix *D_800F32D0;
+int D_800E27EC, D_800F3428, D_8019A634[4];
+unsigned short D_800E1204[8];
 static Actor actor;
 static Instance instance;
 static Transform transform;
@@ -25,7 +31,7 @@ static int lookups, draws, handleValue, expectedShade, renderScale;
 _Static_assert(offsetof(Actor, instance) == 8, "actor instance offset");
 _Static_assert(offsetof(Instance, transform) == 0x238, "transform pointer offset");
 _Static_assert(offsetof(Transform, position) == 0xF4, "origin offset");
-int GetClut(int x, int y) {
+u_short GetClut(int x, int y) {
     unsigned int index;
     assert(lookups++ == 0 && draws == 0 && x == 32);
     assert(y == D_800E1204[D_800F336C] +
@@ -36,11 +42,12 @@ int GetClut(int x, int y) {
     object[0] = 123; object[1] = 456; object[2] = 789;
     D_800F336A = renderScale; D_800E27EC += 3;
     index = ((unsigned int)(D_800E27EC - 1) << 7) & 0xF80;
-    D_800966EC[index] = (int)(0x12340000u | (unsigned short)expectedShade);
+    D_800966EC[index].word = (int)(0x12340000u | (unsigned short)expectedShade);
     return handleValue;
 }
-void func_800CEE20(void *p, int zero, int a, int b, int scale,
-                  unsigned int handle, int flag, int shade, void *colors) {
+void func_800CEE20(struct GteShortVector *p, struct GteRotation *zero, int a,
+                   int b, int scale, int handle, int flag, int shade,
+                   struct RenderColor *colors) {
     assert(lookups == 1 && draws++ == 0 && p != object && zero == 0);
     /* Retail does not initialize the fourth local halfword. */
     assert(memcmp(p, expectedPosition, sizeof(expectedPosition)) == 0);
@@ -51,7 +58,8 @@ void func_800CEE20(void *p, int zero, int a, int b, int scale,
 int main(void) {
     const short values[] = {-32768, -4097, -33, -1, 0, 32, 4097, 32767};
     int counter, event, kind, special, h, s, v, i;
-    actor.instance = &instance; instance.transform = &transform; D_800F32D0 = &actor;
+    actor.instance = &instance; instance.transform = &transform;
+    D_800F32D0 = (FieldAnimObjectPrefix *)&actor;
     for (counter = -16; counter <= 80; ++counter)
     for (event = -1; event <= 3; ++event) {
         if (event == 2) continue;
@@ -66,7 +74,7 @@ int main(void) {
         for (i = 0; i < 8; ++i) D_800E1204[i] = h ? 65535 : i * 100;
         memset(D_800966EC, 0, sizeof(D_800966EC));
         D_800E27EC = counter; D_800F336C = kind; D_800F3428 = special;
-        D_800966EC[index] = (int)(0x56780000u | (unsigned short)values[s]);
+        D_800966EC[index].word = (int)(0x56780000u | (unsigned short)values[s]);
         expectedShade = values[7-s];
         for (i = 0; i < 3; ++i) {
             int64_t product;

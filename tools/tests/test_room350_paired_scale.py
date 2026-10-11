@@ -2,23 +2,24 @@ import pathlib
 import shutil
 import subprocess
 import tempfile
+import sys
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-SOURCE = ROOT / "src/overlays/room_m350/RoomEffect_TripleScalePair.c"
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
+# Overlay function addresses repeat across rooms; search this room only.
+ROOM = 'src/overlays/room_m350'
 
-def controller_source():
-    source = SOURCE.read_text()
-    callback = source.index('int func_80193A80')
-    controller = source.index('int func_80193BCC')
-    return source[:callback] + 'extern int func_80193A80(int, void **);\n' + source[controller:]
+CONTROLLER = "func_80193BCC"
 
 
 class PairedScaleTests(unittest.TestCase):
     @unittest.skipUnless((ROOT / "tools/old-gcc/cc1").is_file() and shutil.which("mipsel-none-elf-as"), "PSX tools unavailable")
     def test_target_layout(self):
-        source = controller_source() + r'''
+        unit = find_definition(CONTROLLER, under=ROOM)
+        source = unit.read_text() + r'''
 #define OFF(t,f) ((unsigned long)&((t *)0)->f)
 typedef char a[sizeof(Particle)==4 ? 1:-1];
 typedef char b[sizeof(Vector)==8 ? 1:-1];
@@ -26,48 +27,46 @@ typedef char c[OFF(Instance,animation)==14 ? 1:-1];
 typedef char d[OFF(Instance,frame)==22 ? 1:-1];
 typedef char e[OFF(Instance,previousFrame)==26 ? 1:-1];
 typedef char f[OFF(Actor,instance)==8 ? 1:-1];
-typedef char g[OFF(Emitter,pool)==8 ? 1:-1];
+typedef char g[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
 '''
         with tempfile.TemporaryDirectory() as directory:
-            path = pathlib.Path(directory) / "layout.c"
-            path.write_text(source)
-            result = subprocess.run([str(ROOT / "tools/scripts/cc.sh"), str(path), str(path.with_suffix(".o"))], cwd=ROOT, capture_output=True, text=True)
+            result = psx_compile(source, pathlib.Path(directory) / "layout.o", unit)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     @unittest.skipUnless(shutil.which("cc"), "host compiler unavailable")
     def test_crossing_precedes_completion(self):
-        source = controller_source().replace(' asm("$16")', '')
+        source = host_unit(CONTROLLER, path=find_definition(CONTROLLER, under=ROOM))
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-Actor *D_800F32D0;
-Emitter *D_800F33E0;
-Vector D_8019A778[2];
-volatile short D_800F3368,D_800F3376,D_800F3378,D_800F3372,D_800F3374,D_800F336E;
-unsigned short D_800F336C;
-short D_800F336A;
-volatile unsigned short D_800E11FA,D_800F3370;
-unsigned short D_800E2850[65536];
+FieldAnimObjectPrefix *D_800F32D0;
+FieldAnimTaskSlot *D_800F33E0;
+GteShortVector D_8019A778[2];
+RenderEffectParameters D_800F3368;
+u16 D_800E11E4[16];
+u16 D_800E2850[65536];
 static Actor actor;
 static Instance instance;
-static Emitter emitters[2];
+static RoomM350Emitter emitters[2];
 static int pools[2], calls, setups, failAt, setupResult;
 static Particle particles[2], expected[2];
 int func_80193A80(int e, void **p) { return 0; }
-int func_800CE560(void *p,int stride,int count,int (*cb)()) {
-    assert(p==&pools[0] && stride==4 && count==2 && cb==func_80193A80);
+int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback cb) {
+    assert(p==(char *)&pools[0] && stride==4 && count==2);
+    assert(cb==(FieldAnimCallbackListCallback)func_80193A80);
     setups++;
     return setupResult;
 }
-Particle *func_800CE610(void *pool) {
+void *func_800CE610(char *pool) {
     int index=calls++;
-    assert(index<2 && pool==&pools[index ? 1:0]);
+    assert(index<2 && pool==(char *)&pools[index ? 1:0]);
     /* Verify pool reload and absence of a post-allocation frame check. */
-    D_800F33E0=&emitters[1];
+    D_800F33E0=(FieldAnimTaskSlot *)&emitters[1];
     instance.frame=65535; instance.previousFrame=65535; instance.animation=0;
     return index==failAt ? 0:&particles[index];
 }
 static void reset(void) {
     calls=setups=0;
-    D_800F32D0=&actor; D_800F33E0=&emitters[0];
+    D_800F32D0=(FieldAnimObjectPrefix *)&actor;
+    D_800F33E0=(FieldAnimTaskSlot *)&emitters[0];
     memset(particles,0x5A,sizeof(particles));
     memcpy(expected,particles,sizeof(particles));
 }
@@ -98,13 +97,15 @@ int main(void) {
         reset(); assert(func_80193BCC(0)==setupResult && setups==1 && calls==0);
     }
     for(i=0;i<65536;i++) {
-        reset(); D_800E11FA=i; D_800E2850[i]=65535-i;
-        D_800F3368=D_800F336A=D_800F3376=D_800F3378=D_800F3372=D_800F3374=-99;
-        D_800F336C=D_800F336E=-99;
+        /* The tpage slot is entry 11 of the texture slot table (0x800E11FA). */
+        reset(); D_800E11E4[11]=i; D_800E2850[i]=65535-i;
+        memset(&D_800F3368,0x9D,sizeof(D_800F3368));
         assert(func_80193BCC(2)==0 && calls==0 && setups==0);
-        assert(D_800F3368==32 && D_800F336A==2 && D_800F3376==32 && D_800F3378==32);
-        assert(D_800F3372==0 && D_800F3374==0 && D_800F336C==3 && D_800F336E==1);
-        assert(D_800F3370==65535-i);
+        assert(D_800F3368.parameter00==32 && D_800F3368.parameter02==2);
+        assert(D_800F3368.extent_x==32 && D_800F3368.extent_y==32);
+        assert(D_800F3368.parameter0A==0 && D_800F3368.depth==0);
+        assert(D_800F3368.palette==3 && D_800F3368.parameter06==1);
+        assert(D_800F3368.tpage==65535-i);
     }
     for(i=-3;i<=5;i++) if(i<0 || i>2) {
         reset(); assert(func_80193BCC(i)==0 && calls==0 && setups==0);

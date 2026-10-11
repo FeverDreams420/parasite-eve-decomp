@@ -2,62 +2,70 @@ import pathlib
 import shutil
 import subprocess
 import tempfile
+import sys
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-SOURCE = ROOT / "src/overlays/room_m350/RoomEffect_PairedAnimationController.c"
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import find_definition, host_unit, psx_compile  # noqa: E402
+
+# Overlay function addresses repeat across rooms; search this room only.
+ROOM = 'src/overlays/room_m350'
+
+CONTROLLER = "func_8019360C"
 
 
 class PairedAnimationTests(unittest.TestCase):
     @unittest.skipUnless((ROOT / "tools/old-gcc/cc1").is_file() and shutil.which("mipsel-none-elf-as"), "PSX tools unavailable")
     def test_target_layout(self):
-        source = SOURCE.read_text().split("extern Actor", 1)[0] + r'''
+        unit = find_definition(CONTROLLER, under=ROOM)
+        source = unit.read_text() + r'''
 #define OFF(t,f) ((unsigned long)&((t *)0)->f)
-typedef char a[sizeof(Particle)==8 ? 1:-1];
-typedef char b[OFF(Particle,frame)==4 ? 1:-1];
+typedef char a[sizeof(RoomM350SweepTrap)==8 ? 1:-1];
+typedef char b[OFF(RoomM350SweepTrap,done)==4 ? 1:-1];
 typedef char c[OFF(Instance,animation)==14 ? 1:-1];
 typedef char d[OFF(Instance,frame)==22 ? 1:-1];
 typedef char e[OFF(Instance,previousFrame)==26 ? 1:-1];
 typedef char f[OFF(Instance,transforms)==0x238 ? 1:-1];
 typedef char g[OFF(Transform,position)==20 ? 1:-1];
 typedef char h[sizeof(Transform)==32 ? 1:-1];
-typedef char i[OFF(Actor,instance)==8 ? 1:-1];
-typedef char j[OFF(Emitter,pool)==8 ? 1:-1];
-typedef char k[OFF(Owner,soundMode)==8 ? 1:-1];
+typedef char i[OFF(RoomM350Actor,instance)==8 ? 1:-1];
+typedef char j[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
+typedef char k[OFF(RoomM350SoundOwner,soundMode)==8 ? 1:-1];
 '''
         with tempfile.TemporaryDirectory() as directory:
-            path = pathlib.Path(directory) / "layout.c"
-            path.write_text(source)
-            result = subprocess.run([str(ROOT / "tools/scripts/cc.sh"), str(path), str(path.with_suffix(".o"))], cwd=ROOT, capture_output=True, text=True)
+            result = psx_compile(source, pathlib.Path(directory) / "layout.o", unit)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     @unittest.skipUnless(shutil.which("cc"), "host compiler unavailable")
     def test_animation_allocation_and_sound(self):
-        source = SOURCE.read_text().replace(' asm("$16")', '')
+        source = host_unit(CONTROLLER, path=find_definition(CONTROLLER, under=ROOM))
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-Actor *D_800F32D0;
-Emitter *D_800F33E0;
-Vector D_8019A778[2];
-volatile short D_800F3368,D_800F336A,D_800F3376,D_800F3378,D_800F3372,D_800F3374;
-static Actor actors[2];
+typedef RoomM350SweepTrap Particle;
+FieldAnimObjectPrefix *D_800F32D0;
+FieldAnimTaskSlot *D_800F33E0;
+GteShortVector D_8019A778[2];
+RenderEffectParameters D_800F3368;
+static RoomM350Actor actors[2];
 static Instance instances[2];
-static Owner owners[2];
+static RoomM350SoundOwner owners[2];
 static Transform transforms[2];
-static Emitter emitters[2];
+static RoomM350Emitter emitters[2];
 static int pools[2], calls, sounds, setups, failAt, setupResult;
 static Particle particles[2], expected[2];
-int func_80192E4C(int e, Particle *p) { return 0; }
-int func_800CE560(void *p,int stride,int count,int (*cb)(int,Particle *)) {
-    assert(p==&pools[0] && stride==8 && count==2 && cb==func_80192E4C);
+int func_80192E4C(int e, RoomM350SweepTrap *p) { return 0; }
+int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback cb) {
+    assert(p==(char *)&pools[0] && stride==8 && count==2);
+    assert(cb==(FieldAnimCallbackListCallback)func_80192E4C);
     setups++;
     return setupResult;
 }
-Particle *func_800CE610(void *pool) {
+void *func_800CE610(char *pool) {
     int index=calls++;
-    assert(index<2 && pool==&pools[index ? 1:0]);
+    assert(index<2 && pool==(char *)&pools[index ? 1:0]);
     /* Exercise reloads after allocation, including the failure path. */
-    D_800F33E0=&emitters[1];
-    D_800F32D0=&actors[1];
+    D_800F33E0=(FieldAnimTaskSlot *)&emitters[1];
+    D_800F32D0=(FieldAnimObjectPrefix *)&actors[1];
     return index==failAt ? 0:&particles[index];
 }
 int Asset_Find08w(int sound,int mode,int x,int y,int z) {
@@ -69,7 +77,8 @@ int Asset_Find08w(int sound,int mode,int x,int y,int z) {
 }
 static void reset(void) {
     calls=sounds=setups=0;
-    D_800F32D0=&actors[0]; D_800F33E0=&emitters[0];
+    D_800F32D0=(FieldAnimObjectPrefix *)&actors[0];
+    D_800F33E0=(FieldAnimTaskSlot *)&emitters[0];
     memset(particles,0x5A,sizeof(particles));
     memcpy(expected,particles,sizeof(particles));
 }
@@ -83,7 +92,7 @@ static void run(int animation,int frame,int previous,int failure) {
     assert(calls==(active ? (failure==0 ? 1:2):0));
     assert(sounds==active && setups==0);
     for(i=0;i<successes;i++) {
-        expected[i].position=&D_8019A778[i]; expected[i].frame=0;
+        expected[i].anchor=&D_8019A778[i]; expected[i].done=0;
     }
     assert(memcmp(expected,particles,sizeof(particles))==0);
 }
@@ -91,7 +100,7 @@ int main(void) {
     int i,j,k;
     int edges[]={0,7,8,49,50,32767,32768,65535};
     for(i=0;i<2;i++) {
-        actors[i].instance=&instances[i]; instances[i].owner=&owners[i];
+        actors[i].instance=(struct RoomM350Instance *)&instances[i]; instances[i].owner=&owners[i];
         instances[i].transforms=&transforms[i]; emitters[i].pool=&pools[i];
     }
     owners[1].soundMode=-17;
@@ -107,10 +116,11 @@ int main(void) {
         reset(); assert(func_8019360C(0)==setupResult && setups==1 && calls==0 && sounds==0);
     }
     reset();
-    D_800F3368=D_800F336A=D_800F3376=D_800F3378=D_800F3372=D_800F3374=-99;
+    memset(&D_800F3368,0x9D,sizeof(D_800F3368));
     assert(func_8019360C(2)==0 && calls==0 && sounds==0 && setups==0);
-    assert(D_800F3368==32 && D_800F336A==2 && D_800F3376==32 && D_800F3378==32);
-    assert(D_800F3372==0 && D_800F3374==0);
+    assert(D_800F3368.parameter00==32 && D_800F3368.parameter02==2);
+    assert(D_800F3368.extent_x==32 && D_800F3368.extent_y==32);
+    assert(D_800F3368.parameter0A==0 && D_800F3368.depth==0);
     for(i=-3;i<=5;i++) if(i<0 || i>2) {
         reset(); assert(func_8019360C(i)==0 && calls==0 && sounds==0 && setups==0);
     }

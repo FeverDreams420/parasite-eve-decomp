@@ -1,29 +1,34 @@
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+ROOM = 'src/overlays/room_m350'
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import host_unit  # noqa: E402
 
 
 class Room350EffectPulseTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_pre_lookup_scale_and_post_lookup_shade(self):
-        source = (ROOT / "src/overlays/room_m350/RoomEffect_PulsingPalettePair.c").read_text()
-        source = source[:source.index('int func_801928D4')]
-        source = source.replace('extern short D_800966EE[];', '')
-        source = source.replace('extern int D_800966EC[];',
-            'static int table[4096];\n#define D_800966EC table\n'
-            '#define D_800966EE ((short *)table + 1)')
+        source = host_unit("func_801927A4", under=ROOM)
+        # The two sine-table views alias: D_800966EE is the halfword at +2.
+        source = source.replace('extern short D_800966EE[];',
+            '#define D_800966EE ((short *)D_800966EC + 1)')
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
 int D_800E27EC, D_800F3428;
-unsigned short D_800F336C;
+GteSineWord D_800966EC[4096];
+#define table ((int *)D_800966EC)
+RenderEffectParameters D_800F3368;
+#define D_800F336C D_800F3368.palette
 unsigned short D_800E1204[8];
 static Particle effect;
 static int position, nextPosition, lookups, draws, handleValue;
 static int nextCounter, expectedScale, expectedShade;
-int GetClut(int x, int y) {
+u_short GetClut(int x, int y) {
     unsigned int index = ((unsigned int)(nextCounter - 1) << 7) & 0xF80;
     assert(lookups++ == 0 && draws == 0 && x == 48);
     assert(y == D_800E1204[D_800F336C] +
@@ -34,8 +39,9 @@ int GetClut(int x, int y) {
     effect.position = (Vector *)&nextPosition;
     return handleValue;
 }
-void func_800CEE20(void *point, void *context, int a, int b, int c,
-                  unsigned int handle, int flag, int shade, void *colors) {
+void func_800CEE20(struct GteShortVector *point, struct GteRotation *context, int a,
+                  int b, int c, int handle, int flag, int shade,
+                  struct RenderColor *colors) {
     assert(lookups == 1 && draws++ == 0);
     assert(point == &nextPosition && context == &effect);
     assert(a == expectedScale && b == expectedScale && c == 110);

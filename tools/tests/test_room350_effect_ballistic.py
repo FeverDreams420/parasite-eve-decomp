@@ -1,34 +1,41 @@
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+ROOM = 'src/overlays/room_m350'
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import host_unit  # noqa: E402
 
 
 class Room350EffectBallisticTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_motion_and_palette_rendering(self):
-        source = (ROOT / "src/overlays/room_m350/RoomEffect_DualBallistic.c").read_text()
-        source = source.split('int func_80196A14', 1)[0]
+        source = host_unit("func_801968D8", under=ROOM)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-int D_800E27EC, D_800F3428, D_800966EC[4096], D_8019A598[4];
-unsigned short D_800F336C, D_800E1204[8];
-short D_800F336A;
+int D_800E27EC, D_800F3428, D_8019A598[4];
+GteSineWord D_800966EC[4096];
+RenderEffectParameters D_800F3368;
+unsigned short D_800E1204[8];
+#define D_800F336C D_800F3368.palette
+#define D_800F336A D_800F3368.parameter02
 static short position[5];
 static int lookups, draws, nextCounter, expectedScale, expectedShade, handleValue;
-int GetClut(int x, int y) {
+u_short GetClut(int x, int y) {
     unsigned int index = ((unsigned int)(nextCounter - 1) << 7) & 0xF80;
     assert(lookups++ == 0 && draws == 0 && x == 16);
     assert(y == D_800E1204[D_800F336C] +
            (D_800F336C == 4 && D_800F3428 ? 4 : 0));
     D_800E27EC = nextCounter; D_800F336A = expectedScale;
-    D_800966EC[index] = (int)(0x76540000U | (unsigned short)expectedShade);
+    D_800966EC[index].word = (int)(0x76540000U | (unsigned short)expectedShade);
     return handleValue;
 }
-void func_800CEE20(void *point, int zero, int a, int b, int scale,
-                  unsigned int handle, int flag, int shade, void *colors) {
+void func_800CEE20(struct GteShortVector *point, struct GteRotation *zero, int a,
+                  int b, int scale, int handle, int flag, int shade,
+                  struct RenderColor *colors) {
     assert(lookups == 1 && draws++ == 0 && point == position && zero == 0);
     assert(a == 12288 && b == 12288);
     assert(scale == expectedScale * (((nextCounter - 1) >> 1) & 7) + 200);

@@ -1,18 +1,22 @@
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+ROOM = 'src/overlays/room_m350'
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import host_unit  # noqa: E402
 
 
 class Room350AnimationRepeatTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_repeat_and_completion_transitions(self):
-        source = (ROOT / "src/overlays/room_m350/RoomAnimation_RepeatFourTimesCallback.c").read_text()
+        source = host_unit("func_80196E04", under=ROOM)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-Animation **D_800F32D0;
+FieldAnimObjectPrefix *D_800F32D0;
 short D_8019A828;
 unsigned char D_8019A82E, D_8019A82F, D_8019A830;
 int main(void) {
@@ -26,7 +30,7 @@ int main(void) {
     Actor actor;
     unsigned char actorState;
     int e, a, s, n, f, l, c;
-    D_800F32D0 = slots;
+    D_800F32D0 = (FieldAnimObjectPrefix *)slots;
     memset(&actor, 0, sizeof(actor));
     actor.state = &actorState;
     for (e = 0; e < 4; ++e) for (a = 0; a < 2; ++a)

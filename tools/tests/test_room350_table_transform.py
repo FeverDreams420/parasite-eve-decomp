@@ -2,24 +2,24 @@ import pathlib
 import shutil
 import subprocess
 import tempfile
+import sys
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-SOURCE = ROOT / "src/overlays/room_m350/RoomEffect_TableTransform.c"
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
+# Overlay function addresses repeat across rooms; search this room only.
+ROOM = 'src/overlays/room_m350'
 
-def controller_source():
-    source = SOURCE.read_text()
-    source = source.split("int func_80195564", 1)[0] + \
-        "extern int func_80195564(int, short *);\n" + \
-        "int func_8019569C" + source.split("int func_8019569C", 1)[1]
-    return source.replace("int (*)(int,Particle *)", "int (*)(int,short *)")
+CONTROLLER = "func_8019569C"
 
 
 class TableTransformTests(unittest.TestCase):
     @unittest.skipUnless((ROOT / "tools/old-gcc/cc1").is_file() and shutil.which("mipsel-none-elf-as"), "PSX tools unavailable")
     def test_target_layout(self):
-        source = SOURCE.read_text().split("int func_80195564", 1)[0] + r'''
+        unit = find_definition(CONTROLLER, under=ROOM)
+        source = unit.read_text() + r'''
 #define OFF(t,f) ((unsigned long)&((t *)0)->f)
 typedef char a[sizeof(Particle)==8 ? 1:-1];
 typedef char b[sizeof(Entry)==2 ? 1:-1];
@@ -28,54 +28,54 @@ typedef char d[OFF(Instance,transforms)==0x238 ? 1:-1];
 typedef char e[sizeof(Transform)==32 ? 1:-1];
 typedef char f[OFF(Transform,position)==20 ? 1:-1];
 typedef char g[OFF(Actor,instance)==8 ? 1:-1];
-typedef char h[OFF(Emitter,pool)==8 ? 1:-1];
+typedef char h[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
 '''
         with tempfile.TemporaryDirectory() as directory:
-            path = pathlib.Path(directory) / "layout.c"
-            path.write_text(source)
-            result = subprocess.run([str(ROOT / "tools/scripts/cc.sh"), str(path), str(path.with_suffix(".o"))], cwd=ROOT, capture_output=True, text=True)
+            result = psx_compile(source, pathlib.Path(directory) / "layout.o", unit)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     @unittest.skipUnless(shutil.which("cc"), "host compiler unavailable")
     def test_table_and_post_allocation_reads(self):
-        source = controller_source().replace(' asm("$3")', '').replace(' asm("$2")', '')
+        source = host_unit(CONTROLLER, path=find_definition(CONTROLLER, under=ROOM))
         harness = '#include <assert.h>\n#include <stdint.h>\n#include <string.h>\n' + source + r'''
-Actor *D_800F32D0;
-Instance *D_8019A7F8;
-Emitter *D_800F33E0;
+FieldAnimObjectPrefix *D_800F32D0;
+FieldActor *D_8019A7F8;
+FieldAnimTaskSlot *D_800F33E0;
 unsigned char D_8019A804;
-Entry D_8019A4D4[26];
-int D_800966EC[4096];
-volatile short D_800F3368,D_800F3376,D_800F3378,D_800F3372,D_800F3374,D_800F336E;
-short D_800F336A;
-unsigned short D_800F336C;
-volatile unsigned short D_800E11FA,D_800F3370;
-unsigned short D_800E2850[65536];
+Entry D_8019A4D4[13][2];
+#define ENTRY(n) (((Entry *)D_8019A4D4)[n])
+GteSineWord D_800966EC[4096];
+RenderEffectParameters D_800F3368;
+u16 D_800E11E4[16];
+u16 D_800E2850[65536];
 static Actor actors[2];
 static Instance instances[3];
 static Transform transforms[3][256];
-static Emitter emitters[2];
+static RoomM350Emitter emitters[2];
 static Particle particles[2],expected[2];
 static int pools[2],calls,setups,setupResult,failAt,frame,indexAfter,alternate,sizeWord;
 static int half(uint32_t x) { x &=65535; return x<32768 ? (int)x:(int)x-65536; }
 int func_80195564(int e,short *p) { return 0; }
-int func_800CE560(void *p,int stride,int count,int (*cb)(int,short *)) {
-    assert(p==&pools[0] && stride==8 && count==10 && cb==func_80195564);
+int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback cb) {
+    assert(p==(char *)&pools[0] && stride==8 && count==10);
+    assert(cb==(FieldAnimCallbackListCallback)func_80195564);
     setups++; return setupResult;
 }
-Particle *func_800CE610(void *p) {
+void *func_800CE610(char *p) {
     int i=calls++;
-    assert(i<2 && p==&pools[i ? 1:0]);
-    D_800F33E0=&emitters[1]; D_800F32D0=&actors[1]; D_8019A7F8=&instances[2];
+    assert(i<2 && p==(char *)&pools[i ? 1:0]);
+    D_800F33E0=(FieldAnimTaskSlot *)&emitters[1]; D_800F32D0=(FieldAnimObjectPrefix *)&actors[1];
+    D_8019A7F8=(FieldActor *)&instances[2];
     D_8019A804=255; instances[1].frame=65535;
-    D_8019A4D4[frame*2+i].index=indexAfter;
-    D_8019A4D4[frame*2+i].alternate=alternate;
-    D_800966EC[(frame-7)*128]=sizeWord;
+    ENTRY(frame*2+i).index=indexAfter;
+    ENTRY(frame*2+i).alternate=alternate;
+    D_800966EC[(frame-7)*128].word=sizeWord;
     return i==failAt ? 0:&particles[i];
 }
 static void reset(void) {
-    calls=setups=0; D_800F32D0=&actors[0]; D_8019A7F8=&instances[0];
-    D_800F33E0=&emitters[0]; D_8019A804=0;
+    calls=setups=0; D_800F32D0=(FieldAnimObjectPrefix *)&actors[0];
+    D_8019A7F8=(FieldActor *)&instances[0];
+    D_800F33E0=(FieldAnimTaskSlot *)&emitters[0]; D_8019A804=0;
     memset(particles,0x5A,sizeof(particles)); memcpy(expected,particles,sizeof(particles));
     memset(D_8019A4D4,0,sizeof(D_8019A4D4));
 }
@@ -84,8 +84,8 @@ static void run(int f,int stop,int first,int second,int failure) {
     int expectedCalls=0, successes=0,i,j;
     reset(); frame=f; instances[0].frame=f; D_8019A804=stop; failAt=failure;
     if(active) {
-        D_8019A4D4[f*2].index=first; D_8019A4D4[f*2+1].index=second;
-        D_8019A4D4[f*2].alternate=!alternate; D_8019A4D4[f*2+1].alternate=!alternate;
+        ENTRY(f*2).index=first; ENTRY(f*2+1).index=second;
+        ENTRY(f*2).alternate=!alternate; ENTRY(f*2+1).alternate=!alternate;
         if(first) { expectedCalls=1; if(failure!=0) { successes=1;
             if(second) { expectedCalls=2; if(failure!=1) successes=2; }
         } }
@@ -120,11 +120,15 @@ int main(void) {
         reset(); assert(func_8019569C(0)==setupResult && setups==1 && calls==0);
     }
     for(i=0;i<65536;i++) {
-        reset(); D_800E11FA=i; D_800E2850[i]=65535-i;
+        /* Texture slot 11 of D_800E11E4 is the halfword at 0x800E11FA. */
+        reset(); D_800E11E4[11]=i; D_800E2850[i]=65535-i;
+        memset(&D_800F3368,0x9D,sizeof(D_800F3368));
         assert(func_8019569C(2)==0 && calls==0 && setups==0);
-        assert(D_800F3368==32 && D_800F336A==2 && D_800F3376==32 && D_800F3378==32);
-        assert(D_800F336C==3 && D_800F336E==1 && D_800F3372==0 && D_800F3374==0);
-        assert(D_800F3370==65535-i);
+        assert(D_800F3368.parameter00==32 && D_800F3368.parameter02==2);
+        assert(D_800F3368.extent_x==32 && D_800F3368.extent_y==32);
+        assert(D_800F3368.palette==3 && D_800F3368.parameter06==1);
+        assert(D_800F3368.parameter0A==0 && D_800F3368.depth==0);
+        assert(D_800F3368.tpage==65535-i);
     }
     for(i=-3;i<=5;i++) if(i<0 || i>2) {
         reset(); assert(func_8019569C(i)==0 && calls==0 && setups==0);

@@ -1,25 +1,32 @@
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+ROOM = 'src/overlays/room_m350'
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import host_unit  # noqa: E402
 
 
 class Room350EffectProductTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_signed_product_palette_and_reload_order(self):
-        source = (ROOT / "src/overlays/room_m350/RoomEffect_RampedPalettePair.c").read_text()
-        source = source[:source.index('int func_80192C34')]
+        source = host_unit("func_80192ADC", under=ROOM)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-int D_800E27EC, D_800F3428, D_800966EC[4096], D_8019A3D0[4];
-unsigned short D_800F336C, D_800E1204[8];
-short D_800F336A;
+RenderColor D_8019A3D0;
+RenderEffectParameters D_800F3368;
+GteSineWord D_800966EC[4096];
+#define D_800F336A D_800F3368.parameter02
+#define D_800F336C D_800F3368.palette
+int D_800E27EC, D_800F3428;
+unsigned short D_800E1204[8];
 static int point, replacement, lookups, draws, nextCounter, expectedSize;
 static int expectedScale, expectedShade, handleValue;
 static Particle object;
-int GetClut(int x, int y) {
+u_short GetClut(int x, int y) {
     unsigned int index = ((unsigned int)(nextCounter - 1) << 7) & 0xF80;
     assert(lookups++ == 0 && draws == 0 && x == 32);
     assert(y == D_800E1204[D_800F336C] +
@@ -27,17 +34,18 @@ int GetClut(int x, int y) {
     /* Deliberate stub mutations test reloads, not real GetClut side effects. */
     memset(D_800966EC, 0, sizeof(D_800966EC));
     D_800E27EC = nextCounter; D_800F336A = expectedScale;
-    D_800966EC[index] = (int)(0x76540000U | (unsigned short)expectedShade);
+    D_800966EC[index].word = (int)(0x76540000U | (unsigned short)expectedShade);
     object.position = (Vector *)&replacement; object.scale = 0;
     return handleValue;
 }
-void func_800CEE20(void *p, int zero, int a, int b, int scale,
-                  unsigned int handle, int flag, int shade, void *colors) {
+void func_800CEE20(struct GteShortVector *p, struct GteRotation *zero, int a,
+                  int b, int scale, int handle, int flag, int shade,
+                  struct RenderColor *colors) {
     assert(lookups == 1 && draws++ == 0 && p == &replacement && zero == 0);
     assert(a == expectedSize && b == expectedSize);
     assert(scale == expectedScale + 216);
     assert(handle == (unsigned short)handleValue && flag == 1);
-    assert(shade == expectedShade >> 5 && colors == D_8019A3D0);
+    assert(shade == expectedShade >> 5 && colors == &D_8019A3D0);
 }
 int main(void) {
     const short values[] = {-32768, -4097, -33, -1, 0, 32, 4097, 32767};

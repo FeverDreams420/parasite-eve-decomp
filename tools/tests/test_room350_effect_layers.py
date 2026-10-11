@@ -1,15 +1,18 @@
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+ROOM = 'src/overlays/room_m350'
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import host_unit  # noqa: E402
 
 
 def callback_source():
-    source = (ROOT / "src/overlays/room_m350/RoomEffect_AnimationBurst.c").read_text()
-    return source[:source.index('int func_80194654')]
+    return host_unit("func_801944F0", under=ROOM)
 
 
 class Room350EffectLayersTests(unittest.TestCase):
@@ -17,29 +20,37 @@ class Room350EffectLayersTests(unittest.TestCase):
     def test_two_draws_and_inter_call_reloads(self):
         source = callback_source()
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-int D_800E27EC, D_800966EC[4096], D_8019A3C8[4], D_8019A4DC[4], D_8019A4E0[4];
+GteSineWord D_800966EC[4096];
+RenderColor D_8019A3C8;
+int D_800E27EC, D_8019A4DC[4], D_8019A4E0[4];
 static int firstPoint, secondPoint, calls, initialCounter, nextCounter;
 static int sizeValue, firstShade, secondShade;
 static void *object;
 static short *savedVector;
-void func_800D004C(void *p, int a, int b, int mode, short *vector,
-                  int x, int y, void *colorA, void *colorB, int shade, int flag) {
+void func_800D004C(struct GteShortVector *p, int a, int b, int mode,
+                   struct GteRotation *rotation, int x, int y,
+                   struct RenderColor *colorA, struct RenderColor *colorB,
+                   int shade, int flag) {
+    short *vector = (short *)rotation;
     unsigned int index = ((unsigned int)(nextCounter - 1) << 8) & 0xF00;
     assert(calls++ == 0 && p == &firstPoint && a == 320 && b == 320 && mode == 16);
     assert(x == sizeValue && y == sizeValue && shade == firstShade >> 5 && flag == 1);
-    assert(colorA == D_8019A4DC && colorB == D_8019A3C8);
+    assert(colorA == D_8019A4DC && colorB == &D_8019A3C8);
     assert(vector[0] == 0 && vector[1] == 0 && vector[2] == (short)(initialCounter * 128));
     assert(vector[3] == 0);
     /* Deliberate mutations test inter-call dataflow, not actual helper effects. */
     savedVector = vector; vector[0] = -11; vector[1] = 22; vector[2] = -33; vector[3] = 44;
     object = &secondPoint; D_800E27EC = nextCounter;
-    D_800966EC[index] = (int)(0x76540000U | (unsigned short)secondShade);
+    D_800966EC[index].word = (int)(0x76540000U | (unsigned short)secondShade);
 }
-void func_800D0728(void *p, int a, int b, int mode, short *vector,
-                  int x, int y, void *colorA, void *colorB, int shade, int flag) {
+void func_800D0728(struct GteShortVector *p, int a, int b, int mode,
+                   struct GteRotation *rotation, int x, int y,
+                   struct RenderColor *colorA, struct RenderColor *colorB,
+                   int shade, int flag) {
+    short *vector = (short *)rotation;
     assert(calls++ == 1 && p == &secondPoint && a == 256 && b == 512 && mode == 16);
     assert(x == nextCounter * 512 + 2048 && y == x && shade == secondShade >> 5 && flag == 1);
-    assert(colorA == D_8019A3C8 && colorB == D_8019A4E0);
+    assert(colorA == &D_8019A3C8 && colorB == D_8019A4E0);
     assert(vector == savedVector);
     assert(vector[0] == -11 && vector[1] == 22 && vector[2] == -33 && vector[3] == 44);
 }
@@ -61,7 +72,7 @@ int main(void) {
         memset(D_800966EC, 0, sizeof(D_800966EC));
         initialCounter = counter; nextCounter = nextValues[n];
         sizeValue = values[s]; firstShade = values[h]; secondShade = values[5-h];
-        D_800966EC[index] = (int)(((unsigned int)(unsigned short)firstShade << 16) |
+        D_800966EC[index].word = (int)(((unsigned int)(unsigned short)firstShade << 16) |
                                   (unsigned short)sizeValue);
         D_800E27EC = counter; object = &firstPoint; calls = 0;
         assert(func_801944F0(2, &object) == 0);

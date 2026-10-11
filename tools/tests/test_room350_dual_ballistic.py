@@ -1,56 +1,66 @@
 import pathlib
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-SOURCE = ROOT / 'src/overlays/room_m350/RoomEffect_DualBallistic.c'
+ROOM = 'src/overlays/room_m350'
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import find_definition, host_unit, psx_compile  # noqa: E402
+FUNCTION = 'func_80196A14'
 
 
 def controller_source():
-    source = SOURCE.read_text()
-    source = source.split('int func_801968D8', 1)[0] + \
-        'extern int func_801968D8(int, short *);\n' + \
-        'int func_80196A14' + source.split('int func_80196A14', 1)[1]
-    return source.replace('int (*)(int, Particle *)', 'int (*)(int, short *)')
+    # The ballistic callback is reduced to a prototype; the test stubs it.
+    return host_unit(FUNCTION, under=ROOM)
 
 
 class DualBallisticTests(unittest.TestCase):
     @unittest.skipUnless((ROOT/'tools/old-gcc/cc1').is_file() and shutil.which('mipsel-none-elf-as'), 'PSX tools unavailable')
     def test_target_layout(self):
-        source = SOURCE.read_text().split('int func_801968D8', 1)[0] + r'''
+        unit = find_definition(FUNCTION, ROOM)
+        source = unit.read_text() + r'''
 #define OFF(t,f) ((unsigned long)&((t *)0)->f)
 typedef char a[sizeof(Matrix)==32 ? 1:-1];
 typedef char b[OFF(Matrix,position)==20 ? 1:-1];
 typedef char c[OFF(Instance,transforms)==0x238 ? 1:-1];
 typedef char d[OFF(Actor,instance)==8 ? 1:-1];
-typedef char e[OFF(Emitter,pool)==8 ? 1:-1];
+typedef char e[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
 typedef char f[sizeof(Particle)==12 ? 1:-1];
 typedef char g[OFF(Particle,velocityY)==6 ? 1:-1];
 typedef char h[OFF(Particle,gravity)==8 ? 1:-1];
 '''
         with tempfile.TemporaryDirectory() as directory:
-            path = pathlib.Path(directory)/'layout.c'
-            path.write_text(source)
-            result = subprocess.run([str(ROOT/'tools/scripts/cc.sh'), str(path), str(path.with_suffix('.o'))], cwd=ROOT, capture_output=True, text=True)
+            result = psx_compile(source, pathlib.Path(directory)/'layout.o', unit)
             self.assertEqual(result.returncode, 0, result.stdout+result.stderr)
 
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_captured_matrices_fresh_fields_and_request(self):
         harness = '#include <assert.h>\n#include <stdint.h>\n#include <string.h>\n#include <limits.h>\n' + controller_source() + r'''
-Actor *D_800F32D0;
-Emitter *D_800F33E0;
-Instance *g_PlayerEntity;
+FieldAnimObjectPrefix *D_800F32D0;
+FieldAnimTaskSlot *D_800F33E0;
+/* The player is read through the same transform-owner view as the actor. */
+FieldActor *g_PlayerEntity;
+#define PLAYER ((Instance *)g_PlayerEntity)
 unsigned char D_8019A82F;
 int D_800E27EC;
-volatile short D_800F3368,D_800F3376,D_800F3378,D_800F336E,D_800F3372,D_800F3374;
-short D_800F336A;
-unsigned short D_800F336C;
-volatile unsigned short D_800E11E8,D_800F3370;
-unsigned short D_800E2850[65536];
+/* The retail halfword names are fields of the sprite parameter block. */
+RenderEffectParameters D_800F3368;
+#define SIGNED(field) (*(short *)&D_800F3368.field)
+#define UNIT SIGNED(parameter00)
+#define D_800F336A SIGNED(parameter02)
+#define D_800F336C D_800F3368.palette
+#define D_800F336E SIGNED(parameter06)
+#define D_800F3370 D_800F3368.tpage
+#define D_800F3372 SIGNED(parameter0A)
+#define D_800F3374 D_800F3368.depth
+#define D_800F3376 SIGNED(extent_x)
+#define D_800F3378 SIGNED(extent_y)
+unsigned short D_800E11E8,D_800E2850[65536];
 static Actor actor;
-static Emitter emitters[2];
+static RoomM350Emitter emitters[2];
 static Instance actorInstance,players[2];
 static Matrix actorMatrices[2][34],playerMatrices[3],*captured;
 static Particle particles[2],expected[2];
@@ -59,21 +69,21 @@ static uint32_t seed;
 static int word(uint32_t x) { int result; memcpy(&result,&x,4); return result; }
 static int half(uint32_t x) { x&=65535; return x<32768 ? (int)x:(int)x-65536; }
 int func_801968D8(int e,short *p) { return 0; }
-int func_800CE560(void *p,int size,int count,int (*cb)(int,short *)) {
-    assert(p==&pools[0] && size==12 && count==16 && cb==func_801968D8);
+int func_800CE560(char *p,int size,int count,FieldAnimCallbackListCallback cb) {
+    assert(p==(char *)&pools[0] && size==12 && count==16 && (void *)cb==(void *)func_801968D8);
     setups++; return setupResult;
 }
-Particle *func_800CE610(void *p) {
+void *func_800CE610(char *p) {
     int i=allocs++,isActor=actorAttempt && i==0;
-    assert(i<2 && p==&pools[i!=0]); active=i; part=0;
-    captured=isActor ? &actorMatrices[0][33] : g_PlayerEntity->transforms;
+    assert(i<2 && p==(char *)&pools[i!=0]); active=i; part=0;
+    captured=isActor ? &actorMatrices[0][33] : PLAYER->transforms;
     /* Pointer changes must not replace the transform captured before allocation. */
     actorInstance.transforms=actorMatrices[1];
     if(isActor) {
-        g_PlayerEntity=&players[1];
+        g_PlayerEntity=(FieldActor *)&players[1];
         if(mutation) D_8019A82F=mutation==1 ? 0:255;
-    } else g_PlayerEntity->transforms=&playerMatrices[2];
-    D_800F33E0=&emitters[1];
+    } else PLAYER->transforms=&playerMatrices[2];
+    D_800F33E0=(FieldAnimTaskSlot *)&emitters[1];
     if(failure&(1<<i)) return 0;
     return &particles[i];
 }
@@ -94,9 +104,12 @@ int Inv_ScrambleGrid(void) {
     part++; return word(value);
 }
 static void reset(void) {
-    allocs=randoms=setups=0; actor.instance=&actorInstance; actorInstance.transforms=actorMatrices[0];
-    D_800F32D0=&actor; D_800F33E0=&emitters[0];
-    players[0].transforms=&playerMatrices[0]; players[1].transforms=&playerMatrices[1]; g_PlayerEntity=&players[0];
+    allocs=randoms=setups=0;
+    actor.instance=(struct RoomM350Instance *)&actorInstance;
+    actorInstance.transforms=actorMatrices[0];
+    D_800F32D0=(FieldAnimObjectPrefix *)&actor; D_800F33E0=(FieldAnimTaskSlot *)&emitters[0];
+    players[0].transforms=&playerMatrices[0]; players[1].transforms=&playerMatrices[1];
+    g_PlayerEntity=(FieldActor *)&players[0];
     memset(particles,0x5A,sizeof(particles)); memcpy(expected,particles,sizeof(particles));
 }
 static void run(int timer,int flag,int mask,int mode) {
@@ -126,7 +139,7 @@ int main(void) {
     for(i=0;i<65536;i++) {
         reset(); D_800E11E8=i; D_800E2850[i]=65535-i;
         assert(func_80196A14(2)==0 && !allocs && !setups);
-        assert(D_800F3368==16 && D_800F336A==1 && D_800F3376==16 && D_800F3378==16);
+        assert(UNIT==16 && D_800F336A==1 && D_800F3376==16 && D_800F3378==16);
         assert(D_800F336C==2 && D_800F336E==0 && D_800F3372==0 && D_800F3374==0 && D_800F3370==65535-i);
     }
     for(event=-3;event<=5;event++) if(event<0 || event>2) {

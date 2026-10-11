@@ -2,21 +2,30 @@ import pathlib
 import shutil
 import subprocess
 import tempfile
+import sys
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import find_definition, host_unit  # noqa: E402
+
+# Overlay function addresses repeat across rooms; search this room only.
+ROOM = 'src/overlays/room_m350'
 
 
 class Room350ProximityTriggerTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_bounds_flags_and_post_sqrt_pointers(self):
-        source = (ROOT / "src/overlays/room_m350/RoomActor_TriggerWithinRadius.c").read_text()
+        source = host_unit("func_8019721C", path=find_definition("func_8019721C", under=ROOM))
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-WorldActor *g_PlayerEntity;
-RoomActor **D_800F32D0;
-short D_8019A86C, D_800942EC;
+/* The player is read both as a FieldActor (state flags) and through the
+ * unit's WorldActor view (x/z); both share the leading state pointer. */
+FieldActor *g_PlayerEntity;
+FieldAnimObjectPrefix *D_800F32D0;
+short D_8019A86C;
+RoomFloorY g_RoomFloorY[1];
 static WorldActor world[2];
-static ActorFlags actors[2];
+static FieldActorState actors[2];
 static RoomActor rooms[2];
 static RoomActor *roomSlots[2][3];
 static unsigned int roomFlags[2];
@@ -24,8 +33,8 @@ static int calls, expectedSquared, distanceResult, mutate;
 int Math_IntSqrt(int squared) {
     assert(calls++ == 0 && squared == expectedSquared);
     if (mutate) {
-        g_PlayerEntity = &world[1];
-        D_800F32D0 = roomSlots[1];
+        g_PlayerEntity = (FieldActor *)&world[1];
+        D_800F32D0 = (FieldAnimObjectPrefix *)roomSlots[1];
         D_8019A86C = 77;
     }
     return distanceResult;
@@ -44,15 +53,16 @@ int main(void) {
         for (i = 0; i < 2; ++i) {
             memset(&world[i], 0, sizeof(world[i]));
             memset(&actors[i], 0, sizeof(actors[i]));
-            world[i].actor = &actors[i];
+            world[i].actor = (ActorFlags *)&actors[i];
             actors[i].flags = 0x12340005U;
             roomFlags[i] = 0x00123456U;
             rooms[i].actor = hasActor ? &roomFlags[i] : 0;
             roomSlots[i][2] = &rooms[i];
         }
-        g_PlayerEntity = &world[0]; D_800F32D0 = roomSlots[0];
+        g_PlayerEntity = (FieldActor *)&world[0];
+        D_800F32D0 = (FieldAnimObjectPrefix *)roomSlots[0];
         world[0].x = point[4] + dx; world[0].z = point[6] + dz;
-        D_800942EC = 700; point[5] = 188 + height;
+        g_RoomFloorY[0].y = 700; point[5] = 188 + height;
         D_8019A86C = gate ? 30 : 0;
         calls = 0; mutate = m; distanceResult = radii[r] + delta;
         expectedSquared = dx * dx + dz * dz;
