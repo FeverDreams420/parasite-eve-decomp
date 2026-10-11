@@ -267,7 +267,7 @@ void RoomFx_UpdateFallingSprite(void *entity, RoomFallingBurstControl *control,
         PE1_COMPILER_LAUNDER(motion);
         motion->x += motion->velocityX;
         motion->z += motion->velocityZ;
-        motion->y += (short)motion->verticalStep >> 8;
+        motion->y += motion->verticalStep >> 8;
         motion->scale += 0x28;
         motion->verticalStep += 0x64;
     }

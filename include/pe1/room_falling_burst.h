@@ -78,7 +78,7 @@ typedef struct RoomFallingSpriteState {
     s16 padE;
     u16 scale;
     u16 depth;
-    u16 verticalStep;
+    s16 verticalStep;             /* 0x14: signed 8.8 displacement per tick */
     u8 active;
 } RoomFallingSpriteState;
 
