@@ -6,7 +6,6 @@
 
 extern FieldActor *g_CurrentEntity[];
 extern int g_SceneDataTable0;
-extern TaskNode *g_TaskNodePool;
 
 int Task_WaitAnimFrameMatch(void) {
     TaskNode *state;

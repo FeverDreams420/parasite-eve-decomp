@@ -18,7 +18,6 @@ extern s32 g_SceneDataTable0;
 extern struct { char _[16]; } D_8009D1A0_o __asm__("g_GameStateFlags");
 extern s32 D_8009D1A0_rd[] __asm__("g_GameStateFlags");
 #define g_GameStateFlags (*(s32 *)&D_8009D1A0_o)
-extern TaskNode *g_TaskNodePool;
 extern Pe1GameState g_GameState;
 
 PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, memcard_init_phase) == 0xF4,

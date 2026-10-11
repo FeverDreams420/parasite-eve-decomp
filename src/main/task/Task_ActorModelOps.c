@@ -156,7 +156,6 @@ success:
 
 extern int g_RenderStateFlags[];
 extern int g_SceneDataTable0;
-extern TaskNode *g_TaskNodePool;
 
 int Boot_CheckModeSwitch(void) {
     int mode = g_RenderStateFlags[0] & 7;

@@ -16,7 +16,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNodeTarget18, actor) == 0,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, target18) == 0x18,
                   task_node_target18_offset);
 
-extern TaskNode *g_TaskNodePool;
 extern TaskNode *g_TaskNodeFreeListHead;
 extern u16 g_TaskNodeSeqCounter[1];
 extern FieldActor *g_CurrentEntity[];
@@ -101,7 +100,6 @@ int Task_SpawnChildNode(int **args) {
 }
 
 extern int g_SceneDataTable0;
-extern TaskNode *g_TaskNodePool;
 extern FieldActor *g_CurrentEntity[];
 /* Same symbol; keep the post-call address calculation independent in GCC. */
 extern FieldActor *g_CurrentEntityAfterAction[] asm("g_CurrentEntity");

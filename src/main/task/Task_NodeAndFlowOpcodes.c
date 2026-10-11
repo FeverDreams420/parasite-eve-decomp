@@ -5,7 +5,6 @@
 #include "pe1/field_collision.h"
 #include "pe1/textbox.h"
 
-extern TaskNode *g_TaskNodePool;
 
 int Entity_SetCurrentNodeActive(int **arg0) {
     g_TaskNodePool->active = *(unsigned short *)arg0[0];

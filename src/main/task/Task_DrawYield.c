@@ -4,7 +4,6 @@
 #include "pe1/task_node.h"
 
 extern int g_SceneDataTable0;
-extern TaskNode *g_TaskNodePool;
 
 int Seq_GetElapsed(void);
 int Gpu_CheckDrawStatus(void);

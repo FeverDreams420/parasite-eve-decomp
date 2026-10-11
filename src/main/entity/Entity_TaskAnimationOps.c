@@ -6,7 +6,6 @@
 /* MASPSX_FLAGS: -G8 */
 
 extern FieldActor *g_CurrentEntity[];
-extern TaskNode *g_TaskNodePool;
 extern int g_SceneDataTable0;
 
 int Entity_MarkAnimPending(void) {

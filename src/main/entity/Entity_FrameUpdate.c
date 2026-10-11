@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G4 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "common.h"
 #include "pe1/entity_frame_update.h"
 #include "pe1/gte.h"
@@ -263,7 +264,6 @@ void Entity_IntegratePositionConditional(FieldActor *a)
  * the parent chain, following attached parents, freeing dead actors, and
  * running and advancing each actor's three task-node lists. */
 
-extern int g_TaskNodePool[];
 
 void Entity_FreeAllocationBlock(int arg0);
 int Util_ReturnTrue(void *unused);
@@ -370,15 +370,15 @@ void Entity_CollectGarbage(void) {
 
 void Entity_DispatchCallbacks(Entity *arg0) {
     int i;
-    int *ptr;
-    int callback;
+    TaskNode **ptr;
+    TaskNode *callback;
 
     i = 0;
-    ptr = (int *)arg0->task_node_lists;
+    ptr = arg0->task_node_lists;
     g_CurrentEntity = arg0;
     do {
         callback = *ptr;
-        g_TaskNodePool[0] = callback;
+        g_TaskNodePool = callback;
         if (callback != 0) {
             Task_RunQueue();
         }

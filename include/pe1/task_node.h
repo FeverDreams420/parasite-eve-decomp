@@ -31,6 +31,8 @@ typedef struct TaskNode {
 } TaskNode;
 
 extern TaskNode *D_8009D300;
+/* The node the task interpreter is currently running. */
+extern TaskNode *g_TaskNodePool;
 extern TaskNode D_8009D310[72];
 
 TaskNode *Task_AllocNode(unsigned int *script, TaskNode *previous);

@@ -19,7 +19,6 @@
 
 extern Pe1GameState g_GameState;
 extern int g_SceneDataTable0;
-extern TaskNode *g_TaskNodePool;
 extern int g_GameStateFlags[];
 extern int g_GameStateFlagsWrite[] asm("g_GameStateFlags");
 

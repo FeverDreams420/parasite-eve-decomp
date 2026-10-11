@@ -12,7 +12,6 @@
 
 extern TaskNode *g_TaskNodeFreeListHead;
 extern int g_SceneDataTable0;
-extern TaskNode *g_TaskNodePool;
 extern unsigned short g_TaskNodeSeqCounter[1];
 extern int g_TaskScriptOperandTable[16];
 

@@ -9,7 +9,6 @@
 
 extern unsigned char g_ScreenTransitionState[];
 extern int g_SceneDataTable0;
-extern TaskNode *g_TaskNodePool;
 
 int Entity_YieldOnLoading(void) {
     if ((g_ScreenTransitionState[0] & 3) >= 2) {
