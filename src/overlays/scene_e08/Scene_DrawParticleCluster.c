@@ -29,23 +29,17 @@ void func_8018FBA4(void *unused0, void *unused1, SceneParticleCluster *argSlots)
     Vec4 scratch, draw;
     SceneParticleOwner *owner;
     register unsigned i;
-    register char *scale asm("$17");
-    register char *position asm("$18");
     s16 *slot = &D_801994B2;
 
     owner = func_800C2B50();
     i = 0;
     /* Hoist the draw state address before the cursor setup. */
     asm("" : : "r"(slot));
-    scale = (char *)slots;
-    /* Keep the scale cursor live before the first draw-state call. */
-    asm("" : "=r"(scale) : "0"(scale));
     func_800C2EAC(owner->drawMode);
-    position = scale;
     func_800C3098(0x10);
     func_800C3238(2);
 
-    for (; i < 30; position += 8, i++, scale += 2) {
+    for (; i < 30; i++) {
         if (slots->active[i] == 1) {
             matrix.m[2][2] = 0x1000;
             matrix.m[1][1] = 0x1000;
@@ -61,16 +55,16 @@ void func_8018FBA4(void *unused0, void *unused1, SceneParticleCluster *argSlots)
             matrix.m[0][1] = 0;
 
             memset(&draw, 0, 0x10);
-            draw.x = ((SceneParticleCluster *)scale)->fieldF0[0];
-            draw.y = ((SceneParticleCluster *)scale)->fieldF0[0];
-            draw.z = ((SceneParticleCluster *)scale)->fieldF0[0];
+            draw.x = slots->fieldF0[i];
+            draw.y = slots->fieldF0[i];
+            draw.z = slots->fieldF0[i];
             scratch = draw;
             ScaleMatrix(&matrix, &scratch);
 
-            matrix.t[0] = ((SceneParticleOffset *)position)->x;
-            matrix.t[1] = ((SceneParticleOffset *)position)->y;
-            matrix.t[2] = ((SceneParticleOffset *)position)->z;
-            *slot = ((SceneParticleCluster *)scale)->brightness[0];
+            matrix.t[0] = slots->position[i].x;
+            matrix.t[1] = slots->position[i].y;
+            matrix.t[2] = slots->position[i].z;
+            *slot = slots->brightness[i];
             if (slots->texture[i] == 0x44) {
                 func_800C2FF0(0x20, 0x20);
                 ((SceneFxColor *)((char *)slot - 10))->t4 = slots->texture[i];
