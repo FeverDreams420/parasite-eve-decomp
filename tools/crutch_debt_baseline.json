@@ -9,7 +9,7 @@
     "declaration_overrides": 0,
     "directives": 0,
     "externs_in_c": 1859,
-    "field_macros": 92,
+    "field_macros": 3,
     "game_asm_units": 4,
     "gotos": 254,
     "gte_matrix_windows": 0,
@@ -23,7 +23,7 @@
     "stack_reserves": 6,
     "stack_switch_macros": 1,
     "statement_expressions": 0,
-    "unknown_fields": 94
+    "unknown_fields": 0
   },
   "overlays": {
     "aliases": 0,
