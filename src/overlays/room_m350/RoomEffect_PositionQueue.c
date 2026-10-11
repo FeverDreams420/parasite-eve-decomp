@@ -42,7 +42,7 @@ int func_80195218(int event, Particle *object)
 }
 
 int func_80195378(int event) {
-    char frameGap[8];
+    int firstIndex;
     switch (event) {
     case 0:
 
@@ -53,8 +53,10 @@ int func_80195378(int event) {
     {
         short *count=&D_8019A800;
         if (*count) {
-            register int i asm("$16")=0;
-            if (*count>0) {
+            int i;
+            firstIndex=0;
+            i=firstIndex;
+            if (*count>firstIndex) {
                 Queue *queue=(Queue *)((char *)count-(unsigned long)&((Queue *)0)->count);
                 Vector *position=queue->positions;
                 do {
