@@ -36,7 +36,7 @@ int func_8019A4CC(int mode,Effect *effect) {
 #include "pe1/scene_fx.h"
 
 extern s32 D_800966EC[];
-extern char D_8019AB70[];
+extern unsigned char D_8019AB70[];
 extern char D_8019AD7C[];
 
 extern short D_8019AF56;
@@ -63,8 +63,8 @@ void *func_8019A5D4(int unused, int value, int flag) {
 #include "room_m273_effects.h"
 extern u8 D_8019AF6B;
 extern u16 D_8019AEFC;
-extern u16 D_8019AEFE;
-extern u16 D_8019AF00;
+extern volatile u16 D_8019AEFE;
+extern volatile u16 D_8019AF00;
 
 extern s32 func_8019A720(s32 mode, RoomM273ArcCallbackState *state);
 

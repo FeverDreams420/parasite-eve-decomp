@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-extern u32 D_8019B668;
+extern int D_8019B668;
 extern s16 D_8019B66C;
 extern s16 D_8019B66E;
 

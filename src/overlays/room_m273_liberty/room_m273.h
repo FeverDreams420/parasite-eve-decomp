@@ -82,7 +82,7 @@ extern u8 D_8019AF8A[];
 extern u16 D_800E11E8;
 extern void *D_8019AE94;
 extern RoomM273PaletteWord D_8019AC30[];
-extern char D_8019AB70[];
+extern unsigned char D_8019AB70[];
 extern char D_8019ACC8[];
 extern char D_8019ACCC[];
 int Inv_ScrambleGrid(void);

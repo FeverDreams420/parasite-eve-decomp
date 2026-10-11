@@ -21,7 +21,8 @@ extern int D_8019956C, D_8019957C;
 extern u8 *D_80199528;
 extern u8 D_80199680, D_80199681, D_80199682, D_80199684, D_80199685, D_80199686;
 extern s16 D_80199688, D_8019968A;
-extern u8 D_801996A0, D_801996A1, D_801996A2, D_801996A4, D_801996A5, D_801996A6;
+extern u8 D_801996A0[];
+extern u8 D_801996A1, D_801996A2, D_801996A4, D_801996A5, D_801996A6;
 extern s16 D_801996A8, D_801996AA;
 extern u8 D_801996B0, D_801996B1, D_801996B2, D_801996B4, D_801996B5, D_801996B6;
 extern s16 D_801996B8, D_801996BA;
@@ -67,7 +68,7 @@ void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
     D_80199682 = intensity;
     D_80199686 = 0;
     D_801996AA = half;
-    D_801996A0 = intensity;
+    D_801996A0[0] = intensity;
     D_801996A1 = intensity;
     D_801996A2 = intensity;
     D_801996A6 = 0;

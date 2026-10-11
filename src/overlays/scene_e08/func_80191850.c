@@ -9,7 +9,7 @@ typedef GteVector Overlay178Vec4;
 
 extern s32 D_8019956C;
 extern s32 D_8019957C;
-extern char D_801996A0;
+extern u8 D_801996A0[];
 
 void func_800C2FF0(s32 arg0, s32 arg1);
 void func_800C3098(s32 arg0);
@@ -49,5 +49,5 @@ void func_80191850(void *arg0, void *arg1, char *arg2) {
     matrix.t[0] = *(s16 *)(arg2 + 0x0) + D_8019956C;
     matrix.t[1] = *(s16 *)(arg2 + 0x2);
     matrix.t[2] = *(s16 *)(arg2 + 0x4) + D_8019957C;
-    func_800C42A4((FieldGlowSprite *)&D_801996A0, &matrix, 1);
+    func_800C42A4((FieldGlowSprite *)D_801996A0, &matrix, 1);
 }

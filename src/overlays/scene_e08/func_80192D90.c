@@ -8,7 +8,7 @@
 typedef GteMatrix SceneE08Matrix;
 typedef GteVector SceneE08Vector;
 
-extern char D_801996A0[];
+extern u8 D_801996A0[];
 extern char D_80198848[];
 extern s32 D_8019956C, D_8019957C;
 
@@ -20,7 +20,7 @@ void func_80192D90(void *unused0, void *unused1, SceneE08OrbitParticles *effect)
     SceneE08Vector transformed, v;
     /* Keep the matrix scale live before the first rendering setup call. */
     register s16 scale asm("$19") = 0x1000;
-    char *table = D_801996A0;
+    char *table = (char *)D_801996A0;
     char *owner;
     unsigned i;
     /* Both cursors address interleaved effect fields at different strides. */
