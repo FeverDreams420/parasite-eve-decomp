@@ -398,7 +398,6 @@ checkLifetime:
                 register int pageDepth asm("$4") = 0;
                 int pageBlend = 1;
                 int pageX = 0;
-                asm volatile("" : "=r"(pageDepth), "=r"(pageBlend), "=r"(pageX) : "0"(pageDepth), "1"(pageBlend), "2"(pageX));
             paletteIndex = &D_800E11EA;
             renderPalette = D_800E2850[*paletteIndex];
 
