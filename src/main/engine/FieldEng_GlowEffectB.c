@@ -15,51 +15,37 @@
 
 
 int func_800C8D34(char *object) {
-    int half;
-    int shade;
-    register int value asm("$3");
-    register void *slotData asm("$3");
     void **slot;
 
     slot = FieldEng_GetSlot(object);
-    slotData = &D_800E0A50;
-    *slot = slotData;
+    *slot = &D_800E0A50;
 
-    value = 0xBD;
-    D_800E22EC = value;
-    value = 9;
-    half = 0x80;
-    asm volatile("" : "=r"(half) : "0"(half));
-    D_800E22ED = value;
-    value = 0x80;
-    D_800E22E8 = value;
-    D_800E22E9 = value;
-    D_800E22EA = value;
-    value = 0xAE;
-    D_800F34A8.cell = value;
-    value = 7;
-    D_800F34A8.clut = value;
-    value = -0x32;
-    shade = 0x50;
-    asm volatile("" : "=r"(shade) : "0"(shade));
-    D_800F34A8.offset = value;
-    D_800E22F0 = 0;
-    D_800E22F2 = half;
-    D_800E22EE = 0;
-    D_800F34A8.depth = half;
-    D_800F34A8.r = shade;
-    D_800F34A8.g = shade;
-    D_800F34A8.b = shade;
+    D_800E22E8.cell = 0xBD;
+    D_800E22E8.clut = 9;
+    D_800E22E8.offset = 0;
+    D_800E22E8.depth = 0x80;
+    D_800E22E8.r = 0x80;
+    D_800E22E8.g = 0x80;
+    D_800E22E8.b = 0x80;
+    D_800E22E8.flip = 0;
+
+    D_800F34A8.cell = 0xAE;
+    D_800F34A8.clut = 7;
+    D_800F34A8.offset = -0x32;
+    D_800F34A8.depth = 0x80;
+    D_800F34A8.r = 0x50;
+    D_800F34A8.g = 0x50;
+    D_800F34A8.b = 0x50;
     D_800F34A8.flip = 0;
-    value = 0x68;
-    D_800E232C = value;
-    D_800E232D = 0;
-    D_800E2330 = 0;
-    D_800E2332 = half;
-    D_800E2328 = shade;
-    D_800E2329 = shade;
-    D_800E232A = shade;
-    D_800E232E = 0;
+
+    D_800E2328.cell = 0x68;
+    D_800E2328.clut = 0;
+    D_800E2328.offset = 0;
+    D_800E2328.depth = 0x80;
+    D_800E2328.r = 0x50;
+    D_800E2328.g = 0x50;
+    D_800E2328.b = 0x50;
+    D_800E2328.flip = 0;
 
     return 0;
 }
@@ -218,7 +204,7 @@ int func_800C9268(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
     scaleCopy = scale;
 
     ScaleMatrix(&matrix, &scaleCopy);
-    func_800C42A4((FieldGlowSprite *)&D_800E22E8, &matrix, 1);
+    func_800C42A4(&D_800E22E8, &matrix, 1);
 }
 
 #define GLOW_LAYERS_FUNC func_800C9398
@@ -229,7 +215,7 @@ int func_800C9268(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
 #include "FieldEng_GlowLayers.inc"
 
 int func_800C9868(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
-    u16 *field_s3 = &D_800E2332;
+    u16 *field_s3 = &D_800E2328.depth;
     GteMatrix matrix;
     int scale;
     u16 field;

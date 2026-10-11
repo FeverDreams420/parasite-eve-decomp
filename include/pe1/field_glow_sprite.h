@@ -28,6 +28,7 @@ extern FieldGlowSprite D_800F3498;
 extern FieldGlowSprite D_800F34D8;
 
 /* Presets shared by emitter setup and the glow renderers. */
+extern FieldGlowSprite D_800E22E8, D_800E2328;
 extern FieldGlowSprite D_800E22F8, D_800F34B8, D_800E2308, D_800E2338, D_800F34C8, D_800F34E8;
 
 /* Burst presets shared by setup and scaled glow renderers. */
