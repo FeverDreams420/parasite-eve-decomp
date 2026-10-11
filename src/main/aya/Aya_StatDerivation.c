@@ -44,19 +44,13 @@ void Inv_RecalcSlotStats(void) {
     }
 }
 
-#include "pe1/aya.h"
-
-extern unsigned short g_AyaStatPeEnergyMax;
-extern int g_StatLevelOffsetType3;
-
-extern FieldActor *g_PlayerEntity;
-
+/* Reports the active-time step and rate of the current PE energy level. */
 void Aya_DeriveStats(int *out_max, int *out_current) {
     int base;
     AyaLevelStats *stats;
 
-    Stat_QueryLevelAndSubLevel(3, g_AyaStatPeEnergyMax, &base, 0);
-    stats = Aya_LookupLevelStats(base + g_StatLevelOffsetType3);
+    Stat_QueryLevelAndSubLevel(3, D_800C0E00.stats.levels[3], &base, 0);
+    stats = Aya_LookupLevelStats(base + D_800A1B30[3]);
 
     if (out_max != 0) {
         *out_max = stats->battleAtbStep;
@@ -66,19 +60,18 @@ void Aya_DeriveStats(int *out_max, int *out_current) {
     }
 }
 
+/* Recomputes the battle stats, then refills the player's current HP. */
 void Battle_SyncEquipSlots(void) {
-    unsigned int *outer;
-    unsigned short *ptr;
-    unsigned short value;
+    Combatant *actor;
+    u16 maxHP;
 
     Inv_RecalcSlotStats();
-    outer = (unsigned int *)g_PlayerEntity;
-    if (outer != 0) {
-        ptr = (unsigned short *)outer[0];
-        if (ptr != 0) {
-            value = ptr[0xE];
-            ptr[7] = value;
-            ptr[6] = value;
+    if (D_8009D254 != 0) {
+        actor = D_8009D254->core;
+        if (actor != 0) {
+            maxHP = actor->maxHP;
+            actor->hpMirror = maxHP;
+            actor->curHP = maxHP;
         }
     }
 }
