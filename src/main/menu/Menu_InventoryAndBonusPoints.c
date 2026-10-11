@@ -10,7 +10,9 @@
 #include "pe1/menu_inventory.h"
 #include "pe1/draw_state.h"
 #include "pe1/text.h"
-#include "include_asm.h"
+#include "pe1/draw_level_bar.h"
+#include "pe1/inventory_slots.h"
+#include "pe1/battle_modifiers.h"
 
 /* The inventory root step, equip panel alignment, the bonus-point slot
  * handlers and the bonus-point allocation flow with its item list input
@@ -109,14 +111,14 @@ void Menu_StepInventoryRoot(int mode, int list, int item)
             int stat;
 
             for (stat = 0; stat < 7; stat++) {
-                D_800A18D8[stat] = *source++;
+                g_BonusPointStatDeltas[stat] = *source++;
                 D_800A18FC[stat] = 0;
-                Stat_QueryLevelAndSubLevel(stat, D_800A18D8[stat], &D_800A18B4.queryResults[stat], 0);
+                Stat_QueryLevelAndSubLevel(stat, g_BonusPointStatDeltas[stat], &D_800A18B4.queryResults[stat], 0);
             }
         }
         D_8009CF80 = 0;
         D_8009CF40 = 0;
-        D_8009CF68 = D_800C0E00.bonus_points;
+        g_BonusPointDisplayValue = D_800C0E00.bonus_points;
         for (slot = 6; slot >= 0; slot--)
             D_800A1898[slot] = 0;
         Menu_InitStateTables();
@@ -156,7 +158,6 @@ void Menu_StepInventoryRoot(int mode, int list, int item)
         Menu_AlignEquipPanels();
 }
 
-void MenuWidget_OffsetPosition(MenuWidgetNode *node, int dx, int dy);
 
 void Menu_AlignEquipPanels(void) {
     MenuWidgetNode *panel;
@@ -185,7 +186,6 @@ void Menu_SetEquipPanelsCursorY(void) {
 int g_MenuItemUseMode;
 int g_BonusPointDisplayValue;
 
-void Draw_PrintNumberWidth5(int arg0);
 
 void Menu_DrawBonusPointSlotValue(void) {
     int value;
@@ -197,10 +197,7 @@ void Menu_DrawBonusPointSlotValue(void) {
     Draw_PrintNumberWidth5(g_BonusPointDisplayValue);
 }
 
-void Menu_CreateBonusPointAllocationView(void);
 
-#include "Menu_InventoryAndBonusPoints_externs.h"
-#define g_AyaBonusPoints (g_AyaBonusPoints[0])
 
 void Menu_ExitBonusPointAllocation(void) {
     s32 index;
@@ -218,7 +215,7 @@ void Menu_ExitBonusPointAllocation(void) {
         *(u16 *)dst = value;
         dst += 2;
     } while (index < 7);
-    g_AyaBonusPoints = g_BonusPointDisplayValue;
+    g_AyaBonusPoints[0] = g_BonusPointDisplayValue;
     Inv_RecalcSlotStats();
     MenuWidget_NavScrollTo(0xF);
     MenuWidget_NavScrollTo(0xB);
@@ -283,9 +280,7 @@ int Menu_StatSlotInputHandler(MenuWidgetNode *node, unsigned int flags) {
 #include "common.h"
 
 #define NULL ((void *)0)
-#include "../../../tools/m2c/m2c_macros.h"
 #include "pe1/menu_inventory.h"
-#include "Menu_InventoryAndBonusPoints_externs_1.h"
 
 s32 Menu_BonusPointCancelHandler(void *arg0, s32 arg1) {
     s32 temp_s0;
@@ -325,7 +320,7 @@ s32 Menu_BonusPointCancelHandler(void *arg0, s32 arg1) {
             *var_a1 = temp_v0;
             var_a1 += 1;
         } while (var_a0 < 7);
-        g_AyaBonusPoints = g_BonusPointDisplayValue;
+        g_AyaBonusPoints[0] = g_BonusPointDisplayValue;
         Menu_StepInventoryRoot(0x37E, -1, -1);
         Menu_PlayCancelSound();
     }
@@ -729,11 +724,12 @@ void Menu_StepEquipSlotSelect2(void) {
 #include "pe1/inventory.h"
 #include "pe1/menu_inventory.h"
 
-#include "Menu_InventoryAndBonusPoints_externs_2.h"
-void MenuWidget_OffsetPosition(MenuWidgetNode *ptr, int dx, int dy);
-s32 Inv_RestoreSelection(u32 index);
 void Menu_DrawBonusPointSpendPanel(void);
 s32 Spend_BonusPoints(void *node, u32 buttons);
+
+/* COMMON tells MASPSX that the spend value is a $gp word, so it keeps the
+ * load delay slot before storing it. */
+int g_BonusPointSpendCurrentValue;
 
 void Menu_OpenBonusPointSpendDialog(MenuWidgetNode *arg0, s32 arg1) {
     MenuWidgetNode *node;
@@ -753,30 +749,19 @@ void Menu_OpenBonusPointSpendDialog(MenuWidgetNode *arg0, s32 arg1) {
         node->grid_width -= 0x14;
         MenuWidget_OffsetPosition(node, 0xA, 0);
     } else {
-        s32 value = g_BonusPointStatDeltas[arg1];
-        PE1_NOP();
-        g_BonusPointSpendCurrentValue = value;
+        g_BonusPointSpendCurrentValue = g_BonusPointStatDeltas[arg1];
     }
     g_MenuSpendArrowDirection = 0;
 }
 #include "pe1/inventory.h"
 
-#include "Menu_InventoryAndBonusPoints_externs_3.h"
-void Draw_PrintNumberWidth5(int);
-void Draw_PrintNumberWidth4(int);
-void Draw_PrintNumberWidth2(int);
-void Draw_AllocTexturedRectAlt(int, int);
-void Stat_QueryLevelAndSubLevel(int, int, int *, int *);
-void Stat_QueryDistanceAndSubLevel(int, int, int *, int *);
 
 void Menu_DrawBonusPointSpendPanel(void) {
-    u8 *stat;
     int value;
     int mode;
     int level;
     int distance;
     int sublevel;
-    register int sprite_index asm("$2");
 
     Draw_OffsetCursor(0x14, 0x15);
     Draw_AllocSprite(g_MenuSpendArrowDirection + 0x4D);
@@ -787,51 +772,38 @@ void Menu_DrawBonusPointSpendPanel(void) {
         Draw_OffsetCursor(0x48, 0);
         Draw_PrintNumberWidth5(g_BonusPointSpendWorkingValue);
         Draw_OffsetCursor(-0x75, 0x1E);
-        if (D_8009CF18 != 0) {
-            sprite_index = g_BonusPointSpendStat;
-            Draw_AllocSprite(sprite_index + 0x7C);
-        } else {
-            sprite_index = g_BonusPointSpendStat;
-            Draw_AllocSprite(sprite_index + 0x7F);
-        }
+        Draw_AllocSprite(D_8009CF18 != 0 ? g_BonusPointSpendStat + 0x7C : g_BonusPointSpendStat + 0x7F);
         Draw_OffsetCursor(0x1E, 0);
         mode = g_BonusPointSpendStat;
         switch (mode) {
         case 0: {
-            stat = &D_800A1A00.baseStats[0];
-            /* Keep the bonus load relative to the selected stat pointer. */
-            asm volatile("" : "=r"(stat) : "0"(stat));
-            value = *stat + *(s16 *)(stat + 7);
+            value = D_800A1A00.baseStats[0] + D_800A1A00.bonusStats[0];
             if (value >= 1000) value = 999;
             Draw_PrintNumberWidth4(value);
             Draw_OffsetCursor(4, 2);
-            Draw_PrintNumberWidth4Unk(*stat);
+            Draw_PrintNumberWidth4Unk(D_800A1A00.baseStats[0]);
             Draw_OffsetCursor(5, 0);
-            Draw_PrintSignedNumberWidth4(*(s16 *)(stat + 7));
+            Draw_PrintSignedNumberWidth4(D_800A1A00.bonusStats[0]);
             break;
         }
         case 1: {
-            stat = &D_800A1A00.baseStats[1];
-            asm volatile("" : "=r"(stat) : "0"(stat));
-            value = *stat + *(s16 *)(stat + 8);
+            value = D_800A1A00.baseStats[1] + D_800A1A00.bonusStats[1];
             if (value >= 1000) value = 999;
             Draw_PrintNumberWidth4(value);
             Draw_OffsetCursor(4, 2);
-            Draw_PrintNumberWidth4Unk(*stat);
+            Draw_PrintNumberWidth4Unk(D_800A1A00.baseStats[1]);
             Draw_OffsetCursor(5, 0);
-            Draw_PrintSignedNumberWidth4(*(s16 *)(stat + 8));
+            Draw_PrintSignedNumberWidth4(D_800A1A00.bonusStats[1]);
             break;
         }
         case 2: {
-            stat = &D_800A1A00.baseStats[2];
-            asm volatile("" : "=r"(stat) : "0"(stat));
-            value = *stat + *(s16 *)(stat + 9);
+            value = D_800A1A00.baseStats[2] + D_800A1A00.bonusStats[2];
             if (value >= 1000) value = 999;
             Draw_PrintNumberWidth4(value);
             Draw_OffsetCursor(4, 2);
-            Draw_PrintNumberWidth4Unk(*stat);
+            Draw_PrintNumberWidth4Unk(D_800A1A00.baseStats[2]);
             Draw_OffsetCursor(5, 0);
-            Draw_PrintSignedNumberWidth4(*(s16 *)(stat + 9));
+            Draw_PrintSignedNumberWidth4(D_800A1A00.bonusStats[2]);
             break;
         }
         }
@@ -856,7 +828,6 @@ void Menu_DrawBonusPointSpendPanel(void) {
 }
 #include "pe1/inventory.h"
 
-#include "Menu_InventoryAndBonusPoints_externs_4.h"
 
 
 int Spend_BonusPoints(void *node, unsigned int buttons)
@@ -868,12 +839,12 @@ int Spend_BonusPoints(void *node, unsigned int buttons)
 
     item = Inv_LookupActiveListData(Inv_RestoreSelection(0));
     if (buttons & 0x4000) {
-        D_8009CFAC = 0;
-        if (D_8009CFD8 < 100) {
+        g_MenuSpendArrowDirection = 0;
+        if (g_BonusPointSpendWorkingValue < 100) {
             goto error;
         }
         changed = 0;
-        switch (D_8009CFD0) {
+        switch (g_BonusPointSpendStat) {
         case 0: {
             short *bonus = &D_800A1A00.bonusStats[0];
             changed = *bonus < 999;
@@ -894,12 +865,12 @@ int Spend_BonusPoints(void *node, unsigned int buttons)
         }
         case 5:
         case 6:
-            Stat_QueryDistanceAndSubLevel(D_8009CFD0, D_8009CFDC, &amount, 0);
+            Stat_QueryDistanceAndSubLevel(g_BonusPointSpendStat, g_BonusPointSpendCurrentValue, &amount, 0);
             changed = amount > 0;
-            D_8009CFDC += amount;
+            g_BonusPointSpendCurrentValue += amount;
             break;
         }
-        D_8009CFD8 -= changed * 100;
+        g_BonusPointSpendWorkingValue -= changed * 100;
         if (!changed) {
             goto error;
         }
@@ -908,8 +879,8 @@ int Spend_BonusPoints(void *node, unsigned int buttons)
     }
 
     if (buttons & 0x1000) {
-        D_8009CFAC = 1;
-        switch (D_8009CFD0) {
+        g_MenuSpendArrowDirection = 1;
+        switch (g_BonusPointSpendStat) {
         case 0: {
             short *bonus = &D_800A1A00.bonusStats[0];
             if (*bonus <= item->bonusStats[0]) {
@@ -917,7 +888,7 @@ int Spend_BonusPoints(void *node, unsigned int buttons)
             }
             {
                 short next;
-                refund = D_8009CFD8;
+                refund = g_BonusPointSpendWorkingValue;
                 asm volatile("" : : "r"(refund));
                 next = *bonus - 1;
                 asm volatile("" : "=m"(*bonus) : "m"(*bonus));
@@ -932,7 +903,7 @@ int Spend_BonusPoints(void *node, unsigned int buttons)
             }
             {
                 short next;
-                refund = D_8009CFD8;
+                refund = g_BonusPointSpendWorkingValue;
                 asm volatile("" : : "r"(refund));
                 next = *bonus - 1;
                 asm volatile("" : "=m"(*bonus) : "m"(*bonus));
@@ -946,31 +917,31 @@ int Spend_BonusPoints(void *node, unsigned int buttons)
                 goto error;
             }
             --*bonus;
-            refund = D_8009CFD8;
+            refund = g_BonusPointSpendWorkingValue;
             break;
         }
         case 5:
         case 6: {
-            int *minimum = &D_800A18D8[D_8009CFD0];
+            int *minimum = &g_BonusPointStatDeltas[g_BonusPointSpendStat];
             int gap;
             int new_current;
-            if (*minimum >= D_8009CFDC) {
+            if (*minimum >= g_BonusPointSpendCurrentValue) {
                 goto error;
             }
-            gap = Stat_OverflowQuery(D_8009CFD0, D_8009CFDC);
-            if (D_8009CFDC - gap < *minimum) {
-                new_current = D_800A18D8[D_8009CFD0];
+            gap = Stat_OverflowQuery(g_BonusPointSpendStat, g_BonusPointSpendCurrentValue);
+            if (g_BonusPointSpendCurrentValue - gap < *minimum) {
+                new_current = g_BonusPointStatDeltas[g_BonusPointSpendStat];
             } else {
-                new_current = D_8009CFDC - Stat_OverflowQuery(D_8009CFD0, D_8009CFDC);
+                new_current = g_BonusPointSpendCurrentValue - Stat_OverflowQuery(g_BonusPointSpendStat, g_BonusPointSpendCurrentValue);
             }
-            D_8009CFDC = new_current;
-            refund = D_8009CFD8;
+            g_BonusPointSpendCurrentValue = new_current;
+            refund = g_BonusPointSpendWorkingValue;
             break;
         }
         default:
             return 1;
         }
-        D_8009CFD8 = refund + 100;
+        g_BonusPointSpendWorkingValue = refund + 100;
         Menu_PlayMoveSound();
         return 1;
     }
@@ -981,18 +952,18 @@ error:
     return 1;
 after_error:
     if (buttons & 0x10000) {
-        D_8009CF68 = D_8009CFD8;
-        if (D_8009CFD0 < 3) {
+        g_BonusPointDisplayValue = g_BonusPointSpendWorkingValue;
+        if (g_BonusPointSpendStat < 3) {
             *item = D_800A1A00;
             if (!Inv_IsActiveListOverrideSelected()) {
                 if (item == Inv_LookupActiveListData(D_800C0E20.tracked[0])) {
                     Inv_SetActiveList(2, 0);
-                } else if (item == Inv_LookupActiveListData(D_800C0E22[0])) {
+                } else if (item == Inv_LookupActiveListData(g_AyaEquippedArmorSlot[0])) {
                     Inv_SetActiveList(3, 0);
                 }
             }
         } else {
-            D_800A18D8[D_8009CFD0] = D_8009CFDC;
+            g_BonusPointStatDeltas[g_BonusPointSpendStat] = g_BonusPointSpendCurrentValue;
         }
         MenuWidget_DestroyNode(node);
         Menu_PlayConfirmSound();

@@ -100,6 +100,7 @@ extern u16 g_AyaHpCurrent[];
 extern u8 g_AyaInventorySlotCount[];
 extern s8 g_AyaEquippedWeaponSlot[];
 extern s8 g_AyaEquippedArmorSlot[];
+extern s32 g_AyaBonusPoints[];
 extern u32 g_AyaParasiteSpellFlags[];
 extern u16 g_AyaStatAgility[];
 extern u16 g_AyaStatActiveTimeRate[];

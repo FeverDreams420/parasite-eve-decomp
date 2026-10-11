@@ -34,6 +34,11 @@ extern int g_BonusPointBarAnimStep, g_BonusPointBarAnimProgress;
 extern int g_MenuBonusPointBarAnimActive;
 /* Frame counter pacing the maximum HP count-up. */
 extern int g_MenuHpMaxAnimTimer;
+/* Bonus point spend dialog: the stat being raised, the points left while
+ * spending and the stat value being edited. */
+extern int g_BonusPointSpendStat;
+extern int g_BonusPointSpendWorkingValue;
+extern int g_BonusPointSpendCurrentValue;
 extern int g_MenuStatBarWidths[8];
 extern int g_MenuStatBarSettleTimers[8];
 /* Panel outlines of the EXP review and the level-up result. */
