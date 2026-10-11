@@ -61,6 +61,8 @@ void SetTransMatrix(const GteMatrix *matrix);
 int ratan2(int y, int x);
 int SquareRoot0(int value);
 void VectorNormal(GteVector *vector, GteVector *unit);
+void VectorNormalS(GteVector *vector, GteShortVector *unit);
+void OuterProduct12(void *matrix_column, void *vector, void *output);
 void SetFogNearFar(int near, int far, int h);
 void SetDQA(int dqa);
 void SetDQB(int dqb);
