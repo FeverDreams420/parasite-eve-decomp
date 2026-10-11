@@ -52,16 +52,16 @@ int func_80195064(int event) {
             if (*count>0) {
                 Queue *queue=(Queue *)((char *)count-(unsigned long)&((Queue *)0)->count);
                 Vector **position=queue->positions;
-                goto emit;
-                for(;i<queue->count;i++,position++) {
-emit:
+                do {
                     {
                         Particle *particle=func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
                         if (!particle) break;
                         particle->position=*position;
                         particle->offset=0;
                     }
-                }
+                    i++;
+                    position++;
+                } while (i<queue->count);
             }
             D_8019A7FE=0;
         }
