@@ -68,10 +68,15 @@ int Entity_TriggerAnimEvent(BattleEntity *entity, u8 slot)
     }
     if (slot >= 6)
         return result;
-    if ((u32)actor->animPrev.fixed > actor->animFrame)
-        nextFrame = ((u32)actor->animFrame >> 16) + actor->animLastFrame + 1;
-    else
-        nextFrame = (u32)actor->animFrame >> 16;
+    {
+        u32 previous = actor->animPrev.fixed;
+        u32 frame = actor->animFrame;
+
+        if (previous > frame)
+            nextFrame = (frame >> 16) + actor->animLastFrame + 1;
+        else
+            nextFrame = frame >> 16;
+    }
     switch (actor->actionMode) {
     case 0:
     case 1:
@@ -104,7 +109,9 @@ int Entity_TriggerAnimEvent(BattleEntity *entity, u8 slot)
             result = 2;
         }
         if (slot < 3 && (core->active->category == 1 || core->active->category == 3)) {
-            if (core->active->frame < ((u32)actor->animFrame >> 16) &&
+            u32 frame = actor->animFrame;
+
+            if (core->active->frame < (frame >> 16) &&
                 core->active->frame >= actor->animPrev.parts.integer)
                 core->active->state = 3;
         }

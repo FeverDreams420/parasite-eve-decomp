@@ -28,7 +28,9 @@ void Entity_AdvanceAnim(BattleEntity *entity) {
 
         if (!(flags & 0x100)) {
             if (flags & 0x200) {
-                if (((u32)old_frame >> 16) == entity->animStopFrame) {
+                u32 whole_frame = old_frame;
+
+                if ((whole_frame >> 16) == entity->animStopFrame) {
                     return;
                 }
             }
