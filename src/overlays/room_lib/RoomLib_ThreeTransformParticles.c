@@ -333,7 +333,7 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
             alpha = workState->size[i];
             arg0 = RoomLib_ThreeParticleTable;
             RoomLib_ThreeParticleAlpha = alpha;
-            asm volatile("" ::: "memory");
+            asm volatile("" : : "m"(RoomLib_ThreeParticleAlpha));
             frame = callArgs[1];
             func_800C3134(arg0, frame, (unsigned char *)&RoomLib_ThreeParticlePacket);
             func_800C2FF0(0x40, 0x40);
