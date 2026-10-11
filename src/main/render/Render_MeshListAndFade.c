@@ -14,6 +14,7 @@
 #include "pe1/field_tile.h"
 #include "pe1/field_anim.h"
 #include "pe1/render_shadow.h"
+#include "pe1/render_buffers.h"
 
 /* Matching debt: fixed-register pins and scheduling constraints preserve the stock PSYQ instruction schedule. */
 
@@ -300,7 +301,6 @@ int Render_SetEntryPosition(int index, int x, int y) {
     return 0;
 }
 
-#include "Render_MeshListAndFade_externs.h"
 int Gpu_LoadGeomState(int);
 /* Loads the selected group's viewport, centres the camera on it and builds
  * every mesh entry's packets into `buffer`; *end returns the free space. */
@@ -463,98 +463,48 @@ int Render_StartFadeIn(int arg0)
   return 0;
 }
 
-#include "Render_MeshListAndFade_externs_2.h"
-
-#define D_800BCF88_WORD (*(s32 *)&D_800BCF88_o)
-#define D_800BCFFA_BYTE (*(u8 *)&D_800BCFFA_o)
-#define D_800BCFFB_BYTE (*(u8 *)&D_800BCFFB_o)
-#define D_800BCFFB_PTR ((u8 *)&D_800BCFFB_o)
-#define D_800B1624_A (*(u8 **)&D_800B1624_a_o)
-#define D_800B1624_B (*(u8 **)&D_800B1624_b_o)
-#define D_800B1624_C (*(u8 **)&D_800B1624_a_o)
-#define READ_S32(base, offset) (*(s32 *)((u8 *)(base) + (offset)))
-#define READ_U16(base, offset) (*(u16 *)((u8 *)(base) + (offset)))
-#define WRITE_U16(base, offset, value) (*(u16 *)((u8 *)(base) + (offset)) = (value))
-
+/* Steps the screen fade: every sprite primitive of every entry gets the
+ * current grey level; when the fade has run its frames the fade-in mode is
+ * switched off and the fade-out flag set. */
 int Render_StepFade(void) {
-    GeomState *geom;
-    register GeomStateAddress entry asm("$4");
-    PrimEntry *prim;
-    s32 fade_step;
-    int fade_value;
-    int tint_loop;
-    int entry_index;
-    int prim_index;
-    int entry_count;
-    int prim_count;
-    int active_slot;
-    register s32 flags asm("$2");
-    s32 mask;
-    s32 divisor;
-    GeomState *final_geom;
-    u8 *fade_ptr;
-    u8 frame;
-    s32 stack_pad[4];
+    GeomState *state;
+    GeomStateAddress entries;
+    GeomEntry *entry;
+    u8 *counter;
+    int level;
+    int count;
+    int i;
 
-    if ((D_800BCF88_WORD & 0x400) == 0) {
+    if (!(g_RenderStateFlags & 0x400))
         return 0;
+    level = (g_RenderFadeFrameCounter << 7) / (g_RenderFadeFrameCount - 1);
+    state = D_800B1624;
+    entries.state = D_800B1624;
+    entries.word += state->entry_offset;
+    count = state->entry_count06;
+    level = 0x80 - level;
+    entry = entries.entry;
+    for (i = 0; i < count; i++, entry++) {
+        PrimEntry *prim = entry->u30.prim;
+        u32 primCount = entry->prim_count;
+        u8 grey = level;
+        u32 j;
+
+        if (g_ActiveDrawSlot != 0)
+            prim += primCount;
+        for (j = 0; j < primCount; j++, prim++) {
+            prim->b = grey;
+            prim->g = grey;
+            prim->r = grey;
+            /* Matching debt: keeps the counter step below the stores. */
+            asm("" : : : "memory");
+        }
     }
-
-    fade_step = D_800BCFFB_BYTE;
-    divisor = D_800BCFFA_BYTE;
-    fade_step <<= 7;
-    divisor--;
-    fade_step /= divisor;
-
-    geom = (GeomState *)D_800B1624_A;
-    entry.bytes = D_800B1624_B;
-    fade_value = geom->entry_offset;
-    entry_count = geom->entry_count06;
-    entry.bytes += fade_value;
-    fade_value = 0x80 - fade_step;
-    entry_index = 0;
-    if (entry_count != 0) {
-        tint_loop = fade_value;
-        do {
-            prim = (PrimEntry *)entry.entry->u30.prim;
-            active_slot = D_8009CDDC;
-            prim_count = entry.entry->prim_count;
-            if (active_slot != 0) {
-                prim = prim + prim_count;
-            }
-            prim_index = 0;
-            if (prim_count != 0) {
-                do {
-                    prim->b = tint_loop;
-                    prim->g = tint_loop;
-                    prim->r = tint_loop;
-                    asm("" : : : "memory");
-                    prim_index++;
-                    prim++;
-                } while ((u32)prim_index < prim_count);
-            }
-            entry_index++;
-            entry.entry++;
-        } while (entry_index < entry_count);
+    counter = &g_RenderFadeFrameCounter;
+    if (++*counter >= g_RenderFadeFrameCount) {
+        g_RenderStateFlags = (g_RenderStateFlags & ~0xC00) | 0x800;
+        D_800B1624->field26 = 0x1FF0;
     }
-
-    fade_ptr = D_800BCFFB_PTR;
-    frame = *fade_ptr;
-    frame++;
-    *fade_ptr = frame;
-    if (frame < D_800BCFFA_BYTE) {
-        return 0;
-    }
-
-    flags = D_800BCF88_WORD;
-    mask = -0xC01;
-    flags &= mask;
-    final_geom = (GeomState *)D_800B1624_C;
-    flags |= 0x800;
-    *(s32 *)&D_800BCF88_store_o = flags;
-    flags = 0x1FF0;
-    final_geom->field26 = flags;
-
     return 0;
 }
 
@@ -589,92 +539,59 @@ int Render_BeginSceneLoad(void) {
     return 0;
 }
 
-#include "Render_MeshListAndFade_externs_3.h"
-
-#define D_800BCFFC_BYTE (*(u8 *)&D_800BCFFC_o)
-
+/* Tints every sprite primitive with the tint level (or neutral grey while
+ * the tint is off) and advances the two-step tint mode. */
 int Render_ApplyScreenTint(void) {
-    GeomState *geom;
-    register GeomStateAddress entry asm("$4");
-    PrimEntry *prim;
-    u32 flags;
-    int tint;
-    int tint_loop;
-    int entry_index;
-    int prim_index;
-    int entry_count;
-    int prim_count;
-    int active_slot;
-    s32 stack_pad[4];
+    GeomState *state;
+    GeomStateAddress entries;
+    GeomEntry *entry;
+    int *flags;
+    int mode;
+    int masked;
+    int level;
+    int count;
+    int i;
 
-    flags = D_800BCF88_WORD;
-    if ((flags & 0x1000) == 0) {
+    if (!(g_RenderStateFlags & 0x1000))
+        return 0;
+    level = 0x80;
+    if (g_RenderStateFlags & 0x2000)
+        level = D_800BCFFC;
+    state = D_800B1624;
+    entries.state = D_800B1624;
+    entries.word += state->entry_offset;
+    count = state->entry_count06;
+    entry = entries.entry;
+    for (i = 0; i < count; i++, entry++) {
+        PrimEntry *prim = entry->u30.prim;
+        u32 primCount = entry->prim_count;
+        u8 grey = level;
+        u32 j;
+
+        if (g_ActiveDrawSlot != 0)
+            prim += primCount;
+        for (j = 0; j < primCount; j++, prim++) {
+            prim->b = grey;
+            prim->g = grey;
+            prim->r = grey;
+            /* Matching debt: keeps the counter step below the stores. */
+            asm("" : : : "memory");
+        }
+    }
+    flags = &g_RenderStateFlags;
+    mode = *flags;
+    masked = mode & ~0xC000;
+    *flags = masked;
+    switch (mode & 0xC000) {
+    case 0x4000:
+        *flags = masked | 0x8000;
+        break;
+    case 0x8000:
+        *flags = masked & ~0x1000;
+        break;
+    default:
         return 0;
     }
-
-    if (flags & 0x2000) {
-        tint = D_800BCFFC_BYTE;
-    } else {
-        tint = 0x80;
-    }
-
-    geom = (GeomState *)D_800B1624_A;
-    entry.bytes = D_800B1624_B;
-    entry.bytes += geom->entry_offset;
-    entry_count = geom->entry_count06;
-    entry_index = 0;
-    if (entry_count != 0) {
-        tint_loop = tint;
-        do {
-            prim = (PrimEntry *)entry.entry->u30.prim;
-            active_slot = g_ActiveDrawSlot;
-            prim_count = entry.entry->prim_count;
-            if (active_slot != 0) {
-                prim = prim + prim_count;
-            }
-            prim_index = 0;
-            if (prim_count != 0) {
-                do {
-                    prim->b = tint_loop;
-                    prim->g = tint_loop;
-                    prim->r = tint_loop;
-                    asm("" : : : "memory");
-                    prim_index++;
-                    prim++;
-                } while ((u32)prim_index < prim_count);
-            }
-            entry_index++;
-            entry.entry++;
-        } while (entry_index < entry_count);
-    }
-
-    {
-        s32 mask;
-        s32 *flags_ptr;
-        s32 mode_bits;
-        s32 value;
-
-        mask = 0xFFFF3FFF;
-        flags_ptr = &D_800BCF88_WORD;
-        value = *flags_ptr;
-        mask = value & mask;
-        mode_bits = value & 0xC000;
-        value = 0x4000;
-        *flags_ptr = mask;
-        switch (mode_bits) {
-        case 0x4000:
-            value = mask | 0x8000;
-            break;
-        case 0x8000:
-            value = -0x1001;
-            value = mask & value;
-            break;
-        default:
-            return 0;
-        }
-        *flags_ptr = value;
-    }
-
     return 0;
 }
 
