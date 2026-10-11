@@ -668,6 +668,10 @@ void Render_TransformSkinnedVertices(RenderObjectEntity *object, u32 *view_matri
 void Render_TransformMorphVertices(RenderObjectEntity *object, u32 *view_matrix);
 /* Word lookup/work buffers also used for GTE screen/depth output. */
 extern u32 D_800A6360[], D_800B1638[];
+/* Byte view of one D_800B1638 vertex colour word. */
+typedef struct RenderVertexColour {
+    u8 r, g, b, code;
+} RenderVertexColour;
 extern u8 D_8009CD98[];
 extern s16 D_8009CD9A;
 void Render_CopyFrameData(RenderObjectEntity *dst, RenderObjectEntity *src, s32 frame);

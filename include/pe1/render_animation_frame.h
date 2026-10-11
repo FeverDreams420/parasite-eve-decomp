@@ -47,7 +47,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RenderAnimPlayer, z) - 0x28 ==
 extern int g_BattleAttackAnimFrame;
 extern struct Combatant *g_ActiveActor;
 extern struct FieldActor *g_PlayerEntity;
-extern int g_ActiveDrawSlot;
 /* Byte offset of the next free packet in the current draw buffer. */
 extern int D_8009CDD8;
 extern void *D_800B0DF8[3];
