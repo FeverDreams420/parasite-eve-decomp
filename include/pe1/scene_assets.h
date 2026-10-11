@@ -250,7 +250,6 @@ extern AkaoVoiceBankEntry D_80094488[];
 void *Asset_FindTable2CByU16Key(char *base, int key);
 void *Asset_FindTable30ByU16Key(char *base, int key);
 void Akao_LoadVoiceBankAlt(void);
-void Akao_ClearVoiceBank(void);
 
 PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, bank_asset_table) == 0x124,
                   game_state_bank_asset_table_offset);

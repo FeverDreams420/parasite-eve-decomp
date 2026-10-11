@@ -19,7 +19,7 @@
  * commands), soft-reset shutdown and screen vertical-offset update. These
  * contiguous routines share the default compiler profile and display state. */
 
-void Akao_StepVoiceTable(void) {
+void Sys_FinishFrame(void) {
     s32 one;
 
     if (!(g_GameState.flags & 0x200) && (g_GameStateFlags & 0x10)) {
@@ -202,10 +202,10 @@ void Sys_SyncShutdown(void)
 void Boot_InitGameState(void)
 {
     Boot_InitMemoryLayout();
-    Akao_ClearVoiceBank();
+    GameState_Reset();
 }
 
-void Akao_ClearVoiceBank(void)
+void GameState_Reset(void)
 {
     u8 *base = (u8 *)&g_GameState;
     u8 *p;

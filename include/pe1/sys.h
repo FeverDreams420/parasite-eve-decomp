@@ -17,6 +17,10 @@ void Sys_SyncShutdown(void);
 int Draw_SetBaseY(int unused, u32 y);
 void Boot_InitMemoryLayout(void);
 void Boot_InitGameState(void);
+/* Resets g_GameState and the scene voice-bank entries to start-up values. */
+void GameState_Reset(void);
+/* End-of-frame pass: draws the fade primitives and sends queued AKAO commands. */
+void Sys_FinishFrame(void);
 
 /* Fixed work areas carved up by Boot_InitMemoryLayout. */
 extern u8 D_800F34F8[];

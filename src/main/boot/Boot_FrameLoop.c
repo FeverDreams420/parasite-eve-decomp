@@ -41,7 +41,7 @@ void Render_ResetGteScreenOffset(void);
 int Render_SetCDDCSlot(void);
 void Gpu_RenderFrame(void);
 int Render_SetFadeColour(unsigned int arg0);
-void Akao_StepVoiceTable(void);
+void Sys_FinishFrame(void);
 void ClearImage(RECT *rect, int r, int g, int b);
 void Akao_Cmd_F1(void);
 void Render_Noop(int mode);
@@ -140,7 +140,7 @@ void Boot_RunFrame(void)
                 Sys_Shutdown();
             }
             if (!(*game_flags & 0x100)) {
-                Akao_StepVoiceTable();
+                Sys_FinishFrame();
             }
             D_8009CDA4[0]++;
             if ((D_8009D1A0 & 0x2000) && (*game_flags & 0x800)) {
