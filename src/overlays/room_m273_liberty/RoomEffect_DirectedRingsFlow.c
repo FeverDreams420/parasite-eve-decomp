@@ -67,8 +67,8 @@ int func_8019665C(int mode, RoomM273Drop *drop) {
 /* room_m273, file offset 0x79F0, 1364 retail-matching bytes. */
 #include "pe1/gte.h"
 typedef GteShortVector Vector;
-typedef struct { short m[3][3]; int t[3]; } Matrix;
-typedef struct { unsigned char unknown[0x2A]; short x,unknown2C,y,unknown30,z; } Player;
+typedef GteMatrix Matrix;
+typedef FieldActor Player;
 extern unsigned char D_8019AF69,D_8019AF68;
 extern unsigned short D_8019AF60;
 extern Vector D_8019AD60;
@@ -88,10 +88,10 @@ int func_801969D8(int mode) {
         int dx,dy,dz,x,y,z; short spread; short angle;
         if(*stopped) return 2;
         player=(Player *)g_PlayerEntity;
-        playerPosition.x=x=player->x;
+        playerPosition.x=x=((Pe1Fixed16_16 *)&player->pos_x)->parts.integer;
         dx=x-D_8019AEFC.x;
-        playerPosition.y=y=player->y;
-        playerPosition.z=z=player->z;
+        playerPosition.y=y=((Pe1Fixed16_16 *)&player->pos_y)->parts.integer;
+        playerPosition.z=z=((Pe1Fixed16_16 *)&player->pos_z)->parts.integer;
         dz=z-D_8019AEFC.z;
         dy=y-D_8019AEFC.y;
         angle=ratan2(dy,func_8005186C((unsigned int)dx*dx+(unsigned int)dz*dz))&4095;
