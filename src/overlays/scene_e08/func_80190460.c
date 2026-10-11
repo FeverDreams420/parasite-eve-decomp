@@ -1,4 +1,5 @@
 #include "pe1/gte_types.h"
+#include "pe1/scene_e08_glow_sprites.h"
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_script_context.h"
 #include "pe1/field_sprite_state.h"
@@ -16,8 +17,8 @@ void func_80190460(void *unused0, void *unused1, char *effect) {
     Matrix matrix;
     Vec4 scratch, draw;
     char *owner;
-    char *base = effect;
-    register char *position asm("$18");
+    SceneE08GlowSprites *base = (SceneE08GlowSprites *)effect;
+    register GteShortVector *position asm("$18");
     register char *scale asm("$16");
     register unsigned i;
     int diag = 0x1000;
@@ -25,15 +26,15 @@ void func_80190460(void *unused0, void *unused1, char *effect) {
     owner = func_800C2B50();
     i = 0;
         asm volatile("" : : "r"(slot));
-    scale = base;
+    scale = (char *)base;
     asm volatile("" : : "r"(scale));
     func_800C2EAC(*(u8 *)(owner + 0x24));
-    position = scale;
+    position = (GteShortVector *)scale;
     func_800C3098(0x10);
     func_800C3238(2);
 
-    for (; i < 4; position += 8, i++, scale += 2) {
-        if (*(u8 *)(base + i + 0x3C) == 1) {
+    for (; i < 4; position++, i++, scale += 2) {
+        if (base->active[i] == 1) {
             matrix.m[2][2] = diag;
             matrix.m[1][1] = diag;
             matrix.m[0][0] = diag;
@@ -54,13 +55,13 @@ void func_80190460(void *unused0, void *unused1, char *effect) {
             scratch = draw;
             ScaleMatrix(&matrix, &scratch);
 
-            matrix.t[0] = *(s16 *)(position + 0);
-            matrix.t[1] = *(s16 *)(position + 2);
-            matrix.t[2] = *(s16 *)(position + 4);
+            matrix.t[0] = position->x;
+            matrix.t[1] = position->y;
+            matrix.t[2] = position->z;
             *slot = *(u16 *)(scale + 0x28);
             func_800C2FF0(0x10, 0x10);
-            *(u8 *)((char *)slot - 6) = *(u8 *)(base + i + 0x30) + (*(u8 *)(base + i + 0x38) >> 1);
-            *(u8 *)((char *)slot - 5) = *(u8 *)(base + i + 0x34);
+            *(u8 *)((char *)slot - 6) = base->cell[i] + (base->frame[i] >> 1);
+            *(u8 *)((char *)slot - 5) = base->clut[i];
             func_800C42A4((FieldGlowSprite *)((char *)slot - 10), &matrix, 1);
         }
     }
