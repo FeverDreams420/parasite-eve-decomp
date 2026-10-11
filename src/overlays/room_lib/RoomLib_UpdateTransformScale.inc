@@ -39,7 +39,7 @@ int ROOMLIB_UPDATE_TRANSFORM_SCALE_NAME(RoomTransformScaleOwner *owner) {
 
     if (owner->timer != 0) {
         curve = (*(s32 *)D_800966EC[(((owner->duration - owner->timer) << 11) /
-                                     owner->duration) & 0xFFF] << 16) >> 17;
+                                     owner->duration) & 0xFFF].half << 16) >> 17;
         Scratch_1F800010 = 0x1000 + curve;
         scale[0] = 0x1000 + curve;
         Scratch_1F80000C = 0x1000 - curve;

@@ -105,7 +105,7 @@ int func_80194E6C(int mode, RoomM273FallingTrail *trail) {
             rotation.z = -0x400;
             rotation.flags = 1;
             if (D_800E27EC < 17) {
-                scale = D_800966EC[(D_800E27EC << 8 & 0x3F00) >> 2].sine * 3 * 2048 / 4096 + 0x800;
+                scale = D_800966EC[(D_800E27EC << 8 & 0x3F00) >> 2].bits.sin * 3 * 2048 / 4096 + 0x800;
             } else {
                 scale = 0x2000;
             }

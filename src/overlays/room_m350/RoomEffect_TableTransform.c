@@ -14,7 +14,7 @@ typedef RoomM350Actor Actor;
 typedef struct { unsigned char index, alternate; } Entry;
 extern unsigned char D_8019A804;
 extern Entry D_8019A4D4[][2];
-extern int D_800966EC[];
+#include "pe1/gte_sine_table.h"
 extern unsigned char D_8019A4EC[];
 extern RenderColor D_8019A3D0;
 
@@ -29,7 +29,7 @@ int func_80195564(int event, short *position) {
         func_800CEE20((GteShortVector *)position, 0, position[3], position[3],
             (s16)D_800F3368.parameter02 * D_8019A4EC[(D_800E27EC - 1) / 2] + 128,
             (unsigned short)handle, 1,
-            (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80] >> 5,
+            (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80].word >> 5,
             &D_8019A3D0);
     }
     return 0;
@@ -62,7 +62,7 @@ int func_8019569C(int event) {
                 int *source=instance->transforms[entry->index].position;
                 for(j=0;j<3;j++) particle->position[j]=source[j];
             }
-            particle->size=D_800966EC[(relative<<7)&0xF80]+2048;
+            particle->size=((int *)D_800966EC)[(relative<<7)&0xF80]+2048;
         }
     }
         break;

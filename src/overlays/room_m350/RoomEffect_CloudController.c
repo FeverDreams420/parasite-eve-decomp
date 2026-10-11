@@ -16,7 +16,7 @@ typedef struct { int asset; short speed,targetSpeed,heightPhase,mode; } State;
 extern unsigned char D_8019A8BE,D_8019A8C0;
 extern volatile short D_8019A89E;
 extern short D_8019A8B8,D_8019A8BA,D_8019A8BC;
-extern short D_800966EC[];
+#include "pe1/gte_sine_table.h"
 extern short D_8019A872,D_8019A874,D_8019A876,D_8019A878,D_8019A87A,D_8019A87C,D_8019A87E,D_8019A880;
 extern int D_8019A884,D_8019A888,D_8019A88C;
 int func_80198CF8(int event,State *state)

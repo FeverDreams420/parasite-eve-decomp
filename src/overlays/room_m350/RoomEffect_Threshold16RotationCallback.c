@@ -1,7 +1,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "room_m350_data.h"
-extern short D_800966EC[];
+#include "pe1/gte_sine_table.h"
 typedef struct { signed int scale:16; signed int shade:16; } EffectEntry;
 extern int D_8019A628[];
 
@@ -14,7 +14,7 @@ int func_8019A21C(int event, void *context) {
     } else if (event == 2) {
         int angle = (D_800E27EC << 12) / 20;
         unsigned int offset = (unsigned int)(D_800E27EC - 1) << 8;
-        short *base = D_800966EC;
+        short *base = ((short *)D_800966EC);
         entry = (short *)((offset & 0x3F00) + (char *)base);
         scale = entry[0];
         rotation[0] = 1024;

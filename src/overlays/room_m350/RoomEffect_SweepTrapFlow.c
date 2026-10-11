@@ -47,8 +47,8 @@ int func_80192E4C(int mode, RoomM350SweepTrap *trap) {
         intensity = phase < 9;
         i = 8;
         if (intensity) i = phase;
-        trig = D_800966EC;
-        rotation.angles.x = -D_800966EC[(i * 128) & 0xFFF].sin * 0x260 / 4096 - 0x500;
+        trig = ((RoomM350Trig *)D_800966EC);
+        rotation.angles.x = -D_800966EC[(i * 128) & 0xFFF].bits.sin * 0x260 / 4096 - 0x500;
         rotation.angles.y = ANIM_OWNER_AS(RoomM350TrapChannel)->actor->heading;
         rotation.angles.z = 0x400;
         RotMatrixYXZ(&rotation.angles, &matrix);
@@ -111,7 +111,7 @@ int func_80192E4C(int mode, RoomM350SweepTrap *trap) {
         spin.angles.y = 0;
         spin.angles.pad = 0;
         spin.angles.z = D_800E27EC << 7;
-        trig = D_800966EC;
+        trig = ((RoomM350Trig *)D_800966EC);
         {
             int scale = trig[(phase * 64) & 0xFFF].sin + 0x1000;
             func_800D0728(trap->anchor, 0x100, 0x1C0, 0x10, &spin.rotation, scale, scale,

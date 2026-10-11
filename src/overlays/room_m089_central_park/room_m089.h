@@ -7,7 +7,7 @@
 #include "pe1/scene_archive.h"
 #include "pe1/akao_send.h"
 
-extern short D_800966EC[][2];
+#include "pe1/gte_sine_table.h"
 
 extern struct FieldActor *D_8009D20C;
 

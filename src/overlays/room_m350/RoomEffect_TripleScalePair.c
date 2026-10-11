@@ -19,7 +19,7 @@ typedef struct RoomM350Instance {
 typedef RoomM350Actor Actor;
 
 /* The controller owns the position pointers rendered by this callback. */
-extern int D_800966EC[];
+#include "pe1/gte_sine_table.h"
 
 int func_80193A80(int event, void **object)
 {
@@ -37,7 +37,7 @@ int func_80193A80(int event, void **object)
         handle = GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 8 : palette + 4);
         func_800CEE20((GteShortVector *)*object, 0, size, size, (s16)D_800F3368.parameter02 * 6 + 128,
             (unsigned short)handle, 1,
-            (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80] >> 5, 0);
+            (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80].word >> 5, 0);
     }
     return 0;
 }

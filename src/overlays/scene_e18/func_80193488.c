@@ -6,7 +6,7 @@ typedef struct {
     u16 base;
 } SceneE18PaletteEffect;
 
-extern s32 D_800966EC[];
+#include "pe1/gte_sine_table.h"
 
 int func_80193488(int mode, SceneE18PaletteEffect *effect) {
     int size, kind, palette, texture, base;
@@ -20,7 +20,7 @@ int func_80193488(int mode, SceneE18PaletteEffect *effect) {
         effect->position.pad++;
     } else if (mode == 2) {
         firstFrame = D_800E27EC - 1;
-        sample = D_800966EC[(((unsigned int)firstFrame << 8) & 0x3F00) / 4];
+        sample = D_800966EC[(((unsigned int)firstFrame << 8) & 0x3F00) / 4].word;
         base = effect->base;
 
         kind = D_800F3368.palette;
@@ -32,7 +32,7 @@ int func_80193488(int mode, SceneE18PaletteEffect *effect) {
         texture = (s16)D_800F3368.parameter02 * ((secondFrame >> 1) & 7);
         func_800CEE20(&effect->position, 0, (s16)size, (s16)size,
                        texture, clut, 1,
-                       (s16)D_800966EC[(((unsigned int)secondFrame << 9) & 0x3E00) / 4] >> 5,
+                       (s16)D_800966EC[(((unsigned int)secondFrame << 9) & 0x3E00) / 4].word >> 5,
                        0);
     }
     return 0;

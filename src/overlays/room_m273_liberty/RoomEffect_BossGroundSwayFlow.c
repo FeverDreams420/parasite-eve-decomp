@@ -104,7 +104,7 @@ int func_80198E94(int mode, GteShortVector *position) {
         if (position->pad != 0) return 0;
         if (D_8019AF74.cooldown != 0) return 0;
         {
-            int radius = D_800966EC[((now << 11) / 40) & 0xFFF].sine / 16 + 0x80;
+            int radius = D_800966EC[((now << 11) / 40) & 0xFFF].bits.sin / 16 + 0x80;
             int dx = g_PlayerEntity->render_object.model_matrix.translation[0] - position->x;
             int dz = g_PlayerEntity->render_object.model_matrix.translation[2] - position->z;
             if (radius < func_8005186C(dx * dx + dz * dz)) return 0;
@@ -126,8 +126,8 @@ int func_80198E94(int mode, GteShortVector *position) {
         int cosine;
         int sine;
         i = D_800E27EC - 5;
-        if (i < 8) value = D_800966EC[(i << 7) & 0xF80].sine;
-        else value = D_800966EC[(((D_800E27EC - 13) << 10) / 24) & 0xFFF].cosine;
+        if (i < 8) value = D_800966EC[(i << 7) & 0xF80].bits.sin;
+        else value = D_800966EC[(((D_800E27EC - 13) << 10) / 24) & 0xFFF].bits.cos;
         page = (D_800E2850[D_800E11FA] | GetTPage(0, 1, 0, 0)) & 0xFFFF;
         fade = value >> 6;
         kind = D_800F3368.palette;
@@ -175,7 +175,7 @@ int func_80198E94(int mode, GteShortVector *position) {
         int kind = D_800F3368.palette;
         int palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428 != 0) palette += 4;
-        size = D_800966EC[(frame << 7) & 0xF80].sine + 0x1800;
+        size = D_800966EC[(frame << 7) & 0xF80].bits.sin + 0x1800;
         func_800CEE20(position, 0, size, size, (s16)D_800F3368.parameter02 * frame + 0x80,
                       (u16)GetClut(0x10, palette), 1, 0x80, 0);
     }
@@ -183,8 +183,8 @@ int func_80198E94(int mode, GteShortVector *position) {
     rotation.y = -frame << 9;
     rotation.flags = 1;
     rotation.z = 0;
-    fade = D_800966EC[(frame * 25) & 0xFFF].cosine >> 5;
-    value = D_800966EC[(frame * 51) & 0xFFF].sine / 16;
+    fade = D_800966EC[(frame * 25) & 0xFFF].bits.cos >> 5;
+    value = D_800966EC[(frame * 51) & 0xFFF].bits.sin / 16;
     for (i = 0; i < 2; i++) {
         func_800D004C(position, value, value, 8, &rotation, 0x1000, 0x1000,
                       &D_8019AE1C[0], &D_8019AE1C[1], fade, 1);

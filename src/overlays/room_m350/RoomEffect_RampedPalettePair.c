@@ -14,7 +14,7 @@ typedef struct RoomM350Instance { char reserved[22]; unsigned short frame; } Ins
 typedef RoomM350Actor Actor;
 
 /* The spawner owns the scaled particles rendered by this callback. */
-extern int D_800966EC[];
+#include "pe1/gte_sine_table.h"
 extern unsigned short D_800E11E8;
 
 int func_80192ADC(int event, Particle *object)
@@ -36,7 +36,7 @@ int func_80192ADC(int event, Particle *object)
         handle = GetClut(32, palette);
         func_800CEE20(object->position, 0, size, size, (s16)D_800F3368.parameter02 + 216,
             (unsigned short)handle, 1,
-            (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80] >> 5,
+            (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80].word >> 5,
             &D_8019A3D0);
     }
     return 0;

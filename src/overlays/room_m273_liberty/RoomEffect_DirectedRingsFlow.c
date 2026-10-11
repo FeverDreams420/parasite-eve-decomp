@@ -41,8 +41,8 @@ int func_8019665C(int mode, RoomM273Drop *drop) {
             if (drop->position.pad++ >= 8) return 1;
         }
     } else if (mode == 2) {
-        int shade = D_800966EC[(drop->position.pad << 7) & 0xF80].cosine >> 5;
-        RoomM273BossTrig *trig = D_800966EC;
+        int shade = D_800966EC[(drop->position.pad << 7) & 0xF80].bits.cos >> 5;
+        RoomM273BossTrig *trig = ((RoomM273BossTrig *)D_800966EC);
         ring.x = drop->ring.x;
         ring.y = drop->ring.y;
         ring.z = drop->ring.z;

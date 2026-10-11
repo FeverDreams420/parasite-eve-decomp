@@ -55,7 +55,7 @@ typedef struct RoomM350Trig {
     int cos : 16;
 } RoomM350Trig;
 
-extern RoomM350Trig D_800966EC[];
+#include "pe1/gte_sine_table.h"
 extern struct FieldActor *g_PlayerEntity;
 extern RenderColor D_8019A434[];
 extern RenderColor D_8019A3C8;

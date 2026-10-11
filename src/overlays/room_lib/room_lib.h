@@ -391,7 +391,7 @@ typedef struct RoomLibHandlerCState {
 } RoomLibHandlerCState;
 
 extern short D_800966EE[];
-extern short D_800966EC[][2];
+#include "pe1/gte_sine_table.h"
 extern struct BattleEntity *D_8009D254;
 struct FieldActorNode;
 extern struct FieldActor *D_8009D20C;

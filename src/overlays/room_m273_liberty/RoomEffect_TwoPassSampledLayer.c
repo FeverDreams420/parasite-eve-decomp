@@ -54,7 +54,7 @@ int func_801933A0(int mode) {
         effect->parameter[1]=8;
         {
             unsigned long address=((D_800E27EC*1024/12)&0xFFF)*4;
-            address+=(unsigned long)D_800966EC;
+            address+=(unsigned long)((RoomM273TrigEntry *)D_800966EC);
             effect->parameter[2]=((short *)address)[1]*40/4096;
         }
         break;

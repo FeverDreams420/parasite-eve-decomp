@@ -4,7 +4,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/psyq_gpu.h"
-extern s32 D_800966EC[];
+#include "pe1/gte_sine_table.h"
 extern void D_8019A410;
 
 s32 func_80199B94(s32 mode, void *ctx) {

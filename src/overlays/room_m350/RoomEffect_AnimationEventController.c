@@ -15,7 +15,7 @@ extern Events D_8018F1CC;
 extern unsigned char D_8019A859;
 extern int D_8019A858;
 extern short D_8019A85C,D_8019A85E,D_8019A86A,D_8019A86C;
-extern int D_800966EC[];
+#include "pe1/gte_sine_table.h"
 extern short D_800966EE[];
 
 int func_80197DA8(int event,short *cursor) {
@@ -62,7 +62,7 @@ int func_80197DA8(int event,short *cursor) {
         else if ((unsigned int)(frame-19)<8) phase=27-frame;
         else phase=0;
         if (phase) {
-        int speed=(short)D_800966EC[(((unsigned int)phase<<10)&0x3C00)/4]>>6;
+        int speed=(short)D_800966EC[(((unsigned int)phase<<10)&0x3C00)/4].word>>6;
         int angle=FieldEng_VecToAngle(g_PlayerEntity->render_object.model_matrix.translation,instance->render_object.model_matrix.translation);
         instance->rot_y=FieldEng_TurnToward(instance->rot_y,(short)angle,speed);
         }

@@ -19,7 +19,7 @@ int func_80195984(int mode, RoomM273PulseInput *input)
         input->velocity += 2;
     } else if (mode == 2) {
         frame = D_800E27EC - 1;
-        sample = D_800966EC[(((unsigned int)frame << 8) & 0x3F00) / sizeof(RoomM273TrigEntry)].low;
+        sample = D_800966EC[(((unsigned int)frame << 8) & 0x3F00) / sizeof(RoomM273TrigEntry)].bits.sin;
         position = input->position;
         palette = D_800E1204[D_800F3368.palette];
         size = sample * 2 + 2048;
@@ -27,7 +27,7 @@ int func_80195984(int mode, RoomM273PulseInput *input)
         clut = GetClut(16, palette);
         func_800CEE20(&position, 0, (s16)size, (s16)size,
                        (s16)D_800F3368.parameter02 * (frame / 2) + 128, clut, 1,
-                       D_800966EC[(((unsigned int)frame << 8) & 0x3F00) / sizeof(RoomM273TrigEntry)].high >> 5, 0);
+                       D_800966EC[(((unsigned int)frame << 8) & 0x3F00) / sizeof(RoomM273TrigEntry)].bits.cos >> 5, 0);
         position.y -= input->position.pad;
         {
             int clut2;

@@ -1048,7 +1048,7 @@ void RoomLib_HandlerB(RoomEnt *obj) {
         v1 += 0x800;
         v0 += v1;
         v0 &= 0xFFF;
-        v1 = (int)D_800966EC;
+        v1 = (int)((short (*)[2])D_800966EC);
         v0 <<= 2;
         v0 += v1;
         v1 = RW16(v0, 2);

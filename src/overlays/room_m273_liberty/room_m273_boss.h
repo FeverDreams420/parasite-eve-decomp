@@ -112,7 +112,7 @@ typedef struct RoomM273BossTrig {
     signed int cosine : 16;
 } RoomM273BossTrig;
 
-extern RoomM273BossTrig D_800966EC[];
+#include "pe1/gte_sine_table.h"
 
 /* Falling drop: position (the pad halfword counts frames after landing),
  * ring position, velocity and the player-contact flag. */

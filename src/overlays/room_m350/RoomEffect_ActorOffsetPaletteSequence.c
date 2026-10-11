@@ -8,7 +8,8 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/asset_find.h"
 
-extern int D_800966EC[], D_8019A56C[];
+#include "pe1/gte_sine_table.h"
+extern int D_8019A56C[];
 
 int func_80195B64(int event, GteShortVector *object)
 {
@@ -18,7 +19,7 @@ int func_80195B64(int event, GteShortVector *object)
             return 1;
         }
     } else if (event == 2) {
-        int entry = D_800966EC[((unsigned int)D_800E27EC << 7) & 0xF80];
+        int entry = D_800966EC[((unsigned int)D_800E27EC << 7) & 0xF80].word;
         int scale = entry >> 16;
         int shade = (short)entry >> 5;
         int *origin = ANIM_OWNER_AS(RoomM350EffectActor)->instance->transforms[33].t;
@@ -81,7 +82,7 @@ int func_80195CE0(int event,State *inputState)
             int timer=D_800E27EC;
             phase=timer<32 ? (unsigned int)timer<<5:1024;
         }
-        sample=(short)D_800966EC[phase&4095];
+        sample=(short)D_800966EC[phase&4095].word;
         state->brightness=sample>>5;
         state->size=(unsigned int)sample<<2;
         if(state->count>=16) return 0;

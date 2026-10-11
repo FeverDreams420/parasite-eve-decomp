@@ -13,7 +13,7 @@ typedef struct { short delay, count; } State;
 /* The spawner owns the particles rendered by this callback. */
 extern int D_8019A414[];
 extern short D_800966EE[];
-extern int D_800966EC[];
+#include "pe1/gte_sine_table.h"
 extern unsigned short D_800E11EA;
 extern int Inv_ScrambleGrid(void);
 
@@ -29,7 +29,7 @@ int func_801927A4(int event, Particle *effect) {
         handle = GetClut(48, palette);
         func_800CEE20(effect->position, (struct GteRotation *)effect, scale, scale, 110,
             (unsigned short)handle, 1,
-            (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80] >> 5,
+            (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80].word >> 5,
             (struct RenderColor *)&effect->color);
     }
     return 0;

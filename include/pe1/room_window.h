@@ -130,7 +130,7 @@ typedef struct RoomWindowScratch {
 #define ROOM_WINDOW_SCRATCH ((RoomWindowScratch *)0x1F800000)
 
 /* The packed PSY-Q sine table, one RoomWindowTrig per angle step. */
-extern short D_800966EC[][2];
+#include "pe1/gte_sine_table.h"
 extern struct FieldActor *g_PlayerEntity;
 
 extern int func_800DFC44(int value);

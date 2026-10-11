@@ -8,7 +8,7 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/psyq_gpu.h"
 typedef GteShortVector Vector;
-extern int D_800966EC[];
+#include "pe1/gte_sine_table.h"
 
 int func_80197230(int mode, Vector *position) {
     if (mode == 1) {
@@ -19,13 +19,13 @@ int func_80197230(int mode, Vector *position) {
         int size;
         int sample;
         unsigned short clut;
-        sample = D_800966EC[(((unsigned int)frame << 9) & 0x3E00) / 4];
+        sample = D_800966EC[(((unsigned int)frame << 9) & 0x3E00) / 4].word;
         kind = D_800F3368.palette;
         size = sample + 2048;
         palette = D_800E1204[kind];
         clut = GetClut(0, (kind == 4 && D_800F3428) ? palette + 9 : palette + 5);
         func_800CEE20(position, 0, (short)size, (short)size, 102, clut, 1,
-            (short)D_800966EC[(((unsigned int)frame << 10) & 0x3C00) / 4] >> 5, 0);
+            (short)D_800966EC[(((unsigned int)frame << 10) & 0x3C00) / 4].word >> 5, 0);
     }
     return 0;
 }
@@ -43,7 +43,7 @@ int func_80197230(int mode, Vector *position) {
 typedef RoomM273RisingParticle Particle;
 
 /* The timed emitter fills the eight-byte records rendered by this callback. */
-extern int D_800966EC[];
+#include "pe1/gte_sine_table.h"
 extern short D_8019AE84;
 extern unsigned char D_8019AD70[],D_8019AF6A,D_8019AF69;
 extern unsigned short D_800E11E8;
@@ -73,7 +73,7 @@ int func_801974DC(int mode, Particle *input) {
         sampleOffset = ((unsigned int)frame << 8) & 0x3F00;
         asm("" : : "r"(sampleOffset), "r"(frame));
         paletteOffset = kind * 2;
-        sample = D_800966EC[sampleOffset / 4];
+        sample = D_800966EC[sampleOffset / 4].word;
         asm("" : : "r"(sample), "r"(paletteOffset));
         sizeOffset = ((unsigned int)frame << 7) & 0x3F80;
         palette = *(unsigned short *)((char *)D_800E1204 + paletteOffset);
@@ -129,7 +129,7 @@ int func_80197648(int mode) {
 }
 
 /* The position emitter fills the eight-byte records rendered by this callback. */
-extern int D_800966EC[];
+#include "pe1/gte_sine_table.h"
 extern unsigned char D_8019AB70[],D_8019AD74[],D_8019AD78[],D_8019AF68,D_8019AF69;
 extern unsigned short D_800E11EA;
 extern volatile unsigned short D_8019AEFE,D_8019AF00;

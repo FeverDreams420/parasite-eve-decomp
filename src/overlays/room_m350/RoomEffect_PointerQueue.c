@@ -9,7 +9,7 @@ typedef RoomM350Vector Vector;
 typedef struct { Vector *position; short offset,reserved; } Particle;
 typedef struct { Vector *positions[4]; char reserved10[0x46]; short count; } Queue;
 
-extern int D_800966EC[];
+#include "pe1/gte_sine_table.h"
 extern RenderColor D_8019A4E8;
 extern short D_8019A7FE, D_8019A802;
 extern unsigned char D_8019A804;
@@ -30,7 +30,7 @@ int func_80194F04(int event, Particle *object)
         handle = GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 6 : palette + 2);
         func_800CEE20((GteShortVector *)&position, 0, 8192, 8192, (s16)D_800F3368.parameter02 * (frame >> 1),
             (unsigned short)handle, 1,
-            (short)D_800966EC[((unsigned int)frame << 7) & 0xF80] >> 5,
+            (short)D_800966EC[((unsigned int)frame << 7) & 0xF80].word >> 5,
             &D_8019A4E8);
     }
     return 0;

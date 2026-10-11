@@ -73,7 +73,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM273TemplatePoint, flags) ==
                       PE1_OFFSETOF(RoomM273RisingParticle, speed),
                   room_m273_delayed_burst_tail_offset);
 
-extern RoomM273TrigEntry D_800966EC[];
+#include "pe1/gte_sine_table.h"
 extern s16 D_8019AE98;
 extern int D_8019ABFC[];
 extern s16 D_8019ACC0[];

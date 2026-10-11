@@ -10,7 +10,7 @@
 #include "pe1/psyq_gpu.h"
 /* Moving effect with collision, queued trail positions and ground rendering. */
 extern FieldActor *g_PlayerEntity;
-extern int D_800966EC[];
+#include "pe1/gte_sine_table.h"
 extern short D_800966EE[],D_8019A7FE,D_8019A800,D_8019A802;
 extern GteRotation D_8019A3C0;
 extern RenderColor D_8019A4E4,D_8019A3C8;
@@ -34,7 +34,7 @@ int func_801947BC(int event,RoomM350Particle *p)
         if(!p->tail.value.active.hit) {
             if(p->motion.value.rotation.x>0) p->motion.value.rotation.x-=64;
             else {
-                int *trig=D_800966EC;
+                int *trig=((int *)D_800966EC);
                 int speed=*(short *)((char *)trig+((timer<<6)&0x3FC0))/4;
                 int angle=FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation,(Vec3Fixed *)ANIM_OWNER_AS(RoomM350EffectActor)->instance->transform.t);
                 int yaw=FieldEng_TurnToward(p->motion.value.rotation.y,(short)angle,speed);

@@ -10,7 +10,8 @@
 
 extern GteMatrix D_8019A870;
 extern short D_8019A890[];
-extern int D_800966EC[], D_8019A690[];
+#include "pe1/gte_sine_table.h"
+extern int D_8019A690[];
 
 int func_801981D0(int event, RoomM350FlareParticle *particle)
 {
@@ -18,7 +19,7 @@ int func_801981D0(int event, RoomM350FlareParticle *particle)
     if (event == 1) {
         int timer = D_800E27EC;
         if (timer >= 8) return 1;
-        particle->shade = (short)D_800966EC[((unsigned int)timer << 8) & 0xF00] >> 5;
+        particle->shade = (short)D_800966EC[((unsigned int)timer << 8) & 0xF00].word >> 5;
     } else if (event == 2) {
         int kind, palette;
         unsigned short clut;

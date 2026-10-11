@@ -7,7 +7,8 @@
 
 extern volatile unsigned short D_800E11E8;
 extern unsigned short D_800E1208;
-extern short D_800966EC[], D_800966EE[];
+#include "pe1/gte_sine_table.h"
+extern short D_800966EE[];
 extern int D_8019A59C[];
 /* Signed high-half view avoids LHU followed by explicit sign extension. */
 typedef RoomM350SignedHalfPair SignedHalf;

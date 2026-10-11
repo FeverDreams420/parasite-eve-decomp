@@ -8,7 +8,7 @@
 
 typedef struct { short x, y, z, pad; } Sprite;
 
-extern unsigned short D_800966EC[];
+#include "pe1/gte_sine_table.h"
 extern GteRotation D_8019AB68;
 extern FieldActor *g_PlayerEntity;
 extern unsigned char D_8019AE5C;

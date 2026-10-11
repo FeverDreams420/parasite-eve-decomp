@@ -106,16 +106,8 @@ typedef struct RoomHomingModelEntity {
 } RoomHomingModelEntity;
 
 extern struct BattleEntity *D_8009D254;
-/* One packed word of the PSY-Q sine table: sine low, cosine high. */
-typedef union RoomHomingTrig {
-    s32 word;
-    struct {
-        s16 sin;
-        s16 cos;
-    } part;
-} RoomHomingTrig;
 
-extern RoomHomingTrig D_800966EC[];
+#include "pe1/gte_sine_table.h"
 /* Texture page index slots, read as records so they stay ordered with the
  * parameter-block stores, as retail does. */
 typedef struct RoomHomingModelTextureSlot {

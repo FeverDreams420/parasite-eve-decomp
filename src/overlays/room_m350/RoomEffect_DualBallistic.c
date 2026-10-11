@@ -13,7 +13,8 @@ typedef RoomM350Actor Actor;
 typedef struct { short x, y, z, velocityY, gravity, reserved; } Particle;
 extern FieldActor *g_PlayerEntity;
 extern unsigned char D_8019A82F;
-extern int D_800966EC[], D_8019A598[];
+#include "pe1/gte_sine_table.h"
+extern int D_8019A598[];
 extern unsigned short D_800E11E8;
 extern int Inv_ScrambleGrid(void);
 
@@ -31,7 +32,7 @@ int func_801968D8(int event, short *position) {
         func_800CEE20((GteShortVector *)position, 0, 12288, 12288,
             (s16)D_800F3368.parameter02 * (((D_800E27EC - 1) >> 1) & 7) + 200,
             (unsigned short)handle, 1,
-            (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80] >> 5,
+            (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80].word >> 5,
             (struct RenderColor *)D_8019A598);
     }
     return 0;

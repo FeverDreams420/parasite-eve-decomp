@@ -7,7 +7,7 @@
 /* The batch emitter fills the eight-byte records rendered by this callback. */
 extern unsigned short D_800E11EA;
 extern short D_8019AD68[];
-extern int D_800966EC[];
+#include "pe1/gte_sine_table.h"
 extern RoomM273RisingBatchBuffer D_8019AF0C;
 
 int func_80196F2C(int mode, GteShortVector *position) {
@@ -23,7 +23,7 @@ int func_80196F2C(int mode, GteShortVector *position) {
         clut = GetClut(64, palette);
         func_800CEE20(position, 0, 4096, 4096,
             44 + (s16)D_800F3368.parameter02 * D_8019AD68[frame / 4], clut, 1,
-            (short)D_800966EC[(((unsigned int)frame << 9) & 0x3E00) / 4] >> 5, 0);
+            (short)D_800966EC[(((unsigned int)frame << 9) & 0x3E00) / 4].word >> 5, 0);
     }
     return 0;
 }

@@ -11,7 +11,8 @@ typedef RenderMatrix Matrix;
 typedef FieldActorState Owner;
 typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
-extern short D_8019A77E[],D_8019A798,D_800966EC[];
+#include "pe1/gte_sine_table.h"
+extern short D_8019A77E[], D_8019A798;
 extern unsigned char D_8019A79A,D_8019A79C;
 int func_80193D6C(int event)
 {

@@ -6,7 +6,7 @@
 typedef RoomM273PointerPoolEffect Effect;
 typedef struct { unsigned char unknown[58]; unsigned short value; } Object;
 typedef struct { short zero; unsigned short value,phase,one; } Parameters;
-extern int D_800966EC[];
+#include "pe1/gte_sine_table.h"
 extern unsigned char D_8019ACDC[],D_8019ACE0[];
 
 int func_8019A4CC(int mode,Effect *effect) {
@@ -36,7 +36,7 @@ int func_8019A4CC(int mode,Effect *effect) {
 #include "room_m273_arc.h"
 #include "pe1/scene_fx.h"
 
-extern s32 D_800966EC[];
+#include "pe1/gte_sine_table.h"
 extern unsigned char D_8019AB70[];
 extern char D_8019AD7C[];
 
@@ -138,7 +138,7 @@ s32 func_8019A720(s32 mode, RoomM273ArcCallbackState *state) {
         count = 0x10;
         rotationValue = day << 7;
         rotation.z = rotationValue;
-        packed = D_800966EC[(day << 6) & 0xFC0];
+        packed = D_800966EC[(day << 6) & 0xFC0].word;
         func_800D004C((GteShortVector *)callState, 0x100, 0x100, count, (GteRotation *)&rotation,
         ((packed << 16) >> 16) + 0x400,
         ((packed << 16) >> 16) + 0x400,

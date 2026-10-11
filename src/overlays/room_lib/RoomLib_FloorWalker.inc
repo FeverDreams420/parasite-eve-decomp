@@ -40,7 +40,7 @@ void ROOMLIB_FLOOR_WALKER_FUNC(RoomFloorWalkerObject *object) {
     }
     retries = 1;
     do {
-        entry = (RoomFloorWalkerTrig *)D_800966EC[(state->angle + 0x800) & 0xFFF];
+        entry = (RoomFloorWalkerTrig *)D_800966EC[(state->angle + 0x800) & 0xFFF].half;
         {
             int cosine = entry->part.cosine;
             int sine;

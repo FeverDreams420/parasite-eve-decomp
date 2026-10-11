@@ -14,7 +14,7 @@ typedef struct { int color; short x, y, z, size; } Particle;
 typedef RoomM350TransformOwner Instance;
 typedef RoomM350TableShadeEntry TrigEntry;
 
-extern int D_800966EC[];
+#include "pe1/gte_sine_table.h"
 extern short D_800966EE[];
 extern int D_8019A3CC[];
 extern unsigned short D_800E11E8;
@@ -35,7 +35,7 @@ int func_8019404C(int event, Particle *particle)
         func_800CEE20((GteShortVector *)&particle->x, 0, size, size, (s16)D_800F3368.parameter02 * 5 + 216, clut, 1,
             ((TrigEntry *)((char *)D_800966EE - 2 + ((((unsigned int)D_800E27EC - 1) << 9) & 0x3E00)))->shade >> 5, (struct RenderColor *)particle);
         func_800D004C((GteShortVector *)&particle->x, 96, 96, 8, 0, size, size, (struct RenderColor *)D_8019A3CC, &D_8019A3C8,
-            (short)D_800966EC[(((unsigned int)D_800E27EC - 1) << 8) & 0xF00] >> 5, 1);
+            (short)D_800966EC[(((unsigned int)D_800E27EC - 1) << 8) & 0xF00].word >> 5, 1);
     }
     return 0;
 }
@@ -77,7 +77,7 @@ offset_start:
             ApplyMatrixSV(&matrix, &vector, out);
             position = D_8019A7F8->render_object.matrices[i ? 11 : 15].translation;
             for (j = 0; j < 3; j++) (&particle->x)[j] = ((short *)out)[j] + (unsigned int)position[j];
-            particle->size = (unsigned int)D_800966EC[((int)((unsigned int)D_800E27EC << 11) / 40) & 4095] + 4096;
+            particle->size = (unsigned int)D_800966EC[((int)((unsigned int)D_800E27EC << 11) / 40) & 4095].word + 4096;
             r = Inv_ScrambleGrid(); g = Inv_ScrambleGrid(); b = Inv_ScrambleGrid();
             particle->color = (r >> 1) | ((unsigned int)(g >> 1) << 8) | ((unsigned int)(b >> 1) << 16);
         }

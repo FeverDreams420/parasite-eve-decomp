@@ -13,7 +13,7 @@ typedef RoomM350Actor Actor;
 extern short D_8019A7FC;
 extern short D_8019A7FE,D_8019A800,D_8019A802;
 extern unsigned char D_8019A804,D_8019A805,D_8019A806;
-extern int D_800966EC[];
+#include "pe1/gte_sine_table.h"
 int func_801958DC(int event) {
     Instance *instance=(Instance *)ANIM_OWNER_AS(Actor)->instance;
     Vector offset;
@@ -60,7 +60,7 @@ int func_801958DC(int event) {
                 *repeat=*(volatile unsigned short *)repeat-1;
             }
             if(frame<19) return 0;
-            speed=*(short *)&D_800966EC[((frame-19)*341)&4095];
+            speed=*(short *)&D_800966EC[((frame-19)*341)&4095].word;
             speed/=32;
             angle=FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation,(Vec3Fixed *)instance->render_object.model_matrix.translation);
             instance->rot_y=FieldEng_TurnToward(instance->rot_y,(short)angle,speed);

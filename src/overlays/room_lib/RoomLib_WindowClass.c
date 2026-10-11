@@ -188,7 +188,7 @@ void RoomLib_WindowHandler(RoomWindowObject *obj) {
         sp->in.local.x = 0x80;
         sp->in.local.y = 0;
         sp->in.local.z = -350;
-        trig = (RoomWindowTrig *)&D_800966EC[anchor->yaw & 0xFFF];
+        trig = (RoomWindowTrig *)&D_800966EC[anchor->yaw & 0xFFF].half;
         {
             int c = trig->part.cos;
             int s;
@@ -217,7 +217,7 @@ void RoomLib_WindowHandler(RoomWindowObject *obj) {
             obj->state.target[2] = obj->state.targetNode->pos[2];
         }
         trig = (RoomWindowTrig *)&D_800966EC[FieldEng_VecToAngle((Vec3Fixed *)&obj->state.origin[0].value,
-                                               (Vec3Fixed *)obj->state.target) & 0xFFF];
+                                               (Vec3Fixed *)obj->state.target) & 0xFFF].half;
         {
             int c = trig->part.cos;
             int s;
@@ -254,7 +254,7 @@ void RoomLib_WindowHandler(RoomWindowObject *obj) {
     }
 
     sp->arrived = 0;
-    trig = (RoomWindowTrig *)&D_800966EC[(((state->spin + 0x8000) >> 16) - 0x400) & 0xFFF];
+    trig = (RoomWindowTrig *)&D_800966EC[(((state->spin + 0x8000) >> 16) - 0x400) & 0xFFF].half;
     {
         u16 c;
         u16 s;
@@ -310,7 +310,7 @@ void RoomLib_WindowHandler(RoomWindowObject *obj) {
     sp->in.angles.y = obj->index * 0x280 + 0x640;
     sp->in.angles.z = -0x400;
     RotMatrixYXZ(&sp->in.angles, (GteMatrix *)&sp->yaw);
-    trig = (RoomWindowTrig *)&D_800966EC[sp->in.angles.y & 0xFFF];
+    trig = (RoomWindowTrig *)&D_800966EC[sp->in.angles.y & 0xFFF].half;
     {
         u16 c;
         u16 s;

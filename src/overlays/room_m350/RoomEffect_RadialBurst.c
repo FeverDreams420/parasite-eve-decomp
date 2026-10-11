@@ -10,7 +10,8 @@ typedef RoomM350OverlayTransform Transform;
 typedef struct RoomM350Instance { char reserved[0x238]; Transform *transform; } Instance;
 typedef RoomM350Actor Actor;
 
-extern int D_800966EC[], D_8019A634[];
+#include "pe1/gte_sine_table.h"
+extern int D_8019A634[];
 
 int func_80197A04(int event, short *object)
 {
@@ -37,7 +38,7 @@ int func_80197A04(int event, short *object)
         handle = GetClut(32, palette);
         func_800CEE20((GteShortVector *)position, 0, 5120, 5120, (s16)D_800F3368.parameter02 * 2 + 216,
             (unsigned short)handle, 1,
-            (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80] >> 5,
+            (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80].word >> 5,
             (struct RenderColor *)D_8019A634);
     }
     return 0;

@@ -9,7 +9,8 @@ typedef RoomM273ThresholdTransform Transform;
 typedef RoomM273ScaledLayerOwner Owner;
 
 /* The emitter owns the twelve-byte records rendered by this callback. */
-extern short D_800966EC[],D_800966EE[];
+#include "pe1/gte_sine_table.h"
+extern short D_800966EE[];
 extern unsigned char D_8019AB70[];
 
 int func_8019353C(int mode,Effect *effect) {
@@ -62,7 +63,7 @@ int func_801936F0(int mode) {
         scale=D_800966EE[((D_800E27EC*1024/12)&0xFFF)*2];
         effect->parameter[0]=40;
         effect->position.pad=scale;
-        effect->parameter[1]=D_800966EC[((D_800E27EC*1024/12)&0xFFF)*2]*40/4096;
+        effect->parameter[1]=((short *)D_800966EC)[((D_800E27EC*1024/12)&0xFFF)*2]*40/4096;
         effect->parameter[2]=0;
         break;
     }

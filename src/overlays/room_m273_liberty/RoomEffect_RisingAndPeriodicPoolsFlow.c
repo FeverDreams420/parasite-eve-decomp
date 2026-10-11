@@ -11,7 +11,7 @@
 typedef RoomM273RisingParticle Particle;
 typedef struct { unsigned char r, g, b, unknown; } Color;
 extern Color D_8018F1E4;
-extern int D_800966EC[];
+#include "pe1/gte_sine_table.h"
 
 int func_80195E10(int mode, Particle *particle) {
     Color color = D_8018F1E4;
@@ -39,7 +39,7 @@ int func_80195E10(int mode, Particle *particle) {
         else palette += 5;
         clut = GetClut(0, palette);
         func_800CEE20((struct GteShortVector *)particle, 0, size, size, 102, clut, 1,
-            (short)D_800966EC[(((unsigned int)frame << 9) & 0x3E00) / 4] >> 6, (struct RenderColor *)&color);
+            (short)D_800966EC[(((unsigned int)frame << 9) & 0x3E00) / 4].word >> 6, (struct RenderColor *)&color);
     }
     return 0;
 }

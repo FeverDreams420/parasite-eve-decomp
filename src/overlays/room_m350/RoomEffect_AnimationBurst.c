@@ -19,7 +19,8 @@ typedef struct { int reserved[2]; Animation *animation; } Actor;
 
 typedef struct { short remaining, delay; } State;
 
-extern int D_800966EC[], D_8019A4DC[], D_8019A4E0[];
+#include "pe1/gte_sine_table.h"
+extern int D_8019A4DC[], D_8019A4E0[];
 
 int func_801944F0(int event, void **object)
 {
@@ -29,7 +30,7 @@ int func_801944F0(int event, void **object)
             return 1;
         }
     } else if (event == 2) {
-        int *base = D_800966EC;
+        int *base = ((int *)D_800966EC);
         int counter = D_800E27EC;
         TableEntry *entry = (TableEntry *)((char *)base +
             (((unsigned int)(counter - 1) << 9) & 0x3E00));

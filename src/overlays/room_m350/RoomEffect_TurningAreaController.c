@@ -25,7 +25,8 @@ typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
 extern FieldActor *g_PlayerEntity;
 extern unsigned char D_8019A831, D_8019A82F;
-extern short D_800966EC[],D_800966EE[];
+#include "pe1/gte_sine_table.h"
+extern short D_800966EE[];
 extern Matrix D_8019A808;
 extern short D_8019A80A,D_8019A80C,D_8019A80E,D_8019A810,D_8019A812,D_8019A814,D_8019A816,D_8019A818;
 extern int D_8019A81C,D_8019A820,D_8019A824;

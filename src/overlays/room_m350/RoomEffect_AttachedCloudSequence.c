@@ -7,7 +7,8 @@ typedef struct { signed int low:16; signed int high:16; } TrigEntry;
 #include "pe1/render_object.h"
 #include "pe1/field_anim_pool.h"
 
-extern short D_800966EC[],D_800966EE[];
+#include "pe1/gte_sine_table.h"
+extern short D_800966EE[];
 extern RenderColor D_8019A3D0;
 int func_80198860(int event,RoomM350CloudParticle *particle)
 {
