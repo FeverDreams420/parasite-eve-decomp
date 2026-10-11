@@ -39,7 +39,6 @@ void Util_CopyWords(unsigned int *src, unsigned int *dst, unsigned int size)
         dst++;
     } while (size != 0);
 }
-void func_8008AB9C(AkaoTrack *);
 
 /* The bank cursor is one field of the sequencer state block. Read as a
  * member, the reload after the bank store stays a separate load: GCC 2.7.2
@@ -92,7 +91,7 @@ void SPU_StepReverbLoad(void)
         bank->pitch_slide_duration--;
         value = oldPrimaryPitch + bank->pitch_delta;
         if ((value & 0x7F0000) != (oldPrimaryPitch & 0x7F0000))
-            func_8008AB9C((AkaoTrack *)D_800B8AC0);
+            Seq_MarkDirtyTracks((AkaoTrack *)D_800B8AC0);
         ((AkaoSequencerBank *)D_8009D2C8)->pitch_current = value;
         bank = (AkaoSequencerBank *)((AkaoBankCursor *)&D_8009D2C8)->bank;
     }
@@ -102,7 +101,7 @@ void SPU_StepReverbLoad(void)
         bank[1].pitch_slide_duration--;
         value = oldSecondaryPitch + bank[1].pitch_delta;
         if ((value & 0x7F0000) != (oldSecondaryPitch & 0x7F0000))
-            func_8008AB9C(g_AkaoVoiceStateTable2);
+            Seq_MarkDirtyTracks(g_AkaoVoiceStateTable2);
         ((AkaoSequencerBank *)D_8009D2C8)->pitch_current = value;
     }
     D_8009D2C8 = D_8009D2C8 - 1;

@@ -31,6 +31,10 @@ void Akao_StepVoiceNote(AkaoTrack *track, unsigned mask, unsigned direct, unsign
 /* Retail callers supply differing numbers of trailing, unused arguments. */
 void Akao_WriteVoiceParam();
 void Spu_WriteKeyOff(unsigned value);
+/* Mark every active track of a 24-track table for a full voice refresh. */
+void Seq_MarkDirtyTracks(AkaoTrack *tracks);
+void Spu_MarkActiveVoicesDirty(void);
+void Akao_LoadSamplePairFromIndex(int *first, int *second, int sample_id);
 void Akao_SetVoicePitch(void);
 void Akao_SetVoiceVolume(void);
 void Akao_SetVoiceAdsr(void);

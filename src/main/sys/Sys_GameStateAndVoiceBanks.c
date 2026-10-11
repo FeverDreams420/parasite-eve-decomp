@@ -8,6 +8,7 @@
 #include "pe1/cdrom_buffers.h"
 #include "pe1/render_buffers.h"
 #include "pe1/asset_find.h"
+#include "pe1/akao.h"
 
 /* End-of-frame overlay pass (draw the game-state primitives into the
  * current draw buffer with background clear off and send the queued AKAO
@@ -25,7 +26,6 @@ void DsReadBreak(void);
 void Akao_Cmd_D8(int arg0);
 void Akao_Cmd_F0(void);
 void Akao_Cmd_F1(void);
-void Spu_Shutdown(void);
 
 void Akao_StepVoiceTable(void) {
     s32 one;
@@ -191,13 +191,12 @@ int Akao_LoadVoiceBank(AkaoVoiceActor *actor) {
     return 0;
 }
 
-void func_80085644(void);
 
 extern u16 D_800B0DD4;
 
 void func_8006A5BC(void)
 {
-    func_80085644();
+    Spu_InitHardware();
     Akao_Cmd_F0();
     Akao_Cmd_F1();
     Akao_Cmd_98_9A_9C(0);

@@ -626,7 +626,7 @@ exhausted:
     Seq_MarkTrack3CMaskDirty();
 }
 
-void func_8008AB1C(int *out0, int *out1, int sample_id) {
+void Akao_LoadSamplePairFromIndex(int *out0, int *out1, int sample_id) {
     u32 index;
     u16 value;
     int result;
@@ -653,7 +653,7 @@ void func_8008AB1C(int *out0, int *out1, int sample_id) {
     *out1 = result;
 }
 
-void func_8008AB9C(AkaoTrack *track) {
+void Seq_MarkDirtyTracks(AkaoTrack *track) {
     u32 mask;
     u32 bit;
     unsigned int *flags;
@@ -673,7 +673,7 @@ void func_8008AB9C(AkaoTrack *track) {
     }
 }
 
-void func_8008ABF0(void) {
+void Spu_MarkActiveVoicesDirty(void) {
     u32 mask;
     u32 bit;
     AkaoTrack *track;
@@ -887,7 +887,6 @@ void Seq_StartDefaultNestedStream(AkaoNestedSource *source) {
     source->pan_target = 0x7F;
     Seq_StartNestedStreams(source, (void *)old1, (void *)old2);
 }
-void Akao_LoadSamplePairFromIndex(int *arg0, int *arg1, int arg2);
 
 void Seq_StartIndexedNestedStreamWithDefaults(AkaoNestedSource *source) {
     /* Keep the word view for retail store scheduling in this wrapper. */
@@ -911,7 +910,6 @@ void Seq_StartIndexedNestedStream(AkaoNestedSource *source) {
 }
 
 
-void Seq_MarkDirtyTracks(AkaoTrack *tracks);
 
 void Seq_ApplyGlobalPitch(void);
 
@@ -1795,7 +1793,6 @@ void Spu_StopActiveVoices(void) {
     Seq_MarkTrack3CMaskDirty();
 }
 
-void Spu_MarkActiveVoicesDirty(void);
 
 void Seq_SetPlaybackMode1AndRefreshVoices(void) {
     AkaoTrack *base = g_AkaoVoiceStateTable;
