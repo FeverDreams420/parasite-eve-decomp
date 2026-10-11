@@ -46,7 +46,7 @@ def _definition_regex(name: str) -> re.Pattern[str]:
     return re.compile(
         r"^(?!\s)(?![^\n]*\b(?:typedef|extern)\b)[^\n;#=]*?\b"
         + re.escape(name)
-        + r"\s*\([^;{}]*\)\s*\{",
+        + r"\s*\([^;{}]*\)(?:\s*[^;{}()]+;)*\s*\{",
         re.M,
     )
 
@@ -113,6 +113,22 @@ def _match_brace(text: str, i: int) -> int:
     raise ValueError("unbalanced braces")
 
 
+# Old-style (K&R) definition head: an identifier-only parameter list followed
+# by one or more parameter declarations.
+_KR_HEAD = re.compile(
+    r"\s*([^;{}()]*?\b\w+\s*\(\s*\w+(?:\s*,\s*\w+)*\s*\))"
+    r"(?:\s*[^;{}()]+;)+\s*$"
+)
+
+
+def _strip_comments(text: str) -> str:
+    return re.sub(r"/\*.*?\*/|//[^\n]*", "", text, flags=re.S)
+
+
+def _is_kr_head(text: str) -> bool:
+    return _KR_HEAD.match(_strip_comments(text)) is not None
+
+
 def _blank(text: str) -> bool:
     """True when `text` holds only whitespace and comments."""
     return re.sub(r"/\*.*?\*/|//[^\n]*", "", text, flags=re.S).strip() == ""
@@ -152,13 +168,17 @@ def _items(text: str):
         elif c == ")":
             paren -= 1
         elif c == ";" and paren == 0:
+            if _is_kr_head(text[start:i + 1]):
+                # Old-style definition: parameter declarations precede the body.
+                i += 1
+                continue
             yield "other", text[start:i + 1], "", start, i + 1
             start = i + 1
         elif c == "{" and paren == 0:
             end = _match_brace(text, i)
             header = text[start:i]
             stripped = re.sub(r"__attribute__\s*\(\(.*?\)\)", "", header).strip()
-            is_function = (stripped.endswith(")")
+            is_function = ((stripped.endswith(")") or _is_kr_head(header))
                            and not re.match(r"\s*(typedef|struct|union|enum)\b", stripped)
                            and "=" not in stripped)
             if is_function:
@@ -175,6 +195,9 @@ def _items(text: str):
 
 def _function_name(header: str) -> str | None:
     header = re.sub(r"__attribute__\s*\(\(.*?\)\)", "", header)
+    kr = _KR_HEAD.match(_strip_comments(header))
+    if kr:
+        header = kr.group(1)
     m = re.search(r"(\w+)\s*\([^()]*(?:\([^()]*\)[^()]*)*\)\s*$", header.strip())
     return m.group(1) if m else None
 
