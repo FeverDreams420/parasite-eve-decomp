@@ -70,7 +70,7 @@ PE1_STATIC_ASSERT(sizeof(BattleGaugePrim) == 0x1C,
  */
 extern s32 g_BattlePanelDrawSlotView[16] asm("D_8009CDDC");
 extern s32 g_BattlePanelInitialDrawSlotView[16] asm("D_8009CDDC");
-extern s32 g_BattlePanelPacketIndex asm("D_8009D230");
+extern s32 D_8009D230;
 extern RenderSpritePacket D_800B01C8[];
 /* Interior byte symbols of the first panel sprite, independently relocated. */
 extern u8 D_800B01CC[], D_800B01CD[], D_800B01CE[];

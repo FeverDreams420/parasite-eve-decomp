@@ -51,7 +51,7 @@ void Battle_Update(void) {
         }
     }
     active = (g_BattleTurnPlayerView[0])->core;
-    (D_8009D230[0]) = 0;
+    D_8009D230 = 0;
     D_8009D278 = active;
     D_8009D2A4 = Menu_RunFrameWithArg((int)&D_800A76D8);
     if (D_8009D28C == 0 && D_8009D244 != 0) {

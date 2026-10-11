@@ -36,7 +36,7 @@ void Battle_DrawStatusPanel(s32 mode, BattleStatusPanel *input) {
     number = panelValue;
     if ((panelValue < 0) && (number = 0, ((mode & 0xFF) == 1))) {
         register s32 frame asm("$2") = g_BattlePanelInitialDrawSlotView[0];
-        register s32 slotIndex asm("$4") = g_BattlePanelPacketIndex;
+        register s32 slotIndex asm("$4") = D_8009D230;
         register s32 x asm("$6") = panel->x;
         register s32 y asm("$7");
                 timer = panel->timer;
@@ -47,14 +47,14 @@ void Battle_DrawStatusPanel(s32 mode, BattleStatusPanel *input) {
         asm("" : : "r"(screenX));
         timer -= 30;
         screenY = y + timer;
-        *(D_800B01CD + ((g_BattlePanelPacketIndex * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578))) = 0;
-        *(D_800B01CE + ((g_BattlePanelPacketIndex * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578))) = 0;
-        *(D_800B01D4 + ((g_BattlePanelPacketIndex * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578))) = 0x50;
-        *(D_800B01D5 + ((g_BattlePanelPacketIndex * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578))) = 0xE0;
+        *(D_800B01CD + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578))) = 0;
+        *(D_800B01CE + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578))) = 0;
+        *(D_800B01D4 + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578))) = 0x50;
+        *(D_800B01D5 + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578))) = 0xE0;
         {
             register s32 slot asm("$7") = g_BattlePanelDrawSlotView[0];
             missFrameOffset = slot * 0x578;
-            panelOffset = g_BattlePanelPacketIndex * 0x8C;
+            panelOffset = D_8009D230 * 0x8C;
             missSprite = (RenderSpritePacket *)(missFrameOffset + panelOffset + ((u8 *)D_800B01C8));
             missSprite->width = 0x18;
             missSprite->x = screenX;
@@ -90,45 +90,45 @@ void Battle_DrawStatusPanel(s32 mode, BattleStatusPanel *input) {
                 switch (panel->style) {
                     case 0:
                     colorOffset = lastDigit * 0x1C;
-                    ((RenderSpritePacket *)(colorOffset + ((g_BattlePanelPacketIndex * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.r = panel->timer * 4;
-                    ((RenderSpritePacket *)(colorOffset + ((g_BattlePanelPacketIndex * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.g = panel->timer * 4;
-                    ((RenderSpritePacket *)(colorOffset + ((g_BattlePanelPacketIndex * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = panel->timer * 4;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.r = panel->timer * 4;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.g = panel->timer * 4;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = panel->timer * 4;
                     break;
                     case 1:
                     colorOffset = lastDigit * 0x1C;
                     {
-                        RenderSpritePacket *sprite = ((RenderSpritePacket *)(colorOffset + ((g_BattlePanelDrawSlotView[0] * 0x578) + (g_BattlePanelPacketIndex * 0x8C)) + ((u8 *)D_800B01C8)));
+                        RenderSpritePacket *sprite = ((RenderSpritePacket *)(colorOffset + ((g_BattlePanelDrawSlotView[0] * 0x578) + (D_8009D230 * 0x8C)) + ((u8 *)D_800B01C8)));
                         sprite->color.bytes.r = 0;
                     }
-                    ((RenderSpritePacket *)(colorOffset + ((g_BattlePanelPacketIndex * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.g = panel->timer * 4;
-                    ((RenderSpritePacket *)(colorOffset + ((g_BattlePanelPacketIndex * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = 0;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.g = panel->timer * 4;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = 0;
                     break;
                     case 2:
                     colorOffset = lastDigit * 0x1C;
-                    ((RenderSpritePacket *)(colorOffset + ((g_BattlePanelPacketIndex * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.r = panel->timer * 4;
-                    ((RenderSpritePacket *)(colorOffset + ((g_BattlePanelPacketIndex * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.g = panel->timer * 4;
-                    ((RenderSpritePacket *)(colorOffset + ((g_BattlePanelPacketIndex * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = 0;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.r = panel->timer * 4;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.g = panel->timer * 4;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = 0;
                     break;
                     case 3:
                     colorOffset = lastDigit * 0x1C;
-                    ((RenderSpritePacket *)(colorOffset + ((g_BattlePanelPacketIndex * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.r = panel->timer * 4;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.r = panel->timer * 4;
                     {
-                        RenderSpritePacket *sprite = ((RenderSpritePacket *)(colorOffset + ((g_BattlePanelDrawSlotView[0] * 0x578) + (g_BattlePanelPacketIndex * 0x8C)) + ((u8 *)D_800B01C8)));
+                        RenderSpritePacket *sprite = ((RenderSpritePacket *)(colorOffset + ((g_BattlePanelDrawSlotView[0] * 0x578) + (D_8009D230 * 0x8C)) + ((u8 *)D_800B01C8)));
                         sprite->color.bytes.g = 0;
                     }
-                    ((RenderSpritePacket *)(colorOffset + ((g_BattlePanelPacketIndex * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = panel->timer * 4;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = panel->timer * 4;
                     break;
                 }
                 signedDigitIndex = lastDigit << 24;
                 digitIndex = signedDigitIndex >> 0x18;
                 digitOffset = digitIndex * 0x1C;
                 screenX += 8;
-                ((RenderSpritePacket *)(digitOffset + ((g_BattlePanelPacketIndex * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->u = (s8) (digits[digitIndex] * 8);
-                ((RenderSpritePacket *)(digitOffset + ((g_BattlePanelPacketIndex * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->v = 0xE0;
+                ((RenderSpritePacket *)(digitOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->u = (s8) (digits[digitIndex] * 8);
+                ((RenderSpritePacket *)(digitOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->v = 0xE0;
                 {
                     s32 slot = g_BattlePanelDrawSlotView[0];
                     frameOffset = slot * 0x578;
-                    digitPanelOffset = g_BattlePanelPacketIndex * 0x8C;
+                    digitPanelOffset = D_8009D230 * 0x8C;
                     digitSprite = (RenderSpritePacket *)(digitOffset + (frameOffset + digitPanelOffset) + ((u8 *)D_800B01C8));
                     digitSprite->x = screenX;
                     digitSprite->y = screenY;
@@ -141,5 +141,5 @@ void Battle_DrawStatusPanel(s32 mode, BattleStatusPanel *input) {
             } while (nextDigit >= 0);
         }
     }
-    g_BattlePanelPacketIndex += 1;
+    D_8009D230 += 1;
 }
