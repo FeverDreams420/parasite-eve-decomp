@@ -102,7 +102,7 @@ case 1:
             i=0; matrix=&D_8019A808; out=matrix->t; source=instance;
             matrix->m[0][0]=cosine;
             D_8019A808.m[0][2]=sine; D_8019A808.m[2][0]=0u-sine; D_8019A808.m[2][2]=cosine;
-            D_8019A824=0; D_8019A820=0; D_8019A81C=0;
+            D_8019A808.t[2]=0; D_8019A808.t[1]=0; D_8019A81C=0;
             D_8019A808.m[2][1]=0; D_8019A808.m[1][2]=0; D_8019A808.m[1][0]=0; D_8019A808.m[0][1]=0; D_8019A808.m[1][1]=4096;
             for(;i<3;i++) { *out++=source->render_object.model_matrix.translation[0]; source=(Instance *)((char *)source+4); }
         }
