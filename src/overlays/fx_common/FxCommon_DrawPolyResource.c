@@ -126,9 +126,8 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
             primitiveCount = var_t8->counts[1];
             if (primitiveCount > 0) {
                 FxCommonFlatQuad *quad;
-                s32 temp_a0_3;
                 u32 temp_a0_4;
-                register s32 temp_v1_3 asm("$3");
+                s32 temp_v1_3;
                 u8 *new_var3;
                 u32 addressMask1;
                 u32 lengthMask1;
@@ -147,9 +146,9 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                             &scratchpad->screenCoordinates[2], &scratchpad->screenCoordinates[3],
                             &scratchpad->perspective, &scratchpad->orderingDepth,
                             &scratchpad->transformFlags);
-                        temp_a0_3 = scratchpad->orderingDepth;
-                        if (temp_a0_3 > 0) {
-                            scratchpad->orderingDepth = (temp_a0_3 + D_801EA5E0) >> 2;
+                        temp_a0 = scratchpad->orderingDepth;
+                        if (temp_a0 > 0) {
+                            scratchpad->orderingDepth = (temp_a0 + D_801EA5E0) >> 2;
                             if (temp_v1_3 > 0) {
                                 ((FxCommonF4Packet *)(var_s1 - 0x4))->tag.bytes.length = 5;
                                 ((FxCommonF4Packet *)(var_s1 - 0x4))->xy0 =
