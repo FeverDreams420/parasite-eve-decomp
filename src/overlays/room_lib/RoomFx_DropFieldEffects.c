@@ -1560,7 +1560,7 @@ void RoomFx_UpdateEightParticles(void *unused,
     matrix = (const GteMatrix *)&matrixBase[5];
 
     particles = state;
-    for (; i < 8;) {
+    for (; i < 8; i++) {
         if (particles->active[i] == 0) {
             frame = clock->frame;
             slot = frame % 8;
@@ -1626,7 +1626,6 @@ void RoomFx_UpdateEightParticles(void *unused,
             }
         }
 
-        i++;
     }
 
     if (particles->activeCount == 0 && clock->frame >= 91) {
