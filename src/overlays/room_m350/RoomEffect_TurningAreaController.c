@@ -191,7 +191,7 @@ case 2:
             clearValue=0;
             clearLength=16;
             i=next;
-            asm volatile("" : : "r"(clearTarget), "r"(clearValue), "r"(clearLength), "r"(i));
+            asm volatile("" : : "r"(i));
             product>>=31;
             asm("" : "=r"(high) : "0"(intermediate), "r"(product));
             size=high-product;
