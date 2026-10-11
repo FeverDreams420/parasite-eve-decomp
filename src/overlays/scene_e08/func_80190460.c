@@ -19,7 +19,6 @@ void func_80190460(void *unused0, void *unused1, char *effect) {
     FieldGlowSprite *sprite;
     char *owner;
     SceneE08GlowSprites *base = (SceneE08GlowSprites *)effect;
-    register GteShortVector *position asm("$18");
     register char *scale asm("$16");
     register unsigned i;
     int diag = 0x1000;
@@ -30,11 +29,10 @@ void func_80190460(void *unused0, void *unused1, char *effect) {
     scale = (char *)base;
     asm volatile("" : : "r"(scale));
     func_800C2EAC(*(u8 *)(owner + 0x24));
-    position = (GteShortVector *)scale;
     func_800C3098(0x10);
     func_800C3238(2);
 
-    for (; i < 4; position++, i++, scale += 2) {
+    for (; i < 4; i++, scale += 2) {
         if (base->active[i] == 1) {
             matrix.m[2][2] = diag;
             matrix.m[1][1] = diag;
@@ -56,9 +54,9 @@ void func_80190460(void *unused0, void *unused1, char *effect) {
             scratch = draw;
             ScaleMatrix(&matrix, &scratch);
 
-            matrix.t[0] = position->x;
-            matrix.t[1] = position->y;
-            matrix.t[2] = position->z;
+            matrix.t[0] = base->position[i].x;
+            matrix.t[1] = base->position[i].y;
+            matrix.t[2] = base->position[i].z;
             *slot = *(u16 *)(scale + 0x28);
             func_800C2FF0(0x10, 0x10);
             sprite = (FieldGlowSprite *)((char *)slot - 10);
