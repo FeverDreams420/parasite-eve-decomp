@@ -95,18 +95,15 @@ void Akao_StepSequencerVoice(void *arg0) {
     s32 t2dc;
     s32 tw1;
     s32 tw2;
-    register s32 kFFFb asm("$3");
+    s32 kFFFb;
     s32 km102;
-    s32 tv0;
-    s32 tcde;
     s32 tlhu;
-    s32 var_v0;
     void *p2c8a;
     s32 tld;
     AkaoSequencerBank *p2c8b;
     AkaoSequencerBank *p2c8c;
     AkaoSequencerBank *pend;
-    register s32 kffe asm("$4");
+    register s32 all_voices asm("$4");
 
     arg0v = arg0;
     walk = (u8 *)arg0v;
@@ -136,18 +133,16 @@ void Akao_StepSequencerVoice(void *arg0) {
     walk += 4;
         bit = 1;
     pvoice = (u8 *)g_AkaoVoiceStateTable;
-    kFFF5 = 0xFFFFFF;
-    base = pvoice + 0x116;
     km102 = -0x102;
         p2c8c = g_AkaoCurTrack;
     p2c8c->pending_voice_mask = tw1 & kFFFb;
     tw2 = *(s32 *)walk;
     walk += 8;
     p2c8c->yield_voice_mask = tw2 & kFFFb;
-        tv0 = p2c8c->status_flags & km102;
-    tcde = g_AkaoVoiceKeyOnState & 0x100;
-    ((volatile AkaoSequencerBank *)p2c8c)->status_flags = tv0;
-    p2c8c->status_flags = tv0 | tcde;
+    kFFF5 = 0xFFFFFF;
+    base = pvoice + 0x116;
+    p2c8c->status_flags &= km102;
+    p2c8c->status_flags |= g_AkaoVoiceKeyOnState & 0x100;
     do {
         AkaoTrack *voice = (AkaoTrack *)(base - 0x116);
         if (mask & bit) {
@@ -187,18 +182,15 @@ void Akao_StepSequencerVoice(void *arg0) {
             voice->key_off_delay = 0;
             voice->key_on_delay = 0;
             Akao_SetNotePitch(pvoice, 0);
-            var_v0 = ~bit;
         } else {
             voice->note_length = 3;
             voice->pan_duration = 1;
             *(void **)pvoice = g_AkaoDefaultVoiceProgram;
             voice->adsr_release_rate = 5;
             voice->update_flags = (voice->update_flags | 0x4400);
-            __asm__ __volatile__("");
-            var_v0 = ~bit;
         }
-        kFFF5 &= var_v0;
-        mask &= var_v0;
+        kFFF5 &= ~bit;
+        mask &= ~bit;
         base += 0x11C;
         pvoice += 0x11C;
         bit *= 2;
@@ -220,11 +212,11 @@ void Akao_StepSequencerVoice(void *arg0) {
     pend->adsr_dirty_mask = 0;
     pend->condition_value = 0;
     pend->key_on_request_mask = 0;
-    kffe = 0xFFFFFF;
+    all_voices = 0xFFFFFF;
     __asm__ __volatile__("");
-    pend->allocated_voice_mask = kffe;
+    pend->allocated_voice_mask = all_voices;
     pend->reserved_voice_mask = 0;
-    func_80089960(kffe);
+    func_80089960(all_voices);
     func_80089B28();
     func_80089CF0();
 }
@@ -276,20 +268,16 @@ void Akao_InitVoices(int arg0, char *arg1) {
     } while (i < 0x18);
 }
 
-void Spu_ManageVoices(int arg0, int arg1)
+void Spu_ManageVoices(int arg0, int mode_bits)
 {
     u32 mask;
     u32 i;
-    register u32 *field asm("$18");
     AkaoTrack *voice;
     u32 id;
     u32 active;
-    register int mode_bits asm("$22");
     int value;
     int flags;
     int best;
-    mode_bits = arg1;
-    __asm__("" : : "r"(mode_bits));
     mask = AKAO_SPU_VOICE_SFX_START_MASK;
     id = (u16_1) arg0;
     if (id == 0xFFFF)
@@ -301,6 +289,7 @@ void Spu_ManageVoices(int arg0, int arg1)
     if ((mode_bits & 0x0FFFFFFF) != 0)
     {
         u32 flag1;
+        u32 *field;
         u32 id;
         i = 0;
         flag1 = AKAO_TRACK_FLAG_SUSTAIN;
@@ -358,6 +347,7 @@ void Spu_ManageVoices(int arg0, int arg1)
     if (value != 0)
     {
         u32 flag1;
+        u32 *field;
         int control;
         i = 0;
         do
@@ -429,6 +419,7 @@ void Spu_ManageVoices(int arg0, int arg1)
     else
     {
         u32 flag1;
+        u32 *field;
         int control;
         i = 0;
         flag1 = AKAO_TRACK_FLAG_SUSTAIN;
@@ -726,14 +717,13 @@ void Akao_UpdateVoiceMask(int new_base) {
     register unsigned int remaining asm("$8");
     unsigned int mask;
     unsigned int voice_mask;
-    register unsigned int updated asm("$2");
+    unsigned int updated;
     int delta;
     int backup_base;
     unsigned int old_status, allocation;
     AkaoSequencerBank *loaded_bank;
     unsigned int key_on_state;
     unsigned int valid_bits;
-    register unsigned int pending asm("$3");
     unsigned int restore_mask;
     AkaoSequencerBank *read_bank;
     AkaoSequencerBank *clear_bank;
@@ -807,20 +797,15 @@ void Akao_UpdateVoiceMask(int new_base) {
     } while (remaining != 0);
 
     read_bank = g_AkaoCurTrack;
-    updated = Akao_ForEachVoiceMasked(g_AkaoVoiceStateTable2,
-                                      ((AkaoSequencerState *)read_bank)->secondary.active_voice_mask &
-                                      ((AkaoSequencerState *)read_bank)->secondary.pending_voice_mask);
+    updated = ~Akao_ForEachVoiceMasked(g_AkaoVoiceStateTable2,
+                                       ((AkaoSequencerState *)read_bank)->secondary.active_voice_mask &
+                                       ((AkaoSequencerState *)read_bank)->secondary.pending_voice_mask);
     valid_bits = 0xffffff;
     clear_bank = g_AkaoCurTrack;
-    updated = ~updated;
-    clear_bank->key_off_request_mask = 0;
-    asm volatile("" ::: "memory");
+    *(unsigned int *)&clear_bank->key_off_request_mask = 0;
     mask = ~g_SpuActiveVoiceMask;
     mask &= valid_bits;
-    updated &= mask;
-    pending = g_SpuPendingKeyOffMask;
-    pending |= updated;
-    g_SpuPendingKeyOffMask = pending;
+    g_SpuPendingKeyOffMask |= updated & mask;
     Seq_MarkTrack34MaskDirty();
     Seq_MarkTrack38MaskDirty();
     Seq_MarkTrack3CMaskDirty();
@@ -959,23 +944,25 @@ extern short g_AkaoGlobalPitchSlideCounter;
 void Seq_ApplyGlobalPitch(void);
 
 void Seq_StartRelativeNestedStream(AkaoRelativeNestedCommand *cmd) {
-    char *base;
+    AkaoU32 table;
     u16 offset;
     void *arg1;
     void *arg2;
 
-    base = (char *)cmd->source.key_off_mask;
-    offset = *(u16 *)base;
+    /* The command's key-off word carries the stream table address here;
+     * each table entry is a byte offset from the table to a stream. */
+    table = cmd->source.key_off_mask;
+    offset = ((AkaoU16 *)table)[0];
     if (offset != 0xFFFF) {
-        arg1 = (char *)(offset + (int)base) + 4;
+        arg1 = (AkaoU8 *)(offset + table) + 4;
     } else {
         arg1 = 0;
     }
 
-    offset = ((u16 *)base)[1];
+    offset = ((AkaoU16 *)table)[1];
     arg2 = 0;
     if (offset != 0xFFFF) {
-        arg2 = (char *)(offset + (int)(char *)cmd->source.key_off_mask) + 4;
+        arg2 = (AkaoU8 *)(offset + cmd->source.key_off_mask) + 4;
     }
 
     cmd->source.key_off_mask = cmd->key_off_mask;
@@ -1025,44 +1012,36 @@ void Seq_SetTrackPitchImmediate(AkaoBankPitchCommand *arg0) {
 }
 
 void Seq_SlideTrackPitch(AkaoBankPitchSlideCommand *arg0) {
-    register int raw asm("$2");
     int duration;
-    register int target asm("$5");
+    int target;
     int selector;
     AkaoSequencerBank *track;
-    char *base;
-    AkaoSequencerBank *next_track;
 
-    raw = arg0->duration;
     duration = 1;
-    if (raw != 0) {
-        duration = raw;
+    if (arg0->duration != 0) {
+        duration = arg0->duration;
     }
 
-    raw = arg0->target;
+    target = (arg0->target & 0x7F) << 16;
     selector = arg0->bank_selector;
-    raw &= 0x7F;
-    target = raw << 16;
 
-    if (selector == 0 || ((track = g_AkaoCurTrack), selector == track->bank_id)) {
+    if (selector == 0 || selector == g_AkaoCurTrack->bank_id) {
         track = g_AkaoCurTrack;
-        target = (target - track->pitch_current) / duration;
-        base = g_AkaoVoiceStateTableBytes;
+        target -= track->pitch_current;
+        target /= duration;
         track->pitch_slide_duration = duration;
         track->pitch_delta = target;
-        Seq_MarkDirtyTracks(base);
-    } else {
-        if (arg0 != 0) {
-            if (selector == ((AkaoSequencerState *)track)->secondary.bank_id) {
-                target = (target - ((AkaoSequencerState *)track)->secondary.pitch_current) / duration;
-                base = g_AkaoVoiceStateTable2Bytes;
-                ((AkaoSequencerState *)track)->secondary.pitch_slide_duration = duration;
-                next_track = track + 1;
-                g_AkaoCurTrack = (AkaoSequencerBank *)next_track;
-                ((AkaoSequencerState *)track)->secondary.pitch_delta = target;
-                Seq_MarkDirtyTracks(base);
-                g_AkaoCurTrack--;
-            }
+        Seq_MarkDirtyTracks(g_AkaoVoiceStateTableBytes);
+    } else if (arg0 != 0) {
+        track = g_AkaoCurTrack;
+        if (selector == ((AkaoSequencerState *)track)->secondary.bank_id) {
+            target -= ((AkaoSequencerState *)track)->secondary.pitch_current;
+            target /= duration;
+            ((AkaoSequencerState *)track)->secondary.pitch_slide_duration = duration;
+            g_AkaoCurTrack = track + 1;
+            ((AkaoSequencerState *)track)->secondary.pitch_delta = target;
+            Seq_MarkDirtyTracks(g_AkaoVoiceStateTable2Bytes);
+            g_AkaoCurTrack--;
         }
     }
 }
@@ -1305,7 +1284,7 @@ void Spu_SetAllVoiceVolumeImmediate(int *arg0) {
         if ((active & mask) != 0) {
             if ((parameters->key_on_mask & block_flag) == 0) {
                 value = arg0[1];
-                dirty = ((volatile AkaoTrack *)parameters)->update_flags;
+                dirty = parameters->update_flags;
                 parameters->panpot_duration = 0;
                 value &= 0x7F;
                 value <<= 8;
@@ -1496,7 +1475,7 @@ void Spu_SetAllVoicePanImmediate(int *arg0) {
         if ((active & mask) != 0) {
             if ((parameters->key_on_mask & block_flag) == 0) {
                 value = ((u8 *)arg0)[4];
-                dirty = *(volatile u32 *)voice;
+                dirty = parameters->update_flags;
                 parameters->panpot_slide_duration = 0;
                 value <<= 8;
                 dirty |= AKAO_VOICE_PARAM_VOLUME;
@@ -1570,7 +1549,7 @@ void Spu_SetVoicePitchImmediateMasked(int *arg0) {
             if ((active & mask) != 0) {
                 if ((parameters->key_on_mask & arg0[2]) != 0) {
                     value = ((u8 *)arg0)[0xC];
-                    dirty = ((volatile AkaoTrack *)parameters)->update_flags;
+                    dirty = parameters->update_flags;
                     parameters->pitch_offset_duration = 0;
                     value <<= 8;
                     dirty |= AKAO_VOICE_PARAM_PITCH;
@@ -1590,7 +1569,7 @@ void Spu_SetVoicePitchImmediateMasked(int *arg0) {
             if ((active & mask) != 0) {
                 if (*(int *)&parameters->key_off_mask == arg0[1]) {
                     value = ((u8 *)arg0)[0xC];
-                    dirty = ((volatile AkaoTrack *)parameters)->update_flags;
+                    dirty = parameters->update_flags;
                     parameters->pitch_offset_duration = 0;
                     value <<= 8;
                     dirty |= AKAO_VOICE_PARAM_PITCH;
@@ -1690,7 +1669,7 @@ void Spu_SetAllVoicePitchImmediate(int *arg0) {
         if ((active & mask) != 0) {
             if ((parameters->key_on_mask & block_flag) == 0) {
                 value = ((u8 *)arg0)[4];
-                dirty = ((volatile AkaoTrack *)parameters)->update_flags;
+                dirty = parameters->update_flags;
                 parameters->pitch_offset_duration = 0;
                 value <<= 8;
                 dirty |= AKAO_VOICE_PARAM_PITCH;
@@ -1863,23 +1842,25 @@ void Akao_InitPrimarySecondaryVoicesWithMode(AkaoValueCommand *cmd) {
 }
 
 void Spu_StopActiveVoices(void) {
-    char *voice = g_AkaoVoiceChannelTable;
+    AkaoTrack *voice = g_AkaoVoiceChannelTable;
     unsigned int mask = AKAO_SPU_VOICE_SFX_START_MASK;
     unsigned int i = 0;
     unsigned int skip_flag = 0x02000000;
-    char *track_flags = voice + 0x38;
+    AkaoU32 *track_flags = &voice->flags;
 
     do {
         if (g_SpuActiveVoiceMask & mask) {
-            if ((*(int *)(track_flags - 0xC) & skip_flag) == 0) {
+            AkaoTrack *fields = (AkaoTrack *)((AkaoU8 *)track_flags - 0x38);
+
+            if ((fields->key_on_mask & skip_flag) == 0) {
                 g_SpuPendingKeyOffMask |= mask;
-                SeqOp_DeactivateVoice((AkaoTrack *)voice, mask);
-                *(int *)track_flags = 0;
+                SeqOp_DeactivateVoice(voice, mask);
+                fields->flags = 0;
             }
         }
         i++;
-        track_flags += sizeof(AkaoTrack);
-        voice += sizeof(AkaoTrack);
+        track_flags += sizeof(AkaoTrack) / sizeof(AkaoU32);
+        voice++;
         mask <<= 1;
     } while (i < 0xC);
 
@@ -2037,7 +2018,7 @@ void Spu_VoiceStopAll(void)
   u32 active;
   u32 new_var;
   u32 inverse;
-  char *voice;
+  AkaoTrack *voice;
   u32 i;
   pending = g_SpuActiveVoiceMask;
   if (pending != 0)
@@ -2049,13 +2030,13 @@ void Spu_VoiceStopAll(void)
     {
       if ((pending & bit) != 0)
       {
-        if (((*((u32 *) (voice + 0x2C))) & 0x02000000) != 0)
+        if ((voice->key_on_mask & 0x02000000) != 0)
         {
           pending &= ~bit;
         }
       }
       i++;
-      voice += sizeof(AkaoTrack);
+      voice++;
       bit <<= 1;
     }
     while (i < 12);
@@ -2104,18 +2085,18 @@ void Spu_RestoreStoppedVoices(void) {
     unsigned int pending = g_SpuStoppedVoiceMask;
     unsigned int saved;
     unsigned int mask;
-    int *slot;
+    AkaoTrackUpdateSlot *slot;
 
     if (pending != 0) {
         mask = AKAO_SPU_VOICE_SFX_START_MASK;
-        slot = (int *)g_SpuVoiceControlTable;
+        slot = (AkaoTrackUpdateSlot *)g_SpuVoiceControlTable;
         do {
             if (pending & mask) {
                 pending &= ~mask;
-                *slot |= AKAO_VOICE_PARAM_RESUME;
+                slot->update_flags |= AKAO_VOICE_PARAM_RESUME;
             }
             mask <<= 1;
-            slot = (int *)((char *)slot + sizeof(AkaoTrack));
+            slot++;
         } while (pending != 0);
 
         saved = g_SpuStoppedVoiceMask;
