@@ -80,11 +80,7 @@ void Battle_ResetEnemyStats(int mode) {
 
     D_8009D278->panelB_timer = 0;
     D_8009D278->panelAux_timer = 0;
-    {
-        u32 state;
-        state = reset_flags_read[0];
-        reset_flags_write[0] = state & ~0x10;
-    }
+    D_8009D2E8 &= ~0x10;
     Battle_FlushScriptSounds();
     Tbl_ResetAll();
     D_8009D298 = 0;
@@ -94,9 +90,7 @@ void Battle_ResetEnemyStats(int mode) {
 }
 
 
-#define PALETTE_BYTE(name) (*(s8 *)&(name))
-#define PALETTE_WORD(name) (*(u32 *)&(name))
-#define PALETTE_POINTER(name) (*(BattleEntity **)&(name))
+
 
 void Battle_SetupPlayerPalette(void) {
     int c2;
@@ -116,72 +110,71 @@ void Battle_SetupPlayerPalette(void) {
     c7 = 0x3D;
     asm("" : : "r"(c2), "r"(c7));
 
-    PALETTE_BYTE(D_800B0135) = c6;
-    PALETTE_BYTE(D_800B0145) = c6;
-    PALETTE_BYTE(D_800B017D) = c6;
-    PALETTE_BYTE(D_800B018D) = c6;
+    D_800B0135[0] = c6;
+    D_800B0145[0] = c6;
+    D_800B017D[0] = c6;
+    D_800B018D[0] = c6;
 
     c6 = 0x81;
-    PALETTE_BYTE(D_800B0136) = c5;
-    PALETTE_BYTE(D_800B0146) = c5;
-    PALETTE_BYTE(D_800B017E) = c5;
-    PALETTE_BYTE(D_800B018E) = c5;
+    D_800B0136[0] = c5;
+    D_800B0146[0] = c5;
+    D_800B017E[0] = c5;
+    D_800B018E[0] = c5;
 
     c5 = 0x83;
-    PALETTE_BYTE(D_800B013C) = c4;
-    PALETTE_BYTE(D_800B014C) = c4;
-    PALETTE_BYTE(D_800B0184) = c4;
-    PALETTE_BYTE(D_800B0194) = c4;
+    D_800B013C[0] = c4;
+    D_800B014C[0] = c4;
+    D_800B0184[0] = c4;
+    D_800B0194[0] = c4;
 
     c4 = 0x13;
-    PALETTE_BYTE(D_800B013E) = c3;
-    PALETTE_BYTE(D_800B014E) = c3;
-    PALETTE_BYTE(D_800B0186) = c3;
-    PALETTE_BYTE(D_800B0196) = c3;
+    D_800B013E[0] = c3;
+    D_800B014E[0] = c3;
+    D_800B0186[0] = c3;
+    D_800B0196[0] = c3;
 
     c3 = 1;
-    PALETTE_BYTE(D_800B0134) = 0;
-    PALETTE_BYTE(D_800B013D) = c2;
-    PALETTE_BYTE(D_800B0144) = 0;
-    PALETTE_BYTE(D_800B014D) = c2;
-    PALETTE_BYTE(D_800B017C) = 0;
-    PALETTE_BYTE(D_800B0185) = c2;
-    PALETTE_BYTE(D_800B018C) = 0;
-    PALETTE_BYTE(D_800B0195) = c2;
+    D_800B0134[0] = 0;
+    D_800B013D[0] = c2;
+    D_800B0144[0] = 0;
+    D_800B014D[0] = c2;
+    D_800B017C[0] = 0;
+    D_800B0185[0] = c2;
+    D_800B018C[0] = 0;
+    D_800B0195[0] = c2;
 
-    PALETTE_BYTE(D_800B0158) = c2;
-    PALETTE_BYTE(D_800B0159) = c7;
-    PALETTE_BYTE(D_800B015A) = c6;
-    PALETTE_BYTE(D_800B0160) = c5;
-    PALETTE_BYTE(D_800B0161) = c4;
-    PALETTE_BYTE(D_800B0162) = c3;
-    PALETTE_BYTE(D_800B0168) = c2;
-    PALETTE_BYTE(D_800B0169) = c7;
-    PALETTE_BYTE(D_800B016A) = c6;
-    PALETTE_BYTE(D_800B0170) = c5;
-    PALETTE_BYTE(D_800B0171) = c4;
-    PALETTE_BYTE(D_800B0172) = c3;
-    PALETTE_BYTE(D_800B01A0) = c2;
-    PALETTE_BYTE(D_800B01A1) = c7;
-    PALETTE_BYTE(D_800B01A2) = c6;
-    PALETTE_BYTE(D_800B01A8) = c5;
-    PALETTE_BYTE(D_800B01A9) = c4;
-    PALETTE_BYTE(D_800B01AA) = c3;
-    PALETTE_BYTE(D_800B01B0) = c2;
-    PALETTE_BYTE(D_800B01B1) = c7;
-    PALETTE_BYTE(D_800B01B2) = c6;
-    PALETTE_BYTE(D_800B01B8) = c5;
-    PALETTE_BYTE(D_800B01B9) = c4;
-    PALETTE_BYTE(D_800B01BA) = c3;
+    D_800B0158[0] = c2;
+    D_800B0159[0] = c7;
+    D_800B015A[0] = c6;
+    D_800B0160[0] = c5;
+    D_800B0161[0] = c4;
+    D_800B0162[0] = c3;
+    D_800B0168[0] = c2;
+    D_800B0169[0] = c7;
+    D_800B016A[0] = c6;
+    D_800B0170[0] = c5;
+    D_800B0171[0] = c4;
+    D_800B0172[0] = c3;
+    D_800B01A0[0] = c2;
+    D_800B01A1[0] = c7;
+    D_800B01A2[0] = c6;
+    D_800B01A8[0] = c5;
+    D_800B01A9[0] = c4;
+    D_800B01AA[0] = c3;
+    D_800B01B0[0] = c2;
+    D_800B01B1[0] = c7;
+    D_800B01B2[0] = c6;
+    D_800B01B8[0] = c5;
+    D_800B01B9[0] = c4;
+    D_800B01BA[0] = c3;
 
     Battle_FlushScriptSounds();
     D_8009D2EC = 0;
     D_8009D2A0 = 0;
-    PALETTE_POINTER(D_8009D254_palette_view)->actionCheckFn =
-        (void *)PALETTE_WORD(D_800915E0);
-    *(u32 *)&D_8009D1A0_write = PALETTE_WORD(D_8009D1A0_read) & -3;
-    *(u32 *)&D_8009D2E8_write = PALETTE_WORD(D_8009D2E8_read) & -0x11;
-    flags = &PALETTE_BYTE(D_800B0CE6);
+    D_8009D254->actionCheckFn = (void *)D_800915E0[0];
+    D_8009D1A0 &= -3;
+    D_8009D2E8 &= -0x11;
+    flags = &D_800B0CE6;
     *flags |= 2;
     BattleCmd_SyncActiveAmmo();
 }
@@ -194,10 +187,11 @@ void Battle_StartEncounter(int mode) {
     Combatant *actor;
     u32 value;
     int mode_reg;
+    u32 initial_flags;
     entity = D_8009D254;
     D_8009D278 = (Combatant *)entity->core;
     D_8009D1E8 = 0;
-    (*(u32 *)&battle_start_phase_storage) = 0;
+    *(u32 *)&D_8009D290 = 0;
     D_8009D28C = 0;
     D_8009CE7C = 0;
     D_8009CE78 = 0;
@@ -208,17 +202,15 @@ void Battle_StartEncounter(int mode) {
 
     i = 0;
     neg_one = -1;
-    battle_start_flags_byte[0] = 0;
-    asm volatile("" : : : "memory");
-    { register u32 initial_flags asm("$3");
-    initial_flags = battle_start_flags_read[0];
+    *(u8 *)&D_8009D1AC = 0;
+    initial_flags = D_8009D1AC;
     D_8009D1A8.summary = 0;
     D_8009D1CE = 0;
     D_8009D235[0] = 0;
     D_8009D304 = 0;
     D_8009D21C = 0;
-    battle_start_flags_write[0] = initial_flags & -0x301;
-    }
+    initial_flags &= -0x301;
+    D_8009D1AC = initial_flags;
 
     for (; (u8)i < 0xA; i++) {
         D_800A7FF0[(u8)i].id = 0;
@@ -229,7 +221,7 @@ void Battle_StartEncounter(int mode) {
         D_800B8A90[(u8)i] = 0;
     }
 
-    srand((*(u32 *)&battle_start_seed_storage));
+    srand(D_8009D250);
     Battle_ResetEnemyStats(0);
     Battle_SetupEnemyAnims();
 
@@ -256,14 +248,14 @@ void Battle_StartEncounter(int mode) {
         post_actor = post_entity->renderObject.matrices;
         callback = (u32)Entity_CheckActionIdMatch;
         post_entity->actionCheckFn = (void *)callback;
-        (*(s16 *)&battle_start_camera_storage) = post_actor->translation[1] - 0x64;
+        D_8009D27C = post_actor->translation[1] - 0x64;
     }
     Window_SetBoundsByMode(mode_reg & 0xFF);
     {
         Combatant *final_actor;
         void *final_entity;
         final_actor = D_8009D278;
-        final_entity = battle_start_final_entity[0];
+        final_entity = D_8009D254;
         Entity_SetActionMode(final_entity, final_actor->actionMode12);
     }
 }

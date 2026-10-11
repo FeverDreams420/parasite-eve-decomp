@@ -12,9 +12,7 @@ extern u8 D_8009D29A;
 extern u8 D_8009D29B[];
 extern s32 D_8009D29C[1];
 
-/* Independent symbol views keep the original absolute load and store. */
-extern u32 reset_flags_read[4] __asm__("D_8009D2E8");
-extern u32 reset_flags_write[4] __asm__("D_8009D2E8");
+extern unsigned int D_8009D2E8;
 
 void Battle_FlushScriptSounds(void);
 void Tbl_ResetAll(void);

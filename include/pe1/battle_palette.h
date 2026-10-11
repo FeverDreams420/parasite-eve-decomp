@@ -5,19 +5,11 @@
 #include "pe1/battle_hud_colors.h"
 #include "pe1/game_state.h"
 
-/* Wide declarations keep palette bytes out of GCC -G8 small-data lowering. */
-typedef struct BattlePaletteSymbol {
-    u8 bytes[16];
-} BattlePaletteSymbol;
-
-
-
-extern BattlePaletteSymbol D_8009D254_palette_view __asm__("D_8009D254");
+extern struct BattleEntity *D_8009D254;
+/* Word copied into the player entity's action check callback. */
 extern u32 D_800915E0[];
-extern BattlePaletteSymbol D_8009D1A0_read __asm__("D_8009D1A0");
-extern BattlePaletteSymbol D_8009D1A0_write __asm__("D_8009D1A0");
-extern BattlePaletteSymbol D_8009D2E8_read __asm__("D_8009D2E8");
-extern BattlePaletteSymbol D_8009D2E8_write __asm__("D_8009D2E8");
+extern unsigned int D_8009D1A0;
+extern unsigned int D_8009D2E8;
 extern u8 D_8009D2EC;
 extern s8 D_8009D2A0;
 

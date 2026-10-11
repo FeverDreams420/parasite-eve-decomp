@@ -15,14 +15,12 @@ extern u8 D_8009D1CE, D_8009D235[16];
 extern u32 D_8009D304;
 extern u16 D_8009D21C;
 
-/* Separate views preserve the original absolute-address loads and stores. */
-extern u8 battle_start_flags_byte[16] __asm__("D_8009D1AC");
-extern u32 battle_start_flags_read[4] __asm__("D_8009D1AC");
-extern u32 battle_start_flags_write[4] __asm__("D_8009D1AC");
-extern BattleEntity *battle_start_final_entity[4] __asm__("D_8009D254");
-extern struct { char bytes[16]; } battle_start_phase_storage __asm__("D_8009D290");
-extern struct { char bytes[16]; } battle_start_seed_storage __asm__("D_8009D250");
-extern struct { char bytes[16]; } battle_start_camera_storage __asm__("D_8009D27C");
+extern unsigned int D_8009D1AC;
+extern unsigned int D_8009D1A0;
+extern unsigned int D_8009D2E8;
+extern s32 D_8009D290[16];
+extern u32 D_8009D250;
+extern s16 D_8009D27C; /* battle camera height: player's model Y - 100 */
 
 void Save_ResetGlobalFlags(void);
 void srand(unsigned int seed);
