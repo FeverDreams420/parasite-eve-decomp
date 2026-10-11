@@ -1,245 +1,227 @@
 #include "common.h"
 #include "pe1/render_object.h"
 
-#define UH(ptr, off) (*(u16 *)((char *)(ptr) + (off)))
-#define UB(ptr, off) (*(u8 *)((char *)(ptr) + (off)))
-#define W(ptr, off) (*(s32 *)((char *)(ptr) + (off)))
+/* Bone angles are decoded into scratchpad vectors indexed by matrix slot. */
+#define ANIM_BONE_ANGLES 0x1F800000
 
-#define APPLY_COMPONENT(entry, count, scratch, dst_off, value_off, abs_bit, add_bit) \
-    do { \
-        v1 = UB((entry), 0xA7); \
-        v0 = v1 & (abs_bit); \
-        if (v0 != 0) { \
-            v0 = (count) << 3; \
-            v1 = UH((entry), (value_off)); \
-            v0p = (char *)(v0 + (s32)(scratch)); \
-            *(u16 *)(v0p + (dst_off)) = v1; \
-        } else { \
-            v0 = v1 & (add_bit); \
-            if (v0 != 0) { \
-                v0 = (count) << 3; \
-                v0p = (char *)(v0 + (s32)(scratch)); \
-                v1 = *(u16 *)(v0p + (dst_off)); \
-                a0tmp = UH((entry), (value_off)); \
-                v1 += a0tmp; \
-                *(u16 *)(v0p + (dst_off)) = v1; \
-            } \
-        } \
-    } while (0)
+/* A halfword sample base seen as the address retail adds the frame's byte
+ * offset to; indexing the samples by frame hoists the scaling below the angle
+ * pointer setup instead. */
+typedef union AnimSampleAddress {
+    u16 *samples;
+    u32 address;
+} AnimSampleAddress;
 
-void Anim_BuildRotationMatrices(char *obj, RenderAnimationDataHeader *data, int arg2) {
-    char *s1 = obj;
-    register char *scratch asm("$18") = (char *)0x1F800000;
-    register char *s0 asm("$16");
-    register int count asm("$5");
-    int v1;
-    register int v0 asm("$2");
-    register char *v0p asm("$2");
-    int a0tmp;
-    char *rot;
-    char *mat_base;
-    int mode;
+/* Apply the two per-object rotation overrides on top of the decoded keyframe
+ * angles, then rebuild the affected bone matrices. */
+void Anim_BuildRotationMatrices(RenderObjectEntity *object, RenderAnimationDataHeader *data, int frame) {
+    u32 angles = ANIM_BONE_ANGLES;
+    int i;
 
     if (data == 0) {
         return;
     }
 
-    ((RenderObjectEntity *)s1)->hit_body.radius = data->object_value7c;
-    ((RenderObjectEntity *)s1)->hit_body.value0 = data->object_value74;
-    ((RenderObjectEntity *)s1)->hit_body.value1 = data->object_value76;
-    ((RenderObjectEntity *)s1)->hit_body.value2 = data->object_value78;
+    object->hit_body.radius = data->object_value7c;
+    object->hit_body.value0 = data->object_value74;
+    object->hit_body.value1 = data->object_value76;
+    object->hit_body.value2 = data->object_value78;
 
-    mode = data->encoding_flags & 3;
-    if (mode == 2) {
-        Anim_DecodeBoneRotationsShort(s1, data, (s16)arg2);
+    if ((data->encoding_flags & 3) == 2) {
+        Anim_DecodeBoneRotationsShort(object, data, (s16)frame);
     } else {
-        Anim_DecodeBoneRotationsByte(s1, data, (s16)arg2);
+        Anim_DecodeBoneRotationsByte(object, data, (s16)frame);
     }
 
-    s0 = s1;
-    do {
-        count = UB(s0, 0xA6);
-        if (count > 0) {
-            APPLY_COMPONENT(s0, count, scratch, 0, 0xA0, 0x08, 0x01);
-            APPLY_COMPONENT(s0, count, scratch, 2, 0xA2, 0x10, 0x02);
-            APPLY_COMPONENT(s0, count, scratch, 4, 0xA4, 0x20, 0x04);
-            rot = (char *)((u32)scratch | (count << 3));
-            mat_base = (char *)((RenderObjectEntity *)s1)->active_matrix;
-            RotMatrixYXZ((GteShortVector *)rot, (GteMatrix *)(mat_base + (count << 5)));
+    for (i = 0; i < 2; i++) {
+        int index = object->rotation_overrides[i].matrix_index;
+
+        if (index > 0) {
+            if (object->rotation_overrides[i].flags & 0x08) {
+                ((GteShortVector *)angles)[index].x = object->rotation_overrides[i].x;
+            } else if (object->rotation_overrides[i].flags & 0x01) {
+                ((GteShortVector *)angles)[index].x += object->rotation_overrides[i].x;
+            }
+            if (object->rotation_overrides[i].flags & 0x10) {
+                ((GteShortVector *)angles)[index].y = object->rotation_overrides[i].y;
+            } else if (object->rotation_overrides[i].flags & 0x02) {
+                ((GteShortVector *)angles)[index].y += object->rotation_overrides[i].y;
+            }
+            if (object->rotation_overrides[i].flags & 0x20) {
+                ((GteShortVector *)angles)[index].z = object->rotation_overrides[i].z;
+            } else if (object->rotation_overrides[i].flags & 0x04) {
+                ((GteShortVector *)angles)[index].z += object->rotation_overrides[i].z;
+            }
+            /* Retail ORs the slot offset into the scratchpad base here. */
+            RotMatrixYXZ((GteShortVector *)(angles | (index << 3)),
+                         (GteMatrix *)&object->active_matrix[index]);
         }
-        s0 += 8;
-    } while ((s32)s0 < (s32)(s1 + 0x10));
+    }
 }
 
 /* Bone rotation keyframe decoders for the byte- and halfword-packed
  * animation formats. */
 
-void Anim_DecodeBoneRotationsByte(RenderObjectEntity *arg0, RenderAnimationDataHeader *arg1, s16 arg2) {
-    u16 *var_s3;
-    s32 var_s2;
-    s32 var_v0;
-    s32 nlim;
-    s32 *var_a1;
-    s32 temp_v1;
-    s32 temp_s5;
-    s32 temp_s6;
-    char *var_s4;
-    u8 var_v0_2;
-    u8 var_v0_3;
-    u8 var_v0_4;
-    char *var_s0;
-    u16 *var_s1;
-    char *var_v1;
-    char *var_a0;
+void Anim_DecodeBoneRotationsByte(RenderObjectEntity *object, RenderAnimationDataHeader *data, s16 frame) {
+    GteShortVector *angle;
+    s32 bone;
+    s32 value;
+    s32 *translation;
+    s32 stride;
+    s32 byteStride;
+    s32 frameIndex;
+    RenderMatrix *matrix;
+    u8 sampleX;
+    u8 sampleY;
+    u8 sampleZ;
+    u8 *cursor;
+    s16 *angleZ;
+    u8 *byteSamples;
+    s16 *shortSamples;
 
-    var_s3 = (u16 *)0x1F800000;
-    var_s0 = (char *)(arg1 + 1);
-    var_s2 = 0;
-    var_s4 = (char *)arg0->matrices;
-    arg0->active_matrix = (RenderMatrix *)var_s4;
-    var_a1 = (s32 *) (var_s4 + 0x14);
-    temp_v1 = (arg1->frame_count >> 1) + 1;
-    temp_v1 = temp_v1 * 4;
+    angle = (GteShortVector *)ANIM_BONE_ANGLES;
+    cursor = (u8 *)(data + 1);
+    bone = 0;
+    matrix = object->matrices;
+    object->active_matrix = matrix;
+    translation = matrix->translation;
+    stride = (data->frame_count >> 1) + 1;
+    stride = stride * 4;
     do {
-        var_a0 = var_s0 + 2;
-        if (((RenderAnimShortChannel *)var_s0)->constant_marker != 0) {
-            var_v0 = ((RenderAnimShortChannel *)var_s0)->samples.signed_values[0];
-            var_s0 += 4;
+        shortSamples = ((RenderAnimShortChannel *)cursor)->samples.signed_values;
+        if (((RenderAnimShortChannel *)cursor)->constant_marker != 0) {
+            value = shortSamples[0];
+            cursor += 4;
         } else {
-            var_v0 = *(s16 *)((((arg2 << 0x10) >> 0xF)) + (s32) var_a0);
-            var_s0 += temp_v1;
+            value = shortSamples[frame];
+            cursor += stride;
         }
-        *var_a1 = var_v0;
-        var_s2 += 1;
-        var_a1 += 1;
-    } while (var_s2 < 3);
-    var_s2 = 0;
-    temp_v1 = (arg1->frame_count >> 2) + 1;
-    if (arg1->last_bone_index >= var_s2) {
-        temp_s6 = arg2;
-        temp_s5 = temp_v1 * 4;
-        var_s1 = var_s3 + 2;
+        *translation = value;
+        bone += 1;
+        translation += 1;
+    } while (bone < 3);
+    bone = 0;
+    stride = (data->frame_count >> 2) + 1;
+    if (data->last_bone_index >= bone) {
+        frameIndex = frame;
+        byteStride = stride * 4;
+        angleZ = &angle->z;
         do {
-            var_v1 = var_s0 + 1;
-            if (((RenderAnimByteChannel *)var_s0)->constant_marker != 0) {
-                var_v0_2 = ((RenderAnimByteChannel *)var_s0)->value_or_samples[0];
-                var_s0 += 4;
+            byteSamples = ((RenderAnimByteChannel *)cursor)->value_or_samples;
+            if (((RenderAnimByteChannel *)cursor)->constant_marker != 0) {
+                sampleX = byteSamples[0];
+                cursor += 4;
             } else {
-                var_v0_2 = *(u8 *)(var_v1 + temp_s6);
-                var_s0 += temp_s5;
+                sampleX = byteSamples[frameIndex];
+                cursor += byteStride;
             }
-            *var_s3 = var_v0_2 * 0x10;
-            var_v1 = var_s0 + 1;
-            if (((RenderAnimByteChannel *)var_s0)->constant_marker != 0) {
-                var_v0_3 = ((RenderAnimByteChannel *)var_s0)->value_or_samples[0];
-                var_s0 += 4;
+            angle->x = sampleX * 0x10;
+            byteSamples = ((RenderAnimByteChannel *)cursor)->value_or_samples;
+            if (((RenderAnimByteChannel *)cursor)->constant_marker != 0) {
+                sampleY = byteSamples[0];
+                cursor += 4;
             } else {
-                var_v0_3 = *(u8 *)(var_v1 + temp_s6);
-                var_s0 += temp_s5;
+                sampleY = byteSamples[frameIndex];
+                cursor += byteStride;
             }
-            var_s1[-1] = var_v0_3 * 0x10;
-            var_v1 = var_s0 + 1;
-            if (((RenderAnimByteChannel *)var_s0)->constant_marker != 0) {
-                var_v0_4 = ((RenderAnimByteChannel *)var_s0)->value_or_samples[0];
-                var_s0 += 4;
+            angleZ[-1] = sampleY * 0x10;
+            byteSamples = ((RenderAnimByteChannel *)cursor)->value_or_samples;
+            /* Both branches store z, so their shared tail is cross-jumped and
+             * the store stays ahead of the RotMatrixYXZ argument setup. */
+            if (((RenderAnimByteChannel *)cursor)->constant_marker != 0) {
+                sampleZ = byteSamples[0];
+                cursor += 4;
+                angleZ[0] = sampleZ * 0x10;
             } else {
-                var_v0_4 = *(u8 *)(var_v1 + temp_s6);
-                var_s0 += temp_s5;
+                sampleZ = byteSamples[frameIndex];
+                cursor += byteStride;
+                angleZ[0] = sampleZ * 0x10;
             }
-            var_s1[0] = var_v0_4 * 0x10;
-            __asm__ volatile("");
-            RotMatrixYXZ((GteShortVector *)var_s3, (GteMatrix *)var_s4);
-            var_s4 += 0x20;
-            var_s1 += 4;
-            nlim = arg1->last_bone_index;
-            __asm__ volatile("");
-            var_s2 += 1;
-            var_s3 += 4;
-        } while (nlim >= var_s2);
+            RotMatrixYXZ(angle, (GteMatrix *)matrix);
+            matrix++;
+            angleZ += 4;
+            angle++;
+        } while (data->last_bone_index >= ++bone);
     }
 }
 
-void Anim_DecodeBoneRotationsShort(RenderObjectEntity *arg0, RenderAnimationDataHeader *arg1, s16 arg2) {
-    register u16 *var_s2 asm("$18");
-    s16 var_s3;
-    s16 temp_v0;
-    s16 temp_v0_2;
-    register s32 nlim asm("$3");
-    s32 var_v0;
-    s32 *var_a0;
-    s32 temp_a3;
-    s32 temp_s5;
-    s32 temp_s6;
-    char *var_s4;
-    u16 var_v0_2;
-    u16 var_v0_3;
-    u16 var_v0_4;
-    char *var_s0;
-    u16 *var_s1;
-    char *var_v1;
+void Anim_DecodeBoneRotationsShort(RenderObjectEntity *object, RenderAnimationDataHeader *data, s16 frame) {
+    /* Without the pin the bone counter, which lives through both loops
+     * but is dead between them, outranks the angle pointer by two insns of
+     * live length and takes $s2. */
+    register GteShortVector *angle asm("$18");
+    s16 bone;
+    s32 value;
+    s32 *translation;
+    s32 stride;
+    s32 frameOffset;
+    s32 channelStride;
+    RenderMatrix *matrix;
+    u16 sampleX;
+    u16 sampleY;
+    u16 sampleZ;
+    u8 *cursor;
+    s16 *angleZ;
+    s16 *samples;
+    AnimSampleAddress sampleBase;
 
-    var_s2 = (u16 *)0x1F800000;
-    var_s0 = (char *)(arg1 + 1);
-    var_s3 = 0;
-    var_s4 = (char *)arg0->matrices;
-    arg0->active_matrix = (RenderMatrix *)var_s4;
-    var_a0 = (s32 *) (var_s4 + 0x14);
-    temp_a3 = (arg1->frame_count >> 1) + 1;
+    angle = (GteShortVector *)ANIM_BONE_ANGLES;
+    cursor = (u8 *)(data + 1);
+    bone = 0;
+    matrix = object->matrices;
+    object->active_matrix = matrix;
+    translation = matrix->translation;
+    stride = (data->frame_count >> 1) + 1;
     do {
-        var_v1 = var_s0 + 2;
-        if (((RenderAnimShortChannel *)var_s0)->constant_marker != 0) {
-            var_v0 = ((RenderAnimShortChannel *)var_s0)->samples.signed_values[0];
-            var_s0 += 4;
+        samples = ((RenderAnimShortChannel *)cursor)->samples.signed_values;
+        if (((RenderAnimShortChannel *)cursor)->constant_marker != 0) {
+            value = samples[0];
+            cursor += 4;
         } else {
-            var_v0 = *(s16 *)((((arg2 << 0x10) >> 0xF)) + (s32) var_v1);
-            var_s0 += temp_a3 * 4;
+            value = samples[frame];
+            cursor += stride * 4;
         }
-        *var_a0 = var_v0;
-        temp_v0 = var_s3 + 1;
-        var_s3 = temp_v0;
-        var_a0 += 1;
-    } while (temp_v0 < 3);
-    var_s3 = 0;
-    if (arg1->last_bone_index >= var_s3) {
-        temp_s6 = ((arg2 << 0x10) >> 0xF);
-        temp_s5 = temp_a3 * 4;
-        var_s1 = var_s2 + 2;
+        *translation = value;
+        translation += 1;
+    } while (++bone < 3);
+    bone = 0;
+    if (data->last_bone_index >= bone) {
+        frameOffset = frame * 2;
+        channelStride = stride * 4;
+        angleZ = &angle->z;
         do {
-            var_v1 = var_s0 + 2;
-            if (((RenderAnimShortChannel *)var_s0)->constant_marker != 0) {
-                var_v0_2 = ((RenderAnimShortChannel *)var_s0)->samples.unsigned_values[0];
-                var_s0 = var_s0 + 4;
+            sampleBase.samples = ((RenderAnimShortChannel *)cursor)->samples.unsigned_values;
+            if (((RenderAnimShortChannel *)cursor)->constant_marker != 0) {
+                sampleX = ((RenderAnimShortChannel *)cursor)->samples.unsigned_values[0];
+                cursor = cursor + 4;
             } else {
-                var_v0_2 = *(u16 *)(temp_s6 + (s32) var_v1);
-                var_s0 = var_s0 + temp_s5;
+                sampleX = *(u16 *)(frameOffset + sampleBase.address);
+                cursor = cursor + channelStride;
             }
-            *var_s2 = var_v0_2;
-            var_v1 = var_s0 + 2;
-            if (((RenderAnimShortChannel *)var_s0)->constant_marker != 0) {
-                var_v0_3 = ((RenderAnimShortChannel *)var_s0)->samples.unsigned_values[0];
-                var_s0 = var_s0 + 4;
+            angle->x = sampleX;
+            sampleBase.samples = ((RenderAnimShortChannel *)cursor)->samples.unsigned_values;
+            if (((RenderAnimShortChannel *)cursor)->constant_marker != 0) {
+                sampleY = ((RenderAnimShortChannel *)cursor)->samples.unsigned_values[0];
+                cursor = cursor + 4;
             } else {
-                var_v0_3 = *(u16 *)(temp_s6 + (s32) var_v1);
-                var_s0 = var_s0 + temp_s5;
+                sampleY = *(u16 *)(frameOffset + sampleBase.address);
+                cursor = cursor + channelStride;
             }
-            var_s1[-1] = var_v0_3;
-            var_v1 = var_s0 + 2;
-            if (((RenderAnimShortChannel *)var_s0)->constant_marker != 0) {
-                var_v0_4 = ((RenderAnimShortChannel *)var_s0)->samples.unsigned_values[0];
-                var_s0 = var_s0 + 4;
+            angleZ[-1] = sampleY;
+            sampleBase.samples = ((RenderAnimShortChannel *)cursor)->samples.unsigned_values;
+            if (((RenderAnimShortChannel *)cursor)->constant_marker != 0) {
+                sampleZ = ((RenderAnimShortChannel *)cursor)->samples.unsigned_values[0];
+                cursor = cursor + 4;
+                angleZ[0] = sampleZ;
             } else {
-                var_v0_4 = *(u16 *)(temp_s6 + (s32) var_v1);
-                var_s0 = var_s0 + temp_s5;
+                sampleZ = *(u16 *)(frameOffset + sampleBase.address);
+                cursor = cursor + channelStride;
+                angleZ[0] = sampleZ;
             }
-            var_s1[0] = var_v0_4;
-            __asm__ volatile("");
-            RotMatrixYXZ((GteShortVector *)var_s2, (GteMatrix *)var_s4);
-            var_s4 += 0x20;
-            var_s1 += 4;
-            temp_v0_2 = var_s3 + 1;
-            var_s3 = temp_v0_2;
-            var_s2 += 4;
-            nlim = arg1->last_bone_index;
-        } while (nlim >= var_s3);
+            RotMatrixYXZ(angle, (GteMatrix *)matrix);
+            matrix++;
+            angleZ += 4;
+            angle++;
+        } while (++bone <= data->last_bone_index);
     }
 }
