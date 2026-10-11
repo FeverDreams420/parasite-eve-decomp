@@ -1,101 +1,15 @@
-#define PE1_PM_LEGACY_RAW_VIEWS
+/* Process manager: allocates the 22 process slots, dispatches the per-command
+ * handler callbacks, and loads the task programs of commands 108..114. */
 #include "pe1/disc_load_state.h"
 #include "pe1/pm.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/scene_room_load.h"
+#include "pe1/scene_assets.h"
 #include "pe1/game_state.h"
-#undef PE1_PM_LEGACY_RAW_VIEWS
-
-int Pm_AllocSlot(unsigned int cmd) {
-    int result;
-    int i;
-    PmSecondarySlot *secondary;
-    PmPrimarySlot *primary;
-
-    result = -1;
-    if (cmd >= 0xC0) {
-        return -1;
-    }
-
-    if ((unsigned int)(cmd - 0x46) < 0xF) {
-        i = 0;
-        secondary = g_PmSlotTable2Typed;
-        do {
-            if (secondary->header.state == 0) {
-                result = i + 0xB;
-                goto done;
-            }
-            i++;
-            secondary++;
-        } while (i < 0xB);
-        return result;
-    }
-
-    i = 0;
-    primary = g_PmSlotTableTyped;
-    do {
-        if (primary->header.state == 0) {
-            result = i;
-            goto done;
-        }
-        i++;
-        primary++;
-    } while (i < 0xB);
-
-done:
-    return result;
-}
-
-int Pm_FreeSlot(int arg0) {
-    int offset;
-    PmSlotHeader *entry;
-    unsigned int i;
-
-    if ((unsigned int)arg0 >= 0x16) {
-        return -1;
-    }
-
-    if ((unsigned int)arg0 >= 0xB) {
-        int idx;
-        int offset_hi;
-        idx = arg0 - 0xB;
-        offset_hi = idx << 4;
-        offset_hi += idx;
-        offset_hi <<= 2;
-        offset_hi -= idx;
-        entry = (PmSlotHeader *)(g_PmSlotTable2Raw + (offset_hi << 2));
-    } else {
-        offset = (((((arg0 * 4) + arg0) << 5) + arg0) << 2) - arg0;
-        offset <<= 2;
-        entry = (PmSlotHeader *)(g_PmSlotTableRaw + offset);
-    }
-
-    if (entry->command == 0x72) {
-        for (i = 0x6C; i < 0x73; i++) {
-            g_PmAuxiliaryPointerTable.entries[i - 0x6C] = 0;
-        }
-        {
-            int *state = (int *)&g_GameState.flags;
-            *state &= 0xFFFEFFFF;
-        }
-    }
-
-    entry->state = 0;
-    entry->command = -1;
-    entry->field02 = -1;
-    entry->field03 = -1;
-    entry->ticks = 0;
-    entry->owner = 0;
-
-    return 0;
-}
 #include "pe1/cdrom.h"
-#include "Pm_ProcessManager_externs.h"
-void FlushCache(void);
-void func_800CE49C(PmSlotHeader *, int);
+#include "pe1/field_anim.h"
+#include "pe1/player_entity.h"
 
-/* Matching debt: the retry jump preserves the two CD retry loops;
- * secondary-slot addressing uses unsigned address arithmetic. */
 static inline int FindSlot(u32 command)
 {
     int slot = -1;
@@ -103,14 +17,14 @@ static inline int FindSlot(u32 command)
     if (command >= 192)
         return -1;
     if (command - 70 < 15) {
-        PmSecondarySlot *entry = D_800942E8;
+        PmSecondarySlot *entry = g_PmSlotTable2;
         for (i = 0; i < 11; ++i, ++entry)
             if (!entry->header.state) {
                 slot = i + 11;
                 break;
             }
     } else {
-        PmPrimarySlot *entry = D_800942E4;
+        PmPrimarySlot *entry = g_PmSlotTable;
         for (i = 0; i < 11; ++i, ++entry)
             if (!entry->header.state) {
                 slot = i;
@@ -118,6 +32,42 @@ static inline int FindSlot(u32 command)
             }
     }
     return slot;
+}
+
+int Pm_AllocSlot(unsigned int cmd) {
+    return FindSlot(cmd);
+}
+
+static inline PmSlotHeader *SlotHeader(int slot)
+{
+    if ((unsigned int)slot >= 11) {
+        int idx = slot - 11;
+        return &g_PmSlotTable2[idx].header;
+    }
+    return &g_PmSlotTable[slot].header;
+}
+
+int Pm_FreeSlot(int slot) {
+    PmSlotHeader *entry;
+    unsigned int i;
+
+    if ((unsigned int)slot >= 22) {
+        return -1;
+    }
+    entry = SlotHeader(slot);
+    if (entry->command == 0x72) {
+        for (i = 0x6C; i < 0x73; i++) {
+            g_FieldAnimTaskPrograms[i - 85] = 0;
+        }
+        g_GameState.flags &= ~0x10000;
+    }
+    entry->state = 0;
+    entry->command = -1;
+    entry->field02 = -1;
+    entry->field03 = -1;
+    entry->ticks = 0;
+    entry->owner = 0;
+    return 0;
 }
 
 int Scene_LoadRoomAssets(u32 command, void *owner)
@@ -131,24 +81,21 @@ int Scene_LoadRoomAssets(u32 command, void *owner)
     if (command - 108 < 7 && !(g_GameState.flags & 0x10000)) {
 retry:
         while (CdRom_ReadSectorsFromLba(D_800B0DD8.baseLba + D_80093162[0],
-                D_80011618, D_80093162[1] - D_80093162[0]) == -1) {}
-        for (;;) {
-            ready = CdRom_PollReady();
-            if (ready == 0)
-                break;
+                g_PmTaskProgramBuffer, D_80093162[1] - D_80093162[0]) == -1) {}
+        while ((ready = CdRom_PollReady()) != 0) {
             if (ready == -1)
                 goto retry;
         }
         EnterCriticalSection();
         FlushCache();
         ExitCriticalSection();
-        g_PmAuxiliaryPointerTable.entries[0] = D_801F1BD8;
-        g_PmAuxiliaryPointerTable.entries[1] = D_801F1C58;
-        g_PmAuxiliaryPointerTable.entries[2] = D_801F1D00;
-        g_PmAuxiliaryPointerTable.entries[3] = D_801F1D8C;
-        g_PmAuxiliaryPointerTable.entries[4] = D_801F1E18;
-        g_PmAuxiliaryPointerTable.entries[5] = D_801F1EA4;
-        g_PmAuxiliaryPointerTable.entries[6] = D_801F1EF0;
+        g_FieldAnimTaskPrograms[108 - 85] = D_801F1BD8;
+        g_FieldAnimTaskPrograms[109 - 85] = D_801F1C58;
+        g_FieldAnimTaskPrograms[110 - 85] = D_801F1D00;
+        g_FieldAnimTaskPrograms[111 - 85] = D_801F1D8C;
+        g_FieldAnimTaskPrograms[112 - 85] = D_801F1E18;
+        g_FieldAnimTaskPrograms[113 - 85] = D_801F1EA4;
+        g_FieldAnimTaskPrograms[114 - 85] = D_801F1EF0;
         g_GameState.flags |= 0x10000;
     }
     Asset_LoadTimTextures(0);
@@ -157,19 +104,20 @@ retry:
         subcommand = command - 85;
         command = 85;
     }
-    if (!D_800942E0[command])
+    if (!g_PmCmdHandlerTable[command])
         return -8;
-    if (!D_800942E0[command]->initialize)
+    if (!g_PmCmdHandlerTable[command]->initialize)
         return -1;
     slot = FindSlot(command);
     if (slot == -1)
         return -3;
-    if ((u32)slot >= 22)
+    if ((unsigned int)slot >= 22)
         return -1;
-    if (slot >= 11)
-        entry = (PmSlotHeader *)((slot - 11) * sizeof(PmSecondarySlot) + (u32)D_800942E8);
-    else
-        entry = &D_800942E4[slot].header;
+    if (slot >= 11) {
+        int idx = slot - 11;
+        entry = &g_PmSlotTable2[idx].header;
+    } else
+        entry = &g_PmSlotTable[slot].header;
     entry->state = 1;
     entry->command = original;
     entry->field02 = 0;
@@ -177,362 +125,107 @@ retry:
     entry->ticks = 0;
     entry->owner = owner;
     if (command == 85)
-        func_800CE49C(entry, subcommand);
-    D_800942E0[command]->initialize(entry);
+        FieldAnim_BindTaskProgram((FieldAnimTaskOwner *)entry, subcommand);
+    g_PmCmdHandlerTable[command]->initialize(entry);
     return slot;
 }
 
-int Pm_SendCmd(int arg0, int arg1, int arg2, int *arg3, int *arg4, int *arg5) {
+int Pm_SendCmd(int slot, int arg1, int arg2, int arg3, int arg4, int arg5) {
     PmSlotHeader *entry;
     int cmd;
     PmCommand *handler;
-    PmCommand **table;
-    PmSendCallback callback;
 
-    if ((unsigned int)arg0 >= 0x16) {
-        return -0xA;
+    if ((unsigned int)slot >= 22) {
+        return -10;
     }
-
-    if ((unsigned int)arg0 >= 0xB) {
-        int idx;
-        int offset_hi;
-        idx = arg0 - 0xB;
-        offset_hi = idx << 4;
-        offset_hi += idx;
-        offset_hi <<= 2;
-        offset_hi -= idx;
-        entry = (PmSlotHeader *)((char *)g_PmSlotTable2 + (offset_hi << 2));
-    } else {
-        entry = &g_PmSlotTableTyped[arg0].header;
-    }
-
+    entry = SlotHeader(slot);
     cmd = entry->command;
     if ((unsigned int)cmd >= 0xC0) {
-        return -0xB;
+        return -11;
     }
     if ((unsigned int)cmd >= 0x55) {
         cmd = 0x55;
     }
-
-    table = g_PmCmdHandlerTable;
-    handler = table[cmd];
-    if (handler == 0) {
-        return -0xC;
-    }
-    callback = handler->send;
-    if (callback == 0) {
-        return -1;
-    }
-
-    if ((arg1 == 1) && (arg2 == 0)) {
-        *arg3 = entry->field02;
-        *arg4 = entry->field03;
-        *arg5 = entry->ticks;
-    }
-
-    {
-        register PmCommand **reload_table asm("$3");
-        reload_table = g_PmCmdHandlerTable;
-        handler = reload_table[cmd];
-        /* The table can change through arg3..arg5, so reload before calling. */
-        return handler->send(entry, arg1, arg2, arg3, arg4, arg5);
-    }
-}
-
-int Pm_SetGetState(int arg0, int arg1, int arg2) {
-    int offset;
-    int cmd;
-    PmCommand *handler;
-
-    if ((unsigned int)arg0 >= 0x16) {
-        return -0xD;
-    }
-
-    if ((unsigned int)arg0 >= 0xB) {
-        int idx;
-        int offset_hi;
-        idx = arg0 - 0xB;
-        offset_hi = idx << 4;
-        offset_hi += idx;
-        offset_hi <<= 2;
-        offset_hi -= idx;
-        arg0 = (int)((char *)g_PmSlotTable2 + (offset_hi << 2));
-    } else {
-        offset = (((((arg0 * 4) + arg0) << 5) + arg0) << 2) - arg0;
-        offset <<= 2;
-        arg0 = (int)((char *)g_PmSlotTable + offset);
-    }
-
-    cmd = ((PmSlotHeader *)arg0)->command;
-    if ((unsigned int)cmd >= 0x55) {
-        cmd = 0x55;
-    }
-
     handler = g_PmCmdHandlerTable[cmd];
     if (handler == 0) {
-        return -0xF;
+        return -12;
     }
-
-    if (arg1 == 0) {
-        if ((unsigned int)arg2 < 6) {
-            *(u8 *)arg0 = arg2;
-        }
-    } else {
-        *(int *)arg2 = *(u8 *)arg0;
-    }
-
-    return *(u8 *)arg0;
-}
-
-int Pm_Start(int arg0) {
-    register int cmd asm("$5");
-    PmCommand *handler;
-    int (*callback)(void);
-    PmCommand **table;
-    register int table_offset asm("$2");
-
-    if ((unsigned int)arg0 >= 0x16) {
-        return -0x10;
-    }
-
-    if ((unsigned int)arg0 >= 0xB) {
-        int idx;
-        int offset_hi;
-        idx = arg0 - 0xB;
-        offset_hi = idx << 4;
-        offset_hi += idx;
-        offset_hi <<= 2;
-        offset_hi -= idx;
-        arg0 = (int)((char *)g_PmSlotTable2 + (offset_hi << 2));
-    } else {
-        arg0 = (int)&g_PmSlotTableTyped[arg0];
-    }
-
-    if ((unsigned int)(*(u8 *)arg0 - 1) >= 2U) {
-        return 0;
-    }
-
-    cmd = ((PmSlotHeader *)arg0)->command;
-    if ((unsigned int)cmd >= 0xC0) {
-        return -0x11;
-    }
-    if ((unsigned int)cmd >= 0x55) {
-        cmd = 0x55;
-    }
-
-    table = g_PmCmdHandlerTable;
-    table_offset = cmd << 2;
-    handler = *(PmCommand **)(table_offset + (int)table);
-    if (handler == 0) {
-        return -0x12;
-    }
-    callback = handler->start;
-    if (callback != 0) {
-        return callback();
-    }
-
-    return -1;
-}
-
-int Pm_Exec(int arg0) {
-    PmSlotHeader *entry;
-    int state;
-    int cmd;
-    PmCommand *handler;
-    int (*callback)(PmSlotHeader *);
-    PmCommand **table;
-    unsigned int i;
-
-    if ((unsigned int)arg0 >= 0x16) {
-        return -0x13;
-    }
-
-    if ((unsigned int)arg0 >= 0xB) {
-        int idx;
-        int offset_hi;
-        idx = arg0 - 0xB;
-        offset_hi = idx << 4;
-        offset_hi += idx;
-        offset_hi <<= 2;
-        offset_hi -= idx;
-        entry = (PmSlotHeader *)(g_PmSlotTable2Raw + (offset_hi << 2));
-    } else {
-        entry = &g_PmSlotTableTyped[arg0].header;
-    }
-
-    state = entry->state;
-    if (((unsigned int)(state - 1) >= 2U) && ((unsigned int)(state - 4) >= 2U)) {
-        return 0;
-    }
-
-    {
-        int state2;
-        asm volatile("" ::: "memory");
-        state2 = entry->state;
-        state = state2;
-    }
-    if (state == 4) {
-        entry->state = 5;
-        return 0;
-    }
-    if (state == 5) {
-        if ((unsigned int)arg0 < 0x16) {
-            PmSlotHeader *cleanup;
-
-            if ((unsigned int)arg0 >= 0xB) {
-                int idx;
-                int offset_hi;
-                idx = arg0 - 0xB;
-                offset_hi = idx << 4;
-                offset_hi += idx;
-                offset_hi <<= 2;
-                offset_hi -= idx;
-                cleanup = (PmSlotHeader *)(g_PmSlotTable2Raw + (offset_hi << 2));
-            } else {
-                cleanup = &g_PmSlotTableTyped[arg0].header;
-            }
-            if (cleanup->command == 0x72) {
-                for (i = 0x6C; i < 0x73; i++) {
-                    g_PmAuxiliaryPointerTable.entries[i - 0x6C] = 0;
-                }
-                D_800B0CD8 &= 0xFFFEFFFF;
-            }
-            cleanup->state = 0;
-            cleanup->command = -1;
-            cleanup->field02 = -1;
-            cleanup->field03 = -1;
-            cleanup->ticks = 0;
-            cleanup->owner = 0;
-        }
-        return 0;
-    }
-
-    if (state == 1) {
-        entry->state = 2;
-    }
-
-    cmd = entry->command;
-    if ((unsigned int)cmd >= 0xC0) {
-        return -0x14;
-    }
-    if ((unsigned int)cmd >= 0x55) {
-        cmd = 0x55;
-    }
-
-    table = g_PmCmdHandlerTable;
-    handler = table[cmd];
-    if (handler == 0) {
-        return -0x15;
-    }
-    callback = handler->execute;
-    if (callback != 0) {
-        int ret = callback(entry);
-        entry->ticks = entry->ticks + 1;
-        return ret;
-    }
-
-    return -1;
-}
-
-int Pm_Stop(int arg0, int arg1, int arg2) {
-    register int state asm("$3");
-    PmCommand *handler;
-    int (*callback)(void);
-    int result;
-    int orig;
-    unsigned int i;
-
-    orig = arg0;
-    if ((unsigned int)orig >= 0x16) {
-        return -0x16;
-    }
-
-    if ((unsigned int)orig >= 0xB) {
-        int idx;
-        int offset_hi;
-        idx = orig - 0xB;
-        offset_hi = idx << 4;
-        offset_hi += idx;
-        offset_hi <<= 2;
-        offset_hi -= idx;
-        arg0 = (int)(g_PmSlotTable2Raw + (offset_hi << 2));
-    } else {
-        arg0 = (int)&g_PmSlotTableTyped[orig];
-    }
-    state = *(u8 *)arg0;
-    if ((state == 0) || (state == 6)) {
-        return 0;
-    }
-    if (arg2 == 0) {
-        if (((PmSlotHeader *)arg0)->owner != (void *)arg1) {
-            return 0;
-        }
-    }
-
-    arg1 = ((PmSlotHeader *)arg0)->command;
-    if ((unsigned int)arg1 >= 0xC0) {
-        return -0x17;
-    }
-    if ((unsigned int)arg1 >= 0x55) {
-        arg1 = 0x55;
-    }
-
-    handler = g_PmCmdHandlerTable[arg1];
-    if (handler == 0) {
-        return -0x18;
-    }
-    callback = handler->stop;
-    if (callback == 0) {
+    if (handler->send == 0) {
         return -1;
     }
-
-    result = callback();
-
-    if ((unsigned int)orig < 0x16) {
-        if ((unsigned int)orig >= 0xB) {
-            int idx;
-            int offset_hi;
-            idx = orig - 0xB;
-            offset_hi = idx << 4;
-            offset_hi += idx;
-            offset_hi <<= 2;
-            offset_hi -= idx;
-            arg1 = (int)(g_PmSlotTable2Raw + (offset_hi << 2));
-        } else {
-            arg1 = (int)&g_PmSlotTableTyped[orig];
-        }
-        if (((PmSlotHeader *)arg1)->command == 0x72) {
-            for (i = 0x6C; i < 0x73; i++) {
-                g_PmAuxiliaryPointerTable.entries[i - 0x6C] = 0;
-            }
-            D_800B0CD8 &= 0xFFFEFFFF;
-        }
-        ((PmSlotHeader *)arg1)->state = 0;
-        ((PmSlotHeader *)arg1)->command = -1;
-        ((PmSlotHeader *)arg1)->field02 = -1;
-        ((PmSlotHeader *)arg1)->field03 = -1;
-        ((PmSlotHeader *)arg1)->ticks = 0;
-        ((PmSlotHeader *)arg1)->owner = 0;
+    if (arg1 == 1 && arg2 == 0) {
+        *(int *)arg3 = entry->field02;
+        *(int *)arg4 = entry->field03;
+        *(int *)arg5 = entry->ticks;
     }
-
-    return result;
+    return g_PmCmdHandlerTable[cmd]->send(entry, arg1, arg2, arg3, arg4, arg5);
 }
 
-static inline void clearSlot(int slot)
+int Pm_SetGetState(int slot, int set, int value) {
+    PmSlotHeader *entry;
+    int cmd;
+
+    if ((unsigned int)slot >= 22) {
+        return -13;
+    }
+    entry = SlotHeader(slot);
+    cmd = entry->command;
+    if ((unsigned int)cmd >= 0x55) {
+        cmd = 0x55;
+    }
+    if (g_PmCmdHandlerTable[cmd] == 0) {
+        return -15;
+    }
+    if (set == 0) {
+        if ((unsigned int)value < 6) {
+            entry->state = value;
+        }
+    } else {
+        *(int *)value = entry->state;
+    }
+    return entry->state;
+}
+
+int Pm_Start(int slot) {
+    PmSlotHeader *entry;
+    int cmd;
+    PmCommand *handler;
+
+    if ((unsigned int)slot >= 22) {
+        return -16;
+    }
+    entry = SlotHeader(slot);
+    if ((unsigned int)(entry->state - 1) >= 2) {
+        return 0;
+    }
+    cmd = entry->command;
+    if ((unsigned int)cmd >= 0xC0) {
+        return -17;
+    }
+    if ((unsigned int)cmd >= 0x55) {
+        cmd = 0x55;
+    }
+    handler = g_PmCmdHandlerTable[cmd];
+    if (handler == 0) {
+        return -18;
+    }
+    if (handler->start != 0) {
+        return handler->start(entry);
+    }
+    return -1;
+}
+
+static inline void ClearSlot(int slot)
 {
     PmSlotHeader *entry;
     unsigned int i;
+
     if ((unsigned int)slot < 22) {
-        if ((unsigned int)slot >= 11) {
-            /* Signed byte offset preserves the retail loop strength reduction. */
-            entry = (PmSlotHeader *)((u8 *)g_PmSlotTable2Typed +
-                (slot - 11) * (int)sizeof(PmSecondarySlot));
-        } else {
-            entry = &g_PmSlotTableTyped[slot].header;
-        }
+        entry = SlotHeader(slot);
         if (entry->command == 0x72) {
-            for (i = 0x6C; i < 0x73; ++i)
-                g_PmSlotBufferTyped[i] = 0;
+            for (i = 0x6C; i < 0x73; i++) {
+                g_FieldAnimTaskPrograms[i - 85] = 0;
+            }
             g_GameState.flags &= ~0x10000;
         }
         entry->state = 0;
@@ -543,6 +236,92 @@ static inline void clearSlot(int slot)
         entry->owner = 0;
     }
 }
+
+int Pm_Exec(int slot) {
+    PmSlotHeader *entry;
+    int state;
+    int cmd;
+    PmCommand *handler;
+    int ret;
+
+    if ((unsigned int)slot >= 22) {
+        return -19;
+    }
+    entry = SlotHeader(slot);
+    state = entry->state;
+    if ((unsigned int)(state - 1) >= 2 && (unsigned int)(state - 4) >= 2) {
+        return 0;
+    }
+    /* Matching debt: retail re-reads the state here; without the barrier
+     * delayed-branch scheduling drops the second load. */
+    asm volatile("" ::: "memory");
+    if (entry->state == 4) {
+        entry->state = 5;
+        return 0;
+    }
+    if (entry->state == 5) {
+        ClearSlot(slot);
+        return 0;
+    }
+    if (entry->state == 1) {
+        entry->state = 2;
+    }
+    cmd = entry->command;
+    if ((unsigned int)cmd >= 0xC0) {
+        return -20;
+    }
+    if ((unsigned int)cmd >= 0x55) {
+        cmd = 0x55;
+    }
+    handler = g_PmCmdHandlerTable[cmd];
+    if (handler == 0) {
+        return -21;
+    }
+    if (handler->execute != 0) {
+        ret = handler->execute(entry);
+        entry->ticks++;
+        return ret;
+    }
+    return -1;
+}
+
+int Pm_Stop(int slot, void *owner, int force) {
+    PmSlotHeader *entry;
+    int state;
+    int cmd;
+    PmCommand *handler;
+    int result;
+
+    if ((unsigned int)slot >= 22) {
+        return -22;
+    }
+    entry = SlotHeader(slot);
+    state = entry->state;
+    if (state == 0 || state == 6) {
+        return 0;
+    }
+    if (force == 0 && entry->owner != owner) {
+        return 0;
+    }
+    cmd = entry->command;
+    if ((unsigned int)cmd >= 0xC0) {
+        return -23;
+    }
+    if ((unsigned int)cmd >= 0x55) {
+        cmd = 0x55;
+    }
+    handler = g_PmCmdHandlerTable[cmd];
+    if (handler == 0) {
+        return -24;
+    }
+    if (handler->stop == 0) {
+        return -1;
+    }
+    result = handler->stop(entry);
+    ClearSlot(slot);
+    return result;
+}
+
 int Scene_FreeEntityTable(void *owner)
 {
     int result;
@@ -551,231 +330,71 @@ int Scene_FreeEntityTable(void *owner)
         return -25;
     result = 0;
     for (i = 0; i < 11; ++i) {
-        PmSlotHeader *entry = &g_PmSlotTableTyped[i].header;
+        PmSlotHeader *entry = &g_PmSlotTable[i].header;
         if (entry->owner == owner) {
-            result = Pm_Stop(i, (int)owner, 1);
+            result = Pm_Stop(i, owner, 1);
             if (result)
                 return result;
-            clearSlot(i);
+            ClearSlot(i);
         }
     }
     for (i = 0; i < 11; ++i) {
-        PmSlotHeader *entry = &g_PmSlotTable2Typed[i].header;
+        PmSlotHeader *entry = &g_PmSlotTable2[i].header;
         if (entry->owner == owner) {
-            result = Pm_Stop(i + 11, (int)owner, 1);
+            result = Pm_Stop(i + 11, owner, 1);
             if (result)
                 return result;
-            clearSlot(i + 11);
+            ClearSlot(i + 11);
         }
     }
     return result;
 }
 
-#include "Pm_ProcessManager_externs_1.h"
 s32 Pm_StopAll(void) {
-    u8 *clear_base;
-    u8 *base_v0;
-    u32 *var_v1;
-    s32 var_a2;
-    s32 var_s1;
-    s32 var_s2;
-    s32 var_v0;
-    u32 var_a0;
-    u32 var_s0;
-    u8 temp_v1;
-    PmSlotHeader *var_a1;
+    int i;
+    int result;
+    u32 command;
 
-    var_a2 = 0;
-    var_s0 = 0;
-    clear_base = (u8 *)g_PmSlotBufferTyped;
-    var_s2 = -0xB84;
-    var_s1 = 0;
-loop_1:
-    base_v0 = (u8 *)g_PmSlotTableRaw;
-    temp_v1 = ((PmSlotHeader *)(base_v0 + var_s1))->command;
-    if ((temp_v1 < 8U) || ((temp_v1 - 0x55) < 0x1EU)) {
-        var_v0 = Pm_Stop(var_s0, (int)g_PlayerEntity, 1);
-        var_a2 = var_v0;
-        asm volatile("" : "=r"(var_a2) : "0"(var_a2));
-        if (var_a2 == 0) {
-            if (var_s0 < 0x16U) {
-                if (var_s0 >= 0xBU) {
-                    var_a1 = (PmSlotHeader *)(g_PmSlotTable2Raw + var_s2);
-                } else {
-                    base_v0 = (u8 *)g_PmSlotTableRaw;
-                    var_a1 = (PmSlotHeader *)(base_v0 + var_s1);
-                }
-                if (var_a1->command == 0x72) {
-                    var_a0 = 0x6C;
-                    var_v1 = (s32 *)(clear_base + 0x1B0);
-                    do {
-                        *var_v1 = 0;
-                        var_a0 += 1;
-                        var_v1 += 1;
-                    } while (var_a0 < 0x73U);
-                    D_800B0CD8 &= 0xFFFEFFFF;
-                }
-                var_a1->state = 0;
-                var_a1->command = 0xFFU;
-                var_a1->field02 = 0xFFU;
-                var_a1->field03 = 0xFFU;
-                var_a1->ticks = 0;
-                var_a1->owner = 0;
+    result = 0;
+    for (i = 0; i < 11; i++) {
+        PmSlotHeader *entry = &g_PmSlotTable[i].header;
+        command = entry->command;
+        if (command < 8 || command - 0x55 < 0x1E) {
+            result = Pm_Stop(i, g_PlayerEntity, 1);
+            if (result != 0) {
+                return result;
             }
-        } else {
-            return var_v0;
+            ClearSlot(i);
         }
     }
-    var_s2 += 0x10C;
-    var_s0 += 1;
-    var_s1 += 0xA0C;
-    if ((s32)var_s0 >= 0xB) {
-        var_v0 = var_a2;
-    } else {
-        goto loop_1;
-    }
-    return var_v0;
+    return result;
 }
 
-/* Both passes share the PM slot ABI but walk their banks in opposite order. */
 s32 Pm_StopUpperHalf(void) {
-    u32 loop_index;
-    u8 *clear_base;
-    s32 table1_offset;
-    s32 table2_offset;
-    u32 slot;
-    s32 result;
-    PmSlotHeader *entry;
-    u8 *base;
-    register u32 fill asm("$2");
-    u32 marker;
-    u32 clear_index;
-    u32 *clear_ptr;
-    s32 game_state;
+    int i;
+    int result;
 
-    loop_index = 0;
-    clear_base = (u8 *)g_PmSlotBufferTyped;
-    table2_offset = 0x6E84;
-    table1_offset = 0;
-    slot = 0xB;
-    do {
-        {
-            s32 arg0 = slot;
-            s32 arg1 = 0;
-            s32 arg2 = 1;
-            result = Pm_Stop(arg0, arg1, arg2);
-        }
+    for (i = 0; i < 11; i++) {
+        result = Pm_Stop(i + 11, 0, 1);
         if (result != 0) {
             return result;
         }
-
-        if (slot < 0x16U) {
-            if (slot >= 0xBU) {
-                base = (u8 *)g_PmSlotTable2Typed;
-                entry = (PmSlotHeader *)(base + table1_offset);
-            } else {
-                base = (u8 *)g_PmSlotTableTyped;
-                entry = (PmSlotHeader *)(base + table2_offset);
-            }
-
-            marker = entry->command;
-            if (marker == 0x72) {
-                clear_index = 0x6C;
-                clear_ptr = (s32 *)(clear_base + 0x1B0);
-                do {
-                    *clear_ptr = 0;
-                    clear_index++;
-                    clear_ptr++;
-                } while (clear_index < 0x73U);
-                game_state = D_800B0CD8;
-                game_state &= 0xFFFEFFFF;
-                D_800B0CD8 = game_state;
-            }
-            fill = 0xFF;
-
-            entry->state = 0;
-            entry->command = fill;
-            entry->field02 = fill;
-            entry->field03 = fill;
-            entry->ticks = 0;
-            entry->owner = 0;
-        }
-
-        table2_offset += 0xA0C;
-        table1_offset += 0x10C;
-        loop_index++;
-        slot++;
-    } while ((s32)loop_index < 0xB);
-
+        ClearSlot(i + 11);
+    }
     return result;
 }
 
 s32 Pm_StopLowerHalf(void) {
-    u32 slot;
-    s32 table1_offset;
-    s32 table2_offset;
-    u8 *clear_base;
-    s32 result;
-    PmSlotHeader *entry;
-    u8 *base;
-    register u32 fill asm("$2");
-    u32 marker;
-    u32 clear_index;
-    u32 *clear_ptr;
-    s32 game_state;
+    int i;
+    int result;
 
-    slot = 0;
-    clear_base = (u8 *)g_PmSlotBufferTyped;
-    table1_offset = 0;
-    table2_offset = -0xB84;
-    do {
-        {
-            s32 arg0 = slot;
-            s32 arg1 = 0;
-            s32 arg2 = 1;
-            result = Pm_Stop(arg0, arg1, arg2);
-        }
+    for (i = 0; i < 11; i++) {
+        result = Pm_Stop(i, 0, 1);
         if (result != 0) {
             return result;
         }
-
-        if (slot < 0x16U) {
-            if (slot >= 0xBU) {
-                base = (u8 *)g_PmSlotTable2Typed;
-                entry = (PmSlotHeader *)(base + table2_offset);
-            } else {
-                base = (u8 *)g_PmSlotTableTyped;
-                entry = (PmSlotHeader *)(base + table1_offset);
-            }
-
-            marker = entry->command;
-            if (marker == 0x72) {
-                clear_index = 0x6C;
-                clear_ptr = (s32 *)(clear_base + 0x1B0);
-                do {
-                    *clear_ptr = 0;
-                    clear_index++;
-                    clear_ptr++;
-                } while (clear_index < 0x73U);
-                game_state = D_800B0CD8;
-                game_state &= 0xFFFEFFFF;
-                D_800B0CD8 = game_state;
-            }
-            fill = 0xFF;
-
-            entry->state = 0;
-            entry->command = fill;
-            entry->field02 = fill;
-            entry->field03 = fill;
-            entry->ticks = 0;
-            entry->owner = 0;
-        }
-
-        table1_offset += 0xA0C;
-        slot++;
-        table2_offset += 0x10C;
-    } while ((s32)slot < 0xB);
-
+        ClearSlot(i);
+    }
     return result;
 }
 

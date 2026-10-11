@@ -18,6 +18,7 @@ void ReturnFromException(void);
 void HookEntryInt(void *entry);
 void ChangeClearPAD(int mode);
 int ChangeClearRCnt(int counter, int enabled);
+void FlushCache(void);
 
 #define PE1_STRINGIFY_INNER(value) #value
 #define PE1_STRINGIFY(value) PE1_STRINGIFY_INNER(value)

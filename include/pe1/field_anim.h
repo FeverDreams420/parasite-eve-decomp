@@ -24,7 +24,7 @@ typedef struct FieldAnimTaskTable {
     u16 sizes[8];
 } FieldAnimTaskTable;
 
-/* Task program registered in D_800E1044: dispatch table, initializer and script. */
+/* Task program registered in g_FieldAnimTaskPrograms: dispatch table, initializer and script. */
 typedef struct FieldAnimTaskProgram {
     FieldAnimTaskTable table;
     int (*initialize)(int, int, int, int);
@@ -100,6 +100,8 @@ typedef struct FieldAnimTaskOwner {
     FieldAnimObjectPrefix prefix;
     FieldAnimTaskContext tasks;
 } FieldAnimTaskOwner;
+/* Binds task program `index` (g_FieldAnimTaskPrograms) to the owner's tasks. */
+int FieldAnim_BindTaskProgram(FieldAnimTaskOwner *owner, int index);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldAnimObjectPrefix, asset_type) == 1,
                   field_anim_owner_asset_type);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldAnimTaskOwner, tasks) == 0xC,

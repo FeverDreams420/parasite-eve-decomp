@@ -3,33 +3,38 @@
 
 #include "pe1/pm_types.h"
 
-int Scene_LoadRoomAssets(u32 command, void *owner);
-/* Stops the process in a slot; owner is compared as an address word. */
-int Pm_Stop(int slot, int owner, int mode);
-extern PmAuxiliaryPointerTable g_PmAuxiliaryPointerTable
-    __asm__("D_800E10A0");
+/* Process manager: 11 primary slots (0..10) and 11 secondary slots (11..21).
+ * Commands 0..84 dispatch through g_PmCmdHandlerTable; commands 85..191 all
+ * use handler 85, which runs field-animation task program (command - 85). */
+extern PmCommand **g_PmCmdHandlerTable;
+extern PmPrimarySlot *g_PmSlotTable;
+extern PmSecondarySlot *g_PmSlotTable2;
 
-#ifdef PE1_PM_LEGACY_RAW_VIEWS
-/* A few exact-match paths retain raw global views; typed operations use aliases
- * for the same linker symbols where the retail addressing permits it. */
-extern PmPrimarySlot *g_PmSlotTableTyped __asm__("g_PmSlotTable");
-extern PmSecondarySlot *g_PmSlotTable2Typed __asm__("g_PmSlotTable2");
-extern u32 g_PmSlotBufferTyped[] __asm__("g_PmSlotBuffer");
-extern PmPrimarySlot *g_PmSlotTable;
-extern PmSecondarySlot *g_PmSlotTable2;
-extern u32 g_PmSlotBuffer[];
-extern PmCommand **g_PmCmdHandlerTable;
-extern char *g_PmSlotTableRaw __asm__("g_PmSlotTable");
-extern char *g_PmSlotTable2Raw __asm__("g_PmSlotTable2");
-#else
-extern PmPrimarySlot *g_PmSlotTable;
-extern PmSecondarySlot *g_PmSlotTable2;
-extern u32 g_PmSlotBuffer[];
-extern PmCommand **g_PmCmdHandlerTable;
+/* Task programs of commands 108..114 (g_FieldAnimTaskPrograms[23..29]) are
+ * read on demand from PE.IMG sectors D_80093162[0..1] to g_PmTaskProgramBuffer. */
+extern u16 D_80093162[2];
+extern void *g_PmTaskProgramBuffer;
+extern u8 D_801F1BD8[], D_801F1C58[], D_801F1D00[], D_801F1D8C[];
+extern u8 D_801F1E18[], D_801F1EA4[], D_801F1EF0[];
+
+int Pm_AllocSlot(unsigned int command);
+int Pm_FreeSlot(int slot);
+int Scene_LoadRoomAssets(u32 command, void *owner);
+/* arg3..arg5 are values, or result addresses when arg1 == 1 and arg2 == 0. */
+int Pm_SendCmd(int slot, int arg1, int arg2, int arg3, int arg4, int arg5);
+/* set == 0 stores value (< 6) as the slot state; otherwise value is the
+ * address that receives the state. Returns the state. */
+int Pm_SetGetState(int slot, int set, int value);
+int Pm_Start(int slot);
+int Pm_Exec(int slot);
+/* Stops the process in a slot; unless forced, only when owner matches. */
+int Pm_Stop(int slot, void *owner, int force);
 int Scene_FreeEntityTable(void *owner);
-/* Callers pass the three result words as plain ints; Pm_ProcessManager.c
- * defines them as pointers. */
-int Pm_SendCmd(int command, int arg1, int arg2, int arg3, int arg4, int arg5);
-#endif
+/* Pm_StopAll and Pm_StopLowerHalf also return the first failing Pm_Stop
+ * result; the battle headers declare them void. */
+s32 Pm_StopUpperHalf(void);
+void Pm_StopAllBoth(void);
+int Pm_RunPrimary(void);
+int Pm_RunBatch(void);
 
 #endif

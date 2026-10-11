@@ -4,9 +4,9 @@
 #include "pe1/battle.h"
 
 /* Binds task program `index` to the owner's task context. */
-int func_800CE49C(FieldAnimTaskOwner *owner, int index)
+int FieldAnim_BindTaskProgram(FieldAnimTaskOwner *owner, int index)
 {
-    FieldAnimTaskProgram *program = D_800E1044[index];
+    FieldAnimTaskProgram *program = g_FieldAnimTaskPrograms[index];
 
     if (program == 0) {
         printf(D_800C2244, index);

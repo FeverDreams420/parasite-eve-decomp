@@ -151,7 +151,7 @@ retry_room:
             void **handler;
             unsigned int entry = index - 0x55;
 
-            handler = &D_800E1044[entry];
+            handler = &g_FieldAnimTaskPrograms[entry];
             if (*handler == 0) {
                 *handler = record[i].u.handler;
             }

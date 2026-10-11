@@ -2,13 +2,8 @@
  * slots, and the same for the secondary bank. Contiguous default-profile
  * pair sharing the game-state gating flags. */
 #include "pe1/pm.h"
-
-#include "Pm_RunBanks_externs.h"
-
-void Render_SetGteScreenOffset(void);
-void Render_ResetGteScreenOffset(void);
-int Pm_Start(int slot);
-int Pm_Exec(int slot);
+#include "pe1/game_state.h"
+#include "pe1/render_animation_frame.h"
 
 int Pm_RunPrimary(void) {
     int i;
