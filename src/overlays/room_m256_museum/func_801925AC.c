@@ -1,5 +1,5 @@
-#include "common.h"
-int func_801925AC(u8 *arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
+#include "pe1/room_m256_swing.h"
+int func_801925AC(RoomM256Swing *arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
     if (arg2 != 0x100) {
         if ((unsigned int)arg2 < 0x101) {
             if (arg2 != 0x19) {
@@ -15,20 +15,20 @@ int func_801925AC(u8 *arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
         if (arg1 != 1) {
             return 0;
         }
-        *(int *)(arg0 + 0x10) = arg3;
+        arg0->cycle.signal = (int *)arg3;
         *(int *)arg3 = arg1;
         goto done;
 
     }
 cmd_100:
-    *(s16 *)(arg0 + 0x22) = arg3;
-    *(s16 *)(arg0 + 0x24) = arg4;
+    arg0->cycle.angles[1] = arg3;
+    arg0->cycle.angles[2] = arg4;
     goto done;
 
 cmd_101:
-    *(s16 *)(arg0 + 0x28) = arg3;
-    *(s16 *)(arg0 + 0x2A) = arg4;
-    *(s16 *)(arg0 + 0x2C) = arg5;
+    arg0->cycle.durations[0] = arg3;
+    arg0->cycle.durations[1] = arg4;
+    arg0->cycle.durations[2] = arg5;
 
 done:
     return 0;

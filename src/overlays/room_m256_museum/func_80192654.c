@@ -1,63 +1,62 @@
 /* MASPSX_FLAGS: --expand-div */
-#include "common.h"
-
+#include "pe1/room_m256_swing.h"
+/* Cosine halves of the packed sine table words (pe1/gte_sine_table.h). */
 extern short D_800966EE[];
-extern int func_80192808(char *state);
 
-void func_80192680(char *state);
+extern int func_80192808(RoomM256Swing *state);
 
-void func_80192654(char *obj) {
-    char *slot = *(char **)(obj + 8);
+void func_80192680(RoomM256Swing *state);
 
-    if (slot[0xE] == 0xB) {
-        *(void (**)(void))(obj + 0xC) = (void (*)(void))func_80192680;
+void func_80192654(RoomM256Swing *obj) {
+    FieldActor *slot = obj->actor;
+
+    if (slot->mode == 0xB) {
+        obj->cycle.callback = (void (*)(void))func_80192680;
     }
 }
 
-void func_80192680(char *state) {
-    char *actor = *(char **)(state + 8);
-    char *base = state + 0xC;
+void func_80192680(RoomM256Swing *state) {
+    FieldActor *actor = state->actor;
+    RoomM256SwingCycle *base = &state->cycle;
     int first;
     int phase;
     int value;
     int timer;
     int baseValue;
 
-    if (state[0x1A] == 0) {
-        state[0x1A] = 1;
-        *(s16 *)(state + 0x32) = 0;
-        first = *(u16 *)(base + 0x14 + *(s16 *)(state + 0x1C) * 2);
-        *(s16 *)(state + 0x2E) = first;
-        *(s16 *)(state + 0x30) =
-            *(u16 *)(base + ((int)*(s16 *)(state + 0x1C) << 1) + 0x16) - first;
-        *(s16 *)(state + 0x34) =
-            *(u16 *)(base + 0x1C + *(s16 *)(state + 0x1C) * 2);
+    if (state->cycle.started == 0) {
+        state->cycle.started = 1;
+        state->cycle.tick = 0;
+        first = base->angles[state->cycle.segment];
+        state->cycle.startAngle = first;
+        state->cycle.sweep = base->angles[state->cycle.segment + 1] - first;
+        state->cycle.length = base->durations[state->cycle.segment];
     }
 
-    timer = *(u16 *)(state + 0x32) + 1;
-    phase = ((timer << 16) >> 5) / *(s16 *)(state + 0x34);
-    *(s16 *)(state + 0x32) = timer;
-    value = (-*(s16 *)((char *)D_800966EE + (phase & 0xFFF) * 4) + 0x1000) *
-            *(s16 *)(state + 0x30);
+    timer = (u16)state->cycle.tick + 1;
+    phase = ((timer << 16) >> 5) / state->cycle.length;
+    state->cycle.tick = timer;
+    value = (-D_800966EE[(phase & 0xFFF) * 2] + 0x1000) *
+            state->cycle.sweep;
     if (value < 0) {
         value += 0x1FFF;
     }
 
-    baseValue = *(u16 *)(state + 0x2E);
-    actor[0x25A] = 3;
-    actor[0x25B] = 2;
-    *(s16 *)(actor + 0x256) = baseValue + (value >> 13);
+    baseValue = (u16)state->cycle.startAngle;
+    actor->render_object.rotation_overrides[0].matrix_index = 3;
+    actor->render_object.rotation_overrides[0].flags = 2;
+    actor->render_object.rotation_overrides[0].y = baseValue + (value >> 13);
 
-    if (*(s16 *)(state + 0x32) >= *(s16 *)(state + 0x34)) {
-        *(s16 *)(state + 0x1C) = *(u16 *)(state + 0x1C) + 1;
-        if (*(s16 *)(state + 0x1C) >= 3) {
+    if (state->cycle.tick >= state->cycle.length) {
+        state->cycle.segment = (u16)state->cycle.segment + 1;
+        if (state->cycle.segment >= 3) {
             func_80192808(state);
         } else {
-            state[0x1A] = 0;
+            state->cycle.started = 0;
         }
     }
 
-    if (*(u16 *)(actor + 0x16) >= (u8)actor[0xF]) {
-        *(int *)(actor + 0x14) = 0;
+    if (actor->anim.parts.integer >= actor->action) {
+        actor->anim.fixed = 0;
     }
 }
