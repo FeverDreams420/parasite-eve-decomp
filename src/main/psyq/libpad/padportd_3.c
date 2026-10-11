@@ -8,9 +8,6 @@
 
 extern CardObj D_800A5B70[];
 extern int D_8009B764;
-/* Separate views prevent GCC from hoisting this IRQ-shared index. */
-extern int g_MemCardDmaNextIndex asm("D_8009B764");
-extern int g_MemCardDmaStoredIndex asm("D_8009B764");
 extern int D_8009B768;
 extern int g_MemCardPort2Present;
 extern int D_8009B77C[];
@@ -50,14 +47,14 @@ int MemCard_DmaCompleteCallback(int result) {
             }
         }
 
-        index = g_MemCardDmaNextIndex;
+        index = D_8009B764;
         asm("" : "=r"(control), "+r"(index) : "0"(D_8009B7BC));
         D_8009B768 = 0;
         asm volatile("" : : : "memory");
         control->control = 0;
         limit = g_MemCardPort2Present;
         index += 1;
-        g_MemCardDmaStoredIndex = index;
+        D_8009B764 = index;
         asm volatile("" : : : "memory");
         if (limit >= index) {
             nextResult = _padInitSioMode(
