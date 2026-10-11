@@ -12,7 +12,7 @@
 
 extern short D_80095750;
 extern short D_80095752;
-extern unsigned int *D_80095850;
+extern unsigned int *g_GpuGp0Ptr;
 void Gpu_ResetDmaWaitTimer(void);
 int Gpu_DmaTimeoutCheck(void);
 
@@ -60,19 +60,19 @@ int Gpu_WaitDmaComplete(RECT *rect, unsigned int *data)
     command = 0xA0000000;
     asm volatile("" : "+r"(command));
     *D_80095854.gp1 = 0x04000000;
-    *D_80095850 = 0x01000000;
-    port = D_80095850;
+    *g_GpuGp0Ptr = 0x01000000;
+    port = g_GpuGp0Ptr;
     if (variant) command = 0xB0000000;
     *port = command;
-    *D_80095850 = ((GpuRectWords *)rect)->position;
-    *D_80095850 = ((GpuRectWords *)rect)->size;
+    *g_GpuGp0Ptr = ((GpuRectWords *)rect)->position;
+    *g_GpuGp0Ptr = ((GpuRectWords *)rect)->size;
     --remainder;
     firstEnd = -1;
     /* The loop materializes its own sentinel after this first test. */
     asm volatile("" : "+r"(firstEnd) : "r"(remainder));
     if (remainder != firstEnd) {
         do {
-            *D_80095850 = *data++;
+            *g_GpuGp0Ptr = *data++;
         } while (--remainder != -1);
     }
     if (blocks) {
@@ -121,10 +121,10 @@ int Gpu_FlushDisplayBuffer(RECT *rect, unsigned int *data)
         } while (!(*D_80095854.gp1 & 0x04000000));
     }
     *D_80095854.gp1 = 0x04000000;
-    *D_80095850 = 0x01000000;
-    *D_80095850 = 0xC0000000;
-    *D_80095850 = ((GpuRectWords *)rect)->position;
-    *D_80095850 = ((GpuRectWords *)rect)->size;
+    *g_GpuGp0Ptr = 0x01000000;
+    *g_GpuGp0Ptr = 0xC0000000;
+    *g_GpuGp0Ptr = ((GpuRectWords *)rect)->position;
+    *g_GpuGp0Ptr = ((GpuRectWords *)rect)->size;
     readStatus = *D_80095854.gp1;
     asm volatile("" : "+r"(readStatus));
     firstMask = 0x08000000;
@@ -141,7 +141,7 @@ int Gpu_FlushDisplayBuffer(RECT *rect, unsigned int *data)
     asm volatile("" : "+r"(firstEnd) : "r"(remainder));
     if (remainder != firstEnd) {
         do {
-            *data++ = *D_80095850;
+            *data++ = *g_GpuGp0Ptr;
         } while (--remainder != -1);
     }
     if (blocks) {
