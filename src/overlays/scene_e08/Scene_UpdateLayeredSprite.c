@@ -8,9 +8,9 @@
 
 int func_80071A54(void);
 
-void func_801946D4(void *unused, char *control, char *state)
+void func_801946D4(void *unused, RoomFxControl *control, char *state)
 {
-    char *owner = (char *)func_800C2B50();
+    Ovl178Position *owner = func_800C2B50();
     /* Keeps the later history-copy loop based at its original offset. */
     register char *cursor asm("$6");
     s16 point[3];
@@ -43,17 +43,17 @@ void func_801946D4(void *unused, char *control, char *state)
     x = ((SceneLayeredSpriteState *)state)->center[0].parts.integer;
     y = ((SceneLayeredSpriteState *)state)->center[1].parts.integer;
     z = ((SceneLayeredSpriteState *)state)->center[2].parts.integer;
-    cursor = state + 0x38;
+    cursor = (char *)&((SceneLayeredSpriteState *)state)->layers[1];
     ((SceneLayeredSpriteState *)state)->layers[0].x = x;
     ((SceneLayeredSpriteState *)state)->layers[0].y = y;
     ((SceneLayeredSpriteState *)state)->layers[0].z = z;
     ((SceneLayeredSpriteState *)state)->layerSeeds[0] = ((SceneLayeredSpriteState *)state)->initialSeed;
     for (; count != 0; --count, cursor -= 8)
     {
-        *((RoomFxSeed8 *) (cursor + 0x86)) = *((RoomFxSeed8 *) (cursor + 0x7E));
+        ((SceneLayeredHistoryLane *)cursor)->olderEntry = ((SceneLayeredHistoryLane *)cursor)->entry;
     }
 
-    *((RoomFxSeed8 *) (state + 0x86)) = *((RoomFxSeed8 *) (state + 0x50));
+    ((SceneLayeredSpriteState *)state)->history[0] = *(RoomFxSeed8 *)&((SceneLayeredSpriteState *)state)->layers[4];
     /* The volatile reads preserve the retail load order. */
     zBase = ((SceneLayeredSpriteState *)state)->center[2].fixed;
     zVelocity = ((SceneLayeredSpriteState *)state)->velocity[2];
@@ -70,15 +70,15 @@ void func_801946D4(void *unused, char *control, char *state)
     zArg = (unsigned)(nextZ >> 16) << 16;
     if (Geo_PointInPoly(((unsigned)((SceneLayeredSpriteState *)state)->center[0].parts.integer) << 16, zArg, D_8009D248, screenLimit) == 0)
     {
-        *((u8 *) (control + 1)) = 2;
+        control->status = 2;
     }
-    if ((*((s16 *) (control + 2))) < 50)
+    if (control->frame < 50)
     {
         random = func_80071A54();
         ((SceneLayeredSpriteState *)state)->initialSeed.vector.y = (random % 1024) - 0x200;
         ground = &g_RoomFloorY->y;
         ((SceneLayeredSpriteState *)state)->initialSeed.vector.x = 0x400;
-        *((u16 *) (state + 0x24)) += 0x270;
+        ((SceneLayeredSpriteState *)state)->initialSeed.vector.z += 0x270;
         if ((((SceneLayeredSpriteState *)state)->center[1].fixed) < (*ground))
         {
             int gravity;
@@ -100,7 +100,7 @@ void func_801946D4(void *unused, char *control, char *state)
         ((SceneLayeredSpriteState *)state)->initialSeed.vector.x = 0x400;
         ((SceneLayeredSpriteState *)state)->initialSeed.vector.y = 0;
         ++(((SceneLayeredSpriteState *)state)->phase);
-        *((u16 *) (state + 0x24)) += 0x270;
+        ((SceneLayeredSpriteState *)state)->initialSeed.vector.z += 0x270;
         ((SceneLayeredSpriteState *)state)->velocity[0] -= (((SceneLayeredSpriteState *)state)->drift) * 8;
         ((SceneLayeredSpriteState *)state)->velocity[2] = rsin((((SceneLayeredSpriteState *)state)->phase) << 6) * 1500;
     }
@@ -112,6 +112,6 @@ void func_801946D4(void *unused, char *control, char *state)
     point[2] = pointValue;
     if (func_800C6B90(point, 0xC8))
     {
-        *((s16 *) (owner + 0x2C)) = 1;
+        owner->playerHit = 1;
     }
 }
