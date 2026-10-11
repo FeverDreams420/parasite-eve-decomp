@@ -3,17 +3,33 @@
 #include "pe1/render_prim.h"
 #include "pe1/psyq_gpu.h"
 
+/* A mesh entry seen as the address its self-relative array offsets add to. */
+typedef union GeomEntryAddress {
+    GeomEntry *entry;
+    u32 address;
+} GeomEntryAddress;
+
 /* Build both frame buffers of room-tile sprites and texture-page packets. */
 int Geo_LoadMeshEntry(GeomEntry *entry, RenderTilePacket *buffer, void **end)
 {
     register unsigned int paletteStart asm("$5") = D_800BD024;
-    unsigned int count = entry->prim_count;
-    u32 *positions = (u32 *)((u8 *)entry + entry->u28.pos_ptr);
-    RenderTileTexture *textures = (RenderTileTexture *)((u8 *)entry + entry->u2C.uv_ptr);
-    unsigned int pass = 0;
-    RenderTexturePagePacket *pages = (RenderTexturePagePacket *)(buffer + count * 2);
-    unsigned int shade = 128;
-    int paletteMax = paletteStart + 479;
+    GeomEntryAddress base;
+    unsigned int count;
+    u32 *positions;
+    RenderTileTexture *textures;
+    unsigned int pass;
+    RenderTexturePagePacket *pages;
+    unsigned int shade;
+    int paletteMax;
+
+    base.entry = entry;
+    count = entry->prim_count;
+    positions = (u32 *)(base.address + entry->u28.pos_ptr);
+    textures = (RenderTileTexture *)(base.address + entry->u2C.uv_ptr);
+    pass = 0;
+    pages = (RenderTexturePagePacket *)(buffer + count * 2);
+    shade = 128;
+    paletteMax = paletteStart + 479;
 
     entry->u30.prim = buffer;
     /* Byte-storage view retains the retail alias scheduling for this pointer
@@ -93,20 +109,21 @@ int Geo_TransformPoint(GeomEntry *entry, int x, int y, int depth) {
     depthWord = current->head.packed;
     sum += x;
     screenX = sum;
+    /* Keeps the unclamped x copy apart from the sum the clamp truncates;
+     * the pins reproduce retail moving the entry to $t0 and reusing $a0
+     * for y, which local allocation otherwise swaps. */
     asm volatile("" : "=r"(sum) : "0"(sum));
     depthWord >>= 20;
     depth += depthWord;
 
-    truncated = (short)sum;
     bound = current->bounds.minX;
     minimum = bound;
-    asm volatile("" : "=r"(bound) : "0"(bound));
-    comparison = truncated < bound;
     screenY += y;
+    truncated = (short)sum;
+    comparison = truncated < bound;
     if (!comparison) {
         bound = current->bounds.maxX;
         minimum = bound;
-        asm volatile("" : "=r"(bound) : "0"(bound));
         comparison = bound < truncated;
     }
     screenX = comparison ? minimum : screenX;
@@ -114,12 +131,10 @@ int Geo_TransformPoint(GeomEntry *entry, int x, int y, int depth) {
     bound = current->bounds.minY;
     truncated = sum >> 16;
     minimum = bound;
-    asm volatile("" : "=r"(bound) : "0"(bound));
     comparison = truncated < bound;
     if (!comparison) {
         bound = current->bounds.maxY;
         minimum = bound;
-        asm volatile("" : "=r"(bound) : "0"(bound));
         comparison = bound < truncated;
     }
     screenY = comparison ? minimum : screenY;
