@@ -1039,7 +1039,7 @@ void RoomLib_HandlerB(RoomEnt *obj) {
     RoomEnt *self = obj;
     char *state = (char *)&self->sub;
     RoomLink *link = self->link;
-    int previousY;
+    int previousValue;
     short *scratch;
     int result;
 
@@ -1121,17 +1121,17 @@ void RoomLib_HandlerB(RoomEnt *obj) {
         scratch[0x11] = 0;
         speedRaw = ((RoomLibHandlerBState *)state)->speed;
         speed = speedRaw >> 12;
-        previousY = y;
+        previousValue = y;
         scratch[0x12] = speed;
         phaseAgain = ((RoomLibHandlerBState *)state)->phaseValue;
-        nextY = previousY - phase;
+        nextY = previousValue - phase;
         if (phaseAgain < 0 && (nextY >> 16) >= ((RoomLibHandlerBState *)state)->floorY) {
             int numerator;
             int divisor;
 
             nextY = ((RoomLibHandlerBState *)state)->floorY << 16;
             numerator = (short)speed;
-            divisor = (previousY - nextY) >> 12;
+            divisor = (previousValue - nextY) >> 12;
             numerator *= divisor;
             divisor = RoomLib_ArcPhaseSpeed(phaseAgain);
             result = numerator;
@@ -1148,14 +1148,14 @@ void RoomLib_HandlerB(RoomEnt *obj) {
     link->pos[0] += ((RoomLibArcWork *)scratch)->point[0] << 12;
     link->pos[2] += ((RoomLibArcWork *)scratch)->point[2] << 12;
 
+    previousValue = ((RoomLibHandlerBState *)state)->phaseValue;
     {
-        register int previous asm("$5") = ((RoomLibHandlerBState *)state)->phaseValue;
         register int delta asm("$2") = ((RoomLibHandlerBState *)state)->mode;
         int enabled = ((RoomLibHandlerBState *)state)->heading;
-        register int current asm("$4") = previous - delta;
+        register int current asm("$4") = previousValue - delta;
         ((RoomLibHandlerBState *)state)->phaseValue = current;
         if (enabled != 0) {
-            register int crossed asm("$2") = previous ^ current;
+            register int crossed asm("$2") = previousValue ^ current;
 
             if (crossed < 0) {
                 ((RoomLibHandlerBState *)state)->callback = (void (*)(void))RoomLib_HandlerBPhase;
