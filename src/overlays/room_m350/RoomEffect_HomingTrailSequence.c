@@ -1,3 +1,4 @@
+#include "room_m350_data.h"
 #include "pe1/gte.h"
 #include "pe1/field_actor.h"
 #include "pe1/field_anim_callback_list.h"
@@ -23,7 +24,7 @@ int func_801947BC(int event,RoomM350Particle *p)
         int brightness;
         if(timer>=48) {
             int result=1;
-            unsigned short *count=(unsigned short *)&D_8019A802;
+            unsigned short *count=(unsigned short *)&D_8019A7FC.activeCount;
             *count=*count-1;
             return result;
         }
@@ -67,7 +68,7 @@ int func_801947BC(int event,RoomM350Particle *p)
                 if(ANIM_OWNER_AS(RoomM350EffectActor)->instance->owner) ANIM_OWNER_AS(RoomM350EffectActor)->instance->owner->flags|=0x80000000;
                 p->tail.value.active.speed=0;
                 if(p->tail.value.active.frame<40) p->tail.value.active.frame=40;
-                count=&D_8019A7FE; n=*count;
+                count=&D_8019A7FC.pointerCount; n=*count;
                 if(n<4) {
                     int next=n;
                     asm volatile("" : "=r"(next) : "0"(next));
@@ -81,7 +82,7 @@ int func_801947BC(int event,RoomM350Particle *p)
             }
         }
         if(p->tail.value.active.frame>=36 && !(p->tail.value.active.frame&3)) {
-            short *count=&D_8019A7FE;
+            short *count=&D_8019A7FC.pointerCount;
             short n=*count;
             if(n<4) {
                 int next=n;
@@ -95,7 +96,7 @@ int func_801947BC(int event,RoomM350Particle *p)
             }
         }
         {
-            short *count=&D_8019A800;
+            short *count=&D_8019A7FC.positionCount;
             unsigned short n=*(unsigned short *)count;
             int next=n+1;
             int shifted=(unsigned int)n<<16;
@@ -131,7 +132,7 @@ int func_80194CFC(int event) {
         RoomM350EffectInstance *instance;
         RoomM350Particle *particle;
         int frame, previous;
-        if (D_8019A804) return 2;
+        if (D_8019A7FC.completionFlags[0]) return 2;
         instance=ANIM_OWNER_AS(RoomM350EffectActor)->instance;
         if (instance->animation != 13) return 0;
         frame=instance->frame;
@@ -148,14 +149,14 @@ int func_80194CFC(int event) {
         }
         asm volatile("" : : : "memory");
         {
-            int count=D_8019A802;
+            int count=D_8019A7FC.activeCount;
             particle->tail.value.spawn.duration=16;
             particle->tail.value.spawn.frame=0;
             particle->tail.value.spawn.state=0;
             particle->tail.value.spawn.size=100-count*20;
         }
         asm volatile("" : : : "memory");
-        D_8019A802++;
+        D_8019A7FC.activeCount++;
     }
         break;
     case 2:

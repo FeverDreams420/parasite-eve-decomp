@@ -40,7 +40,7 @@ int func_8019569C(int event) {
         return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,8,10,
                              (FieldAnimCallbackListCallback)func_80195564);
         case 1:
-    if(D_8019A804) return 2;
+    if(D_8019A7FC.completionFlags[0]) return 2;
     {
         int frame=ANIM_OWNER_AS(Actor)->instance->frame;
         unsigned int relative=frame-7;

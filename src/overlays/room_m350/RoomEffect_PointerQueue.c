@@ -1,3 +1,4 @@
+#include "room_m350_data.h"
 #include "room_m350_shared.h"
 #include "pe1/room_m350_effects.h"
 #include "pe1/field_anim_callback_list.h"
@@ -43,9 +44,9 @@ int func_80195064(int event) {
         return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,8,16,
                              (FieldAnimCallbackListCallback)func_80194F04);
         case 1:
-    if (D_8019A804 && D_8019A802==0) return 2;
+    if (D_8019A7FC.completionFlags[0] && D_8019A7FC.activeCount==0) return 2;
     {
-        short *count=&D_8019A7FE;
+        short *count=&D_8019A7FC.pointerCount;
         if (*count) {
             int i;
             firstIndex=0;
@@ -64,7 +65,7 @@ int func_80195064(int event) {
                     position++;
                 } while (i<queue->count);
             }
-            D_8019A7FE=0;
+            D_8019A7FC.pointerCount=0;
         }
     }
         break;

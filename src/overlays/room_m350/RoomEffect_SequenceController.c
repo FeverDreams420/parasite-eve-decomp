@@ -25,9 +25,9 @@ int func_801958DC(int event) {
         }
         asm volatile("" : : : "memory");
         one=2;
-        D_8019A7FC=one;
-        D_8019A804=0; D_8019A805=0; D_8019A806=0;
-        D_8019A7FE=0; D_8019A800=0; D_8019A802=0;
+        D_8019A7FC.repeats=one;
+        D_8019A7FC.completionFlags[0]=0; D_8019A7FC.completionFlags[1]=0; D_8019A7FC.completionFlags[2]=0;
+        D_8019A7FC.pointerCount=0; D_8019A7FC.positionCount=0; D_8019A7FC.activeCount=0;
         asm volatile("" : : : "$2");
         return 0;
     }
@@ -46,7 +46,7 @@ int func_801958DC(int event) {
         gte_rtv0tr_mac();
         gte_stsv(&D_8019A7A0);
         if(instance->mode!=13) return 0;
-        repeat=&D_8019A7FC;
+        repeat=&D_8019A7FC.repeats;
         repetitions=*repeat;
         frame=instance->anim.parts.integer;
         if(repetitions>0) {
@@ -58,14 +58,14 @@ int func_801958DC(int event) {
                 *repeat=*(volatile unsigned short *)repeat-1;
             }
             if(frame<19) return 0;
-            speed=*(short *)&D_800966EC[((frame-19)*341)&4095].word;
+            speed=D_800966EC[((frame-19)*341)&4095].part.sin;
             speed/=32;
             angle=FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation,(Vec3Fixed *)instance->render_object.model_matrix.translation);
             instance->rot_y=FieldEng_TurnToward(instance->rot_y,(short)angle,speed);
         } else {
             if((short)frame>=instance->action-1) {
                 if(instance->state) instance->state->action_state[0]=4;
-                D_8019A804=1;
+                D_8019A7FC.completionFlags[0]=1;
                 return 1;
             }
         }

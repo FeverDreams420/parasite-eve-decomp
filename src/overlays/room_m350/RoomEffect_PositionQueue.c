@@ -48,9 +48,9 @@ int func_80195378(int event) {
         return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,12,50,
                              (FieldAnimCallbackListCallback)func_80195218);
         case 1:
-    if (D_8019A804 && D_8019A802==0) return 2;
+    if (D_8019A7FC.completionFlags[0] && D_8019A7FC.activeCount==0) return 2;
     {
-        short *count=&D_8019A800;
+        short *count=&D_8019A7FC.positionCount;
         if (*count) {
             int i;
             firstIndex=0;
@@ -70,7 +70,7 @@ int func_80195378(int event) {
                     position++;
                 } while(i<queue->count);
             }
-            D_8019A800=0;
+            D_8019A7FC.positionCount=0;
         }
     }
         break;

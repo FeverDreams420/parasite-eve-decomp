@@ -39,4 +39,14 @@ typedef struct RoomM350CloudTracking {
 } RoomM350CloudTracking;
 extern RoomM350CloudTracking D_8019A8B8;
 
+/* Shared counters for the homing trail producer and its two queue consumers. */
+typedef struct RoomM350TrailSequence {
+    short repeats;
+    short pointerCount;
+    short positionCount;
+    short activeCount;
+    unsigned char completionFlags[3];
+} RoomM350TrailSequence;
+extern RoomM350TrailSequence D_8019A7FC;
+
 #endif /* ROOM_M350_DATA_H */
