@@ -32,6 +32,36 @@ static const RoomFxSeed8 s_ThreeParticleSeed = {
     {0x04, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 };
 
+/* The effect owner state: the owner's actor, a copy of its view matrix
+ * (the translation is where the particles start), the reload timer, the
+ * landed flag and the sprite asset whose low byte selects the page. */
+typedef struct RoomDebrisClock {
+    struct RoomDebrisActor *actor;    /* 0x00 */
+    union {
+        RoomEffectWords8 words;
+        GteMatrix matrix;
+    } view;                           /* 0x04 */
+    unsigned short reload;            /* 0x24 */
+    s16 cooldown;                     /* 0x26 */
+    s16 landedFlag;                   /* 0x28 */
+    s16 pad2A;
+    union {
+        int index;
+        u8 page;
+    } asset;                          /* 0x2C */
+} RoomDebrisClock;
+
+/* The owner's actor: its view matrices. */
+typedef struct RoomDebrisActor {
+    u8 pad000[0x238];
+    RoomEffectWords8 *views;          /* 0x238 */
+} RoomDebrisActor;
+
+typedef struct RoomDebrisEntity {
+    u8 pad00[0x8];
+    RoomDebrisActor *actor;           /* 0x08 */
+} RoomDebrisEntity;
+
 int RoomLib_ThreeParticleNop0(void) {
     return 0;
 }
@@ -40,19 +70,19 @@ int RoomLib_ThreeParticleNop1(void) {
     return 0;
 }
 
-void RoomLib_InitThreeParticlePackets(char *arg0, void *arg1, char *state) {
+void RoomLib_InitThreeParticlePackets(RoomDebrisEntity *arg0, void *arg1, RoomDebrisClock *state) {
     RoomEffectWords8 *src;
-    int *table;
+    RoomDebrisActor *table;
 
     func_800C2B40(state);
-    *(void **)(state + 0x2C) = Asset_SearchByKeyType(0xA);
-    table = *(int **)(arg0 + 8);
-    *(int **)(state + 0x0) = table;
-    src = *(RoomEffectWords8 **)((char *)table + 0x238);
-    *(RoomEffectWords8 *)(state + 0x4) = *src;
-    *(s16 *)(state + 0x26) = 0;
-    *(s16 *)(state + 0x28) = 0;
-    *(s16 *)(state + 0x24) = *func_800C2B28(6);
+    state->asset.index = Asset_SearchByKeyType(0xA);
+    table = arg0->actor;
+    state->actor = table;
+    src = table->views;
+    state->view.words = *src;
+    state->cooldown = 0;
+    state->landedFlag = 0;
+    state->reload = *func_800C2B28(6);
 
     RoomLib_ThreeParticlePacket.offset = -0x64;
     RoomLib_ThreeParticleFloorPacket.code = 4;
@@ -77,18 +107,18 @@ void RoomLib_ThreeParticleNop3(void) {
 
 
 void RoomLib_UpdateThreeParticleTimer(int arg0, char *arg1, char *arg2) {
-    short *state = (short *)arg2;
+    RoomDebrisClock *state = (RoomDebrisClock *)arg2;
 
-    if (state[0x13] != 0) {
-        state[0x13]--;
+    if (state->cooldown != 0) {
+        state->cooldown--;
     }
 
-    if (state[0x14] == 1) {
-        int timer = state[0x13];
+    if (state->landedFlag == 1) {
+        int timer = state->cooldown;
 
-        state[0x14] = 0;
+        state->landedFlag = 0;
         if (timer == 0) {
-            state[0x13] = *(unsigned short *)(arg2 + 0x24);
+            state->cooldown = state->reload;
             func_800C6C18(arg0);
         }
     }
@@ -200,9 +230,9 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
         workState->size[i] = 0;
         workState->countdown[i] = (randomValue % 10) + 1;
         ((RoomDebrisTriplet *)timerCursor)->life[0] = *func_800C2B28(2);
-        ((RoomDebrisTriplet *)positionCursor)->position[0].x = *(s32 *)(clock + 0x18) << 16;
-        ((RoomDebrisTriplet *)positionCursor)->position[0].y = *(s32 *)(clock + 0x1C) << 16;
-        ((RoomDebrisTriplet *)positionCursor)->position[0].z = *(s32 *)(clock + 0x20) << 16;
+        ((RoomDebrisTriplet *)positionCursor)->position[0].x = ((RoomDebrisClock *)clock)->view.matrix.t[0] << 16;
+        ((RoomDebrisTriplet *)positionCursor)->position[0].y = ((RoomDebrisClock *)clock)->view.matrix.t[1] << 16;
+        ((RoomDebrisTriplet *)positionCursor)->position[0].z = ((RoomDebrisClock *)clock)->view.matrix.t[2] << 16;
         ((RoomDebrisTriplet *)velocityCursor)->rotation[0].x = 0;
         ((RoomDebrisTriplet *)velocityCursor)->rotation[0].y = 0;
         ((RoomDebrisTriplet *)velocityCursor)->rotation[0].z = 0;
@@ -265,7 +295,7 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
     RoomSpriteMatrix *inputArg;
     int frame;
     register s16 *callArgs asm("$7");
-    char *clock;
+    RoomDebrisClock *clock;
     int computedScale;
     int alpha;
     int baseScale;
@@ -279,7 +309,7 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
     secondaryMatrix = &stack.secondaryMatrix;
     positionCursor = (char *)workState;
     shortCursor = (char *)workState;
-    func_800C2EAC(*(u8 *)(clock + 0x2C));
+    func_800C2EAC(clock->asset.page);
     func_800C3098(0x10);
 
     for (; i < 3; i++) {
@@ -375,11 +405,6 @@ typedef struct RoomDebrisOwner {
     u8 phase;                     /* 0x01 */
     s16 angle;                    /* 0x02 */
 } RoomDebrisOwner;
-
-typedef struct RoomDebrisClock {
-    u8 reserved[0x28];
-    s16 landedFlag;               /* 0x28 */
-} RoomDebrisClock;
 
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomDebrisTriplet, position) == 0x3C,
                   room_debris_triplet_position_offset);
