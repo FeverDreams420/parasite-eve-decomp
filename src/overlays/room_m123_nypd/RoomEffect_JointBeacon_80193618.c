@@ -32,8 +32,8 @@ int func_80193618(int mode, RoomM123Beacon *state) {
             }
         }
         state->armed = 1;
-        D_80195698 = func_8006E498(D_800B0E64[0], 0xC5483704);
-        D_8019569C = func_8006E498(D_800B0E64[0], 0xC5883704);
+        D_80195698 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5483704);
+        D_8019569C = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5883704);
         func_800C6D5C((union FieldTexturedModel *)D_80195698, 0, 0);
         func_800C6D5C((union FieldTexturedModel *)D_8019569C, 0, 0xF0);
         return 0;

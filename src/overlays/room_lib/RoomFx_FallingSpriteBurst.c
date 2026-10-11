@@ -31,7 +31,7 @@ void RoomFx_FallingBurstInit(void *arg0, int unused, void *arg2) {
     char *self = arg0;
 
     func_800C2B40(state);
-    *(int *)(state + 0x10) = (int)func_8006DC18(0x28);
+    *(int *)(state + 0x10) = (int)Asset_SearchByKeyType(0x28);
     *(short *)(state + 0x6) = 0;
     *(short *)(state + 0x8) = 0;
     *(int *)(state + 0x0) = *(int *)(self + 0x8);

@@ -60,12 +60,12 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     register int c2 asm("$2");
 
     func_800C2B40(state);
-    D_80192C34 = func_8006E498(D_800B0E64[0], 0x498704);
+    D_80192C34 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0x498704);
     link = ent->link;
     state->link = link;
     matrix = (RoomLibFxMatrixWords *)link->p238;
     state->matrix = *matrix;
-    state->asset = func_8006DC18(0xE);
+    state->asset = Asset_SearchByKeyType(0xE);
 
     D_80192C0C = 0;
     D_80192C0D = 0;

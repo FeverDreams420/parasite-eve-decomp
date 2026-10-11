@@ -15,7 +15,7 @@ int func_801924E8(int mode, SceneE18SpinShell *shell) {
 
     switch (mode) {
     case 0:
-        D_801941C0 = func_8006E498(D_800B0E64[0], 0xC54C7704);
+        D_801941C0 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54C7704);
         func_800C6D5C(D_801941C0, 0, 0);
         shell->width = 0x400;
         shell->heightGrowth = 0x40;

@@ -46,7 +46,7 @@ void *RoomLib_InitPairedGlowSprite(char *obj, s32 arg1, char *state) {
     *(s16 *)(state + 0x2A) = 0;
     *(s16 *)(state + 0x2C) = 0;
     *(s16 *)(state + 0x28) = 0x1E;
-    *(void **)(state + 0x24) = func_8006DC18(0x23);
+    *(void **)(state + 0x24) = Asset_SearchByKeyType(0x23);
 
     g_RoomPairedGlowSprite.offset = -0x12C;
     g_RoomPairedGlowSprite.depth = 0x80;
@@ -56,7 +56,7 @@ void *RoomLib_InitPairedGlowSprite(char *obj, s32 arg1, char *state) {
     g_RoomPairedGlowSprite.g = 0x80;
     g_RoomPairedGlowSprite.b = 0x80;
     g_RoomPairedGlowSprite.zero = 0;
-    return g_RoomPairedGlowPacket = func_8006E498(D_800B0E64[0], 0xCB8704);
+    return g_RoomPairedGlowPacket = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xCB8704);
 }
 
 void RoomLib_PairedGlowNopA(void) {
@@ -127,7 +127,7 @@ void RoomLib_InitPairedEmitterWithSound(void *arg0, void *arg1,
 
     soundOwnerSlot = D_800B0E64;
     if (*soundOwnerSlot != 0) {
-        func_8006DF50(*soundOwnerSlot, 0x57E, 0, 0x80, 0x7F);
+        Akao_SendTableCommand(*soundOwnerSlot, 0x57E, 0, 0x80, 0x7F);
     }
 }
 

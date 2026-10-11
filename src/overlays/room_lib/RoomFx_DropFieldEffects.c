@@ -46,7 +46,7 @@ void RoomFx_DropFieldInit(RoomDropFieldEntity *ent, void *unused, RoomDropFieldS
     RoomDropFieldMatrixWords *matrix;
 
     func_800C2B40(state);
-    g_RoomDropFieldModel = func_8006E498(D_800B0E64[0], 0x118704);
+    g_RoomDropFieldModel = Asset_FindTable08ByU32Key(D_800B0E64[0], 0x118704);
 
     link = ent->link;
     state->link = link;
@@ -54,7 +54,7 @@ void RoomFx_DropFieldInit(RoomDropFieldEntity *ent, void *unused, RoomDropFieldS
     state->matrix0 = *matrix;
     matrix = (RoomDropFieldMatrixWords *)((char *)state->link->view + 0xA0);
     state->matrix1 = *matrix;
-    state->asset = func_8006DC18(9);
+    state->asset = Asset_SearchByKeyType(9);
 
     state->holdTimer = 0;
     state->hit = 0;

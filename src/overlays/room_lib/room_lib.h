@@ -17,6 +17,7 @@
 #include "pe1/field_vector_math.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/field_engine_slot.h"
+#include "pe1/pe_image.h"
 
 typedef struct RoomObj {
     char pad0[0xC];
@@ -586,7 +587,6 @@ typedef struct RoomLibPacked8 {
     int hi;
 } __attribute__((packed)) RoomLibPacked8;
 
-extern void *func_8006DC18(int type);
 
 /* Each room that links RoomLib_TwelveElementEffect defines the two packet
  * templates and the sprite table in its data. */

@@ -1,6 +1,7 @@
 #include "room_m273_boss.h"
 #include "pe1/gte.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/asset_find.h"
 
 /* Falling drop: queues its landing position, then knocks the player back on
  * contact; draws two rings before landing and a splash flash after. */
@@ -74,7 +75,6 @@ extern Vector D_8019AD60;
 extern unsigned short D_800E11E8;
 extern int func_8005186C(int);
 #include "pe1/gte_types.h"
-extern void func_8006DCE4(int,void *,int,int,int);
 
 int func_801969D8(int mode) {
     Vector playerPosition;
@@ -158,7 +158,7 @@ int func_801969D8(int mode) {
                 particle->position.pad=0; particle->touched=0;
                 i++;
             } while(i<4);
-            func_8006DCE4(0x5D1,((RoomM273EffectStateContext *)ANIM_OWNER_AS(RoomM273BossActor))->state.directed_rings->owner->value,D_8019AEFC.x,D_8019AEFC.y,D_8019AEFC.z);
+            Asset_Find08w(0x5D1,((RoomM273EffectStateContext *)ANIM_OWNER_AS(RoomM273BossActor))->state.directed_rings->owner->value,D_8019AEFC.x,D_8019AEFC.y,D_8019AEFC.z);
         }
         break;
     }

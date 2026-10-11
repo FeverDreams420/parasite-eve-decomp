@@ -20,9 +20,9 @@
 #include "pe1/floor_polygon.h"
 #include "pe1/gte_types.h"
 #include "pe1/psyq_libc.h"
+#include "pe1/pe_image.h"
 
 extern void func_800C2B40(void *arg0);
-extern void *func_8006DC18(int type);
 
 int *func_800C2B28(int index);
 
@@ -44,7 +44,7 @@ void RoomLib_InitThreeParticlePackets(char *arg0, void *arg1, char *state) {
     int *table;
 
     func_800C2B40(state);
-    *(void **)(state + 0x2C) = func_8006DC18(0xA);
+    *(void **)(state + 0x2C) = Asset_SearchByKeyType(0xA);
     table = *(int **)(arg0 + 8);
     *(int **)(state + 0x0) = table;
     src = *(RoomEffectWords8 **)((char *)table + 0x238);

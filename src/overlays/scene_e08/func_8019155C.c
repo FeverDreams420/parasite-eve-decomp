@@ -1,6 +1,9 @@
 #include "common.h"
 #include "../room_lib/room_lib.h"
 #include "pe1/scene_archive.h"
+#include "pe1/akao_send.h"
+#include "pe1/asset_find.h"
+#include "pe1/pe_image.h"
 
 typedef struct {
     s32 words[8];
@@ -13,9 +16,6 @@ typedef struct {
 } SceneE08InitState;
 
 extern void func_800C2B40(void *);
-extern void *func_8006DC18(int);
-extern int func_8006E498(void *, int);
-extern void func_8006DF50(void *, int, int, int, int);
 extern RoomLink *g_PlayerEntity;
 extern int D_80199528, D_8019956C, D_8019957C;
 extern u8 D_80199680, D_80199681, D_80199682, D_80199684, D_80199685, D_80199686;
@@ -39,11 +39,11 @@ void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
     register int playerZ asm("$3");
 
     func_800C2B40(state);
-    D_80199528 = func_8006E498(*sound, 0x10D8704);
+    D_80199528 = Asset_FindTable08ByU32Key(*sound, 0x10D8704);
     state->link = ent->link;
     matrix = (SceneE08MatrixWords *)state->link->p238;
     state->matrix = *matrix;
-    asset = func_8006DC18(0x2E);
+    asset = Asset_SearchByKeyType(0x2E);
     intensity = 0x80;
     state->asset = asset;
     mode = 8;
@@ -85,6 +85,6 @@ void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
     D_8019956C = playerX;
     D_8019957C = playerZ;
     if (handle != 0) {
-        func_8006DF50(*sound, 0x603, 0, 0x80, 0x7F);
+        Akao_SendTableCommand(*sound, 0x603, 0, 0x80, 0x7F);
     }
 }

@@ -37,7 +37,7 @@ void RoomLib_InitTwelveEffectPackets(char *obj, void *unused, char *state) {
     RoomLibFxMatrixWords *words;
 
     func_800C2B40(state);
-    *(void **)(state + 0x24) = func_8006DC18(0xB);
+    *(void **)(state + 0x24) = Asset_SearchByKeyType(0xB);
     owner = *(char **)(obj + 8);
     *(char **)state = owner;
     words = *(RoomLibFxMatrixWords **)(owner + 0x238);

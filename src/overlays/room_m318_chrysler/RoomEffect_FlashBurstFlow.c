@@ -120,9 +120,9 @@ int func_80195D20(int mode, RoomShakeBurstPoint *burst) {
             if (*soundSlot != 0) {
                 volume = 0x7F;
                 time = func_800D3FD8();
-                func_8006DF50(*soundSlot, 0x5E7, time, 0x80, volume);
+                Akao_SendTableCommand(*soundSlot, 0x5E7, time, 0x80, volume);
                 if (*(void *volatile *)soundSlot != 0)
-                    func_8006DF50(*soundSlot, 0x5E8, 0x80, 0x80, volume);
+                    Akao_SendTableCommand(*soundSlot, 0x5E8, 0x80, 0x80, volume);
             }
         }
         if (D_800E27EC == 3) {

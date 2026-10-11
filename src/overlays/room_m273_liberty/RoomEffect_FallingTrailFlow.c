@@ -2,6 +2,7 @@
 #include "room_m273_boss.h"
 #include "pe1/gte.h"
 #include "pe1/field_actor.h"
+#include "pe1/asset_find.h"
 
 
 typedef struct RoomM273RingController {
@@ -167,7 +168,6 @@ extern s16 D_8019ACA8;
 extern s16 D_8019AE6C, D_8019AE70, D_8019AE74, D_8019AE78;
 extern u8 D_8019AEF8, D_8019AEFA;
 extern int Inv_ScrambleGrid(void);
-extern void func_8006DCE4(int effect, int owner, int x, int y, int z);
 
 int func_801955E8(int mode) {
     s16 nextIndex;
@@ -298,7 +298,7 @@ particleSetup:
         D_8019AE70 = 6;
         D_8019AE6C++;
         matrices = actor->render_object.matrices;
-        func_8006DCE4(0x5D0, ((int *)actor->state)[2],
+        Asset_Find08w(0x5D0, ((int *)actor->state)[2],
                       ((s16 *)matrices[2].translation)[0],
                       ((s16 *)matrices[2].translation)[2],
                       ((s16 *)matrices[2].translation)[4]);

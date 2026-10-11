@@ -113,11 +113,11 @@ int func_80193638(int mode, RoomShakeSweepAnchor *anchor) {
         if (*soundSlot != 0) {
             volume = 0x7F;
             time = func_800D3FD8();
-            func_8006DF50(*soundSlot, 0x5EF, time, 0x80, volume);
+            Akao_SendTableCommand(*soundSlot, 0x5EF, time, 0x80, volume);
             /* Retail re-reads the sound owner for the test and again for
              * the argument. */
             if (*(void *volatile *)soundSlot != 0)
-                func_8006DF50(*soundSlot, 0x5F0, 0x80, 0x80, volume);
+                Akao_SendTableCommand(*soundSlot, 0x5F0, 0x80, 0x80, volume);
         }
         if (ANIM_TASK_AS(RoomShakeBurstEvent)->active) {
             pool = ANIM_OWNER_AS(RoomShakeBurstChannel)->pool;

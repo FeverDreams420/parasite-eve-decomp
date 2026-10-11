@@ -11,6 +11,7 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/asset_find.h"
 
 /* Scene e20 trail controller and its command/particle records.
  * Reserved members are observed offsets, not recovered field meanings. */
@@ -37,8 +38,6 @@ extern void *D_8019085C;
 int func_8018F750(int mode, SceneE20TrailEffect *effect, SceneEffectSlot *command);
 extern SceneEffectSlot D_80190860[];
 int func_80071A54(void);
-void *func_8006E498(void *archive, unsigned key);
-void func_8006DCE4(int sound, int volume, s16 x, s16 y, int z);
 #include "pe1/gte_types.h"
 int func_800C6B90(SceneE20Vec *position, int radius);
 void func_800CFAA8(SceneE20Vec *from, SceneE20Vec *to, SceneE20Vec *angles);

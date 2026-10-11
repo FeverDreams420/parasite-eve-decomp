@@ -101,11 +101,11 @@ int func_80195B40(int mode, SceneE22SwirlRing *swirl) {
         soundSlot = D_800B0E64;
         if (*soundSlot != 0) {
             volume = 0x7F;
-            func_8006DF50(*soundSlot, 0x5D6, func_800D3FD8(), 0x80, volume);
+            Akao_SendTableCommand(*soundSlot, 0x5D6, func_800D3FD8(), 0x80, volume);
             /* Retail re-reads the sound owner for the test and again for
              * the argument. */
             if (*(void *volatile *)soundSlot != 0)
-                func_8006DF50(*soundSlot, 0x5D7, 0x80, 0x80, volume);
+                Akao_SendTableCommand(*soundSlot, 0x5D7, 0x80, 0x80, volume);
         }
         func_800CE8F0(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, 0, &offset, swirl);
         return func_800CE560(ANIM_POOL_AS(SceneE22EmberChannel)->pool, 0x14, 0x28,

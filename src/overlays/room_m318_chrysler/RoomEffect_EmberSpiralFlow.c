@@ -165,13 +165,13 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
         if (*soundSlot != 0) {
             volume = 0x7F;
             time = func_800D3FD8();
-            func_8006DF50(*soundSlot, 0x5ED, time, 0x80, volume);
+            Akao_SendTableCommand(*soundSlot, 0x5ED, time, 0x80, volume);
             /* Retail re-reads the sound owner for the test and again for
              * the argument. */
             if (*(void *volatile *)soundSlot != 0)
-                func_8006DF50(*soundSlot, 0x5EE, 0x80, 0x80, volume);
+                Akao_SendTableCommand(*soundSlot, 0x5EE, 0x80, 0x80, volume);
         }
-        D_80199944 = (void *)func_8006E498(D_800B0E64[0], 0xC5509704);
+        D_80199944 = (void *)Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5509704);
         func_800C6D5C(D_80199944, 0, 0);
         if (ANIM_TASK_AS(RoomShakeBurstEvent)->active) {
             pool = ANIM_OWNER_AS(RoomShakeBurstChannel)->pool;

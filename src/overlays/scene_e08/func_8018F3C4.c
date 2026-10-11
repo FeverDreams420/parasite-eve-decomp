@@ -1,5 +1,6 @@
 #include "common.h"
 #include "../room_lib/room_lib.h"
+#include "pe1/pe_image.h"
 
 typedef struct {
     s32 w0;
@@ -35,7 +36,6 @@ extern Overlay178FxColor D_801994A8;
 extern Overlay178FxColor D_80199670;
 
 void func_800C2B40(void *arg0);
-void *func_8006DC18(s32 type);
 
 void func_8018F3C4(RoomEnt *ent, void *arg1, Overlay178InitState *state) {
     Overlay178MatrixWords *matrix;
@@ -45,7 +45,7 @@ void func_8018F3C4(RoomEnt *ent, void *arg1, Overlay178InitState *state) {
     state->link = ent->link;
     matrix = (Overlay178MatrixWords *)state->link->p238;
     state->matrix = *matrix;
-    state->asset = func_8006DC18(0x2E);
+    state->asset = Asset_SearchByKeyType(0x2E);
 
     D_80199670.t4 = 0x46;
     D_80199670.t5 = 3;

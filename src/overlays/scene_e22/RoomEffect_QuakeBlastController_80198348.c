@@ -25,11 +25,11 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
         fx->state = 0;
         fx->timer = 0;
         if (D_800B0E64[0]) {
-            func_8006DF50(D_800B0E64[0], 0x5DA, func_800D3FD8(), 0x80, 0x7F);
+            Akao_SendTableCommand(D_800B0E64[0], 0x5DA, func_800D3FD8(), 0x80, 0x7F);
         }
-        D_80199508 = func_8006E498(D_800B0E64[0], 0xC58C4704);
+        D_80199508 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC58C4704);
         func_800C6D5C(D_80199508, 0, 0);
-        D_8019950C = func_8006E498(D_800B0E64[0], 0xC5CC4704);
+        D_8019950C = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5CC4704);
         func_800C6D5C(D_8019950C, 0, 0);
         fx->position.x = target->x;
         fx->position.y = target->y;

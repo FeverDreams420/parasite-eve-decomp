@@ -13,6 +13,8 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/akao_send.h"
+#include "pe1/asset_find.h"
 
 /* Ember controllers (scene_e22): ride the room actor, wake the scene
  * object's status byte, spray ember drift particles and draw a halo and a
@@ -115,7 +117,6 @@ typedef struct SceneE22SwirlRing {
 extern GteRotation D_8018F1F4;
 extern RenderColor D_8018F214;
 extern u8 D_80199434[];
-extern void func_8006DF50(void *channel, int id, int value, int volume, int pan);
 extern int func_801957CC(int mode, RoomOrbitTrailParticle *p);
 
 /* Ember column controller (func_80194F60): its spin template and halo
@@ -150,7 +151,6 @@ typedef struct SceneE22ModelScale {
 
 extern void *D_80199500;
 extern RenderColor D_8018F218;
-extern void *func_8006E498(void *base, u32 key);
 extern void func_800C6EC0(int tpage, int clut);
 #include "pe1/gte_types.h"
 extern void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,

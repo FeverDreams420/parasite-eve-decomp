@@ -10,6 +10,7 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/akao_send.h"
 
 /* Orbiter effect controller state and the event flag it watches. */
 typedef struct RoomM005OrbiterState {
@@ -45,7 +46,6 @@ extern RoomM005Seed8 D_8018EFF4;
 extern u8 D_80190B84[];
 extern u8 D_80190B8C[];
 extern volatile u16 D_800E11E8;
-extern void func_8006DF50(void *channel, int id, int value, int volume, int pan);
 extern void func_800CE8F0(void *, int, void *, void *);
 extern int func_80071A54(void);
 extern void RoomM005_FxOrbiter_8018F018(void);

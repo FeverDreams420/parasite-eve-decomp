@@ -5,6 +5,7 @@
 #include "pe1/game_state.h"
 #include "pe1/pm_types.h"
 #include "pe1/scene_room_load.h"
+#include "pe1/asset_table.h"
 
 /* Scene startup and teardown callbacks; other handlers remain unidentified. */
 typedef PmCommand SceneAssetHandler;
@@ -243,7 +244,6 @@ typedef struct AkaoVoiceBankEntry {
     u16 ids[2];
 } AkaoVoiceBankEntry;
 extern AkaoVoiceBankEntry D_80094488[];
-void *Asset_FindTable08ByU32Key(void *base, s32 key);
 void *Asset_FindTable2CByU16Key(char *base, int key);
 void *Asset_FindTable30ByU16Key(char *base, int key);
 void Akao_LoadVoiceBankAlt(void);

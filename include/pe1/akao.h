@@ -5,6 +5,7 @@
 #include "pe1/akao/queue.h"
 #include "pe1/akao/commands.h"
 #include "pe1/akao/spu_voice.h"
+#include "pe1/akao_send.h"
 
 /*
  * Track structs are still intentionally partial in C files. The FF7/FF8 AKAO
@@ -27,7 +28,6 @@ extern AkaoInstrument D_800B2900[];
 extern unsigned D_8009D270, D_8009D1EC, D_8009D204, D_8009D2BC, D_8009D2E4;
 
 extern void * volatile g_AkaoBgmHandle;
-int Akao_SendTableCommand(void *table, int command, int arg1, int arg2, int arg3);
 
 int Spu_UploadSampleBlockBlocking(void *block, int mode);
 int Akao_SendPositionalCmdStereo(int arg0, int arg1, short x, short y, short z);

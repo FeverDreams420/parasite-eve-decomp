@@ -37,11 +37,11 @@ int func_801978EC(int mode, SceneE22EmberBurst *burst) {
         soundSlot = D_800B0E64;
         if (*soundSlot != 0) {
             volume = 0x7F;
-            func_8006DF50(*soundSlot, 0x5E5, func_800D3FD8(), 0x80, volume);
+            Akao_SendTableCommand(*soundSlot, 0x5E5, func_800D3FD8(), 0x80, volume);
             /* Retail re-reads the sound owner for the test and again for
              * the argument. */
             if (*(void *volatile *)soundSlot != 0)
-                func_8006DF50(*soundSlot, 0x5E6, 0x80, 0x80, volume);
+                Akao_SendTableCommand(*soundSlot, 0x5E6, 0x80, 0x80, volume);
         }
         func_800CE870((char *)RoomMain_ActorPtr, 1, (s16 *)burst);
         burst->y = g_RoomFloorY->y;

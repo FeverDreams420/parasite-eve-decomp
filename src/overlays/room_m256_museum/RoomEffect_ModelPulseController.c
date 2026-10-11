@@ -29,7 +29,7 @@ int func_80195728(int mode, s16 *state) {
     switch (mode) {
     case 0:
         *state = 0;
-        D_801960A8 = func_8006E498(D_800B0E64[0], 0xC5487704);
+        D_801960A8 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5487704);
         func_800C6D5C(D_801960A8, 0, 0);
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 8, 0x10,
                              (FieldAnimCallbackListCallback)func_8019552C);

@@ -1,5 +1,6 @@
 #include "common.h"
 #include "../room_lib/room_lib.h"
+#include "pe1/pe_image.h"
 
 typedef struct SceneE08MatrixWords {
     int words[8];
@@ -22,7 +23,6 @@ typedef struct SceneE08Color {
 
 extern SceneE08Color D_801994B8, D_801995A8, D_801995B8, D_80199690;
 extern void func_800C2B40(void *);
-extern void *func_8006DC18(int);
 
 void func_80190060(RoomEnt *ent, void *unused, SceneE08State *state) {
     SceneE08MatrixWords *matrix;
@@ -31,7 +31,7 @@ void func_80190060(RoomEnt *ent, void *unused, SceneE08State *state) {
     state->link = ent->link;
     matrix = (SceneE08MatrixWords *)state->link->p238;
     state->matrix = *matrix;
-    state->asset = func_8006DC18(0x2E);
+    state->asset = Asset_SearchByKeyType(0x2E);
     state->timer = 30;
     state->counter = 0;
     state->flag = 0;

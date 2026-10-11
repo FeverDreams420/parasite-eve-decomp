@@ -8,6 +8,8 @@
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/psyq_libc.h"
+#include "pe1/akao_send.h"
+#include "pe1/asset_find.h"
 
 /* The paired glow (src/overlays/room_lib/RoomLib_PairedGlow.c). */
 
@@ -19,8 +21,6 @@ extern unsigned char g_RoomPairedGlowColorTable[];
 
 
 int *func_800C2B10(int index);
-void *func_8006E498(void *owner, int id);
-void func_8006DF50(void *owner, int soundId, int arg2, int volume, int pan);
 void func_800C4E50(void *params);
 void func_800C6EC0(int arg0, int arg1);
 

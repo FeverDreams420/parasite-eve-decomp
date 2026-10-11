@@ -87,7 +87,7 @@ int RoomEffect_HomingProjectile(int mode) {
                 model->matrixIndex = 9;
                 if (frame >= 2) {
                     model->state = 1;
-                    model->soundHandle = func_8006DCE4(
+                    model->soundHandle = Asset_Find08w(
                         0x585, actor->core->sound,
                         (s16)actor->matrices[9].t[0],
                         (s16)actor->matrices[9].t[1],

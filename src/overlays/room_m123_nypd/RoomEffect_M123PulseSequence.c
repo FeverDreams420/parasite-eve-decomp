@@ -10,6 +10,7 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/akao_send.h"
 
 extern GteShortVector D_8018F1F0;
 
@@ -63,7 +64,6 @@ typedef struct RoomPulseGlobal {
 extern RoomPulseGlobal **D_8009D254;
 extern u16 D_800E11EA;
 extern int func_80194A70(int, RoomPulseParticle *, int *);
-extern void func_8006DF50(void *, int, int, int, int);
 
 int func_80194C04(int mode, RoomPulseParticle *particle)
 {
@@ -93,9 +93,9 @@ int func_80194C04(int mode, RoomPulseParticle *particle)
         if (soundSlot->channel != 0) {
             volume = 0x7F;
             time = func_800D3FD8();
-            func_8006DF50(soundSlot->channel, 0x582, time, 0x80, volume);
+            Akao_SendTableCommand(soundSlot->channel, 0x582, time, 0x80, volume);
             if (soundSlot->channel != 0)
-                func_8006DF50(soundSlot->channel, 0x5B1, 0x80, 0x80, volume);
+                Akao_SendTableCommand(soundSlot->channel, 0x5B1, 0x80, 0x80, volume);
         }
         return func_800CE560(ANIM_POOL_AS(RoomM123Pool)->pool, 12, 8,
                              (FieldAnimCallbackListCallback)func_80194A70);

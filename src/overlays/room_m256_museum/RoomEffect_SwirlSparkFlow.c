@@ -113,11 +113,11 @@ int func_80193BFC(int mode, s16 *counter) {
         if (*soundSlot != 0) {
             volume = 0x7F;
             time = func_800D3FD8();
-            func_8006DF50(*soundSlot, 0x5A7, time, 0x80, volume);
+            Akao_SendTableCommand(*soundSlot, 0x5A7, time, 0x80, volume);
             /* Retail re-reads the sound owner for the test and again for
              * the argument. */
             if (*(void *volatile *)soundSlot != 0)
-                func_8006DF50(*soundSlot, 0x5BF, 0x80, 0x80, volume);
+                Akao_SendTableCommand(*soundSlot, 0x5BF, 0x80, 0x80, volume);
         }
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x20,
                              (FieldAnimCallbackListCallback)func_8019377C);

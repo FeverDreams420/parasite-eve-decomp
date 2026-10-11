@@ -56,9 +56,9 @@ int func_80192A30(int mode, unsigned short *dst, unsigned short *src) {
         if (sound->channel != 0) {
             volume = 0x7F;
             random = func_800D3FD8();
-            func_8006DF50(sound->channel, 0x5BB, random, 0x80, volume);
+            Akao_SendTableCommand(sound->channel, 0x5BB, random, 0x80, volume);
             if (sound->channel != 0) {
-                func_8006DF50(sound->channel, 0x5BC, 0x80, 0x80, volume);
+                Akao_SendTableCommand(sound->channel, 0x5BC, 0x80, 0x80, volume);
             }
         }
     }

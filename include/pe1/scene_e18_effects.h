@@ -12,6 +12,7 @@
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/psyq_libc.h"
+#include "pe1/asset_find.h"
 
 /* Particle emitters of the scene_e18 script: one rises from random model
  * joints and fades out, the other drops wave rings from random joints. */
@@ -84,7 +85,6 @@ typedef struct SceneE18WaveParticle {
 
 extern u8 D_801941D0;
 
-extern int func_8006DCE4(int id, int channel, int x, int y, int z);
 extern int func_80052B2C(void);
 extern int func_80071A54(void);
 extern int func_80193488(int mode, SceneE18RisingParticle *particle);
@@ -107,7 +107,6 @@ typedef struct SceneE18FlankParticle {
 
 extern void *D_801941C4;
 extern s16 D_801941C8;
-extern void *func_8006E498(void *base, u32 key);
 extern void func_800C6EC0(int tpage, int clut);
 extern int func_801928CC(int mode, SceneE18FlankParticle *particle);
 

@@ -101,7 +101,7 @@ initialize:
             effect->position.y = (s16) (u16) effect->target.y;
             effect->position.z = (s16) (u16) effect->target.z;
             asm volatile("" : "=r"(assetKey) : "0"(assetKey) : "memory");
-            temp_v0 = func_8006E498(D_800B0E64[0], assetKey | 0x3704U);
+            temp_v0 = Asset_FindTable08ByU32Key(D_800B0E64[0], assetKey | 0x3704U);
             D_8019085C = temp_v0;
             func_800C6D5C(temp_v0, 0, 0);
             func_800D1384(&effect->position, &effect->position, 0x3EE, (unsigned char *)initColor0, (unsigned char *)initColor1, 0x80, (struct FieldTrailPair *)effect->history, initialMode);
@@ -128,7 +128,7 @@ update: {
         temp_v0_5 = (u16) effect->timer + 1;
         effect->timer = temp_v0_5;
         if ((temp_v0_5 == 1) && (func_80071A54() & 1)) {
-            func_8006DCE4(0x5FF, func_800D3FD8(), effect->position.x, effect->position.y, (s32) effect->position.z);
+            Asset_Find08w(0x5FF, func_800D3FD8(), effect->position.x, effect->position.y, (s32) effect->position.z);
         }
         temp_s3 = rsin((s32) (effect->timer << 0xA) / (s16) effect->duration);
         LoadAverageShort12(&effect->previousPosition, &effect->target, 0x1000 - temp_s3, temp_s3, &effect->position);
@@ -170,7 +170,7 @@ update: {
         temp_v0_7 = (u16) effect->timer + 1;
         effect->timer = temp_v0_7;
         if (temp_v0_7 == 1) {
-            func_8006DCE4(0x5FF, func_800D3FD8(), effect->position.x, effect->position.y, (s32) effect->position.z);
+            Asset_Find08w(0x5FF, func_800D3FD8(), effect->position.x, effect->position.y, (s32) effect->position.z);
         }
         temp_s3 = rsin((s32) (effect->timer << 0xA) / (s16) effect->duration);
         temp_s0_3 = 0x1000 - temp_s3;
@@ -202,7 +202,7 @@ update: {
                 temp_v0_10->timer = 0;
                 temp_v0_10->position.z = particleZ + effectZ;
             }
-            func_8006DCE4(0x600, 0x80, effect->position.x, effect->position.y, (s32) effect->position.z);
+            Asset_Find08w(0x600, 0x80, effect->position.x, effect->position.y, (s32) effect->position.z);
         }
         if (effect->timer >= 4) {
             effect->phase = 5;

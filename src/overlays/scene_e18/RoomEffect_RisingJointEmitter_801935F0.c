@@ -11,7 +11,7 @@ int func_801935F0(int mode, SceneE18EmitterState *state) {
         SceneE18Instance *instance = ANIM_OWNER_AS(SceneE18Actor)->instance;
         GteMatrix *matrix = instance->transforms;
 
-        func_8006DCE4(0x546, instance->owner->asset, (s16)matrix->t[0],
+        Asset_Find08w(0x546, instance->owner->asset, (s16)matrix->t[0],
                       (s16)matrix->t[1], (s16)matrix->t[2]);
         state->count = 0;
         state->delay = 60;
@@ -70,7 +70,7 @@ int func_801935F0(int mode, SceneE18EmitterState *state) {
         particle->position.pad = 0;
         state->delay = 4;
         state->count++;
-        func_8006DCE4(0x5FD, ANIM_OWNER_AS(SceneE18Actor)->instance->owner->asset,
+        Asset_Find08w(0x5FD, ANIM_OWNER_AS(SceneE18Actor)->instance->owner->asset,
                       particle->position.x, particle->position.y,
                       particle->position.z);
         break;

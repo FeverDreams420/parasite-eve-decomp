@@ -12,6 +12,7 @@
 #include "pe1/room_rising_spray.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_vector_math.h"
+#include "pe1/field_collision.h"
 
 /* The grab attack set (src/overlays/room_lib/RoomFx_GrabAttackSet.c, in
  * room_m269 and scene_e01). */
@@ -71,9 +72,8 @@ void func_8003E0FC(void *object, int count, void *out);
 void func_80020C74(void);
 void func_80020CE4(void);
 s32 func_8003010C(void *actor, s32 arg1);
-void func_8001AA78(FieldActor *actor);
 extern int func_8006DF50_handle(void *channel, int id, int value, int volume,
-                                int pan) __asm__("func_8006DF50");
+                                int pan) __asm__("Akao_SendTableCommand");
 void func_800866A4(int handle, int arg);
 void func_800D2B58(void *, void *, void *, void *, int, int, int);
 

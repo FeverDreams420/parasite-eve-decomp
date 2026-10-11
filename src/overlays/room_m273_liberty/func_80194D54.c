@@ -1,8 +1,8 @@
 #include "pe1/field_anim_pool.h"
+#include "pe1/asset_find.h"
 
 extern unsigned char D_8019AE9A;
 
-extern void func_8006DCE4(int arg0, void *arg1, int arg2, int arg3, int arg4);
 
 int func_80194D54(int mode) {
     unsigned char *obj;
@@ -44,7 +44,7 @@ mode_one:
         D_8019AE9A = 1;
     } else if ((short)frame > 0 && ((int)(timer << 16) <= 0)) {
         data = *(unsigned char **)(obj + 0x238);
-        func_8006DCE4(0x5CF, *(void **)(*(unsigned char **)obj + 8),
+        Asset_Find08w(0x5CF, *(void **)(*(unsigned char **)obj + 8),
                       *(short *)(data + 0x594), *(short *)(data + 0x598),
                       *(short *)(data + 0x59C));
     }

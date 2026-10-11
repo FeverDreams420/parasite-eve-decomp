@@ -9,7 +9,7 @@ int func_80191E30(int arg0)
     void *savedOutput;
     int result;
 
-    resource = func_8006EC6C(&D_801D0260, 3);
+    resource = Gpu_GetTimTableEntry(&D_801D0260, 3);
     PushMatrix();
     SetTransMatrix(&D_8019CC30);
     SetRotMatrix(&D_8019CC30);
@@ -18,7 +18,7 @@ int func_80191E30(int arg0)
     *matrixSlot = &D_8019CC30;
     savedOutput = D_800BCFA8;
     D_800BCFA8 = &size;
-    result = func_8006DF50(resource, arg0, 0, 0x80, 1);
+    result = Akao_SendTableCommand(resource, arg0, 0, 0x80, 1);
     *matrixSlot = savedMatrix;
     D_800BCFA8 = savedOutput;
     PopMatrix();

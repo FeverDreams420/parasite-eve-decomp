@@ -11,13 +11,13 @@
 #include "pe1/scene_archive.h"
 #include "pe1/gte_types.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/asset_find.h"
 
 /* ABI declarations used by the room_m256 effect dispatcher. */
 extern u16 D_800E11EA;
 extern int D_80195EF8;
 extern int func_801940B0(int mode, void *state);
 
-extern int func_8006E498(int, int);
 
 int func_80195320(int mode, u16 *out);
 

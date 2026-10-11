@@ -36,7 +36,7 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     sourceValue = source;
     /* The tied operand copies second unchanged after the other call arguments. */
     asm("" : "=r"(secondValue) : "0"(second), "r"(lookupTable), "r"(lookupCount), "r"(sourceValue));
-    base = func_8006EC6C(lookupTable, lookupCount);
+    base = Gpu_GetTimTableEntry(lookupTable, lookupCount);
     offset = (s16)rawIndex * 52;
     extraPtr = &extra;
     func_8018F55C(sourceValue, D_801EA378[offset], base, &point, extraPtr);
@@ -68,7 +68,7 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     D_8019C0B8 = pz;
 
     asm volatile("" : : : "5");
-    base = func_8006EC6C(nextTable, 2);
+    base = Gpu_GetTimTableEntry(nextTable, 2);
     func_8018F55C(sourceValue, D_801EA378[offset + 1], base, &point, extraPtr);
 
     asm volatile("" : "=r"(secondValue) : "0"(secondValue));

@@ -14,6 +14,8 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/akao_send.h"
+#include "pe1/asset_find.h"
 
 /* Room spark particles: damped velocity, gravity and a floor bounce against
  * the frame-count driven floor height. */
@@ -40,7 +42,6 @@ typedef struct RoomSparkChannel {
 extern RoomSparkChannel *D_800942E4;
 extern u16 D_800E11EA;
 extern int func_80071A54(void);
-extern void func_8006DF50(void *channel, int id, int value, int volume, int pan);
 
 /* Heading helpers and the trail history: turn the angles towards a target,
  * record a position into a history of points and draw the history as a
@@ -53,7 +54,6 @@ extern void func_800CEAE8(void *bone, s16 *offset, s16 *out);
 extern void func_800CF4B4(int kind, int value, void *layer);
 
 /* Asset library lookup and the model draw calls of the model effects. */
-void *func_8006E498(void *base, u32 key);
 void func_800C6EC0(int tpage, int clut);
 
 /* Jitter spark: the damped spark layout with a spin angle and a size. */

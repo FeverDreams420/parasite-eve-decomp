@@ -35,7 +35,7 @@ void RoomFx_OrbitSetInit(char *object, void *unused, char *state) {
     ((RoomOrbitSetState *)state)->owner = owner;
     source = owner->render_object.matrices;
     ((RoomOrbitSetState *)state)->matrix = *source;
-    allocation = func_8006DC18(0x24);
+    allocation = Asset_SearchByKeyType(0x24);
 
     callObject = object;
     ((RoomOrbitSetState *)state)->allocation = allocation;

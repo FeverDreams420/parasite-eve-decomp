@@ -4,6 +4,7 @@
 #include "pe1/room_fx.h"
 #include "pe1/field_script_context.h"
 #include "pe1/scene_archive.h"
+#include "pe1/akao_send.h"
 
 typedef struct {
     RoomFxEmitterParams emitters[2];
@@ -58,7 +59,6 @@ extern s16 D_80199590[];
 extern s16 D_80199658[];
 extern s32 D_8019956C;
 extern s32 D_8019957C;
-void func_8006DF50(void *sound, int cue, int arg2, int volume, int pan);
 void func_800C4E50(void *item);
 
 #endif

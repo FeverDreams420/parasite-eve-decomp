@@ -16,6 +16,7 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/asset_find.h"
 
 /* room_m086 falling seeker (func_8018F004): a turning model that flies
  * along its heading until it lands, bursts on the player (flagging the
@@ -103,7 +104,6 @@ extern u16 D_800E1208;
 int func_8018F004(int mode, RoomM086Seeker *seeker, RoomM086SeekerParams *params);
 void func_800CE8F0(void *owner, int joint, RoomM086Offset *offset, void *out);
 void func_800CEAE8(void *bone, RoomM086Offset *offset, void *out);
-void *func_8006E498(void *base, u32 key);
 int func_80071A54(void);
 
 #endif

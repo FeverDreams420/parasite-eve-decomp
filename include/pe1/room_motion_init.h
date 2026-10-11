@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/room_fx.h"
 #include "pe1/field_script_context.h"
+#include "pe1/pe_image.h"
 
 /* Motion particle setup shared by rooms m075, m080 and m082: copies three
  * frames from the owner's model, then seeds the five overlay glyph records
@@ -83,6 +84,5 @@ extern s16 g_RoomMotionQuadDepth;
 extern u8 g_RoomMotionQuadPacket[];
 extern u8 g_RoomMotionLookupCodes[];
 
-void *func_8006DC18(int type);
 
 #endif /* PE1_ROOM_MOTION_INIT_H */

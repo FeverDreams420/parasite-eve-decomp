@@ -7,6 +7,8 @@
 #include "pe1/gte_types.h"
 #include "pe1/render_matrix_slot.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/akao_send.h"
+#include "pe1/asset_tim.h"
 
 typedef struct FxCommonSelection {
     s16 record;
@@ -261,10 +263,8 @@ void func_80077BC4(FxCommonGradientQuad *packet);
 void func_80077B04(void *packet, int enabled);
 void func_800752AC(void *allocation, int size);
 s16 func_80193B5C(s16 value);
-void *func_8006EC6C(void *data, int count);
 int func_8018F55C(u32 position, int radius, void *allocation,
                    FxCommonMotionVec *vector, GteShortVector *angles);
-int func_8006DF50(void *resource, int arg1, int arg2, int arg3, int enabled);
 void *PushMatrix(void);
 int PopMatrix(void);
 void func_8006DFA8(FxCommonShortVec3 *input, int *outA, int *outB);

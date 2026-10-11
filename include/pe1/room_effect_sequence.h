@@ -7,6 +7,7 @@
 #include "pe1/field_script_context.h"
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_libc.h"
+#include "pe1/asset_find.h"
 
 /* The effect sequence (src/overlays/room_lib/RoomFx_EffectSequence.c):
  * the room data it fills and reads (the same addresses in all five rooms
@@ -44,7 +45,6 @@ extern u8 D_80192C3D;
 extern u8 D_80192C3E;
 extern s16 D_80192C40;
 extern s16 D_80192C42;
-extern void *func_8006E498(void *base, int id);
 extern int *func_800C2B28(int index);
 extern int *func_800C2B10(int index);
 /* Per-command handler table and state size table for func_800C2B90. */

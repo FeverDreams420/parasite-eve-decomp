@@ -3,13 +3,13 @@
 #include "pe1/geom_state.h"
 #include "room_m273.h"
 #include "pe1/floor_polygon.h"
+#include "pe1/field_collision.h"
 
 extern FieldActor *g_PlayerEntity;
 extern void **D_8009D254;
 void func_80020CE4(void);
 
 int func_8001CAB0(int x, int z, int *script, u16 mode);
-void func_8001AA78(FieldActor *actor);
 
 void func_80192C00(RoomPlacementOwner *owner, RoomPlacementState *state) {
     register FieldActor *player asm("$4") = g_PlayerEntity;
@@ -32,7 +32,7 @@ void func_80192C00(RoomPlacementOwner *owner, RoomPlacementState *state) {
     }
 
     player = g_PlayerEntity;
-    func_8001AA78(player);
+    Entity_FindFloor(player);
 
     {
         FieldActor *updatedPlayer = g_PlayerEntity;

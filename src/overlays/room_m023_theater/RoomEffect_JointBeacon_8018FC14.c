@@ -37,7 +37,7 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
             }
         }
         state->armed = 1;
-        D_80190760 = func_8006E498(D_800B0E64[0], 0xC5463704);
+        D_80190760 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5463704);
         func_800C6D5C((union FieldTexturedModel *)D_80190760, 0, 0);
         return 0;
     case 1:

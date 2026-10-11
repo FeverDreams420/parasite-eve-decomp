@@ -34,7 +34,7 @@ void RoomFx_MotionParticlesInit(RoomMotionInitOwner *owner, void *unused, RoomMo
     unsigned int i;
 
     func_800C2B40(state);
-    state->allocation = func_8006DC18(12);
+    state->allocation = Asset_SearchByKeyType(12);
     link = owner->link;
     state->link = link;
     state->base = link->model->base;

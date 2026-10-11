@@ -12,6 +12,8 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/akao_send.h"
+#include "pe1/asset_find.h"
 
 /* Scene e19 blast sequence: loads five shell models, then runs a five-state
  * charge/burst timeline at an actor position, spawning rising sparks while
@@ -57,8 +59,6 @@ extern void *D_8019B680, *D_8019B684, *D_8019B688, *D_8019B68C, *D_8019B690;
 
 int func_80192F9C(int mode, SceneE19Blast *blast);
 int func_80192E08(int mode, void *spark);
-void *func_8006E498(void *channel, u32 key);
-void func_8006DF50(void *channel, int sound, int time, int pan, int volume);
 int func_80071A54(void);
 #include "pe1/gte_types.h"
 int func_800C6B90(GteShortVector *position, int range);

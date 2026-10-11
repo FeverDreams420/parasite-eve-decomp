@@ -151,11 +151,11 @@ void func_80196498(void)
         g_FxTextureSetup[textureIndexOrHasPoints].clut = (g_FxTextureSetup[textureIndexOrHasPoints].h << 6) | (((u16) g_FxTextureSetup[textureIndexOrHasPoints].w >> 4) & 0x3F);
         textureIndexOrHasPoints++;
     } while (textureIndexOrHasPoints < 2);
-    if ((D_8019C008 != 0) || (func_800371B0(func_8006EC6C(&D_801D0260, 0)), (D_8019C008 != 0))) {
-        func_800371B0(func_8006EC6C(&D_801D0260, 1));
+    if ((D_8019C008 != 0) || (func_800371B0(Gpu_GetTimTableEntry(&D_801D0260, 0)), (D_8019C008 != 0))) {
+        func_800371B0(Gpu_GetTimTableEntry(&D_801D0260, 1));
     }
     resourceTableData = &D_801D0260;
-    resourceTable = func_8006EC6C(resourceTableData, 2);
+    resourceTable = Gpu_GetTimTableEntry(resourceTableData, 2);
     pointIndex = 0;
     initialSlots = g_FxCommonRuntime.pairedNodes;
     secondInitialSlot = initialSlots + 10;
@@ -367,14 +367,14 @@ void func_80196498(void)
         *yCursor = (s16) (u16)pointList->y;
         pointZ = (u16)pointList->z;
         *zCursor = (s16) pointZ;
-        firstInitialNode = func_80190C1C(&D_8019C340, *subtypeCursor, *variantCursor, *typeCursor, (void *) g_FxCommonEffectSetup[pointIndex].parameter38, (void *) g_FxCommonEffectSetup[pointIndex].parameter3c, func_8006EC6C(&D_8019CE10, 0));
+        firstInitialNode = func_80190C1C(&D_8019C340, *subtypeCursor, *variantCursor, *typeCursor, (void *) g_FxCommonEffectSetup[pointIndex].parameter38, (void *) g_FxCommonEffectSetup[pointIndex].parameter3c, Gpu_GetTimTableEntry(&D_8019CE10, 0));
         initialSlots[pointIndex] = firstInitialNode;
         firstInitialNode->state[1] = setupCursor->position[0];
         (initialSlots[pointIndex])->state[2] = (s32) *yCursor;
         (initialSlots[pointIndex])->state[3] = (s32) *zCursor;
         initialNode = initialSlots[pointIndex];
         (initialNode)->value2E = (u16) *rotationCursor;
-        initialResource = func_8006EC6C(&D_8019CE10, 0);
+        initialResource = Gpu_GetTimTableEntry(&D_8019CE10, 0);
         initialNodeType = *typeCursor;
         initialNodeVariant = *variantCursor;
         initialNodeSubtype = *subtypeCursor;
@@ -396,8 +396,8 @@ void func_80196498(void)
         pointList++;
         setupCursor++;
     }
-    nodeResource = func_8006EC6C(&D_8019CE10, 0);
-    g_FxCommonRuntime.node0 = func_80190AEC(&D_8019C340, func_8006EC6C(&D_8019CE10, 1));
+    nodeResource = Gpu_GetTimTableEntry(&D_8019CE10, 0);
+    g_FxCommonRuntime.node0 = func_80190AEC(&D_8019C340, Gpu_GetTimTableEntry(&D_8019CE10, 1));
     D_8019C180 = func_80190B78(&D_8019C340, 0x51, nodeResource);
     D_8019CDA0 = func_80190B78(&D_8019C340, 0x28, nodeResource);
     D_8019CDA4 = func_80190B78(&D_8019C340, 0x29, nodeResource);
@@ -471,7 +471,7 @@ void func_80196498(void)
     }
     g_FxCommonType26Nodes[3]->state[2] = 0xBB8;
     for (; groupIndex < 9; ++groupIndex) {
-        resourceData = func_8006EC6C(resourceTableData, 2);
+        resourceData = Gpu_GetTimTableEntry(resourceTableData, 2);
         resourceTable = (FxCommonOffsetTable *)((u8 *)resourceData + resourceOffset);
         pointOffset = resourceTable->offsets[0];
         pointIndex = 0;
@@ -529,7 +529,7 @@ void func_80196498(void)
     asm("" : : "r"((u16)motionBase) : "$16");
     variantOrMotionOffset = 0;
     for (; motionIndex < 10; ++motionIndex) {
-        func_8018F55C(motionIndex << 8, motionBase + 0x40, func_8006EC6C(resourceTableData, 2), &motion, &shortMotion);
+        func_8018F55C(motionIndex << 8, motionBase + 0x40, Gpu_GetTimTableEntry(resourceTableData, 2), &motion, &shortMotion);
         *((s32 *)((u8 *)D_8019CAA8 + variantOrMotionOffset)) = motion.x << 0x10;
         *((s32 *)((u8 *)D_8019CAAC + variantOrMotionOffset)) = motion.y << 0x10;
         *((s32 *)((u8 *)D_8019CAB0 + variantOrMotionOffset)) = motion.z << 0x10;
@@ -564,13 +564,13 @@ void func_80196498(void)
         D_8019C044 = 1;
         D_8019C048 = 1;
         D_8019BFF8 = 1;
-        func_8018F55C(0, selectedMotion + 1, func_8006EC6C(resourceTableData, 2), &motion, &shortMotion);
+        func_8018F55C(0, selectedMotion + 1, Gpu_GetTimTableEntry(resourceTableData, 2), &motion, &shortMotion);
         /* Shared volatile is scheduling debt in other callers; this store is ordinary. */
         *(s16 *)&D_8019C054 = 0;
         D_8019C810 = motion.x;
         D_8019C814 = motion.y;
         D_8019C818 = motion.z;
-        motionCount = func_8018F55C(0, selectedMotion, func_8006EC6C(resourceTableData, 2), &motion, &shortMotion) - 2;
+        motionCount = func_8018F55C(0, selectedMotion, Gpu_GetTimTableEntry(resourceTableData, 2), &motion, &shortMotion) - 2;
         D_8019C050 = 0;
         D_8019C040 = motionCount;
         D_8019C041 = 0;

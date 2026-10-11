@@ -25,9 +25,9 @@ int func_8018F330(int mode, RoomM005OrbiterState *state) {
             if (soundSlot->channel != 0) {
                 volume = 0x7F;
                 handle = func_800D3FD8();
-                func_8006DF50(soundSlot->channel, 0x5AB, handle, 0x80, volume);
+                Akao_SendTableCommand(soundSlot->channel, 0x5AB, handle, 0x80, volume);
                 if (soundSlot->channel != 0) {
-                    func_8006DF50(soundSlot->channel, 0x5AC, 0x80, 0x80, volume);
+                    Akao_SendTableCommand(soundSlot->channel, 0x5AC, 0x80, 0x80, volume);
                 }
             }
         }

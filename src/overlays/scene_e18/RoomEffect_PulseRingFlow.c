@@ -1,4 +1,5 @@
 #include "pe1/scene_e18_effects.h"
+#include "pe1/asset_find.h"
 
 /* Pulse ring particle: a pair of light rings around the room model that
  * shrink away. While it lives it advances the model's stage byte; the last
@@ -67,7 +68,6 @@ typedef struct SceneE18PulseState {
 } SceneE18PulseState;
 
 extern int func_80193018(int mode, SceneE18PulseRing *ring);
-extern int func_8006DCE4(int sound, int owner_value, int x, int y, int z);
 
 int func_8019330C(int mode, SceneE18PulseState *state) {
     SceneE18PulseParticle *particle;
@@ -100,7 +100,7 @@ update:
         FieldActor *actor = (FieldActor *)ANIM_OWNER_AS(SceneE18Actor)->instance;
         RenderMatrix *matrix = actor->render_object.matrices;
         FieldActorState *owner = actor->state;
-        func_8006DCE4(0x5C3, owner->progress,
+        Asset_Find08w(0x5C3, owner->progress,
                        (s16)matrix->translation[0],
                        (s16)matrix->translation[1],
                        (s16)matrix->translation[2]);

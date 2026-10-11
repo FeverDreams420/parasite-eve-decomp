@@ -1,6 +1,8 @@
 #ifndef PE1_ASSET_FIND_H
 #define PE1_ASSET_FIND_H
 
+#include "pe1/asset_table.h"
+
 /* Positional effect and sound triggers looked up by asset id
  * (Asset_SceneTablesAndSound.c). Callers pass the coordinates as ints;
  * the definitions narrow them to halfwords. */

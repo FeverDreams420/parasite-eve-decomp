@@ -13,6 +13,8 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/akao_send.h"
+#include "pe1/asset_find.h"
 
 /* Quake blast controller (scene_e22 func_80198348): a blast at the target
  * that lights the actor once it stands in reach, sprays sparks for six
@@ -91,8 +93,6 @@ extern GteRotation D_8018F1FC;
 extern RenderColor D_8018F228;
 
 extern int func_80071A54(void);
-extern void func_8006DF50(void *channel, int id, int value, int volume, int pan);
-extern void *func_8006E498(void *base, u32 key);
 extern int func_800C6B90(void *position, int radius);
 extern void func_800C6EC0(int tpage, int clut);
 #include "pe1/gte_types.h"

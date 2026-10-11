@@ -1,9 +1,9 @@
 #include "common.h"
 #include "pe1/room_sound_slot.h"
-void func_8006DF50(void *, int, int, int, int);
+#include "pe1/akao_send.h"
+#include "pe1/pe_image.h"
 typedef struct WordBlock32 { s32 words[8]; } WordBlock32;
 void func_800C2B40(void *);
-int func_8006DC18(int);
 extern s16 D_80199558;
 extern s16 D_80199588;
 extern u8 D_80199581;
@@ -86,7 +86,7 @@ void func_80193C68(char *actor, void *unused, char *state) {
     *(char **)state = source;
     block = *(char **)(source + 0x238);
     *(WordBlock32 *)(state + 4) = *(WordBlock32 *)block;
-    *(s32 *)(state + 0x24) = func_8006DC18(0x2E);
+    *(s32 *)(state + 0x24) = Asset_SearchByKeyType(0x2E);
     scale = 30;
         sixtyFour = 64;
     one = 1;
@@ -167,6 +167,6 @@ void func_80193C68(char *actor, void *unused, char *state) {
     D_8019949E = thirtyTwo;
     if (sound) {
         scratch = 0x7F;
-        func_8006DF50(soundAddress->channel, 0x604, 0, 0x80, scratch);
+        Akao_SendTableCommand(soundAddress->channel, 0x604, 0, 0x80, scratch);
     }
 }

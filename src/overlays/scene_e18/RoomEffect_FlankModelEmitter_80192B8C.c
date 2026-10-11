@@ -12,7 +12,7 @@ int func_80192B8C(int mode, SceneE18EmitterState *state) {
     switch (mode) {
     case 0:
         D_801941C8 = 4;
-        D_801941C4 = func_8006E498(D_800B0E64[0], 0xC58C7704);
+        D_801941C4 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC58C7704);
         func_800C6D5C(D_801941C4, 0, 0);
         state->count = 0;
         state->delay = 0;
@@ -41,11 +41,11 @@ int func_80192B8C(int mode, SceneE18EmitterState *state) {
             state->delay = 0;
             state->count++;
             if (state->count == 1) {
-                func_8006DCE4(0x5C4, actor->instance->owner->asset,
+                Asset_Find08w(0x5C4, actor->instance->owner->asset,
                               (s16)actor->instance->transforms->t[0],
                               (s16)actor->instance->transforms->t[1],
                               (s16)actor->instance->transforms->t[2]);
-                func_8006DCE4(0x5C5, ANIM_OWNER_AS(SceneE18Actor)->instance->owner->asset,
+                Asset_Find08w(0x5C5, ANIM_OWNER_AS(SceneE18Actor)->instance->owner->asset,
                               (s16)ANIM_OWNER_AS(SceneE18Actor)->instance->transforms->t[0],
                               (s16)ANIM_OWNER_AS(SceneE18Actor)->instance->transforms->t[1],
                               (s16)ANIM_OWNER_AS(SceneE18Actor)->instance->transforms->t[2]);

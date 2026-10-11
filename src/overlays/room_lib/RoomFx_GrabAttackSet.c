@@ -312,7 +312,7 @@ void RoomFx_GrabResetPlayer(FieldActor *unused, RoomGrabStateTail *state) {
 
         actor->pos_x <<= 16;
         actor->pos_z <<= 16;
-        func_8001AA78(actor);
+        Entity_FindFloor(actor);
     }
 
     {
@@ -370,7 +370,7 @@ int RoomFx_GrabRelease(RoomMotionTrigger *entity) {
 
             actor->pos_x <<= 16;
             actor->pos_z <<= 16;
-            func_8001AA78(actor);
+            Entity_FindFloor(actor);
         }
 
         {
@@ -1197,15 +1197,15 @@ int RoomFx_RisingSprayController(int mode, void *state,
         if (D_800E27EC == 1) {
             RoomSoundSlot *sound = (RoomSoundSlot *)D_800B0E64;
             if (sound->channel) {
-                func_8006DF50(sound->channel, 0x599, func_800D3FD8(), 0x80, 0x7F);
-                if (sound->channel) func_8006DF50(sound->channel, 0x5B5, 0x80, 0x80, 0x7F);
+                Akao_SendTableCommand(sound->channel, 0x599, func_800D3FD8(), 0x80, 0x7F);
+                if (sound->channel) Akao_SendTableCommand(sound->channel, 0x5B5, 0x80, 0x80, 0x7F);
             }
         }
         if (D_800E27EC == 0x10) {
             RoomSoundSlot *sound = (RoomSoundSlot *)D_800B0E64;
             if (sound->channel) {
-                func_8006DF50(sound->channel, 0x5B6, func_800D3FD8(), 0x80, 0x7F);
-                if (sound->channel) func_8006DF50(sound->channel, 0x5B7, 0x80, 0x80, 0x7F);
+                Akao_SendTableCommand(sound->channel, 0x5B6, func_800D3FD8(), 0x80, 0x7F);
+                if (sound->channel) Akao_SendTableCommand(sound->channel, 0x5B7, 0x80, 0x80, 0x7F);
             }
         }
         if ((u32)(D_800E27EC - 0x10) < 0x2D) {

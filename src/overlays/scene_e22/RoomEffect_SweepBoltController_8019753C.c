@@ -25,7 +25,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
         bolt->reserved1C = 0;
         bolt->sweep = 0;
         D_80199504 = 0;
-        D_80199500 = func_8006E498(D_800B0E64[0], 0xC54C4704);
+        D_80199500 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54C4704);
         func_800C6D5C(D_80199500, 0, 0);
         if (ANIM_TASK_AS(SceneE22EmberEvent)->active) {
             SceneE22EmberSlot *pool = ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool;
@@ -74,9 +74,9 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
             bolt->state = 1;
             bolt->timer = 0;
             if (D_800B0E64[0]) {
-                func_8006DF50(D_800B0E64[0], 0x5D8, func_800D3FD8(), 0x80, 0x7F);
+                Akao_SendTableCommand(D_800B0E64[0], 0x5D8, func_800D3FD8(), 0x80, 0x7F);
                 if (D_800B0E64[0]) {
-                    func_8006DF50(D_800B0E64[0], 0x5D9, 0x80, 0x80, 0x7F);
+                    Akao_SendTableCommand(D_800B0E64[0], 0x5D9, 0x80, 0x80, 0x7F);
                 }
             }
             break;
