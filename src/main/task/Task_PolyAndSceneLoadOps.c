@@ -5,6 +5,7 @@
 #include "pe1/field_collision.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/task_state.h"
 
 void FlushCache(void);
 void ResetGraph(s32);
@@ -13,7 +14,6 @@ void func_801216C4(s32, s32 *);
 void func_80121C04(s32);
 void func_801223A8(s32);
 
-#include "Task_PolyAndSceneLoadOps_externs.h"
 #define g_SceneAssetLbaTbl (g_SceneAssetLbaTbl[0])
 
 int Task_PointInPoly(int **arg0) {

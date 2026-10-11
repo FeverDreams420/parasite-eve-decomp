@@ -5,8 +5,12 @@
 #include "pe1/game_state.h"
 #include "pe1/battle_context.h"
 #include "pe1/game_timers.h"
+#include "pe1/scene_dispatch.h"
+#include "pe1/player_entity.h"
+#include "pe1/entity_allocation.h"
+#include "pe1/entity_animation.h"
+#include "pe1/battle_entity_anim.h"
 
-#include "Task_StateAndFlagOpcodes_externs.h"
 
 int Str_EncodeBase32(char *out, unsigned int value);
 
@@ -48,7 +52,6 @@ int Task_IsBattlePhase4(int **arg0) {
     return 1;
 }
 
-#include "Task_StateAndFlagOpcodes_externs_1.h"
 
 int Task_ResetPlayerCameraPos(void) {
     Render_UpdateScrollPosition(&g_PlayerEntity->pos_x, -1, -1);
@@ -73,7 +76,6 @@ int Task_SetEntityField224(short **arg0) {
     return 1;
 }
 
-#include "Task_StateAndFlagOpcodes_externs_2.h"
 
 int Entity_ClearGlobalFlag1(void) {
     g_FieldMoveLock &= -2;
@@ -175,7 +177,6 @@ int Entity_ClearCurrentFlag100(void) {
  * battle mode state and read a battle context field of the current actor.
  * Contiguous default-profile handlers. */
 
-#include "Task_StateAndFlagOpcodes_externs_3.h"
 
 int Scene_TestGlobalFlags(int **arg0) {
     int flags;
@@ -222,7 +223,6 @@ int Entity_GetField(char ***arg0) {
     return 1;
 }
 
-#include "Task_StateAndFlagOpcodes_externs_4.h"
 
 int Entity_FindByTypeId(int **arg0) {
     FieldActor *obj;

@@ -48,9 +48,8 @@ extern u8 D_8009D1C0[];
 extern u8 D_800921F8[];
 extern u32 D_80092200[];
 
-/* Render pipeline set-up (Gpu_InitPipeline.c): the task node sequence
- * counter and the projection distances of the field and battle views. */
-extern u16 g_TaskNodeSeqCounter[];
+/* Render pipeline set-up (Gpu_InitPipeline.c): the projection distances
+ * of the field and battle views. */
 extern char D_800B1628[];
 extern char D_800B162C[];
 extern char D_800B8A18[];

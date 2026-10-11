@@ -18,14 +18,17 @@
 #include "pe1/akao/commands.h"
 #include "pe1/akao.h"
 #include "pe1/asset_find.h"
+#include "pe1/game_state.h"
+#include "pe1/battle_level_up.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/task_state.h"
+#include "pe1/battle_entity_anim.h"
 
-#include "Task_ItemAndSoundOps_externs.h"
 /* COMMON supplies small-data metadata to MASPSX. */
 int g_SceneDataTable0;
 TaskNode *g_TaskNodePool;
 TaskNode *D_8009D300;
 
-#include "Task_ItemAndSoundOps_externs_1.h"
 
 void Menu_OpenStartupMemCardDialog(void);
 
@@ -219,9 +222,7 @@ typedef struct AkaoStackLocals {
     u8 pad12[8];
 } AkaoStackLocals;
 
-#include "Task_ItemAndSoundOps_externs_2.h"
 u32 *D_8009CE00;
-#include "Task_ItemAndSoundOps_externs_3.h"
 
 void Akao_Cmd_11(int slot);
 void Akao_Cmd_90(int command);
@@ -262,7 +263,6 @@ int CD_SeekTrack1(int key, int mode, int group, int *slot, int immediate)
     __asm__("CD_SeekToTrack");
 int Overlay_FindAudioSlotIndex(int key);
 int Overlay_GetAudioSlotByKey(int key);
-void Overlay_RegisterAudioSlot(int slot, int key, int handle, int value);
 
 int Akao_ProcessCommand(AkaoCommandArgs *args) {
     AkaoStackLocals locals;

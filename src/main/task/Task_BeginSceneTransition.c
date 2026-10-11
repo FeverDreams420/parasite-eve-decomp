@@ -4,13 +4,13 @@
 #include "pe1/scene_transition.h"
 #include "pe1/task_node.h"
 #include "pe1/game_state_types.h"
+#include "pe1/game_state.h"
+#include "pe1/battle_runtime.h"
 
-#include "Task_BeginSceneTransition_externs.h"
 /* COMMON supplies small-data metadata to MASPSX; the extern words stay
  * absolute. */
 int g_SceneDataTable0;
 TaskNode *g_TaskNodePool;
-#include "Task_BeginSceneTransition_externs_1.h"
 
 void Menu_OpenEquipScreen(int arg0);
 

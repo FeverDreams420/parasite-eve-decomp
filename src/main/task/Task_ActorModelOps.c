@@ -13,6 +13,11 @@
 #include "pe1/field_actor.h"
 #include "pe1/gte.h"
 #include "pe1/gte_types.h"
+#include "pe1/boot_disc_check.h"
+#include "pe1/entity_frame_update.h"
+#include "pe1/geom_state.h"
+#include "pe1/player_entity.h"
+#include "pe1/battle_entity_anim.h"
 
 #define U8_AT(ptr, off) (*(u8 *)((u8 *)(ptr) + (off)))
 #define U16_AT(ptr, off) (*(u16 *)((u8 *)(ptr) + (off)))
@@ -25,7 +30,6 @@
 u32 *D_8009CE00;
 TaskNode *D_8009D300;
 TaskNode *g_TaskNodePool;
-#include "Task_ActorModelOps_externs_1.h"
 
 GteMatrix *RotMatrix(GteShortVector *rotation, GteMatrix *matrix);
 int Anim_BuildRotationMatrices(RenderObjectEntity *object, void *action, int frame, int mode);
@@ -139,7 +143,6 @@ success:
     return 1;
 }
 
-#include "Task_ActorModelOps_externs_2.h"
 int g_SceneDataTable0;
 
 int Boot_CheckModeSwitch(void) {
@@ -165,7 +168,6 @@ int Boot_CheckModeSwitch(void) {
 
 #define NULL ((void *)0)
 
-#include "Task_ActorModelOps_externs_3.h"
 
 /* Script op: angle from the current entity to the actor named by
  * (args[0], args[1]), relative to the current entity's yaw, into args[2]. */

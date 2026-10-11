@@ -7,10 +7,12 @@
 #include "pe1/field_collision.h"
 #include "pe1/gte_types.h"
 #include "pe1/inventory_queries.h"
+#include "pe1/battle_entity_anim.h"
+#include "pe1/player_entity.h"
+#include "pe1/geom_state.h"
 
 #define NULL ((void *)0)
 
-#include "Task_SceneCommandOps_externs.h"
 #include "pe1/game_timers.h"
 
 int Math_IntSqrt(int value);
@@ -289,7 +291,6 @@ int Entity_PolarToPosition(int **arg0)
     return 1;
 }
 
-#include "Task_SceneCommandOps_externs_1.h"
 
 int Entity_PopCount(int **arg0) {
     int value;

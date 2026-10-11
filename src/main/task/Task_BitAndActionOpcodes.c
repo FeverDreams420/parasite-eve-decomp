@@ -1,8 +1,8 @@
 #include "common.h"
 #include "pe1/field_actor.h"
 #include "pe1/entity_animation.h"
+#include "pe1/entity_allocation.h"
 
-#include "Task_BitAndActionOpcodes_externs.h"
 
 int Task_ClearBit(int **arg0) {
     *arg0[0] &= ~(1 << *arg0[1]);

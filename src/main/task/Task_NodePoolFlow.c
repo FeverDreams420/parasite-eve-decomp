@@ -4,6 +4,7 @@
 /* ASPSX_VERSION: 2.21 */
 
 #include "pe1/task_node.h"
+#include "pe1/battle_entity_anim.h"
 
 /* COMMON supplies small-data metadata to MASPSX; the extern words stay
  * absolute. */
@@ -51,7 +52,6 @@ TaskNode *Task_AllocNode(unsigned int *script, TaskNode *arg1) {
 #include "pe1/field_actor.h"
 #include "pe1/task_node.h"
 
-#include "Task_NodePoolFlow_externs.h"
 
 void Task_GarbageCollectNodes(void) {
     FieldActor *group;

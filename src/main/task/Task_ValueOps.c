@@ -1,5 +1,10 @@
 #include "pe1/field_collision.h"
 #include "pe1/scene_flags.h"
+#include "pe1/player_entity.h"
+#include "pe1/geom_state.h"
+#include "pe1/field_movement.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/boot.h"
 /* MASPSX_FLAGS: --expand-div */
 /* Script value opcodes: expression evaluation, current-actor vector get/set
  * and pad/flag mask tests. Contiguous default-profile handlers between the
@@ -9,7 +14,6 @@
 #include "pe1/field_actor.h"
 #include "pe1/gte.h"
 
-#include "Task_ValueOps_externs.h"
 
 int Math_FixedMul(int lhs, int rhs);
 int Math_FixedDivide(int a, int b);

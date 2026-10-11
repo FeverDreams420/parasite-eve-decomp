@@ -9,8 +9,8 @@
 #include "pe1/task_node.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/field_actor.h"
+#include "pe1/task_state.h"
 
-#include "Task_NodePoolSetupFlow_externs.h"
 
 
 void Task_InitNodePool(void) {

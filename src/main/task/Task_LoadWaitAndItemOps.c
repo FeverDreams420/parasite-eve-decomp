@@ -7,8 +7,8 @@
 #include "pe1/inventory.h"
 #include "pe1/scene_transition.h"
 #include "pe1/entity_frame_update.h"
+#include "pe1/save_tail_state.h"
 
-#include "Task_LoadWaitAndItemOps_externs.h"
 /* COMMON supplies small-data metadata to MASPSX. */
 int g_SceneDataTable0;
 TaskNode *g_TaskNodePool;

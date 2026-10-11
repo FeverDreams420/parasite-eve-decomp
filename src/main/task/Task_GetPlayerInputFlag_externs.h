@@ -1,4 +1,0 @@
-#ifndef PE1_EXT_42B4E4ABDBA3
-#define PE1_EXT_42B4E4ABDBA3
-extern unsigned int D_8009D2E8;
-#endif /* PE1_EXT_42B4E4ABDBA3 */

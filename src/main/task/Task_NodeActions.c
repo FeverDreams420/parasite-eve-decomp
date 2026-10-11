@@ -1,6 +1,8 @@
 #include "common.h"
 #include "pe1/gte_types.h"
 #include "pe1/entity_animation.h"
+#include "pe1/battle_entity_anim.h"
+#include "pe1/battle_runtime.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --expand-div --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
@@ -337,7 +339,6 @@ int Task_TurnTowardPointStep(int **arg0) {
 #define U16_AT(ptr, off) (*(u16 *)((u8 *)(ptr) + (off)))
 #define S32_AT(ptr, off) (*(s32 *)((u8 *)(ptr) + (off)))
 
-#include "Task_NodeActions_externs.h"
 
 int Math_FixedMul(int a, int b);
 
@@ -469,7 +470,6 @@ int Task_MoveTowardPoint(int **args) {
 #define U32_AT(ptr, off) (*(u32 *)((u8 *)(ptr) + (off)))
 #define PTR_AT(ptr, off) (*(u8 **)((u8 *)(ptr) + (off)))
 
-#include "Task_NodeActions_externs_1.h"
 
 int Math_FixedMul(int a, int b);
 

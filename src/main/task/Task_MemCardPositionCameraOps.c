@@ -10,6 +10,9 @@
 #include "pe1/field_actor.h"
 #include "pe1/global_slot.h"
 #include "pe1/gte_types.h"
+#include "pe1/game_state.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/battle_entity_anim.h"
 
 #define NULL ((void *)0)
 void Battle_StartEncounter(int mode);
@@ -80,7 +83,6 @@ block_19:
     return 0;
 }
 
-#include "Task_MemCardPositionCameraOps_externs_1.h"
 
 int Entity_GetPositionByType(int **args) {
     FieldActor *entity;

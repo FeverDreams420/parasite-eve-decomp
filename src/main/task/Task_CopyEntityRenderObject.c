@@ -1,7 +1,9 @@
 #include "common.h"
 #include "pe1/field_actor.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/battle_entity_anim.h"
+#include "pe1/entity_frame_update.h"
 
-#include "Task_CopyEntityRenderObject_externs.h"
 
 void Render_InitObjectFromTable(RenderObjectEntity *object,
                                 RenderObjectEntity *source, int index);

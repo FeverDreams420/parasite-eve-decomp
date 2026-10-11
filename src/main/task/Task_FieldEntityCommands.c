@@ -6,6 +6,8 @@
 #include "pe1/field_actor.h"
 #include "pe1/task_anim.h"
 #include "pe1/font.h"
+#include "pe1/task_state.h"
+#include "pe1/entity_allocation.h"
 
 
 int Task_SetSceneFlag2000(void) {
@@ -42,7 +44,6 @@ int Entity_ClearCurrentFlag4000(void) {
     return 1;
 }
 
-#include "Task_FieldEntityCommands_externs.h"
 
 
 int Task_SetAnimSlotPointer(int **arg0) {

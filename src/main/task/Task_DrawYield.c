@@ -2,8 +2,8 @@
 /* MASPSX_FLAGS: -G8 */
 
 #include "pe1/task_node.h"
+#include "pe1/task_state.h"
 
-#include "Task_DrawYield_externs.h"
 
 short Seq_GetElapsed(void);
 int Gpu_CheckDrawStatus(void);

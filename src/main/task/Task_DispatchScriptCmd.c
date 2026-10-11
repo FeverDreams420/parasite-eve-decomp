@@ -6,6 +6,8 @@
 #include "pe1/render_lighting.h"
 #include "pe1/scene_room_load.h"
 #include "pe1/field_actor.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/battle_entity_anim.h"
 
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
@@ -32,7 +34,6 @@ typedef struct TaskScriptArgs {
 #define ARG_WORD(ptr) (*(int *)(ptr))
 #define ARG_BYTE(ptr) (*(u8 *)(ptr))
 
-#include "Task_DispatchScriptCmd_externs.h"
 /* COMMON supplies small-data metadata to MASPSX. */
 u32 *D_8009CE00;
 TaskNode *D_8009D300;

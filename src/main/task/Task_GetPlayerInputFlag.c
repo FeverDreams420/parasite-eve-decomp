@@ -1,4 +1,4 @@
-#include "Task_GetPlayerInputFlag_externs.h"
+#include "pe1/battle_runtime.h"
 
 int Task_GetPlayerInputFlag(int **args) {
     if (D_8009D2E8 & 1) {

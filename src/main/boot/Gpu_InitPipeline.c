@@ -12,6 +12,7 @@
 #include "pe1/render_lighting.h"
 #include "pe1/entity_allocation.h"
 #include "pe1/boot.h"
+#include "pe1/task_state.h"
 #include "pe1/scene_entity_textures.h"
 #include "pe1/save_tail_state.h"
 

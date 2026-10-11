@@ -12,6 +12,9 @@
 #include "pe1/geom_state.h"
 #include "pe1/pm.h"
 #include "pe1/save.h"
+#include "pe1/task_state.h"
+#include "pe1/field_movement.h"
+#include "pe1/save_tail_state.h"
 
 
 int Math_FixedMul(int arg0, int arg1);
@@ -44,7 +47,6 @@ int Entity_ComputeVelocity(void) {
 }
 
 
-#include "Task_SystemCommandOps_externs.h"
 /* Camera base angles at 0x800BD020 (D_800BD020, D_800BD022). The script
  * opcode stores them as one record, so the second argument load stays behind
  * the first store: GCC 2.7 lets a varying array load pass a store to a fixed
@@ -53,7 +55,6 @@ typedef struct CameraBaseAngles {
     short x;
     short y;
 } CameraBaseAngles;
-#include "Task_SystemCommandOps_externs_1.h"
 
 
 int Pm_SetGetState(int arg0, int arg1, int arg2);
