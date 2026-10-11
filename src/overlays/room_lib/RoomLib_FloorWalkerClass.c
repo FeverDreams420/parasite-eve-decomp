@@ -7,6 +7,7 @@
  * Configure, no-op, Update, ..., Release, no-op).
  */
 #include "room_lib.h"
+#include "pe1/room_floor_walker.h"
 
 int RoomLib_HandlerGNop0(void) {
     return 0;
@@ -21,17 +22,17 @@ int RoomLib_InitHandlerG(RoomEnt *o) {
     o->sub.signal = 0;
     o->active = 0;
     o->t1A = 0;
-    RW16(o, 0x32) = 0;
-    RW16(o, 0x36) = 0;
+    ((RoomFloorWalkerObject *)o)->state.rest = 0;
+    ((RoomFloorWalkerObject *)o)->state.turning = 0;
     o->sub.cb = RoomLib_HandlerG;
     RW32(l, 0x98) |= m;
-    RWU16(l, 0x250) |= 0x400;
+    l->h250 |= 0x400;
     return 0;
 }
 
 int RoomLib_ConfigureHandlerG(RoomEnt *o, int mode, unsigned int op,
                               int arg0, int arg1, int arg2) {
-    char *p = (char *)&o->sub;
+    RoomFloorWalkerState *p = &((RoomFloorWalkerObject *)o)->state;
 
     if (op != 4) {
     if (op < 5) {
@@ -49,28 +50,28 @@ int RoomLib_ConfigureHandlerG(RoomEnt *o, int mode, unsigned int op,
     if (mode != 1) {
         return 0;
     }
-    RW32(o, 0x10) = arg0;
-    RW32(arg0, 0) = mode;
+    o->sub.signal = (int *)arg0;
+    *(int *)arg0 = mode;
     goto ret;
 
     }
 case4:
-    RW32(o, 0x20) = arg0;
+    ((RoomFloorWalkerObject *)o)->state.speed = arg0;
     return 0;
 
 case0:
-    RW32(o, 0x1C) = (int)D_8009D20C;
+    ((RoomFloorWalkerObject *)o)->state.leader = (RoomLink *)D_8009D20C;
     if (D_8009D20C != 0) {
         do {
-            char *cur = (char *)RW32(p, 0x10);
-            if ((unsigned char)cur[0xC] == arg0 && (unsigned char)cur[0xD] == arg1) {
-                if ((RW32(cur, 0x98) & 0x10) == 0) {
+            FieldActorNode *cur = (FieldActorNode *)p->leader;
+            if (cur->b0C == arg0 && cur->b0D == arg1) {
+                if ((cur->w98 & 0x10) == 0) {
                     break;
                 }
             }
-            RW32(p, 0x10) = RW32((char *)RW32(p, 0x10), 4);
-        } while (RW32(p, 0x10) != 0);
-        if (RW32(p, 0x10) != 0) {
+            p->leader = (RoomLink *)((FieldActorNode *)p->leader)->next;
+        } while (p->leader != 0);
+        if (p->leader != 0) {
             return 0;
         }
         RoomLib_ReleaseHandlerG(o);
@@ -80,9 +81,9 @@ case0:
     return 0;
 
 case12:
-    RW32(o, 0x24) = arg0;
-    RW32(o, 0x2C) = arg1;
-    RW16(o, 0x34) = arg2;
+    ((RoomFloorWalkerObject *)o)->state.hopVelocity = arg0;
+    ((RoomFloorWalkerObject *)o)->state.gravity = arg1;
+    ((RoomFloorWalkerObject *)o)->state.restTime = arg2;
 
 ret:
     return 0;
@@ -97,11 +98,11 @@ int RoomLib_HandlerGNop3(void) {
 
 void RoomLib_HandlerG(RoomEnt *o) {
     RoomEnt *self = o;
-    RoomLink *src = (RoomLink *)RW32(self, 0x1C);
+    RoomLink *src = ((RoomFloorWalkerObject *)self)->state.leader;
     RoomLink *dst = self->link;
-    dst->pos[0] = RW32(src->p238, 0x94) << 16;
-    dst->pos[1] = RW32(src->p238, 0x98) << 16;
-    dst->pos[2] = RW32(src->p238, 0x9C) << 16;
+    dst->pos[0] = ((GteMatrix *)src->p238)[4].t[0] << 16;
+    dst->pos[1] = ((GteMatrix *)src->p238)[4].t[1] << 16;
+    dst->pos[2] = ((GteMatrix *)src->p238)[4].t[2] << 16;
     *(RoomLibPacked8 *)dst->rotation = *(RoomLibPacked8 *)src->rotation;
     if ((src->variant == 7) && (src->winLo >= 3) && (src->winHi < 3)) {
         self->sub.cb = RoomLib_HandlerGFloorWalker;

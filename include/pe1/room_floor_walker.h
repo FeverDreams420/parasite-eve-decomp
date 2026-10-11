@@ -31,9 +31,11 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomFloorWalkerCore, flags) == 0x98,
 /* Handler state at RoomFloorWalkerObject + 0xC. */
 typedef struct RoomFloorWalkerState {
     void (*callback)(void);       /* 0x00 */
-    u8 pad04[0xA];
+    int *signal;                  /* 0x04 */
+    u8 pad08[0x6];
     u8 started;                   /* 0x0E (object + 0x1A) */
-    u8 pad0F[5];
+    u8 pad0F;
+    struct RoomLink *leader;      /* 0x10: actor whose view the walker follows */
     s32 speed;                    /* 0x14: 16.16 */
     s32 hopVelocity;              /* 0x18 */
     s32 velocity;                 /* 0x1C */
