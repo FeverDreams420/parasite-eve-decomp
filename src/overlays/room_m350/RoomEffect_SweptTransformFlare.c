@@ -1,5 +1,6 @@
 #include "pe1/field_sprite_params.h"
 #include "pe1/room_m350_effects.h"
+#include "pe1/player_entity.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte.h"
 #include "pe1/field_sprite_draw.h"
@@ -38,7 +39,7 @@ int func_801981D0(int event, RoomM350FlareParticle *particle)
         position.y += D_8019A890[1];
         position.z += D_8019A890[2];
         rotation.x = (unsigned int)D_800E27EC * 384;
-        rotation.y = ANIM_OWNER_AS(RoomM350EffectActor)->instance->yaw;
+        rotation.y = ((FieldActor *)ANIM_OWNER_AS(RoomM350EffectActor)->instance)->rot_y;
         rotation.z = 0;
         rotation.pad = 1;
         kind = D_800F3368.palette;
@@ -60,7 +61,6 @@ int func_801981D0(int event, RoomM350FlareParticle *particle)
 }
 
 /* Spawns flares and tests the quad swept by the actor's two side endpoints. */
-extern RoomM350EffectInstance *g_PlayerEntity;
 
 extern unsigned char D_8019A8C0;
 extern short D_8019A898[4],D_8019A8A0[4];
@@ -76,14 +76,14 @@ extern int Inv_ScrambleGrid(void);
 int func_80198400(int event) {
     GteShortVector offset,vertices[4];
     int area;
-    RoomM350EffectInstance *instance=ANIM_OWNER_AS(RoomM350EffectActor)->instance;
+    FieldActor *instance=(FieldActor *)ANIM_OWNER_AS(RoomM350EffectActor)->instance;
     switch (event) {
     case 0:
 
         return func_800CE560(ANIM_POOL_AS(RoomM350EffectEmitter)->pool,8,4,
                              (FieldAnimCallbackListCallback)func_801981D0);
         case 1:
-    if(instance->frame>=31) return 2;
+    if(instance->anim.parts.integer>=31) return 2;
     if(!(D_800E27EC&1)) {
         RoomM350FlareParticle *particle=func_800CE610(ANIM_POOL_AS(RoomM350EffectEmitter)->pool);
         if(particle) {
@@ -92,7 +92,7 @@ int func_80198400(int event) {
             particle->z=(random>>2)+64;
         }
     }
-    if(D_8019A8C0 || instance->animation!=9) return 0;
+    if(D_8019A8C0 || instance->mode!=9) return 0;
     {
         register GteShortVector *from asm("$5")=(GteShortVector *)&D_8019A898;
         register GteShortVector *to asm("$4")=&D_8019A8A8;
@@ -106,21 +106,21 @@ int func_80198400(int event) {
         *to=*from;
     }
     offset.x=256; offset.y=0; offset.z=0;
-    ApplyMatrixSV(&instance->transform,&offset,&offset);
+    ApplyMatrixSV((GteMatrix *)&instance->render_object.model_matrix,&offset,&offset);
     {
-        int positionX=instance->transform.t[0];
+        int positionX=instance->render_object.model_matrix.translation[0];
         unsigned short x;
         unsigned short z;
         int positionZ;
         x=offset.x;
         z=offset.z;
         rightX=x+positionX;
-        positionZ=((volatile RoomM350EffectInstance *)instance)->transform.t[2];
+        positionZ=((volatile FieldActor *)instance)->render_object.model_matrix.translation[2];
         D_8019A89E=1;
         positionZ=z+positionZ;
         D_8019A89C=positionZ;
-        leftX=((volatile RoomM350EffectInstance *)instance)->transform.t[0]-x;
-        D_8019A8A4=((volatile RoomM350EffectInstance *)instance)->transform.t[2]-z;
+        leftX=((volatile FieldActor *)instance)->render_object.model_matrix.translation[0]-x;
+        D_8019A8A4=((volatile FieldActor *)instance)->render_object.model_matrix.translation[2]-z;
     }
     asm volatile("" ::: "memory");
     vertices[0]=*(GteShortVector *)&D_8019A898;
@@ -133,7 +133,7 @@ int func_80198400(int event) {
         {
             int i=0;
             int previous=((unsigned int)vertices[3].z<<16)|(unsigned short)vertices[3].x;
-            int point=((unsigned int)g_PlayerEntity->transform.t[2]<<16)|(unsigned short)g_PlayerEntity->transform.t[0];
+            int point=((unsigned int)g_PlayerEntity->render_object.model_matrix.translation[2]<<16)|(unsigned short)g_PlayerEntity->render_object.model_matrix.translation[0];
             int *out=&area;
             for(;i<4;) {
                 int current=((unsigned int)vertices[i].z<<16)|(unsigned short)vertices[i].x;
@@ -145,12 +145,12 @@ int func_80198400(int event) {
             }
             if(i<4) return 0;
             {
-                RoomM350EffectInstance *player=g_PlayerEntity;
+                FieldActor *player=g_PlayerEntity;
                 asm("" : "=r"(player) : "0"(player));
                 D_8019A8C0=1;
                 asm volatile("" ::: "memory");
-                player->owner->status|=0x4000;
-                if(instance->owner) instance->owner->flags|=0x80000000u;
+                player->state->flags|=0x4000;
+                if(instance->state) instance->state->core_flags|=0x80000000u;
             }
         }
     }
@@ -162,7 +162,7 @@ int func_80198400(int event) {
         int index,color;
         short *destination=D_8019A890;
         GteMatrix *transforms;
-        transforms=instance->transforms;
+        transforms=(GteMatrix *)instance->render_object.matrices;
         for(;i<3;i++) destination[i]=(transforms[11].t[i]+transforms[15].t[i])>>1;
         index=D_800E11EA;
         D_800F3368.parameter00=32; D_800F3368.parameter02=2;
