@@ -1607,10 +1607,10 @@ void RoomFx_UpdateEightParticles(void *unused,
             }
         } else {
             int randomValue;
-            int yValue;
-            int zVelocity;
-            int zPosition;
-            int zValue;
+            s16 yValue;
+            s16 zVelocity;
+            s16 zPosition;
+            s16 zValue;
 
             ((RoomEightParticleState *)positionCursor)->position[0].x +=
                 *(u16 *)&((RoomEightParticleState *)positionCursor)->velocity[0].bytes[0];
