@@ -41,6 +41,24 @@ typedef struct RoomM350Particle {
     RoomM350ParticleTail tail;
 } RoomM350Particle;
 
+typedef struct RoomM350PointerQueue {
+    GteShortVector *positions[4];
+    u8 reserved10[0x46];
+    s16 count;
+} RoomM350PointerQueue;
+
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM350PointerQueue, count) == 0x56,
+                  room_m350_pointer_queue_count_offset);
+
+typedef struct RoomM350PositionQueue {
+    GteShortVector positions[8];
+    u8 reserved40[8];
+    s16 count;
+} RoomM350PositionQueue;
+
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM350PositionQueue, count) == 0x48,
+                  room_m350_position_queue_count_offset);
+
 typedef struct RoomM350FlareParticle {
     s16 y;
     s16 z;

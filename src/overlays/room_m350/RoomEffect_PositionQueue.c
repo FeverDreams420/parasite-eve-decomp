@@ -1,5 +1,6 @@
 #include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
+#include "pe1/room_m350_effects.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
@@ -11,7 +12,7 @@ typedef RoomM350Vector Vector;
 typedef struct { Vector position; short delay,reserved; } Particle;
 typedef struct RoomM350Instance { char reserved[0x3A]; unsigned short yaw; } Instance;
 typedef RoomM350Actor Actor;
-typedef struct { Vector positions[8]; char reserved40[8]; short count; } Queue;
+typedef RoomM350PositionQueue Queue;
 
 #include "RoomEffect_PositionQueue_externs.h"
 

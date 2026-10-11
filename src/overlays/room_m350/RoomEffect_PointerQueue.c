@@ -1,4 +1,5 @@
 #include "room_m350_shared.h"
+#include "pe1/room_m350_effects.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
 #include "pe1/field_texture_tables.h"
@@ -7,7 +8,7 @@
 
 typedef RoomM350Vector Vector;
 typedef struct { Vector *position; short offset,reserved; } Particle;
-typedef struct { Vector *positions[4]; char reserved10[0x46]; short count; } Queue;
+typedef RoomM350PointerQueue Queue;
 
 #include "pe1/gte_sine_table.h"
 #include "RoomEffect_PointerQueue_externs.h"

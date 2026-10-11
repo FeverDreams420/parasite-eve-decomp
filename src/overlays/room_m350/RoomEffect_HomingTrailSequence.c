@@ -73,8 +73,10 @@ int func_801947BC(int event,RoomM350Particle *p)
                     asm volatile("" : "=r"(next) : "0"(next));
                     *count=next+1;
                     asm volatile("" : : "r"(count), "r"(next));
-                    count-=0x2B;
-                    ((RoomM350Particle **)count)[n]=p;
+                    {
+                        RoomM350PointerQueue *queue=(RoomM350PointerQueue *)((char *)count-PE1_OFFSETOF(RoomM350PointerQueue,count));
+                        queue->positions[n]=&p->position;
+                    }
                 }
             }
         }
@@ -86,8 +88,10 @@ int func_801947BC(int event,RoomM350Particle *p)
                 asm volatile("" : "=r"(next) : "0"(next));
                 *count=next+1;
                 asm volatile("" : : "r"(count), "r"(next));
-                count-=0x2B;
-                ((RoomM350Particle **)count)[n]=p;
+                {
+                    RoomM350PointerQueue *queue=(RoomM350PointerQueue *)((char *)count-PE1_OFFSETOF(RoomM350PointerQueue,count));
+                    queue->positions[n]=&p->position;
+                }
             }
         }
         {
