@@ -239,12 +239,12 @@ typedef struct FieldAnimBurstWindow {
 
 typedef struct FieldAnimBurstHeader {
     u8 unused_00[3];
-    u8 mode;
-    u8 scale[2];
-    u8 duration[2];
-    u8 origin_x[2];
-    u8 origin_y[2];
-    u8 origin_z[2];
+    u8 shade; /* renderer cell brightness, doubled */
+    u16 scale;
+    u16 duration;
+    s16 origin_x;
+    s16 origin_y;
+    s16 origin_z;
 } FieldAnimBurstHeader;
 
 typedef union FieldAnimBurstData {

@@ -12,8 +12,8 @@
 #include "pe1/field_engine_slot.h"
 #include "pe1/field_billboard.h"
 
-int func_800CD404(void *arg0, void *arg1, u8 *anim) {
-    u8 *anim_s2 = anim;
+int func_800CD404(void *arg0, void *arg1, FieldAnimBurstData *anim) {
+    FieldAnimBurstData *anim_s2 = anim;
     int *field_s1;
     u8 *cell;
     int *position_v0;
@@ -34,16 +34,16 @@ int func_800CD404(void *arg0, void *arg1, u8 *anim) {
     cell = &D_800E2250.cell;
         call_a0 = (FieldGlowSprite *)(cell - PE1_OFFSETOF(FieldGlowSprite, cell));
         position_v0 = &D_800F33C0.t[0];
-    value_v1 = *(s16 *)(anim_s2 + 0x8);
+    value_v1 = anim_s2->header.origin_x;
     call_a1 = position_v0 - 5;
     position_v0[0] = value_v1;
-    value_v0 = *(s16 *)(anim_s2 + 0xA);
+    value_v0 = anim_s2->header.origin_y;
     call_a2 = 1;
     D_800F33C0.t[1] = value_v0;
-    value_v0 = *(s16 *)(anim_s2 + 0xC);
+    value_v0 = anim_s2->header.origin_z;
     i = 0;
     D_800F33C0.t[2] = value_v0;
-    shade = anim_s2[3];
+    shade = anim_s2->header.shade;
     asm volatile("" ::: "$17");
     field_s1 = &D_800F32B0.t[0];
     *cell = (shade * 2) - 0x80;
@@ -53,14 +53,14 @@ int func_800CD404(void *arg0, void *arg1, u8 *anim) {
 
     do {
         call_a0 = &D_800F3460;
-                entry_v0 = (int)(anim_s2 + ((i & 0xFFFF) * 8));
-        value_v1 = *(s16 *)(entry_v0 + 0x10);
+                entry_v0 = (int)&anim_s2->bytes[(i & 0xFFFF) * 8];
+        value_v1 = (s16)((FieldAnimBurstWindow *)entry_v0)->point.x;
         call_a1 = field_s1 - 5;
         field_s1[0] = value_v1;
-        value_v1 = *(s16 *)(entry_v0 + 0x12);
+        value_v1 = (s16)((FieldAnimBurstWindow *)entry_v0)->point.y;
         call_a2 = 1;
         field_s1[1] = value_v1;
-        value_v0 = *(s16 *)(entry_v0 + 0x14);
+        value_v0 = (s16)((FieldAnimBurstWindow *)entry_v0)->point.z;
         asm volatile("" : "=r"(value_v0) : "0"(value_v0));
         field_s1[2] = value_v0;
         i++;

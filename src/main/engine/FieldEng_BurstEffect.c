@@ -11,6 +11,7 @@
 #include "pe1/field_engine_slot.h"
 #include "pe1/field_billboard.h"
 #include "pe1/psyq_libc.h"
+#include "pe1/battle.h"
 
 static __inline__ void identity_matrix(GteMatrix *matrix)
 {
@@ -163,12 +164,12 @@ extern struct BattleEntity *D_8009D254;
 
 int func_800CD07C(void *arg0, void *arg1, u8 *anim) {
     u16 x = D_800E27F8.x;
-    char *entity = (char *)D_8009D254;
+    BattleEntity *entity = D_8009D254;
     int y;
     u16 z;
 
     *(u16 *)(anim + 8) = x;
-    y = *(s16 *)(entity + 0x2E);
+    y = entity->posY.parts.integer;
     *(u16 *)(anim + 0xA) = y;
     z = D_800E27FC;
     *(u16 *)(anim + 4) = 0x7F;
@@ -190,13 +191,13 @@ void FieldAnim_InitRandomOffsetPairs(void *arg0, void *arg1,
     base = &D_800E27F8;
     i = 0;
 
-    *(u16 *)anim->header.origin_x = base->x;
-    *(u16 *)anim->header.origin_y = base->y;
+    anim->header.origin_x = base->x;
+    anim->header.origin_y = base->y;
     z = base->z;
-    *(u16 *)anim->header.scale = 0x7F;
-    *(u16 *)anim->header.duration = 0x3B4;
-    anim->header.mode = 0;
-    *(u16 *)anim->header.origin_z = z;
+    anim->header.scale = 0x7F;
+    anim->header.duration = 0x3B4;
+    anim->header.shade = 0;
+    anim->header.origin_z = z;
     base_values = &base->x;
 
     do {
