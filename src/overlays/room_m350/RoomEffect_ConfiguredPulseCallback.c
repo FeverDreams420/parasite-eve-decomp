@@ -26,7 +26,7 @@ int func_80196C64(int event, void *object)
         int palette;
         int frame;
         register int mode asm("$5");
-        register int clutX asm("$4");
+        int clutX;
         unsigned short handle;
         asm("" : "=r"(state) : "0"(state));
         state->parameter00 = unit;
