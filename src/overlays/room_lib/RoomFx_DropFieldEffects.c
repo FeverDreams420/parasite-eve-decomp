@@ -431,7 +431,7 @@ void RoomFx_InitRingPair(int unused0, int unused1,
     params->source = source;
     func_800C4E50(params);
 
-    params = (RoomFxEmitterParams *)(anchor + 6);
+    params = &g_RoomDropFieldRings[1];
     secondaryExtent = 0x226;
     asm volatile("" : "=r"(anchor) : "0"(anchor));
     source += 0x100;
