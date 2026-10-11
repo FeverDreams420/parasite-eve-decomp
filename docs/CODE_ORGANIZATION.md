@@ -388,6 +388,65 @@ Still open:
     floor modes. The `$v1` pin in `Entity_ResolvePosition` (947 lines
     differ), the `$t3` parity pin in `Geo_PointInPoly` (22) and the ramp
     `goto slide` stay, as their comments record.
+- Crutches left in `src/main/memcard`, `src/main/save`, `src/main/entity`
+  and `src/main/cdrom` (2026-10-11 pass). `src/main/save` is clean. Each
+  site below was removed and rebuilt; lev is the Levenshtein distance over
+  instruction words of the best crutch-free form tried:
+  - CD and stream retry loops keep one `goto` each
+    (`Overlay_LoadInitialImage`, `CD_FindNextDataSector`, `CD_StepReadState`).
+    Retail hoists no invariant out of these loops: the range pointer, the
+    `0xFEFFBFFF` mask and the `-1`/`33`/`42` constants are rebuilt on every
+    pass. GCC's loop optimizer only runs on syntactic loops, so a `do`/`for`
+    form hoists them into `$s` registers (lev 27 and 63).
+  - `CD_FindNextDataSector` adds the range index to the range table as
+    integers (two `(u32)` casts). `&ranges[i]` and `i + ranges` put the table
+    first in the `addu` (lev 2).
+  - `CD_StepReadState` keeps its two `PE1_NOP_IO2_DEP` slots and the `$a0`
+    pin. The slots are the load-delay `nop` between `lw D_8009CDA4` and the
+    gp-relative `sw` to `g_CdFadeStartTime`: MASPSX does not know an extern
+    `.sdata` symbol is gp-relative, assumes an `$at` expansion fills the
+    delay and drops the `nop` (lev 2). With the slot macro but no pin, CSE
+    reuses `active` (known zero there) for the first argument (lev 2).
+  - `CD_ReadSectors` (pins on `state`, `finished`, `scaledIndex`, `start`,
+    barriers on `blocking`/`kind`, the volatile sector-directory reads)
+    rebuilds at lev 47 without them. `CD_SeekToTrack` keeps the `$s1` pin
+    and the count barrier: without the barrier combine knows the count is a
+    `>> 22` and turns retail's `blez` into `beqz`, and without the pin
+    `slot` and `finished` swap `$s1`/`$s2` (lev 49).
+  - `MemCard_PollTransferDelay` keeps the `$a0` pin and the barrier on the
+    pending-flag pointer. Without the barrier CSE folds `pending + 1` into
+    an absolute address (`lui`/`lw 4`) where retail indexes `$a1` (lev 4);
+    `&pending[count - 2]` and `pending -= 2` change the allocation (lev 10
+    and 17). The pin is only needed with the barrier.
+  - `MemCard_InitManager` keeps three argument pins and the `$16` clobber:
+    retail sets the event table base `$s0` after the second `OpenEvent`
+    arguments, while sched1 places the address load first in every plain
+    form, including the first store inside the call's arguments (lev 4).
+  - `MemCard_AbortActiveOperation` keeps the barrier that separates
+    `name_buf` from `D_8009EE70`: with one value CSE keeps the buffer
+    address in `$s0` across `sprintf` instead of rebuilding it (lev 31), the
+    same effect as the `Save_StartWriteSlot` alias above.
+    `Save_StartWriteSlot` keeps its `$s0` pin and both barriers (lev 23
+    without; lev 1 with only the pin).
+  - `Entity_AllocBlock` keeps its m2c pins and two `goto`s. The structured
+    loop (u8 `blocks`/`slot`, the scratch base read inside the loop) is
+    lev 1: reorg fills the not-free branch's delay slot from the
+    fall-through instead of stealing the loop test's `andi` from the target,
+    so the branch lands one insn early. A separate `next` index fixes the
+    target but swaps `$a2`/`$a3` (lev 10 to 19 over all declaration orders).
+    `Scene_UpdateEntityPositions` keeps its `goto link`: duplicating the two
+    inlined `Scene_LinkContactTask` calls is not cross-jumped (lev 128).
+  - `Entity_TriggerAnimEvent` keeps its three pins (lev 81 without: retail
+    copies `entity` to `$a2` first). `Task_RunEntityCommand` keeps its two
+    argument-register pins: every statement order allocates the `1` and the
+    stack value to `$a0`/`$a1` the other way round (lev 6).
+    `Entity_RelocateSceneData` keeps the `$v0` pin on the loaded block
+    (lev 15) and adds region offsets to the database as integers: an
+    indexed `regions[i]` walk reorders the header loads (lev 9 to 19).
+  - `Entity_ResetStateGlobals` clears both ramp edge points by byte offset
+    (`D_8009CE0C`/`D_8009CE0E`); a `FloorEdgePoint` index keeps a separate
+    counter and `addiu` base (lev 11). `Entity_ResetAllPools` clears the
+    allocation slots by byte offset under `-fno-strength-reduce`.
 
 ## Link ownership
 
