@@ -127,86 +127,52 @@ void *func_800CE610(char *list) {
     return 0;
 }
 
-int func_800CE688(void *data)
-{
-  char *list = data;
-  int frame_pad[2];
-  int old_context = D_800E27EC;
-  char *entry = list + 0xC;
-  char *timer;
-  int i = 0;
-  register int active = 0;
-  register FieldAnimTaskCallback callback = ((FieldAnimCallbackList *)list)->callback;
-  int count = ((FieldAnimCallbackList *)list)->count;
-  register int stride = ((FieldAnimCallbackList *)list)->stride;
-  if (count > 0)
-  {
-    timer = list + 0xE;
-    do
-    {
-      if (((FieldAnimCallbackListEntry *)entry)->active != 0)
-      {
-        active++;
-        D_800E27EC = ((FieldAnimCallbackListEntry *)(timer - 2))->age;
-        if (callback(1, entry + 0x4, D_800E2368->argument) != 0)
-        {
-          ((FieldAnimCallbackListEntry *)entry)->active = 0;
+int func_800CE688(void *data) {
+    FieldAnimCallbackList *list = (FieldAnimCallbackList *)data;
+    int saved_age = D_800E27EC;
+    char *entry = (char *)list->entries;
+    int i;
+    int active = 0;
+    FieldAnimTaskCallback callback = list->callback;
+    int stride = list->stride;
+
+    for (i = 0; i < list->count;) {
+        if (((FieldAnimCallbackListEntry *)entry)->active != 0) {
+            active++;
+            D_800E27EC = ((FieldAnimCallbackListEntry *)entry)->age;
+            if (callback(1, ((FieldAnimCallbackListEntry *)entry)->state, D_800E2368->argument) != 0) {
+                ((FieldAnimCallbackListEntry *)entry)->active = 0;
+            } else {
+                ((FieldAnimCallbackListEntry *)entry)->age++;
+            }
         }
-        else
-        {
-          ((FieldAnimCallbackListEntry *)(timer - 2))->age = ((FieldAnimCallbackListEntry *)(timer - 2))->age + 1;
-        }
-      }
-      i++;
-      timer += stride;
-      entry += stride;
+        i++;
+        entry += stride;
     }
-    while (i < (((FieldAnimCallbackList *)list)->count));
-  }
-  if (list)
-  {
-    D_800E27EC = old_context;
+    D_800E27EC = saved_age;
     return active;
-  }
-  else
-  {
-    D_800E27EC = old_context;
-    return active;
-  }
 }
 
-int func_800CE78C(char *list)
-{
+int func_800CE78C(char *data) {
+    FieldAnimCallbackList *list = (FieldAnimCallbackList *)data;
+    int saved_age = D_800E27EC;
+    char *entry = (char *)list->entries;
+    int i;
+    int active = 0;
+    FieldAnimTaskCallback callback = list->callback;
+    int stride = list->stride;
 
-  int old_context = D_800E27EC;
-  char *entry = list + 0xC;
-  char *payload;
-  int i = 0;
-  register int active = 0;
-  register FieldAnimTaskCallback callback = ((FieldAnimCallbackList *)list)->callback;
-  int new_var;
-  int count = ((FieldAnimCallbackList *)list)->count;
-  register int stride = ((FieldAnimCallbackList *)list)->stride;
-  new_var = 0;
-  if (count > new_var)
-  {
-    payload = list + 0x10;
-    do
-    {
-      if (((FieldAnimCallbackListEntry *)entry)->active != 0)
-      {
-        active++;
-        D_800E27EC = *((s16 *) (payload - 0x2));
-        callback(2, payload, D_800E2368->argument);
-      }
-      i++;
-      payload += stride;
-      entry += stride;
+    for (i = 0; i < list->count;) {
+        if (((FieldAnimCallbackListEntry *)entry)->active != 0) {
+            active++;
+            D_800E27EC = ((FieldAnimCallbackListEntry *)entry)->age;
+            callback(2, ((FieldAnimCallbackListEntry *)entry)->state, D_800E2368->argument);
+        }
+        i++;
+        entry += stride;
     }
-    while (i < (((FieldAnimCallbackList *)list)->count));
-  }
-  D_800E27EC = old_context;
-  return active;
+    D_800E27EC = saved_age;
+    return active;
 }
 
 void func_800CE870(char *arg0, int arg1, s16 *arg2) {
