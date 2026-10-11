@@ -1228,11 +1228,10 @@ void RoomFx_InitQuadSprites(void *unused0, void *unused1, void *output_arg) {
     int red;
     int blue;
     int mid;
-    register char *color asm("$20");
-    register char *scale asm("$21");
     RoomDropFieldState *clock;
     unsigned int speed;
     int value;
+    int hasNonzeroIndex;
 
     clock = func_800C2B50();
     *(RoomDropFieldMatrixWords *)base = clock->matrix0;
@@ -1241,8 +1240,6 @@ void RoomFx_InitQuadSprites(void *unused0, void *unused1, void *output_arg) {
     red = 159;
     blue = 137;
     mid = 64;
-    scale = (char *)base;
-    color = scale;
 
     for (; (unsigned int)index < 4; index++) {
         speed = (int)rand() % 40 + 10;
@@ -1257,22 +1254,19 @@ void RoomFx_InitQuadSprites(void *unused0, void *unused1, void *output_arg) {
         base->velocity[index].y = value;
         value = 160;
         base->position[index].x = 0;
-        ((RoomFourSpriteState *)scale)->depth[0] = value;
-        ((RoomFourSpriteState *)scale)->scale[0] = speed;
+        base->depth[index] = value;
+        base->scale[index] = speed;
 
         if (index != 1) {
-            if (index != 0) {
+            hasNonzeroIndex = index != 0;
+            if (hasNonzeroIndex) {
                 if (index == 2) goto color2;
                 if (index == 3) goto color3;
-                color += 4;
-                scale += 2;
                 continue;
             } else {
-                ((RoomFourSpriteState *)color)->color[0].r = red;
-                ((RoomFourSpriteState *)color)->color[0].g = 138;
-                ((RoomFourSpriteState *)color)->color[0].b = blue;
-                color += 4;
-                scale += 2;
+                base->color[index].r = red;
+                base->color[index].g = 138;
+                base->color[index].b = blue;
                 continue;
             }
         } else {
@@ -1291,8 +1285,7 @@ color3:
         base->color[3].g = 98;
         base->color[3].b = blue;
 advance_color:
-        color += 4;
-        scale += 2;
+        ;
     }
 }
 
