@@ -637,7 +637,7 @@ segments:
       - [0x5F4EC, c, boot/Boot_DiscTableLoad]
       # Slot allocation opens the contiguous process-manager slot API.
       - [0x5FA24, c, pm/Pm_ProcessManager]
-      - [0x60C1C, c, render/Render_DecompressAnimFrame]
+      - [0x60C1C, c, render/Render_DrawWireframeModel]
       - [0x61510, c, task/Task_InitGpuHwRegs]
       - [0x6156C, c, task/Task_GpuFlushPrimQueue]
       - [0x615D0, c, task/Task_GpuPackPrimColor]

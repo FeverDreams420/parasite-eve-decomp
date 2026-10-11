@@ -59,11 +59,11 @@ void Render_AnimationFrame(void) {
     Render_SetGteScreenOffset();
 
     draw_index = g_ActiveDrawSlot;
-    delta = Render_DecompressAnimFrame(D_800B0DF8[0],
-                                       ((RenderAnimPlayer *)g_PlayerEntity)->decoderData,
-                                       size, width & 0xFFFE,
-                                       g_OtBufferTable[draw_index] + 8,
-                                       g_RenderAnimBufferBase[draw_index] +
+    delta = Render_DrawWireframeModel(D_800B0DF8[0],
+                                      ((RenderAnimPlayer *)g_PlayerEntity)->decoderData,
+                                      size, width & 0xFFFE,
+                                      g_OtBufferTable[draw_index] + 8,
+                                      g_RenderAnimBufferBase[draw_index] +
                                            D_8009CDD8);
     D_8009CDD8 += delta;
 

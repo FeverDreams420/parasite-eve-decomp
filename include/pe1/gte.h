@@ -732,9 +732,12 @@
 #define gte_getsz3(out) \
     asm volatile("mfc2 %0,$19" : "=r"(out))
 
-#define gte_getsz3_for_store(value, out) \
-    asm volatile("mfc2 %0,$19\n\t" \
-                 "nop" : "=r"(value) : "r"(out))
+/* Store SZ3 to a halfword through the CPU (mfc2 + sh). */
+#define gte_stsz3_short(r0) \
+    asm volatile("mfc2 $12,$19\n\t" \
+                 "nop\n\t" \
+                 "sh $12,0(%0)" \
+                 : : "r"(r0) : "$12", "memory")
 
 /* RTPT: project V0, V1, and V2. */
 #define gte_ldv012(vec) \

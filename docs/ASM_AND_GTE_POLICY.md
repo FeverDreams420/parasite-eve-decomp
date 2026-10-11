@@ -414,7 +414,7 @@ They load SXY0..2,
 run the documented NCLIP command, and store MAC0. `gte_nclip` owns the two
 required hazard slots before opcode `0x4B400006`; callers retain all culling
 and primitive-building logic in C. Initial users are the NCLIP helpers in
-`Entity_UpdateAndRender`, `Render_DecompressAnimFrame`, and
+`Entity_UpdateAndRender`, `Render_DrawWireframeModel`, and
 `Render_DrawTexturedQuads`. No scratchpad memory is involved.
 
 ## RTV0TR / IR1..3
@@ -426,7 +426,7 @@ from two words, execute RTV0TR (`0x4A480012`), and read IR1..3 or store
 IR1..3/MAC1..3. The IR-read window has one hazard slot; the MAC-store windows
 have two. The C caller owns source and destination layout; the macros only
 move COP2 state. Initial users include `Render_DrawObjectAlt`,
-`Render_DrawObjectVariant`, `Render_DecompressAnimFrame`,
+`Render_DrawObjectVariant`, `Render_DrawWireframeModel`,
 `Render_TransformMorphVertices`, `Render_SetupBoneTransforms`, and
 `Task_SetGteMatrix`.
 
@@ -436,7 +436,7 @@ move COP2 state. Initial users include `Render_DrawObjectAlt`,
 the documented rotation-only MVMVA form (`0x4A49E012`) after one hazard slot.
 IR results are read through the existing `gte_getir*` macros; matrix layout
 and destination stores remain ordinary C. Initial users are the matrix-axis
-helpers in `Render_DecompressAnimFrame`, `Render_SetupBoneTransforms`,
+helpers in `Render_DrawWireframeModel`, `Render_SetupBoneTransforms`,
 `Render_TransformMorphVertices`, `Render_TransformSkinnedVertices`,
 `Render_TransformVertices`, and `Task_SetGteMatrix`.
 
@@ -824,7 +824,7 @@ remain in the C caller.
 three vectors, with one required hazard slot, then store SXY0..2 and SZ1..3.
 The operations are the documented GTE perspective transforms (`0x4A180001` and
 `0x4A280030`); clipping, depth selection, and output-buffer management stay in
-C. Initial users are `Render_DecompressAnimFrame`, `Render_DrawObjectVariant`,
+C. Initial users are `Render_DrawWireframeModel`, `Render_DrawObjectVariant`,
 and `Render_TransformMorphVertices`.
 
 ## Room 350 swept-area emitter
@@ -2433,7 +2433,7 @@ single or paired deletion of the remaining added bindings retained a match.
 
 ### Animation-frame renderer: remaining matrix transfers
 
-`Render_DecompressAnimFrame` now expresses the three column loads/stores,
+`Render_DrawWireframeModel` now expresses the three column loads/stores,
 both translation loads, and the final rotation load in C, with individual
 GTE transfers. The long-vector packing helper also uses separate MTC2 and
 LWC2 wrappers. Stock native GCC 2.7.2 and stock MASPSX 2.56, with the existing

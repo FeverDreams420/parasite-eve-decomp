@@ -51,9 +51,18 @@ extern struct FieldActor *g_PlayerEntity;
 extern int D_8009CDD8;
 extern void *D_800B0DF8[3];
 
+/* Scratchpad buffers for the wireframe pass: projected screen XY per
+ * vertex and its SZ depth. */
+typedef struct RenderWireScratch {
+    u32 *screenXY;
+    s16 *depth;
+} RenderWireScratch;
+extern RenderWireScratch g_WireScratch;
+
 void Render_SetGteScreenOffset(void);
-int Render_DecompressAnimFrame(void *anim, void *entity, int size, int width,
-                               void *ot, void *buffer);
+struct RenderAnimFrame;
+int Render_DrawWireframeModel(struct RenderAnimFrame *frame, void *position, int scale,
+                              int yaw, void *ot, u8 *buffer);
 void Render_ResetGteScreenOffset(void);
 void Render_AnimationFrame(void);
 

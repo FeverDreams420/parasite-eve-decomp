@@ -1,5 +1,0 @@
-#ifndef PE1_EXT_B6BDA0FDFA73
-#define PE1_EXT_B6BDA0FDFA73
-extern u32 *D_8009CDD0;
-extern s16 *D_8009CDD4;
-#endif /* PE1_EXT_B6BDA0FDFA73 */
