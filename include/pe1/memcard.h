@@ -171,6 +171,11 @@ int Save_BuildCardFile(char *path);
 void Save_StartWriteSlot(int port, int slot);
 
 void MemCard_CloseAllAndResetState(void);
+void MemCard_InitState(void);
+int MemCard_IsPortPresent(int port);
+int MemCard_CheckPresent(int port);
+void MemCard_StartRead(int port, int slot);
+int MemCard_IsOperationPending(void);
 
 MemCardSaveSlot *MemCard_GetSlot(unsigned int port, int slot);
 

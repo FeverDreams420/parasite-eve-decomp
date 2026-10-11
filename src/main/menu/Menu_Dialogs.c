@@ -19,19 +19,14 @@
  * dialog with its error prompt. */
 
 #define NULL ((void *)0)
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
 
-void MemCard_InitState(void);
-s32 MemCard_IsPortPresent(s32 port);
-s32 MemCard_CheckPresent(s32 port);
-void MemCard_StartRead(s32 port, s32 slot);
-s32 MemCard_IsOperationPending(void);
 s32 Menu_MemCardPortSelectHandler(void *node, s32 flags);
-int Menu_IsMemCardSlotSelectable(int arg0);
-void Menu_DrawMemCardPortList(int arg0);
 
 int g_McDialogMode;
 int g_MenuMemCardConfirmPending;
-int D_8009CFF4;
+/* Parasite spell named by the info panel. */
+int g_MenuSpellInfoId;
 
 void Menu_DrawParasiteSpellInfoPanel(void);
 
@@ -44,16 +39,16 @@ void Menu_CreateParasiteSpellInfoPanel(int arg0) {
         MenuWidget_CreateSimpleNode(0x1C, 0, 0, 0);
     }
 
-    D_8009CFF4 = arg0;
+    g_MenuSpellInfoId = arg0;
 }
 
 void Menu_DrawParasiteSpellInfoPanel(void) {
     Draw_OffsetCursor(2, 4);
     Draw_PrintCenteredText(Str_LookupTable4(0x26));
     Draw_OffsetCursor(0, 0x10);
-    Draw_PrintCenteredText(Str_LookupTable8(D_8009CFF4 + 0xEB));
+    Draw_PrintCenteredText(Str_LookupTable8(g_MenuSpellInfoId + 0xEB));
     Draw_OffsetCursor(2, 0x14);
-    Draw_PrintRawText(Str_LookupTableC(D_8009CFF4 + 0xEB));
+    Draw_PrintRawText(Str_LookupTableC(g_MenuSpellInfoId + 0xEB));
 }
 
 void Menu_CreateContextHelpPanel(void) {
@@ -393,32 +388,8 @@ void Menu_CreateTwoLineDialog(int line0_id, int line1_id) {
     line1 = line0 + 0x40;
     Util_CopyFFTerminatedBytes(line1, text);
 
-    if (Draw_MeasureTextWidth(line0) > Draw_MeasureTextWidth(line1)) {
-        if (Draw_MeasureTextWidth(line0) >= 100)
-            goto measure_wide;
-        width = 100;
-        /* Keep the short-width branch distinct from the second-line test. */
-        asm("");
-    }
-    else
-    {
-    if (Draw_MeasureTextWidth(line1) < 100) {
-        width = 100;
-    }
-    else
-    {
-measure_wide:
-    {
-        u8 *first = D_800A1A20[0];
-        u8 *second = first + 0x40;
-        width = Draw_MeasureTextWidth(first) > Draw_MeasureTextWidth(second)
-            ? Draw_MeasureTextWidth(first) : Draw_MeasureTextWidth(second);
-    }
-    }
-    }
-width_ready:
-    /* Do not pull layout arithmetic into the preceding jump delay slot. */
-    asm("");
+    width = MAX(100, MAX(Draw_MeasureTextWidth(D_800A1A20[0]),
+                         Draw_MeasureTextWidth(D_800A1A20[1])));
     parent->grid_width = width + 0x14;
     parent->x = (0x12C - width) >> 1;
     parent->visible_rows += 0xE;
@@ -526,15 +497,9 @@ s32 Menu_MemCardPortSelectHandler(void *node, s32 flags) {
 
     cellIndex = MenuWidget_GetCellIndex(MenuWidget_GetChild(node, 0));
     if (flags & 0x10000) {
-        if (cellIndex >= 0) {
-            if (cellIndex >= 2) {
-            if (cellIndex == 2) {
-                goto close_dialog;
-            }
-            }
-            else
-            {
-read_card:
+        switch (cellIndex) {
+        case 0:
+        case 1:
             if ((MemCard_CheckPresent(cellIndex) != 0) && (MemCard_IsPortPresent(cellIndex) != 0) && (MemCard_IsOperationPending() == 0)) {
                 MemCard_CloseAllAndResetState();
                 MemCard_StartRead(cellIndex, 1);
@@ -542,7 +507,7 @@ read_card:
                 return 1;
             }
             return 1;
-close_dialog:
+        case 2:
             MenuWidget_DestroyNode(MenuWidget_FindByModeAndSelectedBase(1, 0x25));
             MenuWidget_DestroyNode(MenuWidget_FindByModeAndSelectedBase(1, 0x26));
             MenuWidget_DestroyNode(MenuWidget_FindByModeAndSelectedBase(1, 0x24));
@@ -553,8 +518,6 @@ close_dialog:
             Menu_PlayConfirmSound();
             return 1;
         }
-            }
-error_sound:
         Menu_PlayErrorSound();
         return 1;
     }

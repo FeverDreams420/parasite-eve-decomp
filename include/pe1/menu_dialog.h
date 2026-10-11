@@ -33,6 +33,8 @@ void Menu_OnItemDiscardConfirm(MenuWidgetNode *node, int confirmed);
 void Menu_StepItemDetailPanel(void);
 
 void Menu_DrawContextHelpText(MenuWidgetNode *panel);
+int Menu_IsMemCardSlotSelectable(int port);
+void Menu_DrawMemCardPortList(MenuWidgetNode *node);
 extern void (*g_MenuDeferredCallback)(void);
 
 #endif
