@@ -44,7 +44,7 @@ s32 func_8018F750(s32 mode, SceneE20TrailEffect *effect, SceneEffectSlot *comman
     s32 var_s0;
     register s32 modelScale asm("$17");
     u32 assetKey;
-    register s32 paletteX asm("$4");
+    s32 paletteX;
     s32 paletteY;
     s32 translationZ;
     s32 drawAngle;
@@ -348,7 +348,7 @@ block_63:
             }
             pageArg0 = 0; pageArg1 = temp_s3; pageArg2 = 0;
                         pageIndex = &D_800E11FA;
-            asm volatile("" : "=r"(pageIndex) : "0"(pageIndex));
+            asm volatile("" : : "r"(pageIndex));
             texturePage = firstPageTable[*pageIndex];
 
             D_800F3368.palette = 3;
