@@ -13,34 +13,23 @@
 
 /* Field frame loop and its scene flush: Boot_FlushSceneFast is the exit tail
  * that Boot_RunFrame repeats after its loop. Contiguous -G8 pair. */
-/* COMMON supplies small-data metadata to MASPSX; the other words stay
- * absolute. */
+/* COMMON supplies small-data metadata to MASPSX; MASPSX_FORCE_G0 keeps
+ * every other word absolute. The frame counter D_8009CDA4 is read
+ * absolutely by CD_TrackReadFlow, so only its size is given here. */
 u32 D_8009D280;
 int D_8009D1C4;
 unsigned int g_GameStateFlags;
-extern u8 D_8009CDD8_blob[] asm("D_8009CDD8");
-#define D_8009CDD8 (*(u32 *)D_8009CDD8_blob)
 u32 D_8009D1A0;
-/* Frame counter word: CD_TrackReadFlow reads it through an absolute
- * address, this -G8 unit through the small-data area, so the size
- * is given here only. */
 u32 D_8009CDA4[1];
+
+extern int D_8009CDD8;
+extern int D_8009CDDC;
 extern u8 D_8009D1F4_blob[] asm("D_8009D1F4");
 #define D_8009D1F4 (*(u32 *)D_8009D1F4_blob)
-extern u8 D_8009D238_blob[] asm("D_8009D238");
-#define D_8009D238 (*(u32 *)D_8009D238_blob)
-extern u8 D_8009CDDC_blob[] asm("D_8009CDDC");
-#define D_8009CDDC (*(u32 *)D_8009CDDC_blob)
-/* Independent views preserve the original load-then-store sequence. */
-extern u32 D_8009D250_read[] asm("D_8009D250");
-extern u32 D_8009D250_write[] asm("D_8009D250");
-extern u8 D_8009D26C_blob[] asm("D_8009D26C");
-#define D_8009D26C (*(u32 *)D_8009D26C_blob)
-/* These views prevent GCC from retaining one address across frame phases. */
-extern u32 D_800B0CD8_post[3] asm("D_800B0CD8");
-extern u32 D_800B0CD8_read[3] asm("D_800B0CD8");
-extern u32 D_800B0CD8_write1[3] asm("D_800B0CD8");
-extern u32 D_800B0CD8_write2[3] asm("D_800B0CD8");
+extern u32 D_8009D238;
+extern u32 D_8009D250;
+extern u32 D_8009D26C;
+extern u32 D_800B0CD8;
 extern u8 D_800B0CEA[];
 
 void Gpu_InitPipeline(void);
@@ -125,7 +114,7 @@ void Boot_RunFrame(void)
                 ClearOTagR(((u32 **)((u8 *)game_flags + (D_8009CDDC << 2)))[0x58],
                            0x1000);
             }
-            D_8009D250_write[0] = D_8009D250_read[0] + 1;
+            D_8009D250 = D_8009D250 + 1;
             Scene_UpdateEntityList();
             Entity_FrameUpdate();
 
@@ -156,7 +145,7 @@ do_vsync:
             VSync(2);
 after_vsync:;
 
-            if (!(D_800B0CD8_post[0] & 0x4200) &&
+            if (!(D_800B0CD8 & 0x4200) &&
                 (D_8009D26C & 0x0F000006u) == 0x0F000006u) {
                 Sys_Shutdown();
             }
@@ -172,7 +161,7 @@ loop_end_check:
         } while (D_8009D1C4 == D_8009D280);
     }
 
-    if (D_800B0CD8_post[0] & 0x200) {
+    if (D_800B0CD8 & 0x200) {
         clear_rect.x = 0;
         clear_rect.y = 0;
         clear_rect.w = 0x140;
@@ -187,14 +176,14 @@ loop_end_check:
         u32 mask = ~0x3800u;
         register u32 final_flags asm("$2");
         final_flags = (D_8009D1A0 | 0x40) & mask;
-        status = D_800B0CD8_read[0] | 2;
+        status = D_800B0CD8 | 2;
         flags = final_flags;
     }
     D_8009D1A0 = flags;
     {
         u32 first_status = status & ~0x800u;
-        D_800B0CD8_write1[0] = first_status;
+        D_800B0CD8 = first_status;
         if (status & 0x200)
-            D_800B0CD8_write2[0] = (first_status | 2u) & ~0x8200u;
+            D_800B0CD8 = (first_status | 2u) & ~0x8200u;
     }
 }
