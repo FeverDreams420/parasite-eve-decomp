@@ -9,6 +9,7 @@
 #include "common.h"
 #include "pe1/geom_state.h"
 #include "pe1/render_prim.h"
+#include "pe1/render_buffers.h"
 
 /* Initialize camera projection and save the active actor screen position. */
 int Render_PrepareFrame(void) {
@@ -32,36 +33,30 @@ int Render_PrepareFrame(void) {
         local.vector[2] = z;
     } else local.vector[0] = local.vector[1] = local.vector[2] = 0;
     {
-        /* Narrow volatile input preserves the retail stack frame in GCC 2.7.2. */
+        /* Matching debt: a volatile register input is the only form found
+         * that keeps the retail 48-byte frame (the 8 bytes above the
+         * projected point are never accessed). */
         register volatile unsigned short cx asm("$6") = 160;
-        unsigned int cy = 112;
-        /* C offset shifts; the narrow X input retains the required allocation. */
-        {
-            gte_SetGeomOffset(cx, cy);
-        }
+
+        gte_SetGeomOffset(cx, 112);
     }
     {
-        GteMatrix **address = &D_800BCFA4.value;
-        asm("" : "=r"(address) : "0"(address));
-        {
-            register const GteMatrixWords *words asm("$6");
-            words = (const GteMatrixWords *)*address;
-            gte_ldrotmatrix(words);
-            gte_ldtransmatrix(words);
-        }
+        GteMatrix **slot = &D_800BCFA4.value;
+        register GteMatrix *view asm("$6");
+
+        asm("" : "=r"(slot) : "0"(slot));
+        view = *slot;
+        gte_ldrotmatrix(view);
+        gte_ldtransmatrix(view);
     }
-    gte_lwc2_0_0(local.vector);
-    gte_lwc2_1_4(local.vector);
-    PE1_NOP();
-    PE1_NOP();
-    gte_rtps_command();
+    gte_ldv0(local.vector);
+    gte_rtps();
     gte_stsxy2(&local.projected);
     {
         int ret = 0;
-        int word;
-        int x;
-        word = local.projected.word;
-        x = local.projected.xy[0];
+        int word = local.projected.word;
+        int x = local.projected.xy[0];
+
         D_800BCFB4 = x;
         D_800BCFB6 = word >> 16;
         return ret;
@@ -86,28 +81,8 @@ int Render_Update(void) {
 /* Reset the screen tint state embedded in the scroll state: white target,
  * black start colour, two full-screen tiles and their draw-mode packets. */
 s32 CdRom_InitScreenState(void) {
+    GeomScrollState *state = &g_GeomScroll.state;
     s32 i;
-    s32 value3;
-    s32 value60;
-    s32 value140;
-    s32 valueE0;
-    s32 value1;
-    s32 command;
-    register GeomScrollState *base asm("$6");
-    register u8 *p asm("$4");
-    register u8 *q asm("$5");
-    s32 tmp2;
-    s32 tmp3;
-    i = 0;
-    value3 = 3;
-    value60 = 0x60;
-    value140 = 0x140;
-    valueE0 = 0xE0;
-    value1 = 1;
-    command = 0xE1000400;
-    base = &g_GeomScroll.state;
-    q = (u8 *)base;
-    p = (u8 *)base;
 
     g_GeomScroll.state.position.tint.target_b = 0xFF;
     g_GeomScroll.state.position.tint.target_g = 0xFF;
@@ -117,40 +92,38 @@ s32 CdRom_InitScreenState(void) {
     g_GeomScroll.state.position.tint.start_g = 0;
     g_GeomScroll.state.position.tint.start_r = 0;
     g_GeomScroll.state.position.tint.blend_mode = 2;
-
-    for (; i < 2; i++) {
-        p[0x33] = value3;
-        p[0x37] = value60;
-        tmp2 = (u16)base->position.tint.target_r;
-        p[0x34] = tmp2;
-        tmp2 = (u16)base->position.tint.target_g;
-        p[0x35] = tmp2;
-        tmp3 = (u16)base->position.tint.target_b;
-        *(u16 *)(p + 0x38) = 0;
-        *(u16 *)(p + 0x3A) = 0;
-        *(u16 *)(p + 0x3C) = value140;
-        *(u16 *)(p + 0x3E) = valueE0;
-        p[0x37] |= 2;
-        p[0x36] = tmp3;
-        q[0x53] = value1;
-        tmp2 = base->position.tint.blend_mode;
-        p += 0x10;
-        tmp2 &= 3;
-        tmp2 <<= 5;
-        tmp2 |= command;
-        *(s32 *)(q + 0x54) = tmp2;
-        q += 8;
+    for (i = 0; i < 2; i++) {
+        state->position.tint.tiles[i].tag.length = 3;
+        state->position.tint.tiles[i].command = 0x60;
+        state->position.tint.tiles[i].r = state->position.tint.target_r;
+        state->position.tint.tiles[i].g = state->position.tint.target_g;
+        state->position.tint.tiles[i].b = state->position.tint.target_b;
+        state->position.tint.tiles[i].x = 0;
+        state->position.tint.tiles[i].y = 0;
+        state->position.tint.tiles[i].width = 320;
+        state->position.tint.tiles[i].height = 224;
+        state->position.tint.tiles[i].command |= 2;
+        state->position.tint.modes[i].tag.length = 1;
+        state->position.tint.modes[i].command = 0xE1000400 | ((state->position.tint.blend_mode & 3) << 5);
     }
-
-    base->position.tint.duration = 0;
-    base->position.tint.frame = 0;
+    state->position.tint.duration = 0;
+    state->position.tint.frame = 0;
     return 0;
 }
 
-/* Re-evaluate the ordering pointer after the packet-tag write. */
-#define linkPrimitive(ordering, tag) { \
-    ((RenderGpuTag *)(tag))->address = ((RenderGpuTag *)(ordering))->address; \
-    ((RenderGpuTag *)(ordering))->address = (u32)(tag); \
+/* A packet tag seen as a pointer and as the address word the DMA chain
+ * links through. */
+typedef union RenderTagAddress {
+    RenderGpuTag *tag;
+    u32 word;
+} RenderTagAddress;
+
+/* PSY-Q addPrim; the ordering pointer is re-evaluated after the tag write. */
+#define linkPrimitive(ordering, packet) { \
+    RenderTagAddress link; \
+    (packet)->address = ((RenderGpuTag *)(ordering))->address; \
+    link.tag = (packet); \
+    ((RenderGpuTag *)(ordering))->address = link.word; \
 }
 
 int Render_SetCDDCSlot(void) {
@@ -171,26 +144,26 @@ int Render_SetCDDCSlot(void) {
             divisor = 1;
         }
         frame = D_800BCFF8;
-        state->position.tint.tiles[D_8009CDDC].r =
+        state->position.tint.tiles[g_ActiveDrawSlot].r =
             D_800BCFF0 + (D_800BCFE8 - D_800BCFF0) * frame / divisor;
-        state->position.tint.tiles[D_8009CDDC].g =
+        state->position.tint.tiles[g_ActiveDrawSlot].g =
             D_800BCFF2 + (D_800BCFEA - D_800BCFF2) * frame / divisor;
-        state->position.tint.tiles[D_8009CDDC].b =
+        state->position.tint.tiles[g_ActiveDrawSlot].b =
             D_800BCFF4 + (D_800BCFEC - D_800BCFF4) * frame / divisor;
     } else {
-        state->position.tint.tiles[D_8009CDDC].r = D_800BCFE8;
-        state->position.tint.tiles[D_8009CDDC].g = D_800BCFEA;
-        state->position.tint.tiles[D_8009CDDC].b = D_800BCFEC;
+        state->position.tint.tiles[g_ActiveDrawSlot].r = D_800BCFE8;
+        state->position.tint.tiles[g_ActiveDrawSlot].g = D_800BCFEA;
+        state->position.tint.tiles[g_ActiveDrawSlot].b = D_800BCFEC;
     }
     buffers = &D_800B0E38;
-    slot = D_8009CDDC;
-    linkPrimitive((u32 *)buffers->ordering[slot] + 3,
+    slot = g_ActiveDrawSlot;
+    linkPrimitive(&buffers->ordering[slot][3],
                   &state->position.tint.tiles[slot].tag);
     (slot + state->position.tint.modes)->tag.length = 1;
-    modeSlot = D_8009CDDC;
+    modeSlot = g_ActiveDrawSlot;
     (modeSlot + state->position.tint.modes)->command =
         0xe1000400 | ((state->position.tint.blend_mode & 3) << 5);
-    linkPrimitive((u32 *)buffers->ordering[modeSlot] + 3,
+    linkPrimitive(&buffers->ordering[modeSlot][3],
                   &state->position.tint.modes[modeSlot].tag);
     if (mode == 2) {
         state->position.tint.frame++;
