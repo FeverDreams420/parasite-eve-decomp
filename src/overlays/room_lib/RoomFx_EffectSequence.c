@@ -1460,7 +1460,6 @@ typedef RoomFxSeed8 RoomDriftMatrixSeed;
 s32 rand(void);
 
 void RoomFx_UpdateDriftingEffect(void *arg0, void *arg1, RoomDriftEffect *effect) {
-    register RoomDriftEffect *initial asm("$16");
     RoomDriftView *view;
     RoomDriftEffect *current;
     RoomDriftMatrixSeed seed;
@@ -1475,23 +1474,22 @@ void RoomFx_UpdateDriftingEffect(void *arg0, void *arg1, RoomDriftEffect *effect
     u16 velocity_y;
     u16 velocity_z;
 
-    asm("" : "=r"(initial) : "0"(effect));
+    current = effect;
     view = (*(RoomDriftRoot **)func_800C2B50())->view;
     seed = s_EffectProjectSeed;
     ApplyMatrixSV(&view->transform, &seed, out);
 
-    current = initial;
-    if (initial->timer == 0) {
-        initial->half14 = 0;
-        initial->x = out[0] + view->base_x;
-        initial->y = out[1] + view->base_y + 0x1E;
-        initial->z = out[2] + view->base_z;
-        initial->velocity_x = 0;
-        initial->velocity_y = -8;
-        initial->velocity_z = 0;
+    if (current->timer == 0) {
+        current->half14 = 0;
+        current->x = out[0] + view->base_x;
+        current->y = out[1] + view->base_y + 0x1E;
+        current->z = out[2] + view->base_z;
+        current->velocity_x = 0;
+        current->velocity_y = -8;
+        current->velocity_z = 0;
         initialRandom = rand();
-        initial->duration = 0x96;
-        initial->timer = initialRandom % 88 + 40;
+        current->duration = 0x96;
+        current->timer = initialRandom % 88 + 40;
     }
 
     x = current->x;
