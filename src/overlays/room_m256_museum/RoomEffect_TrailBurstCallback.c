@@ -272,19 +272,28 @@ s32 func_801940B0(int mode, void *effect) {
             }
                 }
             alive = state->frame < 0x10;
-            goto checkLifetime;
+            if (alive == 0) {
+                return 1;
+            }
+            break;
         case 3:
             nextModelFrame = (u16) state->frame + 1;
             state->frame = nextModelFrame;
             asm volatile("" : "=r"(nextModelFrame) : "0"(nextModelFrame), "m"(state->frame));
             alive = (s16)nextModelFrame < 0xA;
-            goto checkLifetime;
+            if (alive == 0) {
+                return 1;
+            }
+            break;
         case 4:
             nextSpriteFrame = (u16) state->frame + 1;
             state->frame = nextSpriteFrame;
             asm volatile("" : "=r"(nextSpriteFrame) : "0"(nextSpriteFrame), "m"(state->frame));
             alive = (s16)nextSpriteFrame < 0x10;
-            goto checkLifetime;
+            if (alive == 0) {
+                return 1;
+            }
+            break;
         case 5:
             state->frame = (s16) ((u16) state->frame + 1);
             if ((func_800C6B90(state, 0xB4) != 0) && (state->frame < 0x10) && (D_800E2368->flags != 0) && ((D_800F32D0->actor->state->core_flags & 0x3F000000) == 0x01000000)) {

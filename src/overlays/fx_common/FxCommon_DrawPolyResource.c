@@ -362,8 +362,9 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                     temp_a0_9 = (scratchpad->orderingDepth + scratchpad->depthBias) >> 2;
                     scratchpad->orderingDepth = temp_a0_9;
                     if (((temp_a0_9 * 4) - scratchpad->depthBias) <= 0) {
-                        goto nextTexturedTriangle;
                     }
+                    else
+                    {
                     if (temp_a0_9 < 0x1F4) {
                         register FxCommonVector *triangleMidpoint01 asm("$4");
                         FxCommonVector *triangleNamedInput2;
@@ -646,6 +647,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                          triangleLengthMask) |
                         temp_a0_13;
                     }
+                    }
                 nextTexturedTriangle:
                     primitiveIndex4 += 1;
 
@@ -699,8 +701,9 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                 temp_a0_14 = (scratchpad->orderingDepth + scratchpad->depthBias) >> 2;
                 scratchpad->orderingDepth = temp_a0_14;
                 if (((temp_a0_14 * 4) - scratchpad->depthBias) <= 0) {
-                    goto nextTexturedQuad;
                 }
+                else
+                {
                 if (temp_a0_14 >= 0x1F5) {
                     register u32 *quadGteScreen0 asm("$4");
                     register u32 *quadGteScreen1 asm("$3");
@@ -1109,6 +1112,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         (orderBuffer->allocation[scratchpad->orderingDepth].packed &
                          quadLengthMask) |
                         lastQuadAddress;
+                }
                 }
                 }
             nextTexturedQuad:

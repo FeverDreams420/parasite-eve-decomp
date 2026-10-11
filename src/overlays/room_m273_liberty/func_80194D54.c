@@ -21,9 +21,10 @@ int func_80194D54(int mode) {
             return 0;
         }
         D_8019AE9A = 0;
-        goto ret_zero;
 
     }
+    else
+    {
 mode_one:
     obj = ANIM_OWNER_AS(FieldAnimObjectPrefix)->actor;
     state = obj->state->action_state;
@@ -55,6 +56,7 @@ mode_one:
         return 1;
     }
 
+    }
 ret_zero:
     return 0;
 

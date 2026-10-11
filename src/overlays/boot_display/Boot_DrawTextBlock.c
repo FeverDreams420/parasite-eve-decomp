@@ -11,7 +11,7 @@ s32 Boot_DrawTextBlock(void) {
     while (*line != 255) {
         if (y >= -7) {
             if (y >= 225) break;
-            while (*line) {
+            for (; *line; ++line) {
                 switch (*line) {
                 case ' ':
                     break;
@@ -24,17 +24,15 @@ s32 Boot_DrawTextBlock(void) {
                         } while (*scan);
                     }
                     x = (320 - width) >> 1;
-                    goto next_character;
+                    continue;
                 case '\t':
                     x += Boot_GetGlyphWidth(' ') * 14;
-                    goto next_character;
+                    continue;
                 default:
                     g_BootDisplayCallbacks->glyph((s16)x, (s16)y, *line);
                     break;
                 }
                 x += Boot_GetGlyphWidth(*line);
-            next_character:
-                ++line;
             }
             g_BootDisplayFontStyle = 0;
             x = 24;

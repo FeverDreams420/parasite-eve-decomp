@@ -1797,11 +1797,13 @@ int RoomLib_ConfigureHandlerA(RoomEnt *o, int arg1, unsigned int op, int arg3, i
     case28:
         o->h48 = arg3;
         o->h46 = sp10;
-        goto done;
     }
+    else
+    {
 case10:
     o->t16 = arg3;
     o->sub.cb = (void (*)(void))RoomLib_RearmHandlerA;
+    }
 done:
     return 0;
 }

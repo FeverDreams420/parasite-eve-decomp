@@ -52,9 +52,10 @@ int RoomLib_ConfigureHandlerG(RoomEnt *o, int mode, unsigned int op,
     }
     o->sub.signal = (int *)arg0;
     *(int *)arg0 = mode;
-    goto ret;
 
     }
+    else
+    {
 case4:
     ((RoomFloorWalkerObject *)o)->state.speed = arg0;
     return 0;
@@ -85,6 +86,7 @@ case12:
     ((RoomFloorWalkerObject *)o)->state.gravity = arg1;
     ((RoomFloorWalkerObject *)o)->state.restTime = arg2;
 
+    }
 ret:
     return 0;
 }

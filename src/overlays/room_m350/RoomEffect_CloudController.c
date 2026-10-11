@@ -65,26 +65,23 @@ int func_80198CF8(int event,State *state)
         D_8019A8BC=angle;
         asm volatile("" : : "m"(D_8019A8BC));
         delta=(angle-(unsigned short)instance->rot_y)&4095;
-        if (state->mode != 0) {
-            if(state->mode==1) goto steer;
-            state->targetSpeed=0;
-            goto adjust;
-        }
-accelerate:
-        {
-            if(state->speed<=1280) instance->rot_y=FieldEng_TurnToward(instance->rot_y,angle,80);
-            if(state->speed<=state->targetSpeed && ((instance->rot_y-D_8019A8BC+64)&4095)<=256) {
-                state->mode=1; state->targetSpeed=1536; D_8019A8C0=0;
+        do {
+            if (state->mode != 0) {
+                if (state->mode != 1) {
+                    state->targetSpeed=0;
+                    break;
+                }
+            } else {
+                if(state->speed<=1280) instance->rot_y=FieldEng_TurnToward(instance->rot_y,angle,80);
+                if(state->speed<=state->targetSpeed && ((instance->rot_y-D_8019A8BC+64)&4095)<=256) {
+                    state->mode=1; state->targetSpeed=1536; D_8019A8C0=0;
+                }
+                break;
             }
-        }
-        goto adjust;
-steer:
-        {
             if(state->targetSpeed>=state->speed && ((delta-1536)&4095)<1024) {
                 state->mode=0; state->targetSpeed=512;
             }
-        }
-adjust:
+        } while (0);
         speed=state->speed; target=state->targetSpeed;
         {
             register int next asm("$3")=speed;
