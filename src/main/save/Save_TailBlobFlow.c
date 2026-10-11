@@ -11,7 +11,7 @@
 void Save_SerializeTail(void) {
     SAVE_PUT(SaveBytes800, g_EntityWorkBuffer);
     SAVE_PUT(SaveBytes4, &D_8009D2E8);
-    SAVE_PUT(SaveBytes4, &D_8009D280);
+    SAVE_PUT(SaveBytes4, &g_SceneDispatchToken);
     SAVE_PUT(SaveBytes4, &D_8009D1A0);
     SAVE_PUT(SaveBytes4, &D_800B0CDC);
     SAVE_PUT(SaveBytes2, &D_800B0CE0);
@@ -31,7 +31,7 @@ void Save_SerializeTail(void) {
 void Save_DeserializeTail(void) {
     SAVE_GET(SaveBytes800, g_EntityWorkBuffer);
     SAVE_GET(SaveBytes4, &D_8009D2E8);
-    SAVE_GET(SaveBytes4, &D_8009D280);
+    SAVE_GET(SaveBytes4, &g_SceneDispatchToken);
     SAVE_GET(SaveBytes4, &D_8009D1A0);
     SAVE_GET(SaveBytes4, &D_800B0CDC);
     SAVE_GET(SaveBytes2, &D_800B0CE0);

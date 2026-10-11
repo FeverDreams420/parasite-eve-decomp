@@ -10,5 +10,8 @@
 extern u8 D_801D0DBE;
 extern u8 D_801223F6;
 
+/* Prim list the memory card progress widget flushes; 0x40 marks a write. */
+extern int g_MemCardProgressPrimList;
+
 
 #endif

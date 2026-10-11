@@ -1,16 +1,10 @@
-typedef struct TempPoint {
-    int x;
-    int y;
-} TempPoint;
-
-#include "Save_GetCurrentMapNumber_externs.h"
-
-int Str_EncodeBase32(char *out, unsigned int value);
-int Str_ParseMapNumber(char *arg0);
+#include "common.h"
+#include "pe1/scene_dispatch.h"
+#include "pe1/scene_room.h"
 
 int Save_GetCurrentMapNumber(void) {
-    TempPoint point;
+    char roomName[8];
 
-    Str_EncodeBase32(&point, g_SceneDispatchToken);
-    return Str_ParseMapNumber(&point);
+    Str_EncodeBase32(roomName, g_SceneDispatchToken);
+    return Str_ParseMapNumber(roomName);
 }

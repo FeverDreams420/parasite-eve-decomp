@@ -5,13 +5,13 @@
 #include "pe1/menu_inventory.h"
 #include "pe1/menu_notification_dialog.h"
 #include "pe1/menu_widget.h"
+#include "pe1/menu_memcard_display.h"
 
 /* Save-slot write and read starts and the two confirmation handlers that
  * launch the card write behind the progress widget or report the error. */
 
 int g_SaveSelectedSlot;
 int g_SaveSlotCellIndex;
-#include "SaveWriteFlow_externs.h"
 
 void Save_StartWriteSlot(int arg0, int arg1);
 int Save_StartReadSlot(int port, int slot);

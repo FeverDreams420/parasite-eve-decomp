@@ -5,6 +5,9 @@
  * map selection compares it with g_SceneDispatchToken. */
 extern int g_SceneDispatchCur;
 
+/* Packed id of the room to load next (0x8009D280); the save tail stores it. */
+extern int g_SceneDispatchToken;
+
 /* Mirror of the current room id (D_8009D280); see scene_transition.h. */
 extern int D_8009D1C4;
 
