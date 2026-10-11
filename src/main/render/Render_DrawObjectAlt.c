@@ -7,7 +7,7 @@
 #include "pe1/gte.h"
 #include "pe1/render_object.h"
 
-extern s16 D_8009CDDC;
+extern int D_8009CDDC;
 
 #define Render_LoadObjectMatrix(matrix) \
     { \
@@ -115,5 +115,5 @@ void Render_DrawObjectAlt(RenderObjectEntity *input, s16 limit, u8 red, u8 green
             matrix += 8;
         } while (i < entity->header->part_count);
     }
-    Render_UpdateClutTable(entity, 0, D_8009CDDC);
+    Render_UpdateClutTable(entity, 0, (s16)D_8009CDDC);
 }

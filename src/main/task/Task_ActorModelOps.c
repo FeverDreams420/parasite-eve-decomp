@@ -20,7 +20,7 @@
 #define S32_AT(ptr, off) (*(s32 *)((u8 *)(ptr) + (off)))
 #define PTR_AT(ptr, off) (*(u8 **)((u8 *)(ptr) + (off)))
 
-extern Pe1GlobalSlot D_8009CDDC;
+extern int D_8009CDDC;
 extern Pe1GlobalSlot CDDC_toggle0_load __asm__("D_8009CDDC");
 extern Pe1GlobalSlot CDDC_toggle0_store __asm__("D_8009CDDC");
 extern Pe1GlobalSlot CDDC_draw1 __asm__("D_8009CDDC");
@@ -115,7 +115,7 @@ int Task_SetGteMatrix(int **args) {
     Render_TransformSkinnedVertices(&g_CurrentEntity->render_object, D_800B89F8);
     Render_DrawObject(&g_CurrentEntity->render_object, D_800BEA40.words);
     Render_UpdateClutTable(&g_CurrentEntity->render_object, 1,
-                           (s16)D_8009CDDC.value.signed_value);
+                           (s16)D_8009CDDC);
 
     flags = (flag_actor = g_CurrentEntity)->flags;
     if ((flags & 0x10000000) != 0) {

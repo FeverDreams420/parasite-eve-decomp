@@ -1,5 +1,7 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
+/* MASPSX_FORCE_G0: 1 */
+/* ASPSX_VERSION: 2.70 */
 #include "common.h"
 #include "pe1/textbox_open.h"
 #include "pe1/textbox.h"
@@ -19,8 +21,14 @@ extern u8 D_8009EC78[];
 extern u8 D_8009EC70[];
 extern u8 D_8009ECA8[];
 extern u16 D_80091680[];
-extern int D_8009CED4;
-extern u8 *D_8009CE90;
+/* COMMON supplies small-data metadata to MASPSX for the textbox words this
+ * unit reaches through $gp; the other extern words stay absolute. */
+int D_8009CED4;
+u8 *D_8009CE90;
+unsigned char D_8009CE94;
+TextboxRect D_8009CE98;
+u8 D_8009CEA0;
+u8 D_8009CED0;
 void SetDrawTPage(void *, int, int, int);
 void SetSprt(void *);
 int MargePrim(void *, void *);
@@ -288,18 +296,18 @@ extern TextboxFontPage D_80091644[4];
 
 extern TextboxGlyphSpacing D_800916A0[256];
 
-extern s32 D_8009CDDC[];
+extern int D_8009CDDC;
 /* Tentative small-data definition: stock maspsx must recognize this store
  * as GP-relative to retain its load-delay nop. The linker pins the COMMON
  * symbol to the retail address, as for other unplaced game globals. */
 signed char D_8009CEA4;
-extern u8 D_8009CEA8;
-extern u8 D_8009CEAC;
-extern u8 D_8009CEB0;
+u8 D_8009CEA8;
+u8 D_8009CEAC;
+u8 D_8009CEB0;
 extern u8 D_8009CEC4;
 extern u8 D_8009CEC8;
 extern u8 D_8009CECC;
-extern u32 D_8009D1F4[];
+extern u32 D_8009D1F4;
 extern RenderBufferPrefix D_800B0E38;
 
 void Menu_DrawTextboxEntries(void) {
@@ -369,19 +377,19 @@ void Menu_DrawTextboxEntries(void) {
 
     sectionIndex = 0;
     backgroundDrawn = 0;
-    temp_a0 = D_8009CDDC[0] * 4;
+    temp_a0 = D_8009CDDC * 4;
     nextPacket = *(TextboxGlyphPacket **)((u8 *)&D_800B0E38.other_buffers[1] + temp_a0);
     initialBufferTable = &D_800B0E38.other_buffers[1];
     asm("" : "=r"(initialBufferTable) : "0"(initialBufferTable), "r"(nextPacket));
     if (D_8009CED4 != 0) {
         AddPrim((*(u32 **)((u8 *)initialBufferTable + temp_a0 - 0xC)) + 2,
-                (unsigned int *)((D_8009CDDC[0] * 0x18) + (u8 *)D_8009ECA8));
+                (unsigned int *)((D_8009CDDC * 0x18) + (u8 *)D_8009ECA8));
     }
     textboxIndex = 0;
     sectionMask = 0xFFF0FFFF;
     do {
         if (g_TextboxEntries[textboxIndex].state != 0) {
-            orderingTable = ((u32 *)D_800B0E38.ordering[D_8009CDDC[0]]) + 1;
+            orderingTable = ((u32 *)D_800B0E38.ordering[D_8009CDDC]) + 1;
             textbox = &g_TextboxEntries[textboxIndex];
             glyphWidth = 12;
             stopDrawing = 0;
@@ -435,8 +443,8 @@ void Menu_DrawTextboxEntries(void) {
             } else {
                 if ((textbox->background != 0) && (backgroundDrawn == 0) && (D_8009CED4 == 0)) {
                     backgroundDrawn = 1;
-                    AddPrim(((u32 *)D_800B0E38.ordering[D_8009CDDC[0]]) + 2,
-                            (unsigned int *)((D_8009CDDC[0] * 0x18) + (u8 *)D_8009ECA8));
+                    AddPrim(((u32 *)D_800B0E38.ordering[D_8009CDDC]) + 2,
+                            (unsigned int *)((D_8009CDDC * 0x18) + (u8 *)D_8009ECA8));
                 }
             }
             numberStart = textbox->numbers;
@@ -457,7 +465,7 @@ void Menu_DrawTextboxEntries(void) {
                     cursor.y += lineHeight;
                     break;
                 case 0xF8:
-                    if ((textbox->state == 2) && (D_8009D1F4[0] & 0x100)) {
+                    if ((textbox->state == 2) && (D_8009D1F4 & 0x100)) {
                         do {
                             temp_v0 = *stream;
                             stream++;
@@ -471,7 +479,7 @@ void Menu_DrawTextboxEntries(void) {
                     stopDrawing = 1;
                     break;
                 case 0xFF:
-                    if ((textbox->state == 2) && (D_8009D1F4[0] & 0x100) &&
+                    if ((textbox->state == 2) && (D_8009D1F4 & 0x100) &&
                         !((s32)textbox->control.flags & 0x02000000)) {
                         textbox->state = 0U;
                     }
@@ -572,7 +580,7 @@ void Menu_DrawTextboxEntries(void) {
                         break;
                     case 6: {
                         s32 sectionTerminator = 6;
-                        if (D_8009D1F4[0] & 0x100) {
+                        if (D_8009D1F4 & 0x100) {
                         section_again:
                             workingValue = (u32)textbox->control.flags;
                             if (sectionIndex == ((workingValue >> 16) & 15)) {
@@ -666,25 +674,25 @@ void Menu_DrawTextboxEntries(void) {
                         workingValue = (temp_v1_7 & 0xFE3FFFFF) | ((*stream & 7) << 0x16);
                         textbox->control.flags = workingValue;
                         temp_v1_9 = (workingValue >> 0x16) & 7;
-                        if (D_8009D1F4[0] & 0x20) {
+                        if (D_8009D1F4 & 0x20) {
                             temp_v0_5 = D_8009CEA0 + 1;
                             D_8009CEA0 = temp_v0_5;
                             if ((s8)temp_v0_5 >= temp_v1_9) {
                                 D_8009CEA0 = temp_v1_9 - 1;
                             }
                         }
-                        if (D_8009D1F4[0] & 8) {
+                        if (D_8009D1F4 & 8) {
                             temp_v0_6 = D_8009CEA0 - 1;
                             D_8009CEA0 = temp_v0_6;
                             if ((s8)temp_v0_6 < 0) {
                                 D_8009CEA0 = 0;
                             }
                         }
-                        if (D_8009D1F4[0] & 0x100) {
+                        if (D_8009D1F4 & 0x100) {
                             D_8009CEA4 = D_8009CEA0;
                         }
                         stream++;
-                        selectionFrame = D_8009CDDC[0];
+                        selectionFrame = D_8009CDDC;
                         selectionOffset = selectionFrame * 0x1C;
                         selectionOrderingOffset = selectionFrame * 4;
                         selectionSprite =
