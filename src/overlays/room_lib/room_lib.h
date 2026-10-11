@@ -363,7 +363,8 @@ typedef struct RoomLibHandlerBState {
     unsigned char optionB;        /* 0x0B */
     unsigned char optionC;        /* 0x0C */
     unsigned char flags;          /* 0x0D */
-    char pad0E[0x2];
+    unsigned char started;        /* 0x0E */
+    char pad0F;
     short matrix[9];              /* 0x10: heading rotation */
     char pad22[0xE];
     int target[3];                /* 0x30 */
@@ -382,10 +383,11 @@ typedef struct RoomLibHandlerBState {
     int phaseValue;               /* 0x74 */
     int horizontalVelocity[2];   /* 0x78: X/Z velocity during the arc */
     int mode;                     /* 0x80 */
-    char pad84[0x2];
+    short floorY;                 /* 0x84: landing height */
     short rate;                   /* 0x86 */
     short heading;                /* 0x88 */
     short secondaryHeading;       /* 0x8A */
+    unsigned char finished;       /* 0x8C */
 } RoomLibHandlerBState;
 
 /* Argument-controlled state used by HandlerC through RoomEnt + 0x0C. */
@@ -397,7 +399,8 @@ typedef struct RoomLibHandlerCState {
     unsigned char optionB;        /* 0x0B */
     unsigned char optionC;        /* 0x0C */
     unsigned char flags;          /* 0x0D */
-    char pad0E[0x22];
+    unsigned char started;        /* 0x0E */
+    char pad0F[0x21];
     int target[3];                /* 0x30 */
     char pad3C[0x4];
     int arcTarget[3];             /* 0x40: transformed destination */
@@ -418,6 +421,7 @@ typedef struct RoomLibHandlerCState {
     short rate;                   /* 0x90 */
     short heading;                /* 0x92 */
     short secondaryHeading;       /* 0x94 */
+    unsigned char finished;       /* 0x96 */
 } RoomLibHandlerCState;
 
 extern short D_800966EE[];

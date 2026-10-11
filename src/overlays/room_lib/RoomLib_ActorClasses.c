@@ -88,7 +88,7 @@ int RoomLib_ConfigureHandlerD(RoomEnt *o, int query, unsigned int op, int arg0, 
         state->target[0] = arg0;
         state->target[2] = arg2;
         if (arg1 == -1) {
-            state->target[1] = RW32(D_8009D254, 0x2C);
+            state->target[1] = ((RoomLink *)D_8009D254)->pos[1];
         } else {
             state->target[1] = arg1;
         }
@@ -572,7 +572,7 @@ int RoomLib_ConfigureHandlerE(RoomEnt *o, int query, unsigned int op, int arg0, 
         state->target[0] = arg0;
         state->target[2] = arg2;
         if (arg1 == -1) {
-            state->target[1] = RW32(D_8009D254, 0x2C);
+            state->target[1] = ((RoomLink *)D_8009D254)->pos[1];
         } else {
             state->target[1] = arg1;
         }
@@ -681,7 +681,7 @@ void RoomLib_ArmHandlerE(RoomEnt *o) {
     signed char c;
     int t;
     unsigned short lo;
-    if (RW16(o, 0x80) != 0) {
+    if (((RoomLibHandlerEState *)&o->sub)->mirrorPosition != 0) {
         RoomLib_HandlerESteerToward((void *)o->link, (void *)s);
     }
     c = o->t16;
@@ -718,9 +718,9 @@ void RoomLib_HandlerE(RoomEnt *o) {
     short *rotBase;
     short *rot;
     if (o->t1A == 0) {
-        RW16(o, 0x86) = 1;
+        ((RoomLibHandlerEState *)&o->sub)->phase = 1;
         o->t1A = 1;
-        RW32(link, 0x98) &= 0xFFF3FFFF;
+        link->flags &= 0xFFF3FFFF;
         if (o->active != 0 && link->target != 0) {
             link->target->flags |= 0x40000000;
         }
@@ -968,7 +968,7 @@ int RoomLib_ConfigureHandlerB(RoomEnt *o, int query, unsigned int op, int arg0, 
         if (arg1 != -1) {
             state->target[1] = arg1;
         } else {
-            state->target[1] = RW32(D_8009D254, 0x2C);
+            state->target[1] = ((RoomLink *)D_8009D254)->pos[1];
         }
         state->targetLink = 0;
         break;
@@ -1386,7 +1386,7 @@ int RoomLib_ConfigureHandlerC(RoomEnt *o, int query, unsigned int op, int arg0, 
         state->target[0] = arg0;
         state->target[2] = arg2;
         if (arg1 == -1) {
-            state->target[1] = RW32(D_8009D254, 0x2C);
+            state->target[1] = ((RoomLink *)D_8009D254)->pos[1];
         } else {
             state->target[1] = arg1;
         }
