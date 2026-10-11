@@ -260,8 +260,8 @@ extern GeomState * volatile D_800B1624;
 
 extern u8 g_GeomGroupSel;
 int Geom_StepGroupAnimations(void);
-int Scene_IsBattleMode(void);
-int Scene_IsNotBattleMode(void);
+int Geom_ScrollEntries(void);
+int Render_StepCameraTransition(void);
 
 /* 52-byte viewport records addressed through header offset 0x1C. */
 /* GPU state loading reads this 0x20-byte prefix of each viewport record using

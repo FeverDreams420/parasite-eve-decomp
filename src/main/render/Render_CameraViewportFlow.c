@@ -376,7 +376,7 @@ int Render_SetScrollMode(int x, int y, int z, int mode) {
 #undef D_800BCFA2
 
 /* Advance the camera transition, then center the selected viewport. */
-int Scene_IsNotBattleMode(void)
+int Render_StepCameraTransition(void)
 {
     unsigned int flags = g_RenderStateFlags;
     int mode, smooth;

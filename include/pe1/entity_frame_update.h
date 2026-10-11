@@ -31,7 +31,7 @@ int Menu_RunFrameWithArg(int arg);
 void func_80069660(void);
 void func_8001A9F8(void);
 void Entity_CopyParentPosition(void);
-int Scene_IsNotBattleMode(void);
+int Render_StepCameraTransition(void);
 void Render_SetViewport(int *camera);
 void Render_SetGteScreenOffset(void);
 void Render_ResetGteScreenOffset(void);

@@ -63,7 +63,6 @@ int Render_PrepareFrame(void) {
     }
 }
 
-int Scene_IsBattleMode(void);
 int Geo_BuildMeshList(void);
 int Render_StepFade(void);
 int Render_ApplyScreenTint(void);
@@ -71,7 +70,7 @@ int Render_ApplyScreenTint(void);
 int Render_Update(void) {
     Render_DrawSprite();
     Geom_StepGroupAnimations();
-    Scene_IsBattleMode();
+    Geom_ScrollEntries();
     Geo_BuildMeshList();
     Render_StepFade();
     Render_ApplyScreenTint();

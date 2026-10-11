@@ -508,34 +508,25 @@ int Render_StepFade(void) {
     return 0;
 }
 
+/* Starts the scene-load fade: sets the load flag (toggling the 0x2000
+ * phase bit) and selects tint mode 1. */
 int Render_BeginSceneLoad(void) {
-    u32 *flags;
-    u32 temp;
-    u32 old;
-    u32 value;
-    u32 next;
-    u32 mask;
-    u32 *flags2;
-    u32 value2;
-    flags = (u32 *)&g_RenderStateFlags;
-    old = *flags;
-    value = old | 0x1000;
-    *flags = value;
-    if (value & 0x2000) {
-        temp = value & ~0x2000;
-        next = temp;
-    } else {
-        next = old | 0x3000;
+    {
+        int *flags = &g_RenderStateFlags;
+        int old = *flags;
+        int value = old | 0x1000;
+
+        *flags = value;
+        if (value & 0x2000)
+            *flags = value & ~0x2000;
+        else
+            *flags = old | 0x3000;
     }
-    *flags = next;
-    asm volatile("" : : : "memory");
-    mask = 0xFFFF0000;
-    flags2 = (u32 *)&g_RenderStateFlags;
-    value2 = *flags2;
-    mask |= 0x3FFF;
-    value2 &= mask;
-    value2 |= 0x4000;
-    *flags2 = value2;
+    {
+        int *flags = &g_RenderStateFlags;
+
+        *flags = (*flags & ~0xC000) | 0x4000;
+    }
     return 0;
 }
 
@@ -595,8 +586,8 @@ int Render_ApplyScreenTint(void) {
     return 0;
 }
 
-/* Historical name: applies texture scrolling and camera-relative parallax. */
-int Scene_IsBattleMode(void)
+/* Applies texture scrolling and camera-relative parallax to the entries. */
+int Geom_ScrollEntries(void)
 {
     if (!(g_GameStateFlags & 0x104)) {
         int i;
@@ -659,25 +650,22 @@ int Scene_IsBattleMode(void)
 }
 
 /* Builds the ground-aligned shadow transform for `actor` and links its
- * shadow quad, projected from a square of the model's shadow radius.
- * Matching debt: the remaining empty constraints. Rotation, column, and
- * translation windows use the stock GTE macros. */
-int Render_DrawRoom(RenderShadowActor *actor)
+ * shadow quad, projected from a square of the model's shadow radius. */
+int Render_DrawActorShadow(RenderShadowActor *actor)
 {
     GteShortVector origin;
     GteShortVector corner;
     GteVector axis;
     GteVector normal;
-    s32 normalX, normalY, normalZ;
     GteVector up;
     GteMatrixStorage local;
     GteMatrix world;
-    u16 *firstColumn;
+    GteMatrixStorage *source;
+    u32 first, last;
     s32 sxy;
     s32 p;
     s32 flag;
     RenderShadowQuad *quad;
-    GteMatrixStorage *source;
     FieldTileAddress table;
     FieldTileAddress ot;
     FieldTileAddress link;
@@ -685,9 +673,6 @@ int Render_DrawRoom(RenderShadowActor *actor)
     int shade;
     int depth;
     int maxDepth;
-    u32 last;
-    const GteMatrixWords *matrix;
-    u32 first; /* word 0 is read before the rest of the copy */
 
     if (actor->flags & 0x400)
         return 0;
@@ -698,6 +683,7 @@ int Render_DrawRoom(RenderShadowActor *actor)
     origin.x = actor->x.integer;
     origin.y = actor->y.integer;
     origin.z = actor->z.integer;
+    /* The part matrix without its translation turns +Z into the facing. */
     source = &actor->matrices[actor->shadow_matrix_index];
     first = source->words[0];
     local.words[1] = source->words[1];
@@ -708,25 +694,19 @@ int Render_DrawRoom(RenderShadowActor *actor)
     local.words[6] = source->words[6];
     last = source->words[7];
     corner.z = 0x1000;
-    matrix = (const GteMatrixWords *)local.words;
     local.words[0] = first;
     corner.x = 0;
     corner.y = 0;
     local.matrix.t[1] = 0;
     local.matrix.t[0] = 0;
-    /* Retain the final word of the retail copy before clearing translation. */
+    /* Matching debt: retail keeps this store although t[2] overwrites it. */
     *(volatile u32 *)&local.words[7] = last;
     local.matrix.t[2] = 0;
-    {
-                gte_ldrotmatrix(matrix);
-        gte_ldtransmatrix(matrix);
-    }
-    gte_lwc2_0_0(&corner);
-    gte_lwc2_1_4(&corner);
+    gte_ldrotmatrix(&local);
+    gte_ldtransmatrix(&local);
+    gte_ldv0(&corner);
     gte_rt();
-    gte_swc2_25_0(&axis);
-    gte_swc2_26_4(&axis);
-    gte_swc2_27_8(&axis);
+    gte_stlvnl(&axis);
     axis.y = 0;
     if (axis.x == 0 && axis.z == 0) {
         normal.x = 0;
@@ -735,31 +715,20 @@ int Render_DrawRoom(RenderShadowActor *actor)
     } else {
         VectorNormal(&axis, &normal);
     }
-    normalX = normal.x;
-    normalY = normal.y;
-    normalZ = normal.z;
+    /* Shadow basis: X = up x facing, Y = up, Z = facing. */
     local.matrix.m[1][1] = 0x1000;
     up.y = 0x1000;
-    asm volatile("" : : "r"(normalX), "r"(normalY));
     local.matrix.m[0][1] = 0;
     local.matrix.m[2][1] = 0;
     up.x = 0;
     up.z = 0;
-    local.matrix.m[0][2] = normalX;
-    local.matrix.m[1][2] = normalY;
-    local.matrix.m[2][2] = normalZ;
-    {
-        const GteVector *vector = &normal;
-        asm volatile("" : "=r"(vector) : "0"(vector));
-        gte_ldopv1_psyq(vector);
-    }
-    gte_ldir3_precise(&up);
-    gte_ldir1_precise(&up);
-    gte_ldir2_precise(&up);
+    local.matrix.m[0][2] = normal.x;
+    local.matrix.m[1][2] = normal.y;
+    local.matrix.m[2][2] = normal.z;
+    gte_ldopv1_psyq(&normal);
+    gte_ldopv2(&up);
     gte_op12_psyq();
-    gte_swc2_25_0(&axis);
-    gte_swc2_26_4(&axis);
-    gte_swc2_27_8(&axis);
+    gte_stlvnl(&axis);
     local.matrix.m[0][0] = axis.x;
     local.matrix.m[1][0] = axis.y;
     local.matrix.m[2][0] = axis.z;
@@ -769,55 +738,12 @@ int Render_DrawRoom(RenderShadowActor *actor)
         local.matrix.t[1] = origin.y;
     local.matrix.t[0] = actor->matrices[actor->shadow_matrix_index].matrix.t[0];
     local.matrix.t[2] = actor->matrices[actor->shadow_matrix_index].matrix.t[2];
-    {
-        const GteMatrixWords *cameraRot;
-        const GteMatrixWords *cameraTrans;
-        const u16 *column;
-        u16 *outColumn;
-
-        s32 *outTranslation;
-        const s32 *translation;
-        cameraRot = (const GteMatrixWords *)D_800B89F8;
-        /* Keep the camera address in t0 without pinning it: GCC must also
-         * be able to reuse t0 for the signed division below. */
-        asm volatile("" : "=r"(cameraRot) : "0"(cameraRot)
-            : "$3", "$4", "$5", "$6", "$7");
-
-        gte_ldrotmatrix(cameraRot);
-        column = (const u16 *)&local.matrix;
-                gte_ldclmv(column);
-        gte_rtir();
-        firstColumn = (u16 *)&world;
-                gte_stclmv(firstColumn);
-                column = (const u16 *)&local.matrix + 1;
-                gte_ldclmv(column);
-        gte_rtir();
-        outColumn = (u16 *)&world + 1;
-                gte_stclmv(outColumn);
-                column = (const u16 *)&local.matrix + 2;
-                gte_ldclmv(column);
-        gte_rtir();
-        outColumn = (u16 *)&world + 2;
-                gte_stclmv(outColumn);
-        /* Transform placement translation with the camera matrix. */
-                cameraTrans = cameraRot;
-
-        gte_ldtransmatrix(cameraTrans);
-        translation = local.matrix.t;
-                gte_ldlv0(translation);
-        gte_rt();
-        outTranslation = world.t;
-        gte_swc2_9_0(outTranslation);
-        gte_swc2_10_4(outTranslation);
-        gte_swc2_11_8(outTranslation);
-    }
-    SetRotMatrix((GteMatrix *)firstColumn);
-    SetTransMatrix((GteMatrix *)firstColumn);
+    gte_CompMatrix((GteMatrixWords *)D_800B89F8, &local, &world);
+    SetRotMatrix(&world);
+    SetTransMatrix(&world);
     SetGeomScreen(D_800B89F8[8]);
 
-    /* Exclude unused temporaries from GCC's division reload scratch choice. */
-    asm volatile("" : : : "$9", "$10", "$11", "$15", "$24", "$25");
-    quad = &actor->shadow_quads[D_8009CDDC];
+    quad = &actor->shadow_quads[g_ActiveDrawSlot];
     quad->tag.length = 9;
     quad->code = 0x2C;
     if (actor->render_flags & 6)
@@ -825,13 +751,9 @@ int Render_DrawRoom(RenderShadowActor *actor)
     else
         shade = 0x80;
     shade = shade * actor->shadow_intensity / 128;
-    {
-        int half = shade / 2;
-
-        quad->r0 = half;
-        quad->g0 = half;
-        quad->b0 = half;
-    }
+    quad->r0 = shade / 2;
+    quad->g0 = shade / 2;
+    quad->b0 = shade / 2;
     quad->u0 = 0;
     quad->v0 = 0x40;
     quad->u1 = 0x3F;
@@ -872,32 +794,29 @@ int Render_DrawRoom(RenderShadowActor *actor)
         maxDepth = depth;
 
     if (maxDepth >= 0 && maxDepth < 0x1000) {
-        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[D_8009CDDC], maxDepth);
+        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], maxDepth);
         quad->tag.address = ot.tag->address;
-        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[D_8009CDDC], maxDepth);
+        TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], maxDepth);
         link.tag = &quad->tag;
         ot.tag->address = link.word;
     }
-    /* These registers are already saved by the function. Excluding them
-     * from reload leaves t0 available for the multiply-high temporary. */
-        return 0;
+    return 0;
 }
 
-void Render_SetPrimColour(PrimObj *obj, unsigned char a, unsigned char b, unsigned char c) {
+/* Sets the colour of every primitive in both halves of the double-buffered
+ * primitive list. */
+void Render_SetPrimColour(PrimObj *obj, unsigned char r, unsigned char g, unsigned char b) {
     int i;
-    int offset;
-    unsigned char *base;
 
     for (i = 0; i < obj->count; i++) {
-        offset = i << 4;
-        base = (unsigned char *) obj->entries;
-        base[offset + 4] = a;
-        base[offset + 5] = b;
-        base[offset + 6] = c;
+        PrimEntry *entries = obj->entries;
 
-        base = (unsigned char *) obj->entries + (obj->count << 4);
-        base[offset + 4] = a;
-        base[offset + 5] = b;
-        base[offset + 6] = c;
+        entries[i].r = r;
+        entries[i].g = g;
+        entries[i].b = b;
+        entries = obj->entries + obj->count;
+        entries[i].r = r;
+        entries[i].g = g;
+        entries[i].b = b;
     }
 }
