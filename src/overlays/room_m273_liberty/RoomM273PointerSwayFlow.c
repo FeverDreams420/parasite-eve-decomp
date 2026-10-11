@@ -17,13 +17,15 @@ int func_80199950(int mode, Effect *effect) {
         int frame = (short)(D_800E27EC - 1);
         int kind = D_800F3368.palette;
         unsigned int sizeOffset, shadeOffset;
-        int size, shade, palette;
+        s16 size;
+        s16 shade;
+        int palette;
         unsigned short clut;
         sizeOffset = ((unsigned int)frame << 8) & 0x3F00;
         shadeOffset = ((unsigned int)frame << 9) & 0x3E00;
         size = *(int *)((char *)D_800966EC + sizeOffset) + 2048;
         shade = (short)*(int *)((char *)D_800966EC + shadeOffset) >> 6;
-        asm("" : "=r"(size), "=r"(shade) : "0"(size), "1"(shade) : "memory");
+
         palette = D_800E1204[kind];
         clut = GetClut(0, (kind == 4 && D_800F3428) ? palette + 7 : palette + 3);
         func_800CEE20(effect->position, 0, (short)size, (short)size,
