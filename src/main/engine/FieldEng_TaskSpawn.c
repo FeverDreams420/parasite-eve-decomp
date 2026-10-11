@@ -245,8 +245,8 @@ int func_800D4698(FieldAnimTaskOwner *owner, int skip, int arg2, int arg3, int a
     return 0;
 }
 
-/* Matching debt: four register pins for the matrix pointer and GTE words.
- * Matrix loads are C; each GTE transfer uses its individual macro. */
+/* Draws every live task of the owner: loads the current view matrix into
+ * the GTE, then runs each task callback and its particle list in mode 2. */
 int func_800D4704(FieldAnimTaskOwner *owner)
 {
     FieldAnimTaskContext *context = &owner->tasks;
