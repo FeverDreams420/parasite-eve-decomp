@@ -2,6 +2,7 @@
 #define PE1_WEAPON_LIST_OUTPUT_H
 
 #include "common.h"
+#include "pe1/battle.h"
 
 /* Weapon parameters written into the first 0x14 bytes of an action block.
  * The final four bytes of the saved 0x18-byte block are left untouched. */
@@ -11,8 +12,14 @@ typedef struct WeaponListOutput {
     u16 unknown04;
     u16 kind;
     u32 unknown08;
-    u32 packed;
-    u32 effects;
+    union {
+        u32 word;
+        BattleAttackBits bits;
+    } packed;
+    union {
+        u32 word;
+        BattleTurnBits bits;
+    } effects;
 } WeaponListOutput;
 
 PE1_STATIC_ASSERT(sizeof(WeaponListOutput) == 0x14, weapon_list_output_size);
