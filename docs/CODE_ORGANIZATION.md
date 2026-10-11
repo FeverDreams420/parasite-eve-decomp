@@ -485,7 +485,8 @@ How the earlier groups were closed, for the next symbols of the same kind:
   views. Where retail reloads a word after a field store, the plain scalar is
   not enough: GCC 2.7 lets a store to a structure field skip a fixed scalar,
   so `D_8009D29C` stays a one-element array and the `Combatant` flag store in
-  `Battle_InitEntityColors` stays a byte-offset access. A field store that
+  `Battle_InitEntityColors` goes through a pointer to the field (an
+  indirect store is not a structure field store). A field store that
   `g_GameState` and `D_800B0CEC` already describe is written as that field.
 - Pointee views of one pointer (the room and scene records of the player,
   the actor list, the matrix and projection slots) became casts at the use
@@ -502,7 +503,7 @@ How the earlier groups were closed, for the next symbols of the same kind:
   `room_m273_boss_state.h`, `scene_e22_ember_data.h`,
   `menu_memcard_offset.h`).
 - `BattleCmd_CommitAmmoAndUpdate` is called with the queued action and
-  without it, as retail does, so its call sites declare it without a
+  without it, as retail does, so `battle_cmd.h` declares it without a
   prototype.
 - Scalar versus record access of one word: cc1 reads a scalar `extern`
   straight from its symbol, but any record, union, array or cast view goes
