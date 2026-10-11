@@ -26,14 +26,14 @@ int func_8019665C(int mode, RoomM273Drop *drop) {
             }
             if (drop->touched) return 0;
             if (drop->position.y < D_8019AF62) return 0;
-            if (Math_IntSqrt((g_PlayerEntity->position[0] - drop->position.x) *
-                                 (g_PlayerEntity->position[0] - drop->position.x) +
-                             (g_PlayerEntity->position[2] - drop->position.z) *
-                                 (g_PlayerEntity->position[2] - drop->position.z)) < 0x80) {
+            if (Math_IntSqrt((g_PlayerEntity->render_object.model_matrix.translation[0] - drop->position.x) *
+                                 (g_PlayerEntity->render_object.model_matrix.translation[0] - drop->position.x) +
+                             (g_PlayerEntity->render_object.model_matrix.translation[2] - drop->position.z) *
+                                 (g_PlayerEntity->render_object.model_matrix.translation[2] - drop->position.z)) < 0x80) {
                 drop->touched = 1;
                 D_8019AF04.hit = drop->position;
                 D_8019AF04.hit.pad = 1;
-                g_PlayerEntity->actor->flags |= 0x4000;
+                g_PlayerEntity->state->flags |= 0x4000;
                 if (ANIM_OWNER_AS(RoomM273BossActor)->instance->owner)
                     ANIM_OWNER_AS(RoomM273BossActor)->instance->owner->flags |= 0x80000000;
             }

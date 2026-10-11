@@ -5,6 +5,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte_types.h"
 #include "pe1/render_object.h"
+#include "pe1/field_actor.h"
 #include "room_m273_effects.h"
 #include "room_m273_sway.h"
 #include "room_m273_sweep.h"
@@ -104,7 +105,7 @@ typedef struct RoomM273BossPlayer {
     GteMatrix *transforms;
 } RoomM273BossPlayer;
 
-extern RoomM273BossPlayer *g_PlayerEntity;
+extern struct FieldActor *g_PlayerEntity;
 /* Packed sine/cosine table: the low half is the sine, the high half the cosine. */
 typedef struct RoomM273BossTrig {
     signed int sine : 16;

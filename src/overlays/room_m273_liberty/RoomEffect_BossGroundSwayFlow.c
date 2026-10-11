@@ -105,12 +105,12 @@ int func_80198E94(int mode, GteShortVector *position) {
         if (D_8019AF74.cooldown != 0) return 0;
         {
             int radius = D_800966EC[((now << 11) / 40) & 0xFFF].sine / 16 + 0x80;
-            int dx = g_PlayerEntity->position[0] - position->x;
-            int dz = g_PlayerEntity->position[2] - position->z;
+            int dx = g_PlayerEntity->render_object.model_matrix.translation[0] - position->x;
+            int dz = g_PlayerEntity->render_object.model_matrix.translation[2] - position->z;
             if (radius < func_8005186C(dx * dx + dz * dz)) return 0;
         }
         position->pad = 1;
-        g_PlayerEntity->actor->flags |= 0x4000;
+        g_PlayerEntity->state->flags |= 0x4000;
         if (ANIM_OWNER_AS(RoomM273BossActor)->instance->owner) {
             ANIM_OWNER_AS(RoomM273BossActor)->instance->owner->flags |= 0x80000000;
             D_8019AF74.cooldown = 0x28;

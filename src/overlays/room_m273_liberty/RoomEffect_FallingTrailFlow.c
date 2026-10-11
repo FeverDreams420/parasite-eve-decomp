@@ -49,16 +49,16 @@ int func_80194E6C(int mode, RoomM273FallingTrail *trail) {
             trail->landed = 1;
         }
         if (trail->position.y >= D_8019AE9C.floor && g_PlayerEntity->mode >= 4) {
-            int dx = g_PlayerEntity->position[0] - trail->position.x;
-            int dz = g_PlayerEntity->position[2] - trail->position.z;
+            int dx = g_PlayerEntity->render_object.model_matrix.translation[0] - trail->position.x;
+            int dz = g_PlayerEntity->render_object.model_matrix.translation[2] - trail->position.z;
             if (Math_IntSqrt(dx * dx + dz * dz) < 0x140) {
                 trail->landed = 1;
                 source = &trail->position.x;
                 for (i = 0; i < 3; i++) {
-                    D_8019AE9C.hit[i] = (g_PlayerEntity->transforms->t[i] + source[i]) / 2;
+                    D_8019AE9C.hit[i] = (g_PlayerEntity->render_object.matrices->translation[i] + source[i]) / 2;
                 }
                 D_8019AE9C.hit_flag = 1;
-                g_PlayerEntity->actor->flags |= 0x4000;
+                g_PlayerEntity->state->flags |= 0x4000;
                 if (ANIM_OWNER_AS(RoomM273BossActor)->instance->owner) {
                     ANIM_OWNER_AS(RoomM273BossActor)->instance->owner->flags |= 0x80000000;
                 }

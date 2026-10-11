@@ -1,4 +1,5 @@
 #include "pe1/room_floor.h"
+#include "pe1/field_actor.h"
 #include "pe1/field_anim_pool.h"
 typedef struct { int reserved[19]; unsigned int flags; } ActorFlags;
 typedef struct {
@@ -7,7 +8,7 @@ typedef struct {
     int x, y, z;
 } WorldActor;
 typedef struct { unsigned int *actor; } RoomActor;
-extern WorldActor *g_PlayerEntity;
+extern FieldActor *g_PlayerEntity;
 extern short D_8019A86C;
 extern int Math_IntSqrt(int);
 
@@ -17,7 +18,7 @@ int func_8019721C(short *point, int radius) {
     WorldActor *world;
     if (*gate != 0) return 0;
     if (point[5] < g_RoomFloorY->y - 512) return 0;
-    world = g_PlayerEntity;
+    world = (WorldActor *)g_PlayerEntity;
     dx = world->x - point[4];
     if (dx < 0) dx = point[4] - world->x;
     if (dx > radius) return 0;
@@ -25,7 +26,7 @@ int func_8019721C(short *point, int radius) {
     if (dz < 0) dz = point[6] - world->z;
     if (dz > radius) return 0;
     if (Math_IntSqrt(dx * dx + dz * dz) > radius) return 0;
-    g_PlayerEntity->actor->flags |= 0x4000;
+    g_PlayerEntity->state->flags |= 0x4000;
     if (ANIM_OWNER_AS(RoomActor *)[2]->actor) *ANIM_OWNER_AS(RoomActor *)[2]->actor |= 0x80000000U;
     *gate = 30;
     return 1;

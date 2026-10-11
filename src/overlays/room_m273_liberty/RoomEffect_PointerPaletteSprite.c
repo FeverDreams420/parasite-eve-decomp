@@ -1,4 +1,5 @@
 #include "pe1/field_sprite_params.h"
+#include "pe1/field_actor.h"
 #include "room_m273_effects.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/psyq_gpu.h"
@@ -9,7 +10,7 @@ typedef struct { short x, y, z, pad; } Sprite;
 
 extern unsigned short D_800966EC[];
 extern GteRotation D_8019AB68;
-extern RoomM273PlayerActorView *g_PlayerEntity;
+extern FieldActor *g_PlayerEntity;
 extern unsigned char D_8019AE5C;
 
 int func_80193870(int mode, RoomM273SpritePoolEffect *state) {
@@ -52,11 +53,11 @@ int func_801939B4(int mode) {
     case 1:
         if (D_800E27EC >= 20) return 2;
         if (D_8019AE5C) return 2;
-        if (g_PlayerEntity->kind < 4) {
+        if (g_PlayerEntity->mode < 4) {
             RoomM273SpritePoolEffect *effect =
                 func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
             if (effect) {
-                RoomM273PlayerTransform *transform = g_PlayerEntity->tail.transform;
+                RoomM273PlayerTransform *transform = (RoomM273PlayerTransform *)g_PlayerEntity->render_object.matrices;
                 D_8019AE5C = 1;
                 effect->position = &transform->position;
             }

@@ -119,7 +119,7 @@ int func_80192E4C(int mode, RoomM350SweepTrap *trap) {
                       trig[((D_800E27EC - 1) * 64) & 0xFFF].cos >> 5, 1);
         }
         if (trap->done) return 0;
-        if (g_PlayerEntity->stance < 4) return 0;
+        if (g_PlayerEntity->mode < 4) return 0;
         D_8019A444[2].z = D_8019A444[3].z = -dist;
         c = rcos(ANIM_OWNER_AS(RoomM350TrapChannel)->actor->heading);
         s = rsin(ANIM_OWNER_AS(RoomM350TrapChannel)->actor->heading);
@@ -146,7 +146,7 @@ int func_80192E4C(int mode, RoomM350SweepTrap *trap) {
             gte_stsv(&quad[k]);
         }
         {
-            int player = (g_PlayerEntity->z << 16) | (u16)g_PlayerEntity->x;
+            int player = (((RoomM350Player *)g_PlayerEntity)->z << 16) | (u16)((RoomM350Player *)g_PlayerEntity)->x;
             int prev = (quad[3].z << 16) | (u16)quad[3].x;
             k = 0;
             while (k < 4) {
@@ -162,7 +162,7 @@ int func_80192E4C(int mode, RoomM350SweepTrap *trap) {
             }
         }
         if (k < 4) return 0;
-        g_PlayerEntity->actor->flags |= 0x4000;
+        g_PlayerEntity->state->flags |= 0x4000;
         {
             RoomM350TrapNode *node = ANIM_OWNER_AS(RoomM350TrapChannel)->actor->node;
             GteShortVector unused;

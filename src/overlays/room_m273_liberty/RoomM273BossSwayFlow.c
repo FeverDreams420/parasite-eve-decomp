@@ -33,8 +33,8 @@ int func_80197BBC(int mode) {
             step = &D_8019AD80[D_8019AF04.side];
             if (frame == 0) {
                 instance->time.fixed = step->start << 16;
-                angle = (ratan2(instance->x - g_PlayerEntity->location[0].value,
-                                       instance->z - g_PlayerEntity->location[2].value)
+                angle = (ratan2(instance->x - g_PlayerEntity->pos_x,
+                                       instance->z - g_PlayerEntity->pos_z)
                          - instance->yaw) & 0xFFF;
                 if (D_8019AF04.side != 0) {
                     if (angle <= 0x800) D_8019AF04.turn = angle >> 6;
@@ -134,11 +134,11 @@ int func_801981A4(int mode, RoomM273SwayShard *shard) {
     if (mode == 1) {
         if (shard->state == 0 && D_8019AF74.cooldown == 0 &&
             shard->position.y > (s16)g_RoomFloorY->raw - 0x240) {
-            s16 dx = g_PlayerEntity->position[0] - shard->position.x;
-            s16 dz = g_PlayerEntity->position[2] - shard->position.z;
+            s16 dx = g_PlayerEntity->render_object.model_matrix.translation[0] - shard->position.x;
+            s16 dz = g_PlayerEntity->render_object.model_matrix.translation[2] - shard->position.z;
             if ((s16)Math_IntSqrt(dx * dx + dz * dz) < 0x80) {
                 shard->state = 1;
-                g_PlayerEntity->actor->flags |= 0x4000;
+                g_PlayerEntity->state->flags |= 0x4000;
                 if (ANIM_OWNER_AS(RoomM273BossActor)->instance->owner)
                     ANIM_OWNER_AS(RoomM273BossActor)->instance->owner->flags |= 0x80000000;
                 D_8019AF74.hits[shard->side].x = shard->position.x;
@@ -237,7 +237,7 @@ int func_801986E8(int mode) {
                 if (shard == 0) break;
                 shard->side = i;
                 shard->state = 0;
-                player = g_PlayerEntity;
+                player = (RoomM273BossPlayer *)g_PlayerEntity;
                 shard->position.x = D_8019AF74.points[i].x;
                 shard->position.y = D_8019AF74.points[i].y;
                 shard->position.z = D_8019AF74.points[i].z;

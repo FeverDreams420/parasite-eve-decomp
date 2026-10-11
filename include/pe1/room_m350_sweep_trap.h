@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/gte_types.h"
 #include "pe1/render_object.h"
+#include "pe1/field_actor.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/field_texture_tables.h"
@@ -55,7 +56,7 @@ typedef struct RoomM350Trig {
 } RoomM350Trig;
 
 extern RoomM350Trig D_800966EC[];
-extern RoomM350Player *g_PlayerEntity;
+extern struct FieldActor *g_PlayerEntity;
 extern RenderColor D_8019A434[];
 extern RenderColor D_8019A3C8;
 extern RenderColor D_8019A43C;

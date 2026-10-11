@@ -370,9 +370,9 @@ void RoomLib_WindowHandler(RoomWindowObject *obj) {
     actor->matrix[7] = sp->roll.m[2][1];
     actor->matrix[8] = sp->roll.m[2][2];
     if (state->touched == 0) {
-        if (func_800DFE20((Vec3Fixed *)actor->pos, (Vec3Fixed *)g_PlayerEntity->pos) < 200) {
+        if (func_800DFE20((Vec3Fixed *)actor->pos, (Vec3Fixed *)&g_PlayerEntity->pos_x) < 200) {
             state->touched = 1;
-            g_PlayerEntity->core->flags |= 0x4000;
+            g_PlayerEntity->state->flags |= 0x4000;
             if (anchor->marker != 0) {
                 anchor->marker->flags |= 0x80000000;
             }

@@ -23,7 +23,7 @@ typedef struct { void *asset; int yaw; short size,brightness,unknown,turn; unsig
 typedef FieldActorState Owner;
 typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
-extern Instance *g_PlayerEntity;
+extern FieldActor *g_PlayerEntity;
 extern unsigned char D_8019A831, D_8019A82F;
 extern short D_800966EC[],D_800966EE[];
 extern Matrix D_8019A808;

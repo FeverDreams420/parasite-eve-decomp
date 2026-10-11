@@ -1,4 +1,5 @@
 #include "pe1/field_sprite_params.h"
+#include "pe1/field_actor.h"
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"
@@ -10,7 +11,7 @@ typedef RoomM350TransformOwner Instance;
 typedef RoomM350Actor Actor;
 
 typedef struct { short x, y, z, velocityY, gravity, reserved; } Particle;
-extern Instance *g_PlayerEntity;
+extern FieldActor *g_PlayerEntity;
 extern unsigned char D_8019A82F;
 extern int D_800966EC[], D_8019A598[];
 extern unsigned short D_800E11E8;
@@ -59,7 +60,7 @@ int func_80196A14(int event)
         }
     }
     if (D_8019A82F) {
-        Matrix *matrices = g_PlayerEntity->transforms;
+        Matrix *matrices = ((Instance *)g_PlayerEntity)->transforms;
         Particle *particle = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
         if (!particle) return 0;
         {

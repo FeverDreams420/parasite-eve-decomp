@@ -1,4 +1,5 @@
 #include "pe1/field_sprite_params.h"
+#include "pe1/field_actor.h"
 #include "room_m273.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/psyq_gpu.h"
@@ -9,7 +10,7 @@
 #include "pe1/psyq_libc.h"
 #include "pe1/gte_types.h"
 
-extern RoomM273PlayerActorView *g_PlayerEntity;
+extern FieldActor *g_PlayerEntity;
 extern u8 D_8019AE9A;
 extern RoomM273PulseSeed D_8019AC20[2];
 extern int func_800CE688(void *);
@@ -191,7 +192,7 @@ int func_80194128(int mode, GteRotation *rotation) {
         RoomM273PlayerActorView *player;
         /* The loop index is reused for the sampled scale below. */
         size = 0;
-        player = g_PlayerEntity;
+        player = (RoomM273PlayerActorView *)g_PlayerEntity;
         for (; size < 3; size++) {
             RoomM273PlayerTransform *transform = player->tail.transform;
             ((s16 *)&position)[size] = ((s32 *)&transform->position.x)[size];
@@ -301,7 +302,7 @@ int func_801945A8(int mode) {
             if(old<=0) {
                 Vector *position=func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
                 if(position) {
-                    RoomM273PlayerTransform *transform=g_PlayerEntity->tail.transform;
+                    RoomM273PlayerTransform *transform=(RoomM273PlayerTransform *)g_PlayerEntity->render_object.matrices;
                     position->x=transform->position.x;
                     position->y=transform->position.y;
                     position->z=transform->position.z;
@@ -398,7 +399,7 @@ int func_801949EC(int mode) {
             unsigned short value = state->value26;
             if (state->value22 >= 4 && (short)value < 4) {
                 RoomM273PointerPoolEffect *effect = (RoomM273PointerPoolEffect *)func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
-                if (effect) effect->position = g_PlayerEntity->tail.object + 20;
+                if (effect) effect->position = (u8 *)g_PlayerEntity->render_object.matrices->translation;
             }
         }
         func_800CE688(D_8019AE94);

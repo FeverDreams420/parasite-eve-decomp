@@ -17,7 +17,7 @@ typedef struct {
 } SceneE08InitState;
 
 extern void func_800C2B40(void *);
-extern RoomLink *g_PlayerEntity;
+extern struct FieldActor *g_PlayerEntity;
 extern int D_8019956C, D_8019957C;
 extern u8 *D_80199528;
 extern u8 D_80199680, D_80199681, D_80199682, D_80199684, D_80199685, D_80199686;
@@ -54,7 +54,7 @@ void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
     D_80199688 = offset;
     D_801996A8 = offset;
     /* Empty compiler barriers retain the retail register lifetimes. */
-    asm volatile ("" : "=r"(player) : "0"(g_PlayerEntity));
+    asm volatile ("" : "=r"(player) : "0"((RoomLink *)g_PlayerEntity));
     asm volatile ("" : "=r"(half) : "0"(0x80));
     D_80199685 = mode;
     D_801996A4 = 0x44;

@@ -1,4 +1,5 @@
 #include "pe1/gte.h"
+#include "pe1/field_actor.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/room_m350_effects.h"
 #include "pe1/render_object.h"
@@ -8,7 +9,7 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/psyq_gpu.h"
 /* Moving effect with collision, queued trail positions and ground rendering. */
-extern RoomM350EffectInstance *g_PlayerEntity;
+extern FieldActor *g_PlayerEntity;
 extern int D_800966EC[];
 extern short D_800966EE[],D_8019A7FE,D_8019A800,D_8019A802;
 extern GteRotation D_8019A3C0;
@@ -35,7 +36,7 @@ int func_801947BC(int event,RoomM350Particle *p)
             else {
                 int *trig=D_800966EC;
                 int speed=*(short *)((char *)trig+((timer<<6)&0x3FC0))/4;
-                int angle=FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->transform.t,(Vec3Fixed *)ANIM_OWNER_AS(RoomM350EffectActor)->instance->transform.t);
+                int angle=FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation,(Vec3Fixed *)ANIM_OWNER_AS(RoomM350EffectActor)->instance->transform.t);
                 int yaw=FieldEng_TurnToward(p->motion.value.rotation.y,(short)angle,speed);
                 int sum,product;
                 p->motion.value.rotation.y=yaw;
@@ -58,14 +59,14 @@ int func_801947BC(int event,RoomM350Particle *p)
             brightness=value>>5;
         }
         p->tail.value.active.brightness=brightness;
-        if(!p->tail.value.active.hit && g_PlayerEntity->animation>=4) {
-            int dx=g_PlayerEntity->transform.t[0]-p->position.x;
-            int dz=g_PlayerEntity->transform.t[2]-p->position.z;
+        if(!p->tail.value.active.hit && g_PlayerEntity->mode>=4) {
+            int dx=g_PlayerEntity->render_object.model_matrix.translation[0]-p->position.x;
+            int dz=g_PlayerEntity->render_object.model_matrix.translation[2]-p->position.z;
             if(Math_IntSqrt((unsigned int)dx*dx+(unsigned int)dz*dz)<128) {
                 short *count;
                 short n;
                 p->tail.value.active.hit=1;
-                g_PlayerEntity->owner->status|=0x4000;
+                ((RoomM350EffectInstance *)g_PlayerEntity)->owner->status|=0x4000;
                 if(ANIM_OWNER_AS(RoomM350EffectActor)->instance->owner) ANIM_OWNER_AS(RoomM350EffectActor)->instance->owner->flags|=0x80000000;
                 p->tail.value.active.speed=0;
                 if(p->tail.value.active.frame<40) p->tail.value.active.frame=40;

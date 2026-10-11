@@ -1,4 +1,5 @@
 #include "room_m350_shared.h"
+#include "pe1/field_actor.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
 #include "pe1/field_texture_tables.h"
@@ -11,7 +12,7 @@ typedef RoomM350TransformOwner Instance;
 typedef RoomM350SignedHalfPair SignedHalf;
 
 /* The spawner owns the falling particles updated and rendered by this callback. */
-extern Instance *g_PlayerEntity;
+extern FieldActor *g_PlayerEntity;
 extern RenderColor D_8019A464;
 extern unsigned char D_8019A79A,D_8019A79C;
 extern short D_800966EE[];
@@ -48,7 +49,7 @@ int func_801938E4(int event) {
         Instance *player;
         if(!particle) return 0;
         do {
-            player=g_PlayerEntity;
+            player=(Instance *)g_PlayerEntity;
             particle->x=player->transforms->position[0];
             particle->y=player->transforms->position[1];
             particle->z=player->transforms->position[2];

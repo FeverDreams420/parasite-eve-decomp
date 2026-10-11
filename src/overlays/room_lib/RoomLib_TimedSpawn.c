@@ -90,7 +90,7 @@ typedef struct RoomTimedSpawnEngine {
 } RoomTimedSpawnEngine;
 
 extern void *D_8009D254;
-extern void *g_PlayerEntity;
+extern struct FieldActor *g_PlayerEntity;
 extern void *RoomMain_ActorPtr2;
 extern u16 D_800E11EA;
 
