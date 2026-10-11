@@ -28,7 +28,6 @@ int func_80195320(int mode, u16 *out) {
 
         case 1:
     if (D_800E27EC == mode) {
-        ret = D_800E27EC < 8;
         task = func_800CE610(D_800F33E0->end);
         if (task) {
             value = *out;
@@ -38,10 +37,8 @@ int func_80195320(int mode, u16 *out) {
         }
         func_800D3F64(0x5A6, func_800D3FD8());
         func_800D3F64(0x5BE, 0x80);
-        ret = D_800E27EC < 8;
-    } else {
-        ret = D_800E27EC < 8;
     }
+    ret = D_800E27EC < 8;
     if (ret) return 0;
     return 2;
 
