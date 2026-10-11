@@ -481,17 +481,16 @@ int Akao_StepNoteSequencer(unsigned char *input, unsigned available)
         upload_size = available;
         if (upload_size >= payload_size) upload_size = payload_size;
 
-        address = 0x8000;
         if (count < 0x31) {
             if (g_AkaoCurTrack[1].active_voice_mask != 0) {
                 if ((g_AkaoCurTrack[1].status_flags & 0x100) == 0) {
                     address = 0x38000;
                     g_AkaoVoiceKeyOnState |= 0x100;
                 } else {
+                    address = 0x8000;
                     g_AkaoVoiceKeyOnState &= ~0x100U;
                 }
             } else {
-                asm volatile("" : "=r"(address) : "0"(address));
                 address = 0x8000;
                 if (g_AkaoCurTrack[0].active_voice_mask != 0) {
                     if ((g_AkaoCurTrack[0].status_flags & 0x100) == 0) {
@@ -505,6 +504,7 @@ int Akao_StepNoteSequencer(unsigned char *input, unsigned available)
                 }
             }
         } else {
+            address = 0x8000;
             g_AkaoVoiceKeyOnState &= ~0x100U;
         }
         SpuSetTransferStartAddr(address);
