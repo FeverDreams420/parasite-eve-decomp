@@ -130,8 +130,6 @@ void Scene_UpdateEntityFacing(BattleEntity *entity, int *actionState)
         }
         {
             u8 mode;
-            /* The action-mode lookup reads core again after the flag check. */
-            PE1_COMPILER_MEMORY_BARRIER();
             mode = (u8)((Combatant *)entity->core)->actionMode13;
             if (*actionState != mode) {
                 Entity_SetActionMode(entity, mode);
