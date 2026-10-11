@@ -8,7 +8,7 @@ extern char *g_PlayerEntity;
 extern s8 D_8009CE30;
 
 void Entity_SetActionMode(char *arg0, int arg1);
-void Battle_FlushScriptSounds(char *arg0);
+void Battle_FlushScriptSounds(void);
 
 #define COMBATANT_FIELD(ptr, type, member) \
     (*(type *)((ptr) + PE1_OFFSETOF(Combatant, member)))
@@ -37,7 +37,7 @@ void Battle_HaltOnPositiveX(void) {
         flags |= 0x2000;
         COMBATANT_FIELD(state2, int, stateFlags) = flags;
         ENTITY_FIELD(actor2, int, entityFlags) &= ~0x100;
-        Battle_FlushScriptSounds(actor2);
+        Battle_FlushScriptSounds();
     }
 }
 
