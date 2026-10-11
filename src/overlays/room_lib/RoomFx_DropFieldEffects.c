@@ -1580,11 +1580,11 @@ void RoomFx_UpdateEightParticles(void *unused,
                               (GteShortVector *)&transformed2);
 
                 ((RoomEightParticleState *)positionCursor)->position[0].x =
-                    *(u16 *)&transformed0.bytes[0] + context->baseX;
+                    (u16)transformed0.vector.x + context->baseX;
                 ((RoomEightParticleState *)positionCursor)->position[0].y =
-                    *(u16 *)&transformed0.bytes[2] + context->baseY;
+                    (u16)transformed0.vector.y + context->baseY;
                 ((RoomEightParticleState *)positionCursor)->position[0].z =
-                    *(u16 *)&transformed0.bytes[4] + context->baseZ;
+                    (u16)transformed0.vector.z + context->baseZ;
 
                 random = rand();
                 if ((random & 1) == 0) {
@@ -1604,11 +1604,11 @@ void RoomFx_UpdateEightParticles(void *unused,
             s16 zValue;
 
             ((RoomEightParticleState *)positionCursor)->position[0].x +=
-                *(u16 *)&((RoomEightParticleState *)positionCursor)->velocity[0].bytes[0];
+                (u16)((RoomEightParticleState *)positionCursor)->velocity[0].vector.x;
             randomValue = rand();
             randomValue %= 20;
             zPosition = ((RoomEightParticleState *)positionCursor)->position[0].z;
-            zVelocity = *(u16 *)&((RoomEightParticleState *)positionCursor)->velocity[0].bytes[4];
+            zVelocity = (u16)((RoomEightParticleState *)positionCursor)->velocity[0].vector.z;
             asm("" : "=r"(zPosition), "=r"(zVelocity)
                    : "0"(zPosition), "1"(zVelocity));
             yValue = ((RoomEightParticleState *)positionCursor)->position[0].y;
