@@ -63,7 +63,7 @@ case 1:
         intermediate=size/3+(size>>31);
         asm("" : "=h"(intermediate) : "0"(intermediate));
         high=intermediate;
-        asm volatile("" : : "r"(high), "r"(size>>31));
+        asm volatile("" : : "r"(high));
         quotient=high-(size>>31);
         state->size=quotient;
         if(state->size<=0) return 1;
