@@ -54,7 +54,7 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     RoomLink *link;
     RoomLibFxMatrixWords *matrix;
     register int c80a asm("$6");
-    register int c80b asm("$3");
+    u8 c80b;
     register int c40 asm("$5");
     int c20;
     register int c2 asm("$2");
