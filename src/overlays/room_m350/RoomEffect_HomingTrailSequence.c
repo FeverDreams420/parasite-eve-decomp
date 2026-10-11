@@ -11,7 +11,7 @@
 /* Moving effect with collision, queued trail positions and ground rendering. */
 extern FieldActor *g_PlayerEntity;
 #include "pe1/gte_sine_table.h"
-extern short D_800966EE[],D_8019A7FE,D_8019A800,D_8019A802;
+extern short D_8019A7FE,D_8019A800,D_8019A802;
 extern GteRotation D_8019A3C0;
 extern RenderColor D_8019A4E4,D_8019A3C8;
 extern int Math_IntSqrt(int);
@@ -34,13 +34,13 @@ int func_801947BC(int event,RoomM350Particle *p)
         if(!p->tail.value.active.hit) {
             if(p->motion.value.rotation.x>0) p->motion.value.rotation.x-=64;
             else {
-                int *trig=((int *)D_800966EC);
-                int speed=*(short *)((char *)trig+((timer<<6)&0x3FC0))/4;
+                GteSineWord *trig=D_800966EC;
+                int speed=trig[(timer<<4)&0xFF0].part.sin/4;
                 int angle=FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation,(Vec3Fixed *)ANIM_OWNER_AS(RoomM350EffectActor)->instance->transform.t);
                 int yaw=FieldEng_TurnToward(p->motion.value.rotation.y,(short)angle,speed);
                 int sum,product;
                 p->motion.value.rotation.y=yaw;
-                product=(short)trig[(D_800E27EC+2048)&4095]*160;
+                product=(short)trig[(D_800E27EC+2048)&4095].word*160;
                 sum=yaw+80;
                 p->motion.value.rotation.y=sum-product/4096;
             }
@@ -53,9 +53,9 @@ int func_801947BC(int event,RoomM350Particle *p)
             gte_ldv0(&offset); gte_rtv0tr_mac();
             gte_stsv(&p->position);
         }
-        if(p->tail.value.active.frame<40) brightness=((short)*(int *)((char *)D_800966EC+((p->tail.value.active.frame<<11)&0x3800))>>6)+128;
+        if(p->tail.value.active.frame<40) brightness=((short)D_800966EC[(p->tail.value.active.frame<<9)&0xE00].word>>6)+128;
         else {
-            unsigned int value=*(short *)((char *)D_800966EE+(((p->tail.value.active.frame-40)<<9)&0x3E00));
+            unsigned int value=D_800966EC[((p->tail.value.active.frame-40)<<7)&0xF80].part.cos;
             brightness=value>>5;
         }
         p->tail.value.active.brightness=brightness;

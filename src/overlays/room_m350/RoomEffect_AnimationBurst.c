@@ -30,10 +30,9 @@ int func_801944F0(int event, void **object)
             return 1;
         }
     } else if (event == 2) {
-        int *base = ((int *)D_800966EC);
+        GteSineWord *base = D_800966EC;
         int counter = D_800E27EC;
-        TableEntry *entry = (TableEntry *)((char *)base +
-            (((unsigned int)(counter - 1) << 9) & 0x3E00));
+        TableEntry *entry = (TableEntry *)&base[((unsigned int)(counter - 1) << 7) & 0xF80];
         int size = entry->size;
 
         vector[0] = 0;
@@ -47,7 +46,7 @@ int func_801944F0(int event, void **object)
             size = nextCounter * 512 + 2048;
             func_800D0728(*object, 256, 512, 16, (struct GteRotation *)vector, size, size,
                 &D_8019A3C8, (struct RenderColor *)D_8019A4E0,
-                (short)base[((unsigned int)(nextCounter - 1) << 8) & 0xF00] >> 5, 1);
+                (short)base[((unsigned int)(nextCounter - 1) << 8) & 0xF00].word >> 5, 1);
         }
     }
     return 0;

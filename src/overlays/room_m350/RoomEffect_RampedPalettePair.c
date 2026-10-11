@@ -23,8 +23,7 @@ int func_80192ADC(int event, Particle *object)
             return 1;
         }
     } else if (event == 2) {
-        int size = *(short *)((char *)D_800966EC +
-            (((unsigned int)(D_800E27EC - 1) << 8) & 0x3F00)) * object->scale / 4096;
+        int size = D_800966EC[((unsigned int)(D_800E27EC - 1) << 6) & 0xFC0].part.sin * object->scale / 4096;
         int kind = D_800F3368.palette;
         int palette = D_800E1204[kind];
         int handle;

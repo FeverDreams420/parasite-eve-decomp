@@ -21,8 +21,7 @@ int func_80197A04(int event, short *object)
             return 1;
         }
     } else if (event == 2) {
-        int scale = (4096 - *(short *)((char *)D_800966EC +
-            (((unsigned int)(D_800E27EC - 1) << 9) & 0x3E00))) * 2;
+        int scale = (4096 - D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80].part.sin) * 2;
         int *origin = ANIM_OWNER_AS(Actor)->instance->transform->position;
         int i;
         int kind, palette, handle;

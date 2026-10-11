@@ -10,10 +10,8 @@
 
 extern unsigned short D_800E1208;
 #include "pe1/gte_sine_table.h"
-extern short D_800966EE[];
 extern int D_8019A59C[];
 /* Signed high-half view avoids LHU followed by explicit sign extension. */
-typedef RoomM350SignedHalfPair SignedHalf;
 
 int func_80196C64(int event, void *object)
 {
@@ -65,8 +63,7 @@ int func_80196C64(int event, void *object)
             colors = D_8019A59C;
             func_800CEE20(object, 0, (short)size, (short)size,
                 (s16)((RenderEffectParameters *)state)->parameter02 * phase + 192,
-                handle, 1, ((SignedHalf *)((char *)D_800966EE - 2 +
-                    drawSampleOffset))->value >> 5, (struct RenderColor *)colors);
+                handle, 1, D_800966EC[drawSampleOffset / 4].bits.cos >> 5, (struct RenderColor *)colors);
         }
     }
     return 0;

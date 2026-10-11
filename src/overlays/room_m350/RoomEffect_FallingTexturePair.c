@@ -5,17 +5,16 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/gte_sine_table.h"
 
 typedef struct { short x,y,z,frame; } Particle;
 typedef RoomM350TransformOwner Instance;
 
-typedef RoomM350SignedHalfPair SignedHalf;
 
 /* The spawner owns the falling particles updated and rendered by this callback. */
 extern FieldActor *g_PlayerEntity;
 extern RenderColor D_8019A464;
 extern unsigned char D_8019A79A,D_8019A79C;
-extern short D_800966EE[];
 
 int func_801937B4(int event, short *position) {
     if (event == 1) {
@@ -29,8 +28,7 @@ int func_801937B4(int event, short *position) {
         func_800CEE20((GteShortVector *)position, 0, 8192, 8192,
             (s16)D_800F3368.parameter02 * (((D_800E27EC - 1) >> 1) & 7),
             (unsigned short)handle, 1,
-            ((SignedHalf *)((char *)D_800966EE - 2 +
-              (((unsigned int)(D_800E27EC - 1) << 8) & 0x3F00)))->value >> 5,
+            D_800966EC[((unsigned int)(D_800E27EC - 1) << 6) & 0xFC0].bits.cos >> 5,
             &D_8019A464);
     }
     return 0;

@@ -4,10 +4,9 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/gte_sine_table.h"
 
-extern short D_800966EE[];
 extern RenderColor D_8019A62C;
-typedef RoomM350SignedHalfPair SignedHalf;
 
 int func_80197594(int event, short *position) {
     if (event == 1) {
@@ -22,8 +21,7 @@ int func_80197594(int event, short *position) {
         func_800CEE20((GteShortVector *)position, 0, 6144, 6144,
             (s16)D_800F3368.parameter02 * (((D_800E27EC - 1) >> 1) & 7),
             (unsigned short)handle, 1,
-            ((SignedHalf *)((char *)D_800966EE - 2 +
-              (((unsigned int)(D_800E27EC - 1) << 8) & 0x3F00)))->value >> 5,
+            D_800966EC[((unsigned int)(D_800E27EC - 1) << 6) & 0xFC0].bits.cos >> 5,
             &D_8019A62C);
     }
     return 0;

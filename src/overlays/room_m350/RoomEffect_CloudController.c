@@ -125,7 +125,7 @@ adjust:
             register int height asm("$2");
             phase=nextPhase+1;
             state->heightPhase=phase;
-            sample=*(short *)((char *)D_800966EC+(((unsigned int)phase<<8)&0x3F00));
+            sample=D_800966EC[((unsigned int)phase<<6)&0xFC0].part.sin;
             height=4096-sample;
             floor=g_RoomFloorY->y;
             height=height/8-128;

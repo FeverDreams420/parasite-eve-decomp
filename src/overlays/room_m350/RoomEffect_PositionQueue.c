@@ -6,13 +6,13 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/psyq_gpu.h"
 #include "room_m350_data.h"
+#include "pe1/gte_sine_table.h"
 typedef RoomM350Vector Vector;
 typedef struct { Vector position; short delay,reserved; } Particle;
 typedef struct RoomM350Instance { char reserved[0x3A]; unsigned short yaw; } Instance;
 typedef RoomM350Actor Actor;
 typedef struct { Vector positions[8]; char reserved40[8]; short count; } Queue;
 
-typedef RoomM350SignedHalfPair SignedHalf;
 extern short D_800966EE[];
 extern short D_8019A800, D_8019A802;
 extern unsigned char D_8019A804;
@@ -34,7 +34,7 @@ int func_80195218(int event, Particle *object)
             handle = GetClut(0, palette);
             func_800CEE20((GteShortVector *)object, (struct GteRotation *)vector, size, size * 2, (s16)D_800F3368.parameter02 * object->delay + 64,
                 (unsigned short)handle, 1,
-                ((SignedHalf *)((char *)D_800966EE - 2 + (((unsigned int)frame << 8) & 0x3F00)))->value >> 5,
+                D_800966EC[((unsigned int)frame << 6) & 0xFC0].bits.cos >> 5,
                 &D_8019A3D0);
         }
     }

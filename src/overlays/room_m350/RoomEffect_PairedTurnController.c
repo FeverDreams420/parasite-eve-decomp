@@ -98,7 +98,7 @@ int func_80193D6C(int event)
                 *repeat=*(volatile unsigned short *)repeat-1;
             }
             if(signedFrame<28) return 0;
-            speed=*(short *)((char *)D_800966EC+(((signedFrame-28)*680)&0x3FF8))/32;
+            speed=D_800966EC[(((signedFrame-28)*170)&0xFFE)].part.sin/32;
             bias=-128;
             if(*(unsigned short *)repeat&1) bias=128;
             angle=FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation,(Vec3Fixed *)instance->render_object.model_matrix.translation);

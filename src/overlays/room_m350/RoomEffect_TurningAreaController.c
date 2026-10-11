@@ -59,9 +59,9 @@ case 1:
         register int high asm("$9");
         register int quotient asm("$2");
         int intermediate;
-        if(timer<16) size=((4096-*(short *)((char *)D_800966EC+(((unsigned int)timer<<8)&0x3F00)))>>1)+2048;
+        if(timer<16) size=((4096-D_800966EC[((unsigned int)timer<<6)&0xFC0].part.sin)>>1)+2048;
         else if(timer>=91) {
-            int sample=*(short *)((char *)D_800966EE+(((unsigned int)(timer-90)<<8)&0x3F00));
+            int sample=D_800966EC[((unsigned int)(timer-90)<<6)&0xFC0].part.cos;
             asm volatile("" : "=r"(sample) : "0"(sample));
             size=sample>>1;
         }

@@ -3,12 +3,10 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/psyq_gpu.h"
 
-typedef struct { signed int low:16; signed int high:16; } TrigEntry;
 #include "pe1/render_object.h"
 #include "pe1/field_anim_pool.h"
 
 #include "pe1/gte_sine_table.h"
-extern short D_800966EE[];
 extern RenderColor D_8019A3D0;
 int func_80198860(int event,RoomM350CloudParticle *particle)
 {
@@ -19,11 +17,11 @@ int func_80198860(int event,RoomM350CloudParticle *particle)
         int product;
         int tripledProduct;
         if(timer>=8) return 1;
-        shade=((TrigEntry *)((char *)D_800966EE-2+(((unsigned int)timer*3<<8)&0x3F00)))->high >> 5;
+        shade=D_800966EC[((unsigned int)timer*3<<6)&0xFC0].bits.cos >> 5;
         particle->state.value.active.secondShade=128-((unsigned int)timer<<4);
         size=particle->size;
         particle->state.value.active.firstShade=shade;
-        product=*(short *)((char *)D_800966EC+(((unsigned int)timer<<9)&0x3E00))*size;
+        product=D_800966EC[((unsigned int)timer<<7)&0xF80].part.sin*size;
         {
             int twice=(unsigned int)product<<1;
             tripledProduct=(unsigned int)twice+(unsigned int)product;

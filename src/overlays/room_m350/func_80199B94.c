@@ -27,7 +27,7 @@ s32 func_80199B94(s32 mode, void *ctx) {
     }
 
     func_800CEE20(ctx, 0, 0x1800, 0x1800, (s16)D_800F3368.parameter02 + 0xDC, (u16)GetClut(0x30, tex), 1,
-                  (*(s32 *)((char *)D_800966EC + (((D_800E27EC - 1) << 10) & 0x3C00)) << 16) >> 21, &D_8019A410);
+                  (D_800966EC[((D_800E27EC - 1) << 8) & 0xF00].word << 16) >> 21, &D_8019A410);
 ret0:
     return 0;
 

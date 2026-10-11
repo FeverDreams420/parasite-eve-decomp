@@ -63,7 +63,7 @@ int func_80195CE0(int event,State *inputState)
             Asset_Find08w(0x5C9,(int)instance->owner->asset,(short)position[0],(short)position[1],(short)position[2]);
             *(int *)&state->rotation=0;
             emitter=ANIM_POOL_AS(RoomM350EffectEmitter);
-            *(int *)((char *)&state->rotation+4)=0;
+            ((int *)&state->rotation)[1]=0;
             state->count=0; state->fade=0;
             return func_800CE560(emitter->pool,8,18,
                                  (FieldAnimCallbackListCallback)func_80195B64);
