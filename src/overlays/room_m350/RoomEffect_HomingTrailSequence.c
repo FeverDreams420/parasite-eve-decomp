@@ -60,20 +60,19 @@ int func_801947BC(int event,RoomM350Particle *p)
             int dx=g_PlayerEntity->render_object.model_matrix.translation[0]-p->position.x;
             int dz=g_PlayerEntity->render_object.model_matrix.translation[2]-p->position.z;
             if(Math_IntSqrt((unsigned int)dx*dx+(unsigned int)dz*dz)<128) {
-                short *count;
                 short n;
                 p->tail.value.active.hit=1;
                 ((RoomM350EffectInstance *)g_PlayerEntity)->owner->status|=0x4000;
                 if(ANIM_OWNER_AS(RoomM350EffectActor)->instance->owner) ANIM_OWNER_AS(RoomM350EffectActor)->instance->owner->flags|=0x80000000;
                 p->tail.value.active.speed=0;
                 if(p->tail.value.active.frame<40) p->tail.value.active.frame=40;
-                count=&D_8019A7FC.pointerCount; n=D_8019A7FC.pointerCount;
+                n=D_8019A7FC.pointerCount;
                 if(n<4) {
                     int next=n;
                     asm volatile("" : "=r"(next) : "0"(next));
                     D_8019A7FC.pointerCount=next+1;
                     {
-                        RoomM350PointerQueue *queue=(RoomM350PointerQueue *)((char *)count-PE1_OFFSETOF(RoomM350PointerQueue,count));
+                        RoomM350PointerQueue *queue=(RoomM350PointerQueue *)((char *)&D_8019A7FC.pointerCount-PE1_OFFSETOF(RoomM350PointerQueue,count));
                         queue->positions[n]=&p->position;
                     }
                     asm volatile("" : : "r"(next));
@@ -81,27 +80,25 @@ int func_801947BC(int event,RoomM350Particle *p)
             }
         }
         if(p->tail.value.active.frame>=36 && !(p->tail.value.active.frame&3)) {
-            short *count=&D_8019A7FC.pointerCount;
             short n=D_8019A7FC.pointerCount;
             if(n<4) {
                 int next=n;
                 asm volatile("" : "=r"(next) : "0"(next));
                 D_8019A7FC.pointerCount=next+1;
                 {
-                    RoomM350PointerQueue *queue=(RoomM350PointerQueue *)((char *)count-PE1_OFFSETOF(RoomM350PointerQueue,count));
+                    RoomM350PointerQueue *queue=(RoomM350PointerQueue *)((char *)&D_8019A7FC.pointerCount-PE1_OFFSETOF(RoomM350PointerQueue,count));
                     queue->positions[n]=&p->position;
                 }
                 asm volatile("" : : "r"(next));
             }
         }
         {
-            short *count=&D_8019A7FC.positionCount;
             unsigned short n=D_8019A7FC.positionCount;
             int next=n+1;
             int shifted=(unsigned int)n<<16;
             D_8019A7FC.positionCount=next;
             {
-                RoomM350PositionQueue *queue=(RoomM350PositionQueue *)((char *)count-PE1_OFFSETOF(RoomM350PositionQueue,count));
+                RoomM350PositionQueue *queue=(RoomM350PositionQueue *)((char *)&D_8019A7FC.positionCount-PE1_OFFSETOF(RoomM350PositionQueue,count));
                 queue->positions[shifted>>16]=p->position;
             }
         }

@@ -34,7 +34,6 @@ int func_801958DC(int event) {
         Matrix *matrix;
         int frame;
         int repetitions;
-        short *repeat;
         if(instance->state && instance->state->action_state[0]==1)
             instance->state->action_state[0]=2;
         matrix=&D_8019A7F8->render_object.matrices[17];
@@ -45,8 +44,7 @@ int func_801958DC(int event) {
         gte_rtv0tr_mac();
         gte_stsv(&D_8019A7A0);
         if(instance->mode!=13) return 0;
-        repeat=&D_8019A7FC.repeats;
-        repetitions=*repeat;
+        repetitions=D_8019A7FC.repeats;
         frame=instance->anim.parts.integer;
         if(repetitions>0) {
             s16 speed;
@@ -54,7 +52,7 @@ int func_801958DC(int event) {
             frame=(short)frame;
             if(frame>=25) {
                 instance->anim.fixed=0x60000;
-                *repeat=*(volatile unsigned short *)repeat-1;
+                D_8019A7FC.repeats=*(volatile unsigned short *)&D_8019A7FC.repeats-1;
             }
             if(frame<19) return 0;
             speed=D_800966EC[((frame-19)*341)&4095].part.sin;
