@@ -15,7 +15,6 @@ typedef RoomM350Actor Actor;
 typedef struct { int asset; short speed,targetSpeed,heightPhase,mode; } State;
 #include "RoomEffect_CloudController_externs.h"
 #include "pe1/gte_sine_table.h"
-#include "RoomEffect_CloudController_externs_1.h"
 int func_80198CF8(int event,State *state)
 {
     Instance *instance=(Instance *)ANIM_OWNER_AS(Actor)->instance;
@@ -97,13 +96,13 @@ int func_80198CF8(int event,State *state)
         cosine=rcos(instance->rot_y+2048);
         sine=rsin(instance->rot_y+2048);
         {
-        register Matrix *matrix asm("$4")=(Matrix *)&D_8019A870;
+        register GteMatrix *matrix asm("$4")=&D_8019A870;
         register Vector *vector asm("$5")=&offset;
-        *(short *)matrix=cosine; D_8019A874=sine; D_8019A87C=0u-(unsigned int)sine;
-        D_8019A880=cosine;
-        D_8019A88C=0; D_8019A888=0; D_8019A884=0;
-        D_8019A87E=0; D_8019A87A=0; D_8019A876=0; D_8019A872=0;
-        D_8019A878=4096;
+        matrix->m[0][0]=cosine; D_8019A870.m[0][2]=sine; D_8019A870.m[2][0]=0u-(unsigned int)sine;
+        D_8019A870.m[2][2]=cosine;
+        D_8019A870.t[2]=0; D_8019A870.t[1]=0; D_8019A870.t[0]=0;
+        D_8019A870.m[2][1]=0; D_8019A870.m[1][2]=0; D_8019A870.m[1][0]=0; D_8019A870.m[0][1]=0;
+        D_8019A870.m[1][1]=4096;
         asm volatile("" : : "r"(matrix), "r"(vector));
         offset.x=0; offset.y=0; offset.z=state->speed;
         ApplyMatrixSV(matrix,vector,vector);
