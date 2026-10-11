@@ -54,6 +54,6 @@ void Boot_InitDisplayBuffers(void) {
     g_BootDisplayClut = GetClut(D_80172C94[0], D_80172C94[1]);
     func_80124F40(0);
     func_80124F40(1);
-    PutDispEnv(g_RenderDisplayEnvArray + (g_ActiveDrawSlot * 20));
+    PutDispEnv(&D_800BCE80[g_ActiveDrawSlot]);
     func_80074D28(1);
 }

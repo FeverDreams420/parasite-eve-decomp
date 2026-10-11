@@ -25,7 +25,7 @@ void Boot_PresentFrame(void) {
     }
     func_80074DC0(0);
     func_80073A44(2);
-    PutDispEnv(g_RenderDisplayEnvArray + g_ActiveDrawSlot * 20);
-    func_80075424(g_RenderDrawEnvArray + g_ActiveDrawSlot * 92);
+    PutDispEnv(&D_800BCE80[g_ActiveDrawSlot]);
+    func_80075424(&D_800BCDC8[g_ActiveDrawSlot]);
     g_ActiveDrawSlot ^= 1;
 }

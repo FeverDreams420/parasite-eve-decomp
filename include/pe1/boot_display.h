@@ -1,6 +1,7 @@
 #ifndef PE1_BOOT_DISPLAY_H
 #define PE1_BOOT_DISPLAY_H
 
+#include "pe1/display_env.h"
 #include "common.h"
 #include "pe1/cdrom_buffers.h"
 #include "pe1/psyq_gpu.h"
@@ -92,8 +93,6 @@ extern char *D_80172D00;
 extern volatile s32 D_80172CF4;
 extern char *D_80125B48;
 extern s32 g_ActiveDrawSlot __asm__("D_8009CDDC");
-extern char g_RenderDisplayEnvArray[] __asm__("D_800BCE80");
-extern char g_RenderDrawEnvArray[] __asm__("D_800BCDC8");
 
 void func_80077AC4(void *ordering_table, void *primitive);
 void func_80077B04(void *primitive, s32 code);
