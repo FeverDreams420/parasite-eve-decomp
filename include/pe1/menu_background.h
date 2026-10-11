@@ -4,8 +4,8 @@
 #include "common.h"
 #include "pe1/game_state.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/display_env.h"
 
-extern DRAWENV D_800BCDC8[2];
 extern int g_MenuSaveBgFadeState; /* Fade state. */
 extern int g_MenuSaveBgFadeHeight; /* Number of 256-pixel blocks. */
 extern int g_MenuSaveBgFadeLutLen; /* Fade curve length. */

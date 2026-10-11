@@ -1,6 +1,7 @@
 #include "../room_lib/room_lib.h"
 #include "pe1/boot_display.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/display_env.h"
 #include "pe1/gpu_image.h"
 
 extern RoomBlob8 RoomM272_BlobA;
@@ -8,7 +9,6 @@ extern RoomBlob8 RoomM272_BlobB;
 extern RoomBlob8 RoomM272_BlobC;
 extern char RoomM272_Rec[];
 extern int D_801991C8;
-extern char D_800BCE80[];
 extern int D_8009CDDC;
 
 int RoomM272_Cinematic_8018F014(void) {
@@ -26,7 +26,7 @@ int RoomM272_Cinematic_8018F014(void) {
         MoveImage(&b3, 0x140, 0x100);
         func_80074DC0(0);
         func_80073A44(2);
-        PutDispEnv(&D_800BCE80[D_8009CDDC * 20]);
+        PutDispEnv(&D_800BCE80[D_8009CDDC]);
         func_80074D28(1);
     }
     return 0;

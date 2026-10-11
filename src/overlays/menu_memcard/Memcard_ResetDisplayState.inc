@@ -1,3 +1,4 @@
+#include "pe1/display_env.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/gpu_image.h"
 #ifndef MEMCARD_RESET_DISPLAY_STATE_NAME
@@ -21,13 +22,6 @@ typedef struct MemcardRect {
     s16 h;
 } MemcardRect;
 
-typedef struct MemcardSlot20 {
-    char bytes[0x14];
-} MemcardSlot20;
-
-typedef struct MemcardSlot92 {
-    s32 words[0x17];
-} MemcardSlot92;
 
 extern u8 D_800B0DBA;
 extern u32 D_800B0CD8;
@@ -37,10 +31,8 @@ extern void *MEMCARD_DISPLAY_PTR2;
 extern void *MEMCARD_DISPLAY_PTR3;
 extern void *MEMCARD_DISPLAY_PTR4;
 extern void *MEMCARD_DISPLAY_PTR5;
-extern MemcardSlot20 D_800BCE80[2];
-extern MemcardSlot20 MEMCARD_SLOT20_SOURCE[2];
-extern MemcardSlot92 D_800BCDC8[2];
-extern MemcardSlot92 MEMCARD_SLOT92_SOURCE[2];
+extern DISPENV MEMCARD_SLOT20_SOURCE[2];
+extern DRAWENV MEMCARD_SLOT92_SOURCE[2];
 
 void SetDispMask(s32 enabled);
 

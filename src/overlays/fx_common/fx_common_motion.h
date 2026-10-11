@@ -4,6 +4,7 @@
 #include "fx_common_setup.h"
 #include "pe1/signed_rect.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/display_env.h"
 #include "pe1/gpu_image.h"
 
 extern FxCommonVec3 g_FxCommonMotionPosition1 __asm__("D_8019C330");
@@ -65,7 +66,6 @@ extern GteShortVector D_8019BFC4;
 extern RoomSpriteMatrix D_8019CDF0;
 extern s8 D_800B0DB2;
 extern s8 D_800B0DB4;
-extern u8 D_800BCE80[];
 
 void func_80086C5C(int channel, int value, int mode);
 void func_80196498(void);

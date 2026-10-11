@@ -4,6 +4,7 @@
 #include "menu_memcard_screen.h"
 #include "menu_memcard_image.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/display_env.h"
 #include "pe1/gpu_image.h"
 
 /* Matching views of the existing two pointer slots, not extra storage.
@@ -12,8 +13,8 @@ extern struct { MemcardScreenBuffer *value; } secondScreen asm("D_801D11C0");
 extern MemcardScreenBuffer *D_801D11C0;
 extern MemcardScreenBuffer *firstDrawScreen asm("D_801D11BC");
 
-extern DISPENV D_800BCE80, D_800BCE94, D_801D1550, D_801D1564;
-extern DRAWENV D_800BCDC8, D_800BCE24, D_801D1498, D_801D14F4;
+extern DISPENV D_800BCE94, D_801D1550, D_801D1564;
+extern DRAWENV D_800BCE24, D_801D1498, D_801D14F4;
 extern u16 D_800BCE8A, D_800BCE9E;
 extern u8 D_800B0DCD;
 extern s32 D_8009D1BC, D_8009CDDC;

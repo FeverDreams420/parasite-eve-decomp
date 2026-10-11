@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/game_state.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/display_env.h"
 #include "pe1/gpu_image.h"
 #include "pe1/render_packets.h"
 #include "pe1/cdrom.h"
@@ -21,8 +22,6 @@ extern u16 D_800930D8[];
 extern s32 D_8009CDDC;
 /* Ordering table of each draw slot (Boot_InitMemoryLayout). */
 extern RenderBufferPrefix D_800B0E38;
-extern DISPENV D_800BCE80[2];
-extern DRAWENV D_800BCDC8[2];
 extern u8 D_800B0DCD;
 extern u16 D_800B0DD4;
 

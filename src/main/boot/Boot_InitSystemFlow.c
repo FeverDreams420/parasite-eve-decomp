@@ -6,6 +6,7 @@
 #include "pe1/psyq_callbacks.h"
 #include "pe1/psyq_gpu.h"
 #include "common.h"
+#include "pe1/display_env.h"
 #include "../../../tools/m2c/m2c_macros.h"
 #include "pe1/font.h"
 #include "pe1/field_sfx.h"
@@ -80,7 +81,6 @@ void Boot_InitSubsystems(void) {
 }
 
 
-extern u8 D_800BCDC8[];
 extern u8 D_800BCE91;
 extern u8 D_800BCEA5;
 extern u16 D_800BCE9E;
@@ -133,7 +133,7 @@ void Render_ResetScene(int width, int height)
     SetDefDispEnv(disp - 0x11, 0, height, width, height);
     SetDefDispEnv(disp + 3, 0, 0, width, height);
 
-    draw = D_800BCDC8;
+    draw = (u8 *)D_800BCDC8;
     D_800BCE9E = 8;
     D_800BCE8A = 8;
     D_800BCE9C = 0;
