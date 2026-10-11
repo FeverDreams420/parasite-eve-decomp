@@ -10,12 +10,12 @@
 #include "pe1/room_module.h"
 
 int RoomLib_RegisterPairedTablesGated(void *o) {
-    char *entry;
+    RoomLink *entry;
     int result = 0;
 
     if ((unsigned int)FieldEng_GetStatus(o) >= 2) {
-        entry = *(char **)((char *)o + 8);
-        if ((unsigned char)entry[0xE] >= 2 || *(unsigned char *)(*(char **)entry + 0xAC) != 0) {
+        entry = ((RoomEnt *)o)->link;
+        if (entry->variant >= 2 || entry->target->startFlag != 0) {
             result = func_800C251C(o, g_RoomUpdateList);
             result |= func_800C2758(o, g_RoomInitList, g_RoomSpawnLayout);
         }

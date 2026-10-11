@@ -8,10 +8,11 @@
 #include "common.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/field_actor.h"
 
 typedef struct RoomCaptureContext {
     unsigned char pad00[8];
-    unsigned char *object;
+    FieldActor *object;
 } RoomCaptureContext;
 
 extern s16 D_80192C34;
@@ -21,7 +22,7 @@ extern s32 D_80192C3C;
 
 void RoomLib_CaptureFrameSample(RoomCaptureContext *modeOrContext, int x, int y, int z) {
     unsigned int sample;
-    unsigned char *object;
+    FieldActor *object;
     volatile s16 *captureX;
 
     if ((int)modeOrContext == 1) {
@@ -35,14 +36,14 @@ void RoomLib_CaptureFrameSample(RoomCaptureContext *modeOrContext, int x, int y,
     modeOrContext = ANIM_OWNER_AS(RoomCaptureContext);
     captureX = &D_80192C34;
     object = modeOrContext->object;
-    sample = *(u16 *)(object + 0x268);
+    sample = (u16)object->render_object.target_x;
     *captureX = sample;
     sample = (unsigned int)modeOrContext->object;
-    sample = *(u16 *)(sample + 0x26a);
+    sample = (u16)((FieldActor *)sample)->render_object.target_y;
     D_80192C36 = sample;
     sample = (unsigned int)modeOrContext->object;
     modeOrContext = (RoomCaptureContext *)(unsigned int)g_RoomFloorY->raw;
-    x = *(u16 *)(sample + 0x26c);
+    x = (u16)((FieldActor *)sample)->render_object.target_z;
     sample = 0x76c;
     D_80192C36 = (unsigned int)modeOrContext;
     D_80192C3C = sample;

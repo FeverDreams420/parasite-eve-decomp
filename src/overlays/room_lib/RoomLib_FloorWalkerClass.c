@@ -31,7 +31,7 @@ int RoomLib_InitHandlerG(RoomEnt *o) {
 
 int RoomLib_ConfigureHandlerG(RoomEnt *o, int mode, unsigned int op,
                               int arg0, int arg1, int arg2) {
-    char *p = (char *)o + 0xC;
+    char *p = (char *)&o->sub;
 
     if (op != 4) {
     if (op < 5) {
@@ -102,7 +102,7 @@ void RoomLib_HandlerG(RoomEnt *o) {
     dst->pos[0] = RW32(src->p238, 0x94) << 16;
     dst->pos[1] = RW32(src->p238, 0x98) << 16;
     dst->pos[2] = RW32(src->p238, 0x9C) << 16;
-    *(RoomLibPacked8 *)((char *)dst + 0x38) = *(RoomLibPacked8 *)((char *)src + 0x38);
+    *(RoomLibPacked8 *)dst->rotation = *(RoomLibPacked8 *)src->rotation;
     if ((src->variant == 7) && (src->winLo >= 3) && (src->winHi < 3)) {
         self->sub.cb = RoomLib_HandlerGFloorWalker;
     }

@@ -118,6 +118,8 @@ typedef struct RoomRenderNode {
     int flags;                    /* 0x00: 0x3F000000 owner bits, 0xC0FFFFFF mask dance */
     char pad04[0x14];
     unsigned char *state;         /* 0x18: byte poked with entity state (4) */
+    char pad1C[0x90];
+    unsigned char startFlag;      /* 0xAC: opens the gated module start */
 } RoomRenderNode;
 
 /* The actor/object record shared with the field engine (>= 0x254 bytes).
