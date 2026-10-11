@@ -13,8 +13,8 @@ int func_80192DA0(int mode, volatile RoomSpiralDropSparkRecord *record) {
         s16 y = particle->y;
         s16 delta = particle->speed;
         int frame = D_800E27EC;
-        /* Preserve the retail read order and register lifetimes. */
-        asm("" : : "r"(delta), "r"(frame), "r"(speed), "r"(y));
+        /* Keep the decremented speed live before updating the particle. */
+        PE1_COMPILER_USE(speed);
         ((RoomSpiralDropSparkCallbackView *)particle)->y = y - delta;
         ((RoomSpiralDropSparkCallbackView *)particle)->speed = speed;
         if (frame >= 24) return 1;
