@@ -85,7 +85,7 @@ int func_80195CE0(int event,State *inputState)
         state->size=(unsigned int)sample<<2;
         if(state->count>=16) return 0;
         i=0;
-        do {
+        while(i<2) {
             register GteShortVector *particle asm("$17")=func_800CE610(ANIM_POOL_AS(RoomM350EffectEmitter)->pool);
             int random;
             int highByte;
@@ -104,7 +104,7 @@ radial:
             vector.z=random%divisor+320;
             ApplyMatrixSV(&local.matrix,&vector,particle);
             particle->pad=(unsigned int)state->count*128+2048;
-        } while(i<2);
+        }
         state->count=(unsigned short)state->count+1;
     }
         break;
