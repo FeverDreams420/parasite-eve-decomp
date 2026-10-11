@@ -20,26 +20,18 @@ extern u8 D_80192C0C;
 extern u8 D_80192C0D;
 extern u8 D_80192C0E;
 extern s16 D_80192C10;
-extern u8 D_80192C28;
-extern u8 D_80192C29;
-extern u8 D_80192C2A;
-extern u8 D_80192C2C;
-extern u8 D_80192C2D;
-extern u8 D_80192C2E;
-extern s16 D_80192C30;
-extern s16 D_80192C32;
-extern void *D_80192C34;
-/* The sparkle sprite preset consumed by the sequence draw passes. */
+/* The 0xC used bytes of each 0x10-byte sprite preset. The third
+ * preset's trailing word is a separate model resource (D_80192C34). */
 typedef struct RoomEffectSequenceSprite {
     u8 r, g, b, reserved03;
     u8 cell, clut, flip, reserved07;
     s16 offset;
     s16 depth;
-    u8 reserved0C[4];
 } RoomEffectSequenceSprite;
-PE1_STATIC_ASSERT(sizeof(RoomEffectSequenceSprite) == 0x10, effect_sequence_sprite_size);
+PE1_STATIC_ASSERT(sizeof(RoomEffectSequenceSprite) == 0xC, effect_sequence_sprite_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomEffectSequenceSprite, depth) == 0xA, effect_sequence_sprite_depth);
-extern RoomEffectSequenceSprite D_80192C18, D_80192C38;
+extern RoomEffectSequenceSprite D_80192C18, D_80192C28, D_80192C38;
+extern void *D_80192C34;
 
 extern int *func_800C2B28(int index);
 extern int *func_800C2B10(int index);
@@ -49,7 +41,6 @@ extern u16 D_80192BBC[];
 extern volatile s16 D_80192C12;
 extern char D_80192BFC;
 extern char D_80192BF0;
-extern short D_80192C30;
 
 /* The module's class methods (slots 3 to 5). */
 int RoomFx_EffectSequenceRegister(void *o);

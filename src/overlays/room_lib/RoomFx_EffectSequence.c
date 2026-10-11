@@ -81,16 +81,16 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     PE1_COMPILER_USE(c20);
     D_80192C18.clut = 3;
     D_80192C18.offset = -100;
-    D_80192C2C = 8;
+    D_80192C28.cell = 8;
     PE1_COMPILER_MEMORY_BARRIER();
     c2 = 2;
     D_80192C09 = c40;
     D_80192C18.g = c40;
     c40 = 2;
-    D_80192C2D = c2;
-    D_80192C28 = 0x90;
-    D_80192C29 = 0x90;
-    D_80192C2A = 0x90;
+    D_80192C28.clut = c2;
+    D_80192C28.r = 0x90;
+    D_80192C28.g = 0x90;
+    D_80192C28.b = 0x90;
     D_80192C12 = c80a;
     D_80192C0E = 0;
     D_80192C08 = c80b;
@@ -100,9 +100,9 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     D_80192C18.flip = 0;
     D_80192C18.r = c80b;
     D_80192C18.b = c20;
-    D_80192C30 = c40;
-    D_80192C32 = c80a;
-    D_80192C2E = 0;
+    D_80192C28.offset = c40;
+    D_80192C28.depth = c80a;
+    D_80192C28.flip = 0;
     D_80192C38.cell = 0;
     D_80192C38.clut = 0;
     D_80192C38.offset = c40;
@@ -464,7 +464,7 @@ void RoomFx_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control, Roo
     matrix.t[0] = state->final_x;
     matrix.t[1] = state->final_y;
     matrix.t[2] = state->final_z;
-    final_alpha_slot = &D_80192C32;
+    final_alpha_slot = &D_80192C28.depth;
     *final_alpha_slot = state->final_alpha;
     func_800C42A4((FieldGlowSprite *)((char *)final_alpha_slot - 0xA), (GteMatrix *)&matrix, 1);
 }
@@ -720,7 +720,7 @@ void RoomFx_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *control
     matrix.t[0] = state->final_x;
     matrix.t[1] = state->final_y;
     matrix.t[2] = state->final_z;
-    final_alpha_slot = &D_80192C32;
+    final_alpha_slot = &D_80192C28.depth;
     *final_alpha_slot = state->final_alpha;
     func_800C42A4((FieldGlowSprite *)((char *)final_alpha_slot - 0xA), (GteMatrix *)&matrix, 1);
 }
@@ -1371,6 +1371,7 @@ void RoomFx_DrawScaledEffect(void *unused0, void *unused1, RoomLibScaledEffect *
     RoomLibVectorSeed scaleSeed;
     unsigned short *depth;
     int scale;
+    unsigned short depthValue;
 
     roots = (RoomLibEffectRootTable *)func_800C2B50();
     view = roots->root->view;
@@ -1409,12 +1410,13 @@ void RoomFx_DrawScaledEffect(void *unused0, void *unused1, RoomLibScaledEffect *
     scaleSeed.words[2] = scale * 3;
     ScaleMatrix((RoomSpriteMatrix *)&matrix, (RoomFxVec4 *)&scaleSeed);
 
-    depth = (unsigned short *)&D_80192C32;
+    depth = (unsigned short *)&D_80192C28.depth;
     matrix.t[0] = effect->x;
     matrix.t[1] = effect->y;
     matrix.t[2] = effect->z;
-    D_80192C30 = -0x65;
-    *depth = effect->depth;
+    depthValue = effect->depth;
+    D_80192C28.offset = -0x65;
+    *depth = depthValue;
     func_800C42A4((FieldGlowSprite *)((char *)depth - 0xA), (RoomSpriteMatrix *)&matrix, 1);
 }
 
