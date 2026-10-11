@@ -1,4 +1,5 @@
 #include "common.h"
+#include "pe1/field_actor.h"
 #include "pe1/field_glow_sprite.h"
 #include "../room_lib/room_lib.h"
 #include "pe1/scene_archive.h"
@@ -30,8 +31,8 @@ extern FieldGlowSprite D_801996B0;
 void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
     SceneE08MatrixWords *matrix;
     void *asset;
-    int half;
-    RoomLink *player;
+    s16 half;
+    FieldActor *player;
     register int intensity asm("$3");
     register int mode asm("$2");
     register int offset asm("$5");
@@ -54,8 +55,10 @@ void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
     D_80199688 = offset;
     D_801996A8 = offset;
     /* Empty compiler barriers retain the retail register lifetimes. */
-    asm volatile ("" : "=r"(player) : "0"((RoomLink *)g_PlayerEntity));
-    asm volatile ("" : "=r"(half) : "0"(0x80));
+    player = g_PlayerEntity;
+    asm volatile ("" : : "r"(player));
+    half = 0x80;
+    asm volatile ("" : : "r"(half));
     D_80199685 = mode;
     D_801996A4 = 0x44;
     D_801996A5 = 2;
@@ -82,8 +85,8 @@ void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
     handle = *sound;
     /* Keep the handle load ahead of the two player-coordinate loads. */
     asm volatile("" : : "r"(handle));
-    playerZ = ((s16 *)player->pos)[5];
-    playerX = ((s16 *)player->pos)[1];
+    playerZ = Pe1Fixed_Integer(&player->pos_z);
+    playerX = Pe1Fixed_Integer(&player->pos_x);
     D_8019956C = playerX;
     D_8019957C = playerZ;
     if (handle != 0) {
