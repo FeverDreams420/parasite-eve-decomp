@@ -1047,8 +1047,10 @@ void RoomLib_HandlerB(RoomEnt *obj) {
     scratch = (short *)0x1F800000;
 
     if (self->t1A == 0) {
-        register int v0 asm("$2");
+        int v0;
         int v1;
+        GteSineWord *entry;
+        GteSineWord *table;
         unsigned short matrixComponent;
         RoomLink *player;
         register int a0 asm("$4");
@@ -1064,13 +1066,12 @@ void RoomLib_HandlerB(RoomEnt *obj) {
         v1 += 0x800;
         v0 += v1;
         v0 &= 0xFFF;
-        v1 = (int)((short (*)[2])D_800966EC);
-        v0 <<= 2;
-        v0 += v1;
-        v1 = RW16(v0, 2);
+        table = D_800966EC;
+        entry = &table[v0];
+        v1 = entry->part.cos;
         ((RoomLibHandlerBState *)state)->matrix[1] = 0;
         ((volatile RoomLibHandlerBState *)state)->matrix[0] = v1;
-        a0 = RW32(v0, 0);
+        a0 = entry->word;
         v1 = (unsigned short)((RoomLibHandlerBState *)state)->matrix[0];
         v0 = 0x1000;
         ((volatile RoomLibHandlerBState *)state)->matrix[4] = 0x1000;
