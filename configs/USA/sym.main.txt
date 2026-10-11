@@ -82,6 +82,7 @@ g_MenuExpAllocTarget = 0x8009CFEC;
 g_MenuExpReviewLevel = 0x8009CFF0;
 g_MenuExpReviewPanelPoints = 0x800922F4;
 g_MenuLevelUpPanelPoints = 0x80092314;
+g_MenuSelectedSpell = 0x8009CFB4;
 Render_InitViewState = 0x80065B70; // type:func
 Asset_GetTimImageRect = 0x80071964; // type:func
 Scene_Init = 0x80071034; // type:func

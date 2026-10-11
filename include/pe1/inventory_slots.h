@@ -46,6 +46,7 @@ extern SavedMenuMode g_SavedMenuMode;
 
 void Inv_SetActiveList(int mode, int *slot);
 void Inv_ResetActiveList(void);
+void Battle_UseItem(int item);
 int Inv_LoadWayneItemsAsOverride(short *items);
 extern u8 D_800C0E0C;
 

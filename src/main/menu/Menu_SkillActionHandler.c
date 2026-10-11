@@ -1,23 +1,20 @@
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "pe1/menu_state.h"
 #include "common.h"
 #include "pe1/menu_dialog.h"
+#include "pe1/menu_equipment.h"
 #include "pe1/menu_inventory.h"
+#include "pe1/menu_item_list_input.h"
 #include "pe1/text.h"
 #include "pe1/inventory_queries.h"
+#include "pe1/inventory_slots.h"
 #include "pe1/menu_sound.h"
 #include "pe1/menu_widget.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: --use-comm-section -G8 */
-#include "include_asm.h"
 
-void Menu_CreateBonusPointAllocationView(void);
 void Menu_StepItemDetailPanel2(void);
-int Inv_GetPackedListItem(int index);
 
 int g_MenuBattleSelectedItem;
-#include "Menu_SkillActionHandler_externs.h"
-
-void Battle_UseItem(int arg0);
 
 s32 Menu_SkillActionHandler(MenuWidgetNode *node, s32 flags) {
     MenuWidgetNode *child;
@@ -53,9 +50,9 @@ void Menu_StepItemDetailPanel2(void) {
     MenuConfirmCallback callback;
     int height;
 
-    D_8009CFB4 = Inv_GetPackedListItem(MenuWidget_GridCellIndex(MenuWidget_FindByModeAndSelectedBase(2, 8)));
+    g_MenuSelectedSpell = Inv_GetPackedListItem(MenuWidget_GridCellIndex(MenuWidget_FindByModeAndSelectedBase(2, 8)));
     current = MenuWidget_GetCurrentNode();
-    label = Str_LookupTable8(D_8009CFB4 + 0xEB);
+    label = Str_LookupTable8(g_MenuSelectedSpell + 0xEB);
     node = MenuWidget_CreateSimpleNode(0x29, current, 0, 1);
     option_node = MenuWidget_CreateNode(0x29, node, node);
     node->draw = Menu_DrawItemLabel;

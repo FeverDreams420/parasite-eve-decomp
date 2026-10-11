@@ -37,6 +37,8 @@ extern int g_MenuEquipMode;
 extern int g_MenuItemContextFlag;
 extern int g_MenuBattleStatusOverlayActive;
 extern int g_MenuSelectionLocked;
+/* Parasite spell picked on the skill screen (its name is table 8 + 0xEB). */
+extern int g_MenuSelectedSpell;
 /* Which list the equipment options act on: 0 sorts Aya's inventory, any
  * other value sorts Wayne's storage. */
 extern int g_MenuInventoryViewMode;
