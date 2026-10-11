@@ -29,7 +29,7 @@ void Save_SelectMetadataWindow(ItemDataRecord *record) {
             window++;
         }
     } else {
-        window = g_SaveRuntimeMetadataWindows;
+        window = g_SaveRuntimeState.windows.metadata;
         if (g_SaveMetadataWindowIndex != 0) {
             window++;
         }
@@ -48,10 +48,9 @@ void Save_AppendMetadataChar(unsigned char ch) {
     unsigned int value;
     int has_room;
     int terminator;
-    int frame;
-
-    /* Retail keeps an otherwise unused 8-byte leaf stack frame. */
-    asm volatile("" : : "r"(&frame));
+    /* Never used: an unused local array is what gives this leaf function
+     * its 8-byte stack frame, in retail as here. */
+    unsigned char spare[4];
 
     length = g_SaveMetadataWindowLength;
     cursor = g_SaveMetadataCursor;
@@ -164,10 +163,10 @@ unsigned char *Save_GetMetadataCursor(void) {
 char *Save_GetActiveMetadataBuffer(void) {
     char *buffer;
 
-    buffer = (char *)g_SaveRuntimeMetadataWindows;
+    buffer = (char *)g_SaveRuntimeState.windows.metadata[0].text;
 
     if (g_SaveMetadataWindowIndex != 0) {
-        buffer += 0x10;
+        buffer = (char *)g_SaveRuntimeState.windows.metadata[1].text;
     }
 
     return buffer;

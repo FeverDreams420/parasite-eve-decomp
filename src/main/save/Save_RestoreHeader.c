@@ -1,18 +1,9 @@
 #include "common.h"
 #include "pe1/inventory_category.h"
 #include "pe1/save.h"
+#include "pe1/game_timers.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
-
-#include "Save_RestoreHeader_externs.h"
-
-#define D_800C0DE8 (*(int *)&D_800C0DE8_o)
-#define D_800C0DEC (*(int *)&D_800C0DEC_o)
-#define D_800C0DFF (*(s8 *)&D_800C0DFF_o)
-#define g_AyaMenuClampValue (*(s16 *)&D_800C0E40_o)
-#define D_800C0E44 ((u32 *)&D_800C0E44_o)
-#define D_800A76A4 (*(int *)&D_800A76A4_o)
-#define D_800A76BC (*(int *)&D_800A76BC_o)
 
 void Draw_BlendColor(int color);
 int Menu_ClampRange(int value);
@@ -25,32 +16,30 @@ void Menu_CopyPromptCodes(u8 *src);
 void Save_RestoreHeader(void) {
     u16 *src;
     int i;
-    int offset;
-    u32 *saved_color;
+    int category;
     u8 *prompt;
 
     i = 0;
-    src = D_800C1EAC;
-    offset = 0;
+    src = g_SaveRuntimeState.categoryCounts;
+    category = 0;
     while (i < 6) {
-        ((InventoryCategoryState *)((u8 *)g_InvCategoryItemTable + offset))->count = *src++;
+        g_InvCategoryItemTable[category].count = *src++;
         i++;
-        offset += 0x20;
+        category++;
     }
 
-    saved_color = D_800C0E44;
-    Draw_BlendColor(saved_color[0]);
-    Menu_ClampRange(g_AyaMenuClampValue);
+    Draw_BlendColor(g_SaveRuntimeState.drawBlendColor);
+    Menu_ClampRange(g_SaveRuntimeState.menuClampValue);
 
-    D_800A76BC = (D_800C0DE8 * 15) * 4;
-    D_800A76A4 = (D_800C0DEC * 15) * 4;
-    Draw_SetBaseOffsetPosition(0, D_800C0DFF - Draw_GetBaseY());
-    Menu_SetActionSubmenuSelection(D_800C0DFD_action[0] & 3);
-    MenuWidget_SetColumnLayoutMode((D_800C0DFD_layout[0] >> 2) & 1);
+    GAME_TIME_COUNTER(2) = (g_SaveRuntimeState.windows.header.playTimeMinutes * 15) * 4;
+    GAME_TIME_COUNTER(0) = (g_SaveRuntimeState.windows.header.gameTimeMinutes * 15) * 4;
+    Draw_SetBaseOffsetPosition(0, g_SaveRuntimeState.windows.header.drawBaseY - Draw_GetBaseY());
+    Menu_SetActionSubmenuSelection(g_SaveRuntimeState.windows.header.menuLayout & 3);
+    MenuWidget_SetColumnLayoutMode((g_SaveRuntimeState.windows.header.menuLayout >> 2) & 1);
 
-    prompt = (u8 *)saved_color - 0x64;
-    if (D_8009D218 != 0) {
-        prompt = (u8 *)saved_color - 0x54;
+    prompt = g_SaveRuntimeState.windows.metadata[0].text;
+    if (g_SaveMetadataWindowIndex != 0) {
+        prompt = g_SaveRuntimeState.windows.metadata[1].text;
     }
     Menu_CopyPromptCodes(prompt);
 }

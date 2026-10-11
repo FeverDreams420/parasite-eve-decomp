@@ -9,9 +9,14 @@ PE1_STATIC_ASSERT(sizeof(SaveMetadataWindow) == 0x10,
                   save_metadata_window_size);
 
 PE1_STATIC_ASSERT(sizeof(SaveBytes12E4) == 0x12E4, save_runtime_blob_size);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(SaveBytes12E4, metadata[1]) == 0x10,
+PE1_STATIC_ASSERT(sizeof(SaveRuntimeState) == 0x12E4, save_runtime_state_size);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(SaveRuntimeState, windows.metadata[1]) == 0x10,
                   save_second_metadata_window_offset);
-extern SaveBytes12E4 g_SaveRuntimeState;
+PE1_STATIC_ASSERT(PE1_OFFSETOF(SaveRuntimeState, drawBlendColor) == 0x64,
+                  save_draw_blend_color_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(SaveRuntimeState, categoryCounts) == 0x10CC,
+                  save_category_counts_offset);
+extern SaveRuntimeState g_SaveRuntimeState;
 void Save_InitMetadataState(void);
 
 /* Save-slot metadata window selected by the current frontend operation. */
@@ -20,8 +25,6 @@ extern u8 *g_SaveMetadataCursor;
 extern int g_SaveMetadataWindowLength;
 extern ItemDataRecord *g_SaveMetadataSourceRecord;
 extern ItemDataRecord *g_MenuRenameTargetRecord;
-extern SaveMetadataWindow g_SaveRuntimeMetadataWindows[2]
-    __asm__("g_SaveRuntimeState");
 extern SaveMetadataWindow g_CursorRenderMetadataWindows[2]
     __asm__("g_CursorRenderDataBlock");
 

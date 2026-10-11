@@ -385,8 +385,8 @@ static inline void InitName(u8 *buffer, int length, ItemDataRecord *item) {
 void Save_InitMetadataState(void) {
     bzero(&g_SaveRuntimeState, sizeof(g_SaveRuntimeState));
     /* Retail initializes the same window twice, including both lookups. */
-    InitName(g_SaveRuntimeState.metadata[1].text, 8, 0);
-    InitName(g_SaveRuntimeState.metadata[1].text, 8, 0);
+    InitName(g_SaveRuntimeState.windows.metadata[1].text, 8, 0);
+    InitName(g_SaveRuntimeState.windows.metadata[1].text, 8, 0);
     Menu_CopyPromptCodes(Str_LookupTable4(30));
     Inv_InitNewGameInventory();
     D_800C0E20.specialStorage[0] = 515;

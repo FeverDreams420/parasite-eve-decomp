@@ -3,7 +3,6 @@
 #include "pe1/game_timers.h"
 #include "pe1/save.h"
 #include "pe1/draw_wipe_rect.h"
-#include "Save_BuildHeader_externs.h"
 
 int Draw_GetBlendColor(void);
 int Menu_GetItemContextFlag(void);
@@ -16,27 +15,30 @@ int Save_GetCurrentMapNumber(void);
 void Save_BuildHeader(void) {
     u16 *dst;
     int i;
-    int offset;
+    int category;
     unsigned int value;
 
     i = 0;
-    dst = D_800C1EAC;
-    offset = 0;
+    dst = g_SaveRuntimeState.categoryCounts;
+    category = 0;
     while (i < 6) {
-        *dst = ((InventoryCategoryState *)((char *)g_InvCategoryItemTable + offset))->count;
-        offset += 0x20;
+        *dst = g_InvCategoryItemTable[category].count;
+        category++;
         i++;
         dst++;
     }
 
-    g_SavedDrawBlendColor[0] = Draw_GetBlendColor();
-    g_AyaMenuClampValue = Menu_GetItemContextFlag();
-    g_SavePlayTimeMinutes = (unsigned int)g_PlayTimeSeconds / 60U;
-    D_800C0DEC = (unsigned int)g_GameTimeTable / 60U;
-    g_SavedDrawBaseY = Draw_GetBaseY();
+    g_SaveRuntimeState.drawBlendColor = Draw_GetBlendColor();
+    g_SaveRuntimeState.menuClampValue = Menu_GetItemContextFlag();
+    g_SaveRuntimeState.windows.header.playTimeMinutes =
+        (unsigned int)GAME_TIME_COUNTER(2) / 60U;
+    g_SaveRuntimeState.windows.header.gameTimeMinutes =
+        (unsigned int)GAME_TIME_COUNTER(0) / 60U;
+    g_SaveRuntimeState.windows.header.drawBaseY = Draw_GetBaseY();
     value = Menu_GetActionSubmenuSelection();
-    D_800C0DFD = value | (MenuWidget_GetColumnLayoutMode() << 2);
-    D_800C0DFE = 0;
-    D_800C0E3C = Save_ClassifyPlaytime(g_PlayTimeFrameCounter);
-    g_CurrentMapNumber = Save_GetCurrentMapNumber();
+    g_SaveRuntimeState.windows.header.menuLayout =
+        value | (MenuWidget_GetColumnLayoutMode() << 2);
+    g_SaveRuntimeState.windows.header.reserved1E = 0;
+    g_SaveRuntimeState.playTimeClass = Save_ClassifyPlaytime(g_PlayTimeFrameCounter);
+    g_SaveRuntimeState.currentMapNumber = Save_GetCurrentMapNumber();
 }

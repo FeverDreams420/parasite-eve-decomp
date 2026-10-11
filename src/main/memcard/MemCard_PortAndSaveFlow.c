@@ -1141,7 +1141,7 @@ void Save_LoadCardFileIntoRuntime(void) {
     u8 *cursor;
 
     g_SaveIoCursor = (u8 *)&g_MemCardSaveStateBuffer;
-    g_SaveRuntimeState = g_MemCardSaveStateBuffer;
+    *(SaveBytes12E4 *)&g_SaveRuntimeState = g_MemCardSaveStateBuffer;
     g_SaveIoCursor += 0x12E4;
     Save_DeserializeTail();
 
