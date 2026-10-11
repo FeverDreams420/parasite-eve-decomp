@@ -401,8 +401,9 @@ check_code:
                     code = argument;
                     goto check_code;
                 }
-                goto handle_6;
             }
+            else
+            {
             if (argument < 10) {
                 cursor++;
                 if (*cursor == track->repeat_counters[repeat] + 1) {
@@ -410,16 +411,25 @@ check_code:
                     argument = *cursor++;
                     displacement = *cursor++;
                     repeat = (repeat - 1) & 3;
-                    goto apply_displacement;
+                    argument += displacement << 8;
+                    displacement = (short)argument;
+                    cursor += displacement;
+                    break;
                 } else {
                     cursor += 3;
                 }
                 break;
             }
             break;
+            }
 handle_6:
             cursor++;
-            goto read_displacement;
+            argument = *cursor++;
+            displacement = *cursor++;
+            argument += displacement << 8;
+            displacement = (short)argument;
+            cursor += displacement;
+            break;
             }
 check_bank:
             cursor++;

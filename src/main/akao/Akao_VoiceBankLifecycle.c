@@ -244,16 +244,17 @@ void Akao_InitVoices(int arg0, char *arg1) {
     int mode5;
     AkaoTrack *voice;
     u16 *field;
+    do {
     if (arg0 == 0) {
         if (((AkaoSequencerBank *)g_AkaoCurTrack)->active_voice_mask != 0) {
-            goto body;
+            break;
         }
         return;
     } else if (arg0 != ((AkaoSequencerBank *)g_AkaoCurTrack)->bank_id) {
         return;
     }
+    } while (0);
 
-body:
     ((AkaoSequencerBank *)g_AkaoCurTrack)->key_off_request_mask = 0xFFFFFF;
 
     i = 0;

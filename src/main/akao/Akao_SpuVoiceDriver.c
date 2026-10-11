@@ -1183,7 +1183,7 @@ void Spu_TickVoiceEnvelopes(AkaoTrack *track, unsigned voice_mask)
     label##_case1: \
         S16((voice), 0x118) = ((volume) * D_8009B8F8[(pan_value)]) >> 15; \
         S16((voice), 0x11A) = ((volume) * D_8009B8F8[(pan_value) ^ 0xFF]) >> 15; \
-        goto label##_done; \
+        break; \
     label##_case4: { \
         register int right asm("$3"); \
         S16((voice), 0x118) = ((volume) * D_8009B8F8[(pan_value)]) >> 15; \
@@ -1195,16 +1195,16 @@ void Spu_TickVoiceEnvelopes(AkaoTrack *track, unsigned voice_mask)
             do { } while (0); \
         } else { \
             left_value = ~U16((voice), 0x118); \
-            goto label##_store_left; \
+            S16((voice), 0x118) = left_value; \
         } \
-        goto label##_done; \
+        break; \
     } \
     label##_default: { \
         left_value = (u32)((volume) * D_8009B9F8[0]) >> 15; \
         S16((voice), 0x11A) = left_value; \
         label##_store_left: \
         S16((voice), 0x118) = left_value; \
-        goto label##_done; \
+        break; \
     } \
     label##_done:; \
 } while (0)
@@ -1226,7 +1226,7 @@ void Spu_TickVoiceEnvelopes(AkaoTrack *track, unsigned voice_mask)
             do { } while (0); \
         } else { \
             left_value = ~U16((voice), 0x118); \
-            goto label##_store_left; \
+            S16((voice), 0x118) = left_value; \
         } \
         break; \
     } \
