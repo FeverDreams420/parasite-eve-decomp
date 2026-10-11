@@ -16,6 +16,8 @@ void MenuWidget_DrawCenteredTableText(int textId);
 void Menu_DrawEquipSlotListItem(int index);
 void Menu_DrawBlendColorChannelRow(int index);
 void Menu_DrawBlendColorOptionRow(int index);
+void Menu_DrawStatAllocationList(MenuWidgetNode *node);
+void Menu_UpdateStatBarAnimation(int stat);
 
 /* The equip list node whose grid cell the row drawers compare against. */
 extern int D_8009CEF4;

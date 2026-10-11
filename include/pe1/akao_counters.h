@@ -16,4 +16,8 @@ extern char *D_8009D260;
 /* BGM volume fade queued by the menu and sent with Akao_Cmd_21. */
 extern int g_AkaoPendingBgmVolumeFade;
 
+/* Duck the BGM while a menu panel counts up; flushed when it closes. */
+void Akao_SetBgmVolumeFade(void);
+void Akao_FlushBgmVolumeFade(void);
+
 #endif

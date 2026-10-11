@@ -13,10 +13,12 @@ extern unsigned int g_MenuErrorSoundPending;
 void Menu_RequestErrorSound(void);
 int Menu_GetEquipMode(void);
 
-extern int D_8009CF78;
-extern int D_8009CFE8;
-extern int D_8009CFEC;
-extern int D_8009CFF0;
+/* EXP review: the total counting up toward the target, the level reached
+ * so far and the frames left on the LEVEL UP banner. */
+extern int g_MenuPendingTotalExp;
+extern int g_MenuExpAllocTarget;
+extern int g_MenuExpReviewLevel;
+extern int g_MenuLevelUpAnimTimer;
 
 /* Selection state shared by the inventory, equipment and item-action screens. */
 extern int g_MenuActionSubmenuOpen;
@@ -50,10 +52,6 @@ extern int g_MenuBlendColorBackup;
 extern int g_MenuScreenBaseYBackup;
 extern unsigned char g_MenuBlendColorPanelPoints[];
 
-#define g_MenuLevelUpAnimTimer D_8009CF78
-#define g_MenuPendingTotalExp D_8009CFE8
-#define g_MenuExpAllocTarget D_8009CFEC
-#define g_MenuExpReviewLevel D_8009CFF0
 
 /* Menu open/close state (the in-field item/status/equip menu drawn over the
  * paused field). Confirmed live via DuckStation GDB: snapshot-diffed the game

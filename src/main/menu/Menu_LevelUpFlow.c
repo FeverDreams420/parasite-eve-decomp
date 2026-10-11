@@ -1,68 +1,52 @@
-#include "pe1/menu_bonus_stats.h"
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
-
+/* MASPSX_FLAGS: --use-comm-section -G8 */
 #include "common.h"
+#include "pe1/menu_bonus_stats.h"
 #include "pe1/menu_inventory_root.h"
 #include "pe1/menu_state.h"
 #include "pe1/menu_context_help.h"
+#include "pe1/menu_item_rows.h"
+#include "pe1/menu_queue.h"
 #include "pe1/battle_cmd.h"
 #include "pe1/battle_modifiers.h"
-#include "pe1/psyq_nop.h"
-#include "../../../tools/m2c/m2c_macros.h"
+#include "pe1/akao_counters.h"
 
-void *Aya_GetLevelExpTable(void);
-s32 Stat_BinarySearch(s32 value, void *table);
-s32 Battle_GetScaledMaxHP(s32 level);
-void Akao_SetBgmVolumeFade(void);
-void Akao_FlushBgmVolumeFade(void);
-void Menu_ResetInputState(void);
 void Menu_CreateExpReviewView(void);
 void Menu_DrawExpReviewPanel(void);
 s32 Menu_ConfirmExpAllocation(MenuWidgetNode *node, s32 flags);
 void Menu_CreateLevelUpBanner(void);
 void Menu_DrawLevelUpBanner(void);
 void Menu_CreateLevelUpResultPanel(void);
-s32 Aya_UnlockParasiteSpellById(s32 spell);
-void Menu_UpdateStatBarAnimation(s32 stat);
-void Draw_PrintNumberWidth2(s32 value);
-void Draw_PrintNumberWidth5(s32 value);
-void Draw_PrintNumberWidth6(int value);
+void Menu_DrawBonusPointAnimFrame(void);
+s32 Menu_StepParasiteScreen(MenuWidgetNode *node, s32 flags);
 
 #include "Menu_LevelUpFlow_externs.h"
-#define g_AyaSaveTotalExp (g_AyaSaveTotalExp[0])
-/* Distinct views preserve the original loads and store around the bonus update. */
-/* This loop sign-extends the stat allocations (lh in the original). */
-
+/* COMMON tells MASPSX that the pending total is a $gp word, so it keeps the
+ * load delay slot before storing it. */
+int g_MenuPendingTotalExp;
+/* The stat loop sign-extends the allocation levels (lh in retail). */
 
 void Aya_SetTotalExp(s32 exp_delta, s32 pe_bonus_delta, void *wayne_items) {
-    s32 exp_delta_reg;
-    s32 pe_bonus_delta_reg;
-    void *wayne_items_reg;
     AyaSaveState *save;
-    s32 previous_exp;
+    s32 previous;
     s16 *stat_src;
     s32 i;
     s32 stat_level;
-
-    exp_delta_reg = exp_delta;
-    pe_bonus_delta_reg = pe_bonus_delta;
-    wayne_items_reg = wayne_items;
 
     Menu_SetBattleEquipMode(0);
     BattleCmd_SyncActiveAmmo();
 
     save = &D_800C0E00;
-    asm volatile("" : "=r"(save) : "0"(save));
-    previous_exp = save->total_exp;
-    PE1_NOP();
-    g_MenuPendingTotalExp = previous_exp;
-    asm volatile("" : "=m"(g_MenuPendingTotalExp) : "m"(g_MenuPendingTotalExp));
-    g_MenuExpAllocTarget = previous_exp + exp_delta_reg;
+    /* Match debt: retail reads the total and clears the bonus pool through
+     * the save base held in s2; a known constant folds to absolute loads. */
+    PE1_COMPILER_LAUNDER(save);
+    previous = save->total_exp;
+    g_MenuPendingTotalExp = previous;
+    g_MenuExpAllocTarget = previous + exp_delta;
     g_MenuExpReviewLevel = Stat_BinarySearch(g_MenuPendingTotalExp, Aya_GetLevelExpTable());
     D_8009CEFC = 1;
 
-    D1E_write[0] = D1E_read[0] + pe_bonus_delta_reg;
+    D1E_write[0] = D1E_read[0] + pe_bonus_delta;
     g_MenuLevelDisplayValue = D_800C0E00.level;
     g_MenuHpMaxDisplayValue = D_800C0E00.max_hp;
     g_MenuBonusPointDisplayTarget = D_800C0E00.bonus_points;
@@ -70,15 +54,18 @@ void Aya_SetTotalExp(s32 exp_delta, s32 pe_bonus_delta, void *wayne_items) {
     g_MenuLevelDisplayTarget = Stat_BinarySearch(g_MenuExpAllocTarget, Aya_GetLevelExpTable());
 
     if (g_MenuLevelDisplayValue < g_MenuLevelDisplayTarget) {
-        s32 cap = 0x1869F;
-        register s32 result asm("$5") = 0x1869F;
+        s32 total;
         s32 bonus = g_MenuBonusPointDisplayTarget + D1E_bonus[0];
-        if (bonus <= cap) result = bonus;
-        g_MenuBonusPointDisplayTarget = result;
+        if (bonus <= 0x1869F) {
+            total = bonus;
+        } else {
+            total = 0x1869F;
+        }
+        g_MenuBonusPointDisplayTarget = total;
         save->pe_bonus_pool = 0;
     }
 
-    stat_src = D_800C0E28_signed;
+    stat_src = (s16 *)D_800C0E00.stats.levels;
     i = 0;
     do {
         g_BonusPointStatDeltas[i] = *stat_src++;
@@ -90,7 +77,7 @@ void Aya_SetTotalExp(s32 exp_delta, s32 pe_bonus_delta, void *wayne_items) {
     Stat_QueryLevelAndSubLevel(0, g_BonusPointStatDeltas[0] + g_BonusPointStatMultipliers[0], &stat_level, 0);
     g_MenuHpMaxDisplayTarget = Battle_GetScaledMaxHP(stat_level);
     g_BonusPointBarAnimStep = 2;
-    Inv_LoadWayneItemsAsOverride(wayne_items_reg);
+    Inv_LoadWayneItemsAsOverride(wayne_items);
     Menu_CreateExpReviewView();
     Akao_SetBgmVolumeFade();
     Menu_ResetInputState();
@@ -103,7 +90,7 @@ void Menu_CreateExpReviewView(void) {
     node->draw = Menu_DrawExpReviewPanel;
     node->update = Menu_ConfirmExpAllocation;
     MenuWidget_SetCurrentNode(node);
-    node->appearance.gradientPoints = D_800922F4;
+    node->appearance.gradientPoints = g_MenuExpReviewPanelPoints;
 }
 
 void Menu_DrawExpReviewPanel(void) {
@@ -180,7 +167,7 @@ s32 Menu_ConfirmExpAllocation(MenuWidgetNode *node, s32 flags) {
             MenuWidget_DestroyNode(MenuWidget_FindByModeAndSelectedBase(1, 0x16));
             Akao_FlushBgmVolumeFade();
             new_level = Stat_BinarySearch(g_MenuPendingTotalExp, Aya_GetLevelExpTable());
-            if (new_level != Stat_BinarySearch(g_AyaSaveTotalExp, Aya_GetLevelExpTable())) {
+            if (new_level != Stat_BinarySearch(D_800C0E00.total_exp, Aya_GetLevelExpTable())) {
                 Menu_CreateLevelUpResultPanel();
                 Akao_SetBgmVolumeFade();
             } else if (Menu_GetBattleCount() != 0) {
@@ -188,7 +175,7 @@ s32 Menu_ConfirmExpAllocation(MenuWidgetNode *node, s32 flags) {
             } else {
                 Inv_SetActiveList(0xA, 0);
             }
-            g_AyaSaveTotalExp = g_MenuPendingTotalExp;
+            D_800C0E00.total_exp = g_MenuPendingTotalExp;
         }
         Menu_PlayConfirmSound();
     }
@@ -257,11 +244,6 @@ void Menu_InitBonusPointAllocState(int gained_points) {
 }
 
 
-void Menu_DrawBonusPointAnimFrame(void);
-s32 Menu_StepParasiteScreen(MenuWidgetNode *node, s32 flags);
-void Menu_DrawStatAllocationList();
-#include "Menu_LevelUpFlow_externs_1.h"
-
 void Menu_CreateLevelUpResultPanel(void) {
     MenuWidgetNode *root;
     MenuWidgetNode *child;
@@ -276,13 +258,12 @@ void Menu_CreateLevelUpResultPanel(void) {
     child->y += 2;
     child->disabled -= 2;
     MenuWidget_SetCurrentNode(root);
-    root->appearance.gradientPoints = D_80092314;
+    root->appearance.gradientPoints = g_MenuLevelUpPanelPoints;
     g_MenuBonusPointBarAnimActive = 1;
     Menu_InitStateTables();
 }
 
 
-#include "Menu_LevelUpFlow_externs_2.h"
 
 void Menu_InitStateTables(void) {
     int i;
@@ -293,15 +274,11 @@ void Menu_InitStateTables(void) {
     }
 }
 
-#include "Menu_LevelUpFlow_externs_3.h"
-#define g_AyaHpMax (g_AyaHpMax[0])
-#define g_AyaBonusPoints (g_AyaBonusPoints[0])
-#define g_AyaSaveLevel (g_AyaSaveLevel[0])
 
 void Menu_DrawBonusPointAnimFrame(void) {
-    M2C_UNK var_a0;
-    M2C_UNK var_a0_2;
-    M2C_UNK var_a0_3;
+    int var_a0;
+    int var_a0_2;
+    int var_a0_3;
     s32 temp_a0;
     s32 temp_v0;
     s32 temp_v1;
@@ -323,7 +300,7 @@ void Menu_DrawBonusPointAnimFrame(void) {
         }
     }
     var_a0 = 0x808080;
-    if (g_AyaSaveLevel < g_MenuLevelDisplayValue) {
+    if (D_800C0E00.level < g_MenuLevelDisplayValue) {
         var_a0 = 0x8080;
     }
     Draw_SetColor(var_a0);
@@ -333,16 +310,16 @@ void Menu_DrawBonusPointAnimFrame(void) {
     Draw_OffsetCursor(-0x3C, 0x14);
     Draw_AllocSprite(0x99);
     if (g_MenuHpMaxDisplayValue < g_MenuHpMaxDisplayTarget) {
-        temp_v1 = D_8009CF7C;
-        D_8009CF7C = temp_v1 + 1;
+        temp_v1 = g_MenuHpMaxAnimTimer;
+        g_MenuHpMaxAnimTimer = temp_v1 + 1;
         var_s0 = 1;
         if (temp_v1 >= 0) {
-            D_8009CF7C = 0;
+            g_MenuHpMaxAnimTimer = 0;
             g_MenuHpMaxDisplayValue += 1;
         }
     }
     var_a0_2 = 0x808080;
-    if (g_AyaHpMax < g_MenuHpMaxDisplayValue) {
+    if (D_800C0E00.max_hp < g_MenuHpMaxDisplayValue) {
         var_a0_2 = 0x8080;
     }
     Draw_SetColor(var_a0_2);
@@ -357,7 +334,7 @@ void Menu_DrawBonusPointAnimFrame(void) {
     }
     temp_v1 = g_BonusPointDisplayValue;
     var_a0_3 = 0x808080;
-    if (g_AyaBonusPoints < temp_v1) {
+    if ((s32)D_800C0E00.bonus_points < temp_v1) {
         var_a0_3 = 0x8080;
     }
     Draw_SetColor(var_a0_3);
@@ -391,7 +368,7 @@ s32 Menu_StepParasiteScreen(MenuWidgetNode *arg0, s32 arg1) {
     s32 *statDeltas;
     s32 *statMultipliers;
     s32 temp_v0;
-    register s32 temp_v1 asm("$3");
+    s32 temp_v1;
     s32 value;
     s32 var_a0;
     s32 var_a2_old;
@@ -418,21 +395,15 @@ s32 Menu_StepParasiteScreen(MenuWidgetNode *arg0, s32 arg1) {
             statMultipliers = g_BonusPointStatMultipliers;
             statDeltas = g_BonusPointStatDeltas;
             do {
-                temp_v1 = *statMultipliers;
-                statMultipliers++;
-                temp_v0 = *statDeltas;
-                statDeltas++;
+                *statDestination++ = *statDeltas++ + *statMultipliers++;
                 var_a2 += 1;
-                temp_v0 += temp_v1;
-                *statDestination = temp_v0;
-                statDestination++;
             } while (var_a2 < 9);
             temp_v0 = g_MenuLevelDisplayValue;
             temp_v1 = g_MenuHpMaxDisplayValue;
             value = g_BonusPointDisplayValue;
-            g_AyaSaveLevel = (s8) temp_v0;
-            g_AyaHpMax = (s16) temp_v1;
-            g_AyaBonusPoints = value;
+            D_800C0E00.level = temp_v0;
+            D_800C0E00.max_hp = temp_v1;
+            D_800C0E00.bonus_points = value;
             Inv_RecalcSlotStats();
             MenuWidget_DestroyNode(arg0);
             MenuWidget_DestroyNode(MenuWidget_FindByModeAndSelectedBase(1, 0x1E));

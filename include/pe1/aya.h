@@ -151,5 +151,8 @@ void *Aya_GetLevelExpTable(void);
  */
 
 void Inv_RecalcSlotStats(void);
+int Stat_BinarySearch(int value, int *table);
+int Battle_GetScaledMaxHP(int level);
+int Aya_UnlockParasiteSpellById(int key);
 
 #endif /* PE1_AYA_H */

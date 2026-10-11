@@ -26,4 +26,18 @@ extern s32 g_BonusPointStatQueryResults[9];
 extern s32 g_BonusPointStatDeltas[9];
 extern s32 g_BonusPointStatMultipliers[9];
 
+/* Level-up and bonus point panels: shown values step toward their targets. */
+extern int g_MenuLevelDisplayValue, g_MenuLevelDisplayTarget;
+extern int g_MenuHpMaxDisplayValue, g_MenuHpMaxDisplayTarget;
+extern int g_BonusPointDisplayValue, g_MenuBonusPointDisplayTarget;
+extern int g_BonusPointBarAnimStep, g_BonusPointBarAnimProgress;
+extern int g_MenuBonusPointBarAnimActive;
+/* Frame counter pacing the maximum HP count-up. */
+extern int g_MenuHpMaxAnimTimer;
+extern int g_MenuStatBarWidths[8];
+extern int g_MenuStatBarSettleTimers[8];
+/* Panel outlines of the EXP review and the level-up result. */
+extern unsigned char g_MenuExpReviewPanelPoints[];
+extern unsigned char g_MenuLevelUpPanelPoints[];
+
 #endif

@@ -74,6 +74,9 @@ void Draw_PrintSignedNumberWidth4(int value);
 
 void Draw_SetStatCompareColor(int current, int candidate);
 void Draw_PrintNumberWidth4(int value);
+void Draw_PrintNumberWidth2(int value);
+void Draw_PrintNumberWidth5(int value);
+void Draw_PrintNumberWidth6(int value);
 void Draw_SetColor(int color);
 void Draw_SetTextDimmed(int dimmed);
 void Draw_SetFontVariant(int variant);

@@ -44,6 +44,7 @@ extern MenuQueueEntry *g_MenuEventQueueTail;
 
 void MenuInput_DispatchQueuedEvents(void);
 int MenuInput_GetStatusFlags(void);
+void Menu_ResetInputState(void);
 void Draw_SelectBuffer(void);
 void Draw_PresentFrame(int mode);
 
