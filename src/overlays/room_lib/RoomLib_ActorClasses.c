@@ -1019,7 +1019,7 @@ void RoomLib_ArmHandlerB(RoomEnt *o) {
 #define ROOMLIB_HANDLER_B_GTE_LOAD_VECTOR(base) \
     do { \
         asm("" : "=r"(base) : "0"(base)); \
-        gte_ldv0((char *)(base) + 0x20); \
+        gte_ldv0(((RoomLibArcWork *)(base))->input); \
     } while (0)
 
 void RoomLib_HandlerB(RoomEnt *obj) {
@@ -1054,21 +1054,21 @@ void RoomLib_HandlerB(RoomEnt *obj) {
         v0 <<= 2;
         v0 += v1;
         v1 = RW16(v0, 2);
-        *(short *)(state + 0x12) = 0;
-        *(volatile short *)(state + 0x10) = v1;
+        ((RoomLibHandlerBState *)state)->matrix[1] = 0;
+        ((volatile RoomLibHandlerBState *)state)->matrix[0] = v1;
         a0 = RW32(v0, 0);
-        v1 = RWU16(state, 0x10);
+        v1 = (unsigned short)((RoomLibHandlerBState *)state)->matrix[0];
         v0 = 0x1000;
-        *(volatile short *)(state + 0x18) = 0x1000;
-        *(volatile short *)(state + 0x14) = a0;
-        matrixComponent = RWU16(state, 0x14);
+        ((volatile RoomLibHandlerBState *)state)->matrix[4] = 0x1000;
+        ((volatile RoomLibHandlerBState *)state)->matrix[2] = a0;
+        matrixComponent = ((RoomLibHandlerBState *)state)->matrix[2];
         *(short *)(state + 0x16) = 0;
         *(volatile short *)(state + 0x1A) = 0;
         *(volatile short *)(state + 0x1E) = 0;
-        *(short *)(state + 0x20) = v1;
+        ((RoomLibHandlerBState *)state)->matrix[8] = v1;
         player = (RoomLink *)D_8009D254;
         matrixComponent = -matrixComponent;
-        *(short *)(state + 0x1C) = matrixComponent;
+        ((RoomLibHandlerBState *)state)->matrix[6] = matrixComponent;
         v0 = ((short *)&player->pos[1])[1];
         RW16(state, 0x84) = v0;
     }
@@ -1128,7 +1128,7 @@ void RoomLib_HandlerB(RoomEnt *obj) {
     gte_ldrotmatrix(state + 0x10);
     ROOMLIB_HANDLER_B_GTE_LOAD_VECTOR(scratch);
     gte_mvmva();
-    gte_stmac((char *)scratch + 0x28);
+    gte_stmac(((RoomLibArcWork *)scratch)->point);
     link->pos[0] += RW32(scratch, 0x28) << 12;
     link->pos[2] += RW32(scratch, 0x30) << 12;
 
@@ -1529,9 +1529,9 @@ void RoomLib_HandlerC(RoomEnt *obj) {
         scratch[17] = 0;
         scratch[18] = state->localOffset[2] >> 12;
         gte_ldrotmatrix((void *)scratch);
-        gte_ldv0((char *)scratch + 0x20);
+        gte_ldv0(((RoomLibArcWork *)scratch)->input);
         gte_mvmva();
-        gte_stmac((char *)scratch + 0x38);
+        gte_stmac(((RoomLibArcWork *)scratch)->offset);
 
         RW32(state, 0x40) = RW32(scratch, 0x28) +
                             (RW32(scratch, 0x38) << 12);
@@ -1824,15 +1824,14 @@ void RoomLib_HandlerA(RoomEnt *o) {
         }
         if (RW16(o, 0x44) == -1) {
             RW16(o, 0x44) = FieldEng_VecToAngle(
-                (Vec3Fixed *)(((char *)o->link + 0x28)),
+                (Vec3Fixed *)o->link->pos,
                 (Vec3Fixed *)&RW32(D_8009D254, 0x28));
         }
         if (RW16(o, 0x48) == -1) {
             RW16(o, 0x48) = RWU16(o, 0x44) + 0x800;
         }
         {
-            int *e = (int *)((char *)D_800966EC
-                             + ((RWU16(o, 0x44) & 0xFFF) << 2));
+            int *e = &D_800966EC[RWU16(o, 0x44) & 0xFFF].word;
             int hi = ((short *)e)[1];
             int lo;
             int savedHi;

@@ -237,6 +237,20 @@ typedef struct RoomLibMotionWork {
     short pad3A;
 } RoomLibMotionWork;
 
+/* Scratchpad layout of the arc handlers (B and C): the heading matrix, the
+ * local vector it turns, the point and offset vectors and the landed flag. */
+typedef struct RoomLibArcWork {
+    short matrix[9];              /* 0x00 */
+    char pad12[0xE];
+    short input[3];               /* 0x20 */
+    short pad26;
+    int point[3];                 /* 0x28: target point or turned step */
+    char pad34[0x4];
+    int offset[3];                /* 0x38: turned local offset */
+    char pad44[0x4];
+    int landed;                   /* 0x48 */
+} RoomLibArcWork;
+
 /* Four lanes of three-component values with increments and a shared timer. */
 typedef struct RoomLibStepRecords {
     char pad00[0x30];
@@ -342,7 +356,9 @@ typedef struct RoomLibHandlerBState {
     unsigned char optionB;        /* 0x0B */
     unsigned char optionC;        /* 0x0C */
     unsigned char flags;          /* 0x0D */
-    char pad0E[0x22];
+    char pad0E[0x2];
+    short matrix[9];              /* 0x10: heading rotation */
+    char pad22[0xE];
     int target[3];                /* 0x30 */
     char pad3C[0x4];
     int localOffset[3];           /* 0x40 */
