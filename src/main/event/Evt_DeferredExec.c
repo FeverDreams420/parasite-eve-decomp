@@ -1,10 +1,9 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 
 #include "pe1/save_tail_state.h"
+#include "pe1/menu_queue.h"
 
 int g_MenuInputPausePending;
-
-void MenuInput_SetPollingPaused(int arg0);
 
 void Evt_DeferredExec(void) {
     if (g_MenuInputPausePending != 0) {

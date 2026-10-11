@@ -38,6 +38,9 @@ extern MenuQueueEntry *g_MenuEventQueueFreeList;
 extern int g_MenuInputActive;
 extern int g_MenuInputPollingPaused;
 extern int g_MenuInputHeldStatusMask;
+/* Set while a pause request waits for the disc-change bits to clear
+ * (Evt_DeferredExec). */
+extern int g_MenuInputPausePending;
 extern MenuQueueEntry *g_MenuEventQueueHead;
 extern MenuQueueEntry *g_MenuEventQueueTail;
 
@@ -48,6 +51,7 @@ int MenuInput_GetRepeatStep(void);
 void Menu_ResetInputState(void);
 /* Releases the paused input polling once a disc change settles. */
 void Evt_DeferredExec(void);
+void MenuInput_SetPollingPaused(int paused);
 void Draw_SelectBuffer(void);
 void Draw_PresentFrame(int mode);
 

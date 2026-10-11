@@ -532,10 +532,10 @@ retry:
                 state->cd_transition_phase = 62;
                 return 1;
             }
-            Akao_Cmd_C1_WithSlot(voice, 60, state->transition_volume);
+            Akao_Cmd_C1_WithSlot(voice, 60, state->track_volumes[0]);
             if (voice)
                 Overlay_RegisterAudioSlot(0, state->scene_audio.tracks.keys[0][0], voice,
-                                          state->transition_volume);
+                                          state->track_volumes[0]);
             state->cd_transition_phase = 0;
             state->flags = (state->flags & ~4) | 0x40;
             return 0;

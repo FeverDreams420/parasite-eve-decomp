@@ -1,59 +1,46 @@
 #include "common.h"
 #include "pe1/game_state.h"
 
-/* The raw views retain retail addressing while deriving the key-table offset
- * from the shared Pe1GameState scene-audio layout. */
-int Overlay_RegisterAudioSlot(int arg0, int arg1, int arg2, int arg3) {
-    char *base;
-    char *ptr;
+/* Scene audio slots 0 and 1: each caches a track key, its bank and a volume,
+ * and registering one marks that slot's track as loaded in the state flags. */
+int Overlay_RegisterAudioSlot(int slot, int key, int bank, int volume) {
+    Pe1GameState *state = &g_GameState;
 
-    base = (char *)&g_GameState;
-    ptr = &base[arg0 * 2];
-    ptr[PE1_OFFSETOF(Pe1GameState, scene_audio.tracks.keys)] = (char) arg1;
-    ptr[PE1_OFFSETOF(Pe1GameState, scene_audio.tracks.keys) + 1] = (char) arg2;
-    base[arg0 + 0xFE] = (char) arg3;
+    state->scene_audio.tracks.keys[slot][0] = key;
+    state->scene_audio.tracks.keys[slot][1] = bank;
+    state->track_volumes[slot] = volume;
 
-    if (arg0 == 0) {
-        *(int *) base |= 0x40;
-    } else if (arg0 == 1) {
-        *(int *) base |= 0x80;
+    if (slot == 0) {
+        state->flags |= 0x40;
+    } else if (slot == 1) {
+        state->flags |= 0x80;
     }
 
     return 0;
 }
 
-int Overlay_GetAudioSlotByKey(int arg0)
-{
-  register signed char *entry;
-  int i;
-  signed char *new_var;
-  i = 0;
-  entry = (signed char *)&g_GameState;
-  while (i < 2)
-  {
-    if (entry[PE1_OFFSETOF(Pe1GameState, scene_audio.tracks.keys)] == arg0)
-    {
-      new_var = entry;
-      entry = &new_var[PE1_OFFSETOF(Pe1GameState, scene_audio.tracks.keys) + 1];
-      return *entry;
-    }
-    i++;
-    entry += 2;
-  }
+int Overlay_GetAudioSlotByKey(int key) {
+    Pe1GameState *state = &g_GameState;
+    int i;
 
-  return -1;
+    for (i = 0; i < 2; i++) {
+        if (state->scene_audio.tracks.keys[i][0] == key) {
+            return state->scene_audio.tracks.keys[i][1];
+        }
+    }
+
+    return -1;
 }
 
-int Overlay_FindAudioSlotIndex(int id) {
+int Overlay_FindAudioSlotIndex(int key) {
+    Pe1GameState *state = &g_GameState;
     int i = 0;
-    char *ptr = (char *)&g_GameState;
 
     do {
-        if (*(s8 *)(ptr + PE1_OFFSETOF(Pe1GameState, scene_audio.tracks.keys)) == id) {
+        if (state->scene_audio.tracks.keys[i][0] == key) {
             return i;
         }
         i++;
-        ptr += 2;
     } while (i < 2);
 
     return -1;

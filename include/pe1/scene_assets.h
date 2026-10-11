@@ -152,8 +152,8 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, pending_stream_banks) == 0xEA,
                   scene_pending_streams_offset);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, cd_transition_phase) == 0xF2,
                   scene_transition_phase_offset);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, transition_volume) == 0xFE,
-                  scene_transition_volume_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, track_volumes) == 0xFE,
+                  scene_track_volumes_offset);
 
 /* Range-table cursor used by CD_FindNextDataSector. */
 extern int g_CdRangeIndex;
