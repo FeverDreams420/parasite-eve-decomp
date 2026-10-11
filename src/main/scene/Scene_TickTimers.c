@@ -1,6 +1,6 @@
 #include "pe1/game_timers.h"
 
-#include "Scene_TickTimers_externs.h"
+#include "pe1/game_state.h"
 
 int Gpu_CheckDrawStatus(void);
 

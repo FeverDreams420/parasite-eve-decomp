@@ -24,9 +24,8 @@ typedef union SceneCopyCursor {
 #include "pe1/gpu_image.h"
 #include "pe1/field_bg_load.h"
 #include "pe1/menu_state.h"
+#include "pe1/scene_room_load.h"
 
-/* Startup resource blob copied out of the scene scratch buffer. */
-extern u8 g_StartupResourceBlob[];
 
 void Scene_LoadSceneData(void) {
     RECT rect;
@@ -150,6 +149,7 @@ restart4:
 #include "pe1/render_prim.h"
 #include "pe1/field_bg_load.h"
 #include "pe1/menu_state.h"
+#include "pe1/scene_room_load.h"
 
 /* Uploads every TIM listed in a scene blob's directory. */
 #define SCENE_BLOB_LOAD_TIMS(source)                                         \
