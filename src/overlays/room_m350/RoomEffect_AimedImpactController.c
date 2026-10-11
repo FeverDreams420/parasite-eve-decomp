@@ -68,7 +68,7 @@ update:
             register Matrix *m asm("$5") = &matrix;
             int yaw = (u16)instance->rot_y;
             /* Keep the rotation arguments ready before adding the yaw offset. */
-            asm("" : "=r"(offset) : "0"(offset), "r"(input), "r"(m), "r"(yaw));
+            asm("" : : "r"(input), "r"(m));
             offset += 0x800;
             yaw += offset;
             vector.y = yaw;
