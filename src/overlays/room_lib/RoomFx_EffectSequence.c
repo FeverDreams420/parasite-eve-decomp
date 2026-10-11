@@ -58,7 +58,7 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     u8 c80b;
     int c40;
     int value;
-    register int c2 asm("$2");
+    u8 clut;
     RoomEffectSequenceSprite *primary;
 
     func_800C2B40(state);
@@ -86,13 +86,13 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     D_80192C18.clut = 3;
     D_80192C18.offset = -100;
     D_80192C28.cell = 8;
+    clut = 2;
     PE1_COMPILER_MEMORY_BARRIER();
     primary = &D_80192C08;
-    c2 = 2;
     primary->g = c40;
     D_80192C18.g = c40;
     c40 = offsetValue;
-    D_80192C28.clut = c2;
+    D_80192C28.clut = clut;
     D_80192C28.r = 0x90;
     D_80192C28.g = 0x90;
     D_80192C28.b = 0x90;
