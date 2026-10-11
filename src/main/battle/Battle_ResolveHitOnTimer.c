@@ -105,22 +105,20 @@ void Battle_ResolveHitOnTimer(void)
             selectedCore = selectedActor->core;
             if (D_8009CE54 == 1)
             {
+                u32 *coreFlags = &selectedCore->coreFlags;
                 register u32 flags asm("$3");
-                register u32 classMask = 0xFFF3FFFF;
-                register u32 reactionMask = 0xFFFC7FFF;
                 Combatant *active;
-                register s32 reaction;
-                flags = selectedCore->coreFlags;
+                s32 reaction;
+                flags = *coreFlags;
                 flags &= ~0x6000;
                 active = D_8009D278;
                 flags |= 0x2000;
-                selectedCore->coreFlags = flags;
-                flags = (flags & classMask) | (((active->action->attackWord >> 20) & 3) << 18);
-                selectedCore->coreFlags = flags;
-                asm("" : : : "memory");
+                *coreFlags = flags;
+                flags = (flags & 0xFFF3FFFF) | (((active->action->attackWord >> 20) & 3) << 18);
+                *coreFlags = flags;
                 reaction = D_8009CE55;
-                flags = (flags & reactionMask) | ((reaction & 7) << 15);
-                selectedCore->coreFlags = flags;
+                flags = (flags & 0xFFFC7FFF) | ((reaction & 7) << 15);
+                *coreFlags = flags;
             }
             else if (D_8009CE54 == 0)
             {
@@ -148,22 +146,20 @@ void Battle_ResolveHitOnTimer(void)
                                 multiCore = multiTarget->core;
                                 if (D_8009CE54 == 1)
                                 {
+                                    u32 *coreFlags = &multiCore->coreFlags;
                                     register u32 flags asm("$3");
-                                    register u32 classMask = 0xFFF3FFFF;
-                                    register u32 reactionMask = 0xFFFC7FFF;
                                     Combatant *active;
-                                    register s32 reaction;
-                                    flags = multiCore->coreFlags;
+                                    s32 reaction;
+                                    flags = *coreFlags;
                                     flags &= ~0x6000;
                                     active = D_8009D278;
                                     flags |= 0x2000;
-                                    multiCore->coreFlags = flags;
-                                    flags = (flags & classMask) | (((active->action->attackWord >> 20) & 3) << 18);
-                                    multiCore->coreFlags = flags;
-                                    asm("" : : : "memory");
+                                    *coreFlags = flags;
+                                    flags = (flags & 0xFFF3FFFF) | (((active->action->attackWord >> 20) & 3) << 18);
+                                    *coreFlags = flags;
                                     reaction = D_8009CE55;
-                                    flags = (flags & reactionMask) | ((reaction & 7) << 15);
-                                    multiCore->coreFlags = flags;
+                                    flags = (flags & 0xFFFC7FFF) | ((reaction & 7) << 15);
+                                    *coreFlags = flags;
                                 }
                                 else if (D_8009CE54 == 0)
                                 {
@@ -251,22 +247,20 @@ void Battle_ResolveHitOnTimer(void)
                                     coneCore = coneTarget->core;
                                     if (D_8009CE54 == 1)
                                     {
+                                        u32 *coreFlags = &coneCore->coreFlags;
                                         register u32 flags asm("$3");
-                                        register u32 classMask = 0xFFF3FFFF;
-                                        register u32 reactionMask = 0xFFFC7FFF;
                                         Combatant *active;
-                                        register s32 reaction;
-                                        flags = coneCore->coreFlags;
+                                        s32 reaction;
+                                        flags = *coreFlags;
                                         flags &= ~0x6000;
                                         active = D_8009D278;
                                         flags |= 0x2000;
-                                        coneCore->coreFlags = flags;
-                                        flags = (flags & classMask) | (((active->action->attackWord >> 20) & 3) << 18);
-                                        coneCore->coreFlags = flags;
-                                        asm("" : : : "memory");
+                                        *coreFlags = flags;
+                                        flags = (flags & 0xFFF3FFFF) | (((active->action->attackWord >> 20) & 3) << 18);
+                                        *coreFlags = flags;
                                         reaction = D_8009CE55;
-                                        flags = (flags & reactionMask) | ((reaction & 7) << 15);
-                                        coneCore->coreFlags = flags;
+                                        flags = (flags & 0xFFFC7FFF) | ((reaction & 7) << 15);
+                                        *coreFlags = flags;
                                     }
                                     else if (D_8009CE54 == 0)
                                     {
@@ -301,22 +295,20 @@ void Battle_ResolveHitOnTimer(void)
                 {
                 applySelectedHit:
                     {
+                        u32 *coreFlags = &resultCore->coreFlags;
                         register u32 flags asm("$3");
-                        register u32 classMask = 0xFFF3FFFF;
-                        register u32 reactionMask = 0xFFFC7FFF;
                         Combatant *active;
-                        register s32 reaction;
-                        flags = resultCore->coreFlags;
+                        s32 reaction;
+                        flags = *coreFlags;
                         flags &= ~0x6000;
                         active = D_8009D278;
                         flags |= 0x2000;
-                        resultCore->coreFlags = flags;
-                        flags = (flags & classMask) | (((active->action->attackWord >> 20) & 3) << 18);
-                        resultCore->coreFlags = flags;
-                        asm("" : : : "memory");
+                        *coreFlags = flags;
+                        flags = (flags & 0xFFF3FFFF) | (((active->action->attackWord >> 20) & 3) << 18);
+                        *coreFlags = flags;
                         reaction = D_8009CE55;
-                        flags = (flags & reactionMask) | ((reaction & 7) << 15);
-                        resultCore->coreFlags = flags;
+                        flags = (flags & 0xFFFC7FFF) | ((reaction & 7) << 15);
+                        *coreFlags = flags;
                     }
                 }
                 else
