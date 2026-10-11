@@ -31,8 +31,7 @@ int Pm_SendCmd(int, int, int, int, int, int);
 int Render_BeginSceneLoad(void);
 void Save_DrawSlotMetadata(void);
 void srand(unsigned int);
-/* Signed retail LB; battle_palette.h also exposes an unsigned view. */
-extern s8 g_BattleUpdatePaletteEnabled asm("D_8009D2A0");
+extern s8 D_8009D2A0;
 
 /* Only element zero is accessed in the wide matching views below. */
 extern u8 D_8009CE7C;

@@ -64,7 +64,7 @@ void Battle_Update(void) {
                 }
                 D_8009D288 = 1;
             }
-            if (!(D_8009D278->stateFlags & 0x2000) && (g_BattleUpdatePaletteEnabled != 0)) {
+            if (!(D_8009D278->stateFlags & 0x2000) && (D_8009D2A0 != 0)) {
                 if (((g_BattleTurnFrameCounterView[0]) & 3) == 0) {
                     register int topGreen asm("$8") = 0x46;
                     register int topBlue asm("$7") = 0x82;
