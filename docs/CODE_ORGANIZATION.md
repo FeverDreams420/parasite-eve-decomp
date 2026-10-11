@@ -190,6 +190,58 @@ permuter and by hand):
   label CSE enters without knowing `remaining`; every goto-free shape lets
   CSE drop that test (lev 69).
 
+### Tables, assets, process manager and sys (src/main/{table,asset,pm,sys})
+
+These units have no file-scope `extern`s; their data lives in
+`pe1/resident_tables.h`, `pe1/pm.h`, `pe1/asset_table.h`, `pe1/sys.h` and
+the other owner headers. C shapes that only exist for the bytes:
+
+- The resident data pack at 0x800A8028 (`g_ResidentDataPack`) is read
+  directly by most lookups, which lets CSE address the pack base relative to
+  the slot word as retail does, and through a local `ResidentDataPack *` by
+  the text-table lookups, which keeps the slot load and the pack base
+  independent as retail does.
+- The process-manager slot helpers take the secondary index into its own
+  `int idx = slot - 11`; indexing with `slot - 11` directly converts it to
+  the unsigned size type first and loop strength reduction no longer
+  produces the retail per-bank offset counters. `Pm_StopUpperHalf` passes
+  `i + 11` so the slot number is its own induction variable.
+- The keyed asset lookups store the payload in `found` before returning it
+  (retail allocates `found` above the loop index), and each keeps an unused
+  `char unused[1]` local because retail reserves an 8-byte frame it never
+  touches.
+- `Asset_SearchByKeyType` keeps its masks in locals so loop.c hoists all
+  four into saved registers, as retail does; literals in the return
+  expression stay in the exit block.
+
+Crutches still in place (lev is the only metric):
+
+- `Scene_LoadRoomAssets` (1 goto): the PE.IMG retry jumps back over the
+  sector read. Any loop form (do/while, for with break) is seen by loop.c,
+  which hoists the table address and the -1 constant out of the retry path;
+  retail rebuilds them on every retry (lev 50).
+- `Pm_Exec` (1 memory barrier): retail loads `entry->state` again after the
+  active-state test; without the barrier reorg deletes that load as
+  redundant while stealing the branch targets' delay slots (lev 26 across
+  plain, switch, inline-predicate and wrapped forms).
+- `Asset_LoadTimTextures` (2 gotos, 2 volatile bank-pointer views): the
+  state machine restarts its `switch` after states 0 and 0x35; a `for (;;)`
+  loop around the switch lets loop.c move code out of the cases (lev 81).
+  Retail stores each process bank pointer through its address held in a
+  register and reloads it every iteration; plain stores use absolute
+  addressing (lev 47), a `PmPrimarySlot **` local gives the register address
+  but not retail's extra copy (lev 44).
+- `GameState_Reset` (3 pins, 11 barriers, 5 raw offsets, 1 byte-pointer
+  sum): a field-by-field rewrite through a `Pe1GameState *` gives retail's
+  absolute-then-relative addressing and loops, but sched1 launches the
+  shared -1 byte constant just before its first store while retail loads it
+  early into v1, which shifts every later register (best lev 92).
+- `Boot_InitMemoryLayout` (2 pins, 4 pointer-integer casts, volatile
+  `D_800B0E24`..`D_800B0E68` views): without the pins the buffer cursors and
+  the 0x8000/0x48000 constants trade registers in every declaration order
+  (lev 44), and without volatile the scheduler interleaves the game-state
+  stores with the render buffer stores differently.
+
 ### Open declaration conflicts
 
 `python3 tools/scripts/decl_conflicts.py --count` lists symbols declared more
