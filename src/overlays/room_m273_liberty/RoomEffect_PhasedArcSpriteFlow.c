@@ -110,7 +110,6 @@ short *func_8019A70C(void *arg0, short arg1) {
 }
 
 s32 func_8019A720(s32 mode, RoomM273ArcCallbackState *state) {
-    register RoomM273ArcCallbackState *obj asm("$5") = state;
     s32 day;
     s32 rotationValue;
     s32 packed;
@@ -124,8 +123,8 @@ s32 func_8019A720(s32 mode, RoomM273ArcCallbackState *state) {
             result = 1;
             return result;
         }
-        obj->value -= obj->step;
-        obj->step++;
+        state->value -= state->step;
+        state->step++;
     } else {
         if (mode != 2) {
         result = 0;
@@ -135,7 +134,7 @@ s32 func_8019A720(s32 mode, RoomM273ArcCallbackState *state) {
         rotation.x = 0;
         rotation.y = 0;
         rotation.flags = 0;
-        callState = obj;
+        callState = state;
         day = D_800E27EC - 1;
         count = 0x10;
         rotationValue = day << 7;
