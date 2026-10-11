@@ -9,7 +9,9 @@ prototype repeated with other parameter names is not a conflict. A name
 bound to another symbol with `__asm__("...")` is reported under its C name.
 D_/func_ names at overlay addresses (0x80100000 and up) name a different
 symbol in each overlay, so they conflict only within one overlay (a header
-counts towards every overlay whose sources include it).
+counts towards every overlay whose sources include it). A unit in a shared
+overlay directory (room_lib) counts towards each overlay whose splat config
+links it, since every room links its own copy at its own addresses.
 
 Usage: decl_conflicts.py [--count] [--name SYM] [--exclude PATH_PREFIX ...]
 
@@ -275,42 +277,84 @@ OVERLAY_BASE = 0x80100000
 INCLUDE = re.compile(r'^\s*#\s*include\s+"([^"]+)"', re.M)
 
 
+OVERLAY_CONFIGS = ROOT / "configs" / "USA" / "overlays"
+SHARED_UNIT = re.compile(r"\[\s*0x[0-9A-Fa-f]+\s*,\s*[.\w]+\s*,\s*\.\./(\w+)/(\w+)\s*\]")
+
+
+def shared_unit_links():
+    """Map (shared dir, unit) to the overlays whose splat config links it.
+
+    Shared overlay directories (room_lib) hold units that splat links into
+    several rooms, each at its own addresses; a unit's overlay-address
+    names belong to the rooms that link it, not to the directory.
+    """
+    links = collections.defaultdict(set)
+    for cfg in sorted(OVERLAY_CONFIGS.glob("*.yaml")):
+        for shared, unit in SHARED_UNIT.findall(cfg.read_text(errors="replace")):
+            links[(shared, unit)].add(cfg.stem)
+    return links
+
+
+def resolve_include(src: pathlib.Path, inc: str):
+    """Path of an included file relative to ROOT, or None if not in tree."""
+    for base in (src.parent, ROOT / "include"):
+        cand = (base / inc).resolve()
+        if cand.is_file():
+            try:
+                return cand.relative_to(ROOT).as_posix()
+            except ValueError:
+                return None
+    return None
+
+
 def overlay_scopes():
-    """Map each include/ header to the overlay source dirs that include it."""
-    direct = collections.defaultdict(set)   # header -> overlay dirs
-    nested = collections.defaultdict(set)   # header -> headers including it
-    for path in (ROOT / "include").rglob("*.h"):
-        rel = path.relative_to(ROOT / "include").as_posix()
-        for inc in INCLUDE.findall(path.read_text(errors="replace")):
-            nested[inc].add(rel)
-    for path in (ROOT / "src" / "overlays").rglob("*"):
-        if path.suffix not in SUFFIXES or not path.is_file():
-            continue
-        ov = path.relative_to(ROOT / "src" / "overlays").parts[0]
-        for inc in INCLUDE.findall(path.read_text(errors="replace")):
-            direct[inc].add(ov)
+    """Map each scanned file to the overlays its declarations belong to.
+
+    An overlay source belongs to its directory's overlay; a shared-directory
+    unit belongs to every overlay that links it; a header or template
+    belongs to the overlays of every file including it, directly or
+    through other headers.
+    """
+    links = shared_unit_links()
+    shared_dirs = {d for d, _ in links}
+    included_by = collections.defaultdict(set)   # file -> files including it
+    own = {}
+    for top in SCAN_DIRS:
+        for path in (ROOT / top).rglob("*"):
+            if path.suffix not in SUFFIXES or not path.is_file():
+                continue
+            rel = path.relative_to(ROOT).as_posix()
+            for inc in INCLUDE.findall(path.read_text(errors="replace")):
+                target = resolve_include(path, inc)
+                if target:
+                    included_by[target].add(rel)
+            parts = rel.split("/")
+            if parts[0] == "src" and parts[1] == "overlays":
+                ov = parts[2]
+                if ov in shared_dirs:
+                    own[rel] = set(links.get((ov, path.stem), ()))
+                else:
+                    own[rel] = {ov}
     scopes = {}
 
-    def resolve(header, seen):
-        if header in scopes:
-            return scopes[header]
-        out = set(direct.get(header, ()))
-        for parent in nested.get(header, ()):
+    def resolve(rel, seen):
+        if rel in scopes:
+            return scopes[rel]
+        out = set(own.get(rel, ()))
+        for parent in included_by.get(rel, ()):
             if parent not in seen:
                 out |= resolve(parent, seen | {parent})
         return out
 
-    for header in set(direct) | set(nested):
-        scopes[header] = resolve(header, {header})
+    for rel in set(own) | set(included_by):
+        scopes[rel] = resolve(rel, {rel})
     return scopes
 
 
 def location_scopes(loc, scopes):
     path = loc.rsplit(":", 1)[0]
-    if path.startswith("src/overlays/"):
-        return {path.split("/")[2]}
-    if path.startswith("include/"):
-        return scopes.get(path[len("include/"):]) or {path}
+    if path.startswith("src/overlays/") or path.startswith("include/"):
+        return scopes.get(path) or {path}
     return {"main"}
 
 
