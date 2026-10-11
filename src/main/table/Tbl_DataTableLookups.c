@@ -4,233 +4,192 @@
 #include "pe1/draw_state.h"
 #include "pe1/inventory.h"
 #include "pe1/aya.h"
-
-#include "Tbl_DataTableLookups_externs.h"
-
-
-
+#include "pe1/resident_tables.h"
 
 MenuWidgetSimpleDescriptor *MenuWidget_LookupSimpleDescriptor(unsigned int index) {
     if (index >= 0x41) {
         return 0;
     }
-    return &D_80092478[index];
+    return &g_MenuWidgetSimpleDescriptors[index];
 }
 
 MenuWidgetGridDescriptor *MenuWidget_LookupGridDescriptor(unsigned int index) {
     if (index >= 0x41) {
         return 0;
     }
-    return &D_80092888[index];
+    return &g_MenuWidgetGridDescriptors[index];
 }
 
 DrawGlyphDescriptor *Draw_LookupGlyphDescriptor(int index) {
-    register char *base = (char *)&D_800A8030;
-    register int offset = *(int *)base;
+    s32 *slot = &g_ResidentDataPack.directory.glyphDescriptors;
+    s32 offset = *slot;
+    DrawGlyphDescriptor *table = (DrawGlyphDescriptor *)&g_ResidentDataPack.bytes[offset];
 
-    base -= 8;
-    return (DrawGlyphDescriptor *)(offset + base + index * sizeof(DrawGlyphDescriptor));
+    return &table[index];
 }
 
-void *Str_LookupTable0(unsigned int arg0) {
-    u8 *end;
-    u8 *base;
+void *Str_LookupTable0(unsigned int index) {
     TextOffsetTable *table;
     s16 offset;
 
-    end = (u8 *)&g_StrLookupTableOffset;
-    base = end - 4;
-    table = (TextOffsetTable *)(base + *(int *)end);
-    if (arg0 < table->count) {
-        offset = table->offsets[arg0];
-        return (u8 *)table + offset;
+    table = RESIDENT_TABLE(TextOffsetTable, text);
+    if (index < table->header.count) {
+        offset = table->header.offsets[index];
+        return &table->bytes[offset];
     }
 
     return 0;
 }
 
-#include "Tbl_DataTableLookups_externs_1.h"
+ItemDataRecord *Item_LookupBaseData(unsigned int index) {
+    s32 *endSlot = &g_ResidentDataPack.directory.statGrowth;
+    s32 end = *endSlot;
+    s32 begin = g_ResidentDataPack.directory.itemBaseData;
 
-ItemDataRecord *Item_LookupBaseData(unsigned int index)
-{
-    int *endPtr;
-    int base;
-    unsigned int offset;
-    int end;
-
-    endPtr = D_800A8038;
-    end = endPtr[0];
-    base = D_800A8034[0];
-
-    if (index >= ((unsigned int)(end - base) >> 5)) {
+    if (index >= (unsigned int)(end - begin) / sizeof(ItemDataRecord)) {
         return 0;
     }
-
-    offset = index << 5;
-    return (ItemDataRecord *)((char *)D_800A8038 - 0x10 + base + offset);
+    return (ItemDataRecord *)&g_ResidentDataPack.bytes[begin] + index;
 }
 
-#include "Tbl_DataTableLookups_externs_2.h"
-
-void *Stat_GetGrowthTable(int arg0) {
-    return (void *)(g_StatGrowthTable[0] + (int)((char *)g_StatGrowthTable - 0x10) + (arg0 << 9));
+void *Stat_GetGrowthTable(int category) {
+    return &RESIDENT_TABLE(u8, statGrowth)[category << 9];
 }
 
-#include "Tbl_DataTableLookups_externs_3.h"
-
-
-
-
-AyaLevelStats *Aya_LookupLevelStats(int arg0) {
-    if (arg0 < 0) {
-        arg0 = 0;
-    } else if (arg0 >= 0x63) {
-        arg0 = 0x62;
+AyaLevelStats *Aya_LookupLevelStats(int level) {
+    if (level < 0) {
+        level = 0;
+    } else if (level >= 0x63) {
+        level = 0x62;
     }
 
-    return (AyaLevelStats *)(D_800A803C[0] + (int)((char *)D_800A803C - 0x14) + (arg0 * 0x18));
+    return &RESIDENT_TABLE(AyaLevelStats, levelStats)[level];
 }
 
 void *Aya_GetLevelExpTable(void) {
-    register char *base = (char *)&D_800A8040;
-    register int offset = *(int *)base;
-
-    base -= 0x18;
-    return (void *)(offset + base);
+    return RESIDENT_TABLE(s32, levelExp);
 }
 
 void *Aya_GetParasiteSpellUnlockTable(void) {
-    register char *base = (char *)&D_800A8048;
-    register int offset = *(int *)base;
-
-    base -= 0x20;
-    return (void *)(offset + base);
+    return RESIDENT_TABLE(ParasiteSpellEntry, parasiteSpells);
 }
 
-int Draw_LookupGlyphMetrics(int arg0) {
-    arg0 += D_800A8050;
-    return g_GlyphMetricsTable[arg0];
+int Draw_LookupGlyphMetrics(int glyph) {
+    return g_ResidentDataPack.bytes[glyph + g_ResidentDataPack.directory.glyphMetrics];
 }
 
-void *Str_LookupTable4(unsigned int arg0) {
+void *Str_LookupTable4(unsigned int index) {
+    ResidentDataPack *pack = &g_ResidentDataPack;
     TextTableDirectory *directory;
     TextOffsetTable *table;
     s16 offset;
 
-    directory = (TextTableDirectory *)(g_GlyphMetricsTable + g_StrLookupTableOffset);
-    table = (TextOffsetTable *)((u8 *)directory + directory->tableOffsets[0]);
-    if (arg0 >= table->count) {
+    directory = (TextTableDirectory *)&pack->bytes[pack->directory.text];
+    table = (TextOffsetTable *)&directory->bytes[directory->header.tableOffsets[0]];
+    if (index >= table->header.count) {
         return 0;
     }
 
-    offset = table->offsets[arg0];
-    return (u8 *)table + offset;
+    offset = table->header.offsets[index];
+    return &table->bytes[offset];
 }
 
-void *Str_LookupTable8(unsigned int arg0) {
+void *Str_LookupTable8(unsigned int index) {
+    ResidentDataPack *pack = &g_ResidentDataPack;
     TextTableDirectory *directory;
     TextOffsetTable *table;
     s16 offset;
 
-    directory = (TextTableDirectory *)(g_GlyphMetricsTable + g_StrLookupTableOffset);
-    table = (TextOffsetTable *)((u8 *)directory + directory->tableOffsets[1]);
-    if (arg0 >= table->count) {
+    directory = (TextTableDirectory *)&pack->bytes[pack->directory.text];
+    table = (TextOffsetTable *)&directory->bytes[directory->header.tableOffsets[1]];
+    if (index >= table->header.count) {
         return 0;
     }
 
-    offset = table->offsets[arg0];
-    return (u8 *)table + offset;
+    offset = table->header.offsets[index];
+    return &table->bytes[offset];
 }
 
-void *Str_LookupTableC(unsigned int arg0) {
+void *Str_LookupTableC(unsigned int index) {
+    ResidentDataPack *pack = &g_ResidentDataPack;
     TextTableDirectory *directory;
     TextOffsetTable *table;
     s16 offset;
 
-    directory = (TextTableDirectory *)(g_GlyphMetricsTable + g_StrLookupTableOffset);
-    table = (TextOffsetTable *)((u8 *)directory + directory->tableOffsets[2]);
-    if (arg0 >= table->count) {
+    directory = (TextTableDirectory *)&pack->bytes[pack->directory.text];
+    table = (TextOffsetTable *)&directory->bytes[directory->header.tableOffsets[2]];
+    if (index >= table->header.count) {
         return 0;
     }
 
-    offset = table->offsets[arg0];
-    return (u8 *)table + offset;
+    offset = table->header.offsets[index];
+    return &table->bytes[offset];
 }
 
-void *Str_LookupTable10(unsigned int arg0) {
+void *Str_LookupTable10(unsigned int index) {
+    ResidentDataPack *pack = &g_ResidentDataPack;
     TextTableDirectory *directory;
     TextOffsetTable *table;
     s16 offset;
 
-    directory = (TextTableDirectory *)(g_GlyphMetricsTable + g_StrLookupTableOffset);
-    table = (TextOffsetTable *)((u8 *)directory + directory->tableOffsets[3]);
-    if (arg0 >= table->count) {
+    directory = (TextTableDirectory *)&pack->bytes[pack->directory.text];
+    table = (TextOffsetTable *)&directory->bytes[directory->header.tableOffsets[3]];
+    if (index >= table->header.count) {
         return 0;
     }
 
-    offset = table->offsets[arg0];
-    return (u8 *)table + offset;
+    offset = table->header.offsets[index];
+    return &table->bytes[offset];
 }
-#include "Tbl_DataTableLookups_externs_4.h"
 
-void *Str_LookupTableEntry(int arg0) {
+/* Text-table-3 entry naming the location of map `map`. */
+void *Str_LookupMapLocationText(int map) {
     TextTableDirectory *directory;
     TextOffsetTable *table;
     int index;
     s16 offset;
 
-    index = g_GlyphMetricsTable[arg0 + D_800A804C];
+    index = g_ResidentDataPack.bytes[map + g_ResidentDataPack.directory.mapLocationIds];
     if (index == 0) {
         return 0;
     }
 
-    directory = (TextTableDirectory *)(g_GlyphMetricsTable + g_StrLookupTableOffset);
-    table = (TextOffsetTable *)((u8 *)directory + directory->tableOffsets[3]);
+    directory = RESIDENT_TABLE(TextTableDirectory, text);
+    table = (TextOffsetTable *)&directory->bytes[directory->header.tableOffsets[3]];
     index += 0x7F;
-    if ((u32)index >= table->count) {
+    if ((unsigned int)index >= table->header.count) {
         return 0;
     }
 
-    offset = table->offsets[index];
-    return (u8 *)table + offset;
+    offset = table->header.offsets[index];
+    return &table->bytes[offset];
 }
 
-#include "Tbl_DataTableLookups_externs_5.h"
+/* Location name of map `map` (-1 selects name 15); names are NUL-separated. */
+u8 *Tbl_GetMapLocationName(int map) {
+    u8 *name;
 
-
-u8 *Tbl_FindNthNonEmpty(int arg0) {
-    u8 *end;
-    u8 *base;
-    u8 *ptr;
-    int offset;
-
-    end = (u8 *)&D_800A8054;
-    offset = *(int *)end;
-    base = end - 0x2C;
-    ptr = base + offset;
-    if (arg0 >= 0) {
-        arg0 = base[arg0 + D_800A804C];
+    name = RESIDENT_TABLE(u8, locationNames);
+    if (map >= 0) {
+        map = g_ResidentDataPack.bytes[map + g_ResidentDataPack.directory.mapLocationIds];
     } else {
-        arg0 = 0xF;
+        map = 0xF;
     }
 
-    if (arg0 == 0) {
+    if (map == 0) {
         return 0;
     }
 
     do {
-        if (*ptr++ == 0) {
-            arg0--;
+        if (*name++ == 0) {
+            map--;
         }
-    } while (arg0 > 0);
+    } while (map > 0);
 
-    return ptr;
+    return name;
 }
 
-void *Str_ResolveDataPtr(void) {
-    register char *base = (char *)&D_800A8044;
-    register int offset = *(int *)base;
-
-    base -= 0x1C;
-    return (void *)(offset + base);
+/* Memory-card icon block copied into each save file header. */
+u8 *Tbl_GetSaveIconData(void) {
+    return RESIDENT_TABLE(u8, saveIcon);
 }

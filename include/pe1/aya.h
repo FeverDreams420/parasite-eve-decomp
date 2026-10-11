@@ -132,6 +132,7 @@ PE1_STATIC_ASSERT(sizeof(AyaLevelStats) == 0x18, aya_level_stats_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(AyaLevelStats, inventoryCapacity) == 7,
                   aya_level_inventory_capacity_offset);
 AyaLevelStats *Aya_LookupLevelStats(int level);
+void *Aya_GetLevelExpTable(void);
 
 /* EXP threshold table (Aya_GetLevelExpTable): base = *(u32*)0x800A8040 + 0x800A8028,
  * 4 bytes/level, cumulative EXP to REACH each level [CONFIRMED live]:

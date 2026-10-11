@@ -3,16 +3,24 @@
 
 #include "common.h"
 
-/* Signed byte offsets are relative to the start of this counted table. */
-typedef struct TextOffsetTable {
-    u16 count;
-    s16 offsets[0];
+/* A counted table of entries addressed by signed byte offsets relative to the
+ * start of the table itself; `bytes` resolves an offset. */
+typedef union TextOffsetTable {
+    struct {
+        u16 count;
+        s16 offsets[0];
+    } header;
+    u8 bytes[0];
 } TextOffsetTable;
 
-/* Table offsets are relative to this directory; the first word is unknown. */
-typedef struct TextTableDirectory {
-    u32 reserved;
-    s32 tableOffsets[4];
+/* Table offsets are byte offsets relative to this directory; the first word
+ * is unknown. */
+typedef union TextTableDirectory {
+    struct {
+        u32 reserved;
+        s32 tableOffsets[4];
+    } header;
+    u8 bytes[0];
 } TextTableDirectory;
 
 void *Str_LookupTable4(unsigned int index);

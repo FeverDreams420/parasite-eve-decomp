@@ -38,7 +38,7 @@ human decision.
 `Scene_LoadSceneData` reads PE.IMG sectors 72-86 (the pair at `0x800930DC`)
 into `0x800A8028`, a global data pack. Its header is a list of offsets from
 the start of the pack. `Save_FormatTitle` calls
-`Tbl_FindNthNonEmpty(Save_GetCurrentMapNumber())`, which
+`Tbl_GetMapLocationName(Save_GetCurrentMapNumber())`, which
 
 1. takes header word 9 (`0x6FA8`): a byte array indexed by map number, 440
    entries;

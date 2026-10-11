@@ -8,6 +8,7 @@
 #include "pe1/psyq_bios.h"
 #include "pe1/menu_widget.h"
 #include "pe1/game_timers.h"
+#include "pe1/resident_tables.h"
 
 void Save_SetTitleStyleFlag(int value) {
     D_800A1704 = value;
@@ -130,7 +131,6 @@ void Save_SprintfSjis(unsigned char *dst, unsigned char *fmt)
 
 int Save_ClassifyPlaytime(int arg0);
 int Save_GetCurrentMapNumber(void);
-u8 *Tbl_FindNthNonEmpty(int arg0);
 
 typedef unsigned char u8_1;
 
@@ -162,13 +162,13 @@ u8 *Save_FormatTitle(int chapter, int playtime_seconds) {
     g_SaveSjisFormatArguments.seconds = seconds;
 
     if (g_SaveTitleStyleFlag != 0) {
-        value = Tbl_FindNthNonEmpty(-1);
+        value = Tbl_GetMapLocationName(-1);
         g_SaveSjisFormatArguments.primary.text = value;
         Save_SprintfSjis(g_SaveTitleBuffer, g_SaveTitleFormatShortPtr);
     } else {
         g_SaveSjisFormatArguments.primary.number =
             Save_ClassifyPlaytime(g_PlayTimeFrameCounter);
-        value = Tbl_FindNthNonEmpty(Save_GetCurrentMapNumber());
+        value = Tbl_GetMapLocationName(Save_GetCurrentMapNumber());
         g_SaveSjisFormatArguments.secondary.text = value;
         Save_SprintfSjis(g_SaveTitleBuffer, g_SaveTitleFormatLongPtr);
     }
@@ -491,7 +491,6 @@ void MemCard_InitManager(void) {
 #include "MemCard_PortAndSaveFlow_externs_5.h"
 
 char *strcpy(char *dst, char *src);
-u8 *Str_ResolveDataPtr(char *path);
 u8 *Save_FormatTitle(int chapter, int playtime_seconds);
 void Save_SerializeTail(void);
 
@@ -509,7 +508,7 @@ int Save_BuildCardFile(char *path) {
     u8 *file;
     u32 crc;
 
-    resolved = Str_ResolveDataPtr(path);
+    resolved = Tbl_GetSaveIconData();
     file = D_800B8868;
 
     D_800A5D50 = 0x2000;

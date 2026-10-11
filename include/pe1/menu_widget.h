@@ -142,6 +142,10 @@ PE1_STATIC_ASSERT(sizeof(MenuWidgetGridDescriptor) == 0x20,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(MenuWidgetGridDescriptor, yLimit) == 0x10,
                   menu_widget_grid_descriptor_y_limit_offset);
 
+/* Resident widget layout tables, 0x41 entries each. */
+extern MenuWidgetSimpleDescriptor g_MenuWidgetSimpleDescriptors[0x41];
+extern MenuWidgetGridDescriptor g_MenuWidgetGridDescriptors[0x41];
+
 MenuWidgetSimpleDescriptor *MenuWidget_LookupSimpleDescriptor(unsigned int index);
 MenuWidgetGridDescriptor *MenuWidget_LookupGridDescriptor(unsigned int index);
 void Draw_SwapPrimBuffers(MenuWidgetNode *list);
