@@ -127,7 +127,6 @@ void func_80192878(SceneE19Selection *selection) {
 #include "scene_e19_shared.h"
 #include "pe1/geom_state.h"
 
-extern u32 SceneE19FlagsWord asm("D_800BCF88");
 extern struct BattleEntity *D_8009D254;
 
 s32 func_8001AA78();
@@ -281,7 +280,7 @@ s32 func_80192D04(char *obj)
     *out = *((s32 *) (e + 0x28));
     *((s32 *) (e + 0x44)) = *((s32 *) (e + 0x2C));
     *((s32 *) (e + 0x48)) = *((s32 *) (e + 0x30));
-    SceneE19FlagsWord |= 0x80;
+    D_800BCF88 |= 0x80;
     sub[0x38] = 0;
   }
   return 0;
