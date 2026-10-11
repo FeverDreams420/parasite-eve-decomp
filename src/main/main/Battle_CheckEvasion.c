@@ -22,8 +22,8 @@ void Battle_CheckEvasion(BattleEntity *actor, BattleEvasionOutcome *outcome,
     }
 
     outcome->status = 0;
-    range = 200;
-    if ((D_8009D278->stateFlags & 0x30) != 0x10) {
+    range = AYA_DARKNESS_RANGE;
+    if ((D_8009D278->stateFlags & AYA_DARKNESS_MASK) != AYA_DARKNESS) {
         range = D_8009D278->action->range;
     }
     distance = Battle_CalcDistToPlayer(actor, D_8009D254) * 1000 / range;

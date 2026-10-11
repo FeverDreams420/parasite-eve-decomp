@@ -37,25 +37,25 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
     s32 *ps = (s32 *)(D278_0 + 0x4C);
 
     switch (ent->effect->effectType) {
-    case 1:
-        if ((*ps & 3) == 1) {
+    case ENEMY_EFFECT_POISON:
+        if ((*ps & AYA_POISON_MASK) == AYA_POISON) {
             break;
         }
-        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_1)) & 1) {
-            if ((rand() % 100) < 0x46) {
+        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_1)) & EFFECT_RESIST_POISON) {
+            if ((rand() % 100) < AYA_POISON_RESIST_CHANCE) {
                 break;
             }
         }
         {
             s32 f = *ps;
-            if ((f & 3) == 3) {
-                *ps = f & ~3;
+            if ((f & AYA_POISON_MASK) == AYA_POISON_IMMUNE) {
+                *ps = f & ~AYA_POISON_MASK;
                 break;
             }
             {
                 Combatant *pD = (Combatant *)D278_2;
                 u8 lvl;
-                *ps = (f & ~3) | 1;
+                *ps = (f & ~AYA_POISON_MASK) | AYA_POISON;
                 pD->statusTimer40 = 0x2328;
                 lvl = ent->effectLevel;
                 pD->subActionCounter = 0;
@@ -67,28 +67,28 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
             pD->subActionPeriod = ent->effectDuration;
         }
         break;
-    case 2:
+    case ENEMY_EFFECT_CLEAR_BUFFS:
         {
             Combatant *pD = (Combatant *)D278_4;
             s32 flags;
             flags = pD->stateFlags;
             g_ActorEffectFlag100Timer = 0;
-            pD->stateFlags = flags & ~0x100;
+            pD->stateFlags = flags & ~AYA_HASTE;
             {
                 s32 remainingFlags = ((volatile Combatant *)pD)->stateFlags;
-                remainingFlags &= ~0x200;
-                remainingFlags &= ~0x400;
-                remainingFlags &= ~0x800;
+                remainingFlags &= ~AYA_BARRIER;
+                remainingFlags &= ~AYA_GENE_HEAL;
+                remainingFlags &= ~AYA_PRERAISE;
                 pD->stateFlags = remainingFlags;
             }
         }
         break;
-    case 3:
-        if ((*ps & 0xC) == 4) {
+    case ENEMY_EFFECT_CONFUSION:
+        if ((*ps & AYA_CONFUSION_MASK) == AYA_CONFUSION) {
             break;
         }
-        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_5)) & 2) {
-            if ((rand() % 100) < 0x3C) {
+        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_5)) & EFFECT_RESIST_CONFUSION) {
+            if ((rand() % 100) < AYA_CONFUSION_RESIST_CHANCE) {
                 break;
             }
         }
@@ -98,13 +98,13 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
             s32 a3v;
             s32 d;
             Combatant *pD;
-            if ((f & 0xC) == 0xC) {
-                *ps = f & ~0xC;
+            if ((f & AYA_CONFUSION_MASK) == AYA_CONFUSION_IMMUNE) {
+                *ps = f & ~AYA_CONFUSION_MASK;
                 break;
             }
             d = D2E8A;
-            *ps = (f & ~0xC) | 4;
-            D2E8B = d | 0x10;
+            *ps = (f & ~AYA_CONFUSION_MASK) | AYA_CONFUSION;
+            D2E8B = d | FIELD_MOVE_CONFUSED;
             r = rand();
             pD = (Combatant *)D278_6;
             a3v = r;
@@ -112,82 +112,82 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
                 a3v = r + 3;
             }
             pD->statusTimer42 = 0x2328;
-            pD->stateFlags = (pD->stateFlags & ~0x60000) | (((r - ((a3v >> 2) << 2)) & 3) << 17);
+            pD->stateFlags = (pD->stateFlags & ~AYA_CONFUSION_ANGLE_MASK) | (((r - ((a3v >> 2) << 2)) & 3) << 17);
         }
         break;
-    case 4:
-        if ((*ps & 0x30) == 0x10) {
+    case ENEMY_EFFECT_DARKNESS:
+        if ((*ps & AYA_DARKNESS_MASK) == AYA_DARKNESS) {
             break;
         }
-        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_7)) & 4) {
-            if ((rand() % 100) < 0x3C) {
+        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_7)) & EFFECT_RESIST_DARKNESS) {
+            if ((rand() % 100) < AYA_DARKNESS_RESIST_CHANCE) {
                 break;
             }
         }
         {
             s32 f = *ps;
             Combatant *pD;
-            if ((f & 0x30) == 0x30) {
-                *ps = f & ~0x30;
+            if ((f & AYA_DARKNESS_MASK) == AYA_DARKNESS_IMMUNE) {
+                *ps = f & ~AYA_DARKNESS_MASK;
                 break;
             }
             pD = (Combatant *)D278_8;
-            *ps = (f & ~0x30) | 0x10;
+            *ps = (f & ~AYA_DARKNESS_MASK) | AYA_DARKNESS;
             pD->statusTimer44 = 0x2328;
         }
         break;
-    case 5:
-        if ((*ps & 0xC0) == 0x80) {
+    case ENEMY_EFFECT_STIFFNESS_LOCK:
+        if ((*ps & AYA_STIFFNESS_MASK) == AYA_STIFFNESS_LOCK) {
             break;
         }
-        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_9)) & 8) {
-            if ((rand() % 100) < 0x32) {
+        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_9)) & EFFECT_RESIST_STIFFNESS) {
+            if ((rand() % 100) < AYA_STIFFNESS_LOCK_RESIST_CHANCE) {
                 break;
             }
         }
         {
             s32 f = *ps;
-            if ((f & 0xC0) == 0xC0) {
-                *ps = f & ~0xC0;
+            if ((f & AYA_STIFFNESS_MASK) == AYA_STIFFNESS_IMMUNE) {
+                *ps = f & ~AYA_STIFFNESS_MASK;
                 break;
             }
-            if (f & 0x100) {
-                *ps = f & ~0x100;
+            if (f & AYA_HASTE) {
+                *ps = f & ~AYA_HASTE;
             }
             {
-                s32 nf = (*ps & ~0xC0) | 0x80;
+                s32 nf = (*ps & ~AYA_STIFFNESS_MASK) | AYA_STIFFNESS_LOCK;
                 Combatant *pD = (Combatant *)D278_10;
                 *ps = nf;
                 pD->statusTimer46 = 0x2328;
             }
         }
         break;
-    case 6:
+    case ENEMY_EFFECT_STIFFNESS_SLOW:
         {
-            s32 m = *ps & 0xC0;
-            if (m == 0x80) {
+            s32 m = *ps & AYA_STIFFNESS_MASK;
+            if (m == AYA_STIFFNESS_LOCK) {
                 break;
             }
-            if (m == 0x40) {
+            if (m == AYA_STIFFNESS_SLOW) {
                 break;
             }
         }
-        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_11)) & 8) {
-            if ((rand() % 100) < 0x46) {
+        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_11)) & EFFECT_RESIST_STIFFNESS) {
+            if ((rand() % 100) < AYA_STIFFNESS_SLOW_RESIST_CHANCE) {
                 break;
             }
         }
         {
             s32 f = *ps;
-            if ((f & 0xC0) == 0xC0) {
-                *ps = f & ~0xC0;
+            if ((f & AYA_STIFFNESS_MASK) == AYA_STIFFNESS_IMMUNE) {
+                *ps = f & ~AYA_STIFFNESS_MASK;
                 break;
             }
-            if (f & 0x100) {
-                *ps = f & ~0x100;
+            if (f & AYA_HASTE) {
+                *ps = f & ~AYA_HASTE;
             }
             {
-                s32 nf = (*ps & ~0xC0) | 0x40;
+                s32 nf = (*ps & ~AYA_STIFFNESS_MASK) | AYA_STIFFNESS_SLOW;
                 Combatant *pD = (Combatant *)D278_12;
                 *ps = nf;
                 pD->statusTimer46 = 0x2328;
@@ -197,8 +197,8 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
     case 7:
         *ps = *ps | 0x1000;
         break;
-    case 8:
-        if (!(*ps & 0x200)) {
+    case ENEMY_EFFECT_HALVE_HP:
+        if (!(*ps & AYA_BARRIER)) {
             Combatant *pD = (Combatant *)D278_13;
             s32 tmp = pD->curHP << 16;
             if ((tmp >> 16) >= 2) {
@@ -206,18 +206,18 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
             }
         }
         break;
-    case 9:
+    case ENEMY_EFFECT_REDUCE_HP_TO_1:
         {
             Combatant *pD = (Combatant *)D278_14;
             s32 hp;
             s32 f;
             g_ActorEffectFlag100Timer = 0;
             hp = *(s16 *)&pD->curHP;
-            pD->stateFlags = pD->stateFlags & ~0x100;
+            pD->stateFlags = pD->stateFlags & ~AYA_HASTE;
             f = ((volatile Combatant *)pD)->stateFlags;
-            f &= ~0x200;
-            f &= ~0x400;
-            f &= ~0x800;
+            f &= ~AYA_BARRIER;
+            f &= ~AYA_GENE_HEAL;
+            f &= ~AYA_PRERAISE;
             pD->stateFlags = f;
             if (hp >= 2) {
                 *(s16 *)&pD->curHP = 1;
@@ -226,11 +226,11 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
             }
         }
         break;
-    case 10:
-    case 11:
-        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_15)) & 0x10) {
+    case ENEMY_EFFECT_STEAL_ITEM:
+    case ENEMY_EFFECT_STEAL_ITEM_ALT:
+        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_15)) & EFFECT_RESIST_STEAL) {
             s32 r = rand();
-            if ((r % 100) >= 0x3C) {
+            if ((r % 100) >= ENEMY_STEAL_RESIST_CHANCE) {
                 ent->lootItemId = Inv_PickRandomItem(r / 100);
                 ent->effect->effectType = 0;
                 Inv_FindItemById(ent->lootItemId);
@@ -242,10 +242,10 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
             }
         }
         break;
-    case 12:
-    case 13:
-        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_16)) & 0x10) {
-            if ((rand() % 100) >= 0x3C) {
+    case ENEMY_EFFECT_STEAL_AMMO:
+    case ENEMY_EFFECT_STEAL_AMMO_ALT:
+        if (ATTRIBUTE_EFFECT_FLAGS(COMBATANT_ATTRIBUTES(D278_16)) & EFFECT_RESIST_STEAL) {
+            if ((rand() % 100) >= ENEMY_STEAL_RESIST_CHANCE) {
                 Inv_RollRandomItemType(&ent->lootItemId,
                                        &ent->lootItemAux);
                 ent->effect->effectType = 0;
@@ -257,8 +257,8 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
             }
         }
         break;
-    case 16:
-        if (!(*ps & 0x200)) {
+    case ENEMY_EFFECT_HP_TO_THREE_QUARTERS:
+        if (!(*ps & AYA_BARRIER)) {
             Combatant *pD = (Combatant *)D278_17;
             s16 t = *(s16 *)&pD->curHP;
             if (t >= 2) {

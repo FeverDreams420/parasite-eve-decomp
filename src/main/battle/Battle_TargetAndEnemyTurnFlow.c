@@ -39,8 +39,8 @@ void Battle_CycleTarget(s8 mode) {
         s8 outOfRange;
         BattleEntity *actor;
         Render_AnimationFrame();
-        if ((D_8009D278->stateFlags & 0x30) == 0x10)
-            outOfRange = g_BattleTargetList[g_BattleTargetIndex].dist > 200;
+        if ((D_8009D278->stateFlags & AYA_DARKNESS_MASK) == AYA_DARKNESS)
+            outOfRange = g_BattleTargetList[g_BattleTargetIndex].dist > AYA_DARKNESS_RANGE;
         else
             outOfRange = D_8009D278->action->range < g_BattleTargetList[g_BattleTargetIndex].dist;
         actor = g_BattleTargetList[g_BattleTargetIndex].actor;

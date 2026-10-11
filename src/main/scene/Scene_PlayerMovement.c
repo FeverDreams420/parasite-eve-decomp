@@ -99,14 +99,14 @@ void Scene_UpdatePlayerEntity(BattleEntity *entity, int *actionState)
         }
     }
     facing = entity->facingAngle;
-    if (D_8009D254 && (D_8009D2E8 & 0x10)) {
+    if (D_8009D254 && (D_8009D2E8 & FIELD_MOVE_CONFUSED)) {
         facing += 0x800;
         facing += ((u32)((Combatant *)D_8009D254->core)->stateFlags >> 7) & 0xC00;
     }
     facing &= 0xFFF;
     entity->facingAngle = facing;
     ApplyMatrixLV(&D_800BD000, &movement, (GteVector *)&entity->motionX);
-    if (D_8009D2E8 & 0x10) {
+    if (D_8009D2E8 & FIELD_MOVE_CONFUSED) {
         entity->facingAngle = (0x1000 - (u16)entity->facingAngle) & 0xFFF;
         entity->motionX = -entity->motionX;
     }
@@ -120,13 +120,13 @@ void Scene_UpdateEntityFacing(BattleEntity *entity, int *actionState)
     int facing;
     u32 pad;
 
-    speed = 0x168000;
+    speed = AYA_MOVE_SPEED_NORMAL;
     if (D_8009D1A0 & 2) {
         int flags = ((Combatant *)entity->core)->stateFlags;
-        if ((flags & 0xC0) == 0x40) {
-            speed = 0xB4000;
-        } else if (flags & 0x100) {
-            speed = 0x21C000;
+        if ((flags & AYA_STIFFNESS_MASK) == AYA_STIFFNESS_SLOW) {
+            speed = AYA_MOVE_SPEED_STIFF;
+        } else if (flags & AYA_HASTE) {
+            speed = AYA_MOVE_SPEED_HASTE;
         }
         {
             u8 mode;
@@ -204,14 +204,14 @@ void Scene_UpdateEntityFacing(BattleEntity *entity, int *actionState)
         }
     }
     facing = entity->facingAngle;
-    if (D_8009D254 && (D_8009D2E8 & 0x10)) {
+    if (D_8009D254 && (D_8009D2E8 & FIELD_MOVE_CONFUSED)) {
         facing += 0x800;
         facing += ((u32)((Combatant *)D_8009D254->core)->stateFlags >> 7) & 0xC00;
     }
     facing &= 0xFFF;
     entity->facingAngle = facing;
     ApplyMatrixLV(&D_800BD000, &movement, (GteVector *)&entity->motionX);
-    if (D_8009D2E8 & 0x10) {
+    if (D_8009D2E8 & FIELD_MOVE_CONFUSED) {
         entity->facingAngle = (0x1000 - (u16)entity->facingAngle) & 0xFFF;
         entity->motionX = -entity->motionX;
     }
@@ -262,7 +262,7 @@ void Scene_UpdateEntityFacingFromPad(BattleEntity *entity) {
         else if (D_8009D26C & FIELD_PAD_RIGHT) entity->facingAngle = 0xC00;
         angle = entity->facingAngle + D_800BD020;
     }
-    if (D_8009D254 && (D_8009D2E8 & 0x10)) {
+    if (D_8009D254 && (D_8009D2E8 & FIELD_MOVE_CONFUSED)) {
         angle += 0x800;
         {
             Combatant *core = D_8009D254->core;
@@ -273,5 +273,5 @@ void Scene_UpdateEntityFacingFromPad(BattleEntity *entity) {
     entity->facingAngle = angle;
     /* Retail reloads both the mode flags and the stored facing angle. */
     asm volatile("" : : : "memory");
-    if (D_8009D2E8 & 0x10) entity->facingAngle = (0x1000 - (u16)entity->facingAngle) & 0xFFF;
+    if (D_8009D2E8 & FIELD_MOVE_CONFUSED) entity->facingAngle = (0x1000 - (u16)entity->facingAngle) & 0xFFF;
 }

@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "pe1/field_actor.h"
+#include "pe1/battle_ailment.h"
 
 typedef struct BattleRewardSlot {
     s16 id;
@@ -82,7 +83,7 @@ typedef union BattleParameterWord {
 
 typedef struct BattleAttributes {
 /* 0x00 */ BattleParameterWord parameterWord;
-/* 0x04 */ u32 effectFlags;   /* attack/status capabilities consumed by hit logic */
+/* 0x04 */ u32 effectFlags;   /* EFFECT_RESIST_* / EFFECT_AUTO_* in battle_ailment.h */
 } BattleAttributes;
 
 /* Effect descriptor referenced by an enemy's battle-state record. This is a
@@ -90,7 +91,7 @@ typedef struct BattleAttributes {
  */
 typedef struct EnemyActionEffect {
 /* 0x00 */ u8  state;       /* 1=ready; changed to 3/4 by drop resolution */
-/* 0x01 */ u8  effectType;  /* Battle_ApplyEnemyAttack dispatch id */
+/* 0x01 */ u8  effectType;  /* ENEMY_EFFECT_* dispatch id; Battle_ApplyEnemyAttack */
 /* 0x02 */ u8  enterMode;
 /* 0x03 */ u8  exitMode;
 /* 0x04 */ s32 enterStep;
@@ -226,7 +227,7 @@ typedef struct Combatant {
 /* 0x48 */ s8   knockbackFrames;
 /* 0x49 */ u8   knockbackDistance;
 /* 0x4A */ s16  knockbackAngle;
-/* 0x4C */ s32  stateFlags;    /* PRIMARY status/state bitfield. &0xFF status groups (poison/etc, ApplyDamage cases13-17), 0x10000="battle ended" (Battle_IsActive), 0x80000 special-move guard, 0x100000 acted-this-frame, 0x200000 action-committed (Battle_ApplyPlayerHit.c:53,63; Battle_UpdatePlayerTurn.c:47) */
+/* 0x4C */ s32  stateFlags;    /* PRIMARY status/state bitfield. Ailment pairs and buffs: battle_ailment.h. 0x10000="battle ended" (Battle_IsActive), 0x80000 special-move guard, 0x100000 acted-this-frame, 0x200000 action-committed (Battle_ApplyPlayerHit.c:53,63; Battle_UpdatePlayerTurn.c:47) */
 /* 0x50 */ s16  panelA_val;    /* floating damage-number panel A: {s16 val; u16 x; u16 y; u8 scale; u8 mode}; drawn by Battle_DrawStatusPanel(0, &panelA) (Battle_PhaseHitReaction.c:191) */
 /* 0x52 */ u16  panelA_x;      /* x copied from entity projX@0x210 (Battle_PhaseHitReaction.c:188) */
 /* 0x54 */ u16  panelA_y;      /* y from entity projY@0x212 */
