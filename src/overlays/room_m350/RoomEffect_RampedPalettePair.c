@@ -60,11 +60,10 @@ int func_80192C34(int event, State *state)
     else if (state->target < state->current) state->current -= 4096;
     if (state->current) {
         int i;
-        register Vector *position asm("$16") = D_8019A778;
-        for (i = 0; i < 2; i++, position++) {
+        for (i = 0; i < 2; i++) {
             Particle *particle = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
             if (!particle) return 0;
-            particle->position = position;
+            particle->position = &D_8019A778[i];
             particle->scale = state->current;
         }
     }
@@ -75,7 +74,6 @@ int func_80192C34(int event, State *state)
         int unit = 16;
         int palette;
                 palette = D_800E2850[D_800E11E8];
-        asm("" : "=r"(palette) : "0"(palette) : "memory");
         D_800F3368.palette = 2; D_800F3368.parameter06 = 0;
         D_800F3368.parameter00 = unit; D_800F3368.parameter02 = 1;
         D_800F3368.extent_x = unit; D_800F3368.extent_y = unit;
