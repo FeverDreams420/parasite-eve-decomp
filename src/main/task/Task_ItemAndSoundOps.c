@@ -257,10 +257,6 @@ void Akao_Cmd_F1(void);
 void Akao_ResetPositionalState(void);
 int Akao_Cmd_19_Then_C0(u8 *data, int value);
 int CD_SeekToTrack(int key, int mode, int group, int *slot, int immediate);
-int CD_SeekTrack0(int key, int mode, int group, int *slot, int immediate)
-    __asm__("CD_SeekToTrack");
-int CD_SeekTrack1(int key, int mode, int group, int *slot, int immediate)
-    __asm__("CD_SeekToTrack");
 int Overlay_FindAudioSlotIndex(int key);
 int Overlay_GetAudioSlotByKey(int key);
 
@@ -520,13 +516,13 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         } while (++count < entry_limit);
         break;
     case 0x191:
-        status = CD_SeekTrack0(*args->arg1, 1, 0, &locals.slot,
+        status = CD_SeekToTrack(*args->arg1, 1, 0, &locals.slot,
                                *args->arg2 == 0);
         if (status != 1) {
             *args->result = locals.slot;
             break;
     case 0x192:
-        status = CD_SeekTrack1(*args->arg1, 1, 1, &locals.slot,
+        status = CD_SeekToTrack(*args->arg1, 1, 1, &locals.slot,
                                *args->arg2 == 0);
         if (status == 1) {
             D_8009CE00 -= 8;

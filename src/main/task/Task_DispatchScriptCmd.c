@@ -37,7 +37,7 @@ typedef struct TaskScriptArgs {
 /* COMMON supplies small-data metadata to MASPSX. */
 u32 *D_8009CE00;
 TaskNode *D_8009D300;
-u8 g_ScriptCameraBytes[3] __asm__("D_8009CDF8");
+u8 g_ScriptCameraBytes[3];
 
 void Task_SetCollisionFlag(int value);
 void func_800E00CC(Pe1Vec3s *position, int mode, int arg2, int arg3,
