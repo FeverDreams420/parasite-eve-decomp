@@ -338,7 +338,6 @@ int Task_TurnTowardPointStep(int **arg0) {
 #define S32_AT(ptr, off) (*(s32 *)((u8 *)(ptr) + (off)))
 
 extern Pe1GlobalSlot D_8009D254;
-extern u8 *D_8009D2F0[];
 
 int Math_FixedMul(int a, int b);
 
@@ -361,7 +360,7 @@ int Task_MoveTowardPoint(int **args) {
     int remaining_distance;
     int movement_distance;
 
-    speed_entity = D_8009D2F0[0];
+    speed_entity = (u8 *)g_CurrentEntity;
     current_x = S32_AT(speed_entity, 0x28);
     current_z = S32_AT(speed_entity, 0x30);
     if (speed_entity != D_8009D254.value.pointer) {
@@ -369,7 +368,7 @@ int Task_MoveTowardPoint(int **args) {
     } else {
         movement_speed = Math_FixedMul(0x50000, S32_AT(speed_entity, 0x20));
     }
-    movement_speed = Math_FixedMul(movement_speed, U16_AT(D_8009D2F0[0], 0x26) << 4);
+    movement_speed = Math_FixedMul(movement_speed, U16_AT(g_CurrentEntity, 0x26) << 4);
 
     if ((D_8009D300->flags & 0x20) == 0) {
         target_x = *args[0];
@@ -394,7 +393,7 @@ int Task_MoveTowardPoint(int **args) {
     target_angle &= 0xFFF;
     desired_angle = target_angle;
     if (turn_speed != 0) {
-        current_angle = S16_AT(D_8009D2F0[0], 0x3A);
+        current_angle = S16_AT(g_CurrentEntity, 0x3A);
         if (current_angle < desired_angle) {
             angle_difference = desired_angle - current_angle;
             if (angle_difference < 0x800) {
@@ -437,15 +436,15 @@ int Task_MoveTowardPoint(int **args) {
             }
         }
         target_angle &= 0xFFF;
-        S16_AT(D_8009D2F0[0], 0x3A) = target_angle;
+        S16_AT(g_CurrentEntity, 0x3A) = target_angle;
     }
 
-    S32_AT(D_8009D2F0[0], 0x68) = Math_FixedMul(-movement_speed, rsin(target_angle) << 4);
+    S32_AT(g_CurrentEntity, 0x68) = Math_FixedMul(-movement_speed, rsin(target_angle) << 4);
     movement_z = Math_FixedMul(-movement_speed, rcos(target_angle) << 4);
     current_x = (target_x - current_x) >> 16;
     current_z = (target_z - current_z) >> 16;
     remaining_distance = current_x * current_x + current_z * current_z;
-    motion_entity = D_8009D2F0[0];
+    motion_entity = (u8 *)g_CurrentEntity;
     current_x = S16_AT(motion_entity, 0x6A);
     current_z = movement_z >> 16;
     movement_distance = current_x * current_x + current_z * current_z;
@@ -472,7 +471,6 @@ int Task_MoveTowardPoint(int **args) {
 
 extern u8 *D_8009D20C[];
 extern Pe1GlobalSlot D_8009D254;
-extern u8 *D_8009D2F0[];
 
 int Math_FixedMul(int a, int b);
 
@@ -498,7 +496,7 @@ int Camera_TrackEntityAngle(int **args) {
     int stack_pad[2];
 
     script_args = args;
-    args = (int **)D_8009D2F0[0];
+    args = (int **)g_CurrentEntity;
     current_x = S32_AT(args, 0x28);
     current_z = S32_AT(args, 0x30);
 
@@ -507,7 +505,7 @@ int Camera_TrackEntityAngle(int **args) {
     } else {
         base_speed = Math_FixedMul(0x50000, S32_AT(args, 0x20));
     }
-    base_speed = Math_FixedMul(base_speed, U16_AT(D_8009D2F0[0], 0x26) << 4);
+    base_speed = Math_FixedMul(base_speed, U16_AT(g_CurrentEntity, 0x26) << 4);
 
     if ((D_8009D300->flags & 0x20) == 0) {
         target_x = *script_args[0];
@@ -516,7 +514,7 @@ int Camera_TrackEntityAngle(int **args) {
             return 1;
         }
         turn_arg = script_args[2];
-        tracking_entity = D_8009D2F0[0];
+        tracking_entity = (u8 *)g_CurrentEntity;
         turn_speed = *turn_arg;
         if (S16_AT(tracking_entity, 0x3A) < 0) {
             S16_AT(tracking_entity, 0x3A) = S16_AT(tracking_entity, 0x3A) + 0x1000;
@@ -534,10 +532,10 @@ int Camera_TrackEntityAngle(int **args) {
 
     target_angle = (u16)(0x1400 - ratan2(current_z - target_z, current_x - target_x));
     target_angle &= 0xFFF;
-    S32_AT(D_8009D2F0[0], 0x68) = Math_FixedMul(-base_speed, rsin(target_angle) << 4);
+    S32_AT(g_CurrentEntity, 0x68) = Math_FixedMul(-base_speed, rsin(target_angle) << 4);
     base_speed = Math_FixedMul(-base_speed, rcos(target_angle) << 4);
 
-    current = D_8009D2F0[0];
+    current = (u8 *)g_CurrentEntity;
     angle_difference = S16_AT(current, 0x3A);
     current_angle = angle_difference;
     S32_AT(current, 0x70) = base_speed;
@@ -561,7 +559,7 @@ int Camera_TrackEntityAngle(int **args) {
         }
     }
 
-    current = D_8009D2F0[0];
+    current = (u8 *)g_CurrentEntity;
     current_x = (target_x - current_x) >> 16;
     current_z = (target_z - current_z) >> 16;
     squared_x = current_x * current_x;
@@ -635,11 +633,11 @@ int Camera_SnapToEntity(int **args) {
     }
 
     target_x_ptr = (u32 *)(target + 0x28);
-    delta_x = U32_AT(D_8009D2F0[0], 0x28) - *target_x_ptr;
-    delta_z = U32_AT(D_8009D2F0[0], 0x30) - U32_AT(target, 0x30);
+    delta_x = U32_AT(g_CurrentEntity, 0x28) - *target_x_ptr;
+    delta_z = U32_AT(g_CurrentEntity, 0x30) - U32_AT(target, 0x30);
     target_angle = 0x1400 - ratan2(delta_z >> 16, delta_x >> 16);
     next_angle = (target_angle &= 0xFFF);
-    current = D_8009D2F0[0];
+    current = (u8 *)g_CurrentEntity;
     angle = S16_AT(current, 0x3A);
 
     if (target_angle != angle) {
@@ -678,7 +676,7 @@ int Camera_SnapToEntity(int **args) {
         }
 
         next_angle &= 0xFFF;
-        S16_AT(D_8009D2F0[0], 0x3A) = next_angle;
+        S16_AT(g_CurrentEntity, 0x3A) = next_angle;
         if (next_angle != target_angle) {
             D_8009CE00 -= 5;
             D_8009D300->active = 1;
@@ -750,26 +748,26 @@ int Camera_TrackEntityZoom(int **args) {
 
     target_x = S32_AT(target, 0x28);
     target_z = S32_AT(target, 0x30);
-    current_x = S32_AT(D_8009D2F0[0], 0x28);
-    current_z = S32_AT(D_8009D2F0[0], 0x30);
+    current_x = S32_AT(g_CurrentEntity, 0x28);
+    current_z = S32_AT(g_CurrentEntity, 0x30);
     if (current_x == target_x && current_z == target_z) {
         return 1;
     }
 
-    speed_entity = D_8009D2F0[0];
+    speed_entity = (u8 *)g_CurrentEntity;
     if (speed_entity != D_8009D254.value.pointer) {
         movement_speed = S32_AT(speed_entity, 0x20);
     } else {
         movement_speed = Math_FixedMul(0x50000, S32_AT(speed_entity, 0x20));
     }
-    movement_speed = Math_FixedMul(movement_speed, U16_AT(D_8009D2F0[0], 0x26) << 4);
+    movement_speed = Math_FixedMul(movement_speed, U16_AT(g_CurrentEntity, 0x26) << 4);
     target_angle = (u16)(0x1400 - ratan2(current_z - target_z,
                                              current_x - target_x));
     target_angle &= 0xFFF;
 
     desired_angle = target_angle;
     if (turn_speed != 0) {
-        current_angle = S16_AT(D_8009D2F0[0], 0x3A);
+        current_angle = S16_AT(g_CurrentEntity, 0x3A);
         if (current_angle < desired_angle) {
             angle_difference = desired_angle - current_angle;
             if (angle_difference < 0x800) {
@@ -812,15 +810,15 @@ int Camera_TrackEntityZoom(int **args) {
             }
         }
         target_angle &= 0xFFF;
-        S16_AT(D_8009D2F0[0], 0x3A) = target_angle;
+        S16_AT(g_CurrentEntity, 0x3A) = target_angle;
     }
 
-    S32_AT(D_8009D2F0[0], 0x68) = Math_FixedMul(-movement_speed, rsin(target_angle) << 4);
+    S32_AT(g_CurrentEntity, 0x68) = Math_FixedMul(-movement_speed, rsin(target_angle) << 4);
     movement_z = Math_FixedMul(-movement_speed, rcos(target_angle) << 4);
     current_x = (target_x - current_x) >> 16;
     current_z = (target_z - current_z) >> 16;
     remaining_distance = current_x * current_x + current_z * current_z;
-    motion_entity = D_8009D2F0[0];
+    motion_entity = (u8 *)g_CurrentEntity;
     current_x = S16_AT(motion_entity, 0x6A);
     current_z = movement_z >> 16;
     movement_distance = current_x * current_x + current_z * current_z;

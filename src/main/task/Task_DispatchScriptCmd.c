@@ -8,6 +8,7 @@
 
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 /* ASPSX_VERSION: 2.70 */
 
 #define U8_AT(ptr, off) (*(u8 *)((u8 *)(ptr) + (off)))
@@ -32,12 +33,11 @@ typedef struct TaskScriptArgs {
 
 extern u8 *D_8009D20C[];
 extern u8 *D_8009D254[];
-extern u8 *D_8009D2F0[];
-extern int D_8009CE00;
+/* COMMON supplies small-data metadata to MASPSX. */
+int D_8009CE00;
+TaskNode *D_8009D300;
 u8 g_ScriptCameraBytes[3] __asm__("D_8009CDF8");
 extern u32 D_800B0CD8[];
-/* This absolute view keeps the light outside the interpreter GP window. */
-extern RenderLightColor g_ScriptLightColor[] __asm__("D_800BD025");
 
 void Task_SetCollisionFlag(int value);
 void func_800E00CC(Pe1Vec3s *position, int mode, int arg2, int arg3,
@@ -167,21 +167,21 @@ cmd_962:
 cmd_9c4:
         map_id[0] = ARG_WORD(args->arg1);
         map_id[1] = ARG_WORD(args->arg2);
-        loaded = (u8 *)Scene_LoadMap((u8 *)map_id, (FieldActor *)D_8009D2F0[0], 0);
+        loaded = (u8 *)Scene_LoadMap((u8 *)map_id, g_CurrentEntity, 0);
         U32_AT(loaded, 0x28) = ARG_WORD(args->arg3);
         U32_AT(loaded, 0x2C) = ARG_WORD(args->arg4);
         U32_AT(loaded, 0x30) = ARG_WORD(args->arg5);
         goto done;
 cmd_a28:
-        U8_AT(D_8009D2F0[0], 0x27C) = ARG_WORD(args->arg1);
+        U8_AT(g_CurrentEntity, 0x27C) = ARG_WORD(args->arg1);
         goto done;
 cmd_a29:
-        U8_AT(D_8009D2F0[0], 0x27D) = ARG_WORD(args->arg1);
+        U8_AT(g_CurrentEntity, 0x27D) = ARG_WORD(args->arg1);
         goto done;
 cmd_a8c:
-        g_ScriptLightColor[0].r = ARG_WORD(args->arg1);
-        g_ScriptLightColor[0].g = ARG_WORD(args->arg2);
-        g_ScriptLightColor[0].b = ARG_WORD(args->arg3);
+        D_800BD025.r = ARG_WORD(args->arg1);
+        D_800BD025.g = ARG_WORD(args->arg2);
+        D_800BD025.b = ARG_WORD(args->arg3);
         goto done;
 cmd_af0:
         Battle_DrawActiveStatus();

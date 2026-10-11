@@ -12,6 +12,7 @@
 #include "pe1/menu_item_record.h"
 #include "common.h"
 #include "pe1/task_node.h"
+#include "pe1/field_actor.h"
 #include "pe1/game_audio_state.h"
 #include "pe1/game_state_types.h"
 #include "pe1/akao/commands.h"
@@ -222,7 +223,6 @@ extern u8 D_800944A8[];
 u8 *D_8009CE00;
 extern u8 *D_8009D20C[];
 extern u8 *D_8009D254[];
-extern u8 *D_8009D2F0[];
 
 void Akao_Cmd_11(int slot);
 void Akao_Cmd_90(int command);
@@ -464,8 +464,8 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         break;
     case 0x15F:
         *args->result = Asset_Find08w(
-            *args->arg1, 0, S16_AT(D_8009D2F0[0], 0x2A),
-            S16_AT(D_8009D2F0[0], 0x2E), S16_AT(D_8009D2F0[0], 0x32));
+            *args->arg1, 0, S16_AT(g_CurrentEntity, 0x2A),
+            S16_AT(g_CurrentEntity, 0x2E), S16_AT(g_CurrentEntity, 0x32));
         break;
     case 0x160:
         if (*args->arg2 == 0) {
@@ -552,8 +552,8 @@ store_audio_slot:
         if (D_800B0CE8.deferred_count < 0x10) {
             deferred = (DeferredAkaoCommand *)(
                 D_800944A8 + D_800B0CE8.deferred_count * 8);
-            deferred->actor_type = U8_AT(D_8009D2F0[0], 0xC);
-            deferred->actor_id = U8_AT(D_8009D2F0[0], 0xD);
+            deferred->actor_type = g_CurrentEntity->type_id;
+            deferred->actor_id = g_CurrentEntity->sub_id;
             deferred->command = *args->arg1;
             deferred->arg1 = *args->arg2;
             deferred->arg2 = *args->arg3;

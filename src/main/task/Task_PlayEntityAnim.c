@@ -4,15 +4,15 @@
 #include "pe1/task_node.h"
 #include "pe1/render_setup.h"
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 
-extern FieldActor *D_8009D2F0[];
-/* The post-call view still preserves a separate matching address reload. */
-extern FieldActor *current_entity_post[] __asm__("D_8009D2F0");
 extern FieldActor *D_8009D254[];
 extern Pe1GlobalSlot entity_control_load __asm__("D_8009D2E8");
 extern Pe1GlobalSlot entity_control_store __asm__("D_8009D2E8");
-extern s16 *D_8009CE00;
+/* COMMON supplies small-data metadata to MASPSX. */
+s16 *D_8009CE00;
+TaskNode *D_8009D300;
 extern RenderObjectEntity D_800B0CEC;
 
 int Task_PlayEntityAnim(s16 **args) {
@@ -26,16 +26,16 @@ int Task_PlayEntityAnim(s16 **args) {
     task_state = D_8009D300;
     progress = task_state->flags;
     if (progress & 0x20) {
-        if (!(D_8009D2F0[0]->render_object.flags_9C & 4)) {
+        if (!(g_CurrentEntity->render_object.flags_9C & 4)) {
             task_state->flags = progress & ~0x20;
             return 1;
         }
     } else {
-        actor = D_8009D2F0[0];
+        actor = g_CurrentEntity;
         actor->flags &= ~0x40;
         task_state->flags |= 0x20;
         Anim_SetInterpRate(&actor->render_object, *args[0]);
-        post_actor = current_entity_post[0];
+        post_actor = g_CurrentEntity;
         player = D_8009D254[0];
         post_actor->render_object.flags_9C |= 4;
 

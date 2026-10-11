@@ -3,7 +3,6 @@
 
 extern FieldActor *D_8009D20C;
 extern FieldActor *D_8009D254;
-extern FieldActor *D_8009D2F0;
 extern u32 D_800B89F8[];
 
 void Render_InitObjectFromTable(RenderObjectEntity *object,
@@ -51,19 +50,19 @@ int Task_CopyEntityRenderObject(int **args) {
         }
     }
 
-    Render_InitObjectFromTable(&D_8009D2F0->render_object,
+    Render_InitObjectFromTable(&g_CurrentEntity->render_object,
                                &source->render_object, (s16)*args[2]);
-    Render_TransformSkinnedVertices(&D_8009D2F0->render_object,
+    Render_TransformSkinnedVertices(&g_CurrentEntity->render_object,
                                     D_800B89F8);
 
-    D_8009D2F0->parent = source;
-    D_8009D2F0->pos_x =
-        (s16)D_8009D2F0->render_object.rotation_overrides[0].x << 16;
-    D_8009D2F0->pos_y =
-        (s16)D_8009D2F0->render_object.rotation_overrides[0].y << 16;
-    D_8009D2F0->pos_z =
-        (s16)D_8009D2F0->render_object.rotation_overrides[0].z << 16;
-    D_8009D2F0->flags |= 0x2000;
+    g_CurrentEntity->parent = source;
+    g_CurrentEntity->pos_x =
+        (s16)g_CurrentEntity->render_object.rotation_overrides[0].x << 16;
+    g_CurrentEntity->pos_y =
+        (s16)g_CurrentEntity->render_object.rotation_overrides[0].y << 16;
+    g_CurrentEntity->pos_z =
+        (s16)g_CurrentEntity->render_object.rotation_overrides[0].z << 16;
+    g_CurrentEntity->flags |= 0x2000;
 
     return 1;
 }
