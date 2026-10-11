@@ -1465,7 +1465,8 @@ void RoomFx_UpdateDriftingEffect(void *arg0, void *arg1, RoomDriftEffect *effect
     RoomDriftEffect *current;
     RoomDriftMatrixSeed seed;
     u16 out[4];
-    register s32 random asm("$2");
+    s32 initialRandom;
+    s32 durationRandom;
     u16 timer;
     u16 x;
     u16 y;
@@ -1488,9 +1489,9 @@ void RoomFx_UpdateDriftingEffect(void *arg0, void *arg1, RoomDriftEffect *effect
         initial->velocity_x = 0;
         initial->velocity_y = -8;
         initial->velocity_z = 0;
-        random = rand();
+        initialRandom = rand();
         initial->duration = 0x96;
-        initial->timer = random % 88 + 40;
+        initial->timer = initialRandom % 88 + 40;
     }
 
     x = current->x;
@@ -1502,10 +1503,10 @@ void RoomFx_UpdateDriftingEffect(void *arg0, void *arg1, RoomDriftEffect *effect
     z = current->z;
     current->y = y + velocity_y;
     current->z = z + velocity_z;
-    random = rand();
+    durationRandom = rand();
     timer = current->timer - 4;
     current->timer = timer;
-    current->duration += random % 30 + 50;
+    current->duration += durationRandom % 30 + 50;
     if ((s16)timer < 0) {
         current->timer = 0;
     }
