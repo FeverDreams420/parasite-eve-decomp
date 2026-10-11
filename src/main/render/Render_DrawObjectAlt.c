@@ -41,8 +41,8 @@ void Render_DrawObjectAlt(RenderObjectEntity *entity, s16 limit, u8 red, u8 gree
         if (limit < y || limit < y - entity->bounds_vertices[i * 2].pad ||
             limit < y + entity->bounds_vertices[i * 2].pad) {
             RenderVec3s *vertex = &entity->vertices[part->vertex_start];
-            RenderVertexColour *colour =
-                (RenderVertexColour *)&D_800B1638[part->vertex_start];
+            RenderColor *colour =
+                (RenderColor *)&D_800B1638[part->vertex_start];
 
             for (j = 0; j < part->vertex_count; colour++) {
                 /* Retail advances the counters while the GTE works. */

@@ -1,5 +1,0 @@
-#ifndef PE1_EXT_58DBB1A9D7DD
-#define PE1_EXT_58DBB1A9D7DD
-extern RenderVec3s D_80091A58[];
-extern u32 D_8009CDA0;
-#endif /* PE1_EXT_58DBB1A9D7DD */

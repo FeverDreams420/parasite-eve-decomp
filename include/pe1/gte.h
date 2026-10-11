@@ -958,4 +958,38 @@
                  "nop\n\t" \
                  ".word 0x4B78000C")
 
+/* PSY-Q gte_SetBackColor: BK from three colour components scaled by 16. */
+#define gte_SetBackColor(r0, r1, r2) \
+    asm volatile("sll $12,%0,4\n\t" \
+                 "sll $13,%1,4\n\t" \
+                 "sll $14,%2,4\n\t" \
+                 "ctc2 $12,$13\n\t" \
+                 "ctc2 $13,$14\n\t" \
+                 "ctc2 $14,$15" \
+                 : : "r"(r0), "r"(r1), "r"(r2) : "$12", "$13", "$14")
+
+/* PSY-Q gte_SetLightMatrix: the five packed words of L11..L33. */
+#define gte_SetLightMatrix(r0) \
+    asm volatile("lw $12,0(%0)\n\t" \
+                 "lw $13,4(%0)\n\t" \
+                 "ctc2 $12,$8\n\t" \
+                 "ctc2 $13,$9\n\t" \
+                 "lw $12,8(%0)\n\t" \
+                 "lw $13,12(%0)\n\t" \
+                 "lw $14,16(%0)\n\t" \
+                 "ctc2 $12,$10\n\t" \
+                 "ctc2 $13,$11\n\t" \
+                 "ctc2 $14,$12" \
+                 : : "r"(r0) : "$12", "$13", "$14")
+
+/* PSY-Q gte_ncct: two hazard nops, then NCCT. */
+#define gte_ncct() asm volatile("nop\n\tnop\n\t.word 0x4B18043F")
+
+/* PSY-Q gte_strgb3: store RGB0..RGB2 to three addresses. */
+#define gte_strgb3(r0, r1, r2) \
+    asm volatile("swc2 $20,0(%0)\n\t" \
+                 "swc2 $21,0(%1)\n\t" \
+                 "swc2 $22,0(%2)" \
+                 : : "r"(r0), "r"(r1), "r"(r2) : "memory")
+
 #endif

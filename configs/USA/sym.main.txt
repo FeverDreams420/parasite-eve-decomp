@@ -127,6 +127,7 @@ g_CdFadeStartTime = 0x8009D18C;
 g_CdFadeFramesLeft = 0x8009D190;
 g_CdRangeIndex = 0x8009CDCC;
 g_SceneSectorDirectory = 0x8009317C;
+g_RenderNormalTable = 0x80091A58;
 g_RoomFloorY = 0x800942EC;
 g_GameClockLimit = 0x800A76A8;
 g_GameTimer1Flags = 0x800A76AC;
