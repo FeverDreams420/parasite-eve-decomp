@@ -19,37 +19,39 @@ int RoomLib_HandlerDNop0(void) {
     return 0;
 }
 int RoomLib_InitHandlerD(RoomEnt *o) {
+    RoomLibHandlerDState *state = (RoomLibHandlerDState *)&o->sub;
+
     o->flag3 = 1;
     o->t16 = -1;
     o->t17 = -1;
     o->t18 = -1;
     o->t19 = 3;
-    RW32(o, 0x9C) = 0x400;
-    RW16(o, 0xB0) = 0x100;
+    state->value90 = 0x400;
+    state->duration = 0x100;
     o->sub.cb = RoomLib_HandlerD;
     o->sub.signal = 0;
     o->active = 0;
     o->t1A = 0;
-    RW32(o, 0x94) = 0;
-    RW32(o, 0x98) = 0;
-    RW32(o, 0x8C) = 0;
-    RW32(o, 0x3C) = 0;
-    RW32(o, 0x40) = 0;
-    RW32(o, 0x44) = 0;
-    RW32(o, 0xA4) = 0;
-    RW16(o, 0xA8) = 0;
-    RW16(o, 0xAA) = 0;
-    RW16(o, 0xAC) = 0;
-    RW16(o, 0x7C) = 0;
-    RW16(o, 0x7E) = 0;
-    RW16(o, 0x80) = 0;
-    RW32(o, 0x90) = 0;
-    RW16(o, 0xAE) = 0;
-    RW32(o, 0x58) = 0;
-    RW16(o, 0xB2) = 0;
-    RW8(o, 0xB6) = 0;
-    RW8(o, 0xB7) = 0;
-    RW8(o, 0xB8) = 0;
+    state->value88 = 0;
+    state->value8C = 0;
+    state->targetLink = 0;
+    state->motion[0] = 0;
+    state->motion[1] = 0;
+    state->motion[2] = 0;
+    state->progress.word = 0;
+    state->range[0] = 0;
+    state->range[1] = 0;
+    state->range[2] = 0;
+    state->rotation[0] = 0;
+    state->rotation[1] = 0;
+    state->rotation[2] = 0;
+    state->secondaryLink = 0;
+    state->heading = 0;
+    state->target[3] = 0;
+    state->rate = 0;
+    state->lockY = 0;
+    state->copyPosition = 0;
+    state->copyRotation = 0;
     return 0;
 }
 int RoomLib_ConfigureHandlerD(RoomEnt *o, int query, unsigned int op, int arg0, int arg1, int arg2) {
@@ -510,29 +512,31 @@ int RoomLib_HandlerENop0(void) {
     return 0;
 }
 int RoomLib_InitHandlerE(RoomEnt *o) {
+    RoomLibHandlerEState *state = (RoomLibHandlerEState *)&o->sub;
+
     o->flag3 = 1;
     o->t16 = -1;
     o->t17 = -1;
     o->t18 = -1;
     o->t19 = 3;
-    RW32(o, 0x74) = 0x10000;
+    state->speed = 0x10000;
     o->sub.cb = RoomLib_HandlerE;
     o->sub.signal = 0;
     o->active = 0;
     o->t1A = 0;
-    RW32(o, 0x4C) = 0;
-    RW32(o, 0x50) = 0;
-    RW32(o, 0x54) = 0;
-    RW32(o, 0x6C) = 0;
-    RW32(o, 0x70) = 0;
-    RW16(o, 0x7A) = 0;
-    RW16(o, 0x80) = 0;
-    RW16(o, 0x82) = 0;
-    RW16(o, 0x84) = 0;
-    RW16(o, 0x86) = 0;
-    RW16(o, 0x88) = 0;
-    RW8(o, 0x90) = 0;
-    RW8(o, 0x91) = 0;
+    state->localOffset[0] = 0;
+    state->localOffset[1] = 0;
+    state->localOffset[2] = 0;
+    state->targetLink = 0;
+    state->secondaryLink = 0;
+    state->secondaryHeading = 0;
+    state->mirrorPosition = 0;
+    state->frameLimit = 0;
+    state->frame = 0;
+    state->phase = 0;
+    state->phaseFrame[0] = 0;
+    state->lockY = 0;
+    state->copyPosition = 0;
     return 0;
 }
 int RoomLib_ConfigureHandlerE(RoomEnt *o, int query, unsigned int op, int arg0, int arg1, int arg2) {
@@ -848,29 +852,30 @@ int RoomLib_HandlerBNop0(void) {
     return 0;
 }
 int RoomLib_InitHandlerB(RoomEnt *o) {
+    RoomLibHandlerBState *state = (RoomLibHandlerBState *)&o->sub;
     RoomLink *l;
     o->flag3 = 1;
     o->t17 = -1;
     o->t16 = -1;
     o->t19 = 7;
-    RW32(o, 0x8C) = 0x10000;
+    state->mode = 0x10000;
     l = o->link;
     o->sub.signal = 0;
     o->active = 0;
     o->t1A = 0;
-    RW32(o, 0x74) = 0;
-    RW32(o, 0x78) = 0;
-    RW32(o, 0x7C) = 0;
-    RW32(o, 0x80) = 0;
-    RW16(o, 0x92) = 0;
-    RW32(o, 0x4C) = 0;
-    RW32(o, 0x50) = 0;
-    RW32(o, 0x54) = 0;
-    RW16(o, 0x94) = 0;
-    RW32(o, 0x6C) = 0;
+    state->speed = 0;
+    state->acceleration = 0;
+    state->duration = 0;
+    state->phaseValue = 0;
+    state->rate = 0;
+    state->localOffset[0] = 0;
+    state->localOffset[1] = 0;
+    state->localOffset[2] = 0;
+    state->heading = 0;
+    state->targetLink = 0;
     o->sub.cb = RoomLib_HandlerB;
-    RW32(o, 0x70) = 0;
-    RW16(o, 0x96) = 0;
+    state->secondaryLink = 0;
+    state->secondaryHeading = 0;
     l->vel[0] = 0;
     l->vel[1] = 0;
     l->vel[2] = 0;

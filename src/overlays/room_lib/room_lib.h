@@ -316,7 +316,9 @@ typedef struct RoomLibHandlerDState {
     unsigned char optionB;        /* 0x0B */
     unsigned char optionC;        /* 0x0C */
     unsigned char flags;          /* 0x0D */
-    char pad0E[0x32];
+    char pad0E[0x22];
+    int motion[3];                /* 0x30: local x/y/z travel */
+    char pad3C[0x4];
     int target[4];                /* 0x40 */
     char pad50[0x10];
     int positionX;                /* 0x60 */
