@@ -1,8 +1,7 @@
 #include "pe1/player_entity.h"
 #include "pe1/field_collision.h"
 
-extern int g_FieldMoveLock;
-extern FieldActor *g_FieldActorListHead;
+#include "Entity_UpdateList_externs.h"
 
 
 void Entity_UpdateList(void) {

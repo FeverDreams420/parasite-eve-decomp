@@ -12,7 +12,7 @@
 /* Scalar symbol view still preserves the boot loader scheduling.
  * Sector read and polling routines below use the shared structure fields. */
 
-extern unsigned char g_DiscChangeFlags;
+#include "CdRom_BootReadFlow_externs.h"
 
 void ClearImage(RECT *rect, int r, int g, int b);
 
@@ -45,8 +45,7 @@ int CdRom_ReadSectorsFromLba(u32 lba, void *destination, u32 size) {
 void exit(int code);
 CdlLOC *DsIntToPos(int i, CdlLOC *p);
 
-extern u_short g_CdDiskType;
-extern char D_8001136C[];
+#include "CdRom_BootReadFlow_externs_1.h"
 
 int CdRom_ReadSectors(u32 lba, u32 offset, void *destination, u32 size) {
     register int base;
@@ -108,13 +107,7 @@ void FlushCache(void);
 
 DISPENV *SetDefDispEnv(DISPENV *env, int x, int y, int w, int h);
 
-extern s8 D_800B0DB2;
-extern s8 D_800B0DB3;
-extern s8 D_800B0DB4;
-extern s8 D_800B0DB5;
-extern s8 D_800B0DB6;
-extern s8 D_800B0DB7;
-extern u16 g_StrFileDirLba[];
+#include "CdRom_BootReadFlow_externs_2.h"
 
 void SetDispMask(int mask);
 

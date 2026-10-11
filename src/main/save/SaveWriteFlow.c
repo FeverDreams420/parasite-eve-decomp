@@ -11,7 +11,7 @@
 
 int g_SaveSelectedSlot;
 int g_SaveSlotCellIndex;
-extern int g_MemCardProgressPrimList;
+#include "SaveWriteFlow_externs.h"
 
 void Save_StartWriteSlot(int arg0, int arg1);
 int Save_StartReadSlot(int port, int slot);

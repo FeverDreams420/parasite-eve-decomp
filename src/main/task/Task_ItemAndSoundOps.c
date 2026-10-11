@@ -19,14 +19,13 @@
 #include "pe1/akao.h"
 #include "pe1/asset_find.h"
 
-extern Pe1GameState g_GameState;
+#include "Task_ItemAndSoundOps_externs.h"
 /* COMMON supplies small-data metadata to MASPSX. */
 int g_SceneDataTable0;
 TaskNode *g_TaskNodePool;
 TaskNode *D_8009D300;
 
-extern s16 D_8009D2A4; /* menu frame result */
-extern unsigned int g_GameStateFlags;
+#include "Task_ItemAndSoundOps_externs_1.h"
 
 void Menu_OpenStartupMemCardDialog(void);
 
@@ -220,10 +219,9 @@ typedef struct AkaoStackLocals {
     u8 pad12[8];
 } AkaoStackLocals;
 
-extern u8 D_800944A8[];
+#include "Task_ItemAndSoundOps_externs_2.h"
 u32 *D_8009CE00;
-extern FieldActor *D_8009D20C;
-extern struct BattleEntity *D_8009D254;
+#include "Task_ItemAndSoundOps_externs_3.h"
 
 void Akao_Cmd_11(int slot);
 void Akao_Cmd_90(int command);

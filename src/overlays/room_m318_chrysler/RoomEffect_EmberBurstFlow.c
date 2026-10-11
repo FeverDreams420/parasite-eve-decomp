@@ -2,8 +2,7 @@
 #include "pe1/gte.h"
 
 /* Particle-only declarations shared with the shake burst renderer. */
-extern RenderColor D_8018F1FC;
-extern u8 D_80199674[];
+#include "RoomEffect_EmberBurstFlow_externs.h"
 
 /* Ember burst particle: embers drift up and bounce off the floor, flashes
  * pulse in place, and orbiting sparks sweep around their anchor drawing

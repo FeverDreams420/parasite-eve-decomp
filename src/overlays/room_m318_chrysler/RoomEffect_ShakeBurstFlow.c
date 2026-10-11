@@ -2,8 +2,7 @@
 #include "pe1/gte.h"
 #include "pe1/field_sprite_draw.h"
 
-extern char D_801995FC[];
-extern int func_80071A54(void);
+#include "RoomEffect_ShakeBurstFlow_externs.h"
 
 int func_80193FC4(int mode, RoomShakeBurstParticleCallbackView *particle) {
     int color[2];

@@ -41,7 +41,7 @@ int Render_InitViewState(void *matrix, void *screen) {
     return 0;
 }
 
-extern s16 g_CameraClampMinX __asm__("D_800BCF8C");
+#include "Render_CameraViewportFlow_externs.h"
 
 /* Several shapes below are load-bearing for the byte-match (permuter zero):
  * the unused[1] pad keeps retail's empty 0x20 stack frame, `unsigned short sx`
@@ -91,7 +91,7 @@ s32 Render_ClampCameraPosition(s32 x, s32 y)
     }
     return 0;
 }
-extern char * volatile g_GeomStateBytes __asm__("g_GeomState");
+#include "Render_CameraViewportFlow_externs_1.h"
 
 int Render_SaveAndOpenBounds(void) {
     char *base = g_GeomStateBytes;
@@ -325,12 +325,7 @@ int Render_ResetGteScreenOffset(void) {
     return 0;
 }
 
-extern struct { char _[16]; } D_800BCF88_o __asm__("D_800BCF88");
-extern struct { char _[16]; } D_800BCF98_o __asm__("D_800BCF98");
-extern struct { char _[16]; } D_800BCF9C_o __asm__("D_800BCF9C");
-extern struct { char _[16]; } D_800BCF9E_o __asm__("D_800BCF9E");
-extern struct { char _[16]; } D_800BCFA0_o __asm__("D_800BCFA0");
-extern struct { char _[16]; } D_800BCFA2_o __asm__("D_800BCFA2");
+#include "Render_CameraViewportFlow_externs_2.h"
 
 #define D_800BCF88 (*(int *)&D_800BCF88_o)
 #define D_800BCF8C (*(int *)&g_CameraClampMinX)
@@ -531,10 +526,7 @@ int Render_UpdateScrollPosition(void *positionArg, int duration, int mode)
     return 0;
 }
 
-extern u8 g_GeomGroupSel;                  /* active mesh-entry GROUP selector: only
-                                       * entries with entry[+0x24]==this are drawn
-                                       * (one bg layer-set / camera view) */
-extern u16 * volatile g_GeomVramPacketDst;
+#include "Render_CameraViewportFlow_externs_3.h"
 
 void SetGeomScreen(int h);
 
@@ -644,11 +636,7 @@ int Render_InitRoomPrimState(void *objectArg)
     return 0;
 }
 
-extern unsigned short g_ScreenTransitionTargetY;
-extern unsigned char g_ScreenTransitionState[];
-extern unsigned char g_ScreenTransitionMode;
-extern unsigned short g_ScreenTransitionStartY;
-extern unsigned short g_ScreenTransitionFadeColor;
+#include "Render_CameraViewportFlow_externs_4.h"
 
 int CdRom_SetSeekPos(unsigned int arg0) {
     unsigned short old0;

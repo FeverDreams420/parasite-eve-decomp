@@ -1,0 +1,5 @@
+#ifndef PE1_EXT_D5062894872D
+#define PE1_EXT_D5062894872D
+extern int D_801995B8;
+extern char D_801995BC[], D_801995DC[];
+#endif /* PE1_EXT_D5062894872D */

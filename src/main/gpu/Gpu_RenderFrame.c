@@ -12,7 +12,7 @@ void SetDispMask(int arg0);
 void ResetGraph(int arg0);
 int Gpu_CheckDrawStatus(void);
 
-extern int g_ActiveDrawSlot;
+#include "Gpu_RenderFrame_externs.h"
 
 static inline DISPENV *DispAddress(int index) {
     return &g_RenderDispEnvArray[index];

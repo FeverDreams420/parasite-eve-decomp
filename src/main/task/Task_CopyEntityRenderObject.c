@@ -1,9 +1,7 @@
 #include "common.h"
 #include "pe1/field_actor.h"
 
-extern FieldActor *D_8009D20C;
-extern struct BattleEntity *D_8009D254;
-extern u32 D_800B89F8[];
+#include "Task_CopyEntityRenderObject_externs.h"
 
 void Render_InitObjectFromTable(RenderObjectEntity *object,
                                 RenderObjectEntity *source, int index);

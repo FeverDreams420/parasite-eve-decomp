@@ -22,14 +22,7 @@ unsigned int g_GameStateFlags;
 u32 D_8009D1A0;
 u32 D_8009CDA4[1];
 
-extern int D_8009CDD8;
-extern int D_8009CDDC;
-extern u32 D_8009D1F4;
-extern u32 D_8009D238;
-extern u32 D_8009D250;
-extern u32 D_8009D26C;
-extern u32 D_800B0CD8;
-extern u8 D_800B0CEA[];
+#include "Boot_FrameLoop_externs.h"
 
 void Gpu_InitPipeline(void);
 void Field_HandleStateTransition(void);

@@ -1,8 +1,6 @@
 #include "common.h"
 
-extern volatile int D_80172CFC;
-extern volatile int D_80172CF0;
-extern int func_80080C48(int);
+#include "func_801259F0_externs.h"
 
 void func_801259F0(u8 mode, int value) {
     if (mode == 2) {

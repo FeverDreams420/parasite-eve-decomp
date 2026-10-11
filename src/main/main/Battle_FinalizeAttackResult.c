@@ -9,9 +9,7 @@ typedef struct BattleGlobalSlot {
     char storage[16];
 } BattleGlobalSlot;
 
-extern BattleGlobalSlot D_8009D278_first __asm__("D_8009D278");
-extern BattleGlobalSlot D_8009D278_second __asm__("D_8009D278");
-extern BattleGlobalSlot D_8009D254_large __asm__("D_8009D254");
+#include "Battle_FinalizeAttackResult_externs.h"
 
 #define ACTIVE_COMBATANT_FIRST (*(Combatant **)&D_8009D278_first)
 #define ACTIVE_COMBATANT_SECOND (*(Combatant **)&D_8009D278_second)
@@ -72,23 +70,16 @@ void Battle_FinalizeAttackResult(void)
     }
 }
 
-extern char battle_entity_alias_0[16] __asm__("D_8009D254");
-extern char battle_entity_alias_6[16] __asm__("D_8009D254");
-extern char battle_entity_alias_7[16] __asm__("D_8009D254");
+#include "Battle_FinalizeAttackResult_externs_1.h"
 
-extern char battle_sfx_slot_large[16] __asm__("D_8009D2FC");
 
-extern u8 D_8009D274, D_8009CE39, D_8009CE3A;
-extern s16 D_8009D27C;
-extern int D_8009D2FC;
 int BattleCmd_CommitAmmoAndUpdate(); /* no prototype: retail calls it with and without the action */
 
 #define D_8009D254 (*(BattleEntity **)battle_entity_alias_0)
 #define D_8009D278 ACTIVE_COMBATANT_FIRST
 #define D_8009D2FC (*(int *)battle_sfx_slot_large)
 
-extern char battle_actor_group_16[16] __asm__("D_8009D278");
-extern char battle_actor_group_17[16] __asm__("D_8009D278");
+#include "Battle_FinalizeAttackResult_externs_2.h"
 int Battle_StepCharacterAction(BattleInitSlot *slot)
 {
     BattleInitSlot * turnSlot = slot;

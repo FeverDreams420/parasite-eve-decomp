@@ -42,9 +42,8 @@ int Entity_ClearCurrentFlag4000(void) {
     return 1;
 }
 
-extern short g_EntityCollisionWallParam;
+#include "Task_FieldEntityCommands_externs.h"
 
-extern int g_FieldMoveLock;
 
 int Task_SetAnimSlotPointer(int **arg0) {
     int index = *arg0[0];

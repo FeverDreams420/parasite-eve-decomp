@@ -24,15 +24,7 @@ typedef struct MemcardRect {
 } MemcardRect;
 
 
-extern u8 D_800B0DBA;
-extern void *MEMCARD_DISPLAY_PTR0;
-extern void *MEMCARD_DISPLAY_PTR1;
-extern void *MEMCARD_DISPLAY_PTR2;
-extern void *MEMCARD_DISPLAY_PTR3;
-extern void *MEMCARD_DISPLAY_PTR4;
-extern void *MEMCARD_DISPLAY_PTR5;
-extern DISPENV MEMCARD_SLOT20_SOURCE[2];
-extern DRAWENV MEMCARD_SLOT92_SOURCE[2];
+#include "Memcard_ResetDisplayState_externs.h"
 
 void SetDispMask(s32 enabled);
 

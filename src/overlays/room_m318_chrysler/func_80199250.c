@@ -1,7 +1,4 @@
-extern int D_80199914;
-extern int D_80199918;
-extern int D_8019991C;
-extern int D_80199920;
+#include "func_80199250_externs.h"
 
 int* func_80199250(int arg0, int arg1, int arg2, int arg3) {
     if (arg0 == 1) {

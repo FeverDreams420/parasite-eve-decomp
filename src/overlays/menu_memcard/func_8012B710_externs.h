@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_F99ECCE26F94
+#define PE1_EXT_F99ECCE26F94
+extern int D_80193200;
+#endif /* PE1_EXT_F99ECCE26F94 */

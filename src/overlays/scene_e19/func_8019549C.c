@@ -26,15 +26,11 @@ PE1_STATIC_ASSERT(sizeof(SceneE19HomingParticle) == 0x20,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneE19HomingParticle, state) == 0x1C,
                   scene_e19_homing_particle_state);
 
-extern GteRotation D_8018F210;
-extern struct BattleEntity *D_8009D254;
+#include "func_8019549C_externs.h"
 int func_800CFE94(s16 *from, s16 *to);
 
-extern RenderColor D_8018F218;
 /* Not declared in production headers; parameter order inferred from both
  * call sites and the ABI. The eighth argument is zero at both sites. */
-extern void func_800D3BC8(GteShortVector *, int, int, int,
-                         int, int, int, int, int);
 
 int func_8019549C(int mode, SceneE19HomingParticle *particle)
 {

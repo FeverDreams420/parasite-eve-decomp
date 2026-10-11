@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_0EDF23D3F633
+#define PE1_EXT_0EDF23D3F633
+extern unsigned char D_800A12ED;
+#endif /* PE1_EXT_0EDF23D3F633 */

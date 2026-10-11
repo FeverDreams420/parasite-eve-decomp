@@ -10,10 +10,7 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/field_actor.h"
 
-extern TaskNode *g_TaskNodeFreeListHead;
-extern int g_SceneDataTable0;
-extern unsigned short g_TaskNodeSeqCounter[1];
-extern int g_TaskScriptOperandTable[16];
+#include "Task_NodePoolSetupFlow_externs.h"
 
 
 void Task_InitNodePool(void) {

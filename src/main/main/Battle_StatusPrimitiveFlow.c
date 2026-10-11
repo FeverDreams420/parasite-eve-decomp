@@ -188,10 +188,7 @@ void Battle_DrawTargetHighlight(void)
 
 #define NULL ((void *)0)
 
-extern struct { char _[16]; } D_8009CDDC_oa __asm__("g_ActiveDrawSlot");
-extern struct { char _[16]; } D_8009CDDC_og __asm__("g_ActiveDrawSlot");
-extern struct { char _[16]; } D_8009CDDC_oh __asm__("g_ActiveDrawSlot");
-extern struct { char _[16]; } D_8009CDDC_oi __asm__("g_ActiveDrawSlot");
+#include "Battle_StatusPrimitiveFlow_externs.h"
 #define CDDCA (*(s32 *)&D_8009CDDC_oa)
 #define CDDCB (*(s32 *)&D_8009CDDC_oi)
 #define CDDCC (*(s32 *)&D_8009CDDC_og)
@@ -202,14 +199,8 @@ extern struct { char _[16]; } D_8009CDDC_oi __asm__("g_ActiveDrawSlot");
 #define CDDCH (*(s32 *)&D_8009CDDC_oh)
 #define CDDCI (*(s32 *)&D_8009CDDC_oi)
 
-extern struct { char _[16]; } D_8009D1DC_o __asm__("g_BattleRemainingActions");
 #define g_BattleRemainingActions (*(u8 *)&D_8009D1DC_o)
 
-extern u8 D_8009E360[];
-extern u8 g_BattleStatusRowPosY[];
-extern u8 D_8009E508[];
-extern u8 D_8009E516[];
-extern u8 *g_OtBufferTable[];
 
 void Battle_DrawSpellName(void) {
     s32 c;
@@ -376,13 +367,7 @@ typedef struct StatusSymbolSlot {
     StatusSymbolTemplate data;
     u8 padding[6];
 } StatusSymbolSlot;
-extern StatusSymbolTemplate D_80010DFC;
-extern StatusSymbolTemplate D_80010E10;
-extern StatusSymbolTemplate D_80010E24;
-extern u8 D_8009E93C[];
-extern u8 D_8009E93D[];
-extern u8 D_8009E930[];
-extern u8 D_8009E360[];
+#include "Battle_StatusPrimitiveFlow_externs_1.h"
 
 void Battle_DrawStatusSymbol(s8 which) {
     StatusSymbolSlot first;

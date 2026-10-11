@@ -6,23 +6,8 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/game_timers.h"
 #include "pe1/scene_dispatch.h"
-extern void InitSystem(void);
-extern void Sys_SyncShutdown(void);
-extern int OpenPeImage(void);
-extern void Boot_InitGameState(void);
-extern void Boot_InitSubsystems(void);
-extern void Scene_LoadSceneData(void);
-extern void Overlay_LoadTables(void);
-extern void func_8019234C(void);
-extern void CD_LoadBootAudio(void);
-extern void func_801235DC(void);
-extern int Overlay_LoadInitialImage(void);
-extern int func_801909B4(void);
-extern void Gpu_InitDisplay(int arg0);
-extern void Boot_RunFrame(void);
-extern void SetDispMask(int arg0);
+#include "Boot_MainLoop_externs.h"
 
-extern int g_SceneDispatchToken;
 
 #define STATE_FLAG_IMAGE_BUSY 0x00100000U
 #define STATE_FLAG_READY 0x00000100U

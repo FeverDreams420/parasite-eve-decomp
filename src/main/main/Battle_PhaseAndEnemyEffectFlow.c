@@ -26,29 +26,8 @@ int Battle_StepAyaAction(void);
 int Battle_StepCharacterAction(BattleInitSlot *slot);
 void Battle_UpdateEntityFacing(BattleEntity *entity);
 void Pm_StopAll(void);
-extern volatile struct { Combatant *value; char pad[12]; } D_8009D278_absolute __asm__("D_8009D278");
+#include "Battle_PhaseAndEnemyEffectFlow_externs.h"
 #define ACTIVE (D_8009D278_absolute.value)
-extern const Tbl20 D_8001074C;
-extern const BattleActionSoundTable D_80010760;
-extern LargeSymbol D_800942E4_o __asm__("D_800942E4");
-extern u8 D_8009CE38[4];
-extern u8 D_8009CE39;
-extern u8 D_8009CE3A;
-extern u8 D_8009CE3B;
-extern u8 D_8009CE3C;
-extern BattleGameStateWindow D_8009D1A0_r4 __asm__("D_8009D1A0");
-extern BattleGameStateWindow D_8009D1A0_w4 __asm__("D_8009D1A0");
-extern u8 D_8009D1D4;
-extern LargeSymbol D_8009D20C_o __asm__("D_8009D20C");
-extern void *D_8009D254_10 __asm__("D_8009D254");
-extern LargeSymbol D_8009D254_13 __asm__("D_8009D254");
-extern LargeSymbol D_8009D254_14 __asm__("D_8009D254");
-extern LargeSymbol D_8009D254_15 __asm__("D_8009D254");
-extern s32 D_8009D258;
-extern LargeSymbol D_8009D278_10 __asm__("D_8009D278");
-extern LargeSymbol D_8009D278_13 __asm__("D_8009D278");
-extern s16 D_8009D27C;
-extern LargeSymbol D_8009D2A0_o __asm__("D_8009D2A0");
 #define D_800BE830_BYTES ((u8 *)&D_800BE830[0])
 
 #define D_800942E4 (*(u8 **)&D_800942E4_o)

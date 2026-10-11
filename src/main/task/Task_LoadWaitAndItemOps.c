@@ -8,7 +8,7 @@
 #include "pe1/scene_transition.h"
 #include "pe1/entity_frame_update.h"
 
-extern unsigned char g_ScreenTransitionState[];
+#include "Task_LoadWaitAndItemOps_externs.h"
 /* COMMON supplies small-data metadata to MASPSX. */
 int g_SceneDataTable0;
 TaskNode *g_TaskNodePool;

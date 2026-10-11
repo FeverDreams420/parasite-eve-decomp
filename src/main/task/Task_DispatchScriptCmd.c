@@ -32,8 +32,7 @@ typedef struct TaskScriptArgs {
 #define ARG_WORD(ptr) (*(int *)(ptr))
 #define ARG_BYTE(ptr) (*(u8 *)(ptr))
 
-extern FieldActor *D_8009D20C;
-extern struct BattleEntity *D_8009D254;
+#include "Task_DispatchScriptCmd_externs.h"
 /* COMMON supplies small-data metadata to MASPSX. */
 u32 *D_8009CE00;
 TaskNode *D_8009D300;

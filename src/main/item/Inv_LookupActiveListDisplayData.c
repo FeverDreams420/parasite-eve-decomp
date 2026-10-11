@@ -8,8 +8,7 @@
 
 
 
-extern s32 g_InvCategoryBaseItemId;
-extern u8 g_EquipItemDataTable[];
+#include "Inv_LookupActiveListDisplayData_externs.h"
 
 void *Inv_LookupActiveListDisplayData(s32 index);
 

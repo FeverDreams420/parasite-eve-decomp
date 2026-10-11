@@ -1,6 +1,6 @@
 #include "pe1/cdrom.h"
 #include "pe1/psyq_press.h"
-extern unsigned char D_800B0DBA;
+#include "func_8012B19C_externs.h"
 
 void func_800870F0(int arg0);
 void StUnSetRing(void);

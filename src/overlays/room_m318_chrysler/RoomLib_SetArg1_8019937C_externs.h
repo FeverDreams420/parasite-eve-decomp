@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_A9F5A2785F21
+#define PE1_EXT_A9F5A2785F21
+extern int RoomSlotA_8019937C;
+#endif /* PE1_EXT_A9F5A2785F21 */

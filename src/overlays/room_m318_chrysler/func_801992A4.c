@@ -2,7 +2,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/field_actor.h"
-extern struct BattleEntity *D_8009D254;
+#include "func_801992A4_externs.h"
 
 s32 func_801992A4(s32 arg0, void *arg1, s32 *arg2) {
     FieldActorState *actor;

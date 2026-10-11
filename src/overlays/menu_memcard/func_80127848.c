@@ -9,7 +9,7 @@
 
 typedef PsxSignedRect Rect;
 
-extern int D_801D11C8;
+#include "func_80127848_externs.h"
 
 void func_80074A44(int);
 

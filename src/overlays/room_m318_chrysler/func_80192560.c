@@ -1,9 +1,7 @@
 #include "pe1/field_actor.h"
 #include "pe1/field_sprite_draw.h"
 
-extern FieldActor *D_8009D20C;
-extern struct BattleEntity *D_8009D254;
-extern char D_8018F1CC[];
+#include "func_80192560_externs.h"
 
 /* printf. */
 int func_80071A74(const char *format, ...);

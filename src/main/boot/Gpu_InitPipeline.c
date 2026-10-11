@@ -19,13 +19,7 @@
 s32 g_GlobalFrameCounter;
 int g_SceneDispatchToken;
 unsigned int g_GameStateFlags;
-extern u32 D_8009D224;
-extern u16 g_TaskNodeSeqCounter[];
-extern s8 D_800B0CE4[];
-extern char D_800B1628[];
-extern char D_800B162C[];
-extern char D_800B8A18[];
-extern unsigned char g_ScreenTransitionState[];
+#include "Gpu_InitPipeline_externs.h"
 
 #define W(sym) (*(s32 *)(sym))
 #define H(sym) (*(s16 *)(sym))

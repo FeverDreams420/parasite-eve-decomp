@@ -4,21 +4,11 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-extern s16 *g_InvItemPtr;
-extern s32 g_InvSlotLimit;
-extern u32 *g_InvSelectionBits;
-extern struct { char _[16]; } D_8009D05C_o __asm__("g_AyaItemSelectionBits");
+#include "Inv_TransferItem_externs.h"
 #define g_AyaItemSelectionBits (*(u32 *)&D_8009D05C_o)
-extern s32 g_InvSelectionBitWords;
-extern struct { char _[16]; } D_800A1FD4_o __asm__("g_BattleCountTable");
 #define g_BattleCountTable (*(s16 *)&D_800A1FD4_o)
-extern struct { char _[16]; } D_800C0E20_o __asm__("g_AyaEquippedWeaponSlot");
-extern struct { char _[16]; } D_800C0E20_w2 __asm__("g_AyaEquippedWeaponSlot");
 #define g_AyaEquippedWeaponSlot (*(s8 *)&D_800C0E20_o)
-extern struct { char _[16]; } D_800C0E22_o __asm__("g_AyaEquippedArmorSlot");
-extern struct { char _[16]; } D_800C0E22_w2 __asm__("g_AyaEquippedArmorSlot");
 #define g_AyaEquippedArmorSlot (*(s8 *)&D_800C0E22_o)
-extern struct { char _[16]; } g_AyaInventoryItems_o __asm__("g_AyaInventoryItems");
 #define g_AyaInventoryItems (*(s16 *)&g_AyaInventoryItems_o)
 
 s32 Inv_TransferItem(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {

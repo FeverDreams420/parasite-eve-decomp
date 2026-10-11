@@ -16,10 +16,8 @@ void Battle_StartEncounter(int mode);
 M2C_UNK func_80042F20();
 int CD_StepReadState(int active);
 s32 g_SceneDataTable0;
-extern struct { char _[16]; } D_8009D1A0_o __asm__("g_GameStateFlags");
-extern s32 D_8009D1A0_rd[] __asm__("g_GameStateFlags");
+#include "Task_MemCardPositionCameraOps_externs.h"
 #define g_GameStateFlags (*(s32 *)&D_8009D1A0_o)
-extern Pe1GameState g_GameState;
 
 PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, memcard_init_phase) == 0xF4,
                   memcard_init_phase_offset);
@@ -82,8 +80,7 @@ block_19:
     return 0;
 }
 
-extern FieldActor *D_8009D20C;
-extern struct BattleEntity *D_8009D254;
+#include "Task_MemCardPositionCameraOps_externs_1.h"
 
 int Entity_GetPositionByType(int **args) {
     FieldActor *entity;

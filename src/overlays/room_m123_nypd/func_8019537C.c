@@ -1,6 +1,4 @@
-extern char D_80195594[];
-extern char D_801955B4[];
-extern void *D_801956B8;
+#include "func_8019537C_externs.h"
 
 void **func_8019537C(int unused, unsigned int index) {
     if (index >= 2) {

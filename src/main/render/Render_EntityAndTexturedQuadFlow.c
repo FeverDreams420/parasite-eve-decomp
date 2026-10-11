@@ -57,8 +57,7 @@ void Render_DrawEntity(RenderObjectEntity *object, void *viewMatrix) {
 }
 
 /* Projected screen XY and view depth of the transformed model vertices. */
-extern u32 D_800B1644[];
-extern s32 D_800A636C[];
+#include "Render_EntityAndTexturedQuadFlow_externs.h"
 
 /* PSY-Q libgpu style ordering-table link through the 24-bit tag address. */
 #define RENDER_SETADDR(p, a) (((RenderGpuTag *)(p))->address = (u32)(a))
@@ -238,7 +237,7 @@ typedef union RenderMatrixWords {
     s32 words[8];
 } RenderMatrixWords;
 
-extern s32 *g_PlayerMatrixPtr;
+#include "Render_EntityAndTexturedQuadFlow_externs_1.h"
 
 void Render_BuildEntityMatrix(RenderObjectEntity *object, s16 bufferIndex)
 {

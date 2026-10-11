@@ -15,9 +15,7 @@
  * commands), soft-reset shutdown and screen vertical-offset update. These
  * contiguous routines share the default compiler profile and display state. */
 
-extern s32 g_ActiveDrawSlot;
-extern int g_SceneDispatchToken;
-extern int D_800A77F4;
+#include "Sys_GameStateAndVoiceBanks_externs.h"
 
 void Akao_Cmd_98_9A_9C(int arg0);
 void Akao_Cmd_99_9B_9D(int arg0);
@@ -67,9 +65,7 @@ void Sys_Shutdown(void) {
 
 /* Shared draw-environment vertical offset (0..15). */
 
-extern u16 D_800BCE9E;
-extern u16 D_800BCE8A;
-extern u8 D_800B0DB1;
+#include "Sys_GameStateAndVoiceBanks_externs_1.h"
 int func_8006A2E8(int arg0, u32 value)
 {
   register u32 v;
@@ -108,8 +104,7 @@ typedef struct AkaoVoiceBankState {
     u8 active_id_slot;
 } AkaoVoiceBankState;
 
-extern struct BattleEntity *D_8009D254;
-extern unsigned int D_8009D1A0;
+#include "Sys_GameStateAndVoiceBanks_externs_2.h"
 
 int Akao_LoadVoiceBank(AkaoVoiceActor *actor) {
     AkaoVoiceActor *actor_reg = actor;
@@ -192,7 +187,7 @@ int Akao_LoadVoiceBank(AkaoVoiceActor *actor) {
 }
 
 
-extern u16 D_800B0DD4;
+#include "Sys_GameStateAndVoiceBanks_externs_3.h"
 
 void func_8006A5BC(void)
 {
@@ -344,22 +339,8 @@ void Akao_ClearVoiceBank(void)
     ((Pe1GameState *)base)->startup_resource_blob = 0;
 }
 
-extern char D_800F34F8[];
-extern char D_8010BD00[];
-extern char D_80120D08[];
-extern char D_801ED800[];
+#include "Sys_GameStateAndVoiceBanks_externs_4.h"
 
-extern volatile s32 D_800B0E24;
-extern volatile s32 D_800B0E28;
-extern volatile s32 D_800B0E2C;
-extern volatile s32 D_800B0E30;
-extern volatile s32 D_800B0E34;
-extern volatile s32 D_800B0E40;
-extern volatile s32 D_800B0E44;
-extern volatile s32 D_800B0E48;
-extern volatile s32 D_800B0E5C;
-extern volatile s32 D_800B0E60;
-extern volatile s32 D_800B0E68;
 
 void Boot_InitMemoryLayout(void) {
     register s32 ptr asm("$2");

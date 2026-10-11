@@ -51,7 +51,7 @@ TaskNode *Task_AllocNode(unsigned int *script, TaskNode *arg1) {
 #include "pe1/field_actor.h"
 #include "pe1/task_node.h"
 
-extern FieldActor *g_FieldActorListHead;
+#include "Task_NodePoolFlow_externs.h"
 
 void Task_GarbageCollectNodes(void) {
     FieldActor *group;

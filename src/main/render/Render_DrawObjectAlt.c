@@ -7,7 +7,7 @@
 #include "pe1/gte.h"
 #include "pe1/render_object.h"
 
-extern int D_8009CDDC;
+#include "Render_DrawObjectAlt_externs.h"
 
 #define Render_LoadObjectMatrix(matrix) \
     { \

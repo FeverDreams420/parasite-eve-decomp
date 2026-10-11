@@ -6,11 +6,8 @@
 
 #define NULL ((void *)0)
 int Battle_CalcDistToPlayer(BattleEntity *actor, BattleEntity *player);
-extern s8 g_BattleTargetIndex;
-extern struct { char _[16]; } D_8009D20C_o __asm__("g_FieldActorListHead");
+#include "Battle_BuildTargetList_externs.h"
 #define g_FieldActorListHead (*(void **)&D_8009D20C_o)
-extern struct { char _[16]; } g_PlayerEntity_o2 __asm__("g_PlayerEntity");
-extern struct { char _[16]; } g_PlayerEntity_o3 __asm__("g_PlayerEntity");
 #define g_PlayerEntity (*(void **)&g_PlayerEntity_o3)
 #define g_PlayerEntity_2 (*(void **)&g_PlayerEntity_o2)
 #define g_PlayerEntity_3 (*(void **)&g_PlayerEntity_o3)

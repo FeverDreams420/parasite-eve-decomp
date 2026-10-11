@@ -1,8 +1,5 @@
 #include "fx_common_motion.h"
-extern int D_8019CBB4, D_8019CBB8;
-extern int D_8019CBD4, D_8019CBD8;
-extern int D_8019CB48, D_8019CB4C;
-extern int D_8019CC04, D_8019CC0C;
+#include "FxCommon_CheckBounds_externs.h"
 
 int func_8018FFF4(int *point)
 {

@@ -3,7 +3,7 @@
 
 #include "pe1/stat_modifiers.h"
 
-extern int g_InvBonusSlotCount;
+#include "Inv_BonusSlotCount_externs.h"
 
 int *Battle_GetModifierTable(void) {
     return g_StatScaleBase;

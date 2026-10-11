@@ -6,9 +6,7 @@
 #include "pe1/entity_animation.h"
 #include "pe1/asset_find.h"
 
-extern Combatant *g_ActiveActor;
-extern FieldActor *g_PlayerEntity;
-extern void *g_BattlePendingEnemySpawn[];
+#include "Entity_HitAndDropTable_externs.h"
 
 int rand(void);
 s16 Entity_ApplyHitAndSetAnim(void *arg0);
@@ -113,9 +111,7 @@ void Entity_ResolveDropTable(void *arg0) {
 /* COMMON supplies small-data metadata to MASPSX; the extern words stay
  * absolute. */
 u16 D_8009D298;
-extern u8 g_BattleHitActionMode[];
-extern u8 g_BattleHitActionSubmode[];
-extern u32 g_BattleHitActionParam[];
+#include "Entity_HitAndDropTable_externs_1.h"
 
 int Battle_CalcRelativeAngle(BattleEntity *arg0, BattleEntity *actor);
 

@@ -9,11 +9,7 @@
 #include "pe1/field_actor.h"
 #include "pe1/gte.h"
 
-extern FieldActor *g_PlayerEntity;
-extern int g_RenderStateFlags;
-extern u32 D_8009D26C;
-extern u32 D_8009D1F4;
-extern u32 D_800A7770[];
+#include "Task_ValueOps_externs.h"
 
 int Math_FixedMul(int lhs, int rhs);
 int Math_FixedDivide(int a, int b);

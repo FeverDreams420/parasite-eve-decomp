@@ -21,28 +21,8 @@ typedef union GpuDrawEnabledFlag {
     unsigned char bits;
 } GpuDrawEnabledFlag;
 
-extern GpuDrawEnabledFlag g_DrawEnabled;
-extern short g_SeqElapsed;
-extern char D_800F34F8[];
-extern char D_8010BD00[];
-extern char D_80120D08[];
-extern char D_801ED800[];
-extern int g_ActiveDrawSlot;
-extern unsigned char g_ScreenTransitionState[];
-extern volatile unsigned char D_800B0DC6;
-extern int g_SceneDispatchToken;
+#include "Gpu_DisplayInitAndStatus_externs.h"
 
-extern volatile int D_800B0E24;
-extern volatile int D_800B0E28;
-extern volatile int D_800B0E2C;
-extern volatile int D_800B0E30;
-extern volatile int D_800B0E34;
-extern volatile int D_800B0E40;
-extern volatile int D_800B0E44;
-extern volatile int D_800B0E48;
-extern volatile int D_800B0E5C;
-extern volatile int D_800B0E60;
-extern volatile int D_800B0E68;
 
 int Gpu_InitDisplay(int mode) {
     int mode_reg;
@@ -143,7 +123,7 @@ inline short Seq_GetElapsed(void) {
     return -1;
 }
 
-extern signed char D_800B0DBB;
+#include "Gpu_DisplayInitAndStatus_externs_1.h"
 
 /* Both queries are integrated here; the inlined calls leave retail's
  * otherwise empty eight-byte frame and the repeated enabled test. */

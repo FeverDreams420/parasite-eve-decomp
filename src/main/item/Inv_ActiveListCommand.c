@@ -10,7 +10,7 @@
 /* Active-list commands from the item menus and the pending command result
  * (D_8009D010) that the menu loop polls and clears. */
 
-extern BattleEntity *D_8009D254;
+#include "Inv_ActiveListCommand_externs.h"
 /* COMMON supplies small-data metadata to MASPSX; the extern words stay
  * absolute. */
 u8 *D_8009D1E0;

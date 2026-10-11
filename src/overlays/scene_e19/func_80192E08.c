@@ -11,8 +11,7 @@ typedef struct SceneE19Effect {
     s16 frame;
 } SceneE19Effect;
 
-extern GteRotation D_8018F1CC;
-extern int D_8019B668;
+#include "func_80192E08_externs.h"
 
 int func_80192E08(int mode, SceneE19Effect *effect) {
     GteRotation position = D_8018F1CC;

@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_1640D2444D2A
+#define PE1_EXT_1640D2444D2A
+extern BattleEntity *D_8009D254;
+#endif /* PE1_EXT_1640D2444D2A */

@@ -20,17 +20,12 @@
 #define S32_AT(ptr, off) (*(s32 *)((u8 *)(ptr) + (off)))
 #define PTR_AT(ptr, off) (*(u8 **)((u8 *)(ptr) + (off)))
 
-extern int D_8009CDDC;
-extern Pe1GlobalSlot CDDC_toggle0_load __asm__("D_8009CDDC");
-extern Pe1GlobalSlot CDDC_toggle0_store __asm__("D_8009CDDC");
-extern Pe1GlobalSlot CDDC_draw1 __asm__("D_8009CDDC");
-extern Pe1GlobalSlot CDDC_toggle1_load __asm__("D_8009CDDC");
-extern Pe1GlobalSlot CDDC_toggle1_store __asm__("D_8009CDDC");
+#include "Task_ActorModelOps_externs.h"
 /* COMMON supplies small-data metadata to MASPSX. */
 u32 *D_8009CE00;
 TaskNode *D_8009D300;
 TaskNode *g_TaskNodePool;
-extern u32 D_800B89F8[];
+#include "Task_ActorModelOps_externs_1.h"
 
 GteMatrix *RotMatrix(GteShortVector *rotation, GteMatrix *matrix);
 int Anim_BuildRotationMatrices(RenderObjectEntity *object, void *action, int frame, int mode);
@@ -144,7 +139,7 @@ success:
     return 1;
 }
 
-extern int g_RenderStateFlags;
+#include "Task_ActorModelOps_externs_2.h"
 int g_SceneDataTable0;
 
 int Boot_CheckModeSwitch(void) {
@@ -170,8 +165,7 @@ int Boot_CheckModeSwitch(void) {
 
 #define NULL ((void *)0)
 
-extern FieldActor *g_PlayerEntity;
-extern FieldActor *g_FieldActorListHead;
+#include "Task_ActorModelOps_externs_3.h"
 
 /* Script op: angle from the current entity to the actor named by
  * (args[0], args[1]), relative to the current entity's yaw, into args[2]. */

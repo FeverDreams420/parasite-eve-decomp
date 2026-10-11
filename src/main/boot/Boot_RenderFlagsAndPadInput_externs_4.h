@@ -1,0 +1,7 @@
+#ifndef PE1_EXT_7414A97F3248
+#define PE1_EXT_7414A97F3248
+extern u8 D_8009D1C0[];
+extern u8 D_800921F8[];
+extern u32 D_80092200[];
+extern u32 D_800A7770[];
+#endif /* PE1_EXT_7414A97F3248 */

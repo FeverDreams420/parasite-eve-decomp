@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_50705BEA88D9
+#define PE1_EXT_50705BEA88D9
+extern signed char D_800B0DBB;
+#endif /* PE1_EXT_50705BEA88D9 */

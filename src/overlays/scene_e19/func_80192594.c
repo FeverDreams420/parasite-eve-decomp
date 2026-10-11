@@ -4,11 +4,7 @@
 #include "pe1/scene_grab_head.h"
 #include "pe1/scene_grab_trigger.h"
 
-extern char D_8019B31C[];
-extern char D_8019B2FC[];
-extern s32 D_8019B310;
-extern s32 D_8019B314;
-extern s32 D_8019B318;
+#include "func_80192594_externs.h"
 
 s32 func_80192594(SceneGrabTrigger *obj) {
     obj->control.callback = SceneEffect_GrabAwaitStance;

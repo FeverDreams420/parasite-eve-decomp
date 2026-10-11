@@ -1,0 +1,5 @@
+#ifndef PE1_EXT_CD5C88CA409A
+#define PE1_EXT_CD5C88CA409A
+extern int D_8019990C;
+extern int D_80199910;
+#endif /* PE1_EXT_CD5C88CA409A */

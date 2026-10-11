@@ -3,7 +3,7 @@ typedef struct TempPoint {
     int y;
 } TempPoint;
 
-extern int g_SceneDispatchToken;
+#include "Save_GetCurrentMapNumber_externs.h"
 
 int Str_EncodeBase32(char *out, unsigned int value);
 int Str_ParseMapNumber(char *arg0);

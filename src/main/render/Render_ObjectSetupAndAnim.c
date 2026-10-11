@@ -7,9 +7,8 @@
 
 #define NULL ((void *)0)
 
-extern s32 g_ActiveDrawSlot;
+#include "Render_ObjectSetupAndAnim_externs.h"
 /* Texture-page transition deltas, indexed by old and requested page. */
-extern s16 D_800921D8[4][4];
 
 void Field_GetMapEntry(RenderObjectEntity *arg0, s32 arg1) {
     RenderObjectEntity *t0;
@@ -333,11 +332,7 @@ int Util_ReturnTrue(void *unused) {
 
 #define NULL ((void *)0)
 
-extern struct { char _[16]; } D_8009CDDC_lh_o __asm__("g_ActiveDrawSlot");
-extern struct { char _[16]; } D_8009CDDC_lw0_o __asm__("g_ActiveDrawSlot");
-extern struct { char _[16]; } D_8009CDDC_sw0_o __asm__("g_ActiveDrawSlot");
-extern struct { char _[16]; } D_8009CDDC_lw1_o __asm__("g_ActiveDrawSlot");
-extern struct { char _[16]; } D_8009CDDC_sw1_o __asm__("g_ActiveDrawSlot");
+#include "Render_ObjectSetupAndAnim_externs_1.h"
 #define D_8009CDDC_lh (*(s16 *)&D_8009CDDC_lh_o)
 #define D_8009CDDC_lw0 (*(s32 *)&D_8009CDDC_lw0_o)
 #define D_8009CDDC_sw0 (*(s32 *)&D_8009CDDC_sw0_o)
@@ -840,7 +835,7 @@ void Render_OffsetObjectTextureCoordinates(RenderObjectEntity *object, int du, i
     }
 }
 
-extern int D_8003E60C;
+#include "Render_ObjectSetupAndAnim_externs_2.h"
 
 void Render_IncrementCounter(void) {
     register int *ptr asm("$4");

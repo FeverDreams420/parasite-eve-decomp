@@ -2,11 +2,7 @@
 #include "pe1/boot_display.h"
 #include "pe1/cdrom.h"
 
-extern int D_80172CE8;
-extern volatile int D_80172CF0;
-extern volatile int D_80172CF4;
-extern void func_80080B44(int, void *);
-extern int func_8007F0C8(int, void *, int, int, int);
+#include "func_80125794_externs.h"
 
 int func_80125794(int code) {
     int result[2];

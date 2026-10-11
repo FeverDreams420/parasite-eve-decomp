@@ -4,9 +4,7 @@
 #include "fx_common.h"
 #include "fx_common_setup.h"
 
-extern unsigned char D_8019C040, D_8019C042;
-extern int D_8019C810, D_8019C814, D_8019C818;
-extern int D_8019C330, D_8019C334, D_8019C338;
+#include "func_80195D3C_externs.h"
 
 void func_80195D3C(void)
 {

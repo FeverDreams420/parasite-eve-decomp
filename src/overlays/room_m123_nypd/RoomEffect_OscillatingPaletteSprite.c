@@ -8,10 +8,7 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/field_engine_calls.h"
 
-extern GteShortVector D_8018F1F8;
-extern GteShortVector D_8018F1CC;
-extern char D_80195624[];
-extern int func_80071A54(void);
+#include "RoomEffect_OscillatingPaletteSprite_externs.h"
 
 int func_80194F68(int mode, RoomM123Wave *wave) {
     int color[2];

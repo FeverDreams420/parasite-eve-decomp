@@ -1,11 +1,9 @@
 #include "pe1/player_entity.h"
 #include "pe1/render_setup.h"
 #include "pe1/pm.h"
-extern FieldActor *g_CurrentEntity;
-extern unsigned short D_800B0D88;
+#include "Entity_AttachmentAndControl_externs.h"
 
 
-extern int g_BattleModeState;
 
 int Task_Noop3(void) {
     return 1;
@@ -43,7 +41,7 @@ int Menu_GetModeState(int **arg0) {
 
 /* Attachment animation and control use the same current actor. */
 
-extern FieldActor *g_FieldActorListHead;
+#include "Entity_AttachmentAndControl_externs_1.h"
 
 int Entity_CopyAttachmentData(int **arg0)
 {

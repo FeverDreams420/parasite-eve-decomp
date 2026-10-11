@@ -96,8 +96,7 @@ struct _m2c_stack_Render_DecompressAnimFrame {
 
 GteMatrix *RotMatrixY(s32, GteMatrix *);
 void SetDrawTPage(void *, s32, s32, s32);
-extern u32 *D_8009CDD0;
-extern s16 *D_8009CDD4;
+#include "Render_DecompressAnimFrame_externs.h"
 
 #define AnimLoadRotMatrix(matrix) gte_ldrotmatrix((const GteMatrixWords *)(matrix))
 

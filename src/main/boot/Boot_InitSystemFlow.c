@@ -45,11 +45,8 @@ void Boot_BuildRenderFlagTable(void);
 M2C_UNK Save_PostInitStub();
 M2C_UNK CdRom_InitScreenState();
 M2C_UNK Task_InitGpuHwRegs();
-extern int g_ActiveDrawSlot;
-extern unsigned int g_GameStateFlags;
-extern s32 g_FrameRngCounter[];
+#include "Boot_InitSystemFlow_externs.h"
 #define g_FrameRngCounter (g_FrameRngCounter[0])
-extern int g_SceneDispatchToken;
 void Boot_VsyncCallback(void);
 
 void Boot_InitSubsystems(void) {
@@ -80,28 +77,7 @@ void Boot_InitSubsystems(void) {
 }
 
 
-extern u8 D_800BCE91;
-extern u8 D_800BCEA5;
-extern u16 D_800BCE9E;
-extern u16 D_800BCE8A;
-extern u16 D_800BCE9C;
-extern u16 D_800BCE88;
-extern u16 D_800BCEA2;
-extern u16 D_800BCE8E;
-extern u8 D_800BCE3C;
-extern u8 D_800BCDE0;
-extern u8 D_800BCE3A;
-extern u8 D_800BCDDE;
-extern u8 D_800BCE3B;
-extern u8 D_800BCDDF;
-extern u16 D_800BCE38;
-extern u16 D_800BCDDC;
-extern u8 D_800BCE3D;
-extern u8 D_800BCDE1;
-extern u8 D_800BCE3E;
-extern u8 D_800BCDE2;
-extern u8 D_800BCE3F;
-extern u8 D_800BCDE3;
+#include "Boot_InitSystemFlow_externs_1.h"
 
 void ResetGraph(int arg0);
 void SetGraphDebug(int level);
@@ -162,7 +138,7 @@ void Render_ResetScene(int width, int height)
 
 void Scene_TickTimers(void);
 
-extern char g_AnalogStickState[];
+#include "Boot_InitSystemFlow_externs_2.h"
 
 void PadInitDirect(char *arg0, char *arg1);
 void PadStartCom(void);

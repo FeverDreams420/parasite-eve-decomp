@@ -127,7 +127,7 @@ void func_80192878(SceneE19Selection *selection) {
 #include "scene_e19_shared.h"
 #include "pe1/geom_state.h"
 
-extern struct BattleEntity *D_8009D254;
+#include "SceneE19GrabResetFlow_externs.h"
 
 s32 func_8001AA78();
 

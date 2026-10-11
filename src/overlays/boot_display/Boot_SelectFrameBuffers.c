@@ -1,8 +1,6 @@
 #include "pe1/cdrom_buffers.h"
 #include "pe1/boot_display.h"
-extern s32 g_ActiveDrawSlot __asm__("D_8009CDDC");
-extern u16 D_80093168;
-extern void func_800752AC(void *, s32);
+#include "Boot_SelectFrameBuffers_externs.h"
 void Boot_SelectFrameBuffers(void) {
     register s32 orderingOffset asm("$4");
     s32 primitiveOffset;

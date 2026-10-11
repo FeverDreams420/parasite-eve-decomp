@@ -2,7 +2,7 @@
 
 #include "pe1/aya.h"
 
-extern short g_InvPackedList[];
+#include "Item_PackParasiteSpells_externs.h"
 int g_InvPackedListCursor;
 int g_InvPackedListCount;
 

@@ -9,10 +9,7 @@ typedef struct FxAssetSource {
     u8 *data;
 } FxAssetSource;
 
-extern u16 D_80093170[];
-extern u16 D_80093174[];
-extern u16 D_80093172[];
-extern u8 D_8019C1F0;
+#include "func_80191C94_externs.h"
 
 int func_8006E7E8(void);
 

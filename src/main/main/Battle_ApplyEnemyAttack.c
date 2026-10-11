@@ -23,19 +23,13 @@
 #define D278_12 ((u8 *)g_ActiveActor)
 #define D278_13 (*(u8 **)&D278_o16)
 #define D278_14 (*(u8 **)&D278_o17)
-extern Combatant *g_ActiveActor;
+#include "Battle_ApplyEnemyAttack_externs.h"
 #define D278_15 ((u8 *)g_ActiveActor)
-extern struct { char _[16]; } D278_o16 __asm__("g_ActiveActor");
 #define D278_16 (*(u8 **)&D278_o16)
-extern struct { char _[16]; } D278_o17 __asm__("g_ActiveActor");
 #define D278_17 (*(u8 **)&D278_o17)
 
-extern struct { char _[16]; } D228_o __asm__("g_ActorEffectFlag100Timer");
 #define g_ActorEffectFlag100Timer (*(s16 *)&D228_o)
-extern struct { char _[16]; } D1CE_o __asm__("g_BattleSaveOverlayActive");
 #define g_BattleSaveOverlayActive (*(s8 *)&D1CE_o)
-extern struct { char _[16]; } D2E8_oa __asm__("g_FieldMoveLock");
-extern struct { char _[16]; } D2E8_ob __asm__("g_FieldMoveLock");
 #define D2E8A (*(s32 *)&D2E8_oa)
 #define D2E8B (*(s32 *)&D2E8_ob)
 

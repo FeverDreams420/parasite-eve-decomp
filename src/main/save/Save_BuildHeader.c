@@ -3,14 +3,7 @@
 #include "pe1/game_timers.h"
 #include "pe1/save.h"
 #include "pe1/draw_wipe_rect.h"
-extern short g_AyaMenuClampValue;
-extern int g_SavePlayTimeMinutes;
-extern int D_800C0DEC;
-extern signed char g_SavedDrawBaseY;
-extern u8 D_800C0DFD;
-extern u8 D_800C0DFE;
-extern short D_800C0E3C;
-extern short g_CurrentMapNumber;
+#include "Save_BuildHeader_externs.h"
 
 int Draw_GetBlendColor(void);
 int Menu_GetItemContextFlag(void);

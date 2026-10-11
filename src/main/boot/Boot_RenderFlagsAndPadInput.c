@@ -13,16 +13,14 @@
  * at the bit index of a single-bit mask. The helper's only caller is the
  * table builder that precedes it (main_tu_evidence G0344). */
 
-extern unsigned int g_GameStateFlags;
-extern s32 D_8009D1A0w[] __asm__("g_GameStateFlags");
+#include "Boot_RenderFlagsAndPadInput_externs.h"
 /* COMMON supplies small-data metadata to MASPSX. */
 s32 g_SceneFlagBits;
 s32 g_BattleControlFlags;
 s32 g_FieldRenderFlags;
 s32 g_FieldPadBits[1];
 u32 D_8009D2D4;
-extern s32 g_FieldRenderFlagTable[];
-extern u32 D_800A76F0[];
+#include "Boot_RenderFlagsAndPadInput_externs_1.h"
 
 void Gte_StoreTableEntry(u32 mask, int value);
 
@@ -77,16 +75,7 @@ void Gte_StoreTableEntry(u32 mask, int value) {
     D_800A76F0[index] = value;
 }
 
-extern u32 field_flags_read_3[4] __asm__("g_GameStateFlags");
-extern u32 field_flags_read_5[4] __asm__("g_GameStateFlags");
-extern u32 field_flags_read_6[4] __asm__("g_GameStateFlags");
-extern u32 field_flags_write[4] __asm__("g_GameStateFlags");
-extern Pe1GameState g_GameState;
-extern struct { char _[16]; } D_800BE9A0_o __asm__("g_AnalogStickState");
-extern struct { char _[16]; } D_800BE9A2_o __asm__("D_800BE9A2");
-extern struct { char _[16]; } D_800BE9A6_o __asm__("D_800BE9A6");
-extern struct { char _[16]; } D_800BE9A7_o __asm__("D_800BE9A7");
-extern struct { char _[16]; } D_800B0DBF_o __asm__("D_800B0DBF");
+#include "Boot_RenderFlagsAndPadInput_externs_2.h"
 
 #define D_800BE9A0 (*(u16 *)&D_800BE9A0_o)
 #define D_800BE9A2 (*(u16 *)&D_800BE9A2_o)
@@ -97,13 +86,9 @@ extern struct { char _[16]; } D_800B0DBF_o __asm__("D_800B0DBF");
 u32 D_8009D1F4;
 unsigned int D_8009D1E4;
 u32 D_8009D238;
-extern u32 D_8009D26C __asm__("g_FieldPadBits");
-extern int g_SceneDispatchToken;
+#include "Boot_RenderFlagsAndPadInput_externs_3.h"
 u32 D_8009D2A8;
-extern u8 D_8009D1C0[];
-extern u8 D_800921F8[];
-extern u32 D_80092200[];
-extern u32 D_800A7770[];
+#include "Boot_RenderFlagsAndPadInput_externs_4.h"
 
 int PadGetState();
 int PadInfoMode(int arg0, int mode, int index);

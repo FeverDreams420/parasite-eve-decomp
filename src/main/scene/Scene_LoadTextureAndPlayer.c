@@ -5,9 +5,7 @@
 #include "pe1/asset_tim.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/entity_animation.h"
-extern s8 D_800B0CE0;
-extern s8 g_LoadedTexturePageId;
-extern u16 g_EntityTexLbaStartTbl[];
+#include "Scene_LoadTextureAndPlayer_externs.h"
 s32 Overlay_StreamTexturePage(void)
 {
   Pe1GameState *state;
@@ -53,9 +51,7 @@ s32 Overlay_StreamTexturePage(void)
 }
 
 /* Disc-change gating for scene-area transitions. */
-extern unsigned char g_SceneAreaType;
-extern unsigned char g_SavedSceneAreaType;
-extern unsigned char g_DiscChangeFlags;
+#include "Scene_LoadTextureAndPlayer_externs_1.h"
 
 int CdRom_DetectDiscChange(void) {
     unsigned int *state = &g_GameState.flags;
@@ -84,7 +80,7 @@ int CdRom_DetectDiscChange(void) {
 #include "pe1/field_actor.h"
 #include "pe1/player_entity.h"
 #include "../../../tools/m2c/m2c_macros.h"
-extern u8 D_800B0CE2[], D_8009D25C;
+#include "Scene_LoadTextureAndPlayer_externs_2.h"
 /* Matching debt: pins, empty barriers, one retry jump, and a
  * 32-byte unused stack reserve retain retail allocation and scheduling.
  * The shifted state view preserves the bank-row address calculation. */
@@ -207,28 +203,16 @@ retry:
 }
 
 /* Keep independent C lvalues for the retail flag loads across switch cases. */
-extern struct { char _[16]; } D_800B0CE2_o __asm__("g_SceneAreaType");
-extern struct { char _[16]; } D_800B0CE2_w __asm__("g_SceneAreaType");
+#include "Scene_LoadTextureAndPlayer_externs_3.h"
 #define g_SceneAreaType (*(u8 *)&D_800B0CE2_o)
-extern struct { char _[16]; } D_800B0CE3_o __asm__("g_SavedSceneAreaType");
 #define g_SavedSceneAreaType (*(u8 *)&D_800B0CE3_o)
-extern struct { char _[16]; } D_800B0CE4_o __asm__("D_800B0CE4");
 #define g_CurrentStoryDay (*(s8 *)&D_800B0CE4_o)
-extern struct { char _[16]; } D_800B0CE6_o __asm__("g_DiscChangeFlags");
-extern struct { char _[16]; } D_800B0CE6_w __asm__("g_DiscChangeFlags");
-extern Pe1GameState g_GameStateFlagsAfterPlayerInit __asm__("g_GameState");
 #define g_DiscChangeFlags (*(u8 *)&D_800B0CE6_o)
-extern struct { char _[16]; } D_800B0CEB_o __asm__("g_SceneAreaTypeDiscSwapBackup");
 #define g_SceneAreaTypeDiscSwapBackup (*(u8 *)&D_800B0CEB_o)
-extern struct { char _[16]; } D_800B0DC5_o __asm__("D_800B0DC5");
 #define D_800B0DC5 (*(u8 *)&D_800B0DC5_o)
-extern struct { char _[16]; } D_800B0E70_o __asm__("g_SceneMapPrimBaseTable");
 #define g_SceneMapPrimBaseTable (*(s32 *)&D_800B0E70_o)
-extern struct { char _[16]; } D_800B0EEC_o __asm__("D_800B0EEC");
 #define D_800B0EEC (*(s32 *)&D_800B0EEC_o)
-extern struct { char _[16]; } D_800B89F8_o __asm__("g_EntityRenderScratch");
 #define g_EntityRenderScratch (*(M2C_UNK *)&D_800B89F8_o)
-extern struct { char _[16]; } D_800BEA40_o __asm__("D_800BEA40");
 #define D_800BEA40 (*(M2C_UNK *)&D_800BEA40_o)
 
 s32 Scene_InitEntityPlayer(s32 arg0) {
@@ -365,10 +349,9 @@ block_21:
 #undef g_EntityRenderScratch
 #undef D_800BEA40
 
-extern u32 D_8009D2E8;
+#include "Scene_LoadTextureAndPlayer_externs_4.h"
 /* Existing byte symbols for the shared state's pending/current day and flags.
  * Preserve the unsigned pending-byte read before its signed-day conversion. */
-extern volatile u8 D_800B0CE5;
 
 int Scene_SetStoryDay(s32 storyDay) {
     Pe1GameState *gameState = &g_GameState;

@@ -5,12 +5,12 @@
 #include "pe1/task_node.h"
 #include "pe1/game_state_types.h"
 
-extern Pe1GameState g_GameState;
+#include "Task_BeginSceneTransition_externs.h"
 /* COMMON supplies small-data metadata to MASPSX; the extern words stay
  * absolute. */
 int g_SceneDataTable0;
 TaskNode *g_TaskNodePool;
-extern unsigned int g_GameStateFlags;
+#include "Task_BeginSceneTransition_externs_1.h"
 
 void Menu_OpenEquipScreen(int arg0);
 

@@ -1,18 +1,8 @@
 #include "fx_common.h"
-extern char D_801E4E6C[];
+#include "func_80190998_externs.h"
 /* Sentinel nodes of the three node lists: each head node links back to
  * its tail node, each tail node on to its head. */
-extern FxCommonNode D_801EA5E8[];
-extern FxCommonNode D_8019CC58[];
-extern short D_8019C39C;
-extern short D_8019C830[];
-extern short D_8019C9D0;
-extern short D_801E4DA8;
-extern short D_801E4DAA;
-extern short D_801E4DAC;
-extern short D_801E4DAE;
 
-extern void func_80191580(void *);
 
 void func_80190998(void)
 {

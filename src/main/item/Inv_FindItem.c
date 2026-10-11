@@ -7,7 +7,7 @@
 
 #include "pe1/inventory_slots.h"
 
-extern signed char g_AyaEquippedArmorSlot[];
+#include "Inv_FindItem_externs.h"
 
 SavedMenuMode g_SavedMenuMode;
 

@@ -8,8 +8,7 @@ typedef struct RoomM318Node {
     void *link;
 } RoomM318Node;
 
-extern int D_801995B8;
-extern char D_801995BC[], D_801995DC[];
+#include "func_80193D88_externs.h"
 
 int func_80193D88(int mode, RenderSparkEmitter *state)
 {

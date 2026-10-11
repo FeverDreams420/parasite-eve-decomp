@@ -14,15 +14,8 @@ int g_InvSlotLimit;
 int g_InvOverrideSlotLimit;
 u32 *g_InvSelectionBits;
 int g_InvSelectionBitWords;
-extern int D_8009D03C;
-extern int D_8009D04C;
-extern s16 D_800C0EAA[];
-extern s16 D_800C1F7E[];
-extern s16 D_800C2022[];
-extern u8 D_800A1E6D[][32];
-extern s16 D_800A1E76[][16];
+#include "Inv_ActiveListSelection_externs.h"
 
-extern ItemDataRecord D_800A1E64[];
 void Util_CopyFFTerminatedBytes(u8 *dst, u8 *src)
 {
     u8 first;

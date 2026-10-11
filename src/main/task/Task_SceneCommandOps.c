@@ -10,8 +10,7 @@
 
 #define NULL ((void *)0)
 
-extern FieldActor *g_FieldActorListHead;
-extern FieldActor *g_PlayerEntity;
+#include "Task_SceneCommandOps_externs.h"
 #include "pe1/game_timers.h"
 
 int Math_IntSqrt(int value);
@@ -290,7 +289,7 @@ int Entity_PolarToPosition(int **arg0)
     return 1;
 }
 
-extern char D_800BCFFC;
+#include "Task_SceneCommandOps_externs_1.h"
 
 int Entity_PopCount(int **arg0) {
     int value;

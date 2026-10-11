@@ -11,11 +11,7 @@
  * absolute. */
 u8 g_BattleSpritePrimCountdown;
 u8 g_MenuActiveMode;
-extern char D_8009E974[];
-extern char D_8009E975[];
-extern u8 D_8009E976[];
-extern char D_8009EC40[];
-extern char D_8009EC4E[];
+#include "Gpu_SetupSprites_externs.h"
 
 void Gpu_SetupSprites(BattleEntity *arg0, int arg1, int arg2) {
     BattleEntity *obj;
@@ -56,9 +52,7 @@ void Gpu_SetupSprites(BattleEntity *arg0, int arg1, int arg2) {
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-extern int g_ActiveDrawSlot;
-extern u8 D_8009EC38[];
-extern char D_8009EC4A[];
+#include "Gpu_SetupSprites_externs_1.h"
 
 void Gpu_QueuePrimitive(void) {
     int index;
@@ -81,13 +75,7 @@ void Gpu_QueuePrimitive(void) {
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-extern struct Combatant *g_ActiveActor;
-extern char D_8009E968[];
-extern char D_8009EA48[];
-extern char D_8009EA64[];
-extern char D_8009EA80[];
-extern char D_8009EA9C[];
-extern char D_8009EAB8[];
+#include "Gpu_SetupSprites_externs_2.h"
 
 #define INDEX_STRIDE(i) ((((((i) << 1) + (i)) << 3) - (i)) << 2) - (i)
 

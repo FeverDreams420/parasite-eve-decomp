@@ -1,0 +1,5 @@
+#ifndef PE1_EXT_32FA88DF5E7A
+#define PE1_EXT_32FA88DF5E7A
+extern GteRotation D_8018F1CC;
+extern int D_8019B668;
+#endif /* PE1_EXT_32FA88DF5E7A */

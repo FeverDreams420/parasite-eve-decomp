@@ -1,5 +1,4 @@
-extern int D_801998F0;
-extern int D_801998F4;
+#include "func_80199218_externs.h"
 
 int* func_80199218(void* arg0, int arg1, int arg2) {
     int* base = &D_801998F0;

@@ -129,9 +129,7 @@ int Inv_CompareItemsByStatForSort(const void *leftElement, const void *rightElem
 
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
-extern s32 D_8009D0A4;
-extern u16 *g_InvSortListBase;
-extern s32 g_InvSortListCount;
+#include "Inv_CompareItemsForSort_externs.h"
 
 void Inv_SortWeaponSubrange(void) {
     u16 *var_s0;
@@ -180,9 +178,7 @@ void Inv_SortWeaponSubrange(void) {
 
 #define NULL ((void *)0)
 #include "../../../tools/m2c/m2c_macros.h"
-extern s32 D_8009D0A8;
-extern u16 *g_InvSortListBase;
-extern s32 g_InvSortListCount;
+#include "Inv_CompareItemsForSort_externs_1.h"
 
 void Inv_SortAmmoSubrange(void) {
     u16 *var_s0;
@@ -233,32 +229,15 @@ void Inv_SortAmmoSubrange(void) {
 #include "../../../tools/m2c/m2c_macros.h"
 void Inv_SortWeaponSubrange(void);
 void Inv_SortAmmoSubrange(void);
-extern M2C_UNK g_InvSortRankTableA[];
+#include "Inv_CompareItemsForSort_externs_2.h"
 #define g_InvSortRankTableA (g_InvSortRankTableA[0])
-extern M2C_UNK D_80092428[];
 #define D_80092428 (D_80092428[0])
-extern M2C_UNK D_80092440[];
 #define D_80092440 (D_80092440[0])
-extern M2C_UNK g_InvTypeRankTableA[];
 #define g_InvTypeRankTableA (g_InvTypeRankTableA[0])
-extern M2C_UNK g_InvTypeRankTableB[];
 #define g_InvTypeRankTableB (g_InvTypeRankTableB[0])
-extern s16 *g_InvItemPtr;
-extern s32 g_InvSlotLimit;
-extern u32 *g_InvSelectionBits;
-extern M2C_UNK g_AyaItemSelectionBits[];
 #define g_AyaItemSelectionBits (g_AyaItemSelectionBits[0])
-extern s32 g_InvSelectionBitWords;
-extern s32 D_8009D0A4;
-extern s32 D_8009D0A8;
-extern u16 *g_InvSortListBase;
-extern s32 g_InvSortListCount;
-extern M2C_UNK *g_InvSortRankTable;
-extern M2C_UNK *g_InvSortTypeRankTable;
 #define g_AyaEquippedWeaponSlot (g_AyaEquippedWeaponSlot[0])
-extern s8 g_AyaEquippedArmorSlot[];
 #define g_AyaEquippedArmorSlot (g_AyaEquippedArmorSlot[0])
-extern s16 g_AyaInventoryItems[];
 #define g_AyaInventoryItems (g_AyaInventoryItems[0])
 
 void Inv_SortInventoryByMode(s32 arg0, s32 arg1) {
@@ -327,7 +306,7 @@ void Inv_SortInventoryByMode(s32 arg0, s32 arg1) {
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-extern M2C_UNK D_80092410[];
+#include "Inv_CompareItemsForSort_externs_3.h"
 #define D_80092410 (D_80092410[0])
 
 void Sort_ContainerItems(int arg0) {
@@ -352,7 +331,7 @@ void Sort_ContainerItems(int arg0) {
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-extern u16 g_InvItemArray[];
+#include "Inv_CompareItemsForSort_externs_4.h"
 
 void Sort_InventoryItems(int arg0, int arg1) {
     if (arg0 != 0) {

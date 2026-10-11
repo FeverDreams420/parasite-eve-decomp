@@ -4,11 +4,7 @@
 #include "pe1/font.h"
 #include "pe1/scene_dispatch.h"
 
-extern u8 D_8009CD78[];
-extern u8 D_8009CD80[];
-extern u8 g_MapIdTable[];
-extern unsigned int D_8009D280;
-extern u32 D_8009D1A0;
+#include "MapSelectionFlow_externs.h"
 
 int Menu_GetEquipSlotStateOrIndex(void);
 int Task_GpuPackPrimColor(int start, int end);
@@ -69,10 +65,7 @@ int Scene_SelectMapById(int **args) {
     return raw_selection;
 }
 
-extern u8 g_MapNameOverrideA[];
-extern u8 g_MapNameOverrideB[];
-extern int g_SceneDispatchToken;
-extern u32 g_GameStateFlags;
+#include "MapSelectionFlow_externs_1.h"
 
 int Task_SetFloorByEntityRoll(u8 **args) {
     int selection;

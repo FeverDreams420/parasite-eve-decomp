@@ -91,7 +91,7 @@ void Draw_SetStatCompareColor(int arg0, int arg1) {
 #include "pe1/psyq_gpu.h"
 #include "pe1/draw_area.h"
 
-extern s32 g_DrawBufferIndex;
+#include "Draw_TextPrimitives_externs.h"
 
 void Draw_AllocPrimRectFull(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     DrawAreaRect rect;
@@ -336,8 +336,7 @@ void Draw_SetGlyphAdvance(int arg0) {
 
 #include "pe1/text.h"
 
-extern int D_8009CDB0;
-extern int D_8009D0D8;
+#include "Draw_TextPrimitives_externs_1.h"
 
 void Draw_AllocTexturedQuad(int code) {
     int low;
@@ -678,7 +677,7 @@ void Draw_PrintCenteredTextInWidth(u8 *text, int width) {
     }
 }
 
-extern int g_DrawTextBoxWidth;
+#include "Draw_TextPrimitives_externs_2.h"
 
 void Draw_PrintCenteredText(u8 *text) {
     Draw_PrintCenteredTextInWidth(text, g_DrawTextBoxWidth);
@@ -774,9 +773,7 @@ void Draw_PrintTextWrapped(u8 *text, int width) {
     }
 }
 
-extern int D_8009D13C;
-extern int D_8009D140;
-extern int D_8009D144;
+#include "Draw_TextPrimitives_externs_3.h"
 
 void func_8005F844(int variant) {
     D_8009D13C = variant != 0 ? 0x3A1C : 0x395D;

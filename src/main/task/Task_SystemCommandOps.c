@@ -44,9 +44,7 @@ int Entity_ComputeVelocity(void) {
 }
 
 
-extern FieldActor *g_PlayerEntity;
-extern int g_CombatModeFlags;
-extern int D_800A76CC;
+#include "Task_SystemCommandOps_externs.h"
 /* Camera base angles at 0x800BD020 (D_800BD020, D_800BD022). The script
  * opcode stores them as one record, so the second argument load stays behind
  * the first store: GCC 2.7 lets a varying array load pass a store to a fixed
@@ -55,9 +53,8 @@ typedef struct CameraBaseAngles {
     short x;
     short y;
 } CameraBaseAngles;
-extern u16 D_800BD020;
+#include "Task_SystemCommandOps_externs_1.h"
 
-extern unsigned char g_ScreenTransitionState[];
 
 int Pm_SetGetState(int arg0, int arg1, int arg2);
 void Entity_AllocSlot(BattleEntity *entity);

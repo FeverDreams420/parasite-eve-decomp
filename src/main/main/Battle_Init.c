@@ -19,24 +19,12 @@ typedef struct BattleRootObject {
     u8 pad[12];
 } BattleRootObject;
 
-extern s32 D_8009D200;
-extern GlobalWordObject D_8009D2FC_o __asm__("D_8009D2FC");
-extern s32 D_8009D258;
-extern s32 D_8009D208;
-extern u8 D_8009CE44;
-extern u8 D_8009CE40;
-extern u8 D_8009D294;
-extern u8 D_8009D2D8;
-extern u8 D_8009D1DC;
+#include "Battle_Init_externs.h"
 u8 D_8009CE38[4];
 u8 D_8009CE39;
 u8 D_8009CE3A;
 u8 D_8009CE3B;
-extern u8 D_8009CE60;
-extern BattleRootObject D_8009D278_o __asm__("D_8009D278");
-extern GlobalWordObject D_8009D1AC_read __asm__("D_8009D1AC");
-extern GlobalWordObject D_8009D1AC_write __asm__("D_8009D1AC");
-extern GlobalByteObject D_8009D1CE_o __asm__("D_8009D1CE");
+#include "Battle_Init_externs_1.h"
 
 void Pm_StopAll(void);
 void Battle_InitFadeVars(void);

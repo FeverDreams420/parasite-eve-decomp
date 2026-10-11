@@ -94,7 +94,7 @@ store_next:
 
 
 
-extern struct FieldActor *g_FieldActorListHead;
+#include "Entity_AnimationState_externs.h"
 
 void Entity_SetActionMode(BattleEntity *arg0, int arg1) {
     BattleEntity *entity;

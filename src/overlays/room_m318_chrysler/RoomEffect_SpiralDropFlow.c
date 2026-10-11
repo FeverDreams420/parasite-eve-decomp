@@ -1,7 +1,7 @@
 #include "pe1/room_ember_burst.h"
 #include "pe1/gte.h"
 
-extern char D_8019948C[];
+#include "RoomEffect_SpiralDropFlow_externs.h"
 
 int func_80192DA0(int mode, volatile RoomSpiralDropSparkRecord *record) {
     volatile RoomSpiralDropSparkCallbackView *particle = &record->callback;

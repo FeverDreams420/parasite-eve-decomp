@@ -4,11 +4,7 @@
 #include "fx_common.h"
 #include "fx_common_setup.h"
 
-extern int D_8019C810, D_8019C814, D_8019C818;
-extern int D_8019C330, D_8019C334, D_8019C338;
-extern short D_8019C054, D_8019C050, D_8019C02C;
-extern unsigned char D_8019C040;
-extern unsigned char D_8019C042;
+#include "func_80195E4C_externs.h"
 
 void func_80195E4C(int index, int unused1, int unused2, int source)
 {

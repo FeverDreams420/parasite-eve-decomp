@@ -1,0 +1,4 @@
+#ifndef PE1_EXT_975FEE6CAEE0
+#define PE1_EXT_975FEE6CAEE0
+extern RenderObjectEntity D_800B0CEC;
+#endif /* PE1_EXT_975FEE6CAEE0 */

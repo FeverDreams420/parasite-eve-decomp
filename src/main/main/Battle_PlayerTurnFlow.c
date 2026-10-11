@@ -3,15 +3,11 @@
 #include "pe1/battle_runtime.h"
 #include "pe1/gte_types.h"
 
-extern struct { BattleEntity *value; char pad[12]; } D_8009D254_absolute __asm__("D_8009D254");
-extern struct { Combatant *value; char pad[12]; } D_8009D278_absolute __asm__("D_8009D278");
-extern struct { s32 value; char pad[12]; } D_8009D2FC_absolute __asm__("D_8009D2FC");
+#include "Battle_PlayerTurnFlow_externs.h"
 #define PLAYER (D_8009D254_absolute.value)
 #define ACTIVE (D_8009D278_absolute.value)
 #define SECOND_SOUND (D_8009D2FC_absolute.value)
 
-extern s16 D_8009D27C;
-extern u8 D_8009CE39, D_8009CE3B;
 int Battle_CalcDistToPlayer(BattleEntity *actor, BattleEntity *player);
 s16 Battle_CalcAngleToTarget(RenderObjectEntity *object, void *target);
 int Battle_StepCharacterAction(BattleInitSlot *slot);
@@ -95,14 +91,7 @@ void Battle_UpdatePlayerTurn(void)
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-extern struct { char _[16]; } D_8009D254_d __asm__("D_8009D254");
-extern struct { char _[16]; } D_8009D254_e __asm__("D_8009D254");
-extern struct { char _[16]; } D_8009D278_c __asm__("D_8009D278");
-extern struct { char _[16]; } D_8009D278_d __asm__("D_8009D278");
-extern BattleGameStateWindow D_8009D1A0_r0 __asm__("D_8009D1A0");
-extern BattleGameStateWindow D_8009D1A0_w1 __asm__("D_8009D1A0");
-extern u8 D_8009D1D4;
-extern u16 D_800BE834[];
+#include "Battle_PlayerTurnFlow_externs_1.h"
 
 #define D254_A (*(BattleEntity **)&D_8009D254_absolute)
 #define D254_B (*(BattleEntity **)&D_8009D254_d)

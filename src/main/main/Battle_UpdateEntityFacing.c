@@ -26,8 +26,7 @@ typedef struct FacingCore {
     s32 previous_delta;
 } FacingCore;
 
-extern Combatant *D_8009D278;
-extern BattleEntity *D_8009D254;
+#include "Battle_UpdateEntityFacing_externs.h"
 int Battle_CalcRelativeAngle(BattleEntity *, BattleEntity *);
 
 void Battle_UpdateEntityFacing(BattleEntity *entity)

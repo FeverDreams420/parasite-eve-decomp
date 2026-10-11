@@ -1,0 +1,5 @@
+#ifndef PE1_EXT_60C8E6D36EEA
+#define PE1_EXT_60C8E6D36EEA
+extern u32 D_800B1644[];
+extern s32 D_800A636C[];
+#endif /* PE1_EXT_60C8E6D36EEA */

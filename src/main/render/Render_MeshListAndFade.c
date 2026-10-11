@@ -300,7 +300,7 @@ int Render_SetEntryPosition(int index, int x, int y) {
     return 0;
 }
 
-extern u8 D_800BCFFA, D_800BCFFB;
+#include "Render_MeshListAndFade_externs.h"
 int Gpu_LoadGeomState(int);
 int Geo_RenderMeshList(void *buffer, void **end)
 {
@@ -461,8 +461,7 @@ s32 Geo_BuildMeshList(void) {
     return 0;
 }
 
-extern u8 g_RenderFadeFrameCount;
-extern u8 g_RenderFadeFrameCounter;
+#include "Render_MeshListAndFade_externs_1.h"
 int Render_StartFadeIn(int arg0)
 {
   int new_var;
@@ -479,12 +478,7 @@ int Render_StartFadeIn(int arg0)
   return 0;
 }
 
-extern struct { char _[16]; } D_800BCF88_o __asm__("D_800BCF88");
-extern struct { char _[16]; } D_800BCF88_store_o __asm__("D_800BCF88");
-extern struct { char _[16]; } D_800BCFFA_o __asm__("D_800BCFFA");
-extern struct { char _[16]; } D_800BCFFB_o __asm__("D_800BCFFB");
-extern struct { char _[16]; } D_800B1624_a_o __asm__("D_800B1624");
-extern struct { char _[16]; } D_800B1624_b_o __asm__("D_800B1624");
+#include "Render_MeshListAndFade_externs_2.h"
 
 #define D_800BCF88_WORD (*(s32 *)&D_800BCF88_o)
 #define D_800BCFFA_BYTE (*(u8 *)&D_800BCFFA_o)
@@ -610,8 +604,7 @@ int Render_BeginSceneLoad(void) {
     return 0;
 }
 
-extern struct { char _[16]; } D_800BCFFC_o __asm__("D_800BCFFC");
-extern s32 g_ActiveDrawSlot;
+#include "Render_MeshListAndFade_externs_3.h"
 
 #define D_800BCFFC_BYTE (*(u8 *)&D_800BCFFC_o)
 

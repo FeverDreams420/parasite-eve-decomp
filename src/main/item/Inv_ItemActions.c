@@ -17,7 +17,7 @@
 u32 *D_8009D058;
 void *Str_LookupTable8(unsigned int index);
 void Sfx_DrawSlotRow(ItemDataRecord *entry, u8 *text);
-extern u8 g_CursorRenderDataBlock[];
+#include "Inv_ItemActions_externs.h"
 
 static inline ItemDataRecord *LookupItem(int value) {
     int saved = value;
@@ -656,14 +656,10 @@ void Battle_UseItem(s32 arg0) {
 
 /* Active-list removal and tracked equipped slots. The two armor aliases
  * preserve independent address reads across the slot write. */
-extern s8 g_AyaEquippedArmorSlot[];
-extern struct { char _[16]; } D_800C0E22_l1_o __asm__("g_AyaEquippedArmorSlot");
-extern struct { char _[16]; } D_800C0E22_s0_o __asm__("g_AyaEquippedArmorSlot");
+#include "Inv_ItemActions_externs_1.h"
 #define D_800C0E22_l0 (*(s8 *)&D_800C0E22_l1_o)
 #define D_800C0E22_l1 (*(s8 *)&D_800C0E22_l1_o)
 #define D_800C0E22_s0 (*(s8 *)&D_800C0E22_s0_o)
-extern s16 g_BattleCountTable[];
-extern int g_MenuBattleCount;
 
 void Inv_DropCurrentSelectionItem(void) {
     MenuWidgetNode *node = MenuWidget_FindByModeAndSelectedBase(2, 1);

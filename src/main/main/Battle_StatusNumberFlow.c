@@ -1,12 +1,7 @@
 #include "pe1/battle_status.h"
 #include "pe1/global_slot.h"
 
-extern Pe1GlobalSlot g_ActiveDrawSlotObject0
-    __asm__("D_8009CDDC");
-extern Pe1GlobalSlot g_ActiveDrawSlotObject1
-    __asm__("D_8009CDDC");
-extern u8 D_8009E360[];
-extern u16 D_8009E362[];
+#include "Battle_StatusNumberFlow_externs.h"
 
 void Battle_DrawStatusValue(int value, int yOffset)
 {

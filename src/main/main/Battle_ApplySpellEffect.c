@@ -13,11 +13,10 @@
 #define ATTRIBUTE_EFFECT_FLAGS(base) \
     ((BattleAttributes *)(base))->effectFlags
 
-extern const BattleActionSoundTable D_80010760;
+#include "Battle_ApplySpellEffect_externs.h"
 
 s32 rand(void);
 
-extern struct { char _[16]; } D_8009D1A0_o __asm__("g_GameStateFlags");
 #define g_GameStateFlags (*(s32 *)&D_8009D1A0_o)
 /* COMMON supplies small-data metadata to MASPSX; the extern words stay
  * absolute. */
@@ -39,25 +38,17 @@ void *g_BattleActiveEntity;
 #define D1AC_15 (*(s32 *)&D1AC_o23)
 #define D1AC_16 (*(s32 *)&D1AC_o24)
 #define D1AC_17 (*(s32 *)&D1AC_o25)
-extern s32 g_BattleResultFlags[];
+#include "Battle_ApplySpellEffect_externs_1.h"
 #define D1AC_18 (g_BattleResultFlags[0])
-extern struct { char _[16]; } D1AC_o19 __asm__("g_BattleResultFlags");
 #define D1AC_19 (*(s32 *)&D1AC_o19)
-extern struct { char _[16]; } D1AC_o20 __asm__("g_BattleResultFlags");
 #define D1AC_20 (*(s32 *)&D1AC_o20)
-extern struct { char _[16]; } D1AC_o21 __asm__("g_BattleResultFlags");
 #define D1AC_21 (*(s32 *)&D1AC_o21)
-extern struct { char _[16]; } D1AC_o22 __asm__("g_BattleResultFlags");
 #define D1AC_22 (*(s32 *)&D1AC_o22)
-extern struct { char _[16]; } D1AC_o23 __asm__("g_BattleResultFlags");
 #define D1AC_23 (*(s32 *)&D1AC_o23)
-extern struct { char _[16]; } D1AC_o24 __asm__("g_BattleResultFlags");
 #define D1AC_24 (*(s32 *)&D1AC_o24)
-extern struct { char _[16]; } D1AC_o25 __asm__("g_BattleResultFlags");
 #define D1AC_25 (*(s32 *)&D1AC_o25)
 s16 g_ActorEffectFlag100Timer;
-extern struct { char _[16]; } g_PlayerEntity_oa __asm__("g_PlayerEntity");
-extern struct { char _[16]; } g_PlayerEntity_ob __asm__("g_PlayerEntity");
+#include "Battle_ApplySpellEffect_externs_2.h"
 #define D254A (*(u8 **)&g_PlayerEntity_oa)
 #define D254B (*(u8 **)&g_PlayerEntity_ob)
 #define D278_1 ((u8 *)g_ActiveActor)
@@ -111,16 +102,10 @@ extern struct { char _[16]; } g_PlayerEntity_ob __asm__("g_PlayerEntity");
 #define D278_49 ((u8 *)g_ActiveActor)
 #define D278_50 (*(u8 **)&D278_o53)
 #define D278_51 (*(u8 **)&D278_o54)
-extern Combatant *g_ActiveActor;
 #define D278_52 ((u8 *)g_ActiveActor)
-extern struct { char _[16]; } D278_o53 __asm__("g_ActiveActor");
 #define D278_53 (*(u8 **)&D278_o53)
-extern struct { char _[16]; } D278_o54 __asm__("g_ActiveActor");
 #define D278_54 (*(u8 **)&D278_o54)
-extern struct { char _[16]; } D278_o55 __asm__("g_ActiveActor");
 #define D278_55 (*(u8 **)&D278_o55)
-extern struct { char _[16]; } g_FieldMoveLock_oa __asm__("g_FieldMoveLock");
-extern struct { char _[16]; } g_FieldMoveLock_ob __asm__("g_FieldMoveLock");
 #define D2E8A (*(s32 *)&g_FieldMoveLock_oa)
 #define D2E8B (*(s32 *)&g_FieldMoveLock_ob)
 

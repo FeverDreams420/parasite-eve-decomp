@@ -9,8 +9,7 @@
 void Battle_ApplyDamage(s32);
 void Battle_SubActionStep(void);
 s32 Inv_CountByValue(s32);
-extern s32 D_8009CDDC;
-extern u16 D_8009D228;
+#include "Entity_UpdateTimers_externs.h"
 
 void Entity_UpdateTimers(void) {
     s32 status_item_0;

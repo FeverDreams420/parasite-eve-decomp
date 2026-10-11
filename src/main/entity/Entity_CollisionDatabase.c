@@ -9,7 +9,7 @@
 /* The room collision database: clearing the per-room collision state and
  * relocating the loaded database's offsets into pointers. */
 
-extern char *D_800B1620[];
+#include "Entity_CollisionDatabase_externs.h"
 /* COMMON supplies small-data metadata to MASPSX for the words this unit
  * reaches through $gp; the edge points stay absolute. */
 char *g_SceneDataTable2;
@@ -23,9 +23,8 @@ CollisionDatabase *g_CollisionDb;
 short *g_EntityCollisionWallSlot;
 PolygonVertex *D_8009D248;
 u16 D_8009D1CC;
-extern unsigned int D_8009DFB0[];
+#include "Entity_CollisionDatabase_externs_1.h"
 
-extern char D_8009CE0E[];
 
 void Entity_ResetStateGlobals(void) {
     unsigned int i;

@@ -1,6 +1,6 @@
 #include "pe1/game_timers.h"
 
-extern u32 g_GameStateFlags;
+#include "Scene_TickTimers_externs.h"
 
 int Gpu_CheckDrawStatus(void);
 

@@ -1,6 +1,6 @@
 #include "menu_memcard_node.h"
 
-extern int D_80193200;
+#include "func_8012B710_externs.h"
 
 void func_8012B710(void) {
     MenuMemcardListNode *node;

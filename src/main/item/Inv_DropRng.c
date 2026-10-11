@@ -6,10 +6,7 @@
  * lagged-xor refresh of the 0x209-byte table. */
 
 int g_ItemDropRngIndex;
-extern u32 D_800A76A4[4];
-extern unsigned char g_ItemDropRngXorKeyHigh[];
-extern unsigned char g_ItemDropRngTable[];
-extern unsigned char g_ItemDropRngXorKeyLow[];
+#include "Inv_DropRng_externs.h"
 
 #define D_800A76A4_VALUE (D_800A76A4[0])
 

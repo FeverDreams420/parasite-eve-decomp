@@ -7,8 +7,7 @@
 
 /* Matching debt: register pins, empty barriers, volatile shade reads,
  * gotos, and an artificial 16-byte local frame reservation. */
-extern RenderVec3s D_80091A58[];
-extern u32 D_8009CDA0;
+#include "Render_DrawObjectAndClut_externs.h"
 
 #define Draw_LoadRotation(m) gte_ldrotmatrix((const GteMatrixWords *)(m))
 #define Draw_LoadLight(m)                                                                          \

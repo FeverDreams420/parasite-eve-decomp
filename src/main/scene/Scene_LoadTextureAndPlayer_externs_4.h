@@ -1,0 +1,5 @@
+#ifndef PE1_EXT_EDBB2BF708DB
+#define PE1_EXT_EDBB2BF708DB
+extern u32 D_8009D2E8;
+extern volatile u8 D_800B0CE5;
+#endif /* PE1_EXT_EDBB2BF708DB */

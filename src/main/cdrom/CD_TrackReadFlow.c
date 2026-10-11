@@ -7,14 +7,7 @@
 #include "pe1/psyq_nop.h"
 #include "pe1/scene_archive.h"
 
-extern u8 D_8009317C[];
-extern u32 D_8009D170;
-extern u32 D_8009D174;
-extern u32 D_8009D178;
-extern u32 D_8009D17C;
-extern int Spu_SetStreamModeA(void);
-extern int Spu_SetStreamModeB(void);
-extern int Spu_GetTransferStatus(void);
+#include "CD_TrackReadFlow_externs.h"
 /* Matching debt: register pins and empty barriers retain the index,
 * zero extension and callback state. The duplicated ready branch preserves
 * GCC's block ordering. No ASM construct emits an instruction. */
@@ -273,8 +266,7 @@ void Akao_ResetPositionalState(void) {
     Akao_Cmd_F0();
 }
 
-extern SceneTrackRecord *D_8009D180;
-extern s16 D_8009D184;
+#include "CD_TrackReadFlow_externs_1.h"
 void *memcpy(void *, const void *, unsigned);
 
 /* Matching debt: finished is pinned to s1. The empty count barrier preserves
@@ -389,12 +381,7 @@ int CD_SeekToTrack(int key, int mode, int group, int *slot, int blocking)
     return busy;
 }
 
-extern void *D_800B0E08[];
-extern void *tableCheck[] asm("D_800B0E08");
-extern void *tableCheckAgain[] asm("D_800B0E08");
-extern void *tableAgain[] asm("D_800B0E08");
-extern unsigned int D_8009CDA4[];
-extern int D_8009D188, D_8009D18C, D_8009D190;
+#include "CD_TrackReadFlow_externs_2.h"
 void Akao_Cmd_F1(void);
 void Akao_Cmd_40(void);
 void Akao_Cmd_C1_WithSlot(int, int, int);

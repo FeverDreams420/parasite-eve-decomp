@@ -1,7 +1,5 @@
 #include "pe1/psyq_bios.h"
-extern char D_80010EB0[];
-extern char D_80010EC8[];
-extern char *D_80091A2C[];
+#include "Sys_ReportError_externs.h"
 
 void func_80038954(char *arg0, char *arg1, int arg2, unsigned char arg3) {
     int index = arg3 & 0xFF;

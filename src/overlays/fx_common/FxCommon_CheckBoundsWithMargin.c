@@ -1,16 +1,7 @@
 #include "fx_common_motion.h"
 /* MASPSX_FLAGS: --expand-div */
 
-extern int D_8019CBB4;
-extern int D_8019CBB8;
-extern int D_8019CBD4;
-extern int D_8019CBD8;
-extern int D_8019CB48;
-extern int D_8019CB4C;
-extern int D_8019CC04;
-extern int D_8019CC0C;
-extern int D_8019CBC8;
-extern int D_8019CC00;
+#include "FxCommon_CheckBoundsWithMargin_externs.h"
 int FxCommon_CheckBoundsWithMargin(int *point, int margin)
 {
     int first;

@@ -4,10 +4,7 @@
 /* MASPSX_FLAGS: -G8 */
 #include "common.h"
 #include "pe1/render_prim.h"
-extern int D_8009CDB8;
-extern int D_8009CDBC;
-extern int D_8009CDC0;
-extern int D_8009CDC4;
+#include "Render_SortOt_externs.h"
 int Render_SortOt(PrimObj *input, u32 *entries, u8 direction, u8 restart) {
     register PrimObj *entry = input;
     u8 ascending = direction;

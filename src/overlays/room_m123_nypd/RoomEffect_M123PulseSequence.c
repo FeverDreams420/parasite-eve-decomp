@@ -12,7 +12,7 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/akao_send.h"
 
-extern GteShortVector D_8018F1F0;
+#include "RoomEffect_M123PulseSequence_externs.h"
 
 int func_80194A70(int mode, RoomPulseParticle *particle, int *reference)
 {
@@ -61,8 +61,7 @@ typedef struct RoomPulseGlobal {
     u32 flags;
 } RoomPulseGlobal;
 
-extern struct BattleEntity *D_8009D254;
-extern int func_80194A70(int, RoomPulseParticle *, int *);
+#include "RoomEffect_M123PulseSequence_externs_1.h"
 
 int func_80194C04(int mode, RoomPulseParticle *particle)
 {
