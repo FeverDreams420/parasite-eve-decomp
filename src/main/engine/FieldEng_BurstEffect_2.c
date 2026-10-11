@@ -1,4 +1,3 @@
-/* CC1_FLAGS: -fno-schedule-insns */
 #include "common.h"
 #include "pe1/akao/commands.h"
 #include "pe1/field_anim.h"
@@ -13,57 +12,27 @@
 #include "pe1/field_billboard.h"
 
 int func_800CD404(void *arg0, void *arg1, FieldAnimBurstData *anim) {
-    FieldAnimBurstData *anim_s2 = anim;
-    int *field_s1;
-    u8 *cell;
-    int *position_v0;
-    register FieldGlowSprite *call_a0 asm("$4");
-    register int *call_a1 asm("$5");
-    register int call_a2 asm("$6");
-    int value_v0;
-    register int value_v1 asm("$3");
-    int entry_v0;
-    int i;
-    int shade;
+    FieldAnimBurstWindow *window;
+    u16 i;
 
     func_800C2EAC(3);
     func_800C3098(0x10);
     func_800C2FF0(0x20, 0x20);
     func_800C3238(2);
 
-    cell = &D_800E2250.cell;
-        call_a0 = (FieldGlowSprite *)(cell - PE1_OFFSETOF(FieldGlowSprite, cell));
-        position_v0 = &D_800F33C0.t[0];
-    value_v1 = anim_s2->header.origin_x;
-    call_a1 = position_v0 - 5;
-    position_v0[0] = value_v1;
-    value_v0 = anim_s2->header.origin_y;
-    call_a2 = 1;
-    D_800F33C0.t[1] = value_v0;
-    value_v0 = anim_s2->header.origin_z;
-    i = 0;
-    D_800F33C0.t[2] = value_v0;
-    shade = anim_s2->header.shade;
-    asm volatile("" ::: "$17");
-    field_s1 = &D_800F32B0.t[0];
-    *cell = (shade * 2) - 0x80;
-    func_800C42A4(call_a0, (GteMatrix *)call_a1, call_a2);
+    D_800F33C0.t[0] = anim->header.origin_x;
+    D_800F33C0.t[1] = anim->header.origin_y;
+    D_800F33C0.t[2] = anim->header.origin_z;
+    D_800E2250.cell = (anim->header.shade * 2) - 0x80;
+    func_800C42A4(&D_800E2250, &D_800F33C0, 1);
 
     func_800C3238(3);
 
-    do {
-        call_a0 = &D_800F3460;
-                entry_v0 = (int)&anim_s2->bytes[(i & 0xFFFF) * 8];
-        value_v1 = (s16)((FieldAnimBurstWindow *)entry_v0)->point.x;
-        call_a1 = field_s1 - 5;
-        field_s1[0] = value_v1;
-        value_v1 = (s16)((FieldAnimBurstWindow *)entry_v0)->point.y;
-        call_a2 = 1;
-        field_s1[1] = value_v1;
-        value_v0 = (s16)((FieldAnimBurstWindow *)entry_v0)->point.z;
-        asm volatile("" : "=r"(value_v0) : "0"(value_v0));
-        field_s1[2] = value_v0;
-        i++;
-        func_800C42A4(call_a0, (GteMatrix *)call_a1, call_a2);
-    } while ((i & 0xFFFFU) < 2);
+    for (i = 0; i < 2; i++) {
+        window = (FieldAnimBurstWindow *)&anim->bytes[i * 8];
+        D_800F32B0.t[0] = (s16)window->point.x;
+        D_800F32B0.t[1] = (s16)window->point.y;
+        D_800F32B0.t[2] = (s16)window->point.z;
+        func_800C42A4(&D_800F3460, &D_800F32B0, 1);
+    }
 }
