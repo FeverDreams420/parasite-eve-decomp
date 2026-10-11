@@ -5,6 +5,7 @@
 #include "pe1/room_fx.h"
 #include "pe1/field_script_context.h"
 #include "pe1/pe_image.h"
+#include "pe1/field_glow_sprite.h"
 
 /* Motion particle setup shared by rooms m075, m080 and m082: copies three
  * frames from the owner's model, then seeds the five overlay glyph records
@@ -40,21 +41,6 @@ typedef struct RoomMotionInitState {
     void *allocation;               /* 0x6C */
 } RoomMotionInitState;
 
-/* 16-byte glyph record. */
-typedef struct RoomMotionGlyph {
-    u8 red;
-    u8 green;
-    u8 blue;
-    u8 pad03;
-    u8 size;
-    u8 visible;
-    u8 flags;
-    u8 pad07;
-    s16 x;
-    s16 y;
-    u8 pad0C[4];
-} RoomMotionGlyph;
-
 /* 0x44-byte particle record. */
 typedef struct RoomMotionParticle {
     u8 pad00;
@@ -76,12 +62,13 @@ typedef struct RoomMotionParticle {
  * src/overlays/room_lib/RoomFx_MotionParticles*.c), named in every
  * room's symbol file: room_m075, room_m080, room_m082, scene_e09 and
  * scene_e10 keep it at their own addresses. */
-extern RoomMotionGlyph g_RoomMotionGlyph;
+extern FieldGlowSprite g_RoomMotionGlyph;
 extern RoomMotionParticle g_RoomMotionTrailA[10];
 extern RoomMotionParticle g_RoomMotionTrailB[10];
-extern RoomMotionGlyph g_RoomMotionGlyphs[4];
-extern s16 g_RoomMotionQuadDepth;
-extern u8 g_RoomMotionQuadPacket[];
+extern FieldGlowSprite g_RoomMotionGlyphs[4];
+/* Views of glyphs[1].depth and glyphs[2], used by the quad draw pass. */
+extern u16 g_RoomMotionQuadDepth;
+extern FieldGlowSprite g_RoomMotionQuadPacket;
 extern u8 g_RoomMotionLookupCodes[];
 
 

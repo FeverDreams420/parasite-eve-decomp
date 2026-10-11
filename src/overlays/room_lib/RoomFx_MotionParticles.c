@@ -55,50 +55,50 @@ void RoomFx_MotionParticlesInit(RoomMotionInitOwner *owner, void *unused, RoomMo
     state->field66 = 0;
     state->field68 = 0;
 
-    g_RoomMotionGlyphs[1].size = 44;
-    g_RoomMotionGlyphs[1].visible = 1;
-    g_RoomMotionGlyphs[1].x = -30;
-    g_RoomMotionGlyphs[1].y = 0;
-    g_RoomMotionGlyphs[1].red = 128;
-    g_RoomMotionGlyphs[1].green = 128;
-    g_RoomMotionGlyphs[1].blue = 128;
-    g_RoomMotionGlyphs[1].flags = 0;
+    g_RoomMotionGlyphs[1].cell = 44;
+    g_RoomMotionGlyphs[1].clut = 1;
+    g_RoomMotionGlyphs[1].offset = -30;
+    g_RoomMotionGlyphs[1].depth = 0;
+    g_RoomMotionGlyphs[1].r = 128;
+    g_RoomMotionGlyphs[1].g = 128;
+    g_RoomMotionGlyphs[1].b = 128;
+    g_RoomMotionGlyphs[1].flip = 0;
 
-    g_RoomMotionGlyphs[2].size = 44;
-    g_RoomMotionGlyphs[2].visible = 1;
-    g_RoomMotionGlyphs[2].x = 0;
-    g_RoomMotionGlyphs[2].y = 32;
-    g_RoomMotionGlyphs[2].red = 128;
-    g_RoomMotionGlyphs[2].green = 128;
-    g_RoomMotionGlyphs[2].blue = 128;
-    g_RoomMotionGlyphs[2].flags = 0;
+    g_RoomMotionGlyphs[2].cell = 44;
+    g_RoomMotionGlyphs[2].clut = 1;
+    g_RoomMotionGlyphs[2].offset = 0;
+    g_RoomMotionGlyphs[2].depth = 32;
+    g_RoomMotionGlyphs[2].r = 128;
+    g_RoomMotionGlyphs[2].g = 128;
+    g_RoomMotionGlyphs[2].b = 128;
+    g_RoomMotionGlyphs[2].flip = 0;
 
-    g_RoomMotionGlyphs[0].size = 44;
-    g_RoomMotionGlyphs[0].visible = 1;
-    g_RoomMotionGlyphs[0].x = -30;
-    g_RoomMotionGlyphs[0].y = 128;
-    g_RoomMotionGlyph.x = -31;
-    g_RoomMotionGlyphs[3].size = 32;
-    g_RoomMotionGlyphs[0].red = 128;
-    g_RoomMotionGlyphs[0].green = 128;
-    g_RoomMotionGlyphs[0].blue = 128;
-    g_RoomMotionGlyphs[0].flags = 0;
+    g_RoomMotionGlyphs[0].cell = 44;
+    g_RoomMotionGlyphs[0].clut = 1;
+    g_RoomMotionGlyphs[0].offset = -30;
+    g_RoomMotionGlyphs[0].depth = 128;
+    g_RoomMotionGlyph.offset = -31;
+    g_RoomMotionGlyphs[3].cell = 32;
+    g_RoomMotionGlyphs[0].r = 128;
+    g_RoomMotionGlyphs[0].g = 128;
+    g_RoomMotionGlyphs[0].b = 128;
+    g_RoomMotionGlyphs[0].flip = 0;
 
-    g_RoomMotionGlyph.size = 0;
-    g_RoomMotionGlyph.visible = 1;
-    g_RoomMotionGlyph.y = 128;
-    g_RoomMotionGlyph.red = 128;
-    g_RoomMotionGlyph.green = 128;
-    g_RoomMotionGlyph.blue = 128;
-    g_RoomMotionGlyph.flags = 0;
+    g_RoomMotionGlyph.cell = 0;
+    g_RoomMotionGlyph.clut = 1;
+    g_RoomMotionGlyph.depth = 128;
+    g_RoomMotionGlyph.r = 128;
+    g_RoomMotionGlyph.g = 128;
+    g_RoomMotionGlyph.b = 128;
+    g_RoomMotionGlyph.flip = 0;
 
-    g_RoomMotionGlyphs[3].visible = 1;
-    g_RoomMotionGlyphs[3].x = 100;
-    g_RoomMotionGlyphs[3].y = 128;
-    g_RoomMotionGlyphs[3].red = 128;
-    g_RoomMotionGlyphs[3].green = 128;
-    g_RoomMotionGlyphs[3].blue = 128;
-    g_RoomMotionGlyphs[3].flags = 0;
+    g_RoomMotionGlyphs[3].clut = 1;
+    g_RoomMotionGlyphs[3].offset = 100;
+    g_RoomMotionGlyphs[3].depth = 128;
+    g_RoomMotionGlyphs[3].r = 128;
+    g_RoomMotionGlyphs[3].g = 128;
+    g_RoomMotionGlyphs[3].b = 128;
+    g_RoomMotionGlyphs[3].flip = 0;
 
     for (i = 0; i < 10; i++) {
         particle = &g_RoomMotionTrailA[i];
@@ -225,7 +225,7 @@ void RoomFx_DrawAnchoredSpriteQuad(void *unused0, void *unused1,
     /* Retail reuses the params register for the packet pointers. */
     sprite = ((RoomAnchoredSpriteState *)fx)->depth;
     fx = (char *)&g_RoomMotionQuadDepth;
-    *(s16 *)fx = sprite;
+    *(u16 *)fx = sprite;
     stack.scaleMatrix.t[0] = map->primary.t[0];
     stack.scaleMatrix.t[1] = map->primary.t[1];
     fx -= 10;
@@ -236,7 +236,7 @@ void RoomFx_DrawAnchoredSpriteQuad(void *unused0, void *unused1,
     stack.scaleMatrix.t[2] = map->secondary.t[2];
     func_800C42A4((FieldGlowSprite *)fx, scaleMatrix, 1);
 
-    fx = (char *)g_RoomMotionQuadPacket;
+    fx = (char *)&g_RoomMotionQuadPacket;
     floorY = &g_RoomFloorY->y;
     stack.matrix.t[0] = map->primary.t[0];
     stack.matrix.t[1] = *floorY;

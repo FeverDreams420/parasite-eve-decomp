@@ -70,7 +70,7 @@ void RoomFx_DrawMotionParticles(void *unused, RoomStatePair *control,
     }
 
     if (control->h2 >= 31) {
-        g_RoomMotionGlyph.x = 0;
+        g_RoomMotionGlyph.offset = 0;
         primary = &state->matrix[0];
         secondary = &state->matrix[1];
     } else {
@@ -81,7 +81,7 @@ void RoomFx_DrawMotionParticles(void *unused, RoomStatePair *control,
 
     i = 0;
     if (state->count != 0) {
-        depth = (u16 *)&g_RoomMotionGlyph.y;
+        depth = &g_RoomMotionGlyph.depth;
         packet = (char *)depth - 10;
         cursor = (RoomMotionCursor *)state;
         do {
