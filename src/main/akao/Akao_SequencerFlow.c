@@ -1295,7 +1295,7 @@ void Akao_PlayNote(AkaoTrack *track, unsigned int mask) {
     u8_6 *pc;
     unsigned int note;
     unsigned int old_note;
-    int table;
+    AkaoInstrument *instrument;
 
     pc = track->pc;
     track->pc = pc + 1;
@@ -1309,7 +1309,7 @@ void Akao_PlayNote(AkaoTrack *track, unsigned int mask) {
         }
     }
 
-    table = (int)&g_AkaoInstrumentTable + (note << 6);
+    instrument = &g_AkaoInstrumentTable[note];
     old_note = track->note_pitch;
     track->note_pitch = note;
     if (old_note != 0xFF) {
@@ -1317,18 +1317,18 @@ void Akao_PlayNote(AkaoTrack *track, unsigned int mask) {
             if ((g_AkaoCurTrack->allocated_voice_mask & mask & g_SpuActiveVoiceMask) == 0) {
                 track->update_flags |= AKAO_VOICE_PARAM_PITCH;
                 track->pitch_base =
-                    (unsigned int)(track->pitch_base * ((AkaoInstrument *)table)->pitch[0]) /
-                    *(unsigned int *)((int)&g_AkaoPitchPeriodTable + (old_note << 6));
+                    (unsigned int)(track->pitch_base * instrument->pitch[0]) /
+                    (unsigned int)g_AkaoPitchPeriodTable[old_note * 16];
             }
         } else {
             track->update_flags |= AKAO_VOICE_PARAM_PITCH;
             track->pitch_base =
-                (unsigned int)(track->pitch_base * ((AkaoInstrument *)table)->pitch[0]) /
-                *(unsigned int *)((int)&g_AkaoPitchPeriodTable + (old_note << 6));
+                (unsigned int)(track->pitch_base * instrument->pitch[0]) /
+                (unsigned int)g_AkaoPitchPeriodTable[old_note * 16];
         }
     }
 
-    SeqOp_SetVoiceInstrument(track, (AkaoInstrument *)table, *(int *)table);
+    SeqOp_SetVoiceInstrument(track, instrument, instrument->start_address);
     track->flags &= ~AKAO_TRACK_FLAG_PENDING_NOTE_PITCH;
 }
 
@@ -1336,7 +1336,7 @@ void Akao_TieNote(AkaoTrack *track, unsigned int mask) {
     u8_6 *pc;
     int note;
     unsigned int old_note;
-    int table;
+    AkaoInstrument *instrument;
 
     pc = track->pc;
     track->pc = pc + 1;
@@ -1350,7 +1350,7 @@ void Akao_TieNote(AkaoTrack *track, unsigned int mask) {
         }
     }
 
-    table = (int)&g_AkaoInstrumentTable + (note << 6);
+    instrument = &g_AkaoInstrumentTable[note];
     old_note = track->note_pitch;
     track->note_pitch = note;
     if (old_note != 0xFF) {
@@ -1358,18 +1358,18 @@ void Akao_TieNote(AkaoTrack *track, unsigned int mask) {
             if ((g_AkaoCurTrack->allocated_voice_mask & mask & g_SpuActiveVoiceMask) == 0) {
                 track->update_flags |= AKAO_VOICE_PARAM_PITCH;
                 track->pitch_base =
-                    (unsigned int)(track->pitch_base * ((AkaoInstrument *)table)->pitch[0]) /
-                    *(unsigned int *)((int)&g_AkaoPitchPeriodTable + (old_note << 6));
+                    (unsigned int)(track->pitch_base * instrument->pitch[0]) /
+                    (unsigned int)g_AkaoPitchPeriodTable[old_note * 16];
             }
         } else {
             track->update_flags |= AKAO_VOICE_PARAM_PITCH;
             track->pitch_base =
-                (unsigned int)(track->pitch_base * ((AkaoInstrument *)table)->pitch[0]) /
-                *(unsigned int *)((int)&g_AkaoPitchPeriodTable + (old_note << 6));
+                (unsigned int)(track->pitch_base * instrument->pitch[0]) /
+                (unsigned int)g_AkaoPitchPeriodTable[old_note * 16];
         }
     }
 
-    SeqOp_SetVoiceInstrument(track, (AkaoInstrument *)table, 0x1010);
+    SeqOp_SetVoiceInstrument(track, instrument, 0x1010);
     track->flags &= ~AKAO_TRACK_FLAG_PENDING_NOTE_PITCH;
 }
 
@@ -1494,10 +1494,9 @@ void SeqOp_SetPitchLFO(void *ptr) {
     int lfo_target;
     unsigned int masked;
     unsigned int depth;
-    register unsigned int lfo_depth asm("$3");
+    unsigned int lfo_depth;
     int scale;
     int scaled;
-    int product;
     int use_base_scale;
     int selector;
 
@@ -1540,20 +1539,15 @@ void SeqOp_SetPitchLFO(void *ptr) {
     masked = lfo_target & 0x7F00;
     depth = masked >> 8;
     use_base_scale = lfo_target & 0x8000;
+    /* Each arm finishes the depth; the identical multiply tails merge at the join. */
     if (use_base_scale == 0) {
         scaled = ((scale << 4) - scale) >> 8;
-        product = depth * scaled;
+        lfo_depth = (unsigned int)(depth * scaled) >> 7;
     } else {
-        product = depth * scale;
+        lfo_depth = (unsigned int)(depth * scale) >> 7;
     }
-
-    lfo_depth = (unsigned int)product >> 7;
-    /* Finish the depth calculation before reloading the stored selector. */
-    asm("" : : "r"(lfo_depth) : "memory");
-    selector = track->pitch_lfo_selector;
     track->pitch_lfo_depth = lfo_depth;
-
-    table = D_8009C080[selector];
+    table = D_8009C080[track->pitch_lfo_selector];
     track->pitch_lfo_counter = track->pitch_lfo_delay;
     track->pitch_lfo_phase = 1;
     track->pitch_lfo_table = table;
