@@ -1067,8 +1067,8 @@ void RoomLib_HandlerB(RoomEnt *obj) {
         ((volatile RoomLibHandlerBState *)state)->matrix[4] = 0x1000;
         ((volatile RoomLibHandlerBState *)state)->matrix[2] = a0;
         matrixComponent = ((RoomLibHandlerBState *)state)->matrix[2];
-        *(short *)(state + 0x16) = 0;
-        *(volatile short *)(state + 0x1A) = 0;
+        ((RoomLibHandlerBState *)state)->matrix[3] = 0;
+        *(volatile short *)&((RoomLibHandlerBState *)state)->matrix[5] = 0;
         *(volatile short *)(state + 0x1E) = 0;
         ((RoomLibHandlerBState *)state)->matrix[8] = v1;
         player = (RoomLink *)D_8009D254;
