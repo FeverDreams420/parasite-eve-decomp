@@ -51,7 +51,7 @@ case_zero:
     if (arg0 != 0) {
         temp_v0 = MenuWidget_GetCurrentNode();
         temp_v0->cursor_y = 0;
-        M2C_FIELD(MenuWidget_CreateSimpleNode(0x1B, NULL, 0, 0), M2C_UNK **, 0x30) = &Menu_DrawAmmoTypeHeader;
+        MenuWidget_CreateSimpleNode(0x1B, NULL, 0, 0)->draw = (void (*)())&Menu_DrawAmmoTypeHeader;
         temp_v0_2 = MenuWidget_CreateSimpleNode(1, temp_v0, 0, 0);
         temp_s1 = MenuWidget_CreateNode(1, temp_v0_2, temp_v0_2);
         temp_a0 = temp_s1;
@@ -155,7 +155,7 @@ s32 Menu_EquipOptionsInputHandler(void *arg0, s32 arg1) {
     s32 temp_a1;
     MenuWidgetNode *temp_v0;
     MenuWidgetNode *temp_v0_2;
-    void *temp_v0_3;
+    MenuWidgetNode *temp_v0_3;
 
     if (arg1 & 0x10000) {
         temp_v0 = MenuWidget_GetChild(arg0, 0);
@@ -165,9 +165,9 @@ s32 Menu_EquipOptionsInputHandler(void *arg0, s32 arg1) {
             if (temp_a1 == 2) {
                 temp_v0_2 = MenuWidget_CreateSimpleNode(0x3B, temp_v0, 0, 0);
                 temp_v0_3 = MenuWidget_CreateNode(0x3B, temp_v0_2, temp_v0_2);
-                M2C_FIELD(temp_v0_2, M2C_UNK **, 0x2C) = &Menu_EquipGridHandler;
-                MenuWidget_OffsetPosition(temp_v0_2, 0x70 - M2C_FIELD(temp_v0_2, s32 *, 0x18), 0x48 - M2C_FIELD(temp_v0_2, s32 *, 0x1C));
-                M2C_FIELD(temp_v0_3, M2C_UNK **, 0x30) = &Menu_DrawEquipSortToggleList;
+                temp_v0_2->update = (void (*)())&Menu_EquipGridHandler;
+                MenuWidget_OffsetPosition(temp_v0_2, 0x70 - temp_v0_2->x, 0x48 - temp_v0_2->y);
+                temp_v0_3->draw = (void (*)())&Menu_DrawEquipSortToggleList;
                 MenuWidget_SetCurrentNode(temp_v0_3);
             } else {
             case 2:

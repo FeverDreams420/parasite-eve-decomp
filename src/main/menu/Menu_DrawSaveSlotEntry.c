@@ -30,7 +30,7 @@ void Menu_DrawSaveSlotEntry(s32 arg0) {
     u8 state;
 
     index = arg0;
-    slot = MemCard_GetSlot(M2C_FIELD(g_MenuActiveWidget, s32 *, 0x24) - 0x25, index);
+    slot = MemCard_GetSlot(g_MenuActiveWidget->selected_base - 0x25, index);
     if (slot != NULL) {
         state = slot->state;
         switch (state) {
@@ -40,7 +40,7 @@ void Menu_DrawSaveSlotEntry(s32 arg0) {
             } else {
                 Draw_OffsetCursor(-2, -2);
                 func_800614AC(slot->blendColor);
-                Draw_EmitWipeBarRect(M2C_FIELD(g_MenuActiveWidget, s32 *, 0x3C), M2C_FIELD(g_MenuActiveWidget, s32 *, 0x40), 1);
+                Draw_EmitWipeBarRect(g_MenuActiveWidget->draw_state, g_MenuActiveWidget->disabled, 1);
                 func_800614AC(g_SavedDrawBlendColor);
                 Draw_OffsetCursor(2, 2);
             }

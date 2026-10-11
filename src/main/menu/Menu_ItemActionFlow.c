@@ -297,17 +297,17 @@ void Menu_DrawEquipStats(void) {
 }
 
 int Menu_EquipStatsInputHandler(MenuWidgetNode *node, int flags) {
-    void *selected;
-    void *child;
+    MenuWidgetNode *selected;
+    MenuWidgetNode *child;
     void *target;
 
     child = MenuWidget_GetChild(node, 0);
     if (flags & 0x4000) {
-        M2C_FIELD(child, s32 *, 0x44) = -1;
+        child->cursor_x = -1;
         child = MenuWidget_FindByModeAndSelectedBase(2, 0xB);
         selected = child;
-        M2C_FIELD(selected, s32 *, 0x44) = 0;
-        M2C_FIELD(selected, s32 *, 0x48) = 0;
+        selected->cursor_x = 0;
+        selected->cursor_y = 0;
         MenuWidget_SetCurrentNode(selected);
         Menu_PlayMoveSound();
         return 1;

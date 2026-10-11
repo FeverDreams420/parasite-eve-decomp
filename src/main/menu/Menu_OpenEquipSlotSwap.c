@@ -21,22 +21,22 @@ extern s32 g_MenuEquipSwapSource;
 s32 Menu_OpenEquipSlotSwap(s32 arg0) {
     s32 temp_s2;
     s32 temp_v1;
-    void *temp_a0;
-    void *temp_s1;
-    void *temp_v0;
+    MenuWidgetNode *temp_a0;
+    MenuWidgetNode *temp_s1;
+    MenuWidgetNode *temp_v0;
 
     temp_s2 = MenuWidget_FindByModeAndSelectedBase(1, 1) != NULL;
     if (temp_s2 == 0) {
         Queue_Init();
-        M2C_FIELD(MenuWidget_CreateSimpleNode(0x1B, 0, 0, 0), M2C_UNK **, 0x30) = (M2C_UNK *)Menu_DrawAmmoTypeHeader;
+        MenuWidget_CreateSimpleNode(0x1B, 0, 0, 0)->draw = (void (*)())Menu_DrawAmmoTypeHeader;
         temp_v0 = MenuWidget_CreateSimpleNode(1, 0, 0, 0);
         temp_s1 = MenuWidget_CreateNode(1, temp_v0, temp_v0);
         temp_a0 = temp_s1;
-        M2C_FIELD(temp_v0, M2C_UNK **, 0x2C) = (M2C_UNK *)Menu_InventoryInputHandler;
-        M2C_FIELD(temp_s1, M2C_UNK **, 0x30) = (M2C_UNK *)Menu_DrawSelectableEquipSlotList;
+        temp_v0->update = (void (*)())Menu_InventoryInputHandler;
+        temp_s1->draw = (void (*)())Menu_DrawSelectableEquipSlotList;
         MenuWidget_SetCurrentNode(temp_a0);
-        M2C_FIELD(temp_s1, M2C_UNK **, 0x84) = (M2C_UNK *)Inv_SwapSlots;
-        M2C_FIELD(temp_s1, M2C_UNK **, 0x88) = (M2C_UNK *)Menu_RebuildSelectableMask;
+        temp_s1->itemAction = (MenuWidgetItemAction)Inv_SwapSlots;
+        temp_s1->refreshItems = (void (*)(void))Menu_RebuildSelectableMask;
         Inv_RebuildSelectableMask();
         g_InvSwapTargetIndex = -1;
         g_InvSelectedItemIndex = -1;
@@ -44,12 +44,12 @@ s32 Menu_OpenEquipSlotSwap(s32 arg0) {
         g_MenuActionSubmenuOpen = 0;
         if (g_MenuEquipSwapSource != 0) {
             temp_v1 = g_MenuEquipSwapSource - 1;
-            M2C_FIELD(temp_s1, s32 *, 0x44) = (temp_v1 & 1);
-            M2C_FIELD(temp_s1, s32 *, 0x48) = ((temp_v1 >> 1) & 0x7F);
-            M2C_FIELD(temp_s1, s32 *, 0x5C) = (temp_v1 >> 8);
+            temp_s1->cursor_x = (temp_v1 & 1);
+            temp_s1->cursor_y = ((temp_v1 >> 1) & 0x7F);
+            temp_s1->scroll_y = (temp_v1 >> 8);
         }
         Menu_CreateContextHelpPanel();
-        M2C_FIELD(MenuWidget_FindByModeAndSelectedBase(2, 1), s32 *, 0x84) = 0;
+        MenuWidget_FindByModeAndSelectedBase(2, 1)->itemAction = NULL;
         Inv_SortSlotsByPriority();
         g_MenuActionSubmenuOpen = 1;
         D_8009CF5C = arg0;

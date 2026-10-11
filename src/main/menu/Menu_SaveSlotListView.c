@@ -21,32 +21,32 @@ s32 Menu_CreateSaveSlotListView(s32 arg0, M2C_UNK arg1) {
     s32 temp_s0;
     s32 temp_s0_2;
     void *temp_a0;
-    void *temp_s2;
-    void *temp_v0;
+    MenuWidgetNode *temp_s2;
+    MenuWidgetNode *temp_v0;
 
     temp_s0_2 = arg0 + 0x25;
     temp_v0 = MenuWidget_CreateSimpleNode(temp_s0_2, MenuWidget_FindByModeAndSelectedBase(2, 0x24), 0, 0);
     temp_s2 = MenuWidget_CreateNode(temp_s0_2, temp_v0, temp_v0);
     temp_a0 = temp_s2;
-    M2C_FIELD(temp_v0, M2C_UNK **, 0x2C) = &Menu_StepSaveSelect;
-    M2C_FIELD(temp_s2, M2C_UNK **, 0x30) = &Menu_DrawSaveSlotList;
-    M2C_FIELD(temp_s2, M2C_UNK **, 0x8C) = &Menu_IsMemCardSlotCompatible;
+    temp_v0->update = (void (*)())&Menu_StepSaveSelect;
+    temp_s2->draw = (void (*)())&Menu_DrawSaveSlotList;
+    temp_s2->selectionAvailable = (int (*)(int))&Menu_IsMemCardSlotCompatible;
     Draw_SetPrimCallback(temp_a0, arg1);
     temp_s0 = MenuWidget_GridCellIndex(temp_s2);
     if (MenuWidget_FindLastMode1WithCursorX() == 0) {
-        M2C_FIELD(temp_s2, s32 *, 0x44) = 0;
+        temp_s2->cursor_x = 0;
         MenuWidget_SetCurrentNode(temp_s2);
     } else {
-        M2C_FIELD(temp_s2, s32 *, 0x44) = -1;
+        temp_s2->cursor_x = -1;
     }
-    M2C_FIELD(MenuWidget_CreateSimpleNode(0x3F, temp_s2, 0, 0), M2C_UNK **, 0x30) = &Menu_DrawSaveSlotPortLabel;
+    MenuWidget_CreateSimpleNode(0x3F, temp_s2, 0, 0)->draw = (void (*)())&Menu_DrawSaveSlotPortLabel;
     Queue_Init();
     g_SaveSelectedSlot = arg0;
     return temp_s0;
 }
 
 void Menu_CloseSaveSlotListView(s32 arg0) {
-    void *temp_s0;
+    MenuWidgetNode *temp_s0;
 
     temp_s0 = MenuWidget_FindByModeAndSelectedBase(2, 0x24);
     MenuWidget_NavScrollTo(0x28);
@@ -61,7 +61,7 @@ void Menu_CloseSaveSlotListView(s32 arg0) {
         MenuWidget_NavScrollTo(0x1F);
         MenuWidget_NavScrollTo(arg0 + 0x25);
         if (temp_s0 != NULL) {
-            M2C_FIELD(temp_s0, s32 *, 0x44) = 0;
+            temp_s0->cursor_x = 0;
             if (MenuWidget_FindLastMode1WithCursorX() == 0) {
                 MenuWidget_SetCurrentNode(temp_s0);
             }

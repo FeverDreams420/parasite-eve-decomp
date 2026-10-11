@@ -31,8 +31,8 @@ void Draw_PrintRawText(u8 *arg0);
 
 void Menu_CreateItemUsePanel(int itemId) {
     s32 width;
-    void *node;
-    void *created;
+    MenuWidgetNode *node;
+    MenuWidgetNode *created;
     ItemDataRecord *data;
     ItemDataRecord *temp_v0;
 
@@ -41,32 +41,32 @@ void Menu_CreateItemUsePanel(int itemId) {
     if (temp_v0->kind < 0xAU) {
         node = MenuWidget_CreateSimpleNode(5, 0, 0, 0);
         created = MenuWidget_CreateNode(5, node, node);
-        M2C_FIELD(node, M2C_UNK **, 0x30) = &Menu_DrawEquipStatsPanel;
-        M2C_FIELD(node, M2C_UNK **, 0x2C) = &Menu_HandleItemInput;
+        node->draw = (void (*)())&Menu_DrawEquipStatsPanel;
+        node->update = (void (*)())&Menu_HandleItemInput;
         width = 0x80;
-        M2C_FIELD(node, s32 *, 0x34) = width;
+        node->grid_width = width;
         MenuWidget_OffsetPosition(node, 0x44, 0x14);
-        M2C_FIELD(created, M2C_UNK **, 0x30) = &Menu_DrawSoundEffectList;
+        created->draw = (void (*)())&Menu_DrawSoundEffectList;
         MenuWidget_ClearColumnLayout(created);
-        M2C_FIELD(created, s32 *, 0x70) = -1;
+        created->aux_index = -1;
         MenuWidget_SetCurrentNode(node);
         node = MenuWidget_CreateSimpleNode(6, 0, 0, 0);
-        M2C_FIELD(node, s32 *, 0x34) = width;
+        node->grid_width = width;
         MenuWidget_OffsetPosition(node, 0x44, 0x14);
         created = MenuWidget_CreateNode(6, node, node);
-        M2C_FIELD(created, M2C_UNK **, 0x30) = &Menu_DrawEquipItemDetailPanel;
+        created->draw = (void (*)())&Menu_DrawEquipItemDetailPanel;
         MenuWidget_ClearColumnLayout(created);
         data = g_MenuSelectedItemData;
-        M2C_FIELD(created, s32 *, 0x3C) = 0x3E;
+        created->draw_state = 0x3E;
         Draw_SetPrimCallback(created, data->tailCount);
         g_InvItemUsableFlag = g_MenuSelectedItemData->kind != 9;
     } else {
         node = MenuWidget_CreateSimpleNode(0x37, 0, 0, 0);
-        M2C_FIELD(node, M2C_UNK **, 0x30) = &Menu_DrawEquipItemIcon;
-        M2C_FIELD(node, M2C_UNK **, 0x2C) = &Menu_HandleItemInput;
+        node->draw = (void (*)())&Menu_DrawEquipItemIcon;
+        node->update = (void (*)())&Menu_HandleItemInput;
         MenuWidget_SetCurrentNode(node);
     }
-    M2C_FIELD(MenuWidget_CreateSimpleNode(0x13, 0, 0, 0), M2C_UNK **, 0x30) = &Menu_DrawEquipItemName;
+    MenuWidget_CreateSimpleNode(0x13, 0, 0, 0)->draw = (void (*)())&Menu_DrawEquipItemName;
     Queue_Init();
 }
 
