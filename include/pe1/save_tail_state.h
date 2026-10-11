@@ -8,9 +8,14 @@
  * same storage as the typed global its asm label points at. */
 
 extern SaveBytes800 g_SaveEntityWorkBlock __asm__("D_800A77F0");
-extern SaveBytes70 g_AyaBattleState __asm__("D_800B8A20");
-extern SaveBytes18 g_SavedBattleStateTail __asm__("D_800B0CB0");
-extern SaveBytes8 g_BattleEquipStateBlock __asm__("D_8009D1B0");
+/* Battle records the save tail copies as raw bytes; their layouts live in
+ * battle_saved_state.h and battle.h. */
+struct AyaBattleState;
+union BattleStateTail;
+struct BattleAttributes;
+extern struct AyaBattleState g_AyaBattleState __asm__("D_800B8A20");
+extern union BattleStateTail g_SavedBattleStateTail __asm__("D_800B0CB0");
+extern struct BattleAttributes g_BattleEquipStateBlock;
 extern SaveBytes4 g_SaveFieldMoveLockBytes __asm__("D_8009D2E8");
 extern SaveBytes4 g_SaveSceneDispatchTokenBytes __asm__("D_8009D280");
 extern SaveBytes4 g_SaveGameStateFlagsBytes __asm__("D_8009D1A0");

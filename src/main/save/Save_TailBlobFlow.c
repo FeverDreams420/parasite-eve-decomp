@@ -61,13 +61,13 @@ void Save_SerializeTail(void) {
     }
     cd = g_SaveIoCursor + 1;
     g_SaveIoCursor = cd;
-    *(SaveBytes70 *)cd = g_AyaBattleState;
+    *(SaveBytes70 *)cd = *(SaveBytes70 *)&g_AyaBattleState;
     cursor = g_SaveIoCursor;
     g_SaveIoCursor = cursor + 0x70;
-    *(SaveBytes18 *)(cursor + 0x70) = g_SavedBattleStateTail;
+    *(SaveBytes18 *)(cursor + 0x70) = *(SaveBytes18 *)&g_SavedBattleStateTail;
     cursor = g_SaveIoCursor;
     g_SaveIoCursor = cursor + 0x18;
-    *(SaveBytes8 *)(cursor + 0x18) = g_BattleEquipStateBlock;
+    *(SaveBytes8 *)(cursor + 0x18) = *(SaveBytes8 *)&g_BattleEquipStateBlock;
     {
         u8 *end = g_SaveIoCursor;
         g_SaveIoCursor = end + 8;
@@ -99,7 +99,7 @@ void Save_DeserializeTail(void) {
     }
     cursor = g_SaveIoCursor;
     asm volatile("" : : "r"(cursor));
-    aya_dest = &g_AyaBattleState;
+    aya_dest = (SaveBytes70 *)&g_AyaBattleState;
     asm volatile("" : : "r"(aya_dest));
     g_SaveIoCursor = cursor + 0x800;
     asm volatile("" : "=m"(g_SaveIoCursorRead) : "m"(g_SaveIoCursorRead));
@@ -171,12 +171,12 @@ void Save_DeserializeTail(void) {
     game_mask = 0xFFFF2679;
     asm volatile("" : "=m"(g_SaveIoCursorRead) : "m"(g_SaveIoCursorRead));
     next_cur = g_SaveIoCursorRead;
-    battle_dest = &g_SavedBattleStateTail;
+    battle_dest = (SaveBytes18 *)&g_SavedBattleStateTail;
     *battle_dest = *(SaveBytes18 *)(cursor + 0x70);
 
     step18 = next_cur + 0x18;
     g_SaveIoCursor = step18;
-    equip_dest = &g_BattleEquipStateBlock;
+    equip_dest = (SaveBytes8 *)&g_BattleEquipStateBlock;
     *equip_dest = *(SaveBytes8 *)(next_cur + 0x18);
     asm volatile("" : : "r"(step18));
 
