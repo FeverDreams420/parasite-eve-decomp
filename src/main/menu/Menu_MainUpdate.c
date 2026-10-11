@@ -95,14 +95,14 @@ void Menu_MainUpdate(s32 arg0) {
     u16 temp_a1;
     register u32 var_v0;
     u32 temp_a2;
-    u8 *temp_a0_2;
+    EnemyActionEffect *temp_a0_2;
     u8 temp_a0;
     u8 temp_v0_6;
     u8 temp_v1_12;
     register Combatant *state0;
     register Combatant *temp_a1_2;
-    void *temp_v1_5;
-    void *var_s0;
+    EnemyCombatant *temp_v1_5;
+    BattleEntity *var_s0;
 
     state0 = D_8009D278;
     temp_s2 = &state0->stateFlags;
@@ -290,7 +290,7 @@ block_after_d2e8:
             reset_operand = (u32) D_8009D278;
             D_8009CE30 = 0;
             *temp_s2 = reset_flags;
-            M2C_FIELD((void *) reset_operand, s32 *, 8) = 0x10000;
+            ((Combatant *)reset_operand)->exp_or_acc = 0x10000;
             D_800B0158[0] = 0xFF;
             D_800B0159[0] = 0x3D;
             D_800B015A[0] = 0x81;
@@ -492,23 +492,23 @@ block_after_d2e8:
                 *temp_s2 &= 0xFF7FFFFF;
             }
         } else if (!(temp_v1_4 & 0x180000)) {
-            var_s0 = D_8009D20C;
+            var_s0 = (BattleEntity *)D_8009D20C;
             if (var_s0 != NULL) {
                 do {
                     if (var_s0 != D_8009D254) {
                         {
                         register void *entity0;
 
-                        entity0 = M2C_FIELD(var_s0, void **, 0);
-                        if ((entity0 != NULL) && !(M2C_FIELD(var_s0, s32 *, 0x98) & 0x10)) {
+                        entity0 = var_s0->core;
+                        if ((entity0 != NULL) && !(var_s0->entityFlags & 0x10)) {
                             temp_v1_5 = entity0;
-                            temp_a0_2 = M2C_FIELD(temp_v1_5, u8 **, 0x18);
+                            temp_a0_2 = temp_v1_5->effect;
                             if ((temp_a0_2 != NULL) && (*temp_s2 & 0x4000)) {
-                                temp_v1_6 = M2C_FIELD(temp_v1_5, s32 *, 0);
-                                if ((temp_v1_6 < 0) && ((*temp_a0_2 - 1) < 2U)) {
+                                temp_v1_6 = temp_v1_5->coreFlags;
+                                if ((temp_v1_6 < 0) && ((temp_a0_2->state - 1) < 2U)) {
                                     temp_v1_7 = ((u32) temp_v1_6 >> 0x15) & 7;
                                     if (temp_v1_7 < 3) {
-                                        Asset_Find08w(M2C_FIELD(((temp_v1_7 * 2) + temp_v1_5), u16 *, 0xB6), 0, M2C_FIELD(var_s0, s16 *, 0x268), M2C_FIELD(var_s0, s16 *, 0x26A), M2C_FIELD(var_s0, s16 *, 0x26C));
+                                        Asset_Find08w(temp_v1_5->contactAssetIds[temp_v1_7], 0, var_s0->renderObject.target_x, var_s0->renderObject.target_y, var_s0->renderObject.target_z);
                                     }
                                     *temp_s2 |= 0x10000000;
                                     Entity_ResolveDropTable(var_s0);
@@ -519,12 +519,12 @@ block_after_d2e8:
                                     u16 v9c;
                                     s32 vflags;
 
-                                    v9c = M2C_FIELD(temp_v1_5, u16 *, 0x9C);
-                                    vflags = M2C_FIELD(temp_v1_5, s32 *, 0);
+                                    v9c = temp_v1_5->rewardFactorB;
+                                    vflags = temp_v1_5->coreFlags;
                                     v9c = (u16) (v9c + 1);
                                     vflags &= 0x7FFFFFFF;
-                                    M2C_FIELD(temp_v1_5, s32 *, 0) = vflags;
-                                    M2C_FIELD(temp_v1_5, u16 *, 0x9C) = v9c;
+                                    temp_v1_5->coreFlags = vflags;
+                                    temp_v1_5->rewardFactorB = v9c;
                                     }
                                     {
                                     s32 s2_flags;
@@ -540,39 +540,39 @@ block_after_d2e8:
                                 desc_state = D_8009D278;
                                 temp_v1_8 = (s16) desc_state->curHP;
                                 if ((s16) desc_state->maxHP >= temp_v1_8) {
-                                    register void *d254;
+                                    register BattleEntity *d254;
 
                                     d254 = D_8009D254;
                                     desc_state->panelA_val = (s16) (desc_state->hpMirror - temp_v1_8);
                                     {
                                     u16 copy210;
 
-                                    copy210 = M2C_FIELD(d254, u16 *, 0x210);
+                                    copy210 = (u16)d254->renderObject.projected_x;
                                     D_8009D278->panelA_x = copy210;
                                     }
                                     {
                                     u16 copy212;
                                     register Combatant *desc_tail;
 
-                                    copy212 = M2C_FIELD(d254, u16 *, 0x212);
+                                    copy212 = (u16)d254->renderObject.projected_y;
                                     D_8009D278->panelA_timer = 0x1EU;
                                     desc_tail = D_8009D278;
                                     desc_state->panelA_y = copy212;
                                     if (desc_tail->panelA_val == 0) {
                                         desc_tail->panelA_scale = 0;
                                     } else {
-                                        desc_tail->panelA_scale = (s8) ((M2C_FIELD(desc_tail, u32 *, 0x4C) >> 0xE) & 2);
+                                        desc_tail->panelA_scale = (s8) (((unsigned int)desc_tail->stateFlags >> 0xE) & 2);
                                     }
                                     }
                                     D_8009D278->stateFlags = D_8009D278->stateFlags & 0xFFFF7FFF;
                                 }
                                 }
                             }
-                            if (M2C_FIELD(var_s0, s32 *, 0x98) & 0x02000000) {
+                            if (var_s0->entityFlags & 0x02000000) {
                                 temp_v1_9 = *temp_s2;
-                                if (!(temp_v1_9 & 0x01000000) && (M2C_FIELD(temp_v1_5, s32 *, 0x10) > 0)) {
+                                if (!(temp_v1_9 & 0x01000000) && (temp_v1_5->hpAlive > 0)) {
                                     if (!(temp_v1_9 & 0x200)) {
-                                        D_8009D278->curHP = (s16) ((u16) D_8009D278->curHP - M2C_FIELD(temp_v1_5, u8 *, 0x92));
+                                        D_8009D278->curHP = (s16) ((u16) D_8009D278->curHP - temp_v1_5->contactDamage);
                                     }
                                     {
                                     s32 s2_flags2;
@@ -584,28 +584,28 @@ block_after_d2e8:
                                     *temp_s2 = s2_flags2 | 0x01000000;
                                     temp_v1_10 = (s16) desc_state->curHP;
                                     if ((s16) desc_state->maxHP >= temp_v1_10) {
-                                        register void *d254;
+                                        register BattleEntity *d254;
 
                                         d254 = D_8009D254;
                                         desc_state->panelA_val = (s16) (desc_state->hpMirror - temp_v1_10);
                                         {
                                         u16 copy210;
 
-                                        copy210 = M2C_FIELD(d254, u16 *, 0x210);
+                                        copy210 = (u16)d254->renderObject.projected_x;
                                         desc_state->panelA_x = copy210;
                                         }
                                         {
                                         u16 copy212;
                                         register Combatant *desc_tail;
 
-                                        copy212 = M2C_FIELD(d254, u16 *, 0x212);
+                                        copy212 = (u16)d254->renderObject.projected_y;
                                         desc_state->panelA_timer = 0x1EU;
                                         desc_tail = D_8009D278;
                                         desc_state->panelA_y = copy212;
                                         if (desc_tail->panelA_val == 0) {
                                             desc_tail->panelA_scale = 0;
                                         } else {
-                                            desc_tail->panelA_scale = (s8) ((M2C_FIELD(desc_tail, u32 *, 0x4C) >> 0xE) & 2);
+                                            desc_tail->panelA_scale = (s8) (((unsigned int)desc_tail->stateFlags >> 0xE) & 2);
                                         }
                                         }
                                         D_8009D278->stateFlags = D_8009D278->stateFlags & 0xFFFF7FFF;
@@ -621,14 +621,14 @@ block_after_d2e8:
                                     D_8009D254->entityFlags = D_8009D254->entityFlags & clear_flags;
                                     D_8009D278->knockbackAngle = Entity_ApplyHitAndSetAnim(var_s0);
                                     }
-                                    D_8009D278->knockbackDistance = (u8) M2C_FIELD(temp_v1_5, u8 *, 0x93);
+                                    D_8009D278->knockbackDistance = (u8) temp_v1_5->contactKnockback;
                                     D_8009D278->knockbackFrames = 6;
                                 }
                             }
                         }
                         }
                     }
-                    var_s0 = M2C_FIELD(var_s0, void **, 4);
+                    var_s0 = var_s0->next;
                 } while (var_s0 != NULL);
             }
             {
@@ -639,28 +639,28 @@ block_after_d2e8:
             temp_v0_7 = (s16) desc_state->hpMirror;
             if (temp_v1_11 < temp_v0_7) {
                 if ((s16) desc_state->maxHP >= temp_v1_11) {
-                    register void *d254;
+                    register BattleEntity *d254;
 
                     d254 = D_8009D254;
                     desc_state->panelA_val = (s16) (temp_v0_7 - temp_v1_11);
                     {
                     u16 copy210;
 
-                    copy210 = M2C_FIELD(d254, u16 *, 0x210);
+                    copy210 = (u16)d254->renderObject.projected_x;
                     D_8009D278->panelA_x = copy210;
                     }
                     {
                     u16 copy212;
                     register Combatant *desc_tail;
 
-                    copy212 = M2C_FIELD(d254, u16 *, 0x212);
+                    copy212 = (u16)d254->renderObject.projected_y;
                     D_8009D278->panelA_timer = 0x1EU;
                     desc_tail = D_8009D278;
                     desc_state->panelA_y = copy212;
                     if (desc_tail->panelA_val == 0) {
                         desc_tail->panelA_scale = 0;
                     } else {
-                        desc_tail->panelA_scale = (s8) ((M2C_FIELD(desc_tail, u32 *, 0x4C) >> 0xE) & 2);
+                        desc_tail->panelA_scale = (s8) (((unsigned int)desc_tail->stateFlags >> 0xE) & 2);
                     }
                     }
                     D_8009D278->stateFlags = D_8009D278->stateFlags & 0xFFFF7FFF;
@@ -696,18 +696,18 @@ block_after_d2e8:
     temp_v0_8 = (s16) state0->hpMirror;
     temp_v1_13 = (s16) state0->curHP;
     if (temp_v0_8 < temp_v1_13) {
-        register void *d254;
+        register BattleEntity *d254;
 
         d254 = D_8009D254;
         state0->panelB_val = (s16) (temp_v1_13 - temp_v0_8);
         {
         u16 copy210;
 
-        copy210 = M2C_FIELD(d254, u16 *, 0x210);
+        copy210 = (u16)d254->renderObject.projected_x;
         D_8009D278->panelB_x = copy210;
         }
         {
-        var_v0 = M2C_FIELD(d254, u16 *, 0x212);
+        var_v0 = (u16)d254->renderObject.projected_y;
         var_v1 = 0x1E;
         D_8009D278->panelB_timer = var_v1;
         { register Combatant *post_state; post_state = D_8009D278;
@@ -815,9 +815,9 @@ block_after_d2e8:
         var_a3 = 0x3D;
         {
         var_v0 = (u32) D_8009D254;
-        M2C_FIELD((void *) var_v0, s32 *, 0x68) = 0;
-        M2C_FIELD((void *) var_v0, s32 *, 0x6C) = 0;
-        M2C_FIELD((void *) var_v0, s32 *, 0x70) = 0;
+        ((BattleEntity *)var_v0)->motionX = 0;
+        ((BattleEntity *)var_v0)->motionY = 0;
+        ((BattleEntity *)var_v0)->motionZ = 0;
         }
         var_v0 = 0xFF;
         D_800B00ED[0] = var_a2;

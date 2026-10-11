@@ -286,7 +286,8 @@ typedef struct EnemyCombatant {
 /* 0x8E */ u16 chargeStep;
 /* 0x90 */ u8  effectChance;
 /* 0x91 */ u8  deathAnimFrame;
-/* 0x92 */ u8  pad_92[2];
+/* 0x92 */ u8  contactDamage;    /* HP taken from the player on body contact (Menu_MainUpdate) */
+/* 0x93 */ u8  contactKnockback; /* knockback distance applied on body contact */
 /* 0x94 */ u8  effectLevel;
 /* 0x95 */ u8  effectDuration;
 /* 0x96 */ s16 periodicDamage;
@@ -309,7 +310,7 @@ typedef struct EnemyCombatant {
 /* 0xB0 */ u16 attackAssetId;
 /* 0xB2 */ u8  pad_B2[2];
 /* 0xB4 */ u16 deathAssetId;
-/* 0xB6 */ u8  pad_B6[6];
+/* 0xB6 */ u16 contactAssetIds[3]; /* effect asset per facing group (coreFlags >> 21) spawned on contact */
 /* 0xBC */ u8  resumePhase;
 /* 0xBD */ u8  savedActionMode;
 /* 0xBE */ u8  savedInterpolation;
