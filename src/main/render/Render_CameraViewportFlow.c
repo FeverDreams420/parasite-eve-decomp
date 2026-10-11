@@ -101,8 +101,8 @@ int Render_RestoreBounds(void) {
     view->maxY = g_GeomScroll.state.position.boundsMaxY;
     return 0;
 }
-/* Matching debt: register pins, empty scheduling constraints, a $v1 clobber,
- * explicit signed-halving steps, gotos and 40 bytes of frame padding. */
+/* Matching debt: register pins, empty scheduling constraints, a $v1 clobber
+ * and explicit signed-halving steps; see docs/CODE_ORGANIZATION.md. */
 
 
 int Render_SetViewport(s16 *position) {

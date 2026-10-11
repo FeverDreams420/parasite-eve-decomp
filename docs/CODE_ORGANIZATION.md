@@ -242,6 +242,69 @@ Crutches still in place (lev is the only metric):
   (lev 44), and without volatile the scheduler interleaves the game-state
   stores with the render buffer stores differently.
 
+### Render (src/main/render)
+
+The render units have no file-scope `extern`s, raw offset dereferences or
+alias declarations: camera and scroll state is declared in
+`pe1/geom_state.h`, `pe1/render_camera.h` and `pe1/render_tint.h`, the
+object and wireframe data in `pe1/render_object.h` and
+`pe1/render_animation_frame.h`, and the GTE register transfers are PSY-Q
+style macros in `pe1/gte.h`. C shapes that only exist for the bytes:
+
+- Every 8 unused bytes in a render frame came from a top-tested loop with a
+  variable bound, or a guarded `i = 0; if (i < count) do ... while` loop:
+  combine folds the first compare into the branch and the orphaned compare
+  pseudo keeps its stack slot. `Render_DrawTextDigit`, `Font_FindCodeSlot`
+  and `Obj_ResetAllEntries` lost their stack pads this way.
+- Offsets from the geometry header (`g_GeomState + g_GeomState->field`) go
+  through the `GeomStateAddress` word view (`GEOM_STATE_OFFSET`): retail
+  loads the header pointer twice and adds the offset as an integer.
+- `Render_StepFade` and `Render_ApplyScreenTint` advance the primitive
+  pointer inside the loop body; in the `for` header the step is scheduled
+  above the colour stores (lev 2).
+- The wireframe depth and screen-XY buffers are one record
+  (`g_WireScratch`), so the line packet's XY stores and the depth loads are
+  both structure accesses and keep retail's order without volatile.
+
+Crutches still in place (lev is the only metric):
+
+- `Render_SetViewport` (6 pins, 5 barriers): removing any single one costs
+  lev 2-46; the best crutch-free rewrite is lev 65.
+- `Render_UpdateScrollPosition` and `Render_PrepareFrame` (volatile register
+  screen-centre input, view-matrix pin and slot barrier each): retail has 8
+  frame bytes nothing touches. The volatile register is the only form found
+  that keeps them; without it the frame shrinks (lev 6 each), a plain pin
+  keeps the registers but not the frame (lev 2), and a 12-byte projection
+  buffer keeps the frame but swaps the offset registers (lev 4).
+- `Render_DrawSpriteEntry` (21 pins, 2 barriers, 6 pointer casts, 1 byte
+  sum): each pin alone is worth lev 2-69, the natural rewrite is lev 120+.
+- `Render_IncrementCounter` (2 pins): the counter word sits in .text right
+  after the routine and it works in a0/a1, so the original is hand-written
+  assembler.
+- Font selection: `Render_StepFontLoad`, `Render_FindFontGlyphSlot` and
+  `Menu_FindSelectedEquipSlotItem` store the selected slot and reload it
+  through the other symbol for that byte; without the memory barrier the
+  reload is scheduled first (lev 25, 10, 11). `Render_StepFontLoad` keeps an
+  identity constraint on the digit (lev 19) and `Render_SetFontGlyphByCode`
+  one on the stored slot (lev 14). `Render_LoadFontGlyphAlt` keeps its byte
+  view of the table (typed lookup lev 10, shared slot search lev 24).
+- PE.IMG and font retry loops (`Render_LoadFontGlyphAlt` 1 goto,
+  `Render_FontGlyphLoad` 2, `Render_InitDisplayLists` 2): any loop form lets
+  loop.c hoist the table address and constants out of the retry path, which
+  retail rebuilds on every retry.
+- `OpenPeImage` (2 barriers): retail leaves the delay slot of the second and
+  third `found == 0` tests empty; without the barriers reorg fills it with
+  the -1 constant (lev 5-8).
+- `Render_DrawWireframeModel` (1 goto): the floor-edge search shares the far
+  vertex assignment between two arms; written twice, the extra reference
+  swaps the screen-XY registers (lev 14). Its file comment lists the
+  uncounted register-allocation shapes it still needs.
+- `Render_DrawActorShadow` (1 volatile store): retail copies the part matrix
+  word by word and keeps the translation store that the next store
+  overwrites; a structure copy keeps the store but uses GCC's four-register
+  block move (lev 22).
+- `Render_DrawObjectVariant` was left as is (out of scope for this pass).
+
 ### Open declaration conflicts
 
 `python3 tools/scripts/decl_conflicts.py --count` lists symbols declared more
