@@ -139,10 +139,10 @@ int func_801977F8(int mode,Vector *input) {
     if(mode==1) {
         if(D_800E27EC>=16) return 1;
     } else if(mode==2) {
-        register int counter asm("$2")=D_800E27EC;
-        register int frame asm("$22")=counter-1;
+        int counter=D_800E27EC;
+        int frame=counter-1;
         int kind=D_800F3368.palette;
-        int firstSample=*(int *)((char *)D_800966EC+(((unsigned int)frame<<8)&0x3F00));
+        int firstSample=*(int *)((char *)D_800966EC+(((unsigned int)(u8)frame<<8)&0x3F00));
         int shade,size,palette;
         int secondSample;
         unsigned short clut;
@@ -155,13 +155,12 @@ int func_801977F8(int mode,Vector *input) {
         clut=GetClut(80,palette);
         func_800CEE20(&position,(GteRotation *)&rotation,size,size,74,clut,1,shade,0);
         rotation.z>>=1;
-        secondSample=*(int *)((char *)D_800966EC+(((unsigned int)frame<<8)&0x3F00));
+        secondSample=*(int *)((char *)D_800966EC+(((unsigned int)(u8)frame<<8)&0x3F00));
         shade=secondSample>>21;
         size=(short)secondSample+1024;
         func_800D004C(&position,512,512,16,(GteRotation *)&rotation,size,size,(struct RenderColor *)D_8019AB70,(struct RenderColor *)D_8019AD74,shade,1);
         rotation.x=1024; rotation.y=0; rotation.z=(unsigned int)frame<<8; rotation.pad=1;
         position.y=g_RoomFloorY->raw;
-        asm("" : : "r"(frame) : "memory");
         func_800D004C(&position,768,768,8,(GteRotation *)&rotation,4096,4096,(struct RenderColor *)D_8019AD78,(struct RenderColor *)D_8019AB70,shade,1);
     }
     return 0;
