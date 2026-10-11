@@ -82,7 +82,7 @@ int func_8019549C(int mode, SceneE19HomingParticle *particle)
         remMagic = 0x66660000;
         asm("" : : "r"(remMagic));
         random &= 1023;
-        asm volatile("" : : "r"(random) : "memory");
+        asm volatile("" : : "r"(random));
         sum = bias + 390;
         rotation.x += random - sum;
         asm("" : : "r"(sum));
@@ -191,7 +191,7 @@ test_timer:
         func_800CEE20(&particle->position, (GteRotation *)&rotation, 6144, 6144,
                      68, clut, 1, intensity / 2, 0);
         D_800F3368.parameter02 = 2;
-        asm volatile("" : : : "memory");
+        asm volatile("" : :);
         D_800F3368.parameter00 = 32;
         D_800F3368.extent_x = 32;
         D_800F3368.extent_y = 32;
@@ -214,7 +214,7 @@ temporaryPosition.x = particle->position.x;
 temporaryPosition.y = particle->position.y;
 pulseSum = 64;
 floorZ = particle->position.z;
-asm volatile("" : : : "memory");
+asm volatile("" : :);
 
 temporaryPosition.z = floorZ;
 D_800F3368.parameter02 = 4;
@@ -252,7 +252,7 @@ asm("" : : "r"(divider));
         D_800F3368.parameter02 = 4;
         D_800F3368.extent_x = 64;
         D_800F3368.extent_y = 64;
-        asm volatile("" : : : "memory");
+        asm volatile("" : :);
         intensity = rcos((particle->timer << 10) / 24) / 32;
         scale = rcos((particle->timer << 10) / 24) * 2;
         if (particle->timer & 1)
