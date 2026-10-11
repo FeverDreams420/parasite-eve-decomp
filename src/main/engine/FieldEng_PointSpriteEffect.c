@@ -411,48 +411,21 @@ int func_800CC92C(void *arg0, FieldEngSlot *state, FieldAnimPointSprite *anim) {
     }
 }
 
-int func_800CC974(void *arg0, FieldEngSlot *state, FieldAnimRadialParticles *anim) {
+void func_800CC974(void *arg0, FieldEngSlot *state, FieldAnimRadialParticles *anim) {
     int i;
-    FieldEngSlot *state_t2;
-    register int velocityValue asm("$3");
-    int dy;
-    register int dz asm("$5");
-    int frame;
 
-        state_t2 = state;
-    asm volatile("" : "=r"(state_t2) : "0"(state_t2));
-    i = 0;
-    if ((signed char)anim->count > 0) {
-        do {
-            register int pos asm("$2");
-
-            velocityValue = anim->velocity[i].x >> 9;
-            pos = anim->points[i].position.x;
-            dy = anim->velocity[i].y >> 9;
-            dz = anim->velocity[i].z >> 9;
-            pos += velocityValue;
-            anim->points[i].position.x = pos;
-            pos = anim->points[i].position.y;
-            velocityValue = (u16)anim->velocity[i].y;
-            pos += dy;
-            anim->points[i].position.y = pos;
-            pos = anim->points[i].position.z;
-            velocityValue += 0xB4;
-            anim->velocity[i].y = velocityValue;
-            pos += dz;
-            anim->points[i].position.z = pos;
-            pos = anim->extent[i];
-            pos += 0x18;
-            anim->extent[i] = pos;
-            i++;
-        } while (i < anim->count);
+    for (i = 0; i < anim->count; i++) {
+        anim->points[i].position.x += anim->velocity[i].x >> 9;
+        anim->points[i].position.y += anim->velocity[i].y >> 9;
+        anim->points[i].position.z += anim->velocity[i].z >> 9;
+        anim->velocity[i].y += 0xB4;
+        anim->extent[i] += 0x18;
     }
 
     anim->scale -= 2;
     if (anim->scale < 2) {
-        state_t2->flag = 2;
+        state->flag = 2;
     }
-    asm volatile("" : : "r"(&frame));
 }
 
 int func_800CCA40(void *arg0, FieldEngSlot *state, FieldAnimPointSprite *anim) {
@@ -471,45 +444,20 @@ int func_800CCA78(void *arg0, FieldEngSlot *state, FieldAnimPointSprite *anim) {
     }
 }
 
-int func_800CCAB0(void *arg0, FieldEngSlot *state, FieldAnimScatteredParticles *anim) {
+void func_800CCAB0(void *arg0, FieldEngSlot *state, FieldAnimScatteredParticles *anim) {
     int i;
-    FieldEngSlot *state_t1;
-    register int velocityValue asm("$3");
-    int dy;
-    register int dz asm("$5");
-    int frame;
 
-    state_t1 = state;
-    asm volatile("" : "=r"(state_t1) : "0"(state_t1));
-    i = 0;
-    if (anim->points.count > 0) {
-        do {
-            register int pos asm("$2");
-
-            velocityValue = anim->velocity_x[i] >> 8;
-            pos = anim->points.x[i];
-            dy = anim->velocity_y[i] >> 8;
-            dz = anim->velocity_z[i] >> 8;
-            pos += velocityValue;
-            anim->points.x[i] = pos;
-            pos = anim->points.y[i];
-            velocityValue = (u16)anim->velocity_y[i];
-            pos += dy;
-            anim->points.y[i] = pos;
-            pos = anim->points.z[i];
-            velocityValue += 0xB4;
-            anim->velocity_y[i] = velocityValue;
-            pos += dz;
-            anim->points.z[i] = pos;
-            i++;
-        } while (i < anim->points.count);
+    for (i = 0; i < anim->points.count; i++) {
+        anim->points.x[i] += anim->velocity_x[i] >> 8;
+        anim->points.y[i] += anim->velocity_y[i] >> 8;
+        anim->points.z[i] += anim->velocity_z[i] >> 8;
+        anim->velocity_y[i] += 0xB4;
     }
 
     anim->points.scale -= 2;
-    if ((signed char)anim->points.scale < 2) {
-        state_t1->flag = 2;
+    if ((s8)anim->points.scale < 2) {
+        state->flag = 2;
     }
-    asm volatile("" : : "r"(&frame));
 }
 
 int func_800CCB6C(void *arg0, FieldEngSlot *state, FieldAnimPointSprite *anim) {
