@@ -7,6 +7,7 @@
 #include "pe1/menu_sound.h"
 #include "pe1/text.h"
 #include "pe1/menu_flags.h"
+#include "pe1/menu_dialog.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --dont-expand-li */
 /* ASPSX_VERSION: 2.21 */
@@ -21,7 +22,6 @@ extern s32 g_MenuActionTextBase;
 extern s32 g_SaveSelectedSlot;
 extern s32 g_SaveSlotCellIndex;
 extern s32 D_8009CF4C;
-extern s32 g_MenuItemPrimListHandles;
 extern struct { char _[16]; } D_800A1980_o __asm__("g_MenuItemLabelBuffer");
 #define g_MenuItemLabelBuffer (*(u8 *)&D_800A1980_o)
 extern struct { char _[16]; } Menu_DrawItemLabel_o __asm__("Menu_DrawItemLabel");
@@ -81,7 +81,7 @@ s32 Menu_StepSaveSelect(MenuWidgetNode *arg0, s32 arg1) {
                             Inv_SelectActiveList(temp_a0);
                             g_MenuItemLabelBuffer = 0xFF;
                             Util_AppendFFTerminatedBytes(&g_MenuItemLabelBuffer, Str_LookupTable4(0x44));
-                            g_MenuItemPrimListHandles = 0;
+                            g_MenuItemPrimListHandles[0] = 0;
                             {
                                 MenuConfirmCallback callback = Menu_TriggerSaveWrite;
                                 if (Draw_MeasureTextWidth(&g_MenuItemLabelBuffer) < 0x78) {

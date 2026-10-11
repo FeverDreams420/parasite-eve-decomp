@@ -2,7 +2,7 @@
 #include "pe1/inventory_category.h"
 #include "pe1/game_timers.h"
 #include "pe1/save.h"
-extern int g_SavedDrawBlendColor;
+#include "pe1/draw_wipe_rect.h"
 extern short g_AyaMenuClampValue;
 extern int g_SavePlayTimeMinutes;
 extern int D_800C0DEC;
@@ -36,7 +36,7 @@ void Save_BuildHeader(void) {
         dst++;
     }
 
-    g_SavedDrawBlendColor = Draw_GetBlendColor();
+    g_SavedDrawBlendColor[0] = Draw_GetBlendColor();
     g_AyaMenuClampValue = Menu_GetItemContextFlag();
     g_SavePlayTimeMinutes = (unsigned int)g_PlayTimeSeconds / 60U;
     D_800C0DEC = (unsigned int)g_GameTimeTable / 60U;

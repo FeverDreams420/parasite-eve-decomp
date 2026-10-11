@@ -7,6 +7,7 @@
 #include "pe1/cdrom_buffers.h"
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_bios.h"
+#include "pe1/pe_image.h"
 /* Scalar symbol view still preserves the boot loader scheduling.
  * Sector read and polling routines below use the shared structure fields. */
 extern int g_GameState;
@@ -113,7 +114,6 @@ extern s8 D_800B0DB4;
 extern s8 D_800B0DB5;
 extern s8 D_800B0DB6;
 extern s8 D_800B0DB7;
-extern s32 g_PeImageBaseLba;
 extern u16 g_StrFileDirLba[];
 
 void SetDispMask(int mask);

@@ -11,6 +11,7 @@
 #include "pe1/task_anim.h"
 #include "pe1/geom_state.h"
 #include "pe1/pm.h"
+#include "pe1/save.h"
 
 extern FieldActor *g_CurrentEntity;
 
@@ -46,7 +47,6 @@ int Entity_ComputeVelocity(void) {
 
 extern FieldActor *g_PlayerEntity;
 extern int g_CombatModeFlags;
-extern int D_800A76C8;
 extern int D_800A76CC;
 /* Camera base angles at 0x800BD020. As a record, the second argument load
  * stays behind the first store: GCC 2.7 lets a varying array load pass a
@@ -55,8 +55,8 @@ typedef struct CameraBaseAngles {
     short x;
     short y;
 } CameraBaseAngles;
-
 extern CameraBaseAngles D_800BD020;
+
 extern unsigned char g_ScreenTransitionState;
 extern short D_800BCFFE;
 
@@ -81,7 +81,7 @@ int Sys_ComputeAudioTimer(int **arg0) {
     int *dst;
     int value;
 
-    dst = &D_800A76C8;
+    dst = (int *)D_800A76C8;
     value = (*arg0[0] + *arg0[1]) * 216000;
     value += *arg0[2] * 60;
     *dst = value;

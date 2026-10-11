@@ -34,7 +34,7 @@ extern char *D_800B0E58[];
 
 /* Corners of the sprite quad around its centre, 16 units per texel; set by
  * func_800C2FF0. */
-extern GteShortVector D_800F3310;
+extern GteShortVector D_800F3310[];
 extern GteShortVector D_800F3318;
 extern GteShortVector D_800F3320;
 extern GteShortVector D_800F3328;

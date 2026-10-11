@@ -70,9 +70,9 @@ void func_800C2FF0(int width, int height) {
     D_800F345D = height;
     y = (height & 0xFF) << 4;
 
-    D_800F3310.x = -x;
-    D_800F3310.y = -y;
-    D_800F3310.z = 0;
+    D_800F3310[0].x = -x;
+    D_800F3310[0].y = -y;
+    D_800F3310[0].z = 0;
     D_800F3318.x = x;
     D_800F3318.y = -y;
     D_800F3318.z = 0;
@@ -226,7 +226,7 @@ void func_800C3324(FieldOrientedSprite *sprite)
     gte_CompMatrix(&D_800F33B4->matrix, &D_800F33B4->local, &D_800F33B4->matrix);
     gte_ldrotmatrix(&D_800F33B4->matrix);
     gte_ldtransmatrix(&D_800F33B4->matrix);
-    gte_ldv3(&D_800F3310, &D_800F3318, &D_800F3320);
+    gte_ldv3(D_800F3310, &D_800F3318, &D_800F3320);
     gte_rtpt_padded();
     packet->tag.length = 9;
     packet->code = 0x2C;
@@ -473,7 +473,7 @@ void func_800C42A4(FieldGlowSprite *sprite, GteMatrix *placement, u8 mode)
         gte_ldtransmatrix((const GteMatrixWords *)placement);
     }
     func_800C608C((s16)sprite->depth, &sprite->r, &packet->r0);
-    v0 = &D_800F3310;
+    v0 = D_800F3310;
     v1 = &D_800F3318;
     v2 = &D_800F3320;
     gte_lwc2_0_0(v0);
@@ -627,7 +627,7 @@ void func_800C499C(FieldShadedQuadColors *colors, GteMatrix *placement,
     func_800C608C(colors->brightness, colors->rgb[1], &packet->r1);
     func_800C608C(colors->brightness, colors->rgb[2], &packet->r2);
     func_800C608C(colors->brightness, colors->rgb[3], &packet->r3);
-    v0 = &D_800F3310;
+    v0 = D_800F3310;
     v1 = &D_800F3318;
     v2 = &D_800F3320;
     gte_lwc2_0_0(v0);

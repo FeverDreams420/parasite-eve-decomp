@@ -1,4 +1,5 @@
 #include "pe1/inventory_slots.h"
+#include "pe1/task_queue.h"
 extern short D_800C1F80[];
 typedef struct InventorySlotRange {
     s16 start;
@@ -6,7 +7,6 @@ typedef struct InventorySlotRange {
 } InventorySlotRange;
 extern InventorySlotRange D_800923D8[];
 extern InventorySlotRange D_800923F8[];
-extern int D_800A77F0[];
 
 void Inv_RebuildSelectionBitset(void) {
     ItemDataRecord *entry;
@@ -45,7 +45,7 @@ void Inv_RebuildSelectionBitset(void) {
 
     range = D_800923D8;
     if (range < D_800923D8 + 8) {
-        table_base = D_800A77F0;
+        table_base = (int *)D_800A77F0;
         range_stop_ptr = &range->stop;
         do {
             start = range->start;

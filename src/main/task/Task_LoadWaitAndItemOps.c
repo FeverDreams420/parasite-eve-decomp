@@ -5,6 +5,7 @@
 #include "pe1/field_actor.h"
 #include "pe1/inventory.h"
 #include "pe1/scene_transition.h"
+#include "pe1/entity_frame_update.h"
 
 extern unsigned char g_ScreenTransitionState[];
 extern int g_SceneDataTable0;
@@ -48,7 +49,6 @@ int Task_CountItemsByValue(int **arg0) {
     return 1;
 }
 
-extern unsigned short D_8009D2A4[];
 
 void Menu_OpenEquipSlotSwap(int arg0);
 

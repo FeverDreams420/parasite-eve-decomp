@@ -4,6 +4,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/field_tri_test.h"
 #include "pe1/gte.h"
+#include "pe1/field_shaded_quad.h"
 
 int rand(void);
 int func_800C6B20(void *arg0);
@@ -130,7 +131,6 @@ int func_800C6148(char *obj, s16 *pos, unsigned short radius) {
 
 int func_800C653C(void *arg0, GteShortVector *verts);
 
-extern GteShortVector D_800F3310[];
 
 int func_800C61A8(void *arg0, char *matrix) {
     GteShortVector verts[4];

@@ -10,11 +10,11 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/boot_display.h"
 #include "pe1/render_buffers.h"
+#include "pe1/pe_image.h"
 
 void SetDispMask(int arg0);
 void FlushCache(void);
 
-extern int g_PeImageBaseLba;
 extern int D_800A77FC;
 extern int D_800B0CD8_word __asm__("g_GameState");
 extern u16 g_MainAssetLbaTbl[];

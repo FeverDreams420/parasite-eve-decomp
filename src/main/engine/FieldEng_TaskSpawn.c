@@ -7,6 +7,8 @@
 #include "pe1/gte.h"
 #include "pe1/scene_assets.h"
 #include "pe1/asset_find.h"
+#include "pe1/field_effect_pool.h"
+#include "pe1/field_flash_burst.h"
 
 
 int func_800D3F64(int arg0, int arg1) {
@@ -333,8 +335,6 @@ int func_800D4850(u8 *state) {
 
 extern void *D_800B0E20;
 extern int D_800E22D4;
-extern int D_800F32D4;
-extern int D_800F3474;
 
 void func_800CECAC(void);
 void func_800CED3C(int arg0);
