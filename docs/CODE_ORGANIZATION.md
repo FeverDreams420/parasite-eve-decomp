@@ -305,6 +305,110 @@ Crutches still in place (lev is the only metric):
   block move (lev 22).
 - `Render_DrawObjectVariant` was left as is (out of scope for this pass).
 
+### Menu (src/main/menu)
+
+The menu units have no file-scope `extern`s and no local extern lists except
+the two alias views listed below. Menu-wide state lives in
+`pe1/menu_state.h`, the bonus point and level-up panels in
+`pe1/menu_bonus_stats.h`, dialogs and save slots in `pe1/menu_dialog.h`,
+equipment screens in `pe1/menu_equipment.h`, list adapters and row drawers
+in `pe1/menu_item_rows.h`, and the event queue in `pe1/menu_queue.h`. C
+shapes that only exist for the bytes:
+
+- MASPSX fills a load delay before a `$gp` store only when it knows the
+  stored symbol is small data, which it learns from COMMON definitions in
+  the unit (`--use-comm-section`). Units that store a loaded value into an
+  extern word therefore define it tentatively (`int g_MenuEquipSwapItem;`,
+  `g_MenuInventoryViewMode`, `g_MenuPendingTotalExp`,
+  `g_BonusPointDisplayValue`, `g_BonusPointSpendCurrentValue`) instead of an
+  explicit NOP. `Menu_EquipScreenFlow.c` uses `MASPSX_FORCE_G0` with COMMON
+  definitions for every `$gp` word so `&D_8009CF90` stays an absolute `la`.
+- Retail inlines `Queue_Enqueue`, `Queue_DequeueByMask` and
+  `MenuWidget_AllocNode` into their callers; the units declare them `inline`
+  (non-static, so the out-of-line copies remain) and call them.
+- A node variable assigned once places its copy of the call result late
+  (sched1 launch priority), one assigned several times keeps it right after
+  the call: `Menu_OpenRenameScreen` reuses one parent variable, the equip
+  confirm dialog takes its own `dialog` variable, `Menu_StepSkillScreen`
+  stores the second lookup back into `panel`.
+- Two-line and item dialogs size their panel with `MAX(100, MAX(w0, w1))`
+  of `Draw_MeasureTextWidth` calls: the macro's repeated calls and the
+  cross-jumped tail are what retail does.
+- Small decision trees are `switch` statements with an empty `case 1`
+  (`Sfx_ContextPick`) or separate identical cases (`Menu_OpenInventoryOrSwapView`).
+- `Menu_AlignEquipPanels` computes the x shift from one conditional
+  expression; the separate `if` chain gives the loads other registers.
+- The cursor stack is walked as `int` word pairs, except in
+  `MenuWidget_DrawListRow`/`RowPopCursor`, where the `DrawTextCursorPair`
+  structure view lets the scheduler move the global loads above the stores.
+
+Crutches still in place (lev is the only metric):
+
+- `Menu_StepColorSelect` (2 gotos): both arms share one clamp shift and the
+  blend tail. A `do`/`while (0)` form is lev 23, duplicated tails lev 35: cse
+  leaves the second arm's clamp with a copy of the channel shift (s3), so the
+  tails differ and are not cross-jumped.
+- `Menu_StepEquipConfirm` (4 pins, 1 barrier, 7 gotos): retail places the
+  confirm tail right after the first arm and the reserved/dialog arms jump
+  back into it, an order only the label layout gives (if/else chain lev 71);
+  each remaining pin alone costs lev 18-43.
+- `Spend_BonusPoints` (1 pin, 4 barriers, 7 gotos): the error tail sits
+  between the 0x1000 and 0x10000 blocks; with return statements the first
+  copy is kept (lev 64), and without the barriers the two identical
+  bonus-decrement cases are cross-jumped into one (lev 52).
+- `Menu_StepItemSelectScreen` (3 pins, 5 barriers, 2 gotos): retail returns
+  through the cell-index variable in s0 (`li s0,1` then `move v0,s0`); plain
+  returns fold to `li v0,1` (lev 44). Case 8 needs its three argument
+  registers loaded before the `D_8009CF30` store (lev 2 without the pins).
+- `Menu_InventoryInputHandler` (1 pin, 3 barriers): same s3 return value;
+  early returns lev 19, a single-exit chain lev 45.
+- `Menu_InventoryPageNavHandler` (3 pins, 1 barrier): the conditional shift
+  that matches `Menu_AlignEquipPanels` gives the shift a higher global-alloc
+  priority than the target node here (s1/s2 swap, lev 12).
+- `Menu_DrawItemDetailPanel` (2 pins): retail computes dx right after its
+  two loads; unpinned, dx is scheduled after the tail-count chain (lev 5).
+- `Menu_DrawStatsList` (2 pins): with either pin gone loop.c
+  strength-reduces the multiplier index into a sixth saved pointer (lev 20-25).
+- `Menu_StepItemDetailPanel2` (1 pin): retail reloads the label buffer
+  address before each of three calls; unpinned, CSE keeps it in a saved
+  register and label/option node swap (lev 18).
+- `Menu_StepSaveLoadScreen` (1 pin): the transfer callback and
+  `Menu_InventoryInputHandler` addresses both live in saved registers and
+  swap s0/s1 unpinned (lev 18).
+- `Menu_StepSkillList` (1 pin): retail builds the 1 of `1 << type` in v1;
+  every plain form folds it into a0 (lev 2).
+- `Menu_StepSaveSelect` (1 pin): the dialog mode lives in a1 and is passed on
+  to `Save_SetTitleStyleFlag`; unpinned, slot and mode swap a0/a1 (lev 9).
+- `Menu_OpenInventoryScreen` (1 pin): retail loads 9 into a0 once before the
+  branch for `MenuWidget_InitPool(9)` and `Inv_SetActiveList(9, 0)`; the
+  propagated constant leaves a second `li a0,9` (lev 1).
+- `Sfx_DrawActiveListSlot` (1 pin): retail copies the item ID into a1 before
+  the range tests (lev 12 without).
+- `Draw_InitBuffers` (1 pin, 1 barrier): retail stores the screen
+  rectangles relative to s0 (the first frame's packet arena field); constant
+  addresses fold to absolute stores.
+- `Draw_SetPrimCallback` (1 memory barrier, 1 volatile read): retail
+  re-reads y_limit and the other fields after storing them.
+- `Aya_SetTotalExp` (1 barrier, local alias header): retail keeps the save
+  base in s2 for the total and the cleared pool, and reads/writes the bonus
+  pool through three absolute accesses that one symbol lets CSE merge
+  (`Menu_LevelUpFlow_externs.h`).
+- `Menu_MainUpdate` (3 pointer-integer casts, 3 field macros, local alias
+  header): the m2c variables that carry the battle entity pointers also
+  carry colours, and splitting them reallocates registers (lev 28-248); the
+  halfword position reads must not be structure members (the scheduler
+  would hoist the `D_8009D28C` store); `draw_slot_status0..2` keep retail's
+  reloads of the draw slot (`Menu_MainUpdate_externs.h`).
+- `Window_SetBoundsByMode` (volatile window X and bound pointer): plain or
+  multi-set forms keep the order but swap v0/v1 (lev 5).
+- `Menu_DrawTextboxEntries` (7 pins, 6 barriers, 6 gotos, stack reserve, 2
+  byte offsets), `Render_SetupColorTable` (5 pins, 3 barriers) and
+  `Render_SetupFogLayer` (2 pins, 1 barrier, 3 byte offsets): the glyph
+  spacing offset must stay in s7 across the packet calls (lev 127 with
+  structure indexing), a plain digit loop is lev 95, and the fog packets
+  add the offset to integer copies of the bases (typed pointers put the base
+  first, lev 3).
+
 ### Open declaration conflicts
 
 `python3 tools/scripts/decl_conflicts.py --count` lists symbols declared more
