@@ -9,6 +9,7 @@ extern unsigned int g_GameStateFlags;
 /* g_GameState.story_day_flags as its own byte symbol: Scene_SetStoryDay and
  * the battle update read and set it with absolute byte loads and stores. */
 extern u8 D_800B0CE6;
+extern u8 g_DiscChangeFlags;
 
 /* g_GameState.flags as its own scalar symbol: the frame loop, the process
  * manager and the CD boot read update it with absolute loads and stores,
