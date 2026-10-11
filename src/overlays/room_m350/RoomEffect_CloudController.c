@@ -110,7 +110,7 @@ adjust:
         D_8019A88C=0; D_8019A888=0; D_8019A884=0;
         D_8019A87E=0; D_8019A87A=0; D_8019A876=0; D_8019A872=0;
         D_8019A878=4096;
-        asm volatile("" : : "r"(matrix), "r"(vector) : "memory");
+        asm volatile("" : : "r"(matrix), "r"(vector));
         offset.x=0; offset.y=0; offset.z=state->speed;
         ApplyMatrixSV(matrix,vector,vector);
         }
