@@ -350,13 +350,12 @@ void RoomLib_TransformPairedEmitter(void *unused, RoomFxControl *params,
     RoomLibSpriteTransformStack stack;
     RoomSpriteMatrix *scaleMatrix;
     unsigned char *table;
-    register RoomFxPairedEmitterState *workState asm("$18");
+    RoomFxPairedEmitterState *workState;
     register RoomSpriteMatrix *matrix asm("$19");
     FieldActor **root;
     register RoomFxControl *renderParams asm("$21");
     RenderMatrix *owner;
 
-    renderParams = params;
     workState = state;
     root = func_800C2B50();
     stack.seed = s_PairedGlowSeed;
@@ -403,6 +402,7 @@ void RoomLib_TransformPairedEmitter(void *unused, RoomFxControl *params,
         gte_swc2_11_8(translation);
     }
 
+    renderParams = params;
     func_800C3238(2);
     table = g_RoomPairedGlowColorTable;
     owner = (*root)->render_object.matrices;
