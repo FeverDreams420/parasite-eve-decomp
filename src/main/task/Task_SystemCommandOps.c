@@ -47,14 +47,15 @@ int Entity_ComputeVelocity(void) {
 extern FieldActor *g_PlayerEntity;
 extern int g_CombatModeFlags;
 extern int D_800A76CC;
-/* Camera base angles at 0x800BD020. As a record, the second argument load
- * stays behind the first store: GCC 2.7 lets a varying array load pass a
- * store to a fixed scalar, but not to a structure member. */
+/* Camera base angles at 0x800BD020 (D_800BD020, D_800BD022). The script
+ * opcode stores them as one record, so the second argument load stays behind
+ * the first store: GCC 2.7 lets a varying array load pass a store to a fixed
+ * scalar, but not to a structure member. */
 typedef struct CameraBaseAngles {
     short x;
     short y;
 } CameraBaseAngles;
-extern CameraBaseAngles D_800BD020;
+extern u16 D_800BD020;
 
 extern unsigned char g_ScreenTransitionState[];
 
@@ -386,8 +387,8 @@ int Task_LoadGeomState(int **arg0) {
 }
 
 int Task_SetScreenScrollPos(int **arg0) {
-    D_800BD020.x = *arg0[0];
-    D_800BD020.y = *arg0[1];
+    ((CameraBaseAngles *)&D_800BD020)->x = *arg0[0];
+    ((CameraBaseAngles *)&D_800BD020)->y = *arg0[1];
     return 1;
 }
 
