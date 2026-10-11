@@ -96,10 +96,10 @@ int func_801947BC(int event,RoomM350Particle *p)
         }
         {
             short *count=&D_8019A7FC.positionCount;
-            unsigned short n=*(unsigned short *)count;
+            unsigned short n=D_8019A7FC.positionCount;
             int next=n+1;
             int shifted=(unsigned int)n<<16;
-            *count=next;
+            D_8019A7FC.positionCount=next;
             {
                 RoomM350PositionQueue *queue=(RoomM350PositionQueue *)((char *)count-PE1_OFFSETOF(RoomM350PositionQueue,count));
                 queue->positions[shifted>>16]=p->position;
