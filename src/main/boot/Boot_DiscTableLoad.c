@@ -1,5 +1,6 @@
 /* Boot-time disc loads called from Boot_MainLoop: the PE.IMG asset LBA
  * tables and the boot audio banks. */
+#include "pe1/disc_load_state.h"
 #include "common.h"
 #include "pe1/cdrom.h"
 #include "pe1/cdrom_buffers.h"
@@ -22,7 +23,6 @@ extern u16 g_LargeTexLbaTbl[];
 extern u16 D_8009316C[];
 extern u16 g_FontUiLbaTbl[];
 extern u16 D_8009315E[];
-extern int D_800B0DD8;
 extern signed char D_800B0DB2;
 extern signed char D_800B0DB3;
 extern signed char D_800B0DB4;
@@ -198,7 +198,7 @@ retry_first:
     range = D_8009315E;
     retry = -1;
     do {
-        status = CdRom_ReadSectors(D_800B0DD8 + range[0], 0, D_8001160C, range[1] - range[0]);
+        status = CdRom_ReadSectors(D_800B0DD8.baseLba + range[0], 0, D_8001160C, range[1] - range[0]);
     } while (status == retry);
 
     clear_mask = 0xFEFFBFFF;
@@ -234,7 +234,7 @@ retry_second:
     range = (unsigned short  *)&D_80093166;
     retry = -1;
     do {
-        status = CdRom_ReadSectors(D_800B0DD8 + range[0], 0, D_80011610, range[1] - range[0]);
+        status = CdRom_ReadSectors(D_800B0DD8.baseLba + range[0], 0, D_80011610, range[1] - range[0]);
     } while (status == retry);
 
     clear_mask = 0xFEFFBFFF;

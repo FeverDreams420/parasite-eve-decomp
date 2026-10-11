@@ -2,6 +2,7 @@
 #define PE1_FONT_H
 
 #include "common.h"
+#include "pe1/disc_load_state.h"
 
 /* Partial glyph-table layout recovered from the slot lookup at 0x80038BC0.
  * The first list begins at +4; the second list's count is at +0x1C.
@@ -31,14 +32,6 @@ typedef struct FontGlyphTable {
     FontGlyphGroups groups;
     FontGlyphSlots slots;
 } FontGlyphTable;
-
-/* The disc-load view begins at the PE.IMG base LBA. Its destination pointer
- * is also read through D_800B0E6C while copying the selected glyph table. */
-typedef struct FontGlyphLoadState {
-    u32 baseLba;
-    u8 unknown04[0x90];
-    u8 *buffer;
-} FontGlyphLoadState;
 
 /* The selection byte is nine bytes before the table pointer. Navigation
  * derives its address from the pointer member's address in retail code. */
@@ -75,7 +68,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(FontGlyphLoadState, buffer) == 0x94,
 
 extern FontGlyphSelectionState g_FontSelectionState;
 extern FontGlyphTable D_8009ECD8;
-extern FontGlyphLoadState D_800B0DD8;
 extern u8 *D_800B0E6C;
 extern u16 D_80093176[2];
 

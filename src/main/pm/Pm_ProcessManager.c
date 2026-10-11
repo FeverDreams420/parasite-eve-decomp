@@ -1,4 +1,5 @@
 #define PE1_PM_LEGACY_RAW_VIEWS
+#include "pe1/disc_load_state.h"
 #include "pe1/pm.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/scene_room_load.h"
@@ -92,7 +93,7 @@ int Pm_FreeSlot(int arg0) {
 extern PmCommand **D_800942E0;
 extern PmPrimarySlot *D_800942E4;
 extern PmSecondarySlot *D_800942E8;
-extern u32 D_800B0CD8[], D_800B0DD8;
+extern u32 D_800B0CD8[];
 extern u16 D_80093162[];
 extern void *D_80011618;
 extern u8 D_801F1BD8[], D_801F1C58[], D_801F1D00[], D_801F1D8C[];
@@ -136,7 +137,7 @@ int Scene_LoadRoomAssets(u32 command, void *owner)
         return -7;
     if (command - 108 < 7 && !(D_800B0CD8[0] & 0x10000)) {
 retry:
-        while (CdRom_ReadSectorsFromLba(D_800B0DD8 + D_80093162[0],
+        while (CdRom_ReadSectorsFromLba(D_800B0DD8.baseLba + D_80093162[0],
                 D_80011618, D_80093162[1] - D_80093162[0]) == -1) {}
         for (;;) {
             ready = CdRom_PollReady();

@@ -1,3 +1,4 @@
+#include "pe1/disc_load_state.h"
 #include "common.h"
 #include "pe1/game_state.h"
 #include "pe1/cdrom.h"
@@ -84,14 +85,13 @@ int CdRom_DetectDiscChange(void) {
 #include "pe1/player_entity.h"
 #include "../../../tools/m2c/m2c_macros.h"
 extern u8 D_800B0CE2[], D_8009D25C;
-extern u32 D_800B0DD8[];
 /* Matching debt: pins, empty barriers, one retry jump, and a
  * 32-byte unused stack reserve retain retail allocation and scheduling.
  * The shifted state view preserves the bank-row address calculation. */
 int Scene_LoadEntityTexture(void)
 {
     int bank = *D_800B0CE2;
-    u32 lba = *D_800B0DD8;
+    u32 lba = D_800B0DD8.baseLba;
     Pe1GameState *state = &g_GameState;
     SceneAssetBlob *blob;
     SceneAssetDirectory *directory;

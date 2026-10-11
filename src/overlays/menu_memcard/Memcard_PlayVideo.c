@@ -15,7 +15,7 @@ retry:
         VideoDiscRange *range = (VideoDiscRange *)D_8009315E;
         s32 readError = -1;
         s32 pollError;
-        do {} while(CdRom_ReadSectorsFromLba(D_800B0DD8+range->start,D_8001160C,range->end-range->start)==readError);
+        do {} while(CdRom_ReadSectorsFromLba(D_800B0DD8.baseLba+range->start,D_8001160C,range->end-range->start)==readError);
         pollError=-1;
         for (;;) {
             ready=CdRom_PollReady();

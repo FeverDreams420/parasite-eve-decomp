@@ -1,6 +1,7 @@
 #ifndef MENU_MEMCARD_VIDEO_H
 #define MENU_MEMCARD_VIDEO_H
 
+#include "pe1/disc_load_state.h"
 #include "pe1/display_env.h"
 #include "common.h"
 #include "pe1/cdrom_buffers.h"
@@ -75,7 +76,7 @@ extern VideoEntry D_801D0E00[];
 extern u16 D_8009315E[];
 extern u16 D_80093160;
 extern u16 D_80093162[];
-extern u32 D_800B0DD8,D_8009D26C;
+extern u32 D_8009D26C;
 s32 Memcard_StepVideo(void);
 extern void SetDispMask(s32), func_80074A44(s32), func_80072714(void), func_800726C4(void), func_80072724(void), func_8003EB04(void), func_8007A2A4(void), Gpu_RenderFrame(void);
 
