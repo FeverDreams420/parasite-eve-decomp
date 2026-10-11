@@ -22,6 +22,9 @@ extern u8 g_MenuItemLabelBuffer[128];
 extern int g_MenuItemPrimListHandles[2];
 extern int g_MenuActionTextBase;
 extern int g_MenuActiveItemList, g_MenuActiveItemSlot;
+/* Action state per item-action context and option: 0 tests the active item,
+ * 1 is always enabled, 2 needs a selectable slot, 3 follows the disabled flag. */
+extern int g_MenuItemActionStateTable[][3];
 void *Inv_LookupActiveListDisplayData(int index);
 void Menu_DrawItemLabel(MenuWidgetNode *node);
 int Menu_ConfirmDialogHandler(void *node, int flags);
