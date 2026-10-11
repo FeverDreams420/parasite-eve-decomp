@@ -10,7 +10,7 @@ void func_800C3098(s32);
 extern u8 D_80198AD4;
 extern u8 D_80199570;
 extern u8 D_80199574;
-extern u16 D_8019957A;
+extern s16 D_8019957A;
 
 void func_801949F4(s32 arg0, char *arg1, char *rec) {
     char *ctx;
