@@ -13,12 +13,6 @@ typedef struct SceneParticleOwner {
     u8 drawMode;
 } SceneParticleOwner;
 
-typedef struct SceneFxColor {
-    u8 r, g, b, pad3;
-    u8 t4, t5, t6, pad7;
-    s16 h8, hA;
-} SceneFxColor;
-
 extern s16 D_801994B2;
 void func_800C2FF0(int, int);
 void func_800C3098(int);
@@ -67,7 +61,7 @@ void func_8018FBA4(void *unused0, void *unused1, SceneParticleCluster *argSlots)
             *slot = slots->brightness[i];
             if (slots->texture[i] == 0x44) {
                 func_800C2FF0(0x20, 0x20);
-                ((SceneFxColor *)((char *)slot - 10))->t4 = slots->texture[i];
+                ((FieldGlowSprite *)((char *)slot - 10))->cell = slots->texture[i];
             }
             if (slots->texture[i] == 0x4C) {
                 func_800C2FF0(0x10, 0x10);
@@ -75,7 +69,7 @@ void func_8018FBA4(void *unused0, void *unused1, SceneParticleCluster *argSlots)
                     u8 color = slots->texture[i];
                     u8 counter = slots->counter[i];
                     color += 3;
-                    ((SceneFxColor *)((char *)slot - 10))->t4 = color - (counter >> 1);
+                    ((FieldGlowSprite *)((char *)slot - 10))->cell = color - (counter >> 1);
                 }
             }
             if (slots->texture[i] == 0x58) {
@@ -84,10 +78,10 @@ void func_8018FBA4(void *unused0, void *unused1, SceneParticleCluster *argSlots)
                     u8 color = slots->texture[i];
                     u8 counter = slots->counter[i];
                     color += 7;
-                    ((SceneFxColor *)((char *)slot - 10))->t4 = color - (counter >> 1);
+                    ((FieldGlowSprite *)((char *)slot - 10))->cell = color - (counter >> 1);
                 }
             }
-            ((SceneFxColor *)((char *)slot - 10))->t5 = slots->mode[i];
+            ((FieldGlowSprite *)((char *)slot - 10))->clut = slots->mode[i];
             func_800C42A4((FieldGlowSprite *)((char *)slot - 10), &matrix, 1);
         }
     }
