@@ -22,7 +22,7 @@ typedef struct RoomBeamPair {
 
 typedef struct RoomBeamPairActor {
     /* 0x000 */ u8 pad000[0x238];
-    /* 0x238 */ u8 *model;
+    /* 0x238 */ GteMatrix *matrices;
 } RoomBeamPairActor;
 
 /* Sprite parameter block drawn by func_800C4FC4 (one per beam half). */

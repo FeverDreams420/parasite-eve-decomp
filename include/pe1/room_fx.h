@@ -253,7 +253,7 @@ typedef struct RoomEightParticleControl {
 } RoomEightParticleControl;
 
 typedef struct RoomEightParticleContext {
-    char *root;
+    struct RoomFxTransformOwner *root;
     unsigned char pad04[0x34];
     int baseX;
     int baseY;
