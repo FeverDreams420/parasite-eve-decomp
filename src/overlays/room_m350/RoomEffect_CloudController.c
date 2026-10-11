@@ -56,7 +56,6 @@ int func_80198CF8(int event,State *state)
         D_8019A8B8.playerDistance=func_800DFE20((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x);
         angle=FieldEng_VecToAngle((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x)&4095;
         D_8019A8B8.playerAngle=angle;
-        asm volatile("" : : : "memory");
         delta=(angle-(unsigned short)instance->rot_y)&4095;
         do {
             if (state->mode != 0) {
