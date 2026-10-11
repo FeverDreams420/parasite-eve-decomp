@@ -64,16 +64,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM350Action, state) == 0,
                   room_m350_action_state_offset);
 PE1_STATIC_ASSERT(sizeof(RoomM350Action) == 1, room_m350_action_size);
 
-typedef struct RoomM350OverlayTransform {
-    char reserved[0xF4];
-    int position[3];
-} RoomM350OverlayTransform;
-
-PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM350OverlayTransform, position) == 0xF4,
-                  room_m350_overlay_transform_position_offset);
-PE1_STATIC_ASSERT(sizeof(RoomM350OverlayTransform) == 0x100,
-                  room_m350_overlay_transform_size);
-
 typedef struct RoomM350SignedHalfPair {
     signed int unused : 16;
     signed int value : 16;

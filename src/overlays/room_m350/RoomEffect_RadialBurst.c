@@ -1,3 +1,4 @@
+#include "pe1/room_m350_effects.h"
 #include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
@@ -6,9 +7,7 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/psyq_gpu.h"
-typedef RoomM350OverlayTransform Transform;
-typedef struct RoomM350Instance { char reserved[0x238]; Transform *transform; } Instance;
-typedef RoomM350Actor Actor;
+typedef RoomM350EffectActor Actor;
 
 #include "pe1/gte_sine_table.h"
 #include "RoomEffect_RadialBurst_externs.h"
@@ -22,7 +21,7 @@ int func_80197A04(int event, short *object)
         }
     } else if (event == 2) {
         int scale = (4096 - D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80].part.sin) * 2;
-        int *origin = ANIM_OWNER_AS(Actor)->instance->transform->position;
+        int *origin = ANIM_OWNER_AS(Actor)->instance->transforms[7].t;
         int i;
         int kind, palette, handle;
 
