@@ -6,7 +6,7 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/asset_find.h"
 typedef RoomM350Vector Vector;
-typedef RenderMatrix Matrix;
+typedef GteMatrix Matrix;
 typedef struct { Vector velocity; short x, y, z; unsigned char stopped, pad; } Particle;
 
 typedef RenderMatrix Transform;
