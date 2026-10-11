@@ -57,10 +57,9 @@ int func_801974DC(int mode, Particle *input) {
         if (D_800E27EC >= 32) return 1;
         else {
             unsigned short y = ((volatile Particle *)particle)->y;
-            register int speed asm("$3") = ((volatile Particle *)particle)->speed;
+            s16 speed = ((volatile Particle *)particle)->speed;
             int delta = ((Particle *)particle)->speed;
             speed += 1;
-            asm("" : "=r"(y) : "0"(y), "r"(speed));
             particle->y = y - delta;
             particle->speed = speed;
         }
