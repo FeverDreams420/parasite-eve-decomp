@@ -203,8 +203,8 @@ void Entity_UpdateAndRender(BattleEntity *actor)
     radius = actor->renderObject.hit_cylinder.radius;
     face = actor->collisionFace;
     actor->collisionFaceMirror = face;
-    D_8009CE2C = radius;
-    D_8009CE2C = radius * actor->moveSpeed / 4096;
+    g_CollisionRadius = radius;
+    g_CollisionRadius = radius * actor->moveSpeed / 4096;
 
     if (actor == D_8009D254) {
         if (D_8009D2E8 & 8) {
@@ -226,7 +226,7 @@ void Entity_UpdateAndRender(BattleEntity *actor)
             /* Still on the edge when the actor crossed it or did not move
              * closer to it, and the radius stays inside the edge box. */
             if ((a ^ b) < 0 || (a = abs(a), b >= 0 ? b >= a : -b >= a)) {
-                u16 r = D_8009CE2C;
+                u16 r = g_CollisionRadius;
                 u16 maxX = D_8009CE1C, minX = D_8009CE20;
                 u16 maxZ = D_8009CE24, minZ = D_8009CE28;
                 s16 width = maxX - minX;
@@ -366,7 +366,7 @@ FloorEdgePoint D_8009CE10;
 RampEdge *D_8009CE14;
 u16 D_8009CE18;
 u16 D_8009CE1C, D_8009CE20, D_8009CE24, D_8009CE28;
-unsigned short D_8009CE2C;
+unsigned short g_CollisionRadius;
 CollisionDatabase *D_8009D1FC;
 CollisionPlane *volatile D_8009D1D8;
 CollisionRegionEntry *D_8009CE08;
@@ -374,7 +374,7 @@ struct CollisionPlane *g_CollisionPlaneTable;
 CollisionDatabase *g_CollisionDb;
 CollisionRegionEntry *g_RegionHeightTable;
 
-/* Tests the circle of radius D_8009CE2C around (x, z) against the edges of
+/* Tests the circle of radius g_CollisionRadius around (x, z) against the edges of
  * a walkable triangle (flat XZ format when there is no plane table, sloped
  * XYZ format otherwise). An edge the circle touches without a walkable
  * neighbour is published as the blocking boundary (D_8009CE0C..D_8009CE28,
@@ -422,7 +422,7 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
                 int dx, dz;
 
                 *bits |= bit;
-                r = D_8009CE2C;
+                r = g_CollisionRadius;
                 d = px - r;
                 if ((s16)nextX < d && (s16)prevX < d)
                     continue;
@@ -450,7 +450,7 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
                     d += Math_FixedMul(D_8009CE14[edgeId].directionZ, dz << 16);
                     if (d < 0) {
                         d = dx * dx + dz * dz;
-                        if (d > D_8009CE2C * D_8009CE2C)
+                        if (d > g_CollisionRadius * g_CollisionRadius)
                             continue;
                     }
                     if (D_8009CE14[edgeId].length.fixed < d) {
@@ -458,7 +458,7 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
                         int ez = pz - (s16)prevZ;
 
                         d = ex * ex + ez * ez;
-                        if (d > D_8009CE2C * D_8009CE2C)
+                        if (d > g_CollisionRadius * g_CollisionRadius)
                             continue;
                     }
                 } else {
@@ -469,12 +469,12 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
                     d += Math_FixedMul(D_8009CE14[edgeId].directionZ, ez << 16);
                     if (d < 0) {
                         d = ex * ex + ez * ez;
-                        if (d > D_8009CE2C * D_8009CE2C)
+                        if (d > g_CollisionRadius * g_CollisionRadius)
                             continue;
                     }
                     if (D_8009CE14[edgeId].length.fixed < d) {
                         d = dx * dx + dz * dz;
-                        if (d > D_8009CE2C * D_8009CE2C)
+                        if (d > g_CollisionRadius * g_CollisionRadius)
                             continue;
                     }
                 }
@@ -543,7 +543,7 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
                 int dx, dz;
 
                 *bits |= bit;
-                r = D_8009CE2C;
+                r = g_CollisionRadius;
                 d = px - r;
                 if ((s16)nextX < d && (s16)prevX < d)
                     continue;
@@ -571,7 +571,7 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
                     d += Math_FixedMul(D_8009CE14[edgeId].directionZ, dz << 16);
                     if (d < 0) {
                         d = dx * dx + dz * dz;
-                        if (d > D_8009CE2C * D_8009CE2C)
+                        if (d > g_CollisionRadius * g_CollisionRadius)
                             continue;
                     }
                     if (D_8009CE14[edgeId].length.fixed < d) {
@@ -579,7 +579,7 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
                         int ez = pz - (s16)prevZ;
 
                         d = ex * ex + ez * ez;
-                        if (d > D_8009CE2C * D_8009CE2C)
+                        if (d > g_CollisionRadius * g_CollisionRadius)
                             continue;
                     }
                 } else {
@@ -590,12 +590,12 @@ int Geo_ClipToFloorBoundary(s16 x, s16 z, void *triangle)
                     d += Math_FixedMul(D_8009CE14[edgeId].directionZ, ez << 16);
                     if (d < 0) {
                         d = ex * ex + ez * ez;
-                        if (d > D_8009CE2C * D_8009CE2C)
+                        if (d > g_CollisionRadius * g_CollisionRadius)
                             continue;
                     }
                     if (D_8009CE14[edgeId].length.fixed < d) {
                         d = dx * dx + dz * dz;
-                        if (d > D_8009CE2C * D_8009CE2C)
+                        if (d > g_CollisionRadius * g_CollisionRadius)
                             continue;
                     }
                 }
@@ -863,7 +863,7 @@ void Entity_SlideOnRamp(BattleEntity *entity)
     projection = numerator / projection;
     if (projection < 0)
         projection = -projection;
-    if (projection > D_8009CE2C) {
+    if (projection > g_CollisionRadius) {
         entity->posX.fixed = x;
         entity->posZ.fixed = z;
         return;
@@ -888,7 +888,7 @@ void Entity_SlideOnRamp(BattleEntity *entity)
             projection = numerator / projection;
             if (projection < 0)
                 projection = -projection;
-            if (projection > D_8009CE2C) {
+            if (projection > g_CollisionRadius) {
                 entity->posX.fixed = directionX;
                 entity->posZ.fixed = directionZ;
                 return;

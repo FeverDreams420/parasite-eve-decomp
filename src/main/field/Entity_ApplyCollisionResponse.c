@@ -59,7 +59,7 @@ void Entity_SlideOnWall(BattleEntity *input, const PolygonVertex *vertices,
     projection = (((z >> 16) - endZ) * vector.x - ((x >> 16) - endX) * vector.z) / length;
     if (projection < 0)
         projection = -projection;
-    if (projection > D_8009CE2C) {
+    if (projection > g_CollisionRadius) {
         entity->posX.fixed = x;
         entity->posZ.fixed = z;
         return;
@@ -78,7 +78,7 @@ void Entity_SlideOnWall(BattleEntity *input, const PolygonVertex *vertices,
                           ((trialX >> 16) - endX) * vector.z) / length;
             if (projection < 0)
                 projection = -projection;
-            if (projection > D_8009CE2C) {
+            if (projection > g_CollisionRadius) {
                 entity->posX.fixed = trialX;
                 entity->posZ.fixed = trialZ;
                 return;
@@ -88,7 +88,7 @@ void Entity_SlideOnWall(BattleEntity *input, const PolygonVertex *vertices,
 }
 
 /* Returns the first polygon edge (index of its end vertex) whose segment
- * passes within D_8009CE2C of (x, z), or -1 when no edge is that close. */
+ * passes within g_CollisionRadius of (x, z), or -1 when no edge is that close. */
 int Geo_FindNearestEdge(int x, int z, PolygonVertex *vertices,
                         unsigned short count)
 {
@@ -107,7 +107,7 @@ int Geo_FindNearestEdge(int x, int z, PolygonVertex *vertices,
 
         startX = prevX;
         startZ = prevZ;
-        radius = D_8009CE2C;
+        radius = g_CollisionRadius;
         vertexX = vertices[i].x;
         prevX = vertexX;
         endX = prevX;
@@ -135,20 +135,20 @@ int Geo_FindNearestEdge(int x, int z, PolygonVertex *vertices,
         distance = (offsetZ * edge.x - offsetX * edge.z) / length;
         if (distance < 0)
             distance = -distance;
-        if (distance > D_8009CE2C)
+        if (distance > g_CollisionRadius)
             continue;
         VectorNormal(&edge, &edge);
         distance = Math_FixedMul(edge.x << 4, offsetX << 16);
         distance += Math_FixedMul(edge.z << 4, offsetZ << 16);
         if (distance < 0) {
             distance = offsetX * offsetX + offsetZ * offsetZ;
-            if (distance > D_8009CE2C * D_8009CE2C)
+            if (distance > g_CollisionRadius * g_CollisionRadius)
                 continue;
         }
         if (length < distance >> 16) {
             distance = (pointX - startX) * (pointX - startX) +
                        (pointZ - startZ) * (pointZ - startZ);
-            if (distance > D_8009CE2C * D_8009CE2C)
+            if (distance > g_CollisionRadius * g_CollisionRadius)
                 continue;
         }
         return i;
@@ -167,21 +167,21 @@ void Entity_ApplyCollisionResponse(struct FieldActor *player)
     short edge;
     int radius = (u16)actor->renderObject.hit_cylinder.radius;
 
-    D_8009CE2C = radius;
+    g_CollisionRadius = radius;
     /* Preserve the low-word multiply and signed division used by retail. */
-    D_8009CE2C = (int)((long long)radius * actor->moveSpeed) / 4096;
+    g_CollisionRadius = (int)((long long)radius * actor->moveSpeed) / 4096;
     oldX = (short)(actor->baseX >> 16);
     oldZ = (short)(actor->baseZ >> 16);
     edge = Geo_FindNearestEdge(actor->posX.parts.integer, actor->posZ.parts.integer,
-                              D_8009D2F8, D_8009D264);
+                              g_WallPolygonVertices, g_WallPolygonVertexCount);
     if (edge >= 0) {
         BattleEntity *current;
 
-        Entity_SlideOnWall(D_8009D254, D_8009D2F8, D_8009D264, edge, oldX, oldZ);
+        Entity_SlideOnWall(D_8009D254, g_WallPolygonVertices, g_WallPolygonVertexCount, edge, oldX, oldZ);
         current = D_8009D254;
         if ((short)Geo_FindNearestEdge(current->posX.parts.integer,
                                       current->posZ.parts.integer,
-                                      D_8009D2F8, D_8009D264) >= 0) {
+                                      g_WallPolygonVertices, g_WallPolygonVertexCount) >= 0) {
             BattleEntity *restore = D_8009D254;
             restore->posX.fixed = restore->baseX;
             restore->posY.fixed = restore->baseY;

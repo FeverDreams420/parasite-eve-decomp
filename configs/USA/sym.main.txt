@@ -1805,6 +1805,9 @@ PadEnableCom = 0x800829C4; // type:func
 SpuSetIRQCallback = 0x80085D84; // type:func
 
 D_8009B260 = 0x8009B260; // size:0x4
+g_CollisionRadius = 0x8009CE2C; // size:0x2
+g_WallPolygonVertexCount = 0x8009D264; // size:0x2
+g_WallPolygonVertices = 0x8009D2F8; // size:0x4
 D_800B6918 = 0x800B6918; // size:0x4
 
 FieldEng_TransformPackedVertex = 0x800C7AE0; // type:func
