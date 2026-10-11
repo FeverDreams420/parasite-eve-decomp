@@ -279,7 +279,7 @@ s32 func_801940B0(int mode, void *effect) {
         case 3:
             nextModelFrame = (u16) state->frame + 1;
             state->frame = nextModelFrame;
-            asm("" : "=r"(nextModelFrame) : "0"(nextModelFrame), "m"(state->frame));
+            asm("" : "=r"(nextModelFrame) : "0"(nextModelFrame));
             alive = (s16)nextModelFrame < 0xA;
             if (alive == 0) {
                 return 1;
@@ -288,7 +288,7 @@ s32 func_801940B0(int mode, void *effect) {
         case 4:
             nextSpriteFrame = (u16) state->frame + 1;
             state->frame = nextSpriteFrame;
-            asm("" : "=r"(nextSpriteFrame) : "0"(nextSpriteFrame), "m"(state->frame));
+            asm("" : "=r"(nextSpriteFrame) : "0"(nextSpriteFrame));
             alive = (s16)nextSpriteFrame < 0x10;
             if (alive == 0) {
                 return 1;
