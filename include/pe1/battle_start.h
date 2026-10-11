@@ -6,7 +6,7 @@
 extern Combatant *D_8009D278;
 extern BattleEntity *D_8009D254[4];
 extern BattleRewardSlot D_800A7FF0[10];
-extern u32 D_800B8A90[7];
+extern BattleEntity *D_800B8A90[7];
 extern int D_8009D1E8;
 extern int D_8009D28C;
 extern u8 D_8009CE7C, D_8009CE78, D_8009D288, D_8009CE74;

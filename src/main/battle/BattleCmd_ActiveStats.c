@@ -4,8 +4,8 @@
 /* g_PlayerEntity points at the player-side field actor; its core is the
  * Combatant record used by the command paths below. */
 extern BattleEntity *g_PlayerEntity;
-extern s16 g_AyaHpCurrent;
-extern s8 g_AyaEquippedWeaponSlot;
+extern u16 g_AyaHpCurrent[];
+extern s8 g_AyaEquippedWeaponSlot[];
 
 int Inv_IsActiveListOverrideSelected(void);
 void Inv_SelectActiveList(int useOverride);
@@ -26,11 +26,11 @@ void BattleCmd_SyncActiveAmmo(void) {
     if (entity != 0) {
         current = entity->core;
         if (current != 0) {
-            g_AyaHpCurrent = COMBATANT_FIELD(current, unsigned short *, curHP);
+            g_AyaHpCurrent[0] = COMBATANT_FIELD(current, unsigned short *, curHP);
             if (COMBATANT_FIELD(current, void **, action) != 0) {
                 saved = Inv_IsActiveListOverrideSelected();
                 Inv_SelectActiveList(0);
-                entry = Inv_LookupActiveListData(g_AyaEquippedWeaponSlot);
+                entry = Inv_LookupActiveListData(g_AyaEquippedWeaponSlot[0]);
                 if (entry != 0) {
                     ITEM_FIELD(entry, short *, ammo) = ACTION_FIELD(
                         COMBATANT_FIELD(current, void **, action), int *, attackWord) & 0x3FF;
@@ -55,5 +55,5 @@ void BattleCmd_SetCurrentHP(int arg0) {
         }
     }
 
-    g_AyaHpCurrent = arg0;
+    g_AyaHpCurrent[0] = arg0;
 }

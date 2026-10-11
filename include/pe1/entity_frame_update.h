@@ -20,7 +20,7 @@ typedef struct GameStateBlock {
 extern GameStateBlock g_GameStateBlock __asm__("D_8009D1A0");
 extern u32 D_8009D1F4[];       /* pad trigger bits */
 extern s16 D_8009D2A4[];       /* menu frame result */
-extern u8 D_800A76D8[];        /* menu frame argument */
+extern BattleAction D_800A76D8;        /* menu frame argument */
 extern u32 D_800B0CD8[];       /* scene state flags */
 extern u32 D_800B89F8[];       /* view matrix packet */
 extern s16 D_800BCFFE[];       /* camera height (integer part) */

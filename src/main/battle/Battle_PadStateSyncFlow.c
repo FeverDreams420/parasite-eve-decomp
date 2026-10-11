@@ -1,7 +1,8 @@
 #include "common.h"
+#include "pe1/battle.h"
 
 extern u8 *D_8009D278;
-extern u16 D_800A76D8;
+extern BattleAction D_800A76D8;
 extern u16 D_800A76DA;
 extern u16 D_800A76DC;
 extern u16 D_800A76DE;
@@ -23,7 +24,7 @@ void Battle_CopyPadStateToRecord(void) {
 
     word_c = *(volatile u32 *)(record + 0x0C);
     word_10 = *(volatile u32 *)(record + 0x10);
-    *(volatile u16 *)(record + 0x00) = D_800A76D8;
+    *(volatile u16 *)(record + 0x00) = D_800A76D8.field00;
     *(volatile u16 *)(record + 0x02) = D_800A76DA;
     *(volatile u16 *)(record + 0x04) = D_800A76DC;
     *(volatile u16 *)(record + 0x06) = D_800A76DE;

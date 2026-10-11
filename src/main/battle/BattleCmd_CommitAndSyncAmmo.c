@@ -6,8 +6,8 @@
 #include "pe1/inventory.h"
 
 extern BattleEntity *g_PlayerEntity;
-extern short g_AyaHpCurrent[];
-extern signed char g_AyaEquippedWeaponSlot[];
+extern u16 g_AyaHpCurrent[];
+extern s8 g_AyaEquippedWeaponSlot[];
 
 int Inv_IsActiveListOverrideSelected(void);
 void Inv_SelectActiveList(int useOverride);

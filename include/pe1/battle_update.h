@@ -54,6 +54,6 @@ extern s8 D_8009D2B0;
 extern s32 D_8009D2FC;
 extern BattleAction D_800A76D8;
 extern void *D_800B0E08[16];
-extern u8 D_800B8A90[16];
+extern BattleEntity *D_800B8A90[7];
 
 #endif
