@@ -225,8 +225,6 @@ void GameState_Reset(void)
     u32 drawMode;
     i = 0;
     p = base;
-    PE1_COMPILER_USE(i);
-    PE1_COMPILER_USE(p);
     ((Pe1GameState *)base)->flags = 3;
     *(u16 *)(base + 4) = 10;
     ((Pe1GameState *)base)->field_bg_cache_id = -1;
@@ -261,8 +259,6 @@ void GameState_Reset(void)
     } while (j < 2);
     pair = D_80094488;
     pairOffset = 0;
-    PE1_COMPILER_USE(pair);
-    PE1_COMPILER_USE(pairOffset);
     base[0xFF] = 0x7F;
     base[0xFE] = 0x7F;
     base[0xE0] = 0x27;
@@ -281,9 +277,7 @@ void GameState_Reset(void)
         *(u16 *)((u8 *)D_80094488 + 4 + pairOffset) = 0;
     }
     drawMode = 0xE1000440;
-    PE1_COMPILER_USE(drawMode);
     i = 2;
-    PE1_COMPILER_USE(i);
     ((Pe1GameState *)base)->bank_value_f6 = 0x30;
     ((Pe1GameState *)base)->bank_value_f7 = 0x7F;
     ((Pe1GameState *)base)->bank_value_f8 = 0x100;
@@ -293,9 +287,7 @@ void GameState_Reset(void)
     ((Pe1GameState *)base)->fade_tile.w = 0x140;
     ((Pe1GameState *)base)->fade_tile.h = 0xE0;
     base[0x117] = 1;
-    PE1_COMPILER_MEMORY_BARRIER();
     flags = base[0x10B];
-    PE1_COMPILER_MEMORY_BARRIER();
     fill = 0x20;
     base[0xED] = fill;
     base[0x108] = fill;

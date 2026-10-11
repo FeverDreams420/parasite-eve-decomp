@@ -192,7 +192,6 @@ void Field_HandleStateTransition(void) {
             D_8009D2A8 = 0;
         }
         save_pad = D_8009D26C;
-        PE1_NOP();
         D_8009D2D4 = save_pad;
     }
 

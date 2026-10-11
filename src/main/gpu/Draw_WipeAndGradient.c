@@ -146,7 +146,6 @@ void Draw_AllocColorRect(int firstVertex, int secondVertex, int width, int mode)
     *ot = (*ot & maskTop) | ((u32)&p->first & mask24);
     p->second.tag = (p->second.tag & maskTop) | (*ot & mask24);
     *ot = (*ot & maskTop) | ((u32)&p->second & mask24);
-    PE1_COMPILER_USE(p);
 }
 
 static inline u32 *AllocateDrawMode(int mode) {
