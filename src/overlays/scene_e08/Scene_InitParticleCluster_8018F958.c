@@ -24,18 +24,18 @@ void func_8018F958(int unused0, int unused1, SceneParticleCluster *slots) {
                 slots->brightness[i] = 0xFF;
                 slots->texture[i] = 0x4C;
                 slots->mode[i] = 5;
-                slots->fieldF0[i] = Engine_Random() % 256 + 0x200;
+                slots->scale[i] = Engine_Random() % 256 + 0x200;
             } else {
                 slots->brightness[i] = 0xFF;
                 slots->texture[i] = 0x58;
                 slots->mode[i] = 6;
-                slots->fieldF0[i] = Engine_Random() % 512 + 0x300;
+                slots->scale[i] = Engine_Random() % 512 + 0x300;
             }
         } else {
             slots->brightness[i] = 0x80;
             slots->texture[i] = 0x44;
             slots->mode[i] = 2;
-            slots->fieldF0[i] = 0x7C;
+            slots->scale[i] = 0x7C;
         }
     }
     slots->count = 30;

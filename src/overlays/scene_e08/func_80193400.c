@@ -1,41 +1,24 @@
-#include "common.h"
-typedef struct {
-    u16 value00;
-    u16 value02;
-    u16 value04;
-    u16 value06;
-    u16 value08;
-    u16 value0A;
-    u16 value0C;
-    u16 value0E;
-    u16 value10;
-    u16 value12;
-    u16 value14;
-    u16 value16;
-    u16 value18;
-} State;
+#include "pe1/scene_glow_model.h"
 
-void func_80193400(void *arg0, unsigned char *signal, unsigned char *state) {
-    State *work = (State *)state;
+void func_80193400(void *arg0, RoomFxControl *signal, SceneGlowModelState *work) {
+    work->seed.vector.y += 0xC8;
+    if (signal->frame < 0x10) {
+        u16 depth = work->depth;
+        u16 height = work->height;
 
-    work->value0A += 0xC8;
-    if (*(s16 *)(signal + 2) < 0x10) {
-        u16 value18 = work->value18;
-        u16 value02 = work->value02;
-
-        value18 += 8;
-        value02 += 0x100;
-        work->value18 = value18;
-        work->value02 = value02;
+        depth += 8;
+        height += 0x100;
+        work->depth = depth;
+        work->height = height;
     } else {
-        u16 value18 = work->value18;
+        u16 depth = work->depth;
 
-        value18 -= 4;
-        work->value18 = value18;
-        work->value10 += 0x50;
-        work->value14 += 0x50;
+        depth -= 4;
+        work->depth = depth;
+        work->scaleX += 0x50;
+        work->scaleZ += 0x50;
     }
-    if ((s16)work->value18 <= 0) {
-        signal[1] = 2;
+    if ((s16)work->depth <= 0) {
+        signal->status = 2;
     }
 }

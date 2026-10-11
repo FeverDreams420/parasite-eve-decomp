@@ -1,12 +1,12 @@
-#include "pe1/field_script_context.h"
+#include "scene_e08.h"
 
-void func_80194C04(void *arg0, void *arg1, char *arg2) {
-    char *position = func_800C2B50();
+void func_80194C04(void *arg0, void *arg1, SceneE08ExpandingGlow *glow) {
+    Ovl178Position *position = func_800C2B50();
 
-    *(int *)(arg2 + 0x0) = *(int *)(position + 0x18) - 0x15E;
-    *(int *)(arg2 + 0x4) = *(int *)(position + 0x1C);
-    *(int *)(arg2 + 0x8) = *(int *)(position + 0x20);
-    *(short *)(arg2 + 0x10) = 0;
-    *(short *)(arg2 + 0x12) = 0;
-    *(short *)(arg2 + 0x14) = 0xFF;
+    glow->x = position->x - 0x15E;
+    glow->y = position->y;
+    glow->z = position->z;
+    glow->scale = 0;
+    glow->growth = 0;
+    glow->depth = 0xFF;
 }

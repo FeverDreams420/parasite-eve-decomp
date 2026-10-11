@@ -1,10 +1,10 @@
-typedef signed short s16;
+#include "scene_e08.h"
+#include "scene_particle_slots.h"
 
-void func_80192788(void *arg0, void *arg1, char *arg2) {
+void func_80192788(void *arg0, void *arg1, SceneMovingSlots *slots) {
     unsigned int i;
 
     for (i = 0; i < 16; i++) {
-        *(s16 *)(arg2 + 0x1C0) = 0;
-        arg2 += 2;
+        slots->active[i] = 0;
     }
 }

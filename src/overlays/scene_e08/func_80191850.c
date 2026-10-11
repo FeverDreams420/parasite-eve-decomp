@@ -1,3 +1,4 @@
+#include "scene_e08.h"
 #include "pe1/gte_types.h"
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_script_context.h"
@@ -7,21 +8,19 @@
 typedef GteMatrix Overlay178Matrix;
 typedef GteVector Overlay178Vec4;
 
-extern s32 D_8019956C;
-extern s32 D_8019957C;
 extern u8 D_801996A0[];
 
 void func_800C2FF0(s32 arg0, s32 arg1);
 void func_800C3098(s32 arg0);
 
-void func_80191850(void *arg0, void *arg1, char *arg2) {
+void func_80191850(void *arg0, void *arg1, SceneE08CentreGlow *glow) {
     Overlay178Matrix matrix;
     Overlay178Vec4 scratch_scale;
     Overlay178Vec4 draw_scale;
-    char *owner;
+    Ovl178Position *owner;
 
     owner = func_800C2B50();
-    func_800C2EAC(*(u8 *)(owner + 0x24));
+    func_800C2EAC(owner->spriteMode);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
@@ -40,14 +39,14 @@ void func_80191850(void *arg0, void *arg1, char *arg2) {
     matrix.m[0][1] = 0;
 
     memset(&draw_scale, 0, 0x10);
-    draw_scale.x = *(s16 *)(arg2 + 0x8);
-    draw_scale.y = *(s16 *)(arg2 + 0x8);
+    draw_scale.x = glow->scale;
+    draw_scale.y = glow->scale;
     draw_scale.z = 0x1000;
     scratch_scale = draw_scale;
     ScaleMatrix(&matrix, &scratch_scale);
 
-    matrix.t[0] = *(s16 *)(arg2 + 0x0) + D_8019956C;
-    matrix.t[1] = *(s16 *)(arg2 + 0x2);
-    matrix.t[2] = *(s16 *)(arg2 + 0x4) + D_8019957C;
+    matrix.t[0] = glow->x + D_8019956C;
+    matrix.t[1] = glow->y;
+    matrix.t[2] = glow->z + D_8019957C;
     func_800C42A4((FieldGlowSprite *)D_801996A0, &matrix, 1);
 }

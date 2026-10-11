@@ -1,16 +1,9 @@
-#include "common.h"
-#include "pe1/field_script_context.h"
+#include "scene_e08.h"
 #include "pe1/floor_polygon.h"
 #include "pe1/field_engine_calls.h"
 
-typedef struct SceneE08PositionSample {
-    s32 x, y, z, extra;
-} SceneE08PositionSample;
-
-
-
-void func_80194214(void *unused, char *phase, char *effect) {
-    char *owner;
+void func_80194214(void *unused, RoomFxControl *phase, SceneE08TrailGlow *effect) {
+    Ovl178Position *owner;
     s16 point[3];
     int i;
     int angle;
@@ -19,38 +12,37 @@ void func_80194214(void *unused, char *phase, char *effect) {
 
     owner = func_800C2B50();
     for (i = 2; i != 0; i--) {
-        __builtin_memcpy(effect + 0x30 + i * 8, effect + 0x28 + i * 8, 8);
-        *(SceneE08PositionSample *)(effect + i * 0x10) =
-            *(SceneE08PositionSample *)(effect + (i - 1) * 0x10);
-        __builtin_memcpy(effect + 0x48 + i * 8, effect + 0x40 + i * 8, 8);
+        __builtin_memcpy(&effect->rotation[i], &effect->rotation[i - 1], 8);
+        effect->trail[i] = effect->trail[i - 1];
+        __builtin_memcpy(&effect->scale[i], &effect->scale[i - 1], 8);
     }
 
-    if (*(s16 *)(phase + 2) >= 0x33) {
-        angle = *(u16 *)(effect + 0x8A) + *(u16 *)(effect + 0x8C);
-        preserved = *(u16 *)(effect + 0x34);
-        *(u16 *)(effect + 0x8A) = angle;
-        *(u16 *)(effect + 0x34) = preserved;
-        *(s32 *)effect = *(s32 *)effect - (s16)angle;
+    if (phase->frame >= 0x33) {
+        angle = effect->speed + effect->acceleration;
+        preserved = effect->rotation[0].z;
+        effect->speed = angle;
+        effect->rotation[0].z = preserved;
+        effect->trail[0].x = effect->trail[0].x - (s16)angle;
     }
-    if ((u16)(*(u16 *)(phase + 2) - 0x22) < 9) {
-        *(u16 *)(effect + 0x48) += 0x12C;
+    if ((u16)(phase->frame - 0x22) < 9) {
+        effect->scale[0].x += 0x12C;
     }
-    if (*(s16 *)(phase + 2) >= 0x4C) {
-        *(u16 *)(effect + 0x4A) += 0x96;
+    if (phase->frame >= 0x4C) {
+        effect->scale[0].y += 0x96;
     }
-    if (*(s16 *)(phase + 2) == 0x78) {
-        *(u8 *)(phase + 1) = 2;
+    if (phase->frame == 0x78) {
+        phase->status = 2;
     }
 
-    x = *(s32 *)effect;
+    x = effect->trail[0].x;
     point[0] = x;
-    point[1] = *(s32 *)(effect + 4);
-    z = *(s32 *)(effect + 8);
+    point[1] = effect->trail[0].y;
+    z = effect->trail[0].z;
     point[2] = z;
     if (Geo_PointInPoly(x << 16, z << 16, D_8009D248, D_8009D1CC) == 0) {
-        *(u8 *)(phase + 1) = 2;
+        phase->status = 2;
     }
     if (func_800C6B90(point, 0x320) != 0) {
-        *(s16 *)((char *)owner + 0x2C) = 1;
+        owner->playerHit = 1;
     }
 }

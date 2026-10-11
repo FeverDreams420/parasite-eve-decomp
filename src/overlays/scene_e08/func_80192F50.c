@@ -1,11 +1,12 @@
 #include "pe1/scene_e08_orbit_particles.h"
 #include "common.h"
+#include "pe1/room_fx.h"
 
 extern int func_80071A54(void);
 
-void func_80192F50(void *unused, char *condition_arg, SceneE08OrbitParticles *effect) {
+void func_80192F50(void *unused, RoomFxControl *condition_arg, SceneE08OrbitParticles *effect) {
     /* The byte cursor and loop-limit base remain pinned for matching. */
-    char *condition = condition_arg;
+    RoomFxControl *condition = condition_arg;
     register char *base asm("$18") = (char *)effect;
     register char *state asm("$16") = base;
     int random;
@@ -13,7 +14,7 @@ void func_80192F50(void *unused, char *condition_arg, SceneE08OrbitParticles *ef
 
     do {
         if (((SceneE08OrbitParticles *)state)->active[0] == 0) {
-            if (func_80071A54() % 30 == 0 && *(s16 *)(condition + 2) < 50) {
+            if (func_80071A54() % 30 == 0 && condition->frame < 50) {
                 ((SceneE08OrbitParticles *)state)->active[0] = 1;
                 ((SceneE08OrbitParticles *)state)->frame[0] = 0;
                 effect->angle[i] = func_80071A54() % 4096;
@@ -40,7 +41,7 @@ void func_80192F50(void *unused, char *condition_arg, SceneE08OrbitParticles *ef
         state++;
     } while (state < base + 32);
 
-    if (*(s16 *)(condition + 2) >= 121) {
-        *(u8 *)(condition + 1) = 2;
+    if (condition->frame >= 121) {
+        condition->status = 2;
     }
 }

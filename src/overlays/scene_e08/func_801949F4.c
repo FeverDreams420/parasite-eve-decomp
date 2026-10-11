@@ -1,4 +1,4 @@
-#include "common.h"
+#include "scene_e08.h"
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_script_context.h"
 #include "pe1/field_sprite_state.h"
@@ -10,36 +10,36 @@ void func_800C3098(s32);
 extern u8 D_80198AD4;
 extern FieldGlowSprite D_80199570;
 
-void func_801949F4(s32 arg0, char *arg1, char *rec) {
-    char *ctx;
+void func_801949F4(s32 arg0, RoomFxControl *arg1, Ovl178MotionState *rec) {
+    Ovl178Position *ctx;
     u32 idx;
-    char *r;
+    Ovl178MotionState *r;
     GteMatrix buf;
     GteVector vdst;
     GteVector vsrc;
 
     r = rec;
     ctx = func_800C2B50();
-    idx = ((*(u8 *)(rec + 0x22) >> 4) << 1) << 1;
+    idx = ((rec->frame >> 4) << 1) << 1;
     if (idx >= 0xD) {
         idx = 0xC;
     }
-    func_800C2EAC(*(u8 *)(ctx + 0x24));
+    func_800C2EAC(ctx->spriteMode);
     func_800C2FF0(0x40, 0x40);
     func_800C3098(0x10);
     func_800C3238(2);
-    RotMatrix((GteShortVector *)(r + 0x10), &buf);
+    RotMatrix(&r->rotation, &buf);
     memset(&vsrc, 0, 0x10);
-    vsrc.x = *(s16 *)(r + 0x1C);
-    vsrc.y = *(s16 *)(r + 0x1C);
+    vsrc.x = r->scale;
+    vsrc.y = r->scale;
     vsrc.z = 0x1000;
     vdst = vsrc;
     ScaleMatrix(&buf, &vdst);
-    func_800C3134(&D_80198AD4, *(s16 *)(arg1 + 2), &D_80199570);
-    buf.t[0] = *(s32 *)(r + 0);
-    buf.t[1] = *(s32 *)(r + 4);
-    buf.t[2] = *(s32 *)(r + 8);
+    func_800C3134(&D_80198AD4, arg1->frame, &D_80199570);
+    buf.t[0] = r->x;
+    buf.t[1] = r->y;
+    buf.t[2] = r->z;
     D_80199570.cell = idx;
-    D_80199570.depth = *(u16 *)(r + 0x20);
+    D_80199570.depth = r->depth;
     func_800C42A4(&D_80199570, &buf, 1);
 }

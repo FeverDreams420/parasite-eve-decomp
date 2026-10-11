@@ -1,20 +1,5 @@
 #include "scene_e08.h"
 
-typedef struct {
-    int x;
-    int y;
-    int z;
-    char pad_0C[4];
-    s16 field_10;
-    s16 field_12;
-    s16 field_14;
-    char pad_16[6];
-    s16 field_1C;
-    s16 field_1E;
-    s16 field_20;
-    u8 field_22;
-} Ovl178MotionState;
-
 void func_80194988(void *arg0, void *arg1, Ovl178MotionState *state) {
     Ovl178MotionState *state_reg;
     Ovl178Position *position;
@@ -26,12 +11,12 @@ void func_80194988(void *arg0, void *arg1, Ovl178MotionState *state) {
     state_reg->x = position->x - 0xC8;
     state_reg->y = position->y;
     z = position->z;
-    state_reg->field_10 = 0;
-    state_reg->field_12 = 0;
-    state_reg->field_14 = 0;
-    state_reg->field_1C = 0xC04;
-    state_reg->field_22 = 0;
-    state_reg->field_1E = 0;
-    state_reg->field_20 = 0;
+    state_reg->rotation.x = 0;
+    state_reg->rotation.y = 0;
+    state_reg->rotation.z = 0;
+    state_reg->scale = 0xC04;
+    state_reg->frame = 0;
+    state_reg->shrink = 0;
+    state_reg->depth = 0;
     state_reg->z = z;
 }

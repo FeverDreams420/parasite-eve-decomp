@@ -1,26 +1,27 @@
-#include "common.h"
-void func_80192CCC(void *arg0, unsigned char *signal, unsigned char *state) {
-    if (*(s16 *)(signal + 2) < 0x3D) {
-        *(s16 *)(state + 4) = 1;
+#include "scene_e08.h"
+
+void func_80192CCC(void *arg0, RoomFxControl *control, SceneE08ScreenFade *fade) {
+    if (control->frame < 0x3D) {
+        fade->phase = 1;
     } else {
-        *(s16 *)(state + 4) = 2;
+        fade->phase = 2;
     }
 
-    if (*(s16 *)(state + 4) == 1) {
-        *(s16 *)(state + 2) += 8;
-        if (*(s16 *)(state + 2) >= 0x80) {
-            *(s16 *)(state + 2) = 0x7F;
+    if (fade->phase == 1) {
+        fade->level += 8;
+        if (fade->level >= 0x80) {
+            fade->level = 0x7F;
         }
     }
 
-    if (*(s16 *)(state + 4) == 2) {
-        *(s16 *)(state + 2) -= 8;
-        if (*(s16 *)(state + 2) < 0) {
-            *(s16 *)(state + 2) = 0;
+    if (fade->phase == 2) {
+        fade->level -= 8;
+        if (fade->level < 0) {
+            fade->level = 0;
         }
     }
 
-    if (*(s16 *)(signal + 2) >= 0x79) {
-        signal[1] = 2;
+    if (control->frame >= 0x79) {
+        control->status = 2;
     }
 }

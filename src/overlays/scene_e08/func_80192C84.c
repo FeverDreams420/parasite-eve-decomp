@@ -1,3 +1,4 @@
+#include "scene_e08.h"
 #include "pe1/field_sprite_draw.h"
 typedef struct {
     char bytes[4];
@@ -5,9 +6,9 @@ typedef struct {
 
 extern Ovl178_FourBytes D_8018F04C;
 
-void func_80192C84(void *arg0, void *arg1, char *arg2) {
+void func_80192C84(void *arg0, void *arg1, SceneE08ScreenFade *fade) {
     Ovl178_FourBytes local;
 
     local = D_8018F04C;
-    func_800D1AE0((unsigned char *)&local, *(short *)(arg2 + 2), 1, 8);
+    func_800D1AE0((unsigned char *)&local, fade->level, 1, 8);
 }

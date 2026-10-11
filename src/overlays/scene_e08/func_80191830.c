@@ -1,10 +1,10 @@
-typedef signed short s16;
+#include "scene_e08.h"
 
-void func_80191830(void *arg0, void *arg1, char *arg2) {
-    *(s16 *)(arg2 + 0x0) = 0;
-    *(s16 *)(arg2 + 0x2) = 0;
-    *(s16 *)(arg2 + 0x4) = 0;
-    *(s16 *)(arg2 + 0x8) = 0x400;
-    *(s16 *)(arg2 + 0xA) = 0;
-    *(s16 *)(arg2 + 0xC) = 0;
+void func_80191830(void *arg0, void *arg1, SceneE08CentreGlow *glow) {
+    glow->x = 0;
+    glow->y = 0;
+    glow->z = 0;
+    glow->scale = 0x400;
+    glow->unused0A = 0;
+    glow->unused0C = 0;
 }

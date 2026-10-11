@@ -62,6 +62,35 @@ typedef struct SceneMovingSlots {
     s16 extraRadius[16];
 } SceneMovingSlots;
 
+/* One moving slot's life counter, seen from a cursor that steps a word per
+ * slot through the start of the work area. */
+typedef struct SceneMovingWordLane {
+    u8 pad000[0x180];
+    s32 life;
+} SceneMovingWordLane;
+
+/* One moving slot's halfword fields, seen from a cursor that steps a
+ * halfword per slot through the start of the work area. */
+typedef struct SceneMovingHalfLane {
+    u8 pad000[0x1C0];
+    s16 active;
+    u8 pad1C2[0x3E];
+    s16 initialSize;
+    u8 pad202[0x3E];
+    s16 range;
+} SceneMovingHalfLane;
+
+PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneMovingSlots, life) == 0x180,
+                  scene_moving_life_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneMovingSlots, active) == 0x1C0,
+                  scene_moving_active_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneMovingSlots, initialSize) == 0x200,
+                  scene_moving_initial_size_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneMovingSlots, range) == 0x240,
+                  scene_moving_range_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneMovingHalfLane, range) == 0x240,
+                  scene_moving_half_lane_range_offset);
+
 typedef struct SceneE08EffectState {
     u8 pad00;
     u8 status;
@@ -79,7 +108,7 @@ PE1_STATIC_ASSERT(sizeof(SceneE08EffectState) == 4,
 
 typedef struct SceneParticleCluster {
     SceneParticleOffset position[30];
-    s16 fieldF0[30];
+    s16 scale[30];
     s16 angle[30];
     s16 brightness[30];
     u8 texture[30];

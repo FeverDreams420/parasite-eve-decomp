@@ -1,7 +1,8 @@
 #include "common.h"
+#include "pe1/room_fx.h"
 #include "scene_particle_slots.h"
 
-void func_8018FDA8(void *unused, u8 *signal, u8 *state) {
+void func_8018FDA8(void *unused, RoomFxControl *signal, u8 *state) {
     SceneParticleCluster *slots = (SceneParticleCluster *)state;
     int eight;
     unsigned i;
@@ -30,7 +31,7 @@ void func_8018FDA8(void *unused, u8 *signal, u8 *state) {
         done = 0;
 
         if (slots->texture[i] == 0x44) {
-            slots->fieldF0[i] += 0xC8;
+            slots->scale[i] += 0xC8;
             if (slots->texture[i] == 0x44 && slots->counter[i] == eight) {
                 done = 1;
             }
@@ -45,7 +46,7 @@ void func_8018FDA8(void *unused, u8 *signal, u8 *state) {
             slots->active[i] = 0;
             slots->count--;
             if (slots->count == 0) {
-                signal[1] = 2;
+                signal->status = 2;
             }
         }
     }

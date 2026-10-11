@@ -31,6 +31,23 @@ typedef struct ScenePlayerOrbAnchor {
     /* 0x2C */ s16 orbHit;
 } ScenePlayerOrbAnchor;
 
+/* The same scene object as its init (func_80193C68) fills it before
+ * making it the script context: the source actor, a copy of that actor's
+ * root bone matrix whose translation is the anchor position above, the
+ * sprite asset handle whose low byte is the mode above, and the re-arming
+ * hit timer (pe1/room_rearm_timer.h) the effects request through. */
+typedef struct SceneE08Context {
+    /* 0x00 */ FieldActor *source;
+    /* 0x04 */ RenderMatrix rootMatrix;
+    /* 0x24 */ s32 spriteAsset;
+    /* 0x28 */ s16 hitReload;
+    /* 0x2A */ s16 hitTimer;
+    /* 0x2C */ s16 hitRequest;
+} SceneE08Context;
+
+PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneE08Context, spriteAsset) == 0x24,
+                  scene_e08_context_sprite_asset_offset);
+
 typedef struct ScenePlayerOrbTimer {
     /* 0x00 */ u8 pad00;
     /* 0x01 */ u8 state;

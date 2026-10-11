@@ -1,5 +1,6 @@
 #include "common.h"
 #include "pe1/scene_e08_ring_effect.h"
+#include "pe1/room_fx.h"
 #include "pe1/field_flash_burst.h"
 #include "pe1/gte_types.h"
 #include "pe1/field_ring_geometry.h"
@@ -24,7 +25,7 @@ typedef struct {
 extern char D_801995F8[];
 extern s32 D_8019956C, D_8019957C;
 
-void func_80192544(void *unused, char *time, SceneE08RingEffectState *record) {
+void func_80192544(void *unused, RoomFxControl *time, SceneE08RingEffectState *record) {
     Matrix matrix;
     Vec4 scratchScale, firstScale, secondScale;
 
@@ -43,7 +44,7 @@ void func_80192544(void *unused, char *time, SceneE08RingEffectState *record) {
     matrix.t[1] = 0;
     matrix.t[2] = D_8019957C;
     func_800C4FC4(D_801995F8, &matrix, 1);
-    if (*(s16 *)(time + 2) >= 0x3D) {
+    if (time->frame >= 0x3D) {
         func_800C3238(2);
         record->rotation[0] = 0x400;
         record->rotation[1] = 0x400;

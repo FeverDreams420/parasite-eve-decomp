@@ -1,3 +1,4 @@
+#include "scene_e08.h"
 #include "pe1/scene_e08_orbit_particles.h"
 #include "pe1/gte_types.h"
 #include "pe1/field_glow_sprite.h"
@@ -10,7 +11,6 @@ typedef GteVector SceneE08Vector;
 
 extern u8 D_801996A0[];
 extern char D_80198848[];
-extern s32 D_8019956C, D_8019957C;
 
 void func_800C2FF0(int, int);
 void func_800C3098(int);
@@ -21,13 +21,13 @@ void func_80192D90(void *unused0, void *unused1, SceneE08OrbitParticles *effect)
     /* Keep the matrix scale live before the first rendering setup call. */
     register s16 scale asm("$19") = 0x1000;
     char *table = (char *)D_801996A0;
-    char *owner;
+    Ovl178Position *owner;
     unsigned i;
 
     owner = func_800C2B50();
     i = 0;
     asm volatile("" : : "r"(scale));
-    func_800C2EAC(*(u8 *)(owner + 0x24));
+    func_800C2EAC(owner->spriteMode);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);

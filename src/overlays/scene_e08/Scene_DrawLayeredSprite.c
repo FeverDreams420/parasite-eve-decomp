@@ -4,14 +4,6 @@
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_sprite_state.h"
 
-typedef struct {
-    Ovl178Position position;
-    u8 drawMode;
-} SceneLayeredOwner;
-
-PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneLayeredOwner, drawMode) == 0x24,
-                  scene_layered_draw_mode_offset);
-
 extern RoomFxVec4 D_8018F050;
 extern u8 D_80199560, D_80199561, D_80199562;
 extern s16 D_8019956A;
@@ -29,7 +21,7 @@ void func_80194498(void *unused, u16 *phase, SceneLayeredSpriteState *state) {
     u8 *red;
 
     owner = (char *)func_800C2B50();
-    func_800C2EAC(((SceneLayeredOwner *)owner)->drawMode);
+    func_800C2EAC(((Ovl178Position *)owner)->spriteMode);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);

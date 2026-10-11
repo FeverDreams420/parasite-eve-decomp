@@ -3,12 +3,12 @@
 #include "pe1/akao_send.h"
 #include "pe1/pe_image.h"
 #include "pe1/scene_player_orb.h"
+#include "pe1/scene_grab_head.h"
 extern FieldGlowSprite D_80199540, D_80199570, D_80199580;
 /* The 0x80199560 glow sprite, field by field as Scene_DrawLayeredSprite
  * stores its colour. */
 extern u8 D_80199560, D_80199561, D_80199562, D_80199564, D_80199565, D_80199566;
 extern s16 D_80199568, D_8019956A;
-typedef struct WordBlock32 { s32 words[8]; } WordBlock32;
 void func_800C2B40(void *);
 extern s16 D_80199558;
 extern volatile u8 D_80199555;
@@ -33,9 +33,9 @@ extern u8 D_8019949C;
 extern u8 D_8019949D;
 extern u8 D_8019949E;
 
-void func_80193C68(char *actor, void *unused, char *state) {
-    char *source;
-    char *block;
+void func_80193C68(SceneGrabHead *actor, void *unused, SceneE08Context *state) {
+    FieldActor *source;
+    RenderMatrix *block;
     void *sound;
     RoomSoundSlot *soundAddress;
     int sixtyFour;
@@ -48,24 +48,26 @@ void func_80193C68(char *actor, void *unused, char *state) {
     int scratch; /* -50 offset, later the sound pan */
     int scale;
     func_800C2B40(state);
-    source = *(char **)(actor + 8);
-    *(char **)state = source;
-    block = *(char **)(source + 0x238);
-    *(WordBlock32 *)(state + 4) = *(WordBlock32 *)block;
-    *(s32 *)(state + 0x24) = Asset_SearchByKeyType(0x2E);
+    source = actor->actor;
+    state->source = source;
+    block = source->render_object.matrices;
+    state->rootMatrix = *block;
+    state->spriteAsset = Asset_SearchByKeyType(0x2E);
     scale = 30;
         sixtyFour = 64;
     one = 1;
-    *(s16 *)(state + 0x28) = scale;
-    asm volatile("" : : "m"(*(s16 *)(state + 0x28)));
+    state->hitReload = scale;
+    asm volatile("" : : "m"(state->hitReload));
     scratch = -50;
     half128 = 128;
     byte128 = 128;
     thirtyTwo = 32;
     two = 2;
     asm volatile("" : : "r"(two));
-    *(s16 *)(state + 0x2A) = 0;
-    *(s16 *)(state + 0x2C) = 0;
+    /* hitTimer and hitRequest: as field stores GCC would sink them past
+     * the global stores below. */
+    *(s16 *)((char *)state + 0x2A) = 0;
+    *(s16 *)((char *)state + 0x2C) = 0;
     D_80199558 = scratch;
     D_80199580.offset = -100;
     D_80199580.g = 16;

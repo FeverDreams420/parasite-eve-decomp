@@ -49,9 +49,9 @@ void func_8018FBA4(void *unused0, void *unused1, SceneParticleCluster *argSlots)
             matrix.m[0][1] = 0;
 
             memset(&draw, 0, 0x10);
-            draw.x = slots->fieldF0[i];
-            draw.y = slots->fieldF0[i];
-            draw.z = slots->fieldF0[i];
+            draw.x = slots->scale[i];
+            draw.y = slots->scale[i];
+            draw.z = slots->scale[i];
             scratch = draw;
             ScaleMatrix(&matrix, &scratch);
 

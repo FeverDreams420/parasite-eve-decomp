@@ -1,3 +1,4 @@
+#include "scene_e08.h"
 #include "pe1/gte_types.h"
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_script_context.h"
@@ -12,15 +13,15 @@ extern s16 D_801994D2;
 void func_800C2FF0(s32 arg0, s32 arg1);
 void func_800C3098(s32 arg0);
 
-void func_80194C60(void *arg0, void *arg1, char *arg2) {
+void func_80194C60(void *arg0, void *arg1, SceneE08ExpandingGlow *glow) {
     Overlay178Matrix matrix;
     Overlay178Vec4 scratch_scale;
     Overlay178Vec4 draw_scale;
-    char *owner;
+    Ovl178Position *owner;
     s16 *draw_slot;
 
     owner = func_800C2B50();
-    func_800C2EAC(*(u8 *)(owner + 0x24));
+    func_800C2EAC(owner->spriteMode);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
@@ -39,17 +40,17 @@ void func_80194C60(void *arg0, void *arg1, char *arg2) {
     matrix.m[0][1] = 0;
 
     memset(&draw_scale, 0, 0x10);
-    draw_scale.x = *(s16 *)(arg2 + 0x10);
-    draw_scale.y = *(s16 *)(arg2 + 0x10);
+    draw_scale.x = glow->scale;
+    draw_scale.y = glow->scale;
     draw_scale.z = 0x1000;
     scratch_scale = draw_scale;
     ScaleMatrix(&matrix, &scratch_scale);
 
-    matrix.t[0] = *(s32 *)(arg2 + 0x0);
-    matrix.t[1] = *(s32 *)(arg2 + 0x4);
-    matrix.t[2] = *(s32 *)(arg2 + 0x8);
+    matrix.t[0] = glow->x;
+    matrix.t[1] = glow->y;
+    matrix.t[2] = glow->z;
 
     draw_slot = &D_801994D2;
-    *draw_slot = *(u16 *)(arg2 + 0x14);
+    *draw_slot = glow->depth;
     func_800C42A4((FieldGlowSprite *)((char *)draw_slot - 0xA), &matrix, 1);
 }

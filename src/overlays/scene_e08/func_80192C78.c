@@ -1,6 +1,6 @@
-typedef signed short s16;
+#include "scene_e08.h"
 
-void func_80192C78(void *arg0, void *arg1, char *arg2) {
-    *(s16 *)(arg2 + 0x0) = 0;
-    *(s16 *)(arg2 + 0x2) = 0;
+void func_80192C78(void *arg0, void *arg1, SceneE08ScreenFade *fade) {
+    fade->reserved = 0;
+    fade->level = 0;
 }
