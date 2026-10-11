@@ -193,7 +193,7 @@ case 2:
             i=next;
             asm volatile("" : : "r"(i));
             product>>=31;
-            asm("" : "=r"(high) : "0"(intermediate), "r"(product));
+            asm("" : "=r"(high) : "0"(intermediate));
             size=high-product;
             memset(clearTarget,clearValue,clearLength);
             scale.x=size; scale.y=size; scale.z=2048;
