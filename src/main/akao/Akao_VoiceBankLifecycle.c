@@ -9,8 +9,9 @@
 #include "pe1/akao/seq_param.h"
 #include "m2c_macros.h"
 #include "pe1/akao_counters.h"
+#include "pe1/akao/globals.h"
+#include "pe1/akao/queue.h"
 
-typedef unsigned short u16_1;
 
 void Akao_SetNotePitch(AkaoTrack *track, int arg);
 
@@ -221,11 +222,7 @@ void Akao_StepSequencerVoice(void *arg0) {
     func_80089CF0();
 }
 
-void Spu_ManageVoices(int arg0, int arg1);
 void SeqOp_DeactivateVoice(AkaoTrack *ptr, int mask);
-void Seq_MarkTrack34MaskDirty(void);
-void Seq_MarkTrack38MaskDirty(void);
-void Seq_MarkTrack3CMaskDirty(void);
 
 void Akao_InitVoices(int arg0, char *arg1) {
     unsigned int i;
@@ -279,7 +276,7 @@ void Spu_ManageVoices(int arg0, int mode_bits)
     int flags;
     int best;
     mask = AKAO_SPU_VOICE_SFX_START_MASK;
-    id = (u16_1) arg0;
+    id = (u16) arg0;
     if (id == 0xFFFF)
     {
         return;
@@ -462,16 +459,6 @@ void Spu_ManageVoices(int arg0, int mode_bits)
     Seq_MarkTrack38MaskDirty();
     Seq_MarkTrack3CMaskDirty();
 }
-
-extern unsigned int D_800BCD50;
-extern unsigned int D_800BCD54;
-extern unsigned int D_800BCD58;
-extern unsigned int D_800BCD5C;
-extern unsigned int D_800BCD60;
-extern unsigned int D_800BCD6C;
-extern unsigned int D_800BCD70;
-extern unsigned int D_800BCD74;
-extern unsigned int D_8009D2DC;
 
 void Akao_InitVoiceState(AkaoTrack *track, void *script);
 
@@ -686,8 +673,6 @@ void func_8008AB9C(AkaoTrack *track) {
     }
 }
 
-extern u32 D_800BCD50;
-
 void func_8008ABF0(void) {
     u32 mask;
     u32 bit;
@@ -833,8 +818,6 @@ void Seq_SelectPlaybackBank(int *arg0) {
     }
 }
 
-void Util_CopyWords(unsigned int *src, unsigned int *dst, unsigned int size);
-
 void Seq_RestorePrimaryState(void) {
     u32 i;
     AkaoTrack *track;
@@ -863,10 +846,6 @@ void Seq_RestorePrimaryState(void) {
     }
 }
 
-void Util_CopyWords(unsigned int *src, unsigned int *dst, unsigned int size);
-void Akao_StepSequencerVoice(void *arg0);
-
-extern int g_AkaoSeqLoopCounter;
 void Seq_SelectPlaybackBank(int *arg0);
 
 void Seq_RestoreSecondaryStateAndSelect(int *arg0) {
@@ -931,15 +910,8 @@ void Seq_StartIndexedNestedStream(AkaoNestedSource *source) {
     Seq_StartNestedStreams(source, (void *)old1, (void *)old2);
 }
 
-#define g_AkaoCurTrackBytes ((char *)g_AkaoCurTrack)
-#define g_AkaoVoiceStateTableBytes ((char *)g_AkaoVoiceStateTable)
-#define g_AkaoVoiceStateTable2Bytes ((char *)g_AkaoVoiceStateTable2)
 
-void Spu_ManageVoices(int arg0, int arg1);
-
-void Seq_MarkDirtyTracks(char *arg0);
-
-extern short g_AkaoGlobalPitchSlideCounter;
+void Seq_MarkDirtyTracks(AkaoTrack *tracks);
 
 void Seq_ApplyGlobalPitch(void);
 
@@ -979,13 +951,13 @@ void Seq_SetTrackPitchImmediate(AkaoBankPitchCommand *arg0) {
     AkaoSequencerBank *track;
     AkaoSequencerBank *primary_track;
     AkaoSequencerBank *next_track;
-    char *base;
+    AkaoTrack *base;
 
     msg = arg0;
     selector = msg->bank_selector;
-    if (selector == 0 || selector == ((AkaoSequencerBank *)g_AkaoCurTrackBytes)->bank_id) {
+    if (selector == 0 || selector == g_AkaoCurTrack->bank_id) {
         int value;
-        base = g_AkaoVoiceStateTableBytes;
+        base = g_AkaoVoiceStateTable;
         value = msg->pitch;
         primary_track = g_AkaoCurTrack;
         value &= 0x7F;
@@ -998,7 +970,7 @@ void Seq_SetTrackPitchImmediate(AkaoBankPitchCommand *arg0) {
         if (selector == ((AkaoSequencerState *)track)->secondary.bank_id) {
             int value;
             next_track = track + 1;
-            base = g_AkaoVoiceStateTable2Bytes;
+            base = g_AkaoVoiceStateTable2;
             value = msg->pitch;
             g_AkaoCurTrack = (AkaoSequencerBank *)next_track;
             ((AkaoSequencerState *)track)->secondary.pitch_slide_duration = 0;
@@ -1031,7 +1003,7 @@ void Seq_SlideTrackPitch(AkaoBankPitchSlideCommand *arg0) {
         target /= duration;
         track->pitch_slide_duration = duration;
         track->pitch_delta = target;
-        Seq_MarkDirtyTracks(g_AkaoVoiceStateTableBytes);
+        Seq_MarkDirtyTracks(g_AkaoVoiceStateTable);
     } else if (arg0 != 0) {
         track = g_AkaoCurTrack;
         if (selector == ((AkaoSequencerState *)track)->secondary.bank_id) {
@@ -1040,7 +1012,7 @@ void Seq_SlideTrackPitch(AkaoBankPitchSlideCommand *arg0) {
             ((AkaoSequencerState *)track)->secondary.pitch_slide_duration = duration;
             g_AkaoCurTrack = track + 1;
             ((AkaoSequencerState *)track)->secondary.pitch_delta = target;
-            Seq_MarkDirtyTracks(g_AkaoVoiceStateTable2Bytes);
+            Seq_MarkDirtyTracks(g_AkaoVoiceStateTable2);
             g_AkaoCurTrack--;
         }
     }
@@ -1054,7 +1026,7 @@ void Seq_TrackPitchSetup(AkaoBankPitchRangeCommand *arg0) {
     int start;
     register int delta asm("$6");
     AkaoSequencerState *state;
-    char *base;
+    AkaoTrack *base;
     AkaoSequencerBank *next_track;
 
     raw = arg0->duration;
@@ -1074,7 +1046,7 @@ void Seq_TrackPitchSetup(AkaoBankPitchRangeCommand *arg0) {
         raw &= 0x7F;
         delta = raw << 16;
         delta -= start;
-        base = g_AkaoVoiceStateTableBytes;
+        base = g_AkaoVoiceStateTable;
         track->pitch_slide_duration = duration;
         track->pitch_delta = delta / duration;
         Seq_MarkDirtyTracks(base);
@@ -1090,7 +1062,7 @@ void Seq_TrackPitchSetup(AkaoBankPitchRangeCommand *arg0) {
                 state = (AkaoSequencerState *)track;
                 delta = raw << 16;
                 delta -= start;
-                base = g_AkaoVoiceStateTable2Bytes;
+                base = g_AkaoVoiceStateTable2;
                 state->secondary.pitch_slide_duration = duration;
                 next_track = track + 1;
                 g_AkaoCurTrack = (AkaoSequencerBank *)next_track;
@@ -1110,11 +1082,6 @@ void Seq_SetGlobalPitchImmediate(AkaoGlobalPitchCommand *arg0) {
     D_8009D2B4 = value << 16;
     Seq_ApplyGlobalPitch();
 }
-
-extern short g_AkaoGlobalPitchSlideCounter;
-extern int g_AkaoGlobalPitchSlideStep;
-
-extern u32 g_SpuActiveVoiceMask;
 
 void Seq_SlideGlobalPitchToTarget(AkaoGlobalPitchSlideCommand *arg0) {
     int duration;
@@ -1199,8 +1166,6 @@ void Spu_SetVoiceVolumeImmediateMasked(int *arg0) {
     }
 }
 
-extern u32 g_SpuActiveVoiceMask;
-
 static inline int ParameterDelta(int target, int current, int step) {
     return (short)(((target & 0x7F) << 8) - current) / (short)step;
 }
@@ -1261,9 +1226,6 @@ void Spu_ParameterSlide(int *arg0) {
     }
 }
 
-extern char g_SpuVoiceControlTable[];
-extern u32 g_SpuActiveVoiceMask;
-
 void Spu_SetAllVoiceVolumeImmediate(int *arg0) {
     u32 mask;
     u32 active;
@@ -1298,9 +1260,6 @@ void Spu_SetAllVoiceVolumeImmediate(int *arg0) {
         mask <<= 1;
     } while (i < 12);
 }
-
-extern char D_800BC074[];
-extern u32 g_SpuActiveVoiceMask;
 
 void Spu_SlideAllVoiceVolume(int *arg0) {
     u32 mask;
@@ -1452,9 +1411,6 @@ void Spu_SlideVoicePanMasked(int *arg0) {
     }
 }
 
-extern char g_SpuVoiceControlTable[];
-extern u32 g_SpuActiveVoiceMask;
-
 void Spu_SetAllVoicePanImmediate(int *arg0) {
     u32 mask;
     u32 active;
@@ -1489,9 +1445,6 @@ void Spu_SetAllVoicePanImmediate(int *arg0) {
     } while (i < 12);
 }
 
-extern char D_800BC078[];
-extern u32 g_SpuActiveVoiceMask;
-
 void Spu_SlideAllVoicePan(int *arg0) {
     u32 mask;
     u32 active;
@@ -1525,8 +1478,6 @@ void Spu_SlideAllVoicePan(int *arg0) {
         mask <<= 1;
     } while (i < 12);
 }
-
-extern u32 g_SpuActiveVoiceMask;
 
 void Spu_SetVoicePitchImmediateMasked(int *arg0) {
     register char *base;
@@ -1583,8 +1534,6 @@ void Spu_SetVoicePitchImmediateMasked(int *arg0) {
         } while (i < 12);
     }
 }
-
-extern u32 g_SpuActiveVoiceMask;
 
 static inline short PitchDelta(int target, int current, int step) {
     return (short)((target << 8) - current) / (short)step;
@@ -1646,9 +1595,6 @@ void Spu_SlideVoicePitchMasked(int *arg0) {
     }
 }
 
-extern char g_SpuVoiceControlTable[];
-extern u32 g_SpuActiveVoiceMask;
-
 void Spu_SetAllVoicePitchImmediate(int *arg0) {
     u32 mask;
     u32 active;
@@ -1682,11 +1628,6 @@ void Spu_SetAllVoicePitchImmediate(int *arg0) {
         mask <<= 1;
     } while (i < 12);
 }
-
-extern char D_800BC070[];
-extern u32 g_SpuActiveVoiceMask;
-
-extern short g_AkaoGlobalD2D0SlideCounter;
 
 void Spu_SlideAllVoicePitch(int *arg0) {
     u32 mask;
@@ -1729,11 +1670,6 @@ void Akao_SetGlobalD2D0Immediate(AkaoGlobalParamCommand *cmd) {
     D_8009D2D0 = value << 16;
 }
 
-extern short g_AkaoGlobalD2D0SlideCounter;
-extern int g_AkaoGlobalD2D0SlideStep;
-
-extern short g_AkaoGlobalD2CCSlideCounter;
-
 void Akao_SlideGlobalD2D0ToTarget(AkaoGlobalSlideCommand *cmd) {
     int raw_duration = cmd->duration;
     int duration = 1;
@@ -1774,18 +1710,7 @@ void Akao_SetGlobalD2CCImmediate(AkaoGlobalParamCommand *cmd) {
     D_8009D2CC = value << 16;
 }
 
-extern short g_AkaoGlobalD2CCSlideCounter;
-extern int g_AkaoGlobalD2CCSlideStep;
-
 void Akao_InitVoices(int arg0, char *arg1);
-
-extern unsigned int g_SpuActiveVoiceMask;
-extern unsigned int g_SpuPendingKeyOffMask;
-extern unsigned int g_AkaoVoiceUpdateFlags;
-
-void Seq_MarkTrack34MaskDirty(void);
-void Seq_MarkTrack38MaskDirty(void);
-void Seq_MarkTrack3CMaskDirty(void);
 
 void Akao_SlideGlobalD2CCToTarget(AkaoGlobalSlideCommand *cmd) {
     int raw_duration = cmd->duration;
@@ -1870,21 +1795,15 @@ void Spu_StopActiveVoices(void) {
     Seq_MarkTrack3CMaskDirty();
 }
 
-extern int g_AkaoPlaybackMode;
-extern AkaoSequencerBank *g_AkaoCurTrack;
-
-void Seq_MarkDirtyTracks(char *arg0);
 void Spu_MarkActiveVoicesDirty(void);
-
-extern AkaoTrackUpdateSlot g_AkaoTrackStateArray[];
 
 void Seq_SetPlaybackMode1AndRefreshVoices(void) {
     AkaoTrack *base = g_AkaoVoiceStateTable;
 
     g_AkaoPlaybackMode = 1;
-    Seq_MarkDirtyTracks((char *)base);
+    Seq_MarkDirtyTracks(base);
     g_AkaoCurTrack++;
-    Seq_MarkDirtyTracks((char *)&base[AKAO_VOICE_COUNT]);
+    Seq_MarkDirtyTracks(&base[AKAO_VOICE_COUNT]);
     g_AkaoCurTrack--;
     Spu_MarkActiveVoicesDirty();
 }
@@ -1893,9 +1812,9 @@ void Seq_SetPlaybackMode4AndRefreshVoices(void) {
     AkaoTrack *base = g_AkaoVoiceStateTable;
 
     g_AkaoPlaybackMode = 4;
-    Seq_MarkDirtyTracks((char *)base);
+    Seq_MarkDirtyTracks(base);
     g_AkaoCurTrack++;
-    Seq_MarkDirtyTracks((char *)&base[AKAO_VOICE_COUNT]);
+    Seq_MarkDirtyTracks(&base[AKAO_VOICE_COUNT]);
     g_AkaoCurTrack--;
     Spu_MarkActiveVoicesDirty();
 }
@@ -1904,9 +1823,9 @@ void Seq_SetPlaybackMode2AndRefreshVoices(void) {
     AkaoTrack *base = g_AkaoVoiceStateTable;
 
     g_AkaoPlaybackMode = 2;
-    Seq_MarkDirtyTracks((char *)base);
+    Seq_MarkDirtyTracks(base);
     g_AkaoCurTrack++;
-    Seq_MarkDirtyTracks((char *)&base[AKAO_VOICE_COUNT]);
+    Seq_MarkDirtyTracks(&base[AKAO_VOICE_COUNT]);
     g_AkaoCurTrack--;
     Spu_MarkActiveVoicesDirty();
 }
@@ -1926,13 +1845,6 @@ void Seq_SetGlobalD2B8AndDirtyAllTracks(AkaoValueCommand *cmd) {
 void Seq_SetCurrentTrackField56(AkaoValueCommand *arg0) {
     g_AkaoCurTrack->condition_value = arg0->value;
 }
-extern unsigned int g_SpuActiveVoiceMask;
-extern unsigned int g_AkaoSeqPendingFlags;
-
-void AkaoSpuVoice_SetVolume(unsigned int index, unsigned int left, unsigned int right);
-void AkaoSpuVoice_SetPitch(unsigned int index, unsigned int value);
-void AkaoSpuVoice_SetAdsrAttack(unsigned int index, unsigned int left, unsigned int right);
-void AkaoSpuVoice_SetAdsrSustainRate(unsigned int index, unsigned int left, unsigned int right);
 
 void Seq_DeactivatePendingTracks(void) {
     unsigned int pending;
@@ -1965,20 +1877,6 @@ void Seq_DeactivatePendingTracks(void) {
 
     g_AkaoSeqPendingFlags |= 1;
 }
-
-extern unsigned int g_AkaoSeqPendingFlags;
-extern AkaoTrackUpdateSlot g_AkaoTrackStateArray[];
-
-void Seq_MarkTrack34MaskDirty(void);
-void Seq_MarkTrack38MaskDirty(void);
-void Seq_MarkTrack3CMaskDirty(void);
-
-extern u32 g_SpuActiveVoiceMask;
-extern u32 g_SpuStoppedVoiceMask;
-void AkaoSpuVoice_SetVolume(unsigned int index, unsigned int left, unsigned int right);
-void AkaoSpuVoice_SetPitch(unsigned int index, unsigned int value);
-void AkaoSpuVoice_SetAdsrAttack(unsigned int index, unsigned int left, unsigned int right);
-void AkaoSpuVoice_SetAdsrSustainRate(unsigned int index, unsigned int left, unsigned int right);
 
 void Seq_RestorePendingTracks(void) {
     unsigned int pending = g_AkaoCurTrack->pending_restore_mask;
@@ -2069,15 +1967,6 @@ void Spu_VoiceStopAll(void)
   }
   g_AkaoSeqPendingFlags |= 2;
 }
-extern unsigned int g_SpuActiveVoiceMask;
-extern unsigned int g_SpuStoppedVoiceMask;
-extern unsigned int g_AkaoSeqPendingFlags;
-void Seq_MarkTrack34MaskDirty(void);
-void Seq_MarkTrack38MaskDirty(void);
-void Seq_MarkTrack3CMaskDirty(void);
-
-extern AkaoQueueEntry D_800B8628[];
-extern int g_AkaoMessageQueueCount;
 
 void Seq_GetGlobalPitch(unsigned int *out);
 

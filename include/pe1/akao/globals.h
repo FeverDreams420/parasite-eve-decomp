@@ -8,8 +8,13 @@
 #include "common.h"
 #include "pe1/akao/track.h"
 
-/* Sequencer bank selected by the commands (primary or secondary). */
+/* Primary (music) and secondary (sound effect) sequencer banks, and the
+ * one the commands act on. */
+extern AkaoSequencerState g_AkaoSequencerState;
 extern AkaoSequencerBank *g_AkaoCurTrack;
+
+/* Set while the voice driver is busy; the sequencer polls it. */
+extern volatile int D_8009D2E0;
 
 /* Global slides stepped every fourth tick: counters, 16.16 steps and the
  * integer half of the pitch accumulator D_8009D2B4. */
@@ -17,9 +22,9 @@ extern u16 D_8009CDEC; /* tick divider */
 extern short g_AkaoGlobalPitchSlideCounter;
 extern short g_AkaoGlobalD2D0SlideCounter;
 extern short g_AkaoGlobalD2CCSlideCounter;
-extern u32 g_AkaoGlobalPitchSlideStep;
-extern u32 g_AkaoGlobalD2D0SlideStep;
-extern u32 g_AkaoGlobalD2CCSlideStep;
+extern int g_AkaoGlobalPitchSlideStep;
+extern int g_AkaoGlobalD2D0SlideStep;
+extern int g_AkaoGlobalD2CCSlideStep;
 extern unsigned short D_8009D2B6;
 
 /* Rolling timer-callback durations, newest first, and their sum. */
@@ -39,6 +44,10 @@ extern void *g_AkaoSoundEntryTable[];
 
 /* Voice masks. */
 extern unsigned int g_SpuActiveVoiceMask;
+extern unsigned int g_SpuPendingKeyOffMask;
+extern unsigned int g_SpuStoppedVoiceMask;
+extern unsigned int g_AkaoSeqPendingFlags;
+extern int g_AkaoPlaybackMode;
 extern unsigned int g_AkaoTrack34Mask;
 extern unsigned int g_AkaoTrack38Mask;
 extern unsigned int g_AkaoTrack3CMask;
@@ -46,6 +55,29 @@ extern unsigned int g_AkaoVoiceUpdateFlags;
 extern int g_AkaoVoiceMaskScratch;
 extern u16 g_AkaoTrack5ATransposeValue;
 extern int g_AkaoSeqLoopCounter;
+
+/* Sound-effect sequencer masks next to the 34/38/3C dirty masks. */
+extern unsigned int D_800BCD50;
+extern unsigned int D_800BCD54;
+extern unsigned int D_800BCD58;
+extern unsigned int D_800BCD5C;
+extern unsigned int D_800BCD60;
+extern unsigned int D_800BCD64;
+extern unsigned int D_800BCD6C;
+extern unsigned int D_800BCD70;
+extern unsigned int D_800BCD74;
+extern unsigned int D_8009D2DC;
+
+/* Fields of the first sound-effect channel (g_AkaoVoiceChannelTable[0]),
+ * where the per-channel loops start their biased cursors:
+ * pitch_offset_duration, panpot_duration, panpot_slide_duration and
+ * update_flags. */
+extern char D_800BC070[];
+extern char D_800BC074[];
+extern char D_800BC078[];
+extern char g_SpuVoiceControlTable[];
+/* update_flags of the sequencer tracks. */
+extern AkaoTrackUpdateSlot g_AkaoTrackStateArray[];
 
 /* Nested-stream source words filled by SeqOp_LoadNestedStreams and passed
  * to Seq_StartNestedStreams as an AkaoNestedSource. */
