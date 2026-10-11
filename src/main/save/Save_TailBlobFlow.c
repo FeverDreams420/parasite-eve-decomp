@@ -8,18 +8,18 @@ void Save_SerializeTail(void) {
 
     {
         u8 *entityDestination = g_SaveIoCursor;
-        *(SaveBytes800 *)entityDestination = g_EntityWorkBuffer;
+        *(SaveBytes800 *)entityDestination = g_SaveEntityWorkBlock;
     }
 
     cursor = g_SaveIoCursor;
     g_SaveIoCursor = cursor + 0x800;
-    *(SaveBytes4 *)(cursor + 0x800) = g_FieldMoveLock;
+    *(SaveBytes4 *)(cursor + 0x800) = g_SaveFieldMoveLockBytes;
     cursor = g_SaveIoCursor;
     g_SaveIoCursor = cursor + 4;
-    *(SaveBytes4 *)(cursor + 4) = g_SceneDispatchToken;
+    *(SaveBytes4 *)(cursor + 4) = g_SaveSceneDispatchTokenBytes;
     cursor = g_SaveIoCursor;
     g_SaveIoCursor = cursor + 4;
-    *(SaveBytes4 *)(cursor + 4) = g_GameStateFlags;
+    *(SaveBytes4 *)(cursor + 4) = g_SaveGameStateFlagsBytes;
     cursor = g_SaveIoCursor;
     g_SaveIoCursor = cursor + 4;
     *(SaveBytes4 *)(cursor + 4) = D_800B0CDC;
@@ -95,7 +95,7 @@ void Save_DeserializeTail(void) {
 
     {
         u8 *entitySource = g_SaveIoCursor;
-        g_EntityWorkBuffer = *(SaveBytes800 *)entitySource;
+        g_SaveEntityWorkBlock = *(SaveBytes800 *)entitySource;
     }
     cursor = g_SaveIoCursor;
     asm volatile("" : : "r"(cursor));
@@ -104,18 +104,18 @@ void Save_DeserializeTail(void) {
     g_SaveIoCursor = cursor + 0x800;
     asm volatile("" : "=m"(g_SaveIoCursorRead) : "m"(g_SaveIoCursorRead));
     next_cur = g_SaveIoCursorRead;
-    field_dest = &g_FieldMoveLock;
+    field_dest = &g_SaveFieldMoveLockBytes;
     *field_dest = *(SaveBytes4 *)(cursor + 0x800);
     g_SaveIoCursor = next_cur + 4;
     asm volatile("" : "=m"(g_SaveIoCursorRead) : "m"(g_SaveIoCursorRead));
     cursor = g_SaveIoCursorRead;
-    field_dest = &g_SceneDispatchToken;
+    field_dest = &g_SaveSceneDispatchTokenBytes;
     *field_dest = *(SaveBytes4 *)(next_cur + 4);
 
     g_SaveIoCursor = cursor + 4;
     asm volatile("" : "=m"(g_SaveIoCursorRead) : "m"(g_SaveIoCursorRead));
     next_cur = g_SaveIoCursorRead;
-    field_dest = &g_GameStateFlags;
+    field_dest = &g_SaveGameStateFlagsBytes;
     *field_dest = *(SaveBytes4 *)(cursor + 4);
 
     g_SaveIoCursor = next_cur + 4;

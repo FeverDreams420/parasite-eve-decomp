@@ -4,13 +4,16 @@
 #include "common.h"
 #include "pe1/save_blob.h"
 
-extern SaveBytes800 g_EntityWorkBuffer __asm__("D_800A77F0");
+/* Byte-block views of the globals the save tail copies; each names the
+ * same storage as the typed global its asm label points at. */
+
+extern SaveBytes800 g_SaveEntityWorkBlock __asm__("D_800A77F0");
 extern SaveBytes70 g_AyaBattleState __asm__("D_800B8A20");
 extern SaveBytes18 g_SavedBattleStateTail __asm__("D_800B0CB0");
 extern SaveBytes8 g_BattleEquipStateBlock __asm__("D_8009D1B0");
-extern SaveBytes4 g_FieldMoveLock __asm__("D_8009D2E8");
-extern SaveBytes4 g_SceneDispatchToken __asm__("D_8009D280");
-extern SaveBytes4 g_GameStateFlags __asm__("D_8009D1A0");
+extern SaveBytes4 g_SaveFieldMoveLockBytes __asm__("D_8009D2E8");
+extern SaveBytes4 g_SaveSceneDispatchTokenBytes __asm__("D_8009D280");
+extern SaveBytes4 g_SaveGameStateFlagsBytes __asm__("D_8009D1A0");
 extern SaveBytes4 D_800B0CDC;
 extern s8 D_800B0CE0;
 extern s8 g_LoadedTexturePageId __asm__("D_800B0CE1");
