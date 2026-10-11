@@ -51,12 +51,13 @@ s32 RoomFx_EffectSequenceNop6(void) {
 }
 
 void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatrixState *state) {
+    u8 offsetValue;
     RoomLink *link;
     RoomLibFxMatrixWords *matrix;
     register int c80a asm("$6");
     u8 c80b;
-    register int c40 asm("$5");
-    int c20;
+    int c40;
+    int value;
     register int c2 asm("$2");
     RoomEffectSequencePrimarySprite *primary;
 
@@ -66,10 +67,12 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     state->link = link;
     matrix = (RoomLibFxMatrixWords *)link->p238;
     state->matrix = *matrix;
-    state->asset.index = Asset_SearchByKeyType(0xE);
+    value = Asset_SearchByKeyType(0xE);
+    state->asset.index = value;
 
     D_80192C08.cell = 0;
     D_80192C08.clut = 0;
+    offsetValue = 2;
     D_80192C08.offset = 1;
     if (*func_800C2B28(0) == 2 || *func_800C2B28(0) == 5) {
         D_80192C08.offset = -100;
@@ -78,8 +81,8 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     c80b = 0x80;
     PE1_COMPILER_USE(c80b);
     c40 = 0x40;
-    c20 = 0x20;
-    PE1_COMPILER_USE(c20);
+    value = 0x20;
+    PE1_COMPILER_USE(value);
     D_80192C18.clut = 3;
     D_80192C18.offset = -100;
     D_80192C28.cell = 8;
@@ -88,7 +91,7 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     c2 = 2;
     primary->g = c40;
     D_80192C18.g = c40;
-    c40 = 2;
+    c40 = offsetValue;
     D_80192C28.clut = c2;
     D_80192C28.r = 0x90;
     D_80192C28.g = 0x90;
@@ -96,12 +99,12 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     D_80192C08.depth = c80a;
     D_80192C08.flip = 0;
     D_80192C08.r = c80b;
-    D_80192C08.b = c20;
+    D_80192C08.b = value;
     D_80192C18.cell = c80b;
     D_80192C18.depth = c80a;
     D_80192C18.flip = 0;
     D_80192C18.r = c80b;
-    D_80192C18.b = c20;
+    D_80192C18.b = value;
     D_80192C28.offset = c40;
     D_80192C28.depth = c80a;
     D_80192C28.flip = 0;
@@ -111,7 +114,7 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     D_80192C38.flip = 0;
     D_80192C38.depth = c80a;
     D_80192C38.r = c80b;
-    D_80192C38.g = c20;
+    D_80192C38.g = value;
     D_80192C38.b = 0x10;
     ent->pad1[1] = *func_800C2B28(0);
 }
