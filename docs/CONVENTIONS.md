@@ -28,7 +28,7 @@ Two principles decide most questions:
 | Type (struct, union, typedef) | PascalCase, no `_t`, no `struct` tag-only types | `Pe1GameState`, `FieldActor`, `AkaoTrack` |
 | Struct member | `lowerCamelCase` for new code; existing `snake_case` members stay until the struct is reworked | `directoryOffset`, `pe_image_base_lba` |
 | Enum constant / `#define` constant | `UPPER_SNAKE` with a subsystem prefix | `INV_CMD_GET_REMAINING_AMMO`, `STATE_FLAG_READY` |
-| Macro | `UPPER_SNAKE` with a prefix that names its owner | `PE1_OFFSETOF`, `PSYQ_BIOS_TRAMPOLINE`, `GTE_LOAD_ROTATION_WINDOW` |
+| Macro | `UPPER_SNAKE` with a prefix that names its owner | `PE1_OFFSETOF`, `PSYQ_BIOS_TRAMPOLINE`, `BOOT_CALL_ON_SCRATCHPAD_STACK` |
 | Header | `include/pe1/<subsystem>[_topic].h`, lower snake | `cdrom.h`, `menu_widget.h`, `akao/track.h` |
 | C file | named after the responsibility of the unit, same prefix as its functions | `Battle_EncounterInitializationFlow.c`, `Inv_ItemActions.c` |
 | PsyQ C file | the SDK object name, SDK case | `psyq/libspu/s_ini.c`, `psyq/libcd/CdControl.c` |
@@ -179,7 +179,7 @@ name is the configured overlay name.
 - All code is C. There are no `.s` files in `src/`, and none may be added;
   `make source-policy-check` rejects them.
 - Inline assembler appears only through evidenced macros: GTE operations
-  (`include/pe1/gte.h`, `gte_window.h`), the scratchpad stack switch
+  (`include/pe1/gte.h`), the scratchpad stack switch
   (`boot_stack.h`), PsyQ assembler objects (`PSYQ_ASM_FUNCTION`,
   `PSYQ_BIOS_TRAMPOLINE`) and proven game assembler (`GAME_ASM_FUNCTION`).
 - Every whole-function use is listed with address, size and evidence in

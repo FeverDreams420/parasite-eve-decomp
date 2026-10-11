@@ -1,6 +1,5 @@
 /* MASPSX_FLAGS: --expand-div */
 #include "pe1/scene_e19_blast.h"
-#include "pe1/gte_window.h"
 #include "pe1/field_texture_tables.h"
 
 int func_80192F9C(int mode, SceneE19Blast *blast)
@@ -176,8 +175,8 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
         center.x = blast->position.x;
         center.y = blast->position.y;
         center.z = blast->position.z;
-        GTE_LOAD_ROTATION_WINDOW(D_800BCFA4.value);
-        GTE_LOAD_TRANSLATION_WINDOW(D_800BCFA4.value);
+        gte_ldrotmatrix(D_800BCFA4.value);
+        gte_ldtransmatrix(D_800BCFA4.value);
 
         D_800F3368.parameter0A = 0;
         D_800F3368.depth = 4;
@@ -260,8 +259,8 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             func_800C6FA0(D_8019B684, 0x40);
             func_800C71E4(D_8019B684, &shellMatrix1);
             func_800C6F4C(D_8019B684);
-            GTE_LOAD_ROTATION_WINDOW(D_800BCFA4.value);
-            GTE_LOAD_TRANSLATION_WINDOW(D_800BCFA4.value);
+            gte_ldrotmatrix(D_800BCFA4.value);
+            gte_ldtransmatrix(D_800BCFA4.value);
             func_800D004C(&center, 0x12C, 0x12C, 0xC, 0, 0x1000, 0x1000, &glowColor, 0, intensity, 1);
             intensity = rcos(phase) / 32;
             radialScale = rsin(phase);
@@ -336,8 +335,8 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             func_800C6FA0(D_8019B684, 0x40);
             func_800C71E4(D_8019B684, &shellMatrix2);
             func_800C6F4C(D_8019B684);
-            GTE_LOAD_ROTATION_WINDOW(D_800BCFA4.value);
-            GTE_LOAD_TRANSLATION_WINDOW(D_800BCFA4.value);
+            gte_ldrotmatrix(D_800BCFA4.value);
+            gte_ldtransmatrix(D_800BCFA4.value);
             func_800D004C(&center, 0x12C, 0x12C, 0xC, 0, 0x1000, 0x1000, &glowColor, 0, intensity, 1);
             intensity = 0x80;
             if (D_800E27EC & 1) {
@@ -479,8 +478,8 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             func_800C71E4(D_8019B68C, &shellMatrix3c);
             func_800C6F4C(D_8019B68C);
             center.y = height;
-            GTE_LOAD_ROTATION_WINDOW(D_800BCFA4.value);
-            GTE_LOAD_TRANSLATION_WINDOW(D_800BCFA4.value);
+            gte_ldrotmatrix(D_800BCFA4.value);
+            gte_ldtransmatrix(D_800BCFA4.value);
             func_800D004C(&center, 0x9C4, 0x9C4, 0xC, 0, 0x1000, 0x1000, &glowColor, 0, intensity, 1);
             radialScale = rsin(phase) / 4 + 0xC00;
             intensity = rcos(phase) / 32;

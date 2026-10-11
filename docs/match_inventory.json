@@ -73,14 +73,14 @@
       "actual_start": "0x80192F9C",
       "actual_end_exclusive": "0x8019549C",
       "missing_extracted_bytes": 8192,
-      "evidence": "Complete function and rodata match with stock GCC 2.7.2 and MASPSX 2.56. The two extraction slices are merged into the full scene_e19 block; overlay-check SHA1 6b114d71ecf274e02267aa9ea10cb2126793d3af. No bound register variables; two empty barriers (one clobbers $s0 to retain natural parameter allocation), eight evidenced GTE-window macro uses.",
+      "evidence": "Complete function and rodata match with stock GCC 2.7.2 and MASPSX 2.56. The two extraction slices are merged into the full scene_e19 block; overlay-check SHA1 6b114d71ecf274e02267aa9ea10cb2126793d3af. No bound register variables; two empty barriers (one clobbers $s0 to retain natural parameter allocation), eight gte.h view-matrix transfers (gte_ldrotmatrix/gte_ldtransmatrix).",
       "current_unit": "overlays/scene_e19/SceneE19_BlastSequence",
       "extraction_restored": true,
       "candidate_debt": {
         "pins": 0,
         "empty_barriers": 2,
         "fixed_register_clobbers": 1,
-        "gte_matrix_windows": 8,
+        "gte_view_matrix_loads": 8,
         "inline_conversion_helpers": 0
       }
     },
@@ -467,7 +467,7 @@
       "source": "src/overlays/scene_e20/RoomEffect_FlareParticle_8018F028.c",
       "status": "matched_report_credited",
       "levenshtein_score": 0,
-      "evidence": "Plain C except the two evidenced view-matrix windows (GTE_LOAD_ROTATION_WINDOW/GTE_LOAD_TRANSLATION_WINDOW, include/pe1/gte_window.h; manifest gte_matrix_windows in configs/USA/original_asm_evidence.json; docs/ASM_AND_GTE_POLICY.md, 'GTE matrix window'). No pins or barriers. Local stock cc1 lev 0 at equal size (458 words); scene_e20 overlay-check OK; make report credits it. A former C-only attempt reached lev 6."
+      "evidence": "Plain C except the two view-matrix loads through gte.h gte_ldrotmatrix/gte_ldtransmatrix (PSY-Q SetRotMatrix/SetTransMatrix inline shape; docs/ASM_AND_GTE_POLICY.md, 'GTE view-matrix loads'). No pins or barriers. Local stock cc1 lev 0 at equal size (458 words); scene_e20 overlay-check OK; make report credits it. A former C-only attempt reached lev 6."
     }
   ]
 }

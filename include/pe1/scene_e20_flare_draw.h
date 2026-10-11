@@ -4,7 +4,6 @@
 #include "pe1/scene_e20_flare.h"
 #include "pe1/render_object.h"
 #include "pe1/gte.h"
-#include "pe1/gte_window.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/gte_types.h"
 #include "pe1/psyq_gpu.h"
