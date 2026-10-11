@@ -259,6 +259,7 @@ extern GeomState * volatile g_GeomState;
 extern GeomState * volatile D_800B1624;
 
 extern u8 g_GeomGroupSel;
+extern u16 *volatile g_GeomVramPacketDst;
 int Geom_StepGroupAnimations(void);
 int Geom_ScrollEntries(void);
 int Render_StepCameraTransition(void);

@@ -1053,4 +1053,18 @@
                  "swc2 $19,8(%0)" \
                  : : "r"(r0) : "memory")
 
+/* PSY-Q gte_SetColorMatrix: the five packed words of LR1..LB3. */
+#define gte_SetColorMatrix(r0) \
+    asm volatile("lw $12,0(%0)\n\t" \
+                 "lw $13,4(%0)\n\t" \
+                 "ctc2 $12,$16\n\t" \
+                 "ctc2 $13,$17\n\t" \
+                 "lw $12,8(%0)\n\t" \
+                 "lw $13,12(%0)\n\t" \
+                 "lw $14,16(%0)\n\t" \
+                 "ctc2 $12,$18\n\t" \
+                 "ctc2 $13,$19\n\t" \
+                 "ctc2 $14,$20" \
+                 : : "r"(r0) : "$12", "$13", "$14")
+
 #endif

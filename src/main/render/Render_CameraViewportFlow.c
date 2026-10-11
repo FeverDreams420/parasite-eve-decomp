@@ -5,12 +5,12 @@
 #include "pe1/render_camera.h"
 #include "pe1/gte.h"
 #include "pe1/gte_types.h"
-#include "pe1/psyq_nop.h"
 #include "pe1/render_lighting.h"
 #include "pe1/render_object.h"
 #include "pe1/field_movement.h"
 #include "pe1/battle_runtime.h"
 #include "pe1/render_prim.h"
+#include "pe1/render_tint.h"
 
 /* Resets the view state at the start of a room draw: render flags, the
  * scroll and camera words, the light colour, the mesh group and depth, and
@@ -41,84 +41,64 @@ int Render_InitViewState(void *matrix, void *screen) {
     return 0;
 }
 
-#include "Render_CameraViewportFlow_externs.h"
-
-/* Several shapes below are load-bearing for the byte-match (permuter zero):
- * the unused[1] pad keeps retail's empty 0x20 stack frame, `unsigned short sx`
- * moves x out of $a0 so `bounds` can take it, the `bounds = entry` copy splits
- * the pointer live range, and the assignment-in-assignment on min_y plus the
- * doubled max_y field read reproduce retail's clamp-value register copies. */
+/* Clamps the camera position into the selected group's viewport. */
 s32 Render_ClampCameraPosition(s32 x, s32 y)
 {
-    char unused[0x1];
-    unsigned short sx;
-    s32 original_x;
-    CameraViewport *entry;
-    s32 sy;
-    GeomState *base;
-    s32 clamped;
-    CameraViewport *bounds;
+    u16 cameraX = x;
 
-    sx = x;
-    if ((g_RenderStateFlags & 0x40) != 0) {
-        original_x = x;
-        base = g_GeomState;
-        entry = (CameraViewport *)g_GeomState;
-        entry = (CameraViewport *)((char *)entry + base->entry_offset_1C);
-        entry = &entry[g_GeomGroupSel];
-        bounds = entry;
+    if (g_RenderStateFlags & 0x40) {
+        GeomStateAddress address, base;
+        CameraViewport *view;
 
-        if ((s16)sx < bounds->minX) {
-            sx = entry->minX;
-            g_CameraClampMinX = sx;
-        } else if (bounds->maxX < (s16)sx) {
-            sx = bounds->maxX;
-            g_CameraClampMinX = sx;
-        } else {
-            g_CameraClampMinX = original_x;
-        }
-
-        sy = (s16)y;
-        if (sy < bounds->minY) {
-            clamped = (g_CameraClampedY[0] = bounds->minY);
+        GEOM_STATE_OFFSET(address, base, entry_offset_1C, 0);
+        view = &address.viewport[g_GeomGroupSel];
+        if ((s16)cameraX < view->minX)
+            g_GeomScroll.state.position.x = view->minX;
+        else if (view->maxX < (s16)cameraX)
+            g_GeomScroll.state.position.x = view->maxX;
+        else
+            g_GeomScroll.state.position.x = x;
+        if ((s16)y < view->minY) {
+            g_GeomScroll.state.position.y = view->minY;
             return 0;
         }
-        if (bounds->maxY < sy) {
-            g_CameraClampedY[0] = bounds->maxY;
+        if (view->maxY < (s16)y) {
+            g_GeomScroll.state.position.y = view->maxY;
             return 0;
         }
-        g_CameraClampedY[0] = y;
+        g_GeomScroll.state.position.y = y;
     }
     return 0;
 }
-#include "Render_CameraViewportFlow_externs_1.h"
-
+/* Saves the selected viewport's bounds and opens them to the full range. */
 int Render_SaveAndOpenBounds(void) {
-    char *base = g_GeomStateBytes;
-    CameraViewport *entry = (CameraViewport *)(g_GeomStateBytes + ((GeomState *)base)->entry_offset_1C) + g_GeomGroupSel;
+    GeomStateAddress address, base;
+    CameraViewport *view;
 
-    D_800BCFAC = *(u16 *)&entry->minX;
-    D_800BCFAE = *(u16 *)&entry->maxX;
-    D_800BCFB0 = *(u16 *)&entry->minY;
-    D_800BCFB2 = *(u16 *)&entry->maxY;
-
-    *(short *)&entry->minX = -0x8000;
-    *(u16 *)&entry->maxX = 0x7FFF;
-    *(short *)&entry->minY = -0x8000;
-    *(u16 *)&entry->maxY = 0x7FFF;
-
+    GEOM_STATE_OFFSET(address, base, entry_offset_1C, 0);
+    view = &address.viewport[g_GeomGroupSel];
+    g_GeomScroll.state.position.boundsMinX = view->minX;
+    g_GeomScroll.state.position.boundsMaxX = view->maxX;
+    g_GeomScroll.state.position.boundsMinY = view->minY;
+    g_GeomScroll.state.position.boundsMaxY = view->maxY;
+    view->minX = -0x8000;
+    view->maxX = 0x7FFF;
+    view->minY = -0x8000;
+    view->maxY = 0x7FFF;
     return 0;
 }
 
+/* Restores the bounds saved by Render_SaveAndOpenBounds. */
 int Render_RestoreBounds(void) {
-    char *base = g_GeomStateBytes;
-    CameraViewport *entry = (CameraViewport *)(g_GeomStateBytes + ((GeomState *)base)->entry_offset_1C) + g_GeomGroupSel;
+    GeomStateAddress address, base;
+    CameraViewport *view;
 
-    *(u16 *)&entry->minX = D_800BCFAC;
-    *(u16 *)&entry->maxX = D_800BCFAE;
-    *(u16 *)&entry->minY = D_800BCFB0;
-    *(u16 *)&entry->maxY = D_800BCFB2;
-
+    GEOM_STATE_OFFSET(address, base, entry_offset_1C, 0);
+    view = &address.viewport[g_GeomGroupSel];
+    view->minX = g_GeomScroll.state.position.boundsMinX;
+    view->maxX = g_GeomScroll.state.position.boundsMaxX;
+    view->minY = g_GeomScroll.state.position.boundsMinY;
+    view->maxY = g_GeomScroll.state.position.boundsMaxY;
     return 0;
 }
 /* Matching debt: register pins, empty scheduling constraints, a $v1 clobber,
@@ -175,10 +155,7 @@ int Render_SetViewport(s16 *position) {
     }
     {
         unsigned int cy = 112;
-        /* C offset shifts; pins and the empty constraint retain scheduling. */
-        {
-                        gte_SetGeomOffset(cx, cy);
-        }
+        gte_SetGeomOffset(cx, cy);
     }
     {
         register u32 **address = &camera->position.matrixWords;
@@ -194,11 +171,8 @@ int Render_SetViewport(s16 *position) {
         register int distance = *D_800BCFA8.distance;
         gte_ctc2_26(distance);
     }
-    gte_lwc2_0_0(local.point);
-    gte_lwc2_1_4(local.point);
-    PE1_NOP();
-    PE1_NOP();
-    gte_rtps_command();
+    gte_ldv0(local.point);
+    gte_rtps();
     gte_stsxy2(local.projected);
     screen_x = local.projected[0];
     screen_y = local.projected[1];
@@ -298,82 +272,43 @@ int Render_SetViewport(s16 *position) {
     }
     return 0;
 }
+/* Moves the GTE screen offset to the current screen offset. */
 int Render_SetGteScreenOffset(void) {
-    register int x asm("v1") = D_800BCF94;
-    register int y asm("a0") = D_800BCF96;
-    register int sx asm("t4");
-    register int sy asm("t5");
-
-    sx = x << 16;
-    sy = y << 16;
-    gte_ctc2_24(sx);
-    gte_ctc2_25(sy);
+    gte_SetGeomOffset(g_GeomScroll.state.position.screenOffsetX,
+                      g_GeomScroll.state.position.screenOffsetY);
     return 0;
 }
 
+/* Restores the GTE screen offset to the screen centre. */
 int Render_ResetGteScreenOffset(void) {
-    register int x asm("v1") = 0xA0;
-    register int y asm("a0") = 0x70;
-    register int sx asm("t4");
-    register int sy asm("t5");
-
-    asm volatile("" : "=r"(x), "=r"(y) : "0"(x), "1"(y));
-    sx = x << 16;
-    sy = y << 16;
-    gte_ctc2_24(sx);
-    gte_ctc2_25(sy);
+    gte_SetGeomOffset(160, 112);
     return 0;
 }
 
-#include "Render_CameraViewportFlow_externs_2.h"
+/* Starts a camera scroll from the current position to (x, y) over
+ * `duration` frames; mode 8 selects the smoothed step. */
+int Render_SetScrollMode(int x, int y, int duration, int mode) {
+    int *flags = &g_RenderStateFlags;
+    int value = *flags;
+    u32 position;
+    int bits;
 
-#define D_800BCF88 (*(int *)&D_800BCF88_o)
-#define D_800BCF8C (*(int *)&g_CameraClampMinX)
-#define D_800BCF98 (*(int *)&D_800BCF98_o)
-#define D_800BCF9C (*(s16 *)&D_800BCF9C_o)
-#define D_800BCF9E (*(s16 *)&D_800BCF9E_o)
-#define D_800BCFA0 (*(s16 *)&D_800BCFA0_o)
-#define D_800BCFA2 (*(s16 *)&D_800BCFA2_o)
-
-int Render_SetScrollMode(int x, int y, int z, int mode) {
-    int *flags_ptr;
-    int flags;
-    int value;
-    int saved_scroll;
-    flags_ptr = &D_800BCF88;
-    flags = *flags_ptr;
-    if ((flags & 0x40) == 0) {
-        return -0x13;
-    }
-
-    value = 1;
-    saved_scroll = D_800BCF8C;
-    D_800BCFA0 = value;
-    value = -0x10;
-    D_800BCF9C = x;
-    D_800BCF9E = y;
-    D_800BCFA2 = z;
-    D_800BCF98 = saved_scroll;
-
-    saved_scroll = flags & value;
-    value = 8;
-    if (mode != value) {
-        value = saved_scroll | 1;
-    } else {
-        value = saved_scroll | 9;
-    }
-    *flags_ptr = value;
-
+    if (!(value & 0x40))
+        return -19;
+    position = g_GeomScroll.words.position;
+    g_GeomScroll.state.position.elapsed = 1;
+    g_GeomScroll.state.position.targetX = x;
+    g_GeomScroll.state.position.targetY = y;
+    g_GeomScroll.state.position.duration = duration;
+    g_GeomScroll.words.start = position;
+    position = value & ~0xF;
+    if (mode != 8)
+        bits = position | 1;
+    else
+        bits = position | 9;
+    *flags = bits;
     return 0;
 }
-
-#undef D_800BCF88
-#undef D_800BCF8C
-#undef D_800BCF98
-#undef D_800BCF9C
-#undef D_800BCF9E
-#undef D_800BCFA0
-#undef D_800BCFA2
 
 /* Advance the camera transition, then center the selected viewport. */
 int Render_StepCameraTransition(void)
@@ -408,9 +343,10 @@ int Render_StepCameraTransition(void)
         }
     }
     {
-        GeomState *state = D_800B1624;
-        CameraViewport *views = (CameraViewport *)((u8 *)D_800B1624 + state->entry_offset_1C);
-        CameraViewport *view = &views[g_GeomGroupSel];
+        GeomStateAddress views, base;
+        CameraViewport *view;
+        GEOM_STATE_OFFSET(views, base, entry_offset_1C, 0);
+        view = &views.viewport[g_GeomGroupSel];
         {
             unsigned int offset = 160 - (D_800BCF8C.x - (short)view->width / 2);
             D_800BCF94 = offset;
@@ -437,11 +373,14 @@ int Render_StepCameraTransition(void)
 }
 
 /* Project a world-space point and start a clamped camera transition. */
+/* Starts a camera scroll towards the projection of a world position,
+ * clamped to the selected viewport (duration -1 = 30 frames, mode -1 =
+ * plain step). */
 int Render_UpdateScrollPosition(void *positionArg, int duration, int mode)
 {
     int *position = positionArg;
-    short vector[4];
-    short projected[2];
+    GteShortVector vector;
+    s16 projected[2];
     GeomScrollState *camera = &g_GeomScroll.state;
     CameraViewport *view;
     int x, y;
@@ -450,34 +389,27 @@ int Render_UpdateScrollPosition(void *positionArg, int duration, int mode)
         return -21;
     D_800BCF98 = D_800BCF8C.x;
     D_800BCF9A = D_800BCF8E;
-    vector[0] = position[0]>>16;
-    vector[1] = (position[1]>>16)-(u16)D_800BCFFE[0];
-    vector[2] = position[2]>>16;
+    vector.x = position[0] >> 16;
+    vector.y = (position[1] >> 16) - (u16)D_800BCFFE[0];
+    vector.z = position[2] >> 16;
     {
-        /* Narrow volatile register retains GCC's retail 24-byte frame.
-         * This is a matching constraint, not evidence of the original type. */
+        /* Matching debt: see Render_PrepareFrame; this volatile register
+         * input is the only form found that keeps the 24-byte frame. */
         register volatile unsigned short cx asm("$10") = 160;
-        unsigned int cy = 112;
-        /* C offset shifts; pins and the empty constraint retain scheduling. */
-        {
-                        gte_SetGeomOffset(cx, cy);
-        }
+
+        gte_SetGeomOffset(cx, 112);
     }
     {
-        unsigned int **address = &camera->position.matrixWords;
-        asm("" : "=r"(address) : "0"(address));
-        {
-            register const GteMatrixWords *words asm("$10");
-            words = (const GteMatrixWords *)*address;
-            gte_ldrotmatrix(words);
-            gte_ldtransmatrix(words);
-        }
+        GteMatrix **slot = &g_GeomScroll.words.viewMatrix;
+        register GteMatrix *matrix asm("$10");
+
+        asm("" : "=r"(slot) : "0"(slot));
+        matrix = *slot;
+        gte_ldrotmatrix(matrix);
+        gte_ldtransmatrix(matrix);
     }
-    gte_lwc2_0_0(vector);
-    gte_lwc2_1_4(vector);
-    PE1_NOP();
-    PE1_NOP();
-    gte_rtps_command();
+    gte_ldv0(&vector);
+    gte_rtps();
     gte_stsxy2(projected);
     {
         GeomState *state = D_800B1624;
@@ -525,8 +457,6 @@ int Render_UpdateScrollPosition(void *positionArg, int duration, int mode)
     }
     return 0;
 }
-
-#include "Render_CameraViewportFlow_externs_3.h"
 
 void SetGeomScreen(int h);
 
@@ -604,39 +534,16 @@ int Render_InitRoomPrimState(void *objectArg)
     intensity = ClampLight(intensity) << 4;
     D_800BEA62 = intensity * r / 256;
     D_800BEA68 = intensity * g / 256;
-    {
-        int result = intensity * b / 256;
-        asm("" : : "r"(result));
-        D_800BEA6E = result;
-    }
+    D_800BEA6E = intensity * b / 256;
     D_800BEA4C = 0;
     D_800BEA4E = 0;
     D_800BEA50 = 0;
     D_800BEA64 = 0;
     D_800BEA6A = 0;
     D_800BEA70 = 0;
-    {
-        register u32 *matrix asm("$9") = D_800BEA60.words;
-        register u32 a asm("$12");
-        register u32 b asm("$13");
-        register u32 c asm("$14");
-        /* Preserve matrix register scheduling before loading the GTE words. */
-        asm("" : "=r"(matrix) : "0"(matrix));
-        a = matrix[0];
-        b = matrix[1];
-        gte_ctc2_16(a);
-        gte_ctc2_17(b);
-        a = matrix[2];
-        b = matrix[3];
-        c = matrix[4];
-        gte_ctc2_18(a);
-        gte_ctc2_19(b);
-        gte_ctc2_20(c);
-    }
+    gte_SetColorMatrix(D_800BEA60.words);
     return 0;
 }
-
-#include "Render_CameraViewportFlow_externs_4.h"
 
 int CdRom_SetSeekPos(unsigned int arg0) {
     unsigned short old0;
@@ -693,12 +600,6 @@ int CdRom_SetScreenPos(int arg0, int arg1, int arg2, int arg3, unsigned short ar
 
     g_ScreenTransitionMode = arg4;
     return 0;
-
-fail:
-    g_ScreenTransitionMode = 1;
-
-done:
-    return 0;
 }
 
 int Render_SetFadeColour(unsigned int arg0) {
@@ -723,23 +624,25 @@ int Render_SetFadeColour(unsigned int arg0) {
     return 0;
 }
 
-/* Build the camera basis from yaw using the retail GTE operations.
- * Matching debt: 4 register pins and 5 empty constraints. Matrix/vector
- * loads are C, with GTE transfers and commands wrapped individually. */
+/* Build the camera basis matrix from the camera yaw (plus the player's
+ * facing quadrant while aiming): forward = R * Z, right = Y x forward,
+ * up = forward x right. */
 int Render_DrawSprite(void)
 {
     GteMatrixStorage rotation;
     GteShortVector axis;
-    GteVector up,right,newUp,forward;
-    int angle,cosine,sine;
-    if((D_800BE9A0&0xF000)==0x7000)angle = D_800BD022;
-    else angle = D_800BD020;
+    GteVector up, right, newUp, forward;
+    int angle, cosine, sine;
+    if ((D_800BE9A0 & 0xF000) == 0x7000)
+        angle = D_800BD022;
+    else
+        angle = D_800BD020;
     {
-        int masked = angle&4095;
-        if(D_8009D254 && (D_8009D2E8&16)) {
-            angle+=2048;
-            angle+=(((unsigned int)((Combatant *)D_8009D254->core)->stateFlags)>>7)&0xC00;
-            masked = angle&4095;
+        int masked = angle & 4095;
+        if (D_8009D254 && (D_8009D2E8 & 16)) {
+            angle += 2048;
+            angle += (((unsigned int)((Combatant *)D_8009D254->core)->stateFlags) >> 7) & 0xC00;
+            masked = angle & 4095;
         }
         cosine = rcos(masked);
         sine = rsin(masked);
@@ -748,68 +651,39 @@ int Render_DrawSprite(void)
     rotation.matrix.m[2][0] = -sine;
     rotation.matrix.m[1][1] = 4096;
     axis.z = 4096;
-        rotation.matrix.m[0][0] = cosine;
+    rotation.matrix.m[0][0] = cosine;
     rotation.matrix.m[2][2] = cosine;
     rotation.matrix.t[0] = rotation.matrix.t[1] = rotation.matrix.t[2] = 0;
     rotation.matrix.m[0][1] = rotation.matrix.m[1][0] = rotation.matrix.m[1][2] = rotation.matrix.m[2][1] = 0;
     axis.x = 0;
     axis.y = 0;
-    {
-        const GteMatrixWords *matrix;
-        matrix = (const GteMatrixWords *)rotation.words;
-                gte_ldrotmatrix(matrix);
-        gte_ldtransmatrix(matrix);
-    }
-    gte_lwc2_0_0(&axis);
-    gte_lwc2_1_4(&axis);
-    PE1_NOP();
-    PE1_NOP();
-    gte_mvmva_rotation_v0_translation_sf12();
-    gte_swc2_25_0(&forward);
-    gte_swc2_26_4(&forward);
-    gte_swc2_27_8(&forward);
-    {
-        GteVector *source;
-        up.y = 4096;
-                source = &up;
-        up.x = 0;
-        up.z = 0;
-                gte_ldopv1_psyq(source);
-    }
-    {
-        gte_ldopv2(&forward);
-        gte_op12_psyq();
-        gte_swc2_25_0(&right);
-        gte_swc2_26_4(&right);
-        gte_swc2_27_8(&right);
-    }
-    {
-        GteVector *source = &forward;
-                gte_ldopv1_psyq(source);
-    }
-    {
-        gte_ldopv2(&right);
-        gte_op12_psyq();
-        gte_swc2_25_0(&newUp);
-        gte_swc2_26_4(&newUp);
-        gte_swc2_27_8(&newUp);
-    }
-    {
-        int xx = right.x,xy = newUp.x,xz = forward.x;
-        int yx = right.y,yy = newUp.y,yz = forward.y;
-        int zx = right.z,zy = newUp.z,zz = forward.z;
-        D_800BD014 = 0;
-        D_800BD018 = 0;
-        D_800BD01C = 0;
-        D_800BD000.m[0][0] = xx;
-        D_800BD002 = xy;
-        D_800BD004 = xz;
-        D_800BD006 = yx;
-        D_800BD008 = yy;
-        D_800BD00A = yz;
-        D_800BD00C = zx;
-        D_800BD00E = zy;
-        D_800BD010 = zz;
-    }
+    gte_ldrotmatrix(&rotation);
+    gte_ldtransmatrix(&rotation);
+    gte_ldv0(&axis);
+    gte_rt();
+    gte_stlvnl(&forward);
+    up.y = 4096;
+    up.x = 0;
+    up.z = 0;
+    gte_ldopv1_psyq(&up);
+    gte_ldopv2(&forward);
+    gte_op12_psyq();
+    gte_stlvnl(&right);
+    gte_ldopv1_psyq(&forward);
+    gte_ldopv2(&right);
+    gte_op12_psyq();
+    gte_stlvnl(&newUp);
+    D_800BD000.t[0] = 0;
+    D_800BD000.t[1] = 0;
+    D_800BD000.t[2] = 0;
+    D_800BD000.m[0][0] = right.x;
+    D_800BD000.m[0][1] = newUp.x;
+    D_800BD000.m[0][2] = forward.x;
+    D_800BD000.m[1][0] = right.y;
+    D_800BD000.m[1][1] = newUp.y;
+    D_800BD000.m[1][2] = forward.y;
+    D_800BD000.m[2][0] = right.z;
+    D_800BD000.m[2][1] = newUp.z;
+    D_800BD000.m[2][2] = forward.z;
     return 0;
 }

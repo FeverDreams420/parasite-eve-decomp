@@ -50,4 +50,11 @@ extern u8 D_800BCFEE;
 extern u16 D_800BCFF6, D_800BCFF8;
 int Render_SetCDDCSlot(void);
 
+/* Screen transition parameters written by the fade/seek helpers. */
+extern unsigned short g_ScreenTransitionTargetY;
+extern unsigned char g_ScreenTransitionState[];
+extern unsigned char g_ScreenTransitionMode;
+extern unsigned short g_ScreenTransitionStartY;
+extern unsigned short g_ScreenTransitionFadeColor;
+
 #endif
