@@ -21,12 +21,12 @@ int func_801928CC(int mode, SceneE18FlankParticle *particle) {
             int distance;
             int dz;
             int range;
-            distance = RoomMain_ActorPtr->transform.t[0] - particle->position[0];
-            dz = RoomMain_ActorPtr->transform.t[2] - particle->position[2];
+            distance = RoomMain_ActorPtr->render_object.model_matrix.translation[0] - particle->position[0];
+            dz = RoomMain_ActorPtr->render_object.model_matrix.translation[2] - particle->position[2];
             distance = func_8005186C(distance * distance + dz * dz);
             range = particle->width / 4;
             if (distance < range) {
-                RoomMain_ActorPtr->owner->status |= 0x4000;
+                RoomMain_ActorPtr->state->flags |= 0x4000;
                 ANIM_OWNER_AS(SceneE18Actor)->instance->owner->flags |= 0x80000000;
                 particle->leader = 0;
             }

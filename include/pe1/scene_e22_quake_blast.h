@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
+#include "pe1/field_actor.h"
 #include "pe1/room_orbit_trail.h"
 #include "pe1/gte.h"
 #include "pe1/room_floor.h"
@@ -84,7 +85,7 @@ typedef struct SceneE22QuakeActor {
     u32 flags;                    /* 0x4C */
 } SceneE22QuakeActor;
 
-extern SceneE22QuakeActor **RoomMain_ActorPtr;
+extern struct FieldActor *RoomMain_ActorPtr; /* the player actor (0x8009D254) */
 /* Texture page indices: [0] the shared effect page, [8] this scene's. */
 extern u16 D_800E11EA[];
 extern void *D_80199508;

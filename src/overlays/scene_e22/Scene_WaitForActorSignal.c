@@ -1,19 +1,18 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_anim_pool.h"
+#include "pe1/field_actor.h"
 typedef struct { char reserved[0x14]; short complete, signaled; } WaitState;
-typedef struct { char reserved[0x4C]; unsigned int status; } Owner;
-typedef struct { Owner *owner; } Actor;
-extern Actor *RoomMain_ActorPtr;
+extern struct FieldActor *RoomMain_ActorPtr; /* the player actor (0x8009D254) */
 
 int func_80198F54(int mode) {
     switch (mode) {
     case 0:
         ANIM_TASK_AS(WaitState)->complete = 0;
         ANIM_TASK_AS(WaitState)->signaled = 0;
-        RoomMain_ActorPtr->owner->status &= ~0x10000000u;
+        RoomMain_ActorPtr->state->flags &= ~0x10000000u;
         return 0;
     case 1:
-        if (RoomMain_ActorPtr->owner->status & 0x10000000u) {
+        if (RoomMain_ActorPtr->state->flags & 0x10000000u) {
             ANIM_TASK_AS(WaitState)->complete = 1;
             ANIM_TASK_AS(WaitState)->signaled = 1;
             return 1;

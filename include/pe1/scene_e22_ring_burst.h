@@ -25,7 +25,7 @@ typedef struct SceneE22BurstChannel {
     void *pool;                   /* 0x08 */
 } SceneE22BurstChannel;
 
-extern char RoomMain_ActorPtr[];
+extern struct FieldActor *RoomMain_ActorPtr; /* the player actor (0x8009D254) */
 extern u16 D_800E11EA;
 extern RenderColor D_8018F1D0;
 extern RenderColor D_8018F1D4;

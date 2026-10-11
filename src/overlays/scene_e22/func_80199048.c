@@ -1,7 +1,7 @@
 #include "pe1/room_floor.h"
 #include "pe1/field_sprite_draw.h"
 
-extern char *RoomMain_ActorPtr;
+extern struct FieldActor *RoomMain_ActorPtr; /* the player actor (0x8009D254) */
 extern s16 D_801994F4, D_801994F6, D_801994F8;
 extern int D_801994FC;
 
@@ -13,7 +13,7 @@ s16 *func_80199048(int mode, int value, int unused, int extra)
 
     if (mode == 1) {
         saved = g_RoomFloorY->raw;
-        actor = RoomMain_ActorPtr;
+        actor = (char *)RoomMain_ActorPtr;
         out = &D_801994F4;
         *out = value;
         D_801994F8 = extra;

@@ -27,11 +27,11 @@ int func_80193018(int mode, SceneE18PulseRing *ring) {
             angle = 0x400;
         ring->radius = rsin(angle);
         if (ring->last) {
-            int dx = (RoomMain_ActorPtr->x - instance->x) >> 16;
-            int dz = (RoomMain_ActorPtr->z - instance->z) >> 16;
+            int dx = (RoomMain_ActorPtr->pos_x - instance->x) >> 16;
+            int dz = (RoomMain_ActorPtr->pos_z - instance->z) >> 16;
             if (func_8005186C(dx * dx + dz * dz) < (ring->radius * 3) >> 3) {
                 ring->last = 0;
-                RoomMain_ActorPtr->owner->status |= 0x4000;
+                RoomMain_ActorPtr->state->flags |= 0x4000;
                 instance->owner->flags |= 0x80000000;
             }
             if (ring->size < 0x40)

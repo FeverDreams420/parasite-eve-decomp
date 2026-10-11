@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
+#include "pe1/field_actor.h"
 #include "pe1/room_orbit_trail.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_model_draw.h"
@@ -61,7 +62,7 @@ typedef struct SceneE22EmberEvent {
     s16 jointSet;                 /* 0x12 */
 } SceneE22EmberEvent;
 
-extern SceneE22EmberActor **RoomMain_ActorPtr;
+extern struct FieldActor *RoomMain_ActorPtr; /* the player actor (0x8009D254) */
 /* Texture page index slot at 0x800E11EA, read as a record so the load
  * stays behind the first parameter block store through its base register. */
 typedef struct SceneE22TextureSlot {

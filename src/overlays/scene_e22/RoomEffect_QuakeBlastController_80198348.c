@@ -41,7 +41,7 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
         if (fx->timer == 6 && func_800C6B90(fx, target->radius) && ANIM_TASK_AS(SceneE22QuakeEvent)->active) {
             channel = ANIM_OWNER_AS(SceneE22QuakeObjectChannel);
             if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
-                (*RoomMain_ActorPtr)->flags |= 0x4000;
+                RoomMain_ActorPtr->state->flags |= 0x4000;
                 channel->pool->object->flags =
                     (channel->pool->object->flags & 0xC0FFFFFF) | 0x21000000;
                 channel->pool->object->flags |= 0x80000000;

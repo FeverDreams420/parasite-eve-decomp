@@ -122,7 +122,7 @@ int func_80192AF0(int mode, RoomOrbitRingBurst *burst) {
         burst->counterB = 0;
         burst->counterA = 0;
         burst->sweep = 1;
-        func_800CE870(*(char **)RoomMain_ActorPtr, 0, (s16 *)burst);
+        func_800CE870((char *)RoomMain_ActorPtr, 0, (s16 *)burst);
         return func_800CE560(ANIM_POOL_AS(SceneE22BurstChannel)->pool, 0x14, 0x18,
                              (FieldAnimCallbackListCallback)func_80192548);
     case 1:

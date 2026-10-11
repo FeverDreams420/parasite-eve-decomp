@@ -101,7 +101,7 @@ extern void RoomLib_HandlerC(struct RoomEnt *obj);
 extern void RoomLib_HandlerD(struct RoomEnt *obj);
 extern void RoomLib_HandlerE(struct RoomEnt *obj);
 extern void RoomLib_HandlerF();
-extern char *RoomMain_ActorPtr;
+extern struct FieldActor *RoomMain_ActorPtr; /* the player actor (0x8009D254) */
 extern int RoomMain_RotTable[];
 /* Field object status: 0 no model, 1 model without data, 2 inactive,
  * 3 active, 4 disabled object, 5 the player. */

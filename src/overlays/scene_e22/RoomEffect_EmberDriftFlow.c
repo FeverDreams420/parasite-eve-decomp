@@ -227,7 +227,7 @@ int func_8019408C(int mode, SceneE22EmberBurst *burst) {
             if (burst->timer == 0x19 && ANIM_TASK_AS(SceneE22EmberEvent)->active) {
                 channel = ANIM_OWNER_AS(SceneE22EmberObjectChannel);
                 if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
-                    (*RoomMain_ActorPtr)->flags |= 0x4000;
+                    RoomMain_ActorPtr->state->flags |= 0x4000;
                     channel->pool->object->flags =
                         (channel->pool->object->flags & 0xC0FFFFFF) | 0x19000000;
                     channel->pool->object->flags |= 0x80000000;

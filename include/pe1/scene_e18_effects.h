@@ -5,6 +5,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte_types.h"
 #include "pe1/render_object.h"
+#include "pe1/field_actor.h"
 #include "pe1/scene_e18_pulse.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_model_draw.h"
@@ -112,7 +113,7 @@ extern int func_801928CC(int mode, SceneE18FlankParticle *particle);
 
 /* Flank model particle (func_801928CC): the player instance whose distance
  * to the model releases the actor, and the model draw helpers. */
-extern SceneE18Instance *RoomMain_ActorPtr;
+extern struct FieldActor *RoomMain_ActorPtr; /* the player actor (0x8009D254) */
 extern int func_8005186C(int value);
 
 /* Pulse ring particle (func_80193018): shrinking light rings around the
