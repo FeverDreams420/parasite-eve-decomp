@@ -60,6 +60,7 @@ int DS_system_status(int mode);
 int CQ_execute(void);
 int DS_cw(u8 command, void *parameter);
 int DsPosToInt(CdlLOC *);
+CdlLOC *DsIntToPos(int sector, CdlLOC *position);
 int DsSync(int id, void *result);
 
 #endif

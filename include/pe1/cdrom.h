@@ -26,4 +26,10 @@ int CdRom_ReadSectorsFromLba(u32 lba, void *destination, u32 size);
 int DsRead(struct CdlLOC *position, int sectors, void *destination,
                     int mode);
 
+/* Disc type the shell must still report before a read is issued; a
+ * different value means the lid was opened and another disc inserted. */
+extern u16 g_CdDiskType;
+/* "CD: Read error (%d / %d)\n" */
+extern char g_CdReadErrorFormat[];
+
 #endif

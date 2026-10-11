@@ -111,6 +111,7 @@ g_MenuWidgetGridDescriptors = 0x80092888; // size:0x820
 g_ResidentDataPack = 0x800A8028; // size:0x8004
 g_FieldAnimTaskPrograms = 0x800E1044; // size:0x1A0
 g_PmTaskProgramBuffer = 0x80011618;
+g_CdReadErrorFormat = 0x8001136C;
 g_RoomFloorY = 0x800942EC;
 g_GameClockLimit = 0x800A76A8;
 g_GameTimer1Flags = 0x800A76AC;

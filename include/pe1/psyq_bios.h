@@ -10,6 +10,10 @@ int open(char *path, int mode);
 int close(int descriptor);
 int erase(char *path);
 
+/* Program control and cache services. */
+void exit(int code);
+void FlushCache(void);
+
 /* Entry-hook and automatic IRQ acknowledgement services used by LIBETC. */
 int EnterCriticalSection(void);
 void ExitCriticalSection(void);

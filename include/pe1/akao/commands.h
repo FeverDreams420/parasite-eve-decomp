@@ -167,5 +167,15 @@ void Akao_Cmd_F0(void);
 void Akao_Cmd_F1(void);
 
 void Akao_Cmd_21(int arg0, int arg1);
+void Akao_Cmd_F0(void);
+
+/* Sound ids the scene and image loaders reset to -1 (none loaded); the
+ * effect overlays pass D_800B0DB5 to Akao_Cmd_C1_WithSlot. */
+extern signed char D_800B0DB2;
+extern signed char D_800B0DB3;
+extern signed char D_800B0DB4;
+extern signed char D_800B0DB5;
+extern signed char D_800B0DB6;
+extern signed char D_800B0DB7;
 
 #endif

@@ -9,12 +9,9 @@
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/pe_image.h"
-/* Scalar symbol view still preserves the boot loader scheduling.
- * Sector read and polling routines below use the shared structure fields. */
-
-#include "CdRom_BootReadFlow_externs.h"
-
-void ClearImage(RECT *rect, int r, int g, int b);
+#include "pe1/psyq_ds_queue.h"
+#include "pe1/gpu_image.h"
+#include "pe1/akao/commands.h"
 
 void Gpu_ClearOnFlag(void) {
     u32 *state = &g_GameState.flags;
@@ -42,24 +39,11 @@ int CdRom_ReadSectorsFromLba(u32 lba, void *destination, u32 size) {
     return CdRom_ReadSectors(lba, 0, destination, size);
 }
 
-void exit(int code);
-CdlLOC *DsIntToPos(int i, CdlLOC *p);
-
-#include "CdRom_BootReadFlow_externs_1.h"
-
 int CdRom_ReadSectors(u32 lba, u32 offset, void *destination, u32 size) {
-    register int base;
-    register int rel;
-    register int dst_reg;
-    register int size_reg;
     Pe1GameState *state;
     CdlLOC loc;
     int ret;
 
-    base = lba;
-    rel = offset;
-    dst_reg = (int)destination;
-    size_reg = size;
     state = &g_GameState;
 
     if ((state->flags & 0x1000000) != 0) {
@@ -76,18 +60,18 @@ int CdRom_ReadSectors(u32 lba, u32 offset, void *destination, u32 size) {
     }
 
     state->flags |= 0x1004000;
-    base += rel;
-    DsIntToPos(base, &loc);
-    ret = DsRead(&loc, size_reg, (void *)dst_reg, 0x80);
+    lba += offset;
+    DsIntToPos(lba, &loc);
+    ret = DsRead(&loc, size, destination, 0x80);
     if (ret != 0) {
         return ret;
     }
 
     state->flags &= 0xFEFFBFFF;
-    printf(D_8001136C, base, size_reg);
+    printf(g_CdReadErrorFormat, lba, size);
     return -1;
 }
-int CdRom_PollReady(void) {
+inline int CdRom_PollReady(void) {
     int scratch;
     int status;
     Pe1GameState *state;
@@ -100,22 +84,10 @@ int CdRom_PollReady(void) {
     return status;
 }
 
-#define NULL ((void *)0)
-
-void Akao_Cmd_F0(void);
-void FlushCache(void);
-
-DISPENV *SetDefDispEnv(DISPENV *env, int x, int y, int w, int h);
-
-#include "CdRom_BootReadFlow_externs_2.h"
-
-void SetDispMask(int mask);
-
 s32 Overlay_LoadInitialImage(void) {
-    register s32 v0 asm("$2");
-    s32 v1;
+    s32 status;
     u16 *range;
-    s32 sp30;
+    s32 result;
     DISPENV sp18;
 
     D_800B0DB5 = -1;
@@ -130,21 +102,11 @@ s32 Overlay_LoadInitialImage(void) {
 restart:
     range = g_StrFileDirLba;
     do {
-        v1 = CdRom_ReadSectors(g_PeImageBaseLba + range[0], 0, g_StrFileDirBuffer, range[1] - range[0]);
-    } while (v1 == -1);
+        status = CdRom_ReadSectors(g_PeImageBaseLba + range[0], 0, g_StrFileDirBuffer, range[1] - range[0]);
+    } while (status == -1);
 
-    while (1) {
-        v1 = DsReadSync(&sp30);
-        v0 = v1;
-        v0 = (v1 + 1);
-        if (v0 < 2U) {
-            D_800B0CD8 &= 0xFEFFBFFF;
-        }
-        v0 = v1;
-        if (v0 == 0) {
-            break;
-        }
-        if (v0 == -1) {
+    while ((status = CdRom_PollReady()) != 0) {
+        if (status == -1) {
             goto restart;
         }
     }

@@ -81,6 +81,7 @@ void DrawOTagEnv(void *next, DRAWENV *env);
 DISPENV *PutDispEnv(DISPENV *env);
 DRAWENV *SetDefDrawEnv(DRAWENV *env, int x, int y, int w, int h);
 DISPENV *SetDefDispEnv(DISPENV *env, int x, int y, int w, int h);
+void SetDispMask(int mask);
 int LoadImage(RECT *rect, void *pixels);
 int StoreImage(RECT *rect, void *p);
 void SetDrawTPage(void *packet, int drawTexture, int dither, int tpage);
