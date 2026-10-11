@@ -49,7 +49,7 @@ int g_MenuEquipSwapSource;
 int g_MenuItemActionContext;
 int g_MenuItemActionDisabled;
 
-void Menu_CreateEquipScreen(s32 arg0) {
+void Menu_CreateEquipScreen(MenuWidgetNode *arg0) {
     s32 entryIndex;
     MenuWidgetNode *currentNode;
     MenuWidgetNode *node;

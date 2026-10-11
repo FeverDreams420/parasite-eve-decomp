@@ -51,6 +51,7 @@ void Battle_UseItem(int item);
 int Spend_Ammo(int amount);
 void Inv_InitMaxLevelInventory(int variant);
 int Inv_CountTotal(void);
+void Item_PackParasiteSpells(void);
 int Inv_LoadWayneItemsAsOverride(short *items);
 extern u8 D_800C0E0C;
 

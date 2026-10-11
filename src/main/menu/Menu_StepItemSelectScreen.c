@@ -1,17 +1,14 @@
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 */
 #include "pe1/menu_state.h"
 #include "pe1/menu_widget.h"
 #include "pe1/inventory_queries.h"
+#include "pe1/inventory_slots.h"
 #include "pe1/menu_sound.h"
 #include "pe1/menu_context_help.h"
 #include "pe1/menu_equipment.h"
-
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
-
-#include "Menu_StepItemSelectScreen_externs.h"
-
-void Menu_StepSkillList(MenuWidgetNode *panel, int refresh);
-void Inv_SetActiveList(int mode, int *slot);
+#include "pe1/menu_item_list_input.h"
+#include "pe1/battle_cmd.h"
 
 #define CLOSE_SELECT_VIEWS() do { \
     MenuWidget_NavScrollTo(0x2d); \

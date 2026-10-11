@@ -11,7 +11,7 @@ void Menu_OpenCursorModeMenu(MenuWidgetNode *parent);
 int Menu_ActionSubmenuInputHandler(MenuWidgetNode *arg0, u32 arg1);
 int Menu_CursorModeInputHandler(MenuWidgetNode *arg0, u32 arg1);
 
-void Menu_CreateMainMenuView(int arg0) {
+void Menu_CreateMainMenuView(MenuWidgetNode *arg0) {
     MenuWidgetNode *parent;
     MenuWidgetNode *child;
 

@@ -17,6 +17,8 @@ void Menu_SetupSkillSubmenu(MenuWidgetNode *node);
 void Menu_StepSkillList(MenuWidgetNode *panel, int refresh);
 void Menu_OpenRenameScreen(int item);
 void Menu_ReopenEquipScreen(void);
+int Menu_SkillActionHandler(MenuWidgetNode *node, int flags);
+int Menu_GetItemSlotAvailability(int index);
 
 /* Bonus point allocation view is open. */
 extern int D_8009CEF8;
