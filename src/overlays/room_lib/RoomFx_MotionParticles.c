@@ -199,7 +199,7 @@ void RoomFx_DrawAnchoredSpriteQuad(void *unused0, void *unused1,
     stack.sourceScale.z = ((RoomAnchoredSpriteState *)fx)->scale;
     stack.scale = stack.sourceScale;
     ScaleMatrix(&stack.scaleMatrix, &stack.scale);
-    RotMatrix(&stack.seed, &stack.matrix);
+    RotMatrix(&stack.seed.vector, &stack.matrix);
     matrix = &stack.matrix;
 
     scaleMatrix = &stack.scaleMatrix;
@@ -334,7 +334,7 @@ void RoomFx_DrawAnchoredSpritePair(void *unused0, void *unused1,
     stack.scale = stack.sourceScale;
     scaleMatrix = &stack.scaleMatrix;
     ScaleMatrix(scaleMatrix, &stack.scale);
-    RotMatrix(&stack.seed, &stack.matrix);
+    RotMatrix(&stack.seed.vector, &stack.matrix);
     matrix = &stack.matrix;
 
     gte_ldrotmatrix(scaleMatrix);
