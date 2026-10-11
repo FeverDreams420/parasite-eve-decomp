@@ -1,11 +1,11 @@
 #include "common.h"
+#include "pe1/room_liberty_choice.h"
 
 int func_8005186C(int value);
-int func_80193114(int value);
 
 int func_80192E64(char *base, int unused, unsigned int operation, int arg3,
                   int arg4, int arg5) {
-    register char *fields asm("$5") = base + 0xC;
+    char *fields = base + 0xC;
 
     switch (operation) {
     case 0:
@@ -28,7 +28,7 @@ int func_80192E64(char *base, int unused, unsigned int operation, int arg3,
         break;
     }
     case 3:
-        *(s32 *)arg4 = func_80193114(*(s32 *)arg3);
+        *(s32 *)arg4 = func_80193114(*(s32 *)arg3, (s32 **)fields);
         break;
     case 4:
         *(s32 *)fields = arg3;

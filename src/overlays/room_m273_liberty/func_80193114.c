@@ -1,4 +1,5 @@
 #include "common.h"
+#include "pe1/room_liberty_choice.h"
 extern u8 D_8019A8C8[];
 
 extern s32 func_80052B2C(void);
