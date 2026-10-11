@@ -144,7 +144,7 @@ int func_800C66C8(void *object, int message, void *state);
 
 /* Retail marks this function handwritten; only its COP2 windows remain ASM. */
 void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
-                                         char *state) {
+                                         RoomDebrisTriplet *state) {
     RoomInitThreeStack stack;
     RoomSpriteMatrix *firstMatrix;
     register RoomSpriteMatrix *secondMatrix asm("$17");
@@ -161,7 +161,7 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
     int randomValue;
 
     callOwner = owner;
-    workState = (RoomDebrisTriplet *)state;
+    workState = state;
     clockResult = func_800C2B50();
     parameterIndex = 3;
     clock = clockResult;
@@ -275,7 +275,7 @@ typedef struct RoomDrawThreeStack {
 void func_800C3098(int depth);
 void func_800C2FF0(int width, int height);
 
-void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
+void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, RoomDebrisTriplet *state) {
     RoomDrawThreeStack stack;
     register RoomDebrisTriplet *workState asm("$18");
     unsigned int i;
@@ -292,7 +292,7 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, char *state) {
     int alpha;
     int baseScale;
 
-    workState = (RoomDebrisTriplet *)state;
+    workState = state;
     stack.args = args;
     clock = func_800C2B50();
     stack.seed = s_ThreeParticleSeed;

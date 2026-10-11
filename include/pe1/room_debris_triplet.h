@@ -42,4 +42,9 @@ typedef struct RoomDebrisTriplet {
 
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomDebrisTriplet, rotation) == 0x6C, room_debris_rotation_offset);
 
+void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
+                                         RoomDebrisTriplet *state);
+void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args,
+                                         RoomDebrisTriplet *state);
+
 #endif
