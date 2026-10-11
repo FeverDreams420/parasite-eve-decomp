@@ -9,8 +9,7 @@
 s8 D_8009CE30;
 u16 D_8009D298;
 
-extern BattleEntity *D_8009D254;
-extern Combatant *D_8009D278;
+#include "Battle_InitEntityColors_externs.h"
 void Entity_SetActionMode(BattleEntity *entity, int mode);
 /* The flag store goes through a byte-offset scalar access: as a field store
  * GCC would move the D_8009D298 store above it. */

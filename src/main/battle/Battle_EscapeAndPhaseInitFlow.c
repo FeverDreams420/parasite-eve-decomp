@@ -12,13 +12,7 @@ u8 D_8009D244;
 Combatant *D_8009D278;
 s32 D_8009D28C;
 
-extern RenderObjectEntity D_800B0CEC;
-/* D_800B0D88 is D_800B0CEC.flags_9C. Retail reloads the player's flags only
- * after this store, so the store must look like it may alias them: a
- * non-small view keeps the address in a register, and separate read and
- * write views keep GCC from sharing one LUI between the load and the store. */
-extern struct { u16 value; char pad[14]; } D_800B0D88_read __asm__("D_800B0D88");
-extern struct { u16 value; char pad[14]; } D_800B0D88_write __asm__("D_800B0D88");
+#include "Battle_EscapeAndPhaseInitFlow_externs.h"
 s32 Pm_StopUpperHalf(void);
 void Akao_Cmd_21(int arg0, int arg1);
 
@@ -981,7 +975,7 @@ void Battle_PhaseEndTurn(void) {
 }
 
 /* Finish entity death animations and restore the player for the next phase. */
-extern u8 D_8009D244;
+#include "Battle_EscapeAndPhaseInitFlow_externs_1.h"
 void Battle_StepEntityDeath(void)
 {
     BattleEntity *entity;
