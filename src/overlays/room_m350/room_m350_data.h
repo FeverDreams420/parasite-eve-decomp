@@ -34,6 +34,8 @@ extern GteMatrix D_8019A870;
 typedef struct RoomM350CloudTracking {
     short repeats;
     short playerDistance;
+    short playerAngle;
+    unsigned char complete;
 } RoomM350CloudTracking;
 extern RoomM350CloudTracking D_8019A8B8;
 

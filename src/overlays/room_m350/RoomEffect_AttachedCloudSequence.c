@@ -1,3 +1,4 @@
+#include "room_m350_data.h"
 #include "pe1/room_m350_effects.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_texture_tables.h"
@@ -68,7 +69,7 @@ int func_80198ABC(int event)
         case 1:
     {
         int i;
-        if(D_8019A8BE) return 2;
+        if(D_8019A8B8.complete) return 2;
         for(i=0;i<2;i++) {
             int firstRandom;
             int combinedRandom;

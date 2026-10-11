@@ -24,7 +24,7 @@ int func_80198CF8(int event,State *state)
     if(event==0) {
         Matrix *matrix;
         state->speed=0; state->targetSpeed=0; state->heightPhase=0; state->mode=0;
-        D_8019A8BE=0; D_8019A8C0=0; D_8019A89E=0;
+        D_8019A8B8.complete=0; D_8019A8C0=0; D_8019A89E=0;
         asm volatile("" : : : "memory");
         matrix=instance->render_object.matrices;
         state->asset=Asset_Find08w(0x5CB,instance->state->progress,
@@ -48,15 +48,14 @@ int func_80198CF8(int event,State *state)
             }
         } else if((short)current>=instance->action-1) {
             if(instance->state) instance->state->action_state[0]=4;
-            D_8019A8BE=1;
-            asm volatile("" : : : "memory");
+            D_8019A8B8.complete=1;
             Akao_Cmd_21(state->asset,0);
             return 1;
         }
         }
         D_8019A8B8.playerDistance=func_800DFE20((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x);
         angle=FieldEng_VecToAngle((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x)&4095;
-        D_8019A8BC=angle;
+        D_8019A8B8.playerAngle=angle;
         asm volatile("" : : : "memory");
         delta=(angle-(unsigned short)instance->rot_y)&4095;
         do {
@@ -67,7 +66,7 @@ int func_80198CF8(int event,State *state)
                 }
             } else {
                 if(state->speed<=1280) instance->rot_y=FieldEng_TurnToward(instance->rot_y,angle,80);
-                if(state->speed<=state->targetSpeed && ((instance->rot_y-D_8019A8BC+64)&4095)<=256) {
+                if(state->speed<=state->targetSpeed && ((instance->rot_y-D_8019A8B8.playerAngle+64)&4095)<=256) {
                     state->mode=1; state->targetSpeed=1536; D_8019A8C0=0;
                 }
                 break;
