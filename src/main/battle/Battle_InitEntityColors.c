@@ -5,7 +5,7 @@
 
 #define NULL ((void *)0)
 
-int Entity_SetActionMode();
+void Entity_SetActionMode(BattleEntity *entity, int mode);
 extern s8 D_8009CE30;
 extern struct { char _[16]; } g_PlayerEntity_o __asm__("g_PlayerEntity");
 #define g_PlayerEntity (*(s32 *)&g_PlayerEntity_o)
@@ -68,7 +68,7 @@ extern struct { char _[16]; } D_800B01BA_o __asm__("D_800B01BA");
 void Battle_InitEntityColors(void) {
     s32 flags;
 
-    Entity_SetActionMode(g_PlayerEntity,
+    Entity_SetActionMode((BattleEntity *)g_PlayerEntity,
                          COMBATANT_FIELD(g_ActiveActor_call, u8, actionMode12));
     flags = COMBATANT_FIELD(g_ActiveActor_flags, s32, stateFlags);
     D_8009CE30 = 0;

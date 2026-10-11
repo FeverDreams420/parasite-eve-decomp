@@ -7,7 +7,7 @@ extern char *g_ActiveActor;
 extern char *g_PlayerEntity;
 extern s8 D_8009CE30;
 
-void Entity_SetActionMode(char *arg0, int arg1);
+void Entity_SetActionMode(BattleEntity *entity, int mode);
 void Battle_FlushScriptSounds(void);
 
 #define COMBATANT_FIELD(ptr, type, member) \
@@ -28,7 +28,7 @@ void Battle_HaltOnPositiveX(void) {
         ENTITY_FIELD(actor, int, motionX) = 0;
         ENTITY_FIELD(actor, int, motionY) = 0;
         ENTITY_FIELD(actor, int, motionZ) = 0;
-        Entity_SetActionMode(actor, 0x12);
+        Entity_SetActionMode((BattleEntity *)actor, 0x12);
 
         state2 = g_ActiveActor;
         actor2 = g_PlayerEntity;

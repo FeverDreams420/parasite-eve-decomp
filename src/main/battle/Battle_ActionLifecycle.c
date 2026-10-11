@@ -7,7 +7,7 @@ extern char *D_8009D254;
 extern char *D_8009D278;
 extern short D_8009D298;
 
-void Entity_SetActionMode(char *arg0, int arg1);
+void Entity_SetActionMode(BattleEntity *entity, int mode);
 void Battle_FlushScriptSounds(void);
 
 #define COMBATANT_FIELD(ptr, type, member) \
@@ -30,7 +30,7 @@ void Battle_BeginPlayerAction(void) {
     ENTITY_FIELD(player, int, entityFlags) = flags;
     COMBATANT_FIELD(actor, int, stateFlags) |= 0x10000;
     D_8009D298 = 0;
-    Entity_SetActionMode(player, 0x12);
+    Entity_SetActionMode((BattleEntity *)player, 0x12);
     Battle_FlushScriptSounds();
 }
 
@@ -41,7 +41,6 @@ extern int g_FieldMoveLock;
 extern char *g_ActiveActor;
 extern char *g_PlayerEntity;
 
-void Entity_SetActionMode(char *arg0, int arg1);
 
 #define COMBATANT_FIELD(ptr, type, member) \
     (*(type *)((ptr) + PE1_OFFSETOF(Combatant, member)))
@@ -64,7 +63,7 @@ void Battle_ReturnToIdle(void) {
     ENTITY_FIELD(actor, int, motionX) = 0;
     ENTITY_FIELD(actor, int, motionY) = 0;
     ENTITY_FIELD(actor, int, motionZ) = 0;
-    Entity_SetActionMode(actor, COMBATANT_FIELD(state, unsigned char, actionMode12));
+    Entity_SetActionMode((BattleEntity *)actor, COMBATANT_FIELD(state, unsigned char, actionMode12));
 }
 
 #undef ENTITY_FIELD

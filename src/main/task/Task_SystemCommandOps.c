@@ -60,7 +60,7 @@ extern CameraBaseAngles D_800BD020;
 extern unsigned char g_ScreenTransitionState[];
 
 int Pm_SetGetState(int arg0, int arg1, int arg2);
-void Entity_AllocSlot(void *arg0);
+void Entity_AllocSlot(BattleEntity *entity);
 void Render_SetEntryVisible(int arg0, int arg1);
 void Obj_SetEntryLimit(int arg0, int arg1);
 void Sys_SetFlagSlot(int arg0, int arg1);
@@ -198,7 +198,7 @@ int Task_PlayerPointInPoly(int **arg0) {
 }
 
 int Task_InitEntityMoveState(void) {
-    Entity_AllocSlot(g_CurrentEntity);
+    Entity_AllocSlot((BattleEntity *)g_CurrentEntity);
     return 1;
 }
 

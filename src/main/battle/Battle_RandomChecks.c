@@ -4,7 +4,7 @@
 extern void *g_ActiveActor;
 int rand(void);
 int Battle_GetAgilityBonus(void);
-void Battle_SetupEntityTarget(void *arg0);
+void Battle_SetupEntityTarget(BattleEntity *actor);
 
 
 void Battle_CheckDropChance(void)
@@ -60,6 +60,6 @@ void Battle_RollEnemySpawn(void *arg0)
     }
 
     if (scaled < threshold) {
-        Battle_SetupEntityTarget(arg0);
+        Battle_SetupEntityTarget((BattleEntity *)arg0);
     }
 }

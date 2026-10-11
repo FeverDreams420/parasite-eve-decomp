@@ -11,9 +11,9 @@
 #include "pe1/gte_types.h"
 
 #define NULL ((void *)0)
-M2C_UNK Battle_StartEncounter();
+void Battle_StartEncounter(int mode);
 M2C_UNK func_80042F20();
-s32 CD_StepReadState();
+int CD_StepReadState(int active);
 extern s32 g_SceneDataTable0;
 extern struct { char _[16]; } D_8009D1A0_o __asm__("g_GameStateFlags");
 extern s32 D_8009D1A0_rd[] __asm__("g_GameStateFlags");
