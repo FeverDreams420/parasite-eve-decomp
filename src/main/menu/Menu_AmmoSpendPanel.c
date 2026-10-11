@@ -1,31 +1,24 @@
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
 #include "common.h"
 #include "pe1/menu_dialog.h"
 #include "pe1/menu_inventory.h"
+#include "pe1/menu_item_rows.h"
+#include "pe1/menu_queue.h"
 #include "pe1/inventory.h"
 #include "pe1/inventory_queries.h"
+#include "pe1/inventory_slots.h"
 #include "pe1/draw_state.h"
 #include "pe1/text.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 --use-comm-section */
-
-#include "include_asm.h"
 
 #define NULL ((void *)0)
-#include "../../../tools/m2c/m2c_macros.h"
-
-void Inv_ClearSelectionBitset(void);
-
-#define ITEM_FIELD(base, type, member) \
-    (*(type)((char *)(base) + PE1_OFFSETOF(ItemDataRecord, member)))
-
-#include "Menu_AmmoSpendPanel_externs.h"
 
 int Menu_AmmoSpendInputHandler(s32 arg0, s32 arg1);
 void Menu_DrawAmmoSpendPanel(void);
 
 void Menu_CreateAmmoSpendPanel(s32 parent) {
     MenuWidgetNode *node;
-    void *item;
+    ItemDataRecord *item;
 
     node = MenuWidget_CreateSimpleNode(0x3E, parent, 0, 1);
     node->update = (void (*)())Menu_AmmoSpendInputHandler;
@@ -34,7 +27,7 @@ void Menu_CreateAmmoSpendPanel(s32 parent) {
     MenuWidget_SetCurrentNode(node);
     Inv_SelectActiveList(g_InvAmmoSpendActiveList);
     item = Inv_LookupActiveListData(g_InvSelectedItemIndex);
-    if ((item != NULL) && ((ITEM_FIELD(item, u8 *, kind) - 0x13) >= 3U)) {
+    if ((item != NULL) && ((item->kind - 0x13) >= 3U)) {
         s32 active = g_InvAmmoSpendActiveList;
         s32 source = g_InvSwapSourceList;
         s32 selected = g_InvSelectedItemIndex;
@@ -60,27 +53,16 @@ void Menu_CreateAmmoSpendPanel(s32 parent) {
     g_MenuSpendArrowDirection = 0;
 }
 
-#undef ITEM_FIELD
-#include "common.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 --use-comm-section */
-
-#define NULL ((void *)0)
-#include "../../../tools/m2c/m2c_macros.h"
-s32 Spend_Ammo();
-s32 func_8005E120();
-#include "Menu_AmmoSpendPanel_externs_1.h"
-
 s32 Menu_AmmoSpendInputHandler(s32 arg0, s32 arg1) {
     if (arg1 & 0x1000) {
-        if (Spend_Ammo(-func_8005E120()) != 0) {
+        if (Spend_Ammo(-MenuInput_GetRepeatStep()) != 0) {
             Menu_PlayErrorSound();
         } else {
             Menu_PlayMoveSound();
         }
         g_MenuSpendArrowDirection = 1;
     } else if (arg1 & 0x4000) {
-        if (Spend_Ammo(func_8005E120()) != 0) {
+        if (Spend_Ammo(MenuInput_GetRepeatStep()) != 0) {
             Menu_PlayErrorSound();
         } else {
             Menu_PlayMoveSound();
@@ -107,8 +89,6 @@ s32 Menu_AmmoSpendInputHandler(s32 arg0, s32 arg1) {
 }
 
 int g_MenuSpendArrowDirection;
-
-void Menu_DrawWeaponComparisonPanel(void);
 
 void Menu_DrawAmmoSpendPanel(void) {
     Draw_OffsetCursor(0x3C, 0x12);

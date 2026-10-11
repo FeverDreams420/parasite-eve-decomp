@@ -1,6 +1,8 @@
 #ifndef PE1_MENU_STATE_H
 #define PE1_MENU_STATE_H
 
+#include "common.h"
+
 /* 0: closed, 1: opening, 2+: save polling runs in the menu frame. */
 extern int g_MemCardDialogState;
 void MemCard_SetDialogActive(int active);
@@ -39,13 +41,26 @@ extern int g_MenuBattleStatusOverlayActive;
 extern int g_MenuSelectionLocked;
 /* Parasite spell picked on the skill screen (its name is table 8 + 0xEB). */
 extern int g_MenuSelectedSpell;
+/* Row of the action submenu last picked (Menu_SetActionSubmenuSelection). */
+extern unsigned int g_MenuActionSubmenuSel;
 /* Which list the equipment options act on: 0 sorts Aya's inventory, any
  * other value sorts Wayne's storage. */
 extern int g_MenuInventoryViewMode;
 extern int g_InvItemUsableFlag;
+/* Item list pair compared and swapped by the ammo transfer panel. */
+extern int g_InvAmmoSpendActiveList;
+extern int g_InvSwapSourceList;
+/* Arrow the ammo transfer panel points (0 or 1). */
+extern int g_MenuSpendArrowDirection;
 /* Set while the list column layout must not be restored from the saved
  * cursor table. */
 extern int g_MenuLayoutLocked;
+
+/* Window X and Y offset per menu window mode (Window_SetBoundsByMode). */
+typedef struct {
+    u16 values[8];
+} SaveWindowModeBounds;
+extern SaveWindowModeBounds g_MenuWindowModeBounds;
 
 /* Visual settings: the blend colour and screen base Y in effect when the
  * colour and screen adjust panels opened, restored on cancel, and the

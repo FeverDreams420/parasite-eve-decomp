@@ -1,19 +1,16 @@
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 */
 #include "pe1/menu_state.h"
 #include "pe1/game_state.h"
 #include "pe1/inventory_slots.h"
 #include "pe1/menu_queue.h"
 #include "pe1/akao/commands.h"
 #include "pe1/akao_counters.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
-
 #include "pe1/save.h"
 #include "pe1/menu_inventory.h"
+#include "pe1/battle_modifiers.h"
 
-#include "Menu_ActionSubmenuSelection_externs.h"
-
-
-
+/* Retail passes the window index although the reset ignores it. */
 void Save_ResetMetadataWindow(int);
 void Menu_ResetStateFlags(void);
 void Inv_SetDefaultItemId(void);
@@ -23,9 +20,6 @@ void Sys_InitStateBuffer(void);
 void MemCard_ClearDelayedCallback(void);
 void BattleCmd_InitTableCursor(void);
 void Inv_BuildItemGridFromCategory(void);
-void Save_InitMetadataState(void);
-void BattleCmd_LoadWeaponModifiers(void);
-void Menu_SaveBgInitFade(void);
 void Menu_SetEquipSlotIndex(int index);
 
 void Akao_FlushBgmVolumeFade(void) {

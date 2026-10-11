@@ -47,6 +47,8 @@ extern SavedMenuMode g_SavedMenuMode;
 void Inv_SetActiveList(int mode, int *slot);
 void Inv_ResetActiveList(void);
 void Battle_UseItem(int item);
+/* Moves ammo between the compared weapons; nonzero when it cannot. */
+int Spend_Ammo(int amount);
 int Inv_LoadWayneItemsAsOverride(short *items);
 extern u8 D_800C0E0C;
 

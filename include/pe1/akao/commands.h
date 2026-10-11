@@ -181,5 +181,7 @@ extern signed char D_800B0DB4;
 extern signed char D_800B0DB5;
 extern signed char D_800B0DB6;
 extern signed char D_800B0DB7;
+/* Opcode 0x80, 0x81 or 0x82 chosen by the argument. */
+void Akao_Cmd_80_81_82(int arg0);
 
 #endif
