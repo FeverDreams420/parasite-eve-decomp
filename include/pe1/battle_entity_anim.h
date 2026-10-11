@@ -2,6 +2,7 @@
 #define PE1_BATTLE_ENTITY_ANIM_H
 
 #include "pe1/entity_animation.h"
+#include "pe1/asset_find.h"
 
 extern u32 D_8009D1A0;
 extern BattleEntity *g_FieldActorListHead;
@@ -14,7 +15,6 @@ extern BattleRewardSlot D_800A7FF0[];
 
 void Anim_SetInterpRate(RenderObjectEntity *anim, int rate);
 void Akao_Cmd_21(int arg0, int arg1);
-void Asset_Find08w(int id, int arg1, int x, int y, int z);
 void Battle_SlotFree(void *entity);
 void Battle_StartDeathAnim(void);
 void Battle_StepEntityAnimState(BattleEntity *entity);

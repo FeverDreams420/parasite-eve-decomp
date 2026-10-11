@@ -7,6 +7,6 @@
  * (Asset_SceneTablesAndSound.c). Callers pass the coordinates as ints;
  * the definitions narrow them to halfwords. */
 int Asset_Find08w(int id, int mode, int x, int y, int z);
-void Asset_Find08Alt(int id, int mode, int x, int y, int z);
+int Asset_Find08Alt(int id, int mode, int x, int y, int z);
 
 #endif

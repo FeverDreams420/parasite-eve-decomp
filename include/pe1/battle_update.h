@@ -2,9 +2,9 @@
 #define PE1_BATTLE_UPDATE_H
 
 #include "pe1/battle_turn.h"
+#include "pe1/asset_find.h"
 
 int Akao_SendTableCommand(void *, int, int, int, int);
-int Asset_Find08Alt(int, int, int, int, int);
 int Battle_BuildTargetList(void);
 void Battle_DrawActiveStatus(void);
 int Battle_HandleItemMenu(void);

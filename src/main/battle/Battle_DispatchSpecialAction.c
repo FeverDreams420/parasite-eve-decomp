@@ -1,11 +1,11 @@
 
 #include "pe1/battle.h"
+#include "pe1/asset_find.h"
 
 extern int g_GameStateFlags;
 extern BattleEntity *g_PlayerEntity;
 extern int g_ActiveActor;
 
-void Asset_Find08Alt(int id, int arg1, int x, int y, int z);
 void Battle_CopyPadStateToRecord(void);
 void Battle_SetupEnemyAnims(void);
 void Battle_SyncEnemyAttributes(void);
