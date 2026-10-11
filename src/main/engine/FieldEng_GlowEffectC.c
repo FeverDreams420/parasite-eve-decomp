@@ -12,39 +12,27 @@
 #include "FieldEng_GlowEffectC_externs.h"
 
 int func_800C9A70(char *object) {
-    int half;
-    register int value asm("$3");
-    register void *slotData asm("$3");
     void **slot;
 
     slot = FieldEng_GetSlot(object);
-    slotData = &D_800E0B38;
-    *slot = slotData;
+    *slot = &D_800E0B38;
 
-    value = 0xBD;
-    D_800E22F8.cell = value;
-    value = 9;
-    half = 0x80;
-    asm volatile("" : "=r"(half) : "0"(half));
-    D_800E22F8.clut = value;
-    value = 0x80;
-    D_800E22F8.r = value;
-    D_800E22F8.g = value;
-    D_800E22F8.b = value;
-    value = 0xAC;
-    D_800F34B8.cell = value;
-    value = 6;
-    D_800F34B8.clut = value;
-    value = -0x32;
-    D_800F34B8.offset = value;
-    value = 0x50;
+    D_800E22F8.cell = 0xBD;
+    D_800E22F8.clut = 9;
     D_800E22F8.offset = 0;
-    D_800E22F8.depth = half;
+    D_800E22F8.depth = 0x80;
+    D_800E22F8.r = 0x80;
+    D_800E22F8.g = 0x80;
+    D_800E22F8.b = 0x80;
     D_800E22F8.flip = 0;
-    D_800F34B8.depth = half;
-    D_800F34B8.r = value;
-    D_800F34B8.g = value;
-    D_800F34B8.b = value;
+
+    D_800F34B8.cell = 0xAC;
+    D_800F34B8.clut = 6;
+    D_800F34B8.offset = -0x32;
+    D_800F34B8.depth = 0x80;
+    D_800F34B8.r = 0x50;
+    D_800F34B8.g = 0x50;
+    D_800F34B8.b = 0x50;
     D_800F34B8.flip = 0;
 
     return 0;
