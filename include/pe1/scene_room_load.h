@@ -8,4 +8,10 @@ int Scene_LoadEntityTextures(void);
 /* Steps the room TIM texture loader. */
 int Asset_LoadTimTextures(int force);
 
+/* Model allocation per actor type, given to actors of types below 10. */
+extern unsigned int g_SceneMapPrimBaseTable[];
+/* g_SceneAreaType as a byte array: Scene_LoadMap tests the array address
+ * itself (an absolute la), which a -G8 scalar would make $gp-relative. */
+extern unsigned char D_800B0CE2[];
+
 #endif /* PE1_SCENE_ROOM_LOAD_H */

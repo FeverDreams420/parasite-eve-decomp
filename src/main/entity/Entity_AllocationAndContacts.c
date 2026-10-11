@@ -5,7 +5,7 @@
 #include "pe1/render_buffers.h"
 
 
-s32 Entity_AllocBlock(u32 arg0) {
+void *Entity_AllocBlock(u32 arg0) {
     s32 temp_a0;
     u32 var_v0;
     s32 var_a1;
@@ -62,7 +62,7 @@ after_empty_scan:
             D_800A7620[var_v0].blockCount = temp_t0;
             var_v0 = *temp_t1 + (var_v1 << 5);
             ((EntityAllocationBlock *)((u8 *)D_800A7620 + temp_a0))->address = var_v0;
-            return var_v0;
+            return (void *)var_v0;
         }
     }
     else

@@ -16,7 +16,7 @@ typedef struct FieldActor {
     /* 0x00D */ unsigned char sub_id;
     /* 0x00E */ unsigned char mode;
     /* 0x00F */ unsigned char action;
-    /* 0x010 */ unsigned char pad_010[0x02];
+    /* 0x010 */ unsigned short pad_010; /* 0xC8 when the actor is created */
     /* 0x012 */ unsigned short anim_frame_target; /* clamped target anim frame (Task_SetEntityAnimFrame) */
     /* 0x014 */ union {
         int fixed;                                /* current animation position, 16.16 */
@@ -63,13 +63,13 @@ typedef struct FieldActor {
     /* 0x098 */ unsigned int flags;
     /* 0x09C */ unsigned char *script_base; /* base of the entity's 16-bit scene script */
     /* 0x0A0 */ TaskNode *task_node_lists[3]; /* 3 task-node list heads (Entity_MarkNodeFree) */
-    /* 0x0AC */ unsigned char pad_0AC[0xE0];
+    /* 0x0AC */ unsigned int pad_0AC[0x38]; /* cleared when the actor is created */
     /* 0x18C */ struct FieldActor *parent; /* parent actor; child copies its pos/rot when flags & 0x400000 */
     /* 0x190 */ void (*frame_callback)(struct FieldActor *actor); /* run first every frame */
     /* 0x194 */ void (*contact_callback)(struct FieldActor *self, int self_part,
                                          struct FieldActor *other, int other_part);
                 /* run for each overlapping hit-sphere pair (Scene_UpdateEntityPositions) */
-    /* 0x198 */ unsigned char pad_198[0x04];
+    /* 0x198 */ unsigned int pad_198;
     /* 0x19C */ unsigned int *script_cursor_19c; /* entry for queued field-sfx tasks */
     /* 0x1A0 */ unsigned int *script_cursor_1a0; /* entry for actor-contact tasks */
     /* 0x1A4 */ int collision_face;        /* floor face under the actor; rolled back with pos */
@@ -107,6 +107,16 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldActor, render_object.flags_9C) == 0x250,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldActor, allocation_block) == 0x278,
                   field_actor_allocation_block_offset);
 PE1_STATIC_ASSERT(sizeof(FieldActor) == 0x27C, field_actor_size);
+
+/* Per-type frame and contact callbacks copied into a new actor
+ * (Scene_LoadMap), indexed by the scene entry's type byte. */
+typedef struct FieldActorCallbacks {
+    void (*frame)(struct FieldActor *actor);
+    void (*contact)(struct FieldActor *self, int self_part,
+                    struct FieldActor *other, int other_part);
+} FieldActorCallbacks;
+
+extern FieldActorCallbacks g_FieldActorTypeCallbacks[];
 
 /* Packed status values addressed by script selectors 0x64..0x6E. */
 typedef union FieldActorPackedStatus {

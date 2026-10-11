@@ -2,23 +2,22 @@
 #include "pe1/player_entity.h"
 #include "pe1/render_setup.h"
 #include "pe1/scene_assets.h"
-#include "pe1/psyq_nop.h"
 #include "pe1/scene_room_load.h"
 #include "pe1/scene_archive.h"
 #include "pe1/entity_animation.h"
 #include "pe1/scene_entity_textures.h"
 #include "pe1/render_camera.h"
+#include "pe1/game_state.h"
+#include "pe1/render_shadow.h"
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
 
-#define W(p, off) (*(u32 *)((u8 *)(p) + (off)))
-#define H(p, off) (*(u16 *)((u8 *)(p) + (off)))
-#define B(p, off) (*(u8 *)((u8 *)(p) + (off)))
 
-#include "Scene_LoadMap_externs.h"
+#include "pe1/entity_allocation.h"
 
-void Battle_InitEquipLists();
-void *Entity_AllocBlock();
+/* COMMON gives MASPSX the small-data size of the free-list head, so it
+ * keeps the load delay before the $gp store as ASPSX did. */
+FieldActor *g_EntityFreeListHead;
 
 FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
 {
@@ -35,7 +34,6 @@ FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
     u8 sceneType;
     u32 serial;
     u32 *row;
-    u8 *baseRows;
     u32 *table;
     SceneAssetBlob *archive;
     SceneAssetDirectory *directory;
@@ -43,13 +41,11 @@ FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
     SceneBankAssetRecord *walk;
     struct { u8 *primData; u32 unknown; u32 mode; } renderSetup;
 
-    available = D_8009D2AC;
+    available = g_EntityFreeListHead;
     if (!available) return 0;
     actor = available;
     nextFree = actor->next;
-    /* Preserve the retail load-delay slot. */
-    PE1_NOP();
-    D_8009D2AC = nextFree;
+    g_EntityFreeListHead = nextFree;
     if (after) {
         afterNext = after->next;
         actor->prev = after;
@@ -57,10 +53,10 @@ FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
         after->next = actor;
         if (actor->next) actor->next->prev = actor;
     } else {
-        if (D_8009D20C) D_8009D20C->prev = actor;
+        if (g_FieldActorListHead) g_FieldActorListHead->prev = actor;
         actor->prev = 0;
-        actor->next = D_8009D20C;
-        D_8009D20C = actor;
+        actor->next = g_FieldActorListHead;
+        g_FieldActorListHead = actor;
     }
 
     actor->gravity_x = 0;
@@ -76,12 +72,12 @@ FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
     actor->delta_y = 0;
     actor->delta_z = 0;
 
-    W(actor, 0x190) = D_800915DC[scene[0] * 2];
-    W(actor, 0x194) = D_800915E0[scene[0] * 2];
+    actor->frame_callback = g_FieldActorTypeCallbacks[scene[0]].frame;
+    actor->contact_callback = g_FieldActorTypeCallbacks[scene[0]].contact;
     if (scene[0] == 0) {
         g_PlayerEntity = actor;
         actor->move_factor = 0x10000;
-        Battle_InitEquipLists(actor);
+        Battle_InitEquipLists((struct AyaBattleState **)&actor->state);
     } else {
         actor->move_factor = 0x50000;
         actor->state = 0;
@@ -89,44 +85,44 @@ FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
     actor->type_id = scene[0];
     actor->sub_id = scene[1];
     if (scene[0] < 10) {
-        actor->model_state.allocation_active = D_800B0E70[scene[0]];
+        actor->model_state.allocation_active = g_SceneMapPrimBaseTable[scene[0]];
     } else {
         actor->model_state.allocation_active = 0;
     }
-    serial = D_8009D224;
+    serial = g_EntitySerialCounter;
     actor->flags = 0x10000000;
     actor->anim_step = 0x10000;
-    H(actor, 0x10) = 0xC8;
+    actor->pad_010 = 0xC8;
     actor->action_data = 0;
     actor->anim.fixed = 0;
     actor->parent = 0;
     actor->collision_face = 0;
     actor->script_cursor_19c = 0;
     actor->script_cursor_1a0 = 0;
-    W(actor, 0x198) = 0;
+    actor->pad_198 = 0;
     actor->move_speed = 0x1000;
-    D_8009D224 = serial + 1;
+    g_EntitySerialCounter = serial + 1;
     actor->field_sfx_id = serial;
     actor->mode = 0;
-    B(actor, 0x27C) = 0;
-    B(actor, 0x27D) = 0x80;
-    for (i = 0; i < 0x38; ++i) W(actor, 0xAC + 4 * i) = 0;
-    for (i = 0; i < 3; ++i) W(actor, 0xA0 + 4 * i) = 0;
+    ((RenderShadowActor *)actor)->shadow_matrix_index = 0;
+    ((RenderShadowActor *)actor)->shadow_intensity = 0x80;
+    for (i = 0; i < 0x38; ++i) actor->pad_0AC[i] = 0;
+    for (i = 0; i < 3; ++i) actor->task_node_lists[i] = 0;
 
-    table = *(u32 **)D_800B161C;
+    table = (u32 *)g_GameState.bank_reset_944[0];
     actor->script_base = (u8 *)table[2 + scene[0]];
     actor->task_node_lists[2] = Task_AllocNode((unsigned int *)actor->script_base, 0);
     actor->rot_x = 0;
     actor->rot_y = 0;
     actor->rot_z = 0;
-    D_8009D2A6++;
+    g_EntityFreePoolCount++;
 
     if (actor->model_state.allocation_active) {
     if (actor == g_PlayerEntity) {
         Entity_SetActionMode((BattleEntity *)actor, 0x15);
     } else {
-        baseRows = (u8 *)D_800B161C - 0x784;
-        row = (u32 *)(baseRows + actor->type_id * 0xC0);
+        void *(*rows)[48] = g_GameState.bank_rows;
+        row = (u32 *)rows[actor->type_id];
         for (i = 0; i < 0x30; ++i) {
             if (row[i]) {
                 Entity_SetActionMode((BattleEntity *)actor, i & 0xFFFF);
@@ -136,7 +132,7 @@ FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
     }
 
     if (allocateFull) {
-        allocation = Entity_AllocBlock(H((u8 *)actor->model_state.allocation_active, 0) * 8 + actor->model_state.model_header->animation_entry_count * 12 + actor->model_state.model_header->part_count * 32 + 0x50);
+        allocation = Entity_AllocBlock(actor->model_state.model_header->prim_block_count * 8 + actor->model_state.model_header->animation_entry_count * 12 + actor->model_state.model_header->part_count * 32 + 0x50);
     } else {
         allocation = Entity_AllocBlock(actor->model_state.model_header->animation_entry_count * 12 + actor->model_state.model_header->part_count * 32);
         actor->flags |= 0x600000A0;
@@ -163,8 +159,8 @@ scan_loop:
         if (i < count) { ++walk; goto scan_loop; }
         }
         }
-scan_done:
-        allocation = actor->allocation_block;
+
+        allocation = (u8 *)actor->allocation_block;
         value = bankRows[i].trailing;
         Render_SetupEntityPrims(&actor->render_object, actor->model_state.model_header, allocation + 0x50,
                                 (value >> 6) & 0x3C0, (value >> 9) & 0x180,
@@ -172,7 +168,7 @@ scan_done:
                                 (bankRows[i].trailing >> 8) & 0xF, (s8 **)&renderSetup,
                                 allocateFull);
     }
-render_done:
+
     if (actor->action_data) {
         actor->render_object.shade = 0x80;
         actor->render_object.lightNegativeY = 0xC;

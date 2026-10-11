@@ -56,7 +56,7 @@ void Gpu_InitPipeline(void) {
     Akao_LoadVoiceBankAlt();
     Scene_LoadRoom(g_SceneDispatchToken);
     Overlay_StreamTexturePage();
-    D_8009D224 = 1;
+    g_EntitySerialCounter = 1;
     H(g_TaskNodeSeqCounter) = 1;
     Entity_InitFreePool();
     Task_InitNodeFreeList();

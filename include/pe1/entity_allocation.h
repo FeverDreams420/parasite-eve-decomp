@@ -25,4 +25,15 @@ extern char D_800BEA94[];
 extern int D_800C0B14[];
 extern int g_FieldMoveLock;
 
+/* Claims scratch-buffer slots for a model allocation of `size` bytes and
+ * returns its address. */
+void *Entity_AllocBlock(u32 size);
+
+/* Field entity pool (Entity_PoolInit.c): the free-record list, the number
+ * of live records and the serial number of the next allocated entity. */
+struct FieldActor;
+extern struct FieldActor *g_EntityFreeListHead;
+extern u16 g_EntityFreePoolCount;
+extern u32 g_EntitySerialCounter;
+
 #endif

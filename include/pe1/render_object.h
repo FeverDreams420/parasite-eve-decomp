@@ -361,7 +361,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RenderObjectPart, translation_z) == 8,
                   render_object_part_translation_z);
 
 typedef struct RenderObjectHeader {
-    unsigned char pad_00[2];
+    unsigned short prim_block_count; /* 8-byte blocks added to a full allocation */
     unsigned char part_count;
     unsigned char animation_entry_count;
     unsigned char pad_04[2];

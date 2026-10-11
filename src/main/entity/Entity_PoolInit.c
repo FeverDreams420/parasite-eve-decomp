@@ -15,7 +15,7 @@ FieldActor *g_FieldActorListHead;
 FieldActor *g_CurrentEntity;
 u16 g_EntityFreePoolCount;
 FieldActor *g_PlayerEntity;
-u32 D_8009D224;
+u32 g_EntitySerialCounter;
 
 
 void Entity_ResetAllPools(void)
@@ -64,7 +64,7 @@ void Entity_ResetAllPools(void)
     g_CurrentEntity = 0;
     g_EntityFreePoolCount = 0;
     g_PlayerEntity = 0;
-    D_8009D224 = 0;
+    g_EntitySerialCounter = 0;
     g_GameState.flags &= 0xFFFFCFFF;
 }
 
