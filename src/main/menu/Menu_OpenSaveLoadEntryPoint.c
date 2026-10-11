@@ -26,7 +26,7 @@ void Menu_OpenSaveLoadEntryPoint(s32 arg0) {
             Menu_OpenRenameScreen(-1);
         }
         if (MenuWidget_FindByModeAndSelectedBase(1, 0x13) == NULL) {
-            M2C_FIELD(MenuWidget_CreateSimpleNode(0x13, 0, 0, 0), void **, 0x30) = Menu_DrawContextHelpText;
+            MenuWidget_CreateSimpleNode(0x13, 0, 0, 0)->draw = Menu_DrawContextHelpText;
         }
     }
 }

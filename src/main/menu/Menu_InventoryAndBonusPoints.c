@@ -330,7 +330,7 @@ s32 Menu_BonusPointCancelHandler(void *arg0, s32 arg1) {
             MenuWidget_SetCurrentNode(MenuWidget_FindByModeAndSelectedBase(2, 0x32));
         } else {
             if (MenuWidget_GetCurrentNode() != NULL) {
-                MenuWidget_ClearCursorY(M2C_FIELD(MenuWidget_GetCurrentNode(), s32 *, 4));
+                MenuWidget_ClearCursorY(MenuWidget_GetCurrentNode()->parent);
             }
             MenuWidget_ClearCursorY(MenuWidget_FindByModeAndSelectedBase(1, 0x1B));
         }

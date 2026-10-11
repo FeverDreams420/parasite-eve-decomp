@@ -327,7 +327,7 @@ block_21:
         return 1;
     case 39:
         playerForActionMode = g_PlayerEntity;
-        M2C_FIELD(playerForActionMode, s32 *, 0x1AC) = g_SceneMapPrimBaseTable;
+        *(s32 *)&playerForActionMode->model_state = g_SceneMapPrimBaseTable;
         playerForActionMode->action_data = (void *)D_800B0EEC;
         Entity_SetActionMode((BattleEntity *)playerForActionMode, 0x15);
         playerForRenderSetup = g_PlayerEntity;

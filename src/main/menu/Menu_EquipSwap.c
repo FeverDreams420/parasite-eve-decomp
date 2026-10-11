@@ -34,7 +34,7 @@ s32 Menu_HandleAyaInventorySelectionInput(s32 arg0, s32 arg1)
             PE1_NOP();
             D_8009CF9C = item_id;
         }
-        temp_v0_2 = MenuWidget_GridCellIndex(temp_v0) | (M2C_FIELD(temp_v0, s32 *, 0x5C) << 8);
+        temp_v0_2 = MenuWidget_GridCellIndex(temp_v0) | (((MenuWidgetNode *)temp_v0)->scroll_y << 8);
         g_MenuEquipSwapSource = temp_v0_2 + 1;
         Inv_RemoveActiveListItem(temp_v0_2 & 0xFF);
         MenuWidget_DestroyNode(arg0);

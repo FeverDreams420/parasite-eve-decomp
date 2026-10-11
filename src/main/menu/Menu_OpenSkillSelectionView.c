@@ -8,13 +8,13 @@ extern M2C_UNK Menu_HandleAyaInventorySelectionInput[];
 #define Menu_HandleAyaInventorySelectionInput (Menu_HandleAyaInventorySelectionInput[0])
 
 void Menu_OpenSkillSelectionView(void) {
-    void *temp_a0;
-    void *temp_v0;
+    MenuWidgetNode *temp_a0;
+    MenuWidgetNode *temp_v0;
 
     temp_v0 = MenuWidget_CreateSimpleNode(0x40, MenuWidget_GetCurrentNode(), 0, 0);
     temp_a0 = MenuWidget_CreateNode(0x40, temp_v0, temp_v0);
-    M2C_FIELD(temp_v0, M2C_UNK **, 0x2C) = &Menu_HandleAyaInventorySelectionInput;
-    M2C_FIELD(temp_a0, M2C_UNK **, 0x30) = &Menu_DrawSkillSelectionList;
+    temp_v0->update = (void (*)())&Menu_HandleAyaInventorySelectionInput;
+    temp_a0->draw = Menu_DrawSkillSelectionList;
     MenuWidget_SetCurrentNode(temp_a0);
     MenuWidget_SetCursorY(MenuWidget_FindByModeAndSelectedBase(1, 0));
     MenuWidget_SetCursorY(MenuWidget_FindByModeAndSelectedBase(1, 1));
