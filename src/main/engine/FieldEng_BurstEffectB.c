@@ -14,74 +14,44 @@
 
 int func_800CD728(char *object) {
     void **slot = FieldEng_GetSlot(object);
-    int value;
-    register int byte2 asm("$4");
 
-    value = (int)&D_800E0F6C;
-    *slot = (void *)value;
+    *slot = &D_800E0F6C;
 
-    value = 0x5F4;
-    D_800F33E8.oriented.scale.x = value;
-    D_800F33E8.oriented.scale.y = value;
-    D_800F33E8.oriented.scale.z = value;
-
-    value = 0x40;
-    byte2 = 0x20;
-    D_800F33E8.oriented.cell = value;
-    value = -0x64;
-    D_800F33E8.oriented.depth = value;
-
-    value = 0x15;
-    D_800F33E8.oriented.rgb[0] = value;
-
-    value = 0x46;
-    D_800E27B0.oriented.cell = value;
-
-    value = 0x30;
-    D_800E27B0.oriented.clut = value;
-
-    value = -0x6E;
-    D_800E27B0.oriented.depth = value;
-
-    value = 0xFF;
-    D_800E27B0.oriented.rgb[0] = value;
-
-    value = 0xB0;
-    D_800E27B0.oriented.rgb[1] = value;
-    D_800E27B0.oriented.rgb[2] = value;
-
-    value = 0xA4;
-    D_800E2770.oriented.scale.x = value;
-    D_800E2770.oriented.scale.y = value;
-
-    value = 0x108;
-    D_800E2770.oriented.scale.z = value;
-
-    value = 0x6E;
-    D_800E2770.oriented.cell = value;
-
-    value = 3;
-    D_800E2770.oriented.clut = value;
-
-    value = -0x96;
-    D_800E2770.oriented.depth = value;
-
-    value = 0x80;
+    D_800F33E8.oriented.scale.x = 0x5F4;
+    D_800F33E8.oriented.scale.y = 0x5F4;
+    D_800F33E8.oriented.scale.z = 0x5F4;
     D_800F33E8.oriented.rotation.x = 0;
     D_800F33E8.oriented.rotation.y = 0;
     D_800F33E8.oriented.rotation.z = 0;
-    D_800F33E8.oriented.clut = byte2;
-    D_800F33E8.oriented.rgb[1] = byte2;
-    D_800F33E8.oriented.rgb[2] = byte2;
+    D_800F33E8.oriented.cell = 0x40;
+    D_800F33E8.oriented.clut = 0x20;
+    D_800F33E8.oriented.depth = -0x64;
+    D_800F33E8.oriented.rgb[0] = 0x15;
+    D_800F33E8.oriented.rgb[1] = 0x20;
+    D_800F33E8.oriented.rgb[2] = 0x20;
+
     D_800E27B0.oriented.rotation.x = 0;
     D_800E27B0.oriented.rotation.y = 0;
     D_800E27B0.oriented.rotation.z = 0;
+    D_800E27B0.oriented.cell = 0x46;
+    D_800E27B0.oriented.clut = 0x30;
+    D_800E27B0.oriented.depth = -0x6E;
+    D_800E27B0.oriented.rgb[0] = 0xFF;
+    D_800E27B0.oriented.rgb[1] = 0xB0;
+    D_800E27B0.oriented.rgb[2] = 0xB0;
+
+    D_800E2770.oriented.scale.x = 0xA4;
+    D_800E2770.oriented.scale.y = 0xA4;
+    D_800E2770.oriented.scale.z = 0x108;
     D_800E2770.oriented.rotation.x = 0;
     D_800E2770.oriented.rotation.y = 0;
     D_800E2770.oriented.rotation.z = 0;
-    D_800E2770.oriented.rgb[0] = value;
-    D_800E2770.oriented.rgb[1] = value;
-    D_800E2770.oriented.rgb[2] = value;
+    D_800E2770.oriented.cell = 0x6E;
+    D_800E2770.oriented.clut = 3;
+    D_800E2770.oriented.depth = -0x96;
+    D_800E2770.oriented.rgb[0] = 0x80;
+    D_800E2770.oriented.rgb[1] = 0x80;
+    D_800E2770.oriented.rgb[2] = 0x80;
 
     return 0;
 }
