@@ -1045,8 +1045,8 @@ void RoomLib_HandlerB(RoomEnt *obj) {
         register int a0 asm("$4");
 
         self->t1A = 1;
-        RW8(self, 0x98) = 0;
-        RW32(link, 0x98) = (RW32(link, 0x98) & 0xFFF3FFFF) | 2;
+        ((RoomLibHandlerBState *)state)->finished = 0;
+        link->flags = (link->flags & 0xFFF3FFFF) | 2;
         if (self->active != 0 && link->target != 0) {
             link->target->flags |= 0x40000000;
         }
@@ -1075,20 +1075,20 @@ void RoomLib_HandlerB(RoomEnt *obj) {
         matrixComponent = -matrixComponent;
         ((RoomLibHandlerBState *)state)->matrix[6] = matrixComponent;
         v0 = ((short *)&player->pos[1])[1];
-        RW16(state, 0x84) = v0;
+        ((RoomLibHandlerBState *)state)->floorY = v0;
     }
 
-    RW32(scratch, 0x48) = 0;
-    if (RW8(state, 0x8C) == 0) {
+    ((RoomLibArcWork *)scratch)->landed = 0;
+    if (((RoomLibHandlerBState *)state)->finished == 0) {
         switch (((int (*)(RoomEnt *))func_800DFB78)(self)) {
         case 0:
             break;
         case 1:
-            RW8(state, 0x8C) = 1;
-            RW32(state, 0x78) = 0;
-            RW32(state, 0x7C) = 0;
-            if (RW32(state, 0x4) != 0) {
-                RW32((void *)RW32(state, 0x4), 0) = 2;
+            ((RoomLibHandlerBState *)state)->finished = 1;
+            ((RoomLibHandlerBState *)state)->horizontalVelocity[0] = 0;
+            ((RoomLibHandlerBState *)state)->horizontalVelocity[1] = 0;
+            if (((RoomLibHandlerBState *)state)->signal != 0) {
+                *((RoomLibHandlerBState *)state)->signal = 2;
             }
             return;
         case 2:
@@ -1098,34 +1098,34 @@ void RoomLib_HandlerB(RoomEnt *obj) {
         }
     }
 
-    if (RW8(link, 0xE) < 2) {
+    if (link->variant < 2) {
         return;
     }
     {
         register int y asm("$5") = link->pos[1];
-        int phase = RW32(state, 0x74);
+        int phase = ((RoomLibHandlerBState *)state)->phaseValue;
         int speedRaw;
         int speed;
         int phaseAgain;
         int nextY;
         scratch[0x10] = 0;
         scratch[0x11] = 0;
-        speedRaw = RW32(state, 0x68);
+        speedRaw = ((RoomLibHandlerBState *)state)->speed;
         speed = speedRaw >> 12;
         scratch[0x12] = speed;
-        phaseAgain = RW32(state, 0x74);
+        phaseAgain = ((RoomLibHandlerBState *)state)->phaseValue;
         nextY = y - phase;
-        if (phaseAgain < 0 && (nextY >> 16) >= RW16(state, 0x84)) {
+        if (phaseAgain < 0 && (nextY >> 16) >= ((RoomLibHandlerBState *)state)->floorY) {
             register int numerator asm("$3");
             register int divisor asm("$2");
 
-            nextY = RW16(state, 0x84) << 16;
+            nextY = ((RoomLibHandlerBState *)state)->floorY << 16;
             numerator = (short)speed;
             divisor = (y - nextY) >> 12;
             numerator *= divisor;
             divisor = phaseAgain >> 12;
             scratch[0x12] = numerator / divisor;
-            RW32(scratch, 0x48) = 1;
+            ((RoomLibArcWork *)scratch)->landed = 1;
         }
         link->pos[1] = nextY;
     }
@@ -1134,45 +1134,45 @@ void RoomLib_HandlerB(RoomEnt *obj) {
     ROOMLIB_HANDLER_B_GTE_LOAD_VECTOR(scratch);
     gte_mvmva();
     gte_stmac(((RoomLibArcWork *)scratch)->point);
-    link->pos[0] += RW32(scratch, 0x28) << 12;
-    link->pos[2] += RW32(scratch, 0x30) << 12;
+    link->pos[0] += ((RoomLibArcWork *)scratch)->point[0] << 12;
+    link->pos[2] += ((RoomLibArcWork *)scratch)->point[2] << 12;
 
     {
-        register int previous asm("$5") = RW32(state, 0x74);
-        register int delta asm("$2") = RW32(state, 0x80);
-        int enabled = RW16(state, 0x88);
+        register int previous asm("$5") = ((RoomLibHandlerBState *)state)->phaseValue;
+        register int delta asm("$2") = ((RoomLibHandlerBState *)state)->mode;
+        int enabled = ((RoomLibHandlerBState *)state)->heading;
         register int current asm("$4") = previous - delta;
-        RW32(state, 0x74) = current;
+        ((RoomLibHandlerBState *)state)->phaseValue = current;
         if (enabled != 0) {
             register int crossed asm("$2") = previous ^ current;
 
             if (crossed < 0) {
                 RW32(state, 0x0) = (int)RoomLib_HandlerBPhase;
-                RW8(state, 0xE) = 0;
+                ((RoomLibHandlerBState *)state)->started = 0;
                 self->flag3 = 2;
             }
         }
     }
     {
-        int speed = RW32(state, 0x68) + RW32(state, 0x70);
-        int limit = RW32(state, 0x6C);
-        RW32(state, 0x68) = speed;
+        int speed = ((RoomLibHandlerBState *)state)->speed + ((RoomLibHandlerBState *)state)->duration;
+        int limit = ((RoomLibHandlerBState *)state)->acceleration;
+        ((RoomLibHandlerBState *)state)->speed = speed;
         if (limit != 0 && speed > limit) {
-            RW32(state, 0x68) = limit;
+            ((RoomLibHandlerBState *)state)->speed = limit;
         }
     }
-    if (RW16(state, 0x8A) > 0) {
-        RoomLink *secondary = (RoomLink *)RW32(state, 0x64);
+    if (((RoomLibHandlerBState *)state)->secondaryHeading > 0) {
+        RoomLink *secondary = (RoomLink *)((RoomLibHandlerBState *)state)->secondaryLink;
         if (secondary != 0) {
-            RW32(state, 0x50) = secondary->pos[0];
-            RW32(state, 0x58) = secondary->pos[2];
+            ((RoomLibHandlerBState *)state)->secondaryX = secondary->pos[0];
+            ((RoomLibHandlerBState *)state)->secondaryZ = secondary->pos[2];
         }
         angle = FieldEng_VecToAngle((Vec3Fixed *)(state + 0x50), (Vec3Fixed *)link->pos);
-        RW16(link, 0x3A) = FieldEng_TurnToward(
-            RW16(link, 0x3A), (short)angle, RW16(state, 0x8A));
+        link->rotation[1] = FieldEng_TurnToward(
+            link->rotation[1], (short)angle, ((RoomLibHandlerBState *)state)->secondaryHeading);
     }
     func_800DFB20(self);
-    if (RW32(scratch, 0x48) != 0) {
+    if (((RoomLibArcWork *)scratch)->landed != 0) {
         RoomLib_ReleaseHandlerB(self);
     }
 }
