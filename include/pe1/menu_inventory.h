@@ -16,6 +16,7 @@ int Menu_InventoryNavigate(MenuWidgetNode *current, MenuWidgetNode *node,
 void Menu_CreateBonusPointAllocationView(void);
 void Menu_SetSwapReturnFlag(void);
 void Menu_ProcessSwapReturnIfPending(void);
+int Menu_HandleAyaInventorySelectionInput(int node, int flags);
 
 extern int D_8009CF18, D_8009CFB0;
 void Menu_OpenItemUsePanelAtIndex(int index);
@@ -79,6 +80,7 @@ void Menu_InitBonusPointAllocState(int gainedPoints);
 
 void Menu_CopyPromptCodes(u8 *source);
 void Menu_SetActionSubmenuSelection(int value);
+unsigned int Menu_GetActionSubmenuSelection(void);
 void MenuWidget_SetColumnLayoutMode(int mode);
 
 extern int g_MenuItemUseMode;
@@ -97,6 +99,11 @@ extern u16 D_800C0E08[]; /* Current HP. */
 extern u16 D_800C0E06[]; /* Maximum HP. */
 
 int Menu_StepNameEntry(MenuWidgetNode *parent, unsigned int flags);
+int Menu_StepNameEntryAlt(MenuWidgetNode *parent, unsigned int input);
+/* Name entry panel outlines (item and save names) and the save preview. */
+extern u8 D_80092354[];
+extern u8 D_80092380[];
+extern u8 D_800923A0[];
 extern u8 *D_8009CF54;
 extern int D_8009D004;
 

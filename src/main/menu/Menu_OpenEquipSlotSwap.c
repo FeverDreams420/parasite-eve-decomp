@@ -1,3 +1,5 @@
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 */
 #include "pe1/menu_state.h"
 #include "common.h"
 #include "pe1/inventory.h"
@@ -5,13 +7,9 @@
 #include "pe1/inventory_queries.h"
 #include "pe1/menu_queue.h"
 #include "pe1/menu_equipment.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+#include "pe1/menu_inventory.h"
 
 #define NULL ((void *)0)
-#include "../../../tools/m2c/m2c_macros.h"
-void Menu_CreateContextHelpPanel(void);
-#include "Menu_OpenEquipSlotSwap_externs.h"
 
 s32 Menu_OpenEquipSlotSwap(s32 arg0) {
     s32 temp_s2;

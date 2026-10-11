@@ -7,7 +7,7 @@
 
 void Menu_DrawNotificationText(MenuWidgetNode *node);
 void Menu_DrawTwoLineDialogText(void);
-void Menu_DrawNotificationDialogContent(void);
+void Menu_DrawNotificationDialogContent(MenuWidgetNode *node);
 int Menu_HandleDeferredCallbackInput(MenuWidgetNode *node, int flags);
 void Menu_SetDeferredCallback(void (*callback)(void));
 /* Opens the info panel announcing a newly learned parasite spell. */

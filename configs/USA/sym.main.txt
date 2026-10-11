@@ -87,6 +87,7 @@ g_MenuWindowModeBounds = 0x80010E38;
 g_MenuEquipSlotGlyphs = 0x800923B8;
 g_StatBaseTable = 0x800A1888; // size:0x10
 g_MenuScrollStep = 0x8009D0D4;
+g_MenuSortToggleGlyphs = 0x800922D0;
 Render_InitViewState = 0x80065B70; // type:func
 Asset_GetTimImageRect = 0x80071964; // type:func
 Scene_Init = 0x80071034; // type:func

@@ -42,6 +42,8 @@ extern int D_8009CFC4, D_8009CFC8, D_8009CFCC;
 extern int g_StatBaseTable[4];
 extern int D_8009CF24, D_8009CF28, D_8009CFBC, D_8009CF2C;
 extern int D_8009CF14;
+/* Item put back into Aya's inventory after a storage swap (0: none). */
+extern int D_8009CF5C;
 
 void Menu_DrawEquipScreenHeader(void);
 int Menu_InventoryItemHandler(MenuWidgetNode *node, int flags);
@@ -68,6 +70,10 @@ void Menu_DrawEquipInfoOptionRow(int index);
  * second and third glyph of each row. */
 /* Equipment slot glyphs per equip mode. */
 extern unsigned char g_MenuEquipSlotGlyphs[][8];
+/* Sort toggle row glyphs: the label, then the off and on markers. */
+extern short g_MenuSortToggleGlyphs[];
+/* Item icon glyph table for the current list (Str_LookupTable4 entry). */
+extern unsigned char *g_MenuItemIconGlyphTable;
 extern u8 D_800922B8[];
 extern u8 D_800922BC[];
 extern u8 D_800922C4[];

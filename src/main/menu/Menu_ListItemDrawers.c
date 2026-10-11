@@ -10,6 +10,8 @@
 #include "pe1/menu_item_rows.h"
 #include "pe1/text.h"
 #include "pe1/inventory.h"
+#include "pe1/menu_bonus_stats.h"
+#include "pe1/menu_sound.h"
 
 /* Per-row item drawers the widget list renderer calls with the row index:
  * action options, equipped weapon/armor, action codes, modifier names, armor
@@ -21,13 +23,6 @@ int g_InvItemUsableFlag;
 int g_MenuLayoutLocked;
 MenuWidgetNode *g_MenuActiveWidget;
 unsigned char *g_MenuItemIconGlyphTable;
-#include "Menu_ListItemDrawers_externs.h"
-
-int Battle_IsInputAllowedWrapped(void);
-int Inv_GetPackedListCount(void);
-int Inv_GetPackedListItem(int);
-unsigned int Menu_GetActionSubmenuSelection(void);
-int MenuWidget_GetColumnLayoutMode(void);
 void Draw_PrintNumberWidth2(int arg0);
 void Draw_StatePush(void);
 void Draw_StatePop(void);
@@ -183,7 +178,7 @@ void Menu_DrawParasiteAbilityItem(int arg0) {
     int value;
     int local;
 
-    value = D_800A18EC[arg0];
+    value = g_BonusPointStatDeltas[arg0 + 5];
 
     Draw_OffsetCursor(2, 1);
     Draw_AllocSprite(arg0 + 0x91);

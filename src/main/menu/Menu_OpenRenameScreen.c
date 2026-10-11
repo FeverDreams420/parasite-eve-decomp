@@ -1,29 +1,24 @@
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 */
 #include "common.h"
 #include "pe1/save.h"
 #include "pe1/game_state.h"
 #include "pe1/menu_widget.h"
+#include "pe1/menu_inventory.h"
+#include "pe1/menu_item_rows.h"
 #include "pe1/inventory.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+#include "pe1/text.h"
+#include "pe1/draw_state.h"
 
 #define NULL ((void *)0)
-#include "../../../tools/m2c/m2c_macros.h"
-#include "Menu_OpenRenameScreen_externs.h"
+
 void Menu_DrawSaveMetadataPreview(void);
-int Menu_StepNameEntry(MenuWidgetNode *parent, unsigned int flags);
-int Menu_StepNameEntryAlt(MenuWidgetNode *parent, unsigned int flags);
-void Menu_DrawItemIconList(int arg0);
-void Menu_DrawMemCardSlot1List(int arg0);
-void Menu_DrawMemCardSlot2List(int arg0);
-void Menu_DrawMemCardSlot3List(int arg0);
 
 void Menu_OpenRenameScreen(s32 arg0) {
     u8 *var_v1;
     s32 temp_v0_5;
     ItemDataRecord *record;
     MenuWidgetNode *temp_v0;
-    MenuWidgetNode *temp_v0_3;
-    MenuWidgetNode *temp_v0_4;
     MenuWidgetNode *var_a3;
 
     temp_v0 = MenuWidget_CreateSimpleNode(0x17, 0, 0, 0);
@@ -48,40 +43,25 @@ void Menu_OpenRenameScreen(s32 arg0) {
         (var_a3)->draw = &Menu_DrawMemCardSlot3List;
     }
     (var_a3)->cursor_x = -1;
-    temp_v0_3 = MenuWidget_CreateSimpleNode(0x11, MenuWidget_FindByModeAndSelectedBase(2, 0x17), 0, 0);
-    __asm__ volatile("");
-    var_a3 = MenuWidget_CreateNode(0x11, temp_v0_3, temp_v0_3);
-    (temp_v0_3)->update = (void (*)())Menu_StepNameEntry;
+    temp_v0 = MenuWidget_CreateSimpleNode(0x11, MenuWidget_FindByModeAndSelectedBase(2, 0x17), 0, 0);
+    var_a3 = MenuWidget_CreateNode(0x11, temp_v0, temp_v0);
+    (temp_v0)->update = (void (*)())Menu_StepNameEntry;
     (var_a3)->draw = &Menu_DrawItemIconList;
     (var_a3)->cursor_x = 0;
     (var_a3)->cursor_y = 0;
     MenuWidget_SetCurrentNode(var_a3);
-    temp_v0_4 = MenuWidget_CreateSimpleNode(0x1A, 0, 0, 0);
-    __asm__ volatile("");
-    (temp_v0_4)->draw = &Menu_DrawSaveMetadataPreview;
+    temp_v0 = MenuWidget_CreateSimpleNode(0x1A, 0, 0, 0);
+    (temp_v0)->draw = &Menu_DrawSaveMetadataPreview;
     record = Inv_LookupActiveListData(arg0);
     g_MenuRenameTargetRecord = record;
     if (record == 0) {
-        temp_v0_4->appearance.gradientPoints = D_800923A0;
+        temp_v0->appearance.gradientPoints = D_800923A0;
     }
     Save_SelectMetadataWindow(g_MenuRenameTargetRecord);
     Save_LoadMetadataWindowText();
     Inv_ClearEquipFlagForKind(g_MenuRenameTargetRecord);
     g_GameState.flags |= 0x8000;
 }
-
-#include "common.h"
-#include "pe1/save.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
-
-#define NULL ((void *)0)
-#include "../../../tools/m2c/m2c_macros.h"
-#include "pe1/text.h"
-#include "pe1/draw_state.h"
-void Draw_PrintRawText(u8 *text);
-
-void Menu_DrawSaveMetadataPreview(void);
 
 void Menu_DrawSaveMetadataPreview(void) {
     u8 *text;

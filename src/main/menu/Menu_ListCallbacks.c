@@ -6,6 +6,8 @@
 #include "pe1/menu_inventory.h"
 #include "pe1/menu_item_record.h"
 #include "pe1/text.h"
+#include "pe1/menu_equipment.h"
+#include "pe1/menu_item_rows.h"
 
 /* Contiguous list-draw adapters: each binds a widget list to its row drawer,
  * plus the icon, save-slot, sound-effect and equip-detail lists and the
@@ -14,7 +16,6 @@
 MenuWidgetNode *g_MenuActiveWidget;
 ItemDataRecord *g_MenuActionItemData;
 int g_InvItemUsableFlag;
-#include "Menu_ListCallbacks_externs.h"
 
 void Menu_DrawItemIcon(int index);
 void Menu_DrawSaveSlot1Item(int index);
@@ -55,7 +56,6 @@ void Menu_DrawItemListInvPanel(MenuWidgetNode *node) {
 }
 
 void Menu_DrawStatAllocationItem(int arg0);
-#include "Menu_ListCallbacks_externs_1.h"
 
 void Menu_DrawStatAllocationList(MenuWidgetNode *node) {
     MenuWidget_DrawList(node, Menu_DrawStatAllocationItem);
@@ -142,12 +142,12 @@ void Menu_DrawEquipSortToggleRow(int arg0) {
     short *p;
 
     Draw_OffsetCursor(0, 2);
-    Draw_AllocSprite(D_800922D0[arg0]);
+    Draw_AllocSprite(g_MenuSortToggleGlyphs[arg0]);
     Draw_OffsetCursor(0x12, 4);
     Draw_AllocSprite(0x22);
     Draw_OffsetCursor(0x0C, -4);
 
-    p = D_800922D0;
+    p = g_MenuSortToggleGlyphs;
     if (arg0 == 0) {
         p++;
     }

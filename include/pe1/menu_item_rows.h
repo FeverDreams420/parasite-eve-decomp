@@ -25,6 +25,11 @@ void Menu_DrawSaveSlotEntry(int index);
 void Menu_DrawContextActionList(MenuWidgetNode *node);
 void Menu_DrawEquipModList(MenuWidgetNode *node);
 void Menu_DrawUsableItemActionList2(MenuWidgetNode *node);
+void Menu_DrawItemIconList(MenuWidgetNode *node);
+void Menu_DrawMemCardSlot1List(MenuWidgetNode *node);
+void Menu_DrawMemCardSlot2List(MenuWidgetNode *node);
+void Menu_DrawMemCardSlot3List(MenuWidgetNode *node);
+void Sfx_CursorRenderData(ItemDataRecord *record);
 /* List adapters binding a widget list to its row drawer. */
 void Menu_DrawMainMenuList(MenuWidgetNode *node);
 void Menu_DrawActionSubmenuList(MenuWidgetNode *node);
