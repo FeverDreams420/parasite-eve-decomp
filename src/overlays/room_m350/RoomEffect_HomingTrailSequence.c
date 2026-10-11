@@ -74,7 +74,7 @@ int func_801947BC(int event,RoomM350Particle *p)
                     register int next asm("$4")=n;
                     asm volatile("" : "=r"(next) : "0"(next));
                     *count=next+1;
-                    asm volatile("" : "=r"(count) : "0"(count), "r"(next));
+                    asm volatile("" : : "r"(count), "r"(next));
                     count-=0x2B;
                     ((RoomM350Particle **)count)[n]=p;
                 }
@@ -87,18 +87,18 @@ int func_801947BC(int event,RoomM350Particle *p)
                 register int next asm("$4")=n;
                 asm volatile("" : "=r"(next) : "0"(next));
                 *count=next+1;
-                asm volatile("" : "=r"(count) : "0"(count), "r"(next));
+                asm volatile("" : : "r"(count), "r"(next));
                 count-=0x2B;
                 ((RoomM350Particle **)count)[n]=p;
             }
         }
         {
-            register short *count asm("$4")=&D_8019A800;
+            short *count=&D_8019A800;
             unsigned short n=*(unsigned short *)count;
             int next=n+1;
             int shifted=(unsigned int)n<<16;
             *count=next;
-            asm volatile("" : "=r"(count) : "0"(count));
+            asm volatile("" : : "r"(count));
             count-=0x24;
             *(GteShortVector *)((shifted>>13)+(unsigned int)count)=p->position;
         }
