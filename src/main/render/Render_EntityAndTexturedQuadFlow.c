@@ -12,7 +12,7 @@ void Render_DrawEntity(RenderObjectEntity *object, void *viewMatrix) {
     u16 flags;
     if (object->header == 0 || object->draw_count == 0) return;
     if (object->flags_9C & 0x800) {
-        Field_GetMapEntry(object, 0);
+        Render_SetObjectTexturePage(object, 0);
         Render_SetEntityBlendMode(object, 0);
         object->flags_9C &= ~0x800;
     }

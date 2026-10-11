@@ -992,4 +992,11 @@
                  "swc2 $22,0(%2)" \
                  : : "r"(r0), "r"(r1), "r"(r2) : "memory")
 
+/* PSY-Q gte_stlvnl: store MAC1..3 as a long vector. */
+#define gte_stlvnl(r0) \
+    asm volatile("swc2 $25,0(%0)\n\t" \
+                 "swc2 $26,4(%0)\n\t" \
+                 "swc2 $27,8(%0)" \
+                 : : "r"(r0) : "memory")
+
 #endif

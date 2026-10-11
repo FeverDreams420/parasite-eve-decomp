@@ -659,7 +659,12 @@ void Render_BuildEntityMatrix(RenderObjectEntity *object, s16 bufferIndex);
 extern u32 D_8009CDA0;
 int Render_TickObject(RenderObjectEntity *object);
 int Render_ColorEntity(RenderObjectEntity *object);
-void Field_GetMapEntry(RenderObjectEntity *object, int mode);
+/* Texture-page bit deltas, indexed by the current and the requested page. */
+extern s16 g_RenderTexturePageDeltas[4][4];
+/* Text-resident word bumped by Render_IncrementCounter. */
+extern int g_RenderCounter;
+void Render_IncrementCounter(void);
+void Render_SetObjectTexturePage(RenderObjectEntity *object, int page);
 void Render_SetEntityBlendMode(RenderObjectEntity *object, int mode);
 void Render_FadeEntityColor(RenderObjectEntity *object, int r, int g, int b);
 void Render_OffsetObjectTextureCoordinates(RenderObjectEntity *object,

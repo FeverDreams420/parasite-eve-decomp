@@ -2,92 +2,44 @@
 #include "pe1/render_setup.h"
 #include "pe1/entity_frame_update.h"
 #include "pe1/render_matrix_copy.h"
-#include "../../../tools/m2c/m2c_macros.h"
 #include "pe1/gte.h"
+
+#include "pe1/render_buffers.h"
 
 #define NULL ((void *)0)
 
-#include "Render_ObjectSetupAndAnim_externs.h"
 /* Texture-page transition deltas, indexed by old and requested page. */
 
-void Field_GetMapEntry(RenderObjectEntity *arg0, s32 arg1) {
-    RenderObjectEntity *t0;
-    short page;
-    int packetOffset;
-    s32 a3;
-    u8 *a2;
-    s32 a0;
-    s32 a1;
-    register s32 v0 asm("$2");
-    RenderObjectHeader *header;
-    s16 (*deltas)[4];
-    /* Retail reserves 16 unused bytes; their original purpose is unknown. */
-    s32 stack_pad[4];
+/* Moves every packet of the object to texture page `page`: the current page
+ * is read from the first packet and the per-page delta added to all. */
+void Render_SetObjectTexturePage(RenderObjectEntity *obj, s32 page) {
+    int slot = g_ActiveDrawSlot;
+    int current = 0;
+    RenderPrimCursor prim;
+    int delta;
+    int i;
 
-    t0 = arg0;
-    asm("" : "=r"(t0) : "0"(t0));
-    header = t0->header;
-    a3 = g_ActiveDrawSlot;
-    a0 = 0;
-    if (header != NULL) {
-        if (t0->draw_count != 0) {
-            v0 = t0->header->packet34_count;
-            a2 = t0->primitive_buffer;
-            if (v0 != 0) {
-                v0 = a3 * 0x34;
-                v0 = (s32) ((u8 *) v0 + (s32) a2);
-                v0 = ((RenderPacketState *)v0)->page_bits;
-                v0 &= 0x7F;
-                a0 = (u32) v0 >> 5;
-            } else {
-                v0 = t0->header->packet28_count;
-                if (v0 != 0) {
-                    v0 = a3 * 0x28;
-has_entry:
-                    v0 = (s32) ((u8 *) v0 + (s32) a2);
-                    v0 = ((RenderPacketState *)v0)->page_bits;
-                    v0 &= 0x7F;
-                    a0 = (u32) v0 >> 5;
-                }
-            }
-            page = arg1;
-            if (page != a0) {
-                v0 = a0 << 3;
-                deltas = D_800921D8;
-                v0 = (s32) ((u8 *)deltas + v0);
-                a0 = ((s16 *)v0)[page];
-                v0 = t0->header->packet34_count;
-                a1 = 0;
-                if (v0 > 0) {
-                    v0 = ((((a3 << 1) + a3) << 2) + a3);
-                    packetOffset = v0 << 2;
-                    do {
-                        RenderPacketState *packet = (RenderPacketState *)(a2 + packetOffset);
-                        packet->page_bits =
-                            packet->page_bits + a0;
-                        v0 = t0->header->packet34_count;
-                        __asm__ volatile("" ::: "memory");
-                        a1 += 1;
-                        a2 += 2 * sizeof(RenderPacket34);
-                    } while (a1 < v0);
-                }
-                v0 = t0->header->packet28_count;
-                a1 = 0;
-                if (v0 > 0) {
-                    v0 = (a3 << 2) + a3;
-                    a3 = v0 << 3;
-                    do {
-                        RenderPacketState *packet = (RenderPacketState *)(a2 + a3);
-                        packet->page_bits =
-                            packet->page_bits + a0;
-                        v0 = t0->header->packet28_count;
-                        __asm__ volatile("" ::: "memory");
-                        a1 += 1;
-                        a2 += 2 * sizeof(RenderPacket28);
-                    } while (a1 < v0);
-                }
-            }
-        }
+    if (obj->header == NULL || obj->draw_count == 0)
+        return;
+    prim.bytes = obj->primitive_buffer;
+    if (obj->header->packet34_count != 0)
+        current = (prim.p34[slot].page_bits & 0x7F) >> 5;
+    else if (obj->header->packet28_count != 0)
+        current = (prim.p28[slot].page_bits & 0x7F) >> 5;
+    if ((s16)page == current)
+        return;
+    delta = g_RenderTexturePageDeltas[current][(s16)page];
+    for (i = 0; i < obj->header->packet34_count; i++) {
+        RenderPacket34 *packet = &prim.p34[slot];
+
+        packet->page_bits += delta;
+        prim.p34 += 2;
+    }
+    for (i = 0; i < obj->header->packet28_count; i++) {
+        RenderPacket28 *packet = &prim.p28[slot];
+
+        packet->page_bits += delta;
+        prim.p28 += 2;
     }
 }
 
@@ -330,34 +282,23 @@ int Util_ReturnTrue(void *unused) {
     return 1;
 }
 
-#define NULL ((void *)0)
-
-#include "Render_ObjectSetupAndAnim_externs_1.h"
-#define D_8009CDDC_lh (*(s16 *)&D_8009CDDC_lh_o)
-#define D_8009CDDC_lw0 (*(s32 *)&D_8009CDDC_lw0_o)
-#define D_8009CDDC_sw0 (*(s32 *)&D_8009CDDC_sw0_o)
-#define D_8009CDDC_lw1 (*(s32 *)&D_8009CDDC_lw1_o)
-#define D_8009CDDC_sw1 (*(s32 *)&D_8009CDDC_sw1_o)
-
-void Render_DrawWithAnim(RenderObjectEntity *arg0, s32 arg1, s16 arg2, M2C_UNK arg3) {
-    RenderMatrix *temp_s0;
-    s32 temp_v0;
-
-    if (arg1 != 0) {
-        arg0->animation_data = (void *)arg1;
-        temp_s0 = &arg0->model_matrix;
-        Render_CopyMatrixBlock(temp_s0, (RenderMatrix *)g_RenderClutLookupTable, 1);
-        Render_CopyMatrixBlock((RenderMatrix *)g_IdentityMatrixSource, temp_s0, 1);
-        Anim_BuildRotationMatrices(arg0, arg1, arg2, 0);
+/* Draws an object with an optional animation frame applied on top of its
+ * saved model matrix, then refreshes the packets of both draw buffers. */
+void Render_DrawWithAnim(RenderObjectEntity *obj, void *animation, s16 frame,
+                         union RenderLightingMatrix *light) {
+    if (animation != 0) {
+        obj->animation_data = animation;
+        Render_CopyMatrixBlock(&obj->model_matrix, (RenderMatrix *)g_RenderClutLookupTable, 1);
+        Render_CopyMatrixBlock((RenderMatrix *)g_IdentityMatrixSource, &obj->model_matrix, 1);
+        Anim_BuildRotationMatrices(obj, animation, frame, 0);
     }
-    Render_TransformVertices(arg0);
-    Render_CopyMatrixBlock((RenderMatrix *)g_RenderClutLookupTable, &arg0->model_matrix, 1);
-    Render_DrawObject(arg0, arg3);
-    Render_UpdateClutTable(arg0, 1, D_8009CDDC_lh);
-    temp_v0 = D_8009CDDC_lw0 ^ 1;
-    D_8009CDDC_sw0 = temp_v0;
-    Render_UpdateClutTable(arg0, 1, (s16) temp_v0);
-    D_8009CDDC_sw1 = D_8009CDDC_lw1 ^ 1;
+    Render_TransformVertices(obj);
+    Render_CopyMatrixBlock((RenderMatrix *)g_RenderClutLookupTable, &obj->model_matrix, 1);
+    Render_DrawObject(obj, light);
+    Render_UpdateClutTable(obj, 1, g_ActiveDrawSlot);
+    g_ActiveDrawSlot ^= 1;
+    Render_UpdateClutTable(obj, 1, g_ActiveDrawSlot);
+    g_ActiveDrawSlot ^= 1;
 }
 
 /* Equivalent branches preserve the stock compiler\'s register allocation.
@@ -544,38 +485,18 @@ void Render_CopyFrameDataDouble(RenderObjectEntity *dst, RenderObjectEntity *src
     dst->matrices[1].translation[2] = src->matrices[index].translation[2];
 }
 
-typedef unsigned short u16_1;
 
-typedef unsigned char u8_2;
-typedef short s16_2;
 
+/* Bounds vectors come in pairs per table entry; the first one stores the
+ * hit radius in its pad word. */
 void Render_InitObjectFromTable(RenderObjectEntity *obj, RenderObjectEntity *owner, int index) {
-    int offset;
-    int base;
-    RenderVec3s *entry;
-
     obj->table_index = index;
-    offset = (short)index << 4;
     obj->header = 0;
     obj->animation_source = owner;
-
-    base = (int)owner->bounds_vertices;
-    entry = (RenderVec3s *)(offset + base);
-    /* The first vector of each 16-byte bounds pair stores radius in pad. */
-    obj->hit_cylinder.radius = (u16)entry->pad;
-
-    base = (int)owner->bounds_vertices;
-    entry = (RenderVec3s *)(offset + base);
-    obj->table_value2c = (u16)entry->x;
-
-    base = (int)owner->bounds_vertices;
-    entry = (RenderVec3s *)(offset + base);
-    obj->table_value2e = (u16)entry->y;
-
-    base = (int)owner->bounds_vertices;
-    offset += base;
-    entry = (RenderVec3s *)offset;
-    obj->table_value30 = (u16)entry->z + (u16)obj->hit_cylinder.radius;
+    obj->hit_cylinder.radius = owner->bounds_vertices[(short)index * 2].pad;
+    obj->table_value2c = owner->bounds_vertices[(short)index * 2].x;
+    obj->table_value2e = owner->bounds_vertices[(short)index * 2].y;
+    obj->table_value30 = owner->bounds_vertices[(short)index * 2].z + obj->hit_cylinder.radius;
 }
 
 void Render_Noop(void) {
@@ -585,44 +506,22 @@ int Render_ReturnZero(void) {
     return 0;
 }
 
-void Render_CopyMatrixBlock(RenderMatrix *arg0, RenderMatrix *arg1, s16 count) {
-    char unused[8];
-    register RenderMatrix *src_cur asm("$7");
-    register RenderMatrix *dst_cur asm("$8");
+void Render_CopyMatrixBlock(RenderMatrix *src, RenderMatrix *dst, s16 count) {
     int i;
-    register s32 *src_tail asm("$4");
-    register s32 *dst_tail asm("$5");
-    int tmp;
 
-    src_cur = arg0;
-    dst_cur = arg1;
-    i = 0;
-    if (count > 0) {
-        dst_tail = &arg1->translation[2];
-        src_tail = &arg0->translation[2];
-        do {
-            dst_cur->rotation[0][0] = src_cur->rotation[0][0];
-            *(u16_1 *)((char *)dst_tail - 0x1A) = *(u16_1 *)((char *)src_tail - 0x1A);
-            *(u16_1 *)((char *)dst_tail - 0x18) = *(u16_1 *)((char *)src_tail - 0x18);
-            *(u16_1 *)((char *)dst_tail - 0x16) = *(u16_1 *)((char *)src_tail - 0x16);
-            *(u16_1 *)((char *)dst_tail - 0x14) = *(u16_1 *)((char *)src_tail - 0x14);
-            *(u16_1 *)((char *)dst_tail - 0x12) = *(u16_1 *)((char *)src_tail - 0x12);
-            *(u16_1 *)((char *)dst_tail - 0x10) = *(u16_1 *)((char *)src_tail - 0x10);
-            *(u16_1 *)((char *)dst_tail - 0xE) = *(u16_1 *)((char *)src_tail - 0xE);
-            tmp = *(u16_1 *)((char *)src_tail - 0xC);
-            i++;
-            *(u16_1 *)((char *)dst_tail - 0xC) = tmp;
-            tmp = src_tail[-2];
-            src_cur++;
-            dst_tail[-2] = tmp;
-            tmp = src_tail[-1];
-            dst_cur++;
-            dst_tail[-1] = tmp;
-            tmp = *src_tail;
-            src_tail += 8;
-            *dst_tail = tmp;
-            dst_tail += 8;
-        } while (i < count);
+    for (i = 0; i < count; i++, src++, dst++) {
+        dst->rotation[0][0] = src->rotation[0][0];
+        dst->rotation[0][1] = src->rotation[0][1];
+        dst->rotation[0][2] = src->rotation[0][2];
+        dst->rotation[1][0] = src->rotation[1][0];
+        dst->rotation[1][1] = src->rotation[1][1];
+        dst->rotation[1][2] = src->rotation[1][2];
+        dst->rotation[2][0] = src->rotation[2][0];
+        dst->rotation[2][1] = src->rotation[2][1];
+        dst->rotation[2][2] = src->rotation[2][2];
+        dst->translation[0] = src->translation[0];
+        dst->translation[1] = src->translation[1];
+        dst->translation[2] = src->translation[2];
     }
 }
 
@@ -646,35 +545,18 @@ void Render_ClearObjectAnim(RenderObjectEntity *arg0) {
     }
 }
 
-int Render_FindAnimEntry(RenderObjectEntity *arg0, int arg1, s32 *out) {
-    char unused[8];
-    RenderAnimationLookupEntry *base;
-    register s16 *entry asm("$3");
-    s32 i;
-    s32 tmp;
+int Render_FindAnimEntry(RenderObjectEntity *obj, int id, s32 *out) {
+    RenderAnimationLookupEntry *entry = obj->animation_entries;
+    int i;
 
-    tmp = arg0->header->animation_entry_count;
-    base = arg0->animation_entries;
-    i = 0;
-    if (tmp > 0) {
-        tmp = arg1 << 16;
-        arg1 = tmp >> 16;
-        entry = &base->value2;
-        do {
-            tmp = entry[1];
-            i++;
-            if (tmp == arg1) {
-                out[0] = base->value0;
-                out[1] = entry[-1];
-                out[2] = *entry;
-                return 1;
-            }
-            entry += 6;
-            tmp = arg0->header->animation_entry_count;
-            base++;
-        } while (i < tmp);
+    for (i = 0; i < obj->header->animation_entry_count; i++, entry++) {
+        if (entry->animation_id == (s16)id) {
+            out[0] = entry->value0;
+            out[1] = entry->value1;
+            out[2] = entry->value2;
+            return 1;
+        }
     }
-
     return 0;
 }
 
@@ -692,112 +574,39 @@ int Render_FindAnimEntry(RenderObjectEntity *arg0, int arg1, s32 *out) {
         BoneLoadTrans(matrix);                                                                     \
     }
 
-#define Bone_LoadAxis(src) \
-    { \
-        gte_ldclmv((src)); \
-        gte_rtir(); \
-    }
+void Render_SetupBoneTransforms(RenderObjectEntity *actor, s32 *view) {
+    RenderMatrix *scratch = (RenderMatrix *)0x1F800000;
+    RenderObjectEntity *source = actor->animation_source;
+    int index = (s16)actor->table_index;
+    RenderMatrix *matrix = &source->matrices[index];
 
-#define Bone_StoreAxis(dst) gte_stclmv((dst))
-
-#define Bone_StoreVec(output_expr)                                                                 \
-    {                                                                                              \
-        s16 *out = (s16 *)(output_expr);                                                           \
-        gte_stsv(out); \
-    }
-void Render_SetupBoneTransforms(RenderObjectEntity *input, s32 *view_input) {
-    s32 *scratch = (s32 *)0x1F800000;
-    RenderObjectEntity *actor = input;
-    s32 *view = view_input;
-    RenderObjectEntity *source;
-    int index;
-    s32 *matrix;
-        source = actor->animation_source;
-    index = (s16)actor->table_index;
-    matrix = (s32 *)source->matrices;
-    {
-        int offset = index * 32;
-
-        matrix = (s32 *)((u8 *)matrix + offset);
-    }
     BoneLoadFullMatrix(matrix);
-    {
-        u8 *point = (u8 *)source->bounds_vertices;
-        index *= 16;
-        point += index;
-
-        gte_lwc2_0_0(point);
-        gte_lwc2_1_4(point);
-        gte_cop2_hazard_slot();
-        gte_cop2_hazard_slot();
-        gte_mvmva_rotation_v0_translation_sf12();
-    }
+    gte_ldv0(&source->bounds_vertices[index * 2]);
+    gte_rt();
     /* Headerless objects reuse the first override XYZ as a position output. */
-    Bone_StoreVec(&actor->rotation_overrides[0].x);
-    Bone_StoreVec(&actor->hit_cylinder.value0);
-    Bone_StoreVec(&actor->target_x);
-    {
-        register s16 *column asm("$9");
-        BoneLoadRotMatrix(view);
-        Bone_LoadAxis((u16 *)matrix);
-        Bone_StoreAxis((s16 *)scratch);
-        {
-            u16 *src = (u16 *)matrix + 1;
-            Bone_LoadAxis(src);
-            column = (s16 *)0x1F800002;
-            Bone_StoreAxis(column);
-        }
-        {
-            u16 *src = (u16 *)matrix + 2;
-            Bone_LoadAxis(src);
-            column = (s16 *)0x1F800004;
-            Bone_StoreAxis(column);
-        }
-    }
+    gte_stsv(&actor->rotation_overrides[0].x);
+    gte_stsv(&actor->hit_cylinder.value0);
+    gte_stsv(&actor->target_x);
+    /* PSY-Q gte_CompMatrix(view, matrix, scratch). */
+    gte_MulMatrix0(view, matrix, scratch);
     BoneLoadTrans(view);
-    matrix += 5;
-
-    {
-        gte_ldlv0(matrix);
-        gte_rt();
-        {
-            register s32 *dst asm("$9") = (s32 *)0x1F800014;
-
-            gte_swc2_25_0(dst);
-            gte_swc2_26_4(dst);
-            gte_swc2_27_8(dst);
-        }
-    }
+    gte_ldlv0(matrix->translation);
+    gte_rt();
+    gte_stlvnl(scratch->translation);
     BoneLoadFullMatrix(scratch);
     /* In this mode the halfwords at +0x2C form the projection input vector. */
-    {
-        u16 *point = &actor->table_value2c;
-
-        gte_lwc2_0_0(point);
-        gte_lwc2_1_4(point);
-        gte_cop2_hazard_slot();
-        gte_cop2_hazard_slot();
-        gte_rtps_command();
-        actor->hit_body.radius = source->hit_body.radius;
-        {
-            s16 *out = &actor->projected_target_x;
-            gte_stsxy2(out);
-        }
-        actor->table_value2c += (u16)actor->hit_cylinder.radius;
-        gte_lwc2_0_0(point);
-        gte_lwc2_1_4(point);
-        gte_cop2_hazard_slot();
-        gte_cop2_hazard_slot();
-        gte_rtps_command();
-        actor->hit_body.value0 = source->hit_body.value0;
-        actor->hit_body.value1 = source->hit_body.value1;
-        actor->hit_body.value2 = source->hit_body.value2;
-        {
-            s16 *out = &actor->projected_x;
-            gte_stsxy2(out);
-        }
-        actor->table_value2c -= (u16)actor->hit_cylinder.radius;
-    }
+    gte_ldv0(&actor->table_value2c);
+    gte_rtps();
+    actor->hit_body.radius = source->hit_body.radius;
+    gte_stsxy2(&actor->projected_target_x);
+    actor->table_value2c += actor->hit_cylinder.radius;
+    gte_ldv0(&actor->table_value2c);
+    gte_rtps();
+    actor->hit_body.value0 = source->hit_body.value0;
+    actor->hit_body.value1 = source->hit_body.value1;
+    actor->hit_body.value2 = source->hit_body.value2;
+    gte_stsxy2(&actor->projected_x);
+    actor->table_value2c -= actor->hit_cylinder.radius;
 }
 
 void Render_OffsetObjectTextureCoordinates(RenderObjectEntity *object, int du, int dv, int clutOffset) {
@@ -835,13 +644,15 @@ void Render_OffsetObjectTextureCoordinates(RenderObjectEntity *object, int du, i
     }
 }
 
-#include "Render_ObjectSetupAndAnim_externs_2.h"
 
+/* The counter word sits in .text right after this routine (main.yaml
+ * render/Render_Counter) and the routine works in $a0/$a1, both signs of a
+ * hand-written assembler original; the two pins reproduce those registers. */
 void Render_IncrementCounter(void) {
     register int *ptr asm("$4");
     register int value asm("$5");
 
-    ptr = &D_8003E60C;
+    ptr = &g_RenderCounter;
     value = *ptr;
     value++;
     *ptr = value;

@@ -46,8 +46,8 @@ class SourceQualityTests(unittest.TestCase):
     def test_wayne_item_table_store_is_semantic_c(self):
         self.assert_symbol_is_semantic("Inv_LoadWayneItemsAsOverride")
 
-    def test_field_map_entry_frame_is_semantic_c(self):
-        self.assert_symbol_is_semantic("Field_GetMapEntry")
+    def test_object_texture_page_frame_is_semantic_c(self):
+        self.assert_symbol_is_semantic("Render_SetObjectTexturePage")
 
     def test_equip_panel_alignment_is_semantic_c(self):
         root = pathlib.Path(__file__).resolve().parents[2]

@@ -143,7 +143,7 @@ int Render_TickObject(RenderObjectEntity *object) {
     state = object->fade_remaining;
     if (!state) {
         object->fade_remaining = -1;
-        Field_GetMapEntry(object, 0);
+        Render_SetObjectTexturePage(object, 0);
         Render_InitRoomPrimState(object);
         Render_SetEntityBlendMode(object, 0);
         object->flags_9C |= 0x820;
@@ -152,7 +152,7 @@ int Render_TickObject(RenderObjectEntity *object) {
     if (state < 0) {
         object->variant_visible = 1;
         object->flags_9C &= ~0x200;
-        Field_GetMapEntry(object, 1);
+        Render_SetObjectTexturePage(object, 1);
         Render_SetEntityBlendMode(object, 1);
         r = object->primitive_red;
         g = object->primitive_green;
@@ -166,7 +166,7 @@ int Render_TickObject(RenderObjectEntity *object) {
         object->primitive_blue = b;
         object->fade_remaining = object->fade_duration;
     } else if (state == object->fade_duration - 1) {
-        Field_GetMapEntry(object, 1);
+        Render_SetObjectTexturePage(object, 1);
         Render_SetEntityBlendMode(object, 1);
     }
     D_8009CDA0 = (object->fade_blue << 16) | (object->fade_green << 8) | object->fade_red;
@@ -194,7 +194,7 @@ int Render_ColorEntity(RenderObjectEntity *object) {
     } else if (state < 0) {
         object->fade_remaining = object->fade_duration;
         Render_SetEntityBlendMode(object, 1);
-        Field_GetMapEntry(object, 1);
+        Render_SetObjectTexturePage(object, 1);
         if (object->primitive_red > 128) object->primitive_red = 128;
         if (object->primitive_green > 128) object->primitive_green = 128;
         if (object->primitive_blue > 128) object->primitive_blue = 128;
@@ -206,7 +206,7 @@ int Render_ColorEntity(RenderObjectEntity *object) {
         object->fade_blue = object->primitive_blue;
     } else if (state == object->fade_duration - 1) {
         Render_SetEntityBlendMode(object, 1);
-        Field_GetMapEntry(object, 1);
+        Render_SetObjectTexturePage(object, 1);
     } else {
         object->fade_red -= object->fade_red_step;
         if (object->fade_red > 128) object->fade_red = 0;
