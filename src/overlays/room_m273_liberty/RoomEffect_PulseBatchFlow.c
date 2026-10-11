@@ -80,7 +80,7 @@ int func_80195BD0(int mode) {
                 if(!effect) break;
                 pointer=func_800CE610(D_8019AE7C);
                 offset=i*2;
-                asm("" : : "r"(offset) : "memory");
+                asm("" : : "r"(offset));
                 effect->x=*x;
                 y=*(unsigned short *)((char *)batch+offset+16);
                 asm("" : "=r"(offset) : "0"(offset));
@@ -90,7 +90,7 @@ int func_80195BD0(int mode) {
                 effect->size=128;
                 *pointer=effect;
                 count=batch->count;
-                asm("" : "=r"(i) : "0"(i), "r"(x) : "memory");
+                asm("" : : "r"(i), "r"(x) : "memory");
                 ++i;
                 ++x;
             } while(i<count);
