@@ -15,63 +15,45 @@
 #include "FieldEng_FourLayerGlowEffect_externs.h"
 
 int func_800CA574(char *object) {
-    int half_a2;
-    u8 fullBrightness;
-    int shade_a0;
-    register int value asm("$3");
-    register void *slotData asm("$3");
     void **slot;
 
     slot = FieldEng_GetSlot(object);
-    slotData = &D_800E0C88;
-    *slot = slotData;
+    *slot = &D_800E0C88;
 
-    value = 0xBD;
-    D_800E2308.cell = value;
-    value = 9;
-    half_a2 = 0x80;
-    fullBrightness = 0x80;
-    asm volatile("" : "=r"(half_a2), "=r"(fullBrightness) : "0"(half_a2), "1"(fullBrightness));
-    D_800E2308.clut = value;
-    value = 0xAE;
-    D_800F34C8.cell = value;
-    value = 7;
-    D_800F34C8.clut = value;
-    value = -0x32;
-    shade_a0 = 0x50;
-    asm volatile("" : "=r"(shade_a0) : "0"(shade_a0));
-    D_800F34C8.offset = value;
-    value = 0x68;
-    D_800E2338.cell = value;
-    value = -0x3C;
-    D_800E2338.offset = value;
-    value = 0x42;
-    D_800F34E8.cell = value;
-    value = 0x20;
-    D_800F34E8.clut = value;
-    value = 0x32;
+    D_800E2308.cell = 0xBD;
+    D_800E2308.clut = 9;
     D_800E2308.offset = 0;
-    D_800E2308.depth = half_a2;
-    D_800E2308.r = fullBrightness;
-    D_800E2308.g = fullBrightness;
-    D_800E2308.b = fullBrightness;
+    D_800E2308.depth = 0x80;
+    D_800E2308.r = 0x80;
+    D_800E2308.g = 0x80;
+    D_800E2308.b = 0x80;
     D_800E2308.flip = 0;
-    D_800F34C8.depth = half_a2;
-    D_800F34C8.r = shade_a0;
-    D_800F34C8.g = shade_a0;
-    D_800F34C8.b = shade_a0;
+
+    D_800F34C8.cell = 0xAE;
+    D_800F34C8.clut = 7;
+    D_800F34C8.offset = -0x32;
+    D_800F34C8.depth = 0x80;
+    D_800F34C8.r = 0x50;
+    D_800F34C8.g = 0x50;
+    D_800F34C8.b = 0x50;
     D_800F34C8.flip = 0;
+
+    D_800E2338.cell = 0x68;
     D_800E2338.clut = 0;
-    D_800E2338.depth = half_a2;
-    D_800E2338.r = shade_a0;
-    D_800E2338.g = shade_a0;
-    D_800E2338.b = shade_a0;
+    D_800E2338.offset = -0x3C;
+    D_800E2338.depth = 0x80;
+    D_800E2338.r = 0x50;
+    D_800E2338.g = 0x50;
+    D_800E2338.b = 0x50;
     D_800E2338.flip = 0;
-    D_800F34E8.offset = value;
-    D_800F34E8.depth = half_a2;
-    D_800F34E8.r = fullBrightness;
-    D_800F34E8.g = fullBrightness;
-    D_800F34E8.b = fullBrightness;
+
+    D_800F34E8.cell = 0x42;
+    D_800F34E8.clut = 0x20;
+    D_800F34E8.offset = 0x32;
+    D_800F34E8.depth = 0x80;
+    D_800F34E8.r = 0x80;
+    D_800F34E8.g = 0x80;
+    D_800F34E8.b = 0x80;
     D_800F34E8.flip = 0;
 
     return 0;
