@@ -36,7 +36,7 @@ void Battle_StepEntityAnimState(BattleEntity *entity) {
             entity->entityFlags |= 0x1000;
             Akao_Cmd_21(0, state->field08);
 
-            iter = g_FieldActorListHead;
+            iter = (BattleEntity *)g_FieldActorListHead;
             while (iter != 0) {
                 if (iter->core == 0 && iter->parent == entity) {
                     Anim_SetInterpRate(&iter->renderObject, 0x16);
@@ -68,7 +68,7 @@ void Battle_StepEntityAnimState(BattleEntity *entity) {
             state->deathFadeStep++;
         }
 
-        iter = g_FieldActorListHead;
+        iter = (BattleEntity *)g_FieldActorListHead;
         while (iter != 0) {
             if (iter->core == 0 && iter->parent == entity) {
                 Render_FadeEntityColor(&iter->renderObject, color, 0x80, color);
@@ -88,7 +88,7 @@ void Battle_StepEntityAnimState(BattleEntity *entity) {
         entity->entityFlags |= 0x410;
         Battle_SlotFree(entity);
 
-        iter = g_FieldActorListHead;
+        iter = (BattleEntity *)g_FieldActorListHead;
         while (iter != 0) {
             if (iter->core == 0 && iter->parent == entity) {
                 iter->entityFlags |= 0x10;
@@ -126,7 +126,7 @@ void Battle_StepEntityAnimState(BattleEntity *entity) {
             return;
         }
 
-        iter = g_FieldActorListHead;
+        iter = (BattleEntity *)g_FieldActorListHead;
         all_done = 1;
         while (iter != 0) {
             if (iter != D_8009D254 && iter->core != 0) {

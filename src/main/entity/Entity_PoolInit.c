@@ -10,7 +10,7 @@
 
 int g_FieldMoveLock;
 FieldActor *g_EntityFreeListHead;
-void *g_FieldActorListHead;
+FieldActor *g_FieldActorListHead;
 FieldActor *g_CurrentEntity;
 u16 g_EntityFreePoolCount;
 FieldActor *g_PlayerEntity;

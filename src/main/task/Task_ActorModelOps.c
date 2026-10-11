@@ -172,10 +172,8 @@ pop_state:
 
 #define NULL ((void *)0)
 
-extern FieldActor *g_PlayerEntity[];
-#define g_PlayerEntity (g_PlayerEntity[0])
-extern FieldActor *g_FieldActorListHead[];
-#define g_FieldActorListHead (g_FieldActorListHead[0])
+extern FieldActor *g_PlayerEntity;
+extern FieldActor *g_FieldActorListHead;
 
 /* Script op: angle from the current entity to the actor named by
  * (args[0], args[1]), relative to the current entity's yaw, into args[2]. */

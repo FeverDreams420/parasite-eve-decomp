@@ -94,7 +94,7 @@ store_next:
 
 
 
-extern BattleEntity *g_FieldActorListHead;
+extern struct FieldActor *g_FieldActorListHead;
 
 void Entity_SetActionMode(BattleEntity *arg0, int arg1) {
     BattleEntity *entity;
@@ -119,7 +119,7 @@ void Entity_SetActionMode(BattleEntity *arg0, int arg1) {
     entity->animLastFrame = *((u8 *)entity->actionData + 2) - 1;
 
     if (entity->entityFlags & 0x100000) {
-        it = g_FieldActorListHead;
+        it = (BattleEntity *)g_FieldActorListHead;
         if (it != 0) {
             do {
                 if (it->parent == entity && (it->entityFlags & 0x200000)) {
@@ -158,7 +158,7 @@ void Entity_SetAction(BattleEntity *arg0, int arg1) {
 
     entity->entityFlags &= -0x201;
     if (entity->entityFlags & 0x100000) {
-        it = g_FieldActorListHead;
+        it = (BattleEntity *)g_FieldActorListHead;
         if (it != 0) {
             do {
                 if (it->parent == entity && (it->entityFlags & 0x200000)) {

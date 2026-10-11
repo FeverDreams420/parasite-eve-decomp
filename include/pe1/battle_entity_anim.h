@@ -5,7 +5,7 @@
 #include "pe1/asset_find.h"
 
 extern u32 D_8009D1A0;
-extern BattleEntity *g_FieldActorListHead;
+extern struct FieldActor *g_FieldActorListHead;
 extern BattleEntity *D_8009D254;
 extern Combatant *g_ActiveActor;
 extern s8 D_8009D2A0;

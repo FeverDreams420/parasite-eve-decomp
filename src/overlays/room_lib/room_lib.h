@@ -808,7 +808,7 @@ typedef struct FieldActorNode {
     int w98;                      /* 0x98: 0x10 = busy */
 } FieldActorNode;
 
-extern FieldActorNode *g_FieldActorListHead;
+extern struct FieldActor *g_FieldActorListHead;
 
 typedef struct RoomSlotRec {
     short h0;

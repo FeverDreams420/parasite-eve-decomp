@@ -175,9 +175,9 @@ void Entity_FrameUpdate(void) {
 /* The actor list globals this unit owns. */
 typedef FieldActor Entity;
 
-Entity *g_FieldActorListHead;
+FieldActor *g_FieldActorListHead;
 FieldActor *g_EntityFreeListHead;
-Entity *g_PlayerEntity;
+FieldActor *g_PlayerEntity;
 u16 g_EntityFreePoolCount;
 int g_FieldMoveLock;
 FieldActor *g_CurrentEntity;

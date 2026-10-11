@@ -1,11 +1,14 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 --dont-expand-li */
+/* MASPSX_FLAGS: -G8 --dont-expand-li --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 /* ASPSX_VERSION: 2.21 */
 
 #include "pe1/task_node.h"
 
-extern TaskNode *g_TaskNodeFreeListHead;
-extern unsigned short g_TaskNodeSeqCounter[1];
+/* COMMON supplies small-data metadata to MASPSX; the extern words stay
+ * absolute. */
+TaskNode *g_TaskNodeFreeListHead;
+unsigned short g_TaskNodeSeqCounter[1];
 
 TaskNode *Task_AllocNode(unsigned int *script, TaskNode *arg1) {
     TaskNode *node;
@@ -48,14 +51,13 @@ TaskNode *Task_AllocNode(unsigned int *script, TaskNode *arg1) {
 #include "pe1/field_actor.h"
 #include "pe1/task_node.h"
 
-extern FieldActor *g_FieldActorListHead[];
-extern TaskNode *g_TaskNodeFreeListHead;
+extern FieldActor *g_FieldActorListHead;
 
 void Task_GarbageCollectNodes(void) {
     FieldActor *group;
     u8 i;
 
-    group = g_FieldActorListHead[0];
+    group = g_FieldActorListHead;
     if (group != 0) {
         do {
             i = 0;
