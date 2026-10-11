@@ -1,16 +1,19 @@
 """Regression gates for the partial frame-orchestration cleanup."""
 from pathlib import Path
 import re
+import sys
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'tools/tests'))
+from csource import find_definition  # noqa: E402
 
 
 class GpuRenderFrameTests(unittest.TestCase):
     def test_address_helpers_need_no_argument_register_pin(self):
-        source = (ROOT/'src/main/gpu/Gpu_RenderFrame.c').read_text()
+        source = find_definition('Gpu_RenderFrame').read_text()
         source = re.sub(r'/\*.*?\*/|//[^\n]*', '', source, flags=re.S)
-        self.assertIn('PutDispEnv((DISPENV *)DispAddress(idx));', source)
+        self.assertRegex(source, r'PutDispEnv\((?:\(DISPENV \*\))?DispAddress\(idx\)\);')
         self.assertIn('PutDrawEnv(DrawAddress(idx));', source)
         self.assertNotIn('asm("$4")', source)
         # The linked-draw temporary and barrier are still unresolved.

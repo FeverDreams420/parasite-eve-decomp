@@ -7,14 +7,17 @@ GPU packets, easing and highlights are modeled, not physical GPU behavior.
 from pathlib import Path
 import itertools
 import struct
+import sys
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'tools/tests'))
+from csource import function_closure  # noqa: E402
 
 
 class MenuWidgetDrawListTests(unittest.TestCase):
     def test_plain_source(self):
-        source = (ROOT/'src/main/menu/MenuWidget_DrawList.c').read_text()
+        source = function_closure('MenuWidget_DrawList')
         self.assertNotRegex(source, r'\b(?:asm|__asm__|INCLUDE_ASM|REGALLOC_BARRIER)\b')
 
     @unittest.skipUnless((ROOT/'assets/USA/main.exe').is_file() and

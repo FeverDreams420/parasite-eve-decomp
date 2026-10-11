@@ -2,19 +2,21 @@ import pathlib
 import shutil
 import subprocess
 import tempfile
+import sys
 import unittest
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import function_text, host_unit  # noqa: E402
 
 
 class GpuGraphDebugTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_updates_debug_and_reports_type_and_reverse(self):
-        source = (ROOT / "src/main/gpu/SetGraphDebug.c").read_text()
-        for annotation in (' asm("$3")', ' asm("$2")'):
-            self.assertEqual(source.count(annotation), 1)
-            source = source.replace(annotation, "")
+        # The former $3/$2 argument pins are gone; keep it that way.
+        self.assertNotRegex(function_text("SetGraphDebug"), r'\basm\s*\(\s*"\$')
+        source = host_unit("SetGraphDebug")
         harness = source + r'''
 #include <assert.h>
 #include <stdarg.h>
@@ -55,7 +57,7 @@ int main(void) {
         with tempfile.TemporaryDirectory() as directory:
             exe = pathlib.Path(directory) / "graph-debug-test"
             result = subprocess.run(
-                ["cc", "-std=gnu11", "-O2", "-I", str(ROOT / "include"),
+                ["cc", "-std=gnu11", "-O2",
                  "-x", "c", "-", "-o", str(exe)],
                 input=harness, text=True, capture_output=True,
             )

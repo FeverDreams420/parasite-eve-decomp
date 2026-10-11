@@ -3,11 +3,13 @@ from pathlib import Path
 import itertools
 import shutil
 import struct
-import subprocess
 import tempfile
+import sys
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'tools/tests'))
+from csource import linked_function_bytes  # noqa: E402
 
 
 @unittest.skipUnless(shutil.which('mipsel-none-elf-ld') and (ROOT/'assets/USA/main.exe').is_file(), 'retail/toolchain unavailable')
@@ -25,13 +27,10 @@ class GpuQueueRetailTests(unittest.TestCase):
                        D_80095748=0x80095748, D_80011840=format_addr, DMACallback=dma_cb)
         retail = (ROOT/'assets/USA/main.exe').read_bytes()[0x65414:0x654B8]
         with tempfile.TemporaryDirectory() as directory:
-            work = Path(directory)
-            subprocess.run([str(ROOT/'tools/scripts/cc.sh'), str(ROOT/'src/main/gpu/SetGraphQueue.c'), str(work/'test.o')], check=True, capture_output=True)
-            script = 'SECTIONS { .text 0x80074C14 : SUBALIGN(4) { *(.text) } /DISCARD/ : { *(.reginfo) *(.mdebug) *(.pdr) *(.MIPS.abiflags) } }\n'
-            (work/'test.ld').write_text(script+'\n'.join(f'{name} = 0x{address:X};' for name,address in symbols.items()))
-            subprocess.run(['mipsel-none-elf-ld', '-EL', '-T', str(work/'test.ld'), str(work/'test.o'), '-o', str(work/'test.elf')], check=True, capture_output=True)
-            subprocess.run(['mipsel-none-elf-objcopy', '-O', 'binary', '-j', '.text', str(work/'test.elf'), str(work/'test.bin')], check=True, capture_output=True)
-            compiled = (work/'test.bin').read_bytes()
+            compiled = linked_function_bytes(
+                'SetGraphQueue', entry, len(retail),
+                ''.join(f'{name} = 0x{address:X};\n' for name, address in symbols.items()),
+                Path(directory))
         self.assertEqual(compiled, retail)
         modes = (-2147483648, -1, 0, 1, 2, 255, 256, 300, 2147483647)
         for old, mode, debug, mutation, mutate_dma in itertools.product((0, 1, 2, 255), modes, (0, 1, 2, 255), range(3), (False, True)):

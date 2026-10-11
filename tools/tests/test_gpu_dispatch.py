@@ -2,19 +2,20 @@ import pathlib
 import shutil
 import subprocess
 import tempfile
+import sys
 import unittest
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import function_closure, host_unit  # noqa: E402
 
 
 class GpuDispatchTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_ready_states_timeout_and_callback_order(self):
-        unit = (ROOT / "src/main/psyq/libgpu/LoadImage2.c").read_text()
-        source = (unit[:unit.index("int LoadImage2")] +
-                  unit[unit.index("extern char D_80011928"):])
-        self.assertNotRegex(source, r'\b(?:asm|__asm__)\b')
+        self.assertNotRegex(function_closure("DrawOTag2"), r'\b(?:asm|__asm__)\b')
+        source = host_unit("DrawOTag2")
         harness = source + r'''
 #include <assert.h>
 #include <stdarg.h>
@@ -24,7 +25,7 @@ int g_GpuDmaTimeoutDeadline, g_GpuDmaWaitLoopCounter;
 static volatile unsigned int dma;
 static unsigned int gpu;
 volatile unsigned int *g_GpuDmaChcrPtr = &dma;
-volatile unsigned int *g_GpuGp1Ptr = &gpu;
+unsigned int *g_GpuGp1Ptr = &gpu;
 static GpuCallbacks callbacks;
 GpuCallbacks *D_80095744 = &callbacks;
 static int packet, polls, idleAt, readyAt, timeoutAt, events, vsyncCalls;

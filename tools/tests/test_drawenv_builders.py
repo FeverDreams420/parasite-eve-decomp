@@ -2,10 +2,13 @@ import pathlib
 import shutil
 import subprocess
 import tempfile
+import sys
 import unittest
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import host_unit  # noqa: E402
 
 
 class DrawEnvBuilderTests(unittest.TestCase):
@@ -13,9 +16,6 @@ class DrawEnvBuilderTests(unittest.TestCase):
     def test_packet_commands_and_background_paths(self):
         source = r'''
 #include <assert.h>
-#include <string.h>
-#include "pe1/gpu_state.h"
-#include "pe1/gpu_command_builders.h"
 /* DRAWENV_BUILDERS */
 GpuDebugState D_8009574C;
 int Gpu_BuildDrawAreaTopLeftCmd(int x, int y) { return 1; }
@@ -33,8 +33,8 @@ static void check(int back, int background, short x, short w, short h) {
     short width = w < 0 ? 0 : w > 1023 ? 1023 : w;
     short height = h < 0 ? 0 : h > 511 ? 511 : h;
     int fast = back && !(x & 63) && !(width & 63);
-    memset(&env, 0, sizeof(env));
-    memset(&output, 0xA5, sizeof(output));
+    __builtin_memset(&env, 0, sizeof(env));
+    __builtin_memset(&output, 0xA5, sizeof(output));
     env.clip.x = x;
     env.clip.y = 31;
     env.clip.w = w;
@@ -76,8 +76,7 @@ int main(void) {
     return 0;
 }
 '''
-        builders = (ROOT / "src/main/psyq/libgpu/GetDispEnv.c").read_text()
-        builders = "void SetDrawEnv(" + builders.split("void SetDrawEnv(", 1)[1]
+        builders = host_unit("SetDrawEnv", "Gpu_SetDrawEnvBack")
         source = source.replace("/* DRAWENV_BUILDERS */", builders)
         with tempfile.TemporaryDirectory() as directory:
             exe = pathlib.Path(directory) / "drawenv-test"

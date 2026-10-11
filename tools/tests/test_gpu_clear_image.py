@@ -2,22 +2,25 @@ import pathlib
 import shutil
 import subprocess
 import tempfile
+import sys
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import host_unit  # noqa: E402
 
 
 class ClearImageTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_packet_paths_clamping_and_restore(self):
-        source = (ROOT / "src/main/psyq/libgpu/Gpu_DmaVramTransfer.c").read_text()
+        source = host_unit("Gpu_DmaVramTransfer")
         harness = source + r'''
 #include <assert.h>
 #include <stdint.h>
 short D_80095750, D_80095752;
 unsigned int D_800A3300[12], D_800A3328[6];
 static unsigned int gpuStatus;
-unsigned int *D_80095854 = &gpuStatus;
+unsigned int *g_GpuGp1Ptr = &gpuStatus;
 static int params, starts, slow;
 unsigned int _param(int parameter) {
     assert(starts == 0 && parameter == 3 + params);

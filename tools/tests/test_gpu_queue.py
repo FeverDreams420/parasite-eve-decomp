@@ -2,17 +2,20 @@ import pathlib
 import shutil
 import subprocess
 import tempfile
+import sys
 import unittest
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import function_text, host_unit  # noqa: E402
 
 
 class GpuQueueTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_state_and_callback_order(self):
-        source = (ROOT / "src/main/gpu/SetGraphQueue.c").read_text()
-        self.assertNotRegex(source, r'\b(?:asm|__asm__)\b')
+        self.assertNotRegex(function_text("SetGraphQueue"), r'\b(?:asm|__asm__)\b')
+        source = host_unit("SetGraphQueue")
         harness = source + r'''
 #include <assert.h>
 #include <stdarg.h>
@@ -70,7 +73,7 @@ int main(void) {
         with tempfile.TemporaryDirectory() as directory:
             exe = pathlib.Path(directory) / "queue-test"
             result = subprocess.run(
-                ["cc", "-std=gnu11", "-O2", "-I", str(ROOT / "include"),
+                ["cc", "-std=gnu11", "-O2",
                  "-x", "c", "-", "-o", str(exe)],
                 input=harness, text=True, capture_output=True,
             )

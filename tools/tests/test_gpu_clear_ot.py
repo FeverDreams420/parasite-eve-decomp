@@ -2,17 +2,20 @@ import pathlib
 import shutil
 import subprocess
 import tempfile
+import sys
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import function_text, host_unit  # noqa: E402
 
 
 class ClearOtTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_forward_links_last_entry_and_debug(self):
-        source = (ROOT / "src/main/psyq/libgpu/ClearOTag.c").read_text()
-        self.assertEqual(source.count(' asm("$5")'), 1)
-        source = source.replace(' asm("$5")', "")
+        # The link-mask register pin was replaced by staged masks.
+        self.assertNotRegex(function_text("ClearOTag"), r'\basm\s*\(\s*"\$')
+        source = host_unit("ClearOTag")
         harness = source + r'''
 #include <assert.h>
 #include <stdarg.h>

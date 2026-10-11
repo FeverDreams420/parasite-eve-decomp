@@ -2,19 +2,21 @@ import pathlib
 import shutil
 import subprocess
 import tempfile
+import sys
 import unittest
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import function_text, host_unit  # noqa: E402
 
 
 class GpuOtcTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_setup_completion_and_timeout(self):
-        source = (ROOT / "src/main/psyq/libgpu/Gpu_SendOtChain.c").read_text()
-        self.assertEqual(source.count(' asm("$3")'), 1)
-        # Keep the empty barriers; remove only the MIPS register name.
-        source = source.replace(' asm("$3")', "")
+        # The status register pin is gone; the empty barriers remain.
+        self.assertNotRegex(function_text("Gpu_SendOtChain"), r'\basm\s*\(\s*"\$')
+        source = host_unit("Gpu_SendOtChain")
         harness = source + r'''
 #include <assert.h>
 #include <stdint.h>

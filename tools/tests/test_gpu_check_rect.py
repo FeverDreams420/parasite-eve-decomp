@@ -2,26 +2,24 @@ import pathlib
 import shutil
 import subprocess
 import tempfile
+import sys
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import function_text, host_unit  # noqa: E402
 
 
 class CheckRectTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_diagnostics_boundaries_and_no_mutation(self):
-        unit = (ROOT / "src/main/psyq/libgpu/sys.c").read_text()
-        check_rect = unit.index("void checkRECT")
-        source = unit[unit.rfind("/* GCC_VERSION:", 0, check_rect):
-                      unit.find("/* GCC_VERSION:", check_rect + 1)]
-        self.assertEqual(source.count('asm("$3")'), 1)
-        source = source.replace('asm("$3")', "")
+        # Register pins are matching debt: they may only disappear.
+        self.assertLessEqual(function_text("checkRECT").count('asm("$3")'), 1)
+        source = host_unit("checkRECT")
         # The retail MIPS callback is intentionally unprototyped.  Route the
         # host build through a variadic shim so arm64 passes its arguments in
         # the ABI locations inspected below.
-        source = source.replace('#include "pe1/gpu_state.h"',
-                                '#include "pe1/gpu_state.h"\n'
-                                'extern void test_debug(char *, ...);')
+        source = 'extern void test_debug(char *, ...);\n' + source
         source = source.replace('D_80095748(format, name);',
                                 'test_debug(format, name);')
         source = source.replace('D_80095748(D_800118A4, x, y, width, height);',
@@ -30,7 +28,6 @@ class CheckRectTests(unittest.TestCase):
 #include <assert.h>
 #include <stdarg.h>
 #include <stdint.h>
-#include <string.h>
 GpuDebugState D_8009574C;
 char D_80011898[] = "invalid", D_800118B8[] = "all", D_800118A4[] = "fields";
 static char name[] = "test";
@@ -71,7 +68,7 @@ int main(void) {
             calls = 0;
             checkRECT(name, &rect);
             assert(calls == ((level == 2 || (level == 1 && invalid)) ? 2 : 0));
-            assert(memcmp(&rect, &before, sizeof(rect)) == 0);
+            assert(__builtin_memcmp(&rect, &before, sizeof(rect)) == 0);
         }
     }
     return 0;

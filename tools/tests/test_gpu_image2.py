@@ -2,29 +2,27 @@ import pathlib
 import shutil
 import subprocess
 import tempfile
+import sys
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import functions_text, host_unit  # noqa: E402
 
 
 class GpuImage2Tests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_transfer_dispatch_and_move_packet(self):
-        unit = (ROOT / "src/main/psyq/libgpu/LoadImage2.c").read_text()
-        prefix_end = unit.index("int LoadImage2")
-        store_marker = unit.index("extern char D_800118E0")
-        move_marker = unit.index("extern char D_800118EC")
-        dispatch_marker = unit.index("extern char D_80011928")
-        source = (unit[:prefix_end] + unit[prefix_end:store_marker] +
-                  unit[store_marker:move_marker] + unit[move_marker:dispatch_marker])
-        self.assertNotRegex(source, r'\b(?:asm|__asm__)\b')
+        functions = ("LoadImage2", "StoreImage2", "MoveImage2")
+        self.assertNotRegex(functions_text(*functions), r'\b(?:asm|__asm__)\b')
+        source = host_unit(*functions)
         harness = source + r'''
 #include <assert.h>
 char D_800119BC[] = "load", D_800118E0[] = "store", D_800118EC[] = "move";
 static volatile unsigned int dma;
 static unsigned int gpu, data[16];
 volatile unsigned int *g_GpuDmaChcrPtr = &dma;
-volatile unsigned int *g_GpuGp1Ptr = &gpu;
+unsigned int *g_GpuGp1Ptr = &gpu;
 int g_GpuDmaTimeoutDeadline, g_GpuDmaWaitLoopCounter;
 unsigned int D_800957EC[3];
 static GpuCallbacks table;

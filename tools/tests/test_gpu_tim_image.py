@@ -2,17 +2,19 @@ import pathlib
 import shutil
 import subprocess
 import tempfile
+import sys
 import unittest
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools/tests"))
+from csource import host_unit  # noqa: E402
 
 
 class GpuTimImageTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_uploads_image_then_optional_clut(self):
-        source = (ROOT / "src/main/asset/Asset_TimImage.c").read_text()
-        source = source[:source.index("RECT *Asset_GetTimClutRect")]
+        source = host_unit("Asset_LoadTimImage")
         harness = source + r'''
 #include <assert.h>
 static RECT *rects[2];
@@ -42,8 +44,7 @@ int main(void) {
         with tempfile.TemporaryDirectory() as directory:
             exe = pathlib.Path(directory) / "gpu-tim-image-test"
             result = subprocess.run(
-                ["cc", "-I", str(ROOT / "include"), "-include",
-                 str(ROOT / "tools/tests/host_psyq.h"), "-std=gnu11", "-O2", "-x", "c", "-", "-o", str(exe)],
+                ["cc", "-std=gnu11", "-O2", "-x", "c", "-", "-o", str(exe)],
                 input=harness, text=True, capture_output=True,
             )
             self.assertEqual(result.returncode, 0, result.stderr)

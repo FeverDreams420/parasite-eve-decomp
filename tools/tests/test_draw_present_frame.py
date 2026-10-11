@@ -5,15 +5,17 @@ import shutil
 import struct
 import subprocess
 import tempfile
+import sys
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'tools/tests'))
+from csource import function_closure, linked_function_bytes  # noqa: E402
 
 
 class DrawPresentFrameTests(unittest.TestCase):
     def test_source_has_no_assembly(self):
-        source = (ROOT/'src/main/gpu/Draw_FramePresent.c').read_text()
-        source = source[source.index('NormalizeSyncMode'):]
+        source = function_closure('Draw_PresentFrame')
         source = re.sub(r'/\*.*?\*/|//[^\n]*','',source,flags=re.S)
         self.assertNotRegex(source,r'\b(?:asm|__asm__|INCLUDE_ASM|CC_POSTPASS)\b')
 
@@ -31,23 +33,16 @@ class DrawPresentFrameTests(unittest.TestCase):
             fields = line.split()
             if len(fields)==3: symbols[fields[2]] = int(fields[0],16)
         entry, stop, stack = 0x8005E788,0x80010000,0x801F0000
-        unit = 0x8005E54C
         offset = entry-0x8000F800
         retail = (ROOT/'assets/USA/main.exe').read_bytes()[offset:offset+200]
-        with tempfile.TemporaryDirectory() as directory:
-            work = Path(directory)
-            subprocess.run([str(ROOT/'tools/scripts/cc.sh'),str(ROOT/'src/main/gpu/Draw_FramePresent.c'),str(work/'test.o')],check=True,capture_output=True)
-            needed = {line.split()[-1] for line in subprocess.check_output(['mipsel-none-elf-nm','-u',str(work/'test.o')],text=True).splitlines()}
-            # The unit's tentative definitions take their retail addresses too.
-            needed |= {line.split()[-1] for line in subprocess.check_output(['mipsel-none-elf-nm',str(work/'test.o')],text=True).splitlines() if line.split()[-2] == 'C'}
-            needed.add('_gp')
-            script = f'SECTIONS {{ .text 0x{unit:X} : SUBALIGN(4) {{ *(.text) }} /DISCARD/ : {{ *(.reginfo) *(.mdebug) *(.pdr) *(.MIPS.abiflags) }} }}\n'
-            (work/'test.ld').write_text(script+'\n'.join(f'{name} = 0x{symbols[name]:X};' for name in sorted(needed)))
-            subprocess.run(['mipsel-none-elf-ld','-EL','-T',str(work/'test.ld'),str(work/'test.o'),'-o',str(work/'test.elf')],check=True,capture_output=True)
-            subprocess.run(['mipsel-none-elf-objcopy','-O','binary','-j','.text',str(work/'test.elf'),str(work/'test.bin')],check=True)
-            compiled = (work/'test.bin').read_bytes()[entry-unit:entry-unit+200]
-        self.assertEqual(compiled,retail)
         callbacks = ('VSync','DrawSync','ResetGraph','PutDrawEnv','PutDispEnv','LoadImage','DrawOTag')
+        data = ('g_DrawPresentEnabled','g_DrawPresentImage','g_DrawBufferIndex','D_8009D0FC','D_8009D118','_gp')
+        with tempfile.TemporaryDirectory() as directory:
+            compiled = linked_function_bytes(
+                'Draw_PresentFrame', entry, 200,
+                ''.join(f'{name} = 0x{symbols[name]:X};\n' for name in callbacks+data),
+                Path(directory))
+        self.assertEqual(compiled,retail)
         for mode in (-2147483648,-2,-1,0,1,2,8,2147483647):
             for enabled in (0,1,-1):
                 for image in (0,0x80130000):
