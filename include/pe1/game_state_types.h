@@ -62,7 +62,7 @@ typedef struct Pe1GameState {
     Pe1U8 unk_00f;
     Pe1U8 cd_range_read_mode;      /* 0x010: CD_FindNextDataSector */
     Pe1U8 bank_state_11, bank_state_12;
-    Pe1U8 unk_013;
+    Pe1U8 scene_area_type_backup;   /* 0x013: area type kept across a disc swap */
     RenderObjectEntity scene_object; /* 0x014 */
     Pe1U8 reserved_scene_object_tail[8]; /* 0x0D0: outside the render object */
     Pe1SceneAudioState scene_audio; /* 0x0D8: cached track banks and keys */

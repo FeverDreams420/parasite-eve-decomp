@@ -95,4 +95,11 @@ extern char g_PeDisc2MarkerPath[]; /* "\FMV2\PEDISC02.IDF;1" */
 
 int Asset_SearchByKeyType(int type);
 
+/* Sector table address as a pointer or a word: some loaders add the scaled
+ * entry index to the table address as integers, index first. */
+typedef union PeSectorTableAddress {
+    unsigned short *entry;
+    unsigned int word;
+} PeSectorTableAddress;
+
 #endif /* PE1_PE_IMAGE_H */

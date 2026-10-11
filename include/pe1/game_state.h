@@ -13,6 +13,16 @@ extern int g_FieldMoveLock;
  * the battle update read and set it with absolute byte loads and stores. */
 extern u8 D_800B0CE6;
 extern u8 g_DiscChangeFlags;
+/* g_GameState.pending_story_day as an unsigned byte symbol. Matching debt:
+ * Scene_SetStoryDay keeps the lbu and its separate sign extension only
+ * through a volatile read; a plain one combines into lb (lev 28). */
+extern volatile u8 D_800B0CE5;
+/* Room and area bytes of g_GameState as their own symbols: room_type (as
+ * the texture page to load), field_bg_cache_bank (the loaded page) and
+ * loaded_entity_bank (the area type before the transition). */
+extern s8 D_800B0CE0;
+extern s8 g_LoadedTexturePageId;
+extern u8 g_SavedSceneAreaType;
 
 /* g_GameState.flags as its own scalar symbol: the frame loop, the process
  * manager and the CD boot read update it with absolute loads and stores,

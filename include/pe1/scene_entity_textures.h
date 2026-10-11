@@ -22,6 +22,9 @@ extern s8 D_800B0CE4[];
 extern u32 g_PeImageBaseLba;
 extern u16 D_800930D8[], D_800930DA[];
 extern u8 g_EntityRenderScratch[];
+/* Aya action sequencer step (battle_runtime.h); a battle-start texture
+ * load waits until it reaches 2. */
+extern u8 D_8009D25C;
 
 int Scene_UpdateBgDraw(void);
 int CdRom_ReadSectorsFromLba(u32 lba, void *destination, u32 size);

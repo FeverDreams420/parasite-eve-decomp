@@ -5,53 +5,54 @@
 #include "pe1/asset_tim.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/entity_animation.h"
-#include "Scene_LoadTextureAndPlayer_externs.h"
+#include "pe1/pe_image.h"
+#include "pe1/save_tail_state.h"
+#include "pe1/scene_entity_textures.h"
 s32 Overlay_StreamTexturePage(void)
 {
-  Pe1GameState *state;
-  register u16 *ranges;
-  s32 retry;
-  u16 *next_ranges;
-  s32 offset;
-  u16 start;
-  s32 poll;
-  state = &g_GameState;
-  if (D_800B0CE0 != g_LoadedTexturePageId)
-  {
-    DrawSync(0);
-    restart:
-    ranges = g_EntityTexLbaStartTbl;
+    Pe1GameState *state;
+    PeSectorTableAddress ranges;
+    PeSectorTableAddress nextRanges;
+    PeSectorTableAddress first;
+    PeSectorTableAddress last;
+    s32 retry;
+    s32 offset;
+    u16 start;
+    s32 poll;
 
-    next_ranges = ranges + 1;
-    retry = -1;
-    do
-    {
-      offset = ((s8)state->room_type + 0x2B) * 2;
-      start = *((u16 *) (offset + ((s32) ranges)));
+    state = &g_GameState;
+    if (D_800B0CE0 != g_LoadedTexturePageId) {
+        DrawSync(0);
+        /* Matching debt: the CD retry restarts from the table address;
+         * a loop lets loop.c hoist it (docs/CODE_ORGANIZATION.md). */
+restart:
+        ranges.entry = D_800930D8;
+        nextRanges.entry = ranges.entry + 1;
+        retry = -1;
+        do {
+            offset = ((s8)state->room_type + 0x2B) * 2;
+            first.word = offset + ranges.word;
+            last.word = offset + nextRanges.word;
+            start = *first.entry;
+        } while (CdRom_ReadSectorsFromLba(state->pe_image_base_lba + start, state->scene_load_scratch,
+                                          *last.entry - start) == retry);
+        do {
+            poll = CdRom_PollReady();
+            if (poll == 0) {
+                break;
+            }
+            if (poll == -1) {
+                goto restart;
+            }
+        } while (1);
+        Asset_LoadTimImage((TimFile *)state->scene_load_scratch);
+        state->field_bg_cache_bank = (s8)state->room_type;
     }
-    while (CdRom_ReadSectorsFromLba(state->pe_image_base_lba + start, state->scene_load_scratch, (*((u16 *) (offset + ((s32) next_ranges)))) - start) == retry);
-    ;
-    do
-    {
-      poll = CdRom_PollReady();
-      if (poll == 0)
-      {
-        break;
-      }
-      if (poll == ((s32) ((u16 *) (-1))))
-      {
-        goto restart;
-      }
-    }
-    while (1);
-    Asset_LoadTimImage((TimFile *)state->scene_load_scratch);
-    state->field_bg_cache_bank = (s8)state->room_type;
-  }
-  return 0;
+    return 0;
 }
 
 /* Disc-change gating for scene-area transitions. */
-#include "Scene_LoadTextureAndPlayer_externs_1.h"
+
 
 int CdRom_DetectDiscChange(void) {
     unsigned int *state = &g_GameState.flags;
@@ -79,8 +80,7 @@ int CdRom_DetectDiscChange(void) {
 #include "pe1/cdrom.h"
 #include "pe1/field_actor.h"
 #include "pe1/player_entity.h"
-#include "../../../tools/m2c/m2c_macros.h"
-#include "Scene_LoadTextureAndPlayer_externs_2.h"
+
 /* Matching debt: pins, empty barriers, one retry jump, and a
  * 32-byte unused stack reserve retain retail allocation and scheduling.
  * The shifted state view preserves the bank-row address calculation. */
@@ -202,134 +202,98 @@ retry:
     goto retry;
 }
 
-/* Keep independent C lvalues for the retail flag loads across switch cases. */
-#include "Scene_LoadTextureAndPlayer_externs_3.h"
-#define g_SceneAreaType (*(u8 *)&D_800B0CE2_o)
-#define g_SavedSceneAreaType (*(u8 *)&D_800B0CE3_o)
-#define g_CurrentStoryDay (*(s8 *)&D_800B0CE4_o)
-#define g_DiscChangeFlags (*(u8 *)&D_800B0CE6_o)
-#define g_SceneAreaTypeDiscSwapBackup (*(u8 *)&D_800B0CEB_o)
-#define D_800B0DC5 (*(u8 *)&D_800B0DC5_o)
-#define g_SceneMapPrimBaseTable (*(s32 *)&D_800B0E70_o)
-#define D_800B0EEC (*(s32 *)&D_800B0EEC_o)
-#define g_EntityRenderScratch (*(M2C_UNK *)&D_800B89F8_o)
-#define D_800BEA40 (*(M2C_UNK *)&D_800BEA40_o)
+/* Scene start-up steps 0x20..0x27: area type and disc swap bookkeeping,
+ * the entity texture banks, then the player's model and render object. */
+s32 Scene_InitEntityPlayer(s32 resume) {
+    Pe1GameState *gameState = &g_GameState;
+    s8 *renderSetup;
+    u32 area;
+    u8 saved;
 
-s32 Scene_InitEntityPlayer(s32 arg0) {
-    Pe1GameState *gameState;
-    s32 arg0v;
-    M2C_UNK sp28;
-    s32 var_v0_2;
-    u32 temp_a1;
-    u8 temp_v1;
-    u8 tce6;
-    u8 tce3;
-    FieldActor *playerForActionMode;
-    FieldActor *playerForRenderSetup;
-    FieldActor *playerForRoomPrims;
-    FieldActor *playerForAnimation;
-    FieldActor *playerForScaleUpdate;
-    u32 th1;
-    register s32 phaseValue asm("$2");
-
-    arg0v = arg0;
-    gameState = &g_GameState;
-    switch (D_800B0DC5) {
+    switch (g_GameState.scene_init_phase) {
     case 32:
-        g_GameState.flags = g_GameState.flags | 0x20000;
-        if (arg0v != 0) {
-            temp_v1 = g_SceneAreaType;
-            phaseValue = 0xE;
-            (*(u8 *)&D_800B0CE2_w) = phaseValue;
-            g_SceneAreaTypeDiscSwapBackup = temp_v1;
-            phaseValue = 0x21;
-            goto block_20;
+        g_GameState.flags |= 0x20000;
+        if (resume) {
+            saved = g_SceneAreaType;
+            g_SceneAreaType = 0xE;
+            g_GameState.scene_area_type_backup = saved;
         } else {
-            phaseValue = g_SceneAreaTypeDiscSwapBackup;
-            g_SceneAreaType = phaseValue;
-            phaseValue = 0x21;
-            gameState->scene_init_phase = phaseValue;
-            return 1;
+            g_SceneAreaType = g_GameState.scene_area_type_backup;
         }
+        gameState->scene_init_phase = 0x21;
+        return 1;
     case 33:
-        phaseValue = 0x22;
-        gameState->scene_init_phase = phaseValue;
+        gameState->scene_init_phase = 0x22;
         return 1;
     case 34:
-        phaseValue = 0x23;
-        gameState->scene_init_phase = phaseValue;
+        gameState->scene_init_phase = 0x23;
         return 1;
     case 35:
-        temp_a1 = g_SceneAreaType - 0xA;
-        if (temp_a1 < 5U) {
-            tce3 = g_SavedSceneAreaType;
-            if (g_SceneAreaType != tce3) {
-                g_GameStateFlagsAfterPlayerInit.flags = (g_GameState.flags | 0x200000);
+        area = g_SceneAreaType - 0xA;
+        if (area < 5) {
+            saved = g_SavedSceneAreaType;
+            if (g_SceneAreaType != saved) {
+                D_800B0CD8 = g_GameState.flags | 0x200000;
             }
-            th1 = temp_a1 >> 1;
-            if (th1 != ((tce3 - 0xA) / 2)) {
-                tce6 = g_DiscChangeFlags;
-                (*(u8 *)&D_800B0CE6_w) = tce6 | 4;
+            if ((area >> 1) != ((saved - 0xA) / 2)) {
+                g_DiscChangeFlags |= 4;
             }
         }
-                phaseValue = 0x24;
-        gameState->scene_init_phase = phaseValue;
+        gameState->scene_init_phase = 0x24;
         return 1;
     case 36:
-        if (Scene_LoadEntityTexture() != 1) {
-            if (arg0v == 0) {
-                phaseValue = 0x25;
-                gameState->scene_init_phase = phaseValue;
-                return 1;
-            }
-            phaseValue = 0x27;
-            gameState->scene_init_phase = phaseValue;
+        if (Scene_LoadEntityTexture() == 1) {
             return 1;
         }
+        if (resume) {
+            gameState->scene_init_phase = 0x27;
+            return 1;
+        }
+        gameState->scene_init_phase = 0x25;
         return 1;
     case 37:
-        g_DiscChangeFlags |= 4;
-        Scene_SetStoryDay(g_CurrentStoryDay);
+        g_GameState.story_day_flags |= 4;
+        Scene_SetStoryDay(D_800B0CE4[0]);
         gameState->scene_init_phase = 0x26;
         return 1;
     case 38:
-        phaseValue = 0x27;
-        if (Scene_LoadEntityTextures() == 1) {
-            if ((u8) gameState->scene_init_subphase < 0xBU) {
-                goto block_21;
-            }
-        } else {
-            phaseValue = 0x27;
-            gameState->scene_init_phase = phaseValue;
+        if (Scene_LoadEntityTextures() == 1 && gameState->scene_init_subphase < 0xB) {
             return 1;
         }
-block_19:
-        phaseValue = 0x27;
-block_20:
-        gameState->scene_init_phase = phaseValue;
-block_21:
+        gameState->scene_init_phase = 0x27;
         return 1;
     case 39:
-        playerForActionMode = g_PlayerEntity;
-        *(s32 *)&playerForActionMode->model_state = g_SceneMapPrimBaseTable;
-        playerForActionMode->action_data = (void *)D_800B0EEC;
-        Entity_SetActionMode((BattleEntity *)playerForActionMode, 0x15);
-        playerForRenderSetup = g_PlayerEntity;
-        Render_SetupEntityPrims(&playerForRenderSetup->render_object, playerForRenderSetup->model_state.model_header, (u8 *)(playerForRenderSetup->allocation_block + 0x50), 0x3C0, 0x100, 0, 0x1C0, 2, (s8 **)&sp28, 1);
-        playerForRoomPrims = g_PlayerEntity;
-        Render_InitRoomPrimState(&playerForRoomPrims->render_object);
-        playerForAnimation = g_PlayerEntity;
-        Render_DrawWithAnim(&playerForAnimation->render_object, (s32)playerForAnimation->action_data, 0, &D_800BEA40, &g_EntityRenderScratch);
-        playerForScaleUpdate = g_PlayerEntity;
-        playerForScaleUpdate->render_object.header->shadow_radius = (s16) (playerForScaleUpdate->render_object.hit_cylinder.radius * 2);
-        g_GameStateFlagsAfterPlayerInit.flags = (g_GameState.flags & 0xFFF9FFFF);
-        if (arg0v != 0) {
-            phaseValue = gameState->flags;
-            var_v0_2 = phaseValue | 0x80000;
-        } else {
-            var_v0_2 = gameState->flags & 0xFFF7FFFF;
+        {
+            FieldActor *player = g_PlayerEntity;
+            player->model_state.model_header = g_GameState.bank_slots[0];
+            player->action_data = g_GameState.bank_rows[0][0x15];
+            Entity_SetActionMode((BattleEntity *)player, 0x15);
         }
-        gameState->flags = var_v0_2;
+        {
+            FieldActor *player = g_PlayerEntity;
+            Render_SetupEntityPrims(&player->render_object, player->model_state.model_header,
+                                    (u8 *)(player->allocation_block + 0x50), 0x3C0, 0x100, 0,
+                                    0x1C0, 2, &renderSetup, 1);
+        }
+        {
+            FieldActor *player = g_PlayerEntity;
+            Render_InitRoomPrimState(&player->render_object);
+        }
+        {
+            FieldActor *player = g_PlayerEntity;
+            Render_DrawWithAnim(&player->render_object, (s32)player->action_data, 0,
+                                &D_800BEA40, g_EntityRenderScratch);
+        }
+        {
+            FieldActor *player = g_PlayerEntity;
+            player->render_object.header->shadow_radius = player->render_object.hit_cylinder.radius * 2;
+        }
+        D_800B0CD8 = g_GameState.flags & ~0x60000;
+        if (resume) {
+            gameState->flags |= 0x80000;
+        } else {
+            gameState->flags &= ~0x80000;
+        }
         gameState->scene_init_phase = 0x20;
         /* fallthrough */
     default:
@@ -337,19 +301,8 @@ block_21:
     }
 }
 
-/* Independent global views below use the shared typed declarations. */
-#undef g_SceneAreaType
-#undef g_SavedSceneAreaType
-#undef g_CurrentStoryDay
-#undef g_DiscChangeFlags
-#undef g_SceneAreaTypeDiscSwapBackup
-#undef D_800B0DC5
-#undef g_SceneMapPrimBaseTable
-#undef D_800B0EEC
-#undef g_EntityRenderScratch
-#undef D_800BEA40
 
-#include "Scene_LoadTextureAndPlayer_externs_4.h"
+
 /* Existing byte symbols for the shared state's pending/current day and flags.
  * Preserve the unsigned pending-byte read before its signed-day conversion. */
 
@@ -369,7 +322,7 @@ int Scene_SetStoryDay(s32 storyDay) {
 
     if (((g_GameStateFlags & 2) != 0) || ((gameState->flags & 2) != 0)) {
         D_800B0CE6 |= 2;
-        D_8009D2E8 &= ~2U;
+        g_FieldMoveLock &= ~2U;
     }
 
     flags = gameState->story_day_flags;
