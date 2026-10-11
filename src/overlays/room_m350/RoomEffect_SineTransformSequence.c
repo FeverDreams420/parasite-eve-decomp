@@ -87,8 +87,8 @@ int func_8019988C(int event, EmissionState *state)
             effect->brightness = 128;
             effect->amplitude = count * 2048 + 2048;
         }
-        /* Preserve the random value until the position/amplitude stores finish. */
-        asm("" : "=r"(random) : "0"(random) : "memory");
+        /* Keep the position/amplitude stores before the delay/count update. */
+        asm volatile("" ::: "memory");
         {
             int delay = random & 7;
             unsigned short count = state->count;
@@ -106,7 +106,7 @@ int func_8019988C(int event, EmissionState *state)
             asm volatile("" : :);
             rawHigh = random >> 8;
             high = rawHigh & 255;
-            asm("" : : "r"(high), "r"(rawHigh), "r"(random));
+            asm("" : : "r"(high));
             bit = random & 2;
             asm("" : : "r"(bit), "r"(random));
             if (bit) y = high + 768;
