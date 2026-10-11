@@ -1025,25 +1025,25 @@ typedef struct RoomTimer2 {
 
 
 #define ROOMLIB_PARTICLE_TICK_A(name) \
-    void name(RoomEnt *o, unsigned char *state, char *sys) { \
+    void name(RoomEnt *o, RoomFxControl *state, RoomFxPairedEmitterState *sys) { \
         struct { short a; short pad; short b; } saved; \
-        char *clock = (char *)func_800C2B50(); \
+        RoomLibFxMatrixState *clock = func_800C2B50(); \
         int tmp = RW16(o->link, 0x2A); \
         saved.a = tmp; \
         tmp = RW16(o->link, 0x32); \
         saved.b = tmp; \
-        if (RW16(state, 2) < 0x20) { \
-            RWU16(sys, 0x138) = RWU16(sys, 0x138) + RWU16(sys, 0x13C); \
-            RWU16(sys, 0x13C) = RWU16(sys, 0x13C) + 7; \
-            if (RW16(state, 2) < 0x20 && RW16(sys, 0x13A) >= 5) { \
-                RW16(sys, 0x13A) = RW16(sys, 0x13A) - 4; \
+        if (state->frame < 0x20) { \
+            sys->timer = (unsigned short)sys->timer + (unsigned short)sys->phase; \
+            sys->phase = (unsigned short)sys->phase + 7; \
+            if (state->frame < 0x20 && sys->intensity >= 5) { \
+                sys->intensity = sys->intensity - 4; \
             } \
         } \
-        if (RW16(state, 2) == 0x10) { \
-            RW16(clock, 0x2C) = 1; \
+        if (state->frame == 0x10) { \
+            clock->hit = 1; \
         } \
-        if (RW16(state, 2) == 0x20) { \
-            state[1] = 2; \
+        if (state->frame == 0x20) { \
+            state->state = 2; \
         } \
     }
 
