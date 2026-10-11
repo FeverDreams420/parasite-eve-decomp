@@ -1,23 +1,24 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "pe1/battle_runtime.h"
 #include "pe1/battle_turn.h"
 #include "../../../tools/m2c/m2c_macros.h"
 
-extern struct { BattleEntity *value; char pad[12]; } D_8009D20C_absolute __asm__("D_8009D20C");
-extern struct { BattleEntity *value; char pad[12]; } D_8009D254_absolute __asm__("D_8009D254");
-#define LIST_HEAD (D_8009D20C_absolute.value)
-#define PLAYER (D_8009D254_absolute.value)
+/* COMMON supplies small-data metadata to MASPSX; the other battle words
+ * stay absolute. */
+u8 D_8009CE74;
+u8 D_8009D244;
+Combatant *D_8009D278;
+s32 D_8009D28C;
 
 extern RenderObjectEntity D_800B0CEC;
-/* These are the flags_9C and variant_visible fields of D_800B0CEC.
- * Separate views preserve the retail absolute load/store sequence under -G8. */
+/* D_800B0D88 is D_800B0CEC.flags_9C. Retail reloads the player's flags only
+ * after this store, so the store must look like it may alias them: a
+ * non-small view keeps the address in a register, and separate read and
+ * write views keep GCC from sharing one LUI between the load and the store. */
 extern struct { u16 value; char pad[14]; } D_800B0D88_read __asm__("D_800B0D88");
 extern struct { u16 value; char pad[14]; } D_800B0D88_write __asm__("D_800B0D88");
-extern struct { u8 value; char pad[15]; } D_800B0D8A_absolute __asm__("D_800B0D8A");
-#define GLOBAL_FLAGS_READ (D_800B0D88_read.value)
-#define GLOBAL_FLAGS_WRITE (D_800B0D88_write.value)
-#define GLOBAL_VISIBLE (D_800B0D8A_absolute.value)
 s32 Pm_StopUpperHalf(void);
 void Akao_Cmd_21(int arg0, int arg1);
 
@@ -29,13 +30,13 @@ void Battle_StepEscapeOrDeath(void)
     case 0:
         D_8009D244 = 0;
         Pm_StopUpperHalf();
-        for (entity = LIST_HEAD; entity != 0; entity = entity->next) {
+        for (entity = (BattleEntity *)D_8009D20C; entity != 0; entity = entity->next) {
             if (entity->core == 0) {
                 if (entity->parent == 0) continue;
-            } else if (entity == PLAYER) {
+            } else if (entity == D_8009D254) {
                 Anim_SetInterpRate(&D_800B0CEC, 30);
-                GLOBAL_FLAGS_WRITE = GLOBAL_FLAGS_READ | 2;
-                PLAYER->renderObject.flags_9C |= 2;
+                D_800B0D88_write.value = D_800B0D88_read.value | 2;
+                D_8009D254->renderObject.flags_9C |= 2;
             } else {
                 u32 flags;
                 Entity_SetActionMode(entity,
@@ -57,13 +58,13 @@ void Battle_StepEscapeOrDeath(void)
         D_8009CE74++;
         break;
     case 1:
-        if (PLAYER->renderObject.variant_visible != 0 ||
-            GLOBAL_VISIBLE != 0) break;
+        if (D_8009D254->renderObject.variant_visible != 0 ||
+            D_800B0D8A != 0) break;
         Battle_ResetEnemyStats(0);
         D_8009CE74++;
-        entity = LIST_HEAD;
+        entity = (BattleEntity *)D_8009D20C;
         if (entity != 0) {
-            BattleEntity *player = PLAYER;
+            BattleEntity *player = D_8009D254;
             do {
                 if (entity == player) continue;
                 if (entity->core != 0 || entity->parent != 0)
@@ -73,9 +74,9 @@ void Battle_StepEscapeOrDeath(void)
         break;
     case 2: {
         int all_done = 1;
-        entity = LIST_HEAD;
+        entity = (BattleEntity *)D_8009D20C;
         if (entity != 0) {
-            BattleEntity *player = PLAYER;
+            BattleEntity *player = D_8009D254;
             do {
                 if (entity == player) continue;
                 if (entity->core == 0 && entity->parent == 0) continue;
@@ -100,7 +101,7 @@ void Battle_StepEscapeOrDeath(void)
     case 3:
         if (CD_StepReadState(0) != 1) {
             Battle_ClearMotionTable();
-            Entity_SetActionMode(PLAYER, 0x15);
+            Entity_SetActionMode(D_8009D254, 0x15);
             Battle_SetupPlayerPalette();
             D_8009D28C = 10;
         }
@@ -110,7 +111,7 @@ void Battle_StepEscapeOrDeath(void)
 
 #define BATTLE_HUD_BYTE(symbol) ((symbol)[0])
 #define BATTLE_HUD_SLOT_BYTE(symbol, stride) \
-    (*(&BATTLE_HUD_BYTE(symbol) + (g_BattleTurnDrawSlotView[0] * (stride))))
+    (*(&BATTLE_HUD_BYTE(symbol) + (D_8009CDDC * (stride))))
 
 /* Initialize the enemy turn and wait for HUD, animation and texture work. */
 void Battle_PhaseInitEnemyTurn(void) {
@@ -141,20 +142,20 @@ void Battle_PhaseInitEnemyTurn(void) {
     Battle_FlushScriptSounds();
     ready = 1;
     Tbl_ResetAll();
-    moveLock = (g_BattleTurnMoveLockRead[0]) | 1;
-    g_BattleTurnMoveLockWrite[0] = moveLock;
-    initialPlayer = g_BattleTurnPlayerView[0];
+    moveLock = D_8009D2E8 | 1;
+    D_8009D2E8 = moveLock;
+    initialPlayer = D_8009D254;
     active = D_8009D278;
     clearMask = ~4;
     initialPlayer->motionX = 0;
     initialPlayer->motionY = 0;
     initialPlayer->motionZ = 0;
-    gameFlags = (g_BattleTurnGameFlagsRead[0]);
+    gameFlags = D_8009D1A0;
     hp = active->hpAlive;
-    g_BattleTurnGameFlagsWrite[0] = gameFlags & clearMask;
+    D_8009D1A0 = gameFlags & clearMask;
     /* Animate the charged gauge and status highlight using the draw slot. */
     if (hp >= 0x2328U) {
-        if (((g_BattleTurnFrameCounterView[0]) & 3) == 0) {
+        if ((D_8009D250 & 3) == 0) {
             register int topGreen asm("$8") = 0x46;
             register int topBlue asm("$7") = 0x82;
             register int bottomRed asm("$6") = 0x9F;
@@ -177,7 +178,7 @@ void Battle_PhaseInitEnemyTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = bottomGreen;
             asm("" : : "i"(0));
             BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = bottomBlue;
-        } else if (((g_BattleTurnFrameCounterView[0]) & 3) == 1) {
+        } else if ((D_8009D250 & 3) == 1) {
             register int red asm("$5") = 0x50;
             register int green asm("$6") = 0xA3;
             int blue = 0xBE;
@@ -198,7 +199,7 @@ void Battle_PhaseInitEnemyTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = green;
             asm("" : : "i"(1));
             BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = blue;
-        } else if (((g_BattleTurnFrameCounterView[0]) & 3) == 2) {
+        } else if ((D_8009D250 & 3) == 2) {
             register int topRed asm("$7") = 0x9F;
             register int topGreen asm("$8") = 0xFF;
             register int topBlue asm("$6") = 0xF9;
@@ -221,7 +222,7 @@ void Battle_PhaseInitEnemyTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = bottomGreen;
             asm("" : : "i"(2));
             BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = bottomBlue;
-        } else if (((g_BattleTurnFrameCounterView[0]) & 3) == 3) {
+        } else if ((D_8009D250 & 3) == 3) {
             int red = 0x50;
             register int green asm("$6") = 0xA3;
             int blue = 0xBE;
@@ -244,7 +245,7 @@ void Battle_PhaseInitEnemyTurn(void) {
         }
     }
     if (D_8009D278->stateFlags & 0x2000) {
-        if (((g_BattleTurnFrameCounterView[0]) & 3) == 0) {
+        if ((D_8009D250 & 3) == 0) {
             register int topRed asm("$9") = 0xFF;
             register int topGreen asm("$8") = 0x3D;
             register int topBlue asm("$7") = 0x81;
@@ -265,7 +266,7 @@ void Battle_PhaseInitEnemyTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B0171, 0x48) = bottomGreen;
             asm("" : : "i"(0));
             BATTLE_HUD_SLOT_BYTE(D_800B0172, 0x48) = bottomBlue;
-        } else if (((g_BattleTurnFrameCounterView[0]) & 3) == 1) {
+        } else if ((D_8009D250 & 3) == 1) {
             register int red asm("$6") = 0xC1;
             register int green asm("$5") = 0x28;
             int blue = 0x41;
@@ -283,7 +284,7 @@ void Battle_PhaseInitEnemyTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B0171, 0x48) = green;
             asm("" : : "i"(1));
             BATTLE_HUD_SLOT_BYTE(D_800B0172, 0x48) = blue;
-        } else if (((g_BattleTurnFrameCounterView[0]) & 3) == 2) {
+        } else if ((D_8009D250 & 3) == 2) {
             register int topRed asm("$9") = 0x83;
             register int topGreen asm("$8") = 0x13;
             register int topBlue asm("$7") = 1;
@@ -304,7 +305,7 @@ void Battle_PhaseInitEnemyTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B0171, 0x48) = bottomGreen;
             asm("" : : "i"(2));
             BATTLE_HUD_SLOT_BYTE(D_800B0172, 0x48) = bottomBlue;
-        } else if (((g_BattleTurnFrameCounterView[0]) & 3) == 3) {
+        } else if ((D_8009D250 & 3) == 3) {
             register int red asm("$6") = 0xC1;
             register int green asm("$5") = 0x28;
             int blue = 0x41;
@@ -342,24 +343,24 @@ void Battle_PhaseInitEnemyTurn(void) {
         D_8009D278->panelAux_timer = (u8) (D_8009D278->panelAux_timer - 1);
     }
     /* Wait for player/enemy animations to reach their requested idle modes. */
-    entity = g_BattleTurnEntityListView[0];
+    entity = (BattleEntity *)D_8009D20C;
     if (entity != 0) {
         do {
-            if (entity == g_BattleTurnPlayerView[0]) {
+            if (entity == D_8009D254) {
                 if (entity->actionMode != D_8009D278->actionMode12) {
                     ready = 0;
                     entityFlags = entity->entityFlags & ~0x100;
                     entity->entityFlags = entityFlags;
                     if (entity->animLastFrame == entity->animPrev.parts.integer) {
-                        if (((u8) entity->actionMode < 4U) && ((g_BattleTurnResumeCountRead[0]) != 0)) {
-                            if ((u16) (g_BattleTurnResumeCountRead[0]) >= 2U) {
+                        if (((u8) entity->actionMode < 4U) && (D_8009D298 != 0)) {
+                            if (D_8009D298 >= 2U) {
                                 entity->entityFlags = (s32) (entityFlags | 0x100);
                             }
-                            g_BattleTurnResumeCountWrite[0] = 0;
-                            Entity_SetActionMode(g_BattleTurnActionPlayerView[0], (g_BattleTurnResumeModeView[0]));
-                            player = g_BattleTurnResumedPlayerView[0];
-                            player->animFrame = (s32) (g_BattleTurnResumeFrameView[0]);
-                            player->animPrev.fixed = (s32) (g_BattleTurnPreviousFrameView[0] + 0xFFFF0000);
+                            D_8009D298 = 0;
+                            Entity_SetActionMode(D_8009D254, D_8009D29A);
+                            player = D_8009D254;
+                            player->animFrame = (s32) (D_8009D29C[0]);
+                            player->animPrev.fixed = (s32) (D_8009D29C[0] + 0xFFFF0000);
                         } else {
                             Entity_SetActionMode(entity, D_8009D278->actionMode12);
                         }
@@ -404,7 +405,7 @@ void Battle_PhaseInitEnemyTurn(void) {
         BATTLE_HUD_BYTE(D_800B00FD) = value0;
         BATTLE_HUD_BYTE(D_800B0111) = value0;
         BATTLE_HUD_BYTE(D_800B0121) = value0;
-        value0 = (g_BattleTurnMoveLockRead[0]);
+        value0 = D_8009D2E8;
         value1 = ~1;
         BATTLE_HUD_BYTE(D_800B00EC) = 0;
         BATTLE_HUD_BYTE(D_800B00EE) = blue;
@@ -429,7 +430,7 @@ void Battle_PhaseInitEnemyTurn(void) {
         BATTLE_HUD_BYTE(D_800B0128) = color2;
         BATTLE_HUD_BYTE(D_800B0129) = brightGreen;
         BATTLE_HUD_BYTE(D_800B012A) = color1;
-        g_BattleTurnMoveLockWrite[0] = value0 & value1;
+        D_8009D2E8 = value0 & value1;
         BATTLE_HUD_BYTE(D_800B6948) = color2;
         BATTLE_HUD_BYTE(D_800B694A) = color1;
 
@@ -500,7 +501,7 @@ void Battle_PhaseHitReaction(void) {
     BattleEntity *entity;
     EnemyCombatant *enemy;
     if (D_8009D278->hpAlive >= 0x2328U) {
-        if (((g_BattleTurnFrameCounterView[0]) & 3) == 0) {
+        if ((D_8009D250 & 3) == 0) {
             register int topGreen asm("$8") = 0x46;
             register int topBlue asm("$7") = 0x82;
             register int bottomRed asm("$6") = 0x9F;
@@ -523,7 +524,7 @@ void Battle_PhaseHitReaction(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = bottomGreen;
             asm("" : : "i"(0));
             BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = bottomBlue;
-        } else if (((g_BattleTurnFrameCounterView[0]) & 3) == 1) {
+        } else if ((D_8009D250 & 3) == 1) {
             register int red asm("$5") = 0x50;
             register int green asm("$6") = 0xA3;
             int blue = 0xBE;
@@ -544,7 +545,7 @@ void Battle_PhaseHitReaction(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = green;
             asm("" : : "i"(1));
             BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = blue;
-        } else if (((g_BattleTurnFrameCounterView[0]) & 3) == 2) {
+        } else if ((D_8009D250 & 3) == 2) {
             register int topRed asm("$7") = 0x9F;
             register int topGreen asm("$8") = 0xFF;
             register int topBlue asm("$6") = 0xF9;
@@ -567,7 +568,7 @@ void Battle_PhaseHitReaction(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = bottomGreen;
             asm("" : : "i"(2));
             BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = bottomBlue;
-        } else if (((g_BattleTurnFrameCounterView[0]) & 3) == 3) {
+        } else if ((D_8009D250 & 3) == 3) {
             int red = 0x50;
             register int green asm("$6") = 0xA3;
             int blue = 0xBE;
@@ -592,7 +593,7 @@ void Battle_PhaseHitReaction(void) {
     active = D_8009D278;
     if (active->panelA_timer) {
         if (active->panelA_timer == 30) {
-            BattleEntity *panelPlayer = g_BattleTurnPlayerView[0];
+            BattleEntity *panelPlayer = D_8009D254;
             active->panelA_x = panelPlayer->renderObject.projected_x;
             active->panelA_y = panelPlayer->renderObject.projected_y;
         }
@@ -602,7 +603,7 @@ void Battle_PhaseHitReaction(void) {
     active = D_8009D278;
     if (active->panelB_timer) {
         if (active->panelB_timer == 30) {
-            player = g_BattleTurnPlayerView[0];
+            player = D_8009D254;
             active->panelB_x = player->renderObject.projected_x;
             active->panelB_y = player->renderObject.projected_y;
             active->panelB_flag = 1;
@@ -610,8 +611,8 @@ void Battle_PhaseHitReaction(void) {
         Battle_DrawStatusPanel(0, (BattleStatusPanel *)&D_8009D278->panelB_val);
         D_8009D278->panelB_timer--;
     }
-    for (entity = g_BattleTurnEntityListView[0]; entity; entity = entity->next) {
-        if (entity != g_BattleTurnPlayerView[0] && entity->core) {
+    for (entity = (BattleEntity *)D_8009D20C; entity; entity = entity->next) {
+        if (entity != D_8009D254 && entity->core) {
             enemy = entity->core;
             if (enemy->coreFlags & 0x6000) {
                 Battle_ProcessActionSlot(entity);
@@ -650,7 +651,7 @@ void Battle_PhaseEndTurn(void) {
     s32 c6;
     register s32 c7 asm("$8");
 
-    initialPlayer = g_BattleTurnPlayerView[0];
+    initialPlayer = D_8009D254;
     active = D_8009D278;
     initialPlayer->motionX = 0;
     initialPlayer->motionY = 0;
@@ -659,7 +660,7 @@ void Battle_PhaseEndTurn(void) {
     ready = 1;
     /* Animate the charged gauge and active status colors. */
     if (hp >= 0x2328U) {
-        if (((g_BattleTurnFrameCounterView[0]) & 3) == 0) {
+        if ((D_8009D250 & 3) == 0) {
             register int topGreen asm("$8") = 0x46;
             register int topBlue asm("$7") = 0x82;
             register int bottomRed asm("$6") = 0x9F;
@@ -682,7 +683,7 @@ void Battle_PhaseEndTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = bottomGreen;
             asm("" : : "i"(0));
             BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = bottomBlue;
-        } else if (((g_BattleTurnFrameCounterView[0]) & 3) == 1) {
+        } else if ((D_8009D250 & 3) == 1) {
             register int red asm("$5") = 0x50;
             register int green asm("$6") = 0xA3;
             int blue = 0xBE;
@@ -703,7 +704,7 @@ void Battle_PhaseEndTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = green;
             asm("" : : "i"(1));
             BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = blue;
-        } else if (((g_BattleTurnFrameCounterView[0]) & 3) == 2) {
+        } else if ((D_8009D250 & 3) == 2) {
             register int topRed asm("$7") = 0x9F;
             register int topGreen asm("$8") = 0xFF;
             register int topBlue asm("$6") = 0xF9;
@@ -726,7 +727,7 @@ void Battle_PhaseEndTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = bottomGreen;
             asm("" : : "i"(2));
             BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = bottomBlue;
-        } else if (((g_BattleTurnFrameCounterView[0]) & 3) == 3) {
+        } else if ((D_8009D250 & 3) == 3) {
             int red = 0x50;
             register int green asm("$6") = 0xA3;
             int blue = 0xBE;
@@ -749,7 +750,7 @@ void Battle_PhaseEndTurn(void) {
         }
     }
     if (D_8009D278->stateFlags & 0x2000) {
-        if (((g_BattleTurnFrameCounterView[0]) & 3) == 0) {
+        if ((D_8009D250 & 3) == 0) {
             register int topRed asm("$9") = 0xFF;
             register int topGreen asm("$8") = 0x3D;
             register int topBlue asm("$7") = 0x81;
@@ -770,7 +771,7 @@ void Battle_PhaseEndTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B0171, 0x48) = bottomGreen;
             asm("" : : "i"(0));
             BATTLE_HUD_SLOT_BYTE(D_800B0172, 0x48) = bottomBlue;
-        } else if (((g_BattleTurnFrameCounterView[0]) & 3) == 1) {
+        } else if ((D_8009D250 & 3) == 1) {
             register int red asm("$6") = 0xC1;
             register int green asm("$5") = 0x28;
             int blue = 0x41;
@@ -788,7 +789,7 @@ void Battle_PhaseEndTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B0171, 0x48) = green;
             asm("" : : "i"(1));
             BATTLE_HUD_SLOT_BYTE(D_800B0172, 0x48) = blue;
-        } else if (((g_BattleTurnFrameCounterView[0]) & 3) == 2) {
+        } else if ((D_8009D250 & 3) == 2) {
             register int topRed asm("$9") = 0x83;
             register int topGreen asm("$8") = 0x13;
             register int topBlue asm("$7") = 1;
@@ -809,7 +810,7 @@ void Battle_PhaseEndTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B0171, 0x48) = bottomGreen;
             asm("" : : "i"(2));
             BATTLE_HUD_SLOT_BYTE(D_800B0172, 0x48) = bottomBlue;
-        } else if (((g_BattleTurnFrameCounterView[0]) & 3) == 3) {
+        } else if ((D_8009D250 & 3) == 3) {
             register int red asm("$6") = 0xC1;
             register int green asm("$5") = 0x28;
             int blue = 0x41;
@@ -828,7 +829,7 @@ void Battle_PhaseEndTurn(void) {
             BATTLE_HUD_SLOT_BYTE(D_800B0172, 0x48) = blue;
         }
     }
-    player = g_BattleTurnActionPlayerView[0];
+    player = D_8009D254;
     mode = D_8009D278->actionMode12;
     if (player->actionMode != mode) {
         Entity_SetActionMode(player, mode);
@@ -837,11 +838,11 @@ void Battle_PhaseEndTurn(void) {
     switch (step) {
     case 0:
         /* Wait for enemy actions to finish before stopping effects. */
-        entity = g_BattleTurnEntityListView[0];
-        g_BattleTurnMoveLockWrite[0] = g_BattleTurnMoveLockRead[0] | 1;
+        entity = (BattleEntity *)D_8009D20C;
+        D_8009D2E8 = D_8009D2E8 | 1;
         if (entity != 0) {
             do {
-                if (entity != g_BattleTurnPlayerView[0]) {
+                if (entity != D_8009D254) {
                     enemy = entity->core;
                     if ((enemy != 0) && (enemy->field04.bytes.kind != 1)) {
                         if ((u32) (entity->actionMode - 2) >= 2U) {
@@ -871,12 +872,12 @@ void Battle_PhaseEndTurn(void) {
         if (CD_StepReadState(0) != step) {
             Battle_ClearMotionTable();
             nextMode = 0x18;
-            if (!(g_BattleTurnGameFlagsRead[0] & 0x1800)) {
-                player = g_BattleTurnResumedPlayerView[0];
+            if (!(D_8009D1A0 & 0x1800)) {
+                player = D_8009D254;
                 nextMode = 0x15;
             } else {
-                player = g_BattleTurnResumedPlayerView[0];
-                g_BattleTurnGameFlagsWrite[0] = g_BattleTurnGameFlagsRead[0] & ~0x1800;
+                player = D_8009D254;
+                D_8009D1A0 = D_8009D1A0 & ~0x1800;
             }
             Entity_SetActionMode(player, nextMode);
             Battle_SetupPlayerPalette();
@@ -988,8 +989,8 @@ void Battle_StepEntityDeath(void)
     switch (D_8009CE74) {
     case 0:
         D_8009D244 = 0;
-        for (entity = g_BattleTurnEntityListView[0]; entity != 0; entity = entity->next) {
-            if (entity == g_BattleTurnPlayerView[0]) continue;
+        for (entity = (BattleEntity *)D_8009D20C; entity != 0; entity = entity->next) {
+            if (entity == D_8009D254) continue;
             if (entity->core == 0) {
                 if (entity->parent == 0) continue;
             } else {
@@ -1015,9 +1016,9 @@ void Battle_StepEntityDeath(void)
         break;
     case 1: {
         int all_done = 1;
-        entity = g_BattleTurnEntityListView[0];
+        entity = (BattleEntity *)D_8009D20C;
         if (entity != 0) {
-            BattleEntity *player = g_BattleTurnPlayerView[0];
+            BattleEntity *player = D_8009D254;
             do {
                 if (entity == player) continue;
                 if (entity->core == 0 && entity->parent == 0) continue;
@@ -1041,7 +1042,7 @@ void Battle_StepEntityDeath(void)
     case 2:
         if (CD_StepReadState(0) != 1) {
             Battle_ClearMotionTable();
-            Entity_SetActionMode(g_BattleTurnPlayerView[0], 0x15);
+            Entity_SetActionMode(D_8009D254, 0x15);
             Battle_SetupPlayerPalette();
             D_8009D28C = 11;
             Battle_ResetEnemyStats(0);
@@ -1053,174 +1054,7 @@ void Battle_StepEntityDeath(void)
 
 /* Start the player and battle-HUD death sequence after death cleanup. */
 
-#define NULL ((void *)0)
 M2C_UNK func_8006DE80();
-extern struct { char _[16]; } D_8009D1A0_o __asm__("g_GameStateFlags");
-#define g_GameStateFlags (*(s32 *)&D_8009D1A0_o)
-extern struct { char _[16]; } g_PlayerEntity_o __asm__("g_PlayerEntity");
-extern struct { char _[16]; } g_PlayerEntity_b __asm__("g_PlayerEntity");
-#define g_PlayerEntity (*(u8 **)&g_PlayerEntity_o)
-#define D254_B (*(u8 **)&g_PlayerEntity_b)
-extern s32 g_BattleModeState;
-extern s32 g_FieldMoveLock_r[] __asm__("g_FieldMoveLock");
-extern s32 g_FieldMoveLock_w[] __asm__("g_FieldMoveLock");
-extern struct { char _[16]; } D_800B00EC_o __asm__("D_800B00EC");
-#define D_800B00EC (*(s8 *)&D_800B00EC_o)
-extern struct { char _[16]; } D_800B00ED_o __asm__("D_800B00ED");
-#define D_800B00ED (*(s8 *)&D_800B00ED_o)
-extern struct { char _[16]; } D_800B00EE_o __asm__("D_800B00EE");
-#define D_800B00EE (*(s8 *)&D_800B00EE_o)
-extern struct { char _[16]; } D_800B00F4_o __asm__("D_800B00F4");
-#define D_800B00F4 (*(s8 *)&D_800B00F4_o)
-extern struct { char _[16]; } D_800B00F5_o __asm__("D_800B00F5");
-#define D_800B00F5 (*(s8 *)&D_800B00F5_o)
-extern struct { char _[16]; } D_800B00F6_o __asm__("D_800B00F6");
-#define D_800B00F6 (*(s8 *)&D_800B00F6_o)
-extern struct { char _[16]; } D_800B00FC_o __asm__("D_800B00FC");
-#define D_800B00FC (*(s8 *)&D_800B00FC_o)
-extern struct { char _[16]; } D_800B00FD_o __asm__("D_800B00FD");
-#define D_800B00FD (*(s8 *)&D_800B00FD_o)
-extern struct { char _[16]; } D_800B00FE_o __asm__("D_800B00FE");
-#define D_800B00FE (*(s8 *)&D_800B00FE_o)
-extern struct { char _[16]; } D_800B0104_o __asm__("D_800B0104");
-#define D_800B0104 (*(s8 *)&D_800B0104_o)
-extern struct { char _[16]; } D_800B0105_o __asm__("D_800B0105");
-#define D_800B0105 (*(s8 *)&D_800B0105_o)
-extern struct { char _[16]; } D_800B0106_o __asm__("D_800B0106");
-#define D_800B0106 (*(s8 *)&D_800B0106_o)
-extern struct { char _[16]; } D_800B0110_o __asm__("D_800B0110");
-#define D_800B0110 (*(s8 *)&D_800B0110_o)
-extern struct { char _[16]; } D_800B0111_o __asm__("D_800B0111");
-#define D_800B0111 (*(s8 *)&D_800B0111_o)
-extern struct { char _[16]; } D_800B0112_o __asm__("D_800B0112");
-#define D_800B0112 (*(s8 *)&D_800B0112_o)
-extern struct { char _[16]; } D_800B0118_o __asm__("D_800B0118");
-#define D_800B0118 (*(s8 *)&D_800B0118_o)
-extern struct { char _[16]; } D_800B0119_o __asm__("D_800B0119");
-#define D_800B0119 (*(s8 *)&D_800B0119_o)
-extern struct { char _[16]; } D_800B011A_o __asm__("D_800B011A");
-#define D_800B011A (*(s8 *)&D_800B011A_o)
-extern struct { char _[16]; } D_800B0120_o __asm__("D_800B0120");
-#define D_800B0120 (*(s8 *)&D_800B0120_o)
-extern struct { char _[16]; } D_800B0121_o __asm__("D_800B0121");
-#define D_800B0121 (*(s8 *)&D_800B0121_o)
-extern struct { char _[16]; } D_800B0122_o __asm__("D_800B0122");
-#define D_800B0122 (*(s8 *)&D_800B0122_o)
-extern struct { char _[16]; } D_800B0128_o __asm__("D_800B0128");
-#define D_800B0128 (*(s8 *)&D_800B0128_o)
-extern struct { char _[16]; } D_800B0129_o __asm__("D_800B0129");
-#define D_800B0129 (*(s8 *)&D_800B0129_o)
-extern struct { char _[16]; } D_800B012A_o __asm__("D_800B012A");
-#define D_800B012A (*(s8 *)&D_800B012A_o)
-extern struct { char _[16]; } D_800B0134_o __asm__("D_800B0134");
-#define D_800B0134 (*(s8 *)&D_800B0134_o)
-extern struct { char _[16]; } D_800B0135_o __asm__("D_800B0135");
-#define D_800B0135 (*(s8 *)&D_800B0135_o)
-extern struct { char _[16]; } D_800B0136_o __asm__("D_800B0136");
-#define D_800B0136 (*(s8 *)&D_800B0136_o)
-extern struct { char _[16]; } D_800B013C_o __asm__("D_800B013C");
-#define D_800B013C (*(s8 *)&D_800B013C_o)
-extern struct { char _[16]; } D_800B013D_o __asm__("D_800B013D");
-#define D_800B013D (*(s8 *)&D_800B013D_o)
-extern struct { char _[16]; } D_800B013E_o __asm__("D_800B013E");
-#define D_800B013E (*(s8 *)&D_800B013E_o)
-extern struct { char _[16]; } D_800B0144_o __asm__("D_800B0144");
-#define D_800B0144 (*(s8 *)&D_800B0144_o)
-extern struct { char _[16]; } D_800B0145_o __asm__("D_800B0145");
-#define D_800B0145 (*(s8 *)&D_800B0145_o)
-extern struct { char _[16]; } D_800B0146_o __asm__("D_800B0146");
-#define D_800B0146 (*(s8 *)&D_800B0146_o)
-extern struct { char _[16]; } D_800B014C_o __asm__("D_800B014C");
-#define D_800B014C (*(s8 *)&D_800B014C_o)
-extern struct { char _[16]; } D_800B014D_o __asm__("D_800B014D");
-#define D_800B014D (*(s8 *)&D_800B014D_o)
-extern struct { char _[16]; } D_800B014E_o __asm__("D_800B014E");
-#define D_800B014E (*(s8 *)&D_800B014E_o)
-extern struct { char _[16]; } D_800B0158_o __asm__("D_800B0158");
-#define D_800B0158 (*(s8 *)&D_800B0158_o)
-extern struct { char _[16]; } D_800B0159_o __asm__("D_800B0159");
-#define D_800B0159 (*(s8 *)&D_800B0159_o)
-extern struct { char _[16]; } D_800B015A_o __asm__("D_800B015A");
-#define D_800B015A (*(s8 *)&D_800B015A_o)
-extern struct { char _[16]; } D_800B0160_o __asm__("D_800B0160");
-#define D_800B0160 (*(s8 *)&D_800B0160_o)
-extern struct { char _[16]; } D_800B0161_o __asm__("D_800B0161");
-#define D_800B0161 (*(s8 *)&D_800B0161_o)
-extern struct { char _[16]; } D_800B0162_o __asm__("D_800B0162");
-#define D_800B0162 (*(s8 *)&D_800B0162_o)
-extern struct { char _[16]; } D_800B0168_o __asm__("D_800B0168");
-#define D_800B0168 (*(s8 *)&D_800B0168_o)
-extern struct { char _[16]; } D_800B0169_o __asm__("D_800B0169");
-#define D_800B0169 (*(s8 *)&D_800B0169_o)
-extern struct { char _[16]; } D_800B016A_o __asm__("D_800B016A");
-#define D_800B016A (*(s8 *)&D_800B016A_o)
-extern struct { char _[16]; } D_800B0170_o __asm__("D_800B0170");
-#define D_800B0170 (*(s8 *)&D_800B0170_o)
-extern struct { char _[16]; } D_800B0171_o __asm__("D_800B0171");
-#define D_800B0171 (*(s8 *)&D_800B0171_o)
-extern struct { char _[16]; } D_800B0172_o __asm__("D_800B0172");
-#define D_800B0172 (*(s8 *)&D_800B0172_o)
-extern struct { char _[16]; } D_800B017C_o __asm__("D_800B017C");
-#define D_800B017C (*(s8 *)&D_800B017C_o)
-extern struct { char _[16]; } D_800B017D_o __asm__("D_800B017D");
-#define D_800B017D (*(s8 *)&D_800B017D_o)
-extern struct { char _[16]; } D_800B017E_o __asm__("D_800B017E");
-#define D_800B017E (*(s8 *)&D_800B017E_o)
-extern struct { char _[16]; } D_800B0184_o __asm__("D_800B0184");
-#define D_800B0184 (*(s8 *)&D_800B0184_o)
-extern struct { char _[16]; } D_800B0185_o __asm__("D_800B0185");
-#define D_800B0185 (*(s8 *)&D_800B0185_o)
-extern struct { char _[16]; } D_800B0186_o __asm__("D_800B0186");
-#define D_800B0186 (*(s8 *)&D_800B0186_o)
-extern struct { char _[16]; } D_800B018C_o __asm__("D_800B018C");
-#define D_800B018C (*(s8 *)&D_800B018C_o)
-extern struct { char _[16]; } D_800B018D_o __asm__("D_800B018D");
-#define D_800B018D (*(s8 *)&D_800B018D_o)
-extern struct { char _[16]; } D_800B018E_o __asm__("D_800B018E");
-#define D_800B018E (*(s8 *)&D_800B018E_o)
-extern struct { char _[16]; } D_800B0194_o __asm__("D_800B0194");
-#define D_800B0194 (*(s8 *)&D_800B0194_o)
-extern struct { char _[16]; } D_800B0195_o __asm__("D_800B0195");
-#define D_800B0195 (*(s8 *)&D_800B0195_o)
-extern struct { char _[16]; } D_800B0196_o __asm__("D_800B0196");
-#define D_800B0196 (*(s8 *)&D_800B0196_o)
-extern struct { char _[16]; } D_800B01A0_o __asm__("D_800B01A0");
-#define D_800B01A0 (*(s8 *)&D_800B01A0_o)
-extern struct { char _[16]; } D_800B01A1_o __asm__("D_800B01A1");
-#define D_800B01A1 (*(s8 *)&D_800B01A1_o)
-extern struct { char _[16]; } D_800B01A2_o __asm__("D_800B01A2");
-#define D_800B01A2 (*(s8 *)&D_800B01A2_o)
-extern struct { char _[16]; } D_800B01A8_o __asm__("D_800B01A8");
-#define D_800B01A8 (*(s8 *)&D_800B01A8_o)
-extern struct { char _[16]; } D_800B01A9_o __asm__("D_800B01A9");
-#define D_800B01A9 (*(s8 *)&D_800B01A9_o)
-extern struct { char _[16]; } D_800B01AA_o __asm__("D_800B01AA");
-#define D_800B01AA (*(s8 *)&D_800B01AA_o)
-extern struct { char _[16]; } D_800B01B0_o __asm__("D_800B01B0");
-#define D_800B01B0 (*(s8 *)&D_800B01B0_o)
-extern struct { char _[16]; } D_800B01B1_o __asm__("D_800B01B1");
-#define D_800B01B1 (*(s8 *)&D_800B01B1_o)
-extern struct { char _[16]; } D_800B01B2_o __asm__("D_800B01B2");
-#define D_800B01B2 (*(s8 *)&D_800B01B2_o)
-extern struct { char _[16]; } D_800B01B8_o __asm__("D_800B01B8");
-#define D_800B01B8 (*(s8 *)&D_800B01B8_o)
-extern struct { char _[16]; } D_800B01B9_o __asm__("D_800B01B9");
-#define D_800B01B9 (*(s8 *)&D_800B01B9_o)
-extern struct { char _[16]; } D_800B01BA_o __asm__("D_800B01BA");
-#define D_800B01BA (*(s8 *)&D_800B01BA_o)
-extern s32 D_800B0CD8_r[] __asm__("g_GameState");
-extern struct { char _[16]; } D_800B692C_o __asm__("D_800B692C");
-#define D_800B692C (*(s8 *)&D_800B692C_o)
-extern struct { char _[16]; } D_800B692D_o __asm__("D_800B692D");
-#define D_800B692D (*(s8 *)&D_800B692D_o)
-extern struct { char _[16]; } D_800B692E_o __asm__("D_800B692E");
-#define D_800B692E (*(s8 *)&D_800B692E_o)
-extern struct { char _[16]; } D_800B6948_o __asm__("D_800B6948");
-#define D_800B6948 (*(s8 *)&D_800B6948_o)
-extern struct { char _[16]; } D_800B6949_o __asm__("D_800B6949");
-#define D_800B6949 (*(s8 *)&D_800B6949_o)
-extern struct { char _[16]; } D_800B694A_o __asm__("D_800B694A");
-#define D_800B694A (*(s8 *)&D_800B694A_o)
 
 void Battle_StartDeathAnim(void) {
     s32 c2;
@@ -1238,112 +1072,112 @@ void Battle_StartDeathAnim(void) {
     c4 = 0x9F;
     c2 = 0xFF;
     c3 = 0xF9;
-    D_800B00ED = c6;
-    D_800B00FD = c6;
-    D_800B0111 = c6;
-    D_800B0121 = c6;
+    D_800B00ED[0] = c6;
+    D_800B00FD[0] = c6;
+    D_800B0111[0] = c6;
+    D_800B0121[0] = c6;
     c6 = 0x36;
-    D_800B00F4 = c4;
-    D_800B0104 = c4;
-    D_800B692C = c4;
-    D_800B0118 = c4;
-    D_800B0128 = c4;
-    D_800B6948 = c4;
+    D_800B00F4[0] = c4;
+    D_800B0104[0] = c4;
+    D_800B692C[0] = c4;
+    D_800B0118[0] = c4;
+    D_800B0128[0] = c4;
+    D_800B6948[0] = c4;
     c4 = 0x4A;
-    D_800B00F6 = c3;
-    D_800B0106 = c3;
-    D_800B692E = c3;
-    D_800B011A = c3;
-    D_800B012A = c3;
-    D_800B694A = c3;
+    D_800B00F6[0] = c3;
+    D_800B0106[0] = c3;
+    D_800B692E[0] = c3;
+    D_800B011A[0] = c3;
+    D_800B012A[0] = c3;
+    D_800B694A[0] = c3;
     c3 = 0x3B;
     c7 = 0x3D;
-    D_800B00EC = 0;
-    D_800B00EE = c5;
-    D_800B00F5 = c2;
-    D_800B00FC = 0;
-    D_800B00FE = c5;
-    D_800B0105 = c2;
-    D_800B692D = c2;
-    D_800B0110 = 0;
-    D_800B0112 = c5;
-    D_800B0119 = c2;
-    D_800B0120 = 0;
-    D_800B0122 = c5;
-    D_800B0129 = c2;
-    D_800B6949 = c2;
-    D_800B0134 = 0;
-    D_800B0135 = c5;
-    D_800B0136 = c6;
-    D_800B013C = c4;
-    D_800B0146 = c6;
-    D_800B017E = c6;
-    D_800B018E = c6;
+    D_800B00EC[0] = 0;
+    D_800B00EE[0] = c5;
+    D_800B00F5[0] = c2;
+    D_800B00FC[0] = 0;
+    D_800B00FE[0] = c5;
+    D_800B0105[0] = c2;
+    D_800B692D[0] = c2;
+    D_800B0110[0] = 0;
+    D_800B0112[0] = c5;
+    D_800B0119[0] = c2;
+    D_800B0120[0] = 0;
+    D_800B0122[0] = c5;
+    D_800B0129[0] = c2;
+    D_800B6949[0] = c2;
+    D_800B0134[0] = 0;
+    D_800B0135[0] = c5;
+    D_800B0136[0] = c6;
+    D_800B013C[0] = c4;
+    D_800B0146[0] = c6;
+    D_800B017E[0] = c6;
+    D_800B018E[0] = c6;
     c6 = 0x81;
-    D_800B0145 = c5;
-    D_800B017D = c5;
-    D_800B018D = c5;
+    D_800B0145[0] = c5;
+    D_800B017D[0] = c5;
+    D_800B018D[0] = c5;
     c5 = 0x83;
-    D_800B014C = c4;
-    D_800B0184 = c4;
-    D_800B0194 = c4;
+    D_800B014C[0] = c4;
+    D_800B0184[0] = c4;
+    D_800B0194[0] = c4;
     c4 = 0x13;
-    D_800B013E = c3;
-    D_800B014E = c3;
-    D_800B0186 = c3;
-    D_800B0196 = c3;
+    D_800B013E[0] = c3;
+    D_800B014E[0] = c3;
+    D_800B0186[0] = c3;
+    D_800B0196[0] = c3;
     c3 = 1;
-    D_800B013D = c2;
-    D_800B0144 = 0;
-    D_800B014D = c2;
-    D_800B017C = 0;
-    D_800B0185 = c2;
-    D_800B018C = 0;
-    D_800B0195 = c2;
-    D_800B0158 = c2;
-    D_800B0159 = c7;
-    D_800B015A = c6;
-    D_800B0160 = c5;
-    D_800B0161 = c4;
-    D_800B0162 = c3;
-    D_800B0168 = c2;
-    D_800B0169 = c7;
-    D_800B016A = c6;
-    D_800B0170 = c5;
-    D_800B0171 = c4;
-    D_800B0172 = c3;
-    D_800B01A0 = c2;
-    D_800B01A1 = c7;
-    D_800B01B0 = c2;
+    D_800B013D[0] = c2;
+    D_800B0144[0] = 0;
+    D_800B014D[0] = c2;
+    D_800B017C[0] = 0;
+    D_800B0185[0] = c2;
+    D_800B018C[0] = 0;
+    D_800B0195[0] = c2;
+    D_800B0158[0] = c2;
+    D_800B0159[0] = c7;
+    D_800B015A[0] = c6;
+    D_800B0160[0] = c5;
+    D_800B0161[0] = c4;
+    D_800B0162[0] = c3;
+    D_800B0168[0] = c2;
+    D_800B0169[0] = c7;
+    D_800B016A[0] = c6;
+    D_800B0170[0] = c5;
+    D_800B0171[0] = c4;
+    D_800B0172[0] = c3;
+    D_800B01A0[0] = c2;
+    D_800B01A1[0] = c7;
+    D_800B01B0[0] = c2;
     c2 = 2;
-    g_BattleModeState = c2;
+    D_8009D28C = c2;
         {
         s32 d2e8;
-        d2e8 = g_FieldMoveLock_r[0];
-                D_800B01A8 = c5;
-        D_800B01B8 = c5;
-        p254 = g_PlayerEntity;
-                D_800B01AA = c3;
-        D_800B01BA = c3;
+        d2e8 = D_8009D2E8;
+                D_800B01A8[0] = c5;
+        D_800B01B8[0] = c5;
+        p254 = (u8 *)D_8009D254;
+                D_800B01AA[0] = c3;
+        D_800B01BA[0] = c3;
         c3 = ~0x100;
-                D_800B01A2 = c6;
-        D_800B01A9 = c4;
-        D_800B01B1 = c7;
-        D_800B01B2 = c6;
-        D_800B01B9 = c4;
-                g_FieldMoveLock_w[0] = d2e8 | 1;
+                D_800B01A2[0] = c6;
+        D_800B01A9[0] = c4;
+        D_800B01B1[0] = c7;
+        D_800B01B2[0] = c6;
+        D_800B01B9[0] = c4;
+                D_8009D2E8 = d2e8 | 1;
     }
     t98 = *(s32 *) (p254 + 0x98);
     *(s32 *) (p254 + 0x68) = 0;
     *(s32 *) (p254 + 0x6C) = 0;
     *(s32 *) (p254 + 0x70) = 0;
     *(s32 *) (p254 + 0x98) = t98 & c3;
-    D_800B0CD8_r[0] = D_800B0CD8_r[0] | 0x8000;
-    if (!(g_GameStateFlags & 0x1800)) {
+    g_GameState.flags |= 0x8000;
+    if (!(D_8009D1A0 & 0x1800)) {
         Entity_SetActionMode(p254, 0x14);
         {
             u8 *q;
-            q = D254_B;
+            q = (u8 *)D_8009D254;
             func_8006DE80(0x45B, 0, ((BattleEntity *)q)->posX.parts.integer, ((BattleEntity *)q)->posY.parts.integer, (s32)((BattleEntity *)q)->posZ.parts.integer);
         }
     }

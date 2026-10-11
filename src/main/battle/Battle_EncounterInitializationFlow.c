@@ -88,7 +88,7 @@ void Battle_ResetEnemyStats(int mode) {
     Battle_FlushScriptSounds();
     Tbl_ResetAll();
     D_8009D298 = 0;
-    D_8009D29A[0] = 0;
+    D_8009D29A = 0;
     D_8009D29B[0] = 0;
     D_8009D29C[0] = 0;
 }

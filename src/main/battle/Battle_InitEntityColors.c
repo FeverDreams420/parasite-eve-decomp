@@ -15,7 +15,7 @@ extern struct { char _[16]; } g_ActiveActor_flags_o __asm__("g_ActiveActor");
 #define g_ActiveActor_flags (*(void **)&g_ActiveActor_flags_o)
 #define COMBATANT_FIELD(ptr, type, member) \
     (*(type *)((u8 *)(ptr) + PE1_OFFSETOF(Combatant, member)))
-extern s16 D_8009D298;
+extern u16 D_8009D298;
 extern struct { char _[16]; } D_800B0158_o __asm__("D_800B0158");
 #define D_800B0158 (*(u8 *)&D_800B0158_o)
 extern struct { char _[16]; } D_800B0159_o __asm__("D_800B0159");

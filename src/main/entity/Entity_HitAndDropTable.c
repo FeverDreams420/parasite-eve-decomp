@@ -112,7 +112,7 @@ void Entity_ResolveDropTable(void *arg0) {
 
 /* COMMON supplies small-data metadata to MASPSX; the extern words stay
  * absolute. */
-s16 D_8009D298;
+u16 D_8009D298;
 extern u8 g_BattleHitActionMode[];
 extern u8 g_BattleHitActionSubmode[];
 extern u32 g_BattleHitActionParam[];

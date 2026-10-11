@@ -19,7 +19,7 @@ s8 D_8009D2B0;
 s32 D_8009D2FC;
 
 #define BATTLE_HUD_SLOT_BYTE(symbol, stride) \
-    (*(&(symbol)[0] +(g_BattleTurnDrawSlotView[0] * (stride))))
+    (*(&(symbol)[0] +(D_8009CDDC * (stride))))
 
 void Battle_Update(void) {
     /* Retail reserves 0x1A0 unused bytes; original local layout is unknown. */
@@ -50,7 +50,7 @@ void Battle_Update(void) {
             D_8009D28C = (s32) previousPhase;
         }
     }
-    active = (g_BattleTurnPlayerView[0])->core;
+    active = D_8009D254->core;
     D_8009D230 = 0;
     D_8009D278 = active;
     D_8009D2A4 = Menu_RunFrameWithArg((int)&D_800A76D8);
@@ -58,14 +58,14 @@ void Battle_Update(void) {
         if ((u16) D_8009D278->hpAlive >= 0x2328U) {
             D_8009D278->hpAlive = 0x2328U;
             if (D_8009D288 == 0) {
-                srand((g_BattleTurnFrameCounterView[0]));
+                srand(D_8009D250);
                 if ((D_800B0E08[0]) != 0) {
                     Akao_SendTableCommand((D_800B0E08[0]), 0x454, 0, 0x80, 0x7F);
                 }
                 D_8009D288 = 1;
             }
             if (!(D_8009D278->stateFlags & 0x2000) && (D_8009D2A0 != 0)) {
-                if (((g_BattleTurnFrameCounterView[0]) & 3) == 0) {
+                if ((D_8009D250 & 3) == 0) {
                     register int topGreen asm("$8") = 0x46;
                     register int topBlue asm("$7") = 0x82;
                     register int bottomRed asm("$6") = 0x9F;
@@ -88,7 +88,7 @@ void Battle_Update(void) {
                     BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = bottomGreen;
                     asm("" : : "i"(0));
                     BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = bottomBlue;
-                } else if (((g_BattleTurnFrameCounterView[0]) & 3) == 1) {
+                } else if ((D_8009D250 & 3) == 1) {
                     int red = 0x50;
                     register int green asm("$6") = 0xA3;
                     int blue = 0xBE;
@@ -109,7 +109,7 @@ void Battle_Update(void) {
                     BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = green;
                     asm("" : : "i"(1));
                     BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = blue;
-                } else if (((g_BattleTurnFrameCounterView[0]) & 3) == 2) {
+                } else if ((D_8009D250 & 3) == 2) {
                     register int topRed asm("$7") = 0x9F;
                     register int topGreen asm("$8") = 0xFF;
                     register int topBlue asm("$6") = 0xF9;
@@ -132,7 +132,7 @@ void Battle_Update(void) {
                     BATTLE_HUD_SLOT_BYTE(D_800B692D, 0x1C) = bottomGreen;
                     asm("" : : "i"(2));
                     BATTLE_HUD_SLOT_BYTE(D_800B692E, 0x1C) = bottomBlue;
-                } else if (((g_BattleTurnFrameCounterView[0]) & 3) == 3) {
+                } else if ((D_8009D250 & 3) == 3) {
                     int red = 0x50;
                     register int green asm("$6") = 0xA3;
                     int blue = 0xBE;
@@ -168,7 +168,7 @@ void Battle_Update(void) {
                         Akao_Cmd_21(0, 0xFF);
                         D_8009D28C = 1;
                         (D_8009D290[0]) = 0;
-                        g_BattleTurnGameFlagsWrite[0] = g_BattleTurnGameFlagsRead[0] | 4;
+                        D_8009D1A0 = D_8009D1A0 | 4;
                         menuMode = 0;
                         D_8009D2B0 = Battle_BuildTargetList();
                         Battle_Init();
@@ -184,7 +184,7 @@ void Battle_Update(void) {
             }
         }
         if ((Pad_GetMenuPressedBitOrDisabled() << 0x18) > 0) {
-            if (!(D_8009D278->stateFlags & 0x4000) || ((g_BattleTurnGameFlagsRead[0]) & 0x100)) {
+            if (!(D_8009D278->stateFlags & 0x4000) || (D_8009D1A0 & 0x100)) {
                 menuMode = 2;
                 Battle_StepScriptEntry();
             }
@@ -196,10 +196,10 @@ void Battle_Update(void) {
             Save_DrawSlotMetadata();
         }
         Menu_MainUpdate(menuMode);
-        entity = (g_BattleTurnEntityListView[0]);
+        entity = (BattleEntity *)D_8009D20C;
         if (entity != 0) {
             do {
-                if ((entity != (g_BattleTurnPlayerView[0])) && (entity->core != 0)) {
+                if ((entity != D_8009D254) && (entity->core != 0)) {
                     Battle_UpdateEnemy(entity);
                 }
                 entity = entity->next;
@@ -213,35 +213,35 @@ void Battle_Update(void) {
         if ((D_8009D235[0]) != 0) {
             Gpu_QueuePrimitive();
         }
-        player = g_BattleTurnPlayerView[0];
+        player = D_8009D254;
         if ((player->animLastFrame == player->animPrev.parts.integer) && ((u8)player->actionMode < 4U)) {
-            if ((g_BattleTurnResumeCountRead[0]) == 0) {
+            if (D_8009D298 == 0) {
                 Entity_SetActionMode(player, D_8009D278->actionMode12);
                 if (!(D_800B0CE6 & 1) && ((Pad_GetMenuPressedBitOrDisabled() << 0x18) == 0) && (D_8009D28C == 0) && (D_8009D278->action->turnWord & 0x8000) && (D_8009D1D0 != 0)) {
                     Battle_RollEnemySpawn(D_8009D1D0);
                     D_8009D1D0 = 0;
                 }
             } else {
-                if ((u16) (g_BattleTurnResumeCountRead[0]) >= 2U) {
+                if (D_8009D298 >= 2U) {
                     player->entityFlags |= 0x100;
                 }
-                g_BattleTurnResumeCountWrite[0] = 0;
-                Entity_SetActionMode(g_BattleTurnActionPlayerView[0], (g_BattleTurnResumeModeView[0]));
-                player = g_BattleTurnResumedPlayerView[0];
-                player->animFrame = g_BattleTurnPreviousFrameView[0];
-                player->animPrev.fixed = g_BattleTurnResumeFrameView[0] + 0xFFFF0000;
+                D_8009D298 = 0;
+                Entity_SetActionMode(D_8009D254, D_8009D29A);
+                player = D_8009D254;
+                player->animFrame = D_8009D29C[0];
+                player->animPrev.fixed = D_8009D29C[0] + 0xFFFF0000;
             }
         }
-        if (((g_BattleTurnPlayerView[0])->actionMode == 0xD) && !(D_800B0CE6 & 1)) {
+        if ((D_8009D254->actionMode == 0xD) && !(D_800B0CE6 & 1)) {
             D_8009D278->actionMode12 = 4U;
-            if ((g_BattleTurnPlayerView[0])->entityFlags & 0x100) {
-                Asset_Find08Alt(0x453, 0, (g_BattleTurnPlayerView[0])->posX.parts.integer, (g_BattleTurnPlayerView[0])->posY.parts.integer, (s32) (g_BattleTurnPlayerView[0])->posZ.parts.integer);
-                (g_BattleTurnPlayerView[0])->entityFlags = (s32) ((g_BattleTurnPlayerView[0])->entityFlags & ~0x100);
+            if (D_8009D254->entityFlags & 0x100) {
+                Asset_Find08Alt(0x453, 0, D_8009D254->posX.parts.integer, D_8009D254->posY.parts.integer, (s32) D_8009D254->posZ.parts.integer);
+                D_8009D254->entityFlags = (s32) (D_8009D254->entityFlags & ~0x100);
             }
-            player = g_BattleTurnPlayerView[0];
+            player = D_8009D254;
             if (player->animLastFrame == player->animPrev.parts.integer) {
                 Entity_SetActionMode(player, D_8009D278->actionMode12);
-                g_BattleTurnMoveLockWrite[0] = g_BattleTurnMoveLockRead[0] & ~1;
+                D_8009D2E8 = D_8009D2E8 & ~1;
             }
         }
         D_8009D1E8 += 1;
@@ -251,7 +251,7 @@ void Battle_Update(void) {
             menuResult = Battle_HandleItemMenu();
             D_8009D28C = (s32) menuResult;
             if (menuResult == 0) {
-                g_BattleTurnGameFlagsWrite[0] = g_BattleTurnGameFlagsRead[0] & ~4;
+                D_8009D1A0 = D_8009D1A0 & ~4;
             }
 
         } else if (phase == 2) {
@@ -279,10 +279,10 @@ void Battle_Update(void) {
                 Battle_DrawStatusPanel(0, (BattleStatusPanel *)&status->panelAux_val);
                 D_8009D278->panelAux_timer = (u8) (D_8009D278->panelAux_timer - 1);
             }
-            victoryEntity = (g_BattleTurnEntityListView[0]);
+            victoryEntity = (BattleEntity *)D_8009D20C;
             if (victoryEntity != 0) {
                 do {
-                    if ((victoryEntity != (g_BattleTurnPlayerView[0])) && (victoryEntity->core != 0)) {
+                    if ((victoryEntity != D_8009D254) && (victoryEntity->core != 0)) {
                         Battle_UpdateEnemy(victoryEntity);
                     }
                     victoryEntity = victoryEntity->next;
