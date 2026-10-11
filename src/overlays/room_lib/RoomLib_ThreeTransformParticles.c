@@ -151,14 +151,14 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
     RoomInitThreeVec *seed;
     void *callOwner;
     register RoomDebrisTriplet *workState asm("$21");
-    char *clock;
+    RoomDebrisClock *clock;
     int i;
-    char *projectionMatrix;
+    RoomSpriteMatrix *projectionMatrix;
     register char *positionCursor asm("$17");
     register char *velocityCursor asm("$18");
     register char *timerCursor asm("$19");
     int parameterIndex;
-    char *clockResult;
+    RoomDebrisClock *clockResult;
     int *value;
     int randomValue;
 
@@ -187,15 +187,15 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
     RotMatrixYXZ(seed, secondMatrix);
 
     gte_ldrotmatrix(firstMatrix);
-    gte_ldrtir12_matrix_column(clock + 4);
+    gte_ldrtir12_matrix_column(&clock->view.matrix.m[0][0]);
     gte_stir123_column(firstMatrix);
-    gte_ldrtir12_matrix_column(clock + 6);
+    gte_ldrtir12_matrix_column(&clock->view.matrix.m[0][1]);
     gte_stir123_column_at(&stack.firstMatrix.m[0][1]);
-    gte_ldrtir12_matrix_column(clock + 8);
+    gte_ldrtir12_matrix_column(&clock->view.matrix.m[0][2]);
     gte_stir123_column_at(&stack.firstMatrix.m[0][2]);
     gte_ldtransmatrix(firstMatrix);
     {
-        unsigned short *translation = (unsigned short *)(clock + 0x18);
+        unsigned short *translation = (unsigned short *)clock->view.matrix.t;
         gte_ldv0_word3(translation);
         gte_cop2_hazard_slot();
         gte_cop2_hazard_slot();
@@ -205,11 +205,11 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
         gte_swc2_11_8(stack.firstMatrix.t);
 
         gte_ldrotmatrix(secondMatrix);
-        gte_ldrtir12_matrix_column(clock + 4);
+        gte_ldrtir12_matrix_column(&clock->view.matrix.m[0][0]);
         gte_stir123_column(secondMatrix);
-        gte_ldrtir12_matrix_column(clock + 6);
+        gte_ldrtir12_matrix_column(&clock->view.matrix.m[0][1]);
         gte_stir123_column_at(&stack.secondMatrix.m[0][1]);
-        gte_ldrtir12_matrix_column(clock + 8);
+        gte_ldrtir12_matrix_column(&clock->view.matrix.m[0][2]);
         gte_stir123_column_at(&stack.secondMatrix.m[0][2]);
         gte_ldtransmatrix(secondMatrix);
         gte_ldv0_word3(translation);
@@ -230,9 +230,9 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
         workState->size[i] = 0;
         workState->countdown[i] = (randomValue % 10) + 1;
         ((RoomDebrisTriplet *)timerCursor)->life[0] = *func_800C2B28(2);
-        ((RoomDebrisTriplet *)positionCursor)->position[0].x = ((RoomDebrisClock *)clock)->view.matrix.t[0] << 16;
-        ((RoomDebrisTriplet *)positionCursor)->position[0].y = ((RoomDebrisClock *)clock)->view.matrix.t[1] << 16;
-        ((RoomDebrisTriplet *)positionCursor)->position[0].z = ((RoomDebrisClock *)clock)->view.matrix.t[2] << 16;
+        ((RoomDebrisTriplet *)positionCursor)->position[0].x = clock->view.matrix.t[0] << 16;
+        ((RoomDebrisTriplet *)positionCursor)->position[0].y = clock->view.matrix.t[1] << 16;
+        ((RoomDebrisTriplet *)positionCursor)->position[0].z = clock->view.matrix.t[2] << 16;
         ((RoomDebrisTriplet *)velocityCursor)->rotation[0].x = 0;
         ((RoomDebrisTriplet *)velocityCursor)->rotation[0].y = 0;
         ((RoomDebrisTriplet *)velocityCursor)->rotation[0].z = 0;
@@ -257,8 +257,8 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
     stack.projectionSeed.z = 0x1000;
     ApplyMatrixSV(&stack.firstMatrix, &stack.projectionSeed,
                   (GteShortVector *)&workState->velocity[0]);
-    projectionMatrix = clock + 4;
-    ApplyMatrixSV((RoomSpriteMatrix *)projectionMatrix, &stack.projectionSeed,
+    projectionMatrix = &clock->view.matrix;
+    ApplyMatrixSV(projectionMatrix, &stack.projectionSeed,
                   (GteShortVector *)&workState->velocity[1]);
     ApplyMatrixSV(&stack.secondMatrix, &stack.projectionSeed,
                   (GteShortVector *)&workState->velocity[2]);
