@@ -339,7 +339,6 @@ void RoomFx_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control, Roo
     volatile s16 *fade_slot;
     u8 *phase_slot;
     char *draw_slot;
-    s16 *sparkle_alpha_slot;
     s16 *final_alpha_slot;
     s32 draw_zero;
     volatile RoomOverlay024Transform *ordered_transform;
@@ -432,9 +431,8 @@ void RoomFx_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control, Roo
         matrix.t[0] = state->sparkle_x;
         matrix.t[1] = state->sparkle_y;
         matrix.t[2] = state->sparkle_z;
-        sparkle_alpha_slot = &D_80192C38.depth;
-        *sparkle_alpha_slot = state->sparkle_alpha;
-        func_800C42A4((FieldGlowSprite *)((char *)sparkle_alpha_slot - 0xA), (GteMatrix *)&matrix, 0);
+        D_80192C38.depth = state->sparkle_alpha;
+        func_800C42A4((FieldGlowSprite *)&D_80192C38, (GteMatrix *)&matrix, 0);
     }
 
     if (control->frame < 0x1F) {
@@ -601,7 +599,6 @@ void RoomFx_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *control
     s16 *fade_slot;
     u8 *phase_slot;
     char *draw_slot;
-    s16 *sparkle_alpha_slot;
     s16 *final_alpha_slot;
     s32 draw_zero;
     volatile RoomOverlay024Transform *ordered_transform;
@@ -694,9 +691,8 @@ void RoomFx_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *control
         matrix.t[0] = state->sparkle_x;
         matrix.t[1] = state->sparkle_y;
         matrix.t[2] = state->sparkle_z;
-        sparkle_alpha_slot = &D_80192C38.depth;
-        *sparkle_alpha_slot = state->sparkle_alpha;
-        func_800C42A4((FieldGlowSprite *)((char *)sparkle_alpha_slot - 0xA), (GteMatrix *)&matrix, 0);
+        D_80192C38.depth = state->sparkle_alpha;
+        func_800C42A4((FieldGlowSprite *)&D_80192C38, (GteMatrix *)&matrix, 0);
     }
 
     func_800C3238(3);
@@ -871,7 +867,6 @@ void RoomFx_DrawVariant290(void *arg0, RoomOverlay024VariantControl *control, Ro
     RoomOverlay024Vec4 draw_scale;
     RoomOverlay024Vec4 second_scale;
     s16 *fade_slot;
-    s16 *sparkle_alpha_slot;
 
     owner_ptr = func_800C2B50();
     owner = *owner_ptr;
@@ -959,9 +954,8 @@ void RoomFx_DrawVariant290(void *arg0, RoomOverlay024VariantControl *control, Ro
     matrix.t[0] = state->sparkle_x;
     matrix.t[1] = state->sparkle_y;
     matrix.t[2] = state->sparkle_z;
-    sparkle_alpha_slot = &D_80192C38.depth;
-    *sparkle_alpha_slot = state->sparkle_alpha;
-    func_800C42A4((FieldGlowSprite *)((char *)sparkle_alpha_slot - 0xA), (GteMatrix *)&matrix, 0);
+    D_80192C38.depth = state->sparkle_alpha;
+    func_800C42A4((FieldGlowSprite *)&D_80192C38, (GteMatrix *)&matrix, 0);
 }
 
 void RoomFx_UpdateSparkleHeight(
@@ -1071,7 +1065,6 @@ void RoomFx_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, Room
     RoomOverlay024Vec4 draw_scale;
     RoomOverlay024Vec4 second_scale;
     s16 *fade_slot;
-    s16 *sparkle_alpha_slot;
     s32 scale;
 
     owner_ptr = func_800C2B50();
@@ -1167,9 +1160,8 @@ void RoomFx_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, Room
     matrix.t[0] = state->sparkle_x;
     matrix.t[1] = state->sparkle_y;
     matrix.t[2] = state->sparkle_z;
-    sparkle_alpha_slot = &D_80192C38.depth;
-    *sparkle_alpha_slot = state->sparkle_alpha;
-    func_800C42A4((FieldGlowSprite *)((char *)sparkle_alpha_slot - 0xA), (GteMatrix *)&matrix, 0);
+    D_80192C38.depth = state->sparkle_alpha;
+    func_800C42A4((FieldGlowSprite *)&D_80192C38, (GteMatrix *)&matrix, 0);
 }
 
 void RoomFx_UpdateTransformedSparkle(
