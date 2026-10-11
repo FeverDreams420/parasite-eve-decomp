@@ -50,15 +50,11 @@ int func_80195320(int mode, u16 *out) {
         unsigned palette_index = D_800E11EA;
         u16 palette;
         palette = D_800E2850[palette_index];
-        /* The palette lookup precedes every parameter write in retail. */
-        asm volatile("" ::: "memory");
         D_800F3368.palette = 3;
         D_800F3368.parameter06 = 0;
         D_800F3368.parameter0A = 0;
         D_800F3368.depth = 8;
         D_800F3368.tpage = palette;
-        /* Emit the zero result after the final write, not before it. */
-        asm volatile("" : "=r"(ret) : : "memory");
     }
     }
     return 0;
