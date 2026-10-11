@@ -134,14 +134,15 @@ radial:
         palettes=D_800E1204;
         state->rotation.z=(unsigned int)D_800E27EC<<8;
         specialKind=4;
-        do {
+        while(i<2) {
             int kind=D_800F3368.palette;
             int clut,pal=palettes[kind];
             if(kind==specialKind && D_800F3428) pal+=4;
             clut=GetClut(32,pal);
-            func_800CEE20(&local.position,(GteRotation *)state,state->size,state->size,(s16)D_800F3368.parameter02+216,(unsigned short)clut,1,state->brightness,(struct RenderColor *)D_8019A570);
+            func_800CEE20(&local.position,(GteRotation *)&state->rotation,state->size,state->size,(s16)D_800F3368.parameter02+216,(unsigned short)clut,1,state->brightness,(struct RenderColor *)D_8019A570);
             state->rotation.z=0u-(unsigned short)state->rotation.z;
-        } while(++i<2);
+            ++i;
+        }
     }
     }
     return 0;
