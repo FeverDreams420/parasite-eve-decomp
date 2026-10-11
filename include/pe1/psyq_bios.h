@@ -51,5 +51,20 @@ void bzero(void *destination, int length);
 int DeliverEvent(unsigned int event, int spec);
 
 int OpenEvent(unsigned int desc, int spec, int mode, int (*func)(void));
+int CloseEvent(int event);
+int EnableEvent(int event);
+int DisableEvent(int event);
+int UnDeliverEvent(unsigned int event, int spec);
+
+/* LIBAPI root counters (counter.c). */
+int SetRCnt(unsigned int counter, int target, int mode);
+int StartRCnt(unsigned int counter);
+int StopRCnt(unsigned int counter);
+
+/* LIBAPI.H descriptor, event and counter mode constants. */
+#define RCntCNT2 0xF2000002
+#define RCntMdINTR 0x1000
+#define EvSpINT 0x0002
+#define EvMdINTR 0x1000
 
 #endif

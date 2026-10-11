@@ -13,10 +13,20 @@
  * either game yet.
  */
 
-/* Sample transfer and stream instrument relocation. Addresses passed to the
- * upload wrapper are 32-bit main-memory addresses in the PSX ABI. */
-int SpuSetTransferStartAddr(int address);
-void Spu_UploadWithPrepare(int source, int size);
+/* SPU sample transfers (Spu_TransferAndLifecycle.c). The transfer status is
+ * 1 while a DMA transfer runs; the completion callback clears it. */
+extern volatile int g_SpuTransferStatus;
+void Spu_ClearTransferCallback(void);
+void Spu_PrepareTransfer(void);
+void Spu_UploadWithPrepare(void *source, unsigned int size);
+void Spu_ReadWithPrepare(void *destination, unsigned int size);
+void Spu_WaitTransferDone(void);
+int Spu_UploadSampleBlock(int *header, int wait);
+void Spu_InitHardware(void);
+void Spu_SetSampleTableBase(unsigned short *table);
+void Spu_Shutdown(void);
+
+/* Stream instrument relocation. */
 void Spu_RebaseStreamAddrs(unsigned char *instruments, int address, int count);
 int Spu_UploadStreamBlockA(unsigned bank, unsigned char *cursor, unsigned size);
 int Spu_UploadStreamBlockB(unsigned bank, unsigned char *cursor);
@@ -25,6 +35,8 @@ int Akao_StepNoteSequencer(unsigned char *cursor, unsigned size);
 extern unsigned D_800B4900[];
 extern unsigned D_800B4D00[];
 extern AkaoInstrument D_800B2900[];
+/* Instrument records replaced by Spu_UploadSampleBlock. */
+extern AkaoInstrument g_AkaoInstrumentTable[];
 extern unsigned D_8009D270, D_8009D1EC, D_8009D204, D_8009D2BC, D_8009D2E4;
 
 extern void *g_AkaoBgmHandle[];

@@ -1,28 +1,12 @@
 #include "common.h"
 #include "pe1/psyq_spu_internal.h"
-#include "pe1/akao.h"
-#include "pe1/akao/init_state.h"
-#include "pe1/akao/voice_masks.h"
 #include "pe1/psyq_bios.h"
-#include "pe1/akao_counters.h"
+#include "pe1/akao.h"
+#include "pe1/akao/file_header.h"
+#include "pe1/akao/init_state.h"
 
-extern char D_8009B81C[0x40];
-int StopRCnt(unsigned int);
-int UnDeliverEvent(unsigned int, int);
-int DisableEvent(int);
-int CloseEvent(int);
-
-#define U16(base, off) (*(u16 *)((u8 *)(base) + (off)))
-#define U32(base, off) (*(u32 *)((u8 *)(base) + (off)))
-#define G9_U16(off) (*(u16 *)((u8 *)&D_8009D200 + (off)))
-#define G9_U32(off) (*(u32 *)((u8 *)&D_8009D200 + (off)))
-#define GBCD_U32(off) (*(u32 *)((u8 *)&D_800BCD50 + (off)))
-
-extern volatile s32 g_SpuTransferStatus;
-
-int Spu_ValidateSampleHeader(void *arg0)
-{
-    return ((AkaoFilePrefix *)arg0)->magic + 0xB0BEB4BF;
+int Spu_ValidateSampleHeader(void *header) {
+    return ((AkaoFilePrefix *)header)->magic + 0xB0BEB4BF;
 }
 
 void Spu_ClearTransferCallback(void) {
@@ -30,27 +14,19 @@ void Spu_ClearTransferCallback(void) {
     g_SpuTransferStatus = 0;
 }
 
-void Spu_ClearTransferCallback(void);
-
-void Spu_PrepareTransfer(void);
-void SpuWrite(int arg0, int arg1);
-
 void Spu_PrepareTransfer(void) {
     g_SpuTransferStatus = 1;
     SpuSetTransferCallback(Spu_ClearTransferCallback);
 }
 
-void Spu_UploadWithPrepare(int arg0, int arg1) {
+void Spu_UploadWithPrepare(void *source, unsigned int size) {
     Spu_PrepareTransfer();
-    SpuWrite(arg0, arg1);
+    SpuWrite(source, size);
 }
 
-void Spu_PrepareTransfer(void);
-unsigned int SpuRead(int arg0, unsigned int size);
-
-void Spu_ReadWithPrepare(int arg0, int arg1) {
+void Spu_ReadWithPrepare(void *destination, unsigned int size) {
     Spu_PrepareTransfer();
-    SpuRead(arg0, arg1);
+    SpuRead(destination, size);
 }
 
 void Spu_WaitTransferDone(void) {
@@ -58,57 +34,42 @@ void Spu_WaitTransferDone(void) {
     }
 }
 
-void Spu_WaitTransferDone(void);
-int SpuSetTransferStartAddr(int arg0);
-void Spu_UploadWithPrepare(int arg0, int arg1);
-
-extern AkaoInstrument g_AkaoInstrumentTable[];
-
-s32 Spu_UploadSampleBlock(void *arg0, s32 arg1) {
-    register s8 *cursor asm("$16");
-    s8 *src;
-    s32 start;
-    s32 flush;
+s32 Spu_UploadSampleBlock(s32 *header, s32 wait) {
+    u32 *src;
+    u32 *dst;
+    s32 size; /* ADPCM byte count, then the instrument word count */
+    s32 first;
     s32 end;
     s32 count;
-    s32 dst_offset;
-    s32 *dst;
 
-    cursor = arg0;
-    flush = arg1;
     Spu_WaitTransferDone();
-    if (Spu_ValidateSampleHeader(arg0) == 0) {
-        cursor += 0x10;
-        SpuSetTransferStartAddr(*(s32 *)cursor);
-        cursor += 4;
-        asm volatile("" : "=r"(cursor) : "0"(cursor));
-        count = *(s32 *)cursor;
-        cursor += 4;
-        asm volatile("" : "=r"(cursor) : "0"(cursor));
-        start = *(s32 *)cursor;
-        cursor += 4;
-        asm volatile("" : "=r"(cursor) : "0"(cursor));
-        end = *(s32 *)cursor;
-        src = cursor + 0x24;
+    if (Spu_ValidateSampleHeader(header) == 0) {
+        /* Walk the header words after the file prefix: SPU address,
+         * ADPCM size, first and end instrument, then the records. */
+        header += 4;
+        SpuSetTransferStartAddr(*header++);
+        size = *header++;
+        first = *header++;
+        end = *header;
+        src = (u32 *)(header + 9);
         if (end == 0) {
             end = 0x100;
         }
 
-        cursor = (s8 *)(end - start);
-        Spu_UploadWithPrepare((s32)(src + ((s32)cursor << 6)), count);
+        count = end - first;
+        /* The ADPCM data follows the instrument records. */
+        Spu_UploadWithPrepare((AkaoInstrument *)src + count, size);
 
-        dst_offset = start * sizeof(AkaoInstrument);
-        dst = (s32 *)((s8 *)g_AkaoInstrumentTable + dst_offset);
-        count = (s32)cursor * (sizeof(AkaoInstrument) / sizeof(s32));
-        if (count != 0) {
+        dst = (u32 *)&g_AkaoInstrumentTable[first];
+        size = count * (sizeof(AkaoInstrument) / sizeof(u32));
+        if (size != 0) {
             do {
-                count--;
-                *dst++ = *(s32 *)src;
-                src += 4;
-            } while (count != 0);
+                size--;
+                *dst++ = *src++;
+            } while (size != 0);
         }
 
-        if (flush != 0) {
+        if (wait != 0) {
             Spu_WaitTransferDone();
         }
         return 0;
@@ -117,206 +78,177 @@ s32 Spu_UploadSampleBlock(void *arg0, s32 arg1) {
     g_SpuTransferStatus = -1;
     return -1;
 }
+
 void Spu_InitVoiceState(void) {
     u16 i;
-    u8 *voice;
-    u8 *voice_base;
-    u32 voice_count;
-    u8 *track;
-    u32 track_enabled;
-    u32 track_volume;
-    u32 initial_flags;
-    u8 *state;
+    AkaoTickTrack *voice;
+    AkaoSequencerBank *bank;
+    int reset;
 
-    G9_U32(0xC8) = (u32)D_800B6980;
-    G9_U32(0xC0) = 1;
-    U32(D_800B6980, 0xB0) = 0x7F0000;
-    U32(D_800B6980, 0x48) = 0x7F0000;
-    G9_U32(0xB4) = 0x7FFF0000;
-    GBCD_U32(0x00) = 0;
+    g_AkaoCurTrack = &g_AkaoSequencerState.primary;
+    g_AkaoPlaybackMode = 1;
+    g_AkaoSequencerState.secondary.pitch_current = 0x7F0000;
+    g_AkaoSequencerState.primary.pitch_current = 0x7F0000;
+    D_8009D2B4 = 0x7FFF0000;
+    D_800BCD50 = 0;
 
-    U32(D_800B6980, 0x04) = 0;
-    U32(D_800B6980, 0x08) = 0;
-    U16(D_800B6980, 0x54) = 0;
-    GBCD_U32(0x10) = 0;
-    U32(D_800B6980, 0x1C) = 0;
-    U32(D_800B6980, 0x84) = 0;
-    U32(D_800B6980, 0x6C) = 0;
-    U32(D_800B6980, 0x70) = 0;
-    U16(D_800B6980, 0xBC) = 0;
-    U16(D_800B6980, 0xB8) = 0;
-    U16(D_800B6980, 0x50) = 0;
+    g_AkaoSequencerState.primary.active_voice_mask = 0;
+    g_AkaoSequencerState.primary.pending_voice_mask = 0;
+    g_AkaoSequencerState.primary.bank_id = 0;
+    D_800BCD60 = 0;
+    g_AkaoSequencerState.primary.pending_restore_mask = 0;
+    g_AkaoSequencerState.secondary.pending_restore_mask = 0;
+    g_AkaoSequencerState.secondary.active_voice_mask = 0;
+    g_AkaoSequencerState.secondary.pending_voice_mask = 0;
+    g_AkaoSequencerState.secondary.bank_id = 0;
+    g_AkaoSequencerState.secondary.pitch_slide_duration = 0;
+    g_AkaoSequencerState.primary.pitch_slide_duration = 0;
 
-    G9_U16(0x1E) = 0;
-    G9_U32(0xCC) = 0;
-    G9_U16(0x20) = 0;
-    G9_U32(0xD0) = 0;
-    G9_U16(0xA2) = 0;
-    GBCD_U32(0x1C) = 0;
-    U32(D_800B6980, 0x34) = 0;
-    GBCD_U32(0x20) = 0;
-    U32(D_800B6980, 0x38) = 0;
-    GBCD_U32(0x24) = 0;
-    U32(D_800B6980, 0x3C) = 0;
-    U32(D_800B6980, 0xA4) = 0;
-    U32(D_800B6980, 0xA0) = 0;
-    U32(D_800B6980, 0x9C) = 0;
-    *(u32 *)&D_800B8628[0] = 0;
-    U16(D_800B6980, 0x60) = 0;
-    U16(D_800B6980, 0x5E) = 0;
-    U16(D_800B6980, 0x5C) = 0;
-    U16(D_800B6980, 0x64) = 0;
+    g_AkaoGlobalD2CCSlideCounter = 0;
+    D_8009D2CC = 0;
+    g_AkaoGlobalD2D0SlideCounter = 0;
+    D_8009D2D0 = 0;
+    g_AkaoGlobalPitchSlideCounter = 0;
+    g_AkaoTrack34Mask = 0;
+    g_AkaoSequencerState.primary.key_off_dirty_mask = 0;
+    g_AkaoTrack38Mask = 0;
+    g_AkaoSequencerState.primary.volume_dirty_mask = 0;
+    g_AkaoTrack3CMask = 0;
+    g_AkaoSequencerState.primary.adsr_dirty_mask = 0;
+    g_AkaoSequencerState.secondary.adsr_dirty_mask = 0;
+    g_AkaoSequencerState.secondary.volume_dirty_mask = 0;
+    g_AkaoSequencerState.secondary.key_off_dirty_mask = 0;
+    D_800B8628[0].opcode.word = 0;
+    g_AkaoSequencerState.primary.ticks_per_beat = 0;
+    g_AkaoSequencerState.primary.beat = 0;
+    g_AkaoSequencerState.primary.beats_per_measure = 0;
+    g_AkaoSequencerState.primary.measure = 0;
 
-    U32(D_800C0D90, 0x00) = 0x3FCF;
-    U16(D_800C0D90, 0x06) = 0x3FFF;
-    U16(D_800C0D90, 0x04) = 0x3FFF;
-    U16(D_800C0D90, 0x08) = 0;
-    U16(D_800C0D90, 0x0A) = 0;
-    U16(D_800C0D90, 0x12) = 0x7FFF;
-    U16(D_800C0D90, 0x10) = 0x7FFF;
-    U32(D_800C0D90, 0x14) = 0;
-    U32(D_800C0D90, 0x18) = 1;
-    U16(D_800C0D90, 0x1E) = 0;
-    U16(D_800C0D90, 0x1C) = 0;
-    U32(D_800C0D90, 0x20) = 0;
-    U32(D_800C0D90, 0x24) = 0;
-    SpuSetCommonAttr((SpuCommonAttr *)D_800C0D90);
+    g_AkaoSpuCommonAttr.mask = 0x3FCF;
+    g_AkaoSpuCommonAttr.mvol.right = 0x3FFF;
+    g_AkaoSpuCommonAttr.mvol.left = 0x3FFF;
+    g_AkaoSpuCommonAttr.mvolmode.left = 0;
+    g_AkaoSpuCommonAttr.mvolmode.right = 0;
+    g_AkaoSpuCommonAttr.cd.volume.right = 0x7FFF;
+    g_AkaoSpuCommonAttr.cd.volume.left = 0x7FFF;
+    g_AkaoSpuCommonAttr.cd.reverb = 0;
+    g_AkaoSpuCommonAttr.cd.mix = 1;
+    g_AkaoSpuCommonAttr.ext.volume.right = 0;
+    g_AkaoSpuCommonAttr.ext.volume.left = 0;
+    g_AkaoSpuCommonAttr.ext.reverb = 0;
+    g_AkaoSpuCommonAttr.ext.mix = 0;
+    SpuSetCommonAttr(&g_AkaoSpuCommonAttr);
 
-    i = 0;
-    voice_base = (u8 *)D_800B8AC0;
-    voice_count = 24;
-    G9_U32(0x68) = 0;
-    G9_U32(0x2C) = 0;
-    G9_U32(0xB8) = 0;
-    U32(D_800C0D90, 0x48) = 0;
-    U32(D_800C0D90, 0x44) = 0;
-    U32(D_800C0D90, 0x40) = 0;
-    /* The original reloads the reset mask before copying it to three slots. */
-    initial_flags = *(volatile u32 *)((u8 *)&D_8009D200 + 0x68);
-    G9_U32(0xF4) = initial_flags;
-    G9_U32(0xDC) = initial_flags;
-    G9_U32(0xE0) = initial_flags;
-    voice = voice_base;
-    for (; i < 24; i++, voice += 0x11C, voice_base += 0x11C) {
-        U32(voice, 0x38) = 0;
-        U32(voice, 0xF0) = voice_count;
-        U16(voice, 0x54) = 0;
-        U32(voice, 0x50) = 0;
+    D_8009D268 = 0;
+    g_AkaoSeqLoopCounter = 0;
+    g_AkaoVoicePortamentoResetMask = 0;
+    D_800C0DD8 = 0;
+    D_800C0DD4 = 0;
+    D_800C0DD0 = 0;
+    /* The message-queue lock is shared with the timer interrupt, so the
+     * original reloads it before copying it to the three queue words. */
+    reset = D_8009D268;
+    g_AkaoMessageQueueCount = reset;
+    g_AkaoSeqPendingFlags = reset;
+    D_8009D2E0 = reset;
+
+    voice = D_800B8AC0;
+    for (i = 0; i < AKAO_VOICE_COUNT; i++, voice++) {
+        voice->track.flags = 0;
+        voice->track.assigned_voice_index = AKAO_VOICE_COUNT;
+        voice->track.parent_track_id = 0;
+        voice->timing.tick_count = 0;
+        SpuSetVoiceVolumeAttr(i, 0, 0, 0, 0);
+    }
+    for (i = 0; i < AKAO_VOICE_COUNT; i++, voice++) {
+        voice->track.flags = 0;
+        voice->track.assigned_voice_index = AKAO_VOICE_COUNT;
+        voice->track.parent_track_id = 0;
+        voice->timing.tick_count = 0;
         SpuSetVoiceVolumeAttr(i, 0, 0, 0, 0);
     }
 
-    i = 0;
-    voice_count = 24;
-    voice = voice_base;
-    for (; i < 24; i++) {
-        U32(voice, 0x38) = 0;
-        U32(voice, 0xF0) = voice_count;
-        U16(voice, 0x54) = 0;
-        U32(voice, 0x50) = 0;
-        SpuSetVoiceVolumeAttr(i, 0, 0, 0, 0);
-        voice += 0x11C;
+    voice = D_800BC000;
+    for (i = AKAO_SPU_VOICE_SFX_START_INDEX; i < AKAO_VOICE_COUNT; i++, voice++) {
+        voice->track.flags = 0;
+        voice->track.assigned_voice_index = i;
+        voice->track.parent_track_id = 1;
+        voice->timing.tick_count = 0;
+        voice->track.pan_target = 0x7F00;
+        voice->track.panpot_duration = 0;
+        voice->track.pitch_offset_duration = 0;
+        voice->track.pitch_offset = 0;
     }
 
-    i = 12;
-    track_enabled = 1;
-    track_volume = 0x7F00;
-    track = (u8 *)g_AkaoVoiceChannelTable;
-    for (; i < 24; i++, track += 0x11C) {
-        U32(track, 0x38) = 0;
-        U32(track, 0xF0) = i;
-        U16(track, 0x54) = track_enabled;
-        U32(track, 0x50) = 0;
-        U16(track, 0xD8) = track_volume;
-        U16(track, 0x74) = 0;
-        U16(track, 0x70) = 0;
-        U32(track, 0x3C) = 0;
-    }
+    /* Retail keeps the bank stores ordered against the scalar globals
+     * around them. GCC 2.7 lets a scalar access pass a structure-field
+     * store, so the bank fields are written through word views. */
+    bank = g_AkaoCurTrack;
+    *(int *)&bank[0].key_off_request_mask = 0;
+    *(int *)&bank[0].allocated_voice_mask = 0;
+    *(int *)&bank[0].key_on_request_mask = 0;
+    *(int *)&bank[1].key_off_request_mask = 0;
+    *(int *)&bank[1].allocated_voice_mask = 0;
+    *(int *)&bank[1].key_on_request_mask = 0;
+    D_800BCD68 = 1;
+    D_800BCD64 = 0x66A80000;
+    D_800BCD5C = 0;
+    D_800BCD58 = 0;
+    D_800BCD54 = 0;
+    *(int *)&bank[1].volume = 0x3FFF0000;
+    *(int *)&bank[0].volume = 0x3FFF0000;
+    *(int *)&bank[1].volume_delta = 0;
+    *(int *)&bank[0].volume_delta = 0;
+    *(short *)&bank[1].volume_slide_duration = 0;
+    *(short *)&bank[0].volume_slide_duration = 0;
 
-    state = (u8 *)G9_U32(0xC8);
-    U32(state, 0x18) = 0;
-    U32(state, 0x14) = 0;
-    U32(state, 0x10) = 0;
-    U32(state, 0x80) = 0;
-    U32(state, 0x7C) = 0;
-    U32(state, 0x78) = 0;
-    GBCD_U32(0x18) = 1;
-    GBCD_U32(0x14) = 0x66A80000;
-    GBCD_U32(0x0C) = 0;
-    GBCD_U32(0x08) = 0;
-    GBCD_U32(0x04) = 0;
-    U32(state, 0xA8) = 0x3FFF0000;
-    U32(state, 0x40) = 0x3FFF0000;
-    U32(state, 0xAC) = 0;
-    U32(state, 0x44) = 0;
-    U16(state, 0xC0) = 0;
-    U16(state, 0x58) = 0;
-
-    G9_U32(0xC4) |= 0x80;
+    g_AkaoVoiceUpdateFlags |= AKAO_GLOBAL_UPDATE_TEMPO;
     Seq_SetParamWithReset(4);
     SpuSetReverb(1);
 }
 
-s32 EnableEvent(s32);
-s32 SetRCnt(s32, s32, s32);
-void SpuInitMalloc(s32, void *);
-void SpuSetIRQ(s32);
-s32 StartRCnt(s32);
-void Spu_WaitTransferDone(void);
-void SpuSetTransferMode(s32);
-extern u8 D_8009B7FC[];
-extern s32 g_AkaoTimerEventDesc[];
-extern u8 D_800B6958[];
-extern u8 Akao_TimerCallback[];
-#define D_8009B7FC (D_8009B7FC[0])
-#define g_AkaoTimerEventDesc (g_AkaoTimerEventDesc[0])
-#define D_800B6958 (D_800B6958[0])
-#define Akao_TimerCallback (Akao_TimerCallback[0])
-
 void Spu_InitHardware(void) {
-    s32 eventDesc;
+    int event;
 
     SpuStart();
-    SpuInitMalloc(4, &D_800B6958);
+    SpuInitMalloc(4, g_AkaoSpuMallocTable);
     SpuSetTransferMode(0);
     SpuSetTransferStartAddr(0x1010);
-    Spu_UploadWithPrepare(&D_8009B7FC, 0x20);
+    Spu_UploadWithPrepare(g_AkaoSilentLoopSample, sizeof(g_AkaoSilentLoopSample));
     Spu_WaitTransferDone();
     Spu_InitVoiceState();
     SpuSetIRQ(0);
     SpuSetIRQCallback(0);
     do {
-
-    } while (SetRCnt(0xF2000002, 0x44E8, 0x1000) == 0);
+    } while (SetRCnt(RCntCNT2, 0x44E8, RCntMdINTR) == 0);
     do {
-
-    } while (StartRCnt(0xF2000002) == 0);
+    } while (StartRCnt(RCntCNT2) == 0);
     do {
-        eventDesc = OpenEvent(0xF2000002, 2, 0x1000, (int (*)(void))&Akao_TimerCallback);
-        g_AkaoTimerEventDesc = eventDesc;
-    } while (eventDesc == -1);
+        event = OpenEvent(RCntCNT2, EvSpINT, EvMdINTR, Akao_TimerCallback);
+        g_AkaoTimerEventDesc = event;
+    } while (event == -1);
     do {
-
     } while (EnableEvent(g_AkaoTimerEventDesc) == 0);
 }
 
-void Spu_SetSampleTableBase(int arg0) {
-    D_8009D240 = (unsigned short *)arg0;
-    D_8009D260 = (char *)(arg0 + 0x800);
+void Spu_SetSampleTableBase(unsigned short *table) {
+    D_8009D240 = table;
+    D_8009D260 = (char *)&table[0x400];
 }
 
 void Spu_Shutdown(void) {
     unsigned int counter;
 
     if (g_SpuTransferStatus == 1) {
-        Spu_UploadWithPrepare(D_8009B81C, 0x40);
+        Spu_UploadWithPrepare(g_AkaoSilentEndSample, sizeof(g_AkaoSilentEndSample));
         Spu_WaitTransferDone();
     }
 
     do {
-        counter = 0xF2000002;
+        counter = RCntCNT2;
     } while (StopRCnt(counter) == 0);
 
-    UnDeliverEvent(0xF2000002, 2);
+    UnDeliverEvent(RCntCNT2, EvSpINT);
 
     while (DisableEvent(g_AkaoTimerEventDesc) == 0) {
     }

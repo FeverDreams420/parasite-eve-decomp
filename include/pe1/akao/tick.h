@@ -55,7 +55,8 @@ extern AkaoTickTrack D_800BC000[];
 extern u8 D_8009D2D2;
 extern u32 D_8009D2DC;
 extern u32 D_8009D22C;
-extern u32 D_8009D268;
+/* Message-queue lock, also read by the timer interrupt. */
+extern volatile u32 D_8009D268;
 extern u32 D_8009D2C4;
 extern u32 D_800BCD50;
 extern u32 D_800BCD58;
@@ -72,5 +73,6 @@ void SPU_StepReverbLoad(void);
 void Akao_SetVoicePitch(void);
 void Util_CopyWords(unsigned int *src, unsigned int *dst, unsigned int size);
 void Akao_Tick(void);
+int Akao_TimerCallback(void);
 
 #endif
