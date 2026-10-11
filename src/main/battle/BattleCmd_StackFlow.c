@@ -7,7 +7,7 @@
 #include "pe1/inventory_slots.h"
 
 extern BattleCmdEntry *D_8009D014;
-extern char D_800A1B30[];
+extern int D_800A1B30[7];
 extern BattleCmdEntry D_800A1AA0[];
 extern s8 D_800C0E22[];
 

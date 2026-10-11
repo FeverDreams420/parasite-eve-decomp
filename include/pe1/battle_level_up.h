@@ -9,7 +9,7 @@ extern u8 D_8009CE74;
 extern s16 D_8009D2A4;
 extern u32 D_8009D304;
 extern u16 D_8009D21C;
-extern u32 D_8009D28C;
+extern int D_8009D28C;
 
 extern u32 battle_step_flags_read[4] __asm__("D_8009D1A0");
 extern u32 battle_step_flags_write[4] __asm__("D_8009D1A0");

@@ -205,7 +205,7 @@ extern struct { char _[16]; } D_8009CDDC_oi __asm__("g_ActiveDrawSlot");
 extern struct { char _[16]; } D_8009D1DC_o __asm__("g_BattleRemainingActions");
 #define g_BattleRemainingActions (*(u8 *)&D_8009D1DC_o)
 
-extern u8 D_8009E360[];
+extern u16 D_8009E360[];
 extern u8 g_BattleStatusRowPosY[];
 extern u8 D_8009E508[];
 extern u8 D_8009E516[];
@@ -257,7 +257,7 @@ void Battle_DrawSpellName(void) {
             cC = CDDCC;
             rFD = 0x1FD;
             t3 = cC * 0x118;
-            tE = *(u16 *)(D_8009E360 + cC * 0x30);
+            tE = *(u16 *)((u8 *)D_8009E360 + cC * 0x30);
             t3 = t3 + (s32)q508;
             *(s16 *)((u8 *)t3 + 0xA) = ys;
             *(s16 *)((u8 *)t3 + 8) = tE + 0x3C;
@@ -279,7 +279,7 @@ void Battle_DrawSpellName(void) {
     i = 0;
     {
         s32 tx;
-        tx = *(u16 *)(D_8009E360 + c * 0x30);
+        tx = *(u16 *)((u8 *)D_8009E360 + c * 0x30);
         xs = tx + 0x40;
     }
     if (g_BattleRemainingActions != 0) {
@@ -382,7 +382,7 @@ extern StatusSymbolTemplate D_80010E24;
 extern u8 D_8009E93C[];
 extern u8 D_8009E93D[];
 extern u8 D_8009E930[];
-extern u8 D_8009E360[];
+extern u16 D_8009E360[];
 
 void Battle_DrawStatusSymbol(s8 which) {
     StatusSymbolSlot first;
@@ -412,8 +412,8 @@ void Battle_DrawStatusSymbol(s8 which) {
     packet = packetBase + packetOffset;
     *(u16 *)(packet + 16) = b[0];
     *(u16 *)(packet + 18) = b[1];
-    *(u16 *)(packet + 8) = *(u16 *)(D_8009E360 + slot * 48) + c[0];
-    *(u16 *)(packet + 10) = *(u16 *)(D_8009E360 + slot * 48 + 2) + c[1];
+    *(u16 *)(packet + 8) = *(u16 *)((u8 *)D_8009E360 + slot * 48) + c[0];
+    *(u16 *)(packet + 10) = *(u16 *)((u8 *)D_8009E360 + slot * 48 + 2) + c[1];
     packetBase -= 8;
     AddPrim((u8 *)D_800B0E38.ordering[slot] + 16, packetBase + packetOffset);
 }
