@@ -25,7 +25,7 @@ void func_801923D8(void *unused0, void *unused1, SceneE08RingEffectState *effect
     effect->rotation[2] = 0;
     effect->secondScale = 0;
 
-    *(u16 *)mid = 0x20;
+    ((FieldRingGeometry *)base)->mode = 0x20;
     D_8019960A = 0x1F4;
     asm volatile("" : : "r"(intensity));
     D_80199600 = 0xF0;
@@ -39,7 +39,7 @@ void func_801923D8(void *unused0, void *unused1, SceneE08RingEffectState *effect
     D_801995FE = 0;
     D_80199606 = span;
     D_80199608 = 0;
-    *(u8 **)base = source;
+    ((FieldRingGeometry *)base)->source = source;
     func_800C4E50(base);
 
     ((FieldRingGeometry *)(mid + 12))->mode = 0x20;
@@ -53,7 +53,7 @@ void func_801923D8(void *unused0, void *unused1, SceneE08RingEffectState *effect
     ((FieldRingGeometry *)(mid + 12))->color0[2] = 0xFF;
     ((FieldRingGeometry *)(mid + 12))->extent0 = span;
     ((FieldRingGeometry *)(mid + 12))->extent1 = 0;
-    *(u8 **)(mid + 12) = source + 0x200;
+    ((FieldRingGeometry *)(mid + 12))->source = source + 0x200;
     func_800C4E50(mid + 12);
 
     third = mid + 36;
@@ -70,6 +70,6 @@ void func_801923D8(void *unused0, void *unused1, SceneE08RingEffectState *effect
     ((FieldRingGeometry *)(mid + 36))->extent0 = span;
     ((FieldRingGeometry *)(mid + 36))->extent1 = 0;
     source += 0x400;
-    *(u8 **)third = source;
+    ((FieldRingGeometry *)third)->source = source;
     func_800C4E50(third);
 }
