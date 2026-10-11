@@ -1,3 +1,4 @@
+#include "scene_e08.h"
 #include "pe1/gte_types.h"
 #include "pe1/scene_e08_glow_sprites.h"
 #include "pe1/field_glow_sprite.h"
@@ -17,7 +18,7 @@ void func_80190460(void *unused0, void *unused1, char *effect) {
     Matrix matrix;
     Vec4 scratch, draw;
     FieldGlowSprite *sprite;
-    char *owner;
+    Ovl178Position *owner;
     SceneE08GlowSprites *base = (SceneE08GlowSprites *)effect;
     register unsigned i;
     int diag = 0x1000;
@@ -25,7 +26,7 @@ void func_80190460(void *unused0, void *unused1, char *effect) {
     owner = func_800C2B50();
     i = 0;
         asm volatile("" : : "r"(slot));
-    func_800C2EAC(*(u8 *)(owner + 0x24));
+    func_800C2EAC(owner->spriteMode);
     func_800C3098(0x10);
     func_800C3238(2);
 
