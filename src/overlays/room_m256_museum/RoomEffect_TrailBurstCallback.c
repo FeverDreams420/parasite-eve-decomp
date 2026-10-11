@@ -246,7 +246,7 @@ s32 func_801940B0(int mode, void *effect) {
                 int dampZ;
                 coordinate = *(volatile u16 *)&state->x;
                 vxBits = *(volatile u16 *)&state->motionX;
-                asm volatile("" : : "r"(frame), "r"(vx), "r"(coordinate), "r"(vxBits));
+                asm volatile("" : :);
                 dampX = vx * 63;
                 state->x = coordinate + vxBits;
                 coordinate = *(volatile u16 *)&state->y;
