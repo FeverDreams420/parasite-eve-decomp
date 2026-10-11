@@ -51,7 +51,7 @@ s32 func_801940B0(int mode, void *effect) {
     s16 impactY;
     int historyCount;
     void *historyPosition;
-    char *historySample;
+    GteShortVector *historySample;
     s16 *spriteFrame;
     register int pulseExtent asm("$3");
     int spriteExtent;
@@ -73,7 +73,7 @@ s32 func_801940B0(int mode, void *effect) {
     u32 tripledScale;
     u32 pulseSine;
     void *motionAngles;
-    void *history;
+    RoomM256TrailHistory *history;
     FieldActorState *trailPlayerState;
     FieldActorState *impactPlayerState;
 
@@ -102,7 +102,7 @@ s32 func_801940B0(int mode, void *effect) {
             state->motionY = angles.y;
             state->motionZ = angles.z;
             state->motionY = (u16) (state->motionY + 0x800);
-            func_800D3AFC((state->index * 0x88) + D_80195EFC, historyCount, historyPosition, 1);
+            func_800D3AFC(&D_80195EFC[state->index], historyCount, historyPosition, 1);
             state->speed = (s16) ((func_80071A54() & 7) + 8);
             state->angle = 0;
             particle = func_800CE610(D_800F33E0->end);
@@ -121,7 +121,7 @@ s32 func_801940B0(int mode, void *effect) {
             return 0;
         case 1:
             state->frame = (s16) ((u16) state->frame + 1);
-            history = (state->index * 0x88) + D_80195EFC;
+            history = &D_80195EFC[state->index];
             func_800CE870((char *)g_PlayerEntity, 1, &delta.x);
             FieldEng_CalculateLookAngles(state, &delta.x, &angles.x);
             ending = state->ending;
@@ -324,10 +324,10 @@ checkLifetime:
             if ((D_800F336C == 4) && (D_800F3428 != 0)) {
                 trailClutY += 4;
             }
-            func_800D3114((GteShortVector *)((state->index * 0x88) + D_80195EFC), 0x10, 0xF0, 0, 0x60, 0xFF, 0xF, (s32) D_800E2850[D_800E11EA], GetClut(0x30, trailClutY) & 0xFFFF, 0x80, (RenderColor *)&color.r, (RenderColor *)&darkColor.r, 1);
+            func_800D3114(D_80195EFC[state->index].point, 0x10, 0xF0, 0, 0x60, 0xFF, 0xF, (s32) D_800E2850[D_800E11EA], GetClut(0x30, trailClutY) & 0xFFFF, 0x80, (RenderColor *)&color.r, (RenderColor *)&darkColor.r, 1);
             fade = ((D_800E27EC & 1) << 5) + 0x60;
             func_800D004C((GteShortVector *)state, 0x190, 0x190, 8, 0, 0x1000, 0x1000, (RenderColor *)&color.r, 0, fade, 1);
-            historySample = D_80195EFC + ((func_80071A54() & 7) * 8);
+            historySample = D_80195EFC[0].point + (func_80071A54() & 7);
             func_800D004C((void *)((unsigned)(state->index * 0x88) + (unsigned)historySample), 0x1F4, 0x1F4, 6, 0, 0x1000, 0x1000, (RenderColor *)&color.r, 0, (u32)fade >> 1, 1);
             return 0;
         case 1:
