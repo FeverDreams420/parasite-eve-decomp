@@ -1,6 +1,7 @@
 #include "room_m350_shared.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
+#include "pe1/field_actor.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/psyq_gpu.h"
@@ -49,14 +50,9 @@ int func_80199148(int event, Particle *object)
 /* MASPSX_FLAGS: --expand-div */
 #include "pe1/gte.h"
 typedef RoomM350Vector Vector;
-typedef RoomM350TransformMatrix Matrix;
+typedef RenderMatrix Matrix;
 typedef struct { short count,delay; } State;
-typedef struct { int reserved[2]; int asset; } Owner;
-typedef struct { unsigned char reserved[2],count; } Model;
-typedef struct RoomM350Instance {
-    Owner *owner; char reserved04[0x1B0]; Model *model;
-    char reserved1B8[0x80]; Matrix *transforms;
-} Instance;
+typedef FieldActor Instance;
 typedef RoomM350Actor Actor;
 
 extern unsigned char D_8019A8C4;
@@ -73,9 +69,9 @@ int func_801992A0(int event,State *state)
     case 0:
 
         {
-            Instance *instance=ANIM_OWNER_AS(Actor)->instance;
-            Matrix *matrix=instance->transforms;
-            Asset_Find08w(0x549,instance->owner->asset,(short)matrix->position[0],(short)matrix->position[1],(short)matrix->position[2]);
+            Instance *instance=(Instance *)ANIM_OWNER_AS(Actor)->instance;
+            Matrix *matrix=instance->render_object.matrices;
+            Asset_Find08w(0x549,instance->state->progress,(short)matrix->translation[0],(short)matrix->translation[1],(short)matrix->translation[2]);
             state->count=0; state->delay=0; D_8019A8C4=0;
             return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,20,10,
                                  (FieldAnimCallbackListCallback)func_80199148);
@@ -107,10 +103,10 @@ int func_801992A0(int event,State *state)
         }
         random=Inv_ScrambleGrid();
         actor=ANIM_OWNER_AS(Actor);
-        instance=actor->instance;
+        instance=(Instance *)actor->instance;
         {
             register int low asm("$5")=random&255;
-            register int parts asm("$3")=instance->model->count-1;
+            register int parts asm("$3")=instance->render_object.header->part_count-1;
             register int scaled asm("$2")=low*parts;
                         scaled=scaled/256;
                         {
@@ -122,27 +118,27 @@ int func_801992A0(int event,State *state)
         {
         Instance *ySource;
         Instance *zSource;
-        particle->x=instance->transforms[index].position[0];
-                ySource=actor->instance;
+        particle->x=instance->render_object.matrices[index].translation[0];
+                ySource=(Instance *)actor->instance;
         asm volatile("" : : "r"(ySource));
         size=particle->size;
         asm volatile("" : : "r"(size), "r"(ySource) : "memory");
         sizeBits=(unsigned short)particle->size;
-        particle->y=ySource->transforms[index].position[1];
+        particle->y=ySource->render_object.matrices[index].translation[1];
         asm volatile("" : : : "$2");
         {
             u8 low7=random&127;
             product=low7*size;
         }
-        zSource=actor->instance;
+        zSource=(Instance *)actor->instance;
         asm volatile("" : : "r"(sizeBits), "r"(zSource));
         sizeBits=(unsigned int)sizeBits<<16;
                 {
-        Matrix *transforms=zSource->transforms;
-        asm volatile("" : "=r"(sizeBits) : "0"(sizeBits), "r"(transforms));
+        Matrix *transforms=zSource->render_object.matrices;
+        asm volatile("" : : "r"(sizeBits), "r"(transforms));
         halfSize=sizeBits>>17;
-        asm volatile("" : "=r"(transforms) : "0"(transforms), "r"(halfSize));
-        particle->z=transforms[index].position[2];
+        asm volatile("" : : "r"(transforms), "r"(halfSize));
+        particle->z=transforms[index].translation[2];
         }
         }
         particle->velocity=0; particle->acceleration=0; particle->counter=0;
@@ -162,7 +158,7 @@ int func_801992A0(int event,State *state)
         sine=4096;
         rotation.rotation[1][1]=sine;
                 rotation.rotation[0][0]=cosine; rotation.rotation[2][2]=cosine;
-        rotation.position[2]=0; rotation.position[1]=0; rotation.position[0]=0;
+        rotation.translation[2]=0; rotation.translation[1]=0; rotation.translation[0]=0;
         rotation.rotation[2][1]=0; rotation.rotation[1][2]=0;
         rotation.rotation[1][0]=0; rotation.rotation[0][1]=0;
         {
@@ -176,7 +172,7 @@ int func_801992A0(int event,State *state)
         particle->x=(unsigned short)particle->x+(unsigned short)offset.x;
         particle->z=(unsigned short)particle->z+(unsigned short)offset.z;
         state->delay=0; state->count=(unsigned short)state->count+1;
-        Asset_Find08w(0x5FE,ANIM_OWNER_AS(Actor)->instance->owner->asset,particle->x,particle->y,particle->z);
+        Asset_Find08w(0x5FE,((Instance *)ANIM_OWNER_AS(Actor)->instance)->state->progress,particle->x,particle->y,particle->z);
     }
         break;
     case 2:
