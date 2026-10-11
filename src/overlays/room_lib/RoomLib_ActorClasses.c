@@ -1050,8 +1050,8 @@ void RoomLib_HandlerB(RoomEnt *obj) {
         if (self->active != 0 && link->target != 0) {
             link->target->flags |= 0x40000000;
         }
-        v1 = RWU16(state, 0x86);
-        v0 = RWU16(link, 0x3A);
+        v1 = (unsigned short)((RoomLibHandlerBState *)state)->rate;
+        v0 = (unsigned short)link->rotation[1];
         v1 += 0x800;
         v0 += v1;
         v0 &= 0xFFF;
@@ -1147,7 +1147,7 @@ void RoomLib_HandlerB(RoomEnt *obj) {
             register int crossed asm("$2") = previous ^ current;
 
             if (crossed < 0) {
-                RW32(state, 0x0) = (int)RoomLib_HandlerBPhase;
+                ((RoomLibHandlerBState *)state)->callback = (void (*)(void))RoomLib_HandlerBPhase;
                 ((RoomLibHandlerBState *)state)->started = 0;
                 self->flag3 = 2;
             }
@@ -1218,14 +1218,14 @@ void RoomLib_AdvanceArcToTarget(RoomEnt *obj) {
             scratch[1] = 0;
             *(volatile short *)&scratch[0] = hi;
             lo = *entry;
-            savedHi = RWU16(scratch, 0x0);
+            savedHi = (unsigned short)((RoomLibArcWork *)scratch)->matrix[0];
             scratch[3] = 0;
             scratch[5] = 0;
             scratch[7] = 0;
             scratch[2] = lo;
             scratch[4] = 0x1000;
             scratch[8] = savedHi;
-            scratch[6] = -RWU16(scratch, 0x4);
+            scratch[6] = -(unsigned short)((RoomLibArcWork *)scratch)->matrix[2];
         }
         scratch[16] = ((RoomLibHandlerBState *)state)->localOffset[0] >> 12;
         scratch[17] = 0;
@@ -1521,14 +1521,14 @@ void RoomLib_HandlerC(RoomEnt *obj) {
             scratch[1] = 0;
             *(volatile short *)&scratch[0] = hi;
             lo = *entry;
-            savedHi = RWU16(scratch, 0x0);
+            savedHi = (unsigned short)((RoomLibArcWork *)scratch)->matrix[0];
             scratch[3] = 0;
             scratch[5] = 0;
             scratch[7] = 0;
             scratch[2] = lo;
             scratch[4] = 0x1000;
             scratch[8] = savedHi;
-            scratch[6] = -RWU16(scratch, 0x4);
+            scratch[6] = -(unsigned short)((RoomLibArcWork *)scratch)->matrix[2];
         }
         scratch[16] = state->localOffset[0] >> 12;
         scratch[17] = 0;
@@ -1654,14 +1654,14 @@ void RoomLib_AdvanceArcToTargetY(RoomEnt *obj) {
             scratch[1] = 0;
             *(volatile short *)&scratch[0] = hi;
             lo = *entry;
-            savedHi = RWU16(scratch, 0x0);
+            savedHi = (unsigned short)((RoomLibArcWork *)scratch)->matrix[0];
             scratch[3] = 0;
             scratch[5] = 0;
             scratch[7] = 0;
             scratch[2] = lo;
             scratch[4] = 0x1000;
             scratch[8] = savedHi;
-            scratch[6] = -RWU16(scratch, 0x4);
+            scratch[6] = -(unsigned short)((RoomLibArcWork *)scratch)->matrix[2];
         }
         scratch[16] = ((RoomLibHandlerCState *)state)->localOffset[0] >> 12;
         scratch[17] = 0;
@@ -1833,24 +1833,24 @@ void RoomLib_HandlerA(RoomEnt *o) {
                 (Vec3Fixed *)((RoomLink *)D_8009D254)->pos);
         }
         if (o->h48 == -1) {
-            o->h48 = RWU16(o, 0x44) + 0x800;
+            o->h48 = (unsigned short)o->h44 + 0x800;
         }
         {
-            int *e = &D_800966EC[RWU16(o, 0x44) & 0xFFF].word;
+            int *e = &D_800966EC[(unsigned short)o->h44 & 0xFFF].word;
             int hi = ((short *)e)[1];
             int lo;
             int savedHi;
             RVW16(o, 0x1E) = 0;
             RVW16(o, 0x1C) = hi;
             lo = *e;
-            savedHi = RWU16(o, 0x1C);
+            savedHi = (unsigned short)o->mat[0];
             RVW16(o, 0x22) = 0;
             RVW16(o, 0x26) = 0;
             RVW16(o, 0x2A) = 0;
             RVW16(o, 0x20) = lo;
             RVW16(o, 0x24) = 0x1000;
             RVW16(o, 0x2C) = savedHi;
-            RVW16(o, 0x28) = -RWU16(o, 0x20);
+            RVW16(o, 0x28) = -(unsigned short)o->mat[2];
         }
     }
 }
