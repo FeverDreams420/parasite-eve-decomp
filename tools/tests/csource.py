@@ -391,19 +391,28 @@ def object_symbols(obj: pathlib.Path) -> dict[str, int]:
     return symbols
 
 
-def linked_function_bytes(name: str, address: int, size: int, symbols: str,
-                          work: pathlib.Path, path: pathlib.Path | None = None,
-                          *cflags: str) -> bytes:
-    """Compile the unit defining `name` and return its `size` linked bytes.
+@functools.lru_cache(maxsize=None)
+def main_symbol_addresses() -> dict[str, int]:
+    """Retail addresses of main.exe symbols from configs/ and linkers/."""
+    files = [ROOT / "configs/USA/sym.main.txt",
+             *sorted((ROOT / "linkers/USA").glob("undefined_*.txt"))]
+    rx = re.compile(r"^\s*(\w+)\s*=\s*(0x[0-9A-Fa-f]+)\s*;", re.M)
+    known = {}
+    for path in files:
+        if path.is_file():
+            for name, value in rx.findall(path.read_text()):
+                known.setdefault(name, int(value, 16))
+    gp = re.search(r"^\s*gp_value:\s*(0x[0-9A-Fa-f]+)",
+                   (ROOT / "configs/USA/main.yaml").read_text(), re.M)
+    if gp:
+        known.setdefault("_gp", int(gp.group(1), 16))
+    return known
 
-    Units are merged and split over time, so the object may hold more than
-    the function under test.  The whole .text is linked so that `name` lands
-    at `address` (in-unit calls therefore resolve to their real neighbours),
-    `symbols` (linker-script assignments such as "VSync = 0x80073A44;")
-    resolves the external references, references only the unit's other
-    functions make are parked at a dummy address, and only [address, address + size) is
-    returned.
-    """
+
+def _link_unit(name: str, address: int, symbols: str, work: pathlib.Path,
+               path: pathlib.Path | None, cflags) -> tuple[bytes, int]:
+    """Linked .text of the unit defining `name`, placed so `name` is at
+    `address`; returns (text, offset of `name` within it)."""
     path = path or find_definition(name)
     obj, elf, data = work / "unit.o", work / "unit.elf", work / "unit.bin"
     result = subprocess.run([str(ROOT / "tools/scripts/cc.sh"), str(path),
@@ -413,16 +422,33 @@ def linked_function_bytes(name: str, address: int, size: int, symbols: str,
         raise RuntimeError(result.stdout + result.stderr)
     offset = object_symbols(obj)[name]
     base = address - offset
-    # References only the unit's other functions make are parked at the
-    # base so their jal/hi16 relocations fit; they do not reach the range.
-    undefined = subprocess.run(["mipsel-none-elf-nm", "-u", str(obj)],
-                               check=True, capture_output=True,
-                               text=True).stdout.split()
-    provide = "".join(f"PROVIDE({u} = 0x{base:x});\n"
-                      for u in undefined if u != "U")
+    # Unresolved references take their retail address from the project
+    # symbol lists (or the address a D_/func_ name encodes); anything left is
+    # parked at the base so jal/hi16 relocations fit.
+    # Small-data COMMON symbols (MASPSX --use-comm-section) are external
+    # data as well; give them their retail address instead of allocating them.
+    listing = subprocess.run(["mipsel-none-elf-nm", str(obj)], check=True,
+                             capture_output=True, text=True).stdout
+    undefined = [(f[-1], f[-2]) for f in map(str.split, listing.splitlines())
+                 if len(f) >= 2 and f[-2] in ("U", "C")]
+    pinned = set(re.findall(r"(\w+)\s*=", symbols))
+    known = main_symbol_addresses()
+    provide = ""
+    if "_gp" in known:
+        provide += f"PROVIDE(_gp = 0x{known['_gp']:x});\n"
+    for u, kind in undefined:
+        encoded = re.fullmatch(r"(?:D|func)_([0-9A-Fa-f]{8})", u)
+        value = known.get(u, int(encoded.group(1), 16) if encoded else base)
+        if kind == "C":
+            # PROVIDE never overrides a COMMON definition; assign directly.
+            if u not in pinned:
+                provide += f"{u} = 0x{value:x};\n"
+        else:
+            provide += f"PROVIDE({u} = 0x{value:x});\n"
     script = work / "unit.ld"
     script.write_text(
-        symbols + "\n" + provide + "SECTIONS { .text 0x%x : SUBALIGN(4) { *(.text .text.*) } "
+        symbols + "\n" + provide
+        + "SECTIONS { .text 0x%x : SUBALIGN(4) { *(.text .text.*) } "
         "/DISCARD/ : { *(.reginfo) *(.mdebug) } }\n" % base)
     result = subprocess.run(["mipsel-none-elf-ld", "-T", str(script),
                              "--no-warn-mismatch", str(obj), "-o", str(elf)],
@@ -432,4 +458,48 @@ def linked_function_bytes(name: str, address: int, size: int, symbols: str,
     subprocess.run(["mipsel-none-elf-objcopy", "-O", "binary",
                     "--only-section=.text", str(elf), str(data)],
                    check=True, capture_output=True)
-    return data.read_bytes()[offset:offset + size]
+    return data.read_bytes(), offset
+
+
+def linked_function_bytes(name: str, address: int, size: int, symbols: str,
+                          work: pathlib.Path, path: pathlib.Path | None = None,
+                          *cflags: str) -> bytes:
+    """Compile the unit defining `name` and return its `size` linked bytes.
+
+    Units are merged and split over time, so the object may hold more than
+    the function under test.  The whole .text is linked so that `name` lands
+    at `address` (in-unit calls therefore resolve to their real neighbours),
+    `symbols` (linker-script assignments such as "VSync = 0x80073A44;")
+    pins external references (the rest come from main_symbol_addresses),
+    and only [address, address + size) is returned.
+    """
+    text, offset = _link_unit(name, address, symbols, work, path, cflags)
+    return text[offset:offset + size]
+
+
+def linked_range_bytes(address: int, size: int, symbols: str,
+                       work: pathlib.Path) -> bytes:
+    """Linked bytes of main.exe [address, address + size) from current units.
+
+    The range may span several functions in any number of units; each step
+    links the unit defining the function that starts at the cursor (named in
+    configs/USA/sym.main.txt) and takes the rest of that unit's text.
+    """
+    by_address = {}
+    for symbol, value in main_symbol_addresses().items():
+        by_address.setdefault(value, []).append(symbol)
+    out = b""
+    cursor = address
+    while len(out) < size:
+        units = [(n, find_definitions(n)) for n in by_address.get(cursor, [])]
+        units = [(n, hits[0]) for n, hits in units if len(hits) == 1]
+        if not units:
+            raise LookupError(f"no C unit defines a function at 0x{cursor:08X}")
+        name, path = units[0]
+        text, offset = _link_unit(name, cursor, symbols, work, path, ())
+        piece = text[offset:offset + size - len(out)]
+        if not piece:
+            raise LookupError(f"{name} at 0x{cursor:08X} links no bytes")
+        out += piece
+        cursor += len(piece)
+    return out
