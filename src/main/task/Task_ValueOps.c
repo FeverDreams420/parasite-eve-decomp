@@ -12,7 +12,7 @@
 extern FieldActor *g_PlayerEntity;
 extern int g_RenderStateFlags;
 extern u32 D_8009D26C;
-extern u32 D_8009D1F4[];
+extern u32 D_8009D1F4;
 extern u32 D_800A7770[];
 
 int Math_FixedMul(int lhs, int rhs);
@@ -219,7 +219,7 @@ int Task_DispatchCmd(int **args) {
     case 1: {
         u32 mask;
         u32 state;
-        state = D_8009D1F4[0];
+        state = D_8009D1F4;
         mask = *args[1];
         if ((state & mask) == mask) {
             *args[2] = 1;

@@ -155,10 +155,10 @@ void Battle_Update(void) {
                 }
                 if ((Pad_GetMenuPressedBitOrDisabled() << 0x18) == 0) {
                     opened = 0;
-                    if ((D_8009D1F4[0]) & 0x200) {
+                    if (D_8009D1F4 & 0x200) {
                         (D_8009D1F0[0]) = 0;
                         opened = 1;
-                    } else if ((D_8009D1F4[0]) & 0x80) {
+                    } else if (D_8009D1F4 & 0x80) {
                         opened = 1;
                         (D_8009D1F0[0]) = opened;
                         Inventory_OpenAyaItemList(1);

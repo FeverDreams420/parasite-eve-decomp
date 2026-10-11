@@ -110,7 +110,7 @@ typedef struct AkaoVoiceBankState {
 
 extern AkaoVoiceBankState D_800B0CD8;
 extern AkaoVoiceActor *D_8009D254;
-extern int D_8009D1A0;
+extern unsigned int D_8009D1A0;
 
 int Akao_LoadVoiceBank(AkaoVoiceActor *actor) {
     AkaoVoiceActor *actor_reg = actor;

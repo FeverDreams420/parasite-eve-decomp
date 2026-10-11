@@ -28,7 +28,7 @@ void Entity_FrameUpdate(void) {
         if (g_GameStateBlock.flags & 2) {
             Battle_Update();
         } else {
-            if (g_PlayerEntity != 0 && g_PlayerEntity->state != 0 && (D_8009D1F4[0] & 0x80) &&
+            if (g_PlayerEntity != 0 && g_PlayerEntity->state != 0 && (D_8009D1F4 & 0x80) &&
                 !(g_GameStateBlock.flags & 0x2000) && !(D_800B0CD8[0] & 0x3400)) {
                 Inventory_OpenAyaItemList(0);
                 Render_BeginSceneLoad();

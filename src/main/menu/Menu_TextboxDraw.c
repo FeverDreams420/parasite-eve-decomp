@@ -299,7 +299,7 @@ extern u8 D_8009CEB0;
 extern u8 D_8009CEC4;
 extern u8 D_8009CEC8;
 extern u8 D_8009CECC;
-extern s32 D_8009D1F4[];
+extern u32 D_8009D1F4[];
 extern RenderBufferPrefix D_800B0E38;
 
 void Menu_DrawTextboxEntries(void) {

@@ -36,7 +36,7 @@ extern s32 draw_slot_status2 __asm__("D_8009CDDC");
 /* COMMON supplies small-data metadata to MASPSX. */
 s8 D_8009CE30;
 unsigned char D_8009CE34;
-extern s32 D_8009D1A0;
+extern u32 D_8009D1A0;
 extern unsigned int D_8009D1AC;
 extern u8 D_8009D1CE;
 extern u8 D_8009D1D4;

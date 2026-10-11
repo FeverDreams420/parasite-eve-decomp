@@ -18,7 +18,7 @@ typedef struct GameStateBlock {
     u32 reserved;
 } GameStateBlock;
 extern GameStateBlock g_GameStateBlock __asm__("D_8009D1A0");
-extern u32 D_8009D1F4[];       /* pad trigger bits */
+extern u32 D_8009D1F4;         /* pad trigger bits */
 extern s16 D_8009D2A4;         /* menu frame result */
 extern BattleAction D_800A76D8;        /* menu frame argument */
 extern u32 D_800B0CD8[];       /* scene state flags */

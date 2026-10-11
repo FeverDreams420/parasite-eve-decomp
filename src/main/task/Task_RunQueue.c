@@ -32,7 +32,7 @@ void Task_RunQueue(void)
         if (*(u32 *)&node->flags & 0x50) continue;
         entity = D_8009D2F0[0];
         if ((((FieldActor *)entity)->flags & 0x1000) && !(node->flags & 0x80)) continue;
-        if ((D_8009D1A0[0] & 0x100) && entity != D_8009D254[0] && !(node->flags & 0x80)) continue;
+        if ((D_8009D1A0 & 0x100) && entity != D_8009D254[0] && !(node->flags & 0x80)) continue;
         node = D_8009D300;
         if (node->active == 0) continue;
         node->active = (u32)node->active - 1;

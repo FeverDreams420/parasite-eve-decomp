@@ -41,7 +41,7 @@ extern u8 D_8009D1CE;
 extern s32 D_8009D1D0;
 extern s32 D_8009D1E8;
 extern s8 D_8009D1F0[16];
-extern s32 D_8009D1F4[16];
+extern u32 D_8009D1F4;
 extern s32 D_8009D230[16];
 extern u8 D_8009D235[16];
 extern u8 D_8009D23C;
