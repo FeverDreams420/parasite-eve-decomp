@@ -80,9 +80,16 @@ typedef struct RoomTimedSpawnEventState {
 } RoomTimedSpawnEventState;
 
 typedef struct RoomTimedSpawnNode {
-    u8 reserved[0x18];
+    u32 flags;                        /* 0x00: 0x3F000000 owner bits */
+    u8 reserved04[0x14];
     u8 *status;                       /* 0x18 */
 } RoomTimedSpawnNode;
+
+/* The animation owner: its link, whose first word is the render node. */
+typedef struct RoomTimedSpawnOwner {
+    u8 reserved[0x8];
+    RoomTimedSpawnNode **link;        /* 0x08 */
+} RoomTimedSpawnOwner;
 
 typedef struct RoomTimedSpawnEngine {
     u8 reserved[0x4C];
@@ -94,7 +101,7 @@ extern struct FieldActor *g_PlayerEntity;
 extern void *RoomMain_ActorPtr2;
 
 int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
-    void *actor;
+    RoomFxTimedRenderState *actor;
     int tick;
     int value;
     u16 ground;
@@ -102,14 +109,14 @@ int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
     switch (mode) {
     case 0:
 
-        func_800CE870(((void **)ANIM_OWNER_AS(void))[2], 0, (s16 *)&state->position);
+        func_800CE870(ANIM_OWNER_AS(RoomTimedSpawnOwner)->link, 0, (s16 *)&state->position);
         state->x = 0;
         state->y = 0;
 
         if (ANIM_TASK_AS(RoomTimedSpawnEventState)->active != 0) {
-            void *p = ((void **)ANIM_OWNER_AS(void))[2];
-            if (p != 0 && *(void **)p != 0) {
-                u8 *status = (*(RoomTimedSpawnNode **)p)->status;
+            RoomTimedSpawnNode **p = ANIM_OWNER_AS(RoomTimedSpawnOwner)->link;
+            if (p != 0 && *p != 0) {
+                u8 *status = (*p)->status;
                 if (*status == 1) {
                     *status = 2;
                 }
@@ -128,30 +135,30 @@ int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
     if (tick < 0x20 && tick % 6 == 0) {
         actor = func_800CE610(((void **)ANIM_POOL_AS(void))[2]);
         if (actor != 0) {
-            *(u16 *)((char *)actor + 0) = state->position.x;
-            *(u16 *)((char *)actor + 2) = state->position.y;
-            *(u16 *)((char *)actor + 4) = state->position.z;
+            actor->x = state->position.x;
+            actor->y = state->position.y;
+            actor->z = state->position.z;
             ground = g_RoomFloorY->y;
-            *(s16 *)((char *)actor + 8) = 0;
-            *(s16 *)((char *)actor + 0xA) = 0;
-            *(u16 *)((char *)actor + 2) = ground;
+            actor->disabled = 0;
+            actor->frame = 0;
+            actor->y = ground;
         }
     }
 
     if (D_800E27EC == 7 && ANIM_TASK_AS(RoomTimedSpawnEventState)->active != 0) {
-        void *root;
-        root = ANIM_OWNER_AS(void);
-        if ((*(u32 *)*(void **)((void **)root)[2] & 0x3F000000) ==
+        RoomTimedSpawnOwner *root;
+        root = ANIM_OWNER_AS(RoomTimedSpawnOwner);
+        if (((*root->link)->flags & 0x3F000000) ==
             0x01000000) {
-            void *object;
+            RoomTimedSpawnNode *object;
             RoomTimedSpawnEngine *engine = *(RoomTimedSpawnEngine **)g_PlayerEntity;
             engine->flags |= 0x4000;
 
-            object = *(void **)((void **)root)[2];
-            *(u32 *)object = (*(u32 *)object & 0xC0FFFFFF) | 0x21000000;
+            object = *root->link;
+            object->flags = (object->flags & 0xC0FFFFFF) | 0x21000000;
 
-            object = *(void **)((void **)root)[2];
-            *(u32 *)object |= 0x80000000;
+            object = *root->link;
+            object->flags |= 0x80000000;
         }
     }
         if (D_800E27EC >= 8) return 2;

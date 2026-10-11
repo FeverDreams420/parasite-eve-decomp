@@ -197,10 +197,14 @@ typedef struct RoomFxGroundSpriteParams {
     unsigned short depth;
 } RoomFxGroundSpriteParams;
 
+/* A timed spawn's sprite: its position, a disable flag and its frame. */
 typedef struct RoomFxTimedRenderState {
-    unsigned char pad00[8];
-    short disabled;
-    unsigned short frame;
+    unsigned short x;
+    unsigned short y;
+    unsigned short z;
+    unsigned short pad06;
+    short disabled;               /* 0x08 */
+    unsigned short frame;         /* 0x0A */
 } RoomFxTimedRenderState;
 
 typedef struct RoomFallingParticleControl {
