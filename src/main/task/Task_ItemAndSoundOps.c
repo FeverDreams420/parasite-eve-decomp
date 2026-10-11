@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 /* Script opcodes: actor screen position, start-up memory-card dialog,
  * received-item notice, inventory command and the AKAO/CD sound command.
  * Contiguous handlers between the map-selection flow and the ASPSX 2.70
@@ -18,13 +19,17 @@
 #include "pe1/asset_find.h"
 
 extern Pe1GameState g_GameState;
-extern int g_SceneDataTable0;
+/* COMMON supplies small-data metadata to MASPSX. */
+int g_SceneDataTable0;
+TaskNode *g_TaskNodePool;
+TaskNode *D_8009D300;
+
+extern s16 D_8009D2A4; /* menu frame result */
 extern int g_GameStateFlags[];
 extern int g_GameStateFlagsWrite[] asm("g_GameStateFlags");
 
 void Menu_OpenStartupMemCardDialog(void);
 
-extern short D_8009D2A4[];
 int MenuWidget_HasActiveNodes(void);
 
 int Render_SetEntryPosition(int index, int x, int y);
@@ -157,7 +162,7 @@ int Task_RunInvCommand(TaskInvCommandArgs *arg0) {
         return 0;
     }
 
-    temp = D_8009D2A4[0];
+    temp = D_8009D2A4;
     if (temp != 0) {
         *saved->result = temp;
         {
@@ -214,7 +219,7 @@ typedef struct AkaoStackLocals {
 } AkaoStackLocals;
 
 extern u8 D_800944A8[];
-extern u8 *D_8009CE00;
+u8 *D_8009CE00;
 extern u8 *D_8009D20C[];
 extern u8 *D_8009D254[];
 extern u8 *D_8009D2F0[];

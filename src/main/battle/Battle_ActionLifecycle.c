@@ -4,7 +4,7 @@
 
 extern int D_8009D2E8;
 extern char *D_8009D254;
-extern char *D_8009D278;
+extern Combatant *D_8009D278;
 extern short D_8009D298;
 
 void Entity_SetActionMode(BattleEntity *entity, int mode);
@@ -25,7 +25,7 @@ void Battle_BeginPlayerAction(void) {
     D_8009D2E8 |= 1;
     player = D_8009D254;
     flags = ENTITY_FIELD(player, int, entityFlags);
-    actor = D_8009D278;
+    actor = (char *)D_8009D278;
     flags &= mask;
     ENTITY_FIELD(player, int, entityFlags) = flags;
     COMBATANT_FIELD(actor, int, stateFlags) |= 0x10000;

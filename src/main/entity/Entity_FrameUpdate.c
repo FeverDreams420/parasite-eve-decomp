@@ -35,8 +35,8 @@ void Entity_FrameUpdate(void) {
                 g_GameStateBlock.flags |= 4;
                 D_800B0CD8[0] |= 0x9000;
             }
-            D_8009D2A4[0] = Menu_RunFrameWithArg((int)&D_800A76D8);
-            if (D_8009D2A4[0] != 0) {
+            D_8009D2A4 = Menu_RunFrameWithArg((int)&D_800A76D8);
+            if (D_8009D2A4 != 0) {
                 Render_BeginSceneLoad();
                 g_GameStateBlock.flags &= ~4;
                 D_800B0CD8[0] &= ~0x9000;

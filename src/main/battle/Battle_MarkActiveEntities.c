@@ -1,13 +1,16 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "pe1/battle.h"
 
-/* Unsized declarations preserve the original absolute accesses with -G8. */
-extern s8 D_8009D2B0[];
-extern Combatant *D_8009D278[];
+/* MASPSX_FORCE_G0 keeps these extern reads absolute; only the COMMON
+ * D_8009CE6C below is gp-relative. */
+extern s8 D_8009D2B0;
+extern Combatant *D_8009D278;
 extern BattleEntity *D_8009D20C[];
 extern BattleEntity *D_8009D254[];
-extern s8 D_8009CE6C;
+/* COMMON supplies small-data metadata to MASPSX. */
+s8 D_8009CE6C;
 
 inline static void Mark(BattleEntity *entity)
 {
@@ -93,11 +96,11 @@ void Battle_MarkActiveEntities(BattleTarget *table, int selected_index)
   BattleEntity *cached_active;
   unsigned char slot;
   BattleEntity *active;
-  if (D_8009D2B0[0] == 0)
+  if (D_8009D2B0 == 0)
   {
     return;
   }
-  mode = (D_8009D278[0]->action->turnWord >> 6) & 3;
+  mode = (D_8009D278->action->turnWord >> 6) & 3;
   D_8009CE6C = 0;
   switch (mode)
   {

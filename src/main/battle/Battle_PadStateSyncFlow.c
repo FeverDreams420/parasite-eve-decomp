@@ -1,7 +1,7 @@
 #include "common.h"
 #include "pe1/battle.h"
 
-extern u8 *D_8009D278;
+extern Combatant *D_8009D278;
 extern BattleAction D_800A76D8;
 extern u16 D_800A76DA;
 extern u16 D_800A76DC;
@@ -12,7 +12,7 @@ extern volatile u32 D_800A76E8;
 extern volatile u16 D_800A76EA;
 
 void Battle_CopyPadStateToRecord(void) {
-    volatile u8 *record = *(u8 **)(D_8009D278 + 0x68);
+    volatile u8 *record = (u8 *)D_8009D278->action;
     register u32 word_c asm("$4");
     register u32 word_10 asm("$3");
     u32 middle_mask = 0x000FFC00;

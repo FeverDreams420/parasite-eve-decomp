@@ -1,11 +1,14 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "pe1/battle.h"
 extern BattleInitSlot D_800BE830[45];
-extern Combatant *D_8009D278[];
-extern u8 D_8009D2B0[];
-extern u8 D_8009CE3C, D_8009CE44, D_8009CE60;
-extern u8 D_8009D2D8, D_8009D1DC;
+extern Combatant *D_8009D278;
+extern s8 D_8009D2B0;
+
+/* COMMON supplies small-data metadata to MASPSX. */
+u8 D_8009CE3C, D_8009CE44, D_8009CE60;
+u8 D_8009D2D8, D_8009D1DC;
 void BattleCmd_UndoPending(void);
 
 /* Matching debt: the empty memory barriers preserve repeated slot-index
@@ -58,26 +61,26 @@ void Battle_AdvanceTurnSlot(void)
     kind = D_800BE830[savedIndex - 1].command;
     if (kind == 1) {
         asm volatile("" : "=r"(savedIndex) : "0"(savedIndex));
-        if (D_8009D1DC == (D_8009D278[0]->action->turnWord & 15)) {
+        if (D_8009D1DC == (D_8009D278->action->turnWord & 15)) {
             D_8009D2D8++;
             RewindEqual(savedIndex);
             RestorePending(savedIndex);
         } else {
                         RewindTurn(savedIndex);
         }
-        D_8009D1DC = D_8009D278[0]->action->turnWord & 15;
+        D_8009D1DC = D_8009D278->action->turnWord & 15;
     } else if (kind == 2) {
-        int mode = D_8009D278[0]->action->turnWord & 0xC0;
+        int mode = D_8009D278->action->turnWord & 0xC0;
         if (mode == 0xC0) {
             D_8009D2D8++;
-            D_8009CE3C = savedIndex - D_8009D2B0[0];
+            D_8009CE3C = savedIndex - (u8)D_8009D2B0;
         } else if (mode == 0x40) {
             int word;
             D_8009D2D8++;
-            word = D_8009D278[0]->action->turnWord;
+            word = D_8009D278->action->turnWord;
             D_8009CE3C = savedIndex - (((word & 15) * 3) >> 1);
         }
-        D_8009D1DC = D_8009D278[0]->action->turnWord & 15;
+        D_8009D1DC = D_8009D278->action->turnWord & 15;
     } else if (kind < 0x197) {
         D_8009D2D8++;
         if (!D_8009CE60)
@@ -95,7 +98,7 @@ void Battle_AdvanceTurnSlot(void)
             }
         }
         RestorePending(savedIndex);
-        D_8009D1DC = D_8009D278[0]->action->turnWord & 15;
+        D_8009D1DC = D_8009D278->action->turnWord & 15;
     }
     generation = D_8009D2D8;
     for (i = 0; i < 45; i++) {

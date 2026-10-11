@@ -65,13 +65,13 @@ int Entity_InitWithTimeout(int **arg0) {
         return 0;
     }
 
-    if ((unsigned short)(D_8009D2A4[0] - 3) < 0x180) {
-        *arg0[1] = (short)D_8009D2A4[0] - 3;
+    if ((unsigned short)(D_8009D2A4 - 3) < 0x180) {
+        *arg0[1] = (short)D_8009D2A4 - 3;
         g_TaskNodePool->flags &= 0xFFDF;
         return 1;
     }
 
-    if ((short)D_8009D2A4[0] == -1) {
+    if ((short)D_8009D2A4 == -1) {
         *arg0[1] = -1;
         g_TaskNodePool->flags &= 0xFFDF;
         return 1;
