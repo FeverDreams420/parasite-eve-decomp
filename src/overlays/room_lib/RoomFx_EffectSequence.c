@@ -1185,8 +1185,7 @@ void RoomFx_UpdateTransformedSparkle(
             random = rand();
             transformZ = transform->z;
             z = (u16)transformed.vector.z;
-            asm("" : "=r"(transformZ), "=r"(z)
-                   : "0"(transformZ), "1"(z));
+            asm("" : "=r"(transformZ) : "0"(transformZ));
             state->sparkleAlpha = 0xFF;
             state->sparkleLife = 20;
             sign = random >> 31;
