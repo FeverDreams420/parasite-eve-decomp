@@ -1194,18 +1194,18 @@ void RoomLib_AdvanceArcToTarget(RoomEnt *obj) {
         register int targetY;
         register int accel;
         self->t1A = 1;
-        RW8(self, 0x98) = 0;
-        if (RW32(self, 0x6C) != 0) {
-            RW32((void *)0x1F800000, 0x28) =
-                RW32((void *)RW32(self, 0x6C), 0x28);
-            RW32((void *)0x1F800000, 0x2C) =
-                RW32((void *)RW32(self, 0x6C), 0x2C);
-            RW32((void *)0x1F800000, 0x30) =
-                RW32((void *)RW32(self, 0x6C), 0x30);
+        ((RoomLibHandlerBState *)state)->finished = 0;
+        if (((RoomLibHandlerBState *)state)->targetLink != 0) {
+            ((RoomLibArcWork *)0x1F800000)->point[0] =
+                ((RoomLibHandlerBState *)state)->targetLink->pos[0];
+            ((RoomLibArcWork *)0x1F800000)->point[1] =
+                ((RoomLibHandlerBState *)state)->targetLink->pos[1];
+            ((RoomLibArcWork *)0x1F800000)->point[2] =
+                ((RoomLibHandlerBState *)state)->targetLink->pos[2];
         } else {
-            RW32((void *)0x1F800000, 0x28) = RW32(self, 0x3C);
-            RW32((void *)0x1F800000, 0x2C) = RW32(self, 0x40);
-            RW32((void *)0x1F800000, 0x30) = RW32(self, 0x44);
+            ((RoomLibArcWork *)0x1F800000)->point[0] = ((RoomLibHandlerBState *)state)->target[0];
+            ((RoomLibArcWork *)0x1F800000)->point[1] = ((RoomLibHandlerBState *)state)->target[1];
+            ((RoomLibArcWork *)0x1F800000)->point[2] = ((RoomLibHandlerBState *)state)->target[2];
         }
 
         angle = FieldEng_VecToAngle((Vec3Fixed *)link->pos, (Vec3Fixed *)&scratch[20]) & 0xFFF;
@@ -1227,24 +1227,24 @@ void RoomLib_AdvanceArcToTarget(RoomEnt *obj) {
             scratch[8] = savedHi;
             scratch[6] = -RWU16(scratch, 0x4);
         }
-        scratch[16] = RW32(state, 0x40) >> 12;
+        scratch[16] = ((RoomLibHandlerBState *)state)->localOffset[0] >> 12;
         scratch[17] = 0;
-        scratch[18] = RW32(state, 0x48) >> 12;
+        scratch[18] = ((RoomLibHandlerBState *)state)->localOffset[2] >> 12;
         gte_ldrotmatrix((void *)scratch);
         gte_ldv0((void *)((int)scratch + 0x20));
         gte_mvmva();
         gte_stmac((void *)((int)scratch + 0x38));
 
-        ((RoomLibHandlerBState *)state)->target[0] = RW32(scratch, 0x28) +
-                            (RW32(scratch, 0x38) << 12);
-        ((RoomLibHandlerBState *)state)->target[1] = RW32(scratch, 0x2C) +
-                            (RW32(scratch, 0x3C) << 12);
-        ((RoomLibHandlerBState *)state)->target[2] = RW32(scratch, 0x30) +
-                            (RW32(scratch, 0x40) << 12);
+        ((RoomLibHandlerBState *)state)->target[0] = ((RoomLibArcWork *)scratch)->point[0] +
+                            (((RoomLibArcWork *)scratch)->offset[0] << 12);
+        ((RoomLibHandlerBState *)state)->target[1] = ((RoomLibArcWork *)scratch)->point[1] +
+                            (((RoomLibArcWork *)scratch)->offset[1] << 12);
+        ((RoomLibHandlerBState *)state)->target[2] = ((RoomLibArcWork *)scratch)->point[2] +
+                            (((RoomLibArcWork *)scratch)->offset[2] << 12);
 
         count = 0;
-        step = RW32(state, 0x74);
-        accel = RW32(state, 0x80);
+        step = ((RoomLibHandlerBState *)state)->phaseValue;
+        accel = ((RoomLibHandlerBState *)state)->mode;
         targetY = ((RoomLibHandlerBState *)state)->target[1];
         y = link->pos[1];
         do {
@@ -1261,17 +1261,17 @@ void RoomLib_AdvanceArcToTarget(RoomEnt *obj) {
         }
     }
 
-    RW32(scratch, 0x48) = 0;
-    if (RW8(state, 0x8C) == 0) {
+    ((RoomLibArcWork *)scratch)->landed = 0;
+    if (((RoomLibHandlerBState *)state)->finished == 0) {
         switch (((int (*)(RoomEnt *))func_800DFB78)(self)) {
         case 0:
             break;
         case 1:
-            RW8(state, 0x8C) = 1;
+            ((RoomLibHandlerBState *)state)->finished = 1;
             ((RoomLibHandlerBState *)state)->horizontalVelocity[0] = 0;
             ((RoomLibHandlerBState *)state)->horizontalVelocity[1] = 0;
-            if (RW32(state, 0x4) != 0) {
-                RW32((void *)RW32(state, 0x4), 0) = 2;
+            if (((RoomLibHandlerBState *)state)->signal != 0) {
+                *((RoomLibHandlerBState *)state)->signal = 2;
             }
             break;
         case 2:
@@ -1281,21 +1281,21 @@ void RoomLib_AdvanceArcToTarget(RoomEnt *obj) {
         }
     }
 
-    if (RW8(link, 0xE) < 2) {
+    if (link->variant < 2) {
         return;
     }
     link->pos[0] += ((RoomLibHandlerBState *)state)->horizontalVelocity[0];
-    link->pos[1] += RW32(state, 0x74);
+    link->pos[1] += ((RoomLibHandlerBState *)state)->phaseValue;
     link->pos[2] += ((RoomLibHandlerBState *)state)->horizontalVelocity[1];
-    RW32(state, 0x74) += RW32(state, 0x80);
+    ((RoomLibHandlerBState *)state)->phaseValue += ((RoomLibHandlerBState *)state)->mode;
     if (RW16(link, 0x2E) >= RW16(state, 0x36)) {
-        RW32(scratch, 0x48) = 1;
+        ((RoomLibArcWork *)scratch)->landed = 1;
         link->pos[0] = ((RoomLibHandlerBState *)state)->target[0];
         link->pos[1] = ((RoomLibHandlerBState *)state)->target[1];
         link->pos[2] = ((RoomLibHandlerBState *)state)->target[2];
     }
     func_800DFB20(self);
-    if (RW32(scratch, 0x48) != 0) {
+    if (((RoomLibArcWork *)scratch)->landed != 0) {
         RoomLib_ReleaseHandlerB(self);
     }
 }
@@ -1491,23 +1491,23 @@ void RoomLib_HandlerC(RoomEnt *obj) {
     scratch = (short *)0x1F800000;
     if (self->t1A == 0) {
         self->t1A = 1;
-        RW8(self, 0xA2) = 0;
-        RW32(link, 0x98) = (RW32(link, 0x98) & 0xFFF3FFFF) | 2;
+        ((RoomLibHandlerCState *)state)->finished = 0;
+        link->flags = (link->flags & 0xFFF3FFFF) | 2;
         if (self->active != 0 && link->target != 0) {
             link->target->flags |= 0x40000000;
         }
         state->phaseValue = (state->mode * (state->rate - 1)) >> 1;
         if (state->targetLink == 0) {
-            RW32(scratch, 0x28) = state->target[0];
-            RW32(scratch, 0x2C) = state->target[1];
-            RW32(scratch, 0x30) = state->target[2];
-            if (RW32(scratch, 0x2C) == -1) {
-                RW32(scratch, 0x2C) = RW32(D_8009D254, 0x2C);
+            ((RoomLibArcWork *)scratch)->point[0] = state->target[0];
+            ((RoomLibArcWork *)scratch)->point[1] = state->target[1];
+            ((RoomLibArcWork *)scratch)->point[2] = state->target[2];
+            if (((RoomLibArcWork *)scratch)->point[1] == -1) {
+                ((RoomLibArcWork *)scratch)->point[1] = ((RoomLink *)D_8009D254)->pos[1];
             }
         } else {
-            RW32(scratch, 0x28) = state->targetLink->pos[0];
-            RW32(scratch, 0x2C) = state->targetLink->pos[1];
-            RW32(scratch, 0x30) = state->targetLink->pos[2];
+            ((RoomLibArcWork *)scratch)->point[0] = state->targetLink->pos[0];
+            ((RoomLibArcWork *)scratch)->point[1] = state->targetLink->pos[1];
+            ((RoomLibArcWork *)scratch)->point[2] = state->targetLink->pos[2];
         }
 
         angle = FieldEng_VecToAngle((Vec3Fixed *)link->pos, (Vec3Fixed *)((int)scratch | 0x28)) &
@@ -1538,27 +1538,27 @@ void RoomLib_HandlerC(RoomEnt *obj) {
         gte_mvmva();
         gte_stmac(((RoomLibArcWork *)scratch)->offset);
 
-        RW32(state, 0x40) = RW32(scratch, 0x28) +
-                            (RW32(scratch, 0x38) << 12);
-        RW32(state, 0x44) = RW32(scratch, 0x2C) +
-                            (RW32(scratch, 0x3C) << 12);
-        RW32(state, 0x48) = RW32(scratch, 0x30) +
-                            (RW32(scratch, 0x40) << 12);
-        RW32(state, 0x80) =
-            (RW32(state, 0x40) - link->pos[0]) / state->rate;
-        RW32(state, 0x84) =
-            (RW32(state, 0x48) - link->pos[2]) / state->rate;
+        ((RoomLibHandlerCState *)state)->arcTarget[0] = ((RoomLibArcWork *)scratch)->point[0] +
+                            (((RoomLibArcWork *)scratch)->offset[0] << 12);
+        ((RoomLibHandlerCState *)state)->arcTarget[1] = ((RoomLibArcWork *)scratch)->point[1] +
+                            (((RoomLibArcWork *)scratch)->offset[1] << 12);
+        ((RoomLibHandlerCState *)state)->arcTarget[2] = ((RoomLibArcWork *)scratch)->point[2] +
+                            (((RoomLibArcWork *)scratch)->offset[2] << 12);
+        ((RoomLibHandlerCState *)state)->horizontalVelocity[0] =
+            (((RoomLibHandlerCState *)state)->arcTarget[0] - link->pos[0]) / state->rate;
+        ((RoomLibHandlerCState *)state)->horizontalVelocity[1] =
+            (((RoomLibHandlerCState *)state)->arcTarget[2] - link->pos[2]) / state->rate;
     }
 
-    RW32(scratch, 0x48) = 0;
-    if (RW8(state, 0x96) == 0) {
+    ((RoomLibArcWork *)scratch)->landed = 0;
+    if (((RoomLibHandlerCState *)state)->finished == 0) {
         switch (((int (*)(RoomEnt *))func_800DFB78)(self)) {
         case 0:
             break;
         case 1:
-            RW8(state, 0x96) = 1;
-            RW32(state, 0x80) = 0;
-            RW32(state, 0x84) = 0;
+            ((RoomLibHandlerCState *)state)->finished = 1;
+            ((RoomLibHandlerCState *)state)->horizontalVelocity[0] = 0;
+            ((RoomLibHandlerCState *)state)->horizontalVelocity[1] = 0;
             if (state->signal != 0) {
                 *state->signal = 2;
             }
@@ -1570,18 +1570,18 @@ void RoomLib_HandlerC(RoomEnt *obj) {
         }
     }
 
-    if (RW8(link, 0xE) < 2) {
+    if (link->variant < 2) {
         return;
     }
-    link->pos[0] += RW32(state, 0x80);
+    link->pos[0] += ((RoomLibHandlerCState *)state)->horizontalVelocity[0];
     link->pos[1] -= state->phaseValue;
-    link->pos[2] += RW32(state, 0x84);
+    link->pos[2] += ((RoomLibHandlerCState *)state)->horizontalVelocity[1];
     {
         int previous = state->phaseValue;
         state->phaseValue = previous - state->mode;
         if (state->heading != 0 && (previous ^ state->phaseValue) < 0) {
             state->callback = RoomLib_HandlerCPhase;
-            RW8(state, 0xE) = 0;
+            ((RoomLibHandlerCState *)state)->started = 0;
             state->localOffset[0] = 0;
             state->localOffset[1] = 0;
             state->localOffset[2] = 0;
@@ -1590,11 +1590,11 @@ void RoomLib_HandlerC(RoomEnt *obj) {
     }
     if (state->phaseValue < 0) {
         int y = link->pos[1];
-        int targetY = RW32(state, 0x44);
+        int targetY = ((RoomLibHandlerCState *)state)->arcTarget[1];
         int delta = y - targetY;
         if (delta >= 0) {
             link->pos[1] = targetY;
-            RW32(scratch, 0x48) = 1;
+            ((RoomLibArcWork *)scratch)->landed = 1;
         }
     }
     if (state->secondaryHeading > 0) {
@@ -1604,11 +1604,11 @@ void RoomLib_HandlerC(RoomEnt *obj) {
             state->secondaryZ = secondary->pos[2];
         }
         angle = FieldEng_VecToAngle((Vec3Fixed *)&state->secondaryX, (Vec3Fixed *)link->pos);
-        RW16(link, 0x3A) = FieldEng_TurnToward(
-            RW16(link, 0x3A), (short)angle, (short)state->secondaryHeading);
+        link->rotation[1] = FieldEng_TurnToward(
+            link->rotation[1], (short)angle, (short)state->secondaryHeading);
     }
     func_800DFB20(self);
-    if (RW32(scratch, 0x48) != 0) {
+    if (((RoomLibArcWork *)scratch)->landed != 0) {
         RoomLib_ReleaseHandlerC(self);
     }
 }
@@ -1630,18 +1630,18 @@ void RoomLib_AdvanceArcToTargetY(RoomEnt *obj) {
         register int targetY;
         register int accel;
         self->t1A = 1;
-        RW8(self, 0xA2) = 0;
-        if (RW32(self, 0x7C) == 0) {
-            RW32((void *)0x1F800000, 0x28) = RW32(self, 0x3C);
-            RW32((void *)0x1F800000, 0x2C) = RW32(self, 0x40);
-            RW32((void *)0x1F800000, 0x30) = RW32(self, 0x44);
+        ((RoomLibHandlerCState *)state)->finished = 0;
+        if (((RoomLibHandlerCState *)state)->targetLink == 0) {
+            ((RoomLibArcWork *)0x1F800000)->point[0] = ((RoomLibHandlerCState *)state)->target[0];
+            ((RoomLibArcWork *)0x1F800000)->point[1] = ((RoomLibHandlerCState *)state)->target[1];
+            ((RoomLibArcWork *)0x1F800000)->point[2] = ((RoomLibHandlerCState *)state)->target[2];
         } else {
-            RW32((void *)0x1F800000, 0x28) =
-                RW32((void *)RW32(self, 0x7C), 0x28);
-            RW32((void *)0x1F800000, 0x2C) =
-                RW32((void *)RW32(self, 0x7C), 0x2C);
-            RW32((void *)0x1F800000, 0x30) =
-                RW32((void *)RW32(self, 0x7C), 0x30);
+            ((RoomLibArcWork *)0x1F800000)->point[0] =
+                ((RoomLibHandlerCState *)state)->targetLink->pos[0];
+            ((RoomLibArcWork *)0x1F800000)->point[1] =
+                ((RoomLibHandlerCState *)state)->targetLink->pos[1];
+            ((RoomLibArcWork *)0x1F800000)->point[2] =
+                ((RoomLibHandlerCState *)state)->targetLink->pos[2];
         }
 
         angle = FieldEng_VecToAngle((Vec3Fixed *)link->pos, (Vec3Fixed *)&scratch[20]) & 0xFFF;
@@ -1663,24 +1663,24 @@ void RoomLib_AdvanceArcToTargetY(RoomEnt *obj) {
             scratch[8] = savedHi;
             scratch[6] = -RWU16(scratch, 0x4);
         }
-        scratch[16] = RW32(state, 0x50) >> 12;
+        scratch[16] = ((RoomLibHandlerCState *)state)->localOffset[0] >> 12;
         scratch[17] = 0;
-        scratch[18] = RW32(state, 0x58) >> 12;
+        scratch[18] = ((RoomLibHandlerCState *)state)->localOffset[2] >> 12;
         gte_ldrotmatrix((void *)scratch);
         gte_ldv0((void *)((int)scratch + 0x20));
         gte_mvmva();
         gte_stmac((void *)((int)scratch + 0x38));
 
-        ((RoomLibHandlerCState *)state)->arcTarget[0] = RW32(scratch, 0x28) +
-                            (RW32(scratch, 0x38) << 12);
-        ((RoomLibHandlerCState *)state)->arcTarget[1] = RW32(scratch, 0x2C) +
-                            (RW32(scratch, 0x3C) << 12);
-        ((RoomLibHandlerCState *)state)->arcTarget[2] = RW32(scratch, 0x30) +
-                            (RW32(scratch, 0x40) << 12);
+        ((RoomLibHandlerCState *)state)->arcTarget[0] = ((RoomLibArcWork *)scratch)->point[0] +
+                            (((RoomLibArcWork *)scratch)->offset[0] << 12);
+        ((RoomLibHandlerCState *)state)->arcTarget[1] = ((RoomLibArcWork *)scratch)->point[1] +
+                            (((RoomLibArcWork *)scratch)->offset[1] << 12);
+        ((RoomLibHandlerCState *)state)->arcTarget[2] = ((RoomLibArcWork *)scratch)->point[2] +
+                            (((RoomLibArcWork *)scratch)->offset[2] << 12);
 
         count = 0;
-        step = RW32(state, 0x7C);
-        accel = RW32(state, 0x88);
+        step = ((RoomLibHandlerCState *)state)->phaseValue;
+        accel = ((RoomLibHandlerCState *)state)->mode;
         targetY = ((RoomLibHandlerCState *)state)->arcTarget[1];
         y = link->pos[1];
         do {
@@ -1697,17 +1697,17 @@ void RoomLib_AdvanceArcToTargetY(RoomEnt *obj) {
         }
     }
 
-    RW32(scratch, 0x48) = 0;
-    if (RW8(state, 0x96) == 0) {
+    ((RoomLibArcWork *)scratch)->landed = 0;
+    if (((RoomLibHandlerCState *)state)->finished == 0) {
         switch (((int (*)(RoomEnt *))func_800DFB78)(self)) {
         case 0:
             break;
         case 1:
-            RW8(state, 0x96) = 1;
+            ((RoomLibHandlerCState *)state)->finished = 1;
             ((RoomLibHandlerCState *)state)->horizontalVelocity[0] = 0;
             ((RoomLibHandlerCState *)state)->horizontalVelocity[1] = 0;
-            if (RW32(state, 0x4) != 0) {
-                RW32((void *)RW32(state, 0x4), 0) = 2;
+            if (((RoomLibHandlerCState *)state)->signal != 0) {
+                *((RoomLibHandlerCState *)state)->signal = 2;
             }
             break;
         case 2:
@@ -1717,19 +1717,19 @@ void RoomLib_AdvanceArcToTargetY(RoomEnt *obj) {
         }
     }
 
-    if (RW8(link, 0xE) < 2) {
+    if (link->variant < 2) {
         return;
     }
     link->pos[0] += ((RoomLibHandlerCState *)state)->horizontalVelocity[0];
-    link->pos[1] += RW32(state, 0x7C);
+    link->pos[1] += ((RoomLibHandlerCState *)state)->phaseValue;
     link->pos[2] += ((RoomLibHandlerCState *)state)->horizontalVelocity[1];
-    RW32(state, 0x7C) += RW32(state, 0x88);
+    ((RoomLibHandlerCState *)state)->phaseValue += ((RoomLibHandlerCState *)state)->mode;
     if (RW16(link, 0x2E) >= RW16(state, 0x46)) {
-        RW32(scratch, 0x48) = 1;
+        ((RoomLibArcWork *)scratch)->landed = 1;
         link->pos[1] = ((RoomLibHandlerCState *)state)->arcTarget[1];
     }
     func_800DFB20(self);
-    if (RW32(scratch, 0x48) != 0) {
+    if (((RoomLibArcWork *)scratch)->landed != 0) {
         RoomLib_ReleaseHandlerC(self);
     }
 }
@@ -1819,21 +1819,21 @@ void RoomLib_RearmHandlerA(RoomEnt *o) {
 }
 void RoomLib_HandlerA(RoomEnt *o) {
     char *g = (char *)D_8009D254;
-    if (RW8(g, 0xE) < 4) {
+    if (((RoomLink *)g)->variant < 4) {
         int *sig;
-        RW32(g, 0x98) &= 0xFFF3FFFF;
+        ((RoomLink *)g)->flags &= 0xFFF3FFFF;
         sig = o->sub.signal;
         o->sub.cb = RoomLib_HandlerF;
         if (sig != 0) {
             *sig = 2;
         }
-        if (RW16(o, 0x44) == -1) {
-            RW16(o, 0x44) = FieldEng_VecToAngle(
+        if (o->h44 == -1) {
+            o->h44 = FieldEng_VecToAngle(
                 (Vec3Fixed *)o->link->pos,
-                (Vec3Fixed *)&RW32(D_8009D254, 0x28));
+                (Vec3Fixed *)((RoomLink *)D_8009D254)->pos);
         }
-        if (RW16(o, 0x48) == -1) {
-            RW16(o, 0x48) = RWU16(o, 0x44) + 0x800;
+        if (o->h48 == -1) {
+            o->h48 = RWU16(o, 0x44) + 0x800;
         }
         {
             int *e = &D_800966EC[RWU16(o, 0x44) & 0xFFF].word;
