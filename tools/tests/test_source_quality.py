@@ -4,6 +4,7 @@ import tempfile
 import unittest
 
 from tools.scripts import source_quality
+from tools.tests.csource import find_definition, function_text
 
 
 class SourceQualityTests(unittest.TestCase):
@@ -13,19 +14,14 @@ class SourceQualityTests(unittest.TestCase):
             path.write_text(text)
             return source_quality.classify(path)
 
-    def assert_symbol_is_semantic(self, root, name):
-        # Locate definitions, not call sites or prototypes, after TU merges.
-        pattern = re.compile(r"\b" + re.escape(name) + r"\s*\([^();{}]*\)\s*\{")
-        matches = [path for path in root.glob("*.c")
-                   if pattern.search(path.read_text())]
-        self.assertEqual(len(matches), 1, (name, matches))
-        self.assertEqual(source_quality.classify(matches[0]), "semantic_c")
+    def assert_symbol_is_semantic(self, name):
+        # Locate the defining unit by symbol: units are merged and moved.
+        self.assertEqual(source_quality.classify(find_definition(name)), "semantic_c")
 
     def test_plain_c_is_semantic(self):
         self.assertEqual(self.classify("int f(void) { return 1; }"), "semantic_c")
 
     def test_repaired_engine_load_and_distance_sources_are_semantic(self):
-        root = pathlib.Path(__file__).resolve().parents[2] / "src/main/engine"
         for name in ("func_800CC92C", "func_800C6148", "func_800C6584",
                      "func_800C6B90", "func_800C6B20", "func_800C2E08",
                      "func_800C2FF0", "func_800D3F64", "func_800CC878",
@@ -35,13 +31,12 @@ class SourceQualityTests(unittest.TestCase):
                      "func_800C9268", "func_800C9EA8", "func_800CACDC",
                      "func_800CB9F8"):
             with self.subTest(name=name):
-                self.assert_symbol_is_semantic(root, name)
+                self.assert_symbol_is_semantic(name)
 
     def test_repaired_render_load_and_tint_sources_are_semantic(self):
-        root = pathlib.Path(__file__).resolve().parents[2] / "src/main/render"
         for name in ("Pm_StopAll", "Render_ApplyScreenTint", "Render_StepFade"):
             with self.subTest(name=name):
-                self.assert_symbol_is_semantic(root, name)
+                self.assert_symbol_is_semantic(name)
 
     def test_font_step_modulo_is_semantic_c(self):
         root = pathlib.Path(__file__).resolve().parents[2]
@@ -49,14 +44,10 @@ class SourceQualityTests(unittest.TestCase):
             root / "src/main/render/Render_FontGlyphSelection.c"), "semantic_c")
 
     def test_wayne_item_table_store_is_semantic_c(self):
-        root = pathlib.Path(__file__).resolve().parents[2]
-        self.assertEqual(source_quality.classify(
-            root / "src/main/item/Inv_ActiveListController.c"), "semantic_c")
+        self.assert_symbol_is_semantic("Inv_LoadWayneItemsAsOverride")
 
     def test_field_map_entry_frame_is_semantic_c(self):
-        root = pathlib.Path(__file__).resolve().parents[2]
-        self.assertEqual(source_quality.classify(
-            root / "src/main/field/Field_GetMapEntry.c"), "semantic_c")
+        self.assert_symbol_is_semantic("Field_GetMapEntry")
 
     def test_equip_panel_alignment_is_semantic_c(self):
         root = pathlib.Path(__file__).resolve().parents[2]
@@ -84,14 +75,10 @@ class SourceQualityTests(unittest.TestCase):
             root / "src/main/menu/Menu_Dialogs.c"), "semantic_c")
 
     def test_akao_pitch_lfo_depth_is_semantic_c(self):
-        root = pathlib.Path(__file__).resolve().parents[2]
-        self.assertEqual(source_quality.classify(
-            root / "src/main/akao/Akao_SeqPitchLfo.c"), "semantic_c")
+        self.assert_symbol_is_semantic("SeqOp_SetPitchLFO")
 
     def test_akao_pitch_slide_voice_search_is_semantic_c(self):
-        root = pathlib.Path(__file__).resolve().parents[2]
-        self.assertEqual(source_quality.classify(
-            root / "src/main/akao/SeqOp_NoteOnWithPitchSlide.c"), "semantic_c")
+        self.assert_symbol_is_semantic("SeqOp_NoteOnWithPitchSlide")
 
     def test_audited_cpu_helpers_are_not_gte_exemptions(self):
         for name in ("gte_ldv0_short3", "gte_load_packed_short3",
@@ -148,20 +135,15 @@ class SourceQualityTests(unittest.TestCase):
                     self.assertNotIn(name, text)
 
     def test_arc_divisions_use_c_and_stock_expansion(self):
-        root = pathlib.Path(__file__).resolve().parents[2] / "src/overlays"
-        templates = ("RoomLib_AdvanceArcToTarget.inc", "RoomLib_AdvanceArcToTargetY.inc")
-        for name in templates:
-            text = (root / "room_lib" / name).read_text()
-            self.assertEqual(text.count("value /= count;"), 2)
-            self.assertNotIn("ROOMLIB_DIV_V0_A0_CHECKED", text)
-        callers = 0
-        for source in root.rglob("*.c"):
-            text = source.read_text()
-            if any('room_lib/' + name in text for name in templates):
-                callers += 1
-                with self.subTest(source=str(source)):
-                    self.assertIn("/* MASPSX_FLAGS: --expand-div */", text)
-        self.assertGreater(callers, 0)
+        # The arc steppers divide in C and rely on maspsx's stock div expansion
+        # rather than the retired ROOMLIB_DIV_V0_A0_CHECKED CPU helper.
+        for name in ("RoomLib_AdvanceArcToTarget", "RoomLib_AdvanceArcToTargetY"):
+            with self.subTest(name=name):
+                text = function_text(name)
+                self.assertEqual(len(re.findall(r"\) / count;", text)), 2)
+                self.assertNotIn("ROOMLIB_DIV_V0_A0_CHECKED", text)
+                self.assertIn("/* MASPSX_FLAGS: --expand-div */",
+                              find_definition(name).read_text())
 
     def test_cpu_helper_mentions_are_not_calls(self):
         text = '''
