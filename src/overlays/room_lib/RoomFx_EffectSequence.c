@@ -341,7 +341,6 @@ void RoomFx_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control, Roo
     RoomOverlay024Vec4 draw_scale;
     RoomOverlay024Vec4 second_scale;
     RoomOverlay024Vec4 third_scale;
-    s16 *final_alpha_slot;
     s32 draw_zero;
     volatile RoomOverlay024Transform *ordered_transform;
 
@@ -463,9 +462,8 @@ void RoomFx_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control, Roo
     matrix.t[0] = state->final_x;
     matrix.t[1] = state->final_y;
     matrix.t[2] = state->final_z;
-    final_alpha_slot = &D_80192C28.depth;
-    *final_alpha_slot = state->final_alpha;
-    func_800C42A4((FieldGlowSprite *)((char *)final_alpha_slot - 0xA), (GteMatrix *)&matrix, 1);
+    D_80192C28.depth = state->final_alpha;
+    func_800C42A4((FieldGlowSprite *)&D_80192C28, (GteMatrix *)&matrix, 1);
 }
 
 int rand(void);
@@ -595,7 +593,6 @@ void RoomFx_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *control
     RoomOverlay024Vec4 draw_scale;
     RoomOverlay024Vec4 second_scale;
     RoomOverlay024Vec4 third_scale;
-    s16 *final_alpha_slot;
     s32 draw_zero;
     volatile RoomOverlay024Transform *ordered_transform;
 
@@ -713,9 +710,8 @@ void RoomFx_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *control
     matrix.t[0] = state->final_x;
     matrix.t[1] = state->final_y;
     matrix.t[2] = state->final_z;
-    final_alpha_slot = &D_80192C28.depth;
-    *final_alpha_slot = state->final_alpha;
-    func_800C42A4((FieldGlowSprite *)((char *)final_alpha_slot - 0xA), (GteMatrix *)&matrix, 1);
+    D_80192C28.depth = state->final_alpha;
+    func_800C42A4((FieldGlowSprite *)&D_80192C28, (GteMatrix *)&matrix, 1);
 }
 
 void RoomFx_UpdatePairedSpriteBurst(
