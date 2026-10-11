@@ -274,6 +274,9 @@ void Entity_WriteFieldByCmd(FieldActor *actor, int command, int value);
  * migrated and build-checked.
  */
 
+/* The actor whose task-node lists are being run. */
+extern FieldActor *g_CurrentEntity;
+
 /* Spawns the actors of a scene record after an existing actor. */
 FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull);
 

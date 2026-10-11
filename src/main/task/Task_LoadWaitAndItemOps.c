@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "pe1/task_node.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/field_actor.h"
@@ -8,7 +9,9 @@
 #include "pe1/entity_frame_update.h"
 
 extern unsigned char g_ScreenTransitionState[];
-extern int g_SceneDataTable0;
+/* COMMON supplies small-data metadata to MASPSX. */
+int g_SceneDataTable0;
+TaskNode *g_TaskNodePool;
 
 int Entity_YieldOnLoading(void) {
     if ((g_ScreenTransitionState[0] & 3) >= 2) {
@@ -20,14 +23,13 @@ int Entity_YieldOnLoading(void) {
     return 1;
 }
 
-extern FieldActor *g_CurrentEntity[];
 
 int Inv_CountByValue(int arg0);
 
 int Task_ScaleAnimValue(int **arg0) {
     int value = *arg0[0];
-    int scale = (s16)g_CurrentEntity[0]->render_object.hit_cylinder.radius * 2;
-    RenderObjectHeader *dst = g_CurrentEntity[0]->render_object.header;
+    int scale = (s16)g_CurrentEntity->render_object.hit_cylinder.radius * 2;
+    RenderObjectHeader *dst = g_CurrentEntity->render_object.header;
 
     dst->shadow_radius = (scale * value) >> 16;
     return 1;

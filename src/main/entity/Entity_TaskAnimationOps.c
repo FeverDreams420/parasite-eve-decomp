@@ -3,10 +3,12 @@
 #include "pe1/task_node.h"
 #include "pe1/battle_entity_anim.h"
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 
-extern FieldActor *g_CurrentEntity[];
-extern int g_SceneDataTable0;
+/* COMMON supplies small-data metadata to MASPSX. */
+int g_SceneDataTable0;
+TaskNode *g_TaskNodePool;
 
 int Entity_MarkAnimPending(void) {
     unsigned int i;
@@ -16,7 +18,7 @@ int Entity_MarkAnimPending(void) {
 
     i = 0;
     skip = g_TaskNodePool;
-    entity = g_CurrentEntity[0];
+    entity = g_CurrentEntity;
     do {
         node = entity->task_node_lists[0];
         if (node != 0) {
@@ -42,7 +44,7 @@ int Entity_AdvancePendingAnim(void) {
 
     i = 0;
     active = 1;
-    entity = g_CurrentEntity[0];
+    entity = g_CurrentEntity;
     do {
         node = entity->task_node_lists[0];
         if (node != 0) {
@@ -71,7 +73,7 @@ int Entity_MarkNodeAnimPendingById(int **arg0) {
     TaskNode *node;
 
     i = 0;
-    entity = g_CurrentEntity[0];
+    entity = g_CurrentEntity;
     do {
         node = entity->task_node_lists[0];
         if (node != 0) {
@@ -100,7 +102,7 @@ int Entity_AdvanceNodeById(int **arg0) {
 
     i = 0;
     active_value = 1;
-    entity = g_CurrentEntity[0];
+    entity = g_CurrentEntity;
     do {
         node = entity->task_node_lists[0];
         if (node != 0) {
@@ -129,7 +131,7 @@ int Task_RunEntityCommand(int **arg0) {
     register int active asm("$5");
     register int stack asm("$4");
 
-    result = (signed char)Entity_TriggerAnimEvent((BattleEntity *)g_CurrentEntity[0], *(unsigned char *)arg0[0]);
+    result = (signed char)Entity_TriggerAnimEvent((BattleEntity *)g_CurrentEntity, *(unsigned char *)arg0[0]);
     *arg0[1] = result;
     if (*arg0[1] != 0) {
         return 1;

@@ -13,7 +13,6 @@
 #include "pe1/pm.h"
 #include "pe1/save.h"
 
-extern FieldActor *g_CurrentEntity;
 
 int Math_FixedMul(int arg0, int arg1);
 

@@ -180,7 +180,7 @@ FieldActor *g_EntityFreeListHead;
 Entity *g_PlayerEntity;
 u16 g_EntityFreePoolCount;
 int g_FieldMoveLock;
-Entity *g_CurrentEntity;
+FieldActor *g_CurrentEntity;
 
 void Entity_DispatchCallbacks(FieldActor *a);
 

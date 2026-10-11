@@ -1,18 +1,20 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "common.h"
 #include "pe1/field_actor.h"
 #include "pe1/task_node.h"
 #include "pe1/field_sfx.h"
 
-extern FieldActor *g_CurrentEntity[];
-extern int g_SceneDataTable0;
+/* COMMON supplies small-data metadata to MASPSX. */
+int g_SceneDataTable0;
+TaskNode *g_TaskNodePool;
 
 int Entity_YieldWhileMoving(void) {
     int ret;
 
     ret = 0;
-    if ((g_CurrentEntity[0]->flags & 2) == 0) {
+    if ((g_CurrentEntity->flags & 2) == 0) {
         return 1;
     }
 
@@ -29,10 +31,10 @@ int Entity_SelectFieldSetter(int **arg0) {
         selector = *arg0[0];
         switch (selector) {
         case 1:
-            g_CurrentEntity[0]->script_cursor_1a0 = 0;
+            g_CurrentEntity->script_cursor_1a0 = 0;
             break;
         case 2:
-            g_CurrentEntity[0]->script_cursor_19c = 0;
+            g_CurrentEntity->script_cursor_19c = 0;
             break;
         case 3:
             g_TaskNodePool->next_value = 0;
@@ -42,13 +44,13 @@ int Entity_SelectFieldSetter(int **arg0) {
         selector = *arg0[0];
         switch (selector) {
         case 1:
-            g_CurrentEntity[0]->script_cursor_1a0 = (unsigned int *)(g_CurrentEntity[0]->script_base + (value << 1));
+            g_CurrentEntity->script_cursor_1a0 = (unsigned int *)(g_CurrentEntity->script_base + (value << 1));
             break;
         case 2:
-            g_CurrentEntity[0]->script_cursor_19c = (unsigned int *)(g_CurrentEntity[0]->script_base + (value << 1));
+            g_CurrentEntity->script_cursor_19c = (unsigned int *)(g_CurrentEntity->script_base + (value << 1));
             break;
         case 3:
-            g_TaskNodePool->next_value = (int)(g_CurrentEntity[0]->script_base + (value << 1));
+            g_TaskNodePool->next_value = (int)(g_CurrentEntity->script_base + (value << 1));
             break;
         }
     }
@@ -58,7 +60,7 @@ int Entity_SelectFieldSetter(int **arg0) {
 
 int Entity_SetCurrentFlags(int **args)
 {
-    g_CurrentEntity[0]->flags |= (*args)[0];
+    g_CurrentEntity->flags |= (*args)[0];
     return 1;
 }
 
@@ -103,7 +105,7 @@ int Task_PlayFieldSfx(FieldSfxScriptArgs *arg0) {
     b = *(unsigned char *)ptr1;
     ptr0 = (void *)arg0->typeId;
     c = *(unsigned short *)ptr0;
-    d = g_CurrentEntity[0]->field_sfx_id;
+    d = g_CurrentEntity->field_sfx_id;
     Task_QueueFieldSfx(a, b, c, d, 0);
     return 1;
 }
@@ -151,7 +153,7 @@ int Entity_FindNodeById(unsigned short **arg0) {
         return 0;
     }
 
-    base = g_CurrentEntity[0];
+    base = g_CurrentEntity;
     search_id = id;
     bucket = 0;
     do {
@@ -170,17 +172,17 @@ int Entity_FindNodeById(unsigned short **arg0) {
 }
 
 int Task_GetCurrentEntityFieldD(int **arg0) {
-    *arg0[0] = g_CurrentEntity[0]->sub_id;
+    *arg0[0] = g_CurrentEntity->sub_id;
     return 1;
 }
 
 int Task_SetCurrentEntityFieldD(int **arg0) {
-    g_CurrentEntity[0]->sub_id = *arg0[0];
+    g_CurrentEntity->sub_id = *arg0[0];
     return 1;
 }
 
 int Task_GetCurrentEntityField24(int **arg0) {
-    *arg0[0] = g_CurrentEntity[0]->field_sfx_id;
+    *arg0[0] = g_CurrentEntity->field_sfx_id;
     return 1;
 }
 
@@ -191,7 +193,7 @@ int Entity_MarkNodeFree(void) {
     TaskNode *node;
 
     i = 0;
-    entity = g_CurrentEntity[0];
+    entity = g_CurrentEntity;
     skip = g_TaskNodePool;
     do {
         node = (TaskNode *)entity->task_node_lists[i];

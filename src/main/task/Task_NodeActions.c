@@ -2,7 +2,8 @@
 #include "pe1/gte_types.h"
 #include "pe1/entity_animation.h"
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 --expand-div */
+/* MASPSX_FLAGS: -G8 --expand-div --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 
 #include "pe1/task_node.h"
 #include "pe1/field_actor.h"
@@ -16,10 +17,13 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNodeTarget18, actor) == 0,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, target18) == 0x18,
                   task_node_target18_offset);
 
-extern TaskNode *g_TaskNodeFreeListHead;
-extern u16 g_TaskNodeSeqCounter[1];
-extern FieldActor *g_CurrentEntity[];
-extern FieldActor *g_CurrentEntityForDirection[] asm("g_CurrentEntity");
+/* COMMON supplies small-data metadata to MASPSX. */
+TaskNode *g_TaskNodeFreeListHead;
+u16 g_TaskNodeSeqCounter[1];
+TaskNode *g_TaskNodePool;
+TaskNode *D_8009D300;
+int *D_8009CE00;
+int g_SceneDataTable0;
 
 int Task_SpawnChildNode(int **args) {
     TaskNode *node = g_TaskNodePool;
@@ -35,7 +39,7 @@ int Task_SpawnChildNode(int **args) {
         TaskNode *next;
 
         value_ptr = args[0];
-        state = g_CurrentEntity[0];
+        state = g_CurrentEntity;
         entry = g_TaskNodeFreeListHead;
         seq = g_TaskNodeSeqCounter[0];
         scriptValue = *value_ptr;
@@ -60,12 +64,12 @@ int Task_SpawnChildNode(int **args) {
             if (head != 0) {
                 head->prev = entry;
             }
-            g_CurrentEntity[0]->task_node_lists[2] = entry;
+            g_CurrentEntity->task_node_lists[2] = entry;
         }
     } else {
         register TaskNode *entry asm("$5") = g_TaskNodeFreeListHead;
         register int *value_ptr asm("$2") = args[0];
-        register FieldActor *state asm("$4") = g_CurrentEntity[0];
+        register FieldActor *state asm("$4") = g_CurrentEntity;
         TaskNode *next = entry->next;
         int value;
 
@@ -99,11 +103,6 @@ int Task_SpawnChildNode(int **args) {
     return 1;
 }
 
-extern int g_SceneDataTable0;
-extern FieldActor *g_CurrentEntity[];
-/* Same symbol; keep the post-call address calculation independent in GCC. */
-extern FieldActor *g_CurrentEntityAfterAction[] asm("g_CurrentEntity");
-
 int Task_SetEntityActionAndWait(int **arg0) {
     TaskNode *node = g_TaskNodePool;
     int flags = node->flags;
@@ -116,20 +115,20 @@ int Task_SetEntityActionAndWait(int **arg0) {
         ptr = arg0[0];
         {
             FieldActor *state;
-            state = g_CurrentEntity[0];
+            state = g_CurrentEntity;
             mode = *(u16 *)ptr;
             Entity_SetActionMode((BattleEntity *)state, mode);
         }
         {
             FieldActor *state;
-            state = g_CurrentEntityAfterAction[0];
+            state = g_CurrentEntity;
             state->flags &= -0x101;
         }
     } else {
         FieldActor *state;
         int keep;
 
-        state = g_CurrentEntity[0];
+        state = g_CurrentEntity;
         if (state->action == 0) {
             node->flags = flags & 0xFFDF;
             return 1;
@@ -173,7 +172,7 @@ int Task_WaitAnimRange(void) {
     int cmp;
     register int divisor asm("$2");
 
-    entity = g_CurrentEntity[0];
+    entity = g_CurrentEntity;
     node = g_TaskNodePool;
     max_frame = entity->anim.fixed;
     current = max_frame;
@@ -194,7 +193,7 @@ int Task_WaitAnimRange(void) {
         return 0;
     }
 
-    max_frame = g_CurrentEntity[0]->action;
+    max_frame = g_CurrentEntity->action;
     frame = next >> 16;
     if (max_frame < frame) {
         next = (frame % (max_frame + 1)) << 16;
@@ -253,7 +252,7 @@ int Task_TurnTowardPointStep(int **arg0) {
         int dy;
         register int tmp asm("$2");
 
-        state = g_CurrentEntityForDirection[0];
+        state = g_CurrentEntity;
         tmp = state->pos_x;
         dx = (tmp - x) >> 16;
         dy = (state->pos_z - y) >> 16;
@@ -265,7 +264,7 @@ int Task_TurnTowardPointStep(int **arg0) {
 
     {
         FieldActor *state;
-        state = g_CurrentEntity[0];
+        state = g_CurrentEntity;
         angle &= 0xFFF;
         original = state->rot_y;
     }
@@ -311,7 +310,7 @@ int Task_TurnTowardPointStep(int **arg0) {
         }
         {
             FieldActor *state;
-            state = g_CurrentEntity[0];
+            state = g_CurrentEntity;
             stepped &= 0xFFF;
             state->rot_y = stepped;
         }
@@ -340,7 +339,6 @@ int Task_TurnTowardPointStep(int **arg0) {
 
 extern Pe1GlobalSlot D_8009D254;
 extern u8 *D_8009D2F0[];
-extern int *D_8009CE00;
 
 int Math_FixedMul(int a, int b);
 
@@ -475,7 +473,6 @@ int Task_MoveTowardPoint(int **args) {
 extern u8 *D_8009D20C[];
 extern Pe1GlobalSlot D_8009D254;
 extern u8 *D_8009D2F0[];
-extern int *D_8009CE00;
 
 int Math_FixedMul(int a, int b);
 

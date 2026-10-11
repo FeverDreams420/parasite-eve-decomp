@@ -1,11 +1,13 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 
 #include "pe1/field_actor.h"
 #include "pe1/task_node.h"
 
-extern FieldActor *g_CurrentEntity[];
-extern int g_SceneDataTable0;
+/* COMMON supplies small-data metadata to MASPSX. */
+int g_SceneDataTable0;
+TaskNode *g_TaskNodePool;
 
 int Task_WaitAnimFrameMatch(void) {
     TaskNode *state;
@@ -14,7 +16,7 @@ int Task_WaitAnimFrameMatch(void) {
     int ret;
 
     state = g_TaskNodePool;
-    entity = g_CurrentEntity[0];
+    entity = g_CurrentEntity;
     state->active = 1;
     ret = 0;
     if (entity->anim.parts.integer == entity->anim_frame_target) {

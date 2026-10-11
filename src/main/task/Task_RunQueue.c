@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "pe1/task_queue.h"
 #include "pe1/field_actor.h"
 
@@ -77,9 +78,7 @@ int Task_JumpToEntityOffset(TaskJumpOffsetEntry **arg0)
     return 1;
 }
 
-extern FieldActor *g_CurrentEntity[];
-
 int Entity_MarkCurrentDead(void) {
-    g_CurrentEntity[0]->flags |= 0x10;
+    g_CurrentEntity->flags |= 0x10;
     return 0;
 }

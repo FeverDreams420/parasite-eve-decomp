@@ -62,7 +62,6 @@ int Task_SetBattleStateMode(void) {
     return 1;
 }
 
-extern FieldActor *g_CurrentEntity;
 
 int Task_SetEntityField224(short **arg0) {
     FieldActor *entity;

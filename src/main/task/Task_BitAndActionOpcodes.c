@@ -34,7 +34,6 @@ int Entity_SetGlobalFlags(int **arg0) {
     return 1;
 }
 
-extern FieldActor *g_CurrentEntity;
 
 int Entity_SetCurrentActionMode(u16 **arg0) {
     FieldActor *entity;

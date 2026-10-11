@@ -1,7 +1,6 @@
 #include "common.h"
 #include "pe1/field_actor.h"
 
-extern FieldActor *g_CurrentEntity;
 
 int Math_FixedDivide(int a, int b);
 int Math_FixedMul(int arg0, int arg1);

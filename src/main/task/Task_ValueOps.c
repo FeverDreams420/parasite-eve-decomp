@@ -9,9 +9,8 @@
 #include "pe1/field_actor.h"
 #include "pe1/gte.h"
 
-extern FieldActor *g_CurrentEntity;
 extern FieldActor *g_PlayerEntity;
-extern int g_RenderStateFlags[];
+extern int g_RenderStateFlags;
 extern u32 D_8009D26C;
 extern u32 D_8009D1F4[];
 extern u32 D_800A7770[];
@@ -121,7 +120,9 @@ int Task_SetEntityVec3(int **args) {
         g_CurrentEntity->base_y = g_CurrentEntity->pos_y;
         g_CurrentEntity->base_z = g_CurrentEntity->pos_z;
         if (g_CurrentEntity == g_PlayerEntity) {
-            g_RenderStateFlags[0] |= 0x80;
+            int *flags = &g_RenderStateFlags;
+
+            *flags |= 0x80;
         }
         break;
     case 1:

@@ -7,7 +7,6 @@ extern int g_GameState;
 #include "pe1/task_anim.h"
 #include "pe1/font.h"
 
-extern FieldActor *g_CurrentEntity;
 
 int Task_SetSceneFlag2000(void) {
     int *ptr = &g_GameState;

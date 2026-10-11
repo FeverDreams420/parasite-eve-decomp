@@ -10,7 +10,6 @@
 
 #define NULL ((void *)0)
 
-extern FieldActor *g_CurrentEntity;
 extern FieldActor *g_FieldActorListHead;
 extern FieldActor *g_PlayerEntity;
 #include "pe1/game_timers.h"

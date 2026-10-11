@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "common.h"
 #include "pe1/memcard.h"
 #include "pe1/task_node.h"
@@ -14,7 +15,7 @@
 void Battle_StartEncounter(int mode);
 M2C_UNK func_80042F20();
 int CD_StepReadState(int active);
-extern s32 g_SceneDataTable0;
+s32 g_SceneDataTable0;
 extern struct { char _[16]; } D_8009D1A0_o __asm__("g_GameStateFlags");
 extern s32 D_8009D1A0_rd[] __asm__("g_GameStateFlags");
 #define g_GameStateFlags (*(s32 *)&D_8009D1A0_o)
@@ -170,8 +171,10 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, target1c) == 0x1C,
 
 #define S16_AT(ptr, off) (*(s16 *)((u8 *)(ptr) + (off)))
 
-extern FieldActor *D_8009D2F0[];
-extern int *D_8009CE00;
+/* COMMON supplies small-data metadata to MASPSX. */
+int *D_8009CE00;
+TaskNode *D_8009D300;
+TaskNode *g_TaskNodePool;
 
 int Math_FixedMul(int a, int b);
 
@@ -195,7 +198,7 @@ int Camera_TrackRelativeOffset(int **args) {
     int remaining_distance;
     int movement_distance;
 
-    speed_entity = D_8009D2F0[0];
+    speed_entity = g_CurrentEntity;
     current_x = speed_entity->pos_x;
     current_z = speed_entity->pos_z;
     if (speed_entity != D_8009D254.value.pointer) {
@@ -203,7 +206,7 @@ int Camera_TrackRelativeOffset(int **args) {
     } else {
         movement_speed = Math_FixedMul(0x50000, speed_entity->move_factor);
     }
-    movement_speed = Math_FixedMul(movement_speed, D_8009D2F0[0]->move_speed << 4);
+    movement_speed = Math_FixedMul(movement_speed, g_CurrentEntity->move_speed << 4);
 
     init_state = D_8009D300;
     if ((init_state->flags & 0x20) == 0) {
@@ -226,7 +229,7 @@ int Camera_TrackRelativeOffset(int **args) {
     target_angle &= 0xFFF;
     desired_angle = target_angle;
     if (turn_speed != 0) {
-        current_angle = D_8009D2F0[0]->rot_y;
+        current_angle = g_CurrentEntity->rot_y;
         if (current_angle < desired_angle) {
             angle_difference = desired_angle - current_angle;
             if (angle_difference < 0x800) {
@@ -269,15 +272,15 @@ int Camera_TrackRelativeOffset(int **args) {
             }
         }
         target_angle &= 0xFFF;
-        D_8009D2F0[0]->rot_y = target_angle;
+        g_CurrentEntity->rot_y = target_angle;
     }
 
-    D_8009D2F0[0]->motion_x = Math_FixedMul(-movement_speed, rsin(target_angle) << 4);
+    g_CurrentEntity->motion_x = Math_FixedMul(-movement_speed, rsin(target_angle) << 4);
     movement_z = Math_FixedMul(-movement_speed, rcos(target_angle) << 4);
     current_x = (target_x - current_x) >> 16;
     current_z = (target_z - current_z) >> 16;
     remaining_distance = current_x * current_x + current_z * current_z;
-    motion_entity = D_8009D2F0[0];
+    motion_entity = g_CurrentEntity;
     current_x = S16_AT(motion_entity, 0x6A);
     current_z = movement_z >> 16;
     movement_distance = current_x * current_x + current_z * current_z;
@@ -297,8 +300,6 @@ int Camera_TrackRelativeOffset(int **args) {
     }
 }
 
-extern FieldActor *g_CurrentEntity[];
-#define g_CurrentEntity (g_CurrentEntity[0])
 
 s32 Camera_StepAngleFade(s32 **arg0) {
     register s32 temp_a1 asm("$5");
