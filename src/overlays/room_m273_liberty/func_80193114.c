@@ -4,25 +4,26 @@ extern u8 D_8019A8C8[];
 
 extern s32 func_80052B2C(void);
 
-s32 func_80193114(s32 arg0, s32 **arg1) {
+s32 func_80193114(s32 arg0, RoomLibertyChoiceInputs *inputs) {
     s32 variant;
+    s32 distanceBand;
     s32 threshold;
     s32 i;
     s32 sum;
     u8 *weights;
 
-    variant = (*arg1[0] >> 10) & 3;
-    arg1 = (s32 **)*arg1[1];
+    variant = (*inputs->variantBits >> 10) & 3;
+    distanceBand = *inputs->distance;
 
-    if ((s32)arg1 < 0x280) {
-        arg1 = (s32 **)0;
-    } else if ((s32)arg1 < 0x600) {
-        arg1 = (s32 **)1;
+    if (distanceBand < 0x280) {
+        distanceBand = 0;
+    } else if (distanceBand < 0x600) {
+        distanceBand = 1;
     } else {
-        arg1 = (s32 **)2;
+        distanceBand = 2;
     }
 
-    weights = D_8019A8C8 + (arg0 * 84) + ((s32)arg1 * 28) + (variant * 7);
+    weights = D_8019A8C8 + (arg0 * 84) + (distanceBand * 28) + (variant * 7);
     threshold = ((func_80052B2C() & 0xFF) * 100) / 0x100;
 
     i = 0;

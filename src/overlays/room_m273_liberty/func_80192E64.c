@@ -28,7 +28,7 @@ int func_80192E64(char *base, int unused, unsigned int operation, int arg3,
         break;
     }
     case 3:
-        *(s32 *)arg4 = func_80193114(*(s32 *)arg3, (s32 **)fields);
+        *(s32 *)arg4 = func_80193114(*(s32 *)arg3, (RoomLibertyChoiceInputs *)fields);
         break;
     case 4:
         *(s32 *)fields = arg3;

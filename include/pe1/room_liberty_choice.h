@@ -5,6 +5,13 @@
 
 /* Selects a weighted outcome using the two input pointers in the script
  * parameter block: variant bits and distance band. */
-s32 func_80193114(s32 value, s32 **inputs);
+typedef struct RoomLibertyChoiceInputs {
+    s32 *variantBits;
+    s32 *distance;
+} RoomLibertyChoiceInputs;
+
+PE1_STATIC_ASSERT(sizeof(RoomLibertyChoiceInputs) == 8, room_liberty_choice_inputs_size);
+
+s32 func_80193114(s32 value, RoomLibertyChoiceInputs *inputs);
 
 #endif
