@@ -209,7 +209,7 @@ extern u16 D_8009E360[];
 extern u8 g_BattleStatusRowPosY[];
 extern u8 D_8009E508[];
 extern u8 D_8009E516[];
-extern u8 g_OtBufferTable[];
+extern u8 *g_OtBufferTable[];
 
 void Battle_DrawSpellName(void) {
     s32 c;
@@ -272,7 +272,7 @@ void Battle_DrawSpellName(void) {
             cD = cD * 4;
             *(s16 *)(D_8009E516 + eo) = clut;
             __asm__ __volatile__("");
-            AddPrim(*(u8 **)(g_OtBufferTable + cD) + 0x10, eo + q508);
+            AddPrim(*(u8 **)((u8 *)g_OtBufferTable + cD) + 0x10, eo + q508);
         }
         return;
     }
@@ -358,7 +358,7 @@ void Battle_DrawSpellName(void) {
                 *(s16 *)((u8 *)t2 + 8) = xs;
                 *(s16 *)((u8 *)t2 + 0xA) = ys;
                 xs -= 6;
-                AddPrim(*(u8 **)(g_OtBufferTable + cJ * 4) + 0x10, (void *)a2v);
+                AddPrim(*(u8 **)((u8 *)g_OtBufferTable + cJ * 4) + 0x10, (void *)a2v);
             }
             {
                 s16 inext = i + 1;

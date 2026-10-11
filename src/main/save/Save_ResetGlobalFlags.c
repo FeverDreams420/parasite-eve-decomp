@@ -5,8 +5,8 @@
 unsigned char g_BattleActionQueueCount;
 unsigned char g_BattleActionIndex;
 unsigned char g_BattleRemainingActions;
-unsigned char g_BattleActiveTurnSlot;
-unsigned char g_BattleItemMenuState;
+signed char g_BattleActiveTurnSlot;
+signed char g_BattleItemMenuState;
 
 void Save_ResetGlobalFlags(void) {
     g_BattleActionQueueCount = 0;
