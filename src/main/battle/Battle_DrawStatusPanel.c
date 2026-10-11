@@ -1,11 +1,16 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "pe1/battle_status.h"
+
+/* COMMON supplies small-data metadata to MASPSX; the draw slot stays
+ * absolute. */
+s32 D_8009D230;
 
 /* Draw a floating damage/recovery number, or the enemy MISS label.
  * Each frame has ten panel slots (0x578 / 0x8C), each with five 28-byte
  * texture-page/sprite packets. Repeated byte stores deliberately retain
- * the original index reloads and separate symbol views.
+ * the original index reloads.
  * Matching debt: 9 pins and four empty barriers. Retail sizes the digit
  * buffer at 56 bytes although a 16-bit value needs at most five digits.
  * GCC rotates the digit-conversion condition into two blocks.
@@ -34,7 +39,7 @@ void Battle_DrawStatusPanel(s32 mode, BattleStatusPanel *input) {
     panelValue = panel->value;
     number = panelValue;
     if ((panelValue < 0) && (number = 0, ((mode & 0xFF) == 1))) {
-        register s32 frame asm("$2") = g_BattlePanelInitialDrawSlotView[0];
+        register s32 frame asm("$2") = D_8009CDDC;
         register s32 slotIndex asm("$4") = D_8009D230;
         register s32 x asm("$6") = panel->x;
         register s32 y asm("$7");
@@ -46,12 +51,12 @@ void Battle_DrawStatusPanel(s32 mode, BattleStatusPanel *input) {
         asm("" : : "r"(screenX));
         timer -= 30;
         screenY = y + timer;
-        *(D_800B01CD + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578))) = 0;
-        *(D_800B01CE + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578))) = 0;
-        *(D_800B01D4 + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578))) = 0x50;
-        *(D_800B01D5 + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578))) = 0xE0;
+        *(D_800B01CD + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578))) = 0;
+        *(D_800B01CE + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578))) = 0;
+        *(D_800B01D4 + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578))) = 0x50;
+        *(D_800B01D5 + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578))) = 0xE0;
         {
-            register s32 slot asm("$7") = g_BattlePanelDrawSlotView[0];
+            register s32 slot asm("$7") = D_8009CDDC;
             missFrameOffset = slot * 0x578;
             panelOffset = D_8009D230 * 0x8C;
             missSprite = (RenderSpritePacket *)(missFrameOffset + panelOffset + ((u8 *)D_800B01C8));
@@ -89,43 +94,43 @@ void Battle_DrawStatusPanel(s32 mode, BattleStatusPanel *input) {
                 switch (panel->style) {
                     case 0:
                     colorOffset = lastDigit * 0x1C;
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.r = panel->timer * 4;
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.g = panel->timer * 4;
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = panel->timer * 4;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.r = panel->timer * 4;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.g = panel->timer * 4;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = panel->timer * 4;
                     break;
                     case 1:
                     colorOffset = lastDigit * 0x1C;
                     {
-                        RenderSpritePacket *sprite = ((RenderSpritePacket *)(colorOffset + ((g_BattlePanelDrawSlotView[0] * 0x578) + (D_8009D230 * 0x8C)) + ((u8 *)D_800B01C8)));
+                        RenderSpritePacket *sprite = ((RenderSpritePacket *)(colorOffset + ((D_8009CDDC * 0x578) + (D_8009D230 * 0x8C)) + ((u8 *)D_800B01C8)));
                         sprite->color.bytes.r = 0;
                     }
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.g = panel->timer * 4;
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = 0;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.g = panel->timer * 4;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = 0;
                     break;
                     case 2:
                     colorOffset = lastDigit * 0x1C;
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.r = panel->timer * 4;
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.g = panel->timer * 4;
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = 0;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.r = panel->timer * 4;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.g = panel->timer * 4;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = 0;
                     break;
                     case 3:
                     colorOffset = lastDigit * 0x1C;
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.r = panel->timer * 4;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.r = panel->timer * 4;
                     {
-                        RenderSpritePacket *sprite = ((RenderSpritePacket *)(colorOffset + ((g_BattlePanelDrawSlotView[0] * 0x578) + (D_8009D230 * 0x8C)) + ((u8 *)D_800B01C8)));
+                        RenderSpritePacket *sprite = ((RenderSpritePacket *)(colorOffset + ((D_8009CDDC * 0x578) + (D_8009D230 * 0x8C)) + ((u8 *)D_800B01C8)));
                         sprite->color.bytes.g = 0;
                     }
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = panel->timer * 4;
+                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = panel->timer * 4;
                     break;
                 }
                 signedDigitIndex = lastDigit << 24;
                 digitIndex = signedDigitIndex >> 0x18;
                 digitOffset = digitIndex * 0x1C;
                 screenX += 8;
-                ((RenderSpritePacket *)(digitOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->u = (s8) (digits[digitIndex] * 8);
-                ((RenderSpritePacket *)(digitOffset + ((D_8009D230 * 0x8C) + (g_BattlePanelDrawSlotView[0] * 0x578)) + ((u8 *)D_800B01C8)))->v = 0xE0;
+                ((RenderSpritePacket *)(digitOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->u = (s8) (digits[digitIndex] * 8);
+                ((RenderSpritePacket *)(digitOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->v = 0xE0;
                 {
-                    s32 slot = g_BattlePanelDrawSlotView[0];
+                    s32 slot = D_8009CDDC;
                     frameOffset = slot * 0x578;
                     digitPanelOffset = D_8009D230 * 0x8C;
                     digitSprite = (RenderSpritePacket *)(digitOffset + (frameOffset + digitPanelOffset) + ((u8 *)D_800B01C8));

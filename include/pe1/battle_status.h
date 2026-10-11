@@ -64,12 +64,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(BattleGaugePrim, sprite) == 8,
 PE1_STATIC_ASSERT(sizeof(BattleGaugePrim) == 0x1C,
                   battle_gauge_prim_stride);
 
-/* Floating panel renderer matching views: wide draw-slot declarations keep
- * absolute addressing under -G8; the packet index uses the retail GP load.
- * Separate initial/read views preserve the original base-address lifetime.
- */
-extern s32 g_BattlePanelDrawSlotView[16] asm("D_8009CDDC");
-extern s32 g_BattlePanelInitialDrawSlotView[16] asm("D_8009CDDC");
 extern s32 D_8009D230;
 extern RenderSpritePacket D_800B01C8[];
 /* Interior byte symbols of the first panel sprite, independently relocated. */
