@@ -34,7 +34,7 @@ typedef struct SceneE20Event { u8 reserved[13]; u8 active; } SceneE20Event;
 typedef struct SceneE20Pool { SceneE20Node *node; u8 reserved04[0x264]; SceneE20Vec position; } SceneE20Pool;
 typedef struct SceneE20Channel { int reserved[2]; SceneE20Pool *pool; } SceneE20Channel;
 extern SceneE20Color D_8018EFFC, D_8018F000, D_8018F004, D_8018F008;
-extern SceneE20Actor **D_8009D254;
+extern struct BattleEntity *D_8009D254;
 extern void *D_8019085C;
 int func_8018F750(int mode, SceneE20TrailEffect *effect, SceneEffectSlot *command);
 extern SceneEffectSlot D_80190860[];

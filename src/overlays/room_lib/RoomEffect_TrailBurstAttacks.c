@@ -103,7 +103,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if (((*(RoomSeekingTrailPacket **)channel->pool)->code & 0x3F000000) ==
                         0x01000000) {
-                        D_8009D254->actor->flags |= 0x4000;
+                        ((RoomSparkBattleEntity *)D_8009D254)->actor->flags |= 0x4000;
                         (*(RoomSeekingTrailPacket **)channel->pool)->code |= 0x3F000000;
                         (*(RoomSeekingTrailPacket **)channel->pool)->code |= 0x80000000;
                     }
@@ -549,7 +549,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if (((*(RoomSeekingTrailPacket **)channel->pool)->code & 0x3F000000) ==
                         0x01000000) {
-                        D_8009D254->actor->flags |= 0x4000;
+                        ((RoomSparkBattleEntity *)D_8009D254)->actor->flags |= 0x4000;
                         (*(RoomSeekingTrailPacket **)channel->pool)->code |= 0x3F000000;
                         (*(RoomSeekingTrailPacket **)channel->pool)->code |= 0x80000000;
                     }

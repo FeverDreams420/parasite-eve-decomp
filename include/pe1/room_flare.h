@@ -118,7 +118,7 @@ PE1_STATIC_ASSERT(sizeof(RoomOrbitFlareState) == 0x14, room_orbit_flare_state_si
 PE1_STATIC_ASSERT(sizeof(RoomDroppedFlare) == 0x14, room_dropped_flare_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomFlareAnchor, x) == 0x268, room_flare_anchor_x);
 
-extern RoomFlareBattleEntity *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 extern RoomFlareTextureSlot D_800E11E8;
 extern u16 D_800E1208;
 

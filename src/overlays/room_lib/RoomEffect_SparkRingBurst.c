@@ -176,7 +176,7 @@ int RoomEffect_SparkRingController(int mode, RoomSparkRingState *state) {
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     u32 *entry;
                     if ((**(u32 **)channel->pool & 0x3F000000) == 0x01000000) {
-                        D_8009D254->actor->flags |= 0x4000;
+                        ((RoomSparkBattleEntity *)D_8009D254)->actor->flags |= 0x4000;
                         entry = *(u32 **)channel->pool;
                         *entry = (*entry & 0xC0FFFFFF) | 0x21000000;
                         entry = *(u32 **)channel->pool;
@@ -311,7 +311,7 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     u32 *entry;
                     if ((**(u32 **)channel->pool & 0x3F000000) == 0x01000000) {
-                        D_8009D254->actor->flags |= 0x4000;
+                        ((RoomSparkBattleEntity *)D_8009D254)->actor->flags |= 0x4000;
                         entry = *(u32 **)channel->pool;
                         *entry = (*entry & 0xC0FFFFFF) | 0x19000000;
                         entry = *(u32 **)channel->pool;

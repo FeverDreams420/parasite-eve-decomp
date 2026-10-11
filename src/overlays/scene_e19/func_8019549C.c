@@ -27,7 +27,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneE19HomingParticle, state) == 0x1C,
                   scene_e19_homing_particle_state);
 
 extern GteRotation D_8018F210;
-extern FieldActor *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 int func_800CFE94(s16 *from, s16 *to);
 
 extern RenderColor D_8018F218;
@@ -123,7 +123,7 @@ int func_8019549C(int mode, SceneE19HomingParticle *particle)
             if (D_800E2368->flags &&
                 (D_800F32D0->actor->state->core_flags & 0x3F000000)
                     == 0x01000000) {
-                D_8009D254->state->flags |= 0x4000;
+                ((FieldActor *)D_8009D254)->state->flags |= 0x4000;
                 D_800F32D0->actor->state->core_flags =
                     (D_800F32D0->actor->state->core_flags & 0xC0FFFFFF)
                     | 0x29000000;
@@ -146,7 +146,7 @@ int func_8019549C(int mode, SceneE19HomingParticle *particle)
             D_800E2368->flags &&
             (D_800F32D0->actor->state->core_flags & 0x3F000000)
                 == 0x01000000) {
-            D_8009D254->state->flags |= 0x4000;
+            ((FieldActor *)D_8009D254)->state->flags |= 0x4000;
             D_800F32D0->actor->state->core_flags =
                 (D_800F32D0->actor->state->core_flags & 0xC0FFFFFF)
                 | 0x29000000;

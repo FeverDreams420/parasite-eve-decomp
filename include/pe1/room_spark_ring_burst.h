@@ -93,7 +93,7 @@ typedef struct RoomSparkTextureSlot {
     u16 index;
 } RoomSparkTextureSlot;
 
-extern RoomSparkBattleEntity *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 extern RoomSparkTextureSlot D_800E11E8;
 
 int func_80071A54(void);

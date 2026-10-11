@@ -392,7 +392,7 @@ typedef struct RoomLibHandlerCState {
 
 extern short D_800966EE[];
 extern short D_800966EC[][2];
-extern char *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 struct FieldActorNode;
 extern struct FieldActor *D_8009D20C;
 extern int RoomLib_ResetAndSignal_801914B0(RoomEnt *obj);

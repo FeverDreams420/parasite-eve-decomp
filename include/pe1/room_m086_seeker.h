@@ -65,7 +65,7 @@ typedef struct RoomM086EventState {
     u8 active;
 } RoomM086EventState;
 
-extern RoomM086BattleEntity *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 extern u8 *D_80190B84;
 extern u16 D_800E11E8;
 extern u16 D_800E11EA;

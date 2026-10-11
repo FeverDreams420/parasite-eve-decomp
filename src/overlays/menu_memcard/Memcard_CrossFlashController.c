@@ -28,17 +28,17 @@ int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
         D_801F1F38 = 0;
         tipA.x *= -1;
         tipB.x *= -1;
-        FieldEng_TransformMatrixPoint(D_8009D254, 8, &hand, &from);
-        FieldEng_TransformMatrixPoint(D_8009D254, 8, &tipA, &to);
+        FieldEng_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 8, &hand, &from);
+        FieldEng_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 8, &tipA, &to);
         func_800D1384(&from, &to, 0x3F0, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailA, 1);
-        FieldEng_TransformMatrixPoint(D_8009D254, 8, &tipB, &from);
+        FieldEng_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 8, &tipB, &from);
         func_800D1384(&from, &to, 0x3F2, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailC, 1);
         tipA.x *= -1;
         tipB.x *= -1;
-        FieldEng_TransformMatrixPoint(D_8009D254, 21, &hand, &from);
-        FieldEng_TransformMatrixPoint(D_8009D254, 21, &tipA, &to);
+        FieldEng_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 21, &hand, &from);
+        FieldEng_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 21, &tipA, &to);
         func_800D1384(&from, &to, 0x3F0, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailB, 1);
-        FieldEng_TransformMatrixPoint(D_8009D254, 21, &tipB, &from);
+        FieldEng_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 21, &tipB, &from);
         func_800D1384(&from, &to, 0x3F2, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailD, 1);
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 36,
                              (FieldAnimCallbackListCallback)Memcard_RisingEmberParticle);
@@ -142,17 +142,17 @@ int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
         }
         tipA.x *= -1;
         tipB.x *= -1;
-        FieldEng_TransformMatrixPoint(D_8009D254, 8, &hand, &from);
-        FieldEng_TransformMatrixPoint(D_8009D254, 8, &tipA, &to);
+        FieldEng_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 8, &hand, &from);
+        FieldEng_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 8, &tipA, &to);
         func_800D1384(&from, &to, 8, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailA, 1);
-        FieldEng_TransformMatrixPoint(D_8009D254, 8, &tipB, &from);
+        FieldEng_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 8, &tipB, &from);
         func_800D1384(&from, &to, 10, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailC, 1);
         tipA.x *= -1;
         tipB.x *= -1;
-        FieldEng_TransformMatrixPoint(D_8009D254, 21, &hand, &from);
-        FieldEng_TransformMatrixPoint(D_8009D254, 21, &tipA, &to);
+        FieldEng_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 21, &hand, &from);
+        FieldEng_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 21, &tipA, &to);
         func_800D1384(&from, &to, 8, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailB, 1);
-        FieldEng_TransformMatrixPoint(D_8009D254, 21, &tipB, &from);
+        FieldEng_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 21, &tipB, &from);
         func_800D1384(&from, &to, 10, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailD, 1);
         D_800F3368.depth = 16;
         break;

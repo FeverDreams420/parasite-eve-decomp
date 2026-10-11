@@ -89,7 +89,7 @@ typedef struct RoomTimedSpawnEngine {
     u32 flags;                        /* 0x4C */
 } RoomTimedSpawnEngine;
 
-extern void *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 extern struct FieldActor *g_PlayerEntity;
 extern void *RoomMain_ActorPtr2;
 extern u16 D_800E11EA;

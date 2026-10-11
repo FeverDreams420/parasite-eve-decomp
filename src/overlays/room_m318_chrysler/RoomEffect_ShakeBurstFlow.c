@@ -93,7 +93,7 @@ int func_80194164(int mode, RoomShakeBurstPoint *anchor) {
         if (D_800E27EC == 0x28 && ANIM_TASK_AS(RoomShakeBurstEvent)->active) {
             channel = ANIM_OWNER_AS(RoomShakeBurstChannel);
             if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
-                (*D_8009D254)->flags |= 0x4000;
+                (*((RoomShakeBurstEntity **)D_8009D254))->flags |= 0x4000;
                 channel->pool->object->flags =
                     (channel->pool->object->flags & 0xC0FFFFFF) | 0x19000000;
                 channel->pool->object->flags |= 0x80000000;

@@ -243,7 +243,7 @@ update: {
             *(u8 *)((u8 *)temp_v1_3 + ((temp_v1_3->flags >> 17) & 0x70) + 0x1C) = 2;
             if (ANIM_TASK_AS(SceneE20Event)->active != 0) {
                 if ((ANIM_OWNER_AS(SceneE20Channel)->pool->node->flags & 0x3F000000) == 0x01000000) {
-                    temp_v1_4 = *D_8009D254;
+                    temp_v1_4 = *((SceneE20Actor **)D_8009D254);
                     temp_v1_4->flags |= 0x4000;
                     temp_a0 = ANIM_OWNER_AS(SceneE20Channel)->pool->node;
                     temp_a0->flags = (temp_a0->flags & 0xC0FFFFFF) | 0x2F000000;

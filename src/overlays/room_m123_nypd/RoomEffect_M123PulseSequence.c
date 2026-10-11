@@ -61,7 +61,7 @@ typedef struct RoomPulseGlobal {
     u32 flags;
 } RoomPulseGlobal;
 
-extern RoomPulseGlobal **D_8009D254;
+extern struct BattleEntity *D_8009D254;
 extern u16 D_800E11EA;
 extern int func_80194A70(int, RoomPulseParticle *, int *);
 
@@ -114,7 +114,7 @@ int func_80194C04(int mode, RoomPulseParticle *particle)
         if (D_800E27EC == 32 && ANIM_TASK_AS(u8)[13]) {
             context = ANIM_OWNER_AS(RoomM123Pool);
             if ((((RoomPulsePool *)context->pool)->object->flags & 0x3F000000) == 0x01000000) {
-                (*D_8009D254)->flags |= 0x4000;
+                (*((RoomPulseGlobal **)D_8009D254))->flags |= 0x4000;
                 ((RoomPulsePool *)context->pool)->object->flags =
                     (((RoomPulsePool *)context->pool)->object->flags & 0xC0FFFFFF) | 0x21000000;
                 ((RoomPulsePool *)context->pool)->object->flags |= 0x80000000;

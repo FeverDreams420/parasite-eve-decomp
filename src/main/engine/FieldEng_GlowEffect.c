@@ -148,7 +148,7 @@ int func_800C7E50(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
     anim->age = 0;
 }
 
-extern char *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 extern char D_800E08A8[];
 
 int func_800C7F60(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
@@ -195,7 +195,7 @@ int func_800C8064(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
 }
 
 int func_800C811C(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
-    char *entity_v1 = D_8009D254;
+    char *entity_v1 = (char *)D_8009D254;
     int value;
     int z_v1;
 

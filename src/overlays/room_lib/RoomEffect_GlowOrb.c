@@ -144,11 +144,11 @@ void RoomEffect_GlowOrbDraw(RoomGlowOrbObject *object, u8 *slot, RoomGlowOrb *or
             func_800C42A4((FieldGlowSprite *)&g_RoomGlowOrbSprite, &matrix, 0);
         }
 
-        point.x = D_8009D254->x.part.integer;
-        point.y = D_8009D254->y.part.integer;
-        point.z = D_8009D254->z.part.integer;
+        point.x = ((RoomSparkBattleEntity *)D_8009D254)->x.part.integer;
+        point.y = ((RoomSparkBattleEntity *)D_8009D254)->y.part.integer;
+        point.z = ((RoomSparkBattleEntity *)D_8009D254)->z.part.integer;
         if (func_800C61A8(&point, &matrix) != 0 && FieldEng_GetStatus(object) == 3) {
-            D_8009D254->actor->flags |= 0x4000;
+            ((RoomSparkBattleEntity *)D_8009D254)->actor->flags |= 0x4000;
             if (object->link != 0) {
                 *object->link->target |= 0x80000000;
             }

@@ -159,11 +159,11 @@ int func_800CCFA0(void) {
     func_800CEDA8(0);
 }
 
-extern char *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 
 int func_800CD07C(void *arg0, void *arg1, u8 *anim) {
     u16 x = D_800E27F8.x;
-    char *entity = D_8009D254;
+    char *entity = (char *)D_8009D254;
     int y;
     u16 z;
 

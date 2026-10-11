@@ -2,7 +2,7 @@
 #include "pe1/field_actor.h"
 
 extern FieldActor *D_8009D20C;
-extern FieldActor *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 extern u32 D_800B89F8[];
 
 void Render_InitObjectFromTable(RenderObjectEntity *object,
@@ -16,7 +16,7 @@ int Task_CopyEntityRenderObject(int **args) {
     if (type_id == 0) {
         FieldActor *player;
 
-        player = D_8009D254;
+        player = (FieldActor *)D_8009D254;
         if (player == 0) {
             return 1;
         }

@@ -2,7 +2,7 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_anim_pool.h"
 #include "room_m350_shared.h"
-extern char *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 
 extern void func_80196C64(void);
 
@@ -25,7 +25,7 @@ s32 func_80199D50(s32 arg0) {
     } else if ((char)D_8019A830 != 0) {
         obj = func_800CE610(ANIM_POOL_AS(char *)[2]);
         if (obj != 0) {
-            actor = D_8009D254;
+            actor = (char *)D_8009D254;
             *(short *)(obj + 0) = *(s32 *)(actor + 0x1FC);
             *(short *)(obj + 2) = *(s32 *)(actor + 0x200) - 0x140;
             {

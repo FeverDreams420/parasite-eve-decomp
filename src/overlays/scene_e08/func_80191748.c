@@ -1,6 +1,6 @@
 #include "pe1/field_script_context.h"
 
-extern void *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 
 int *func_800C2B28(int arg0);
 void func_80020D50(void);

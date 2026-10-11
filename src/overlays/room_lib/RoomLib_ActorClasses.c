@@ -1811,7 +1811,7 @@ void RoomLib_RearmHandlerA(RoomEnt *o) {
     }
 }
 void RoomLib_HandlerA(RoomEnt *o) {
-    char *g = D_8009D254;
+    char *g = (char *)D_8009D254;
     if (RW8(g, 0xE) < 4) {
         int *sig;
         RW32(g, 0x98) &= 0xFFF3FFFF;
@@ -1823,7 +1823,7 @@ void RoomLib_HandlerA(RoomEnt *o) {
         if (RW16(o, 0x44) == -1) {
             RW16(o, 0x44) = FieldEng_VecToAngle(
                 (Vec3Fixed *)(((char *)o->link + 0x28)),
-                (Vec3Fixed *)(D_8009D254 + 0x28));
+                (Vec3Fixed *)&RW32(D_8009D254, 0x28));
         }
         if (RW16(o, 0x48) == -1) {
             RW16(o, 0x48) = RWU16(o, 0x44) + 0x800;

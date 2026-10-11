@@ -33,7 +33,7 @@ int func_8018F004(int mode, RoomM086Seeker *seeker, RoomM086SeekerParams *params
             if (ANIM_TASK_AS(RoomM086EventState)->active) {
                 channel = ANIM_OWNER_AS(RoomM086Channel);
                 if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
-                    D_8009D254->actor->flags |= 0x4000;
+                    ((RoomM086BattleEntity *)D_8009D254)->actor->flags |= 0x4000;
                     channel->pool->object->flags =
                         (channel->pool->object->flags & 0xC0FFFFFF) | 0x11000000;
                     channel->pool->object->flags |= 0x80000000;

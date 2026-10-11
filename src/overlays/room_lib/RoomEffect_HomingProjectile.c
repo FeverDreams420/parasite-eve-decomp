@@ -169,7 +169,7 @@ int RoomEffect_HomingProjectile(int mode) {
                 }
                 if (model->escaped == 0) {
                     model->angle = (FieldEng_VecToAngle((Vec3Fixed *)&model->position[0].word,
-                                                        (Vec3Fixed *)D_8009D254->position) + 0x800) & 0xFFF;
+                                                        (Vec3Fixed *)((RoomHomingModelEntity *)D_8009D254)->position) + 0x800) & 0xFFF;
                     break;
                 }
                 i = ratan2((s16)current - (s16)previous,
@@ -207,7 +207,7 @@ int RoomEffect_HomingProjectile(int mode) {
                 if (model->speed <= 0) model->finished = 1;
             }
             if (model->floor - 0x200 < model->position[1].part.integer) {
-                area = func_800DFE20((Vec3Fixed *)&position.x, (Vec3Fixed *)D_8009D254->position);
+                area = func_800DFE20((Vec3Fixed *)&position.x, (Vec3Fixed *)((RoomHomingModelEntity *)D_8009D254)->position);
                 if (area < 0x80) model->finished = 1;
             }
             if (model->finished == 0) return 0;

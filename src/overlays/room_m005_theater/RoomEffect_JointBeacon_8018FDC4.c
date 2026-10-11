@@ -79,7 +79,7 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
         if (ANIM_TASK_AS(RoomM005BeaconEvent)->active) {
             RoomM005BeaconChannel *channel = ANIM_OWNER_AS(RoomM005BeaconChannel);
             if ((channel->pool->node->flags & 0x3F000000) != 0x01000000) return 0;
-            D_8009D254->actor->flags |= 0x4000;
+            ((RoomM005BeaconEntity *)D_8009D254)->actor->flags |= 0x4000;
             channel->pool->node->flags =
                 (channel->pool->node->flags & 0xC0FFFFFF) | 0x11000000;
             channel->pool->node->flags |= 0x80000000;

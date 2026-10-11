@@ -7,7 +7,7 @@
 #include "pe1/field_engine_calls.h"
 
 extern FieldActor *g_PlayerEntity;
-extern void **D_8009D254;
+extern struct BattleEntity *D_8009D254;
 void func_80020CE4(void);
 
 
@@ -75,7 +75,7 @@ s32 func_80192D8C(RoomSelectionState *selection) {
     **(s32 ***)&selection->signal = 0;
     selection->pad_00[0] = 4;
     if (selection->activated != 0) {
-        target = *D_8009D254;
+        target = *((void **)D_8009D254);
         if (target != 0) {
             if (*(s16 *)(target + 0xC) > 0) {
                 func_80020CE4();

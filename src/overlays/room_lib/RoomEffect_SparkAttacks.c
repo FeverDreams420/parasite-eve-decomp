@@ -37,7 +37,7 @@ static const RenderColor s_BurstOrbColor = { 0xC8, 0x46, 0x08, 0 };
         RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);                                       \
         if ((((RoomBurstOrbPool *)channel->pool)->object->flags & 0x3F000000) ==      \
             0x01000000) {                                                             \
-            D_8009D254->actor->flags |= 0x4000;                                       \
+            ((RoomSparkBattleEntity *)D_8009D254)->actor->flags |= 0x4000;                                       \
             ((RoomBurstOrbPool *)channel->pool)->object->flags =                      \
                 (((RoomBurstOrbPool *)channel->pool)->object->flags & 0xC0FFFFFF) |   \
                 0x19000000;                                                           \
@@ -785,7 +785,7 @@ int RoomEffect_BeamSparkController(int mode, RoomBeamSpark *fx,
                     channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if ((((RoomBeamSparkPool *)channel->pool)->object->flags & 0x3F000000) ==
                         0x01000000) {
-                        D_8009D254->actor->flags |= 0x4000;
+                        ((RoomSparkBattleEntity *)D_8009D254)->actor->flags |= 0x4000;
                         ((RoomBeamSparkPool *)channel->pool)->object->flags =
                             (((RoomBeamSparkPool *)channel->pool)->object->flags & 0xC0FFFFFF) |
                             0x19000000;

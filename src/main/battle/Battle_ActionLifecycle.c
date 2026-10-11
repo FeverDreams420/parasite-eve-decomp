@@ -3,7 +3,7 @@
 /* MASPSX_FLAGS: -G2 */
 
 extern int D_8009D2E8;
-extern char *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 extern Combatant *D_8009D278;
 extern short D_8009D298;
 
@@ -23,7 +23,7 @@ void Battle_BeginPlayerAction(void) {
 
     mask = -0x101;
     D_8009D2E8 |= 1;
-    player = D_8009D254;
+    player = (char *)D_8009D254;
     flags = ENTITY_FIELD(player, int, entityFlags);
     actor = (char *)D_8009D278;
     flags &= mask;

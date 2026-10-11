@@ -123,7 +123,7 @@ int func_800C9C8C(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
     anim->age = 0;
 }
 
-extern char *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 extern char D_800E0AF8[];
 
 int func_800C9D9C(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {

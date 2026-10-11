@@ -161,7 +161,7 @@ typedef struct RoomSparkBattleEntity {
     RoomSparkCoord z;             /* 0x30 */
 } RoomSparkBattleEntity;
 
-extern RoomSparkBattleEntity *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 /* Walkable floor polygons and their count, for Geo_PointInPoly. */
 
 /* Bouncing spark: the damped spark layout with a rise acceleration in the

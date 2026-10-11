@@ -6,7 +6,7 @@
     if (func_800C6B90(drop, radius) && drop->hazard && ANIM_TASK_AS(RoomM256DropEvent)->active) {  \
         RoomM256DropChannel *channel = ANIM_OWNER_AS(RoomM256DropChannel);                            \
         if ((channel->pool->node->flags & 0x3F000000) == 0x01000000) {        \
-            D_8009D254->actor->flags |= 0x4000;                               \
+            ((RoomM256DropEntity *)D_8009D254)->actor->flags |= 0x4000;                               \
             channel->pool->node->flags =                                      \
                 (channel->pool->node->flags & 0xC0FFFFFF) | 0x19000000;       \
             channel->pool->node->flags |= 0x80000000;                         \

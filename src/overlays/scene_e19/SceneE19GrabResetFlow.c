@@ -128,7 +128,7 @@ void func_80192878(SceneE19Selection *selection) {
 
 extern volatile int D_800BCF88;
 extern u32 SceneE19FlagsWord asm("D_800BCF88");
-extern char *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 
 s32 func_8001AA78();
 
@@ -270,7 +270,7 @@ s32 func_80192D04(char *obj)
     ((SceneE19Actor *)D_8009D254)->reset_word = 0;
     ((SceneE19Actor *)D_8009D254)->reset_halfword = 0;
     func_8001AA78();
-    e = D_8009D254;
+    e = (char *)D_8009D254;
     *((s32 *) (e + 0x68)) = 0;
     *((s32 *) (e + 0x6C)) = 0;
     *((s32 *) (e + 0x70)) = 0;

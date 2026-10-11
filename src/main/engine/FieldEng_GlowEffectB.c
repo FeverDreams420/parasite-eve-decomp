@@ -157,7 +157,7 @@ int func_800C8F94(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
     }
 }
 
-extern char *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 extern char D_800E0A10[];
 
 int func_800C90A4(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {

@@ -192,7 +192,7 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
 
     dc4 = rcos(0xC00);
     cf4 = rsin(0xC00);
-    g = RoomGrab_PlayerView(D_8009D254);
+    g = RoomGrab_PlayerView(((RoomSparkBattleEntity *)D_8009D254));
     rotationMatrix = &g->render_object.model_matrix;
     neg = -cf4;
     rotationMatrix->rotation[0][1] = neg;
@@ -208,9 +208,9 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
     rotationMatrix->rotation[0][2] = 0;
     rotationMatrix->rotation[2][2] = 0x1000;
     scale = s_GrabHoldScale;
-    matrix_arg = RoomGrab_PlayerView(D_8009D254);
+    matrix_arg = RoomGrab_PlayerView(((RoomSparkBattleEntity *)D_8009D254));
     ScaleMatrix(&matrix_arg->render_object.model_matrix, &scale);
-    g = RoomGrab_PlayerView(D_8009D254);
+    g = RoomGrab_PlayerView(((RoomSparkBattleEntity *)D_8009D254));
     g->render_object.model_matrix.translation[0] = 0x100;
     g->render_object.model_matrix.translation[1] = -0x20;
     g->render_object.model_matrix.translation[2] = -0xC0;
@@ -220,7 +220,7 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
     s4 = s0;
 
     if (s1->state == 0 || func_8003010C(s1, 0x2C) <= 0) {
-        if (RoomGrab_PlayerView(D_8009D254)->state->amount > 0) {
+        if (RoomGrab_PlayerView(((RoomSparkBattleEntity *)D_8009D254))->state->amount > 0) {
             func_80020CE4();
         }
         RoomFx_GrabResetPlayer(s1, s3v);
@@ -228,7 +228,7 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
         return;
     }
 
-    if (RoomGrab_PlayerView(D_8009D254)->state->amount <= 0) {
+    if (RoomGrab_PlayerView(((RoomSparkBattleEntity *)D_8009D254))->state->amount <= 0) {
         RoomFx_GrabResetPlayer(s1, s3v);
         RoomFx_GrabRelease(arg0);
         return;
@@ -278,7 +278,7 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
         }
         {
             /* One load of the player's state for the read and the write. */
-            FieldActorState *state = RoomGrab_PlayerView(D_8009D254)->state;
+            FieldActorState *state = RoomGrab_PlayerView(((RoomSparkBattleEntity *)D_8009D254))->state;
 
             state->flags |= 0x4000;
         }
@@ -551,7 +551,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if ((((RoomGroundSweepHitPool *)channel->pool)->object->flags & 0x3F000000) == 0x01000000) {
                         {
-                            RoomSparkActor *player = D_8009D254->actor;
+                            RoomSparkActor *player = ((RoomSparkBattleEntity *)D_8009D254)->actor;
 
                             player->flags |= 0x4000;
                         }
@@ -591,7 +591,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if ((((RoomGroundSweepHitPool *)channel->pool)->object->flags & 0x3F000000) == 0x01000000) {
                         {
-                            RoomSparkActor *player = D_8009D254->actor;
+                            RoomSparkActor *player = ((RoomSparkBattleEntity *)D_8009D254)->actor;
 
                             player->flags |= 0x4000;
                         }
@@ -993,7 +993,7 @@ int RoomFx_RisingSprayParticle(int mode, RoomSpraySpark *spark) {
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if ((((RoomSprayHitPool *)channel->pool)->object->flags & 0x3F000000) == 0x01000000) {
                         {
-                            RoomSparkActor *player = D_8009D254->actor;
+                            RoomSparkActor *player = ((RoomSparkBattleEntity *)D_8009D254)->actor;
 
                             player->flags |= 0x4000;
                         }

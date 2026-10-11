@@ -24,7 +24,7 @@ typedef struct FieldTriEntity {
     } pos[3];
 } FieldTriEntity;
 
-extern FieldTriEntity *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 
 int func_800C62DC(GteShortVector *point, GteShortVector *tri);
 int func_800C689C(GteShortVector *tri);

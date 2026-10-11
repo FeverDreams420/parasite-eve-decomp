@@ -189,7 +189,7 @@ typedef struct RoomTwelveEffectDrawStack {
 void ApplyMatrix(RoomSpriteMatrix *matrix, void *position, int *translation);
 int func_800C61A8(GteShortVector *point, GteMatrix *matrix);
 
-extern char *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 
 /* Retail marks this function handwritten; only its COP2 windows remain ASM. */
 void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
@@ -289,11 +289,11 @@ void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
                 ((RoomLibTick12Rec *)element)->state[0] = -1;
             }
 
-            pointX = *(s16 *)(D_8009D254 + 0x2A);
+            pointX = RW16(D_8009D254, 0x2A);
             stack.point[0] = pointX;
-            pointY = *(s16 *)(D_8009D254 + 0x2E);
+            pointY = RW16(D_8009D254, 0x2E);
             stack.point[1] = pointY;
-            pointZ = *(s16 *)(D_8009D254 + 0x32);
+            pointZ = RW16(D_8009D254, 0x32);
             stack.point[2] = pointZ;
             if (func_800C61A8(stack.point, secondaryMatrix) != 0) {
                 *(s16 *)(clock + 0x2C) = 1;

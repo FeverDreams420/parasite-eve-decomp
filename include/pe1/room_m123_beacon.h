@@ -79,7 +79,7 @@ typedef struct RoomM123BeaconColor {
     u8 r, g, b, code;
 } RoomM123BeaconColor;
 
-extern RoomM123BeaconEntity *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 extern RoomM123BeaconOffset D_8018F1E8;
 extern u8 *D_80195698;
 extern u8 *D_8019569C;

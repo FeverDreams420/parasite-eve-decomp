@@ -161,7 +161,7 @@ int func_800CA824(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
     }
 }
 
-extern char *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 extern char D_800E0C08[];
 
 int func_800CA934(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
@@ -223,7 +223,7 @@ int func_800CAA38(void *arg0, void *arg1, FieldAnimTwinGlow *anim) {
 
 int func_800CAB88(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
     u16 x = D_800E2360.x;
-    char *data = D_8009D254;
+    char *data = (char *)D_8009D254;
     int y;
     u16 z;
 

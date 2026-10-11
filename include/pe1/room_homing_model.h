@@ -105,7 +105,7 @@ typedef struct RoomHomingModelEntity {
     s32 position[3];              /* 0x28 */
 } RoomHomingModelEntity;
 
-extern RoomHomingModelEntity *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 /* One packed word of the PSY-Q sine table: sine low, cosine high. */
 typedef union RoomHomingTrig {
     s32 word;

@@ -73,7 +73,7 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
         if (ANIM_TASK_AS(RoomM089PulseEvent)->active) {
             channel = ANIM_OWNER_AS(RoomM089PulseChannel);
             if ((channel->pool->node->flags & 0x3F000000) == 0x01000000) {
-                D_8009D254->actor->flags |= 0x4000;
+                ((RoomM089PulseEntity *)D_8009D254)->actor->flags |= 0x4000;
                 channel->pool->node->flags =
                     (channel->pool->node->flags & 0xC0FFFFFF) | 0x29000000;
                 channel->pool->node->flags |= 0x80000000;

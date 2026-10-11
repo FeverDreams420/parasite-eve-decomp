@@ -87,7 +87,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomShakeSweepParticle, stretch) == 0x0E,
 PE1_STATIC_ASSERT(sizeof(RoomShakeSweepParticle) == 0x10,
                   room_shake_sweep_particle_size);
 
-extern RoomShakeBurstEntity **D_8009D254;
+extern struct BattleEntity *D_8009D254;
 extern u16 D_800E11EA;
 
 extern int func_80071A54(void);

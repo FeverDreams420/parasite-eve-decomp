@@ -118,7 +118,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                     || func_800C6B90(&blast->position, 0x6A4) == 0)
                 && ANIM_TASK_AS(SceneE19BlastScript)->active != 0
                 && ((*ANIM_OWNER_AS(SceneE19BlastChannel)->pool)->flags & 0x3F000000) == 0x01000000) {
-                (*D_8009D254)->flags |= 0x4000;
+                (*((SceneE19BlastPlayer **)D_8009D254))->flags |= 0x4000;
                 actor = *ANIM_OWNER_AS(SceneE19BlastChannel)->pool;
                 actor->flags = (actor->flags & 0xC0FFFFFF) | 0x2D000000;
                 actor = *ANIM_OWNER_AS(SceneE19BlastChannel)->pool;

@@ -862,9 +862,9 @@ void func_800C5538(FieldChainRecord *record)
             previous.x = link[-1].matrix.t[0] - link[-2].matrix.t[0];
             previous.y = 0;
             previous.z = link[-1].matrix.t[2] - link[-2].matrix.t[2];
-            toPlayer.x = D_8009D254->x.part.integer - link[-2].matrix.t[0];
+            toPlayer.x = ((RoomSparkBattleEntity *)D_8009D254)->x.part.integer - link[-2].matrix.t[0];
             toPlayer.y = 0;
-            toPlayer.z = D_8009D254->z.part.integer - link[-2].matrix.t[2];
+            toPlayer.z = ((RoomSparkBattleEntity *)D_8009D254)->z.part.integer - link[-2].matrix.t[2];
             OuterProduct0(&previous, &toPlayer, &cross);
             run = SquareRoot0(previous.x * previous.x + previous.z * previous.z);
             ratan2(run, SquareRoot0(toPlayer.x * toPlayer.x + toPlayer.z * toPlayer.z));

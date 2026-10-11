@@ -18,10 +18,10 @@ int func_800C689C(GteShortVector *tri)
     FieldTriScratch *third;
     FieldTriScratch *result;
 
-    playerX = D_8009D254->pos[0].integer;
+    playerX = ((FieldTriEntity *)D_8009D254)->pos[0].integer;
     point.x = playerX;
-    point.y = D_8009D254->pos[1].integer;
-    playerZ = D_8009D254->pos[2].integer;
+    point.y = ((FieldTriEntity *)D_8009D254)->pos[1].integer;
+    playerZ = ((FieldTriEntity *)D_8009D254)->pos[2].integer;
     point.z = playerZ;
     FIELD_TRI_SCRATCH->edge[0].y = 0;
     FIELD_TRI_SCRATCH->edge[1].y = 0;

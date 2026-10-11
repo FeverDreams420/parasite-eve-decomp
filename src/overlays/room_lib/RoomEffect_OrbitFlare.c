@@ -64,7 +64,7 @@ ret0:
         RoomFlarePacket *packet;                                             \
         if (((*(RoomFlarePacket **)channel->pool)->code & 0x3F000000) ==     \
             0x01000000) {                                                    \
-            D_8009D254->actor->flags |= 0x4000;                              \
+            ((RoomFlareBattleEntity *)D_8009D254)->actor->flags |= 0x4000;                              \
             packet = *(RoomFlarePacket **)channel->pool;                     \
             packet->code = (packet->code & 0xC0FFFFFF) | 0x11000000;         \
             packet = *(RoomFlarePacket **)channel->pool;                     \

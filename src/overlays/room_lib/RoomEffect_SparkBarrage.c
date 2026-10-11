@@ -42,7 +42,7 @@ typedef struct RoomSparkBarrageOwner {
         RoomSparkBarragePacket *packet;                                             \
         if (((*(RoomSparkBarragePacket **)channel->pool)->code & 0x3F000000) ==     \
             0x01000000) {                                                    \
-            D_8009D254->actor->flags |= 0x4000;                              \
+            ((RoomSparkBattleEntity *)D_8009D254)->actor->flags |= 0x4000;                              \
             packet = *(RoomSparkBarragePacket **)channel->pool;                     \
             packet->code = (packet->code & 0xC0FFFFFF) | 0x19000000;         \
             packet = *(RoomSparkBarragePacket **)channel->pool;                     \
@@ -730,7 +730,7 @@ int RoomEffect_CometSparkParticle(int mode, RoomCometSpark *spark) {
                 RoomSparkBarragePacket *packet;
                 if (((*(RoomSparkBarragePacket **)channel->pool)->code & 0x3F000000) ==
                     0x01000000) {
-                    D_8009D254->actor->flags |= 0x4000;
+                    ((RoomSparkBattleEntity *)D_8009D254)->actor->flags |= 0x4000;
                     packet = *(RoomSparkBarragePacket **)channel->pool;
                     packet->code = (packet->code & 0xC0FFFFFF) | 0x21000000;
                     packet = *(RoomSparkBarragePacket **)channel->pool;

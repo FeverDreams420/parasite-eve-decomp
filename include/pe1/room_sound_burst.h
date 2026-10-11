@@ -78,7 +78,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomSoundBurstState, soundHandle) == 0xC,
 extern volatile u16 D_800E11E8;
 extern void func_800866A4(int, int);
 extern int func_80071A54(void);
-extern RoomSoundBurstBattleEntity *D_8009D254;
+extern struct BattleEntity *D_8009D254;
 extern void func_800CF844(void *, void *, int, void *, int, int);
 extern void LoadAverageShort12(void *, void *, int, int, void *);
 extern void func_800D2B58(void *, void *, void *, void *, int, int, int);

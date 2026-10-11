@@ -67,7 +67,7 @@ int RoomEffect_SeekerSparkCallback(int mode, RoomDampedSpark *spark,
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if ((((RoomSeekerPool *)channel->pool)->object->flags & 0x3F000000) ==
                         0x01000000) {
-                        D_8009D254->actor->flags |= 0x4000;
+                        ((RoomSparkBattleEntity *)D_8009D254)->actor->flags |= 0x4000;
                         ((RoomSeekerPool *)channel->pool)->object->flags =
                             (((RoomSeekerPool *)channel->pool)->object->flags & 0xC0FFFFFF) |
                             0x19000000;
