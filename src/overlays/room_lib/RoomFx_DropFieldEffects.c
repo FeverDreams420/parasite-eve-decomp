@@ -1223,7 +1223,7 @@ void RoomFx_UpdateBeamPair(s32 arg0, RoomDropSlot *slot, RoomBeamPair *beam) {
 
 
 void RoomFx_InitQuadSprites(void *unused0, void *unused1, void *output_arg) {
-    char *base = output_arg;
+    RoomFourSpriteState *base = output_arg;
     int index;
     int red;
     int blue;
@@ -1241,7 +1241,7 @@ void RoomFx_InitQuadSprites(void *unused0, void *unused1, void *output_arg) {
     red = 159;
     blue = 137;
     mid = 64;
-    scale = base;
+    scale = (char *)base;
     color = scale;
 
     for (; (unsigned int)index < 4; index++) {
@@ -1249,14 +1249,14 @@ void RoomFx_InitQuadSprites(void *unused0, void *unused1, void *output_arg) {
         rand();
 
         value = -200;
-        ((RoomFourSpriteState *)base)->position[index].y = value;
-        ((RoomFourSpriteState *)base)->position[index].z = value;
+        base->position[index].y = value;
+        base->position[index].z = value;
         value = -(speed >> 1);
         speed <<= 6;
-        ((RoomFourSpriteState *)base)->velocity[index].x = value;
-        ((RoomFourSpriteState *)base)->velocity[index].y = value;
+        base->velocity[index].x = value;
+        base->velocity[index].y = value;
         value = 160;
-        ((RoomFourSpriteState *)base)->position[index].x = 0;
+        base->position[index].x = 0;
         ((RoomFourSpriteState *)scale)->depth[0] = value;
         ((RoomFourSpriteState *)scale)->scale[0] = speed;
 
@@ -1276,20 +1276,20 @@ void RoomFx_InitQuadSprites(void *unused0, void *unused1, void *output_arg) {
                 continue;
             }
         } else {
-            ((RoomFourSpriteState *)base)->color[1].r = mid;
-            ((RoomFourSpriteState *)base)->color[1].g = 76;
-            ((RoomFourSpriteState *)base)->color[1].b = 6;
+            base->color[1].r = mid;
+            base->color[1].g = 76;
+            base->color[1].b = 6;
             goto advance_color;
         }
 color2:
-        ((RoomFourSpriteState *)base)->color[2].r = 18;
-        ((RoomFourSpriteState *)base)->color[2].g = 32;
-        ((RoomFourSpriteState *)base)->color[2].b = mid;
+        base->color[2].r = 18;
+        base->color[2].g = 32;
+        base->color[2].b = mid;
         goto advance_color;
 color3:
-        ((RoomFourSpriteState *)base)->color[3].r = red;
-        ((RoomFourSpriteState *)base)->color[3].g = 98;
-        ((RoomFourSpriteState *)base)->color[3].b = blue;
+        base->color[3].r = red;
+        base->color[3].g = 98;
+        base->color[3].b = blue;
 advance_color:
         color += 4;
         scale += 2;
