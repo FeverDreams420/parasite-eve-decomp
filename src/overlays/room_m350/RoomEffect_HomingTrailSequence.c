@@ -138,7 +138,7 @@ int func_80194CFC(int event) {
         previous=instance->previousFrame;
         if (frame<15 || previous>=15) return 0;
         particle=func_800CE610(ANIM_POOL_AS(RoomM350EffectEmitter)->pool);
-        *(GteShortVector *)particle=D_8019A7A0;
+        particle->position=D_8019A7A0;
         particle->position.pad=16;
         particle->motion.value.spawn.speed=512;
         {
@@ -146,7 +146,6 @@ int func_80194CFC(int event) {
             particle->motion.value.spawn.phase=0;
             particle->motion.value.spawn.yaw=yaw;
         }
-        asm volatile("" : : : "memory");
         {
             int count=D_8019A7FC.activeCount;
             particle->tail.value.spawn.duration=16;
@@ -154,7 +153,6 @@ int func_80194CFC(int event) {
             particle->tail.value.spawn.state=0;
             particle->tail.value.spawn.size=100-count*20;
         }
-        asm volatile("" : : : "memory");
         D_8019A7FC.activeCount++;
     }
         break;
