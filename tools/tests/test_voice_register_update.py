@@ -5,12 +5,14 @@ import random
 import struct
 import unittest
 
+from tools.tests.csource import find_definition
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
 class VoiceRegisterUpdateTests(unittest.TestCase):
     def test_shared_old_value_pin_is_gone(self):
-        source = (ROOT/'src/main/akao/Akao_SpuVoiceDriver.c').read_text()
+        source = find_definition('Spu_UpdateVoiceRegisters').read_text()
         source = source[source.index('static inline int compute_volume'):source.index('void Spu_TickVoiceEnvelopes(')]
         self.assertNotRegex(source,r'old_value\s+asm')
         self.assertLessEqual(source.count('asm("$'),6)

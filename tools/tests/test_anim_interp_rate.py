@@ -5,12 +5,14 @@ import random
 import re
 import unittest
 
+from tools.tests.csource import find_definition
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
 class AnimInterpRateTests(unittest.TestCase):
     def test_plain_c(self):
-        source = (ROOT / 'src/main/render/Render_DrawObjectVariant.c').read_text()
+        source = find_definition('Anim_SetInterpRate').read_text()
         source = re.sub(r'/\*.*?\*/|//[^\n]*', '', source, flags=re.S)
         source = source[source.rindex('Anim_SetInterpRate('):]
         self.assertIsNone(re.search(r'\b(?:asm|__asm__|INCLUDE_ASM|CC_POSTPASS|REGALLOC_BARRIER)\b', source))

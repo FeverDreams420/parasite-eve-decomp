@@ -5,12 +5,14 @@ import random
 import struct
 import unittest
 
+from tools.tests.csource import find_definition
+
 ROOT=Path(__file__).resolve().parents[2]
 
 
 class CDCommandEventTests(unittest.TestCase):
     def test_local_alias_removed(self):
-        source=(ROOT/'src/main/psyq/libds/dssys_1_6.c').read_text()
+        source=find_definition('LIBDS_DSSYS_1_text_D24').read_text()
         # LIBDS_DSSYS_1_text_D24 and its declaration close the unit.
         source=source[source.index('extern CdRomEventCommandState D_8009B558;'):]
         self.assertNotIn('D_8009B558_o',source)

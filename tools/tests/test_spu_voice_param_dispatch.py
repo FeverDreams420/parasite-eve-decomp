@@ -6,12 +6,14 @@ import re
 import struct
 import unittest
 
+from tools.tests.csource import find_definition
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
 class SpuVoiceParamDispatchTests(unittest.TestCase):
     def test_voice_control_section_is_plain_c(self):
-        source = (ROOT/'src/main/akao/Akao_SpuVoiceDriver.c').read_text()
+        source = find_definition('Spu_WriteKeyOn').read_text()
         source = source[source.index('void Spu_WriteKeyOn('):source.index('static inline int compute_volume')]
         source = re.sub(r'/\*.*?\*/|//[^\n]*','',source,flags=re.S)
         self.assertNotRegex(source,r'\b(?:asm|__asm__|INCLUDE_ASM|CC_POSTPASS)\b')

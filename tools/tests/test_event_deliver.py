@@ -6,12 +6,14 @@ import re
 import struct
 import unittest
 
+from tools.tests.csource import find_definition
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
 class EventDeliverTests(unittest.TestCase):
     def test_plain_c(self):
-        source = (ROOT / 'src/main/psyq/libmath/ferr.c').read_text()
+        source = find_definition('_err_math').read_text()
         source = re.sub(r'/\*.*?\*/|//[^\n]*', '', source, flags=re.S)
         self.assertIsNone(re.search(r'\b(?:asm|__asm__|INCLUDE_ASM|CC_POSTPASS|REGALLOC_BARRIER)\b', source))
 

@@ -4,12 +4,14 @@ import re
 import struct
 import unittest
 
+from tools.tests.csource import find_definition
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
 class GpuQueuePrimitiveTests(unittest.TestCase):
     def test_queue_function_has_no_assembly(self):
-        source = (ROOT/'src/main/gpu/Gpu_SetupSprites.c').read_text()
+        source = find_definition('Gpu_QueuePrimitive').read_text()
         source = source.split('void Gpu_QueuePrimitive(void) {',1)[1].split('\n#include',1)[0]
         source = re.sub(r'/\*.*?\*/|//[^\n]*','',source,flags=re.S)
         self.assertNotRegex(source,r'\b(?:asm|__asm__)\b')

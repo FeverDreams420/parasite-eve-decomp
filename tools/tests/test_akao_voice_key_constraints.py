@@ -3,12 +3,14 @@ from pathlib import Path
 import re
 import unittest
 
+from tools.tests.csource import find_definition
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
 class AkaoVoiceKeyConstraintTests(unittest.TestCase):
     def test_redundant_constraints_are_absent(self):
-        unit = (ROOT/'src/main/akao/Akao_SpuVoiceDriver.c').read_text()
+        unit = find_definition('Akao_SetVoiceKeyOn').read_text()
         for name,limit,unpinned,first,last in (
             ('Akao_SetVoiceKeyOn',9,('flags','base_volume','value','next'),
              '#undef ADVANCE_ENV_PTR','void Spu_CopyVoiceToStereoSlot('),

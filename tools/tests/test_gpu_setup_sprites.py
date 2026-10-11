@@ -8,8 +8,10 @@ import subprocess
 import tempfile
 import unittest
 
+from tools.tests.csource import find_definition, linked_function_bytes
+
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = ROOT/'src/main/gpu/Gpu_SetupSprites.c'
+SOURCE = find_definition('Gpu_SetupSprites')
 
 
 class GpuSetupSpritesTests(unittest.TestCase):
@@ -36,14 +38,14 @@ class GpuSetupSpritesTests(unittest.TestCase):
         retail = (ROOT/'assets/USA/main.exe').read_bytes()[offset:offset+0x644]
         with tempfile.TemporaryDirectory() as directory:
             work = Path(directory)
-            subprocess.run([str(ROOT/'tools/scripts/cc.sh'),str(SOURCE),str(work/'test.o')],check=True,capture_output=True)
-            needed = {line.split()[-1] for line in subprocess.check_output(['mipsel-none-elf-nm','-u',str(work/'test.o')],text=True).splitlines()}
-            needed.add('_gp')
-            script = f'SECTIONS {{ .text 0x{entry:X} : SUBALIGN(4) {{ *(.text) }} /DISCARD/ : {{ *(.reginfo) *(.mdebug) *(.pdr) *(.MIPS.abiflags) }} }}\n'
-            (work/'test.ld').write_text(script+'\n'.join(f'{name} = 0x{symbols[name]:X};' for name in sorted(needed)))
-            subprocess.run(['mipsel-none-elf-ld','-EL','-T',str(work/'test.ld'),str(work/'test.o'),'-o',str(work/'test.elf')],check=True,capture_output=True)
-            subprocess.run(['mipsel-none-elf-objcopy','-O','binary','-j','.text',str(work/'test.elf'),str(work/'test.bin')],check=True,capture_output=True)
-            compiled = (work/'test.bin').read_bytes()
+            # The unit may hold more than this range; link it with the
+            # function at its retail address and take the retail range.
+            # External references take their built-image addresses.
+            provide = ''.join(f'PROVIDE({name} = 0x{value:X});\n'
+                              for name, value in symbols.items()
+                              if re.fullmatch(r'\w+', name))
+            compiled = linked_function_bytes('Gpu_SetupSprites', entry, 0x644,
+                                             provide, work, SOURCE)
         self.assertEqual(compiled,retail)
         rng = random.Random(entry)
         cases = list(range(256))+[-2147483648,-1,256,257,65535,2147483647]

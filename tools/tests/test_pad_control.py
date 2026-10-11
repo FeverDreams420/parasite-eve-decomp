@@ -4,6 +4,8 @@ import subprocess
 import tempfile
 import unittest
 
+from tools.tests.csource import find_definition
+
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 
@@ -11,7 +13,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 class PadControlTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_start_and_stop_manage_the_pad_lifecycle(self):
-        source = (ROOT / "src/main/psyq/libapi/pad_4.c").read_text()
+        source = find_definition('StartPAD').read_text()
         harness = source + r'''
 #include <assert.h>
 int g_InitPadFlag;

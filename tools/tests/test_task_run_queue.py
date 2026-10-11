@@ -9,12 +9,14 @@ import itertools
 import struct
 import unittest
 
+from tools.tests.csource import find_definition
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
 class TaskRunQueueTests(unittest.TestCase):
     def test_plain_source(self):
-        source = (ROOT/'src/main/task/Task_RunQueue.c').read_text()
+        source = find_definition('Task_RunQueue').read_text()
         self.assertNotRegex(source, r'\b(?:asm|__asm__|INCLUDE_ASM|REGALLOC_BARRIER)\b')
 
     @unittest.skipUnless((ROOT/'assets/USA/main.exe').is_file() and

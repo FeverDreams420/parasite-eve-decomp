@@ -6,6 +6,8 @@ import subprocess
 import tempfile
 import unittest
 
+from tools.tests.csource import find_definition
+
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -28,7 +30,7 @@ class GpuDmaTransferTests(unittest.TestCase):
         retail = (ROOT/'assets/USA/main.exe').read_bytes()[0x67DE8:0x68200]
         with tempfile.TemporaryDirectory() as directory:
             work = Path(directory)
-            subprocess.run([str(ROOT/'tools/scripts/cc.sh'), str(ROOT/'src/main/psyq/libgpu/LoadImage2.c'), str(work/'test.o')], check=True, capture_output=True)
+            subprocess.run([str(ROOT/'tools/scripts/cc.sh'), str(find_definition('LoadImage2')), str(work/'test.o')], check=True, capture_output=True)
             needed = [line.split()[-1] for line in subprocess.check_output(['mipsel-none-elf-nm', '-u', str(work/'test.o')], text=True).splitlines()]
             script = 'SECTIONS { .text 0x800775E8 : SUBALIGN(4) { *(.text) } /DISCARD/ : { *(.reginfo) *(.mdebug) *(.pdr) *(.MIPS.abiflags) } }\n'
             (work/'test.ld').write_text(script + '\n'.join(f'{name} = 0x{symbols[name]:X};' for name in needed))
