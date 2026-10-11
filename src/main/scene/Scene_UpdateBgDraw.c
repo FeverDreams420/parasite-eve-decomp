@@ -22,7 +22,7 @@ extern struct { char _[16]; } D_800B89F8_o __asm__("D_800B89F8");
 #define D_800B0D10_WRITE (*(u8 **)&D_800B0D10_w)
 #define D_800B0D14 (*(u16 *)&D_800B0D14_o)
 #define D_800B0D16 (*(u16 *)&D_800B0D16_o)
-#define D_800B0CEC ((u8 *)&D_800B0CD8_o + 0x14)
+#define D_800B0CEC ((u8 *)&((Pe1GameState *)&D_800B0CD8_o)->scene_object)
 #define D_800B89F8 ((u32 *)&D_800B89F8_o)
 
 void Render_SetGteScreenOffset(void);

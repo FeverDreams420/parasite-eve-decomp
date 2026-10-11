@@ -40,7 +40,7 @@ void Battle_UpdatePlayerTurn(void)
                 if (angle < -0xAB) category = 0;
                 else if (angle < 0xE4) category = 1;
                 else category = 2;
-                Entity_SetActionMode(PLAYER, ((u8 *)ACTIVE)[0x14 + category]);
+                Entity_SetActionMode(PLAYER, *(category + ACTIVE->targetAngleActionModes));
                 ACTIVE->stateFlags &= ~0x200000;
             }
         }
@@ -87,7 +87,7 @@ void Battle_UpdatePlayerTurn(void)
     if (angle < -0xAB) category = 0;
     else if (angle < 0xE4) category = 1;
     else category = 2;
-    Entity_SetActionMode(PLAYER, ((u8 *)ACTIVE)[0x14 + category]);
+    Entity_SetActionMode(PLAYER, *(category + ACTIVE->targetAngleActionModes));
 }
 
 #include "common.h"

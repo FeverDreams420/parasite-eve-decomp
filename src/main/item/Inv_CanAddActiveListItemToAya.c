@@ -10,11 +10,7 @@ int Inv_CanAddActiveListItemToAya(int index) {
     int result;
     slot_index = index;
     if (slot_index >= 0 && slot_index < g_InvActiveListCount) {
-        {
-            int offset;
-            offset = slot_index << 1;
-            item_id = *(s16 *)((u8 *)g_InvActiveListItems + offset);
-        }
+        item_id = g_InvActiveListItems[slot_index];
         saved_item_id = item_id;
         if ((unsigned int)(item_id - 0x100) < 0x80) {
             int shifted;
@@ -41,9 +37,7 @@ int Inv_CanAddActiveListItemToAya(int index) {
 
         result = Inv_WriteSlotById(data);
         if (result == 0) {
-            int offset;
-            offset = slot_index << 1;
-            *(s16 *)((u8 *)g_InvActiveListItems + offset) = 0;
+            g_InvActiveListItems[slot_index] = 0;
         }
     } else {
         result = 1;

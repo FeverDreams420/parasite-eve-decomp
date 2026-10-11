@@ -1686,7 +1686,7 @@ void Akao_UpdateVoiceEnvelopes(s32 protectedMask) {
     mask = 1;
     voiceBase = &g_AkaoVoiceStateTable[0];
     envelope = &g_AkaoVoiceEnvelopeTable[0];
-    combinedMask = (((*((s32 *) (((u8 *) g_AkaoCurTrack) + 4))) & (*((s32 *) (((u8 *) g_AkaoCurTrack) + 0xC)))) | ((*((s32 *) (((u8 *) g_AkaoCurTrack) + 0x6C))) & (*((s32 *) (((u8 *) g_AkaoCurTrack) + 0x74))))) | protectedMask;
+    combinedMask = ((g_AkaoCurTrack[0].active_voice_mask & g_AkaoCurTrack[0].yield_voice_mask) | (g_AkaoCurTrack[1].active_voice_mask & g_AkaoCurTrack[1].yield_voice_mask)) | protectedMask;
     do {
         if (combinedMask & (mask << voiceIndex)) {
             register s32 level = 0x7FFF;
@@ -1735,8 +1735,8 @@ void Akao_ProcessVoiceQueue(void)
   {
     Akao_UpdateVoiceEnvelopes(excluded);
   }
-  secondary = (g_AkaoCurTrack[1].active_voice_mask & g_AkaoCurTrack[1].allocated_voice_mask) & (~(g_AkaoCurTrack[1].field_0C & excluded));
-  secondary_new = (secondary & g_AkaoCurTrack[1].field_0C) & (~excluded);
+  secondary = (g_AkaoCurTrack[1].active_voice_mask & g_AkaoCurTrack[1].allocated_voice_mask) & (~(g_AkaoCurTrack[1].yield_voice_mask & excluded));
+  secondary_new = (secondary & g_AkaoCurTrack[1].yield_voice_mask) & (~excluded);
   if (secondary & g_AkaoCurTrack[1].pending_voice_mask)
   {
     g_AkaoCurTrack++;
@@ -1748,8 +1748,8 @@ void Akao_ProcessVoiceQueue(void)
   }
   allocated_primary = g_AkaoCurTrack->active_voice_mask & g_AkaoCurTrack->allocated_voice_mask;
   primary_new = secondary_new | excluded;
-  primary = allocated_primary & (~(g_AkaoCurTrack->field_0C & primary_new));
-  excluded = (primary & g_AkaoCurTrack->field_0C) & (~primary_new);
+  primary = allocated_primary & (~(g_AkaoCurTrack->yield_voice_mask & primary_new));
+  excluded = (primary & g_AkaoCurTrack->yield_voice_mask) & (~primary_new);
   if (primary & g_AkaoCurTrack->pending_voice_mask)
   {
     Akao_StepVoiceNote(g_AkaoVoiceStateTable, primary & g_AkaoCurTrack->pending_voice_mask, excluded, &result);

@@ -144,7 +144,7 @@ void Akao_StepSequencerVoice(void *arg0) {
     p2c8c->pending_voice_mask = tw1 & kFFFb;
     tw2 = *(s32 *)walk;
     walk += 8;
-    p2c8c->field_0C = tw2 & kFFFb;
+    p2c8c->yield_voice_mask = tw2 & kFFFb;
         tv0 = p2c8c->status_flags & km102;
     tcde = g_AkaoVoiceKeyOnState & 0x100;
     ((volatile AkaoSequencerBank *)p2c8c)->status_flags = tv0;

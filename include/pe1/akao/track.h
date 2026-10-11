@@ -151,7 +151,7 @@ typedef struct AkaoSequencerBank {
     /* 0x00 */ AkaoU32 status_flags;
     /* 0x04 */ AkaoU32 active_voice_mask;
     /* 0x08 */ AkaoU32 pending_voice_mask;
-    /* 0x0C */ AkaoU32 field_0C;
+    /* 0x0C */ AkaoU32 yield_voice_mask; /* sequence header word 2; these channels release voices that sound effects claim */
     /* 0x10 */ AkaoU32 key_on_request_mask;
     /* 0x14 */ AkaoU32 allocated_voice_mask;
     /* 0x18 */ AkaoU32 key_off_request_mask;

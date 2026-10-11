@@ -2419,12 +2419,12 @@ void SeqOp_StopVoice(AkaoTrack *track, u32 arg1) {
             temp1 = state->key_off_dirty_mask;
             temp0 &= mask;
             state->pending_voice_mask = temp0;
-            temp0 = state->field_0C;
+            temp0 = state->yield_voice_mask;
             temp1 &= mask;
             state->key_off_dirty_mask = temp1;
             temp1 = state->adsr_dirty_mask;
             temp0 &= mask;
-            state->field_0C = temp0;
+            state->yield_voice_mask = temp0;
             temp0 = state->volume_dirty_mask;
             temp1 &= mask;
             state->adsr_dirty_mask = temp1;
