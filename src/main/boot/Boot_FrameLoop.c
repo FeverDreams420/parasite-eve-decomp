@@ -24,8 +24,7 @@ u32 D_8009CDA4[1];
 
 extern int D_8009CDD8;
 extern int D_8009CDDC;
-extern u8 D_8009D1F4_blob[] asm("D_8009D1F4");
-#define D_8009D1F4 (*(u32 *)D_8009D1F4_blob)
+extern u32 D_8009D1F4;
 extern u32 D_8009D238;
 extern u32 D_8009D250;
 extern u32 D_8009D26C;

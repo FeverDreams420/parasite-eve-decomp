@@ -835,11 +835,6 @@ int Geo_PointInTri(void *triangle, s16 x, s16 z)
     return inside;
 }
 
-/* Matching debt: independent views preserve the absolute flag load/store.
- * Both names refer to one word; the array declarations control addressing. */
-extern u32 rampFlagsRead[4] asm("D_8009D2E8");
-extern u32 rampFlagsWrite[4] asm("D_8009D2E8");
-
 void Entity_SlideOnRamp(BattleEntity *entity)
 {
     s32 x = entity->baseX;
@@ -852,7 +847,7 @@ void Entity_SlideOnRamp(BattleEntity *entity)
     s32 edgeX, edgeZ;
     s32 radius, direction;
 
-    rampFlagsWrite[0] = rampFlagsRead[0] | 8;
+    D_8009D2E8 |= 8;
     projection = Math_FixedMul(directionX, deltaX);
     projection += Math_FixedMul(directionZ, entity->posZ.fixed - z);
     x = Math_FixedMul(directionX, projection);
