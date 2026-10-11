@@ -1,22 +1,23 @@
 #include "scene_e08.h"
+#include "pe1/scene_e08_layered_sprite.h"
 
-void func_801943CC(void *arg0, void *arg1, Ovl178EffectState *out)
+void func_801943CC(void *arg0, void *arg1, SceneLayeredSpriteState *out)
 {
     Ovl178Position *position = func_800C2B50();
 
-    out->field_00 = position->x << 16;
-    out->field_04 = position->y << 16;
-    out->field_08 = position->z << 16;
-    out->field_20 = 0;
-    out->field_22 = 0;
-    out->field_24 = 0;
-    out->field_2C = *func_800C2B10(2);
-    out->field_28 = *func_800C2B10(3);
-    out->field_2A = *func_800C2B28(1);
-    if (out->field_28 == 0)
-        out->field_18 = 0x124F80;
+    out->center[0].fixed = position->x << 16;
+    out->center[1].fixed = position->y << 16;
+    out->center[2].fixed = position->z << 16;
+    out->initialSeed.vector.x = 0;
+    out->initialSeed.vector.y = 0;
+    out->initialSeed.vector.z = 0;
+    out->phase = *func_800C2B10(2);
+    out->direction = *func_800C2B10(3);
+    out->drift = *func_800C2B28(1);
+    if (out->direction == 0)
+        out->velocity[2] = 0x124F80;
     else
-        out->field_18 = 0xFFEDB080;
-    out->field_10 = 0x7A120;
-    out->field_14 = 0xFFF551A0;
+        out->velocity[2] = 0xFFEDB080;
+    out->velocity[0] = 0x7A120;
+    out->velocity[1] = 0xFFF551A0;
 }

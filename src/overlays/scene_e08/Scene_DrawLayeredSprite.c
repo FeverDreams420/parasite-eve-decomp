@@ -1,32 +1,8 @@
 #include "scene_e08.h"
+#include "pe1/scene_e08_layered_sprite.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_sprite_state.h"
-
-typedef struct {
-    s16 fraction;
-    s16 integer;
-} SceneFixedCoordinate;
-
-typedef struct {
-    s16 x, y, z, pad;
-} SceneLayerPosition;
-
-typedef struct {
-    SceneFixedCoordinate center[3];
-    u8 pad_0C[0x14];
-    RoomFxSeed8 initialSeed;
-    u8 pad_28[8];
-    SceneLayerPosition layers[5];
-    RoomFxSeed8 layerSeeds[5];
-} SceneLayeredSpriteState;
-
-PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneLayeredSpriteState, initialSeed) == 0x20,
-                  scene_layered_initial_seed_offset);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneLayeredSpriteState, layers) == 0x30,
-                  scene_layered_positions_offset);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneLayeredSpriteState, layerSeeds) == 0x58,
-                  scene_layered_seed_offset);
 
 typedef struct {
     Ovl178Position position;
@@ -73,16 +49,16 @@ void func_80194498(void *unused, u16 *phase, SceneLayeredSpriteState *state) {
 
     alphaBase = &D_8019956A;
     alpha = alphaBase;
-    matrix.t[0] = state->center[0].integer;
+    matrix.t[0] = state->center[0].parts.integer;
     red = (u8 *)((char *)alpha - 10);
-    matrix.t[1] = state->center[1].integer;
-    matrix.t[2] = state->center[2].integer;
+    matrix.t[1] = state->center[1].parts.integer;
+    matrix.t[2] = state->center[2].parts.integer;
     *alpha = 0x80;
     func_800C42A4((FieldGlowSprite *)((char *)alphaBase - 10), &matrix, 0);
 
-    matrix.t[0] = state->center[0].integer;
+    matrix.t[0] = state->center[0].parts.integer;
     matrix.t[1] = g_RoomFloorY->y;
-    matrix.t[2] = state->center[2].integer;
+    matrix.t[2] = state->center[2].parts.integer;
     *alpha = 0x20;
     func_800C42A4((FieldGlowSprite *)((char *)alpha - 10), &matrix, 0);
 

@@ -23,24 +23,7 @@ typedef struct {
     s32 z;
 } Ovl178Position;
 
-typedef struct {
-    s32 field_00;
-    s32 field_04;
-    s32 field_08;
-    char pad_0C[4];
-    s32 field_10;
-    s32 field_14;
-    s32 field_18;
-    char pad_1C[4];
-    s16 field_20;
-    s16 field_22;
-    s16 field_24;
-    char pad_26[2];
-    u8 field_28;
-    char pad_29;
-    s16 field_2A;
-    s32 field_2C;
-} Ovl178EffectState;
+
 
 typedef struct {
     u8 pad_00[8];
