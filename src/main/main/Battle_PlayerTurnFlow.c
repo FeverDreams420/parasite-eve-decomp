@@ -1,13 +1,18 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "pe1/battle_runtime.h"
 #include "pe1/gte_types.h"
-
-#include "Battle_PlayerTurnFlow_externs.h"
 #include "pe1/battle_main.h"
-#define PLAYER (D_8009D254_absolute.value)
-#define ACTIVE (D_8009D278_absolute.value)
-#define SECOND_SOUND (D_8009D2FC_absolute.value)
+
+/* COMMON supplies the small-data sizes of the turn queue words to MASPSX;
+ * every other word stays absolute. */
+u8 D_8009CE39;
+u8 D_8009CE3B;
+u8 D_8009CE3C;
+u8 D_8009D1D4;
+int D_8009D200;
+s16 D_8009D27C;
 
 int Battle_CalcDistToPlayer(BattleEntity *actor, BattleEntity *player);
 s16 Battle_CalcAngleToTarget(RenderObjectEntity *object, void *target);
@@ -18,7 +23,7 @@ int Battle_StepCharacterAction(BattleInitSlot *slot);
 void Battle_UpdatePlayerTurn(void)
 {
     BattleInitSlot *slot = &D_800BE830[D_8009D1D4];
-    BattleEntity *player = PLAYER;
+    BattleEntity *player = D_8009D254;
     BattleEntity *actor;
     Combatant *active;
     int angle;
@@ -27,7 +32,7 @@ void Battle_UpdatePlayerTurn(void)
     int diff;
 
     if (player->actionMode != 12) {
-        active = ACTIVE;
+        active = D_8009D278;
         if (active->stateFlags & 0x200000) {
             BattleEntity *target = slot->actor;
             if (target->core != 0 && CORE_HEALTH(target) > 0) {
@@ -37,14 +42,14 @@ void Battle_UpdatePlayerTurn(void)
                 if (angle < -0xAB) category = 0;
                 else if (angle < 0xE4) category = 1;
                 else category = 2;
-                Entity_SetActionMode(PLAYER, *(category + ACTIVE->targetAngleActionModes));
-                ACTIVE->stateFlags &= ~0x200000;
+                Entity_SetActionMode(D_8009D254, *(category + D_8009D278->targetAngleActionModes));
+                D_8009D278->stateFlags &= ~0x200000;
             }
         }
 
         {
             BattleEntity *angle_actor = slot->actor;
-            PLAYER->facingAngle = Battle_CalcAngleToTarget(&angle_actor->renderObject, &PLAYER->posX);
+            D_8009D254->facingAngle = Battle_CalcAngleToTarget(&angle_actor->renderObject, &D_8009D254->posX);
             step = Battle_StepCharacterAction(slot);
             if (step == 0) return;
             if (step != 1) return;
@@ -56,7 +61,7 @@ void Battle_UpdatePlayerTurn(void)
                 u8 count = D_8009CE39;
                 u8 delta = D_8009CE3B;
                 register Combatant *effect asm("$4");
-                                effect = ACTIVE;
+                                effect = D_8009D278;
                 D_8009CE39 = count + delta;
                 asm volatile("" : : );
                 if (effect->action->attackWord & 0x3FF)
@@ -66,10 +71,10 @@ void Battle_UpdatePlayerTurn(void)
 
         D_8009D1D4++;
         if (D_8009D1D4 != D_8009CE3C) return;
-        if (ACTIVE->action->actionCode.actionId != 8)
+        if (D_8009D278->action->actionCode.actionId != 8)
             Pm_SendCmd(D_8009D200, 0, 0, 2, 0, 0);
         {
-            int sound = SECOND_SOUND;
+            int sound = D_8009D2FC;
             if (sound != -1)
                 Pm_SendCmd(sound, 0, 0, 2, 0, 0);
         }
@@ -84,29 +89,11 @@ void Battle_UpdatePlayerTurn(void)
     if (angle < -0xAB) category = 0;
     else if (angle < 0xE4) category = 1;
     else category = 2;
-    Entity_SetActionMode(PLAYER, *(category + ACTIVE->targetAngleActionModes));
+    Entity_SetActionMode(D_8009D254, *(category + D_8009D278->targetAngleActionModes));
 }
 
 #include "common.h"
 #include "pe1/battle.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
-
-#include "Battle_PlayerTurnFlow_externs_1.h"
-
-#define D254_A (*(BattleEntity **)&D_8009D254_absolute)
-#define D254_B (*(BattleEntity **)&D_8009D254_d)
-#define D254_C (*(BattleEntity **)&D_8009D254_absolute)
-#define D254_D (*(BattleEntity **)&D_8009D254_d)
-#define D254_E (*(BattleEntity **)&D_8009D254_e)
-#define D278_A (*(Combatant **)&D_8009D278_absolute)
-#define D278_B (*(Combatant **)&D_8009D278_c)
-#define D278_C (*(Combatant **)&D_8009D278_c)
-#define D278_D (*(Combatant **)&D_8009D278_d)
-#define D1A0_R0 (D_8009D1A0_r0.flags)
-#define D1A0_W0 (D_8009D1A0_w1.flags)
-#define D1A0_R1 (D_8009D1A0_r0.flags)
-#define D1A0_W1 (D_8009D1A0_w1.flags)
 
 #define U8_AT(ptr, offset) (*(u8 *)((u8 *)(ptr) + (offset)))
 #define S16_AT(ptr, offset) (*(s16 *)((u8 *)(ptr) + (offset)))
@@ -125,28 +112,28 @@ void Battle_ApplyPlayerHit(void) {
     u16 action;
 
     committed = 0x200000;
-    if (D278_A->stateFlags & committed) {
+    if (D_8009D278->stateFlags & committed) {
         unsigned int stateFlags;
-        Entity_SetActionMode(D254_A, 0xE);
-        Asset_Find08Alt(0x4B3, 0, D254_B->posX.parts.integer,
-                        D254_B->posY.parts.integer, D254_B->posZ.parts.integer);
+        Entity_SetActionMode(D_8009D254, 0xE);
+        Asset_Find08Alt(0x4B3, 0, D_8009D254->posX.parts.integer,
+                        D_8009D254->posY.parts.integer, D_8009D254->posZ.parts.integer);
 
         mask = ~0x200000;
-        actor = D278_B;
+        actor = D_8009D278;
         stateFlags = actor->stateFlags;
-        flags = D1A0_R0;
-        D1A0_W0 = flags | 0x100;
+        flags = D_8009D1A0;
+        D_8009D1A0 = flags | 0x100;
         actor->stateFlags = stateFlags & mask;
     }
 
-    if (D254_C->animLastFrame == D254_C->animPrev.parts.integer) {
-        Entity_SetActionMode(D254_C, D278_C->actionMode12);
-        actor = D278_D;
+    if (D_8009D254->animLastFrame == D_8009D254->animPrev.parts.integer) {
+        Entity_SetActionMode(D_8009D254, D_8009D278->actionMode12);
+        actor = D_8009D278;
         index = D_8009D1D4;
         actor->stateFlags |= committed;
 
         Battle_ApplyDamage((s16)ACTION_AT(index) - 3);
-        Scene_LoadRoomAssets(0x55, D254_D);
+        Scene_LoadRoomAssets(0x55, D_8009D254);
 
         {
             unsigned int nextIndex = D_8009D1D4 + 1;
@@ -154,8 +141,8 @@ void Battle_ApplyPlayerHit(void) {
             D_8009D1D4 = nextIndex;
         }
 
-        if ((unsigned int)(action - 3) >= 0x194 || D254_E->actionMode < 4) {
-            D1A0_W1 = D1A0_R1 & ~0x100;
+        if ((unsigned int)(action - 3) >= 0x194 || D_8009D254->actionMode < 4) {
+            D_8009D1A0 = D_8009D1A0 & ~0x100;
         }
     }
 }
