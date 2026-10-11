@@ -203,7 +203,9 @@ int Menu_StepSkillSelect(MenuWidgetNode *arg0, int arg1) {
         temp_v0 = MenuWidget_GridCellIndex(MenuWidget_GetChild(arg0, 0));
         if (temp_v0 != 0) {
             if (temp_v0 == 1) {
-                goto shared_1;
+                MenuWidget_DestroyNode(arg0);
+                Menu_PlayCancelSound();
+                return 1;
             }
             return 1;
         }
@@ -494,8 +496,9 @@ void Menu_OpenItemList(void)
         i = (D_800A1888[0] > 0) + (D_800A188C[0] > 0) + (D_800A1890[0] > 0);
         if (D_800A1894[0] > 0 ? i + 1 >= 2 : i >= 2) {
             Menu_CreateScreenModeSubmenu();
-            goto confirm;
         }
+        else
+        {
 
         for (i = 0; i < 4 && D_800A1888[i] == 0; ++i) {}
         D_8009CF2C = i < 4 ? i : 0;
@@ -506,6 +509,7 @@ void Menu_OpenItemList(void)
             Menu_CreateItemActionSubmenu();
         } else {
             Menu_CreateItemList();
+        }
         }
     confirm:
         Menu_PlayConfirmSound();

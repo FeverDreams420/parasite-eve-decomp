@@ -597,7 +597,8 @@ void Menu_DrawTextboxEntries(void) {
                             if (sectionIndex != (textbox->control.parts.bits & 15))
                                 goto section_skip;
                             stopDrawing = 1;
-                            goto section_next;
+                            sectionIndex++;
+                            break;
                         }
                         goto section_skip;
                     }
@@ -611,8 +612,9 @@ void Menu_DrawTextboxEntries(void) {
                                 goto section_skip;
                             textbox->control.parts.elapsed = temp_a0_4 + 1;
                             stopDrawing = 1;
-                            goto section_next;
                         }
+                        else
+                        {
                     section_delay_again:
                         if (sectionIndex == (textbox->control.parts.bits & 15)) {
                             textbox->control.parts.elapsed = 0;
@@ -626,6 +628,7 @@ void Menu_DrawTextboxEntries(void) {
                         if (textbox->control.parts.elapsed != 0) {
                     section_skip:
                         stream++;
+                        }
                         }
                     section_next:
                         sectionIndex++;

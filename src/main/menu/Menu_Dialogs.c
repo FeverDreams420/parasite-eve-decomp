@@ -399,18 +399,22 @@ void Menu_CreateTwoLineDialog(int line0_id, int line1_id) {
         width = 100;
         /* Keep the short-width branch distinct from the second-line test. */
         asm("");
-        goto width_ready;
     }
+    else
+    {
     if (Draw_MeasureTextWidth(line1) < 100) {
         width = 100;
-        goto width_ready;
     }
+    else
+    {
 measure_wide:
     {
         u8 *first = D_800A1A20[0];
         u8 *second = first + 0x40;
         width = Draw_MeasureTextWidth(first) > Draw_MeasureTextWidth(second)
             ? Draw_MeasureTextWidth(first) : Draw_MeasureTextWidth(second);
+    }
+    }
     }
 width_ready:
     /* Do not pull layout arithmetic into the preceding jump delay slot. */
@@ -527,8 +531,9 @@ s32 Menu_MemCardPortSelectHandler(void *node, s32 flags) {
             if (cellIndex == 2) {
                 goto close_dialog;
             }
-            goto error_sound;
             }
+            else
+            {
 read_card:
             if ((MemCard_CheckPresent(cellIndex) != 0) && (MemCard_IsPortPresent(cellIndex) != 0) && (MemCard_IsOperationPending() == 0)) {
                 MemCard_CloseAllAndResetState();
@@ -548,6 +553,7 @@ close_dialog:
             Menu_PlayConfirmSound();
             return 1;
         }
+            }
 error_sound:
         Menu_PlayErrorSound();
         return 1;

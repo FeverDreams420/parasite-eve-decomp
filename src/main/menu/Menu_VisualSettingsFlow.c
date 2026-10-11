@@ -144,11 +144,13 @@ check4000:
     temp_v1_3 = ((temp_v1 >> temp_s0) & 0xFF) - 2;
     if (temp_v1_3 >= 0x20) {
         var_v0 = temp_v1_3 << temp_s0;
-        goto blend;
     }
+    else
+    {
     clamp = 0x20;
 clampshift:
     var_v0 = clamp << temp_s0;
+    }
 blend:
     Draw_BlendColor(var_a0 | var_v0);
     Menu_PlayMoveSound();
@@ -236,20 +238,20 @@ int Draw_GetBaseY(void);
 int func_8004B650(void *node, int input) {
     int zero_arg;
 
+    do {
     if ((input & 0x1000) != 0) {
         zero_arg = 0;
         input = -1;
-        goto move;
-    }
-
-    if ((input & 0x4000) != 0) {
+    } else if ((input & 0x4000) != 0) {
         zero_arg = 0;
         input = 1;
-move:
+    } else {
+        break;
+    }
         Draw_SetBaseOffsetPosition(zero_arg, input);
         Menu_PlayMoveSound();
         return 1;
-    }
+    } while (0);
 
     if ((input & 0x10000) != 0) {
         MenuWidget_DestroyNode(node);

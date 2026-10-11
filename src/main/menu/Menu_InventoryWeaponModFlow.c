@@ -109,7 +109,7 @@ void Menu_DrawWeaponModSlots(s32 arg0) {
             Draw_AllocSprite(0x22U);
             Draw_OffsetCursor(0xC, -2);
             var_a0 = D_800922CC[temp_s0];
-            goto block_5;
+            Draw_AllocSprite(var_a0);
         }
     } else {
         Draw_AllocSprite(D_800922BC[temp_s0]);

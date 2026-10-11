@@ -102,18 +102,18 @@ s32 Menu_StepSaveSelect(MenuWidgetNode *arg0, s32 arg1) {
                                 MenuWidget_NavScrollTo(0x1F);
                                 Menu_CreateMemCardProgressWidget(0x45);
                                 var_a0 = &func_800504F4;
-                                goto block_17;
-                            }
-                            temp_s0 = g_SaveSelectedSlot;
-                            if (MenuWidget_FindByModeAndSelectedBase(1, 0x28) == 0) {
-                                Menu_CreateTwoLineDialog(temp_s0 + 0x47, g_McDialogMode + 0x42);
+                                func_80042B50(var_a0);
+                            } else {
+                                temp_s0 = g_SaveSelectedSlot;
+                                if (MenuWidget_FindByModeAndSelectedBase(1, 0x28) == 0) {
+                                    Menu_CreateTwoLineDialog(temp_s0 + 0x47, g_McDialogMode + 0x42);
+                                }
                             }
                         }
                     } else {
                         MenuWidget_NavScrollTo(0x1F);
                         Menu_CreateMemCardProgressWidget(0x46);
                         var_a0 = &func_8005051C;
-block_17:
                         func_80042B50(var_a0);
                     }
                     Menu_PlayConfirmSound();

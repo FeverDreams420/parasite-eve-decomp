@@ -144,6 +144,7 @@ int Menu_StepNameEntryAlt(MenuWidgetNode *parent, unsigned int input) {
     }
     }
 
+    do {
     if (input & MENU_INPUT_RIGHT) {
         int mode;
         int cursor_y;
@@ -213,14 +214,15 @@ int Menu_StepNameEntryAlt(MenuWidgetNode *parent, unsigned int input) {
         node->cursor_y = 0;
         move_node = node;
     } else {
-        goto after_move;
+        break;
     }
 
     MenuWidget_SetCurrentNode(move_node);
     Menu_PlayMoveSound();
     return 1;
+    } while (0);
 
-after_move:
+
     if (input & MENU_INPUT_BACK) {
         if (node->selected_base != MODE_NAME_WINDOW_2) {
             node->cursor_x = -1;
