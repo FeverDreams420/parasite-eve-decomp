@@ -44,7 +44,7 @@ void RoomFx_OrbitSetInit(char *object, void *unused, char *state) {
     allocation = Asset_SearchByKeyType(0x24);
 
     callObject = object;
-    ((RoomOrbitSetState *)state)->allocation = allocation;
+    ((RoomOrbitSetState *)state)->asset.allocation = allocation;
     value = -0x29;
     value128a = 0x80;
     value128b = 0x80;
@@ -142,7 +142,7 @@ void RoomFx_DrawOrbitParticles(
     RoomSpriteMatrix matrix;
     RoomFxVec4 scratchScale;
     RoomFxVec4 scale;
-    char *owner;
+    RoomOrbitSetState *owner;
     unsigned short *depthSlot;
     short *position;
     unsigned int i;
@@ -151,7 +151,7 @@ void RoomFx_DrawOrbitParticles(
 
     i = 0;
     depthSlot = (unsigned short *)&g_RoomOrbitParticlePacket.depth;
-    func_800C2EAC(owner[0x24]);
+    func_800C2EAC(owner->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
@@ -262,7 +262,7 @@ void RoomFx_DrawOrbitBurst(
     RoomSpriteMatrix matrix;
     RoomFxVec4 scratchScale;
     RoomFxVec4 scale;
-    char *owner;
+    RoomOrbitSetState *owner;
     RoomOrbitBurstVector *position;
     unsigned char *configA;
     unsigned char *configB;
@@ -275,7 +275,7 @@ void RoomFx_DrawOrbitBurst(
     configB = &g_RoomOrbitShadowPacket.code;
     PE1_COMPILER_USE(configB);
     position = state->position;
-    func_800C2EAC(owner[0x24]);
+    func_800C2EAC(owner->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
@@ -414,11 +414,11 @@ void RoomFx_DrawOrbitSprite(
     RoomSpriteMatrix matrix;
     RoomFxVec4 scratchScale;
     RoomFxVec4 scale;
-    char *owner;
+    RoomOrbitSetState *owner;
     u8 *drawSlot;
 
     owner = func_800C2B50();
-    func_800C2EAC(owner[0x24]);
+    func_800C2EAC(owner->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);

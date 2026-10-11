@@ -497,14 +497,14 @@ typedef struct RoomEruptionShadowStack {
 void RoomEffect_GroundEruptionDrawShadow(
     void *unused0, void *unused1, RoomFxGroundSpriteParams *fx) {
     RoomEruptionShadowStack stack;
-    char *owner;
+    RoomEruptionActor *owner;
     unsigned short *depthSlot;
     RenderMatrixSlot *matrixSlot;
 
     owner = func_800C2B50();
     stack.seed = s_EruptionShadowSeed;
     RotMatrix(&stack.seed.vector, &stack.generatedMatrix);
-    func_800C2EAC(owner[0x24]);
+    func_800C2EAC(owner->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
@@ -540,7 +540,7 @@ void RoomEffect_GroundEruptionNop2(void) {
 
 /* Flings the six debris particles out at random angles. */
 void RoomEffect_GroundEruptionInitDebris(void *arg0, void *arg1, char *state) {
-    char *owner;
+    RoomEruptionActor *owner;
     unsigned int i;
     short *flag;
     int *life;
@@ -557,9 +557,9 @@ void RoomEffect_GroundEruptionInitDebris(void *arg0, void *arg1, char *state) {
     particle = state;
     for (; i < 6; i++) {
         PE1_COMPILER_LAUNDER(particle);
-        ((RoomEruptionDebrisState *)particle)->position[0].x = ((RoomEruptionActor *)owner)->matrix.t[0];
-        ((RoomEruptionDebrisState *)particle)->position[0].y = ((RoomEruptionActor *)owner)->matrix.t[1];
-        ((RoomEruptionDebrisState *)particle)->position[0].z = ((RoomEruptionActor *)owner)->matrix.t[2];
+        ((RoomEruptionDebrisState *)particle)->position[0].x = owner->matrix.t[0];
+        ((RoomEruptionDebrisState *)particle)->position[0].y = owner->matrix.t[1];
+        ((RoomEruptionDebrisState *)particle)->position[0].z = owner->matrix.t[2];
 
         wave = rsin(angle);
         ((RoomEruptionDebrisState *)particle)->velocity[0].x =
@@ -585,7 +585,7 @@ void RoomEffect_GroundEruptionInitDebris(void *arg0, void *arg1, char *state) {
 void RoomEffect_GroundEruptionDrawDebris(void *arg0, void *arg1, RoomEruptionDebrisState *state) {
     RoomSpriteMatrix matrix;
     RoomFxVec4 scale;
-    char *owner;
+    RoomEruptionActor *owner;
     int depth;
     unsigned int i;
     GteShortVector *particle;
@@ -602,7 +602,7 @@ void RoomEffect_GroundEruptionDrawDebris(void *arg0, void *arg1, RoomEruptionDeb
     mode = 3;
     packetFields = &g_RoomEruptionDebrisPacket.code;
     packet = (RoomFxSpritePacket *)(packetFields - 4);
-    func_800C2EAC(owner[0x24]);
+    func_800C2EAC(owner->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);

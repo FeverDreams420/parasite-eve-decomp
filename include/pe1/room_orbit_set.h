@@ -22,10 +22,13 @@
 typedef struct RoomOrbitSetState {
     struct FieldActor *owner;
     RenderMatrix matrix;
-    void *allocation;
+    union {
+        void *allocation;
+        u8 page;                  /* texture page the draws select */
+    } asset;
 } RoomOrbitSetState;
 
-PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomOrbitSetState, allocation) == 0x24,
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomOrbitSetState, asset) == 0x24,
                   room_orbit_set_allocation_offset);
 
 /* Per-room data: the four sprite records, at different addresses and with
