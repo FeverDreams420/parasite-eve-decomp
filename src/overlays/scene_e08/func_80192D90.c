@@ -23,23 +23,19 @@ void func_80192D90(void *unused0, void *unused1, SceneE08OrbitParticles *effect)
     char *table = (char *)D_801996A0;
     char *owner;
     unsigned i;
-    /* Both cursors address interleaved effect fields at different strides. */
-    register char *phase asm("$16") = (char *)effect;
-    char *state;
 
     owner = func_800C2B50();
     i = 0;
     asm volatile("" : : "r"(scale));
-    state = phase;
     func_800C2EAC(*(u8 *)(owner + 0x24));
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
     for (; i < 32; i++) {
-        if (((SceneE08OrbitParticles *)state)->active[0] == 1) {
-            temp[0] = (rsin(((SceneE08OrbitParticles *)phase)->angle[0]) * ((SceneE08OrbitParticles *)phase)->radius[0]) >> 12;
+        if (effect->active[i] == 1) {
+            temp[0] = (rsin(effect->angle[i]) * effect->radius[i]) >> 12;
             temp[1] = 0;
-            temp[2] = (rcos(((SceneE08OrbitParticles *)phase)->angle[0]) * ((SceneE08OrbitParticles *)phase)->radius[0]) >> 12;
+            temp[2] = (rcos(effect->angle[i]) * effect->radius[i]) >> 12;
             matrix.m[2][2] = scale;
             matrix.m[1][1] = scale;
             matrix.m[0][0] = scale;
@@ -53,18 +49,16 @@ void func_80192D90(void *unused0, void *unused1, SceneE08OrbitParticles *effect)
             matrix.m[0][2] = 0;
             matrix.m[0][1] = 0;
             memset(&v, 0, 0x10);
-            v.x = ((SceneE08OrbitParticles *)phase)->size[0];
-            v.y = ((SceneE08OrbitParticles *)phase)->size[0];
+            v.x = effect->size[i];
+            v.y = effect->size[i];
             v.z = scale;
             transformed = v;
             ScaleMatrix(&matrix, &transformed);
             matrix.t[0] = temp[0] + D_8019956C;
             matrix.t[1] = temp[1];
             matrix.t[2] = temp[2] + D_8019957C;
-            func_800C3134(D_80198848, ((SceneE08OrbitParticles *)state)->frame[0], table);
+            func_800C3134(D_80198848, effect->frame[i], table);
             func_800C42A4((FieldGlowSprite *)table, &matrix, 1);
         }
-        phase += 2;
-        state += 1;
     }
 }
