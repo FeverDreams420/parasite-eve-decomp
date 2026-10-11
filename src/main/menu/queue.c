@@ -19,8 +19,8 @@ void Queue_Init(void) {
     MenuQueueEntry *entry;
     MenuQueueEntry *end;
 
-    entry = D_800A2090;
-    end = D_800A2090 + 20;
+    entry = g_MenuEventQueuePool;
+    end = g_MenuEventQueuePool + MENU_EVENT_QUEUE_SIZE;
     if (entry < end) {
         do {
             entry->next = entry + 1;
@@ -28,8 +28,8 @@ void Queue_Init(void) {
         } while (entry < end);
     }
 
-    D_800A2174[0].next = 0;
-    g_MenuEventQueueFreeList = (MenuQueueEntry *)((char *)D_800A2174 - 0xE4);
+    g_MenuEventQueuePool[MENU_EVENT_QUEUE_SIZE - 1].next = 0;
+    g_MenuEventQueueFreeList = g_MenuEventQueuePool;
     g_MenuEventQueueTail = 0;
     g_MenuEventQueueHead = 0;
     g_MenuInputActive = 0;
@@ -37,7 +37,7 @@ void Queue_Init(void) {
     g_MenuInputHeldStatusMask = 0;
 }
 
-void Queue_Enqueue(int arg0, int arg1) {
+inline void Queue_Enqueue(int arg0, int arg1) {
     MenuQueueEntry *entry;
     MenuQueueEntry *tail;
 
@@ -60,7 +60,7 @@ void Queue_Enqueue(int arg0, int arg1) {
     }
 }
 
-void Queue_DequeueByMask(int mask, MenuQueueEntry *out_arg) {
+inline void Queue_DequeueByMask(int mask, MenuQueueEntry *out_arg) {
     MenuQueueEntry *out;
     MenuQueueEntry *entry;
     MenuQueueEntry *prev;
@@ -97,12 +97,14 @@ void Queue_DequeueByMask(int mask, MenuQueueEntry *out_arg) {
                 entry->next = oldFree;
             }
             *out = *entry;
-            return;
+        } else {
+            out->payload.values.value0 = 0;
+            out->payload.values.value1 = 0;
         }
+    } else {
+        out->payload.values.value0 = 0;
+        out->payload.values.value1 = 0;
     }
-
-    out->payload.values.value0 = 0;
-    out->payload.values.value1 = 0;
 }
 
 #include "pe1/psyq_nop.h"
@@ -120,73 +122,60 @@ typedef MenuWidgetNode MenuInputWidget;
 int D_8009D0F4;
 int D_8009D0F8;
 
-#include "queue_externs.h"
-#define g_FieldPadBits (g_FieldPadBits[0])
+#include "pe1/field_pad.h"
 
-int Draw_RemapStatusFlags(void)
-{
-  int value;
-  register int later_value;
-  register int bit2;
-  int mask;
-  value = g_FieldPadBits;
-  mask = (value << 9) & 0x1000;
-  if (value & 0x20)
-  {
-    mask |= 0x4000;
-  }
-  if (value & 0x40)
-  {
-    mask |= 0x8000;
-  }
-  if (value & 0x10)
-  {
-    mask |= 0x2000;
-  }
-  if (value & 0x20000000)
-  {
-    mask |= 0x20;
-  }
-  if (value & 0x40000000)
-  {
-    mask |= 0x40;
-  }
-  if (value & 0x10000000)
-  {
-    mask |= 0x10;
-  }
-  if (value < 0)
-  {
-    mask |= 0x80;
-  }
-  if (value & 0x04000000)
-  {
-    mask |= 0x4;
-  }
-  if (value & 0x08000000)
-  {
-    mask |= 0x8;
-  }
-  later_value = value;
-  if (later_value & 0x01000000)
-  {
-    mask |= 0x1;
-  }
-  if (later_value & 0x02000000)
-  {
-    mask |= 0x2;
-  }
-  bit2 = later_value & 0x2;
-  if (bit2)
-  {
-    mask |= 0x100;
-  }
-  if (value & 0x4)
-  {
-    later_value = 0x800;
-    mask |= later_value;
-  }
-  return mask;
+/* Translate the field pad bits into the menu input status flags. */
+int Draw_RemapStatusFlags(void) {
+    int pad;
+    register int lower;
+    register int select;
+    int mask;
+
+    pad = g_FieldPadBits;
+    mask = (pad << 9) & 0x1000;
+    if (pad & 0x20) {
+        mask |= 0x4000;
+    }
+    if (pad & 0x40) {
+        mask |= 0x8000;
+    }
+    if (pad & 0x10) {
+        mask |= 0x2000;
+    }
+    if (pad & 0x20000000) {
+        mask |= 0x20;
+    }
+    if (pad & 0x40000000) {
+        mask |= 0x40;
+    }
+    if (pad & 0x10000000) {
+        mask |= 0x10;
+    }
+    if (pad < 0) {
+        mask |= 0x80;
+    }
+    if (pad & 0x04000000) {
+        mask |= 0x4;
+    }
+    if (pad & 0x08000000) {
+        mask |= 0x8;
+    }
+    lower = pad;
+    if (lower & 0x01000000) {
+        mask |= 0x1;
+    }
+    if (lower & 0x02000000) {
+        mask |= 0x2;
+    }
+    select = lower & 0x2;
+    if (select) {
+        mask |= 0x100;
+    }
+    if (pad & 0x4) {
+        lower = 0x800;
+        mask |= lower;
+    }
+    return mask;
 }
 
 #include "pe1/bounds_check.h"
@@ -199,54 +188,18 @@ int MenuInput_GetRepeatStep(void) {
     return D_8009D0F4;
 }
 
-static inline void AppendInputEvent(MenuInputQueuedEvent *event,
-                                    MenuInputQueuedEvent *tail) {
-    if (tail != 0) {
-        tail->next = event;
-    } else {
-        if (g_MenuEventQueueHead != 0)
-            BoundsCheck_AssertStub(0x1F);
-        g_MenuEventQueueHead = event;
-    }
-    g_MenuEventQueueTail = event;
-}
-
 void MenuInput_EnqueueStatusChanges(int flags) {
-    int flags_reg;
-    MenuInputQueuedEvent *event;
-    MenuInputQueuedEvent *tail;
     int mapped;
-    int released;
+    int changed;
     int timer;
-    int prev_flags;
     int repeat_reset;
-    int repeat_step;
-    register int type asm("$2");
-    register int release_type;
 
-    flags_reg = flags;
     repeat_reset = 0;
     mapped = Draw_RemapStatusFlags();
     if (g_MenuInputActive != 0) {
-        int inverse;
-        prev_flags = g_MenuInputHeldStatusMask;
-        inverse = ~mapped;
-        released = inverse & prev_flags;
-        if (released != 0) {
-            event = g_MenuEventQueueFreeList;
-            release_type = 4;
-            if (event != 0) {
-                {
-                    MenuInputQueuedEvent *next = event->next;
-                    asm("" : : : "memory");
-                    g_MenuEventQueueFreeList = next;
-                }
-                event->next = 0;
-                tail = g_MenuEventQueueTail;
-                AppendInputEvent(event, tail);
-                event->payload.input.type = release_type;
-                event->payload.input.flags = released;
-            }
+        changed = ~mapped & g_MenuInputHeldStatusMask;
+        if (changed != 0) {
+            Queue_Enqueue(4, changed);
         }
 
         if (g_MenuInputHeldStatusMask != mapped) {
@@ -256,40 +209,18 @@ void MenuInput_EnqueueStatusChanges(int flags) {
         timer = D_8009D0F8 - 2;
         D_8009D0F8 = timer;
         if (timer < 0) {
-            if ((flags_reg != 0 && timer < -0x5A) || (timer & 3) == 0) {
+            if ((flags != 0 && timer < -0x5A) || (timer & 3) == 0) {
                 g_MenuInputHeldStatusMask = 0;
                 repeat_reset = 1;
             }
         }
 
-        if (D_8009D0F8 >= -0x12B) {
-            repeat_step = 1;
-        } else {
-            repeat_step = 8;
-        }
-        D_8009D0F4 = repeat_step;
+        D_8009D0F4 = D_8009D0F8 >= -0x12B ? 1 : 8;
 
-        {
-            int previous;
-            previous = g_MenuInputHeldStatusMask;
-            released = mapped & ~previous;
-        }
-        if (released != 0) {
-            if (repeat_reset == 0 || (released & 0x40) == 0) {
-                type = repeat_reset != 0 ? 2 : 1;
-                event = g_MenuEventQueueFreeList;
-                if (event != 0) {
-                    register MenuInputQueuedEvent *next asm("$2");
-                    int event_type;
-                    event_type = type;
-                    next = event->next;
-                    tail = g_MenuEventQueueTail;
-                    event->next = 0;
-                    g_MenuEventQueueFreeList = next;
-                    AppendInputEvent(event, tail);
-                    event->payload.input.type = event_type;
-                    event->payload.input.flags = released;
-                }
+        changed = mapped & ~g_MenuInputHeldStatusMask;
+        if (changed != 0) {
+            if (repeat_reset == 0 || (changed & 0x40) == 0) {
+                Queue_Enqueue(repeat_reset != 0 ? 2 : 1, changed);
             }
         }
         g_MenuInputHeldStatusMask = mapped;
@@ -300,12 +231,7 @@ void MenuInput_EnqueueStatusChanges(int flags) {
 
 void MenuInput_DispatchQueuedEvents(void) {
     MenuInputWidget *node;
-    MenuInputQueuedEvent *event;
-    MenuInputQueuedEvent *prev;
-    MenuInputQueuedEvent *head;
-    MenuInputQueuedEvent *free_head;
     MenuInputQueuedEvent local;
-    MenuInputQueuedEvent *localp;
     int type;
     int flags;
     int handled;
@@ -315,39 +241,7 @@ void MenuInput_DispatchQueuedEvents(void) {
         MenuInput_EnqueueStatusChanges(node->flags);
     }
 
-    localp = &local;
-    head = g_MenuEventQueueHead;
-    if (head != 0) {
-        event = head;
-        prev = 0;
-        while (event != 0 && event->payload.input.type == 0) {
-            prev = event;
-            event = event->next;
-        }
-
-        if (event != 0) {
-            if (prev != 0) {
-                prev->next = event->next;
-            } else {
-                MenuInputQueuedEvent *next = event->next;
-                PE1_NOP_DEP("r", next);
-                g_MenuEventQueueHead = next;
-            }
-            if (event == g_MenuEventQueueTail) {
-                g_MenuEventQueueTail = prev;
-            }
-            free_head = g_MenuEventQueueFreeList;
-            g_MenuEventQueueFreeList = event;
-            event->next = free_head;
-            *localp = *event;
-        } else {
-            localp->payload.input.type = 0;
-            localp->payload.input.flags = 0;
-        }
-    } else {
-        local.payload.input.type = 0;
-        local.payload.input.flags = 0;
-    }
+    Queue_DequeueByMask(-1, &local);
 
     type = local.payload.input.type;
     if (type <= 0) {
@@ -429,10 +323,6 @@ void Draw_SetPresentEnabled(int arg0) {
 
 #define NULL ((void *)0)
 
-DISPENV *SetDefDispEnv(DISPENV *env, int x, int y, int w, int h);
-DRAWENV *SetDefDrawEnv(DRAWENV *env, int x, int y, int w, int h);
-void Draw_SetFontVariant();
-
 int g_TextCursorX;
 int g_TextCursorY;
 int g_DrawGradientBlendColor;
@@ -442,59 +332,40 @@ u8 *D_8009D100;
 u8 *D_8009D104;
 u32 *D_8009D118;
 u32 *D_8009D11C;
-#include "queue_externs_1.h"
-#define D_800A2198 (D_800A2198[0])
-#define D_800A2199 (D_800A2199[0])
-#define D_800A219A (D_800A219A[0])
-#define D_800A219B (D_800A219B[0])
-#define D_800A2210 (D_800A2210[0])
-#define D_800A2211 (D_800A2211[0])
-#define D_800A2212 (D_800A2212[0])
-#define D_800A2213 (D_800A2213[0])
-#define D_800A2268 (D_800A2268[0])
-#define D_800A226C (D_800A226C[0])
-
-void Draw_InitBuffers(void);
-
 void Draw_InitBuffers(void) {
-    u8 *bufferBase = (u8 *)g_DrawBufferFrontBases;
-    DrawFrameBuffer *bufferRecord =
-        (DrawFrameBuffer *)(bufferBase -
-                            PE1_OFFSETOF(DrawFrameBuffer, frontBufferBase));
-
-    bufferRecord->frontBufferBase = (u8 *)g_RenderFrontBufferBase[0];
-    D_800A226C = g_RenderBackBufferBase[0];
-    g_DrawBufferOtBases[0] = g_OtBufferTable[0];
-    D_800A2268 = g_RenderOtBufferBaseAlt[0];
-    SetDefDrawEnv(&bufferRecord->draw, 0, 0, 0x140, 0xE0);
-    SetDefDrawEnv(&bufferRecord[1].draw, 0, 0xE0, 0x140, 0xE0);
-    D_800A2210 = 1;
-    D_800A2198 = 1;
-    D_800A2199 = 0;
-    D_800A219A = 0;
-    D_800A219B = 0;
-    D_800A2211 = 0;
-    D_800A2212 = 0;
-    D_800A2213 = 0;
-    SetDefDispEnv(&bufferRecord->display, 0, 0xE0, 0x140, 0xE0);
-    SetDefDispEnv(&bufferRecord[1].display, 0, 0, 0x140, 0xE0);
+    g_DrawFrameBuffers[0].frontBufferBase = (u8 *)g_RenderFrontBufferBase[0];
+    g_DrawFrameBuffers[1].frontBufferBase = (u8 *)g_RenderBackBufferBase[0];
+    g_DrawFrameBuffers[0].orderingTableBase = (u32 *)g_OtBufferTable[0];
+    g_DrawFrameBuffers[1].orderingTableBase = (u32 *)g_RenderOtBufferBaseAlt[0];
+    SetDefDrawEnv(&g_DrawFrameBuffers[0].draw, 0, 0, 0x140, 0xE0);
+    SetDefDrawEnv(&g_DrawFrameBuffers[1].draw, 0, 0xE0, 0x140, 0xE0);
+    g_DrawFrameBuffers[0].draw.isbg = g_DrawFrameBuffers[1].draw.isbg = 1;
+    g_DrawFrameBuffers[0].draw.r0 = 0;
+    g_DrawFrameBuffers[0].draw.g0 = 0;
+    g_DrawFrameBuffers[0].draw.b0 = 0;
+    g_DrawFrameBuffers[1].draw.r0 = 0;
+    g_DrawFrameBuffers[1].draw.g0 = 0;
+    g_DrawFrameBuffers[1].draw.b0 = 0;
+    SetDefDispEnv(&g_DrawFrameBuffers[0].display, 0, 0xE0, 0x140, 0xE0);
+    SetDefDispEnv(&g_DrawFrameBuffers[1].display, 0, 0, 0x140, 0xE0);
     {
-        s32 color;
-        register u8 *screenBase asm("$16") = bufferBase;
+        /* Match debt: retail stores the screen rectangles relative to the
+         * register holding the first frame's packet arena field (s0), not
+         * as absolute addresses. */
+        register u8 **front asm("$16") = &g_DrawFrameBuffers[0].frontBufferBase;
+        DrawFrameBuffer *second;
 
-        /* Match debt: stop CSE rematerializing the four screen addresses.
-         * A separate local keeps earlier buffer initialization unchanged. */
-        asm volatile("" : "=r"(screenBase) : "0"(screenBase));
-        color = 0x800000;
-        ((DISPENV *)(screenBase + 0x60))->screen.y = 8;
-        ((DISPENV *)(screenBase - 0x18))->screen.y = 8;
-        ((DISPENV *)(screenBase + 0x60))->screen.h = 0xE0;
-        ((DISPENV *)(screenBase - 0x18))->screen.h = 0xE0;
-        g_TextCursorY = 0;
-        g_TextCursorX = 0;
-        g_TextCursorStackPtr = &g_TextCursorStackBottom;
-        Draw_SetColor(color | 0x8080);
+        PE1_COMPILER_LAUNDER(front);
+        second = (DrawFrameBuffer *)(front + 1);
+        second[0].display.screen.y = 8;
+        second[-1].display.screen.y = 8;
+        second[0].display.screen.h = 0xE0;
+        second[-1].display.screen.h = 0xE0;
     }
+    g_TextCursorY = 0;
+    g_TextCursorX = 0;
+    g_TextCursorStackPtr = g_TextCursorStackBottom;
+    Draw_SetColor(0x808080);
     g_DrawGradientBlendColor = 0;
     Draw_SetFontVariant(0);
     g_DrawPresentImage = 0;
@@ -502,7 +373,6 @@ void Draw_InitBuffers(void) {
 
 int g_DrawPresentImage;
 
-#include "queue_externs_2.h"
 int g_DrawBufferIndex;
 
 void Draw_SetPresentImage(int arg0) {
@@ -511,34 +381,30 @@ void Draw_SetPresentImage(int arg0) {
 
 void Draw_SelectBuffer(void) {
     int index;
-    int offset;
-    DrawFrameBuffer *entry;
-    u8 *value0;
-    u32 *value1;
+    DrawFrameBuffer *frame;
+    u8 *packets;
+    u32 *ordering;
 
     if (g_DrawPresentEnabled != 0) {
-        index = (u32)g_DrawBufferIndex < 1;
+        index = g_DrawBufferIndex == 0;
     } else {
         index = g_ActiveDrawSlot;
     }
 
-    offset = ((index << 4) - index) << 3;
     g_DrawBufferIndex = index;
-    entry = &D_800A2180[index];
-    value0 = *(u8 **)((u8 *)g_DrawBufferFrontBases + offset);
-    value1 = *(u32 **)((u8 *)g_DrawBufferOtBases + offset);
-    D_8009D0FC = entry;
-    g_DrawPacketArenaBase = value0;
-    g_DrawPacketCursor = value0;
-    D_8009D118 = value1;
-    g_DrawOrderingTableEntry = value1 + 1;
+    frame = &g_DrawFrameBuffers[index];
+    packets = g_DrawFrameBuffers[index].frontBufferBase;
+    ordering = g_DrawFrameBuffers[index].orderingTableBase;
+    D_8009D0FC = frame;
+    g_DrawPacketArenaBase = packets;
+    g_DrawPacketCursor = packets;
+    D_8009D118 = ordering;
+    g_DrawOrderingTableEntry = ordering + 1;
 
     if (g_DrawPresentEnabled != 0) {
-        ClearOTagR(value1, 0x1000);
+        ClearOTagR(ordering, 0x1000);
     }
 }
-
-void ResetGraph(int arg0);
 
 static inline int NormalizeSyncMode(int mode) {
     if (mode == 1) {

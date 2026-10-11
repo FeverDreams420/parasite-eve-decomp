@@ -32,8 +32,8 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(MenuQueueEntry, payload) == 0x04,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(MenuQueueEntry, payload.input.flags) == 0x08,
                   menu_queue_input_flags_offset);
 
-extern MenuQueueEntry D_800A2090[];
-extern MenuQueueEntry D_800A2174[];
+#define MENU_EVENT_QUEUE_SIZE 20
+extern MenuQueueEntry g_MenuEventQueuePool[MENU_EVENT_QUEUE_SIZE];
 extern MenuQueueEntry *g_MenuEventQueueFreeList;
 extern int g_MenuInputActive;
 extern int g_MenuInputPollingPaused;

@@ -76,6 +76,7 @@ void Draw_SetStatCompareColor(int current, int candidate);
 void Draw_PrintNumberWidth4(int value);
 void Draw_SetColor(int color);
 void Draw_SetTextDimmed(int dimmed);
+void Draw_SetFontVariant(int variant);
 int Draw_GetBlendColor(void);
 void Draw_PrintSignedNumberWidth3(int value);
 void Draw_EmitGlyph(int glyph, int mode);
