@@ -16,8 +16,8 @@ class DrawFlushPrimListTests(unittest.TestCase):
         body = function_text('Draw_FlushPrimList', unit)
         macros = text[text.index('#define PUSH_CURSOR()'):text.index(body.strip()[:40])]
         prefix = body.split('    if (cursor != 0) {', 1)[0]
-        # Each push advances the stack by one (x, y) cursor pair.
-        self.assertIn('g_TextCursorStackPtr = (int *)(cursor + 1);', macros)
+        # Each push advances the stack by one (x, y) word pair.
+        self.assertIn('g_TextCursorStackPtr = cursor + 2;', macros)
         self.assertIn('g_TextCursorX = x + center;', prefix)
         for source in (macros, body):
             source = re.sub(r'/\*.*?\*/|//[^\n]*', '', source, flags=re.S)
