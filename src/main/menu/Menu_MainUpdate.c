@@ -10,6 +10,8 @@
 #include "pe1/asset_find.h"
 #include "pe1/pm.h"
 #include "pe1/battle_runtime.h"
+#include "pe1/battle_update.h"
+#include "pe1/battle_reset_stats.h"
 
 /* CC1_FLAGS: -g3 -G1 */
 /* MASPSX_FLAGS: --expand-div -G1 --use-comm-section */
@@ -34,7 +36,7 @@ void Entity_UpdateTimers(void);
 /* COMMON supplies small-data metadata to MASPSX. */
 s8 D_8009CE30;
 unsigned char D_8009CE34;
-#include "Menu_MainUpdate_externs_1.h"
+
 
 static inline u8 Battle_GetReactionTimer(void) {
     return D_8009D234[0];
@@ -128,32 +130,19 @@ void Menu_MainUpdate(s32 arg0) {
         }
         if ((arg0 & 0xFF) == 1) {
             temp_a0 = D_8009D254->actionMode;
-            if ((temp_a0 == D_8009D278->actionMode12) || (temp_a0 == 5)) {
-                if ((D_8009D278->attributes->effectFlags & 0x4000) && (D_8009D278->stateFlags & 0x4000)) {
-                if ((Pad_GetMenuPressedBitOrDisabled() << 0x18) > 0) {
-                goto block_range_check;
-                }
-                }
-block_clear_bit0:
+            if (((temp_a0 == D_8009D278->actionMode12) || (temp_a0 == 5)) &&
+                !((D_8009D278->attributes->effectFlags & 0x4000) && (D_8009D278->stateFlags & 0x4000) &&
+                  (Pad_GetMenuPressedBitOrDisabled() << 0x18) > 0)) {
                 D_8009D2E8 &= ~1;
-                goto block_after_d2e8;
-            }
-block_range_check:
-            if ((u8) D_8009D254->actionMode >= 0xEU) {
+            } else if ((u8) D_8009D254->actionMode >= 0xEU) {
                 D_8009D2E8 &= ~1;
             } else {
-                var_v0_2 = D_8009D2E8 | 1;
-                D_8009D2E8 = var_v0_2;
+                D_8009D2E8 |= 1;
             }
-            goto block_after_d2e8;
         }
     } else {
-block_27:
-        var_v0_2 = D_8009D2E8 | 1;
-block_28:
-        D_8009D2E8 = var_v0_2;
+        D_8009D2E8 |= 1;
     }
-block_after_d2e8:
     if (D_8009D278->exp_or_acc < 0) {
         D_8009D278->exp_or_acc = 0;
     }
@@ -490,7 +479,7 @@ block_after_d2e8:
                             if ((temp_a0_2 != NULL) && (*temp_s2 & 0x4000)) {
                                 temp_v1_6 = temp_v1_5->coreFlags;
                                 if ((temp_v1_6 < 0) && ((temp_a0_2->state - 1) < 2U)) {
-                                    temp_v1_7 = ((u32) temp_v1_6 >> 0x15) & 7;
+                                    temp_v1_7 = ((unsigned int)temp_v1_6 >> 0x15) & 7;
                                     if (temp_v1_7 < 3) {
                                         Asset_Find08w(temp_v1_5->contactAssetIds[temp_v1_7], 0, var_s0->renderObject.target_x, var_s0->renderObject.target_y, var_s0->renderObject.target_z);
                                     }
