@@ -8,6 +8,13 @@ extern char D_80011970[];
 int GetVideoMode(void);
 void *memcpy(void *, const void *, unsigned);
 #define SIGNED_HALF(p) ((short)*(volatile unsigned short *)(p))
+/* Hides the cached rectangle address so the remaining halves load from a
+ * register copy instead of folded offsets. */
+static inline unsigned short *OpaqueHalfPointer(unsigned short *p) {
+    asm("" : "=r"(p) : "0"(p));
+    return p;
+}
+
 DISPENV *PutDispEnv(DISPENV *env) {
     register DISPENV *e = env;
     register unsigned char *state;
@@ -36,10 +43,7 @@ DISPENV *PutDispEnv(DISPENV *env) {
     system = ((GpuSystemState *)(state - PE1_OFFSETOF(GpuSystemState, status.queueState.debugLevel)));
     rect = (unsigned short *)&system->displayCache.disp;
     if (*(unsigned *)&system->displayCache.isinter != *(unsigned *)&e->isinter ||
-        SIGNED_HALF(rect) != e->disp.x || ({
-                                              asm("" : "=r"(rect) : "0"(rect));
-                                              SIGNED_HALF(rect + 1);
-                                          }) != e->disp.y ||
+        SIGNED_HALF(rect) != e->disp.x || SIGNED_HALF((rect = OpaqueHalfPointer(rect)) + 1) != e->disp.y ||
         SIGNED_HALF(rect + 2) != e->disp.w || SIGNED_HALF(rect + 3) != e->disp.h) {
         e->pad0 = GetVideoMode();
         if (e->pad0 == 1)
