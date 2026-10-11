@@ -36,31 +36,6 @@ extern u16 D_8009315E[];
 
 /* System start-up (Boot_InitSystemFlow.c). */
 extern s32 g_FrameRngCounter[];
-/* Display and draw environment bytes and halfwords set for each buffer:
- * fields of g_RenderDispEnvArray (0x800BCE80) and g_RenderDrawEnvArray
- * (0x800BCDC8) written as their own symbols. */
-extern u8 D_800BCE91;
-extern u8 D_800BCEA5;
-extern u16 D_800BCE9E;
-extern u16 D_800BCE8A;
-extern u16 D_800BCE9C;
-extern u16 D_800BCE88;
-extern u16 D_800BCEA2;
-extern u16 D_800BCE8E;
-extern u8 D_800BCE3C;
-extern u8 D_800BCDE0;
-extern u8 D_800BCE3A;
-extern u8 D_800BCDDE;
-extern u8 D_800BCE3B;
-extern u8 D_800BCDDF;
-extern u16 D_800BCE38;
-extern u16 D_800BCDDC;
-extern u8 D_800BCE3D;
-extern u8 D_800BCDE1;
-extern u8 D_800BCE3E;
-extern u8 D_800BCDE2;
-extern u8 D_800BCE3F;
-extern u8 D_800BCDE3;
 extern char g_AnalogStickState[];
 
 /* Pad sampling (Boot_RenderFlagsAndPadInput.c): render flag table, the

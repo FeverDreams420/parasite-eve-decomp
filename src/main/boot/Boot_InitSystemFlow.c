@@ -14,6 +14,7 @@
 #include "pe1/battle_status.h"
 #include "pe1/battle_runtime.h"
 #include "pe1/boot.h"
+#include "pe1/draw_buffers.h"
 
 void Render_ResetScene(int arg0, int arg1);
 void InitGeom(void);
@@ -90,8 +91,6 @@ DRAWENV *SetDefDrawEnv(DRAWENV *env, int x, int y, int w, int h);
 void Render_ResetScene(int width, int height)
 {
     s16 rect[4];
-    u8 *disp;
-    u8 *draw;
 
     ResetGraph(0);
     SetGraphDebug(0);
@@ -103,38 +102,36 @@ void Render_ResetScene(int width, int height)
     rect[1] = 0;
     ClearImage(rect, 0, 0, 1);
 
-    disp = &D_800BCE91;
-    *disp = 1;
-    D_800BCEA5 = 1;
-    SetDefDispEnv(disp - 0x11, 0, height, width, height);
-    SetDefDispEnv(disp + 3, 0, 0, width, height);
+    g_RenderDispEnvArray[0].isrgb24 = 1;
+    g_RenderDispEnvArray[1].isrgb24 = 1;
+    SetDefDispEnv(&g_RenderDispEnvArray[0], 0, height, width, height);
+    SetDefDispEnv(&g_RenderDispEnvArray[1], 0, 0, width, height);
 
-    draw = (u8 *)D_800BCDC8;
-    D_800BCE9E = 8;
-    D_800BCE8A = 8;
-    D_800BCE9C = 0;
-    D_800BCE88 = 0;
-    D_800BCE8E = D_800BCEA2 = height;
-    SetDefDrawEnv(draw, 0, 0, width, height);
-    SetDefDrawEnv(draw + 0x5C, 0, height, width, height);
+    g_RenderDispEnvArray[1].screen.y = 8;
+    g_RenderDispEnvArray[0].screen.y = 8;
+    g_RenderDispEnvArray[1].screen.x = 0;
+    g_RenderDispEnvArray[0].screen.x = 0;
+    g_RenderDispEnvArray[0].screen.h = g_RenderDispEnvArray[1].screen.h = height;
+    SetDefDrawEnv(&g_RenderDrawEnvArray[0], 0, 0, width, height);
+    SetDefDrawEnv(&g_RenderDrawEnvArray[1], 0, height, width, height);
 
-    D_800BCE3C = 1;
-    D_800BCDE0 = 1;
-    D_800BCE3A = 1;
-    D_800BCDDE = 1;
-    D_800BCE3B = 0;
-    D_800BCDDF = 0;
-    D_800BCE38 = 0;
-    D_800BCDDC = 0;
-    D_800BCE3D = 0;
-    D_800BCDE1 = 0;
-    D_800BCE3E = 0;
-    D_800BCDE2 = 0;
-    D_800BCE3F = 0;
-    D_800BCDE3 = 0;
+    g_RenderDrawEnvArray[1].isbg = 1;
+    g_RenderDrawEnvArray[0].isbg = 1;
+    g_RenderDrawEnvArray[1].dtd = 1;
+    g_RenderDrawEnvArray[0].dtd = 1;
+    g_RenderDrawEnvArray[1].dfe = 0;
+    g_RenderDrawEnvArray[0].dfe = 0;
+    g_RenderDrawEnvArray[1].tpage = 0;
+    g_RenderDrawEnvArray[0].tpage = 0;
+    g_RenderDrawEnvArray[1].r0 = 0;
+    g_RenderDrawEnvArray[0].r0 = 0;
+    g_RenderDrawEnvArray[1].g0 = 0;
+    g_RenderDrawEnvArray[0].g0 = 0;
+    g_RenderDrawEnvArray[1].b0 = 0;
+    g_RenderDrawEnvArray[0].b0 = 0;
     g_ActiveDrawSlot = 0;
 
-    PutDispEnv((DISPENV *)(disp - 0x11));
+    PutDispEnv(&g_RenderDispEnvArray[0]);
 }
 
 void Scene_TickTimers(void);
