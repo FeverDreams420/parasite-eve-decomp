@@ -191,9 +191,8 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
             primitiveIndex2 = 0;
             primitiveCount = var_t8->counts[2];
             if (primitiveCount > 0) {
-                s32 temp_a0_5;
                 u32 temp_a0_6;
-                register s32 temp_v1_5 asm("$3");
+                s32 temp_v1_5;
                 u32 addressMask2;
                 u32 lengthMask2;
                 addressMask2 = 0xFFFFFF;
@@ -208,9 +207,9 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         &scratchpad->screenCoordinates[0], &scratchpad->screenCoordinates[1],
                         &scratchpad->screenCoordinates[2], &scratchpad->perspective,
                         &scratchpad->orderingDepth, &scratchpad->transformFlags);
-                    temp_a0_5 = scratchpad->orderingDepth;
-                    if (temp_a0_5 > 0) {
-                        scratchpad->orderingDepth = (temp_a0_5 + D_801EA5E0) >> 2;
+                    temp_a0 = scratchpad->orderingDepth;
+                    if (temp_a0 > 0) {
+                        scratchpad->orderingDepth = (temp_a0 + D_801EA5E0) >> 2;
                         if (temp_v1_5 > 0) {
                             ((FxCommonG3Packet *)(var_s1 - 0x14))->tag.bytes.length = 6;
                             ((FxCommonG3Packet *)(var_s1 - 0x14))->xy0 =
@@ -253,9 +252,8 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
             primitiveIndex3 = 0;
             primitiveCount = var_t8->counts[3];
             if (primitiveCount > 0) {
-                s32 temp_a0_7;
                 u32 temp_a0_8;
-                register s32 temp_v1_7 asm("$3");
+                s32 temp_v1_7;
                 u32 addressMask3;
                 u32 lengthMask3;
                 addressMask3 = 0xFFFFFF;
@@ -269,9 +267,9 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         &scratchpad->screenCoordinates[1], &scratchpad->screenCoordinates[2],
                         &scratchpad->screenCoordinates[3], &scratchpad->perspective,
                         &scratchpad->orderingDepth, &scratchpad->transformFlags);
-                    temp_a0_7 = scratchpad->orderingDepth;
-                    if (temp_a0_7 > 0) {
-                        scratchpad->orderingDepth = (temp_a0_7 + D_801EA5E0) >> 2;
+                    temp_a0 = scratchpad->orderingDepth;
+                    if (temp_a0 > 0) {
+                        scratchpad->orderingDepth = (temp_a0 + D_801EA5E0) >> 2;
                         if (temp_v1_7 > 0) {
                             ((FxCommonG4Packet *)(var_s1 - 0x1c))->tag.bytes.length = 8;
                             ((FxCommonG4Packet *)(var_s1 - 0x1c))->xy0 =
