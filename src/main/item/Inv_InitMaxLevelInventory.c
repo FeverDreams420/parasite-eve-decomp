@@ -1,8 +1,13 @@
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "common.h"
 #include "pe1/aya.h"
 #include "pe1/inventory_slots.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+
+/* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
+s16 *D_8009D048;
+s32 D_8009D050;
 
 void Battle_SyncEquipSlots(void);
 void *Aya_GetLevelExpTable(void);
@@ -11,9 +16,7 @@ extern u16 g_AyaHpMax[];
 #define g_AyaHpCurrent (g_AyaHpCurrent[0])
 #define g_AyaInventorySlotCount (g_AyaInventorySlotCount[0])
 #define g_AyaParasiteSpellFlags (g_AyaParasiteSpellFlags[0])
-extern u8 g_AyaSaveLevel[];
-extern u8 g_AyaSaveLevel_read[] asm("g_AyaSaveLevel");
-#define g_AyaSaveLevel (g_AyaSaveLevel[0])
+extern u8 g_AyaSaveLevel;
 extern s32 g_AyaSaveTotalExp[];
 #define g_AyaSaveTotalExp (g_AyaSaveTotalExp[0])
 
@@ -38,7 +41,7 @@ void Inv_InitMaxLevelInventory(s32 arg0) {
     }
     g_AyaSaveLevel = 0x62;
     expTable = (s32 *)Aya_GetLevelExpTable();
-    g_AyaSaveTotalExp = expTable[g_AyaSaveLevel_read[0]];
+    g_AyaSaveTotalExp = expTable[g_AyaSaveLevel];
     levelStats = Aya_LookupLevelStats(0x62);
     unlockedSpells = 0xFFFFF;
     save = (AyaSaveState *)((u8 *)items - PE1_OFFSETOF(AyaSaveState, inventory_items));
