@@ -1,4 +1,5 @@
 #include "pe1/draw_buffers.h"
+#include "pe1/game_state.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/render_packets.h"
 /* CC1_FLAGS: -G8 */
@@ -11,7 +12,6 @@ void SetDispMask(int arg0);
 void ResetGraph(int arg0);
 int Gpu_CheckDrawStatus(void);
 
-extern RenderFrameState g_GameState;
 extern int g_ActiveDrawSlot;
 
 static inline DISPENV *DispAddress(int index) {
@@ -53,7 +53,7 @@ void Gpu_RenderFrame(void) {
         goto draw_direct;
     }
 
-    state_ptr = &g_GameState;
+    state_ptr = (RenderFrameState *)&g_GameState;
     state = state_ptr->flags;
     if ((state & 0x200) != 0) {
 

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "pe1/game_state.h"
 #include "pe1/cdrom.h"
 #include "fx_common.h"
 #include "fx_common_setup.h"
@@ -8,7 +9,6 @@ typedef struct FxAssetSource {
     u8 *data;
 } FxAssetSource;
 
-extern FxAssetSource D_800B0CD8;
 extern u16 D_80093170[];
 extern u16 D_80093174[];
 extern u16 D_80093172[];
@@ -17,7 +17,7 @@ extern u8 D_8019C1F0;
 int func_8006E7E8(void);
 
 void func_80191C94(void) {
-    FxAssetSource *resource = &D_800B0CD8;
+    FxAssetSource *resource = (FxAssetSource *)&D_800B0CD8;
     u16 *range;
     int result;
 

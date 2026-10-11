@@ -1,4 +1,5 @@
 #include "common.h"
+#include "pe1/game_state.h"
 #include "pe1/map_selection.h"
 #include "pe1/font.h"
 #include "pe1/scene_dispatch.h"
@@ -8,7 +9,6 @@ extern u8 D_8009CD80[];
 extern u8 g_MapIdTable[];
 extern unsigned int D_8009D280;
 extern u32 D_8009D1A0;
-extern u32 D_800B0CD8[];
 
 int Menu_GetEquipSlotStateOrIndex(void);
 int Task_GpuPackPrimColor(int start, int end);
@@ -58,7 +58,7 @@ int Scene_SelectMapById(int **args) {
 
     raw_selection = 1;
     if (D_8009D1C4 == D_8009D280) {
-        game_state = D_800B0CD8;
+        game_state = &g_GameState.flags;
         state_flags = D_8009D1A0;
         map_flags = game_state[0];
         D_8009D1A0 = state_flags | 0x2000;
@@ -73,7 +73,6 @@ extern u8 g_MapNameOverrideA[];
 extern u8 g_MapNameOverrideB[];
 extern int g_SceneDispatchToken;
 extern u32 g_GameStateFlags;
-extern u32 g_GameState[];
 
 int Task_SetFloorByEntityRoll(u8 **args) {
     int selection;
@@ -108,7 +107,7 @@ int Task_SetFloorByEntityRoll(u8 **args) {
 
     selection = 1;
     if (g_SceneDispatchCur == g_SceneDispatchToken) {
-        game_state = g_GameState;
+        game_state = &g_GameState.flags;
         state_flags = g_GameStateFlags;
         map_flags = game_state[0];
         g_GameStateFlags = state_flags | 0x2000;

@@ -2,6 +2,7 @@
 /* MASPSX_FLAGS: -G4 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 #include "common.h"
+#include "pe1/game_state.h"
 #include "pe1/entity_frame_update.h"
 #include "pe1/gte.h"
 #include "pe1/scene_flags.h"
@@ -24,22 +25,22 @@ void Entity_FrameUpdate(void) {
         }
     }
 
-    if (!(D_800B0CD8[0] & 0x200)) {
+    if (!(g_GameState.flags & 0x200)) {
         if (g_GameStateBlock.flags & 2) {
             Battle_Update();
         } else {
             if (g_PlayerEntity != 0 && g_PlayerEntity->state != 0 && (D_8009D1F4 & 0x80) &&
-                !(g_GameStateBlock.flags & 0x2000) && !(D_800B0CD8[0] & 0x3400)) {
+                !(g_GameStateBlock.flags & 0x2000) && !(g_GameState.flags & 0x3400)) {
                 Inventory_OpenAyaItemList(0);
                 Render_BeginSceneLoad();
                 g_GameStateBlock.flags |= 4;
-                D_800B0CD8[0] |= 0x9000;
+                g_GameState.flags |= 0x9000;
             }
             D_8009D2A4 = Menu_RunFrameWithArg((int)&D_800A76D8);
             if (D_8009D2A4 != 0) {
                 Render_BeginSceneLoad();
                 g_GameStateBlock.flags &= ~4;
-                D_800B0CD8[0] &= ~0x9000;
+                g_GameState.flags &= ~0x9000;
             }
         }
 
@@ -104,7 +105,7 @@ void Entity_FrameUpdate(void) {
         for (entity = g_FieldActorListHead; entity != 0; entity = entity->next) {
             RenderObjectEntity *object;
 
-            if (entity == g_PlayerEntity && (D_800B0CD8[0] & 0x40000)) {
+            if (entity == g_PlayerEntity && (g_GameState.flags & 0x40000)) {
                 continue;
             }
             if (entity->model_state.allocation_active != 0) {
@@ -146,12 +147,12 @@ void Entity_FrameUpdate(void) {
 
         if (!(g_GameStateBlock.flags & 4)) {
             if (g_GameStateBlock.flags & 0x100) {
-                if (!(D_800B0CD8[0] & 0x40000) && g_PlayerEntity != 0) {
+                if (!(g_GameState.flags & 0x40000) && g_PlayerEntity != 0) {
                     Entity_AdvanceAnim((BattleEntity *)g_PlayerEntity);
                 }
             } else {
                 for (entity = g_FieldActorListHead; entity != 0; entity = entity->next) {
-                    if ((entity != g_PlayerEntity || !(D_800B0CD8[0] & 0x40000)) &&
+                    if ((entity != g_PlayerEntity || !(g_GameState.flags & 0x40000)) &&
                         !(entity->flags & 0x800040)) {
                         Entity_AdvanceAnim((BattleEntity *)entity);
                     }

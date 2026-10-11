@@ -389,7 +389,6 @@ int CD_SeekToTrack(int key, int mode, int group, int *slot, int blocking)
     return busy;
 }
 
-extern u32 D_800B0CD8[];
 extern void *D_800B0E08[];
 extern void *tableCheck[] asm("D_800B0E08");
 extern void *tableCheckAgain[] asm("D_800B0E08");
@@ -419,7 +418,7 @@ retry:
             D_8009D188 = 0;
             Akao_Cmd_F1();
             if (active) {
-                if (!(D_800B0CD8[0] & 0x400000)) {
+                if (!(g_GameState.flags & 0x400000)) {
                     if (*tableCheck) {
                         Akao_SendTableCommand(*D_800B0E08, 0x451, 0, 0x80, 0x7F);
                         if (*tableCheckAgain)

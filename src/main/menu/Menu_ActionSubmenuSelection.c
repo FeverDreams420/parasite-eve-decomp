@@ -1,4 +1,5 @@
 #include "pe1/menu_state.h"
+#include "pe1/game_state.h"
 #include "pe1/inventory_slots.h"
 #include "pe1/menu_queue.h"
 #include "pe1/akao/commands.h"
@@ -13,10 +14,6 @@ extern unsigned int g_MenuActionSubmenuSel;
 
 extern void Akao_Cmd_80_81_82(int arg0);
 
-/* g_GameState lives at 0x800B0CD8, outside the gp window; the incomplete
- * array type keeps -G8 from treating this 4-byte extern as small data and
- * matches retail's materialized-pointer read-modify-write. */
-extern unsigned int g_GameState[];
 
 void Save_ResetMetadataWindow(int);
 void Menu_ResetStateFlags(void);
@@ -72,6 +69,6 @@ void Menu_FullInit(void) {
     BattleCmd_LoadWeaponModifiers();
     Menu_SaveBgInitFade();
     Save_ResetMetadataWindow(1);
-    g_GameState[0] |= 0x40000000;
+    g_GameState.flags |= 0x40000000;
     Menu_SetEquipSlotIndex(1);
 }

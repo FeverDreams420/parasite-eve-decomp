@@ -10,6 +10,7 @@
 #include "pe1/psyq_press.h"
 #include "pe1/cdrom.h"
 #include "pe1/gpu_image.h"
+#include "pe1/game_state.h"
 
 typedef struct VideoFrame { u32 reserved[2], time, reserved0c; u16 width, height; } VideoFrame;
 /* One entry of a video table: file name, colour depth and playback layout. */
@@ -62,7 +63,6 @@ extern u8 *D_801D0DE8,*D_801D0DEC,*D_801D0DF0,*D_801D0DF4,*D_801D0DF8,*D_801D0DF
 extern u8 D_800B0DBA;
 typedef struct VideoFrameCount { s16 value; } VideoFrameCount;
 extern VideoFrameCount D_800B0DBC;
-extern u32 D_800B0CD8;
 
 s32 Memcard_InitVideoBuffers(s8 count, u8 **buffers);
 s32 func_801216C4(s8 count, u8 **buffers);

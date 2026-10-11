@@ -1,4 +1,5 @@
 #include "common.h"
+#include "pe1/game_state.h"
 #include "pe1/entity_allocation.h"
 #include "pe1/player_entity.h"
 #include "pe1/task_node.h"
@@ -20,7 +21,6 @@ extern char g_EntityWorkBuffer[];
 extern char D_800BEA90[];
 extern char D_800BEA94[];
 extern int D_800C0B14[];
-extern unsigned int g_GameState[];
 
 void Entity_ResetAllPools(void)
 {
@@ -69,7 +69,7 @@ void Entity_ResetAllPools(void)
     g_EntityFreePoolCount = 0;
     g_PlayerEntity = 0;
     D_8009D224 = 0;
-    g_GameState[0] &= 0xFFFFCFFF;
+    g_GameState.flags &= 0xFFFFCFFF;
 }
 
 void Entity_InitFreePool(void)

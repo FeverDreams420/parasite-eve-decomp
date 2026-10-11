@@ -1,4 +1,5 @@
 #include "pe1/geom_state.h"
+#include "pe1/game_state.h"
 #include "common.h"
 #include "pe1/task_node.h"
 #include "pe1/vector_types.h"
@@ -37,7 +38,6 @@ extern struct BattleEntity *D_8009D254;
 u32 *D_8009CE00;
 TaskNode *D_8009D300;
 u8 g_ScriptCameraBytes[3] __asm__("D_8009CDF8");
-extern u32 D_800B0CD8[];
 
 void Task_SetCollisionFlag(int value);
 void func_800E00CC(Pe1Vec3s *position, int mode, int arg2, int arg3,
@@ -131,7 +131,7 @@ int Task_DispatchScriptCmd(TaskScriptArgs *args)
     return 1;
 
 cmd_835:
-        D_800B0CD8[0] |= 0x800;
+        g_GameState.flags |= 0x800;
         goto done;
 cmd_898:
         Render_UpdateScrollPosition(&((FieldActor *)D_8009D254)->pos_x,
@@ -190,7 +190,7 @@ cmd_af1:
         Window_SetBoundsByMode(ARG_BYTE(args->arg1));
         return 1;
 cmd_b54:
-        D_800B0CD8[0] |= 0x400000;
+        g_GameState.flags |= 0x400000;
         goto done;
     }
 find_entity:
@@ -226,7 +226,7 @@ cmd_c1c:
         }
         return 1;
 cmd_c80:
-        D_800B0CD8[0] |= 0x8000000;
+        g_GameState.flags |= 0x8000000;
 done:
     return 1;
 }

@@ -1,6 +1,7 @@
 #include "pe1/display_env.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/gpu_image.h"
+#include "pe1/game_state.h"
 #ifndef MEMCARD_RESET_DISPLAY_STATE_NAME
 #define MEMCARD_RESET_DISPLAY_STATE_NAME func_8012A848
 #endif
@@ -24,7 +25,6 @@ typedef struct MemcardRect {
 
 
 extern u8 D_800B0DBA;
-extern u32 D_800B0CD8;
 extern void *MEMCARD_DISPLAY_PTR0;
 extern void *MEMCARD_DISPLAY_PTR1;
 extern void *MEMCARD_DISPLAY_PTR2;

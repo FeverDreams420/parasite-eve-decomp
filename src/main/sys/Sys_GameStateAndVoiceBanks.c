@@ -108,7 +108,6 @@ typedef struct AkaoVoiceBankState {
     u8 active_id_slot;
 } AkaoVoiceBankState;
 
-extern AkaoVoiceBankState D_800B0CD8;
 extern struct BattleEntity *D_8009D254;
 extern unsigned int D_8009D1A0;
 
@@ -126,7 +125,7 @@ int Akao_LoadVoiceBank(AkaoVoiceActor *actor) {
         return -1;
     }
 
-    state = &D_800B0CD8;
+    state = (AkaoVoiceBankState *)&g_GameState;
     frame = actor_reg->frame;
     step = actor_reg->frameStep;
     target = actor_reg->targetFrame;

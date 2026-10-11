@@ -1,5 +1,6 @@
 /* Scene display clearing and CD read flow share the scene read flags. */
 #include "pe1/game_state_types.h"
+#include "pe1/game_state.h"
 #include "common.h"
 #include "pe1/render_camera.h"
 #include "pe1/psyq_gpu.h"
@@ -10,14 +11,13 @@
 #include "pe1/pe_image.h"
 /* Scalar symbol view still preserves the boot loader scheduling.
  * Sector read and polling routines below use the shared structure fields. */
-extern int g_GameState;
 
 extern unsigned char g_DiscChangeFlags;
 
 void ClearImage(RECT *rect, int r, int g, int b);
 
 void Gpu_ClearOnFlag(void) {
-    u32 *state = (u32 *)&g_GameState;
+    u32 *state = &g_GameState.flags;
 
     if (*state & 0x08000000) {
         RECT rect;
@@ -61,7 +61,7 @@ int CdRom_ReadSectors(u32 lba, u32 offset, void *destination, u32 size) {
     rel = offset;
     dst_reg = (int)destination;
     size_reg = size;
-    state = (Pe1GameState *)&g_GameState;
+    state = &g_GameState;
 
     if ((state->flags & 0x1000000) != 0) {
         return -1;
@@ -95,7 +95,7 @@ int CdRom_PollReady(void) {
 
     status = DsReadSync(&scratch);
     if ((unsigned int)(status + 1) < 2U) {
-        state = (Pe1GameState *)&g_GameState;
+        state = &g_GameState;
         state->flags &= 0xFEFFBFFF;
     }
     return status;
@@ -131,7 +131,7 @@ s32 Overlay_LoadInitialImage(void) {
     D_800B0DB6 = -1;
     D_800B0DB3 = -1;
     D_800B0DB2 = -1;
-    g_GameState &= 0xFFFFFF0F;
+    D_800B0CD8 &= 0xFFFFFF0F;
     Akao_Cmd_F0();
 
 restart:
@@ -145,7 +145,7 @@ restart:
         v0 = v1;
         v0 = (v1 + 1);
         if (v0 < 2U) {
-            g_GameState &= 0xFEFFBFFF;
+            D_800B0CD8 &= 0xFEFFBFFF;
         }
         v0 = v1;
         if (v0 == 0) {

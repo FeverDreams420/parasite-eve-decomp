@@ -1,7 +1,7 @@
 #include "pe1/field_collision.h"
+#include "pe1/game_state.h"
 #include "pe1/gte_types.h"
 #include "pe1/collision_database.h"
-extern int g_GameState;
 
 #include "pe1/field_actor.h"
 #include "pe1/task_anim.h"
@@ -9,14 +9,14 @@ extern int g_GameState;
 
 
 int Task_SetSceneFlag2000(void) {
-    int *ptr = &g_GameState;
+    int *ptr = (int *)&g_GameState.flags;
 
     *ptr |= 0x2000;
     return 1;
 }
 
 int Task_ClearSceneFlag2000(void) {
-    int *ptr = &g_GameState;
+    int *ptr = (int *)&g_GameState.flags;
 
     *ptr &= -0x2001;
     return 1;

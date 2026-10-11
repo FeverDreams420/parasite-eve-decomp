@@ -3,8 +3,8 @@
 #include "pe1/pm.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/scene_room_load.h"
+#include "pe1/game_state.h"
 #undef PE1_PM_LEGACY_RAW_VIEWS
-extern int g_GameState;
 
 int Pm_AllocSlot(unsigned int cmd) {
     int result;
@@ -75,7 +75,7 @@ int Pm_FreeSlot(int arg0) {
             g_PmAuxiliaryPointerTable.entries[i - 0x6C] = 0;
         }
         {
-            int *state = &g_GameState;
+            int *state = (int *)&g_GameState.flags;
             *state &= 0xFFFEFFFF;
         }
     }
@@ -93,7 +93,6 @@ int Pm_FreeSlot(int arg0) {
 extern PmCommand **D_800942E0;
 extern PmPrimarySlot *D_800942E4;
 extern PmSecondarySlot *D_800942E8;
-extern u32 D_800B0CD8[];
 extern u16 D_80093162[];
 extern void *D_80011618;
 extern u8 D_801F1BD8[], D_801F1C58[], D_801F1D00[], D_801F1D8C[];
@@ -135,7 +134,7 @@ int Scene_LoadRoomAssets(u32 command, void *owner)
     PmSlotHeader *entry;
     if (command >= 192)
         return -7;
-    if (command - 108 < 7 && !(D_800B0CD8[0] & 0x10000)) {
+    if (command - 108 < 7 && !(g_GameState.flags & 0x10000)) {
 retry:
         while (CdRom_ReadSectorsFromLba(D_800B0DD8.baseLba + D_80093162[0],
                 D_80011618, D_80093162[1] - D_80093162[0]) == -1) {}
@@ -156,7 +155,7 @@ retry:
         g_PmAuxiliaryPointerTable.entries[4] = D_801F1E18;
         g_PmAuxiliaryPointerTable.entries[5] = D_801F1EA4;
         g_PmAuxiliaryPointerTable.entries[6] = D_801F1EF0;
-        D_800B0CD8[0] |= 0x10000;
+        g_GameState.flags |= 0x10000;
     }
     Asset_LoadTimTextures(0);
     original = command;
@@ -341,10 +340,6 @@ int Pm_Start(int arg0) {
     return -1;
 }
 
-#define PE1_GAME_STATE_LEGACY_RAW_VIEW
-#include "pe1/game_state.h"
-#undef PE1_GAME_STATE_LEGACY_RAW_VIEW
-
 int Pm_Exec(int arg0) {
     PmSlotHeader *entry;
     int state;
@@ -406,7 +401,7 @@ int Pm_Exec(int arg0) {
                 for (i = 0x6C; i < 0x73; i++) {
                     g_PmAuxiliaryPointerTable.entries[i - 0x6C] = 0;
                 }
-                g_GameState &= 0xFFFEFFFF;
+                D_800B0CD8 &= 0xFFFEFFFF;
             }
             cleanup->state = 0;
             cleanup->command = -1;
@@ -516,7 +511,7 @@ int Pm_Stop(int arg0, int arg1, int arg2) {
             for (i = 0x6C; i < 0x73; i++) {
                 g_PmAuxiliaryPointerTable.entries[i - 0x6C] = 0;
             }
-            g_GameState &= 0xFFFEFFFF;
+            D_800B0CD8 &= 0xFFFEFFFF;
         }
         *(u8 *)arg1 = 0;
         *(u8 *)(arg1 + 1) = -1;
@@ -544,7 +539,7 @@ static inline void clearSlot(int slot)
         if (entry->command == 0x72) {
             for (i = 0x6C; i < 0x73; ++i)
                 g_PmSlotBufferTyped[i] = 0;
-            g_GameStateTyped.flags &= ~0x10000;
+            g_GameState.flags &= ~0x10000;
         }
         entry->state = 0;
         entry->command = 0xFF;
@@ -624,7 +619,7 @@ loop_1:
                         var_a0 += 1;
                         var_v1 += 1;
                     } while (var_a0 < 0x73U);
-                    g_GameState &= 0xFFFEFFFF;
+                    D_800B0CD8 &= 0xFFFEFFFF;
                 }
                 var_a1->state = 0;
                 var_a1->command = 0xFFU;
@@ -699,9 +694,9 @@ s32 Pm_StopUpperHalf(void) {
                     clear_index++;
                     clear_ptr++;
                 } while (clear_index < 0x73U);
-                game_state = g_GameState;
+                game_state = D_800B0CD8;
                 game_state &= 0xFFFEFFFF;
-                g_GameState = game_state;
+                D_800B0CD8 = game_state;
             }
             fill = 0xFF;
 
@@ -769,9 +764,9 @@ s32 Pm_StopLowerHalf(void) {
                     clear_index++;
                     clear_ptr++;
                 } while (clear_index < 0x73U);
-                game_state = g_GameState;
+                game_state = D_800B0CD8;
                 game_state &= 0xFFFEFFFF;
-                g_GameState = game_state;
+                D_800B0CD8 = game_state;
             }
             fill = 0xFF;
 

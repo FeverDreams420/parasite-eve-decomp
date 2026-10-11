@@ -1,4 +1,5 @@
 #include "common.h"
+#include "pe1/game_state.h"
 #include "pe1/cdrom_buffers.h"
 #include "pe1/cdrom.h"
 #include "pe1/field_collision.h"
@@ -16,7 +17,6 @@ extern u16 g_SceneInitLbaTbl0[];
 extern u16 g_SceneInitLbaTbl1[];
 extern u16 g_SceneAssetLbaTbl[];
 #define g_SceneAssetLbaTbl (g_SceneAssetLbaTbl[0])
-extern s32 g_GameState[];
 
 int Task_PointInPoly(int **arg0) {
     int local[8];
@@ -33,7 +33,7 @@ int Task_PointInPoly(int **arg0) {
 
 s32 Task_LoadSceneData(s16 **arg0) {
     s16 **arg0_reg = arg0;
-    s32 *base = g_GameState;
+    s32 *base = (s32 *)&g_GameState;
     union {
         s32 words[2];
         u8 *buffers[2];
