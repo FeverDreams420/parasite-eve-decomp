@@ -22,7 +22,8 @@ int func_80196C64(int event, void *object)
         volatile RenderEffectParameters *state = &D_800F3368;
         int unit = 32;
         s16 size;
-        int index;
+        int paletteIndex;
+        int sampleOffset;
         int palette;
         int frame;
         register int mode asm("$5");
@@ -30,14 +31,14 @@ int func_80196C64(int event, void *object)
         unsigned short handle;
         asm("" : "=r"(state) : "0"(state));
         state->parameter00 = unit;
-        index = D_800E11E8;
+        paletteIndex = D_800E11E8;
         mode = 2;
         D_800F3368.parameter02 = mode;
         D_800F3368.extent_x = unit;
         D_800F3368.extent_y = unit;
         D_800F3368.extent_x = unit;
         D_800F3368.extent_y = unit;
-        palette = D_800E2850[index];
+        palette = D_800E2850[paletteIndex];
         /* Capture the palette before reading the animation frame. */
         asm volatile("" : "=r"(palette) : "0"(palette) : "memory");
         frame = D_800E27EC;
@@ -46,22 +47,23 @@ int func_80196C64(int event, void *object)
         D_800F3368.parameter06 = 0;
         D_800F3368.parameter0A = 0;
         D_800F3368.depth = unit;
-        index = ((unsigned int)(frame - 1) << 9) & 0x3E00;
-        asm("" : "=r"(index) : "0"(index) : "memory");
+        sampleOffset = ((unsigned int)(frame - 1) << 9) & 0x3E00;
+        asm("" : "=r"(sampleOffset) : "0"(sampleOffset) : "memory");
         D_800F3368.tpage = palette;
-        size = *(short *)((char *)D_800966EC + index);
+        size = *(short *)((char *)D_800966EC + sampleOffset);
         size = size * 2 + 4096;
         handle = GetClut(clutX, D_800E1208);
         {
-            register int frame asm("$6") = D_800E27EC - 1;
+            int frame = D_800E27EC - 1;
             int phase = (frame >> 2) & 3;
             register int *colors asm("$3");
-            frame = ((unsigned int)frame << 9) & 0x3E00;
+            unsigned int drawSampleOffset;
+            drawSampleOffset = ((unsigned int)frame << 9) & 0x3E00;
             colors = D_8019A59C;
             func_800CEE20(object, 0, (short)size, (short)size,
                 (s16)((RenderEffectParameters *)state)->parameter02 * phase + 192,
                 handle, 1, ((SignedHalf *)((char *)D_800966EE - 2 +
-                    frame))->value >> 5, (struct RenderColor *)colors);
+                    drawSampleOffset))->value >> 5, (struct RenderColor *)colors);
         }
     }
     return 0;
