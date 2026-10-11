@@ -1,4 +1,6 @@
 #include "common.h"
+#include "pe1/field_anim_pool.h"
+#include "pe1/battle.h"
 #include "pe1/field_engine_slot.h"
 #include "pe1/field_anim_particle.h"
 #include "pe1/field_sprite_state.h"
@@ -91,14 +93,14 @@ int func_800C9C18(void) {
     return 0;
 }
 
-extern char *D_800E27A4;
+extern FieldActor *D_800E27A4;
 
-int func_800C9C20(char *obj) {
-    char *data = *(char **)(obj + 8);
+int func_800C9C20(FieldAnimObjectPrefix *obj) {
+    FieldActor *data = obj->actor;
 
-    D_800E2358.x = *(int *)(*(char **)(data + 0x238) + 0x274);
-    D_800E2358.y = *(int *)(*(char **)(data + 0x238) + 0x278);
-    D_800E2358.z = *(int *)(*(char **)(data + 0x238) + 0x27C);
+    D_800E2358.x = data->render_object.matrices[19].translation[0];
+    D_800E2358.y = data->render_object.matrices[19].translation[1];
+    D_800E2358.z = data->render_object.matrices[19].translation[2];
     D_800E27A4 = data;
     func_800CEDA8(0);
 }
@@ -107,14 +109,14 @@ int rand(void);
 
 int func_800C9C8C(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
     GteShortVector vec;
-    int (*model)[];
+    RenderMatrix *model;
 
     vec.x = -(rand() % 3 + 9);
     vec.y = -(rand() % 3 + 9);
     vec.z = rand() % 5 - 2;
 
-    model = *(int (**)[])(D_800E27A4 + 0x238);
-    ApplyMatrixSV(model, &vec, &anim->velocity);
+    model = D_800E27A4->render_object.matrices;
+    ApplyMatrixSV((GteMatrix *)model, &vec, &anim->velocity);
 
     anim->position.x = D_800E2358.x;
     anim->position.y = D_800E2358.y;
@@ -129,20 +131,20 @@ extern char D_800E0AF8[];
 int func_800C9D9C(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
     FieldAnimMatrixGlow *anim_s0 = anim;
     GteShortVector out;
-    char *data;
+    FieldActor *data;
     char *entry;
-    char *model;
+    RenderMatrix *model;
 
-    entry = D_800E0AF8 + (((short)(*(u16 *)(*(char **)(*(char **)D_8009D254 + 0x68) + 6) - 1)) << 3);
-    ApplyMatrixSV(*(char **)(D_800E27A4 + 0x238) + 0x260, entry, &out);
+    entry = D_800E0AF8 + (((short)((u16)((Combatant *)D_8009D254->core)->action->actionCode.actionId - 1)) << 3);
+    ApplyMatrixSV((GteMatrix *)&D_800E27A4->render_object.matrices[19], entry, &out);
 
     anim_s0->position.x = D_800E2358.x + out.x;
     anim_s0->position.y = D_800E2358.y + out.y;
     data = D_800E27A4;
     anim_s0->position.z = D_800E2358.z + out.z;
 
-    model = *(char **)(data + 0x238);
-    anim_s0->transform = *(GteMatrixStorage *)(model + 0x260);
+    model = data->render_object.matrices;
+    anim_s0->transform = *(GteMatrixStorage *)&model[19];
     anim_s0->brightness = 0x7F;
 }
 
@@ -151,18 +153,18 @@ void func_800C9EA0(void) {
 
 extern s16 D_800E0AD8[];
 
-int func_800C9EA8(void *arg0, void *arg1, u8 *anim) {
+int func_800C9EA8(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
     GteMatrix matrix;
     GteShortVector rot;
     GteVector scaleCopy;
     GteVector scale;
     s16 index;
 
-    index = *(u16 *)(*(char **)(*(char **)D_8009D254 + 0x68) + 6) - 1;
+    index = (u16)((Combatant *)D_8009D254->core)->action->actionCode.actionId - 1;
 
     rot.x = 0;
     rot.y = 0;
-    rot.z = (s8)anim[1] << 6;
+    rot.z = (s8)anim->age << 6;
 
     func_800C2EAC(3);
     func_800C3098(0x10);
@@ -171,9 +173,9 @@ int func_800C9EA8(void *arg0, void *arg1, u8 *anim) {
 
     RotMatrix(&rot, &matrix);
 
-    matrix.t[0] = *(s16 *)(anim + 0x8);
-    matrix.t[1] = *(s16 *)(anim + 0xA);
-    matrix.t[2] = *(s16 *)(anim + 0xC);
+    matrix.t[0] = (s16)anim->position.x;
+    matrix.t[1] = (s16)anim->position.y;
+    matrix.t[2] = (s16)anim->position.z;
 
     memset(&scale, 0, sizeof(scale));
     scale.x = D_800E0AD8[index];
