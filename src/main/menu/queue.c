@@ -222,7 +222,7 @@ void MenuInput_EnqueueStatusChanges(int flags) {
     int repeat_reset;
     int repeat_step;
     register int type asm("$2");
-    register int release_type asm("$20");
+    register int release_type;
 
     flags_reg = flags;
     repeat_reset = 0;
