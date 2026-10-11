@@ -225,15 +225,14 @@ step_tasks:
 
 int func_800D4620(FieldAnimTaskOwner *owner)
 {
-  register char *base;
+  register FieldAnimTaskContext *base;
   int i;
   register char *p;
   register char *q;
   int sentinel;
-  char *obj = (char *)owner;
-  base = (char *)&owner->tasks;
+  base = &owner->tasks;
   i = 6;
-  p = obj + 0x18;
+  p = (char *)&owner->tasks.count;
   owner->prefix.reserved02[0] = 1;
   owner->prefix.reserved02[1] = 0;
   owner->tasks.delay = 0;
@@ -247,10 +246,10 @@ int func_800D4620(FieldAnimTaskOwner *owner)
     p -= 2;
   }
 
-  p = base + 0x20;
+  p = (char *)base->slots;
   i = 0;
   sentinel = 0xFFFF;
-  q = base + 0x24;
+  q = (char *)&base->slots[0].start;
   for (; i < 8; p += 0xC)
   {
     i++;
