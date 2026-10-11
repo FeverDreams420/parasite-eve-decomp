@@ -12,7 +12,7 @@ int func_80071A54(void);
 
 int func_80196C48(int mode, RoomM318Pulse *pulse) {
     int angle, sine, cosine, size, clut, random;
-    register int value asm("$3");
+    s16 value;
     s16 *settings;
     int clutX;
     register int clutY asm("$5");
