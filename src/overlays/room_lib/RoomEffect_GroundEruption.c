@@ -271,20 +271,20 @@ void RoomEffect_GroundEruptionUpdateColumn(
 }
 
 void RoomEffect_GroundEruptionInitGlow(void *unused0, void *unused1,
-                                       char *state) {
-    char *obj = (char *)func_800C2B50();
+                                       RoomEruptionGlow *state) {
+    RoomEruptionActor *obj = func_800C2B50();
     int tmp;
     int cst;
 
-    tmp = RW32(obj, 0x18);
-    RW16(state, 0) = tmp;
-    tmp = RW32(obj, 0x1C);
-    RW16(state, 2) = tmp;
-    tmp = RW32(obj, 0x20);
+    tmp = obj->matrix.t[0];
+    state->x = tmp;
+    tmp = obj->matrix.t[1];
+    state->y = tmp;
+    tmp = obj->matrix.t[2];
     cst = 0x400;
-    RW16(state, 0xA) = 0;
-    RW16(state, 8) = cst;
-    RW16(state, 4) = tmp;
+    state->phase = 0;
+    state->scale = cst;
+    state->z = tmp;
 }
 
 /* The flash at the owner's feet. */
@@ -320,10 +320,10 @@ void RoomEffect_GroundEruptionDrawGlow(void) {
     func_800C42A4((FieldGlowSprite *)&g_RoomEruptionGlowPacket, &matrix, 1);
 }
 
-void RoomEffect_GroundEruptionUpdateGlow(void *unused, char *state,
+void RoomEffect_GroundEruptionUpdateGlow(void *unused, RoomFxControl *state,
                                          void *obj) {
-    if (RW16(state, 2) == 0x3A) {
-        state[1] = 2;
+    if (state->frame == 0x3A) {
+        state->state = 2;
     }
 }
 
@@ -472,19 +472,19 @@ void RoomEffect_GroundEruptionUpdateRing(void *arg0, unsigned char *signal,
 }
 
 void RoomEffect_GroundEruptionInitShadow(void *unused0, void *unused1,
-                                         char *state) {
-    char *obj = (char *)func_800C2B50();
+                                         RoomEruptionShadow *state) {
+    RoomEruptionActor *obj = func_800C2B50();
     unsigned int i;
-    GteShortVector *entries = (GteShortVector *)state;
+    GteShortVector *entries = state->point;
 
     for (i = 0; i < 0x10; i++) {
-        entries[i].x = RW32(obj, 0x18);
-        entries[i].y = RW32(obj, 0x1C);
-        entries[i].z = RW32(obj, 0x20);
+        entries[i].x = obj->matrix.t[0];
+        entries[i].y = obj->matrix.t[1];
+        entries[i].z = obj->matrix.t[2];
     }
 
-    RW16(state, 0x82) = 0x80;
-    RW16(state, 0x80) = 0x800;
+    state->depth = 0x80;
+    state->scale = 0x800;
 }
 
 typedef struct RoomEruptionShadowStack {

@@ -76,7 +76,7 @@ int RoomLib_ConfigureWindowClass(RoomWindowObject *obj, int query, unsigned int 
         state->target[0] = a;
         state->target[2] = c;
         if (b == -1) {
-            state->target[1] = RW32(g_PlayerEntity, 0x2C);
+            state->target[1] = g_PlayerEntity->pos_y;
         } else {
             state->target[1] = b;
         }

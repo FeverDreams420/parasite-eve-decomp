@@ -47,6 +47,24 @@ typedef struct RoomEruptionColumn {
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomEruptionColumn, scale) == 0x120,
                   room_eruption_column_scale_offset);
 
+/* The flash at the owner's feet: its position and scale. */
+typedef struct RoomEruptionGlow {
+    s16 x;
+    s16 y;
+    s16 z;
+    s16 pad06;
+    s16 scale;                    /* 0x08 */
+    s16 phase;                    /* 0x0A */
+} RoomEruptionGlow;
+
+/* The floor shadow: sixteen points under the owner, its scale and depth
+ * (the depth is what RoomFxGroundSpriteParams reads at 0x82). */
+typedef struct RoomEruptionShadow {
+    GteShortVector point[16];
+    s16 scale;                    /* 0x80 */
+    s16 depth;                    /* 0x82 */
+} RoomEruptionShadow;
+
 /* Six eight-byte point/velocity records followed by gravity increments
  * and trail visibility flags, shared by debris setup and drawing. */
 typedef struct RoomEruptionDebrisState {

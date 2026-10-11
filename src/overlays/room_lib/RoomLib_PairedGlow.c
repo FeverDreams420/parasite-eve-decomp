@@ -143,7 +143,7 @@ void RoomLib_UpdatePairedEmitter(void *arg0, RoomFxControl *arg1,
                                         RoomFxPairedEmitterState *state) {
     RoomPairedEmitterStack stack;
     RoomClock *owner;
-    RoomLink *link;
+    GteMatrix *view;
     unsigned char *table;
 
     owner = func_800C2B50();
@@ -189,20 +189,20 @@ void RoomLib_UpdatePairedEmitter(void *arg0, RoomFxControl *arg1,
     func_800C3238(2);
 
     table = g_RoomPairedGlowColorTable;
-    link = (*(RoomLink **)owner)->p238;
+    view = (*(RoomLink **)owner)->p238;
     func_800C3134(table, arg1->frame, (unsigned char *)&state->primary.color0);
     func_800C3134(table, arg1->frame, (unsigned char *)&state->secondary.color0);
     state->primary.intensity = state->intensity;
-    stack.matrix.t[0] = RW32(link, 0x14);
-    stack.matrix.t[1] = RW32(link, 0x18) - 0x64;
-    stack.matrix.t[2] = RW32(link, 0x1C);
+    stack.matrix.t[0] = view->t[0];
+    stack.matrix.t[1] = view->t[1] - 0x64;
+    stack.matrix.t[2] = view->t[2];
     func_800C4FC4(&state->primary, &stack.matrix, 0);
 
     state->secondary.intensity = state->intensity;
-    stack.matrix.t[0] = RW32(link, 0x14);
+    stack.matrix.t[0] = view->t[0];
     stack.matrix.t[1] =
         g_RoomFloorY->y;
-    stack.matrix.t[2] = RW32(link, 0x1C);
+    stack.matrix.t[2] = view->t[2];
     func_800C4FC4(&state->secondary, &stack.matrix, 0);
 }
 

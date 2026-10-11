@@ -21,10 +21,6 @@
 #include "pe1/room_four_sprite.h"
 #include "pe1/room_ring_pair.h"
 
-#define RW16(o, off) (*(short *)((char *)(o) + (off)))
-#define RW32(o, off) (*(int *)((char *)(o) + (off)))
-#define RW8(o, off) (*(u8 *)((char *)(o) + (off)))
-#define RWU16(o, off) (*(u16 *)((char *)(o) + (off)))
 
 static const GteShortVector s_DropFieldTiltX = { 0x400, 0, 0, 0 };
 static const GteShortVector s_DropFieldTiltY = { 0, 0x400, 0, 0 };
