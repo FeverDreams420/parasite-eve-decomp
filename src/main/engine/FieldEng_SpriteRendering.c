@@ -680,26 +680,26 @@ void func_800C4E50(FieldRingGeometry *data) {
     int angle;
     u32 i;
     int step;
-    char *verts;
+    GteShortVector *verts;
 
     data_s3 = data;
     asm("" : "=r"(data_s3) : "0"(data_s3));
     angle = 0;
     step = 0x1000 / data_s3->mode;
-    verts = (char *)data_s3->source;
+    verts = data_s3->source;
 
-    for (i = 0; i < data_s3->mode; i++, verts += 8) {
-        *(s16 *)(verts + 0) = (rsin(angle) * data_s3->extent1) >> 12;
-        *(s16 *)(verts + 2) = (rcos(angle) * data_s3->extent1) >> 12;
-        *(s16 *)(verts + 4) = 0;
+    for (i = 0; i < data_s3->mode; i++, verts++) {
+        verts->x = (rsin(angle) * data_s3->extent1) >> 12;
+        verts->y = (rcos(angle) * data_s3->extent1) >> 12;
+        verts->z = 0;
         angle += step;
     }
 
     angle = 0;
-    for (i = 0; i < data_s3->mode; i++, verts += 8) {
-        *(s16 *)(verts + 0) = (rsin(angle) * data_s3->extent0) >> 12;
-        *(s16 *)(verts + 2) = (rcos(angle) * data_s3->extent0) >> 12;
-        *(s16 *)(verts + 4) = 0;
+    for (i = 0; i < data_s3->mode; i++, verts++) {
+        verts->x = (rsin(angle) * data_s3->extent0) >> 12;
+        verts->y = (rcos(angle) * data_s3->extent0) >> 12;
+        verts->z = 0;
         angle += step;
     }
 }
