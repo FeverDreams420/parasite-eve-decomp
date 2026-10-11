@@ -22,6 +22,6 @@ void func_80192CCC(void *arg0, RoomFxControl *control, SceneE08ScreenFade *fade)
     }
 
     if (control->frame >= 0x79) {
-        control->status = 2;
+        control->state = 2;
     }
 }

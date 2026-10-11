@@ -46,7 +46,7 @@ void func_8018FDA8(void *unused, RoomFxControl *signal, u8 *state) {
             slots->active[i] = 0;
             slots->count--;
             if (slots->count == 0) {
-                signal->status = 2;
+                signal->state = 2;
             }
         }
     }

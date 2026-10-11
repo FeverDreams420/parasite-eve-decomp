@@ -31,7 +31,7 @@ void func_80194214(void *unused, RoomFxControl *phase, SceneE08TrailGlow *effect
         effect->scale[0].y += 0x96;
     }
     if (phase->frame == 0x78) {
-        phase->status = 2;
+        phase->state = 2;
     }
 
     x = effect->trail[0].x;
@@ -40,7 +40,7 @@ void func_80194214(void *unused, RoomFxControl *phase, SceneE08TrailGlow *effect
     z = effect->trail[0].z;
     point[2] = z;
     if (Geo_PointInPoly(x << 16, z << 16, D_8009D248, D_8009D1CC) == 0) {
-        phase->status = 2;
+        phase->state = 2;
     }
     if (func_800C6B90(point, 0x320) != 0) {
         owner->playerHit = 1;

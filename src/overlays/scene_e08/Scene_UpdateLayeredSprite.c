@@ -70,7 +70,7 @@ void func_801946D4(void *unused, RoomFxControl *control, char *state)
     zArg = (unsigned)(nextZ >> 16) << 16;
     if (Geo_PointInPoly(((unsigned)((SceneLayeredSpriteState *)state)->center[0].parts.integer) << 16, zArg, D_8009D248, screenLimit) == 0)
     {
-        control->status = 2;
+        control->state = 2;
     }
     if (control->frame < 50)
     {

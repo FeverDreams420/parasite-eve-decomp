@@ -10,6 +10,6 @@ void func_80194D74(s32 arg0, RoomFxControl *rec, SceneE08ExpandingGlow *p) {
         p->depth = v - 8;
     }
     if (rec->frame == 0x3C) {
-        rec->status = 2;
+        rec->state = 2;
     }
 }

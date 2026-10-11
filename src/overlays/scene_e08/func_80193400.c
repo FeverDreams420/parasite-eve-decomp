@@ -19,6 +19,6 @@ void func_80193400(void *arg0, RoomFxControl *signal, SceneGlowModelState *work)
         work->scaleZ += 0x50;
     }
     if ((s16)work->depth <= 0) {
-        signal->status = 2;
+        signal->state = 2;
     }
 }

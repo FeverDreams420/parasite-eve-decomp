@@ -34,6 +34,6 @@ void func_80191748(SceneGrabHead *arg0, RoomFxControl *arg1) {
     }
 
     if (func_800C2B68() == 1) {
-        arg1->status = 2;
+        arg1->state = 2;
     }
 }

@@ -16,6 +16,6 @@ void func_80191348(s32 arg0, RoomFxControl *rec, SceneRingSpritesState *p) {
         p->depth = zero;
     }
     if (q->depth == zero) {
-        rec->status = 2;
+        rec->state = 2;
     }
 }

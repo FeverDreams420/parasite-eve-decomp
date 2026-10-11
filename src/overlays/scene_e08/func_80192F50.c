@@ -42,6 +42,6 @@ void func_80192F50(void *unused, RoomFxControl *condition_arg, SceneE08OrbitPart
     } while (state < base + 32);
 
     if (condition->frame >= 121) {
-        condition->status = 2;
+        condition->state = 2;
     }
 }
