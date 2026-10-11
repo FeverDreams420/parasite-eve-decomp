@@ -9,8 +9,8 @@
 #include "pe1/menu_flags.h"
 #include "pe1/render_prim.h"
 
-/* Each textbox entry is 0x38 bytes; preserve the retail field addresses. */
-#include "Menu_TextboxDraw_externs.h"
+#include "pe1/field_pad.h"
+#include "pe1/boot_disc_check.h"
 /* COMMON supplies small-data metadata to MASPSX for the textbox words this
  * unit reaches through $gp; the other extern words stay absolute. */
 int D_8009CED4;
@@ -279,7 +279,6 @@ int Menu_GetEquipSlotIndex(void) {
     return D_8009CEA4;
 }
 
-#include "Menu_TextboxDraw_externs_1.h"
 
 
 
@@ -290,7 +289,6 @@ signed char D_8009CEA4;
 u8 D_8009CEA8;
 u8 D_8009CEAC;
 u8 D_8009CEB0;
-#include "Menu_TextboxDraw_externs_2.h"
 
 void Menu_DrawTextboxEntries(void) {
     TextboxPoint cursor;

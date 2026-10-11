@@ -56,6 +56,21 @@ typedef struct TextboxGlyphPacket {
 
 extern TextboxEntry g_TextboxEntries[]; /* = D_800BCEA8 */
 
+/* Font pages, the per-glyph spacing table and the textbox sprite/tile
+ * packets for both frame buffers (glyph packets at 0x8009EC70, 28 bytes;
+ * fog tiles at 0x8009ECA8, 24 bytes). */
+extern TextboxFontPage D_80091644[4];
+extern u16 D_80091680[];
+extern TextboxGlyphSpacing D_800916A0[256];
+extern u8 D_8009EC70[];
+extern u8 D_8009EC78[];
+extern u8 D_8009EC86[];
+extern u8 D_8009ECA8[];
+/* Text colour bytes of the textbox glyphs. */
+extern u8 D_8009CEC4;
+extern u8 D_8009CEC8;
+extern u8 D_8009CECC;
+
 PE1_STATIC_ASSERT(sizeof(TextboxEntry) == 0x38, textbox_entry_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(TextboxEntry, control) == 0xC, textbox_control_offset);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(TextboxEntry, numbers) == 0x1A, textbox_numbers_offset);
