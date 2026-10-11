@@ -244,11 +244,11 @@ int func_800C9268(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
     func_800C42A4((FieldGlowSprite *)&D_800E22E8, &matrix, 1);
 }
 
-#define FIELD_GLOW_LAYERS_FUNC func_800C9398
-#define FIELD_GLOW_LAYERS_SPIN_A D_800C2184
-#define FIELD_GLOW_LAYERS_SPIN_B D_800C218C
-#define FIELD_GLOW_LAYERS_SCALE D_800C2194
-#define FIELD_GLOW_LAYERS_SPRITE D_800F34A8
+#define GLOW_LAYERS_FUNC func_800C9398
+#define GLOW_LAYERS_SPIN_A D_800C2184
+#define GLOW_LAYERS_SPIN_B D_800C218C
+#define GLOW_LAYERS_SCALE D_800C2194
+#define GLOW_LAYERS_SPRITE D_800F34A8
 #include "FieldEng_GlowLayers.inc"
 
 int func_800C9868(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {

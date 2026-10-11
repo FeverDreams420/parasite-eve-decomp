@@ -187,11 +187,11 @@ int func_800C9EA8(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
     func_800C42A4(&D_800E22F8, &matrix, 1);
 }
 
-#define FIELD_GLOW_LAYERS_FUNC func_800C9FD8
-#define FIELD_GLOW_LAYERS_SPIN_A D_800C21A4
-#define FIELD_GLOW_LAYERS_SPIN_B D_800C21AC
-#define FIELD_GLOW_LAYERS_SCALE D_800C21B4
-#define FIELD_GLOW_LAYERS_SPRITE D_800F34B8
+#define GLOW_LAYERS_FUNC func_800C9FD8
+#define GLOW_LAYERS_SPIN_A D_800C21A4
+#define GLOW_LAYERS_SPIN_B D_800C21AC
+#define GLOW_LAYERS_SCALE D_800C21B4
+#define GLOW_LAYERS_SPRITE D_800F34B8
 #include "FieldEng_GlowLayers.inc"
 
 int func_800CA4A8(void *arg0, FieldEngSlot *state) {

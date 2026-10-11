@@ -1,10 +1,10 @@
 /* Field glow layers: compose the effect's axis matrix with two fixed spins
  * and draw the sprite once per spin, scaled by a fixed vector.
- * FIELD_GLOW_LAYERS_FUNC    entry point
- * FIELD_GLOW_LAYERS_SPIN_A  GteShortVector first spin
- * FIELD_GLOW_LAYERS_SPIN_B  GteShortVector second spin
- * FIELD_GLOW_LAYERS_SCALE   GteVector sprite scale
- * FIELD_GLOW_LAYERS_SPRITE  FieldGlowSprite parameter block */
+ * GLOW_LAYERS_FUNC    entry point
+ * GLOW_LAYERS_SPIN_A  GteShortVector first spin
+ * GLOW_LAYERS_SPIN_B  GteShortVector second spin
+ * GLOW_LAYERS_SCALE   GteVector sprite scale
+ * GLOW_LAYERS_SPRITE  FieldGlowSprite parameter block */
 #include "pe1/field_glow_layers.h"
 #include "pe1/gte.h"
 
@@ -12,7 +12,7 @@
  * Matrix arithmetic and loads are C; GTE instructions are wrapped separately.
  * Volatile column reads retain each rotation load instead of caching values
  * across the two compositions. */
-void FIELD_GLOW_LAYERS_FUNC(void *object, void *slot, FieldGlowLayers *glow)
+void GLOW_LAYERS_FUNC(void *object, void *slot, FieldGlowLayers *glow)
 {
     GteMatrix *workMatrix;
     register GteMatrix *stepMatrix asm("$18");
@@ -30,13 +30,13 @@ void FIELD_GLOW_LAYERS_FUNC(void *object, void *slot, FieldGlowLayers *glow)
     GteVector scaleA;
     GteVector scaleB;
 
-    spinA = FIELD_GLOW_LAYERS_SPIN_A;
-    spinB = FIELD_GLOW_LAYERS_SPIN_B;
+    spinA = GLOW_LAYERS_SPIN_A;
+    spinB = GLOW_LAYERS_SPIN_B;
     func_800C2EAC(3);
     func_800C3098(0x10);
     func_800C2FF0(0x20, 0x10);
     func_800C3238(2);
-    FIELD_GLOW_LAYERS_SPRITE.depth = glow->depth;
+    GLOW_LAYERS_SPRITE.depth = glow->depth;
 
     RotMatrixYXZ(&spinA, &rotation);
     stepMatrix = &rotation;
@@ -78,9 +78,9 @@ void FIELD_GLOW_LAYERS_FUNC(void *object, void *slot, FieldGlowLayers *glow)
     gte_swc2_10_4(outTranslation);
     gte_swc2_11_8(outTranslation);
 
-    scaleA = FIELD_GLOW_LAYERS_SCALE;
+    scaleA = GLOW_LAYERS_SCALE;
     ScaleMatrix(workMatrix, &scaleA);
-    func_800C42A4(&FIELD_GLOW_LAYERS_SPRITE, workMatrix, 0);
+    func_800C42A4(&GLOW_LAYERS_SPRITE, workMatrix, 0);
 
     RotMatrixYXZ(nextSpin, stepMatrix);
     matrix = glow->matrix;
@@ -107,13 +107,13 @@ void FIELD_GLOW_LAYERS_FUNC(void *object, void *slot, FieldGlowLayers *glow)
     gte_swc2_9_0(outTranslation);
     gte_swc2_10_4(outTranslation);
     gte_swc2_11_8(outTranslation);
-    scaleB = FIELD_GLOW_LAYERS_SCALE;
+    scaleB = GLOW_LAYERS_SCALE;
     ScaleMatrix(workMatrix, &scaleB);
-    func_800C42A4(&FIELD_GLOW_LAYERS_SPRITE, workMatrix, 0);
+    func_800C42A4(&GLOW_LAYERS_SPRITE, workMatrix, 0);
 }
 
-#undef FIELD_GLOW_LAYERS_FUNC
-#undef FIELD_GLOW_LAYERS_SPIN_A
-#undef FIELD_GLOW_LAYERS_SPIN_B
-#undef FIELD_GLOW_LAYERS_SCALE
-#undef FIELD_GLOW_LAYERS_SPRITE
+#undef GLOW_LAYERS_FUNC
+#undef GLOW_LAYERS_SPIN_A
+#undef GLOW_LAYERS_SPIN_B
+#undef GLOW_LAYERS_SCALE
+#undef GLOW_LAYERS_SPRITE
