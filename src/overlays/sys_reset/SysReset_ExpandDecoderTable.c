@@ -6,12 +6,12 @@ void SysReset_ExpandDecoderTable(u16 *table) {
     /* Keep the output cursor in a2; the empty barrier preserves the token load order. */
     register u8 *output asm("$6") = (u8 *)table;
     u32 count;
-    u32 token;
+    u8 token;
     s32 wordCount;
     do {
         token = *source;
-        __asm__("" : "=r"(token) : "0"(token), "r"(source));
-        count = token & 255;
+        __asm__("" : : "r"(token), "r"(source));
+        count = token;
         ++source;
         if (count < 240) {
             if (distance != 0) {
