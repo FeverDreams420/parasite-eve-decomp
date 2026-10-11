@@ -13,6 +13,7 @@
  * this one object.
  */
 #include "room_lib.h"
+#include "pe1/battle.h"
 #include "pe1/gte_types.h"
 
 int RoomLib_HandlerDNop0(void) {
@@ -1052,7 +1053,7 @@ void RoomLib_HandlerB(RoomEnt *obj) {
         GteSineWord *entry;
         GteSineWord *table;
         unsigned short matrixComponent;
-        RoomLink *player;
+        BattleEntity *player;
         register int a0 asm("$4");
 
         self->t1A = 1;
@@ -1081,10 +1082,10 @@ void RoomLib_HandlerB(RoomEnt *obj) {
         *(volatile short *)&((RoomLibHandlerBState *)state)->matrix[5] = 0;
         *(volatile short *)(state + 0x1E) = 0;
         ((RoomLibHandlerBState *)state)->matrix[8] = v1;
-        player = (RoomLink *)D_8009D254;
+        player = D_8009D254;
         matrixComponent = -matrixComponent;
         ((RoomLibHandlerBState *)state)->matrix[6] = matrixComponent;
-        v0 = ((short *)&player->pos[1])[1];
+        v0 = player->posY.parts.integer;
         ((RoomLibHandlerBState *)state)->floorY = v0;
     }
 
