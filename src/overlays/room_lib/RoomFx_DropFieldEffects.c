@@ -486,7 +486,7 @@ void RoomFx_DrawRingPair(void *unused0, void *unused1,
     matrix.t[1] = fx->y;
     matrix.t[2] = fx->z;
     saved_matrix = matrix;
-    func_800C4FC4((char *)depth_slot - 0x14, &matrix, 0);
+    func_800C4FC4(&g_RoomDropFieldRings[0], &matrix, 0);
     matrix = saved_matrix;
     func_800C4FC4(depth_slot + 2, &matrix, 0);
 
@@ -502,7 +502,7 @@ void RoomFx_DrawRingPair(void *unused0, void *unused1,
     matrix.t[1] = fx->y;
     matrix.t[2] = fx->z;
     saved_matrix = matrix;
-    func_800C4FC4((char *)depth_slot - 0x14, &matrix, 0);
+    func_800C4FC4(&g_RoomDropFieldRings[0], &matrix, 0);
     matrix = saved_matrix;
     func_800C4FC4(depth_slot + 2, &matrix, 0);
 }
