@@ -58,6 +58,7 @@ int UnDeliverEvent(unsigned int event, int spec);
 
 /* LIBAPI root counters (counter.c). */
 int SetRCnt(unsigned int counter, int target, int mode);
+int GetRCnt(unsigned int counter);
 int StartRCnt(unsigned int counter);
 int StopRCnt(unsigned int counter);
 

@@ -153,6 +153,10 @@ g_AkaoSilentLoopSample = 0x8009B7FC;
 g_AkaoSilentEndSample = 0x8009B81C;
 g_AkaoSpuMallocTable = 0x800B6958;
 g_AkaoSequencerState = 0x800B6980;
+g_AkaoTimerDeltaHist3 = 0x8009B7EC;
+g_AkaoTimerDeltaSum = 0x8009CDE4;
+g_AkaoOpcodeArgLengths = 0x8009B85C;
+g_AkaoExtOpcodeArgLengths = 0x8009B8BC;
 
 // PSYQ 4.0 object signature matches.
 __SN_ENTRY_POINT = 0x80072534; // type:func

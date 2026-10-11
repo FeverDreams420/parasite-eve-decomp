@@ -8,8 +8,9 @@
 #include "pe1/akao/note_step.h"
 #include "pe1/akao_script.h"
 #include "pe1/akao_counters.h"
-
-extern unsigned short D_8009D2B6;
+#include "pe1/akao/globals.h"
+#include "pe1/akao/voice_state.h"
+#include "pe1/psyq_bios.h"
 
 void Seq_GetGlobalPitch(unsigned int *out)
 {
@@ -38,12 +39,6 @@ void Util_CopyWords(unsigned int *src, unsigned int *dst, unsigned int size)
         dst++;
     } while (size != 0);
 }
-extern u16 D_8009CDEC;
-extern s16 D_8009D2A2, D_8009D220, D_8009D21E;
-extern u32 D_8009D284, D_8009D214;
-extern u32 D_8009D210, D_800BCD50;
-extern AkaoTrack D_800BA560[];
-void Seq_ApplyGlobalPitch(void);
 void func_8008AB9C(AkaoTrack *);
 
 /* The bank cursor is one field of the sequencer state block. Read as a
@@ -71,19 +66,19 @@ void SPU_StepReverbLoad(void)
     AkaoSequencerBank *bank;
     if ((++D_8009CDEC & 3) != 0)
         return;
-    if (D_8009D2A2 != 0) {
-        D_8009D2A2--;
-        D_8009D2B4 += D_8009D284;
+    if (g_AkaoGlobalPitchSlideCounter != 0) {
+        g_AkaoGlobalPitchSlideCounter--;
+        D_8009D2B4 += g_AkaoGlobalPitchSlideStep;
         Seq_ApplyGlobalPitch();
     }
-    if (D_8009D220 != 0) {
-        D_8009D220--;
-        D_8009D2D0 += D_8009D214;
+    if (g_AkaoGlobalD2D0SlideCounter != 0) {
+        g_AkaoGlobalD2D0SlideCounter--;
+        D_8009D2D0 += g_AkaoGlobalD2D0SlideStep;
     }
-    if (D_8009D21E != 0) {
+    if (g_AkaoGlobalD2CCSlideCounter != 0) {
         oldGlobalParam = D_8009D2CC;
-        D_8009D21E--;
-        value = oldGlobalParam + D_8009D210;
+        g_AkaoGlobalD2CCSlideCounter--;
+        value = oldGlobalParam + g_AkaoGlobalD2CCSlideStep;
         if ((value & 0xFF0000) != (oldGlobalParam & 0xFF0000)) {
             track = (AkaoTrack *)D_800B8AC0;
             for (count = 24; count != 0; --count, ++track)
@@ -107,7 +102,7 @@ void SPU_StepReverbLoad(void)
         bank[1].pitch_slide_duration--;
         value = oldSecondaryPitch + bank[1].pitch_delta;
         if ((value & 0x7F0000) != (oldSecondaryPitch & 0x7F0000))
-            func_8008AB9C(D_800BA560);
+            func_8008AB9C(g_AkaoVoiceStateTable2);
         ((AkaoSequencerBank *)D_8009D2C8)->pitch_current = value;
     }
     D_8009D2C8 = D_8009D2C8 - 1;
@@ -324,13 +319,6 @@ void Akao_Tick(void)
 
 /* Timer callback immediately follows the sequencer tick and measures its
  * duration to maintain the rolling AKAO timer history. */
-s32 GetRCnt(s32 arg0);
-
-extern s32 D_8009B7EC;
-extern s32 g_AkaoTimerDeltaHist2;
-extern s32 g_AkaoTimerDeltaHist1;
-extern s32 g_AkaoTimerDeltaHist0;
-extern s32 D_8009CDE4;
 
 /* Timer event handler (OpenEvent takes an int-returning handler): runs one
  * sequencer tick, records how long it took and returns that duration. */
@@ -350,20 +338,18 @@ int Akao_TimerCallback(void) {
     old_f4 = g_AkaoTimerDeltaHist1;
     old_f8 = g_AkaoTimerDeltaHist0;
     g_AkaoTimerDeltaHist0 = delta;
-    D_8009B7EC = old_f0;
+    g_AkaoTimerDeltaHist3 = old_f0;
     old_f0 = old_f0 + old_f4;
     old_f0 = old_f0 + old_f8;
     old_f0 = old_f0 + delta;
 
     g_AkaoTimerDeltaHist2 = old_f4;
     g_AkaoTimerDeltaHist1 = old_f8;
-    D_8009CDE4 = old_f0;
+    g_AkaoTimerDeltaSum = old_f0;
     return delta;
 }
 
 /* Argument lengths of opcodes 0xA0-0xFF, zero for opcodes handled below. */
-extern AkaoU8 D_8009B85C[];
-extern AkaoU8 D_8009B8BC[];
 
 int Akao_LookupSampleBankByte(AkaoTrack *track)
 {
@@ -388,7 +374,7 @@ int Akao_LookupSampleBankByte(AkaoTrack *track)
             if (code < 0xA0) {
                 return 0xA0;
             }
-            skip = D_8009B85C[code - 0xA0];
+            skip = g_AkaoOpcodeArgLengths[code - 0xA0];
             if (skip) {
                 cursor += skip;
                 break;
@@ -397,7 +383,7 @@ int Akao_LookupSampleBankByte(AkaoTrack *track)
             case 0xFC:
                 cursor++;
                 argument = *cursor;
-                skip = D_8009B8BC[argument];
+                skip = g_AkaoExtOpcodeArgLengths[argument];
                 if (skip) {
                     cursor += skip;
                     break;
@@ -489,9 +475,6 @@ int Akao_LookupSampleBankByte(AkaoTrack *track)
 }
 #define NULL ((void *)0)
 
-void SeqOp_SetVoiceInstrument(AkaoTrack *track, AkaoInstrument *instrument, int sample_header);
-extern AkaoSequencerBank *g_AkaoCurTrack;
-extern AkaoInstrument g_AkaoInstrumentTable[];
 
 void Akao_SetVoiceLoopAddr(AkaoTrack *track, u32 arg1) {
     s32 temp_a2;
@@ -613,8 +596,6 @@ void Akao_SetVoiceLoopAddrAlt(AkaoTrack *track, u32 arg1) {
         }
     }
 }
-
-extern int g_AkaoPitchPeriodTable[];
 
 void Akao_SetNotePitchBounded(AkaoTrack *track, int arg1) {
     int value = track->current_note;
@@ -873,16 +854,7 @@ void Akao_StepSampleLoader(AkaoTrack *track, u32 voice_mask)
     track->tremolo_delta = track->expression;
 }
 
-extern unsigned int g_SpuActiveVoiceMask;
 
-extern int g_AkaoVoiceMaskScratch;
-extern unsigned int g_AkaoTrack34Mask;
-extern unsigned int g_AkaoTrack38Mask;
-extern unsigned int g_AkaoTrack3CMask;
-
-typedef unsigned char u8_1;
-
-typedef unsigned int u32_1;
 
 void SeqOp_SetVoiceInstrument(AkaoTrack *track_arg, AkaoInstrument *instrument_arg, int sample_header) {
     AkaoTrack *track = track_arg;
@@ -960,15 +932,15 @@ void SeqOp_SetTempo(void *ptr)
 }
 
 void SeqOp_SetPitchSlideTarget(void *ptr) {
-    u8_1 *pc;
+    u8 *pc;
 
     {
         int value;
-        u8_1 *pc0;
+        u8 *pc0;
         AkaoSequencerBank *track;
 
-        pc0 = *(u8_1 **)ptr;
-        *(u8_1 **)ptr = pc0 + 1;
+        pc0 = *(u8 **)ptr;
+        *(u8 **)ptr = pc0 + 1;
         track = g_AkaoCurTrack;
         value = (track->tempo_slide_duration = *pc0);
         if (value == 0) {
@@ -983,10 +955,10 @@ void SeqOp_SetPitchSlideTarget(void *ptr) {
         AkaoSequencerBank *track;
         int current;
 
-        pc = *(u8_1 **)ptr;
-        *(u8_1 **)ptr = pc + 1;
+        pc = *(u8 **)ptr;
+        *(u8 **)ptr = pc + 1;
         value = pc[0];
-        *(u8_1 **)ptr = pc + 2;
+        *(u8 **)ptr = pc + 2;
         high = pc[1];
 
         track = g_AkaoCurTrack;
@@ -1000,8 +972,6 @@ void SeqOp_SetPitchSlideTarget(void *ptr) {
         track->tempo_delta = (value - current) / track->tempo_slide_duration;
     }
 }
-
-extern unsigned int g_AkaoVoiceUpdateFlags;
 
 void SeqOp_SetTempoSlide(void *ptr)
 {
@@ -1168,12 +1138,8 @@ void SeqOp_SetVolumeOrExpression(AkaoTrack *track) {
     }
 }
 
-typedef unsigned char u8_2;
 
-typedef unsigned char u8_4;
-typedef int s32_4;
 
-typedef unsigned char u8_6;
 
 void Akao_SetExpressionSlide(AkaoTrack *track) {
     u8 *pc;
@@ -1292,7 +1258,7 @@ void sndTrackDecPanpot(AkaoTrack *track) {
 }
 
 void Akao_PlayNote(AkaoTrack *track, unsigned int mask) {
-    u8_6 *pc;
+    u8 *pc;
     unsigned int note;
     unsigned int old_note;
     AkaoInstrument *instrument;
@@ -1333,7 +1299,7 @@ void Akao_PlayNote(AkaoTrack *track, unsigned int mask) {
 }
 
 void Akao_TieNote(AkaoTrack *track, unsigned int mask) {
-    u8_6 *pc;
+    u8 *pc;
     int note;
     unsigned int old_note;
     AkaoInstrument *instrument;
@@ -1597,8 +1563,6 @@ void SeqOp_SetPanSlide(AkaoScriptState *state) {
     state->pan_delta = delta;
 }
 
-extern void *g_AkaoSoundEntryTable[];
-
 void SeqOp_StopPitchLFO(AkaoTrack *track) {
     track->pitch_lfo_value = 0;
     track->flags &= ~AKAO_TRACK_FLAG_PITCH_LFO;
@@ -1722,9 +1686,6 @@ void SeqOp_PitchSlide(AkaoScriptState *state) {
     state->pitch_delta = target_delta;
 }
 
-extern u32 g_AkaoVoiceUpdateFlags;
-
-void Seq_MarkTrack34MaskDirty(void);
 
 void SeqOp_ResetFlag4State(AkaoTrack *track) {
     track->aux_lfo_value = 0;
@@ -1755,7 +1716,6 @@ void SeqOp_ClearTrack34Mask(AkaoTrack *track, u32 mask) {
     track->key_on_delay = 0;
 }
 
-void Seq_MarkTrack3CMaskDirty(void);
 
 void SeqOp_SetMask(AkaoTrack *track, u32 mask) {
     if (track->parent_track_id == 0) {
@@ -1777,10 +1737,6 @@ void SeqOp_ClearTrack3CMask(AkaoTrack *track, u32 mask) {
     Seq_MarkTrack3CMaskDirty();
     track->key_off_delay = 0;
 }
-
-extern u16 g_AkaoTrack5ATransposeValue;
-
-extern u8_2 D_800B290C[];
 
 
 void SeqOp_SetTrack38Mask(AkaoTrack *track, u32 mask) {
@@ -1968,7 +1924,7 @@ void Akao_SetReleaseRate(AkaoTrack *track) {
 
 void Akao_ResetReleaseRate(AkaoTrack *track) {
     track->flags &= ~AKAO_TRACK_FLAG_RELEASE_RATE_OVERRIDE;
-    track->adsr_release_rate = D_800B290C[track->note_pitch << 6];
+    track->adsr_release_rate = g_AkaoInstrumentTable[track->note_pitch].adsr_release_rate;
     track->update_flags |= AKAO_VOICE_PARAM_ADSR_RELEASE;
 }
 
@@ -2146,12 +2102,6 @@ void SeqOp_ReadTrack64U16(unsigned char **stream) {
     *stream = cursor + 1;
     track->repeat_counters[1] |= cursor[0] << 8;
 }
-
-extern u32 D_800B89D0;
-extern u32 D_800B89D4;
-extern u32 D_800B89D8;
-extern u32 D_800B89DC;
-extern u32 D_800B89E0;
 
 void SeqOp_ReadAdsrDecayAndSustain(void *ptr, int arg) {
     sndTrackReadAdsrDecayRate(ptr);
@@ -2360,8 +2310,6 @@ void SeqOp_NoteOnWithPitchSlide(AkaoTrack *track, u32 voice_mask) {
 
     SeqOp_SetTrack38Mask(track, voice_mask);
 }
-
-extern int g_AkaoSeqLoopCounter;
 
 void SeqOp_SetSustainFlag(AkaoTrack *track) {
     track->flags |= AKAO_TRACK_FLAG_SUSTAIN;
