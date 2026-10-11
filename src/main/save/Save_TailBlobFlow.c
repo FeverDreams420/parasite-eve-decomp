@@ -2,189 +2,46 @@
 
 #include "pe1/save_tail_state.h"
 
+/* The save tail is a packed byte stream: each record is copied as an
+ * unaligned byte block at the IO cursor, which then advances past it. */
+#define SAVE_PUT(type, src)                                \
+    *(type *)g_SaveIoCursor = *(type *)(src);              \
+    g_SaveIoCursor += sizeof(type)
+
 void Save_SerializeTail(void) {
-    register u8 *cursor asm("$3");
-    u8 *cd;
-
-    {
-        u8 *entityDestination = g_SaveIoCursor;
-        *(SaveBytes800 *)entityDestination = g_SaveEntityWorkBlock;
-    }
-
-    cursor = g_SaveIoCursor;
-    g_SaveIoCursor = cursor + 0x800;
-    *(SaveBytes4 *)(cursor + 0x800) = g_SaveFieldMoveLockBytes;
-    cursor = g_SaveIoCursor;
-    g_SaveIoCursor = cursor + 4;
-    *(SaveBytes4 *)(cursor + 4) = g_SaveSceneDispatchTokenBytes;
-    cursor = g_SaveIoCursor;
-    g_SaveIoCursor = cursor + 4;
-    *(SaveBytes4 *)(cursor + 4) = g_SaveGameStateFlagsBytes;
-    cursor = g_SaveIoCursor;
-    g_SaveIoCursor = cursor + 4;
-    *(SaveBytes4 *)(cursor + 4) = D_800B0CDC;
-    {
-        int b0;
-        int b1;
-        u8 u0;
-        u32 screenByte;
-        cursor = g_SaveIoCursor;
-        g_SaveIoCursor = cursor + 4;
-        asm volatile("" : "=m"(g_SaveIoCursorRead) : "m"(g_SaveIoCursorRead));
-        b0 = D_800B0CE0;
-        b1 = g_LoadedTexturePageId;
-        cursor[4] = b0;
-        cursor[5] = b1;
-        cursor = g_SaveIoCursor;
-        g_SaveIoCursor = cursor + 2;
-        asm volatile("" : "=m"(g_SaveIoCursorRead) : "m"(g_SaveIoCursorRead));
-        b0 = (s8)g_SceneAreaType;
-        b1 = (s8)g_SavedSceneAreaType;
-        cursor[2] = b0;
-        cursor[3] = b1;
-        cursor = g_SaveIoCursor;
-        g_SaveIoCursor = cursor + 2;
-        asm volatile("" : "=m"(g_SaveIoCursorRead) : "m"(g_SaveIoCursorRead));
-        b0 = g_CurrentStoryDay;
-        b1 = g_PendingStoryDay;
-        cursor[2] = b0;
-        cursor[3] = b1;
-        cursor = g_SaveIoCursor;
-        u0 = g_DiscChangeFlags;
-        g_SaveIoCursor = cursor + 2;
-        cursor[2] = u0;
-        cursor = g_SaveIoCursor;
-        g_SaveIoCursor = cursor + 1;
-        screenByte = g_ScreenTransitionState[0];
-        asm volatile("" : : "r"(screenByte));
-        cursor[1] = screenByte;
-    }
-    cd = g_SaveIoCursor + 1;
-    g_SaveIoCursor = cd;
-    *(SaveBytes70 *)cd = *(SaveBytes70 *)&g_AyaBattleState;
-    cursor = g_SaveIoCursor;
-    g_SaveIoCursor = cursor + 0x70;
-    *(SaveBytes18 *)(cursor + 0x70) = *(SaveBytes18 *)&g_SavedBattleStateTail;
-    cursor = g_SaveIoCursor;
-    g_SaveIoCursor = cursor + 0x18;
-    *(SaveBytes8 *)(cursor + 0x18) = *(SaveBytes8 *)&g_BattleEquipStateBlock;
-    {
-        u8 *end = g_SaveIoCursor;
-        g_SaveIoCursor = end + 8;
-    }
+    SAVE_PUT(SaveBytes800, g_EntityWorkBuffer);
+    SAVE_PUT(SaveBytes4, &D_8009D2E8);
+    SAVE_PUT(SaveBytes4, &D_8009D280);
+    SAVE_PUT(SaveBytes4, &D_8009D1A0);
+    SAVE_PUT(SaveBytes4, &D_800B0CDC);
+    SAVE_PUT(SaveBytes2, &D_800B0CE0);
+    SAVE_PUT(SaveBytes2, &g_SceneAreaType);
+    SAVE_PUT(SaveBytes2, &g_CurrentStoryDay);
+    SAVE_PUT(SaveU8, &g_DiscChangeFlags);
+    SAVE_PUT(SaveU8, &g_ScreenTransitionState[0]);
+    SAVE_PUT(SaveBytes70, &g_AyaBattleState);
+    SAVE_PUT(SaveBytes18, &g_SavedBattleStateTail);
+    SAVE_PUT(SaveBytes8, &g_BattleEquipStateBlock);
 }
 
+#define SAVE_GET(type, dst)                                \
+    *(type *)(dst) = *(type *)g_SaveIoCursor;              \
+    g_SaveIoCursor += sizeof(type)
+
 void Save_DeserializeTail(void) {
-    register u8 *cursor asm("$3");
-    register u8 *next_cur asm("$4");
-    SaveBytes70 *aya_dest;
-    SaveBytes18 *battle_dest;
-    SaveBytes8 *equip_dest;
-    u8 *step18;
-    SaveBytes4 *field_dest;
-    int b0;
-    register int b1 asm("$5");
-    int restoreValue;
-    register u8 *third_cur asm("$7");
-    register u8 *bulk_src asm("$6");
-    register u8 *bulk_tmp asm("$2");
-    u32 game_mask;
-    u8 screen_byte;
-    u32 game_word;
-    u32 field_word;
-
-    {
-        u8 *entitySource = g_SaveIoCursor;
-        g_SaveEntityWorkBlock = *(SaveBytes800 *)entitySource;
-    }
-    cursor = g_SaveIoCursor;
-    asm volatile("" : : "r"(cursor));
-    aya_dest = (SaveBytes70 *)&g_AyaBattleState;
-    asm volatile("" : : "r"(aya_dest));
-    g_SaveIoCursor = cursor + 0x800;
-    asm volatile("" : "=m"(g_SaveIoCursorRead) : "m"(g_SaveIoCursorRead));
-    next_cur = g_SaveIoCursorRead;
-    field_dest = &g_SaveFieldMoveLockBytes;
-    *field_dest = *(SaveBytes4 *)(cursor + 0x800);
-    g_SaveIoCursor = next_cur + 4;
-    asm volatile("" : "=m"(g_SaveIoCursorRead) : "m"(g_SaveIoCursorRead));
-    cursor = g_SaveIoCursorRead;
-    field_dest = &g_SaveSceneDispatchTokenBytes;
-    *field_dest = *(SaveBytes4 *)(next_cur + 4);
-
-    g_SaveIoCursor = cursor + 4;
-    asm volatile("" : "=m"(g_SaveIoCursorRead) : "m"(g_SaveIoCursorRead));
-    next_cur = g_SaveIoCursorRead;
-    field_dest = &g_SaveGameStateFlagsBytes;
-    *field_dest = *(SaveBytes4 *)(cursor + 4);
-
-    g_SaveIoCursor = next_cur + 4;
-    asm volatile("" : "=m"(g_SaveIoCursorRead) : "m"(g_SaveIoCursorRead));
-    cursor = g_SaveIoCursorRead;
-    field_dest = &D_800B0CDC;
-    *field_dest = *(SaveBytes4 *)(next_cur + 4);
-
-    g_SaveIoCursor = cursor + 4;
-    asm volatile("" : "=m"(g_SaveIoCursorRead) : "m"(g_SaveIoCursorRead));
-    next_cur = g_SaveIoCursorRead;
-    b0 = ((s8 *)cursor)[4];
-    b1 = ((s8 *)cursor)[5];
-    asm volatile("" : : "r"(b0), "r"(b1));
-    D_800B0CE0 = b0;
-    g_LoadedTexturePageId = b1;
-
-    g_SaveIoCursor = next_cur + 2;
-    asm volatile("" : "=m"(g_SaveIoCursorRead) : "m"(g_SaveIoCursorRead));
-    cursor = g_SaveIoCursorRead;
-    b0 = ((s8 *)next_cur)[2];
-    b1 = ((s8 *)next_cur)[3];
-    asm volatile("" : : "r"(b0), "r"(b1));
-    g_SceneAreaType = b0;
-    g_SavedSceneAreaType = b1;
-
-    g_SaveIoCursor = cursor + 2;
-    asm volatile("" : "=m"(g_SaveIoCursorRead) : "m"(g_SaveIoCursorRead));
-    third_cur = g_SaveIoCursorRead;
-    asm volatile("" : : "r"(third_cur));
-    b0 = ((s8 *)cursor)[2];
-    restoreValue = ((s8 *)cursor)[3];
-    g_CurrentStoryDay = b0;
-    g_PendingStoryDay = restoreValue;
-    asm volatile("" : "=m"(g_SaveIoCursorRead) : "m"(g_SaveIoCursorRead));
-
-    bulk_tmp = third_cur + 4;
-    bulk_src = bulk_tmp;
-    asm volatile("" : : "r"(bulk_src),
-        "r"((u32)bulk_src | (u32)aya_dest));
-    g_SaveIoCursor = third_cur + 2;
-    g_DiscChangeFlags = third_cur[2];
-    g_SaveIoCursor = third_cur + 3;
-    screen_byte = third_cur[3];
-    asm volatile("" : : "r"(screen_byte));
-    g_ScreenTransitionState[0] = screen_byte;
-    g_SaveIoCursor = bulk_src;
-
-    *aya_dest = *(SaveBytes70 *)bulk_src;
-
-    cursor = g_SaveIoCursor;
-    g_SaveIoCursor = cursor + 0x70;
-    game_mask = 0xFFFF2679;
-    asm volatile("" : "=m"(g_SaveIoCursorRead) : "m"(g_SaveIoCursorRead));
-    next_cur = g_SaveIoCursorRead;
-    battle_dest = (SaveBytes18 *)&g_SavedBattleStateTail;
-    *battle_dest = *(SaveBytes18 *)(cursor + 0x70);
-
-    step18 = next_cur + 0x18;
-    g_SaveIoCursor = step18;
-    equip_dest = (SaveBytes8 *)&g_BattleEquipStateBlock;
-    *equip_dest = *(SaveBytes8 *)(next_cur + 0x18);
-    asm volatile("" : : "r"(step18));
-
-    restoreValue = -10;
-    game_word = g_GameStateFlagsWord;
-    cursor = g_SaveIoCursor;
-    g_GameStateFlagsWord = game_word & game_mask;
-    field_word = g_FieldMoveLockWord;
-    g_SaveIoCursor = cursor + 8;
-    g_FieldMoveLockWord = field_word & restoreValue;
+    SAVE_GET(SaveBytes800, g_EntityWorkBuffer);
+    SAVE_GET(SaveBytes4, &D_8009D2E8);
+    SAVE_GET(SaveBytes4, &D_8009D280);
+    SAVE_GET(SaveBytes4, &D_8009D1A0);
+    SAVE_GET(SaveBytes4, &D_800B0CDC);
+    SAVE_GET(SaveBytes2, &D_800B0CE0);
+    SAVE_GET(SaveBytes2, &g_SceneAreaType);
+    SAVE_GET(SaveBytes2, &g_CurrentStoryDay);
+    SAVE_GET(SaveU8, &g_DiscChangeFlags);
+    SAVE_GET(SaveU8, &g_ScreenTransitionState[0]);
+    SAVE_GET(SaveBytes70, &g_AyaBattleState);
+    SAVE_GET(SaveBytes18, &g_SavedBattleStateTail);
+    SAVE_GET(SaveBytes8, &g_BattleEquipStateBlock);
+    D_8009D1A0 &= 0xFFFF2679;
+    D_8009D2E8 &= ~9;
 }

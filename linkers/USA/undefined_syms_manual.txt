@@ -1190,6 +1190,7 @@ g_MenuWidgetColumnLayoutTable = 0x800A3060;
 g_OtBufferTable = 0x800B0E38;
 g_OtListTail = 0x8009D11C;
 g_PadStateMirrorWord3 = 0x800A76DE;
+g_CurrentStoryDay = 0x800B0CE4;
 g_PendingStoryDay = 0x800B0CE5;
 g_PlayTimeFrameCounter = 0x800A7918;
 g_PlayTimeSeconds = 0x800A76BC;

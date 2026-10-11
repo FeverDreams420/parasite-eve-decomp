@@ -3,6 +3,10 @@
 
 typedef unsigned char SaveU8;
 
+typedef struct SaveBytes2 {
+    SaveU8 b[2];
+} SaveBytes2;
+
 typedef struct SaveBytes4 {
     SaveU8 b[4];
 } SaveBytes4;
