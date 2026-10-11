@@ -22,8 +22,8 @@ extern GameTimerEntry g_GameTimers[4];
  * cleared and the running value. */
 extern volatile u32 D_800A76A0;
 
-/* Interior symbols for the single words the reset routines write. The game
- * clock limit is stored twice on reset, so it stays volatile. */
+/* Interior symbols for the single words the reset routines write. Retail
+ * stores the game clock limit twice on reset; the qualifier keeps both. */
 extern int g_GameTimeTable;
 extern volatile int g_GameClockLimit;
 extern u32 g_GameTimer1Flags;
