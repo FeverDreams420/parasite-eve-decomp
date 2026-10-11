@@ -59,7 +59,7 @@ int func_80197B98(int event)
     if (D_8019A86E) return 2;
     if (D_8019A859) {
         register int i asm("$18") = 0;
-        do {
+        while (i < 2) {
             Matrix matrix;
             Vector vector;
             int random;
@@ -82,7 +82,7 @@ offset:
             divisor = 64;
             vector.z = random % divisor + 256;
             ApplyMatrixSV(&matrix, &vector, (Vector *)effect);
-        } while (i < 2);
+        }
         {
             unsigned char *request = &D_8019A859;
             *request = *request - 1;
