@@ -100,7 +100,7 @@ segments:
       - [0x15E4, .rodata, battle/Battle_StatusPrimitiveFlow]
       - [0x15FC, rodata, main/rodata_0015FC]
       - [0x164C, .rodata, battle/Battle_DrawStatusOverlay]
-      - [0x166C, .rodata, draw/Menu_TextboxDraw]
+      - [0x166C, .rodata, draw/Draw_Textbox]
       - [0x1694, rodata, main/rodata_001694]
       - [0x1734, .rodata, memcard/MemCard_PortAndSaveFlow]
       - [0x17AC, .rodata, menu/Menu_StatusPanels]
@@ -290,12 +290,12 @@ segments:
       - [0x2788C, c, math/Math_FixedMul]
       - [0x278A8, c, math/Math_FixedDivide]
       - [0x278BC, c, math/math_fixed]
-      # Draw-mode + sprite and draw-mode + tile packet initialisers: identical
-      # SetDrawTPage/MargePrim shape, contiguous default-profile pair.
-      - [0x278DC, c, draw/Gpu_DrawModePackets]
-      - [0x279A4, c, draw/Menu_SetEquipSlotIndex]
-      # Fog and colour-table setup, text cursor, textbox table, movement flags, equip slot index, textbox drawing and highlight colour share private state (G0310).
-      - [0x279B0, c, draw/Menu_TextboxDraw]
+      # Draw-mode + sprite and draw-mode + tile packet initialisers (identical
+      # SetDrawTPage/MargePrim shape); fog and colour-table setup, text cursor,
+      # textbox table, movement flags, equip slot index, textbox drawing and
+      # highlight colour share private state (G0310). One -G8 FORCE_G0 unit with
+      # COMMON $gp words and ASPSX 2.70.
+      - [0x278DC, c, draw/Draw_Textbox]
       - [0x29154, c, draw/Sys_ReportError]
       # The glyph loader keeps -fno-schedule-insns, which changes its
       # neighbours, so it stays a unit of its own.

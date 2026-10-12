@@ -325,13 +325,22 @@ def main() -> int:
             sys.exit(f"{header} is also used by {users}")
 
     header_text = None
+    decls: list[str] = []
     if inlined:
+        shared = "\n".join(p.read_text(errors="replace")
+                           for p in sorted((ROOT / "include").rglob("*.h")))
+        for header in inlined:
+            for decl in externs_body(header):
+                name = re.search(r"(\w+)\s*(?:\[[^\]]*\])?\s*;\s*$", decl)
+                if name and re.search(r"^\s*extern\b[^;]*\b" + name.group(1)
+                                      + r"\b", shared, re.M):
+                    continue  # a shared header already declares it
+                if decl not in decls:
+                    decls.append(decl)
+    if decls:
         if not args.externs_to:
             sys.exit("private externs headers need --externs-to: "
                      + ", ".join(inlined))
-        decls = []
-        for header in inlined:
-            decls.extend(d for d in externs_body(header) if d not in decls)
         header_text = (ROOT / args.externs_to).read_text()
         end = header_text.rstrip().rfind("#endif")
         if end < 0:
