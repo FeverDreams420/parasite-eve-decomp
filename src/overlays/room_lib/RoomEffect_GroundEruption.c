@@ -32,31 +32,32 @@ static const RoomFxVec4 s_EruptionDebrisScale = { 0x226, 0x226, 0x226, 0 };
 
 /* Sets up the four packets and the column's work area, then hands the work
  * area to the field engine's effect handler 0x587. */
-void RoomEffect_GroundEruptionInit(RoomEnt *owner, void *arg1, char *state) {
+void RoomEffect_GroundEruptionInit(RoomEnt *owner, void *arg1, RoomEruptionActor *state) {
     RoomLink *entity;
     int asset;
-    register char *callOwner asm("$4");
+    register RoomEnt *callOwner asm("$4");
     int depth;
     int color;
     int offset;
     int modeB;
-    char *workState;
+    RoomEruptionActor *workState;
+    RoomSpriteMatrix *workMatrix;
 
     asm("" : "=r"(workState) : "0"(state));
     func_800C2B40(workState);
-    ((RoomEruptionActor *)workState)->cooldown = 0;
-    ((RoomEruptionActor *)workState)->collisionState = 0;
-    ((RoomEruptionActor *)workState)->reload = *FieldEng_VarPtr(5);
-    ((RoomEruptionActor *)workState)->collisionRadius = *FieldEng_VarPtr(4);
+    workState->cooldown = 0;
+    workState->collisionState = 0;
+    workState->reload = *FieldEng_VarPtr(5);
+    workState->collisionRadius = *FieldEng_VarPtr(4);
     entity = owner->link;
-    ((RoomEruptionActor *)workState)->entity = entity;
-    ((RoomEruptionActor *)workState)->matrix = *(RoomSpriteMatrix *)entity->p238;
-    ((RoomEruptionActor *)workState)->matrix.t[0] = *FieldEng_VarPtr(1);
-    ((RoomEruptionActor *)workState)->matrix.t[1] = *FieldEng_VarPtr(2);
-    ((RoomEruptionActor *)workState)->matrix.t[2] = *FieldEng_VarPtr(3);
+    workState->entity = entity;
+    workState->matrix = *(RoomSpriteMatrix *)entity->p238;
+    workState->matrix.t[0] = *FieldEng_VarPtr(1);
+    workState->matrix.t[1] = *FieldEng_VarPtr(2);
+    workState->matrix.t[2] = *FieldEng_VarPtr(3);
     asset = Asset_SearchByKeyType(0xA6);
-    callOwner = (char *)owner;
-    ((RoomEruptionActor *)workState)->asset.handle = asset;
+    callOwner = owner;
+    workState->asset.handle = asset;
 
     g_RoomEruptionGlowPacket.code = 0x42;
     g_RoomEruptionGlowPacket.mode = 3;
@@ -79,8 +80,8 @@ void RoomEffect_GroundEruptionInit(RoomEnt *owner, void *arg1, char *state) {
     g_RoomEruptionDebrisPacket.code = 0x47;
     modeB = 5;
     PE1_COMPILER_LAUNDER(workState);
-    workState += 4;
-    PE1_COMPILER_LAUNDER(workState);
+    workMatrix = &workState->matrix;
+    PE1_COMPILER_LAUNDER(workMatrix);
     g_RoomEruptionGlowPacket.depth = depth;
     g_RoomEruptionRingPacket.depth = depth;
     g_RoomEruptionShadowPacket.depth = depth;
@@ -105,7 +106,7 @@ void RoomEffect_GroundEruptionInit(RoomEnt *owner, void *arg1, char *state) {
     g_RoomEruptionDebrisPacket.b = color;
     g_RoomEruptionDebrisPacket.zero = 0;
     g_RoomFloorY->y = 0;
-    func_800C66C8(callOwner, 0x587, workState);
+    func_800C66C8(callOwner, 0x587, workMatrix);
 }
 
 void RoomEffect_GroundEruptionNop(void) {
