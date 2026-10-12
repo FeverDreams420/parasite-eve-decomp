@@ -50,20 +50,11 @@ int Task_GetAngleToPoint(int **arg0) {
 }
 
 int Task_SnapPosToSpawnPos(void) {
-    FieldActor *actor;
-    register int x asm("$2");
-    int y;
+    FieldActor *actor = g_CurrentEntity;
 
-    actor = g_CurrentEntity;
-    x = actor->render_object.hit_cylinder.value0;
-    y = actor->render_object.hit_cylinder.value2;
-    x <<= 16;
-    actor->pos_x = x;
-    x = actor->render_object.hit_cylinder.value1;
-    y <<= 16;
-    actor->pos_z = y;
-    x <<= 16;
-    actor->pos_y = x;
+    actor->pos_x = actor->render_object.hit_cylinder.value0 << 16;
+    actor->pos_y = actor->render_object.hit_cylinder.value1 << 16;
+    actor->pos_z = actor->render_object.hit_cylinder.value2 << 16;
     return 1;
 }
 
