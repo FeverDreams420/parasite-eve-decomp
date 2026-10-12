@@ -12,21 +12,12 @@ static inline int ClampStat(ItemDataRecord *item, int which) {
 }
 void Inv_BuildWeaponList(int unused, WeaponListOutput *out) {
     ItemDataRecord *item;
-    /* Preserve the eight-byte local area in the retail stack frame. */
-    int frame_padding[2];
-    int value, i, kind, code, root, shift, trial, radicand;
+    int i, kind, code, root, shift, trial, radicand;
     int product;
     Inv_SelectActiveList(0);
     item = Inv_LookupActiveListData(D_800C0E20.tracked[0]);
-    {
-        int bonus = item->bonusStats[0];
-        int base = item->baseStats[0];
-        register int saved asm("$3") = bonus;
-        asm("" : "=r"(saved) : "0"(saved));
-        if (base + bonus >= 1000) bonus = 999;
-        else bonus = saved + base;
-        out->attack = bonus;
-    }
+    if (item->baseStats[0] + item->bonusStats[0] >= 1000) out->attack = 999;
+    else out->attack = item->baseStats[0] + item->bonusStats[0];
     {
         int base2 = item->baseStats[1];
         int bonus2 = item->bonusStats[1];
