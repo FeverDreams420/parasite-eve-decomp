@@ -103,8 +103,7 @@ segments:
       - [0x166C, .rodata, draw/Menu_TextboxDraw]
       - [0x1694, rodata, main/rodata_001694]
       - [0x1734, .rodata, memcard/MemCard_PortAndSaveFlow]
-      - [0x17AC, .rodata, menu/Menu_SaveBackground]
-      - [0x17CC, .rodata, menu/Menu_StepItemSelectScreen]
+      - [0x17AC, .rodata, menu/Menu_StatusPanels]
       - [0x17F0, rodata, main/rodata_0017F0]
       - [0x17F4, .rodata, menu/Menu_ItemActions]
       - [0x1830, rodata, main/rodata_001830]
@@ -358,20 +357,13 @@ segments:
       # Save tail blob, title-style flag, card file presence, title-screen card
       # support, card port handling and the save flow share card state (G0354).
       - [0x30000, c, memcard/MemCard_PortAndSaveFlow]
-      # Save background fade: gamma curve, fade step and fade state setters share the fade state words.
-      # Save-background fade state, captured-frame update and draw controller.
-      - [0x33478, c, menu/Menu_SaveBackground]
-      - [0x33838, c, menu/Menu_SaveBgIsFadeComplete]
-      - [0x3384C, c, menu/Inv_FetchSelectedInventoryItem]
-      - [0x338A0, c, menu/Menu_HandleInput]
-      - [0x33A40, c, menu/Menu_SetItemContext]
-      - [0x33A4C, c, menu/Menu_CheckItemAffordable]
-      - [0x33C74, c, menu/Save_ClassifyPlaytime]
-      - [0x33CC0, c, menu/Menu_DrawSaveSlotEntry]
-      - [0x33FB4, c, menu/Menu_StatBarAnimation]
-      # Inventory/bonus-point panel construction and its status/stat draw callbacks.
-      - [0x340EC, c, menu/Menu_StatPanels]
-      - [0x345A4, c, menu/Menu_StepItemSelectScreen]
+      # Save background fade (gamma curve, fade step and fade state setters share the
+      # fade state words; captured-frame update and draw controller), menu input,
+      # item context and affordability, playtime class, save slot entry, stat bar
+      # animation, inventory/bonus-point panel construction with its status/stat
+      # draw callbacks and the item select step: one -G8 FORCE_G0 unit whose COMMON
+      # words are the ones retail reaches through $gp.
+      - [0x33478, c, menu/Menu_StatusPanels]
       # Equip-screen construction and item-confirm handler share selection state.
       # Equip/inventory list screen, list input, count header and item action submenu: private data and helpers join the run.
       - [0x34974, c, menu/Menu_EquipScreenFlow]
