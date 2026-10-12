@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: --use-comm-section -G8 */
+/* MASPSX_FORCE_G0: 1 */
 #include "common.h"
 #include "pe1/menu_bonus_stats.h"
 #include "pe1/menu_inventory_root.h"
@@ -20,10 +21,18 @@ void Menu_CreateLevelUpResultPanel(void);
 void Menu_DrawBonusPointAnimFrame(void);
 s32 Menu_StepParasiteScreen(MenuWidgetNode *node, s32 flags);
 
-#include "Menu_LevelUpFlow_externs.h"
-/* COMMON tells MASPSX that the pending total is a $gp word, so it keeps the
- * load delay slot before storing it. */
+/* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
 int g_MenuPendingTotalExp;
+int D_8009CEFC;
+int g_BonusPointBarAnimProgress, g_BonusPointBarAnimStep;
+int g_BonusPointDisplayValue, g_MenuBonusPointDisplayTarget;
+int g_MenuBonusPointBarAnimActive;
+int g_MenuExpAllocTarget;
+int g_MenuExpReviewLevel;
+int g_MenuHpMaxAnimTimer;
+int g_MenuHpMaxDisplayTarget, g_MenuHpMaxDisplayValue;
+int g_MenuLevelDisplayTarget, g_MenuLevelDisplayValue;
+int g_MenuLevelUpAnimTimer;
 /* The stat loop sign-extends the allocation levels (lh in retail). */
 
 void Aya_SetTotalExp(s32 exp_delta, s32 pe_bonus_delta, void *wayne_items) {
@@ -46,7 +55,7 @@ void Aya_SetTotalExp(s32 exp_delta, s32 pe_bonus_delta, void *wayne_items) {
     g_MenuExpReviewLevel = Stat_BinarySearch(g_MenuPendingTotalExp, Aya_GetLevelExpTable());
     D_8009CEFC = 1;
 
-    D1E_write[0] = D1E_read[0] + pe_bonus_delta;
+    g_AyaBonusPoolRecord.pool = g_AyaBonusPoolRecord.pool + pe_bonus_delta;
     g_MenuLevelDisplayValue = D_800C0E00.level;
     g_MenuHpMaxDisplayValue = D_800C0E00.max_hp;
     g_MenuBonusPointDisplayTarget = D_800C0E00.bonus_points;
@@ -55,7 +64,7 @@ void Aya_SetTotalExp(s32 exp_delta, s32 pe_bonus_delta, void *wayne_items) {
 
     if (g_MenuLevelDisplayValue < g_MenuLevelDisplayTarget) {
         s32 total;
-        s32 bonus = g_MenuBonusPointDisplayTarget + D1E_bonus[0];
+        s32 bonus = g_MenuBonusPointDisplayTarget + g_AyaBonusPoolRecord.pool;
         if (bonus <= 0x1869F) {
             total = bonus;
         } else {

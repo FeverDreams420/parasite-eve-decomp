@@ -94,6 +94,12 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(AyaSaveState, stats.levels) == 0x28,
                   aya_stat_allocations_offset);
 PE1_STATIC_ASSERT(sizeof(AyaSaveState) == 0xAC, aya_save_state_prefix_size);
 extern AyaSaveState D_800C0E00;
+/* AyaSaveState.pe_bonus_pool as a one-field record: a small word that
+ * -G8 units with MASPSX_FORCE_G0 address directly (Aya_SetTotalExp). */
+typedef struct AyaBonusPoolRecord {
+    u16 pool;
+} AyaBonusPoolRecord;
+extern AyaBonusPoolRecord g_AyaBonusPoolRecord;
 /* Interior names for single AyaSaveState fields. Incomplete arrays keep
  * their accesses absolute in -G8 units; scalar readers index element 0. */
 extern u16 g_AyaHpCurrent[];

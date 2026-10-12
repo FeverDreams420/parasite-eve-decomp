@@ -2102,6 +2102,7 @@ g_ScriptCameraBytes = 0x8009CDF8;
  * (Inv_TransferItem). */
 g_EquippedWeaponSlot = 0x800C0E20;
 g_EquippedArmorSlot = 0x800C0E22;
+g_AyaBonusPoolRecord = 0x800C0E1E;
 
 /* One-field record views of battle words (pe1/battle_word_records.h). */
 g_ActiveActorRecord = 0x8009D278;
