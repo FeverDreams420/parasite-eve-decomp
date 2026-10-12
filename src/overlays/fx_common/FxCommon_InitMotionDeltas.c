@@ -20,7 +20,7 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     register s32 sourceValue asm("$22");
     register void *lookupTable asm("$4");
     register s32 lookupCount asm("$5");
-    s32 *base;
+    void *base;
     register s32 bx asm("$9");
     s32 by;
     s32 bz;
