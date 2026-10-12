@@ -22,6 +22,13 @@ typedef struct BattleStatusMarkerBody {
 
 /* Texture-page command followed by a variable-size UI sprite. */
 typedef RenderPagedSpritePacket BattleGaugePrim;
+/* A gauge packet addressed from an untyped buffer by byte offset. */
+typedef union BattleGaugePrimAddress {
+    void *raw;
+    BattleGaugePrim *prim;
+    RenderSpritePacket *sprite;
+    u32 word;
+} BattleGaugePrimAddress;
 
 /* A HUD packet address as a pointer or a word: retail adds the scaled slot
  * and index offsets to the buffer address as integers, offsets first. */

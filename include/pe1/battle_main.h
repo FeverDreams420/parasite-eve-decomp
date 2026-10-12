@@ -22,6 +22,11 @@ extern u8 D_8009CE3B;
 extern u16 D_800BE834[];
 extern u8 D_8009E360[];
 extern u16 D_8009E362[];
+/* A status anchor halfword addressed by the slot's byte offset. */
+typedef union BattleHalfwordAddress {
+    u16 *half;
+    u32 word;
+} BattleHalfwordAddress;
 extern u8 g_BattleStatusRowPosY[];
 extern u8 D_8009E508[];
 extern u8 D_8009E516[];
