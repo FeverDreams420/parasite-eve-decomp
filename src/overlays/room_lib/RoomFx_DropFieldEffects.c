@@ -704,16 +704,16 @@ void RoomFx_DrawStagedMotion(void *unused,
                 scale3.z = state->kind[i] * 0x20 + 0x20C;
                 scale2 = scale3;
                 ScaleMatrix((GteMatrix *)&matrix, (GteVector *)&scale2);
-                FieldModel_ScrollUv(g_RoomDropFieldModel, 0, 0);
-                FieldModel_SetDepthBias(-0x64);
+                FieldFx_ModelScrollUv(g_RoomDropFieldModel, 0, 0);
+                FieldFx_ModelSetDepthBias(-0x64);
                 handle = (u16)GetTPage(1, 1, 0x340, 0x100);
                 func_800C6EC0(handle, (u16)GetClut(0, 0x1DB));
-                FieldModel_SetSemiTrans(1);
-                FieldModel_SaveColors(g_RoomDropFieldModel);
-                FieldModel_ScaleColors(g_RoomDropFieldModel,
+                FieldFx_ModelSetSemiTrans(1);
+                FieldFx_ModelSaveColors(g_RoomDropFieldModel);
+                FieldFx_ModelScaleColors(g_RoomDropFieldModel,
                               (u16)(state->depth[i] * 2));
-                FieldModel_Draw(g_RoomDropFieldModel, &matrix);
-                FieldModel_RestoreColors(g_RoomDropFieldModel);
+                FieldFx_ModelDraw(g_RoomDropFieldModel, &matrix);
+                FieldFx_ModelRestoreColors(g_RoomDropFieldModel);
             }
             i++;
         } while ((unsigned int)i < state->count);

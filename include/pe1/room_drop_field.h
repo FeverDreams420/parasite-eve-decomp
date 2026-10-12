@@ -136,6 +136,6 @@ extern u8 g_RoomDropFieldParticleFrames[];
 int rand(void);
 s32 *FieldFx_RegPtr(s32 index);
 void func_800C4E50(void *params);
-void FieldModel_SetDepthBias(int arg0);
+void FieldFx_ModelSetDepthBias(int arg0);
 
 #endif

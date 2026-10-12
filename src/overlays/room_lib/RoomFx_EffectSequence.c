@@ -1233,7 +1233,7 @@ void RoomFx_UpdateTransformedSparkle(
 void RoomFx_EffectSequenceNopB(void) {
 }
 
-void FieldModel_SetDepthBias(s32 arg0);
+void FieldFx_ModelSetDepthBias(s32 arg0);
 void func_800C6EC0(s32 arg0, s32 arg1);
 
 void RoomFx_DrawEffectGlow(void) {
@@ -1264,17 +1264,17 @@ void RoomFx_DrawEffectGlow(void) {
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
     func_800C3238(2);
-    FieldModel_ScrollUv(D_80192C34, 0, 0);
-    FieldModel_SetDepthBias(-10);
+    FieldFx_ModelScrollUv(D_80192C34, 0, 0);
+    FieldFx_ModelSetDepthBias(-10);
     handle_a = GetTPage(0, 1, 0x340, 0x100);
     handle_a = (u16)handle_a;
     handle_b = GetClut(0x10, 0x1D7);
     func_800C6EC0(handle_a, (u16)handle_b);
-    FieldModel_SetSemiTrans(0);
-    FieldModel_SaveColors(D_80192C34);
-    FieldModel_ScaleColors(D_80192C34, 0x80);
-    FieldModel_Draw(D_80192C34, (GteMatrix *)&matrix);
-    FieldModel_RestoreColors(D_80192C34);
+    FieldFx_ModelSetSemiTrans(0);
+    FieldFx_ModelSaveColors(D_80192C34);
+    FieldFx_ModelScaleColors(D_80192C34, 0x80);
+    FieldFx_ModelDraw(D_80192C34, (GteMatrix *)&matrix);
+    FieldFx_ModelRestoreColors(D_80192C34);
 }
 
 void RoomFx_EffectSequenceNopC(void) {

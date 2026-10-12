@@ -1458,7 +1458,7 @@ int func_801960C4(int event,TurningAreaControllerState *state)
 case 0:
     {
         state->asset=Asset_FindTable08ByU32Key(D_800B0E64[0],0xC54E0704);
-        FieldModel_ScrollUv(state->asset,0,0);
+        FieldFx_ModelScrollUv(state->asset,0,0);
         state->size=0;
         {
             int yaw=((short )D_8019A82A[0]);
@@ -1589,9 +1589,9 @@ case 2:
         palette=D_800E1204[kind];
         palette=GetClut(0,(kind==4 && D_800F3428!=0) ? palette+7 : palette+3);
         GsSetOrign(page,(unsigned short)palette);
-        FieldModel_SetSemiTrans(1);
-        FieldModel_SaveColors(state->asset);
-        FieldModel_ScaleColors(state->asset,(unsigned short)state->brightness);
+        FieldFx_ModelSetSemiTrans(1);
+        FieldFx_ModelSaveColors(state->asset);
+        FieldFx_ModelScaleColors(state->asset,(unsigned short)state->brightness);
         i=0;
         for (;i<3;) {
             register int size asm("$17");
@@ -1618,9 +1618,9 @@ case 2:
             memset(clearTarget,clearValue,clearLength);
             scale.x=size; scale.y=size; scale.z=2048;
             ScaleMatrix((GteMatrix *)&local.matrix, (const GteVector *)&scale);
-            FieldModel_Draw(state->asset,(GteMatrix *)&local.matrix);
+            FieldFx_ModelDraw(state->asset,(GteMatrix *)&local.matrix);
         }
-        FieldModel_RestoreColors(state->asset);
+        FieldFx_ModelRestoreColors(state->asset);
         i=0;
         position.x=instance->render_object.model_matrix.translation[0]; position.y=instance->render_object.model_matrix.translation[1]; position.z=instance->render_object.model_matrix.translation[2];
         {

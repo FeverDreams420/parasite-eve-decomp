@@ -223,7 +223,7 @@ int func_80192CD4(int mode, RoomM089SpinModel *spin, GteShortVector *anchor) {
         spin->stage = 0;
         spin->timer = 0;
         D_80194168 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5864704);
-        FieldModel_ScrollUv((union FieldTexturedModel *)D_80194168, 0, 0);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80194168, 0, 0);
         return 0;
     case 1:
         spin->timer++;
@@ -295,7 +295,7 @@ int func_80192CD4(int mode, RoomM089SpinModel *spin, GteShortVector *anchor) {
             int palette = D_800E1204[kind];
             GsSetOrign(page, GetClut(0, (kind == 4 && D_800F3428) ? palette + 7 : palette + 3));
         }
-        FieldModel_SetSemiTrans(1);
+        FieldFx_ModelSetSemiTrans(1);
         RotMatrixYXZ(&rotation, &matrix);
         matrix.t[0] = position.x;
         matrix.t[1] = position.y;
@@ -304,10 +304,10 @@ int func_80192CD4(int mode, RoomM089SpinModel *spin, GteShortVector *anchor) {
         scale.y = turn;
         scale.z = turn;
         ScaleMatrix(&matrix, &scale);
-        FieldModel_SaveColors(D_80194168);
-        FieldModel_ScaleColors(D_80194168, intensity);
-        FieldModel_Draw((union FieldTexturedModel *)D_80194168, &matrix);
-        FieldModel_RestoreColors(D_80194168);
+        FieldFx_ModelSaveColors(D_80194168);
+        FieldFx_ModelScaleColors(D_80194168, intensity);
+        FieldFx_ModelDraw((union FieldTexturedModel *)D_80194168, &matrix);
+        FieldFx_ModelRestoreColors(D_80194168);
         position.y += (0x20 - D_800E27EC) << 3;
         RotMatrixYXZ(&rotation, &innerMatrix);
         innerMatrix.t[0] = position.x;
@@ -317,10 +317,10 @@ int func_80192CD4(int mode, RoomM089SpinModel *spin, GteShortVector *anchor) {
         innerScale.y = turn / 2;
         innerScale.z = turn / 2;
         ScaleMatrix(&innerMatrix, &innerScale);
-        FieldModel_SaveColors(D_80194168);
-        FieldModel_ScaleColors(D_80194168, intensity);
-        FieldModel_Draw((union FieldTexturedModel *)D_80194168, &innerMatrix);
-        FieldModel_RestoreColors(D_80194168);
+        FieldFx_ModelSaveColors(D_80194168);
+        FieldFx_ModelScaleColors(D_80194168, intensity);
+        FieldFx_ModelDraw((union FieldTexturedModel *)D_80194168, &innerMatrix);
+        FieldFx_ModelRestoreColors(D_80194168);
         break;
     }
     return 0;
@@ -468,9 +468,9 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             }
         }
         D_8019416C = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5464704);
-        FieldModel_ScrollUv((union FieldTexturedModel *)D_8019416C, 0, 0);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_8019416C, 0, 0);
         D_80194168 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5864704);
-        FieldModel_ScrollUv((union FieldTexturedModel *)D_80194168, 0, 0);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80194168, 0, 0);
         return func_800CE560(ANIM_POOL_AS(RoomM089SpawnChannel)->pool, 0x10, 0x18,
                              (FieldAnimCallbackListCallback)func_80193200);
     case 1:
@@ -532,7 +532,7 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
                 GsSetOrign(page, GetClut(0, (kind == 4 && D_800F3428) ? palette + 6
                                                                      : palette + 2));
             }
-            FieldModel_SetSemiTrans(1);
+            FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&rotation, &matrix);
             matrix.t[0] = state->position.x;
             matrix.t[1] = state->position.y;
@@ -541,10 +541,10 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             scale.y = tall;
             scale.z = outer;
             ScaleMatrix(&matrix, &scale);
-            FieldModel_SaveColors(D_8019416C);
-            FieldModel_ScaleColors(D_8019416C, fade);
-            FieldModel_Draw((union FieldTexturedModel *)D_8019416C, &matrix);
-            FieldModel_RestoreColors(D_8019416C);
+            FieldFx_ModelSaveColors(D_8019416C);
+            FieldFx_ModelScaleColors(D_8019416C, fade);
+            FieldFx_ModelDraw((union FieldTexturedModel *)D_8019416C, &matrix);
+            FieldFx_ModelRestoreColors(D_8019416C);
             rotation.x = 0;
             rotation.z = 0;
             rotation.y = D_800E27EC << 5;
@@ -556,10 +556,10 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             wideScale.y = low;
             wideScale.z = wide;
             ScaleMatrix(&wideMatrix, &wideScale);
-            FieldModel_SaveColors(D_8019416C);
-            FieldModel_ScaleColors(D_8019416C, glow);
-            FieldModel_Draw((union FieldTexturedModel *)D_8019416C, &wideMatrix);
-            FieldModel_RestoreColors(D_8019416C);
+            FieldFx_ModelSaveColors(D_8019416C);
+            FieldFx_ModelScaleColors(D_8019416C, glow);
+            FieldFx_ModelDraw((union FieldTexturedModel *)D_8019416C, &wideMatrix);
+            FieldFx_ModelRestoreColors(D_8019416C);
             rotation.x = 0;
             rotation.z = 0;
             rotation.y = D_800E27EC << 4;
@@ -571,10 +571,10 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             lowScale.y = low * 3 / 2;
             lowScale.z = outer;
             ScaleMatrix(&lowMatrix, &lowScale);
-            FieldModel_SaveColors(D_8019416C);
-            FieldModel_ScaleColors(D_8019416C, glow);
-            FieldModel_Draw((union FieldTexturedModel *)D_8019416C, &lowMatrix);
-            FieldModel_RestoreColors(D_8019416C);
+            FieldFx_ModelSaveColors(D_8019416C);
+            FieldFx_ModelScaleColors(D_8019416C, glow);
+            FieldFx_ModelDraw((union FieldTexturedModel *)D_8019416C, &lowMatrix);
+            FieldFx_ModelRestoreColors(D_8019416C);
         }
         if (D_800E27EC < 0x19) {
             u16 *index;
@@ -594,7 +594,7 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
                 GsSetOrign(page, GetClut(0, (kind == 4 && D_800F3428) ? palette + 7
                                                                      : palette + 3));
             }
-            FieldModel_SetSemiTrans(1);
+            FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&rotation, &coreMatrix);
             coreMatrix.t[0] = state->position.x;
             coreMatrix.t[1] = state->position.y;
@@ -603,10 +603,10 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             lowScale.y = outer;
             lowScale.z = outer;
             ScaleMatrix(&coreMatrix, &lowScale);
-            FieldModel_SaveColors(D_80194168);
-            FieldModel_ScaleColors(D_80194168, fade);
-            FieldModel_Draw((union FieldTexturedModel *)D_80194168, &coreMatrix);
-            FieldModel_RestoreColors(D_80194168);
+            FieldFx_ModelSaveColors(D_80194168);
+            FieldFx_ModelScaleColors(D_80194168, fade);
+            FieldFx_ModelDraw((union FieldTexturedModel *)D_80194168, &coreMatrix);
+            FieldFx_ModelRestoreColors(D_80194168);
         }
         if (D_800E27EC < 0x31) {
             func_800CF3AC(D_801940F8, &color, D_800E27EC);

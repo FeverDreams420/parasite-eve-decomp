@@ -1915,15 +1915,15 @@ g_EntitySerialCounter = 0x8009D224; // size:0x4
 g_FieldActorTypeCallbacks = 0x800915DC;
 g_SceneObjectAnimationSource = 0x800B0D10; // size:0x4
 g_StartupResourceBlob = 0x800E2858;
-FieldModel_ScrollUv = 0x800C6D5C; // type:func
-FieldModel_SetSemiTrans = 0x800C6ED8; // type:func
-FieldModel_SaveColors = 0x800C6EF8; // type:func
-FieldModel_RestoreColors = 0x800C6F4C; // type:func
-FieldModel_ScaleColors = 0x800C6FA0; // type:func
-FieldModel_SetColors = 0x800C7098; // type:func
-FieldModel_Draw = 0x800C71E4; // type:func
-FieldModel_SetDepthBias = 0x800C6EE8; // type:func
-FieldModel_ShiftColors = 0x800C70EC; // type:func
+FieldFx_ModelScrollUv = 0x800C6D5C; // type:func
+FieldFx_ModelSetSemiTrans = 0x800C6ED8; // type:func
+FieldFx_ModelSaveColors = 0x800C6EF8; // type:func
+FieldFx_ModelRestoreColors = 0x800C6F4C; // type:func
+FieldFx_ModelScaleColors = 0x800C6FA0; // type:func
+FieldFx_ModelSetColors = 0x800C7098; // type:func
+FieldFx_ModelDraw = 0x800C71E4; // type:func
+FieldFx_ModelSetDepthBias = 0x800C6EE8; // type:func
+FieldFx_ModelShiftColors = 0x800C70EC; // type:func
 
 // Field engine object passes (FieldFx_ObjectScript.c).
 g_FieldEngServiceThreadMissingMsg = 0x800C20C8;

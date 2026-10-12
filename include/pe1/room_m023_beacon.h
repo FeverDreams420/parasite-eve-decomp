@@ -78,7 +78,7 @@ extern struct BattleEntity *D_8009D254;
 extern u8 *D_80190760;
 extern u8 D_801906F0[];
 
-void FieldModel_ShiftColors(u8 *data, int r, int g, int b);
+void FieldFx_ModelShiftColors(u8 *data, int r, int g, int b);
 int func_800CEB8C(void *position, GteShortVector *target, int radius);
 GteMatrix *MulMatrix0(GteMatrix *first, GteMatrix *second, GteMatrix *out);
 

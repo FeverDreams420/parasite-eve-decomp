@@ -70,7 +70,7 @@ int func_801924E8(int mode, SceneE18SpinShell *shell) {
     switch (mode) {
     case 0:
         D_801941C0 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54C7704);
-        FieldModel_ScrollUv(D_801941C0, 0, 0);
+        FieldFx_ModelScrollUv(D_801941C0, 0, 0);
         shell->width = 0x400;
         shell->heightGrowth = 0x40;
         shell->height = 0;
@@ -144,11 +144,11 @@ int func_801924E8(int mode, SceneE18SpinShell *shell) {
             func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 8
                                                                          : palette + 4));
         }
-        FieldModel_SetSemiTrans(1);
-        FieldModel_SaveColors(D_801941C0);
-        FieldModel_ScaleColors(D_801941C0, shell->brightness);
-        FieldModel_Draw(D_801941C0, &matrix);
-        FieldModel_RestoreColors(D_801941C0);
+        FieldFx_ModelSetSemiTrans(1);
+        FieldFx_ModelSaveColors(D_801941C0);
+        FieldFx_ModelScaleColors(D_801941C0, shell->brightness);
+        FieldFx_ModelDraw(D_801941C0, &matrix);
+        FieldFx_ModelRestoreColors(D_801941C0);
         break;
     }
     return 0;
@@ -214,10 +214,10 @@ int func_801928CC(int mode, SceneE18FlankParticle *particle) {
         matrix.t[0] = particle->position[0];
         matrix.t[1] = particle->position[1];
         matrix.t[2] = particle->position[2];
-        FieldModel_SaveColors(D_801941C4);
-        FieldModel_ScaleColors(D_801941C4, particle->brightness > 0x80 ? 0x80 : particle->brightness);
-        FieldModel_Draw(D_801941C4, &matrix);
-        FieldModel_RestoreColors(D_801941C4);
+        FieldFx_ModelSaveColors(D_801941C4);
+        FieldFx_ModelScaleColors(D_801941C4, particle->brightness > 0x80 ? 0x80 : particle->brightness);
+        FieldFx_ModelDraw(D_801941C4, &matrix);
+        FieldFx_ModelRestoreColors(D_801941C4);
     }
     return 0;
 }
@@ -235,7 +235,7 @@ int func_80192B8C(int mode, SceneE18EmitterState *state) {
     case 0:
         D_801941C8 = 4;
         D_801941C4 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC58C7704);
-        FieldModel_ScrollUv(D_801941C4, 0, 0);
+        FieldFx_ModelScrollUv(D_801941C4, 0, 0);
         state->count = 0;
         state->delay = 0;
         return func_800CE560(ANIM_POOL_AS(SceneE18Emitter)->pool, 0x14, 4,
@@ -286,7 +286,7 @@ int func_80192B8C(int mode, SceneE18EmitterState *state) {
             func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 10
                                                                          : palette + 6));
         }
-        FieldModel_SetSemiTrans(1);
+        FieldFx_ModelSetSemiTrans(1);
         break;
     }
     return 0;

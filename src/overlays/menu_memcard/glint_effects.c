@@ -826,7 +826,7 @@ int Memcard_SpinRingParticle(int mode, MemcardSpinParticle *p) {
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800C6EC0(page, GetClut(224, palette));
-            FieldModel_SetSemiTrans(1);
+            FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&p->rotation, &matrix);
             matrix.t[0] = offset.x;
             matrix.t[1] = offset.y;
@@ -835,10 +835,10 @@ int Memcard_SpinRingParticle(int mode, MemcardSpinParticle *p) {
             scale.y = size;
             scale.z = size;
             ScaleMatrix(&matrix, &scale);
-            FieldModel_SaveColors(D_800E22D4);
-            FieldModel_ScaleColors(D_800E22D4, (u16)fade);
-            FieldModel_Draw((union FieldTexturedModel *)D_800E22D4, (GteMatrix *)&matrix);
-            FieldModel_RestoreColors(D_800E22D4);
+            FieldFx_ModelSaveColors(D_800E22D4);
+            FieldFx_ModelScaleColors(D_800E22D4, (u16)fade);
+            FieldFx_ModelDraw((union FieldTexturedModel *)D_800E22D4, (GteMatrix *)&matrix);
+            FieldFx_ModelRestoreColors(D_800E22D4);
             break;
         }
         }
@@ -860,7 +860,7 @@ int Memcard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
         burst->z = ((MemcardGlintAnchor *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->z;
         func_800CE9D4((struct RoomFxTransformOwner *)D_8009D254, 0, (GteShortVector *)&burst->rotation);
         burst->rotation.x = 0;
-        FieldModel_ScrollUv((union FieldTexturedModel *)D_800E22D4, 0, 0);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_800E22D4, 0, 0);
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 40,
                              (FieldAnimCallbackListCallback)Memcard_SpinRingParticle);
     case 1:

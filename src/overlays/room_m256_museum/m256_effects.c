@@ -698,7 +698,7 @@ checkLifetime:
                 }
             }
             func_800C6EC0(modelPage, GetClut(0x70, modelClutY) & 0xFFFF);
-            FieldModel_SetSemiTrans(1);
+            FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&state->motionX, &transform);
             transform.t[0] = (s32) state->x;
             transform.t[1] = (s32) state->y;
@@ -708,11 +708,11 @@ checkLifetime:
             scale.z = 0x2AA;
             transform.t[2] = translationZ;
             ScaleMatrix(&transform, &scale.x);
-            FieldModel_SaveColors((char *)D_80195EF8);
-            FieldModel_SetColors((char *)D_80195EF8, darkColor.r, darkColor.g, darkColor.b);
-            FieldModel_ScaleColors((char *)D_80195EF8, fade & 0xFFFF);
-            FieldModel_Draw((union FieldTexturedModel *)D_80195EF8, &transform);
-            FieldModel_RestoreColors((char *)D_80195EF8);
+            FieldFx_ModelSaveColors((char *)D_80195EF8);
+            FieldFx_ModelSetColors((char *)D_80195EF8, darkColor.r, darkColor.g, darkColor.b);
+            FieldFx_ModelScaleColors((char *)D_80195EF8, fade & 0xFFFF);
+            FieldFx_ModelDraw((union FieldTexturedModel *)D_80195EF8, &transform);
+            FieldFx_ModelRestoreColors((char *)D_80195EF8);
             return 0;
         case 3:
             pulseSine = rsin(state->frame << 6);
@@ -794,7 +794,7 @@ int func_80195320(int mode, u16 *out) {
 
         *out = (u16)D_800E2368->variables[0];
         D_80195EF8 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5887704);
-        FieldModel_ScrollUv((union FieldTexturedModel *)D_80195EF8, 0, 0);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80195EF8, 0, 0);
         if (D_800E2368->flags) {
             actor = (FieldActor *)D_800F32D0->actor;
             if (actor) {
@@ -900,7 +900,7 @@ int func_80195728(int mode, s16 *state) {
     case 0:
         *state = 0;
         D_801960A8 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5487704);
-        FieldModel_ScrollUv(D_801960A8, 0, 0);
+        FieldFx_ModelScrollUv(D_801960A8, 0, 0);
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 8, 0x10,
                              (FieldAnimCallbackListCallback)func_8019552C);
     case 1:
@@ -980,7 +980,7 @@ int func_80195728(int mode, s16 *state) {
                 clut = GetClut(0x50, palette);
                 func_800C6EC0(page, clut);
             }
-            FieldModel_SetSemiTrans(1);
+            FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&D_80196098, &matrix);
             matrix.t[0] = position.x;
             matrix.t[1] = position.y;
@@ -989,10 +989,10 @@ int func_80195728(int mode, s16 *state) {
             scale.y = size;
             scale.z = size;
             ScaleMatrix(&matrix, &scale);
-            FieldModel_SaveColors(D_801960A8);
-            FieldModel_ScaleColors(D_801960A8, (u16)brightness);
-            FieldModel_Draw(D_801960A8, (GteMatrix *)&matrix);
-            FieldModel_RestoreColors(D_801960A8);
+            FieldFx_ModelSaveColors(D_801960A8);
+            FieldFx_ModelScaleColors(D_801960A8, (u16)brightness);
+            FieldFx_ModelDraw(D_801960A8, (GteMatrix *)&matrix);
+            FieldFx_ModelRestoreColors(D_801960A8);
         }
         D_800F3368.parameter00 = 0x10;
         D_800F3368.parameter02 = 1;

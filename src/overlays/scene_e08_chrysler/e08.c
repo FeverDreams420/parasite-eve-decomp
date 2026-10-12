@@ -1770,7 +1770,7 @@ void func_80193150(void *object, SceneGlowModelTimer *timer, SceneGlowModelState
     matrix.t[0] = D_8019956C;
     matrix.t[1] = g_RoomFloorY->y + model->height;
     matrix.t[2] = D_8019957C;
-    FieldModel_ScrollUv((union FieldTexturedModel *)D_80199528, 0, 0);
+    FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80199528, 0, 0);
     if (owner->mode == 0) {
         int tpage = (u16)GetTPage(0, 1, 0x340, 0x100);
         func_800C6EC0(tpage, (u16)GetClut(0, 0x1D7));
@@ -1780,11 +1780,11 @@ void func_80193150(void *object, SceneGlowModelTimer *timer, SceneGlowModelState
         func_800C6EC0(tpage, (u16)GetClut(0, 0x1DB));
     }
     func_800C3134(D_80198860, timer->ticks, (unsigned char *)&color);
-    FieldModel_SetSemiTrans(1);
-    FieldModel_SaveColors(D_80199528);
-    FieldModel_ScaleColors(D_80199528, model->depth);
-    FieldModel_Draw((union FieldTexturedModel *)D_80199528, &matrix);
-    FieldModel_RestoreColors(D_80199528);
+    FieldFx_ModelSetSemiTrans(1);
+    FieldFx_ModelSaveColors(D_80199528);
+    FieldFx_ModelScaleColors(D_80199528, model->depth);
+    FieldFx_ModelDraw((union FieldTexturedModel *)D_80199528, &matrix);
+    FieldFx_ModelRestoreColors(D_80199528);
     if (timer->ticks > 10) {
         size = (timer->ticks - 10) << 9;
         if (size > 0x7D00)

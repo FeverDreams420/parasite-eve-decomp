@@ -387,8 +387,8 @@ int func_80193618(int mode, RoomM123Beacon *state) {
         state->armed = 1;
         D_80195698 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5483704);
         D_8019569C = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5883704);
-        FieldModel_ScrollUv((union FieldTexturedModel *)D_80195698, 0, 0);
-        FieldModel_ScrollUv((union FieldTexturedModel *)D_8019569C, 0, 0xF0);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80195698, 0, 0);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_8019569C, 0, 0xF0);
         return 0;
     case 1:
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123BeaconChannel)->pool, 0x17, &offset, state);
@@ -553,13 +553,13 @@ int func_80193618(int mode, RoomM123Beacon *state) {
                     if (kind == 4 && D_800F3428) palette += 4;
                     GsSetOrign(page, GetClut(0x60, palette));
                 }
-                FieldModel_SetSemiTrans(1);
-                FieldModel_SaveColors(D_8019569C);
-                FieldModel_SetColors(D_8019569C, color.r, color.g, color.b);
+                FieldFx_ModelSetSemiTrans(1);
+                FieldFx_ModelSaveColors(D_8019569C);
+                FieldFx_ModelSetColors(D_8019569C, color.r, color.g, color.b);
                 size = rcos(D_800E27EC << 6) / 64;
-                FieldModel_ScaleColors(D_8019569C, size);
-                FieldModel_Draw((union FieldTexturedModel *)D_8019569C, &matrix);
-                FieldModel_RestoreColors(D_8019569C);
+                FieldFx_ModelScaleColors(D_8019569C, size);
+                FieldFx_ModelDraw((union FieldTexturedModel *)D_8019569C, &matrix);
+                FieldFx_ModelRestoreColors(D_8019569C);
             }
         }
         rotation.x = 0x800;
@@ -592,12 +592,12 @@ int func_80193618(int mode, RoomM123Beacon *state) {
             if (kind == 4 && D_800F3428) palette += 4;
             GsSetOrign(page, GetClut(0x60, palette));
         }
-        FieldModel_SetSemiTrans(1);
-        FieldModel_SaveColors(D_80195698);
-        FieldModel_SetColors(D_80195698, color.r, color.g, color.b);
-        FieldModel_Draw((union FieldTexturedModel *)D_80195698, &matrix);
-        FieldModel_RestoreColors(D_80195698);
-        FieldModel_SaveColors(D_80195698);
+        FieldFx_ModelSetSemiTrans(1);
+        FieldFx_ModelSaveColors(D_80195698);
+        FieldFx_ModelSetColors(D_80195698, color.r, color.g, color.b);
+        FieldFx_ModelDraw((union FieldTexturedModel *)D_80195698, &matrix);
+        FieldFx_ModelRestoreColors(D_80195698);
+        FieldFx_ModelSaveColors(D_80195698);
         scale.z = 0x1000;
         scale.x = scale.y = state->depth;
         ScaleMatrix(&matrix, &scale);
@@ -614,11 +614,11 @@ int func_80193618(int mode, RoomM123Beacon *state) {
             if (kind == 4 && D_800F3428) palette += 4;
             GsSetOrign(page, GetClut(0x60, palette));
         }
-        FieldModel_SetSemiTrans(1);
-        FieldModel_SetColors(D_80195698, color.r, color.g, color.b);
-        FieldModel_Draw((union FieldTexturedModel *)D_80195698, &matrix);
-        FieldModel_RestoreColors(D_80195698);
-        FieldModel_SaveColors(D_80195698);
+        FieldFx_ModelSetSemiTrans(1);
+        FieldFx_ModelSetColors(D_80195698, color.r, color.g, color.b);
+        FieldFx_ModelDraw((union FieldTexturedModel *)D_80195698, &matrix);
+        FieldFx_ModelRestoreColors(D_80195698);
+        FieldFx_ModelSaveColors(D_80195698);
         scale.z = 0x1000;
         scale.x = scale.y = state->width;
         ScaleMatrix(&matrix, &scale);
@@ -635,10 +635,10 @@ int func_80193618(int mode, RoomM123Beacon *state) {
             if (kind == 4 && D_800F3428) palette += 4;
             GsSetOrign(page, GetClut(0x60, palette));
         }
-        FieldModel_SetSemiTrans(1);
-        FieldModel_SetColors(D_80195698, color.r, color.g, color.b);
-        FieldModel_Draw((union FieldTexturedModel *)D_80195698, &matrix);
-        FieldModel_RestoreColors(D_80195698);
+        FieldFx_ModelSetSemiTrans(1);
+        FieldFx_ModelSetColors(D_80195698, color.r, color.g, color.b);
+        FieldFx_ModelDraw((union FieldTexturedModel *)D_80195698, &matrix);
+        FieldFx_ModelRestoreColors(D_80195698);
         break;
     }
     return 0;

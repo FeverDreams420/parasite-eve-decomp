@@ -324,11 +324,11 @@ int func_8019326C(int mode, RoomShakeSweepParticle *p) {
             palette = GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 8 : palette + 4);
             func_800C6EC0(page, (u16)palette);
         }
-        FieldModel_SetSemiTrans(1);
-        FieldModel_SaveColors(D_800F32D8);
-        FieldModel_SetColors(D_800F32D8, (u8)(p->size / 3), 0, (u8)(p->size / 2));
-        FieldModel_Draw((union FieldTexturedModel *)D_800F32D8, &matrix);
-        FieldModel_RestoreColors(D_800F32D8);
+        FieldFx_ModelSetSemiTrans(1);
+        FieldFx_ModelSaveColors(D_800F32D8);
+        FieldFx_ModelSetColors(D_800F32D8, (u8)(p->size / 3), 0, (u8)(p->size / 2));
+        FieldFx_ModelDraw((union FieldTexturedModel *)D_800F32D8, &matrix);
+        FieldFx_ModelRestoreColors(D_800F32D8);
         break;
     }
     return 0;
@@ -370,7 +370,7 @@ int func_80193638(int mode, RoomShakeSweepAnchor *anchor) {
                     *object->status = 2;
             }
         }
-        FieldModel_ScrollUv((union FieldTexturedModel *)D_800F32D8, 0, 0);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_800F32D8, 0, 0);
         return func_800CE560(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool, 0x10, 0x18,
                              (FieldAnimCallbackListCallback)func_8019326C);
     case 1:
@@ -2030,7 +2030,7 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
                 Akao_SendTableCommand(*soundSlot, 0x5EE, 0x80, 0x80, volume);
         }
         D_80199944 = (void *)Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5509704);
-        FieldModel_ScrollUv(D_80199944, 0, 0);
+        FieldFx_ModelScrollUv(D_80199944, 0, 0);
         if (ANIM_TASK_AS(RoomShakeBurstEvent)->active) {
             pool = ANIM_OWNER_AS(RoomShakeBurstChannel)->pool;
             if (pool != 0 && pool->object != 0) {
@@ -2159,7 +2159,7 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
                 palette = GetClut(0x40, palette);
                 func_800C6EC0(page, (u16)palette);
             }
-            FieldModel_SetSemiTrans(1);
+            FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&rotation, &matrix);
             matrix.t[0] = tip.x;
             matrix.t[1] = tip.y;
@@ -2168,10 +2168,10 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
             scale.y = width;
             scale.z = depth;
             ScaleMatrix(&matrix, &scale);
-            FieldModel_SaveColors(D_80199944);
-            FieldModel_ScaleColors(D_80199944, (u16)glow);
-            FieldModel_Draw(D_80199944, &matrix);
-            FieldModel_RestoreColors(D_80199944);
+            FieldFx_ModelSaveColors(D_80199944);
+            FieldFx_ModelScaleColors(D_80199944, (u16)glow);
+            FieldFx_ModelDraw(D_80199944, &matrix);
+            FieldFx_ModelRestoreColors(D_80199944);
         }
         D_800F3368.parameter0A = 0;
         D_800F3368.depth = 4;

@@ -93,7 +93,7 @@ extern u8 *D_80190B98;
 extern GteShortVector D_80190BA0;
 extern GteShortVector D_80190BA8;
 
-void FieldModel_ShiftColors(u8 *data, int r, int g, int b);
+void FieldFx_ModelShiftColors(u8 *data, int r, int g, int b);
 int func_800CEB8C(void *position, GteShortVector *target, int radius);
 int func_80071A54(void);
 

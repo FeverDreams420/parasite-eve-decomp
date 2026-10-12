@@ -42,7 +42,7 @@ void *Asset_FindTable08ByU32Key(void *owner,int id) {
     assert(stage++==0 && owner==&context && (unsigned int)id==0xC5541704);
     return &asset;
 }
-void FieldModel_ScrollUv(union FieldTexturedModel *handle,u8 a,u8 b) {
+void FieldFx_ModelScrollUv(union FieldTexturedModel *handle,u8 a,u8 b) {
     assert(stage++==1 && (void *)handle==&asset && D_8019AF6C==&asset && !a && !b);
     context.pool=&pool;
 }

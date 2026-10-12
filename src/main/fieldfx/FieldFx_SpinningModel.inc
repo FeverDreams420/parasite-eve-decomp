@@ -4,7 +4,7 @@
  * SPINNING_MODEL_FUNC       entry point
  * SPINNING_MODEL_ANCHOR     s16[3] anchor position
  * SPINNING_MODEL_PALETTE    palette offset (the special palette adds 4)
- * SPINNING_MODEL_COLOR(s)   r, g, b arguments for FieldModel_SetColors */
+ * SPINNING_MODEL_COLOR(s)   r, g, b arguments for FieldFx_ModelSetColors */
 #include "pe1/render_object.h"
 #include "pe1/field_anim.h"
 #include "pe1/field_model_draw.h"
@@ -74,11 +74,11 @@ int SPINNING_MODEL_FUNC(int mode, FieldAnimSpinningModel *state)
         kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         GsSetOrign(tpage, GetClut(0, (kind == 4 && D_800F3428) ? palette + SPINNING_MODEL_PALETTE + 4 : palette + SPINNING_MODEL_PALETTE));
-        FieldModel_SetSemiTrans(1);
-        FieldModel_SaveColors(D_800F32D8);
-        FieldModel_SetColors(D_800F32D8, SPINNING_MODEL_COLOR(state->size));
-        FieldModel_Draw((union FieldTexturedModel *)D_800F32D8, &matrix);
-        FieldModel_RestoreColors(D_800F32D8);
+        FieldFx_ModelSetSemiTrans(1);
+        FieldFx_ModelSaveColors(D_800F32D8);
+        FieldFx_ModelSetColors(D_800F32D8, SPINNING_MODEL_COLOR(state->size));
+        FieldFx_ModelDraw((union FieldTexturedModel *)D_800F32D8, &matrix);
+        FieldFx_ModelRestoreColors(D_800F32D8);
         break;
     }
     return 0;

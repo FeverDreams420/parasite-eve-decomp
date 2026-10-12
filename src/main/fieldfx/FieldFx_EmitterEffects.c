@@ -365,8 +365,8 @@ int func_800DC058(int mode, FieldAnimTwinModel *state)
         state->stage = 0;
         state->timer = 0;
         func_800CE870((char *)D_8009D254, 1, &state->position.x);
-        FieldModel_ScrollUv((union FieldTexturedModel *)D_800F3418, 0, 0);
-        FieldModel_ScrollUv((union FieldTexturedModel *)D_800F342C, 0, 0);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_800F3418, 0, 0);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_800F342C, 0, 0);
         break;
     case 1:
         state->timer++;
@@ -420,10 +420,10 @@ int func_800DC058(int mode, FieldAnimTwinModel *state)
             int palette = D_800E1204[kind];
             GsSetOrign(tpage, GetClut(0, (kind == 4 && D_800F3428) ? palette + 10 : palette + 6));
         }
-        FieldModel_SetSemiTrans(1);
-        FieldModel_SaveColors(D_800F3418);
-        FieldModel_SetColors(D_800F3418, color.r, color.g, color.b);
-        FieldModel_Draw((union FieldTexturedModel *)D_800F3418, &matrix);
+        FieldFx_ModelSetSemiTrans(1);
+        FieldFx_ModelSaveColors(D_800F3418);
+        FieldFx_ModelSetColors(D_800F3418, color.r, color.g, color.b);
+        FieldFx_ModelDraw((union FieldTexturedModel *)D_800F3418, &matrix);
         size = 0x4B0;
         scale.z = size;
         scale.x = size;
@@ -439,8 +439,8 @@ int func_800DC058(int mode, FieldAnimTwinModel *state)
         matrix.t[0] = position.x;
         matrix.t[1] = position.y;
         matrix.t[2] = position.z;
-        FieldModel_Draw((union FieldTexturedModel *)D_800F3418, &matrix);
-        FieldModel_RestoreColors(D_800F3418);
+        FieldFx_ModelDraw((union FieldTexturedModel *)D_800F3418, &matrix);
+        FieldFx_ModelRestoreColors(D_800F3418);
         if (spin) {
             scale.z = size;
             scale.x = size;
@@ -461,11 +461,11 @@ int func_800DC058(int mode, FieldAnimTwinModel *state)
                 int palette = D_800E1204[kind];
                 GsSetOrign(tpage, GetClut(0, (kind == 4 && D_800F3428) ? palette + 10 : palette + 6));
             }
-            FieldModel_SetSemiTrans(1);
-            FieldModel_SaveColors(D_800F342C);
-            FieldModel_SetColors(D_800F342C, 255, 255, 255);
-            FieldModel_Draw((union FieldTexturedModel *)D_800F342C, &matrix);
-            FieldModel_RestoreColors(D_800F342C);
+            FieldFx_ModelSetSemiTrans(1);
+            FieldFx_ModelSaveColors(D_800F342C);
+            FieldFx_ModelSetColors(D_800F342C, 255, 255, 255);
+            FieldFx_ModelDraw((union FieldTexturedModel *)D_800F342C, &matrix);
+            FieldFx_ModelRestoreColors(D_800F342C);
         }
         break;
     }
@@ -961,7 +961,7 @@ int func_800DE0A8(int mode, FieldFlashBurst *state)
         state->anchor.x = g_PlayerEntity->render_object.matrices[19].translation[0];
         state->anchor.y = g_PlayerEntity->render_object.matrices[19].translation[1];
         state->anchor.z = g_PlayerEntity->render_object.matrices[19].translation[2];
-        FieldModel_ScrollUv((union FieldTexturedModel *)D_800F3474, 0, 0);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_800F3474, 0, 0);
         break;
     case 1:
         if (D_800E27EC >= 25)
@@ -1001,14 +1001,14 @@ int func_800DE0A8(int mode, FieldFlashBurst *state)
                     palette += 4;
                 GsSetOrign(tpage, GetClut(0xD0, palette));
             }
-            FieldModel_SetSemiTrans(1);
-            FieldModel_SaveColors(D_800F3474);
-            FieldModel_SetColors(D_800F3474, color.r, color.g, color.b);
-            FieldModel_Draw((union FieldTexturedModel *)D_800F3474, &matrix);
+            FieldFx_ModelSetSemiTrans(1);
+            FieldFx_ModelSaveColors(D_800F3474);
+            FieldFx_ModelSetColors(D_800F3474, color.r, color.g, color.b);
+            FieldFx_ModelDraw((union FieldTexturedModel *)D_800F3474, &matrix);
             scale.x = scale.y = 0x1800;
             scale.z = 0x1000;
             ScaleMatrix(&matrix, &scale);
-            FieldModel_SetColors(D_800F3474, color.r, color.g >> 1, 0);
+            FieldFx_ModelSetColors(D_800F3474, color.r, color.g >> 1, 0);
             {
                 int tpage = (u16)(D_800E2850[D_800E11E6] | GetTPage(0, 1, 0, 0));
                 int kind = D_800F3368.palette;
@@ -1017,8 +1017,8 @@ int func_800DE0A8(int mode, FieldFlashBurst *state)
                     palette += 4;
                 GsSetOrign(tpage, GetClut(0xD0, palette));
             }
-            FieldModel_Draw((union FieldTexturedModel *)D_800F3474, &matrix);
-            FieldModel_RestoreColors(D_800F3474);
+            FieldFx_ModelDraw((union FieldTexturedModel *)D_800F3474, &matrix);
+            FieldFx_ModelRestoreColors(D_800F3474);
         }
         if (D_800E27EC < 25) {
             D_800F3368.depth = 16;
@@ -1424,7 +1424,7 @@ int FieldFx_PointEmitter(int mode, FieldAnimEmitter *state) {
     switch (mode) {
     case 0:
         state->angle = rand();
-        FieldModel_ScrollUv((union FieldTexturedModel *)D_800F32D8, 0, 0);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_800F32D8, 0, 0);
         return func_800CE560(D_800F33E0->end, 16, 24,
                              (FieldAnimCallbackListCallback)func_800D9A8C);
     case 1:

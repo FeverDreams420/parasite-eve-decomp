@@ -104,7 +104,7 @@ initialize:
 
             temp_v0 = Asset_FindTable08ByU32Key(D_800B0E64[0], assetKey | 0x3704U);
             D_8019085C = temp_v0;
-            FieldModel_ScrollUv(temp_v0, 0, 0);
+            FieldFx_ModelScrollUv(temp_v0, 0, 0);
             func_800D1384(&effect->position, &effect->position, 0x3EE, (unsigned char *)initColor0, (unsigned char *)initColor1, 0x80, (struct FieldTrailPair *)effect->history, initialMode);
             return func_800CE560((char *)ANIM_POOL_AS(SceneE20Channel)->pool, 0x14, 0x20,
                                  (FieldAnimCallbackListCallback)func_8018F028);
@@ -364,8 +364,8 @@ block_63:
                 var_a1_2 = temp_a1 + 2;
             }
             func_800C6EC0(temp_s0, GetClut(0, var_a1_2) & 0xFFFF);
-            if (temp_s3 != 0xFF) FieldModel_SetSemiTrans(1);
-            else FieldModel_SetSemiTrans(0);
+            if (temp_s3 != 0xFF) FieldFx_ModelSetSemiTrans(1);
+            else FieldFx_ModelSetSemiTrans(0);
             drawAngle = D_800E27EC * 0x60;
             temp_v0_3 = (u16) effect->rotation.x;
             drawRotation.x = temp_v0_3;
@@ -386,10 +386,10 @@ block_63:
             scale[2] = modelScale;
             matrix.t[2] = translationZ;
             ScaleMatrix(&matrix, &scale[0]);
-            FieldModel_SaveColors(D_8019085C);
-            FieldModel_ScaleColors(D_8019085C, (u16) effect->alpha);
-            FieldModel_Draw(D_8019085C, (GteMatrix *)&matrix);
-            FieldModel_RestoreColors(D_8019085C);
+            FieldFx_ModelSaveColors(D_8019085C);
+            FieldFx_ModelScaleColors(D_8019085C, (u16) effect->alpha);
+            FieldFx_ModelDraw(D_8019085C, (GteMatrix *)&matrix);
+            FieldFx_ModelRestoreColors(D_8019085C);
             func_800D1384(&effect->trailHead, &effect->trailTail, 6, (unsigned char *)&beamColor, (unsigned char *)&edgeColor, (s32) effect->alpha, (struct FieldTrailPair *)effect->history, 1);
             D_800F3368.depth = 0x33;
             var_s0 = effect->alpha;

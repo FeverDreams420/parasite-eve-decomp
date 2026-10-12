@@ -571,7 +571,7 @@ int func_800D6514(int mode, RenderArcingEmitter *state)
         state->position.y = D_800F32D0->actor->render_object.target_y;
         state->position.z = D_800F32D0->actor->render_object.target_z;
         state->position.y = g_RoomFloorY->y;
-        FieldModel_ScrollUv((union FieldTexturedModel *)D_800F32D4, 0, 0xC0);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_800F32D4, 0, 0xC0);
         return func_800CE560(D_800F33E0->end, 16, 24,
                              (FieldEffectCallback)func_800D629C);
     case 1:
@@ -620,10 +620,10 @@ int func_800D6514(int mode, RenderArcingEmitter *state)
                 palette += 4;
             GsSetOrign(tpage, GetClut(0xC0, palette));
         }
-        FieldModel_SetSemiTrans(1);
-        FieldModel_SaveColors(D_800F32D4);
-        FieldModel_ScaleColors(D_800F32D4, intensity);
-        FieldModel_Draw((union FieldTexturedModel *)D_800F32D4, &matrix);
+        FieldFx_ModelSetSemiTrans(1);
+        FieldFx_ModelSaveColors(D_800F32D4);
+        FieldFx_ModelScaleColors(D_800F32D4, intensity);
+        FieldFx_ModelDraw((union FieldTexturedModel *)D_800F32D4, &matrix);
         scale.x /= 2;
         scale.y /= 2;
         scale.z /= 2;
@@ -632,8 +632,8 @@ int func_800D6514(int mode, RenderArcingEmitter *state)
         matrix.t[0] = state->position.x;
         matrix.t[1] = state->position.y;
         matrix.t[2] = state->position.z;
-        FieldModel_Draw((union FieldTexturedModel *)D_800F32D4, &matrix);
-        FieldModel_RestoreColors(D_800F32D4);
+        FieldFx_ModelDraw((union FieldTexturedModel *)D_800F32D4, &matrix);
+        FieldFx_ModelRestoreColors(D_800F32D4);
         D_800F3368.parameter00 = 32;
         D_800F3368.parameter02 = 2;
         D_800F3368.extent_x = 32;
@@ -1701,7 +1701,7 @@ int func_800DA5D4(int mode, FieldAnimEmitter *state) {
     switch (mode) {
     case 0:
         state->angle = rand();
-        FieldModel_ScrollUv((union FieldTexturedModel *)D_800F32D8, 0, 0);
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_800F32D8, 0, 0);
         return func_800CE560(D_800F33E0->end, 16, 24,
                              (FieldAnimCallbackListCallback)func_800DA1FC);
     case 1:

@@ -1274,7 +1274,7 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
         bolt->timer = 0;
         bolt->reserved1C = 0;
         D_80199500 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54C4704);
-        FieldModel_ScrollUv(D_80199500, 0, 0);
+        FieldFx_ModelScrollUv(D_80199500, 0, 0);
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, 0, &offset, &bolt->position);
         bolt->origin.x = bolt->position.x;
         bolt->origin.y = bolt->position.y;
@@ -1357,7 +1357,7 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
                 func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
                                                                              : palette + 3));
             }
-            FieldModel_SetSemiTrans(1);
+            FieldFx_ModelSetSemiTrans(1);
             rotation.x = bolt->heading.x;
             rotation.y = bolt->heading.y;
             rotation.z = bolt->heading.z;
@@ -1370,10 +1370,10 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
             scale.y = modelScale;
             scale.z = modelScale;
             ScaleMatrix(&matrix, &scale);
-            FieldModel_SaveColors(D_80199500);
-            FieldModel_ScaleColors(D_80199500, (u16)glow);
-            FieldModel_Draw(D_80199500, (GteMatrix *)&matrix);
-            FieldModel_RestoreColors(D_80199500);
+            FieldFx_ModelSaveColors(D_80199500);
+            FieldFx_ModelScaleColors(D_80199500, (u16)glow);
+            FieldFx_ModelDraw(D_80199500, (GteMatrix *)&matrix);
+            FieldFx_ModelRestoreColors(D_80199500);
             break;
         }
         case 1: {
@@ -1398,7 +1398,7 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
                 func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
                                                                              : palette + 3));
             }
-            FieldModel_SetSemiTrans(1);
+            FieldFx_ModelSetSemiTrans(1);
             rotation.x = bolt->heading.x;
             rotation.y = bolt->heading.y;
             rotation.z = bolt->heading.z;
@@ -1411,10 +1411,10 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
             scale.y = modelScale;
             scale.z = modelScale;
             ScaleMatrix(&matrix, &scale);
-            FieldModel_SaveColors(D_80199500);
-            FieldModel_ScaleColors(D_80199500, (u16)glow);
-            FieldModel_Draw(D_80199500, (GteMatrix *)&matrix);
-            FieldModel_RestoreColors(D_80199500);
+            FieldFx_ModelSaveColors(D_80199500);
+            FieldFx_ModelScaleColors(D_80199500, (u16)glow);
+            FieldFx_ModelDraw(D_80199500, (GteMatrix *)&matrix);
+            FieldFx_ModelRestoreColors(D_80199500);
             {
                 int kind;
                 int palette;
@@ -1626,7 +1626,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
         bolt->sweep = 0;
         D_80199504 = 0;
         D_80199500 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54C4704);
-        FieldModel_ScrollUv(D_80199500, 0, 0);
+        FieldFx_ModelScrollUv(D_80199500, 0, 0);
         if (ANIM_TASK_AS(SceneE22EmberEvent)->active) {
             SceneE22EmberSlot *pool = ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool;
             if (pool) {
@@ -1758,7 +1758,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
                 func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
                                                                              : palette + 3));
             }
-            FieldModel_SetSemiTrans(1);
+            FieldFx_ModelSetSemiTrans(1);
             rotation.x = bolt->heading.x;
             rotation.y = bolt->heading.y;
             rotation.z = bolt->heading.z;
@@ -1771,10 +1771,10 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
             scale.y = modelScale;
             scale.z = modelScale;
             ScaleMatrix(&matrix, &scale);
-            FieldModel_SaveColors(D_80199500);
-            FieldModel_ScaleColors(D_80199500, (u16)glow);
-            FieldModel_Draw(D_80199500, (GteMatrix *)&matrix);
-            FieldModel_RestoreColors(D_80199500);
+            FieldFx_ModelSaveColors(D_80199500);
+            FieldFx_ModelScaleColors(D_80199500, (u16)glow);
+            FieldFx_ModelDraw(D_80199500, (GteMatrix *)&matrix);
+            FieldFx_ModelRestoreColors(D_80199500);
             {
                 int kind;
                 int palette;
@@ -1825,7 +1825,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
                 func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
                                                                              : palette + 3));
             }
-            FieldModel_SetSemiTrans(1);
+            FieldFx_ModelSetSemiTrans(1);
             rotation.x = bolt->heading.x;
             rotation.y = bolt->heading.y;
             rotation.z = bolt->heading.z;
@@ -1838,10 +1838,10 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
             scale.y = modelScale;
             scale.z = modelScale;
             ScaleMatrix(&matrix, &scale);
-            FieldModel_SaveColors(D_80199500);
-            FieldModel_ScaleColors(D_80199500, (u16)glow);
-            FieldModel_Draw(D_80199500, (GteMatrix *)&matrix);
-            FieldModel_RestoreColors(D_80199500);
+            FieldFx_ModelSaveColors(D_80199500);
+            FieldFx_ModelScaleColors(D_80199500, (u16)glow);
+            FieldFx_ModelDraw(D_80199500, (GteMatrix *)&matrix);
+            FieldFx_ModelRestoreColors(D_80199500);
             modelScale = rcos(angle) + 0x1000;
             spin.z = bolt->timer * 32;
             func_800D004C(&bolt->origin, 1000, 0x32, 8, &spin, modelScale, modelScale,
@@ -1917,9 +1917,9 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             Akao_SendTableCommand(D_800B0E64[0], 0x5DA, func_800D3FD8(), 0x80, 0x7F);
         }
         D_80199508 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC58C4704);
-        FieldModel_ScrollUv(D_80199508, 0, 0);
+        FieldFx_ModelScrollUv(D_80199508, 0, 0);
         D_8019950C = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5CC4704);
-        FieldModel_ScrollUv(D_8019950C, 0, 0);
+        FieldFx_ModelScrollUv(D_8019950C, 0, 0);
         fx->position.x = target->x;
         fx->position.y = target->y;
         fx->position.z = target->z;
@@ -2034,7 +2034,7 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800C6EC0(page, GetClut(0x10, palette));
-            FieldModel_SetSemiTrans(1);
+            FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&rotation, &matrix);
             shape.x = scale;
             shape.y = scale * 2;
@@ -2043,10 +2043,10 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             matrix.t[1] = position.y;
             matrix.t[2] = position.z;
             ScaleMatrix(&matrix, &shape);
-            FieldModel_SaveColors(D_80199508);
-            FieldModel_ScaleColors(D_80199508, (u16)(glow * 3 / 2));
-            FieldModel_Draw(D_80199508, (GteMatrix *)&matrix);
-            FieldModel_RestoreColors(D_80199508);
+            FieldFx_ModelSaveColors(D_80199508);
+            FieldFx_ModelScaleColors(D_80199508, (u16)(glow * 3 / 2));
+            FieldFx_ModelDraw(D_80199508, (GteMatrix *)&matrix);
+            FieldFx_ModelRestoreColors(D_80199508);
         }
         scale = scale / 2;
         {
@@ -2069,7 +2069,7 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800C6EC0(page, GetClut(0x10, palette));
-            FieldModel_SetSemiTrans(1);
+            FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&rotation, &matrix);
             shape.x = scale;
             shape.y = scale * 8;
@@ -2078,10 +2078,10 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             matrix.t[1] = position.y;
             matrix.t[2] = position.z;
             ScaleMatrix(&matrix, &shape);
-            FieldModel_SaveColors(D_80199508);
-            FieldModel_ScaleColors(D_80199508, (u16)glow);
-            FieldModel_Draw(D_80199508, (GteMatrix *)&matrix);
-            FieldModel_RestoreColors(D_80199508);
+            FieldFx_ModelSaveColors(D_80199508);
+            FieldFx_ModelScaleColors(D_80199508, (u16)glow);
+            FieldFx_ModelDraw(D_80199508, (GteMatrix *)&matrix);
+            FieldFx_ModelRestoreColors(D_80199508);
         }
         if (fx->timer < 0x19) {
             SceneE22QuakeMatrix matrix;
@@ -2106,7 +2106,7 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800C6EC0(page, GetClut(0x30, palette));
-            FieldModel_SetSemiTrans(1);
+            FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&rotation, &matrix);
             shape.x = scale;
             shape.y = 0x1000;
@@ -2115,10 +2115,10 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             matrix.t[1] = position.y;
             matrix.t[2] = position.z;
             ScaleMatrix(&matrix, &shape);
-            FieldModel_SaveColors(D_8019950C);
-            FieldModel_ScaleColors(D_8019950C, (u16)glow);
-            FieldModel_Draw(D_8019950C, (GteMatrix *)&matrix);
-            FieldModel_RestoreColors(D_8019950C);
+            FieldFx_ModelSaveColors(D_8019950C);
+            FieldFx_ModelScaleColors(D_8019950C, (u16)glow);
+            FieldFx_ModelDraw(D_8019950C, (GteMatrix *)&matrix);
+            FieldFx_ModelRestoreColors(D_8019950C);
         }
         D_800F3368.parameter00 = 0x10;
         D_800F3368.parameter02 = 1;

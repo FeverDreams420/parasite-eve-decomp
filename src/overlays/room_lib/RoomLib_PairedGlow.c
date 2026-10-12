@@ -250,7 +250,7 @@ void RoomLib_DrawPairedGlowSprite(char *object, void *unused, RoomDoubleSpriteFx
     stack.scale = stack.sourceScale;
     ScaleMatrix(&stack.matrix, &stack.scale);
 
-    FieldModel_ScrollUv(g_RoomPairedGlowPacket, 0, 0);
+    FieldFx_ModelScrollUv(g_RoomPairedGlowPacket, 0, 0);
     textureWord = 0;
     if (clock->asset.index == 0) {
         handleA = GetTPage(textureWord, 1, 0x340, 0x100);
@@ -264,12 +264,12 @@ void RoomLib_DrawPairedGlowSprite(char *object, void *unused, RoomDoubleSpriteFx
         handleB = GetClut(0, 0x1DB);
         func_800C6EC0(textureWord, (u16)handleB);
     }
-    FieldModel_SetSemiTrans(1);
-    FieldModel_SaveColors(g_RoomPairedGlowPacket);
-    FieldModel_SetColors(g_RoomPairedGlowPacket, 0x60, 0x10, 0x80);
-    FieldModel_ScaleColors(g_RoomPairedGlowPacket, workState->depth);
-    FieldModel_Draw(g_RoomPairedGlowPacket, &stack.matrix);
-    FieldModel_RestoreColors(g_RoomPairedGlowPacket);
+    FieldFx_ModelSetSemiTrans(1);
+    FieldFx_ModelSaveColors(g_RoomPairedGlowPacket);
+    FieldFx_ModelSetColors(g_RoomPairedGlowPacket, 0x60, 0x10, 0x80);
+    FieldFx_ModelScaleColors(g_RoomPairedGlowPacket, workState->depth);
+    FieldFx_ModelDraw(g_RoomPairedGlowPacket, &stack.matrix);
+    FieldFx_ModelRestoreColors(g_RoomPairedGlowPacket);
 }
 
 /* Grows the glow sprite and fades it in for sixteen frames, then out. */

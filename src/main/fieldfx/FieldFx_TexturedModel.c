@@ -11,7 +11,7 @@
 #define MODEL_VERTEX(model, offset) ((FieldModelVertex *)&(model)->bytes[offset])
 #define MODEL_COLOR(model, offset) (((FieldModelColor *)&(model)->bytes[offset])->word)
 
-void FieldModel_ScrollUv(FieldTexturedModel *model, u8 xOffset, u8 yOffset) {
+void FieldFx_ModelScrollUv(FieldTexturedModel *model, u8 xOffset, u8 yOffset) {
     FieldModelHeader *header = &model->header;
     FieldModelTri *tri = header->tris;
     FieldModelQuad *quad;
@@ -61,15 +61,15 @@ void GsSetOrign(short x, short y) {
     D_800F3414 = y;
 }
 
-void FieldModel_SetSemiTrans(short value) {
+void FieldFx_ModelSetSemiTrans(short value) {
     D_800F33E4 = value;
 }
 
-void FieldModel_SetDepthBias(short value) {
+void FieldFx_ModelSetDepthBias(short value) {
     D_800F3420 = value;
 }
 
-void FieldModel_SaveColors(char *data) {
+void FieldFx_ModelSaveColors(char *data) {
     FieldModelHeader *table = (FieldModelHeader *)data;
     int i = 0;
     u32 *src = (u32 *)(data + table->colorOffset);
@@ -81,7 +81,7 @@ void FieldModel_SaveColors(char *data) {
     }
 }
 
-void FieldModel_RestoreColors(char *data) {
+void FieldFx_ModelRestoreColors(char *data) {
     FieldModelHeader *table = (FieldModelHeader *)data;
     int i = 0;
     u32 *src = g_FieldModelColorBackup;
@@ -93,7 +93,7 @@ void FieldModel_RestoreColors(char *data) {
     }
 }
 
-void FieldModel_ScaleColors(char *data, u16 factor)
+void FieldFx_ModelScaleColors(char *data, u16 factor)
 {
     int i;
     u32 red;
@@ -138,7 +138,7 @@ void FieldModel_ScaleColors(char *data, u16 factor)
     }
 }
 
-void FieldModel_SetColors(char *data, u8 r, u8 g, u8 b) {
+void FieldFx_ModelSetColors(char *data, u8 r, u8 g, u8 b) {
     FieldModelHeader *table = (FieldModelHeader *)data;
     FieldModelColor *entry = (FieldModelColor *)(data + table->colorOffset);
     int i;
@@ -152,7 +152,7 @@ void FieldModel_SetColors(char *data, u8 r, u8 g, u8 b) {
     }
 }
 
-void FieldModel_ShiftColors(char *data, int rDelta, int gDelta, int bDelta) {
+void FieldFx_ModelShiftColors(char *data, int rDelta, int gDelta, int bDelta) {
     FieldModelHeader *table = (FieldModelHeader *)data;
     FieldModelColor *entry = (FieldModelColor *)(data + table->colorOffset);
     int i;
@@ -193,7 +193,7 @@ void FieldModel_ShiftColors(char *data, int rDelta, int gDelta, int bDelta) {
 /* Composes the placement onto the view matrix, then walks the flat and
  * gouraud textured triangles and quads, culling back faces by NCLIP and
  * linking the visible ones at their averaged depth. */
-void FieldModel_Draw(FieldTexturedModel *model, GteMatrix *placement)
+void FieldFx_ModelDraw(FieldTexturedModel *model, GteMatrix *placement)
 {
     FieldModelHeader *header;
     FieldModelTri *tri;
