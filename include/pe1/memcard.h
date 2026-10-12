@@ -223,7 +223,17 @@ extern int g_MemCardEventF000Spec2000Flag;
 
 /* Card file being written: the 0x100-byte directory/icon header (its
  * 16-colour icon palette at +0x60), then the whole image. */
-extern u8 g_MemCardIconHeader[];
+typedef struct MemCardFileHeader {
+    /* 0x00 */ u16 productCode;
+    /* 0x02 */ u8 iconDisplay;
+    /* 0x03 */ u8 blockCount;
+    /* 0x04 */ char title[64];
+    /* 0x44 */ u8 reserved[28];
+    /* 0x60 */ u16 palette[16];
+    /* 0x80 */ u8 icon[128];
+} MemCardFileHeader;
+PE1_STATIC_ASSERT(sizeof(MemCardFileHeader) == 0x100, memcard_file_header_size);
+extern MemCardFileHeader g_MemCardIconHeader;
 extern u8 g_MemCardIconPalette[];
 extern u8 g_MemCardFileBuffer[];
 /* Runtime save state as read back from the card file. */

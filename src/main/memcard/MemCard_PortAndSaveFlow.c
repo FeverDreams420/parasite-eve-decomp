@@ -461,26 +461,26 @@ const MemCardSaveSupportData g_MemCardSaveSupportData __attribute__((used)) = {
 
 int Save_BuildCardFile(char *path) {
     u8 *resolved;
-    u8 *file;
+    MemCardFileHeader *file;
     u32 crc;
 
 resolved = Tbl_GetSaveIconData();
-    file = g_MemCardIconHeader;
+    file = &g_MemCardIconHeader;
 
     D_800A5D50 = 0x2000;
-    bzero(file, 0x100);
+    bzero(file, sizeof(*file));
 
-    *(short *)(file + 0) = g_MemCardSaveSupportData.cardProductCode;
-    file[2] = 0x11;
-    file[3] = 1;
-    strcpy((char *)(file + 4), (char *)Save_FormatTitle(path[0x18] - 0x40, g_SaveRuntimeState.windows.header.playTimeMinutes));
+    file->productCode = g_MemCardSaveSupportData.cardProductCode;
+    file->iconDisplay = 0x11;
+    file->blockCount = 1;
+    strcpy(file->title, (char *)Save_FormatTitle(path[0x18] - 0x40, g_SaveRuntimeState.windows.header.playTimeMinutes));
 
     __builtin_memcpy(g_MemCardIconPalette, resolved + 0x14, 0x20);
-    __builtin_memcpy(file + 0x80, resolved + 0x40, 0x80);
+    __builtin_memcpy(file->icon, resolved + 0x40, sizeof(file->icon));
 
     bzero(g_MemCardFileBuffer, 0x2000);
     g_SaveIoCursor = g_MemCardFileBuffer;
-    __builtin_memcpy(g_SaveIoCursor, g_MemCardIconHeader, 0x100);
+    __builtin_memcpy(g_SaveIoCursor, &g_MemCardIconHeader, sizeof(g_MemCardIconHeader));
     g_SaveIoCursor += 0x100;
     __builtin_memcpy(g_SaveIoCursor, (u8 *)&g_SaveRuntimeState, 0x12E4);
     g_SaveIoCursor += 0x12E4;
