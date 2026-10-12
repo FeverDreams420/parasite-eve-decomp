@@ -6,9 +6,9 @@
 #include "pe1/gte_types.h"
 #include "pe1/s32_vector3.h"
 #include "room_m273_particles.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/field_texture_tables.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 
 /* The third word of the shared allocator context points at its pool. */
 typedef struct RoomM273PoolContext {

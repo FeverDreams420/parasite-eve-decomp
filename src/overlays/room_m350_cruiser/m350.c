@@ -2,10 +2,10 @@
 #include "pe1/room_m350_effects.h"
 #include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/gte_types.h"
 #include "pe1/field_texture_tables.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "room_m350_data.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/psyq_gpu.h"
@@ -122,7 +122,7 @@ int func_80192508(int event)
     case 0:
 
         return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,8,64,
-                             (FieldAnimCallbackListCallback)func_80199B94);
+                             (FieldFxCallbackListCallback)func_80199B94);
         case 1:
     {
         int timer=D_800E27EC;
@@ -205,7 +205,7 @@ int func_801928D4(int event, State *state)
         state->delay = 0;
         state->count = 0;
         return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 16, 18,
-                             (FieldAnimCallbackListCallback)func_801927A4);
+                             (FieldFxCallbackListCallback)func_801927A4);
         case 1:
     {
         int i;
@@ -278,7 +278,7 @@ int func_80192C34(int event, RampedPalettePairState *state)
         state->target = 16384;
         state->current = 0;
         return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 8, 6,
-                             (FieldAnimCallbackListCallback)func_80192ADC);
+                             (FieldFxCallbackListCallback)func_80192ADC);
         case 1:
     if (!state->target) {
         if (state->current <= 0) return 2;
@@ -473,7 +473,7 @@ int func_8019360C(int event) {
     case 0:
 
         return func_800CE560(((RoomM350Emitter *)ANIM_POOL_AS(RoomM350Emitter))->pool,8,2,
-                             (FieldAnimCallbackListCallback)func_80192E4C);
+                             (FieldFxCallbackListCallback)func_80192E4C);
         case 1:
     {
         SweepTrapFlowInstance *instance = ((RoomM350ControllerChannel *)ANIM_OWNER_AS(RoomM350TrapChannel))->instance;
@@ -543,7 +543,7 @@ int func_801938E4(int event) {
     case 0:
 
         return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,8,4,
-                             (FieldAnimCallbackListCallback)func_801937B4);
+                             (FieldFxCallbackListCallback)func_801937B4);
         case 1:
     if(D_8019A79A) return 2;
     if(D_8019A79C) {
@@ -604,7 +604,7 @@ int func_80193BCC(int event) {
     case 0:
 
         return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,4,2,
-                             (FieldAnimCallbackListCallback)func_80193A80);
+                             (FieldFxCallbackListCallback)func_80193A80);
         case 1:
     {
         Instance *instance = ANIM_OWNER_AS(Actor)->instance;
@@ -768,7 +768,7 @@ int func_8019421C(int event)
     case 0:
 
         return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 12, 64,
-                             (FieldAnimCallbackListCallback)func_8019404C);
+                             (FieldFxCallbackListCallback)func_8019404C);
         case 1:
     {
         int i = 0;
@@ -854,7 +854,7 @@ int func_80194654(int event, AnimationBurstState *state)
     case 0:
         state->remaining = 0;
         return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 4, 4,
-                             (FieldAnimCallbackListCallback)func_801944F0);
+                             (FieldFxCallbackListCallback)func_801944F0);
     case 1:
         {
             Animation *animation = ANIM_OWNER_AS(AnimationBurstActor)->animation;
@@ -998,7 +998,7 @@ int func_80194CFC(int event) {
     case 0:
 
         return func_800CE560(ANIM_POOL_AS(RoomM350EffectEmitter)->pool,28,3,
-                             (FieldAnimCallbackListCallback)func_801947BC);
+                             (FieldFxCallbackListCallback)func_801947BC);
         case 1:
     {
         RoomM350EffectInstance *instance;
@@ -1074,7 +1074,7 @@ int func_80195064(int event) {
     case 0:
 
         return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,8,16,
-                             (FieldAnimCallbackListCallback)func_80194F04);
+                             (FieldFxCallbackListCallback)func_80194F04);
         case 1:
     if (D_8019A7FC.completionFlags[0] && D_8019A7FC.activeCount==0) return 2;
     {
@@ -1148,7 +1148,7 @@ int func_80195378(int event) {
     case 0:
 
         return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,12,50,
-                             (FieldAnimCallbackListCallback)func_80195218);
+                             (FieldFxCallbackListCallback)func_80195218);
         case 1:
     if (D_8019A7FC.completionFlags[0] && D_8019A7FC.activeCount==0) return 2;
     {
@@ -1211,7 +1211,7 @@ int func_8019569C(int event) {
     case 0:
 
         return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,8,10,
-                             (FieldAnimCallbackListCallback)func_80195564);
+                             (FieldFxCallbackListCallback)func_80195564);
         case 1:
     if(D_8019A7FC.completionFlags[0]) return 2;
     {
@@ -1362,7 +1362,7 @@ int func_80195CE0(int event,RoomM350RadialSpriteState *inputState)
             ((int *)&state->rotation)[1]=0;
             state->count=0; state->fade=0;
             return func_800CE560(emitter->pool,8,18,
-                                 (FieldAnimCallbackListCallback)func_80195B64);
+                                 (FieldFxCallbackListCallback)func_80195B64);
         }
         case 1:
     {
@@ -1669,7 +1669,7 @@ int func_80196A14(int event)
     case 0:
 
         return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 12, 16,
-                             (FieldAnimCallbackListCallback)func_801968D8);
+                             (FieldFxCallbackListCallback)func_801968D8);
         case 1:
     if (D_800E27EC >= 107) return 2;
     if (D_800E27EC & 1) {

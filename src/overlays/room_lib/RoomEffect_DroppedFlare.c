@@ -51,7 +51,7 @@ int RoomEffect_DroppedFlareParticle(int mode, RoomDroppedFlare *flare,
             flare->z += flare->velocity.z;
             flare->velocity.y += 2;
             if (func_800C6B90(flare, lift * 50 / 4096)) {
-                if (ANIM_TASK_AS(RoomFlareEventState)->active) {
+                if (FX_TASK_AS(RoomFlareEventState)->active) {
                     ROOMEFFECT_DROPPED_FLARE_FLASH();
                 }
                 flare->state = 1;
@@ -228,7 +228,7 @@ int RoomEffect_DroppedFlareEmitter(int mode, RoomDroppedFlareEmitter *emitter,
     switch (mode) {
     case 0:
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomFlareChannel)->pool, 0x13, &rect, emitter);
-        switch (ANIM_TASK_AS(RoomFlareEventState)->phase) {
+        switch (FX_TASK_AS(RoomFlareEventState)->phase) {
         case 0:
             func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomFlareChannel)->pool, 0x13,
                           &emitter->angles);
@@ -242,7 +242,7 @@ int RoomEffect_DroppedFlareEmitter(int mode, RoomDroppedFlareEmitter *emitter,
             }
             break;
         }
-        if (ANIM_TASK_AS(RoomFlareEventState)->active != 0) {
+        if (FX_TASK_AS(RoomFlareEventState)->active != 0) {
             RoomFlareNode **node = (RoomFlareNode **)ANIM_OWNER_AS(RoomFlareChannel)->pool;
             if (node != 0 && *node != 0) {
                 u8 *state = (*node)->state;
@@ -252,7 +252,7 @@ int RoomEffect_DroppedFlareEmitter(int mode, RoomDroppedFlareEmitter *emitter,
             }
         }
         return func_800CE560(ANIM_POOL_AS(RoomFlareChannel)->pool, 0x14, 0x18,
-                             (FieldAnimCallbackListCallback)RoomEffect_DroppedFlareParticle);
+                             (FieldFxCallbackListCallback)RoomEffect_DroppedFlareParticle);
     case 1:
         if (D_800E27EC == mode) {
             RoomDroppedFlare *flare = func_800CE610(ANIM_POOL_AS(RoomFlareChannel)->pool);

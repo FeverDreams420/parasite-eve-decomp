@@ -2,7 +2,7 @@
 #define PE1_SCENE_E22_QUAKE_BLAST_H
 
 #include "common.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/render_object.h"
 #include "pe1/field_actor.h"
 #include "pe1/room_orbit_trail.h"
@@ -11,7 +11,7 @@
 #include "pe1/field_model_draw.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_sprite_draw.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/akao_send.h"

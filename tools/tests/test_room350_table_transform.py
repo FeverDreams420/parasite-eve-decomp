@@ -38,9 +38,9 @@ typedef char h[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
     def test_table_and_post_allocation_reads(self):
         source = host_unit(CONTROLLER, path=find_definition(CONTROLLER, under=ROOM))
         harness = '#include <assert.h>\n#include <stdint.h>\n#include <string.h>\n' + source + r'''
-FieldAnimObjectPrefix *D_800F32D0;
+FieldFxObjectPrefix *D_800F32D0;
 FieldActor *D_8019A7F8;
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxTaskSlot *D_800F33E0;
 unsigned char D_8019A804;
 Entry D_8019A4D4[13][2];
 #define ENTRY(n) (((Entry *)D_8019A4D4)[n])
@@ -56,15 +56,15 @@ static Particle particles[2],expected[2];
 static int pools[2],calls,setups,setupResult,failAt,frame,indexAfter,alternate,sizeWord;
 static int half(uint32_t x) { x &=65535; return x<32768 ? (int)x:(int)x-65536; }
 int func_80195564(int e,short *p) { return 0; }
-int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback cb) {
+int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && stride==8 && count==10);
-    assert(cb==(FieldAnimCallbackListCallback)func_80195564);
+    assert(cb==(FieldFxCallbackListCallback)func_80195564);
     setups++; return setupResult;
 }
 void *func_800CE610(char *p) {
     int i=calls++;
     assert(i<2 && p==(char *)&pools[i ? 1:0]);
-    D_800F33E0=(FieldAnimTaskSlot *)&emitters[1]; D_800F32D0=(FieldAnimObjectPrefix *)&actors[1];
+    D_800F33E0=(FieldFxTaskSlot *)&emitters[1]; D_800F32D0=(FieldFxObjectPrefix *)&actors[1];
     D_8019A7F8=(FieldActor *)&instances[2];
     D_8019A804=255; instances[1].frame=65535;
     ENTRY(frame*2+i).index=indexAfter;
@@ -73,9 +73,9 @@ void *func_800CE610(char *p) {
     return i==failAt ? 0:&particles[i];
 }
 static void reset(void) {
-    calls=setups=0; D_800F32D0=(FieldAnimObjectPrefix *)&actors[0];
+    calls=setups=0; D_800F32D0=(FieldFxObjectPrefix *)&actors[0];
     D_8019A7F8=(FieldActor *)&instances[0];
-    D_800F33E0=(FieldAnimTaskSlot *)&emitters[0]; D_8019A804=0;
+    D_800F33E0=(FieldFxTaskSlot *)&emitters[0]; D_8019A804=0;
     memset(particles,0x5A,sizeof(particles)); memcpy(expected,particles,sizeof(particles));
     memset(D_8019A4D4,0,sizeof(D_8019A4D4));
 }

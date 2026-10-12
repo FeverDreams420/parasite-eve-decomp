@@ -5,7 +5,7 @@
  * room's own data with its own layout (m005's dialog anchor, m023's anchor
  * vector, m123's burst parameter); see pe1/room_script_record.h.
  */
-#include "pe1/field_anim.h"
+#include "pe1/fieldfx_task.h"
 #include "pe1/room_script_record.h"
 
 void *RoomLib_SetTaskVar0(int mode) {

@@ -2,7 +2,7 @@
 #include "pe1/field_sprite_params.h"
 #include "../room_lib/room_lib.h"
 #include "pe1/room_script_record.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/room_m005.h"
@@ -63,7 +63,7 @@ init:
     if (r->h6 < 0x81) {
         r->h6 += 8;
     }
-    if (ANIM_TASK_AS(RoomDlgState)->h12 == mode) {
+    if (FX_TASK_AS(RoomDlgState)->h12 == mode) {
         r->hC = 1;
         r->hE = 0;
     }
@@ -123,7 +123,7 @@ int func_8018F330(int mode, RoomM005OrbiterState *state) {
         state->frame = 0;
         pool = ANIM_POOL_AS(RoomM005Channel)->pool;
         return func_800CE560(pool, 16, 24,
-                             (FieldAnimCallbackListCallback)RoomM005_FxOrbiter);
+                             (FieldFxCallbackListCallback)RoomM005_FxOrbiter);
     case 1:
         if (D_800E27EC == 7) {
             soundSlot = (RoomSoundSlot *)D_800B0E64;
@@ -154,7 +154,7 @@ int func_8018F330(int mode, RoomM005OrbiterState *state) {
         if (state->armed == 1) {
             state->frame++;
             if ((s16)state->frame >= 32) return 1;
-        } else if (ANIM_TASK_AS(RoomM005EventState)->triggered != 0) {
+        } else if (FX_TASK_AS(RoomM005EventState)->triggered != 0) {
             state->armed = 1;
         }
         break;
@@ -364,7 +364,7 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
         state->phase = 0;
         state->timer = 0;
         state->height = 0;
-        if (ANIM_TASK_AS(RoomM005BeaconEvent)->active) {
+        if (FX_TASK_AS(RoomM005BeaconEvent)->active) {
             RoomM005BeaconPool *pool = ANIM_OWNER_AS(RoomM005BeaconChannel)->pool;
             if (pool && pool->node) {
                 u8 *flag = pool->node->state;
@@ -376,7 +376,7 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
         D_80190B98 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5862704);
         FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80190B98, 0, 0);
         return func_800CE560(ANIM_POOL_AS(RoomM005BeaconSpawnChannel)->pool, 0x10, 8,
-                             (FieldAnimCallbackListCallback)func_8018FB84);
+                             (FieldFxCallbackListCallback)func_8018FB84);
     case 1:
         if (D_800E27EC < 10) {
             sprite = func_800CE610(ANIM_POOL_AS(RoomM005BeaconSpawnChannel)->pool);
@@ -413,7 +413,7 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
         state->target.y += position.y;
         state->target.z += position.z;
         if (func_800CEB8C(state, &state->target, 100) == 0) return 0;
-        if (ANIM_TASK_AS(RoomM005BeaconEvent)->active) {
+        if (FX_TASK_AS(RoomM005BeaconEvent)->active) {
             RoomM005BeaconChannel *channel = ANIM_OWNER_AS(RoomM005BeaconChannel);
             if ((channel->pool->node->flags & 0x3F000000) != 0x01000000) return 0;
             ((RoomM005BeaconEntity *)D_8009D254)->actor->flags |= 0x4000;

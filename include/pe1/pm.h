@@ -22,7 +22,7 @@ typedef struct PmTables {
 
 extern PmTables g_PmTables;
 
-/* Task programs of commands 108..114 (g_FieldAnimTaskPrograms[23..29]) are
+/* Task programs of commands 108..114 (g_FieldFxTaskPrograms[23..29]) are
  * read on demand from PE.IMG sectors D_80093162[0..1] to g_PmTaskProgramBuffer. */
 extern u16 D_80093162[2];
 extern void *g_PmTaskProgramBuffer;

@@ -1,6 +1,6 @@
 #include "pe1/render_object.h"
 #include "pe1/gte.h"
-#include "pe1/field_anim.h"
+#include "pe1/fieldfx_task.h"
 #include "pe1/battle_runtime.h"
 #include "pe1/random.h"
 #include "pe1/render_prim.h"
@@ -43,7 +43,7 @@ int func_800DACA4(int mode, RenderSparkEmitter *state)
     case 0:
         state->phase = rand();
         func_800CE870((char *)D_8009D254, 0, &state->position.x);
-        return func_800CE560(D_800F33E0->end, 8, 24, (FieldAnimTaskCallback)FieldFx_CosineEffect);
+        return func_800CE560(D_800F33E0->end, 8, 24, (FieldFxTaskCallback)FieldFx_CosineEffect);
     case 1:
         if (D_800E27EC < 51) {
             particle = func_800CE610(D_800F33E0->end);
@@ -105,7 +105,7 @@ int func_800DB0D0(int mode, RenderSineEmitter *state)
         state->phase = rand();
         func_800CE870((char *)D_8009D254, 0, &state->position.x);
         return func_800CE560(D_800F33E0->end, 16, 16,
-                             (FieldAnimTaskCallback)func_800DAF8C);
+                             (FieldFxTaskCallback)func_800DAF8C);
     case 1:
         if (D_800E27EC < 17) {
             effect = func_800CE610(D_800F33E0->end);
@@ -203,7 +203,7 @@ int func_800DB6BC(int mode, RenderDiamondEmitter *state)
         state->position.x = D_800F32D0->actor->render_object.target_x;
         state->position.y = D_800F32D0->actor->render_object.target_y;
         state->position.z = D_800F32D0->actor->render_object.target_z;
-        return func_800CE560(D_800F33E0->end, 12, 10, (FieldAnimTaskCallback)func_800DB5F4);
+        return func_800CE560(D_800F33E0->end, 12, 10, (FieldFxTaskCallback)func_800DB5F4);
     case 1:
         if (D_800E27EC < 25) {
             state->angle = -D_800E27EC * 64;
@@ -315,7 +315,7 @@ int func_800DBE6C(int mode, GteShortVector *state)
         state->y = D_800F32D0->actor->render_object.target_y;
         state->z = D_800F32D0->actor->render_object.target_z;
         return func_800CE560(D_800F33E0->end, 8, 20,
-                            (FieldAnimTaskCallback)func_800DBCD8);
+                            (FieldFxTaskCallback)func_800DBCD8);
     case 1:
         if (D_800E27EC < 21) {
             particle = func_800CE610(D_800F33E0->end);
@@ -346,7 +346,7 @@ int func_800DBE6C(int mode, GteShortVector *state)
 /* Matching debt: 3 GTE transfer pins, 4 empty constraints, and the three
  * TU-local register reservations above. The unpinned matrix pointer lets
  * GCC reuse t1 for constant-division multiply-high results. */
-int func_800DC058(int mode, FieldAnimTwinModel *state)
+int func_800DC058(int mode, FieldFxTwinModel *state)
 {
     GteShortVector angles;
     GteShortVector position;
@@ -508,7 +508,7 @@ int func_800DC750(int mode, GteShortVector *state)
     case 0:
         func_800CE870((char *)D_8009D254, 0, &state->x);
         return func_800CE560(D_800F33E0->end, 8, 20,
-                            (FieldAnimTaskCallback)func_800DC5BC);
+                            (FieldFxTaskCallback)func_800DC5BC);
     case 1:
         if (D_800E27EC < 40) {
             particle = func_800CE610(D_800F33E0->end);
@@ -573,7 +573,7 @@ int func_800DCA80(int mode, GteShortVector *state)
     case 0:
         func_800CE870((char *)D_8009D254, 1, &state->x);
         return func_800CE560(D_800F33E0->end, 8, 20,
-                            (FieldAnimTaskCallback)FieldFx_DriftingEffect);
+                            (FieldFxTaskCallback)FieldFx_DriftingEffect);
     case 1:
         if (D_800E27EC < 33 && (D_800E27EC & 1)) {
             particle = func_800CE610(D_800F33E0->end);
@@ -639,7 +639,7 @@ int func_800DCE94(int mode, RenderSparkEmitter *state)
         state->phase = rand();
         func_800CE870((char *)D_8009D254, 0, &state->position.x);
         return func_800CE560(D_800F33E0->end, 16, 16,
-                            (FieldAnimTaskCallback)func_800DCCCC);
+                            (FieldFxTaskCallback)func_800DCCCC);
     case 1:
         if (D_800E27EC < 17) {
             particle = func_800CE610(D_800F33E0->end);
@@ -787,7 +787,7 @@ int func_800DD76C(int mode, RenderConvergingEmitter *state)
         state->target.y = state->position.y;
         state->target.z = state->position.z;
         state->target.y -= 550;
-        return func_800CE560(D_800F33E0->end, 16, 24, (FieldAnimTaskCallback)func_800DD380);
+        return func_800CE560(D_800F33E0->end, 16, 24, (FieldFxTaskCallback)func_800DD380);
     case 1:
         if (D_800E27EC < 49 && (D_800E27EC & 1)) {
             particle = func_800CE610(D_800F33E0->end);
@@ -894,7 +894,7 @@ int func_800DDD70(int mode, GteShortVector *state)
     case 0:
         func_800CE870((char *)D_8009D254, 1, &state->x);
         return func_800CE560(D_800F33E0->end, 16, 32,
-                            (FieldAnimTaskCallback)func_800DD9E4);
+                            (FieldFxTaskCallback)func_800DD9E4);
     case 1:
         if (D_800E27EC < 67) {
             particle = func_800CE610(D_800F33E0->end);
@@ -1348,7 +1348,7 @@ int func_800DF6AC(int mode, RenderFadeEmitter *state)
         state->count = 0;
         state->intensity = 160;
         return func_800CE560(D_800F33E0->end, 20, 32,
-                             (FieldAnimCallbackListCallback)func_800DEFFC);
+                             (FieldFxCallbackListCallback)func_800DEFFC);
     case 1:
         if ((D_800E27EC & 3) == 0 && state->count < 8) {
             particle = func_800CE610(D_800F33E0->end);
@@ -1415,8 +1415,8 @@ int FieldFx_RotatingEffect(int mode) {
     return 0;
 }
 
-int FieldFx_PointEmitter(int mode, FieldAnimEmitter *state) {
-    FieldAnimEmittedPoint *point;
+int FieldFx_PointEmitter(int mode, FieldFxEmitter *state) {
+    FieldFxEmittedPoint *point;
     int angle;
 
     switch (mode) {
@@ -1424,7 +1424,7 @@ int FieldFx_PointEmitter(int mode, FieldAnimEmitter *state) {
         state->angle = rand();
         FieldFx_ModelScrollUv((union FieldTexturedModel *)D_800F32D8, 0, 0);
         return func_800CE560(D_800F33E0->end, 16, 24,
-                             (FieldAnimCallbackListCallback)func_800D9A8C);
+                             (FieldFxCallbackListCallback)func_800D9A8C);
     case 1:
         if (D_800E27EC < 40 && D_800E27EC % 6 == 0) {
             point = func_800CE610(D_800F33E0->end);

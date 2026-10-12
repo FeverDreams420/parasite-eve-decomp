@@ -2,14 +2,14 @@
 #define PE1_SCENE_E18_EFFECTS_H
 
 #include "common.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/gte_types.h"
 #include "pe1/render_object.h"
 #include "pe1/field_actor.h"
 #include "pe1/scene_e18_pulse.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_model_draw.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/psyq_libc.h"

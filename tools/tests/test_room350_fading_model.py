@@ -59,8 +59,8 @@ typedef char h[sizeof(Matrix)==32 && OFF(Matrix,translation)==20 && sizeof(Vecto
 #include <string.h>
 #include <limits.h>
 ''' + source + r'''
-FieldAnimObjectPrefix *D_800F32D0;
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxObjectPrefix *D_800F32D0;
+FieldFxTaskSlot *D_800F33E0;
 unsigned char D_8019A8C4;
 RenderEffectParameters D_800F3368;
 u16 D_800E11E4[16];
@@ -87,7 +87,7 @@ int Asset_Find08w(int id,int asset,int x,int y,int z) {
     if(id==0x549) {
         assert(asset==owners[0].progress && x==(short)matrices[0][0].translation[0]);
         assert(y==(short)matrices[0][0].translation[1] && z==(short)matrices[0][0].translation[2]);
-        D_800F33E0=(FieldAnimTaskSlot *)&emitters[1]; state.count=123; state.delay=456; D_8019A8C4=255;
+        D_800F33E0=(FieldFxTaskSlot *)&emitters[1]; state.count=123; state.delay=456; D_8019A8C4=255;
     } else {
         assert(id==0x5FE && asset==owners[mutate ? 2:0].progress && gteStage==7);
         assert(x==expected.x && y==expected.y && z==expected.z);
@@ -95,9 +95,9 @@ int Asset_Find08w(int id,int asset,int x,int y,int z) {
     }
     return -999;
 }
-int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback cb) {
+int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[1] && stride==20 && count==10);
-    assert(cb==(FieldAnimCallbackListCallback)func_80199148);
+    assert(cb==(FieldFxCallbackListCallback)func_80199148);
     assert(sounds==1 && state.count==0 && state.delay==0 && D_8019A8C4==0); return -17;
 }
 void *func_800CE610(char *p) {
@@ -113,7 +113,7 @@ int rand(void) {
 }
 int Inv_ScrambleGrid(void) {
     assert(randoms==1 && scrambles++==0 && particle.brightness==64 && particle.size==size);
-    if(mutate) D_800F32D0=(FieldAnimObjectPrefix *)&actors[1];
+    if(mutate) D_800F32D0=(FieldFxObjectPrefix *)&actors[1];
     return sample;
 }
 int rcos(int angle) { assert(randoms==3 && cosines++==0 && angle==rng(2)); return -12345; }
@@ -135,7 +135,7 @@ static void load_vector(void *p) {
 }
 static void transform(void) {
     assert(gteStage++==3 && vector);
-    if(mutate) { D_800F32D0=(FieldAnimObjectPrefix *)&actors[2]; state.count=-1; }
+    if(mutate) { D_800F32D0=(FieldFxObjectPrefix *)&actors[2]; state.count=-1; }
 }
 static void store_ir(void *p) {
     Vector *v=p;
@@ -144,8 +144,8 @@ static void store_ir(void *p) {
 }
 static void reset(void) {
     allocs=randoms=scrambles=sounds=cosines=sines=gteStage=0;
-    D_800F32D0=(FieldAnimObjectPrefix *)&actors[0];
-    D_800F33E0=(FieldAnimTaskSlot *)&emitters[0]; D_8019A8C4=0;
+    D_800F32D0=(FieldFxObjectPrefix *)&actors[0];
+    D_800F33E0=(FieldFxTaskSlot *)&emitters[0]; D_8019A8C4=0;
     memset(&particle,0x5A,sizeof(particle)); memcpy(&expected,&particle,sizeof(particle));
 }
 static void run(int count,int delay,int modelCount,int failure,int mutation,int stop) {

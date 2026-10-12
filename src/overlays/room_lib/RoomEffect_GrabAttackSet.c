@@ -497,7 +497,7 @@ int RoomEffect_GroundSweepController(int mode, RoomGroundSweep *sweep,
         sweep->heading.z = 0;
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &offset, &hand);
         func_800D1384(&hand, (GteShortVector *)sweep, 0x3F0, (unsigned char *)&colorA, (unsigned char *)&colorA, 0x8C, (struct FieldTrailPair *)sweep->trail, 1);
-        if (ANIM_TASK_AS(RoomSparkEventState)->active) {
+        if (FX_TASK_AS(RoomSparkEventState)->active) {
             RoomSparkNode **slot = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
             if (slot && *slot) {
                 u8 *flag = (*slot)->state;
@@ -508,7 +508,7 @@ int RoomEffect_GroundSweepController(int mode, RoomGroundSweep *sweep,
         sweep->timer = 0;
         sweep->sweeps = 8;
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0xC, 0x10,
-                             (FieldAnimCallbackListCallback)RoomEffect_GroundSweepMark);
+                             (FieldFxCallbackListCallback)RoomEffect_GroundSweepMark);
     case 1:
         func_800CE870((char *)D_8009D254, 1, (s16 *)&hand);
         hand.y = g_RoomFloorY->y;
@@ -546,7 +546,7 @@ int RoomEffect_GroundSweepController(int mode, RoomGroundSweep *sweep,
                 mark->frame = 0;
             }
             if (func_800C6B90(sweep, 50)) {
-                if (ANIM_TASK_AS(RoomSparkEventState)->active) {
+                if (FX_TASK_AS(RoomSparkEventState)->active) {
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if ((((RoomGroundSweepHitPool *)channel->pool)->object->flags & 0x3F000000) == 0x01000000) {
                         {
@@ -586,7 +586,7 @@ int RoomEffect_GroundSweepController(int mode, RoomGroundSweep *sweep,
                 mark->frame = 0;
             }
             if (func_800C6B90(sweep, 50)) {
-                if (ANIM_TASK_AS(RoomSparkEventState)->active) {
+                if (FX_TASK_AS(RoomSparkEventState)->active) {
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if ((((RoomGroundSweepHitPool *)channel->pool)->object->flags & 0x3F000000) == 0x01000000) {
                         {
@@ -852,7 +852,7 @@ int RoomEffect_OrbitTrailBurst(int mode, RoomOrbitTrailBurst *burst) {
         func_800CE870((char *)D_8009D254, 0, (s16 *)burst);
         func_800D3F64(0x596, func_800D3FD8());
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x28,
-                             (FieldAnimCallbackListCallback)RoomEffect_OrbitTrailParticle);
+                             (FieldFxCallbackListCallback)RoomEffect_OrbitTrailParticle);
     case 1:
         if (D_800E27EC < 4) {
             for (i = 0; i < 3; i++) {
@@ -988,7 +988,7 @@ int RoomEffect_RisingSprayParticle(int mode, RoomSpraySpark *spark) {
             position.x += rcos(spark->swirl) / 128;
             position.z += rsin(spark->swirl) / 128;
             if (func_800C6B90(&position, 100)) {
-                if (ANIM_TASK_AS(RoomSparkEventState)->active) {
+                if (FX_TASK_AS(RoomSparkEventState)->active) {
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if ((((RoomSprayHitPool *)channel->pool)->object->flags & 0x3F000000) == 0x01000000) {
                         {
@@ -1161,7 +1161,7 @@ int RoomEffect_RisingSprayController(int mode, void *state,
 
     switch (mode) {
     case 0:
-        if (ANIM_TASK_AS(RoomSparkEventState)->active) {
+        if (FX_TASK_AS(RoomSparkEventState)->active) {
             RoomSparkNode **slot = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
             if (slot && *slot) {
                 u8 *flag = (*slot)->state;
@@ -1169,7 +1169,7 @@ int RoomEffect_RisingSprayController(int mode, void *state,
             }
         }
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x37,
-                             (FieldAnimCallbackListCallback)RoomEffect_RisingSprayParticle);
+                             (FieldFxCallbackListCallback)RoomEffect_RisingSprayParticle);
     case 1:
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &offset, &position);
         position.y -= 0x50;

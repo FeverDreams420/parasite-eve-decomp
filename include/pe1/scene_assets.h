@@ -234,7 +234,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, loaded_scene_assets) == 0x18C,
 extern unsigned int g_GameStateFlags;
 /* Opaque handler pointers; the unload path reads the prefix declared above. */
 extern PmCommand **g_PmCmdHandlerTable;
-extern void *g_FieldAnimTaskPrograms[104];
+extern void *g_FieldFxTaskPrograms[104];
 
 int CdRom_ReadAssetSectors(unsigned int kind, unsigned int index, int channel,
                    void *buffer, u32 maximum, int blocking);

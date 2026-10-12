@@ -39,8 +39,8 @@ typedef char h[OFF(Particle,gravity)==8 ? 1:-1];
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_captured_matrices_fresh_fields_and_request(self):
         harness = '#include <assert.h>\n#include <stdint.h>\n#include <string.h>\n#include <limits.h>\n' + controller_source() + r'''
-FieldAnimObjectPrefix *D_800F32D0;
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxObjectPrefix *D_800F32D0;
+FieldFxTaskSlot *D_800F33E0;
 /* The player is read through the same transform-owner view as the actor. */
 FieldActor *g_PlayerEntity;
 #define PLAYER ((Instance *)g_PlayerEntity)
@@ -69,7 +69,7 @@ static uint32_t seed;
 static int word(uint32_t x) { int result; memcpy(&result,&x,4); return result; }
 static int half(uint32_t x) { x&=65535; return x<32768 ? (int)x:(int)x-65536; }
 int func_801968D8(int e,short *p) { return 0; }
-int func_800CE560(char *p,int size,int count,FieldAnimCallbackListCallback cb) {
+int func_800CE560(char *p,int size,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && size==12 && count==16 && (void *)cb==(void *)func_801968D8);
     setups++; return setupResult;
 }
@@ -83,7 +83,7 @@ void *func_800CE610(char *p) {
         g_PlayerEntity=(FieldActor *)&players[1];
         if(mutation) D_8019A82F=mutation==1 ? 0:255;
     } else PLAYER->transforms=&playerMatrices[2];
-    D_800F33E0=(FieldAnimTaskSlot *)&emitters[1];
+    D_800F33E0=(FieldFxTaskSlot *)&emitters[1];
     if(failure&(1<<i)) return 0;
     return &particles[i];
 }
@@ -107,7 +107,7 @@ static void reset(void) {
     allocs=randoms=setups=0;
     actor.instance=(struct RoomM350Instance *)&actorInstance;
     actorInstance.transforms=actorMatrices[0];
-    D_800F32D0=(FieldAnimObjectPrefix *)&actor; D_800F33E0=(FieldAnimTaskSlot *)&emitters[0];
+    D_800F32D0=(FieldFxObjectPrefix *)&actor; D_800F33E0=(FieldFxTaskSlot *)&emitters[0];
     players[0].transforms=&playerMatrices[0]; players[1].transforms=&playerMatrices[1];
     g_PlayerEntity=(FieldActor *)&players[0];
     memset(particles,0x5A,sizeof(particles)); memcpy(expected,particles,sizeof(particles));

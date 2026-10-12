@@ -4,7 +4,7 @@
 #define ROOM_LIB_H
 
 #include "../../../include/common.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "../../../include/pe1/gte.h"
 #include "../../../include/pe1/room_fx.h"
 #include "../../../include/pe1/field_script_context.h"
@@ -15,7 +15,7 @@
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_script_context.h"
 #include "pe1/field_vector_math.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "pe1/fieldfx_slot.h"
 #include "pe1/pe_image.h"
 #include "pe1/fieldfx_calls.h"
@@ -924,8 +924,8 @@ extern void *RoomMain_ActorPtr2;
         switch (mode) { \
         case 0: \
             FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomChanCtx)->w8, 0x13, &tmp, msg); \
-            if (ANIM_TASK_AS(RoomDlgState)->h12 == 0) goto send_pos; \
-            if (ANIM_TASK_AS(RoomDlgState)->h12 == 1) goto at_actor; \
+            if (FX_TASK_AS(RoomDlgState)->h12 == 0) goto send_pos; \
+            if (FX_TASK_AS(RoomDlgState)->h12 == 1) goto at_actor; \
             goto after; \
         send_pos: \
             func_800CE9D4(ANIM_OWNER_AS(RoomChanCtx)->w8, 0x13, &msg->sub); \
@@ -938,7 +938,7 @@ extern void *RoomMain_ActorPtr2;
                 msg->sub.h0 = 0x180; \
             } \
         after: \
-            if (ANIM_TASK_AS(RoomDlgState)->bD != 0) { \
+            if (FX_TASK_AS(RoomDlgState)->bD != 0) { \
                 RoomNodeB **q = ANIM_OWNER_AS(RoomChanCtx)->w8; \
                 if (q != 0 && *q != 0) { \
                     unsigned char *st = (*q)->state; \

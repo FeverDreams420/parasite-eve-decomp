@@ -2,12 +2,12 @@
 #define PE1_ROOM_SPARK_RING_BURST_H
 
 #include "common.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/gte_types.h"
 #include "pe1/render_object.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_owner_actor.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/floor_polygon.h"
 #include "pe1/psyq_gpu.h"

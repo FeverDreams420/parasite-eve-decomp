@@ -4,7 +4,7 @@
 #include "pe1/field_sprite_params.h"
 #include "pe1/room_m256_trail.h"
 #include "pe1/room_model_pulse_particle.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_owner_actor.h"

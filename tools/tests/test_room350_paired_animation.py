@@ -42,8 +42,8 @@ typedef char k[OFF(RoomM350SoundOwner,soundMode)==8 ? 1:-1];
         source = host_unit(CONTROLLER, path=find_definition(CONTROLLER, under=ROOM))
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
 typedef RoomM350SweepTrap Particle;
-FieldAnimObjectPrefix *D_800F32D0;
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxObjectPrefix *D_800F32D0;
+FieldFxTaskSlot *D_800F33E0;
 GteShortVector D_8019A778[2];
 RenderEffectParameters D_800F3368;
 static RoomM350Actor actors[2];
@@ -54,9 +54,9 @@ static RoomM350Emitter emitters[2];
 static int pools[2], calls, sounds, setups, failAt, setupResult;
 static Particle particles[2], expected[2];
 int func_80192E4C(int e, RoomM350SweepTrap *p) { return 0; }
-int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback cb) {
+int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && stride==8 && count==2);
-    assert(cb==(FieldAnimCallbackListCallback)func_80192E4C);
+    assert(cb==(FieldFxCallbackListCallback)func_80192E4C);
     setups++;
     return setupResult;
 }
@@ -64,8 +64,8 @@ void *func_800CE610(char *pool) {
     int index=calls++;
     assert(index<2 && pool==(char *)&pools[index ? 1:0]);
     /* Exercise reloads after allocation, including the failure path. */
-    D_800F33E0=(FieldAnimTaskSlot *)&emitters[1];
-    D_800F32D0=(FieldAnimObjectPrefix *)&actors[1];
+    D_800F33E0=(FieldFxTaskSlot *)&emitters[1];
+    D_800F32D0=(FieldFxObjectPrefix *)&actors[1];
     return index==failAt ? 0:&particles[index];
 }
 int Asset_Find08w(int sound,int mode,int x,int y,int z) {
@@ -77,8 +77,8 @@ int Asset_Find08w(int sound,int mode,int x,int y,int z) {
 }
 static void reset(void) {
     calls=sounds=setups=0;
-    D_800F32D0=(FieldAnimObjectPrefix *)&actors[0];
-    D_800F33E0=(FieldAnimTaskSlot *)&emitters[0];
+    D_800F32D0=(FieldFxObjectPrefix *)&actors[0];
+    D_800F33E0=(FieldFxTaskSlot *)&emitters[0];
     memset(particles,0x5A,sizeof(particles));
     memcpy(expected,particles,sizeof(particles));
 }

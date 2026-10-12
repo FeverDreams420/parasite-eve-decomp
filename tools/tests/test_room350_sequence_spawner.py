@@ -43,8 +43,8 @@ typedef char k[OFF(Particle,tail.value.spawn.state)==24 ? 1:-1];
     def test_initialization_and_crossing(self):
         harness = '#include <assert.h>\n#include <string.h>\n' + host_unit(SPAWNER, path=find_definition(SPAWNER, under=ROOM)) + r'''
 typedef RoomM350Particle Particle;
-FieldAnimObjectPrefix *D_800F32D0;
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxObjectPrefix *D_800F32D0;
+FieldFxTaskSlot *D_800F33E0;
 GteShortVector D_8019A7A0;
 unsigned char D_8019A804;
 short D_8019A802;
@@ -61,22 +61,22 @@ static int half(int value) {
     return bits<32768 ? (int)bits:(int)bits-65536;
 }
 int func_801947BC(int e, Particle *p) { return 0; }
-int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback cb) {
+int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pool && stride==28 && count==3);
-    assert(cb==(FieldAnimCallbackListCallback)func_801947BC);
+    assert(cb==(FieldFxCallbackListCallback)func_801947BC);
     setups++;
     return setupResult;
 }
 void *func_800CE610(char *p) {
     assert(p==(char *)&pool && calls++==0);
     /* Allocation is assumed successful by the target. Probe helper reloads. */
-    D_800F32D0=(FieldAnimObjectPrefix *)&actors[1]; D_8019A802=countAfterAllocation; D_8019A804=255;
+    D_800F32D0=(FieldFxObjectPrefix *)&actors[1]; D_8019A802=countAfterAllocation; D_8019A804=255;
     D_8019A7A0.x=-32768; D_8019A7A0.y=32767; D_8019A7A0.z=-123; D_8019A7A0.pad=99;
     return &particle;
 }
 static void reset(void) {
     calls=setups=0;
-    D_800F32D0=(FieldAnimObjectPrefix *)&actors[0]; D_800F33E0=(FieldAnimTaskSlot *)&emitter;
+    D_800F32D0=(FieldFxObjectPrefix *)&actors[0]; D_800F33E0=(FieldFxTaskSlot *)&emitter;
     D_8019A802=123; D_8019A804=0;
     memset(&particle,0x5A,sizeof(particle)); expected=particle;
     memset(&D_8019A7A0,0,sizeof(D_8019A7A0));

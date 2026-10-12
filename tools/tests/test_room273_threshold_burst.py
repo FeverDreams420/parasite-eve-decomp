@@ -44,8 +44,8 @@ static FieldActor owner,replacement;
 static RoomM273PlayerTransform transform;
 static Vector output;
 static unsigned char pool[64];
-FieldAnimTaskSlot *D_800F33E0=(FieldAnimTaskSlot *)&context;
-FieldAnimObjectPrefix *D_800F32D0=(FieldAnimObjectPrefix *)&stateContext;
+FieldFxTaskSlot *D_800F33E0=(FieldFxTaskSlot *)&context;
+FieldFxObjectPrefix *D_800F32D0=(FieldFxObjectPrefix *)&stateContext;
 FieldActor *g_PlayerEntity=&owner;
 unsigned char D_8019AE9A;
 short D_8019AE60,D_8019AE64;
@@ -53,9 +53,9 @@ unsigned short D_800E11FA,D_800E2850[8];
 RenderEffectParameters D_800F3368;
 static int init,allocations,fail;
 int func_80194470(int mode, Vector *input) { assert(0); return 0; }
-int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback callback) {
+int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(init++==0 && p==(char *)pool && stride==8 && count==4 &&
-           callback==(FieldAnimCallbackListCallback)func_80194470);
+           callback==(FieldFxCallbackListCallback)func_80194470);
     assert(D_8019AE60==0 && D_8019AE64==0); return 60;
 }
 void *func_800CE610(char *p) {

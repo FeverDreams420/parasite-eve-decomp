@@ -98,7 +98,7 @@ int RoomEffect_SeekingTrailParticle(int mode, RoomSeekingTrail *trail) {
             func_800D3AFC(point, 0x18, trail, 0);
             point = g_RoomSeekingTrailHistory[trail->slot].point;
             for (i = 0; i < 0x18; i++, point++) {
-                if (func_800C6B90(point, 0x68) && ANIM_TASK_AS(RoomSparkEventState)->active) {
+                if (func_800C6B90(point, 0x68) && FX_TASK_AS(RoomSparkEventState)->active) {
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if (((*(RoomSeekingTrailPacket **)channel->pool)->code & 0x3F000000) ==
                         0x01000000) {
@@ -253,7 +253,7 @@ int RoomEffect_SeekingTrailController(int mode, u16 *slot) {
 
     switch (mode) {
     case 0:
-        event = ANIM_TASK_AS(RoomSparkEventState);
+        event = FX_TASK_AS(RoomSparkEventState);
         *slot = 0;
         if (event->active != 0) {
             RoomSparkNode **nodes = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
@@ -265,7 +265,7 @@ int RoomEffect_SeekingTrailController(int mode, u16 *slot) {
             }
         }
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x18, 0x20,
-                             (FieldAnimCallbackListCallback)RoomEffect_SeekingTrailParticle);
+                             (FieldFxCallbackListCallback)RoomEffect_SeekingTrailParticle);
     case 1:
         if (D_800E27EC == mode) {
             trail = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
@@ -368,7 +368,7 @@ int RoomEffect_ModelBurstController(int mode, s16 *state) {
         handle = func_800D3FD8();
         func_800D3F64(0x5A4, handle);
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x10, 0x10,
-                             (FieldAnimCallbackListCallback)RoomEffect_ModelBurstParticle);
+                             (FieldFxCallbackListCallback)RoomEffect_ModelBurstParticle);
     case 1:
         if (*state < 0x80) *state += 8;
         if (D_800E27EC >= 2) {
@@ -500,7 +500,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
         case 0:
             trail->timer = 0;
             trail->state = 1;
-            trail->slot = ANIM_TASK_AS(RoomSparkEventState)->trailSlot;
+            trail->slot = FX_TASK_AS(RoomSparkEventState)->trailSlot;
             trail->fade = 0;
             FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 5, &rotation, trail);
             func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &angles);
@@ -544,7 +544,7 @@ int RoomEffect_ScatterTrailParticle(int mode, RoomSeekingTrail *trail) {
             func_800D3AFC(point, 0x18, trail, 0);
             point = g_RoomScatterTrailHistory[trail->slot].point;
             for (i = 0; i < 0x18; i++, point++) {
-                if (func_800C6B90(point, 0x64) && ANIM_TASK_AS(RoomSparkEventState)->active) {
+                if (func_800C6B90(point, 0x64) && FX_TASK_AS(RoomSparkEventState)->active) {
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     if (((*(RoomSeekingTrailPacket **)channel->pool)->code & 0x3F000000) ==
                         0x01000000) {
@@ -697,7 +697,7 @@ int RoomEffect_ScatterTrailController(int mode, u16 *slot) {
 
     switch (mode) {
     case 0:
-        event = ANIM_TASK_AS(RoomSparkEventState);
+        event = FX_TASK_AS(RoomSparkEventState);
         *slot = 0;
         if (event->active != 0) {
             RoomSparkNode **nodes = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
@@ -709,7 +709,7 @@ int RoomEffect_ScatterTrailController(int mode, u16 *slot) {
             }
         }
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x18, 0x20,
-                             (FieldAnimCallbackListCallback)RoomEffect_ScatterTrailParticle);
+                             (FieldFxCallbackListCallback)RoomEffect_ScatterTrailParticle);
     case 1:
         if (D_800E27EC == mode) {
             trail = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
@@ -808,7 +808,7 @@ int RoomEffect_ScatterBurstController(int mode, s16 *state) {
         handle = func_800D3FD8();
         func_800D3F64(0x5A4, handle);
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x10, 0x10,
-                             (FieldAnimCallbackListCallback)RoomEffect_ScatterBurstParticle);
+                             (FieldFxCallbackListCallback)RoomEffect_ScatterBurstParticle);
     case 1:
         if (*state < 0x80) *state += 8;
         if (D_800E27EC >= 2) {

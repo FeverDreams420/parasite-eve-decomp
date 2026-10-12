@@ -37,8 +37,8 @@ typedef char g[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
     def test_crossing_precedes_completion(self):
         source = host_unit(CONTROLLER, path=find_definition(CONTROLLER, under=ROOM))
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-FieldAnimObjectPrefix *D_800F32D0;
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxObjectPrefix *D_800F32D0;
+FieldFxTaskSlot *D_800F33E0;
 GteShortVector D_8019A778[2];
 RenderEffectParameters D_800F3368;
 u16 D_800E11E4[16];
@@ -49,9 +49,9 @@ static RoomM350Emitter emitters[2];
 static int pools[2], calls, setups, failAt, setupResult;
 static Particle particles[2], expected[2];
 int func_80193A80(int e, void **p) { return 0; }
-int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback cb) {
+int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && stride==4 && count==2);
-    assert(cb==(FieldAnimCallbackListCallback)func_80193A80);
+    assert(cb==(FieldFxCallbackListCallback)func_80193A80);
     setups++;
     return setupResult;
 }
@@ -59,14 +59,14 @@ void *func_800CE610(char *pool) {
     int index=calls++;
     assert(index<2 && pool==(char *)&pools[index ? 1:0]);
     /* Verify pool reload and absence of a post-allocation frame check. */
-    D_800F33E0=(FieldAnimTaskSlot *)&emitters[1];
+    D_800F33E0=(FieldFxTaskSlot *)&emitters[1];
     instance.frame=65535; instance.previousFrame=65535; instance.animation=0;
     return index==failAt ? 0:&particles[index];
 }
 static void reset(void) {
     calls=setups=0;
-    D_800F32D0=(FieldAnimObjectPrefix *)&actor;
-    D_800F33E0=(FieldAnimTaskSlot *)&emitters[0];
+    D_800F32D0=(FieldFxObjectPrefix *)&actor;
+    D_800F33E0=(FieldFxTaskSlot *)&emitters[0];
     memset(particles,0x5A,sizeof(particles));
     memcpy(expected,particles,sizeof(particles));
 }

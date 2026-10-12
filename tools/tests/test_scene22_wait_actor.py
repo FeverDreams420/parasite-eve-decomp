@@ -32,7 +32,7 @@ typedef char d[OFF(struct FieldActor,state)==0 ? 1:-1];
 WaitState state;
 FieldActorState owner;
 struct FieldActor actor = { &owner };
-struct FieldAnimTaskContext *D_800E2368 = (struct FieldAnimTaskContext *)&state;
+struct FieldFxTaskContext *D_800E2368 = (struct FieldFxTaskContext *)&state;
 struct FieldActor *RoomMain_ActorPtr = &actor;
 int D_800E27EC;
 int main(void) {

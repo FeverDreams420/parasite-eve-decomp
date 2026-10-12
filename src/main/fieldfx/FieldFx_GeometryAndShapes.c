@@ -18,7 +18,7 @@
 #include "pe1/field_glow_line.h"
 #include "pe1/field_textured_ribbon.h"
 #include "pe1/field_pulled_sprite.h"
-#include "pe1/field_anim.h"
+#include "pe1/fieldfx_task.h"
 #include "pe1/field_actor.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/pe_image.h"
@@ -2130,7 +2130,7 @@ int func_800D3F64(int arg0, int arg1) {
 }
 
 int func_800D3FD8(void) {
-    FieldAnimObjectPrefix *ctx;
+    FieldFxObjectPrefix *ctx;
     FieldActorState *node;
     int value;
 
@@ -2150,8 +2150,8 @@ int func_800D401C(int id)
 {
     /* Reused for the callback's additional payload size after the slot scan. */
     int result;
-    FieldAnimTaskContext *ctx = D_800E2368;
-    FieldAnimTaskSlot *slot = ctx->slots;
+    FieldFxTaskContext *ctx = D_800E2368;
+    FieldFxTaskSlot *slot = ctx->slots;
     int size;
     char *payload;
     for (result = 0; result < 8; result++, slot++) {
@@ -2186,10 +2186,10 @@ int func_800D401C(int id)
  * Opcodes: 0 stop (end of script), 1 set variable, 2 spawn task,
  * 3 count down a variable and jump while positive, 4 wait on a timer or
  * a variable, 5 toggle the owner's held state. */
-int func_800D413C(FieldAnimTaskOwner *owner)
+int func_800D413C(FieldFxTaskOwner *owner)
 {
-    FieldAnimTaskContext *context = &owner->tasks;
-    FieldAnimTaskSlot *slot;
+    FieldFxTaskContext *context = &owner->tasks;
+    FieldFxTaskSlot *slot;
     FieldActorState *state;
     unsigned int flags;
     int count;
@@ -2309,10 +2309,10 @@ int func_800D413C(FieldAnimTaskOwner *owner)
     return 0;
 }
 
-int func_800D4620(FieldAnimTaskOwner *owner)
+int func_800D4620(FieldFxTaskOwner *owner)
 {
-    FieldAnimTaskContext *context = &owner->tasks;
-    FieldAnimTaskSlot *slot;
+    FieldFxTaskContext *context = &owner->tasks;
+    FieldFxTaskSlot *slot;
     int i;
 
     owner->prefix.owner_kind = 1;
@@ -2336,13 +2336,13 @@ int func_800D4620(FieldAnimTaskOwner *owner)
     return 0;
 }
 
-int func_800D4698(FieldAnimTaskOwner *owner, int skip, int arg2, int arg3, int arg4, int arg5) {
-    FieldAnimTaskContext *ctx;
+int func_800D4698(FieldFxTaskOwner *owner, int skip, int arg2, int arg3, int arg4, int arg5) {
+    FieldFxTaskContext *ctx;
     int (*callback)(int, int, int, int);
 
     ctx = &owner->tasks;
     if (skip == 0) {
-        callback = ((FieldAnimTaskProgram *)owner->tasks.table)->initialize;
+        callback = ((FieldFxTaskProgram *)owner->tasks.table)->initialize;
         D_800F32D0 = &owner->prefix;
         D_800E2368 = ctx;
         if (callback != 0) {
@@ -2354,10 +2354,10 @@ int func_800D4698(FieldAnimTaskOwner *owner, int skip, int arg2, int arg3, int a
 
 /* Draws every live task of the owner: loads the current view matrix into
  * the GTE, then runs each task callback and its particle list in mode 2. */
-int func_800D4704(FieldAnimTaskOwner *owner)
+int func_800D4704(FieldFxTaskOwner *owner)
 {
-    FieldAnimTaskContext *context = &owner->tasks;
-    FieldAnimTaskSlot *slot = context->slots;
+    FieldFxTaskContext *context = &owner->tasks;
+    FieldFxTaskSlot *slot = context->slots;
     int i;
 
     D_800F32D0 = &owner->prefix;

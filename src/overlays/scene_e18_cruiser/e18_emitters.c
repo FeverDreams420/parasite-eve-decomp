@@ -1,8 +1,8 @@
 #include "common.h"
 #include "pe1/scene_e18_effects.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/field_sprite_draw.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "pe1/asset_find.h"
 #include "pe1/field_actor.h"
 #include "pe1/scene_e18_pulse.h"
@@ -237,7 +237,7 @@ int func_80192B8C(int mode, SceneE18EmitterState *state) {
         state->count = 0;
         state->delay = 0;
         return func_800CE560(ANIM_POOL_AS(SceneE18Emitter)->pool, 0x14, 4,
-                             (FieldAnimCallbackListCallback)func_801928CC);
+                             (FieldFxCallbackListCallback)func_801928CC);
     case 1:
         if (state->count < 4) {
             state->delay++;
@@ -400,7 +400,7 @@ int func_8019330C(int mode, SceneE18PulseState *state) {
         state->stage = 0;
         state->ticks = 0;
         return func_800CE560(ANIM_POOL_AS(SceneE18Emitter)->pool, 8, 4,
-                             (FieldAnimCallbackListCallback)func_80193018);
+                             (FieldFxCallbackListCallback)func_80193018);
 
     }
 update:
@@ -487,7 +487,7 @@ int func_801935F0(int mode, SceneE18EmitterState *state) {
         state->delay = 60;
         D_801941D0 = 0;
         return func_800CE560(ANIM_POOL_AS(SceneE18Emitter)->pool, 12, 10,
-                             (FieldAnimCallbackListCallback)func_80193488);
+                             (FieldFxCallbackListCallback)func_80193488);
     }
     case 1: {
         SceneE18RisingParticle *particle;
@@ -579,7 +579,7 @@ int func_80193A58(int mode, SceneE18WaveEffect *effect) {
     func_800CEE20((struct GteShortVector *)effect, (struct GteRotation *)&effect->field08, effect->wave, effect->wave,
                   0x40, palette & 0xffff, 3, effect->size, 0);
     position[0] = effect->x;
-    position[1] = ANIM_OWNER_AS(FieldAnimObjectPrefix)->actor->render_object.model_matrix.translation[1];
+    position[1] = ANIM_OWNER_AS(FieldFxObjectPrefix)->actor->render_object.model_matrix.translation[1];
     position[2] = effect->z;
     params[0] = 0x400;
     params[1] = (D_800E27EC * 3) << 6;
@@ -600,7 +600,7 @@ int func_80193C24(int mode, SceneE18EmitterState *state) {
         state->count = 0;
         state->delay = 0;
         return func_800CE560(ANIM_POOL_AS(SceneE18Emitter)->pool, 24, 8,
-                             (FieldAnimCallbackListCallback)func_80193A58);
+                             (FieldFxCallbackListCallback)func_80193A58);
     case 1:
         if (state->count < 24) {
             SceneE18WaveParticle *particle;

@@ -30,7 +30,7 @@ typedef char layout[sizeof(Particle)==8 && __alignof__(Particle)==2 &&
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_behavior(self):
         source = '#include <assert.h>\n#include <limits.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxTaskSlot *D_800F33E0;
 unsigned char D_8019AF6A,D_8019AF69;
 short D_8019AE84;
 RoomM273SweepPoint D_8019AEFC;
@@ -43,9 +43,9 @@ static int pool,initCalls,initResult,allocs,fail;
 static short expectedCounter;
 static unsigned short newY;
 int func_801974DC(int mode,Particle *p) { assert(0); return 0; }
-int func_800CE560(char *p,int size,int count,FieldAnimCallbackListCallback callback) {
+int func_800CE560(char *p,int size,int count,FieldFxCallbackListCallback callback) {
     assert(p==(char *)&pool && size==8 && count==12 &&
-           callback==(FieldAnimCallbackListCallback)func_801974DC);
+           callback==(FieldFxCallbackListCallback)func_801974DC);
     assert(D_8019AE84==0);
     ++initCalls;
     return initResult;
@@ -62,7 +62,7 @@ int main(void) {
     short counters[]={-32768,-1,0,1,2,32767};
     unsigned short values[]={0,255,256,32768,65535};
     unsigned short indices[]={0,1,32768,65535};
-    D_800F33E0=(FieldAnimTaskSlot *)&context; context.pool=&pool;
+    D_800F33E0=(FieldFxTaskSlot *)&context; context.pool=&pool;
     for(initResult=-1;initResult<=1;++initResult) {
         D_8019AE84=99;
         assert(func_80197648(0)==initResult);

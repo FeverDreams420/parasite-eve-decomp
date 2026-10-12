@@ -1,6 +1,6 @@
 #include "common.h"
 #include "pe1/gte.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/room_m123.h"
 #include "pe1/room_m123_joint_triangle.h"
 #include "room_m123_effects.h"
@@ -17,7 +17,7 @@
 #include "pe1/room_sound_slot.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_owner_actor.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "pe1/akao_send.h"
 
 typedef struct RoomPulseObject RoomPulseObject;
@@ -125,7 +125,7 @@ int func_801929FC(int mode) {
     switch (mode) {
     case 0:
         return func_800CE560(ANIM_POOL_AS(RoomM123Pool)->pool, 8, 16,
-                             (FieldAnimCallbackListCallback)func_8019251C);
+                             (FieldFxCallbackListCallback)func_8019251C);
     case 1:
         frame = D_800E27EC;
         if (frame == (frame / 6) * 6) {
@@ -240,7 +240,7 @@ int func_80192F0C(int mode, RoomM123GlowBurst *burst) {
     case 0:
         burst->timer = 0;
         return func_800CE560(ANIM_POOL_AS(RoomM123Pool)->pool, 8, 0x10,
-                             (FieldAnimCallbackListCallback)func_80192BDC);
+                             (FieldFxCallbackListCallback)func_80192BDC);
     case 1:
         if (burst->timer < 0x80) burst->timer += 4;
         if (D_800E27EC == 1) {
@@ -377,7 +377,7 @@ int func_80193618(int mode, RoomM123Beacon *state) {
         state->glow = 0;
         state->width = 0;
         state->depth = 0x1000;
-        if (ANIM_TASK_AS(RoomM123BeaconEvent)->active) {
+        if (FX_TASK_AS(RoomM123BeaconEvent)->active) {
             RoomM123BeaconPool *pool = ANIM_OWNER_AS(RoomM123BeaconChannel)->pool;
             if (pool && pool->node) {
                 u8 *flag = pool->node->state;
@@ -437,7 +437,7 @@ int func_80193618(int mode, RoomM123Beacon *state) {
         state->target.z += position.z;
         if (func_800CEB8C(state, &state->target, 0x140) == 0) return 0;
         if (state->armed == 0) return 0;
-        if (ANIM_TASK_AS(RoomM123BeaconEvent)->active) {
+        if (FX_TASK_AS(RoomM123BeaconEvent)->active) {
             RoomM123BeaconChannel *channel = ANIM_OWNER_AS(RoomM123BeaconChannel);
             if ((channel->pool->node->flags & 0x3F000000) == 0x01000000) {
                 ((RoomM123BeaconEntity *)D_8009D254)->actor->flags |= 0x4000;
@@ -695,7 +695,7 @@ int func_80194768(int mode)
     switch (mode) {
     case 0:
         return func_800CE560(ANIM_POOL_AS(RoomM123Pool)->pool, 8, 24,
-                             (FieldAnimCallbackListCallback)func_801945EC);
+                             (FieldFxCallbackListCallback)func_801945EC);
     case 1:
         if (D_800E27EC == 1) {
             for (i = 0; i < 24; i++) {
@@ -802,7 +802,7 @@ int func_80194C04(int mode, RoomPulseParticle *particle)
         func_800CE870(ANIM_OWNER_AS(RoomM123Pool)->pool, 1, &particle->z);
         particle->x = 0;
         particle->y = 0;
-        if (ANIM_TASK_AS(u8)[13]) {
+        if (FX_TASK_AS(u8)[13]) {
             pool = ANIM_OWNER_AS(RoomM123Pool)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
@@ -819,7 +819,7 @@ int func_80194C04(int mode, RoomPulseParticle *particle)
                 Akao_SendTableCommand(soundSlot->channel, 0x5B1, 0x80, 0x80, volume);
         }
         return func_800CE560(ANIM_POOL_AS(RoomM123Pool)->pool, 12, 8,
-                             (FieldAnimCallbackListCallback)func_80194A70);
+                             (FieldFxCallbackListCallback)func_80194A70);
     case 1:
         if (D_800E27EC < 32 && D_800E27EC % 6 == 0) {
             next = func_800CE610(ANIM_POOL_AS(RoomM123Pool)->pool);
@@ -832,7 +832,7 @@ int func_80194C04(int mode, RoomPulseParticle *particle)
                 next->frame = 0;
             }
         }
-        if (D_800E27EC == 32 && ANIM_TASK_AS(u8)[13]) {
+        if (D_800E27EC == 32 && FX_TASK_AS(u8)[13]) {
             context = ANIM_OWNER_AS(RoomM123Pool);
             if ((((RoomPulsePool *)context->pool)->object->flags & 0x3F000000) == 0x01000000) {
                 (*((RoomPulseGlobal **)D_8009D254))->flags |= 0x4000;
@@ -902,7 +902,7 @@ int func_80195114(int mode, RoomM123Burst *burst, int *choice) {
         burst->phase = 0;
         func_800D3F64(0x581, func_800D3FD8());
         return func_800CE560(ANIM_POOL_AS(RoomM123Pool)->pool, 12, 24,
-                             (FieldAnimCallbackListCallback)func_80194F68);
+                             (FieldFxCallbackListCallback)func_80194F68);
     case 1:
         if (D_800E27EC < 32) {
             child = func_800CE610(ANIM_POOL_AS(RoomM123Pool)->pool);

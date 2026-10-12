@@ -5,12 +5,12 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_sprite_params.h"
 #include "pe1/gte_types.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/scene_e22_quake_blast.h"
 #include "scene_e22_shared.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "pe1/field_actor.h"
 #include "pe1/room_floor.h"
 
@@ -146,9 +146,9 @@ int func_80192AF0(int mode, RoomOrbitRingBurst *burst) {
         burst->sweep = 1;
         func_800CE870((char *)RoomMain_ActorPtr, 0, (s16 *)burst);
         return func_800CE560(ANIM_POOL_AS(SceneE22BurstChannel)->pool, 0x14, 0x18,
-                             (FieldAnimCallbackListCallback)func_80192548);
+                             (FieldFxCallbackListCallback)func_80192548);
     case 1:
-        if (ANIM_TASK_AS(SceneE22BurstEvent)->running == 0)
+        if (FX_TASK_AS(SceneE22BurstEvent)->running == 0)
             return 1;
         if (D_800E27EC == 2) {
             func_800D3F64(0x5D4, func_800D3FD8());
@@ -336,7 +336,7 @@ int func_80193414(int mode, SceneE22LinkBeam *beam) {
         beam->alpha = 0x80;
         beam->reserved00 = 0;
         beam->timer = 0;
-        beam->jointSet = ANIM_TASK_AS(SceneE22EmberEvent)->jointSet;
+        beam->jointSet = FX_TASK_AS(SceneE22EmberEvent)->jointSet;
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].first,
                       &offset0, &first);
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].middle,
@@ -348,7 +348,7 @@ int func_80193414(int mode, SceneE22LinkBeam *beam) {
         func_800D1384(&middle, &last, 0x3F2, (unsigned char *)&color1, (unsigned char *)&color0, 0x80,
                       (struct FieldTrailPair *)beam->trailB, 1);
         return func_800CE560(ANIM_POOL_AS(SceneE22EmberChannel)->pool, 0x14, 8,
-                             (FieldAnimCallbackListCallback)func_801931B8);
+                             (FieldFxCallbackListCallback)func_801931B8);
     case 1:
         beam->timer++;
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].last,
@@ -558,7 +558,7 @@ int func_8019408C(int mode, SceneE22EmberBurst *burst) {
         func_800D3F64(0x5DB, func_800D3FD8());
         func_800CE870((char *)RoomMain_ActorPtr, 1, (s16 *)burst);
         burst->y = g_RoomFloorY->y;
-        if (ANIM_TASK_AS(SceneE22EmberEvent)->active) {
+        if (FX_TASK_AS(SceneE22EmberEvent)->active) {
             pool = ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
@@ -567,7 +567,7 @@ int func_8019408C(int mode, SceneE22EmberBurst *burst) {
             }
         }
         return func_800CE560(ANIM_POOL_AS(SceneE22EmberChannel)->pool, 0x14, 0x28,
-                             (FieldAnimCallbackListCallback)func_80193940);
+                             (FieldFxCallbackListCallback)func_80193940);
     case 1:
         switch (burst->state) {
         case 0:
@@ -621,7 +621,7 @@ int func_8019408C(int mode, SceneE22EmberBurst *burst) {
             }
             if (burst->timer == 0x18)
                 func_80020DD0();
-            if (burst->timer == 0x19 && ANIM_TASK_AS(SceneE22EmberEvent)->active) {
+            if (burst->timer == 0x19 && FX_TASK_AS(SceneE22EmberEvent)->active) {
                 channel = ANIM_OWNER_AS(SceneE22EmberObjectChannel);
                 if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                     RoomMain_ActorPtr->state->flags |= 0x4000;
@@ -841,7 +841,7 @@ int func_80194F60(int mode, GteShortVector *anchor) {
         func_800D3F64(0x5DC, func_800D3FD8());
         func_800D3F64(0x5DD, 0x80);
         func_800CE870((char *)RoomMain_ActorPtr, 0, (s16 *)anchor);
-        if (ANIM_TASK_AS(SceneE22EmberEvent)->active) {
+        if (FX_TASK_AS(SceneE22EmberEvent)->active) {
             pool = ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
@@ -850,7 +850,7 @@ int func_80194F60(int mode, GteShortVector *anchor) {
             }
         }
         return func_800CE560(ANIM_POOL_AS(SceneE22EmberChannel)->pool, 0x14, 0x3C,
-                             (FieldAnimCallbackListCallback)func_8019485C);
+                             (FieldFxCallbackListCallback)func_8019485C);
     case 1:
         if (D_800E27EC < 0x1C)
             func_80020D50();
@@ -897,7 +897,7 @@ int func_80194F60(int mode, GteShortVector *anchor) {
         }
         if (D_800E27EC == 0x1C)
             func_80020DD0();
-        if (D_800E27EC == 0x1D && ANIM_TASK_AS(SceneE22EmberEvent)->active) {
+        if (D_800E27EC == 0x1D && FX_TASK_AS(SceneE22EmberEvent)->active) {
             channel = ANIM_OWNER_AS(SceneE22EmberObjectChannel);
             if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                 RoomMain_ActorPtr->state->flags |= 0x4000;
@@ -1066,7 +1066,7 @@ int func_80195B40(int mode, SceneE22SwirlRing *swirl) {
         }
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, 0, &offset, swirl);
         return func_800CE560(ANIM_POOL_AS(SceneE22EmberChannel)->pool, 0x14, 0x28,
-                             (FieldAnimCallbackListCallback)func_801957CC);
+                             (FieldFxCallbackListCallback)func_801957CC);
     case 1:
         position.x = swirl->x;
         position.y = swirl->y;
@@ -1282,7 +1282,7 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
         bolt->heading.x -= 0x220;
         bolt->heading.y -= 0x80;
         return func_800CE560(ANIM_POOL_AS(SceneE22EmberChannel)->pool, 0x14, 0x18,
-                             (FieldAnimCallbackListCallback)func_801962FC);
+                             (FieldFxCallbackListCallback)func_801962FC);
     case 1:
         func_800CFB7C(&bolt->heading, 0x140, &position);
         position.x += bolt->position.x;
@@ -1625,7 +1625,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
         D_80199504 = 0;
         D_80199500 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54C4704);
         FieldFx_ModelScrollUv(D_80199500, 0, 0);
-        if (ANIM_TASK_AS(SceneE22EmberEvent)->active) {
+        if (FX_TASK_AS(SceneE22EmberEvent)->active) {
             SceneE22EmberSlot *pool = ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool;
             if (pool) {
                 SceneE22EmberObject *object = pool->object;
@@ -1641,7 +1641,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
         bolt->heading.y = -0x200;
         bolt->heading.z = 0;
         return func_800CE560(ANIM_POOL_AS(SceneE22EmberChannel)->pool, 0x14, 0x20,
-                             (FieldAnimCallbackListCallback)func_8019702C);
+                             (FieldFxCallbackListCallback)func_8019702C);
     case 1:
         func_800CFB7C(&bolt->heading, -((0x10 - bolt->sweep) * 320), &bolt->position);
         bolt->position.x += bolt->origin.x;
@@ -1922,10 +1922,10 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
         fx->position.y = target->y;
         fx->position.z = target->z;
         return func_800CE560(ANIM_POOL_AS(SceneE22QuakeChannel)->pool, 0xC, 0x20,
-                             (FieldAnimCallbackListCallback)func_801981B0);
+                             (FieldFxCallbackListCallback)func_801981B0);
     case 1:
         fx->timer++;
-        if (fx->timer == 6 && func_800C6B90(fx, target->radius) && ANIM_TASK_AS(SceneE22QuakeEvent)->active) {
+        if (fx->timer == 6 && func_800C6B90(fx, target->radius) && FX_TASK_AS(SceneE22QuakeEvent)->active) {
             channel = ANIM_OWNER_AS(SceneE22QuakeObjectChannel);
             if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                 RoomMain_ActorPtr->state->flags |= 0x4000;
@@ -2141,19 +2141,19 @@ int *func_80198F44(void) {
 int func_80198F54(int mode) {
     switch (mode) {
     case 0:
-        ANIM_TASK_AS(WaitState)->complete = 0;
-        ANIM_TASK_AS(WaitState)->signaled = 0;
+        FX_TASK_AS(WaitState)->complete = 0;
+        FX_TASK_AS(WaitState)->signaled = 0;
         RoomMain_ActorPtr->state->flags &= ~0x10000000u;
         return 0;
     case 1:
         if (RoomMain_ActorPtr->state->flags & 0x10000000u) {
-            ANIM_TASK_AS(WaitState)->complete = 1;
-            ANIM_TASK_AS(WaitState)->signaled = 1;
+            FX_TASK_AS(WaitState)->complete = 1;
+            FX_TASK_AS(WaitState)->signaled = 1;
             return 1;
         }
         if (D_800E27EC >= 100) {
-            ANIM_TASK_AS(WaitState)->complete = 1;
-            ANIM_TASK_AS(WaitState)->signaled = 0;
+            FX_TASK_AS(WaitState)->complete = 1;
+            FX_TASK_AS(WaitState)->signaled = 0;
             return 1;
         }
         break;

@@ -33,7 +33,7 @@ typedef char layout[sizeof(Effect)==4 && sizeof(GteRotation)==8 &&
         source = '#include <assert.h>\n#include <limits.h>\n#include <string.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
 int D_800E27EC;
 GteSineWord D_800966EC[4096];
-FieldAnimObjectPrefix *D_800F32D0;
+FieldFxObjectPrefix *D_800F32D0;
 unsigned char D_8019ACDC[4],D_8019ACE0[4];
 static Object object;
 static RoomM273EffectStateContext context;
@@ -55,7 +55,7 @@ int main(void) {
     int times[]={INT_MIN,-1,0,15,16,INT_MAX};
     unsigned short values[]={0,1,32767,32768,65535};
     int f,j,k,i;
-    D_800F32D0=(FieldAnimObjectPrefix *)&context;
+    D_800F32D0=(FieldFxObjectPrefix *)&context;
     context.state.mode=(RoomM273EffectModeState *)&object; effect.position=&position;
     memset(object.unknown,0xA5,sizeof(object.unknown));
     for(i=0;i<6;++i) {

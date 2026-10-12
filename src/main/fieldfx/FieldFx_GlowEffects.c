@@ -1,17 +1,17 @@
 #include "common.h"
 #include "pe1/fieldfx_slot.h"
 #include "pe1/field_glow_sprite.h"
-#include "pe1/field_anim_particle.h"
+#include "pe1/fieldfx_particle.h"
 #include "pe1/field_sprite_state.h"
 #include "pe1/gte_types.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/psyq_libc.h"
 #include "pe1/battle.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "pe1/field_effect_modules.h"
 #include "pe1/field_glow_layers.h"
 #include "pe1/gte.h"
-#include "pe1/field_anim.h"
+#include "pe1/fieldfx_task.h"
 #include "pe1/fieldfx_state.h"
 
 int GlowEffect_PlantScript(char *object) {
@@ -91,7 +91,7 @@ int GlowEffect_ClassNop0(void) {
     return 0;
 }
 
-int func_800C7DE4(FieldAnimObjectPrefix *obj) {
+int func_800C7DE4(FieldFxObjectPrefix *obj) {
     FieldActor *data = obj->actor;
 
     D_800E2348.x = data->render_object.matrices[19].translation[0];
@@ -101,7 +101,7 @@ int func_800C7DE4(FieldAnimObjectPrefix *obj) {
     func_800CEDA8(0);
 }
 
-int func_800C7E50(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
+int func_800C7E50(void *arg0, void *arg1, FieldFxMovingParticle *anim) {
     GteShortVector vec;
     RenderMatrix *model;
 
@@ -119,8 +119,8 @@ int func_800C7E50(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
     anim->age = 0;
 }
 
-int func_800C7F60(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
-    FieldAnimMatrixGlow *anim_s0 = anim;
+int func_800C7F60(void *arg0, void *arg1, FieldFxMatrixGlow *anim) {
+    FieldFxMatrixGlow *anim_s0 = anim;
     GteShortVector out;
     GteShortVector *entry;
     FieldActor *data;
@@ -139,7 +139,7 @@ int func_800C7F60(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
     anim_s0->brightness = 0x7F;
 }
 
-int func_800C8064(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
+int func_800C8064(void *arg0, void *arg1, FieldFxGlowPoint *anim) {
     GteShortVector in;
     GteShortVector out;
     RenderMatrix *model;
@@ -156,7 +156,7 @@ int func_800C8064(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
     anim->scale = 0;
 }
 
-int func_800C811C(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
+int func_800C811C(void *arg0, void *arg1, FieldFxGlowPoint *anim) {
     BattleEntity *entity_v1 = D_8009D254;
     int value;
     int z_v1;
@@ -170,8 +170,8 @@ int func_800C811C(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
     anim->position.z = z_v1;
 }
 
-int func_800C815C(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
-    FieldAnimMatrixGlow *anim_s0 = anim;
+int func_800C815C(void *arg0, void *arg1, FieldFxMatrixGlow *anim) {
+    FieldFxMatrixGlow *anim_s0 = anim;
     GteShortVector out;
     FieldActor *data;
     RenderMatrix *model;
@@ -194,7 +194,7 @@ int func_800C815C(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
 void func_800C8268(void) {
 }
 
-int func_800C8270(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
+int func_800C8270(void *arg0, void *arg1, FieldFxMatrixGlow *anim) {
     GteMatrix matrix;
     GteShortVector rot;
     GteVector scaleCopy;
@@ -235,7 +235,7 @@ int func_800C8270(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
 #define GLOW_LAYERS_SPRITE D_800F3498
 #include "FieldFx_GlowLayers.inc"
 
-int func_800C8870(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
+int func_800C8870(void *arg0, void *arg1, FieldFxGlowPoint *anim) {
     GteMatrix matrix;
     int scale;
     u16 field;
@@ -277,7 +277,7 @@ int func_800C8870(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
     func_800C42A4(&D_800E2318, &matrix, 1);
 }
 
-int func_800C8970(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
+int func_800C8970(void *arg0, void *arg1, FieldFxGlowPoint *anim) {
     u16 *field = &D_800F34D8.depth;
     GteMatrix matrix;
     GteShortVector rot;
@@ -308,7 +308,7 @@ int func_800C8970(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
     func_800C42A4(&D_800F34D8, &matrix, 0);
 }
 
-int func_800C8A88(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
+int func_800C8A88(void *arg0, void *arg1, FieldFxMatrixGlow *anim) {
     u16 *field = &D_800F34D8.depth;
     GteMatrix matrix;
     GteVector scaleCopy;
@@ -342,8 +342,8 @@ int func_800C8BB4(void *arg0, u8 *state) {
     state[1] = ret;
     return ret;
 }
-int func_800C8BC0(void *arg0, FieldFxSlot *state, FieldAnimMovingParticle *anim) {
-    FieldAnimMovingParticle *particle = anim;
+int func_800C8BC0(void *arg0, FieldFxSlot *state, FieldFxMovingParticle *anim) {
+    FieldFxMovingParticle *particle = anim;
     u16 vy = anim->velocity.y;
     u16 vz = anim->velocity.z;
     int age;
@@ -464,7 +464,7 @@ int GlowEffectB_ClassNop0(void) {
     return 0;
 }
 
-int func_800C8F28(FieldAnimObjectPrefix *obj) {
+int func_800C8F28(FieldFxObjectPrefix *obj) {
     FieldActor *data = obj->actor;
 
     D_800E2350.x = data->render_object.matrices[19].translation[0];
@@ -474,7 +474,7 @@ int func_800C8F28(FieldAnimObjectPrefix *obj) {
     func_800CEDA8(0);
 }
 
-int func_800C8F94(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
+int func_800C8F94(void *arg0, void *arg1, FieldFxMovingParticle *anim) {
     GteShortVector vec;
 
     vec.x = -((rand() % 3) + 9);
@@ -495,8 +495,8 @@ int func_800C8F94(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
     }
 }
 
-int func_800C90A4(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
-    FieldAnimMatrixGlow *anim_s0 = anim;
+int func_800C90A4(void *arg0, void *arg1, FieldFxMatrixGlow *anim) {
+    FieldFxMatrixGlow *anim_s0 = anim;
     GteShortVector out;
     FieldActor *data;
     GteShortVector *entry;
@@ -515,7 +515,7 @@ int func_800C90A4(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
     anim_s0->brightness = 0x7F;
 }
 
-int func_800C91A8(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
+int func_800C91A8(void *arg0, void *arg1, FieldFxGlowPoint *anim) {
     GteShortVector in;
     GteShortVector out;
 
@@ -539,7 +539,7 @@ int func_800C91A8(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
 void func_800C9260(void) {
 }
 
-int func_800C9268(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
+int func_800C9268(void *arg0, void *arg1, FieldFxMatrixGlow *anim) {
     GteMatrix matrix;
     GteShortVector rot;
     GteVector scaleCopy;
@@ -580,7 +580,7 @@ int func_800C9268(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
 #define GLOW_LAYERS_SPRITE D_800F34A8
 #include "FieldFx_GlowLayers.inc"
 
-int func_800C9868(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
+int func_800C9868(void *arg0, void *arg1, FieldFxGlowPoint *anim) {
     u16 *field_s3 = &D_800E2328.depth;
     GteMatrix matrix;
     int scale;
@@ -628,8 +628,8 @@ int func_800C9968(void *arg0, u8 *state) {
     state[1] = ret;
     return ret;
 }
-int func_800C9974(void *arg0, FieldFxSlot *state, FieldAnimMovingParticle *anim) {
-    FieldAnimMovingParticle *particle = anim;
+int func_800C9974(void *arg0, FieldFxSlot *state, FieldFxMovingParticle *anim) {
+    FieldFxMovingParticle *particle = anim;
     u16 vy = anim->velocity.y;
     u16 vz = anim->velocity.z;
     int age;
@@ -650,7 +650,7 @@ int func_800C9974(void *arg0, FieldFxSlot *state, FieldAnimMovingParticle *anim)
         state->flag = 2;
     }
 }
-int func_800C9A00(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
+int func_800C9A00(void *arg0, FieldFxSlot *state, FieldFxGlowPoint *anim) {
     s16 value = anim->brightness - 0x14;
 
     anim->brightness = value;
@@ -659,7 +659,7 @@ int func_800C9A00(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
         state->flag = 2;
     }
 }
-int func_800C9A34(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
+int func_800C9A34(void *arg0, FieldFxSlot *state, FieldFxGlowPoint *anim) {
     anim->brightness = anim->brightness - 8;
     anim->scale = (u16)anim->scale + 0x28;
     if ((s16)anim->brightness < 0x14) {
@@ -726,7 +726,7 @@ int GlowEffectC_ClassNop0(void) {
     return 0;
 }
 
-int func_800C9C20(FieldAnimObjectPrefix *obj) {
+int func_800C9C20(FieldFxObjectPrefix *obj) {
     FieldActor *data = obj->actor;
 
     D_800E2358.x = data->render_object.matrices[19].translation[0];
@@ -736,7 +736,7 @@ int func_800C9C20(FieldAnimObjectPrefix *obj) {
     func_800CEDA8(0);
 }
 
-int func_800C9C8C(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
+int func_800C9C8C(void *arg0, void *arg1, FieldFxMovingParticle *anim) {
     GteShortVector vec;
     RenderMatrix *model;
 
@@ -754,8 +754,8 @@ int func_800C9C8C(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
     anim->age = 0;
 }
 
-int func_800C9D9C(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
-    FieldAnimMatrixGlow *anim_s0 = anim;
+int func_800C9D9C(void *arg0, void *arg1, FieldFxMatrixGlow *anim) {
+    FieldFxMatrixGlow *anim_s0 = anim;
     GteShortVector out;
     FieldActor *data;
     GteShortVector *entry;
@@ -777,7 +777,7 @@ int func_800C9D9C(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
 void func_800C9EA0(void) {
 }
 
-int func_800C9EA8(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
+int func_800C9EA8(void *arg0, void *arg1, FieldFxMatrixGlow *anim) {
     GteMatrix matrix;
     GteShortVector rot;
     GteVector scaleCopy;
@@ -825,8 +825,8 @@ int func_800CA4A8(void *arg0, FieldFxSlot *state) {
     return ret;
 }
 
-int func_800CA4B4(void *arg0, FieldFxSlot *state, FieldAnimMovingParticle *anim) {
-    FieldAnimMovingParticle *particle = anim;
+int func_800CA4B4(void *arg0, FieldFxSlot *state, FieldFxMovingParticle *anim) {
+    FieldFxMovingParticle *particle = anim;
     u16 vy = anim->velocity.y;
     u16 vz = anim->velocity.z;
     int age;
@@ -848,7 +848,7 @@ int func_800CA4B4(void *arg0, FieldFxSlot *state, FieldAnimMovingParticle *anim)
     }
 }
 
-int func_800CA540(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
+int func_800CA540(void *arg0, FieldFxSlot *state, FieldFxGlowPoint *anim) {
     s16 value = anim->brightness - 0x14;
 
     anim->brightness = value;
@@ -940,7 +940,7 @@ int FourLayerGlow_ClassNop0(void) {
     return 0;
 }
 
-int func_800CA7B8(FieldAnimObjectPrefix *obj) {
+int func_800CA7B8(FieldFxObjectPrefix *obj) {
     FieldActor *data = obj->actor;
 
     D_800E2360.x = data->render_object.matrices[19].translation[0];
@@ -950,7 +950,7 @@ int func_800CA7B8(FieldAnimObjectPrefix *obj) {
     func_800CEDA8(0);
 }
 
-int func_800CA824(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
+int func_800CA824(void *arg0, void *arg1, FieldFxMovingParticle *anim) {
     GteShortVector vec;
 
     vec.x = -((rand() % 3) + 9);
@@ -971,8 +971,8 @@ int func_800CA824(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
     }
 }
 
-int func_800CA934(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
-    FieldAnimMatrixGlow *anim_s0 = anim;
+int func_800CA934(void *arg0, void *arg1, FieldFxMatrixGlow *anim) {
+    FieldFxMatrixGlow *anim_s0 = anim;
     GteShortVector out;
     FieldActor *data;
     GteShortVector *entry;
@@ -991,8 +991,8 @@ int func_800CA934(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
     anim_s0->brightness = 0x7F;
 }
 
-int func_800CAA38(void *arg0, void *arg1, FieldAnimTwinGlow *anim) {
-    FieldAnimTwinGlow *anim_s0;
+int func_800CAA38(void *arg0, void *arg1, FieldFxTwinGlow *anim) {
+    FieldFxTwinGlow *anim_s0;
     u16 *field_s1;
     GteShortVector *out_s2;
     u16 z_base_v1;
@@ -1025,7 +1025,7 @@ int func_800CAA38(void *arg0, void *arg1, FieldAnimTwinGlow *anim) {
     anim_s0->position[1].z = z_base_v1 + z_out_a0;
 }
 
-int func_800CAB88(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
+int func_800CAB88(void *arg0, void *arg1, FieldFxGlowPoint *anim) {
     u16 x = D_800E2360.x;
     BattleEntity *data = D_8009D254;
     int y;
@@ -1040,8 +1040,8 @@ int func_800CAB88(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
     anim->position.z = z;
 }
 
-int func_800CABC8(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
-    FieldAnimMatrixGlow *anim_s0 = anim;
+int func_800CABC8(void *arg0, void *arg1, FieldFxMatrixGlow *anim) {
+    FieldFxMatrixGlow *anim_s0 = anim;
     GteShortVector out;
     FieldActor *data;
     GteShortVector *entry;
@@ -1064,7 +1064,7 @@ int func_800CABC8(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
 void func_800CACD4(void) {
 }
 
-int func_800CACDC(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
+int func_800CACDC(void *arg0, void *arg1, FieldFxMatrixGlow *anim) {
     GteMatrix matrix;
     GteShortVector rot;
     GteVector scaleCopy;
@@ -1290,7 +1290,7 @@ void func_800CAE0C(void *object, void *slot, FieldGlowLayers *glow)
     func_800C42A4(&D_800F34C8, workMatrix, 0);
 }
 
-int func_800CB750(void *arg0, void *arg1, FieldAnimTwinGlow *anim) {
+int func_800CB750(void *arg0, void *arg1, FieldFxTwinGlow *anim) {
     u16 *field_s4 = &D_800E2338.depth;
     GteMatrix matrix;
     int scale;
@@ -1358,7 +1358,7 @@ int func_800CB750(void *arg0, void *arg1, FieldAnimTwinGlow *anim) {
     func_800C42A4(&D_800E2338, &matrix, 1);
 }
 
-int func_800CB8E0(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
+int func_800CB8E0(void *arg0, void *arg1, FieldFxMovingParticle *anim) {
     s16 *position;
     u16 *field = &D_800F34E8.depth;
     GteMatrix matrix;
@@ -1391,7 +1391,7 @@ int func_800CB8E0(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
     func_800C42A4(&D_800F34E8, &matrix, 0);
 }
 
-int func_800CB9F8(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
+int func_800CB9F8(void *arg0, void *arg1, FieldFxMatrixGlow *anim) {
     u16 *field = &D_800F34E8.depth;
     GteMatrix matrix;
     GteVector scaleCopy;
@@ -1426,8 +1426,8 @@ int func_800CBB24(void *arg0, FieldFxSlot *state) {
     return ret;
 }
 
-int func_800CBB30(void *arg0, FieldFxSlot *state, FieldAnimMovingParticle *anim) {
-    FieldAnimMovingParticle *particle = anim;
+int func_800CBB30(void *arg0, FieldFxSlot *state, FieldFxMovingParticle *anim) {
+    FieldFxMovingParticle *particle = anim;
     u16 vy = anim->velocity.y;
     u16 vz = anim->velocity.z;
     int age;
@@ -1449,7 +1449,7 @@ int func_800CBB30(void *arg0, FieldFxSlot *state, FieldAnimMovingParticle *anim)
     }
 }
 
-int func_800CBBBC(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
+int func_800CBBBC(void *arg0, FieldFxSlot *state, FieldFxGlowPoint *anim) {
     s16 value = anim->brightness - 0x14;
 
     anim->brightness = value;
@@ -1459,7 +1459,7 @@ int func_800CBBBC(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
     }
 }
 
-int func_800CBBF0(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
+int func_800CBBF0(void *arg0, FieldFxSlot *state, FieldFxGlowPoint *anim) {
     anim->brightness = anim->brightness - 8;
     anim->scale = (u16)anim->scale + 0x3C;
     if ((s16)anim->brightness < 0x14) {
@@ -1468,7 +1468,7 @@ int func_800CBBF0(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
     }
 }
 
-int func_800CBC2C(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
+int func_800CBC2C(void *arg0, FieldFxSlot *state, FieldFxGlowPoint *anim) {
     anim->brightness = anim->brightness - 8;
     anim->scale = (u16)anim->scale + 0x78;
     if ((s16)anim->brightness < 0x14) {
@@ -1477,7 +1477,7 @@ int func_800CBC2C(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
     }
 }
 
-int func_800CBC68(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
+int func_800CBC68(void *arg0, FieldFxSlot *state, FieldFxGlowPoint *anim) {
     anim->brightness = anim->brightness - 8;
     anim->scale = (u16)anim->scale + 0xA;
     if ((s16)anim->brightness < 0x14) {

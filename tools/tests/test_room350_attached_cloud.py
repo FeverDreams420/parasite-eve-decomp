@@ -40,8 +40,8 @@ typedef char i[OFF(RoomM350EffectEmitter,pool)==8 ? 1:-1];
 typedef GteShortVector Vector;
 typedef GteMatrix Matrix;
 typedef RoomM350CloudParticle Particle;
-FieldAnimObjectPrefix *D_800F32D0;
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxObjectPrefix *D_800F32D0;
+FieldFxTaskSlot *D_800F33E0;
 unsigned char D_8019A8BE;
 /* The retail halfword names are fields of the sprite parameter block. */
 RenderEffectParameters D_800F3368;
@@ -68,7 +68,7 @@ static int word(uint32_t x) { int result; memcpy(&result,&x,4); return result; }
 static int half(uint32_t x) { x &= 65535; return x<32768 ? (int)x:(int)x-65536; }
 static uint32_t rng(int n) { return seed+(uint32_t)n*0x87654321u; }
 int func_80198860(int e,Particle *p) { return 0; }
-int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback cb) {
+int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && stride==20 && count==16 && (void *)cb==(void *)func_80198860);
     return -123;
 }
@@ -83,8 +83,8 @@ int Inv_ScrambleGrid(void) {
     assert(allocs==i+1);
     if(n%5==4) {
         assert(applications==i+1);
-        D_800F32D0=(FieldAnimObjectPrefix *)&actors[1];
-        D_800F33E0=(FieldAnimTaskSlot *)&emitters[1];
+        D_800F32D0=(FieldFxObjectPrefix *)&actors[1];
+        D_800F33E0=(FieldFxTaskSlot *)&emitters[1];
     }
     return word(rng(n));
 }
@@ -105,8 +105,8 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *m,const GteShortVector *v,GteShor
 }
 static void reset(void) {
     allocs=randoms=rotations=applications=0;
-    D_8019A8BE=0; D_800F32D0=(FieldAnimObjectPrefix *)&actors[0];
-    D_800F33E0=(FieldAnimTaskSlot *)&emitters[0];
+    D_8019A8BE=0; D_800F32D0=(FieldFxObjectPrefix *)&actors[0];
+    D_800F33E0=(FieldFxTaskSlot *)&emitters[0];
     memset(particles,0x5A,sizeof(particles));
 }
 int main(void) {

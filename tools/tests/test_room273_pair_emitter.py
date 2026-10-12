@@ -33,7 +33,7 @@ RenderEffectParameters D_800F3368;
 #define memset __builtin_memset
 struct SceneAssetBlob *D_800B0E64[1];
 void *D_8019AF6C;
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxTaskSlot *D_800F33E0;
 EmitterState D_8019AF84;
 static RoomM273PoolContext context;
 static int asset,pool,stage,initResult,allocs,failAt;
@@ -47,9 +47,9 @@ void FieldFx_ModelScrollUv(union FieldTexturedModel *handle,u8 a,u8 b) {
     context.pool=&pool;
 }
 int func_80198E94(int mode,GteShortVector *p) { assert(0); return 0; }
-int func_800CE560(char *p,int size,int count,FieldAnimCallbackListCallback callback) {
+int func_800CE560(char *p,int size,int count,FieldFxCallbackListCallback callback) {
     assert(stage++==2 && p==(char *)&pool && size==8 && count==4);
-    assert(callback==(FieldAnimCallbackListCallback)func_80198E94);
+    assert(callback==(FieldFxCallbackListCallback)func_80198E94);
     return initResult;
 }
 void *func_800CE610(char *p) {
@@ -61,7 +61,7 @@ void *func_800CE610(char *p) {
 int main(void) {
     int mask,fail,i,next,successful,expectedCalls,stopped;
     D_800B0E64[0]=(struct SceneAssetBlob *)&context;
-    D_800F33E0=(FieldAnimTaskSlot *)&context;
+    D_800F33E0=(FieldFxTaskSlot *)&context;
     for(initResult=-1;initResult<=1;++initResult) {
         stage=0; context.pool=0;
         assert(func_801993F0(0)==initResult && stage==3);

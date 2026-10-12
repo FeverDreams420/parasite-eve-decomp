@@ -2,7 +2,7 @@
 #define ROOM_M273_H
 
 #include "pe1/render_object.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/field_actor_script_state.h"
 #include "room_m273_effects.h"
 #include "pe1/room_floor.h"

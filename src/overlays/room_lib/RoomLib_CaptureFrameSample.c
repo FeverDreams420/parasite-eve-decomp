@@ -7,7 +7,7 @@
  */
 #include "common.h"
 #include "pe1/room_floor.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "pe1/field_actor.h"
 
 typedef struct RoomCaptureContext {

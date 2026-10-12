@@ -41,8 +41,8 @@ int Asset_UnloadTableEntries(void) {
         }
     }
     for (i = 30; (unsigned int)i < 104; i++) {
-        if (g_FieldAnimTaskPrograms[i]) {
-            g_FieldAnimTaskPrograms[i] = 0;
+        if (g_FieldFxTaskPrograms[i]) {
+            g_FieldFxTaskPrograms[i] = 0;
         }
     }
     return 0;

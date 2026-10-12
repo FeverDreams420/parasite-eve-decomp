@@ -39,7 +39,7 @@ typedef char h[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
         source = host_unit(SPAWNER, path=find_definition(SPAWNER, under=ROOM))
         # Helper stubs check CPU behavior, not rotation/GTE arithmetic.
         harness = '#include <assert.h>\n#include <stdint.h>\n#include <string.h>\n#include <limits.h>\n' + source + r'''
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxTaskSlot *D_800F33E0;
 FieldActor *D_8019A7F8;
 int D_800E27EC;
 GteSineWord D_800966EC[4096];
@@ -58,9 +58,9 @@ static int half(uint32_t x) { x&=65535; return x<32768 ? (int)x:(int)x-65536; }
 static int asr1(uint32_t x) { return (int)((int64_t)signed_word(x)/2-(signed_word(x)<0 && (x&1))); }
 static uint32_t rng(int call) { return seed+(uint32_t)call*0x1234567u; }
 int func_8019404C(int e,Particle *p) { return 0; }
-int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback cb) {
+int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && stride==12 && count==64);
-    assert(cb==(FieldAnimCallbackListCallback)func_8019404C);
+    assert(cb==(FieldFxCallbackListCallback)func_8019404C);
     setups++; return setupResult;
 }
 void *func_800CE610(char *p) {
@@ -96,7 +96,7 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *m,const GteShortVector *v,GteShor
     assert(randoms==i*7+4 && rotations==i+1 && m==rotationMatrix);
     assert(v->x==0 && v->y==0 && v->z==combined%192+128);
     out->x=half(seed); out->y=half(seed*7); out->z=half(seed*31); out->pad=123;
-    D_8019A7F8=&instances[1]; D_800F33E0=(FieldAnimTaskSlot *)&emitters[1];
+    D_8019A7F8=&instances[1]; D_800F33E0=(FieldFxTaskSlot *)&emitters[1];
     D_800E27EC=signed_word(seed+(uint32_t)i*0x13579u);
     timer=signed_word((uint32_t)D_800E27EC<<11); index=(timer/40)&4095;
     D_800966EC[index].word=signed_word(tableWord); expected[i].size=half(tableWord+4096);
@@ -106,7 +106,7 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *m,const GteShortVector *v,GteShor
 }
 static void reset(void) {
     allocs=randoms=rotations=applications=setups=0;
-    D_800F33E0=(FieldAnimTaskSlot *)&emitters[0]; D_8019A7F8=&instances[0]; D_800E27EC=40;
+    D_800F33E0=(FieldFxTaskSlot *)&emitters[0]; D_8019A7F8=&instances[0]; D_800E27EC=40;
     memset(particles,0x5A,sizeof(particles)); memcpy(expected,particles,sizeof(particles));
 }
 int main(void) {

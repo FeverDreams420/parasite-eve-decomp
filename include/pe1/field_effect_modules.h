@@ -123,7 +123,7 @@ int PointSprite_CloseTarget(char *object);
 int PointSprite_ClassNop6(void);
 
 /* Burst effect (FieldFx_BurstEffects.c); its script and setup
- * are declared with the burst records in pe1/field_anim.h. */
+ * are declared with the burst records in pe1/fieldfx_task.h. */
 extern FieldFxHandler g_BurstEffectInitList[];
 extern FieldFxHandler g_BurstEffectDrawList[];
 extern FieldFxHandler g_BurstEffectUpdateList[];

@@ -45,7 +45,7 @@ static int gteCalls,draws;
 '''
         harness = prefix + source + r'''
 typedef RoomM350Particle Particle;
-FieldAnimObjectPrefix *D_800F32D0;
+FieldFxObjectPrefix *D_800F32D0;
 FieldActor *g_PlayerEntity;
 int D_800E27EC,D_800F3428;
 GteSineWord D_800966EC[4096];
@@ -107,7 +107,7 @@ static void reset(void) {
     /* The player's leading state pointer is read as an effect owner. */
     player.state=(FieldActorState *)&playerOwner;
     playerOwner.status=0; player.mode=4;
-    D_800F32D0=(FieldAnimObjectPrefix *)&actor; g_PlayerEntity=&player;
+    D_800F32D0=(FieldFxObjectPrefix *)&actor; g_PlayerEntity=&player;
     D_800E27EC=0; D_8019A802=9; gteCalls=draws=turnCalls=steering=0; sqrtResult=128;
 }
 int main(void) {

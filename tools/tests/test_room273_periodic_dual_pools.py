@@ -42,8 +42,8 @@ RoomM273BossState D_8019AE9C;
 static RoomM273PoolContext context;
 static RoomM273EffectStateContext stateContext;
 static State state,replacement;
-FieldAnimTaskSlot *D_800F33E0=(FieldAnimTaskSlot *)&context;
-FieldAnimObjectPrefix *D_800F32D0=(FieldAnimObjectPrefix *)&stateContext;
+FieldFxTaskSlot *D_800F33E0=(FieldFxTaskSlot *)&context;
+FieldFxObjectPrefix *D_800F32D0=(FieldFxObjectPrefix *)&stateContext;
 static unsigned char primary[64],otherPrimary[64],secondary[64],otherSecondary[64];
 void *D_8019AE80=secondary;
 unsigned short D_800E11FA,D_800E2850[8];
@@ -52,9 +52,9 @@ static Vector *primaryLinks[2],*secondaryLinks[2];
 static int init,attempts,aux,updates,renders,failPrimary,failSecondary;
 int func_8019A398(void) { assert(0); return 0; }
 int func_8019A4CC(void) { assert(0); return 0; }
-int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback callback) {
+int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(init++==0 && p==(char *)primary && stride==4 && count==6 &&
-           callback==(FieldAnimCallbackListCallback)func_8019A398);
+           callback==(FieldFxCallbackListCallback)func_8019A398);
     return 48;
 }
 int func_800CE5AC(void *p,int offset,int stride,int count,void *callback) {

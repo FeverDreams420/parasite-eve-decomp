@@ -1,6 +1,6 @@
 #include "common.h"
-#include "pe1/field_anim_callback_list.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_callback_list.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "pe1/field_actor.h"
 #include "../room_lib/room_lib.h"
 
@@ -16,8 +16,8 @@ s32 func_801992A4(s32 arg0, void *arg1, s32 *arg2) {
         if (arg0 != 0) {
             return 0;
         }
-        ANIM_TASK_AS(s16)[10] = 0;
-        ANIM_TASK_AS(s16)[11] = 0;
+        FX_TASK_AS(s16)[10] = 0;
+        FX_TASK_AS(s16)[11] = 0;
         {
             /* The player battle entity, read as its field actor record. */
             FieldActorState *actor0 = ((FieldActor *)D_8009D254)->state;
@@ -28,15 +28,15 @@ s32 func_801992A4(s32 arg0, void *arg1, s32 *arg2) {
     } else {
         actor = ((FieldActor *)D_8009D254)->state;
         if (actor->flags & 0x10000000) {
-            ANIM_TASK_AS(s16)[10] = 1;
-            ANIM_TASK_AS(s16)[11] = 1;
+            FX_TASK_AS(s16)[10] = 1;
+            FX_TASK_AS(s16)[11] = 1;
             return 1;
         }
         if (D_800E27EC < *arg2) {
             return 0;
         }
-        ANIM_TASK_AS(s16)[10] = 1;
-        ANIM_TASK_AS(s16)[11] = 0;
+        FX_TASK_AS(s16)[10] = 1;
+        FX_TASK_AS(s16)[11] = 0;
         return 1;
     }
 }

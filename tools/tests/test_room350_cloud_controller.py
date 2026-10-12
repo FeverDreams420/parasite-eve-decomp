@@ -52,7 +52,7 @@ typedef char j[sizeof(Vector)==8 ? 1:-1];
         source = source.replace(declarations, '')
         # Transform and angle helpers are boundary stubs, not GTE emulation.
         harness = '#include <assert.h>\n#include <stdint.h>\n#include <string.h>\n#include <limits.h>\n' + source + r'''
-FieldAnimObjectPrefix *D_800F32D0;
+FieldFxObjectPrefix *D_800F32D0;
 Instance *g_PlayerEntity;
 unsigned char D_8019A8BE,D_8019A8C0;
 volatile short D_8019A89E;
@@ -89,7 +89,7 @@ void Akao_Cmd_21(int handle,int zero) {
 s32 func_800DFE20(Vec3Fixed *a,Vec3Fixed *b) {
     assert(stage++==0 && a==POS(players[0]) && b==POS(instance));
     assert(instance.anim.fixed==(uint32_t)expectedFrame && D_8019A8B8==expectedRepeat);
-    if(mutate) { g_PlayerEntity=&players[1]; D_800F32D0=(FieldAnimObjectPrefix *)&otherActor; instance.anim.fixed=0; }
+    if(mutate) { g_PlayerEntity=&players[1]; D_800F32D0=(FieldFxObjectPrefix *)&otherActor; instance.anim.fixed=0; }
     return -123456;
 }
 int FieldFx_VecToAngle(Vec3Fixed *a,Vec3Fixed *b) {
@@ -131,7 +131,7 @@ static void reset(void) {
     memset(&instance,0,sizeof(instance)); memset(&state,0,sizeof(state));
     actor.instance=(struct RoomM350Instance *)&instance;
     otherActor.instance=(struct RoomM350Instance *)&otherInstance;
-    D_800F32D0=(FieldAnimObjectPrefix *)&actor;
+    D_800F32D0=(FieldFxObjectPrefix *)&actor;
     instance.state=&owner; owner.action_state=&action; owner.progress=123;
     instance.render_object.matrices=&transforms;
     action=1; g_PlayerEntity=&players[0]; stage=stopped=turns=0;

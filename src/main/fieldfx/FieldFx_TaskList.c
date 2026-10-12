@@ -1,13 +1,13 @@
-#include "pe1/field_anim.h"
+#include "pe1/fieldfx_task.h"
 #include "pe1/scene_assets.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/battle.h"
 #include "pe1/field_effect_modules.h"
 
 /* Binds task program `index` to the owner's task context. */
-int FieldFx_BindTaskProgram(FieldAnimTaskOwner *owner, int index)
+int FieldFx_BindTaskProgram(FieldFxTaskOwner *owner, int index)
 {
-    FieldAnimTaskProgram *program = g_FieldAnimTaskPrograms[index];
+    FieldFxTaskProgram *program = g_FieldFxTaskPrograms[index];
 
     if (program == 0) {
         printf(D_800C2244, index);
@@ -37,11 +37,11 @@ void *FieldFx_GetEffectResource(int index) {
         return ret;
     }
 }
-int func_800CE560(char *out, int stride, int count, FieldAnimTaskCallback callback)
+int func_800CE560(char *out, int stride, int count, FieldFxTaskCallback callback)
 {
   int i;
   register char *entry;
-  FieldAnimCallbackList *list = (FieldAnimCallbackList *)out;
+  FieldFxCallbackList *list = (FieldFxCallbackList *)out;
   stride += 4;
   entry = out;
   entry = entry + 0xC;
@@ -50,7 +50,7 @@ int func_800CE560(char *out, int stride, int count, FieldAnimTaskCallback callba
   list->count = count;
   for (i = 0; i < count; i++)
   {
-    ((FieldAnimCallbackListEntry *)entry)->active = 0;
+    ((FieldFxCallbackListEntry *)entry)->active = 0;
     entry += stride;
   }
 
@@ -60,23 +60,23 @@ int func_800CE560(char *out, int stride, int count, FieldAnimTaskCallback callba
 int func_800CE5AC(void *arg0, int arg1, int arg2, int arg3, void *arg4) {
     char *header;
     char *entry;
-    FieldAnimCallbackList *list;
+    FieldFxCallbackList *list;
     int stride;
     int i;
 
     i = 0;
     stride = arg2 + 4;
     header = D_800F33E0->end + arg1;
-    list = (FieldAnimCallbackList *)header;
+    list = (FieldFxCallbackList *)header;
     entry = header + 0xC;
 
     *(char **)arg0 = header;
-    list->callback = (FieldAnimCallbackListCallback)arg4;
+    list->callback = (FieldFxCallbackListCallback)arg4;
     list->stride = stride;
     list->count = arg3;
 
     while (i < arg3) {
-        ((FieldAnimCallbackListEntry *)entry)->active = 0;
+        ((FieldFxCallbackListEntry *)entry)->active = 0;
         i++;
         entry += stride;
     }
@@ -86,9 +86,9 @@ int func_800CE5AC(void *arg0, int arg1, int arg2, int arg3, void *arg4) {
 
 void *func_800CE610(char *list) {
     char frame[8];
-    FieldAnimCallbackList *header;
-    FieldAnimCallbackList *base;
-    FieldAnimCallbackListEntry *slot;
+    FieldFxCallbackList *header;
+    FieldFxCallbackList *base;
+    FieldFxCallbackListEntry *slot;
     int count;
     int limit;
     int stride;
@@ -97,8 +97,8 @@ void *func_800CE610(char *list) {
     (void)frame;
     /* The parameter itself becomes the entry cursor, so the header is read
      * through two copies taken before it advances, as retail does. */
-    header = (FieldAnimCallbackList *)list;
-    base = (FieldAnimCallbackList *)list;
+    header = (FieldFxCallbackList *)list;
+    base = (FieldFxCallbackList *)list;
     list += 0xC;
     count = header->count;
     stride = header->stride;
@@ -106,7 +106,7 @@ void *func_800CE610(char *list) {
     if (count > 0) {
         limit = count;
         while (1) {
-            slot = (FieldAnimCallbackListEntry *)list;
+            slot = (FieldFxCallbackListEntry *)list;
             if (slot->active == 0) {
                 break;
             }
@@ -127,22 +127,22 @@ void *func_800CE610(char *list) {
 }
 
 int func_800CE688(void *data) {
-    FieldAnimCallbackList *list = (FieldAnimCallbackList *)data;
+    FieldFxCallbackList *list = (FieldFxCallbackList *)data;
     int saved_age = D_800E27EC;
     char *entry = (char *)list->entries;
     int i;
     int active = 0;
-    FieldAnimTaskCallback callback = list->callback;
+    FieldFxTaskCallback callback = list->callback;
     int stride = list->stride;
 
     for (i = 0; i < list->count;) {
-        if (((FieldAnimCallbackListEntry *)entry)->active != 0) {
+        if (((FieldFxCallbackListEntry *)entry)->active != 0) {
             active++;
-            D_800E27EC = ((FieldAnimCallbackListEntry *)entry)->age;
-            if (callback(1, ((FieldAnimCallbackListEntry *)entry)->state, D_800E2368->argument) != 0) {
-                ((FieldAnimCallbackListEntry *)entry)->active = 0;
+            D_800E27EC = ((FieldFxCallbackListEntry *)entry)->age;
+            if (callback(1, ((FieldFxCallbackListEntry *)entry)->state, D_800E2368->argument) != 0) {
+                ((FieldFxCallbackListEntry *)entry)->active = 0;
             } else {
-                ((FieldAnimCallbackListEntry *)entry)->age++;
+                ((FieldFxCallbackListEntry *)entry)->age++;
             }
         }
         i++;
@@ -153,19 +153,19 @@ int func_800CE688(void *data) {
 }
 
 int func_800CE78C(char *data) {
-    FieldAnimCallbackList *list = (FieldAnimCallbackList *)data;
+    FieldFxCallbackList *list = (FieldFxCallbackList *)data;
     int saved_age = D_800E27EC;
     char *entry = (char *)list->entries;
     int i;
     int active = 0;
-    FieldAnimTaskCallback callback = list->callback;
+    FieldFxTaskCallback callback = list->callback;
     int stride = list->stride;
 
     for (i = 0; i < list->count;) {
-        if (((FieldAnimCallbackListEntry *)entry)->active != 0) {
+        if (((FieldFxCallbackListEntry *)entry)->active != 0) {
             active++;
-            D_800E27EC = ((FieldAnimCallbackListEntry *)entry)->age;
-            callback(2, ((FieldAnimCallbackListEntry *)entry)->state, D_800E2368->argument);
+            D_800E27EC = ((FieldFxCallbackListEntry *)entry)->age;
+            callback(2, ((FieldFxCallbackListEntry *)entry)->state, D_800E2368->argument);
         }
         i++;
         entry += stride;

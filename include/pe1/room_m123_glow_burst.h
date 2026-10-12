@@ -2,7 +2,7 @@
 #define PE1_ROOM_M123_GLOW_BURST_H
 
 #include "common.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/gte_types.h"
 #include "pe1/render_object.h"
 #include "pe1/room_m123_burst_particle.h"

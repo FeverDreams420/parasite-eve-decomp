@@ -6,7 +6,7 @@
  * volatile read stays an absolute load. */
 #include "pe1/field_sprite_params.h"
 #include "room_m350_shared.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/psyq_gpu.h"

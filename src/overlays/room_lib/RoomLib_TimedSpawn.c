@@ -6,7 +6,7 @@
  */
 #include "common.h"
 #include "pe1/field_sprite_params.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/gte.h"
 #include "pe1/room_fx.h"
 #include "pe1/room_floor.h"
@@ -14,7 +14,7 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_owner_actor.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "pe1/scene_archive.h"
 #include "pe1/gte_types.h"
 #include "pe1/akao.h"
@@ -111,7 +111,7 @@ int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
         state->x = 0;
         state->y = 0;
 
-        if (ANIM_TASK_AS(RoomTimedSpawnEventState)->active != 0) {
+        if (FX_TASK_AS(RoomTimedSpawnEventState)->active != 0) {
             RoomTimedSpawnNode **p = ANIM_OWNER_AS(RoomTimedSpawnOwner)->link;
             if (p != 0 && *p != 0) {
                 u8 *status = (*p)->status;
@@ -126,7 +126,7 @@ int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
             Akao_SendTableCommand(D_800B0E64[0], 0x588, value, 0x80, 0x7F);
         }
         return func_800CE560(((void **)ANIM_POOL_AS(void))[2], 0xC, 8,
-                             (FieldAnimCallbackListCallback)RoomLib_UpdateTimedRender);
+                             (FieldFxCallbackListCallback)RoomLib_UpdateTimedRender);
 
         case 1:
     tick = D_800E27EC;
@@ -143,7 +143,7 @@ int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
         }
     }
 
-    if (D_800E27EC == 7 && ANIM_TASK_AS(RoomTimedSpawnEventState)->active != 0) {
+    if (D_800E27EC == 7 && FX_TASK_AS(RoomTimedSpawnEventState)->active != 0) {
         RoomTimedSpawnOwner *root;
         root = ANIM_OWNER_AS(RoomTimedSpawnOwner);
         if (((*root->link)->flags & 0x3F000000) ==

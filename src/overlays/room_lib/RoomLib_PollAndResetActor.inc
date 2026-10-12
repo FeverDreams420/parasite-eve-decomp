@@ -1,6 +1,6 @@
 #include "common.h"
 #include "pe1/field_sprite_params.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/room_fx.h"
 #include "pe1/field_texture_tables.h"
 
@@ -44,7 +44,7 @@ s32 ROOMLIB_POLL_RESET_FUNC(s32 state) {
     switch (state) {
     case 0:
         return func_800CE560(ROOMLIB_POLL_RESET_POOL_EXPR, 8, 4,
-                             (FieldAnimCallbackListCallback)ROOMLIB_POLL_RESET_CALLBACK);
+                             (FieldFxCallbackListCallback)ROOMLIB_POLL_RESET_CALLBACK);
     case 1:
         if (ROOMLIB_POLL_RESET_FLAG != 0) {
             return 2;

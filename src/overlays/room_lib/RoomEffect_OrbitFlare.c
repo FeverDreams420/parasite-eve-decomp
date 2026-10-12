@@ -98,7 +98,7 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
         state->state = 0;
         state->frame = 0;
         state->soundHandle = -1;
-        switch (ANIM_TASK_AS(RoomFlareEventState)->phase) {
+        switch (FX_TASK_AS(RoomFlareEventState)->phase) {
         case 0:
             state->angle = -spawn->angle;
             state->soundHandle = func_800D3F64(0x565, func_800D3FD8());
@@ -112,7 +112,7 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
         }
         pool = ANIM_POOL_AS(RoomFlareChannel)->pool;
         return func_800CE560(pool, 12, 16,
-                             (FieldAnimCallbackListCallback)RoomEffect_OrbitFlareDrift);
+                             (FieldFxCallbackListCallback)RoomEffect_OrbitFlareDrift);
     case 1:
         state->frame++;
         switch (state->state) {
@@ -140,7 +140,7 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
             func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomFlareChannel)->pool, 0,
                           (GteShortVector *)&spin);
             state->angle = (s16)(state->angle + 0x400) - spin.y;
-            if (ANIM_TASK_AS(RoomFlareEventState)->active) {
+            if (FX_TASK_AS(RoomFlareEventState)->active) {
                 RoomFlareNode **slot = (RoomFlareNode **)ANIM_OWNER_AS(RoomFlareChannel)->pool;
                 if (slot && *slot) {
                     u8 *flag = (*slot)->state;
@@ -175,7 +175,7 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
                 }
             }
             if (func_800C6B90(state, 0x39) == 0) break;
-            if (ANIM_TASK_AS(RoomFlareEventState)->active) {
+            if (FX_TASK_AS(RoomFlareEventState)->active) {
                 ROOMEFFECT_ORBIT_FLARE_FLASH();
             }
             state->state = 2;

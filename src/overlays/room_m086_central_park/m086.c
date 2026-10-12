@@ -2,11 +2,11 @@
 #include "pe1/room_m086_seeker.h"
 #include "pe1/gte.h"
 #include "pe1/field_sprite_params.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/room_bounce_glint.h"
 #include "pe1/room_fx.h"
 #include "pe1/field_owner_actor.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "pe1/gte_types.h"
 #include "pe1/fieldfx_calls.h"
 
@@ -41,7 +41,7 @@ int func_8018F004(int mode, RoomM086Seeker *seeker, RoomM086SeekerParams *params
             }
             if (func_800C6B90(&seeker->position, size * 41 / 512) == 0) break;
             if (seeker->position.y < floor->y - 0x202) break;
-            if (ANIM_TASK_AS(RoomM086EventState)->active) {
+            if (FX_TASK_AS(RoomM086EventState)->active) {
                 channel = ANIM_OWNER_AS(RoomM086Channel);
                 if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                     ((RoomM086BattleEntity *)D_8009D254)->actor->flags |= 0x4000;
@@ -205,7 +205,7 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
         state->velocity.y -= 0x18;
         func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomM086Channel)->pool, 0,
                       &state->rotation);
-        if (ANIM_TASK_AS(RoomM086EventState)->active) {
+        if (FX_TASK_AS(RoomM086EventState)->active) {
             RoomM086Pool *pool = ANIM_OWNER_AS(RoomM086Channel)->pool;
             if (pool && pool->object) {
                 u8 *flag = pool->object->state;
@@ -218,7 +218,7 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
         FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80190B84, 0, 0);
         func_800D3F64(0x577, func_800D3FD8());
         return func_800CE560(ANIM_POOL_AS(RoomM086SpawnChannel)->pool, 0x14, 0xE,
-                             (FieldAnimCallbackListCallback)func_8018F004);
+                             (FieldFxCallbackListCallback)func_8018F004);
     case 1:
         switch (state->state) {
         case 0:
@@ -527,7 +527,7 @@ s32 func_80190574(s32 mode, RoomBounceGlint *ent) {
         value = func_800D3FD8();
         func_800D3F64(0x579, value);
         func_800CE560(((void **)ANIM_POOL_AS(void))[2], 0x14, 0x18,
-                      (FieldAnimCallbackListCallback)func_801900CC);
+                      (FieldFxCallbackListCallback)func_801900CC);
         goto done;
 
     }

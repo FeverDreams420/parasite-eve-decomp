@@ -57,7 +57,7 @@ typedef char f[OFF(RoomM350EffectActor,instance)==8 ? 1:-1];
         harness = prefix + source + r'''
 typedef GteShortVector Vector;
 typedef RoomM350FlareParticle Particle;
-FieldAnimObjectPrefix *D_800F32D0;
+FieldFxObjectPrefix *D_800F32D0;
 GteMatrix D_8019A870;
 short D_8019A890[3];
 int D_800E27EC,D_800F3428,D_8019A690[4];
@@ -78,7 +78,7 @@ static void load_vector(void *p) {
     vector=p; assert(step++==2 && vector->x==0 && vector->y==particle.y && vector->z==particle.z);
     vector->pad=0x2468;
 }
-static void command(void) { assert(step++==3); D_800F32D0=(FieldAnimObjectPrefix *)&otherActor; }
+static void command(void) { assert(step++==3); D_800F32D0=(FieldFxObjectPrefix *)&otherActor; }
 static void store_ir(void *p) {
     Vector *v=p;
     assert(step==4 && v==vector); step+=3;
@@ -117,7 +117,7 @@ int main(void) {
         assert(func_801981D0(1,&particle)==0 && particle.shade==asr5(half(i)));
     }
     for(i=0;i<65536;i++) for(phase=0;phase<8;phase++) {
-        step=0; D_800F32D0=(FieldAnimObjectPrefix *)&actor; D_800E27EC=timerBefore=i-32768;
+        step=0; D_800F32D0=(FieldFxObjectPrefix *)&actor; D_800E27EC=timerBefore=i-32768;
         particle.y=half(i); particle.z=half(65535-i); particle.shade=321;
         ir[0]=i; ir[1]=-i-1; ir[2]=i*30001;
         D_8019A890[0]=half(i*7); D_8019A890[1]=half(i*11); D_8019A890[2]=half(i*19);

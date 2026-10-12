@@ -6,18 +6,18 @@
  * SPINNING_MODEL_PALETTE    palette offset (the special palette adds 4)
  * SPINNING_MODEL_COLOR(s)   r, g, b arguments for FieldFx_ModelSetColors */
 #include "pe1/render_object.h"
-#include "pe1/field_anim.h"
+#include "pe1/fieldfx_task.h"
 #include "pe1/field_model_draw.h"
 #include "pe1/gte.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/render_prim.h"
 
-int SPINNING_MODEL_FUNC(int mode, FieldAnimSpinningModel *state)
+int SPINNING_MODEL_FUNC(int mode, FieldFxSpinningModel *state)
 {
     GteShortVector angles;
     GteMatrix matrix;
     GteVector scale;
-    FieldAnimSpinningModel *copy;
+    FieldFxSpinningModel *copy;
     int tpage;
     int kind;
     int palette;

@@ -1,17 +1,17 @@
 #include "common.h"
 #include "pe1/field_actor.h"
 #include "pe1/field_sprite_draw.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/room_ember_burst.h"
 #include "pe1/gte.h"
 #include "pe1/room_shake_burst.h"
 #include "pe1/render_object.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/field_anim.h"
+#include "pe1/fieldfx_task.h"
 #include "pe1/battle_runtime.h"
 #include "pe1/random.h"
 #include "pe1/field_texture_tables.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "pe1/room_twin_ribbon.h"
 #include "pe1/gte_types.h"
 #include "pe1/room_ember_spiral.h"
@@ -90,7 +90,7 @@ int func_80192A7C(int mode, RoomFanSweep *sweep, RoomEmberBurstParams *params) {
         func_800D3F64(0x5F3, func_800D3FD8());
         func_800D3F64(0x5F4, 0x80);
         handles = func_800CE560(ANIM_POOL_AS(RoomEmberBurstChannel)->pool, 0x10, 0x18,
-                                (FieldAnimCallbackListCallback)func_80192718);
+                                (FieldFxCallbackListCallback)func_80192718);
         handles += func_800CE5AC(&sweep->pool, handles, 8, 0x12, func_80192620);
         return handles;
     case 1:
@@ -196,7 +196,7 @@ int func_80192ED4(int mode, RoomSpiralDrop *drop, RoomEmberBurstParams *params) 
         drop->radius = 0;
         RoomEffect_AttachToActor(params->subId, params->typeId, drop);
         return func_800CE560(ANIM_POOL_AS(RoomEmberBurstChannel)->pool, 8, 0x18,
-                             (FieldAnimCallbackListCallback)func_80192DA0);
+                             (FieldFxCallbackListCallback)func_80192DA0);
     case 1:
         if (D_800E27EC < 0x33) {
             spark = (RoomSpiralDropSparkRecord *)func_800CE610(ANIM_POOL_AS(RoomEmberBurstChannel)->pool);
@@ -360,7 +360,7 @@ int func_80193638(int mode, RoomShakeSweepAnchor *anchor) {
             if (*(void *volatile *)soundSlot != 0)
                 Akao_SendTableCommand(*soundSlot, 0x5F0, 0x80, 0x80, volume);
         }
-        if (ANIM_TASK_AS(RoomShakeBurstEvent)->active) {
+        if (FX_TASK_AS(RoomShakeBurstEvent)->active) {
             pool = ANIM_OWNER_AS(RoomShakeBurstChannel)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
@@ -370,7 +370,7 @@ int func_80193638(int mode, RoomShakeSweepAnchor *anchor) {
         }
         FieldFx_ModelScrollUv((union FieldTexturedModel *)D_800F32D8, 0, 0);
         return func_800CE560(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool, 0x10, 0x18,
-                             (FieldAnimCallbackListCallback)func_8019326C);
+                             (FieldFxCallbackListCallback)func_8019326C);
     case 1:
         if (D_800E27EC < 0x2B)
             func_80020D50();
@@ -389,7 +389,7 @@ int func_80193638(int mode, RoomShakeSweepAnchor *anchor) {
         }
         if (D_800E27EC == 0x2B)
             func_80020DD0();
-        if (D_800E27EC == 0x2C && ANIM_TASK_AS(RoomShakeBurstEvent)->active) {
+        if (D_800E27EC == 0x2C && FX_TASK_AS(RoomShakeBurstEvent)->active) {
             channel = ANIM_OWNER_AS(RoomShakeBurstChannel);
             if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                 (*((RoomShakeBurstEntity **)D_8009D254))->flags |= 0x4000;
@@ -450,7 +450,7 @@ int func_80193B60(int mode, GteShortVector *state)
     case 0:
         func_800CE870((char *)D_8009D254, 1, &state->x);
         state->y = g_RoomFloorY->y;
-        return func_800CE560(D_800F33E0->end, 8, 12, (FieldAnimTaskCallback)func_801939AC);
+        return func_800CE560(D_800F33E0->end, 8, 12, (FieldFxTaskCallback)func_801939AC);
     case 1:
         if (D_800E27EC < 40 && (D_800E27EC & 1)) {
             particle = func_800CE610(D_800F33E0->end);
@@ -564,7 +564,7 @@ int func_80194164(int mode, RoomShakeBurstPoint *anchor) {
     switch (mode) {
     case 0:
         func_800CE870((char *)D_8009D254, 0, (s16 *)anchor);
-        if (ANIM_TASK_AS(RoomShakeBurstEvent)->active) {
+        if (FX_TASK_AS(RoomShakeBurstEvent)->active) {
             pool = ANIM_OWNER_AS(RoomShakeBurstChannel)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
@@ -583,7 +583,7 @@ int func_80194164(int mode, RoomShakeBurstPoint *anchor) {
                 Akao_SendTableCommand(*soundSlot, 0x5F2, 0x80, 0x80, volume);
         }
         return func_800CE560(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool, 8, 0x14,
-                             (FieldAnimCallbackListCallback)func_80193FC4);
+                             (FieldFxCallbackListCallback)func_80193FC4);
     case 1:
         if (D_800E27EC < 0x27)
             func_80020D50();
@@ -597,7 +597,7 @@ int func_80194164(int mode, RoomShakeBurstPoint *anchor) {
         }
         if (D_800E27EC == 0x27)
             func_80020DD0();
-        if (D_800E27EC == 0x28 && ANIM_TASK_AS(RoomShakeBurstEvent)->active) {
+        if (D_800E27EC == 0x28 && FX_TASK_AS(RoomShakeBurstEvent)->active) {
             channel = ANIM_OWNER_AS(RoomShakeBurstChannel);
             if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                 (*((RoomShakeBurstEntity **)D_8009D254))->flags |= 0x4000;
@@ -776,7 +776,7 @@ int func_80194AAC(int mode, RoomEmberBurst *burst, RoomEmberBurstParams *params)
         func_800D3F64(0x5F5, func_800D3FD8());
         func_800D3F64(0x5F6, 0x80);
         return func_800CE560(ANIM_POOL_AS(RoomEmberBurstChannel)->pool, 0x14, 0x28,
-                             (FieldAnimCallbackListCallback)func_801944E8);
+                             (FieldFxCallbackListCallback)func_801944E8);
     case 1:
         switch (burst->state) {
         case 0:
@@ -988,7 +988,7 @@ int func_801955E4(int mode, RoomRisingColumn *column,
         column->timer = 0;
         func_800D3F64(0x5EA, func_800D3FD8());
         return func_800CE560(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool, 0x14, 0x20,
-                             (FieldAnimCallbackListCallback)func_80195190);
+                             (FieldFxCallbackListCallback)func_80195190);
     case 1:
         column->timer++;
         func_800CE870((char *)ANIM_OWNER_AS(RoomShakeBurstChannel)->pool, 0, (s16 *)column);
@@ -1149,9 +1149,9 @@ int func_80195D20(int mode, RoomShakeBurstPoint *burst) {
     case 0:
         func_800CE870((char *)D_8009D254, 0, (s16 *)burst);
         return func_800CE560(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool, 0x14, 0x10,
-                             (FieldAnimCallbackListCallback)func_80195904);
+                             (FieldFxCallbackListCallback)func_80195904);
     case 1:
-        if (ANIM_TASK_AS(RoomShakeBurstEvent)->running == 0)
+        if (FX_TASK_AS(RoomShakeBurstEvent)->running == 0)
             return 1;
         if (D_800E27EC == 2) {
             soundSlot = D_800B0E64;
@@ -1348,9 +1348,9 @@ int func_80196820(int mode, RoomCrossFlash *flash) {
                       (GteShortVector *)&flash->rotation);
         flash->rotation.x = 0;
         return func_800CE560(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool, 0x14, 0x28,
-                             (FieldAnimCallbackListCallback)func_8019646C);
+                             (FieldFxCallbackListCallback)func_8019646C);
     case 1:
-        if (ANIM_TASK_AS(RoomShakeBurstEvent)->running == 0)
+        if (FX_TASK_AS(RoomShakeBurstEvent)->running == 0)
             return 1;
         if (D_800E27EC == 2) {
             child = (RoomCrossFlashParticle *)func_800CE610(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool);
@@ -1533,7 +1533,7 @@ int func_80196E4C(int mode, RoomTwinRibbon *ribbon, RoomTwinRibbonParams *params
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomEmberFountainChannel)->pool, 0x15, &fork, &from);
         func_800D1384(&from, &to, 0x3EE, (unsigned char *)&colorC, (unsigned char *)&colorB, 0x80, (struct FieldTrailPair *)ribbon->trailD, 1);
         return func_800CE560(ANIM_POOL_AS(RoomEmberBurstChannel)->pool, 0x14, 0x10,
-                             (FieldAnimCallbackListCallback)func_80196C48);
+                             (FieldFxCallbackListCallback)func_80196C48);
     case 1:
         ribbon->timer++;
         if (params->stop) return 2;
@@ -1770,7 +1770,7 @@ int func_80197CBC(int mode, RoomEmberFountain *fountain) {
         func_800D3F64(0x5EB, func_800D3FD8());
         func_800D3F64(0x5EC, 0x80);
         return func_800CE560(ANIM_POOL_AS(RoomEmberBurstChannel)->pool, 0x14, 0x28,
-                             (FieldAnimCallbackListCallback)func_80197618);
+                             (FieldFxCallbackListCallback)func_80197618);
     case 1:
         fountain->timer++;
         func_800CE870((char *)ANIM_OWNER_AS(RoomEmberFountainChannel)->pool, 0, (s16 *)fountain);
@@ -2029,7 +2029,7 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
         }
         D_80199944 = (void *)Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5509704);
         FieldFx_ModelScrollUv(D_80199944, 0, 0);
-        if (ANIM_TASK_AS(RoomShakeBurstEvent)->active) {
+        if (FX_TASK_AS(RoomShakeBurstEvent)->active) {
             pool = ANIM_OWNER_AS(RoomShakeBurstChannel)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
@@ -2040,7 +2040,7 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
         func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomShakeBurstChannel)->pool, 0,
                       (GteShortVector *)spiral);
         return func_800CE560(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool, 0x14, 0x28,
-                             (FieldAnimCallbackListCallback)func_80198268);
+                             (FieldFxCallbackListCallback)func_80198268);
     case 1:
         spiral->timer++;
         func_800CE870((char *)ANIM_OWNER_AS(RoomShakeBurstChannel)->pool, 0, (s16 *)&position);
@@ -2091,7 +2091,7 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
             }
         }
         if (func_800C6B90(&position, 0x19A)) {
-            if (ANIM_TASK_AS(RoomShakeBurstEvent)->active) {
+            if (FX_TASK_AS(RoomShakeBurstEvent)->active) {
                 channel = ANIM_OWNER_AS(RoomShakeBurstChannel);
                 if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                     (*((RoomShakeBurstEntity **)D_8009D254))->flags |= 0x4000;

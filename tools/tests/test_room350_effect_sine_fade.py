@@ -18,7 +18,7 @@ class Room350EffectSineFadeTests(unittest.TestCase):
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <stdint.h>\n#include <string.h>\n' + source + r'''
 typedef GteShortVector Vector;
 typedef RoomM350SineParticle Particle;
-FieldAnimObjectPrefix *D_800F32D0;
+FieldFxObjectPrefix *D_800F32D0;
 int D_800E27EC, D_800F3428;
 RenderEffectParameters D_800F3368;
 #define D_800F336C D_800F3368.palette
@@ -75,7 +75,7 @@ void func_800CEE20(struct GteShortVector *position, struct GteRotation *controls
     assert(flag == 1 && brightness == renderBrightness && colors == 0);
     particle.position.x = -32768; particle.position.z = 32767;
     particle.size = -1234; particle.brightness = -99;
-    D_800F32D0 = (FieldAnimObjectPrefix *)&actors[1]; D_800E27EC = afterRenderFrame;
+    D_800F32D0 = (FieldFxObjectPrefix *)&actors[1]; D_800E27EC = afterRenderFrame;
     expected = particle;
 }
 void func_800D004C(struct GteShortVector *position, int w, int h, int mode,
@@ -94,7 +94,7 @@ void func_800D004C(struct GteShortVector *position, int w, int h, int mode,
 static void reset(void) {
     waves = cluts = firstDraws = secondDraws = 0;
     memset(&particle, 0x5A, sizeof(particle));
-    D_800E27EC = beforeFrame; D_800F32D0 = (FieldAnimObjectPrefix *)&actors[0];
+    D_800E27EC = beforeFrame; D_800F32D0 = (FieldFxObjectPrefix *)&actors[0];
     D_800F336C = kind; D_800F3428 = special; D_800E1204[kind] = palette;
 }
 static void runUpdate(int brightness) {

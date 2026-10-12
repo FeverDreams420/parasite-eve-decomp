@@ -35,7 +35,7 @@ typedef char f[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_allocation_rng_and_counter_wrap(self):
         harness = '#include <assert.h>\n#include <stdint.h>\n#include <string.h>\n#include <limits.h>\n' + host_unit(EMITTER, path=find_definition(EMITTER, under=ROOM)) + r'''
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxTaskSlot *D_800F33E0;
 int D_800E27EC,D_8019A414[8];
 GteShortVector D_8019A778[2];
 RenderEffectParameters D_800F3368;
@@ -52,9 +52,9 @@ static void change_count(unsigned n) {
     lastCount=(unsigned short)state.count;
 }
 int func_801927A4(int e,Particle *p) { return 0; }
-int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback cb) {
+int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && stride==16 && count==18);
-    assert(cb==(FieldAnimCallbackListCallback)func_801927A4);
+    assert(cb==(FieldFxCallbackListCallback)func_801927A4);
     assert(state.delay==0 && state.count==0); setups++; return setupResult;
 }
 void *func_800CE610(char *p) {
@@ -69,7 +69,7 @@ int Inv_ScrambleGrid(void) {
     uint32_t value=seed+(uint32_t)call*0x7654321u;
     assert(allocs==index+1);
     change_count(37);
-    if(mutate) { D_800F33E0=(FieldAnimTaskSlot *)&emitters[1]; D_800E27EC=INT_MAX; }
+    if(mutate) { D_800F33E0=(FieldFxTaskSlot *)&emitters[1]; D_800E27EC=INT_MAX; }
     if(!(call&1)) expected[index].rotation.x=half(value<<4);
     else {
         expected[index].rotation.y=half(value<<4);
@@ -80,7 +80,7 @@ int Inv_ScrambleGrid(void) {
     memcpy(&result,&value,4); return result;
 }
 static void reset(unsigned count) {
-    allocs=randoms=setups=0; D_800F33E0=(FieldAnimTaskSlot *)&emitters[0]; D_800E27EC=16;
+    allocs=randoms=setups=0; D_800F33E0=(FieldFxTaskSlot *)&emitters[0]; D_800E27EC=16;
     state.delay=-123; state.count=half(count); lastCount=count&65535;
     memset(particles,0x5A,sizeof(particles)); memcpy(expected,particles,sizeof(particles));
 }

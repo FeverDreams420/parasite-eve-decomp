@@ -45,20 +45,20 @@ static RoomPlacementOwner owner;
 static RoomPlacementMap transform;
 static Effect output;
 static unsigned char pool[128];
-FieldAnimTaskSlot *D_800F33E0=(FieldAnimTaskSlot *)&context;
-FieldAnimObjectPrefix *D_800F32D0=(FieldAnimObjectPrefix *)&state;
+FieldFxTaskSlot *D_800F33E0=(FieldFxTaskSlot *)&context;
+FieldFxObjectPrefix *D_800F32D0=(FieldFxObjectPrefix *)&state;
 int D_800E27EC;
 GteSineWord D_800966EC[4096];
 static int init,allocations,fail,newCounter;
 int func_8019320C(int mode, RoomM273SampledLayerEffect *effect) { assert(0); return 0; }
-int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback callback) {
+int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(init++==0 && p==(char *)pool && stride==12 && count==9 &&
-           callback==(FieldAnimCallbackListCallback)func_8019320C);
+           callback==(FieldFxCallbackListCallback)func_8019320C);
     return 140;
 }
 void *func_800CE610(char *p) {
     assert(p==(char *)pool && allocations++==0);
-    D_800F32D0=(FieldAnimObjectPrefix *)&replacement;
+    D_800F32D0=(FieldFxObjectPrefix *)&replacement;
     D_800E27EC=newCounter;
     return fail ? 0 : &output;
 }
@@ -73,7 +73,7 @@ int main(void) {
         int index=(int)(((long long)counters[i]*1024/12)&0xFFF)*2;
         Effect before;
         newCounter=counters[i]; D_800E27EC=0;
-        D_800F32D0=(FieldAnimObjectPrefix *)&state; state.owner=0;
+        D_800F32D0=(FieldFxObjectPrefix *)&state; state.owner=0;
         memset(D_800966EC,0x55,sizeof(D_800966EC));
         ((short *)D_800966EC)[index]=samples[j]; ((short *)D_800966EC)[index+1]=samples[k];
         memset(&output,0xA5,sizeof(output)); before=output;

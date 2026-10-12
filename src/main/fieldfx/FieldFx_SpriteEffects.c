@@ -1,5 +1,5 @@
 #include "pe1/render_object.h"
-#include "pe1/field_anim.h"
+#include "pe1/fieldfx_task.h"
 #include "pe1/battle_runtime.h"
 #include "pe1/random.h"
 #include "pe1/gte.h"
@@ -79,7 +79,7 @@ int func_800D4C24(int mode, RenderPhaseEmitter *state)
     case 0:
         state->phase = rand();
         return func_800CE560(D_800F33E0->end, 16, 16,
-                             (FieldAnimTaskCallback)func_800D4928);
+                             (FieldFxTaskCallback)func_800D4928);
     case 1:
         if (D_800E27EC < 8) {
             for (i = 0; i < 1; i++) {
@@ -214,7 +214,7 @@ int func_800D5290(int mode, RenderArcingEmitter *state)
         state->position.y = D_800F32D0->actor->render_object.target_y;
         state->position.z = D_800F32D0->actor->render_object.target_z;
         return func_800CE560(D_800F33E0->end, 16, 12,
-                             (FieldAnimTaskCallback)func_800D5010);
+                             (FieldFxTaskCallback)func_800D5010);
     case 1:
         if (D_800E27EC < 6) {
             for (i = 0; i < 2; i++) {
@@ -339,7 +339,7 @@ int func_800D5A00(int mode, RenderArcingEmitter *state)
         state->position.y = D_800F32D0->actor->render_object.target_y;
         state->position.z = D_800F32D0->actor->render_object.target_z;
         return func_800CE560(D_800F33E0->end, 8, 24,
-                             (FieldAnimTaskCallback)func_800D5898);
+                             (FieldFxTaskCallback)func_800D5898);
     case 1:
         if (D_800E27EC >= 4 && D_800E27EC < 11) {
             for (i = 0; i < 3; i++) {
@@ -450,7 +450,7 @@ int func_800D5EB4(int mode, RenderArcingEmitter *state)
         Asset_Find08Alt(0x487, 0, state->position.x, state->position.y,
                         state->position.z);
         return func_800CE560(D_800F33E0->end, 16, 8,
-                             (FieldAnimTaskCallback)func_800D5CE4);
+                             (FieldFxTaskCallback)func_800D5CE4);
     case 1:
         if (D_800E27EC < 8) {
             effect = func_800CE610(D_800F33E0->end);
@@ -744,7 +744,7 @@ int func_800D6E3C(int mode, RenderPhaseEmitter *state) {
     case 0:
         state->phase = rand();
         return func_800CE560(D_800F33E0->end, 16, 24,
-                             (FieldAnimTaskCallback)func_800D6C58);
+                             (FieldFxTaskCallback)func_800D6C58);
     case 1:
         if (D_800E27EC < 8) {
             for (count = 0; count < 3; count++) {
@@ -838,7 +838,7 @@ int func_800D751C(int mode, FieldFanSweep *sweep)
     case 0:
         sweep->angle = rand();
         handles = func_800CE560(ANIM_POOL_AS(RoomEmberBurstChannel)->pool, 0x10, 0x18,
-                                (FieldAnimCallbackListCallback)func_800D71B8);
+                                (FieldFxCallbackListCallback)func_800D71B8);
         handles += func_800CE5AC(&sweep->pool, handles, 8, 0x12, func_800D70C0);
         return handles;
     case 1:
@@ -922,7 +922,7 @@ int func_800D7764(int mode, FieldFanSweepGlow *glow)
         func_800CEE20(&glow->position, 0, scale, scale, 4,
                       GetClut(0, (kind == 4 && D_800F3428) ? palette + 6 : palette + 2),
                       3, intensity, 0);
-        if (ANIM_TASK_AS(FieldFanSweepEvent)->stage != 11) {
+        if (FX_TASK_AS(FieldFanSweepEvent)->stage != 11) {
             position.x = glow->position.x;
             position.y = glow->position.y;
             position.z = glow->position.z;
@@ -931,7 +931,7 @@ int func_800D7764(int mode, FieldFanSweepGlow *glow)
             rotation.z = D_800E27EC * 8;
             rotation.flags = 0;
             scale = (D_800E27EC & 1) * 60 + 0x1000;
-            ring = ANIM_TASK_AS(FieldFanSweepEvent)->stage == 10 ? 1 : 3;
+            ring = FX_TASK_AS(FieldFanSweepEvent)->stage == 10 ? 1 : 3;
             func_800D0728(&position, 400, 500, 20, &rotation, scale, scale, 0,
                           &color, intensity, ring);
         }
@@ -980,7 +980,7 @@ int func_800D7B70(int mode, RenderArcingEmitter *state)
         state->radius = 0;
         func_800CE870((char *)D_8009D254, 0, &state->position.x);
         return func_800CE560(D_800F33E0->end, 8, 24,
-                             (FieldAnimTaskCallback)func_800D7A1C);
+                             (FieldFxTaskCallback)func_800D7A1C);
     case 1:
         if (D_800E27EC < 51) {
             effect = func_800CE610(D_800F33E0->end);
@@ -1133,7 +1133,7 @@ int func_800D8388(int mode, RenderOrbitingEmitter *state)
     case 0:
         state->phase = rand();
         count = func_800CE560(D_800F33E0->end, 16, 12,
-                              (FieldAnimTaskCallback)func_800D7FBC);
+                              (FieldFxTaskCallback)func_800D7FBC);
         count += func_800CE5AC(&state->particles, count, 8, 32,
                                func_800D7E78);
         return count;
@@ -1196,7 +1196,7 @@ int func_800D868C(int mode, RenderOrbitingEmitter *state)
     case 0:
         state->phase = rand();
         count = func_800CE560(D_800F33E0->end, 16, 3,
-                             (FieldAnimTaskCallback)func_800D7FBC);
+                             (FieldFxTaskCallback)func_800D7FBC);
         count += func_800CE5AC(&state->particles, count, 8, 18,
                                    func_800D7E78);
         return count;
@@ -1307,7 +1307,7 @@ int func_800D8B6C(int mode, void *state)
     switch (mode) {
     case 0:
         return func_800CE560(D_800F33E0->end, 12, 14,
-                            (FieldAnimTaskCallback)func_800D8978);
+                            (FieldFxTaskCallback)func_800D8978);
     case 1:
         if (D_800E27EC < 32 && (D_800E27EC & 1)) {
             effect = func_800CE610(D_800F33E0->end);
@@ -1450,7 +1450,7 @@ int func_800D927C(int mode, RenderOrbitingEmitter *state)
     case 0:
         state->phase = rand();
         count = func_800CE560(D_800F33E0->end, 16, 4,
-                             (FieldAnimTaskCallback)func_800D8E74);
+                             (FieldFxTaskCallback)func_800D8E74);
         count += func_800CE5AC(&state->particles, count, 8, 32,
                                    func_800D8D14);
         return count;
@@ -1553,7 +1553,7 @@ int func_800D96F4(int mode, RenderSparkEmitter *state)
         state->phase = rand();
         func_800CE870((char *)D_8009D254, 0, &state->position.x);
         return func_800CE560(D_800F33E0->end, 12, 24,
-                            (FieldAnimTaskCallback)func_800D9554);
+                            (FieldFxTaskCallback)func_800D9554);
     case 1:
         if (D_800E27EC < 12) {
             for (count = 0; count < 2; ++count) {
@@ -1654,7 +1654,7 @@ int func_800D9FD4(int mode, GteShortVector *state)
     case 0:
         func_800CE870((char *)D_8009D254, 1, &state->x);
         return func_800CE560(D_800F33E0->end, 8, 12,
-                            (FieldAnimTaskCallback)func_800D9E5C);
+                            (FieldFxTaskCallback)func_800D9E5C);
     case 1:
         if (D_800E27EC < 32 && (D_800E27EC & 1)) {
             particle = func_800CE610(D_800F33E0->end);
@@ -1692,8 +1692,8 @@ int func_800D9FD4(int mode, GteShortVector *state)
 #define SPINNING_MODEL_COLOR(size) (u8)((size) / 3), 0, (u8)((size) / 2)
 #include "FieldFx_SpinningModel.inc"
 
-int func_800DA5D4(int mode, FieldAnimEmitter *state) {
-    FieldAnimEmittedPoint *point;
+int func_800DA5D4(int mode, FieldFxEmitter *state) {
+    FieldFxEmittedPoint *point;
     int angle;
 
     switch (mode) {
@@ -1701,7 +1701,7 @@ int func_800DA5D4(int mode, FieldAnimEmitter *state) {
         state->angle = rand();
         FieldFx_ModelScrollUv((union FieldTexturedModel *)D_800F32D8, 0, 0);
         return func_800CE560(D_800F33E0->end, 16, 24,
-                             (FieldAnimCallbackListCallback)func_800DA1FC);
+                             (FieldFxCallbackListCallback)func_800DA1FC);
     case 1:
         if (D_800E27EC < 40 && D_800E27EC % 6 == 0) {
             point = func_800CE610(D_800F33E0->end);

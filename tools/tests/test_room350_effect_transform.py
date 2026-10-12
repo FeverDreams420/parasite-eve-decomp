@@ -20,7 +20,7 @@ RenderEffectParameters D_800F3368;
 GteSineWord D_800966EC[4096];
 #define D_800F336A D_800F3368.parameter02
 #define D_800F336C D_800F3368.palette
-FieldAnimObjectPrefix *D_800F32D0;
+FieldFxObjectPrefix *D_800F32D0;
 int D_800E27EC, D_800F3428, D_8019A56C[4];
 unsigned short D_800E1204[8];
 static RoomM350EffectActor actor;
@@ -57,7 +57,7 @@ int main(void) {
     const short values[] = {-32768, -4097, -33, -1, 0, 32, 4097, 32767};
     int counter, event, kind, special, h, s, v, i;
     actor.instance = &instance; instance.transforms = transforms;
-    D_800F32D0 = (FieldAnimObjectPrefix *)&actor;
+    D_800F32D0 = (FieldFxObjectPrefix *)&actor;
     for (counter = -16; counter <= 80; ++counter)
     for (event = -1; event <= 3; ++event) {
         if (event == 2) continue;

@@ -70,8 +70,8 @@ static short rightRecord[4],leftRecord[4];
         body = r'''
 typedef GteShortVector Vector;
 typedef RoomM350FlareParticle Particle;
-FieldAnimObjectPrefix *D_800F32D0;
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxObjectPrefix *D_800F32D0;
+FieldFxTaskSlot *D_800F33E0;
 FieldActor *g_PlayerEntity;
 int D_800E27EC;
 unsigned char D_8019A8C0;
@@ -92,14 +92,14 @@ static int word(uint32_t u) { int x; memcpy(&x,&u,4); return x; }
 static int half(unsigned u) { return (u&65535)<32768 ? (int)(u&65535):(int)(u&65535)-65536; }
 static int xz(int x,int z) { return word(((uint32_t)z<<16)|(uint16_t)x); }
 int func_801981D0(int event,RoomM350FlareParticle *p) { (void)event;(void)p; assert(0); return 0; }
-int func_800CE560(char *pool,int stride,int count,FieldAnimCallbackListCallback callback) {
+int func_800CE560(char *pool,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(++initCalls==1 && pool==(char *)&particle && stride==8 && count==4);
-    assert(callback==(FieldAnimCallbackListCallback)func_801981D0);
+    assert(callback==(FieldFxCallbackListCallback)func_801981D0);
     return -17;
 }
 void *func_800CE610(char *pool) {
     assert(++allocations==1 && pool==(char *)&particle);
-    if (mutate) D_800F32D0=(FieldAnimObjectPrefix *)&actors[1];
+    if (mutate) D_800F32D0=(FieldFxObjectPrefix *)&actors[1];
     return failAlloc ? 0:&particle;
 }
 int Inv_ScrambleGrid(void) { assert(++randoms==1 && allocations==1); return randomValue; }
@@ -110,7 +110,7 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *m,const GteShortVector *in,GteSho
     assert(!memcmp(&D_8019A8A8,&oldRight,8) && !memcmp(&D_8019A8B0,&oldLeft,8));
     out->x=-32768; out->y=123; out->z=-1;
     if(mutate) {
-        D_800F32D0=(FieldAnimObjectPrefix *)&actors[1];
+        D_800F32D0=(FieldFxObjectPrefix *)&actors[1];
         model->translation[0]=INT_MAX;
         model->translation[2]=INT_MIN;
     }
@@ -152,8 +152,8 @@ static void reset(void) {
     players[0].render_object.model_matrix.translation[0]=123;
     players[0].render_object.model_matrix.translation[2]=-456;
     expectedPoint=xz(123,-456);
-    emitter.pool=&particle; D_800F33E0=(FieldAnimTaskSlot *)&emitter;
-    D_800F32D0=(FieldAnimObjectPrefix *)&actors[0]; g_PlayerEntity=&players[0];
+    emitter.pool=&particle; D_800F33E0=(FieldFxTaskSlot *)&emitter;
+    D_800F32D0=(FieldFxObjectPrefix *)&actors[0]; g_PlayerEntity=&players[0];
     oldRight=(Vector){100,222,300,1}; oldLeft=(Vector){-100,333,-300,444};
     memcpy(rightRecord,&oldRight,8); memcpy(leftRecord,&oldLeft,8);
     memset(&D_8019A8A8,0x55,8); memset(&D_8019A8B0,0x66,8);

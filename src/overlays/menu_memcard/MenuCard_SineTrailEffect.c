@@ -13,7 +13,7 @@ s32 MenuCard_SineTrailEffect(s32 mode, MemcardTrailState *state) {
         state->phase = 0;
         state->timer = 0;
         return func_800CE560(ANIM_POOL_AS(MemcardLinkChannel)->slots, 20, 24,
-                             (FieldAnimCallbackListCallback)MenuCard_SineRotatingImage);
+                             (FieldFxCallbackListCallback)MenuCard_SineRotatingImage);
     case 1:
         state->timer++;
         FieldFx_TransformMatrixPoint(D_8009D254, state->attachment, &offset, &position);

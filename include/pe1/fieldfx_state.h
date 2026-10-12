@@ -3,7 +3,7 @@
 
 #include "pe1/field_script_context.h"
 #include "pe1/fieldfx_slot.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 
 /* Script-state work area (obj+0xC, pointed at by g_FieldFxScriptState).
  * FieldFx_RunScript interprets the command table: each 32-bit command
@@ -34,7 +34,7 @@ typedef struct FieldFxStateWords {
 
 /* Field engine object: header, script state, dispatch slots, slot data. */
 typedef struct FieldFxObject {
-    /* 0x000 */ FieldAnimObjectPrefix prefix;
+    /* 0x000 */ FieldFxObjectPrefix prefix;
     /* 0x00C */ FieldFxState state;
     /* 0x080 */ FieldFxSlot slots[0x40];
     /* 0x200 */ char data[1];
@@ -81,8 +81,8 @@ int FieldFx_FreeAllSlots(void);
 int FieldFx_GetStatus(void *obj);
 
 /* Shared XYZ origin consumed by field effect initializers. */
-struct FieldAnimPointTriple;
-extern struct FieldAnimPointTriple D_800E2290;
+struct FieldFxPointTriple;
+extern struct FieldFxPointTriple D_800E2290;
 
 /* Shape helpers (FieldFx_GeometryAndShapes.c): the two CLUT pixel blocks
  * func_800CED3C uploads and the index of the loaded one, the colour-key table

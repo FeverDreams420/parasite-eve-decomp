@@ -2,7 +2,7 @@
 #define MENU_MEMCARD_TRAIL_H
 
 #include "menu_memcard_link.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/field_texture_tables.h"
 
 typedef struct MemcardTrailState { s16 phase, timer, attachment; } MemcardTrailState;

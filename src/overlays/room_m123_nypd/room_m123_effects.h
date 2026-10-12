@@ -2,7 +2,7 @@
 #define ROOM_M123_EFFECTS_H
 
 #include "common.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 
 typedef struct RoomM123Particle {
     u16 frame;

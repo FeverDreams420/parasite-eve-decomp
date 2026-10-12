@@ -57,7 +57,7 @@ int RoomEffect_HomingProjectileSpark(int mode, GteShortVector *spark) {
  * with a damped bounce, then reports its resting position through the
  * scene script.  Drawn as a glow sprite plus a floor ring while in flight. */
 int RoomEffect_HomingProjectile(int mode) {
-    RoomHomingModel *model = ANIM_TASK_AS(RoomHomingModelEvent)->model;
+    RoomHomingModel *model = FX_TASK_AS(RoomHomingModelEvent)->model;
     GteVector position;
     s16 vector[4];
     s16 rotated[4];
@@ -71,7 +71,7 @@ int RoomEffect_HomingProjectile(int mode) {
         model->state = 0;
         model->angle = ANIM_OWNER_AS(RoomHomingModelActorChannel)->actor->heading;
         return func_800CE560(ANIM_POOL_AS(RoomHomingModelSparkChannel)->pool, 8, 4,
-                             (FieldAnimCallbackListCallback)RoomEffect_HomingProjectileSpark);
+                             (FieldFxCallbackListCallback)RoomEffect_HomingProjectileSpark);
     case 1:
         actor = ANIM_OWNER_AS(RoomHomingModelActorChannel)->actor;
         switch (model->state) {
@@ -312,7 +312,7 @@ int RoomEffect_HomingProjectileThrow(int mode, RoomHomingModel *model) {
 
     if (mode == 0) {
         int floor;
-        ANIM_TASK_AS(RoomHomingModelEvent)->model = model;
+        FX_TASK_AS(RoomHomingModelEvent)->model = model;
         actor->core->flags |= 0x40000000;
         floor = g_RoomFloorY->y;
         model->matrixIndex = 0x1A;

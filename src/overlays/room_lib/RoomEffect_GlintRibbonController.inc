@@ -56,7 +56,7 @@ int ROOMEFFECT_GLINT_RIBBON_FUNC(int mode, RoomGlintRibbon *ribbon) {
         func_800D1384(&middle, &last, 0x3F2, (unsigned char *)&color1, (unsigned char *)&color2, 0x80,
                       (struct FieldTrailPair *)ribbon->trailB, 1);
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x24,
-                             (FieldAnimCallbackListCallback)ROOMEFFECT_GLINT_RIBBON_CALLBACK);
+                             (FieldFxCallbackListCallback)ROOMEFFECT_GLINT_RIBBON_CALLBACK);
     case 1:
         ribbon->timer++;
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, ROOMEFFECT_GLINT_RIBBON_JOINTS[2],

@@ -167,7 +167,7 @@ int func_8018F7C4(int mode, RoomM349FlareTarget *target,
         target->position.z = params->z;
         target->position.y = g_RoomFloorY->y;
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 70,
-                             (FieldAnimCallbackListCallback)func_8018F010);
+                             (FieldFxCallbackListCallback)func_8018F010);
     case 1:
         func_800CE870(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, (s16 *)&joint);
         radius = params->radius;

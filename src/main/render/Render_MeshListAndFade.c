@@ -12,7 +12,7 @@
 #include "pe1/gte.h"
 #include "pe1/gte_types.h"
 #include "pe1/field_tile.h"
-#include "pe1/field_anim.h"
+#include "pe1/fieldfx_task.h"
 #include "pe1/render_shadow.h"
 #include "pe1/render_buffers.h"
 

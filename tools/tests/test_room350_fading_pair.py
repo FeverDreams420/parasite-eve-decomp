@@ -47,8 +47,8 @@ typedef char f[OFF(RoomM350EffectActor,instance)==8 && OFF(RoomM350EffectOwner,a
 typedef GteShortVector Particle;
 typedef GteMatrix Matrix;
 typedef GteShortVector Vector;
-FieldAnimObjectPrefix *D_800F32D0;
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxObjectPrefix *D_800F32D0;
+FieldFxTaskSlot *D_800F33E0;
 unsigned char D_8019A82E;
 int D_800E27EC,D_800F3428;
 GteSineWord D_800966EC[4096];
@@ -78,16 +78,16 @@ int Asset_Find08w(int id,int asset,int x,int y,int z) {
     assert(sounds++==0 && id==0x5C9 && asset==(int)(intptr_t)owners[0].asset);
     assert(x==half(transforms[0][33].t[0]));
     assert(y==half(transforms[0][33].t[1]) && z==half(transforms[0][33].t[2]));
-    D_800F33E0=(FieldAnimTaskSlot *)&emitters[1]; memset(&state,0x39,sizeof(state));
+    D_800F33E0=(FieldFxTaskSlot *)&emitters[1]; memset(&state,0x39,sizeof(state));
     return -999;
 }
-int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback cb) {
+int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     State wanted;
     memset(&wanted,0x39,sizeof(wanted)); memset(&wanted.rotation,0,sizeof(wanted.rotation));
     wanted.count=0; wanted.fade=0;
     assert(memcmp(&state,&wanted,sizeof(state))==0);
     assert(sounds==1 && p==(char *)&pools[1] && stride==8 && count==18);
-    assert(cb==(FieldAnimCallbackListCallback)func_80195B64);
+    assert(cb==(FieldFxCallbackListCallback)func_80195B64);
     return -17;
 }
 void *func_800CE610(char *p) {
@@ -120,7 +120,7 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *m,const GteShortVector *v,GteShor
     p->x=expectedParticles[i].x=-32768+i;
     p->y=expectedParticles[i].y=32767-i;
     p->z=expectedParticles[i].z=-1234+i;
-    if(mutate) { state.count=expected.count=i ? -32768:32767; D_800F33E0=(FieldAnimTaskSlot *)&emitters[1]; }
+    if(mutate) { state.count=expected.count=i ? -32768:32767; D_800F33E0=(FieldFxTaskSlot *)&emitters[1]; }
     expectedParticles[i].pad=half((uint32_t)state.count*128+2048);
     return out;
 }
@@ -144,11 +144,11 @@ void func_800CEE20(struct GteShortVector *pos,struct GteRotation *rotation,int s
     state.rotation.z=i ? -32768:12345;
     expectedRotation=half(0u-(uint16_t)state.rotation.z);
     D_800F3368.palette=nextKind; D_800F3428=special; D_800E1204[nextKind]=65535;
-    D_800F32D0=(FieldAnimObjectPrefix *)&actors[1]; transforms[0][33].t[0]=55; D_800E27EC=999;
+    D_800F32D0=(FieldFxObjectPrefix *)&actors[1]; transforms[0][33].t[0]=55; D_800E27EC=999;
 }
 static void reset(void) {
     allocs=randoms=rotations=applies=sounds=cluts=draws=0;
-    D_800F32D0=(FieldAnimObjectPrefix *)&actors[0]; D_800F33E0=(FieldAnimTaskSlot *)&emitters[0];
+    D_800F32D0=(FieldFxObjectPrefix *)&actors[0]; D_800F33E0=(FieldFxTaskSlot *)&emitters[0];
     memset(&state,0x5A,sizeof(state)); memset(particles,0x5A,sizeof(particles));
     memcpy(expectedParticles,particles,sizeof(particles));
     transforms[0][33].t[0]=word(0xABCDEF01u);

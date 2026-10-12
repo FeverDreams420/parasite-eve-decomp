@@ -106,7 +106,7 @@ initialize:
             FieldFx_ModelScrollUv(temp_v0, 0, 0);
             func_800D1384(&effect->position, &effect->position, 0x3EE, (unsigned char *)initColor0, (unsigned char *)initColor1, 0x80, (struct FieldTrailPair *)effect->history, initialMode);
             return func_800CE560((char *)ANIM_POOL_AS(SceneE20Channel)->pool, 0x14, 0x20,
-                                 (FieldAnimCallbackListCallback)SceneE20_FlareParticle);
+                                 (FieldFxCallbackListCallback)SceneE20_FlareParticle);
 update: {
     temp_v1_2 = effect->phase;
     switch (temp_v1_2) {                            /* switch 1 */
@@ -241,7 +241,7 @@ update: {
         if ((func_800C6B90(&effect->endpoint, 0x42) != 0) && (D_80190800 == 0)) {
             temp_v1_3 = ANIM_OWNER_AS(SceneE20Channel)->pool->node;
             *(u8 *)((u8 *)temp_v1_3 + ((temp_v1_3->flags >> 17) & 0x70) + 0x1C) = 2;
-            if (ANIM_TASK_AS(SceneE20Event)->active != 0) {
+            if (FX_TASK_AS(SceneE20Event)->active != 0) {
                 if ((ANIM_OWNER_AS(SceneE20Channel)->pool->node->flags & 0x3F000000) == 0x01000000) {
                     temp_v1_4 = *((SceneE20Actor **)D_8009D254);
                     temp_v1_4->flags |= 0x4000;

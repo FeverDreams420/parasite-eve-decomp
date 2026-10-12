@@ -797,7 +797,7 @@ changing bytes:
   cell-size temporaries are not launched, so width-1/height-1 are computed
   first as in retail.
 - The particle updaters' `move a0,a2` is a second pointer to the particle
-  (`FieldAnimMovingParticle *particle = anim`) used only for the lifetime
+  (`FieldFxMovingParticle *particle = anim`) used only for the lifetime
   countdown after the bounce test.
 - `func_800C5EB0` walks the strip nodes beside a `FieldStripNodeTail` view
   (the node seen from its brightness field, `pe1/field_textured_chain_node.h`):

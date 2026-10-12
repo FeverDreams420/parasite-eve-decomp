@@ -2,11 +2,11 @@
 #define PE1_ROOM_M005_H
 
 #include "pe1/gte_types.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/render_object.h"
 #include "pe1/room_m005_drifting_sprite.h"
 #include "pe1/field_owner_actor.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"

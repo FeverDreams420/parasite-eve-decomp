@@ -62,7 +62,7 @@ int func_80192540(int mode, RoomM404Drop *drop) {
                 }
             }
             if (func_800C6B90(drop, 0x6E) && drop->y >= g_RoomFloorY->y - 0x202 &&
-                ANIM_TASK_AS(RoomM404DropEvent)->active) {
+                FX_TASK_AS(RoomM404DropEvent)->active) {
                 ROOM_M404_DROP_FLASH(0x3D000000);
             }
             if (Geo_PointInPoly(drop->x << 16, drop->z << 16, D_8009D248, D_8009D1CC) == 0) return 1;
@@ -87,7 +87,7 @@ int func_80192540(int mode, RoomM404Drop *drop) {
                     child->timer = 0;
                 }
             }
-            if (func_800C6B90(drop, 0x6E) && ANIM_TASK_AS(RoomM404DropEvent)->active) {
+            if (func_800C6B90(drop, 0x6E) && FX_TASK_AS(RoomM404DropEvent)->active) {
                 ROOM_M404_DROP_FLASH(0x19000000);
             }
             if (Geo_PointInPoly(drop->x << 16, drop->z << 16, D_8009D248, D_8009D1CC) == 0) return 1;
@@ -128,7 +128,7 @@ int func_80192540(int mode, RoomM404Drop *drop) {
             break;
         case 4:
             drop->timer++;
-            if (func_800C6B90(drop, 0x6E) && ANIM_TASK_AS(RoomM404DropEvent)->active) {
+            if (func_800C6B90(drop, 0x6E) && FX_TASK_AS(RoomM404DropEvent)->active) {
                 ROOM_M404_DROP_FLASH(0x19000000);
             }
             if ((drop->timer & 1) && (func_80071A54() & 0xF) == 0) {
@@ -243,7 +243,7 @@ int func_80193368(int mode, void *unused, char *state) {
         {
             int handle = func_800D3FD8();
             func_800D3F64(0x5b9, handle);
-            if (ANIM_TASK_AS(RoomM404EventState)->active) {
+            if (FX_TASK_AS(RoomM404EventState)->active) {
                 RoomM404Node **slot = (RoomM404Node **)ANIM_OWNER_AS(RoomM404Channel)->pool;
                 if (slot && *slot) {
                     u8 *flag = (*slot)->state;
@@ -252,7 +252,7 @@ int func_80193368(int mode, void *unused, char *state) {
             }
             pool = ANIM_POOL_AS(RoomM404Channel)->pool;
             return func_800CE560(pool, 20, 55,
-                                 (FieldAnimCallbackListCallback)func_80192540);
+                                 (FieldFxCallbackListCallback)func_80192540);
         }
     case 1:
     {
@@ -402,7 +402,7 @@ int func_80193A6C(int mode, RoomM404BurstOrigin *origin) {
         func_800D3F64(0x5C0, func_800D3FD8());
         func_800D3F64(0x5C1, 0x80);
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 32,
-                             (FieldAnimCallbackListCallback)func_801935E0);
+                             (FieldFxCallbackListCallback)func_801935E0);
     case 1:
         if (D_800E27EC < 5) {
             for (i = 0; i < 6; i++) {

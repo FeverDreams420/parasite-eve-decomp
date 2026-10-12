@@ -81,7 +81,7 @@ typedef char f[OFF(Instance,render_object.matrices)==0x238 && OFF(Actor,instance
 #define D_800966EE (TABLE+1)
 '''
         harness = prefix + source + r'''
-FieldAnimObjectPrefix *D_800F32D0;
+FieldFxObjectPrefix *D_800F32D0;
 FieldActor *g_PlayerEntity;
 struct SceneAssetBlob *D_800B0E64[1];
 short D_8019A82A[1];
@@ -115,7 +115,7 @@ static void reset(void) {
     memset(players,0,sizeof(players)); memset(owners,0,sizeof(owners));
     actors[0].instance=(struct RoomM350Instance *)&instances[0];
     actors[1].instance=(struct RoomM350Instance *)&instances[1];
-    D_800F32D0=(FieldAnimObjectPrefix *)&actors[0];
+    D_800F32D0=(FieldFxObjectPrefix *)&actors[0];
     instances[0].state=&owners[0]; instances[0].render_object.matrices=(RenderMatrix *)transforms;
     players[0].state=&owners[1]; players[1].state=&owners[2]; g_PlayerEntity=&players[0];
     instances[0].render_object.model_matrix.translation[0]=-100;
@@ -141,7 +141,7 @@ void FieldFx_ModelScrollUv(union FieldTexturedModel *asset,u8 a,u8 b) {
 s32 func_800DFE20(Vec3Fixed *a,Vec3Fixed *b) {
     assert(mode==1 && distances++==0);
     assert((void *)a==&players[0].pos_x && (void *)b==&instances[0].pos_x);
-    if(mutate) { g_PlayerEntity=&players[1]; D_800F32D0=(FieldAnimObjectPrefix *)&actors[1]; }
+    if(mutate) { g_PlayerEntity=&players[1]; D_800F32D0=(FieldFxObjectPrefix *)&actors[1]; }
     return turnDistance;
 }
 int FieldFx_VecToAngle(Vec3Fixed *a,Vec3Fixed *b) {
@@ -242,7 +242,7 @@ static void update(int timer,int sample,int initialized,int enabled,int distance
 }
 u_short GetTPage(int a,int b,int c,int d) {
     assert(mode==2 && drawStage++==0 && !a && b==1 && !c && !d);
-    D_800E11FA=65535; D_800F32D0=(FieldAnimObjectPrefix *)&actors[1];
+    D_800E11FA=65535; D_800F32D0=(FieldFxObjectPrefix *)&actors[1];
     return 0x0100;
 }
 u_short GetClut(int x,int y) {

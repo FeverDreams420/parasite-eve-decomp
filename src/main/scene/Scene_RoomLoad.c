@@ -540,7 +540,7 @@ retry_room:
             void **handler;
             unsigned int entry = index - 0x55;
 
-            handler = &g_FieldAnimTaskPrograms[entry];
+            handler = &g_FieldFxTaskPrograms[entry];
             if (*handler == 0) {
                 *handler = record[i].u.handler;
             }

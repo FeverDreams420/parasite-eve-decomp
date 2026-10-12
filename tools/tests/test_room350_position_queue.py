@@ -41,8 +41,8 @@ typedef char f[OFF(Actor,instance)==8 ? 1:-1];
         assert head in source
         source = source.replace(head, 'static Queue pending;\n#define D_8019A800 pending.count\n' + head)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-FieldAnimTaskSlot *D_800F33E0;
-FieldAnimObjectPrefix *D_800F32D0;
+FieldFxTaskSlot *D_800F33E0;
+FieldFxObjectPrefix *D_800F32D0;
 int D_800E27EC;
 short D_8019A802;
 unsigned char D_8019A804;
@@ -56,15 +56,15 @@ static int pools[2], calls, setups, setupResult, failAt, nextCount, yaw, timer;
 static Particle particles[8], expected[8];
 static int half(int x) { unsigned int b=(unsigned int)x&65535; return b<32768 ? (int)b:(int)b-65536; }
 int func_80195218(int e, Particle *p) { return 0; }
-int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback cb) {
+int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && stride==12 && count==50);
-    assert(cb==(FieldAnimCallbackListCallback)func_80195218);
+    assert(cb==(FieldFxCallbackListCallback)func_80195218);
     setups++; return setupResult;
 }
 void *func_800CE610(char *p) {
     int index=calls++;
     assert(index<8 && p==(char *)&pools[index ? 1:0]);
-    D_800F33E0=(FieldAnimTaskSlot *)&emitters[1]; D_800F32D0=(FieldAnimObjectPrefix *)&actors[1];
+    D_800F33E0=(FieldFxTaskSlot *)&emitters[1]; D_800F32D0=(FieldFxObjectPrefix *)&actors[1];
     instances[1].yaw=yaw; D_800E27EC=timer;
     pending.count=nextCount;
     pending.positions[index].x=-32768+index;
@@ -74,8 +74,8 @@ void *func_800CE610(char *p) {
     return index==failAt ? 0:&particles[index];
 }
 static void reset(void) {
-    calls=setups=0; D_800F33E0=(FieldAnimTaskSlot *)&emitters[0];
-    D_800F32D0=(FieldAnimObjectPrefix *)&actors[0];
+    calls=setups=0; D_800F33E0=(FieldFxTaskSlot *)&emitters[0];
+    D_800F32D0=(FieldFxObjectPrefix *)&actors[0];
     D_800E27EC=123; instances[0].yaw=123;
     memset(particles,0x5A,sizeof(particles)); memcpy(expected,particles,sizeof(particles));
     memset(pending.positions,0,sizeof(pending.positions));

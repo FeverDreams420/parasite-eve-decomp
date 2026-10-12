@@ -16,7 +16,7 @@ class Room350EffectTrailTests(unittest.TestCase):
     def test_queue_consumption_reloads_and_configuration(self):
         source = host_unit("func_8019784C", under=ROOM)
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <string.h>\n' + source + r'''
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxTaskSlot *D_800F33E0;
 unsigned char D_8019A86E;
 short D_8019A85C;
 RoomM350TrailQueue g_RoomEffectTrailPositions;
@@ -42,7 +42,7 @@ _Static_assert(sizeof(Vector) == 8, "queue stride");
 _Static_assert(offsetof(Vector, y) == 2 && offsetof(Vector, z) == 4, "coordinate offsets");
 int func_8019A014(int event, short *object) { return 0; }
 int func_800CE560(char *pool, int a, int b,
-                  FieldAnimCallbackListCallback callback) {
+                  FieldFxCallbackListCallback callback) {
     assert(setups++ == 0 && allocations == 0 && pool == &pools[0]);
     assert(a == 8 && b == 16 && (void *)callback == (void *)func_8019A014);
     return setupResult;
@@ -51,7 +51,7 @@ void *func_800CE610(char *pool) {
     int slot = allocations++;
     assert(setups == 0 && slot < 4 && pool == &pools[slot ? 1 : 0]);
     /* Stub changes probe reloads; they do not describe actual allocator behavior. */
-    D_800F33E0 = (FieldAnimTaskSlot *)&emitters[1];
+    D_800F33E0 = (FieldFxTaskSlot *)&emitters[1];
     D_8019A86E = 255;
     if (replacementCount >= 0) D_8019A85C = replacementCount;
     if (allocations == failAt) return 0;
@@ -63,7 +63,7 @@ void *func_800CE610(char *pool) {
 }
 static void reset(void) {
     setups = allocations = successes = 0;
-    D_800F33E0 = (FieldAnimTaskSlot *)&emitters[0];
+    D_800F33E0 = (FieldFxTaskSlot *)&emitters[0];
     memset(effects, 0x6B, sizeof(effects));
     memset(&g_RoomEffectTrailPositions, 0x5A, sizeof(g_RoomEffectTrailPositions));
 }

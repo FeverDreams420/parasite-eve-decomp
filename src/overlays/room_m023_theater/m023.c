@@ -116,7 +116,7 @@ int func_8018F3C8(int mode, RoomM023ScatterState *state) {
         state->unused08 = 0;
         state->unused0A = 0;
         state->timer = 0;
-        switch (ANIM_TASK_AS(RoomM023EventState)->variant) {
+        switch (FX_TASK_AS(RoomM023EventState)->variant) {
         case 0:
             state->joint = 8;
             break;
@@ -125,12 +125,12 @@ int func_8018F3C8(int mode, RoomM023ScatterState *state) {
             break;
         }
         return func_800CE560(ANIM_POOL_AS(RoomM023Channel)->pool, 16, 12,
-                             (FieldAnimCallbackListCallback)func_8018F004);
+                             (FieldFxCallbackListCallback)func_8018F004);
     case 1:
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM023Channel)->pool, state->joint, &template, position);
         state->timer++;
-        if (ANIM_TASK_AS(RoomM023EventState)->interval == 0) return 1;
-        if (ANIM_TASK_AS(RoomM023EventState)->interval < state->timer) {
+        if (FX_TASK_AS(RoomM023EventState)->interval == 0) return 1;
+        if (FX_TASK_AS(RoomM023EventState)->interval < state->timer) {
             state->timer = 0;
             func_800CE870(ANIM_OWNER_AS(RoomM023Channel)->pool, 0, position);
             particle = func_800CE610(ANIM_POOL_AS(RoomM023Channel)->pool);
@@ -181,7 +181,7 @@ int func_8018F710(int mode, RoomM023JointGlow *glow) {
 
     switch (mode) {
     case 0:
-        switch (ANIM_TASK_AS(RoomM023EventState)->variant) {
+        switch (FX_TASK_AS(RoomM023EventState)->variant) {
         case 0:
             glow->joint = 8;
             func_800D3F64(0x5AE, func_800D3FD8());
@@ -284,7 +284,7 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
 
     switch (mode) {
     case 0:
-        switch (ANIM_TASK_AS(RoomM023BeaconEvent)->variant) {
+        switch (FX_TASK_AS(RoomM023BeaconEvent)->variant) {
         case 0:
             state->joint = 8;
             break;
@@ -296,7 +296,7 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
         state->timer = 0;
         state->height = 0;
         state->glow = 0;
-        if (ANIM_TASK_AS(RoomM023BeaconEvent)->active) {
+        if (FX_TASK_AS(RoomM023BeaconEvent)->active) {
             RoomM023BeaconPool *pool = ANIM_OWNER_AS(RoomM023BeaconChannel)->pool;
             if (pool && pool->node) {
                 u8 *flag = pool->node->state;
@@ -360,7 +360,7 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
         state->target.z += position.z;
         if (func_800CEB8C(state, &state->target, 0x50) == 0) return 0;
         if (state->armed == 0) return 0;
-        if (ANIM_TASK_AS(RoomM023BeaconEvent)->active) {
+        if (FX_TASK_AS(RoomM023BeaconEvent)->active) {
             RoomM023BeaconChannel *channel = ANIM_OWNER_AS(RoomM023BeaconChannel);
             if ((channel->pool->node->flags & 0x3F000000) == 0x01000000) {
                 ((RoomM023BeaconEntity *)D_8009D254)->actor->flags |= 0x4000;

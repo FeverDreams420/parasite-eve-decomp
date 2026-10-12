@@ -44,8 +44,8 @@ typedef char emitter_pool[OFFSET(RoomM350EffectEmitter, pool) == 8 ? 1 : -1];
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <stdint.h>\n#include <string.h>\n' + source + r'''
 typedef RoomM350SineParticle Particle;
 typedef RenderMatrix Transform;
-FieldAnimTaskSlot *D_800F33E0;
-FieldAnimObjectPrefix *D_800F32D0;
+FieldFxTaskSlot *D_800F33E0;
+FieldFxObjectPrefix *D_800F32D0;
 unsigned char D_8019A8C4;
 unsigned short D_800E11E4[12], D_800E2850[65536];
 #define D_800E11FA D_800E11E4[11]
@@ -85,7 +85,7 @@ static int selectedIndex(void) {
 }
 int func_801996BC(int event, Particle *particle) { return 0; }
 int func_800CE560(char *p, int stride, int count,
-                  FieldAnimCallbackListCallback callback) {
+                  FieldFxCallbackListCallback callback) {
     assert(setups++ == 0 && allocations == 0 && p == &pool);
     assert(stride == 24 && count == 8 && (void *)callback == (void *)func_801996BC);
     assert(state.count == 0 && state.delay == 0);
@@ -98,7 +98,7 @@ void *func_800CE610(char *p) {
 int Inv_ScrambleGrid(void) {
     assert(tableRandoms++ == 0 && allocations == 1 && controlRandoms == 0);
     /* Probe post-helper reloads, without asserting these are the real helper's effects. */
-    D_800F32D0 = (FieldAnimObjectPrefix *)&actors[1];
+    D_800F32D0 = (FieldFxObjectPrefix *)&actors[1];
     state.count = countAfterRandom;
     return tableRandom;
 }
@@ -117,8 +117,8 @@ int rand(void) {
 }
 static void reset(void) {
     setups = allocations = tableRandoms = controlRandoms = 0;
-    D_800F33E0 = (FieldAnimTaskSlot *)&emitter;
-    D_800F32D0 = (FieldAnimObjectPrefix *)&actors[0]; D_8019A8C4 = 90;
+    D_800F33E0 = (FieldFxTaskSlot *)&emitter;
+    D_800F32D0 = (FieldFxObjectPrefix *)&actors[0]; D_8019A8C4 = 90;
     state.count = 0; state.delay = 0;
     memset(&effect, 0x5A, sizeof(effect));
 }

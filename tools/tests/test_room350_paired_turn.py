@@ -65,7 +65,7 @@ typedef char h[sizeof(Vector)==8 ? 1:-1];
 #define D_8019A77E ((short *)&D_8019A778[0].pad)
 '''
         harness = prefix + source + r'''
-FieldAnimObjectPrefix *D_800F32D0;
+FieldFxObjectPrefix *D_800F32D0;
 FieldActor *D_8019A774,*g_PlayerEntity;
 GteShortVector D_8019A778[2];
 short D_8019A798;
@@ -89,7 +89,7 @@ static void load_vector(void *p) {
 static void command(void) {
     assert(phase++==9);
     D_8019A774=&otherModel;
-    D_800F32D0=(FieldAnimObjectPrefix *)&otherActor;
+    D_800F32D0=(FieldFxObjectPrefix *)&otherActor;
 }
 static int read_ir(int index) {
     int value=index==0 ? -32768 : index==1 ? 32767 : -123;
@@ -113,7 +113,7 @@ static void reset(void) {
     memset(&instance,0,sizeof(instance));
     actor.instance=(struct RoomM350Instance *)&instance;
     otherActor.instance=(struct RoomM350Instance *)&other;
-    D_800F32D0=(FieldAnimObjectPrefix *)&actor;
+    D_800F32D0=(FieldFxObjectPrefix *)&actor;
     instance.state=&owner; owner.action_state=action; owner.core_flags=0x13579;
     /* mode is the animation id; action holds the clip length. */
     instance.mode=11; instance.action=42; instance.rot_y=123;

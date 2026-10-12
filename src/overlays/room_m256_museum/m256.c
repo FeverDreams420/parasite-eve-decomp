@@ -90,7 +90,7 @@ int func_8019283C(void) {
 
 /* Flashes the scene when the drop touches the player. */
 #define ROOM_M256_DROP_FLASH(radius)                                          \
-    if (func_800C6B90(drop, radius) && drop->hazard && ANIM_TASK_AS(RoomM256DropEvent)->active) {  \
+    if (func_800C6B90(drop, radius) && drop->hazard && FX_TASK_AS(RoomM256DropEvent)->active) {  \
         RoomM256DropChannel *channel = ANIM_OWNER_AS(RoomM256DropChannel);                            \
         if ((channel->pool->node->flags & 0x3F000000) == 0x01000000) {        \
             ((RoomM256DropEntity *)D_8009D254)->actor->flags |= 0x4000;                               \
@@ -323,7 +323,7 @@ int func_801934AC(int mode, u16 *counter) {
     switch (mode) {
     case 0:
     {
-        RoomOrbitPairEventState *event = ANIM_TASK_AS(RoomOrbitPairEventState);
+        RoomOrbitPairEventState *event = FX_TASK_AS(RoomOrbitPairEventState);
         *counter = 0;
         if (event->active) {
             RoomOrbitPairNode **slot = (RoomOrbitPairNode **)ANIM_OWNER_AS(RoomOrbitPairChannel)->pool;
@@ -335,7 +335,7 @@ int func_801934AC(int mode, u16 *counter) {
     }
     pool = ANIM_POOL_AS(RoomOrbitPairChannel)->pool;
     return func_800CE560(pool, 20, 50,
-                         (FieldAnimCallbackListCallback)func_80192844);
+                         (FieldFxCallbackListCallback)func_80192844);
     case 1:
     pool = ANIM_OWNER_AS(RoomOrbitPairChannel)->pool;
     FieldFx_TransformMatrixPoint(pool, 4, &template, position);
@@ -503,7 +503,7 @@ int func_80193BFC(int mode, s16 *counter) {
                 Akao_SendTableCommand(*soundSlot, 0x5BF, 0x80, 0x80, volume);
         }
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x20,
-                             (FieldAnimCallbackListCallback)func_8019377C);
+                             (FieldFxCallbackListCallback)func_8019377C);
     case 1:
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &template, &position);
         func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &base);
@@ -1203,7 +1203,7 @@ int func_80195728(int mode, s16 *state) {
         D_801960A8 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5487704);
         FieldFx_ModelScrollUv(D_801960A8, 0, 0);
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 8, 0x10,
-                             (FieldAnimCallbackListCallback)func_8019552C);
+                             (FieldFxCallbackListCallback)func_8019552C);
     case 1:
         if (*state < 0x80) *state += 4;
         if (D_800E27EC == 1) {

@@ -3,7 +3,7 @@
 
 #include "common.h"
 #include "pe1/field_sprite_params.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/room_m005_drifting_sprite.h"
 #include "pe1/field_transform_point.h"
 #include "pe1/gte.h"
@@ -14,7 +14,7 @@
 #include "pe1/room_floor.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/asset_find.h"

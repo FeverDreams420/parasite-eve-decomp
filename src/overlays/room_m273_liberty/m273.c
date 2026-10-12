@@ -9,9 +9,9 @@
 #include "pe1/fieldfx_calls.h"
 #include "pe1/room_liberty_choice.h"
 #include "pe1/gte_types.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "room_m273_effects.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/gte_sine_table.h"
@@ -507,7 +507,7 @@ int func_801933A0(int mode) {
     switch(mode) {
     case 0:
         return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,12,9,
-                             (FieldAnimCallbackListCallback)func_8019320C);
+                             (FieldFxCallbackListCallback)func_8019320C);
     case 1: {
         RoomM273SampledLayerEffect *effect;
         RoomPlacementMap *transform;
@@ -570,7 +570,7 @@ int func_801936F0(int mode) {
     switch(mode) {
     case 0:
         return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,12,9,
-                             (FieldAnimCallbackListCallback)func_8019353C);
+                             (FieldFxCallbackListCallback)func_8019353C);
     case 1: {
         RoomM273ScaledLayerEffect *effect;
         Transform *transform;
@@ -632,7 +632,7 @@ int func_801939B4(int mode) {
     case 0:
         D_8019AE5C = 0;
         return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 4, 1,
-                             (FieldAnimCallbackListCallback)func_80193870);
+                             (FieldFxCallbackListCallback)func_80193870);
     case 1:
         if (D_800E27EC >= 20) return 2;
         if (D_8019AE5C) return 2;
@@ -784,7 +784,7 @@ int func_80193F30(int mode) {
         D_8019AE8C.asset=Asset_FindTable08ByU32Key(D_800B0E64[0],0xC5941704);
         FieldFx_ModelScrollUv(D_8019AE8C.asset,0,0);
         size=func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,16,6,
-                           (FieldAnimCallbackListCallback)func_80193CB8);
+                           (FieldFxCallbackListCallback)func_80193CB8);
         asm("" : : "r"(size));
         return size+func_800CE5AC(&D_8019AE8C.pool,size,4,2,func_80193B5C);
     }
@@ -853,7 +853,7 @@ int func_80194284(int mode) {
     switch (mode) {
     case 0:
         return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 4,
-                             (FieldAnimCallbackListCallback)func_80194128);
+                             (FieldFxCallbackListCallback)func_80194128);
     case 1: {
         RoomM273EffectModeState *state;
         if (D_8019AE9A) return 2;
@@ -920,7 +920,7 @@ int func_801945A8(int mode) {
     case 0:
         D_8019AE60=0; D_8019AE64=0;
         return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,8,4,
-                             (FieldAnimCallbackListCallback)func_80194470);
+                             (FieldFxCallbackListCallback)func_80194470);
     case 1: {
         RoomM273EffectModeState *state;
         if(D_8019AE9A) return 2;
@@ -1018,7 +1018,7 @@ int func_801949EC(int mode) {
     switch (mode) {
     case 0: {
         int size = func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 2,
-                                 (FieldAnimCallbackListCallback)func_801947CC);
+                                 (FieldFxCallbackListCallback)func_801947CC);
         asm("" : : "r"(size));
         return size + func_800CE5AC(&D_8019AE94, size, 16, 9, func_80199F84);
     }
@@ -1100,7 +1100,7 @@ int func_80194D54(int mode) {
     else
     {
 mode_one:
-    obj = ANIM_OWNER_AS(FieldAnimObjectPrefix)->actor;
+    obj = ANIM_OWNER_AS(FieldFxObjectPrefix)->actor;
     state = obj->state->action_state;
     frame = obj->anim.parts.integer;
     /* High half of anim_prev, the previous whole frame. */
@@ -1309,7 +1309,7 @@ int func_801955E8(int mode) {
         D_8019AE74 = (Inv_ScrambleGrid() & 7) + 4;
         D_8019AE78 = (Inv_ScrambleGrid() & 7) + 4;
         return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 100, 10,
-                             (FieldAnimCallbackListCallback)func_80194E6C);
+                             (FieldFxCallbackListCallback)func_80194E6C);
     }
     case 1: {
         s16 pathY[2];
@@ -1483,7 +1483,7 @@ int func_80195BD0(int mode) {
     switch(mode) {
     case 0: {
         int size=func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,12,10,
-                               (FieldAnimCallbackListCallback)func_80195984);
+                               (FieldFxCallbackListCallback)func_80195984);
         asm("" : : "r"(size));
         return size+func_800CE5AC(&D_8019AE7C,size,4,10,func_8019A290);
     }
@@ -1788,7 +1788,7 @@ int func_801969D8(int mode) {
     switch(mode) {
     case 0:
         return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,24,40,
-                             (FieldAnimCallbackListCallback)func_8019665C);
+                             (FieldFxCallbackListCallback)func_8019665C);
     case 1: {
         register unsigned char *stopped asm("$17")=&D_8019AF69;
         Player *player;
@@ -1909,7 +1909,7 @@ int func_8019706C(int mode) {
     switch(mode) {
     case 0:
         return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,8,40,
-                             (FieldAnimCallbackListCallback)func_80196F2C);
+                             (FieldFxCallbackListCallback)func_80196F2C);
     case 1: {
         int i;
         unsigned short *x,*y;
@@ -2038,7 +2038,7 @@ int func_80197648(int mode) {
     case 0:
         D_8019AE84=0;
         return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,8,12,
-                             (FieldAnimCallbackListCallback)func_801974DC);
+                             (FieldFxCallbackListCallback)func_801974DC);
     case 1: {
         Particle *output;
         if(D_8019AF69) return 2;
@@ -2114,7 +2114,7 @@ int func_80197A48(int mode) {
     switch(mode) {
     case 0:
         return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,8,4,
-                             (FieldAnimCallbackListCallback)func_801977F8);
+                             (FieldFxCallbackListCallback)func_801977F8);
     case 1: {
         Vector *output;
         if(D_8019AF69) return 2;
@@ -2370,7 +2370,7 @@ int func_801986E8(int mode) {
     switch (mode) {
     case 0:
         count = func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 0x14, 4,
-                              (FieldAnimCallbackListCallback)func_801981A4);
+                              (FieldFxCallbackListCallback)func_801981A4);
         count += func_800CE5AC(&D_8019AF70, count, 8, 0x14, func_80198060);
         return count;
     case 1:
@@ -2477,7 +2477,7 @@ int func_80198CD4(int mode) {
     switch(mode) {
     case 0:
         return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,8,4,
-                             (FieldAnimCallbackListCallback)func_80198B1C);
+                             (FieldFxCallbackListCallback)func_80198B1C);
     case 1: {
         Record *source;
         int i;
@@ -2633,7 +2633,7 @@ int func_801993F0(int mode) {
         D_8019AF6C = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5541704);
         FieldFx_ModelScrollUv(D_8019AF6C, 0, 0);
         return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 4,
-                             (FieldAnimCallbackListCallback)func_80198E94);
+                             (FieldFxCallbackListCallback)func_80198E94);
     case 1: {
         int i;
         unsigned char *flags;
@@ -2799,7 +2799,7 @@ int func_80199A90(int mode) {
     case 0:
         D_8019AE88=0;
         return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,4,6,
-                             (FieldAnimCallbackListCallback)func_80199950);
+                             (FieldFxCallbackListCallback)func_80199950);
     case 1: {
         int i;
         Position *position;
@@ -2963,7 +2963,7 @@ s32 func_8019A068(s32 state) {
         }
         D_8019AE68 = 0;
         return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 5,
-                             (FieldAnimCallbackListCallback)func_80194B5C);
+                             (FieldFxCallbackListCallback)func_80194B5C);
     }
     if (D_8019AE68 != 0) {
         return 2;

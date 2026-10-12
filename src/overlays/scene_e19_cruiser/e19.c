@@ -12,7 +12,7 @@
 #include "pe1/scene_e19_blast.h"
 #include "pe1/render_object.h"
 #include "pe1/gte.h"
-#include "pe1/field_anim.h"
+#include "pe1/fieldfx_task.h"
 #include "pe1/field_actor.h"
 #include "pe1/overlay_math.h"
 #include "pe1/random.h"
@@ -466,7 +466,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             if (func_800C6B90(&blast->position, 0x960) != 0
                 && (func_800C6B90(&blast->position, 0x4B0) != 0
                     || func_800C6B90(&blast->position, 0x6A4) == 0)
-                && ANIM_TASK_AS(SceneE19BlastScript)->active != 0
+                && FX_TASK_AS(SceneE19BlastScript)->active != 0
                 && ((*ANIM_OWNER_AS(SceneE19BlastChannel)->pool)->flags & 0x3F000000) == 0x01000000) {
                 (*((SceneE19BlastPlayer **)D_8009D254))->flags |= 0x4000;
                 actor = *ANIM_OWNER_AS(SceneE19BlastChannel)->pool;
@@ -1342,7 +1342,7 @@ int func_801960C4(int mode, SceneHomingBurst *burst)
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneHomingBurstChannel)->pool, 0, &rotation, &burst->position);
         burst->timer = 0;
         burst->released = 0;
-        if (ANIM_TASK_AS(SceneHomingBurstEvent)->active) {
+        if (FX_TASK_AS(SceneHomingBurstEvent)->active) {
             SceneHomingBurstPool *pool = ANIM_OWNER_AS(SceneHomingBurstChannel)->pool;
             if (pool) {
                 SceneHomingBurstObject *object = pool->object;
@@ -1593,7 +1593,7 @@ int func_80196CCC(int mode, SceneSpinRayBurst *burst)
         func_800D3F64(0x5E1, func_800D3FD8());
         func_800D3F64(0x5E2, 0x80);
         return func_800CE560(ANIM_POOL_AS(SceneSpinRayChannel)->pool, 0x10, 0x32,
-                             (FieldAnimCallbackListCallback)func_80196748);
+                             (FieldFxCallbackListCallback)func_80196748);
     case 1:
         if (++burst->timer & 1) {
             child = func_800CE610(ANIM_POOL_AS(SceneSpinRayChannel)->pool);
@@ -1830,7 +1830,7 @@ int func_801978EC(int mode, SceneE22EmberBurst *burst) {
         burst->state = 0;
         burst->timer = 0;
         burst->glow = 0;
-        if (ANIM_TASK_AS(SceneE22EmberEvent)->active) {
+        if (FX_TASK_AS(SceneE22EmberEvent)->active) {
             pool = ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool;
             if (pool != 0 && pool->object != 0) {
                 object = pool->object;
@@ -1850,7 +1850,7 @@ int func_801978EC(int mode, SceneE22EmberBurst *burst) {
         func_800CE870((char *)RoomMain_ActorPtr, 1, (s16 *)burst);
         burst->y = g_RoomFloorY->y;
         return func_800CE560(ANIM_POOL_AS(SceneE22EmberChannel)->pool, 0x14, 0x28,
-                             (FieldAnimCallbackListCallback)func_801972EC);
+                             (FieldFxCallbackListCallback)func_801972EC);
     case 1:
         if (burst->state < 2)
             func_80020D50();
@@ -1909,7 +1909,7 @@ int func_801978EC(int mode, SceneE22EmberBurst *burst) {
         case 2:
             burst->timer++;
             burst->glow = rcos((burst->timer << 10) / 24) / 32;
-            if (burst->timer == 1 && ANIM_TASK_AS(SceneE22EmberEvent)->active) {
+            if (burst->timer == 1 && FX_TASK_AS(SceneE22EmberEvent)->active) {
                 channel = ANIM_OWNER_AS(SceneE22EmberObjectChannel);
                 if ((channel->pool->object->flags & 0x3F000000) == 0x01000000) {
                     RoomMain_ActorPtr->state->flags |= 0x4000;

@@ -17,7 +17,7 @@ class Room350EffectRequestTests(unittest.TestCase):
         # The fall callback is reduced to a prototype; the test stubs it.
         source = host_unit("func_801976C8", under=ROOM)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxTaskSlot *D_800F33E0;
 unsigned char D_8019A86E, D_8019A857;
 short D_8019A864[3];
 #define D_8019A866 D_8019A864[1]
@@ -42,7 +42,7 @@ static int poolToken, setups, allocations, failAllocation, setupResult;
 static short effect[4], xValue, yValue, zValue;
 int func_80197594(int event, short *point) { return 0; }
 int func_800CE560(char *pool, int a, int b,
-                  FieldAnimCallbackListCallback callback) {
+                  FieldFxCallbackListCallback callback) {
     assert(setups++ == 0 && allocations == 0 && pool == &poolToken);
     assert(a == 8 && b == 4 && (void *)callback == (void *)func_80197594);
     return setupResult;
@@ -60,7 +60,7 @@ int main(void) {
     const unsigned short indices[] = {0, 1, 255, 32768, 65535};
     short before[4];
     int event, stop, request, fail, x, y, z, i, ret;
-    emitter.pool = &poolToken; D_800F33E0 = (FieldAnimTaskSlot *)&emitter;
+    emitter.pool = &poolToken; D_800F33E0 = (FieldFxTaskSlot *)&emitter;
     for (ret = -2; ret <= 2; ++ret) {
         setups = allocations = 0; setupResult = ret;
         D_8019A857 = 128; D_8019A86E = 255;

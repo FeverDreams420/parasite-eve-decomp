@@ -47,7 +47,7 @@ typedef char layout[sizeof(Effect)==12 &&
         source = '#include <assert.h>\n#include <string.h>\n#include <limits.h>\n' + source + r'''
 typedef RoomM273PulseEmitterView Effect;
 static RoomM273PoolContext context;
-FieldAnimTaskSlot *D_800F33E0=(FieldAnimTaskSlot *)&context;
+FieldFxTaskSlot *D_800F33E0=(FieldFxTaskSlot *)&context;
 static unsigned char primary[128],otherPrimary[128],secondary[128],otherSecondary[128];
 void *D_8019AE7C=secondary;
 unsigned short D_800E11EA,D_800E2850[8];
@@ -56,9 +56,9 @@ static Effect records[8],*links[8];
 static int init,attempts,aux,updates,renders,failAt,mutateCount;
 int func_80195984(int mode, RoomM273PulseInput *input) { assert(0); return 0; }
 int func_8019A290(void) { assert(0); return 0; }
-int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback callback) {
+int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(init++==0 && p==(char *)primary && stride==12 && count==10 &&
-           callback==(FieldAnimCallbackListCallback)func_80195984);
+           callback==(FieldFxCallbackListCallback)func_80195984);
     return 120;
 }
 int func_800CE5AC(void *p,int offset,int stride,int count,void *callback) {

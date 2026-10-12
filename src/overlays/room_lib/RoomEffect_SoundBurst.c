@@ -39,7 +39,7 @@ int RoomEffect_SoundBurstParticle(int mode, RoomSoundBurstParticle *particle,
         func_800CF844(particle, world, (s16)particle->swing, &position, swing,
                       0);
         if (func_800C6B90(world, 100) != 0) {
-            if (ANIM_TASK_AS(RoomSoundBurstEventState)->active) {
+            if (FX_TASK_AS(RoomSoundBurstEventState)->active) {
                 RoomSoundBurstChannel *channel = ANIM_OWNER_AS(RoomSoundBurstChannel);
                 u32 *entry;
                 if ((**(u32 **)channel->pool & 0x3F000000) == 0x01000000) {
@@ -95,7 +95,7 @@ int RoomEffect_SoundBurstController(int mode, RoomSoundBurstState *state) {
         state->soundHandle = func_800D3F64(0x5A1, func_800D3FD8());
         pool = ANIM_POOL_AS(RoomSoundBurstChannel)->pool;
         return func_800CE560(pool, 24, 24,
-                             (FieldAnimCallbackListCallback)RoomEffect_SoundBurstParticle);
+                             (FieldFxCallbackListCallback)RoomEffect_SoundBurstParticle);
     case 1:
         state->frame++;
         if (D_800E27EC < 0x47) {
@@ -119,7 +119,7 @@ int RoomEffect_SoundBurstController(int mode, RoomSoundBurstState *state) {
                     child->tilt = func_80071A54();
                     child->spread = angle;
                 }
-                if (ANIM_TASK_AS(RoomSoundBurstEventState)->active) {
+                if (FX_TASK_AS(RoomSoundBurstEventState)->active) {
                     RoomSoundBurstNode **slot =
                         (RoomSoundBurstNode **)ANIM_OWNER_AS(RoomSoundBurstChannel)->pool;
                     if (slot && *slot) {

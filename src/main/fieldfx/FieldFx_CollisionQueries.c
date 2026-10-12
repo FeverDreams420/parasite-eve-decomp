@@ -9,7 +9,7 @@
 #include "pe1/field_actor.h"
 #include "pe1/psyq_libc.h"
 #include "pe1/asset_find.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "pe1/fieldfx_state.h"
 #include "pe1/field_collision.h"
 #include "pe1/battle.h"
@@ -256,7 +256,7 @@ void func_800C65E4(s16 *from, s16 *to, GteMatrix *out) {
     VectorNormalS(&forward, (GteShortVector *)&out->t[2]);
 }
 
-int func_800C66C8(FieldAnimObjectPrefix *owner, int message, GteMatrix *pos) {
+int func_800C66C8(FieldFxObjectPrefix *owner, int message, GteMatrix *pos) {
     int result = 0;
 
     if (FieldFx_GetStatus(owner) == 3 || FieldFx_GetStatus(owner) == 4) {
@@ -267,7 +267,7 @@ int func_800C66C8(FieldAnimObjectPrefix *owner, int message, GteMatrix *pos) {
     return result;
 }
 
-int func_800C6764(FieldAnimObjectPrefix *owner, int message, GteVector *pos) {
+int func_800C6764(FieldFxObjectPrefix *owner, int message, GteVector *pos) {
     int result = 0;
 
     if (FieldFx_GetStatus(owner) == 3 || FieldFx_GetStatus(owner) == 4) {
@@ -278,7 +278,7 @@ int func_800C6764(FieldAnimObjectPrefix *owner, int message, GteVector *pos) {
     return result;
 }
 
-int func_800C6800(FieldAnimObjectPrefix *owner, int message, GteShortVector *pos) {
+int func_800C6800(FieldFxObjectPrefix *owner, int message, GteShortVector *pos) {
     int result = 0;
 
     if (FieldFx_GetStatus(owner) == 3 || FieldFx_GetStatus(owner) == 4) {
@@ -391,7 +391,7 @@ int func_800C6C18(char *obj) {
     int enabled;
 
     if (FieldFx_GetStatus(obj) == 3) {
-        enabled = (((FieldAnimObjectPrefix *)obj)->actor->state->action_state[0] == 2);
+        enabled = (((FieldFxObjectPrefix *)obj)->actor->state->action_state[0] == 2);
     } else {
         enabled = 1;
     }
@@ -399,7 +399,7 @@ int func_800C6C18(char *obj) {
     if (enabled != 0) {
         if (FieldFx_GetStatus(obj) == 3) {
             ((Combatant *)D_8009D254->core)->stateFlags |= 0x4000;
-            ((FieldAnimObjectPrefix *)obj)->actor->state->core_flags |= 0x80000000;
+            ((FieldFxObjectPrefix *)obj)->actor->state->core_flags |= 0x80000000;
         }
     }
 
@@ -407,7 +407,7 @@ int func_800C6C18(char *obj) {
 }
 
 int FieldFx_GetStatus(void *object) {
-    FieldAnimObjectPrefix *obj = object;
+    FieldFxObjectPrefix *obj = object;
     FieldActor *data = obj->actor;
     int status = 0;
 

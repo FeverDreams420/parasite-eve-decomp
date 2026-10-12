@@ -1,6 +1,6 @@
 #include "room_m273_effects.h"
 #include "pe1/field_sprite_draw.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "room_m273_sweep.h"
 
 typedef RoomM273PointerPoolEffect Effect;
@@ -51,7 +51,7 @@ void *func_8019A5D4(int unused, int value, int flag) {
 }
 
 #include "common.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 
 #include "room_m273_effects.h"
 #include "RoomEffect_PhasedArcSpriteFlow_externs_2.h"
@@ -68,7 +68,7 @@ s32 func_8019A628(s32 arg0) {
             return 0;
         }
         return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 5,
-                             (FieldAnimCallbackListCallback)func_8019A720);
+                             (FieldFxCallbackListCallback)func_8019A720);
     }
 
     if (D_8019AF6B != 0) {

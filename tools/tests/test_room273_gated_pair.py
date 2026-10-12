@@ -29,7 +29,7 @@ typedef char layout[sizeof(Record)==8 && __alignof__(Record)==2 &&
     def test_behavior(self):
         source = '#include <assert.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
 #define memcmp __builtin_memcmp
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxTaskSlot *D_800F33E0;
 RoomM273SwayState D_8019AF74;
 unsigned short D_800E11FA,D_800E2850[65536];
 RenderEffectParameters D_800F3368;
@@ -37,9 +37,9 @@ static RoomM273PoolContext context;
 static int pool,initCalls,initResult,allocs,failAt;
 static Record outputs[2];
 int func_80198B1C(int mode,Vector *p) { assert(0); return 0; }
-int func_800CE560(char *p,int size,int count,FieldAnimCallbackListCallback callback) {
+int func_800CE560(char *p,int size,int count,FieldFxCallbackListCallback callback) {
     assert(p==(char *)&pool && size==8 && count==4 &&
-           callback==(FieldAnimCallbackListCallback)func_80198B1C);
+           callback==(FieldFxCallbackListCallback)func_80198B1C);
     ++initCalls;
     return initResult;
 }
@@ -56,7 +56,7 @@ int main(void) {
     short states[]={-32768,14,15,16,32767};
     short counts[]={-32768,3,4,32767};
     unsigned short indices[]={0,1,32768,65535};
-    D_800F33E0=(FieldAnimTaskSlot *)&context; context.pool=&pool;
+    D_800F33E0=(FieldFxTaskSlot *)&context; context.pool=&pool;
     for(initResult=-1;initResult<=1;++initResult)
         assert(func_80198CD4(0)==initResult);
     for(a=0;a<5;++a) for(b=0;b<4;++b) for(c=0;c<4;++c)

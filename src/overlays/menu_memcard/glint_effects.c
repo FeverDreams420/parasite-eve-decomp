@@ -97,7 +97,7 @@ int MenuCard_RingBurstController(int mode, MemcardRingBurst *burst) {
         burst->state = 0;
         burst->timer = 0;
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 50,
-                             (FieldAnimCallbackListCallback)MenuCard_DriftGlowParticle);
+                             (FieldFxCallbackListCallback)MenuCard_DriftGlowParticle);
     case 1:
         switch (burst->state) {
         case 0:
@@ -396,7 +396,7 @@ int MenuCard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
         FieldFx_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 21, &tipB, &from);
         func_800D1384(&from, &to, 0x3F2, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailD, 1);
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 36,
-                             (FieldAnimCallbackListCallback)MenuCard_RisingEmberParticle);
+                             (FieldFxCallbackListCallback)MenuCard_RisingEmberParticle);
     case 1:
         flash->timer++;
         D_801F1F3A = 1;
@@ -627,7 +627,7 @@ int MenuCard_GlintBurstController(int mode, MemcardGlintBurst *burst) {
         burst->y = ((MemcardGlintAnchor *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->y;
         burst->z = ((MemcardGlintAnchor *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->z;
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 22,
-                             (FieldAnimCallbackListCallback)MenuCard_FadingGlintParticle);
+                             (FieldFxCallbackListCallback)MenuCard_FadingGlintParticle);
     case 1:
         if (D_800E27EC == 3) {
             for (i = 0; i < 6; i++) {
@@ -862,7 +862,7 @@ int MenuCard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
         burst->rotation.x = 0;
         FieldFx_ModelScrollUv((union FieldTexturedModel *)D_800E22D4, 0, 0);
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 40,
-                             (FieldAnimCallbackListCallback)MenuCard_SpinRingParticle);
+                             (FieldFxCallbackListCallback)MenuCard_SpinRingParticle);
     case 1:
         if (D_800E27EC == 3) {
             func_8006DDCC(1201, 0, burst->x, burst->y, burst->z);

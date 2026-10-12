@@ -8,7 +8,7 @@
 #include "pe1/field_sprite_params.h"
 #include "pe1/field_color.h"
 #include "pe1/field_sprite_draw.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/field_texture_tables.h"
 
 /* Packed geometry at 0x800C7AE0: two groups of 12-byte records and two

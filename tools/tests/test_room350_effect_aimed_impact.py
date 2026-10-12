@@ -16,8 +16,8 @@ class Room350EffectAimedImpactTests(unittest.TestCase):
     def test_spawn_angles_layout_and_helper_capture_order(self):
         source = host_unit("func_80197364", under=ROOM)
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <stdint.h>\n#include <string.h>\n' + source + r'''
-FieldAnimTaskSlot *D_800F33E0;
-FieldAnimObjectPrefix *D_800F32D0;
+FieldFxTaskSlot *D_800F33E0;
+FieldFxObjectPrefix *D_800F32D0;
 Player *g_PlayerEntity;
 unsigned char D_8019A86E, D_8019A855;
 short D_8019A86A;
@@ -55,7 +55,7 @@ static short signedHalf(uint32_t x) {
 }
 int func_80196F2C(int event, Particle *effect) { return 0; }
 int func_800CE560(char *p, int size, int count,
-                  FieldAnimCallbackListCallback callback) {
+                  FieldFxCallbackListCallback callback) {
     assert(setups++ == 0 && allocations == 0 && p == &pool);
     assert(size == 16 && count == 4 && (void *)callback == (void *)func_80196F2C);
     return setupResult;
@@ -63,7 +63,7 @@ int func_800CE560(char *p, int size, int count,
 void *func_800CE610(char *p) {
     assert(allocations++ == 0 && setups == 0 && p == &pool);
     /* Mutations probe captured versus reloaded values, not real helper side effects. */
-    D_800F32D0 = (FieldAnimObjectPrefix *)&actors[1];
+    D_800F32D0 = (FieldFxObjectPrefix *)&actors[1];
     g_PlayerEntity = &players[1];
     D_8019A855 = 165;
     D_8019A86E = 255;
@@ -88,7 +88,7 @@ int ratan2(int y, int horizontal) {
 }
 int Inv_ScrambleGrid(void) {
     assert(angles == 1 && randoms < 2);
-    D_800F32D0 = (FieldAnimObjectPrefix *)&actors[2];
+    D_800F32D0 = (FieldFxObjectPrefix *)&actors[2];
     instances[1].rot_y = yawAfterRandom;
     return rng[randoms++];
 }
@@ -114,7 +114,7 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *m, const GteShortVector *v,
     assert(out == &particle.velocity && D_8019A855 == 165);
     out->x = -3; out->y = 4; out->z = 5;
     particle.x = -32768; particle.y = 32767; particle.z = -123;
-    D_800F32D0 = (FieldAnimObjectPrefix *)&actors[2];
+    D_800F32D0 = (FieldFxObjectPrefix *)&actors[2];
     return out;
 }
 int Asset_Find08w(int id, int mode, int x, int y, int z) {
@@ -127,8 +127,8 @@ int Asset_Find08w(int id, int mode, int x, int y, int z) {
 }
 static void reset(void) {
     setups = allocations = roots = angles = randoms = rotations = applications = sounds = 0;
-    D_800F33E0 = (FieldAnimTaskSlot *)&emitter;
-    D_800F32D0 = (FieldAnimObjectPrefix *)&actors[0]; g_PlayerEntity = &players[0];
+    D_800F33E0 = (FieldFxTaskSlot *)&emitter;
+    D_800F32D0 = (FieldFxObjectPrefix *)&actors[0]; g_PlayerEntity = &players[0];
     D_8019A86E = 0; D_8019A855 = 1; D_8019A86A = -333;
     instances[1].rot_y = 17;
     memset(&particle, 0x5A, sizeof(particle));

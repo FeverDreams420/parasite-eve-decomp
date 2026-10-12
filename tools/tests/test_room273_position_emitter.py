@@ -30,7 +30,7 @@ typedef char layout[sizeof(Vector)==8 && __alignof__(Vector)==2 &&
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_behavior(self):
         source = '#include <assert.h>\n#include <limits.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxTaskSlot *D_800F33E0;
 unsigned char D_8019AF68,D_8019AF69;
 RoomM273SweepPoint D_8019AEFC;
 volatile unsigned short D_8019AEFE,D_8019AF00;
@@ -40,9 +40,9 @@ static RoomM273PoolContext context;
 static Vector output;
 static int pool,initCalls,initResult,allocs,fail;
 int func_801977F8(int mode,Vector *p) { assert(0); return 0; }
-int func_800CE560(char *p,int size,int count,FieldAnimCallbackListCallback callback) {
+int func_800CE560(char *p,int size,int count,FieldFxCallbackListCallback callback) {
     assert(p==(char *)&pool && size==8 && count==4 &&
-           callback==(FieldAnimCallbackListCallback)func_801977F8);
+           callback==(FieldFxCallbackListCallback)func_801977F8);
     ++initCalls;
     return initResult;
 }
@@ -57,7 +57,7 @@ int main(void) {
     int stop,emit,i,calls;
     unsigned char flags[]={0,1,255};
     unsigned short indices[]={0,1,32768,65535};
-    D_800F33E0=(FieldAnimTaskSlot *)&context; context.pool=&pool;
+    D_800F33E0=(FieldFxTaskSlot *)&context; context.pool=&pool;
     for(initResult=-1;initResult<=1;++initResult)
         assert(func_80197A48(0)==initResult);
     for(stop=0;stop<3;++stop) for(emit=0;emit<3;++emit)

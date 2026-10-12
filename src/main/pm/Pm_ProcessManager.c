@@ -7,7 +7,7 @@
 #include "pe1/scene_assets.h"
 #include "pe1/game_state.h"
 #include "pe1/cdrom.h"
-#include "pe1/field_anim.h"
+#include "pe1/fieldfx_task.h"
 #include "pe1/player_entity.h"
 
 static inline int FindSlot(u32 command)
@@ -57,7 +57,7 @@ int Pm_FreeSlot(int slot) {
     entry = SlotHeader(slot);
     if (entry->command == 0x72) {
         for (i = 0x6C; i < 0x73; i++) {
-            g_FieldAnimTaskPrograms[i - 85] = 0;
+            g_FieldFxTaskPrograms[i - 85] = 0;
         }
         g_GameState.flags &= ~0x10000;
     }
@@ -89,13 +89,13 @@ retry:
         EnterCriticalSection();
         FlushCache();
         ExitCriticalSection();
-        g_FieldAnimTaskPrograms[108 - 85] = D_801F1BD8;
-        g_FieldAnimTaskPrograms[109 - 85] = D_801F1C58;
-        g_FieldAnimTaskPrograms[110 - 85] = D_801F1D00;
-        g_FieldAnimTaskPrograms[111 - 85] = D_801F1D8C;
-        g_FieldAnimTaskPrograms[112 - 85] = D_801F1E18;
-        g_FieldAnimTaskPrograms[113 - 85] = D_801F1EA4;
-        g_FieldAnimTaskPrograms[114 - 85] = D_801F1EF0;
+        g_FieldFxTaskPrograms[108 - 85] = D_801F1BD8;
+        g_FieldFxTaskPrograms[109 - 85] = D_801F1C58;
+        g_FieldFxTaskPrograms[110 - 85] = D_801F1D00;
+        g_FieldFxTaskPrograms[111 - 85] = D_801F1D8C;
+        g_FieldFxTaskPrograms[112 - 85] = D_801F1E18;
+        g_FieldFxTaskPrograms[113 - 85] = D_801F1EA4;
+        g_FieldFxTaskPrograms[114 - 85] = D_801F1EF0;
         g_GameState.flags |= 0x10000;
     }
     Asset_LoadTimTextures(0);
@@ -125,7 +125,7 @@ retry:
     entry->ticks = 0;
     entry->owner = owner;
     if (command == 85)
-        FieldFx_BindTaskProgram((FieldAnimTaskOwner *)entry, subcommand);
+        FieldFx_BindTaskProgram((FieldFxTaskOwner *)entry, subcommand);
     g_PmCmdHandlerTable[command]->initialize(entry);
     return slot;
 }
@@ -224,7 +224,7 @@ static inline void ClearSlot(int slot)
         entry = SlotHeader(slot);
         if (entry->command == 0x72) {
             for (i = 0x6C; i < 0x73; i++) {
-                g_FieldAnimTaskPrograms[i - 85] = 0;
+                g_FieldFxTaskPrograms[i - 85] = 0;
             }
             g_GameState.flags &= ~0x10000;
         }

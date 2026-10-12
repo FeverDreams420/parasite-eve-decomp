@@ -43,17 +43,17 @@ static FieldActor scene, replacementScene;
 static RoomM273PointerPoolEffect effect;
 static unsigned char pool[512];
 static RenderMatrix object, replacementObject;
-FieldAnimTaskSlot *D_800F33E0=(FieldAnimTaskSlot *)&context;
-FieldAnimObjectPrefix *D_800F32D0=(FieldAnimObjectPrefix *)&stateContext;
+FieldFxTaskSlot *D_800F33E0=(FieldFxTaskSlot *)&context;
+FieldFxObjectPrefix *D_800F32D0=(FieldFxObjectPrefix *)&stateContext;
 FieldActor *g_PlayerEntity=&scene;
 void *D_8019AE94;
 unsigned char D_8019AE9A;
 static int calls,allocations,updates,renders,failAllocation,firstSize,secondSize;
 int func_801947CC(int mode, RoomM273PaletteInput *input) { assert(0); return 0; }
 int func_80199F84(int mode, RoomM273PulseState *state) { assert(0); return 0; }
-int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback callback) {
+int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(calls++==0 && p==(char *)pool && stride==8 && count==2 &&
-           callback==(FieldAnimCallbackListCallback)func_801947CC);
+           callback==(FieldFxCallbackListCallback)func_801947CC);
     return firstSize;
 }
 int func_800CE5AC(void *out,int offset,int stride,int count,void *callback) {

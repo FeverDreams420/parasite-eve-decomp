@@ -1,5 +1,5 @@
 #include "common.h"
-#include "pe1/field_anim.h"
+#include "pe1/fieldfx_task.h"
 #include "pe1/field_actor.h"
 #include "pe1/vector_types.h"
 #include "pe1/field_vector_math.h"
@@ -39,9 +39,9 @@ void func_800DFB20(Func800DFB20State *state)
  * A pending one-shot flag (0x80000 or 0x40000 at +0x98, selected by the
  * state bits) is consumed and reported once; otherwise the object waits while
  * its child is mid-animation. */
-int func_800DFB78(FieldAnimTaskOwner *arg0)
+int func_800DFB78(FieldFxTaskOwner *arg0)
 {
-  register FieldAnimTaskContext *state;
+  register FieldFxTaskContext *state;
   FieldActor *obj;
   register u32 flags;
   register u32 masked;

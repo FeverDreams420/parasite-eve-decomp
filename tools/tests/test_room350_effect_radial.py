@@ -25,7 +25,7 @@ RenderEffectParameters D_800F3368;
 #define D_800F3374 D_800F3368.depth
 #define D_800F3376 D_800F3368.extent_x
 #define D_800F3378 D_800F3368.extent_y
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxTaskSlot *D_800F33E0;
 unsigned char D_8019A86E, D_8019A859;
 unsigned short D_800E11E8, D_800E2850[65536];
 static RoomM350Emitter emitters[2];
@@ -38,7 +38,7 @@ _Static_assert(offsetof(Matrix, position) == 20, "translation offset");
 _Static_assert(sizeof(Vector) == 8, "vector size");
 int func_80197A04(int event, short *object) { return 0; }
 int func_800CE560(char *pool, int a, int b,
-                  FieldAnimCallbackListCallback callback) {
+                  FieldFxCallbackListCallback callback) {
     assert(setups++ == 0 && allocations == 0 && pool == &pools[0]);
     assert(a == 8 && b == 16 && (void *)callback == (void *)func_80197A04);
     return setupResult;
@@ -47,7 +47,7 @@ void *func_800CE610(char *pool) {
     assert(setups == 0 && allocations < 2);
     assert(pool == &pools[allocations & 1]);
     /* Mutations probe reload order, not the real allocator's side effects. */
-    D_800F33E0 = (FieldAnimTaskSlot *)&emitters[1];
+    D_800F33E0 = (FieldFxTaskSlot *)&emitters[1];
     D_8019A859 = requestAfterAllocation;
     D_8019A86E = 255;
     allocations++;
@@ -84,7 +84,7 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *matrix, const GteShortVector *vec
 }
 static void reset(void) {
     setups = allocations = draws = rotations = randomCalls = 0;
-    D_800F33E0 = (FieldAnimTaskSlot *)&emitters[0];
+    D_800F33E0 = (FieldFxTaskSlot *)&emitters[0];
 }
 int main(void) {
     const int values[] = {0, 1, 63, 64, 127, 128, 254, 255};

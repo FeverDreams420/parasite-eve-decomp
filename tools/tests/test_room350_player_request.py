@@ -37,7 +37,7 @@ typedef char e[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
 typedef RoomM350TransformMatrix Transform;
 /* The spawner reads the player through the transform-owner view. */
 FieldActor *g_PlayerEntity;
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxTaskSlot *D_800F33E0;
 unsigned char D_8019A79A,D_8019A79C;
 RenderEffectParameters D_800F3368;
 u16 D_800E11E4[16];
@@ -49,9 +49,9 @@ static Particle particle,expected;
 static int pool,calls,setups,setupResult,fail;
 static int half(uint32_t x) { x &=65535; return x<32768 ? (int)x:(int)x-65536; }
 int func_801937B4(int e,short *p) { return 0; }
-int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback cb) {
+int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pool && stride==8 && count==4);
-    assert(cb==(FieldAnimCallbackListCallback)func_801937B4);
+    assert(cb==(FieldFxCallbackListCallback)func_801937B4);
     setups++; return setupResult;
 }
 void *func_800CE610(char *p) {
@@ -62,7 +62,7 @@ void *func_800CE610(char *p) {
 }
 static void reset(void) {
     calls=setups=0; g_PlayerEntity=(FieldActor *)&players[0];
-    D_800F33E0=(FieldAnimTaskSlot *)&emitter;
+    D_800F33E0=(FieldFxTaskSlot *)&emitter;
     D_8019A79A=0; D_8019A79C=1;
     memset(&particle,0x5A,sizeof(particle)); expected=particle;
 }

@@ -1,10 +1,10 @@
 #include "common.h"
-#include "pe1/field_anim_pool.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "room_m350_shared.h"
 #include "pe1/room_m350_drop.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_actor.h"
-#include "pe1/field_anim_callback_list.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/gte_types.h"
 #include "pe1/player_entity.h"
 #include "pe1/asset_find.h"
@@ -202,7 +202,7 @@ int func_80197364(int event)
         goto done;
         }
         return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 16, 4,
-                             (FieldAnimCallbackListCallback)func_80196F2C);
+                             (FieldFxCallbackListCallback)func_80196F2C);
     }
 update:
     {
@@ -291,7 +291,7 @@ int func_801976C8(int event)
     case 0:
 
         return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 8, 4,
-                             (FieldAnimCallbackListCallback)func_80197594);
+                             (FieldFxCallbackListCallback)func_80197594);
         case 1:
     if (D_8019A86E) return 2;
     if (D_8019A857) {
@@ -330,7 +330,7 @@ int func_8019784C(int event)
     switch (event) {
     case 0:
         return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 8, 16,
-                             (FieldAnimCallbackListCallback)func_8019A014);
+                             (FieldFxCallbackListCallback)func_8019A014);
     case 1:
     if (D_8019A86E) return 2;
     {
@@ -406,7 +406,7 @@ int func_80197B98(int event)
     case 0:
 
         return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 8, 16,
-                             (FieldAnimCallbackListCallback)func_80197A04);
+                             (FieldFxCallbackListCallback)func_80197A04);
         case 1:
     if (D_8019A86E) return 2;
     if (D_8019A859) {
@@ -604,7 +604,7 @@ int func_80198400(int event) {
     case 0:
 
         return func_800CE560(ANIM_POOL_AS(RoomM350EffectEmitter)->pool,8,4,
-                             (FieldAnimCallbackListCallback)func_801981D0);
+                             (FieldFxCallbackListCallback)func_801981D0);
         case 1:
     previousEndpoint=&D_8019A8A8;
     previousOppositeEndpoint=&D_8019A8B0;
@@ -748,7 +748,7 @@ int func_80198ABC(int event)
     case 0:
 
         return func_800CE560(ANIM_POOL_AS(RoomM350EffectEmitter)->pool,20,16,
-                             (FieldAnimCallbackListCallback)func_80198860);
+                             (FieldFxCallbackListCallback)func_80198860);
         case 1:
     {
         int i;
@@ -959,7 +959,7 @@ int func_801992A0(int event,FadingModelState *state)
             Asset_Find08w(0x549,instance->state->progress,(short)matrix->translation[0],(short)matrix->translation[1],(short)matrix->translation[2]);
             state->count=0; state->delay=0; D_8019A8C4=0;
             return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,20,10,
-                                 (FieldAnimCallbackListCallback)func_80199148);
+                                 (FieldFxCallbackListCallback)func_80199148);
         }
         case 1:
     {
@@ -1114,7 +1114,7 @@ int func_8019988C(int event, EmissionState *state)
         state->count = 0;
         state->delay = 0;
         return func_800CE560(ANIM_POOL_AS(RoomM350EffectEmitter)->pool, 24, 8,
-                             (FieldAnimCallbackListCallback)func_801996BC);
+                             (FieldFxCallbackListCallback)func_801996BC);
         case 1:
     if (state->count < 24) {
         RoomM350SineParticle *effect;
@@ -1291,7 +1291,7 @@ s32 func_80199D50(s32 arg0) {
         }
         obj = ANIM_POOL_AS(char *)[2];
         return func_800CE560(obj, 8, 2,
-                             (FieldAnimCallbackListCallback)func_80196C64);
+                             (FieldFxCallbackListCallback)func_80196C64);
     } else if ((char)D_8019A82E != 0) {
         return 2;
     } else if ((char)D_8019A830 != 0) {
@@ -1329,7 +1329,7 @@ s32 func_80199E50(s32 arg0) {
             return 0;
         }
         return func_800CE560(D_800F33E0->end, 4, 2,
-                             (FieldAnimCallbackListCallback)func_8019A134);
+                             (FieldFxCallbackListCallback)func_8019A134);
     } else if ((char)D_8019A86E != 0) {
         return 2;
     } else if (D_8019A854 != 0) {
@@ -1355,7 +1355,7 @@ s32 func_80199F2C(s32 arg0) {
             return 0;
         }
         return func_800CE560(ANIM_POOL_AS(char *)[2], 8, 6,
-                             (FieldAnimCallbackListCallback)func_8019A21C);
+                             (FieldFxCallbackListCallback)func_8019A21C);
     } else if ((char)D_8019A86E != 0) {
         return 2;
     } else if (D_8019A856 != 0) {

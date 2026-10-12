@@ -35,7 +35,7 @@ typedef char d[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
         source = host_unit(SPAWNER, path=find_definition(SPAWNER, under=ROOM))
         # Stubs validate CPU-side helper contracts, not rotation/GTE arithmetic.
         harness = '#include <assert.h>\n#include <stdint.h>\n#include <string.h>\n#include <limits.h>\n' + source + r'''
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxTaskSlot *D_800F33E0;
 GteShortVector D_8019A778[2];
 int D_800E27EC;
 short D_800966EE[8192];
@@ -51,9 +51,9 @@ static int word(uint32_t x) { int r; memcpy(&r,&x,4); return r; }
 static int half(uint32_t x) { x&=65535; return x<32768 ? (int)x:(int)x-65536; }
 static uint32_t rng(int n) { return seed+(uint32_t)n*0x87654321u; }
 int func_80199B94(int e,Particle *p) { return 0; }
-int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback cb) {
+int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && stride==8 && count==64);
-    assert(cb==(FieldAnimCallbackListCallback)func_80199B94); return -123;
+    assert(cb==(FieldFxCallbackListCallback)func_80199B94); return -123;
 }
 void *func_800CE610(char *p) {
     int i=allocs++;
@@ -79,12 +79,12 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *m,const GteShortVector *v,GteShor
         ((short *)&D_8019A778[i&1])[j]=half(seed*13+i*257+j);
         expected[i].position[j]=half((uint16_t)((short *)out)[j]+(uint16_t)((short *)&D_8019A778[i&1])[j]);
     }
-    D_800F33E0=(FieldAnimTaskSlot *)&emitters[(i+1)&1];
+    D_800F33E0=(FieldFxTaskSlot *)&emitters[(i+1)&1];
     memset(D_800966EE,0,sizeof(D_800966EE));
     return out;
 }
 static void reset(void) {
-    allocs=randoms=rotations=applications=0; D_800F33E0=(FieldAnimTaskSlot *)&emitters[0];
+    allocs=randoms=rotations=applications=0; D_800F33E0=(FieldFxTaskSlot *)&emitters[0];
     memset(particles,0x5A,sizeof(particles)); memcpy(expected,particles,sizeof(particles));
 }
 static void run(int timer,int sample,int failure) {

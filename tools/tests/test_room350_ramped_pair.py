@@ -37,8 +37,8 @@ typedef char g[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
     def test_signed_ramp_and_allocation_reloads(self):
         source = host_unit(EMITTER, path=find_definition(EMITTER, under=ROOM))
         harness = '#include <assert.h>\n#include <stdint.h>\n#include <string.h>\n#include <limits.h>\n' + source + r'''
-FieldAnimTaskSlot *D_800F33E0;
-FieldAnimObjectPrefix *D_800F32D0;
+FieldFxTaskSlot *D_800F33E0;
+FieldFxObjectPrefix *D_800F32D0;
 int D_800E27EC;
 GteShortVector D_8019A778[2];
 RenderEffectParameters D_800F3368;
@@ -52,9 +52,9 @@ static Particle particles[2],expected[2];
 static int pools[2],calls,setups,setupResult,failAt,mutate;
 static int half(uint32_t x) { x&=65535; return x<32768 ? (int)x:(int)x-65536; }
 int func_80192ADC(int e,Particle *p) { return 0; }
-int func_800CE560(char *pool,int size,int count,FieldAnimCallbackListCallback cb) {
+int func_800CE560(char *pool,int size,int count,FieldFxCallbackListCallback cb) {
     assert(pool==(char *)&pools[0] && size==8 && count==6);
-    assert(cb==(FieldAnimCallbackListCallback)func_80192ADC);
+    assert(cb==(FieldFxCallbackListCallback)func_80192ADC);
     assert(state.target==16384 && state.current==0); setups++; return setupResult;
 }
 void *func_800CE610(char *pool) {
@@ -64,7 +64,7 @@ void *func_800CE610(char *pool) {
     if(mutate) {
         state.current=half((unsigned short)state.current+0x8001u);
         state.target=-777; reference=state;
-        D_800F33E0=(FieldAnimTaskSlot *)&emitters[1]; D_800E27EC=7; instance.frame=65535;
+        D_800F33E0=(FieldFxTaskSlot *)&emitters[1]; D_800E27EC=7; instance.frame=65535;
     }
     if(i==failAt) return 0;
     expected[i].position=&D_8019A778[i]; expected[i].scale=state.current;
@@ -72,7 +72,7 @@ void *func_800CE610(char *pool) {
 }
 static void reset(int target,int current) {
     calls=setups=0; state.target=target; state.current=current; reference=state;
-    D_800F33E0=(FieldAnimTaskSlot *)&emitters[0]; D_800F32D0=(FieldAnimObjectPrefix *)&actor;
+    D_800F33E0=(FieldFxTaskSlot *)&emitters[0]; D_800F32D0=(FieldFxObjectPrefix *)&actor;
     memset(particles,0x5A,sizeof(particles)); memcpy(expected,particles,sizeof(particles));
 }
 static void run(int target,int current,unsigned frame,int timer,int failure,int mutation) {

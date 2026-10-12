@@ -37,7 +37,7 @@ static RoomM273PlayerTransform transform;
 static RoomM273SpritePoolEffect output;
 static RoomM273WorldPosition sentinel;
 static unsigned char pool[32];
-FieldAnimTaskSlot *D_800F33E0=(FieldAnimTaskSlot *)&context;
+FieldFxTaskSlot *D_800F33E0=(FieldFxTaskSlot *)&context;
 FieldActor *g_PlayerEntity=&owner;
 int D_800E27EC;
 unsigned char D_8019AE5C;
@@ -45,9 +45,9 @@ unsigned short D_800E11FA,D_800E2850[8];
 RenderEffectParameters D_800F3368;
 static int init,allocations,fail;
 int func_80193870(int mode, RoomM273SpritePoolEffect *state) { assert(0); return 0; }
-int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback callback) {
+int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(init++==0 && p==(char *)pool && stride==4 && count==1 &&
-           callback==(FieldAnimCallbackListCallback)func_80193870);
+           callback==(FieldFxCallbackListCallback)func_80193870);
     assert(D_8019AE5C==0); return 36;
 }
 void *func_800CE610(char *p) {

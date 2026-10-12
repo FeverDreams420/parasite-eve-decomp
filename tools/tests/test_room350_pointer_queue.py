@@ -39,7 +39,7 @@ typedef char d[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
         assert head in source
         source = source.replace(head, 'static Queue pending;\n#define D_8019A7FE pending.count\n' + head)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxTaskSlot *D_800F33E0;
 short D_8019A802;
 unsigned char D_8019A804;
 RenderEffectParameters D_800F3368;
@@ -50,22 +50,22 @@ static int pools[2], calls, setups, setupResult, failAt, nextCount;
 static Particle particles[4], expected[4];
 static Vector positions[8];
 int func_80194F04(int e, Particle *p) { return 0; }
-int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback cb) {
+int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && stride==8 && count==16);
-    assert(cb==(FieldAnimCallbackListCallback)func_80194F04);
+    assert(cb==(FieldFxCallbackListCallback)func_80194F04);
     setups++; return setupResult;
 }
 void *func_800CE610(char *p) {
     int index=calls++;
     assert(index<4 && p==(char *)&pools[index ? 1:0]);
-    D_800F33E0=(FieldAnimTaskSlot *)&emitters[1];
+    D_800F33E0=(FieldFxTaskSlot *)&emitters[1];
     pending.count=nextCount;
     pending.positions[index]=&positions[index+4];
     return index==failAt ? 0:&particles[index];
 }
 static void reset(void) {
     int i;
-    calls=setups=0; D_800F33E0=(FieldAnimTaskSlot *)&emitters[0];
+    calls=setups=0; D_800F33E0=(FieldFxTaskSlot *)&emitters[0];
     memset(particles,0x5A,sizeof(particles)); memcpy(expected,particles,sizeof(particles));
     for(i=0;i<4;i++) pending.positions[i]=&positions[i];
 }

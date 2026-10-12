@@ -28,7 +28,7 @@ typedef char layout[sizeof(Position)==8 && sizeof(Effect)==4 &&
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_behavior(self):
         source = '#include <assert.h>\n#include <limits.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
-FieldAnimTaskSlot *D_800F33E0;
+FieldFxTaskSlot *D_800F33E0;
 RoomM273SwayState D_8019AF74;
 short D_8019AE88;
 int D_800E27EC;
@@ -39,9 +39,9 @@ static Effect outputs[2];
 static Position sentinel;
 static int pool,initCalls,initResult,allocs,failAt;
 int func_80199950(int mode,Effect *p) { assert(0); return 0; }
-int func_800CE560(char *p,int size,int count,FieldAnimCallbackListCallback callback) {
+int func_800CE560(char *p,int size,int count,FieldFxCallbackListCallback callback) {
     assert(p==(char *)&pool && size==4 && count==6 &&
-           callback==(FieldAnimCallbackListCallback)func_80199950);
+           callback==(FieldFxCallbackListCallback)func_80199950);
     assert(D_8019AE88==0); ++initCalls; return initResult;
 }
 void *func_800CE610(char *p) {
@@ -57,7 +57,7 @@ int main(void) {
     int frames[]={INT_MIN,-9,-8,-1,0,1,7,8,16,INT_MAX};
     unsigned short indices[]={0,1,32768,65535};
     int s,a,b,f,i,stopped,eligible,success,calls;
-    D_800F33E0=(FieldAnimTaskSlot *)&context; context.pool=&pool;
+    D_800F33E0=(FieldFxTaskSlot *)&context; context.pool=&pool;
     for(initResult=-1;initResult<=1;++initResult) {
         D_8019AE88=99; assert(func_80199A90(0)==initResult);
     }
