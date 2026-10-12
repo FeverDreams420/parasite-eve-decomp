@@ -471,7 +471,7 @@ style macros in `pe1/gte.h`. C shapes that only exist for the bytes:
   variable bound, or a guarded `i = 0; if (i < count) do ... while` loop:
   combine folds the first compare into the branch and the orphaned compare
   pseudo keeps its stack slot. `Render_DrawTextDigit`, `Font_FindCodeSlot`
-  and `Obj_ResetAllEntries` lost their stack pads this way.
+  and `Render_ResetAllEntries` lost their stack pads this way.
 - Offsets from the geometry header (`g_GeomState + g_GeomState->field`) go
   through the `GeomStateAddress` word view (`GEOM_STATE_OFFSET`): retail
   loads the header pointer twice and adds the offset as an integer.

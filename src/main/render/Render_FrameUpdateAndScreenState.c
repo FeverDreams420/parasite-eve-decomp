@@ -176,7 +176,7 @@ int Render_PrepareFrame(void) {
     Render_InitViewState(state, state + 8);
     if (Geo_RenderMeshList((void *)D_800B0E40, &local.result)) return -2;
     SetGeomScreen(state[8]);
-    Obj_ResetAllEntries();
+    Render_ResetAllEntries();
     if (D_8009D254) {
         int x = D_8009D254->posX.parts.integer;
         int y, z;

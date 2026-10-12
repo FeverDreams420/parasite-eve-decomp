@@ -505,13 +505,13 @@ typedef struct CameraBaseAngles {
 } CameraBaseAngles;
 
 void Render_SetEntryVisible(int arg0, int arg1);
-void Obj_SetEntryLimit(int arg0, int arg1);
+void Render_SetEntryLimit(int arg0, int arg1);
 void Render_SetFlagSlot(int arg0, int arg1);
-int Obj_GetEntryField6(int arg0);
-void Obj_SetEntryField8(int arg0, int arg1);
-void Obj_FillEntrySlotValues(int arg0, int arg1);
-void Obj_SetEntrySlotValue(int arg0, int arg1, int arg2);
-void Obj_SetEntryFlags(int arg0, int arg1);
+int Render_GetEntryField6(int arg0);
+void Render_SetEntryField8(int arg0, int arg1);
+void Render_FillEntrySlotValues(int arg0, int arg1);
+void Render_SetEntrySlotValue(int arg0, int arg1, int arg2);
+void Render_SetEntryFlags(int arg0, int arg1);
 
 /* Arms the combat countdown: args are two minute-or-hour terms summed and
  * scaled to 60 Hz frames (216000 per unit), plus seconds (60 frames each). */
@@ -691,7 +691,7 @@ int Script_SetRenderEntryPos(short **arg0) {
 }
 
 int Script_SetObjEntryLimit(int **arg0) {
-    Obj_SetEntryLimit(*arg0[0], *arg0[1]);
+    Render_SetEntryLimit(*arg0[0], *arg0[1]);
     return 1;
 }
 
@@ -711,32 +711,32 @@ int Entity_SetCurrentFlag20(void) {
 }
 
 int Script_GetObjEntryField6(int **arg0) {
-    *arg0[1] = Obj_GetEntryField6(*arg0[0]);
+    *arg0[1] = Render_GetEntryField6(*arg0[0]);
     return 1;
 }
 
 int Script_SetObjEntryField8(int **arg0) {
-    Obj_SetEntryField8(*arg0[0], *arg0[1]);
+    Render_SetEntryField8(*arg0[0], *arg0[1]);
     return 1;
 }
 
 int Script_FillObjEntrySlotValues(int **arg0) {
-    Obj_FillEntrySlotValues(*arg0[0], *arg0[1]);
+    Render_FillEntrySlotValues(*arg0[0], *arg0[1]);
     return 1;
 }
 
 int Script_SetObjEntrySlotValue(int **arg0) {
-    Obj_SetEntrySlotValue(*arg0[0], *arg0[1], *arg0[2]);
+    Render_SetEntrySlotValue(*arg0[0], *arg0[1], *arg0[2]);
     return 1;
 }
 
 int Script_SetObjEntryFlags(int **arg0) {
-    Obj_SetEntryFlags(*arg0[0], *arg0[1]);
+    Render_SetEntryFlags(*arg0[0], *arg0[1]);
     return 1;
 }
 
 int Script_ClearObjEntryFlags(int **arg0) {
-    Obj_SetEntryFlags(*arg0[0], ~*arg0[1]);
+    Render_SetEntryFlags(*arg0[0], ~*arg0[1]);
     return 1;
 }
 

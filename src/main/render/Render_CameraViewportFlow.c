@@ -16,7 +16,7 @@
 
 /* Geometry animation control: reset, update and script setup commands. */
 
-int Obj_ResetAllEntries(void) {
+int Render_ResetAllEntries(void) {
     GeomState *state;
     GeomStateAddress base, controls, slots;
     GeomEntry *entries;
@@ -122,7 +122,7 @@ int Geom_StepGroupAnimations(void)
 #define GEOM_CTRL_ENTRY(address, base, index) \
     (GEOM_STATE_OFFSET(address, base, ctrl_offset, (index) << 4), (address).ctrl)
 
-int Obj_SetEntryLimit(int arg0, int arg1)
+int Render_SetEntryLimit(int arg0, int arg1)
 {
   GeomStateAddress address, base;
   GeomCtrlEntry *entry;
@@ -160,20 +160,20 @@ int Render_SetFlagSlot(int arg0, int arg1) {
     return 0;
 }
 
-s16 Obj_GetEntryField6(int index) {
+s16 Render_GetEntryField6(int index) {
     GeomStateAddress address, base;
 
     return GEOM_CTRL_ENTRY(address, base, index)->position.parts.frame;
 }
 
-int Obj_SetEntryField8(int index, unsigned int value) {
+int Render_SetEntryField8(int index, unsigned int value) {
     GeomStateAddress address, base;
 
     GEOM_CTRL_ENTRY(address, base, index)->step = value >> 8;
     return 0;
 }
 
-int Obj_FillEntrySlotValues(int index, u8 value)
+int Render_FillEntrySlotValues(int index, u8 value)
 {
     GeomStateAddress address, base, slots;
     GeomCtrlEntry *entry;
@@ -190,7 +190,7 @@ int Obj_FillEntrySlotValues(int index, u8 value)
     return 0;
 }
 
-int Obj_SetEntrySlotValue(int index, int slot, u8 value) {
+int Render_SetEntrySlotValue(int index, int slot, u8 value) {
     GeomStateAddress address, base;
     GeomCtrlEntry *entry;
     int ret;
@@ -202,7 +202,7 @@ int Obj_SetEntrySlotValue(int index, int slot, u8 value) {
     return ret;
 }
 
-int Obj_SetEntryFlags(int index, int bits) {
+int Render_SetEntryFlags(int index, int bits) {
     GeomStateAddress address, base;
 
     GEOM_CTRL_ENTRY(address, base, index)->head.b.flags |= bits & 0x30;

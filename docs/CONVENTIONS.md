@@ -103,7 +103,7 @@ edge, as `akao/Spu_TransferAndLifecycle` did before LIBPAD WAITRC2's
 | `render` | `Render_` | 3D object, room and sprite rendering, fades, camera | keep; `Scene_*Battle*` predicates to `scene` |
 | `anim` | `Anim_` | skeletal animation decode and interpolation | keep |
 | `entity` | `Entity_` | actor pools, movement, hierarchy, per-frame actor update | keep; `task.c` renamed by content |
-| `obj` | `Obj_` | geometry-state entry slots | dissolved: the three `Obj_` units are in `render` |
+| `obj` | `Obj_` | geometry-state entry slots | dissolved: its functions are `Render_*Entry*` in `render` |
 | `field` | `Field_`, `Geo_` | field map entries, collision and floor geometry | keep; `Geo_*` from `main` join it |
 | `fieldfx` | `FieldFx_` | the field effect engine in the separate `0x800C1CA0` segment: effect pool, emitters, particles | keep (renamed from `engine`, prefixes from `FieldEng_` and `FieldAnim_`) |
 | `scene` | `Scene_` | room and scene loading, story flags, scene dispatch | keep; receives `Scene_*` files from `draw`, `main`, `render`, `time` |
