@@ -3,17 +3,13 @@
 
 #include "pe1/akao_counters.h"
 #include "pe1/akao.h"
-
-int Akao_SendTableCommand(void *arg0, int arg1, int arg2, int arg3, int arg4);
+#include "pe1/akao_send.h"
 
 void Akao_SetBgmVolumeFade(void) {
-    void * volatile *slot;
     int value;
 
-    slot = g_AkaoBgmHandle;
-    if (*slot != 0) {
-        value = 0x7F;
-        value = Akao_SendTableCommand(*slot, 0x450, 0x100, 0x80, value);
+    if (g_AkaoBgmHandle[0] != 0) {
+        value = Akao_SendTableCommand(g_AkaoBgmHandle[0], 0x450, 0x100, 0x80, 0x7F);
     } else {
         value = 0;
     }
