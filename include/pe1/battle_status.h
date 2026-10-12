@@ -96,9 +96,8 @@ extern u8 D_8009CD90[];
 extern RenderPagedSpritePacket D_800B01C0[2][10][5];
 /* Clut and texture page halfwords of the end-of-battle panel quads. */
 extern u8 D_800BE9FE[], D_800BEA06[];
-/* End-of-battle panel; color bytes also have independent retail symbols. */
+/* End-of-battle panel quads, one per draw buffer. */
 extern RenderTexturedQuad D_800BE9F0[2];
-extern u8 D_800BE9F4[], D_800BE9F5[], D_800BE9F6[];
 void Battle_DrawStatusValue(int value, int yOffset);
 /* Returns the highest digit index (number of rendered digits minus one). */
 int Battle_DrawDecimalNumber(void *buffer, s16 x, s16 y, s16 value, s16 mode);

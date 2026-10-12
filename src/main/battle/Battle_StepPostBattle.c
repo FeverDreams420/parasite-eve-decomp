@@ -129,9 +129,9 @@ void Battle_StepPostBattle(void)
         s32 frame;
         asm volatile("" : : "r"(top));
         brightness = brightnessBase - (D_8009CE70 * 4);
-        *(D_800BE9F4 + (D_8009CDDC * 0x28)) = brightness;
-        *(D_800BE9F5 + (D_8009CDDC * 0x28)) = brightness;
-        *(D_800BE9F6 + (D_8009CDDC * 0x28)) = brightness;
+        D_800BE9F0[D_8009CDDC].color.bytes.r = brightness;
+        D_800BE9F0[D_8009CDDC].color.bytes.g = brightness;
+        D_800BE9F0[D_8009CDDC].color.bytes.b = brightness;
         base = D_800BE9F0;
         frame = D_8009CDDC;
         expandingPanel = &base[frame];
