@@ -134,8 +134,7 @@ typedef struct RoomInitThreeStack {
     RoomInitThreeVec projectionSeed;
     RoomInitThreeVec firstSeed;
     RoomInitThreeVec secondSeed;
-    RoomSpriteMatrix firstMatrix;
-    RoomSpriteMatrix secondMatrix;
+    RoomSpriteMatrix matrices[2];
 } RoomInitThreeStack;
 
 int *FieldEng_RegPtr(int index);
@@ -170,7 +169,7 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
     stack.firstSeed.z = 0;
     seed = &stack.firstSeed;
     asm("" : : "r"(seed));
-    firstMatrix = &stack.firstMatrix;
+    firstMatrix = &stack.matrices[0];
     RotMatrixYXZ(seed, firstMatrix);
 
     parameterIndex = 3;
@@ -180,16 +179,16 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
     stack.secondSeed.z = 0;
     seed = &stack.secondSeed;
     asm("" : : "r"(seed));
-    secondMatrix = &stack.secondMatrix;
+    secondMatrix = &stack.matrices[1];
     RotMatrixYXZ(seed, secondMatrix);
 
     gte_ldrotmatrix(firstMatrix);
     gte_ldrtir12_matrix_column(&clock->view.matrix.m[0][0]);
     gte_stir123_column(firstMatrix);
     gte_ldrtir12_matrix_column(&clock->view.matrix.m[0][1]);
-    gte_stir123_column_at(&stack.firstMatrix.m[0][1]);
+    gte_stir123_column_at(&stack.matrices[0].m[0][1]);
     gte_ldrtir12_matrix_column(&clock->view.matrix.m[0][2]);
-    gte_stir123_column_at(&stack.firstMatrix.m[0][2]);
+    gte_stir123_column_at(&stack.matrices[0].m[0][2]);
     gte_ldtransmatrix(firstMatrix);
     {
         unsigned short *translation = (unsigned short *)clock->view.matrix.t;
@@ -197,25 +196,25 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
         gte_cop2_hazard_slot();
         gte_cop2_hazard_slot();
         gte_rtv0tr_sf0();
-        gte_swc2_9_0(stack.firstMatrix.t);
-        gte_swc2_10_4(stack.firstMatrix.t);
-        gte_swc2_11_8(stack.firstMatrix.t);
+        gte_swc2_9_0(stack.matrices[0].t);
+        gte_swc2_10_4(stack.matrices[0].t);
+        gte_swc2_11_8(stack.matrices[0].t);
 
         gte_ldrotmatrix(secondMatrix);
         gte_ldrtir12_matrix_column(&clock->view.matrix.m[0][0]);
         gte_stir123_column(secondMatrix);
         gte_ldrtir12_matrix_column(&clock->view.matrix.m[0][1]);
-        gte_stir123_column_at(&stack.secondMatrix.m[0][1]);
+        gte_stir123_column_at(&stack.matrices[1].m[0][1]);
         gte_ldrtir12_matrix_column(&clock->view.matrix.m[0][2]);
-        gte_stir123_column_at(&stack.secondMatrix.m[0][2]);
+        gte_stir123_column_at(&stack.matrices[1].m[0][2]);
         gte_ldtransmatrix(secondMatrix);
         gte_ldv0_word3(translation);
         gte_cop2_hazard_slot();
         gte_cop2_hazard_slot();
         gte_rtv0tr_sf0();
-        gte_swc2_9_0(stack.secondMatrix.t);
-        gte_swc2_10_4(stack.secondMatrix.t);
-        gte_swc2_11_8(stack.secondMatrix.t);
+        gte_swc2_9_0(stack.matrices[1].t);
+        gte_swc2_10_4(stack.matrices[1].t);
+        gte_swc2_11_8(stack.matrices[1].t);
     }
 
     i = 0;
@@ -246,12 +245,12 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
     stack.projectionSeed.x = 0;
     stack.projectionSeed.y = 0;
     stack.projectionSeed.z = 0x1000;
-    ApplyMatrixSV(&stack.firstMatrix, &stack.projectionSeed,
+    ApplyMatrixSV(&stack.matrices[0], &stack.projectionSeed,
                   (GteShortVector *)&particles->velocity[0]);
     projectionMatrix = &clock->view.matrix;
     ApplyMatrixSV(projectionMatrix, &stack.projectionSeed,
                   (GteShortVector *)&particles->velocity[1]);
-    ApplyMatrixSV(&stack.secondMatrix, &stack.projectionSeed,
+    ApplyMatrixSV(&stack.matrices[1], &stack.projectionSeed,
                   (GteShortVector *)&particles->velocity[2]);
     func_800C66C8(callOwner, 0x573, projectionMatrix);
 }
