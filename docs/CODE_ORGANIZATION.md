@@ -1480,8 +1480,8 @@ deleting one pin at a time:
   `Draw_MeasureTextWidth`, a `SetCursor`, a print loop that saves the
   known cursor (`SaveCursor`) and two `PopCursor`s.
 - PSY-Q GTE macros cover the hand-pinned GTE sequences:
-  `gte_SetBackColor`, `gte_SetColorMatrix` (`Gte_SetBackColor`,
-  `Gte_SetLightColor`) and `gte_MulMatrix0` (`Script_SetGteMatrix`).
+  `gte_SetBackColor`, `gte_SetColorMatrix` (`Boot_SetBackColor`,
+  `Boot_SetLightColor`) and `gte_MulMatrix0` (`Script_SetGteMatrix`).
 - Address arithmetic on a pointer as an integer goes through a union
   (`RelocAddress`, `TaskNodeAddress`, `DrawPrimLink`, `TimRelativeTable`).
   Declare the union in the innermost block that uses it: a union declared

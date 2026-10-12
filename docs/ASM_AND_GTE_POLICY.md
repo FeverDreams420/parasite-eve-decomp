@@ -396,12 +396,12 @@ pair: `mtc2 value,$30` writes LZCS; `swc2 $31,0(ptr)` stores LZCR; and
 `gte_getlzcr` transfers LZCR to a general-purpose register after its two
 required hazard slots. Scalar C cannot express these hardware transfers.
 
-The initial target windows are `Gte_StoreTableEntry` at `0x8003EACC`, the
+The initial target windows are `Boot_StoreTableEntry` at `0x8003EACC`, the
 type-3 branch of `Script_DispatchCmd` at `0x80013188`, and `SquareRoot0` at
 `0x80078004`. The first two store LZCR through a normal stack or argument
 pointer; `SquareRoot0`, `InvSquareRoot`, and `LIBGTE_MSC02_text_100` read it after two nop
 hazard slots. No scratchpad layout is involved. The first remaining difference
-in `Gte_StoreTableEntry` is an 8-byte compiler frame for the C local receiving
+in `Boot_StoreTableEntry` is an 8-byte compiler frame for the C local receiving
 LZCR, not the COP2 window itself. The dispatcher still needs source-shape work
 for argument-load timing and branch sharing. These macros contain only the
 documented COP2 transfers and a memory constraint for the LZCR store.

@@ -37,8 +37,8 @@ void Scene_LoadRoom(int arg0);
 s32 Scene_StreamTexturePage(void);
 void Entity_InitFreePool(void);
 void Script_InitNodeFreeList(void);
-void Gte_SetBackColor(void *arg0, int arg1, int arg2, int arg3);
-void Gte_SetLightColor(void *arg0, int arg1, int arg2, int arg3, int arg4);
+void Boot_SetBackColor(void *arg0, int arg1, int arg2, int arg3);
+void Boot_SetLightColor(void *arg0, int arg1, int arg2, int arg3, int arg4);
 int CdRom_DetectDiscChange(void);
 int Scene_LoadEntityTexture(void);
 void Entity_RelocateSceneData(void);
@@ -65,7 +65,7 @@ void Draw_InitPipeline(void) {
     Entity_InitFreePool();
     Script_InitNodeFreeList();
 
-    Gte_SetBackColor((char *)&D_800BEA42 - 2, 0x28, 0x28, 0x28);
+    Boot_SetBackColor((char *)&D_800BEA42 - 2, 0x28, 0x28, 0x28);
     BARRIER();
 
     v1 = 0;
@@ -79,7 +79,7 @@ void Draw_InitPipeline(void) {
     *(s16 *)a0p = t0;
     D_800BEA42 = t1;
     D_800BEA44 = v1;
-    Gte_SetLightColor(a0p, 0, 0xFF, 0xFF, 0xFF);
+    Boot_SetLightColor(a0p, 0, 0xFF, 0xFF, 0xFF);
 
     v1 = 0;
     t0 = 0;
@@ -92,7 +92,7 @@ void Draw_InitPipeline(void) {
     *(s16 *)p = t0;
     D_800BEA48 = t1;
     D_800BEA4A = v1;
-    Gte_SetLightColor(p - 6, 1, 0x80, 0x80, 0x80);
+    Boot_SetLightColor(p - 6, 1, 0x80, 0x80, 0x80);
 
     v1 = 0x10000;
     t0 = 0;
@@ -114,7 +114,7 @@ void Draw_InitPipeline(void) {
     *(s16 *)p = t0;
     D_800BEA4E = t1;
     D_800BEA50 = v1;
-    Gte_SetLightColor(p - 0xC, 2, 0x60, 0x60, 0x60);
+    Boot_SetLightColor(p - 0xC, 2, 0x60, 0x60, 0x60);
 
     one = 1;
     Render_PrepareFrame();

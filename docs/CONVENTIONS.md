@@ -98,7 +98,7 @@ edge, as `akao/Spu_TransferAndLifecycle` did before LIBPAD WAITRC2's
 | `memcard` | `MemCard_` | memory-card access for saves | keep the game part; LIBPAD/LIBCARD units and BIOS veneers (`_card_*`, `InitCARD2`...) to `psyq` |
 | `pad` | `Pad_` | controller input | mostly LIBAPI: move to `psyq/libapi`; what remains joins `boot` or `menu` input |
 | `draw` | `Draw_` | game 2D drawing: text, glyphs, wipes, number and bar widgets, packet pools | keep the game part (renamed from `gpu`, prefix from `Gpu_`); LIBGPU units to `psyq/libgpu`, where private SYS routines keep their `Gpu_` project names; `Scene_*` files to `scene` |
-| `gte` | `Gte_` | none of its own | dissolved: the LIBGTE objects are `psyq/libgte/<object>.c` under SDK names |
+| `gte` | `Gte_` | none of its own | dissolved: the LIBGTE objects are `psyq/libgte/<object>.c` under SDK names; the boot-time light and table setters are `Boot_*` |
 | `math` | `Math_` | fixed-point and integer helpers | keep; the LIBMATH objects are `psyq/libmath/<object>.c` under SDK names |
 | `render` | `Render_` | 3D object, room and sprite rendering, fades, camera | keep; `Scene_*Battle*` predicates to `scene` |
 | `anim` | `Anim_` | skeletal animation decode and interpolation | keep |

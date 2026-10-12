@@ -171,7 +171,7 @@ void Boot_InitMemCard(void) {
  * at the bit index of a single-bit mask. The helper's only caller is the
  * table builder that precedes it (main_tu_evidence G0344). */
 
-void Gte_StoreTableEntry(u32 mask, int value);
+void Boot_StoreTableEntry(u32 mask, int value);
 
 void Boot_BuildRenderFlagTable(void) {
     s32 *entry;
@@ -189,30 +189,30 @@ void Boot_BuildRenderFlagTable(void) {
         i += 1;
         entry += 1;
     } while (i < 0x20U);
-    Gte_StoreTableEntry(1, 0x4000);
-    Gte_StoreTableEntry(0x80, 0x1000);
-    Gte_StoreTableEntry(0x100, 0x2000);
-    Gte_StoreTableEntry(8, 0x10);
-    Gte_StoreTableEntry(0x20, 0x40);
-    Gte_StoreTableEntry(0x40, 0x80);
-    Gte_StoreTableEntry(0x10, 0x20);
-    Gte_StoreTableEntry(2, 1);
-    Gte_StoreTableEntry(4, 8);
-    Gte_StoreTableEntry(0x200, 0x2000);
-    Gte_StoreTableEntry(0x400, 0x4000);
-    Gte_StoreTableEntry(0x2000, 0x8000);
-    Gte_StoreTableEntry(0x01000000, 0x100);
-    Gte_StoreTableEntry(0x02000000, 0x200);
-    Gte_StoreTableEntry(0x04000000, 0x400);
-    Gte_StoreTableEntry(0x08000000, 0x800);
-    Gte_StoreTableEntry(0x10000000, 0x1000);
-    Gte_StoreTableEntry(0x20000000, 0x2000);
-    Gte_StoreTableEntry(0x40000000, 0x4000);
-    Gte_StoreTableEntry(0x80000000, 0x8000);
+    Boot_StoreTableEntry(1, 0x4000);
+    Boot_StoreTableEntry(0x80, 0x1000);
+    Boot_StoreTableEntry(0x100, 0x2000);
+    Boot_StoreTableEntry(8, 0x10);
+    Boot_StoreTableEntry(0x20, 0x40);
+    Boot_StoreTableEntry(0x40, 0x80);
+    Boot_StoreTableEntry(0x10, 0x20);
+    Boot_StoreTableEntry(2, 1);
+    Boot_StoreTableEntry(4, 8);
+    Boot_StoreTableEntry(0x200, 0x2000);
+    Boot_StoreTableEntry(0x400, 0x4000);
+    Boot_StoreTableEntry(0x2000, 0x8000);
+    Boot_StoreTableEntry(0x01000000, 0x100);
+    Boot_StoreTableEntry(0x02000000, 0x200);
+    Boot_StoreTableEntry(0x04000000, 0x400);
+    Boot_StoreTableEntry(0x08000000, 0x800);
+    Boot_StoreTableEntry(0x10000000, 0x1000);
+    Boot_StoreTableEntry(0x20000000, 0x2000);
+    Boot_StoreTableEntry(0x40000000, 0x4000);
+    Boot_StoreTableEntry(0x80000000, 0x8000);
     g_GameStateFlags = g_GameStateFlags | 0x4000;
 }
 
-void Gte_StoreTableEntry(u32 mask, int value) {
+void Boot_StoreTableEntry(u32 mask, int value) {
     int index;
 
     gte_ldlzcs(mask);

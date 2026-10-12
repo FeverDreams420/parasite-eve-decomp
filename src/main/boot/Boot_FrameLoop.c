@@ -196,7 +196,7 @@ loop_end_check:
 
 /* Load the GTE back colour (scaled by 16) and clear the nine-halfword
  * caller block that mirrors it. */
-void Gte_SetBackColor(u16 *dst, int r, int g, int b) {
+void Boot_SetBackColor(u16 *dst, int r, int g, int b) {
     gte_SetBackColor(r, g, b);
 
     dst[0] = 0;
@@ -212,7 +212,7 @@ void Gte_SetBackColor(u16 *dst, int r, int g, int b) {
 
 /* Store one light's colour in the light colour matrix column and the 8-bit
  * colour table, then reload the GTE light colour matrix. */
-void Gte_SetLightColor(RenderLightingState *lighting, int index, int r, int g, u16 b) {
+void Boot_SetLightColor(RenderLightingState *lighting, int index, int r, int g, u16 b) {
     if ((unsigned int)index < 3) {
         lighting->color.matrix.m[0][index] = r;
         lighting->color.matrix.m[1][index] = g;
