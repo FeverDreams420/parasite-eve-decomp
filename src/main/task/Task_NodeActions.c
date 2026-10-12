@@ -222,6 +222,8 @@ int Task_WaitAnimRange(void) {
 }
 
 /* Point-turn and movement handlers use the same active TaskNode layout. */
+/* Script op: turn the current actor's yaw toward (x, z) by at most `step`
+ * per frame along the shorter arc; yields until the yaw reaches it. */
 int Task_TurnTowardPointStep(int **arg0) {
     TaskNode *node = g_TaskNodePool;
     int flags = node->flags;
@@ -230,15 +232,14 @@ int Task_TurnTowardPointStep(int **arg0) {
     int step;
     int angle;
     int stepped;
-    int original;
+    int current;
+    int delta;
 
     if (!(flags & 0x20)) {
-        int new_flags;
         x = *arg0[0];
         y = *arg0[1];
         step = *arg0[2];
-        new_flags = flags | 0x20;
-        node->flags = new_flags;
+        node->flags = flags | 0x20;
         node->target14 = x;
         node->target1c = step;
         node->target18.coordinate = y;
@@ -248,91 +249,60 @@ int Task_TurnTowardPointStep(int **arg0) {
         step = node->target1c;
     }
 
-    {
-        FieldActor *state;
-        register int dx asm("$6");
-        int dy;
-        register int tmp asm("$2");
-
-        state = g_CurrentEntity;
-        tmp = state->pos_x;
-        dx = (tmp - x) >> 16;
-        dy = (state->pos_z - y) >> 16;
-        if ((dx | dy) == 0) {
-            return 1;
-        }
-        angle = 0x1400 - ratan2(dy, dx);
+    x = (g_CurrentEntity->pos_x - x) >> 16;
+    y = (g_CurrentEntity->pos_z - y) >> 16;
+    if ((x | y) == 0) {
+        return 1;
     }
-
-    {
-        FieldActor *state;
-        state = g_CurrentEntity;
-        angle &= 0xFFF;
-        original = state->rot_y;
-    }
+    angle = (0x1400 - ratan2(y, x)) & 0xFFF;
+    current = g_CurrentEntity->rot_y;
     stepped = angle;
-    if (angle != original) {
-        {
-            int current = original;
-            int delta;
+    if (angle != current) {
+        if (current < angle) {
+            delta = angle - current;
+            if (delta < 0x800) {
+                if (step < delta) {
+                    stepped = current + step;
+                }
+            } else if (step < delta) {
+                stepped = current - step;
+                if (stepped < 0) {
+                    int wrap = current + 0x1000;
 
-            if (current < angle) {
-                delta = angle - current;
-                if (delta < 0x800) {
-                    if (step < delta) {
-                        stepped = current + step;
-                    }
-                } else if (step < delta) {
-                    stepped = current - step;
-                    if (stepped < 0) {
-                        int wrap = current + 0x1000;
-                        wrap = wrap - angle;
-                        if (wrap < step) {
-                            stepped = angle;
-                        }
+                    wrap -= angle;
+                    if (wrap < step) {
+                        stepped = angle;
                     }
                 }
-            } else {
-                delta = current - angle;
-                if (delta < 0x800) {
-                    if (step < delta) {
-                        stepped = current - step;
-                    }
-                } else if (step < delta) {
-                    stepped = current + step;
-                    if (stepped >= 0x1001) {
-                        int wrap = angle + 0x1000;
-                        wrap = wrap - current;
-                        if (wrap < step) {
-                            stepped = angle;
-                        }
+            }
+        } else {
+            delta = current - angle;
+            if (delta < 0x800) {
+                if (step < delta) {
+                    stepped = current - step;
+                }
+            } else if (step < delta) {
+                stepped = current + step;
+                if (stepped >= 0x1001) {
+                    int wrap = angle + 0x1000;
+
+                    wrap -= current;
+                    if (wrap < step) {
+                        stepped = angle;
                     }
                 }
             }
         }
-        {
-            FieldActor *state;
-            state = g_CurrentEntity;
-            stepped &= 0xFFF;
-            state->rot_y = stepped;
-        }
+        stepped &= 0xFFF;
+        g_CurrentEntity->rot_y = stepped;
         if (stepped != angle) {
-            int cursor = g_SceneDataTable0;
-            TaskNode *active = g_TaskNodePool;
-            cursor -= 0x14;
-            g_SceneDataTable0 = cursor;
-            active->active = 1;
+            g_SceneDataTable0 -= 0x14;
+            g_TaskNodePool->active = 1;
             return 0;
         }
-
     }
-    {
-        TaskNode *active = g_TaskNodePool;
-        int f = active->flags;
-        f &= 0xFFDF;
-        active->flags = f;
-        return 1;
-    }
+    g_TaskNodePool->flags &= 0xFFDF;
+    return 1;
 }
 
 #define S16_AT(ptr, off) (*(s16 *)((u8 *)(ptr) + (off)))
