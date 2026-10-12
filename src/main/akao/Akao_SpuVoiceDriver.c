@@ -444,7 +444,7 @@ int Akao_StepNoteSequencer(unsigned char *input, unsigned available)
     unsigned remaining_payload;
     unsigned start;
     unsigned *dest;
-    AkaoInstrumentCacheAddress cache;
+    AkaoInstrumentAddress cache;
     unsigned result;
 
     if (D_8009D270 & 1) {
@@ -543,7 +543,7 @@ int Spu_UploadStreamBlockA(unsigned bank, unsigned char *input, unsigned availab
     unsigned start;
     unsigned after_header;
     unsigned *dest;
-    AkaoInstrumentCacheAddress cache;
+    AkaoInstrumentAddress cache;
 
     if (D_8009D270 & 2) {
         if (Spu_ValidateSampleHeader(input)) return -1;
@@ -599,7 +599,7 @@ int Spu_UploadStreamBlockB(unsigned bank, unsigned char *cursor)
 {
     unsigned char *instruments;
     unsigned size, start, count, address;
-    AkaoInstrumentCacheAddress cache;
+    AkaoInstrumentAddress cache;
     unsigned *dest;
     if (bank & ~1U) return 1;
     if (Spu_ValidateSampleHeader(cursor)) return -1;
