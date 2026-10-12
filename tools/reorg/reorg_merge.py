@@ -19,7 +19,9 @@ The merged source is:
 * ``--common`` declarations (tentative definitions of the ``$gp`` words, see
   ``docs/REORGANIZATION_G_FLAGS.md``);
 * each unit's remaining text in manifest order, with its marker lines dropped
-  and its private ``*_externs*.h`` headers inlined (include guards dropped).
+  and its includes of private ``*_externs*.h`` headers dropped: their
+  declarations move to ``--externs-to HEADER`` (a shared ``include/pe1``
+  header), because file-scope ``extern``s in a ``.c`` file count as debt.
   A macro defined by one unit and defined again by a later unit (template
   instantiations) is ``#undef``-ed at the end of the first unit.
 
@@ -27,7 +29,7 @@ The manifest keeps one ``c`` entry (and one entry per data section) at the
 first unit's offset, renamed to the new file; the other units' entries go.
 Path-qualified mentions of the old units elsewhere (docs, tests, comments)
 are rewritten to the new file with ``reorg_move``'s rules. Old files and
-their inlined externs headers are removed with ``git rm``.
+their private externs headers are removed with ``git rm``.
 
 Byte identity is not checked here; use ``marker_probe.py`` and the make
 gates.
@@ -74,7 +76,6 @@ def split_unit(path: str) -> tuple[list[str], list[str], list[str], list[str]]:
             local = (ROOT / target).is_file()
             if local and re.search(r"_externs(_\d+)?\.h$", target):
                 inlined.append(target)
-                body.extend(externs_body(target))
                 continue
             if in_preamble and not local:
                 includes.append(stripped)
@@ -207,6 +208,8 @@ def main() -> int:
     parser.add_argument("units", nargs="+")
     parser.add_argument("--marker", action="append")
     parser.add_argument("--common", action="append", default=[])
+    parser.add_argument("--externs-to", metavar="HEADER",
+                        help="shared header that receives the private externs")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
@@ -231,6 +234,22 @@ def main() -> int:
         if users:
             sys.exit(f"{header} is also used by {users}")
 
+    header_text = None
+    if inlined:
+        if not args.externs_to:
+            sys.exit("private externs headers need --externs-to: "
+                     + ", ".join(inlined))
+        decls = []
+        for header in inlined:
+            decls.extend(d for d in externs_body(header) if d not in decls)
+        header_text = (ROOT / args.externs_to).read_text()
+        end = header_text.rstrip().rfind("#endif")
+        if end < 0:
+            sys.exit(f"{args.externs_to}: no closing #endif")
+        block = (f"/* Used by {os.path.basename(new)}. */\n"
+                 + "\n".join(decls) + "\n\n")
+        header_text = header_text[:end] + block + header_text[end:]
+
     moves = {u: new for u in units if u != new}
     rules = rm.token_rules(moves)
     # bare `Old.c` mentions, when no other tracked file has that basename
@@ -251,7 +270,9 @@ def main() -> int:
             text = file.read_text()
         except UnicodeDecodeError:
             continue
-        new_text = rm.rewrite_tokens(text, rules)
+        new_text = rm.rewrite_tokens(
+            header_text if header_text and path == args.externs_to else text,
+            rules)
         for pattern, name in bare:
             new_text = pattern.sub(name, new_text)
         if path.startswith("configs/") and path.endswith(".yaml"):
@@ -263,7 +284,7 @@ def main() -> int:
     for path in sorted(edits):
         print(f"edit  {path}")
     for header in inlined:
-        print(f"inline {header}")
+        print(f"externs {header} -> {args.externs_to}")
     if args.dry_run:
         sys.stdout.write(source)
         return 0

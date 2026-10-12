@@ -628,7 +628,7 @@ What is left (best crutch-free lev against retail):
   s1, s2, s3. Dropping the index's reuse as the return value lets the strip
   outrank the index (lev 13); starting the index inside the `if` gives the
   node s1 but swaps strip and index (lev 17-21).
-- `FieldEng_EffectPrimitives.c`: `func_800D2370` keeps one empty constraint on
+- `FieldEng_GeometryAndShapes.c`: `func_800D2370` keeps one empty constraint on
   `rotation` and `length` (lev 71 without it: `rotation` is spilled to the
   stack instead of living in s8 across the packet setup calls).
   `func_800D3BC8` keeps the entry memory barrier, the `$6` clobber and the

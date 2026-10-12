@@ -84,4 +84,13 @@ int FieldEng_GetStatus(void *obj);
 struct FieldAnimPointTriple;
 extern struct FieldAnimPointTriple D_800E2290;
 
+/* Shape helpers (FieldEng_GeometryAndShapes.c): the two CLUT pixel blocks
+ * func_800CED3C uploads and the index of the loaded one, the colour-key table
+ * and a word of the direction helpers. */
+extern void *D_800B0E18;
+extern void *D_800B0E1C;
+extern s16 D_800F34E4;
+extern u16 D_800E21A8[];
+extern u16 D_800E21C8;
+
 #endif /* PE1_FIELD_ENGINE_STATE_H */

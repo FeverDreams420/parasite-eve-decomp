@@ -1097,7 +1097,7 @@ segments:
       - [0xB24A0, rodata, engine/engine_800C1CA0]
       - [0xB2928, .rodata, fieldfx/FieldEng_SpriteRendering]
       - [0xB293C, rodata, engine/engine_800C213C]
-      - [0xB2AA4, .rodata, fieldfx/FieldEng_TaskSpawn]
+      - [0xB2AA4, .rodata, fieldfx/FieldEng_GeometryAndShapes]
       - [0xB2ABC, rodata, engine/engine_800C22BC]
       # Object slot reset and dispatch, the script interpreter, slot allocation and cleanup share FieldEngState (G1389, helper evidence into the cleanup pair).
       - [0xB2AF8, c, fieldfx/FieldEng_ObjectScript]
@@ -1121,14 +1121,12 @@ segments:
       - [0xBC4A4, c, fieldfx/FieldEng_BurstEffects]
       # Task program binding, task-list setup/allocation/ticking/callback dispatch and the anchor position query.
       - [0xBEC9C, c, fieldfx/FieldAnim_TaskList]
-      # Transform, direction and colour helpers with the shape builders that use them (G1558).
+      # Transform, direction and colour helpers with the shape builders that use them (G1558);
+      # the effect primitive builders: rotated triangle, history trail, fade tile, point tiles,
+      # rotated quad (G1559), orbit tile, glow line, textured ribbon, point history and pulled
+      # sprite; and effect task spawning: the descriptor at D_800E13D4 names the asset
+      # bootstrap, the object lifecycle callbacks and the task spawn entry together.
       - [0xBF0F0, c, fieldfx/FieldEng_GeometryAndShapes]
-      # Effect primitive builders: rotated triangle, history trail, fade tile, point tiles, rotated quad
-      # (G1559), orbit tile, glow line, textured ribbon, point history and pulled sprite.
-      - [0xC1688, c, fieldfx/FieldEng_EffectPrimitives]
-      # Effect task spawning: the descriptor at D_800E13D4 names the asset bootstrap,
-      # the object lifecycle callbacks and the task spawn entry together.
-      - [0xC4764, c, fieldfx/FieldEng_TaskSpawn]
       - [0xC5128, c, fieldfx/FieldEng_FallingSpriteEffect]
       - [0xC5810, c, fieldfx/FieldEng_ScatterBurstEffect]
       - [0xC6A9C, c, fieldfx/FieldEng_SpiralSpriteEffect]
