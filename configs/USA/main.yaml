@@ -120,7 +120,7 @@ segments:
       - [0x1A18, .rodata, aya/Inv_BuildArmorList]
       - [0x1A5C, .rodata, item/Inv_InsertItem]
       - [0x1AA4, .rodata, item/Inv_ItemActions]
-      - [0x1ADC, .rodata, save/Inv_EquipmentSelection]
+      - [0x1ADC, .rodata, save/Save_GameData]
       - [0x1B30, rodata, main/rodata_001B30]
       - [0x1B88, .rodata, asset/Render_InitDisplayLists]
       # Scene startup and entity texture jump tables share the loader TU.
@@ -487,22 +487,13 @@ segments:
       # Item comparators, subrange passes, and all sort dispatchers share active sort state.
       - [0x4B7FC, c, item/Inv_CompareItemsForSort]
       - [0x4C090, c, item/Menu_BattleEquipMode]
-      - [0x4C0A8, c, save/stat]
-      # Metadata-window reset, selection, editing, loading and accessors share
-      # one contiguous 0x2AC-byte -G8 unit, including its common index.
-      - [0x4C498, c, save/Save_MetadataWindow]
-      # Item lookup, inventory opening and card-dialog gating share menu state.
-      - [0x4C744, c, save/Inv_FindItem]
-      - [0x4CA5C, c, save/Save_BuildHeader]
-      - [0x4CB74, c, save/Save_RestoreHeader]
-      # Error-sound requests and both frame entry points share their pending
-      # flag in one contiguous -G8 menu-frame unit.
-      - [0x4CC88, c, save/Menu_RunFrame]
-      # Bonus-slot selection and inventory bootstrap share the inventory runtime.
-      - [0x4CE88, c, save/Inv_EquipmentSelection]
-      - [0x4E140, c, save/Save_GetCurrentMapNumber]
-      - [0x4E170, c, save/Menu_InitScrollDirection]
-      - [0x4E194, c, save/Inv_InitMaxLevelInventory]
+      # Save data: stat helpers; metadata-window reset, selection, editing, loading
+      # and accessors (with its common index); item lookup, inventory opening and
+      # card-dialog gating (menu state); save header build and restore; error-sound
+      # requests and both frame entry points (their pending flag); bonus-slot
+      # selection, the current map number, scroll direction and the inventory
+      # bootstrap. One -G8 FORCE_G0 unit with COMMON $gp words and --expand-div.
+      - [0x4C0A8, c, save/Save_GameData]
       # Default-profile lookups into the resident data tables: menu descriptors,
       # glyphs, items, stats, Aya level/EXP/spell tables and the string tables.
       - [0x4E28C, c, text/Tbl_DataTableLookups]
