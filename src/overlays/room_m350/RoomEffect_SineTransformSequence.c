@@ -77,7 +77,6 @@ int func_8019988C(int event, EmissionState *state)
             product /= 256;
             index = product + 1;
         }
-        asm("" : "=r"(index) : "0"(index));
         effect->position.x = instance->render_object.matrices[index].translation[0];
         effect->position.y = ((FieldActor *)actor->instance)->render_object.matrices[index].translation[1];
         effect->position.z = ((FieldActor *)actor->instance)->render_object.matrices[index].translation[2];
