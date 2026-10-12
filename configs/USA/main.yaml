@@ -80,9 +80,7 @@ segments:
       - [0xF4C, rodata, main/rodata_000F4C]
       - [0xF8C, .rodata, battle/Battle_AttackResolution]
       - [0x1068, pad] # retail alignment after the 17-entry Aya action jump table
-      - [0x106C, .rodata, battle/Battle_SpecialActionAndEscape]
-      - [0x1080, rodata, main/rodata_001080]
-      - [0x1084, .rodata, battle/Battle_TurnFlow]
+      - [0x106C, .rodata, battle/Battle_TurnFlow]
       - [0x10E4, .rodata, battle/Battle_EnemyMovement]
       - [0x10F0, .rodata, battle/Battle_EncounterFlow]
       - [0x1128, rodata, main/rodata_001128]
@@ -206,17 +204,15 @@ segments:
       # unit with COMMON $gp words, --expand-div and ASPSX 2.77 (from the Aya
       # action step; neutral for the rest, as is dropping -fno-force-mem).
       - [0x13808, c, battle/Battle_AttackResolution]
-      # Special action dispatch and the escape chance roll: one unit under cc1 -G0
-      # and the FORCE_G0 assembler -G8.
-      - [0x15CBC, c, battle/Battle_SpecialActionAndEscape]
-      # Turn flow: target and enemy turn, turn slot advance, target fade initializer
-      # and highlight animation (their fade state), active entity marks and action
-      # slot processing. One -G8 FORCE_G0 unit with COMMON $gp words, --expand-div
-      # and ASPSX 2.70. The escape roll before it stays apart until
-      # main/rodata_001080 is claimed as C data; the enemy movement after it stays
+      # Turn flow: special action dispatch, escape chance roll, target and enemy
+      # turn, turn slot advance, target fade initializer and highlight animation
+      # (their fade state), active entity marks and action slot processing. One
+      # -G8 FORCE_G0 unit with COMMON $gp words, --expand-div and ASPSX 2.70. The
+      # four zero bytes that were main/rodata_001080 are the pad the object puts
+      # before its 8-aligned target jump table. The enemy movement after it stays
       # apart because one object would pad the 8-aligned turn-flow rodata after the
       # movement's 11 bytes (the link grows by 4).
-      - [0x160CC, c, battle/Battle_TurnFlow]
+      - [0x15CBC, c, battle/Battle_TurnFlow]
       # Enemy movement step, entity facing update and entity anim state step: one
       # -G8 FORCE_G0 unit with COMMON $gp words and --expand-div.
       - [0x18D74, c, battle/Battle_EnemyMovement]
