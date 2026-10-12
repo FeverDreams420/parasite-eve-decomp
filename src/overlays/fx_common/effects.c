@@ -1,0 +1,1228 @@
+#include "fx_common.h"
+#include "fx_common_motion.h"
+#include "fx_common_render.h"
+
+void func_80191FE8(void)
+{
+    func_800868AC(1, 0);
+}
+
+void func_8019200C(void)
+{
+    func_800868AC(30, 0);
+}
+
+/* Choose the room to return to once the effect sequence ends, clear the
+ * screen, fade the music out and hand control back to the scene loader. */
+void func_80192030(void)
+{
+    FxCommonRect area;
+    s32 room;
+    u32 night;
+    u32 band;
+    u8 fade;
+    int i;
+
+    fade = 1;
+    night = g_FxCommonSceneIds.flags & 0x2000;
+    g_FxCommonSceneIds.room = 999;
+    D_8009D280 = 0xA9400048;
+    room = g_FxCommonSceneIds.area;
+    if (room == 0x80) {
+        D_8009D280 = 0xA80650C8;
+    } else if (room == 0x78) {
+        D_8009D280 = 0xA8003348;
+        fade = 0;
+    } else if (room == 0x208) {
+        D_8009D280 = 0xA80032C8;
+        fade = 0;
+    } else if (room == 0x210) {
+        if (night)
+            D_8009D280 = 0xA8029148;
+        else
+            D_8009D280 = 0xA80290C8;
+    } else {
+        switch (D_8019CA68) {
+        case 0:
+            D_8009D280 = 0xA80281C8;
+            break;
+        case 1:
+            D_8009D280 = 0xA80260C8;
+            break;
+        case 2:
+            D_8009D280 = 0xA8009348;
+            break;
+        case 3:
+            D_8009D280 = 0xA8046048;
+            break;
+        case 4:
+            if (room == 0x1C0) {
+                D_8009D280 = 0xA80034C8;
+                fade = 0;
+            } else if (night) {
+                D_8009D280 = 0xA80222C8;
+            } else {
+                D_8009D280 = 0xA80630C8;
+            }
+            break;
+        case 5:
+            D_8009D280 = 0xA8049048;
+            break;
+        case 6:
+            D_8009D280 = 0xA8002248;
+            break;
+        case 7:
+            if (room == 0xD0) {
+                D_8009D280 = 0xA80033C8;
+                fade = 0;
+            } else if (room == 0x178) {
+                D_8009D280 = 0xA80033C8;
+                fade = 0;
+            } else {
+                band = room - 0x180;
+                if (band < 0x88)
+                    D_8009D280 = 0xA80201C8;
+                else
+                    D_8009D280 = 0xA8004348;
+            }
+            break;
+        case 8:
+            if (room == 0xE0) {
+                D_8009D280 = 0xA80034C8;
+                fade = 0;
+            } else if (room >= 0x128) {
+                D_8009D280 = 0xA8005448;
+            } else {
+                D_8009D280 = 0xA8067248;
+            }
+            break;
+        case 9:
+            if (room == 0xB8 || room == 0x148) {
+                D_8009D280 = 0xA8003448;
+                fade = 0;
+            } else if (night) {
+                D_8009D280 = 0xA8029148;
+            } else {
+                D_8009D280 = 0xA80290C8;
+            }
+            break;
+        }
+    }
+
+    func_80074D28(0);
+    func_80074A44(1);
+    area.x = 0;
+    area.y = 0;
+    area.w = 0x140;
+    area.h = 0x1C0;
+    ClearImage(&area, 0, 0, 0);
+    func_80074DC0(0);
+    PutDispEnv(D_800BCE80);
+    if (fade == 1)
+        func_80086C5C(D_800B0DB5, 0x1E, 0);
+    func_800868AC(0x1E, 0);
+    for (i = 0; i < 0x1E; i++)
+        func_80073A44(0);
+    if (fade == 1) {
+        D_800B0DB4 = -1;
+        D_800B0DB2 = -1;
+        g_FxCommonGameFlags &= ~0x40;
+        func_80086FF8();
+    }
+    func_80087024();
+    func_80038D48();
+}
+
+/* The effect overlay's own frame loop: run every effect system, compact the
+ * ordering table, present the frame and flip the double buffer until the
+ * scene asks to leave. */
+void func_8019234C(void)
+{
+    FxCommonBuffer *next;
+    int last;
+    int handle;
+    u8 started;
+    int scanning;
+    int i;
+    FxCommonAddress current;
+
+    D_8009CDDC = 0;
+    D_8019C00E = 0;
+    last = 0;
+    func_80196498();
+    func_80191DE8(D_8019C034 != 10);
+    func_80071A64(func_80073A44(-1));
+    started = 0;
+    D_8019C03C = func_80071A54() % 3000000;
+    handle = 0;
+    if (D_8019C034 == 10)
+        D_8019C03C = 120000;
+
+    while (D_8019C024 == 0) {
+        func_8003EB04();
+        if ((D_8009D26C & 0x0F000006) == 0x0F000006) {
+            func_80073A44(0);
+            func_80074D28(0);
+            D_8019C00E = 1;
+            D_8019C024 = 1;
+            func_8006A25C();
+        }
+        func_801942FC();
+        if (D_8019C00E != 0)
+            continue;
+
+        func_8018F05C();
+        func_8018F92C((void *)&g_FxCommonMotionPosition1);
+        if (D_8019C02A != 0)
+            D_8019C02A = func_80194108(D_8019C02A);
+        func_80192740();
+        func_80192800();
+        func_80193478();
+        if (!started) {
+            handle = func_80191E30(0xABE, D_801EA578->state);
+            started = 1;
+        } else if (D_8019C0C0 == 0) {
+            func_80191EFC(handle, D_801EA578->state);
+        }
+        if (D_8019C034 == 10 || (D_8019C044 == 1 && D_8019C045 == 0))
+            func_80037870();
+
+        scanning = 1;
+        for (i = 0xFFF; i >= 0; i--) {
+            if (scanning) {
+                if ((FxCommonPacketTag *)(D_8019C9C0->allocation[i].packed |
+                                          0x80000000) ==
+                    &D_8019C9C0->allocation[i - 1]) {
+                    last = i;
+                    scanning = 0;
+                }
+            } else if ((FxCommonPacketTag *)(D_8019C9C0->allocation[i].packed |
+                                             0x80000000) !=
+                       &D_8019C9C0->allocation[i - 1]) {
+                current.pointer = &D_8019C9C0->allocation[i];
+                D_8019C9C0->allocation[last].packed = current.word & 0xFFFFFF;
+                scanning = 1;
+            }
+        }
+
+        D_8019CC14 = func_80073A44(1);
+        func_80074DC0(0);
+        func_80073A44(2);
+        func_80193AB0();
+        func_80074A44(1);
+        func_80075424(((FxCommonFrame *)D_8019C9C0)->drawEnv);
+        PutDispEnv(((FxCommonFrame *)D_8019C9C0)->dispEnv);
+        func_800753B4(&D_8019C9C0->allocation[0xFFF]);
+        next = &g_FxCommonFrames[0].buffer;
+        if (D_8019C9C0 == next)
+            next = &g_FxCommonFrames[1].buffer;
+        D_8019C9C0 = next;
+        D_8009CDDC ^= 1;
+        func_800752AC(next->allocation, 0x1000);
+        func_8019BF8C((void **)D_8019C9C0);
+    }
+    if (D_8019C00E == 0)
+        func_80192030();
+}
+
+void func_80192740(void)
+{
+    if (D_8019C1F0 == 1) {
+        u32 *dst = D_801EA598;
+        FxCommonBuffer *owner = D_8019C9C0;
+        FxCommonBuffer *sentinel = (FxCommonBuffer *)&D_8019C1F8;
+        u32 lowMask;
+        u32 *base;
+        u32 highMask;
+        u32 *src1;
+        u32 *src2;
+        u32 destWord;
+        u32 lowWord;
+        FxCommonAddress address;
+
+        if (owner != sentinel)
+            dst += 9;
+        lowMask = 0xFFFFFF;
+        base = D_801EA598;
+        highMask = 0xFF000000;
+        src1 = (u32 *)((FxCommonBuffer *)owner)->allocation;
+        destWord = *dst;
+        lowWord = src1[0xFFF];
+        destWord &= highMask;
+        lowWord &= lowMask;
+        destWord |= lowWord;
+        *dst = destWord;
+        src2 = (u32 *)((FxCommonBuffer *)owner)->allocation;
+        if (owner != sentinel)
+            base += 9;
+        address.pointer = base;
+        lowWord = address.word & lowMask;
+        src2[0xFFF] = (src2[0xFFF] & highMask) | lowWord;
+    }
+    if (D_8019C02C != 0)
+        D_8019C02C = func_80193B5C(D_8019C02C);
+}
+
+#define DRAW(node, pass, force, mirrored) \
+    func_80190E04((node), D_8019C9C0, (pass), (force), (mirrored))
+#define DRAW_PAIR(node, pass, mode) \
+    func_80191114((node), D_8019C9C0, (pass), (mode))
+
+/* Draw every scene node for this frame, each with its depth bias: the
+ * backdrop, the turning fans, the static props, the camera path nodes and
+ * their echoes, the effect node pairs and the overlay nodes. */
+void func_80192800(void)
+{
+    int i;
+
+    if (D_8019C034 != 0) {
+        D_801EA5E4 = 0xFA1;
+        DRAW(D_8019CC28, 1, 1, 0);
+    }
+    D_801EA5E4 = 0xFA0;
+    DRAW(g_FxCommonRuntime.node25, 1, 1, 0);
+    D_801EA5E4 = 0xF9F;
+    DRAW(g_FxCommonType26Nodes[0], 1, 1, 0);
+    DRAW(g_FxCommonType26Nodes[1], 1, 1, 0);
+    DRAW(g_FxCommonType26Nodes[2], 1, 1, 0);
+    DRAW(g_FxCommonType26Nodes[3], 1, 1, 0);
+    g_FxCommonType26Nodes[0]->state[0] += 10;
+    g_FxCommonType26Nodes[1]->state[0] += 2;
+    g_FxCommonType26Nodes[2]->state[0] += 40;
+    g_FxCommonType26Nodes[3]->state[0] += 30;
+    if (g_FxCommonType26Nodes[0]->state[0] > 0x6EE0)
+        g_FxCommonType26Nodes[0]->state[0] = -0x6328;
+    if (g_FxCommonType26Nodes[1]->state[0] > 0x6EE0)
+        g_FxCommonType26Nodes[1]->state[0] = -0x6328;
+    if (g_FxCommonType26Nodes[2]->state[0] > 0x6EE0)
+        g_FxCommonType26Nodes[2]->state[0] = -0x6328;
+    if (g_FxCommonType26Nodes[3]->state[0] > 0x6EE0)
+        g_FxCommonType26Nodes[3]->state[0] = -0x6328;
+
+    D_801EA5E4 = 1000;
+    DRAW(D_8019CDA4, 0, 1, 0);
+    DRAW(D_8019CDAC, 0, 1, 0);
+    D_801EA5E4 = 0xF3B;
+    DRAW(D_8019CDA0, 1, 1, 0);
+    DRAW(D_8019CDA8, 1, 1, 0);
+    D_801EA5E4 = 0xF3A;
+    DRAW(D_8019CDB0, 1, 1, 0);
+    D_801EA5E4 = 0xF39;
+    DRAW(D_8019CDB4, 1, 1, 0);
+    D_801EA5E4 = 0;
+    DRAW(D_8019CDB8, 0, 1, 0);
+    DRAW(D_8019CDBC, 0, 1, 0);
+    DRAW(D_8019CDC0, 0, 1, 0);
+    DRAW(D_8019CDC4, 0, 1, 0);
+    DRAW(D_8019CDC8, 0, 1, 0);
+    DRAW(D_8019C180, 0, 1, 0);
+
+    if (g_FxCommonPathNodes[0]->kind == 0x24) {
+        g_FxCommonPathNodes[0]->kind = 0x52;
+        g_FxCommonPathNodes[1]->kind = 0x52;
+        g_FxCommonPathNodes[2]->kind = 0x52;
+        g_FxCommonPathNodes[3]->kind = 0x52;
+    } else {
+        g_FxCommonPathNodes[0]->kind = 0x24;
+        g_FxCommonPathNodes[1]->kind = 0x24;
+        g_FxCommonPathNodes[2]->kind = 0x24;
+        g_FxCommonPathNodes[3]->kind = 0x24;
+    }
+    D_801EA5E4 = 0;
+    DRAW(g_FxCommonPathNodes[0], 0, 0, 0);
+    if (D_8019C034 != 2)
+        DRAW(g_FxCommonPathNodes[2], 0, 0, 0);
+    D_801EA5E4 = 1000;
+    DRAW(g_FxCommonPathNodes[1], 0, 0, 1);
+    if (D_8019C034 != 2)
+        DRAW(g_FxCommonPathNodes[3], 0, 0, 1);
+
+    D_801EA5E4 = 0;
+    DRAW_PAIR(D_8019C820, 1, 0);
+    DRAW_PAIR(g_FxCommonPairedNodes[0], 1, 0);
+    D_801EA5E4 = 1000;
+    DRAW_PAIR(D_8019C824, 1, 2);
+    DRAW_PAIR(g_FxCommonPairedNodes[1], 1, 2);
+
+    D_801EA5E4 = 0;
+    DRAW(g_FxCommonPathTailNodes[0], 0, 0, 0);
+    DRAW(g_FxCommonPathTailNodes[1], 0, 0, 0);
+    D_801EA5E4 = 10;
+    DRAW(g_FxCommonPathTailNodes[0], 0, 0, 1);
+    DRAW(g_FxCommonPathTailNodes[1], 0, 0, 1);
+    D_801EA5E4 = 0;
+    DRAW(D_8019CC20, 0, 1, 0);
+    D_801EA5E4 = 800;
+    DRAW(D_8019CC24, 0, 1, 1);
+
+    if (D_8019C1F0 == 1) {
+        D_8019C0D0[0] += (s16)(func_80071A54() % 40 + 20);
+        D_8019C0D0[1] += (s16)(func_80071A54() % 52 + 26);
+        g_FxCommonEchoNodes[0]->matrix = g_FxCommonPathNodes[0]->matrix;
+        g_FxCommonEchoNodes[0]->seed = g_FxCommonPathNodes[0]->seed;
+        g_FxCommonEchoNodes[0]->kind = 0x53;
+        g_FxCommonEchoNodes[2]->matrix = g_FxCommonPathNodes[2]->matrix;
+        g_FxCommonEchoNodes[2]->seed = g_FxCommonPathNodes[2]->seed;
+        g_FxCommonEchoNodes[2]->kind = 0x53;
+        g_FxCommonEchoNodes[1]->matrix = g_FxCommonPathNodes[0]->matrix;
+        g_FxCommonEchoNodes[1]->seed = g_FxCommonPathNodes[0]->seed;
+        g_FxCommonEchoNodes[1]->kind = 0x53;
+        g_FxCommonEchoNodes[3]->matrix = g_FxCommonPathNodes[2]->matrix;
+        g_FxCommonEchoNodes[3]->seed = g_FxCommonPathNodes[2]->seed;
+        g_FxCommonEchoNodes[3]->kind = 0x53;
+        D_801EA5E4 = 0;
+        DRAW(g_FxCommonEchoNodes[0], 0, 0, 0);
+        D_801EA5E4 = 800;
+        DRAW(g_FxCommonEchoNodes[1], 0, 0, 1);
+    }
+
+    for (i = 0; i < D_8019C020 >> 1; i++) {
+        D_801EA5E4 = 0;
+        if (D_800A77FC & 0x2000) {
+            D_801EA264[0] = 60;
+            D_801EA264[1] = 60;
+            D_801EA264[2] = 40;
+        } else {
+            D_801EA264[0] = 20;
+            D_801EA264[1] = 40;
+            D_801EA264[2] = 40;
+        }
+        DRAW_PAIR(D_8019C3B0[i * 2], 0, 0);
+        if (D_8019C032 == 1 && (i & 3)) {
+            D_801EA5E4 = 800;
+            DRAW_PAIR(D_8019C3B0[i * 2 + 1], 0, 1);
+        }
+    }
+
+    D_801EA5E4 = 0;
+    for (i = 0; i < 8; i++)
+        DRAW_PAIR(g_FxCommonRuntime.pairedNodes[i], 0, 0);
+    D_801EA5E4 = 0x23A;
+    DRAW_PAIR(g_FxCommonRuntime.pairedNodes[8], 0, 0);
+    D_801EA5E4 = 0;
+    DRAW_PAIR(g_FxCommonRuntime.pairedNodes[9], 0, 0);
+    if (D_8019C032 == 1) {
+        D_801EA5E4 = 800;
+        if (D_8019C044) {
+            DRAW_PAIR(g_FxCommonRuntime.pairedNodes[11], 0, 1);
+            DRAW_PAIR(g_FxCommonRuntime.pairedNodes[12], 0, 1);
+            DRAW_PAIR(g_FxCommonRuntime.pairedNodes[13], 0, 1);
+            DRAW_PAIR(g_FxCommonRuntime.pairedNodes[14], 0, 1);
+            DRAW_PAIR(g_FxCommonRuntime.pairedNodes[16], 0, 1);
+            DRAW_PAIR(g_FxCommonRuntime.pairedNodes[17], 0, 1);
+            DRAW_PAIR(g_FxCommonRuntime.pairedNodes[18], 0, 1);
+            DRAW_PAIR(g_FxCommonRuntime.pairedNodes[19], 0, 1);
+        }
+        DRAW_PAIR(g_FxCommonRuntime.pairedNodes[15], 0, 1);
+    }
+    D_801EA5E0 = 500;
+    func_80190D3C(D_801EA260, D_8019C9C0);
+}
+
+#undef DRAW
+#undef DRAW_PAIR
+
+/* Move the path-following nodes one step along their recorded paths, bank
+ * the two flyers into their turns, and copy each flyer onto its shadow. */
+void func_80193478(void)
+{
+    GteShortVector bank0;
+    GteShortVector bank1;
+
+    func_8018F55C(D_8019C038, 0x4A, Gpu_GetTimTableEntry(&D_801D0260, 2),
+                  (FxCommonVec3 *)g_FxCommonPathNodes[4]->matrix.t,
+                  &g_FxCommonPathNodes[4]->seed.angles);
+    func_8018F55C(D_8019C038, 0x4B, Gpu_GetTimTableEntry(&D_801D0260, 2),
+                  (FxCommonVec3 *)g_FxCommonPathNodes[5]->matrix.t,
+                  &g_FxCommonPathNodes[5]->seed.angles);
+    func_8018F55C(D_8019C03C, 0x4C, Gpu_GetTimTableEntry(&D_801D0260, 2),
+                  (FxCommonVec3 *)g_FxCommonPathNodes[0]->matrix.t, &bank0);
+    func_8018F55C(D_8019C03C, 0x4D, Gpu_GetTimTableEntry(&D_801D0260, 2),
+                  (FxCommonVec3 *)g_FxCommonPathNodes[2]->matrix.t, &bank1);
+
+    g_FxCommonPathNodes[0]->seed.component[0] = bank0.x;
+    g_FxCommonPathNodes[0]->seed.component[1] = bank0.y;
+    g_FxCommonPathNodes[0]->seed.component[2] += bank0.z;
+    if (g_FxCommonPathNodes[0]->seed.component[2] > 0x200)
+        g_FxCommonPathNodes[0]->seed.component[2] = 0x200;
+    if (g_FxCommonPathNodes[0]->seed.component[2] < -0x200)
+        g_FxCommonPathNodes[0]->seed.component[2] = -0x200;
+    if (g_FxCommonPathNodes[0]->seed.component[2] > 0)
+        g_FxCommonPathNodes[0]->seed.component[2] -= 8;
+    if (g_FxCommonPathNodes[0]->seed.component[2] < 0)
+        g_FxCommonPathNodes[0]->seed.component[2] += 8;
+
+    g_FxCommonPathNodes[2]->seed.component[0] = bank1.x;
+    g_FxCommonPathNodes[2]->seed.component[1] = bank1.y;
+    g_FxCommonPathNodes[2]->seed.component[2] += bank1.z;
+    if (g_FxCommonPathNodes[2]->seed.component[2] > 0x180)
+        g_FxCommonPathNodes[2]->seed.component[2] = 0x180;
+    if (g_FxCommonPathNodes[2]->seed.component[2] < -0x180)
+        g_FxCommonPathNodes[2]->seed.component[2] = -0x180;
+    if (g_FxCommonPathNodes[2]->seed.component[2] > 0)
+        g_FxCommonPathNodes[0]->seed.component[2] -= 8;
+    if (g_FxCommonPathNodes[2]->seed.component[2] < 0)
+        g_FxCommonPathNodes[0]->seed.component[2] += 8;
+
+    g_FxCommonPathNodes[4]->seed.component[1] -= 0x400;
+    g_FxCommonPathNodes[5]->seed.component[1] -= 0x400;
+    g_FxCommonPathNodes[0]->seed.component[1] -= 0x400;
+    g_FxCommonPathNodes[2]->seed.component[1] -= 0x400;
+
+    g_FxCommonPathNodes[1]->matrix = g_FxCommonPathNodes[0]->matrix;
+    g_FxCommonPathNodes[1]->seed = g_FxCommonPathNodes[0]->seed;
+    g_FxCommonPathNodes[3]->matrix = g_FxCommonPathNodes[2]->matrix;
+    g_FxCommonPathNodes[3]->seed = g_FxCommonPathNodes[2]->seed;
+    D_8019C038 += 4;
+    D_8019C03C += 0x10;
+}
+
+void func_801938E8(s16 base)
+{
+    FxCommonMotionRecord sample;
+    GteShortVector extra;
+    unsigned int i;
+
+    D_8019C058 = 0;
+    for (i = 0; i < 10; i++) {
+        func_8018F55C(i << 8, base + 0x40,
+                      Gpu_GetTimTableEntry(&D_801D0260, 2), &sample.vector, &extra);
+        D_8019CAA8[i].vector.x = sample.vector.x << 16;
+        D_8019CAA8[i].vector.y = sample.vector.y << 16;
+        D_8019CAA8[i].vector.z = sample.vector.z << 16;
+    }
+}
+
+void func_801939B0(s16 base)
+{
+    FxCommonMotionRecord sample;
+    GteShortVector extra;
+    unsigned int i;
+
+    D_8019C058 = 0x20;
+    for (i = 0; i < 10; i++) {
+        func_8018F55C(i << 8, base + 0x40,
+                      Gpu_GetTimTableEntry(&D_801D0260, 2), &sample.vector, &extra);
+        g_FxCommonMotionDeltas[i].vector.x =
+            ((sample.vector.x << 16) - D_8019CAA8[i].vector.x) >> 5;
+        g_FxCommonMotionDeltas[i].vector.y =
+            ((sample.vector.y << 16) - D_8019CAA8[i].vector.y) >> 5;
+        g_FxCommonMotionDeltas[i].vector.z =
+            ((sample.vector.z << 16) - D_8019CAA8[i].vector.z) >> 5;
+    }
+}
+
+void func_80193AB0(void)
+{
+    FxCommonMotionLane *x;
+    FxCommonMotionLane *y;
+    FxCommonMotionLane *z;
+    FxCommonMotionLane *end;
+    FxCommonMotionByte *base;
+    int sourceOffset;
+
+    if (D_8019C058 <= 0) {
+        return;
+    }
+
+    D_8019C058--;
+    base = (FxCommonMotionByte *)D_8019CAB0;
+    z = D_8019CAB0;
+    y = (FxCommonMotionLane *)(base - 4);
+    x = (FxCommonMotionLane *)(base - 8);
+    sourceOffset = 0;
+    end = (FxCommonMotionLane *)(base + 0xA0);
+    do {
+        x->value += *(s32 *)(D_801EA268 + sourceOffset);
+        y->value += *(s32 *)(D_801EA26C + sourceOffset);
+        z->value += *(s32 *)(D_801EA270 + sourceOffset);
+        x++;
+        y++;
+        z++;
+        sourceOffset += 0x10;
+    } while (z < end);
+}
+
+#define FX_MODE_PACKET                                          \
+    (D_8019C9C0 == &g_FxCommonFrames[0].buffer ? &g_FxCommonDrawModes1[1] \
+                                               : &g_FxCommonDrawModes1[0])
+
+/* Fade the effect markers in or out by eight steps and draw, for every
+ * enabled effect, a line from its projected position to a two-part label
+ * (the selected effect uses the brighter palette). */
+s16 func_80193B5C(s16 value)
+{
+    s16 level;
+    FxCommonDrawModePacket *mode;
+    FxCommonBuffer *buffer;
+    FxCommonBuffer *leftBuffer;
+    FxCommonBuffer *rightBuffer;
+    FxCommonPacketTag *ot;
+    FxCommonAddress address;
+    FxCommonAddress lineLink;
+    FxCommonAddress leftLink;
+    FxCommonAddress rightLink;
+    FxCommonLinePacket *line;
+    FxCommonMarkerQuad *quad;
+    GteShortVector rotation;
+    GteShortVector position;
+    GteShortVector unused;
+    s32 screen0;
+    s32 screen1;
+    s32 screen2;
+    s32 depth;
+    s32 flag;
+    u32 xy;
+    u32 *vertex;
+    u8 u;
+    s16 x;
+    s16 y;
+    int i;
+
+    level = 0;
+    if (value > 0) {
+        if (value < 0xFF)
+            value += 8;
+        if (value > 0xFF)
+            value = 0xFF;
+        level = value;
+    }
+    if (value < 0) {
+        if (value >= -0xFE)
+            value -= 8;
+        if (value < -0xFF)
+            value = -0xFF;
+        level = value + 0xFF;
+    }
+
+    mode = FX_MODE_PACKET;
+    mode->tag.bits.address = D_8019C9C0->allocation[10].bits.address;
+    ot = &D_8019C9C0->allocation[10];
+    address.pointer = FX_MODE_PACKET;
+    ot->bits.address = address.word;
+
+    for (i = 0; i < 10; i++) {
+        position.x = g_FxCommonMotionWhole[i].x.whole;
+        position.y = g_FxCommonMotionWhole[i].y.whole;
+        position.z = g_FxCommonMotionWhole[i].z.whole;
+        if (g_FxCommonEffectSetup[i].enabled != 1 || level == 0)
+            continue;
+
+        rotation.x = g_FxCommonEffectSetup[i].position[0];
+        rotation.y = g_FxCommonEffectSetup[i].position[1];
+        rotation.z = g_FxCommonEffectSetup[i].position[2];
+        RotTransPers3(&rotation, &position, &unused, &screen0, &screen1,
+                      &screen2, &depth, &flag);
+
+        line = (FxCommonLinePacket *)D_8019C9C0->data;
+        line->tag.bytes.length = 3;
+        line->code = 0x40;
+        func_80077B04(line, 1);
+        vertex = &line->xy0;
+        *vertex++ = screen0;
+        *vertex = screen1;
+        if (D_8019CC52 == i) {
+            line->r = level >> 1;
+            line->g = level >> 1;
+            line->b = level >> 1;
+        } else {
+            line->r = level >> 3;
+            line->g = level >> 3;
+            line->b = level >> 3;
+        }
+        buffer = D_8019C9C0;
+        lineLink.pointer = line;
+        line->tag.bits.address = buffer->allocation[10].bits.address;
+        buffer->allocation[10].bits.address = lineLink.word;
+        line++;
+        buffer->data = (u8 *)line;
+        quad = (FxCommonMarkerQuad *)buffer->data;
+
+        xy = screen1;
+        x = xy;
+        y = xy >> 16;
+        u = 0;
+        func_80077BE4(quad);
+        func_80077B04(quad, 1);
+        quad->r0 = level >> 1;
+        quad->g0 = level >> 1;
+        quad->b0 = level >> 1;
+        quad->r1 = level >> 1;
+        quad->g1 = level >> 1;
+        quad->b1 = level >> 1;
+        quad->r2 = level >> 1;
+        quad->g2 = level >> 1;
+        quad->b2 = level >> 1;
+        quad->r3 = level >> 1;
+        quad->g3 = level >> 1;
+        quad->b3 = level >> 1;
+        quad->x0 = x;
+        quad->y0 = y;
+        quad->x1 = x + 0x7F;
+        quad->y1 = y;
+        quad->x2 = x;
+        quad->y2 = y + 12;
+        quad->x3 = x + 0x7F;
+        quad->y3 = y + 13;
+        quad->u0 = u;
+        quad->v0 = i * 13;
+        quad->u1 = u + 0x7F;
+        quad->v1 = i * 13;
+        quad->u2 = u;
+        quad->v2 = i * 13 + 12;
+        quad->u3 = u + 0x7F;
+        quad->v3 = i * 13 + 12;
+        if (D_8019CC52 == i)
+            quad->clut = GetClut(0x3C0, 0x90);
+        else
+            quad->clut = GetClut(0x3C0, 0x8F);
+        quad->tpage = GetTPage(0, 1, 0x3C0, 0);
+        leftBuffer = D_8019C9C0;
+        leftLink.pointer = quad;
+        quad->tag.bits.address = leftBuffer->allocation[9].bits.address;
+        leftBuffer->allocation[9].bits.address = leftLink.word;
+        quad++;
+
+        u = 0x80;
+        func_80077BE4(quad);
+        func_80077B04(quad, 1);
+        quad->r0 = u;
+        quad->g0 = u;
+        quad->b0 = u;
+        quad->r1 = u;
+        quad->g1 = u;
+        quad->b1 = u;
+        quad->r2 = u;
+        quad->g2 = u;
+        quad->b2 = u;
+        quad->r3 = u;
+        quad->g3 = u;
+        quad->b3 = u;
+        quad->x0 = x;
+        quad->y0 = y;
+        quad->x1 = x + 0x7F;
+        quad->y1 = y;
+        quad->x2 = x;
+        quad->y2 = y + 12;
+        quad->x3 = x + 0x7F;
+        quad->y3 = y + 13;
+        quad->u0 = u;
+        quad->v0 = i * 13;
+        quad->u1 = u + 0x7F;
+        quad->v1 = i * 13;
+        quad->u2 = u;
+        quad->v2 = i * 13 + 12;
+        quad->u3 = u + 0x7F;
+        quad->v3 = i * 13 + 12;
+        quad->clut = GetClut(0x3C0, 0x91);
+        quad->tpage = GetTPage(0, 2, 0x3C0, 0);
+        rightBuffer = D_8019C9C0;
+        rightLink.pointer = quad;
+        quad->tag.bits.address = rightBuffer->allocation[9].bits.address;
+        rightBuffer->allocation[9].bits.address = rightLink.word;
+        quad++;
+        rightBuffer->data = (u8 *)quad;
+    }
+    return value;
+}
+
+#undef FX_MODE_PACKET
+
+s16 func_80194108(s16 value)
+{
+    s16 result;
+
+    result = value;
+    if (value > 0) {
+        if (value < 0xFF) {
+            func_801941A4((u8)result);
+            result = value + 0x10;
+        } else {
+            func_801941A4(0xFF);
+        }
+    }
+
+    if (result < 0) {
+        if (result >= -0xFE) {
+            func_801941A4((u8)(result - 1));
+            result -= 0x10;
+        } else {
+            func_801941A4(0);
+            result = 0;
+        }
+    }
+
+    return result;
+}
+
+void func_801941A4(int intensity)
+{
+    FxCommonPacketCursor *packet;
+    FxCommonBuffer *quadBuffer;
+    FxCommonBuffer *modeBuffer;
+    FxCommonAddress packetAddress;
+    u32 addressMask = 0xFFFFFF;
+    u32 commandMask;
+    u32 tag;
+
+    packet = D_8019C9C0->data;
+    func_80077BC4(&packet->quad);
+    func_80077B04(&packet->quad, 1);
+
+    packet->quad.color0[0] = intensity;
+    packet->quad.color0[1] = intensity;
+    packet->quad.color0[2] = intensity;
+    packet->quad.color1[0] = intensity;
+    packet->quad.color1[1] = intensity;
+    packet->quad.color1[2] = intensity;
+    packet->quad.color2[0] = intensity;
+    packet->quad.color2[1] = intensity;
+    packet->quad.color2[2] = intensity;
+    packet->quad.color3[0] = intensity;
+    packet->quad.color3[1] = intensity;
+    packet->quad.color3[2] = intensity;
+    packet->quad.x0 = 0;
+    packet->quad.y0 = 0;
+    packet->quad.x1 = 0x140;
+    packet->quad.y1 = 0;
+    packet->quad.x2 = 0;
+    packet->quad.y2 = 0xF0;
+    packet->quad.x3 = 0x140;
+    packet->quad.y3 = 0xF0;
+
+    commandMask = 0xFF000000;
+    packetAddress.pointer = packet;
+    quadBuffer = D_8019C9C0;
+    tag = packet->quad.tag;
+    tag &= commandMask;
+    tag |= *(u32 *)quadBuffer->allocation & addressMask;
+    packet->quad.tag = tag;
+    *(u32 *)quadBuffer->allocation =
+        (*(u32 *)quadBuffer->allocation & commandMask) |
+        (packetAddress.word & addressMask);
+    packet++;
+    quadBuffer->data = packet;
+
+    SetDrawTPage(&packet->mode.packet, 0, 0, 0x40);
+    modeBuffer = D_8019C9C0;
+    packet->mode.packet.tag.packed = (packet->mode.packet.tag.packed & commandMask) |
+                              (*(u32 *)modeBuffer->allocation & addressMask);
+    packetAddress.pointer = packet;
+    addressMask = packetAddress.word & addressMask;
+    *(u32 *)modeBuffer->allocation =
+        (*(u32 *)modeBuffer->allocation & commandMask) | addressMask;
+    modeBuffer->data = &packet->mode.packet + 1;
+}
+
+/* Advance effect selection, resource transitions and the two motion blends. */
+void func_801942FC(void)
+{
+    FxCommonMotionRecord mode1Sample;
+    FxCommonMotionRecord mode1NextSample;
+    FxCommonMotionRecord mode2Sample;
+    FxCommonMotionRecord mode2NextSample;
+    GteShortVector shortA;
+    GteShortVector shortB;
+    GteShortVector sampleExtra;
+    FxCommonMotionRecord motionSample;
+    GteShortVector motionExtra;
+    s32 copyX;
+    s32 copyY;
+    s32 copyZ;
+    s32 currentX;
+    s32 currentY;
+    s32 currentZ;
+    s16 resourceResult;
+    s32 rowIndex;
+    /* Raw halfword is loaded before the blend duration, then sign-extended. */
+    u16 phase0;
+    u16 phase1;
+    s16 nextMode;
+    s16 remaining0;
+    s16 remaining1;
+    s16 motionBase0;
+    s16 motionBase1;
+    s16 countdown;
+    s16 mode;
+    s16 transitionMode;
+    s32 accumX0;
+    s32 accumX1;
+    s32 accumZ0;
+    s32 accumZ1;
+    s32 nextFrame;
+    s32 elapsed;
+    s32 resourceTicks;
+    s32 accumY1;
+    s32 accumY0;
+    s32 motionSlot0;
+    s32 motionSlot1;
+    u32 motionIndex0;
+    u32 motionIndex1;
+    s16 nextIndex0;
+    s16 nextIndex1;
+
+    resourceResult = 0;
+    if (D_8019C026 != 0) {
+        countdown = D_8019C026 - 1;
+        D_8019C026 = countdown;
+        if (countdown == 1) {
+            D_8019C024 = 1;
+        }
+    }
+    if (D_8019C045 == 1) {
+        func_80195994(D_8019CC52, 0, 0, D_8019CC1C << 8);
+        rowIndex = D_8019CC52;
+        if (D_8019CC1C >= g_FxCommonEffectSetup[rowIndex].value30) {
+            D_8019C032 = 0;
+        }
+        if (D_8019CC1C < (g_FxCommonEffectSetup[rowIndex].value0c - 1)) {
+            D_8019CC1C += 1;
+        } else {
+            D_8019C045 = 0;
+        }
+    }
+    if ((D_8019C026 != 0) && (D_8019C045 == 0) && (D_8019C034 != 0xA) && (D_8019C046 == 0) && (D_8019BFF8 == -1)) {
+        nextFrame = D_8019CC1C + 1;
+        D_8019CC1C = nextFrame;
+        func_80195994(D_8019CC52, 0, 0, nextFrame << 8);
+    }
+    if ((D_8019C044 == 1) && (elapsed = D_8019C048 + 1, D_8019C048 = elapsed, ((elapsed < 0xC9) == 0)) && (D_8019C040 == 0)) {
+        if (D_8019C046 == 0) {
+            D_8019C04C = 0;
+        }
+        D_8019C046 = 1;
+    } else {
+        D_8019C046 = 0;
+    }
+    mode = D_8019C034;
+    if (mode != 0xA) {
+        if ((D_8019C026 == 0) && (D_8009D26C != 0)) {
+            if ((D_8009D1F4 & 2) && (D_8019BFF8 == -1)) {
+                nextMode = (s16)(mode + 1) % 3;
+                D_8019C034 = nextMode;
+                if ((nextMode << 0x10) == 0) {
+                    D_8019C02C = 1;
+                    D_8019C045 = 0;
+                    func_80195994(D_8019CC52, 4, 5, 0);
+                    if ((D_8019C026 == 0) && (D_800B0E08[0] != 0)) {
+                        Akao_SendTableCommand((void *) D_800B0E08[0], 0x44D, 0, 0x80, 0x7F);
+                    }
+                }
+                transitionMode = D_8019C034;
+                if (transitionMode == 1) {
+                    if (D_8009D26C & 0x20) {
+                        if ((D_8019C026 == 0) && (D_800B0E08[0] != 0)) {
+                            Akao_SendTableCommand((void *) D_800B0E08[0], 0x44C, 0, 0x80, 0x7F);
+                        }
+                        D_8019C02C = -1;
+                        D_8019C032 = 1;
+                        D_8019C048 = 0;
+                        D_8019C044 = 0;
+                        D_8019C045 = 0;
+                        D_8019C13C = 0;
+                        func_8018F55C(D_8019C038 + 0x20, 0x4A, Gpu_GetTimTableEntry((&D_801D0260), 2), &mode1Sample.vector, &sampleExtra);
+                        func_8018F55C(D_8019C038 + 0x20, 0x4B, Gpu_GetTimTableEntry((&D_801D0260), 2), &mode1NextSample.vector, &sampleExtra);
+                        copyX = mode1Sample.vector.x;
+                        copyY = mode1Sample.vector.y;
+                        copyZ = mode1Sample.vector.z;
+                        currentX = g_FxCommonMotionPosition0.x;
+                        currentY = g_FxCommonMotionPosition0.y;
+                        currentZ = g_FxCommonMotionPosition0.z;
+                        shortA.x = (s16)copyX;
+                        shortA.y = copyY - 0x64;
+                        shortA.z = (s16)copyZ;
+                        shortB.x = (s16)currentX;
+                        shortB.y = (s16)currentY;
+                        shortB.z = (s16)currentZ;
+                        func_80195BC8((FxCommonShortVec3 *)&shortA, (FxCommonShortVec3 *)&shortB, 4, 5);
+                        D_8019C13E = 1;
+                    } else {
+                        D_8019C034 = 2;
+                        D_8019C13E = 0;
+                    }
+                }
+                if (D_8019C034 == 2) {
+                    if ((D_8019C026 == 0) && (D_800B0E08[0] != 0)) {
+                        Akao_SendTableCommand((void *) D_800B0E08[0], 0x44C, 0, 0x80, 0x7F);
+                    }
+                    if (D_8019C13E == 0) {
+                        D_8019C02C = -1;
+                    }
+                    if (D_8019C13E == 1) {
+                        D_8019C02C = 0;
+                    }
+                    D_8019C032 = 1;
+                    D_8019C048 = 0;
+                    D_8019C044 = 0;
+                    D_8019C045 = 0;
+                    D_8019C13C = 0;
+                    func_8018F55C(D_8019C03C + 0x100, 0x4C, Gpu_GetTimTableEntry((&D_801D0260), 2), &mode2Sample.vector, &sampleExtra);
+                    func_8018F55C(D_8019C03C + 0x100, 0x4D, Gpu_GetTimTableEntry((&D_801D0260), 2), &mode2NextSample.vector, &sampleExtra);
+                    shortA.x = (s16) mode2NextSample.vector.x;
+                    shortA.y = (s16) mode2NextSample.vector.y;
+                    shortA.z = (s16) mode2NextSample.vector.z;
+                    shortB.x = (s16) mode2Sample.vector.x;
+                    shortB.y = (s16) mode2Sample.vector.y;
+                    shortB.z = (s16) mode2Sample.vector.z;
+                    func_80195BC8((FxCommonShortVec3 *)&shortA, (FxCommonShortVec3 *)&shortB, 4, 5);
+                }
+            }
+            if ((D_8009D1F4 & 0x50) && (D_8019C034 != 0)) {
+                D_8019C034 = 0;
+                D_8019C02C = 1;
+                D_8019C045 = 0;
+                func_80195994(D_8019CC52, 4, 5, 0);
+                if ((D_8019C026 == 0) && (D_800B0E08[0] != 0)) {
+                    Akao_SendTableCommand((void *) D_800B0E08[0], 0x44D, 0, 0x80, 0x7F);
+                }
+            }
+            if (((u8) D_8019C040 < 2U) && (D_8019C034 == 0) && (D_8019C13C == 0)) {
+                if ((D_8009D1F4 & 0x20000000) && (D_8019C026 == 0)) {
+                    if (D_8019C040 == 1) {
+                        D_8019C02A = 1;
+                        D_8019C026 = 0x10;
+                        D_8019CA68 = D_8019CC52;
+                    }
+                    if (D_8019C044 == 0) {
+                        if (D_800B0E08[0] != 0) {
+                            Akao_SendTableCommand((void *) D_800B0E08[0], 0x44C, 0, 0x80, 0x7F);
+                        }
+                        D_8019C02C = -1;
+                        D_8019C045 = 1;
+                        D_8019C044 = 1;
+                        D_8019CC1C = 0;
+                        D_8019C048 = 1;
+                    } else {
+                        if (D_800B0E08[0] != 0) {
+                            Akao_SendTableCommand((void *) D_800B0E08[0], 0x44C, 0, 0x80, 0x7F);
+                        }
+                        D_8019C02A = 1;
+                        D_8019C026 = 0x10;
+                        D_8019CA68 = D_8019CC52;
+                    }
+                    if ((D_8019C000 == 1) && (D_8019CC52 == D_8019C004)) {
+                        D_8019C02C = -1;
+                        D_8019C02A = 1;
+                        D_8019C045 = 0;
+                        D_8019C044 = 0;
+                        D_8019CC1C = 0;
+                        D_8019C048 = 0;
+                        D_8019C026 = 0x10;
+                        D_8019CA68 = D_8019CC52;
+                    }
+                }
+                if ((D_8009D1F4 & 0x40000000) && (D_8019BFF8 == -1) && (D_8019C026 == 0)) {
+                    D_8019C032 = 1;
+                    if (D_8019C044 == 1) {
+                        if (D_800B0E08[0] != 0) {
+                            Akao_SendTableCommand((void *) D_800B0E08[0], 0x44D, 0, 0x80, 0x7F);
+                        }
+                        func_80195994(D_8019CC52, 4, 5, 0);
+                        D_8019C02C = 1;
+                        D_8019C044 = 0;
+                        D_8019C045 = 0;
+                    }
+                }
+                if ((D_8009D1F4 & 0x40) && (D_8019BFF8 == -1)) {
+                    if (D_8019C044 == 1) {
+                        D_8019C02C = 1;
+                    }
+                    D_8019C045 = 0;
+                    D_8019C044 = 0;
+                    D_8019CC1C = 0;
+                    D_8019C032 = 1;
+                    if (g_FxCommonEffectSetup[D_8019CC52].value22 != 0xFF) {
+                        do {
+                            nextIndex0 = g_FxCommonEffectSetup[D_8019CC52].value22;
+                            D_8019CC52 = (s16) nextIndex0;
+                        } while (g_FxCommonEffectSetup[nextIndex0].enabled == 0);
+                        D_8019C018 = 1;
+                        D_8019CC1C = g_FxCommonEffectSetup[nextIndex0].value0c;
+                        func_80195994(nextIndex0, 4, 5, 0);
+                        motionIndex0 = 0;
+                        motionSlot0 = 0;
+                        phase0 = D_8019CC52;
+                        D_8019C058 = 0x20;
+                        motionBase0 = (s16)phase0;
+                        do {
+                            func_8018F55C(motionIndex0 << 8, motionBase0 + 0x40, Gpu_GetTimTableEntry((&D_801D0260), 2), &motionSample.vector, &motionExtra);
+                            motionIndex0 += 1;
+                            g_FxCommonMotionDeltas[motionSlot0].vector.x = ((motionSample.vector.x << 0x10) - D_8019CAA8[motionSlot0].vector.x) >> 5;
+                            g_FxCommonMotionDeltas[motionSlot0].vector.y = ((motionSample.vector.y << 0x10) - D_8019CAA8[motionSlot0].vector.y) >> 5;
+                            g_FxCommonMotionDeltas[motionSlot0].vector.z = ((motionSample.vector.z << 0x10) - D_8019CAA8[motionSlot0].vector.z) >> 5;
+                            motionSlot0 += 1;
+                        } while (motionIndex0 < 0xAU);
+                    }
+                }
+                if ((D_8009D1F4 & 0x10) && (D_8019BFF8 == -1)) {
+                    if (D_8019C044 == 1) {
+                        D_8019C02C = 1;
+                    }
+                    D_8019C045 = 0;
+                    D_8019C044 = 0;
+                    D_8019CC1C = 0;
+                    D_8019C032 = 1;
+                    if (g_FxCommonEffectSetup[D_8019CC52].value23 != 0xFF) {
+                        do {
+                            nextIndex1 = g_FxCommonEffectSetup[D_8019CC52].value23;
+                            D_8019CC52 = (s16) nextIndex1;
+                        } while (g_FxCommonEffectSetup[nextIndex1].enabled == 0);
+                        D_8019C018 = 1;
+                        D_8019CC1C = g_FxCommonEffectSetup[nextIndex1].value0c;
+                        func_80195994(nextIndex1, 4, 5, 0);
+                        motionIndex1 = 0;
+                        motionSlot1 = 0;
+                        phase1 = D_8019CC52;
+                        D_8019C058 = 0x20;
+                        motionBase1 = (s16)phase1;
+                        do {
+                            func_8018F55C(motionIndex1 << 8, motionBase1 + 0x40, Gpu_GetTimTableEntry((&D_801D0260), 2), &motionSample.vector, &motionExtra);
+                            motionIndex1 += 1;
+                            g_FxCommonMotionDeltas[motionSlot1].vector.x = ((motionSample.vector.x << 0x10) - D_8019CAA8[motionSlot1].vector.x) >> 5;
+                            g_FxCommonMotionDeltas[motionSlot1].vector.y = ((motionSample.vector.y << 0x10) - D_8019CAA8[motionSlot1].vector.y) >> 5;
+                            g_FxCommonMotionDeltas[motionSlot1].vector.z = ((motionSample.vector.z << 0x10) - D_8019CAA8[motionSlot1].vector.z) >> 5;
+                            motionSlot1 += 1;
+                        } while (motionIndex1 < 0xAU);
+                    }
+                }
+            }
+        }
+    }
+    if ((D_8019C034 == 1) && (g_FxCommonMotionRemaining0 == 0) && (g_FxCommonMotionRemaining1 == 0)) {
+        ((FxCommonVec3 *)&g_FxCommonMotionPosition1)->x = D_801EA58C->state[0];
+        g_FxCommonMotionPosition1.y = D_801EA58C->state[1] - 0x12C;
+        g_FxCommonMotionPosition1.z = D_801EA58C->state[2];
+        ((FxCommonVec3 *)&g_FxCommonMotionPosition0)->x = D_801EA578->state[0];
+        g_FxCommonMotionPosition0.y = D_801EA578->state[1];
+        g_FxCommonMotionPosition0.z = D_801EA578->state[2];
+    }
+    if ((D_8019C034 == 2) && (g_FxCommonMotionRemaining0 == 0) && (g_FxCommonMotionRemaining1 == 0)) {
+        ((FxCommonVec3 *)&g_FxCommonMotionPosition1)->x = D_801EA580->state[0];
+        g_FxCommonMotionPosition1.y = D_801EA580->state[1];
+        g_FxCommonMotionPosition1.z = D_801EA580->state[2];
+        ((FxCommonVec3 *)&g_FxCommonMotionPosition0)->x = D_801EA578->state[0];
+        g_FxCommonMotionPosition0.y = D_801EA578->state[1];
+        g_FxCommonMotionPosition0.z = D_801EA578->state[2];
+    }
+    if (D_8019C046 == 1) {
+        func_8018F55C(D_8019C04C, g_FxCommonEffectSetup[D_8019CC52].motionIndices[3], Gpu_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonMotionPosition1, &sampleExtra);
+        func_8018F55C(D_8019C04C, g_FxCommonEffectSetup[D_8019CC52].motionIndices[2], Gpu_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonMotionPosition0, &sampleExtra);
+        D_8019C04C += 0x80;
+    }
+    if (D_8019C034 == 0xA) {
+        D_8019C030 += 1;
+        func_8018F55C(D_8019C04C, 0x4E, Gpu_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonMotionPosition1, &sampleExtra);
+        func_8018F55C(D_8019C04C, 0x4F, Gpu_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonMotionPosition0, &sampleExtra);
+        D_8019C04C += 0x10;
+        if ((s16) D_8019C030 == 0x4B) {
+            D_8019C0C4 = func_801958D4(0xB, 0U);
+            D_8019C0C8 = 0;
+        }
+        if ((s16)D_8019C030 == 0x11D) {
+            func_801958D4(0xE, 1U);
+        }
+        if ((s16)D_8019C030 == 0x13B) {
+            D_8019C0C4 = func_801958D4(0xC, 0U);
+            D_8019C0C8 = 0;
+        }
+        if ((s16)D_8019C030 == 0x20D) {
+            func_801958D4(0xE, 1U);
+        }
+        if ((s16)D_8019C030 == 0x22B) {
+            D_8019C0C4 = func_801958D4(0xD, 0U);
+            D_8019C0C8 = 0;
+        }
+        if ((s16)D_8019C030 == 0x2FD) {
+            func_801958D4(0xE, 1U);
+        }
+        if ((s16)D_8019C030 == 0x31B) {
+            D_8019C0C4 = func_801958D4(0xE, 0U);
+            D_8019C0C8 = 0;
+        }
+        if ((s16)D_8019C030 == 0x3ED) {
+            func_801958D4(0xE, 1U);
+        }
+        if ((s16)D_8019C030 == 0x40B) {
+            D_8019C0C4 = func_801958D4(0xE, 1U);
+        }
+        if (D_8019C0C8 == 0) {
+            D_8019C0CD = 0;
+            D_8019C0CC = 0;
+        }
+        if (D_8019C0C8 == 0x18) {
+            D_8019C0CD = 1;
+        }
+        if (D_8019C0C8 == 0xBA) {
+            D_8019C0CD = 2;
+        }
+        D_8019C0C8 += 1;
+        if ((D_8019C0CD == 0) && ((u8) D_8019C0CC < 0x78U)) {
+            D_8019C0CC += 5;
+        }
+        if ((D_8019C0CD == 2) && ((u8) D_8019C0CC >= 0xBU)) {
+            D_8019C0CC -= 5;
+        }
+        func_80038940(D_8019C0C4, D_8019C0CC, D_8019C0CC, D_8019C0CC);
+        resourceTicks = D_8019C0BC + 1;
+        D_8019C0BC = resourceTicks;
+        if (resourceTicks == 0x4B1) {
+            D_8019C02A = 1;
+            D_8019C026 = 0x10;
+            D_8019CA68 = D_8019CC52;
+            func_800868AC(0x12C, 0);
+            D_8019C0C0 = 1;
+        }
+        if (D_8019C0BC == 0x41A) {
+            func_80086C5C(D_800B0DB5, 0xDC, 0);
+        }
+    }
+    func_80195D3C();
+    if (D_8019C018 != 0) {
+        D_8019C018 = 0;
+        if (D_8019C01C == 1) {
+            func_8003746C(D_8019C028);
+        }
+        func_80038940(g_FxCommonEffectSetup[D_8019CC52].value25, 0x80, 0x80, 0x80);
+        if (D_8019C034 != 0xA) {
+            func_800375E0(g_FxCommonEffectSetup[D_8019CC52].value25, 3, &resourceResult);
+        }
+        D_8019C028 = (s16) g_FxCommonEffectSetup[D_8019CC52].value25;
+        D_8019C01C = 1;
+    }
+    if (g_FxCommonMotionRemaining0 != 0) {
+        remaining0 = g_FxCommonMotionRemaining0 - 1;
+        g_FxCommonMotionRemaining0 = remaining0;
+        accumX0 = g_FxCommonMotionAccum0.x + D_8019C08C;
+        g_FxCommonMotionAccum0.x = accumX0;
+        accumY0 = g_FxCommonMotionAccum0.y + D_8019C090;
+        accumZ0 = g_FxCommonMotionAccum0.z + D_8019C094;
+        g_FxCommonMotionAccum0.y = accumY0;
+        g_FxCommonMotionAccum0.z = accumZ0;
+        g_FxCommonMotionPosition0.x = g_FxCommonMotionOrigin0.x + (accumX0 >> D_8019C056);
+        g_FxCommonMotionPosition0.y = g_FxCommonMotionOrigin0.y + (accumY0 >> D_8019C056);
+        g_FxCommonMotionPosition0.z = g_FxCommonMotionOrigin0.z + (accumZ0 >> D_8019C056);
+        if ((remaining0 << 0x10) == 0) {
+            g_FxCommonMotionPosition0.x = g_FxCommonMotionTarget0.x;
+            g_FxCommonMotionPosition0.y = g_FxCommonMotionTarget0.y;
+            g_FxCommonMotionPosition0.z = g_FxCommonMotionTarget0.z;
+        }
+    }
+    if (g_FxCommonMotionRemaining1 != 0) {
+        remaining1 = g_FxCommonMotionRemaining1 - 1;
+        g_FxCommonMotionRemaining1 = remaining1;
+        accumX1 = g_FxCommonMotionAccum1.x + D_8019C05C;
+        g_FxCommonMotionAccum1.x = accumX1;
+        accumY1 = g_FxCommonMotionAccum1.y + D_8019C060;
+        accumZ1 = g_FxCommonMotionAccum1.z + D_8019C064;
+        g_FxCommonMotionAccum1.y = accumY1;
+        g_FxCommonMotionAccum1.z = accumZ1;
+        g_FxCommonMotionPosition1.x = g_FxCommonMotionOrigin1.x + (accumX1 >> D_8019C052);
+        g_FxCommonMotionPosition1.y = g_FxCommonMotionOrigin1.y + (accumY1 >> D_8019C052);
+        g_FxCommonMotionPosition1.z = g_FxCommonMotionOrigin1.z + (accumZ1 >> D_8019C052);
+        if ((remaining1 << 0x10) == 0) {
+            g_FxCommonMotionPosition1.x = g_FxCommonMotionTarget1.x;
+            g_FxCommonMotionPosition1.y = g_FxCommonMotionTarget1.y;
+            g_FxCommonMotionPosition1.z = g_FxCommonMotionTarget1.z;
+        }
+    }
+}
