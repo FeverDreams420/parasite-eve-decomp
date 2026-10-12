@@ -609,7 +609,6 @@ segments:
       - [0x67BD0, c, psyq/libgpu/Gpu_ResetDmaWaitTimer]
       - [0x67DE8, c, psyq/libgpu/LoadImage2]
       - [0x68200, c, psyq/libgpu/Gpu_RestoreDmaCallback]
-      - [0x68228, c, psyq/libgpu/GPU_memset]
       # LIBAPI C73.OBJ.
       - [0x68254, c, psyq/libapi/c73]
       # Psy-Q LIBGPU primitive objects, one SDK object per unit.
