@@ -127,6 +127,11 @@ extern BattleHudShades D_8009CD90[]; /* one record; unsized keeps it off $gp */
 extern RenderPagedSpritePacket D_800B01C0[2][10][5];
 /* End-of-battle panel quads, one per draw buffer. */
 extern RenderTexturedQuad D_800BE9F0[2];
+/* Corner coordinates of a quad (the PSY-Q setXY4 sequence). */
+#define BATTLE_SET_QUAD_XY(quad, x0_, y0_, x1_, y1_, x2_, y2_, x3_, y3_)  \
+    ((quad).x0 = (x0_), (quad).y0 = (y0_), (quad).x1 = (x1_),           \
+     (quad).y1 = (y1_), (quad).x2 = (x2_), (quad).y2 = (y2_),           \
+     (quad).x3 = (x3_), (quad).y3 = (y3_))
 void Battle_DrawStatusValue(int value, int yOffset);
 /* Returns the highest digit index (number of rendered digits minus one). */
 int Battle_DrawDecimalNumber(void *buffer, s16 x, s16 y, s16 value, s16 mode);

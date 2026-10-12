@@ -12,7 +12,8 @@ s32 D_8009D28C;
 
 /* End-of-battle sequence: retire enemy actors, fade sound and animate the
  * textured panel before completing the battle phase. Matching debt: register
- * pins, empty barriers, two volatile packet views and 24 reserved stack bytes.
+ * pins, empty barriers, a volatile packet view and 24 reserved stack bytes
+ * in the other cases; case 3 sets the corners through a quad pointer.
  * Countdown and stage stores remain local to their switch cases. */
 void Battle_StepPostBattle(void)
 {
@@ -23,7 +24,6 @@ void Battle_StepPostBattle(void)
     register BattleEntity *hiddenEntity asm("$16");
     RenderTexturedQuad *expandingPanel;
     volatile RenderTexturedQuad *fadingPanel;
-    register volatile RenderTexturedQuad *raisingPanel asm("$2");
     s32 remainingFrames;
     register s32 horizontalInset asm("$7");
     s8 brightness;
@@ -31,7 +31,7 @@ void Battle_StepPostBattle(void)
     u16 rightEdge;
     u32 entityFlags;
     u8 fadeBrightness;
-    register u8 countdown asm("$2");
+    u8 countdown;
     EnemyCombatant *core;
     EnemyCombatant *actionCore;
     EnemyCombatant *fadingCore;
@@ -163,44 +163,17 @@ void Battle_StepPostBattle(void)
         break;
     }
     case 3: {
-        u16 edgeCoordinate;
         if ((u8) g_BattleEndTimer >= 0x1AU) {
-            u32 pulse = rcos((g_BattleEndTimer - 16) * 16) * 11U >> 11;
-            register RenderTexturedQuad *base asm("$5") = D_800BE9F0;
-            register u16 left asm("$6") = 100;
-            s32 frame = D_8009CDDC;
-            u16 top;
-            register u16 right asm("$5");
-            pulse &= 255;
-            raisingPanel = &base[frame];
-            asm volatile("" : "=r"(raisingPanel) : "0"(raisingPanel));
-            top = 122 - pulse;
-            right = 220;
-            edgeCoordinate = 124;
-            raisingPanel->x0 = left;
-            raisingPanel->y0 = top;
-            raisingPanel->x1 = right;
-            raisingPanel->y1 = top;
-            raisingPanel->x2 = left;
-            raisingPanel->y2 = edgeCoordinate;
-            ((RenderTexturedQuad *)raisingPanel)->x3 = right;
+            u8 pulse = rcos((g_BattleEndTimer - 16) * 16) * 11U >> 11;
+            RenderTexturedQuad *panels = D_800BE9F0;
+            RenderTexturedQuad *panel = &panels[D_8009CDDC];
+            BATTLE_SET_QUAD_XY(*panel, 100, 122 - pulse, 220, 122 - pulse, 100, 124, 220, 124);
         }
         else {
-            RenderTexturedQuad *base = D_800BE9F0;
-            raisingPanel = &base[D_8009CDDC];
-            asm volatile("" : "=r"(raisingPanel) : "0"(raisingPanel));
-            edgeCoordinate = 100;
-            horizontalEdge = 220;
-            raisingPanel->x0 = edgeCoordinate;
-            raisingPanel->y0 = edgeCoordinate;
-            raisingPanel->y1 = edgeCoordinate;
-            raisingPanel->x2 = edgeCoordinate;
-            edgeCoordinate = 124;
-            raisingPanel->x1 = horizontalEdge;
-            raisingPanel->y2 = edgeCoordinate;
-            ((RenderTexturedQuad *)raisingPanel)->x3 = horizontalEdge;
+            RenderTexturedQuad *panels = D_800BE9F0;
+            RenderTexturedQuad *panel = &panels[D_8009CDDC];
+            BATTLE_SET_QUAD_XY(*panel, 100, 100, 220, 100, 100, 124, 220, 124);
         }
-        raisingPanel->y3 = edgeCoordinate;
         countdown = g_BattleEndTimer;
         if (countdown == 0) {
             Anim_SetInterpRate(&D_8009D254->renderObject, 0x3C);
