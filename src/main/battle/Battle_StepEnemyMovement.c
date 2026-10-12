@@ -54,12 +54,15 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
     else
     {
         unsigned char hitCountPercent[11] = { 0, 100, 60, 41, 0, 25, 0, 18, 0, 0, 13 };
+        int strength;
         weaponAction = D_8009D278->action;
-        attackPower = ((((s32)(((u16)D_8009D278->stat1E / 5U) & 0xFFFF)) + (s16) weaponAction->powerBonus) * hitCountPercent[weaponAction->turnWord & 0xF]) / 100;
+        strength = (u16)D_8009D278->stat1E / 5U;
+        attackPower = ((strength + (s16) weaponAction->powerBonus) * hitCountPercent[weaponAction->turnWord & 0xF]) / 100;
     }
     if (!(D_8009D278->stateFlags & 0x180000) && (defenseAction = D_8009D278->action, (defenseAction->actionCode.actionId != 8)))
     {
-        damage = attackPower - (enemy->defense / (s32) (defenseAction->turnWord & 0xF));
+        int remainingActions = defenseAction->turnWord & 0xF;
+        damage = attackPower - (enemy->defense / remainingActions);
     }
     else
     {
