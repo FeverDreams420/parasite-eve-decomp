@@ -85,7 +85,7 @@ unsigned int Menu_GetActionSubmenuSelection(void) {
     return g_MenuActionSubmenuSel;
 }
 
-void BoundsCheck_AssertStub(int code)
+void Inv_BoundsCheckAssertStub(int code)
 {
 }
 
@@ -1052,7 +1052,7 @@ int Inv_CountByCategory(int arg0) {
     return count;
 }
 
-int WayneStorage_CountItemType(int arg0) {
+int Inv_CountWayneStorageItemType(int arg0) {
     short *item;
     int index;
     int count;

@@ -599,7 +599,7 @@ int Inv_BuildCompatibleWeaponBitset(int sourceIndex) {
     return count;
 }
 
-int Spend_Ammo(int amount) {
+int Inv_SpendAmmo(int amount) {
     InvItemSlot *src;
     InvItemSlot *dst;
     int new_src;

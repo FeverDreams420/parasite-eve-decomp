@@ -378,7 +378,7 @@ void Battle_Update(void) {
                     } else if (D_8009D1F4 & 0x80) {
                         opened = 1;
                         (D_8009D1F0[0]) = opened;
-                        Inventory_OpenAyaItemList(1);
+                        Inv_OpenAyaItemList(1);
                         Render_BeginSceneLoad();
                     }
                     if ((u8)opened != 0) {

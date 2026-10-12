@@ -802,8 +802,8 @@ int Menu_StepItemSelectScreen(MenuWidgetNode *node, unsigned int buttons)
             g_StatBaseTable[0] = Inv_CountByCategory(0xe) ? 999 : Inv_CountByCategory(0xc);
             g_StatBaseTable[1] = Inv_CountByCategory(0xf) ? 999 : Inv_CountByCategory(0xd);
             if (g_MenuEquipMode) {
-                g_StatBaseTable[2] = WayneStorage_CountItemType(0xe) ? 999 : WayneStorage_CountItemType(0xc);
-                g_StatBaseTable[3] = WayneStorage_CountItemType(0xf) ? 999 : WayneStorage_CountItemType(0xd);
+                g_StatBaseTable[2] = Inv_CountWayneStorageItemType(0xe) ? 999 : Inv_CountWayneStorageItemType(0xc);
+                g_StatBaseTable[3] = Inv_CountWayneStorageItemType(0xf) ? 999 : Inv_CountWayneStorageItemType(0xd);
             } else {
                 g_StatBaseTable[3] = 0;
                 g_StatBaseTable[2] = 0;

@@ -513,7 +513,7 @@ void Menu_ResetInputState(void) {
 void BattleCmd_SyncActiveAmmo(void);
 void Menu_CreateInventoryTabView(void);
 
-void Inventory_OpenAyaItemList(unsigned int arg) {
+void Inv_OpenAyaItemList(unsigned int arg) {
     g_MenuBattleEquipMode = arg;
     g_SavedMenuMode.value = Menu_GetActiveMode() & 0xFF;
     Window_SetBoundsByMode(0);

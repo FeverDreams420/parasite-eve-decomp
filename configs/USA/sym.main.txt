@@ -525,7 +525,7 @@ GD_cbready = 0x80082444; // type:func
 // first 0x12E4 bytes are a bulk copy and the tail is serialized explicitly.
 Math_FixedDivide = 0x800370A8; // type:func
 Save_ResetGlobalFlags = 0x80020EFC; // type:func
-BoundsCheck_AssertStub = 0x800527C0; // type:func
+Inv_BoundsCheckAssertStub = 0x800527C0; // type:func
 Save_SerializeTail = 0x8003F800; // type:func
 Save_DeserializeTail = 0x8003FBD8; // type:func
 Save_SetTitleStyleFlag = 0x8003FFAC; // type:func
@@ -555,7 +555,7 @@ Save_GetMetadataCursor = 0x8005BEDC; // type:func
 Save_GetActiveMetadataBuffer = 0x8005BEE8; // type:func
 Save_GetMetadataRemainingChars = 0x8005BF08; // type:func
 Menu_ResetInputState = 0x8005C144; // type:func
-Inventory_OpenAyaItemList = 0x8005C174; // type:func
+Inv_OpenAyaItemList = 0x8005C174; // type:func
 MemCard_SetDialogActive = 0x8005C1EC; // type:func
 Menu_RequestErrorSound = 0x8005C488; // type:func
 sprintf = 0x80071A84; // type:func
@@ -604,9 +604,9 @@ Aya_HasParasiteSpell = 0x80051834; // type:func
 Aya_UnlockParasiteSpell = 0x8005184C; // type:func
 Aya_DeriveStats = 0x800523F8; // type:func
 Aya_GetActiveTimeRate = 0x80052524; // type:func
-WayneStorage_CountItemType = 0x80053F90; // type:func
+Inv_CountWayneStorageItemType = 0x80053F90; // type:func
 Aya_UnlockParasiteSpellById = 0x80055668; // type:func
-Spend_Ammo = 0x80056B24; // type:func
+Inv_SpendAmmo = 0x80056B24; // type:func
 
 
 // PSX SPU common/control MMIO aliases used by small AKAO register writers.
@@ -710,8 +710,8 @@ Save_StartSelectedReadSlot = 0x8005051C; // type:func
 Menu_DrawItemSlot = 0x80050748; // type:func
 Menu_SoundTestSelect = 0x800509E0; // type:func
 Inv_LookupItemData = 0x80058BBC; // type:func
-Sort_ContainerItems = 0x8005B71C; // type:func
-Sort_InventoryItems = 0x8005B7D0; // type:func
+Inv_SortContainerItems = 0x8005B71C; // type:func
+Inv_SortInventoryItems = 0x8005B7D0; // type:func
 Text_LookupMapLocationText = 0x8005DD8C; // type:func
 Text_GetMapLocationName = 0x8005DE08; // type:func
 Draw_BlendColor = 0x800614AC; // type:func

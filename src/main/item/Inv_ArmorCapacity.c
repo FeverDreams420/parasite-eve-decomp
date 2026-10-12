@@ -733,7 +733,7 @@ void Inv_SortInventoryByMode(s32 arg0, s32 arg1) {
     Inv_RebuildSelectableMask();
 }
 
-void Sort_ContainerItems(int arg0) {
+void Inv_SortContainerItems(int arg0) {
     if (arg0 != 0) {
         g_InvSortRankTable = g_InvSortRankTableA;
         g_InvSortTypeRankTable = g_InvTypeRankTableA;
@@ -752,7 +752,7 @@ void Sort_ContainerItems(int arg0) {
     Inv_TransferItemAlt2(0xF400);
 }
 
-void Sort_InventoryItems(int arg0, int arg1) {
+void Inv_SortInventoryItems(int arg0, int arg1) {
     if (arg0 != 0) {
         D_8009D0A4 = arg1;
         g_InvSortRankTable = g_InvSortRankTableA;

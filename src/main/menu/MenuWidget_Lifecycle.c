@@ -65,7 +65,7 @@ inline MenuWidgetNode *MenuWidget_AllocNode(MenuWidgetNode *arg0, MenuWidgetNode
     temp_s1 = arg1;
     temp_s0 = g_MenuWidgetFreeListHead;
     if (temp_s0 == NULL) {
-        BoundsCheck_AssertStub(0xA);
+        Inv_BoundsCheckAssertStub(0xA);
     }
     var_a0 = 3;
     temp_next = temp_s0->next;
@@ -96,7 +96,7 @@ inline MenuWidgetNode *MenuWidget_AllocNode(MenuWidgetNode *arg0, MenuWidgetNode
         if (var_v0 != 0) {
             temp_s1->children[var_a0] = temp_s0;
         } else {
-            BoundsCheck_AssertStub(0xB, var_a1);
+            Inv_BoundsCheckAssertStub(0xB, var_a1);
         }
     }
     return temp_s0;
@@ -184,7 +184,7 @@ void Draw_PushPrimToList(MenuWidgetNode *node) {
         temp_a1[0] = t0;
         temp_a1[1] = t1;
     } else {
-        BoundsCheck_AssertStub(2, temp_a1);
+        Inv_BoundsCheckAssertStub(2, temp_a1);
     }
     offsetX = node->x;
     cursorX = g_TextCursorX;
@@ -202,7 +202,7 @@ void Draw_PushPrimToList(MenuWidgetNode *node) {
             q[1] = temp_a1_2;
             g_TextCursorStackPtr = q + 2;
         } else {
-            BoundsCheck_AssertStub(2, temp_a1_2, temp_a2);
+            Inv_BoundsCheckAssertStub(2, temp_a1_2, temp_a2);
         }
         node->draw(node);
         if (g_TextCursorStackBottom < g_TextCursorStackPtr) {
@@ -212,7 +212,7 @@ void Draw_PushPrimToList(MenuWidgetNode *node) {
             g_TextCursorX = temp_v0;
             g_TextCursorY = temp_a0;
         } else {
-            BoundsCheck_AssertStub(3);
+            Inv_BoundsCheckAssertStub(3);
         }
     }
     var_s1 = 0;
@@ -231,7 +231,7 @@ void Draw_PushPrimToList(MenuWidgetNode *node) {
         g_TextCursorY = temp_a0_3;
         return;
     }
-    BoundsCheck_AssertStub(3);
+    Inv_BoundsCheckAssertStub(3);
 }
 
 MenuWidgetNode *g_MenuWidgetActiveListHead;
@@ -299,7 +299,7 @@ void Draw_AllocTexturedQuad(int glyph);
             cursor[0] = x;                                                 \
             cursor[1] = y;                                                 \
         } else {                                                           \
-            BoundsCheck_AssertStub(2);                                     \
+            Inv_BoundsCheckAssertStub(2);                                     \
         }                                                                  \
     } while (0)
 
@@ -314,7 +314,7 @@ void Draw_AllocTexturedQuad(int glyph);
             cursor[1] = y;                                 \
             g_TextCursorStackPtr = next;                   \
         } else {                                           \
-            BoundsCheck_AssertStub(2);                     \
+            Inv_BoundsCheckAssertStub(2);                     \
         }                                                  \
     } while (0)
 
@@ -327,7 +327,7 @@ void Draw_AllocTexturedQuad(int glyph);
             g_TextCursorY = cursor[-1];                    \
             g_TextCursorStackPtr = cursor - 2;             \
         } else {                                           \
-            BoundsCheck_AssertStub(3);                     \
+            Inv_BoundsCheckAssertStub(3);                     \
         }                                                  \
     } while (0)
 
@@ -448,13 +448,13 @@ MenuWidgetNode *MenuWidget_CreateSimpleNode(s32 mode, MenuWidgetNode *parent_arg
 
     desc = MenuWidget_LookupSimpleDescriptor(mode);
     if (desc == 0) {
-        BoundsCheck_AssertStub(0xC);
+        Inv_BoundsCheckAssertStub(0xC);
     }
 
     node = MenuWidget_AllocNode(parent_arg, parent);
 
     if (node == 0) {
-        BoundsCheck_AssertStub(0xD);
+        Inv_BoundsCheckAssertStub(0xD);
     }
 
     if (arg_flag == 0) {
@@ -655,13 +655,13 @@ MenuWidgetNode *MenuWidget_CreateNode(s32 mode, MenuWidgetNode *parent_arg, Menu
 
     desc = MenuWidget_LookupGridDescriptor(mode);
     if (desc == 0) {
-        BoundsCheck_AssertStub(0xE);
+        Inv_BoundsCheckAssertStub(0xE);
     }
 
     node = MenuWidget_AllocNode(parent_arg, parent);
 
     if (node == 0) {
-        BoundsCheck_AssertStub(0xF);
+        Inv_BoundsCheckAssertStub(0xF);
     }
 
     node->mode = 2;
@@ -798,7 +798,7 @@ static inline GpuCmdPacket *AllocRect(DrawAreaRect *rect)
         g_DrawPacketCursor = next;
         packet = (GpuCmdPacket *)old;
     } else {
-        BoundsCheck_AssertStub(1);
+        Inv_BoundsCheckAssertStub(1);
     }
     if (packet) SetDrawArea(packet, rect);
     return packet;
@@ -845,7 +845,7 @@ static inline void RowPopCursor(void)
         D_8009D124 = stack[-1].x;
         D_8009D128 = stack[-1].y;
     } else {
-        BoundsCheck_AssertStub(3);
+        Inv_BoundsCheckAssertStub(3);
     }
 }
 
@@ -865,7 +865,7 @@ void MenuWidget_DrawListRow(MenuWidgetNode *node,
         stack->x = D_8009D124;
         stack->y = D_8009D128;
     } else {
-        BoundsCheck_AssertStub(2);
+        Inv_BoundsCheckAssertStub(2);
     }
     D_8009D124 += 2;
     D_8009D128 += 2;
@@ -930,7 +930,7 @@ static inline void PushCursor(void)
         stack->x = x;
         stack->y = y;
     } else {
-        BoundsCheck_AssertStub(2);
+        Inv_BoundsCheckAssertStub(2);
     }
 }
 
@@ -941,7 +941,7 @@ static inline void PopCursor(void)
         g_TextCursorStack = (int *)(stack - 1);
         SetCursor(stack[-1].x, stack[-1].y);
     } else {
-        BoundsCheck_AssertStub(3);
+        Inv_BoundsCheckAssertStub(3);
     }
 }
 
@@ -1614,7 +1614,7 @@ static inline MenuWidgetNode *Allocate(MenuWidgetNode *parent,
     int i;
 
     if (!node)
-        BoundsCheck_AssertStub(10);
+        Inv_BoundsCheckAssertStub(10);
     next = node->next;
     old = g_MenuWidgetActiveListHead;
     g_MenuWidgetActiveListHead = node;
@@ -1638,7 +1638,7 @@ static inline MenuWidgetNode *Allocate(MenuWidgetNode *parent,
         if (i < 4)
             owner->children[i] = node;
         else
-            BoundsCheck_AssertStub(11);
+            Inv_BoundsCheckAssertStub(11);
     }
     return node;
 }
@@ -1651,7 +1651,7 @@ void Draw_SwapPrimBuffers(MenuWidgetNode *list)
     MenuWidgetListNavigation *navigation = (MenuWidgetListNavigation *)node;
 
     if (!node)
-        BoundsCheck_AssertStub(16);
+        Inv_BoundsCheckAssertStub(16);
     node->mode = 3;
     node->draw = Draw_FlushFrontBuffer;
     node->update = (void (*)())Menu_StepListNavigate;
@@ -1696,7 +1696,7 @@ void Draw_FlushFrontBuffer(MenuWidgetListNavigation *node) {
             stack->x = x;
             stack->y = y;
         } else {
-            BoundsCheck_AssertStub(2);
+            Inv_BoundsCheckAssertStub(2);
         }
         Offset(list->draw_state * list->grid_width + 2,
                node->visibleRows + 2);

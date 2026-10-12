@@ -26,7 +26,7 @@ extern u32 D_800B89F8[];       /* view matrix packet */
 extern s16 D_800BCFFE[];       /* camera height (integer part) */
 
 void Battle_Update(void);
-void Inventory_OpenAyaItemList(unsigned int mode);
+void Inv_OpenAyaItemList(unsigned int mode);
 int Menu_RunFrameWithArg(int arg);
 void func_80069660(void);
 void func_8001A9F8(void);

@@ -50,7 +50,7 @@ inline void Queue_Enqueue(int arg0, int arg1) {
             tail->next = entry;
         } else {
             if (g_MenuEventQueueHead != 0) {
-                BoundsCheck_AssertStub(0x1F);
+                Inv_BoundsCheckAssertStub(0x1F);
             }
             g_MenuEventQueueHead = entry;
         }

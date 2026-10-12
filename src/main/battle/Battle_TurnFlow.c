@@ -296,7 +296,7 @@ int Battle_HandleItemMenu(void) {
                 g_BattleItemMenuState=1;
                 Battle_MarkActiveEntities(g_BattleTargetList,g_BattleTargetIndex);
                 PLAY_TABLE_SOUND(0x44C)
-                Inventory_OpenAyaItemList(1);
+                Inv_OpenAyaItemList(1);
                 opened=1;
                 Render_BeginSceneLoad();
             }

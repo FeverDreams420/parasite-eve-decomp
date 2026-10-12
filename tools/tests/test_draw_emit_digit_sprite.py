@@ -93,7 +93,7 @@ class DrawEmitDigitSpriteTests(unittest.TestCase):
                 for i in range(8): machine.reg_write(getattr(R, f'UC_MIPS_REG_S{i}'), 0xABCD0000+i)
                 events = []
                 def hook(m, address, size, user):
-                    if address == symbols['BoundsCheck_AssertStub']:
+                    if address == symbols['Inv_BoundsCheckAssertStub']:
                         events.append(m.reg_read(R.UC_MIPS_REG_A0))
                         m.emu_stop()
                 machine.hook_add(UC_HOOK_CODE, hook)
@@ -104,7 +104,7 @@ class DrawEmitDigitSpriteTests(unittest.TestCase):
                     assert machine.reg_read(R.UC_MIPS_REG_SP) == STACK
                     for i in range(8): assert machine.reg_read(getattr(R, f'UC_MIPS_REG_S{i}')) == 0xABCD0000+i
                 else:
-                    assert machine.reg_read(R.UC_MIPS_REG_PC) == symbols['BoundsCheck_AssertStub']
+                    assert machine.reg_read(R.UC_MIPS_REG_PC) == symbols['Inv_BoundsCheckAssertStub']
                 assert bytes(machine.mem_read(pointer & 0x1FFFFFFF, 40)) == expected, case
                 assert bytes(machine.mem_read(OT & 0x1FFFFFFF, 4)) == struct.pack('<I', expected_ot), case
                 values['D_8009D100'] = pointer if failed else pointer + 40

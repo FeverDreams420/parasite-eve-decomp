@@ -74,14 +74,14 @@ void Menu_CreateAmmoSpendPanel(MenuWidgetNode *parent) {
 
 s32 Menu_AmmoSpendInputHandler(s32 arg0, s32 arg1) {
     if (arg1 & 0x1000) {
-        if (Spend_Ammo(-MenuInput_GetRepeatStep()) != 0) {
+        if (Inv_SpendAmmo(-MenuInput_GetRepeatStep()) != 0) {
             Menu_PlayErrorSound();
         } else {
             Menu_PlayMoveSound();
         }
         g_MenuSpendArrowDirection = 1;
     } else if (arg1 & 0x4000) {
-        if (Spend_Ammo(MenuInput_GetRepeatStep()) != 0) {
+        if (Inv_SpendAmmo(MenuInput_GetRepeatStep()) != 0) {
             Menu_PlayErrorSound();
         } else {
             Menu_PlayMoveSound();

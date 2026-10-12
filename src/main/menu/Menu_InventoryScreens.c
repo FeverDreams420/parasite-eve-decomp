@@ -259,8 +259,8 @@ int Menu_StepInventoryCategory(MenuWidgetNode *node, unsigned int flags)
             g_StatBaseTable[0] = Inv_CountByCategory(14) ? 999 : Inv_CountByCategory(12);
             g_StatBaseTable[1] = Inv_CountByCategory(15) ? 999 : Inv_CountByCategory(13);
             if (g_MenuEquipMode) {
-                g_StatBaseTable[2] = WayneStorage_CountItemType(14) ? 999 : WayneStorage_CountItemType(12);
-                g_StatBaseTable[3] = WayneStorage_CountItemType(15) ? 999 : WayneStorage_CountItemType(13);
+                g_StatBaseTable[2] = Inv_CountWayneStorageItemType(14) ? 999 : Inv_CountWayneStorageItemType(12);
+                g_StatBaseTable[3] = Inv_CountWayneStorageItemType(15) ? 999 : Inv_CountWayneStorageItemType(13);
             } else {
                 g_StatBaseTable[3] = 0;
                 g_StatBaseTable[2] = 0;

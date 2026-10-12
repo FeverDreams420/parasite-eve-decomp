@@ -119,7 +119,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(ItemDataRecord, tailData) == 0x15,
                   item_data_record_tail_data_offset);
 
 int Inv_CountByCategory(int category);
-int WayneStorage_CountItemType(int category);
+int Inv_CountWayneStorageItemType(int category);
 
 void Inv_ClearSelectionBitset(void);
 int Inv_IsActiveListOverrideSelected(void);

@@ -71,7 +71,7 @@ void Draw_StatePush(void) {
         cursor->x = x;
         cursor->y = y;
     } else {
-        BoundsCheck_AssertStub(2);
+        Inv_BoundsCheckAssertStub(2);
     }
 }
 
@@ -88,7 +88,7 @@ void Draw_StatePop(void) {
         g_TextCursorX = x;
         g_TextCursorY = y;
     } else {
-        BoundsCheck_AssertStub(3);
+        Inv_BoundsCheckAssertStub(3);
     }
 }
 
@@ -119,7 +119,7 @@ static inline void PushCursor(void)
         stack->x = x;
         stack->y = y;
     } else {
-        BoundsCheck_AssertStub(2);
+        Inv_BoundsCheckAssertStub(2);
     }
 }
 
@@ -132,7 +132,7 @@ static inline void SaveCursor(int x, int y)
         stack->y = y;
         g_TextCursorStack = (int *)(stack + 1);
     } else {
-        BoundsCheck_AssertStub(2);
+        Inv_BoundsCheckAssertStub(2);
     }
 }
 
@@ -143,7 +143,7 @@ static inline void PopCursor(void)
         g_TextCursorStack = (int *)(stack - 1);
         SetCursor(stack[-1].x, stack[-1].y);
     } else {
-        BoundsCheck_AssertStub(3);
+        Inv_BoundsCheckAssertStub(3);
     }
 }
 
@@ -203,7 +203,7 @@ void Draw_AllocPrimRectFull(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
         g_DrawPacketCursor = nextPacket;
         packet = (GpuCmdPacket *) oldPacket;
     } else {
-        BoundsCheck_AssertStub(1);
+        Inv_BoundsCheckAssertStub(1);
     }
     if (packet != NULL) {
         SetDrawArea(packet, rectPtr);
@@ -236,7 +236,7 @@ void Draw_AllocPrimRect(void) {
         g_DrawPacketCursor = nextPacket;
         packet = (GpuCmdPacket *) oldPacket;
     } else {
-        BoundsCheck_AssertStub(1);
+        Inv_BoundsCheckAssertStub(1);
     }
     if (packet != NULL) {
         SetDrawArea(packet, rectPtr);
@@ -268,7 +268,7 @@ void Draw_AllocSprite(int index) {
         if (next < g_DrawPacketArenaBase + 0x4000) {
             g_DrawPacketCursor = next;
             sprite = (RenderSpritePacket *)old;
-        } else BoundsCheck_AssertStub(1);
+        } else Inv_BoundsCheckAssertStub(1);
     }
     if (sprite) {
         if (g_DrawColorSelect) sprite->color.word = g_DrawAlternateColor;
@@ -299,7 +299,7 @@ void Draw_AllocSprite(int index) {
         if (next < g_DrawPacketArenaBase + 0x4000) {
             g_DrawPacketCursor = next;
             page = (u32 *)old;
-        } else BoundsCheck_AssertStub(1);
+        } else Inv_BoundsCheckAssertStub(1);
     }
     if (page) {
         SetDrawTPage(page, 0, 0, ((mode & 3) << 7) | 7);
@@ -335,7 +335,7 @@ void Draw_EmitGlyph(s32 arg0, s32 arg1) {
         g_DrawPacketCursor = nextPacket;
         packet = (RenderTexturedQuad *)oldPacket;
     } else {
-        BoundsCheck_AssertStub(1);
+        Inv_BoundsCheckAssertStub(1);
     }
 
     if (packet != 0) {
@@ -430,7 +430,7 @@ static inline RenderTexturedQuad *AllocBarQuad(void)
         D_8009D100 = next;
         prim = (RenderTexturedQuad *)old;
     } else {
-        BoundsCheck_AssertStub(1);
+        Inv_BoundsCheckAssertStub(1);
     }
     if (prim != 0) {
         if (D_8009D10C != 0)
@@ -516,7 +516,7 @@ void Draw_AllocTexturedQuad(int code) {
         D_8009D100 = next;
         prim = (RenderTexturedQuad *)old;
     } else {
-        BoundsCheck_AssertStub(1);
+        Inv_BoundsCheckAssertStub(1);
     }
     if (prim != 0) {
         if (D_8009D10C != 0) {
@@ -662,7 +662,7 @@ void Draw_PrintTextWrapped(u8 *text, int width) {
             D_8009D12C = (int *)(stack + 1);
             stack->x = x;
             stack->y = y;
-        } else BoundsCheck_AssertStub(2);
+        } else Inv_BoundsCheckAssertStub(2);
         used = 0;
         while (used < width) {
             int code, glyph, narrow;
@@ -693,7 +693,7 @@ void Draw_PrintTextWrapped(u8 *text, int width) {
                 D_8009D12C = (int *)(restore - 1);
                 g_DrawSpriteX = x;
                 g_DrawSpriteY = y;
-            } else BoundsCheck_AssertStub(3);
+            } else Inv_BoundsCheckAssertStub(3);
         }
         {
             int y = g_DrawSpriteY;
@@ -721,7 +721,7 @@ void Draw_EmitDigitSprite(int digit) {
         g_DrawPacketCursor = next;
         quad = (RenderTexturedQuad *)old;
     } else {
-        BoundsCheck_AssertStub(1);
+        Inv_BoundsCheckAssertStub(1);
     }
     if (quad) {
         if (g_DrawColorSelect) quad->color.word = g_DrawAlternateColor;
@@ -1019,7 +1019,7 @@ static inline void PushCursorAt(int x, int y)
         stack->y = y;
         g_TextCursorStack = (int *)(stack + 1);
     } else {
-        BoundsCheck_AssertStub(2);
+        Inv_BoundsCheckAssertStub(2);
     }
 }
 
@@ -1088,7 +1088,7 @@ void Draw_AllocTexturedRectAlt(int value, int width)
         D_8009D100 = next;
         mode = (RenderDrawModePacket *)old;
     } else {
-        BoundsCheck_AssertStub(1);
+        Inv_BoundsCheckAssertStub(1);
     }
     if (mode != 0)
         SetDrawTPage(mode, 0, 0, ((drawMode & 3) << 7) | 7);

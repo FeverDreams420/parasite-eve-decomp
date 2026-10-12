@@ -7,7 +7,7 @@
 #include "pe1/menu_widget.h"
 
 #include "pe1/bounds_check.h"
-void Inventory_OpenAyaItemList(unsigned int mode);
+void Inv_OpenAyaItemList(unsigned int mode);
 
 void MenuWidget_RestoreSavedCurrentNode(void);
 int Menu_InventoryNavigate(MenuWidgetNode *current, MenuWidgetNode *node,

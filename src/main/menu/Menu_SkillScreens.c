@@ -562,7 +562,7 @@ s32 Menu_EquipOptionsInputHandler(void *arg0, s32 arg1) {
             }
             break;
         case 1:
-            Sort_ContainerItems(temp_a1);
+            Inv_SortContainerItems(temp_a1);
             Menu_OpenInventoryOrSwapView(1);
             break;
         }
@@ -586,7 +586,7 @@ int Menu_EquipGridHandler(void *arg0, int arg1) {
     if (arg1 & 0x10000) {
         temp = MenuWidget_GridCellIndex(MenuWidget_GetChild(arg0, 0));
         if (g_MenuInventoryViewMode != 0) {
-            Sort_ContainerItems(temp);
+            Inv_SortContainerItems(temp);
         } else {
             Inv_SortInventoryByMode(2, temp);
         }
@@ -634,7 +634,7 @@ int Menu_EquipSelectInput(void *arg0, unsigned int arg1) {
 
     if (arg1 & 0x10000) {
         temp = MenuWidget_GridCellIndex(MenuWidget_GetChild(arg0, 0));
-        handler = g_MenuInventoryViewMode ? Sort_InventoryItems : Inv_SortInventoryByMode;
+        handler = g_MenuInventoryViewMode ? Inv_SortInventoryItems : Inv_SortInventoryByMode;
         handler(g_InvItemUsableFlag, temp);
         Menu_OpenInventoryOrSwapView(1);
         Menu_PlayConfirmSound();

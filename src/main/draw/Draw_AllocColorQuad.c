@@ -69,7 +69,7 @@ void Draw_AllocColorQuad(int width, int height) {
         D_8009D100 = next;
         first = (RenderGouraudQuad *)old;
     } else {
-        BoundsCheck_AssertStub(1);
+        Inv_BoundsCheckAssertStub(1);
     }
     if (first != 0) {
         *(u32 *)&first->r0 = 0x808080;
@@ -139,7 +139,7 @@ void Draw_AllocColorQuad(int width, int height) {
         D_8009D100 = next;
         second = (RenderGouraudQuad *)old;
     } else {
-        BoundsCheck_AssertStub(1);
+        Inv_BoundsCheckAssertStub(1);
     }
     if (second != 0) {
         *(u32 *)&second->r0 = 0x808080;
@@ -198,7 +198,7 @@ void Draw_AllocColorQuad(int width, int height) {
         D_8009D100 = next;
         tile = (RenderColorTilePacket *)old;
     } else {
-        BoundsCheck_AssertStub(1);
+        Inv_BoundsCheckAssertStub(1);
     }
     if (tile != 0) {
         if (D_8009D10C != 0) {
@@ -233,7 +233,7 @@ void Draw_AllocColorQuad(int width, int height) {
         D_8009D100 = next;
         drawMode = (RenderDrawModePacket *)old;
     } else {
-        BoundsCheck_AssertStub(1);
+        Inv_BoundsCheckAssertStub(1);
     }
     if (drawMode != 0) {
         SetDrawTPage(drawMode, 0, 0, 0);

@@ -219,7 +219,7 @@ void Entity_FrameUpdate(void) {
         } else {
             if (g_PlayerEntity != 0 && g_PlayerEntity->state != 0 && (D_8009D1F4 & 0x80) &&
                 !(g_GameStateBlock.flags & 0x2000) && !(g_GameState.flags & 0x3400)) {
-                Inventory_OpenAyaItemList(0);
+                Inv_OpenAyaItemList(0);
                 Render_BeginSceneLoad();
                 g_GameStateBlock.flags |= 4;
                 g_GameState.flags |= 0x9000;

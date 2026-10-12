@@ -85,7 +85,7 @@ void Draw_AllocColorRect(int firstVertex, int secondVertex, int width, int mode)
     if (next < end + 0x4000) {
         D_8009D100 = next;
         pair = (ColorTriPair *)old;
-    } else BoundsCheck_AssertStub(1);
+    } else Inv_BoundsCheckAssertStub(1);
     if (pair != 0 && pair < pair + 1) {
         prim = &pair->first;
         do {
@@ -151,7 +151,7 @@ static inline u32 *AllocateDrawMode(int mode) {
     if (next < g_DrawPacketArenaBase + 0x4000) {
         g_DrawPacketCursor = next;
         packet = (u32 *)old;
-    } else BoundsCheck_AssertStub(1);
+    } else Inv_BoundsCheckAssertStub(1);
     if (packet) SetDrawTPage(packet, 0, 0, (mode & 3) << 5);
     return packet;
 }
@@ -200,7 +200,7 @@ void Draw_EmitWipeBar(u8 *edges, int mode) {
             g_DrawVertexWritePtr = out + 2;                      \
             out[0] = y;                                          \
         } else {                                                 \
-            BoundsCheck_AssertStub(4);                           \
+            Inv_BoundsCheckAssertStub(4);                           \
         }                                                       \
     }
 
@@ -235,7 +235,7 @@ void Draw_EmitWipeBarPoly(int arg0, int arg1, u8 *arg2) {
                 g_DrawVertexWritePtr = out + 2;
                 out[0] = y;
             } else {
-                BoundsCheck_AssertStub(4);
+                Inv_BoundsCheckAssertStub(4);
             }
 
             cursor += 2;
@@ -351,7 +351,7 @@ void Draw_AllocColorTri(int width, int height, int pulse) {
         D_8009D100 = next;
         tile = (TilePrim *)old;
     } else {
-        BoundsCheck_AssertStub(1);
+        Inv_BoundsCheckAssertStub(1);
     }
     if (tile != 0) {
         if (D_8009D10C != 0) {
@@ -421,7 +421,7 @@ void Draw_AllocColorTri(int width, int height, int pulse) {
         D_8009D100 = next;
         drawMode = (DrawModePrim *)old;
     } else {
-        BoundsCheck_AssertStub(1);
+        Inv_BoundsCheckAssertStub(1);
     }
     if (drawMode != 0) {
         SetDrawTPage(drawMode, 0, 0, 0x20);

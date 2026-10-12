@@ -48,7 +48,7 @@ void Inv_SetActiveList(int mode, int *slot);
 void Inv_ResetActiveList(void);
 void Battle_UseItem(int item);
 /* Moves ammo between the compared weapons; nonzero when it cannot. */
-int Spend_Ammo(int amount);
+int Inv_SpendAmmo(int amount);
 void Inv_InitMaxLevelInventory(int variant);
 int Inv_CountTotal(void);
 void Item_PackParasiteSpells(void);

@@ -21,7 +21,7 @@ int Battle_StepVictory(void);
 void Draw_QueuePrimitive(void);
 int Inv_CountByValue(int);
 int Inv_FindItemById(int);
-void Inventory_OpenAyaItemList(unsigned int);
+void Inv_OpenAyaItemList(unsigned int);
 void Menu_MainUpdate(int);
 int Menu_RunFrameWithArg(int);
 void Menu_SaveOverlayDraw(void);

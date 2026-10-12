@@ -86,7 +86,7 @@ PE1_STATIC_ASSERT(sizeof(DrawWipeVertex) == 4, draw_wipe_vertex_size);
             g_DrawVertexWritePtr = (u16 *)(out + 1);          \
             out->y = y;                              \
         } else {                                     \
-            BoundsCheck_AssertStub(4);               \
+            Inv_BoundsCheckAssertStub(4);               \
         }                                            \
     }
 
@@ -101,7 +101,7 @@ PE1_STATIC_ASSERT(sizeof(DrawWipeVertex) == 4, draw_wipe_vertex_size);
             D_8009D100 = (u8 *)next;                                           \
             (packet).word = old;                                         \
         } else {                                                         \
-            BoundsCheck_AssertStub(1);                                   \
+            Inv_BoundsCheckAssertStub(1);                                   \
         }                                                                \
     }
 
