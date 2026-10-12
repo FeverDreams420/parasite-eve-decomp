@@ -104,42 +104,34 @@ s32 Menu_StepColorSelect(MenuWidgetNode *panel, s32 flags) {
     s32 shift;
     s32 choice;
     s32 color;
-    s32 raised;
-    s32 lowered;
-    s32 others;
+    s32 level;
     s32 value;
-    s32 clamp;
+    s32 others;
     MenuWidgetNode *options;
 
-    shift = MenuWidget_GridCellIndex(MenuWidget_GetChild(panel, 0)) * 8;
+    shift = MenuWidget_GridCellIndex(MenuWidget_GetChild(panel, 0)) << 3;
     color = Draw_GetBlendColor();
     if (flags & 0x1000) {
         others = color & ~(0xFF << shift);
-        raised = ((color >> shift) & 0xFF) + 2;
-        if (raised < 0xE9) {
-            value = raised << shift;
-            /* Match debt: both arms share one clamp shift and blend tail. */
-            goto blend;
-        }
-        clamp = 0xE8;
-        goto clamp_shift;
-    }
-    if (flags & 0x4000) {
-        others = color & ~(0xFF << shift);
-        lowered = ((color >> shift) & 0xFF) - 2;
-        if (lowered >= 0x20) {
-            value = lowered << shift;
+        level = ((color >> shift) & 0xFF) + 2;
+        if (level < 0xE9) {
+            value = level << shift;
         } else {
-            clamp = 0x20;
-clamp_shift:
-            value = clamp << shift;
+            value = 0xE8 << shift;
         }
-blend:
         Draw_BlendColor(others | value);
         Menu_PlayMoveSound();
-        return 1;
-    }
-    if (flags & 0x10000) {
+    } else if (flags & 0x4000) {
+        others = color & ~(0xFF << shift);
+        level = ((color >> shift) & 0xFF) - 2;
+        if (level >= 0x20) {
+            value = level << shift;
+        } else {
+            value = 0x20 << shift;
+        }
+        Draw_BlendColor(others | value);
+        Menu_PlayMoveSound();
+    } else if (flags & 0x10000) {
         options = MenuWidget_GetChild(panel, 1);
         choice = MenuWidget_GridCellIndex(options);
         if (choice == 0) {
@@ -156,9 +148,7 @@ blend:
             MenuWidget_GetChild(panel, 0)->cursor_x = -1;
         }
         Menu_PlayConfirmSound();
-        return 1;
-    }
-    if (flags & 0x40) {
+    } else if (flags & 0x40) {
         MenuWidget_DestroyNode(panel);
         Draw_BlendColor(g_MenuBlendColorBackup);
         Menu_PlayCancelSound();
