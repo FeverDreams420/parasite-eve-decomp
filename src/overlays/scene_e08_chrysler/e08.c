@@ -24,7 +24,6 @@
 #include "pe1/field_sprite_params.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/overlay_math.h"
 #include "pe1/scene_particle_slot_draw.h"
 #include "pe1/scene_e08_ring_effect.h"
 #include "pe1/field_ring_geometry.h"
@@ -46,13 +45,13 @@ typedef struct {
     s32 w5;
     s32 w6;
     s32 w7;
-} Overlay178MatrixWords;
+} SceneE08MatrixFields;
 
 typedef struct {
     RoomLink *link;
-    Overlay178MatrixWords matrix;
+    SceneE08MatrixFields matrix;
     void *asset;
-} Overlay178InitState;
+} SceneE08LinkInitState;
 
 typedef struct SceneShiftedPosition {
     char reserved[0x14];
@@ -126,15 +125,9 @@ typedef struct {
     void *asset;
 } SceneE08InitState;
 
-typedef GteMatrix Overlay178Matrix;
-
-typedef GteVector Overlay178Vec4;
-
-
-
 typedef struct {
     char bytes[4];
-} Ovl178_FourBytes;
+} SceneE08FourBytes;
 
 typedef GteMatrix SceneE08Matrix;
 
@@ -159,13 +152,13 @@ typedef struct {
 
 void func_800C2B40(void *arg0);
 
-void func_8018F3C4(RoomEnt *ent, void *arg1, Overlay178InitState *state) {
-    Overlay178MatrixWords *matrix;
+void func_8018F3C4(RoomEnt *ent, void *arg1, SceneE08LinkInitState *state) {
+    SceneE08MatrixFields *matrix;
 
     func_800C2B40(state);
 
     state->link = ent->link;
-    matrix = (Overlay178MatrixWords *)state->link->p238;
+    matrix = (SceneE08MatrixFields *)state->link->p238;
     state->matrix = *matrix;
     state->asset = Asset_SearchByKeyType(0x2E);
 
@@ -1118,9 +1111,9 @@ void func_800C2FF0(s32 arg0, s32 arg1);
 void func_800C3098(s32 arg0);
 
 void func_80191850(void *arg0, void *arg1, SceneE08CentreGlow *glow) {
-    Overlay178Matrix matrix;
-    Overlay178Vec4 scratch_scale;
-    Overlay178Vec4 draw_scale;
+    SceneE08Matrix matrix;
+    SceneE08Vector scratch_scale;
+    SceneE08Vector draw_scale;
     Ovl178Position *owner;
 
     owner = func_800C2B50();
@@ -1600,7 +1593,7 @@ void func_80192C78(void *arg0, void *arg1, SceneE08ScreenFade *fade) {
 }
 
 void func_80192C84(void *arg0, void *arg1, SceneE08ScreenFade *fade) {
-    Ovl178_FourBytes local;
+    SceneE08FourBytes local;
 
     local = D_8018F04C;
     func_800D1AE0((unsigned char *)&local, fade->level, 1, 8);
@@ -2497,9 +2490,9 @@ void func_800C2FF0(s32 arg0, s32 arg1);
 void func_800C3098(s32 arg0);
 
 void func_80194C60(void *arg0, void *arg1, SceneE08ExpandingGlow *glow) {
-    Overlay178Matrix matrix;
-    Overlay178Vec4 scratch_scale;
-    Overlay178Vec4 draw_scale;
+    SceneE08Matrix matrix;
+    SceneE08Vector scratch_scale;
+    SceneE08Vector draw_scale;
     Ovl178Position *owner;
     s16 *draw_slot;
 

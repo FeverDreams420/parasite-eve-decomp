@@ -29,7 +29,7 @@ extern u8 D_80198C90[];
 extern char D_801995F8[];
 extern s32 D_8019956C, D_8019957C;
 extern u8 D_80198820[];
-extern Ovl178_FourBytes D_8018F04C;
+extern SceneE08FourBytes D_8018F04C;
 extern char D_80198848[];
 extern int func_80071A54(void);
 extern FieldGlowSprite D_80199540, D_80199570, D_80199580;
