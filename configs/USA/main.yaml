@@ -184,32 +184,18 @@ segments:
       # mode and anim frame: one -G8 FORCE_G0 unit whose COMMON words are the
       # $gp ones; g_CurrentEntity stays absolute through the array declaration.
       - [0x7110, c, script/Task_FlowOpcodes]
-      # Default-profile script opcodes between Task_FlowOpcodes
-      # and Entity_TaskAnimationOps: barcode, fog/scroll, camera reset and
-      # render state, move lock, menu-choice branch, current-actor flags,
-      # global flags and battle mode, field get/set by type and battle flags.
-      - [0x83B4, c, script/Task_StateAndFlagOpcodes]
-      # Task-node animation scheduling and the current-actor event command.
-      - [0x8B00, c, script/Entity_TaskAnimationOps]
-      # Motion, system, process-manager and object-entry opcodes: contiguous
-      # default-profile handlers between Entity_TaskAnimationOps and the -G8
-      # Task_DrawYield.
-      - [0x8D6C, c, script/Task_SystemCommandOps]
-      - [0x97DC, c, script/Task_DrawYield]
-      # Animation rate, attachment and actor-control opcodes share FieldActor.
-      - [0x98AC, c, script/Entity_AttachmentAndControl]
-      # -G8 opcodes: loading yield, anim scale, menu clamp, item give/count and
-      # the timed equip-swap init.
-      - [0x9C10, c, script/Task_LoadWaitAndItemOps]
-      # Field-actor flags, movement and animation-entry commands.
-      - [0x9E18, c, script/Task_FieldEntityCommands]
-      - [0xA308, c, script/Task_WaitEntityFlags8]
-      - [0xA378, c, script/Task_RotateEntityAngle]
-      - [0xA3E4, c, script/Task_SetNodeFlag80]
-      # Scene, game-time, parent-link and trigonometry opcodes: contiguous
-      # default-profile handlers on the current actor (main_tu_evidence
-      # G0199..G0215 have no split evidence between them).
-      - [0xA404, c, script/Task_SceneCommandOps]
+      # State, system, field-entity and scene opcodes: barcode, fog/scroll, camera
+      # reset and render state, move lock, menu-choice branch, current-actor flags,
+      # global flags and battle mode, field get/set by type and battle flags;
+      # task-node animation scheduling and the current-actor event command; motion,
+      # system, process-manager and object-entry opcodes; draw yield; animation rate,
+      # attachment and actor-control opcodes (FieldActor); loading yield, anim scale,
+      # menu clamp, item give/count and the timed equip-swap init; field-actor flags,
+      # movement and animation-entry commands; actor angle and node flag opcodes;
+      # scene, game-time, parent-link and trigonometry opcodes (main_tu_evidence
+      # G0199..G0215 have no split evidence). One unit under cc1 -G0 and the
+      # FORCE_G0 assembler -G8 whose COMMON words are the $gp ones.
+      - [0x83B4, c, script/Task_SystemOpcodes]
       # Animation advancement and action selection share per-model action tables.
       - [0xACAC, c, field/Entity_AnimationState]
       # Collision-state reset and database relocation share the collision table globals (G0227).
