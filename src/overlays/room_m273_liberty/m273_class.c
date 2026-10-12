@@ -3,8 +3,13 @@
 #include "pe1/scene_grab_head.h"
 #include "pe1/field_actor.h"
 #include "room_m273.h"
-#include "func_8019250C_externs.h"
+#include "../room_lib/room_lib.h"
 
+#include "m273_class_externs.h"
+
+int func_80192504(void) {
+    return 0;
+}
 
 int func_8019250C(RoomSelectionState *obj) {
     int ret;
@@ -24,4 +29,25 @@ int func_8019250C(RoomSelectionState *obj) {
     *(int *)((char *)obj + 0x38) = D_8019A8D4;
     /* Keep the call result live so GCC allocates the final data load to v1. */
     return ret - ret;
+}
+
+int func_801925B0(void *obj, int mode, int event, int arg3, int index) {
+    switch (event) {
+    case 0x19:
+        if (mode == 1) {
+            RW32(obj, 0x10) = arg3;
+            *(int *)arg3 = mode;
+        }
+        break;
+    case 0x1D:
+        RW16(obj, 0x14) = arg3;
+        RW8(obj, 0x4C) = D_8019A8E0[index];
+        break;
+    }
+
+    return 0;
+}
+
+int func_80192608(void) {
+    return 0;
 }

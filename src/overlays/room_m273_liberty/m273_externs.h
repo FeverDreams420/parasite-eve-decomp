@@ -1,0 +1,43 @@
+#ifndef PE1_EXT_M273
+#define PE1_EXT_M273
+extern FieldActor *g_PlayerEntity;
+extern void func_80020C74(void);
+extern void func_80192838(RoomSelectionState *);
+extern void func_80192D50(char *obj);
+extern void func_80020CE4(void);
+extern void func_80192C00(RoomPlacementOwner *owner, RoomPlacementState *state);
+extern struct BattleEntity *D_8009D254;
+extern u8 D_8019A8C8[];
+extern s32 func_80052B2C(void);
+extern short D_800966EE[];
+extern unsigned char D_8019AB70[];
+extern GteRotation D_8019AB68;
+extern unsigned char D_8019AE5C;
+extern u8 D_8019AE9A;
+extern RoomM273PulseSeed D_8019AC20[2];
+extern int func_800CE688(void *);
+extern int Inv_ScrambleGrid(void);
+extern short D_8019AC18[];
+extern int D_8019AC0C[];
+extern AssetState D_8019AE8C;
+extern void *D_8019AE90;
+extern unsigned char D_8019AE9A;
+extern void GsSetOrign(int,int);
+extern int func_80193CB8(),func_80193B5C();
+extern short D_8019AE60, D_8019AE64;
+extern int func_80199F84();
+extern s16 D_8019ACA8;
+extern s16 D_8019AE6C, D_8019AE70, D_8019AE74, D_8019AE78;
+extern u8 D_8019AEF8, D_8019AEFA;
+extern unsigned char D_8019AEF8;
+extern short D_8019AEE8;
+extern void *D_8019AE7C;
+extern int func_80195984(),func_8019A290();
+extern Color D_8018F1E4;
+extern unsigned char D_8019AF69,D_8019AF68;
+extern unsigned short D_8019AF60;
+extern Vector D_8019AD60;
+extern int func_8005186C(int);
+extern short D_8019AD68[];
+extern RoomM273RisingBatchBuffer D_8019AF0C;
+#endif /* PE1_EXT_M273 */

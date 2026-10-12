@@ -1,7 +1,0 @@
-#ifndef PE1_EXT_265998839490
-#define PE1_EXT_265998839490
-extern s16 D_8019ACA8;
-extern s16 D_8019AE6C, D_8019AE70, D_8019AE74, D_8019AE78;
-extern u8 D_8019AEF8, D_8019AEFA;
-extern int Inv_ScrambleGrid(void);
-#endif /* PE1_EXT_265998839490 */

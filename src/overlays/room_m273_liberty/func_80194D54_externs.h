@@ -1,4 +1,0 @@
-#ifndef PE1_EXT_97B46ED556CE
-#define PE1_EXT_97B46ED556CE
-extern unsigned char D_8019AE9A;
-#endif /* PE1_EXT_97B46ED556CE */

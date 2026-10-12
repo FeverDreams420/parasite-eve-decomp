@@ -1,4 +1,0 @@
-#ifndef PE1_EXT_3863DA5BD507
-#define PE1_EXT_3863DA5BD507
-extern RoomM273RisingBatchBuffer D_8019AF0C;
-#endif /* PE1_EXT_3863DA5BD507 */
