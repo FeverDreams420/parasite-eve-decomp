@@ -37,7 +37,7 @@ extern unsigned char g_ItemDropRngTable[];
 extern unsigned char g_ItemDropRngXorKeyLow[];
 extern u8 g_CursorRenderDataBlock[];
 extern s16 g_BattleCountTable[];
-extern int g_MenuBattleCount;
+extern int g_InvActiveListCount;
 extern s32 g_InvCategoryBaseItemId;
 extern InventorySlotRange D_800923D8[];
 extern InventorySlotRange D_800923F8[];

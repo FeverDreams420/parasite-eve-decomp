@@ -7,10 +7,10 @@
 
 /* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
 s32 D_8009D040;
-s16 *D_8009D048;
-s32 D_8009D050;
-u32 *D_8009D058;
-s32 D_8009D064;
+s16 *g_InvItemPtr;
+s32 g_InvSlotLimit;
+u32 *g_InvSelectionBits;
+s32 g_InvSelectionBitWords;
 u8 *D_8009D084;
 s32 D_8009D088;
 s32 D_8009D08C;
@@ -25,8 +25,8 @@ static inline ItemDataRecord *LookupOldArmor(int index) {
     int value, saved;
     ItemDataRecord *result;
 
-    if (index >= 0 && index < D_8009D050) {
-        value = D_8009D048[index];
+    if (index >= 0 && index < g_InvSlotLimit) {
+        value = g_InvItemPtr[index];
         saved = value;
         if (value - 0x100U < 0x80U) {
             result = &D_800C0E20.equipment[value - 0x100];
@@ -52,8 +52,8 @@ static inline ItemDataRecord *LookupTrackedItem(int index) {
     ItemDataRecord *result;
     ItemDataRecord *output = 0;
 
-    if (index >= 0 && index < D_8009D050) {
-        value = D_8009D048[index];
+    if (index >= 0 && index < g_InvSlotLimit) {
+        value = g_InvItemPtr[index];
         saved = value;
         if (value - 0x100U < 0x80U) {
             result = &D_800C0E20.equipment[value - 0x100];
@@ -77,8 +77,8 @@ static inline ItemDataRecord *LookupArmorTrackedItem(int index) {
     /* Match the shared armor pointer across reserve scanning and rollback. */
     register ItemDataRecord *output asm("$16") = 0;
 
-    if (index >= 0 && index < D_8009D050) {
-        value = D_8009D048[index];
+    if (index >= 0 && index < g_InvSlotLimit) {
+        value = g_InvItemPtr[index];
         saved = value;
         if (value - 0x100U < 0x80U) {
             result = &D_800C0E20.equipment[value - 0x100];
@@ -160,21 +160,21 @@ int Inv_GetActiveSlotCount(int *out) {
         else reserve = 0;
     }
     bonusSlots = Inv_GetBonusSlotCount();
-    if (D_800C0E0C + bonusSlots < 51) {
+    if (g_InvBaseCapacity + bonusSlots < 51) {
         used = 0;
         bonusSlots = Inv_GetBonusSlotCount();
-        capacityBeforeScan = D_800C0E0C + bonusSlots;
+        capacityBeforeScan = g_InvBaseCapacity + bonusSlots;
     } else {
         used = 0;
         capacityBeforeScan = 50;
     }
-    D_8009D048 = D_800C0E48;
+    g_InvItemPtr = g_AyaInventoryItems;
     capacity = capacityBeforeScan;
-    D_8009D050 = Inv_GetAyaSlotLimit();
-    D_8009D058 = D_8009D05C;
-    D_8009D064 = 2;
-    slot = D_8009D048;
-    end = slot + D_8009D050;
+    g_InvSlotLimit = Inv_GetAyaSlotLimit();
+    g_InvSelectionBits = g_InvSelectionBitStorage;
+    g_InvSelectionBitWords = 2;
+    slot = g_InvItemPtr;
+    end = slot + g_InvSlotLimit;
     while (slot < end) {
         occupied = *slot++;
         occupied = occupied != 0;
@@ -212,7 +212,7 @@ static inline s32 RestoreSelection(u32 index) {
         } else {
             g_InvItemPtr = g_AyaInventoryItems;
             g_InvSlotLimit = Inv_GetAyaSlotLimit();
-            g_InvSelectionBits = g_AyaItemSelectionBits;
+            g_InvSelectionBits = g_InvSelectionBitStorage;
             g_InvSelectionBitWords = 2;
         }
         return g_InvSavedSelectionIndex[index];
@@ -226,15 +226,15 @@ s32 Inv_RestoreSelection(u32 index) {
 
 static inline void RestoreList(int storage) {
     if (storage && g_InvActiveListOverride != 0) {
-        D_8009D048 = g_InvActiveListOverride;
-        D_8009D058 = g_InvStorageSelectionBits;
-        D_8009D064 = 4;
-        D_8009D050 = g_InvOverrideSlotLimit;
+        g_InvItemPtr = g_InvActiveListOverride;
+        g_InvSelectionBits = g_InvStorageSelectionBits;
+        g_InvSelectionBitWords = 4;
+        g_InvSlotLimit = g_InvOverrideSlotLimit;
     } else {
-        D_8009D048 = D_800C0E48;
-        D_8009D050 = Inv_GetAyaSlotLimit();
-        D_8009D058 = D_8009D05C;
-        D_8009D064 = 2;
+        g_InvItemPtr = g_AyaInventoryItems;
+        g_InvSlotLimit = Inv_GetAyaSlotLimit();
+        g_InvSelectionBits = g_InvSelectionBitStorage;
+        g_InvSelectionBitWords = 2;
     }
 }
 void Inv_BuildStorageDisplay(void) {
@@ -248,8 +248,8 @@ static inline ItemDataRecord *LookupActiveItem(int index) {
     int value, saved;
     ItemDataRecord *result;
 
-    if (index >= 0 && index < D_8009D050) {
-        value = D_8009D048[index];
+    if (index >= 0 && index < g_InvSlotLimit) {
+        value = g_InvItemPtr[index];
         saved = value;
         if (value - 0x100U < 0x80U) {
             result = &D_800C0E20.equipment[value - 0x100];
@@ -282,8 +282,8 @@ static inline void ClampAmmo(ItemDataRecord *item) {
         item->baseStats[2] + (u16)item->bonusStats[2] : 999);
 }
 static inline void DeleteSlot(int slot) {
-    int id = D_8009D048[slot];
-    D_8009D048[slot] = 0;
+    int id = g_InvItemPtr[slot];
+    g_InvItemPtr[slot] = 0;
     if (id >= 256) D_800C0E20.equipment[id - 256].iconId = 0;
 }
 static inline int ItemKind(int slot) {
@@ -292,13 +292,13 @@ static inline int ItemKind(int slot) {
     return 0;
 }
 static inline int FindWeapon(int kind, int excluded) {
-    s16 *slot = D_8009D048;
+    s16 *slot = g_InvItemPtr;
     s16 *skip = slot + excluded;
-    while (slot < D_8009D048 + D_8009D050) {
+    while (slot < g_InvItemPtr + g_InvSlotLimit) {
         if (slot != skip && Inv_LookupItemRecordScaled(*slot)->kind == kind) break;
         ++slot;
     }
-    if (slot < D_8009D048 + D_8009D050) return slot - D_8009D048;
+    if (slot < g_InvItemPtr + g_InvSlotLimit) return slot - g_InvItemPtr;
     return -1;
 }
 static inline void SetTracked(unsigned index, int value) {
@@ -308,7 +308,7 @@ static inline int GetTracked(unsigned index) {
     return index < 4 ? D_800C0E20.tracked[index] : -1;
 }
 static inline int IsList(s16 *list) {
-    return D_8009D048 == list;
+    return g_InvItemPtr == list;
 }
 /* Transfer bonuses or one modifier; flags govern tool and donor consumption.
  * Signed comparisons and halfword additions must remain distinct: the final
@@ -320,15 +320,15 @@ void Inv_TransferItemBetweenLists(unsigned selection, int modifier, int flags, i
     {
         int index = RestoreSelection(selection);
         source = 0;
-        if (index >= 0 && index < D_8009D050) {
-            source = Inv_LookupItemRecordScaled(D_8009D048[index]);
+        if (index >= 0 && index < g_InvSlotLimit) {
+            source = Inv_LookupItemRecordScaled(g_InvItemPtr[index]);
         }
     }
     {
         int index = RestoreSelection(!selection);
         dest = 0;
-        if (index >= 0 && index < D_8009D050) {
-            dest = Inv_LookupItemRecordScaled(D_8009D048[index]);
+        if (index >= 0 && index < g_InvSlotLimit) {
+            dest = Inv_LookupItemRecordScaled(g_InvItemPtr[index]);
         }
     }
     if (modifier >= 0) {
@@ -399,17 +399,17 @@ void Inv_TransferItemBetweenLists(unsigned selection, int modifier, int flags, i
                 if (D_800C1EB8[slot] && Item_LookupBaseData(D_800C1EB8[slot] - 1)->kind == cost) break;
             if (slot < 100) D_800C1EB8[slot] = 0;
         } else {
-            D_8009D048 = D_800C0E48;
-            D_8009D050 = Inv_GetAyaSlotLimit();
-            D_8009D058 = D_8009D05C;
-            D_8009D064 = 2;
-            for (slot = 0; slot < D_8009D050; ++slot)
+            g_InvItemPtr = g_AyaInventoryItems;
+            g_InvSlotLimit = Inv_GetAyaSlotLimit();
+            g_InvSelectionBits = g_InvSelectionBitStorage;
+            g_InvSelectionBitWords = 2;
+            for (slot = 0; slot < g_InvSlotLimit; ++slot)
                 if (ItemKind(slot) == cost) break;
-            if (slot < D_8009D050) {
-                if (D_8009D048 == D_800C0E48 && GetTracked(2) == slot)
+            if (slot < g_InvSlotLimit) {
+                if (g_InvItemPtr == g_AyaInventoryItems && GetTracked(2) == slot)
                     Inv_GetActiveSlotCount(&reserve);
                 DeleteSlot(slot);
-                if (D_8009D048 == D_800C0E48 && GetTracked(2) == slot) {
+                if (g_InvItemPtr == g_AyaInventoryItems && GetTracked(2) == slot) {
                     SetTracked(2, -1);
                     Inv_CheckFreeSlotCapacity(reserve);
                     Inv_CompactActiveListSlots();
@@ -430,26 +430,26 @@ void Inv_TransferItemBetweenLists(unsigned selection, int modifier, int flags, i
         }
         ammo->ammo += source->ammo;
         ClampAmmo(ammo);
-        if (D_8009D048 == D_800C0E48 && GetTracked(2) == slot)
+        if (g_InvItemPtr == g_AyaInventoryItems && GetTracked(2) == slot)
             Inv_GetActiveSlotCount(&reserve);
         DeleteSlot(slot);
-        if (IsList(D_800C0E48)) {
+        if (IsList(g_AyaInventoryItems)) {
             if (GetTracked(2) == slot) {
                 SetTracked(2, -1);
                 Inv_CheckFreeSlotCapacity(reserve);
                 Inv_CompactActiveListSlots();
                 Inv_SetActiveList(3, 0);
             }
-            if (IsList(D_800C0E48)) {
+            if (IsList(g_AyaInventoryItems)) {
                 if (D_800C0E20.tracked[0] == slot) {
                     D_800C0E20.tracked[0] = FindWeapon(8, -1);
                     Inv_SetActiveList(2, 0);
                 } else if (GetTracked(2) == slot) {
-                    for (slot = 0; slot < D_8009D050; ++slot) {
+                    for (slot = 0; slot < g_InvSlotLimit; ++slot) {
                         ItemDataRecord *item = LookupActiveItem(slot);
                         if (item && item->kind == 9) break;
                     }
-                    if (slot >= D_8009D050) slot = -1;
+                    if (slot >= g_InvSlotLimit) slot = -1;
                     D_800C0E20.tracked[2] = slot;
                     Inv_SetActiveList(3, 0);
                 }

@@ -30,10 +30,10 @@ int Inv_CanAddActiveListItemToAya(int index) {
             data = 0;
         }
 
-        D_8009D048 = D_800C0E48;
-        D_8009D050 = Inv_GetAyaSlotLimit();
-        D_8009D058 = D_8009D05C;
-        D_8009D064 = 2;
+        g_InvItemPtr = g_AyaInventoryItems;
+        g_InvSlotLimit = Inv_GetAyaSlotLimit();
+        g_InvSelectionBits = g_InvSelectionBitStorage;
+        g_InvSelectionBitWords = 2;
 
         result = Inv_WriteSlotById(data);
         if (result == 0) {
@@ -47,7 +47,7 @@ int Inv_CanAddActiveListItemToAya(int index) {
 
 
 static inline int FindFreeActiveSlot(void) {
-    s16 *p = D_8009D048, *end = p + D_8009D050;
+    s16 *p = g_InvItemPtr, *end = p + g_InvSlotLimit;
 
     if (p < end) {
         do {
@@ -55,8 +55,8 @@ static inline int FindFreeActiveSlot(void) {
                 break;
             p++;
         } while (p < end);
-        if (p < D_8009D048 + D_8009D050)
-            return p - D_8009D048;
+        if (p < g_InvItemPtr + g_InvSlotLimit)
+            return p - g_InvItemPtr;
     }
     return -1;
 }
@@ -65,20 +65,20 @@ static inline int FindFreeActiveSlot(void) {
 /* Transfer pending IDs, then rebuild the selectable-item mask. */
 void Inv_TransferItemAlt(void) {
     int i = 0;
-    D_8009D048 = D_800C0E48;
-    D_8009D050 = Inv_GetAyaSlotLimit();
-    D_8009D058 = D_8009D05C;
-    D_8009D064 = 2;
-    for (; i < D_8009D078; i++) {
-        int id = D_800A1FD4[i];
+    g_InvItemPtr = g_AyaInventoryItems;
+    g_InvSlotLimit = Inv_GetAyaSlotLimit();
+    g_InvSelectionBits = g_InvSelectionBitStorage;
+    g_InvSelectionBitWords = 2;
+    for (; i < g_InvActiveListCount; i++) {
+        int id = g_InvActiveListItems[i];
         if (Inv_LookupItemRecord(id)->kind >= 16 && Inv_LookupItemRecord(id)->kind < 19) {
             if (!Inv_CanAddActiveListItemToAya(i))
-                D_800A1FD4[i] = 0;
+                g_InvActiveListItems[i] = 0;
         } else if (id < 512) {
             int slot = FindFreeActiveSlot();
             if (slot >= 0) {
-                D_8009D048[slot] = id;
-                D_800A1FD4[i] = 0;
+                g_InvItemPtr[slot] = id;
+                g_InvActiveListItems[i] = 0;
             }
         }
     }
@@ -87,8 +87,8 @@ void Inv_TransferItemAlt(void) {
 
 static inline int ActiveItemKind(int index) {
     ItemDataRecord *item;
-    if (index >= 0 && index < D_8009D050)
-        item = Inv_LookupItemRecord(D_8009D048[index]);
+    if (index >= 0 && index < g_InvSlotLimit)
+        item = Inv_LookupItemRecord(g_InvItemPtr[index]);
     else
         item = 0;
     return item ? item->kind : 0;
@@ -124,18 +124,18 @@ void Inv_ClearDisplaySlots(void) {
     int i = 0;
     g_InvActiveListOverride = 0;
     g_InvOverrideSlotLimit = 0;
-    D_8009D048 = D_800C0E20.slots;
-    D_8009D050 = Inv_GetAyaSlotLimit();
-    D_8009D058 = D_8009D05C;
-    D_8009D064 = 2;
-    for (; i < D_8009D050; i++) {
+    g_InvItemPtr = D_800C0E20.slots;
+    g_InvSlotLimit = Inv_GetAyaSlotLimit();
+    g_InvSelectionBits = g_InvSelectionBitStorage;
+    g_InvSelectionBitWords = 2;
+    for (; i < g_InvSlotLimit; i++) {
         if ((unsigned)(ActiveItemKind(i) - 1) < 9 &&
-            (unsigned)((u16)D_8009D048[i] - 256) >= 128) {
+            (unsigned)((u16)g_InvItemPtr[i] - 256) >= 128) {
             int record = FindFreeEquipmentRecord();
             if (record >= 0) {
                 ItemDataRecord *item = &D_800C0E20.equipment[record];
-                *item = *Item_LookupBaseData(D_8009D048[i] - 1);
-                D_8009D048[i] = record + 256;
+                *item = *Item_LookupBaseData(g_InvItemPtr[i] - 1);
+                g_InvItemPtr[i] = record + 256;
             }
         }
     }
@@ -151,16 +151,16 @@ int Inv_StepScrollDisplay2(int special) {
                 break;
         found = i < 82;
         if (!found) {
-            for (i = 0; i < D_8009D050; i++) {
+            for (i = 0; i < g_InvSlotLimit; i++) {
                 ItemDataRecord *item;
-                if (i >= 0 && i < D_8009D050)
-                    item = Inv_LookupItemRecord(D_8009D048[i]);
+                if (i >= 0 && i < g_InvSlotLimit)
+                    item = Inv_LookupItemRecord(g_InvItemPtr[i]);
                 else
                     item = 0;
                 if (item && item->kind == 6)
                     break;
             }
-            if (i < D_8009D050) {
+            if (i < g_InvSlotLimit) {
                 /* If slots 0..80 are occupied, retail writes slot 81 unchecked. */
                 for (i = 0; i < 81; i++)
                     if (!D_8009D07C[i])

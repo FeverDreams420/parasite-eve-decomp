@@ -9,10 +9,10 @@
 /* MASPSX_FORCE_G0: 1 */
 
 /* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
-s16 *D_8009D048;
-s32 D_8009D050;
-u32 *D_8009D058;
-s32 D_8009D064;
+s16 *g_InvItemPtr;
+s32 g_InvSlotLimit;
+u32 *g_InvSelectionBits;
+s32 g_InvSelectionBitWords;
 
 #define LIST_ACTIVE 13
 #define LIST_AYA 14
@@ -39,7 +39,7 @@ int Inv_TransferItem(int fromList, int fromSlot, int toList, int toSlot) {
 
     g_InvItemPtr = g_AyaInventoryItems;
     g_InvSlotLimit = Inv_GetAyaSlotLimit();
-    g_InvSelectionBits = g_AyaItemSelectionBits;
+    g_InvSelectionBits = g_InvSelectionBitStorage;
     g_InvSelectionBitWords = 2;
     if (fromList == LIST_ACTIVE && toList == fromList) {
         u16 *table = (u16 *)g_BattleCountTable;

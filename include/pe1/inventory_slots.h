@@ -5,7 +5,7 @@
 #include "pe1/inventory.h"
 #include "pe1/inventory_queries.h"
 
-extern s16 D_800C0E48[];
+extern s16 g_AyaInventoryItems[];
 /* Retail adjacency: tracked selections at C0E20, 50 item IDs at C0E48,
  * and 128 equipment records at C0EAC. Reserved bytes are not interpreted. */
 typedef struct InventoryRuntime {
@@ -28,7 +28,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(InventoryRuntime, specialStorage) == 0x1160,
                   inventory_runtime_special_storage_offset);
 extern InventoryRuntime D_800C0E20;
 /* Count of filtered slot indices in D_800A1D9C; distinct from the
- * pending item-ID list at D_800A1FD4 (count D_8009D078). */
+ * pending item-ID list at g_InvActiveListItems (count g_InvActiveListCount). */
 extern s32 D_8009D040;
 extern s32 D_8009D044;
 extern s16 D_800A1E00[];
@@ -53,33 +53,21 @@ void Inv_InitMaxLevelInventory(int variant);
 int Inv_CountTotal(void);
 void Item_PackParasiteSpells(void);
 int Inv_LoadWayneItemsAsOverride(short *items);
-extern u8 D_800C0E0C;
+extern u8 g_InvBaseCapacity;
 
-extern u32 D_8009D05C[];
-extern s16 *D_8009D048;
-extern s32 D_8009D050;
-extern u32 *D_8009D058;
-extern s32 D_8009D064;
-extern s32 D_8009D06C;
+extern u32 g_InvSelectionBitStorage[];
+extern s16 *g_InvItemPtr;
+extern s32 g_InvSlotLimit;
+extern u32 *g_InvSelectionBits;
+extern s32 g_InvSelectionBitWords;
+extern s32 g_InvPendingCompactCount;
 extern s32 D_8009D068;
 /* Equipment comparison filter: nonzero selects kinds 1..8, zero kind 9; first-stat floor. */
 extern s32 D_8009D0CC, D_8009D0D0;
 /* Pending item IDs and the current number to transfer. */
-extern s32 D_8009D078;
-extern s16 D_800A1FD4[];
-#define g_InvActiveListCount D_8009D078
-#define g_InvActiveListItems D_800A1FD4
-
-#define g_AyaInventoryItems D_800C0E48
-#define g_InvItemPtr D_8009D048
-#define g_InvSlotLimit D_8009D050
-#define g_InvSelectionBitStorage D_8009D05C
-#define g_InvSelectionBits D_8009D058
-#define g_InvSelectionBitWords D_8009D064
-#define g_InvPendingCompactCount D_8009D06C
+extern s32 g_InvActiveListCount;
+extern s16 g_InvActiveListItems[];
 #define g_InvTrackedSlots D_800C0E20.tracked
-#define g_InvBaseCapacity D_800C0E0C
-
 /* Two remembered selections. The retail indexed accesses use full addresses;
  * fixed-slot accesses use the individual small-data symbols below. Keeping
  * incomplete arrays avoids the old, overlapping three-element declarations. */
@@ -90,8 +78,6 @@ extern s32 D_8009D098, D_8009D09C; /* storage flags 0, 1 */
 extern s16 *g_InvActiveListOverride;
 extern s32 g_InvOverrideSlotLimit;
 extern u32 g_InvStorageSelectionBits[];
-#define g_AyaItemSelectionBits D_8009D05C
-
 /* Scratch state and full record snapshots used by the item-detail operation. */
 extern u8 D_800A1FE8[];
 extern u8 *D_8009D084;

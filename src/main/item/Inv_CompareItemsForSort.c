@@ -93,7 +93,7 @@ int Inv_CompareItemsByStatForSort(const void *leftElement, const void *rightElem
     left = g_InvSortLookup(*leftIndex);
     right = g_InvSortLookup(*rightIndex);
 
-    switch (D_8009D0A0) {
+    switch (g_InvSortStatIndex) {
     case 0:
         leftValue = left->baseStats[0] + left->bonusStats[0];
         rightValue = right->baseStats[0] + right->bonusStats[0];
@@ -130,7 +130,7 @@ void Inv_SortWeaponSubrange(void) {
     u16 tmpu;
 
     var_s0 = g_InvSortListBase;
-    D_8009D0A0 = D_8009D0A4;
+    g_InvSortStatIndex = D_8009D0A4;
     mask = 0x1FE;
     if (var_s0 < g_InvSortListBase + g_InvSortListCount) {
         while (*(s16 *) var_s0 != 0) {
@@ -171,7 +171,7 @@ void Inv_SortAmmoSubrange(void) {
     u16 tmpu;
 
     var_s0 = g_InvSortListBase;
-    D_8009D0A0 = D_8009D0A8;
+    g_InvSortStatIndex = D_8009D0A8;
     mask = 0x200;
     if (var_s0 < g_InvSortListBase + g_InvSortListCount) {
         while (*(s16 *) var_s0 != 0) {
@@ -232,7 +232,7 @@ void Inv_SortInventoryByMode(s32 arg0, s32 arg1) {
     }
     g_InvItemPtr = g_AyaInventoryItems;
     g_InvSlotLimit = Inv_GetAyaSlotLimit();
-    g_InvSelectionBits = g_AyaItemSelectionBits;
+    g_InvSelectionBits = g_InvSelectionBitStorage;
     g_InvSelectionBitWords = 2;
     temp_s1 = g_InvItemPtr[g_AyaEquippedWeaponSlot[0]];
     if (g_AyaEquippedArmorSlot[0] >= 0) {

@@ -38,7 +38,7 @@ int Inv_EquipItemById(unsigned int itemId) {
             s16 *end;
             g_InvItemPtr = D_800C0E20.slots;
             count = Inv_GetAyaSlotLimit();
-            g_InvSelectionBits = g_AyaItemSelectionBits;
+            g_InvSelectionBits = g_InvSelectionBitStorage;
             g_InvSelectionBitWords = 2;
             value = record - D_800C0E20.equipment + 0x100;
             item = g_InvItemPtr;
@@ -110,7 +110,7 @@ void Inventory_OpenAyaItemList(unsigned int arg) {
     BattleCmd_SyncActiveAmmo();
     g_InvItemPtr = g_AyaInventoryItems;
     g_InvSlotLimit = Inv_GetAyaSlotLimit();
-    g_InvSelectionBits = g_AyaItemSelectionBits;
+    g_InvSelectionBits = g_InvSelectionBitStorage;
     g_InvSelectionBitWords = 2;
     Menu_CreateInventoryTabView();
     Menu_PlayConfirmSound();

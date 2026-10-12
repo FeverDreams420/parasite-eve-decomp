@@ -51,7 +51,7 @@ void BattleCmd_UndoPending(void) {
 
         switch (opcode) {
         case 0:
-            slot = &D_800C0E48[entry->payload.inventory_restore.slot_index];
+            slot = &g_AyaInventoryItems[entry->payload.inventory_restore.slot_index];
             if (*slot == 0) {
                 *slot = entry->payload.inventory_restore.item_id;
             } else {

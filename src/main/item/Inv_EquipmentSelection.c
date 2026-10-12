@@ -16,10 +16,10 @@
 /* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
 int D_8009D03C;
 s32 D_8009D040;
-s16 *D_8009D048;
-s32 D_8009D050;
-u32 *D_8009D058;
-s32 D_8009D064;
+s16 *g_InvItemPtr;
+s32 g_InvSlotLimit;
+u32 *g_InvSelectionBits;
+s32 g_InvSelectionBitWords;
 s32 D_8009D068;
 s32 D_8009D0CC;
 s32 D_8009D0D0;
@@ -31,23 +31,23 @@ int g_SaveMetadataWindowLength;
 
 
 static inline ItemDataRecord *LookupActiveItem(int index) {
-    if (index >= 0 && index < D_8009D050) return Inv_LookupItemRecordScaled(D_8009D048[index]);
+    if (index >= 0 && index < g_InvSlotLimit) return Inv_LookupItemRecordScaled(g_InvItemPtr[index]);
     return 0;
 }
 
 static inline void ClearBits(void) {
     int i;
-    for (i = 0; i < D_8009D064; i++) D_8009D058[i] = 0;
+    for (i = 0; i < g_InvSelectionBitWords; i++) g_InvSelectionBits[i] = 0;
 }
 
 /* Build the threshold-qualified set; negate its count if a tagged record exists. */
 int Inv_RebuildWithBonusSlots(int minSecond, int minThird) {
     int count, i, index;
     ItemDataRecord *item;
-    D_8009D048 = D_800C0E48;
-    D_8009D050 = Inv_GetAyaSlotLimit();
-    D_8009D058 = D_8009D05C;
-    D_8009D064 = 2;
+    g_InvItemPtr = g_AyaInventoryItems;
+    g_InvSlotLimit = Inv_GetAyaSlotLimit();
+    g_InvSelectionBits = g_InvSelectionBitStorage;
+    g_InvSelectionBitWords = 2;
     Inv_BuildFilteredPackedList(D_8009D0CC ? 0x1FE : 0x200);
     ClearBits();
     count = 0;
@@ -61,7 +61,7 @@ int Inv_RebuildWithBonusSlots(int minSecond, int minThird) {
             item->baseStats[2] + item->bonusStats[2] >= minThird &&
             item->itemId != 0x93 && item->itemId != 0x61) {
             count++;
-            D_8009D058[i >> 5] |= 1u << (i & 31);
+            g_InvSelectionBits[i >> 5] |= 1u << (i & 31);
         }
         i++;
     }
@@ -90,10 +90,10 @@ int Inv_RebuildWithBonusSlots(int minSecond, int minThird) {
 int Inv_TransferToStorage(void) {
     int count, i, index;
     ItemDataRecord *item;
-    D_8009D048 = D_800C0E48;
-    D_8009D050 = Inv_GetAyaSlotLimit();
-    D_8009D058 = D_8009D05C;
-    D_8009D064 = 2;
+    g_InvItemPtr = g_AyaInventoryItems;
+    g_InvSlotLimit = Inv_GetAyaSlotLimit();
+    g_InvSelectionBits = g_InvSelectionBitStorage;
+    g_InvSelectionBitWords = 2;
     Inv_BuildFilteredPackedList(0x3FE);
     ClearBits();
     count = 0;
@@ -104,7 +104,7 @@ int Inv_TransferToStorage(void) {
         item = LookupActiveItem(index);
         if (item->tailCount < item->tailCapacity) {
             count++;
-            D_8009D058[i >> 5] |= 1u << (i & 31);
+            g_InvSelectionBits[i >> 5] |= 1u << (i & 31);
         }
         i++;
     }
@@ -112,10 +112,10 @@ int Inv_TransferToStorage(void) {
 }
 
 static inline void SelectAya(void) {
-    D_8009D048 = D_800C0E00.inventory_items;
-    D_8009D050 = Inv_GetAyaSlotLimit();
-    D_8009D058 = D_8009D05C;
-    D_8009D064 = 2;
+    g_InvItemPtr = D_800C0E00.inventory_items;
+    g_InvSlotLimit = Inv_GetAyaSlotLimit();
+    g_InvSelectionBits = g_InvSelectionBitStorage;
+    g_InvSelectionBitWords = 2;
 }
 
 /* Carry a tagged record forward, removing its first storage-list reference. */
@@ -150,10 +150,10 @@ void Inv_InitNewGameInventory(void) {
     capacity = stats->inventoryCapacity;
     if (capacity > 50) capacity = 50;
     D_800C0E00.inventory_slot_count = capacity;
-    if (D_8009D048 == D_800C0E00.inventory_items)
-        D_8009D050 = Inv_GetAyaSlotLimit();
+    if (g_InvItemPtr == D_800C0E00.inventory_items)
+        g_InvSlotLimit = Inv_GetAyaSlotLimit();
     SelectAya();
-    for (i = 49; i >= 0; i--) D_8009D048[i] = 0;
+    for (i = 49; i >= 0; i--) g_InvItemPtr[i] = 0;
     Inv_AddItem(0x44);
     Inv_AddItem(0x96);
     Inv_AddItem(0x3F);
@@ -177,12 +177,12 @@ void Inv_InitNewGameInventory(void) {
 /* Remove the selected record, preserving armor-capacity bookkeeping. */
 static inline void RemoveItem(int index) {
     int required, id;
-    if (D_8009D048 == D_800C0E48 && D_800C0E20.tracked[2] == index)
+    if (g_InvItemPtr == g_AyaInventoryItems && D_800C0E20.tracked[2] == index)
         Inv_GetActiveSlotCount(&required);
-    id = D_8009D048[index];
-    D_8009D048[index] = 0;
+    id = g_InvItemPtr[index];
+    g_InvItemPtr[index] = 0;
     if (id >= 256) D_800C0E20.equipment[id - 256].iconId = 0;
-    if (D_8009D048 == D_800C0E48 && D_800C0E20.tracked[2] == index) {
+    if (g_InvItemPtr == g_AyaInventoryItems && D_800C0E20.tracked[2] == index) {
         D_800C0E20.tracked[2] = -1;
         Inv_CheckFreeSlotCapacity(required);
         Inv_CompactActiveListSlots();
@@ -193,28 +193,28 @@ static inline void RemoveItem(int index) {
 static inline int FindKind(int kind, int excluded) {
     /* excluded is -1 when no slot is skipped; the address then lies before
      * the list and never matches. */
-    s16 *skip = D_8009D048 + excluded;
-    s16 *p = D_8009D048;
-    while (p < D_8009D048 + D_8009D050) {
+    s16 *skip = g_InvItemPtr + excluded;
+    s16 *p = g_InvItemPtr;
+    while (p < g_InvItemPtr + g_InvSlotLimit) {
         if (p != skip && Inv_LookupItemRecordScaled(*p)->kind == kind) break;
         p++;
     }
-    if (p < D_8009D048 + D_8009D050) return p - D_8009D048;
+    if (p < g_InvItemPtr + g_InvSlotLimit) return p - g_InvItemPtr;
     return -1;
 }
 
 void Inv_MergeStorageToSlot(void) {
     int i;
-    D_8009D048 = D_800C0E48;
-    D_8009D050 = Inv_GetAyaSlotLimit();
-    D_8009D058 = D_8009D05C;
-    D_8009D064 = 2;
-    for (i = 0; i < D_8009D050; i++) {
-        unsigned short id = D_8009D048[i];
+    g_InvItemPtr = g_AyaInventoryItems;
+    g_InvSlotLimit = Inv_GetAyaSlotLimit();
+    g_InvSelectionBits = g_InvSelectionBitStorage;
+    g_InvSelectionBitWords = 2;
+    for (i = 0; i < g_InvSlotLimit; i++) {
+        unsigned short id = g_InvItemPtr[i];
         if (id - 256U < 128U &&
             D_800C0E20.equipment[(short)id - 256].itemId == 0x61) break;
     }
-    if (i < D_8009D050) RemoveItem(i);
+    if (i < g_InvSlotLimit) RemoveItem(i);
     Inv_AddItem(0x93);
     D_800C0E20.tracked[0] = FindKind(7, -1);
     g_MenuBattleEquipMode = 0;
@@ -223,19 +223,19 @@ void Inv_MergeStorageToSlot(void) {
 
 /* The caller supplies a fourth script argument; these commands ignore it. */
 static inline int FindItem(int id) {
-    s16 *p = D_8009D048;
-    while (p < D_8009D048 + D_8009D050) {
+    s16 *p = g_InvItemPtr;
+    while (p < g_InvItemPtr + g_InvSlotLimit) {
         if (*p == id) break;
         p++;
     }
-    if (p < D_8009D048 + D_8009D050) return p - D_8009D048;
+    if (p < g_InvItemPtr + g_InvSlotLimit) return p - g_InvItemPtr;
     return -1;
 }
 
 static inline void SetCapacity(int value) {
     if (value > 50) value = 50;
     D_800C0E00.inventory_slot_count = value;
-    if (D_8009D048 == D_800C0E48) D_8009D050 = Inv_GetAyaSlotLimit();
+    if (g_InvItemPtr == g_AyaInventoryItems) g_InvSlotLimit = Inv_GetAyaSlotLimit();
 }
 
 int Inv_DispatchCommand(int command, int value, int other, int *unused) {
@@ -244,15 +244,15 @@ int Inv_DispatchCommand(int command, int value, int other, int *unused) {
         s16 *p;
         int count = 0;
         SelectAya();
-        for (p = D_8009D048; p < D_8009D048 + D_8009D050; p++)
+        for (p = g_InvItemPtr; p < g_InvItemPtr + g_InvSlotLimit; p++)
             count += (*p != 0);
         return count;
     }
     case INV_CMD_GET_CAPACITY: {
         int bonus = Inv_GetBonusSlotCount();
-        if (D_800C0E0C + bonus < 51) {
+        if (g_InvBaseCapacity + bonus < 51) {
             bonus = Inv_GetBonusSlotCount();
-            return D_800C0E0C + bonus;
+            return g_InvBaseCapacity + bonus;
         }
         return 50;
     }
@@ -261,7 +261,7 @@ int Inv_DispatchCommand(int command, int value, int other, int *unused) {
         s16 *p;
         if (value >= D_8009D03C && value < D_8009D03C + 3)
             count = D_800A1E64[value - D_8009D03C].ammo;
-        else for (p = D_8009D048; p < D_8009D048 + D_8009D050; p++) {
+        else for (p = g_InvItemPtr; p < g_InvItemPtr + g_InvSlotLimit; p++) {
             unsigned short id = *p;
             if (id - 256U < 128U)
                 count += (D_800C0E20.equipment[(short)id - 256].itemId == value);

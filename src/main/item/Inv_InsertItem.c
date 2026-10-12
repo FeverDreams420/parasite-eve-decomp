@@ -26,13 +26,13 @@ static inline int FindFreeEquipmentRecord(void) {
 }
 
 static inline int FindFreeActiveSlot(void) {
-    s16 *p = D_8009D048, *end = p + D_8009D050;
+    s16 *p = g_InvItemPtr, *end = p + g_InvSlotLimit;
 
     if (p < end) {
         while (p < end && *p != 0)
             p++;
-        if (p < D_8009D048 + D_8009D050)
-            return p - D_8009D048;
+        if (p < g_InvItemPtr + g_InvSlotLimit)
+            return p - g_InvItemPtr;
     }
     return -1;
 }
@@ -45,22 +45,22 @@ ItemDataRecord *Inv_FindSlotByIndex(int id) {
     if (record >= 0 && slot >= 0) {
         result = &D_800C0E20.equipment[record];
         *result = *Item_LookupBaseData(id - 1);
-        D_8009D048 = D_800C0E20.slots;
-        D_8009D050 = Inv_GetAyaSlotLimit();
-        D_8009D058 = D_8009D05C;
-        D_8009D064 = 2;
-        D_8009D048[slot] = record + 256;
+        g_InvItemPtr = D_800C0E20.slots;
+        g_InvSlotLimit = Inv_GetAyaSlotLimit();
+        g_InvSelectionBits = g_InvSelectionBitStorage;
+        g_InvSelectionBitWords = 2;
+        g_InvItemPtr[slot] = record + 256;
     }
     return result;
 }
 
 static inline int FindActiveSlot(int value) {
-    s16 *p = D_8009D048, *end = p + D_8009D050;
+    s16 *p = g_InvItemPtr, *end = p + g_InvSlotLimit;
     if (p < end) {
         while (p < end && *p != value)
             p++;
-        if (p < D_8009D048 + D_8009D050)
-            return p - D_8009D048;
+        if (p < g_InvItemPtr + g_InvSlotLimit)
+            return p - g_InvItemPtr;
     }
     return -1;
 }
@@ -92,7 +92,7 @@ int Inv_WriteSlotById(ItemDataRecord *item) {
         if (FindActiveSlot(category + 512) < 0) {
             int slot = FindFreeActiveSlot();
             if (slot >= 0)
-                D_8009D048[slot] = category + 512;
+                g_InvItemPtr[slot] = category + 512;
             else
                 failed = 1;
         }
@@ -116,8 +116,8 @@ s32 Inv_AddItem(s32 arg0) {
     ItemDataRecord *ent;
 
     ret = 0;
-    cur = D_8009D048;
-    end = D_8009D048 + D_8009D050;
+    cur = g_InvItemPtr;
+    end = g_InvItemPtr + g_InvSlotLimit;
     if (cur < end) {
         do {
             if (*cur == 0) {
@@ -125,8 +125,8 @@ s32 Inv_AddItem(s32 arg0) {
             }
             cur++;
         } while (cur < end);
-        if (cur < D_8009D048 + D_8009D050) {
-            t = cur - D_8009D048;
+        if (cur < g_InvItemPtr + g_InvSlotLimit) {
+            t = cur - g_InvItemPtr;
         } else {
             t = -1;
         }
@@ -157,7 +157,7 @@ s32 Inv_AddItem(s32 arg0) {
         case 14:
         case 15:
             if (slot >= 0) {
-                D_8009D048[slot] = arg0;
+                g_InvItemPtr[slot] = arg0;
             } else {
                 ret = 1;
             }
@@ -170,7 +170,7 @@ s32 Inv_AddItem(s32 arg0) {
         }
     } else {
         if (slot >= 0) {
-            D_8009D048[slot] = arg0;
+            g_InvItemPtr[slot] = arg0;
         } else {
             ret = 1;
         }

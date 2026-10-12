@@ -6,17 +6,17 @@
 #include "pe1/save.h"
 #include "pe1/text.h"
 
-int g_MenuBattleCount;
+int g_InvActiveListCount;
 
-int g_MenuBattleCount;
+int g_InvActiveListCount;
 short g_BattleCountTable[];
 
 int Menu_GetBattleCount(void) {
-    return g_MenuBattleCount;
+    return g_InvActiveListCount;
 }
 
 int Menu_GetBattleCountEntry(int arg0) {
-    if (arg0 >= 0 && arg0 < g_MenuBattleCount) {
+    if (arg0 >= 0 && arg0 < g_InvActiveListCount) {
         return g_BattleCountTable[arg0];
     }
     return 0;

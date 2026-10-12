@@ -6,8 +6,8 @@
 #include "pe1/inventory_slots.h"
 
 /* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
-s16 *D_8009D048;
-s32 D_8009D050;
+s16 *g_InvItemPtr;
+s32 g_InvSlotLimit;
 
 void Battle_SyncEquipSlots(void);
 void *Aya_GetLevelExpTable(void);

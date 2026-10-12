@@ -68,7 +68,7 @@ int Inv_CountTotal(void) {
     g_InvItemPtr = g_AyaInventoryItems;
     count = 0;
     g_InvSlotLimit = Inv_GetAyaSlotLimit();
-    g_InvSelectionBits = g_AyaItemSelectionBits;
+    g_InvSelectionBits = g_InvSelectionBitStorage;
     g_InvSelectionBitWords = 2;
 
     item = g_InvItemPtr;
@@ -88,7 +88,7 @@ int Inv_FindItemById(int arg0) {
 
     g_InvItemPtr = g_AyaInventoryItems;
     g_InvSlotLimit = Inv_GetAyaSlotLimit();
-    g_InvSelectionBits = g_AyaItemSelectionBits;
+    g_InvSelectionBits = g_InvSelectionBitStorage;
     g_InvSelectionBitWords = 2;
 
     item = g_InvItemPtr;

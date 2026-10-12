@@ -17,7 +17,7 @@ void Menu_DrawArmorItemDetail(int slot) {
 
     value = D_8009D07C[slot];
     if (value != 0) {
-        bit = D_8009D058[slot >> 5] & (1 << (slot & 0x1F));
+        bit = g_InvSelectionBits[slot >> 5] & (1 << (slot & 0x1F));
         Draw_SetTextDimmed(bit == 0);
 
         if ((unsigned int)(value - 0x100) < 0x80U) {

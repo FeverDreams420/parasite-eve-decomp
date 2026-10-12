@@ -135,7 +135,7 @@ void Inv_SelectActiveList(int useOverride) {
     } else {
         g_InvItemPtr = g_AyaInventoryItems;
         g_InvSlotLimit = Inv_GetAyaSlotLimit();
-        g_InvSelectionBits = g_AyaItemSelectionBits;
+        g_InvSelectionBits = g_InvSelectionBitStorage;
         g_InvSelectionBitWords = 2;
     }
 }
@@ -150,7 +150,7 @@ void Inv_ResetActiveList(void) {
     g_InvOverrideSlotLimit = 0;
     g_InvItemPtr = g_AyaInventoryItems;
     g_InvSlotLimit = Inv_GetAyaSlotLimit();
-    g_InvSelectionBits = g_AyaItemSelectionBits;
+    g_InvSelectionBits = g_InvSelectionBitStorage;
     g_InvSelectionBitWords = 2;
 }
 

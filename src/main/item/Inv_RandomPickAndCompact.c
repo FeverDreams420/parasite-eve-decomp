@@ -8,31 +8,31 @@
 /* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
 s32 D_8009D038;
 s32 D_8009D040;
-s16 *D_8009D048;
-s32 D_8009D050;
-u32 *D_8009D058;
-s32 D_8009D064;
+s16 *g_InvItemPtr;
+s32 g_InvSlotLimit;
+u32 *g_InvSelectionBits;
+s32 g_InvSelectionBitWords;
 s32 D_8009D068;
-s32 D_8009D06C;
+s32 g_InvPendingCompactCount;
 int D_8009D218;
 s16 *g_InvActiveListOverride;
 s32 g_InvOverrideSlotLimit;
 
 static inline ItemDataRecord *LookupActiveItem(int index) {
-    if (index >= 0 && index < D_8009D050) return Inv_LookupItemRecord(D_8009D048[index]);
+    if (index >= 0 && index < g_InvSlotLimit) return Inv_LookupItemRecord(g_InvItemPtr[index]);
     return 0;
 }
 static inline void RestoreList(int storage) {
     if (storage && g_InvActiveListOverride != 0) {
-        D_8009D048 = g_InvActiveListOverride;
-        D_8009D058 = g_InvStorageSelectionBits;
-        D_8009D064 = 4;
-        D_8009D050 = g_InvOverrideSlotLimit;
+        g_InvItemPtr = g_InvActiveListOverride;
+        g_InvSelectionBits = g_InvStorageSelectionBits;
+        g_InvSelectionBitWords = 4;
+        g_InvSlotLimit = g_InvOverrideSlotLimit;
     } else {
-        D_8009D048 = D_800C0E48;
-        D_8009D050 = Inv_GetAyaSlotLimit();
-        D_8009D058 = D_8009D05C;
-        D_8009D064 = 2;
+        g_InvItemPtr = g_AyaInventoryItems;
+        g_InvSlotLimit = Inv_GetAyaSlotLimit();
+        g_InvSelectionBits = g_InvSelectionBitStorage;
+        g_InvSelectionBitWords = 2;
     }
 }
 
@@ -44,18 +44,18 @@ static inline int ListCount(void) {
 
 static inline int Eligible(int index,int mask) {
     ItemDataRecord *item;
-    if (index >= 0 && index < D_8009D050) item=Inv_LookupItemRecord(D_8009D048[index]);
+    if (index >= 0 && index < g_InvSlotLimit) item=Inv_LookupItemRecord(g_InvItemPtr[index]);
     else item=0;
     return item && ((mask >> item->kind) & 1) && item->tailCount != 0;
 }
 int Inv_SetupSlotDisplay(int mask) {
     int i=0, count=0;
-    int wasStorage=D_8009D048 != D_800C0E48;
+    int wasStorage=g_InvItemPtr != g_AyaInventoryItems;
     RestoreList(0);
-    for (; i<D_8009D050; ++i) count += Eligible(i,mask);
+    for (; i<g_InvSlotLimit; ++i) count += Eligible(i,mask);
     if (ListCount() >= 2 && !(mask & 0x100)) {
         RestoreList(1);
-        for (i=0; i<D_8009D050; ++i) count += Eligible(i,mask);
+        for (i=0; i<g_InvSlotLimit; ++i) count += Eligible(i,mask);
     }
     RestoreList(wasStorage);
     return count>=2;
@@ -75,7 +75,7 @@ static inline int RandomByte(void) {
 
 static inline int IsTracked(int index) {
     int result = 0;
-    if (D_8009D048 == D_800C0E48) {
+    if (g_InvItemPtr == g_AyaInventoryItems) {
         if (D_800C0E20.tracked[0] == index || D_800C0E20.tracked[2] == index)
             result = 1;
     }
@@ -85,14 +85,14 @@ int Inv_PickRandomItem(int unused) {
     s16 *out = D_800A1D9C;
     int i;
     ItemDataRecord *item;
-    for (i = 0; i < D_8009D050; ++i) {
+    for (i = 0; i < g_InvSlotLimit; ++i) {
         item = LookupActiveItem(i);
         if (item && (item->flags & 128) && !IsTracked(i)) *out++ = i;
     }
     D_8009D068 = 0;
     D_8009D040 = out - D_800A1D9C;
     if (!D_8009D040) return 0;
-    return D_8009D048[D_800A1D9C[(D_8009D040 * RandomByte()) >> 8]];
+    return g_InvItemPtr[D_800A1D9C[(D_8009D040 * RandomByte()) >> 8]];
 }
 
 /* Historical name: formats the item message into the shared FF-terminated buffer. */
@@ -140,8 +140,8 @@ void Inv_CompactActiveListSlots(void) {
         }
         index = slot;
         if (index >= 0) {
-            if (D_800C0E0C + Inv_GetBonusSlotCount() < 51) {
-                limit = D_800C0E0C + Inv_GetBonusSlotCount();
+            if (g_InvBaseCapacity + Inv_GetBonusSlotCount() < 51) {
+                limit = g_InvBaseCapacity + Inv_GetBonusSlotCount();
             } else {
                 limit = 50;
             }

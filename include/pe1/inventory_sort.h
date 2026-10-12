@@ -3,13 +3,10 @@
 
 #include "pe1/inventory.h"
 
-extern int D_8009D0A0;
-extern ItemDataRecord *(*D_8009D0B4)(int index);
+extern int g_InvSortStatIndex;
+extern ItemDataRecord *(*g_InvSortLookup)(int index);
 extern unsigned char *D_8009D0B8;
 extern unsigned char *D_8009D0BC;
-
-#define g_InvSortStatIndex D_8009D0A0
-#define g_InvSortLookup D_8009D0B4
 
 int Inv_CompareItemsByStatForSort(const void *leftElement, const void *rightElement);
 int Inv_CompareItemsForSort(const void *leftElement, const void *rightElement);

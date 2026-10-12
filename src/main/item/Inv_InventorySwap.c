@@ -40,7 +40,7 @@ static inline void SwapSlots(s16 *a, s16 *b) {
 static inline void SwapAyaSlots(int firstSlot, int secondSlot) {
     int from = firstSlot;
     int to = secondSlot;
-    SwapSlots(&D_8009D048[from], &D_8009D048[to]);
+    SwapSlots(&g_InvItemPtr[from], &g_InvItemPtr[to]);
     if (D_800C0E20.tracked[0] == from) D_800C0E20.tracked[0] = to;
     else if (D_800C0E20.tracked[0] == to) D_800C0E20.tracked[0] = from;
     if (D_800C0E20.tracked[2] == from) D_800C0E20.tracked[2] = to;
@@ -50,8 +50,8 @@ static inline ItemDataRecord *LookupTrackedItem(int index) {
     int value, saved;
     ItemDataRecord *result;
 
-    if (index >= 0 && index < D_8009D050) {
-        value = D_8009D048[index];
+    if (index >= 0 && index < g_InvSlotLimit) {
+        value = g_InvItemPtr[index];
         saved = value;
         if (value - 0x100U < 0x80U) {
             result = &D_800C0E20.equipment[value - 0x100];
@@ -75,7 +75,7 @@ static inline ItemDataRecord *LookupTrackedItem(int index) {
 
 
 static inline ItemDataRecord *LookupActiveItem(int index) {
-    if (index >= 0 && index < D_8009D050) return Inv_LookupItemRecordScaled(D_8009D048[index]);
+    if (index >= 0 && index < g_InvSlotLimit) return Inv_LookupItemRecordScaled(g_InvItemPtr[index]);
     return 0;
 }
 
@@ -90,17 +90,17 @@ static inline int ItemKind(int slot) {
 int Inv_TransferItemAlt2(int mask) {
     s16 *out = D_800A1E00;
     int i;
-    D_8009D048 = D_800C0E48;
-    D_8009D050 = Inv_GetAyaSlotLimit();
-    D_8009D058 = D_8009D05C;
-    D_8009D064 = 2;
-    for (i = 0; i < D_8009D050; i++) {
+    g_InvItemPtr = g_AyaInventoryItems;
+    g_InvSlotLimit = Inv_GetAyaSlotLimit();
+    g_InvSelectionBits = g_InvSelectionBitStorage;
+    g_InvSelectionBitWords = 2;
+    for (i = 0; i < g_InvSlotLimit; i++) {
         if ((mask >> ItemKind(i)) & 1) *out++ = i;
     }
     D_8009D044 = out - D_800A1E00;
     Inv_RebuildSelectableMask();
-    for (i = 0; i < D_8009D050; i++) {
-        if (D_8009D048[i] == 0) *out++ = i;
+    for (i = 0; i < g_InvSlotLimit; i++) {
+        if (g_InvItemPtr[i] == 0) *out++ = i;
     }
     D_8009D044 = out - D_800A1E00;
     return D_8009D044;
@@ -124,7 +124,7 @@ int Inv_IsSlotEquipped(int index) {
         allowed = 0;
         if (!(data->flags & 0x20)) {
             equipped = 0;
-            if (D_8009D048 == D_800C0E48 &&
+            if (g_InvItemPtr == g_AyaInventoryItems &&
                 (D_800C0E20.tracked[0] == index || D_800C0E20.tracked[2] == index))
                 equipped = 1;
             if (!equipped) allowed = 1;
@@ -132,7 +132,7 @@ int Inv_IsSlotEquipped(int index) {
         if (data->kind == 8) {
             kind = 8;
             count = 0;
-            for (i = 0; i < D_8009D050; i++) {
+            for (i = 0; i < g_InvSlotLimit; i++) {
                 if (Inv_GetActiveListItemType(i) == kind) count++;
             }
             allowed &= count >= 2;
@@ -145,10 +145,10 @@ int Inv_IsSlotEquipped(int index) {
 int Inv_RebuildWithSlotLimit(int fromMode, int fromIndex, int toMode, int toIndex) {
     int success = 1;
     int from;
-    D_8009D048 = D_800C0E48;
-    D_8009D050 = Inv_GetAyaSlotLimit();
-    D_8009D058 = D_8009D05C;
-    D_8009D064 = 2;
+    g_InvItemPtr = g_AyaInventoryItems;
+    g_InvSlotLimit = Inv_GetAyaSlotLimit();
+    g_InvSelectionBits = g_InvSelectionBitStorage;
+    g_InvSelectionBitWords = 2;
     if (fromMode == 0x34 && toMode == fromMode) {
         SwapSlots(&D_8009D07C[fromIndex], &D_8009D07C[toIndex]);
         Inv_RebuildSelectableMask();
@@ -163,7 +163,7 @@ int Inv_RebuildWithSlotLimit(int fromMode, int fromIndex, int toMode, int toInde
         if (Inv_IsSlotEquipped(from) &&
             (Inv_LookupItemRecordScaled(D_8009D07C[fromIndex])->kind < 19 ||
              Inv_LookupItemRecordScaled(D_8009D07C[fromIndex])->kind >= 22)) {
-            SwapSlots(&D_8009D07C[fromIndex], &D_8009D048[from]);
+            SwapSlots(&D_8009D07C[fromIndex], &g_InvItemPtr[from]);
             Menu_SetSwapReturnFlag();
             Inv_RebuildSelectableMask();
         } else success = 0;
@@ -172,7 +172,7 @@ int Inv_RebuildWithSlotLimit(int fromMode, int fromIndex, int toMode, int toInde
         if (Inv_IsSlotEquipped(from) &&
             (Inv_LookupItemRecordScaled(D_8009D07C[toIndex])->kind < 19 ||
              Inv_LookupItemRecordScaled(D_8009D07C[toIndex])->kind >= 22)) {
-            SwapSlots(&D_8009D048[from], &D_8009D07C[toIndex]);
+            SwapSlots(&g_InvItemPtr[from], &D_8009D07C[toIndex]);
             Menu_SetSwapReturnFlag();
             Inv_RebuildSelectableMask();
         } else success = 0;

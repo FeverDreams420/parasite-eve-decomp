@@ -5,11 +5,11 @@
 #include "pe1/inventory_slots.h"
 
 /* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
-s16 *D_8009D048;
-s32 D_8009D050;
-u32 *D_8009D058;
-s32 D_8009D064;
-s32 D_8009D06C;
+s16 *g_InvItemPtr;
+s32 g_InvSlotLimit;
+u32 *g_InvSelectionBits;
+s32 g_InvSelectionBitWords;
+s32 g_InvPendingCompactCount;
 
 int Inv_CheckFreeSlotCapacity(int requested_slots) {
     s16 *slot;
@@ -26,10 +26,10 @@ int Inv_CheckFreeSlotCapacity(int requested_slots) {
     g_InvSelectionBitWords = 2;
 
     bonus_slots = Inv_GetBonusSlotCount();
-    if (D_800C0E0C + bonus_slots < 51) {
+    if (g_InvBaseCapacity + bonus_slots < 51) {
         used_slots = 0;
         capacity_before_scan =
-            D_800C0E0C + Inv_GetBonusSlotCount();
+            g_InvBaseCapacity + Inv_GetBonusSlotCount();
     } else {
         used_slots = 0;
         capacity_before_scan = 50;
@@ -72,11 +72,11 @@ int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
     mask = 0;
     selected_a = Inv_RestoreSelection(list_index);
     item_a = 0;
-    if (selected_a >= 0 && selected_a < D_8009D050) {
+    if (selected_a >= 0 && selected_a < g_InvSlotLimit) {
         ItemDataRecord *resolved;
         int saved_id;
         int scaled_id;
-        item_id = D_8009D048[selected_a];
+        item_id = g_InvItemPtr[selected_a];
         saved_id = (s16)item_id;
         if (item_id - 0x100U < 0x80U) {
             resolved = (ItemDataRecord *)(g_EquipItemDataTable + (item_id << 5));
@@ -92,11 +92,11 @@ int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
 
     selected_b = Inv_RestoreSelection(list_index < 1);
     item_b = 0;
-    if (selected_b >= 0 && selected_b < D_8009D050) {
+    if (selected_b >= 0 && selected_b < g_InvSlotLimit) {
         ItemDataRecord *resolved;
         int saved_id;
         int scaled_id;
-        item_id = D_8009D048[selected_b];
+        item_id = g_InvItemPtr[selected_b];
         saved_id = (s16)item_id;
         if (item_id - 0x100U < 0x80U) {
             scaled_id = item_id << 5;
@@ -168,7 +168,7 @@ int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
     }
 
     Inv_RestoreSelection(list_index);
-    if (D_8009D048 == D_800C0E48 && selected_a == D_800C0E22[0]) {
+    if (g_InvItemPtr == g_AyaInventoryItems && selected_a == D_800C0E22[0]) {
         {
             int raw_count;
             int loop_count;
@@ -202,7 +202,7 @@ int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
     }
 
     Inv_RestoreSelection(list_index < 1);
-    if (D_8009D048 == D_800C0E48) {
+    if (g_InvItemPtr == g_AyaInventoryItems) {
         if (selected_b == D_800C0E22[0]) {
             if (mod_index >= 0) {
 

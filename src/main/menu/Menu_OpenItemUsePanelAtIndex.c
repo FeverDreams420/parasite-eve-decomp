@@ -8,8 +8,8 @@
 static inline ItemDataRecord *LookupTrackedItem(int index) {
     int value;
     int saved;
-    if (index < 0 || index >= D_8009D050) return 0;
-    value = D_8009D048[index];
+    if (index < 0 || index >= g_InvSlotLimit) return 0;
+    value = g_InvItemPtr[index];
     saved = (s16)value;
     if ((unsigned)(value - 0x100) < 0x80)
         return &D_800C0E20.equipment[value - 0x100];
