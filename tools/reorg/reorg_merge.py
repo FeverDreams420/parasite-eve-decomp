@@ -187,7 +187,8 @@ def collapse_manifest(text: str, units: list[str], new: str,
 
 
 def build_source(units: list[str], markers: list[str] | None,
-                 commons: list[str]) -> tuple[str, list[str]]:
+                 commons: list[str],
+                 extra_includes: list[str] = ()) -> tuple[str, list[str]]:
     parts = [split_unit(u) for u in units]
     if markers is None:
         sets = {tuple(sorted(p[0])) for p in parts}
@@ -200,6 +201,9 @@ def build_source(units: list[str], markers: list[str] | None,
         for inc in part[1]:
             if inc not in includes:
                 includes.append(inc)
+    if extra_includes and any(p[3] for p in parts):
+        includes.append("")
+        includes.extend(extra_includes)
     # #undef template macros that a later unit defines again
     defined_later: list[set[str]] = []
     for index in range(len(parts)):
@@ -310,6 +314,11 @@ def main() -> int:
                              "these (old unit) objects")
     parser.add_argument("--externs-to", metavar="HEADER",
                         help="shared header that receives the private externs")
+    parser.add_argument("--private-externs", action="store_true",
+                        help="collect the private externs in one NEW_externs.h "
+                             "next to NEW.c instead of a shared header (PsyQ "
+                             "objects, whose SDK declarations have no subsystem "
+                             "header)")
     parser.add_argument("--absorb", action="append", default=[], metavar="ENTRY",
                         help="drop this data entry between the units (the merged "
                              "object produces its bytes)")
@@ -328,15 +337,30 @@ def main() -> int:
     commons = list(args.common)
     if args.gp_commons:
         commons += [c for c in gp_commons(args.gp_commons, units) if c not in commons]
-    source, inlined = build_source(units, args.marker, commons)
+    private = None
+    extra = []
+    if args.private_externs:
+        private = rm.norm(new[:-2] + "_externs.h")
+        extra = [f'#include "{os.path.basename(private)}"']
+    source, inlined = build_source(units, args.marker, commons, extra)
     manifest = (ROOT / MANIFEST).read_text()
     new_manifest = collapse_manifest(manifest, units, new, args.absorb)
 
     # inlined externs headers must have no other users
+    def includes_header(path: str, header: str) -> bool:
+        text = (ROOT / path).read_text(errors="replace")
+        if os.path.basename(header) not in text:
+            return False
+        for line in text.splitlines():
+            match = rm.INCLUDE.match(line)
+            if match and rm.norm(os.path.join(os.path.dirname(path),
+                                              match["path"])) == header:
+                return True
+        return False
+
     for header in inlined:
         users = [p for p in tracked if p.endswith((".c", ".h", ".inc"))
-                 and p not in units and os.path.basename(header)
-                 in (ROOT / p).read_text(errors="replace")]
+                 and p not in units and includes_header(p, header)]
         if users:
             sys.exit(f"{header} is also used by {users}")
 
@@ -348,12 +372,17 @@ def main() -> int:
         for header in inlined:
             for decl in externs_body(header):
                 name = re.search(r"(\w+)\s*(?:\[[^\]]*\])?\s*;\s*$", decl)
-                if name and re.search(r"^\s*extern\b[^;]*\b" + name.group(1)
-                                      + r"\b", shared, re.M):
+                if not private and name and re.search(
+                        r"^\s*extern\b[^;]*\b" + name.group(1) + r"\b", shared, re.M):
                     continue  # a shared header already declares it
                 if decl not in decls:
                     decls.append(decl)
-    if decls:
+    private_text = None
+    if decls and private:
+        guard = re.sub(r"\W", "_", private[len("src/main/"):]).upper()
+        private_text = (f"#ifndef {guard}\n#define {guard}\n\n"
+                        + "\n".join(decls) + f"\n\n#endif /* {guard} */\n")
+    elif decls:
         if not args.externs_to:
             sys.exit("private externs headers need --externs-to: "
                      + ", ".join(inlined))
@@ -441,6 +470,9 @@ def main() -> int:
         rm.git("rm", "-qf", header)
     (ROOT / new).write_text(source)
     rm.git("add", new, MANIFEST, *edits)
+    if private_text is not None:
+        (ROOT / private).write_text(private_text)
+        rm.git("add", private)
     return 0
 
 
