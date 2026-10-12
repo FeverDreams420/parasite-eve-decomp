@@ -28,7 +28,7 @@ extern u8 D_8009D25C;
 
 int Scene_UpdateBgDraw(void);
 int CdRom_ReadSectorsFromLba(u32 lba, void *destination, u32 size);
-void Render_DrawWithAnim(void *object, int animation, int frame,
+void Render_DrawWithAnim(void *object, void *animation, int frame,
                          void *matrices, void *scratch);
 
 #endif

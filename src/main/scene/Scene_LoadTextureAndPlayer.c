@@ -180,11 +180,13 @@ retry:
             record = firstRecord;
             do {
                 unsigned id;
-                Pe1GameState *destination;
+                union { Pe1GameState *state; u32 address; } destination;
                 asm("" : "=r"(record) : "0"(record), "r"(offsetMask));
                 id = record->source.bytes.id;
-                destination = (Pe1GameState *)(id * 4 + (u32)state);
-                destination->bank_rows[0][0] = SceneAsset_ResolveOffset(
+                /* The row id indexes the flattened bank row table. */
+                destination.state = state;
+                destination.address = id * 4 + destination.address;
+                destination.state->bank_rows[0][0] = SceneAsset_ResolveOffset(
                     blob, record->source.offsetAndId & offsetMask);
                 packed = directory->bankRowEntries;
                 asm volatile("" : "=r"(packed) : "0"(packed));
@@ -281,7 +283,7 @@ s32 Scene_InitEntityPlayer(s32 resume) {
         }
         {
             FieldActor *player = g_PlayerEntity;
-            Render_DrawWithAnim(&player->render_object, (s32)player->action_data, 0,
+            Render_DrawWithAnim(&player->render_object, player->action_data, 0,
                                 &D_800BEA40, g_EntityRenderScratch);
         }
         {

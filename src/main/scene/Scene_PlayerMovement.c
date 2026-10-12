@@ -100,8 +100,10 @@ void Scene_UpdatePlayerEntity(BattleEntity *entity, int *actionState)
     }
     facing = entity->facingAngle;
     if (D_8009D254 && (D_8009D2E8 & FIELD_MOVE_CONFUSED)) {
+        u32 stateFlags = ((Combatant *)D_8009D254->core)->stateFlags;
+
         facing += 0x800;
-        facing += ((u32)((Combatant *)D_8009D254->core)->stateFlags >> 7) & 0xC00;
+        facing += (stateFlags >> 7) & 0xC00;
     }
     facing &= 0xFFF;
     entity->facingAngle = facing;
@@ -203,8 +205,10 @@ void Scene_UpdateEntityFacing(BattleEntity *entity, int *actionState)
     }
     facing = entity->facingAngle;
     if (D_8009D254 && (D_8009D2E8 & FIELD_MOVE_CONFUSED)) {
+        u32 stateFlags = ((Combatant *)D_8009D254->core)->stateFlags;
+
         facing += 0x800;
-        facing += ((u32)((Combatant *)D_8009D254->core)->stateFlags >> 7) & 0xC00;
+        facing += (stateFlags >> 7) & 0xC00;
     }
     facing &= 0xFFF;
     entity->facingAngle = facing;

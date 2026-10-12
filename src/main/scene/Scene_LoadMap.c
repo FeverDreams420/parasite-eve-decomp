@@ -34,7 +34,7 @@ FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
     u8 sceneType;
     u32 serial;
     u32 *row;
-    u32 *table;
+    u8 **table;
     SceneAssetBlob *archive;
     SceneAssetDirectory *directory;
     SceneBankAssetRecord *bankRows;
@@ -109,8 +109,8 @@ FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
     for (i = 0; i < 0x38; ++i) actor->pad_0AC[i] = 0;
     for (i = 0; i < 3; ++i) actor->task_node_lists[i] = 0;
 
-    table = (u32 *)g_GameState.bank_reset_944[0];
-    actor->script_base = (u8 *)table[2 + scene[0]];
+    table = g_GameState.bank_reset_944[0];
+    actor->script_base = table[2 + scene[0]];
     actor->task_node_lists[2] = Task_AllocNode((unsigned int *)actor->script_base, 0);
     actor->rot_x = 0;
     actor->rot_y = 0;
