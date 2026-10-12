@@ -313,15 +313,15 @@ void GameState_Reset(void)
 
 
 void Boot_InitMemoryLayout(void) {
-    register s32 ptr asm("$2");
-    s32 ptr2;
+    register u8 *ptr asm("$2");
+    u8 *ptr2;
     register s32 const_8000 asm("$4");
     s32 const_48000;
-    s32 tmp;
+    u8 *tmp;
 
     const_48000 = 0x48000;
 
-    ptr = (s32)D_800F34F8;
+    ptr = D_800F34F8;
     ptr2 = ptr + 0x1800;
     D_800B0E24 = ptr;
     ptr += 0x6000;
@@ -330,14 +330,14 @@ void Boot_InitMemoryLayout(void) {
     ptr += 0xE000;
     D_800B0E30 = ptr;
 
-    ptr = (s32)D_8010BD00;
-    ptr2 = (s32)D_80120D08;
+    ptr = D_8010BD00;
+    ptr2 = D_80120D08;
     D_800B0E40 = ptr;
     ptr = ptr2 + 0x1C98;
     D_800B0E34 = ptr2;
     ptr2 += 0x5C98;
     const_8000 = 0x8000;
-    g_OtBufferTable[0] = (u8 *)ptr;
+    g_OtBufferTable[0] = ptr;
     ptr += const_8000;
     g_RenderOtBufferBaseAlt[0] = ptr2;
     ptr2 = ptr + 0x2400;
@@ -353,10 +353,10 @@ void Boot_InitMemoryLayout(void) {
     ptr2 = ptr + 0x3800;
     D_800B0E5C = ptr2;
     tmp = g_StrFileDirBuffer;
-    g_RenderAnimBufferBase[0] = (u8 *)ptr;
+    g_RenderAnimBufferBase[0] = ptr;
     ptr += 0x7000;
     D_800B0E60 = ptr;
-    g_SceneLoadScratchBuffer[0] = (s32)D_801ED800;
+    g_SceneLoadScratchBuffer[0] = D_801ED800;
     g_LoadedSceneAssetBlock[0] = tmp - 8;
     D_800B0E68 = tmp;
 }

@@ -29,18 +29,17 @@ extern u8 D_80120D08[];
 extern u8 D_801ED800[];
 
 /* Absolute views of the g_GameState buffer-pointer fields that
- * Boot_InitMemoryLayout writes (0x14C..0x190). Matching debt: volatile keeps
- * the retail store order against the render buffer tables. */
-extern volatile s32 D_800B0E24;
-extern volatile s32 D_800B0E28;
-extern volatile s32 D_800B0E2C;
-extern volatile s32 D_800B0E30;
-extern volatile s32 D_800B0E34;
-extern volatile s32 D_800B0E40;
-extern volatile s32 D_800B0E44;
-extern volatile s32 D_800B0E48;
-extern volatile s32 D_800B0E5C;
-extern volatile s32 D_800B0E60;
-extern volatile s32 D_800B0E68;
+ * Boot_InitMemoryLayout writes (0x14C..0x190). */
+extern u8 *volatile D_800B0E24;
+extern u8 *volatile D_800B0E28;
+extern u8 *volatile D_800B0E2C;
+extern u8 *volatile D_800B0E30;
+extern u8 *volatile D_800B0E34;
+extern u8 *volatile D_800B0E40;
+extern u8 *volatile D_800B0E44;
+extern u8 *volatile D_800B0E48;
+extern u8 *volatile D_800B0E5C;
+extern u8 *volatile D_800B0E60;
+extern u8 *volatile D_800B0E68;
 
 #endif /* PE1_SYS_H */
