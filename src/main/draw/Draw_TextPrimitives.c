@@ -642,7 +642,7 @@ void Draw_PrintCenteredText(u8 *text) {
 }
 
 void Draw_PrintTextById(unsigned int textId) {
-    u8 *text = Str_LookupTable4(textId);
+    u8 *text = Text_LookupTable4(textId);
 
     if (text) {
         PushCursor();
@@ -974,7 +974,7 @@ void Draw_AllocTexturedRect(int value, int width)
             divisor /= 10;
             width--;
         }
-        PrintSign(Str_LookupTable4(0x70));
+        PrintSign(Text_LookupTable4(0x70));
         SetCursor(D_8009D124 + 9u, D_8009D128);
     }
     for (i = 0; i < width; i++) {

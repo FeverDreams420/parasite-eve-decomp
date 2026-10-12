@@ -937,25 +937,25 @@ int Scene_SelectMapById(int **args) {
         state = Menu_GetEquipSlotStateOrIndex();
         if (state < 2) {
             Menu_ResetEquipSlotState();
-            D_8009D280 = Str_ParseBase32Id(g_MapNameOverrideA);
+            D_8009D280 = Text_ParseBase32Id(g_MapNameOverrideA);
         } else {
             Menu_ResetEquipSlotState();
-            D_8009D280 = Str_ParseBase32Id(g_MapNameOverrideB);
+            D_8009D280 = Text_ParseBase32Id(g_MapNameOverrideB);
         }
         return 1;
     }
 
     if ((u8)(raw_selection - 6) < 2 || selection == 8) {
         if ((s16)Draw_PackPrimColor(0, 100) < 60) {
-            D_8009D280 = Str_ParseBase32Id(g_MapIdTable);
+            D_8009D280 = Text_ParseBase32Id(g_MapIdTable);
         } else {
-            D_8009D280 = Str_ParseBase32Id(g_MapIdTable + ((s16)Draw_PackPrimColor(1, 4) << 3));
+            D_8009D280 = Text_ParseBase32Id(g_MapIdTable + ((s16)Draw_PackPrimColor(1, 4) << 3));
         }
     } else {
         state = (u8)(Menu_GetEquipSlotStateOrIndex() - 1);
         state /= 10;
         select_index = g_MapSelectIndexTable + state;
-        D_8009D280 = Str_ParseBase32Id(
+        D_8009D280 = Text_ParseBase32Id(
             g_MapFilenameTable[select_index->filename_index[selection]].name);
     }
 
@@ -988,10 +988,10 @@ int Script_SetFloorByEntityRoll(u8 **args) {
     if (selection == 0xFF) {
         if ((u8)Menu_GetEquipSlotStateOrIndex() < 2) {
             Menu_ResetEquipSlotState();
-            g_SceneDispatchToken = Str_ParseBase32Id(g_MapNameOverrideA);
+            g_SceneDispatchToken = Text_ParseBase32Id(g_MapNameOverrideA);
         } else {
             Menu_ResetEquipSlotState();
-            g_SceneDispatchToken = Str_ParseBase32Id(g_MapNameOverrideB);
+            g_SceneDispatchToken = Text_ParseBase32Id(g_MapNameOverrideB);
         }
         return 1;
     }
@@ -1000,7 +1000,7 @@ int Script_SetFloorByEntityRoll(u8 **args) {
     state /= 10;
     select_index = g_MapSelectIndexTable + state;
     g_SceneDispatchToken =
-        Str_ParseBase32Id(
+        Text_ParseBase32Id(
             g_MapFilenameTable[select_index->filename_index[selection]].name);
 
     selection = 1;

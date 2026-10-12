@@ -96,12 +96,12 @@ PE1_STATIC_ASSERT(sizeof(TextboxNumber) == 6, textbox_number_size);
 PE1_STATIC_ASSERT(sizeof(TextboxGlyphPacket) == 28, textbox_glyph_packet_size);
 
 void Menu_DrawTextboxEntries(void);
-void Tbl_ResetAll(void);
+void Draw_ResetTextboxes(void);
 void Menu_SetTextCursorRect(int x, int y, int width, int height);
 void Render_SetupColorTable(int index, int mode, short *colors);
 void Draw_SetCursor(int x, int y);
 
-void Tbl_ClearEntry(int arg0);
+void Draw_CloseTextboxPage(int arg0);
 void Script_SetCollisionFlag(int value);
 void Script_EnableMovement(void);
 void Script_DisableMovement(void);

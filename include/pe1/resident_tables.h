@@ -7,7 +7,7 @@
  * Resident data pack at 0x800A8028: a 32 KiB block that Scene_LoadSceneData
  * reads from PE.IMG once at start-up. It begins with a directory of byte
  * offsets, each relative to the start of the pack, followed by the tables.
- * The lookups in src/main/text/Tbl_DataTableLookups.c resolve a table with
+ * The lookups in src/main/text/Text_DataTableLookups.c resolve a table with
  * RESIDENT_TABLE(type, slot).
  */
 typedef struct ResidentTableDirectory {
@@ -38,8 +38,8 @@ extern ResidentDataPack g_ResidentDataPack;
 #define RESIDENT_TABLE(type, slot) \
     ((type *)&g_ResidentDataPack.bytes[g_ResidentDataPack.directory.slot])
 
-void *Str_LookupMapLocationText(int map);
-u8 *Tbl_GetMapLocationName(int map);
-u8 *Tbl_GetSaveIconData(void);
+void *Text_LookupMapLocationText(int map);
+u8 *Text_GetMapLocationName(int map);
+u8 *Text_GetSaveIconData(void);
 
 #endif /* PE1_RESIDENT_TABLES_H */

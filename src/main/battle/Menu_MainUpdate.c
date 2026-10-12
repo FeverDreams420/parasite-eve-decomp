@@ -888,7 +888,7 @@ void Menu_MainUpdate(s32 arg0) {
         if (*temp_s2 & 0x10000) {
             Battle_ReturnToIdle();
         }
-        Tbl_ResetAll();
+        Draw_ResetTextboxes();
         if (Pad_GetMenuPressedBitOrDisabled() != D_8009D1D4) {
             if (D_8009D200 != -1) {
                 Pm_SendCmd(D_8009D200, 0, 0, 2, 0, 0);

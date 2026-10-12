@@ -408,7 +408,7 @@ segments:
       - [0x4C0A8, c, save/Save_GameData]
       # Default-profile lookups into the resident data tables: menu descriptors,
       # glyphs, items, stats, Aya level/EXP/spell tables and the string tables.
-      - [0x4E28C, c, text/Tbl_DataTableLookups]
+      - [0x4E28C, c, text/Text_DataTableLookups]
       # Event queue, input dispatch and frame presentation share -G8/common.
       - [0x4E688, c, menu/queue]
       # Base-offset setter and Y accessor; cursor/colour state, rectangle

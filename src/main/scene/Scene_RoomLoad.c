@@ -424,11 +424,11 @@ int Scene_LoadRoom(unsigned int roomId)
     flags = 0;
     state = &g_GameState;
     base = g_GameState.pe_image_base_lba;
-    Str_EncodeBase32(name, roomId);
+    Text_EncodeBase32(name, roomId);
 
 retry_scratch:
     {
-        map = Str_ParseMapNumber(name) - 1;
+        map = Text_ParseMapNumber(name) - 1;
         while ((ready = CdRom_ReadSectorsFromLba(base + D_80093378[map].start,
                                         state->scene_load_scratch,
                                         D_80093378[map].scratchSectors)) == -1) {

@@ -23,8 +23,8 @@ typedef union TextTableDirectory {
     u8 bytes[0];
 } TextTableDirectory;
 
-void *Str_LookupTable4(unsigned int index);
-void *Str_LookupTable8(unsigned int index);
+void *Text_LookupTable4(unsigned int index);
+void *Text_LookupTable8(unsigned int index);
 extern int g_SaveMetadataWindowIndex;
 void Util_CopyFFTerminatedBytes(u8 *dst, u8 *src);
 void Util_AppendFFTerminatedBytes(u8 *dst, u8 *src);
@@ -45,7 +45,7 @@ void Draw_PrintTextById(unsigned int textId);
  *   Draw_AllocTexturedQuad(code) -> one textured quad sampling the glyph from
  *   the VRAM font cache. Printers:
  *     Draw_PrintRawText(u8 *s)              -- raw string
- *     Draw_PrintTextById(index)             -- string from a table (Str_LookupTable4)
+ *     Draw_PrintTextById(index)             -- string from a table (Text_LookupTable4)
  *     Draw_PrintTextWrapped(u8 *s, int w)   -- word-wrap to width w
  *     Draw_PrintCenteredText / *InWidth     -- centered
  *     Draw_PrintNumberWidth2..6 / Signed*   -- numeric fields
@@ -71,7 +71,7 @@ void Draw_PrintTextById(unsigned int textId);
  *   Draw_LookupGlyphMetrics / Draw_EmitGlyph back the metrics/advance.
  *
  * MESSAGE SOURCE: messages are looked up by index from PE asset tables (loaded
- * from PE.IMG): Str_LookupTable0/4/8/C/10 (e.g. Str_LookupTable4 = func_8005DC4C,
+ * from PE.IMG): Text_LookupTable0/4/8/C/10 (e.g. Text_LookupTable4 = func_8005DC4C,
  * used by Draw_PrintTextById and many Menu_Draw* helpers). The string returned
  * is the 0xFF-terminated glyph-code array above.
  *
@@ -98,7 +98,7 @@ void Draw_PrintTextById(unsigned int textId);
  *   current message = decode *(u8**)(0x800BCEA8 + 0x04) (entry 0).
  */
 
-/* Nth non-empty entry of the location name table (Tbl_DataTableLookups.c). */
-u8 *Tbl_FindNthNonEmpty(int index);
+/* Nth non-empty entry of the location name table (Text_DataTableLookups.c). */
+u8 *Text_FindNthNonEmpty(int index);
 
 #endif /* PE1_TEXT_H */

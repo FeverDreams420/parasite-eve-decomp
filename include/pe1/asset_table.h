@@ -8,9 +8,9 @@ void *Asset_FindTable08ByU32Key(void *base, int key);
 
 /* Room names are six base-32 digits drawn from this 32-character alphabet. */
 extern u8 g_Base32CharTable[32];
-int Str_EncodeBase32(char *out, unsigned int value);
-int Str_DecodeBase32(unsigned int value);
-int Str_ParseBase32Id(signed char *name);
-int Str_ParseMapNumber(signed char *name);
+int Text_EncodeBase32(char *out, unsigned int value);
+int Text_DecodeBase32(unsigned int value);
+int Text_ParseBase32Id(signed char *name);
+int Text_ParseMapNumber(signed char *name);
 
 #endif

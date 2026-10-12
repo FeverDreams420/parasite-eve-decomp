@@ -18,8 +18,8 @@
  * LOAD PATH:
  *   Gpu_InitPipeline()           -> Scene_LoadRoom(D_8009D280)
  *   Scene_LoadRoom(s32 roomId):
- *     Str_EncodeBase32(buf, roomId)  -> 6-char room name (table D_800930B4)
- *     Str_ParseMapNumber(buf)        -> 3-digit map number from name[2..4]
+ *     Text_EncodeBase32(buf, roomId)  -> 6-char room name (table D_800930B4)
+ *     Text_ParseMapNumber(buf)        -> 3-digit map number from name[2..4]
  *     CdRom_ReadSectorsFromLba(...)  -> stream room data from PE.IMG
  *                                       (base g_PeImageBaseLba)
  *   Other room entries: Scene_LoadMap (0x80035038), Scene_LoadSceneData
@@ -40,8 +40,8 @@
  *   s32  Scene_LoadRoom(s32 roomId);         // 0x8006B4F8
  *   s32  Scene_LoadMap(...);                  // 0x80035038
  *   s32  Scene_LoadSceneData(...);            // 0x8006A9E4
- *   int  Str_EncodeBase32(char *out, u32 v);  // room id -> 6-char name
- *   int  Str_ParseMapNumber(char *name);      // 0x8006E454; name -> map number
+ *   int  Text_EncodeBase32(char *out, u32 v);  // room id -> 6-char name
+ *   int  Text_ParseMapNumber(char *name);      // 0x8006E454; name -> map number
  *   void Gpu_InitPipeline(void);              // calls Scene_LoadRoom(D_8009D280)
  *   int  Render_BeginSceneLoad(void);          // updates render transition flags
  *   g_PeImageBaseLba   base LBA of PE.IMG (room data source)

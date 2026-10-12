@@ -45,7 +45,7 @@ int Script_EncodeBarcode(int **arg0) {
     int value;
     unsigned int *counter;
 
-    Str_EncodeBase32(&tmp[0], *arg0[0]);
+    Text_EncodeBase32(&tmp[0], *arg0[0]);
     value = *arg0[0];
     g_GameStateFlags |= 0x2000;
     g_SceneDispatchToken = value;

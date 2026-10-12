@@ -78,11 +78,11 @@ void Menu_CreateParasiteSpellInfoPanel(int arg0) {
 
 void Menu_DrawParasiteSpellInfoPanel(void) {
     Draw_OffsetCursor(2, 4);
-    Draw_PrintCenteredText(Str_LookupTable4(0x26));
+    Draw_PrintCenteredText(Text_LookupTable4(0x26));
     Draw_OffsetCursor(0, 0x10);
-    Draw_PrintCenteredText(Str_LookupTable8(g_MenuSpellInfoId + 0xEB));
+    Draw_PrintCenteredText(Text_LookupTable8(g_MenuSpellInfoId + 0xEB));
     Draw_OffsetCursor(2, 0x14);
-    Draw_PrintRawText(Str_LookupTableC(g_MenuSpellInfoId + 0xEB));
+    Draw_PrintRawText(Text_LookupTableC(g_MenuSpellInfoId + 0xEB));
 }
 
 void Menu_CreateContextHelpPanel(void) {
@@ -138,7 +138,7 @@ void Menu_DrawContextHelpText(MenuWidgetNode *panel)
                 i++;
                 mask >>= 1;
             } while (i < 9);
-            text = Str_LookupTable10(i + 0x28);
+            text = Text_LookupTable10(i + 0x28);
             break;
         case 5:
             if (index < 0)
@@ -146,7 +146,7 @@ void Menu_DrawContextHelpText(MenuWidgetNode *panel)
             data = Inv_LookupActiveListData(g_InvItemUsableFlag ? D_800C0E20.tracked[0]
                                                        : D_800C0E20.tracked[2]);
             if (data != 0)
-                text = Str_LookupTableC(data->itemId - 1);
+                text = Text_LookupTableC(data->itemId - 1);
             break;
         case 1:
             if (g_InvSelectedItemIndex >= 0) {
@@ -154,13 +154,13 @@ void Menu_DrawContextHelpText(MenuWidgetNode *panel)
                 if (Inv_GetActiveListItemType(g_InvSelectedItemIndex) < 0x13
                     || Inv_GetActiveListItemType(g_InvSelectedItemIndex) >= 0x16)
                     hint = 1;
-                text = Str_LookupTable4(hint | 0xE);
+                text = Text_LookupTable4(hint | 0xE);
                 Draw_SetColor(0x408040);
                 break;
             }
             data = Inv_LookupActiveListData(index);
             if (data != 0)
-                text = Str_LookupTableC(data->itemId - 1);
+                text = Text_LookupTableC(data->itemId - 1);
             break;
         case 51:
             if (g_InvSelectedItemIndex >= 0) {
@@ -168,13 +168,13 @@ void Menu_DrawContextHelpText(MenuWidgetNode *panel)
                 if (Inv_GetActiveListItemType(g_InvSelectedItemIndex) < 0x13
                     || Inv_GetActiveListItemType(g_InvSelectedItemIndex) >= 0x16)
                     hint = 1;
-                text = Str_LookupTable4(hint | 0xE);
+                text = Text_LookupTable4(hint | 0xE);
                 Draw_SetColor(0x408040);
                 break;
             }
             data = Inv_LookupActiveListData(Inv_GetWayneListItemByIndex(index));
             if (data != 0)
-                text = Str_LookupTableC(data->itemId - 1);
+                text = Text_LookupTableC(data->itemId - 1);
             break;
         case 52:
             if (g_InvSelectedItemIndex >= 0) {
@@ -182,13 +182,13 @@ void Menu_DrawContextHelpText(MenuWidgetNode *panel)
                 if (Inv_GetActiveListItemType(g_InvSelectedItemIndex) < 0x13
                     || Inv_GetActiveListItemType(g_InvSelectedItemIndex) >= 0x16)
                     hint = 1;
-                text = Str_LookupTable4(hint | 0xE);
+                text = Text_LookupTable4(hint | 0xE);
                 Draw_SetColor(0x408040);
                 break;
             }
             data = Inv_LookupItemData(index);
             if (data != 0)
-                text = Str_LookupTableC(data->itemId - 1);
+                text = Text_LookupTableC(data->itemId - 1);
             break;
         case 7:
             if (g_MenuLayoutLocked)
@@ -197,67 +197,67 @@ void Menu_DrawContextHelpText(MenuWidgetNode *panel)
                 index = Inv_GetPackedListItem(index);
             data = Inv_LookupActiveListData(index);
             if (data != 0)
-                text = Str_LookupTableC(data->itemId - 1);
+                text = Text_LookupTableC(data->itemId - 1);
             break;
         case 8:
             if (index < Inv_GetPackedListCount())
-                text = Str_LookupTableC(Inv_GetPackedListItem(index) + 0xEB);
+                text = Text_LookupTableC(Inv_GetPackedListItem(index) + 0xEB);
             break;
         case 12:
-            text = Str_LookupTable10(index + 0x4F);
+            text = Text_LookupTable10(index + 0x4F);
             break;
         case 13:
         case 16:
             if (g_MenuSelectionLocked) {
-                text = Str_LookupTableC(Menu_GetBattleCountEntry(index) - 1);
+                text = Text_LookupTableC(Menu_GetBattleCountEntry(index) - 1);
                 break;
             }
             data = Inv_LookupActiveListData(Inv_GetPackedListItem(index));
             if (data != 0)
-                text = Str_LookupTableC(data->itemId - 1);
+                text = Text_LookupTableC(data->itemId - 1);
             break;
         case 14:
             Inv_SelectActiveList(0);
             data = Inv_LookupActiveListData(index);
             if (data != 0)
-                text = Str_LookupTableC(data->itemId - 1);
+                text = Text_LookupTableC(data->itemId - 1);
             break;
         case 6:
             value = g_MenuActionItemData->tailData[index] & 0x1F;
             if (value != 0)
-                text = Str_LookupTable10(value + (1 - g_InvItemUsableFlag) * 20 - 1);
+                text = Text_LookupTable10(value + (1 - g_InvItemUsableFlag) * 20 - 1);
             break;
         case 11:
             data = Inv_LookupActiveListData(Inv_RestoreSelection(1));
             value = data->tailData[index] & 0x1F;
             if (value != 0)
-                text = Str_LookupTable10(value + (1 - g_InvItemUsableFlag) * 20 - 1);
+                text = Text_LookupTable10(value + (1 - g_InvItemUsableFlag) * 20 - 1);
             break;
         case 17:
-            text = Str_LookupTable4(0x27);
+            text = Text_LookupTable4(0x27);
             break;
         case 27:
         case 28:
-            text = Str_LookupTable10(0x52);
+            text = Text_LookupTable10(0x52);
             break;
         case 29:
             {
                 int base = g_InvItemUsableFlag * 3 - 0x56;
 
-                text = Str_LookupTable10(index - base);
+                text = Text_LookupTable10(index - base);
             }
             break;
         case 32:
             if (index < 4)
-                text = Str_LookupTable10(index + 0x31);
+                text = Text_LookupTable10(index + 0x31);
             else
                 text = 0;
             break;
         case 33:
-            text = Str_LookupTable10(index + 0x3A);
+            text = Text_LookupTable10(index + 0x3A);
             break;
         case 35:
-            text = Str_LookupTable10(index + 0x3D);
+            text = Text_LookupTable10(index + 0x3D);
             break;
         case 36:
             if (MemCard_PollTransferDelay()) {
@@ -270,7 +270,7 @@ void Menu_DrawContextHelpText(MenuWidgetNode *panel)
             hint = 0;
             if (MemCard_IsPortPresent(0) || MemCard_IsPortPresent(1))
                 hint = 1;
-            text = Str_LookupTable4(hint | 0x4E);
+            text = Text_LookupTable4(hint | 0x4E);
             break;
         case 37:
         case 38:
@@ -283,10 +283,10 @@ void Menu_DrawContextHelpText(MenuWidgetNode *panel)
                     Draw_PrintTextById(0x59);
                     break;
                 }
-                text = Str_LookupTable4(0x5C);
+                text = Text_LookupTable4(0x5C);
                 break;
             }
-            text = Str_LookupTable4(Save_GetTitleStyleFlag() ? 0x57 : 0x5B);
+            text = Text_LookupTable4(Save_GetTitleStyleFlag() ? 0x57 : 0x5B);
             break;
         case 39:
             Draw_SetTextDimmed(0);
@@ -296,13 +296,13 @@ void Menu_DrawContextHelpText(MenuWidgetNode *panel)
             Draw_PrintTextById(0x51);
             break;
         case 46:
-            text = Str_LookupTable10(index + 0x3F);
+            text = Text_LookupTable10(index + 0x3F);
             break;
         case 48:
-            text = Str_LookupTable10(index + 0x38);
+            text = Text_LookupTable10(index + 0x38);
             break;
         case 49:
-            text = Str_LookupTable10(index + 0x42);
+            text = Text_LookupTable10(index + 0x42);
             break;
         case 50:
             /* Retail keeps the table base in a register for the row-4
@@ -319,27 +319,27 @@ void Menu_DrawContextHelpText(MenuWidgetNode *panel)
                 } else {
                     hint = &D_8009234C[index];
                 }
-                text = Str_LookupTable10(*hint);
+                text = Text_LookupTable10(*hint);
             }
             break;
         case 56:
             Draw_SetTextDimmed(0);
-            text = Str_LookupTable10(0x44);
+            text = Text_LookupTable10(0x44);
             break;
         case 58:
-            text = Str_LookupTable10(index + 0x35);
+            text = Text_LookupTable10(index + 0x35);
             break;
         case 59:
             if (g_MenuEquipMode == 2)
-                text = Str_LookupTable10(index + 0x4D);
+                text = Text_LookupTable10(index + 0x4D);
             else
-                text = Str_LookupTable10(index + 0x4B);
+                text = Text_LookupTable10(index + 0x4B);
             break;
         case 60:
             {
                 int base = g_InvItemUsableFlag * 3 - 0x48;
 
-                text = Str_LookupTable10(index - base);
+                text = Text_LookupTable10(index - base);
             }
             break;
         }
@@ -368,11 +368,11 @@ void Menu_CreateNotificationDialog(int message, int suffix) {
     child->draw = Menu_DrawNotificationDialogContent;
     MenuWidget_SetCurrentNode(child);
     Menu_SetDeferredCallback(0);
-    messageText = Str_LookupTable4(message);
+    messageText = Text_LookupTable4(message);
     text = D_800A1A20[alternate];
     Util_CopyFFTerminatedBytes(text, messageText);
     if (suffix) {
-        Util_AppendFFTerminatedBytes(text, Str_LookupTable4(suffix));
+        Util_AppendFFTerminatedBytes(text, Text_LookupTable4(suffix));
     }
     width = Draw_MeasureTextWidth(text) < 100 ? 100 : Draw_MeasureTextWidth(text);
     parent->grid_width = width + 20;
@@ -414,11 +414,11 @@ void Menu_CreateTwoLineDialog(int line0_id, int line1_id) {
     MenuWidget_SetCurrentNode(child);
     Menu_SetDeferredCallback(0);
 
-    text = Str_LookupTable4(line0_id);
+    text = Text_LookupTable4(line0_id);
     line0 = D_800A1A20[0];
     Util_CopyFFTerminatedBytes(line0, text);
 
-    text = Str_LookupTable4(line1_id);
+    text = Text_LookupTable4(line1_id);
     line1 = line0 + 0x40;
     Util_CopyFFTerminatedBytes(line1, text);
 
@@ -684,7 +684,7 @@ s32 Menu_StepSaveSelect(MenuWidgetNode *arg0, s32 arg1) {
                             temp_s2_2->cursor_x = 1;
                             Inv_SelectActiveList(temp_a0);
                             g_MenuItemLabelBuffer[0] = 0xFF;
-                            Util_AppendFFTerminatedBytes(g_MenuItemLabelBuffer, Str_LookupTable4(0x44));
+                            Util_AppendFFTerminatedBytes(g_MenuItemLabelBuffer, Text_LookupTable4(0x44));
                             g_MenuItemPrimListHandles[0] = 0;
                             {
                                 MenuConfirmCallback callback = Menu_TriggerSaveWrite;
@@ -809,7 +809,7 @@ void Menu_StepItemGrid2(void) {
         }
 
         node = MenuWidget_FindByModeAndSelectedBase(2, 0x24);
-        label = Str_LookupTable4(MemCard_GetActivePort() + 0x47);
+        label = Text_LookupTable4(MemCard_GetActivePort() + 0x47);
         {
             MenuWidgetNode *result = MenuWidget_CreateSimpleNode(0x2A, node, 0, 1);
             mode = 0x2A;
@@ -840,7 +840,7 @@ void Menu_StepItemGrid2(void) {
         }
         {
             u8 *text_buf;
-            Util_AppendFFTerminatedBytes(D_800A19C0, Str_LookupTable4(0x49));
+            Util_AppendFFTerminatedBytes(D_800A19C0, Text_LookupTable4(0x49));
             D_8009CFA4 = suffix_id;
             /* Recompute the buffer address at each measurement. */
             asm volatile("" : "=r"(text_buf) : "0"(D_800A19C0));
@@ -1025,7 +1025,7 @@ int Menu_StepNameEntry(MenuWidgetNode *parent, unsigned int flags)
         index = 0x75;
         if (page)
             index = page->cursor_y + 0x73;
-        text = Str_LookupTable4(index);
+        text = Text_LookupTable4(index);
         g_MenuItemIconGlyphTable = text;
         Save_AppendMetadataChar(text[MenuWidget_GridCellIndex(node)]);
         Menu_PlayConfirmSound();

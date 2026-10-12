@@ -189,13 +189,13 @@ u8 *Save_FormatTitle(int chapter, int playtime_seconds) {
     g_SaveSjisFormatArguments.seconds = seconds;
 
     if (g_SaveTitleStyleFlag != 0) {
-        value = Tbl_GetMapLocationName(-1);
+        value = Text_GetMapLocationName(-1);
         g_SaveSjisFormatArguments.primary.text = value;
         Save_SprintfSjis(g_SaveTitleBuffer, g_SaveTitleFormatShortPtr);
     } else {
         g_SaveSjisFormatArguments.primary.number =
             Save_ClassifyPlaytime(g_PlayTimeFrameCounter);
-        value = Tbl_GetMapLocationName(Save_GetCurrentMapNumber());
+        value = Text_GetMapLocationName(Save_GetCurrentMapNumber());
         g_SaveSjisFormatArguments.secondary.text = value;
         Save_SprintfSjis(g_SaveTitleBuffer, g_SaveTitleFormatLongPtr);
     }
@@ -508,7 +508,7 @@ int Save_BuildCardFile(char *path) {
     MemCardFileHeader *file;
     u32 crc;
 
-resolved = Tbl_GetSaveIconData();
+resolved = Text_GetSaveIconData();
     file = &g_MemCardIconHeader;
 
     D_800A5D50 = 0x2000;

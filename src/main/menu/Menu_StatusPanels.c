@@ -496,7 +496,7 @@ void Menu_DrawSaveSlotEntry(s32 arg0) {
             Draw_OffsetCursor(0x1E, 0);
             Draw_PrintNumberWidth2(slot->progressStage);
             Draw_OffsetCursor(0x14, 0);
-            Draw_PrintRawText(Str_LookupMapLocationText(slot->mapNumber));
+            Draw_PrintRawText(Text_LookupMapLocationText(slot->mapNumber));
             return;
         case MEMCARD_SLOT_EMPTY:
             Draw_OffsetCursor(0, 0x12);

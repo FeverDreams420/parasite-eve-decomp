@@ -162,7 +162,7 @@ retryFog:
             case 2:
                 break;
             case 1:
-                Tbl_ResetAll();
+                Draw_ResetTextboxes();
                 Render_SetupColorTable(mode == 1 ? 3 : 4, 0, colors);
                 wait = 180;
                 state = 5;
@@ -183,13 +183,13 @@ retryFog:
             status = OpenPeImage();
             switch (status) {
             case -1:
-                Tbl_ResetAll();
+                Draw_ResetTextboxes();
                 wait = 180;
                 Render_SetupColorTable(5, 0, colors);
                 state = 7;
                 break;
             case -2:
-                Tbl_ResetAll();
+                Draw_ResetTextboxes();
                 wait = 180;
                 Render_SetupColorTable(5, 0, colors);
                 state = 8;
@@ -209,7 +209,7 @@ retryFog:
                 wait--;
                 break;
             }
-            Tbl_ResetAll();
+            Draw_ResetTextboxes();
             Render_SetupColorTable(mode == 1 ? 1 : 2, 0, colors);
             state = 2;
             break;
@@ -218,7 +218,7 @@ retryFog:
                 wait--;
                 break;
             }
-            Tbl_ResetAll();
+            Draw_ResetTextboxes();
             Render_SetupColorTable(mode == 1 ? 1 : 2, 0, colors);
             state = 2;
             break;
@@ -227,7 +227,7 @@ retryFog:
                 wait--;
                 break;
             }
-            Tbl_ResetAll();
+            Draw_ResetTextboxes();
             Render_SetupColorTable(mode == 1 ? 1 : 2, 0, colors);
             state = 2;
             break;
@@ -236,7 +236,7 @@ retryFog:
                 wait--;
                 break;
             }
-            Tbl_ResetAll();
+            Draw_ResetTextboxes();
             Render_SetupColorTable(mode == 1 ? 1 : 2, 0, colors);
             state = 2;
             break;

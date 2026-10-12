@@ -72,7 +72,7 @@ void Menu_DrawEquipInfoOptionRow(int index);
 extern unsigned char g_MenuEquipSlotGlyphs[][8];
 /* Sort toggle row glyphs: the label, then the off and on markers. */
 extern short g_MenuSortToggleGlyphs[];
-/* Item icon glyph table for the current list (Str_LookupTable4 entry). */
+/* Item icon glyph table for the current list (Text_LookupTable4 entry). */
 extern unsigned char *g_MenuItemIconGlyphTable;
 extern u8 D_800922B8[];
 extern u8 D_800922BC[];

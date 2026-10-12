@@ -124,7 +124,7 @@ void Menu_DrawItemIconList(MenuWidgetNode *node) {
         index = 0x75;
     }
 
-    g_MenuItemIconGlyphTable = Str_LookupTable4(index);
+    g_MenuItemIconGlyphTable = Text_LookupTable4(index);
     MenuWidget_DrawList(node, Menu_DrawItemIcon);
 }
 
@@ -436,7 +436,7 @@ void Sfx_ContextPick(int arg0)
         Draw_SetTextDimmed(g_MenuItemActionDisabled);
         break;
     }
-    MenuWidget_DrawCenteredText(Str_LookupTable4(state));
+    MenuWidget_DrawCenteredText(Text_LookupTable4(state));
 }
 
 /* Per-row item drawers the widget list renderer calls with the row index:
@@ -519,7 +519,7 @@ void Menu_DrawActionCodeItem(int arg0) {
 
 void Menu_DrawModNameItem(int arg0) {
     if (arg0 < Inv_GetPackedListCount()) {
-        Draw_PrintRawText(Str_LookupTable8(Inv_GetPackedListItem(arg0) + 0xEB));
+        Draw_PrintRawText(Text_LookupTable8(Inv_GetPackedListItem(arg0) + 0xEB));
     }
 }
 

@@ -372,10 +372,10 @@ void Save_LoadMetadataWindowText(void) {
 
     dst = g_SaveMetadataCursor;
     if (g_SaveMetadataSourceRecord != 0) {
-        lookup = Str_LookupTable8(g_SaveMetadataSourceRecord->itemId - 1);
+        lookup = Text_LookupTable8(g_SaveMetadataSourceRecord->itemId - 1);
         out = dst;
     } else {
-        lookup = Str_LookupTable4(0x1E);
+        lookup = Text_LookupTable4(0x1E);
         out = dst;
     }
 
@@ -1014,9 +1014,9 @@ static inline void InitName(u8 *buffer, int length, ItemDataRecord *item) {
         *p = 255;
     dest = g_SaveMetadataCursor;
     if (g_SaveMetadataSourceRecord)
-        source = Str_LookupTable8(g_SaveMetadataSourceRecord->itemId - 1);
+        source = Text_LookupTable8(g_SaveMetadataSourceRecord->itemId - 1);
     else
-        source = Str_LookupTable4(30);
+        source = Text_LookupTable4(30);
     CopyName(dest, source);
 }
 
@@ -1025,7 +1025,7 @@ void Save_InitMetadataState(void) {
     /* Retail initializes the same window twice, including both lookups. */
     InitName(g_SaveRuntimeState.windows.metadata[1].text, 8, 0);
     InitName(g_SaveRuntimeState.windows.metadata[1].text, 8, 0);
-    Menu_CopyPromptCodes(Str_LookupTable4(30));
+    Menu_CopyPromptCodes(Text_LookupTable4(30));
     Inv_InitNewGameInventory();
     D_800C0E20.specialStorage[0] = 515;
     D_800C0E00.blend_color = 0x404040;
@@ -1044,8 +1044,8 @@ void Save_InitMetadataState(void) {
 int Save_GetCurrentMapNumber(void) {
     char roomName[8];
 
-    Str_EncodeBase32(roomName, g_SceneDispatchToken);
-    return Str_ParseMapNumber(roomName);
+    Text_EncodeBase32(roomName, g_SceneDispatchToken);
+    return Text_ParseMapNumber(roomName);
 }
 
 void Menu_InitScrollDirection(void) {

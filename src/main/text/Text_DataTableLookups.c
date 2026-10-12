@@ -28,7 +28,7 @@ DrawGlyphDescriptor *Draw_LookupGlyphDescriptor(int index) {
     return &table[index];
 }
 
-void *Str_LookupTable0(unsigned int index) {
+void *Text_LookupTable0(unsigned int index) {
     TextOffsetTable *table;
     s16 offset;
 
@@ -78,7 +78,7 @@ int Draw_LookupGlyphMetrics(int glyph) {
     return g_ResidentDataPack.bytes[glyph + g_ResidentDataPack.directory.glyphMetrics];
 }
 
-void *Str_LookupTable4(unsigned int index) {
+void *Text_LookupTable4(unsigned int index) {
     ResidentDataPack *pack = &g_ResidentDataPack;
     TextTableDirectory *directory;
     TextOffsetTable *table;
@@ -94,7 +94,7 @@ void *Str_LookupTable4(unsigned int index) {
     return &table->bytes[offset];
 }
 
-void *Str_LookupTable8(unsigned int index) {
+void *Text_LookupTable8(unsigned int index) {
     ResidentDataPack *pack = &g_ResidentDataPack;
     TextTableDirectory *directory;
     TextOffsetTable *table;
@@ -110,7 +110,7 @@ void *Str_LookupTable8(unsigned int index) {
     return &table->bytes[offset];
 }
 
-void *Str_LookupTableC(unsigned int index) {
+void *Text_LookupTableC(unsigned int index) {
     ResidentDataPack *pack = &g_ResidentDataPack;
     TextTableDirectory *directory;
     TextOffsetTable *table;
@@ -126,7 +126,7 @@ void *Str_LookupTableC(unsigned int index) {
     return &table->bytes[offset];
 }
 
-void *Str_LookupTable10(unsigned int index) {
+void *Text_LookupTable10(unsigned int index) {
     ResidentDataPack *pack = &g_ResidentDataPack;
     TextTableDirectory *directory;
     TextOffsetTable *table;
@@ -143,7 +143,7 @@ void *Str_LookupTable10(unsigned int index) {
 }
 
 /* Text-table-3 entry naming the location of map `map`. */
-void *Str_LookupMapLocationText(int map) {
+void *Text_LookupMapLocationText(int map) {
     TextTableDirectory *directory;
     TextOffsetTable *table;
     int index;
@@ -166,7 +166,7 @@ void *Str_LookupMapLocationText(int map) {
 }
 
 /* Location name of map `map` (-1 selects name 15); names are NUL-separated. */
-u8 *Tbl_GetMapLocationName(int map) {
+u8 *Text_GetMapLocationName(int map) {
     u8 *name;
 
     name = RESIDENT_TABLE(u8, locationNames);
@@ -190,6 +190,6 @@ u8 *Tbl_GetMapLocationName(int map) {
 }
 
 /* Memory-card icon block copied into each save file header. */
-u8 *Tbl_GetSaveIconData(void) {
+u8 *Text_GetSaveIconData(void) {
     return RESIDENT_TABLE(u8, saveIcon);
 }

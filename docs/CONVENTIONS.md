@@ -120,7 +120,7 @@ edge, as `akao/Spu_TransferAndLifecycle` did before LIBPAD WAITRC2's
 | `akao` | `Akao_`, `Seq_`, `Spu_` | Square's AKAO sound driver: sequencer, voices, SPU uploads | keep; LIBSPU units to `psyq/libspu` |
 | `audio` | `Sfx_` | misnamed: both files are menu item-list code | dissolved: both `Sfx_` units are in `menu` |
 | `time` | `GameTime_` | play-time counters and timers | keep |
-| `text` | `Tbl_`, `Str_` | text and textbox lookup tables | keep (renamed from `table`); prefix to become `Text_` |
+| `text` | `Text_` | text and textbox lookup tables, map-name and base-32 id strings | keep (renamed from `table`, prefixes from `Tbl_` and `Str_`); the textbox page helpers are `Draw_*` |
 | `util` | `Util_` | vague | dissolved: `util.c` is `item/Inv_ActiveList.c` |
 | `main` | mixed | splat's default bucket, not a subsystem | dissolved: the battle units are in `battle`, `MapSelectionFlow` is in `script` |
 

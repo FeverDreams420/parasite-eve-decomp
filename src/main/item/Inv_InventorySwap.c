@@ -59,7 +59,7 @@ void Inv_ShowItemDescriptionPanel(s32 index) {
             entry = 0;
         }
         if (entry != 0) {
-            Sfx_DrawSlotRow(entry, Str_LookupTable8(entry->itemId - 1));
+            Sfx_DrawSlotRow(entry, Text_LookupTable8(entry->itemId - 1));
         }
     } else {
         entry = (ItemDataRecord *)(g_KeyItemDataTable + (value << 5));
@@ -69,7 +69,7 @@ void Inv_ShowItemDescriptionPanel(s32 index) {
                 text = g_CursorRenderDataBlock + 0x10;
             }
         } else {
-            text = Str_LookupTable8(entry->itemId - 1);
+            text = Text_LookupTable8(entry->itemId - 1);
         }
         Sfx_DrawSlotRow(entry, text);
     }
@@ -357,7 +357,7 @@ void Menu_DrawArmorItemDetail(int slot) {
                 display = g_CursorRenderDataBlock + 0x10;
             }
         } else {
-            display = Str_LookupTable8(entry->itemId - 1);
+            display = Text_LookupTable8(entry->itemId - 1);
         }
 
         Sfx_DrawSlotRow(entry, display);

@@ -248,7 +248,7 @@ void Menu_DrawItemActionSubmenu(void) {
         Draw_OffsetCursor(0x24, 0);
     } else {
         Draw_PrintTextById(0x66);
-        Draw_OffsetCursor(Draw_MeasureTextWidth(Str_LookupTable4(0x66)), 0);
+        Draw_OffsetCursor(Draw_MeasureTextWidth(Text_LookupTable4(0x66)), 0);
     }
 
     Draw_PrintTextById((g_MenuSelectedItemIndex & 1) | 0x64);
@@ -1220,7 +1220,7 @@ int Menu_ItemListInputHandler(MenuWidgetNode *node, unsigned int flags)
                 MenuWidget_SetCurrentNode(options);
                 Inv_SelectActiveList(g_MenuActiveItemList);
                 g_MenuItemLabelBuffer[0] = 0xFF;
-                Util_AppendFFTerminatedBytes(g_MenuItemLabelBuffer, Str_LookupTable4(0x61));
+                Util_AppendFFTerminatedBytes(g_MenuItemLabelBuffer, Text_LookupTable4(0x61));
                 D_8009CFA0 = 0;
                 action = Menu_ItemUseAction;
                 if (Draw_MeasureTextWidth(g_MenuItemLabelBuffer) < 0x78)

@@ -192,7 +192,7 @@ void Menu_SetTextCursorRect(int x, int y, int w, int h) {
     D_8009CE98.height = h;
 }
 
-void Tbl_ClearEntry(int arg0) {
+void Draw_CloseTextboxPage(int arg0) {
     int i;
     int idx;
 
@@ -210,7 +210,7 @@ void Tbl_ClearEntry(int arg0) {
     }
 }
 
-void Tbl_ResetAll(void) {
+void Draw_ResetTextboxes(void) {
     int i;
     int idx;
     u32 value;
@@ -224,7 +224,7 @@ void Tbl_ResetAll(void) {
     }
 }
 
-s8 Tbl_LookupEntry(int arg0) {
+s8 Draw_GetTextboxPageState(int arg0) {
     int i;
     int idx;
     int value;

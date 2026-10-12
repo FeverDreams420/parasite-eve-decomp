@@ -204,7 +204,7 @@ void Battle_Init(void)
     config5 = *action;
     D_8009CE3B = config5->animMode[3];
 
-    Tbl_ResetAll();
+    Draw_ResetTextboxes();
     D_8009D1CE = 0;
     D_8009D1AC &= ~0x300;
     Battle_InitFadeVars();

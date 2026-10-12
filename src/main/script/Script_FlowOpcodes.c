@@ -527,7 +527,7 @@ int Script_PlayFieldSfx(FieldSfxScriptArgs *arg0) {
     return 1;
 }
 
-int Tbl_LookupEntry(short arg0);
+int Draw_GetTextboxPageState(short arg0);
 
 int Script_GetNodeTarget14(int **arg0) {
     *arg0[0] = g_TaskNodePool->target14;
@@ -535,7 +535,7 @@ int Script_GetNodeTarget14(int **arg0) {
 }
 
 int Script_YieldWhileTableEntrySet(short **arg0) {
-    if ((Tbl_LookupEntry(*arg0[0]) << 24) != 0) {
+    if ((Draw_GetTextboxPageState(*arg0[0]) << 24) != 0) {
         g_SceneDataTable0 -= 0xC;
         g_TaskNodePool->active = 1;
         return 0;
@@ -544,7 +544,7 @@ int Script_YieldWhileTableEntrySet(short **arg0) {
 }
 
 int Script_ClearTableEntry(short **arg0) {
-    Tbl_ClearEntry(*arg0[0]);
+    Draw_CloseTextboxPage(*arg0[0]);
     return 1;
 }
 

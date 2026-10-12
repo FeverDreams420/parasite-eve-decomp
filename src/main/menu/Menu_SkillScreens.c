@@ -221,7 +221,7 @@ reserved:
 
         dialog_text = g_MenuItemLabelBuffer;
         dialog_text[0] = 0xFF;
-        Util_AppendFFTerminatedBytes(dialog_text, (void *)Str_LookupTable4(0));
+        Util_AppendFFTerminatedBytes(dialog_text, (void *)Text_LookupTable4(0));
         D_8009CFA0 = 0;
         callback = Menu_OnEquipConfirm;
         first_width = Draw_MeasureTextWidth(dialog_text);
@@ -241,7 +241,7 @@ reserved:
             option_node->y = height - 0x14;
         }
 
-        Util_CopyFFTerminatedBytes(g_MenuItemLabelBuffer, (void *)Str_LookupTable4(0x71));
+        Util_CopyFFTerminatedBytes(g_MenuItemLabelBuffer, (void *)Text_LookupTable4(0x71));
         Util_AppendFFTerminatedBytes(g_MenuItemLabelBuffer, Inv_LookupActiveListDisplayData(item));
         if (Draw_MeasureTextWidth(g_MenuItemLabelBuffer) >= 0x78) {
             width = Draw_MeasureTextWidth(g_MenuItemLabelBuffer);
@@ -359,7 +359,7 @@ void Menu_StepItemDetailPanel2(void) {
 
     g_MenuSelectedSpell = Inv_GetPackedListItem(MenuWidget_GridCellIndex(MenuWidget_FindByModeAndSelectedBase(2, 8)));
     current = MenuWidget_GetCurrentNode();
-    label = Str_LookupTable8(g_MenuSelectedSpell + 0xEB);
+    label = Text_LookupTable8(g_MenuSelectedSpell + 0xEB);
     node = MenuWidget_CreateSimpleNode(0x29, current, 0, 1);
     option_node = MenuWidget_CreateNode(0x29, node, node);
     node->draw = Menu_DrawItemLabel;
@@ -380,7 +380,7 @@ void Menu_StepItemDetailPanel2(void) {
         u8 *suffix;
         register u8 *text_buf asm("$4");
 
-        suffix = Str_LookupTable4(0x1A);
+        suffix = Text_LookupTable4(0x1A);
         text_buf = g_MenuItemLabelBuffer;
         Util_AppendFFTerminatedBytes(text_buf, suffix);
         D_8009CFA0 = 0;

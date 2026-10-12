@@ -269,7 +269,7 @@ void Menu_DrawAmmoTypeHeader(MenuWidgetNode *node) {
     }
 
     Draw_OffsetCursor(0xA, 2);
-    Draw_PrintRawText(Str_LookupTable4(0x25));
+    Draw_PrintRawText(Text_LookupTable4(0x25));
     Draw_OffsetCursor(0x46, 4);
     Draw_PrintNumberWidth2Unk(Inv_CountTotal());
     Draw_AllocSprite(0x4C);

@@ -214,7 +214,7 @@ int Gpu_LoadTimAsset(TimUploadRecord *asset, void *base) {
     return 0;
 }
 
-int Str_EncodeBase32(char *out, unsigned int value) {
+int Text_EncodeBase32(char *out, unsigned int value) {
     int i;
     int last;
     char *dst;
@@ -238,7 +238,7 @@ int Str_EncodeBase32(char *out, unsigned int value) {
     return 0;
 }
 
-int Str_DecodeBase32(unsigned int a0) {
+int Text_DecodeBase32(unsigned int a0) {
     int total = 0;
     int i;
 
@@ -258,7 +258,7 @@ int Str_DecodeBase32(unsigned int a0) {
     return total;
 }
 
-int Str_ParseBase32Id(signed char *arg0) {
+int Text_ParseBase32Id(signed char *arg0) {
     unsigned int result = 0;
     int index = 0;
 
@@ -276,7 +276,7 @@ int Str_ParseBase32Id(signed char *arg0) {
     return result;
 }
 
-int Str_ParseMapNumber(signed char *arg0) {
+int Text_ParseMapNumber(signed char *arg0) {
     int hundreds;
     int tens;
     int result;

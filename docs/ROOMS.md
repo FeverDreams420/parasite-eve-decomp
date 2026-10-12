@@ -10,8 +10,8 @@ human decision.
 
 - `NNN` in `room_mNNN` is the game's own map number, not an index chosen by
   this project. The engine builds a scene token from a room letter and the
-  number (`Str_EncodeBase32`), reads the digits back with
-  `Str_ParseMapNumber`, and uses `number - 1` as the row of the room sector
+  number (`Text_EncodeBase32`), reads the digits back with
+  `Text_ParseMapNumber`, and uses `number - 1` as the row of the room sector
   table at `0x80093378` (`Scene_LoadRoom`). The special-scene table at
   `0x80094048` is the same table continued: `scene_eNN` is row `409 + NN`,
   that is map number `410 + NN`.
@@ -38,7 +38,7 @@ human decision.
 `Scene_LoadSceneData` reads PE.IMG sectors 72-86 (the pair at `0x800930DC`)
 into `0x800A8028`, a global data pack. Its header is a list of offsets from
 the start of the pack. `Save_FormatTitle` calls
-`Tbl_GetMapLocationName(Save_GetCurrentMapNumber())`, which
+`Text_GetMapLocationName(Save_GetCurrentMapNumber())`, which
 
 1. takes header word 9 (`0x6FA8`): a byte array indexed by map number, 440
    entries;

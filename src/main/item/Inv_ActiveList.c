@@ -434,17 +434,17 @@ void *Inv_LookupActiveListDisplayData(s32 index) {
             }
         } else {
             lookupIndex = entry->itemId - 1;
-            displayData = Str_LookupTable8(lookupIndex);
+            displayData = Text_LookupTable8(lookupIndex);
         }
     } else {
         lookupIndex = itemId - 1;
         if (lookupIndex >= 0xFFU) {
             if ((itemId - 0x200) < 9U) {
                 lookupIndex = (g_InvCategoryBaseItemId + itemId) - 0x201;
-                displayData = Str_LookupTable8(lookupIndex);
+                displayData = Text_LookupTable8(lookupIndex);
             }
         } else {
-            displayData = Str_LookupTable8(lookupIndex);
+            displayData = Text_LookupTable8(lookupIndex);
         }
     }
     return displayData;
@@ -700,7 +700,7 @@ void Sfx_CursorRenderData(ItemDataRecord *record) {
             cursor = g_CursorRenderMetadataWindows[1].text;
         }
     } else {
-        cursor = Str_LookupTable8(record->itemId - 1);
+        cursor = Text_LookupTable8(record->itemId - 1);
     }
 
     Sfx_DrawSlotRow(record, cursor);
@@ -732,17 +732,17 @@ void Sfx_DrawActiveListSlot(s32 arg0) {
             }
         } else {
             var_a0 = temp_v1_2->itemId - 1;
-            var_a1 = Str_LookupTable8(var_a0);
+            var_a1 = Text_LookupTable8(var_a0);
         }
     } else {
         var_a0 = temp_v1 - 1;
         if (var_a0 >= 0xFFU) {
             if ((temp_v1 - 0x200) < 9U) {
                 var_a0 = (g_InvCategoryBaseItemId + temp_v1) - 0x201;
-                var_a1 = Str_LookupTable8(var_a0);
+                var_a1 = Text_LookupTable8(var_a0);
             }
         } else {
-            var_a1 = Str_LookupTable8(var_a0);
+            var_a1 = Text_LookupTable8(var_a0);
         }
     }
     saved_a1 = var_a1;
@@ -1384,14 +1384,14 @@ static inline void AppendText(u8 *dest, const u8 *src) {
     while ((*dest++ = *src++) != 255) {}
 }
 u8 *Inv_GetItemEffectData(int item, int mode) {
-    if (!item) CopyText(D_800A1B50, Str_LookupTable4(19));
-    else if (mode >= 2) CopyText(D_800A1B50, Str_LookupTable4(18));
+    if (!item) CopyText(D_800A1B50, Text_LookupTable4(19));
+    else if (mode >= 2) CopyText(D_800A1B50, Text_LookupTable4(18));
     else if (!g_SaveMetadataWindowIndex) {
-        CopyText(D_800A1B50, Str_LookupTable8(item - 1));
-        AppendText(D_800A1B50, Str_LookupTable4(mode + 16));
+        CopyText(D_800A1B50, Text_LookupTable8(item - 1));
+        AppendText(D_800A1B50, Text_LookupTable4(mode + 16));
     } else {
-        CopyText(D_800A1B50, Str_LookupTable4(mode + 16));
-        AppendText(D_800A1B50, Str_LookupTable8(item - 1));
+        CopyText(D_800A1B50, Text_LookupTable4(mode + 16));
+        AppendText(D_800A1B50, Text_LookupTable8(item - 1));
     }
     return D_800A1B50;
 }

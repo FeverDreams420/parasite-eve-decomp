@@ -475,7 +475,7 @@ void Menu_DrawExpReviewPanel(void) {
 
     Draw_OffsetCursor(4, 4);
     Draw_StatePush();
-    Draw_PrintRawText(Str_LookupTable4(9));
+    Draw_PrintRawText(Text_LookupTable4(9));
     Draw_OffsetCursor(0x50, 0);
     Draw_PrintNumberWidth6(
         0xF423F < g_MenuPendingTotalExp ? 0xF423F : g_MenuPendingTotalExp);
@@ -485,7 +485,7 @@ void Menu_DrawExpReviewPanel(void) {
 
     Draw_OffsetCursor(0, 0xE);
     Draw_StatePush();
-    Draw_PrintRawText(Str_LookupTable4(0xA));
+    Draw_PrintRawText(Text_LookupTable4(0xA));
     Draw_OffsetCursor(0x50, 0);
     Draw_PrintNumberWidth6(exp_to_next);
     Draw_OffsetCursor(2, 2);
@@ -494,7 +494,7 @@ void Menu_DrawExpReviewPanel(void) {
 
     Draw_OffsetCursor(0, 0x14);
     Draw_StatePush();
-    Draw_PrintRawText(Str_LookupTable4(0xC));
+    Draw_PrintRawText(Text_LookupTable4(0xC));
     Draw_OffsetCursor(0x74, 0);
     Draw_PrintNumberWidth2(Menu_GetBattleCount());
     Draw_StatePop();
@@ -534,7 +534,7 @@ void Menu_CreateLevelUpBanner(void) {
 
 void Menu_DrawLevelUpBanner(void) {
     Draw_OffsetCursor(0, 4);
-    Draw_PrintCenteredText(Str_LookupTable4(0x19));
+    Draw_PrintCenteredText(Text_LookupTable4(0x19));
 }
 
 void Menu_InitBonusPointAllocState(int gained_points) {

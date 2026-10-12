@@ -339,7 +339,7 @@ void Draw_FlushPrimList(int textId) {
     int ch;
     int first;
 
-    text = Str_LookupTable4(textId);
+    text = Text_LookupTable4(textId);
 
     PUSH_CURSOR();
 
@@ -1582,7 +1582,7 @@ void MenuWidget_DrawCenteredText(u8 *text) {
 #include "pe1/text.h"
 
 void MenuWidget_DrawCenteredTableText(int text_id) {
-    Draw_PrintCenteredTextInWidth(Str_LookupTable4(text_id), g_DrawTextPosX);
+    Draw_PrintCenteredTextInWidth(Text_LookupTable4(text_id), g_DrawTextPosX);
 }
 
 #include "pe1/draw_state.h"

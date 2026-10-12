@@ -24,7 +24,7 @@ void Save_DrawSlotMetadata(void)
     short colors[3];
 
     if (D_8009D1A8.summary == 0 || *D_8009D1A8.summary == 0 || (*D_8009D1A8.summary)->primaryValue <= 0) {
-        Tbl_ResetAll();
+        Draw_ResetTextboxes();
         D_8009D1A8.prompt.word &= ~0x300;
     }
 
@@ -35,7 +35,7 @@ void Save_DrawSlotMetadata(void)
         colors[0] = (*D_8009D1A8.summary)->primaryValue;
         colors[1] = (*D_8009D1A8.summary)->secondaryValue;
         colors[2] = 0;
-        Tbl_ResetAll();
+        Draw_ResetTextboxes();
         Menu_SetTextCursorRect(Save_GetMetadataWindowIndex() != 0 ? 0x14 : 0x61, D_8009CE80 < 2 ? 0xF : 0xC3, 0, 0);
         Render_SetupColorTable(0, 2, colors);
         prompt = (D_8009D1A8.prompt.word >> 10) & 3;
@@ -80,7 +80,7 @@ void Save_DrawSlotMetadata(void)
                 g_TextboxEntries[0].message = D_80091570[Save_GetMetadataWindowIndex()];
                 D_8009D1A8.prompt.word &= ~0x40000;
             } else {
-                Tbl_ResetAll();
+                Draw_ResetTextboxes();
                 D_8009D1A8.prompt.word &= ~0x300;
             }
         }
@@ -99,7 +99,7 @@ void Menu_SaveOverlayDraw(void)
     switch (D_8009D1CE) {
     case 1:
         color = -1;
-        Tbl_ResetAll();
+        Draw_ResetTextboxes();
         value = Save_GetMetadataWindowIndex() ? 20 : 97;
         y = D_8009CE80 < 2 ? 15 : 195;
         Menu_SetTextCursorRect(value, y, 0, 0);
@@ -114,7 +114,7 @@ void Menu_SaveOverlayDraw(void)
         break;
     case 2:
         if (!D_8009CE88) {
-            Tbl_ResetAll();
+            Draw_ResetTextboxes();
             D_8009D1CE = 0;
         }
         break;

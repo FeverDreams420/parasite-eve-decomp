@@ -130,7 +130,7 @@ void Battle_ResetEnemyStats(int mode) {
     D_8009D278->panelAux_timer = 0;
     D_8009D2E8 &= ~0x10;
     Battle_FlushScriptSounds();
-    Tbl_ResetAll();
+    Draw_ResetTextboxes();
     D_8009D298 = 0;
     D_8009D29A = 0;
     D_8009D29B[0] = 0;
@@ -1063,7 +1063,7 @@ void Battle_PhaseInitEnemyTurn(void) {
     /* Clear prior script effects and stop the player before waiting for actors. */
     Battle_FlushScriptSounds();
     ready = 1;
-    Tbl_ResetAll();
+    Draw_ResetTextboxes();
     moveLock = D_8009D2E8 | 1;
     D_8009D2E8 = moveLock;
     initialPlayer = D_8009D254;

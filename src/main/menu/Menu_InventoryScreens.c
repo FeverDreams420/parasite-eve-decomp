@@ -470,7 +470,7 @@ M2C_UNK Menu_DrawSoundEffectList();
 M2C_UNK Menu_DrawEquipItemDetailPanel();
 int g_MenuItemDiscardMode;
 void Inv_SetActiveList(int mode, int *slot);
-u8 *Str_LookupTableC(unsigned int index);
+u8 *Text_LookupTableC(unsigned int index);
 void Draw_PrintRawText(u8 *arg0);
 
 void Menu_CreateItemUsePanel(int itemId) {
@@ -559,7 +559,7 @@ int Menu_HandleItemInput(int arg0, int arg1) {
 
 void Menu_DrawEquipItemName(void) {
     Draw_OffsetCursor(4, 4);
-    Draw_PrintRawText(Str_LookupTableC(g_MenuSelectedItemData->itemId - 1));
+    Draw_PrintRawText(Text_LookupTableC(g_MenuSelectedItemData->itemId - 1));
 }
 
 int g_MenuSelectionLocked;

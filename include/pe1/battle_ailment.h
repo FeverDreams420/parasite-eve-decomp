@@ -12,7 +12,7 @@
  * and does not apply the ailment. Battle_ApplyDamage cases 13-16 implement
  * the cure, and Gpu_DrawStatusIcons draws one icon per pair.
  *
- * In-game names are PE.IMG string table 2 (Str_LookupTableC), decoded with
+ * In-game names are PE.IMG string table 2 (Text_LookupTableC), decoded with
  * tools/scripts/pe1_text.py. The cure item id is the Battle_ApplyDamage kind
  * (Inv_SetActiveList mode 0 stores itemId + 3, and the hit path subtracts 3).
  *
@@ -61,7 +61,7 @@
  * Buffs set by Parasite Energy. Battle_UseItem looks up item (index + 0xEC)
  * and queues command (index + 0x183). Battle_ApplySpellEffect switches on
  * command - 0x183, so the case number is the tech index. Descriptions are
- * Str_LookupTableC(0xEB + index).
+ * Text_LookupTableC(0xEB + index).
  *
  *   5  Barrier      "Uses PE to Absorb Damage"         sets 0x200
  *   9  Haste        "Speeds Up Movement and AT Recharge" sets 0x100

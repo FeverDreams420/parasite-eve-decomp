@@ -376,7 +376,7 @@ s16 *g_InvActiveListOverride;
 s32 g_InvOverrideSlotLimit;
 int g_InvActiveListCount;
 int g_MenuBattleEquipMode;
-void *Str_LookupTable8(unsigned int index);
+void *Text_LookupTable8(unsigned int index);
 void Sfx_DrawSlotRow(ItemDataRecord *entry, u8 *text);
 
 static inline ItemDataRecord *LookupActiveItem(int index) {
@@ -689,7 +689,7 @@ void Menu_DrawWeaponComparisonPanel(void) {
             var_a1 = g_CursorRenderMetadataWindows[1].text;
         }
     } else {
-        var_a1 = Str_LookupTable8(g_InvCompareSlotLeft.itemId - 1);
+        var_a1 = Text_LookupTable8(g_InvCompareSlotLeft.itemId - 1);
     }
     Sfx_DrawSlotRow(&g_InvCompareSlotLeft, var_a1);
     Draw_OffsetCursor(0, 0x18);
@@ -699,7 +699,7 @@ void Menu_DrawWeaponComparisonPanel(void) {
             var_a1_2 = g_CursorRenderMetadataWindows[1].text;
         }
     } else {
-        var_a1_2 = Str_LookupTable8(g_InvCompareSlotRight.itemId - 1);
+        var_a1_2 = Text_LookupTable8(g_InvCompareSlotRight.itemId - 1);
     }
     Sfx_DrawSlotRow(&g_InvCompareSlotRight, var_a1_2);
 }

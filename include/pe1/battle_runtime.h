@@ -95,7 +95,7 @@ int Battle_GetAgilityBonus(void);
 void Pm_StopAll(void);
 int Pm_SendCmd(int command, int arg1, int arg2, int arg3, int arg4, int arg5);
 int Akao_SetPos3D(int arg0, int arg1, int x, int y, int z);
-void Tbl_ResetAll(void);
+void Draw_ResetTextboxes(void);
 extern s8 g_BattleTargetIndex;
 extern s8 g_BattleActiveTurnSlot, g_BattleItemMenuState;
 extern unsigned int g_GameStateFlags;

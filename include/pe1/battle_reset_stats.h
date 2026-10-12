@@ -15,7 +15,7 @@ extern s32 D_8009D29C[1];
 extern unsigned int D_8009D2E8;
 
 void Battle_FlushScriptSounds(void);
-void Tbl_ResetAll(void);
+void Draw_ResetTextboxes(void);
 void Battle_ResetEnemyStats(int mode);
 
 #endif

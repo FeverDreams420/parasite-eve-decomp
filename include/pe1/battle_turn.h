@@ -25,7 +25,7 @@ int Asset_LoadTimTextures(int);
 void Battle_DrawStatusPanel(int, BattleStatusPanel *);
 void Battle_UpdateEnemy(BattleEntity *);
 void Entity_TickAnimSequences(BattleEntity *);
-void Tbl_ResetAll(void);
+void Draw_ResetTextboxes(void);
 void Battle_PhaseInitEnemyTurn(void);
 void Battle_PhaseEndTurn(void);
 void Battle_PhaseHitReaction(void);
