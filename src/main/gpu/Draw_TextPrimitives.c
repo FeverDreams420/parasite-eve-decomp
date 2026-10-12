@@ -220,62 +220,56 @@ void Draw_SetTextDimmed(int value) {
 }
 
 void Draw_AllocSprite(int index) {
-    RenderSpritePacket *sprite = 0;
-    register DrawGlyphDescriptor *glyph asm("$18");
-    u8 *old, *next;
-
+    DrawGlyphDescriptor *glyph;
+    RenderSpritePacket *sprite;
     u32 *page;
     int mode;
     DrawPrimLink link;
+
     glyph = Draw_LookupGlyphDescriptor(index);
-    /* Finish saving the descriptor before starting the allocation. */
-    asm("" : : "r"(glyph));
-    old = g_DrawPacketCursor;
-    next = old + sizeof(RenderSpritePacket);
-    if (next < g_DrawPacketArenaBase + 0x4000) {
-        g_DrawPacketCursor = next;
-        sprite = (RenderSpritePacket *)old;
-    } else BoundsCheck_AssertStub(1);
+    sprite = 0;
+    {
+        u8 *old = g_DrawPacketCursor;
+        u8 *next = old + sizeof(RenderSpritePacket);
+
+        if (next < g_DrawPacketArenaBase + 0x4000) {
+            g_DrawPacketCursor = next;
+            sprite = (RenderSpritePacket *)old;
+        } else BoundsCheck_AssertStub(1);
+    }
     if (sprite) {
         if (g_DrawColorSelect) sprite->color.word = g_DrawAlternateColor;
         else sprite->color.word = g_DrawPrimaryColor;
         sprite->tag.bytes.length = 4;
         sprite->color.bytes.code = 0x64;
     }
+    sprite->x = g_DrawSpriteX;
+    sprite->y = g_DrawSpriteY;
+    sprite->u = glyph->u;
+    sprite->v = glyph->v;
+    sprite->clut = glyph->clut;
+    sprite->width = glyph->width;
+    sprite->height = glyph->height;
     {
-        register u32 oldTag asm("$5");
-        register u32 maskTop asm("$6");
-        register u32 mask24;
-        u32 *ot;
-        oldTag = sprite->tag.word;
-        sprite->x = g_DrawSpriteX;
-        sprite->y = g_DrawSpriteY;
-        sprite->u = glyph->u;
-        sprite->v = glyph->v;
-        sprite->clut = glyph->clut;
-        sprite->width = glyph->width;
-        sprite->height = glyph->height;
-        maskTop = 0xff000000;
-        ot = g_DrawOrderingTableEntry;
-        mask24 = 0xffffff;
-        sprite->tag.word = (oldTag & maskTop) | (*ot & mask24);
+        RenderPacketTag *ot = (RenderPacketTag *)g_DrawOrderingTableEntry;
+
+        sprite->tag.link.address = ot->link.address;
         link.packet = sprite;
-        *ot = (*ot & maskTop) | (link.word & mask24);
+        ot->link.address = link.word;
     }
     mode = glyph->mode;
     page = 0;
-    old = g_DrawPacketCursor;
-    next = old + 8;
-    if (next < g_DrawPacketArenaBase + 0x4000) {
-        g_DrawPacketCursor = next;
-        page = (u32 *)old;
-    } else BoundsCheck_AssertStub(1);
+    {
+        u8 *old = g_DrawPacketCursor;
+        u8 *next = old + 8;
+
+        if (next < g_DrawPacketArenaBase + 0x4000) {
+            g_DrawPacketCursor = next;
+            page = (u32 *)old;
+        } else BoundsCheck_AssertStub(1);
+    }
     if (page) {
-        register char *drawPage asm("$4") = (char *)page;
-        register int pageBits = (mode & 3) << 7;
-        /* Prepare page bits before the two zero-valued call arguments. */
-        asm("" : : "r"(pageBits), "r"(drawPage));
-        SetDrawTPage(drawPage, 0, 0, pageBits | 7);
+        SetDrawTPage(page, 0, 0, ((mode & 3) << 7) | 7);
     }
     {
         u32 mask24, maskTop;
