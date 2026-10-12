@@ -47,8 +47,8 @@ int func_80193D6C(int event)
                 register int y asm("$13");
                 register int z asm("$14");
                 const GteMatrixWords *words=(const GteMatrixWords *)matrix;
-                /* Separate transfers and barriers keep GCC from hoisting the
-                 * pad-array address. These are not GTE hardware hazards. */
+                /* Field-specific barriers preserve retail load scheduling around
+                 * the individual GTE transfers; they are not hardware hazards. */
                 x=words->r11_r12;
                 y=words->r13_r21;
                 gte_ctc2_0(x);
@@ -58,21 +58,21 @@ int func_80193D6C(int event)
                 z=words->r33_pad;
                 gte_ctc2_2(x);
                 gte_ctc2_3(y);
-                asm volatile("" : : "r"(words));
+                asm volatile("" : : "m"(words->r33_pad));
                 gte_ctc2_4(z);
-                asm volatile("" : : "r"(words));
+                asm volatile("" : : "m"(words->tx));
                 x=words->tx;
-                asm volatile("" : : "r"(words));
+                asm volatile("" : : "m"(words->tx));
                 y=words->ty;
-                asm volatile("" : : "r"(words));
+                asm volatile("" : : "m"(words->ty));
                 gte_ctc2_5(x);
-                asm volatile("" : : "r"(words));
+                asm volatile("" : : "m"(words->tz));
                 z=words->tz;
-                asm volatile("" : : "r"(words));
+                asm volatile("" : : "m"(words->tz));
                 gte_ctc2_6(y);
-                asm volatile("" : : "r"(words));
+                asm volatile("" : : "m"(words->tz));
                 gte_ctc2_7(z);
-                asm volatile("" : : "r"(words));
+                asm volatile("" : : "m"(words->tz));
             }
             gte_ldv0(input); gte_rtv0tr_mac();
             out=(Vector *)((i*8)+(unsigned int)base);
