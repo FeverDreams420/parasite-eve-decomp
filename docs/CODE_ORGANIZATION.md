@@ -413,7 +413,10 @@ Crutches still in place (lev is the only metric):
   to `Save_SetTitleStyleFlag`; unpinned, slot and mode swap a0/a1 (lev 9).
 - `Menu_OpenInventoryScreen` (1 pin): retail loads 9 into a0 once before the
   branch for `MenuWidget_InitPool(9)` and `Inv_SetActiveList(9, 0)`; the
-  propagated constant leaves a second `li a0,9` (lev 1).
+  propagated constant leaves a second `li a0,9` (lev 1; an unpinned local
+  for both calls is also lev 1: cse substitutes the constant on the
+  fall-through arm and the delay slot of `MenuWidget_InitPool` gets the
+  second `li` instead of a `nop`).
 - `Sfx_DrawActiveListSlot` (1 pin): retail copies the item ID into a1 before
   the range tests (lev 12 without).
 - `Draw_InitBuffers` (1 pin, 1 barrier): retail stores the screen
@@ -425,17 +428,21 @@ Crutches still in place (lev is the only metric):
   total and the cleared pool; without the launder the constant base folds
   into absolute loads (lev 6). The bonus pool is read and written through
   the `g_AyaBonusPoolRecord` record view (the unit is forced-G0).
-- `Menu_MainUpdate` (3 pointer-integer casts, 3 field macros, local alias
-  header): the m2c variables that carry the battle entity pointers also
-  carry colours, and splitting them reallocates registers (lev 28-248); the
-  halfword position reads must not be structure members (the scheduler
-  would hoist the `D_8009D28C` store). The draw slot reloads come from the
+- `Menu_MainUpdate` (3 pointer-integer casts): the m2c variables that carry
+  the battle entity pointers also carry colours, and splitting them
+  reallocates registers: the dead-player motion clear in its own pointer
+  lev 129, the reset actor pointer lev 7-8 (a single-set pointer is loaded
+  late), the tail position pointer lev 7 (local-alloc gives it v1, retail
+  keeps the function-wide t0). The halfword position reads go through
+  `Pe1Fixed_IntegerHalf` (see the recipes below). The draw slot reloads come from the
   `g_ActiveDrawSlotRecord` record view and the BGM handle reload from an
   array element read (see the recipes below).
 - `Menu_StepItemGrid2` (two asm-labelled views of `D_800A19C0` in
   `pe1/Menu_MemCardProgress_externs.h`): retail rebuilds the text buffer
   address for each `Draw_MeasureTextWidth` call; with one symbol CSE keeps
-  it in a saved register.
+  it in a saved register (the `MAX`-style repeated call form is lev 42:
+  GCC compares SYMBOL_REFs by name, so only a second name is a second
+  constant).
 - `Window_SetBoundsByMode` (volatile window X and bound pointer): plain or
   multi-set forms keep the order but swap v0/v1 (lev 5).
 - `Menu_DrawTextboxEntries` (7 pins, 6 barriers, 6 gotos, stack reserve, 2
@@ -943,6 +950,20 @@ These apply to any unit, not only the ones they were found in:
   `MASPSX_FORCE_G0` so the record does not get its address CSE'd into a
   register (`Battle_DrawSpellName`). The linker map names the record at the
   word's address. `Battle_ApplySpellEffect` lost 33 views this way.
+- The reverse case, a structure field that retail reads as a plain scalar,
+  needs no byte offset either. GCC 2.7 marks a MEM as "in struct" for a
+  member access, for an indexed pointer (`p[1]`, an INDIRECT_REF of a
+  PLUS_EXPR) and for `*&aggregate`; such a load may be moved across a store
+  to a fixed global. A load through a pointer variable is a scalar MEM and
+  stays ordered against those stores. `Pe1Fixed_IntegerHalf`
+  (`pe1/fixed_point.h`) reads the integer half of a 16.16 coordinate that
+  way; `Menu_MainUpdate` lost its three `M2C_FIELD` position reads with it.
+  The same split explains why a store and an immediate reload of one field
+  survive CSE only when the two addresses are different RTL
+  (`Battle_ApplyEnemyAttack`: reloading `stateFlags` through the
+  function-entry `&g_ActiveActor->stateFlags` pointer keeps the reload, but
+  in s0 instead of retail's a0, lev 1; a pointer to the field taken in the
+  same block is CSE'd away, lev 52).
 - Scalar views do the opposite job: `g_EquippedWeaponSlot`/`ArmorSlot`
   (`pe1/aya.h`) are byte scalars, so in a forced-G0 -G8 unit every slot
   access is a direct `lui`/`lb` or `lui at`/`sb` instead of an address held
@@ -1033,7 +1054,12 @@ single removal (none was byte-identical):
   loop.c placed it in retail), its `goto`s, and the scaled queue reads in
   the two finish tails (array indexing gives the index another register,
   lev 6). `Battle_DrawStatusValue` keeps two byte offsets (typed line and
-  marker views lev 13, ordering index lev 2). `Battle_ApplyEnemyAttack` keeps
+  marker views lev 13, ordering index lev 2; indexing `D_8009E358` by a
+  precomputed `slot * 3` is lev 6: the element scaling becomes its own
+  single-set shift that sched1 launches late, where retail's whole
+  `(slot * 3) << 4` is one multi-set offset computed first).
+  `Battle_DrawStatusSymbol` and `Battle_DrawATBGauge` address their ordering
+  entry and sprite as array elements. `Battle_ApplyEnemyAttack` keeps
   two volatile `stateFlags` reloads: bit-field forms drop the store and
   reload pair (lev 52 with branch offsets, 2 instructions). `Battle_UpdateEntityFacing` keeps its two `goto`s: any
   conditional form of the facing mode becomes an `slti` store-flag or the
