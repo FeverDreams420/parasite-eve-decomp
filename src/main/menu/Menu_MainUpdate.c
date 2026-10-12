@@ -910,13 +910,13 @@ void Menu_MainUpdate(s32 arg0) {
             register s32 tail_a3;
             register s32 tail_sp;
 
+            /* var_t0 is the function-wide colour/pointer scratch; the
+             * player pointer must reuse it to stay in $t0. */
             var_t0 = (s32) D_8009D254;
-            /* posX/posY/posZ integer halves. Struct member reads let the
-             * scheduler hoist the D_8009D28C store above them. */
-            tail_a2 =M2C_FIELD((void *) var_t0, s16 *, 0x2A);
-            tail_a3 = M2C_FIELD((void *) var_t0, s16 *, 0x2E);
+            tail_a2 = Pe1Fixed_IntegerHalf(&((BattleEntity *)var_t0)->posX);
+            tail_a3 = Pe1Fixed_IntegerHalf(&((BattleEntity *)var_t0)->posY);
             D_8009D28C = 3;
-            tail_sp = M2C_FIELD((void *) var_t0, s16 *, 0x32);
+            tail_sp = Pe1Fixed_IntegerHalf(&((BattleEntity *)var_t0)->posZ);
             tail_a1 = 0;
             D_8009D1CE = 0;
             Asset_Find08Alt(tail_a0, tail_a1, tail_a2, tail_a3, tail_sp);
