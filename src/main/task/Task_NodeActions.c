@@ -136,13 +136,13 @@ int Task_SetEntityActionAndWait(int **arg0) {
             return 1;
         }
         if (state->anim_step >= 0) {
-            register unsigned int lhs asm("$2") = (u32)state->anim.fixed;
-            unsigned int rhs = (u32)state->anim_prev;
+            register unsigned int lhs asm("$2") = state->anim.fixed;
+            unsigned int rhs = state->anim_prev;
             int result = lhs < rhs;
             keep = result;
         } else {
-            unsigned int rhs = (u32)state->anim.fixed;
-            unsigned int lhs = (u32)state->anim_prev;
+            unsigned int rhs = state->anim.fixed;
+            unsigned int lhs = state->anim_prev;
             int result = lhs < rhs;
             keep = result;
         }

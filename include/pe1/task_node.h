@@ -30,6 +30,13 @@ typedef struct TaskNode {
     /* 0x28 */ struct TaskNode *prev;
 } TaskNode;
 
+/* A node-pool address with byte offsets added to it word by word. */
+typedef union TaskNodeAddress {
+    TaskNode *node;
+    int *words;
+    unsigned int word;
+} TaskNodeAddress;
+
 extern TaskNode *D_8009D300;
 /* The node the task interpreter is currently running. */
 extern TaskNode *g_TaskNodePool;

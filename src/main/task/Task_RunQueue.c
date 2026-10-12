@@ -35,7 +35,7 @@ void Task_RunQueue(void)
         if ((D_8009D1A0 & 0x100) && entity != (u8 *)D_8009D254 && !(node->flags & 0x80)) continue;
         node = D_8009D300;
         if (node->active == 0) continue;
-        node->active = (u32)node->active - 1;
+        node->active--;
         if (node->active != 0) continue;
         D_8009CE00 = node->current.script;
         do {

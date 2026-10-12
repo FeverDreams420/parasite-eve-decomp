@@ -17,26 +17,26 @@ void Task_InitNodePool(void) {
     unsigned int i;
     unsigned int j;
     unsigned int rowOffset;
-    char *base;
+    TaskNodeAddress base;
     int *ptr;
 
     i = 0;
-    base = (char *)D_8009D310;
+    base.node = D_8009D310;
     rowOffset = 0;
 
     g_TaskNodePool = 0;
     g_TaskNodeSeqCounter[0] = 0;
     g_TaskNodeFreeListHead = 0;
 
-    for (; i < 72; i++, rowOffset += 0x2C) {
+    for (; i < 72; i++, rowOffset += sizeof(TaskNode)) {
         register unsigned int colOffset;
-        int *cell;
+        TaskNodeAddress cell;
 
         j = 0;
         colOffset = rowOffset;
         for (; j < 11; j++, colOffset += 4) {
-            cell = (int *)(colOffset + (unsigned int)base);
-                        *cell = 0;
+            cell.word = colOffset + base.word;
+            *cell.words = 0;
         }
     }
 
@@ -52,33 +52,33 @@ void Task_InitNodePool(void) {
     g_SceneDataTable1 = 0;
 }
 
+/* Turn a loaded block's self-relative base and offsets into addresses;
+ * a base already above 0x80000000 means the block was relocated before. */
 RelocBlock *Task_RelocBlock(RelocBlock *block) {
+    RelocAddress address;
     RelocU32 offset;
-    RelocU32 limit;
-    RelocU32 isAbsolute;
     RelocU32 i;
     RelocU32 count;
-    register RelocU32 *ptr;
+    RelocU32 *ptr;
     char frame[8];
 
-    offset = block->u0.baseOffset;
-    limit = 0x80000000U;
-    g_SceneDataTable1 = block;
-    isAbsolute = limit < offset;
-    if (isAbsolute) {
-        return block;
+    address.block = block;
+    offset = address.block->u0.baseOffset;
+    g_SceneDataTable1 = address.block;
+    if (0x80000000U < offset) {
+        return address.block;
     }
 
     i = 0;
-    count = block->count;
-    block->u0.baseOffset = (RelocU32)((char *)block + offset);
+    count = address.block->count;
+    address.block->u0.baseOffset = address.word + offset;
     if (count != 0) {
-        ptr = (RelocU32 *)block;
+        ptr = &address.block->u0.baseOffset;
         do {
-            ptr[2] = ptr[2] + (unsigned int)block;
+            ptr[2] += address.word;
             i++;
             ptr++;
-        } while (i < block->count);
+        } while (i < address.block->count);
     }
 
     return g_SceneDataTable1;
