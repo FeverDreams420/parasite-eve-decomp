@@ -123,7 +123,7 @@ segments:
       - [0x1AA4, .rodata, item/Inv_ItemActions]
       - [0x1ADC, .rodata, save/Inv_EquipmentSelection]
       - [0x1B30, rodata, main/rodata_001B30]
-      - [0x1B88, .rodata, render/Render_InitDisplayLists]
+      - [0x1B88, .rodata, asset/Render_InitDisplayLists]
       # Scene startup and entity texture jump tables share the loader TU.
       - [0x1BB0, .rodata, scene/Scene_LoadTextureAndPlayer]
       # Both sector-state jump tables now belong to the shared object.
@@ -316,7 +316,7 @@ segments:
       # PSYQ 4.0 object signature matches.
       - [0x275C8, c, psyq/libsnd/ssinit_c]
       - [0x275F8, c, time/GameTime_Counters]
-      - [0x2777C, c, scene/Scene_TickTimers]
+      - [0x2777C, c, time/Scene_TickTimers]
       - [0x2788C, c, math/Math_FixedMul]
       - [0x278A8, c, math/Math_FixedDivide]
       - [0x278BC, c, math/math_fixed]
@@ -333,7 +333,7 @@ segments:
       # Glyph table lookups, selection flags, the shuffled code load and the
       # slot stepping: all of it works on g_FontSelectionState (G0313).
       - [0x293C0, c, draw/Render_FontGlyphSelection]
-      - [0x2A19C, c, scene/Scene_CheckFlagBits]
+      - [0x2A19C, c, anim/Scene_CheckFlagBits]
       # Bone rotation matrices and the byte and halfword rotation decoders (G0315).
       - [0x2A374, c, anim/Anim_BoneRotations]
       # Rigid, skinned and morph vertex transforms: adjacent GTE vertex passes over
@@ -366,7 +366,7 @@ segments:
       # the fast scene flush and the field frame loop that follow are -G8.
       - [0x2F874, c, boot/Gpu_InitPipeline]
       - [0x2FAFC, c, boot/Boot_FrameLoop]
-      - [0x2FF58, c, draw/Gte_LightingState]
+      - [0x2FF58, c, boot/Gte_LightingState]
       - [0x30000, c, memcard/Save_TailBlobFlow]
       # Title-style flag, card file presence, title-screen card support, card
       # port handling and the save flow share card state (G0354).
@@ -580,7 +580,7 @@ segments:
       # View state reset, camera clamp, bounds, viewport and GTE offsets, scroll mode and screen transitions share private state (G0819).
       - [0x56370, c, render/Render_CameraViewportFlow]
       # Tile packet setup and point clamping share GeomEntry flags/depth and bounds.
-      - [0x57760, c, field/Geo_LoadMeshEntry]
+      - [0x57760, c, render/Geo_LoadMeshEntry]
       # Sprite entry setters, the geometry mesh list build and draw, the screen
       # fade and tint, background scroll/parallax and room/primitive colour
       # drawing (G0833/G0835). One -fno-strength-reduce unit: the scroll loop
@@ -595,10 +595,10 @@ segments:
       - [0x5994C, c, asset/Asset_LoadTimTextures]
       # Primary and secondary bank drivers: contiguous default-profile pair
       # sharing the game-state gating flags.
-      - [0x59D94, c, pm/Pm_RunBanks]
+      - [0x59D94, c, asset/Pm_RunBanks]
       - [0x59EF0, c, asset/Asset_UnloadTableEntries]
       # Disc-image discovery and boot notice use the same mount state.
-      - [0x5A0D4, c, render/Render_InitDisplayLists]
+      - [0x5A0D4, c, asset/Render_InitDisplayLists]
       # End-of-frame overlay pass, soft-reset shutdown, vertical-offset update,
       # the actor voice-bank loader, the sound and DS shell reset,
       # Boot_InitGameState (called from main), the memory layout and the scene
@@ -608,7 +608,7 @@ segments:
       - [0x5A8E8, c, asset/Sys_GameStateAndVoiceBanks]
       # Startup data and field background loading share scene resource state.
       - [0x5B1E4, c, scene/Scene_LoadSceneData]
-      - [0x5BB5C, c, akao/Akao_LoadVoiceBankAlt]
+      - [0x5BB5C, c, scene/Akao_LoadVoiceBankAlt]
       - [0x5BCF8, c, scene/Scene_LoadRoom]
       # Texture-page streaming, disc-change gating, entity textures, player
       # startup and story-day changes share scene state and the default profile.
@@ -626,15 +626,15 @@ segments:
       # labels of AKAO senders), TIM upload, base-32 keys and the three directory
       # searches sharing SceneAssetDirectory call one another (helper and call
       # evidence, no split evidence). --expand-div covers the pan projection.
-      - [0x5E418, c, asset/Asset_SceneTablesAndSound]
+      - [0x5E418, c, cdrom/Asset_SceneTablesAndSound]
       # Display clearing and CD reads share scene flags and the default profile.
       - [0x5EE0C, c, cdrom/CdRom_BootReadFlow]
       # Display initialisation, the draw-enabled and sequence-elapsed queries, the
       # draw-status check and the TIM table loaders: the queries share
       # g_DrawEnabled and g_SeqElapsed (private evidence), contiguous
       # default-profile run with no split evidence.
-      - [0x5F1A0, c, draw/Gpu_DisplayInitAndStatus]
-      - [0x5F4EC, c, boot/Boot_DiscTableLoad]
+      - [0x5F1A0, c, pm/Gpu_DisplayInitAndStatus]
+      - [0x5F4EC, c, pm/Boot_DiscTableLoad]
       # Slot allocation opens the contiguous process-manager slot API.
       - [0x5FA24, c, pm/Pm_ProcessManager]
       - [0x60C1C, c, draw/Render_DrawWireframeModel]
@@ -649,7 +649,7 @@ segments:
       - [0x61834, c, scene/Scene_PlayerMovement]
       # Game TIM container helpers: no Psy-Q signature matches; the last game
       # object before the LIBC veneers.
-      - [0x620D0, c, asset/Asset_TimImage]
+      - [0x620D0, c, scene/Asset_TimImage]
       - [0x621E4, c, psyq/libc/a56]
       - [0x621F4, c, psyq/libc/c21]
       - [0x62204, c, psyq/libc/c24]

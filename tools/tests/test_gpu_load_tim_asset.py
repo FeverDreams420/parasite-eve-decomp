@@ -23,7 +23,7 @@ class GpuLoadTimAssetTests(unittest.TestCase):
         except ImportError:
             self.skipTest('unicorn unavailable')
         ENTRY,EXIT,STACK,ASSET,UPLOAD=0x8006E1C0,0x80010000,0x801F0000,0x80100000,0x8007506C
-        source = 'src/main/asset/Asset_SceneTablesAndSound.c'
+        source = 'src/main/cdrom/Asset_SceneTablesAndSound.c'
         SLICE=0x5A8
         retail=(ROOT/'assets/USA/main.exe').read_bytes()[0x5E9C0:0x5EB38]
         with tempfile.TemporaryDirectory() as directory:
