@@ -1,5 +1,11 @@
 #include "common.h"
 
+/* Table entry address: the queue offsets are byte offsets into the table. */
+typedef union TaskGeneratorAddress {
+    u32 *pointer;
+    u32 address;
+} TaskGeneratorAddress;
+
 u32 Task_GpuFlushPrimQueue(void) {
     register u32 *base asm("$8");
     register u32 *head_slot asm("$15");
@@ -23,8 +29,20 @@ u32 Task_GpuFlushPrimQueue(void) {
     asm volatile("" : "=r"(base) : "0"(base));
 
     /* Match note: preserve target operand order in the address adds. */
-    head_ptr = (u32 *)((u32)base + head);
-    tail_ptr = (u32 *)((u32)base + tail);
+    {
+        TaskGeneratorAddress entry;
+
+        entry.pointer = base;
+        entry.address += head;
+        head_ptr = entry.pointer;
+    }
+    {
+        TaskGeneratorAddress entry;
+
+        entry.pointer = base;
+        entry.address += tail;
+        tail_ptr = entry.pointer;
+    }
     asm volatile("" : "=r"(head_ptr), "=r"(tail_ptr) : "0"(head_ptr), "1"(tail_ptr));
 
     {
