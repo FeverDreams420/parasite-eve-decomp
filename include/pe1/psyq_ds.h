@@ -25,6 +25,12 @@ typedef struct DslDirectoryCacheEntry {
     char name[32];
 } DslDirectoryCacheEntry;
 
+/* A cache entry's name, addressed from the first name by byte offset. */
+typedef union DslNameAddress {
+    char *text;
+    u32 word;
+} DslNameAddress;
+
 enum {
     DSL_MAX_FILE = 64,
     DSL_MAX_DIR = 128,
@@ -75,6 +81,13 @@ typedef struct CdDsReadQueueEntry {
     DslCB callback;
     int count;
 } CdDsReadQueueEntry;
+
+/* A queue entry addressed by byte offset, as DSSYS_2.OBJ computes it. */
+typedef union CdDsQueueEntryAddress {
+    CdDsReadQueueEntry *entry;
+    u8 *bytes;
+    u32 word;
+} CdDsQueueEntryAddress;
 PE1_STATIC_ASSERT(sizeof(CdDsReadQueueEntry) == 0x18,
                   ds_command_entry_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(CdDsReadQueueEntry, callback) == 0x10,
@@ -121,6 +134,12 @@ PE1_STATIC_ASSERT(sizeof(DsCallbackRegistry) == 12, ds_callback_registry_size);
 extern DsCallbackRegistry g_DsReadCallbackState;
 extern CdQueuedCmdSlot g_CdQueuedCmdSlots[3];
 extern DsReadCallbackSlot g_DsReadCallbackSlots[8];
+/* A history slot (or one of its words) addressed by byte offset (DsSync). */
+typedef union DsSlotAddress {
+    DsReadCallbackSlot *slot;
+    int *words;
+    u32 word;
+} DsSlotAddress;
 extern int g_DsReadCallbackCursor;
 extern DsEventCallback volatile g_DsSyncCallback;
 extern DsEventCallback volatile g_DsReadyCallback;

@@ -285,7 +285,12 @@ s32 DsSync(s32 inId, void *inResult) {
         scanned = 0;
         entryIdOrOffset = forward * 0x10;
     scanForward:
-        entryIdOrOffset = *(int *)((char *)g_DsReadCallbackSlots + entryIdOrOffset);
+        {
+            DsSlotAddress at;
+            at.slot = g_DsReadCallbackSlots;
+            at.word += entryIdOrOffset;
+            entryIdOrOffset = *at.words;
+        }
         forward += 1;
         if (entryIdOrOffset != id) {
             if (forward >= 8) {
@@ -294,8 +299,13 @@ s32 DsSync(s32 inId, void *inResult) {
             scanned += 1;
             if (scanned >= 8) {
                 readiness = 0;
-                if (id < *(int *)((char *)g_DsReadCallbackSlots + (g_DsReadCallbackCursor * 0x10))) {
-                    goto completed;
+                {
+                    DsSlotAddress at;
+                    at.slot = g_DsReadCallbackSlots;
+                    at.word += g_DsReadCallbackCursor * 0x10;
+                    if (id < *at.words) {
+                        goto completed;
+                    }
                 }
             } else {
                 entryIdOrOffset = forward * 0x10;
@@ -319,8 +329,11 @@ s32 DsSync(s32 inId, void *inResult) {
             if (id != 0) {
                 offset = backward * 0x10;
                 while (1) {
+                    DsSlotAddress at;
                     backward -= 1;
-                    if (*(int *)((char *)g_DsReadCallbackSlots + offset) != id) {
+                    at.slot = g_DsReadCallbackSlots;
+                    at.word += offset;
+                    if (*at.words != id) {
                         if (backward < 0) {
                             backward = 7;
                         }
@@ -337,9 +350,12 @@ s32 DsSync(s32 inId, void *inResult) {
                     break;
                 }
             } else {
+                DsSlotAddress at;
                 offset = backward * 0x10;
                 selected = 0;
-                if (*(int *)((char *)g_DsReadCallbackSlots + offset) == 0) {
+                at.slot = g_DsReadCallbackSlots;
+                at.word += offset;
+                if (*at.words == 0) {
 
                 } else {
                     goto publishResult;
@@ -356,7 +372,11 @@ s32 DsSync(s32 inId, void *inResult) {
         offset = cursor * 0x10;
     }
     selected = 0;
-    if (*(int *)((char *)g_DsReadCallbackSlots + offset) != 0) {
+    {
+    DsSlotAddress at;
+    at.slot = g_DsReadCallbackSlots;
+    at.word += offset;
+    if (*at.words != 0) {
     publishResult:
         {
             register int *dst = D_800A3500.words;
@@ -364,19 +384,34 @@ s32 DsSync(s32 inId, void *inResult) {
             register int second asm("$3");
             register int third asm("$4");
             asm("" : "=r"(dst) : "0"(dst) : "memory");
-            first = *(int *)((char *)g_DsReadCallbackSlots + offset);
-            second = *(int *)((char *)D_800A3614 + offset);
-            third = *(int *)((char *)D_800A3618 + offset);
+            {
+                DsSlotAddress word0, word1, word2;
+                word0.slot = g_DsReadCallbackSlots;
+                word0.word += offset;
+                first = *word0.words;
+                word1.words = D_800A3614;
+                word1.word += offset;
+                second = *word1.words;
+                word2.words = D_800A3618;
+                word2.word += offset;
+                third = *word2.words;
+            }
             asm(""
                 : "=r"(first), "=r"(second), "=r"(third)
                 : "0"(first), "1"(second), "2"(third));
             dst[0] = first;
             dst[1] = second;
             dst[2] = third;
-            dst[3] = *(int *)((char *)D_800A361C + offset);
+            {
+                DsSlotAddress word3;
+                word3.words = D_800A361C;
+                word3.word += offset;
+                dst[3] = *word3.words;
+            }
         }
         asm("" ::: "$16", "memory");
         selected = &D_800A3500;
+    }
     }
 copyResult:
     if (selected != 0) {

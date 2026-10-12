@@ -186,7 +186,12 @@ s32 LIBDS_DSSYS_1_text_774(void) {
     value += 1;
     idx <<= 2;
     *retry = value;
-    value = *(s32 *)((char *)g_CdRomCmdLongTimeoutTable + idx);
+    {
+        CdTimeoutFlagAddress at;
+        at.flag = g_CdRomCmdLongTimeoutTable;
+        at.word += idx;
+        value = *at.flag;
+    }
     idx = 30;
     if (value != 0) {
         idx = 960;

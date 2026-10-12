@@ -52,8 +52,12 @@ int DS_newmedia(void) {
             if (record->nameLength == 0) break;
             memcpy(count * sizeof(DslDirectoryCacheEntry) + sectors,
                    record->sectorLE, 4);
-            name = (char *)((count * sizeof(DslDirectoryCacheEntry)) +
-                           (u32)names);
+            {
+                DslNameAddress at;
+                at.text = names;
+                at.word = count * sizeof(DslDirectoryCacheEntry) + at.word;
+                name = at.text;
+            }
             g_DslDirectoryCache[count].parentDirectoryId =
                 record->parentDirectoryLE[0];
             g_DslDirectoryCache[count].directoryId = count + 1;

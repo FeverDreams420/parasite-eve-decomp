@@ -67,6 +67,11 @@ void SetTransMatrix(const GteMatrix *matrix);
 int ratan2(int y, int x);
 /* RATAN.OBJ arctangent table, indexed by the scaled ratio. */
 extern s16 atan_table[];
+/* An atan_table entry addressed by its byte offset (the doubled ratio). */
+typedef union GteAtanEntryAddress {
+    s16 *entry;
+    u32 word;
+} GteAtanEntryAddress;
 int SquareRoot0(int value);
 void VectorNormal(GteVector *vector, GteVector *unit);
 void VectorNormalS(GteVector *vector, GteShortVector *unit);

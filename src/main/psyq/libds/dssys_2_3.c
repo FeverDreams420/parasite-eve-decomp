@@ -111,7 +111,12 @@ void CQ_error_flush(int event, u8 *data) {
                 j = 3;
                 asm("" : : "r"(j));
                 /* Reverse byte traversal retains the queue-entry base. */
-                clear = (u8 *)entry + 3;
+                {
+                    CdDsQueueEntryAddress at;
+                    at.entry = entry;
+                    at.word += 3;
+                    clear = at.bytes;
+                }
                 for (; j >= 0; j--, clear--)
                     clear[PE1_OFFSETOF(CdDsReadQueueEntry, payload)] = 0;
             }
@@ -156,7 +161,12 @@ int CQ_execute(void) {
     entry = QUEUE_FROM_CURRENT(entry)->entries;
     offset = index * 3;
     offset <<= 3;
-    entry = (CdDsReadQueueEntry *)((u8 *)entry + offset);
+    {
+        CdDsQueueEntryAddress at;
+        at.entry = entry;
+        at.word = offset + at.word;
+        entry = at.entry;
+    }
 
     if (entry->active != 0) {
         return DS_cw(entry->command, entry->parameter) != 0;
@@ -180,7 +190,10 @@ void CQ_sync_system(int inEvent, u8 *inResult) {
         asm("" : "=r"(base) : "0"(base));
         {
             int offset = index * sizeof(CdDsReadQueueEntry);
-            entry = (CdDsReadQueueEntry *)(offset + (u32)base);
+            CdDsQueueEntryAddress at;
+            at.entry = base;
+            at.word = offset + at.word;
+            entry = at.entry;
         }
     }
     savedEvent = event;

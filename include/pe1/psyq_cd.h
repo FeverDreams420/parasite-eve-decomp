@@ -129,6 +129,14 @@ typedef struct StSectorPayload {
 } StSectorPayload;
 
 extern StHEADER *StRingAddr;
+/* A ring header addressed by its byte offset. StFreeRing and init_ring_status
+ * clear its leading status as a plain halfword or word, not a member. */
+typedef union StHeaderAddress {
+    StHEADER *header;
+    s16 *status;
+    s32 *statusWord;
+    u32 word;
+} StHeaderAddress;
 extern u32 StRingSize;
 
 /* C_004 streaming completion and back-location state. The byte-view alias
@@ -295,6 +303,11 @@ extern s32 g_DsSyncResultCountdown;
 extern int g_CdRomCmdTimeout;
 extern int g_CdRomCmdRetryState;
 extern int g_CdRomCmdLongTimeoutTable[];
+/* A long-timeout flag addressed by the command's word offset. */
+typedef union CdTimeoutFlagAddress {
+    int *flag;
+    u32 word;
+} CdTimeoutFlagAddress;
 
 /* Recover the shared command window from its timeout/ready-result word. */
 #define CDROM_EVENT_STATE_FROM_TIMEOUT(pointer) \
