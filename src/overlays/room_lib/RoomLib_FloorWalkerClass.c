@@ -1,5 +1,3 @@
-/* MASPSX_FLAGS: --expand-div */
-
 /*
  * The floor walker actor class driven by RoomLib_HandlerG: a sixth class
  * that 8 rooms (room_m145, m152, m153, m154, m332, m399, m401, m402) link

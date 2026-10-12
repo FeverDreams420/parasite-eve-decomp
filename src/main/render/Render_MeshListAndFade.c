@@ -1,5 +1,4 @@
 /* CC1_FLAGS: -fno-strength-reduce */
-/* MASPSX_FLAGS: --expand-div */
 
 /* Geometry sprite entries and mesh lists, the screen fade and tint, the
  * background scroll/parallax step and the room shadow and primitive colour

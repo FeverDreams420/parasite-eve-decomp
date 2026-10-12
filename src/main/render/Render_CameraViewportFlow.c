@@ -1,5 +1,3 @@
-/* MASPSX_FLAGS: --expand-div */
-
 #include "pe1/geom_state.h"
 #include "pe1/game_state.h"
 #include "pe1/projection_slot.h"

@@ -1,5 +1,3 @@
-/* MASPSX_FLAGS: --expand-div */
-
 #include "common.h"
 #include "pe1/scene_e18_effects.h"
 #include "pe1/field_anim_callback_list.h"

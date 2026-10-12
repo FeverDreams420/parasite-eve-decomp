@@ -22,7 +22,9 @@ if [ -z "${PE_CC1:-}" ] && grep -q 'GCC_VERSION:.*2\.8\.1' "$IN"; then
     CC1="$ROOT/tools/scripts/cc1_stock281psx.sh"
 fi
 MASPSX=("$ROOT/.venv/bin/python" "$ROOT/tools/maspsx/maspsx.py")
-MASPSX_ASPSX_VERSION="${PE_MASPSX_ASPSX_VERSION:-2.56}"
+# Default ASPSX 2.70: every unit compiles the same under it except the ones
+# that say `ASPSX_VERSION: 2.56` (docs/COMPILATION_FLAGS.md).
+MASPSX_ASPSX_VERSION="${PE_MASPSX_ASPSX_VERSION:-2.70}"
 if [ -z "${PE_MASPSX_ASPSX_VERSION:-}" ]; then
     SOURCE_ASPSX_VERSION=$(sed -n 's/.*ASPSX_VERSION:[[:space:]]*\([0-9][0-9.]*\).*/\1/p' "$IN" | head -1)
     if [ -n "$SOURCE_ASPSX_VERSION" ]; then
@@ -116,7 +118,9 @@ MASPSX_EXTRA=()
 if grep -q 'MASPSX_FLAGS:.*--dont-expand-li' "$IN"; then
     MASPSX_EXTRA+=(--dont-expand-li)
 fi
-if grep -q 'MASPSX_FLAGS:.*--expand-div' "$IN"; then
+# Divisions get ASPSX's divide checks unless the unit opts out with
+# `MASPSX_FLAGS: --no-expand-div` (MASPSX itself has no negative option).
+if ! grep -q 'MASPSX_FLAGS:.*--no-expand-div' "$IN"; then
     MASPSX_EXTRA+=(--expand-div)
 fi
 if grep -q 'MASPSX_FLAGS:.*--use-comm-section' "$IN"; then

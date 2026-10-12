@@ -1,5 +1,3 @@
-/* MASPSX_FLAGS: --expand-div */
-
 /*
  * The grab attack set: an actor class that seizes the player when it comes
  * within reach, holds the player through its own animation and lets go,

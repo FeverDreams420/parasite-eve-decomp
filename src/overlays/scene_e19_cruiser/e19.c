@@ -1,5 +1,3 @@
-/* MASPSX_FLAGS: --expand-div */
-
 #include "common.h"
 #include "pe1/scene_grab_trigger.h"
 #include "pe1/scene_grab_head.h"

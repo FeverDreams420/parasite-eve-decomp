@@ -1,5 +1,3 @@
-/* MASPSX_FLAGS: --expand-div */
-
 /*
  * The room library: five actor classes, driven by RoomLib_HandlerD,
  * RoomLib_HandlerE, RoomLib_HandlerB, RoomLib_HandlerC and RoomLib_HandlerA.

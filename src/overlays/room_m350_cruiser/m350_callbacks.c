@@ -1,5 +1,3 @@
-/* MASPSX_FLAGS: --expand-div */
-
 #include "common.h"
 #include "pe1/field_anim_pool.h"
 #include "room_m350_shared.h"

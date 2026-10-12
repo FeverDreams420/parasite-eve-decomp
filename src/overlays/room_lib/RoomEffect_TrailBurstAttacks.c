@@ -1,5 +1,3 @@
-/* MASPSX_FLAGS: --expand-div */
-
 /*
  * Trail and burst attacks: two seeking trails that chase the player, each
  * shedding sparks and flashes, and two model bursts that grow a scaled model

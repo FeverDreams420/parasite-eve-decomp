@@ -1,5 +1,3 @@
-/* MASPSX_FLAGS: --expand-div */
-
 #include "common.h"
 #include "pe1/field_actor.h"
 #include "pe1/field_sprite_draw.h"

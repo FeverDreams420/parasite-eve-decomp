@@ -5,8 +5,13 @@ Every C file is compiled by `tools/scripts/cc.sh`: the stock PSX GCC 2.7.2
 
 ```
 cc1     -w -O2 -G0 -funsigned-char -mips1 -mcpu=3000
-maspsx  --aspsx-version=2.56, assembler -G0
+maspsx  --aspsx-version=2.70 --expand-div, assembler -G0
 ```
+
+`--expand-div` and ASPSX 2.70 became the defaults on 2026-10-12 (they were
+2.56 without division checks before): every game unit, overlay unit and
+PsyQ unit compiles byte-identically under them except the two exceptions
+below, so the 55 marker parts (in 52 units) that spelled them out are gone.
 
 A file changes them with marker comments. This page covers `src/main`
 without `src/main/psyq` and `src/overlays`; `tools/reorg/flag_audit.py`
@@ -29,12 +34,13 @@ includes):
   `-fno-expensive-optimizations`, `-fno-force-mem`, `-ffixed-<reg>`, ...).
   An option that is not on the list is silently ignored.
 - `MASPSX_FLAGS:` the last `-G<n>` becomes the assembler `-G`;
-  `--expand-div`, `--dont-expand-li` and `--use-comm-section` are passed to
-  MASPSX.
+  `--dont-expand-li` and `--use-comm-section` are passed to MASPSX;
+  `--no-expand-div` drops the default `--expand-div` (cc.sh's own option,
+  MASPSX has no negative form).
 - `MASPSX_FORCE_G0: 1` keeps MASPSX in its stock forced-G0 mode when the
   assembler `-G` is not 0; without it cc.sh passes `--dont-force-G0`. With
   assembler `-G0` the marker does nothing.
-- `ASPSX_VERSION:` the ASPSX version MASPSX emulates.
+- `ASPSX_VERSION:` the ASPSX version MASPSX emulates (default 2.70).
 - `GCC_VERSION: 2.8.1` selects the stock GCC 2.8.1 `cc1`.
 - `ASSEMBLER: GNU` assembles cc1's output with plain GNU as (no MASPSX);
   `GAS_VERSION:` selects gas 2.7 / 2.8.1 (only PsyQ units use it).
@@ -48,9 +54,9 @@ file, one marker per line in a fixed order, then a blank line:
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -G8 -g3 -fno-schedule-insns */
 /* ASSEMBLER: GNU */
-/* MASPSX_FLAGS: -G8 --use-comm-section --expand-div */
+/* MASPSX_FLAGS: -G8 --use-comm-section --no-expand-div */
 /* MASPSX_FORCE_G0: 1 */
-/* ASPSX_VERSION: 2.70 */
+/* ASPSX_VERSION: 2.56 */
 ```
 
 `-G<n>` comes first, the other options in the order of
@@ -84,24 +90,26 @@ know their size. The canonical small-data sets are
 - **K0:** the same with cc1 left at `-G0`, for units whose code needs the
   cc1 `-G0` address reuse.
 
-**maspsx `--expand-div`.** MASPSX expands `div`/`divu` into the divide plus
-the divide-by-zero and overflow `break` checks, as ASPSX does; without it
-the divide is emitted bare. Adding it is byte-identical for every game unit
-except `math/Math_FixedDivide.c`, whose retail divide has no checks (its
-neighbours `Math_FixedMul` and `math_fixed` are original assembler). It is
-a soft flag: a unit needs it exactly when it divides by a variable.
+**maspsx `--expand-div` (default) and `--no-expand-div`.** MASPSX expands
+`div`/`divu` into the divide plus the divide-by-zero and overflow `break`
+checks, as ASPSX does; without it the divide is emitted bare. It is
+byte-identical for every unit that does not divide by a variable, so it is
+the default. The one exception is `math/Math_FixedDivide.c`
+(`--no-expand-div`, lev 9 without): its retail divide has no checks (its
+neighbours `Math_FixedMul` and `math_fixed` are original assembler).
 
 **maspsx `--dont-expand-li`.** Only acts when the emulated ASPSX is older
 than 2.50; with the 2.56 default it does nothing.
 
-**`ASPSX_VERSION`.** MASPSX changes behaviour at 2.60 (`sltu` with a
-negative immediate no longer goes through `$at`), 2.70 (a COMMON word may be
-reached through `$gp` with an offset, `sw v1,4(gp)`) and 2.80 (`la` through
-`$gp`). Compiling every game unit with 2.60 is identical to 2.56, so the
-`sltu` change never matters, and 2.77 configures MASPSX exactly like 2.70. Every game unit except
-`battle/Battle_EncounterFlow.c` compiles byte-identically with 2.70, so the
-marker is a soft flag that can be taken as a union in merges.
-`Battle_EncounterFlow` needs < 2.70 because it copies the 8-byte COMMON
+**`ASPSX_VERSION` (default 2.70).** MASPSX changes behaviour at 2.60
+(`sltu` with a negative immediate no longer goes through `$at`), 2.70 (a
+COMMON word may be reached through `$gp` with an offset, `sw v1,4(gp)`) and
+2.80 (`la` through `$gp`). Compiling every game unit with 2.60 is identical
+to 2.56, so the `sltu` change never matters, and 2.77 configures MASPSX
+exactly like 2.70. Every unit except `battle/Battle_EncounterFlow.c`
+compiles byte-identically with 2.70, so it is the default.
+`Battle_EncounterFlow` keeps `ASPSX_VERSION: 2.56` (lev 2 without, in
+`Battle_SaveAyaState`) because it copies the 8-byte COMMON
 `g_BattleEquipStateBlock` and retail stores its second word absolutely.
 
 **`-g3`.** Debug line notes change GCC 2.7.2's scheduling and register
@@ -145,6 +153,7 @@ and the linked binaries stayed identical:
 | `item/Menu_OpenItemUsePanelAtIndex.c` | `--use-comm-section` | the unit defines no COMMON words |
 | `scene_e18_cruiser/e18_emitters.c` | cc1 `-fno-cse-skip-blocks` | the function matches without it |
 | `battle/Battle_AttackResolution.c` | `ASPSX_VERSION` 2.77 written as 2.70 | MASPSX configures both identically |
+| 52 units in `src/main` and `src/overlays` | `--expand-div` (49), `ASPSX_VERSION: 2.70` (6) | the defaults since 2026-10-12 |
 
 `MASPSX_FORCE_G0` is also byte-identical without it in
 `battle/BattleCmd_Commands.c`, `menu/Menu_EquipItemSelection.c`,
@@ -236,11 +245,8 @@ flag):
 - `-g3`: `battle/Menu_MainUpdate.c`, `battle/Entity_UpdateTimers.c` and
   `battle/Battle_PhaseAndEnemyEffectFlow.c` now share one set, but their
   neighbours score lev 276 to 2894 under `-g3`.
-- `ASPSX_VERSION` 2.70 (six units) is neutral for every other game unit
-  except `Battle_EncounterFlow`, and `--expand-div` for every unit except
-  `Math_FixedDivide`: both could become per-directory defaults for game
-  code, which would retire about 40 markers, but a default that is not
-  written in the unit is less declarative, so the markers stay.
+- `Battle_EncounterFlow` (`ASPSX_VERSION: 2.56`) and `Math_FixedDivide`
+  (`--no-expand-div`): the only units that differ under the defaults.
 - `draw/Render_DrawWireframeModel.c` (cc1 and assembler `-G8` without
   FORCE_G0): lev 52 under K8.
 - Overlays: `render_op.c` and `RoomEffect_ConfiguredPulseCallback` need
@@ -251,86 +257,59 @@ flag):
 
 Measured on 2026-10-12 with `tools/reorg/flag_audit.py --markdown`. A
 setting is what cc.sh runs, so two files whose markers are spelled
-differently but resolve to the same options count once.
+differently but resolve to the same options count once. `--expand-div` and
+ASPSX 2.70 are defaults and only their exceptions are shown.
 
 | # | effective setting | main | overlays |
 |---|---|---|---|
-| S1 | `cc1 -G0 ; maspsx -G0` (default) | 25 | 115 |
-| S2 | `cc1 -G0 ; maspsx -G0 --expand-div` | 9 | 22 |
-| S3 | `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0` | 28 | 2 |
-| S4 | `cc1 -G0 ; gnu-as -G0` | 4 | 6 |
-| S5 | `cc1 -G8 ; maspsx -G8 --expand-div --use-comm-section FORCE_G0` | 8 | 0 |
-| S6 | `cc1 -G0 -fno-schedule-insns ; maspsx -G0` | 3 | 2 |
-| S7 | `cc1 -G0 -fno-strength-reduce ; maspsx -G0` | 1 | 2 |
-| S8 | `cc1 -G0 ; maspsx -G8 --use-comm-section FORCE_G0` | 3 | 0 |
-| S9 | `cc1 -G8 -g3 ; maspsx -G8 --expand-div --use-comm-section FORCE_G0` | 3 | 0 |
-| S10 | `cc1 -G8 ; maspsx -G8 --expand-div --use-comm-section FORCE_G0 aspsx 2.70` | 3 | 0 |
-| S11 | `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0 aspsx 2.70` | 3 | 0 |
-| S12 | `cc1 -G0 -fno-cse-skip-blocks ; maspsx -G0` | 0 | 2 |
-| S13 | `cc1 -G0 -fno-strength-reduce ; maspsx -G0 --expand-div` | 2 | 0 |
-| S14 | `cc1 -G8 -fno-strength-reduce ; maspsx -G8 --use-comm-section FORCE_G0` | 2 | 0 |
-| S15 | `cc1 -G0 -ffixed-10 -ffixed-11 -ffixed-15 -ffixed-21 -ffixed-22 -ffixed-23 -ffixed-24 -ffixed-25 ; maspsx -G0 --expand-div` | 0 | 1 |
-| S16 | `cc1 -G0 -fno-expensive-optimizations ; maspsx -G0` | 0 | 1 |
-| S17 | `cc1 -G0 -fno-force-mem ; maspsx -G0` | 1 | 0 |
-| S18 | `cc1 -G0 -fno-strength-reduce -fno-expensive-optimizations ; maspsx -G0` | 1 | 0 |
-| S19 | `cc1 -G8 -fno-cse-skip-blocks ; maspsx -G8 --expand-div --use-comm-section FORCE_G0` | 1 | 0 |
-| S20 | `cc1 -G8 -fno-expensive-optimizations ; maspsx -G8 --use-comm-section FORCE_G0` | 1 | 0 |
-| S21 | `cc1 -G8 -fno-schedule-insns ; maspsx -G8 --expand-div --use-comm-section FORCE_G0` | 1 | 0 |
-| S22 | `cc1 -G8 ; maspsx -G8` | 1 | 0 |
-| S23 | `gcc 2.8.1 ; cc1 -G0 ; maspsx -G0` | 0 | 1 |
+| S1 | `cc1 -G0 ; maspsx -G0` (default) | 33 | 133 |
+| S2 | `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0` | 41 | 2 |
+| S3 | `cc1 -G0 ; gnu-as -G0` | 4 | 6 |
+| S4 | `cc1 -G0 -fno-schedule-insns ; maspsx -G0` | 3 | 2 |
+| S5 | `cc1 -G0 -fno-strength-reduce ; maspsx -G0` | 3 | 2 |
+| S6 | `cc1 -G0 ; maspsx -G8 --use-comm-section FORCE_G0` | 3 | 0 |
+| S7 | `cc1 -G8 -g3 ; maspsx -G8 --use-comm-section FORCE_G0` | 3 | 0 |
+| S8 | `cc1 -G0 -fno-cse-skip-blocks ; maspsx -G0` | 0 | 2 |
+| S9 | `cc1 -G8 -fno-strength-reduce ; maspsx -G8 --use-comm-section FORCE_G0` | 2 | 0 |
+| S10 | `cc1 -G0 -ffixed-10 -ffixed-11 -ffixed-15 -ffixed-21 -ffixed-22 -ffixed-23 -ffixed-24 -ffixed-25 ; maspsx -G0` | 0 | 1 |
+| S11 | `cc1 -G0 -fno-expensive-optimizations ; maspsx -G0` | 0 | 1 |
+| S12 | `cc1 -G0 -fno-force-mem ; maspsx -G0` | 1 | 0 |
+| S13 | `cc1 -G0 -fno-strength-reduce -fno-expensive-optimizations ; maspsx -G0` | 1 | 0 |
+| S14 | `cc1 -G0 ; maspsx -G0 --no-expand-div` | 1 | 0 |
+| S15 | `cc1 -G8 -fno-cse-skip-blocks ; maspsx -G8 --use-comm-section FORCE_G0` | 1 | 0 |
+| S16 | `cc1 -G8 -fno-expensive-optimizations ; maspsx -G8 --use-comm-section FORCE_G0` | 1 | 0 |
+| S17 | `cc1 -G8 -fno-schedule-insns ; maspsx -G8 --use-comm-section FORCE_G0` | 1 | 0 |
+| S18 | `cc1 -G8 ; maspsx -G8` | 1 | 0 |
+| S19 | `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0 aspsx 2.56` | 1 | 0 |
+| S20 | `gcc 2.8.1 ; cc1 -G0 ; maspsx -G0` | 0 | 1 |
 
-23 distinct settings over 254 files.
+20 distinct settings over 250 files.
 
-#### S2: `cc1 -G0 ; maspsx -G0 --expand-div`
-
-- `src/main/akao/Akao_SequencerFlow.c`
-- `src/main/cdrom/CdRom_SceneAssetsAndBootRead.c`
-- `src/main/draw/Render_FontGlyphSelection.c`
-- `src/main/fieldfx/FieldFx_EmitterEffects.c`
-- `src/main/fieldfx/FieldFx_GeometryAndShapes.c`
-- `src/main/fieldfx/FieldFx_SpriteEffects.c`
-- `src/main/fieldfx/FieldFx_SpriteRendering.c`
-- `src/main/render/Render_CameraViewportFlow.c`
-- `src/main/script/Script_ValueOps.c`
-- `src/overlays/boot_display/BootDisplay_StepImageSprite.c`
-- `src/overlays/fx_common/camera_nodes.c`
-- `src/overlays/room_lib/RoomEffect_DroppedFlare.c`
-- `src/overlays/room_lib/RoomEffect_LineBurst.c`
-- `src/overlays/room_lib/RoomEffect_SparkAttacks.c`
-- `src/overlays/room_lib/RoomEffect_TrailBurstAttacks.c`
-- `src/overlays/room_lib/RoomEffect_GrabAttackSet.c`
-- `src/overlays/room_lib/RoomEffect_MirrorModel.c`
-- `src/overlays/room_lib/RoomLib_ActorClasses.c`
-- `src/overlays/room_lib/RoomLib_FloorWalkerClass.c`
-- `src/overlays/room_lib/RoomLib_WindowClass.c`
-- `src/overlays/room_m023_theater/m023.c`
-- `src/overlays/room_m256_museum/m256.c`
-- `src/overlays/room_m273_liberty/m273.c`
-- `src/overlays/room_m318_chrysler/m318.c`
-- `src/overlays/room_m349_cruiser/m349.c`
-- `src/overlays/room_m350_cruiser/m350.c`
-- `src/overlays/room_m350_cruiser/m350_callbacks.c`
-- `src/overlays/scene_e18_cruiser/e18_emitters.c`
-- `src/overlays/scene_e19_cruiser/e19.c`
-- `src/overlays/scene_e22_liberty/e22.c`
-
-#### S3: `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0`
+#### S2: `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0`
 
 - `src/main/aya/Aya_StatDerivation.c`
 - `src/main/battle/BattleCmd_Commands.c`
-- `src/main/battle/Battle_EncounterFlow.c`
+- `src/main/battle/Battle_AttackResolution.c`
+- `src/main/battle/Battle_EnemyMovement.c`
 - `src/main/battle/Battle_PlayerTurnFlow.c`
+- `src/main/battle/Battle_Setup.c`
+- `src/main/battle/Battle_StatusHud.c`
+- `src/main/battle/Battle_TurnFlow.c`
+- `src/main/battle/Entity_HitAndDropTable.c`
 - `src/main/boot/Boot_FrameLoop.c`
 - `src/main/boot/Boot_InitSystemFlow.c`
 - `src/main/cdrom/CdRom_TrackReadFlow.c`
-- `src/main/draw/Draw_WipeAndGradient.c`
 - `src/main/draw/Draw_RenderFrame.c`
+- `src/main/draw/Draw_Textbox.c`
+- `src/main/draw/Draw_WipeAndGradient.c`
 - `src/main/entity/Entity_FrameUpdate.c`
+- `src/main/field/Entity_ActorCollision.c`
 - `src/main/item/Inv_ActiveList.c`
 - `src/main/item/Inv_ArmorCapacity.c`
 - `src/main/item/Inv_InventorySwap.c`
 - `src/main/item/Inv_ItemActions.c`
 - `src/main/item/Menu_OpenItemUsePanelAtIndex.c`
+- `src/main/menu/MenuWidget_Lifecycle.c`
 - `src/main/menu/Menu_EquipItemSelection.c`
 - `src/main/menu/Menu_EquipScreenFlow.c`
 - `src/main/menu/Menu_InventoryScreens.c`
@@ -342,15 +321,20 @@ differently but resolve to the same options count once.
 - `src/main/menu/Menu_SkillScreens.c`
 - `src/main/menu/Menu_StatusPanels.c`
 - `src/main/menu/queue.c`
+- `src/main/render/Render_FrameUpdateAndScreenState.c`
+- `src/main/render/Render_ObjectDraw.c`
+- `src/main/save/Save_GameData.c`
 - `src/main/scene/Scene_RoomLoad.c`
 - `src/main/script/Script_ActorOpcodes.c`
+- `src/main/script/Script_FlowOpcodes.c`
+- `src/main/script/Script_NodeActions.c`
 - `src/overlays/fx_common/render_op.c`
 - `src/overlays/room_m350_cruiser/RoomEffect_ConfiguredPulseCallback.c`
 
-#### S4: `cc1 -G0 ; gnu-as -G0`
+#### S3: `cc1 -G0 ; gnu-as -G0`
 
-- `src/main/draw/Math_SqrtApprox3.c`
 - `src/main/draw/Draw_PackPrimColor.c`
+- `src/main/draw/Math_SqrtApprox3.c`
 - `src/main/math/Math_FixedMul.c`
 - `src/main/math/math_fixed.c`
 - `src/overlays/mdec_diag/DecDCTPutEnv.c`
@@ -360,103 +344,85 @@ differently but resolve to the same options count once.
 - `src/overlays/mdec_diag/MdecDiag_Reset.c`
 - `src/overlays/mdec_diag/MdecDiag_SendInput.c`
 
-#### S5: `cc1 -G8 ; maspsx -G8 --expand-div --use-comm-section FORCE_G0`
+#### S4: `cc1 -G0 -fno-schedule-insns ; maspsx -G0`
 
-- `src/main/battle/Battle_EnemyMovement.c`
-- `src/main/battle/Battle_Setup.c`
-- `src/main/battle/Entity_HitAndDropTable.c`
-- `src/main/menu/MenuWidget_Lifecycle.c`
-- `src/main/render/Render_FrameUpdateAndScreenState.c`
-- `src/main/render/Render_ObjectDraw.c`
-- `src/main/save/Save_GameData.c`
-- `src/main/script/Script_NodeActions.c`
-
-#### S6: `cc1 -G0 -fno-schedule-insns ; maspsx -G0`
-
-- `src/main/draw/Render_FontGlyphLoad.c`
 - `src/main/draw/Draw_InitGpuHwRegs.c`
+- `src/main/draw/Render_FontGlyphLoad.c`
 - `src/main/fieldfx/FieldFx_AngleMath.c`
 - `src/overlays/fx_common/FxCommon_SetMotionEndpoints.c`
 - `src/overlays/room_m273_liberty/RoomM273_PulseSpriteCallback.c`
 
-#### S7: `cc1 -G0 -fno-strength-reduce ; maspsx -G0`
+#### S5: `cc1 -G0 -fno-strength-reduce ; maspsx -G0`
 
+- `src/main/akao/Akao_VoiceBankLifecycle.c`
 - `src/main/fieldfx/FieldFx_CollisionQueries.c`
+- `src/main/render/Render_MeshListAndFade.c`
 - `src/overlays/room_lib/RoomEffect_MotionParticles_2.c`
 - `src/overlays/room_lib/RoomEffect_OrbitEffectSet.c`
 
-#### S8: `cc1 -G0 ; maspsx -G8 --use-comm-section FORCE_G0`
+#### S6: `cc1 -G0 ; maspsx -G8 --use-comm-section FORCE_G0`
 
 - `src/main/boot/Draw_InitPipeline.c`
 - `src/main/script/Script_FieldSfxQueue.c`
 - `src/main/script/Script_SystemOpcodes.c`
 
-#### S9: `cc1 -G8 -g3 ; maspsx -G8 --expand-div --use-comm-section FORCE_G0`
+#### S7: `cc1 -G8 -g3 ; maspsx -G8 --use-comm-section FORCE_G0`
 
 - `src/main/battle/Battle_PhaseAndEnemyEffectFlow.c`
 - `src/main/battle/Entity_UpdateTimers.c`
 - `src/main/battle/Menu_MainUpdate.c`
 
-#### S10: `cc1 -G8 ; maspsx -G8 --expand-div --use-comm-section FORCE_G0 aspsx 2.70`
-
-- `src/main/battle/Battle_StatusHud.c`
-- `src/main/battle/Battle_TurnFlow.c`
-- `src/main/field/Entity_ActorCollision.c`
-
-#### S11: `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0 aspsx 2.70`
-
-- `src/main/battle/Battle_AttackResolution.c`
-- `src/main/draw/Draw_Textbox.c`
-- `src/main/script/Script_FlowOpcodes.c`
-
-#### S12: `cc1 -G0 -fno-cse-skip-blocks ; maspsx -G0`
+#### S8: `cc1 -G0 -fno-cse-skip-blocks ; maspsx -G0`
 
 - `src/overlays/menu_memcard/MenuCard_FlipScreenPages.c`
 - `src/overlays/menu_memcard/MenuCard_ListAndScreenFlow.c`
 
-#### S13: `cc1 -G0 -fno-strength-reduce ; maspsx -G0 --expand-div`
-
-- `src/main/akao/Akao_VoiceBankLifecycle.c`
-- `src/main/render/Render_MeshListAndFade.c`
-
-#### S14: `cc1 -G8 -fno-strength-reduce ; maspsx -G8 --use-comm-section FORCE_G0`
+#### S9: `cc1 -G8 -fno-strength-reduce ; maspsx -G8 --use-comm-section FORCE_G0`
 
 - `src/main/entity/Entity_PoolInit.c`
 - `src/main/script/Script_NodePool.c`
 
-#### S15: `cc1 -G0 -ffixed-10 -ffixed-11 -ffixed-15 -ffixed-21 -ffixed-22 -ffixed-23 -ffixed-24 -ffixed-25 ; maspsx -G0 --expand-div`
+#### S10: `cc1 -G0 -ffixed-10 -ffixed-11 -ffixed-15 -ffixed-21 -ffixed-22 -ffixed-23 -ffixed-24 -ffixed-25 ; maspsx -G0`
 
 - `src/overlays/scene_e20_cruiser/SceneE20_HoverOrbController.c`
 
-#### S16: `cc1 -G0 -fno-expensive-optimizations ; maspsx -G0`
+#### S11: `cc1 -G0 -fno-expensive-optimizations ; maspsx -G0`
 
 - `src/overlays/fx_common/FxCommon_EffectInitializationFlow.c`
 
-#### S17: `cc1 -G0 -fno-force-mem ; maspsx -G0`
+#### S12: `cc1 -G0 -fno-force-mem ; maspsx -G0`
 
 - `src/main/asset/Asset_UnloadTableEntries.c`
 
-#### S18: `cc1 -G0 -fno-strength-reduce -fno-expensive-optimizations ; maspsx -G0`
+#### S13: `cc1 -G0 -fno-strength-reduce -fno-expensive-optimizations ; maspsx -G0`
 
 - `src/main/render/Render_LoadMeshEntry.c`
 
-#### S19: `cc1 -G8 -fno-cse-skip-blocks ; maspsx -G8 --expand-div --use-comm-section FORCE_G0`
+#### S14: `cc1 -G0 ; maspsx -G0 --no-expand-div`
+
+- `src/main/math/Math_FixedDivide.c`
+
+#### S15: `cc1 -G8 -fno-cse-skip-blocks ; maspsx -G8 --use-comm-section FORCE_G0`
 
 - `src/main/draw/Draw_TextPrimitives.c`
 
-#### S20: `cc1 -G8 -fno-expensive-optimizations ; maspsx -G8 --use-comm-section FORCE_G0`
+#### S16: `cc1 -G8 -fno-expensive-optimizations ; maspsx -G8 --use-comm-section FORCE_G0`
 
 - `src/main/menu/Menu_ItemDetailPanel.c`
 
-#### S21: `cc1 -G8 -fno-schedule-insns ; maspsx -G8 --expand-div --use-comm-section FORCE_G0`
+#### S17: `cc1 -G8 -fno-schedule-insns ; maspsx -G8 --use-comm-section FORCE_G0`
 
 - `src/main/draw/Draw_AllocColorQuad.c`
 
-#### S22: `cc1 -G8 ; maspsx -G8`
+#### S18: `cc1 -G8 ; maspsx -G8`
 
 - `src/main/draw/Render_DrawWireframeModel.c`
 
-#### S23: `gcc 2.8.1 ; cc1 -G0 ; maspsx -G0`
+#### S19: `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0 aspsx 2.56`
+
+- `src/main/battle/Battle_EncounterFlow.c`
+
+#### S20: `gcc 2.8.1 ; cc1 -G0 ; maspsx -G0`
 
 - `src/overlays/mdec_diag/DecDCTReset.c`
 
@@ -467,7 +433,10 @@ removed on its own (and the whole small-data part together) and the unit
 recompiled; "identical" means
 the object is byte-identical without it. "Same code, symbol table differs"
 means only the order of symbol-table entries changed (cc1 `-G8` emits
-`.extern` lines for small words).
+`.extern` lines for small words). The `--expand-div` and `ASPSX_VERSION 2.70`
+entries were measured while those were markers; they are now the defaults,
+so the numbers say what the unit scores with `--no-expand-div` or
+`ASPSX_VERSION: 2.56`.
 
 | unit | without this marker part (lev, worst functions) |
 |---|---|
@@ -477,7 +446,7 @@ means only the order of symbol-table entries changed (cc1 `-G8` emits
 | `main/aya/Aya_StatDerivation.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 2 (Inv_GetBonusSlotCount 2); maspsx `--use-comm-section`: lev 1 (Inv_GetBonusSlotCount 1); FORCE_G0: lev 18 (Inv_RecalcSlotStats 7, Battle_GetEnemyEscapeFlag 5, Battle_SyncEquipSlots 4); small-data set: lev 2 (Inv_GetBonusSlotCount 2) |
 | `main/battle/BattleCmd_Commands.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 93 (Inv_SetActiveList 37, BattleCmd_LoadWeaponModifiers 13, BattleCmd_UndoPending 12); maspsx `--use-comm-section`: lev 20 (Inv_SetActiveList 7, BattleCmd_UndoPending 2, BattleCmd_UndoAllPending 2); FORCE_G0: lev 68 (Inv_SetActiveList 26, BattleCmd_GetRemainingAmmo 8, BattleCmd_ChangeWeaponAndSync 8); small-data set: lev 93 (Inv_SetActiveList 37, BattleCmd_LoadWeaponModifiers 13, BattleCmd_UndoPending 12) |
 | `main/battle/Battle_AttackResolution.c` | cc1 `-G8`: lev 182 (Battle_ApplySpellEffect 79, Battle_StepAyaAction 58, Battle_StepCharacterAction 45); maspsx `-G8`: lev 395 (Battle_StepAyaAction 167, Battle_StepCharacterAction 90, Battle_ResolveHitOnTimer 90); maspsx `--use-comm-section`: lev 116 (Battle_StepAyaAction 58, Battle_ResolveHitOnTimer 27, Battle_StepCharacterAction 25); FORCE_G0: lev 569 (Battle_StepAyaAction 151, Battle_ApplySpellEffect 125, Battle_ResolveHitOnTimer 96); ASPSX_VERSION 2.70: lev 63 (Battle_StepAyaAction 63); small-data set: lev 452 (Battle_StepAyaAction 176, Battle_StepCharacterAction 90, Battle_ResolveHitOnTimer 90) |
-| `main/battle/Battle_EncounterFlow.c` | cc1 `-G8`: lev 12 (Battle_Update 6, Battle_PhaseInitEnemyTurn 6); maspsx `-G8`: lev 670 (Battle_Update 170, Battle_StepPostBattle 89, Battle_StepVictory 85); maspsx `--use-comm-section`: lev 176 (Battle_Update 44, Battle_StepVictory 32, Battle_StepPostBattle 24); FORCE_G0: lev 1295 (Battle_PhaseInitEnemyTurn 289, Battle_PhaseEndTurn 275, Battle_Update 264); small-data set: lev 682 (Battle_Update 176, Battle_StepPostBattle 89, Battle_StepVictory 85) |
+| `main/battle/Battle_EncounterFlow.c` | ASPSX_VERSION 2.56: lev 2 (Battle_SaveAyaState 2); cc1 `-G8`: lev 12 (Battle_Update 6, Battle_PhaseInitEnemyTurn 6); maspsx `-G8`: lev 670 (Battle_Update 170, Battle_StepPostBattle 89, Battle_StepVictory 85); maspsx `--use-comm-section`: lev 176 (Battle_Update 44, Battle_StepVictory 32, Battle_StepPostBattle 24); FORCE_G0: lev 1295 (Battle_PhaseInitEnemyTurn 289, Battle_PhaseEndTurn 275, Battle_Update 264); small-data set: lev 682 (Battle_Update 176, Battle_StepPostBattle 89, Battle_StepVictory 85) |
 | `main/battle/Battle_EnemyMovement.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: identical; maspsx `--use-comm-section`: identical; maspsx `--expand-div`: lev 70 (Battle_StepEnemyMovement 70); FORCE_G0: lev 169 (Battle_StepEntityAnimState 73, Battle_StepEnemyMovement 71, Battle_UpdateEntityFacing 25); small-data set: same code, symbol table differs |
 | `main/battle/Battle_PhaseAndEnemyEffectFlow.c` | cc1 `-G8`: same code, symbol table differs; cc1 `-g3`: lev 1588 (Battle_AdvancePhase 633, Battle_StartEnemyAttackEffect 161, LM196 37); maspsx `-G8`: lev 61 (LM196 3, LM93 2, LM9 2); maspsx `--use-comm-section`: lev 30 (LM93 1, LM9 1, LM77 1); maspsx `--expand-div`: identical; FORCE_G0: lev 99 (LM196 5, LM82 4, LM81 4); small-data set: lev 61 (LM196 3, LM93 2, LM9 2) |
 | `main/battle/Battle_PlayerTurnFlow.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 51 (Battle_UpdatePlayerTurn 42, Battle_ApplyPlayerHit 9); maspsx `--use-comm-section`: lev 14 (Battle_UpdatePlayerTurn 11, Battle_ApplyPlayerHit 3); FORCE_G0: lev 74 (Battle_UpdatePlayerTurn 44, Battle_ApplyPlayerHit 30); small-data set: lev 51 (Battle_UpdatePlayerTurn 42, Battle_ApplyPlayerHit 9) |
@@ -515,6 +484,7 @@ means only the order of symbol-table entries changed (cc1 `-G8` emits
 | `main/item/Inv_InventorySwap.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 397 (Inv_RebuildWithSlotLimit 91, Inv_TransferItemAlt 47, Inv_TransferItem 46); maspsx `--use-comm-section`: lev 108 (Inv_RebuildWithSlotLimit 18, Inv_TransferItem 17, Inv_TransferItemAlt 13); FORCE_G0: lev 90 (Inv_TransferItem 56, Inv_TransferItemAlt 27, Inv_CanAddActiveListItemToAya 7); small-data set: lev 397 (Inv_RebuildWithSlotLimit 91, Inv_TransferItemAlt 47, Inv_TransferItem 46) |
 | `main/item/Inv_ItemActions.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 932 (Inv_BuildCompatibleWeaponBitset 217, Inv_RebuildSelectableMask 181, Inv_InitSlotDisplay 94); maspsx `--use-comm-section`: lev 242 (Inv_RebuildSelectableMask 50, Inv_BuildCompatibleWeaponBitset 48, Inv_InitSlotDisplay 37); FORCE_G0: lev 25 (Inv_RemoveActiveListItem 11, Inv_CheckFreeSlotCapacity 8, Item_PackParasiteSpells 6); small-data set: lev 932 (Inv_BuildCompatibleWeaponBitset 217, Inv_RebuildSelectableMask 181, Inv_InitSlotDisplay 94) |
 | `main/item/Menu_OpenItemUsePanelAtIndex.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 22 (Menu_OpenItemUsePanelAtIndex 22); maspsx `--use-comm-section`: lev 4 (Menu_OpenItemUsePanelAtIndex 4); FORCE_G0: identical; small-data set: lev 22 (Menu_OpenItemUsePanelAtIndex 22) |
+| `main/math/Math_FixedDivide.c` | maspsx `--no-expand-div`: lev 9 (Math_FixedDivide 9) |
 | `main/menu/MenuWidget_Lifecycle.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 797 (Menu_StepScrollCursor 133, MenuWidget_DrawList 109, MenuWidget_DrawListRow 74); maspsx `--use-comm-section`: lev 228 (MenuWidget_DrawList 37, MenuWidget_DrawListRow 29, Draw_FlushFrontBuffer 27); maspsx `--expand-div`: lev 42 (Draw_SetPrimCallback 22, MenuWidget_EaseNodePosition 20); FORCE_G0: identical; small-data set: lev 797 (Menu_StepScrollCursor 133, MenuWidget_DrawList 109, MenuWidget_DrawListRow 74) |
 | `main/menu/Menu_EquipItemSelection.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 177 (Menu_CreateAmmoSpendPanel 36, Menu_StepEquipSlotSelect 29, Menu_StepItemGridScroll 24); maspsx `--use-comm-section`: lev 44 (Menu_CreateAmmoSpendPanel 17, Menu_StepEquipSlotSelect 6, Menu_AmmoSpendInputHandler 6); FORCE_G0: identical; small-data set: lev 177 (Menu_CreateAmmoSpendPanel 36, Menu_StepEquipSlotSelect 29, Menu_StepItemGridScroll 24) |
 | `main/menu/Menu_EquipScreenFlow.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 185 (Menu_InventoryInputHandler 56, Menu_StepEquipScreen 50, Menu_OpenItemActionSubmenu 44); maspsx `--use-comm-section`: lev 46 (Menu_OpenItemActionSubmenu 13, Menu_StepEquipScreen 11, Menu_OnInventoryItemConfirm 9); FORCE_G0: lev 13 (Menu_OnInventoryItemConfirm 13); small-data set: lev 185 (Menu_InventoryInputHandler 56, Menu_StepEquipScreen 50, Menu_OpenItemActionSubmenu 44) |

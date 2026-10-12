@@ -1,6 +1,7 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
+/* ASPSX_VERSION: 2.56 */
 
 #include "common.h"
 #include "pe1/battle_runtime.h"

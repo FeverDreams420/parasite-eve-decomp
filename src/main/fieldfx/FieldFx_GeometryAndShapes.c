@@ -1,5 +1,3 @@
-/* MASPSX_FLAGS: --expand-div */
-
 #include "pe1/gte.h"
 #include "pe1/room_fx.h"
 #include "pe1/render_object.h"

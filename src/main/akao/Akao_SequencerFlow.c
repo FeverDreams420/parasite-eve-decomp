@@ -1,5 +1,3 @@
-/* MASPSX_FLAGS: --expand-div */
-
 #include "common.h"
 #include "pe1/akao/spu_common.h"
 #include "pe1/psyq_spu_internal.h"

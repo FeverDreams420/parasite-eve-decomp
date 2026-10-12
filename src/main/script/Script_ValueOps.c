@@ -1,5 +1,3 @@
-/* MASPSX_FLAGS: --expand-div */
-
 #include "pe1/field_collision.h"
 #include "pe1/scene_flags.h"
 #include "pe1/player_entity.h"
@@ -9,8 +7,8 @@
 #include "pe1/boot.h"
 /* Script value opcodes: expression evaluation, current-actor vector get/set
  * and pad/flag mask tests. Contiguous default-profile handlers between the
- * node pool and the node actions; --expand-div serves the expression
- * divide and remainder and leaves the others unchanged. */
+ * node pool and the node actions; the expression divide and remainder
+ * carry ASPSX's divide checks. */
 #include "common.h"
 #include "pe1/field_actor.h"
 #include "pe1/gte.h"

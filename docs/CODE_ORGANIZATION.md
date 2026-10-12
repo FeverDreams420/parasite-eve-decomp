@@ -127,7 +127,8 @@ lies between them in the manifest (no shared `room_lib` unit, data, or foreign
 rodata between the members' rodata) and their per-file markers agree.
 `--expand-div` is not a difference: every default overlay unit compiles
 byte-identically with it, so a run that contains one `--expand-div` member
-becomes one unit with that marker. Each merge was checked with
+becomes one unit with that marker (since 2026-10-12 `--expand-div` is the
+default and no unit writes it). Each merge was checked with
 `make overlay-check` of its overlay; `tools/reorg/merge_overlay_units.py`
 does the mechanical part (hoisted includes and types, one folded
 `<unit>_externs.h`, `#undef` of each member's template macros, renamed
@@ -870,7 +871,7 @@ How the earlier groups were closed, for the next symbols of the same kind:
   does reach through `$gp`. MASPSX then emits `$gp` loads only for that
   COMMON metadata and every extern stays absolute, whatever its declared
   size. A unit whose `$gp` words are records read at a field offset also
-  takes `/* ASPSX_VERSION: 2.70 */`, which lets MASPSX keep those offset
+  takes ASPSX 2.70 (a marker then, the default now), which lets MASPSX keep those offset
   accesses `$gp`-relative (`Geo_ActorFloorResolution`, `Menu_TextboxDraw`).
   A unit that also needs cc1 to treat a small word as expensive (address
   kept in a register) gets `-G0` for cc1 instead; that is why

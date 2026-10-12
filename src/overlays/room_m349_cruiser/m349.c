@@ -1,5 +1,3 @@
-/* MASPSX_FLAGS: --expand-div */
-
 #include "pe1/room_m349_effects.h"
 #include "room_m349.h"
 

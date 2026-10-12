@@ -142,8 +142,8 @@ class SourceQualityTests(unittest.TestCase):
                 text = function_text(name)
                 self.assertEqual(len(re.findall(r"\) / count;", text)), 2)
                 self.assertNotIn("ROOMLIB_DIV_V0_A0_CHECKED", text)
-                self.assertIn("/* MASPSX_FLAGS: --expand-div */",
-                              find_definition(name).read_text())
+                self.assertNotIn("--no-expand-div",
+                                 find_definition(name).read_text())
 
     def test_cpu_helper_mentions_are_not_calls(self):
         text = '''

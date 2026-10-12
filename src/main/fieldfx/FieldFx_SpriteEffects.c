@@ -1,5 +1,3 @@
-/* MASPSX_FLAGS: --expand-div */
-
 #include "pe1/render_object.h"
 #include "pe1/field_anim.h"
 #include "pe1/battle_runtime.h"

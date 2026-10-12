@@ -13,7 +13,9 @@ effective setting:
   beyond the defaults ``-w -O2 -G0 -funsigned-char -mips1 -mcpu=3000``;
 - the assembler back end (MASPSX + GNU as, plain GNU as, gas 2.7/2.8.1);
 - the assembler ``-G`` value, MASPSX's options, its ASPSX version and
-  whether MASPSX keeps its forced-G0 mode (``MASPSX_FORCE_G0``).
+  whether MASPSX keeps its forced-G0 mode (``MASPSX_FORCE_G0``). cc.sh
+  expands divisions and emulates ASPSX 2.70 by default, so only the
+  exceptions (``--no-expand-div``, another ASPSX version) are shown.
 
 Marker text that cc.sh does not act on is reported as dead.
 """
@@ -91,7 +93,10 @@ def setting(info: dict[str, str]) -> dict[str, object]:
         flags = info.get("maspsx_flags", "").split()
         result["aspsx"] = info["aspsx_version"]
         result["force_g0"] = info["as_g"] != "-G0" and "--dont-force-G0" not in flags
-        result["maspsx"] = [flag for flag in flags if flag != "--dont-force-G0"]
+        result["maspsx"] = [flag for flag in flags
+                            if flag not in ("--dont-force-G0", "--expand-div")]
+        if "--expand-div" not in flags:
+            result["maspsx"].append("--no-expand-div")
     return result
 
 
@@ -104,7 +109,7 @@ def key_of(s: dict[str, object]) -> str:
         tail = [s["as_g"], *s["maspsx"]]
         if s["force_g0"]:
             tail.append("FORCE_G0")
-        if s["aspsx"] != "2.56":
+        if s["aspsx"] != "2.70":
             tail.append(f"aspsx {s['aspsx']}")
         parts.append("maspsx " + " ".join(tail))
     else:
@@ -137,7 +142,9 @@ def dead_markers(path: pathlib.Path, s: dict[str, object],
                 if re.fullmatch(r"-G\d+", flag):
                     if flag == "-G0":
                         dead.append(f"line {line}: MASPSX_FLAGS {flag} is the default")
-                elif flag not in ("--expand-div", "--dont-expand-li",
+                elif flag == "--expand-div":
+                    dead.append(f"line {line}: MASPSX_FLAGS {flag} is the default")
+                elif flag not in ("--no-expand-div", "--dont-expand-li",
                                   "--use-comm-section"):
                     dead.append(f"line {line}: MASPSX_FLAGS {flag} is not read by cc.sh")
             if s["backend"] != "maspsx":
@@ -145,8 +152,8 @@ def dead_markers(path: pathlib.Path, s: dict[str, object],
         elif kind == "MASPSX_FORCE_G0":
             if s["backend"] != "maspsx" or s["as_g"] == "-G0":
                 dead.append(f"line {line}: MASPSX_FORCE_G0 with assembler -G0 does nothing")
-        elif kind == "ASPSX_VERSION" and value == "2.56":
-            dead.append(f"line {line}: ASPSX_VERSION 2.56 is the default")
+        elif kind == "ASPSX_VERSION" and value == "2.70":
+            dead.append(f"line {line}: ASPSX_VERSION 2.70 is the default")
     kinds = [kind for _, kind, _ in found]
     for kind in set(kinds):
         if kinds.count(kind) > 1:
@@ -190,7 +197,8 @@ def main() -> int:
     default = key_of(setting({"cc1": "cc1_stock272psx.sh",
                               "cc1_flags": " ".join(CC1_DEFAULT),
                               "backend": "maspsx", "as_g": "-G0",
-                              "aspsx_version": "2.56", "maspsx_flags": ""}))
+                              "aspsx_version": "2.70",
+                              "maspsx_flags": "--expand-div"}))
 
     def area(file: str) -> str:
         return "main" if file.startswith("src/main/") else "overlays"

@@ -1,7 +1,6 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
-/* ASPSX_VERSION: 2.70 */
 
 #include "pe1/geom_state.h"
 #include "pe1/player_entity.h"

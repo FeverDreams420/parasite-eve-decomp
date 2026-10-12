@@ -9,17 +9,20 @@ settings in one block at the very top of the file:
     /* GCC_VERSION: 2.8.1 */
     /* CC1_FLAGS: -G8 -g3 -fno-schedule-insns */
     /* ASSEMBLER: GNU */
-    /* MASPSX_FLAGS: -G8 --use-comm-section --expand-div */
+    /* MASPSX_FLAGS: -G8 --use-comm-section --no-expand-div */
     /* MASPSX_FORCE_G0: 1 */
-    /* ASPSX_VERSION: 2.70 */
+    /* ASPSX_VERSION: 2.56 */
 
 - one marker per line, in this order, each at most once, followed by a
   blank line; no marker text anywhere else in the file;
 - `-G<n>` first in its marker, then the options in the order listed in
   CC1_OPTIONS / MASPSX_OPTIONS below, no repeats;
 - only options cc.sh acts on, and no defaults written out (`-G0`,
-  ASPSX 2.56); MASPSX_FORCE_G0 only with an assembler -G, MASPSX markers
-  only on MASPSX units.
+  `--expand-div`, ASPSX 2.70); MASPSX_FORCE_G0 only with an assembler -G,
+  MASPSX markers only on MASPSX units.
+
+cc.sh expands divisions (`--expand-div`) and emulates ASPSX 2.70 unless a
+unit says otherwise (`--no-expand-div`, `ASPSX_VERSION: 2.56`).
 
 `--fix` rewrites files into that form (it only moves and respells markers;
 the build decides whether the result is byte-identical). docs/CONVENTIONS.md
@@ -43,7 +46,10 @@ CC1_OPTIONS = ["-O1", "-O3", "-g3", "-mdebuga", "-fno-schedule-insns",
                "-fno-rerun-cse-after-loop", "-fno-thread-jumps",
                "-mno-split-addresses", "-fcall-used-$1"] + [
     f"-ffixed-{n}" for n in (10, 11, 15, 20, 21, 22, 23, 24, 25)]
-MASPSX_OPTIONS = ["--use-comm-section", "--expand-div", "--dont-expand-li"]
+MASPSX_OPTIONS = ["--use-comm-section", "--no-expand-div", "--dont-expand-li"]
+# Written defaults: cc.sh applies them to every unit, so the marker says nothing.
+DEFAULTS = {"-G0", "--expand-div"}
+DEFAULT_ASPSX = "2.70"
 ANY_MARKER = re.compile(r"\b(" + "|".join(KINDS) + r")\s*:")
 LINE = re.compile(r"^/\* (" + "|".join(KINDS) + r"): (\S.*?) \*/$")
 LOOSE = re.compile(r"^\s*/\*\s*(" + "|".join(KINDS) + r")\s*:\s*(.*?)\s*\*/\s*$")
@@ -75,10 +81,10 @@ def canonical(markers: dict[str, list[str]]) -> tuple[list[str], list[str]]:
             rest = [t for t in tokens if not G.fullmatch(t)]
             if len(set(gs)) > 1:
                 errors.append(f"{kind} has several -G values: {gs}")
-            unknown = [t for t in rest if t not in known]
+            unknown = [t for t in rest if t not in known and t not in DEFAULTS]
             if unknown:
                 errors.append(f"{kind} options cc.sh does not read: {unknown}")
-            out = [g for g in dict.fromkeys(gs) if g != "-G0"]
+            out = [g for g in dict.fromkeys(gs) if g not in DEFAULTS]
             out += [o for o in known if o in rest]
             if kind == "MASPSX_FLAGS":
                 if backend != "maspsx":
@@ -96,7 +102,7 @@ def canonical(markers: dict[str, list[str]]) -> tuple[list[str], list[str]]:
         elif kind == "ASPSX_VERSION":
             if backend != "maspsx":
                 errors.append("ASPSX_VERSION on a GNU as unit")
-            if tokens != ["2.56"]:
+            if tokens != [DEFAULT_ASPSX]:
                 lines.append(f"/* ASPSX_VERSION: {' '.join(tokens)} */")
         else:
             lines.append(f"/* {kind}: {' '.join(tokens)} */")
@@ -122,7 +128,7 @@ def check(path: pathlib.Path, fix: bool) -> list[str]:
     if any(len(v) > 1 for v in markers.values()):
         problems.append("a marker is written more than once")
     rest = [l for i, l in enumerate(lines) if i not in set(marker_rows)]
-    while want and rest and rest[0] == "":
+    while (want or marker_rows) and rest and rest[0] == "":
         rest.pop(0)
     expected = "\n".join(want + ([""] if want else []) + rest)
     if expected != text:

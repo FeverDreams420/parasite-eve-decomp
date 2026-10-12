@@ -1,5 +1,4 @@
 /* CC1_FLAGS: -fno-strength-reduce */
-/* MASPSX_FLAGS: --expand-div */
 
 #include "common.h"
 #include "pe1/akao.h"

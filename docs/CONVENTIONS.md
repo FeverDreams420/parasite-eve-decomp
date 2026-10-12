@@ -220,14 +220,17 @@ name is the configured overlay name.
   /* GCC_VERSION: 2.8.1 */
   /* CC1_FLAGS: -G8 -g3 -fno-schedule-insns */
   /* ASSEMBLER: GNU */
-  /* MASPSX_FLAGS: -G8 --use-comm-section --expand-div */
+  /* MASPSX_FLAGS: -G8 --use-comm-section --no-expand-div */
   /* MASPSX_FORCE_G0: 1 */
-  /* ASPSX_VERSION: 2.70 */
+  /* ASPSX_VERSION: 2.56 */
   ```
 
   `-G<n>` comes first in its marker, the other options in the order of
   `tools/scripts/check_flag_markers.py`; defaults are not written out, and
   marker text appears nowhere else in the file (cc.sh greps the whole file).
+  The defaults are cc1 `-G0`, assembler `-G0`, MASPSX `--expand-div` and
+  ASPSX 2.70; a unit that needs the opposite says `--no-expand-div`
+  (`Math_FixedDivide`) or `ASPSX_VERSION: 2.56` (`Battle_EncounterFlow`).
   Small data uses the K8 set (cc1 `-G8`, maspsx
   `-G8 --use-comm-section`, `MASPSX_FORCE_G0`) or K0 (the same without the
   cc1 marker), with one COMMON definition per word retail reaches through

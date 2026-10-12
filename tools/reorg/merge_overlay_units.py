@@ -10,9 +10,9 @@ order, which is address order) into ``src/overlays/<dir>/NEW.c``:
   ``.rodata`` entries must be adjacent too (they collapse into one entry at
   the first offset);
 * every member must carry the same per-file markers (CC1_FLAGS,
-  MASPSX_FLAGS, GCC_VERSION, ...), except that ``--expand-div`` may differ:
-  the reorganisation probe showed that every default overlay unit compiles
-  byte-identically with it, and the build check confirms each merge;
+  MASPSX_FLAGS, GCC_VERSION, ...), except that a leftover ``--expand-div``
+  may differ: it is cc.sh's default (every default overlay unit compiles
+  byte-identically with it), and the build check confirms each merge;
 * GNU-as / GAME_ASM / PSYQ_ASM units are refused.
 
 The new source keeps the function bodies in manifest order. ``#include``
