@@ -41,6 +41,7 @@ MARKER = re.compile(r"/\*\s*(CC1_FLAGS|MASPSX_FLAGS|GCC_VERSION|ASSEMBLER|GAS_VE
                     r"MASPSX_FORCE_G0)\s*:\s*(.*?)\s*\*/")
 INCLUDE = re.compile(r'^\s*#\s*include\s+([<"])([^>"]+)[>"]')
 DEFINE = re.compile(r"^\s*#\s*define\s+([A-Za-z_]\w*)", re.M)
+ALIAS = re.compile(r"^typedef\s+((?:struct\s+|union\s+)?\w+)\s+(\w+)\s*;[ \t]*\n", re.M)
 TYPE_START = re.compile(r"^(typedef\b|struct\s+\w+\s*\{|union\s+\w+\s*\{|enum\s+\w+\s*\{)")
 EXCLUDED = (
     re.compile(r"^docs/REORGANIZATION[^/]*\.md$"),
@@ -265,6 +266,30 @@ def main() -> int:
     for unit in units:
         text = MARKER.sub("", texts[unit])
         text = re.sub(r"^[ \t]*\n", "\n", text, flags=re.M)
+        # A local alias (`typedef RoomX Particle;`) whose name an earlier
+        # member already uses for another type is spelled out in this unit.
+        for alias in ALIAS.finditer(text):
+            target, name = alias.group(1), alias.group(2)
+            key = norm_ws(alias.group(0))
+            if name in type_owner and type_owner[name][1] != key:
+                text = text.replace(alias.group(0), "")
+                text = re.sub(r"\b" + name + r"\b", target, text)
+                print(f"  inlined alias {name} = {target} in {unit}")
+        # A local type body whose name an earlier member uses for another
+        # layout takes the unit's role as a prefix (`PulsingPalettePairState`).
+        role = re.sub(r"_[0-9A-F]{8}$", "", unit)
+        role = re.sub(r"^(RoomEffect|RoomM\d+|SceneE\d+|Scene|Room|RoomLib|RoomFx|FxCommon|Memcard|Boot)_?", "", role)
+        for chunk in top_level_chunks(text):
+            if not TYPE_START.match(strip_comments(chunk).strip()) or ALIAS.match(chunk.strip() + "\n"):
+                continue
+            key = norm_ws(chunk)
+            for name in defined_type_names(chunk):
+                if name in type_owner and type_owner[name][1] != key:
+                    if role.startswith("func_"):
+                        continue
+                    new_name = role + name if not name.startswith(role) else name + "B"
+                    text = re.sub(r"\b" + name + r"\b", new_name, text)
+                    print(f"  renamed type {name} -> {new_name} in {unit}")
         out: list[str] = []
         defined_before = False
         macros: list[str] = []
@@ -327,6 +352,29 @@ def main() -> int:
             body += "\n" + "".join(f"#undef {name}\n" for name in undefs)
         bodies.append(body)
 
+    # Prototypes in the folded externs headers of functions that the merged
+    # unit defines are replaced by the definition's own signature.
+    all_body = "\n".join(bodies)
+    defined: dict[str, str] = {}
+    for chunk in top_level_chunks(all_body):
+        code = strip_comments(chunk).strip()
+        if "{" not in code:
+            continue
+        sig = code.split("{", 1)[0].strip()
+        m = re.search(r"(\w+)\s*\([^;{}]*\)$", sig, re.S)
+        if m and not sig.startswith(("typedef", "struct", "union", "enum", "#")):
+            defined[m.group(1)] = re.sub(r"\s+", " ", sig) + ";"
+    kept = []
+    for eline in externs:
+        m = re.match(r"\s*(?:extern\s+)?[\w\s\*]+?\b(\w+)\s*\([^;]*\)\s*;\s*$", eline)
+        if m and m.group(1) in defined:
+            proto = defined[m.group(1)]
+            if proto not in kept:
+                kept.append(proto)
+            continue
+        kept.append(eline)
+    externs = kept
+
     head = []
     for key, flags in merged_markers.items():
         head.append(f"/* {key}: {' '.join(flags)} */\n")
@@ -350,7 +398,7 @@ def main() -> int:
     for line in conflicts:
         print(f"  type conflict {line}")
     print(f"merge {len(units)} units -> {src_path}/{new_unit}.c at {offset}")
-    print("  " + " ".join(units))
+    print("  units: " + " ".join(units))
     print(f"  markers: {merged_markers or 'default'}; externs: {len(externs_files)} headers")
     if args.dry_run:
         sys.stdout.write(source)
