@@ -34,7 +34,7 @@ void RoomFx_OrbitSetInit(RoomOrbitSetEntity *object, void *unused, RoomOrbitSetS
     u16 value128a;
     u8 value128b;
     int value32;
-    register int value1 asm("$7");
+    int packetValue;
     register int valueNeg42 asm("$5");
 
     func_800C2B40(state);
@@ -50,12 +50,12 @@ void RoomFx_OrbitSetInit(RoomOrbitSetEntity *object, void *unused, RoomOrbitSetS
     value128a = 0x80;
     value128b = 0x80;
     value32 = 0x20;
-    value1 = 1;
+    packetValue = 1;
     valueNeg42 = -0x2A;
     PE1_COMPILER_LAUNDER(value128a);
     PE1_COMPILER_LAUNDER(value128b);
     PE1_COMPILER_LAUNDER(value32);
-    PE1_COMPILER_LAUNDER(value1);
+    PE1_COMPILER_LAUNDER(packetValue);
     g_RoomOrbitParticlePacket.offset = value;
     value = 0x60;
     g_RoomOrbitBurstPacket.r = value;
@@ -76,20 +76,21 @@ void RoomFx_OrbitSetInit(RoomOrbitSetEntity *object, void *unused, RoomOrbitSetS
     g_RoomOrbitParticlePacket.b = value128b;
     g_RoomOrbitParticlePacket.zero = 0;
     g_RoomOrbitBurstPacket.code = value32;
-    g_RoomOrbitBurstPacket.mode = value1;
+    g_RoomOrbitBurstPacket.mode = packetValue;
     g_RoomOrbitBurstPacket.g = value;
     g_RoomOrbitBurstPacket.b = value;
     g_RoomOrbitBurstPacket.zero = 0;
     g_RoomOrbitShadowPacket.code = value32;
-    g_RoomOrbitShadowPacket.mode = value1;
+    g_RoomOrbitShadowPacket.mode = packetValue;
     g_RoomOrbitShadowPacket.depth = 0;
     g_RoomOrbitShadowPacket.r = 0;
     g_RoomOrbitShadowPacket.g = 0;
     g_RoomOrbitShadowPacket.b = 0;
     g_RoomOrbitShadowPacket.zero = 0;
+    packetValue = value128b;
     g_RoomOrbitSpritePacket.code = 0;
     g_RoomOrbitSpritePacket.mode = 0;
-    g_RoomOrbitSpritePacket.r = value128b;
+    g_RoomOrbitSpritePacket.r = packetValue;
     g_RoomOrbitSpritePacket.g = value128b;
     g_RoomOrbitSpritePacket.b = value128b;
     g_RoomOrbitSpritePacket.zero = 0;
