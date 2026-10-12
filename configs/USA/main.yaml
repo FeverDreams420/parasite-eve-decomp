@@ -106,7 +106,7 @@ segments:
       - [0x17AC, .rodata, menu/Menu_SaveBackground]
       - [0x17CC, .rodata, menu/Menu_StepItemSelectScreen]
       - [0x17F0, rodata, main/rodata_0017F0]
-      - [0x17F4, .rodata, menu/Menu_InventoryAndBonusPoints]
+      - [0x17F4, .rodata, menu/Menu_ItemActions]
       - [0x1830, rodata, main/rodata_001830]
       - [0x1834, .rodata, menu/Menu_CreateMainMenuView]
       - [0x184C, .rodata, menu/Menu_Dialogs]
@@ -394,14 +394,12 @@ segments:
       - [0x37358, c, menu/Menu_SkillActionHandler]
       - [0x375FC, c, menu/Menu_CreateInvSwapView]
       - [0x376AC, c, menu/Menu_InventoryWeaponModFlow]
-      - [0x37D60, c, menu/Menu_ConfigureScreen]
-      # Category tab reset, equip screen header, item action submenu, skill select,
-      # equip stats, item detail and item list views: private data and helpers join the run.
-      - [0x37E78, c, menu/Menu_ItemActionFlow]
-      - [0x38E54, c, menu/Menu_StepSaveLoadScreen]
-      - [0x39038, c, menu/Menu_SaveLoadNavigate]
-      # Inventory root step, equip panel alignment, bonus-point slot handlers and the bonus-point flow (G0426).
-      - [0x39118, c, menu/Menu_InventoryAndBonusPoints]
+      # Configure screen; category tab reset, equip screen header, item action submenu,
+      # skill select, equip stats, item detail and item list views (private data and
+      # helpers); save/load screen step and navigation; inventory root step, equip
+      # panel alignment, bonus-point slot handlers and the bonus-point flow (G0426).
+      # One unit under cc1 -G8 and the COMMON-driven assembler -G8.
+      - [0x37D60, c, menu/Menu_ItemActions]
       - [0x3B59C, c, menu/Menu_CreateMainMenuView]
       - [0x3B93C, c, menu/Menu_VisualSettingsFlow]
       - [0x3BF0C, c, menu/Menu_LevelUpFlow]
