@@ -174,52 +174,41 @@ done:;
 
 void CD_flush(void);
 
-#include "dssys_1_5_externs_1.h"
-#define D_8009B59C (D_8009B59C[0])
-
 s32 LIBDS_DSSYS_1_text_774(void) {
-    void *base;
+    int *retry;
     s32 value;
     register s32 idx;
-    s32 arg0;
-    s32 arg2;
-    s32 arg3;
 
     CD_flush();
-    base = &D_8009B59C;
-        value = *(s32 *)base;
-    idx = *(u8 *)((char *)base - 0x44);
+    retry = &g_CdRomCmdRetryState;
+    value = *retry;
+    idx = CDROM_EVENT_STATE_FROM_RETRY(retry)->pendingCommand;
     value += 1;
-    idx = idx << 2;
-    *(s32 *)base = value;
+    idx <<= 2;
+    *retry = value;
     value = *(s32 *)((char *)g_CdRomCmdLongTimeoutTable + idx);
-    idx = 0x1E;
+    idx = 30;
     if (value != 0) {
-        idx = 0x3C0;
+        idx = 960;
     }
-    arg0 = *(u8 *)((char *)base - 0x44);
-    arg2 = 0;
-    *(s32 *)((char *)base - 4) = idx;
-    value = *(s32 *)((char *)base - 0x3C);
-    arg3 = 1;
-    CD_cw(arg0, (void *)value, (u8 *)arg2, arg3);
+    CDROM_EVENT_STATE_FROM_RETRY(retry)->command.read.readyResult = idx;
+    value = CDROM_EVENT_STATE_FROM_RETRY(retry)->pendingCommand;
+    CD_cw(value, CDROM_EVENT_STATE_FROM_RETRY(retry)->pendingParams, 0, 1);
     return 0;
 }
-
-#include "dssys_1_5_externs_2.h"
 
 void LIBDS_DSSYS_1_text_7FC(int inputEvent, void *inputResult) {
     void *result = inputResult;
     int event = inputEvent;
-    int *state;
+    int *timeout;
 
     LIBDS_DSSYS_1_text_EA4((unsigned char)event, result);
-    /* The timeout symbol anchors the surrounding CD command state. */
-    state = D_8009B598;
-    state[1] = 0;
-    state[0] = 0;
-    if (((unsigned char *)state)[-44] & 0x10) event = 5;
-    switch (state[-10]) {
+    /* The timeout word anchors the surrounding CD command state. */
+    timeout = &g_CdRomCmdTimeout;
+    CDROM_EVENT_STATE_FROM_TIMEOUT(timeout)->command.retryAttempts = 0;
+    *timeout = 0;
+    if (CDROM_EVENT_STATE_FROM_TIMEOUT(timeout)->command.eventStatus & 0x10) event = 5;
+    switch (CDROM_EVENT_STATE_FROM_TIMEOUT(timeout)->command.eventValue) {
     case 0x1F:
         LIBDS_DSSYS_1_text_8B8((unsigned char)event, result);
         break;
@@ -230,6 +219,6 @@ void LIBDS_DSSYS_1_text_7FC(int inputEvent, void *inputResult) {
         LIBDS_DSSYS_1_text_D24((unsigned char)event, result);
         break;
     }
-    state = D_8009B598;
-    if (!state[0]) state[-10] = 0x21;
+    timeout = &g_CdRomCmdTimeout;
+    if (!*timeout) CDROM_EVENT_STATE_FROM_TIMEOUT(timeout)->command.eventValue = 0x21;
 }

@@ -301,6 +301,10 @@ extern int g_CdRomCmdLongTimeoutTable[];
 #define CDROM_EVENT_STATE_FROM_TIMEOUT(pointer) \
     ((CdRomEventCommandState *)((char *)(pointer) - \
         PE1_OFFSETOF(CdRomEventCommandState, command.read.readyResult)))
+/* The same window addressed from its retry counter. */
+#define CDROM_EVENT_STATE_FROM_RETRY(pointer) \
+    ((CdRomEventCommandState *)((char *)(pointer) - \
+        PE1_OFFSETOF(CdRomEventCommandState, command.retryAttempts)))
 
 /* This word is also the base address used by CQ_execute. */
 extern int g_CdDsReadIndex;
@@ -451,6 +455,8 @@ int CdGetSector(void *address, int size);
 DsCallback CdDataCallback(DsCallback callback);
 int CdDataSync(int mode);
 
+void LIBDS_DSSYS_1_text_8B8(int event, u8 *result);
+void LIBDS_DSSYS_1_text_A9C(int event, u8 *result);
 void LIBDS_DSSYS_1_text_D24(int event, u8 *result);
 
 #endif
