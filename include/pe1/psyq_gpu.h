@@ -88,7 +88,7 @@ void SetDrawTPage(void *packet, int drawTexture, int dither, int tpage);
 u_short GetClut(int x, int y);
 
 /*
- * Many GPU helpers in src/main/main currently keep local callback-table
+ * Many GPU helpers in the game code currently keep local callback-table
  * structs because register allocation is sensitive there. Centralize RECT
  * first; migrate callback declarations only after a function cluster is
  * build-checked.

@@ -4,7 +4,7 @@
 #include "common.h"
 #include "pe1/battle.h"
 
-/* Battle turn, status and map-selection flow (src/main/main). */
+/* Battle turn, status and map-selection flow (src/main/battle, script). */
 
 /* 20-byte record copied as one unit by the enemy effect flow. */
 typedef struct { u8 bytes[0x14]; } __attribute__((packed)) Tbl20;

@@ -29,7 +29,7 @@ typedef struct BattleGameStateWindow {
 PE1_STATIC_ASSERT(sizeof(BattleGameStateWindow) == 16, battle_game_state_window_size);
 
 /* Battle subsystem (ATB combat). Layout reverse-engineered from the battle code
- * (src/main/battle, src/main/main/Battle_) and validated live on real
+ * (src/main/battle) and validated live on real
  * BIOS (DuckStation GDB) by fighting the first Carnegie Hall encounter and
  * cross-checking enemy stats against the wiki (enemy max HP read as 40).
  *
