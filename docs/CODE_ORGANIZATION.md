@@ -809,9 +809,9 @@ Still open:
   - `Battle_AdvanceTurnSlot`: retail shares the queue-index store between
     the loop entry and the loop body; a `while` loop rotates the other way
     (goto and barriers, lev 27).
-  - `Battle_DrawStatusPanel` (typed digit packets lev 294),
-    `Battle_DrawHPBar` and the four phase steps of
-    `Battle_EscapeAndPhaseInitFlow` (70 pins) were not reduced further.
+  - `Battle_DrawStatusPanel` (typed digit packets lev 294) and the four
+    phase steps of `Battle_EscapeAndPhaseInitFlow` (62 pins) were not
+    reduced further; `Battle_DrawHPBar` is crutch-free (recipes below).
   - Second half of the directory (`Battle_HaltOnPositiveX` to
     `Math_IntSqrt`), measured again after the recipes above:
     - `Battle_StepEnemyMovement` (1 pin): in global allocation the
@@ -821,9 +821,10 @@ Still open:
       load then uses `s4` where retail uses the copy in `s2`); moving the
       mode's initialisation or retyping it does not help (lev 18 to 71).
     - Constant hoisting (`Battle_Update` gauge recolor: 6 pins and 7
-      barriers; `Battle_StepVictory` stat reset: 5 pins;
-      `Battle_StepPostBattle`: 13 pins and 4 barriers, most on the panel
-      quads, measured one at a time lev 2 to 38): retail loads
+      barriers; `Battle_StepPostBattle` cases 2 and 4: 6 pins, 3 barriers
+      and the volatile panel view, measured one at a time lev 2 to 38;
+      the `Battle_StepVictory` stat reset and `Battle_StepPostBattle` case
+      3 are solved, see the recipes after this list): retail loads
       every color or edge constant at the top of its block and leaves the
       later load-delay slots empty. Without the pins sched1 places each
       `li` in the first load stall after its use, whether the constant is
@@ -832,26 +833,71 @@ Still open:
       for the three blocks). The `asm("" : : "i"(n))` barriers in
       `Battle_Update` also keep cross-jumping to the last store only;
       without them blocks 1 and 3 merge (lev 299).
-    - `Battle_StepVictory` (also `result`, `object`, `brightness`, `delay`
-      pins): retail jumps from case 1 to the byte truncation in case 5
-      before register allocation, so the brightness temporaries share
-      `s0`; written as a goto or as two tails the temporaries take `v0`
-      (lev 25). The `delay` pin only moves the `249` constant (lev 2).
-    - `Battle_StepAyaAction` (9 pins, 7 barriers): case 9 written with a
-      word pointer and named inserts reaches lev 16 (the outcome stores to
-      `g_EvasionStatus` and `g_EvasionReaction` sink below the actor loads,
-      which do not alias them); with the record views the store and load of the
-      reaction share one address register under cc1 `-G0` (lev 57). The
-      pose save/restore cases keep `$2`/`$3`/`$4`/`$5` transfer pins
-      (lev 2 to 55 each, measured one at a time).
-    - `Battle_TargetAndEnemyTurnFlow` (2 pins, 2 barriers): the first
-      target-confirm sound loads the AKAO table before the `128` argument
-      and the cancel path keeps `mode = 0` in the call delay slot; every
-      plain form (inline sound helper, local table, reordered statements)
-      gives lev 11 to 16.
+    - `Battle_StepVictory` (`result`, `object`, `brightness` pins):
+      retail jumps from case 1 to the byte truncation in case 5 before
+      register allocation, so the brightness temporaries share `s0`;
+      written as a goto or as two tails the temporaries take `v0` (lev 25).
+      Without the `result` pin the `result = 1` (set twice, so not
+      launched) fills an early load stall instead of the delay slot before
+      the death-animation call (lev 3).
+    - `Battle_StepAyaAction` (6 pins, 3 barriers left; cases 0 and 9 are
+      plain C, see the recipes after this list): case 11 restores the pose
+      through the position and rotation records at lev 41, all of it one
+      `lh` of `posZ` that sched1 hoists into an earlier load stall where
+      retail reads it after the rotation stores (a `z` local, a reload
+      through `D_8009D254` or a rotation record copy do not keep it there).
+      Case 6 without the product barrier is lev 8 (`mflo` lands in `t1`, not
+      `v1`; inline products, two locals, `<< 4` and operand order do not
+      change it). Case 15 written as `flags &= mask` with `mask` assigned
+      twice keeps the two `and`s (lev 11; the one-statement mask folds them,
+      lev 29), but the flags load moves above the visibility store and the
+      registers rotate.
     - Stack reserves: `Battle_Update` keeps 0x1A0 and
       `Battle_StepPostBattle` 24 unused frame bytes; no local of the
       function accounts for them.
+  - Recipes found in the 2026-10-12 battle debt pass (each replaced pins,
+    barriers, gotos, casts or volatile with the same bytes):
+    - Packet arrays are typed (`RenderPagedSpritePacket g_BattleHpDigits[2][4]`
+      and the rest of `battle_status.h`) and indexed naturally. When retail
+      keeps the sprite base (array + 8) in its own register and adds the
+      offset to it, the stores go through `BATTLE_SPRITE_SLOTS`, a cast of
+      `&array[0][0].sprite` to rows of `BattleDigitSlot`: as a memory
+      reference GCC adds the shared index offset to the hoisted `array + 8`
+      while the packet argument and the clut store keep `array` itself
+      (`Battle_DrawHPBar`, six `goto` loops, five pins, two barriers and
+      eight pointer casts retired). An assignment as the stored value
+      (`tile.r0 = shade = shades[i]`) expands the store address before the
+      load, which is retail's order.
+    - A statement macro instead of a `static inline` sound helper:
+      inlining gives each `g_AkaoBgmHandle[0]` read its own `lui`, the
+      direct code takes the table address into a register once, as retail
+      does (`PLAY_TABLE_SOUND` in `Battle_TargetAndEnemyTurnFlow`, which
+      retired the four volatile handle pointers, two pins and two barriers).
+    - Globals that retail reaches as one object are records:
+      `g_AyaSavedPos` (three words) and `g_AyaSavedRotation` (three
+      halfwords) keep the player loads and the saved-pose stores
+      interleaved, because GCC 2.7 lets a structure store alias any other
+      structure access but never a scalar global. The evasion outcome is
+      `g_EvasionOutcome` (`BattleEvasionOutcome`, at `g_EvasionStatus`):
+      its reaction is read back after the core flag bitfield stores. Under
+      cc1 `-G0` the record address is CSE'd into a register (lev 57), so
+      the unit moved to cc1 `-G8` with `MASPSX_FORCE_G0`, which leaves the
+      other words absolute (`Battle_StepAyaAction`). The two byte names
+      remain for `Battle_ResolveHitOnTimer`: its ASPSX 2.56 addresses
+      `g_EvasionOutcome+1` absolutely, ASPSX 2.70 or later through `$gp`.
+    - Constant gradients and colors are `BATTLE_SET_GAUGE_GRADIENT` and
+      `BATTLE_SET_SPRITE_COLOR` on the typed arrays: GCC sorts the byte
+      stores by value itself (`Battle_StepVictory`, 6 pins and the interior
+      byte symbols). Quad corners are `BATTLE_SET_QUAD_XY` on a pointer
+      formed from a local copy of the array base (`panels = g_BattleEndPanels;
+      panel = &panels[slot]`), which loads the base where retail does
+      (`Battle_StepPostBattle` case 3, the volatile view, two barriers and
+      five pins).
+    - An `s16` parameter on an inline helper keeps CSE from reusing a
+      caller's `index - 1` for the helper's own `initial - 1`: the
+      conversion gives the helper a separate value, and it folds away
+      afterwards (`RewindTurn` in `Battle_AdvanceTurnSlot`, which retired
+      the `savedIndex` barrier; `int` and `u8` parameters keep lev 26).
 
 ### Small-data recipes that replaced crutches (2026-10-12 pass)
 
@@ -1019,6 +1065,14 @@ or for the best crutch-free form tried:
   constant right before its first use (lev 20 to 60 per case, 260 for the
   four HP cases together). The `asm("" : : "i"(n))` statements stop
   cross-jumping from merging more than the last store of each case.
+  Measured again on a one-function copy of a case (2026-10-12): plain code
+  already gets retail's registers (the last-born constant in `a0`), and a
+  loop note after the first store (`do { ... } while (0)`, which sched1
+  treats as a full barrier) gets retail's schedule, but the loop weights
+  the references inside it and the constants then take `a0` upwards in
+  birth order (lev 18 for the best of 288 barrier placements, types,
+  declaration orders, `register` and inline-parameter forms). No single C
+  form gave both.
   `moveLock` in `Battle_PhaseInitEnemyTurn` (lev 12: the flag store sinks
   below the player motion stores). The memory barriers in
   `Battle_StepEscapeOrDeath` and `Battle_StepEntityDeath` (lev 41: retail
@@ -1029,15 +1083,16 @@ or for the best crutch-free form tried:
   s*0x8C` order; the macro form wastes 8 to 48 stack bytes because combine
   leaves `(use)` insns for the deleted base registers, the direct array form
   computes the slot offset first (lev 73 to 128).
-- `Battle_DrawHPBar`: the six `goto` loops are loops GCC's loop optimizer
-  must not see; as `do`/`while` loops it hoists constants and spills
-  `hudPage` (lev 98). Its pins, barriers and casts stay with that structure.
 - `Battle_ActionSlotAndEnemy.c`: `room` (`$4`, lev 27: one delay slot,
   the rest is branch offsets), the `actor` barrier (lev 129: global
   allocation swaps s0/s1), the `stepDeathAnimation` goto (lev 184 for an
   inline search helper).
-- `Battle_AdvanceTurnSlot`: the `savedIndex` barrier (lev 26: CSE reuses the
-  slot index minus one from the command lookup).
+- `Battle_DrawStatusPanel`: the MISS branch with the panel as
+  `(g_BattlePanelDigits[frame] + slot)` computes the frame offset first as
+  retail does, but the five byte stores then leave five `(use)` insns
+  after combine and 40 unused frame bytes (lev 77; the `(use)` comes from
+  combine's REG_DEAD note placement when the base pseudo of a three-insn
+  combination disappears).
 
 ### Task and GPU units (src/main/{task,gpu})
 
@@ -1144,9 +1199,9 @@ Crutches still in these units, with the best crutch-free lev found:
   additions, 2 raw offsets) and `Gpu_DrawStatusIcons` keeps 8 pins. A typed
   `{ tag; mode; RenderSpritePacket sprite; }` array reproduces every
   instruction except the register base, which retail points at the sprite
-  part (lev 8 from the immediates); `battle_status.h` and
-  `Battle_DrawHPBar.c` declare the same symbols as byte arrays, so the
-  typed view belongs to a change that covers them too.
+  part (lev 8 from the immediates). `battle_status.h` now types
+  `D_8009E960` as `RenderPagedSpritePacket[2][13]` for `Battle_DrawHPBar`;
+  `D_8009E976` and `D_8009EC38` are still byte arrays for this unit.
 
 ## Link ownership
 
