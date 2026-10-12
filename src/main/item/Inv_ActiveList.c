@@ -207,7 +207,7 @@ int g_InvOverrideSlotLimit;
 u32 *g_InvSelectionBits;
 int g_InvSelectionBitWords;
 
-void Util_CopyFFTerminatedBytes(u8 *dst, u8 *src)
+void Text_CopyFFTerminatedBytes(u8 *dst, u8 *src)
 {
     u8 first;
 
@@ -225,7 +225,7 @@ void Util_CopyFFTerminatedBytes(u8 *dst, u8 *src)
     }
 }
 
-void Util_AppendFFTerminatedBytes(u8 *dst, u8 *src)
+void Text_AppendFFTerminatedBytes(u8 *dst, u8 *src)
 {
     int scan;
     u8 first;

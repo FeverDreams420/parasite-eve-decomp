@@ -1220,7 +1220,7 @@ int Menu_ItemListInputHandler(MenuWidgetNode *node, unsigned int flags)
                 MenuWidget_SetCurrentNode(options);
                 Inv_SelectActiveList(g_MenuActiveItemList);
                 g_MenuItemLabelBuffer[0] = 0xFF;
-                Util_AppendFFTerminatedBytes(g_MenuItemLabelBuffer, Text_LookupTable4(0x61));
+                Text_AppendFFTerminatedBytes(g_MenuItemLabelBuffer, Text_LookupTable4(0x61));
                 D_8009CFA0 = 0;
                 action = Menu_ItemUseAction;
                 if (Draw_MeasureTextWidth(g_MenuItemLabelBuffer) < 0x78)

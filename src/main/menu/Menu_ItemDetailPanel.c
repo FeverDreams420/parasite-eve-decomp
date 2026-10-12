@@ -123,9 +123,9 @@ void Menu_StepItemDetailPanel(void) {
     child->cursor_x = 1;
     confirm = Menu_OnItemDiscardConfirm;
     Inv_SelectActiveList(g_MenuActiveItemList);
-    if (label) Util_CopyFFTerminatedBytes(g_MenuItemLabelBuffer, label);
+    if (label) Text_CopyFFTerminatedBytes(g_MenuItemLabelBuffer, label);
     else g_MenuItemLabelBuffer[0] = 0xFF;
-    Util_AppendFFTerminatedBytes(g_MenuItemLabelBuffer, Text_LookupTable4(4));
+    Text_AppendFFTerminatedBytes(g_MenuItemLabelBuffer, Text_LookupTable4(4));
     g_MenuItemPrimListHandles[0] = 0;
     width = Draw_MeasureTextWidth(g_MenuItemLabelBuffer) < 120 ? 120 : Draw_MeasureTextWidth(g_MenuItemLabelBuffer);
     panel->grid_width = width + 20;

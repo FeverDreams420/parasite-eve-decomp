@@ -26,8 +26,8 @@ typedef union TextTableDirectory {
 void *Text_LookupTable4(unsigned int index);
 void *Text_LookupTable8(unsigned int index);
 extern int g_SaveMetadataWindowIndex;
-void Util_CopyFFTerminatedBytes(u8 *dst, u8 *src);
-void Util_AppendFFTerminatedBytes(u8 *dst, u8 *src);
+void Text_CopyFFTerminatedBytes(u8 *dst, u8 *src);
+void Text_AppendFFTerminatedBytes(u8 *dst, u8 *src);
 int Draw_MeasureTextWidth(u8 *text);
 void Draw_OffsetCursor(int x, int y);
 void Draw_PrintCenteredText(u8 *text);

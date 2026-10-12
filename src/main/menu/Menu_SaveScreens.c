@@ -370,9 +370,9 @@ void Menu_CreateNotificationDialog(int message, int suffix) {
     Menu_SetDeferredCallback(0);
     messageText = Text_LookupTable4(message);
     text = D_800A1A20[alternate];
-    Util_CopyFFTerminatedBytes(text, messageText);
+    Text_CopyFFTerminatedBytes(text, messageText);
     if (suffix) {
-        Util_AppendFFTerminatedBytes(text, Text_LookupTable4(suffix));
+        Text_AppendFFTerminatedBytes(text, Text_LookupTable4(suffix));
     }
     width = Draw_MeasureTextWidth(text) < 100 ? 100 : Draw_MeasureTextWidth(text);
     parent->grid_width = width + 20;
@@ -416,11 +416,11 @@ void Menu_CreateTwoLineDialog(int line0_id, int line1_id) {
 
     text = Text_LookupTable4(line0_id);
     line0 = D_800A1A20[0];
-    Util_CopyFFTerminatedBytes(line0, text);
+    Text_CopyFFTerminatedBytes(line0, text);
 
     text = Text_LookupTable4(line1_id);
     line1 = line0 + 0x40;
-    Util_CopyFFTerminatedBytes(line1, text);
+    Text_CopyFFTerminatedBytes(line1, text);
 
     width = MAX(100, MAX(Draw_MeasureTextWidth(D_800A1A20[0]),
                          Draw_MeasureTextWidth(D_800A1A20[1])));
@@ -684,7 +684,7 @@ s32 Menu_StepSaveSelect(MenuWidgetNode *arg0, s32 arg1) {
                             temp_s2_2->cursor_x = 1;
                             Inv_SelectActiveList(temp_a0);
                             g_MenuItemLabelBuffer[0] = 0xFF;
-                            Util_AppendFFTerminatedBytes(g_MenuItemLabelBuffer, Text_LookupTable4(0x44));
+                            Text_AppendFFTerminatedBytes(g_MenuItemLabelBuffer, Text_LookupTable4(0x44));
                             g_MenuItemPrimListHandles[0] = 0;
                             {
                                 MenuConfirmCallback callback = Menu_TriggerSaveWrite;
@@ -834,13 +834,13 @@ void Menu_StepItemGrid2(void) {
         }
 
         if (label != 0) {
-            Util_CopyFFTerminatedBytes(D_800A19C0, label);
+            Text_CopyFFTerminatedBytes(D_800A19C0, label);
         } else {
             D_800A19C0[0] = 0xFF;
         }
         {
             u8 *text_buf;
-            Util_AppendFFTerminatedBytes(D_800A19C0, Text_LookupTable4(0x49));
+            Text_AppendFFTerminatedBytes(D_800A19C0, Text_LookupTable4(0x49));
             D_8009CFA4 = suffix_id;
             /* Recompute the buffer address at each measurement. */
             asm volatile("" : "=r"(text_buf) : "0"(D_800A19C0));

@@ -453,7 +453,7 @@ void Entity_IntegratePositionConditional(FieldActor *a)
  * running and advancing each actor's three task-node lists. */
 
 void Entity_FreeAllocationBlock(int arg0);
-int Util_ReturnTrue(void *unused);
+int Render_ReturnTrue(void *unused);
 void Script_RunQueue(void);
 
 void Entity_RollbackPositionHierarchy(FieldActor *arg0)
@@ -527,7 +527,7 @@ void Entity_CollectGarbage(void) {
 
                 if (cur->model_state.allocation_active != 0) {
                     Entity_FreeAllocationBlock(cur->allocation_block);
-                    Util_ReturnTrue(&cur->render_object);
+                    Render_ReturnTrue(&cur->render_object);
                 }
 
                 if (cur->prev == 0) {

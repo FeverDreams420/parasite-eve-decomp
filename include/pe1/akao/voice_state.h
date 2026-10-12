@@ -18,7 +18,7 @@ extern unsigned int D_800BCD6C, D_800BCD74;
 extern unsigned int g_AkaoSeqPendingFlags;
 extern unsigned short g_AkaoSelectedBankId;
 
-void Util_CopyWords(unsigned int *src, unsigned int *dst, unsigned int size);
+void Akao_CopyWords(unsigned int *src, unsigned int *dst, unsigned int size);
 unsigned int Akao_ForEachVoiceMasked(AkaoTrack *track, unsigned int mask);
 void Seq_MarkTrack34MaskDirty(void);
 void Seq_MarkTrack38MaskDirty(void);

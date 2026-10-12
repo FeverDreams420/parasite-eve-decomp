@@ -73,7 +73,7 @@ void Spu_TickVoiceEnvelopes(AkaoTrack *track, unsigned int voice_mask);
 void Akao_ProcessMessageQueue(void);
 void SPU_StepReverbLoad(void);
 void Akao_SetVoicePitch(void);
-void Util_CopyWords(unsigned int *src, unsigned int *dst, unsigned int size);
+void Akao_CopyWords(unsigned int *src, unsigned int *dst, unsigned int size);
 void Akao_Tick(void);
 int Akao_TimerCallback(void);
 

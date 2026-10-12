@@ -718,9 +718,9 @@ void Akao_UpdateVoiceMask(AkaoU8 *new_base) {
     unsigned int magic_flags;
     register unsigned int reset_duration asm("$10");
 
-    Util_CopyWords((unsigned int *)&g_AkaoTrackStateBackup,
+    Akao_CopyWords((unsigned int *)&g_AkaoTrackStateBackup,
                    (unsigned int *)g_AkaoCurTrack, 0x68);
-    Util_CopyWords((unsigned int *)&g_AkaoVoiceStateBackup,
+    Akao_CopyWords((unsigned int *)&g_AkaoVoiceStateBackup,
                    (unsigned int *)&g_AkaoVoiceStateTable, sizeof(AkaoVoiceBank));
 
     track = g_AkaoVoiceStateTable;
@@ -827,8 +827,8 @@ void Seq_RestorePrimaryState(void) {
     u16 value;
 
     if (g_AkaoCurTrack->active_voice_mask != 0) {
-        Util_CopyWords((u32 *)g_AkaoCurTrack, (u32 *)&g_AkaoTrackStateBackup, sizeof(AkaoSequencerBank));
-        Util_CopyWords((u32 *)g_AkaoVoiceStateTable, (u32 *)&g_AkaoVoiceStateBackup, sizeof(AkaoVoiceBank));
+        Akao_CopyWords((u32 *)g_AkaoCurTrack, (u32 *)&g_AkaoTrackStateBackup, sizeof(AkaoSequencerBank));
+        Akao_CopyWords((u32 *)g_AkaoVoiceStateTable, (u32 *)&g_AkaoVoiceStateBackup, sizeof(AkaoVoiceBank));
 
         flags = g_AkaoTrackStateBackup.status_flags;
         if ((flags & 0x100) != 0) {
@@ -854,8 +854,8 @@ void Seq_RestoreSecondaryStateAndSelect(AkaoQueueEntry *entry) {
 
     state = (AkaoSequencerBank *)g_AkaoCurTrack;
     if ((state->active_voice_mask != 0) && ((state + 1)->active_voice_mask == 0)) {
-        Util_CopyWords((u32 *)state, (u32 *)(state + 1), sizeof(*state));
-        Util_CopyWords((u32 *)g_AkaoVoiceStateTable,
+        Akao_CopyWords((u32 *)state, (u32 *)(state + 1), sizeof(*state));
+        Akao_CopyWords((u32 *)g_AkaoVoiceStateTable,
                        (u32 *)&g_AkaoVoiceStateTable[AKAO_VOICE_COUNT], sizeof(AkaoVoiceBank));
     }
 

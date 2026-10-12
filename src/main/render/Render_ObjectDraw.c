@@ -1273,9 +1273,9 @@ int Render_SetupEntityPrims(RenderObjectEntity *obj, RenderObjectHeader *model,
     return 1;
 }
 
-int Util_ReturnTrue(void *unused);
+int Render_ReturnTrue(void *unused);
 
-int Util_ReturnTrue(void *unused) {
+int Render_ReturnTrue(void *unused) {
     return 1;
 }
 

@@ -41,7 +41,7 @@ typedef struct PackedTime {
     u32 seconds : 6;
 } PackedTime;
 
-void Util_PackTime(u32 *src, PackedTime *out) {
+void GameTime_PackTime(u32 *src, PackedTime *out) {
     out->frames = src[1] % 60 * 60 * 60 * 60;
     out->minutes = src[1] % 60 * 60 * 60;
     out->seconds = src[1] % 60 * 60;

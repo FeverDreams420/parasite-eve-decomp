@@ -30,7 +30,7 @@ void Seq_ApplyGlobalPitch(void) {
     SpuSetCommonAttr(regs);
 }
 
-void Util_CopyWords(unsigned int *src, unsigned int *dst, unsigned int size)
+void Akao_CopyWords(unsigned int *src, unsigned int *dst, unsigned int size)
 {
     size >>= 2;
     do {
@@ -275,8 +275,8 @@ void Akao_Tick(void)
 
     if (!D_8009D2C8->timing.active_voice_mask && !D_8009D2C8->timing.pending_restore_mask
         && D_8009D2C8[1].timing.active_voice_mask) {
-        Util_CopyWords(D_8009D2C8[1].words, D_8009D2C8->words, sizeof(AkaoTickBank));
-        Util_CopyWords(D_800B8AC0[24].words, D_800B8AC0[0].words, sizeof(AkaoTickTrack) * 24);
+        Akao_CopyWords(D_8009D2C8[1].words, D_8009D2C8->words, sizeof(AkaoTickBank));
+        Akao_CopyWords(D_800B8AC0[24].words, D_800B8AC0[0].words, sizeof(AkaoTickTrack) * 24);
         D_8009D2C8[1].timing.bank_id = 0;
         D_8009D2C8[1].timing.active_voice_mask = 0;
     }
