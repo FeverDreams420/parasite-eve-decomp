@@ -30,6 +30,19 @@ typedef struct RoomFxSpritePacket {
     short depth;                  /* 0x0A */
 } RoomFxSpritePacket;
 
+/* Control fields in the sprite packet, beginning at its code byte. */
+typedef struct RoomFxSpriteControl {
+    u8 code;
+    u8 mode;
+    u8 zero;
+    u8 pad03;
+    s16 offset;
+    s16 depth;
+} RoomFxSpriteControl;
+PE1_STATIC_ASSERT(sizeof(RoomFxSpriteControl) == 8, room_fx_sprite_control_size);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomFxSpriteControl, depth) == 6,
+                  room_fx_sprite_control_depth_offset);
+
 typedef GteVector RoomFxVec4;
 
 typedef struct RoomUniformSpriteFxParams {

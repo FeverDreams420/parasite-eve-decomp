@@ -577,19 +577,18 @@ void RoomEffect_GroundEruptionDrawDebris(void *arg0, void *arg1, RoomEruptionDeb
     int depth;
     unsigned int i;
     GteShortVector *particle;
-    u8 *packetFields;
+    RoomFxSpriteControl *packetFields;
     RoomFxSpritePacket *packet;
     u8 code;
     u8 mode;
 
     owner = func_800C2B50();
-    PE1_COMPILER_USE(owner);
     depth = 0x80;
     i = 0;
     code = 0x42;
     mode = 3;
-    packetFields = &g_RoomEruptionDebrisPacket.code;
-    packet = (RoomFxSpritePacket *)(packetFields - 4);
+    packetFields = (RoomFxSpriteControl *)&g_RoomEruptionDebrisPacket.code;
+    packet = (RoomFxSpritePacket *)((char *)packetFields - PE1_OFFSETOF(RoomFxSpritePacket, code));
     func_800C2EAC(owner->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
@@ -618,14 +617,14 @@ void RoomEffect_GroundEruptionDrawDebris(void *arg0, void *arg1, RoomEruptionDeb
             matrix.t[2] = particle->z;
             if (i == 0) {
                 func_800C3238(2);
-                packetFields[0] = code;
-                packetFields[1] = mode;
-                *(s16 *)(packetFields + 6) = 0xFF;
+                packetFields->code = code;
+                packetFields->mode = mode;
+                packetFields->depth = 0xFF;
             } else {
                 func_800C3238(3);
-                packetFields[0] = 0x47;
-                packetFields[1] = 5;
-                *(s16 *)(packetFields + 6) = depth;
+                packetFields->code = 0x47;
+                packetFields->mode = 5;
+                packetFields->depth = depth;
             }
             func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
             if (i == 0) {
