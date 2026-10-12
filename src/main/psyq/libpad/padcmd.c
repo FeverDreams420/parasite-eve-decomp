@@ -337,7 +337,6 @@ void CardObj_EmitCommand4D(CardObj *arg0) {
 s32 Render_CheckParticleBounds(CardObj *arg0) {
     s32 i;
     s32 ff;
-    s32 offset;
     u8 *cursor;
     s32 matched;
     s32 remaining;
@@ -349,7 +348,6 @@ s32 Render_CheckParticleBounds(CardObj *arg0) {
     i = 0;
     if (arg0->actuatorCount != 0) {
         ff = 0xFF;
-        offset = 0;
         do {
             cursor = arg0->requestedActuatorMap;
             matched = 0;
@@ -360,7 +358,7 @@ s32 Render_CheckParticleBounds(CardObj *arg0) {
                 }
                 remaining -= 1;
             } while (remaining >= 0);
-            needed = ((PadCapabilityRecord *)(offset + (u32)arg0->capabilities))->payloadBytes;
+            needed = arg0->capabilities[i].payloadBytes;
             cursor = arg0->requestedActuatorMap;
             written = 0;
             if (needed == 0) {
@@ -381,7 +379,6 @@ s32 Render_CheckParticleBounds(CardObj *arg0) {
             } while (written < 6);
             limit = arg0->actuatorCount;
             i += 1;
-            offset += 5;
         } while (i < limit);
     }
     arg0->sequenceStep = 0xFE;
