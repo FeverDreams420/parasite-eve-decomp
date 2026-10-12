@@ -62,7 +62,9 @@ extern FxCommonVec3 g_FxCommonCameraTarget __asm__("D_8019C810");
 extern RoomSpriteMatrix D_8018EFF4;
 /* Transform nodes animated along the camera paths (D_801EA578..D_801EA58C). */
 extern FxCommonTransformNode *g_FxCommonPathNodes[6] __asm__("D_801EA578");
-extern GteShortVector D_8019BFC4;
+/* Camera rotation angles. An incomplete array, so the -G8 camera unit keeps
+ * the absolute address in a register as retail does. */
+extern GteShortVector D_8019BFC4[];
 extern RoomSpriteMatrix D_8019CDF0;
 extern s8 D_800B0DB2;
 extern s8 D_800B0DB4;
@@ -107,7 +109,7 @@ void func_80191114(FxCommonLodNode *node, FxCommonBuffer *context, u8 force, u8 
 void func_80190D3C(FxCommonTransformNode *node, void *context);
 void func_80193478(void);
 int func_80191E30(int id, s32 *state);
-void func_80191EFC(int handle, s32 *state);
+void func_80191EFC(int handle, volatile s32 *state);
 void func_80037870(void);
 void func_80074DC0(s32 value);
 void func_80193AB0(void);

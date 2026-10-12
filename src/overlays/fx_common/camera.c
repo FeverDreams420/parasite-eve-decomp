@@ -1,3 +1,7 @@
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
+
 #include "common.h"
 #include "fx_common_motion.h"
 #include "fx_common.h"
@@ -12,7 +16,7 @@ typedef struct FxAssetSource {
     u8 *data;
 } FxAssetSource;
 
-#include "camera_nodes_externs.h"
+#include "camera_externs.h"
 
 /* Aim the effect camera from its position at its target: build the view
  * matrix, the look-at matrix and the billboard rotation used by sprites. */
@@ -35,10 +39,10 @@ void func_8018F05C(void)
     view.t[0] = -g_FxCommonCameraPosition.x;
     view.t[1] = -g_FxCommonCameraPosition.y;
     view.t[2] = -g_FxCommonCameraPosition.z;
-    D_8019BFC4.x = ratan2(unit.y, SquareRoot0(unit.x * unit.x + unit.z * unit.z));
-    D_8019BFC4.y = ratan2(unit.z, unit.x) - 0x400;
-    D_8019BFC4.z = 0;
-    RotMatrix((RoomFxSeed8 *)&D_8019BFC4, &rotation);
+    D_8019BFC4->x = ratan2(unit.y, SquareRoot0(unit.x * unit.x + unit.z * unit.z));
+    D_8019BFC4->y = ratan2(unit.z, unit.x) - 0x400;
+    D_8019BFC4->z = 0;
+    RotMatrix((RoomFxSeed8 *)D_8019BFC4, &rotation);
     CompMatrix(&rotation, &view, &D_8019CC30);
 
     up.x = 0;
@@ -52,11 +56,11 @@ void func_8018F05C(void)
     eye.z = g_FxCommonCameraPosition.z;
     func_8018F344((GteMatrix *)&D_8019CC30, &eye, &target, &up);
 
-    D_8019BFC4.x = -ratan2(SquareRoot0(offset.x * offset.x + offset.z * offset.z),
+    D_8019BFC4->x = -ratan2(SquareRoot0(offset.x * offset.x + offset.z * offset.z),
                               -offset.y) + 0x400;
-    D_8019BFC4.y = -ratan2(offset.z, offset.x) + 0x400;
-    D_8019BFC4.z = 0;
-    RotMatrixZYX(&D_8019BFC4, &D_8019CDF0);
+    D_8019BFC4->y = -ratan2(offset.z, offset.x) + 0x400;
+    D_8019BFC4->z = 0;
+    RotMatrixZYX(D_8019BFC4, &D_8019CDF0);
     D_8019CDF0.t[0] = g_FxCommonCameraPosition.x;
     D_8019CDF0.t[1] = g_FxCommonCameraPosition.y;
     D_8019CDF0.t[2] = g_FxCommonCameraPosition.z;
@@ -983,4 +987,63 @@ void func_80191DE8(int extended)
     }
     D_800B0DD0 = 0;
     D_800B0DD2 = 0xFFF;
+}
+
+int func_80191E30(int id, s32 *state)
+{
+    int size = 0x300;
+    void *resource;
+    GteMatrix **matrixSlot;
+    GteMatrix *savedMatrix;
+    s32 *savedOutput;
+    int result;
+
+    resource = Draw_GetTimTableEntry(&D_801D0260, 3);
+    PushMatrix();
+    SetTransMatrix(&D_8019CC30);
+    SetRotMatrix(&D_8019CC30);
+    matrixSlot = &D_800BCFA4.value;
+    savedMatrix = *matrixSlot;
+    *matrixSlot = &D_8019CC30;
+    savedOutput = D_800BCFA8.distance;
+    D_800BCFA8.distance = &size;
+    result = Akao_SendTableCommand(resource, id, 0, 0x80, 1);
+    *matrixSlot = savedMatrix;
+    D_800BCFA8.distance = savedOutput;
+    PopMatrix();
+    return result;
+}
+
+void func_80191EFC(int handle, volatile s32 *state)
+{
+    struct FxCommonApplyScratch {
+        int size;
+        int pad14;
+        FxCommonShortVec3 vector;
+        s16 pad1E;
+        int valueA;
+        int valueB;
+    } scratch;
+    GteMatrix **matrixSlot;
+    GteMatrix *savedMatrix;
+    s32 *savedOutput;
+
+    scratch.size = 0x300;
+    PushMatrix();
+    SetTransMatrix(&D_8019CC30);
+    SetRotMatrix(&D_8019CC30);
+    matrixSlot = &D_800BCFA4.value;
+    savedMatrix = *matrixSlot;
+    *matrixSlot = &D_8019CC30;
+    savedOutput = D_800BCFA8.distance;
+    D_800BCFA8.distance = &scratch.size;
+    scratch.vector.x = state[0];
+    scratch.vector.y = state[1];
+    scratch.vector.z = state[2];
+    func_8006DFA8(&scratch.vector, &scratch.valueA, &scratch.valueB);
+    func_800868F0(handle, 0, scratch.valueB);
+    func_80086A28(handle, 0, scratch.valueA);
+    *matrixSlot = savedMatrix;
+    D_800BCFA8.distance = savedOutput;
+    PopMatrix();
 }

@@ -1,5 +1,5 @@
-#ifndef PE1_EXT_CAMERA_NODES
-#define PE1_EXT_CAMERA_NODES
+#ifndef PE1_EXT_CAMERA
+#define PE1_EXT_CAMERA
 extern int D_8019CBB4, D_8019CBB8;
 extern int D_8019CBD4, D_8019CBD8;
 extern int D_8019CB48, D_8019CB4C;
@@ -39,4 +39,4 @@ extern u16 D_80093170[];
 extern u16 D_80093174[];
 extern u16 D_80093172[];
 extern u8 D_8019C1F0;
-#endif /* PE1_EXT_CAMERA_NODES */
+#endif /* PE1_EXT_CAMERA */

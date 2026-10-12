@@ -269,8 +269,8 @@ int func_8018F55C(u32 position, int radius, void *allocation,
 void *PushMatrix(void);
 int PopMatrix(void);
 void func_8006DFA8(FxCommonShortVec3 *input, int *outA, int *outB);
-void func_800868F0(void *object, int index, int value);
-void func_80086A28(void *object, int index, int value);
+void func_800868F0(int handle, int index, int value);
+void func_80086A28(int handle, int index, int value);
 void func_8003746C(int resourceId);
 void func_80038940(int resourceId, int red, int green, int blue);
 void func_800375E0(int resourceId, int mode, s16 *result);
