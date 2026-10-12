@@ -210,7 +210,7 @@ int _padInitSioMode(CardObj *port) {
                     register int *table asm("$3");
                     register int *count;
                     table = D_8009B77C;
-                    count = (int *)((index * 4) + (u32)table);
+                    count = &table[index];
                     if (*count == 0) {
                         register int value asm("$3") = -1;
                         register CardObj *arg asm("$4") = port;
