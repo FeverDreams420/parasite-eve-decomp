@@ -313,7 +313,6 @@ byte-identical.
 | LIBDS DSREAD | 2 | 2 | `dsread.c` GCC 2.7.2, `dsread_2.c` only builds with GCC 2.8.1 |
 | LIBDS DSFILE | 2 | 2 | `dsfile.c` GCC 2.8.1, `dsfile_2.c` GCC 2.7.2 |
 | LIBDS DSREADY | 5 | 4 | parts 1 and 3 GCC 2.8.1, parts 2 and 4 GCC 2.7.2 |
-| LIBPAD PADPORTD | 4 | 4 | parts 1 and 3 GCC 2.8.1 (3 only builds with it), parts 2 and 4 GCC 2.7.2 |
 | LIBSPU SPU | 4 | 3 | `spu.c` GCC 2.7.2 with GNU as, `spu_3.c` GCC 2.8.1, `spu_4.c` GCC 2.7.2 with the GNU as 2.8.1 assembler: `_spu_FsetRXXa` needs the old assembler's `remu` expansion (divide before the zero check) and `spu.c` the new assembler's `jal` delay-slot fill with the low half of `la`; no assembler here does both, as ASPSX did. `_spu_t` (`spu_3.c`) keeps a base register that GCC 2.7.2 folds (lev 26) |
 
 Objects unified after a new C shape for the part that needed other
@@ -337,6 +336,15 @@ markers (one unit each now):
 - LIBMATH MULDF3 (`muldf3.c`, GCC 2.7.2 with GNU as): `_mul_mant_d` only
   failed to build with GCC 2.7.2, whose inline asm has no `+` constraint;
   the two `"+m"` barriers it used are not needed under GCC 2.7.2.
+- LIBPAD PADPORTD (`padportd.c`, GCC 2.7.2 with GNU as): `PadInitDirect`
+  stores the two output pointers through the `cursor` variable it later
+  walks the actuator maps with (`obj[1].output_30 = ...` folds into an
+  absolute address under GCC 2.7.2), and its final memory barrier is not
+  needed. `MemCard_DmaCompleteCallback` keeps its barriers, now in GCC 2.7.2
+  syntax: the callback result launder moved to the end of the loop, the
+  cleared test goes through a flag (`cleared = callbackResult == 0`) so
+  the store stays `sw zero`, and the I/O pointer and index are loaded in
+  one barrier.
 - LIBSPU SPU parts 4 and 5 (`spu_4.c`, GNU as 2.8.1): `_spu_Fw1ts` counts
   its volatile loop index with `i = i + 1`; `i++` reads the volatile twice
   under GCC 2.7.2.

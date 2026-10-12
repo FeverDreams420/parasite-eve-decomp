@@ -11,10 +11,10 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import linked_range_bytes  # noqa: E402
 
 # Entire linked text ranges at their retail addresses.
-CASES = [('libpad/padportd_4',
-  928,
-  '155be32d071e436ea5ebfa2786d5cb1de439d92dabae661b6d5f2eaf2dffae69',
-  'bzero = 0x80071A24;\nD_8009B76C = 0x8009B76C;\nD_800A5B70 = 0x800A5B70;\nSECTIONS { .text 0x800847a0 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }'),
+CASES = [('libpad/padportd',
+  1628,
+  'bb07a5439818d8e0df4141a1e8b246b51e769fb4ab6d663a746d17589216bb02',
+  'D_8009B724 = 0x8009b724;\nD_8009B72C = 0x8009b72c;\nD_8009B730 = 0x8009b730;\nD_8009B734 = 0x8009b734;\nD_8009B748 = 0x8009b748;\nD_8009B764 = 0x8009b764;\nD_8009B768 = 0x8009b768;\nD_8009B76C = 0x8009b76c;\nD_8009B77C = 0x8009b77c;\nD_8009B7BC = 0x8009b7bc;\nD_800A5AE0 = 0x800a5ae0;\nD_800A5B28 = 0x800a5b28;\nD_800A5B70 = 0x800a5b70;\n_dirFailAuto = 0x80084eb0;\n_padInitDirSeq = 0x80084b44;\n_padInitSioMode = 0x80082e00;\n_padSetVsyncParam = 0x80082adc;\nbzero = 0x80071a24;\ng_MemCardCommandByte = 0x8009b770;\ng_MemCardObjArray = 0x8009b758;\ng_MemCardObjLookupFn = 0x8009b738;\ng_MemCardObjResetFn = 0x8009b728;\ng_MemCardPort2Present = 0x8009b778;\ng_MemCardServiceReady = 0x8009b75c;\nSECTIONS { .text 0x800844e4 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }'),
  ('libds/dssys1_vsync',
   720,
   '7df21a00b56e81e4d4a811bd38215db6ff65f4246173802e2e0beb262734fabd',

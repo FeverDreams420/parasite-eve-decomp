@@ -824,10 +824,7 @@ segments:
       - [0x74704, c, psyq/libpad/padif]
       # Command emission, response-size decoding, and acknowledgment share the write protocol.
       - [0x74CE4, c, psyq/libpad/padportd]
-      - [0x74E44, c, psyq/libpad/padportd_2]
-      - [0x74EAC, c, psyq/libpad/padportd_3]
       # Command-byte state and payload reads share the full CardObj layout.
-      - [0x74FA0, c, psyq/libpad/padportd_4]
       # Channel encode/decode share the two-entry CardObj array.
       - [0x75340, pad]
       # Psy-Q LIBPAD PADSEQD.OBJ: direct-sequence setup and transfer state.

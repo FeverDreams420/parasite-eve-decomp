@@ -1,4 +1,0 @@
-#ifndef PE1_EXT_CB58DFEE13E1
-#define PE1_EXT_CB58DFEE13E1
-extern int D_8009B76C;
-#endif /* PE1_EXT_CB58DFEE13E1 */
