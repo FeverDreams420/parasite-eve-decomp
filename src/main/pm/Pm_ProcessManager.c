@@ -125,7 +125,7 @@ retry:
     entry->ticks = 0;
     entry->owner = owner;
     if (command == 85)
-        FieldAnim_BindTaskProgram((FieldAnimTaskOwner *)entry, subcommand);
+        FieldFx_BindTaskProgram((FieldAnimTaskOwner *)entry, subcommand);
     g_PmCmdHandlerTable[command]->initialize(entry);
     return slot;
 }

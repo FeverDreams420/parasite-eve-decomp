@@ -954,7 +954,7 @@ segments:
       - [0xB83A0, c, fieldfx/FieldFx_GlowEffects]
       - [0xBC4A4, c, fieldfx/FieldFx_BurstEffects]
       # Task program binding, task-list setup/allocation/ticking/callback dispatch and the anchor position query.
-      - [0xBEC9C, c, fieldfx/FieldAnim_TaskList]
+      - [0xBEC9C, c, fieldfx/FieldFx_TaskList]
       # Transform, direction and colour helpers with the shape builders that use them (G1558);
       # the effect primitive builders: rotated triangle, history trail, fade tile, point tiles,
       # rotated quad (G1559), orbit tile, glow line, textured ribbon, point history and pulled

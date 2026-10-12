@@ -150,7 +150,7 @@ int func_800CBFC4(void *arg0, void *arg1, FieldAnimPointSprite *anim) {
     anim->point.z = z_base_a1 + (z_rand % 201);
 }
 
-void FieldAnim_InitRadialEntries(void *arg0, void *arg1, FieldAnimRadialParticles *anim) {
+void FieldFx_InitRadialEntries(void *arg0, void *arg1, FieldAnimRadialParticles *anim) {
     int i;
     int angle;
     int lift;
@@ -277,7 +277,7 @@ int func_800CC480(void *arg0, FieldEngSlot *params, FieldAnimPointSprite *anim) 
     func_800C3B04(output);
 }
 
-void FieldAnim_ProcessInterleavedPoints(void *arg0, void *arg1, FieldAnimRadialParticles *anim) {
+void FieldFx_ProcessInterleavedPoints(void *arg0, void *arg1, FieldAnimRadialParticles *anim) {
     unsigned int i;
 
     func_800C2EAC(3);
@@ -338,7 +338,7 @@ int func_800CC6F8(void *arg0, void *arg1, FieldAnimPointSprite *anim) {
     func_800C3B04(output);
 }
 
-void FieldAnim_ProcessPointTriples(void *arg0, void *arg1,
+void FieldFx_ProcessPointTriples(void *arg0, void *arg1,
                                    FieldAnimPointData *points) {
     unsigned int i;
 
@@ -586,7 +586,7 @@ int func_800CD07C(void *arg0, void *arg1, FieldAnimBurstData *anim) {
     anim->header.origin_z = z;
 }
 
-void FieldAnim_InitRandomOffsetPairs(void *arg0, void *arg1,
+void FieldFx_InitRandomOffsetPairs(void *arg0, void *arg1,
                                      FieldAnimBurstData *anim) {
     FieldAnimPointTriple *base;
     u16 *base_values;

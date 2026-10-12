@@ -1935,7 +1935,7 @@ g_FieldEngineCommandTable = 0x800F33B0; // size:0x4
 g_FieldEngineSlotTable = 0x800F34F4; // size:0x4
 
 // Field effect modules (FieldFx_GlowEffects.c .. FieldFx_BurstEffects.c).
-FieldAnim_GetEffectResource = 0x800CE4F8; // type:func
+FieldFx_GetEffectResource = 0x800CE4F8; // type:func
 GlowEffect_PlantScript = 0x800C7BA0; // type:func
 GlowEffect_Spawn6 = 0x800C7D00; // type:func
 GlowEffect_RegisterDrawList = 0x800C7D2C; // type:func

@@ -5,7 +5,7 @@
 #include "pe1/field_effect_modules.h"
 
 /* Binds task program `index` to the owner's task context. */
-int FieldAnim_BindTaskProgram(FieldAnimTaskOwner *owner, int index)
+int FieldFx_BindTaskProgram(FieldAnimTaskOwner *owner, int index)
 {
     FieldAnimTaskProgram *program = g_FieldAnimTaskPrograms[index];
 
@@ -19,7 +19,7 @@ int FieldAnim_BindTaskProgram(FieldAnimTaskOwner *owner, int index)
 }
 
 /* Effect resource `index`: the two texture pages, then the third resource. */
-void *FieldAnim_GetEffectResource(int index) {
+void *FieldFx_GetEffectResource(int index) {
     void *ret;
 
     switch (index) {

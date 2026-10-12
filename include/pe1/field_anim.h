@@ -101,7 +101,7 @@ typedef struct FieldAnimTaskOwner {
     FieldAnimTaskContext tasks;
 } FieldAnimTaskOwner;
 /* Binds task program `index` (g_FieldAnimTaskPrograms) to the owner's tasks. */
-int FieldAnim_BindTaskProgram(FieldAnimTaskOwner *owner, int index);
+int FieldFx_BindTaskProgram(FieldAnimTaskOwner *owner, int index);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldAnimObjectPrefix, asset_type) == 1,
                   field_anim_owner_asset_type);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldAnimTaskOwner, tasks) == 0xC,

@@ -29,7 +29,7 @@ extern void *g_FieldEffectTexturePage0;
 extern void *g_FieldEffectTexturePage1;
 extern void *g_FieldEffectResource2;
 extern void *g_FieldEffectAssetTable;
-void *FieldAnim_GetEffectResource(int index);
+void *FieldFx_GetEffectResource(int index);
 
 /* Glow effect (FieldFx_GlowEffects.c). */
 extern int g_GlowEffectScript[];
