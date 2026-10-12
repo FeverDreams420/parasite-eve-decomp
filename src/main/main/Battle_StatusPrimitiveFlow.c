@@ -440,8 +440,10 @@ void Battle_DrawStatusSymbol(s8 which) {
     packet = packetBase + packetOffset;
     ((RenderSpritePacket *)packet)->width = b[0];
     ((RenderSpritePacket *)packet)->height = b[1];
-    ((RenderSpritePacket *)packet)->x = *(u16 *)(D_8009E360 + slot * 48) + c[0];
-    ((RenderSpritePacket *)packet)->y = *(u16 *)(D_8009E360 + slot * 48 + 2) + c[1];
+    /* The panel line's x0/y0 halfwords (D_8009E358[slot * 3]); read as a
+     * member, the frame loses the 8 bytes `spare` stands in for. */
+    ((RenderSpritePacket *)packet)->x = ((u16 *)(D_8009E360 + slot * 48))[0] + c[0];
+    ((RenderSpritePacket *)packet)->y = ((u16 *)(D_8009E360 + slot * 48))[1] + c[1];
     packetBase -= 8;
     AddPrim(D_800B0E38.ordering[slot] + 4, (unsigned int *)(packetBase + packetOffset));
 }
