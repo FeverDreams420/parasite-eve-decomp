@@ -86,9 +86,9 @@ extern unsigned char D_80091A1D, D_80091A1F;
 /* The code list: codes from index 2 on are shuffled by
  * Render_LoadFontGlyphAlt. */
 extern unsigned char D_8009EE22[];
-int Render_LoadFontGlyph(unsigned char code);
+int Render_LoadFontGlyph(int code);
 unsigned char Render_SetFontGlyphByCode(unsigned char code);
-u8 Render_LoadFontGlyphAlt(void);
+int Render_LoadFontGlyphAlt(void);
 int func_80038CE4(int index);
 int func_80038D48(void);
 

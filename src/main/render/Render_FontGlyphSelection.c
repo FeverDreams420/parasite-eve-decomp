@@ -145,7 +145,10 @@ static inline int find_slot(u8 *table)
     return 255;
 }
 
-u8 Render_LoadFontGlyphAlt(void)
+/* A failed poll restarts the load through a tail call, as in
+ * Render_LoadFontGlyph. GCC 2.7 only turns it into a jump when the return
+ * type is int (a u8 result is converted at the return). */
+int Render_LoadFontGlyphAlt(void)
 {
     u16 *range;
     FontGlyphLoadState *state;
@@ -159,7 +162,6 @@ u8 Render_LoadFontGlyphAlt(void)
     u8 duplicate;
     u8 j;
 
-retry_read:
     state = &D_800B0DD8;
     range = D_80093176;
     do {
@@ -174,7 +176,7 @@ retry_read:
             break;
         }
         if (poll_status == -1) {
-            goto retry_read;
+            return Render_LoadFontGlyphAlt();
         }
     }
 

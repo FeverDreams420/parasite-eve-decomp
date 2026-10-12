@@ -23,7 +23,7 @@ int Scene_SelectMapById(int **args) {
     if ((u8)Menu_IsEquipSlotActive() != 0) {
         raw_selection = ((int (*)(int))Render_GetOrLoadFontGlyph)(*(u8 *)args[0]);
     } else {
-        raw_selection = ((int (*)(void))Render_LoadFontGlyphAlt)();
+        raw_selection = Render_LoadFontGlyphAlt();
     }
     selection = raw_selection;
 

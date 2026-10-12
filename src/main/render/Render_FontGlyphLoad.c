@@ -2,7 +2,13 @@
 #include "pe1/font.h"
 #include "pe1/cdrom.h"
 
-int Render_LoadFontGlyph(u8 code)
+/* A failed poll restarts the whole load. Retail rebuilds the directory
+ * address and the -1 sentinel on every pass, which a loop around the read
+ * would hoist; the restart is a tail call, which GCC 2.7 turns into a jump
+ * back to the function body without loop notes. The tail call needs an
+ * int parameter: a u8 one is promoted at the call and fails the type
+ * check of the tail-recursion test. */
+int Render_LoadFontGlyph(int code)
 {
     int status;
     int offset;
@@ -12,24 +18,17 @@ int Render_LoadFontGlyph(u8 code)
     u8 *bytePtr;
     FontGlyphLoadState *state;
     u16 *range;
-    int pollError;
-retry:
     state = &D_800B0DD8;
     range = D_80093176;
     do {
         status = CdRom_ReadSectorsFromLba(state->baseLba + range[0], state->buffer,
                                             range[1] - range[0]);
     } while (status == -1);
-    pollError = -1;
-poll:
-    status = CdRom_PollReady();
-    if (status != 0) {
-    if (status == pollError)
-        goto retry;
-    goto poll;
+    while ((status = CdRom_PollReady()) != 0) {
+        if (status == -1)
+            return Render_LoadFontGlyph(code);
     }
-copy:
-    offset = code * sizeof(FontGlyphRecord);
+    offset = (u8)code * sizeof(FontGlyphRecord);
     sourceOffset = offset + PE1_OFFSETOF(FontGlyphTable, groups.unknown[0]);
     source = D_800B0E6C;
     i = 0;
