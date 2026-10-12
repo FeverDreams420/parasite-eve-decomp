@@ -776,8 +776,6 @@ segments:
       - {start: 0x6ED84, type: rodata, name: psyq/libcard/END_templates, linker_section_order: .text, linker_section: .psyq_text_data}
       # Psy-Q LIBDS DSSYS_2.OBJ (0x8007E594..0x8007F994) in five parts; parts 2 and 4 need GCC 2.8.1.
       - [0x6ED94, c, psyq/libds/dssys_2]
-      - [0x6EDC4, c, psyq/libds/dssys_2_2]
-      - [0x6EEB0, c, psyq/libds/dssys_2_3]
       - [0x6F414, c, psyq/libds/dssys_2_4]
       - [0x6F664, c, psyq/libds/dssys_2_5]
       # Psy-Q LIBDS DSSYS_1.OBJ (0x8007F994..0x80080AC4) in eleven parts; see dssys_1.c.

@@ -310,7 +310,7 @@ byte-identical.
 | LIBAPI PATCH | 2 | 2 | `_patch_pad` is SDK assembler (policy) |
 | LIBCARD PATCH | 4 | 4 | parts 1 and 3 are SDK assembler (policy) |
 | LIBDS DSSYS_1 | 11 | 11 | neighbours alternate between GNU as with GCC 2.7.2 and GCC 2.8.1, several with their own scheduling option |
-| LIBDS DSSYS_2 | 5 | 5 | parts 1, 3 and 5 GCC 2.7.2; 2 and 4 GCC 2.8.1 with `-fno-thread-jumps` or `-fno-schedule-insns2` |
+| LIBDS DSSYS_2 | 5 | 3 | `dssys_2.c` and `dssys_2_5.c` GCC 2.7.2 with GNU as; DsInit and DsReset (`dssys_2_4.c`) need GCC 2.8.1 with `-fno-schedule-insns2`: they clear two tables through a base register, which GCC 2.7.2 folds into absolute addresses (lev 43) |
 | LIBDS DSREAD | 2 | 2 | `dsread.c` GCC 2.7.2, `dsread_2.c` only builds with GCC 2.8.1 |
 | LIBDS DSFILE | 2 | 2 | `dsfile.c` GCC 2.8.1, `dsfile_2.c` GCC 2.7.2 |
 | LIBDS DSREADY | 5 | 4 | parts 1 and 3 GCC 2.8.1, parts 2 and 4 GCC 2.7.2 |
@@ -326,6 +326,10 @@ markers (one unit each now):
   `handlers[1] = ...` cse folds the register-plus-offset address into the
   constant `D_800A34B4+4` (find_best_addr folds every non-register address)
   and the store goes out absolute, which is why the part used GCC 2.8.1.
+- LIBDS DSSYS_2 parts 1 to 3 (`dssys_2.c`): `CQ_delete_command` copies
+  the read index through a second pointer variable (`state = end - 1;
+  *end = *state;`), which GCC 2.7.2 keeps as `-4(v1)`; `end[-1]` folds to an
+  absolute address. Its three asm barriers were only needed under GCC 2.8.1.
 
 ### AKAO driver (src/main/akao)
 
