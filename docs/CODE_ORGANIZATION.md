@@ -883,13 +883,12 @@ Still open:
       for the three blocks). The `asm("" : : "i"(n))` barriers in
       `Battle_Update` also keep cross-jumping to the last store only;
       without them blocks 1 and 3 merge (lev 299).
-    - `Battle_StepVictory` (`result`, `object`, `brightness` pins):
-      retail jumps from case 1 to the byte truncation in case 5 before
-      register allocation, so the brightness temporaries share `s0`;
-      written as a goto or as two tails the temporaries take `v0` (lev 25).
-      Without the `result` pin the `result = 1` (set twice, so not
-      launched) fills an early load stall instead of the delay slot before
-      the death-animation call (lev 3).
+      `Battle_StepPostBattle` case 4 written plainly (`panels` local, the
+      quad corners through `BATTLE_SET_QUAD_XY`, no volatile view, no
+      pins) is lev 8: retail allocates the fade byte before the 220 corner,
+      which it can only do if the `li 220` sits at the top of the block
+      (not launched); sharing `rightEdge` or `horizontalEdge` with case 2
+      to make it multi-set moves the other registers (lev 31 to 47).
     - `Battle_StepAyaAction` (6 pins, 3 barriers left; cases 0 and 9 are
       plain C, see the recipes after this list): case 11 restores the pose
       through the position and rotation records at lev 41, all of it one
@@ -898,7 +897,8 @@ Still open:
       through `D_8009D254` or a rotation record copy do not keep it there).
       Case 6 without the product barrier is lev 8 (`mflo` lands in `t1`, not
       `v1`; inline products, two locals, `<< 4` and operand order do not
-      change it). Case 15 written as `flags &= mask` with `mask` assigned
+      change it; the second product in the function-scope `slot` is lev 7,
+      the permuter found nothing closer in 5800 tries). Case 15 written as `flags &= mask` with `mask` assigned
       twice keeps the two `and`s (lev 11; the one-statement mask folds them,
       lev 29), but the flags load moves above the visibility store and the
       registers rotate.
@@ -907,6 +907,24 @@ Still open:
       function accounts for them.
   - Recipes found in the 2026-10-12 battle debt pass (each replaced pins,
     barriers, gotos, casts or volatile with the same bytes):
+    - A byte computed in steps belongs in a wider variable truncated by the
+      expression itself: `u16 brightness; brightness = ~(brightness << 3) &
+      0xFF;` keeps the load, shift, `nor` and `andi` in one register, so
+      cross-jumping shares the `andi` and the fade calls between cases 1
+      and 5 (`Battle_StepVictory`; a `u8` variable gives the temporaries
+      their own register, lev 9).
+    - A callee-saved pointer that two cases set separately is block-local in
+      each case (`partner` in `Battle_StepVictory`): as one function-scope
+      variable it is multi-set and global allocation swaps it with the
+      constant 1 kept across the calls (lev 13).
+    - A result flag that retail sets in the delay slot of the last branch is
+      assigned after the conditional call (`if (...) f(); result = 1;`),
+      not before it (lev 3).
+    - Loops that walk the entity list in different cases of one function
+      share the cursor variable when retail keeps every walk in the same
+      callee-saved register: a walk without calls then still takes `s0`
+      (`Battle_StepPostBattle` case 1, which retired the `hiddenEntity`
+      pin).
     - Packet arrays are typed (`RenderPagedSpritePacket g_BattleHpDigits[2][4]`
       and the rest of `battle_status.h`) and indexed naturally. When retail
       keeps the sprite base (array + 8) in its own register and adds the
@@ -1167,8 +1185,27 @@ or for the best crutch-free form tried:
   birth order (lev 18 for the best of 288 barrier placements, types,
   declaration orders, `register` and inline-parameter forms). No single C
   form gave both.
-  `moveLock` in `Battle_PhaseInitEnemyTurn` (lev 12: the flag store sinks
-  below the player motion stores). The memory barriers in
+  Measured on the whole of `Battle_PhaseHitReaction` (2026-10-12, third
+  pass): the plain macro form is lev 241 for its four ATB cases. In retail
+  the constants that are not stored first sit in the load stalls of
+  exactly the first two stores (ATB) or the first store (PE gauge), the
+  rest at the top, and no later stall is filled; sched1 only does that when
+  no constant is ready before a full barrier after those stores, so the
+  source had something that sched1 treats as a barrier there (a loop note
+  or an asm). The register order (last-born constant in `a0`, the first
+  in `t0`) needs the later constants to have the higher allocation
+  priority, which the local-alloc formula only gives them when all five
+  die together; a loop note after the second store reverses it (lev 93
+  ending the loop there, 169 starting it there, 80 with both), shared
+  function-scope colour variables move every register (lev 189 to 247), a
+  copy into block-local `u8`s lev 109, a `static inline` helper with the
+  whole if-chain is the plain lev 241. A non-volatile unused array gives
+  the same frame as the `volatile` reserve, so the reserves are unused
+  locals of the original, but no role for them is known.
+  `moveLock` in `Battle_PhaseInitEnemyTurn` (lev 11, every statement order
+  and a struct view of the flag word alike: the flag store is a fixed
+  scalar and the motion stores are struct fields at a varying address, so
+  sched1 sees no dependence and sinks it below them). The memory barriers in
   `Battle_StepEscapeOrDeath` and `Battle_StepEntityDeath` (lev 41: retail
   reloads `entityFlags` after storing it). The three stack reserves are
   retail's unused frames.
