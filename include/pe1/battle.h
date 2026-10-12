@@ -434,7 +434,7 @@ typedef struct BattleEntity {
 /* 0x030 */ Pe1Fixed16_16 posZ;
 /* 0x034 */ u8   pad_034[4];
 /* 0x038 */ s16  rotationX;
-/* 0x03A */ s16  facingAngle;   /* facing/heading, set from target (Battle_UpdateEntityFacing.c:71) */
+/* 0x03A */ s16  facingAngle;   /* facing/heading, set from target (Battle_EnemyMovement.c:275) */
 /* 0x03C */ s16  rotationZ;
 /* 0x03E */ u8   pad_03E[2];
 /* 0x040 */ s32  baseX;
