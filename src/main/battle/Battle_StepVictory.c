@@ -11,18 +11,16 @@ Combatant *D_8009D278;
 int D_8009D28C;
 s8 D_8009D2A0;
 /* Eight-stage transition: model fades, an effect spawn, stat recovery and
- * HUD reset. Matching debt: the result, fade object and brightness pins
- * (see docs/CODE_ORGANIZATION.md). */
+ * HUD reset. Returns 1 once the stats have been restored. */
 int Battle_StepVictory(void)
 {
-    register int result asm("$18") = 0;
-    register BattleEntity *player;
+    int result = 0;
+    BattleEntity *player;
     BattleEntity *spawnPlayer;
     Combatant *core;
-    register RenderObjectEntity *object asm("$16");
-    register u8 brightness asm("$16");
     u8 countdown;
-    register Combatant *restoredCore;
+    u16 brightness;
+    Combatant *restoredCore;
     switch (D_8009CE74) {
     case 0:
         player = D_8009D254;
@@ -41,19 +39,22 @@ int Battle_StepVictory(void)
     case 1:
         brightness = g_BattleEndTimer;
         if (brightness != 0) {
-            brightness = ~(brightness << 3);
+            brightness = ~(brightness << 3) & 0xFF;
             Render_FadeEntityColor(&D_8009D254->renderObject, brightness, brightness, brightness);
             Render_FadeEntityColor(&D_800B0CEC, brightness, brightness, brightness);
             g_BattleEndTimer--;
             break;
         }
         Render_FadeEntityColor(&D_8009D254->renderObject, 255, 255, 255);
-        object = &D_800B0CEC;
-        Render_FadeEntityColor(object, 255, 255, 255);
-        Anim_SetInterpRate(&D_8009D254->renderObject, 30);
-        D_8009D254->renderObject.flags_9C |= 2;
-        Anim_SetInterpRate(object, 30);
-        D_800B0CEC.flags_9C |= 2;
+        {
+            RenderObjectEntity *partner = &D_800B0CEC;
+
+            Render_FadeEntityColor(partner, 255, 255, 255);
+            Anim_SetInterpRate(&D_8009D254->renderObject, 30);
+            D_8009D254->renderObject.flags_9C |= 2;
+            Anim_SetInterpRate(partner, 30);
+            D_800B0CEC.flags_9C |= 2;
+        }
         D_8009CE74++;
         break;
     case 2:
@@ -75,10 +76,13 @@ int Battle_StepVictory(void)
         D_8009D254->renderObject.flags_9C |= 4;
         Render_FadeEntityColor(&D_8009D254->renderObject, 255, 255, 255);
         D_800B0CEC.variant_visible = 1;
-        object = &D_800B0CEC;
-        Anim_SetInterpRate(object, 30);
-        D_800B0CEC.flags_9C |= 4;
-        Render_FadeEntityColor(object, 255, 255, 255);
+        {
+            RenderObjectEntity *partner = &D_800B0CEC;
+
+            Anim_SetInterpRate(partner, 30);
+            D_800B0CEC.flags_9C |= 4;
+            Render_FadeEntityColor(partner, 255, 255, 255);
+        }
         Entity_SetActionMode(D_8009D254, 0xF);
         g_BattleEndTimer = 30;
         D_8009D254->animFrame = 0x230000;
@@ -98,8 +102,7 @@ int Battle_StepVictory(void)
     case 5:
         brightness = g_BattleEndTimer;
         if (brightness != 0) {
-            brightness = (brightness << 3) + 127;
-fade:
+            brightness = ((brightness << 3) + 127) & 0xFF;
             Render_FadeEntityColor(&D_8009D254->renderObject, brightness, brightness, brightness);
             Render_FadeEntityColor(&D_800B0CEC, brightness, brightness, brightness);
             g_BattleEndTimer--;
@@ -136,9 +139,9 @@ fade:
         BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[1][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
         D_8009CE74 = 0;
         D_8009D28C = 0;
-        result = 1;
         if (D_8009D2A0 == 0)
             Battle_StartDeathAnim();
+        result = 1;
         break;
     }
     return result;
