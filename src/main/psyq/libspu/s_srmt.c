@@ -12,19 +12,17 @@ int SpuSetReverbModeType(u32 mode) {
     unsigned char *src;
     unsigned char *dst;
     int i;
-    int occupied;
+    int result;
     if (mode & 0x100) {
         mode &= ~0x100;
         clear = 1;
     }
     if (mode >= 10) return -1;
-    {
-        register u32 offset asm("$2") = mode << 2;
-        area = (u32 *)((unsigned char *)g_SpuReverbWorkAreaTable + offset);
-    }
-    occupied = _SpuIsInAllocateArea_(*area);
+    result = mode << 2;
+    area = (u32 *)((unsigned char *)g_SpuReverbWorkAreaTable + result);
+    result = _SpuIsInAllocateArea_(*area);
     dst = (unsigned char *)&attr;
-    if (occupied) return -1;
+    if (result) return -1;
     D_8009B3A0.mode = mode;
     _spu_rev_offsetaddr = *area;
     src = (unsigned char *)&g_SpuReverbPresetRegisters[mode];
