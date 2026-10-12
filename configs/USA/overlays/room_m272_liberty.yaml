@@ -35,13 +35,7 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m272_liberty]
-      - [0x24, c, func_8018F00C]
-      - [0x2C, c, RoomM272_Cinematic_8018F014]
-      - [0x190, c, RoomM272_SetPhase_8018F178]
-      - [0x1A0, c, RoomM272_Nop_8018F188]
-      - [0x1A8, c, RoomM272_Nop_8018F190]
-      - [0x1B0, c, RoomM272_Nop_8018F198]
-      - [0x1B8, c, RoomM272_Nop_8018F1A0]
+      - [0x24, c, m272]
       - [0x1C0, data, D_8018F1A8]
       - start: 0x1E0
         type: databin

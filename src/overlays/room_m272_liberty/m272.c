@@ -4,6 +4,11 @@
 #include "pe1/display_env.h"
 #include "pe1/gpu_image.h"
 #include "room_m272.h"
+#include "room_m272_phase.h"
+
+int func_8018F00C(void) {
+    return 0;
+}
 
 int RoomM272_Cinematic_8018F014(void) {
     RoomBlob8 b1 = RoomM272_BlobA;
@@ -23,5 +28,26 @@ int RoomM272_Cinematic_8018F014(void) {
         PutDispEnv(&D_800BCE80[D_8009CDDC]);
         func_80074D28(1);
     }
+    return 0;
+}
+
+int RoomM272_SetPhase_8018F178(int a, int b, int c, int d) {
+    D_801991C8 = d;
+    return 0;
+}
+
+int RoomM272_Nop_8018F188(void) {
+    return 0;
+}
+
+int RoomM272_Nop_8018F190(void) {
+    return 0;
+}
+
+int RoomM272_Nop_8018F198(void) {
+    return 0;
+}
+
+int RoomM272_Nop_8018F1A0(void) {
     return 0;
 }
