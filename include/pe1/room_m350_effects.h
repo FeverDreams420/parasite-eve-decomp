@@ -96,6 +96,18 @@ typedef struct RoomM350CloudParticle {
     RoomM350CloudParticleState state;
 } RoomM350CloudParticle;
 
+typedef struct RoomM350FadingParticle {
+    GteShortVector position;
+    s16 velocity, acceleration, brightness, size, phase, counter;
+} RoomM350FadingParticle;
+
+PE1_STATIC_ASSERT(sizeof(RoomM350FadingParticle) == 0x14,
+                  room_m350_fading_particle_size);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM350FadingParticle, velocity) == 8,
+                  room_m350_fading_particle_velocity_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM350FadingParticle, size) == 0xE,
+                  room_m350_fading_particle_size_offset);
+
 typedef struct RoomM350SineParticle {
     GteShortVector position;
     GteRotation rotation;

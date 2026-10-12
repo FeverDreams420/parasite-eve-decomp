@@ -1,4 +1,5 @@
 #include "room_m350_shared.h"
+#include "pe1/room_m350_effects.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/render_object.h"
 #include "pe1/field_actor.h"
@@ -7,10 +8,7 @@
 #include "pe1/psyq_gpu.h"
 
 
-typedef struct {
-    short x, y, z, unused;
-    short velocity, acceleration, brightness, size, phase, counter;
-} Particle;
+typedef RoomM350FadingParticle Particle;
 
 int func_80199148(int event, Particle *object)
 {
@@ -33,7 +31,7 @@ int func_80199148(int event, Particle *object)
             register short velocity;
             velocity = object->velocity >> 1;
             object->counter = counter + 1;
-            object->y -= velocity;
+            object->position.y -= velocity;
             object->velocity += object->acceleration;
         }
     } else if (event == 2) {
@@ -41,7 +39,7 @@ int func_80199148(int event, Particle *object)
         int palette = D_800E1204[kind];
         int handle;
         handle = GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 6 : palette + 2);
-        func_800CEE20((GteShortVector *)object, 0, object->size, object->size, (s16)D_800F3368.parameter02 * object->phase,
+        func_800CEE20(&object->position, 0, object->size, object->size, (s16)D_800F3368.parameter02 * object->phase,
             (unsigned short)handle, 1, object->brightness, 0);
     }
     return 0;
@@ -115,13 +113,13 @@ int func_801992A0(int event,State *state)
         {
         Instance *ySource;
         Instance *zSource;
-        particle->x=instance->render_object.matrices[index].translation[0];
+        particle->position.x=instance->render_object.matrices[index].translation[0];
                 ySource=(Instance *)actor->instance;
         asm volatile("" : : "r"(ySource));
         size=particle->size;
         asm volatile("" ::: "memory");
         sizeBits=(unsigned short)particle->size;
-        particle->y=ySource->render_object.matrices[index].translation[1];
+        particle->position.y=ySource->render_object.matrices[index].translation[1];
         asm volatile("" : : : "$2");
         {
             u8 low7=random&127;
@@ -135,14 +133,14 @@ int func_801992A0(int event,State *state)
         asm volatile("" : : "r"(sizeBits), "r"(transforms));
         halfSize=sizeBits>>17;
         asm volatile("" : : "r"(transforms), "r"(halfSize));
-        particle->z=transforms[index].translation[2];
+        particle->position.z=transforms[index].translation[2];
         }
         }
         particle->velocity=0; particle->acceleration=0; particle->counter=0;
         {
-            int y=(unsigned short)particle->y;
+            int y=(unsigned short)particle->position.y;
             asm volatile("" : "=l"(product) : "0"(product), "r"(y), "r"(halfSize));
-            particle->y=y-(product>>13);
+            particle->position.y=y-(product>>13);
         }
         offset.x=0;
         scatterRandom=rand(); divisor=96;
@@ -166,10 +164,10 @@ int func_801992A0(int event,State *state)
             gte_ldv0(out); gte_rtv0tr_mac();
             gte_stsv(out);
         }
-        particle->x=(unsigned short)particle->x+(unsigned short)offset.x;
-        particle->z=(unsigned short)particle->z+(unsigned short)offset.z;
+        particle->position.x=(unsigned short)particle->position.x+(unsigned short)offset.x;
+        particle->position.z=(unsigned short)particle->position.z+(unsigned short)offset.z;
         state->delay=0; state->count=(unsigned short)state->count+1;
-        Asset_Find08w(0x5FE,((Instance *)ANIM_OWNER_AS(Actor)->instance)->state->progress,particle->x,particle->y,particle->z);
+        Asset_Find08w(0x5FE,((Instance *)ANIM_OWNER_AS(Actor)->instance)->state->progress,particle->position.x,particle->position.y,particle->position.z);
     }
         break;
     case 2:
