@@ -686,7 +686,7 @@ PE1_STATIC_ASSERT(sizeof(BattleEntity) == sizeof(FieldActor),
 
 int Battle_RollEscapeChance(void);
 
-/* Restoring integer square root (battle/BattleCmd_CommitAmmoAndUpdate.c). */
+/* Restoring integer square root (battle/BattleCmd_Commands.c). */
 int Math_IntSqrt(int value);
 
 /* ============================================================================

@@ -236,7 +236,7 @@ Units that stay separate, and why:
   shape, so the use-panel opener stays between `Inv_InventorySwap.c` and
   `Inv_ArmorCapacity.c`.
 - Flags the neighbours do not tolerate: `fieldfx/FieldEng_AngleMath.c`,
-  `battle/Aya_UnlockParasiteSpell.c`, `draw/Draw_AllocColorQuad.c` and
+  `draw/Draw_AllocColorQuad.c` and
   `draw/Render_FontGlyphLoad.c` (`-fno-schedule-insns`),
   `asset/Asset_UnloadTableEntries.c` (`-fno-force-mem`, lev 1 without),
   `menu/Menu_EquipScreenFlow.c` (does not match under the item detail

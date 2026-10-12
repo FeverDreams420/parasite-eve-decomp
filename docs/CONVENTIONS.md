@@ -112,7 +112,7 @@ edge, as `akao/Spu_TransferAndLifecycle` did before LIBPAD WAITRC2's
 | `script` | `Task_` | actor script interpreter: opcodes, expressions, node pool | keep (renamed from `task`); prefix to become `Script_`; `Task_Gpu*` to `draw`, `Task_ConvertSecondsToHMS` to `time` |
 | `pm` | `Pm_` | process manager: slot table that runs script batches | keep |
 | `event` | `Evt_` | game event delivery and deferred execution | dissolved: `Evt_DeferredExec` is in `menu`; the old `Evt_Deliver` was LIBMATH FERR `_err_math` (`psyq/libmath/ferr.c`) |
-| `battle` | `Battle_`, `BattleCmd_` | ATB battle: turns, targeting, damage, enemy AI, status display | keep; `Inv_Build*List.c` to `item`; `Math_IntSqrt` shares one unit with the ammo commit (`BattleCmd_CommitAmmoAndUpdate.c`) |
+| `battle` | `Battle_`, `BattleCmd_` | ATB battle: turns, targeting, damage, enemy AI, status display | keep; `Inv_Build*List.c` to `item`; `Math_IntSqrt` shares the battle command unit with the ammo commit (`BattleCmd_Commands.c`) |
 | `aya` | `Aya_` | the player character: stats, level table, parasite-energy spells | keep; `misc7.c` to `battle`, `Draw_LookupGlyphMetrics` to `draw` |
 | `item` | `Inv_`, `Item_` | inventory, item table, equipment and its modifiers | keep; `Menu_*` files to `menu` |
 | `menu` | `Menu_`, `MenuWidget_`, `MenuInput_` | in-game menus, widget tree, menu input queue | keep; `Inv_*`, `Save_*`, `Pad_*` files out to their owners |

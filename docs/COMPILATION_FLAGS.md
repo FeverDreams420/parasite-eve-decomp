@@ -124,12 +124,28 @@ and the linked binaries stayed identical:
 | `battle/Battle_AttackResolution.c` | `ASPSX_VERSION` 2.77 written as 2.70 | MASPSX configures both identically |
 
 `MASPSX_FORCE_G0` is also byte-identical without it in
-`battle/BattleCmd_WeaponLists.c`, `menu/Menu_EquipItemSelection.c`,
+`battle/BattleCmd_Commands.c`, `menu/Menu_EquipItemSelection.c`,
 `menu/Menu_StatusPanels.c`, `boot/Gpu_InitPipeline.c` and
 `script/Task_SystemOpcodes.c`; it stays, because it is part of the canonical
 K8/K0 sets those units share with their neighbours. `ASSEMBLER: GNU` on
 `math/Math_FixedMul.c` and `math/math_fixed.c` also stays: source policy
 requires it on evidenced assembler.
+
+## Flags replaced by C shapes, and the merges they unblocked
+
+A unit that needed a cc1 option its neighbours do not tolerate was
+rewritten until it matched under its neighbours' settings (lev is the only
+score; no pins, barriers, `volatile`, `goto` or assembler were added), and
+then merged with them:
+
+- `Aya_UnlockParasiteSpell` (`-fno-schedule-insns`, lev 7 without): the
+  plain `D_800C0E00.parasite_spell_flags |= 1 << spell;` compiles to
+  retail's order under the default schedule; the pointer, mask and value
+  temporaries were what made the scheduler hoist the `li`. It joined the
+  command stack, ammo commit and weapon list units in
+  `battle/BattleCmd_Commands.c` (K8; the ammo commit is the same code
+  under K8, and `main/rodata_0019A4` was the 8-alignment pad before the
+  weapon-list constants).
 
 ## Settings in use
 
@@ -139,13 +155,13 @@ differently but resolve to the same options count once.
 
 | # | effective setting | main | overlays |
 |---|---|---|---|
-| S1 | `cc1 -G0 ; maspsx -G0` (default) | 26 | 120 |
+| S1 | `cc1 -G0 ; maspsx -G0` (default) | 25 | 120 |
 | S2 | `cc1 -G0 ; maspsx -G0 --expand-div` | 9 | 22 |
-| S3 | `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0` | 20 | 0 |
+| S3 | `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0` | 19 | 0 |
 | S4 | `cc1 -G0 ; gnu-as -G0` | 4 | 6 |
 | S5 | `cc1 -G8 ; maspsx -G8 --expand-div --use-comm-section FORCE_G0` | 7 | 0 |
-| S6 | `cc1 -G0 -fno-schedule-insns ; maspsx -G0` | 4 | 2 |
-| S7 | `cc1 -G8 ; maspsx -G8 --use-comm-section` | 6 | 0 |
+| S6 | `cc1 -G8 ; maspsx -G8 --use-comm-section` | 6 | 0 |
+| S7 | `cc1 -G0 -fno-schedule-insns ; maspsx -G0` | 3 | 2 |
 | S8 | `cc1 -G0 -fno-strength-reduce ; maspsx -G0` | 1 | 2 |
 | S9 | `cc1 -G8 ; maspsx -G8` | 3 | 0 |
 | S10 | `cc1 -G8 ; maspsx -G8 --expand-div --use-comm-section FORCE_G0 aspsx 2.70` | 3 | 0 |
@@ -172,7 +188,7 @@ differently but resolve to the same options count once.
 | S31 | `cc1 -G8 ; maspsx -G8 --expand-div --use-comm-section` | 1 | 0 |
 | S32 | `gcc 2.8.1 ; cc1 -G0 ; maspsx -G0` | 0 | 1 |
 
-32 distinct settings over 263 files.
+32 distinct settings over 260 files.
 
 #### S2: `cc1 -G0 ; maspsx -G0 --expand-div`
 
@@ -211,8 +227,7 @@ differently but resolve to the same options count once.
 #### S3: `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0`
 
 - `src/main/aya/Aya_StatDerivation.c`
-- `src/main/battle/BattleCmd_StackAndActiveList.c`
-- `src/main/battle/BattleCmd_WeaponLists.c`
+- `src/main/battle/BattleCmd_Commands.c`
 - `src/main/battle/Battle_EncounterFlow.c`
 - `src/main/battle/Battle_PlayerTurnFlow.c`
 - `src/main/boot/Boot_FrameLoop.c`
@@ -254,16 +269,7 @@ differently but resolve to the same options count once.
 - `src/main/save/Save_GameData.c`
 - `src/main/script/Task_NodeActions.c`
 
-#### S6: `cc1 -G0 -fno-schedule-insns ; maspsx -G0`
-
-- `src/main/battle/Aya_UnlockParasiteSpell.c`
-- `src/main/draw/Render_FontGlyphLoad.c`
-- `src/main/draw/Task_InitGpuHwRegs.c`
-- `src/main/fieldfx/FieldEng_AngleMath.c`
-- `src/overlays/fx_common/FxCommon_SetMotionEndpoints.c`
-- `src/overlays/room_m273_liberty/RoomM273_PulseSpriteCallback.c`
-
-#### S7: `cc1 -G8 ; maspsx -G8 --use-comm-section`
+#### S6: `cc1 -G8 ; maspsx -G8 --use-comm-section`
 
 - `src/main/cdrom/CD_TrackReadFlow.c`
 - `src/main/draw/Draw_WipeAndGradient.c`
@@ -271,6 +277,14 @@ differently but resolve to the same options count once.
 - `src/main/menu/Menu_InventoryScreens.c`
 - `src/main/menu/Menu_ItemActions.c`
 - `src/main/menu/Menu_ListDrawers.c`
+
+#### S7: `cc1 -G0 -fno-schedule-insns ; maspsx -G0`
+
+- `src/main/draw/Render_FontGlyphLoad.c`
+- `src/main/draw/Task_InitGpuHwRegs.c`
+- `src/main/fieldfx/FieldEng_AngleMath.c`
+- `src/overlays/fx_common/FxCommon_SetMotionEndpoints.c`
+- `src/overlays/room_m273_liberty/RoomM273_PulseSpriteCallback.c`
 
 #### S8: `cc1 -G0 -fno-strength-reduce ; maspsx -G0`
 
