@@ -4,25 +4,26 @@
 
 void func_80195BC8(FxCommonShortVec3 *a, FxCommonShortVec3 *b, int bi, int ai)
 {
-    int x, y, z, bz, ax, ay, az, u, v, w, one;
+    int x, y, z, bz, originX, ay, az, u, v, w, one;
     u16 bzCopy, ayCopy, azCopy;
     volatile FxCommonShortVec3 *origin0 = &g_FxCommonMotionOrigin0;
     volatile FxCommonShortVec3 *target0 = &g_FxCommonMotionTarget0;
     volatile FxCommonShortVec3 *origin1 = &g_FxCommonMotionOrigin1;
     volatile FxCommonShortVec3 *target1 = &g_FxCommonMotionTarget1;
-    register int pinnedBx asm("$9");
+    int firstOriginX;
     register int pinnedBy asm("$8");
 
     x = b->x;
-    pinnedBx = g_FxCommonMotionPosition0.x;
+    originX = g_FxCommonMotionPosition0.x;
+    firstOriginX = originX;
     pinnedBy = g_FxCommonMotionPosition0.y;
-    D_8019C08C = x - pinnedBx;
+    D_8019C08C = x - firstOriginX;
     y = b->y;
     bz = g_FxCommonMotionPosition0.z;
     D_8019C090 = y - pinnedBy;
     z = b->z;
-    D_8019C0AC = pinnedBx;
-    ax = g_FxCommonMotionPosition1.x;
+    D_8019C0AC = firstOriginX;
+    originX = g_FxCommonMotionPosition1.x;
     origin0->y = pinnedBy;
     ay = g_FxCommonMotionPosition1.y;
     D_8019C09C = 0;
@@ -39,7 +40,7 @@ void func_80195BC8(FxCommonShortVec3 *a, FxCommonShortVec3 *b, int bi, int ai)
     target0->z = bzCopy;
 
     u = a->x;
-    D_8019C05C = u - ax;
+    D_8019C05C = u - originX;
     v = a->y;
     az = g_FxCommonMotionPosition1.z;
     D_8019C060 = v - ay;
@@ -50,7 +51,7 @@ void func_80195BC8(FxCommonShortVec3 *a, FxCommonShortVec3 *b, int bi, int ai)
     D_8019C064 = w - az;
     D_8019C070 = 0;
     D_8019C074 = 0;
-    D_8019C07C = ax;
+    D_8019C07C = originX;
     origin1->y = ay;
     origin1->z = az;
     D_8019C084 = *(u16 *)&a->x;
