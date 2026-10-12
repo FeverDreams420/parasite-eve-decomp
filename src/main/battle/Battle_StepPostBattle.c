@@ -120,13 +120,14 @@ void Battle_StepPostBattle(void)
         break;
     }
     case 2: {
-        register s32 brightnessBase asm("$4") = 120;
-        register u16 top asm("$5") = 122;
+        register u16 top asm("$5");
         u8 timer;
         register RenderTexturedQuad *base asm("$3");
         s32 frame;
+        brightness = 120;
+        top = 122;
         asm volatile("" : : "r"(top));
-        brightness = brightnessBase - (g_BattleEndTimer * 4);
+        brightness -= g_BattleEndTimer * 4;
         g_BattleEndPanels[D_8009CDDC].color.bytes.r = brightness;
         g_BattleEndPanels[D_8009CDDC].color.bytes.g = brightness;
         g_BattleEndPanels[D_8009CDDC].color.bytes.b = brightness;
