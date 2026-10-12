@@ -18,34 +18,39 @@
 
 /* Matching debt: fixed-register pins and scheduling constraints preserve the stock PSYQ instruction schedule. */
 
-#define LINK_PACKET(packet, ordering, mask24, maskTop)                     \
-    do {                                                                   \
-        u32 packet_tag = *(u32 *)(packet);             \
-        u32 ot_tag = *(u32 *)(ordering);               \
-        *(u32 *)(packet) = (packet_tag & (maskTop)) | (ot_tag & (mask24));  \
-        *(u32 *)(ordering) = (ot_tag & maskTop) | (packet & mask24); \
-    } while (0)
+/* A packet or ordering-table slot address as the 24-bit link word. */
+typedef union RenderLinkAddress {
+    void *pointer;
+    u8 *bytes;
+    u32 *words;
+    GeomEntry *entry;
+    u32 word;
+} RenderLinkAddress;
 
 #define LINK_PACKET_PRELOADED(packet, ordering, packet_tag, mask24, maskTop) \
     do {                                                                    \
         u32 ot_tag;                                      \
+        RenderLinkAddress link;                                             \
         ot_tag = *(u32 *)(ordering);                                        \
         *(u32 *)(packet) = ((packet_tag) & (maskTop)) | (ot_tag & (mask24)); \
         ot_tag = *(u32 *)(ordering);                                        \
-        *(u32 *)(ordering) = (ot_tag & (maskTop)) | ((u32)(packet) & (mask24)); \
+        link.pointer = (packet);                                            \
+        *(u32 *)(ordering) = (ot_tag & (maskTop)) | (link.word & (mask24)); \
     } while (0)
 
 #define LINK_PAGE(packet, ordering, mask24, maskTop)                         \
     do {                                                                     \
         u32 packet_tag = *(u32 *)(packet);               \
         register u32 ot_tag asm("$2");                                      \
+        RenderLinkAddress link;                                              \
         ot_tag = *(u32 *)(ordering);                                         \
         ot_tag &= (mask24);                                                   \
         packet_tag &= (maskTop);                                              \
         packet_tag |= ot_tag;                                                 \
         *(u32 *)(packet) = packet_tag;                                        \
         ot_tag = *(u32 *)(ordering);                                         \
-        *(u32 *)(ordering) = (ot_tag & (maskTop)) | ((u32)(packet) & (mask24)); \
+        link.pointer = (packet);                                             \
+        *(u32 *)(ordering) = (ot_tag & (maskTop)) | (link.word & (mask24)); \
     } while (0)
 
 int Render_DrawSpriteEntry(GeomEntry *input)
@@ -54,7 +59,7 @@ int Render_DrawSpriteEntry(GeomEntry *input)
     s32 active;
     RenderTilePacket *sprite;
     register RenderTexturePagePacket *page asm("$8");
-    u8 *ordering;
+    RenderLinkAddress ordering;
     GeomState *state;
     u32 flags;
     u32 count;
@@ -74,7 +79,7 @@ int Render_DrawSpriteEntry(GeomEntry *input)
     count = entry->prim_count;
     asm("" : "=r"(active), "=r"(sprite), "=r"(count)
         : "0"(active), "1"(sprite), "2"(count));
-    ordering = (u8 *)D_800B0E38.ordering[active];
+    ordering.pointer = D_800B0E38.ordering[active];
     if (active != 0) {
         sprite += count;
     }
@@ -105,7 +110,14 @@ int Render_DrawSpriteEntry(GeomEntry *input)
     }
     screen_src = entry->u28.pos_ptr;
     flags = entry->head.b.flags;
-    pos = (u32 *)((u8 *)entry + screen_src);
+    {
+        /* The position words lie pos_ptr bytes past the entry. */
+        RenderLinkAddress positions;
+
+        positions.entry = entry;
+        positions.word += screen_src;
+        pos = positions.words;
+    }
 
     if (flags & 4) {
         s32 mod_x;
@@ -172,15 +184,15 @@ int Render_DrawSpriteEntry(GeomEntry *input)
                             if (((tile_u - 8) & 0xFFFFU) < 0xFF1) {
                                 u32 sprite_tag;
                                 s32 ot_index = tile_u;
-                                u8 *ot;
+                                RenderLinkAddress ot;
                                 ot_index <<= 16;
                                 ot_index >>= 14;
-                                ot = (u8 *)(ot_index + (u32)ordering);
+                                ot.word = ot_index + ordering.word;
                                 sprite_tag = *(u32 *)sprite_cursor;
                                 ((RenderTilePacket *)sprite_cursor)->x = draw_x;
                                 ((RenderTilePacket *)sprite_cursor)->y = draw_y;
-                                LINK_PACKET_PRELOADED(sprite_cursor, ot, sprite_tag, mask24, maskTop);
-                                LINK_PAGE(page_cursor, ot, mask24, maskTop);
+                                LINK_PACKET_PRELOADED(sprite_cursor, ot.bytes, sprite_tag, mask24, maskTop);
+                                LINK_PAGE(page_cursor, ot.bytes, mask24, maskTop);
                             }
                         }
                 }
@@ -221,15 +233,15 @@ int Render_DrawSpriteEntry(GeomEntry *input)
                         if (((tile_u - 8) & 0xFFFFU) < 0xFF1) {
                             register u32 sprite_tag asm("$3");
                             s32 ot_index = tile_u;
-                            u8 *ot;
+                            RenderLinkAddress ot;
                             ot_index <<= 16;
                             ot_index >>= 14;
-                            ot = (u8 *)(ot_index + (u32)ordering);
+                            ot.word = ot_index + ordering.word;
                             sprite_tag = *(u32 *)sprite_cursor;
                             ((RenderTilePacket *)sprite_cursor)->x = draw_x;
                             ((RenderTilePacket *)sprite_cursor)->y = draw_y;
-                            LINK_PACKET_PRELOADED(sprite_cursor, ot, sprite_tag, mask24, maskTop);
-                            LINK_PAGE(page_cursor, ot, mask24, maskTop);
+                            LINK_PACKET_PRELOADED(sprite_cursor, ot.bytes, sprite_tag, mask24, maskTop);
+                            LINK_PAGE(page_cursor, ot.bytes, mask24, maskTop);
                         }
                     }
                     }
