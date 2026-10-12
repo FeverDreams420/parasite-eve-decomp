@@ -74,6 +74,16 @@ typedef struct CardObj {
     int combinationStorageBytes;                     /* 0xEC: combination headers and aligned data size */
 } CardObj;
 
+/* LIBPAD addresses ports, sub-ports, capability records and the multitap
+ * count words by byte offset, as integer sums in retail's operand order. */
+typedef union CardObjAddress {
+    struct CardObj *obj;
+    PadCapabilityRecord *capability;
+    int *count;
+    u8 *bytes;
+    u32 word;
+} CardObjAddress;
+
 /* PadInitDirect walks the objects by their statusBuffer member. */
 #define CARD_OBJ_FROM_STATUS_BUFFER(pointer) \
     ((CardObj *)((u8 *)(pointer) - PE1_OFFSETOF(CardObj, statusBuffer)))

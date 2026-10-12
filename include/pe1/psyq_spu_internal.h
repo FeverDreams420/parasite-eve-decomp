@@ -101,6 +101,12 @@ extern SpuAddressUnit _spu_mem_mode;
 extern SpuRegs *_spu_RXX;
 extern u32 *_spu_sys_pcr;
 extern volatile u32 *g_SpuDmaMadrPtr;
+/* A reverb work-area table entry as the address word SpuClearReverbWorkArea
+ * keeps in the register it then reuses for the byte count. */
+typedef union SpuReverbEntryAddress {
+    u32 *entry;
+    u32 word;
+} SpuReverbEntryAddress;
 extern volatile u32 *g_SpuDmaBcrPtr;
 extern volatile u32 *g_SpuDmaChcrPtr;
 extern s32 g_SpuDmaDirection;

@@ -33,7 +33,12 @@ int LIBPAD_PADIF_text_26C(CardObj *inPort) {
                 break;
         /* Keep the incremented byte cursor: typed indexing changes scheduling. */
         if (index >= 0)
-            D_8009B730((CardObj *)((u8 *)port->subPorts + offset));
+        {
+            CardObjAddress at;
+            at.obj = port->subPorts;
+            at.word += offset;
+            D_8009B730(at.obj);
+        }
         result = MemCard_WriteByte(port, (u8)D_8009B72C(port, 1));
         if (result < 0)
             return result;
@@ -54,10 +59,12 @@ setup:
         opposite = !original;
         if (D_8009B79C >= 2) {
             register int *count asm("$16");
-            register int *table asm("$3") = D_8009B77C;
+            register CardObjAddress table asm("$3");
             register int scaled asm("$2");
+            table.count = D_8009B77C;
             scaled = opposite * 4;
-            count = (int *)(scaled + (u32)table);
+            table.word = scaled + table.word;
+            count = table.count;
             {
                 register int product = opposite * 15;
                 offset = product * 16;
@@ -68,12 +75,15 @@ setup:
                 if (remaining < 0)
                     break;
                 if (remaining > 0) {
-                    CardObj *base =
-                        (CardObj *)(offset + (u32)D_8009B758);
                     /* Preserve the retail multiply and interior byte cursor. */
-                    register int scaled asm("$2") = remaining * sizeof(CardObj);
-                    register u8 *child asm("$3") = (u8 *)base->subPorts + scaled;
-                    other = (CardObj *)(child - sizeof(CardObj));
+                    register int scaled asm("$2");
+                    register CardObjAddress child asm("$3");
+                    scaled = remaining * sizeof(CardObj);
+                    child.obj = D_8009B758;
+                    child.word = offset + child.word;
+                    child.obj = child.obj->subPorts;
+                    child.word += scaled;
+                    other = child.obj - 1;
                     D_8009B744(other);
                 }
                 {
@@ -101,8 +111,9 @@ setup:
                     break;
                 primary:
                     {
-                        register CardObj *base asm("$2") = D_8009B758;
-                        other = (CardObj *)((u8 *)base + offset);
+                        register CardObjAddress base asm("$2");
+                        base.obj = D_8009B758;
+                        other = (CardObj *)(base.bytes + offset);
                     }
                     D_8009B744(other);
                     D_8009B748(other);

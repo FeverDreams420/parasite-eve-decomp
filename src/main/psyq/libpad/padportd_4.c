@@ -79,10 +79,12 @@ void LIBPAD_PADPORTD_text_388(CardObj *port) {
             one = 1;
             offset = 0;
             do {
+                CardObjAddress capability;
                 active = 0;
                 mask = 1;
-                if (((PadCapabilityRecord *)(offset + (u32)port->capabilities))
-                        ->payloadBytes)
+                capability.capability = port->capabilities;
+                capability.word = offset + capability.word;
+                if (capability.capability->payloadBytes)
                     mask = 255;
                 map = port->actuatorMap;
                 data = port->payload_28;
@@ -102,10 +104,11 @@ void LIBPAD_PADPORTD_text_388(CardObj *port) {
                 }
             search_done:
                 if (active) {
-                    int total =
-                        D_8009B76C +
-                        ((PadCapabilityRecord *)(offset + (u32)port->capabilities))
-                            ->activationCost;
+                    CardObjAddress costRecord;
+                    int total;
+                    costRecord.capability = port->capabilities;
+                    costRecord.word = offset + costRecord.word;
+                    total = D_8009B76C + costRecord.capability->activationCost;
                     if (total < 61)
                         D_8009B76C = total;
                     else {
@@ -153,11 +156,14 @@ void LIBPAD_PADPORTD_text_388(CardObj *port) {
             else if (!port->currentExtendedId) {
                 register int value = 1;
                 register int k asm("$3") = 5;
-                register u8 *cursor = (u8 *)port + 5;
+                /* Byte cursor over the object, offset by the flag index. */
+                register CardObjAddress cursor;
+                cursor.obj = port;
+                cursor.word += 5;
                 do {
-                    cursor[0x57] = value;
+                    cursor.bytes[PE1_OFFSETOF(CardObj, actuatorEnabled)] = value;
                     k--;
-                    cursor--;
+                    cursor.bytes--;
                 } while (k >= 0);
             }
         }

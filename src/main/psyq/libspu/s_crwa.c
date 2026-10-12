@@ -27,10 +27,11 @@ int SpuClearReverbWorkArea(int mode)
     }
     {
         u32 offset;
-        u32 *base = g_SpuReverbWorkAreaTable;
+        SpuReverbEntryAddress base;
+        base.entry = g_SpuReverbWorkAreaTable;
         offset = mode << 2;
         /* Reuse the address temporary for the remaining byte count below. */
-        length = offset + (u32)base;
+        length = offset + base.word;
     }
     if (_SpuIsInAllocateArea_(*(u32 *)length) != 0) {
         return -1;

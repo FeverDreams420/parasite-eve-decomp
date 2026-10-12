@@ -127,14 +127,29 @@ int Gpu_SetDisplayBuffer(void) {
                 argIndex = D_80095878;
                 argOffset = argIndex * sizeof(GpuQueueEntry);
                 fnOffset = fnIndex * 3;
-                arg0 = ((GpuQueueEntry *)((char *)D_800BD030 + argOffset))->argument0;
+                {
+                    GpuQueueEntryAddress at;
+                    at.entry = D_800BD030;
+                    at.word += argOffset;
+                    arg0 = at.entry->argument0;
+                }
                 asm volatile("" : "=r"(arg0), "=r"(fnOffset)
                              : "0"(arg0), "1"(fnOffset) : "memory");
                 arg1Index = D_80095878;
                 fnOffset <<= 5;
                 arg1Offset = arg1Index * sizeof(GpuQueueEntry);
-                arg1 = ((GpuQueueEntry *)((char *)D_800BD030 + arg1Offset))->argument1;
-                function = ((GpuQueueEntry *)((char *)D_800BD030 + fnOffset))->function;
+                {
+                    GpuQueueEntryAddress at;
+                    at.entry = D_800BD030;
+                    at.word += arg1Offset;
+                    arg1 = at.entry->argument1;
+                }
+                {
+                    GpuQueueEntryAddress at;
+                    at.entry = D_800BD030;
+                    at.word += fnOffset;
+                    function = at.entry->function;
+                }
                 function(arg0, arg1);
             }
             D_80095878 = (D_80095878 + 1) & 63;

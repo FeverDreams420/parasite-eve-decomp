@@ -200,9 +200,11 @@ int _padInitSioMode(CardObj *port) {
                 if (remaining > 0) {
                     register int *counts = D_8009B77C;
                     do {
-                        int *count = (int *)((D_8009B764 * 4) + (u32)counts);
-                        (*count)--;
-                        D_8009B744(port->subPorts + *count);
+                        CardObjAddress count;
+                        count.count = counts;
+                        count.word = (D_8009B764 * 4) + count.word;
+                        (*count.count)--;
+                        D_8009B744(port->subPorts + *count.count);
                     } while (counts[D_8009B764] > 0);
                 }
                 {
