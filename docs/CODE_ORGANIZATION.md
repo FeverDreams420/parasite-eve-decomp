@@ -714,6 +714,26 @@ Still open:
     16.16 field with one `lh`/`lhu`.
   - A base pointer local (`BattleTileSlot *tiles = D_8009E070`) keeps a
     packet base in a register where retail loads it early.
+  - The hit-state, category and reaction inserts into an enemy's core flags
+    are `EnemyCoreFlagBits` bitfield assignments; each insert then reuses
+    the previous value's register (retail's `$3` chain). The reaction byte
+    is read through the `BattleEvasionReaction` record view, which keeps the
+    load after the flag stores and the middle store alive
+    (`Battle_ResolveHitOnTimer`, one `ApplyEvasionOutcome` helper for all
+    four targets; the steal path reaches it by cross-jumping).
+  - A narrower copy keeps a register copy alive: `s16 centered = bound`
+    stays a `move` where an `s32` copy is folded into its source.
+  - Retail fields of the partner render object that splat split into their
+    own symbols (`D_800B0D8A`, `D_800B0D88`) are `D_800B0CEC` fields; GCC
+    derives the object address from the field address as retail does, and
+    only the relocation addend changes. The same holds for the end-of-battle
+    panel color bytes (`D_800BE9F0[slot].color`).
+  - The case-into-if switch shape (`case 0: if (!(rand() & 1)) { case 2:
+    ... }`) replaces a goto into a shared resistance body, and a separate
+    `if (damage <= 0)` after the scaling block replaces a goto into the
+    minimum-damage branch (`Battle_StepEnemyMovement`).
+  - An if/else with two calls keeps the branch that `x = 1; if (c) x = 0;
+    f(x)` folds to `sltiu` (`Battle_Update` item menu context).
   Crutches left, each removed and rebuilt (lev without it):
   - `Battle_DrawActiveStatus`: the background pointer and the index of the
     last `AddPrim` are both born in `v0`; as pseudos they take `a0`/`v1`
@@ -729,25 +749,53 @@ Still open:
     out as its own block when duplicated (goto, lev 19).
   - `Battle_StepEscapeOrDeath`: see the `D_800B0D88` views above (lev 42).
   - `Battle_SetupPlayerPalette`: `c2`/`c7` are single-set constants, so
-    sched1 launches them late (lev 35). `Battle_MarkActiveEntities`: the
-    hoisted kind constant 4 lands after the active-entity load (lev 2).
+    sched1 launches them late (lev 35).
   - `Battle_AdvanceTurnSlot`: retail shares the queue-index store between
     the loop entry and the loop body; a `while` loop rotates the other way
     (goto and barriers, lev 27).
-  - `Inv_BuildWeaponList`: retail computes the attack sum twice, which CSE
-    merges without the pin (lev 7); the 8-byte frame pad stays.
-  - `Battle_StepAyaAction` case 9: the core-flag inserts match through a
-    word pointer, but the queue index and the mask constants are allocated
-    the other way (lev 30). `Battle_ResolveHitOnTimer` keeps the `$3` pin
-    on the same insert sequence (lev 107 without).
-  - `Battle_StepEnemyMovement`: `enemy` and its copy swap `s4`/`s5` (lev 22).
-  - `Battle_StepVictory` (brightness folded into separate pseudos, lev 81),
-    `Battle_Update` (gauge recolor: the four cases cross-jump differently,
-    lev 286), `Battle_TargetAndEnemyTurnFlow` (the AKAO handle is reloaded
-    after the test where a plain read is CSE'd, lev 10 per site),
-    `Battle_DrawStatusPanel` (typed digit packets lev 294),
-    `Battle_DrawHPBar`, `Battle_StepPostBattle` and the four phase steps of
+  - `Battle_DrawStatusPanel` (typed digit packets lev 294),
+    `Battle_DrawHPBar` and the four phase steps of
     `Battle_EscapeAndPhaseInitFlow` (70 pins) were not reduced further.
+  - Second half of the directory (`Battle_HaltOnPositiveX` to
+    `Math_IntSqrt`), measured again after the recipes above:
+    - `Battle_StepEnemyMovement` (1 pin): in global allocation the
+      resistance mode (7 refs over 137 insns) outranks `enemy` (9 refs
+      over 285 insns), so they swap `s4`/`s5` (lev 22). Naming `enemy`
+      instead of its copy in one more read makes it win (lev 1, but that
+      load then uses `s4` where retail uses the copy in `s2`); moving the
+      mode's initialisation or retyping it does not help (lev 18 to 71).
+    - Constant hoisting (`Battle_Update` gauge recolor: 6 pins and 7
+      barriers; `Battle_StepVictory` stat reset: 5 pins;
+      `Battle_StepPostBattle`: 13 pins and 4 barriers, most on the panel
+      quads, measured one at a time lev 2 to 38): retail loads
+      every color or edge constant at the top of its block and leaves the
+      later load-delay slots empty. Without the pins sched1 places each
+      `li` in the first load stall after its use, whether the constant is
+      a block local, a function-scope variable set in two cases (no longer
+      LAUNCH priority, still a stall filler) or a `u8` (lev 75, 60 and 103
+      for the three blocks). The `asm("" : : "i"(n))` barriers in
+      `Battle_Update` also keep cross-jumping to the last store only;
+      without them blocks 1 and 3 merge (lev 299).
+    - `Battle_StepVictory` (also `result`, `object`, `brightness`, `delay`
+      pins): retail jumps from case 1 to the byte truncation in case 5
+      before register allocation, so the brightness temporaries share
+      `s0`; written as a goto or as two tails the temporaries take `v0`
+      (lev 25). The `delay` pin only moves the `249` constant (lev 2).
+    - `Battle_StepAyaAction` (9 pins, 7 barriers): case 9 written with a
+      word pointer and named inserts reaches lev 16 (the outcome stores to
+      `D_8009CE54`/`D_8009CE55` sink below the actor loads, which do not
+      alias them); with the record views the store and load of the
+      reaction share one address register under cc1 `-G0` (lev 57). The
+      pose save/restore cases keep `$2`/`$3`/`$4`/`$5` transfer pins
+      (lev 2 to 55 each, measured one at a time).
+    - `Battle_TargetAndEnemyTurnFlow` (2 pins, 2 barriers): the first
+      target-confirm sound loads the AKAO table before the `128` argument
+      and the cancel path keeps `mode = 0` in the call delay slot; every
+      plain form (inline sound helper, local table, reordered statements)
+      gives lev 11 to 16.
+    - Stack reserves: `Battle_Update` keeps 0x1A0 and
+      `Battle_StepPostBattle` 24 unused frame bytes; no local of the
+      function accounts for them.
 
 ### Small-data recipes that replaced crutches (2026-10-12 pass)
 
