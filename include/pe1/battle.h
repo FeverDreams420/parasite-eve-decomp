@@ -197,7 +197,7 @@ typedef struct Combatant {
 /* 0x08 */ s32  exp_or_acc;    /* damage-derived accumulator, clamped to maxAtk@0x28 / 0x10000 (Battle_AttackResolution.c:537,541) */
 /* 0x0C */ u16  curHP;         /* CURRENT HP -- damage & heal land here; clamped to maxHP@0x1C (Battle_AttackResolution.c:518-530) */
 /* 0x0E */ u16  hpMirror;      /* current-HP MIRROR; re-synced from curHP each reset (Battle_ResetEnemyStats.c:42) */
-/* 0x10 */ u16  hpAlive;       /* authoritative ">0 == alive" HP (target tests); on player doubles as EXP/level gauge clamped 0x2328 (Battle_Setup.c:436; Battle_Update.c:155). TENTATIVE width: some reads s32 */
+/* 0x10 */ u16  hpAlive;       /* authoritative ">0 == alive" HP (target tests); on player doubles as EXP/level gauge clamped 0x2328 (Battle_Setup.c:436; Battle_EncounterFlow.c:373). TENTATIVE width: some reads s32 */
 /* 0x12 */ u8   actionMode12;  /* action-mode id table [0x12..0x19], filled per enemy by facing (Battle_EnemyActions.c:38-46): 4 idle, 0xD special */
 /* 0x13 */ s8   actionMode13;
 /* 0x14 */ u8   targetAngleActionModes[3]; /* selected by the relative target angle in Battle_AdvancePhase */

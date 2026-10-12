@@ -15,7 +15,7 @@ extern BattleRewardSlot D_800A7FF0[];
 
 void Anim_SetInterpRate(RenderObjectEntity *anim, int rate);
 void Akao_Cmd_21(int arg0, int arg1);
-void Battle_SlotFree(void *entity);
+void Battle_SlotFree(void **combatantPtr);
 void Battle_StartDeathAnim(void);
 void Battle_StepEntityAnimState(BattleEntity *entity);
 int Entity_TriggerAnimEvent(BattleEntity *entity, u8 slot);

@@ -143,19 +143,19 @@
   },
   "resolved_entries": [
     {
-      "unit": "main/battle/Battle_AyaEquipStateFlow",
+      "unit": "main/battle/Battle_EncounterFlow",
       "symbol": "Battle_SaveAyaState",
       "reported_size": 276,
-      "source": "src/main/battle/Battle_AyaEquipStateFlow.c",
+      "source": "src/main/battle/Battle_EncounterFlow.c",
       "status": "matched_report_credited",
       "levenshtein_score": 0,
       "evidence": "Fresh linked asm-differ run on darwine against retail instruction target; no source changes required. Main commit 4682d1677 replaced the CPU ASM implementation with matching plain C; the fresh complete report now credits this function."
     },
     {
-      "unit": "main/battle/Battle_AyaEquipStateFlow",
+      "unit": "main/battle/Battle_EncounterFlow",
       "symbol": "Battle_InitEquipLists",
       "reported_size": 108,
-      "source": "src/main/battle/Battle_AyaEquipStateFlow.c",
+      "source": "src/main/battle/Battle_EncounterFlow.c",
       "status": "matched_report_credited",
       "levenshtein_score": 0,
       "evidence": "Fresh linked asm-differ run on darwine against retail instruction target; no source changes required. Main commit 4682d1677 replaced the CPU ASM implementation with matching plain C; the fresh complete report now credits this function."

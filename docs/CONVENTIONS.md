@@ -30,7 +30,7 @@ Two principles decide most questions:
 | Enum constant / `#define` constant | `UPPER_SNAKE` with a subsystem prefix | `INV_CMD_GET_REMAINING_AMMO`, `STATE_FLAG_READY` |
 | Macro | `UPPER_SNAKE` with a prefix that names its owner | `PE1_OFFSETOF`, `PSYQ_BIOS_TRAMPOLINE`, `BOOT_CALL_ON_SCRATCHPAD_STACK` |
 | Header | `include/pe1/<subsystem>[_topic].h`, lower snake | `cdrom.h`, `menu_widget.h`, `akao/track.h` |
-| C file | named after the responsibility of the unit, same prefix as its functions | `Battle_EncounterInitializationFlow.c`, `Inv_ItemActions.c` |
+| C file | named after the responsibility of the unit, same prefix as its functions | `Battle_EncounterFlow.c`, `Inv_ItemActions.c` |
 | PsyQ C file | the SDK object name, SDK case | `psyq/libspu/s_ini.c`, `psyq/libcd/CdControl.c` |
 
 Prefixes are fixed per subsystem (table below). Use the subsystem's prefix

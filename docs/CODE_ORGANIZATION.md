@@ -1281,7 +1281,7 @@ Recipes that removed crutches here and apply to other HUD code:
 Crutches left; each was removed on its own and rebuilt, lev for that removal
 or for the best crutch-free form tried:
 
-- `Battle_EscapeAndPhaseInitFlow.c`: the per-frame gauge colour cases in
+- `Battle_EncounterFlow.c`: the per-frame gauge colour cases in
   `Battle_PhaseInitEnemyTurn`, `Battle_PhaseHitReaction` and
   `Battle_PhaseEndTurn` (all register pins and empty barriers of those
   functions). Retail loads all five gradient constants before the third

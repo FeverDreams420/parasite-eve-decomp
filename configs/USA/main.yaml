@@ -86,8 +86,7 @@ segments:
       - [0x1080, rodata, main/rodata_001080]
       - [0x1084, .rodata, battle/Battle_TurnFlow]
       - [0x10E4, .rodata, battle/Battle_EnemyMovement]
-      - [0x10F0, .rodata, battle/Battle_StepVictory]
-      - [0x1110, .rodata, battle/Battle_StepPostBattle]
+      - [0x10F0, .rodata, battle/Battle_EncounterFlow]
       - [0x1128, rodata, main/rodata_001128]
       - [0x1288, .rodata, battle/Entity_AnimationEvents]
       - [0x12C8, .rodata, battle/Battle_ContextAccess]
@@ -236,14 +235,14 @@ segments:
       # Enemy movement step, entity facing update and entity anim state step: one
       # -G8 FORCE_G0 unit with COMMON $gp words and --expand-div.
       - [0x18D74, c, battle/Battle_EnemyMovement]
-      - [0x19B88, c, battle/Save_InitSystem]
-      - [0x19BF4, c, battle/Battle_EncounterInitializationFlow]
-      - [0x1A1CC, c, battle/Battle_Update]
-      - [0x1B298, c, battle/Battle_StepVictory]
-      - [0x1B8E8, c, battle/Battle_StepLevelUp]
-      - [0x1BA9C, c, battle/Battle_StepPostBattle]
-      - [0x1C14C, c, battle/Battle_EscapeAndPhaseInitFlow]
-      - [0x1FE58, c, battle/Battle_AyaEquipStateFlow]
+      # Encounter flow (G0263): save system init, encounter start and enemy stat
+      # reset, the battle update, victory, level-up and post-battle steps, escape
+      # and phase init and Aya's equip state. One -G8 FORCE_G0 unit with COMMON $gp
+      # words and --expand-div; the player palette sets the story-day flag through
+      # g_GameState, which retires the encounter init's cc1 -G0.
+      - [0x19B88, c, battle/Battle_EncounterFlow]
+      # The enemy slot lifecycle reads g_BattleEquipStateBlock absolutely, which
+      # the encounter flow reaches through $gp, so it stays a unit of its own.
       - [0x1FFD8, c, battle/Battle_EnemySlotLifecycle]
       # Script setters and event execution share the six-record core layout.
       - [0x20210, c, battle/Entity_AnimationEvents]
