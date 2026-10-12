@@ -1,11 +1,13 @@
-/* Field player movement state handlers: idle, walk, run, turn-in-place and
- * the idle resync. All five are contiguous, compile under the default
- * profile and share the pad/analog and camera-angle globals. */
 #include "pe1/battle_runtime.h"
 #include "pe1/field_movement.h"
 #include "pe1/gte_types.h"
 #include "pe1/gte.h"
 #include "pe1/render_camera.h"
+#include "pe1/asset_tim.h"
+
+/* Field player movement state handlers: idle, walk, run, turn-in-place and
+ * the idle resync. All five are contiguous, compile under the default
+ * profile and share the pad/analog and camera-angle globals. */
 
 void Scene_Init(BattleEntity *entity, int *actionState) {
     if (D_8009D1A0 & 2) {
@@ -276,4 +278,64 @@ void Scene_UpdateEntityFacingFromPad(BattleEntity *entity) {
     /* Retail reloads both the mode flags and the stored facing angle. */
     asm volatile("" : : : "memory");
     if (D_8009D2E8 & FIELD_MOVE_CONFUSED) entity->facingAngle = (0x1000 - (u16)entity->facingAngle) & 0xFFF;
+}
+
+/* Game-side TIM container helpers: upload a TIM's image and optional CLUT,
+ * and return its CLUT/image rectangles and pixel pointers. No Psy-Q
+ * signature of any SDK version matches these bytes; they are linked as the
+ * last game object, directly before the LIBC veneers. */
+
+int *Asset_LoadTimImage(TimFile *tim) {
+    TimBlock *clut;
+    TimBlock *image;
+    int *pixels;
+
+    clut = 0;
+    if ((tim->flags & 8) != 0) {
+        clut = &tim->first_block;
+        image = (TimBlock *)&clut->bytes[clut->header.length];
+    } else {
+        image = &tim->first_block;
+    }
+
+    pixels = image->header.pixels;
+    LoadImage(&image->header.rect, pixels);
+    if (clut != 0) {
+        LoadImage(&clut->header.rect, clut->header.pixels);
+    }
+    return pixels;
+}
+
+RECT *Asset_GetTimClutRect(TimFile *tim) {
+    if (tim->flags & 8) {
+        return &tim->first_block.header.rect;
+    }
+    return 0;
+}
+
+static inline TimBlock *ImageBlock(TimFile *tim) {
+    TimBlock *image;
+
+    if (tim->flags & 8) {
+        TimBlock *clut = &tim->first_block;
+        image = (TimBlock *)&clut->bytes[clut->header.length];
+    } else {
+        image = &tim->first_block;
+    }
+    return image;
+}
+
+RECT *Asset_GetTimImageRect(TimFile *tim) {
+    return &ImageBlock(tim)->header.rect;
+}
+
+int *Asset_GetTimImagePixels(TimFile *tim) {
+    return ImageBlock(tim)->header.pixels;
+}
+
+int *Asset_GetTimClutPixels(TimFile *tim) {
+    if (tim->flags & 8) {
+        return tim->first_block.header.pixels;
+    }
+    return 0;
 }

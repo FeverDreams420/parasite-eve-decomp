@@ -621,11 +621,10 @@ segments:
       - [0x61654, c, draw/Gpu_RenderFrame]
       - [0x617AC, c, draw/Math_SqrtApprox3]
       # Player movement state handlers share the pad/analog and camera-angle
-      # globals and the default profile (main_tu_evidence G0920..G0923).
+      # globals and the default profile (main_tu_evidence G0920..G0923). The game
+      # TIM container helpers at the end (no Psy-Q signature matches) are the last
+      # game code before the LIBC veneers.
       - [0x61834, c, scene/Scene_PlayerMovement]
-      # Game TIM container helpers: no Psy-Q signature matches; the last game
-      # object before the LIBC veneers.
-      - [0x620D0, c, scene/Asset_TimImage]
       - [0x621E4, c, psyq/libc/a56]
       - [0x621F4, c, psyq/libc/c21]
       - [0x62204, c, psyq/libc/c24]
