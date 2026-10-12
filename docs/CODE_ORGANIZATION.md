@@ -148,9 +148,11 @@ after what their functions do (`fx_common/camera_nodes.c`,
   `room_m350_cruiser` (`RoomEffect_ConfiguredPulseCallback`, `-G8`) and
   `scene_e20_cruiser` (the `-ffixed-*` hover orb splits its three units).
   `docs/COMPILATION_FLAGS.md` has the lev of each unit without its flag.
-- Between shared units: `scene_e08_chrysler/SceneE08_ModuleStart`,
-  `room_m123_nypd/RoomM123_SelectSlotPointer`, `scene_e14_chrysler`'s only
-  unit.
+- Between shared units: `scene_e08_chrysler/SceneE08_ModuleStart` and
+  `room_m123_nypd/RoomM123_SelectSlotPointer`. `scene_e14_chrysler`'s only
+  unit was a copy of the room library's script-argument entry and now links
+  the shared `room_lib/RoomLib_SetArgs3` with its words named
+  `g_RoomScriptArgs`, so that scene has no C of its own.
 - `mdec_diag`: the GNU-as units, `DecDCTReset` (GCC 2.8.1) and the two VLC
   objects stay separate. `MdecDiag_WaitMdec.inc` declares a file-scope
   register variable on `$a0`; it reserves the register for every later

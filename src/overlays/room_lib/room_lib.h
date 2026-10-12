@@ -811,24 +811,6 @@ extern char RoomLib_TableB[];
         return 0; \
     }
 
-/* stash three args into room slots; returns the first slot */
-#define ROOMLIB_SET_ARGS2(name, sA, sB) \
-    int *name(int a0, int a1, int a2) { \
-        int *p = &sA; \
-        *p = a1; \
-        sB = a2; \
-        return p; \
-    }
-
-#define ROOMLIB_SET_ARGS3(name, sA, sB, sC) \
-    int *name(int a0, int a1, int a2, int a3) { \
-        int *p = &sA; \
-        *p = a1; \
-        sB = a2; \
-        sC = a3; \
-        return p; \
-    }
-
 /* stash one arg into a room slot; returns the slot */
 #define ROOMLIB_SET_ARG1(name, sA) \
     int *name(int a0, int a1) { \

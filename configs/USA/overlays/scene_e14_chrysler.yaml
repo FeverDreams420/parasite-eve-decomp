@@ -44,7 +44,7 @@ segments:
       - [0x150, c, ../room_lib/RoomLib_CloseTarget]
       - [0x1D4, c, ../room_lib/RoomLib_PairedGlow]
       - [0x10BC, c, ../room_lib/RoomEffect_OrbitFlare]
-      - [0x1D0C, c, RoomLib_SetArgs3_80190CF4]
+      - [0x1D0C, c, ../room_lib/RoomLib_SetArgs3]
       - [0x1D30, data]
   - [0x2000]
 # source slice: scanner
