@@ -115,7 +115,7 @@ int func_80198400(int event) {
         D_8019A8A0=((volatile FieldActor *)instance)->render_object.model_matrix.translation[0]-x;
         D_8019A8A4=((volatile FieldActor *)instance)->render_object.model_matrix.translation[2]-z;
     }
-    asm volatile("" ::: "memory");
+    asm volatile("" : : "m"(D_8019A8A4));
     vertices[0]=*(GteShortVector *)&D_8019A898;
     vertices[1]=*(GteShortVector *)&D_8019A8A0;
     vertices[2]=D_8019A8B0;
@@ -140,9 +140,9 @@ int func_80198400(int event) {
             if(i<4) return 0;
             {
                 FieldActor *player=g_PlayerEntity;
-                asm("" : "=r"(player) : "0"(player));
+                asm("" : : "r"(player));
                 D_8019A8C0=1;
-                asm volatile("" ::: "memory");
+                asm volatile("" : : "m"(D_8019A8C0));
                 player->state->flags|=0x4000;
                 if(instance->state) instance->state->core_flags|=0x80000000u;
             }
