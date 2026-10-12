@@ -45,7 +45,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x54, c, MdecDiag_ExpandDecoderTable]
+      - [0x54, c, vlc_build]
   - name: mdec_diag_decoder_padding
     type: code
     start: 0x138
@@ -63,13 +63,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x144, c, DecDCTReset]
-      - [0x178, c, DecDCTGetEnv]
-      - [0x204, c, DecDCTPutEnv]
-      - [0x29C, c, libpress_decdct]
-      - [0x404, c, MdecDiag_Reset]
-      - [0x4F4, c, MdecDiag_SendInput]
-      - [0x584, c, MdecDiag_ReceiveOutput]
+      - [0x144, c, decdct]
       - [0x610, c, mdec_wait]
       - [0x738, c, mdec_status]
   - name: mdec_diag_vlc_padding
@@ -89,7 +83,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x7D4, c, DecDCTvlc]
+      - [0x7D4, c, vlc]
   - name: mdec_diag_vlc_c_padding
     type: code
     start: 0xB68
@@ -107,7 +101,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0xB74, c, DecDCTvlc2]
+      - [0xB74, c, vlc_c]
       - [0xF04, data, mdec_diag_tables]
   - [0x13000]
 # source slice: scanner, extended through decoder code/tables to sector 965

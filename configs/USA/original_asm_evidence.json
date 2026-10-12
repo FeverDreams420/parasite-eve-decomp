@@ -74,7 +74,7 @@
     {
       "name": "func_8010C4CC",
       "module": "mdec_diag",
-      "source": "overlays/mdec_diag/DecDCTvlc.c",
+      "source": "overlays/mdec_diag/vlc.c",
       "address": "0x8010C4CC",
       "size": 48,
       "origin": "psyq",
@@ -90,7 +90,7 @@
     {
       "name": "func_8010C4FC",
       "module": "mdec_diag",
-      "source": "overlays/mdec_diag/DecDCTvlc.c",
+      "source": "overlays/mdec_diag/vlc.c",
       "address": "0x8010C4FC",
       "size": 868,
       "origin": "psyq",
@@ -105,7 +105,7 @@
     {
       "name": "func_8010C86C",
       "module": "mdec_diag",
-      "source": "overlays/mdec_diag/DecDCTvlc2.c",
+      "source": "overlays/mdec_diag/vlc_c.c",
       "address": "0x8010C86C",
       "size": 48,
       "origin": "psyq",
@@ -120,7 +120,7 @@
     {
       "name": "func_8010C89C",
       "module": "mdec_diag",
-      "source": "overlays/mdec_diag/DecDCTvlc2.c",
+      "source": "overlays/mdec_diag/vlc_c.c",
       "address": "0x8010C89C",
       "size": 864,
       "origin": "psyq",
