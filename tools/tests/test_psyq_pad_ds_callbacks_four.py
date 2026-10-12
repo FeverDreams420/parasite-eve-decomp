@@ -23,10 +23,10 @@ CASES = [('libpad/padportd_4',
   732,
   'dd749c65e05714e3bd6130961ed0cc79bdbbef7acfedd2fd2622c3e6f21af5a7',
   'DS_lastmode = 0x8007FC18;\nDS_lastpos = 0x8007FC28;\ng_DsAsyncReadState = 0x8009B6EC;\nDsCommand = 0x8007EE84;\nDsDataCallback = 0x800824F0;\nDsGetSector = 0x80080AE4;\nDsPosToInt = 0x80080C48;\nDsQueueLen = 0x8007F778;\nDsReadyCallback = 0x800824C8;\nDsStartCallback = 0x800824DC;\nER_retry = 0x80082204;\ng_DsReadBusy = 0x8009B70C;\nSECTIONS { .text 0x80081e70 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }'),
- ('libpad/padif_2',
-  892,
-  'a435b3916bf94b1ffe701eb59664b0f9a9b3b57710343a2f3e1a7f39070089c3',
-  '_padSioRW = 0x800830DC;\nD_8009B724 = 0x8009B724;\nD_8009B72C = 0x8009B72C;\nD_8009B730 = 0x8009B730;\nD_8009B744 = 0x8009B744;\nD_8009B748 = 0x8009B748;\nD_8009B758 = 0x8009B758;\nD_8009B764 = 0x8009B764;\nD_8009B770 = 0x8009B770;\nD_8009B77C = 0x8009B77C;\nD_8009B79C = 0x8009B79C;\nD_8009B7A0 = 0x8009B7A0;\nMemCard_WaitReadyForTransfer = 0x800834E8;\nMemCard_WaitStatusBit2 = 0x80083578;\nMemCard_WriteByte = 0x800832B4;\nsetRC2wait = 0x80084FC4;\nSECTIONS { .text 0x80084168 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }')]
+ ('libpad/padif',
+  1504,
+  '338fd1ade835fb0bc2491c596f668f5f176d0410b4b93296693aca93b2d2f1ac',
+  'D_8009B724 = 0x8009b724;\nD_8009B72C = 0x8009b72c;\nD_8009B730 = 0x8009b730;\nD_8009B744 = 0x8009b744;\nD_8009B748 = 0x8009b748;\nD_8009B750 = 0x8009b750;\nD_8009B754 = 0x8009b754;\nD_8009B758 = 0x8009b758;\nD_8009B760 = 0x8009b760;\nD_8009B764 = 0x8009b764;\nD_8009B770 = 0x8009b770;\nD_8009B77C = 0x8009b77c;\nD_8009B79C = 0x8009b79c;\nD_8009B7A0 = 0x8009b7a0;\nMemCard_WaitReadyForTransfer = 0x800834e8;\nMemCard_WaitStatusBit2 = 0x80083578;\nMemCard_WriteByte = 0x800832b4;\n_padSioRW = 0x800830dc;\ng_MemCardCommandByte = 0x8009b770;\ng_MemCardDispatchResult = 0x8009b7a4;\ng_MemCardPort1Present = 0x8009b774;\ng_MemCardStateDispatchFn = 0x8009b73c;\ng_MemCardWriteBlockCount = 0x8009b79c;\nsetRC2wait = 0x80084fc4;\nSECTIONS { .text 0x80083f04 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }')]
 
 
 class PsyqPadDsCallbacksFourTests(unittest.TestCase):

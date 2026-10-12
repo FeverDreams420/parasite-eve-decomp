@@ -826,7 +826,6 @@ segments:
       - [0x746F8, pad]
       - [0x74704, c, psyq/libpad/padif]
       # Command emission, response-size decoding, and acknowledgment share the write protocol.
-      - [0x74968, c, psyq/libpad/padif_2]
       - [0x74CE4, c, psyq/libpad/padportd]
       - [0x74E44, c, psyq/libpad/padportd_2]
       - [0x74EAC, c, psyq/libpad/padportd_3]

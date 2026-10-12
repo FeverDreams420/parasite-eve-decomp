@@ -314,7 +314,6 @@ byte-identical.
 | LIBDS DSREAD | 2 | 2 | `dsread.c` GCC 2.7.2, `dsread_2.c` only builds with GCC 2.8.1 |
 | LIBDS DSFILE | 2 | 2 | `dsfile.c` GCC 2.8.1, `dsfile_2.c` GCC 2.7.2 |
 | LIBDS DSREADY | 5 | 4 | parts 1 and 3 GCC 2.8.1, parts 2 and 4 GCC 2.7.2 |
-| LIBPAD PADIF | 3 | 2 | `padif.c` GCC 2.8.1, LIBPAD_PADIF_text_26C GCC 2.7.2 |
 | LIBPAD PADPORTD | 4 | 4 | parts 1 and 3 GCC 2.8.1 (3 only builds with it), parts 2 and 4 GCC 2.7.2 |
 | LIBSPU SPU | 4 | 4 | part 1 GCC 2.7.2 with GNU as, parts 2 and 4 GCC 2.8.1, part 3 GCC 2.7.2 with the GNU as 2.8.1 assembler |
 
@@ -330,6 +329,12 @@ markers (one unit each now):
   the read index through a second pointer variable (`state = end - 1;
   *end = *state;`), which GCC 2.7.2 keeps as `-4(v1)`; `end[-1]` folds to an
   absolute address. Its three asm barriers were only needed under GCC 2.8.1.
+- LIBPAD PADIF (`padif.c`, GCC 2.7.2 with GNU as and
+  `-fno-cse-follow-jumps`): no source change. `CardObj_WriteCommandByte`
+  loads `obj->command` again for the call after testing it; GCC 2.7.2 reuses
+  the tested value when cse follows the branch into the `else` block, and
+  with that option off the whole object matches, `LIBPAD_PADIF_text_26C`
+  included.
 
 ### AKAO driver (src/main/akao)
 
