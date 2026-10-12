@@ -36,6 +36,12 @@ typedef union GteMatrixStorage {
 
 PE1_STATIC_ASSERT(sizeof(GteMatrixStorage) == 32, gte_matrix_storage_size);
 
+/* MULTU: unsigned 32 x 32 -> 64 bit product in HI/LO. The Q12 matrix code
+ * feeds signed operands and reads LO only, as the assembler does. A macro,
+ * not an inline function, so the pinned operand registers feed MULTU
+ * directly. */
+#define GTE_MULTU(a, b) ((unsigned long long)(u32)(a) * (u32)(b))
+
 typedef struct GteVector {
     s32 x, y, z, pad;
 } GteVector;
