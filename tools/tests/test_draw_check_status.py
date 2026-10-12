@@ -116,7 +116,7 @@ def check_model(images):
     return verified
 
 
-class GpuStatusTests(unittest.TestCase):
+class DrawCheckStatusTests(unittest.TestCase):
     @unittest.skipUnless((ROOT / 'assets/USA/main.exe').is_file() and
                          (ROOT / 'build/USA/main.exe').is_file() and find_spec('unicorn'),
                          'images or unicorn unavailable')

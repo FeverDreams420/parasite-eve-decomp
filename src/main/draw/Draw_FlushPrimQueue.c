@@ -1,10 +1,10 @@
 #include "common.h"
 
 /* Table entry address: the queue offsets are byte offsets into the table. */
-typedef union TaskGeneratorAddress {
+typedef union DrawPrimGeneratorAddress {
     u32 *pointer;
     u32 address;
-} TaskGeneratorAddress;
+} DrawPrimGeneratorAddress;
 
 u32 Draw_FlushPrimQueue(void) {
     register u32 *base asm("$8");
@@ -30,14 +30,14 @@ u32 Draw_FlushPrimQueue(void) {
 
     /* Match note: preserve target operand order in the address adds. */
     {
-        TaskGeneratorAddress entry;
+        DrawPrimGeneratorAddress entry;
 
         entry.pointer = base;
         entry.address += head;
         head_ptr = entry.pointer;
     }
     {
-        TaskGeneratorAddress entry;
+        DrawPrimGeneratorAddress entry;
 
         entry.pointer = base;
         entry.address += tail;

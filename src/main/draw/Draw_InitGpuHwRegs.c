@@ -1,6 +1,6 @@
 /* CC1_FLAGS: -fno-schedule-insns */
 
-register int *g_TaskGpuReg2 asm("$10");
+register int *g_DrawGpuReg2 asm("$10");
 
 void Draw_InitGpuHwRegs(void) {
     register unsigned int zero asm("$0");
@@ -27,9 +27,9 @@ void Draw_InitGpuHwRegs(void) {
     } while (count != 0 && (count--, 1));
 
     ptr1 = (int *)0x80070E04;
-    g_TaskGpuReg2 = (int *)0x80070E08;
+    g_DrawGpuReg2 = (int *)0x80070E08;
     a = zero | 0x40;
     b = zero | 0x10;
     *ptr1 = a;
-    *g_TaskGpuReg2 = b;
+    *g_DrawGpuReg2 = b;
 }

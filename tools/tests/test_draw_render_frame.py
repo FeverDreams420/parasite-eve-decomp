@@ -9,7 +9,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import find_definition  # noqa: E402
 
 
-class GpuRenderFrameTests(unittest.TestCase):
+class DrawRenderFrameTests(unittest.TestCase):
     def test_address_helpers_need_no_argument_register_pin(self):
         source = find_definition('Draw_RenderFrame').read_text()
         source = re.sub(r'/\*.*?\*/|//[^\n]*', '', source, flags=re.S)

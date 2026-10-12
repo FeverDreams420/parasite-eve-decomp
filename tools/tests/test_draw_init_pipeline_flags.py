@@ -10,7 +10,7 @@ END = 0x8003F2D8
 FIELD_MOVE_LOCK = 0x8009D2E8
 
 
-class GpuInitPipelineFlagsTests(unittest.TestCase):
+class DrawInitPipelineFlagsTests(unittest.TestCase):
     @unittest.skipUnless((ROOT / 'assets/USA/main.exe').is_file() and
                          (ROOT / 'build/USA/main.exe').is_file() and find_spec('unicorn'),
                          'images or unicorn unavailable')

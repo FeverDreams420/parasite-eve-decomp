@@ -906,7 +906,7 @@ void Draw_AllocPrimWithMask(MenuWidgetNode *node)
     GetPosition(node, &x, &y);
     packet = AllocArea(x, y, Dimension(node->draw_state, node->grid_width),
                       Dimension(node->disabled, node->visible_rows));
-    Gpu_LinkDrawArea(g_DrawOrderingTableEntry, packet);
+    Draw_LinkDrawArea(g_DrawOrderingTableEntry, packet);
 }
 
 static inline void SetCursor(u32 x, u32 y)
@@ -969,7 +969,7 @@ void MenuWidget_DrawList(MenuWidgetNode *node, void (*draw_callback)(int))
     rect.x = 0; rect.y = 0; rect.w = 320; rect.h = 224;
     if (g_DrawBufferIndex) rect.y = 224;
     packet = AllocRect(&rect);
-    Gpu_LinkDrawArea(D_8009D11C, packet);
+    Draw_LinkDrawArea(D_8009D11C, packet);
     PushCursor();
     MoveCursor(0, node->scroll_adjust);
     if (node->scroll_adjust > 0) {

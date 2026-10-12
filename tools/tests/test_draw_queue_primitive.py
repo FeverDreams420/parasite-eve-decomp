@@ -9,7 +9,7 @@ from tools.tests.csource import find_definition
 ROOT = Path(__file__).resolve().parents[2]
 
 
-class GpuQueuePrimitiveTests(unittest.TestCase):
+class DrawQueuePrimitiveTests(unittest.TestCase):
     def test_queue_function_has_no_assembly(self):
         source = find_definition('Draw_QueuePrimitive').read_text()
         source = source.split('void Draw_QueuePrimitive(void) {',1)[1].split('\n#include',1)[0]

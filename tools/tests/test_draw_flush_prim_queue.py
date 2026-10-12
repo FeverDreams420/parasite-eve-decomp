@@ -59,7 +59,7 @@ def check_model(images):
     return len(cases) * len(values) ** 2
 
 
-class GpuQueueTests(unittest.TestCase):
+class DrawFlushPrimQueueTests(unittest.TestCase):
     @unittest.skipUnless((ROOT / 'assets/USA/main.exe').is_file() and
                          (ROOT / 'build/USA/main.exe').is_file() and find_spec('unicorn'),
                          'images or unicorn unavailable')

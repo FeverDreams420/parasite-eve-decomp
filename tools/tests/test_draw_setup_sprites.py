@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SOURCE = find_definition('Draw_SetupSprites')
 
 
-class GpuSetupSpritesTests(unittest.TestCase):
+class DrawSetupSpritesTests(unittest.TestCase):
     def test_setup_function_has_no_assembly(self):
         source = function_text('Draw_SetupSprites', SOURCE)
         source = re.sub(r'/\*.*?\*/|//[^\n]*','',source,flags=re.S)

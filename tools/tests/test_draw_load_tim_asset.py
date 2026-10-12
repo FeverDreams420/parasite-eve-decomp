@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 @unittest.skipUnless(shutil.which('mipsel-none-elf-ld') and (ROOT/'assets/USA/main.exe').is_file(), 'retail image/toolchain unavailable')
-class GpuLoadTimAssetTests(unittest.TestCase):
+class DrawLoadTimAssetTests(unittest.TestCase):
     def test_retail_bytes_and_packet_model(self):
         try:
             from unicorn import Uc, UC_ARCH_MIPS, UC_MODE_MIPS32, UC_MODE_LITTLE_ENDIAN, UC_HOOK_CODE

@@ -1617,7 +1617,7 @@ Crutches still in these units, with the best crutch-free lev found:
   no frame, hand-filled delay slots. GCC emits none of these (crutch-free
   lev 22 and 24). They should become `GAME_ASM_FUNCTION` units with
   evidence entries in a reviewed change; this pass adds no assembler. The
-  queue offsets are now added through the `TaskGeneratorAddress` union
+  queue offsets are now added through the `DrawPrimGeneratorAddress` union
   instead of integer casts.
 - `Boot_MemCardStepInit`: 3 re-dispatch `goto`s (a `for`/`continue` loop
   lets loop.c hoist `0x400000` and `1`, lev 39; tail recursion re-runs the

@@ -11,7 +11,7 @@ sys.path.insert(0, str(ROOT / "tools/tests"))
 from csource import host_unit  # noqa: E402
 
 
-class GpuTimImageTests(unittest.TestCase):
+class AssetTimImageTests(unittest.TestCase):
     @unittest.skipUnless(shutil.which("cc"), "host C compiler unavailable")
     def test_uploads_image_then_optional_clut(self):
         source = host_unit("Asset_LoadTimImage")
