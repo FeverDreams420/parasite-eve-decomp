@@ -19,6 +19,8 @@ typedef struct { u8 bytes[0x10]; } __attribute__((packed)) PackedCopy16;
 typedef struct { u8 bytes[8]; } __attribute__((packed)) PackedCopy8;
 typedef struct { u8 bytes[0x10]; } LargeSymbol;
 typedef union { s32 value; } FlagValue;
+/* A block-move pointer seen as a word for GCC's alignment test. */
+typedef union { const u8 *bytes; u32 word; } CopyAddress;
 
 int BattleCmd_CommitAmmoAndUpdate(); /* no prototype: retail calls it with and without the action */
 s16 Battle_CalcAngleToTarget(RenderObjectEntity *object, void *target);
@@ -103,6 +105,7 @@ void Battle_AdvancePhase(void) {
     u8 *copy_dst;
     const u8 *copy_src;
     const u8 *copy_end;
+    u32 misaligned;
 
     var_a0 = D_8009D2A0;
     temp_a2 = D_8009D1D4;
@@ -128,7 +131,15 @@ void Battle_AdvancePhase(void) {
         copy_dst = (u8 *)sp30.soundId;
         copy_src = (const u8 *)D_80010760.soundId;
         copy_end = copy_src + 0x20;
-        if (((u32)copy_dst | (u32)copy_src) & 3) {
+        {
+            CopyAddress dst;
+            CopyAddress src;
+
+            dst.bytes = copy_dst;
+            src.bytes = copy_src;
+            misaligned = (dst.word | src.word) & 3;
+        }
+        if (misaligned) {
             do {
                 *(PackedCopy16 *)copy_dst = *(const PackedCopy16 *)copy_src;
                 copy_src += 0x10;
@@ -183,7 +194,13 @@ block_search_done:
                     var_v0_3 = D_8009D1D4 + 7;
                 temp_v1_3 = var_v0_3 & 0xFF;
                 temp_v1_3 <<= 3;
-                temp_v1_3 = *(u16 *)((u8 *)&D_800BE830[0].command + temp_v1_3);
+                {
+                    BattleInitSlotAddress at;
+
+                    at.slot = D_800BE830;
+                    at.address = temp_v1_3 + at.address;
+                    temp_v1_3 = (u16)at.slot->command;
+                }
                 D_8009D1D4 = var_v0_3;
                 temp_v1_3 -= 3;
                 temp_v1_3 = temp_v1_3 < 0x194U;
@@ -219,7 +236,13 @@ block_search_done:
 block_35:
                 temp_v1_3 = var_v0_3 & 0xFF;
                 temp_v1_3 <<= 3;
-                temp_v1_3 = *(u16 *)((u8 *)&D_800BE830[0].command + temp_v1_3);
+                {
+                    BattleInitSlotAddress at;
+
+                    at.slot = D_800BE830;
+                    at.address = temp_v1_3 + at.address;
+                    temp_v1_3 = (u16)at.slot->command;
+                }
                 D_8009D1D4 = var_v0_3;
                 temp_v1_3 -= 3;
                 temp_v1_3 = temp_v1_3 < 0x194U;

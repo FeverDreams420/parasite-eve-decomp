@@ -1081,7 +1081,9 @@ single removal (none was byte-identical):
   but the target search's found block then moves out of the copy, where
   loop.c placed it in retail), its `goto`s, and the scaled queue reads in
   the two finish tails (array indexing gives the index another register,
-  lev 6). `Battle_DrawStatusValue` and
+  lev 6); those reads and the block-move alignment test now go through
+  block-scope `BattleInitSlotAddress`/`CopyAddress` unions instead of byte
+  and integer casts. `Battle_DrawStatusValue` and
   `Battle_DrawDecimalNumber` add their precomputed byte offsets to a
   block-scope `BattleStatusPrimAddress` (`pe1/battle_status.h`) loaded with
   the base right where the sum is needed. A function-wide union copy of the

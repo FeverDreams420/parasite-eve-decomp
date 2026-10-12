@@ -497,6 +497,13 @@ typedef struct BattleInitSlot {
 } BattleInitSlot;
 extern BattleInitSlot D_800BE830[45];
 
+/* A queue slot address as a pointer or a word: the phase code adds a
+ * pre-scaled slot offset to the queue address as an integer. */
+typedef union BattleInitSlotAddress {
+    BattleInitSlot *slot;
+    u32 address;
+} BattleInitSlotAddress;
+
 PE1_STATIC_ASSERT(sizeof(BattleInitSlot) == 8, battle_init_slot_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(BattleInitSlot, command) == 4,
                   battle_init_slot_field04_offset);

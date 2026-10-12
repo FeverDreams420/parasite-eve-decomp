@@ -165,7 +165,9 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
             result = 1; break;
         }
         }
-        { EnemyCombatant *enemy = (EnemyCombatant *)((BattleInitSlot *)((u8 *)D_800BE830 + offset))->actor->core; if (!(enemy->hpAlive > 0 && enemy)) {
+        { EnemyCombatant *enemy;
+        { BattleInitSlotAddress at; at.slot = D_800BE830; at.address = at.address + offset; enemy = (EnemyCombatant *)at.slot->actor->core; }
+        if (!(enemy->hpAlive > 0 && enemy)) {
             Entity_SetActionMode(D_8009D254, active->actionMode12);
             D_8009D1D4++;
             D_8009D278->stateFlags |= 0x200000;
