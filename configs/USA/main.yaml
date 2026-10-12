@@ -396,8 +396,8 @@ segments:
       # The parasite spell unlock keeps -fno-schedule-insns (lev 7 without it,
       # its neighbours do not match with it).
       - [0x4204C, c, battle/Aya_UnlockParasiteSpell]
-      - [0x4206C, c, battle/Math_IntSqrt]
-      - [0x420A8, c, battle/BattleCmd_CommitAmmoAndUpdate]
+      # Integer square root and the ammo commit/update: one default-profile unit.
+      - [0x4206C, c, battle/BattleCmd_CommitAmmoAndUpdate]
       - [0x42180, c, battle/Inv_BuildWeaponList]
       - [0x424C4, c, battle/BattleCmd_LoadWeaponModifiers]
       - [0x425F8, c, battle/Battle_GetScaledMaxHP]

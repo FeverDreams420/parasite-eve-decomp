@@ -6,6 +6,25 @@
 #include "pe1/inventory_queries.h"
 #include "pe1/weapon_list_output.h"
 
+int Math_IntSqrt(int value) {
+    int result = 0;
+    int shift = 30;
+
+    do {
+        int step = ((result << 2) + 1) << shift;
+
+        result <<= 1;
+        if (value >= step) {
+            value -= step;
+            result |= 1;
+        }
+
+        shift -= 2;
+    } while (shift >= 0);
+
+    return result;
+}
+
 int BattleCmd_CommitAmmoAndUpdate(void *out) {
     Combatant *current;
     ItemDataRecord *entry;
@@ -32,4 +51,3 @@ int BattleCmd_CommitAmmoAndUpdate(void *out) {
     Inv_BuildWeaponList(0, out);
     return result;
 }
-
