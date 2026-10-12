@@ -55,7 +55,7 @@ void func_80195BC8(FxCommonShortVec3 *a, FxCommonShortVec3 *b, int bi, int ai)
     D_8019C07C = originX;
     origin1->y = ay;
     origin1->z = az;
-    D_8019C084 = *(u16 *)&a->x;
+    D_8019C084 = (u16)a->x;
     ayCopy = a->y;
     ai &= 255;
     target1->y = ayCopy;
