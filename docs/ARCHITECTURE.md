@@ -26,7 +26,7 @@ each against the retail SHA-1.
 | `0x800718D0..0x8008D7C0` | PsyQ libraries interleaved with game-side drivers that sit beside them: CD, memory card, pad, SPU/AKAO, GPU queues |
 | `0x8008D7C0..0x800910A0` | AKAO sequencer: note timing and track commands |
 | `0x800910A0..0x800C1CA0` | initialized data and small data; `$gp` = `0x8009CD70`; the main state block `g_GameState` is at `0x800B0CD8` |
-| `0x800C1CA0..0x800E0060` | second code segment: the field effect engine (`src/main/engine`, effect pool, emitters, particles) with its own rodata |
+| `0x800C1CA0..0x800E0060` | second code segment: the field effect engine (`src/main/fieldfx`, effect pool, emitters, particles) with its own rodata |
 | `0x800E0060..0x801FE000` | image tail, almost entirely zero: BSS, buffers and the overlay windows |
 | `0x801FFFF0` | initial stack top |
 

@@ -498,7 +498,7 @@ Crutches still in place (lev is the only metric):
   `other_buffers[slot + 1]` directly recreates such a slot, but above the
   spilled locals instead of at 0x38 (lev 38).
 
-### Field effect engine (src/main/engine) remaining crutches
+### Field effect engine (src/main/fieldfx) remaining crutches
 
 Swept 2026-10-11 and 2026-10-12. Recipes that removed crutches without
 changing bytes:

@@ -4,7 +4,7 @@
 #include "common.h"
 #include "pe1/gte_types.h"
 
-/* Textured model packet helpers (engine/FieldEng_TexturedModel.c). The model
+/* Textured model packet helpers (fieldfx/FieldEng_TexturedModel.c). The model
  * layout is FieldTexturedModel in pe1/field_textured_model.h. */
 union FieldTexturedModel;
 
