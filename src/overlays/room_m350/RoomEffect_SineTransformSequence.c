@@ -57,7 +57,7 @@ int func_8019988C(int event, EmissionState *state)
         RoomM350SineParticle *effect;
         int random;
         register int index asm("$3");
-        register RoomM350EffectActor *actor asm("$5");
+        RoomM350EffectActor *actor;
         FieldActor *instance;
         state->delay--;
         if (state->delay != -1) return 0;
