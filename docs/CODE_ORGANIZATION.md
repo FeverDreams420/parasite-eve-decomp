@@ -115,6 +115,61 @@ question, not a real conflict:
   guarded `do`/`while`, with the camera pointer taken before it, matches under
   `-fno-strength-reduce`.
 
+### Overlay translation units (src/overlays, 2026-10-12)
+
+The overlays' own C went from 432 files to 106 and from 149 address-named
+files to none. Adjacent units of one overlay were merged when nothing else
+lies between them in the manifest (no shared `room_lib` unit, data, or foreign
+rodata between the members' rodata) and their per-file markers agree.
+`--expand-div` is not a difference: every default overlay unit compiles
+byte-identically with it, so a run that contains one `--expand-div` member
+becomes one unit with that marker. Each merge was checked with
+`make overlay-check` of its overlay; `tools/reorg/merge_overlay_units.py`
+does the mechanical part (hoisted includes and types, one folded
+`<unit>_externs.h`, `#undef` of each member's template macros, renamed
+clashing local types, prototypes taken from the definitions).
+`room_lib/` keeps one unit per method.
+
+The main run of a room or scene is `<short>.c` (`scene_e08_chrysler/e08.c`),
+a grab-trigger class prelude is `<short>_class.c`, and other runs are named
+after what their functions do (`fx_common/camera_nodes.c`,
+`menu_memcard/glint_effects.c`). Units that stay separate, and why:
+
+- Copied code with its own link address: `boot_display` and `menu_memcard`
+  are built from segments whose functions keep the link VMA of the place they
+  were copied from, so a segment is at most one unit. Only segments with
+  several functions merged (`boot_display/{sprites,playback}.c`,
+  `menu_memcard/{video,glint_effects,video_open_step,fade}.c`).
+- Flag singletons: `fx_common` (`-fno-force-addr`, `-fno-schedule-insns`,
+  `-fno-expensive-optimizations`, `--dont-expand-li`; the two `-G8` units are
+  `render_op.c`), `menu_memcard` (`-fno-cse-skip-blocks` twice),
+  `room_m273_liberty` (`RoomM273_PulseSpriteCallback`, `-fno-schedule-insns`,
+  which also leaves `RoomEffect_PhasedArcSpriteFlow` alone after it),
+  `room_m350_cruiser` (`RoomEffect_ConfiguredPulseCallback`, `-G8`),
+  `scene_e18_cruiser` (`SceneE18_ExpandingRingCallback`,
+  `-fno-cse-skip-blocks`) and `scene_e20_cruiser` (the `-ffixed-*` hover orb
+  splits its three units).
+- Between shared units: `scene_e08_chrysler/SceneE08_ModuleStart`,
+  `room_m123_nypd/RoomM123_SelectSlotPointer`, `scene_e14_chrysler`'s only
+  unit.
+- `mdec_diag`: the GNU-as units, `DecDCTReset` (GCC 2.8.1) and the two VLC
+  objects stay separate. `SysReset_WaitMdec.inc` declares a file-scope
+  register variable on `$a0`; it reserves the register for every later
+  function of its translation unit, so `mdec_wait.c` and `mdec_status.c`
+  cannot be one file.
+- Foreign rodata: in `room_m256_museum`, `RoomEffect_SpriteSeeds_8018F208`
+  (still an asm blob) sits between the swing run's and the effects run's
+  rodata, so they are `m256_swing.c` and `m256_effects.c` until the seeds are
+  claimed as C data.
+- Two type views of one symbol: in `room_m273_liberty`, the poll/reset
+  template of `RoomEffect_RisingSpritePoolFlow` declares `D_8019AF04` as a
+  `RoomFxSeed8` seed, while the boss code declares it as the
+  `RoomM273DropQueue` that starts with that seed; that unit separates
+  `m273.c` from `m273_boss_sway.c` until the template can take the queue's
+  member.
+- Not attempted: `room_lib/RoomFx_MotionParticles{,_2,_3}` (split by
+  `-fno-strength-reduce`, needs a probe first).
+
 ### AKAO driver (src/main/akao)
 
 The AKAO units have no offset macros, byte arithmetic or file-scope
