@@ -69,10 +69,8 @@ segments:
       - [0x404, c, func_8010C0FC]
       - [0x4F4, c, func_8010C1EC]
       - [0x584, c, func_8010C27C]
-      - [0x610, c, SysReset_WaitMdecInput]
-      - [0x6A4, c, SysReset_WaitMdecOutput]
-      - [0x738, c, func_8010C430]
-      - [0x750, c, func_8010C448]
+      - [0x610, c, mdec_wait]
+      - [0x738, c, mdec_status]
   - name: mdec_diag_vlc_padding
     type: code
     start: 0x7CC

@@ -1,5 +1,9 @@
 #include "pe1/mdec_diag.h"
 
+int func_8010C430(void) {
+    return *D_8010DB50;
+}
+
 int func_8010C448(char *message) {
     func_80071A74(D_8010BD38, message);
     *D_8010DB50 = 0x80000000;
