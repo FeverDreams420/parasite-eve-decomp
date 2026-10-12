@@ -139,7 +139,8 @@ void CQ_error_flush(int event, u8 *data) {
     }
 }
 
-#include "dssys_2_3_externs.h"
+#define QUEUE_FROM_CURRENT(p)                                                          \
+    ((CdDsReadQueueWindow *)((u8 *)(p) - PE1_OFFSETOF(CdDsReadQueueWindow, read_index)))
 
 
 int CQ_execute(void) {
@@ -150,9 +151,9 @@ int CQ_execute(void) {
         return 0;
     }
 
-    entry = (CdDsReadQueueEntry *)g_CdDsReadIndexBase;
-    index = *(s32 *)entry;
-    entry = (CdDsReadQueueEntry *)((u8 *)entry - 0xC4);
+    entry = (CdDsReadQueueEntry *)&D_800A3604;
+    index = QUEUE_FROM_CURRENT(entry)->read_index;
+    entry = QUEUE_FROM_CURRENT(entry)->entries;
     offset = index * 3;
     offset <<= 3;
     entry = (CdDsReadQueueEntry *)((u8 *)entry + offset);
@@ -164,8 +165,6 @@ int CQ_execute(void) {
 }
 
 void CQ_delete_command(void);
-#define QUEUE_FROM_CURRENT(p)                                                          \
-    ((CdDsReadQueueWindow *)((u8 *)(p) - PE1_OFFSETOF(CdDsReadQueueWindow, read_index)))
 void CQ_sync_system(int inEvent, u8 *inResult) {
     register int event = inEvent;
     register u8 *result = inResult;
