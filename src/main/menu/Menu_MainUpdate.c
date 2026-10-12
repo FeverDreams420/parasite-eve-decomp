@@ -31,7 +31,7 @@ void Battle_DrawStatusPanel(s32, struct BattleStatusPanel *);
 M2C_UNK Entity_ResolveDropTable(void *);                      /* static */
 s16 Entity_ApplyHitAndSetAnim(void *);                 /* static */
 void Entity_UpdateTimers(void);
-#include "Menu_MainUpdate_externs.h"
+#include "pe1/draw_slot_record.h"
 /* Separate declarations preserve the original GCC quantities for each tail. */
 /* COMMON supplies small-data metadata to MASPSX. */
 s8 D_8009CE30;
@@ -171,7 +171,7 @@ void Menu_MainUpdate(s32 arg0) {
             *(&D_800B016A[0] + (D_8009CDDC * 0x48)) = var_a3;
             *(&D_800B0170[0] + (D_8009CDDC * 0x48)) = var_a2;
             *(&D_800B0171[0] + (D_8009CDDC * 0x48)) = var_a1;
-            var_v0_3 = draw_slot_status0;
+            var_v0_3 = g_ActiveDrawSlotRecord.slot;
             *(&D_800B0172[0] + ((var_v0_3 * 9) * 8)) = var_a0;
         }
         else if (var_v1 == 1) {
@@ -194,7 +194,7 @@ void Menu_MainUpdate(s32 arg0) {
             *(&D_800B016A[0] + (D_8009CDDC * 0x48)) = var_a0;
             *(&D_800B0170[0] + (D_8009CDDC * 0x48)) = var_a2;
             *(&D_800B0171[0] + (D_8009CDDC * 0x48)) = var_a1;
-            var_v0_3 = draw_slot_status1;
+            var_v0_3 = g_ActiveDrawSlotRecord.slot;
             *(&D_800B0172[0] + ((var_v0_3 * 9) * 8)) = var_a0;
         }
         else if (var_v1 == 2) {
@@ -220,7 +220,7 @@ void Menu_MainUpdate(s32 arg0) {
             *(&D_800B016A[0] + (D_8009CDDC * 0x48)) = var_a3;
             *(&D_800B0170[0] + (D_8009CDDC * 0x48)) = var_a2;
             *(&D_800B0171[0] + (D_8009CDDC * 0x48)) = var_a1;
-            var_v0_3 = draw_slot_status2;
+            var_v0_3 = g_ActiveDrawSlotRecord.slot;
             *(&D_800B0172[0] + ((var_v0_3 * 9) * 8)) = var_a0;
         }
         else {
@@ -327,7 +327,7 @@ void Menu_MainUpdate(s32 arg0) {
                     *(&D_800B0146[0] + (D_8009CDDC * 0x48)) = var_a3;
                     *(&D_800B014C[0] + (D_8009CDDC * 0x48)) = var_a2;
                     *(&D_800B014D[0] + (D_8009CDDC * 0x48)) = var_a1;
-                    var_v0_4 = draw_slot_status0;
+                    var_v0_4 = g_ActiveDrawSlotRecord.slot;
                     *(&D_800B014E[0] + ((var_v0_4 * 9) * 8)) = var_a0_2;
                 }
                 else if (var_v1 == 1) {
@@ -350,7 +350,7 @@ void Menu_MainUpdate(s32 arg0) {
                     *(&D_800B0146[0] + (D_8009CDDC * 0x48)) = var_a0_2;
                     *(&D_800B014C[0] + (D_8009CDDC * 0x48)) = var_a2;
                     *(&D_800B014D[0] + (D_8009CDDC * 0x48)) = var_a1;
-                    var_v0_4 = draw_slot_status1;
+                    var_v0_4 = g_ActiveDrawSlotRecord.slot;
                     *(&D_800B014E[0] + ((var_v0_4 * 9) * 8)) = var_a0_2;
                 }
                 else if (var_v1 == 2) {
@@ -375,7 +375,7 @@ void Menu_MainUpdate(s32 arg0) {
                     *(&D_800B0146[0] + (D_8009CDDC * 0x48)) = var_a2;
                     *(&D_800B014C[0] + (D_8009CDDC * 0x48)) = 0;
                     *(&D_800B014D[0] + (D_8009CDDC * 0x48)) = var_a1;
-                    var_v0_4 = draw_slot_status2;
+                    var_v0_4 = g_ActiveDrawSlotRecord.slot;
                     *(&D_800B014E[0] + ((var_v0_4 * 9) * 8)) = var_a0_2;
                 }
                 else if (var_v1 == 3) {
