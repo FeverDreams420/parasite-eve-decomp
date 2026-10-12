@@ -166,8 +166,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, target18) == 0x18,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, target1c) == 0x1C,
                   camera_task_node_target1c_offset);
 
-#define S16_AT(ptr, off) (*(s16 *)((u8 *)(ptr) + (off)))
-
 /* COMMON supplies small-data metadata to MASPSX. */
 u32 *D_8009CE00;
 TaskNode *D_8009D300;
@@ -198,7 +196,7 @@ int Camera_TrackRelativeOffset(int **args) {
     speed_entity = g_CurrentEntity;
     current_x = speed_entity->pos_x;
     current_z = speed_entity->pos_z;
-    if (speed_entity != (u8 *)D_8009D254) {
+    if (speed_entity != (FieldActor *)D_8009D254) {
         movement_speed = speed_entity->move_factor;
     } else {
         movement_speed = Math_FixedMul(0x50000, speed_entity->move_factor);
@@ -278,7 +276,7 @@ int Camera_TrackRelativeOffset(int **args) {
     current_z = (target_z - current_z) >> 16;
     remaining_distance = current_x * current_x + current_z * current_z;
     motion_entity = g_CurrentEntity;
-    current_x = S16_AT(motion_entity, 0x6A);
+    current_x = ((s16 *)&motion_entity->motion_x)[1];
     current_z = movement_z >> 16;
     movement_distance = current_x * current_x + current_z * current_z;
     motion_entity->motion_z = movement_z;
