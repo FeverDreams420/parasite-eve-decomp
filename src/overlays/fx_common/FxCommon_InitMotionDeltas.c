@@ -11,14 +11,14 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     s32 firstMask;
     register s32 firstValue asm("$18");
     s32 secondValue;
-    u8 *table = &D_801D0260;
+    TimRelativeTable *table = &D_801D0260;
     GteShortVector *extraPtr;
     volatile FxCommonShortVec3 *origin0 = &g_FxCommonMotionOrigin0;
     volatile FxCommonShortVec3 *target0 = &g_FxCommonMotionTarget0;
     volatile FxCommonShortVec3 *origin1 = &g_FxCommonMotionOrigin1;
     volatile FxCommonShortVec3 *target1 = &g_FxCommonMotionTarget1;
     register s32 sourceValue asm("$22");
-    register void *lookupTable asm("$4");
+    register TimRelativeTable *lookupTable asm("$4");
     register s32 lookupCount asm("$5");
     void *base;
     register s32 bx asm("$9");

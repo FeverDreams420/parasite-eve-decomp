@@ -255,7 +255,7 @@ extern FxCommonBuffer *D_8019C9C0;
 extern FxCommonNode D_8019C340;
 extern RoomSpriteMatrix D_8019CC30;
 extern RoomSpriteMatrix *D_8019BFF0;
-extern u8 D_801D0260;
+extern TimRelativeTable D_801D0260;
 
 void func_800868AC(int mode, int arg1);
 void func_80077BC4(FxCommonGradientQuad *packet);
