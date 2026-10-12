@@ -1,19 +1,126 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
+
 #include "common.h"
-#include "pe1/draw_state.h"
-#include "pe1/menu_context_help.h"
 #include "pe1/menu_dialog.h"
-#include "pe1/menu_equipment.h"
 #include "pe1/menu_inventory.h"
-#include "pe1/menu_item_list_input.h"
+#include "pe1/menu_item_rows.h"
+#include "pe1/menu_queue.h"
+#include "pe1/inventory.h"
+#include "pe1/inventory_queries.h"
+#include "pe1/inventory_slots.h"
+#include "pe1/draw_state.h"
 #include "pe1/text.h"
+#include "pe1/menu_context_help.h"
+#include "pe1/menu_equipment.h"
+#include "pe1/menu_item_list_input.h"
+#include "pe1/menu_widget.h"
+#include "pe1/draw_level_bar.h"
+
+/* COMMON supplies small-data metadata to MASPSX: these words are reached
+ * through $gp, every other extern stays absolute. */
+int g_InvAmmoSpendActiveList;
+int g_InvItemUsableFlag;
+int g_InvSelectedItemIndex;
+int g_InvSwapSourceList;
+int g_InvSwapTargetIndex;
+int g_MenuEquipMode;
+int g_MenuItemUseMode;
+int g_MenuSelectionLocked;
+int g_MenuLayoutLocked;
+
+#define NULL ((void *)0)
+
+int Menu_AmmoSpendInputHandler(s32 arg0, s32 arg1);
+void Menu_DrawAmmoSpendPanel(void);
+
+void Menu_CreateAmmoSpendPanel(MenuWidgetNode *parent) {
+    MenuWidgetNode *node;
+    ItemDataRecord *item;
+
+    node = MenuWidget_CreateSimpleNode(0x3E, parent, 0, 1);
+    node->update = (void (*)())Menu_AmmoSpendInputHandler;
+    node->draw = Menu_DrawAmmoSpendPanel;
+    node->flags = 1;
+    MenuWidget_SetCurrentNode(node);
+    Inv_SelectActiveList(g_InvAmmoSpendActiveList);
+    item = Inv_LookupActiveListData(g_InvSelectedItemIndex);
+    if ((item != NULL) && ((item->kind - 0x13) >= 3U)) {
+        s32 active = g_InvAmmoSpendActiveList;
+        s32 source = g_InvSwapSourceList;
+        s32 selected = g_InvSelectedItemIndex;
+        s32 target = g_InvSwapTargetIndex;
+
+        active ^= source;
+        source ^= active;
+        g_InvAmmoSpendActiveList = active;
+        active ^= source;
+
+        selected ^= target;
+        target ^= selected;
+        g_InvSelectedItemIndex = selected;
+        selected ^= target;
+
+        g_InvSwapSourceList = source;
+        g_InvAmmoSpendActiveList = active;
+        g_InvSwapTargetIndex = target;
+        g_InvSelectedItemIndex = selected;
+    }
+    Inv_BuildDisplayFromList(g_InvAmmoSpendActiveList, g_InvSelectedItemIndex, g_InvSwapSourceList, g_InvSwapTargetIndex);
+    Inv_ClearSelectionBitset();
+    g_MenuSpendArrowDirection = 0;
+}
+
+s32 Menu_AmmoSpendInputHandler(s32 arg0, s32 arg1) {
+    if (arg1 & 0x1000) {
+        if (Spend_Ammo(-MenuInput_GetRepeatStep()) != 0) {
+            Menu_PlayErrorSound();
+        } else {
+            Menu_PlayMoveSound();
+        }
+        g_MenuSpendArrowDirection = 1;
+    } else if (arg1 & 0x4000) {
+        if (Spend_Ammo(MenuInput_GetRepeatStep()) != 0) {
+            Menu_PlayErrorSound();
+        } else {
+            Menu_PlayMoveSound();
+        }
+        g_MenuSpendArrowDirection = 0;
+    } else {
+        if (arg1 & 0x10000) {
+            Inv_StepScrollDisplay();
+            g_InvSwapTargetIndex = -1;
+            g_InvSelectedItemIndex = -1;
+            Inv_RebuildSelectableMask();
+            MenuWidget_DestroyNode(arg0);
+            Menu_PlayConfirmSound();
+        }
+    }
+    if (arg1 & 0x40) {
+        g_InvSwapTargetIndex = -1;
+        g_InvSelectedItemIndex = -1;
+        Inv_RebuildSelectableMask();
+        MenuWidget_DestroyNode(arg0);
+        Menu_PlayCancelSound();
+    }
+    return 1;
+}
+
+int g_MenuSpendArrowDirection;
+
+void Menu_DrawAmmoSpendPanel(void) {
+    Draw_OffsetCursor(0x3C, 0x12);
+    Draw_AllocSprite(g_MenuSpendArrowDirection + 0x4D);
+    Draw_OffsetCursor(-0x38, -0xE);
+    Menu_DrawWeaponComparisonPanel();
+}
+#undef NULL
 
 /* Equip item selection view, its stat delta preview, grid scroll and slot
  * step, and the skill screen input handler it installs. */
 
 #define NULL ((void *)0)
-
 
 void Menu_CreateEquipItemSelectionView(MenuWidgetNode *parent)
 {
@@ -271,5 +378,147 @@ s32 Menu_StepSkillScreen(MenuWidgetNode *panel, s32 flags) {
         }
         Menu_PlayMoveSound();
     }
+    return 1;
+}
+
+void Menu_CreateInventoryListView(MenuWidgetNode *parent) {
+    MenuWidgetNode *root;
+    MenuWidgetNode *node;
+
+    root = MenuWidget_CreateSimpleNode(6, parent, 0, 0);
+    node = MenuWidget_CreateNode(6, root, root);
+    root->update = (void (*)())Menu_InventoryPageInputHandler;
+    root->disabled = 1;
+    node->draw = Menu_DrawUsableItemActionList;
+    node->layout_flags |= 0x80;
+    if (g_MenuLayoutLocked != 0) {
+        MenuWidget_ClearColumnLayout(node);
+    } else if (g_InvItemUsableFlag == 0) {
+        MenuWidget_SetColumnLayout(node, 0x14);
+    }
+    if (node->cursor_x >= 0) {
+        MenuWidget_SetCurrentNode(node);
+    }
+}
+
+void Menu_DrawItemDetailPanel(MenuWidgetNode *panel) {
+    MenuWidgetNode *selection;
+    ItemDataRecord *item;
+    int index;
+    int base;
+    int panel_y;
+    /* Match debt: retail computes dx right after its two loads, in the
+     * argument registers; unpinned it is scheduled after the tail-count
+     * chain (lev 5). */
+    register int dx asm("$5");
+    register int dy asm("$6");
+    int sum;
+    int displayed;
+    MenuWidgetNode *arg_panel;
+    int panel_offset;
+
+    if (!MenuWidget_IsCursorYClear(MenuWidget_FindByModeAndSelectedBase(1, 7))) {
+        selection = MenuWidget_FindByModeAndSelectedBase(1, 6);
+        if (selection == 0) selection = MenuWidget_FindByModeAndSelectedBase(1, 0xB);
+
+        if (MenuWidget_FindByModeAndSelectedBase(1, 0xB) == 0 &&
+            MenuWidget_GridCellIndex(MenuWidget_FindByModeAndSelectedBase(2, 7)) >= 0) {
+            index = Inv_GetPackedListItem(MenuWidget_GridCellIndex(
+                MenuWidget_FindByModeAndSelectedBase(2, 7)));
+        } else {
+            index = Inv_RestoreSelection(0);
+        }
+
+        item = Inv_LookupActiveListData(index);
+        arg_panel = panel;
+        dx = selection->x - arg_panel->x;
+        dy = ((item->tailCount + 1) >> 1) * 16;
+        panel_offset = arg_panel->y - 0x6C;
+        dy -= panel_offset;
+    } else {
+        base = g_MenuEquipMode ? 0x38 : 0x24;
+        panel_y = panel->y;
+        if (Inv_GetPackedListCount() < 9) {
+            panel_offset = base + Inv_GetPackedListCount() * 16;
+            dy = panel_offset - panel_y;
+        } else {
+            panel_offset = panel_y - 0x80;
+            dy = base - panel_offset;
+        }
+        arg_panel = panel;
+        dx = 0;
+    }
+
+    MenuWidget_OffsetPosition(arg_panel, dx, dy);
+    Draw_OffsetCursor(4, 4);
+    Draw_PrintTextById(0x6A);
+    Draw_OffsetCursor(0x3C, 0);
+    Draw_PrintTextById(0x6B);
+
+    sum = g_StatBaseTable[0] + g_StatBaseTable[2];
+    if (sum < 100 && !g_MenuEquipMode) {
+        Draw_OffsetCursor(-0xF, 3);
+        Draw_PrintNumberWidth2Unk(sum);
+    } else {
+        Draw_OffsetCursor(-0x14, 3);
+        displayed = 999;
+        if (sum < 1000) displayed = sum;
+        Draw_PrintNumberWidth3Unk(displayed);
+    }
+
+    sum = g_StatBaseTable[1] + g_StatBaseTable[3];
+    if (sum < 100 && !g_MenuEquipMode) {
+        Draw_OffsetCursor(0x32, 0);
+        Draw_PrintNumberWidth2Unk(sum);
+    } else {
+        Draw_OffsetCursor(0x2D, 0);
+        displayed = 999;
+        if (sum < 1000) displayed = sum;
+        Draw_PrintNumberWidth3Unk(displayed);
+    }
+}
+
+int Menu_InventoryPageInputHandler(MenuWidgetNode *root, u32 flags) {
+    MenuWidgetNode *widget;
+    MenuWidgetNode *node;
+    int handled;
+
+    handled = 0;
+    widget = MenuWidget_GetChild(root, 0);
+    node = MenuWidget_FindByModeAndSelectedBase(2, 0xB);
+
+    if (node != 0) {
+        handled = Menu_InventoryNavigate(widget, node, flags);
+    }
+
+    if (handled == 0 && (flags & 0x40)) {
+        if (node != 0) {
+            return 1;
+        }
+
+        MenuWidget_NavScrollTo(7);
+        MenuWidget_DestroyNode(root);
+        MenuWidget_NavScrollTo(5);
+        Menu_CreateBonusPointAllocationView();
+        Menu_PlayCancelSound();
+        return 1;
+    }
+
+    if (flags & 0x1000) {
+        widget->cursor_x = -1;
+        if (node == 0) {
+            widget = MenuWidget_FindByModeAndSelectedBase(2, 5);
+        } else {
+            widget = MenuWidget_FindByModeAndSelectedBase(2, 0x1B);
+        }
+
+        if (widget != 0) {
+            widget->cursor_x = 0;
+            widget->cursor_y = widget->y_limit - 1;
+            MenuWidget_SetCurrentNode(widget);
+        }
+        Menu_PlayMoveSound();
+    }
+
     return 1;
 }

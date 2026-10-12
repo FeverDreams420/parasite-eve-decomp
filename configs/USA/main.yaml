@@ -371,15 +371,11 @@ segments:
       # confirmation it opens (G0397; the label draw is its helper). -G8 FORCE_G0 with
       # -fno-expensive-optimizations, which the label draw does not mind.
       - [0x355CC, c, menu/Menu_ItemDetailPanel]
-      # Ammo-spend panel construction, input and draw callback share selection
-      # state and a typed MenuWidgetNode under one matching -G8/common profile.
-      - [0x359D0, c, menu/Menu_AmmoSpendPanel]
-      # Equip-item selection view, stat preview, grid scroll, slot step and the skill
-      # screen input handler it installs.
-      - [0x35C2C, c, menu/Menu_EquipItemSelectionFlow]
-      - [0x366E4, c, menu/Menu_CreateInventoryListView]
-      - [0x367A4, c, menu/Menu_DrawItemDetailPanel]
-      - [0x36A0C, c, menu/Menu_InventoryPageInputHandler]
+      # Ammo-spend panel construction, input and draw callback (selection state and a
+      # typed MenuWidgetNode); equip-item selection view, stat preview, grid scroll,
+      # slot step and the skill screen input handler it installs; inventory list view,
+      # item detail draw and page input: one -G8 FORCE_G0 unit with COMMON $gp words.
+      - [0x359D0, c, menu/Menu_EquipItemSelection]
       - [0x36B34, c, menu/Evt_DeferredExec]
       - [0x36B78, c, menu/Menu_StepSkillList]
       - [0x36D74, c, menu/Menu_OnEquipConfirm]
