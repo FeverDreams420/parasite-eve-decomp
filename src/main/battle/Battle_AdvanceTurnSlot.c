@@ -10,8 +10,10 @@ u8 D_8009D2D8, D_8009D1DC;
 
 /* Step the turn index back to the first slot of the action that ends at
  * initial. The test before the loop is the loop test, so GCC merges the
- * two and enters the decrement loop through it. */
-static inline void RewindTurn(int initial)
+ * two and enters the decrement loop through it. The halfword parameter
+ * makes the rewind compute its own initial - 1 instead of reusing the one
+ * from the command lookup. */
+static inline void RewindTurn(s16 initial)
 {
     D_8009CE3C = initial - 1;
     if (D_8009CE3C == 0 ||
@@ -42,9 +44,6 @@ void Battle_AdvanceTurnSlot(void)
     D_8009CE44 = 0;
     kind = D_800BE830[savedIndex - 1].command;
     if (kind == 1) {
-        /* Matching debt: without this barrier CSE reuses the slot index
-         * minus one computed for the command lookup (lev 26). */
-        asm volatile("" : "=r"(savedIndex) : "0"(savedIndex));
         if (D_8009D1DC == (D_8009D278->action->turnWord & 15)) {
             D_8009D2D8++;
             RewindTurn(savedIndex);
