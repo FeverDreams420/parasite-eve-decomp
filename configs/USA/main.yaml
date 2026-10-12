@@ -376,13 +376,11 @@ segments:
       # slot step and the skill screen input handler it installs; inventory list view,
       # item detail draw and page input: one -G8 FORCE_G0 unit with COMMON $gp words.
       - [0x359D0, c, menu/Menu_EquipItemSelection]
-      - [0x36B34, c, menu/Evt_DeferredExec]
-      - [0x36B78, c, menu/Menu_StepSkillList]
-      - [0x36D74, c, menu/Menu_OnEquipConfirm]
-      - [0x372BC, c, menu/Menu_CreateSkillActionScreen]
-      - [0x37358, c, menu/Menu_SkillActionHandler]
-      - [0x375FC, c, menu/Menu_CreateInvSwapView]
-      - [0x376AC, c, menu/Menu_InventoryWeaponModFlow]
+      # Deferred execution, skill list step, equip confirm, skill action screen and
+      # handler, inventory swap view and the weapon modifier flow: one -G8 FORCE_G0
+      # unit with COMMON $gp words; --dont-expand-li (from the swap view) is neutral
+      # for the others.
+      - [0x36B34, c, menu/Menu_SkillScreens]
       # Configure screen; category tab reset, equip screen header, item action submenu,
       # skill select, equip stats, item detail and item list views (private data and
       # helpers); save/load screen step and navigation; inventory root step, equip
