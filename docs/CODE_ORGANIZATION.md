@@ -367,6 +367,12 @@ shapes that only exist for the bytes:
 - Two-line and item dialogs size their panel with `MAX(100, MAX(w0, w1))`
   of `Draw_MeasureTextWidth` calls: the macro's repeated calls and the
   cross-jumped tail are what retail does.
+- `Menu_StepColorSelect` is an `else if` chain with one `return 1` at the
+  end: both channel arms end in the same blend tail, and with the jumps to
+  one return label cross-jumping keeps the second arm's copy as retail does
+  (separate `return 1` statements keep the first copy). The channel shift is
+  `index << 3`: `index * 8` expands through a temporary that cse later
+  swaps with the variable, leaving one clamp with a copy of the shift in s3.
 - Small decision trees are `switch` statements with an empty `case 1`
   (`Sfx_ContextPick`) or separate identical cases (`Menu_OpenInventoryOrSwapView`).
 - `Menu_AlignEquipPanels` computes the x shift from one conditional
@@ -377,10 +383,6 @@ shapes that only exist for the bytes:
 
 Crutches still in place (lev is the only metric):
 
-- `Menu_StepColorSelect` (2 gotos): both arms share one clamp shift and the
-  blend tail. A `do`/`while (0)` form is lev 23, duplicated tails lev 35: cse
-  leaves the second arm's clamp with a copy of the channel shift (s3), so the
-  tails differ and are not cross-jumped.
 - `Menu_StepEquipConfirm` (4 pins, 1 barrier, 7 gotos): retail places the
   confirm tail right after the first arm and the reserved/dialog arms jump
   back into it, an order only the label layout gives (if/else chain lev 71);
@@ -429,15 +431,17 @@ Crutches still in place (lev is the only metric):
   total and the cleared pool; without the launder the constant base folds
   into absolute loads (lev 6). The bonus pool is read and written through
   the `g_AyaBonusPoolRecord` record view (the unit is forced-G0).
-- `Menu_MainUpdate` (3 pointer-integer casts): the m2c variables that carry
-  the battle entity pointers also carry colours, and splitting them
-  reallocates registers: the dead-player motion clear in its own pointer
-  lev 129, the reset actor pointer lev 7-8 (a single-set pointer is loaded
-  late), the tail position pointer lev 7 (local-alloc gives it v1, retail
-  keeps the function-wide t0). The halfword position reads go through
-  `Pe1Fixed_IntegerHalf` (see the recipes below). The draw slot reloads come from the
-  `g_ActiveDrawSlotRecord` record view and the BGM handle reload from an
-  array element read (see the recipes below).
+- `Menu_MainUpdate` (1 pointer-integer cast): the m2c variables that carry
+  the battle entity pointers also carry colours. The dead-player motion
+  clear and the tail position pointer use register unions of the colour word
+  and the entity pointer, which keep one pseudo and so the allocation. The
+  reset actor pointer keeps its cast: the same union is lev 8, because a
+  store to a union member is expanded through a fresh pseudo and copied, so
+  the actor load is no longer tied to the mask register and is scheduled
+  early (a separate single-set pointer is lev 7-8). The halfword position
+  reads go through `Pe1Fixed_IntegerHalf` (see the recipes below). The draw
+  slot reloads come from the `g_ActiveDrawSlotRecord` record view and the
+  BGM handle reload from an array element read (see the recipes below).
 - `Menu_StepItemGrid2` (two asm-labelled views of `D_800A19C0` in
   `pe1/Menu_MemCardProgress_externs.h`): retail rebuilds the text buffer
   address for each `Draw_MeasureTextWidth` call; with one symbol CSE keeps

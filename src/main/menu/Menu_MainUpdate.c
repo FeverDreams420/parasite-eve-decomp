@@ -82,7 +82,10 @@ void Menu_MainUpdate(s32 arg0) {
     register u32 var_a0;
     register u8 var_a0_2;
     u16 temp_a1;
-    register u32 var_v0;
+    register union {
+        u32 value;
+        BattleEntity *entity;
+    } var_v0;
     u32 temp_a2;
     EnemyActionEffect *temp_a0_2;
     u8 temp_a0;
@@ -680,11 +683,11 @@ void Menu_MainUpdate(s32 arg0) {
         D_8009D278->panelB_x = copy210;
         }
         {
-        var_v0 = (u16)d254->renderObject.projected_y;
+        var_v0.value = (u16)d254->renderObject.projected_y;
         var_v1 = 0x1E;
         D_8009D278->panelB_timer = var_v1;
         { register Combatant *post_state; post_state = D_8009D278;
-        state0->panelB_y = (s16) (var_v0 - 8);
+        state0->panelB_y = (s16) (var_v0.value - 8);
         post_state->panelB_flag = 1; }
         }
         D_8009D278->hpMirror = (u16) D_8009D278->curHP;
@@ -720,7 +723,7 @@ void Menu_MainUpdate(s32 arg0) {
         var_a2 = 0x46;
         var_a1 = 0x82;
         var_a0 = 0x9F;
-        var_v0 = 0xFF;
+        var_v0.value = 0xFF;
         var_v1 = 0xF9;
         D_800B00ED[0] = var_a2;
         D_800B00FD[0] = var_a2;
@@ -743,41 +746,41 @@ void Menu_MainUpdate(s32 arg0) {
         var_v1 = 0x3B;
         D_800B00EC[0] = 0;
         D_800B00EE[0] = var_a1;
-        D_800B00F5[0] = var_v0;
+        D_800B00F5[0] = var_v0.value;
         D_800B00FC[0] = 0;
         D_800B00FE[0] = var_a1;
-        D_800B0105[0] = var_v0;
-        D_800B692D[0] = var_v0;
+        D_800B0105[0] = var_v0.value;
+        D_800B692D[0] = var_v0.value;
         D_800B0110[0] = 0;
         D_800B0112[0] = var_a1;
-        D_800B0119[0] = var_v0;
+        D_800B0119[0] = var_v0.value;
         D_800B0120[0] = 0;
         D_800B0122[0] = var_a1;
-        D_800B0129[0] = var_v0;
-        D_800B6949[0] = var_v0;
+        D_800B0129[0] = var_v0.value;
+        D_800B6949[0] = var_v0.value;
         D_800B0134[0] = 0;
         D_800B0135[0] = var_a1;
         D_800B0136[0] = var_a2;
         D_800B013C[0] = var_a0;
-        D_800B013D[0] = var_v0;
+        D_800B013D[0] = var_v0.value;
         D_800B013E[0] = var_v1;
         D_800B0144[0] = 0;
         D_800B0145[0] = var_a1;
         D_800B0146[0] = var_a2;
         D_800B014C[0] = var_a0;
-        D_800B014D[0] = var_v0;
+        D_800B014D[0] = var_v0.value;
         D_800B014E[0] = var_v1;
         D_800B017C[0] = 0;
         D_800B017D[0] = var_a1;
         D_800B017E[0] = var_a2;
         D_800B0184[0] = var_a0;
-        D_800B0185[0] = var_v0;
+        D_800B0185[0] = var_v0.value;
         D_800B0186[0] = var_v1;
         D_800B018C[0] = 0;
         D_800B018D[0] = var_a1;
         D_800B018E[0] = var_a2;
         D_800B0194[0] = var_a0;
-        D_800B0195[0] = var_v0;
+        D_800B0195[0] = var_v0.value;
         D_800B0196[0] = var_v1;
     }
     if ((s16) D_8009D278->curHP <= 0) {
@@ -787,12 +790,12 @@ void Menu_MainUpdate(s32 arg0) {
         var_v1 = 0xF9;
         var_a3 = 0x3D;
         {
-        var_v0 = (u32) D_8009D254;
-        ((BattleEntity *)var_v0)->motionX = 0;
-        ((BattleEntity *)var_v0)->motionY = 0;
-        ((BattleEntity *)var_v0)->motionZ = 0;
+        var_v0.entity = D_8009D254;
+        var_v0.entity->motionX = 0;
+        var_v0.entity->motionY = 0;
+        var_v0.entity->motionZ = 0;
         }
-        var_v0 = 0xFF;
+        var_v0.value = 0xFF;
         D_800B00ED[0] = var_a2;
         D_800B00FD[0] = var_a2;
         D_800B0111[0] = var_a2;
@@ -805,23 +808,23 @@ void Menu_MainUpdate(s32 arg0) {
         D_800B6948[0] = var_a0;
         D_800B00EC[0] = 0;
         D_800B00EE[0] = var_a1;
-        D_800B00F5[0] = var_v0;
+        D_800B00F5[0] = var_v0.value;
         D_800B00F6[0] = var_v1;
         D_800B00FC[0] = 0;
         D_800B00FE[0] = var_a1;
-        D_800B0105[0] = var_v0;
+        D_800B0105[0] = var_v0.value;
         D_800B0106[0] = var_v1;
-        D_800B692D[0] = var_v0;
+        D_800B692D[0] = var_v0.value;
         D_800B692E[0] = var_v1;
         D_800B0110[0] = 0;
         D_800B0112[0] = var_a1;
-        D_800B0119[0] = var_v0;
+        D_800B0119[0] = var_v0.value;
         D_800B011A[0] = var_v1;
         D_800B0120[0] = 0;
         D_800B0122[0] = var_a1;
-        D_800B0129[0] = var_v0;
+        D_800B0129[0] = var_v0.value;
         D_800B012A[0] = var_v1;
-        D_800B6949[0] = var_v0;
+        D_800B6949[0] = var_v0.value;
         D_800B694A[0] = var_v1;
         {
         var_a2 = 0x36;
@@ -849,33 +852,33 @@ void Menu_MainUpdate(s32 arg0) {
         D_800B0196[0] = var_v1;
         var_v1 = 1;
         D_800B0134[0] = 0;
-        D_800B013D[0] = var_v0;
+        D_800B013D[0] = var_v0.value;
         D_800B0144[0] = 0;
-        D_800B014D[0] = var_v0;
+        D_800B014D[0] = var_v0.value;
         D_800B017C[0] = 0;
-        D_800B0185[0] = var_v0;
+        D_800B0185[0] = var_v0.value;
         D_800B018C[0] = 0;
-        D_800B0195[0] = var_v0;
+        D_800B0195[0] = var_v0.value;
         {
-        D_800B0158[0] = var_v0;
+        D_800B0158[0] = var_v0.value;
         D_800B0159[0] = var_a3;
         D_800B015A[0] = var_a2;
         D_800B0160[0] = var_a1;
         D_800B0161[0] = var_a0;
         D_800B0162[0] = var_v1;
-        D_800B0168[0] = var_v0;
+        D_800B0168[0] = var_v0.value;
         D_800B0169[0] = var_a3;
         D_800B016A[0] = var_a2;
         D_800B0170[0] = var_a1;
         D_800B0171[0] = var_a0;
         D_800B0172[0] = var_v1;
-        D_800B01A0[0] = var_v0;
+        D_800B01A0[0] = var_v0.value;
         D_800B01A1[0] = var_a3;
         D_800B01A2[0] = var_a2;
         D_800B01A8[0] = var_a1;
         D_800B01A9[0] = var_a0;
         D_800B01AA[0] = var_v1;
-        D_800B01B0[0] = var_v0;
+        D_800B01B0[0] = var_v0.value;
         D_800B01B1[0] = var_a3;
         D_800B01B2[0] = var_a2;
         D_800B01B8[0] = var_a1;
