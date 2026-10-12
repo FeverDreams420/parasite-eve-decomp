@@ -112,10 +112,11 @@ typedef struct RoomOrbitSpriteFxParams {
     short x;
     short y;
     short z;
-    unsigned char pad6[0xA];
+    short pad06;
+    GteShortVector velocity;
     short scale;
     unsigned short depth;
-    unsigned char pad14[2];
+    short phase;
     unsigned short alpha;
 } RoomOrbitSpriteFxParams;
 

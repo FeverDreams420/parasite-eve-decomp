@@ -389,23 +389,22 @@ void RoomFx_InitOrbitSprite(
 
     if (*FieldEng_RegPtr(1) == 0) {
         ApplyMatrixSV((GteMatrix *)view->transform, &seed0.vector,
-                      (GteShortVector *)&state->pad6[2]);
+                      &state->velocity);
         ApplyMatrixSV((GteMatrix *)view->transform, &seed1.vector,
                       (GteShortVector *)position);
     } else {
         ApplyMatrixSV((GteMatrix *)view->transform, &seed2.vector,
-                      (GteShortVector *)&state->pad6[2]);
+                      &state->velocity);
         ApplyMatrixSV((GteMatrix *)view->transform, &seed3.vector,
                       (GteShortVector *)position);
     }
 
     state->x = position[0] + view->baseX;
-    PE1_COMPILER_MEMORY_BARRIER();
     state->y = g_RoomFloorY->y;
     state->z = position[2] + view->baseZ;
     state->depth = 0x80;
     state->scale = 0x800;
-    *(unsigned short *)state->pad14 = 0x258;
+    state->phase = 0x258;
     state->alpha = 0;
 }
 
@@ -446,25 +445,25 @@ void RoomFx_DrawOrbitSprite(
     func_800C42A4((FieldGlowSprite *)(drawSlot - 4), &matrix, 1);
 }
 
-void RoomFx_UpdateOrbitSprite(unsigned char *arg0, RoomFxControl *signal, RoomFxDriftState *state) {
-    RoomFxDriftState *p = state;
-    unsigned short counter = state->counter16;
+void RoomFx_UpdateOrbitSprite(unsigned char *arg0, RoomFxControl *signal, RoomOrbitSpriteFxParams *state) {
+    RoomOrbitSpriteFxParams *p = state;
+    unsigned short counter = state->alpha;
 
-    state->counter16 = counter + 1;
+    state->alpha = counter + 1;
     if ((short)counter >= 16) {
-        state->counter16 = 15;
+        state->alpha = 15;
     }
 
-    if (state->limit12 >= 9) {
-        state->limit12 -= 8;
+    if ((s16)state->depth >= 9) {
+        state->depth -= 8;
     }
-    if (state->phase14 >= 21) {
-        state->phase14 -= 20;
+    if (state->phase >= 21) {
+        state->phase -= 20;
     }
 
-    p->phase10 -= 0x64;
-    p->x += (p->dx * p->phase14) >> 16;
-    p->z += (p->dz * p->phase14) >> 16;
+    p->scale -= 0x64;
+    p->x += (p->velocity.x * p->phase) >> 16;
+    p->z += (p->velocity.z * p->phase) >> 16;
 
     if (signal->frame >= 21) {
         signal->state = 2;
