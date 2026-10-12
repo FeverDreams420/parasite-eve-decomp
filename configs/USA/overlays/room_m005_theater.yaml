@@ -35,11 +35,7 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m005_theater]
-      - [0x30, c, RoomM005_FxOrbiter_8018F018]
-      - [0x348, c, RoomM005_OrbiterController_8018F330]
-      - [0x62C, c, RoomM005_CrossFlare_8018F614]
-      - [0xB9C, c, RoomM005_DriftingSprite_8018FB84]
-      - [0xDDC, c, RoomEffect_JointBeacon_8018FDC4]
+      - [0x30, c, m005]
       - [0x1A84, c, ../room_lib/RoomLib_SetTaskVar0]
       - [0x1AB0, data, D_80190A98]
       - [0x1AEC, data, RoomM005_Rec2]
