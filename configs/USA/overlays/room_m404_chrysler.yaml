@@ -38,7 +38,6 @@ segments:
       - [0xC, .rodata, ../room_lib/RoomLib_ActorClasses]
       - [0x1E4, rodata, RoomLib_HandlerCArgsData_801915F4]
       - [0x1F4, .rodata, m404]
-      - [0x220, rodata, RoomEffect_SpriteSeeds_8018F208]
       - [0x23C, c, ../room_lib/RoomLib_ActorClasses]
       - [0x3558, c, m404]
       - [0x4E3C, c, ../room_lib/RoomLib_SetArg1]

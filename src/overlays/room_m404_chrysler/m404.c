@@ -444,3 +444,10 @@ int func_80193A6C(int mode, RoomM404BurstOrigin *origin) {
     }
     return 0;
 }
+
+/* The stack templates the effects above copy: read-only data of this unit,
+ * which GCC emits after the unit's jump tables, as retail has them. */
+const RoomTemplate8 D_8018F208 = {{0, 0xFFE2}};
+const GteRotation D_8018F210 = {0, 0, 0, 0};
+const RenderColor D_8018F218 = {0x6E, 0x3C, 0x3C, 0};
+const RoomM404JointTemplate D_8018F21C = {{0, 0x2BC}};
