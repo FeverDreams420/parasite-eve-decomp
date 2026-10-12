@@ -713,8 +713,6 @@ segments:
       - [0x6C3FC, c, psyq/libcd/CD_init]
       - [0x6C5DC, c, psyq/libcd/CD_datasync]
       - [0x6C744, c, psyq/libcd/CD_getsector]
-      - [0x6C930, c, psyq/libcd/CD_set_test_parmnum]
-      - [0x6C93C, c, psyq/libcd/callback]
       # Psy-Q LIBCD C_004.OBJ: completion callback and back-location query.
       - [0x6CA14, c, psyq/libcd/c_004]
       - [0x6CAF8, pad]

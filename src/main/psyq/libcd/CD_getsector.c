@@ -1,8 +1,10 @@
 /* ASSEMBLER: GNU */
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses */
-/* Psy-Q LIBCD BIOS.OBJ: CD_getsector, CD_getsector2. */
-
+/* Psy-Q LIBCD BIOS.OBJ, end of the object: CD_getsector, CD_getsector2,
+ * CD_set_test_parmnum and callback. The rest of BIOS.OBJ is in the preceding
+ * units (see docs/CODE_ORGANIZATION.md, "PsyQ objects split over several
+ * units"). */
 #include "pe1/psyq_cd.h"
 
 int CD_getsector(void *destination, int words) {
@@ -60,4 +62,28 @@ int CD_getsector2(void *destination, int words) {
     *g_CdRegDmaControl = 0x11400100;
     readback = *g_CdRegDmaControl;
     return 0;
+}
+
+void CD_set_test_parmnum(int status) {
+    D_8009B260 = status;
+}
+
+int getintr(void);
+
+void callback(void) {
+    int pending;
+    volatile u8 *ready = &g_CdReadyEvent;
+    int bank = *D_8009B27C & 3;
+    volatile u8 *complete = ready - 1;
+
+    while ((pending = getintr()) != 0) {
+        if ((pending & 4) && D_8009AFB8) {
+            D_8009AFB8(*ready, D_800A3468);
+        }
+        if ((pending & 2) && D_8009AFB4) {
+            D_8009AFB4(*complete, D_800A3460);
+        }
+    }
+
+    *D_8009B27C = bank;
 }
