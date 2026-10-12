@@ -118,12 +118,9 @@ void Menu_MainUpdate(s32 arg0) {
                 temp_v0_3 = D_8009D278->exp_or_acc + temp_a1_2->atbStep;
                 D_8009D278->exp_or_acc = temp_v0_3;
                 if (temp_v0_3 >= temp_a1_2->maxAtk) {
-                    volatile s32 *callback;
-
                     temp_a1_2->atbGauge = 0xF0;
-                    callback = (volatile s32 *)D_800B0E08;
-                    if (*callback != 0) {
-                        Akao_SendTableCommand((void *)*callback, 0x455, 0, 0x80, 0x7F);
+                    if (D_800B0E08[0] != 0) {
+                        Akao_SendTableCommand(D_800B0E08[0], 0x455, 0, 0x80, 0x7F);
                     }
                 }
             }
