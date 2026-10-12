@@ -556,7 +556,7 @@ segments:
       - [0x4E194, c, item/Inv_InitMaxLevelInventory]
       # Default-profile lookups into the resident data tables: menu descriptors,
       # glyphs, items, stats, Aya level/EXP/spell tables and the string tables.
-      - [0x4E28C, c, table/Tbl_DataTableLookups]
+      - [0x4E28C, c, text/Tbl_DataTableLookups]
       # Event queue, input dispatch and frame presentation share -G8/common.
       - [0x4E688, c, menu/queue]
       # Base-offset setter and Y accessor share one default-profile object.
