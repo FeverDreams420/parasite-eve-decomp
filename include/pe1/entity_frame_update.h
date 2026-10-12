@@ -39,7 +39,7 @@ int Anim_BuildRotationMatrices(RenderObjectEntity *object, void *action, int fra
 void Render_TransformVertices(RenderObjectEntity *object);
 void Render_TransformSkinnedVertices(RenderObjectEntity *object, u32 *view_matrix);
 void Render_TransformMorphVertices(RenderObjectEntity *object, u32 *view_matrix);
-void Render_DrawEntity(RenderObjectEntity *object, u32 *view_matrix);
+void Render_DrawEntity(RenderObjectEntity *object, void *viewMatrix);
 void func_80069594(void);
 void Scene_UpdateEntityPositions(void);
 void func_80012774(void);

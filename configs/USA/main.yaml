@@ -306,24 +306,14 @@ segments:
       # Scene flag-bit checks, bone rotation matrices and the byte and halfword
       # rotation decoders (G0315).
       - [0x2A19C, c, anim/Anim_BoneRotations]
-      # Rigid, skinned and morph vertex transforms: adjacent GTE vertex passes over
-      # the same render-object vertex buffers; the rigid and morph passes compile
-      # identically under the skinned pass's -G8 profile, which the unit uses.
-      - [0x2A888, c, render/Render_VertexTransforms]
-      # Entity draw, textured quads and the entity matrix builder share helpers (G0320).
-      - [0x2B714, c, render/Render_EntityAndTexturedQuadFlow]
-      # Object drawing and its CLUT-table update (helper evidence across the
-      # object-draw span); Render_UpdateClutTable compiles identically under
-      # Render_DrawObject's -G8 profile. The -fno-schedule-insns variant that
-      # follows stays separate.
-      - [0x2C17C, c, render/Render_DrawObjectAndClut]
-      - [0x2C8B4, c, render/Render_DrawObjectAlt]
-      # Variant draw, animation stepping, fade and blend update shared object state.
-      - [0x2CAE0, c, render/Render_DrawObjectVariant]
-      # Texture-page changes and model packet setup share RenderObjectEntity and packet types.
-      - [0x2D6F8, c, render/Render_ObjectSetupAndAnim]
-      # Animated draw, packet setup and object-state helpers share RenderObjectEntity
-      # and RenderMatrix; contiguous handlers with the default compiler profile.
+      # Object draw (G0320): rigid, skinned and morph vertex transforms over the
+      # render-object vertex buffers; entity draw, textured quads and the entity
+      # matrix builder; object drawing and its CLUT-table update; variant draw,
+      # animation stepping, fade and blend update; texture-page changes, model packet
+      # setup, animated draw and object-state helpers (RenderObjectEntity and
+      # RenderMatrix). One -G8 FORCE_G0 unit with COMMON $gp words and --expand-div;
+      # g_RenderCounter is declared unsized so its address stays in a register.
+      - [0x2A888, c, render/Render_ObjectDraw]
       # Render_IncrementCounter's counter word lives in .text; it is data,
       # not a function (docs/CONVENTIONS.md, text-resident data).
       - {start: 0x2EE0C, type: data, name: render/Render_Counter, linker_section_order: .text, linker_section: .code_data}
@@ -979,7 +969,7 @@ segments:
       # Psy-Q 4.6 DSFILE.OBJ media-state words and section padding.
       - [0x8BEDC, .data, psyq/libds/dsfile]
       - [0x8BEEC, data, main/dtail_gp_post_dsfile]
-      - {start: 0x8D5A0, type: .sdata, name: render/Render_DrawObjectVariant, linker_section_order: .data}
+      - {start: 0x8D5A0, type: .sdata, name: render/Render_ObjectDraw, linker_section_order: .data}
       - [0x8D5A4, data, main/dtail_gp_post_render_color]
       - [0x8DA54, .data, field/Entity_ActorCollision]
       - [0x8DA58, data, main/dtail_gp_post_collision_actor]
