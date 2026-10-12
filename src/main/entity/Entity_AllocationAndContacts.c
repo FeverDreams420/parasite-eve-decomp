@@ -19,84 +19,68 @@ void *Entity_AllocBlock(u32 arg0) {
     var_a3 = 8;
     if (arg0 < 0x47E1U) {
         var_a3 = 1;
-        goto block_6;
-    }
-    if (arg0 <= 0x8FC0U) {
+    } else if (arg0 <= 0x8FC0U) {
         var_a3 = 2;
-        goto block_6;
+    } else if (arg0 <= 0x11F80U) {
+        var_a3 = 4;
     }
     var_a1 = 0;
-    if (arg0 <= 0x11F80U) {
-        var_a3 = 4;
-block_6:
-        var_a1 = 0;
-    }
     temp_t0 = var_a3 & 0xFF;
     temp_t1 = (s32 *)g_RenderScratchBufferBase;
-    var_a0 = var_a1 & 0xFF;
-    while (1) {
-    var_v1 = var_a0 << 3;
-    if (D_800A7620[var_a0].address == 0) {
-        var_a2 = 1;
-        if (var_a0 < (var_a0 + temp_t0)) {
-            var_v0 = var_a3 + var_a0;
-            var_a0 = var_v0 << 3;
-            while (1) {
-                EntityAllocationAddress run;
+    do {
+        var_a0 = var_a1 & 0xFF;
+        var_v1 = var_a0 << 3;
+        if (D_800A7620[var_a0].address == 0) {
+            var_a2 = 1;
+            if (var_a0 < (var_a0 + temp_t0)) {
+                var_v0 = var_a3 + var_a0;
+                var_a0 = var_v0 << 3;
+                do {
+                    EntityAllocationAddress run;
 
-                run.entry = D_800A7620;
-                run.word += var_v1;
-                if (run.entry->address != 0) {
-                    var_a2 = 0;
-                    var_a1 += var_a3;
-                    break;
-                }
-                var_v1 += 8;
-                if (var_v1 >= var_a0) {
-                    break;
-                }
+                    run.entry = D_800A7620;
+                    run.word += var_v1;
+                    if (run.entry->address != 0) {
+                        var_a2 = 0;
+                        var_a1 += var_a3;
+                        break;
+                    }
+                    var_v1 += 8;
+                } while (var_v1 < var_a0);
             }
-        }
-after_empty_scan:
-        var_v0 = var_a1 & 0xFF;
-        if (var_a2 != 0) {
-            temp_a0 = var_v0 << 3;
-            var_v1 = temp_a0 + var_v0;
-            var_v1 = (var_v1 << 6) - var_v0;
-            D_800A7620[var_v0].blockCount = temp_t0;
-            var_v0 = *temp_t1 + (var_v1 << 5);
+            var_v0 = var_a1 & 0xFF;
+            if (var_a2 != 0) {
+                temp_a0 = var_v0 << 3;
+                var_v1 = temp_a0 + var_v0;
+                var_v1 = (var_v1 << 6) - var_v0;
+                D_800A7620[var_v0].blockCount = temp_t0;
+                var_v0 = *temp_t1 + (var_v1 << 5);
+                {
+                    EntityAllocationAddress block;
+
+                    block.entry = D_800A7620;
+                    block.word += temp_a0;
+                    block.entry->address = var_v0;
+                }
+                return (void *)var_v0;
+            }
+        } else {
             {
-                EntityAllocationAddress block;
+                EntityAllocationAddress used;
 
-                block.entry = D_800A7620;
-                block.word += temp_a0;
-                block.entry->address = var_v0;
+                used.entry = D_800A7620;
+                used.word += var_v1;
+                var_v1 = used.entry->blockCount;
             }
-            return (void *)var_v0;
+            if (temp_t0 < var_v1) {
+                var_a1 += var_v1;
+            } else {
+                var_a1 += var_a3;
+            }
+            var_v0 = var_a1 & 0xFF;
         }
-    }
-    else
-    {
-    {
-        EntityAllocationAddress used;
-
-        used.entry = D_800A7620;
-        used.word += var_v1;
-        var_v1 = used.entry->blockCount;
-    }
-    if (temp_t0 < var_v1) {
-        var_a1 += var_v1;
-    } else {
-        var_a1 += var_a3;
-    }
-    var_v0 = var_a1 & 0xFF;
-    }
-block_20:
-    var_a0 = var_a1 & 0xFF;
-    if (var_v0 >= 0x10U) {
-        return 0;
-    }
-    }
+    } while (var_v0 < 0x10U);
+    return 0;
 }
 
 void Entity_FreeAllocationBlock(int arg0) {
