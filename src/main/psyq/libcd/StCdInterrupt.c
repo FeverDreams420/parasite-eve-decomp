@@ -78,7 +78,7 @@ void StCdInterrupt(void) {
             if (D_800C0DB8 != 0) {
                 mem2mem(D_800A34A0, D_800C0DB8 + (D_800BCD7C << 0xB), 8, 0);
             } else {
-                dma_execute(3, (u32)D_800A34A0, 0, 8, dmaControl, 0U, 0);
+                dma_execute(3, D_800A34A0, 0, 8, dmaControl, 0U, 0);
             }
             if (*D_8009B35C & 0x01000000) {
                 do {
@@ -200,7 +200,7 @@ void StCdInterrupt(void) {
                 D_8009B374 = 0xA;
                 D_800A8018 = (u16)D_800A8018 + 1;
                 D_800C0DC4 =
-                    (u8 *)D_800C0DC8 + (D_800C20C4 << 5) + (D_800BE998 * 0x7E0);
+                    &((StSectorPayload *)(D_800C0DC8 + D_800C20C4))[D_800BE998];
                 dmaControl = 0x11000000;
                 if (D_800A801C != 0) {
                     *D_8009B33C = 0x20943;
@@ -220,7 +220,7 @@ void StCdInterrupt(void) {
                                 0x1F8, 1);
                         D_800BCD7C += 1;
                     } else {
-                        dma_execute(3, (u32)D_800C0DC4, 0, 0x1F8, dmaControl, 1U, 0);
+                        dma_execute(3, D_800C0DC4, 0, 0x1F8, dmaControl, 1U, 0);
                     }
                     D_800A8018 = 0;
                     D_800A5D54 = 0;
@@ -230,7 +230,7 @@ void StCdInterrupt(void) {
                             0);
                     D_800BCD7C += 1;
                 } else {
-                    dma_execute(3, (u32)D_800C0DC4, 0, 0x1F8, dmaControl, 0U, 0);
+                    dma_execute(3, D_800C0DC4, 0, 0x1F8, dmaControl, 0U, 0);
                 }
                 *D_8009B340 = 0x1325;
                 D_800A34A0->id = 3;

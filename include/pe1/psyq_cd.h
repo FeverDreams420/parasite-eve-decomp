@@ -123,6 +123,11 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(StHEADER, loc) == 0x1C,
                   st_header_location_offset);
 
 /* LIBCD streaming ring: StRingSize headers followed by sector payloads. */
+/* Each ring slot's sector payload: 2048 bytes less its 32-byte header. */
+typedef struct StSectorPayload {
+    u32 words[0x1F8];
+} StSectorPayload;
+
 extern StHEADER *StRingAddr;
 extern u32 StRingSize;
 
@@ -429,7 +434,7 @@ int DsSetDebug(int level);
 extern u32 D_8009AFC4;
 extern u32 D_8009AFC8; /* SDK CD_status1, also stored as a full word. */
 int CD_cw(int command, void *parameters, u8 *result, int mode);
-void dma_execute(int channel, u32 address, int blockCount, int blockSize,
+void dma_execute(int channel, void *address, int blockCount, int blockSize,
                  volatile u32 control, u8 interrupt, int reserved);
 /* The streaming caller supplies a fourth word; the copy helper ignores it. */
 void mem2mem(void *destination, void *source, unsigned int count, int reserved);

@@ -5,7 +5,7 @@
 #include "pe1/psyq_bios.h"
 #include "pe1/psyq_cd.h"
 
-void dma_execute(int channel, u32 address, int blockCount, int blockSize,
+void dma_execute(int channel, void *address, int blockCount, int blockSize,
                  volatile u32 control, u8 interrupt, int reserved) {
     int i = 0;
     register CdDmaInterruptRegister *interruptRegister asm("$3");
@@ -49,7 +49,9 @@ void dma_execute(int channel, u32 address, int blockCount, int blockSize,
     dma += channel << 2;
     blockControl = (blockCount << 16) | blockSize;
     *D_8009B344 = shift | priorityBit;
-    *dma++ = address;
+    /* MADR takes the buffer address itself. */
+    *(void *volatile *)dma = address;
+    dma++;
     *dma++ = blockControl;
 
     while (!(*D_8009B32C & 0x40)) {
