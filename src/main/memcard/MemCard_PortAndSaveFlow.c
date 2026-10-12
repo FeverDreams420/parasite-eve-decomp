@@ -1028,7 +1028,9 @@ void Save_StartWriteSlot(int port, int arg_slot) {
                     state > g_MemCardPortStates,
                     state->slots[(u8)slot].titleStyleFlag + 0x30,
                     (u8)slot + 0x41);
-    Save_BuildCardFile(g_MemCardPathForCardFile);
+    /* Recompute the path address after formatting it. */
+    asm volatile("" : "=r"(path) : "0"(D_8009EE70));
+    Save_BuildCardFile(path);
 
     state->listCursor = slot;
     state->scanCursor = 0;

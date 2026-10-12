@@ -152,8 +152,6 @@ extern int g_MemCardActivePromptPending;
 extern int g_MemCardLoadSucceeded;
 
 extern char D_8009EE70[];
-/* Separate declaration keeps the retail address load at the card-file call. */
-extern char g_MemCardPathForCardFile[] asm("D_8009EE70");
 extern s8 *D_80092224;
 
 PE1_STATIC_ASSERT(PE1_OFFSETOF(MemCardSaveSlot, titleStyleFlag) == 0x29,

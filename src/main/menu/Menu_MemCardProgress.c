@@ -116,12 +116,13 @@ void Menu_StepItemGrid2(void) {
             u8 *text_buf;
             Util_AppendFFTerminatedBytes(D_800A19C0, Str_LookupTable4(0x49));
             D_8009CFA4 = suffix_id;
-            text_buf = D_800A19C0_measure;
+            /* Recompute the buffer address at each measurement. */
+            asm volatile("" : "=r"(text_buf) : "0"(D_800A19C0));
             width = Draw_MeasureTextWidth(text_buf);
             if (width < 0x78) {
                 width = 0x78;
             } else {
-                text_buf = D_800A19C0_remeasure;
+                asm volatile("" : "=r"(text_buf) : "0"(D_800A19C0));
                 width = Draw_MeasureTextWidth(text_buf);
             }
         }
