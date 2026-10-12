@@ -17,7 +17,7 @@
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/asset_find.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 /* room_m086 falling seeker (func_8018F004): a turning model that flies
  * along its heading until it lands, bursts on the player (flagging the

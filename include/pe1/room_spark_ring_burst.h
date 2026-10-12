@@ -11,7 +11,7 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/floor_polygon.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 /* The spark ring and spark burst effects linked by ten museum rooms
  * (src/overlays/room_lib/RoomEffect_SparkRingBurst.c). The ring controller

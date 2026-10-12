@@ -16,7 +16,7 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/akao_send.h"
 #include "pe1/asset_find.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 #include "pe1/field_texture_tables.h"
 
 /* Quake blast controller (scene_e22 func_80198348): a blast at the target

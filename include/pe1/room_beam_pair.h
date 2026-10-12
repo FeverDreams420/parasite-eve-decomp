@@ -8,7 +8,7 @@
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_script_context.h"
 #include "pe1/psyq_libc.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 /* Work area of the paired beam effect (rooms m174, m348, m383): the
  * anchor matrix copied from the script actor, a scale and a brightness. */

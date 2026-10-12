@@ -11,7 +11,7 @@
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/akao_send.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 /* Orbiter effect controller state and the event flag it watches. */
 typedef struct RoomM005OrbiterState {

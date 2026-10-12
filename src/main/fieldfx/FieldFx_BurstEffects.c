@@ -1,8 +1,8 @@
 #include "common.h"
 #include "pe1/field_anim_particle.h"
 #include "pe1/field_anim.h"
-#include "pe1/field_engine_state.h"
-#include "pe1/field_engine_slot.h"
+#include "pe1/fieldfx_state.h"
+#include "pe1/fieldfx_slot.h"
 #include "pe1/battle.h"
 #include "pe1/field_sprite_state.h"
 #include "pe1/field_glow_sprite.h"
@@ -241,7 +241,7 @@ int func_800CC440(void *arg0, void *arg1, FieldAnimPointSprite *anim) {
     anim->point.z = z;
 }
 
-int func_800CC480(void *arg0, FieldEngSlot *params, FieldAnimPointSprite *anim) {
+int func_800CC480(void *arg0, FieldFxSlot *params, FieldAnimPointSprite *anim) {
     short *base_a0;
     FieldBillboard *output;
     FieldAnimPointSprite *pointData = anim;
@@ -377,7 +377,7 @@ int func_800CC878(void *arg0, void *arg1, FieldAnimPointSprite *anim) {
     func_800C3324(output);
 }
 
-void func_800CC92C(void *arg0, FieldEngSlot *state, FieldAnimPointSprite *anim) {
+void func_800CC92C(void *arg0, FieldFxSlot *state, FieldAnimPointSprite *anim) {
     anim->point.x += 0; /* no horizontal drift, but the record is rewritten */
     anim->point.y -= 10;
     anim->scale -= 2;
@@ -387,7 +387,7 @@ void func_800CC92C(void *arg0, FieldEngSlot *state, FieldAnimPointSprite *anim) 
     }
 }
 
-void func_800CC974(void *arg0, FieldEngSlot *state, FieldAnimRadialParticles *anim) {
+void func_800CC974(void *arg0, FieldFxSlot *state, FieldAnimRadialParticles *anim) {
     int i;
 
     for (i = 0; i < anim->count; i++) {
@@ -404,7 +404,7 @@ void func_800CC974(void *arg0, FieldEngSlot *state, FieldAnimRadialParticles *an
     }
 }
 
-int func_800CCA40(void *arg0, FieldEngSlot *state, FieldAnimPointSprite *anim) {
+int func_800CCA40(void *arg0, FieldFxSlot *state, FieldAnimPointSprite *anim) {
     anim->scale -= 2;
     anim->extent = (u16)anim->extent + 0x28;
     if ((s8)anim->scale < 0x1E) {
@@ -412,7 +412,7 @@ int func_800CCA40(void *arg0, FieldEngSlot *state, FieldAnimPointSprite *anim) {
     }
 }
 
-int func_800CCA78(void *arg0, FieldEngSlot *state, FieldAnimPointSprite *anim) {
+int func_800CCA78(void *arg0, FieldFxSlot *state, FieldAnimPointSprite *anim) {
     anim->scale -= 6;
     anim->extent = (u16)anim->extent + 0xB4;
     if ((s8)anim->scale < 0x1E) {
@@ -420,7 +420,7 @@ int func_800CCA78(void *arg0, FieldEngSlot *state, FieldAnimPointSprite *anim) {
     }
 }
 
-void func_800CCAB0(void *arg0, FieldEngSlot *state, FieldAnimScatteredParticles *anim) {
+void func_800CCAB0(void *arg0, FieldFxSlot *state, FieldAnimScatteredParticles *anim) {
     int i;
 
     for (i = 0; i < anim->points.count; i++) {
@@ -436,7 +436,7 @@ void func_800CCAB0(void *arg0, FieldEngSlot *state, FieldAnimScatteredParticles 
     }
 }
 
-int func_800CCB6C(void *arg0, FieldEngSlot *state, FieldAnimPointSprite *anim) {
+int func_800CCB6C(void *arg0, FieldFxSlot *state, FieldAnimPointSprite *anim) {
     anim->scale -= 8;
     anim->extent = (u16)anim->extent + 0x1A4;
     if ((s8)anim->scale < 0x14) {
@@ -718,13 +718,13 @@ int func_800CD50C(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
 void func_800CD59C(void) {
 }
 
-int func_800CD5A4(void *arg0, FieldEngSlot *state) {
+int func_800CD5A4(void *arg0, FieldFxSlot *state) {
     int ret = 2;
     state->flag = ret;
     return ret;
 }
 
-int func_800CD5B0(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
+int func_800CD5B0(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
     anim->brightness = anim->brightness - 0xA;
     anim->scale += 0x3C;
     if ((s16)anim->brightness < 0x14) {
@@ -733,7 +733,7 @@ int func_800CD5B0(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
     }
 }
 
-int func_800CD5EC(void *arg0, FieldEngSlot *state, FieldAnimTwoPointMotion *anim) {
+int func_800CD5EC(void *arg0, FieldFxSlot *state, FieldAnimTwoPointMotion *anim) {
     unsigned int i = 0;
 
     do {
@@ -751,7 +751,7 @@ int func_800CD5EC(void *arg0, FieldEngSlot *state, FieldAnimTwoPointMotion *anim
     }
 }
 
-int func_800CD678(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
+int func_800CD678(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
     int value = rand() % 11;
     int jitter;
     FieldAnimGlowPoint *output;
@@ -773,7 +773,7 @@ int func_800CD678(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
     }
 }
 
-int func_800CD71C(void *arg0, FieldEngSlot *state) {
+int func_800CD71C(void *arg0, FieldFxSlot *state) {
     int ret = 2;
     state->flag = ret;
     return ret;
@@ -997,13 +997,13 @@ int func_800CDE90(void *arg0, void *arg1, FieldAnimSparkPoint *anim) {
     func_800C3B04(output);
 }
 
-int func_800CDF40(void *arg0, FieldEngSlot *state) {
+int func_800CDF40(void *arg0, FieldFxSlot *state) {
     int ret = 2;
     state->flag = ret;
     return ret;
 }
 
-int func_800CDF4C(void *arg0, FieldEngSlot *state, FieldAnimSparkCloud *anim) {
+int func_800CDF4C(void *arg0, FieldFxSlot *state, FieldAnimSparkCloud *anim) {
     unsigned int i = 0;
 
     anim->center.brightness -= 0x10;
@@ -1023,7 +1023,7 @@ int func_800CDF4C(void *arg0, FieldEngSlot *state, FieldAnimSparkCloud *anim) {
     }
 }
 
-int func_800CDFE0(void *arg0, FieldEngSlot *state, FieldAnimSparkPoint *anim) {
+int func_800CDFE0(void *arg0, FieldFxSlot *state, FieldAnimSparkPoint *anim) {
     int value = rand() % 11;
     int jitter;
     FieldAnimSparkPoint *output;

@@ -15,7 +15,7 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/psyq_libc.h"
 #include "pe1/akao_send.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 /* Scene e08 player orb: an effect spawned at a random spot around the
  * player, swung around the scene anchor by the anchor's facing, then drawn

@@ -1,5 +1,5 @@
-#ifndef PE1_FIELD_ENGINE_SCRATCH_H
-#define PE1_FIELD_ENGINE_SCRATCH_H
+#ifndef PE1_FIELDFX_SCRATCH_H
+#define PE1_FIELDFX_SCRATCH_H
 
 #include "common.h"
 #include "pe1/gte_types.h"
@@ -8,7 +8,7 @@
  * D_800F33B4: an ordering-table depth, the current texture cell, the
  * CLUT offset, a colour channel temporary, a composed matrix and an
  * object-local matrix. */
-typedef struct FieldEngineScratch {
+typedef struct FieldFxScratch {
     /* 0x00 */ u8 pad00[0xC];
     /* 0x0C */ s32 depth;
     /* 0x10 */ u8 u;
@@ -19,10 +19,10 @@ typedef struct FieldEngineScratch {
     /* 0x18 */ u8 pad18[4];
     /* 0x1C */ GteMatrix matrix;
     /* 0x3C */ GteMatrix local;
-} FieldEngineScratch;
+} FieldFxScratch;
 
-#define FIELD_ENGINE_SCRATCH ((FieldEngineScratch *)0x1F800000)
+#define FIELDFX_SCRATCH ((FieldFxScratch *)0x1F800000)
 
-extern FieldEngineScratch *D_800F33B4;
+extern FieldFxScratch *D_800F33B4;
 
 #endif

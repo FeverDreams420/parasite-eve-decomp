@@ -5,7 +5,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/field_textured_chain_node.h"
 #include "pe1/render_tint.h"
-#include "pe1/field_engine_scratch.h"
+#include "pe1/fieldfx_scratch.h"
 #include "pe1/field_sprite_state.h"
 #include "pe1/psyq_gpu.h"
 

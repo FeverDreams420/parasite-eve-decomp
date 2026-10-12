@@ -803,9 +803,9 @@ changing bytes:
   (the node seen from its brightness field, `pe1/field_textured_chain_node.h`):
   `body[-1].nextCellStep`, `body[1].edgeA` replace the raw byte offsets.
 - The field engine object passes (`FieldFx_ObjectScript.c`) keep the slot
-  table and script state in typed globals (`FieldEngSlot *`,
-  `FieldEngState *`); the slot address the two dispatch loops add as an
-  integer, index first, is a `FieldEngSlotAddress` pointer/word union.
+  table and script state in typed globals (`FieldFxSlot *`,
+  `FieldFxState *`); the slot address the two dispatch loops add as an
+  integer, index first, is a `FieldFxSlotAddress` pointer/word union.
 - `FieldFx_GlowEffects.c` .. `FieldFx_BurstEffects.c` are the eight effect
   module classes of `pe1/field_effect_modules.h`; their scripts, handler lists,
   slot sizes and tables are declared there under module names instead of the

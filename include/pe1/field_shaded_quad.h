@@ -4,7 +4,7 @@
 #include "common.h"
 #include "pe1/gte_types.h"
 #include "pe1/render_tint.h"
-#include "pe1/field_engine_scratch.h"
+#include "pe1/fieldfx_scratch.h"
 #include "pe1/field_sprite_state.h"
 
 /* Field engine shaded quad (func_800C499C): four vertex colours scaled by

@@ -5,7 +5,7 @@
 #include "pe1/room_shake_burst.h"
 #include "pe1/field_model_draw.h"
 #include "pe1/asset_find.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 /* Ember spiral controller (room_m318 func_801988F8): rides the actor's
  * hand for 24 frames shedding orbiting sparks, embers and smoke while it

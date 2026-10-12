@@ -1,5 +1,5 @@
 #include "common.h"
-#include "pe1/field_engine_slot.h"
+#include "pe1/fieldfx_slot.h"
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_anim_particle.h"
 #include "pe1/field_sprite_state.h"
@@ -12,7 +12,7 @@
 #include "pe1/field_glow_layers.h"
 #include "pe1/gte.h"
 #include "pe1/field_anim.h"
-#include "pe1/field_engine_state.h"
+#include "pe1/fieldfx_state.h"
 
 int GlowEffect_PlantScript(char *object) {
     void **slot;
@@ -342,7 +342,7 @@ int func_800C8BB4(void *arg0, u8 *state) {
     state[1] = ret;
     return ret;
 }
-int func_800C8BC0(void *arg0, FieldEngSlot *state, FieldAnimMovingParticle *anim) {
+int func_800C8BC0(void *arg0, FieldFxSlot *state, FieldAnimMovingParticle *anim) {
     FieldAnimMovingParticle *particle = anim;
     u16 vy = anim->velocity.y;
     u16 vz = anim->velocity.z;
@@ -628,7 +628,7 @@ int func_800C9968(void *arg0, u8 *state) {
     state[1] = ret;
     return ret;
 }
-int func_800C9974(void *arg0, FieldEngSlot *state, FieldAnimMovingParticle *anim) {
+int func_800C9974(void *arg0, FieldFxSlot *state, FieldAnimMovingParticle *anim) {
     FieldAnimMovingParticle *particle = anim;
     u16 vy = anim->velocity.y;
     u16 vz = anim->velocity.z;
@@ -650,7 +650,7 @@ int func_800C9974(void *arg0, FieldEngSlot *state, FieldAnimMovingParticle *anim
         state->flag = 2;
     }
 }
-int func_800C9A00(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
+int func_800C9A00(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
     s16 value = anim->brightness - 0x14;
 
     anim->brightness = value;
@@ -659,7 +659,7 @@ int func_800C9A00(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
         state->flag = 2;
     }
 }
-int func_800C9A34(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
+int func_800C9A34(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
     anim->brightness = anim->brightness - 8;
     anim->scale = (u16)anim->scale + 0x28;
     if ((s16)anim->brightness < 0x14) {
@@ -818,14 +818,14 @@ int func_800C9EA8(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
 #define GLOW_LAYERS_SPRITE D_800F34B8
 #include "FieldFx_GlowLayers.inc"
 
-int func_800CA4A8(void *arg0, FieldEngSlot *state) {
+int func_800CA4A8(void *arg0, FieldFxSlot *state) {
     int ret = 2;
 
     state->flag = ret;
     return ret;
 }
 
-int func_800CA4B4(void *arg0, FieldEngSlot *state, FieldAnimMovingParticle *anim) {
+int func_800CA4B4(void *arg0, FieldFxSlot *state, FieldAnimMovingParticle *anim) {
     FieldAnimMovingParticle *particle = anim;
     u16 vy = anim->velocity.y;
     u16 vz = anim->velocity.z;
@@ -848,7 +848,7 @@ int func_800CA4B4(void *arg0, FieldEngSlot *state, FieldAnimMovingParticle *anim
     }
 }
 
-int func_800CA540(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
+int func_800CA540(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
     s16 value = anim->brightness - 0x14;
 
     anim->brightness = value;
@@ -1419,14 +1419,14 @@ int func_800CB9F8(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
     func_800C42A4(&D_800F34E8, &matrix, 0);
 }
 
-int func_800CBB24(void *arg0, FieldEngSlot *state) {
+int func_800CBB24(void *arg0, FieldFxSlot *state) {
     int ret = 2;
 
     state->flag = ret;
     return ret;
 }
 
-int func_800CBB30(void *arg0, FieldEngSlot *state, FieldAnimMovingParticle *anim) {
+int func_800CBB30(void *arg0, FieldFxSlot *state, FieldAnimMovingParticle *anim) {
     FieldAnimMovingParticle *particle = anim;
     u16 vy = anim->velocity.y;
     u16 vz = anim->velocity.z;
@@ -1449,7 +1449,7 @@ int func_800CBB30(void *arg0, FieldEngSlot *state, FieldAnimMovingParticle *anim
     }
 }
 
-int func_800CBBBC(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
+int func_800CBBBC(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
     s16 value = anim->brightness - 0x14;
 
     anim->brightness = value;
@@ -1459,7 +1459,7 @@ int func_800CBBBC(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
     }
 }
 
-int func_800CBBF0(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
+int func_800CBBF0(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
     anim->brightness = anim->brightness - 8;
     anim->scale = (u16)anim->scale + 0x3C;
     if ((s16)anim->brightness < 0x14) {
@@ -1468,7 +1468,7 @@ int func_800CBBF0(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
     }
 }
 
-int func_800CBC2C(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
+int func_800CBC2C(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
     anim->brightness = anim->brightness - 8;
     anim->scale = (u16)anim->scale + 0x78;
     if ((s16)anim->brightness < 0x14) {
@@ -1477,7 +1477,7 @@ int func_800CBC2C(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
     }
 }
 
-int func_800CBC68(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
+int func_800CBC68(void *arg0, FieldFxSlot *state, FieldAnimGlowPoint *anim) {
     anim->brightness = anim->brightness - 8;
     anim->scale = (u16)anim->scale + 0xA;
     if ((s16)anim->brightness < 0x14) {

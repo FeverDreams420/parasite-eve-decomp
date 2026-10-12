@@ -279,7 +279,7 @@ is in [CODE_ORGANIZATION.md](CODE_ORGANIZATION.md#shiftability); in practice:
   `(T *)0x800XXXXX`, no integer that happens to equal an address, no table of
   addresses typed as integers.
 - Fixed addresses are allowed only for hardware: I/O registers and the
-  scratchpad, each behind a named macro (`FIELD_ENGINE_SCRATCH`,
+  scratchpad, each behind a named macro (`FIELDFX_SCRATCH`,
   `BOOT_SCRATCHPAD_STACK_TOP`), and for the loader contract such as an
   overlay's load address.
 - Data the program owns is defined in a translation unit. Absolute

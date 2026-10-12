@@ -17,7 +17,7 @@
 #include "pe1/overlay_math.h"
 #include "pe1/random.h"
 #include "pe1/room_floor.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 #include "pe1/scene_e19_2_homing_burst.h"
 #include "pe1/scene_e19_2_spin_ray.h"
 #include "pe1/scene_e19_2_ember.h"

@@ -10,7 +10,7 @@
 #include "pe1/field_glow_sprite.h"
 #include "pe1/psyq_libc.h"
 #include "pe1/pe_image.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 /* The falling sprite burst linked by ten hospital and Chrysler rooms
  * (src/overlays/room_lib/RoomEffect_FallingSpriteBurst.c): a sprite and its

@@ -16,7 +16,7 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/floor_polygon.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 /* Flare effects: a controller that orbits an anchor read from the scene
  * object and sheds drift particles, and a dropped flare particle that falls,

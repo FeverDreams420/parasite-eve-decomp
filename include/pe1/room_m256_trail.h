@@ -10,7 +10,7 @@
 #include "pe1/field_model_draw.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 /* Shared 24-byte pool record: steering trail, damped sparks, model burst,
  * expanding sprite and floor impact. Modes 1 and 2 update and draw it. */

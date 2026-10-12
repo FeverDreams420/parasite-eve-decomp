@@ -16,7 +16,7 @@
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/asset_find.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 /* room_m123 joint beacon (func_80193618): follows joint 0x17 of the actor,
  * swells, pulses and fades, tags the player once on contact, and draws a glow

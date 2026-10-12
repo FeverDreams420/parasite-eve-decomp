@@ -16,9 +16,9 @@
 #include "pe1/field_script_context.h"
 #include "pe1/field_vector_math.h"
 #include "pe1/field_anim_pool.h"
-#include "pe1/field_engine_slot.h"
+#include "pe1/fieldfx_slot.h"
 #include "pe1/pe_image.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 typedef struct RoomObj {
     char pad0[0xC];

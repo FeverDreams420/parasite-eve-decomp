@@ -12,7 +12,7 @@
 #include "pe1/room_fx.h"
 #include "scene_e08_modules.h"
 #include "pe1/room_rearm_timer.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 #include "pe1/scene_e08_glow_sprites.h"
 #include "pe1/scene_player_orb.h"
 #include "pe1/scene_ring_sprites.h"

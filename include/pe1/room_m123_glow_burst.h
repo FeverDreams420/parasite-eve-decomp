@@ -8,7 +8,7 @@
 #include "pe1/room_m123_burst_particle.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 #include "pe1/room_script_record.h"
 #include "pe1/field_texture_tables.h"
 

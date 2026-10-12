@@ -9,7 +9,7 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/gte_types.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 #include "pe1/field_texture_tables.h"
 
 /* Scene e19_2 twin glow controller: glows on two actor joints that pulse,

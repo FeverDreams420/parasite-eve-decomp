@@ -4,7 +4,7 @@
 #include "pe1/room_spark.h"
 #include "pe1/gte.h"
 #include "pe1/field_sprite_draw.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 #include "pe1/field_effect_pool.h"
 #include "menu_memcard_offset.h"
 

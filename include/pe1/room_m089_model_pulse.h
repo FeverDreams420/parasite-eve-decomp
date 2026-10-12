@@ -6,7 +6,7 @@
 #include "pe1/room_m089_spin_model.h"
 #include "pe1/room_swirl_rise.h"
 #include "pe1/field_anim_pool.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 #include "pe1/field_texture_tables.h"
 
 /* room_m089 pulsing model burst (func_80193618): three turning layers of

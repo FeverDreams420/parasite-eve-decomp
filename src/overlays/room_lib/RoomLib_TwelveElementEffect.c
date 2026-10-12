@@ -15,7 +15,7 @@
 #include "pe1/room_floor.h"
 #include "pe1/floor_polygon.h"
 #include "pe1/psyq_libc.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 /* Seeds copied into the stack frames; file-scope so the all-zero rotation
  * stays a rodata copy. */

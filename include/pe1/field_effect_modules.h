@@ -3,7 +3,7 @@
 
 #include "common.h"
 #include "pe1/gte_types.h"
-#include "pe1/field_engine_state.h"
+#include "pe1/fieldfx_state.h"
 
 /* The eight field effect modules the descriptor table at 0x80094188 lists
  * (FieldFx_GlowEffects.c .. FieldFx_BurstEffects.c). Each module is a class
@@ -21,8 +21,8 @@ struct BattleEntity;
 extern struct BattleEntity *D_8009D254;
 
 /* Effect resources the scene loaders install: the AKAO sound header the
- * burst modules start, the two texture pages FieldEng loads into VRAM
- * (0x380, 0x100), the third resource FieldAnim hands out with them, and the
+ * burst modules start, the two texture pages the effect engine loads into
+ * VRAM (0x380, 0x100), the third resource the task pool hands out with them, and the
  * asset table the task spawner searches. */
 extern void *g_FieldEffectSoundHeader;
 extern void *g_FieldEffectTexturePage0;
@@ -33,9 +33,9 @@ void *FieldFx_GetEffectResource(int index);
 
 /* Glow effect (FieldFx_GlowEffects.c). */
 extern int g_GlowEffectScript[];
-extern FieldEngHandler g_GlowEffectInitList[];
-extern FieldEngHandler g_GlowEffectDrawList[];
-extern FieldEngHandler g_GlowEffectUpdateList[];
+extern FieldFxHandler g_GlowEffectInitList[];
+extern FieldFxHandler g_GlowEffectDrawList[];
+extern FieldFxHandler g_GlowEffectUpdateList[];
 extern u16 g_GlowEffectSlotSizes[];
 extern s16 g_GlowEffectScaleByAction[];
 extern GteShortVector g_GlowEffectFlareOffsets[];
@@ -53,9 +53,9 @@ int GlowEffect_ClassNop6(void);
 
 /* Second glow effect (FieldFx_GlowEffects.c). */
 extern int g_GlowEffectBScript[];
-extern FieldEngHandler g_GlowEffectBInitList[];
-extern FieldEngHandler g_GlowEffectBDrawList[];
-extern FieldEngHandler g_GlowEffectBUpdateList[];
+extern FieldFxHandler g_GlowEffectBInitList[];
+extern FieldFxHandler g_GlowEffectBDrawList[];
+extern FieldFxHandler g_GlowEffectBUpdateList[];
 extern u16 g_GlowEffectBSlotSizes[];
 extern s16 g_GlowEffectBScaleByAction[];
 extern GteShortVector g_GlowEffectBFlareOffsets[];
@@ -71,9 +71,9 @@ int GlowEffectB_ClassNop6(void);
 
 /* Third glow effect (FieldFx_GlowEffects.c). */
 extern int g_GlowEffectCScript[];
-extern FieldEngHandler g_GlowEffectCInitList[];
-extern FieldEngHandler g_GlowEffectCDrawList[];
-extern FieldEngHandler g_GlowEffectCUpdateList[];
+extern FieldFxHandler g_GlowEffectCInitList[];
+extern FieldFxHandler g_GlowEffectCDrawList[];
+extern FieldFxHandler g_GlowEffectCUpdateList[];
 extern u16 g_GlowEffectCSlotSizes[];
 extern s16 g_GlowEffectCScaleByAction[];
 extern GteShortVector g_GlowEffectCFlareOffsets[];
@@ -88,9 +88,9 @@ int GlowEffectC_ClassNop6(void);
 
 /* Four-layer glow effect (FieldFx_GlowEffects.c). */
 extern int g_FourLayerGlowScript[];
-extern FieldEngHandler g_FourLayerGlowInitList[];
-extern FieldEngHandler g_FourLayerGlowDrawList[];
-extern FieldEngHandler g_FourLayerGlowUpdateList[];
+extern FieldFxHandler g_FourLayerGlowInitList[];
+extern FieldFxHandler g_FourLayerGlowDrawList[];
+extern FieldFxHandler g_FourLayerGlowUpdateList[];
 extern u16 g_FourLayerGlowSlotSizes[];
 extern s16 g_FourLayerGlowScaleByAction[];
 extern GteShortVector g_FourLayerGlowFlareOffsets[];
@@ -109,9 +109,9 @@ int FourLayerGlow_ClassNop6(void);
 
 /* Point sprite effect (FieldFx_BurstEffects.c). */
 extern u8 g_PointSpriteScript[];
-extern FieldEngHandler g_PointSpriteInitList[];
-extern FieldEngHandler g_PointSpriteDrawList[];
-extern FieldEngHandler g_PointSpriteUpdateList[];
+extern FieldFxHandler g_PointSpriteInitList[];
+extern FieldFxHandler g_PointSpriteDrawList[];
+extern FieldFxHandler g_PointSpriteUpdateList[];
 extern u16 g_PointSpriteSlotSizes[];
 extern struct FieldActor *g_PointSpriteOwner;
 int PointSprite_ClassNop0(void);
@@ -124,9 +124,9 @@ int PointSprite_ClassNop6(void);
 
 /* Burst effect (FieldFx_BurstEffects.c); its script and setup
  * are declared with the burst records in pe1/field_anim.h. */
-extern FieldEngHandler g_BurstEffectInitList[];
-extern FieldEngHandler g_BurstEffectDrawList[];
-extern FieldEngHandler g_BurstEffectUpdateList[];
+extern FieldFxHandler g_BurstEffectInitList[];
+extern FieldFxHandler g_BurstEffectDrawList[];
+extern FieldFxHandler g_BurstEffectUpdateList[];
 extern u16 g_BurstEffectSlotSizes[];
 extern GteShortVector g_BurstEffectSpriteRotation;
 extern struct FieldActor *g_BurstEffectTarget;
@@ -139,9 +139,9 @@ int BurstEffect_ClassNop6(void);
 
 /* Second burst effect (FieldFx_BurstEffects.c). */
 extern int g_BurstEffectBScript[];
-extern FieldEngHandler g_BurstEffectBInitList[];
-extern FieldEngHandler g_BurstEffectBDrawList[];
-extern FieldEngHandler g_BurstEffectBUpdateList[];
+extern FieldFxHandler g_BurstEffectBInitList[];
+extern FieldFxHandler g_BurstEffectBDrawList[];
+extern FieldFxHandler g_BurstEffectBUpdateList[];
 extern u16 g_BurstEffectBSlotSizes[];
 extern struct FieldActor *g_BurstEffectBTarget;
 int BurstEffectB_ClassNop0(void);
@@ -154,9 +154,9 @@ int BurstEffectB_ClassNop6(void);
 
 /* Third burst effect (FieldFx_BurstEffects.c). */
 extern int g_BurstEffectCScript[];
-extern FieldEngHandler g_BurstEffectCInitList[];
-extern FieldEngHandler g_BurstEffectCDrawList[];
-extern FieldEngHandler g_BurstEffectCUpdateList[];
+extern FieldFxHandler g_BurstEffectCInitList[];
+extern FieldFxHandler g_BurstEffectCDrawList[];
+extern FieldFxHandler g_BurstEffectCUpdateList[];
 extern u16 g_BurstEffectCSlotSizes[];
 extern struct FieldActor *g_BurstEffectCTarget;
 int BurstEffectC_ClassNop0(void);

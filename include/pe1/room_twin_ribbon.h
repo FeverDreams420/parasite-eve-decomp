@@ -5,7 +5,7 @@
 #include "pe1/render_object.h"
 #include "pe1/room_ember_burst.h"
 #include "pe1/field_sprite_draw.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 /* Twin ribbon controller (room_m318 func_80196E4C): two mirrored pairs of
  * light ribbons hang between the actor's bones 8 and 21; a pulse is shed

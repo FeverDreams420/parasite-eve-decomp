@@ -12,7 +12,7 @@
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/asset_find.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 /* Scene e20 trail controller and its command/particle records.
  * Reserved members are observed offsets, not recovered field meanings. */

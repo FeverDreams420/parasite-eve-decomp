@@ -14,7 +14,7 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/floor_polygon.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 /* room_m404 sinking drop (func_80192540): a drop that sinks and jitters,
  * spreads on the floor and sheds splash children, a lingering pool that

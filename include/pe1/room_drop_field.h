@@ -12,7 +12,7 @@
 #include "pe1/field_script_context.h"
 #include "pe1/psyq_libc.h"
 #include "pe1/pe_image.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 /* The drop field effect set linked by room_m174, room_m348 and room_m383
  * (src/overlays/room_lib/RoomEffect_DropFieldEffects.c): a controller and

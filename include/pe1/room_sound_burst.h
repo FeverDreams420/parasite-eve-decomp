@@ -13,7 +13,7 @@
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 /* Room effect controllers that play a sound, then emit one particle every
  * third frame along an angle that sweeps half a turn over seventy frames. */

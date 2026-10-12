@@ -10,7 +10,7 @@
 #include "pe1/psyq_libc.h"
 #include "pe1/asset_find.h"
 #include "pe1/field_anim_pool.h"
-#include "pe1/field_engine_state.h"
+#include "pe1/fieldfx_state.h"
 #include "pe1/field_collision.h"
 #include "pe1/battle.h"
 

@@ -12,7 +12,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 #include "pe1/render_matrix_slot.h"
 #include "pe1/room_sound_slot.h"
 #include "pe1/room_floor.h"

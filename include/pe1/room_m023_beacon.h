@@ -17,7 +17,7 @@
 #include "pe1/scene_archive.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/asset_find.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 #include "pe1/room_m023_effects.h"
 
 /* room_m023 joint beacon (func_8018FC14): follows a model joint, swells

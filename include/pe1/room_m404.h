@@ -9,7 +9,7 @@
 #include "pe1/field_texture_tables.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_anim_pool.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 typedef struct { s32 word[2]; } __attribute__((packed)) RoomTemplate8;
 typedef struct RoomM404Node {

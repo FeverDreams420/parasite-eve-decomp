@@ -1,18 +1,18 @@
-#ifndef PE1_FIELD_ENGINE_STATE_H
-#define PE1_FIELD_ENGINE_STATE_H
+#ifndef PE1_FIELDFX_STATE_H
+#define PE1_FIELDFX_STATE_H
 
 #include "pe1/field_script_context.h"
-#include "pe1/field_engine_slot.h"
+#include "pe1/fieldfx_slot.h"
 #include "pe1/field_anim_pool.h"
 
-/* Script-state work area (obj+0xC, pointed at by g_FieldEngineScriptState).
+/* Script-state work area (obj+0xC, pointed at by g_FieldFxScriptState).
  * FieldFx_RunScript interprets the command table: each 32-bit command
  * carries an opcode in the high half and an operand in the low half. The int
  * register file at +0x08 and the variable file at +0x48 are also reached
  * through FieldFx_RegPtr/FieldFx_VarPtr; the active context
  * pointer at +0x70 is shared by FieldFx_SetScriptContext and
  * FieldFx_GetScriptContext. */
-typedef struct FieldEngState {
+typedef struct FieldFxState {
     /* 0x00 */ short wait;              /* frames to sleep before the next command */
     /* 0x02 */ short pc;                /* index into the command table */
     /* 0x04 */ short data_next;         /* next free slot-data offset */
@@ -23,40 +23,40 @@ typedef struct FieldEngState {
     /* 0x48 */ int vars[9];
     /* 0x6C */ int *commands;           /* command table (obj+0x78) */
     /* 0x70 */ void *current_context;   /* active field object or its effect context */
-} FieldEngState;
+} FieldFxState;
 
 /* Word view of the same work area: the halt tests compare slot_count and
  * halted (the high half of the word at +4) in one load. */
-typedef struct FieldEngStateWords {
+typedef struct FieldFxStateWords {
     /* 0x00 */ u32 timing;  /* wait and pc */
     /* 0x04 */ u32 status;  /* data_next, slot_count, halted */
-} FieldEngStateWords;
+} FieldFxStateWords;
 
 /* Field engine object: header, script state, dispatch slots, slot data. */
-typedef struct FieldEngObject {
+typedef struct FieldFxObject {
     /* 0x000 */ FieldAnimObjectPrefix prefix;
-    /* 0x00C */ FieldEngState state;
-    /* 0x080 */ FieldEngSlot slots[0x40];
+    /* 0x00C */ FieldFxState state;
+    /* 0x080 */ FieldFxSlot slots[0x40];
     /* 0x200 */ char data[1];
-} FieldEngObject;
+} FieldFxObject;
 
 /* Bytes of slot data after the dispatch slots (object size 0xA0C). */
-#define FIELD_ENG_DATA_SIZE 0x80C
+#define FIELDFX_DATA_SIZE 0x80C
 
 /* One handler of an effect module's lists: called with the object, its
  * dispatch slot and the slot's data. */
-typedef int (*FieldEngHandler)(void *obj, void *slot, void *data);
+typedef int (*FieldFxHandler)(void *obj, void *slot, void *data);
 
 /* The object the engine is running and its parts, set by every pass. */
-extern FieldEngState *g_FieldEngineScriptState;
-extern FieldEngObject *g_FieldEngineScriptObject;
-extern char *g_FieldEngineScriptData;
-extern int *g_FieldEngineCommandTable;
-extern FieldEngSlot *g_FieldEngineSlotTable;
+extern FieldFxState *g_FieldFxScriptState;
+extern FieldFxObject *g_FieldFxScriptObject;
+extern char *g_FieldFxScriptData;
+extern int *g_FieldFxCommandTable;
+extern FieldFxSlot *g_FieldFxSlotTable;
 
 /* Messages printed for a slot whose handler list entry is -1. */
-extern char g_FieldEngServiceThreadMissingMsg[];
-extern char g_FieldEngUpdateThreadMissingMsg[];
+extern char g_FieldFxServiceThreadMissingMsg[];
+extern char g_FieldFxUpdateThreadMissingMsg[];
 
 /* Object passes (FieldFx_ObjectScript.c). FieldFx_Register runs the
  * service (draw) handler of every active slot, FieldFx_UpdateSlots the
@@ -64,16 +64,16 @@ extern char g_FieldEngUpdateThreadMissingMsg[];
  * steps the command table and starts slots from the init list with the slot
  * data sizes. FieldFx_Spawn6 stores a script variable; the effect classes
  * forward their six spawn arguments to it unchanged. */
-int FieldFx_Register(FieldEngObject *obj, FieldEngHandler *handlers);
-int FieldFx_UpdateSlots(FieldEngObject *obj, FieldEngHandler *handlers);
-int FieldFx_RunScript(FieldEngObject *obj, FieldEngHandler *handlers, u16 *sizes);
+int FieldFx_Register(FieldFxObject *obj, FieldFxHandler *handlers);
+int FieldFx_UpdateSlots(FieldFxObject *obj, FieldFxHandler *handlers);
+int FieldFx_RunScript(FieldFxObject *obj, FieldFxHandler *handlers, u16 *sizes);
 int FieldFx_Spawn6();
 int *FieldFx_RegPtr(int index);
 int *FieldFx_VarPtr(int index);
 void FieldFx_SetScriptContext(void *context);
 void *FieldFx_GetScriptContext(void);
 int FieldFx_IsLastSlotHalted(void);
-void *FieldFx_StartSlot(void *obj, u8 id, u16 *sizes, FieldEngHandler *handlers);
+void *FieldFx_StartSlot(void *obj, u8 id, u16 *sizes, FieldFxHandler *handlers);
 void FieldFx_ActivateSlot(u16 slot, u8 id, u16 size);
 int FieldFx_FreeSlot(u16 slot);
 int FieldFx_FreeAllSlots(void);
@@ -93,4 +93,4 @@ extern s16 D_800F34E4;
 extern u16 D_800E21A8[];
 extern u16 D_800E21C8;
 
-#endif /* PE1_FIELD_ENGINE_STATE_H */
+#endif /* PE1_FIELDFX_STATE_H */

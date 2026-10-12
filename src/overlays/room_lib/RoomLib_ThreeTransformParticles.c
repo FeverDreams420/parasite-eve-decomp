@@ -21,7 +21,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/psyq_libc.h"
 #include "pe1/pe_image.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 #include "RoomLib_ThreeTransformParticles_externs.h"
 

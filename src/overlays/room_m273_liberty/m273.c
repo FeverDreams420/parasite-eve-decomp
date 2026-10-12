@@ -6,7 +6,7 @@
 #include "pe1/geom_state.h"
 #include "pe1/floor_polygon.h"
 #include "pe1/field_collision.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 #include "pe1/room_liberty_choice.h"
 #include "pe1/gte_types.h"
 #include "pe1/field_anim_pool.h"

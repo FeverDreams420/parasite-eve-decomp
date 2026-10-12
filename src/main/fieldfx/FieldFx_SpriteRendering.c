@@ -173,7 +173,7 @@ void func_800C3324(FieldOrientedSprite *sprite)
     FieldStripLink link;
 
     packet = (FieldStripPacket *)(D_800B0E58[D_8009CDDC] + D_8009CDD8);
-    D_800F33B4 = FIELD_ENGINE_SCRATCH;
+    D_800F33B4 = FIELDFX_SCRATCH;
     D_800F33B4->v = sprite->cell & 0xF0;
     D_800F33B4->u = (sprite->cell - D_800F33B4->v) << 4;
     D_800F33B4->clutX = sprite->clut << 4;
@@ -411,7 +411,7 @@ void func_800C42A4(FieldGlowSprite *sprite, GteMatrix *placement, u8 mode)
     FieldStripLink link;
 
     packet = (FieldStripPacket *)(D_800B0E58[D_8009CDDC] + D_8009CDD8);
-    D_800F33B4 = FIELD_ENGINE_SCRATCH;
+    D_800F33B4 = FIELDFX_SCRATCH;
     if (mode == 0) {
         /* Compose camera rotation with each placement column. */
         gte_ldrotmatrix(D_800BCFA4.value);
@@ -521,7 +521,7 @@ void func_800C499C(FieldShadedQuadColors *colors, GteMatrix *placement,
     FieldShadedQuadLink link;
 
     packet = (FieldShadedQuadPacket *)(D_800B0E58[D_8009CDDC] + D_8009CDD8);
-    D_800F33B4 = FIELD_ENGINE_SCRATCH;
+    D_800F33B4 = FIELDFX_SCRATCH;
     if (mode == 0) {
         /* Compose camera rotation with each placement column. */
         gte_ldrotmatrix(D_800BCFA4.value);
@@ -631,7 +631,7 @@ void func_800C4FC4(FieldShadedRing *ring, GteMatrix *placement, u8 mode)
     u16 d;
     FieldRingLink link;
 
-    D_800F33B4 = FIELD_ENGINE_SCRATCH;
+    D_800F33B4 = FIELDFX_SCRATCH;
     if (mode == 0) {
         /* Compose camera rotation with each placement column. */
         gte_ldrotmatrix(D_800BCFA4.value);
@@ -794,7 +794,7 @@ void func_800C5A40(FieldTexturedStrip *strip)
 
     node = strip->nodes;
     i = 0;
-    D_800F33B4 = FIELD_ENGINE_SCRATCH;
+    D_800F33B4 = FIELDFX_SCRATCH;
     packet = (FieldStripPacket *)(D_800B0E58[D_8009CDDC] + D_8009CDD8);
     D_800F33B4->clutX = strip->clut << 4;
     D_800F33B4->clutY = strip->clut >> 4;

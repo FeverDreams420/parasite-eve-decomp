@@ -14,7 +14,7 @@
 #include "pe1/field_anim_pool.h"
 #include "pe1/floor_polygon.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/field_engine_calls.h"
+#include "pe1/fieldfx_calls.h"
 
 /* room_m256 scatter drop (func_80192844): a falling drop that jitters,
  * sheds three kinds of splash children, flashes the scene when it reaches
