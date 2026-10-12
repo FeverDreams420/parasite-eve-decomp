@@ -1,4 +1,0 @@
-#ifndef PE1_EXT_A8E9D92F2633
-#define PE1_EXT_A8E9D92F2633
-extern char D_800E17E0;
-#endif /* PE1_EXT_A8E9D92F2633 */

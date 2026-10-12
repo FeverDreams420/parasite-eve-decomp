@@ -5,6 +5,7 @@
 #include "pe1/field_actor.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/battle.h"
+#include "pe1/field_engine_state.h"
 
 /* func_800C62DC specialised for the player position (16.16 integer halves). */
 
@@ -160,7 +161,6 @@ int func_800C6B90(s16 *pos, int extraRadius) {
     return x_sq + z_sq < radius_sq;
 }
 
-int FieldEng_GetStatus(void *obj);
 
 int func_800C6C18(char *obj) {
     int enabled;

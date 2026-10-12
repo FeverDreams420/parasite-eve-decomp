@@ -5,8 +5,6 @@
 /* Rising ember sparks: the drifting ember callback and the fan-sweep
  * spark template instance. */
 
-#include "FieldEng_FanSweepSparks_externs.h"
-
 int func_800D70C0(int mode, s16 *state) {
     s16 sp10[3];
     char sp18[8];
@@ -25,7 +23,7 @@ int func_800D70C0(int mode, s16 *state) {
         sp10[0] = state[0];
         sp10[1] = state[1];
         sp10[2] = state[2];
-        func_800CF3AC(&D_800E17E0, sp18, D_800E27EC);
+        func_800CF3AC(g_EmberColorTrack, sp18, D_800E27EC);
         func_800D1DEC(sp10, sp18, 0x80, 1);
         break;
     }

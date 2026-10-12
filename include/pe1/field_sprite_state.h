@@ -27,6 +27,8 @@ extern u8 D_800F345D;  /* cell height - 1 */
 void func_800C2EAC(u8 mode);
 void func_800C2FF0(int width, int height);
 void func_800C3098(int mode);
+/* Printed by func_800C3098 for a depth other than 4 or 8 bits. */
+extern char g_FieldSpriteWrongColorModeMsg[];
 void func_800C3134(u8 *table, u32 step, u8 *out);
 void func_800C3238(u8 mode);
 

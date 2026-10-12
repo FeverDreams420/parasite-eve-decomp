@@ -28,5 +28,7 @@ extern struct BattleEntity *D_8009D254;
 
 int func_800C62DC(GteShortVector *point, GteShortVector *tri);
 int func_800C689C(GteShortVector *tri);
+/* Nonzero when the player stands inside the XZ quad of four corners. */
+int func_800C6B20(GteShortVector *quad);
 
 #endif /* PE1_FIELD_TRI_TEST_H */

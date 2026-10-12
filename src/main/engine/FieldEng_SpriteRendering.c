@@ -21,8 +21,6 @@
  * draw state and scratch pointers private to this range (main_tu_evidence
  * G1390). */
 
-#include "FieldEng_SpriteRendering_externs.h"
-
 void func_800C2EAC(u8 mode) {
     if (mode == 0) {
         D_800F3424 = 0x340;
@@ -98,7 +96,7 @@ void func_800C3098(int mode) {
         D_800F33AC = 1;
         break;
     default:
-        printf(D_800C2110);
+        printf(g_FieldSpriteWrongColorModeMsg);
         break;
     }
 

@@ -6,9 +6,8 @@
 #include "pe1/gte.h"
 #include "pe1/field_shaded_quad.h"
 #include "pe1/field_actor.h"
+#include "pe1/psyq_libc.h"
 
-int rand(void);
-int func_800C6B20(void *arg0);
 
 int func_800C5EB0(char *data, void *unused, int *hit) {
     GteShortVector local[5];

@@ -2058,3 +2058,7 @@ g_BurstEffectBTarget = 0x800E2804;
 g_BurstEffectTarget = 0x800E2810;
 g_BurstEffectCTarget = 0x800E2848;
 g_PointSpriteOwner = 0x800F3470;
+g_FieldSpriteWrongColorModeMsg = 0x800C2110;
+g_FieldPlacementUpAxis = 0x800C213C;
+g_EmberColorTrack = 0x800E17E0;
+g_FieldModelColorBackup = 0x800E2370; // size:0x400

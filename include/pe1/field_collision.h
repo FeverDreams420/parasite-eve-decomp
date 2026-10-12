@@ -3,6 +3,11 @@
 
 #include "common.h"
 #include "pe1/floor_polygon.h"
+#include "pe1/gte_types.h"
+
+/* Up axis (0, -4096, 0) the placement basis (FieldEng_CollisionQueries_2.c)
+ * crosses with the facing direction. */
+extern GteVector g_FieldPlacementUpAxis;
 
 /* vertices must contain count > 0 entries. x and z are 16.16 coordinates. */
 int Geo_PointInPoly(int x, int z, const PolygonVertex *vertices,

@@ -10,6 +10,7 @@
 #include "pe1/field_effect_pool.h"
 #include "pe1/field_flash_burst.h"
 #include "pe1/field_effect_modules.h"
+#include "pe1/field_sprite_draw.h"
 
 int func_800D3F64(int arg0, int arg1) {
     FieldActor *actor;
@@ -275,9 +276,6 @@ int func_800D4850(u8 *state) {
     state[0] = 4;
     return 0;
 }
-
-void func_800CECAC(void);
-void func_800CED3C(int arg0);
 
 int func_800D4860(void) {
     void **table;

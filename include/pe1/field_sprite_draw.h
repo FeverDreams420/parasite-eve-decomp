@@ -11,6 +11,12 @@ struct FieldTrailPair;
 
 void func_800CE870(char *object, int mode, short *position);
 
+/* Builds the tpage words of the two effect texture pages (0x380 and 0x340). */
+void func_800CECAC(void);
+
+/* Loads texture block index (0 or 1) into VRAM and marks it resident. */
+void func_800CED3C(int index);
+
 /* Loads texture block index (0 or 1) into VRAM unless already resident. */
 void func_800CEDA8(int index);
 
@@ -25,6 +31,9 @@ void func_800CEE20(struct GteShortVector *position, struct GteRotation *rotation
  * key and a zero-duration terminator carrying the final RGB value. Call
  * with nonnegative time. */
 void func_800CF3AC(void *track, void *color, int time);
+
+/* Colour track of the rising ember sparks (FieldEng_FanSweepSparks.c). */
+extern char g_EmberColorTrack[];
 
 /* Rotates (0, 0, distance) by the angles (z forced to 0) into out. */
 void func_800CFB7C(struct GteShortVector *angles, short distance,

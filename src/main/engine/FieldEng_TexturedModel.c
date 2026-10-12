@@ -8,8 +8,6 @@
  * semi-transparency and depth state the draw reads, the colour-table
  * save/restore and fades, and the draw itself. */
 
-#include "FieldEng_TexturedModel_externs.h"
-
 #define MODEL_VERTEX(model, offset) ((FieldModelVertex *)&(model)->bytes[offset])
 #define MODEL_COLOR(model, offset) (((FieldModelColor *)&(model)->bytes[offset])->word)
 
@@ -75,7 +73,7 @@ void FieldModel_SaveColors(char *data) {
     FieldModelHeader *table = (FieldModelHeader *)data;
     int i = 0;
     u32 *src = (u32 *)(data + table->colorOffset);
-    u32 *dst = D_800E2370;
+    u32 *dst = g_FieldModelColorBackup;
 
     while (i < table->colorCount) {
         i++;
@@ -86,7 +84,7 @@ void FieldModel_SaveColors(char *data) {
 void FieldModel_RestoreColors(char *data) {
     FieldModelHeader *table = (FieldModelHeader *)data;
     int i = 0;
-    u32 *src = D_800E2370;
+    u32 *src = g_FieldModelColorBackup;
     u32 *dst = (u32 *)(data + table->colorOffset);
 
     while (i < table->colorCount) {
