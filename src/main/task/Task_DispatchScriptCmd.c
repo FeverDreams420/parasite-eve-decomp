@@ -8,14 +8,12 @@
 #include "pe1/field_actor.h"
 #include "pe1/battle_runtime.h"
 #include "pe1/battle_entity_anim.h"
+#include "pe1/render_shadow.h"
 
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 /* ASPSX_VERSION: 2.70 */
-
-#define U8_AT(ptr, off) (*(u8 *)((u8 *)(ptr) + (off)))
-#define U32_AT(ptr, off) (*(u32 *)((u8 *)(ptr) + (off)))
 
 typedef struct ScriptArgParts {
     s16 low;
@@ -50,8 +48,8 @@ int Task_DispatchScriptCmd(TaskScriptArgs *args)
     Pe1Vec3s position;
     Pe1Vec3s position2;
     char map_id[2];
-    u8 *entity;
-    u8 *loaded;
+    FieldActor *entity;
+    FieldActor *loaded;
     int opcode;
     int status;
     int entity_id;
@@ -167,16 +165,16 @@ cmd_962:
 cmd_9c4:
         map_id[0] = ARG_WORD(args->arg1);
         map_id[1] = ARG_WORD(args->arg2);
-        loaded = (u8 *)Scene_LoadMap((u8 *)map_id, g_CurrentEntity, 0);
-        U32_AT(loaded, 0x28) = ARG_WORD(args->arg3);
-        U32_AT(loaded, 0x2C) = ARG_WORD(args->arg4);
-        U32_AT(loaded, 0x30) = ARG_WORD(args->arg5);
+        loaded = Scene_LoadMap((u8 *)map_id, g_CurrentEntity, 0);
+        loaded->pos_x = ARG_WORD(args->arg3);
+        loaded->pos_y = ARG_WORD(args->arg4);
+        loaded->pos_z = ARG_WORD(args->arg5);
         goto done;
 cmd_a28:
-        U8_AT(g_CurrentEntity, 0x27C) = ARG_WORD(args->arg1);
+        ((RenderShadowActor *)g_CurrentEntity)->shadow_matrix_index = ARG_WORD(args->arg1);
         goto done;
 cmd_a29:
-        U8_AT(g_CurrentEntity, 0x27D) = ARG_WORD(args->arg1);
+        ((RenderShadowActor *)g_CurrentEntity)->shadow_intensity = ARG_WORD(args->arg1);
         goto done;
 cmd_a8c:
         D_800BD025.r = ARG_WORD(args->arg1);
@@ -199,20 +197,20 @@ find_entity:
         if (initial_entity_id == 0) {
             return 1;
         }
-        entity = (u8 *)D_8009D20C;
+        entity = D_8009D20C;
         entity_id = initial_entity_id;
         if (entity == 0) {
             return 1;
         }
         while (1) {
-            if (U8_AT(entity, 0xC) == entity_id) {
-                if (U8_AT(entity, 0xD) == ARG_WORD(args->arg2)) {
-                    if ((U32_AT(entity, 0x98) & 0x10) == 0) {
+            if (entity->type_id == entity_id) {
+                if (entity->sub_id == ARG_WORD(args->arg2)) {
+                    if ((entity->flags & 0x10) == 0) {
                         return 1;
                     }
                 }
             }
-            entity = (u8 *)U32_AT(entity, 4);
+            entity = entity->next;
             if (entity == 0) {
                 break;
             }
