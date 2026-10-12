@@ -248,8 +248,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x9D08, c, Memcard_OpenVideo]
-      - [0xA144, c, Memcard_StepVideo]
+      - [0x9D08, c, video_open_step]
   - [0xA458]
   - name: menu_memcard_video_after_step
     type: code
