@@ -74,7 +74,7 @@ templates other shared code still instantiates per overlay.
   and relocates the room directory into `g_GameState`: entity banks, script
   blocks, task slots and sound banks.
 - **Scripts.** Actor and scene behaviour is bytecode: the interpreter in
-  `src/main/task` runs per-actor command streams, and the process manager in
+  `src/main/script` runs per-actor command streams, and the process manager in
   `src/main/pm` schedules script batches in slots.
 - **Battle.** The ATB battle system (`src/main/battle`, `aya`, `item`) runs in
   the main executable on top of the same actor and render code.

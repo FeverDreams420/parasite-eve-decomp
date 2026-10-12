@@ -61,6 +61,8 @@ SUBSEG = re.compile(
     r"(?P<kind>c|\.rodata|\.data|\.sdata|\.bss|\.sbss)\s*,\s*)"
     r"(?P<name>[^\],\s]+)(?P<tail>.*)$"
 )
+# `src/main/gpu`, `src/main/gpu/`, `src/main/gpu/*.c`, not `src/main/gpu/X.c`.
+DIR_MENTION = r"(?<![\w.-]){}(?=/(?![\w])|(?![\w/.-])|\.(?![\w]))"
 INCLUDE = re.compile(r'^(?P<head>\s*#\s*include\s+")(?P<path>[^"]+)(?P<tail>".*)$')
 
 
@@ -260,8 +262,7 @@ def rewrite_dirs(text: str, dirs) -> str:
         # Only bare directory mentions (`src/main/gpu/`, `src/main/gpu/*.c`);
         # `dir/Name` tokens are file mentions, handled (or reported) per file,
         # so test fixtures with invented file names stay self-consistent.
-        text = re.sub(r"(?<![\w.-])" + re.escape(old_dir) + r"/(?![\w])",
-                      new_dir + "/", text)
+        text = re.sub(DIR_MENTION.format(re.escape(old_dir)), new_dir, text)
     return text
 
 

@@ -109,7 +109,7 @@ edge, as `akao/Spu_TransferAndLifecycle` did before LIBPAD WAITRC2's
 | `scene` | `Scene_` | room and scene loading, story flags, scene dispatch | keep; receives `Scene_*` files from `gpu`, `main`, `render`, `time` |
 | `overlay` | `Overlay_` | overlay tables and loading, overlay audio/texture slots | keep |
 | `asset` | `Asset_` | PE.IMG asset tables, TIM upload | keep |
-| `task` | `Task_` | actor script interpreter: opcodes, expressions, node pool | rename to `script` (`Script_`); `Task_Gpu*` to `gpu`, `Task_ConvertSecondsToHMS` to `time` |
+| `script` | `Task_` | actor script interpreter: opcodes, expressions, node pool | keep (renamed from `task`); prefix to become `Script_`; `Task_Gpu*` to `draw`, `Task_ConvertSecondsToHMS` to `time` |
 | `pm` | `Pm_` | process manager: slot table that runs script batches | keep |
 | `event` | `Evt_` | game event delivery and deferred execution | keep; the old `Evt_Deliver` was LIBMATH FERR `_err_math` (`psyq/libmath/ferr.c`) |
 | `battle` | `Battle_`, `BattleCmd_` | ATB battle: turns, targeting, damage, enemy AI, status display | keep; `Inv_Build*List.c` to `item`, `Math_IntSqrt.c` to `math` |

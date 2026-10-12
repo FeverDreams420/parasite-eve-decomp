@@ -5,7 +5,7 @@
 #include "pe1/task_node.h"
 
 /* Task script interpreter state and the tables its opcodes read
- * (src/main/task). */
+ * (src/main/script). */
 
 extern int g_SceneDataTable0;
 extern short g_EntityCollisionWallParam;

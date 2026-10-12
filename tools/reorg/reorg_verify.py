@@ -81,8 +81,8 @@ def main() -> int:
                     line = text.count("\n", 0, match.start()) + 1
                     errors.append(f"{path}:{line}: stale {match.group(0)}")
         for old_dir in args.old_dir:
-            for match in re.finditer(r"(?<![\w.-])" + re.escape(
-                    rm.norm(old_dir)) + r"/(?![\w])", text):
+            for match in re.finditer(rm.DIR_MENTION.format(
+                    re.escape(rm.norm(old_dir))), text):
                 line = text.count("\n", 0, match.start()) + 1
                 errors.append(f"{path}:{line}: stale directory {old_dir}/")
         if path.startswith("src/") and path.endswith((".c", ".h", ".inc")):
