@@ -172,16 +172,47 @@ after what their functions do (`fx_common/camera_nodes.c`,
 
 ### Resident translation units (src/main, 2026-10-12)
 
-The modules marked READY in `docs/REORGANIZATION_PLAN.md` were merged when
-their units are adjacent in the manifest, no foreign data lies between their
-rodata, and one marker set compiles every member to the same instructions.
+`src/main` outside `psyq/` went from 339 files to 104. Units were first moved
+into the directory of their module (`docs/reorganization_mapping.csv`,
+`tools/reorg/maps/step1c_*.csv`), then merged when they are adjacent in the
+manifest, nothing foreign lies between their rodata, and one marker set
+compiles every member to the same instructions: the READY modules of
+`docs/REORGANIZATION_PLAN.md` and the compatible parts of the PARTIAL ones.
 `tools/reorg/reorg_merge.py` concatenates the units in manifest order (one
-include set, the COMMON words of `-G8` FORCE_G0 units in one block after the
-includes, private `*_externs.h` declarations moved to a shared header);
+include set, the tentative COMMON definitions of the words retail reaches
+through `$gp` in one block after the includes, private `*_externs.h`
+declarations moved to a shared header, `Old.c:NN` references re-pointed);
 `tools/reorg/marker_probe.py` compares every function with the old unit
-objects before `make check` and `make overlay-check-all`. File names follow
-the role of the module (`FieldEng_GlowEffects.c`, `Task_FlowOpcodes.c`,
-`Menu_InventoryScreens.c`).
+objects before `make check` and `make overlay-check-all` decide. File names
+follow the role of the module (`FieldEng_GlowEffects.c`, `Task_FlowOpcodes.c`,
+`Menu_InventoryScreens.c`, `Battle_Setup.c`).
+
+The marker sets that unified the most units:
+
+- K8: cc1 `-G8`, MASPSX `-G8 --use-comm-section`, `MASPSX_FORCE_G0`, plus a
+  COMMON definition for every word one of the old units reached through
+  `$gp`. Old per-unit `-G0`, `-G1`, `-G2`, `-G4` and `-G4096` values were
+  only ways to get the same `$gp` set; with FORCE_G0 only COMMON words are
+  `$gp`, and every other extern stays absolute.
+- Soft flags taken as a union where they are neutral for the other members:
+  `--expand-div`, `--dont-expand-li`, `-fno-cse-skip-blocks`,
+  `-fno-expensive-optimizations`, `-fno-strength-reduce` (node pool),
+  `ASPSX_VERSION` 2.70/2.77. `-fno-force-mem` turned out unnecessary for
+  `Battle_FinalizeAttackResult` and the geometry control entries.
+- Three one-line C changes from `docs/REORGANIZATION_G_FLAGS.md`: the name
+  entry clears the game-state flags through `D_800B0CD8` (#29), the player
+  palette sets the story-day flag through `&g_GameState.story_day_flags`
+  (#14), and `g_RenderCounter` is declared unsized (#19).
+
+Data between the units: `main/rodata_0009AC`, `main/rodata_001324`,
+`main/rodata_001080` and `main/rodata_00196C` were four zero bytes each, the
+pad GCC puts before an 8-aligned jump table when both units are one object;
+the merged objects emit them, so the entries are gone (`--absorb`).
+`main/rodata_0015FC` is real data, now const definitions at the end of
+`battle/Battle_StatusHud.c` (status symbol templates and window bounds): GCC
+writes them after the status primitive constants and before the jump
+tables, as retail has them, and defining them after their users keeps the
+users' byte-aligned struct copies.
 
 Units that stay separate, and why:
 
@@ -190,6 +221,39 @@ Units that stay separate, and why:
   `CdRom_PollReady` they inline, while `Scene_LoadRoomAssets` in the process
   manager unit calls it (lev 56 when the two share a translation unit). This
   is binary evidence of an original file boundary.
+- Word clashes (a word one unit reaches through `$gp` and another reads
+  absolutely): `entity/Entity_FrameUpdate.c` with
+  `entity/Entity_AllocationAndContacts.c` (`g_FieldActorListHead`,
+  `g_PlayerEntity`; `Scene_UpdateEntityPositions` lev 97) and
+  `battle/Battle_EnemySlotLifecycle.c` after `battle/Battle_EncounterFlow.c`
+  (`g_BattleEquipStateBlock`; `Entity_AllocSlot` lev 11).
+- Section padding: `battle/Battle_EnemyMovement.c` after
+  `battle/Battle_TurnFlow.c`. As one object the 8-aligned turn-flow rodata
+  is padded after the movement's 11 bytes and the link grows by 4; the
+  per-function probe cannot see this, `make check` does.
+- Per-unit inline helpers: `item/Menu_OpenItemUsePanelAtIndex.c` and
+  `item/Inv_ArmorCapacity.c` each define their own `LookupTrackedItem`
+  shape, so the use-panel opener stays between `Inv_InventorySwap.c` and
+  `Inv_ArmorCapacity.c`.
+- Flags the neighbours do not tolerate: `fieldfx/FieldEng_AngleMath.c`,
+  `battle/Aya_UnlockParasiteSpell.c`, `draw/Draw_AllocColorQuad.c` and
+  `draw/Render_FontGlyphLoad.c` (`-fno-schedule-insns`),
+  `asset/Asset_UnloadTableEntries.c` (`-fno-force-mem`, lev 1 without),
+  `menu/Menu_EquipScreenFlow.c` (does not match under the item detail
+  panel's `-fno-expensive-optimizations`), `entity/Entity_PoolInit.c`
+  (`-fno-strength-reduce`, which `Scene_LoadMap` does not take),
+  `render/Geo_LoadMeshEntry.c` and `render/Render_MeshListAndFade.c`, the
+  primitive queue in `draw/` (`Task_InitGpuHwRegs` and
+  `Task_GpuFlushPrimQueue` are lev 4 under each other's set) and the `-g3`
+  battle units (`Menu_MainUpdate`, `Entity_UpdateTimers`,
+  `Battle_PhaseAndEnemyEffectFlow`, which also isolate
+  `Entity_HitAndDropTable` and `Battle_PlayerTurnFlow`).
+- Open small-data shapes from `docs/REORGANIZATION_G_FLAGS.md`:
+  `script/Task_ValueOps.c` with `script/Task_NodeActions.c` (#0) and
+  `boot/Gpu_InitPipeline.c` (#20, also a gprofile boundary).
+- Source policy: the GNU-as units (`math/Math_FixedMul.c`,
+  `math/math_fixed.c`, `draw/Task_GpuPackPrimColor.c`,
+  `draw/Math_SqrtApprox3.c`) stay alone.
 
 ### AKAO driver (src/main/akao)
 
@@ -757,10 +821,12 @@ How the earlier groups were closed, for the next symbols of the same kind:
 
 Still open:
 
-- Translation units that cannot merge: `Entity_CollisionDatabase` with
-  `Entity_UpdateList` (`-G8` against default) and
-  `Render_EntityAndTexturedQuadFlow` with `Render_DrawObjectAndClut` (GPREL
-  relocation overflow).
+- (Superseded 2026-10-12: both pairs this item listed as unmergeable,
+  `Entity_CollisionDatabase`/`Entity_UpdateList` and
+  `Render_EntityAndTexturedQuadFlow`/`Render_DrawObjectAndClut`, are now
+  one unit each, `field/Entity_ActorCollision.c` and
+  `render/Render_ObjectDraw.c`, under one FORCE_G0 set with COMMON `$gp`
+  words; see "Resident translation units".)
 - Symbol aliases that `MASPSX_FORCE_G0` cannot remove, because cc1 decides
   them before MASPSX runs:
   - `CD_StepReadState` reads the sound table pointer `D_800B0E08` four
