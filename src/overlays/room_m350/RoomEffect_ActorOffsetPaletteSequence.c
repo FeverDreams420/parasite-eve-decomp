@@ -43,7 +43,7 @@ int func_80195B64(int event, RoomM350RadialSpriteParticle *object)
 
 /* MASPSX_FLAGS: --expand-div */
 /* Event state: rotation, emission count, brightness, fade phase and size. */
-typedef struct { GteShortVector rotation; short count,brightness,fade,size; } State;
+typedef RoomM350RadialSpriteState State;
 
 #include "RoomEffect_ActorOffsetPaletteSequence_externs_1.h"
 
@@ -139,7 +139,7 @@ radial:
             int clut,pal=palettes[kind];
             if(kind==specialKind && D_800F3428) pal+=4;
             clut=GetClut(32,pal);
-            func_800CEE20(&local.position,(GteRotation *)&state->rotation,state->size,state->size,(s16)D_800F3368.parameter02+216,(unsigned short)clut,1,state->brightness,(struct RenderColor *)D_8019A570);
+            func_800CEE20(&local.position,&state->rotation,state->size,state->size,(s16)D_800F3368.parameter02+216,(unsigned short)clut,1,state->brightness,(struct RenderColor *)D_8019A570);
             state->rotation.z=0u-(unsigned short)state->rotation.z;
             ++i;
         }

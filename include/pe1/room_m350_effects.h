@@ -96,6 +96,16 @@ typedef struct RoomM350CloudParticle {
     RoomM350CloudParticleState state;
 } RoomM350CloudParticle;
 
+typedef struct RoomM350RadialSpriteState {
+    GteRotation rotation;
+    s16 count, brightness, fade, size;
+} RoomM350RadialSpriteState;
+
+PE1_STATIC_ASSERT(sizeof(RoomM350RadialSpriteState) == 0x10,
+                  room_m350_radial_sprite_state_size);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM350RadialSpriteState, count) == 8,
+                  room_m350_radial_sprite_state_count_offset);
+
 typedef struct RoomM350RadialSpriteParticle {
     s16 position[3];
     s16 size;
