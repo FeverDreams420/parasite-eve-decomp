@@ -117,7 +117,7 @@ segments:
       - [0x19A4, rodata, main/rodata_0019A4]
       - [0x19A8, .rodata, battle/Inv_BuildWeaponList]
       - [0x19F8, .rodata, battle/BattleCmd_LoadWeaponModifiers]
-      - [0x1A18, .rodata, aya/Inv_BuildArmorList]
+      - [0x1A18, .rodata, aya/Aya_StatDerivation]
       - [0x1A5C, .rodata, item/Inv_ActiveList]
       - [0x1AA4, .rodata, item/Inv_ItemActions]
       - [0x1ADC, .rodata, save/Save_GameData]
@@ -410,10 +410,10 @@ segments:
       - [0x42180, c, battle/Inv_BuildWeaponList]
       - [0x424C4, c, battle/BattleCmd_LoadWeaponModifiers]
       - [0x425F8, c, battle/Battle_GetScaledMaxHP]
-      - [0x42648, c, aya/Inv_BonusSlotCount]
-      - [0x42664, c, aya/Inv_BuildArmorList]
-      - [0x4298C, c, aya/Aya_StatDerivation]
-      - [0x42CD0, c, aya/Menu_SoundsAndBattleQueries]
+      # Aya stats: bonus slot count, armor list build, stat derivation, menu sounds
+      # and battle queries. One -G8 FORCE_G0 unit with COMMON $gp words (the armor
+      # list and stat derivation were cc1 -G0 only for their absolute words).
+      - [0x42648, c, aya/Aya_StatDerivation]
       # Active inventory list: BGM volume fade, action submenu selection, counter
       # seconds; item-drop random table seeding and per-draw refresh
       # (g_ItemDropRngIndex); byte-string helpers, item grid rebuild and active-list
