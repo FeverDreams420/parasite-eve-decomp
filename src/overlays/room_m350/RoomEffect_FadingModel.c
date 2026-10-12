@@ -126,13 +126,13 @@ int func_801992A0(int event,State *state)
             product=low7*size;
         }
         zSource=(Instance *)actor->instance;
-        asm volatile("" : : "r"(sizeBits), "r"(zSource));
+        asm volatile("" : : "r"(zSource));
         sizeBits=(unsigned int)sizeBits<<16;
                 {
         Matrix *transforms=zSource->render_object.matrices;
-        asm volatile("" : : "r"(sizeBits), "r"(transforms));
+        asm volatile("" : : "r"(transforms));
         halfSize=sizeBits>>17;
-        asm volatile("" : : "r"(transforms), "r"(halfSize));
+        asm volatile("" : : "r"(transforms));
         particle->position.z=transforms[index].translation[2];
         }
         }
