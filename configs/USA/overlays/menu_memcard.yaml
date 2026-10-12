@@ -48,14 +48,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x2060, c, Memcard_DriftGlowParticle]
-      - [0x244C, c, Memcard_RingBurstController]
-      - [0x2D9C, c, Memcard_RisingEmberParticle]
-      - [0x33D0, c, Memcard_CrossFlashController]
-      - [0x3D68, c, Memcard_FadingGlintParticle]
-      - [0x4180, c, Memcard_GlintBurstController]
-      - [0x4870, c, Memcard_SpinRingParticle]
-      - [0x4E98, c, Memcard_SpinBurstController]
+      - [0x2060, c, glint_effects]
   - [0x53A8]
   # Pulse-image jumps retain the original copied callback link address.
   - name: menu_memcard_pulse_linkbase
