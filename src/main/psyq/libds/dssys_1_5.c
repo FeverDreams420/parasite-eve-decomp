@@ -1,229 +1,273 @@
 /* ASSEMBLER: GNU */
-/* GCC_VERSION: 2.8.1 */
-/* CC1_FLAGS: -mno-split-addresses */
-/* Psy-Q LIBDS DSSYS_1.OBJ, part 5 of 11: LIBDS_DSSYS_1_text_368, LIBDS_DSSYS_1_text_4A4, LIBDS_DSSYS_1_text_774, LIBDS_DSSYS_1_text_7FC. */
-#include "pe1/psyq_cd.h"
+/* Psy-Q LIBDS DSSYS_1.OBJ, part 5 of 10: LIBDS_DSSYS_1_text_8B8, LIBDS_DSSYS_1_text_A9C, LIBDS_DSSYS_1_text_D24. */
 #include "pe1/psyq_ds.h"
+#include "common.h"
+#include "pe1/psyq_cd.h"
 
+/* Contiguous private routines from Psy-Q LIBDS/DSSYS_1.OBJ:
+ * text_8B8 is at 0x80080220 and text_A9C follows at 0x80080404.
+ * text_4A4 is non-contiguous and remains in dssys1_vsync.c. */
+/* Psy-Q LIBDS/DSSYS_1.OBJ private text_8B8.
+ * Provenance: configs/USA/psyq_provenance.json (LIBDS). */
+#define STATE_FROM_MODE(p)                                                             \
+    ((CdRomEventCommandState *)((u8 *)(p) - PE1_OFFSETOF(CdRomEventCommandState,       \
+                                                         command.read.commandMode)))
+#define STATE_FROM_RETRY(p)                                                            \
+    ((CdRomEventCommandState *)((u8 *)(p) - PE1_OFFSETOF(CdRomEventCommandState,       \
+                                                         command.read.retryCount)))
+#define STATE_FROM_PARAM(p)                                                            \
+    ((CdRomEventCommandState *)((u8 *)(p) - PE1_OFFSETOF(CdRomEventCommandState,       \
+                                                         command.read.commandParam)))
 #include "dssys_1_5_externs.h"
 
-int LIBDS_DSSYS_1_text_368(unsigned char command, void *param) {
-    CdRomEventCommandState *state;
-    int *timeout;
-    CD_flush();
-    state = &g_CdRomEventCommandState;
-    state->pendingCommand = command;
-    if (param) {
-        unsigned char *copy = state->pendingParamBytes;
-        parcpy(copy, param);
-        state->pendingParams = copy;
-    } else state->pendingParams = 0;
-    timeout = &g_CdRomCmdTimeout;
-    CDROM_EVENT_STATE_FROM_TIMEOUT(timeout)->command.read.readyResult = g_CdRomCmdLongTimeoutTable[CDROM_EVENT_STATE_FROM_TIMEOUT(timeout)->pendingCommand] ? 960 : 30;
-    CDROM_EVENT_STATE_FROM_TIMEOUT(timeout)->command.retryAttempts = 0;
-    switch (CDROM_EVENT_STATE_FROM_TIMEOUT(timeout)->pendingCommand) {
-    case 7:
-        if (CDROM_EVENT_STATE_FROM_TIMEOUT(timeout)->command.read.eventFlags.bit1 == 1) {
-            CDROM_EVENT_STATE_FROM_TIMEOUT(timeout)->pendingCommand = 1;
-            CDROM_EVENT_STATE_FROM_TIMEOUT(timeout)->pendingParams = 0;
+#define STATE(p)                                                                       \
+    ((CdRomCommandState *)((u8 *)(p) - PE1_OFFSETOF(CdRomCommandState, read.command)))
+#define SYSTEM(p)                                                                      \
+    ((CdRomSystemState *)((u8 *)(p) -                                                  \
+                          CDROM_SYSTEM_READ_COMMAND_OFFSET))
+
+void LIBDS_DSSYS_1_text_8B8(int inEvent, u8 *inResult) {
+    u8 *commandByte;
+    register int event = inEvent;
+    register u8 *result = inResult;
+    register int masked = (u8)event;
+    register int two;
+    two = 2;
+    if (masked == two) {
+        register CdRomEventCommandState *state = &g_CdRomEventCommandState;
+        register int pending;
+        register int command;
+        register int value;
+        asm("" : "=r"(state) : "0"(state) : "$2");
+        pending = state->pendingCommand;
+        value = 14;
+        asm("" : "=r"(pending) : "0"(pending) : "memory");
+        command = (u8)pending;
+        if (command == value) {
+            if ((state->command.read.commandMode ^ state->pendingParamBytes[0]) & 128) {
+                state->command.read.command = 15;
+                state->command.read.status = two;
+                state->command.read.syncResult = 3;
+            } else {
+                state->command.read.status = 1;
+                state->command.read.command = 11;
+            }
+            {
+                commandByte = &g_CdRomEventCommandState.command.read.commandMode;
+                asm("" : "=r"(commandByte) : "0"(commandByte));
+                *commandByte = STATE_FROM_MODE(commandByte)->pendingParamBytes[0];
+            }
+            goto dispatch;
         }
-        break;
-    case 8:
-        if (CDROM_EVENT_STATE_FROM_TIMEOUT(timeout)->command.read.eventFlags.bit1 != 1) {
-            CDROM_EVENT_STATE_FROM_TIMEOUT(timeout)->pendingCommand = 1;
-            CDROM_EVENT_STATE_FROM_TIMEOUT(timeout)->pendingParams = 0;
+        if (command == 3) {
+            state->command.read.command = 16;
+            state->command.read.status = two;
+            state->command.read.commandParam = pending;
+            state->command.reserved34 = 1200;
+            goto dispatch;
+        } else if (command == 6 || command == 27) {
+            state->command.read.command = 17;
+            state->command.read.status = two;
+            state->command.read.commandParam = pending;
+            state->command.reserved34 = 1200;
+            goto dispatch;
         }
-        break;
-    }
-    {
-        CdRomEventCommandState *current = &g_CdRomEventCommandState;
-        if (CD_cw(current->pendingCommand, current->pendingParams, 0, 1)) {
-            current->command.retryAttempts = 0;
-            current->command.read.readyResult = 0;
-            return 0;
+        switch (state->pendingCommand) {
+        case 2:
+            D_8009B582 = *(CdlLOC *)g_CdRomEventCommandState.pendingParamBytes;
+            break;
+        case 21:
+        case 22: {
+            commandByte = &g_CdRomEventCommandState.command.read.retryCount;
+            asm("" : "=r"(commandByte) : "0"(commandByte));
+            *commandByte = STATE_FROM_RETRY(commandByte)->pendingCommand;
+            break;
+        }
+        case 3:
+        case 6:
+        case 27: {
+            commandByte = &g_CdRomEventCommandState.command.read.commandParam;
+            asm("" : "=r"(commandByte) : "0"(commandByte));
+            *commandByte = STATE_FROM_PARAM(commandByte)->pendingCommand;
+            break;
+        }
+        }
+        {
+            register DsReadStatusBlock *read = &g_DsReadStatusBlock;
+            asm("" : "=r"(read) : "0"(read));
+            read->status = 1;
+            read->command = 11;
+        }
+    } else {
+        register CdRomCommandState *state = &g_CdSeekState;
+        asm("" : "=r"(state) : "0"(state));
+        if (state->eventStatus & 16) {
+            state->read.status = two;
+            state->read.command = 12;
         } else {
-            current->command.read.lastCommand = current->pendingCommand;
-            return 1;
+            state->read.status = 1;
+            state->read.command = 11;
         }
+    }
+dispatch:
+    if (g_DsSyncCallback && g_DsReadSysEnabled.enabled) {
+        register DsEventCallback cb = g_DsSyncCallback;
+        cb(event, result);
     }
 }
-s32 LIBDS_DSSYS_1_text_774(void);
-#define READ(p)                                                                        \
-    ((DsReadStatusBlock *)((u8 *)(p) - PE1_OFFSETOF(DsReadStatusBlock, syncResult)))
-#define CMD(p)                                                                         \
-    ((CdRomCommandState *)((u8 *)(p) -                                                 \
-                           PE1_OFFSETOF(CdRomCommandState, read.syncResult)))
-void LIBDS_DSSYS_1_text_4A4(void) {
-    u8 parameter;
-    register int pending;
-    register int one;
-    register int *timer;
-    register int *retry = &g_CdRomCmdTimeout;
-    if (*retry > 0 && --*retry == 0) {
-        LIBDS_DSSYS_1_text_774();
-        return;
-    }
-    timer = &g_DsSyncResultCountdown;
-        if (*timer > 0)
-        --*timer;
-    if ((int)CMD(timer)->reserved34 > 0)
-        --CMD(timer)->reserved34;
-    one = 1;
-    if (READ(timer)->status != one && READ(timer)->status == 2) {
-        register int state = READ(timer)->command;
-        register int eleven = 11;
-        if (state != eleven) {
-        if (state == 12) {
-            if (g_CdReadCommandPollToggle) {
-                register u8 *arg = &parameter;
-                parameter = 0;
-                if (g_CdRomCmdTimeout <= 0) {
-                    CMD(timer)->eventValue = 32;
-                    LIBDS_DSSYS_1_text_368(14, arg);
-                }
-                g_CdReadCommandPollToggle = 0;
-            } else {
-                if (g_CdRomCmdTimeout <= 0) {
-                    CMD(timer)->eventValue = 32;
-                    LIBDS_DSSYS_1_text_368(1, 0);
-                }
-                g_CdReadCommandPollToggle = one;
-            }
-        } else if (state == 13) {
-            pending = g_CdRomCmdTimeout;
-            g_CdReadCommandPollToggle = 0;
-            if (pending <= 0) {
-                CMD(timer)->eventValue = 32;
-                LIBDS_DSSYS_1_text_368(1, 0);
-            }
-        } else if (state == 14) {
-            int step = READ(timer)->sector;
-            if (step == 21) {
-                pending = g_CdRomCmdTimeout;
-                if (pending <= 0) {
-                    CMD(timer)->eventValue = 32;
-                    LIBDS_DSSYS_1_text_368(1, 0);
-                }
-            } else if (step == 22) {
-                READ(timer)->reserved18++;
-                if (g_CdRomCmdTimeout <= 0) {
-                    CMD(timer)->eventValue = 32;
-                    LIBDS_DSSYS_1_text_368(1, 0);
-                }
-            } else if (step == 23) {
-                if (g_CdRomCmdTimeout <= 0) {
-                    CMD(timer)->eventValue = 32;
-                    LIBDS_DSSYS_1_text_368(19, 0);
-                }
-            } else if (step == 24) {
-                pending = g_CdRomCmdTimeout;
-                if (pending <= 0) {
-                    CMD(timer)->eventValue = 32;
-                    LIBDS_DSSYS_1_text_368(1, 0);
-                }
-            }
-        } else if (state == 15) {
-            if (!*timer) {
-                READ(timer)->status = one;
-                READ(timer)->command = eleven;
-            }
-        } else if (state == 16) {
-            if (!READ(timer)->eventFlags.bit7) {
-                pending = g_CdRomCmdTimeout;
-                if (pending <= 0) {
-                    CMD(timer)->eventValue = 32;
-                    LIBDS_DSSYS_1_text_368(1, 0);
-                }
-            } else {
-                asm("" ::: "memory");
-                READ(timer)->status = one;
-                READ(timer)->command = eleven;
-            }
-        } else if (state == 17) {
-            if (!READ(timer)->eventFlags.bit5)
-                goto poll;
-            READ(timer)->status = one;
-        complete:
-            READ(timer)->command = eleven;
-        }
-        goto callbacks;
-    poll:
-        pending = g_CdRomCmdTimeout;
-    check_timeout:
-        if (pending <= 0) {
-    send_status:
-        CMD(timer)->eventValue = 32;
-        LIBDS_DSSYS_1_text_368(1, 0);
-        }
-    }
-        }
-callbacks:
-    if (g_DsPollCallback && g_DsReadSysEnabled.enabled)
-        g_DsPollCallback();
+
+void LIBDS_DSSYS_1_text_A9C(int event, u8 *inResult) {
+    u8 *result = inResult;
+    register u32 *command = &D_8009B578;
+    register int twelve;
+    register int old;
+    register int two;
+    register DsEventCallback callback;
+    register int callbackEvent;
+    asm("" : "=r"(command) : "0"(command));
+    old = *command;
+    twelve = 12;
+    if (old == twelve)
+        *command = 13;
     {
-        DsReadStatusBlock *read = &g_DsReadStatusBlock;
-                if ((read->status == 1 && !read->eventFlags.bit1) || read->status == 3) {
-            if (g_CdRomCmdTimeout <= 0) {
-                g_CdRomCommandEventValue = 33;
-                LIBDS_DSSYS_1_text_368(1, 0);
+        register int masked = (u8)event;
+        two = 2;
+        if (masked == two) {
+            register int current = *command;
+            register u32 range;
+            if (current == 13) {
+                if (!(STATE(command)->eventStatus & 16)) {
+                    *command = 14;
+                    STATE(command)->read.status = two;
+                    STATE(command)->read.sector = 21;
+                    STATE(command)->read.discType++;
+                }
+                return;
+            } else {
+                if (current == 14) {
+                    register int step = STATE(command)->read.sector;
+                    register int next;
+                    if (step == 21) {
+                        if (!(STATE(command)->eventStatus & 16)) {
+                            STATE(command)->read.status = two;
+                            *command = current;
+                            STATE(command)->read.sector = 22;
+                            STATE(command)->read.reserved18 = 0;
+                        }
+                    } else if (step == 22) {
+                        if (STATE(command)->eventStatus & 2) {
+                            next = 23;
+                            goto advance;
+                        }
+                        if ((int)STATE(command)->read.reserved18 >= 301) {
+                            STATE(command)->read.status = 3;
+                            if (g_DsDispatchCallback) {
+                                callbackEvent = 5;
+                                callback = g_DsDispatchCallback;
+                                goto notify;
+                            }
+                        }
+                    } else if (step == 23) {
+                        next = 24;
+                    advance:
+                        STATE(command)->read.status = two;
+                        *command = current;
+                        STATE(command)->read.sector = next;
+                    } else if (step == 24) {
+                        if (STATE(command)->eventStatus == two) {
+                            register DsEventCallback available = g_DsDispatchCallback;
+                            register int value asm("$2") = 1;
+                            STATE(command)->read.status = value;
+                            value = 11;
+                            *command = value;
+                            STATE(command)->read.sector = 0;
+                            if (available) {
+                                callbackEvent = 2;
+                                callback = g_DsDispatchCallback;
+                                goto notify;
+                            }
+                        }
+                    }
+                    return;
+                } else {
+                    range = current - 16;
+                    if (range < 2) {
+                        if (STATE(command)->reserved34 == 0 &&
+                            !(STATE(command)->eventStatus & 2)) {
+                            {
+                                register DsEventCallback available = g_DsReadyCallback;
+                                register int value asm("$2") = 1;
+                                STATE(command)->read.status = value;
+                                value = 11;
+                                *command = value;
+                                if (available && SYSTEM(command)->enabled)
+                                    g_DsReadyCallback(5, result);
+                            }
+                            if (g_DsSyncCallback && g_DsReadSysEnabled.enabled) {
+                                callbackEvent = 5;
+                                callback = g_DsSyncCallback;
+                            notify:
+                                callback(callbackEvent, result);
+                            }
+                        }
+                        return;
+                    }
+                }
+            }
+        } else {
+            if (STATE(command)->eventStatus & 16) {
+                STATE(command)->read.status = two;
+                *command = twelve;
+            } else if ((*command - 16) < 2) {
+                STATE(command)->read.status = 1;
+                *command = 11;
             }
         }
     }
 done:;
 }
 
-void CD_flush(void);
 
-s32 LIBDS_DSSYS_1_text_774(void) {
-    int *retry;
-    s32 value;
-    register s32 idx;
+void LIBDS_DSSYS_1_text_D24(int event, u8 *result) {
+    u32 event_reg;
+    register CdRomEventCommandState *cmd_state asm("$6");
+    int value;
+    int status;
+    CdRomCommandState *ready;
 
-    CD_flush();
-    retry = &g_CdRomCmdRetryState;
-    value = *retry;
-    idx = CDROM_EVENT_STATE_FROM_RETRY(retry)->pendingCommand;
-    value += 1;
-    idx <<= 2;
-    *retry = value;
-    {
-        CdTimeoutFlagAddress at;
-        at.flag = g_CdRomCmdLongTimeoutTable;
-        at.word += idx;
-        value = *at.flag;
+    event_reg = event & 0xFF;
+    if (event_reg == 2) {
+        cmd_state = &g_CdRomEventCommandState;
+        asm volatile("" : "=r"(cmd_state) : "0"(cmd_state));
+        status = cmd_state->pendingCommand;
+        value = 0xE;
+        if (status == value) {
+            value = cmd_state->command.read.commandMode;
+            status = cmd_state->pendingParamBytes[0];
+            if (((value ^ status) & 0x80) != 0) {
+                cmd_state->command.read.command = 0xF;
+                cmd_state->command.read.status = event_reg;
+                cmd_state->command.read.syncResult = 3;
+            }
+            cmd_state->command.read.commandMode = status;
+        }
     }
-    idx = 30;
-    if (value != 0) {
-        idx = 960;
-    }
-    CDROM_EVENT_STATE_FROM_RETRY(retry)->command.read.readyResult = idx;
-    value = CDROM_EVENT_STATE_FROM_RETRY(retry)->pendingCommand;
-    CD_cw(value, CDROM_EVENT_STATE_FROM_RETRY(retry)->pendingParams, 0, 1);
-    return 0;
-}
 
-void LIBDS_DSSYS_1_text_7FC(int inputEvent, void *inputResult) {
-    void *result = inputResult;
-    int event = inputEvent;
-    int *timeout;
-
-    LIBDS_DSSYS_1_text_EA4((unsigned char)event, result);
-    /* The timeout word anchors the surrounding CD command state. */
-    timeout = &g_CdRomCmdTimeout;
-    CDROM_EVENT_STATE_FROM_TIMEOUT(timeout)->command.retryAttempts = 0;
-    *timeout = 0;
-    if (CDROM_EVENT_STATE_FROM_TIMEOUT(timeout)->command.eventStatus & 0x10) event = 5;
-    switch (CDROM_EVENT_STATE_FROM_TIMEOUT(timeout)->command.eventValue) {
-    case 0x1F:
-        LIBDS_DSSYS_1_text_8B8((unsigned char)event, result);
-        break;
-    case 0x20:
-        LIBDS_DSSYS_1_text_A9C((unsigned char)event, result);
-        break;
-    default:
-        LIBDS_DSSYS_1_text_D24((unsigned char)event, result);
-        break;
+    status = event & 0xFF;
+    if (status == 5) {
+        ready = &g_CdSeekState;
+        asm volatile("" : "=r"(ready) : "0"(ready));
+        if (ready->eventStatus & 0x10) {
+            ready->read.status = 2;
+            ready->read.command = 12;
+            if (g_DsSyncCallback &&
+                ((CdRomSystemState *)((char *)ready -
+                    CDROM_SYSTEM_COMMAND_OFFSET))->enabled) {
+                g_DsSyncCallback(5, result);
+            }
+        } else {
+            ready->read.status = 1;
+            ready->read.command = 11;
+        }
     }
-    timeout = &g_CdRomCmdTimeout;
-    if (!*timeout) CDROM_EVENT_STATE_FROM_TIMEOUT(timeout)->command.eventValue = 0x21;
 }

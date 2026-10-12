@@ -1,4 +1,5 @@
-#ifndef PE1_EXT_AAEAD94D59D3
-#define PE1_EXT_AAEAD94D59D3
-extern void parcpy(void *, const void *);
-#endif /* PE1_EXT_AAEAD94D59D3 */
+#ifndef PE1_EXT_AAE103433A5E
+#define PE1_EXT_AAE103433A5E
+extern CdlLOC D_8009B582;
+extern u32 D_8009B578;
+#endif /* PE1_EXT_AAE103433A5E */

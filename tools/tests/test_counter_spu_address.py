@@ -18,7 +18,7 @@ CASES = [('libapi/counter',
   'D_8009B7D4 = 0x8009B7D4;\n'
   'SECTIONS { .text 0x80085814 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) '
   '*(.mdebug) } }'),
- ('libspu/spu_4',
+ ('libspu/spu_3',
   552,
   '51d8aaa835d28a54bae2e84948b52c900867d28f05b95065295c2c3fdb78f3e0',
   'D_8009B410 = 0x8009b410;\n_spu_RXX = 0x8009b3fc;\n_spu_mem_mode = 0x8009b420;\n_spu_sys_pcr = 0x8009b40c;\nSECTIONS { .text 0x8007dae0 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }')]

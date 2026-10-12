@@ -117,9 +117,9 @@ segments:
       - [0x2318, rodata, main/rodata_002318_pre_getintr]
       - [0x238C, .rodata, psyq/libcd/bios]
       - [0x23A0, rodata, main/rodata_0023A0_post_getintr]
-      - [0x249C, .rodata, psyq/libds/dssys_2_5]
+      - [0x249C, .rodata, psyq/libds/dssys_2_3]
       - [0x2500, rodata, main/rodata_002500]
-      - [0x250C, .rodata, psyq/libds/dssys_1_6]
+      - [0x250C, .rodata, psyq/libds/dssys_1_5]
       - [0x2574, rodata, main/rodata_002574]
       # Psy-Q 4.6 DSFILE.OBJ private strings (0x1F0-byte .rdata).
       - [0x266C, .rodata, psyq/libds/dsfile]
@@ -730,9 +730,9 @@ segments:
       - [0x6D9CC, pad]
       # Psy-Q LIBSPU SPU.OBJ initialization fragment.
       - [0x6D9D4, c, psyq/libspu/spu]
-      - [0x6DED0, c, psyq/libspu/spu_3]
+      - [0x6DED0, c, psyq/libspu/spu_2]
       # Contiguous Psy-Q LIBSPU SPU register access and control APIs.
-      - [0x6E2E0, c, psyq/libspu/spu_4]
+      - [0x6E2E0, c, psyq/libspu/spu_3]
       - [0x6E508, pad]
       - [0x6E514, c, psyq/libspu/s_dcb]
       - [0x6E538, pad]
@@ -773,19 +773,19 @@ segments:
       - {start: 0x6ED84, type: rodata, name: psyq/libcard/END_templates, linker_section_order: .text, linker_section: .psyq_text_data}
       # Psy-Q LIBDS DSSYS_2.OBJ (0x8007E594..0x8007F994) in five parts; parts 2 and 4 need GCC 2.8.1.
       - [0x6ED94, c, psyq/libds/dssys_2]
-      - [0x6F414, c, psyq/libds/dssys_2_4]
-      - [0x6F664, c, psyq/libds/dssys_2_5]
+      - [0x6F414, c, psyq/libds/dssys_2_2]
+      - [0x6F664, c, psyq/libds/dssys_2_3]
       # Psy-Q LIBDS DSSYS_1.OBJ (0x8007F994..0x80080AC4) in eleven parts; see dssys_1.c.
       - [0x70194, c, psyq/libds/dssys_1]
       - [0x7022C, c, psyq/libds/dssys_1_2]
       - [0x70304, c, psyq/libds/dssys_1_3]
-      - [0x704FC, c, psyq/libds/dssys_1_5]
-      - [0x70A20, c, psyq/libds/dssys_1_6]
-      - [0x70F78, c, psyq/libds/dssys_1_7]
-      - [0x7100C, c, psyq/libds/dssys_1_8]
-      - [0x710BC, c, psyq/libds/dssys_1_9]
-      - [0x71150, c, psyq/libds/dssys_1_10]
-      - [0x711E0, c, psyq/libds/dssys_1_11]
+      - [0x704FC, c, psyq/libds/dssys_1_4]
+      - [0x70A20, c, psyq/libds/dssys_1_5]
+      - [0x70F78, c, psyq/libds/dssys_1_6]
+      - [0x7100C, c, psyq/libds/dssys_1_7]
+      - [0x710BC, c, psyq/libds/dssys_1_8]
+      - [0x71150, c, psyq/libds/dssys_1_9]
+      - [0x711E0, c, psyq/libds/dssys_1_10]
       # Psy-Q LIBDS DSSYS_3.OBJ: mixer, sector, position and debug accessors.
       - [0x712C4, c, psyq/libds/dssys_3]
       - [0x71530, pad]

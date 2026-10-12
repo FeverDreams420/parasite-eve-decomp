@@ -1247,7 +1247,10 @@ and reads palette state after its helper. Remaining buffer fields are unknown.
 ## Psy-Q CD command retry wrapper
 
 `CdControl` in `psyq/libcd/sys_2.c` matches all 316 relocated
-bytes with stock GCC 2.8.1 and stock MASPSX. Three pins retain the saved
+bytes with stock GCC 2.7.2 and GNU as, the marker set of the rest of the
+SYS object; it first matched with GCC 2.8.1 and MASPSX, then with
+`-fno-schedule-insns`, which copying the command through the retry counter
+(`tries = cmd; cmd_reg = tries;`) made unnecessary. Three pins retain the saved
 callback, return value, and comparison constant. Removing them independently
 from the final zero candidate causes 15, 35, and 2 differing bytes.
 Five other pins were removed while retaining the match, including two after
@@ -1653,7 +1656,7 @@ delay slot naturally. The accepted source uses the equivalent `if/else`.
 Simply deleting the barrier while retaining the unconditional OR schedules
 that OR before the DMA register writes and leaves a nop in the branch slot.
 
-All four functions in `psyq/libspu/spu_3.c` compare at 100% against
+All four functions in `psyq/libspu/spu_2.c` compare at 100% against
 the prior SHA-verified object. The entire TU now contains no pins, barriers
 or instruction assembly. Full main and all 191 overlay SHA checks pass.
 

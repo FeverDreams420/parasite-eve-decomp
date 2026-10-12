@@ -9,7 +9,7 @@ import unittest
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 
 # Entire linked text ranges at their retail addresses.
-CASES = [('libds/dssys_1_6',
+CASES = [('libds/dssys_1_5',
   1368,
   'dce5b5d86421ed0faa869592a01a82b86f177654f0df0c1a0fbc90e0aefbc1d2',
   'g_CdRomEventCommandState = 0x8009B558;\ng_DsReadStatusBlock = 0x8009B574;\nD_8009B578 = 0x8009B578;\nD_8009B581 = 0x8009B581;\nD_8009B582 = 0x8009B582;\nD_8009B586 = 0x8009B586;\nD_8009B587 = 0x8009B587;\ng_DsSyncCallback = 0x800A36A4;\ng_DsReadyCallback = 0x800A36A8;\ng_DsDispatchCallback = 0x800A36AC;\ng_CdSeekState = 0x8009B56C;\ng_DsReadSysEnabled = 0x8009B554;\nSECTIONS { .text 0x80080220 : SUBALIGN(4) { *(.text .text.*) } .rodata 0x80011d0c : SUBALIGN(4) { *(.rodata) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }'),
@@ -46,7 +46,7 @@ class PsyqPadDsNextFourTests(unittest.TestCase):
                 self.assertEqual(len(code), size)
                 self.assertEqual(hashlib.sha256(code).hexdigest(), digest)
 
-                if name == "libds/dssys_1_6":
+                if name == "libds/dssys_1_5":
                     subprocess.run(["mipsel-none-elf-objcopy", "-O", "binary",
                                     "--only-section=.rodata", str(elf), str(data)],
                                    check=True)

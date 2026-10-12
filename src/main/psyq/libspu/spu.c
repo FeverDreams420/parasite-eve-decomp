@@ -1,5 +1,5 @@
 /* ASSEMBLER: GNU */
-/* PSY-Q LIBSPU SPU.OBJ: initialization, programmed I/O and DMA interrupt.
+/* PSY-Q LIBSPU SPU.OBJ, part 1 of 3: initialization, programmed I/O and DMA interrupt.
  * Transfer and register helpers retain separate compiler/assembler profiles. */
 #include "pe1/psyq_spu_internal.h"
 #include "pe1/psyq_bios.h"

@@ -309,11 +309,11 @@ byte-identical.
 | LIBAPI PATCH | 2 | 2 | `_patch_pad` is SDK assembler (policy) |
 | LIBCARD PATCH | 4 | 4 | parts 1 and 3 are SDK assembler (policy) |
 | LIBDS DSSYS_1 | 11 | 10 | neighbours alternate between GNU as with GCC 2.7.2 and GCC 2.8.1, several with their own scheduling option; the GCC 2.8.1 parts keep a base register in `$s0` across calls, which GCC 2.7.2 folds into absolute addresses (`DS_stop` lev 18, `tipDsSystem` 26, `DS_reset_members` 49 under GCC 2.7.2) |
-| LIBDS DSSYS_2 | 5 | 3 | `dssys_2.c` and `dssys_2_5.c` GCC 2.7.2 with GNU as; DsInit and DsReset (`dssys_2_4.c`) need GCC 2.8.1 with `-fno-schedule-insns2`: they clear two tables through a base register, which GCC 2.7.2 folds into absolute addresses (lev 43) |
+| LIBDS DSSYS_2 | 5 | 3 | `dssys_2.c` and `dssys_2_3.c` GCC 2.7.2 with GNU as; DsInit and DsReset (`dssys_2_2.c`) need GCC 2.8.1 with `-fno-schedule-insns2`: they clear two tables through a base register, which GCC 2.7.2 folds into absolute addresses (lev 43) |
 | LIBDS DSREAD | 2 | 2 | `dsread.c` GCC 2.7.2, `dsread_2.c` only builds with GCC 2.8.1 |
 | LIBDS DSFILE | 2 | 2 | `dsfile.c` GCC 2.8.1, `dsfile_2.c` GCC 2.7.2 |
 | LIBDS DSREADY | 5 | 2 | `dsready.c` GCC 2.8.1: `DsStartReadySystem` stores eight fields through a base register, which GCC 2.7.2 folds into absolute addresses (lev 23, `DsEndReadySystem` 9); `ER_cbsync` in `dsready_2.c` keeps the unfilled `jr ra` delay slot that GCC 2.8.1 always fills, so the object cannot move to GCC 2.8.1 either |
-| LIBSPU SPU | 4 | 3 | `spu.c` GCC 2.7.2 with GNU as, `spu_3.c` GCC 2.8.1, `spu_4.c` GCC 2.7.2 with the GNU as 2.8.1 assembler: `_spu_FsetRXXa` needs the old assembler's `remu` expansion (divide before the zero check) and `spu.c` the new assembler's `jal` delay-slot fill with the low half of `la`; no assembler here does both, as ASPSX did. `_spu_t` (`spu_3.c`) keeps a base register that GCC 2.7.2 folds (lev 26) |
+| LIBSPU SPU | 4 | 3 | `spu.c` GCC 2.7.2 with GNU as, `spu_2.c` GCC 2.8.1, `spu_3.c` GCC 2.7.2 with the GNU as 2.8.1 assembler: `_spu_FsetRXXa` needs the old assembler's `remu` expansion (divide before the zero check) and `spu.c` the new assembler's `jal` delay-slot fill with the low half of `la`; no assembler here does both, as ASPSX did. `_spu_t` (`spu_2.c`) keeps a base register that GCC 2.7.2 folds (lev 26) |
 
 Objects unified after a new C shape for the part that needed other
 markers (one unit each now):
@@ -358,7 +358,7 @@ markers (one unit each now):
   no longer knows the state pointer is a constant and keeps it in `$s0` as
   retail does; without it every field access folds into an absolute
   address. `ER_retry` no longer needs its `$3` register pin.
-- LIBSPU SPU parts 4 and 5 (`spu_4.c`, GNU as 2.8.1): `_spu_Fw1ts` counts
+- LIBSPU SPU parts 4 and 5, now part 3 (`spu_3.c`, GNU as 2.8.1): `_spu_Fw1ts` counts
   its volatile loop index with `i = i + 1`; `i++` reads the volatile twice
   under GCC 2.7.2.
 

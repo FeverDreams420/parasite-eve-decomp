@@ -1,5 +1,5 @@
 /* ASSEMBLER: GNU */
-/* Psy-Q LIBDS DSSYS_1.OBJ, parts 3 and 4: DS_close, DS_cw, DS_vsync_callback,
+/* Psy-Q LIBDS DSSYS_1.OBJ, part 3 of 10: DS_close, DS_cw, DS_vsync_callback,
  * DS_ready_callback, DS_start_callback, DS_sync_callback, DS_system_status,
  * DS_lastcom, DS_lastmode, DS_lastpos, DS_lastread, DS_lastseek, DS_status,
  * DS_sync, DS_ready, DS_shell_open, DS_cw_system. */

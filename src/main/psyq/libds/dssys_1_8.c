@@ -1,43 +1,49 @@
-/* Psy-Q LIBDS DSSYS_1.OBJ, part 8 of 11: LIBDS_DSSYS_1_text_EA4. */
+/* ASSEMBLER: GNU */
+/* GCC_VERSION: 2.8.1 */
+/* CC1_FLAGS: -mno-split-addresses */
+/* Psy-Q LIBDS DSSYS_1.OBJ, part 8 of 10: DS_stop, DS_restart, DS_system_active. */
 #include "common.h"
 #include "pe1/psyq_cd.h"
-#include "pe1/psyq_ds_queue.h"
+#include "pe1/cdrom.h"
 
-#include "dssys_1_8_externs.h"
+void CD_flush(void);
 
-void LIBDS_DSSYS_1_text_EA4(int event, u8 *data) {
-    u8 *data_reg;
-    DsDecodedEventFlags *state;
-    CdRomEventCommandState *eventState;
-    u8 value;
-    u8 *src;
-    int index;
+void DS_stop(void)
+{
+    CdRomSystemState *state;
+    u32 kind;
+    u32 cmp;
 
-    data_reg = data;
-    event &= 0xFF;
-    if (event != 5) {
+    state = &g_DsReadSysEnabled;
+    state->enabled = 0;
+    CD_flush();
 
-    index = D_8009B624[g_CdRomEventCommandState.pendingCommand] - 1;
-    if (index < 0) {
-        return;
+    if (state->view.system.command.read.status == 2) {
+        kind = state->view.system.command.read.command;
+        cmp = 0xB;
+        if (kind == cmp || ((cmp = 0x11), kind == cmp) || ((cmp = 0x10), kind == cmp)) {
+            DsReadStatusBlock *slot;
+            u32 value;
+
+            slot = &g_DsReadStatusBlock;
+            value = 1;
+            slot->status = value;
+            slot->command = 0xB;
+        }
     }
+}
 
-    } else {
-    index = 0;
-    }
-    src = data_reg + index;
-    value = src[0];
-    asm volatile("" : : "r"(value));
-    state = &g_CdRomEventCommandState.command.read.eventFlags;
-    asm volatile("" : "=r"(state) : "0"(state));
-    state->bit7 = value >> 7;
-    state->bit6 = (value >> 6) & 1;
-    state->bit5 = (value >> 5) & 1;
-    state->bit1 = (value >> 1) & 1;
-    eventState = (CdRomEventCommandState *)((u8 *)state -
-        (PE1_OFFSETOF(CdRomEventCommandState, command) +
-         PE1_OFFSETOF(CdRomCommandState, read) +
-         PE1_OFFSETOF(DsReadStatusBlock, eventFlags)));
-    eventState->command.eventStatus = value;
-    rescpy(eventState->eventResult, data_reg);
+void DS_restart(void) {
+    int enabled;
+    enabled = 1;
+    g_DsReadSysEnabled.enabled = enabled;
+}
+
+int DS_system_active(void) {
+    int scratch;
+    int enabled;
+
+    /* Keep $at live so the load uses $v0 as both base and destination. */
+    enabled = g_DsReadSysEnabled.enabled;
+    return enabled;
 }
