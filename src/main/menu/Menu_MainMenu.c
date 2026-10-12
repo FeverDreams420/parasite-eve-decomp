@@ -1,16 +1,357 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: --use-comm-section -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
+
+#include "pe1/menu_widget.h"
+#include "pe1/menu_dialog.h"
+#include "pe1/menu_inventory.h"
+#include "pe1/menu_item_rows.h"
+#include "pe1/menu_sound.h"
+#include "pe1/inventory_slots.h"
 #include "common.h"
+#include "pe1/draw_state.h"
+#include "pe1/draw_wipe_rect.h"
+#include "pe1/menu_queue.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/text.h"
+#include "pe1/menu_draw_list.h"
 #include "pe1/menu_bonus_stats.h"
 #include "pe1/menu_inventory_root.h"
 #include "pe1/menu_state.h"
 #include "pe1/menu_context_help.h"
-#include "pe1/menu_item_rows.h"
-#include "pe1/menu_queue.h"
 #include "pe1/battle_cmd.h"
 #include "pe1/battle_modifiers.h"
 #include "pe1/akao_counters.h"
+#include "pe1/inventory.h"
+#include "pe1/inventory_queries.h"
+#include "pe1/menu_equipment.h"
+
+/* COMMON supplies small-data metadata to MASPSX: these words are reached
+ * through $gp, every other extern stays absolute. */
+int g_MenuPendingTotalExp;
+int g_MenuSelectionLocked;
+int g_AyaFullInvHold;
+int g_InvSelectedItemIndex;
+int g_InvSwapTargetIndex;
+int g_MenuActionSubmenuOpen;
+int g_MenuBlendColorBackup;
+int g_MenuEquipSwapSource;
+
+int Menu_MainMenuInputHandler(MenuWidgetNode *arg0, u32 arg1);
+void Menu_OpenCursorModeMenu(MenuWidgetNode *parent);
+int Menu_ActionSubmenuInputHandler(MenuWidgetNode *arg0, u32 arg1);
+int Menu_CursorModeInputHandler(MenuWidgetNode *arg0, u32 arg1);
+
+void Menu_CreateMainMenuView(MenuWidgetNode *arg0) {
+    MenuWidgetNode *parent;
+    MenuWidgetNode *child;
+
+    parent = MenuWidget_CreateSimpleNode(0x20, arg0, 0, 0);
+    child = MenuWidget_CreateNode(0x20, parent, parent);
+    parent->update = Menu_MainMenuInputHandler;
+    child->draw = Menu_DrawMainMenuList;
+    MenuWidget_SetCurrentNode(child);
+    Draw_SetPrimCallback(child, 4);
+}
+
+int Menu_MainMenuInputHandler(MenuWidgetNode *arg0, u32 arg1) {
+    MenuWidgetNode *child = MenuWidget_GetChild(arg0, 0);
+
+    if (arg1 & 0x10000) {
+        switch (MenuWidget_GridCellIndex(child)) {
+        case 0:
+            Menu_CreateActionSubmenu(child);
+            break;
+        case 1:
+            Menu_OpenCursorModeMenu(child);
+            break;
+        case 2:
+            Menu_OpenBlendColorScreen(child);
+            break;
+        case 3:
+            Menu_OpenScreenAdjustView(child);
+            break;
+        case 4:
+        case 5:
+            Inv_InitMaxLevelInventory(MenuWidget_GridCellIndex(child) - 4);
+            MenuWidget_DestroyNode(arg0);
+            Menu_CreateBonusPointAllocationView();
+            Menu_PlayConfirmSound();
+            break;
+        }
+        Menu_PlayConfirmSound();
+        return 1;
+    }
+
+    if (arg1 & 0x40) {
+        MenuWidget_DestroyNode(arg0);
+        Menu_CreateBonusPointAllocationView();
+        Menu_PlayCancelSound();
+    }
+    return 1;
+}
+
+void Menu_CreateActionSubmenu(MenuWidgetNode *arg0) {
+    MenuWidgetNode *created;
+    MenuWidgetNode *node;
+
+    created = MenuWidget_CreateSimpleNode(0x21, arg0, 0, 0);
+    node = MenuWidget_CreateNode(0x21, created, created);
+    created->update = Menu_ActionSubmenuInputHandler;
+    node->draw = Menu_DrawActionSubmenuList;
+    MenuWidget_SetCurrentNode(node);
+}
+
+int Menu_ActionSubmenuInputHandler(MenuWidgetNode *arg0, u32 arg1) {
+    MenuWidgetNode *base;
+
+    base = MenuWidget_GetChild(arg0, 0);
+    if (arg1 & 0x10000) {
+        Menu_PlayConfirmSound();
+        Menu_SetActionSubmenuSelection(MenuWidget_GridCellIndex(base));
+        MenuWidget_DestroyNode(arg0);
+        return 1;
+    }
+    if (arg1 & 0x40) {
+        MenuWidget_DestroyNode(arg0);
+        Menu_PlayCancelSound();
+    }
+    return 1;
+}
+
+void Menu_OpenCursorModeMenu(MenuWidgetNode *arg0) {
+    MenuWidgetNode *created;
+    MenuWidgetNode *node;
+
+    created = MenuWidget_CreateSimpleNode(0x23, arg0, 0, 0);
+    node = MenuWidget_CreateNode(0x23, created, created);
+    created->update = Menu_CursorModeInputHandler;
+    node->draw = Menu_DrawCursorModeList;
+    MenuWidget_SetCurrentNode(node);
+}
+
+int Menu_CursorModeInputHandler(MenuWidgetNode *arg0, u32 arg1) {
+    MenuWidgetNode *base;
+
+    base = MenuWidget_GetChild(arg0, 0);
+    if (arg1 & 0x10000) {
+        Menu_PlayConfirmSound();
+        MenuWidget_SetColumnLayoutMode(MenuWidget_GridCellIndex(base));
+        MenuWidget_DestroyNode(arg0);
+        return 1;
+    }
+    if (arg1 & 0x40) {
+        MenuWidget_DestroyNode(arg0);
+        Menu_PlayCancelSound();
+    }
+    return 1;
+}
+
+void Menu_DrawBlendColorArrows(MenuWidgetNode *panel);
+s32 Menu_StepColorSelect(MenuWidgetNode *panel, s32 flags);
+void Menu_DrawBlendColorChannelList(int node);
+void Menu_DrawBlendColorOptionList(int node);
+void Menu_DrawScreenAdjustPanel(void);
+int Menu_ScreenAdjustInputHandler(void *node, int input);
+
+void Menu_OpenBlendColorScreen(MenuWidgetNode *arg0) {
+    MenuWidgetNode *parent;
+    MenuWidgetNode *panel;
+    MenuWidgetNode *options;
+
+    parent = MenuWidget_CreateSimpleNode(0x2E, arg0, 0, 0);
+    panel = MenuWidget_CreateNode(0x2E, parent, parent);
+    parent->draw = (void (*)())Menu_DrawBlendColorArrows;
+    parent->update = (void (*)())Menu_StepColorSelect;
+    parent->appearance.gradientPoints = g_MenuBlendColorPanelPoints;
+    parent->disabled = 1;
+    panel->draw = (void (*)())Menu_DrawBlendColorChannelList;
+    panel->flags = 1;
+    options = MenuWidget_CreateNode(0x31, parent, parent);
+    options->draw = (void (*)())Menu_DrawBlendColorOptionList;
+    panel->linkedNext = options;
+    options->linkedPrevious = panel;
+    MenuWidget_SetCurrentNode(panel->cursor_x < 0 ? options : panel);
+    g_MenuBlendColorBackup = Draw_GetBlendColor();
+}
+
+/* Up/down arrows over the three colour channels; the pair over the selected
+ * channel lights up while that direction is held. */
+void Menu_DrawBlendColorArrows(MenuWidgetNode *panel) {
+    int dimmed0;
+    int dimmed1;
+    int dimmed2;
+    int dimmed3;
+    int dimmed4;
+    int dimmed5;
+    u16 directionHeld;
+    s32 selectedChannel;
+
+    selectedChannel = MenuWidget_GridCellIndex(MenuWidget_GetChild(panel, 0));
+    directionHeld = MenuInput_GetStatusFlags() & 0x1000;
+    Draw_OffsetCursor(0x12, 5);
+    dimmed0 = 0;
+    if ((selectedChannel != 0) || (directionHeld == 0)) {
+        dimmed0 = 1;
+    }
+    Draw_SetTextDimmed(dimmed0);
+    Draw_AllocSprite(0x4A);
+    Draw_OffsetCursor(0x20, 0);
+    dimmed1 = 0;
+    if ((selectedChannel != 1) || (directionHeld == 0)) {
+        dimmed1 = 1;
+    }
+    Draw_SetTextDimmed(dimmed1);
+    Draw_AllocSprite(0x4A);
+    Draw_OffsetCursor(0x20, 0);
+    dimmed2 = 0;
+    if ((selectedChannel != 2) || (directionHeld == 0)) {
+        dimmed2 = 1;
+    }
+    Draw_SetTextDimmed(dimmed2);
+    Draw_AllocSprite(0x4A);
+    directionHeld = MenuInput_GetStatusFlags() & 0x4000;
+    Draw_OffsetCursor(-0x40, 0x19);
+    dimmed3 = 0;
+    if ((selectedChannel != 0) || (directionHeld == 0)) {
+        dimmed3 = 1;
+    }
+    Draw_SetTextDimmed(dimmed3);
+    Draw_AllocSprite(0x4B);
+    Draw_OffsetCursor(0x20, 0);
+    dimmed4 = 0;
+    if ((selectedChannel != 1) || (directionHeld == 0)) {
+        dimmed4 = 1;
+    }
+    Draw_SetTextDimmed(dimmed4);
+    Draw_AllocSprite(0x4B);
+    Draw_OffsetCursor(0x20, 0);
+    dimmed5 = 0;
+    if ((selectedChannel != 2) || (directionHeld == 0)) {
+        dimmed5 = 1;
+    }
+    Draw_SetTextDimmed(dimmed5);
+    Draw_AllocSprite(0x4B);
+}
+
+s32 Menu_StepColorSelect(MenuWidgetNode *panel, s32 flags) {
+    s32 shift;
+    s32 choice;
+    s32 color;
+    s32 level;
+    s32 value;
+    s32 others;
+    MenuWidgetNode *options;
+
+    shift = MenuWidget_GridCellIndex(MenuWidget_GetChild(panel, 0)) << 3;
+    color = Draw_GetBlendColor();
+    if (flags & 0x1000) {
+        others = color & ~(0xFF << shift);
+        level = ((color >> shift) & 0xFF) + 2;
+        if (level < 0xE9) {
+            value = level << shift;
+        } else {
+            value = 0xE8 << shift;
+        }
+        Draw_BlendColor(others | value);
+        Menu_PlayMoveSound();
+    } else if (flags & 0x4000) {
+        others = color & ~(0xFF << shift);
+        level = ((color >> shift) & 0xFF) - 2;
+        if (level >= 0x20) {
+            value = level << shift;
+        } else {
+            value = 0x20 << shift;
+        }
+        Draw_BlendColor(others | value);
+        Menu_PlayMoveSound();
+    } else if (flags & 0x10000) {
+        options = MenuWidget_GetChild(panel, 1);
+        choice = MenuWidget_GridCellIndex(options);
+        if (choice == 0) {
+            g_SavedDrawBlendColor[0] = Draw_GetBlendColor();
+            MenuWidget_DestroyNode(panel);
+        } else if (choice == 1) {
+            Draw_BlendColor(0x404040);
+            g_SavedDrawBlendColor[0] = Draw_GetBlendColor();
+            MenuWidget_DestroyNode(panel);
+        } else {
+            options->cursor_x = 0;
+            options->cursor_y = 0;
+            MenuWidget_SetCurrentNode(options);
+            MenuWidget_GetChild(panel, 0)->cursor_x = -1;
+        }
+        Menu_PlayConfirmSound();
+    } else if (flags & 0x40) {
+        MenuWidget_DestroyNode(panel);
+        Draw_BlendColor(g_MenuBlendColorBackup);
+        Menu_PlayCancelSound();
+    }
+    return 1;
+}
+
+void Menu_DrawBlendColorChannelList(int node) {
+    MenuWidget_DrawList((MenuWidgetNode *)node, Menu_DrawBlendColorChannelRow);
+}
+
+int g_MenuScreenBaseYBackup;
+
+void Menu_DrawBlendColorOptionList(int node) {
+    MenuWidget_DrawList((MenuWidgetNode *)node, Menu_DrawBlendColorOptionRow);
+}
+
+void Menu_OpenScreenAdjustView(MenuWidgetNode *parent) {
+    MenuWidgetNode *node;
+
+    node = MenuWidget_CreateSimpleNode(0x38, parent, 0, 1);
+    node->draw = (void (*)())Menu_DrawScreenAdjustPanel;
+    node->update = (void (*)())Menu_ScreenAdjustInputHandler;
+    MenuWidget_SetCurrentNode(node);
+    g_MenuScreenBaseYBackup = Draw_GetBaseY();
+}
+
+void Menu_DrawScreenAdjustPanel(void) {
+    Draw_OffsetCursor(0x10, 0xA);
+    Draw_PrintSignedNumberWidth3(8 - Draw_GetBaseY());
+    Draw_SetTextDimmed(VSync(-1) & 0x10);
+    Draw_OffsetCursor(-0x10, -0x69);
+    Draw_AllocSprite(0x7B);
+    Draw_OffsetCursor(0, 0xBE);
+    Draw_EmitGlyph(0x7B, 2);
+}
+
+int Menu_ScreenAdjustInputHandler(void *node, int input) {
+    int zero_arg;
+
+    do {
+        if ((input & 0x1000) != 0) {
+            zero_arg = 0;
+            input = -1;
+        } else if ((input & 0x4000) != 0) {
+            zero_arg = 0;
+            input = 1;
+        } else {
+            break;
+        }
+        Draw_SetBaseOffsetPosition(zero_arg, input);
+        Menu_PlayMoveSound();
+        return 1;
+    } while (0);
+
+    if ((input & 0x10000) != 0) {
+        MenuWidget_DestroyNode(node);
+        Menu_PlayConfirmSound();
+        return 1;
+    }
+
+    if ((input & 0x40) != 0) {
+        Draw_SetBaseOffsetPosition(0, g_MenuScreenBaseYBackup - Draw_GetBaseY());
+        MenuWidget_DestroyNode(node);
+        Menu_PlayCancelSound();
+    }
+
+    return 1;
+}
 
 void Menu_CreateExpReviewView(void);
 void Menu_DrawExpReviewPanel(void);
@@ -21,9 +362,6 @@ void Menu_CreateLevelUpResultPanel(void);
 void Menu_DrawBonusPointAnimFrame(void);
 s32 Menu_StepParasiteScreen(MenuWidgetNode *node, s32 flags);
 
-/* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
-int g_MenuPendingTotalExp;
-int g_MenuSelectionLocked;
 int g_BonusPointBarAnimProgress, g_BonusPointBarAnimStep;
 int g_BonusPointDisplayValue, g_MenuBonusPointDisplayTarget;
 int g_MenuBonusPointBarAnimActive;
@@ -162,7 +500,6 @@ void Menu_DrawExpReviewPanel(void) {
     Draw_StatePop();
 }
 
-
 s32 Menu_ConfirmExpAllocation(MenuWidgetNode *node, s32 flags) {
     s32 confirm;
     s32 new_level;
@@ -252,7 +589,6 @@ void Menu_InitBonusPointAllocState(int gained_points) {
     Menu_ResetInputState();
 }
 
-
 void Menu_CreateLevelUpResultPanel(void) {
     MenuWidgetNode *root;
     MenuWidgetNode *child;
@@ -272,8 +608,6 @@ void Menu_CreateLevelUpResultPanel(void) {
     Menu_InitStateTables();
 }
 
-
-
 void Menu_InitStateTables(void) {
     int i;
 
@@ -282,7 +616,6 @@ void Menu_InitStateTables(void) {
         g_MenuStatBarWidths[i] = 0;
     }
 }
-
 
 void Menu_DrawBonusPointAnimFrame(void) {
     int var_a0;
@@ -428,4 +761,47 @@ s32 Menu_StepParasiteScreen(MenuWidgetNode *arg0, s32 arg1) {
         Menu_PlayConfirmSound();
     }
     return 1;
+}
+
+#define NULL ((void *)0)
+
+s32 Menu_OpenEquipSlotSwap(s32 arg0) {
+    s32 temp_s2;
+    s32 temp_v1;
+    MenuWidgetNode *temp_a0;
+    MenuWidgetNode *temp_s1;
+    MenuWidgetNode *temp_v0;
+
+    temp_s2 = MenuWidget_FindByModeAndSelectedBase(1, 1) != NULL;
+    if (temp_s2 == 0) {
+        Queue_Init();
+        MenuWidget_CreateSimpleNode(0x1B, 0, 0, 0)->draw = (void (*)())Menu_DrawAmmoTypeHeader;
+        temp_v0 = MenuWidget_CreateSimpleNode(1, 0, 0, 0);
+        temp_s1 = MenuWidget_CreateNode(1, temp_v0, temp_v0);
+        temp_a0 = temp_s1;
+        temp_v0->update = (void (*)())Menu_InventoryInputHandler;
+        temp_s1->draw = (void (*)())Menu_DrawSelectableEquipSlotList;
+        MenuWidget_SetCurrentNode(temp_a0);
+        temp_s1->itemAction = (MenuWidgetItemAction)Inv_SwapSlots;
+        temp_s1->refreshItems = (void (*)(void))Menu_RebuildSelectableMask;
+        Inv_RebuildSelectableMask();
+        g_InvSwapTargetIndex = -1;
+        g_InvSelectedItemIndex = -1;
+        Draw_SetPrimCallback(temp_s1, Inv_GetAyaSlotLimit());
+        g_MenuActionSubmenuOpen = 0;
+        if (g_MenuEquipSwapSource != 0) {
+            temp_v1 = g_MenuEquipSwapSource - 1;
+            temp_s1->cursor_x = (temp_v1 & 1);
+            temp_s1->cursor_y = ((temp_v1 >> 1) & 0x7F);
+            temp_s1->scroll_y = (temp_v1 >> 8);
+        }
+        Menu_CreateContextHelpPanel();
+        MenuWidget_FindByModeAndSelectedBase(2, 1)->itemAction = NULL;
+        Inv_SortSlotsByPriority();
+        g_MenuActionSubmenuOpen = 1;
+        g_AyaFullInvHold = arg0;
+        g_MenuSelectionLocked = 0;
+        Menu_SetBattleEquipMode(0);
+    }
+    return temp_s2;
 }

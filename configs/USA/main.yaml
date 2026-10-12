@@ -108,7 +108,7 @@ segments:
       - [0x17F0, rodata, main/rodata_0017F0]
       - [0x17F4, .rodata, menu/Menu_ItemActions]
       - [0x1830, rodata, main/rodata_001830]
-      - [0x1834, .rodata, menu/Menu_CreateMainMenuView]
+      - [0x1834, .rodata, menu/Menu_MainMenu]
       - [0x184C, .rodata, menu/Menu_Dialogs]
       - [0x1940, rodata, main/rodata_001940]
       - [0x1944, .rodata, menu/Menu_InventoryScreens]
@@ -400,10 +400,10 @@ segments:
       # panel alignment, bonus-point slot handlers and the bonus-point flow (G0426).
       # One unit under cc1 -G8 and the COMMON-driven assembler -G8.
       - [0x37D60, c, menu/Menu_ItemActions]
-      - [0x3B59C, c, menu/Menu_CreateMainMenuView]
-      - [0x3B93C, c, menu/Menu_VisualSettingsFlow]
-      - [0x3BF0C, c, menu/Menu_LevelUpFlow]
-      - [0x3CB4C, c, menu/Menu_OpenEquipSlotSwap]
+      # Main menu view, visual settings (blend colour, screen adjust), level-up and
+      # bonus-point flow and the equip slot swap opener: one -G8 FORCE_G0 unit whose
+      # COMMON words are the ones retail reaches through $gp.
+      - [0x3B59C, c, menu/Menu_MainMenu]
       # Spell info and context help panels, notification and two-line dialogs, their
       # deferred confirm callback and the memory-card port dialog with its error
       # prompt share the widget panel helpers and dialog state (g_McDialogMode).

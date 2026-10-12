@@ -206,6 +206,14 @@ def build_source(units: list[str], markers: list[str] | None,
         parts[index] = (part[0], part[1], body, part[3])
         hoisted.extend(c for c in found if c not in hoisted)
     hoisted.extend(c for c in commons if c not in hoisted)
+    # one declarator per line, no repeats (`int a, b;` -> `int a;` `int b;`)
+    single: list[str] = []
+    for line in hoisted:
+        match = re.match(r"^((?:[A-Za-z_]\w*\s+)+)(\w+(?:\s*,\s*\w+)+);$", line)
+        split = ([f"{match.group(1).strip()} {name.strip()};"
+                  for name in match.group(2).split(",")] if match else [line])
+        single.extend(d for d in split if d not in single)
+    hoisted = single
     out = list(markers)
     if out:
         out.append("")
@@ -237,12 +245,54 @@ def build_source(units: list[str], markers: list[str] | None,
     return re.sub(r"\n{3,}", "\n\n", "\n".join(out) + "\n"), inlined
 
 
+def gp_commons(objs: list[str], units: list[str]) -> list[str]:
+    """Tentative definitions for the words the old objects reach through $gp.
+
+    Words the units already define (tentatively or not) are skipped. The type
+    comes from the word's `extern` declaration in include/ or in the units."""
+    import subprocess
+    words: set[str] = set()
+    defined: set[str] = set()
+    for obj in objs:
+        out = subprocess.run(["mipsel-none-elf-objdump", "-r", "-j", ".text", obj],
+                             capture_output=True, text=True, check=True).stdout
+        for line in out.splitlines():
+            parts = line.split()
+            if len(parts) == 3 and parts[1] == "R_MIPS_GPREL16":
+                sym = re.split(r"[+-]0x", parts[2])[0]
+                if not sym.startswith("."):
+                    words.add(sym)
+        out = subprocess.run(["mipsel-none-elf-nm", obj], capture_output=True,
+                             text=True, check=True).stdout
+        defined |= {l.split()[-1] for l in out.splitlines()
+                    if len(l.split()) == 3 and l.split()[1] != "U"}
+    texts = [(ROOT / u).read_text() for u in units] + [
+        p.read_text(errors="replace") for p in sorted((ROOT / "include").rglob("*.h"))]
+    decls = []
+    for word in sorted(words - defined):
+        pattern = re.compile(r"^\s*extern\s+([^;()]*?\b" + re.escape(word)
+                             + r"\b(?:\[[^\]]*\])?)\s*;", re.M)
+        found = None
+        for text in texts:
+            match = pattern.search(text)
+            if match:
+                found = match.group(1).strip()
+                break
+        if found is None or found.endswith("[]"):
+            sys.exit(f"no complete declaration for $gp word {word}")
+        decls.append(re.sub(r"\s+", " ", found) + ";")
+    return decls
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("new")
     parser.add_argument("units", nargs="+")
     parser.add_argument("--marker", action="append")
     parser.add_argument("--common", action="append", default=[])
+    parser.add_argument("--gp-commons", nargs="+", metavar="OBJ",
+                        help="add tentative definitions for the $gp words of "
+                             "these (old unit) objects")
     parser.add_argument("--externs-to", metavar="HEADER",
                         help="shared header that receives the private externs")
     parser.add_argument("--dry-run", action="store_true")
@@ -257,7 +307,10 @@ def main() -> int:
     if new in tracked and new not in units:
         sys.exit(f"target exists: {new}")
 
-    source, inlined = build_source(units, args.marker, args.common)
+    commons = list(args.common)
+    if args.gp_commons:
+        commons += [c for c in gp_commons(args.gp_commons, units) if c not in commons]
+    source, inlined = build_source(units, args.marker, commons)
     manifest = (ROOT / MANIFEST).read_text()
     new_manifest = collapse_manifest(manifest, units, new)
 
