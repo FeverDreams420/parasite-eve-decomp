@@ -80,14 +80,14 @@
  *   MAE 0.41 / tol48 100% / tol16 100% vs 9.png (vs 1.35 without).
  *
  * == DRAW / LOAD CODE ==
- *   loader  Scene_LoadFieldBg 0x8006AD40  src/main/scene/Scene_LoadFieldBg.c
+ *   loader  Scene_LoadFieldBg 0x8006AD40  src/main/scene/room_load.c
  *                                 (renamed from the mis-named Scene_Nop; room
  *                                 bg/asset loader, gated by g_GameState[0]&1)
  *                                 upload loop 0x8006AF18 (LoadImage records),
  *                                 tpage/clut pack loop 0x8006AFB4.
  *   Render_LoadMeshEntry 0x80066F60  builds the tile primitives (the format above).
  *   Render_DrawSpriteEntry 0x80067294  flat screen-space path (clips vs 320/224).
- *   Render_DrawActorShadow   0x80068014  src/main/render/Render_MeshListAndFade.c (GTE/OT).
+ *   Render_DrawActorShadow   0x80068014  src/main/render/mesh_list.c (GTE/OT).
  *   Render_BuildMeshList 0x80067A78 ; Render_LoadGeomState 0x80066800 ; called from
  *                     Entity_FrameUpdate 0x80035558 (@0x80035B0C).
  *   GetClut 0x80077AA4 ; GetTPage 0x80077A64 (libgpu).

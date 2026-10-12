@@ -85,7 +85,7 @@ void Save_SprintfSjis(unsigned char *dst, unsigned char *fmt);
  * item search uses its address as the end of the item records. */
 extern u16 D_800C1EAC[];
 
-/* Save title and card file assembly (MemCard_PortAndSaveFlow.c). */
+/* Save title and card file assembly (memcard/save_flow.c). */
 extern u8 g_SaveTitleBuffer[];
 extern u8 *g_SaveTitleFormatLongPtr;
 extern u8 *g_SaveTitleFormatShortPtr;

@@ -50,7 +50,7 @@ class CrutchDebtTests(unittest.TestCase):
             root = pathlib.Path(tmp)
             math = root / "main" / "math"
             math.mkdir(parents=True)
-            (math / "math_fixed.c").write_text(
+            (math / "fixed_round.c").write_text(
                 '/* ASSEMBLER: GNU */\n'
                 'GAME_ASM_FUNCTION(Math_FixedRoundToInt,\n'
                 '    "    ori $at, $zero, 0x8000\\n" "    add $v0, $a0, $at\\n"\n'
@@ -91,13 +91,13 @@ class CrutchDebtTests(unittest.TestCase):
             root = pathlib.Path(tmp) / "src"
             boot = root / "main" / "boot"
             boot.mkdir(parents=True)
-            (boot / "Boot_MainLoop.c").write_text(
+            (boot / "main.c").write_text(
                 'void main(void) {\n'
                 '    BOOT_CALL_ON_SCRATCHPAD_STACK(BOOT_SCRATCHPAD_STACK_TOP, f());\n'
                 '}\n')
             source_quality = crutch_debt.classify.__globals__
             original = source_quality["stack_switch_sources"]
-            source_quality["stack_switch_sources"] = lambda: {"main/boot/Boot_MainLoop.c"}
+            source_quality["stack_switch_sources"] = lambda: {"main/boot/main.c"}
             try:
                 _, totals, dirty, scopes = crutch_debt.collect_debt(root)
             finally:

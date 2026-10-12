@@ -287,10 +287,10 @@ the manifest entry, write the unit with the macro, flip its yaml subsegment to
 
 | Function | Unit | Size | Evidence |
 | --- | --- | --- | --- |
-| `Math_FixedMul` | `math/Math_FixedMul` | 28 | `mult`, then LO before HI, both shifted in place, `or v0,v1,v0`. Stock 2.7.2 and 2.8.1 compile `(long long)a * b >> 16` to HI before LO and keep the dead high-word shift (9 words, not 7). |
-| `Math_FixedRoundToInt`, `Math_FixedRoundToByte` | `math/math_fixed` | 16 + 16 | `ori $at, $zero, 0x8000` and trapping `add $v0, $a0, $at`: the assembler expansion of `add $v0, $a0, 0x8000`. GCC never allocates `$at` and emits `addu` for C addition. |
-| `Draw_PackPrimColor` | `draw/Draw_PackPrimColor` | 52 | Calls `Draw_FlushPrimQueue` without a frame: `ra` saved with `or $v1, $zero, $ra` and restored with `or $ra, $zero, $v1`; trapping `sub` in the `jal` delay slot and trapping `add` in the return delay slot. It returns `low + ((u16)r * (high - low) >> 16)` for the generator result `r`. |
-| `Math_SqrtApprox3` | `draw/Math_SqrtApprox3` | 136 | No frame; LO before HI for all three squares with two NOPs before each following `mult`; three unfilled `bgez` delay slots; the carry is added before the high words. Stock 2.7.2 and 2.8.1 compile the `long long` sum with an 8-byte stack spill, HI first, filled delay slots and a dead high-word shift. |
+| `Math_FixedMul` | `math/fixed_mul` | 28 | `mult`, then LO before HI, both shifted in place, `or v0,v1,v0`. Stock 2.7.2 and 2.8.1 compile `(long long)a * b >> 16` to HI before LO and keep the dead high-word shift (9 words, not 7). |
+| `Math_FixedRoundToInt`, `Math_FixedRoundToByte` | `math/fixed_round` | 16 + 16 | `ori $at, $zero, 0x8000` and trapping `add $v0, $a0, $at`: the assembler expansion of `add $v0, $a0, 0x8000`. GCC never allocates `$at` and emits `addu` for C addition. |
+| `Draw_PackPrimColor` | `draw/prim_color` | 52 | Calls `Draw_FlushPrimQueue` without a frame: `ra` saved with `or $v1, $zero, $ra` and restored with `or $ra, $zero, $v1`; trapping `sub` in the `jal` delay slot and trapping `add` in the return delay slot. It returns `low + ((u16)r * (high - low) >> 16)` for the generator result `r`. |
+| `Math_SqrtApprox3` | `math/sqrt_approx` | 136 | No frame; LO before HI for all three squares with two NOPs before each following `mult`; three unfilled `bgez` delay slots; the carry is added before the high words. Stock 2.7.2 and 2.8.1 compile the `long long` sum with an 8-byte stack spill, HI first, filled delay slots and a dead high-word shift. |
 
 Overlay SDK entries in the same manifest:
 
@@ -316,7 +316,7 @@ Rule: inside a C function, the only CPU instruction assembly allowed is
 `BOOT_CALL_ON_SCRATCHPAD_STACK(top, call)` from `include/pe1/boot_stack.h`,
 and only in the functions listed under `stack_switch_macros` in
 `configs/USA/original_asm_evidence.json`. Today that is one function, the boot
-entry `main` in `boot/Boot_MainLoop`.
+entry `main` in `boot/main`.
 
 Why C cannot express it: the retail code runs one call with `$sp` moved into
 the 1 KiB scratchpad. It parks the caller's `$sp` in the top word

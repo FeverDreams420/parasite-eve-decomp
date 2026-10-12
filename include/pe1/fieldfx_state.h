@@ -58,7 +58,7 @@ extern FieldFxSlot *g_FieldFxSlotTable;
 extern char g_FieldFxServiceThreadMissingMsg[];
 extern char g_FieldFxUpdateThreadMissingMsg[];
 
-/* Object passes (FieldFx_ObjectScript.c). FieldFx_Register runs the
+/* Object passes (fieldfx/object_script.c). FieldFx_Register runs the
  * service (draw) handler of every active slot, FieldFx_UpdateSlots the
  * update handler and frees the slots marked for teardown, FieldFx_RunScript
  * steps the command table and starts slots from the init list with the slot
@@ -77,14 +77,14 @@ void *FieldFx_StartSlot(void *obj, u8 id, u16 *sizes, FieldFxHandler *handlers);
 void FieldFx_ActivateSlot(u16 slot, u8 id, u16 size);
 int FieldFx_FreeSlot(u16 slot);
 int FieldFx_FreeAllSlots(void);
-/* Object status (FieldFx_CollisionQueries.c); 3 = running. */
+/* Object status (fieldfx/collision.c); 3 = running. */
 int FieldFx_GetStatus(void *obj);
 
 /* Shared XYZ origin consumed by field effect initializers. */
 struct FieldFxPointTriple;
 extern struct FieldFxPointTriple D_800E2290;
 
-/* Shape helpers (FieldFx_GeometryAndShapes.c): the two CLUT pixel blocks
+/* Shape helpers (fieldfx/geometry.c): the two CLUT pixel blocks
  * func_800CED3C uploads and the index of the loaded one, the colour-key table
  * and a word of the direction helpers. */
 extern void *D_800B0E18;

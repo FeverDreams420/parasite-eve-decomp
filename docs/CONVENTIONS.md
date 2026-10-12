@@ -30,7 +30,7 @@ Two principles decide most questions:
 | Enum constant / `#define` constant | `UPPER_SNAKE` with a subsystem prefix | `INV_CMD_GET_REMAINING_AMMO`, `STATE_FLAG_READY` |
 | Macro | `UPPER_SNAKE` with a prefix that names its owner | `PE1_OFFSETOF`, `PSYQ_BIOS_TRAMPOLINE`, `BOOT_CALL_ON_SCRATCHPAD_STACK` |
 | Header | `include/pe1/<subsystem>[_topic].h`, lower snake | `cdrom.h`, `menu_widget.h`, `akao/track.h` |
-| C file | named after the responsibility of the unit, same prefix as its functions | `Battle_EncounterFlow.c`, `Inv_ItemActions.c` |
+| C file (`src/main`) | lower snake case, the unit's role inside its subsystem directory, no directory or function prefix | `battle/encounter.c`, `item/actions.c`, `boot/main.c` |
 | PsyQ C file | the SDK object name, SDK case | `psyq/libspu/s_ini.c`, `psyq/libcd/sys.c` |
 
 Prefixes are fixed per subsystem (table below). Use the subsystem's prefix
@@ -59,6 +59,25 @@ renamed to `ScriptNode`, `g_FieldFxSlotTable`, `script_node.h`,
 and lists the documented exceptions (GTE and GPU hardware types, the libgpu
 headers) with `-v`; `rename_symbols.py --header OLD NEW` renames a header
 with its include guard.
+
+**Game file names.** A unit in `src/main/<subsystem>/` outside `psyq/` is
+named the way its developers would have named a C file: lower snake case,
+short, by the role of the unit inside its directory, unique there. The
+directory already names the subsystem, so the file name repeats neither it
+nor the function prefix (`battle/encounter.c`, not
+`battle/Battle_EncounterFlow.c` or `battle/battle_encounter.c`), and filler
+words (`Flow`, `Lifecycle`, `And`, `Driver`) are dropped
+(`akao/voice_bank.c`, `fieldfx/geometry.c`, `menu/status_panels.c`). A
+unit named after the one function it is known for keeps that function's
+plain name (`boot/main.c`). Function names keep their `Prefix_VerbObject`
+form; no file has to match a function. A unit whose functions belong to
+another subsystem than its neighbours' lives in its own subsystem's
+directory (`menu/main_update.c` lies between field and battle code).
+`make organization-check` counts names that break these rules
+(`unconventional_files`, ratcheted at zero). Overlay units keep their
+current names (`RoomLib_ActorClasses.c`). The function-style names the
+`src/main` units had before are listed with their new paths in
+`tools/reorg/maps/step9_snake_case_names.csv`.
 
 **PsyQ file names.** A unit under `psyq/<library>/` is named after the SDK
 object it reproduces, lower case (`INTR_VB` is `intr_vb.c`, the BIOS veneer
@@ -106,14 +125,14 @@ files in `memcard` (LIBPAD/LIBCARD), most of `pad` (LIBAPI PAD/PATCH), the
 64-bit helpers in `math` (LIBMATH), the `Spu_*` setters in `akao` (LIBSPU),
 and `gte` (LIBGTE). They move to `psyq/<library>/` under their SDK names.
 Confirm each with the provenance entry first: a unit can straddle an object
-edge, as `akao/Spu_TransferAndLifecycle` did before LIBPAD WAITRC2's
+edge, as `akao/spu_transfer.c` did before LIBPAD WAITRC2's
 `chkRC2wait` was split off it.
 
 | Directory | Prefix | Responsibility | Target |
 | --- | --- | --- | --- |
 | `psyq/lib*` | SDK names | Sony PsyQ 4.0 libraries, one directory per SDK library | keep; receives the units above |
 | `boot` | `Boot_` | `main`, start-up, subsystem init, the per-frame loop | keep |
-| `sys` | `Sys_` | interrupt and BIOS glue, shutdown and reset | dissolved: `Draw_ReportError` is in `draw`, `Asset_GameStateAndVoiceBanks` (with `Boot_Shutdown` and `Boot_FinishFrame`) in `asset`; SDK parts and `setjmp.c` (LIBAPI veneer) belong in `psyq`, where private LIBETC/LIBAPI routines keep their `Sys_` project names |
+| `sys` | `Sys_` | interrupt and BIOS glue, shutdown and reset | dissolved: `Draw_ReportError` is in `draw`, `asset/game_state.c` (with `Boot_Shutdown` and `Boot_FinishFrame`) in `asset`; SDK parts and `setjmp.c` (LIBAPI veneer) belong in `psyq`, where private LIBETC/LIBAPI routines keep their `Sys_` project names |
 | `cdrom` | `CdRom_` | game-side CD layer: sector reads from PE.IMG, retries, boot reads | keep; `cd_rom*.c`, `misc9.c` renamed by content |
 | `memcard` | `MemCard_` | memory-card access for saves | keep the game part; LIBPAD/LIBCARD units and BIOS veneers (`_card_*`, `InitCARD2`...) to `psyq` |
 | `pad` | `Pad_` | controller input | mostly LIBAPI: move to `psyq/libapi`; what remains joins `boot` or `menu` input |
@@ -132,7 +151,7 @@ edge, as `akao/Spu_TransferAndLifecycle` did before LIBPAD WAITRC2's
 | `script` | `Script_` | actor script interpreter: opcodes, expressions, node pool | keep (renamed from `task`, prefix from `Task_`); the former `Task_Gpu*` units are `Draw_*` in `draw` |
 | `pm` | `Pm_` | process manager: slot table that runs script batches | keep |
 | `event` | `Evt_` | game event delivery and deferred execution | dissolved: `Menu_DeferredExec` is in `menu`; the old `Evt_Deliver` was LIBMATH FERR `_err_math` (`psyq/libmath/ferr.c`) |
-| `battle` | `Battle_`, `BattleCmd_` | ATB battle: turns, targeting, damage, enemy AI, status display | keep; `Inv_Build*List.c` to `item`; `Math_IntSqrt` shares the battle command unit with the ammo commit (`BattleCmd_Commands.c`) |
+| `battle` | `Battle_`, `BattleCmd_` | ATB battle: turns, targeting, damage, enemy AI, status display | keep; `Inv_Build*List.c` to `item`; `Math_IntSqrt` shares the battle command unit with the ammo commit (`battle/commands.c`) |
 | `aya` | `Aya_` | the player character: stats, level table, parasite-energy spells | keep; `misc7.c` to `battle`, `Draw_LookupGlyphMetrics` to `draw` |
 | `item` | `Inv_`, `Item_` | inventory, item table, equipment and its modifiers | keep; `Menu_*` files to `menu` |
 | `menu` | `Menu_`, `MenuWidget_`, `MenuInput_` | in-game menus, widget tree, menu input queue | keep; `Inv_*`, `Save_*`, `Pad_*` files out to their owners |
@@ -141,7 +160,7 @@ edge, as `akao/Spu_TransferAndLifecycle` did before LIBPAD WAITRC2's
 | `audio` | `Sfx_` | misnamed: both files are menu item-list code | dissolved: the item-list functions are `Menu_*` (`Menu_ContextPick`, `Menu_DrawSlotRow`, ...) |
 | `time` | `GameTime_` | play-time counters and timers | keep |
 | `text` | `Text_` | text and textbox lookup tables, map-name and base-32 id strings | keep (renamed from `table`, prefixes from `Tbl_` and `Str_`); the textbox page helpers are `Draw_*` |
-| `util` | `Util_` | vague | dissolved: `util.c` is `item/Inv_ActiveList.c`; its helpers took their owners' prefixes (`Text_CopyFFTerminatedBytes`, `Akao_CopyWords`, `GameTime_PackTime`) |
+| `util` | `Util_` | vague | dissolved: `util.c` is `item/active_list.c`; its helpers took their owners' prefixes (`Text_CopyFFTerminatedBytes`, `Akao_CopyWords`, `GameTime_PackTime`) |
 | `main` | mixed | splat's default bucket, not a subsystem | dissolved: the battle units are in `battle`, `MapSelectionFlow` is in `script` |
 
 ## Overlays
@@ -238,7 +257,7 @@ name is the configured overlay name.
   marker text appears nowhere else in the file (cc.sh greps the whole file).
   The defaults are cc1 `-G0`, assembler `-G0`, MASPSX `--expand-div` and
   ASPSX 2.70; a unit that needs the opposite says `--no-expand-div`
-  (`Math_FixedDivide`) or `ASPSX_VERSION: 2.56` (`Battle_EncounterFlow`).
+  (`math/fixed_div.c`) or `ASPSX_VERSION: 2.56` (`battle/encounter.c`).
   Small data uses the K8 set (cc1 `-G8`, maspsx
   `-G8 --use-comm-section`, `MASPSX_FORCE_G0`) or K0 (the same without the
   cc1 marker), with one COMMON definition per word retail reaches through

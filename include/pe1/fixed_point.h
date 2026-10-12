@@ -18,7 +18,7 @@ static inline s16 Pe1Fixed_Integer(const s32 *value)
 }
 
 /* 16.16 product: the middle 32 bits of the signed 64-bit a * b
- * (src/main/math/Math_FixedMul.c). */
+ * (src/main/math/fixed_mul.c). */
 int Math_FixedMul(int a, int b);
 
 /* The same integer half read through a plain halfword pointer. GCC 2.7

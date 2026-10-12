@@ -5,7 +5,7 @@
 #include "pe1/field_collision.h"
 
 /* Field engine helpers called from the room and scene effects
- * (FieldFx_CollisionQueries.c). The definitions take typed
+ * (fieldfx/collision.c). The definitions take typed
  * records; each effect passes its own view, so these pointers are untyped. */
 
 /* Sends asset message `message` at a halfword position while the object is

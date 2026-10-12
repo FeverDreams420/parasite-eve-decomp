@@ -69,45 +69,45 @@ segments:
     bss_size: 0x0
     subsegments:
       # Expression and FieldActor Vec3 getter/setter switch tables.
-      - [0x800, .rodata, script/Script_ValueOps]
+      - [0x800, .rodata, script/value_ops]
       - [0x89C, rodata, main/rodata_00089C]
-      - [0x8A0, .rodata, script/Script_ActorOpcodes]
+      - [0x8A0, .rodata, script/actor_opcodes]
       - [0xE8C, rodata, main/rodata_000E8C]
-      - [0xE90, .rodata, script/Script_FlowOpcodes]
+      - [0xE90, .rodata, script/flow_opcodes]
       - [0xEA4, rodata, main/rodata_000EA4]
-      - [0xEE4, .rodata, battle/Entity_HitAndDropTable]
-      - [0xF0C, .rodata, battle/Battle_EnemyActions]
+      - [0xEE4, .rodata, entity/combat]
+      - [0xF0C, .rodata, battle/enemy_actions]
       - [0xF4C, rodata, main/rodata_000F4C]
-      - [0xF8C, .rodata, battle/Battle_AttackResolution]
+      - [0xF8C, .rodata, battle/attack]
       - [0x1068, pad] # retail alignment after the 17-entry Aya action jump table
-      - [0x106C, .rodata, battle/Battle_TurnFlow]
-      - [0x10E4, .rodata, battle/Battle_EnemyMovement]
-      - [0x10F0, .rodata, battle/Battle_EncounterFlow]
+      - [0x106C, .rodata, battle/turn]
+      - [0x10E4, .rodata, battle/enemy_movement]
+      - [0x10F0, .rodata, battle/encounter]
       - [0x1128, rodata, main/rodata_001128]
-      - [0x1288, .rodata, battle/Battle_Context]
-      - [0x15E4, .rodata, battle/Battle_StatusHud]
-      - [0x166C, .rodata, draw/Draw_Textbox]
+      - [0x1288, .rodata, battle/context]
+      - [0x15E4, .rodata, battle/status_hud]
+      - [0x166C, .rodata, draw/textbox]
       - [0x1694, rodata, main/rodata_001694]
-      - [0x1734, .rodata, memcard/MemCard_PortAndSaveFlow]
-      - [0x17AC, .rodata, menu/Menu_StatusPanels]
+      - [0x1734, .rodata, memcard/save_flow]
+      - [0x17AC, .rodata, menu/status_panels]
       - [0x17F0, rodata, main/rodata_0017F0]
-      - [0x17F4, .rodata, menu/Menu_ItemActions]
+      - [0x17F4, .rodata, menu/item_actions]
       - [0x1830, rodata, main/rodata_001830]
-      - [0x1834, .rodata, menu/Menu_MainMenu]
-      - [0x184C, .rodata, menu/Menu_SaveScreens]
+      - [0x1834, .rodata, menu/main_menu]
+      - [0x184C, .rodata, menu/save_screens]
       - [0x1940, rodata, main/rodata_001940]
-      - [0x1944, .rodata, menu/Menu_InventoryScreens]
-      - [0x1958, .rodata, battle/BattleCmd_Commands]
-      - [0x1A18, .rodata, aya/Aya_StatDerivation]
-      - [0x1A5C, .rodata, item/Inv_ActiveList]
-      - [0x1AA4, .rodata, item/Inv_ItemActions]
-      - [0x1ADC, .rodata, save/Save_GameData]
+      - [0x1944, .rodata, menu/inventory]
+      - [0x1958, .rodata, battle/commands]
+      - [0x1A18, .rodata, aya/stats]
+      - [0x1A5C, .rodata, item/active_list]
+      - [0x1AA4, .rodata, item/actions]
+      - [0x1ADC, .rodata, save/game_data]
       - [0x1B30, rodata, main/rodata_001B30]
-      - [0x1B88, .rodata, asset/Asset_GameStateAndVoiceBanks]
+      - [0x1B88, .rodata, asset/game_state]
       # Scene startup and entity texture jump tables share the loader TU.
-      - [0x1BB0, .rodata, scene/Scene_RoomLoad]
+      - [0x1BB0, .rodata, scene/room_load]
       # Both sector-state jump tables now belong to the shared object.
-      - [0x1C28, .rodata, cdrom/CdRom_TrackReadFlow]
+      - [0x1C28, .rodata, cdrom/track_read]
       - [0x1E0C, rodata, main/rodata_001E0C]
       - [0x1E1C, .rodata, psyq/libc/sprintf]
       - [0x1EF8, rodata, main/rodata_001EF8]
@@ -130,18 +130,18 @@ segments:
       - [0x28BC, .rodata, psyq/libspu/s_sca]
       - [0x28FC, .rodata, psyq/libspu/s_svva]
       - [0x2938, rodata, main/rodata_002938]
-      - [0x293C, .rodata, akao/Akao_SequencerFlow]
-      - [0x2A0C, c, boot/Boot_MainLoop]
+      - [0x293C, .rodata, akao/sequencer]
+      - [0x2A0C, c, boot/main]
       # Node-pool init, scene relocation, map flush and free-list setup share
       # the task-node pool and g_SceneDataTable1 (main_tu_evidence G0001);
       # allocation and garbage collection share the ScriptNode free list. One -G8
       # FORCE_G0 unit with -fno-strength-reduce.
-      - [0x2CF8, c, script/Script_NodePool]
+      - [0x2CF8, c, script/node_pool]
       # Expression, Vec3 get/set and mask-test opcodes: contiguous
       # default-profile handlers whose jump tables are adjacent in .rodata.
-      - [0x3050, c, script/Script_ValueOps]
+      - [0x3050, c, script/value_ops]
       # Task-node, point-motion, and camera tracking share the active entity cache.
-      - [0x39E8, c, script/Script_NodeActions]
+      - [0x39E8, c, script/node_actions]
       # Actor, camera, model and item opcodes: field-actor query and distance
       # routines (actor globals); memory-card init step, position by actor type,
       # relative camera offset tracking and camera angle fade; poly and scene load
@@ -151,14 +151,14 @@ segments:
       # sound opcodes. One -G8 FORCE_G0 unit with COMMON $gp words; the four zero
       # bytes that were main/rodata_0009AC are the alignment pad before the
       # 8-aligned sound command jump table, which the one object emits itself.
-      - [0x4A28, c, script/Script_ActorOpcodes]
+      - [0x4A28, c, script/actor_opcodes]
       # Script dispatcher, pending-node launch controller for equip and save/load
       # menus, interpreter loop, jump-to-actor-script and mark-dead opcodes,
       # node/flow opcodes (current-node active/free, jump-if-zero, spawn, assign,
       # stop-anim), actor and node field opcodes, bit and global-flag ops, action
       # mode and anim frame: one -G8 FORCE_G0 unit whose COMMON words are the
       # $gp ones; g_CurrentEntity stays absolute through the array declaration.
-      - [0x7110, c, script/Script_FlowOpcodes]
+      - [0x7110, c, script/flow_opcodes]
       # State, system, field-entity and scene opcodes: barcode, fog/scroll, camera
       # reset and render state, move lock, menu-choice branch, current-actor flags,
       # global flags and battle mode, field get/set by type and battle flags;
@@ -170,7 +170,7 @@ segments:
       # scene, game-time, parent-link and trigonometry opcodes (main_tu_evidence
       # G0199..G0215 have no split evidence). One unit under cc1 -G0 and the
       # FORCE_G0 assembler -G8 whose COMMON words are the $gp ones.
-      - [0x83B4, c, script/Script_SystemOpcodes]
+      - [0x83B4, c, script/system_opcodes]
       # Actor animation and collision (G0227): animation advancement and action
       # selection (per-model action tables), collision-state reset and database
       # relocation, the actor update list, actor floor lookup, boundary clipping,
@@ -178,28 +178,28 @@ segments:
       # wall sliding, nearest-edge testing and collision response, and the action id
       # match. One -G8 FORCE_G0 unit with COMMON $gp words, --expand-div and
       # ASPSX 2.70 (from the floor resolution, neutral for the rest).
-      - [0xACAC, c, field/Entity_ActorCollision]
-      - [0xDB40, c, battle/Menu_MainUpdate]
+      - [0xACAC, c, field/actor_collision]
+      - [0xDB40, c, menu/main_update]
       # Drop-table resolution and hit application share the active-actor helpers
       # (G0232); the timer update after them compiles in the same -g3 unit.
-      - [0xFCD4, c, battle/Entity_HitAndDropTable]
+      - [0xFCD4, c, entity/combat]
       # Sub-action step, enemy attack application and enemy animation setup: one
       # default-profile unit (the -g3 timer update before it stays separate).
-      - [0x109DC, c, battle/Battle_EnemyActions]
+      - [0x109DC, c, battle/enemy_actions]
       # Battle setup: begin-action and return-to-idle transitions (player combat
       # state), entity colours, global flag reset, battle init, pad and menu
       # queries, entity effect dispatch, evasion, target list and sort, pad state
       # sync, script sound flush and the script entry step. One -G8 FORCE_G0 unit
       # with COMMON $gp words (the old -G1/-G2 units' words among them) and
       # --expand-div.
-      - [0x11474, c, battle/Battle_Setup]
-      - [0x12738, c, battle/Battle_PlayerTurnFlow]
-      - [0x12B94, c, battle/Battle_PhaseAndEnemyEffectFlow]
+      - [0x11474, c, battle/setup]
+      - [0x12738, c, battle/player_turn]
+      - [0x12B94, c, battle/phase]
       # Attack resolution: finalise the attack result, resolve hits on the timer,
       # apply damage and spell effects and step Aya's action. One -G8 FORCE_G0
       # unit with COMMON $gp words and ASPSX 2.70 (from the Aya action step;
       # neutral for the rest, as is dropping -fno-force-mem).
-      - [0x13808, c, battle/Battle_AttackResolution]
+      - [0x13808, c, battle/attack]
       # Turn flow: special action dispatch, escape chance roll, target and enemy
       # turn, turn slot advance, target fade initializer and highlight animation
       # (their fade state), active entity marks and action slot processing. One
@@ -208,69 +208,69 @@ segments:
       # before its 8-aligned target jump table. The enemy movement after it stays
       # apart because one object would pad the 8-aligned turn-flow rodata after the
       # movement's 11 bytes (the link grows by 4).
-      - [0x15CBC, c, battle/Battle_TurnFlow]
+      - [0x15CBC, c, battle/turn]
       # Enemy movement step, entity facing update and entity anim state step: one
       # -G8 FORCE_G0 unit with COMMON $gp words and --expand-div.
-      - [0x18D74, c, battle/Battle_EnemyMovement]
+      - [0x18D74, c, battle/enemy_movement]
       # Encounter flow (G0263): save system init, encounter start and enemy stat
       # reset, the battle update, victory, level-up and post-battle steps, escape
       # and phase init and Aya's equip state. One -G8 FORCE_G0 unit with COMMON $gp
       # words and --expand-div; the player palette sets the story-day flag through
       # g_GameState, which retires the encounter init's cc1 -G0.
-      - [0x19B88, c, battle/Battle_EncounterFlow]
+      - [0x19B88, c, battle/encounter]
       # The enemy slot lifecycle reads g_BattleEquipStateBlock absolutely, which
       # the encounter flow reaches through $gp, so it stays a unit of its own.
-      - [0x1FFD8, c, battle/Battle_EnemySlotLifecycle]
+      - [0x1FFD8, c, battle/enemy_slots]
       # Battle context: script setters and event execution share the six-record
       # core layout; context accessors, enemy context fields, field writes by
       # command, angle and distance helpers, and the random drop and enemy spawn
       # checks (combatant state and rand()). One default-profile unit; the four
       # zero bytes that were main/rodata_001324 are the alignment pad before the
       # 8-aligned enemy-context jump table, which the one object now emits itself.
-      - [0x20210, c, battle/Battle_Context]
+      - [0x20210, c, battle/context]
       # Battle status HUD (G0283): HP bar, status overlay, status primitives and
       # numbers, status panel, the battle-status sprite and ordering-table renderer,
       # the window mode setter and getter (g_MenuActiveMode), exit signal, active
       # and enemy status, animation frame. One -G8 FORCE_G0 unit with COMMON $gp
       # words, --expand-div and ASPSX 2.70. It defines the status symbol templates
       # and window bounds that were main/rodata_0015FC as const data.
-      - [0x21094, c, battle/Battle_StatusHud]
+      - [0x21094, c, battle/status_hud]
       # Save slot metadata and save overlay draws (private join). One -G8
       # FORCE_G0 unit with COMMON $gp words.
-      - [0x2515C, c, menu/Menu_SaveSlotDraw]
+      - [0x2515C, c, menu/save_slot]
       # Pool reset and free-list setup share the entity pool globals and record block.
-      - [0x25710, c, entity/Entity_PoolInit]
+      - [0x25710, c, entity/pool]
       # Map entity loading and the per-frame entity driver with the actor list
       # passes it runs: position integration, rollback, parent following,
       # garbage collection, callbacks and animation sequences (G0296). One -G8
       # FORCE_G0 unit with COMMON $gp words (the entity pool globals); the pool
       # reset before it keeps -fno-strength-reduce.
-      - [0x25838, c, entity/Entity_FrameUpdate]
+      - [0x25838, c, entity/frame_update]
       # Scratch block allocator and the actor position/contact pass that closes the entity frame module.
-      - [0x26AB8, c, entity/Entity_AllocationAndContacts]
+      - [0x26AB8, c, entity/allocation]
 
       # PSYQ 4.0 object signature matches.
       - [0x275C8, c, psyq/libsnd/ssinit_c]
-      - [0x275F8, c, time/GameTime_Counters]
-      - [0x2788C, c, math/Math_FixedMul]
-      - [0x278A8, c, math/Math_FixedDivide]
-      - [0x278BC, c, math/math_fixed]
+      - [0x275F8, c, time/counters]
+      - [0x2788C, c, math/fixed_mul]
+      - [0x278A8, c, math/fixed_div]
+      - [0x278BC, c, math/fixed_round]
       # Draw-mode + sprite and draw-mode + tile packet initialisers (identical
       # SetDrawTPage/MargePrim shape); fog and colour-table setup, text cursor,
       # textbox table, movement flags, equip slot index, textbox drawing and
       # highlight colour share private state (G0310). One -G8 FORCE_G0 unit with
       # COMMON $gp words and ASPSX 2.70.
-      - [0x278DC, c, draw/Draw_Textbox]
-      - [0x29154, c, draw/Draw_ReportError]
+      - [0x278DC, c, draw/textbox]
+      - [0x29154, c, draw/error]
       # The glyph loader keeps -fno-schedule-insns, which changes its
       # neighbours, so it stays a unit of its own.
-      - [0x291DC, c, draw/Render_FontGlyphLoad]
+      - [0x291DC, c, render/font_load]
       # Glyph table lookups, selection flags, the shuffled code load and the
       # slot stepping: all of it works on g_FontSelectionState (G0313).
-      - [0x293C0, c, draw/Render_FontGlyphSelection]
+      - [0x293C0, c, render/font]
       # Scene flag-bit checks, bone rotation matrices and the byte and halfword
       # rotation decoders (G0315).
-      - [0x2A19C, c, anim/Anim_BoneRotations]
+      - [0x2A19C, c, anim/bone_rotations]
       # Object draw (G0320): rigid, skinned and morph vertex transforms over the
       # render-object vertex buffers; entity draw, textured quads and the entity
       # matrix builder; object drawing and its CLUT-table update; variant draw,
@@ -278,7 +278,7 @@ segments:
       # setup, animated draw and object-state helpers (RenderObjectEntity and
       # RenderMatrix). One -G8 FORCE_G0 unit with COMMON $gp words and --expand-div;
       # g_RenderCounter is declared unsized so its address stays in a register.
-      - [0x2A888, c, render/Render_ObjectDraw]
+      - [0x2A888, c, render/object]
       # Render_IncrementCounter's counter word lives in .text; it is data,
       # not a function (docs/CONVENTIONS.md, text-resident data).
       - {start: 0x2EE0C, type: data, name: render/Render_Counter, linker_section_order: .text, linker_section: .code_data}
@@ -286,50 +286,50 @@ segments:
       # callback and the pad/memory-card start-up (G0341/G0342); the render-flag
       # table builder and the per-frame pad and state transition handler share
       # private state (G0343). One -G8 FORCE_G0 unit with COMMON $gp words.
-      - [0x2EE10, c, boot/Boot_InitSystemFlow]
+      - [0x2EE10, c, boot/init]
       # GPU pipeline init is built without small-data address lowering (-G0 cc1)
       # and starts a new gprofile (split evidence); the fast scene flush and the
       # field frame loop that follow are -G8.
-      - [0x2F874, c, boot/Draw_InitPipeline]
+      - [0x2F874, c, draw/pipeline]
       # Fast scene flush, the field frame loop and the GTE lighting state setters:
       # one -G8 FORCE_G0 unit with COMMON $gp words.
-      - [0x2FAFC, c, boot/Boot_FrameLoop]
+      - [0x2FAFC, c, boot/frame_loop]
       # Save tail blob, title-style flag, card file presence, title-screen card
       # support, card port handling and the save flow share card state (G0354).
-      - [0x30000, c, memcard/MemCard_PortAndSaveFlow]
+      - [0x30000, c, memcard/save_flow]
       # Save background fade (gamma curve, fade step and fade state setters share the
       # fade state words; captured-frame update and draw controller), menu input,
       # item context and affordability, playtime class, save slot entry, stat bar
       # animation, inventory/bonus-point panel construction with its status/stat
       # draw callbacks and the item select step: one -G8 FORCE_G0 unit whose COMMON
       # words are the ones retail reaches through $gp.
-      - [0x33478, c, menu/Menu_StatusPanels]
+      - [0x33478, c, menu/status_panels]
       # Equip-screen construction and item-confirm handler share selection state.
       # Equip/inventory list screen, list input, count header and item action submenu: private data and helpers join the run.
-      - [0x34974, c, menu/Menu_EquipScreenFlow]
+      - [0x34974, c, menu/equip_screen]
       # Item label draw, yes/no dialog handler, item detail panel step and the discard
       # confirmation it opens (G0397; the label draw is its helper). -G8 FORCE_G0 with
       # -fno-expensive-optimizations, which the label draw does not mind.
-      - [0x355CC, c, menu/Menu_ItemDetailPanel]
+      - [0x355CC, c, menu/item_detail]
       # Ammo-spend panel construction, input and draw callback (selection state and a
       # typed MenuWidgetNode); equip-item selection view, stat preview, grid scroll,
       # slot step and the skill screen input handler it installs; inventory list view,
       # item detail draw and page input: one -G8 FORCE_G0 unit with COMMON $gp words.
-      - [0x359D0, c, menu/Menu_EquipItemSelection]
+      - [0x359D0, c, menu/equip_select]
       # Deferred execution, skill list step, equip confirm, skill action screen and
       # handler, inventory swap view and the weapon modifier flow: one -G8 FORCE_G0
       # unit with COMMON $gp words.
-      - [0x36B34, c, menu/Menu_SkillScreens]
+      - [0x36B34, c, menu/skills]
       # Configure screen; category tab reset, equip screen header, item action submenu,
       # skill select, equip stats, item detail and item list views (private data and
       # helpers); save/load screen step and navigation; inventory root step, equip
       # panel alignment, bonus-point slot handlers and the bonus-point flow (G0426).
       # One -G8 FORCE_G0 unit with COMMON $gp words.
-      - [0x37D60, c, menu/Menu_ItemActions]
+      - [0x37D60, c, menu/item_actions]
       # Main menu view, visual settings (blend colour, screen adjust), level-up and
       # bonus-point flow and the equip slot swap opener: one -G8 FORCE_G0 unit whose
       # COMMON words are the ones retail reaches through $gp.
-      - [0x3B59C, c, menu/Menu_MainMenu]
+      - [0x3B59C, c, menu/main_menu]
       # Spell info and context help panels, notification and two-line dialogs, their
       # deferred confirm callback and the memory-card port dialog with its error
       # prompt share the widget panel helpers and dialog state (g_McDialogMode); the
@@ -339,7 +339,7 @@ segments:
       # the name entry page input handlers (private data and helpers). One -G8
       # FORCE_G0 unit with COMMON $gp words; the name entry clears the game-state flags
       # through D_800B0CD8, which retires its old cc1 -G4096 marker.
-      - [0x3CCB4, c, menu/Menu_SaveScreens]
+      - [0x3CCB4, c, menu/save_screens]
       # Inventory screens (G0464): equip and inventory screen builders and the equip
       # list container draw (helper calls, G0462); weapon and armor list draws, the
       # inventory category step and the battle command list draw; the inventory pick
@@ -348,7 +348,7 @@ segments:
       # context-action, action-option and action-code list renderers (active widget
       # and item list state); item-slot availability, modifier, armor and memory-card
       # port list draws and the port and save-slot selectability filters.
-      - [0x3EF04, c, menu/Menu_InventoryScreens]
+      - [0x3EF04, c, menu/inventory]
       # List callbacks and row drawers: list-draw adapters with the icon, save-slot,
       # sound-effect and equip-detail lists and the equip sort-toggle and info-option
       # rows; selected-slot write/read starts and both write confirmation handlers;
@@ -357,7 +357,7 @@ segments:
       # equipped slots, action codes, modifier names, armor cells, table text, stat
       # bars, item icons, save slots and the sound-effect cursor). One -G8
       # FORCE_G0 unit with COMMON $gp words.
-      - [0x406EC, c, menu/Menu_ListDrawers]
+      - [0x406EC, c, menu/lists]
       # Battle commands: command table cursor init, command-stack allocation and
       # rollback (cursor and record ABI), the active-list command and its pending
       # result accessors (D_8009D010), active-stat synchronization and HP writes
@@ -367,11 +367,11 @@ segments:
       # and the scaled max HP. One -G8 FORCE_G0 unit with COMMON $gp words; the
       # four zero bytes that were main/rodata_00196C and main/rodata_0019A4 are
       # the pads before its 8-aligned jump tables and the weapon-list constants.
-      - [0x41884, c, battle/BattleCmd_Commands]
+      - [0x41884, c, battle/commands]
       # Aya stats: bonus slot count, armor list build, stat derivation, menu sounds
       # and battle queries. One -G8 FORCE_G0 unit with COMMON $gp words (the armor
       # list and stat derivation were cc1 -G0 only for their absolute words).
-      - [0x42648, c, aya/Aya_StatDerivation]
+      - [0x42648, c, aya/stats]
       # Active inventory list: BGM volume fade, action submenu selection, counter
       # seconds; item-drop random table seeding and per-draw refresh
       # (g_ItemDropRngIndex); byte-string helpers, item grid rebuild and active-list
@@ -381,78 +381,78 @@ segments:
       # kinds and the packed-list accessors; filtered active-list builders; eligible
       # slot count, random item pick, pick message text and active-list compaction.
       # One -G8 FORCE_G0 unit with COMMON $gp words.
-      - [0x42F0C, c, item/Inv_ActiveList]
+      - [0x42F0C, c, item/active_list]
       # Capacity check and equip modifier validation, random item type roll, parasite
       # spell packing and unlock, packed-list items, and the selection masks, ammo
       # transfer, comparison panels, item actions and active-list controller (shared
       # records and direct calls): one -G8 FORCE_G0 unit with COMMON $gp words.
-      - [0x4564C, c, item/Inv_ItemActions]
+      - [0x4564C, c, item/actions]
       # Item transfer and swap: menu getters, item transfer, Aya list eligibility,
       # armor detail draw, Wayne-list item lookup, kind filtering, filtered-slot
       # lookup, eligibility and swaps. One -G8 FORCE_G0 unit with COMMON $gp words.
       # The item use panel opener and the armor capacity unit after it each keep
       # their own LookupTrackedItem inline shape, so they stay separate units.
-      - [0x486CC, c, item/Inv_InventorySwap]
-      - [0x49D34, c, item/Menu_OpenItemUsePanelAtIndex]
+      - [0x486CC, c, item/swap]
+      - [0x49D34, c, menu/item_use_panel]
       # Armor capacity, snapshots, selection restore and transfers share the
       # item-runtime state; item comparators, subrange passes and all sort
       # dispatchers share the active sort state; battle equip mode. One -G8
       # FORCE_G0 unit with COMMON $gp words.
-      - [0x49E8C, c, item/Inv_ArmorCapacity]
+      - [0x49E8C, c, item/armor_capacity]
       # Save data: stat helpers; metadata-window reset, selection, editing, loading
       # and accessors (with its common index); item lookup, inventory opening and
       # card-dialog gating (menu state); save header build and restore; error-sound
       # requests and both frame entry points (their pending flag); bonus-slot
       # selection, the current map number, scroll direction and the inventory
       # bootstrap. One -G8 FORCE_G0 unit with COMMON $gp words and --expand-div.
-      - [0x4C0A8, c, save/Save_GameData]
+      - [0x4C0A8, c, save/game_data]
       # Default-profile lookups into the resident data tables: menu descriptors,
       # glyphs, items, stats, Aya level/EXP/spell tables and the string tables.
-      - [0x4E28C, c, text/Text_DataTableLookups]
+      - [0x4E28C, c, text/tables]
       # Event queue, input dispatch and frame presentation share -G8/common.
-      - [0x4E688, c, menu/queue]
+      - [0x4E688, c, menu/input_queue]
       # Base-offset setter and Y accessor; cursor/colour state, rectangle
       # allocation, glyph sprites, text/number packets, wrapping and stat bars
       # share typed draw state. One -G8 FORCE_G0 unit with COMMON $gp words,
       # -fno-cse-skip-blocks and --expand-div (neutral for the base offset).
-      - [0x4F050, c, draw/Draw_TextPrimitives]
+      - [0x4F050, c, draw/text]
       # The colour quad keeps -fno-schedule-insns, which the text primitives
       # and the wipes around it do not match under.
-      - [0x51844, c, draw/Draw_AllocColorQuad]
+      - [0x51844, c, draw/color_quad]
       # Blend colour, screen wipes, gradients and colour packet allocators share
       # the draw runtime; one -G8 FORCE_G0 unit with COMMON $gp words.
-      - [0x51CA0, c, draw/Draw_WipeAndGradient]
+      - [0x51CA0, c, draw/wipe]
       # Pool, recursive drawing, node lookups, labels, scrolling, layouts and popups
       # share their typed widget state; one -G8 FORCE_G0 unit with COMMON $gp
       # words and --expand-div.
-      - [0x52D68, c, menu/MenuWidget_Lifecycle]
+      - [0x52D68, c, menu/widget]
       # Field sound event enqueue/reset and actor dispatch share queue records.
-      - [0x55B6C, c, script/Script_FieldSfxQueue]
+      - [0x55B6C, c, script/sfx_queue]
       # Geometry control entries (reset, animation update and slot commands share
       # GeomCtrlEntry) and the view state reset, camera clamp, bounds, viewport and
       # GTE offsets, scroll mode and screen transitions (private state, G0819). One
       # default-profile unit with --expand-div; the entries match without the old
       # -fno-force-mem.
-      - [0x55DD4, c, render/Render_CameraViewportFlow]
+      - [0x55DD4, c, render/camera]
       # Tile packet setup and point clamping share GeomEntry flags/depth and bounds.
-      - [0x57760, c, render/Render_LoadMeshEntry]
+      - [0x57760, c, render/mesh_entry]
       # Sprite entry setters, the geometry mesh list build and draw, the screen
       # fade and tint, background scroll/parallax and room/primitive colour
       # drawing (G0833/G0835). One -fno-strength-reduce unit: the scroll loop
       # walks its entry pointer itself.
-      - [0x57A94, c, render/Render_MeshListAndFade]
+      - [0x57A94, c, render/mesh_list]
       # OT sort and grid cursor step; per-frame camera preparation and render
       # update, the screen-tint reset and the tint/scroll slot step share the
       # D_800BCF88 scroll state with its embedded RenderTintState (helper
       # evidence; no split evidence). One -G8 FORCE_G0 unit with COMMON $gp
       # words (the grid cursor) and Render_SetCDDCSlot's --expand-div.
-      - [0x58F10, c, render/Render_FrameUpdateAndScreenState]
+      - [0x58F10, c, render/frame_update]
       # TIM texture loading and the primary and secondary bank drivers (the
       # game-state gating flags): one default-profile unit.
-      - [0x5994C, c, asset/Asset_LoadTimTextures]
+      - [0x5994C, c, asset/tim_textures]
       # Table entry unload keeps -fno-force-mem (lev 1 without it; the TIM loader
       # does not match with it), so it stays a unit of its own.
-      - [0x59EF0, c, asset/Asset_UnloadTableEntries]
+      - [0x59EF0, c, asset/unload_table]
       # Display list init, disc-image discovery and boot notice (same mount state);
       # end-of-frame overlay pass, soft-reset shutdown, vertical-offset update,
       # the actor voice-bank loader, the sound and DS shell reset,
@@ -460,19 +460,19 @@ segments:
       # voice-bank reset: one default-profile unit; the voice-bank table
       # D_80094488 is read by the loader and cleared by the reset (private
       # evidence into the reset; helper/call/private evidence over the rest).
-      - [0x5A0D4, c, asset/Asset_GameStateAndVoiceBanks]
+      - [0x5A0D4, c, asset/game_state]
       # Scene and room loading: startup data and field background loading (scene
       # resource state), the alternate voice-bank load, the room loader, texture-page
       # streaming, disc-change gating, entity textures, player startup and story-day
       # changes and the background draw update. One -G8 FORCE_G0 unit with COMMON $gp
       # words (the room loader's old -G1 word is one of them).
-      - [0x5B1E4, c, scene/Scene_RoomLoad]
+      - [0x5B1E4, c, scene/room_load]
       # Sector reads, the range scanner, the scene-audio key reset and the
       # track seek/read state machine share the CD sector-read and scene audio
       # state (helper evidence across the reset); the audio slot registration and
       # its two lookups share the scene audio keys. One -G8 FORCE_G0 unit with
       # COMMON $gp words.
-      - [0x5D5A4, c, cdrom/CdRom_TrackReadFlow]
+      - [0x5D5A4, c, cdrom/track_read]
       # Scene asset-directory unit: the key-type search, the positional sound
       # senders (scene-table and BGM-handle wrappers, 3D send path, table-command
       # lookup, GTE pan/volume projection; the two Asset_Find08* names are legacy
@@ -480,28 +480,28 @@ segments:
       # searches sharing SceneAssetDirectory call one another (helper and call
       # evidence, no split evidence); display clearing and the CD boot reads share
       # scene flags and the default profile. --expand-div covers the pan projection.
-      - [0x5E418, c, cdrom/CdRom_SceneAssetsAndBootRead]
+      - [0x5E418, c, cdrom/scene_assets]
       # Display initialisation, the draw-enabled and sequence-elapsed queries, the
       # draw-status check and the TIM table loaders: the queries share
       # g_DrawEnabled and g_SeqElapsed (private evidence), contiguous
       # default-profile run with no split evidence.
-      - [0x5F1A0, c, pm/Boot_DisplayInitAndDiscTables]
+      - [0x5F1A0, c, pm/disc_tables]
       # Slot allocation opens the contiguous process-manager slot API. Separate
       # translation unit: the disc table loaders above inline the extern inline
       # CdRom_PollReady (pe1/cd_poll.h), Scene_LoadRoomAssets here calls it.
-      - [0x5FA24, c, pm/Pm_ProcessManager]
-      - [0x60C1C, c, draw/Render_DrawWireframeModel]
-      - [0x61510, c, draw/Draw_InitGpuHwRegs]
-      - [0x6156C, c, draw/Draw_FlushPrimQueue]
-      - [0x615D0, c, draw/Draw_PackPrimColor]
+      - [0x5FA24, c, pm/process]
+      - [0x60C1C, c, render/wireframe]
+      - [0x61510, c, draw/gpu_regs]
+      - [0x6156C, c, draw/prim_queue]
+      - [0x615D0, c, draw/prim_color]
       - [0x61604, pad] # zero words after Draw_PackPrimColor's jr ra
-      - [0x61654, c, draw/Draw_RenderFrame]
-      - [0x617AC, c, draw/Math_SqrtApprox3]
+      - [0x61654, c, draw/frame]
+      - [0x617AC, c, math/sqrt_approx]
       # Player movement state handlers share the pad/analog and camera-angle
       # globals and the default profile (main_tu_evidence G0920..G0923). The game
       # TIM container helpers at the end (no Psy-Q signature matches) are the last
       # game code before the LIBC veneers.
-      - [0x61834, c, scene/Scene_PlayerMovement]
+      - [0x61834, c, scene/player_movement]
       - [0x621E4, c, psyq/libc/a56]
       - [0x621F4, c, psyq/libc/c21]
       - [0x62204, c, psyq/libc/c24]
@@ -829,7 +829,7 @@ segments:
       - [0x757B8, pad]
       - [0x757C4, c, psyq/libpad/waitrc2]
       # SPU transfer and lifecycle routines share one game-side source unit.
-      - [0x75884, c, akao/Spu_TransferAndLifecycle]
+      - [0x75884, c, akao/spu_transfer]
       - [0x75FE4, c, psyq/libapi/a09]
       - [0x75FF4, c, psyq/libapi/a13]
       - [0x76004, c, psyq/libapi/a32]
@@ -870,13 +870,13 @@ segments:
       # voice control (register writers, per-voice parameters, envelope ticks,
       # key on/off, voice queue and mask setters): one contiguous
       # default-profile AKAO driver unit sharing AkaoTrack voice state.
-      - [0x76C64, c, akao/Akao_SpuVoiceDriver]
+      - [0x76C64, c, akao/voice_driver]
       - [0x7A6B8, c, psyq/libspu/s_snc]
       - [0x7A708, c, psyq/libspu/s_gvex]
       - [0x7A724, pad]
       - [0x7A728, c, psyq/libspu/s_srmd]
       # Voice-bank setup, propagation and parameter lifecycle share AKAO state.
-      - [0x7A758, c, akao/Akao_VoiceBankLifecycle]
+      - [0x7A758, c, akao/voice_bank]
       - [0x7D770, c, psyq/libspu/s_srmt]
       - [0x7D93C, pad]
       - [0x7D940, c, psyq/libspu/s_sra]
@@ -886,7 +886,7 @@ segments:
       # SPU ticking, sample-bank scanning, note stepping, track parameters,
       # slides, masks and note commands: the --expand-div sequencer unit
       # sharing AKAO track state.
-      - [0x7DFC0, c, akao/Akao_SequencerFlow]
+      - [0x7DFC0, c, akao/sequencer]
       - [0x818A0, data, main/dtail_gp_pre_s016]
       - [0x84D28, .data, psyq/libc/sprintf]
       - [0x84D34, data, main/dtail_gp_post_sprintf]
@@ -899,9 +899,9 @@ segments:
       # Psy-Q 4.6 DSFILE.OBJ media-state words and section padding.
       - [0x8BEDC, .data, psyq/libds/dsfile]
       - [0x8BEEC, data, main/dtail_gp_post_dsfile]
-      - {start: 0x8D5A0, type: .sdata, name: render/Render_ObjectDraw, linker_section_order: .data}
+      - {start: 0x8D5A0, type: .sdata, name: render/object, linker_section_order: .data}
       - [0x8D5A4, data, main/dtail_gp_post_render_color]
-      - [0x8DA54, .data, field/Entity_ActorCollision]
+      - [0x8DA54, .data, field/actor_collision]
       - [0x8DA58, data, main/dtail_gp_post_collision_actor]
 
   # Data separates the initial code from the field-engine code. Keep a
@@ -915,38 +915,38 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0xB24A0, rodata, engine/engine_800C1CA0]
-      - [0xB2928, .rodata, fieldfx/FieldFx_SpriteRendering]
+      - [0xB2928, .rodata, fieldfx/sprite_render]
       - [0xB293C, rodata, engine/engine_800C213C]
-      - [0xB2AA4, .rodata, fieldfx/FieldFx_GeometryAndShapes]
+      - [0xB2AA4, .rodata, fieldfx/geometry]
       - [0xB2ABC, rodata, engine/engine_800C22BC]
       # Object slot reset and dispatch, the script interpreter, slot allocation and cleanup share FieldFxState (G1389, helper evidence into the cleanup pair).
-      - [0xB2AF8, c, fieldfx/FieldFx_ObjectScript]
+      - [0xB2AF8, c, fieldfx/object_script]
       # Sprite draw state, oriented sprite, billboard, glow sprite, shaded quad and ring, textured strip and particle chain draws share the draw state (G1390).
-      - [0xB36AC, c, fieldfx/FieldFx_SpriteRendering]
+      - [0xB36AC, c, fieldfx/sprite_render]
       # Field collision queries: ring entry, radius and floor-triangle tests, placement
       # normals and asset lookups, player/entity collision and object status. One unit
       # under -fno-strength-reduce (the old three-way split matched under it unchanged).
-      - [0xB66B0, c, fieldfx/FieldFx_CollisionQueries]
+      - [0xB66B0, c, fieldfx/collision]
       # UV scroll, render-state setters, colour-table helpers and the textured model draw
       # share the model header and the tpage/CLUT/semi-transparency state (TU evidence:
       # private data D_800F346C, D_800F3414, D_800F33E4, D_800F3420).
-      - [0xB755C, c, fieldfx/FieldFx_TexturedModel]
+      - [0xB755C, c, fieldfx/model]
       # Eight field effect objects. The descriptor table D_80094188 lists them; each
       # descriptor names a setup function, the spawn/register/update entry points and the
       # particle and state callback lists. Every module starts with its setup function and
       # ends with its state callbacks, and the data each setup function points at sits after
       # that module's own lists. The four glow classes are one unit, and the point sprite
       # and the three burst classes another (each contiguous under one marker set).
-      - [0xB83A0, c, fieldfx/FieldFx_GlowEffects]
-      - [0xBC4A4, c, fieldfx/FieldFx_BurstEffects]
+      - [0xB83A0, c, fieldfx/glow]
+      - [0xBC4A4, c, fieldfx/burst]
       # Task program binding, task-list setup/allocation/ticking/callback dispatch and the anchor position query.
-      - [0xBEC9C, c, fieldfx/FieldFx_TaskList]
+      - [0xBEC9C, c, fieldfx/task_list]
       # Transform, direction and colour helpers with the shape builders that use them (G1558);
       # the effect primitive builders: rotated triangle, history trail, fade tile, point tiles,
       # rotated quad (G1559), orbit tile, glow line, textured ribbon, point history and pulled
       # sprite; and effect task spawning: the descriptor at D_800E13D4 names the asset
       # bootstrap, the object lifecycle callbacks and the task spawn entry together.
-      - [0xBF0F0, c, fieldfx/FieldFx_GeometryAndShapes]
+      - [0xBF0F0, c, fieldfx/geometry]
       # Sprite effects: falling, scatter-burst and spiral sprites; ember drift, the fan-sweep
       # spark instance and its controller sharing the spark pools (G1583); the arcing emitter,
       # orbiting/vertical/helical callbacks (G1588 draw helpers and literals) and the damped
@@ -954,17 +954,17 @@ segments:
       # fan-sweep sparks; the two spinning flares, the emitter that spawns the second (call +
       # private anchor D_800E2214) and the rotating ballistic sprite the effect program at
       # D_800E1BA8 pairs with it.
-      - [0xC5128, c, fieldfx/FieldFx_SpriteEffects]
+      - [0xC5128, c, fieldfx/sprite_effects]
       # Emitter and flash effects: wave and diamond emitters, radial and converging flashes,
       # twin model, drifting sprite, settling glow, fade particle, rotating effect and point
       # emitter.
-      - [0xCB398, c, fieldfx/FieldFx_EmitterEffects]
+      - [0xCB398, c, fieldfx/emitters]
       # Room-object script conditions (the cursor counter trigger and the
       # busy/one-shot wait test) and the vector helpers: one default-profile unit.
-      - [0xD0320, c, fieldfx/FieldFx_ConditionsAndVectorMath]
+      - [0xD0320, c, fieldfx/vector]
       # The angle helpers keep -fno-schedule-insns (FieldFx_TurnToward is lev 2
       # without it, the vector helpers do not match with it).
-      - [0xD07B8, c, fieldfx/FieldFx_AngleMath]
+      - [0xD07B8, c, fieldfx/angle]
       - [0xD0860, data, main/dtail_0D0860]
 
   - [0x1ee800]

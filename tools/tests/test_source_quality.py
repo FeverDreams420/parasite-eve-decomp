@@ -41,7 +41,7 @@ class SourceQualityTests(unittest.TestCase):
     def test_font_step_modulo_is_semantic_c(self):
         root = pathlib.Path(__file__).resolve().parents[2]
         self.assertEqual(source_quality.classify(
-            root / "src/main/draw/Render_FontGlyphSelection.c"), "semantic_c")
+            root / "src/main/render/font.c"), "semantic_c")
 
     def test_wayne_item_table_store_is_semantic_c(self):
         self.assert_symbol_is_semantic("Inv_LoadWayneItemsAsOverride")
@@ -52,27 +52,27 @@ class SourceQualityTests(unittest.TestCase):
     def test_equip_panel_alignment_is_semantic_c(self):
         root = pathlib.Path(__file__).resolve().parents[2]
         self.assertEqual(source_quality.classify(
-            root / "src/main/menu/Menu_ItemActions.c"), "semantic_c")
+            root / "src/main/menu/item_actions.c"), "semantic_c")
 
     def test_selected_equip_lookup_is_semantic_c(self):
         root = pathlib.Path(__file__).resolve().parents[2]
         self.assertEqual(source_quality.classify(
-            root / "src/main/draw/Render_FontGlyphSelection.c"), "semantic_c")
+            root / "src/main/render/font.c"), "semantic_c")
 
     def test_max_level_inventory_is_semantic_c(self):
         root = pathlib.Path(__file__).resolve().parents[2]
         self.assertEqual(source_quality.classify(
-            root / "src/main/save/Save_GameData.c"), "semantic_c")
+            root / "src/main/save/game_data.c"), "semantic_c")
 
     def test_memcard_dialog_workflow_is_semantic_c(self):
         root = pathlib.Path(__file__).resolve().parents[2]
         self.assertEqual(source_quality.classify(
-            root / "src/main/menu/Menu_SaveScreens.c"), "semantic_c")
+            root / "src/main/menu/save_screens.c"), "semantic_c")
 
     def test_two_line_dialog_width_picker_is_semantic_c(self):
         root = pathlib.Path(__file__).resolve().parents[2]
         self.assertEqual(source_quality.classify(
-            root / "src/main/menu/Menu_SaveScreens.c"), "semantic_c")
+            root / "src/main/menu/save_screens.c"), "semantic_c")
 
     def test_akao_pitch_lfo_depth_is_semantic_c(self):
         self.assert_symbol_is_semantic("SeqOp_SetPitchLFO")
@@ -288,24 +288,24 @@ class SourceQualityTests(unittest.TestCase):
 
     def test_listed_stack_switch_is_semantic_c(self):
         self.assertEqual(self.classify_unit(
-            "main/boot/Boot_MainLoop.c", self.STACK_SWITCH,
-            {"main/boot/Boot_MainLoop.c"}), "semantic_c")
+            "main/boot/main.c", self.STACK_SWITCH,
+            {"main/boot/main.c"}), "semantic_c")
 
     def test_unlisted_stack_switch_is_asm_constrained(self):
         self.assertEqual(self.classify_unit(
             "main/boot/Other.c", self.STACK_SWITCH,
-            {"main/boot/Boot_MainLoop.c"}), "asm_constrained")
+            {"main/boot/main.c"}), "asm_constrained")
 
     def test_stack_switch_does_not_excuse_other_asm(self):
         self.assertEqual(self.classify_unit(
-            "main/boot/Boot_MainLoop.c",
+            "main/boot/main.c",
             self.STACK_SWITCH + 'void g(void) { asm volatile("nop"); }\n',
-            {"main/boot/Boot_MainLoop.c"}), "asm_constrained")
+            {"main/boot/main.c"}), "asm_constrained")
 
     def test_repository_stack_switch_user_is_semantic_c(self):
         root = pathlib.Path(__file__).resolve().parents[2]
         self.assertEqual(source_quality.classify(
-            root / "src/main/boot/Boot_MainLoop.c"), "semantic_c")
+            root / "src/main/boot/main.c"), "semantic_c")
 
     def test_psyq_assembler_object_cannot_hide_c_functions(self):
         self.assertEqual(self.classify(

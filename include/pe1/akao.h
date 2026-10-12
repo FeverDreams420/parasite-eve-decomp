@@ -13,7 +13,7 @@
  * either game yet.
  */
 
-/* SPU sample transfers (Spu_TransferAndLifecycle.c). The transfer status is
+/* SPU sample transfers (akao/spu_transfer.c). The transfer status is
  * 1 while a DMA transfer runs; the completion callback clears it. */
 extern volatile int g_SpuTransferStatus;
 void Spu_ClearTransferCallback(void);

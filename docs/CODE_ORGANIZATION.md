@@ -204,9 +204,26 @@ include set, the tentative COMMON definitions of the words retail reaches
 through `$gp` in one block after the includes, private `*_externs.h`
 declarations moved to a shared header, `Old.c:NN` references re-pointed);
 `tools/reorg/marker_probe.py` compares every function with the old unit
-objects before `make check` and `make overlay-check-all` decide. File names
-follow the role of the module (`FieldFx_GlowEffects.c`, `Script_FlowOpcodes.c`,
-`Menu_InventoryScreens.c`, `Battle_Setup.c`).
+objects before `make check` and `make overlay-check-all` decide.
+
+File names are lower snake case and name the role of the unit inside its
+directory, without the directory or the function prefix (`fieldfx/glow.c`,
+`script/flow_opcodes.c`, `menu/inventory.c`, `battle/setup.c`). The old
+function-style names (`Battle_EncounterFlow.c`) and their new paths are in
+`tools/reorg/maps/step9_snake_case_names.csv`, the unit that holds each
+file of the original layout is the `current` column of
+`docs/reorganization_mapping.csv`, and `make organization-check` counts
+names that break the rule
+(`unconventional_files`). A unit whose functions all belong to another
+subsystem sits in that subsystem's directory even where the binary places
+it among other code: the main update between field collision and the hit
+and drop table is `menu/main_update.c`, the hit, drop-table and timer unit
+after it `entity/combat.c`, the render pipeline set-up between the boot
+units `draw/pipeline.c`, the item use panel opener between the inventory
+units `menu/item_use_panel.c`, the font glyph units and the wireframe model
+in the draw run `render/font_load.c`, `render/font.c` and
+`render/wireframe.c`, and the GNU-as square-root approximation after the
+frame presentation `math/sqrt_approx.c`.
 
 The marker sets that unified the most units:
 
@@ -230,51 +247,51 @@ Data between the units: `main/rodata_0009AC`, `main/rodata_001324`,
 pad GCC puts before an 8-aligned jump table when both units are one object;
 the merged objects emit them, so the entries are gone (`--absorb`).
 `main/rodata_0015FC` is real data, now const definitions at the end of
-`battle/Battle_StatusHud.c` (status symbol templates and window bounds): GCC
+`battle/status_hud.c` (status symbol templates and window bounds): GCC
 writes them after the status primitive constants and before the jump
 tables, as retail has them, and defining them after their users keeps the
 users' byte-aligned struct copies.
 
 Units that stay separate, and why:
 
-- `pm/Pm_ProcessManager.c` is not part of `pm/Boot_DisplayInitAndDiscTables.c`:
+- `pm/process.c` is not part of `pm/disc_tables.c`:
   the disc table loaders include `pe1/cd_poll.h`, whose `extern inline`
   `CdRom_PollReady` they inline, while `Scene_LoadRoomAssets` in the process
   manager unit calls it (lev 56 when the two share a translation unit). This
   is binary evidence of an original file boundary.
 - Word clashes (a word one unit reaches through `$gp` and another reads
-  absolutely): `entity/Entity_FrameUpdate.c` with
-  `entity/Entity_AllocationAndContacts.c` (`g_FieldActorListHead`,
+  absolutely): `entity/frame_update.c` with
+  `entity/allocation.c` (`g_FieldActorListHead`,
   `g_PlayerEntity`; `Scene_UpdateEntityPositions` lev 97) and
-  `battle/Battle_EnemySlotLifecycle.c` after `battle/Battle_EncounterFlow.c`
+  `battle/enemy_slots.c` after `battle/encounter.c`
   (`g_BattleEquipStateBlock`; `Entity_AllocSlot` lev 11).
-- Section padding: `battle/Battle_EnemyMovement.c` after
-  `battle/Battle_TurnFlow.c`. As one object the 8-aligned turn-flow rodata
+- Section padding: `battle/enemy_movement.c` after
+  `battle/turn.c`. As one object the 8-aligned turn-flow rodata
   is padded after the movement's 11 bytes and the link grows by 4; the
   per-function probe cannot see this, `make check` does.
-- Per-unit inline helpers: `item/Menu_OpenItemUsePanelAtIndex.c` and
-  `item/Inv_ArmorCapacity.c` each define their own `LookupTrackedItem`
-  shape, so the use-panel opener stays between `Inv_InventorySwap.c` and
-  `Inv_ArmorCapacity.c`.
-- Flags the neighbours do not tolerate: `fieldfx/FieldFx_AngleMath.c`,
-  `draw/Draw_AllocColorQuad.c` and
-  `draw/Render_FontGlyphLoad.c` (`-fno-schedule-insns`),
-  `asset/Asset_UnloadTableEntries.c` (`-fno-force-mem`, lev 1 without),
-  `menu/Menu_EquipScreenFlow.c` (does not match under the item detail
-  panel's `-fno-expensive-optimizations`), `entity/Entity_PoolInit.c`
+- Per-unit inline helpers: `menu/item_use_panel.c` and
+  `item/armor_capacity.c` each define their own `LookupTrackedItem`
+  shape, so the use-panel opener stays between `item/swap.c` and
+  `item/armor_capacity.c`.
+- Flags the neighbours do not tolerate: `fieldfx/angle.c`,
+  `draw/color_quad.c` and
+  `render/font_load.c` (`-fno-schedule-insns`),
+  `asset/unload_table.c` (`-fno-force-mem`, lev 1 without),
+  `menu/equip_screen.c` (does not match under the item detail
+  panel's `-fno-expensive-optimizations`), `entity/pool.c`
   (`-fno-strength-reduce`, which `Scene_LoadMap` does not take),
-  `render/Render_LoadMeshEntry.c` and `render/Render_MeshListAndFade.c`, the
+  `render/mesh_entry.c` and `render/mesh_list.c`, the
   primitive queue in `draw/` (`Draw_InitGpuHwRegs` and
   `Draw_FlushPrimQueue` are lev 4 under each other's set) and the `-g3`
-  battle units (`Menu_MainUpdate`, `Battle_PhaseAndEnemyEffectFlow`, which
-  also isolates `Battle_PlayerTurnFlow`, and the drop table, hit application
+  battle units (`menu/main_update.c`, `battle/phase.c`, which
+  also isolates `battle/player_turn.c`, and the drop table, hit application
   and timer update, which do compile as one `-g3` unit).
 - Open small-data shapes from `docs/REORGANIZATION_G_FLAGS.md`:
-  `script/Script_ValueOps.c` with `script/Script_NodeActions.c` (#0) and
-  `boot/Draw_InitPipeline.c` (#20, also a gprofile boundary).
-- Source policy: the GNU-as units (`math/Math_FixedMul.c`,
-  `math/math_fixed.c`, `draw/Draw_PackPrimColor.c`,
-  `draw/Math_SqrtApprox3.c`) stay alone.
+  `script/value_ops.c` with `script/node_actions.c` (#0) and
+  `draw/pipeline.c` (#20, also a gprofile boundary).
+- Source policy: the GNU-as units (`math/fixed_mul.c`,
+  `math/fixed_round.c`, `draw/prim_color.c`,
+  `math/sqrt_approx.c`) stay alone.
 
 ### PsyQ objects split over several units (src/main/psyq)
 
@@ -646,7 +663,7 @@ shapes that only exist for the bytes:
   extern word therefore define it tentatively (`int g_MenuEquipSwapItem;`,
   `g_MenuInventoryViewMode`, `g_MenuPendingTotalExp`,
   `g_BonusPointDisplayValue`, `g_BonusPointSpendCurrentValue`) instead of an
-  explicit NOP. `Menu_EquipScreenFlow.c` uses `MASPSX_FORCE_G0` with COMMON
+  explicit NOP. `menu/equip_screen.c` uses `MASPSX_FORCE_G0` with COMMON
   definitions for every `$gp` word so `&D_8009CF90` stays an absolute `la`.
 - Retail inlines `Queue_Enqueue`, `Queue_DequeueByMask` and
   `MenuWidget_AllocNode` into their callers; the units declare them `inline`
@@ -784,7 +801,7 @@ changing bytes:
   insn needs at once, so the three-operand `gte_ldv3` is what gives the
   t1, t2, t3 rotation retail has in the sprite renderers. Separate
   `gte_lwc2_*` statements or one-operand loads leave a single spill register.
-- The composed glow layers are two (`FieldFx_GlowLayers.inc`) PSY-Q
+- The composed glow layers are two (`fieldfx/glow_layers.inc`) PSY-Q
   `gte_CompMatrix(&matrix, &rotation, &matrix)` calls; the floor-triangle
   tests are the PSY-Q outer product (`gte_ldopv1_psyq`, `gte_ldopv2`, OP,
   `gte_stlvnl`) with the first operand read through `D_800E2844` and one
@@ -802,11 +819,11 @@ changing bytes:
 - `func_800C5EB0` walks the strip nodes beside a `FieldStripNodeTail` view
   (the node seen from its brightness field, `pe1/field_textured_chain_node.h`):
   `body[-1].nextCellStep`, `body[1].edgeA` replace the raw byte offsets.
-- The field engine object passes (`FieldFx_ObjectScript.c`) keep the slot
+- The field engine object passes (`fieldfx/object_script.c`) keep the slot
   table and script state in typed globals (`FieldFxSlot *`,
   `FieldFxState *`); the slot address the two dispatch loops add as an
   integer, index first, is a `FieldFxSlotAddress` pointer/word union.
-- `FieldFx_GlowEffects.c` .. `FieldFx_BurstEffects.c` are the eight effect
+- `fieldfx/glow.c` .. `fieldfx/burst.c` are the eight effect
   module classes of `pe1/field_effect_modules.h`; their scripts, handler lists,
   slot sizes and tables are declared there under module names instead of the
   per-unit extern headers.
@@ -821,7 +838,7 @@ changing bytes:
 
 What is left (best crutch-free lev against retail):
 
-- `FieldFx_AngleMath.c` (5 pins): `FieldFx_TurnToward` lev 15 and
+- `fieldfx/angle.c` (5 pins): `FieldFx_TurnToward` lev 15 and
   `FieldFx_AngleDistance` lev 6. Retail keeps the step and the turn delta in separate
   registers (`move v1,a2` then `negu v1,a2`): with `delta = step` followed by
   `delta = -step` cse makes the longer-lived delta the class head and rewrites
@@ -833,25 +850,25 @@ What is left (best crutch-free lev against retail):
   being the zero extension before the final add and the difference computed
   into `v0` then copied (`short` lev 9). The distance helper stays at lev 6
   for `s16`/`int` distances, if/else, ternary and in-place `lhs -= rhs`.
-- `FieldFx_CollisionQueries.c` `func_800C5EB0` (1 pin on the node pointer):
+- `fieldfx/collision.c` `func_800C5EB0` (1 pin on the node pointer):
   lev 9 without the pin. Global alloc ranks the loop index (9 refs over 45
   insns) above the node pointer (11 over 59); retail has node, index, strip in
   s1, s2, s3. Dropping the index's reuse as the return value lets the strip
   outrank the index (lev 13); starting the index inside the `if` gives the
   node s1 but swaps strip and index (lev 17-21).
-- `FieldFx_GeometryAndShapes.c`: `func_800D2370` keeps one empty constraint on
+- `fieldfx/geometry.c`: `func_800D2370` keeps one empty constraint on
   `rotation` and `length` (lev 71 without it: `rotation` is spilled to the
   stack instead of living in s8 across the packet setup calls).
   `func_800D3BC8` keeps the entry memory barrier, the `$6` clobber and the
   volatile stack parameters (lev 14 without them: sched2 interleaves the
   stack-argument loads with the register saves, retail loads them after the
   last save).
-- `FieldFx_GlowEffects.c` `func_800CAE0C` (5 pins, 1 barrier): lev 50
+- `fieldfx/glow.c` `func_800CAE0C` (5 pins, 1 barrier): lev 50
   as four `gte_CompMatrix` layers. Local alloc ranks the composed translation
   source (`&rotation.t`) above the second-column addresses and leaves the
   matrix second column without a register; retail spills the translation
   source instead (stack slot 192).
-- `FieldFx_GeometryAndShapes.c` is excluded from this sweep (owned
+- `fieldfx/geometry.c` is excluded from this sweep (owned
   elsewhere); its three `_externs` headers stay with it.
 
 ### Open declaration conflicts
@@ -950,8 +967,8 @@ Still open:
 - (Superseded 2026-10-12: both pairs this item listed as unmergeable,
   `Entity_CollisionDatabase`/`Entity_UpdateList` and
   `Render_EntityAndTexturedQuadFlow`/`Render_DrawObjectAndClut`, are now
-  one unit each, `field/Entity_ActorCollision.c` and
-  `render/Render_ObjectDraw.c`, under one FORCE_G0 set with COMMON `$gp`
+  one unit each, `field/actor_collision.c` and
+  `render/object.c`, under one FORCE_G0 set with COMMON `$gp`
   words; see "Resident translation units".)
 - Symbol aliases that `MASPSX_FORCE_G0` cannot remove, because cc1 decides
   them before MASPSX runs:
@@ -1302,7 +1319,7 @@ These apply to any unit, not only the ones they were found in:
   `--use-comm-section` and tentative definitions of the words retail reaches
   through `$gp` makes every other word absolute, so plain declarations give
   the same code (`Battle_BuildTargetList`, `Battle_Init`,
-  `Battle_PlayerTurnFlow`, `Battle_FinalizeAttackResult`,
+  `battle/player_turn.c`, `Battle_FinalizeAttackResult`,
   `Battle_AdvancePhase`, the forced-G0 task units).
 - Views that only separate reads of one word for CSE give way to one-field
   record views (`pe1/battle_word_records.h`, `pe1/draw_slot_record.h`,
@@ -1344,17 +1361,17 @@ These apply to any unit, not only the ones they were found in:
   `Menu_MainUpdate`.
 - An inline helper keeps an index scaled before the table base is added:
   `&D_800A1E64[kind - 5]` written directly folds the -5 into the address
-  (lev 16); `AmmoPoolRecord(kind - 5)` does not (`Inv_ArmorCapacity.c`).
+  (lev 16); `AmmoPoolRecord(kind - 5)` does not (`item/armor_capacity.c`).
 - Under `-G0` every extern is absolute anyway; the views in
   `Scene_UpdateBgDraw` and `Scene_LoadSceneData` were unnecessary.
 - An array bound changes the small-data decision: `g_ScriptNodeSeqCounter[1]`
   is small, `[]` is not. Declaring a symbol as an incomplete array before
   its tentative definition in the same unit also makes it large, so
-  `Boot_FrameLoop` includes `pe1/boot.h` after its definitions.
+  `boot/frame_loop.c` includes `pe1/boot.h` after its definitions.
 - `CdRom_PollReady` is an `extern inline` in `pe1/cd_poll.h`: the boot disc
   loaders inline it as retail does (the copy into the return register is
   what the old `$v0` pins and status barriers imitated), and
-  `CdRom_SceneAssetsAndBootRead.c` keeps the out-of-line definition.
+  `cdrom/scene_assets.c` keeps the out-of-line definition.
 - A loop that walks a table by index rather than an incremented pointer
   leaves the table pointer single-set, and sched1 then places its address
   load late (`MemCard_InitManager`, no pins).
@@ -1473,7 +1490,7 @@ Recipes that removed crutches here and apply to other HUD code:
 Crutches left; each was removed on its own and rebuilt, lev for that removal
 or for the best crutch-free form tried:
 
-- `Battle_EncounterFlow.c`: the per-frame gauge colour cases in
+- `battle/encounter.c`: the per-frame gauge colour cases in
   `Battle_PhaseInitEnemyTurn`, `Battle_PhaseHitReaction` and
   `Battle_PhaseEndTurn` (all register pins and empty barriers of those
   functions). Retail loads all five gradient constants before the third
@@ -1520,7 +1537,7 @@ or for the best crutch-free form tried:
   s*0x8C` order; the macro form wastes 8 to 48 stack bytes because combine
   leaves `(use)` insns for the deleted base registers, the direct array form
   computes the slot offset first (lev 73 to 128).
-- `Battle_TurnFlow.c`: `room` (`$4`, lev 27: one delay slot,
+- `battle/turn.c`: `room` (`$4`, lev 27: one delay slot,
   the rest is branch offsets), the `actor` barrier (lev 129: global
   allocation swaps s0/s1), the `stepDeathAnimation` goto (lev 184 for an
   inline search helper).
@@ -1647,7 +1664,7 @@ Crutches still in these units, with the best crutch-free lev found:
   packet copy in `t2`, the masks in `a0`/`a2`); declaration order, block
   scope for the first quad and dropping the `w`/`h` copies do not change
   the global allocation order (lev 138 to 153).
-- `Draw_TextPrimitives.c`: `Draw_EmitGlyph` keeps the `$4` vertex pointer
+- `draw/text.c`: `Draw_EmitGlyph` keeps the `$4` vertex pointer
   pin and the descriptor barrier (lev 44 without them: retail copies the
   packet into `a0` for the vertex stores, an inline vertex helper or a
   block-local copy is merged back into the packet register);
@@ -1657,7 +1674,7 @@ Crutches still in these units, with the best crutch-free lev found:
   16); the `DecodeGlyph` `$4` pin stays (a `u8` copy of the code lev 10, a
   `u8` parameter lev 14: retail masks the code byte again for every use but
   keeps the masked glyph in `v1`).
-- `Draw_WipeAndGradient.c`: `Draw_AllocColorTri` keeps the tag tail of its
+- `draw/wipe.c`: `Draw_AllocColorTri` keeps the tag tail of its
   tile, one pin and two barriers (lev 27 without them: the code byte load
   is scheduled above the width store and the cursor loads move); its pulse
   shade and colour clear are plain C now.
@@ -1674,7 +1691,7 @@ Crutches still in these units, with the best crutch-free lev found:
   constant 1 is rematerialized before the loop); without pins and barrier
   lev 61; calling the layout as a `static inline` function lets cse fold
   the pointer chain into symbol offsets (lev 63).
-- `Battle_StatusHud.c`: the status-icon packets (`D_8009E960[2][13]`,
+- `battle/status_hud.c`: the status-icon packets (`D_8009E960[2][13]`,
   `D_8009EC38[2]`, 28 bytes: draw mode then sprite) are addressed from the
   sprite part at +8 (`D_8009E968`, `D_8009EC40`) with byte offsets (7 byte
   additions, 2 raw offsets) and `Draw_StatusIcons` keeps 8 pins. A typed
@@ -1683,7 +1700,7 @@ Crutches still in these units, with the best crutch-free lev found:
   part (lev 8 from the immediates). `battle_status.h` now types
   `D_8009E960` as `RenderPagedSpritePacket[2][13]` for `Battle_DrawHPBar`;
   `D_8009E976` and `D_8009EC38` are still byte arrays for this unit.
-- `Battle_StatusHud.c`: the status icons are typed now
+- `battle/status_hud.c`: the status icons are typed now
   (`g_StatusIconPackets[2][13]`, `g_StatusMarkerPackets[2]` in
   `pe1/draw_state.h`, linker names beside the battle byte arrays), and
   `Draw_SetupSprites`/`Draw_QueuePrimitive` are plain field accesses.
@@ -1929,7 +1946,7 @@ Left, with the best crutch-free lev:
 
 Byte-pointer arithmetic, raw offset dereferences and pointer/integer casts in
 `src/main` went from 70/14/227 to 8/3/7, and every remaining site is either in
-`FieldFx_GeometryAndShapes`/`Render_DrawObjectVariant` (out of scope) or
+`fieldfx/geometry.c`/`Render_DrawObjectVariant` (out of scope) or
 listed below. None of the recipes changed a byte.
 
 Why most sites needed a union rather than a typed index: GCC 2.7.2 and 2.8.1

@@ -150,7 +150,7 @@ void Draw_LoadTimTable(TimRelativeTable *table, int count) {
     }
 }
 
-/* Boot-time disc loads called from Boot_MainLoop: the PE.IMG asset LBA
+/* Boot-time disc loads called from boot/main.c: the PE.IMG asset LBA
  * tables and the boot audio banks. */
 
 void SetDispMask(int arg0);

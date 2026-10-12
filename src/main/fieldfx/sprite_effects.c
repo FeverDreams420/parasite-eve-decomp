@@ -1613,7 +1613,7 @@ int func_800D96F4(int mode, RenderSparkEmitter *state)
 #define SPINNING_MODEL_ANCHOR D_800E220C
 #define SPINNING_MODEL_PALETTE 4
 #define SPINNING_MODEL_COLOR(size) 0, (u8)((size) / 2), (u8)((size) / 8)
-#include "FieldFx_SpinningModel.inc"
+#include "spinning_model.inc"
 
 int func_800D9E5C(int mode, RenderArcingEffect *state)
 {
@@ -1690,7 +1690,7 @@ int func_800D9FD4(int mode, GteShortVector *state)
 #define SPINNING_MODEL_ANCHOR D_800E2214
 #define SPINNING_MODEL_PALETTE 3
 #define SPINNING_MODEL_COLOR(size) (u8)((size) / 3), 0, (u8)((size) / 2)
-#include "FieldFx_SpinningModel.inc"
+#include "spinning_model.inc"
 
 int func_800DA5D4(int mode, FieldFxEmitter *state) {
     FieldFxEmittedPoint *point;

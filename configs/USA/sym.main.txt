@@ -1925,7 +1925,7 @@ FieldFx_ModelDraw = 0x800C71E4; // type:func
 FieldFx_ModelSetDepthBias = 0x800C6EE8; // type:func
 FieldFx_ModelShiftColors = 0x800C70EC; // type:func
 
-// Field engine object passes (FieldFx_ObjectScript.c).
+// Field engine object passes (fieldfx/object_script.c).
 g_FieldFxServiceThreadMissingMsg = 0x800C20C8;
 g_FieldFxUpdateThreadMissingMsg = 0x800C20EC;
 g_FieldFxScriptState = 0x800E2248; // size:0x4
@@ -1934,7 +1934,7 @@ g_FieldFxScriptData = 0x800F3330; // size:0x4
 g_FieldFxCommandTable = 0x800F33B0; // size:0x4
 g_FieldFxSlotTable = 0x800F34F4; // size:0x4
 
-// Field effect modules (FieldFx_GlowEffects.c .. FieldFx_BurstEffects.c).
+// Field effect modules (fieldfx/glow.c .. fieldfx/burst.c).
 FieldFx_GetEffectResource = 0x800CE4F8; // type:func
 GlowEffect_PlantScript = 0x800C7BA0; // type:func
 GlowEffect_Spawn6 = 0x800C7D00; // type:func

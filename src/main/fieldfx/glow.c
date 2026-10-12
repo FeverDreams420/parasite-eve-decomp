@@ -233,7 +233,7 @@ int func_800C8270(void *arg0, void *arg1, FieldFxMatrixGlow *anim) {
 #define GLOW_LAYERS_SPIN_B D_800C215C
 #define GLOW_LAYERS_SCALE D_800C2164
 #define GLOW_LAYERS_SPRITE D_800F3498
-#include "FieldFx_GlowLayers.inc"
+#include "glow_layers.inc"
 
 int func_800C8870(void *arg0, void *arg1, FieldFxGlowPoint *anim) {
     GteMatrix matrix;
@@ -578,7 +578,7 @@ int func_800C9268(void *arg0, void *arg1, FieldFxMatrixGlow *anim) {
 #define GLOW_LAYERS_SPIN_B D_800C218C
 #define GLOW_LAYERS_SCALE D_800C2194
 #define GLOW_LAYERS_SPRITE D_800F34A8
-#include "FieldFx_GlowLayers.inc"
+#include "glow_layers.inc"
 
 int func_800C9868(void *arg0, void *arg1, FieldFxGlowPoint *anim) {
     u16 *field_s3 = &D_800E2328.depth;
@@ -816,7 +816,7 @@ int func_800C9EA8(void *arg0, void *arg1, FieldFxMatrixGlow *anim) {
 #define GLOW_LAYERS_SPIN_B D_800C21AC
 #define GLOW_LAYERS_SCALE D_800C21B4
 #define GLOW_LAYERS_SPRITE D_800F34B8
-#include "FieldFx_GlowLayers.inc"
+#include "glow_layers.inc"
 
 int func_800CA4A8(void *arg0, FieldFxSlot *state) {
     int ret = 2;

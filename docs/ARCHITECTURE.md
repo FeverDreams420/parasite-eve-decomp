@@ -32,7 +32,7 @@ each against the retail SHA-1.
 
 Entry is the PsyQ start-up (`psyq/libsn/snmain.c`): it clears BSS, sets
 `$sp`, `$fp` and `$gp`, initializes the heap and calls `main`
-(`src/main/boot/Boot_MainLoop.c`).
+(`src/main/boot/main.c`).
 
 ## Overlay windows
 

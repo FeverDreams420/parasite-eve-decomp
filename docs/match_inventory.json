@@ -8,43 +8,43 @@
   "verified_excluded_matches": 5,
   "entries": [
     {
-      "unit": "main/boot/Boot_MainLoop",
+      "unit": "main/boot/main",
       "symbol": "main",
       "reported_size": 748,
-      "source": "src/main/boot/Boot_MainLoop.c",
+      "source": "src/main/boot/main.c",
       "status": "matched_excluded_by_asm_policy",
       "levenshtein_score": 0,
       "evidence": "Fresh linked asm-differ run on darwine against retail instruction target; no source changes required."
     },
     {
-      "unit": "main/math/Math_FixedMul",
+      "unit": "main/math/fixed_mul",
       "symbol": "Math_FixedMul",
       "reported_size": 28,
-      "source": "src/main/math/Math_FixedMul.c",
+      "source": "src/main/math/fixed_mul.c",
       "status": "matched_excluded_by_asm_policy",
       "levenshtein_score": 0,
       "evidence": "Fresh linked asm-differ run on darwine against retail instruction target; no source changes required."
     },
     {
-      "unit": "main/math/math_fixed",
+      "unit": "main/math/fixed_round",
       "symbol": "Math_FixedRoundToInt",
       "reported_size": 16,
-      "source": "src/main/math/math_fixed.c",
+      "source": "src/main/math/fixed_round.c",
       "status": "matched_excluded_by_asm_policy",
       "levenshtein_score": 0,
       "evidence": "Fresh linked asm-differ run on darwine against retail instruction target; no source changes required."
     },
     {
-      "unit": "main/math/math_fixed",
+      "unit": "main/math/fixed_round",
       "symbol": "Math_FixedRoundToByte",
       "reported_size": 16,
-      "source": "src/main/math/math_fixed.c",
+      "source": "src/main/math/fixed_round.c",
       "status": "matched_excluded_by_asm_policy",
       "levenshtein_score": 0,
       "evidence": "Fresh linked asm-differ run on darwine against retail instruction target; no source changes required."
     },
     {
-      "unit": "main/draw/Draw_PackPrimColor",
+      "unit": "main/draw/prim_color",
       "symbol": "Draw_PackPrimColor",
       "reported_size": 52,
       "source": null,
@@ -53,10 +53,10 @@
       "evidence": "Fresh linked stock GCC 2.7.2 + MASPSX 2.56 candidate score on darwine. Not integrated at the time of this inventory."
     },
     {
-      "unit": "main/draw/Math_SqrtApprox3",
+      "unit": "main/math/sqrt_approx",
       "symbol": "Math_SqrtApprox3",
       "reported_size": 136,
-      "source": "src/main/draw/Math_SqrtApprox3.c",
+      "source": "src/main/math/sqrt_approx.c",
       "status": "matched_excluded_by_asm_policy",
       "levenshtein_score": 0,
       "evidence": "Fresh linked asm-differ run on darwine against retail instruction target; no source changes required."
@@ -143,19 +143,19 @@
   },
   "resolved_entries": [
     {
-      "unit": "main/battle/Battle_EncounterFlow",
+      "unit": "main/battle/encounter",
       "symbol": "Battle_SaveAyaState",
       "reported_size": 276,
-      "source": "src/main/battle/Battle_EncounterFlow.c",
+      "source": "src/main/battle/encounter.c",
       "status": "matched_report_credited",
       "levenshtein_score": 0,
       "evidence": "Fresh linked asm-differ run on darwine against retail instruction target; no source changes required. Main commit 4682d1677 replaced the CPU ASM implementation with matching plain C; the fresh complete report now credits this function."
     },
     {
-      "unit": "main/battle/Battle_EncounterFlow",
+      "unit": "main/battle/encounter",
       "symbol": "Battle_InitEquipLists",
       "reported_size": 108,
-      "source": "src/main/battle/Battle_EncounterFlow.c",
+      "source": "src/main/battle/encounter.c",
       "status": "matched_report_credited",
       "levenshtein_score": 0,
       "evidence": "Fresh linked asm-differ run on darwine against retail instruction target; no source changes required. Main commit 4682d1677 replaced the CPU ASM implementation with matching plain C; the fresh complete report now credits this function."

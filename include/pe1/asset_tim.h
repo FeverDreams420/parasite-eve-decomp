@@ -4,7 +4,7 @@
 #include "common.h"
 #include "pe1/psyq_tim.h"
 
-/* Game-side TIM helpers (Scene_PlayerMovement.c): upload a TIM's image and
+/* Game-side TIM helpers (scene/player_movement.c): upload a TIM's image and
  * optional CLUT to VRAM, and locate its rectangles and pixel data. */
 int *Asset_LoadTimImage(TimFile *tim);
 RECT *Asset_GetTimClutRect(TimFile *tim);

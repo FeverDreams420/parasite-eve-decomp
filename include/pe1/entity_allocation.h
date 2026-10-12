@@ -37,7 +37,7 @@ extern int g_FieldMoveLock;
  * returns its address. */
 void *Entity_AllocBlock(u32 size);
 
-/* Field entity pool (Entity_PoolInit.c): the free-record list, the number
+/* Field entity pool (entity/pool.c): the free-record list, the number
  * of live records and the serial number of the next allocated entity. */
 struct FieldActor;
 extern struct FieldActor *g_EntityFreeListHead;

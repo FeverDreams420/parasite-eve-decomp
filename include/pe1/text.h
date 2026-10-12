@@ -98,7 +98,7 @@ void Draw_PrintTextById(unsigned int textId);
  *   current message = decode *(u8**)(0x800BCEA8 + 0x04) (entry 0).
  */
 
-/* Nth non-empty entry of the location name table (Text_DataTableLookups.c). */
+/* Nth non-empty entry of the location name table (text/tables.c). */
 u8 *Text_FindNthNonEmpty(int index);
 
 #endif /* PE1_TEXT_H */

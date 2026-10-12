@@ -411,7 +411,7 @@ void Render_DrawTexturedQuads(RenderObjectEntity *entity) {
     }
 }
 
-/* Callers pass a fourth argument the definition in Anim_BoneRotations.c
+/* Callers pass a fourth argument the definition in anim/bone_rotations.c
  * does not declare (see entity_frame_update.h). */
 int Anim_BuildRotationMatrices(RenderObjectEntity *object, void *action, int frame, int mode);
 

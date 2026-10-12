@@ -32,7 +32,7 @@ void func_800CEE20(struct GteShortVector *position, struct GteRotation *rotation
  * with nonnegative time. */
 void func_800CF3AC(void *track, void *color, int time);
 
-/* Colour track of the rising ember sparks (FieldFx_SpriteEffects.c). */
+/* Colour track of the rising ember sparks (fieldfx/sprite_effects.c). */
 extern char g_EmberColorTrack[];
 
 /* Rotates (0, 0, distance) by the angles (z forced to 0) into out. */

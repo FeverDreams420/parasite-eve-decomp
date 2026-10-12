@@ -8,7 +8,7 @@ import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 ENTRY = 0x8006A674
-UNIT = 0x800698D4  # start of Asset_GameStateAndVoiceBanks.c (display lists first)
+UNIT = 0x800698D4  # start of asset/game_state.c (display lists first)
 EXIT = 0x80010000
 STATE = 0x800B0CD8
 PAIRS = 0x80094488
@@ -39,7 +39,7 @@ class AkaoClearVoiceBankTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             work = pathlib.Path(directory)
             obj, elf, binary = (work / name for name in ("akao.o", "akao.elf", "akao.bin"))
-            subprocess.run(["tools/scripts/cc.sh", "src/main/asset/Asset_GameStateAndVoiceBanks.c", str(obj)],
+            subprocess.run(["tools/scripts/cc.sh", "src/main/asset/game_state.c", str(obj)],
                            cwd=ROOT, check=True, capture_output=True)
             # Call targets elsewhere in the unit are placed in jal range; only
             # the reset routine's slice is compared.

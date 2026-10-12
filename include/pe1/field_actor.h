@@ -286,7 +286,7 @@ void Entity_WriteFieldByCmd(FieldActor *actor, int command, int value);
 
 /* The actor whose script-node lists are being run. */
 extern FieldActor *g_CurrentEntity;
-/* Head of the active actor list (Entity_PoolInit.c). */
+/* Head of the active actor list (entity/pool.c). */
 extern FieldActor *g_FieldActorListHead;
 
 /* Spawns the actors of a scene record after an existing actor. */

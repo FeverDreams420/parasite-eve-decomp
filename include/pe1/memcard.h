@@ -182,7 +182,7 @@ void Save_SetTitleStyleFlag(int value);
 
 MemCardSaveSlot *MemCard_GetSlot(unsigned int port, int slot);
 
-/* Card manager state (MemCard_PortAndSaveFlow.c). */
+/* Card manager state (memcard/save_flow.c). */
 extern unsigned int g_MemCardServicedPort;
 extern int g_MemCardInfoPollCountdown;
 extern int g_MemCardConnectDebounce;

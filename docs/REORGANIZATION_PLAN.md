@@ -432,6 +432,29 @@ Estimate: about **20–30 agent rounds** in total. Steps 0–3 take ~10 rounds a
 already deliver 339→286 main files and 432→58 overlay files. Step 6 is the
 long tail.
 
+
+### Step 9: snake-case file names (2026-10-13)
+
+Decision: the `src/main` game units (outside `psyq/`) are named like the
+original developers would name C files, lower snake case without the
+directory or function prefix (`battle/encounter.c`, `akao/voice_bank.c`,
+`fieldfx/geometry.c`), instead of the function-style names the merges left
+(`Battle_EncounterFlow.c`). Function names did not change. All 99 units and
+the two private `.inc` templates were renamed with `reorg_move.py`
+(`tools/reorg/maps/step9_snake_case_names.csv`); the module names of §2 and
+the Appendix (`battle/battle_hud.c`, ...) are superseded by these, and the
+`current` column of `docs/reorganization_mapping.csv` gives the unit that
+now holds each original file. Single-function strays left in a foreign
+directory moved to their subsystem: `battle/Menu_MainUpdate.c` to
+`menu/main_update.c`, `item/Menu_OpenItemUsePanelAtIndex.c` to
+`menu/item_use_panel.c`, `boot/Draw_InitPipeline.c` to `draw/pipeline.c`,
+the `draw/Render_*` units to `render/` and `draw/Math_SqrtApprox3.c` to
+`math/sqrt_approx.c`. `battle/Entity_HitAndDropTable.c` and
+`battle/Entity_UpdateTimers.c` compile as one `-g3` unit and became
+`entity/combat.c`; the other strays have no compatible neighbour of their
+subsystem and stay separate units. `make organization-check` now counts
+names that break the convention (`unconventional_files`).
+
 ---
 
 ## 5. Risks and mitigations

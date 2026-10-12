@@ -3,14 +3,14 @@
 
 #include "common.h"
 
-/* Error reporting (Draw_ReportError.c): prints the severity name and the two
+/* Error reporting (draw/error.c): prints the severity name and the two
  * messages; severity 1 halts. */
 extern char D_80010EB0[]; /* severity/message format */
 extern char D_80010EC8[]; /* detail format */
 extern char *D_80091A2C[]; /* severity names */
 void Draw_ReportError(char *message, char *detail, int value, unsigned char severity);
 
-/* Soft-reset and start-up services (Asset_GameStateAndVoiceBanks.c). */
+/* Soft-reset and start-up services (asset/game_state.c). */
 extern int g_SceneDispatchToken;
 extern int D_800A77F4; /* dispatch token saved by Boot_Shutdown */
 void Boot_SyncShutdown(void);

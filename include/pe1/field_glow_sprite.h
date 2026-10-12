@@ -35,7 +35,7 @@ extern FieldGlowSprite D_800E22F8, D_800F34B8, D_800E2308, D_800E2338, D_800F34C
 extern FieldGlowSprite D_800E2298, D_800E2250, D_800E27E0, D_800F3460;
 
 /* Draws one scaled glow sprite at the matrix translation (engine/
- * FieldFx_SpriteRendering.c). */
+ * fieldfx/sprite_render.c). */
 void func_800C42A4(FieldGlowSprite *sprite, GteMatrix *matrix, u8 mode);
 
 #endif

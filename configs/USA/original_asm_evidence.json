@@ -5,7 +5,7 @@
     {
       "name": "Math_FixedMul",
       "module": "main",
-      "source": "main/math/Math_FixedMul.c",
+      "source": "main/math/fixed_mul.c",
       "address": "0x8003708C",
       "size": 28,
       "origin": "game",
@@ -19,7 +19,7 @@
     {
       "name": "Math_FixedRoundToInt",
       "module": "main",
-      "source": "main/math/math_fixed.c",
+      "source": "main/math/fixed_round.c",
       "address": "0x800370BC",
       "size": 16,
       "origin": "game",
@@ -32,7 +32,7 @@
     {
       "name": "Math_FixedRoundToByte",
       "module": "main",
-      "source": "main/math/math_fixed.c",
+      "source": "main/math/fixed_round.c",
       "address": "0x800370CC",
       "size": 16,
       "origin": "game",
@@ -45,7 +45,7 @@
     {
       "name": "Draw_PackPrimColor",
       "module": "main",
-      "source": "main/draw/Draw_PackPrimColor.c",
+      "source": "main/draw/prim_color.c",
       "address": "0x80070DD0",
       "size": 52,
       "origin": "game",
@@ -59,7 +59,7 @@
     {
       "name": "Math_SqrtApprox3",
       "module": "main",
-      "source": "main/draw/Math_SqrtApprox3.c",
+      "source": "main/math/sqrt_approx.c",
       "address": "0x80070FAC",
       "size": 136,
       "origin": "game",
@@ -137,7 +137,7 @@
     {
       "name": "main",
       "module": "main",
-      "source": "main/boot/Boot_MainLoop.c",
+      "source": "main/boot/main.c",
       "address": "0x8001220C",
       "size": 748,
       "window": "0x80012320..0x80012348: move $t0,$a1; sw $sp,0($t0); addiu $t0,$t0,-4; move $sp,$t0; jal func_8019234C; nop; addiu $sp,$sp,4; lw $sp,0($sp)",

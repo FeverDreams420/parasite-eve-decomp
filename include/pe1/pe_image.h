@@ -9,7 +9,7 @@
  * single container we must understand byte-for-byte.
  *
  * == HOW IT IS LOCATED (boot) ==
- *   Asset_OpenPeImage() (src/main/cdrom/Asset_OpenPeImage.c) searches the ISO9660 volume
+ *   Asset_OpenPeImage() (src/main/asset/game_state.c) searches the ISO9660 volume
  *   with DsSearchFile() for these paths (verified from the data bytes at
  *   0x80011330 / 0x80011348 / 0x80011354):
  *     "\FMV1\PEDISC01.IDF;1"   -- CD1 marker

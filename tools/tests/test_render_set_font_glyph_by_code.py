@@ -67,7 +67,7 @@ class RenderSetFontGlyphByCodeTests(unittest.TestCase):
             work = pathlib.Path(directory)
             obj, elf, data = work / "glyph.o", work / "glyph.elf", work / "glyph.bin"
             subprocess.run(
-                ["tools/scripts/cc.sh", "src/main/draw/Render_FontGlyphSelection.c", str(obj)],
+                ["tools/scripts/cc.sh", "src/main/render/font.c", str(obj)],
                 cwd=ROOT, check=True, capture_output=True,
             )
             (work / "glyph.ld").write_text(
@@ -106,7 +106,7 @@ class RenderSetFontGlyphByCodeTests(unittest.TestCase):
                 ["mipsel-none-elf-objcopy", "-O", "binary", "-j", ".text", str(elf), str(data)],
                 check=True, capture_output=True,
             )
-            # Render_FontGlyphSelection.c starts with Render_DrawTextDigit.
+            # render/font.c starts with Render_DrawTextDigit.
             compiled = data.read_bytes()[ENTRY - 0x80038BC0:][:len(retail)]
         self.assertEqual(len(compiled), len(retail))
         self.assertEqual(compiled, retail)

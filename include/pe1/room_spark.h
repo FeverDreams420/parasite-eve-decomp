@@ -40,7 +40,7 @@ typedef struct RoomSparkChannel {
     char *pool;                   /* 0x08 */
 } RoomSparkChannel;
 
-extern struct PmPrimarySlot *D_800942E4; /* running process slot (Pm_ProcessManager) */
+extern struct PmPrimarySlot *D_800942E4; /* running process slot (pm/process.c) */
 extern int func_80071A54(void);
 
 /* Heading helpers and the trail history: turn the angles towards a target,
