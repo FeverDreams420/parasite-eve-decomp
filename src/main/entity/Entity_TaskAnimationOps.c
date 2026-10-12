@@ -124,8 +124,6 @@ int Entity_AdvanceNodeById(int **arg0) {
 
 int Task_RunEntityCommand(int **arg0) {
     int result;
-    register int active asm("$5");
-    register int stack asm("$4");
 
     result = (signed char)Entity_TriggerAnimEvent((BattleEntity *)g_CurrentEntity, *(unsigned char *)arg0[0]);
     *arg0[1] = result;
@@ -133,10 +131,7 @@ int Task_RunEntityCommand(int **arg0) {
         return 1;
     }
 
-    active = 1;
-    stack = g_SceneDataTable0;
-    stack -= 0x10;
-    g_TaskNodePool->active = active;
-    g_SceneDataTable0 = stack;
+    g_TaskNodePool->active = 1;
+    g_SceneDataTable0 -= 0x10;
     return 0;
 }
