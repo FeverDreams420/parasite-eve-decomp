@@ -3,13 +3,13 @@
 /* MASPSX_FORCE_G0: 1 */
 #include "pe1/battle_runtime.h"
 #include "pe1/battle_status.h"
+#include "pe1/battle_entity_anim.h"
+#include "pe1/aya.h"
 /* COMMON metadata retains retail GP-relative addressing; symbols provide storage. */
 u8 D_8009CE70, D_8009CE74;
 Combatant *D_8009D278;
 int D_8009D28C;
 s8 D_8009D2A0;
-void Aya_DeriveStats(int *maximum, int *current);
-void Battle_StartDeathAnim(void);
 /* Eight-stage transition: model fades, an effect spawn, stat recovery and
  * HUD reset. Matching debt: fixed-register pins, a shared fade tail and
  * interior HUD symbols.

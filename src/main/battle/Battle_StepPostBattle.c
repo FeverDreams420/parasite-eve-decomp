@@ -3,11 +3,8 @@
 /* MASPSX_FORCE_G0: 1 */
 #include "pe1/battle_runtime.h"
 #include "pe1/battle_status.h"
-
-void Akao_Cmd_C1_WithSlot(int slot, int duration, int volume);
-void Akao_Cmd_21(int slot, int value);
-int Render_StartFadeIn(int);
-void Sys_Shutdown(void);
+#include "pe1/akao/commands.h"
+#include "pe1/game_state.h"
 
 /* COMMON metadata preserves GP-relative accesses; retail symbols supply storage. */
 u8 D_8009CE70, D_8009CE74;

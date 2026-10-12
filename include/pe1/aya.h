@@ -158,6 +158,7 @@ int Stat_BinarySearch(int value, int *table);
 void Stat_QueryDistanceAndSubLevel(int kind, int value, int *distance_out, int *sublevel_out);
 int Stat_OverflowQuery(int kind, int value);
 int Battle_GetScaledMaxHP(int level);
+void Aya_DeriveStats(int *out_max, int *out_current);
 int Aya_UnlockParasiteSpellById(int key);
 
 #endif /* PE1_AYA_H */

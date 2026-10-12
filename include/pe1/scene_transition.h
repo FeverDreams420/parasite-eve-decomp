@@ -49,6 +49,8 @@
  */
 
 int Render_BeginSceneLoad(void);
+/* Starts a screen fade-in lasting the given number of frames. */
+int Render_StartFadeIn(int frames);
 /* -1 applies the pending story day; ordinary days update the shared scene state. */
 int Scene_SetStoryDay(int storyDay);
 
