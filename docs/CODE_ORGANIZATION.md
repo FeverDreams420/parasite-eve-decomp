@@ -891,6 +891,69 @@ single removal (none was byte-identical):
   to 15). `Battle_PhaseAndEnemyEffectFlow` keeps its `(void *)D_8009D254`
   casts: removing them changes the bytes.
 
+### Battle HUD recipes and crutches left (src/main/battle, first half, 2026-10-12)
+
+Recipes that removed crutches here and apply to other HUD code:
+
+- PSY-Q macro shape. Retail indexes the draw-buffer packet arrays through
+  `(&array[D_8009CDDC][i])->field`, the shape the `setXY0`/`setRGB0` macros
+  expand to. GCC turns that into pointer arithmetic, `(f*stride + i*size) +
+  base`, and keeps the base in a register across a loop. A direct
+  `array[f][i].field` gives `(i*size + f*stride)` with the symbol folded into
+  the store (`MAX_HP_DIGIT`, `PANEL_DIGIT`). When retail adds the base before
+  the store offset of a sprite, declare the sprite-first view
+  (`BattleDigitSlot`) so the symbol is the sprite, not the packet.
+- Branches that store the same tail (`.b = 128` in both colour branches,
+  the four background tiles) should repeat it in each branch: retail's
+  shared block is GCC cross-jumping, not source.
+- HUD colour resets that use constant indices (`[0]`, `[1]`) are plain
+  `BATTLE_SET_GAUGE_GRADIENT`/`BATTLE_SET_SPRITE_COLOR` calls in the natural
+  per-quad order. The scheduler reorders the stores and groups the constants
+  the way retail does. The macros are comma expressions: a `do { } while (0)`
+  body or an inline function changes the result (lev 96 and 62).
+- A test of the form `if (D == 0 || ...) return; do { D--; } while (...)`
+  is the inverted loop that retail's entry jump comes from (`RewindTurn`).
+- A copy register that retail keeps for one pointer (`statusCore`) comes
+  from reading the field twice, before any store.
+- A temporary that only feeds two stores and must not share a register with
+  an earlier variable is block-local (`finisher` in
+  `Battle_PhaseInitEnemyTurn`).
+- A result flag that must not be merged with the constant 1 by CSE is an
+  `s8` (`Battle_ProcessActionSlot`).
+
+Crutches left; each was removed on its own and rebuilt, lev for that removal
+or for the best crutch-free form tried:
+
+- `Battle_EscapeAndPhaseInitFlow.c`: the per-frame gauge colour cases in
+  `Battle_PhaseInitEnemyTurn`, `Battle_PhaseHitReaction` and
+  `Battle_PhaseEndTurn` (all register pins and empty barriers of those
+  functions). Retail loads all five gradient constants before the third
+  store of each case; every crutch-free form tried (struct fields, the
+  gradient macros, shared or block-local variables, `u8` constants, an
+  inline helper, a volatile draw slot, even `-fno-schedule-insns`) loads each
+  constant right before its first use (lev 20 to 60 per case, 260 for the
+  four HP cases together). The `asm("" : : "i"(n))` statements stop
+  cross-jumping from merging more than the last store of each case.
+  `moveLock` in `Battle_PhaseInitEnemyTurn` (lev 12: the flag store sinks
+  below the player motion stores). The memory barriers in
+  `Battle_StepEscapeOrDeath` and `Battle_StepEntityDeath` (lev 41: retail
+  reloads `entityFlags` after storing it). The three stack reserves are
+  retail's unused frames.
+- `Battle_DrawStatusPanel`: the MISS branch keeps seven pins and two
+  barriers. Its five byte stores need the folded symbol and `f*0x578 +
+  s*0x8C` order; the macro form wastes 8 to 48 stack bytes because combine
+  leaves `(use)` insns for the deleted base registers, the direct array form
+  computes the slot offset first (lev 73 to 128).
+- `Battle_DrawHPBar`: the six `goto` loops are loops GCC's loop optimizer
+  must not see; as `do`/`while` loops it hoists constants and spills
+  `hudPage` (lev 98). Its pins, barriers and casts stay with that structure.
+- `Battle_ActionSlotAndEnemy.c`: `room` (`$4`, lev 27: one delay slot,
+  the rest is branch offsets), the `actor` barrier (lev 129: global
+  allocation swaps s0/s1), the `stepDeathAnimation` goto (lev 184 for an
+  inline search helper).
+- `Battle_AdvanceTurnSlot`: the `savedIndex` barrier (lev 26: CSE reuses the
+  slot index minus one from the command lookup).
+
 ## Link ownership
 
 Splat's `undefined_syms_auto` and `undefined_funcs_auto` files are address/name
