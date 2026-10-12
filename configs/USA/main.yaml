@@ -754,10 +754,7 @@ segments:
       - [0x6E5D4, c, psyq/libcard/init]
       - [0x6E6A0, pad]
       - [0x6E6A4, c, psyq/libapi/pad]
-      - [0x6E6C0, c, psyq/libapi/pad_2]
-      - [0x6E750, c, psyq/libapi/pad_3]
       # Psy-Q libapi PAD control entry points: StartPAD and StopPAD.
-      - [0x6E7E0, c, psyq/libapi/pad_4]
       - [0x6E848, c, psyq/libapi/pad_5]
       - [0x6E8C0, c, psyq/libapi/pad_6]
       - [0x6E9A0, pad]
