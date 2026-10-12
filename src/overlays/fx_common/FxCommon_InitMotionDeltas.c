@@ -29,7 +29,6 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     s32 qx;
     s32 qy;
     s32 qz;
-    register void *nextTable asm("$4");
 
     lookupTable = table;
     firstValue = first;
@@ -42,7 +41,7 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     extraPtr = &extra;
     func_8018F55C(sourceValue, D_801EA378[offset], base, &point, extraPtr);
 
-    nextTable = table;
+    lookupTable = table;
     firstValue &= 0xff;
     px = point.x;
     bx = g_FxCommonMotionPosition0.x;
@@ -68,7 +67,7 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     D_8019C0B8 = pz;
 
 
-    base = Gpu_GetTimTableEntry(nextTable, 2);
+    base = Gpu_GetTimTableEntry(lookupTable, 2);
     func_8018F55C(sourceValue, D_801EA378[offset + 1], base, &point, extraPtr);
 
     asm volatile("" : : "r"(secondValue));
