@@ -26,7 +26,7 @@ int PadInitDirect(u8 *output0, u8 *output1) {
     u8 *table40;
     int i;
     int fill;
-    register u8 *field40 asm("$4");
+    register u8 **field40 asm("$4");
     u8 *cursor;
     void (*swapCommand)(CardObj *);
     CardObj *clearObj;
@@ -51,18 +51,18 @@ int PadInitDirect(u8 *output0, u8 *output1) {
     bzero(clearObj, sizeof(CardObj) * 2);
     i = 0;
     fill = 0xFF;
-    field40 = (u8 *)&obj->statusBuffer;
+    field40 = &obj->statusBuffer;
     table40 = D_800A5B28;
     table3c = D_800A5AE0;
     obj[0].output_30 = savedOutput0;
     obj[1].output_30 = savedOutput1;
     do {
-        *(void **)(field40 - 0x34) = 0;
-        *(CardObj **)(field40 - 0x30) = obj;
-        (*(u8 **)(field40 - 0x10))[0] = fill;
-        (*(u8 **)(field40 - 0x10))[1] = 0;
-        *(u8 **)(field40 - 4) = table3c;
-        *(u8 **)field40 = table40;
+        CARD_OBJ_FROM_STATUS_BUFFER(field40)->subPorts = 0;
+        CARD_OBJ_FROM_STATUS_BUFFER(field40)->ownerPort = obj;
+        CARD_OBJ_FROM_STATUS_BUFFER(field40)->output_30[0] = fill;
+        CARD_OBJ_FROM_STATUS_BUFFER(field40)->output_30[1] = 0;
+        CARD_OBJ_FROM_STATUS_BUFFER(field40)->response_3c = table3c;
+        *field40 = table40;
         cursor = obj->actuatorMap;
         count = 5;
         do {
@@ -73,7 +73,7 @@ int PadInitDirect(u8 *output0, u8 *output1) {
         table40 += 0x23;
         table3c += 0x23;
         i++;
-        field40 += sizeof(CardObj);
+        field40 = &CARD_OBJ_FROM_STATUS_BUFFER(field40)[1].statusBuffer;
         obj++;
     } while (i < 2);
 

@@ -74,6 +74,10 @@ typedef struct CardObj {
     int combinationStorageBytes;                     /* 0xEC: combination headers and aligned data size */
 } CardObj;
 
+/* PadInitDirect walks the objects by their statusBuffer member. */
+#define CARD_OBJ_FROM_STATUS_BUFFER(pointer) \
+    ((CardObj *)((u8 *)(pointer) - PE1_OFFSETOF(CardObj, statusBuffer)))
+
 /* Direct-port operations shared by PADPORTD and PADMAIN. */
 void PadSetAct(int channel, u8 *payload, int size);
 void _padSetAct(CardObj *obj, u8 *payload, int size);
