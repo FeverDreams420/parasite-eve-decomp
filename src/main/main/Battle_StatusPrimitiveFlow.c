@@ -391,7 +391,7 @@ void Battle_DrawStatusSymbol(s8 which) {
     ((RenderSpritePacket *)packet)->x = *(u16 *)(D_8009E360 + slot * 48) + c[0];
     ((RenderSpritePacket *)packet)->y = *(u16 *)(D_8009E360 + slot * 48 + 2) + c[1];
     packetBase -= 8;
-    AddPrim((u8 *)D_800B0E38.ordering[slot] + 16, packetBase + packetOffset);
+    AddPrim(D_800B0E38.ordering[slot] + 4, (unsigned int *)(packetBase + packetOffset));
 }
 
 void Battle_DrawATBGauge(void)
@@ -412,7 +412,7 @@ void Battle_DrawATBGauge(void)
     packet = (BattleGaugePrim *)((char *)base - PE1_OFFSETOF(BattleGaugePrim, sprite));
 
     packet += g_ActiveDrawSlot;
-    sprite = (RenderSpritePacket *)((char *)base + sizeof(BattleGaugePrim) * g_ActiveDrawSlot);
+    sprite = &D_8009E768[g_ActiveDrawSlot].sprite;
     ammo += *(unsigned short *)&D_8009D278->action->attackWord & 0x3ff;
     sprite->x = D_8009E358[g_ActiveDrawSlot * 3].x0 + 8;
     sprite->y = y;

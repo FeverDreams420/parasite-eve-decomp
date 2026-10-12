@@ -183,7 +183,7 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
             result = 1;
             { register Combatant *postActor = D_8009D278;
               { register BattleEntity *postEntity = D_8009D254;
-                postEntity->animFrame = (u32)D_8009D254->animLastFrame << 16;
+                postEntity->animFrame = D_8009D254->animLastFrame << 16;
                 D_8009D254->entityFlags |= 0x100; }
               { register BattleAction *postAction = postActor->action;
                 { u32 turnWord = postAction->turnWord;
