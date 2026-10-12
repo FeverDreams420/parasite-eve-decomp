@@ -149,24 +149,17 @@ void CQ_error_flush(int event, u8 *data) {
 
 
 int CQ_execute(void) {
-    s32 index;
-    register CdDsReadQueueEntry *entry asm("$3");
-    register s32 offset asm("$2");
+    int *current;
+    CdDsQueueEntryAddress at;
+    CdDsReadQueueEntry *entry;
     if (DS_system_status(0) != 1) {
         return 0;
     }
 
-    entry = (CdDsReadQueueEntry *)&D_800A3604;
-    index = QUEUE_FROM_CURRENT(entry)->read_index;
-    entry = QUEUE_FROM_CURRENT(entry)->entries;
-    offset = index * 3;
-    offset <<= 3;
-    {
-        CdDsQueueEntryAddress at;
-        at.entry = entry;
-        at.word = offset + at.word;
-        entry = at.entry;
-    }
+    current = &D_800A3604;
+    at.entry = QUEUE_FROM_CURRENT(current)->entries;
+    at.word = *current * sizeof(CdDsReadQueueEntry) + at.word;
+    entry = at.entry;
 
     if (entry->active != 0) {
         return DS_cw(entry->command, entry->parameter) != 0;
