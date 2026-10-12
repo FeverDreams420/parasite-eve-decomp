@@ -61,7 +61,7 @@ s32 sprintf(char *dest, s8 *format, ...)
     s8 *flagBase;
     s8 *precisionBase;
 
-    args = (u8 *)&format + 4;
+    args = (u8 *)(&format + 1);
     c = *format;
     length = 0;
     if (c != 0) {
@@ -131,7 +131,7 @@ s32 sprintf(char *dest, s8 *format, ...)
             format = flagBase + 2;
             c = flagBase[2];
         } else {
-            while ((u32)(c - '0') < 10) {
+            while (c >= '0' && c <= '9') {
                 work.spec.width = work.spec.width * 10 - ('0' - c);
                 c = *++format;
             }
@@ -149,7 +149,7 @@ s32 sprintf(char *dest, s8 *format, ...)
                 format = precisionBase + 2;
                 c = precisionBase[2];
             } else {
-                while ((u32)(c - '0') < 10) {
+                while (c >= '0' && c <= '9') {
                     work.spec.precision = work.spec.precision * 10 - ('0' - c);
                     c = *++format;
                 }
@@ -189,7 +189,7 @@ conversion:
             if ((work.spec.header.flags >> 5) & 1) {
                 value = (s16)value;
             }
-            if ((s32)value < 0) {
+            if (value & 0x80000000) {
                 value = -value;
                 work.spec.header.bytes.prefix = minus;
             } else if ((work.spec.header.flags >> 1) & 1) {
