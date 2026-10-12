@@ -304,6 +304,10 @@ def main() -> int:
     head = []
     for key, flags in merged_markers.items():
         head.append(f"/* {key}: {' '.join(flags)} */\n")
+    common = '#include "common.h"\n'
+    if common in hoisted:
+        hoisted.remove(common)
+        hoisted.insert(0, common)
     head += hoisted
     if types:
         head.append("\n" + "\n".join(types))
