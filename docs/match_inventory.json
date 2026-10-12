@@ -398,7 +398,7 @@
       "evidence": "Size/offset tables; now a data subsegment (.code_data). Byte-identical; see docs/CONVENTIONS.md, text-resident data."
     },
     {
-      "unit": "overlays/render_clip/render_clip_header",
+      "unit": "overlays/fx_common_sector17/render_clip_header",
       "symbol": "func_80170000",
       "reported_size": 944,
       "source": null,
@@ -407,7 +407,7 @@
       "evidence": "render_clip.bin is PE.IMG sector 1809 = fx_common sector 17 (0x8800-0x9000), code already counted and matched in fx_common; the duplicate is now one data subsegment. Byte-identical; see docs/CONVENTIONS.md, text-resident data."
     },
     {
-      "unit": "overlays/render_clip/func_render_clip_0003B0",
+      "unit": "overlays/fx_common_sector17/func_render_clip_0003B0",
       "symbol": "func_801703B0",
       "reported_size": 1104,
       "source": null,

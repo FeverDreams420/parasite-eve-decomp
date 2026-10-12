@@ -140,9 +140,9 @@ name is the configured overlay name.
   `0x80094048`. They get a suffix the same way once their scenes are named.
 - **Shared overlays:** `fx_common`, `fx_field`, `menu_memcard`,
   `boot_display`, `mdec_diag` (MDEC diagnostics and the PsyQ LIBPRESS VLC
-  decoder, formerly `sys_reset`): named by responsibility. One name misleads
-  and should be replaced in a config rename: `render_clip` is a data-only
-  duplicate of one `fx_common` sector.
+  decoder, formerly `sys_reset`): named by responsibility.
+  `fx_common_sector17` (formerly `render_clip`) is a data-only duplicate of
+  that `fx_common` sector, named after the data it holds.
 - **Shared overlay code:** `src/overlays/room_lib/` holds the room library's
   unit (`RoomLib_ActorClasses.c`), which every overlay that links the
   library lists in its manifest as `../room_lib/<unit>` and compiles into its

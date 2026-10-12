@@ -45,7 +45,7 @@ Entry is the PsyQ start-up (`psyq/libsn/snmain.c`): it clears BSS, sets
 | `mdec_diag` | `0x8010BCF8` | 1 | MDEC diagnostics and the PsyQ LIBPRESS VLC decoder with its tables |
 | `menu_memcard` | `0x80120D00` | 1 | memory-card menu |
 | `boot_display` | `0x80122FA4` | 1 | boot screens: text blocks, glyphs, display buffers |
-| `render_clip` | `0x80170000` | 1 | one PE.IMG sector duplicating part of `fx_common`; data only |
+| `fx_common_sector17` | `0x80170000` | 1 | one PE.IMG sector duplicating part of `fx_common` (its sector 17); data only |
 
 Rooms, scene sets and the effect blocks are linked for the same window, so
 only one of them can run at a time. `boot_display` and `menu_memcard`
