@@ -118,7 +118,7 @@ segments:
       - [0x19A4, rodata, main/rodata_0019A4]
       - [0x19A8, .rodata, battle/Inv_BuildWeaponList]
       - [0x19F8, .rodata, battle/BattleCmd_LoadWeaponModifiers]
-      - [0x1A18, .rodata, battle/Inv_BuildArmorList]
+      - [0x1A18, .rodata, aya/Inv_BuildArmorList]
       - [0x1A5C, .rodata, item/Inv_InsertItem]
       - [0x1AA4, .rodata, item/Inv_ItemActions]
       - [0x1ADC, .rodata, item/Inv_EquipmentSelection]
@@ -486,13 +486,13 @@ segments:
       - [0x42180, c, battle/Inv_BuildWeaponList]
       - [0x424C4, c, battle/BattleCmd_LoadWeaponModifiers]
       - [0x425F8, c, battle/Battle_GetScaledMaxHP]
-      - [0x42648, c, item/Inv_BonusSlotCount]
-      - [0x42664, c, battle/Inv_BuildArmorList]
+      - [0x42648, c, aya/Inv_BonusSlotCount]
+      - [0x42664, c, aya/Inv_BuildArmorList]
       - [0x4298C, c, aya/Aya_StatDerivation]
-      - [0x42CD0, c, menu/Menu_SoundsAndBattleQueries]
-      - [0x42F0C, c, akao/Akao_SetBgmVolumeFade]
-      - [0x42F64, c, menu/Menu_ActionSubmenuSelection]
-      - [0x4308C, c, time/GameTime_CounterSeconds]
+      - [0x42CD0, c, aya/Menu_SoundsAndBattleQueries]
+      - [0x42F0C, c, item/Akao_SetBgmVolumeFade]
+      - [0x42F64, c, item/Menu_ActionSubmenuSelection]
+      - [0x4308C, c, item/GameTime_CounterSeconds]
       # Item-drop random table seeding and per-draw refresh share g_ItemDropRngIndex.
       - [0x430F0, c, item/Inv_DropRng]
       # Byte-string helpers, item grid rebuild and active-list selection share the
@@ -504,7 +504,7 @@ segments:
       - [0x43AB4, c, item/Inv_DataLookup]
       # Item-data row renderer and cursor-text selector.
       # Contiguous item-list row selection and renderer UI helpers.
-      - [0x43CE4, c, menu/Sfx_DrawSlotRow]
+      - [0x43CE4, c, item/Sfx_DrawSlotRow]
       - [0x4402C, c, item/Inv_FindFirstEmptySlot]
       - [0x44168, c, item/Inv_InsertItem]
       - [0x4466C, c, item/Inv_CountByValue]
@@ -520,24 +520,24 @@ segments:
       - [0x4564C, c, item/Inv_EquipmentCapacityFlow]
       - [0x45BA4, c, item/Inv_RollRandomItemType]
       - [0x45E10, c, item/Item_PackParasiteSpells]
-      - [0x45E68, c, aya/Aya_UnlockParasiteSpellById]
+      - [0x45E68, c, item/Aya_UnlockParasiteSpellById]
       - [0x45EE8, c, item/Inv_PackedListItem]
       # Selection masks, ammo transfer, comparison panels, item actions and
       # the active-list controller share records and direct calls (-G8).
       - [0x45F60, c, item/Inv_ItemActions]
-      - [0x486CC, c, menu/menu_get]
+      - [0x486CC, c, item/menu_get]
       - [0x48830, c, item/Inv_TransferItem]
       - [0x48B3C, c, item/Inv_CanAddActiveListItemToAya]
-      - [0x492A8, c, menu/Menu_DrawArmorItemDetail]
+      - [0x492A8, c, item/Menu_DrawArmorItemDetail]
       # Wayne-list item lookup, kind filtering, filtered-slot lookup, eligibility and
       # swaps form one 0x978-byte unit.
       - [0x493BC, c, item/Inv_InventorySwap]
-      - [0x49D34, c, menu/Menu_OpenItemUsePanelAtIndex]
+      - [0x49D34, c, item/Menu_OpenItemUsePanelAtIndex]
       # Armor capacity, snapshots, selection restore and transfers share the item-runtime state.
       - [0x49E8C, c, item/Inv_ArmorCapacity]
       # Item comparators, subrange passes, and all sort dispatchers share active sort state.
       - [0x4B7FC, c, item/Inv_CompareItemsForSort]
-      - [0x4C090, c, menu/Menu_BattleEquipMode]
+      - [0x4C090, c, item/Menu_BattleEquipMode]
       - [0x4C0A8, c, item/stat]
       # Metadata-window reset, selection, editing, loading and accessors share
       # one contiguous 0x2AC-byte -G8 unit, including its common index.
