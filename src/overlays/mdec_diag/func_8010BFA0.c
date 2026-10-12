@@ -1,5 +1,5 @@
 #include "common.h"
-#include "pe1/sys_reset.h"
+#include "pe1/mdec_diag.h"
 
 void func_8010BFA0(s32 *arg0, s32 arg1) {
     if (arg1 & 1) {

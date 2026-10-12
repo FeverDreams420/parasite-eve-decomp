@@ -1,5 +1,5 @@
-#ifndef PE1_SYS_RESET_H
-#define PE1_SYS_RESET_H
+#ifndef PE1_MDEC_DIAG_H
+#define PE1_MDEC_DIAG_H
 
 #include "common.h"
 

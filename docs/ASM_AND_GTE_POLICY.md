@@ -296,8 +296,8 @@ Overlay SDK entries in the same manifest:
 
 | Functions | Unit | Object | Evidence |
 | --- | --- | --- | --- |
-| `func_8010C4CC` (DecDCTvlcSize), `func_8010C4FC` (DecDCTvlc) | `sys_reset` `DecDCTvlc` | LIBPRESS VLC | DecDCTvlcSize: 12/12 words identical to PSY-Q 3.5 `vlc.o` with relocations masked, label `default` at the same offset. DecDCTvlc keeps the frameless static-state protocol and has 54 trapping instructions and COP0 Status masking; its 4.0 body was revised after 3.5. The VLC range 0x8010C4C8..0x8010C860 is 0x398 bytes, the size Psyz gives the PSY-Q 4.0 `vlc` object. |
-| `func_8010C86C` (DecDCTvlcSize2), `func_8010C89C` (DecDCTvlc2) | `sys_reset` `DecDCTvlc2` | LIBPRESS VLC_C | The same protocol; DecDCTvlc2 has 56 trapping instructions and reads the table built by `SysReset_ExpandDecoderTable` (DecDCTvlcBuild). Psyz places DecDCTvlcSize2 at +4 of the 4.0 `vlc_c` object. |
+| `func_8010C4CC` (DecDCTvlcSize), `func_8010C4FC` (DecDCTvlc) | `mdec_diag` `DecDCTvlc` | LIBPRESS VLC | DecDCTvlcSize: 12/12 words identical to PSY-Q 3.5 `vlc.o` with relocations masked, label `default` at the same offset. DecDCTvlc keeps the frameless static-state protocol and has 54 trapping instructions and COP0 Status masking; its 4.0 body was revised after 3.5. The VLC range 0x8010C4C8..0x8010C860 is 0x398 bytes, the size Psyz gives the PSY-Q 4.0 `vlc` object. |
+| `func_8010C86C` (DecDCTvlcSize2), `func_8010C89C` (DecDCTvlc2) | `mdec_diag` `DecDCTvlc2` | LIBPRESS VLC_C | The same protocol; DecDCTvlc2 has 56 trapping instructions and reads the table built by `SysReset_ExpandDecoderTable` (DecDCTvlcBuild). Psyz places DecDCTvlcSize2 at +4 of the 4.0 `vlc_c` object. |
 
 The three zero words at 0x8010C860..0x8010C86B between the two objects are a
 separate data subsegment, so neither unit range contains padding.

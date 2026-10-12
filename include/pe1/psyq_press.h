@@ -1,7 +1,7 @@
 #ifndef PE1_PSYQ_PRESS_H
 #define PE1_PSYQ_PRESS_H
 
-/* Psy-Q LIBPRESS entry points linked into the sys_reset overlay. */
+/* Psy-Q LIBPRESS entry points linked into the mdec_diag overlay. */
 
 /* DecDCToutCallback: installs the MDEC-out DMA completion callback. */
 void func_8010C0D8(void *callback);

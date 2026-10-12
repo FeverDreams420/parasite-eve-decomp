@@ -1,5 +1,5 @@
 #include "common.h"
-#include "pe1/sys_reset.h"
+#include "pe1/mdec_diag.h"
 typedef unsigned int size_t;
 
 typedef struct DecDCTEnv {

@@ -1,4 +1,4 @@
-#include "pe1/sys_reset.h"
+#include "pe1/mdec_diag.h"
 
 int func_8010C448(char *message) {
     func_80071A74(D_8010BD38, message);

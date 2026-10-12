@@ -42,7 +42,7 @@ Entry is the PsyQ start-up (`psyq/libsn/snmain.c`): it clears BSS, sets
 | `scene_eNN` | `0x8018EFE8` | 22 | special-scene sets: entry `NN` of the table at `0x80094048`, section 3 |
 | `fx_field` | `0x8018EFE8` | 1 | effect block (PE.IMG sectors 10994..10995) |
 | `fx_common` | `0x8018EFF0` | 1 | effect code block (PE.IMG sectors 1792..1817) |
-| `sys_reset` | `0x8010BCF8` | 1 | MDEC diagnostics and the PsyQ LIBPRESS VLC decoder with its tables |
+| `mdec_diag` | `0x8010BCF8` | 1 | MDEC diagnostics and the PsyQ LIBPRESS VLC decoder with its tables |
 | `menu_memcard` | `0x80120D00` | 1 | memory-card menu |
 | `boot_display` | `0x80122FA4` | 1 | boot screens: text blocks, glyphs, display buffers |
 | `render_clip` | `0x80170000` | 1 | one PE.IMG sector duplicating part of `fx_common`; data only |

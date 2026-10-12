@@ -73,8 +73,8 @@
     },
     {
       "name": "func_8010C4CC",
-      "module": "sys_reset",
-      "source": "overlays/sys_reset/DecDCTvlc.c",
+      "module": "mdec_diag",
+      "source": "overlays/mdec_diag/DecDCTvlc.c",
       "address": "0x8010C4CC",
       "size": 48,
       "origin": "psyq",
@@ -89,8 +89,8 @@
     },
     {
       "name": "func_8010C4FC",
-      "module": "sys_reset",
-      "source": "overlays/sys_reset/DecDCTvlc.c",
+      "module": "mdec_diag",
+      "source": "overlays/mdec_diag/DecDCTvlc.c",
       "address": "0x8010C4FC",
       "size": 868,
       "origin": "psyq",
@@ -104,8 +104,8 @@
     },
     {
       "name": "func_8010C86C",
-      "module": "sys_reset",
-      "source": "overlays/sys_reset/DecDCTvlc2.c",
+      "module": "mdec_diag",
+      "source": "overlays/mdec_diag/DecDCTvlc2.c",
       "address": "0x8010C86C",
       "size": 48,
       "origin": "psyq",
@@ -119,8 +119,8 @@
     },
     {
       "name": "func_8010C89C",
-      "module": "sys_reset",
-      "source": "overlays/sys_reset/DecDCTvlc2.c",
+      "module": "mdec_diag",
+      "source": "overlays/mdec_diag/DecDCTvlc2.c",
       "address": "0x8010C89C",
       "size": 864,
       "origin": "psyq",

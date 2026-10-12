@@ -55,7 +55,7 @@ class CrutchDebtTests(unittest.TestCase):
                 'GAME_ASM_FUNCTION(Math_FixedRoundToInt,\n'
                 '    "    ori $at, $zero, 0x8000\\n" "    add $v0, $a0, $at\\n"\n'
                 '    "    jr $ra\\n" "    sra $v0, $v0, 16\\n");\n')
-            vlc = root / "overlays" / "sys_reset"
+            vlc = root / "overlays" / "mdec_diag"
             vlc.mkdir(parents=True)
             (vlc / "DecDCTvlc.c").write_text(
                 'PSYQ_ASM_OBJECT(LIBPRESS, VLC)\n'

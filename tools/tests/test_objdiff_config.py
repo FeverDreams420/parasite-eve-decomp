@@ -42,7 +42,7 @@ class CategoryTests(unittest.TestCase):
         self.assertEqual(objdiff_config.overlay_category("room_m005"), "rooms")
         self.assertEqual(objdiff_config.overlay_category("scene_e01"), "scenes")
         self.assertEqual(objdiff_config.overlay_category("fx_field"), "system")
-        self.assertEqual(objdiff_config.overlay_category("sys_reset"), "system")
+        self.assertEqual(objdiff_config.overlay_category("mdec_diag"), "system")
 
     def test_every_category_used_is_declared(self):
         # objdiff silently drops a unit's category when the config never

@@ -1,5 +1,5 @@
 /* ASSEMBLER: GNU */
-#include "pe1/sys_reset.h"
+#include "pe1/mdec_diag.h"
 
 void func_8010C1EC(s32 *data, u32 size)
 {

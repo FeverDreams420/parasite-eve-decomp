@@ -1,4 +1,4 @@
-#include "pe1/sys_reset.h"
+#include "pe1/mdec_diag.h"
 
 s32 func_8010C03C(s32 mode) {
     s32 result;
