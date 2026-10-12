@@ -306,7 +306,7 @@ differently but resolve to the same options count once.
 - `src/overlays/room_m023_theater/m023.c`
 - `src/overlays/room_m256_museum/m256.c`
 - `src/overlays/room_m273_liberty/m273.c`
-- `src/overlays/room_m273_liberty/m273_boss_sway.c`
+- `src/overlays/room_m273_liberty/m273.c`
 - `src/overlays/room_m318_chrysler/m318.c`
 - `src/overlays/room_m349_cruiser/m349.c`
 - `src/overlays/room_m350_cruiser/m350.c`
@@ -565,7 +565,7 @@ means only the order of symbol-table entries changed (cc1 `-G8` emits
 | `overlays/room_m256_museum/m256.c` | maspsx `--expand-div`: lev 14 (func_80192680 14) |
 | `overlays/room_m273_liberty/RoomM273_PulseSpriteCallback.c` | cc1 `-fno-schedule-insns`: lev 24 (RoomM273_PulseSpriteCallback 24) |
 | `overlays/room_m273_liberty/m273.c` | maspsx `--expand-div`: lev 13 (func_80192F5C 13) |
-| `overlays/room_m273_liberty/m273_boss_sway.c` | maspsx `--expand-div`: lev 17 (func_80197BBC 17) |
+| `overlays/room_m273_liberty/m273.c` | maspsx `--expand-div`: lev 17 (func_80197BBC 17) |
 | `overlays/room_m318_chrysler/m318.c` | maspsx `--expand-div`: lev 22 (func_801955E4 22) |
 | `overlays/room_m349_cruiser/m349.c` | maspsx `--expand-div`: lev 47 (func_8018F7C4 47) |
 | `overlays/room_m350_cruiser/RoomEffect_ConfiguredPulseCallback.c` | cc1 `-G8`: lev 7 (func_80196C64 7); maspsx `-G8`: identical; maspsx `--use-comm-section`: identical; FORCE_G0: lev 14 (func_80196C64 14); small-data set: lev 7 (func_80196C64 7) |

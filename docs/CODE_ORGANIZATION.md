@@ -165,12 +165,13 @@ after what their functions do (`fx_common/camera_nodes.c`,
   effects tables, and the 8-aligned effects tables take the 4-byte pad
   retail has. In a unit of its own the effects run could not reproduce
   that pad (the link shrank by 4).
-- Two type views of one symbol: in `room_m273_liberty`, the poll/reset
-  template of `RoomEffect_RisingSpritePoolFlow` declares `D_8019AF04` as a
-  `RoomFxSeed8` seed, while the boss code declares it as the
-  `RoomM273DropQueue` that starts with that seed; that unit separates
-  `m273.c` from `m273_boss_sway.c` until the template can take the queue's
-  member.
+- Two type views of one symbol, resolved: in `room_m273_liberty` the
+  poll/reset template declared `D_8019AF04` as a `RoomFxSeed8` seed and the
+  boss code as the `RoomM273DropQueue` that starts with it. The queue's
+  first member is now that seed (`hit`), the template copies
+  `D_8019AF04.hit`, and its including units declare the words they name,
+  so the main run, the rising sprite pools and the boss sway are one
+  `m273.c`.
 - Not attempted: `room_lib/RoomEffect_MotionParticles{,_2,_3}` (split by
   `-fno-strength-reduce`, needs a probe first).
 

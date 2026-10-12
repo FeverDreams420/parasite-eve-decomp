@@ -52,9 +52,7 @@ segments:
       # The ring emitter fills the same 24-byte record interpreted by its callback.
       # The batch emitter fills the callback's contiguous eight-byte records.
       # Sized-table, timed, and position-layer sprite pools share one TU.
-      - [0x8248, c, RoomEffect_RisingSpritePoolFlow]
       # Boss sweep position and its shard/pool callbacks share the boss state ABI.
-      - [0x8BD4, c, m273_boss_sway]
       # Paired ground sprites and ground rings share sway points and pool-record layout.
       # The emitter owns the callback's four-byte pointer entries.
       # The pointer emitter and boss sway controller share the typed sway-point table.
