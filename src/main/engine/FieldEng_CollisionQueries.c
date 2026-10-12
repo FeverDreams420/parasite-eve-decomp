@@ -18,7 +18,6 @@ int func_800C5EB0(char *data, void *unused, int *hit) {
     u32 idx;
     u32 count;
     int countMinus;
-    u16 timer;
 
     entry = data_s3->nodes;
     hit_s4 = hit;
@@ -70,9 +69,7 @@ int func_800C5EB0(char *data, void *unused, int *hit) {
         } while (i < data_s3->count - 1);
     }
 
-    timer = *(volatile u16 *)&data_s3->collision_step;
-    i = ((s16)timer == 0x64);
-    data_s3->collision_step = timer + 1;
+    i = (data_s3->collision_step++ == 0x64);
 
     return i;
 }
