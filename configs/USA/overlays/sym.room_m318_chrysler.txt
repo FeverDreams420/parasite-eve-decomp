@@ -1,8 +1,8 @@
 GetClut = 0x80077AA4; // type:func
 FieldFx_VecToAngle = 0x800DFF80;
 FieldFx_TurnToward = 0x800DFFB8;
-RoomLib_SetArg1_8019937C = 0x8019937C; // type:func
-RoomSlotA_8019937C = 0x80199938;
+RoomM318_SetScriptArg2 = 0x8019937C; // type:func
+g_RoomM318ScriptArg2 = 0x80199938;
 func_80199218 = 0x80199218; // type:func
 func_80199234 = 0x80199234; // type:func
 func_80199250 = 0x80199250; // type:func

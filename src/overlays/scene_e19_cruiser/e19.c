@@ -102,7 +102,7 @@ void SceneEffect_GrabOnApproach(SceneGrabHead *head) {
         }
     }
     *control->signal = 3;
-    control->callback = RoomLib_RunAfterFrame37_80192BC0;
+    control->callback = SceneE19_RunAfterFrame37;
 }
 
 /* Grab sequence driver: pins the player to the selection matrix and steps
@@ -220,7 +220,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneE19FrameGateEntity, link) == 8,
 PE1_STATIC_ASSERT(sizeof(SceneE19FrameGateEntity) == 0x0C,
                   scene_e19_frame_gate_entity_size);
 
-void RoomLib_RunAfterFrame37_80192BC0(SceneE19FrameGateEntity *o)
+void SceneE19_RunAfterFrame37(SceneE19FrameGateEntity *o)
 {
     if (o->link->winLo >= 0x26) {
         func_80192BFC();

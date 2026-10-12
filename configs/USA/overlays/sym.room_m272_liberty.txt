@@ -1,5 +1,5 @@
-RoomM272_Cinematic_8018F014 = 0x8018F014; // type:func
-RoomM272_SetPhase_8018F178 = 0x8018F178; // type:func
+RoomM272_Cinematic = 0x8018F014; // type:func
+RoomM272_SetPhase = 0x8018F178; // type:func
 RoomM272_Nop_8018F188 = 0x8018F188; // type:func
 RoomM272_Nop_8018F190 = 0x8018F190; // type:func
 RoomM272_Nop_8018F198 = 0x8018F198; // type:func

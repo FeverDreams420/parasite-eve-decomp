@@ -384,10 +384,10 @@ class SceneE20MappingTests(unittest.TestCase):
             [0x24, ".rodata", "RoomEffect_HoverOrbController_8018F750"],
             [0x40, "c", "RoomEffect_FlareParticle_8018F028"],
             [0x768, "c", "RoomEffect_HoverOrbController_8018F750"],
-            [0x1704, "c", "Scene_CommandEffectSlot"],
+            [0x1704, "c", "SceneE20_CommandEffectSlot"],
             [0x17F8, "data", "scene_e20_tail"],
         ])
-        source = ROOT / "src/overlays/scene_e20_cruiser/Scene_CommandEffectSlot.c"
+        source = ROOT / "src/overlays/scene_e20_cruiser/SceneE20_CommandEffectSlot.c"
         self.assertEqual(source_quality.classify(source), "semantic_c")
 
     def test_retail_switch_targets_are_internal_not_function_entries(self):
@@ -426,7 +426,7 @@ class SceneE08MappingTests(SceneFunctionRangeMixin, unittest.TestCase):
                      if isinstance(r, dict) else r for r in segment["subsegments"]]
 
     def test_header_and_compiler_jump_tables_are_data(self):
-        for name in ("Scene_UpdateFadeSlots_801905F8", "Scene_InitParticleSlots_80191DB8"):
+        for name in ("SceneE08_UpdateFadeSlots", "SceneE08_InitParticleSlots"):
             source = ROOT / "src/overlays/scene_e08_chrysler" / (name + ".c")
             self.assertIn("void " + name + "(", source.read_text())
         self.assertEqual(self.rows[0], [0, "rodatabin", "scene_e08_header"])

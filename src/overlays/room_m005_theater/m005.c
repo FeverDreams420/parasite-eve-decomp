@@ -33,10 +33,10 @@ typedef struct RoomM005_Dialog {
 
 /* Dialog anchor room_m005 keeps in its scene script record. */
 #define RoomM005_ScriptDialog (*(RoomM005_Dialog *)&g_RoomScriptRecord)
-#include "RoomM005_FxOrbiter_8018F018_externs.h"
+#include "RoomM005_FxOrbiter_externs.h"
 #include "pe1/gte_types.h"
 
-int RoomM005_FxOrbiter_8018F018(int mode, RoomM005_OrbRec *r) {
+int RoomM005_FxOrbiter(int mode, RoomM005_OrbRec *r) {
     unsigned short anchor[3];
     short q[4];
     char out[8];
@@ -123,7 +123,7 @@ int func_8018F330(int mode, RoomM005OrbiterState *state) {
         state->frame = 0;
         pool = ANIM_POOL_AS(RoomM005Channel)->pool;
         return func_800CE560(pool, 16, 24,
-                             (FieldAnimCallbackListCallback)RoomM005_FxOrbiter_8018F018);
+                             (FieldAnimCallbackListCallback)RoomM005_FxOrbiter);
     case 1:
         if (D_800E27EC == 7) {
             soundSlot = (RoomSoundSlot *)D_800B0E64;

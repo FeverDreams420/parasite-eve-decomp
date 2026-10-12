@@ -332,7 +332,7 @@ int func_80192CD4(int mode, RoomM089SpinModel *spin, GteShortVector *anchor) {
  * local pointer, whose copy keeps the frame counter load below the palette
  * lookup. */
 
-int RoomEffect_SwirlRiseSprite_80193200(int mode, RoomSwirlRiseState *state,
+int RoomM089_SwirlRiseSprite(int mode, RoomSwirlRiseState *state,
                                         GteShortVector *anchor) {
     GteShortVector origin;
     GteRotation rotation;

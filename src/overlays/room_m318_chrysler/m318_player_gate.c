@@ -41,7 +41,9 @@ s32 func_801992A4(s32 arg0, void *arg1, s32 *arg2) {
     }
 }
 
-ROOMLIB_SET_ARG1(RoomLib_SetArg1_8019937C, RoomSlotA_8019937C)
+/* A second single-argument script entry; the room's first is the shared
+ * RoomLib_SetArg1 unit linked just before this one. */
+ROOMLIB_SET_ARG1(RoomM318_SetScriptArg2, g_RoomM318ScriptArg2)
 
 int *func_8019938C(void) {
     return &D_801998F0;

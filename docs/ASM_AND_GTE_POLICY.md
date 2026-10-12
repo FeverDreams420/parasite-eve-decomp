@@ -2193,7 +2193,7 @@ The compiler owns the seven-entry switch table at overlay offset `0x24`.
 The complete overlay retains SHA-1
 `cb847aba4aa80d900b766aa03ca9e306edc140e8`.
 
-The controller and `Scene_CommandEffectSlot` share the 24-byte command record
+The controller and `SceneE20_CommandEffectSlot` share the 24-byte command record
 in `pe1/scene_e20_hover_orb.h`. The controller record is 196 bytes, including seven
 head/tail history pairs beginning at offset `0x54`; spawned particles are
 20 bytes. Reserved members and address-based external names remain provisional.

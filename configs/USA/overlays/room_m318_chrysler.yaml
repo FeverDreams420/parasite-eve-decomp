@@ -90,7 +90,7 @@ segments:
       - [0xA944, data, RoomSlotA_80199294]
       - [0xA948, data, D_80199930]
       - [0xA94C, data, D_80199934]
-      - [0xA950, data, RoomSlotA_8019937C]
+      - [0xA950, data, g_RoomM318ScriptArg2]
       - [0xA954, data, D_8019993C]
       - [0xA958, data, D_80199940]
       - start: 0xA95C

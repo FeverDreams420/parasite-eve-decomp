@@ -644,7 +644,7 @@ void func_80190460(void *unused0, void *unused1, char *effect) {
     }
 }
 
-void Scene_UpdateFadeSlots_801905F8(int unused, u8 *sceneState, SceneFadeSlots *slots) {
+void SceneE08_UpdateFadeSlots(int unused, u8 *sceneState, SceneFadeSlots *slots) {
     unsigned int i;
     u8 frame;
 
@@ -1246,7 +1246,7 @@ void func_80191B14(int unused, SceneMovingState *state, SceneMovingSlots *slots)
     }
 }
 
-void Scene_InitParticleSlots_80191DB8(int unused0, int unused1, SceneParticleSlots *slots) {
+void SceneE08_InitParticleSlots(int unused0, int unused1, SceneParticleSlots *slots) {
     unsigned int i;
 
     slots->motionRamp = 0;

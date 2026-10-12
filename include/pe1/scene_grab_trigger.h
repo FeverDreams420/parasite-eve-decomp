@@ -45,6 +45,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneGrabTrigger, control.grabbed) == 0x44,
 void func_80020C74(void);
 s32 func_80192D04(char *obj);
 void func_80192878();
-void RoomLib_RunAfterFrame37_80192BC0();
+void SceneE19_RunAfterFrame37();
 
 #endif

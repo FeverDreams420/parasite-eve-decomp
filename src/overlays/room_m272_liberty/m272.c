@@ -10,7 +10,7 @@ int func_8018F00C(void) {
     return 0;
 }
 
-int RoomM272_Cinematic_8018F014(void) {
+int RoomM272_Cinematic(void) {
     RoomBlob8 b1 = RoomM272_BlobA;
     RoomBlob8 b2 = RoomM272_BlobB;
     RoomBlob8 b3 = RoomM272_BlobC;
@@ -31,7 +31,7 @@ int RoomM272_Cinematic_8018F014(void) {
     return 0;
 }
 
-int RoomM272_SetPhase_8018F178(int a, int b, int c, int d) {
+int RoomM272_SetPhase(int a, int b, int c, int d) {
     D_801991C8 = d;
     return 0;
 }
