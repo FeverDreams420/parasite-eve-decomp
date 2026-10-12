@@ -14,6 +14,9 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     u8 *table = &D_801D0260;
     GteShortVector *extraPtr;
     volatile FxCommonShortVec3 *origin0 = &g_FxCommonMotionOrigin0;
+    volatile FxCommonShortVec3 *target0 = &g_FxCommonMotionTarget0;
+    volatile FxCommonShortVec3 *origin1 = &g_FxCommonMotionOrigin1;
+    volatile FxCommonShortVec3 *target1 = &g_FxCommonMotionTarget1;
     register s32 sourceValue asm("$22");
     register void *lookupTable asm("$4");
     register s32 lookupCount asm("$5");
@@ -64,8 +67,8 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     origin0->y = by;
     origin0->z = bz;
     D_8019C0B4 = px;
-    D_8019C0B6 = py;
-    D_8019C0B8 = pz;
+    target0->y = py;
+    target0->z = pz;
 
 
     base = Gpu_GetTimTableEntry(lookupTable, 2);
@@ -93,9 +96,9 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     D_8019C060 = qy - ay;
     D_8019C064 = qz - az;
     D_8019C07C = ax;
-    D_8019C07E = ay;
-    D_8019C080 = az;
+    origin1->y = ay;
+    origin1->z = az;
     D_8019C084 = qx;
-    D_8019C086 = qy;
-    D_8019C088 = qz;
+    target1->y = qy;
+    target1->z = qz;
 }
