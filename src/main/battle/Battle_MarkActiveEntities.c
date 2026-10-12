@@ -5,8 +5,8 @@
 #include "pe1/battle_runtime.h"
 
 /* MASPSX_FORCE_G0 keeps the battle globals absolute; the COMMON fade step
- * D_8009CE6C supplies the small-data metadata of the one $gp-relative byte. */
-s8 D_8009CE6C;
+ * g_BattleFadeStep supplies the small-data metadata of the one $gp-relative byte. */
+s8 g_BattleFadeStep;
 
 inline static void Mark(BattleEntity *entity)
 {
@@ -89,7 +89,7 @@ void Battle_MarkActiveEntities(BattleTarget *table, int selected_index)
     return;
   }
   mode = (D_8009D278->action->turnWord >> 6) & 3;
-  D_8009CE6C = 0;
+  g_BattleFadeStep = 0;
   switch (mode)
   {
     case 0:

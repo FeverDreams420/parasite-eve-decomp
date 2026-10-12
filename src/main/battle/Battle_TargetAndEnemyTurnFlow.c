@@ -225,7 +225,7 @@ int Battle_HandleItemMenu(void) {
 u8 D_8009D2D8, D_8009CE3C, D_8009D1DC;
 u8 D_8009CE60, D_8009D25C;
 s8 D_8009CE40;
-u16 D_8009CE50;
+u16 g_BattlePendingCommand;
 s8 g_BattleTargetIndex;
 
 static inline void StoreSlot(BattleInitSlot *slot, BattleEntity *actor, s16 kind, s16 actionGeneration) {
@@ -357,14 +357,14 @@ int Battle_StepEnemyTurn(s8 mode) {
             }
             if (!D_8009CE40)
                 Sound(0x44C);
-            D_8009CE50 = D_8009D2A4;
+            g_BattlePendingCommand = D_8009D2A4;
         } else if (command == -1) {
             mode = 0;
         }
     } else if (mode == 2) {
         Battle_CycleTarget(D_8009CE40);
         if (D_8009D1F4 & 0x200) {
-            SetSlot(D_8009CE3C, g_BattleTargetList[g_BattleTargetIndex].actor, D_8009CE50,
+            SetSlot(D_8009CE3C, g_BattleTargetList[g_BattleTargetIndex].actor, g_BattlePendingCommand,
                     (s8)D_8009D2D8);
             D_8009D2D8--;
             D_8009CE3C++;

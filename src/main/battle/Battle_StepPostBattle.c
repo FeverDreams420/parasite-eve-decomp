@@ -7,7 +7,7 @@
 #include "pe1/game_state.h"
 
 /* COMMON metadata preserves GP-relative accesses; retail symbols supply storage. */
-u8 D_8009CE70, D_8009CE74;
+u8 g_BattleEndTimer, D_8009CE74;
 s32 D_8009D28C;
 
 /* End-of-battle sequence: retire enemy actors, fade sound and animate the
@@ -70,7 +70,7 @@ void Battle_StepPostBattle(void)
                     } while (entity != 0);
                 }
                 Battle_ResetEnemyStats(0);
-                D_8009CE70 = 0x46;
+                g_BattleEndTimer = 0x46;
                 D_8009CE74 += 1;
                 D_8009D254->entityFlags |= 0x100;
             }
@@ -80,7 +80,7 @@ void Battle_StepPostBattle(void)
             break;
         case 1: {
             s32 exemptKind;
-            if (D_8009CE70 == 0x3C) {
+            if (g_BattleEndTimer == 0x3C) {
                 Render_StartFadeIn(0x3C);
                 Akao_Cmd_C1_WithSlot(0, 0x3C, 0);
                 exemptKind = 1;
@@ -108,16 +108,16 @@ void Battle_StepPostBattle(void)
                 } while (hiddenEntity != 0);
             }
         }
-        countdown = D_8009CE70;
+        countdown = g_BattleEndTimer;
         if (countdown == 0) {
             Pm_StopAllBoth();
             Akao_Cmd_21(0, 0xFF);
-            D_8009CE70 = 0x1E;
+            g_BattleEndTimer = 0x1E;
             D_8009CE74++;
             break;
         }
         else {
-            D_8009CE70--;
+            g_BattleEndTimer--;
         }
         break;
     }
@@ -128,14 +128,14 @@ void Battle_StepPostBattle(void)
         register RenderTexturedQuad *base asm("$3");
         s32 frame;
         asm volatile("" : : "r"(top));
-        brightness = brightnessBase - (D_8009CE70 * 4);
+        brightness = brightnessBase - (g_BattleEndTimer * 4);
         D_800BE9F0[D_8009CDDC].color.bytes.r = brightness;
         D_800BE9F0[D_8009CDDC].color.bytes.g = brightness;
         D_800BE9F0[D_8009CDDC].color.bytes.b = brightness;
         base = D_800BE9F0;
         frame = D_8009CDDC;
         expandingPanel = &base[frame];
-        timer = D_8009CE70;
+        timer = g_BattleEndTimer;
         asm volatile("" : "=r"(expandingPanel) : "0"(expandingPanel));
         remainingFrames = timer & 0xFF;
         horizontalInset = remainingFrames * 4;
@@ -152,11 +152,11 @@ void Battle_StepPostBattle(void)
         if (remainingFrames != 0) {
             {
                 u8 nextTimer = timer - 1;
-                D_8009CE70 = nextTimer;
+                g_BattleEndTimer = nextTimer;
             }
         }
         else {
-            D_8009CE70 = 0x50;
+            g_BattleEndTimer = 0x50;
             D_8009CE74++;
             break;
         }
@@ -164,8 +164,8 @@ void Battle_StepPostBattle(void)
     }
     case 3: {
         u16 edgeCoordinate;
-        if ((u8) D_8009CE70 >= 0x1AU) {
-            u32 pulse = rcos((D_8009CE70 - 16) * 16) * 11U >> 11;
+        if ((u8) g_BattleEndTimer >= 0x1AU) {
+            u32 pulse = rcos((g_BattleEndTimer - 16) * 16) * 11U >> 11;
             register RenderTexturedQuad *base asm("$5") = D_800BE9F0;
             register u16 left asm("$6") = 100;
             s32 frame = D_8009CDDC;
@@ -201,21 +201,21 @@ void Battle_StepPostBattle(void)
             ((RenderTexturedQuad *)raisingPanel)->x3 = horizontalEdge;
         }
         raisingPanel->y3 = edgeCoordinate;
-        countdown = D_8009CE70;
+        countdown = g_BattleEndTimer;
         if (countdown == 0) {
             Anim_SetInterpRate(&D_8009D254->renderObject, 0x3C);
             D_8009D254->renderObject.flags_9C |= 2;
             Anim_SetInterpRate(&D_800B0CEC, 0x3C);
             {
                 u8 state = D_8009CE74;
-                D_8009CE70 = 0x3C;
+                g_BattleEndTimer = 0x3C;
                 state++;
                 D_800B0CEC.flags_9C |= 2;
                 D_8009CE74 = state;
             }
         }
         else {
-            D_8009CE70--;
+            g_BattleEndTimer--;
         }
         break;
     }
@@ -228,7 +228,7 @@ void Battle_StepPostBattle(void)
         }
         base = D_800BE9F0;
         right = 220;
-        fadeBrightness = D_8009CE70 * 2;
+        fadeBrightness = g_BattleEndTimer * 2;
         fadingPanel = &base[D_8009CDDC];
         fadingPanel->color.bytes.r = fadeBrightness;
         fadingPanel->x0 = 0x64;
@@ -241,7 +241,7 @@ void Battle_StepPostBattle(void)
         fadingPanel->y3 = 0x7C;
         base[D_8009CDDC].color.bytes.g = fadeBrightness;
         base[D_8009CDDC].color.bytes.b = fadeBrightness;
-        D_8009CE70--;
+        g_BattleEndTimer--;
         break;
     }
     case 5:

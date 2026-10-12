@@ -6,7 +6,7 @@
 #include "pe1/battle_entity_anim.h"
 #include "pe1/aya.h"
 /* COMMON metadata retains retail GP-relative addressing; symbols provide storage. */
-u8 D_8009CE70, D_8009CE74;
+u8 g_BattleEndTimer, D_8009CE74;
 Combatant *D_8009D278;
 int D_8009D28C;
 s8 D_8009D2A0;
@@ -34,17 +34,17 @@ int Battle_StepVictory(void)
             player->entityFlags &= ~0x100;
             break;
         }
-        D_8009CE70 = 16;
+        g_BattleEndTimer = 16;
         player->entityFlags |= 0x100;
         D_8009CE74++;
         break;
     case 1:
-        brightness = D_8009CE70;
+        brightness = g_BattleEndTimer;
         if (brightness != 0) {
             brightness = ~(brightness << 3);
             Render_FadeEntityColor(&D_8009D254->renderObject, brightness, brightness, brightness);
             Render_FadeEntityColor(&D_800B0CEC, brightness, brightness, brightness);
-            D_8009CE70--;
+            g_BattleEndTimer--;
             break;
         }
         Render_FadeEntityColor(&D_8009D254->renderObject, 255, 255, 255);
@@ -64,13 +64,13 @@ int Battle_StepVictory(void)
         Asset_Find08Alt(0x4AF, 0, spawnPlayer->posX.parts.integer, spawnPlayer->posY.parts.integer, spawnPlayer->posZ.parts.integer);
         {
             register u8 delay asm("$3") = 0x34;
-            D_8009CE70 = delay;
+            g_BattleEndTimer = delay;
         }
         D_8009CE74++;
         break;
     case 3:
-        if (D_8009CE70 != 0) {
-            D_8009CE70--;
+        if (g_BattleEndTimer != 0) {
+            g_BattleEndTimer--;
             break;
         }
         D_8009D254->renderObject.variant_visible = 1;
@@ -83,29 +83,29 @@ int Battle_StepVictory(void)
         D_800B0CEC.flags_9C |= 4;
         Render_FadeEntityColor(object, 255, 255, 255);
         Entity_SetActionMode(D_8009D254, 0xF);
-        D_8009CE70 = 30;
+        g_BattleEndTimer = 30;
         D_8009D254->animFrame = 0x230000;
         D_8009D254->animPrev.fixed = 0x220000;
         D_8009CE74++;
         break;
     case 4:
-        countdown = D_8009CE70;
+        countdown = g_BattleEndTimer;
         if (countdown == 16) {
             D_8009CE74++;
             player = D_8009D254;
             player->entityFlags &= ~0x100;
         } else {
-            D_8009CE70 = countdown - 1;
+            g_BattleEndTimer = countdown - 1;
         }
         break;
     case 5:
-        brightness = D_8009CE70;
+        brightness = g_BattleEndTimer;
         if (brightness != 0) {
             brightness = (brightness << 3) + 127;
 fade:
             Render_FadeEntityColor(&D_8009D254->renderObject, brightness, brightness, brightness);
             Render_FadeEntityColor(&D_800B0CEC, brightness, brightness, brightness);
-            D_8009CE70--;
+            g_BattleEndTimer--;
         } else {
             D_8009CE74++;
             D_8009D254->renderObject.flags_9C |= 0x20;

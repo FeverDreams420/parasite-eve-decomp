@@ -783,8 +783,8 @@ Still open:
       (lev 25). The `delay` pin only moves the `249` constant (lev 2).
     - `Battle_StepAyaAction` (9 pins, 7 barriers): case 9 written with a
       word pointer and named inserts reaches lev 16 (the outcome stores to
-      `D_8009CE54`/`D_8009CE55` sink below the actor loads, which do not
-      alias them); with the record views the store and load of the
+      `g_EvasionStatus` and `g_EvasionReaction` sink below the actor loads,
+      which do not alias them); with the record views the store and load of the
       reaction share one address register under cc1 `-G0` (lev 57). The
       pose save/restore cases keep `$2`/`$3`/`$4`/`$5` transfer pins
       (lev 2 to 55 each, measured one at a time).

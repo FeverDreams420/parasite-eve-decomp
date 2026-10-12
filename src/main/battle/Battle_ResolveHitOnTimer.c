@@ -9,24 +9,25 @@
 /* COMMON supplies small-data metadata to stock MASPSX. Existing retail
  * data/linker symbols provide storage; these do not allocate new globals. */
 u8 D_8009D274, D_8009D1D4, D_8009D294;
-s8 D_8009CE54, D_8009CE55;
+s8 g_EvasionStatus, g_EvasionReaction;
 
-/* Apply the evasion outcome Battle_CheckEvasion left in D_8009CE54/55 to one
- * target: a resolved hit sets the hit state, the weapon category and the
- * reaction in the core flags; an unresolved one opens the floating panel.
+/* Apply the evasion outcome Battle_CheckEvasion left in g_EvasionStatus and
+ * g_EvasionReaction to one target: a resolved hit sets the hit state, the
+ * weapon category and the reaction in the core flags; an unresolved one
+ * opens the floating panel.
  * The steal path reaches this through jump cross-jumping into the
  * single-target copy, as in retail. */
 static inline void ApplyEvasionOutcome(BattleEntity *target)
 {
     EnemyCombatant *core = target->core;
-    if (D_8009CE54 == 1)
+    if (g_EvasionStatus == 1)
     {
         EnemyCoreFlagBits *bits = (EnemyCoreFlagBits *)&core->coreFlags;
         bits->hitState = 1;
         bits->category = D_8009D278->action->attackWord >> 20;
-        bits->reaction = ((BattleEvasionReaction *)&D_8009CE55)->value;
+        bits->reaction = ((BattleEvasionReaction *)&g_EvasionReaction)->value;
     }
-    else if (D_8009CE54 == 0)
+    else if (g_EvasionStatus == 0)
     {
         core->panelC_val = -1;
         core->panelC_timer = 0x1E;
@@ -54,8 +55,8 @@ void Battle_ResolveHitOnTimer(void)
     actionId = action->actionCode.actionId;
     if (actionId == 8)
     {
-        Battle_CheckEvasion(selectedSlot->actor, (BattleEvasionOutcome *)&D_8009CE54, 0);
-        if (D_8009CE54 == 1)
+        Battle_CheckEvasion(selectedSlot->actor, (BattleEvasionOutcome *)&g_EvasionStatus, 0);
+        if (g_EvasionStatus == 1)
         {
             BattleEntity *thief = selectedSlot->actor;
             Asset_Find08Alt(0x46D, 0, thief->renderObject.target_x, thief->renderObject.target_y, thief->renderObject.target_z);
@@ -91,10 +92,10 @@ void Battle_ResolveHitOnTimer(void)
     else if (actionId == 6)
     {
         s16 reaction;
-        Battle_CheckEvasion(selectedSlot->actor, (BattleEvasionOutcome *)&D_8009CE54, 0);
+        Battle_CheckEvasion(selectedSlot->actor, (BattleEvasionOutcome *)&g_EvasionStatus, 0);
         ApplyEvasionOutcome(selectedSlot->actor);
-        reaction = D_8009CE55;
-        if (D_8009CE54 == 1)
+        reaction = g_EvasionReaction;
+        if (g_EvasionStatus == 1)
         {
             for (target = (BattleEntity *)D_8009D20C; target != 0; target = target->next)
             {
@@ -108,7 +109,7 @@ void Battle_ResolveHitOnTimer(void)
                 flags = target->entityFlags;
                 if (((flags & 0x2040) != 0x40) && !(flags & 0x4000) && (core->hpAlive > 0) && (target != selectedSlot->actor))
                 {
-                    Battle_CheckEvasion(target, (BattleEvasionOutcome *)&D_8009CE54, reaction);
+                    Battle_CheckEvasion(target, (BattleEvasionOutcome *)&g_EvasionStatus, reaction);
                     ApplyEvasionOutcome(target);
                 }
             }
@@ -169,14 +170,14 @@ void Battle_ResolveHitOnTimer(void)
                     if ((s16)angle < upper && lower < (s16)angle)
                         continue;
                 }
-                Battle_CheckEvasion(target, (BattleEvasionOutcome *)&D_8009CE54, 0);
+                Battle_CheckEvasion(target, (BattleEvasionOutcome *)&g_EvasionStatus, 0);
                 ApplyEvasionOutcome(target);
             } while ((target = target->next) != 0);
         }
     }
     else if (selectedSlot->actor != 0)
     {
-        Battle_CheckEvasion(selectedSlot->actor, (BattleEvasionOutcome *)&D_8009CE54, 0);
+        Battle_CheckEvasion(selectedSlot->actor, (BattleEvasionOutcome *)&g_EvasionStatus, 0);
         ApplyEvasionOutcome(selectedSlot->actor);
     }
     D_8009D294 = 0;

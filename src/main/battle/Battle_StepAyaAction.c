@@ -6,9 +6,9 @@
 /* COMMON declarations preserve GP size metadata for stock MASPSX;
  * storage is provided by the existing retail data/linker symbols. */
 u8 D_8009D25C;
-s8 D_8009CE48, D_8009CE54, D_8009CE55;
-s16 D_8009CE4C;
-u16 D_8009CE58[2], D_8009CE5C;
+s8 g_AyaAttackStep, g_EvasionStatus, g_EvasionReaction;
+s16 g_AyaActionTimer;
+u16 g_AyaSavedRotation[2], g_AyaSavedRotationZ;
 u8 D_8009D1D4;
 int D_8009D258;
 
@@ -46,19 +46,19 @@ s32 Battle_StepAyaAction(void)
       {
         BattleEntity *player = D_8009D254;
         transfer = player->posX.fixed;
-        D_8009E054 = transfer;
+        g_AyaSavedPosX = transfer;
         transfer = player->posY.fixed;
-        D_8009E058 = transfer;
+        g_AyaSavedPosY = transfer;
         transfer = player->posZ.fixed;
-        D_8009E05C = transfer;
+        g_AyaSavedPosZ = transfer;
         transfer = (u16) player->rotationX;
-        D_8009CE58[0] = transfer;
+        g_AyaSavedRotation[0] = transfer;
         rate = 30;
-        D_8009CE48 = 0;
-        D_8009CE58[1] = (u16) player->facingAngle;
+        g_AyaAttackStep = 0;
+        g_AyaSavedRotation[1] = (u16) player->facingAngle;
         mask = ~4;
         transfer = (u16) player->rotationZ;
-        D_8009CE5C = transfer;
+        g_AyaSavedRotationZ = transfer;
         render = &player->renderObject;
         transfer = D_8009D2E8;
         asm volatile("" : : "r"(transfer));
@@ -104,21 +104,21 @@ s32 Battle_StepAyaAction(void)
       D_8009D254->renderObject.flags_9C |= 4;
       assetOwner = D_8009D254;
       Scene_LoadRoomAssets(0x6CU, assetOwner);
-      D_8009CE4C = 0x1E;
+      g_AyaActionTimer = 0x1E;
       D_8009D25C++;
       break;
     }
       break;
 
     case 3:
-      if (D_8009CE4C == 0)
+      if (g_AyaActionTimer == 0)
     {
       D_8009D25C += 1;
       D_8009D254->entityFlags &= ~0x100;
     }
     else
     {
-      D_8009CE4C -= 1;
+      g_AyaActionTimer -= 1;
     }
 
     /* State 3 also waits for the animation handled by state 4. */
@@ -166,7 +166,7 @@ s32 Battle_StepAyaAction(void)
         targetEntity = D_800BE830[D_8009D1D4].actor;
         reachScale = (((EnemyCombatant *) targetEntity->core)->statusFlags2 >> 0x13) & 0x1F;
         targetDistance = ((targetEntity->renderObject.hit_cylinder.radius * reachScale) / 10) + D_8009D254->renderObject.hit_cylinder.radius;
-        targetAngle = Battle_CalcAngleToTarget(&targetEntity->renderObject, &D_8009E054);
+        targetAngle = Battle_CalcAngleToTarget(&targetEntity->renderObject, &g_AyaSavedPosX);
         D_8009D254->facingAngle = targetAngle;
         product = targetDistance * rsin(targetAngle);
         asm("" : "=r"(product) : "0"(product));
@@ -178,7 +178,7 @@ s32 Battle_StepAyaAction(void)
       D_8009D254->baseY = D_8009D254->posY.fixed;
       D_8009D254->baseZ = D_8009D254->posZ.fixed;
       Asset_Find08Alt(0x4B6, 0, D_8009D254->posX.parts.integer, D_8009D254->posY.parts.integer, D_8009D254->posZ.parts.integer);
-      D_8009CE4C = 0x1E;
+      g_AyaActionTimer = 0x1E;
       D_8009D25C++;
       break;
     }
@@ -190,7 +190,7 @@ s32 Battle_StepAyaAction(void)
       Entity_SetActionMode(D_8009D254, 7);
       D_8009D254->animFrame = D_8009D254->animLastFrame << 0xF;
     }
-      if (D_8009CE4C == 0)
+      if (g_AyaActionTimer == 0)
     {
       D_8009D254->renderObject.variant_visible = 1;
       Anim_SetInterpRate(&D_8009D254->renderObject, 0xF);
@@ -199,7 +199,7 @@ s32 Battle_StepAyaAction(void)
     }
     else
     {
-      D_8009CE4C -= 1;
+      g_AyaActionTimer -= 1;
     }
       break;
 
@@ -211,7 +211,7 @@ s32 Battle_StepAyaAction(void)
         flags |= 0x20;
         D_8009D254->renderObject.flags_9C = flags;
       }
-      Entity_SetActionMode(D_8009D254, ((D_8009CE48 * 2) + 8) & 0xFFFE);
+      Entity_SetActionMode(D_8009D254, ((g_AyaAttackStep * 2) + 8) & 0xFFFE);
       D_8009D25C += 1;
       break;
     }
@@ -220,7 +220,7 @@ s32 Battle_StepAyaAction(void)
     case 9:
       if (D_8009D254->animLastFrame == D_8009D254->animPrev.parts.integer)
     {
-      Entity_SetActionMode(D_8009D254, ((D_8009CE48 * 2) + 9) & 0xFFFF);
+      Entity_SetActionMode(D_8009D254, ((g_AyaAttackStep * 2) + 9) & 0xFFFF);
       {
         Combatant *attacker;
         u32 hitFlags;
@@ -235,11 +235,11 @@ s32 Battle_StepAyaAction(void)
         asm("" : "=r"(attackMask) : "0"(attackMask));
         index = D_8009D1D4;
         value = 2;
-        D_8009CE55 = value;
+        g_EvasionReaction = value;
         value = 1;
         hitCountMask = 7;
-        D_8009CE54 = value;
-        asm("" : "=r"(index) : "0"(index), "m"(D_8009CE54));
+        g_EvasionStatus = value;
+        asm("" : "=r"(index) : "0"(index), "m"(g_EvasionStatus));
         targetIndex = index;
         target = D_800BE830[targetIndex].actor;
         attackMask |= 0xFFFF;
@@ -251,14 +251,14 @@ s32 Battle_StepAyaAction(void)
         (*(u32 *)&targetCore->coreFlags) = hitFlags;
         classFlags = (hitFlags & attackMask) | ((((attacker->action->attackWord) >> 0x14) & 3) << 0x12);
         (*(u32 *)&targetCore->coreFlags) = classFlags;
-        (*(u32 *)&targetCore->coreFlags) = ((classFlags & countMask) | ((D_8009CE55 & hitCountMask) << 0xF));
-        if (D_8009CE48 == 2)
+        (*(u32 *)&targetCore->coreFlags) = ((classFlags & countMask) | ((g_EvasionReaction & hitCountMask) << 0xF));
+        if (g_AyaAttackStep == 2)
         {
           effectTarget = D_800BE830[targetIndex].actor;
           targetEffectId = 0x6F;
         }
         else
-          if (D_8009CE48 == 5)
+          if (g_AyaAttackStep == 5)
         {
           effectTarget = D_800BE830[targetIndex].actor;
           targetEffectId = 0x71;
@@ -266,7 +266,7 @@ s32 Battle_StepAyaAction(void)
         else
         {
           targetEffectId = 0x6E;
-          if (D_8009CE48 == 6)
+          if (g_AyaAttackStep == 6)
           {
             effectTarget = D_800BE830[targetIndex].actor;
             targetEffectId = 0x70;
@@ -278,8 +278,8 @@ s32 Battle_StepAyaAction(void)
         }
         Scene_LoadRoomAssets(targetEffectId, effectTarget);
       }
-      attackStep = ((u8) D_8009CE48) + 1;
-      D_8009CE48 = attackStep;
+      attackStep = ((u8) g_AyaAttackStep) + 1;
+      g_AyaAttackStep = attackStep;
       if (attackStep < 7)
       {
         slot = D_8009D1D4 & 0xFF;
@@ -302,7 +302,7 @@ s32 Battle_StepAyaAction(void)
       if (D_8009D254->animLastFrame == D_8009D254->animPrev.parts.integer)
     {
       Entity_SetActionMode(D_8009D254, 7);
-      if (D_8009CE48 < 7)
+      if (g_AyaAttackStep < 7)
       {
         D_8009D25C = 5;
         D_8009D1D4 += 1;
@@ -326,31 +326,31 @@ s32 Battle_StepAyaAction(void)
       if (player->renderObject.variant_visible == 0)
       {
         effect = 0x4B6;
-        saved = &D_8009E054;
+        saved = &g_AyaSavedPosX;
         transfer = *saved;
         player->posX.fixed = transfer;
         x = player->posX.parts.integer;
-        transfer = D_8009E058;
+        transfer = g_AyaSavedPosY;
         player->posY.fixed = transfer;
         y = player->posY.parts.integer;
-        transfer = D_8009E05C;
+        transfer = g_AyaSavedPosZ;
         player->posZ.fixed = transfer;
         transfer = *saved;
         player->baseX = transfer;
-        transfer = D_8009E058;
+        transfer = g_AyaSavedPosY;
         player->baseY = transfer;
-        transfer = D_8009E05C;
+        transfer = g_AyaSavedPosZ;
         player->baseZ = transfer;
-        transfer = D_8009CE58[0];
+        transfer = g_AyaSavedRotation[0];
         player->rotationX = transfer;
-        transfer = D_8009CE58[1];
+        transfer = g_AyaSavedRotation[1];
         player->facingAngle = transfer;
         asm volatile("" : : "r"(transfer));
-        rotationZ = D_8009CE5C;
+        rotationZ = g_AyaSavedRotationZ;
         player->rotationZ = rotationZ;
         transfer = player->posZ.parts.integer;
         Asset_Find08Alt(effect, 0, x, y, transfer);
-        D_8009CE4C = 0x1E;
+        g_AyaActionTimer = 0x1E;
         D_8009D25C++;
         break;
       }
@@ -358,23 +358,23 @@ s32 Battle_StepAyaAction(void)
     }
 
     case 12:
-      if (D_8009CE4C == 0)
+      if (g_AyaActionTimer == 0)
     {
       Entity_SetActionMode(D_8009D254, 7);
       D_8009D254->renderObject.variant_visible = 1;
       Anim_SetInterpRate(&D_8009D254->renderObject, 0x1E);
       D_801F1F38 = 1;
-      D_8009CE4C = 0xF;
+      g_AyaActionTimer = 0xF;
       D_8009D25C += 1;
       D_8009D254->renderObject.flags_9C |= 4;
       break;
     }
-      D_8009CE4C -= 1;
+      g_AyaActionTimer -= 1;
       break;
       break;
 
     case 13:
-      if (D_8009CE4C == 0)
+      if (g_AyaActionTimer == 0)
     {
       if (D_8009D254->animLastFrame == D_8009D254->animPrev.parts.integer)
       {
@@ -384,7 +384,7 @@ s32 Battle_StepAyaAction(void)
       }
       break;
     }
-      D_8009CE4C -= 1;
+      g_AyaActionTimer -= 1;
       break;
 
     case 14:
@@ -429,7 +429,7 @@ s32 Battle_StepAyaAction(void)
         D_800B0CEC.variant_visible = 1;
         Anim_SetInterpRate(&D_800B0CEC, 0x1E);
         {
-          D_8009CE4C = 0xF;
+          g_AyaActionTimer = 0xF;
           D_800B0CEC.flags_9C |= 4;
           D_8009D25C++;
         }
@@ -439,7 +439,7 @@ s32 Battle_StepAyaAction(void)
       break;
 
     case 16:
-      if (D_8009CE4C == 0)
+      if (g_AyaActionTimer == 0)
     {
       {
         int mask = ~0x100;
@@ -452,7 +452,7 @@ s32 Battle_StepAyaAction(void)
     }
     else
     {
-      D_8009CE4C -= 1;
+      g_AyaActionTimer -= 1;
       break;
     }
       break;

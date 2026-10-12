@@ -19,7 +19,7 @@ typedef struct BattleEvasionOutcome {
 
 PE1_STATIC_ASSERT(sizeof(BattleEvasionOutcome) == 2, battle_evasion_outcome_size);
 
-/* Record view of the outcome's reaction byte (D_8009CE55). Hit resolution
+/* Record view of the outcome's reaction byte (g_EvasionReaction). Hit resolution
  * reads it back through this view after storing the target's core flags, so
  * the read stays ordered after those stores as in retail. */
 typedef struct BattleEvasionReaction {
@@ -144,13 +144,14 @@ PE1_STATIC_ASSERT(sizeof(BattleEnemySlot) == 0xDC, battle_enemy_slot_size);
 
 /* Aya action sequencer state and its render/scene dependencies. */
 extern u8 D_8009D25C;
-extern s8 D_8009CE48;
-extern s8 D_8009CE54;
-extern s8 D_8009CE55;
-extern s16 D_8009CE4C;
-extern s32 D_8009E054, D_8009E058, D_8009E05C;
-extern u16 D_8009CE58[2];
-extern u16 D_8009CE5C;
+extern s8 g_AyaAttackStep;
+/* The BattleEvasionOutcome Battle_CheckEvasion fills for the current hit. */
+extern s8 g_EvasionStatus;
+extern s8 g_EvasionReaction;
+extern s16 g_AyaActionTimer;
+extern s32 g_AyaSavedPosX, g_AyaSavedPosY, g_AyaSavedPosZ;
+extern u16 g_AyaSavedRotation[2];
+extern u16 g_AyaSavedRotationZ;
 extern RenderObjectEntity D_800B0CEC;
 /* D_800B0D88 is D_800B0CEC.flags_9C. Battle_StepEscapeOrDeath reloads the
  * player's flags only after this store, so the store must look like it may

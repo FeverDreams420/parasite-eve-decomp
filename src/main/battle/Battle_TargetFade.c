@@ -6,12 +6,12 @@
 /* Shared level and direction for the pulsing target highlight. Retail linker
  * objects own the storage; these retain the matching COMMON metadata. */
 u8 g_BattleFadeLevel;
-s8 D_8009CE6C;
+s8 g_BattleFadeStep;
 
 void Battle_InitFadeVars(void) {
     if (g_BattleTargetCount[0] != 0) {
         g_BattleFadeLevel = 0x80;
-        D_8009CE6C = -8;
+        g_BattleFadeStep = -8;
     }
 }
 
@@ -53,11 +53,11 @@ void Battle_StepPlayerTurn(BattleTarget *targets, int index, int mode)
         return;
     }
     if (g_BattleFadeLevel < 0x41) {
-        D_8009CE6C = 8;
+        g_BattleFadeStep = 8;
     } else if (g_BattleFadeLevel >= 0xC0) {
-        D_8009CE6C = -8;
+        g_BattleFadeStep = -8;
     }
-    level = g_BattleFadeLevel + D_8009CE6C;
+    level = g_BattleFadeLevel + g_BattleFadeStep;
     g_BattleFadeLevel = level;
 
     if ((s8)mode < 4) {
