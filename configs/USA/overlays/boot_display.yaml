@@ -161,11 +161,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x15F4, c, Boot_QueueTintedSprite]
-      - [0x1688, c, Boot_InitSprite16]
-      - [0x1760, c, func_80124604]
-      - [0x1850, c, func_801246F4]
-      - [0x18F8, c, Boot_InitDisplayBuffers]
+      - [0x15F4, c, sprites]
   - [0x1B00]
   # Present-frame local jumps retain a link address 0x100 above load address.
   - name: boot_display_present_frame_linkbase
