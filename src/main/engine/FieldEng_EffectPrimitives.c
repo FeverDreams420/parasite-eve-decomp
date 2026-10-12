@@ -16,8 +16,8 @@
  * away along local Z, turned by `rotation` and shaded per corner from
  * color0..color2 at intensity/128; mode 0xFF draws it opaque, anything
  * else adds a semi-transparent draw mode.
- * Matching debt: six register pins and two empty constraints. The camera
- * and local matrix uploads are gte_ldrotmatrix and gte_ldtransmatrix. */
+ * The camera and local matrix uploads are gte_ldrotmatrix and
+ * gte_ldtransmatrix; the corners go to the GTE through gte_ldv3. */
 void func_800D0E88(GteShortVector *position, GteRotation *rotation, int length,
                    int breadth, RenderColor *color0, RenderColor *color1,
                    RenderColor *color2, int intensity, int mode)
@@ -69,23 +69,8 @@ void func_800D0E88(GteShortVector *position, GteRotation *rotation, int length,
         gte_ldrotmatrix(words);
         gte_ldtransmatrix(words);
     }
-    {
-        GteShortVector *v0;
-        register GteShortVector *v1 asm("$4");
-        GteShortVector *v2;
-        v1 = &corners[1];
-        v2 = &corners[2];
-        v0 = &corners[0];
-        gte_lwc2_0_0(v0);
-        gte_lwc2_1_4(v0);
-        gte_lwc2_2_0(v1);
-        gte_lwc2_3_4(v1);
-        gte_lwc2_4_0(v2);
-        gte_lwc2_5_4(v2);
-    }
-    gte_cop2_hazard_slot();
-    gte_cop2_hazard_slot();
-    gte_rtpt_command();
+    gte_ldv3(&corners[0], &corners[1], &corners[2]);
+    gte_rtpt_padded();
     SetPolyG3(packet);
     if (color0 == 0) {
         color0 = &black;
@@ -107,25 +92,11 @@ void func_800D0E88(GteShortVector *position, GteRotation *rotation, int length,
     packet->b2 = color2->b * (s16)intensity / 128;
     gte_stmac0(&depth);
     if (depth != 0) {
-        {
-            register s16 *xy0 asm("$4") = &packet->x0;
-            register s16 *xy1 asm("$3") = &packet->x1;
-            s16 *xy2 = &packet->x2;
-            gte_stsxy0(xy0);
-            gte_stsxy1(xy1);
-            gte_stsxy2(xy2);
-        }
+        gte_stsxy3(&packet->x0, &packet->x1, &packet->x2);
         gte_cop2_hazard_slot();
         gte_cop2_hazard_slot();
         gte_avsz3_command();
-        {
-            register s32 z asm("$12");
-            register u32 *out asm("$5") = &depth;
-            asm volatile("" : "=r"(out) : "0"(out));
-            gte_getsz3(z);
-            gte_cop2_hazard_slot();
-            *out = z >> 2;
-        }
+        gte_stszotz(&depth);
         depth -= bias;
         if (depth < 0x1000) {
             TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[D_8009CDDC], depth);
@@ -151,13 +122,11 @@ void func_800D0E88(GteShortVector *position, GteRotation *rotation, int length,
  * color1 (tail side) at scale/128. A missing head repeats the previous
  * pair; count >= 1000 instead clears the first count - 999 pairs. Mode
  * 0xFF draws opaque, anything else semi-transparent.
- * Matching debt: five register pins and one empty pointer constraint. The
- * camera upload is gte_ldrotmatrix and gte_ldtransmatrix. */
-void func_800D1384(GteShortVector *head, GteShortVector *tail, u32 countArg,
+ * The camera upload is gte_ldrotmatrix and gte_ldtransmatrix. */
+void func_800D1384(GteShortVector *head, GteShortVector *tail, u32 count,
                    u8 *color0, u8 *color1, int scale, FieldTrailPair *history,
                    int mode)
 {
-    register u32 count asm("$23") = countArg;
     u8 headColor[3];
     u8 tailColor[3];
     u32 depth;
@@ -226,53 +195,27 @@ void func_800D1384(GteShortVector *head, GteShortVector *tail, u32 countArg,
         tailColor[1] = color1[1] * scale / 128;
         tailColor[2] = color1[2] * scale / 128;
     }
-    {
-        gte_ldrotmatrix((const GteMatrixWords *)view);
-        gte_ldtransmatrix((const GteMatrixWords *)view);
-    }
+    gte_ldrotmatrix(view);
+    gte_ldtransmatrix(view);
     for (i = 0; i < count; i++, history++, packet++) {
         if (history[0].head.vector.pad & history[0].tail.vector.pad & history[1].head.vector.pad &
             history[1].tail.vector.pad) {
-            {
-                GteShortVector *v1;
-                GteShortVector *v2;
-                v1 = &history[0].tail.vector;
-                v2 = &history[1].head.vector;
-                gte_lwc2_0_0(&history[0].head.vector);
-                gte_lwc2_1_4(&history[0].head.vector);
-                gte_lwc2_2_0(v1);
-                gte_lwc2_3_4(v1);
-                gte_lwc2_4_0(v2);
-                gte_lwc2_5_4(v2);
-            }
-            gte_cop2_hazard_slot();
-            gte_cop2_hazard_slot();
-            gte_rtpt_command();
+            gte_ldv3(&history[0].head.vector, &history[0].tail.vector, &history[1].head.vector);
+            gte_rtpt_padded();
             gte_stmac0(&depth);
             if (depth == 0) {
                 return;
             }
-            {
-                s16 *xy0 = &packet->x0;
-                s16 *xy1 = &packet->x1;
-                s16 *xy2 = &packet->x2;
-                gte_stsxy3(xy0, xy1, xy2);
-            }
+            gte_stsxy3(&packet->x0, &packet->x1, &packet->x2);
             gte_cop2_hazard_slot();
             gte_cop2_hazard_slot();
             gte_avsz3_command();
-            {
-                gte_stszotz(&depth);
-            }
+            gte_stszotz(&depth);
             depth -= bias;
             if (depth >= 0x1000) {
                 return;
             }
-            {
-                GteShortVector *lastVertex = &history[1].tail.vector;
-                gte_lwc2_0_0(lastVertex);
-                gte_lwc2_1_4(lastVertex);
-            }
+            gte_ldv0(&history[1].tail.vector);
             gte_cop2_hazard_slot();
             gte_cop2_hazard_slot();
             gte_rtps_command();
@@ -367,10 +310,6 @@ int Geo_ClipAlternatingArcPoint(int radius, int divisor, int segment) {
     return Geo_ClipPoint(0, (s16)y, 0);
 }
 
-/* Matching debt: one SZ3 transfer pin and one empty depth-pointer constraint
- * per function. The shifts and stores are C; GTE transfers, commands and
- * hazard nops are separate macros. */
-
 /* Projected one-pixel tile plus a 3x3 halo at a quarter of its colour. */
 void func_800D1DEC(void *position, void *colorArg, int scale, int abr)
 {
@@ -402,10 +341,7 @@ void func_800D1DEC(void *position, void *colorArg, int scale, int abr)
     glow->g >>= 2;
     glow->b >>= 2;
     gte_stsxy2(&point->x);
-    {
-        s32 *out = (s32 *)&depth;
-        gte_stszotz(out);
-    }
+    gte_stszotz(&depth);
     depth -= (u16)D_800F3368.depth;
     if (depth < 0x1000) {
         glow->x = point->x - 1;
@@ -479,8 +415,9 @@ void func_800D2104(GteShortVector *position, u8 *color, int scale, int abr)
  * `position`, turned by `rotation`, gouraud shaded from color0 (near edge)
  * to color1 (far edge) at intensity/128 and textured with the cell at
  * (u, v); mode 0xFF draws it opaque, anything else semi-transparent.
- * Matching debt: seven register pins and two empty constraints. The camera
- * and local matrix uploads are gte_ldrotmatrix and gte_ldtransmatrix. */
+ * The camera and local matrix uploads are gte_ldrotmatrix and
+ * gte_ldtransmatrix. Matching debt: one empty constraint on rotation and
+ * length (see docs/CODE_ORGANIZATION.md). */
 void func_800D2370(GteShortVector *position, GteRotation *rotation,
                    int length, int breadth, int u, int v, int texture_width,
                    int texture_height, int clut, RenderColor *color0,
@@ -512,11 +449,8 @@ void func_800D2370(GteShortVector *position, GteRotation *rotation,
     /* Keep rotation and length in registers across the packet setup calls. */
     asm("" : : "r"(rotation), "r"(length));
     packet->clut = clut;
-    {
-        register const GteMatrixWords *words asm("$19") = (const GteMatrixWords *)(view);
-        gte_ldrotmatrix(words);
-        gte_ldtransmatrix(words);
-    }
+    gte_ldrotmatrix(view);
+    gte_ldtransmatrix(view);
     gte_lwc2_0_0(position);
     gte_lwc2_1_4(position);
     gte_cop2_hazard_slot();
@@ -541,23 +475,8 @@ void func_800D2370(GteShortVector *position, GteRotation *rotation,
         gte_ldrotmatrix(words);
         gte_ldtransmatrix(words);
     }
-    {
-        GteShortVector *v0;
-        register GteShortVector *v1 asm("$4");
-        GteShortVector *v2;
-        v1 = &corners[1];
-        v2 = &corners[2];
-        v0 = &corners[0];
-        gte_lwc2_0_0(v0);
-        gte_lwc2_1_4(v0);
-        gte_lwc2_2_0(v1);
-        gte_lwc2_3_4(v1);
-        gte_lwc2_4_0(v2);
-        gte_lwc2_5_4(v2);
-    }
-    gte_cop2_hazard_slot();
-    gte_cop2_hazard_slot();
-    gte_rtpt_command();
+    gte_ldv3(&corners[0], &corners[1], &corners[2]);
+    gte_rtpt_padded();
     if (color0 == 0) {
         color0 = &black;
     }
@@ -608,8 +527,7 @@ void func_800D2370(GteShortVector *position, GteRotation *rotation,
 
 /* Haloed point at distance `x` from the view origin rotated by `y` about Z.
  * The halo is always drawn semi-transparent; `mode` is not read.
- * Matching debt: two pins and one empty pointer constraint. The rotation
- * upload is gte_ldrotmatrix. */
+ * The rotation upload is gte_ldrotmatrix. */
 void func_800D27FC(int x, int y, void *color, int scale, int mode)
 {
     GteShortVector offset;
@@ -635,12 +553,8 @@ void func_800D27FC(int x, int y, void *color, int scale, int mode)
     matrix.m[0][1] = matrix.m[0][2] = matrix.m[1][0] = matrix.m[1][2] =
         matrix.m[2][0] = matrix.m[2][1] = 0;
     RotMatrixZ(y, &matrix);
-    {
-        const GteMatrixWords *words = (const GteMatrixWords *)&matrix;
-        gte_ldrotmatrix(words);
-    }
-    gte_lwc2_0_0(&offset);
-    gte_lwc2_1_4(&offset);
+    gte_ldrotmatrix(&matrix);
+    gte_ldv0(&offset);
     gte_cop2_hazard_slot();
     gte_cop2_hazard_slot();
     gte_rtps_command();
@@ -654,10 +568,7 @@ void func_800D27FC(int x, int y, void *color, int scale, int mode)
     glow->g >>= 2;
     glow->b >>= 2;
     gte_stsxy2(&point->x);
-    {
-        s32 *out = (s32 *)&depth;
-        gte_stszotz(out);
-    }
+    gte_stszotz(&depth);
     depth -= (u16)D_800F3368.depth;
     if (depth < 0x1000) {
         glow->x = point->x - 1;
@@ -677,17 +588,12 @@ void func_800D27FC(int x, int y, void *color, int scale, int mode)
     }
 }
 
-/* Matching debt: the packet-table pin, two SZ3 pins and four empty barriers
- * preserve the retail register allocation and store order. Each GTE command,
- * transfer and hazard nop is separate; depth shifts and writes are C. */
-
 /* Gouraud line from `from` (color0 at scale0/128) to `to` (color1 at
  * scale1/128) linked at the mean depth, with a 16x16 glow cell stretched
  * along it; mode 0xFF draws both opaque, anything else semi-transparent. */
 void func_800D2B58(GteShortVector *from, GteShortVector *to, u8 *color0,
                    u8 *color1, int scale0, int scale1, int mode)
 {
-    register char **packetBuffers asm("$10");
     u32 depth[2];
     FieldLineG2Packet *line;
     FieldGlowQuadPacket *glow;
@@ -701,13 +607,11 @@ void func_800D2B58(GteShortVector *from, GteShortVector *to, u8 *color0,
     int along;
     int alongY;
 
-    packetBuffers = D_800B0E38.packets;
-    line = (FieldLineG2Packet *)(packetBuffers[D_8009CDDC] + D_8009CDD8);
+    line = (FieldLineG2Packet *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
     D_8009CDD8 += sizeof(FieldLineG2Packet);
-    glow = (FieldGlowQuadPacket *)(packetBuffers[D_8009CDDC] + D_8009CDD8);
+    glow = (FieldGlowQuadPacket *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
     D_8009CDD8 += sizeof(FieldGlowQuadPacket);
-    gte_lwc2_0_0(from);
-    gte_lwc2_1_4(from);
+    gte_ldv0(from);
     gte_cop2_hazard_slot();
     gte_cop2_hazard_slot();
     gte_rtps_command();
@@ -722,8 +626,7 @@ void func_800D2B58(GteShortVector *from, GteShortVector *to, u8 *color0,
     gte_stsxy2(&line->x0);
     line->tag.length = 4;
     line->code = 0x50;
-    gte_lwc2_0_0(to);
-    gte_lwc2_1_4(to);
+    gte_ldv0(to);
     gte_cop2_hazard_slot();
     gte_cop2_hazard_slot();
     gte_rtps_command();
@@ -738,10 +641,9 @@ void func_800D2B58(GteShortVector *from, GteShortVector *to, u8 *color0,
     gte_stsxy2(&line->x1);
     depth[0] = (int)(depth[0] + depth[1]) / 2 - (u16)D_800F3368.depth;
     if (depth[0] < 0x1000) {
-        char **drawBuffers = packetBuffers;
         TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[D_8009CDDC], depth[0]);
         if (mode != 0xFF) {
-            drawMode = (RenderTintMode *)(drawBuffers[D_8009CDDC] + D_8009CDD8);
+            drawMode = (RenderTintMode *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
             D_8009CDD8 += sizeof(RenderTintMode);
             SetDrawTPage((char *)drawMode, 0, 1, GetTPage(0, mode, 0, 0));
             if (line) {
@@ -1002,11 +904,9 @@ void FieldEng_UpdatePointHistory(RenderHistoryPoint *history, s16 count,
     }
 }
 
-/* Matching debt: two empty barriers and five volatile stack
- * parameters. The volatile copies and entry memory barrier keep all register
- * saves before the ordered argument loads. Each argument is read exactly once.
- * Matrix loads and depth scaling/stores are C;
- GTE ops and nops are individual. */
+/* Matching debt: two empty barriers and five volatile stack parameters keep
+ * every register save before the stack argument loads (see
+ * docs/CODE_ORGANIZATION.md). */
 void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,
                    int texture, volatile int input_clut, volatile int input_page,
                    volatile int input_intensity, RenderColor *volatile input_color,
@@ -1059,13 +959,9 @@ void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,
         u = (texture & 0xF) << 4;
         v = texture / 16 * 16;
     }
-    {
-        register RenderMatrixSlot *slot = &D_800BCFA4;
-        gte_ldrotmatrix((const GteMatrixWords *)slot->value);
-        gte_ldtransmatrix((const GteMatrixWords *)slot->value);
-    }
-    gte_lwc2_0_0(position);
-    gte_lwc2_1_4(position);
+    gte_ldrotmatrix(D_800BCFA4.value);
+    gte_ldtransmatrix(D_800BCFA4.value);
+    gte_ldv0(position);
     gte_cop2_hazard_slot();
     gte_cop2_hazard_slot();
     gte_rtps_command();
@@ -1087,11 +983,7 @@ void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,
     packet->v2 = packet->v3 = v + height - 1;
     width = width * scale_x / 8192;
     height = height * scale_y / 8192;
-    {
-        s32 *depthOut = &depth;
-        gte_stszotz(&depth);
-
-    }
+    gte_stszotz(&depth);
     depth -= (u16)D_800F3368.depth;
     if (pull != 0) {
         depth = 14;
