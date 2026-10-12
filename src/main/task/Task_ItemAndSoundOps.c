@@ -48,11 +48,11 @@ int Task_OpenMemCardDialog(void) {
     int flags;
     int cursor;
 
-    if ((state->flags & 0x1000) == 0) {
+    if (!(state->flags & 0x1000)) {
         node = g_TaskNodePool;
         node_flags = &node->flags;
         flags = *node_flags;
-        if ((flags & 0x20) == 0) {
+        if (!(flags & 0x20)) {
             *node_flags = flags | 0x20;
             cursor = g_SceneDataTable0;
             node->active = 1;
@@ -60,24 +60,20 @@ int Task_OpenMemCardDialog(void) {
             g_SceneDataTable0 = cursor;
             return 0;
         }
-    } else {
-        return 1;
-    }
+        Render_BeginSceneLoad();
+        Menu_OpenStartupMemCardDialog();
+        {
+            TaskNode *tail_node = g_TaskNodePool;
+            int tail_flags;
 
-    Render_BeginSceneLoad();
-    Menu_OpenStartupMemCardDialog();
-    {
-        TaskNode *tail_node = g_TaskNodePool;
-        int tail_flags;
-
-        state->flags |= 0x9000;
-        tail_flags = tail_node->flags;
-        g_GameStateFlags |= 4;
-        tail_flags &= 0xFFDF;
-        tail_node->flags = tail_flags;
-        asm volatile("" : : : "$2", "memory");
-        return 1;
+            state->flags |= 0x9000;
+            tail_flags = tail_node->flags;
+            g_GameStateFlags |= 4;
+            tail_flags &= 0xFFDF;
+            tail_node->flags = tail_flags;
+        }
     }
+    return 1;
 }
 
 int Task_ShowReceivedItem(int **arg0) {
@@ -102,7 +98,6 @@ int Task_ShowReceivedItem(int **arg0) {
     return 0;
 
     }
-finish:
     Render_BeginSceneLoad();
     Menu_CreateItemUsePanel(**saved);
     {
@@ -117,7 +112,6 @@ finish:
     }
 
     }
-ret_one:
     return 1;
 }
 
@@ -177,16 +171,21 @@ int Task_RunInvCommand(TaskInvCommandArgs *arg0) {
             clear_node->flags = flags;
         }
     }
-done:
     return 1;
 }
 
-#define U8_AT(ptr, off) (*(u8 *)((u8 *)(ptr) + (off)))
-#define S8_AT(ptr, off) (*(s8 *)((u8 *)(ptr) + (off)))
-#define U16_AT(ptr, off) (*(u16 *)((u8 *)(ptr) + (off)))
-#define S16_AT(ptr, off) (*(s16 *)((u8 *)(ptr) + (off)))
-#define U32_AT(ptr, off) (*(u32 *)((u8 *)(ptr) + (off)))
-#define PTR_AT(ptr, off) (*(u8 **)((u8 *)(ptr) + (off)))
+/* The sound archive's second word locates a section whose asset-table
+ * word packs the entry count (bits 22-31) and the table's offset from the
+ * archive (bits 0-21). */
+typedef struct AkaoArchiveHeader {
+    u32 reserved;
+    u32 section_offset;
+} AkaoArchiveHeader;
+
+typedef struct AkaoArchiveSection {
+    u8 reserved[0x30];
+    u32 asset_table;
+} AkaoArchiveSection;
 
 typedef struct AkaoCommandArgs {
     int *opcode;
@@ -273,9 +272,9 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
     u32 entry_limit;
     int volume;
     u32 table_info;
-    u8 *actor;
+    FieldActor *actor;
     u8 *base;
-    u8 *player;
+    FieldActor *player;
     AkaoAssetEntry *current;
     AkaoAssetEntry *entries;
     DeferredAkaoCommand *deferred;
@@ -452,51 +451,52 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         Akao_Cmd_F1();
         break;
     case 0x15E:
-        D_800B0CE8.position_y = U32_AT(PTR_AT(args, 4), 0);
-        D_800B0CE8.position_x = U32_AT(PTR_AT(args, 8), 0);
-        D_800B0CE8.position_w = U32_AT(PTR_AT(args, 0xC), 0);
-        D_800B0CE8.position_z = U32_AT(PTR_AT(args, 0x10), 0);
+        D_800B0CE8.position_y = *args->arg1;
+        D_800B0CE8.position_x = *args->arg2;
+        D_800B0CE8.position_w = *args->arg3;
+        D_800B0CE8.position_z = *args->arg4;
         break;
     case 0x15F:
         *args->result = Asset_Find08w(
-            *args->arg1, 0, S16_AT(g_CurrentEntity, 0x2A),
-            S16_AT(g_CurrentEntity, 0x2E), S16_AT(g_CurrentEntity, 0x32));
+            *args->arg1, 0, ((s16 *)&g_CurrentEntity->pos_x)[1],
+            ((s16 *)&g_CurrentEntity->pos_y)[1],
+            ((s16 *)&g_CurrentEntity->pos_z)[1]);
         break;
     case 0x160:
         if (*args->arg2 == 0) {
-            player = (u8 *)D_8009D254;
+            player = (FieldActor *)D_8009D254;
             if (player == 0) {
                 break;
             }
             actor = player;
         } else {
-            actor = (u8 *)D_8009D20C;
+            actor = D_8009D20C;
             while (actor != 0) {
-                if (U8_AT(actor, 0xC) == *args->arg2 &&
-                    U8_AT(actor, 0xD) == *args->arg3 &&
-                    !(U32_AT(actor, 0x98) & 0x10)) {
+                if (actor->type_id == *args->arg2 &&
+                    actor->sub_id == *args->arg3 &&
+                    !(actor->flags & 0x10)) {
                     break;
                 }
-                actor = PTR_AT(actor, 4);
+                actor = actor->next;
             }
             if (actor == 0) {
                 break;
             }
         }
         *args->result = Asset_Find08w(
-            *args->arg1, 0, S16_AT(actor, 0x2A),
-            S16_AT(actor, 0x2E), S16_AT(actor, 0x32));
+            *args->arg1, 0, ((s16 *)&actor->pos_x)[1],
+            ((s16 *)&actor->pos_y)[1], ((s16 *)&actor->pos_z)[1]);
         break;
     case 0x161:
         *args->result = Asset_Find08w(*args->arg1, 0,
-                                     S16_AT(args->arg2, 2),
-                                     S16_AT(args->arg3, 2),
-                                     S16_AT(args->arg4, 2));
+                                     ((s16 *)args->arg2)[1],
+                                     ((s16 *)args->arg3)[1],
+                                     ((s16 *)args->arg4)[1]);
         break;
     case 0x190:
         base = D_800B0CE8.archive;
-        table_info =
-            U32_AT(base + U32_AT(D_800B0CE8.archive, 4), 0x30);
+        table_info = ((AkaoArchiveSection *)(base +
+            ((AkaoArchiveHeader *)D_800B0CE8.archive)->section_offset))->asset_table;
         base += table_info & 0x3FFFFF;
         count = 0;
         entry_count = table_info >> 22;
@@ -532,12 +532,10 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         }
         else
         {
-wait_for_cd:
         D_8009CE00 -= 8;
         D_8009D300->active = status;
         return 0;
         }
-store_audio_slot:
         *args->result = locals.slot;
         break;
     case 0x195:
@@ -581,6 +579,5 @@ archive_match:
         Akao_Cmd_92(*args->arg1);
         break;
     }
-done:
     return 1;
 }
