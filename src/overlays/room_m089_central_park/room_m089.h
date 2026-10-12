@@ -16,6 +16,5 @@ extern short D_80194162;
 extern short D_80194164;
 
 extern int func_80071A54(void);
-extern void func_801924F8(void);
 
 #endif
