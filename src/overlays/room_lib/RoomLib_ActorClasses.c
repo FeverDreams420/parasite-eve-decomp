@@ -1157,9 +1157,9 @@ void RoomLib_HandlerB(RoomEnt *obj) {
         register int current asm("$4") = previousValue - delta;
         ((RoomLibHandlerBState *)state)->phaseValue = current;
         if (enabled != 0) {
-            register int crossed asm("$2") = previousValue ^ current;
+            delta = previousValue ^ current;
 
-            if (crossed < 0) {
+            if (delta < 0) {
                 ((RoomLibHandlerBState *)state)->callback = (void (*)(void))RoomLib_HandlerBPhase;
                 ((RoomLibHandlerBState *)state)->started = 0;
                 self->flag3 = 2;
