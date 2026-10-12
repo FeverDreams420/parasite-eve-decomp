@@ -633,7 +633,7 @@ s32 Menu_RunFrameWithArg(s32 arg0) {
         g_MenuActiveListTarget[0] = arg0;
         Menu_ClearCommandResult();
         Draw_SelectBuffer();
-        Evt_DeferredExec();
+        Menu_DeferredExec();
         MenuInput_DispatchQueuedEvents();
         Menu_ProcessSwapReturnIfPending();
         MemCard_DelayedCallback();
@@ -662,7 +662,7 @@ s32 Menu_RunFrame(void) {
         g_MenuActiveListTarget[0] = 0;
         Menu_ClearCommandResult();
         Draw_SelectBuffer();
-        Evt_DeferredExec();
+        Menu_DeferredExec();
         MenuInput_DispatchQueuedEvents();
         Menu_ProcessSwapReturnIfPending();
         MemCard_DelayedCallback();

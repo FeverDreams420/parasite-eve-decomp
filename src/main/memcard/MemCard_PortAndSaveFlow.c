@@ -238,7 +238,7 @@ void MemCard_ClearPort1Events(void) {
     g_MemCardEventF400Spec0004Flag = 0;
 }
 
-void Evt_ClearEvents(void) {
+void MemCard_ClearEvents(void) {
     TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_SW_IO_END]);
     TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_SW_ERROR]);
     TestEvent(g_MemCardEventHandles[MEMCARD_EVENT_SW_TIMEOUT]);

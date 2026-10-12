@@ -39,7 +39,7 @@ int g_MenuSelectedSpell;
 
 int g_MenuInputPausePending;
 
-void Evt_DeferredExec(void) {
+void Menu_DeferredExec(void) {
     if (g_MenuInputPausePending != 0) {
         if ((g_DiscChangeFlags & 3) == 0) {
             MenuInput_SetPollingPaused(0);
