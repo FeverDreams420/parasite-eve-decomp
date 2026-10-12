@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "pe1/inventory_slots.h"
 #include "pe1/text.h"
 #include "pe1/aya.h"
@@ -15,7 +16,17 @@
  * weapon comparison panel and the per-slot item actions and active-list controller. Contiguous at
  * 0x80055760 and joined by the comparison records and list state. */
 
+/* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
+int D_8009D03C;
+s16 *D_8009D048;
+s32 D_8009D050;
 u32 *D_8009D058;
+s32 D_8009D064;
+ItemDataRecord *D_8009D070, *D_8009D074;
+s16 *g_InvActiveListOverride;
+s32 g_InvOverrideSlotLimit;
+int g_MenuBattleCount;
+int g_MenuBattleEquipMode;
 void *Str_LookupTable8(unsigned int index);
 void Sfx_DrawSlotRow(ItemDataRecord *entry, u8 *text);
 
@@ -637,12 +648,6 @@ void Battle_UseItem(s32 arg0) {
     }
 }
 
-/* Active-list removal and tracked equipped slots. The two armor aliases
- * preserve independent address reads across the slot write. */
-#include "Inv_ItemActions_externs_1.h"
-#define D_800C0E22_l0 (*(s8 *)&D_800C0E22_l1_o)
-#define D_800C0E22_l1 (*(s8 *)&D_800C0E22_l1_o)
-#define D_800C0E22_s0 (*(s8 *)&D_800C0E22_s0_o)
 
 void Inv_DropCurrentSelectionItem(void) {
     MenuWidgetNode *node = MenuWidget_FindByModeAndSelectedBase(2, 1);
@@ -694,7 +699,7 @@ s32 Inv_RemoveActiveListItem(s32 arg0) {
     s32 activeList;
 
     selected = arg0;
-    if ((g_InvItemPtr == g_AyaInventoryItems) && (D_800C0E22_l0 == selected)) {
+    if ((g_InvItemPtr == g_AyaInventoryItems) && (g_EquippedArmorSlot == selected)) {
         Inv_GetActiveSlotCount(&sp10);
     }
 
@@ -709,8 +714,8 @@ s32 Inv_RemoveActiveListItem(s32 arg0) {
         g_InvItemSlotArray[removed - 0x100].iconId = 0;
     }
 
-    if ((g_InvItemPtr == g_AyaInventoryItems) && (D_800C0E22_l1 == selected)) {
-        D_800C0E22_s0 = -1;
+    if ((g_InvItemPtr == g_AyaInventoryItems) && (g_EquippedArmorSlot == selected)) {
+        g_EquippedArmorSlot = -1;
         Inv_CheckFreeSlotCapacity(sp10);
         Inv_CompactActiveListSlots();
         Inv_SetActiveList(3, 0);
