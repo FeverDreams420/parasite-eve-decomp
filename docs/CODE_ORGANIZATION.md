@@ -595,7 +595,7 @@ changing bytes:
   table and script state in typed globals (`FieldEngSlot *`,
   `FieldEngState *`); the slot address the two dispatch loops add as an
   integer, index first, is a `FieldEngSlotAddress` pointer/word union.
-- `FieldEng_GlowEffects.c` .. `FieldEng_BurstEffectC.c` are the eight effect
+- `FieldEng_GlowEffects.c` .. `FieldEng_BurstEffects.c` are the eight effect
   module classes of `pe1/field_effect_modules.h`; their scripts, handler lists,
   slot sizes and tables are declared there under module names instead of the
   per-unit extern headers.

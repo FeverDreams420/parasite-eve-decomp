@@ -1115,15 +1115,10 @@ segments:
       # descriptor names a setup function, the spawn/register/update entry points and the
       # particle and state callback lists. Every module starts with its setup function and
       # ends with its state callbacks, and the data each setup function points at sits after
-      # that module's own lists. The four glow classes are one unit (contiguous, one
-      # marker set); the burst module is split in three (_2/_3).
+      # that module's own lists. The four glow classes are one unit, and the point sprite
+      # and the three burst classes another (each contiguous under one marker set).
       - [0xB83A0, c, fieldfx/FieldEng_GlowEffects]
-      - [0xBC4A4, c, fieldfx/FieldEng_PointSpriteEffect]
-      - [0xBD3A8, c, fieldfx/FieldEng_BurstEffect]
-      - [0xBDC04, c, fieldfx/FieldEng_BurstEffect_2]
-      - [0xBDD0C, c, fieldfx/FieldEng_BurstEffect_3]
-      - [0xBDF28, c, fieldfx/FieldEng_BurstEffectB]
-      - [0xBE884, c, fieldfx/FieldEng_BurstEffectC]
+      - [0xBC4A4, c, fieldfx/FieldEng_BurstEffects]
       # Task program binding, task-list setup/allocation/ticking/callback dispatch and the anchor position query.
       - [0xBEC9C, c, fieldfx/FieldAnim_TaskList]
       # Transform, direction and colour helpers with the shape builders that use them (G1558).
