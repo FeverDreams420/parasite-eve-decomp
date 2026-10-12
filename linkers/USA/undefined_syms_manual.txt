@@ -2102,3 +2102,10 @@ g_ScriptCameraBytes = 0x8009CDF8;
  * (Inv_TransferItem). */
 g_EquippedWeaponSlot = 0x800C0E20;
 g_EquippedArmorSlot = 0x800C0E22;
+
+/* One-field record views of battle words (pe1/battle_word_records.h). */
+g_ActiveActorRecord = 0x8009D278;
+g_PlayerEntityRecord = 0x8009D254;
+g_GameStateFlagsRecord = 0x8009D1A0;
+g_BattleResultFlagsRecord = 0x8009D1AC;
+g_FieldMoveLockRecord = 0x8009D2E8;

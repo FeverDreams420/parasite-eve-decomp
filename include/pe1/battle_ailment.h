@@ -83,6 +83,25 @@
 #define AYA_GENE_HEAL  0x400
 #define AYA_PRERAISE   0x800
 
+/* The same word as bit fields. Retail updates some of these pairs as bit
+ * fields: a field store is a read-modify-write of the word, and a field
+ * read after it loads the word again. Stiffness values: 1 slow, 2 lock. */
+typedef struct CombatantStateBits {
+    unsigned int poison : 2;
+    unsigned int confusion : 2;
+    unsigned int darkness : 2;
+    unsigned int stiffness : 2;
+    unsigned int haste : 1;
+    unsigned int barrier : 1;
+    unsigned int geneHeal : 1;
+    unsigned int preraise : 1;
+    unsigned int reserved : 20;
+} CombatantStateBits;
+#define AYA_STIFFNESS_SLOW_VALUE 1
+#define AYA_STIFFNESS_LOCK_VALUE 2
+/* Combatant.stateFlags viewed as CombatantStateBits. */
+#define COMBATANT_STATE_BITS(combatant) (*(CombatantStateBits *)&(combatant)->stateFlags)
+
 #define PE_SPELL_COMMAND_BASE 0x183
 #define PE_SPELL_HEAL_1       0
 #define PE_SPELL_HEAL_2       1
