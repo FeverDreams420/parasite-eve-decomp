@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / "tools/tests"))
 from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 # Overlay function addresses repeat across rooms; search this room only.
-ROOM = 'src/overlays/room_m350'
+ROOM = 'src/overlays/room_m350_cruiser'
 
 CONTROLLER = 'func_801992A0'
 # The GTE stays a boundary in the host harness: keep pe1/gte.h's asm out and

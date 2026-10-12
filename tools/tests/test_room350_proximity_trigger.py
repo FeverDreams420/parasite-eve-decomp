@@ -10,7 +10,7 @@ sys.path.insert(0, str(ROOT / "tools/tests"))
 from csource import find_definition, host_unit  # noqa: E402
 
 # Overlay function addresses repeat across rooms; search this room only.
-ROOM = 'src/overlays/room_m350'
+ROOM = 'src/overlays/room_m350_cruiser'
 
 
 class Room350ProximityTriggerTests(unittest.TestCase):

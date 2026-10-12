@@ -248,8 +248,10 @@ split; the old ones can be deleted. Headers under `include/pe1/` that carry a
 room number in their file name (`room_m089_trail.h`) and prose in other docs
 keep the number, which still identifies the overlay.
 
-All 161 room overlays with a place of medium or high confidence are renamed;
-room_m350 keeps its name. The scene overlays keep theirs.
+All 161 room overlays with a place of medium or high confidence are renamed.
+room_m350 has no save label and takes its slug from its text bank instead:
+`room_m350_cruiser` (low confidence, see entry 6 below). The scene overlays
+keep theirs.
 
 ### Overlays by place
 
@@ -272,7 +274,7 @@ room_m350 keeps its name. The scene overlays keep theirs.
 | `sewer` | medium | 1 | m348 |
 | `cruiser` | medium | 1 | m349 |
 | `chrysler` | medium | 37 | m291+2, m295, m298, m299, m308-m311, m318, m383-m410 |
-| (none) | low | 1 | m350 |
+| `cruiser` (text bank only) | low | 1 | m350 |
 
 Confidence rules: **high** = save label present and the dialog bank agrees
 (or the bank is empty and the map sits inside a run of at least three maps
@@ -293,8 +295,10 @@ cruiser, e22 liberty (high); e01-e14 and e24-e27 Chrysler bank (medium).
 4. **m348 (`sewer`).** Labelled Sewer, but alone in the late-addition block
    and its bank has none of the keywords.
 5. **m349 (`cruiser`).** Labelled Cruiser, museum-side bank.
-6. **m350 (not renamed).** No save label; its bank is the cruiser bank, so it
-   is probably a final-day scene, but the evidence is not enough for a name.
+6. **m350 (`cruiser`, from the text bank).** No save label; its bank is the
+   cruiser bank, so it is probably a final-day scene. The suffix follows the
+   text-bank rule of docs/CONVENTIONS.md and is the weakest place name in the
+   tree; rename it if a save label or a script reference says otherwise.
 7. **Slug style.** `theater`, `nypd`, `hospital`, `warehouse`, `liberty`
    and `cruiser` are the game's own words. The longer forms
    (`carnegie_hall`, `precinct`, `st_francis_hospital`, `pier4_warehouse`,

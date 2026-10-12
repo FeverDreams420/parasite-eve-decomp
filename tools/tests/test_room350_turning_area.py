@@ -12,7 +12,7 @@ from csource import find_definition, host_unit, psx_compile  # noqa: E402
 
 CONTROLLER = 'func_801960C4'
 # Other overlays define a function at the same address; search this room only.
-ROOM = 'src/overlays/room_m350'
+ROOM = 'src/overlays/room_m350_cruiser'
 # Keep pe1/gte.h's asm out of the host build; the GTE is a recorded boundary.
 HOST_GTE = r'''
 #include "pe1/gte_types.h"

@@ -1,18 +1,18 @@
-name: room_m350.bin
+name: room_m350_cruiser.bin
 sha1: e9597b000d287033f981cee44f3db65deb8696e1
 options:
-  basename: room_m350
+  basename: room_m350_cruiser
   target_path: original/USA/overlays/room_m350.bin
   base_path: ../../..
   platform: psx
   compiler: GCC
-  asm_path: asm/USA/overlays/room_m350
-  src_path: src/overlays/room_m350
-  build_path: build/USA/overlays/room_m350
-  ld_script_path: linkers/USA/overlays/room_m350.ld
-  undefined_funcs_auto_path: linkers/USA/overlays/undefined_funcs_auto.room_m350.txt
-  symbol_addrs_path: configs/USA/overlays/sym.room_m350.txt
-  undefined_syms_auto_path: linkers/USA/overlays/undefined_syms_auto.room_m350.txt
+  asm_path: asm/USA/overlays/room_m350_cruiser
+  src_path: src/overlays/room_m350_cruiser
+  build_path: build/USA/overlays/room_m350_cruiser
+  ld_script_path: linkers/USA/overlays/room_m350_cruiser.ld
+  undefined_funcs_auto_path: linkers/USA/overlays/undefined_funcs_auto.room_m350_cruiser.txt
+  symbol_addrs_path: configs/USA/overlays/sym.room_m350_cruiser.txt
+  undefined_syms_auto_path: linkers/USA/overlays/undefined_syms_auto.room_m350_cruiser.txt
   find_file_boundaries: True
   disassemble_all: True
   asm_function_macro: glabel
@@ -26,7 +26,7 @@ options:
   rodata_string_guesser_level: 2
   data_string_guesser_level: 2
 segments:
-  - name: room_m350
+  - name: room_m350_cruiser
     type: code
     start: 0x0
     vram: 0x8018EFE8
@@ -188,13 +188,13 @@ segments:
       - start: 0xB8DC
         type: databin
         name: D_8019A8C4
-        dir: room_m350
+        dir: room_m350_cruiser
       - start: 0x21018
         type: databin
         name: D_801B0000
-        dir: room_m350
+        dir: room_m350_cruiser
   - [0x46000]
 # room: m350, section3 sector 83539, scanner delta 0
 # source slice: room-section3
 # extract locally with: dd if=disc/extracted/PE.IMG of=original/USA/overlays/room_m350.bin bs=2048 skip=83539 count=140
-# area: no save-location label for map 350; place unknown, low confidence (docs/ROOMS.md)
+# area: no save-location label for map 350; text-bank: cruiser; place cruiser from the bank only, low confidence (docs/ROOMS.md)
