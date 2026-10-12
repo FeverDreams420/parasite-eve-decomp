@@ -1,4 +1,0 @@
-#ifndef PE1_EXT_384FA6BBCB46
-#define PE1_EXT_384FA6BBCB46
-extern FieldActor *D_8009D20C;
-#endif /* PE1_EXT_384FA6BBCB46 */

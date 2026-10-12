@@ -1,4 +1,0 @@
-#ifndef PE1_EXT_53B0B5ABDF77
-#define PE1_EXT_53B0B5ABDF77
-extern Entry D_8019A4D4[][2];
-#endif /* PE1_EXT_53B0B5ABDF77 */

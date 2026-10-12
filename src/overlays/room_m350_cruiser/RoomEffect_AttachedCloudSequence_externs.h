@@ -1,4 +1,0 @@
-#ifndef PE1_EXT_290744425C10
-#define PE1_EXT_290744425C10
-extern RenderColor D_8019A3D0;
-#endif /* PE1_EXT_290744425C10 */

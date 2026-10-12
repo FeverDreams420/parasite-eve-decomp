@@ -1,4 +1,0 @@
-#ifndef PE1_EXT_AF41788266CD
-#define PE1_EXT_AF41788266CD
-extern RenderColor D_8019A4E8;
-#endif /* PE1_EXT_AF41788266CD */

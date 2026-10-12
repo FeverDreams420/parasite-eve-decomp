@@ -1,4 +1,0 @@
-#ifndef PE1_EXT_BACAC1F6D37D
-#define PE1_EXT_BACAC1F6D37D
-extern GteShortVector D_8019A778[];
-#endif /* PE1_EXT_BACAC1F6D37D */
