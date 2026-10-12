@@ -93,8 +93,8 @@ typedef struct GeomEntry {                /* 0x38 */
     GeomCoordinateBounds bounds;         /* +0x10: limits applied before scr_x/scr_y stores */
     u16 disp_x;                           /* +0x18 */
     u16 disp_y;                           /* +0x1A */
-    s16 coefX;                            /* +0x1C  scroll/mirror coefficient */
-    s16 coefY;                            /* +0x1E */
+    s16 speedX;                           /* +0x1C  added into the 8.8 position when flags bit 4 is set */
+    s16 speedY;                           /* +0x1E */
     s16 field20;                          /* +0x20 */
     s16 field22;                          /* +0x22 */
     u8  group;                            /* +0x24  == g_GeomGroupSel */

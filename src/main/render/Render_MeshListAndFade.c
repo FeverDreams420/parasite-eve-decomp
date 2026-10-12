@@ -269,8 +269,8 @@ int Render_SetEntryScrolled(int index, int enabled, unsigned int arg2, unsigned 
     } else {
         entry->head.b.flags &= 0xFB;
     }
-    entry->coefX = arg2 >> 8;
-    entry->coefY = arg3 >> 8;
+    entry->speedX = arg2 >> 8;
+    entry->speedY = arg3 >> 8;
     return 0;
 }
 
@@ -283,8 +283,8 @@ int Render_SetEntryMirrored(int index, int enabled, unsigned int arg2, unsigned 
     } else {
         entry->head.b.flags &= 0xF7;
     }
-    entry->coefX = (0x10000 - arg2) >> 8;
-    entry->coefY = (0x10000 - arg3) >> 8;
+    entry->speedX = (0x10000 - arg2) >> 8;
+    entry->speedY = (0x10000 - arg3) >> 8;
     return 0;
 }
 
