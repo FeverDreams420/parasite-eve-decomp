@@ -48,7 +48,7 @@ PE1_STATIC_ASSERT(sizeof(BattleGameStateWindow) == 16, battle_game_state_window_
  *                                -> Combatant in the player-side paths below
  *
  *   Proof: Battle_DispatchInit.c:17        g_ActiveActor = *g_PlayerEntity;
- *          Battle_DispatchSpecialAction.c:30 g_ActiveActor = actor->core;
+ *          Battle_SpecialActionAndEscape.c:34 g_ActiveActor = actor->core;
  *          Battle_AttackResolution.c:496          g_ActiveActor = *(void**)g_PlayerEntity;
  *          Battle_Set/GetContextField use   ctx = *(u8**)g_PlayerEntity, index ctx.
  *
