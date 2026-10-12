@@ -536,6 +536,11 @@ What is left (best crutch-free lev against retail):
   `-step` as `-delta`, so step dies at the copy and global alloc gives delta
   step's register (a s16 delta, if/else and ternary forms tried). The same
   copy preference ties `FieldEng_AngleDistance`'s distance to the difference in `a0`.
+  Declaring the turn delta `unsigned short` breaks the cse equivalence (the
+  copy is a truncation), so delta keeps its own register: lev 8, the rest
+  being the zero extension before the final add and the difference computed
+  into `v0` then copied (`short` lev 9). The distance helper stays at lev 6
+  for `s16`/`int` distances, if/else, ternary and in-place `lhs -= rhs`.
 - `FieldEng_CollisionQueries.c` `func_800C5EB0` (1 pin on the node pointer):
   lev 9 without the pin. Global alloc ranks the loop index (9 refs over 45
   insns) above the node pointer (11 over 59); retail has node, index, strip in
@@ -1313,9 +1318,19 @@ Crutches still in these units, with the best crutch-free lev found:
   tile, one pin and two barriers (lev 27 without them: the code byte load
   is scheduled above the width store and the cursor loads move); its pulse
   shade and colour clear are plain C now.
+  Plain field statements (`w`, `h`, `code |= 2`, `y0`, `x0`, then the
+  AddPrim pair with `old = D_8009D100` after it) reach lev 16: the tag load
+  and the semi-transparency byte load still move below the width store
+  (same base register, disjoint offsets, so sched1 may reorder them), and
+  the x/y cursor stores swap.
 - `Gpu_InitDisplay` (3 pins, 1 barrier) repeats `Boot_InitMemoryLayout`
-  (sys, also pinned) on the `volatile s32` buffer words of `pe1/sys.h`;
-  both should change together with that header.
+  (sys, also pinned) on the `u8 *volatile` buffer words of `pe1/sys.h`;
+  both should change together with that header. Its locals are `u8 *` now
+  (no integer casts). Without the barrier lev 14 (the `g_OtBufferTable`
+  address joins the `g_OtBufferTable[0]` store and loads late, and the
+  constant 1 is rematerialized before the loop); without pins and barrier
+  lev 61; calling the layout as a `static inline` function lets cse fold
+  the pointer chain into symbol offsets (lev 63).
 - `Gpu_SetupSprites.c`: the status-icon packets (`D_8009E960[2][13]`,
   `D_8009EC38[2]`, 28 bytes: draw mode then sprite) are addressed from the
   sprite part at +8 (`D_8009E968`, `D_8009EC40`) with byte offsets (7 byte
