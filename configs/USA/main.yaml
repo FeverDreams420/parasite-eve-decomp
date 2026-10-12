@@ -326,8 +326,9 @@ segments:
       # and starts a new gprofile (split evidence); the fast scene flush and the
       # field frame loop that follow are -G8.
       - [0x2F874, c, boot/Gpu_InitPipeline]
+      # Fast scene flush, the field frame loop and the GTE lighting state setters:
+      # one -G8 FORCE_G0 unit with COMMON $gp words.
       - [0x2FAFC, c, boot/Boot_FrameLoop]
-      - [0x2FF58, c, boot/Gte_LightingState]
       # Save tail blob, title-style flag, card file presence, title-screen card
       # support, card port handling and the save flow share card state (G0354).
       - [0x30000, c, memcard/MemCard_PortAndSaveFlow]

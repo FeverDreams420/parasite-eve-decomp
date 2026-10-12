@@ -1,6 +1,7 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
+
 #include "common.h"
 #include "pe1/scene_transition.h"
 #include "pe1/render_camera.h"
@@ -16,17 +17,19 @@
 #include "pe1/pad_state.h"
 #include "pe1/battle_status.h"
 #include "pe1/field_movement.h"
+#include "pe1/gte.h"
+#include "pe1/render_lighting.h"
 
-/* Field frame loop and its scene flush: Boot_FlushSceneFast is the exit tail
- * that Boot_RunFrame repeats after its loop. Contiguous -G8 pair. */
-/* COMMON supplies small-data metadata to MASPSX; MASPSX_FORCE_G0 keeps
- * every other word absolute. The frame counter D_8009CDA4 is read
- * absolutely by CD_TrackReadFlow, so only its size is given here. */
+/* COMMON supplies small-data metadata to MASPSX: these words are reached
+ * through $gp, every other extern stays absolute. */
 u32 D_8009D280;
 int D_8009D1C4;
 unsigned int g_GameStateFlags;
 u32 D_8009D1A0;
 u32 D_8009CDA4[1];
+
+/* Field frame loop and its scene flush: Boot_FlushSceneFast is the exit tail
+ * that Boot_RunFrame repeats after its loop. Contiguous -G8 pair. */
 
 #include "pe1/boot.h"
 
@@ -189,4 +192,36 @@ loop_end_check:
         if (status & 0x200)
             D_800B0CD8 = (first_status | 2u) & ~0x8200u;
     }
+}
+
+/* Load the GTE back colour (scaled by 16) and clear the nine-halfword
+ * caller block that mirrors it. */
+void Gte_SetBackColor(u16 *dst, int r, int g, int b) {
+    gte_SetBackColor(r, g, b);
+
+    dst[0] = 0;
+    dst[1] = 0;
+    dst[2] = 0;
+    dst[3] = 0;
+    dst[4] = 0;
+    dst[5] = 0;
+    dst[6] = 0;
+    dst[7] = 0;
+    dst[8] = 0;
+}
+
+/* Store one light's colour in the light colour matrix column and the 8-bit
+ * colour table, then reload the GTE light colour matrix. */
+void Gte_SetLightColor(RenderLightingState *lighting, int index, int r, int g, u16 b) {
+    if ((unsigned int)index < 3) {
+        lighting->color.matrix.m[0][index] = r;
+        lighting->color.matrix.m[1][index] = g;
+        lighting->color.matrix.m[2][index] = b;
+    }
+
+    lighting->light_colors[index][0] = r;
+    lighting->light_colors[index][1] = g;
+    lighting->light_colors[index][2] = b;
+
+    gte_SetColorMatrix(&lighting->color);
 }
