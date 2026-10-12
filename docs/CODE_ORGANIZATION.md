@@ -802,12 +802,14 @@ Still open:
     barrier is gone.
     `Save_StartWriteSlot` keeps its `$s0` pin and both barriers (lev 23
     without; lev 1 with only the pin).
-  - `Entity_AllocBlock` keeps its m2c pins and two `goto`s. The structured
-    loop (u8 `blocks`/`slot`, the scratch base read inside the loop) is
-    lev 1: reorg fills the not-free branch's delay slot from the
-    fall-through instead of stealing the loop test's `andi` from the target,
-    so the branch lands one insn early. A separate `next` index fixes the
-    target but swaps `$a2`/`$a3` (lev 10 to 19 over all declaration orders).
+  - `Entity_AllocBlock` needs no pin or `goto`: a `u8 slot` (the `andi`
+    retail applies before each index), an `else if` chain of size classes
+    and a `while (slot < 0x10U)` loop. Only the `while` form matches: its
+    rotated exit test carries `NOTE_INSN_LOOP_VTOP`, and reorg's
+    `mostly_true_jump` predicts a branch to that test as taken, so the
+    not-free branch steals the test's `andi` from the target and lands past
+    it; a `do`/`while` test has no such note, the branch is predicted not
+    taken and its delay slot is filled from the fall-through (lev 1).
     `Scene_UpdateEntityPositions` keeps its `goto link`: duplicating the two
     inlined `Scene_LinkContactTask` calls is not cross-jumped (lev 128).
   - `Entity_TriggerAnimEvent` keeps its three pins (lev 81 without: retail
@@ -1644,12 +1646,6 @@ Left, with the best crutch-free lev:
   and byte `-1` stores share one register).
 - `Boot_InitMemoryLayout`: the `$2`/`$4` pins and the volatile buffer views
   (lev 60 without: sched1 reorders the stores to distinct symbols).
-- `Entity_AllocBlock`: structured with `u8 blocks`/`slot` and a default of 8
-  it is lev 3 (reorg fills the not-free branch's delay slot from the
-  fall-through); a `u32 index` copy of the slot fixes the branch target but
-  ranks the free flag (6 refs over 18 insns) just below `blocks` (11 over 49),
-  swapping `a2`/`a3`; moving `free = 0` after the slot step flips them but
-  swaps the scaled-index temporaries (lev 12).
 - `Entity_InitFreePool` keeps its byte-offset loop (now through the union)
   because the file is `-fno-strength-reduce`; dropping the marker reverses
   the loops (lev 8).
