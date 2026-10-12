@@ -121,11 +121,11 @@ PE1_STATIC_ASSERT(sizeof(DsCallbackRegistry) == 12, ds_callback_registry_size);
 extern DsCallbackRegistry g_DsReadCallbackState;
 extern CdQueuedCmdSlot g_CdQueuedCmdSlots[3];
 extern DsReadCallbackSlot g_DsReadCallbackSlots[8];
-extern int g_DsReadCallbackCursor __asm__("D_800A3690");
-extern DsEventCallback volatile g_DsSyncCallback __asm__("D_800A36A4");
-extern DsEventCallback volatile g_DsReadyCallback __asm__("D_800A36A8");
+extern int g_DsReadCallbackCursor;
+extern DsEventCallback volatile g_DsSyncCallback;
+extern DsEventCallback volatile g_DsReadyCallback;
 extern DsCallback volatile g_DsPollCallback;
-extern DsEventCallback volatile g_DsDispatchCallback __asm__("D_800A36AC");
+extern DsEventCallback volatile g_DsDispatchCallback;
 DsEventCallback DsSyncCallback(DsEventCallback callback);
 DsEventCallback DsReadyCallback(DsEventCallback callback);
 DsEventCallback DsStartCallback(DsEventCallback callback);
@@ -137,10 +137,10 @@ extern volatile int g_DsDiskType;
 void CQ_clear_queue(void *queue);
 void ER_clear(void);
 void DS_init(void);
-void DS_sync_callback(unsigned int value);
-void DS_ready_callback(unsigned int value);
-void DS_start_callback(unsigned int value);
-void DS_vsync_callback(unsigned int value);
+void DS_sync_callback(DsEventCallback callback);
+void DS_ready_callback(DsEventCallback callback);
+void DS_start_callback(DsEventCallback callback);
+void DS_vsync_callback(DsCallback callback);
 void CQ_sync_system(int event, u8 *result);
 int CQ_ready_system(int command, u8 *payload);
 void LIBDS_DSSYS_2_text_13CC(int event);
@@ -210,8 +210,8 @@ typedef struct IsoDirectoryRecord {
     ((IsoDirectoryRecord *)((u8 *)(record) + (record)->recordLength))
 
 extern u8 g_DsFileSectorBuffer[2048];
-extern int g_DsCachedDirectory __asm__("D_8009B6DC");
-extern int g_DsCachedDiskType __asm__("D_8009B6E0");
+extern int g_DsCachedDirectory;
+extern int g_DsCachedDiskType;
 
 typedef void (*DsAsyncReadCallback)(int status, void *data, void *detail);
 

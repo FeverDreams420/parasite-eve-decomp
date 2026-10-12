@@ -114,6 +114,12 @@ PE1_STATIC_ASSERT(sizeof(InterruptDispatchTable) == 28, intr_dispatch_size);
 extern InterruptDispatchTable *g_EventCallbackTable;
 extern PsyqInterruptHandler g_IntrVSyncCallbackTable[];
 extern volatile int g_VSyncCount;
+/* VSYNC.OBJ: GPU status and root-counter-1 (hblank) register pointers and
+ * the counts sampled at the previous VSync. */
+extern volatile u32 *g_VSyncGpuStatusRegister;
+extern volatile u32 *g_VSyncHcountRegister;
+extern volatile u32 g_VSyncLastHcount;
+extern int g_VSyncLastCount;
 void trapIntrVSync(void);
 VSyncCallbackSetter startIntrVSync(void);
 PsyqInterruptHandler setIntrVSync(unsigned int index, PsyqInterruptHandler callback);

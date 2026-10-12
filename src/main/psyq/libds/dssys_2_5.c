@@ -281,7 +281,7 @@ s32 DsSync(s32 inId, void *inResult) {
 
     if (id != 0) {
         DS_sync(0);
-        forward = D_800A3690;
+        forward = g_DsReadCallbackCursor;
         scanned = 0;
         entryIdOrOffset = forward * 0x10;
     scanForward:
@@ -294,7 +294,7 @@ s32 DsSync(s32 inId, void *inResult) {
             scanned += 1;
             if (scanned >= 8) {
                 readiness = 0;
-                if (id < *(int *)((char *)g_DsReadCallbackSlots + (D_800A3690 * 0x10))) {
+                if (id < *(int *)((char *)g_DsReadCallbackSlots + (g_DsReadCallbackCursor * 0x10))) {
                     goto completed;
                 }
             } else {
@@ -310,7 +310,7 @@ s32 DsSync(s32 inId, void *inResult) {
             return status;
         }
         {
-            cursor = D_800A3690;
+            cursor = g_DsReadCallbackCursor;
             backward = cursor - 1;
             if (backward < 0) {
                 backward = 7;
@@ -348,7 +348,7 @@ s32 DsSync(s32 inId, void *inResult) {
             goto copyResult;
         }
     }
-    cursor = D_800A3690 - 1;
+    cursor = g_DsReadCallbackCursor - 1;
     offset = cursor * 0x10;
     if (cursor < 0) {
         cursor = 7;

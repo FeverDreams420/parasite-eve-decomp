@@ -27,22 +27,20 @@ int DS_cw(u8 command, void *parameter) {
     return LIBDS_DSSYS_1_text_368((prev[9] = 0xB, command), parameter);
 }
 
-#include "dssys_1_4_externs.h"
-
-void DS_vsync_callback(unsigned int value) {
-    D_800A36A0 = value;
+void DS_vsync_callback(DsCallback callback) {
+    g_DsPollCallback = callback;
 }
 
-void DS_sync_callback(unsigned int value) {
-    D_800A36A4 = value;
+void DS_sync_callback(DsEventCallback callback) {
+    g_DsSyncCallback = callback;
 }
 
-void DS_ready_callback(unsigned int value) {
-    D_800A36A8 = value;
+void DS_ready_callback(DsEventCallback callback) {
+    g_DsReadyCallback = callback;
 }
 
-void DS_start_callback(unsigned int value) {
-    D_800A36AC = value;
+void DS_start_callback(DsEventCallback callback) {
+    g_DsDispatchCallback = callback;
 }
 
 u32 DS_system_status(u32 mode) {

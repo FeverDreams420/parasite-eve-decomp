@@ -14,10 +14,10 @@ class CDCommandEventTests(unittest.TestCase):
     def test_local_alias_removed(self):
         source=find_definition('LIBDS_DSSYS_1_text_D24').read_text()
         # LIBDS_DSSYS_1_text_D24 and its declaration close the unit.
-        source=source[source.index('extern CdRomEventCommandState D_8009B558;'):]
+        source=source[source.index('extern CdRomEventCommandState g_CdRomEventCommandState;'):]
         self.assertNotIn('D_8009B558_o',source)
         self.assertNotIn('__asm__',source)
-        self.assertIn('extern CdRomEventCommandState D_8009B558;',source)
+        self.assertIn('extern CdRomEventCommandState g_CdRomEventCommandState;',source)
         self.assertEqual(source.count('asm("$'),1)
 
     @unittest.skipUnless((ROOT/'assets/USA/main.exe').is_file() and

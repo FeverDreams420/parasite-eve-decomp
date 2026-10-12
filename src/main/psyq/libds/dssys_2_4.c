@@ -39,12 +39,12 @@ int DsInit(void) {
     g_CdPendingReadCount = 0;
     for (k = 7, offset = 112; k >= 0; --k, offset -= 16)
         ((DsReadCallbackSlot *)((unsigned char *)g_DsReadCallbackSlots + offset))->value = 0;
-    D_800A3690 = 0;
+    g_DsReadCallbackCursor = 0;
     DS_init();
-    DS_sync_callback((unsigned int)CQ_sync_system);
-    DS_ready_callback((unsigned int)CQ_ready_system);
-    DS_start_callback((unsigned int)LIBDS_DSSYS_2_text_13CC);
-    DS_vsync_callback((unsigned int)CQ_vsync_system);
+    DS_sync_callback((DsEventCallback)CQ_sync_system);
+    DS_ready_callback((DsEventCallback)CQ_ready_system);
+    DS_start_callback((DsEventCallback)LIBDS_DSSYS_2_text_13CC);
+    DS_vsync_callback(CQ_vsync_system);
     ER_clear();
     DsReadySystemMode(0);
     return 1;
@@ -78,7 +78,7 @@ int DsReset(void) {
     g_CdPendingReadCount = 0;
     for (k = 7, offset = 112; k >= 0; --k, offset -= 16)
         *(int *)((unsigned char *)g_DsReadCallbackSlots + offset) = 0;
-    D_800A3690 = 0;
+    g_DsReadCallbackCursor = 0;
     ER_clear();
     DsReadySystemMode(0);
     DS_restart();

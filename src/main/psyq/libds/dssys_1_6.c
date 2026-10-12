@@ -238,7 +238,7 @@ void LIBDS_DSSYS_1_text_D24(int event, u8 *result) {
 
     event_reg = event & 0xFF;
     if (event_reg == 2) {
-        cmd_state = &D_8009B558;
+        cmd_state = &g_CdRomEventCommandState;
         asm volatile("" : "=r"(cmd_state) : "0"(cmd_state));
         status = cmd_state->pendingCommand;
         value = 0xE;

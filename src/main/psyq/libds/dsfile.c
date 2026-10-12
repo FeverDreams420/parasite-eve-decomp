@@ -49,8 +49,8 @@ const char D_80012038[] =
     "DS_cachefile: %d files found\n";
 const u8 dsfile_rodata_padding[4] = {0};
 
-int D_8009B6DC = 0;
-int D_8009B6E0 = 0;
+int g_DsCachedDirectory = 0;
+int g_DsCachedDiskType = 0;
 int dsfile_data_padding[2] = {0, 0};
 
 #include "dsfile_externs.h"

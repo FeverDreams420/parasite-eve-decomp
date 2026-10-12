@@ -2187,3 +2187,14 @@ g_CdRomCommandEventValue = 0x8009B570;
 g_DsSyncResultCountdown = 0x8009B594;
 g_CdStreamRingIndex = 0x800BE9EC;
 g_SaveSjisFormatArguments = 0x800A1708;
+
+// PSY-Q library state formerly reached through asm-label aliases.
+atan_table = 0x8009A6EC;
+g_VSyncGpuStatusRegister = 0x80094574;
+g_VSyncHcountRegister = 0x80094578;
+g_VSyncLastHcount = 0x8009457C;
+g_VSyncLastCount = 0x80094580;
+g_CdRomEventCommandState = 0x8009B558;
+g_CdRomCmdRetryState = 0x8009B59C;
+g_CdReadProgress = 0x8009B6A4;
+g_CdStreamReady = 0x800B0CD0;

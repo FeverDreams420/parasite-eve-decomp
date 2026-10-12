@@ -2,7 +2,7 @@
 /* GAS_VERSION: 2.7 */
 /* PSY-Q LIBGTE RATAN: ratan2. */
 #include "common.h"
-#include "ratan_externs.h"
+#include "pe1/gte_types.h"
 
 /* A function section avoids GAS 2.7's mandatory 16-byte .text padding. */
 int __attribute__((section(".text.ratan2"))) ratan2(int y, int x) {

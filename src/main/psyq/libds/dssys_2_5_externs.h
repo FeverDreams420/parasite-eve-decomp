@@ -1,6 +1,5 @@
 #ifndef PE1_EXT_30C3B6FA1917
 #define PE1_EXT_30C3B6FA1917
 extern int D_800A3614[], D_800A3618[], D_800A361C[];
-extern int D_800A3690;
 extern DsResult D_800A3500;
 #endif /* PE1_EXT_30C3B6FA1917 */

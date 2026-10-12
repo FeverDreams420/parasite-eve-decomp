@@ -5,13 +5,12 @@
 
 #include "pe1/psyq_cd.h"
 
-#include "callback_externs.h"
 
 int getintr(void);
 
 void callback(void) {
     int pending;
-    volatile u8 *ready = &cd_ready_event;
+    volatile u8 *ready = &g_CdReadyEvent;
     int bank = *D_8009B27C & 3;
     volatile u8 *complete = ready - 1;
 

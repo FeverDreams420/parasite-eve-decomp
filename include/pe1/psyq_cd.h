@@ -288,13 +288,12 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(CdRomEventCommandState, command) +
 extern CdRomSystemState g_DsReadSysEnabled;
 extern DsReadStatusBlock g_DsReadStatusBlock;
 extern CdRomCommandState g_CdSeekState;
-extern CdRomEventCommandState g_CdRomEventCommandState
-    __asm__("D_8009B558");
+extern CdRomEventCommandState g_CdRomEventCommandState;
 /* Direct word aliases of the overlapping command-state structure fields. */
 extern s32 g_CdRomCommandEventValue;
 extern s32 g_DsSyncResultCountdown;
-extern int g_CdRomCmdTimeout __asm__("D_8009B598");
-extern int g_CdRomCmdRetryState __asm__("D_8009B59C");
+extern int g_CdRomCmdTimeout;
+extern int g_CdRomCmdRetryState;
 extern int g_CdRomCmdLongTimeoutTable[];
 
 /* Recover the shared command window from its timeout/ready-result word. */
@@ -311,9 +310,10 @@ extern int g_CdDsReadIndex;
 
 void DS_read_cbready(int status, void *data, void *detail);
 
-extern CdReadProgressState g_CdReadProgress __asm__("D_8009B6A4");
-/* Direct alias preserves the SDK's word access to the first state field. */
-extern s32 g_CdReadCommandPollToggle __asm__("D_8009B6A4");
+extern CdReadProgressState g_CdReadProgress;
+/* Scalar view of the first field: LIBDS_DSSYS_1_text_4A4 reads it as a plain
+ * word; through the structure GCC keeps its address live in $s0. */
+extern s32 g_CdReadCommandPollToggle __asm__("g_CdReadProgress");
 #define g_CdReadStartVsync (g_CdReadProgress.startVsync)
 #define g_CdReadCurrentVsync (g_CdReadProgress.currentVsync)
 #define g_CdReadInProgress (g_CdReadProgress.inProgress)
@@ -415,9 +415,10 @@ typedef union CdStreamReadyState {
 } CdStreamReadyState;
 PE1_STATIC_ASSERT(sizeof(CdStreamReadyState) == 4,
                   cd_stream_ready_state_size);
-extern CdStreamReadyState D_800B0CD0;
-/* The memcard overlay reads and clears only the low halfword at this address. */
-extern s16 g_CdStreamReadyHalfword __asm__("D_800B0CD0");
+extern CdStreamReadyState g_CdStreamReady;
+/* The memcard overlay reads and clears only the low halfword, as a scalar:
+ * through the union its test and clear schedule differently. */
+extern s16 g_CdStreamReadyHalfword __asm__("g_CdStreamReady");
 extern volatile s32 D_800B6914, D_800B8620;
 extern void (*D_800B0CCC)(void);
 extern s32 g_CdStreamRingIndex;
@@ -428,6 +429,8 @@ extern u32 D_8009AF2C[];
 extern CdlCB D_8009AFB4;
 extern CdlCB D_8009AFB8;
 extern CdlCB g_CdSyncCallback;
+/* BIOS.OBJ: set by the CD interrupt when a ready event arrives. */
+extern volatile u8 g_CdReadyEvent;
 extern CdlCB g_CdReadyCallback;
 extern int CD_debug;
 int CdSetDebug(int level);

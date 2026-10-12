@@ -2,8 +2,8 @@
 /* Psy-Q LIBETC VSYNC.OBJ: VSync, v_wait. */
 #include "common.h"
 #include "pe1/psyq_bios.h"
+#include "pe1/psyq_api_internal.h"
 
-#include "vsync_externs.h"
 void v_wait(int target, int frames);
 
 int VSync(int mode) {
@@ -14,33 +14,33 @@ int VSync(int mode) {
     int next;
     volatile u32 sample;
 
-    status = *gpu_status;
+    status = *g_VSyncGpuStatusRegister;
     do {
-        sample = *hblank_counter;
-    } while (sample != *hblank_counter);
-    elapsed = (sample - last_hblank) & 0xFFFF;
+        sample = *g_VSyncHcountRegister;
+    } while (sample != *g_VSyncHcountRegister);
+    elapsed = (sample - g_VSyncLastHcount) & 0xFFFF;
     if (mode < 0) return g_VSyncCount;
     if (mode == 1) return elapsed;
     if (mode > 0) {
-        target = last_vblank - 1;
+        target = g_VSyncLastCount - 1;
         target += mode;
     } else {
-        target = last_vblank;
+        target = g_VSyncLastCount;
     }
     frames = 0;
     if (mode > 0) frames = mode - 1;
     v_wait(target, frames);
-    status = *gpu_status;
+    status = *g_VSyncGpuStatusRegister;
     next = g_VSyncCount;
     next++;
     v_wait(next, 1);
     if (status & 0x400000) {
-        while (!((status ^ *gpu_status) & 0x80000000)) {}
+        while (!((status ^ *g_VSyncGpuStatusRegister) & 0x80000000)) {}
     }
-    last_vblank = g_VSyncCount;
+    g_VSyncLastCount = g_VSyncCount;
     do {
-        last_hblank = *hblank_counter;
-    } while (last_hblank != *hblank_counter);
+        g_VSyncLastHcount = *g_VSyncHcountRegister;
+    } while (g_VSyncLastHcount != *g_VSyncHcountRegister);
     return elapsed;
 }
 

@@ -65,6 +65,8 @@ void SetLightMatrix(const GteMatrix *matrix);
 void SetColorMatrix(const GteMatrix *matrix);
 void SetTransMatrix(const GteMatrix *matrix);
 int ratan2(int y, int x);
+/* RATAN.OBJ arctangent table, indexed by the scaled ratio. */
+extern s16 atan_table[];
 int SquareRoot0(int value);
 void VectorNormal(GteVector *vector, GteVector *unit);
 void VectorNormalS(GteVector *vector, GteShortVector *unit);

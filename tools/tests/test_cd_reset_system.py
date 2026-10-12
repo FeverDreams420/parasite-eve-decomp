@@ -27,7 +27,7 @@ CdQueuedCmdSlot g_CdQueuedCmdSlots[3];
 CdDsReadQueueEntry g_CdDsReadQueue[8];
 DsReadCallbackSlot g_DsReadCallbackSlots[8];
 DsQueueIndices D_800A3600;
-int D_800A3604, g_CdPendingReadCount, D_800A3690;
+int D_800A3604, g_CdPendingReadCount, g_DsReadCallbackCursor;
 static int stage, queues, fill;
 static void status_cleared(void) {
     unsigned char *bytes = (unsigned char *)g_CdQueuedCmdSlots;
@@ -47,7 +47,7 @@ void CQ_clear_queue(void *raw_queue) {
     CdDsReadQueueEntry *queue = raw_queue;
     int i, j;
     assert(stage == 1 && queue == &g_CdDsReadQueue[queues]);
-    assert(D_800A3690 == fill);
+    assert(g_DsReadCallbackCursor == fill);
     status_cleared();
     assert(D_800A3600.start == 123 && D_800A3604 == 456 && g_CdPendingReadCount == 789);
     for (i = 0; i < 8; ++i) for (j = 0; j < sizeof(CdDsReadQueueEntry); ++j)
@@ -62,7 +62,7 @@ void ER_clear(void) {
     assert(D_800A3600.start == 0 && D_800A3604 == 0 && g_CdPendingReadCount == 0);
     for (i = 0; i < 8; ++i) for (j = 0; j < 16; ++j)
         assert(((unsigned char *)&g_DsReadCallbackSlots[i])[j] == (j < 4 ? 0 : fill));
-    assert(D_800A3690 == 0);
+    assert(g_DsReadCallbackCursor == 0);
 }
 DsCallback DsReadySystemMode(DsCallback callback) {
     assert(stage++ == 2 && callback == 0);
@@ -75,7 +75,7 @@ int main(void) {
         memset(g_CdQueuedCmdSlots, fill, sizeof(g_CdQueuedCmdSlots));
         memset(g_CdDsReadQueue, fill, sizeof(g_CdDsReadQueue));
         memset(g_DsReadCallbackSlots, fill, sizeof(g_DsReadCallbackSlots));
-        D_800A3690 = fill;
+        g_DsReadCallbackCursor = fill;
         D_800A3600.start = 123; D_800A3600.current = 321; D_800A3600.count = 654;
         D_800A3604 = 456; g_CdPendingReadCount = 789;
         stage = queues = 0;
