@@ -44,7 +44,7 @@
       "evidence": "Fresh linked asm-differ run on darwine against retail instruction target; no source changes required."
     },
     {
-      "unit": "main/task/Task_GpuPackPrimColor",
+      "unit": "main/script/Task_GpuPackPrimColor",
       "symbol": "Task_GpuPackPrimColor",
       "reported_size": 52,
       "source": null,

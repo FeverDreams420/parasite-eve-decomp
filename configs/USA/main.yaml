@@ -69,13 +69,13 @@ segments:
     bss_size: 0x0
     subsegments:
       # Expression and FieldActor Vec3 getter/setter switch tables.
-      - [0x800, .rodata, task/Task_ValueOps]
+      - [0x800, .rodata, script/Task_ValueOps]
       - [0x89C, rodata, main/rodata_00089C]
-      - [0x8A0, .rodata, task/Task_MemCardPositionCameraOps]
+      - [0x8A0, .rodata, script/Task_MemCardPositionCameraOps]
       - [0x9AC, rodata, main/rodata_0009AC]
-      - [0x9B0, .rodata, task/Task_ItemAndSoundOps]
+      - [0x9B0, .rodata, script/Task_ItemAndSoundOps]
       - [0xE8C, rodata, main/rodata_000E8C]
-      - [0xE90, .rodata, task/Task_RunQueue]
+      - [0xE90, .rodata, script/Task_RunQueue]
       - [0xEA4, rodata, main/rodata_000EA4]
       - [0xEE4, .rodata, entity/Entity_HitAndDropTable]
       - [0xF0C, .rodata, main/Battle_ApplyEnemyAttack]
@@ -154,75 +154,75 @@ segments:
       - [0x2A0C, c, boot/Boot_MainLoop]
       # Node-pool init, scene relocation, map flush and free-list setup share
       # the task-node pool and g_SceneDataTable1 (main_tu_evidence G0001).
-      - [0x2CF8, c, task/Task_NodePoolSetupFlow]
+      - [0x2CF8, c, script/Task_NodePoolSetupFlow]
       # Allocation and garbage collection share the TaskNode free list.
-      - [0x2F00, c, task/Task_NodePoolFlow]
+      - [0x2F00, c, script/Task_NodePoolFlow]
       # Expression, Vec3 get/set and mask-test opcodes: contiguous
       # default-profile handlers whose jump tables are adjacent in .rodata.
-      - [0x3050, c, task/Task_ValueOps]
+      - [0x3050, c, script/Task_ValueOps]
       # Task-node, point-motion, and camera tracking share the active entity cache.
-      - [0x39E8, c, task/Task_NodeActions]
+      - [0x39E8, c, script/Task_NodeActions]
       # Field-actor query and distance routines share their actor globals.
       - [0x4A28, c, entity/Entity_QueryAndDistance]
       # -G8 opcodes: memory-card init step, position by actor type, relative
       # camera offset tracking and camera angle fade.
-      - [0x4CFC, c, task/Task_MemCardPositionCameraOps]
-      - [0x55A0, c, task/Task_PolyAndSceneLoadOps]
-      - [0x57D8, c, task/Task_PlayEntityAnim]
-      - [0x5908, c, task/Task_CopyEntityRenderObject]
+      - [0x4CFC, c, script/Task_MemCardPositionCameraOps]
+      - [0x55A0, c, script/Task_PolyAndSceneLoadOps]
+      - [0x57D8, c, script/Task_PlayEntityAnim]
+      - [0x5908, c, script/Task_CopyEntityRenderObject]
       # Actor model draw, render-mode switch wait and angle-to-actor
       # opcodes: contiguous; -G8 leaves the angle opcode unchanged.
-      - [0x5A40, c, task/Task_ActorModelOps]
+      - [0x5A40, c, script/Task_ActorModelOps]
       - [0x5F90, c, main/MapSelectionFlow]
       # Screen-position, memory-card dialog, received-item, inventory and
       # AKAO/CD sound opcodes: contiguous -G8 handlers; only the sound
       # command has rodata.
-      - [0x62B8, c, task/Task_ItemAndSoundOps]
-      - [0x7110, c, task/Task_DispatchScriptCmd]
-      - [0x75F8, c, task/Task_ShadowFlagOps]
+      - [0x62B8, c, script/Task_ItemAndSoundOps]
+      - [0x7110, c, script/Task_DispatchScriptCmd]
+      - [0x75F8, c, script/Task_ShadowFlagOps]
       # Pending-node launch controller for equip and save/load menus.
-      - [0x7640, c, task/Task_BeginSceneTransition]
-      - [0x77E0, c, task/Task_GetPlayerInputFlag]
+      - [0x7640, c, script/Task_BeginSceneTransition]
+      - [0x77E0, c, script/Task_GetPlayerInputFlag]
       # Interpreter loop, jump-to-actor-script and mark-dead opcodes: -G8 unit
       # sharing the script cursor; no data of the jump opcode is COMMON.
-      - [0x7818, c, task/Task_RunQueue]
+      - [0x7818, c, script/Task_RunQueue]
       # -G8 opcodes: current-node active/free, jump-if-zero, spawn, assign and
       # stop-anim; g_CurrentEntity stays absolute through the array declaration.
-      - [0x7AE0, c, task/Task_NodeAndFlowOpcodes]
+      - [0x7AE0, c, script/Task_NodeAndFlowOpcodes]
       - [0x7C44, c, entity/Entity_ComputeVelocityToTarget]
       # -G8 opcodes: movement wait, field-setter selection, actor flags, node
       # id, random range, field sfx, node table lookups, actor byte fields and
       # node free; g_CurrentEntity stays absolute through the array declaration.
-      - [0x7D40, c, task/Task_ActorAndNodeFieldOps]
+      - [0x7D40, c, script/Task_ActorAndNodeFieldOps]
       # Default-profile opcodes: bit and global-flag ops, action mode and anim frame.
-      - [0x81F8, c, task/Task_BitAndActionOpcodes]
-      - [0x8374, c, task/Task_WaitAnimFrameMatch]
+      - [0x81F8, c, script/Task_BitAndActionOpcodes]
+      - [0x8374, c, script/Task_WaitAnimFrameMatch]
       # Default-profile script opcodes between the -G8 Task_WaitAnimFrameMatch
       # and Entity_TaskAnimationOps: barcode, fog/scroll, camera reset and
       # render state, move lock, menu-choice branch, current-actor flags,
       # global flags and battle mode, field get/set by type and battle flags.
-      - [0x83B4, c, task/Task_StateAndFlagOpcodes]
+      - [0x83B4, c, script/Task_StateAndFlagOpcodes]
       # Task-node animation scheduling and the current-actor event command.
       - [0x8B00, c, entity/Entity_TaskAnimationOps]
       # Motion, system, process-manager and object-entry opcodes: contiguous
       # default-profile handlers between Entity_TaskAnimationOps and the -G8
       # Task_DrawYield.
-      - [0x8D6C, c, task/Task_SystemCommandOps]
-      - [0x97DC, c, task/Task_DrawYield]
+      - [0x8D6C, c, script/Task_SystemCommandOps]
+      - [0x97DC, c, script/Task_DrawYield]
       # Animation rate, attachment and actor-control opcodes share FieldActor.
       - [0x98AC, c, entity/Entity_AttachmentAndControl]
       # -G8 opcodes: loading yield, anim scale, menu clamp, item give/count and
       # the timed equip-swap init.
-      - [0x9C10, c, task/Task_LoadWaitAndItemOps]
+      - [0x9C10, c, script/Task_LoadWaitAndItemOps]
       # Field-actor flags, movement and animation-entry commands.
-      - [0x9E18, c, task/Task_FieldEntityCommands]
-      - [0xA308, c, task/Task_WaitEntityFlags8]
-      - [0xA378, c, task/Task_RotateEntityAngle]
-      - [0xA3E4, c, task/Task_SetNodeFlag80]
+      - [0x9E18, c, script/Task_FieldEntityCommands]
+      - [0xA308, c, script/Task_WaitEntityFlags8]
+      - [0xA378, c, script/Task_RotateEntityAngle]
+      - [0xA3E4, c, script/Task_SetNodeFlag80]
       # Scene, game-time, parent-link and trigonometry opcodes: contiguous
       # default-profile handlers on the current actor (main_tu_evidence
       # G0199..G0215 have no split evidence between them).
-      - [0xA404, c, task/Task_SceneCommandOps]
+      - [0xA404, c, script/Task_SceneCommandOps]
       # Animation advancement and action selection share per-model action tables.
       - [0xACAC, c, entity/Entity_AnimationState]
       # Collision-state reset and database relocation share the collision table globals (G0227).
@@ -300,7 +300,7 @@ segments:
       - [0x23B5C, c, gpu/Gpu_SetupSprites]
       # Window mode setter and getter: g_MenuActiveMode is private to this pair.
       - [0x241A0, c, menu/Menu_ActiveWindowMode]
-      - [0x2422C, c, task/Task_SignalExit]
+      - [0x2422C, c, script/Task_SignalExit]
       - [0x24240, c, battle/Battle_ActiveAndEnemyStatusFlow]
       - [0x24FB4, c, render/Render_AnimationFrame]
       - [0x2515C, c, save/Save_DrawSlotMetadata]
@@ -573,7 +573,7 @@ segments:
       # share their typed widget state and -G8/common profile.
       - [0x52D68, c, menu/MenuWidget_Lifecycle]
       # Field sound event enqueue/reset and actor dispatch share queue records.
-      - [0x55B6C, c, task/Task_FieldSfxQueue]
+      - [0x55B6C, c, script/Task_FieldSfxQueue]
       # Reset, animation update and slot commands share GeomCtrlEntry.
       # Reset/setup also byte-match under the update profile (-fno-force-mem).
       - [0x55DD4, c, render/Obj_ControlEntries]
@@ -638,9 +638,9 @@ segments:
       # Slot allocation opens the contiguous process-manager slot API.
       - [0x5FA24, c, pm/Pm_ProcessManager]
       - [0x60C1C, c, render/Render_DrawWireframeModel]
-      - [0x61510, c, task/Task_InitGpuHwRegs]
-      - [0x6156C, c, task/Task_GpuFlushPrimQueue]
-      - [0x615D0, c, task/Task_GpuPackPrimColor]
+      - [0x61510, c, script/Task_InitGpuHwRegs]
+      - [0x6156C, c, script/Task_GpuFlushPrimQueue]
+      - [0x615D0, c, script/Task_GpuPackPrimColor]
       - [0x61604, pad] # zero words after Task_GpuPackPrimColor's jr ra
       - [0x61654, c, gpu/Gpu_RenderFrame]
       - [0x617AC, c, math/Math_SqrtApprox3]
