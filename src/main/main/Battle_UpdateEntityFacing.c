@@ -37,7 +37,6 @@ void Battle_UpdateEntityFacing(BattleEntity *entity)
     int mode;
     int phase;
     int value;
-    BattleEntity *call_entity;
     FacingMotion *motion;
 
     if (core->status05 != 0 || (core->flags & 0xE)) return;
@@ -51,19 +50,16 @@ void Battle_UpdateEntityFacing(BattleEntity *entity)
             core->previous_delta = entity->animStep;
         }
     }
-update_angle:
     direction = (s16)Battle_CalcRelativeAngle(D_8009D254, entity);
-    call_entity = entity;
-    if (direction >= 0x401) {
-    if (direction < 0xC00) goto turn;
+    if (direction > 0x400) {
+        if (direction < 0xC00) {
+            Entity_SetActionMode(entity, 1);
+        } else {
+            Entity_SetActionMode(entity, 0);
+        }
+    } else {
+        Entity_SetActionMode(entity, 0);
     }
-straight:
-    mode = 0;
-    goto set_mode;
-turn:
-    mode = 1;
-set_mode:
-    Entity_SetActionMode(call_entity, mode);
     entity->animStep = 0x10000;
     entity->entityFlags |= 0x1000;
     if (D_8009D278->stateFlags & 0x80000) return;

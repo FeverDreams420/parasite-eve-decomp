@@ -1089,9 +1089,12 @@ single removal (none was byte-identical):
   `Battle_DrawStatusSymbol` and `Battle_DrawATBGauge` address their ordering
   entry and sprite as array elements. `Battle_ApplyEnemyAttack` keeps
   two volatile `stateFlags` reloads: bit-field forms drop the store and
-  reload pair (lev 52 with branch offsets, 2 instructions). `Battle_UpdateEntityFacing` keeps its two `goto`s: any
-  conditional form of the facing mode becomes an `slti` store-flag or the
-  folded unsigned range test (lev 16 to 21). `Battle_DrawStatusOverlay`
+  reload pair (lev 52 with branch offsets, 2 instructions). `Battle_UpdateEntityFacing` has no `goto`s:
+  the facing mode is passed as a constant in nested `if`s with one
+  `Entity_SetActionMode` call per arm, which cross-jumping merges into the
+  retail `li a1,1` / `move a1,zero` pair; a `mode` variable becomes an
+  `slti` store-flag and `&&` folds into an unsigned range test (lev 16
+  to 21). `Battle_DrawStatusOverlay`
   case 3 keeps its packet base pin (typed sprite forms lev 7 to 23).
 
 ### Battle HUD recipes and crutches left (src/main/battle, first half, 2026-10-12)
