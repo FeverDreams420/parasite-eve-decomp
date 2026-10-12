@@ -314,7 +314,7 @@ byte-identical.
 | LIBDS DSFILE | 2 | 2 | `dsfile.c` GCC 2.8.1, `dsfile_2.c` GCC 2.7.2 |
 | LIBDS DSREADY | 5 | 4 | parts 1 and 3 GCC 2.8.1, parts 2 and 4 GCC 2.7.2 |
 | LIBPAD PADPORTD | 4 | 4 | parts 1 and 3 GCC 2.8.1 (3 only builds with it), parts 2 and 4 GCC 2.7.2 |
-| LIBSPU SPU | 4 | 4 | part 1 GCC 2.7.2 with GNU as, parts 2 and 4 GCC 2.8.1, part 3 GCC 2.7.2 with the GNU as 2.8.1 assembler |
+| LIBSPU SPU | 4 | 3 | `spu.c` GCC 2.7.2 with GNU as, `spu_3.c` GCC 2.8.1, `spu_4.c` GCC 2.7.2 with the GNU as 2.8.1 assembler: `_spu_FsetRXXa` needs the old assembler's `remu` expansion (divide before the zero check) and `spu.c` the new assembler's `jal` delay-slot fill with the low half of `la`; no assembler here does both, as ASPSX did. `_spu_t` (`spu_3.c`) keeps a base register that GCC 2.7.2 folds (lev 26) |
 
 Objects unified after a new C shape for the part that needed other
 markers (one unit each now):
@@ -337,6 +337,9 @@ markers (one unit each now):
 - LIBMATH MULDF3 (`muldf3.c`, GCC 2.7.2 with GNU as): `_mul_mant_d` only
   failed to build with GCC 2.7.2, whose inline asm has no `+` constraint;
   the two `"+m"` barriers it used are not needed under GCC 2.7.2.
+- LIBSPU SPU parts 4 and 5 (`spu_4.c`, GNU as 2.8.1): `_spu_Fw1ts` counts
+  its volatile loop index with `i = i + 1`; `i++` reads the volatile twice
+  under GCC 2.7.2.
 
 ### AKAO driver (src/main/akao)
 

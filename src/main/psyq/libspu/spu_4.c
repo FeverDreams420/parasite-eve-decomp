@@ -1,6 +1,6 @@
-/* PSY-Q LIBSPU SPU, part 4 of 5: _spu_FsetRXX, _spu_FsetRXXa, _spu_FgetRXXa,
- * _spu_FsetPCR, _spu_FsetDelayW, _spu_FsetDelayR. */
 /* GAS_VERSION: 2.8.1 */
+/* PSY-Q LIBSPU SPU, last part: _spu_FsetRXX, _spu_FsetRXXa, _spu_FgetRXXa,
+ * _spu_FsetPCR, _spu_FsetDelayW, _spu_FsetDelayR, _spu_Fw1ts. */
 #include "pe1/psyq_spu_internal.h"
 
 void _spu_FsetRXX(u32 offset, u32 value, u32 mode) {
@@ -77,4 +77,15 @@ void _spu_FsetDelayW(void) {
 
 void _spu_FsetDelayR(void) {
     *_spu_delay = (*_spu_delay & 0xF0FFFFFF) | 0x22000000;
+}
+
+
+void _spu_Fw1ts(void) {
+    volatile int i;
+    volatile u32 value;
+
+    value = 13;
+    for (i = 0; i < 60; i = i + 1) {
+        value = value * 13;
+    }
 }

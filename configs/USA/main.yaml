@@ -732,9 +732,8 @@ segments:
       # Psy-Q LIBSPU SPU.OBJ initialization fragment.
       - [0x6D9D4, c, psyq/libspu/spu]
       - [0x6DED0, c, psyq/libspu/spu_3]
-      # Contiguous Psy-Q libspu/spu.c register access and control APIs.
+      # Contiguous Psy-Q LIBSPU SPU register access and control APIs.
       - [0x6E2E0, c, psyq/libspu/spu_4]
-      - [0x6E4AC, c, psyq/libspu/spu_5]
       - [0x6E508, pad]
       - [0x6E514, c, psyq/libspu/s_dcb]
       - [0x6E538, pad]
