@@ -88,8 +88,6 @@ extern u8 D_801941D0;
 
 extern int func_80052B2C(void);
 extern int func_80071A54(void);
-extern int func_80193488(int mode, SceneE18RisingParticle *particle);
-extern int func_80193A58(int mode, SceneE18WaveParticle *particle);
 
 /* Flank model emitter (func_80192B8C): four model particles that follow
  * the room model's translation and alternate sides, the model asset it
