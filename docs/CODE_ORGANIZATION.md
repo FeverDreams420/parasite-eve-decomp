@@ -117,11 +117,12 @@ question, not a real conflict:
 
 ### Overlay translation units (src/overlays, 2026-10-12)
 
-The overlays' own C (outside `room_lib/`) went from 432 files to 97. Of
-the 149 address-named files one is left,
-`menu_memcard/MenuCard_UpdateEventFlag_8012B1F0.c`: the second instance of
-the event-flag template in that overlay (the first is in `video.c`), which
-the address tells apart. The others are named by role, and the functions
+The overlays' own C (outside `room_lib/`) went from 432 files to 62 (97
+until the `boot_display` and `menu_memcard` merges of 2026-10-13). None of
+the 149 address-named files is left: the last, the second instance of the
+event-flag template in `menu_memcard` (the first is in `video.c`), is now
+part of `menu_memcard/video_playback.c`, where its function keeps the
+address-named `func_8012B1F0`. The others are named by role, and the functions
 they hold take that name when the overlay has only the one copy. Adjacent units of one overlay were merged when nothing else
 lies between them in the manifest (no shared `room_lib` unit, data, or foreign
 rodata between the members' rodata) and their per-file markers agree.
@@ -148,6 +149,50 @@ after what their functions do (`fx_common/camera.c`,
 - Flag singletons: `fx_common` (`motion_endpoints.c` needs
   `-fno-schedule-insns`, `effect_init.c` `-fno-expensive-optimizations`,
   see below), `menu_memcard` (`-fno-cse-skip-blocks` twice),
+  hold functions whose local jumps (`j`, jump tables) resolve at the link
+  address of the place they were copied from, so a unit cannot span two
+  link bases. A unit without local jumps (no `.text`/`.rodata` relocation of
+  its own) reveals no base and sits in the segment of its neighbours.
+  These two overlays use lower snake-case role names, like `src/main`
+  (`tools/reorg/maps/step9_overlay_shared_units.csv`):
+  - `boot_display` runs at 0x80122FA4 throughout: the switch tables, the
+    callback tables of the data block (0x80123E08 is
+    `BootDisplay_InitDisplayResources`, 0x80125444
+    `BootDisplay_CallInitSystem`) and the calls between units name
+    addresses of that base, and the glyph-width lookup only lands inside
+    the width tables with it. The units without local jumps had been put at
+    0x80122EA4; they moved to 0x80122FA4 with the data block, the
+    `BootDisplay_SetCdFilter`/`BootDisplay_RecordReadPosition` symbols and
+    three address-named helpers (now `func_80124704`, `func_801247F4`,
+    `func_801258EC`). The units follow the two callback tables:
+    `text_screen.c` (main loop, text block, glyph lookups; one unit, so the
+    4-byte font-table pad is the alignment of the glyph jump table),
+    `sprites.c` (the sprite-mode callbacks), `image_display.c` (the
+    image-mode callbacks, from `BootDisplay_InitDisplayBuffers` on),
+    `playback_stop.c`, `playback_file.c` and `playback.c`.
+    `playback_file.c` (`BootDisplay_InitPlaybackFile`) resolves its local
+    jumps 0xE8 below the overlay base, so it stays a unit of its own and
+    `playback_stop.c` before it cannot join `playback.c` after it.
+  - `menu_memcard` has four link bases: `video.c` 0x80120D00, the effect
+    callbacks 0x801EB7F8 (`glint_effects.c`, `image_effects.c`), the screen
+    and the second video player copy 0x801887F0 (`page_flip.c`,
+    `image_nodes.c`, `list_screen.c`, `video_playback.c`) and the fade
+    code 0x801887A4 (`fade.c`; 0x4C, the size of the copied event-flag
+    handler, below the player's). Units without local jumps that had sat at
+    the 0x80120D44 load address (`MenuCard_ResetDisplayState`,
+    `MenuCard_StopVideo`, `MenuCard_InitFadeForNode`, the old `fade.c`)
+    joined their neighbours' base; callers still reach them by their load
+    addresses through pinned names. `glint_effects.c` and
+    `image_effects.c` (which ends with the glint origin hooks retail places
+    after the image effects) share a base and markers and are split by role
+    only.
+- Flag singletons: `fx_common` (`-fno-schedule-insns`,
+  `-fno-expensive-optimizations`; the two `-G8` units are `render_op.c`),
+  `menu_memcard` (`-fno-cse-skip-blocks` in `page_flip.c` and
+  `list_screen.c`; `MenuCard_RedrawImageNodes`, the first function of
+  `image_nodes.c`, is lev 45 under that flag, so `image_nodes.c` joins
+  neither neighbour; its other four functions compile identically with
+  and without it),
   `room_m273_liberty` (`RoomM273_PulseSpriteCallback`, `-fno-schedule-insns`,
   which also leaves `RoomEffect_PhasedArcSpriteFlow` alone after it),
   `room_m350_cruiser` (`RoomEffect_ConfiguredPulseCallback`, `-G8`) and

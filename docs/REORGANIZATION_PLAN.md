@@ -466,6 +466,15 @@ objects (`decdct.c`, `mdec_wait.c`, `mdec_status.c`, `vlc_build.c`,
 `model_buffers.c`. `fx_field` has no C of its own. What stays apart and
 why is in `docs/CODE_ORGANIZATION.md`.
 
+The shared-code overlays followed: `boot_display` went from 21 units to 6
+and `menu_memcard` from 28 to 8, named by role in lower snake case
+(`tools/reorg/maps/step9_overlay_shared_units.csv`). What kept a "segment
+is at most one unit" limit there was the link base of copied code; units
+without local jumps reveal no base and now share the segment of their
+neighbours (for `boot_display` the retail callback tables and calls show
+that the whole overlay runs at 0x80122FA4). The pairs that stay apart,
+and why, are in CODE_ORGANIZATION.md ("Overlay translation units").
+
 ---
 
 ## 5. Risks and mitigations

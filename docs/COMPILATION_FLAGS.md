@@ -151,7 +151,7 @@ and the linked binaries stayed identical:
 |---|---|---|
 | `draw/pipeline.c`, `script/sfx_queue.c` | cc1 `-G0` | the default, written out |
 | `fx_common/effects.c` | cc1 `-fno-force-addr` | not an option cc.sh reads |
-| `menu_memcard/MenuCard_ListAndScreenFlow.c` | second `-fno-cse-skip-blocks` line | left over from a merge |
+| `menu_memcard/list_screen.c` | second `-fno-cse-skip-blocks` line | left over from a merge |
 | `menu/save_screens.c`, `menu/skills.c`, `script/node_pool.c`, `fx_common/model_buffers.c` | `--dont-expand-li` | no effect at ASPSX 2.56 |
 | `battle/attack.c`, `battle/encounter.c`, `room_lib/RoomEffect_SeekerSparkCallback.c`, `room_lib/RoomEffect_DropFieldEffects.c` | `--expand-div` | no variable division left in the unit |
 | `menu/item_use_panel.c` | `--use-comm-section` | the unit defines no COMMON words |
@@ -391,8 +391,8 @@ ASPSX 2.70 are defaults and only their exceptions are shown.
 
 #### S8: `cc1 -G0 -fno-cse-skip-blocks ; maspsx -G0`
 
-- `src/overlays/menu_memcard/MenuCard_FlipScreenPages.c`
-- `src/overlays/menu_memcard/MenuCard_ListAndScreenFlow.c`
+- `src/overlays/menu_memcard/page_flip.c`
+- `src/overlays/menu_memcard/list_screen.c`
 
 #### S9: `cc1 -G8 -fno-strength-reduce ; maspsx -G8 --use-comm-section FORCE_G0`
 
@@ -525,13 +525,13 @@ so the numbers say what the unit scores with `--no-expand-div` or
 | `main/script/sfx_queue.c` | maspsx `-G8`: lev 30 (Scene_UpdateEntityList 22, Script_QueueFieldSfx 6, Script_ClearSfxTable 2); maspsx `--use-comm-section`: lev 7 (Script_QueueFieldSfx 3, Scene_UpdateEntityList 3, Script_ClearSfxTable 1); FORCE_G0: identical; small-data set: lev 30 (Scene_UpdateEntityList 22, Script_QueueFieldSfx 6, Script_ClearSfxTable 2) |
 | `main/script/system_opcodes.c` | maspsx `-G8`: lev 67 (Entity_InitWithTimeout 16, Script_WaitEntityFlags8 11, Script_WaitFrameOrDraw 8); maspsx `--use-comm-section`: lev 24 (Entity_InitWithTimeout 5, Script_WaitEntityFlags8 4, Script_WaitFrameOrDraw 3); FORCE_G0: identical; small-data set: lev 67 (Entity_InitWithTimeout 16, Script_WaitEntityFlags8 11, Script_WaitFrameOrDraw 8) |
 | `main/script/value_ops.c` | maspsx `--expand-div`: lev 41 (Script_EvalExpr 41) |
-| `overlays/boot_display/BootDisplay_StepImageSprite.c` | maspsx `--expand-div`: lev 22 (BootDisplay_StepImageSprite 22) |
 | `overlays/fx_common/effect_init.c` | cc1 `-fno-expensive-optimizations`: lev 28 (func_80196498 28) |
 | `overlays/fx_common/motion_endpoints.c` | cc1 `-fno-schedule-insns`: lev 56 (FxCommon_SetMotionEndpoints 56) |
 | `overlays/fx_common/camera.c` | cc1 `-G8`: lev 27 (func_80191EFC 15, func_80191E30 12); maspsx `-G8`: identical; maspsx `--use-comm-section`: identical; FORCE_G0: lev 536 (func_80191854 141, FxCommon_CheckFourBoundsWithMargin 103, FxCommon_CheckBoundsWithMargin 51); small-data set: lev 27 (func_80191EFC 15, func_80191E30 12); maspsx `--expand-div`: lev 165 (FxCommon_CheckFourBoundsWithMargin 88, FxCommon_CheckBoundsWithMargin 44, func_8018F55C 33) |
 | `overlays/mdec_diag/decdct.c` | `ASSEMBLER: GNU`: lev 18 (MdecDiag_Reset 10, DecDCTReset 2, DecDCTPutEnv 2) |
-| `overlays/menu_memcard/MenuCard_FlipScreenPages.c` | cc1 `-fno-cse-skip-blocks`: lev 12 (MenuCard_FlipScreenPages 12) |
-| `overlays/menu_memcard/MenuCard_ListAndScreenFlow.c` | cc1 `-fno-cse-skip-blocks`: lev 71 (func_801909B4 59, func_80190660 12) |
+| `overlays/boot_display/sprites.c` | maspsx `--expand-div`: lev 22 (BootDisplay_StepImageSprite 22) |
+| `overlays/menu_memcard/page_flip.c` | cc1 `-fno-cse-skip-blocks`: lev 12 (MenuCard_FlipScreenPages 12) |
+| `overlays/menu_memcard/list_screen.c` | cc1 `-fno-cse-skip-blocks`: lev 71 (func_801909B4 59, func_80190660 12) |
 | `overlays/room_lib/RoomEffect_DroppedFlare.c` | maspsx `--expand-div`: lev 63 (RoomEffect_DroppedFlareParticle 63) |
 | `overlays/room_lib/RoomEffect_LineBurst.c` | maspsx `--expand-div`: lev 36 (RoomEffect_LineBurstController 36) |
 | `overlays/room_lib/RoomEffect_SparkAttacks.c` | maspsx `--expand-div`: lev 37 (RoomEffect_BeamSparkController 37) |
