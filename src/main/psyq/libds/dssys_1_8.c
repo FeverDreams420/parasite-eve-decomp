@@ -1,4 +1,3 @@
-/* ASSEMBLER: GNU */
 /* Psy-Q LIBDS DSSYS_1.OBJ, part 8 of 11: LIBDS_DSSYS_1_text_EA4. */
 #include "common.h"
 #include "pe1/psyq_cd.h"

@@ -1,6 +1,6 @@
 /* ASSEMBLER: GNU */
 /* GCC_VERSION: 2.8.1 */
-/* CC1_FLAGS: -mno-split-addresses -fno-thread-jumps */
+/* CC1_FLAGS: -mno-split-addresses */
 /* Psy-Q LIBDS DSSYS_2.OBJ, part 2 of 5: CQ_delete_command. */
 #include "pe1/psyq_ds.h"
 

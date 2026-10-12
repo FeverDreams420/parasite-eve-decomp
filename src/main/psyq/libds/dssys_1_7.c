@@ -1,4 +1,3 @@
-/* ASSEMBLER: GNU */
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses -fno-schedule-insns */
 /* Psy-Q LIBDS DSSYS_1.OBJ, part 7 of 11: LIBDS_DSSYS_1_text_E10. */

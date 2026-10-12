@@ -1,4 +1,3 @@
-/* ASSEMBLER: GNU */
 /* CC1_FLAGS: -fno-schedule-insns2 */
 /* Psy-Q LIBDS DSSYS_1.OBJ, part 3 of 11: DS_close. */
 #include "pe1/psyq_cd.h"

@@ -1,4 +1,3 @@
-/* ASSEMBLER: GNU */
 /* Psy-Q LIBDS DSSYS_2.OBJ, part 1 of 5: CQ_clear_queue. */
 /* DSSYS_2 is split where its functions need different compilers: parts 2
  * (CQ_delete_command) and 4 (DsInit) only match with GCC 2.8.1, the rest
