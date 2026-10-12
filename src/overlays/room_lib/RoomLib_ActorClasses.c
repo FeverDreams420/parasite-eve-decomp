@@ -1041,11 +1041,11 @@ void RoomLib_HandlerB(RoomEnt *obj) {
     RoomLibHandlerBState *state = (RoomLibHandlerBState *)&self->sub;
     RoomLink *link = self->link;
     int previousValue;
-    short *scratch;
+    RoomLibArcWork *scratch;
     int result;
 
     asm("" : : "r"(state) : "$19");
-    scratch = (short *)0x1F800000;
+    scratch = (RoomLibArcWork *)0x1F800000;
 
     if (self->t1A == 0) {
         int v0;
@@ -1089,7 +1089,7 @@ void RoomLib_HandlerB(RoomEnt *obj) {
         state->floorY = v0;
     }
 
-    ((RoomLibArcWork *)scratch)->landed = 0;
+    scratch->landed = 0;
     if (state->finished == 0) {
         switch (((int (*)(RoomEnt *))func_800DFB78)(self)) {
         case 0:
@@ -1119,12 +1119,12 @@ void RoomLib_HandlerB(RoomEnt *obj) {
         int speed;
         int phaseAgain;
         int nextY;
-        scratch[0x10] = 0;
-        scratch[0x11] = 0;
+        scratch->input[0] = 0;
+        scratch->input[1] = 0;
         speedRaw = state->speed;
         speed = speedRaw >> 12;
         previousValue = y;
-        scratch[0x12] = speed;
+        scratch->input[2] = speed;
         phaseAgain = state->phaseValue;
         nextY = previousValue - phase;
         if (phaseAgain < 0 && (nextY >> 16) >= state->floorY) {
@@ -1137,8 +1137,8 @@ void RoomLib_HandlerB(RoomEnt *obj) {
             numerator *= divisor;
             divisor = RoomLib_ArcPhaseSpeed(phaseAgain);
             result = numerator;
-            scratch[0x12] = result / divisor;
-            ((RoomLibArcWork *)scratch)->landed = 1;
+            scratch->input[2] = result / divisor;
+            scratch->landed = 1;
         }
         link->pos[1] = nextY;
     }
@@ -1146,9 +1146,9 @@ void RoomLib_HandlerB(RoomEnt *obj) {
     gte_ldrotmatrix(state->matrix);
     ROOMLIB_HANDLER_B_GTE_LOAD_VECTOR(scratch);
     gte_mvmva();
-    gte_stmac(((RoomLibArcWork *)scratch)->point);
-    link->pos[0] += ((RoomLibArcWork *)scratch)->point[0] << 12;
-    link->pos[2] += ((RoomLibArcWork *)scratch)->point[2] << 12;
+    gte_stmac(scratch->point);
+    link->pos[0] += scratch->point[0] << 12;
+    link->pos[2] += scratch->point[2] << 12;
 
     previousValue = state->phaseValue;
     {
@@ -1185,7 +1185,7 @@ void RoomLib_HandlerB(RoomEnt *obj) {
             link->rotation[1], (short)result, state->secondaryHeading);
     }
     func_800DFB20(self);
-    if (((RoomLibArcWork *)scratch)->landed != 0) {
+    if (scratch->landed != 0) {
         RoomLib_ReleaseHandlerB(self);
     }
 }
