@@ -15,7 +15,7 @@ void Menu_DrawArmorItemDetail(int slot) {
     int value;
     unsigned int bit;
 
-    value = D_8009D07C[slot];
+    value = g_InvActiveItemList[slot];
     if (value != 0) {
         bit = g_InvSelectionBits[slot >> 5] & (1 << (slot & 0x1F));
         Draw_SetTextDimmed(bit == 0);
@@ -34,9 +34,9 @@ void Menu_DrawArmorItemDetail(int slot) {
         entry = candidate;
 
         if ((entry->flags & ITEM_DATA_FLAG_GENERIC_DESCRIPTION) != 0) {
-            display = D_800C20A4;
+            display = g_CursorRenderDataBlock;
             if (entry->kind == ITEM_KIND_ARMOR) {
-                display = D_800C20A4 + 0x10;
+                display = g_CursorRenderDataBlock + 0x10;
             }
         } else {
             display = Str_LookupTable8(entry->itemId - 1);

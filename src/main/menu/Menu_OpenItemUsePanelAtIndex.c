@@ -17,14 +17,14 @@ static inline ItemDataRecord *LookupTrackedItem(int index) {
         return Item_LookupBaseData(value - 1);
     if ((unsigned)(saved - 0x200) < 9) {
         int shifted = saved << 5;
-        return (ItemDataRecord *)(D_8009DE64 + shifted);
+        return (ItemDataRecord *)(g_KeyItemDataTable + shifted);
     }
     return 0;
 }
 static inline int GetFilteredSlot(int index) {
     int result;
-    if (index >= 0 && index < D_8009D040)
-        result = D_800A1D9C[index];
+    if (index >= 0 && index < g_InvPackedListCount)
+        result = g_InvPackedList[index];
     else result = 0;
     return result;
 }

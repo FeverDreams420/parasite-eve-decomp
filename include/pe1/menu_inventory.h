@@ -17,7 +17,7 @@ void Menu_SetSwapReturnFlag(void);
 void Menu_ProcessSwapReturnIfPending(void);
 int Menu_HandleAyaInventorySelectionInput(int node, int flags);
 
-extern int D_8009CF18, D_8009CFB0;
+extern int g_InvItemUsableFlag, g_MenuInputPausePending;
 void Menu_OpenItemUsePanelAtIndex(int index);
 void Menu_OpenSkillSelectionView(void);
 void Menu_OpenInventoryOrSwapView(int showList);
@@ -92,10 +92,10 @@ int Menu_StatSlotInputHandler(MenuWidgetNode *node, unsigned int flags);
 int Menu_StepListNavigate(MenuWidgetListNavigation *node, unsigned int flags);
 
 int Menu_CheckItemAffordable(int actionId);
-extern int D_8009CF3C; /* Restricts selected parasite actions when nonzero. */
+extern int g_MenuItemSelectFlag; /* Restricts selected parasite actions when nonzero. */
 /* Incomplete arrays retain the retail full-address HP accesses with -G8. */
-extern u16 D_800C0E08[]; /* Current HP. */
-extern u16 D_800C0E06[]; /* Maximum HP. */
+extern u16 g_AyaHpCurrent[]; /* Current HP. */
+extern u16 g_AyaHpMax[]; /* Maximum HP. */
 
 int Menu_StepNameEntry(MenuWidgetNode *parent, unsigned int flags);
 int Menu_StepNameEntryAlt(MenuWidgetNode *parent, unsigned int input);
@@ -103,7 +103,7 @@ int Menu_StepNameEntryAlt(MenuWidgetNode *parent, unsigned int input);
 extern u8 D_80092354[];
 extern u8 D_80092380[];
 extern u8 D_800923A0[];
-extern u8 *D_8009CF54;
+extern u8 *g_MenuItemIconGlyphTable;
 extern int D_8009D004;
 
 #endif

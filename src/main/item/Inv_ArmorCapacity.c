@@ -6,7 +6,7 @@
 #include "pe1/inventory_slots.h"
 
 /* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
-s32 D_8009D040;
+s32 g_InvPackedListCount;
 s16 *g_InvItemPtr;
 s32 g_InvSlotLimit;
 u32 *g_InvSelectionBits;
@@ -35,7 +35,7 @@ static inline ItemDataRecord *LookupOldArmor(int index) {
                 return Item_LookupBaseData(value - 1);
             }
             if (saved - 0x200U < 9U) {
-                result = &((ItemDataRecord *)D_8009DE64)[saved];
+                result = &((ItemDataRecord *)g_KeyItemDataTable)[saved];
             } else {
                 result = 0;
             }
@@ -61,7 +61,7 @@ static inline ItemDataRecord *LookupTrackedItem(int index) {
             if (value - 1U < 0xFFU) {
                 result = Item_LookupBaseData(value - 1);
             } else if (saved - 0x200U < 9U) {
-                result = &((ItemDataRecord *)D_8009DE64)[saved];
+                result = &((ItemDataRecord *)g_KeyItemDataTable)[saved];
             } else {
                 result = 0;
             }
@@ -86,7 +86,7 @@ static inline ItemDataRecord *LookupArmorTrackedItem(int index) {
             if (value - 1U < 0xFFU) {
                 result = Item_LookupBaseData(value - 1);
             } else if (saved - 0x200U < 9U) {
-                result = &((ItemDataRecord *)D_8009DE64)[saved];
+                result = &((ItemDataRecord *)g_KeyItemDataTable)[saved];
             } else {
                 result = 0;
             }
@@ -98,7 +98,7 @@ static inline ItemDataRecord *LookupArmorTrackedItem(int index) {
 
 static inline int FilteredSlot(int index) {
     int slot;
-    if (index >= 0 && index < D_8009D040) slot = D_800A1D9C[index];
+    if (index >= 0 && index < g_InvPackedListCount) slot = g_InvPackedList[index];
     else slot = 0;
     return slot;
 }
@@ -258,7 +258,7 @@ static inline ItemDataRecord *LookupActiveItem(int index) {
                 return Item_LookupBaseData(value - 1);
             }
             if (saved - 0x200U < 9U) {
-                result = &((ItemDataRecord *)D_8009DE64)[saved];
+                result = &((ItemDataRecord *)g_KeyItemDataTable)[saved];
             } else {
                 result = 0;
             }
@@ -396,8 +396,8 @@ void Inv_TransferItemBetweenLists(unsigned selection, int modifier, int flags, i
         cost = (flags & 1) ? 13 : 12;
         if (flags & 2) {
             for (slot = 0; slot < 100; ++slot)
-                if (D_800C1EB8[slot] && Item_LookupBaseData(D_800C1EB8[slot] - 1)->kind == cost) break;
-            if (slot < 100) D_800C1EB8[slot] = 0;
+                if (g_WayneStorageItems[slot] && Item_LookupBaseData(g_WayneStorageItems[slot] - 1)->kind == cost) break;
+            if (slot < 100) g_WayneStorageItems[slot] = 0;
         } else {
             g_InvItemPtr = g_AyaInventoryItems;
             g_InvSlotLimit = Inv_GetAyaSlotLimit();

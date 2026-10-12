@@ -77,7 +77,7 @@ void Menu_StepItemGrid2(void) {
     int width;
     int height;
 
-    if (D_8009CF50 != 0) {
+    if (g_McDialogMode != 0) {
         if (MenuWidget_FindByModeAndSelectedBase(1, 0x2A) != 0) {
             return;
         }
@@ -94,14 +94,14 @@ void Menu_StepItemGrid2(void) {
         panel = node;
         panel->update = Menu_ConfirmDialogHandler;
         option_node->draw = Menu_DrawActionOptionList;
-        D_8009CF14 = 0x6C;
+        g_MenuActionTextBase = 0x6C;
         MenuWidget_SaveAndSetCurrentNode(option_node);
 
         {
             int enabled = 1;
             int active_list;
             suffix_id = 0x4A;
-            active_list = D_8009CF10;
+            active_list = g_MenuActiveItemList;
             callback = Menu_HandleMemCardWriteOrError;
             option_node->cursor_x = enabled;
             Inv_SelectActiveList(active_list);

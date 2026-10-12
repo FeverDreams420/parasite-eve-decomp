@@ -27,16 +27,16 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(InventoryRuntime, storage) == 0x1098,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(InventoryRuntime, specialStorage) == 0x1160,
                   inventory_runtime_special_storage_offset);
 extern InventoryRuntime D_800C0E20;
-/* Count of filtered slot indices in D_800A1D9C; distinct from the
+/* Count of filtered slot indices in g_InvPackedList; distinct from the
  * pending item-ID list at g_InvActiveListItems (count g_InvActiveListCount). */
-extern s32 D_8009D040;
-extern s32 D_8009D044;
-extern s16 D_800A1E00[];
-extern s16 *D_8009D07C;
+extern s32 g_InvPackedListCount;
+extern s32 g_InvTransferItemCount;
+extern s16 g_InvTransferItemList[];
+extern s16 *g_InvActiveItemList;
 extern s32 D_8009D080;
 extern s16 D_800C1F80[];
-extern s16 D_800A1D9C[];
-extern u8 D_8009DE64[];
+extern s16 g_InvPackedList[];
+extern u8 g_KeyItemDataTable[];
 /* Saved by inventory commands as a word; the frame loop reads its low byte. */
 typedef union SavedMenuMode {
     u32 value;
@@ -61,7 +61,7 @@ extern s32 g_InvSlotLimit;
 extern u32 *g_InvSelectionBits;
 extern s32 g_InvSelectionBitWords;
 extern s32 g_InvPendingCompactCount;
-extern s32 D_8009D068;
+extern s32 g_InvPackedListCursor;
 /* Equipment comparison filter: nonzero selects kinds 1..8, zero kind 9; first-stat floor. */
 extern s32 D_8009D0CC, D_8009D0D0;
 /* Pending item IDs and the current number to transfer. */
@@ -86,7 +86,7 @@ extern ItemDataRecord D_800A204C, D_800A206C;
 /* Global fallback and category-specific ammunition records; storage tool IDs. */
 extern ItemDataRecord D_800A1E44;
 extern ItemDataRecord D_800A1E64[];
-extern s16 D_800C1EB8[];
+extern s16 g_WayneStorageItems[];
 
 void Inv_InitWayneStorage(void);
 void Inv_RememberSelection(unsigned int index, int value);
@@ -99,7 +99,7 @@ int Inv_FindFirstEmptySlot(int neededSlots);
 void Inv_CompactActiveListSlots(void);
 int Inv_CheckFreeSlotCapacity(int requestedSlots);
 
-extern int D_8009D03C; /* First base-item ID represented by the three ammo pools. */
+extern int g_InvCategoryBaseItemId; /* First base-item ID represented by the three ammo pools. */
 
 int Inv_GetPackedListItem(int index);
 
@@ -109,7 +109,7 @@ void Menu_ClearCommandResult(void);
 /* Item record of an inventory value: 0x100..0x17F equipment records,
  * 1..0xFF base item data, 0x200..0x208 the key item records at D_800A1E64
  * (32 bytes each). Retail units spell the key item address two ways: as a
- * record index, or scaled from the key item table base D_8009DE64. */
+ * record index, or scaled from the key item table base g_KeyItemDataTable. */
 static inline ItemDataRecord *Inv_LookupItemRecord(int value) {
     int saved = value;
     ItemDataRecord *result;
@@ -137,7 +137,7 @@ static inline ItemDataRecord *Inv_LookupItemRecordScaled(int value) {
             result = Item_LookupBaseData(value - 1);
         } else if (saved - 0x200U < 9U) {
             int shifted = saved << 5;
-            result = (ItemDataRecord *)(D_8009DE64 + shifted);
+            result = (ItemDataRecord *)(g_KeyItemDataTable + shifted);
         } else {
             result = 0;
         }

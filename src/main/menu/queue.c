@@ -119,7 +119,7 @@ typedef MenuWidgetNode MenuInputWidget;
 
 /* COMMON supplies small-data metadata to MASPSX for the words this unit
  * reaches through $gp; the other extern words stay absolute. */
-int D_8009D0F4;
+int g_MenuDrawPhase;
 int D_8009D0F8;
 
 #include "pe1/field_pad.h"
@@ -185,7 +185,7 @@ void MenuInput_SetPollingPaused(int paused) {
 }
 
 int MenuInput_GetRepeatStep(void) {
-    return D_8009D0F4;
+    return g_MenuDrawPhase;
 }
 
 void MenuInput_EnqueueStatusChanges(int flags) {
@@ -215,7 +215,7 @@ void MenuInput_EnqueueStatusChanges(int flags) {
             }
         }
 
-        D_8009D0F4 = D_8009D0F8 >= -0x12B ? 1 : 8;
+        g_MenuDrawPhase = D_8009D0F8 >= -0x12B ? 1 : 8;
 
         changed = mapped & ~g_MenuInputHeldStatusMask;
         if (changed != 0) {

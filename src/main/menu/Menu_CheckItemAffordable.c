@@ -31,7 +31,7 @@ int Menu_CheckItemAffordable(int actionId)
     }
     /* These actions are unavailable while the global restriction is active. */
     allowed = 0;
-    if (!D_8009CF3C || ((unsigned)(action - 6) >= 3 && action != 10 && action != 19)) {
+    if (!g_MenuItemSelectFlag || ((unsigned)(action - 6) >= 3 && action != 10 && action != 19)) {
         allowed = 1;
     }
     enabled &= allowed;
@@ -55,7 +55,7 @@ int Menu_CheckItemAffordable(int actionId)
         }
     }
     if (action < 3 || action == 18) {
-        if (D_800C0E08[0] >= D_800C0E06[0]) enabled = 0;
+        if (g_AyaHpCurrent[0] >= g_AyaHpMax[0]) enabled = 0;
     }
     return enabled;
 }

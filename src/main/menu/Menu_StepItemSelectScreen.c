@@ -29,9 +29,9 @@ int Menu_StepItemSelectScreen(MenuWidgetNode *node, unsigned int buttons)
         child = MenuWidget_GetChild(node, 0);
         index = MenuWidget_GridCellIndex(child);
         if (Menu_GetBattleEquipMode()) {
-            mask = D_8009CEF0 & 0x1f;
+            mask = g_MenuItemContextFlag & 0x1f;
         } else {
-            mask = D_8009CEF0 & 0x1ef;
+            mask = g_MenuItemContextFlag & 0x1ef;
         }
         action = -1;
         goto check;
@@ -54,14 +54,14 @@ int Menu_StepItemSelectScreen(MenuWidgetNode *node, unsigned int buttons)
             break;
         case 2:
             CLOSE_SELECT_VIEWS();
-            D_8009CF18 = 1;
+            g_InvItemUsableFlag = 1;
             Menu_CreateInventoryListView(child);
             Menu_CreateEquipItemSelectionView(child);
             Menu_StepSkillList(MenuWidget_FindByModeAndSelectedBase(2, 5), 0);
             break;
         case 3:
             CLOSE_SELECT_VIEWS();
-            D_8009CF18 = 0;
+            g_InvItemUsableFlag = 0;
             Menu_CreateInventoryListView(child);
             Menu_CreateEquipItemSelectionView(child);
             /* An int-returning call keeps cross-jumping from merging this
@@ -89,11 +89,11 @@ int Menu_StepItemSelectScreen(MenuWidgetNode *node, unsigned int buttons)
             break;
         case 7:
             CLOSE_SELECT_VIEWS();
-            D_8009CF1C = 1;
+            g_MenuLayoutLocked = 1;
             Inv_SelectActiveList(0);
             g_StatBaseTable[0] = Inv_CountByCategory(0xe) ? 999 : Inv_CountByCategory(0xc);
             g_StatBaseTable[1] = Inv_CountByCategory(0xf) ? 999 : Inv_CountByCategory(0xd);
-            if (D_8009CF0C) {
+            if (g_MenuEquipMode) {
                 g_StatBaseTable[2] = WayneStorage_CountItemType(0xe) ? 999 : WayneStorage_CountItemType(0xc);
                 g_StatBaseTable[3] = WayneStorage_CountItemType(0xf) ? 999 : WayneStorage_CountItemType(0xd);
             } else {
@@ -101,7 +101,7 @@ int Menu_StepItemSelectScreen(MenuWidgetNode *node, unsigned int buttons)
                 g_StatBaseTable[2] = 0;
             }
             Menu_StepInventoryRoot(0x33e, -1, -1);
-            D_8009CEF8 = 0;
+            g_MenuBattleStatusOverlayActive = 0;
             break;
         case 8: {
             int command;
@@ -114,9 +114,9 @@ int Menu_StepItemSelectScreen(MenuWidgetNode *node, unsigned int buttons)
             third = -1;
             command = 1;
             asm volatile("" : "=r"(command) : "0"(command), "r"(first), "r"(second), "r"(third));
-            D_8009CF30 = command;
+            g_MenuItemUseMode = command;
             Menu_StepInventoryRoot(first, second, third);
-            D_8009CEF8 = 0;
+            g_MenuBattleStatusOverlayActive = 0;
             break;
         }
         default:

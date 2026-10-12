@@ -43,7 +43,7 @@ void Menu_DrawItemDetailPanel(MenuWidgetNode *panel) {
         panel_offset = arg_panel->y - 0x6C;
         dy -= panel_offset;
     } else {
-        base = D_8009CF0C ? 0x38 : 0x24;
+        base = g_MenuEquipMode ? 0x38 : 0x24;
         panel_y = panel->y;
         if (Inv_GetPackedListCount() < 9) {
             panel_offset = base + Inv_GetPackedListCount() * 16;
@@ -63,7 +63,7 @@ void Menu_DrawItemDetailPanel(MenuWidgetNode *panel) {
     Draw_PrintTextById(0x6B);
 
     sum = g_StatBaseTable[0] + g_StatBaseTable[2];
-    if (sum < 100 && !D_8009CF0C) {
+    if (sum < 100 && !g_MenuEquipMode) {
         Draw_OffsetCursor(-0xF, 3);
         Draw_PrintNumberWidth2Unk(sum);
     } else {
@@ -74,7 +74,7 @@ void Menu_DrawItemDetailPanel(MenuWidgetNode *panel) {
     }
 
     sum = g_StatBaseTable[1] + g_StatBaseTable[3];
-    if (sum < 100 && !D_8009CF0C) {
+    if (sum < 100 && !g_MenuEquipMode) {
         Draw_OffsetCursor(0x32, 0);
         Draw_PrintNumberWidth2Unk(sum);
     } else {

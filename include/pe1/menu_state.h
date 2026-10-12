@@ -101,14 +101,14 @@ extern unsigned char g_MenuBlendColorPanelPoints[];
  *   D_8009D154  MenuWidget node-pool pointer : NULL in field -> 0x800a25b0 in menu
  *   D_8009D15C  MenuWidget node-pool pointer : NULL in field -> 0x800a2370 in menu
  *   D_8009D158  active widget/draw pointer    : 0x800a22e0  -> 0x800a2640
- *   D_8009D0F4  menu draw phase / step        : field 0x01  -> menu 0x08
+ *   g_MenuDrawPhase  menu draw phase / step        : field 0x01  -> menu 0x08
  *   D_8009D100  active draw buffer pointer     : switches with the layer
  *   (The D_8009D150..D_8009D160 cluster is the MenuWidget pool head/free/tail,
  *    managed by MenuWidget_InitPool / MenuWidget_CreateNode; non-null only
  *    while a menu owns it -> a clean "is a menu open?" test.)
  *
  * OPEN  : MenuWidget_InitPool() allocates the node pool (D_8009D154/15C != NULL),
- *         D_8009D1A0 |= 0x04, D_8009D0F4 set; the inventory root step begins
+ *         D_8009D1A0 |= 0x04, g_MenuDrawPhase set; the inventory root step begins
  *         (Menu_StepInventoryRoot via Menu_InitCategoryTabs).
  * CLOSE : the pool is torn down (pointers NULL), D_8009D1A0 &= ~0x04, phase
  *         restored; control returns to the field step.

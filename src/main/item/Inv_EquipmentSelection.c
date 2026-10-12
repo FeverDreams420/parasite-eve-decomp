@@ -14,13 +14,13 @@
 #include "pe1/draw_state.h"
 
 /* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
-int D_8009D03C;
-s32 D_8009D040;
+int g_InvCategoryBaseItemId;
+s32 g_InvPackedListCount;
 s16 *g_InvItemPtr;
 s32 g_InvSlotLimit;
 u32 *g_InvSelectionBits;
 s32 g_InvSelectionBitWords;
-s32 D_8009D068;
+s32 g_InvPackedListCursor;
 s32 D_8009D0CC;
 s32 D_8009D0D0;
 int g_MenuBattleEquipMode;
@@ -53,8 +53,8 @@ int Inv_RebuildWithBonusSlots(int minSecond, int minThird) {
     count = 0;
     i = 0;
     while (1) {
-        if (i >= D_8009D040) break;
-        index = i >= 0 && i < D_8009D040 ? D_800A1D9C[i] : 0;
+        if (i >= g_InvPackedListCount) break;
+        index = i >= 0 && i < g_InvPackedListCount ? g_InvPackedList[i] : 0;
         item = LookupActiveItem(index);
         if (item->baseStats[0] + item->bonusStats[0] >= D_8009D0D0 &&
             item->baseStats[1] + item->bonusStats[1] >= minSecond &&
@@ -82,7 +82,7 @@ int Inv_RebuildWithBonusSlots(int minSecond, int minThird) {
         }
         if (scan < D_800C0E20.equipment + 128) count = -count;
     }
-    D_8009D068 = count != 0;
+    g_InvPackedListCursor = count != 0;
     return count;
 }
 
@@ -99,8 +99,8 @@ int Inv_TransferToStorage(void) {
     count = 0;
     i = 0;
     while (1) {
-        if (i >= D_8009D040) break;
-        index = i >= 0 && i < D_8009D040 ? D_800A1D9C[i] : 0;
+        if (i >= g_InvPackedListCount) break;
+        index = i >= 0 && i < g_InvPackedListCount ? g_InvPackedList[i] : 0;
         item = LookupActiveItem(index);
         if (item->tailCount < item->tailCapacity) {
             count++;
@@ -139,7 +139,7 @@ static inline int TakeTagged(int armor) {
 void Inv_InitNewGameInventory(void) {
     int i, capacity;
     AyaLevelStats *stats;
-    u16 *growth = D_800C0E28;
+    u16 *growth = g_AyaStatAgility;
     for (i = 0; i < 7; i++) *growth++ = *(u16 *)Stat_GetGrowthTable(i);
     stats = Aya_LookupLevelStats(0);
     D_800C0E00.max_hp = D_800C0E00.current_hp = stats->hp;
@@ -259,8 +259,8 @@ int Inv_DispatchCommand(int command, int value, int other, int *unused) {
     case INV_CMD_COUNT_ITEM: {
         int count = 0;
         s16 *p;
-        if (value >= D_8009D03C && value < D_8009D03C + 3)
-            count = D_800A1E64[value - D_8009D03C].ammo;
+        if (value >= g_InvCategoryBaseItemId && value < g_InvCategoryBaseItemId + 3)
+            count = D_800A1E64[value - g_InvCategoryBaseItemId].ammo;
         else for (p = g_InvItemPtr; p < g_InvItemPtr + g_InvSlotLimit; p++) {
             unsigned short id = *p;
             if (id - 256U < 128U)
@@ -383,6 +383,6 @@ void Save_InitMetadataState(void) {
     Draw_SetBaseOffsetPosition(0, 8 - Draw_GetBaseY());
     MenuWidget_SetColumnLayoutMode(0);
     Menu_SetActionSubmenuSelection(1);
-    D_800C20A4[0] = 255;
+    g_CursorRenderDataBlock[0] = 255;
     D_800C20B4[0] = 255;
 }

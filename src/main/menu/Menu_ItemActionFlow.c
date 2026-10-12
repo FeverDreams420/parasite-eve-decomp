@@ -47,7 +47,7 @@ static inline void Menu_CreateScreenModeSubmenu(void) {
     parent->update = Menu_InventoryItemHandler;
     child->draw = Menu_DrawScreenModeList;
     child->selectionAvailable = Menu_GetStatBaseValue;
-    if (D_8009CF0C != 0) {
+    if (g_MenuEquipMode != 0) {
         parent->visible_rows += 0x10;
         child->visible_rows = 2;
         child->y_limit = 2;
@@ -482,13 +482,13 @@ void Menu_OpenItemList(void)
     /* slot == -1 reads tailCount, the byte just before tailData. */
     if (item->tailData[slot]) {
 
-    D_8009CF24 = list;
-    D_8009CF28 = slot;
+    g_MenuSelectedItemList = list;
+    g_MenuSelectedItemSlot = slot;
     status = Inv_CheckItemEquippable(list, slot);
     D_8009CFBC = status == 5;
     if (status == 1 || status == 2 || status == 5) {
         kind = Inv_GetActiveListItemType(Inv_RestoreSelection(list));
-        D_8009CF18 = kind != 9;
+        g_InvItemUsableFlag = kind != 9;
         i = (g_StatBaseTable[0] > 0) + (g_StatBaseTable[1] > 0) + (g_StatBaseTable[2] > 0);
         if (g_StatBaseTable[3] > 0 ? i + 1 >= 2 : i >= 2) {
             Menu_CreateScreenModeSubmenu();
@@ -497,11 +497,11 @@ void Menu_OpenItemList(void)
         {
 
         for (i = 0; i < 4 && g_StatBaseTable[i] == 0; ++i) {}
-        D_8009CF2C = i < 4 ? i : 0;
+        g_MenuSelectedItemIndex = i < 4 ? i : 0;
         item = Inv_LookupActiveListData(Inv_RestoreSelection(list));
         kind = item->tailData[slot] & 0x1f;
-        if (status == 1 || (!(D_8009CF2C & 1) && status == 2) ||
-            ((D_8009CF2C & 1) && status == 5 && (unsigned)(kind - 8) >= 3)) {
+        if (status == 1 || (!(g_MenuSelectedItemIndex & 1) && status == 2) ||
+            ((g_MenuSelectedItemIndex & 1) && status == 5 && (unsigned)(kind - 8) >= 3)) {
             Menu_CreateItemActionSubmenu();
         } else {
             Menu_CreateItemList();

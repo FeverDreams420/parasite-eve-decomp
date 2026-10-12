@@ -26,7 +26,7 @@ void Menu_CreateInvSwapView(MenuWidgetNode *parent, int mode) {
     if (mode_offset != 0) {
         u32 value;
 
-        value = (unsigned int)D_8009CF0C;
+        value = (unsigned int)g_MenuEquipMode;
         g_MenuInventoryViewMode = value;
     } else {
         g_MenuInventoryViewMode = 0;

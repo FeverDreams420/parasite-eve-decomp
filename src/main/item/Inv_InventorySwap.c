@@ -9,7 +9,7 @@
  * eligibility and inventory swaps. */
 
 u8 *Inv_LookupItemData(int index) {
-    int value = D_8009D07C[index];
+    int value = g_InvActiveItemList[index];
     int saved_value = value;
     u8 *entry;
 
@@ -18,7 +18,7 @@ u8 *Inv_LookupItemData(int index) {
     } else if (value - 1U < 0xFFU) {
         entry = Item_LookupBaseData(value - 1);
     } else if (saved_value - 0x200U < 9U) {
-        entry = D_8009DE64 + (saved_value << 5);
+        entry = g_KeyItemDataTable + (saved_value << 5);
     } else {
         entry = 0;
     }
@@ -28,7 +28,7 @@ u8 *Inv_LookupItemData(int index) {
 
 static inline int WayneSlot(int index) {
     int result;
-    if (index >= 0 && index < D_8009D044) result = D_800A1E00[index];
+    if (index >= 0 && index < g_InvTransferItemCount) result = g_InvTransferItemList[index];
     else result = 0;
     return result;
 }
@@ -61,7 +61,7 @@ static inline ItemDataRecord *LookupTrackedItem(int index) {
             }
             if (saved - 0x200U < 9U) {
                 int shifted = saved << 5;
-                result = (ItemDataRecord *)(D_8009DE64 + shifted);
+                result = (ItemDataRecord *)(g_KeyItemDataTable + shifted);
             } else {
                 result = 0;
             }
@@ -88,7 +88,7 @@ static inline int ItemKind(int slot) {
  * empty slots. Return the final row count consumed by inventory menus.
  * The C variable shift requires item kinds below 32. */
 int Inv_TransferItemAlt2(int mask) {
-    s16 *out = D_800A1E00;
+    s16 *out = g_InvTransferItemList;
     int i;
     g_InvItemPtr = g_AyaInventoryItems;
     g_InvSlotLimit = Inv_GetAyaSlotLimit();
@@ -97,18 +97,18 @@ int Inv_TransferItemAlt2(int mask) {
     for (i = 0; i < g_InvSlotLimit; i++) {
         if ((mask >> ItemKind(i)) & 1) *out++ = i;
     }
-    D_8009D044 = out - D_800A1E00;
+    g_InvTransferItemCount = out - g_InvTransferItemList;
     Inv_RebuildSelectableMask();
     for (i = 0; i < g_InvSlotLimit; i++) {
         if (g_InvItemPtr[i] == 0) *out++ = i;
     }
-    D_8009D044 = out - D_800A1E00;
-    return D_8009D044;
+    g_InvTransferItemCount = out - g_InvTransferItemList;
+    return g_InvTransferItemCount;
 }
 
 int Inv_GetWayneListItemByIndex(int index) {
-    if (index >= 0 && index < D_8009D044) {
-        return D_800A1E00[index];
+    if (index >= 0 && index < g_InvTransferItemCount) {
+        return g_InvTransferItemList[index];
     }
     return 0;
 }
@@ -150,7 +150,7 @@ int Inv_RebuildWithSlotLimit(int fromMode, int fromIndex, int toMode, int toInde
     g_InvSelectionBits = g_InvSelectionBitStorage;
     g_InvSelectionBitWords = 2;
     if (fromMode == 0x34 && toMode == fromMode) {
-        SwapSlots(&D_8009D07C[fromIndex], &D_8009D07C[toIndex]);
+        SwapSlots(&g_InvActiveItemList[fromIndex], &g_InvActiveItemList[toIndex]);
         Inv_RebuildSelectableMask();
     } else if (fromMode == 0x33 && toMode == fromMode) {
         int first, second;
@@ -161,18 +161,18 @@ int Inv_RebuildWithSlotLimit(int fromMode, int fromIndex, int toMode, int toInde
     } else if (fromMode == 0x34) {
         from = WayneSlot(toIndex);
         if (Inv_IsSlotEquipped(from) &&
-            (Inv_LookupItemRecordScaled(D_8009D07C[fromIndex])->kind < 19 ||
-             Inv_LookupItemRecordScaled(D_8009D07C[fromIndex])->kind >= 22)) {
-            SwapSlots(&D_8009D07C[fromIndex], &g_InvItemPtr[from]);
+            (Inv_LookupItemRecordScaled(g_InvActiveItemList[fromIndex])->kind < 19 ||
+             Inv_LookupItemRecordScaled(g_InvActiveItemList[fromIndex])->kind >= 22)) {
+            SwapSlots(&g_InvActiveItemList[fromIndex], &g_InvItemPtr[from]);
             Menu_SetSwapReturnFlag();
             Inv_RebuildSelectableMask();
         } else success = 0;
     } else {
         from = WayneSlot(fromIndex);
         if (Inv_IsSlotEquipped(from) &&
-            (Inv_LookupItemRecordScaled(D_8009D07C[toIndex])->kind < 19 ||
-             Inv_LookupItemRecordScaled(D_8009D07C[toIndex])->kind >= 22)) {
-            SwapSlots(&g_InvItemPtr[from], &D_8009D07C[toIndex]);
+            (Inv_LookupItemRecordScaled(g_InvActiveItemList[toIndex])->kind < 19 ||
+             Inv_LookupItemRecordScaled(g_InvActiveItemList[toIndex])->kind >= 22)) {
+            SwapSlots(&g_InvItemPtr[from], &g_InvActiveItemList[toIndex]);
             Menu_SetSwapReturnFlag();
             Inv_RebuildSelectableMask();
         } else success = 0;

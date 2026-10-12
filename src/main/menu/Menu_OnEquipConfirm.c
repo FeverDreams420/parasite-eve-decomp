@@ -15,7 +15,7 @@ void Menu_OnEquipConfirm(MenuWidgetNode *unused, int confirmed)
     MenuWidgetNode *next;
     if (confirmed) {
         node = MenuWidget_FindByModeAndSelectedBase(2, 7);
-        if (D_8009CF18) {
+        if (g_InvItemUsableFlag) {
             Menu_OpenItemUsePanelAtIndex(MenuWidget_GridCellIndex(node));
             node->cursor_x = -1;
             next = MenuWidget_FindByModeAndSelectedBase(2, 5);
@@ -31,15 +31,15 @@ void Menu_OnEquipConfirm(MenuWidgetNode *unused, int confirmed)
                 MenuWidget_FindByModeAndSelectedBase(2, 6) : next);
             MenuWidget_NavScrollTo(0x35);
         }
-        Inv_BuildFilteredPackedList(D_8009CF18 ? 0x1FE : 0x200);
+        Inv_BuildFilteredPackedList(g_InvItemUsableFlag ? 0x1FE : 0x200);
         node = MenuWidget_FindByModeAndSelectedBase(2, 6);
         if (node == MenuWidget_GetCurrentNode()) {
             node->cursor_y = 0;
             node->cursor_x = 0;
         }
-        if (D_8009CF18) {
+        if (g_InvItemUsableFlag) {
             MenuInput_SetPollingPaused(1);
-            D_8009CFB0 = 1;
+            g_MenuInputPausePending = 1;
         }
     }
 }
@@ -65,7 +65,7 @@ int Menu_StepEquipConfirm(MenuWidgetNode *node, int input) {
 
     if ((input & 0x10000) != 0) {
         item = Inv_GetPackedListItem(MenuWidget_GridCellIndex(child));
-        if (D_8009CF1C != 0) {
+        if (g_MenuLayoutLocked != 0) {
             Inv_SelectActiveList(MenuWidget_GridCellIndex(
                 MenuWidget_FindByModeAndSelectedBase(2, 0x36)) == 1);
 
@@ -96,9 +96,9 @@ reserved:
         dialog->draw = Menu_DrawItemLabel;
         dialog->update = Menu_ConfirmDialogHandler;
         option_node->draw = Menu_DrawActionOptionList;
-        D_8009CF14 = 5;
+        g_MenuActionTextBase = 5;
         MenuWidget_SetCurrentNode(option_node);
-        Inv_SelectActiveList(D_8009CF10);
+        Inv_SelectActiveList(g_MenuActiveItemList);
 
         dialog_text = g_MenuItemLabelBuffer;
         dialog_text[0] = 0xFF;
@@ -148,7 +148,7 @@ error:
         Menu_PlayErrorSound();
         goto done;
     } else if ((input & 0x1040) != 0) {
-        if (D_8009CF0C != 0) {
+        if (g_MenuEquipMode != 0) {
             MenuWidget_NavScrollTo(0x35);
             child->cursor_x = -1;
             child->scroll_y = 0;
@@ -160,7 +160,7 @@ error:
             }
 
             MenuWidget_NavScrollTo(0x35);
-            if (D_8009CF1C != 0) {
+            if (g_MenuLayoutLocked != 0) {
                 MenuWidget_DestroyNode(node);
                 MenuWidget_NavScrollTo(5);
                 MenuWidget_NavScrollTo(6);

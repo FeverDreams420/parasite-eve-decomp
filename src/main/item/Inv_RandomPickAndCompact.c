@@ -6,15 +6,15 @@
 #include "pe1/text.h"
 
 /* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
-s32 D_8009D038;
-s32 D_8009D040;
+s32 g_ItemDropRngIndex;
+s32 g_InvPackedListCount;
 s16 *g_InvItemPtr;
 s32 g_InvSlotLimit;
 u32 *g_InvSelectionBits;
 s32 g_InvSelectionBitWords;
-s32 D_8009D068;
+s32 g_InvPackedListCursor;
 s32 g_InvPendingCompactCount;
-int D_8009D218;
+int g_SaveMetadataWindowIndex;
 s16 *g_InvActiveListOverride;
 s32 g_InvOverrideSlotLimit;
 
@@ -63,14 +63,14 @@ int Inv_SetupSlotDisplay(int mask) {
 
 static inline int RandomByte(void) {
     int i = 0;
-    if (++D_8009D038 >= 521) {
+    if (++g_ItemDropRngIndex >= 521) {
         for (; i < 32; ++i)
-            D_800A1B90[i] ^= D_800A1B90[i + 489];
+            g_ItemDropRngTable[i] ^= g_ItemDropRngTable[i + 489];
         for (i = 32; i < 521; ++i)
-            D_800A1B90[i] ^= D_800A1B90[i - 32];
-        D_8009D038 = 0;
+            g_ItemDropRngTable[i] ^= g_ItemDropRngTable[i - 32];
+        g_ItemDropRngIndex = 0;
     }
-    return D_800A1B90[D_8009D038];
+    return g_ItemDropRngTable[g_ItemDropRngIndex];
 }
 
 static inline int IsTracked(int index) {
@@ -82,17 +82,17 @@ static inline int IsTracked(int index) {
     return result;
 }
 int Inv_PickRandomItem(int unused) {
-    s16 *out = D_800A1D9C;
+    s16 *out = g_InvPackedList;
     int i;
     ItemDataRecord *item;
     for (i = 0; i < g_InvSlotLimit; ++i) {
         item = LookupActiveItem(i);
         if (item && (item->flags & 128) && !IsTracked(i)) *out++ = i;
     }
-    D_8009D068 = 0;
-    D_8009D040 = out - D_800A1D9C;
-    if (!D_8009D040) return 0;
-    return g_InvItemPtr[D_800A1D9C[(D_8009D040 * RandomByte()) >> 8]];
+    g_InvPackedListCursor = 0;
+    g_InvPackedListCount = out - g_InvPackedList;
+    if (!g_InvPackedListCount) return 0;
+    return g_InvItemPtr[g_InvPackedList[(g_InvPackedListCount * RandomByte()) >> 8]];
 }
 
 /* Historical name: formats the item message into the shared FF-terminated buffer. */
@@ -107,7 +107,7 @@ static inline void AppendText(u8 *dest, const u8 *src) {
 u8 *Inv_GetItemEffectData(int item, int mode) {
     if (!item) CopyText(D_800A1B50, Str_LookupTable4(19));
     else if (mode >= 2) CopyText(D_800A1B50, Str_LookupTable4(18));
-    else if (!D_8009D218) {
+    else if (!g_SaveMetadataWindowIndex) {
         CopyText(D_800A1B50, Str_LookupTable8(item - 1));
         AppendText(D_800A1B50, Str_LookupTable4(mode + 16));
     } else {

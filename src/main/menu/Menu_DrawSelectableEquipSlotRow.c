@@ -8,7 +8,7 @@
 void Menu_DrawSelectableEquipSlotRow(int slot) {
     int dimmed = 0;
 
-    if (D_8009CEFC != 0 || Inv_TestSelectionBit(slot) == 0) {
+    if (g_MenuSelectionLocked != 0 || Inv_TestSelectionBit(slot) == 0) {
         dimmed = 1;
     }
 

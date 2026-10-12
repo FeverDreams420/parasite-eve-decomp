@@ -31,10 +31,10 @@ int Scene_SelectMapById(int **args) {
         state = Menu_GetEquipSlotStateOrIndex();
         if (state < 2) {
             Menu_ResetEquipSlotState();
-            D_8009D280 = Str_ParseBase32Id(D_8009CD78);
+            D_8009D280 = Str_ParseBase32Id(g_MapNameOverrideA);
         } else {
             Menu_ResetEquipSlotState();
-            D_8009D280 = Str_ParseBase32Id(D_8009CD80);
+            D_8009D280 = Str_ParseBase32Id(g_MapNameOverrideB);
         }
         return 1;
     }

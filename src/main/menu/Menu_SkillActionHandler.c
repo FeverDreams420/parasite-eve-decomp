@@ -58,10 +58,10 @@ void Menu_StepItemDetailPanel2(void) {
     node->draw = Menu_DrawItemLabel;
     node->update = Menu_ConfirmDialogHandler;
     option_node->draw = Menu_DrawActionOptionList;
-    D_8009CF14 = 5;
+    g_MenuActionTextBase = 5;
     MenuWidget_SetCurrentNode(option_node);
     callback = Menu_OnBattleCommandConfirm;
-    Inv_SelectActiveList(D_8009CF10);
+    Inv_SelectActiveList(g_MenuActiveItemList);
 
     if (label != 0) {
         Util_CopyFFTerminatedBytes(g_MenuItemLabelBuffer, label);

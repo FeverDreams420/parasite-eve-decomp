@@ -805,7 +805,7 @@ static inline void GetPosition(MenuWidgetNode *node, u32 *x, u32 *y)
 static inline GpuCmdPacket *AllocArea(u32 x, u32 y, u32 width, u32 height)
 {
     DrawAreaRect rect;
-    if (D_8009D108) y += 0xE0;
+    if (g_DrawBufferIndex) y += 0xE0;
     rect.x = x;
     rect.y = y;
     rect.w = width;
@@ -951,10 +951,10 @@ void MenuWidget_DrawList(MenuWidgetNode *node, void (*draw_callback)(int))
     DrawAreaRect rect;
     GpuCmdPacket *packet;
     int row, offset, highlight;
-    D_8009D164 = node->draw_state;
+    g_DrawTextPosX = node->draw_state;
     D_8009D168 = node->disabled;
     rect.x = 0; rect.y = 0; rect.w = 320; rect.h = 224;
-    if (D_8009D108) rect.y = 224;
+    if (g_DrawBufferIndex) rect.y = 224;
     packet = AllocRect(&rect);
     Gpu_LinkDrawArea(D_8009D11C, packet);
     PushCursor();
@@ -989,7 +989,7 @@ void MenuWidget_DrawList(MenuWidgetNode *node, void (*draw_callback)(int))
         D_8009D128 += Product(node->disabled, Difference(node->cursor_y, node->scroll_y));
         highlight = 0;
         if (!(node->layout_flags & 0x80) && g_MenuWidgetCurrentNode == node) {
-            int blink = D_8009D0E8 && (Draw_RemapStatusFlags() & 0x20);
+            int blink = g_MenuInputActive && (Draw_RemapStatusFlags() & 0x20);
             if (blink) highlight = 1;
         }
         Draw_AllocColorTriGradient(node->draw_state, node->disabled, highlight,
@@ -1121,7 +1121,7 @@ static inline void MenuWidget_ScrollToCursor(MenuWidgetNode *node)
 
 static inline int MenuWidget_HeldShoulder(void)
 {
-    if (D_8009D0E8)
+    if (g_MenuInputActive)
         return (Draw_RemapStatusFlags() & 0x5000) != 0;
     return 0;
 }
@@ -1185,7 +1185,7 @@ int Menu_StepScrollCursor(MenuWidgetNode *node, unsigned int buttons)
     int margin;
 
     changed = 0;
-    if (D_8009D0E8)
+    if (g_MenuInputActive)
         flags = Draw_RemapStatusFlags();
     else
         flags = 0;
@@ -1562,14 +1562,14 @@ void MenuWidget_ClearColumnLayout(MenuWidgetNode *node) {
 }
 
 void MenuWidget_DrawCenteredText(u8 *text) {
-    Draw_PrintCenteredTextInWidth(text, D_8009D164);
+    Draw_PrintCenteredTextInWidth(text, g_DrawTextPosX);
 }
 
 #include "pe1/draw_state.h"
 #include "pe1/text.h"
 
 void MenuWidget_DrawCenteredTableText(int text_id) {
-    Draw_PrintCenteredTextInWidth(Str_LookupTable4(text_id), D_8009D164);
+    Draw_PrintCenteredTextInWidth(Str_LookupTable4(text_id), g_DrawTextPosX);
 }
 
 #include "pe1/draw_state.h"
@@ -1581,7 +1581,7 @@ void Draw_DropShadow(void) {
     D_8009D114 = 0x7F2000;
     g_DrawSpriteX -= 2;
     g_DrawSpriteY -= 2;
-    Draw_AllocColorTri(D_8009D164, D_8009D168, 0);
+    Draw_AllocColorTri(g_DrawTextPosX, D_8009D168, 0);
     D_8009D110 = 0x808080;
     D_8009D114 = 0x404040;
     g_DrawSpriteX += 2;

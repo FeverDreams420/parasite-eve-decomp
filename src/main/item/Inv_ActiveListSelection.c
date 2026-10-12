@@ -93,14 +93,14 @@ void Inv_BuildItemGridFromCategory(void)
         src = Item_LookupBaseData(lookup);
     } while (src != 0 && src->kind != category);
 
-    D_8009D03C = i;
+    g_InvCategoryBaseItemId = i;
 
     /* Nine grid cells cycle through the three records after the first
      * category match; each cell clears its third base stat and sets the
      * third bonus to the 999 placeholder. */
     i = 0;
     do {
-        base = D_8009D03C + i % 3;
+        base = g_InvCategoryBaseItemId + i % 3;
         src = Item_LookupBaseData(base - 1);
         D_800A1E64[i] = *src;
         D_800A1E6D[i][0] = 0;

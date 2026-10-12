@@ -30,6 +30,6 @@ extern int D_8009CFD4;
 /* Per-stat preview tables: value, level, sublevel and pending bonus. */
 extern int D_800A1898[7];
 extern int D_800C0E10[];
-extern int D_8009CF80, D_8009CF40, D_8009CF68;
+extern int g_MenuBonusPointBarAnimActive, g_BonusPointBarAnimProgress, D_8009CF68;
 
 #endif

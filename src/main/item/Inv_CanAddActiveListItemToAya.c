@@ -145,9 +145,9 @@ void Inv_ClearDisplaySlots(void) {
 int Inv_StepScrollDisplay2(int special) {
     if (special) {
         int i, found;
-        D_8009D07C = D_800C1F80;
+        g_InvActiveItemList = D_800C1F80;
         for (i = 0; i < 82; i++)
-            if (D_8009D07C[i] == 516)
+            if (g_InvActiveItemList[i] == 516)
                 break;
         found = i < 82;
         if (!found) {
@@ -163,19 +163,19 @@ int Inv_StepScrollDisplay2(int special) {
             if (i < g_InvSlotLimit) {
                 /* If slots 0..80 are occupied, retail writes slot 81 unchecked. */
                 for (i = 0; i < 81; i++)
-                    if (!D_8009D07C[i])
+                    if (!g_InvActiveItemList[i])
                         break;
                 if (i < 82) {
-                    D_8009D07C[i] = 516;
+                    g_InvActiveItemList[i] = 516;
                     found = 1;
                 }
             }
         }
         D_8009D080 = 80 + found;
     } else {
-        D_8009D07C = D_800C1EB8;
+        g_InvActiveItemList = g_WayneStorageItems;
         D_8009D080 = 100;
     }
-    g_InvActiveListOverride = D_8009D07C;
+    g_InvActiveListOverride = g_InvActiveItemList;
     return g_InvOverrideSlotLimit = D_8009D080;
 }

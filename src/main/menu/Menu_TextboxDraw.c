@@ -13,12 +13,12 @@
 #include "pe1/boot_disc_check.h"
 /* COMMON supplies small-data metadata to MASPSX for the textbox words this
  * unit reaches through $gp; the other extern words stay absolute. */
-int D_8009CED4;
+int g_TaskCollisionFlag;
 u8 *D_8009CE90;
 unsigned char D_8009CE94;
 TextboxRect D_8009CE98;
-u8 D_8009CEA0;
-u8 D_8009CED0;
+u8 g_DialogueChoiceCursor;
+u8 g_PlayerMovementEnabled;
 void SetDrawTPage(void *, int, int, int);
 void SetSprt(void *);
 int MargePrim(void *, void *);
@@ -81,9 +81,9 @@ void Render_SetupFogLayer(void *source) {
     draw_base = D_8009EC70;
     tile_base = D_8009ECA8;
     tile_payload_base = tile_base + 8;
-    D_8009CEA0 = 0;
-    D_8009CED0 = 0;
-    D_8009CED4 = 0;
+    g_DialogueChoiceCursor = 0;
+    g_PlayerMovementEnabled = 0;
+    g_TaskCollisionFlag = 0;
     D_8009CE90 = source;
     for (; (u8)i < 2; ++i) {
         draw_mode = (u8 *)((int)((u8)i * 28) + (int)draw_base);
@@ -191,15 +191,15 @@ s8 Tbl_LookupEntry(int arg0) {
 }
 
 void Task_EnableMovement(void) {
-    D_8009CED0 = 1;
+    g_PlayerMovementEnabled = 1;
 }
 
 void Task_DisableMovement(void) {
-    D_8009CED0 = 0;
+    g_PlayerMovementEnabled = 0;
 }
 
 void Task_SetCollisionFlag(int value) {
-    D_8009CED4 = value != 0;
+    g_TaskCollisionFlag = value != 0;
 }
 
 /* Opens the first free textbox for message `index`. A styled box takes the
@@ -225,10 +225,10 @@ void Render_SetupColorTable(int inputIndex, int inputStyle, short *inputValues)
         g_TextboxEntries[i].state = 1;
         g_TextboxEntries[i].background = 0;
         g_TextboxEntries[i].page_id = index;
-        D_8009CEA0 = 0;
+        g_DialogueChoiceCursor = 0;
         {
             int terminator = -1;
-            D_8009CEA4 = terminator;
+            g_MenuEquipSlotIndex = terminator;
         }
         g_TextboxEntries[i].style = style;
         g_TextboxEntries[i].control.flags &= ~0x100000;
@@ -244,7 +244,7 @@ void Render_SetupColorTable(int inputIndex, int inputStyle, short *inputValues)
             g_TextboxEntries[i].height = D_8009CE98.height;
             if (g_TextboxEntries[i].style == 3)
                 g_TextboxEntries[i].control.flags |= 0x100000;
-        } else if (D_8009CED0) {
+        } else if (g_PlayerMovementEnabled) {
             g_TextboxEntries[i].background = 1;
         }
 
@@ -276,7 +276,7 @@ void Render_SetupColorTable(int inputIndex, int inputStyle, short *inputValues)
 }
 
 int Menu_GetEquipSlotIndex(void) {
-    return D_8009CEA4;
+    return g_MenuEquipSlotIndex;
 }
 
 
@@ -285,7 +285,7 @@ int Menu_GetEquipSlotIndex(void) {
 /* Tentative small-data definition: stock maspsx must recognize this store
  * as GP-relative to retain its load-delay nop. The linker pins the COMMON
  * symbol to the retail address, as for other unplaced game globals. */
-signed char D_8009CEA4;
+signed char g_MenuEquipSlotIndex;
 u8 D_8009CEA8;
 u8 D_8009CEAC;
 u8 D_8009CEB0;
@@ -361,7 +361,7 @@ void Menu_DrawTextboxEntries(void) {
     nextPacket = *(TextboxGlyphPacket **)((u8 *)&D_800B0E38.other_buffers[1] + temp_a0);
     initialBufferTable = &D_800B0E38.other_buffers[1];
     asm("" : "=r"(initialBufferTable) : "0"(initialBufferTable), "r"(nextPacket));
-    if (D_8009CED4 != 0) {
+    if (g_TaskCollisionFlag != 0) {
         AddPrim((*(u32 **)((u8 *)initialBufferTable + temp_a0 - 0xC)) + 2,
                 (unsigned int *)((D_8009CDDC * 0x18) + (u8 *)D_8009ECA8));
     }
@@ -421,7 +421,7 @@ void Menu_DrawTextboxEntries(void) {
                     }
                 }
             } else {
-                if ((textbox->background != 0) && (backgroundDrawn == 0) && (D_8009CED4 == 0)) {
+                if ((textbox->background != 0) && (backgroundDrawn == 0) && (g_TaskCollisionFlag == 0)) {
                     backgroundDrawn = 1;
                     AddPrim(((u32 *)D_800B0E38.ordering[D_8009CDDC]) + 2,
                             (unsigned int *)((D_8009CDDC * 0x18) + (u8 *)D_8009ECA8));
@@ -658,21 +658,21 @@ void Menu_DrawTextboxEntries(void) {
                         textbox->control.flags = workingValue;
                         temp_v1_9 = (workingValue >> 0x16) & 7;
                         if (D_8009D1F4 & 0x20) {
-                            temp_v0_5 = D_8009CEA0 + 1;
-                            D_8009CEA0 = temp_v0_5;
+                            temp_v0_5 = g_DialogueChoiceCursor + 1;
+                            g_DialogueChoiceCursor = temp_v0_5;
                             if ((s8)temp_v0_5 >= temp_v1_9) {
-                                D_8009CEA0 = temp_v1_9 - 1;
+                                g_DialogueChoiceCursor = temp_v1_9 - 1;
                             }
                         }
                         if (D_8009D1F4 & 8) {
-                            temp_v0_6 = D_8009CEA0 - 1;
-                            D_8009CEA0 = temp_v0_6;
+                            temp_v0_6 = g_DialogueChoiceCursor - 1;
+                            g_DialogueChoiceCursor = temp_v0_6;
                             if ((s8)temp_v0_6 < 0) {
-                                D_8009CEA0 = 0;
+                                g_DialogueChoiceCursor = 0;
                             }
                         }
                         if (D_8009D1F4 & 0x100) {
-                            D_8009CEA4 = D_8009CEA0;
+                            g_MenuEquipSlotIndex = g_DialogueChoiceCursor;
                         }
                         stream++;
                         selectionFrame = D_8009CDDC;
@@ -682,7 +682,7 @@ void Menu_DrawTextboxEntries(void) {
                             (RenderSpritePacket *)(selectionOffset + (u8 *)D_8009EC78);
                         selectionSprite->x = (u16)selectionCursor->x;
                         selectionBase = (u8 *)D_8009EC78 - 8;
-                        selectionSprite->y = (s16)(selectionCursor->y + ((s8)D_8009CEA0 * 0xC));
+                        selectionSprite->y = (s16)(selectionCursor->y + ((s8)g_DialogueChoiceCursor * 0xC));
                         AddPrim(*(u32 **)((u8 *)D_800B0E38.ordering + selectionOrderingOffset) + 1,
                                 selectionOffset + selectionBase);
                         break;

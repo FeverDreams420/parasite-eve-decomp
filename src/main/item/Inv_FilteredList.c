@@ -16,7 +16,7 @@ void Inv_BuildFilteredPackedList(int mask) {
     int stack_pad[2];
 
     limit = g_InvSlotLimit;
-    out = D_800A1D9C;
+    out = g_InvPackedList;
     index = 0;
     if (limit > 0) {
         do {
@@ -57,8 +57,8 @@ void Inv_BuildFilteredPackedList(int mask) {
         } while (index < limit);
     }
 
-    D_8009D068 = 0;
-    D_8009D040 = (out - D_800A1D9C);
+    g_InvPackedListCursor = 0;
+    g_InvPackedListCount = (out - g_InvPackedList);
 
 }
 
@@ -75,7 +75,7 @@ void Inv_BuildFilteredPackedListExcluding(int mask, int excluded) {
     int stack_pad[2];
 
     limit = g_InvSlotLimit;
-    out = D_800A1D9C;
+    out = g_InvPackedList;
     index = 0;
     if (limit > 0) {
         do {
@@ -113,7 +113,7 @@ void Inv_BuildFilteredPackedListExcluding(int mask, int excluded) {
         } while (index < limit);
     }
 
-    D_8009D068 = 0;
-    D_8009D040 = (out - D_800A1D9C);
+    g_InvPackedListCursor = 0;
+    g_InvPackedListCount = (out - g_InvPackedList);
 
 }

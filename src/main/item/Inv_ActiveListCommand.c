@@ -9,12 +9,12 @@
 #include "pe1/inventory_slots.h"
 
 /* Active-list commands from the item menus and the pending command result
- * (D_8009D010) that the menu loop polls and clears. */
+ * (g_MenuCommandResult) that the menu loop polls and clears. */
 
 /* COMMON supplies small-data metadata to MASPSX; the extern words stay
  * absolute. */
 u8 *D_8009D1E0;
-int D_8009D010;
+int g_MenuCommandResult;
 int D_8009D018;
 #include "pe1/battle_modifiers.h"
 void Battle_DispatchSpecialAction(int);
@@ -35,10 +35,10 @@ void Inv_SetActiveList(int mode, int *slot) {
     }
     switch (mode) {
     case 0:
-        D_8009D010 = *selection + 3;
+        g_MenuCommandResult = *selection + 3;
         break;
     case 1:
-        D_8009D010 = *selection + 0x183;
+        g_MenuCommandResult = *selection + 0x183;
         break;
     case 2:
         if (active) {
@@ -47,7 +47,7 @@ void Inv_SetActiveList(int mode, int *slot) {
                 *(BattleAction *)out = *(BattleAction *)(active->action);
                 Inv_BuildWeaponList(0, (WeaponListOutput *)D_8009D1E0);
             }
-            if (Menu_GetBattleEquipMode()) D_8009D010 = 0x197;
+            if (Menu_GetBattleEquipMode()) g_MenuCommandResult = 0x197;
             else Battle_DispatchSpecialAction(0x197);
         }
         break;
@@ -58,7 +58,7 @@ void Inv_SetActiveList(int mode, int *slot) {
                 *(BattleAttributes *)out = *active->attributes;
                 Inv_BuildArmorList((BattleAttributes *)D_8009D1E0);
             }
-            if (Menu_GetBattleEquipMode()) D_8009D010 = 0x198;
+            if (Menu_GetBattleEquipMode()) g_MenuCommandResult = 0x198;
             else Battle_DispatchSpecialAction(0x198);
         }
         break;
@@ -96,25 +96,25 @@ void Inv_SetActiveList(int mode, int *slot) {
             data->attackWord = flags2;
         }
         break;
-    case 8: D_8009D010 = 0x199; break;
-    case 9: D_8009D010 = -1; break;
-    case 10: D_8009D010 = 1000; break;
-    case 11: D_8009D010 = 1; break;
+    case 8: g_MenuCommandResult = 0x199; break;
+    case 9: g_MenuCommandResult = -1; break;
+    case 10: g_MenuCommandResult = 1000; break;
+    case 11: g_MenuCommandResult = 1; break;
     case 12:
         D_8009D018 = 4;
         Inv_SelectActiveList(0);
         BattleCmd_LoadWeaponModifiers();
-        D_8009D010 = 2;
+        g_MenuCommandResult = 2;
         break;
     default: break;
     }
-    if (D_8009D010) MenuWidget_InitPool();
+    if (g_MenuCommandResult) MenuWidget_InitPool();
 }
 
 int Menu_GetCommandResult(void) {
-    return D_8009D010;
+    return g_MenuCommandResult;
 }
 
 void Menu_ClearCommandResult(void) {
-    D_8009D010 = 0;
+    g_MenuCommandResult = 0;
 }

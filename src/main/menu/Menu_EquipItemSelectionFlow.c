@@ -49,7 +49,7 @@ void Menu_DrawEquipStatsDelta(ItemDataRecord *preview) {
     }
 
     sprite_base = 0x7F;
-    if (D_8009CF18 != 0) {
+    if (g_InvItemUsableFlag != 0) {
         sprite_base = 0x7C;
     }
 
@@ -60,7 +60,7 @@ void Menu_DrawEquipStatsDelta(ItemDataRecord *preview) {
     Draw_OffsetCursor(0, 0xE);
     Draw_AllocSprite(sprite_base + 2);
 
-    if (D_8009CF1C != 0) {
+    if (g_MenuLayoutLocked != 0) {
         node = MenuWidget_GetCurrentNode();
         if (node->selected_base == 7) {
             Draw_OffsetCursor(0x18, 0xE);
@@ -107,7 +107,7 @@ void Menu_StepItemGridScroll(ItemDataRecord *item, ItemDataRecord *other)
     if (!other)
         return;
     if (item) {
-        if (D_8009CF1C) {
+        if (g_MenuLayoutLocked) {
             Draw_OffsetCursor(40, -50);
             Draw_AllocSprite(0x88);
             Draw_OffsetCursor(0, 10);
@@ -124,7 +124,7 @@ void Menu_StepItemGridScroll(ItemDataRecord *item, ItemDataRecord *other)
         Draw_AllocSprite(0x22);
         Draw_OffsetCursor(0, -14);
         Draw_AllocSprite(0x22);
-        if (D_8009CF1C) {
+        if (g_MenuLayoutLocked) {
             Draw_OffsetCursor(12, -10);
             Draw_AllocSprite(0x88);
             Draw_SetStatCompareColor(item->bonusStats[0], other->bonusStats[0]);
@@ -148,7 +148,7 @@ void Menu_StepItemGridScroll(ItemDataRecord *item, ItemDataRecord *other)
             Draw_PrintNumberWidth4(clampedStatTotal(other, 2));
         }
     } else {
-        sprite = D_8009CF18 ? 0x7C : 0x7F;
+        sprite = g_InvItemUsableFlag ? 0x7C : 0x7F;
         Draw_OffsetCursor(4, 23);
         Draw_AllocSprite(sprite);
         Draw_OffsetCursor(0, 14);
@@ -182,18 +182,18 @@ void Menu_StepEquipSlotSelect(void)
         node = MenuWidget_FindByModeAndSelectedBase(2, 16);
         if (node && node->cursor_x >= 0)
             Inv_RememberSelection(0, Inv_GetPackedListItem(MenuWidget_GridCellIndex(node)));
-    } else if (!D_8009CF1C) {
-        Inv_RememberSelection(0, D_8009CF18 ? D_800C0E20.tracked[0] : D_800C0E20.tracked[2]);
+    } else if (!g_MenuLayoutLocked) {
+        Inv_RememberSelection(0, g_InvItemUsableFlag ? D_800C0E20.tracked[0] : D_800C0E20.tracked[2]);
     }
-    if (D_8009CF1C)
+    if (g_MenuLayoutLocked)
         selection = Inv_RestoreSelection(0);
     else
-        selection = D_8009CF18 ? D_800C0E20.tracked[0] : D_800C0E20.tracked[2];
+        selection = g_InvItemUsableFlag ? D_800C0E20.tracked[0] : D_800C0E20.tracked[2];
     item = Inv_LookupActiveListData(selection);
     current = MenuWidget_FindByModeAndSelectedBase(2, 7);
     if (current == MenuWidget_GetCurrentNode()) {
         other = Inv_LookupActiveListData(Inv_RestoreSelection(1));
-        Menu_DrawEquipStatsDelta(D_8009CF1C ? other : item);
+        Menu_DrawEquipStatsDelta(g_MenuLayoutLocked ? other : item);
         Menu_StepItemGridScroll(item, other);
     } else {
         Menu_DrawEquipStatsDelta(item);

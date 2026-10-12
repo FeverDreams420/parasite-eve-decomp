@@ -11,8 +11,8 @@ typedef struct TextboxRect {
 } TextboxRect;
 
 extern TextboxRect D_8009CE98;
-extern u8 D_8009CEA0;
-extern s8 D_8009CEA4;
-extern u8 D_8009CED0;
+extern u8 g_DialogueChoiceCursor;
+extern s8 g_MenuEquipSlotIndex;
+extern u8 g_PlayerMovementEnabled;
 
 #endif /* PE1_TEXTBOX_OPEN_H */

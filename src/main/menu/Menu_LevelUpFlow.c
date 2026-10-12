@@ -23,7 +23,7 @@ s32 Menu_StepParasiteScreen(MenuWidgetNode *node, s32 flags);
 
 /* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
 int g_MenuPendingTotalExp;
-int D_8009CEFC;
+int g_MenuSelectionLocked;
 int g_BonusPointBarAnimProgress, g_BonusPointBarAnimStep;
 int g_BonusPointDisplayValue, g_MenuBonusPointDisplayTarget;
 int g_MenuBonusPointBarAnimActive;
@@ -53,7 +53,7 @@ void Aya_SetTotalExp(s32 exp_delta, s32 pe_bonus_delta, void *wayne_items) {
     g_MenuPendingTotalExp = previous;
     g_MenuExpAllocTarget = previous + exp_delta;
     g_MenuExpReviewLevel = Stat_BinarySearch(g_MenuPendingTotalExp, Aya_GetLevelExpTable());
-    D_8009CEFC = 1;
+    g_MenuSelectionLocked = 1;
 
     g_AyaBonusPoolRecord.pool = g_AyaBonusPoolRecord.pool + pe_bonus_delta;
     g_MenuLevelDisplayValue = D_800C0E00.level;

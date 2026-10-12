@@ -51,7 +51,7 @@ void Menu_SaveOverlayDraw(void);
 
 /* Leading values of the four runtime timer records reset at new game. */
 extern unsigned int D_800A76A4[], D_800A76B0[], D_800A76BC[], D_800A76C8[];
-extern unsigned char D_800C20A4[], D_800C20B4[];
+extern unsigned char g_CursorRenderDataBlock[], D_800C20B4[];
 
 /* The save-title formatter consumes four numeric fields and two variant
  * arguments from this contiguous six-word slot array. Each variant slot is

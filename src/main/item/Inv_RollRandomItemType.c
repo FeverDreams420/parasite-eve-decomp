@@ -5,14 +5,14 @@
 
 static inline int RandomByte(void) {
     int i;
-    if (++D_8009D038 >= 521) {
+    if (++g_ItemDropRngIndex >= 521) {
         for (i = 0; i < 32; ++i)
-            D_800A1B90[i] ^= D_800A1B90[i + 489];
+            g_ItemDropRngTable[i] ^= g_ItemDropRngTable[i + 489];
         for (i = 32; i < 521; ++i)
-            D_800A1B90[i] ^= D_800A1B90[i - 32];
-        D_8009D038 = 0;
+            g_ItemDropRngTable[i] ^= g_ItemDropRngTable[i - 32];
+        g_ItemDropRngIndex = 0;
     }
-    return D_800A1B90[D_8009D038];
+    return g_ItemDropRngTable[g_ItemDropRngIndex];
 }
 void Inv_RollRandomItemType(s16 *type, s16 *amount) {
     /* Retail builds this list but only uses its count when choosing a type. */

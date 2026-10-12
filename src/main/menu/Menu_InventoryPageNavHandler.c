@@ -30,7 +30,7 @@ int Menu_InventoryPageNavHandler(MenuWidgetNode *root, unsigned int flags) {
                 other = MenuWidget_FindByModeAndSelectedBase(1, 0xF);
                 child = MenuWidget_GetChild(MenuWidget_FindByModeAndSelectedBase(1, 0xD), 0);
                 oldx = other->x;
-                x = D_8009CF30;
+                x = g_MenuItemUseMode;
                 if (x == 0) {
                     x = (int)child->popup_node;
                     if (x == 0) x = 0x9C;
@@ -75,18 +75,18 @@ int Menu_InventoryPageNavHandler(MenuWidgetNode *root, unsigned int flags) {
             MenuWidget_NavScrollTo(0xD);
             MenuWidget_NavScrollTo(0x18);
             MenuWidget_NavScrollTo(0x30);
-            if (D_8009CF0C) {
+            if (g_MenuEquipMode) {
                 MenuWidget_SetCurrentNode(MenuWidget_FindByModeAndSelectedBase(2, 0x32));
             } else {
                 current = MenuWidget_GetCurrentNode();
                 if (current) MenuWidget_ClearCursorY(MenuWidget_GetCurrentNode()->parent);
                 MenuWidget_ClearCursorY(MenuWidget_FindByModeAndSelectedBase(1, 0x1B));
             }
-            D_8009CF34 = 0;
+            g_MenuItemRenameMode = 0;
             MenuWidget_NavScrollTo(0x2F);
-            D_8009CF1C = 0;
-            D_8009CF30 = 0;
-            Menu_OpenEquipScreen(D_8009CF0C - 1);
+            g_MenuLayoutLocked = 0;
+            g_MenuItemUseMode = 0;
+            Menu_OpenEquipScreen(g_MenuEquipMode - 1);
         }
         Menu_PlayCancelSound();
     }

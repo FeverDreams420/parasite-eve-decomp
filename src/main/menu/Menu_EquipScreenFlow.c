@@ -24,17 +24,17 @@ void Menu_OpenItemActionSubmenu(MenuWidgetNode *, int, int);
 
 /* COMMON supplies small-data metadata to MASPSX for the words this unit
  * reaches through $gp; addresses taken with & stay absolute. */
-int D_8009CDA8;
-int D_8009CEFC;
-int D_8009CF00;
-int D_8009CF04;
-int D_8009CF08;
-int D_8009CF0C;
-int D_8009CF10;
-int D_8009CF5C;
-int D_8009CF8C;
-int D_8009CF90;
-int D_8009CF94;
+int g_MenuItemActionContext;
+int g_MenuSelectionLocked;
+int g_MenuActionSubmenuOpen;
+int g_MenuActiveItemSlot;
+int g_MenuItemActionDisabled;
+int g_MenuEquipMode;
+int g_MenuActiveItemList;
+int g_AyaFullInvHold;
+int g_InvSelectedItemIndex;
+int g_InvSwapSourceList;
+int g_InvSwapTargetIndex;
 int g_InvAmmoSpendActiveList;
 int g_InvSelectedItemIndex;
 int g_InvSwapSourceList;
@@ -107,7 +107,7 @@ void Menu_OnInventoryItemConfirm(s32 arg0) {
             MenuWidget_SetCurrentNode(temp_s1);
         }
         g_InvSwapSourceList = g_InvAmmoSpendActiveList;
-        Inv_InitSlotDisplay(&D_8009CF90, &D_8009CF94);
+        Inv_InitSlotDisplay(&g_InvSwapSourceList, &g_InvSwapTargetIndex);
         Menu_CreateAmmoSpendPanel(MenuWidget_GetCurrentNode());
         return;
     }
@@ -147,7 +147,7 @@ int Menu_InventoryInputHandler(MenuWidgetNode *root, unsigned int flags) {
     if (root->selected_base == 0xD || root->selected_base == 0x34) active_list_flag = 1;
     Inv_SelectActiveList(active_list_flag);
 
-    if (D_8009CF00 != 0) {
+    if (g_MenuActionSubmenuOpen != 0) {
         if (flags_saved & 0x10000) {
             index = MenuWidget_GridCellIndex(child);
             item = Inv_LookupActiveListData(index);
@@ -161,8 +161,8 @@ int Menu_InventoryInputHandler(MenuWidgetNode *root, unsigned int flags) {
                 }
                 result = action_result;
                 Inv_SetActiveList(0, &result);
-                if (D_8009CF5C) Inv_AddItem(D_8009CF5C);
-                D_8009CF00 = 0;
+                if (g_AyaFullInvHold) Inv_AddItem(g_AyaFullInvHold);
+                g_MenuActionSubmenuOpen = 0;
                 Menu_PlayConfirmSound();
             } else {
                 Menu_PlayErrorSound();
@@ -183,12 +183,12 @@ int Menu_InventoryInputHandler(MenuWidgetNode *root, unsigned int flags) {
             index = MenuWidget_GridCellIndex(child);
         }
 
-        if (D_8009CF8C >= 0) {
-            D_8009CF90 = Inv_IsActiveListOverrideSelected();
-            D_8009CF94 = index;
+        if (g_InvSelectedItemIndex >= 0) {
+            g_InvSwapSourceList = Inv_IsActiveListOverrideSelected();
+            g_InvSwapTargetIndex = index;
             if (Inv_TestSelectionBit(index)) Menu_CreateAmmoSpendPanel(child);
         } else if (MenuWidget_GridCellIndex(child) >= 0 &&
-                   Inv_LookupActiveListData(index) != 0 && D_8009CEFC == 0) {
+                   Inv_LookupActiveListData(index) != 0 && g_MenuSelectionLocked == 0) {
             if (child->appearance.cursorTargetX >= 0) child->appearance.cursorTargetX = -1;
             submenu_flag = root->selected_base == 0xD || root->selected_base == 0x34;
             Menu_OpenItemActionSubmenu(child, submenu_flag, index);
@@ -213,9 +213,9 @@ int Menu_InventoryInputHandler(MenuWidgetNode *root, unsigned int flags) {
     }
 
     if (flags_saved & 0x40) {
-        if (D_8009CF8C >= 0) {
+        if (g_InvSelectedItemIndex >= 0) {
             Inv_RebuildSelectableMask();
-            D_8009CF8C = -1;
+            g_InvSelectedItemIndex = -1;
         } else if (child->appearance.cursorTargetX < 0) {
             selected_base = root->selected_base;
             if (selected_base == 0xD || selected_base == 0xE) {
@@ -338,29 +338,29 @@ block_22:
 int Menu_StepEquipScreen(MenuWidgetNode *node, unsigned int flags)
 {
     int handled = 0;
-    Inv_SelectActiveList(D_8009CF10);
+    Inv_SelectActiveList(g_MenuActiveItemList);
     if (flags & 0x10000) {
-        switch (D_80092234[D_8009CDA8][
+        switch (g_MenuItemActionStateTable[g_MenuItemActionContext][
             MenuWidget_GridCellIndex(MenuWidget_GetChild(node, 0))]) {
         case 0: {
             int allowed = 0;
-            int index = D_8009CF04;
+            int index = g_MenuActiveItemSlot;
             ItemDataRecord *item = Inv_LookupActiveListData(index);
             /* Kind 10 uses a byte at +0x0E, not the equipment signed bonus. */
             if (Inv_TestSelectionBit(index)) {
-                if (D_8009CF0C != 1 || item->kind != 10 ||
+                if (g_MenuEquipMode != 1 || item->kind != 10 ||
                     *(u8 *)&item->bonusStats[0] < 4)
                     allowed = 1;
             }
             if (allowed) {
                 MenuWidget_DestroyNode(node);
-                if (D_8009CF0C == 2) {
+                if (g_MenuEquipMode == 2) {
                     MenuWidget_NavScrollTo(51);
                     MenuWidget_NavScrollTo(52);
                 }
                 if (Menu_GetBattleEquipMode())
                     MenuWidget_DestroyNode(MenuWidget_GetCurrentNode()->parent);
-                Inv_BuildEquipSlotDisplay(D_8009CF04);
+                Inv_BuildEquipSlotDisplay(g_MenuActiveItemSlot);
                 Menu_PlayConfirmSound();
             } else {
                 Menu_PlayErrorSound();
@@ -371,7 +371,7 @@ int Menu_StepEquipScreen(MenuWidgetNode *node, unsigned int flags)
             MenuWidgetNode *parent = node->parent;
             parent->appearance.cursorTargetX = parent->cursor_x;
             parent->target_y = parent->cursor_y;
-            if (!D_8009CF0C) {
+            if (!g_MenuEquipMode) {
                 Inv_ClearSelectionBitset();
                 Inv_SetSelectionBit(parent->x_limit * parent->cursor_y + parent->cursor_x);
             }
@@ -380,8 +380,8 @@ int Menu_StepEquipScreen(MenuWidgetNode *node, unsigned int flags)
             break;
         }
         case 2:
-            if (Inv_IsSlotSelectable(D_8009CF04)) {
-                if (Inv_IsActiveListOverrideSelected() || D_8009CF04 != D_800C0E20.tracked[2] ||
+            if (Inv_IsSlotSelectable(g_MenuActiveItemSlot)) {
+                if (Inv_IsActiveListOverrideSelected() || g_MenuActiveItemSlot != D_800C0E20.tracked[2] ||
                     Inv_GetActiveSlotCount(0))
                     Menu_StepItemDetailPanel();
                 else
@@ -392,9 +392,9 @@ int Menu_StepEquipScreen(MenuWidgetNode *node, unsigned int flags)
             }
             break;
         case 3:
-            if (!D_8009CF08) {
+            if (!g_MenuItemActionDisabled) {
                 MenuWidget_DestroyNode(node);
-                Menu_OnInventoryItemConfirm(D_8009CF04);
+                Menu_OnInventoryItemConfirm(g_MenuActiveItemSlot);
                 Menu_PlayConfirmSound();
             } else {
                 Menu_PlayErrorSound();

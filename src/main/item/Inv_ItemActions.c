@@ -17,7 +17,7 @@
  * 0x80055760 and joined by the comparison records and list state. */
 
 /* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
-int D_8009D03C;
+int g_InvCategoryBaseItemId;
 s16 *g_InvItemPtr;
 s32 g_InvSlotLimit;
 u32 *g_InvSelectionBits;
@@ -366,7 +366,7 @@ static inline ItemDataRecord *LookupComparisonItem(int value) {
             result = Item_LookupBaseData(value - 1);
         } else if (saved - 0x200U < 9U) {
             int shifted = saved << 5;
-            result = (ItemDataRecord *)(D_8009DE64 + shifted);
+            result = (ItemDataRecord *)(g_KeyItemDataTable + shifted);
         } else {
             result = 0;
         }
@@ -512,7 +512,7 @@ static inline ItemDataRecord *LookupTrackedItem(int index) {
             }
             if (saved - 0x200U < 9U) {
                 int shifted = saved << 5;
-                result = (ItemDataRecord *)(D_8009DE64 + shifted);
+                result = (ItemDataRecord *)(g_KeyItemDataTable + shifted);
             } else {
                 result = 0;
             }
@@ -728,8 +728,8 @@ int Inv_LoadWayneItemsAsOverride(short *items) {
     int count = 0;
 
     if (items != 0) {
-        int base = D_8009D03C;
-        u16 *out = (u16 *)g_BattleCountTable;
+        int base = g_InvCategoryBaseItemId;
+        u16 *out = (u16 *)g_InvActiveListItems;
         int end = base + 3;
         int id;
         while (count < 10 && (id = items[0]) != 0) {
@@ -750,7 +750,7 @@ int Inv_LoadWayneItemsAsOverride(short *items) {
             items += 2;
         }
 
-        g_InvActiveListOverride = g_BattleCountTable;
+        g_InvActiveListOverride = g_InvActiveListItems;
         g_InvOverrideSlotLimit = count;
         Inv_RebuildSelectableMask();
     }

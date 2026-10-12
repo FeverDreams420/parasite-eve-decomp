@@ -43,9 +43,9 @@ void Menu_OpenEquipScreen(int mode)
     container->itemAction = Inv_RebuildWithSlotLimit;
     container->cursor_x = -1;
     if (mode)
-        D_8009CF0C = 2;
+        g_MenuEquipMode = 2;
     else
-        D_8009CF0C = 1;
+        g_MenuEquipMode = 1;
 
     count = Inv_StepScrollDisplay2(mode);
     BattleCmd_SyncActiveAmmo();
@@ -63,8 +63,8 @@ void Menu_OpenEquipScreen(int mode)
     list->itemAction = Inv_RebuildWithSlotLimit;
     list->refreshItems = Menu_RebuildSelectableMask;
     list->cursor_x = -1;
-    D_8009CF94 = -1;
-    D_8009CF8C = -1;
+    g_InvSwapTargetIndex = -1;
+    g_InvSelectedItemIndex = -1;
     Draw_SetPrimCallback(list, count);
     list->linkedPrevious = container;
     container->linkedNext = list;
@@ -73,8 +73,8 @@ void Menu_OpenEquipScreen(int mode)
         parent = MenuWidget_CreateSimpleNode(19, 0, 0, 0);
         parent->draw = Menu_DrawContextHelpText;
     }
-    D_8009CF00 = 0;
-    D_8009CEFC = 0;
+    g_MenuActionSubmenuOpen = 0;
+    g_MenuSelectionLocked = 0;
     Queue_Init();
 }
 
@@ -84,7 +84,7 @@ void Menu_ReopenEquipScreen(void) {
 }
 
 int Menu_GetEquipMode(void) {
-    return D_8009CF0C;
+    return g_MenuEquipMode;
 }
 
 void Menu_OpenInventoryScreen(void) {
@@ -103,7 +103,7 @@ void Menu_OpenInventoryScreen(void) {
 
     nine = 9;
     Inv_ResetActiveList();
-    D_8009CF0C = 0;
+    g_MenuEquipMode = 0;
 
     if (g_MenuEquipSwapSource != 0) {
         /* The retail caller passes 9 although the pool initializer ignores it. */

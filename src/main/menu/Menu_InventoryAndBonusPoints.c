@@ -34,42 +34,42 @@ void Menu_StepInventoryRoot(int mode, int list, int item)
     int slot;
 
     data = Inv_LookupActiveListData(list);
-    if (D_8009CF0C) {
+    if (g_MenuEquipMode) {
         panel = MenuWidget_CreateSimpleNode(0x36, MenuWidget_GetCurrentNode(), 0, 0);
         node = MenuWidget_CreateNode(0x36, panel, panel);
         panel->update = Menu_InventoryPageNavHandler;
-        if (D_8009CF30)
+        if (g_MenuItemUseMode)
             MenuWidget_OffsetPosition(panel, 0, 0x14);
         node->draw = Menu_DrawBattleCommandList;
         MenuWidget_SetCurrentNode(node);
     }
     panel = MenuWidget_CreateSimpleNode(0xD, MenuWidget_GetCurrentNode(), 0, 0);
-    node = MenuWidget_CreateNode(D_8009CF30 ? 0x10 : 0xD, panel, panel);
+    node = MenuWidget_CreateNode(g_MenuItemUseMode ? 0x10 : 0xD, panel, panel);
     panel->update = Menu_ItemListInputHandler;
     panel->disabled = 1;
     node->draw = Menu_DrawEquipSelectionList;
-    if (D_8009CF1C) {
+    if (g_MenuLayoutLocked) {
         MenuWidget_SetColumnLayout(node, 0x15);
         if (node->cursor_x < 0)
             node->cursor_x = 0;
         MenuWidget_ClampScroll(node);
     }
-    if (D_8009CF0C) {
-        MenuWidget_OffsetPosition(panel, 0, D_8009CF30 ? -0x10 : 0x14);
+    if (g_MenuEquipMode) {
+        MenuWidget_OffsetPosition(panel, 0, g_MenuItemUseMode ? -0x10 : 0x14);
         node->cursor_x = -1;
     }
     D_8009CFD4 = Inv_IsActiveListOverrideSelected();
     Inv_SelectActiveList(0);
     D_8009CFC4 = list;
-    D_8009CF34 = list == -2;
-    D_8009CF38 = list == -3;
-    if (D_8009CF34) {
+    g_MenuItemRenameMode = list == -2;
+    g_MenuItemDiscardMode = list == -3;
+    if (g_MenuItemRenameMode) {
         MenuWidget_ClearColumnLayout(node);
         node->cursor_x = 0;
     }
-    if (D_8009CF1C)
+    if (g_MenuLayoutLocked)
         Inv_BuildFilteredPackedListExcluding(mode, -1);
-    else if (!D_8009CF34 && !D_8009CF38)
+    else if (!g_MenuItemRenameMode && !g_MenuItemDiscardMode)
         Inv_BuildFilteredPackedList(mode);
     Draw_SetPrimCallback(node, Inv_GetPackedListCount());
     if (item >= 0) {
@@ -82,16 +82,16 @@ void Menu_StepInventoryRoot(int mode, int list, int item)
             MenuWidget_ClampScroll(node);
         }
     }
-    if (node->cursor_x >= 0 && !D_8009CF0C)
+    if (node->cursor_x >= 0 && !g_MenuEquipMode)
         MenuWidget_SetCurrentNode(node);
-    if (D_8009CF30) {
+    if (g_MenuItemUseMode) {
         MenuWidget_OffsetPosition(panel, 0, 0x38);
         panel->visible_rows -= 0x30;
         panel = MenuWidget_CreateSimpleNode(0x18, 0, 0, 0);
         panel->draw = Menu_DrawBonusPointSlotValue;
         panel->grid_width += 0x14;
         MenuWidget_OffsetPosition(panel, -0x88, 0);
-        if (!D_8009CF0C) {
+        if (!g_MenuEquipMode) {
             int unfocused = node->cursor_x < 0;
 
             panel = MenuWidget_CreateSimpleNode(0x30,
@@ -112,12 +112,12 @@ void Menu_StepInventoryRoot(int mode, int list, int item)
 
             for (stat = 0; stat < 7; stat++) {
                 g_BonusPointStatDeltas[stat] = *source++;
-                D_800A18FC[stat] = 0;
+                g_BonusPointStatMultipliers[stat] = 0;
                 Stat_QueryLevelAndSubLevel(stat, g_BonusPointStatDeltas[stat], &D_800A18B4.queryResults[stat], 0);
             }
         }
-        D_8009CF80 = 0;
-        D_8009CF40 = 0;
+        g_MenuBonusPointBarAnimActive = 0;
+        g_BonusPointBarAnimProgress = 0;
         g_BonusPointDisplayValue = D_800C0E00.bonus_points;
         for (slot = 6; slot >= 0; slot--)
             D_800A1898[slot] = 0;
@@ -125,7 +125,7 @@ void Menu_StepInventoryRoot(int mode, int list, int item)
     }
     MenuWidget_SetCursorY(MenuWidget_FindByModeAndSelectedBase(1, 1));
     MenuWidget_SetCursorY(MenuWidget_FindByModeAndSelectedBase(1, 0x1B));
-    if (D_8009CF1C && !MenuWidget_FindByModeAndSelectedBase(1, 0x2F))
+    if (g_MenuLayoutLocked && !MenuWidget_FindByModeAndSelectedBase(1, 0x2F))
         MenuWidget_CreateSimpleNode(0x2F, 0, 0, 0)->draw = Menu_DrawItemDetailPanel;
     panel = MenuWidget_CreateSimpleNode(0xB, node, 0, 0);
     node = MenuWidget_CreateNode(0xB, panel, panel);
@@ -134,7 +134,7 @@ void Menu_StepInventoryRoot(int mode, int list, int item)
     MenuWidget_ClearColumnLayout(node);
     MenuWidget_OffsetPosition(panel, 6, 0);
     panel = MenuWidget_CreateSimpleNode(0xF, node, 0, 0);
-    if (D_8009CF30) {
+    if (g_MenuItemUseMode) {
         node = MenuWidget_CreateNode(0x1D, panel, panel);
         panel->update = Menu_BonusPointCancelHandler;
         node->draw = Menu_DrawEmptyList;
@@ -150,7 +150,7 @@ void Menu_StepInventoryRoot(int mode, int list, int item)
         D_8009CFCC = data->reserveAmmo;
     else
         D_8009CFCC = 0;
-    D_8009CF18 = mode != 0x200;
+    g_InvItemUsableFlag = mode != 0x200;
     node = MenuWidget_GetCurrentNode();
     if (node->selected_base == 0x30 || node->selected_base == 0x36)
         Menu_SetEquipPanelsCursorY();
@@ -338,14 +338,14 @@ static inline void Menu_CloseItemList(void)
     MenuWidget_NavScrollTo(0xD);
     MenuWidget_NavScrollTo(0x18);
     MenuWidget_NavScrollTo(0x30);
-    if (D_8009CF0C != 0) {
+    if (g_MenuEquipMode != 0) {
         MenuWidget_SetCurrentNode(MenuWidget_FindByModeAndSelectedBase(2, 0x32));
     } else {
         if (MenuWidget_GetCurrentNode() != 0)
             MenuWidget_ClearCursorY(MenuWidget_GetCurrentNode()->parent);
         MenuWidget_ClearCursorY(MenuWidget_FindByModeAndSelectedBase(1, 0x1B));
     }
-    D_8009CF34 = 0;
+    g_MenuItemRenameMode = 0;
 }
 
 static inline void Menu_ResetSlotCursors(void)
@@ -367,9 +367,9 @@ static inline void Menu_CreateUsableItemActionView(MenuWidgetNode *parent)
     root->disabled = 1;
     node->draw = Menu_DrawUsableItemActionList;
     node->layout_flags |= 0x80;
-    if (D_8009CF1C != 0)
+    if (g_MenuLayoutLocked != 0)
         MenuWidget_ClearColumnLayout(node);
-    else if (D_8009CF18 == 0)
+    else if (g_InvItemUsableFlag == 0)
         MenuWidget_SetColumnLayout(node, 0x14);
     if (node->cursor_x >= 0)
         MenuWidget_SetCurrentNode(node);
@@ -386,9 +386,9 @@ static inline void Menu_CreateEquipItemSelectionView(MenuWidgetNode *parent)
     root->draw = Menu_StepEquipSlotSelect;
     root->update = (void (*)())Menu_StepSkillScreen;
     node->draw = Menu_DrawSoundTestList;
-    if (D_8009CF1C != 0)
+    if (g_MenuLayoutLocked != 0)
         MenuWidget_ClearColumnLayout(node);
-    else if (D_8009CF18 == 0)
+    else if (g_InvItemUsableFlag == 0)
         MenuWidget_SetColumnLayout(node, 0x12);
     if (node->cursor_x >= 0)
         MenuWidget_SetCurrentNode(node);
@@ -475,24 +475,24 @@ int Menu_ItemListInputHandler(MenuWidgetNode *node, unsigned int flags)
             Inv_SelectActiveList(D_8009CFD4);
             Inv_RemoveActiveListItem(D_8009CFC4);
             Menu_CloseItemList();
-            if (D_8009CF0C == 1) {
+            if (g_MenuEquipMode == 1) {
                 MenuWidget_NavScrollTo(0x36);
                 Menu_ReopenEquipScreen();
             }
             Menu_PlayConfirmSound();
             return 1;
-        } else if (D_8009CF1C != 0) {
+        } else if (g_MenuLayoutLocked != 0) {
             if (Menu_CanEquipSelection(Inv_RestoreSelection(0)) != 0) {
                 Menu_CloseItemList();
                 MenuWidget_OffsetPosition(MenuWidget_FindByModeAndSelectedBase(1, 0x36), 0x98, 0);
-                D_8009CF18 = data->kind != 9;
+                g_InvItemUsableFlag = data->kind != 9;
                 panel = MenuWidget_FindByModeAndSelectedBase(2, 0);
                 if (panel == 0)
                     panel = MenuWidget_FindByModeAndSelectedBase(2, 0x32);
                 Menu_CreateUsableItemActionView(panel);
                 Menu_CreateEquipItemSelectionView(panel);
                 Menu_StepSkillList(panel, 1);
-                if (D_8009CF0C == 0) {
+                if (g_MenuEquipMode == 0) {
                     MenuWidgetNode *submenu;
 
                     submenu = MenuWidget_CreateSimpleNode(0x35, 0, 0, 0);
@@ -504,7 +504,7 @@ int Menu_ItemListInputHandler(MenuWidgetNode *node, unsigned int flags)
                     MenuWidget_SetCurrentNode(child);
                 return 1;
             }
-        } else if (D_8009CF30 != 0) {
+        } else if (g_MenuItemUseMode != 0) {
             MenuWidget_NavScrollTo(0xD);
             MenuWidget_NavScrollTo(0x30);
             MenuWidget_NavScrollTo(0x36);
@@ -524,12 +524,12 @@ int Menu_ItemListInputHandler(MenuWidgetNode *node, unsigned int flags)
             D_800A1960 = *Inv_LookupActiveListData(Inv_RestoreSelection(0));
             Menu_PlayConfirmSound();
             return 1;
-        } else if (D_8009CF34 != 0 && Inv_TestSelectionBit(index) != 0) {
+        } else if (g_MenuItemRenameMode != 0 && Inv_TestSelectionBit(index) != 0) {
             Menu_CloseItemList();
             Menu_OpenRenameScreen(item);
             Menu_PlayConfirmSound();
             return 1;
-        } else if (D_8009CF38 != 0) {
+        } else if (g_MenuItemDiscardMode != 0) {
             if (Inv_TestSelectionBit(index) != 0) {
                 MenuWidgetNode *dialog;
                 MenuWidgetNode *options;
@@ -541,9 +541,9 @@ int Menu_ItemListInputHandler(MenuWidgetNode *node, unsigned int flags)
                 dialog->draw = (void (*)())Menu_DrawItemLabel;
                 dialog->update = (void (*)())Menu_ConfirmDialogHandler;
                 options->draw = (void (*)())Menu_DrawActionOptionList;
-                D_8009CF14 = 5;
+                g_MenuActionTextBase = 5;
                 MenuWidget_SetCurrentNode(options);
-                Inv_SelectActiveList(D_8009CF10);
+                Inv_SelectActiveList(g_MenuActiveItemList);
                 g_MenuItemLabelBuffer[0] = 0xFF;
                 Util_AppendFFTerminatedBytes(g_MenuItemLabelBuffer, Str_LookupTable4(0x61));
                 D_8009CFA0 = 0;
@@ -572,21 +572,21 @@ int Menu_ItemListInputHandler(MenuWidgetNode *node, unsigned int flags)
             child->scroll_y = 0;
             MenuWidget_SetCurrentNode(found);
             Menu_ResetSlotCursors();
-        } else if (D_8009CF34 != 0 || D_8009CF38 != 0) {
-            D_8009CF34 = 0;
-            D_8009CF38 = 0;
+        } else if (g_MenuItemRenameMode != 0 || g_MenuItemDiscardMode != 0) {
+            g_MenuItemRenameMode = 0;
+            g_MenuItemDiscardMode = 0;
             Inv_SetActiveList(9, 0);
         } else {
             MenuWidget_NavScrollTo(0x36);
-            if (D_8009CF1C != 0) {
-                D_8009CF1C = 0;
+            if (g_MenuLayoutLocked != 0) {
+                g_MenuLayoutLocked = 0;
                 Menu_CloseItemList();
                 MenuWidget_NavScrollTo(0x2F);
-                if (D_8009CF0C == 0) {
+                if (g_MenuEquipMode == 0) {
                     Menu_CreateBonusPointAllocationView();
-                    D_8009CEF8 = 1;
+                    g_MenuBattleStatusOverlayActive = 1;
                 }
-            } else if (D_8009CF30 != 0) {
+            } else if (g_MenuItemUseMode != 0) {
                 Menu_ExitBonusPointAllocation();
             } else {
                 Menu_CloseItemList();
@@ -631,14 +631,14 @@ void Menu_StepEquipSlotSelect2(void) {
             slot = Inv_GetPackedListItem(MenuWidget_GridCellIndex(node));
             Inv_RememberSelection(0, slot);
         }
-    } else if (D_8009CF30 != 0) {
+    } else if (g_MenuItemUseMode != 0) {
         node = MenuWidget_FindByModeAndSelectedBase(2, 0x10);
         if (node != 0 && node->cursor_x >= 0) {
             slot = Inv_GetPackedListItem(MenuWidget_GridCellIndex(node));
             Inv_RememberSelection(0, slot);
         }
-    } else if (D_8009CF1C == 0) {
-        if (D_8009CF18 != 0) {
+    } else if (g_MenuLayoutLocked == 0) {
+        if (g_InvItemUsableFlag != 0) {
             Inv_RememberSelection(0, D_800C0E20.tracked[0]);
         } else {
             Inv_RememberSelection(0, D_800C0E20.tracked[2]);
@@ -651,10 +651,10 @@ void Menu_StepEquipSlotSelect2(void) {
     Draw_OffsetCursor(-4, -4);
 
     item = Inv_LookupActiveListData(slot);
-    D_8009CF18 = (item->kind != 9);
+    g_InvItemUsableFlag = (item->kind != 9);
     Menu_DrawEquipStatsDelta(item);
 
-    if ((D_8009CF1C != 0 || D_8009CF30 != 0 || D_8009CF34 != 0 || D_8009CF38 != 0) &&
+    if ((g_MenuLayoutLocked != 0 || g_MenuItemUseMode != 0 || g_MenuItemRenameMode != 0 || g_MenuItemDiscardMode != 0) &&
         item != 0) {
         Draw_OffsetCursor(0x2A, -0xC);
         Draw_PrintNumberWidth4Unk(item->baseStats[2]);
@@ -772,7 +772,7 @@ void Menu_DrawBonusPointSpendPanel(void) {
         Draw_OffsetCursor(0x48, 0);
         Draw_PrintNumberWidth5(g_BonusPointSpendWorkingValue);
         Draw_OffsetCursor(-0x75, 0x1E);
-        Draw_AllocSprite(D_8009CF18 != 0 ? g_BonusPointSpendStat + 0x7C : g_BonusPointSpendStat + 0x7F);
+        Draw_AllocSprite(g_InvItemUsableFlag != 0 ? g_BonusPointSpendStat + 0x7C : g_BonusPointSpendStat + 0x7F);
         Draw_OffsetCursor(0x1E, 0);
         mode = g_BonusPointSpendStat;
         switch (mode) {

@@ -45,7 +45,7 @@ s32 Menu_OpenEquipSlotSwap(s32 arg0) {
         MenuWidget_FindByModeAndSelectedBase(2, 1)->itemAction = NULL;
         Inv_SortSlotsByPriority();
         g_MenuActionSubmenuOpen = 1;
-        D_8009CF5C = arg0;
+        g_AyaFullInvHold = arg0;
         g_MenuSelectionLocked = 0;
         Menu_SetBattleEquipMode(0);
     }

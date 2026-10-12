@@ -46,7 +46,7 @@ int Menu_StepNameEntry(MenuWidgetNode *parent, unsigned int flags)
         if (page)
             index = page->cursor_y + 0x73;
         text = Str_LookupTable4(index);
-        D_8009CF54 = text;
+        g_MenuItemIconGlyphTable = text;
         Save_AppendMetadataChar(text[MenuWidget_GridCellIndex(node)]);
         Menu_PlayConfirmSound();
     } else if (flags & 0x40) {

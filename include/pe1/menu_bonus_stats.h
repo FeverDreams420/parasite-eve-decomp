@@ -20,7 +20,7 @@ PE1_STATIC_ASSERT(sizeof(MenuBonusStatWorkspace) == 0x6C,
                   menu_bonus_stat_workspace_size);
 
 extern MenuBonusStatWorkspace D_800A18B4;
-extern s32 D_800A18D8[9], D_800A18FC[9];
+extern s32 D_800A18D8[9], g_BonusPointStatMultipliers[9];
 /* Independent interior labels retain the retail address calculations. */
 extern s32 g_BonusPointStatQueryResults[9];
 extern s32 g_BonusPointStatDeltas[9];

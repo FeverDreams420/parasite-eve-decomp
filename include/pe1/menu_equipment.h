@@ -18,7 +18,7 @@ void Menu_RebuildSelectableMask(void);
 int Inv_TransferItem(int arg0, int arg1, int arg2, int arg3);
 int Menu_GetBattleCount(void);
 void MenuWidget_ClampCursor(MenuWidgetNode *node, int x, int y);
-extern int D_8009CF94, D_8009CF8C, D_8009CF00;
+extern int g_InvSwapTargetIndex, g_InvSelectedItemIndex, g_MenuActionSubmenuOpen;
 
 PE1_STATIC_ASSERT(PE1_OFFSETOF(MenuWidgetNode, itemAction) == 0x84,
                   menu_widget_item_action_offset);
@@ -28,22 +28,22 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(MenuWidgetNode, refreshItems) == 0x88,
 void Menu_OpenEquipScreen(int mode);
 int Menu_StepInventoryCategory(MenuWidgetNode *node, unsigned int flags);
 void Menu_DrawEquipListContainer(void *node);
-extern int D_8009CEFC;
+extern int g_MenuSelectionLocked;
 
 int Menu_EquipOptionsInputHandler(void *node, int flags);
 void Menu_DrawEquipOptionsList(int node);
 void Menu_OpenInventoryScreen(void);
-extern int D_8009CF1C;
+extern int g_MenuLayoutLocked;
 /* Equipment selection state and stat preview. */
-extern int D_8009CF30, D_8009CF34, D_8009CF38;
+extern int g_MenuItemUseMode, g_MenuItemRenameMode, g_MenuItemDiscardMode;
 extern int D_8009CFC4, D_8009CFC8, D_8009CFCC;
 /* Ammo counts of the four ammo categories (999 when a category is
  * unlimited); a nonzero sum enables the ammo transfer actions. */
 extern int g_StatBaseTable[4];
-extern int D_8009CF24, D_8009CF28, D_8009CFBC, D_8009CF2C;
-extern int D_8009CF14;
+extern int g_MenuSelectedItemList, g_MenuSelectedItemSlot, D_8009CFBC, g_MenuSelectedItemIndex;
+extern int g_MenuActionTextBase;
 /* Item put back into Aya's inventory after a storage swap (0: none). */
-extern int D_8009CF5C;
+extern int g_AyaFullInvHold;
 
 void Menu_DrawEquipScreenHeader(void);
 int Menu_InventoryItemHandler(MenuWidgetNode *node, int flags);
@@ -58,9 +58,9 @@ void Menu_StepItemGridScroll(ItemDataRecord *item, ItemDataRecord *other);
 
 int Menu_StepEquipScreen(MenuWidgetNode *node, unsigned int flags);
 void Menu_OnInventoryItemConfirm(int index);
-extern int D_8009CF10, D_8009CF04, D_8009CF08, D_8009CDA8;
+extern int g_MenuActiveItemList, g_MenuActiveItemSlot, g_MenuItemActionDisabled, g_MenuItemActionContext;
 /* Three action IDs per menu configuration, indexed by the selected child cell. */
-extern int D_80092234[][3];
+extern int g_MenuItemActionStateTable[][3];
 
 void Menu_DrawAmmoTypeHeader(MenuWidgetNode *node);
 void Menu_DrawEquipSortToggleRow(int index);

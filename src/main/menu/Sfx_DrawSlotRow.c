@@ -120,7 +120,7 @@ void Sfx_DrawActiveListSlot(s32 arg0) {
         var_a0 = temp_v1 - 1;
         if (var_a0 >= 0xFFU) {
             if ((temp_v1 - 0x200) < 9U) {
-                var_a0 = (D_8009D03C + temp_v1) - 0x201;
+                var_a0 = (g_InvCategoryBaseItemId + temp_v1) - 0x201;
                 var_a1 = Str_LookupTable8(var_a0);
             }
         } else {

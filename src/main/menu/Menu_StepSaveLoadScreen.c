@@ -35,8 +35,8 @@ void Menu_StepSaveLoadScreen(void)
     list->refreshItems = Menu_RebuildSelectableMask;
     list->itemAction = transfer;
     list->cursor_x = -1;
-    D_8009CF94 = -1;
-    D_8009CF8C = -1;
+    g_InvSwapTargetIndex = -1;
+    g_InvSelectedItemIndex = -1;
     Draw_SetPrimCallback(list, Inv_GetAyaSlotLimit());
     list->linkedPrevious = container;
     container->linkedNext = list;
@@ -51,5 +51,5 @@ void Menu_StepSaveLoadScreen(void)
     }
     list->cursor_x = -1;
     Menu_CreateContextHelpPanel();
-    D_8009CF00 = 0;
+    g_MenuActionSubmenuOpen = 0;
 }
