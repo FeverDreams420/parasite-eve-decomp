@@ -1127,21 +1127,14 @@ segments:
       # sprite; and effect task spawning: the descriptor at D_800E13D4 names the asset
       # bootstrap, the object lifecycle callbacks and the task spawn entry together.
       - [0xBF0F0, c, fieldfx/FieldEng_GeometryAndShapes]
-      - [0xC5128, c, fieldfx/FieldEng_FallingSpriteEffect]
-      - [0xC5810, c, fieldfx/FieldEng_ScatterBurstEffect]
-      - [0xC6A9C, c, fieldfx/FieldEng_SpiralSpriteEffect]
-      # Ember drift, fan-sweep spark instance and the fan-sweep controller share the spark pools (G1583).
-      - [0xC78C0, c, fieldfx/FieldEng_FanSweepSparks]
-      # Arcing emitter, orbiting/vertical/helical callbacks (G1588 draw helpers and literals)
-      # and the damped spark: the effect programs at D_800E1920..D_800E1AF0 chain their
-      # callbacks with the fan-sweep sparks above, which stays separate only because it
-      # includes room_ember_burst.h (conflicting D_800F33E0/D_800F32D0/D_800E2368/D_8009D20C).
-      - [0xC821C, c, fieldfx/FieldEng_SparkEffects]
-      - [0xCA28C, c, fieldfx/FieldEng_SpinningModel]
-      - [0xCA65C, c, fieldfx/FieldEng_BallisticSprite]
-      # The second spinning flare, the emitter that spawns it (call + private anchor D_800E2214)
-      # and the rotating ballistic sprite the effect program at D_800E1BA8 pairs with it.
-      - [0xCA9FC, c, fieldfx/FieldEng_AttachedEmitterEffect]
+      # Sprite effects: falling, scatter-burst and spiral sprites; ember drift, the fan-sweep
+      # spark instance and its controller sharing the spark pools (G1583); the arcing emitter,
+      # orbiting/vertical/helical callbacks (G1588 draw helpers and literals) and the damped
+      # spark, whose effect programs at D_800E1920..D_800E1AF0 chain their callbacks with the
+      # fan-sweep sparks; the two spinning flares, the emitter that spawns the second (call +
+      # private anchor D_800E2214) and the rotating ballistic sprite the effect program at
+      # D_800E1BA8 pairs with it.
+      - [0xC5128, c, fieldfx/FieldEng_SpriteEffects]
       - [0xCB398, c, fieldfx/FieldEng_WaveEmitterEffect]
       - [0xCBA5C, c, fieldfx/FieldEng_DiamondEmitter]
       - [0xCC29C, c, fieldfx/FieldEng_RadialFlashEffect]
