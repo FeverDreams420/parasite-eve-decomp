@@ -247,19 +247,19 @@ their unit counts (2026-10-12; "2.8.1" is `GCC_VERSION: 2.8.1`, "GNU" is
 
 | library | units | marker sets (units) |
 |---|---|---|
-| libapi | 43 | none (36); GNU (5); 2.8.1 nsa (2) |
+| libapi | 41 | none (35); GNU (5); 2.8.1 nsa (1) |
 | libc | 18 | none (16); 2.8.1 (1); gas 2.8.1, 2.8.1 nsa (1) |
 | libcard | 15 | none (10); GNU (4); 2.8.1 (1) |
-| libcd | 21 | GNU (5); none (4); GNU 2.8.1 nsa (2); GNU 2.8.1 `-fno-expensive-optimizations` nsa (2); GNU `-fno-expensive-optimizations` (1); GNU `-fno-schedule-insns` (1); GNU `-fno-schedule-insns -fno-schedule-insns2` (1); GNU 2.8.1 nsa `-fno-schedule-insns` (1); 2.8.1 nsa (1); 2.8.1 `-fcall-used-$1` (1); 2.8.1 (1); gas 2.7 (1) |
-| libds | 29 | GNU (13); GNU 2.8.1 nsa (7); none (4); 2.8.1 nsa (2); `-fno-schedule-insns2` (1); 2.8.1 nsa `-fno-schedule-insns` (1); GNU 2.8.1 nsa `-fno-schedule-insns2` (1) |
-| libetc | 6 | GNU 2.8.1 nsa (2); GNU (2); none (1); GNU `-fno-cse-follow-jumps` (1) |
+| libcd | 20 | GNU (6); none (3); GNU 2.8.1 `-fno-expensive-optimizations` nsa (2); GNU 2.8.1 nsa (2); 2.8.1 (1); 2.8.1 `-fcall-used-$1` (1); 2.8.1 nsa (1); GNU 2.8.1 `-fno-schedule-insns` nsa (1); GNU `-fno-expensive-optimizations` (1); GNU `-fno-schedule-insns` `-fno-schedule-insns2` (1); gas 2.7 (1) |
+| libds | 24 | GNU (12); GNU 2.8.1 nsa (5); none (3); 2.8.1 nsa (2); 2.8.1 `-fno-schedule-insns` nsa (1); GNU 2.8.1 `-fno-schedule-insns2` nsa (1) |
+| libetc | 6 | GNU (2); GNU 2.8.1 nsa (2); GNU `-fno-cse-follow-jumps` (1); none (1) |
 | libgpu | 28 | none (20); GNU 2.8.1 nsa (3); 2.8.1 nsa (2); 2.8.1 (1); GNU (1); `-O1` (1) |
-| libgte | 39 | none (26); GNU (11); gas 2.8.1 (1); GNU gas 2.7 (1) |
-| libmath | 11 | 2.8.1 (6); GNU (4); 2.8.1 `-g3` (1) |
-| libpad | 11 | GNU (7); 2.8.1 nsa (3); none (1) |
+| libgte | 39 | none (26); GNU (11); GNU gas 2.7 (1); gas 2.8.1 (1) |
+| libmath | 10 | 2.8.1 (5); GNU (4); 2.8.1 `-g3` (1) |
+| libpad | 7 | GNU (6); GNU `-fno-cse-follow-jumps` (1) |
 | libsn | 1 | GNU (1) |
 | libsnd | 1 | none (1) |
-| libspu | 27 | none (11); 2.8.1 nsa (8); GNU (6); gas 2.8.1 (1); 2.8.1 (1) |
+| libspu | 26 | none (11); 2.8.1 nsa (8); GNU (6); gas 2.8.1 (1) |
 
 The spread is a toolchain limit, not a property of the SDK sources: PsyQ
 built every library with one compiler, which the stock GCC 2.7.2 and 2.8.1

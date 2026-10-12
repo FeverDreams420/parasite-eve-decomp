@@ -284,8 +284,26 @@ Parts are merged whenever every function of the merged unit compiles to its
 retail words under one marker set, so the splits that remain record a
 toolchain limit, not an original source boundary: PsyQ compiled each object
 once, but the stock compilers here reproduce some of its functions only
-with GCC 2.7.2 and its neighbours only with GCC 2.8.1 (mostly the
-return-delay-slot fill), or need an option that breaks the neighbour.
+with GCC 2.7.2 and its neighbours only with GCC 2.8.1, or need an option
+that breaks the neighbour. Two retail traits mark the limit:
+
+- an unfilled return: `lw ra; addiu sp; jr ra; nop`. GCC 2.7.2 emits it
+  whenever no instruction can go into the epilogue's delay slot; GCC 2.8.1
+  expands the epilogue as RTL and always moves the stack adjustment into
+  the `jr ra` slot. Such a function can only be GCC 2.7.2.
+- several fields of one global reached through one base register
+  (`la s0, sym` and `sw x, 4(s0)` ...), often across calls. GCC 2.8.1's
+  cse turns repeated constant addresses into that form; GCC 2.7.2 does the
+  opposite and folds every register-plus-offset address it knows to be
+  constant into an absolute `lui/sw`. GCC 2.7.2 keeps the base only when
+  cse does not know the pointer is constant: a store through a pointer
+  variable without an offset, an address in a variable that is reassigned
+  elsewhere, or a block cse does not reach along its jump-following path
+  (a loop boundary). The merges below use those shapes; where a function
+  needs the base for many fields across calls no plain C shape was found.
+
+An object whose functions show both traits cannot be reproduced under one
+stock compiler; the table gives the best single marker set and its lev.
 
 The evidence is a marker probe: every part is compiled under the marker set
 of each sibling (and with no markers) and compared, instruction word by
@@ -301,22 +319,22 @@ byte-identical.
 
 | object | units (before) | units now | why the split stays |
 |---|---|---|---|
-| LIBGPU SYS | 17 | 11 (`sys.c` .. `sys_11.c`) | parts 1, 3, 6, 8 and 10 need GCC 2.8.1 with `-mno-split-addresses`; 2, 4, 7, 9 and 11 need GCC 2.7.2; part 5 needs `-O1` or `-fno-schedule-insns` |
+| LIBGPU SYS | 17 | 11 (`sys.c` .. `sys_11.c`) | parts 1, 3, 6, 8 and 10 need GCC 2.8.1 with `-mno-split-addresses` (base registers); 2, 4, 7, 9 and 11 need GCC 2.7.2 (unfilled returns in `Gpu_RestoreDmaCallback` and others); part 5 needs `-O1`. Best single set GCC 2.8.1 with GNU as and `-mno-split-addresses`, lev 115; GCC 2.7.2 with GNU as lev 412 |
 | LIBCD SYS | 6 | 2 | `sys.c` GCC 2.8.1: GCC 2.7.2 tests the `CD_initvol` result in `$v0`, retail copies it to `$v1` first (`CdReset` lev 5 under GCC 2.7.2 with GNU as, the set of `sys_2.c`) |
-| LIBCD BIOS | 9 | 7 | parts alternate between GCC 2.7.2 (2, 4, 5) and GCC 2.8.1 (1, 3, 6, 7); parts 2, 3, 4 and 6 each need their own `-fno-expensive-optimizations` or scheduling option |
-| LIBCD C_011 | 3 | 2 | StCdInterrupt and mem2mem GCC 2.7.2, dma_execute GCC 2.8.1 with `-fno-schedule-insns` |
-| LIBETC INTR | 3 | 2 | the callbacks GCC 2.7.2, the interrupt manager GCC 2.8.1 |
+| LIBCD BIOS | 9 | 7 | parts alternate between GCC 2.7.2 (2, 4, 5) and GCC 2.8.1 (1, 3, 6, 7); parts 2, 3, 4 and 6 each need their own `-fno-expensive-optimizations` or scheduling option. Best single set GCC 2.8.1 with GNU as and `-mno-split-addresses`, lev 92; GCC 2.7.2 with GNU as lev 222 |
+| LIBCD C_011 | 3 | 2 | StCdInterrupt and mem2mem GCC 2.7.2 (an unfilled return), dma_execute GCC 2.8.1 with `-fno-schedule-insns`. Best single set GCC 2.7.2 with GNU as, lev 13 (`dma_execute`) |
+| LIBETC INTR | 3 | 2 | the callbacks GCC 2.7.2 (eight unfilled returns, lev 16 under GCC 2.8.1), the interrupt manager GCC 2.8.1 (base register, lev 76 under GCC 2.7.2 with GNU as) |
 | LIBAPI PATCH | 2 | 2 | `_patch_pad` is SDK assembler (policy) |
 | LIBCARD PATCH | 4 | 4 | parts 1 and 3 are SDK assembler (policy) |
-| LIBDS DSSYS_1 | 11 | 10 | neighbours alternate between GNU as with GCC 2.7.2 and GCC 2.8.1, several with their own scheduling option; the GCC 2.8.1 parts keep a base register in `$s0` across calls, which GCC 2.7.2 folds into absolute addresses (`DS_stop` lev 18, `tipDsSystem` 26, `DS_reset_members` 49 under GCC 2.7.2) |
+| LIBDS DSSYS_1 | 11 | 10 | neighbours alternate between GNU as with GCC 2.7.2 and GCC 2.8.1, some with their own scheduling option; the GCC 2.8.1 parts keep a base register in `$s0` across calls (under GCC 2.7.2 with GNU as: `DS_stop` lev 18, `LIBDS_DSSYS_1_text_E10` 17, `tipDsSystem` 26, `DS_reset_members` 49, the four `text_368`..`text_7FC` helpers 181; best single set GCC 2.8.1 with GNU as and `-mno-split-addresses`, lev 87) |
 | LIBDS DSSYS_2 | 5 | 3 | `dssys_2.c` and `dssys_2_3.c` GCC 2.7.2 with GNU as; DsInit and DsReset (`dssys_2_2.c`) need GCC 2.8.1 with `-fno-schedule-insns2`: they clear two tables through a base register, which GCC 2.7.2 folds into absolute addresses (lev 43) |
-| LIBDS DSREAD | 2 | 2 | `dsread.c` GCC 2.7.2, `dsread_2.c` only builds with GCC 2.8.1 |
-| LIBDS DSFILE | 2 | 2 | `dsfile.c` GCC 2.8.1, `dsfile_2.c` GCC 2.7.2 |
+| LIBDS DSREAD | 2 | 2 | `dsread.c` GCC 2.7.2 (`DS_read_cbsync` has an unfilled return), `dsread_2.c` GCC 2.8.1 (base registers, lev 123 under GCC 2.7.2). Best single set GCC 2.8.1 with GNU as and `-mno-split-addresses`, lev 32 |
+| LIBDS DSFILE | 2 | 2 | `dsfile.c` GCC 2.8.1, `dsfile_2.c` GCC 2.7.2. Best single set GCC 2.7.2 with GNU as, lev 45: GCC 2.7.2 gives `DsSearchFile` a 96-byte frame, retail 80 |
 | LIBDS DSREADY | 5 | 2 | `dsready.c` GCC 2.8.1: `DsStartReadySystem` stores eight fields through a base register, which GCC 2.7.2 folds into absolute addresses (lev 23, `DsEndReadySystem` 9); `ER_cbsync` in `dsready_2.c` keeps the unfilled `jr ra` delay slot that GCC 2.8.1 always fills, so the object cannot move to GCC 2.8.1 either |
 | LIBSPU SPU | 4 | 3 | `spu.c` GCC 2.7.2 with GNU as, `spu_2.c` GCC 2.8.1, `spu_3.c` GCC 2.7.2 with the GNU as 2.8.1 assembler: `_spu_FsetRXXa` needs the old assembler's `remu` expansion (divide before the zero check) and `spu.c` the new assembler's `jal` delay-slot fill with the low half of `la`; no assembler here does both, as ASPSX did. `_spu_t` (`spu_2.c`) keeps a base register that GCC 2.7.2 folds (lev 26) |
 
-Objects unified after a new C shape for the part that needed other
-markers (one unit each now):
+Merges after a new C shape for the part that needed other markers (LIBAPI
+PAD, LIBPAD PADIF, LIBMATH MULDF3 and LIBPAD PADPORTD are one unit each now):
 
 - LIBAPI PAD (`pad.c`, GCC 2.7.2 with GNU as): `Sys_SetInterruptHandler`
   stores its second handler through a post-incremented pointer. With
