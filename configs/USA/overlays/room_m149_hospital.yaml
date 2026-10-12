@@ -1,18 +1,18 @@
-name: room_m149+1_hospital.bin
+name: room_m149_hospital.bin
 sha1: 5cdc3cb4c8c22332646faca446c2e2824c51bb77
 options:
-  basename: room_m149+1_hospital
+  basename: room_m149_hospital
   target_path: original/USA/overlays/room_m149+1.bin
   base_path: ../../..
   platform: psx
   compiler: GCC
-  asm_path: asm/USA/overlays/room_m149+1_hospital
-  src_path: src/overlays/room_m149+1_hospital
-  build_path: build/USA/overlays/room_m149+1_hospital
-  ld_script_path: linkers/USA/overlays/room_m149+1_hospital.ld
-  undefined_funcs_auto_path: linkers/USA/overlays/undefined_funcs_auto.room_m149+1_hospital.txt
-  symbol_addrs_path: configs/USA/overlays/sym.room_m149+1_hospital.txt
-  undefined_syms_auto_path: linkers/USA/overlays/undefined_syms_auto.room_m149+1_hospital.txt
+  asm_path: asm/USA/overlays/room_m149_hospital
+  src_path: src/overlays/room_m149_hospital
+  build_path: build/USA/overlays/room_m149_hospital
+  ld_script_path: linkers/USA/overlays/room_m149_hospital.ld
+  undefined_funcs_auto_path: linkers/USA/overlays/undefined_funcs_auto.room_m149_hospital.txt
+  symbol_addrs_path: configs/USA/overlays/sym.room_m149_hospital.txt
+  undefined_syms_auto_path: linkers/USA/overlays/undefined_syms_auto.room_m149_hospital.txt
   find_file_boundaries: True
   disassemble_all: True
   asm_function_macro: glabel
@@ -26,7 +26,7 @@ options:
   rodata_string_guesser_level: 2
   data_string_guesser_level: 2
 segments:
-  - name: room_m149+1_hospital
+  - name: room_m149_hospital
     type: code
     start: 0x0
     vram: 0x8018EFE8
@@ -34,7 +34,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x0, rodata, room_m149+1_0_C]
+      - [0x0, rodata, room_m149_0_C]
       - [0xC, .rodata, ../room_lib/RoomEffect_DroppedFlare]
       - [0x50, c, ../room_lib/RoomEffect_DroppedFlare]
       - [0xCF4, data, D_8018FCDC]
@@ -43,11 +43,11 @@ segments:
       - start: 0xD54
         type: databin
         name: RoomLib_PairB
-        dir: room_m149+1_hospital
+        dir: room_m149_hospital
       - start: 0x1920C
         type: databin
         name: D_801A81F4
-        dir: room_m149+1_hospital
+        dir: room_m149_hospital
   - [0x22000]
 # room: m149, section3 sector 43106, scanner delta 1
 # source slice: room-section3

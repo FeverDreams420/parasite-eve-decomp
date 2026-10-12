@@ -4,7 +4,7 @@
  * sparks, a beam that showers bouncing sparks and a ring of jittering
  * sparks, each a controller and its particle callback.
  *
- * room_m156+2, room_m291+2 and room_m380+2 link these eight functions in
+ * room_m156, room_m291 and room_m380 link these eight functions in
  * this order, with the same 0x64 bytes of read-only seeds and jump tables;
  * this unit is that object, compiled into each of them. The orb heading and
  * the beam's model asset live in each room's own data. The beam's bouncing

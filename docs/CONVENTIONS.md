@@ -134,8 +134,8 @@ name is the configured overlay name.
   suffix, for example `room_m005_carnegie_hall`. The suffix is lower snake case from the
   room's text bank (the `text-bank:` comment in its config). Renaming is a
   single change across config, `src/overlays`, symbol file and CI. The
-  current `+1`/`+2` tails (`room_m126+1`) record an extraction delta, not an
-  identity, and are dropped by that rename.
+  former `+1`/`+2` tails (`room_m126+1`) recorded an extraction delta, not an
+  identity, and are gone; only the retail asset names keep them.
 - **Scene sets:** `scene_eNN`, entry `NN` of the special-scene table at
   `0x80094048`. They get a suffix the same way once their scenes are named.
 - **Shared overlays:** `fx_common`, `fx_field`, `menu_memcard`,

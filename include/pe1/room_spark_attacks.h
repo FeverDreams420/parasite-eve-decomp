@@ -6,7 +6,7 @@
 #include "pe1/render_object.h"
 #include "pe1/room_spark.h"
 
-/* The spark attacks linked by room_m156+2, room_m291+2 and room_m380+2
+/* The spark attacks linked by room_m156, room_m291 and room_m380
  * (src/overlays/room_lib/RoomEffect_SparkAttacks.c): burst orbs launched
  * from the actor's hand, a spray of damped sparks, a beam with a bouncing
  * spark shower and a ring of jittering sparks. */

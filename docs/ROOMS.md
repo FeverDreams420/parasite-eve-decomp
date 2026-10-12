@@ -113,7 +113,7 @@ in each run (`m` = `room_m`, `e` = `scene_e`):
 | 57-89 | Central Park (4) | m059, m061, m062, m063, m065, m066, m067, m075, m078, m080, m081, m082, m083, m085, m086, m087, m089 |
 | 90-97 | Soho (5) | m090 |
 | 98-124 | N.Y.P.D. (3) | m100, m102, m104, m107, m110, m111, m113, m114, m115, m116, m118, m120, m121, m122, m123 |
-| 125-160 | Hospital (6) | m126+1, m129+1, m137, m139+1, m140, m141, m145, m146, m147, m149+1, m151, m152, m153, m154, m156+2, m159 |
+| 125-160 | Hospital (6) | m126, m129, m137, m139, m140, m141, m145, m146, m147, m149, m151, m152, m153, m154, m156, m159 |
 | 161-165 | Chinatown (7) | m162, m163 |
 | 166-181 | Sewer2 (8) | m167, m168, m169, m173, m174, m178 |
 | 182-190 | Subway (9) | m186, m187, m188 |
@@ -122,8 +122,8 @@ in each run (`m` = `room_m`, `e` = `scene_e`):
 | 271 | Carrier (12) | - |
 | 272-273 | Liberty (13) | m272, m273 |
 | 274-287 | Cruiser (14) | - |
-| 288-318 | none (0) | m291+2, m295, m298, m299, m308, m309, m310, m311, m318 |
-| 319-332 | Hospital (6) | m319, m324, m326+1, m327, m328, m332 |
+| 288-318 | none (0) | m291, m295, m298, m299, m308, m309, m310, m311, m318 |
+| 319-332 | Hospital (6) | m319, m324, m326, m327, m328, m332 |
 | 333 | Warehouse (11) | m333 |
 | 334 | Sewer (2) | - |
 | 335 | none (0) | - |
@@ -148,7 +148,7 @@ in each run (`m` = `room_m`, `e` = `scene_e`):
 | 376 | N.Y.P.D. (3) | - |
 | 377-378 | Theater (1) | - |
 | 379 | Museum (10) | - |
-| 380-381 | Hospital (6) | m380+2 |
+| 380-381 | Hospital (6) | m380 |
 | 382-424 | none (0) | m383-m410, e01-e14 |
 | 425-430 | Cruiser (14) | e18, e19, e20 |
 | 431 | Theater (1) | (e21, not configured) |
@@ -209,8 +209,10 @@ a real story revisit, not a numbering inversion.
 
 ## Naming scheme
 
-Overlays that have a place get a suffix: `room_mNNN_<place>` (the `+N`
-variants keep their marker: `room_m126+1_hospital`).
+Overlays that have a place get a suffix: `room_mNNN_<place>`. Eight
+overlays were first extracted with a scanner delta and named `room_mNNN+N`;
+the delta is not part of the identity and is dropped (`room_m126_hospital`),
+while their retail assets keep the `+N` file name (`target_path`).
 
 - `NNN` stays: it is the game's map number and the key that links the
   overlay to the room table, the save table and the retail asset name.
@@ -263,7 +265,7 @@ keep theirs.
 | `nypd` | medium | 2 | m049, m050 |
 | `central_park` | high | 19 | m059, m061, m062, m063, m065, m066, m067, m075, m078, m080, m081, m082, m083, m085, m086, m087, m089, m358, m374 |
 | `soho` | high | 1 | m090 |
-| `hospital` | high | 22 | m126+1, m129+1, m137, m139+1, m140, m141, m145, m146, m147, m149+1, m151, m152, m153, m154, m156+2, m159, m324, m326+1, m327, m328, m332, m380+2 |
+| `hospital` | high | 22 | m126, m129, m137, m139, m140, m141, m145, m146, m147, m149, m151, m152, m153, m154, m156, m159, m324, m326, m327, m328, m332, m380 |
 | `hospital` | medium | 1 | m319 |
 | `chinatown` | high | 2 | m162, m163 |
 | `sewer2` | high | 6 | m167, m168, m169, m173, m174, m178 |
@@ -273,7 +275,7 @@ keep theirs.
 | `liberty` | high | 2 | m272, m273 |
 | `sewer` | medium | 1 | m348 |
 | `cruiser` | medium | 1 | m349 |
-| `chrysler` | medium | 37 | m291+2, m295, m298, m299, m308-m311, m318, m383-m410 |
+| `chrysler` | medium | 37 | m291, m295, m298, m299, m308-m311, m318, m383-m410 |
 | `cruiser` (text bank only) | low | 1 | m350 |
 
 Confidence rules: **high** = save label present and the dialog bank agrees

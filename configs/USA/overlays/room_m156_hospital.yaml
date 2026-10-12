@@ -1,18 +1,18 @@
-name: room_m291+2_chrysler.bin
-sha1: 7a6299c18cf06e69e0e5aaabb79ecbc65329b479
+name: room_m156_hospital.bin
+sha1: 2d094b8b74b918379e1ed7c213e1337fb7fe4cac
 options:
-  basename: room_m291+2_chrysler
-  target_path: original/USA/overlays/room_m291+2.bin
+  basename: room_m156_hospital
+  target_path: original/USA/overlays/room_m156+2.bin
   base_path: ../../..
   platform: psx
   compiler: GCC
-  asm_path: asm/USA/overlays/room_m291+2_chrysler
-  src_path: src/overlays/room_m291+2_chrysler
-  build_path: build/USA/overlays/room_m291+2_chrysler
-  ld_script_path: linkers/USA/overlays/room_m291+2_chrysler.ld
-  undefined_funcs_auto_path: linkers/USA/overlays/undefined_funcs_auto.room_m291+2_chrysler.txt
-  symbol_addrs_path: configs/USA/overlays/sym.room_m291+2_chrysler.txt
-  undefined_syms_auto_path: linkers/USA/overlays/undefined_syms_auto.room_m291+2_chrysler.txt
+  asm_path: asm/USA/overlays/room_m156_hospital
+  src_path: src/overlays/room_m156_hospital
+  build_path: build/USA/overlays/room_m156_hospital
+  ld_script_path: linkers/USA/overlays/room_m156_hospital.ld
+  undefined_funcs_auto_path: linkers/USA/overlays/undefined_funcs_auto.room_m156_hospital.txt
+  symbol_addrs_path: configs/USA/overlays/sym.room_m156_hospital.txt
+  undefined_syms_auto_path: linkers/USA/overlays/undefined_syms_auto.room_m156_hospital.txt
   find_file_boundaries: True
   disassemble_all: True
   asm_function_macro: glabel
@@ -26,7 +26,7 @@ options:
   rodata_string_guesser_level: 2
   data_string_guesser_level: 2
 segments:
-  - name: room_m291+2_chrysler
+  - name: room_m156_hospital
     type: code
     start: 0x0
     vram: 0x8018EFE8
@@ -34,7 +34,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x0, rodata, room_m291+2_header]
+      - [0x0, rodata, room_m156_header]
       - [0xC, .rodata, ../room_lib/RoomEffect_SparkAttacks]
       - [0x70, c, ../room_lib/RoomEffect_SparkAttacks]
       - [0x3A00, c, ../room_lib/RoomLib_SetArg1]
@@ -54,9 +54,10 @@ segments:
       - start: 0x3C54
         type: databin
         name: D_80192C3C
-        dir: room_m291+2_chrysler
-  - [0x3E800]
-# room: m291, section3 sector 73473, scanner delta 2
+        dir: room_m156_hospital
+      - [0x411F8, data, D_801D01E0]
+  - [0x43800]
+# room: m156, section3 sector 44878, scanner delta 2
 # source slice: room-section3
-# extract locally with: dd if=disc/extracted/PE.IMG of=original/USA/overlays/room_m291+2.bin bs=2048 skip=73473 count=125
-# area: no save-location label for map 291; place chrysler, medium confidence (docs/ROOMS.md)
+# extract locally with: dd if=disc/extracted/PE.IMG of=original/USA/overlays/room_m156+2.bin bs=2048 skip=44878 count=135
+# area: save-location label "Hospital" (id 6) for map 156; place hospital, high confidence (docs/ROOMS.md)
