@@ -11,7 +11,7 @@
 #include "pe1/battle_status.h"
 #include "pe1/save_tail_state.h"
 #include "pe1/scene_dispatch.h"
-#include "pe1/sys.h"
+#include "pe1/boot_services.h"
 #include "pe1/render_camera.h"
 #include "pe1/menu_queue.h"
 #include "pe1/boot.h"

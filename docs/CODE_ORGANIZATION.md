@@ -486,7 +486,7 @@ permuter and by hand):
 ### Tables, assets, process manager and sys (src/main/{table,asset,pm,sys})
 
 These units have no file-scope `extern`s; their data lives in
-`pe1/resident_tables.h`, `pe1/pm.h`, `pe1/asset_table.h`, `pe1/sys.h` and
+`pe1/resident_tables.h`, `pe1/pm.h`, `pe1/asset_table.h`, `pe1/boot_services.h` and
 the other owner headers. C shapes that only exist for the bytes:
 
 - The resident data pack at 0x800A8028 (`g_ResidentDataPack`) is read
@@ -1667,7 +1667,7 @@ Crutches still in these units, with the best crutch-free lev found:
   (same base register, disjoint offsets, so sched1 may reorder them), and
   the x/y cursor stores swap.
 - `Draw_InitDisplay` (3 pins, 1 barrier) repeats `Boot_InitMemoryLayout`
-  (sys, also pinned) on the `u8 *volatile` buffer words of `pe1/sys.h`;
+  (sys, also pinned) on the `u8 *volatile` buffer words of `pe1/boot_services.h`;
   both should change together with that header. Its locals are `u8 *` now
   (no integer casts). Without the barrier lev 14 (the `g_OtBufferTable`
   address joins the `g_OtBufferTable[0]` store and loads late, and the

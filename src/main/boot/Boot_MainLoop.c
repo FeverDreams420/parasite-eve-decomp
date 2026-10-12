@@ -7,7 +7,7 @@
 #include "pe1/game_timers.h"
 #include "pe1/scene_dispatch.h"
 #include "pe1/boot.h"
-#include "pe1/sys.h"
+#include "pe1/boot_services.h"
 
 
 #define STATE_FLAG_IMAGE_BUSY 0x00100000U

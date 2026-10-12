@@ -1,5 +1,5 @@
-#ifndef PE1_SYS_H
-#define PE1_SYS_H
+#ifndef PE1_BOOT_SERVICES_H
+#define PE1_BOOT_SERVICES_H
 
 #include "common.h"
 
@@ -42,4 +42,4 @@ extern u8 *volatile D_800B0E5C;
 extern u8 *volatile D_800B0E60;
 extern u8 *volatile D_800B0E68;
 
-#endif /* PE1_SYS_H */
+#endif /* PE1_BOOT_SERVICES_H */
