@@ -190,6 +190,8 @@ typedef struct FxCommonPoint8 { s16 x,y,z,pad; } FxCommonPoint8;
 typedef struct FxCommonPointList { u8 header[6]; s16 count; FxCommonPoint8 points[1]; } FxCommonPointList;
 
 PE1_STATIC_ASSERT(sizeof(FxCommonEffectSetupRecord) == 52, fx_setup_record_size);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(FxCommonEffectSetupRecord, motionIndices) == 8,
+                  fx_setup_motion_indices_offset);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(FxCommonEffectSetupRecord, subtype) == 0x14, fx_setup_subtype);
 PE1_STATIC_ASSERT(sizeof(FxCommonPoint8) == 8, fx_point_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(FxCommonPointList, points) == 8, fx_point_list_header);

@@ -7,7 +7,7 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     FxCommonMotionVec point;
     GteShortVector extra;
     s32 secondMask;
-    s32 offset;
+    s16 setupIndex;
     s32 firstMask;
     register s32 firstValue asm("$18");
     s32 secondValue;
@@ -41,9 +41,9 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     /* The tied operand copies second unchanged after the other call arguments. */
     asm("" : "=r"(secondValue) : "0"(second), "r"(lookupTable), "r"(lookupCount), "r"(sourceValue));
     base = Gpu_GetTimTableEntry(lookupTable, lookupCount);
-    offset = (s16)index * 52;
+    setupIndex = (s16)index;
     extraPtr = &extra;
-    func_8018F55C(sourceValue, D_801EA378[offset], base, &point, extraPtr);
+    func_8018F55C(sourceValue, g_FxCommonEffectSetup[setupIndex].motionIndices[0], base, &point, extraPtr);
 
     lookupTable = table;
     firstValue &= 0xff;
@@ -72,7 +72,7 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
 
 
     base = Gpu_GetTimTableEntry(lookupTable, 2);
-    func_8018F55C(sourceValue, D_801EA378[offset + 1], base, &point, extraPtr);
+    func_8018F55C(sourceValue, g_FxCommonEffectSetup[setupIndex].motionIndices[1], base, &point, extraPtr);
 
     asm volatile("" : : "r"(secondValue));
     secondValue &= 0xff;
