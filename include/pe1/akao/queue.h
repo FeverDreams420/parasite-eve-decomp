@@ -15,6 +15,8 @@ typedef struct AkaoQueueEntry {
         int value;
         /* sample load messages: sample data past the header */
         unsigned short *sample_data;
+        /* sequence messages: the sequence data to play */
+        unsigned char *sequence;
     } arg0;
     /* 0x08 */ int arg1;
     /* 0x0C */ int arg2;

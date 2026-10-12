@@ -295,6 +295,11 @@ typedef struct AkaoTrack {
     /* 0x11A */ AkaoS16 volume_right;
 } AkaoTrack;
 
+/* The voice record that contains a member the voice loops walk: retail biases
+ * those loop cursors to one field and reaches the record back from it. */
+#define AKAO_TRACK_OF(cursor, member) \
+    ((AkaoTrack *)((unsigned char *)(cursor) - PE1_OFFSETOF(AkaoTrack, member)))
+
 /* View at AkaoTrack::update_flags. Tables using this view retain the full
  * AkaoTrack stride while exposing the field the sequencer updates. */
 typedef struct AkaoTrackUpdateSlot {
