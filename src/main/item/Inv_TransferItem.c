@@ -1,141 +1,89 @@
 #include "common.h"
+#include "pe1/aya.h"
 #include "pe1/inventory.h"
 #include "pe1/inventory_queries.h"
 #include "pe1/inventory_state.h"
 #include "pe1/inventory_slots.h"
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 
-#include "Inv_TransferItem_externs.h"
-#define g_BattleCountTable (*(s16 *)&D_800A1FD4_o)
-#define g_AyaEquippedWeaponSlot (*(s8 *)&D_800C0E20_o)
-#define g_AyaEquippedArmorSlot (*(s8 *)&D_800C0E22_o)
+/* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
+s16 *D_8009D048;
+s32 D_8009D050;
+u32 *D_8009D058;
+s32 D_8009D064;
 
-s32 Inv_TransferItem(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
-    register s16 *var_v0 asm("$2");
-    s16 *temp_s0;
-    s32 var_a0;
-    s32 var_a0_2;
-    s32 var_a0_3;
-    s32 var_s4;
-    u16 *temp_a0;
-    u16 *temp_a0_2;
-    u16 *temp_a1;
-    register u16 *var_a1 asm("$5");
-    u32 temp_v0;
-    s8 te20;
-    s8 te22;
-    u8 *tb48;
-    s32 ta1m;
-    s32 ta0m;
-    u32 tl1;
-    u32 tl0;
-    register s32 tsm asm("$2");
-    register u8 *tla asm("$2");
-    u32 temp_v0_2;
-    register u32 tl1b asm("$2");
-    u32 tl0b;
-    u32 temp_v1;
-    u32 temp_v1_2;
+#define LIST_ACTIVE 13
+#define LIST_AYA 14
 
-    g_InvItemPtr = &g_AyaInventoryItems;
-    var_s4 = 1;
+static inline void SwapItems(u16 *a, u16 *b) {
+    *a ^= *b;
+    *b ^= *a;
+    *a ^= *b;
+}
+
+static inline int IsEquippedSlot(int slot) {
+    int equipped = 0;
+    if (g_InvItemPtr == g_AyaInventoryItems &&
+        (g_EquippedWeaponSlot == slot || g_EquippedArmorSlot == slot)) {
+        equipped = 1;
+    }
+    return equipped;
+}
+
+/* Swaps an item between Aya's inventory and the active (pending) list, or
+ * inside one of them. Returns 0 when the slot cannot move. */
+int Inv_TransferItem(int fromList, int fromSlot, int toList, int toSlot) {
+    int result = 1;
+
+    g_InvItemPtr = g_AyaInventoryItems;
     g_InvSlotLimit = Inv_GetAyaSlotLimit();
-    g_InvSelectionBits = &g_AyaItemSelectionBits;
+    g_InvSelectionBits = g_AyaItemSelectionBits;
     g_InvSelectionBitWords = 2;
-    if (arg0 == 0xD) {
-        if (arg2 == arg0) {
-            var_v0 = (s16 *)&D_800A1FD4_o;
-            var_a1 = &((u16 *)&D_800A1FD4_o)[arg1];
-            var_a0 = arg3 * 2;
-            goto block_33;
+    if (fromList == LIST_ACTIVE && toList == fromList) {
+        u16 *table = (u16 *)g_BattleCountTable;
+        SwapItems(&table[fromSlot], &table[toSlot]);
+    } else if (fromList == LIST_AYA && toList == fromList) {
+        int slot;
+        SwapItems((u16 *)&g_InvItemPtr[fromSlot], (u16 *)&g_InvItemPtr[toSlot]);
+        slot = g_EquippedWeaponSlot;
+        if (slot == fromSlot) {
+            g_EquippedWeaponSlot = toSlot;
+        } else if (slot == toSlot) {
+            g_EquippedWeaponSlot = fromSlot;
         }
-    }
-    if (arg0 == 0xE) {
-        if (arg2 == arg0) {
-            ta1m = arg1 * 2;
-            tb48 = (u8 *)g_InvItemPtr;
-            ta0m = arg3 * 2;
-            temp_a1 = (u16 *)(ta1m + (u32)tb48);
-            temp_a0 = (u16 *)(ta0m + (u32)tb48);
-            tl1 = *temp_a1;
-            tl0 = *temp_a0;
-            temp_v0 = tl1 ^ tl0;
-            *temp_a1 = temp_v0;
-            temp_v1 = *temp_a0 ^ temp_v0;
-            *temp_a0 = temp_v1;
-            *temp_a1 ^= temp_v1;
-            te20 = g_AyaEquippedWeaponSlot;
-            if (te20 == arg1) {
-                (*(s8 *)&D_800C0E20_w2) = arg3;
-            } else if (te20 == arg3) {
-                (*(s8 *)&D_800C0E20_w2) = arg1;
-            }
-            te22 = g_AyaEquippedArmorSlot;
-            if (te22 == arg1) {
-                (*(s8 *)&D_800C0E22_w2) = arg3;
-            } else if (te22 == arg3) {
-                (*(s8 *)&D_800C0E22_w2) = arg1;
-            }
-            Inv_RebuildSelectableMask();
-            return var_s4;
+        slot = g_EquippedArmorSlot;
+        if (slot == fromSlot) {
+            g_EquippedArmorSlot = toSlot;
+        } else if (slot == toSlot) {
+            g_EquippedArmorSlot = fromSlot;
         }
-    }
-    if (arg0 == 0xD) {
-        if (Inv_IsSlotSelectable(arg3) != 0) {
-            var_a0_2 = 0;
-            if ((g_InvItemPtr == &g_AyaInventoryItems) && ((g_AyaEquippedWeaponSlot == arg3) || (g_AyaEquippedArmorSlot == arg3))) {
-                var_a0_2 = 1;
-            }
-            if (var_a0_2 == 0) {
-                tsm = arg1 * 2;
-                temp_s0 = (s16 *)(tsm + (u8 *)&D_800A1FD4_o);
-                if ((Item_LookupBaseData(*temp_s0 - 1)->kind >= 0x10U) && (Item_LookupBaseData(*temp_s0 - 1)->kind < 0x13U)) {
-                    var_s4 = Inv_CanAddActiveListItemToAya(arg1) == 0;
-                } else {
-                    tla = (u8 *)&D_800A1FD4_o;
-                    ta1m = arg1 * 2;
-                    var_a1 = (u16 *)(ta1m + tla);
-                    var_v0 = g_InvItemPtr;
-                    var_a0 = arg3 * 2;
-                    goto block_33;
-                }
-                Inv_RebuildSelectableMask();
-                return var_s4;
-            }
-            goto block_35;
+    } else if (fromList == LIST_ACTIVE) {
+        s16 *item;
+        if (!Inv_IsSlotSelectable(toSlot) || IsEquippedSlot(toSlot)) {
+            goto blocked;
         }
-    }
-    else
-    {
-    if (Inv_IsSlotSelectable(arg1) != 0) {
-        var_a0_3 = 0;
-        if ((g_InvItemPtr == &g_AyaInventoryItems) && ((g_AyaEquippedWeaponSlot == arg1) || (g_AyaEquippedArmorSlot == arg1))) {
-            var_a0_3 = 1;
+        {
+            s16 *table = g_BattleCountTable;
+            item = &table[fromSlot];
         }
-        if (var_a0_3 == 0) {
-            ta1m = arg1 * 2;
-            tla = (u8 *)g_InvItemPtr;
-            var_a0 = arg3 * 2;
-            var_a1 = (u16 *)(ta1m + (u32)tla);
-            var_v0 = (s16 *)&D_800A1FD4_o;
-block_33:
-            temp_a0_2 = (u16 *)(var_a0 + (u32)var_v0);
-            tl1b = *var_a1;
-            tl0b = *temp_a0_2;
-            temp_v0_2 = tl1b ^ tl0b;
-            *var_a1 = temp_v0_2;
-            temp_v1_2 = *temp_a0_2 ^ temp_v0_2;
-            *temp_a0_2 = temp_v1_2;
-            *var_a1 ^= temp_v1_2;
-block_34:
-            Inv_RebuildSelectableMask();
-            goto return_result;
+        if (Item_LookupBaseData(*item - 1)->kind >= 16 && Item_LookupBaseData(*item - 1)->kind < 19) {
+            result = Inv_CanAddActiveListItemToAya(fromSlot) == 0;
+        } else {
+            u16 *table = (u16 *)g_BattleCountTable;
+            SwapItems(&table[fromSlot], (u16 *)&g_InvItemPtr[toSlot]);
         }
+    } else {
+        if (!Inv_IsSlotSelectable(fromSlot) || IsEquippedSlot(fromSlot)) {
+            goto blocked;
+        }
+        SwapItems((u16 *)&g_InvItemPtr[fromSlot], (u16 *)&g_BattleCountTable[toSlot]);
     }
-    }
-block_35:
-    var_s4 = 0;
-return_result:
-    return var_s4;
+    Inv_RebuildSelectableMask();
+    goto done;
+blocked:
+    result = 0;
+done:
+    return result;
 }

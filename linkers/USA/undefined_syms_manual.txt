@@ -2097,3 +2097,8 @@ g_FontSelectionState = 0x80091A1C;
 /* Three script bytes opcode 0x961 stores and opcode 0x962 passes on
  * (Task_DispatchScriptCmd). */
 g_ScriptCameraBytes = 0x8009CDF8;
+
+/* Scalar views of AyaSaveState.equipped_weapon_slot/equipped_armor_slot
+ * (Inv_TransferItem). */
+g_EquippedWeaponSlot = 0x800C0E20;
+g_EquippedArmorSlot = 0x800C0E22;

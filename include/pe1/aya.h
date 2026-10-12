@@ -100,6 +100,11 @@ extern u16 g_AyaHpCurrent[];
 extern u8 g_AyaInventorySlotCount[];
 extern s8 g_AyaEquippedWeaponSlot[];
 extern s8 g_AyaEquippedArmorSlot[];
+/* Scalar views of the same two bytes for -G8 units with MASPSX_FORCE_G0:
+ * cc1 then addresses each access directly (absolute after MASPSX) instead of
+ * keeping the address in a register as it does for the arrays. */
+extern s8 g_EquippedWeaponSlot;
+extern s8 g_EquippedArmorSlot;
 extern s32 g_AyaBonusPoints[];
 extern u32 g_AyaParasiteSpellFlags[];
 extern u16 g_AyaStatAgility[];
