@@ -132,7 +132,6 @@ typedef struct WrapperArgs {
 int Pm_ScriptSendCommand0(WrapperArgs *args) {
     int *ptr0;
     int *ptr2;
-    int *ptr3;
     int *ptr4;
     int value4;
     int value0;
@@ -144,8 +143,7 @@ int Pm_ScriptSendCommand0(WrapperArgs *args) {
     value4 = *ptr4;
     value0 = *ptr0;
     value2 = *ptr2;
-    ptr3 = args->arg3;
-    Pm_SendCmd(value0, 0, value2, *(volatile int *)ptr3, value4, *(volatile int *)args->arg5);
+    Pm_SendCmd(value0, 0, value2, *args->arg3, value4, *args->arg5);
     return 1;
 }
 
