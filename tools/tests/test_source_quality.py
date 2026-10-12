@@ -62,7 +62,7 @@ class SourceQualityTests(unittest.TestCase):
     def test_max_level_inventory_is_semantic_c(self):
         root = pathlib.Path(__file__).resolve().parents[2]
         self.assertEqual(source_quality.classify(
-            root / "src/main/item/Inv_InitMaxLevelInventory.c"), "semantic_c")
+            root / "src/main/save/Inv_InitMaxLevelInventory.c"), "semantic_c")
 
     def test_memcard_dialog_workflow_is_semantic_c(self):
         root = pathlib.Path(__file__).resolve().parents[2]
