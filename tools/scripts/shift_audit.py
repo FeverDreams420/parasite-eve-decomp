@@ -16,8 +16,12 @@ executable and the built overlays, and prints one table per area:
   (d) how the overlays learn main's addresses;
   (e) layout that is fixed in the linker script or the executable header.
 
-`--json` prints the same inventory as JSON. `--check BASELINE` fails when a
-counted category grows past the JSON baseline (for later CI use).
+`--json` prints the same inventory as JSON. `--check [BASELINE]` (`make
+shift-check`) is the ratchet: it adds the hidden-address counts of
+`shift_test.py` and fails when any counted category grows past the committed
+baseline `tools/shift_baseline.json`; `--update-baseline` (`make
+shift-baseline`) rewrites it. Both need `make build` and `make
+overlay-build-all`.
 """
 from __future__ import annotations
 
@@ -732,12 +736,19 @@ def render(report: dict) -> str:
     return "\n".join(out)
 
 
+# Categories that are catalogue or bookkeeping, not a fixed address: they may
+# grow (a decompiled reference can make a manual symbol unreferenced).
+UNCOUNTED = {"unreferenced", "overlays_built", "overlays_not_built"}
+BASELINE = ROOT / "tools" / "shift_baseline.json"
+
+
 def flat_counts(report: dict) -> dict[str, int]:
     flat = {}
     for name, info in report["linker_assignments"].items():
         if info["linked"]:
             for cat, n in info["categories"].items():
-                flat[f"{name}:{cat}"] = n
+                if cat not in UNCOUNTED:
+                    flat[f"{name}:{cat}"] = n
     for scope, c in report["source"].items():
         for k, n in c.items():
             flat[f"src:{scope}:{k}"] = n
@@ -745,26 +756,81 @@ def flat_counts(report: dict) -> dict[str, int]:
         for k, n in report["executable"]["unrelocated"].items():
             flat[f"exe:unrelocated:{k}"] = n
         flat["exe:relocs_to_absolute_program"] = report["executable"]["relocs_to_absolute"].get("program", 0)
+    for k, n in report["overlays"]["totals"].items():
+        if k not in UNCOUNTED:
+            flat[f"overlays:{k}"] = n
+    for k, n in report.get("shift_test", {}).items():
+        flat[f"shift_test:{k}"] = n
     return flat
+
+
+def shift_test_counts(pad: int = 0x10) -> dict[str, int]:
+    """The hidden-address counts of `shift_test.py` (padded relink comparison)."""
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+    from tools.scripts import shift_test
+
+    with tempfile.TemporaryDirectory(prefix="shift_check_") as tmp:
+        m = shift_test.measure(pad, Path(tmp))
+    if not m.base_identical:
+        sys.exit("shift-check: the base relink differs from build/USA/main.exe; rebuild first")
+    if m.shifted_error is not None:
+        sys.exit("shift-check: the shifted relink failed:\n" + m.shifted_error)
+    return {k: m.counts.get(k, 0) for k in shift_test.HIDDEN}
+
+
+def check(counts: dict[str, int], baseline_path: Path) -> int:
+    baseline = json.loads(baseline_path.read_text())
+    baseline = baseline.get("counts", baseline)
+    worse = [(k, baseline.get(k, 0), v) for k, v in sorted(counts.items()) if v > baseline.get(k, 0)]
+    better = [(k, b, counts.get(k, 0)) for k, b in sorted(baseline.items()) if counts.get(k, 0) < b]
+    for k, b, v in worse:
+        print(f"shift-check: {k} grew {b} -> {v}", file=sys.stderr)
+    if worse:
+        print("A fixed program address was added; refer to the owning symbol instead "
+              "(docs/CODE_ORGANIZATION.md, Shiftability).", file=sys.stderr)
+        return 1
+    if better:
+        print("Shiftability improved; lower the ratchet with `make shift-baseline`:")
+        for k, b, v in better:
+            print(f"  {k}: {b} -> {v}")
+    print("OK: no fixed-address category grew past tools/shift_baseline.json.")
+    return 0
 
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--json", action="store_true")
     parser.add_argument("--no-relocs", action="store_true", help="skip the --emit-relocs relink")
-    parser.add_argument("--check", type=Path, help="fail if a count exceeds this JSON baseline")
+    parser.add_argument("--check", nargs="?", type=Path, const=BASELINE,
+                        help="fail if a count exceeds this JSON baseline (default tools/shift_baseline.json)")
+    parser.add_argument("--update-baseline", action="store_true",
+                        help="write the current counts to tools/shift_baseline.json")
+    parser.add_argument("--require-overlays", action="store_true",
+                        help="with --check, fail instead of warning when an overlay is not built")
     args = parser.parse_args(argv)
-    report = collect(with_relocs=not args.no_relocs)
+    ratchet = args.check is not None or args.update_baseline
+    report = collect(with_relocs=ratchet or not args.no_relocs)
+    if ratchet:
+        missing = report["overlays"]["totals"].get("overlays_not_built", 0)
+        if missing and (args.update_baseline or args.require_overlays):
+            sys.exit(f"shift-check: {missing} overlays are not built; run `make overlay-build-all` first")
+        if missing:
+            # Unbuilt overlays only lower the overlay counts, so the check
+            # stays sound for everything else; CI requires them.
+            print(f"shift-check: {missing} overlays not built, overlay counts not fully checked")
+        report["shift_test"] = shift_test_counts()
+    if args.update_baseline:
+        counts = flat_counts(report)
+        BASELINE.write_text(json.dumps({"counts": counts}, indent=1, sort_keys=True) + "\n")
+        print(f"wrote {BASELINE.relative_to(ROOT)} ({len(counts)} counts)")
+        return 0
+    if args.check is not None:
+        return check(flat_counts(report), args.check)
     if args.json:
         print(json.dumps({"report": report, "counts": flat_counts(report)}, indent=1, default=list))
     else:
         print(render(report))
-    if args.check:
-        baseline = json.loads(args.check.read_text())
-        worse = [(k, v, baseline.get(k, 0)) for k, v in flat_counts(report).items() if v > baseline.get(k, 0)]
-        for k, v, b in worse:
-            print(f"shift-audit: {k} grew {b} -> {v}", file=sys.stderr)
-        return 1 if worse else 0
     return 0
 
 

@@ -65,7 +65,7 @@ OBJS := $(ASM_OBJS) $(C_OBJS)
 C_DEPS := $(C_OBJS:.o=.o.d)
 -include $(C_DEPS)
 
-.PHONY: expected objdiff-config progress-audit report report-audit all build check check-sources source-policy-check ci verify verify-clean clean diff distclean overlay-build overlay-build-all overlay-check overlay-check-all overlay-clean overlay-extract overlay-split permute progress debt debt-check debt-baseline organization-check organization-baseline test drop-pins drop-barriers drop-aliases shift-audit shift-test split split-if-needed tools
+.PHONY: expected objdiff-config progress-audit report report-audit all build check check-sources source-policy-check ci verify verify-clean clean diff distclean overlay-build overlay-build-all overlay-check overlay-check-all overlay-clean overlay-extract overlay-split permute progress debt debt-check debt-baseline organization-check organization-baseline test drop-pins drop-barriers drop-aliases shift-audit shift-test shift-check shift-baseline split split-if-needed tools
 
 all: verify
 
@@ -137,7 +137,9 @@ source-policy-check:
 ci: check-sources source-policy-check debt-check organization-check
 
 # Canonical acceptance target when the local retail image/toolchain is present.
+# shift-check reads the build, so it runs after `check` has produced it.
 verify: ci check
+	@$(MAKE) --no-print-directory shift-check
 
 # Use before merging structural, toolchain, manifest, or shared-header changes.
 verify-clean:
@@ -187,6 +189,16 @@ shift-audit:
 	@$(PY) tools/scripts/shift_audit.py
 shift-test:
 	@$(PY) tools/scripts/shift_test.py $(if $(PAD),--pad $(PAD),)
+
+# Shiftability ratchet: fail when a fixed-address count grows past
+# tools/shift_baseline.json. Needs `make build`; the overlay counts are only
+# checked when `make overlay-build-all` has built every overlay (CI sets
+# SHIFT_REQUIRE_OVERLAYS=1 so they are never skipped there).
+shift-check:
+	@$(PY) tools/scripts/shift_audit.py --check $(if $(SHIFT_REQUIRE_OVERLAYS),--require-overlays,)
+
+shift-baseline:
+	@$(PY) tools/scripts/shift_audit.py --update-baseline
 
 # Disassemble the retail binaries into objdiff's target objects. This is a
 # fresh second split against an empty source tree - never a copy of our own

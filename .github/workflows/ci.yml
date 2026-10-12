@@ -189,6 +189,11 @@ jobs:
       - name: Verify the overlays against the retail SHA-1s
         run: make overlay-check-all
 
+      # Shiftability ratchet: no fixed program address may be added
+      # (tools/shift_baseline.json, docs/CODE_ORGANIZATION.md).
+      - name: Check that no fixed-address count grew
+        run: make shift-check SHIFT_REQUIRE_OVERLAYS=1
+
       - name: Generate the target objects and the progress report
         run: make report
 
