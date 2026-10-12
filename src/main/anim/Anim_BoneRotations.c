@@ -249,10 +249,7 @@ void Anim_DecodeBoneRotationsByte(RenderObjectEntity *object, RenderAnimationDat
 }
 
 void Anim_DecodeBoneRotationsShort(RenderObjectEntity *object, RenderAnimationDataHeader *data, s16 frame) {
-    /* Without the pin the bone counter, which lives through both loops
-     * but is dead between them, outranks the angle pointer by two insns of
-     * live length and takes $s2. */
-    register GteShortVector *angle asm("$18");
+    GteShortVector *angle;
     s16 bone;
     s32 value;
     s32 *translation;
@@ -310,6 +307,8 @@ void Anim_DecodeBoneRotationsShort(RenderObjectEntity *object, RenderAnimationDa
                 sampleY = *(u16 *)(frameOffset + sampleBase.address);
                 cursor = cursor + channelStride;
             }
+            /* Keep the vector pointer live through the Y-channel store. */
+            asm volatile("" : : "r"(angle));
             angleZ[-1] = sampleY;
             sampleBase.samples = ((RenderAnimShortChannel *)cursor)->samples.unsigned_values;
             if (((RenderAnimShortChannel *)cursor)->constant_marker != 0) {
