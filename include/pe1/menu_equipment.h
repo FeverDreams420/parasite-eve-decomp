@@ -11,8 +11,8 @@
 void Menu_StepSaveLoadScreen(void);
 int Menu_SaveLoadNavigate(MenuWidgetNode *node, unsigned int flags);
 int Menu_InventoryInputHandler(MenuWidgetNode *node, unsigned int flags);
-void Menu_DrawArmorListContainer(int node);
-void Menu_DrawArmorSelectionList(int node);
+void Menu_DrawArmorListContainer(MenuWidgetNode *node);
+void Menu_DrawArmorSelectionList(MenuWidgetNode *node);
 void Menu_DrawSelectableEquipSlotList(MenuWidgetNode *node);
 void Menu_RebuildSelectableMask(void);
 int Inv_TransferItem(int arg0, int arg1, int arg2, int arg3);

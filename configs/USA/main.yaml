@@ -111,7 +111,7 @@ segments:
       - [0x1834, .rodata, menu/Menu_CreateMainMenuView]
       - [0x184C, .rodata, menu/Menu_Dialogs]
       - [0x1940, rodata, main/rodata_001940]
-      - [0x1944, .rodata, menu/Menu_InventoryCategoryLists]
+      - [0x1944, .rodata, menu/Menu_InventoryScreens]
       - [0x1958, .rodata, battle/BattleCmd_StackFlow]
       - [0x196C, rodata, main/rodata_00196C]
       - [0x1970, .rodata, battle/Inv_ActiveListCommand]
@@ -421,26 +421,15 @@ segments:
       - [0x3E564, c, menu/Menu_OpenRenameScreen]
       # Name entry page input handlers: private data and helpers join the pair.
       - [0x3E874, c, menu/Menu_NameEntryFlow]
-      # Equip and inventory screen builders and the equip list container draw: helper calls join the run (G0462).
-      - [0x3EF04, c, menu/Menu_OpenEquipInventoryScreens]
-      # Weapon and armor list draws, the inventory category step and the battle
-      # command list draw.
-      - [0x3F43C, c, menu/Menu_InventoryCategoryLists]
-      - [0x3F758, c, menu/Menu_InventoryPageNavHandler]
-      - [0x3FA3C, c, menu/Menu_OpenSkillSelectionView]
-      # Inventory pick for an equipment swap and the swap-return step share the
-      # swap source and pending flag.
-      - [0x3FB0C, c, menu/Menu_EquipSwap]
-      # Item use panel creation, input and name header: helper calls join the pair.
-      - [0x3FC90, c, menu/Menu_ItemUsePanel]
-      - [0x3FFD8, c, menu/Menu_EquipItemIcon]
-      # Item, equip-slot, context-action, action-option and action-code list
-      # renderers share the active widget and item list state.
-      - [0x40038, c, menu/Menu_DrawListRenderers]
-      - [0x40348, c, menu/Menu_DrawEquipSelectionList]
-      # Item-slot availability, modifier, armor and memory-card port list draws and
-      # the port and save-slot selectability filters: contiguous list callbacks.
-      - [0x4043C, c, menu/Menu_SelectionListCallbacks]
+      # Inventory screens (G0464): equip and inventory screen builders and the equip
+      # list container draw (helper calls, G0462); weapon and armor list draws, the
+      # inventory category step and the battle command list draw; the inventory pick
+      # for an equipment swap and the swap-return step (swap source and pending flag);
+      # item use panel creation, input and name header; item, equip-slot,
+      # context-action, action-option and action-code list renderers (active widget
+      # and item list state); item-slot availability, modifier, armor and memory-card
+      # port list draws and the port and save-slot selectability filters.
+      - [0x3EF04, c, menu/Menu_InventoryScreens]
       - [0x406EC, c, menu/Menu_DrawSaveSlotList]
       # Contiguous list-draw adapters with the icon, save-slot, sound-effect and
       # equip-detail lists and the equip sort-toggle and info-option rows.

@@ -28,7 +28,7 @@ extern int g_MenuItemActionStateTable[][3];
 void *Inv_LookupActiveListDisplayData(int index);
 void Menu_DrawItemLabel(MenuWidgetNode *node);
 int Menu_ConfirmDialogHandler(void *node, int flags);
-void Menu_DrawActionOptionList(void *node);
+void Menu_DrawActionOptionList(MenuWidgetNode *node);
 void Menu_OnItemDiscardConfirm(MenuWidgetNode *node, int confirmed);
 void Menu_StepItemDetailPanel(void);
 
