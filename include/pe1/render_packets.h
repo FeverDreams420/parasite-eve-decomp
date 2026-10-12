@@ -52,6 +52,18 @@ typedef struct RenderBufferPrefix {
     char *packets[2];
 } RenderBufferPrefix;
 
+/* A buffer-table slot addressed by the draw slot's word offset. */
+typedef union RenderBufferSlotAddress {
+    char **buffer;
+    u32 **ordering;
+    u32 word;
+} RenderBufferSlotAddress;
+/* The buffer table seen from other_buffers[1]; offset by the draw slot's
+ * word, its ordering[0] is that slot's ordering table. */
+#define RENDER_BUFFERS_FROM_GLYPH_SLOT(pointer) \
+    ((RenderBufferPrefix *)((char *)(pointer) - \
+        PE1_OFFSETOF(RenderBufferPrefix, other_buffers[1])))
+
 /* Renderer view of the shared game working state. */
 typedef struct RenderFrameState {
     u32 flags;

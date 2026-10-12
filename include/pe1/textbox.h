@@ -75,6 +75,11 @@ typedef union TextboxTableAddress {
     TextboxGlyphSpacing *spacing;
     u32 address;
 } TextboxTableAddress;
+/* A glyph's spacing entry addressed by the doubled glyph index. */
+typedef union TextboxGlyphSpacingAddress {
+    TextboxGlyphSpacing *spacing;
+    u32 word;
+} TextboxGlyphSpacingAddress;
 extern u8 D_8009EC70[];
 extern u8 D_8009EC78[];
 extern u8 D_8009EC86[];
