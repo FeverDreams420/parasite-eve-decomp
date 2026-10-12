@@ -102,9 +102,9 @@ ROOM_REARM_TIMER_TICK(RoomFx_FallingBurstTick, 4)
 void RoomFx_InitFallingSprite(void *entity, void *unused,
                               RoomFallingSpriteState *state) {
     RoomFxSeed8 positionSeed;
-    unsigned short position[4];
+    GteShortVector position;
     RoomFxSeed8 velocitySeed;
-    unsigned short velocity[4];
+    GteShortVector velocity;
     FieldActor **root;
     RenderMatrix *view;
 
@@ -113,11 +113,11 @@ void RoomFx_InitFallingSprite(void *entity, void *unused,
     velocitySeed = s_FallingSpriteVelocitySeed;
     view = &(*root)->render_object.matrices[5];
     ApplyMatrixSV((GteMatrix *)view, &positionSeed.vector,
-                  (GteShortVector *)position);
+                  &position);
 
-    state->x = position[0] + view->translation[0];
-    state->y = position[1] + view->translation[1];
-    state->z = position[2] + view->translation[2];
+    state->x = (u16)position.x + view->translation[0];
+    state->y = (u16)position.y + view->translation[1];
+    state->z = (u16)position.z + view->translation[2];
     state->scale = 0x100;
     state->depth = 0x80;
     state->verticalStep = 0;
@@ -129,10 +129,10 @@ void RoomFx_InitFallingSprite(void *entity, void *unused,
         state->velocityZ = func_80071A54() % 10 - 5;
     } else {
         ApplyMatrixSV((GteMatrix *)view, &velocitySeed.vector,
-                      (GteShortVector *)velocity);
-        state->velocityX = velocity[0] * 2;
+                      &velocity);
+        state->velocityX = (u16)velocity.x * 2;
         state->velocityY = 0;
-        state->velocityZ = velocity[2] * 2;
+        state->velocityZ = (u16)velocity.z * 2;
     }
 
     func_800C6800(entity, 0x583, state);
