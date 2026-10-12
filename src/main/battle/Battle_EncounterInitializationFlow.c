@@ -5,6 +5,7 @@
 #include "pe1/battle_palette.h"
 #include "pe1/battle.h"
 #include "pe1/battle_start.h"
+#include "pe1/battle_status.h"
 
 /* COMMON supplies small-data metadata to MASPSX; the other battle words
  * stay absolute. cc1 runs at -G0 so the story-day flags byte (D_800B0CE6)
@@ -92,82 +93,14 @@ void Battle_ResetEnemyStats(int mode) {
 
 
 
+/* Reset the PE gauge fill and remainder gradients of both draw buffers. */
 void Battle_SetupPlayerPalette(void) {
-    int c2;
-    int c3;
-    int c4;
-    int c5;
-    int c6;
-    register int c7 asm("$7");
     u8 *flags;
 
-    c6 = 0x82;
-    c5 = 0x36;
-    c4 = 0x4A;
-    c2 = 0xFF;
-    asm("" : : "r"(c2));
-    c3 = 0x3B;
-    c7 = 0x3D;
-    asm("" : : "r"(c2), "r"(c7));
-
-    D_800B0135[0] = c6;
-    D_800B0145[0] = c6;
-    D_800B017D[0] = c6;
-    D_800B018D[0] = c6;
-
-    c6 = 0x81;
-    D_800B0136[0] = c5;
-    D_800B0146[0] = c5;
-    D_800B017E[0] = c5;
-    D_800B018E[0] = c5;
-
-    c5 = 0x83;
-    D_800B013C[0] = c4;
-    D_800B014C[0] = c4;
-    D_800B0184[0] = c4;
-    D_800B0194[0] = c4;
-
-    c4 = 0x13;
-    D_800B013E[0] = c3;
-    D_800B014E[0] = c3;
-    D_800B0186[0] = c3;
-    D_800B0196[0] = c3;
-
-    c3 = 1;
-    D_800B0134[0] = 0;
-    D_800B013D[0] = c2;
-    D_800B0144[0] = 0;
-    D_800B014D[0] = c2;
-    D_800B017C[0] = 0;
-    D_800B0185[0] = c2;
-    D_800B018C[0] = 0;
-    D_800B0195[0] = c2;
-
-    D_800B0158[0] = c2;
-    D_800B0159[0] = c7;
-    D_800B015A[0] = c6;
-    D_800B0160[0] = c5;
-    D_800B0161[0] = c4;
-    D_800B0162[0] = c3;
-    D_800B0168[0] = c2;
-    D_800B0169[0] = c7;
-    D_800B016A[0] = c6;
-    D_800B0170[0] = c5;
-    D_800B0171[0] = c4;
-    D_800B0172[0] = c3;
-    D_800B01A0[0] = c2;
-    D_800B01A1[0] = c7;
-    D_800B01A2[0] = c6;
-    D_800B01A8[0] = c5;
-    D_800B01A9[0] = c4;
-    D_800B01AA[0] = c3;
-    D_800B01B0[0] = c2;
-    D_800B01B1[0] = c7;
-    D_800B01B2[0] = c6;
-    D_800B01B8[0] = c5;
-    D_800B01B9[0] = c4;
-    D_800B01BA[0] = c3;
-
+    Battle_SetGaugeGradient(&D_800B0130[0][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
+    Battle_SetGaugeGradient(&D_800B0130[1][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
+    Battle_SetGaugeGradient(&D_800B0130[0][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
+    Battle_SetGaugeGradient(&D_800B0130[1][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
     Battle_FlushScriptSounds();
     D_8009D2EC = 0;
     D_8009D2A0 = 0;
@@ -185,7 +118,7 @@ void Battle_StartEncounter(int mode) {
     int neg_one;
     BattleEntity *entity;
     Combatant *actor;
-    u32 value;
+    s32 value;
     int mode_reg;
     u32 initial_flags;
     entity = D_8009D254;
@@ -227,13 +160,13 @@ void Battle_StartEncounter(int mode) {
 
     actor = D_8009D278;
     value = actor->exp_or_acc;
-    if ((s32)value <= 0) {
+    if (value <= 0) {
         actor->exp_or_acc = 0x10000;
     } else {
-        u32 max_value;
+        s32 max_value;
 
         max_value = actor->maxAtk;
-        if ((s32)value >= (s32)max_value) {
+        if (value >= max_value) {
             actor->exp_or_acc = max_value;
             actor->atbGauge = 0xF0;
         }

@@ -77,6 +77,26 @@ extern RenderPagedSpritePacket D_8009E320[2];   /* PE label */
 extern RenderGouraudQuad D_800B00E8[2];         /* ATB gauge fill */
 extern RenderGouraudQuad D_800B0130[2][2];      /* PE gauge fill, remainder */
 extern RenderPagedSpritePacket D_800B6920[2];   /* ATB gauge marker */
+/* Color a gauge quad: vertices 0 and 2 take the first color, 1 and 3 the
+ * second (the PSY-Q setRGB0..setRGB3 sequence). */
+static inline void Battle_SetGaugeGradient(RenderGouraudQuad *quad,
+                                           int r0, int g0, int b0,
+                                           int r1, int g1, int b1)
+{
+    quad->r0 = r0;
+    quad->g0 = g0;
+    quad->b0 = b0;
+    quad->r1 = r1;
+    quad->g1 = g1;
+    quad->b1 = b1;
+    quad->r2 = r0;
+    quad->g2 = g0;
+    quad->b2 = b0;
+    quad->r3 = r1;
+    quad->g3 = g1;
+    quad->b3 = b1;
+}
+
 /* HP digit packets: current HP has four per draw buffer, maximum HP five
  * (digits and slash). Battle_DrawEnemyHP addresses the sprites from the
  * sprite, each followed by the texture-page command of the next packet (the
