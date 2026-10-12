@@ -165,15 +165,9 @@ int Battle_StepCharacterAction(BattleInitSlot *slot)
             result = 1; break;
         }
         }
-<<<<<<< HEAD
         { EnemyCombatant *enemy;
         { BattleInitSlotAddress at; at.slot = D_800BE830; at.address = at.address + offset; enemy = (EnemyCombatant *)at.slot->actor->core; }
         if (!(enemy->hpAlive > 0 && enemy)) {
-||||||| parent of 01cc5a43e (Address battle queue slots and the sound table copy through unions)
-        { EnemyCombatant *enemy = (EnemyCombatant *)((BattleInitSlot *)((u8 *)D_800BE830 + offset))->actor->core; if (!(enemy->hpAlive > 0 && enemy)) {
-=======
-        { EnemyCombatant *enemy; BattleInitSlotAddress at; at.slot = D_800BE830; at.word += offset; enemy = (EnemyCombatant *)at.slot->actor->core; if (!(enemy->hpAlive > 0 && enemy)) {
->>>>>>> 01cc5a43e (Address battle queue slots and the sound table copy through unions)
             Entity_SetActionMode(D_8009D254, active->actionMode12);
             D_8009D1D4++;
             D_8009D278->stateFlags |= 0x200000;
