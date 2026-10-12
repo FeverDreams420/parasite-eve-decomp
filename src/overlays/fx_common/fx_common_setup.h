@@ -88,7 +88,9 @@ FxCommonNode *func_80190AEC(FxCommonNode *,void *);
 FxCommonNode *func_80190B78(FxCommonNode *,s16,void *);
 FxCommonNode *func_80190C1C(FxCommonNode *,s16,s16,s16,void *,void *,void *);
 void func_80191854(void);
-void func_80195994(int,int,int,int);
+/* The two camera lanes advance for 1 << durationShift frames. */
+void func_80195994(int setupIndex, int targetDurationShift,
+                   int eyeDurationShift, u32 pathPosition);
 void func_80195F6C(void);
 
 /* Double-buffered full-screen gradient overlays and their draw-mode
