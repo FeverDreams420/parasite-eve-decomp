@@ -119,7 +119,8 @@ int func_80198400(int event) {
     vertices[1]=*(GteShortVector *)&D_8019A8A0;
     vertices[2]=D_8019A8B0;
     {
-        int valid=D_8019A8AE;
+        /* The saved endpoint uses its fourth halfword as a validity flag. */
+        int valid=D_8019A8A8.pad;
         vertices[3]=D_8019A8A8;
         if(!valid) return 0;
         {
