@@ -75,9 +75,13 @@ another subsystem than its neighbours' lives in its own subsystem's
 directory (`menu/main_update.c` lies between field and battle code).
 `make organization-check` counts names that break these rules
 (`unconventional_files`, ratcheted at zero). Overlay units keep their
-current names (`RoomLib_ActorClasses.c`). The function-style names the
-`src/main` units had before are listed with their new paths in
-`tools/reorg/maps/step9_snake_case_names.csv`.
+current names (`RoomLib_ActorClasses.c`), except the two shared-code
+overlays `boot_display` and `menu_memcard`, whose units and templates
+follow the same lower snake-case role rule (`boot_display/text_screen.c`,
+`menu_memcard/video_playback.c`, `menu_memcard/video_open.inc`). The
+function-style names the `src/main` units had before are listed with their
+new paths in `tools/reorg/maps/step9_snake_case_names.csv`, those of the
+two overlays in `tools/reorg/maps/step9_overlay_shared_units.csv`.
 
 **PsyQ file names.** A unit under `psyq/<library>/` is named after the SDK
 object it reproduces, lower case (`INTR_VB` is `intr_vb.c`, the BIOS veneer
