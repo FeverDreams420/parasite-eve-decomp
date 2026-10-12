@@ -375,16 +375,15 @@ def main() -> int:
     def bare_repl(unit):
         def repl(match):
             out = os.path.basename(new)
-            for group in (1, 2):
-                number = match.group(group)
-                if number is None:
-                    continue
-                mapped = linemaps[unit].get(int(number))
-                out += (":" if group == 1 else "-") + (str(mapped) if mapped else number)
+            if match.group(1):
+                out += ":" + re.sub(
+                    r"\d+", lambda n: str(linemaps[unit].get(int(n.group(0)),
+                                                         n.group(0))),
+                    match.group(1))
             return out
         return repl
     bare = [(re.compile(r"(?<![\w/.-])" + re.escape(os.path.basename(u))
-                        + r"(?![\w])(?::(\d+)(?:-(\d+))?)?"), bare_repl(u))
+                        + r"(?![\w])(?::(\d+(?:[-,]\d+)*))?"), bare_repl(u))
             for u in units if basenames.count(os.path.basename(u)) == 1]
     edits: dict[str, str] = {}
     for path in rm.tracked_files():

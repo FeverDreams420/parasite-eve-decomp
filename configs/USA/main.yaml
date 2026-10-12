@@ -80,10 +80,7 @@ segments:
       - [0xEE4, .rodata, battle/Entity_HitAndDropTable]
       - [0xF0C, .rodata, battle/Battle_ApplyEnemyAttack]
       - [0xF4C, rodata, main/rodata_000F4C]
-      - [0xF8C, .rodata, battle/Battle_FinalizeAttackResult]
-      - [0xFA4, .rodata, battle/Battle_ApplyDamage]
-      - [0xFD4, .rodata, battle/Battle_ApplySpellEffect]
-      - [0x1024, .rodata, battle/Battle_StepAyaAction]
+      - [0xF8C, .rodata, battle/Battle_AttackResolution]
       - [0x1068, pad] # retail alignment after the 17-entry Aya action jump table
       - [0x106C, .rodata, battle/Battle_RollEscapeChance]
       - [0x1080, rodata, main/rodata_001080]
@@ -220,11 +217,11 @@ segments:
       - [0x11474, c, battle/Battle_Setup]
       - [0x12738, c, battle/Battle_PlayerTurnFlow]
       - [0x12B94, c, battle/Battle_PhaseAndEnemyEffectFlow]
-      - [0x13808, c, battle/Battle_FinalizeAttackResult]
-      - [0x13EE8, c, battle/Battle_ResolveHitOnTimer]
-      - [0x14614, c, battle/Battle_ApplyDamage]
-      - [0x14A50, c, battle/Battle_ApplySpellEffect]
-      - [0x1523C, c, battle/Battle_StepAyaAction]
+      # Attack resolution: finalise the attack result, resolve hits on the timer,
+      # apply damage and spell effects and step Aya's action. One -G8 FORCE_G0
+      # unit with COMMON $gp words, --expand-div and ASPSX 2.77 (from the Aya
+      # action step; neutral for the rest, as is dropping -fno-force-mem).
+      - [0x13808, c, battle/Battle_AttackResolution]
       - [0x15CBC, c, battle/Battle_DispatchSpecialAction]
       - [0x15DE4, c, battle/Battle_RollEscapeChance]
       - [0x160CC, c, battle/Battle_TargetAndEnemyTurnFlow]

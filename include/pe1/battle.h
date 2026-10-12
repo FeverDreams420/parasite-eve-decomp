@@ -49,7 +49,7 @@ PE1_STATIC_ASSERT(sizeof(BattleGameStateWindow) == 16, battle_game_state_window_
  *
  *   Proof: Battle_DispatchInit.c:17        g_ActiveActor = *g_PlayerEntity;
  *          Battle_DispatchSpecialAction.c:30 g_ActiveActor = actor->core;
- *          Battle_ApplyDamage.c:51          g_ActiveActor = *(void**)g_PlayerEntity;
+ *          Battle_AttackResolution.c:496          g_ActiveActor = *(void**)g_PlayerEntity;
  *          Battle_Set/GetContextField use   ctx = *(u8**)g_PlayerEntity, index ctx.
  *
  *   The old prose notes conflated the two: the side byte / screen coords / a
@@ -194,8 +194,8 @@ typedef struct Combatant {
 /* 0x00 */ u32  coreFlags;     /* bitfield; &0x6000 / &0xC0000 facing, >>13&3 weapon-cat (Battle_GetEnemyContextField.c:28,44,55) */
 /* 0x04 */ CombatantIdentity field04;
 /* 0x06 */ s16  fieldId06;     /* SetContextField case2 (Battle_SetContextField.c:24) */
-/* 0x08 */ s32  exp_or_acc;    /* damage-derived accumulator, clamped to maxAtk@0x28 / 0x10000 (Battle_ApplyDamage.c:92,96) */
-/* 0x0C */ u16  curHP;         /* CURRENT HP -- damage & heal land here; clamped to maxHP@0x1C (Battle_ApplyDamage.c:73-85) */
+/* 0x08 */ s32  exp_or_acc;    /* damage-derived accumulator, clamped to maxAtk@0x28 / 0x10000 (Battle_AttackResolution.c:537,541) */
+/* 0x0C */ u16  curHP;         /* CURRENT HP -- damage & heal land here; clamped to maxHP@0x1C (Battle_AttackResolution.c:518-530) */
 /* 0x0E */ u16  hpMirror;      /* current-HP MIRROR; re-synced from curHP each reset (Battle_ResetEnemyStats.c:42) */
 /* 0x10 */ u16  hpAlive;       /* authoritative ">0 == alive" HP (target tests); on player doubles as EXP/level gauge clamped 0x2328 (Battle_Setup.c:436; Battle_Update.c:155). TENTATIVE width: some reads s32 */
 /* 0x12 */ u8   actionMode12;  /* action-mode id table [0x12..0x19], filled per enemy by facing (Battle_SetupEnemyAnims.c:38-46): 4 idle, 0xD special */
@@ -203,13 +203,13 @@ typedef struct Combatant {
 /* 0x14 */ u8   targetAngleActionModes[3]; /* selected by the relative target angle in Battle_AdvancePhase */
 /* 0x17 */ u8   followUpAngleActionModes[3]; /* modes 7/9/11 that end the attack started by targetAngleActionModes */
 /* 0x1A */ u8   pad_1A[2];
-/* 0x1C */ u16  maxHP;         /* MAX HP; curHP clamped to this (Battle_ApplyDamage.c:85; Battle_ResetEnemyStats.c:34) */
+/* 0x1C */ u16  maxHP;         /* MAX HP; curHP clamped to this (Battle_AttackResolution.c:530; Battle_ResetEnemyStats.c:34) */
 /* 0x1E */ s16  stat1E;        /* SetContextField case11 (Battle_SetContextField.c:42) */
 /* 0x20 */ s16  stat20;        /* SetContextField case12 (Battle_SetContextField.c:45) */
 /* 0x22 */ u16  stat22;        /* base for scaled-offense calc (Battle_SetupEnemyAnims.c:39) */
 /* 0x24 */ u16  scaledOffense; /* = stat22 * tbl[anim] / 10 (Battle_SetupEnemyAnims.c:39) */
 /* 0x26 */ s16  stat26;        /* SetContextField case18 (Battle_SetContextField.c:50) */
-/* 0x28 */ s32  maxAtk;        /* cap for exp_or_acc@0x08 (Battle_ApplyDamage.c:88,95; Battle_StartEncounter.c:116) */
+/* 0x28 */ s32  maxAtk;        /* cap for exp_or_acc@0x08 (Battle_AttackResolution.c:533,540; Battle_StartEncounter.c:116) */
 /* 0x2C */ s32  atbStep;       /* per-frame increment subtracted from atbRate */
 /* 0x30 */ s32  atbRate;       /* divisor/rate used while charging exp_or_acc */
 /* 0x34 */ s32  atbGauge;      /* ATB / "AT" gauge; reset 0, latched 0xF0 (Battle_ResetEnemyStats.c:41; Battle_StartEncounter.c:119) */
@@ -347,7 +347,7 @@ typedef struct BattleAction {
                struct { u8 actionIdByte; u8 field07; } bytes;
            } actionCode;
 /* 0x08 */ s32  hitTrigger;    /* anim-row byte matched against the hit timer */
-/* 0x0C */ u32  attackWord;    /* &0x3FF = shot/hit countdown (consumed per hit), >>0x14&3 = weapon category (Battle_DrawATBGauge.c:55; Battle_FinalizeAttackResult.c:34) */
+/* 0x0C */ u32  attackWord;    /* &0x3FF = shot/hit countdown (consumed per hit), >>0x14&3 = weapon category (Battle_DrawATBGauge.c:55; Battle_AttackResolution.c:51) */
 /* 0x10 */ u32  turnWord;      /* &0xF = remaining actions, >>4&3 = active turn slot, &0xC0 = action mode, 0x100..0x1000 = attack element (Battle_Setup.c:195; Battle_AdvanceTurnSlot.c:70; Battle_StartEnemyAttackEffect.c:26) */
 /* 0x14 */ u8   animMode[4];   /* per-facing anim/effect ids [0x14..0x17], filled from a 5-byte table (Battle_Setup.c:197; Battle_SetupEntityTarget.c:55) */
                                /* ... continues; rest unmapped */
