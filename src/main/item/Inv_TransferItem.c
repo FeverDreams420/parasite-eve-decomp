@@ -7,11 +7,9 @@
 /* MASPSX_FLAGS: -G8 */
 
 #include "Inv_TransferItem_externs.h"
-#define g_AyaItemSelectionBits (*(u32 *)&D_8009D05C_o)
 #define g_BattleCountTable (*(s16 *)&D_800A1FD4_o)
 #define g_AyaEquippedWeaponSlot (*(s8 *)&D_800C0E20_o)
 #define g_AyaEquippedArmorSlot (*(s8 *)&D_800C0E22_o)
-#define g_AyaInventoryItems (*(s16 *)&g_AyaInventoryItems_o)
 
 s32 Inv_TransferItem(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     register s16 *var_v0 asm("$2");
