@@ -102,8 +102,8 @@ void Battle_AdvancePhase(void) {
     Combatant *cleanupActor;
     Combatant *aya_actor;
     BattleEntity *aya_player;
-    BattleCopyCursor copy_dst;
-    BattleCopyCursor copy_src;
+    u8 *copy_dst;
+    const u8 *copy_src;
     const u8 *copy_end;
     u32 misaligned;
 
@@ -141,11 +141,11 @@ void Battle_AdvancePhase(void) {
         }
         if (misaligned) {
             do {
-                *(PackedCopy16 *)copy_dst.bytes = *(const PackedCopy16 *)copy_src.source;
-                copy_src.source += 0x10;
-                copy_dst.bytes += 0x10;
-            } while (copy_src.source != copy_end);
-            *(PackedCopy8 *)copy_dst.bytes = *(const PackedCopy8 *)copy_src.source;
+                *(PackedCopy16 *)copy_dst = *(const PackedCopy16 *)copy_src;
+                copy_src += 0x10;
+                copy_dst += 0x10;
+            } while (copy_src != copy_end);
+            *(PackedCopy8 *)copy_dst = *(const PackedCopy8 *)copy_src;
             command_value = temp_s2->command;
         }
         else
@@ -157,12 +157,12 @@ block_found:
         goto block_search_done;
 aligned_copy:
         do {
-            *(Copy16 *)copy_dst.bytes = *(const Copy16 *)copy_src.source;
-            copy_src.source += 0x10;
-            copy_dst.bytes += 0x10;
-        } while (copy_src.source != copy_end);
+            *(Copy16 *)copy_dst = *(const Copy16 *)copy_src;
+            copy_src += 0x10;
+            copy_dst += 0x10;
+        } while (copy_src != copy_end);
 copy_tail:
-        *(PackedCopy8 *)copy_dst.bytes = *(const PackedCopy8 *)copy_src.source;
+        *(PackedCopy8 *)copy_dst = *(const PackedCopy8 *)copy_src;
         command_value = temp_s2->command;
         }
 after_command:
