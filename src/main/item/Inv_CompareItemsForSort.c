@@ -1,10 +1,14 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 */
 
-#include "pe1/inventory_sort.h"
-#include "pe1/psyq_libc.h"
-#include "pe1/inventory_queries.h"
+#include "common.h"
 #include "pe1/aya.h"
+#include "pe1/inventory.h"
+#include "pe1/inventory_queries.h"
+#include "pe1/inventory_slots.h"
+#include "pe1/inventory_sort.h"
+#include "pe1/inventory_state.h"
+#include "pe1/psyq_libc.h"
 
 int Inv_CompareItemsForSort(const void *leftElement, const void *rightElement) {
     const short *leftIndex = leftElement;
@@ -73,11 +77,6 @@ int Inv_CompareItemsForSort(const void *leftElement, const void *rightElement) {
     return rightItem != 0;
 }
 
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
-
-#include "pe1/inventory.h"
-
 int Inv_CompareItemsByStatForSort(const void *leftElement, const void *rightElement)
 {
     s16 *leftIndex = (s16 *)leftElement;
@@ -123,14 +122,6 @@ int Inv_CompareItemsByStatForSort(const void *leftElement, const void *rightElem
                : -((unsigned int)leftName < (unsigned int)rightName);
 }
 
-#include "common.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
-
-#define NULL ((void *)0)
-#include "../../../tools/m2c/m2c_macros.h"
-#include "Inv_CompareItemsForSort_externs.h"
-
 void Inv_SortWeaponSubrange(void) {
     u16 *var_s0;
     u16 *var_s1;
@@ -171,14 +162,6 @@ void Inv_SortWeaponSubrange(void) {
         }
     }
 }
-
-#include "common.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
-
-#define NULL ((void *)0)
-#include "../../../tools/m2c/m2c_macros.h"
-#include "Inv_CompareItemsForSort_externs_1.h"
 
 void Inv_SortAmmoSubrange(void) {
     u16 *var_s0;
@@ -221,25 +204,6 @@ void Inv_SortAmmoSubrange(void) {
     }
 }
 
-#include "common.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
-
-#define NULL ((void *)0)
-#include "../../../tools/m2c/m2c_macros.h"
-void Inv_SortWeaponSubrange(void);
-void Inv_SortAmmoSubrange(void);
-#include "Inv_CompareItemsForSort_externs_2.h"
-#define g_InvSortRankTableA (g_InvSortRankTableA[0])
-#define D_80092428 (D_80092428[0])
-#define D_80092440 (D_80092440[0])
-#define g_InvTypeRankTableA (g_InvTypeRankTableA[0])
-#define g_InvTypeRankTableB (g_InvTypeRankTableB[0])
-#define g_AyaItemSelectionBits (g_AyaItemSelectionBits[0])
-#define g_AyaEquippedWeaponSlot (g_AyaEquippedWeaponSlot[0])
-#define g_AyaEquippedArmorSlot (g_AyaEquippedArmorSlot[0])
-#define g_AyaInventoryItems (g_AyaInventoryItems[0])
-
 void Inv_SortInventoryByMode(s32 arg0, s32 arg1) {
     s16 *var_a0;
     s16 *var_a0_2;
@@ -250,29 +214,29 @@ void Inv_SortInventoryByMode(s32 arg0, s32 arg1) {
 
     switch (arg0) {
     case 0:
-        g_InvSortRankTable = &D_80092428;
+        g_InvSortRankTable = D_80092428;
         D_8009D0A8 = arg1;
         break;
     case 1:
-        g_InvSortRankTable = &g_InvSortRankTableA;
+        g_InvSortRankTable = g_InvSortRankTableA;
         D_8009D0A4 = arg1;
         break;
     case 2:
-        g_InvSortRankTable = &D_80092440;
+        g_InvSortRankTable = D_80092440;
         if (arg1 != 0) {
-            g_InvSortTypeRankTable = &g_InvTypeRankTableA;
+            g_InvSortTypeRankTable = g_InvTypeRankTableA;
         } else {
-            g_InvSortTypeRankTable = &g_InvTypeRankTableB;
+            g_InvSortTypeRankTable = g_InvTypeRankTableB;
         }
         break;
     }
-    g_InvItemPtr = &g_AyaInventoryItems;
+    g_InvItemPtr = g_AyaInventoryItems;
     g_InvSlotLimit = Inv_GetAyaSlotLimit();
-    g_InvSelectionBits = &g_AyaItemSelectionBits;
+    g_InvSelectionBits = g_AyaItemSelectionBits;
     g_InvSelectionBitWords = 2;
-    temp_s1 = g_InvItemPtr[g_AyaEquippedWeaponSlot];
-    if (g_AyaEquippedArmorSlot >= 0) {
-        var_s0 = g_InvItemPtr[g_AyaEquippedArmorSlot];
+    temp_s1 = g_InvItemPtr[g_AyaEquippedWeaponSlot[0]];
+    if (g_AyaEquippedArmorSlot[0] >= 0) {
+        var_s0 = g_InvItemPtr[g_AyaEquippedArmorSlot[0]];
     } else {
         var_s0 = -1;
     }
@@ -288,7 +252,7 @@ void Inv_SortInventoryByMode(s32 arg0, s32 arg1) {
         }
     }
     if (var_v1 < g_InvSlotLimit) {
-        g_AyaEquippedWeaponSlot = var_v1;
+        g_AyaEquippedWeaponSlot[0] = var_v1;
     }
     if (var_s0 >= 0) {
         for (var_v1_2 = 0; var_v1_2 < g_InvSlotLimit; var_v1_2++) {
@@ -297,25 +261,19 @@ void Inv_SortInventoryByMode(s32 arg0, s32 arg1) {
             }
         }
         if (var_v1_2 < g_InvSlotLimit) {
-            g_AyaEquippedArmorSlot = var_v1_2;
+            g_AyaEquippedArmorSlot[0] = var_v1_2;
         }
     }
     Inv_RebuildSelectableMask();
 }
 
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
-
-#include "Inv_CompareItemsForSort_externs_3.h"
-#define D_80092410 (D_80092410[0])
-
 void Sort_ContainerItems(int arg0) {
     if (arg0 != 0) {
-        g_InvSortRankTable = &g_InvSortRankTableA;
-        g_InvSortTypeRankTable = &g_InvTypeRankTableA;
+        g_InvSortRankTable = g_InvSortRankTableA;
+        g_InvSortTypeRankTable = g_InvTypeRankTableA;
     } else {
-        g_InvSortRankTable = &D_80092410;
-        g_InvSortTypeRankTable = &g_InvTypeRankTableB;
+        g_InvSortRankTable = D_80092410;
+        g_InvSortTypeRankTable = g_InvTypeRankTableB;
     }
 
     g_InvSortListBase = g_WayneStorageItems;
@@ -328,22 +286,17 @@ void Sort_ContainerItems(int arg0) {
     Inv_TransferItemAlt2(0xF400);
 }
 
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
-
-#include "Inv_CompareItemsForSort_externs_4.h"
-
 void Sort_InventoryItems(int arg0, int arg1) {
     if (arg0 != 0) {
         D_8009D0A4 = arg1;
-        g_InvSortRankTable = &g_InvSortRankTableA;
+        g_InvSortRankTable = g_InvSortRankTableA;
     } else {
         D_8009D0A8 = arg1;
-        g_InvSortRankTable = &D_80092410;
+        g_InvSortRankTable = D_80092410;
     }
 
     g_InvSortListBase = g_InvItemArray;
-    g_InvSortTypeRankTable = &g_InvTypeRankTableA;
+    g_InvSortTypeRankTable = g_InvTypeRankTableA;
     g_InvSortListCount = 0x52;
     g_InvSortLookup = Inv_LookupData;
     qsort(g_InvItemArray, 0x52, 2, Inv_CompareItemsForSort);
