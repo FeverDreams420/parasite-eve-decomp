@@ -49,9 +49,7 @@ void dma_execute(int channel, void *address, int blockCount, int blockSize,
     dma += channel << 2;
     blockControl = (blockCount << 16) | blockSize;
     *D_8009B344 = shift | priorityBit;
-    /* MADR takes the buffer address itself. */
-    *(void *volatile *)dma = address;
-    dma++;
+    *dma++ = PSX_ADDRESS(address);
     *dma++ = blockControl;
 
     while (!(*D_8009B32C & 0x40)) {

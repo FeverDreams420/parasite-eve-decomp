@@ -31,13 +31,13 @@ u32 *ClearOTagR(u32 *ot, int count) {
     result = ot;
     PE1_COMPILER_LAUNDER(result);
     terminator = &D_8009580C;
-    address = GPU_ADDRESS(&D_800957F8);
+    address = PSX_ADDRESS(&D_800957F8);
     address &= mask;
     command = 0x04000000;
     address |= command;
     *terminator = address;
-    terminator = (u32 *)(GPU_ADDRESS(terminator) & mask);
-    *result = GPU_ADDRESS(terminator);
+    terminator = (u32 *)(PSX_ADDRESS(terminator) & mask);
+    *result = PSX_ADDRESS(terminator);
     return result;
 }
 
@@ -96,7 +96,7 @@ void DrawOTagEnv(void *next, DRAWENV *environment)
     }
     packet = &environment->dr_env;
     Gpu_SetDrawEnvBack(packet, environment);
-    packet->tag = (packet->tag & 0xFF000000) | (GPU_ADDRESS(next) & 0xFFFFFF);
+    packet->tag = (packet->tag & 0xFF000000) | (PSX_ADDRESS(next) & 0xFFFFFF);
     D_80095744->addque2(D_80095744->u18.packet, packet, 0x40, 0);
     copy(state + 14, environment, sizeof(DRAWENV));
 }

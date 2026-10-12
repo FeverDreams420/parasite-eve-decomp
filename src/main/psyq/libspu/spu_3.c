@@ -4,6 +4,7 @@
 /* CC1_FLAGS: -mno-split-addresses */
 
 #include "pe1/psyq_spu_internal.h"
+#include "pe1/psyq_stdarg.h"
 #include "spu_3_externs.h"
 
 void _spu_Fr_(void *address, u16 spuAddress, u32 blocks)
@@ -13,7 +14,7 @@ void _spu_Fr_(void *address, u16 spuAddress, u32 blocks)
     _spu_RXX->spucnt |= 0x30;
     _spu_Fw1ts();
     _spu_FsetDelayR();
-    *g_SpuDmaMadrPtr = (u32)address;
+    *g_SpuDmaMadrPtr = PSX_ADDRESS(address);
     *g_SpuDmaBcrPtr = (blocks << 16) | 0x10;
     g_SpuDmaDirection = 1;
     *g_SpuDmaChcrPtr = 0x1000200;
@@ -21,16 +22,16 @@ void _spu_Fr_(void *address, u16 spuAddress, u32 blocks)
 
 int _spu_t(int command, ...)
 {
-    /* PSX varargs ABI: the compiler spills a0-a3 into the argument area. */
-    char *args = (char *)(&command + 1);
+    va_list args;
     u32 count;
     u32 size;
     u32 control;
     u16 mode;
 
+    va_start(args, command);
     switch (command) {
     case 2:
-        size = *(u32 *)((args += 4) - 4);
+        size = va_arg(args, u32);
         g_SpuTransferAddr = size >> _spu_mem_mode.shift;
         _spu_RXX->trans_addr = g_SpuTransferAddr;
         break;
