@@ -82,6 +82,13 @@ follow the same lower snake-case role rule (`boot_display/text_screen.c`,
 function-style names the `src/main` units had before are listed with their
 new paths in `tools/reorg/maps/step9_snake_case_names.csv`, those of the
 two overlays in `tools/reorg/maps/step9_overlay_shared_units.csv`.
+(`unconventional_files`, ratcheted at zero). The shared room library
+`src/overlays/room_lib/` follows the same rule (`orbit_flare.c`,
+`class_spawn.c`, counted in the overlays scope); the other overlay units
+keep their current names. The function-style names the `src/main` units
+had before are listed with their new paths in
+`tools/reorg/maps/step9_snake_case_names.csv`, those of `room_lib` in
+`tools/reorg/maps/step10_room_lib_units.csv`.
 
 **PsyQ file names.** A unit under `psyq/<library>/` is named after the SDK
 object it reproduces, lower case (`INTR_VB` is `intr_vb.c`, the BIOS veneer
@@ -187,13 +194,15 @@ name is the configured overlay name.
   decoder, formerly `sys_reset`): named by responsibility.
   `fx_common_sector17` (formerly `render_clip`) is a data-only duplicate of
   that `fx_common` sector, named after the data it holds.
-- **Shared overlay code:** `src/overlays/room_lib/` holds the room library's
-  unit (`RoomLib_ActorClasses.c`), which every overlay that links the
-  library lists in its manifest as `../room_lib/<unit>` and compiles into its
-  own build, and the templates that other copied code still instantiates
-  (`*.inc` bodies and `room_lib.h`). A templated copy
-  keeps its own instantiation file in the overlay until its whole family can
-  move to one shared unit.
+- **Shared overlay code:** `src/overlays/room_lib/` holds the units that
+  several overlays link (the room library `actor_classes.c`, the effect
+  modules such as `orbit_flare.c`, the module class methods `class_*.c`
+  and the scene script entries `script_*.c`), which every overlay that
+  links one lists in its manifest as `../room_lib/<unit>` and compiles into
+  its own build, and the templates that several units still instantiate
+  (`bounce_render.inc`, `fan_sweep_spark.inc`, `poll_reset_actor.inc`,
+  with `room_lib.h`, `motion_particles.h` and `render_layouts.h`). A
+  template with a single instance is written out in its unit instead.
 - **Function names inside overlays:** `RoomLib_` for `room_lib` templates
   and the hooks they call (`RoomLib_GrabOnApproach`), `RoomEffect_` for
   effect templates (the former `RoomFx_` spelling is gone),

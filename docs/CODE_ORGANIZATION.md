@@ -28,16 +28,16 @@ reduce the file count.
   binary evidence identifies a linked library or a reproducible generation
   rule.
 - `src/overlays/room_lib/` holds such a linked library once. The room
-  library (`RoomLib_ActorClasses.c`) is the same run of 53 functions, in the
+  library (`actor_classes.c`) is the same run of 53 functions, in the
   same order and with the same jump tables, in 125 room and scene overlays.
-  Each overlay's manifest names the unit as a `../room_lib/RoomLib_ActorClasses`
+  Each overlay's manifest names the unit as a `../room_lib/actor_classes`
   subsegment, and `make overlay-build` compiles it into that overlay's own
   build directory, so every overlay still links its own copy at its own
   address. Eight rooms link a sixth class right after it
-  (`RoomLib_FloorWalkerClass.c`); whether that class was part of the same
+  (`floor_walker_class.c`); whether that class was part of the same
   object cannot be told from the binary, so it is a unit of its own.
   Smaller effect objects shared by a few rooms live there the same way
-  (`RoomEffect_DroppedFlare.c`, `RoomLib_TwelveElementEffect.c`, ...): each
+  (`dropped_flare.c`, `twelve_elements.c`, ...): each
   is a run of functions in the same order in every instance, with a rodata
   block (seed initialisers, jump tables) that is contiguous and in the same
   order too. Data the code reads from the room (packet templates, colour
@@ -45,8 +45,11 @@ reduce the file count.
   the room's symbol file. The methods of a room module's class (the run in
   front of each effect module: `RoomLib_PlantScript`, `RoomLib_Spawn6`,
   `RoomLib_RegisterDrawList`, `RoomLib_RegisterPairedTables`,
-  `RoomLib_CloseTarget`) are one unit per function, because rooms replace
-  single methods with their own; see `include/pe1/room_module.h`.
+  `RoomLib_CloseTarget`) are one unit per function (`class_*.c`), because
+  rooms replace single methods with their own; see
+  `include/pe1/room_module.h`. A module whose own class always precedes
+  it shares one unit with it (`orbit_set.c`); the units and what keeps
+  the rest apart are listed under "Room library units" below.
 - `include/pe1/` owns game ABI, shared data structures, and declarations.
 - `include/pe1/akao/` owns the AKAO command, queue, track, and SPU interfaces.
 - hardware and SDK declarations belong in their subsystem header rather than
@@ -134,7 +137,7 @@ default and no unit writes it). Each merge was checked with
 does the mechanical part (hoisted includes and types, one folded
 `<unit>_externs.h`, `#undef` of each member's template macros, renamed
 clashing local types, prototypes taken from the definitions).
-`room_lib/` keeps one unit per method.
+`room_lib/` is described in its own section below.
 
 The main run of a room or scene is `<short>.c` (`scene_e08_chrysler/e08.c`),
 a grab-trigger class prelude is `<short>_class.c`, and other runs are named
@@ -201,7 +204,7 @@ after what their functions do (`fx_common/camera.c`,
 - Between shared units: `scene_e08_chrysler/SceneE08_ModuleStart` and
   `room_m123_nypd/RoomM123_SelectSlotPointer`. `scene_e14_chrysler`'s only
   unit was a copy of the room library's script-argument entry and now links
-  the shared `room_lib/RoomLib_SetArgs3` with its words named
+  the shared `room_lib/script_args` with its words named
   `g_RoomScriptArgs`, so that scene has no C of its own.
 - `mdec_diag` (2026-10-13): the LIBPRESS DCT object is `decdct.c`,
   `mdec_wait.c` and `mdec_status.c`; the decoder-table builder is
@@ -251,7 +254,7 @@ after what their functions do (`fx_common/camera.c`,
   `D_8019AF04.hit`, and its including units declare the words they name,
   so the main run, the rising sprite pools and the boss sway are one
   `m273.c`.
-- Probed, still split: `room_lib/RoomEffect_MotionParticles{,_2,_3}`.
+- Probed, still split: `room_lib/motion_particles{,_2,_3}`.
   Under the default flags `RoomEffect_DrawMotionParticles` is lev 66 (loop
   strength reduction turns the lookup index and the particle cursor into
   pointers that retail computes per iteration); under
@@ -262,6 +265,83 @@ after what their functions do (`fx_common/camera.c`,
   to lev 9; the rest is loop-invariant hoisting (`-64` leaves the loop once
   the strength-reduction register is gone). The split matches what the
   binary shows, two flag sets, until one C shape reproduces both.
+
+### Room library units (src/overlays/room_lib, 2026-10-13)
+
+`room_lib/` went from 90 files (53 units, 12 templates and 25 headers) to
+54 (48 units, 3 templates, 3 headers). The units are named like the
+resident ones, lower snake case by role (`orbit_flare.c`,
+`class_spawn.c`, `script_args.c`); function names did not change, and
+`tools/reorg/maps/step10_room_lib_units.csv` maps every old file to its
+unit. A shared unit exists because the same run of functions, in the
+same order and with the same rodata, appears in several overlays; it is
+compiled into each of them with the unit's own markers, so two units
+became one only when every overlay that links one links the other
+directly after it, with nothing (code, data or foreign rodata) between
+them, and one marker set compiles both. Merged, all 190 overlays
+byte-identical:
+
+- `drop_field.c`: the drop field's class and its effect set (room_m174,
+  m348, m383);
+- `ground_eruption.c`: the eruption's class and the eruption (room_m141,
+  m146, m153, m154, m328, scene_e02, e04, e05);
+- `orbit_set.c`: the orbit set's class and the set (room_m186, m187,
+  m385, m388, m389); the class compiles the same under the set's
+  `-fno-strength-reduce`;
+- `three_particles.c`: the three particles' class and the particles
+  (eleven Central Park and Chrysler rooms);
+- `class_register_active.c`: the two status-3 registration methods of the
+  glow orb rooms (room_m034, m174, m383).
+
+The templates with one instance were written out where they are used:
+`floor_walker.inc` and `transform_scale.inc` in `floor_walker_class.c`,
+and the seven glint, orbit-spin and jitter-spark templates in
+`scene_e19_cruiser/e19.c` under that scene's function names, with their
+parameter declarations in `e19_externs.h`. The per-unit `_externs.h`
+headers are gone: their declarations were already in the unit's
+`include/pe1` header or `room_lib.h` (`mirror_model.c`, `paired_glow.c`,
+`twelve_elements.c`, `three_particles.c`, the bounce template's colour,
+which each includer defines), or moved there (`motion_particles.h` for
+the motion particle set's field engine calls and the folded shared
+state view, `room_spark_attacks.h` for the capture block of
+`capture_frame_sample.c`, `room_lib.h` for the timed spawns' ramp table,
+`room_floor_walker.h` for the scratchpad scale words). The effect
+sequence's private record types moved from their header into
+`effect_sequence.c`.
+
+Still separate, and why:
+
+- The class methods (`class_nop0.c`, `class_plant_script.c`,
+  `class_spawn.c`, `class_register_draw_list.c`,
+  `class_register_tables.c`, `class_register_tables_gated.c`,
+  `class_close_target.c`, `class_nop6.c`): each is linked by a different
+  set of rooms (21, 43, 46, 37, 32, 5, 41 and 16), because a room links
+  only the methods it does not replace.
+- Same rooms, not adjacent: `glow_orb_setup.c` and `glow_orb.c` (the
+  shared spawn, registration and close methods lie between them);
+  `floor_walker_class.c` and `timed_spawn.c` (room_m152 links
+  `dropped_flare.c` between them); `spark_attacks.c` and
+  `capture_frame_sample.c` (`script_arg.c` and `script_slot.c` between);
+  `homing_projectile.c` and `ground_eruption.c` (other modules, and in
+  some rooms the room library, between; the projectile's seeds are a
+  data unit, `homing_projectile_seeds.c`).
+- Different rooms: `class_update_callback.c` (room_m256, m273, scene_e19)
+  and `grab_await_stance.c` (only m273 and e19); `line_burst.c` (14 rooms)
+  and `script_slot.c` (17, three of them after `script_arg.c` instead).
+- The scene script entries (`script_arg.c`, `script_args.c`,
+  `script_slot.c`, `script_task_var.c`, `script_arg_pair.c`) are room
+  glue that follows whichever effect module a room links last:
+  `script_args.c` follows the orbit flare, the homing flash or the sound
+  burst. `script_arg_pair.c` follows `spark_barrage.c` in both of its
+  rooms and would merge byte-identically, but it is kept with its family
+  rather than folded into the effect module.
+- `motion_particles{,_2,_3}.c`: the particle draw needs
+  `-fno-strength-reduce` and the setup and update loops must not have it
+  (see "Probed, still split" above).
+- Templates still instantiated more than once: `bounce_render.inc`
+  (`line_burst.c`, `spark_attacks.c`), `fan_sweep_spark.inc`
+  (`room_m318_chrysler/m318.c`, `fieldfx/sprite_effects.c`) and
+  `poll_reset_actor.inc` (twice in `room_m273_liberty/m273.c`).
 
 ### Resident translation units (src/main, 2026-10-12)
 
@@ -1018,7 +1098,7 @@ How the earlier groups were closed, for the next symbols of the same kind:
   with the projection slot record `D_800BCFA8`,
   `RoomEffect_ConfiguredPulseCallback` with `*(volatile u16 *)&D_800E11E8`).
   The cc1 `-G8` trick needs a unit without small data definitions of its
-  own: in `RoomEffect_GrabAttackSet` its `.sdata` is discarded by the overlay
+  own: in `room_lib/grab_attack.c` its `.sdata` is discarded by the overlay
   link.
 - The texture slot words `D_800E11E8`/`D_800E11EA` are declared once as
   `u16` entries of the slot table (`field_texture_tables.h`); the one-field
@@ -1030,8 +1110,8 @@ How the earlier groups were closed, for the next symbols of the same kind:
   that scalar, room_m005 and room_m023 take its address through their own
   view macros, and `RoomLib_SetTaskVar0` returns its address.
 - A unit in a shared overlay directory (room_lib) now counts towards the
-  rooms whose splat config links it, so `RoomLib_CaptureFrameSample`
-  (m156/m291/m380) and `RoomEffect_EffectSequence` (other rooms) no longer
+  rooms whose splat config links it, so `room_lib/capture_frame_sample.c`
+  (m156/m291/m380) and `room_lib/effect_sequence.c` (other rooms) no longer
   collide at `D_80192C34`/`D_80192C38`/`D_80192C3C`.
 
 Still open:

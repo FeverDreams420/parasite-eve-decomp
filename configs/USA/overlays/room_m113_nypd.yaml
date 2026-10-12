@@ -35,12 +35,12 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m113_header]
-      - [0xC, .rodata, ../room_lib/RoomEffect_OrbitFlare]
-      - [0x1C, .rodata, ../room_lib/RoomEffect_LineBurst]
-      - [0x30, c, ../room_lib/RoomEffect_OrbitFlare]
-      - [0xC80, c, ../room_lib/RoomLib_SetArgs3]
-      - [0xCA4, c, ../room_lib/RoomEffect_LineBurst]
-      - [0x1A94, c, ../room_lib/RoomLib_SlotSet]
+      - [0xC, .rodata, ../room_lib/orbit_flare]
+      - [0x1C, .rodata, ../room_lib/line_burst]
+      - [0x30, c, ../room_lib/orbit_flare]
+      - [0xC80, c, ../room_lib/script_args]
+      - [0xCA4, c, ../room_lib/line_burst]
+      - [0x1A94, c, ../room_lib/script_slot]
       - [0x1AD8, data, D_80190AC0]
       - [0x1B4C, data, D_80190B34]
       - [0x1BA4, data, RoomSlotA_8018FC68]

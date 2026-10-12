@@ -1,4 +1,0 @@
-#ifndef PE1_EXT_20A637CDDA00
-#define PE1_EXT_20A637CDDA00
-extern int ROOMEFFECT_JITTER_SPAWNER_CALLBACK(int mode, RoomJitterSpark *spark);
-#endif /* PE1_EXT_20A637CDDA00 */

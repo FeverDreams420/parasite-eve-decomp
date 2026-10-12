@@ -35,9 +35,8 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m348_sewer]
-      - [0xC, .rodata, ../room_lib/RoomEffect_DropFieldEffects]
-      - [0x7C, c, ../room_lib/RoomEffect_DropFieldClass]
-      - [0x258, c, ../room_lib/RoomEffect_DropFieldEffects]
+      - [0xC, .rodata, ../room_lib/drop_field]
+      - [0x7C, c, ../room_lib/drop_field]
       - [0x3860, data, D_80192848]
       - [0x3898, data, D_80192880]
       - [0x38D0, data, D_801928B8]

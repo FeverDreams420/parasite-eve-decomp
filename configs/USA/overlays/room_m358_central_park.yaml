@@ -35,11 +35,11 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m358_central_park]
-      - [0xC, .rodata, ../room_lib/RoomLib_ActorClasses]
+      - [0xC, .rodata, ../room_lib/actor_classes]
       - [0x1E4, rodata, RoomLib_HandlerCArgsData_801915FC]
-      - [0x1E4, .rodata, ../room_lib/RoomLib_WindowClass]
-      - [0x244, c, ../room_lib/RoomLib_ActorClasses]
-      - [0x3560, c, ../room_lib/RoomLib_WindowClass]
+      - [0x1E4, .rodata, ../room_lib/window_class]
+      - [0x244, c, ../room_lib/actor_classes]
+      - [0x3560, c, ../room_lib/window_class]
       - start: 0x42E8
         type: databin
         name: D_801932D0

@@ -10,7 +10,9 @@ developers would name C files (docs/CONVENTIONS.md): lower snake case, short,
 named by the unit's role inside its subsystem directory, without the
 directory's or the functions' prefix (``battle/encounter.c``, not
 ``battle/Battle_EncounterFlow.c`` or ``battle/battle_encounter.c``). Names
-that break this count as ``unconventional_files``.
+that break this count as ``unconventional_files``. The shared room library
+(``src/overlays/room_lib``) follows the same rule and is counted in the
+overlays scope; the other overlay directories keep their names for now.
 """
 from __future__ import annotations
 
@@ -48,16 +50,25 @@ def unconventional(rel: pathlib.PurePath) -> bool:
     return not SNAKE_NAME.fullmatch(stem) or stem.startswith(directory + "_")
 
 
+def unconventional_shared(rel: pathlib.PurePath) -> bool:
+    """A room_lib unit whose file name is not a short snake-case role."""
+    stem = rel.stem
+    return not SNAKE_NAME.fullmatch(stem) or stem.startswith(rel.parts[1] + "_")
+
+
 def collect(source_root: pathlib.Path = SRC) -> dict[str, dict[str, int]]:
     counts = {
         "main": {"address_files": 0, "placeholder_files": 0,
                  "unconventional_files": 0},
-        "overlays": {"address_files": 0, "placeholder_files": 0},
+        "overlays": {"address_files": 0, "placeholder_files": 0,
+                     "unconventional_files": 0},
     }
     for path in source_root.rglob("*.c"):
         rel = path.relative_to(source_root)
         scope = "overlays" if rel.parts and rel.parts[0] == "overlays" else "main"
         if scope == "main" and unconventional(rel):
+            counts[scope]["unconventional_files"] += 1
+        if rel.parts[:2] == ("overlays", "room_lib") and unconventional_shared(rel):
             counts[scope]["unconventional_files"] += 1
         if ADDRESS_NAME.fullmatch(path.stem):
             counts[scope]["address_files"] += 1

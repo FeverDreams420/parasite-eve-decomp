@@ -35,8 +35,8 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m083_central_park]
-      - [0xC, .rodata, ../room_lib/RoomLib_WindowClass]
-      - [0x6C, c, ../room_lib/RoomLib_WindowClass]
+      - [0xC, .rodata, ../room_lib/window_class]
+      - [0x6C, c, ../room_lib/window_class]
       - start: 0xDF4
         type: databin
         name: D_8018FDDC

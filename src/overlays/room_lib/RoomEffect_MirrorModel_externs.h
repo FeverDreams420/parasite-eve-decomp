@@ -1,5 +1,0 @@
-#ifndef PE1_EXT_12E748A92E59
-#define PE1_EXT_12E748A92E59
-extern u32 D_800B1644[];
-extern s32 D_800A636C[];
-#endif /* PE1_EXT_12E748A92E59 */

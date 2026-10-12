@@ -38,11 +38,11 @@ segments:
         type: rodatabin
         name: scene_e07_header
         dir: scene_e07_chrysler
-      - [0xC, .rodata, ../room_lib/RoomLib_ActorClasses]
-      - [0x1E4, .rodata, ../room_lib/RoomEffect_SeekerSparkCallback]
+      - [0xC, .rodata, ../room_lib/actor_classes]
+      - [0x1E4, .rodata, ../room_lib/seeker_spark]
       - [0x1EC, rodata, scene_e07_1EC_1FC]
-      - [0x1FC, c, ../room_lib/RoomLib_ActorClasses]
-      - [0x3518, c, ../room_lib/RoomEffect_SeekerSparkCallback]
+      - [0x1FC, c, ../room_lib/actor_classes]
+      - [0x3518, c, ../room_lib/seeker_spark]
       - [0x3D8C, data]
   - [0x4000]
 # source slice: scanner

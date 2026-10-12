@@ -35,13 +35,13 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m256_museum]
-      - [0xC, .rodata, ../room_lib/RoomLib_ActorClasses]
+      - [0xC, .rodata, ../room_lib/actor_classes]
       - [0x1E4, rodata, RoomLib_HandlerCArgsData_80191630]
       - [0x1F4, .rodata, m256]
       - [0x270, rodata, RoomEffect_TrailBurstPadding]
-      - [0x278, c, ../room_lib/RoomLib_ActorClasses]
+      - [0x278, c, ../room_lib/actor_classes]
       - [0x3594, c, m256_class]
-      - [0x3644, c, ../room_lib/RoomLib_UpdateCallback]
+      - [0x3644, c, ../room_lib/class_update_callback]
       - [0x366C, c, m256]
       - [0x6D18, data, D_80195D00]
       - [0x6D50, data, D_80195D38]

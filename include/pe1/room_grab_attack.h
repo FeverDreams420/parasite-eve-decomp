@@ -15,7 +15,7 @@
 #include "pe1/field_collision.h"
 #include "pe1/geom_state.h"
 
-/* The grab attack set (src/overlays/room_lib/RoomEffect_GrabAttackSet.c, in
+/* The grab attack set (src/overlays/room_lib/grab_attack.c, in
  * room_m269 and scene_e01). */
 
 /* The class's state words from 0x0C on, as the player reset receives them. */

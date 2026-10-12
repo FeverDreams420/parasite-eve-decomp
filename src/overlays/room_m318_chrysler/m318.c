@@ -71,7 +71,7 @@ s32 func_80192620(s32 mode, s16 *pos) {
     return 0;
 }
 
-#include "../room_lib/RoomEffect_FanSweepSpark.inc"
+#include "../room_lib/fan_sweep_spark.inc"
 
 /* Fan sweep: attaches to the actor named by its parameters at floor level,
  * plays its sounds and opens a spark pool plus a trail pool; for 32 frames

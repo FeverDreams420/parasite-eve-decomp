@@ -35,9 +35,8 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m187_subway]
-      - [0xC, .rodata, ../room_lib/RoomEffect_OrbitEffectSet]
-      - [0x2C, c, ../room_lib/RoomEffect_OrbitSetClass]
-      - [0x1EC, c, ../room_lib/RoomEffect_OrbitEffectSet]
+      - [0xC, .rodata, ../room_lib/orbit_set]
+      - [0x2C, c, ../room_lib/orbit_set]
       - [0xFC0, data, D_8018FFA8]
       - [0xFD4, data, RoomLib_TableC]
       - [0xFE8, data, D_8018FFD0]

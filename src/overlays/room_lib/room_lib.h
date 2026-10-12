@@ -628,7 +628,7 @@ typedef struct RoomLibPacked8 {
 } __attribute__((packed)) RoomLibPacked8;
 
 
-/* Each room that links RoomLib_TwelveElementEffect defines the two packet
+/* Each room that links room_lib/twelve_elements.c defines the two packet
  * templates and the sprite table in its data. */
 extern RoomFxSpritePacket RoomLib_TwelveEffectPrimaryPacket;
 extern RoomFxSpritePacket RoomLib_TwelveEffectSecondaryPacket;
@@ -840,7 +840,7 @@ typedef struct RoomSlotRec {
     int wC;
 } RoomSlotRec;
 
-/* The room's slot table (RoomLib_SlotSet.c), named in each room's symbol
+/* The room's slot table (script_slot.c), named in each room's symbol
  * file. */
 extern RoomSlotRec RoomLib_SlotTable[];
 RoomSlotRec *RoomLib_SlotSet(int mode, int idx, int a, int b);
@@ -917,6 +917,10 @@ typedef struct RoomDlgState {
 } RoomDlgState;
 
 extern void *RoomMain_ActorPtr2;
+
+/* The colour ramp table of the timed spawns (timed_spawn.c), each
+ * room's own data. */
+extern char RoomLib_TimedRenderTable;
 
 #define ROOMLIB_MSG_DISPATCH(name, rect, blob) \
     int name(int mode, RoomMsg *msg, short *pitch) { \
@@ -1078,8 +1082,8 @@ extern int func_80071A54(void);
         return 0; \
     }
 
-/* The room library's actor classes (RoomLib_ActorClasses.c, and
- * RoomLib_FloorWalkerClass.c in the rooms that link the longer library).
+/* The room library's actor classes (actor_classes.c, and
+ * floor_walker_class.c in the rooms that link the longer library).
  * A room's class table lists seven methods per class: three no-ops (slots
  * 0, 3 and 6), Init, Configure, Update and Release; the remaining functions
  * are the class's private states. */

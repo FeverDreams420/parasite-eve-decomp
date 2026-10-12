@@ -11,7 +11,7 @@
 #include "pe1/akao_send.h"
 #include "pe1/asset_find.h"
 
-/* The paired glow (src/overlays/room_lib/RoomLib_PairedGlow.c). */
+/* The paired glow (src/overlays/room_lib/paired_glow.c). */
 
 /* Per-room data: the glow sprite's record and packet, and the colour table
  * the emitters step through. */

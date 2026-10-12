@@ -100,4 +100,9 @@ typedef struct RoomFloorWalkerTarget {
  * declared by the room library header and read through the views above;
  * the floor height is g_RoomFloorY (pe1/room_floor.h). */
 
+/* The scale vector RoomLib_UpdateHandlerG builds in the scratchpad. */
+extern s32 Scratch_1F800008 asm("0x1F800008");
+extern s32 Scratch_1F80000C asm("0x1F80000C");
+extern s32 Scratch_1F800010 asm("0x1F800010");
+
 #endif

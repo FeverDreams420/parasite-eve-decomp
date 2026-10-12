@@ -150,7 +150,7 @@ extern int func_800DFC44(int value);
 
 struct RoomEnt;
 
-/* The window actor class (src/overlays/room_lib/RoomLib_WindowClass.c). */
+/* The window actor class (src/overlays/room_lib/window_class.c). */
 void RoomLib_WindowHandler(RoomWindowObject *obj);
 void RoomLib_WindowArrived(void *ctx);
 void RoomLib_ArmWindowClass(struct RoomEnt *o);

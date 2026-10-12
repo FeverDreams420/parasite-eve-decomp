@@ -13,7 +13,7 @@
 #include "pe1/fieldfx_calls.h"
 
 /* The falling sprite burst linked by ten hospital and Chrysler rooms
- * (src/overlays/room_lib/RoomEffect_FallingSpriteBurst.c): a sprite and its
+ * (src/overlays/room_lib/falling_sprite_burst.c): a sprite and its
  * floor shadow fall until they reach the floor, then spawn an impact
  * shimmer, a ground pulse and six particles. */
 

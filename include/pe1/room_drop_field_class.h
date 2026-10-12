@@ -4,7 +4,7 @@
 #include "common.h"
 #include "pe1/room_module.h"
 
-/* The drop field effect set's module class (RoomEffect_DropFieldClass.c), in
+/* The drop field effect set's module class (drop_field.c), in
  * class-table slot order, and the script and lists it hands the field
  * engine, named in each room's symbol file. The start method spawns from
  * the spawn data with the spawn script as the layout; the set's effects

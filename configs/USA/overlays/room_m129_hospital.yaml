@@ -35,8 +35,8 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m129_0_C]
-      - [0xC, .rodata, ../room_lib/RoomEffect_DroppedFlare]
-      - [0x50, c, ../room_lib/RoomEffect_DroppedFlare]
+      - [0xC, .rodata, ../room_lib/dropped_flare]
+      - [0x50, c, ../room_lib/dropped_flare]
       - [0xCF4, data, D_8018FCDC]
       - [0xD18, data, D_8018FD00]
       - [0xD50, data, RoomLib_PairA]

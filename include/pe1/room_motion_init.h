@@ -59,7 +59,7 @@ typedef struct RoomMotionParticle {
 } RoomMotionParticle;
 
 /* The motion particle set's per-room data (the shared units
- * src/overlays/room_lib/RoomEffect_MotionParticles*.c), named in every
+ * src/overlays/room_lib/motion_particles*.c), named in every
  * room's symbol file: room_m075, room_m080, room_m082, scene_e09 and
  * scene_e10 keep it at their own addresses. */
 extern FieldGlowSprite g_RoomMotionGlyph;

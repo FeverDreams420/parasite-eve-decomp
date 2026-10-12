@@ -39,15 +39,15 @@ segments:
         type: rodatabin
         name: scene_e08_header
         dir: scene_e08_chrysler
-      - [0x80, .rodata, ../room_lib/RoomLib_ActorClasses]
-      - [0x258, c, ../room_lib/RoomLib_ClassNop0]
-      - [0x260, c, ../room_lib/RoomLib_PlantScript]
-      - [0x28C, c, ../room_lib/RoomLib_Spawn6]
+      - [0x80, .rodata, ../room_lib/actor_classes]
+      - [0x258, c, ../room_lib/class_nop0]
+      - [0x260, c, ../room_lib/class_plant_script]
+      - [0x28C, c, ../room_lib/class_spawn]
       - [0x2B8, c, SceneE08_ModuleStart]
-      - [0x350, c, ../room_lib/RoomLib_CloseTarget]
-      - [0x3D4, c, ../room_lib/RoomLib_ClassNop6]
+      - [0x350, c, ../room_lib/class_close_target]
+      - [0x3D4, c, ../room_lib/class_nop6]
       - [0x3DC, c, e08]
-      - [0x6370, c, ../room_lib/RoomLib_ActorClasses]
+      - [0x6370, c, ../room_lib/actor_classes]
       - [0x968C, data]
   - [0x9800]
 # source slice: scanner

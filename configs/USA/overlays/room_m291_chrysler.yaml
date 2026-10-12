@@ -35,11 +35,11 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m291_header]
-      - [0xC, .rodata, ../room_lib/RoomEffect_SparkAttacks]
-      - [0x70, c, ../room_lib/RoomEffect_SparkAttacks]
-      - [0x3A00, c, ../room_lib/RoomLib_SetArg1]
-      - [0x3A10, c, ../room_lib/RoomLib_SlotSet]
-      - [0x3A54, c, ../room_lib/RoomLib_CaptureFrameSample]
+      - [0xC, .rodata, ../room_lib/spark_attacks]
+      - [0x70, c, ../room_lib/spark_attacks]
+      - [0x3A00, c, ../room_lib/script_arg]
+      - [0x3A10, c, ../room_lib/script_slot]
+      - [0x3A54, c, ../room_lib/capture_frame_sample]
       - [0x3AF4, data, D_80192ADC]
       - [0x3B20, data, D_80192B08]
       - [0x3B58, data, D_80192B40]

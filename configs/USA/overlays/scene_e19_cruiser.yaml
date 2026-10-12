@@ -40,7 +40,7 @@ segments:
         type: rodatabin
         name: scene_e19_header
         dir: scene_e19_cruiser
-      - [0xC, .rodata, ../room_lib/RoomLib_ActorClasses]
+      - [0xC, .rodata, ../room_lib/actor_classes]
       - start: 0x1E4
         type: rodatabin
         name: scene_e19_header_tail
@@ -50,10 +50,10 @@ segments:
         type: rodatabin
         name: scene_e19_header_tail2
         dir: scene_e19_cruiser
-      - [0x288, c, ../room_lib/RoomLib_ActorClasses]
+      - [0x288, c, ../room_lib/actor_classes]
       - [0x35A4, c, e19_class]
-      - [0x3678, c, ../room_lib/RoomLib_UpdateCallback]
-      - [0x36A0, c, ../room_lib/RoomLib_GrabAwaitStance]
+      - [0x3678, c, ../room_lib/class_update_callback]
+      - [0x36A0, c, ../room_lib/grab_await_stance]
       # The approach callback arms the grab sequence and both paths share actor/target state.
       - [0x36CC, c, e19]
       - [0xC26C, data]

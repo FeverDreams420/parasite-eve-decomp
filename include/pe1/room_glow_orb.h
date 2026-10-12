@@ -12,7 +12,7 @@
 #include "pe1/psyq_libc.h"
 #include "pe1/fieldfx_slot.h"
 
-/* The glow orb (src/overlays/room_lib/RoomEffect_GlowOrb.c, rooms m034,
+/* The glow orb (src/overlays/room_lib/glow_orb.c, rooms m034,
  * m174 and m383): a camera-facing glow placed by the owner's matrix,
  * turned with the script's yaw, drifting until it leaves the walkable area
  * and leaving fading flashes behind. */

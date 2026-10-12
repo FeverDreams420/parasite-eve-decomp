@@ -35,8 +35,8 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m269_warehouse_header]
-      - [0xC, .rodata, ../room_lib/RoomEffect_GrabAttackSet]
-      - [0x70, c, ../room_lib/RoomEffect_GrabAttackSet]
+      - [0xC, .rodata, ../room_lib/grab_attack]
+      - [0x70, c, ../room_lib/grab_attack]
       - [0x31E0, data, D_801921C8]
       - [0x31FC, data, D_801921E4]
       - [0x323C, data, D_80192224]

@@ -153,7 +153,7 @@ and the linked binaries stayed identical:
 | `fx_common/effects.c` | cc1 `-fno-force-addr` | not an option cc.sh reads |
 | `menu_memcard/list_screen.c` | second `-fno-cse-skip-blocks` line | left over from a merge |
 | `menu/save_screens.c`, `menu/skills.c`, `script/node_pool.c`, `fx_common/model_buffers.c` | `--dont-expand-li` | no effect at ASPSX 2.56 |
-| `battle/attack.c`, `battle/encounter.c`, `room_lib/RoomEffect_SeekerSparkCallback.c`, `room_lib/RoomEffect_DropFieldEffects.c` | `--expand-div` | no variable division left in the unit |
+| `battle/attack.c`, `battle/encounter.c`, `room_lib/seeker_spark.c`, `room_lib/drop_field.c` | `--expand-div` | no variable division left in the unit |
 | `menu/item_use_panel.c` | `--use-comm-section` | the unit defines no COMMON words |
 | `scene_e18_cruiser/e18_emitters.c` | cc1 `-fno-cse-skip-blocks` | the function matches without it |
 | `battle/attack.c` | `ASPSX_VERSION` 2.77 written as 2.70 | MASPSX configures both identically |
@@ -274,6 +274,9 @@ flag):
   without). The camera functions before the render ops share their K8 unit;
   `fx_common/effects.c` after them does not take it (lev 143). The
   `room_lib` units keep one unit per method.
+- Overlays: `render_op.c` and `RoomEffect_ConfiguredPulseCallback` need
+  cc1 `-G8` (lev 27 and 7 without) and their neighbours do not take it
+  (lev 16 to 143). In `room_lib` the class methods that rooms link one by one stay one unit each, and `orbit_set.c` takes `-fno-strength-reduce` for its class too.
 
 ## Settings in use
 
@@ -374,8 +377,8 @@ ASPSX 2.70 are defaults and only their exceptions are shown.
 - `src/main/akao/voice_bank.c`
 - `src/main/fieldfx/collision.c`
 - `src/main/render/mesh_list.c`
-- `src/overlays/room_lib/RoomEffect_MotionParticles_2.c`
-- `src/overlays/room_lib/RoomEffect_OrbitEffectSet.c`
+- `src/overlays/room_lib/motion_particles_2.c`
+- `src/overlays/room_lib/orbit_set.c`
 
 #### S6: `cc1 -G0 ; maspsx -G8 --use-comm-section FORCE_G0`
 
@@ -532,17 +535,17 @@ so the numbers say what the unit scores with `--no-expand-div` or
 | `overlays/boot_display/sprites.c` | maspsx `--expand-div`: lev 22 (BootDisplay_StepImageSprite 22) |
 | `overlays/menu_memcard/page_flip.c` | cc1 `-fno-cse-skip-blocks`: lev 12 (MenuCard_FlipScreenPages 12) |
 | `overlays/menu_memcard/list_screen.c` | cc1 `-fno-cse-skip-blocks`: lev 71 (func_801909B4 59, func_80190660 12) |
-| `overlays/room_lib/RoomEffect_DroppedFlare.c` | maspsx `--expand-div`: lev 63 (RoomEffect_DroppedFlareParticle 63) |
-| `overlays/room_lib/RoomEffect_LineBurst.c` | maspsx `--expand-div`: lev 36 (RoomEffect_LineBurstController 36) |
-| `overlays/room_lib/RoomEffect_SparkAttacks.c` | maspsx `--expand-div`: lev 37 (RoomEffect_BeamSparkController 37) |
-| `overlays/room_lib/RoomEffect_TrailBurstAttacks.c` | maspsx `--expand-div`: lev 66 (RoomEffect_SeekingTrailParticle 66) |
-| `overlays/room_lib/RoomEffect_GrabAttackSet.c` | maspsx `--expand-div`: lev 17 (RoomEffect_RisingSprayController 17) |
-| `overlays/room_lib/RoomEffect_MirrorModel.c` | maspsx `--expand-div`: lev 29 (RoomEffect_ModelUpdate 29) |
-| `overlays/room_lib/RoomEffect_MotionParticles_2.c` | cc1 `-fno-strength-reduce`: lev 66 (RoomEffect_DrawMotionParticles 66) |
-| `overlays/room_lib/RoomEffect_OrbitEffectSet.c` | cc1 `-fno-strength-reduce`: lev 179 (RoomEffect_UpdateOrbitBurst 38, RoomEffect_DrawOrbitBurst 33, RoomEffect_InitOrbitParticles 30) |
-| `overlays/room_lib/RoomLib_ActorClasses.c` | maspsx `--expand-div`: lev 194 (RoomLib_HandlerE 58, RoomLib_HandlerC 33, RoomLib_AdvanceArcToTargetY 28) |
-| `overlays/room_lib/RoomLib_FloorWalkerClass.c` | maspsx `--expand-div`: lev 10 (RoomLib_UpdateHandlerG 10) |
-| `overlays/room_lib/RoomLib_WindowClass.c` | maspsx `--expand-div`: lev 20 (RoomLib_WindowHandler 20) |
+| `overlays/room_lib/dropped_flare.c` | maspsx `--expand-div`: lev 63 (RoomEffect_DroppedFlareParticle 63) |
+| `overlays/room_lib/line_burst.c` | maspsx `--expand-div`: lev 36 (RoomEffect_LineBurstController 36) |
+| `overlays/room_lib/spark_attacks.c` | maspsx `--expand-div`: lev 37 (RoomEffect_BeamSparkController 37) |
+| `overlays/room_lib/trail_burst_attacks.c` | maspsx `--expand-div`: lev 66 (RoomEffect_SeekingTrailParticle 66) |
+| `overlays/room_lib/grab_attack.c` | maspsx `--expand-div`: lev 17 (RoomEffect_RisingSprayController 17) |
+| `overlays/room_lib/mirror_model.c` | maspsx `--expand-div`: lev 29 (RoomEffect_ModelUpdate 29) |
+| `overlays/room_lib/motion_particles_2.c` | cc1 `-fno-strength-reduce`: lev 66 (RoomEffect_DrawMotionParticles 66) |
+| `overlays/room_lib/orbit_set.c` | cc1 `-fno-strength-reduce`: lev 179 (RoomEffect_UpdateOrbitBurst 38, RoomEffect_DrawOrbitBurst 33, RoomEffect_InitOrbitParticles 30) |
+| `overlays/room_lib/actor_classes.c` | maspsx `--expand-div`: lev 194 (RoomLib_HandlerE 58, RoomLib_HandlerC 33, RoomLib_AdvanceArcToTargetY 28) |
+| `overlays/room_lib/floor_walker_class.c` | maspsx `--expand-div`: lev 10 (RoomLib_UpdateHandlerG 10) |
+| `overlays/room_lib/window_class.c` | maspsx `--expand-div`: lev 20 (RoomLib_WindowHandler 20) |
 | `overlays/room_m023_theater/m023.c` | maspsx `--expand-div`: lev 16 (func_8018F710 16) |
 | `overlays/room_m256_museum/m256.c` | maspsx `--expand-div`: lev 14 (func_80192680 14) |
 | `overlays/room_m273_liberty/RoomM273_PulseSpriteCallback.c` | cc1 `-fno-schedule-insns`: lev 24 (RoomM273_PulseSpriteCallback 24) |

@@ -35,8 +35,8 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m017_theater]
-      - [0xC, c, ../room_lib/RoomEffect_MirrorModel]
-      - [0xB5C, .data, ../room_lib/RoomEffect_MirrorModel]
+      - [0xC, c, ../room_lib/mirror_model]
+      - [0xB5C, .data, ../room_lib/mirror_model]
       - start: 0xB98
         type: databin
         name: D_8018FB80

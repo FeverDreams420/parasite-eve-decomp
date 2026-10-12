@@ -35,9 +35,9 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m027_header]
-      - [0xC, .rodata, ../room_lib/RoomEffect_OrbitFlare]
-      - [0x1C, c, ../room_lib/RoomEffect_OrbitFlare]
-      - [0xC6C, c, ../room_lib/RoomLib_SetArgs3]
+      - [0xC, .rodata, ../room_lib/orbit_flare]
+      - [0x1C, c, ../room_lib/orbit_flare]
+      - [0xC6C, c, ../room_lib/script_args]
       - [0xC90, data, D_8018FC78]
       - [0xCCC, data, D_8018FCB4]
       - [0xD04, data, RoomSlotA_8018FC54]

@@ -36,9 +36,9 @@ segments:
     subsegments:
       # generated from static prologue hints; verify with runtime trace and SHA check
       - [0x0, rodata, scene_e22]
-      - [0xC, .rodata, ../room_lib/RoomLib_ActorClasses]
+      - [0xC, .rodata, ../room_lib/actor_classes]
       - [0x1E4, rodata, scene_e22_tail]
-      - [0x244, c, ../room_lib/RoomLib_ActorClasses]
+      - [0x244, c, ../room_lib/actor_classes]
       - [0x3560, c, e22]
       - {start: 0xA0D8, type: data, name: scene_e22_data_00A0D8, linker_section_order: .text, linker_section: .code_data}
   - [0xA800]

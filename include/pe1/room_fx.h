@@ -404,7 +404,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomFxPairedEmitterState, secondary) == 0x120,
 PE1_STATIC_ASSERT(sizeof(RoomFxPairedEmitterState) == 0x140,
                   room_fx_paired_state_size);
 
-/* Each room that links RoomLib_ThreeTransformParticles defines its sprite
+/* Each room that links room_lib/three_particles.c defines its sprite
  * table and the two packet templates (primary sprite, floor shadow). */
 extern unsigned char RoomLib_ThreeParticleTable[];
 extern RoomFxSpritePacket RoomLib_ThreeParticlePacket;

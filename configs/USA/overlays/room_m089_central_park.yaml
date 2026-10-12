@@ -35,9 +35,9 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m089_central_park]
-      - [0xC, .rodata, ../room_lib/RoomLib_ActorClasses]
+      - [0xC, .rodata, ../room_lib/actor_classes]
       - [0x1E4, rodata, D_8018F1CC]
-      - [0x1F4, c, ../room_lib/RoomLib_ActorClasses]
+      - [0x1F4, c, ../room_lib/actor_classes]
       - [0x3510, c, m089]
       - [0x503C, data, D_80194024]
       - [0x5074, data, D_8019405C]

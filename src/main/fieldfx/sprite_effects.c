@@ -823,7 +823,7 @@ int func_800D70C0(int mode, s16 *state) {
 #define ROOM_FAN_SWEEP_SPARK_RAND rand
 #define ROOM_FAN_SWEEP_SPARK_PALETTE_LIT 7
 #define ROOM_FAN_SWEEP_SPARK_PALETTE_BASE 3
-#include "../../overlays/room_lib/RoomEffect_FanSweepSpark.inc"
+#include "../../overlays/room_lib/fan_sweep_spark.inc"
 
 /* Fan sweep controller: opens a spark pool and a trail pool, launches a
  * spark on a turning angle every other frame for 32 frames, updates the

@@ -35,10 +35,10 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m245_museum]
-      - [0xC, .rodata, ../room_lib/RoomLib_ActorClasses]
-      - [0x1E4, .rodata, ../room_lib/RoomEffect_TrailBurstAttacks]
-      - [0x1FC, c, ../room_lib/RoomLib_ActorClasses]
-      - [0x3518, c, ../room_lib/RoomEffect_TrailBurstAttacks]
+      - [0xC, .rodata, ../room_lib/actor_classes]
+      - [0x1E4, .rodata, ../room_lib/trail_burst_attacks]
+      - [0x1FC, c, ../room_lib/actor_classes]
+      - [0x3518, c, ../room_lib/trail_burst_attacks]
       - [0x661C, data, D_80195604]
       - [0x6654, data, D_8019563C]
       - [0x66C4, data, D_801956AC]

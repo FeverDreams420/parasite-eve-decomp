@@ -6,6 +6,7 @@
   },
   "overlays": {
     "address_files": 0,
-    "placeholder_files": 0
+    "placeholder_files": 0,
+    "unconventional_files": 0
   }
 }

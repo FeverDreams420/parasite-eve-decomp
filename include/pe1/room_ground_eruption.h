@@ -6,7 +6,7 @@
 #include "pe1/room_module.h"
 #include "pe1/psyq_libc.h"
 
-/* The ground eruption (src/overlays/room_lib/RoomEffect_GroundEruption.c). */
+/* The ground eruption (src/overlays/room_lib/ground_eruption.c). */
 
 /* The eruption's owner state: the owner's actor link, its view matrix (the
  * translation is where the eruption stands), the sprite asset whose low
@@ -125,7 +125,7 @@ extern RoomFxSpritePacket g_RoomEruptionRingPacket;
  * across the loop. */
 extern s16 g_RoomEruptionDebrisDepth;
 
-/* The eruption's module class (RoomEffect_GroundEruptionClass.c), in
+/* The eruption's module class (ground_eruption.c), in
  * class-table slot order, and the script and lists it hands the field
  * engine, named in each overlay's symbol file. */
 extern int g_RoomEruptionScript[];

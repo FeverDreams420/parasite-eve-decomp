@@ -35,11 +35,11 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m318_chrysler]
-      - [0xC, .rodata, ../room_lib/RoomLib_ActorClasses]
+      - [0xC, .rodata, ../room_lib/actor_classes]
       - [0x1E4, rodata, RoomLib_HandlerCArgsData_80191614]
-      - [0x25C, c, ../room_lib/RoomLib_ActorClasses]
+      - [0x25C, c, ../room_lib/actor_classes]
       - [0x3578, c, m318]
-      - [0xA2AC, c, ../room_lib/RoomLib_SetArg1]
+      - [0xA2AC, c, ../room_lib/script_arg]
       - [0xA2BC, c, m318_player_gate]
       - [0xA3B4, data, D_8019939C]
       - [0xA3EC, data, D_801993D4]

@@ -4,11 +4,11 @@
 #include "pe1/room_module.h"
 
 /* The three transform particles' module class
- * (src/overlays/room_lib/RoomLib_ThreeParticleClass.c): the plant, spawn,
+ * (src/overlays/room_lib/three_particles.c): the plant, spawn,
  * registration, start and close methods of the room module class, in
  * class-table slot order, and the script and lists they hand the field
- * engine, named in each room's symbol file. The class's no-ops belong to
- * RoomLib_ThreeTransformParticles.c. */
+ * engine, named in each room's symbol file. The class's no-ops open the
+ * particles' run in the same unit. */
 extern int g_RoomThreeParticleScript[];
 extern RoomModuleHandler g_RoomThreeParticleDrawList[];
 extern RoomModuleHandler g_RoomThreeParticleUpdateList[];

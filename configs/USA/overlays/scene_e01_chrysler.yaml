@@ -35,8 +35,8 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodatabin, scene_e01_header]
-      - [0xC, .rodata, ../room_lib/RoomEffect_GrabAttackSet]
-      - [0x70, c, ../room_lib/RoomEffect_GrabAttackSet]
+      - [0xC, .rodata, ../room_lib/grab_attack]
+      - [0x70, c, ../room_lib/grab_attack]
       - [0x31E0, data]
   - [0x3800]
 # source slice: scanner

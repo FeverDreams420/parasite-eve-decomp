@@ -1585,7 +1585,7 @@ int func_80195E10(int mode, Particle *particle) {
 #define ROOMLIB_POLL_RESET_FLAG D_8019AEF8
 #define ROOMLIB_POLL_RESET_COUNTER D_8019AEB2
 #define ROOMLIB_POLL_RESET_SEED D_8019AEAC
-#include "../room_lib/RoomLib_PollAndResetActor.inc"
+#include "../room_lib/poll_reset_actor.inc"
 
 #include "room_m273_effects.h"
 typedef RoomM273EffectModeState State;
@@ -1988,7 +1988,7 @@ int func_80197230(int mode, Vector *position) {
 #define ROOMLIB_POLL_RESET_FLAG D_8019AF69
 #define ROOMLIB_POLL_RESET_COUNTER D_8019AF0A
 #define ROOMLIB_POLL_RESET_SEED D_8019AF04.hit
-#include "../room_lib/RoomLib_PollAndResetActor.inc"
+#include "../room_lib/poll_reset_actor.inc"
 
 #include "room_m273_effects.h"
 

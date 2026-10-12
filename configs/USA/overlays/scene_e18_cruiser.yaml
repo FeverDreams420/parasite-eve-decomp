@@ -38,8 +38,8 @@ segments:
         type: rodatabin
         name: scene_e18_header
         dir: scene_e18_cruiser
-      - [0xC, .rodata, ../room_lib/RoomLib_ActorClasses]
-      - [0x1E4, c, ../room_lib/RoomLib_ActorClasses]
+      - [0xC, .rodata, ../room_lib/actor_classes]
+      - [0x1E4, c, ../room_lib/actor_classes]
       - [0x3500, c, e18_emitters]
       # Pulse-ring emitter and callback share one pool-record flow.
       - [0x4EF4, data]

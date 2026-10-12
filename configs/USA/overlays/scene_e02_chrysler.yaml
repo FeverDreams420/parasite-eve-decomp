@@ -39,17 +39,16 @@ segments:
         type: rodatabin
         name: scene_e02_header
         dir: scene_e02_chrysler
-      - [0xC, .rodata, ../room_lib/RoomEffect_GroundEruption]
-      - [0x5C, .rodata, ../room_lib/RoomLib_ActorClasses]
-      - [0x234, .rodata, ../room_lib/RoomEffect_OrbitFlare]
-      - [0x244, c, ../room_lib/RoomEffect_GroundEruptionClass]
-      - [0x3E0, c, ../room_lib/RoomEffect_GroundEruption]
-      - [0x1708, c, ../room_lib/RoomLib_ActorClasses]
-      - [0x4A24, c, ../room_lib/RoomEffect_OrbitFlare]
-      - [0x5674, c, ../room_lib/RoomLib_SetArgs3]
-      - [0x5698, c, ../room_lib/RoomEffect_HomingProjectile]
+      - [0xC, .rodata, ../room_lib/ground_eruption]
+      - [0x5C, .rodata, ../room_lib/actor_classes]
+      - [0x234, .rodata, ../room_lib/orbit_flare]
+      - [0x244, c, ../room_lib/ground_eruption]
+      - [0x1708, c, ../room_lib/actor_classes]
+      - [0x4A24, c, ../room_lib/orbit_flare]
+      - [0x5674, c, ../room_lib/script_args]
+      - [0x5698, c, ../room_lib/homing_projectile]
       - [0x6484, data]
-      - [0x6680, .data, ../room_lib/RoomEffect_HomingProjectileSeeds]
+      - [0x6680, .data, ../room_lib/homing_projectile_seeds]
       - [0x66A8, data]
   - [0x6800]
 # source slice: scanner

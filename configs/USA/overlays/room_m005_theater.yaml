@@ -36,7 +36,7 @@ segments:
     subsegments:
       - [0x0, rodata, room_m005_theater]
       - [0x30, c, m005]
-      - [0x1A84, c, ../room_lib/RoomLib_SetTaskVar0]
+      - [0x1A84, c, ../room_lib/script_task_var]
       - [0x1AB0, data, D_80190A98]
       - [0x1AEC, data, RoomM005_Rec2]
       - [0x1B0C, data, D_80190AF4]

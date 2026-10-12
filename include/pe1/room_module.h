@@ -14,10 +14,10 @@
  * The lists the methods hand to the field engine are the module's own data,
  * named in each room's symbol file. A room that links several modules names
  * the lists of the module whose methods are the shared units. The other
- * module's methods are a class unit of that module, linked in every room
- * that links the module, with the same methods and lists under the
- * module's names (RoomEffect_OrbitSetClass.c, RoomEffect_DropFieldClass.c,
- * RoomEffect_GroundEruptionClass.c, RoomLib_ThreeParticleClass.c). */
+ * module's methods open that module's unit in room_lib, linked in every
+ * room that links the module, with the same methods and lists under the
+ * module's names (orbit_set.c, drop_field.c, ground_eruption.c,
+ * three_particles.c). */
 
 struct RoomEnt;
 
@@ -59,7 +59,7 @@ extern int g_RoomScriptArg;
 int *RoomLib_SetArg1(int unused, int value);
 
 /* The spark barrage rooms take two such words, one entry each
- * (RoomLib_SetArgPair). */
+ * (room_lib/script_arg_pair.c). */
 extern int g_RoomScriptArgA;
 extern int g_RoomScriptArgB;
 

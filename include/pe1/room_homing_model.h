@@ -118,7 +118,7 @@ extern int func_8003010C(void *actor, int field);
 /* The projectile's constant seeds: the spark sprite's rotation and colour,
  * the model words reported to the scene script, and the floor ring's
  * rotation and colours. They are the data of
- * src/overlays/room_lib/RoomEffect_HomingProjectileSeeds.c; scene_e04 and
+ * src/overlays/room_lib/homing_projectile_seeds.c; scene_e04 and
  * scene_e05 keep them past the end of their extracted image and name them
  * in their symbol files. */
 extern GteRotation g_RoomHomingSparkRotation;

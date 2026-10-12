@@ -14,7 +14,7 @@
 #include "pe1/pe_image.h"
 
 /* The orbit effect set linked by room_m186, m187, m385, m388 and m389
- * (src/overlays/room_lib/RoomEffect_OrbitEffectSet.c): eight orbiting
+ * (src/overlays/room_lib/orbit_set.c): eight orbiting
  * particles, a burst of eight falling sprites with floor shadows and one
  * drifting sprite, sharing four sprite records the set's init fills. */
 
@@ -38,7 +38,7 @@ extern RoomFxSpritePacket g_RoomOrbitParticlePacket;
 extern RoomFxSpritePacket g_RoomOrbitBurstPacket;
 extern RoomFxSpritePacket g_RoomOrbitShadowPacket;
 
-/* The set's module class (RoomEffect_OrbitSetClass.c), in class-table slot
+/* The set's module class (orbit_set.c), in class-table slot
  * order, and the script and lists it hands the field engine, named in each
  * room's symbol file. */
 extern int g_RoomOrbitSetScript[];

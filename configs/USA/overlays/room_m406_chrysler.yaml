@@ -35,11 +35,11 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m406_chrysler]
-      - [0xC, .rodata, ../room_lib/RoomLib_ActorClasses]
-      - [0x1E4, .rodata, ../room_lib/RoomEffect_SoundBurst]
-      - [0x1F0, c, ../room_lib/RoomLib_ActorClasses]
-      - [0x350C, c, ../room_lib/RoomEffect_SoundBurst]
-      - [0x3C2C, c, ../room_lib/RoomLib_SetArgs3]
+      - [0xC, .rodata, ../room_lib/actor_classes]
+      - [0x1E4, .rodata, ../room_lib/sound_burst]
+      - [0x1F0, c, ../room_lib/actor_classes]
+      - [0x350C, c, ../room_lib/sound_burst]
+      - [0x3C2C, c, ../room_lib/script_args]
       - [0x3C50, data, D_80192C38]
       - [0x3C88, data, D_80192C70]
       - [0x3CF8, data, D_80192CE0]

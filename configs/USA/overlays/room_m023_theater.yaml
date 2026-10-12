@@ -36,7 +36,7 @@ segments:
     subsegments:
       - [0x0, rodata, room_m023_header]
       - [0x1C, c, m023]
-      - [0x165C, c, ../room_lib/RoomLib_SetTaskVar0]
+      - [0x165C, c, ../room_lib/script_task_var]
       - [0x1688, data, D_80190670]
       - [0x1708, data, D_801906F0]
       - [0x1738, data, D_80190720]

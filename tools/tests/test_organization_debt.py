@@ -29,6 +29,7 @@ class OrganizationDebtTests(unittest.TestCase):
         self.assertEqual(counts["overlays"], {
             "address_files": 1,
             "placeholder_files": 0,
+            "unconventional_files": 0,
         })
 
     def test_main_units_are_snake_case_roles_without_prefix(self):
@@ -57,7 +58,22 @@ class OrganizationDebtTests(unittest.TestCase):
         self.assertEqual(counts["overlays"], {
             "address_files": 0,
             "placeholder_files": 0,
+            "unconventional_files": 0,
         })
+
+    def test_room_lib_units_are_snake_case_roles(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = pathlib.Path(tmp)
+            (root / "overlays" / "room_lib").mkdir(parents=True)
+            (root / "overlays" / "room_m001").mkdir(parents=True)
+            (root / "overlays" / "room_lib" / "orbit_flare.c").write_text("")
+            (root / "overlays" / "room_lib" / "RoomEffect_OrbitFlare.c").write_text("")
+            (root / "overlays" / "room_lib" / "room_lib_spawn.c").write_text("")
+            (root / "overlays" / "room_m001" / "RoomM001_Door.c").write_text("")
+
+            counts = organization_debt.collect(root)
+
+        self.assertEqual(counts["overlays"]["unconventional_files"], 2)
 
     def test_check_rejects_new_placeholder_file(self):
         counts = {

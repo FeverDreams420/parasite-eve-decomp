@@ -14,7 +14,7 @@
 #include "pe1/fieldfx_calls.h"
 
 /* The spark ring and spark burst effects linked by ten museum rooms
- * (src/overlays/room_lib/RoomEffect_SparkRingBurst.c). The ring controller
+ * (src/overlays/room_lib/spark_ring_burst.c). The ring controller
  * plays a sound, then sheds damped sparks around the actor while it draws
  * a pulsing sprite with two expanding rings; the burst spawner launches
  * homing sparks that shed trail sparks and burst into debris when they

@@ -35,11 +35,11 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m120_nypd]
-      - [0xC, .rodata, ../room_lib/RoomLib_ActorClasses]
-      - [0x1E4, .rodata, ../room_lib/RoomEffect_LineBurst]
-      - [0x1F8, c, ../room_lib/RoomLib_ActorClasses]
-      - [0x3514, c, ../room_lib/RoomEffect_LineBurst]
-      - [0x4304, c, ../room_lib/RoomLib_SlotSet]
+      - [0xC, .rodata, ../room_lib/actor_classes]
+      - [0x1E4, .rodata, ../room_lib/line_burst]
+      - [0x1F8, c, ../room_lib/actor_classes]
+      - [0x3514, c, ../room_lib/line_burst]
+      - [0x4304, c, ../room_lib/script_slot]
       - [0x4348, data, D_80193330]
       - [0x4380, data, D_80193368]
       - [0x43F0, data, D_801933D8]

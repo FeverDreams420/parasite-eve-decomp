@@ -35,12 +35,11 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m087_central_park]
-      - [0xC, .rodata, ../room_lib/RoomLib_ThreeTransformParticles]
-      - [0x14, .rodata, ../room_lib/RoomLib_ActorClasses]
+      - [0xC, .rodata, ../room_lib/three_particles]
+      - [0x14, .rodata, ../room_lib/actor_classes]
       - [0x1EC, rodata, RoomLib_HandlerCArgsData_801925A0]
-      - [0x1EC, c, ../room_lib/RoomLib_ThreeParticleClass]
-      - [0x39C, c, ../room_lib/RoomLib_ThreeTransformParticles]
-      - [0x11E8, c, ../room_lib/RoomLib_ActorClasses]
+      - [0x1EC, c, ../room_lib/three_particles]
+      - [0x11E8, c, ../room_lib/actor_classes]
       - [0x4504, data, D_801934EC]
       - [0x4510, data, RoomLib_TableA_8018F22C]
       - [0x451C, data, D_80193504]

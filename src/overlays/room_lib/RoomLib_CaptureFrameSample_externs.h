@@ -1,7 +1,0 @@
-#ifndef PE1_EXT_B72D6683AC5F
-#define PE1_EXT_B72D6683AC5F
-extern s16 D_80192C34;
-extern s16 D_80192C36;
-extern s16 D_80192C38;
-extern s32 D_80192C3C;
-#endif /* PE1_EXT_B72D6683AC5F */

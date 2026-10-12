@@ -21,6 +21,10 @@
 #include "pe1/scene_e19_2_spin_ray.h"
 #include "pe1/scene_e19_2_ember.h"
 #include "pe1/scene_e19_2_twin_glow.h"
+#include "pe1/room_spark.h"
+#include "pe1/room_orbit_trail.h"
+#include "pe1/room_orbit_spin_burst.h"
+#include "pe1/room_glint_ribbon.h"
 #include "scene_e19_state.h"
 
 typedef struct SceneE19FrameGateLink {
@@ -2002,60 +2006,610 @@ int func_801978EC(int mode, SceneE22EmberBurst *burst) {
     return 0;
 }
 
-#define ROOMEFFECT_ORBIT_SPIN_FUNC func_801982A4
-#define ROOMEFFECT_ORBIT_SPIN_COLOR D_8018F234
-#define ROOMEFFECT_ORBIT_SPIN_ORIGIN D_8019B678
-#define ROOMEFFECT_ORBIT_SPIN_TRACK D_8019B4FC
-#include "../room_lib/RoomEffect_OrbitSpinParticle.inc"
+/* Orbit trail particle variant: the flash phase draws a spinning sprite
+ * with its own parameter block and the closing ring is larger and
+ * slower than RoomEffect_OrbitTrailParticle's. */
+int func_801982A4(int mode, RoomOrbitTrailParticle *p) {
+    GteShortVector offset;
+    GteShortVector blend;
+    GteRotation rotation;
+    RenderColor color;
+    int fall;
+    int bounce;
+    int scale;
+    int weight;
+    int glow;
 
-#undef ROOMEFFECT_ORBIT_SPIN_FUNC
-#undef ROOMEFFECT_ORBIT_SPIN_COLOR
-#undef ROOMEFFECT_ORBIT_SPIN_ORIGIN
-#undef ROOMEFFECT_ORBIT_SPIN_TRACK
+    color = D_8018F234;
+    switch (mode) {
+    case 1:
+        switch (p->state) {
+        case 0:
+            p->timer++;
+            p->heading.x += 0x10;
+            p->heading.y += 8;
+            if ((s16)p->timer < 0x18) break;
+            return 1;
+        case 1:
+            p->timer++;
+            p->x += p->heading.x;
+            p->y += p->heading.y;
+            p->z += p->heading.z;
+            p->heading.x = p->heading.x * 127 / 128;
+            p->heading.z = p->heading.z * 127 / 128;
+            fall = (u16)p->heading.y + 1;
+            p->heading.y = fall;
+            if (p->y >= g_RoomFloorY->y) {
+                bounce = -(s16)fall;
+                p->heading.y = bounce;
+            }
+            if ((s16)p->timer < 0x10) break;
+            return 1;
+        case 2:
+            p->timer++;
+            p->heading.z += 0x80;
+            if ((s16)p->timer < 0xC) break;
+            return 1;
+        }
+        break;
+    case 2:
+        switch (p->state) {
+        case 0:
+            scale = (rsin(((s16)p->timer << 10) / 24) + 0x1000) / 2;
+            func_800CFB7C(&p->heading, (s16)(p->radius * scale / 4096), &offset);
+            offset.x += D_8019B678.x;
+            offset.y += D_8019B678.y;
+            offset.z += D_8019B678.z;
+            weight = rsin(((s16)p->timer << 10) / 24);
+            LoadAverageShort12(&D_8019B678, &offset, 0x1000 - weight,
+                          weight, &blend);
+            {
+                RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+                gte_ldrotmatrix(matrixSlot->value);
+                gte_ldtransmatrix(matrixSlot->value);
+            }
+            func_800CF3AC(D_8019B4FC, &color, (s16)p->timer);
+            func_800D2B58(&blend, &offset, 0, &color, 0, 0x80, 1);
+            break;
+        case 1: {
+            u16 clut;
+            int kind;
+            int palette;
+            int size = rsin((s16)p->timer << 6) + 0x800;
+            glow = rcos((s16)p->timer * 1204 / 16) / 128 + 0x28;
+            D_800F3368.parameter00 = 0x40;
+            D_800F3368.parameter02 = 4;
+            D_800F3368.extent_x = 0x40;
+            D_800F3368.extent_y = 0x40;
+            rotation.x = 0;
+            rotation.y = 0;
+            rotation.z = (s16)p->timer * 32;
+            rotation.flags = 0;
+            kind = D_800F3368.palette;
+            palette = D_800E1204[kind];
+            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            clut = GetClut(0x60, palette);
+            func_800CEE20((GteShortVector *)p, &rotation, size, size, 0x40, clut, 1,
+                          glow / 2, 0);
+            break;
+        }
+        case 2: {
+            u16 clut;
+            int kind;
+            int palette;
+            glow = rcos(((s16)p->timer << 10) / 12) / 32;
+            scale = rsin(((s16)p->timer << 10) / 12);
+            /* The scaled radius shares the palette kind's temporary, which
+             * is what leaves the heading pointer the first saved register. */
+            kind = p->radius * scale / 4096;
+            func_800CFB7C(&p->heading, (s16)kind, &offset);
+            offset.x += D_8019B678.x;
+            offset.y += D_8019B678.y;
+            offset.z += D_8019B678.z;
+            {
+                RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+                gte_ldrotmatrix(matrixSlot->value);
+                gte_ldtransmatrix(matrixSlot->value);
+            }
+            *(u32 *)&color = 0x808080;
+            {
+                int tpage = D_800E2850[D_800E11EA];
+                D_800F3368.palette = 3;
+                D_800F3368.parameter06 = 0;
+                D_800F3368.tpage = tpage;
+            }
+            kind = D_800F3368.palette;
+            palette = D_800E1204[kind];
+            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            clut = GetClut(0x10, palette);
+            func_800D2370(&offset, (GteRotation *)&p->heading, 1000, 320, 0x80, 0x90,
+                          0x1F, 0x1F, clut, &color, &color, (s16)glow, 1);
+            break;
+        }
+        }
+        break;
+    }
+    return 0;
+}
 
-#define ROOMEFFECT_ORBIT_SPIN_BURST_FUNC func_80198914
-#define ROOMEFFECT_ORBIT_SPIN_BURST_CALLBACK func_801982A4
-#define ROOMEFFECT_ORBIT_SPIN_BURST_COLOR0 D_8018F23C
-#define ROOMEFFECT_ORBIT_SPIN_BURST_COLOR1 D_8018F240
-#define ROOMEFFECT_ORBIT_SPIN_BURST_ORIGIN D_8019B678
-#include "../room_lib/RoomEffect_OrbitSpinBurst.inc"
+/* Controller that bursts orbit spin particles from the actor during the
+ * first four frames (falling sparks, sweeping trails and drifting rings),
+ * flashes a glow, a halo, two tilted rings and three glow sprites while it
+ * fades, and publishes the actor position as the orbit centre. */
+int func_80198914(int mode, RoomOrbitTrailBurst *burst) {
+    RoomOrbitSpinBurstTilt tilt;
+    RenderColor color = D_8018F23C;
+    RenderColor ringColor = D_8018F240;
+    RoomOrbitTrailParticle *child;
+    int i;
 
-#undef ROOMEFFECT_ORBIT_SPIN_BURST_FUNC
-#undef ROOMEFFECT_ORBIT_SPIN_BURST_CALLBACK
-#undef ROOMEFFECT_ORBIT_SPIN_BURST_COLOR0
-#undef ROOMEFFECT_ORBIT_SPIN_BURST_COLOR1
-#undef ROOMEFFECT_ORBIT_SPIN_BURST_ORIGIN
+    switch (mode) {
+    case 0:
+        burst->counterB = 0;
+        burst->counterA = 0;
+        func_800D3F64(0x5DF, func_800D3FD8());
+        func_800D3F64(0x5E0, 0x80);
+        func_800CE870((char *)D_8009D254, 0, (s16 *)burst);
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x3C,
+                             (FieldFxCallbackListCallback)func_801982A4);
+    case 1:
+        if (D_800E27EC < 4) {
+            for (i = 0; i < 4; i++) {
+                child = (RoomOrbitTrailParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+                if (child) {
+                    child->x = burst->x;
+                    child->y = burst->y;
+                    child->z = burst->z;
+                    child->heading.x = func_80071A54() % 32 - 0x10;
+                    child->heading.y = func_80071A54() % 32 - 0x10;
+                    child->heading.z = func_80071A54() % 32 - 0x10;
+                    child->state = 1;
+                    child->timer = 0;
+                }
+            }
+            for (i = 0; i < 7; i++) {
+                child = (RoomOrbitTrailParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+                if (child) {
+                    child->x = burst->x;
+                    child->y = burst->y;
+                    child->z = burst->z;
+                    child->heading.x = func_80071A54();
+                    child->heading.y = func_80071A54();
+                    child->heading.z = func_80071A54();
+                    child->radius = (func_80071A54() & 0x3FF) + 0x5DC;
+                    child->state = 0;
+                    child->timer = 0;
+                }
+            }
+            for (i = 0; i < 5; i++) {
+                child = (RoomOrbitTrailParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+                if (child) {
+                    child->x = burst->x;
+                    child->y = burst->y;
+                    child->z = burst->z;
+                    child->heading.x = func_80071A54();
+                    child->heading.y = func_80071A54();
+                    child->heading.z = func_80071A54();
+                    child->radius = (func_80071A54() & 0xFF) + 0x100;
+                    child->state = 2;
+                    child->timer = 0;
+                }
+            }
+        }
+        if (D_800E27EC < 0x1C) break;
+        return 1;
+    case 2:
+        {
+            RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+            gte_ldrotmatrix(matrixSlot->value);
+            gte_ldtransmatrix(matrixSlot->value);
+        }
+        D_800F3368.parameter00 = 0x20;
+        D_800F3368.parameter02 = 2;
+        D_800F3368.extent_x = 0x20;
+        D_800F3368.extent_y = 0x20;
+        {
+            int tpage = D_800E2850[D_800E11EA];
+            D_800F3368.palette = 3;
+            D_800F3368.parameter06 = 0;
+            D_800F3368.parameter0A = 0;
+            D_800F3368.depth = 0x20;
+            D_800F3368.tpage = tpage;
+        }
+        if (D_800E27EC < 0x15) {
+            int glow = rcos((D_800E27EC << 10) / 20) / 32;
+            int scale;
+            {
+                u16 clut;
+                int kind;
+                int palette;
+                kind = D_800F3368.palette;
+                palette = D_800E1204[kind];
+                if (kind == 4 && D_800F3428 != 0) palette += 4;
+                clut = GetClut(0x90, palette);
+                func_800CEE20((GteShortVector *)burst, 0, 0x2000, 0x2000, 0x98,
+                              clut, 1, glow, 0);
+            }
+            func_800D004C((GteShortVector *)burst, 0x320, 0x320, 12, 0, 0x1000,
+                          0x1000, &color, 0, glow, 1);
+            scale = rsin((D_800E27EC << 10) / 20) / 2 + 0x1000;
+            func_800D0728((GteShortVector *)burst, 0x226, 0x320, 0x14, 0, scale,
+                          scale, 0, &color, glow / 2, 1);
+            func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0,
+                          &tilt.vector);
+            scale = rsin((D_800E27EC << 10) / 20);
+            tilt.rotation.flags = 1;
+            tilt.rotation.x += 0x200;
+            tilt.rotation.y += 0x400;
+            func_800D0728((GteShortVector *)burst, 0x44C, 0x578, 0x14,
+                          &tilt.rotation, scale, scale, 0, &ringColor, glow, 1);
+            tilt.rotation.x -= 0x400;
+            func_800D0728((GteShortVector *)burst, 0x44C, 0x578, 0x14,
+                          &tilt.rotation, scale, scale, 0, &ringColor, glow, 1);
+            glow = rcos((D_800E27EC << 10) / 20) / 32;
+            D_800F3368.parameter00 = 0x40;
+            D_800F3368.parameter02 = 4;
+            D_800F3368.extent_x = 0x40;
+            D_800F3368.extent_y = 0x40;
+            {
+                u16 clut;
+                int kind;
+                int palette;
+                kind = D_800F3368.palette;
+                palette = D_800E1204[kind];
+                if (kind == 4 && D_800F3428 != 0) palette += 4;
+                clut = GetClut(0xA0, palette);
+                func_800D3BC8((GteShortVector *)burst, 0x1000, 0x1000, 12, clut,
+                              1, glow, 0, 0xC00);
+            }
+            D_800F3368.parameter00 = 0x20;
+            D_800F3368.parameter02 = 2;
+            D_800F3368.extent_x = 0x20;
+            D_800F3368.extent_y = 0x20;
+            {
+                u16 clut;
+                int kind;
+                int palette;
+                kind = D_800F3368.palette;
+                palette = D_800E1204[kind];
+                if (kind == 4 && D_800F3428 != 0) palette += 4;
+                clut = GetClut(0xB0, palette);
+                func_800D3BC8((GteShortVector *)burst, 0x1000, 0x1000, 0x9A, clut,
+                              1, glow, 0, 0xA00);
+            }
+            {
+                u16 clut;
+                int kind;
+                int palette;
+                kind = D_800F3368.palette;
+                palette = D_800E1204[kind];
+                if (kind == 4 && D_800F3428 != 0) palette += 4;
+                clut = GetClut(0xC0, palette);
+                func_800D3BC8((GteShortVector *)burst, 0x1000, 0x1000, 0x9C, clut,
+                              1, glow, 0, 0x600);
+            }
+        }
+        D_8019B678.x = burst->x;
+        D_8019B678.y = burst->y;
+        D_8019B678.z = burst->z;
+        D_800F3368.parameter00 = 0x20;
+        D_800F3368.parameter02 = 2;
+        D_800F3368.extent_x = 0x20;
+        D_800F3368.extent_y = 0x20;
+        {
+            int tpage = D_800E2850[D_800E11EA];
+            D_800F3368.palette = 3;
+            D_800F3368.parameter06 = 0;
+            D_800F3368.parameter0A = 0;
+            D_800F3368.depth = 8;
+            D_800F3368.tpage = tpage;
+        }
+        break;
+    }
+    return 0;
+}
 
-#define ROOMEFFECT_GLINT_SPARK_FUNC func_801991F8
-#define ROOMEFFECT_GLINT_SPARK_COLOR D_8018F244
-#include "../room_lib/RoomEffect_GlintSparkParticle.inc"
+/* Spark that drifts with damped velocity and bounces off the floor
+ * height; state 0 draws a spinning glint that pulses with a sine of its
+ * age, state 1 spins while it drifts and draws a tinted fading glint. */
+int func_801991F8(int mode, RoomDampedSpark *spark) {
+    GteRotation rotation;
+    RenderColor color = D_8018F244;
+    int fall;
+    int bounce;
+    int angle;
+    int size;
+    int fade;
+    int frame;
 
-#undef ROOMEFFECT_GLINT_SPARK_FUNC
-#undef ROOMEFFECT_GLINT_SPARK_COLOR
+    switch (mode) {
+    case 1:
+        switch (spark->state) {
+        case 0:
+            spark->timer++;
+            spark->x += spark->vx;
+            spark->y += spark->vy;
+            spark->z += spark->vz;
+            spark->vx = spark->vx * 63 / 64;
+            spark->vz = spark->vz * 63 / 64;
+            fall = (u16)spark->vy + 1;
+            spark->vy = fall;
+            if (spark->y >= g_RoomFloorY->y) {
+                bounce = -(s16)fall;
+                spark->vy = bounce;
+            }
+            if ((s16)spark->timer < 24) break;
+            return 1;
+        case 1:
+            spark->timer++;
+            spark->angle += 32;
+            spark->x += spark->vx;
+            spark->y += spark->vy;
+            spark->z += spark->vz;
+            spark->vx = spark->vx * 63 / 64;
+            spark->vz = spark->vz * 63 / 64;
+            fall = (u16)spark->vy;
+            spark->vy = fall;
+            if (spark->y >= g_RoomFloorY->y) {
+                bounce = -(s16)fall;
+                spark->vy = bounce;
+            }
+            if ((s16)spark->timer < 16) break;
+            return 1;
+        }
+        break;
+    case 2:
+        switch (spark->state) {
+        case 0: {
+            u16 clut;
+            int kind;
+            int palette;
+            angle = ((s16)spark->timer << 10) / 24;
+            size = rsin(angle) + 0x1800;
+            fade = rcos(angle) / 128;
+            rotation.x = 0;
+            rotation.y = 0;
+            rotation.z = spark->angle + (s16)spark->timer * 32;
+            rotation.flags = 0;
+            frame = (s16)spark->timer / 8;
+            D_800F3368.parameter00 = 16;
+            D_800F3368.parameter02 = 1;
+            D_800F3368.extent_x = 16;
+            D_800F3368.extent_y = 16;
+            kind = D_800F3368.palette;
+            palette = D_800E1204[kind];
+            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            clut = GetClut(0x80, palette);
+            func_800CEE20((GteShortVector *)spark, &rotation, size, size,
+                          (s16)D_800F3368.parameter02 * frame + 0xFD, clut, 1,
+                          fade, 0);
+            break;
+        }
+        case 1: {
+            u16 clut;
+            int kind;
+            int palette;
+            angle = (s16)spark->timer << 6;
+            fade = rcos(angle) / 64 + 16;
+            rotation.z = spark->angle;
+            size = rsin(angle) / 2 + 0x800;
+            D_800F3368.parameter00 = 16;
+            D_800F3368.parameter02 = 1;
+            D_800F3368.extent_x = 16;
+            D_800F3368.extent_y = 16;
+            kind = D_800F3368.palette;
+            palette = D_800E1204[kind];
+            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            clut = GetClut(0x80, palette);
+            func_800CEE20((GteShortVector *)spark, &rotation, size, size,
+                          (s16)D_800F3368.parameter02 * ((s16)spark->timer / 2) + 0xB8,
+                          clut, 1, fade, &color);
+            break;
+        }
+        }
+        break;
+    }
+    return 0;
+}
 
-#define ROOMEFFECT_GLINT_RIBBON_FUNC func_80199684
-#define ROOMEFFECT_GLINT_RIBBON_CALLBACK func_801991F8
-#define ROOMEFFECT_GLINT_RIBBON_JOINTS D_8019B55C
-#define ROOMEFFECT_GLINT_RIBBON_OFFSET0 D_8018F248
-#define ROOMEFFECT_GLINT_RIBBON_OFFSET1 D_8018F250
-#define ROOMEFFECT_GLINT_RIBBON_COLOR0 D_8018F258
-#define ROOMEFFECT_GLINT_RIBBON_COLOR1 D_8018F25C
-#define ROOMEFFECT_GLINT_RIBBON_COLOR2 D_8018F260
-#include "../room_lib/RoomEffect_GlintRibbonController.inc"
+/* Strings two light ribbons across three actor joints.  For twelve frames
+ * the last joint and its floor shadow each shed a glint spark per frame,
+ * after which the ribbons fade out. */
+int func_80199684(int mode, RoomGlintRibbon *ribbon) {
+    GteShortVector first;
+    GteShortVector middle;
+    GteShortVector last;
+    GteShortVector offset0 = D_8018F248;
+    GteShortVector offset1 = D_8018F250;
+    RenderColor color0 = D_8018F258;
+    RenderColor color1 = D_8018F25C;
+    RenderColor color2 = D_8018F260;
+    RoomDampedSpark *spark;
 
-#undef ROOMEFFECT_GLINT_RIBBON_FUNC
-#undef ROOMEFFECT_GLINT_RIBBON_CALLBACK
-#undef ROOMEFFECT_GLINT_RIBBON_JOINTS
-#undef ROOMEFFECT_GLINT_RIBBON_OFFSET0
-#undef ROOMEFFECT_GLINT_RIBBON_OFFSET1
-#undef ROOMEFFECT_GLINT_RIBBON_COLOR0
-#undef ROOMEFFECT_GLINT_RIBBON_COLOR1
-#undef ROOMEFFECT_GLINT_RIBBON_COLOR2
+    switch (mode) {
+    case 0:
+        ribbon->alpha = 0x80;
+        ribbon->reserved00 = 0;
+        ribbon->timer = 0;
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, D_8019B55C[0],
+                      &offset0, &first);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, D_8019B55C[1],
+                      &offset0, &middle);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, D_8019B55C[2],
+                      &offset1, &last);
+        func_800D1384(&first, &middle, 0x3F2, (unsigned char *)&color0, (unsigned char *)&color1, 0x80,
+                      (struct FieldTrailPair *)ribbon->trailA, 1);
+        func_800D1384(&middle, &last, 0x3F2, (unsigned char *)&color1, (unsigned char *)&color2, 0x80,
+                      (struct FieldTrailPair *)ribbon->trailB, 1);
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x24,
+                             (FieldFxCallbackListCallback)func_801991F8);
+    case 1:
+        ribbon->timer++;
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, D_8019B55C[2],
+                      &offset0, &first);
+        middle.x = first.x;
+        middle.y = first.y;
+        middle.z = first.z;
+        first.y = g_RoomFloorY->y;
+        if (ribbon->timer < 13) {
+            spark = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+            if (spark != 0) {
+                spark->x = first.x;
+                spark->y = first.y;
+                spark->z = first.z;
+                spark->vx = func_80071A54() % 32 - 0x10;
+                spark->vy = -(func_80071A54() % 32);
+                spark->vz = func_80071A54() % 32 - 0x10;
+                spark->state = 0;
+                spark->timer = 0;
+            }
+            spark = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+            if (spark != 0) {
+                spark->x = middle.x;
+                spark->y = middle.y;
+                spark->z = middle.z;
+                spark->vx = func_80071A54() % 32 - 0x10;
+                spark->vy = func_80071A54() % 32 - 0x10;
+                spark->vz = func_80071A54() % 32 - 0x10;
+                spark->state = 1;
+                spark->timer = 0;
+            }
+        } else if (ribbon->alpha > 0) {
+            ribbon->alpha -= 0x10;
+        }
+        if (ribbon->timer < 12) break;
+        return 2;
+    case 2:
+        if (ribbon->alpha >= 0) {
+            FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, D_8019B55C[0],
+                          &offset0, &first);
+            FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, D_8019B55C[1],
+                          &offset0, &middle);
+            FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, D_8019B55C[2],
+                          &offset1, &last);
+            func_800D1384(&first, &middle, 10, (unsigned char *)&color0, (unsigned char *)&color1, ribbon->alpha,
+                          (struct FieldTrailPair *)ribbon->trailA, 1);
+            func_800D1384(&middle, &last, 10, (unsigned char *)&color1, (unsigned char *)&color2, ribbon->alpha,
+                          (struct FieldTrailPair *)ribbon->trailB, 1);
+        }
+        D_800F3368.parameter00 = 0x10;
+        D_800F3368.parameter02 = 1;
+        D_800F3368.extent_x = 0x10;
+        D_800F3368.extent_y = 0x10;
+        {
+            int tpage = D_800E2850[D_800E11E8];
+            D_800F3368.palette = 2;
+            D_800F3368.parameter06 = 0;
+            D_800F3368.parameter0A = 0;
+            D_800F3368.depth = 0x10;
+            D_800F3368.tpage = tpage;
+        }
+        break;
+    }
+    return 0;
+}
 
-#define ROOMEFFECT_PULSE_GLINT_FUNC func_80199C28
-#include "../room_lib/RoomEffect_PulseGlintParticle.inc"
+/* Spark that drifts with damped velocity and bounces off the floor
+ * height for 24 frames; state 0 draws a spinning glint whose size and
+ * fade follow a sine and a cosine of its age, state 1 also spins its
+ * seed angle and draws a fixed frame glint that shrinks as it fades. */
+int func_80199C28(int mode, RoomDampedSpark *spark) {
+    GteRotation rotation;
+    int fall;
+    int bounce;
+    int angle;
+    int size;
+    int fade;
+    int frame;
 
-#undef ROOMEFFECT_PULSE_GLINT_FUNC
+    switch (mode) {
+    case 1:
+        switch (spark->state) {
+        case 0:
+            spark->timer++;
+            spark->x += spark->vx;
+            spark->y += spark->vy;
+            spark->z += spark->vz;
+            spark->vx = spark->vx * 63 / 64;
+            spark->vz = spark->vz * 63 / 64;
+            fall = (u16)spark->vy + 1;
+            spark->vy = fall;
+            if (spark->y >= g_RoomFloorY->y) {
+                bounce = -(s16)fall;
+                spark->vy = bounce;
+            }
+            if ((s16)spark->timer < 24) break;
+            return 1;
+        case 1:
+            spark->timer++;
+            spark->angle += 20;
+            spark->x += spark->vx;
+            spark->y += spark->vy;
+            spark->z += spark->vz;
+            spark->vx = spark->vx * 31 / 32;
+            spark->vz = spark->vz * 31 / 32;
+            fall = (u16)spark->vy + 1;
+            spark->vy = fall;
+            if (spark->y >= g_RoomFloorY->y) {
+                bounce = -(s16)fall;
+                spark->vy = bounce;
+            }
+            if ((s16)spark->timer < 24) break;
+            return 1;
+        }
+        break;
+    case 2:
+        switch (spark->state) {
+        case 0: {
+            u16 clut;
+            int kind;
+            int palette;
+            angle = ((s16)spark->timer << 10) / 24;
+            size = rsin(angle) + 0x2000;
+            fade = rcos(angle) / 80;
+            rotation.x = 0;
+            rotation.y = 0;
+            rotation.z = spark->angle + (s16)spark->timer * 32;
+            rotation.flags = 0;
+            frame = (s16)spark->timer / 8;
+            D_800F3368.parameter00 = 16;
+            D_800F3368.parameter02 = 1;
+            D_800F3368.extent_x = 16;
+            D_800F3368.extent_y = 16;
+            kind = D_800F3368.palette;
+            palette = D_800E1204[kind];
+            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            clut = GetClut(0x80, palette);
+            func_800CEE20((GteShortVector *)spark, &rotation, size, size,
+                          (s16)D_800F3368.parameter02 * frame + 0xFD, clut, 1,
+                          fade, 0);
+            break;
+        }
+        case 1: {
+            u16 clut;
+            int kind;
+            int palette;
+            angle = ((s16)spark->timer << 10) / 24;
+            fade = rcos(angle) / 46;
+            rotation.z = spark->angle;
+            size = rcos(angle) / 4;
+            D_800F3368.parameter00 = 32;
+            D_800F3368.parameter02 = 2;
+            D_800F3368.extent_x = 32;
+            D_800F3368.extent_y = 32;
+            kind = D_800F3368.palette;
+            palette = D_800E1204[kind];
+            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            clut = GetClut(0x10, palette);
+            func_800CEE20((GteShortVector *)spark, &rotation, size, size, 0x98,
+                          clut, 1, fade, 0);
+            break;
+        }
+        }
+        break;
+    }
+    return 0;
+}
 
 /* Mode 0 picks the two joints; mode 1 sprays a ring of sixteen sparks and
  * sixteen falling sparks at frame 15 and reports 2 after frame 33; mode 2
@@ -2284,19 +2838,114 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
     return 0;
 }
 
-#define ROOMEFFECT_JITTER_SIZED_FUNC func_8019AC30
-#define ROOMEFFECT_JITTER_SIZED_ROTATION D_8018F1CC
-#include "../room_lib/RoomEffect_JitterSizedSpark.inc"
+/* Spark that drifts with damped velocity, jitters and spins for 8 frames
+ * while drawing an animated sprite scaled by its size field. */
+int func_8019AC30(int mode, RoomJitterSpark *spark) {
+    GteRotation rotation = D_8018F1CC;
+    int fall;
+    int bounce;
+    int size;
 
-#undef ROOMEFFECT_JITTER_SIZED_FUNC
-#undef ROOMEFFECT_JITTER_SIZED_ROTATION
+    switch (mode) {
+    case 1:
+        switch (spark->state) {
+        case 0:
+            spark->timer++;
+            spark->x += spark->vx;
+            spark->y += spark->vy;
+            spark->z += spark->vz;
+            spark->vx = spark->vx * 63 / 64;
+            spark->vz = spark->vz * 63 / 64;
+            fall = (u16)spark->vy;
+            spark->vy = fall;
+            if (spark->y >= g_RoomFloorY->y) {
+                bounce = -(s16)fall;
+                spark->vy = bounce;
+            }
+            spark->x += (func_80071A54() & 7) - 3;
+            spark->y += (func_80071A54() & 7) - 3;
+            spark->z += (func_80071A54() & 7) - 3;
+            spark->angle += 8;
+            if ((s16)spark->timer < 8) break;
+            return 1;
+        }
+        break;
+    case 2:
+        switch (spark->state) {
+        case 0: {
+            int kind;
+            int palette;
+            rcos((s16)spark->timer << 5);
+            rotation.z = spark->angle;
+            size = spark->size * 4;
+            kind = D_800F3368.palette;
+            palette = D_800E1204[kind];
+            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            func_800CEE20((GteShortVector *)spark, &rotation, size * 3 / 2, size * 3 / 2,
+                          (s16)D_800F3368.parameter02 * (s16)spark->timer + 184,
+                          GetClut(208, palette), 1, 88, 0);
+            break;
+        }
+        }
+        break;
+    }
+    return 0;
+}
 
-#define ROOMEFFECT_JITTER_SPAWNER_FUNC func_8019AE8C
-#define ROOMEFFECT_JITTER_SPAWNER_CALLBACK func_8019AC30
-#include "../room_lib/RoomEffect_JitterSizedSpawner.inc"
+/* Spawner that, while the primary scene object is past frame 10, scatters
+ * up to three jitter sized sparks a frame up the object's anchor. */
+int func_8019AE8C(int mode) {
+    GteShortVector position;
+    RoomJitterSpark *child;
+    int i;
 
-#undef ROOMEFFECT_JITTER_SPAWNER_FUNC
-#undef ROOMEFFECT_JITTER_SPAWNER_CALLBACK
+    switch (mode) {
+    case 0:
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 10,
+                             (FieldFxCallbackListCallback)func_8019AC30);
+    case 1:
+        if (ANIM_OWNER_AS(struct PmPrimarySlot) != D_800942E4) return 1;
+        if (((RoomSparkOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->state->frame < 11) return 1;
+        func_800CE870(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, (s16 *)&position);
+        for (i = 0; i < 3; i++) {
+            if (func_80071A54() & 1) {
+                child = (RoomJitterSpark *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+                if (child) {
+                    position.y += 110;
+                    child->x = position.x;
+                    child->y = position.y;
+                    child->z = position.z;
+                    child->x += func_80071A54() % 400 - 200;
+                    child->y += func_80071A54() % 800 - 400;
+                    child->z += func_80071A54() % 400 - 200;
+                    child->size = (func_80071A54() & 0x1FF) + 682;
+                    child->angle = func_80071A54();
+                    child->vx = func_80071A54() % 24 - 12;
+                    child->vy = -(func_80071A54() % 24);
+                    child->vz = func_80071A54() % 24 - 12;
+                    child->state = 0;
+                    child->timer = 0;
+                }
+            }
+        }
+        break;
+    case 2: {
+        int tpage;
+        D_800F3368.parameter00 = 16;
+        D_800F3368.parameter02 = 1;
+        D_800F3368.extent_x = 16;
+        D_800F3368.extent_y = 16;
+        tpage = D_800E2850[D_800E11EA];
+        D_800F3368.palette = 3;
+        D_800F3368.parameter06 = 0;
+        D_800F3368.parameter0A = 0;
+        D_800F3368.depth = 32;
+        D_800F3368.tpage = tpage;
+        break;
+    }
+    }
+    return 0;
+}
 
 u32 *func_8019B1D8(void) {
     return (u32 *)&D_8019B668;

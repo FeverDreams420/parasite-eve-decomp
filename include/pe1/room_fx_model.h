@@ -45,7 +45,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomFxModelOwner, geom) == 0x1B4, room_fx_model_g
 int abs(int value);
 void func_80039B74(RoomFxModelGeom *geom, void *animation, int count, int mode);
 
-/* The mirror room controller (src/overlays/room_lib/RoomEffect_MirrorModel.c),
+/* The mirror room controller (src/overlays/room_lib/mirror_model.c),
  * linked by room_m017, room_m018, room_m021, room_m045, room_m102,
  * room_m151 and room_m319: it finds an actor by kind, binds a mirror model
  * to it across a guide line and redraws the reflection every frame. */

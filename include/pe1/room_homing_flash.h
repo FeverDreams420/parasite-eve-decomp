@@ -6,7 +6,7 @@
 #include "pe1/room_sound_burst.h"
 #include "pe1/field_texture_tables.h"
 
-/* The homing flash (src/overlays/room_lib/RoomEffect_HomingFlash.c): a
+/* The homing flash (src/overlays/room_lib/homing_flash.c): a
  * flash controller anchored to the actor and the homing sparks it
  * releases. */
 

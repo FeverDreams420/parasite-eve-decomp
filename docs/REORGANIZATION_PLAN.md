@@ -248,6 +248,9 @@ number. Files with the same part number can be merged now.
    replace single class methods. Merge only the flag-split
    `RoomFx_MotionParticles{,_2,_3}` once they compile under one set; probe
    first, as with `FieldEng_CollisionQueries`.
+   Status (2026-10-13, Step 10): the class methods stay one unit each; a
+   module and its own class, which always follow each other, became one
+   unit, and the motion particle set is still split.
 2. **Directory names.** Make one config-wide rename commit per item, covering
    yaml, sym file, src dir and CI cache key:
    - `room_m350` gets its text-bank suffix.
@@ -474,6 +477,22 @@ without local jumps reveal no base and now share the segment of their
 neighbours (for `boot_display` the retail callback tables and calls show
 that the whole overlay runs at 0x80122FA4). The pairs that stay apart,
 and why, are in CODE_ORGANIZATION.md ("Overlay translation units").
+
+### Step 10: room library units (2026-10-13)
+
+The shared units in `src/overlays/room_lib/` follow the same naming
+(`RoomEffect_OrbitFlare.c` is `orbit_flare.c`, `RoomLib_Spawn6.c` is
+`class_spawn.c`, `RoomLib_SetArgs3.c` is `script_args.c`), mapped in
+`tools/reorg/maps/step10_room_lib_units.csv` and in the room_lib rows of
+`docs/reorganization_mapping.csv`. Five pairs that every linking overlay
+places back to back became one unit (`drop_field.c`,
+`ground_eruption.c`, `orbit_set.c`, `three_particles.c`,
+`class_register_active.c`), single-instance templates were written out
+in their unit, and the per-unit `_externs.h` headers were folded into
+existing headers: 90 files to 54. `make organization-check` counts
+`room_lib` names that break the convention in the overlays scope
+(ratcheted at zero). What stays apart and why is listed in
+CODE_ORGANIZATION.md, "Room library units".
 
 ---
 
