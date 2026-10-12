@@ -86,7 +86,7 @@ set_mode:
     phase = (u16)D_8009D254->facingAngle + 0x800;
     motion->angle = phase;
     value = rsin((s16)phase);
-    entity->posX.fixed += ((u32)(motion->amplitude * value) << 4);
+    entity->posX.fixed += (motion->amplitude * value) << 4;
     value = rcos(motion->angle);
-    entity->posZ.fixed += ((u32)(motion->amplitude * value) << 4);
+    entity->posZ.fixed += (motion->amplitude * value) << 4;
 }
