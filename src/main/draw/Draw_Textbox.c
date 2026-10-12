@@ -36,7 +36,7 @@ typedef struct GpuModeTilePacket {
     u8 tile[1];
 } GpuModeTilePacket;
 
-void Gpu_InitDrawModeSprtPacket(GpuModeSprtPacket *packet, int tpage) {
+void Draw_InitDrawModeSprtPacket(GpuModeSprtPacket *packet, int tpage) {
     u8 *prim = packet->sprt;
 
     SetDrawTPage(packet, 0, 1, tpage);
@@ -46,7 +46,7 @@ void Gpu_InitDrawModeSprtPacket(GpuModeSprtPacket *packet, int tpage) {
     }
 }
 
-void Gpu_InitDrawModeTilePacket(GpuModeTilePacket *packet, int tpage) {
+void Draw_InitDrawModeTilePacket(GpuModeTilePacket *packet, int tpage) {
     u8 *prim = packet->tile;
 
     SetDrawTPage(packet, 0, 1, tpage);
@@ -926,7 +926,7 @@ unsigned char D_8009CEC4;
 unsigned char D_8009CEC8;
 unsigned char D_8009CECC;
 
-void Gpu_SetLightingParams(short arg0, short arg1, short arg2, unsigned char arg3, unsigned char arg4, unsigned char arg5) {
+void Draw_SetLightingParams(short arg0, short arg1, short arg2, unsigned char arg3, unsigned char arg4, unsigned char arg5) {
     D_8009CEB8 = arg0;
     D_8009CEB4 = 1;
     D_8009CEBC = arg1;

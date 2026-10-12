@@ -47,7 +47,7 @@ void Script_DrawSyncAndFlush(void);
 void func_800E0060(void);
 void SetDispMask(int arg0);
 
-void Gpu_InitPipeline(void) {
+void Draw_InitPipeline(void) {
     int one;
     int v1;
     register int t0 asm("$8");

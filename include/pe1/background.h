@@ -88,7 +88,7 @@
  *   Geo_LoadMeshEntry 0x80066F60  builds the tile primitives (the format above).
  *   Render_DrawSpriteEntry 0x80067294  flat screen-space path (clips vs 320/224).
  *   Render_DrawActorShadow   0x80068014  src/main/render/Render_MeshListAndFade.c (GTE/OT).
- *   Geo_BuildMeshList 0x80067A78 ; Gpu_LoadGeomState 0x80066800 ; called from
+ *   Geo_BuildMeshList 0x80067A78 ; Render_LoadGeomState 0x80066800 ; called from
  *                     Entity_FrameUpdate 0x80035558 (@0x80035B0C).
  *   GetClut 0x80077AA4 ; GetTPage 0x80077A64 (libgpu).
  *   Asset_FindTable08ByU32Key 0x8006E498  (container resource lookup by u32 id).
@@ -105,7 +105,7 @@
  *                       state (also referenced by menu/textbox code via .reloc),
  *                       so renaming needs the full byte-safe workflow.
  *   g_GeomGroupSel        0x800BCFFD   active group/view selector (u8). Written by
- *                       Gpu_LoadGeomState; read by Geo_BuildMeshList/
+ *                       Render_LoadGeomState; read by Geo_BuildMeshList/
  *                       Geo_RenderMeshList/Render_* as an index of stride-52
  *                       entries in the State ctx g_GeomState (selects which
  *                       mesh-entry group / camera view is drawn).

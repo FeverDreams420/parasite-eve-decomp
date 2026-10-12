@@ -25,7 +25,7 @@
 #include "pe1/pe_image.h"
 #include "pe1/akao/commands.h"
 
-int Gpu_InitDisplay(int mode) {
+int Draw_InitDisplay(int mode) {
     int mode_reg;
     int one;
     register u8 **slots asm("$18");
@@ -98,7 +98,7 @@ int Gpu_InitDisplay(int mode) {
     do {
         ClearOTagR(slots[g_ActiveDrawSlot], 0x1000);
         Render_SetCDDCSlot();
-        Gpu_RenderFrame();
+        Draw_RenderFrame();
     } while ((g_ScreenTransitionState[0] & 3) != one);
 
     D_800B0DC6 = 0;
@@ -125,7 +125,7 @@ inline short Seq_GetElapsed(void) {
 
 /* Both queries are integrated here; the inlined calls leave retail's
  * otherwise empty eight-byte frame and the repeated enabled test. */
-int Gpu_CheckDrawStatus(void) {
+int Draw_CheckDrawStatus(void) {
     if (Draw_GetDrawEnabled()) {
         if (Seq_GetElapsed() > 0) {
             if (D_800B0DBB != 0) {
@@ -137,11 +137,11 @@ int Gpu_CheckDrawStatus(void) {
     return 0;
 }
 
-TimFile *Gpu_GetTimTableEntry(TimRelativeTable *table, int index) {
+TimFile *Draw_GetTimTableEntry(TimRelativeTable *table, int index) {
     return (TimFile *)&table->bytes[table->offsets[(s16)index]];
 }
 
-void Gpu_LoadTimTable(TimRelativeTable *table, int count) {
+void Draw_LoadTimTable(TimRelativeTable *table, int count) {
     int i;
 
     for (i = 0; i < count; i++) {

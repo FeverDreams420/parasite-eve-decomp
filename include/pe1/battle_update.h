@@ -18,7 +18,7 @@ void Battle_StepLevelUp(void);
 void Battle_StepPostBattle(void);
 void Battle_StepScriptEntry(void);
 int Battle_StepVictory(void);
-void Gpu_QueuePrimitive(void);
+void Draw_QueuePrimitive(void);
 int Inv_CountByValue(int);
 int Inv_FindItemById(int);
 void Inventory_OpenAyaItemList(unsigned int);

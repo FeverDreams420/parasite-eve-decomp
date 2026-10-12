@@ -174,7 +174,7 @@ restart4:
         directory = SceneAsset_ResolveOffset(blob, blob->directoryOffset);   \
         tim = SceneAsset_ResolveOffset(blob, directory->timEntries & 0x3fffff); \
         for (i = 0; i < directory->timEntries >> 22; i++)                    \
-            Gpu_LoadTimAsset(&tim[i], blob);                                 \
+            Draw_LoadTimAsset(&tim[i], blob);                                 \
     }
 
 int Scene_LoadFieldBg(void)
@@ -313,7 +313,7 @@ retry6:
         i = 0;
         if (directory->timEntries >> 22) {
             do {
-                Gpu_LoadTimAsset(&tim[i], blob);
+                Draw_LoadTimAsset(&tim[i], blob);
                 i++;
             } while (i < directory->timEntries >> 22);
         }
@@ -455,7 +455,7 @@ retry_texture:
                 directory = SceneAsset_ResolveOffset(room, room->header.directoryOffset);
                 tim = SceneAsset_ResolveOffset(room, directory->tims & 0x3FFFFF);
                 for (i = 0; i < directory->tims >> 22; i++) {
-                    Gpu_LoadTimAsset(&tim[i], room);
+                    Draw_LoadTimAsset(&tim[i], room);
                 }
                 loaded = 1;
             }
@@ -481,7 +481,7 @@ retry_room:
                 directory = SceneAsset_ResolveOffset(room, room->header.directoryOffset);
                 tim = SceneAsset_ResolveOffset(room, directory->tims & 0x3FFFFF);
                 for (i = 0; i < directory->tims >> 22; i++) {
-                    Gpu_LoadTimAsset(&tim[i], room);
+                    Draw_LoadTimAsset(&tim[i], room);
                 }
                 loaded = 1;
             }
@@ -763,7 +763,7 @@ retry:
         if (directory->timEntries >> 22) {
             tim = firstTim;
             do {
-                Gpu_LoadTimAsset(tim, blob);
+                Draw_LoadTimAsset(tim, blob);
                 packed = directory->timEntries;
                 ++i;
                 ++tim;
@@ -1040,7 +1040,7 @@ retry:
         if (directory->timEntries >> 22) {
             tim = firstTim;
             do {
-                Gpu_LoadTimAsset(tim, view);
+                Draw_LoadTimAsset(tim, view);
                 packed = directory->timEntries;
                 i++;
                 tim++;

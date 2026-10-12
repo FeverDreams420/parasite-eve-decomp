@@ -691,7 +691,7 @@ int Render_UpdateScrollPosition(void *positionArg, int duration, int mode)
 
 void SetGeomScreen(int h);
 
-int Gpu_LoadGeomState(int index) {
+int Render_LoadGeomState(int index) {
     GeomStateAddress table, base;
     CameraViewport *entry;
     u16 *dst;

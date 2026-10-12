@@ -68,7 +68,7 @@ void Battle_LayoutStatusPrimRow(int bottomY);
 void Battle_DrawTargetHighlight(void);
 void Battle_DrawActiveStatus(void);
 void Battle_DrawEnemyHP(s16 maximum, s16 current);
-void Gpu_DrawStatusIcons(void);
+void Draw_StatusIcons(void);
 int Menu_GetItemContextFlag(void);
 
 /* Active menu window origin (Menu_ActiveWindowMode): x at D_8009CE84 and y

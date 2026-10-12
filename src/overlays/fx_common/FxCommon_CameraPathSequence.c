@@ -15,14 +15,14 @@ void func_80195D3C(void)
         D_8019C040--;
         D_8019C041++;
 
-        lookup = Gpu_GetTimTableEntry(&D_801D0260, 2);
+        lookup = Draw_GetTimTableEntry(&D_801D0260, 2);
         func_8018F55C(D_8019C041 << 8, D_8019C042 + 1,
                        lookup, &point, &scratch);
         D_8019C810 = point.x;
         D_8019C814 = point.y;
         D_8019C818 = point.z;
 
-        lookup = Gpu_GetTimTableEntry(&D_801D0260, 2);
+        lookup = Draw_GetTimTableEntry(&D_801D0260, 2);
         func_8018F55C(D_8019C041 << 8, D_8019C042,
                        lookup, &point, &scratch);
         D_8019C330 = point.x;
@@ -40,7 +40,7 @@ void func_80195E4C(int index, int unused1, int unused2, int source)
     int result;
     int shortIndex;
 
-    lookup = Gpu_GetTimTableEntry(&D_801D0260, 2);
+    lookup = Draw_GetTimTableEntry(&D_801D0260, 2);
     shortIndex = savedIndex;
     func_8018F55C(source, shortIndex + 1, lookup, &point, &scratch);
     D_8019C054 = 0;
@@ -48,7 +48,7 @@ void func_80195E4C(int index, int unused1, int unused2, int source)
     D_8019C814 = point.y;
     D_8019C818 = point.z;
 
-    lookup = Gpu_GetTimTableEntry(&D_801D0260, 2);
+    lookup = Draw_GetTimTableEntry(&D_801D0260, 2);
     result = func_8018F55C(source, shortIndex, lookup, &point, &scratch);
     D_8019C040 = result - 2;
     D_8019C050 = 0;

@@ -290,7 +290,7 @@ segments:
       # GPU pipeline init is built without small-data address lowering (-G0 cc1)
       # and starts a new gprofile (split evidence); the fast scene flush and the
       # field frame loop that follow are -G8.
-      - [0x2F874, c, boot/Gpu_InitPipeline]
+      - [0x2F874, c, boot/Draw_InitPipeline]
       # Fast scene flush, the field frame loop and the GTE lighting state setters:
       # one -G8 FORCE_G0 unit with COMMON $gp words.
       - [0x2FAFC, c, boot/Boot_FrameLoop]
@@ -495,7 +495,7 @@ segments:
       - [0x6156C, c, draw/Draw_FlushPrimQueue]
       - [0x615D0, c, draw/Draw_PackPrimColor]
       - [0x61604, pad] # zero words after Draw_PackPrimColor's jr ra
-      - [0x61654, c, draw/Gpu_RenderFrame]
+      - [0x61654, c, draw/Draw_RenderFrame]
       - [0x617AC, c, draw/Math_SqrtApprox3]
       # Player movement state handlers share the pad/analog and camera-angle
       # globals and the default profile (main_tu_evidence G0920..G0923). The game

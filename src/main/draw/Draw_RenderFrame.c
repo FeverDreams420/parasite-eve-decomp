@@ -26,7 +26,7 @@ static inline DRAWENV *DrawAddress(int index) {
     return &g_RenderDrawEnvArray[index];
 }
 
-void Gpu_RenderFrame(void) {
+void Draw_RenderFrame(void) {
     RenderBufferPrefix *buffers;
     int displayFlags;
     int idx;
@@ -52,7 +52,7 @@ void Gpu_RenderFrame(void) {
     idx = g_ActiveDrawSlot;
     PutDispEnv(DispAddress(idx));
 
-    status = Gpu_CheckDrawStatus();
+    status = Draw_CheckDrawStatus();
     if ((status << 24) != 0 ||
         (state_ptr = (RenderFrameState *)&g_GameState,
          state = state_ptr->flags,

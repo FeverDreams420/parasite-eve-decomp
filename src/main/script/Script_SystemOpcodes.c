@@ -775,7 +775,7 @@ int Script_ClearObjEntryFlag80(int **arg0) {
 }
 
 int Script_LoadGeomState(int **arg0) {
-    Gpu_LoadGeomState(**arg0);
+    Render_LoadGeomState(**arg0);
     return 1;
 }
 
@@ -832,7 +832,7 @@ int Script_WaitFrameOrDraw(int **arg0) {
     if (Seq_GetElapsed() == *arg0[0]) {
         return 1;
     }
-    if ((Gpu_CheckDrawStatus() << 24) != 0) {
+    if ((Draw_CheckDrawStatus() << 24) != 0) {
         g_SceneDataTable0 -= 0xC;
         g_TaskNodePool->active = 1;
     } else {
@@ -851,7 +851,7 @@ int Script_Noop2(void) {
 }
 
 int Entity_YieldOnDrawBusy(void) {
-    if ((Gpu_CheckDrawStatus() << 24) != 0) {
+    if ((Draw_CheckDrawStatus() << 24) != 0) {
         g_SceneDataTable0 -= 8;
         g_TaskNodePool->active = 1;
     } else {

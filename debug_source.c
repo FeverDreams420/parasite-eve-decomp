@@ -127,7 +127,7 @@ extern void func_8010C0D8(s32);
 extern void func_8007A2A4(void);
 extern void DsControlB(s32, s32, s32);
 extern void VSync(s32);
-extern void Gpu_RenderFrame(void);
+extern void Draw_RenderFrame(void);
 s32 Memcard_PlayVideo(s32 index);
 extern u8 D_801D0DBE;
 extern s16 D_800BCE84[];

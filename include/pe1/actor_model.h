@@ -48,7 +48,7 @@
  *   Entity_CopyAttachmentData()                        -- find same-type actor, share
  *   Scene_LoadEntityTexture()/Scene_LoadEntityTextures()/Asset_LoadTimTextures()
  *                                                      -- stream TIM textures from PE.IMG
- *   Gpu_LoadTimAsset()/Gpu_LoadTimTable()             -- upload TIMs to VRAM (LoadImage)
+ *   Draw_LoadTimAsset()/Draw_LoadTimTable()             -- upload TIMs to VRAM (LoadImage)
  *   Anim_BuildRotationMatrices(), Anim_DecodeBoneRotationsByte/Short(),
  *   Entity_AdvanceAnim(), Entity_TickAnimSequences()  -- skeletal animation
  *     (bone rotations are delta/abs-encoded; decoded to 3x3 matrices in scratch

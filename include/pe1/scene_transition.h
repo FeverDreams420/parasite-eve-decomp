@@ -16,7 +16,7 @@
  *         that did not revert on return; ignore it for room identity).
  *
  * LOAD PATH:
- *   Gpu_InitPipeline()           -> Scene_LoadRoom(D_8009D280)
+ *   Draw_InitPipeline()           -> Scene_LoadRoom(D_8009D280)
  *   Scene_LoadRoom(s32 roomId):
  *     Text_EncodeBase32(buf, roomId)  -> 6-char room name (table D_800930B4)
  *     Text_ParseMapNumber(buf)        -> 3-digit map number from name[2..4]
@@ -42,7 +42,7 @@
  *   s32  Scene_LoadSceneData(...);            // 0x8006A9E4
  *   int  Text_EncodeBase32(char *out, u32 v);  // room id -> 6-char name
  *   int  Text_ParseMapNumber(char *name);      // 0x8006E454; name -> map number
- *   void Gpu_InitPipeline(void);              // calls Scene_LoadRoom(D_8009D280)
+ *   void Draw_InitPipeline(void);              // calls Scene_LoadRoom(D_8009D280)
  *   int  Render_BeginSceneLoad(void);          // updates render transition flags
  *   g_PeImageBaseLba   base LBA of PE.IMG (room data source)
  *   g_MapIdTable = 0x800917E4

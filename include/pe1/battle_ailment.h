@@ -10,7 +10,7 @@
  * has one bit set. Both bits set is the one-use immunity left by using the
  * matching cure while healthy; the next matching attack consumes that pair
  * and does not apply the ailment. Battle_ApplyDamage cases 13-16 implement
- * the cure, and Gpu_DrawStatusIcons draws one icon per pair.
+ * the cure, and Draw_StatusIcons draws one icon per pair.
  *
  * In-game names are PE.IMG string table 2 (Text_LookupTableC), decoded with
  * tools/scripts/pe1_text.py. The cure item id is the Battle_ApplyDamage kind

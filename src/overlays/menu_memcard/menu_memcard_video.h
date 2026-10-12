@@ -78,7 +78,7 @@ extern u16 D_80093160;
 extern u16 D_80093162[];
 extern u32 D_8009D26C;
 s32 Memcard_StepVideo(void);
-extern void SetDispMask(s32), func_80074A44(s32), func_80072714(void), func_800726C4(void), func_80072724(void), func_8003EB04(void), func_8007A2A4(void), Gpu_RenderFrame(void);
+extern void SetDispMask(s32), func_80074A44(s32), func_80072714(void), func_800726C4(void), func_80072724(void), func_8003EB04(void), func_8007A2A4(void), Draw_RenderFrame(void);
 
 s32 Memcard_PlayVideo(s32 index);
 

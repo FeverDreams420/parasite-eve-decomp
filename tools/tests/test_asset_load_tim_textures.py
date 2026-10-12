@@ -31,11 +31,11 @@ class AssetLoadTimTexturesTests(unittest.TestCase):
                        g_PmSlotTable=0x800942E4, g_PmSlotTable2=0x800942E8,
                        g_PmCmdHandlerTable=0x800942E0, g_PmTables=0x800942E0,
                        D_800930E2=0x800930E2,
-                       D_800930E4=0x800930E4, Gpu_LoadTimAsset=0x8006E1C0,
+                       D_800930E4=0x800930E4, Draw_LoadTimAsset=0x8006E1C0,
                        CdRom_ReadSectorsFromLba=0x8006E6A8, CdRom_PollReady=0x8006E7E8,
                        Asset_FindTable08ByU32Key=0x8006E498, LoadImage=0x8007506C)
         CALLS = {value: name for name, value in SYMBOLS.items() if name in (
-            'Gpu_LoadTimAsset', 'CdRom_ReadSectorsFromLba', 'CdRom_PollReady', 'Asset_FindTable08ByU32Key', 'LoadImage')}
+            'Draw_LoadTimAsset', 'CdRom_ReadSectorsFromLba', 'CdRom_PollReady', 'Asset_FindTable08ByU32Key', 'LoadImage')}
         retail = (ROOT/'assets/USA/main.exe').read_bytes()[0x5994C:0x59D94]
         with tempfile.TemporaryDirectory() as directory:
             compiled = linked_function_bytes(
@@ -127,7 +127,7 @@ class AssetLoadTimTexturesTests(unittest.TestCase):
                     next_state = 0x36
             if next_state == 0x36:
                 for index in range(nuploads):
-                    expected_events.append(('Gpu_LoadTimAsset', TIM+0x100+index*20, TIM))
+                    expected_events.append(('Draw_LoadTimAsset', TIM+0x100+index*20, TIM))
                 for index in range(nimages+1):
                     expected_events.append(('Asset_FindTable08ByU32Key', SCENE, 0x73DECD80+4*index))
                     if index < nimages:
@@ -163,7 +163,7 @@ class AssetLoadTimTexturesTests(unittest.TestCase):
                         events.append((name, *args)); result = read_result
                     elif name == 'CdRom_PollReady':
                         events.append((name,)); result = poll_result
-                    elif name == 'Gpu_LoadTimAsset':
+                    elif name == 'Draw_LoadTimAsset':
                         events.append((name, *args[:2]))
                     elif name == 'Asset_FindTable08ByU32Key':
                         events.append((name, *args[:2]))

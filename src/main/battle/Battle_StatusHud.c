@@ -29,8 +29,8 @@ u8 g_MenuActiveMode;
 u16 D_8009CE84;
 int g_BattleAttackAnimFrame;
 
-void Gpu_InitDrawModeSprtPacket(void *, int);
-void Gpu_InitDrawModeTilePacket(void *, int);
+void Draw_InitDrawModeSprtPacket(void *, int);
+void Draw_InitDrawModeTilePacket(void *, int);
 void SetSemiTrans(void *, int);
 void SetShadeTex(void *, int);
 void SetPolyF3(void *);
@@ -117,13 +117,13 @@ void Battle_DrawHPBar(void) {
             for (i = 0; (u8)i < 10; i++) {
                 gridRow = (u8)i;
                 for (j = 0; (u8)j < 4; j++) {
-                    Gpu_InitDrawModeSprtPacket(&g_BattlePanelDigits[buffer][gridRow][(u8)j], hudPage);
+                    Draw_InitDrawModeSprtPacket(&g_BattlePanelDigits[buffer][gridRow][(u8)j], hudPage);
                     g_BattlePanelDigits[buffer][gridRow][(u8)j].sprite.clut = hudClut;
                 }
             }
         }
         pageCode = GetTPage(0, 0, 0, 0);
-        Gpu_InitDrawModeTilePacket(&g_BattleStatusBackgrounds[bufferIndex], pageCode);
+        Draw_InitDrawModeTilePacket(&g_BattleStatusBackgrounds[bufferIndex], pageCode);
         background = &g_BattleStatusBackgrounds[bufferIndex].tile;
         background->r0 = 0x30;
         background->g0 = 0x30;
@@ -138,7 +138,7 @@ void Battle_DrawHPBar(void) {
         atbTrack->w = 0x38;
         atbTrack->h = 3;
         SetPolyG4(atbGradient);
-        Gpu_InitDrawModeSprtPacket(&g_BattleAtbMarkers[bufferIndex], hudPage);
+        Draw_InitDrawModeSprtPacket(&g_BattleAtbMarkers[bufferIndex], hudPage);
         atbMarker = &g_BattleAtbMarkers[bufferIndex].sprite;
         atbMarker->u = 0xC8;
         atbMarker->v = 0xE0;
@@ -162,13 +162,13 @@ void Battle_DrawHPBar(void) {
         atbMarker->color.bytes.b = 0xF9;
 
         for (i = 0; (u8)i < 4; i++) {
-            Gpu_InitDrawModeSprtPacket(&g_BattleHpDigits[bufferIndex][(u8)i], hudPage);
+            Draw_InitDrawModeSprtPacket(&g_BattleHpDigits[bufferIndex][(u8)i], hudPage);
             g_BattleHpDigits[bufferIndex][(u8)i].sprite.clut = hudClut;
             BATTLE_SPRITE_SLOTS(g_BattleHpDigits, 4)[bufferIndex][(u8)i].sprite.width = 6;
             BATTLE_SPRITE_SLOTS(g_BattleHpDigits, 4)[bufferIndex][(u8)i].sprite.height = 0xA;
         }
         for (i = 0; (u8)i < 5; i++) {
-            Gpu_InitDrawModeSprtPacket(&g_BattleMaxHpDigits[bufferIndex][(u8)i], hudPage);
+            Draw_InitDrawModeSprtPacket(&g_BattleMaxHpDigits[bufferIndex][(u8)i], hudPage);
             g_BattleMaxHpDigits[bufferIndex][(u8)i].sprite.clut = hudClut;
             BATTLE_SPRITE_SLOTS(g_BattleMaxHpDigits, 5)[bufferIndex][(u8)i].sprite.width = 6;
             BATTLE_SPRITE_SLOTS(g_BattleMaxHpDigits, 5)[bufferIndex][(u8)i].sprite.height = 0xA;
@@ -196,7 +196,7 @@ void Battle_DrawHPBar(void) {
             greenGradient->b3 = blue;
         }
         BATTLE_SET_GAUGE_GRADIENT(*pinkGradient, 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
-        Gpu_InitDrawModeSprtPacket(&g_BattleAtbLabels[bufferIndex], hudPage);
+        Draw_InitDrawModeSprtPacket(&g_BattleAtbLabels[bufferIndex], hudPage);
         atbLabel = &g_BattleAtbLabels[bufferIndex].sprite;
         SetShadeTex(atbLabel, 1);
         markerV = 0xF4;
@@ -206,7 +206,7 @@ void Battle_DrawHPBar(void) {
         g_BattleAtbLabels[bufferIndex].sprite.clut = hudClut;
         atbLabel->width = 8;
         atbLabel->height = 4;
-        Gpu_InitDrawModeSprtPacket(&g_BattleHpLabels[bufferIndex], hudPage);
+        Draw_InitDrawModeSprtPacket(&g_BattleHpLabels[bufferIndex], hudPage);
         hpLabel = &g_BattleHpLabels[bufferIndex].sprite;
         SetShadeTex(hpLabel, 1);
         hpLabel->u = 0x58;
@@ -215,7 +215,7 @@ void Battle_DrawHPBar(void) {
         g_BattleHpLabels[bufferIndex].sprite.clut = hudClut;
         hpLabel->width = 8;
         hpLabel->height = 4;
-        Gpu_InitDrawModeSprtPacket(&g_BattlePeLabels[bufferIndex], hudPage);
+        Draw_InitDrawModeSprtPacket(&g_BattlePeLabels[bufferIndex], hudPage);
         peLabel = &g_BattlePeLabels[bufferIndex].sprite;
         SetShadeTex(peLabel, 1);
         peLabel->u = 0x60;
@@ -232,7 +232,7 @@ void Battle_DrawHPBar(void) {
             BATTLE_STATUS_TILES[bufferIndex][tileIndex].g0 = shade;
             BATTLE_STATUS_TILES[bufferIndex][tileIndex].b0 = shade;
         }
-        Gpu_InitDrawModeSprtPacket(&D_8009E460[bufferIndex], hudPage);
+        Draw_InitDrawModeSprtPacket(&D_8009E460[bufferIndex], hudPage);
         upperLine = &D_8009E498[bufferIndex][0];
         pointerSprite = &D_8009E460[bufferIndex].sprite;
         pointerSprite->u = 0xE8;
@@ -251,7 +251,7 @@ void Battle_DrawHPBar(void) {
         lowerLine->b = 0x60;
         SetPolyF3(&D_8009E4D8[bufferIndex]);
         for (i = 0; (u8)i < 3; i++) {
-            Gpu_InitDrawModeSprtPacket(&D_8009E3B8[bufferIndex][(u8)i], hudPage);
+            Draw_InitDrawModeSprtPacket(&D_8009E3B8[bufferIndex][(u8)i], hudPage);
             D_8009E3B8[bufferIndex][(u8)i].sprite.clut = hudClut;
             BATTLE_SPRITE_SLOTS(D_8009E3B8, 3)[bufferIndex][(u8)i].sprite.width = 0x18;
             BATTLE_SPRITE_SLOTS(D_8009E3B8, 3)[bufferIndex][(u8)i].sprite.height = 8;
@@ -259,11 +259,11 @@ void Battle_DrawHPBar(void) {
                                     0x80, 0x80, 0x80);
         }
         for (i = 0; (u8)i < 10; i++) {
-            Gpu_InitDrawModeSprtPacket(&D_8009E500[bufferIndex][(u8)i], hudPage);
+            Draw_InitDrawModeSprtPacket(&D_8009E500[bufferIndex][(u8)i], hudPage);
             BATTLE_SET_SPRITE_COLOR(BATTLE_SPRITE_SLOTS(D_8009E500, 10)[bufferIndex][(u8)i].sprite,
                                     0x80, 0x80, 0x80);
         }
-        Gpu_InitDrawModeSprtPacket(&D_8009E768[bufferIndex], hudPage);
+        Draw_InitDrawModeSprtPacket(&D_8009E768[bufferIndex], hudPage);
         ammoLabel = &D_8009E768[bufferIndex].sprite;
         ammoLabel->u = 0x58;
         ammoLabel->v = 0xEF;
@@ -272,14 +272,14 @@ void Battle_DrawHPBar(void) {
         ammoLabel->height = 5;
         BATTLE_SET_SPRITE_COLOR(*ammoLabel, 0x80, 0x80, 0x80);
         for (i = 0; (u8)i < 4; i++) {
-            Gpu_InitDrawModeSprtPacket(&D_8009E7A0[bufferIndex][(u8)i], hudPage);
+            Draw_InitDrawModeSprtPacket(&D_8009E7A0[bufferIndex][(u8)i], hudPage);
             D_8009E7A0[bufferIndex][(u8)i].sprite.clut = hudClut;
             BATTLE_SPRITE_SLOTS(D_8009E7A0, 4)[bufferIndex][(u8)i].sprite.width = 6;
             BATTLE_SPRITE_SLOTS(D_8009E7A0, 4)[bufferIndex][(u8)i].sprite.height = 6;
             BATTLE_SET_SPRITE_COLOR(BATTLE_SPRITE_SLOTS(D_8009E7A0, 4)[bufferIndex][(u8)i].sprite,
                                     0x80, 0x80, 0x80);
         }
-        Gpu_InitDrawModeSprtPacket(&D_8009E730[bufferIndex], hudPage);
+        Draw_InitDrawModeSprtPacket(&D_8009E730[bufferIndex], hudPage);
         statusIcon = &D_8009E730[bufferIndex].sprite;
         statusIcon->u = 0x68;
         statusIcon->v = 0xF4;
@@ -287,7 +287,7 @@ void Battle_DrawHPBar(void) {
         statusIcon->width = 0x18;
         statusIcon->height = 4;
         BATTLE_SET_SPRITE_COLOR(*statusIcon, 0x80, 0x80, 0x80);
-        Gpu_InitDrawModeSprtPacket(&D_8009E880[bufferIndex], hudPage);
+        Draw_InitDrawModeSprtPacket(&D_8009E880[bufferIndex], hudPage);
         ammoIcon = &D_8009E880[bufferIndex].sprite;
         ammoIcon->u = 0x7C;
         ammoIcon->v = 0xEF;
@@ -296,12 +296,12 @@ void Battle_DrawHPBar(void) {
         ammoIcon->height = 5;
         BATTLE_SET_SPRITE_COLOR(*ammoIcon, 0x80, 0x80, 0x80);
         for (i = 0; (u8)i < 2; i++) {
-            Gpu_InitDrawModeSprtPacket(&D_8009E8B8[bufferIndex][(u8)i], hudPage);
+            Draw_InitDrawModeSprtPacket(&D_8009E8B8[bufferIndex][(u8)i], hudPage);
             D_8009E8B8[bufferIndex][(u8)i].sprite.clut = hudClut;
             BATTLE_SPRITE_SLOTS(D_8009E8B8, 2)[bufferIndex][(u8)i].sprite.width = 6;
             BATTLE_SPRITE_SLOTS(D_8009E8B8, 2)[bufferIndex][(u8)i].sprite.height = 6;
         }
-        Gpu_InitDrawModeSprtPacket(&D_8009E928[bufferIndex], hudPage);
+        Draw_InitDrawModeSprtPacket(&D_8009E928[bufferIndex], hudPage);
         D_8009E928[bufferIndex].sprite.clut = hudClut;
         weaponIcon = &D_8009E928[bufferIndex].sprite;
         BATTLE_SET_SPRITE_COLOR(*weaponIcon, 0x80, 0x80, 0);
@@ -309,7 +309,7 @@ void Battle_DrawHPBar(void) {
         for (i = 0; (u8)i < 13; i++) {
             glyph = Draw_LookupGlyphDescriptor(((u8)i) + 0x6A);
             pageCode = GetTPage(0, 0, 0x1C0, 0);
-            Gpu_InitDrawModeSprtPacket(&D_8009E960[bufferIndex][(u8)i], pageCode);
+            Draw_InitDrawModeSprtPacket(&D_8009E960[bufferIndex][(u8)i], pageCode);
 #define GLYPH_SPRITE BATTLE_SPRITE_SLOTS(D_8009E960, 13)[bufferIndex][(u8)i].sprite
             GLYPH_SPRITE.u = glyph->u;
             GLYPH_SPRITE.v = glyph->v;
@@ -321,7 +321,7 @@ void Battle_DrawHPBar(void) {
 #undef GLYPH_SPRITE
         }
         pageCode = GetTPage(0, 0, 0x1C0, 0);
-        Gpu_InitDrawModeSprtPacket(&((RenderPagedSpritePacket *)D_8009EC38)[bufferIndex], pageCode);
+        Draw_InitDrawModeSprtPacket(&((RenderPagedSpritePacket *)D_8009EC38)[bufferIndex], pageCode);
         cursorSprite = &((RenderPagedSpritePacket *)D_8009EC38)[bufferIndex].sprite;
         bufferIndex += 1;
         cursorSprite->width = 0x10;
@@ -1085,7 +1085,7 @@ void Battle_DrawStatusPanel(s32 mode, BattleStatusPanel *input) {
     g_BattleStatusPanelSlot += 1;
 }
 
-void Gpu_SetupSprites(BattleEntity *entity, int unused, int icon) {
+void Draw_SetupSprites(BattleEntity *entity, int unused, int icon) {
     int i;
 
     g_BattleSpritePrimCountdown = 0x1E;
@@ -1107,7 +1107,7 @@ void Gpu_SetupSprites(BattleEntity *entity, int unused, int icon) {
 
 #include "common.h"
 
-void Gpu_QueuePrimitive(void) {
+void Draw_QueuePrimitive(void) {
     int slot;
 
     slot = g_ActiveDrawSlot;
@@ -1182,7 +1182,7 @@ void Gpu_QueuePrimitive(void) {
     AddPrim(*(char **)((char *)g_OtBufferTable + idx) + 0x1C, (char *)idx_off + (int)base); \
 } while (0)
 
-void Gpu_DrawStatusIcons(void) {
+void Draw_StatusIcons(void) {
     Combatant *s1;
     int s0;
     register int s2 asm("$18");
@@ -1422,7 +1422,7 @@ void Battle_DrawActiveStatus(void)
     }
     AddPrim(D_800B0E38.ordering[D_8009CDDC] + 7, (u32 *)&g_BattleStatusBackgrounds[D_8009CDDC]);
     Battle_DrawEnemyHP(D_8009D278->maxHP, D_8009D278->curHP);
-    Gpu_DrawStatusIcons();
+    Draw_StatusIcons();
 }
 
 /* Digit sprites of the current draw buffer. Every use indexes again: the

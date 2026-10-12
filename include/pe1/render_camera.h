@@ -26,7 +26,7 @@ int Render_PrepareFrame(void);
 extern u16 g_CameraClampedY[];
 
 int CdRom_SetSeekPos(unsigned int arg0);
-int Gpu_LoadGeomState(int index);
+int Render_LoadGeomState(int index);
 int Render_SetFadeColour(unsigned int arg0);
 int CdRom_SetScreenPos(int arg0, int arg1, int arg2, int arg3, unsigned short arg4);
 

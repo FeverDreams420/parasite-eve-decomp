@@ -19,7 +19,7 @@ typedef union TimRelativeTable {
     u8 bytes[1];
 } TimRelativeTable;
 
-TimFile *Gpu_GetTimTableEntry(TimRelativeTable *table, int index);
-void Gpu_LoadTimTable(TimRelativeTable *table, int count);
+TimFile *Draw_GetTimTableEntry(TimRelativeTable *table, int index);
+void Draw_LoadTimTable(TimRelativeTable *table, int count);
 
 #endif

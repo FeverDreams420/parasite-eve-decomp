@@ -167,7 +167,7 @@ int Akao_Calc3DPan(AkaoPackedRect3 *pos, int *pan, int *volume)
 
 /* Contiguous scene-container helpers: TIM upload, key encoding and lookup. */
 
-int Gpu_LoadTimAsset(TimUploadRecord *asset, void *base) {
+int Draw_LoadTimAsset(TimUploadRecord *asset, void *base) {
     RECT rect;
     int mask;
     u8 *saved_base;
@@ -328,7 +328,7 @@ DEFINE_ASSET_SEARCHER(Asset_FindTable30ByU16Key, char *, int, trackEntries, Scen
 
 /* Scene display clearing and CD read flow share the scene read flags. */
 
-void Gpu_ClearOnFlag(void) {
+void Draw_ClearOnFlag(void) {
     u32 *state = &g_GameState.flags;
 
     if (*state & 0x08000000) {

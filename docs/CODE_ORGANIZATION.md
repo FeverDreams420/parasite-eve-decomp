@@ -249,7 +249,7 @@ Units that stay separate, and why:
   `Entity_HitAndDropTable` and `Battle_PlayerTurnFlow`).
 - Open small-data shapes from `docs/REORGANIZATION_G_FLAGS.md`:
   `script/Script_ValueOps.c` with `script/Script_NodeActions.c` (#0) and
-  `boot/Gpu_InitPipeline.c` (#20, also a gprofile boundary).
+  `boot/Draw_InitPipeline.c` (#20, also a gprofile boundary).
 - Source policy: the GNU-as units (`math/Math_FixedMul.c`,
   `math/math_fixed.c`, `draw/Draw_PackPrimColor.c`,
   `draw/Math_SqrtApprox3.c`) stay alone.
@@ -792,7 +792,7 @@ How the earlier groups were closed, for the next symbols of the same kind:
   accesses `$gp`-relative (`Geo_ActorFloorResolution`, `Menu_TextboxDraw`).
   A unit that also needs cc1 to treat a small word as expensive (address
   kept in a register) gets `-G0` for cc1 instead; that is why
-  `Gpu_InitPipeline` is its own unit, ahead of the `-G8` frame loop. This
+  `Draw_InitPipeline` is its own unit, ahead of the `-G8` frame loop. This
   retired the array, record and aliased views of the battle, task, boot,
   menu and field words, the actor list head (`D_8009D20C`,
   `g_FieldActorListHead`), the player (`D_8009D254` as a `BattleEntity`
@@ -1319,7 +1319,7 @@ single removal (none was byte-identical):
   v0/v1, lev 2). The six local item
   record lookups became `Inv_LookupItemRecord`/`Inv_LookupItemRecordScaled`
   in `pe1/inventory_slots.h`.
-- boot: `Field_HandleStateTransition` (lev 13 to 48), `Gpu_InitPipeline`
+- boot: `Field_HandleStateTransition` (lev 13 to 48), `Draw_InitPipeline`
   (pins lev 11 to 13, barrier lev 37: the constant clamps are not folded
   without it). `Boot_DiscTableLoad` keeps its retry `goto`s (loop.c).
 - main: `Battle_ApplySpellEffect` is crutch-free. `Battle_BuildTargetList`
@@ -1583,7 +1583,7 @@ Crutches still in these units, with the best crutch-free lev found:
   and the semi-transparency byte load still move below the width store
   (same base register, disjoint offsets, so sched1 may reorder them), and
   the x/y cursor stores swap.
-- `Gpu_InitDisplay` (3 pins, 1 barrier) repeats `Boot_InitMemoryLayout`
+- `Draw_InitDisplay` (3 pins, 1 barrier) repeats `Boot_InitMemoryLayout`
   (sys, also pinned) on the `u8 *volatile` buffer words of `pe1/sys.h`;
   both should change together with that header. Its locals are `u8 *` now
   (no integer casts). Without the barrier lev 14 (the `g_OtBufferTable`
@@ -1594,7 +1594,7 @@ Crutches still in these units, with the best crutch-free lev found:
 - `Battle_StatusHud.c`: the status-icon packets (`D_8009E960[2][13]`,
   `D_8009EC38[2]`, 28 bytes: draw mode then sprite) are addressed from the
   sprite part at +8 (`D_8009E968`, `D_8009EC40`) with byte offsets (7 byte
-  additions, 2 raw offsets) and `Gpu_DrawStatusIcons` keeps 8 pins. A typed
+  additions, 2 raw offsets) and `Draw_StatusIcons` keeps 8 pins. A typed
   `{ tag; mode; RenderSpritePacket sprite; }` array reproduces every
   instruction except the register base, which retail points at the sprite
   part (lev 8 from the immediates). `battle_status.h` now types
@@ -1603,8 +1603,8 @@ Crutches still in these units, with the best crutch-free lev found:
 - `Battle_StatusHud.c`: the status icons are typed now
   (`g_StatusIconPackets[2][13]`, `g_StatusMarkerPackets[2]` in
   `pe1/draw_state.h`, linker names beside the battle byte arrays), and
-  `Gpu_SetupSprites`/`Gpu_QueuePrimitive` are plain field accesses.
-  `Gpu_DrawStatusIcons` keeps 7 pins and the integer address sums in its
+  `Draw_SetupSprites`/`Draw_QueuePrimitive` are plain field accesses.
+  `Draw_StatusIcons` keeps 7 pins and the integer address sums in its
   three emit macros (3 byte additions): retail adds the slot and icon
   offsets to the sprite base and derives the packet base as sprite base
   minus 8, which typed indexing does not produce (lev 48 with a texture-page
@@ -1809,7 +1809,7 @@ of scope). Recipes, none of which changed a byte:
   the colour through `RenderTintTargetView`; the mode bit is a nested `if`,
   because one `&&` chain lets fold merge the blue and mode compares into one
   masked word load.
-- `Gpu_InitPipeline` clears `D_8009D2E8` through the symbol; the linker gives
+- `Draw_InitPipeline` clears `D_8009D2E8` through the symbol; the linker gives
   the same `lui 0x800a`/`-0x2D18` pair as the absolute address did.
 - `GameState_Reset` writes named fields; two loop counters (`i` for the
   scene object, `j` for the key/table loops) replace the `$3`/`$5` pins and
@@ -1900,7 +1900,7 @@ Left, with the best crutch-free lev:
 - `Battle_DrawStatusPanel` (miss sprite link, `(u8 *)D_800B01C8 - 8`): as a
   `BattleSpriteWord` integer sum the frame/panel offset multiplies swap
   `a1`/`a2` (lev 16); with a byte member the `-8` moves after the sum.
-- `Gpu_SetupSprites` emit macros: the `BattleSpriteWord` form of `EMIT_BASE`
+- `Draw_SetupSprites` emit macros: the `BattleSpriteWord` form of `EMIT_BASE`
   reorders the base load against the slot multiply (lev 76); see the earlier
   entry for the typed forms.
 - `Menu_MainUpdate` `reset_operand` (mask, then `D_8009D278`): any union

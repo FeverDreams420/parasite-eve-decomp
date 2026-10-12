@@ -11,12 +11,12 @@ import unittest
 from tools.tests.csource import find_definition, function_text, linked_function_bytes
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = find_definition('Gpu_SetupSprites')
+SOURCE = find_definition('Draw_SetupSprites')
 
 
 class GpuSetupSpritesTests(unittest.TestCase):
     def test_setup_function_has_no_assembly(self):
-        source = function_text('Gpu_SetupSprites', SOURCE)
+        source = function_text('Draw_SetupSprites', SOURCE)
         source = re.sub(r'/\*.*?\*/|//[^\n]*','',source,flags=re.S)
         self.assertNotRegex(source,r'\b(?:asm|__asm__|INCLUDE_ASM|CC_POSTPASS)\b')
 
@@ -44,7 +44,7 @@ class GpuSetupSpritesTests(unittest.TestCase):
             provide = ''.join(f'PROVIDE({name} = 0x{value:X});\n'
                               for name, value in symbols.items()
                               if re.fullmatch(r'\w+', name))
-            compiled = linked_function_bytes('Gpu_SetupSprites', entry, 0x644,
+            compiled = linked_function_bytes('Draw_SetupSprites', entry, 0x644,
                                              provide, work, SOURCE)
         self.assertEqual(compiled,retail)
         rng = random.Random(entry)

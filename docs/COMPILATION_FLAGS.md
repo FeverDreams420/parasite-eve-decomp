@@ -137,7 +137,7 @@ and the linked binaries stayed identical:
 
 | unit | removed | why it did nothing |
 |---|---|---|
-| `boot/Gpu_InitPipeline.c`, `script/Script_FieldSfxQueue.c` | cc1 `-G0` | the default, written out |
+| `boot/Draw_InitPipeline.c`, `script/Script_FieldSfxQueue.c` | cc1 `-G0` | the default, written out |
 | `fx_common/effects.c` | cc1 `-fno-force-addr` | not an option cc.sh reads |
 | `menu_memcard/Memcard_ListAndScreenFlow.c` | second `-fno-cse-skip-blocks` line | left over from a merge |
 | `menu/Menu_SaveScreens.c`, `menu/Menu_SkillScreens.c`, `script/Script_NodePool.c`, `fx_common/model_buffers.c` | `--dont-expand-li` | no effect at ASPSX 2.56 |
@@ -148,7 +148,7 @@ and the linked binaries stayed identical:
 
 `MASPSX_FORCE_G0` is also byte-identical without it in
 `battle/BattleCmd_Commands.c`, `menu/Menu_EquipItemSelection.c`,
-`menu/Menu_StatusPanels.c`, `boot/Gpu_InitPipeline.c` and
+`menu/Menu_StatusPanels.c`, `boot/Draw_InitPipeline.c` and
 `script/Script_SystemOpcodes.c`; it stays, because it is part of the canonical
 K8/K0 sets those units share with their neighbours. `ASSEMBLER: GNU` on
 `math/Math_FixedMul.c` and `math/math_fixed.c` also stays: source policy
@@ -188,7 +188,7 @@ order of symbol-table entries can change, and the link is identical):
   (generated from the old objects by `reorg_merge.py --gp-commons`):
   `cdrom/CD_TrackReadFlow.c`, `draw/Draw_WipeAndGradient.c`,
   `draw/Draw_AllocColorQuad.c` (keeps `-fno-schedule-insns`),
-  `draw/Gpu_RenderFrame.c`, `entity/Entity_FrameUpdate.c`,
+  `draw/Draw_RenderFrame.c`, `entity/Entity_FrameUpdate.c`,
   `item/Menu_OpenItemUsePanelAtIndex.c`, `menu/Menu_InventoryScreens.c`,
   `menu/Menu_ItemActions.c`, `menu/Menu_ListDrawers.c`,
   `menu/Menu_SaveSlotDraw.c` (was assembler `-G4`),
@@ -325,7 +325,7 @@ differently but resolve to the same options count once.
 - `src/main/boot/Boot_InitSystemFlow.c`
 - `src/main/cdrom/CD_TrackReadFlow.c`
 - `src/main/draw/Draw_WipeAndGradient.c`
-- `src/main/draw/Gpu_RenderFrame.c`
+- `src/main/draw/Draw_RenderFrame.c`
 - `src/main/entity/Entity_FrameUpdate.c`
 - `src/main/item/Inv_ActiveList.c`
 - `src/main/item/Inv_ArmorCapacity.c`
@@ -388,7 +388,7 @@ differently but resolve to the same options count once.
 
 #### S8: `cc1 -G0 ; maspsx -G8 --use-comm-section FORCE_G0`
 
-- `src/main/boot/Gpu_InitPipeline.c`
+- `src/main/boot/Draw_InitPipeline.c`
 - `src/main/script/Script_FieldSfxQueue.c`
 - `src/main/script/Script_SystemOpcodes.c`
 
@@ -490,14 +490,14 @@ means only the order of symbol-table entries changed (cc1 `-G8` emits
 | `main/battle/Menu_MainUpdate.c` | cc1 `-G8`: same code, symbol table differs; cc1 `-g3`: lev 4292 (Menu_MainUpdate 2146, LM35 26, LM22 22); maspsx `-G8`: lev 10 (LM352 2, LM323 2, LM166 2); maspsx `--use-comm-section`: lev 5 (LM352 1, LM323 1, LM166 1); maspsx `--expand-div`: lev 18 (LM424 9, LM22 9); FORCE_G0: lev 372 (LM422 4, LM421 4, LM40 4); small-data set: lev 10 (LM352 2, LM323 2, LM166 2) |
 | `main/boot/Boot_FrameLoop.c` | cc1 `-G8`: lev 13 (Boot_RunFrame 13); maspsx `-G8`: lev 61 (Boot_RunFrame 56, Boot_FlushSceneFast 5); maspsx `--use-comm-section`: lev 17 (Boot_RunFrame 15, Boot_FlushSceneFast 2); FORCE_G0: lev 52 (Boot_RunFrame 52); small-data set: lev 63 (Boot_RunFrame 58, Boot_FlushSceneFast 5) |
 | `main/boot/Boot_InitSystemFlow.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 161 (Field_HandleStateTransition 150, Boot_BuildRenderFlagTable 11); maspsx `--use-comm-section`: lev 55 (Field_HandleStateTransition 50, Boot_BuildRenderFlagTable 5); FORCE_G0: lev 101 (Field_HandleStateTransition 86, Boot_InitSubsystems 9, Boot_BuildRenderFlagTable 4); small-data set: lev 161 (Field_HandleStateTransition 150, Boot_BuildRenderFlagTable 11) |
-| `main/boot/Gpu_InitPipeline.c` | maspsx `-G8`: lev 17 (Gpu_InitPipeline 17); maspsx `--use-comm-section`: lev 4 (Gpu_InitPipeline 4); FORCE_G0: identical; small-data set: lev 17 (Gpu_InitPipeline 17) |
+| `main/boot/Draw_InitPipeline.c` | maspsx `-G8`: lev 17 (Draw_InitPipeline 17); maspsx `--use-comm-section`: lev 4 (Draw_InitPipeline 4); FORCE_G0: identical; small-data set: lev 17 (Draw_InitPipeline 17) |
 | `main/cdrom/CD_TrackReadFlow.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 206 (CD_StepReadState 77, CD_ReadSectors 54, CD_SeekToTrack 53); maspsx `--use-comm-section`: lev 48 (CD_StepReadState 19, CD_ReadSectors 12, CD_SeekToTrack 11); FORCE_G0: identical; small-data set: lev 206 (CD_StepReadState 77, CD_ReadSectors 54, CD_SeekToTrack 53) |
 | `main/cdrom/CdRom_SceneAssetsAndBootRead.c` | maspsx `--expand-div`: lev 19 (Akao_Calc3DPan 19) |
 | `main/draw/Draw_AllocColorQuad.c` | cc1 `-G8`: identical; cc1 `-fno-schedule-insns`: lev 107 (Draw_AllocColorQuad 107); maspsx `-G8`: lev 70 (Draw_AllocColorQuad 70); maspsx `--use-comm-section`: lev 24 (Draw_AllocColorQuad 24); maspsx `--expand-div`: lev 23 (Draw_AllocColorQuad 23); FORCE_G0: identical; small-data set: lev 70 (Draw_AllocColorQuad 70) |
 | `main/draw/Draw_TextPrimitives.c` | cc1 `-G8`: same code, symbol table differs; cc1 `-fno-cse-skip-blocks`: lev 22 (Draw_AllocTexturedQuad 22); maspsx `-G8`: lev 907 (Draw_AllocTexturedRectAlt 211, Draw_PrintTimeValue 81, Draw_PrintCenteredTextInWidth 65); maspsx `--use-comm-section`: lev 343 (Draw_AllocTexturedRectAlt 82, Draw_PrintTimeValue 38, Draw_PrintCenteredTextInWidth 23); maspsx `--expand-div`: lev 73 (Draw_AllocTexturedRect 13, Draw_PrintSignedNumberWidth4 12, Draw_PrintSignedNumberWidth3 12); FORCE_G0: lev 4 (Draw_SetBaseOffsetPosition 2, Draw_GetBaseY 2); small-data set: lev 907 (Draw_AllocTexturedRectAlt 211, Draw_PrintTimeValue 81, Draw_PrintCenteredTextInWidth 65) |
-| `main/draw/Draw_Textbox.c` | cc1 `-G8`: lev 20 (Render_SetupColorTable 20); maspsx `-G8`: lev 259 (Menu_DrawTextboxEntries 186, Render_SetupColorTable 24, Gpu_SetLightingParams 14); maspsx `--use-comm-section`: lev 79 (Menu_DrawTextboxEntries 49, Render_SetupColorTable 7, Gpu_SetLightingParams 7); FORCE_G0: lev 108 (Menu_DrawTextboxEntries 108); ASPSX_VERSION 2.70: lev 22 (Render_SetupColorTable 16, Menu_SetTextCursorRect 6); small-data set: lev 261 (Menu_DrawTextboxEntries 186, Render_SetupColorTable 26, Gpu_SetLightingParams 14) |
+| `main/draw/Draw_Textbox.c` | cc1 `-G8`: lev 20 (Render_SetupColorTable 20); maspsx `-G8`: lev 259 (Menu_DrawTextboxEntries 186, Render_SetupColorTable 24, Draw_SetLightingParams 14); maspsx `--use-comm-section`: lev 79 (Menu_DrawTextboxEntries 49, Render_SetupColorTable 7, Draw_SetLightingParams 7); FORCE_G0: lev 108 (Menu_DrawTextboxEntries 108); ASPSX_VERSION 2.70: lev 22 (Render_SetupColorTable 16, Menu_SetTextCursorRect 6); small-data set: lev 261 (Menu_DrawTextboxEntries 186, Render_SetupColorTable 26, Draw_SetLightingParams 14) |
 | `main/draw/Draw_WipeAndGradient.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 335 (Draw_AllocColorGradient 113, Draw_AllocColorTriGradient 66, Draw_EmitWipeBarRect 40); maspsx `--use-comm-section`: lev 119 (Draw_AllocColorGradient 42, Draw_AllocColorTriGradient 24, Draw_EmitWipeBarRect 16); FORCE_G0: identical; small-data set: lev 335 (Draw_AllocColorGradient 113, Draw_AllocColorTriGradient 66, Draw_EmitWipeBarRect 40) |
-| `main/draw/Gpu_RenderFrame.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 13 (Gpu_RenderFrame 13); maspsx `--use-comm-section`: lev 5 (Gpu_RenderFrame 5); FORCE_G0: identical; small-data set: lev 13 (Gpu_RenderFrame 13) |
+| `main/draw/Draw_RenderFrame.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 13 (Draw_RenderFrame 13); maspsx `--use-comm-section`: lev 5 (Draw_RenderFrame 5); FORCE_G0: identical; small-data set: lev 13 (Draw_RenderFrame 13) |
 | `main/draw/Render_DrawWireframeModel.c` | cc1 `-G8`: lev 57 (Render_DrawWireframeModel 57); maspsx `-G8`: lev 56 (Render_DrawWireframeModel 56); small-data set: lev 57 (Render_DrawWireframeModel 57) |
 | `main/draw/Render_FontGlyphLoad.c` | cc1 `-fno-schedule-insns`: lev 13 (Render_LoadFontGlyph 13) |
 | `main/draw/Render_FontGlyphSelection.c` | maspsx `--expand-div`: lev 30 (Render_LoadFontGlyphAlt 30) |

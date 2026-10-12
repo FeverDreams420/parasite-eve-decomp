@@ -16,10 +16,10 @@ void Scene_LoadSceneData(void);
 int Overlay_LoadTables(void);
 int CD_LoadBootAudio(void);
 int Overlay_LoadInitialImage(void);
-int Gpu_InitDisplay(int mode);
+int Draw_InitDisplay(int mode);
 void Boot_RunFrame(void);
 /* Entry points of the boot overlays: the title display, the movie player
- * and the display-mode selection that returns the mode for Gpu_InitDisplay. */
+ * and the display-mode selection that returns the mode for Draw_InitDisplay. */
 void func_8019234C(void);
 void func_801235DC(void);
 int func_801909B4(void);
@@ -48,13 +48,13 @@ extern u8 D_8009D1C0[];
 extern u8 D_800921F8[];
 extern u32 D_80092200[];
 
-/* Render pipeline set-up (Gpu_InitPipeline.c): the projection distances
+/* Render pipeline set-up (Draw_InitPipeline.c): the projection distances
  * of the field and battle views. */
 extern char D_800B1628[];
 extern char D_800B162C[];
 extern char D_800B8A18[];
 
-void Gpu_RenderFrame(void);
-int Gpu_CheckDrawStatus(void);
+void Draw_RenderFrame(void);
+int Draw_CheckDrawStatus(void);
 
 #endif

@@ -426,7 +426,7 @@ void Battle_Update(void) {
             g_BattleActionActorCount = 0;
         }
         if ((D_8009D235[0]) != 0) {
-            Gpu_QueuePrimitive();
+            Draw_QueuePrimitive();
         }
         player = D_8009D254;
         if ((player->animLastFrame == player->animPrev.parts.integer) && ((u8)player->actionMode < 4U)) {

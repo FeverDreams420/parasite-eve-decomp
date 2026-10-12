@@ -241,7 +241,7 @@ int CD_ReadSectors(unsigned int kind, unsigned int index, int channel,
 int CD_FindNextDataSector(void);
 
 int Asset_UnloadTableEntries(void);
-int Gpu_LoadTimAsset(TimUploadRecord *record, void *base);
+int Draw_LoadTimAsset(TimUploadRecord *record, void *base);
 extern u16 D_800930E2, D_800930E4;
 
 /* Scene voice-bank entries: actor animation key and two voice ids; the

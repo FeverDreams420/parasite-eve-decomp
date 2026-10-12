@@ -48,7 +48,7 @@ retry:
                     D_800B0DBA=0;
                     if(remaining<1400) {VSync(0);SetDispMask(0);result=1;}
                 }
-                Gpu_RenderFrame();
+                Draw_RenderFrame();
             } while(D_800B0DBA);
         }
     }

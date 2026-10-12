@@ -47,7 +47,7 @@ void Util_PackTime(u32 *src, PackedTime *out) {
     out->seconds = src[1] % 60 * 60;
 }
 
-int Gpu_CheckDrawStatus(void);
+int Draw_CheckDrawStatus(void);
 
 void Scene_TickTimers(void) {
     register GameTimerEntry *entry asm("$5");
@@ -62,7 +62,7 @@ void Scene_TickTimers(void) {
     if ((g_GameStateFlags & 0x41) != 0) {
         return;
     }
-    if ((Gpu_CheckDrawStatus() << 24) != 0) {
+    if ((Draw_CheckDrawStatus() << 24) != 0) {
         return;
     }
 

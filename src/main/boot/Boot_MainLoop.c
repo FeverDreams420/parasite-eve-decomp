@@ -64,7 +64,7 @@ void main(void) {
                 break;
             case 0xA9400048:
                 Overlay_LoadInitialImage();
-                Gpu_InitDisplay(func_801909B4());
+                Draw_InitDisplay(func_801909B4());
                 g_GameState.flags |= 3;
                 break;
             default:

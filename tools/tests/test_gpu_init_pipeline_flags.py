@@ -1,4 +1,4 @@
-"""Verify the field-move-lock update in Gpu_InitPipeline."""
+"""Verify the field-move-lock update in Draw_InitPipeline."""
 from importlib.util import find_spec
 from pathlib import Path
 import struct

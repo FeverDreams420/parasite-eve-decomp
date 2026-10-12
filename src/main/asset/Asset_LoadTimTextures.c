@@ -84,7 +84,7 @@ restart:
             u32 key;
             TimPackedImage *image;
             for (i = 0; i < (int)(directory->timEntries >> 22); i++)
-                Gpu_LoadTimAsset(&entry[i], blob);
+                Draw_LoadTimAsset(&entry[i], blob);
             blob = &state->loaded_scene_assets->header;
             for (key = 0x73DECD80; ; key += 4) {
                 image = (TimPackedImage *)Asset_FindTable08ByU32Key(blob, key);

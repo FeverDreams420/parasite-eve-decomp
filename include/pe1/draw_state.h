@@ -130,10 +130,10 @@ extern volatile unsigned char D_800B0DC6;
 extern signed char D_800B0DBB;
 
 /* Battle status icons: per draw buffer, thirteen paged sprites (poison,
- * confusion and the other ailment symbols Gpu_DrawStatusIcons lists). */
+ * confusion and the other ailment symbols Draw_StatusIcons lists). */
 extern RenderPagedSpritePacket g_StatusIconPackets[2][13];
-/* Status icon floated over an entity by Gpu_SetupSprites and raised two
- * pixels a frame by Gpu_QueuePrimitive. */
+/* Status icon floated over an entity by Draw_SetupSprites and raised two
+ * pixels a frame by Draw_QueuePrimitive. */
 extern RenderPagedSpritePacket g_StatusMarkerPackets[2];
 
 #endif /* PE1_DRAW_STATE_H */

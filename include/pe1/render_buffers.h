@@ -1,7 +1,7 @@
 #ifndef PE1_RENDER_BUFFERS_H
 #define PE1_RENDER_BUFFERS_H
 
-/* Work-buffer bases carved out by Gpu_InitDisplay. The -G8 menu units read
+/* Work-buffer bases carved out by Draw_InitDisplay. The -G8 menu units read
  * them with absolute addresses, so they are incomplete arrays used at
  * element 0. */
 extern unsigned char *g_RenderOtBufferBaseAlt[];

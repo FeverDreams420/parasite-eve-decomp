@@ -448,7 +448,7 @@ void Battle_ResolveHitOnTimer(void)
 }
 
 void Aya_DeriveStats(int *first, int *second);
-void Gpu_SetupSprites(BattleEntity *actor, int unused, int kind);
+void Draw_SetupSprites(BattleEntity *actor, int unused, int kind);
 
 void Battle_ApplyDamage(int damageKind) {
     int effect;
@@ -574,7 +574,7 @@ void Battle_ApplyDamage(int damageKind) {
         }
     }
     if (result != -1 && (D_8009D1A0 & 2)) {
-        Gpu_SetupSprites(D_8009D254, 0, (u8)result);
+        Draw_SetupSprites(D_8009D254, 0, (u8)result);
     }
 }
 

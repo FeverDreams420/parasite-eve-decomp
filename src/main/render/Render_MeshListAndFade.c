@@ -314,7 +314,7 @@ int Render_SetEntryPosition(int index, int x, int y) {
     return 0;
 }
 
-int Gpu_LoadGeomState(int);
+int Render_LoadGeomState(int);
 /* Loads the selected group's viewport, centres the camera on it and builds
  * every mesh entry's packets into `buffer`; *end returns the free space. */
 int Geo_RenderMeshList(void *buffer, void **end)
@@ -328,7 +328,7 @@ int Geo_RenderMeshList(void *buffer, void **end)
     unsigned int i;
     int x;
 
-    Gpu_LoadGeomState(*group);
+    Render_LoadGeomState(*group);
     address.state = state;
     address.word += state->entry_offset_1C;
     view = &address.viewport[*group];

@@ -33,22 +33,22 @@ u32 D_8009CDA4[1];
 
 #include "pe1/boot.h"
 
-void Gpu_InitPipeline(void);
+void Draw_InitPipeline(void);
 void Field_HandleStateTransition(void);
 void ClearOTagR(u32 *address, int length);
 void Scene_UpdateEntityList(void);
 void Entity_FrameUpdate(void);
-int Gpu_CheckDrawStatus(void);
+int Draw_CheckDrawStatus(void);
 int func_80122040(void);
 void func_80121A00(void);
-void Gpu_ClearOnFlag(void);
+void Draw_ClearOnFlag(void);
 void Render_Update(void);
 void Menu_DrawTextboxEntries(void);
 void Render_SetGteScreenOffset(void);
 void func_800E01BC(void);
 void Render_ResetGteScreenOffset(void);
 int Render_SetCDDCSlot(void);
-void Gpu_RenderFrame(void);
+void Draw_RenderFrame(void);
 int Render_SetFadeColour(unsigned int arg0);
 void Sys_FinishFrame(void);
 void ClearImage(RECT *rect, int r, int g, int b);
@@ -94,7 +94,7 @@ void Boot_RunFrame(void)
     u8 *scene_flags;
     RenderTintTargetView *fade;
 
-    Gpu_InitPipeline();
+    Draw_InitPipeline();
     if (D_8009D1C4 == D_8009D280) {
         scene_flags = &g_GameState.bank_state_12;
         state = &g_GameState;
@@ -130,10 +130,10 @@ void Boot_RunFrame(void)
             Entity_FrameUpdate();
 
             if (!(state->flags & 0x100)) {
-                if ((s8)Gpu_CheckDrawStatus() != 0) {
+                if ((s8)Draw_CheckDrawStatus() != 0) {
                     if ((s8)func_80122040() == 0) {
                         func_80121A00();
-                        Gpu_ClearOnFlag();
+                        Draw_ClearOnFlag();
                         continue;
                     }
                 } else if (!(state->flags & 0x200)) {
@@ -144,7 +144,7 @@ void Boot_RunFrame(void)
                     Render_ResetGteScreenOffset();
                     Render_SetCDDCSlot();
                 }
-                Gpu_RenderFrame();
+                Draw_RenderFrame();
                 /* A finished fade to white reloads fade colour 15. */
                 if (!D_8009CDA4[0] && fade->packed.red_green == 0xFF00FFu &&
                     fade->packed.blue == 0xFF) {

@@ -13,7 +13,7 @@ int func_80191E30(int arg0)
     s32 *savedOutput;
     int result;
 
-    resource = Gpu_GetTimTableEntry(&D_801D0260, 3);
+    resource = Draw_GetTimTableEntry(&D_801D0260, 3);
     PushMatrix();
     SetTransMatrix(&D_8019CC30);
     SetRotMatrix(&D_8019CC30);
