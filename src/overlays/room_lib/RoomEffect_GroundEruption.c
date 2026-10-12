@@ -358,7 +358,7 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, RoomEruptionRing 
     RoomFxVec4 scale1;
     RoomFxVec4 scale2;
     RoomEruptionActor *rawOwner;
-    register RoomEruptionActor *owner asm("$17");
+    RoomEruptionActor *owner;
     unsigned int i;
     s16 *packetDepth;
     RoomFxSpritePacket *packet;
@@ -378,7 +378,7 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, RoomEruptionRing 
     PE1_COMPILER_USE(packetAddress);
     packet = (RoomFxSpritePacket *)packetAddress;
     owner = rawOwner;
-    PE1_COMPILER_USE(owner);
+    PE1_COMPILER_LAUNDER(owner);
     func_800C2EAC((s8)owner->asset.page);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
