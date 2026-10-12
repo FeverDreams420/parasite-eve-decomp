@@ -1,8 +1,6 @@
 /* GCC_VERSION: 2.8.1 */
-/* Psy-Q LIBCD SYS.OBJ, part 1 of 3: CdStatus, CdMode, CdLastCom, CdLastPos
- * and CdReset. SYS stays in three units: CdLastPos needs GCC 2.8.1, which
- * breaks sys_2.c, and CdControl (sys_2.c) needs -fno-schedule-insns, which
- * breaks CdIntToPos (sys_3.c). */
+/* Psy-Q LIBCD SYS.OBJ, part 1 of 2: CdStatus, CdMode, CdLastCom, CdLastPos
+ * and CdReset. CdReset needs GCC 2.8.1 (the call result goes through $v1). */
 #include "pe1/psyq_cd.h"
 
 int CdStatus(void) {

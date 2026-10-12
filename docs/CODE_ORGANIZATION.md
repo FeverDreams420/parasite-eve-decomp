@@ -302,7 +302,7 @@ byte-identical.
 | object | units (before) | units now | why the split stays |
 |---|---|---|---|
 | LIBGPU SYS | 17 | 11 (`sys.c` .. `sys_11.c`) | parts 1, 3, 6, 8 and 10 need GCC 2.8.1 with `-mno-split-addresses`; 2, 4, 7, 9 and 11 need GCC 2.7.2; part 5 needs `-O1` or `-fno-schedule-insns` |
-| LIBCD SYS | 6 | 3 | CdLastPos needs GCC 2.8.1, CdControl (part 2) `-fno-schedule-insns`, which CdIntToPos (part 3) does not tolerate |
+| LIBCD SYS | 6 | 2 | `sys.c` GCC 2.8.1: GCC 2.7.2 tests the `CD_initvol` result in `$v0`, retail copies it to `$v1` first (`CdReset` lev 5 under GCC 2.7.2 with GNU as, the set of `sys_2.c`) |
 | LIBCD BIOS | 9 | 7 | parts alternate between GCC 2.7.2 (2, 4, 5) and GCC 2.8.1 (1, 3, 6, 7); parts 2, 3, 4 and 6 each need their own `-fno-expensive-optimizations` or scheduling option |
 | LIBCD C_011 | 3 | 2 | StCdInterrupt and mem2mem GCC 2.7.2, dma_execute GCC 2.8.1 with `-fno-schedule-insns` |
 | LIBETC INTR | 3 | 2 | the callbacks GCC 2.7.2, the interrupt manager GCC 2.8.1 |
@@ -345,6 +345,12 @@ markers (one unit each now):
   cleared test goes through a flag (`cleared = callbackResult == 0`) so
   the store stays `sw zero`, and the I/O pointer and index are loaded in
   one barrier.
+- LIBCD SYS parts 2 and 3 (`sys_2.c`, GCC 2.7.2 with GNU as): `CdControl`
+  and `CdControlF` copy the incoming command through their retry counter
+  before the counter gets its start value (`tries = cmd; cmd_reg = tries;
+  tries = 3;`), which gives the retail register order without
+  `-fno-schedule-insns`; `CdIntToPos` and `CdPosToInt` match under the
+  same set.
 - LIBSPU SPU parts 4 and 5 (`spu_4.c`, GNU as 2.8.1): `_spu_Fw1ts` counts
   its volatile loop index with `i = i + 1`; `i++` reads the volatile twice
   under GCC 2.7.2.

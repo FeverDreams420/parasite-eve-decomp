@@ -1,9 +1,8 @@
 /* ASSEMBLER: GNU */
-/* CC1_FLAGS: -fno-schedule-insns */
-/* Psy-Q LIBCD SYS.OBJ, part 2 of 3: CdFlush, CdSetDebug, CdComstr, CdIntstr,
+/* Psy-Q LIBCD SYS.OBJ, part 2 of 2: CdFlush, CdSetDebug, CdComstr, CdIntstr,
  * CdSync, CdReady, CdSyncCallback, CdReadyCallback, CdControl, CdControlF,
- * CdControlB, CdMix, CdGetSector, CdGetSector2, CdDataCallback and
- * CdDataSync. */
+ * CdControlB, CdMix, CdGetSector, CdGetSector2, CdDataCallback, CdDataSync,
+ * CdIntToPos and CdPosToInt. */
 #include "pe1/psyq_cd.h"
 
 #include "sys_2_externs.h"
@@ -84,7 +83,8 @@ int CdControl_Impl(int cmd, void *param, u8 *extra) {
 
     param_reg = param;
     extra_reg = extra;
-    cmd_reg = cmd;
+    tries = cmd;
+    cmd_reg = tries;
     tries = 3;
     cmd_byte = cmd_reg & 0xFF;
     table = D_8009AF2C;
@@ -141,8 +141,9 @@ int CdControlF_Impl(int command, void *parameters) {
     u32 *flag_table;
 
     saved_callback = D_8009AFB4;
+    retries = command;
     parameter = parameters;
-    command_word = command;
+    command_word = retries;
     retries = 3;
     one = 1;
     command_byte = command_word & 0xFF;
@@ -234,4 +235,28 @@ DsCallback CdDataCallback(DsCallback callback) {
 
 int CdDataSync(int mode) {
     return CD_datasync(mode);
+}
+
+
+static inline int ENCODE_BCD(int value) {
+    return ((value / 10) << 4) + (value % 10);
+}
+
+CdlLOC *CdIntToPos(int sector, CdlLOC *position) {
+    sector += 150;
+    position->sector = ENCODE_BCD(sector % 75);
+    position->second = ENCODE_BCD(sector / 75 % 60);
+    position->minute = ENCODE_BCD(sector / 75 / 60);
+    return position;
+}
+
+#define DECODE_BCD(value) (((value) >> 4) * 10 + ((value) & 0xF))
+
+int CdPosToInt(CdlLOC *position) {
+    u_char sector = position->sector;
+    u_char second = position->second;
+    u_char minute = position->minute;
+
+    return (DECODE_BCD(minute) * 60 + DECODE_BCD(second)) * 75 +
+           DECODE_BCD(sector) - 150;
 }

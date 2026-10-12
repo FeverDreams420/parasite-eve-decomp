@@ -696,7 +696,6 @@ segments:
       - [0x6ABCC, c, psyq/libcd/sys_2]
       # Psy-Q LIBCD S_016.OBJ: CdControl, CdControlF, CdControlB.
       # Psy-Q LIBCD SYS.OBJ ends with CdIntToPos and CdPosToInt.
-      - [0x6B130, c, psyq/libcd/sys_3]
       # Psy-Q LIBCD BIOS.OBJ starts with getintr.
       - [0x6B2B4, c, psyq/libcd/bios]
       # Adjacent CD_sync/CD_ready polling routines from BIOS_1.OBJ.
