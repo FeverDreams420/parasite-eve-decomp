@@ -75,7 +75,7 @@ typedef struct CollisionPlane {
 } CollisionPlane;
 
 /* Plane-table pointer; existing floor queries require a fresh read. */
-extern CollisionPlane *volatile D_8009D1D8;
+extern CollisionPlane *D_8009D1D8;
 /* Flat mode: per-region records that start with the region height. The
  * floor search adds the slot offset to the table address as integers, which
  * keeps the sum in the offset register as retail does. */

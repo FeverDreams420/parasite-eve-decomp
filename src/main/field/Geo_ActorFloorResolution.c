@@ -367,7 +367,7 @@ u16 D_8009CE18;
 u16 D_8009CE1C, D_8009CE20, D_8009CE24, D_8009CE28;
 unsigned short g_CollisionRadius;
 CollisionDatabase *D_8009D1FC;
-CollisionPlane *volatile D_8009D1D8;
+CollisionPlane *D_8009D1D8;
 CollisionRegionTable D_8009CE08;
 struct CollisionPlane *g_CollisionPlaneTable;
 CollisionDatabase *g_CollisionDb;
