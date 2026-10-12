@@ -50,111 +50,42 @@ int Task_DispatchScriptCmd(TaskScriptArgs *args)
     char map_id[2];
     FieldActor *entity;
     FieldActor *loaded;
-    int opcode;
     int status;
     int entity_id;
     int initial_entity_id;
 
-    opcode = *args->opcode;
-    if (opcode == 0x9C4) {
-        goto cmd_9c4;
-    }
-    if (opcode < 0x9C5) {
-        if (opcode == 0x899) {
-            goto cmd_899;
-        }
-        if (opcode < 0x89A) {
-            if (opcode == 0x835) {
-                goto cmd_835;
-            }
-            if (opcode < 0x836) {
-                return 1;
-            }
-            if (opcode == 0x898) {
-                goto cmd_898;
-            }
-            return 1;
-        }
-        if (opcode == 0x960) {
-            goto cmd_960;
-        }
-        if (opcode < 0x961) {
-            if (opcode == 0x8FC) {
-                goto cmd_8fc;
-            }
-            return 1;
-        }
-        if (opcode == 0x961) {
-            goto cmd_961;
-        }
-        if (opcode == 0x962) {
-            goto cmd_962;
-        }
-        return 1;
-    }
-    if (opcode == 0xAF1) {
-        goto cmd_af1;
-    }
-    if (opcode < 0xAF2) {
-        if (opcode == 0xA29) {
-            goto cmd_a29;
-        }
-        if (opcode < 0xA2A) {
-            if (opcode == 0xA28) {
-                goto cmd_a28;
-            }
-            return 1;
-        }
-        if (opcode == 0xA8C) {
-            goto cmd_a8c;
-        }
-        if (opcode == 0xAF0) {
-            goto cmd_af0;
-        }
-        return 1;
-    }
-    if (opcode != 0xBB8) {
-    if (opcode < 0xBB9) {
-        if (opcode == 0xB54) {
-            goto cmd_b54;
-        }
-        return 1;
-    }
-    if (opcode == 0xC1C) {
-        goto cmd_c1c;
-    }
-    if (opcode == 0xC80) {
-        goto cmd_c80;
-    }
-    return 1;
-
-cmd_835:
+    /* Opcode 2100 is accepted and does nothing; its case node is what
+     * makes the compiler split the dispatch tree at 2500 as retail does. */
+    switch (*args->opcode) {
+    case 2100:
+        break;
+    case 2101:
         g_GameState.flags |= 0x800;
-        goto done;
-cmd_898:
+        break;
+    case 2200:
         Render_UpdateScrollPosition(&((FieldActor *)D_8009D254)->pos_x,
                                     ARG_WORD(args->arg1), ARG_WORD(args->arg2));
         return 1;
-cmd_899:
+    case 2201:
         g_GeomScroll.state.position.originX = ARG_WORD(args->arg1);
         g_GeomScroll.state.position.originY = ARG_WORD(args->arg2);
-        goto done;
-cmd_8fc:
+        break;
+    case 2300:
         Task_SetCollisionFlag(ARG_WORD(args->arg1) != 0);
         return 1;
-cmd_960:
+    case 2400:
         position.x = args->arg1->high;
         position.y = args->arg2->high;
         position.z = args->arg3->high;
         func_800E00CC(&position, 0, args->arg4->low,
                       ARG_BYTE(args->arg5), 0, 0, 0);
         return 1;
-cmd_961:
+    case 2401:
         g_ScriptCameraBytes[0] = ARG_WORD(args->arg1);
         g_ScriptCameraBytes[1] = ARG_WORD(args->arg2);
         g_ScriptCameraBytes[2] = ARG_WORD(args->arg3);
-        goto done;
-cmd_962:
+        break;
+    case 2402:
         position2.x = args->arg1->high;
         position2.y = args->arg2->high;
         position2.z = args->arg3->high;
@@ -162,37 +93,35 @@ cmd_962:
                       ARG_BYTE(args->arg5), g_ScriptCameraBytes[0],
                       g_ScriptCameraBytes[1], g_ScriptCameraBytes[2]);
         return 1;
-cmd_9c4:
+    case 2500:
         map_id[0] = ARG_WORD(args->arg1);
         map_id[1] = ARG_WORD(args->arg2);
         loaded = Scene_LoadMap((u8 *)map_id, g_CurrentEntity, 0);
         loaded->pos_x = ARG_WORD(args->arg3);
         loaded->pos_y = ARG_WORD(args->arg4);
         loaded->pos_z = ARG_WORD(args->arg5);
-        goto done;
-cmd_a28:
+        break;
+    case 2600:
         ((RenderShadowActor *)g_CurrentEntity)->shadow_matrix_index = ARG_WORD(args->arg1);
-        goto done;
-cmd_a29:
+        break;
+    case 2601:
         ((RenderShadowActor *)g_CurrentEntity)->shadow_intensity = ARG_WORD(args->arg1);
-        goto done;
-cmd_a8c:
+        break;
+    case 2700:
         D_800BD025.r = ARG_WORD(args->arg1);
         D_800BD025.g = ARG_WORD(args->arg2);
         D_800BD025.b = ARG_WORD(args->arg3);
-        goto done;
-cmd_af0:
+        break;
+    case 2800:
         Battle_DrawActiveStatus();
         return 1;
-cmd_af1:
+    case 2801:
         Window_SetBoundsByMode(ARG_BYTE(args->arg1));
         return 1;
-cmd_b54:
+    case 2900:
         g_GameState.flags |= 0x400000;
-    }
-    else
-    {
-find_entity:
+        break;
+    case 3000:
         initial_entity_id = ARG_WORD(args->arg1);
         if (initial_entity_id == 0) {
             return 1;
@@ -216,7 +145,7 @@ find_entity:
             }
         }
         return 1;
-cmd_c1c:
+    case 3100:
         status = Asset_LoadTimTextures(1);
         if (status == 1) {
             D_8009CE00 -= 10;
@@ -224,9 +153,9 @@ cmd_c1c:
             return 0;
         }
         return 1;
-cmd_c80:
+    case 3200:
         g_GameState.flags |= 0x8000000;
+        break;
     }
-done:
     return 1;
 }
