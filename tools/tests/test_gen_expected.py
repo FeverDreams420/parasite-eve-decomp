@@ -70,7 +70,7 @@ class MainDataLayoutTests(unittest.TestCase):
             [0x8DA58, "data"],
         ])
         self.assertEqual([r[2] for r in tail[1:9:2]],
-                         ["psyq/libc/sprintf", "psyq/libcd/CdControl",
+                         ["psyq/libc/sprintf", "psyq/libcd/sys",
                           "psyq/libcd/bios", "psyq/libds/dsfile"])
         # The gp-relative word is emitted with its owner's .data.
         self.assertEqual(tail[9]["linker_section_order"], ".data")

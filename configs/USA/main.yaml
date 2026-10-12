@@ -701,8 +701,6 @@ segments:
       - [0x6AB24, c, psyq/libcd/CdStatus]
       - [0x6ABCC, c, psyq/libcd/sys]
       # Psy-Q LIBCD S_016.OBJ: CdControl, CdControlF, CdControlB.
-      - [0x6ACD0, c, psyq/libcd/CdControl]
-      - [0x6B08C, c, psyq/libcd/CdMix]
       # Psy-Q LIBCD SYS.OBJ ends with CdIntToPos and CdPosToInt.
       - [0x6B130, c, psyq/libcd/CdIntToPos]
       # Psy-Q LIBCD BIOS.OBJ starts with getintr.
@@ -920,7 +918,7 @@ segments:
       - [0x84D28, .data, psyq/libc/sprintf]
       - [0x84D34, data, main/dtail_gp_post_sprintf]
       # Psy-Q 4.6 LIBCD S_016.OBJ owns this 32-entry command table.
-      - [0x8B72C, .data, psyq/libcd/CdControl]
+      - [0x8B72C, .data, psyq/libcd/sys]
       - [0x8B7AC, data, main/dtail_gp_post_s016_pre_bios]
       # Psy-Q 4.6 LIBCD BIOS_1.OBJ state through DS_active.
       - [0x8B7B4, .data, psyq/libcd/bios]

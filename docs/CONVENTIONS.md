@@ -31,7 +31,7 @@ Two principles decide most questions:
 | Macro | `UPPER_SNAKE` with a prefix that names its owner | `PE1_OFFSETOF`, `PSYQ_BIOS_TRAMPOLINE`, `BOOT_CALL_ON_SCRATCHPAD_STACK` |
 | Header | `include/pe1/<subsystem>[_topic].h`, lower snake | `cdrom.h`, `menu_widget.h`, `akao/track.h` |
 | C file | named after the responsibility of the unit, same prefix as its functions | `Battle_EncounterFlow.c`, `Inv_ItemActions.c` |
-| PsyQ C file | the SDK object name, SDK case | `psyq/libspu/s_ini.c`, `psyq/libcd/CdControl.c` |
+| PsyQ C file | the SDK object name, SDK case | `psyq/libspu/s_ini.c`, `psyq/libcd/sys.c` |
 
 Prefixes are fixed per subsystem (table below). Use the subsystem's prefix
 even when the caller is elsewhere: a CD routine is `CdRom_*` wherever it is
