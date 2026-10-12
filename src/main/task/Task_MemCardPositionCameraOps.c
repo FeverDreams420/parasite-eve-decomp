@@ -57,25 +57,20 @@ s32 Boot_MemCardStepInit(u8 **arg0) {
         }
         break;
     case 0x3A:
-        {
-            s32 t1a0 = g_GameStateFlags | 2;
-            g_GameStateFlags = t1a0;
-        }
+        g_GameStateFlags |= 2;
         Battle_StartEncounter(**arg0);
         base->memcard_init_phase = 0x3BU;
         break;
     case 0x3B:
-        if (!(base->story_day_flags & 3)) {
-            base->memcard_init_phase = 0U;
-            base->flags = base->flags & 0xFF7FFFFF;
-            __asm__ volatile("");
-            return 1;
+        if (base->story_day_flags & 3) {
+            break;
         }
-        break;
+        base->memcard_init_phase = 0U;
+        base->flags = base->flags & 0xFF7FFFFF;
+        /* fall through */
     default:
         return 1;
     }
-block_19:
     g_SceneDataTable0 -= 0xC;
     g_TaskNodePool->active = 1;
     return 0;
