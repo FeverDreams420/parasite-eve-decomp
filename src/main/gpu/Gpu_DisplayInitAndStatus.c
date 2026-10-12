@@ -23,13 +23,13 @@
 int Gpu_InitDisplay(int mode) {
     int mode_reg;
     int one;
-    register volatile int *slots asm("$18");
-    register int ptr asm("$2");
-    int ptr2;
+    register u8 **slots asm("$18");
+    register u8 *ptr asm("$2");
+    u8 *ptr2;
     register int const_8000 asm("$4");
     int const_48000;
     RECT rect;
-    int tmp;
+    u8 *tmp;
 
     mode_reg = mode;
     VSync(0);
@@ -45,10 +45,10 @@ int Gpu_InitDisplay(int mode) {
     DrawSync(0);
 
     const_48000 = 0x48000;
-    slots = (volatile int *)g_OtBufferTable;
+    slots = g_OtBufferTable;
     asm volatile("" : "=r"(slots) : "0"(slots));
 
-    ptr = (int)D_800F34F8;
+    ptr = D_800F34F8;
     ptr2 = ptr + 0x1800;
     D_800B0E24 = ptr;
     ptr += 0x6000;
@@ -57,14 +57,14 @@ int Gpu_InitDisplay(int mode) {
     ptr += 0xE000;
     D_800B0E30 = ptr;
 
-    ptr = (int)D_8010BD00;
-    ptr2 = (int)D_80120D08;
+    ptr = D_8010BD00;
+    ptr2 = D_80120D08;
     D_800B0E40 = ptr;
     ptr = ptr2 + 0x1C98;
     D_800B0E34 = ptr2;
     ptr2 += 0x5C98;
     const_8000 = 0x8000;
-    g_OtBufferTable[0] = (u8 *)ptr;
+    g_OtBufferTable[0] = ptr;
     ptr += const_8000;
     g_RenderOtBufferBaseAlt[0] = ptr2;
     ptr2 = ptr + 0x2400;
@@ -80,10 +80,10 @@ int Gpu_InitDisplay(int mode) {
     ptr2 = ptr + 0x3800;
     D_800B0E5C = ptr2;
     tmp = g_StrFileDirBuffer;
-    g_RenderAnimBufferBase[0] = (u8 *)ptr;
+    g_RenderAnimBufferBase[0] = ptr;
     ptr += 0x7000;
     D_800B0E60 = ptr;
-    g_SceneLoadScratchBuffer[0] = (int)D_801ED800;
+    g_SceneLoadScratchBuffer[0] = D_801ED800;
     g_LoadedSceneAssetBlock[0] = tmp - 8;
     D_800B0E68 = tmp;
 

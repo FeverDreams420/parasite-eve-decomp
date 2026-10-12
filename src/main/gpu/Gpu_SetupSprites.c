@@ -66,7 +66,7 @@ void Gpu_QueuePrimitive(void) {
     int idx; \
     int idx_off; \
     register void *prim asm("$5"); \
-    register void *packet asm("$2"); \
+    void *packet; \
     void *ot; \
     packet_code = (code_expr); \
     base = (char *)&g_StatusIconPackets[0][0].sprite; \
