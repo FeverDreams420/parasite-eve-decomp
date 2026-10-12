@@ -7,7 +7,7 @@
 #include "pe1/battle_update.h"
 
 /* COMMON supplies the small-data metadata of the window origin to MASPSX. */
-volatile u16 D_8009CE84;
+u16 D_8009CE84;
 
 /* Clamp the active combatant's gauges, draw the ATB and PE bars and the
  * status background, then the HP numbers and status icons. Each background

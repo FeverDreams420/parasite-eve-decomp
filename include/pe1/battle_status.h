@@ -53,7 +53,7 @@ typedef struct BattleHudOrigin {
     u16 y;
 } BattleHudOrigin;
 
-extern volatile u16 D_8009CE84;
+extern u16 D_8009CE84;
 #define g_HudOrigin (*(BattleHudOrigin *)&D_8009CE84)
 
 /* Per draw buffer HUD packets (Battle_DrawHPBar fills them once). */
