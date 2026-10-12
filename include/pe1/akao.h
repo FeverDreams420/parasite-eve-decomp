@@ -35,8 +35,15 @@ int Spu_SetStreamModeA(void);
 int Spu_SetStreamModeB(void);
 int Spu_GetTransferStatus(void);
 /* Stream instrument scratch table; bank selection advances by 0x400 bytes. */
-extern unsigned D_800B4900[];
-extern unsigned D_800B4D00[];
+extern AkaoInstrument D_800B4900[];
+extern AkaoInstrument D_800B4D00[];
+/* An instrument cache slot as the word retail adds a byte offset to; the
+ * relocated records are copied into it word by word. */
+typedef union AkaoInstrumentCacheAddress {
+    AkaoInstrument *instrument;
+    unsigned *words;
+    unsigned word;
+} AkaoInstrumentCacheAddress;
 extern AkaoInstrument D_800B2900[];
 /* Instrument records replaced by Spu_UploadSampleBlock. */
 extern AkaoInstrument g_AkaoInstrumentTable[];

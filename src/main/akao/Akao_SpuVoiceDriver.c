@@ -12,7 +12,7 @@
 
 int Akao_Cmd_10(void *bank) {
     g_AkaoCmd.opcode = 0x10;
-    g_AkaoCmd.arg0.value = (int)bank;
+    g_AkaoCmd.arg0.sample_header = bank;
     return Akao_EnqueueStagedCommand();
 }
 
@@ -444,7 +444,7 @@ int Akao_StepNoteSequencer(unsigned char *input, unsigned available)
     unsigned remaining_payload;
     unsigned start;
     unsigned *dest;
-    unsigned *dest_base;
+    AkaoInstrumentCacheAddress cache;
     unsigned result;
 
     if (D_8009D270 & 1) {
@@ -497,7 +497,7 @@ int Akao_StepNoteSequencer(unsigned char *input, unsigned available)
             g_AkaoVoiceKeyOnState &= ~0x100U;
         }
         SpuSetTransferStartAddr(address);
-        Spu_UploadWithPrepare((int)input, upload_size);
+        Spu_UploadWithPrepare(input, upload_size);
         rebase_instruments = instruments;
         rebase_address = address;
         next_address = address + upload_size;
@@ -507,8 +507,9 @@ int Akao_StepNoteSequencer(unsigned char *input, unsigned available)
         Spu_RebaseStreamAddrs(rebase_instruments, rebase_address, count);
         address_offset = address == 0x8000 ? 0x20 : 0x50;
         address_offset <<= 6;
-        dest_base = (unsigned *)D_800B2900;
-        dest = (unsigned *)(address_offset + (unsigned)dest_base);
+        cache.instrument = D_800B2900;
+        cache.word = address_offset + cache.word;
+        dest = cache.words;
         upload_size = count << 4;
         do {
             --upload_size;
@@ -521,7 +522,7 @@ int Akao_StepNoteSequencer(unsigned char *input, unsigned available)
     SpuSetTransferStartAddr(D_8009D2BC);
     upload_size = available;
     if (upload_size >= D_8009D2E4) upload_size = D_8009D2E4;
-    Spu_UploadWithPrepare((int)input, upload_size);
+    Spu_UploadWithPrepare(input, upload_size);
     D_8009D2BC += upload_size;
     D_8009D2E4 -= upload_size;
     return D_8009D2E4;
@@ -542,6 +543,7 @@ int Spu_UploadStreamBlockA(unsigned bank, unsigned char *input, unsigned availab
     unsigned start;
     unsigned after_header;
     unsigned *dest;
+    AkaoInstrumentCacheAddress cache;
 
     if (D_8009D270 & 2) {
         if (Spu_ValidateSampleHeader(input)) return -1;
@@ -567,12 +569,14 @@ int Spu_UploadStreamBlockA(unsigned bank, unsigned char *input, unsigned availab
         if (upload_size >= payload_size) upload_size = payload_size;
         address = ((bank * 5) << 13) + 0x4f000;
         SpuSetTransferStartAddr(address);
-        Spu_UploadWithPrepare((int)input, upload_size);
+        Spu_UploadWithPrepare(input, upload_size);
         D_8009D1EC = address + upload_size;
         D_8009D204 = payload_size - upload_size;
         Spu_RebaseStreamAddrs(instruments, address, count);
         address = bank << 10;
-        dest = (unsigned *)((unsigned char *)D_800B4D00 + address);
+        cache.instrument = D_800B4D00;
+        cache.word = address + cache.word;
+        dest = cache.words;
         upload_size = count << 4;
         do {
             --upload_size;
@@ -585,7 +589,7 @@ int Spu_UploadStreamBlockA(unsigned bank, unsigned char *input, unsigned availab
     SpuSetTransferStartAddr(D_8009D1EC);
     upload_size = available;
     if (upload_size >= D_8009D204) upload_size = D_8009D204;
-    Spu_UploadWithPrepare((int)input, upload_size);
+    Spu_UploadWithPrepare(input, upload_size);
     D_8009D1EC += upload_size;
     D_8009D204 -= upload_size;
     return D_8009D204;
@@ -595,6 +599,7 @@ int Spu_UploadStreamBlockB(unsigned bank, unsigned char *cursor)
 {
     unsigned char *instruments;
     unsigned size, start, count, address;
+    AkaoInstrumentCacheAddress cache;
     unsigned *dest;
     if (bank & ~1U) return 1;
     if (Spu_ValidateSampleHeader(cursor)) return -1;
@@ -613,11 +618,13 @@ int Spu_UploadStreamBlockB(unsigned bank, unsigned char *cursor)
     cursor = instruments + (count << 6);
     address = 0x68000 + (bank << 13);
     SpuSetTransferStartAddr(address);
-    Spu_UploadWithPrepare((int)cursor,size);
+    Spu_UploadWithPrepare(cursor, size);
     Spu_RebaseStreamAddrs(instruments,address,count);
     /* Cache the relocated records after the SPU payload upload. */
     address = bank << 10;
-    dest = (unsigned *)((unsigned char *)D_800B4900 + address);
+    cache.instrument = D_800B4900;
+    cache.word = address + cache.word;
+    dest = cache.words;
     size = count << 4;
     do {
         --size;
