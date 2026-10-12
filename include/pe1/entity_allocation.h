@@ -14,6 +14,8 @@ PE1_STATIC_ASSERT(sizeof(EntityAllocationBlock) == 8, entity_allocation_block_si
 PE1_STATIC_ASSERT(PE1_OFFSETOF(EntityAllocationBlock, address) == 4,
                   entity_allocation_block_address);
 extern EntityAllocationBlock D_800A7620[16];
+/* Bytes per allocation block in the render scratch buffer. */
+#define ENTITY_ALLOCATION_BLOCK_SIZE 0x47E0
 
 /* An allocation slot addressed by its byte offset into the table. */
 typedef union EntityAllocationAddress {

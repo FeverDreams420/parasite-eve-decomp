@@ -5,81 +5,65 @@
 #include "pe1/render_buffers.h"
 
 
-void *Entity_AllocBlock(u32 arg0) {
-    s32 temp_a0;
-    u32 var_v0;
-    s32 var_a1;
-    s32 var_a2;
-    s32 var_a3;
-    u32 temp_t0;
-    s32 *temp_t1;
-    u32 var_a0;
-    register u32 var_v1 asm("$3");
+/* Allocates a run of 0x47E0-byte blocks from the render scratch buffer, sized
+ * 1, 2, 4 or 8 blocks by the request; returns 0 when no run is free. */
+void *Entity_AllocBlock(u32 size) {
+    s32 blocks;
+    u8 slot;
+    u32 count;
+    s32 *scratch;
+    u32 offset;
+    u32 end;
+    s32 free;
+    u32 used;
 
-    var_a3 = 8;
-    if (arg0 < 0x47E1U) {
-        var_a3 = 1;
-    } else if (arg0 <= 0x8FC0U) {
-        var_a3 = 2;
-    } else if (arg0 <= 0x11F80U) {
-        var_a3 = 4;
+    blocks = 8;
+    if (size <= ENTITY_ALLOCATION_BLOCK_SIZE) {
+        blocks = 1;
+    } else if (size <= ENTITY_ALLOCATION_BLOCK_SIZE * 2) {
+        blocks = 2;
+    } else if (size <= ENTITY_ALLOCATION_BLOCK_SIZE * 4) {
+        blocks = 4;
     }
-    var_a1 = 0;
-    temp_t0 = var_a3 & 0xFF;
-    temp_t1 = (s32 *)g_RenderScratchBufferBase;
-    do {
-        var_a0 = var_a1 & 0xFF;
-        var_v1 = var_a0 << 3;
-        if (D_800A7620[var_a0].address == 0) {
-            var_a2 = 1;
-            if (var_a0 < (var_a0 + temp_t0)) {
-                var_v0 = var_a3 + var_a0;
-                var_a0 = var_v0 << 3;
+    slot = 0;
+    count = blocks & 0xFF;
+    scratch = (s32 *)g_RenderScratchBufferBase;
+    while (slot < 0x10U) {
+        offset = slot << 3;
+        if (D_800A7620[slot].address == 0) {
+            free = 1;
+            if (slot < slot + count) {
+                end = (blocks + slot) << 3;
                 do {
                     EntityAllocationAddress run;
 
                     run.entry = D_800A7620;
-                    run.word += var_v1;
+                    run.word += offset;
                     if (run.entry->address != 0) {
-                        var_a2 = 0;
-                        var_a1 += var_a3;
+                        free = 0;
+                        slot += blocks;
                         break;
                     }
-                    var_v1 += 8;
-                } while (var_v1 < var_a0);
+                    offset += sizeof(EntityAllocationBlock);
+                } while (offset < end);
             }
-            var_v0 = var_a1 & 0xFF;
-            if (var_a2 != 0) {
-                temp_a0 = var_v0 << 3;
-                var_v1 = temp_a0 + var_v0;
-                var_v1 = (var_v1 << 6) - var_v0;
-                D_800A7620[var_v0].blockCount = temp_t0;
-                var_v0 = *temp_t1 + (var_v1 << 5);
-                {
-                    EntityAllocationAddress block;
+            if (free != 0) {
+                s32 address;
 
-                    block.entry = D_800A7620;
-                    block.word += temp_a0;
-                    block.entry->address = var_v0;
-                }
-                return (void *)var_v0;
+                D_800A7620[slot].blockCount = count;
+                address = *scratch + slot * ENTITY_ALLOCATION_BLOCK_SIZE;
+                D_800A7620[slot].address = address;
+                return (void *)address;
             }
         } else {
-            {
-                EntityAllocationAddress used;
-
-                used.entry = D_800A7620;
-                used.word += var_v1;
-                var_v1 = used.entry->blockCount;
-            }
-            if (temp_t0 < var_v1) {
-                var_a1 += var_v1;
+            used = D_800A7620[slot].blockCount;
+            if (count < used) {
+                slot += used;
             } else {
-                var_a1 += var_a3;
+                slot += blocks;
             }
-            var_v0 = var_a1 & 0xFF;
         }
-    } while (var_v0 < 0x10U);
+    }
     return 0;
 }
 
