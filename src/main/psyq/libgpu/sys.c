@@ -1,7 +1,15 @@
 /* ASSEMBLER: GNU */
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses */
-
+/* Psy-Q LIBGPU SYS.OBJ, part 1 of 11: ResetGraph, SetGraphDebug,
+ * SetGraphQueue, GetGraphDebug, DrawSyncCallback, SetDispMask, DrawSync,
+ * ClearImage, ClearImage2, LoadImage, StoreImage, MoveImage, ClearOTag,
+ * ClearOTagR, DrawPrim, DrawOTag, PutDrawEnv, DrawOTagEnv and GetDrawEnv. SYS
+ * stays in eleven units because neighbouring parts need different compilers:
+ * sys.c, sys_3.c, sys_6.c, sys_8.c and sys_10.c only match with GCC 2.8.1 and
+ * -mno-split-addresses, sys_2.c, sys_4.c, sys_7.c, sys_9.c and sys_11.c only
+ * with GCC 2.7.2 (the return delay slot), and sys_5.c only with -O1 or -fno-
+ * schedule-insns. */
 #include "pe1/psyq_callbacks.h"
 #include "pe1/gpu_callbacks.h"
 #include "common.h"
@@ -11,13 +19,6 @@
 #include "pe1/psyq_bios.h"
 
 #include "sys_externs.h"
-
-/* Psy-Q LIBGPU SYS.OBJ, from the object start: ResetGraph, SetGraphDebug,
- * SetGraphQueue, GetGraphDebug, DrawSyncCallback, SetDispMask, DrawSync,
- * ClearImage, ClearImage2, LoadImage, StoreImage, MoveImage, ClearOTag,
- * ClearOTagR, DrawPrim, DrawOTag, PutDrawEnv, DrawOTagEnv and GetDrawEnv.
- * The rest of SYS.OBJ is in the following units (see
- * docs/CODE_ORGANIZATION.md, "PsyQ objects split over several units"). */
 
 void GPU_cw(unsigned int);
 int Gpu_InitDmaQueue(int);

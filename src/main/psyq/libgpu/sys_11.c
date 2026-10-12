@@ -1,7 +1,5 @@
-/* Psy-Q LIBGPU SYS.OBJ part, the end of the object: the DMA callback restore
- * and GPU_memset. GCC 2.7.2 without markers; the other SYS.OBJ functions are
- * in neighbouring units (see docs/CODE_ORGANIZATION.md, "PsyQ objects split
- * over several units"). */
+/* Psy-Q LIBGPU SYS.OBJ, part 11 of 11: the private DMA callback restore and
+ * GPU_memset. */
 #include "pe1/psyq_callbacks.h"
 #include "pe1/psyq_gpu.h"
 

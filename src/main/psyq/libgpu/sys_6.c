@@ -1,20 +1,17 @@
 /* ASSEMBLER: GNU */
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses */
-
+/* Psy-Q LIBGPU SYS.OBJ, part 6 of 11: the private draw-offset and texture-
+ * window command builders, _status, the OTC ordering-table clear, the VRAM
+ * fill, upload and readback transfers, the GP1 control mirror and the DMA
+ * start helpers. */
 #include "pe1/gpu_command_builders.h"
 #include "common.h"
 #include "pe1/psyq_types.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/gpu_dma_register_window.h"
 
-#include "gpu_build_externs.h"
-
-/* Psy-Q LIBGPU SYS.OBJ part: private draw-offset and texture-window command
- * builders, _status, the OTC ordering-table clear, the VRAM fill, upload and
- * readback transfers, the GP1 control mirror and the DMA start helpers.
- * The other SYS.OBJ functions are in neighbouring units (see
- * docs/CODE_ORGANIZATION.md, "PsyQ objects split over several units"). */
+#include "sys_6_externs.h"
 
 unsigned int Gpu_BuildDrawOffsetCmd(unsigned int arg0, unsigned int arg1) {
     arg1 &= 0x7FF;

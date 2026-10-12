@@ -1,20 +1,17 @@
-#include "pe1/gpu_command_builders.h"
 /* ASSEMBLER: GNU */
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses */
-/* Psy-Q LIBGPU SYS.OBJ part: GetDispEnv, GetODE, SetTexWindow, SetDrawArea,
- * SetDrawOffset, SetPriority, SetDrawStp, SetDrawMode, SetDrawEnv and
- * Gpu_SetDrawEnvBack.
- * The other SYS.OBJ functions are in neighbouring units because their
- * reconstructions need different compiler options.
- */
+/* Psy-Q LIBGPU SYS.OBJ, part 3 of 11: GetDispEnv, GetODE, SetTexWindow,
+ * SetDrawArea, SetDrawOffset, SetPriority, SetDrawStp, SetDrawMode,
+ * SetDrawEnv and the private Gpu_SetDrawEnvBack. */
+#include "pe1/gpu_command_builders.h"
 #include "pe1/gpu_state.h"
 #include "common.h"
 #include "pe1/gpu_callbacks.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/draw_area.h"
 
-#include "GetDispEnv_externs.h"
+#include "sys_3_externs.h"
 
 void *GetDispEnv(void *arg0) {
     void *(*fn)(void *, const void *, unsigned int);
@@ -28,15 +25,12 @@ int GetODE(void) {
     return D_80095744->callback() < 0;
 }
 
-
-
 typedef signed short s16_1;
 
 typedef struct {
     s16_1 x;
     s16_1 y;
 } Point;
-
 
 void SetTexWindow(GpuCmdPacket *arg0, int arg1) {
     arg0->u0.head.code = 2;
@@ -67,7 +61,6 @@ void SetDrawStp(GpuCmdPacket *arg0, int arg1) {
     arg0->field4 = arg1 ? 0xE6000001 : 0xE6000000;
     arg0->field8 = 0;
 }
-
 
 void SetDrawMode(GpuCmdPacket *arg0, int arg1, int arg2, int arg3, int arg4) {
     arg0->u0.head.code = 2;

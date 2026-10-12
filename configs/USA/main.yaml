@@ -598,16 +598,16 @@ segments:
       # Psy-Q LIBGPU SYS.OBJ. One object; the reconstruction is split where
       # parts need other compiler options or conflicting declarations.
       - [0x65244, c, psyq/libgpu/sys]
-      - [0x65DF0, c, psyq/libgpu/PutDispEnv]
-      - [0x662E8, c, psyq/libgpu/GetDispEnv]
-      - [0x66950, c, psyq/libgpu/Gpu_BuildDrawModeCmd]
-      - [0x66970, c, psyq/libgpu/drawarea]
-      - [0x66AA0, c, psyq/libgpu/gpu_build]
-      - [0x673E0, c, psyq/libgpu/Gpu_SubmitPacket]
-      - [0x67434, c, psyq/libgpu/dma_queue]
-      - [0x67BD0, c, psyq/libgpu/Gpu_ResetDmaWaitTimer]
-      - [0x67DE8, c, psyq/libgpu/LoadImage2]
-      - [0x68200, c, psyq/libgpu/Gpu_RestoreDmaCallback]
+      - [0x65DF0, c, psyq/libgpu/sys_2]
+      - [0x662E8, c, psyq/libgpu/sys_3]
+      - [0x66950, c, psyq/libgpu/sys_4]
+      - [0x66970, c, psyq/libgpu/sys_5]
+      - [0x66AA0, c, psyq/libgpu/sys_6]
+      - [0x673E0, c, psyq/libgpu/sys_7]
+      - [0x67434, c, psyq/libgpu/sys_8]
+      - [0x67BD0, c, psyq/libgpu/sys_9]
+      - [0x67DE8, c, psyq/libgpu/sys_10]
+      - [0x68200, c, psyq/libgpu/sys_11]
       # LIBAPI C73.OBJ.
       - [0x68254, c, psyq/libapi/c73]
       # Psy-Q LIBGPU primitive objects, one SDK object per unit.

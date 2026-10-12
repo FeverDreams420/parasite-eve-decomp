@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 class GpuTexWindowTests(unittest.TestCase):
     def test_no_local_register_pins(self):
-        # The command builders and _status open the gpu_build.c unit.
+        # The command builders and _status open the libgpu sys_6.c unit.
         source = functions_text('Gpu_BuildDrawOffsetCmd', 'Gpu_BuildTexWindowCmd',
                                 '_status')
         source = re.sub(r'/\*.*?\*/|//[^\n]*', '', source, flags=re.S)

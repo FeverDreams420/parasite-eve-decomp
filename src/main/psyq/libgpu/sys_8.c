@@ -1,18 +1,14 @@
 /* ASSEMBLER: GNU */
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses */
-/* Psy-Q LIBGPU SYS.OBJ part: private command queue submission, queue
- * callback, initialization and drain.
- * The other SYS.OBJ functions are in neighbouring units because their
- * reconstructions need different compiler options or conflicting
- * declarations.
- */
+/* Psy-Q LIBGPU SYS.OBJ, part 8 of 11: the private display-buffer swap and DMA
+ * queue. */
 #include "pe1/gpu_state.h"
 #include "pe1/gpu_dma_state.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/gpu_dma_register_window.h"
 
-#include "dma_queue_externs.h"
+#include "sys_8_externs.h"
 void Gpu_ResetDmaWaitTimer(void);
 int Gpu_DmaTimeoutCheck(void);
 int SetIntrMask(int);
@@ -84,7 +80,7 @@ queued:
     return (D_80095874 - D_80095878) & 63;
 }
 
-#include "dma_queue_externs_1.h"
+#include "sys_8_externs_1.h"
 int SetIntrMask(int);
 
 /* LIBGPU queue drain (_exeque); the existing project name is retained.
@@ -177,7 +173,7 @@ int Gpu_SetDisplayBuffer(void) {
     return (D_80095874 - D_80095878) & 63;
 }
 
-#include "dma_queue_externs_2.h"
+#include "sys_8_externs_2.h"
 
 int SetIntrMask(int mask);
 int Gpu_QueryStatus(int arg0);

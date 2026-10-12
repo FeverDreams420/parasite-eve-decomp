@@ -1,3 +1,5 @@
+/* Psy-Q LIBGPU SYS.OBJ, part 4 of 11: the private draw-mode command builder
+ * Gpu_BuildDrawModeCmd. */
 #include "pe1/gpu_command_builders.h"
 
 int Gpu_BuildDrawModeCmd(int arg0, int arg1, int arg2) {

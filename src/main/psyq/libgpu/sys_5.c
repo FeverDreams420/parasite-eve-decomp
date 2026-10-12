@@ -1,8 +1,9 @@
+/* CC1_FLAGS: -O1 */
+/* Psy-Q LIBGPU SYS.OBJ, part 5 of 11: the private draw-area command builders. */
 #include "pe1/gpu_command_builders.h"
 #include "common.h"
-/* CC1_FLAGS: -O1 */
 
-#include "drawarea_externs.h"
+#include "sys_5_externs.h"
 
 int Gpu_BuildDrawAreaTopLeftCmd(int x, int y) {
     register int clamped_x asm("$2");

@@ -1,9 +1,10 @@
+/* Psy-Q LIBGPU SYS.OBJ, part 7 of 11: _param and the private packet submit
+ * Gpu_SubmitPacket. */
 #include "pe1/gpu_dma_state.h"
 
 typedef unsigned long u_long;
 
-#include "Gpu_SubmitPacket_externs.h"
-
+#include "sys_7_externs.h"
 
 int _param(int x) {
     *g_GpuGp1Ptr = x | 0x10000000;
