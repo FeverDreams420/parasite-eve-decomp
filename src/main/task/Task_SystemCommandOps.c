@@ -301,81 +301,37 @@ int Task_ClearObjEntryFlags(int **arg0) {
     return 1;
 }
 
+/* Script ops: set or clear the "not walkable from a neighbour" bit (0x80)
+ * of the collision triangle args[0], in whichever of the flat (XZ) and
+ * sloped (XYZ) tables the room uses. The triangle address is an integer
+ * offset added to the table address; each branch updates its triangle. */
 int Task_SetObjEntryFlag80(int **arg0) {
-    register CollisionTriangleTable entry asm("$3");
-    CollisionTriangleTable base_entry;
-    int value;
     if (g_CollisionPlaneTable == 0) {
-        int index;
-        CollisionDatabase *base;
-        int *arg = arg0[0];
+        CollisionTriangleTable entry;
 
-        index = *arg;
-        asm volatile("" : "=r"(index) : "0"(index));
-        base = g_CollisionDb;
-        asm volatile("" : "=r"(base) : "0"(base));
-        entry.word = index * 11;
-        base_entry = base->triangles;
-        /* Keep the base load branch-local while allowing the final shift into the jump delay slot. */
-        entry.word <<= 1;
+        entry.word = *arg0[0] * sizeof(CollisionTriangleXZ) + g_CollisionDb->triangles.word;
+        entry.header->kind |= 0x80;
     } else {
-        register int index asm("$2");
-        CollisionDatabase *base;
-        int *arg = arg0[0];
+        CollisionTriangleTable entry;
 
-        index = *arg;
-        asm volatile("" : "=r"(index) : "0"(index));
-        base = g_CollisionDb;
-        asm volatile("" : "=r"(base) : "0"(base));
-        entry.word = index * 7;
-        base_entry = base->triangles;
-        /* Keep the base load branch-local without materializing the add before the join. */
-        asm volatile("" : : "r"(base_entry));
-        entry.word <<= 2;
+        entry.word = *arg0[0] * sizeof(CollisionTriangleXYZ) + g_CollisionDb->triangles.word;
+        entry.header->kind |= 0x80;
     }
-    entry.word += base_entry.word;
-    value = entry.header->kind | 0x80;
-    entry.header->kind = value;
-    asm volatile("" : : : "memory");
     return 1;
 }
 
 int Task_ClearObjEntryFlag80(int **arg0) {
-    register CollisionTriangleTable entry asm("$3");
-    CollisionTriangleTable base_entry;
-    int value;
     if (g_CollisionPlaneTable == 0) {
-        int index;
-        CollisionDatabase *base;
-        int *arg = arg0[0];
+        CollisionTriangleTable entry;
 
-        index = *arg;
-        asm volatile("" : "=r"(index) : "0"(index));
-        base = g_CollisionDb;
-        asm volatile("" : "=r"(base) : "0"(base));
-        entry.word = index * 11;
-        base_entry = base->triangles;
-        /* Keep the base load branch-local while allowing the final shift into the jump delay slot. */
-        entry.word <<= 1;
+        entry.word = *arg0[0] * sizeof(CollisionTriangleXZ) + g_CollisionDb->triangles.word;
+        entry.header->kind &= 0x7F;
     } else {
-        register int index asm("$2");
-        CollisionDatabase *base;
-        int *arg = arg0[0];
+        CollisionTriangleTable entry;
 
-        index = *arg;
-        asm volatile("" : "=r"(index) : "0"(index));
-        base = g_CollisionDb;
-        asm volatile("" : "=r"(base) : "0"(base));
-        entry.word = index * 7;
-        base_entry = base->triangles;
-        /* Keep the base load branch-local without materializing the add before the join. */
-        asm volatile("" : : "r"(base_entry));
-        entry.word <<= 2;
+        entry.word = *arg0[0] * sizeof(CollisionTriangleXYZ) + g_CollisionDb->triangles.word;
+        entry.header->kind &= 0x7F;
     }
-    entry.word += base_entry.word;
-    value = entry.header->kind & 0x7F;
-    entry.header->kind = value;
-    asm volatile("" : : : "memory");
     return 1;
 }
 
