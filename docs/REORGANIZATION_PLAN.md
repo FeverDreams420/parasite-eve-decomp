@@ -416,6 +416,13 @@ Merge 73 files into 15 objects, with LIBGPU SYS (17 files) first. Probe
 markers first; most differ only by the `_N` split reason recorded in each
 file's header.
 
+Status (2026-10-12): the marker probe merged every run of parts that share
+a lev-0 set (268 to 250 files) and the split units now carry their
+object's name (`libgpu/sys_N.c`, `libcd/bios_N.c`, ...). The 17 objects
+still split, and why, are listed in CODE_ORGANIZATION.md ("PsyQ objects
+split over several units"): neighbouring parts need different compilers,
+so one-file-per-object is out of reach with the stock toolchain.
+
 ### Step 8: symbol renames (continuous)
 
 Covers 271 `func_` in main (mostly `fieldfx`) and ~580 in overlays. This is

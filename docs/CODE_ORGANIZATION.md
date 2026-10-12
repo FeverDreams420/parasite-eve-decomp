@@ -258,18 +258,46 @@ Units that stay separate, and why:
 ### PsyQ objects split over several units (src/main/psyq)
 
 Each `psyq/<library>/` unit reproduces one SDK object, or a contiguous part
-of one. Parts of one object are merged into one unit when every part
-compiles to its retail bytes under a single marker set, so the remaining
-splits record a toolchain limit, not an original source boundary: PsyQ
-compiled each object once, but the stock compilers here reproduce some of
-its functions only with GCC 2.7.2 and others only with GCC 2.8.1 (the
-return-delay-slot fill), or only with MASPSX and others only with GNU as.
-The probe compiles every part under every marker set used by its siblings
-and compares instruction words and data against the matching object.
+of one, and is named after the object (`sys.c`); the parts of an object that
+stays split are numbered in address order (`sys_2.c`, `sys_3.c`, ...).
+Parts are merged whenever every function of the merged unit compiles to its
+retail words under one marker set, so the splits that remain record a
+toolchain limit, not an original source boundary: PsyQ compiled each object
+once, but the stock compilers here reproduce some of its functions only
+with GCC 2.7.2 and its neighbours only with GCC 2.8.1 (mostly the
+return-delay-slot fill), or need an option that breaks the neighbour.
 
-| object | units | why the split stays |
-|---|---|---|
-| LIBGPU SYS | `sys.c` (ResetGraph..GetDrawEnv) and its neighbours | in progress |
+The evidence is a marker probe: every part is compiled under the marker set
+of each sibling (and with no markers) and compared, instruction word by
+instruction word with relocations, and section by section for data, with
+its retail-matching object. A run of neighbours with one common lev-0 set
+is merged and then confirmed by `make check`.
+
+LIBAPI PATCH and LIBCARD PATCH are a policy split instead: their assembler
+parts (`PSYQ_ASM_FUNCTION`, counted as `original_asm` units) may not share
+a unit with C functions. LIBSPU S_R and S_W are separate objects; the
+provenance file lists both at both addresses because their signatures are
+byte-identical.
+
+| object | units (before) | units now | why the split stays |
+|---|---|---|---|
+| LIBGPU SYS | 17 | 11 (`sys.c` .. `sys_11.c`) | parts 1, 3, 6, 8 and 10 need GCC 2.8.1 with `-mno-split-addresses`; 2, 4, 7, 9 and 11 need GCC 2.7.2; part 5 needs `-O1` or `-fno-schedule-insns` |
+| LIBCD SYS | 6 | 3 | CdLastPos needs GCC 2.8.1, CdControl (part 2) `-fno-schedule-insns`, which CdIntToPos (part 3) does not tolerate |
+| LIBCD BIOS | 9 | 7 | parts alternate between GCC 2.7.2 (2, 4, 5) and GCC 2.8.1 (1, 3, 6, 7); parts 2 to 6 each need their own `-fno-expensive-optimizations` or scheduling option |
+| LIBCD C_011 | 3 | 2 | StCdInterrupt and mem2mem GCC 2.7.2, dma_execute GCC 2.8.1 with `-fno-schedule-insns` |
+| LIBETC INTR | 3 | 2 | the callbacks GCC 2.7.2, the interrupt manager GCC 2.8.1 |
+| LIBMATH MULDF3 | 2 | 2 | `__muldf3` GCC 2.7.2 with GNU as, `_mul_mant_d` GCC 2.8.1 |
+| LIBAPI PAD | 6 | 3 | Sys_SetInterruptHandler (part 2) needs GCC 2.8.1: GCC 2.7.2 folds its second handler store into an absolute address; parts 1 and 3 need GCC 2.7.2 |
+| LIBAPI PATCH | 2 | 2 | `_patch_pad` is SDK assembler (policy) |
+| LIBCARD PATCH | 4 | 4 | parts 1 and 3 are SDK assembler (policy) |
+| LIBDS DSSYS_1 | 11 | 11 | neighbours alternate between GNU as with GCC 2.7.2 and GCC 2.8.1, several with their own scheduling option |
+| LIBDS DSSYS_2 | 5 | 5 | parts 1, 3 and 5 GCC 2.7.2; 2 and 4 GCC 2.8.1 with `-fno-thread-jumps` or `-fno-schedule-insns2` |
+| LIBDS DSREAD | 2 | 2 | `dsread.c` GCC 2.7.2, `dsread_2.c` only builds with GCC 2.8.1 |
+| LIBDS DSFILE | 2 | 2 | `dsfile.c` GCC 2.8.1, `dsfile_2.c` GCC 2.7.2 |
+| LIBDS DSREADY | 5 | 4 | parts 1 and 3 GCC 2.8.1, parts 2 and 4 GCC 2.7.2 |
+| LIBPAD PADIF | 3 | 2 | `padif.c` GCC 2.8.1, LIBPAD_PADIF_text_26C GCC 2.7.2 |
+| LIBPAD PADPORTD | 4 | 4 | parts 1 and 3 GCC 2.8.1 (3 only builds with it), parts 2 and 4 GCC 2.7.2 |
+| LIBSPU SPU | 4 | 4 | part 1 GCC 2.7.2 with GNU as, parts 2 and 4 GCC 2.8.1, part 3 GCC 2.7.2 with the GNU as 2.8.1 assembler |
 
 ### AKAO driver (src/main/akao)
 
