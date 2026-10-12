@@ -6,6 +6,13 @@
 /* CC1_FLAGS: -fno-strength-reduce */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 
+/* A pool record cell as the word retail adds the row and column offsets to. */
+typedef union EntityPoolAddress {
+    char *bytes;
+    int *words;
+    unsigned int word;
+} EntityPoolAddress;
+
 /* Entity pool reset and free-list construction share the pool globals and the
  * 14-entry 0x280-byte entity record block at D_800BEA90. */
 
@@ -22,36 +29,37 @@ void Entity_ResetAllPools(void)
 {
     unsigned int i;
     unsigned int row;
-    char *ptr;
-    unsigned int base;
+    int *ptr;
+    EntityPoolAddress base, cell;
     unsigned int col;
     register unsigned int offset;
 
     g_FieldMoveLock = 0;
 
     i = 0;
-    ptr = g_EntityWorkBuffer;
+    ptr = (int *)g_EntityWorkBuffer;
     do {
-        *(int *)ptr = 0;
+        *ptr = 0;
         i++;
-        ptr += 4;
+        ptr++;
     } while (i < 0x200);
 
     i = 0;
-    ptr = (char *)g_TaskNodeActiveFlags;
+    ptr = (int *)g_TaskNodeActiveFlags;
     do {
         i++;
-        *(int *)ptr = 0;
+        *ptr = 0;
     } while (i < 0x40);
 
     i = 0;
-    base = (unsigned int)D_800BEA90;
+    base.bytes = D_800BEA90;
     row = 0;
     do {
         col = 0;
         offset = row;
         do {
-            *(int *)(offset + base) = 0;
+            cell.word = offset + base.word;
+            *cell.words = 0;
             col++;
             offset += 4;
         } while (col < 0xA0);
