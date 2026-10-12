@@ -699,7 +699,6 @@ segments:
       - [0x6AA44, c, psyq/libcd/c_002]
       - [0x6AAA4, c, psyq/libcd/c_003]
       - [0x6AB24, c, psyq/libcd/CdStatus]
-      - [0x6AB54, c, psyq/libcd/CdLastPos]
       - [0x6ABCC, c, psyq/libcd/sys]
       # Psy-Q LIBCD S_016.OBJ: CdControl, CdControlF, CdControlB.
       - [0x6ACD0, c, psyq/libcd/CdControl]
