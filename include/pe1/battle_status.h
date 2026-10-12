@@ -78,24 +78,18 @@ extern RenderGouraudQuad D_800B00E8[2];         /* ATB gauge fill */
 extern RenderGouraudQuad D_800B0130[2][2];      /* PE gauge fill, remainder */
 extern RenderPagedSpritePacket D_800B6920[2];   /* ATB gauge marker */
 /* Color a gauge quad: vertices 0 and 2 take the first color, 1 and 3 the
- * second (the PSY-Q setRGB0..setRGB3 sequence). */
-static inline void Battle_SetGaugeGradient(RenderGouraudQuad *quad,
-                                           int r0, int g0, int b0,
-                                           int r1, int g1, int b1)
-{
-    quad->r0 = r0;
-    quad->g0 = g0;
-    quad->b0 = b0;
-    quad->r1 = r1;
-    quad->g1 = g1;
-    quad->b1 = b1;
-    quad->r2 = r0;
-    quad->g2 = g0;
-    quad->b2 = b0;
-    quad->r3 = r1;
-    quad->g3 = g1;
-    quad->b3 = b1;
-}
+ * second (the PSY-Q setRGB0..setRGB3 sequence). A macro rather than an
+ * inline function: the constants must stay shared with neighbouring stores. */
+#define BATTLE_SET_GAUGE_GRADIENT(quad, r0_, g0_, b0_, r1_, g1_, b1_) \
+    ((quad).r0 = (r0_), (quad).g0 = (g0_), (quad).b0 = (b0_),         \
+     (quad).r1 = (r1_), (quad).g1 = (g1_), (quad).b1 = (b1_),         \
+     (quad).r2 = (r0_), (quad).g2 = (g0_), (quad).b2 = (b0_),         \
+     (quad).r3 = (r1_), (quad).g3 = (g1_), (quad).b3 = (b1_))
+
+/* Color of a marker or label sprite (setRGB0). */
+#define BATTLE_SET_SPRITE_COLOR(sprite, r_, g_, b_)                   \
+    ((sprite).color.bytes.r = (r_), (sprite).color.bytes.g = (g_),    \
+     (sprite).color.bytes.b = (b_))
 
 /* HP digit packets: current HP has four per draw buffer, maximum HP five
  * (digits and slash). Battle_DrawEnemyHP addresses the sprites from the
