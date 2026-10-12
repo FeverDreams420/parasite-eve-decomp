@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 """Rename project symbols everywhere in the tree, or audit function prefixes.
 
-``rename_symbols.py OLD NEW [OLD NEW ...]`` renames each symbol OLD to NEW.
+``rename_symbols.py OLD NEW [OLD NEW ...]`` renames each symbol OLD to NEW
+(functions, types, globals, macros, struct members, test names alike).
 ``rename_symbols.py --prefix Task_ Script_ [--dir src/main/script]`` renames
 every symbol spelled ``Task_*`` (only those defined under ``--dir`` when it
 is given) to ``Script_*``. ``--map FILE`` reads ``OLD NEW`` lines.
+``--header OLD NEW`` renames the header ``include/pe1/OLD.h`` (or any tracked
+header whose path ends in ``/OLD.h``): the file moves, its include guard
+``PE1_OLD_H`` becomes ``PE1_NEW_H``, and only path mentions of the header
+(``pe1/OLD.h``, a bare ``OLD.h``) change, so a header named like a common word
+(``sys.h``) does not rename that word, nor ``psyq/libcd/sys.c``.
 
 A rename is a whole-word substitution (``\\bOLD\\b``) over every tracked text
 file: the splat symbol files of the executable and the overlays, the manual
@@ -31,7 +37,17 @@ its prefix must be one its directory lists in the subsystem table of
 docs/CONVENTIONS.md, or one another live (not dissolved) subsystem lists
 (the function serves that subsystem from a unit the binary places here;
 ``--verbose`` lists those), or the name must be in AUDIT_EXCEPTIONS. It exits
-1 on any other function.
+1 on any other function. It also checks the other names of the game code
+(``--names`` runs only this part): types and ``g_`` globals declared in
+``include/pe1`` (without ``psyq_*.h``), ``src/main`` (without ``psyq/``) and
+``src/overlays``, the headers of ``include/pe1`` and the tests in
+``tools/tests``, and the ``Old_*`` functions the function audit does not see
+(static inline helpers, ``__asm__`` aliases). A name must not start with the prefix of a dissolved or
+renamed module (``Task``, ``FieldEng``, ``FieldAnim``, ``Tbl``, ``Evt``, ...,
+read from the subsystem table: the dissolved rows' prefixes and the "renamed
+from `dir`, prefix from `Old_`" notes), nor a header or test with that
+module's directory name (``task_*.h``, ``test_task_*.py``), unless
+NAME_EXCEPTIONS lists it with a reason.
 """
 from __future__ import annotations
 
@@ -56,6 +72,23 @@ WORD = re.compile(r"\b[A-Za-z_][A-Za-z0-9_]*\b")
 # labels, and private SDK routines keep the project names they were given.
 AUDIT_EXCEPTIONS = {
     "main": "the C entry point; boot owns it",
+}
+
+# Names that start with an old module name on purpose, keyed by the full name
+# or by "<kind> <old module>" (kind: type, global, function, header, test).
+# GTE and GPU are also the hardware, and libgpu's private routines keep their
+# Gpu_ project names (they are defined under psyq/ and pass on their own).
+NAME_EXCEPTIONS = {
+    "type Gte": "GTE hardware types (pe1/gte.h), not the dissolved gte module",
+    "header gte": "GTE hardware headers (gte.h, gte_types.h, ...)",
+    "test gte": "tests of GTE register reads and LIBGTE ratan",
+    "type Gpu": "GPU hardware packets, registers and libgpu state",
+    "global Gpu": "libgpu DMA state words",
+    "header gpu": "libgpu-side headers (psyq/libgpu is their only user but gpu_image.h)",
+    "test gpu": "tests of psyq/libgpu routines",
+    "test overlay": "overlay link tooling test",
+    "g_StrFileDirBuffer": "STR movie file directory, not the Str_ text prefix",
+    "g_StrFileDirLba": "STR movie file directory, not the Str_ text prefix",
 }
 
 
@@ -237,6 +270,152 @@ def rename(pairs: list[tuple[str, str]], dry_run: bool) -> int:
     return 0
 
 
+def old_module_names() -> tuple[set[str], set[str]]:
+    """(CamelCase prefixes, snake directory names) of dissolved or renamed modules."""
+    text = (ROOT / "docs/CONVENTIONS.md").read_text()
+    camel: set[str] = set()
+    snake: set[str] = set()
+    for line in text.splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) != 4 or not re.fullmatch(r"`[a-z0-9_]+`", cells[0]):
+            continue
+        directory, note = cells[0].strip("`"), cells[3]
+        if note.startswith("dissolved") and directory != "main":
+            snake.add(directory)
+            camel.update(p.rstrip("_") for p in re.findall(r"`([A-Za-z0-9]+_)`", cells[1]))
+        m = re.search(r"renamed from `([a-z0-9_]+)`", note)
+        if m:
+            snake.add(m.group(1))
+        m = re.search(r"prefix(?:es)? from ((?:`[A-Za-z0-9]+_`(?:,| and| or)?\s*)+)", note)
+        if m:
+            camel.update(p.rstrip("_") for p in re.findall(r"`([A-Za-z0-9]+_)`", m.group(1)))
+    if "engine" in snake:
+        snake.add("field_engine")
+    if "FieldAnim" in camel:
+        snake.add("field_anim")
+    return camel, snake
+
+
+TYPE_RX = re.compile(r"\}\s*(\w+)\s*;|\btypedef\b[^;{}]*?\b(\w+)\s*(?:\[[^\]]*\]\s*)*;|"
+                     r"\(\s*\*\s*(\w+)\s*\)\s*\(|\b(?:struct|union|enum)\s+(\w+)\s*\{")
+
+
+def audit_names(verbose: bool) -> int:
+    """Flag types, globals, functions, headers and tests named after an old module.
+
+    Functions are caught here when the function audit cannot see them: static
+    inline helpers in headers and ``__asm__`` aliases of an address."""
+    camel, snake = old_module_names()
+    sdk = psyq_names()
+    defs = function_definitions(tracked_text_files())
+
+    def old_camel(name: str) -> str | None:
+        for token in camel:
+            if re.match(re.escape(token) + r"(?:[A-Z0-9_]|$)", name):
+                return token
+        return None
+
+    def old_snake(stem: str) -> str | None:
+        for token in sorted(snake, key=len, reverse=True):
+            if stem == token or stem.startswith(token + "_"):
+                return token
+        return None
+
+    found: dict[tuple[str, str], set[str]] = {}
+    for path in tracked_text_files():
+        parts = pathlib.PurePath(path).parts
+        game = (parts[:2] == ("src", "overlays") or
+                (parts[:2] == ("src", "main") and parts[2:3] != ("psyq",)) or
+                (parts[:2] == ("include", "pe1") and not parts[-1].startswith("psyq_")))
+        if game and path.endswith((".c", ".h", ".inc")):
+            text = read(path) or ""
+            for groups in TYPE_RX.findall(text):
+                name = next(g for g in groups if g)
+                if old_camel(name) and name not in sdk:
+                    found.setdefault(("type", name), set()).add(path)
+            for name in re.findall(r"\bg_(\w+)", text):
+                if old_camel(name):
+                    found.setdefault(("global", "g_" + name), set()).add(path)
+            for name in re.findall(r"\b([A-Z][A-Za-z0-9]*_\w+)\s*\(", text):
+                token = old_camel(name)
+                if (token and name[len(token)] == "_" and name not in sdk and
+                        not any(f.startswith("src/main/psyq/") for f, _ in defs.get(name, []))):
+                    found.setdefault(("function", name), set()).add(path)
+        if parts[:2] == ("include", "pe1") and path.endswith(".h") and not parts[-1].startswith("psyq_"):
+            stem = pathlib.PurePath(path).stem
+            if old_snake(stem):
+                found.setdefault(("header", stem), set()).add(path)
+        if parts[:2] == ("tools", "tests") and parts[-1].startswith("test_") and path.endswith(".py"):
+            stem = pathlib.PurePath(path).stem[len("test_"):]
+            if old_snake(stem):
+                found.setdefault(("test", "test_" + stem), set()).add(path)
+    bad = 0
+    for (kind, name), paths in sorted(found.items()):
+        bare = name[2:] if kind == "global" else name
+        token = old_camel(bare) if kind in ("type", "global", "function") else old_snake(
+            bare[len("test_"):] if kind == "test" else bare)
+        where = ", ".join(sorted(paths)[:2]) + (" ..." if len(paths) > 2 else "")
+        reason = NAME_EXCEPTIONS.get(name) or NAME_EXCEPTIONS.get(f"{kind} {token}")
+        if reason:
+            if verbose:
+                print(f"  ok {kind} {name}  -- {reason}")
+            continue
+        bad += 1
+        print(f"  !! {kind} {name}  (old module `{token}`; {where})")
+    print(f"{bad} types, globals, functions, headers or tests named after an old module")
+    return 1 if bad else 0
+
+
+def header_pairs(pairs: list[tuple[str, str]]) -> tuple[list[tuple[str, str]], list[tuple[str, str]]]:
+    """(guard renames, header moves) for --header OLD NEW pairs."""
+    tracked = git("ls-files").splitlines()
+    guards, moves = [], []
+    for old, new in pairs:
+        hits = [p for p in tracked if p.endswith("/" + old + ".h")]
+        if len(hits) != 1:
+            sys.exit(f"--header {old}: {len(hits)} tracked headers named {old}.h")
+        dst = str(pathlib.PurePath(hits[0]).with_name(new + ".h"))
+        if (ROOT / dst).exists():
+            sys.exit(f"--header {old}: {dst} exists")
+        moves.append((hits[0], dst))
+        guards.append((f"PE1_{old.upper()}_H", f"PE1_{new.upper()}_H"))
+    return guards, moves
+
+
+def rename_headers(pairs: list[tuple[str, str]], dry_run: bool) -> int:
+    guards, moves = header_pairs(pairs)
+    texts = {p: read(p) for p in tracked_text_files()}
+    rxs = []
+    for (old, new), (src, _) in zip(pairs, moves):
+        rel = src.split("include/", 1)[1] if src.startswith("include/") else old + ".h"
+        rxs.append((re.compile(r"(?<![\w./-])(" + re.escape(rel) + r"|" + re.escape(old + ".h") + r")\b"),
+                    lambda m, rel=rel, old=old, new=new: m.group(1).replace(old + ".h", new + ".h")))
+    for guard_old, guard_new in guards:
+        rxs.append((re.compile(r"\b" + guard_old + r"\b"), lambda m, g=guard_new: g))
+    changed = {}
+    for path, text in texts.items():
+        if text is None:
+            continue
+        new_text, total = text, 0
+        for rx, fn in rxs:
+            new_text, n = rx.subn(fn, new_text)
+            total += n
+        if total:
+            changed[path] = total
+            if not dry_run:
+                (ROOT / path).write_text(new_text)
+    if not dry_run:
+        for src, dst in moves:
+            git("mv", src, dst)
+    print(f"{'would rename' if dry_run else 'renamed'} {len(moves)} headers:")
+    for src, dst in moves:
+        print(f"  {src} -> {dst}")
+    print(f"{sum(changed.values())} substitutions in {len(changed)} files:")
+    for path in sorted(changed):
+        print(f"  {changed[path]:5d}  {path}")
+    return 0
+
+
 def conventions_table() -> dict[str, tuple[list[str], bool]]:
     """directory -> (prefixes, dissolved) from the subsystem table."""
     text = (ROOT / "docs/CONVENTIONS.md").read_text()
@@ -291,7 +470,7 @@ def audit(verbose: bool) -> int:
     print("functions serving another live subsystem, per directory: " +
           (", ".join(f"{d} {n}" for d, n in sorted(cross.items())) or "none"))
     print(f"{bad} prefix mismatches without a documented exception")
-    return 1 if bad else 0
+    return 1 if bad or audit_names(verbose) else 0
 
 
 def main() -> int:
@@ -304,11 +483,21 @@ def main() -> int:
                         help="with --prefix: leave this symbol alone")
     parser.add_argument("--map", type=pathlib.Path, help="file of OLD NEW lines")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--header", nargs=2, action="append", default=[],
+                        metavar=("OLD", "NEW"), help="rename include/pe1/OLD.h to NEW.h")
     parser.add_argument("--audit", action="store_true")
+    parser.add_argument("--names", action="store_true",
+                        help="only the type/global/header/test part of --audit")
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
+    if args.names:
+        return audit_names(args.verbose)
     if args.audit:
         return audit(args.verbose)
+    if args.header:
+        if args.pairs or args.map or args.prefix:
+            sys.exit("--header renames headers only; run symbol renames separately")
+        return rename_headers([tuple(p) for p in args.header], args.dry_run)
     if len(args.pairs) % 2:
         sys.exit("pairs must be OLD NEW")
     pairs = list(zip(args.pairs[::2], args.pairs[1::2]))

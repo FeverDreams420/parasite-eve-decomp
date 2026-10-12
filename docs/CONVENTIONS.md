@@ -51,6 +51,14 @@ external function. `tools/reorg/rename_symbols.py --audit` checks this for
 `src/main` outside `psyq/` (`-v` lists the cross-subsystem functions per
 directory), and `rename_symbols.py OLD NEW` or `--map FILE` renames a
 symbol everywhere: symbol files, manifests, sources, docs and tests.
+The same goes for the other names: a type, `g_` global, header or test
+does not start with an old module's name either (`TaskNode`,
+`g_FieldEngineSlotTable`, `task_node.h`, `test_task_run_queue.py` were
+renamed to `ScriptNode`, `g_FieldFxSlotTable`, `script_node.h`,
+`test_script_run_queue.py`). `--audit` checks these too (`--names` alone)
+and lists the documented exceptions (GTE and GPU hardware types, the libgpu
+headers) with `-v`; `rename_symbols.py --header OLD NEW` renames a header
+with its include guard.
 
 **PsyQ file names.** A unit under `psyq/<library>/` is named after the SDK
 object it reproduces, lower case (`INTR_VB` is `intr_vb.c`, the BIOS veneer
