@@ -80,7 +80,7 @@ class SaveSprintfSjisTests(unittest.TestCase):
             # The unit holding Save_SprintfSjis changes as files merge.
             compiled = linked_function_bytes(
                 "Save_SprintfSjis", ENTRY, RETAIL_END - RETAIL_OFF,
-                "D_800A1708 = 0x800A1708;\n_gp = 0x8009CD70;\n", work)
+                "g_SaveSjisFormatArguments = 0x800A1708;\n_gp = 0x8009CD70;\n", work)
         self.assertEqual(compiled, retail)
 
         def read_byte(memory, address):

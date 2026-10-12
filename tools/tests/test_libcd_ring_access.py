@@ -28,9 +28,9 @@ CASES = [('StUnSetRing',
  ('StGetNext',
   184,
   'ffecaf09d4884883f522487717299cec0311a543aadc4df6689919103ac0c1b7',
-  'D_800BE9EC = 0x800BE9EC;\n'
+  'g_CdStreamRingIndex = 0x800BE9EC;\n'
   'StRingAddr = 0x800C0DC8;\n'
-  'g_CdStreamEndSector = 0x800C0DBC;\n'
+  'g_CdStreamEndState = 0x800C0DBC;\n'
   'StRingSize = 0x800C20C4;\n'
   'SECTIONS { .text 0x8007c484 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) '
   '*(.mdebug) } }')]

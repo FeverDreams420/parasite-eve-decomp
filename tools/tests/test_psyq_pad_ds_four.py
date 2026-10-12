@@ -20,7 +20,7 @@ CASES = [('libpad/padseqd',
  ('libds/dssys_2_3',
   1380,
   'b7050732b8e92fb15e3d90b4f1314937417e99711c63adb0f137f19178bc1494',
-  'CQ_delete_command = 0x8007E5C4;\nDS_cw = 0x8007FB44;\nDS_system_status = 0x8007FBF0;\nD_800A3510 = 0x800A3510;\nD_800A3540 = 0x800A3540;\nD_800A3600 = 0x800A3600;\nD_800A3604 = 0x800A3604;\nD_800A3608 = 0x800A3608;\nD_800A3610 = 0x800A3610;\nD_800A3690 = 0x800A3690;\nD_800B8AB0 = 0x800B8AB0;\ng_CdPendingReadCount = 0x800A3608;\nrescpy = 0x80080998;\nSECTIONS { .text 0x8007e6b0 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }')]
+  'CQ_delete_command = 0x8007E5C4;\nDS_cw = 0x8007FB44;\nDS_system_status = 0x8007FBF0;\ng_CdQueuedCmdSlots = 0x800A3510;\nD_800A3540 = 0x800A3540;\nD_800A3600 = 0x800A3600;\nD_800A3604 = 0x800A3604;\nD_800A3608 = 0x800A3608;\ng_DsReadCallbackSlots = 0x800A3610;\nD_800A3690 = 0x800A3690;\ng_DsReadCallbackState = 0x800B8AB0;\ng_CdPendingReadCount = 0x800A3608;\nrescpy = 0x80080998;\nSECTIONS { .text 0x8007e6b0 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }')]
 
 
 class PsyqPadDsFourTests(unittest.TestCase):
