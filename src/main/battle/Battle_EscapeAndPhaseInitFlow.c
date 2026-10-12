@@ -117,17 +117,10 @@ void Battle_PhaseInitEnemyTurn(void) {
     BattleEntity *initialPlayer;
     register s32 moveLock asm("$3");
 
-    register s32 value0 asm("$2");
-    register s32 value1 asm("$3");
-    register s32 brightGreen asm("$4");
-    s32 color1;
-    s32 blue;
-    s32 color2;
 
     u32 hp;
     s32 gameFlags;
     s32 clearMask;
-    register Combatant *finishActor asm("$2");
     /* Clear prior script effects and stop the player before waiting for actors. */
     Battle_FlushScriptSounds();
     ready = 1;
@@ -381,106 +374,21 @@ void Battle_PhaseInitEnemyTurn(void) {
     }
     if ((u8)ready != 0) {
         Akao_Cmd_21(0, 0xFF);
-        blue = 0x82;
-        color2 = 0x9F;
-        brightGreen = 0xFF;
-        color1 = 0xF9;
-        finishActor = D_8009D278;
-        finishActor->knockbackDistance = 0;
-        finishActor->knockbackFrames = 0;
-        value0 = 7;
-        D_8009D28C = value0;
-        value0 = 0x46;
-        BATTLE_HUD_BYTE(D_800B00ED) = value0;
-        BATTLE_HUD_BYTE(D_800B00FD) = value0;
-        BATTLE_HUD_BYTE(D_800B0111) = value0;
-        BATTLE_HUD_BYTE(D_800B0121) = value0;
-        value0 = D_8009D2E8;
-        value1 = ~1;
-        BATTLE_HUD_BYTE(D_800B00EC) = 0;
-        BATTLE_HUD_BYTE(D_800B00EE) = blue;
-        BATTLE_HUD_BYTE(D_800B00F4) = color2;
-        BATTLE_HUD_BYTE(D_800B00F5) = brightGreen;
-        BATTLE_HUD_BYTE(D_800B00F6) = color1;
-        BATTLE_HUD_BYTE(D_800B00FC) = 0;
-        BATTLE_HUD_BYTE(D_800B00FE) = blue;
-        BATTLE_HUD_BYTE(D_800B0104) = color2;
-        BATTLE_HUD_BYTE(D_800B0105) = brightGreen;
-        BATTLE_HUD_BYTE(D_800B0106) = color1;
-        BATTLE_HUD_BYTE(D_800B692C) = color2;
-        BATTLE_HUD_BYTE(D_800B692D) = brightGreen;
-        BATTLE_HUD_BYTE(D_800B692E) = color1;
-        BATTLE_HUD_BYTE(D_800B0110) = 0;
-        BATTLE_HUD_BYTE(D_800B0112) = blue;
-        BATTLE_HUD_BYTE(D_800B0118) = color2;
-        BATTLE_HUD_BYTE(D_800B0119) = brightGreen;
-        BATTLE_HUD_BYTE(D_800B011A) = color1;
-        BATTLE_HUD_BYTE(D_800B0120) = 0;
-        BATTLE_HUD_BYTE(D_800B0122) = blue;
-        BATTLE_HUD_BYTE(D_800B0128) = color2;
-        BATTLE_HUD_BYTE(D_800B0129) = brightGreen;
-        BATTLE_HUD_BYTE(D_800B012A) = color1;
-        D_8009D2E8 = value0 & value1;
-        BATTLE_HUD_BYTE(D_800B6948) = color2;
-        BATTLE_HUD_BYTE(D_800B694A) = color1;
-
-        color1 = 0x36;
-        value1 = 0x4A;
-        value0 = 0x3B;
-        color2 = 0x3D;
-        BATTLE_HUD_BYTE(D_800B0135) = blue;
-        BATTLE_HUD_BYTE(D_800B0145) = blue;
-        BATTLE_HUD_BYTE(D_800B017D) = blue;
-        BATTLE_HUD_BYTE(D_800B018D) = blue;
-        blue = 0x81;
-        BATTLE_HUD_BYTE(D_800B0136) = color1;
-        BATTLE_HUD_BYTE(D_800B0146) = color1;
-        BATTLE_HUD_BYTE(D_800B017E) = color1;
-        BATTLE_HUD_BYTE(D_800B018E) = color1;
-        color1 = 0x83;
-        BATTLE_HUD_BYTE(D_800B013C) = value1;
-        BATTLE_HUD_BYTE(D_800B014C) = value1;
-        BATTLE_HUD_BYTE(D_800B0184) = value1;
-        BATTLE_HUD_BYTE(D_800B0194) = value1;
-        value1 = 0x13;
-        BATTLE_HUD_BYTE(D_800B013E) = value0;
-        BATTLE_HUD_BYTE(D_800B014E) = value0;
-        BATTLE_HUD_BYTE(D_800B0186) = value0;
-        BATTLE_HUD_BYTE(D_800B0196) = value0;
-        value0 = 1;
-        BATTLE_HUD_BYTE(D_800B6949) = brightGreen;
-        BATTLE_HUD_BYTE(D_800B0134) = 0;
-        BATTLE_HUD_BYTE(D_800B013D) = brightGreen;
-        BATTLE_HUD_BYTE(D_800B0144) = 0;
-        BATTLE_HUD_BYTE(D_800B014D) = brightGreen;
-        BATTLE_HUD_BYTE(D_800B017C) = 0;
-        BATTLE_HUD_BYTE(D_800B0185) = brightGreen;
-        BATTLE_HUD_BYTE(D_800B018C) = 0;
-        BATTLE_HUD_BYTE(D_800B0195) = brightGreen;
-        BATTLE_HUD_BYTE(D_800B0158) = brightGreen;
-        BATTLE_HUD_BYTE(D_800B0159) = color2;
-        BATTLE_HUD_BYTE(D_800B015A) = blue;
-        BATTLE_HUD_BYTE(D_800B0160) = color1;
-        BATTLE_HUD_BYTE(D_800B0161) = value1;
-        BATTLE_HUD_BYTE(D_800B0162) = value0;
-        BATTLE_HUD_BYTE(D_800B0168) = brightGreen;
-        BATTLE_HUD_BYTE(D_800B0169) = color2;
-        BATTLE_HUD_BYTE(D_800B016A) = blue;
-        BATTLE_HUD_BYTE(D_800B0170) = color1;
-        BATTLE_HUD_BYTE(D_800B0171) = value1;
-        BATTLE_HUD_BYTE(D_800B0172) = value0;
-        BATTLE_HUD_BYTE(D_800B01A0) = brightGreen;
-        BATTLE_HUD_BYTE(D_800B01A1) = color2;
-        BATTLE_HUD_BYTE(D_800B01A2) = blue;
-        BATTLE_HUD_BYTE(D_800B01A8) = color1;
-        BATTLE_HUD_BYTE(D_800B01A9) = value1;
-        BATTLE_HUD_BYTE(D_800B01AA) = value0;
-        BATTLE_HUD_BYTE(D_800B01B0) = brightGreen;
-        BATTLE_HUD_BYTE(D_800B01B1) = color2;
-        BATTLE_HUD_BYTE(D_800B01B2) = blue;
-        BATTLE_HUD_BYTE(D_800B01B8) = color1;
-        BATTLE_HUD_BYTE(D_800B01B9) = value1;
-        BATTLE_HUD_BYTE(D_800B01BA) = value0;
+        {
+            Combatant *finisher = D_8009D278;
+            finisher->knockbackDistance = 0;
+            finisher->knockbackFrames = 0;
+        }
+        D_8009D28C = 7;
+        D_8009D2E8 &= ~1;
+        BATTLE_SET_GAUGE_GRADIENT(D_800B00E8[0], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
+        BATTLE_SET_SPRITE_COLOR(D_800B6920[0].sprite, 0x9F, 0xFF, 0xF9);
+        BATTLE_SET_GAUGE_GRADIENT(D_800B00E8[1], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
+        BATTLE_SET_SPRITE_COLOR(D_800B6920[1].sprite, 0x9F, 0xFF, 0xF9);
+        BATTLE_SET_GAUGE_GRADIENT(D_800B0130[0][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
+        BATTLE_SET_GAUGE_GRADIENT(D_800B0130[1][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
+        BATTLE_SET_GAUGE_GRADIENT(D_800B0130[0][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
+        BATTLE_SET_GAUGE_GRADIENT(D_800B0130[1][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
     }
 }
 
@@ -954,130 +862,32 @@ void Battle_StepEntityDeath(void)
 /* Start the player and battle-HUD death sequence after death cleanup. */
 
 
+/* Start the player death sequence: reset the HUD gauges, stop the player and
+ * spawn the death effect unless an escape is in progress. */
 void Battle_StartDeathAnim(void) {
-    s32 c2;
-    s32 c3;
-    s32 c4;
-    s32 c5;
-    s32 c6;
-    register s32 c7 asm("$7");
-    u8 *p254;
-    s32 t98;
+    BattleEntity *player;
 
     Battle_ResetEnemyStats(0);
-    c6 = 0x46;
-    c5 = 0x82;
-    c4 = 0x9F;
-    c2 = 0xFF;
-    c3 = 0xF9;
-    D_800B00ED[0] = c6;
-    D_800B00FD[0] = c6;
-    D_800B0111[0] = c6;
-    D_800B0121[0] = c6;
-    c6 = 0x36;
-    D_800B00F4[0] = c4;
-    D_800B0104[0] = c4;
-    D_800B692C[0] = c4;
-    D_800B0118[0] = c4;
-    D_800B0128[0] = c4;
-    D_800B6948[0] = c4;
-    c4 = 0x4A;
-    D_800B00F6[0] = c3;
-    D_800B0106[0] = c3;
-    D_800B692E[0] = c3;
-    D_800B011A[0] = c3;
-    D_800B012A[0] = c3;
-    D_800B694A[0] = c3;
-    c3 = 0x3B;
-    c7 = 0x3D;
-    D_800B00EC[0] = 0;
-    D_800B00EE[0] = c5;
-    D_800B00F5[0] = c2;
-    D_800B00FC[0] = 0;
-    D_800B00FE[0] = c5;
-    D_800B0105[0] = c2;
-    D_800B692D[0] = c2;
-    D_800B0110[0] = 0;
-    D_800B0112[0] = c5;
-    D_800B0119[0] = c2;
-    D_800B0120[0] = 0;
-    D_800B0122[0] = c5;
-    D_800B0129[0] = c2;
-    D_800B6949[0] = c2;
-    D_800B0134[0] = 0;
-    D_800B0135[0] = c5;
-    D_800B0136[0] = c6;
-    D_800B013C[0] = c4;
-    D_800B0146[0] = c6;
-    D_800B017E[0] = c6;
-    D_800B018E[0] = c6;
-    c6 = 0x81;
-    D_800B0145[0] = c5;
-    D_800B017D[0] = c5;
-    D_800B018D[0] = c5;
-    c5 = 0x83;
-    D_800B014C[0] = c4;
-    D_800B0184[0] = c4;
-    D_800B0194[0] = c4;
-    c4 = 0x13;
-    D_800B013E[0] = c3;
-    D_800B014E[0] = c3;
-    D_800B0186[0] = c3;
-    D_800B0196[0] = c3;
-    c3 = 1;
-    D_800B013D[0] = c2;
-    D_800B0144[0] = 0;
-    D_800B014D[0] = c2;
-    D_800B017C[0] = 0;
-    D_800B0185[0] = c2;
-    D_800B018C[0] = 0;
-    D_800B0195[0] = c2;
-    D_800B0158[0] = c2;
-    D_800B0159[0] = c7;
-    D_800B015A[0] = c6;
-    D_800B0160[0] = c5;
-    D_800B0161[0] = c4;
-    D_800B0162[0] = c3;
-    D_800B0168[0] = c2;
-    D_800B0169[0] = c7;
-    D_800B016A[0] = c6;
-    D_800B0170[0] = c5;
-    D_800B0171[0] = c4;
-    D_800B0172[0] = c3;
-    D_800B01A0[0] = c2;
-    D_800B01A1[0] = c7;
-    D_800B01B0[0] = c2;
-    c2 = 2;
-    D_8009D28C = c2;
-        {
-        s32 d2e8;
-        d2e8 = D_8009D2E8;
-                D_800B01A8[0] = c5;
-        D_800B01B8[0] = c5;
-        p254 = (u8 *)D_8009D254;
-                D_800B01AA[0] = c3;
-        D_800B01BA[0] = c3;
-        c3 = ~0x100;
-                D_800B01A2[0] = c6;
-        D_800B01A9[0] = c4;
-        D_800B01B1[0] = c7;
-        D_800B01B2[0] = c6;
-        D_800B01B9[0] = c4;
-                D_8009D2E8 = d2e8 | 1;
-    }
-    t98 = *(s32 *) (p254 + 0x98);
-    *(s32 *) (p254 + 0x68) = 0;
-    *(s32 *) (p254 + 0x6C) = 0;
-    *(s32 *) (p254 + 0x70) = 0;
-    *(s32 *) (p254 + 0x98) = t98 & c3;
+    BATTLE_SET_GAUGE_GRADIENT(D_800B00E8[0], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
+    BATTLE_SET_SPRITE_COLOR(D_800B6920[0].sprite, 0x9F, 0xFF, 0xF9);
+    BATTLE_SET_GAUGE_GRADIENT(D_800B00E8[1], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
+    BATTLE_SET_SPRITE_COLOR(D_800B6920[1].sprite, 0x9F, 0xFF, 0xF9);
+    BATTLE_SET_GAUGE_GRADIENT(D_800B0130[0][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
+    BATTLE_SET_GAUGE_GRADIENT(D_800B0130[1][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
+    BATTLE_SET_GAUGE_GRADIENT(D_800B0130[0][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
+    BATTLE_SET_GAUGE_GRADIENT(D_800B0130[1][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
+    D_8009D28C = 2;
+    D_8009D2E8 |= 1;
+    player = D_8009D254;
+    player->motionX = 0;
+    player->motionY = 0;
+    player->motionZ = 0;
+    player->entityFlags &= ~0x100;
     g_GameState.flags |= 0x8000;
     if (!(D_8009D1A0 & 0x1800)) {
-        Entity_SetActionMode(p254, 0x14);
-        {
-            u8 *q;
-            q = (u8 *)D_8009D254;
-            Asset_Find08Alt(0x45B, 0, ((BattleEntity *)q)->posX.parts.integer, ((BattleEntity *)q)->posY.parts.integer, ((BattleEntity *)q)->posZ.parts.integer);
-        }
+        Entity_SetActionMode(player, 0x14);
+        Asset_Find08Alt(0x45B, 0, D_8009D254->posX.parts.integer, D_8009D254->posY.parts.integer,
+                        D_8009D254->posZ.parts.integer);
     }
 }
 
