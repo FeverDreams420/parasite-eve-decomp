@@ -940,6 +940,21 @@ Still open:
 
 These apply to any unit, not only the ones they were found in:
 
+- Loop exit tests. When a loop body starts with a conditional exit,
+  `expand_end_loop` rolls that test to the bottom and jumps to it, and the
+  first jump pass then copies the test in front of the loop, so the first
+  iteration is peeled. Retail search loops that test at the top (written
+  with a backward `goto` until now) come out of a plain loop whose body
+  opens with a block-scope declaration: the block note stops the roll
+  (`Scene_LoadMap`: `do { u8 id = walk->...; if (id == sceneType) break;
+  ... } while (i < count)`). A byte compared inside such a loop must be
+  held in a full-word variable, or loop.c hoists its zero-extension to the
+  loop entry and the load moves with it. The other way round, a loop that
+  retail enters through a jump to its bottom test (`Menu_StepItemSelectScreen`)
+  cannot come from `while`/`for`: the jump pass copies the test in front of
+  the loop and cse folds it against the constant start value (lev 28);
+  an inline helper in the condition stops both the roll and the copy
+  (lev 8) and a `do`/`while` has no entry jump (lev 7).
 - A `PE1_NOP`/`PE1_NOP_IO2_DEP` slot between a load and a `$gp` store of
   the loaded value stands in for the load-delay `nop` ASPSX emitted. A
   tentative definition of the stored word in the unit plus

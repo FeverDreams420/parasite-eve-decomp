@@ -31,7 +31,7 @@ FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
     u32 i;
     u32 count;
     u32 value;
-    u8 sceneType;
+    u32 sceneType;
     u32 serial;
     u32 *row;
     u8 **table;
@@ -150,14 +150,18 @@ FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
         bankRows = SceneAsset_ResolveOffset(archive, entry & 0x3FFFFF);
         i = 0;
         if ((entry >> 22) != 0) {
-        sceneType = scene[0];
-        count = entry >> 22;
-        walk = bankRows;
-scan_loop:
-        if (walk->source.bytes.id != sceneType) {
-        ++i;
-        if (i < count) { ++walk; goto scan_loop; }
-        }
+            sceneType = scene[0];
+            count = entry >> 22;
+            walk = bankRows;
+            /* The block-scope id keeps the match test at the top of the
+             * loop (see docs/CODE_ORGANIZATION.md, loop exit tests). */
+            do {
+                u8 id = walk->source.bytes.id;
+
+                if (id == sceneType) break;
+                ++i;
+                ++walk;
+            } while (i < count);
         }
 
         allocation = (u8 *)actor->allocation_block;
