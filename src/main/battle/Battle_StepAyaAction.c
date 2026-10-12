@@ -8,14 +8,17 @@
 u8 D_8009D25C;
 s8 g_AyaAttackStep, g_EvasionStatus, g_EvasionReaction;
 s16 g_AyaActionTimer;
-u16 g_AyaSavedRotation[2], g_AyaSavedRotationZ;
+BattleSavedRotation g_AyaSavedRotation;
 u8 D_8009D1D4;
 int D_8009D258;
 
 /* Advances Aya's 17-state action, saving her pose, visiting the selected
  * targets, and restoring normal animation/visibility at completion.
+ * The saved pose is written through the position and rotation records:
+ * their field stores may alias the player's fields, which keeps retail's
+ * load/store interleaving without pins.
  * Matching debt: register pins and empty compiler barriers retain
- * retail allocation and scheduling. No instruction ASM or tool patches. */
+ * retail allocation and scheduling in the remaining cases. */
 s32 Battle_StepAyaAction(void)
 {
   BattleEntity *targetEntity;
@@ -38,38 +41,19 @@ s32 Battle_StepAyaAction(void)
   {
     case 0:
     {
-      register int rate asm("$5");
-      int mask;
-      RenderObjectEntity *render;
-      unsigned entityFlags;
+      BattleEntity *player;
       Scene_InitEntityPlayer(1);
-      {
-        BattleEntity *player = D_8009D254;
-        transfer = player->posX.fixed;
-        g_AyaSavedPosX = transfer;
-        transfer = player->posY.fixed;
-        g_AyaSavedPosY = transfer;
-        transfer = player->posZ.fixed;
-        g_AyaSavedPosZ = transfer;
-        transfer = (u16) player->rotationX;
-        g_AyaSavedRotation[0] = transfer;
-        rate = 30;
-        g_AyaAttackStep = 0;
-        g_AyaSavedRotation[1] = (u16) player->facingAngle;
-        mask = ~4;
-        transfer = (u16) player->rotationZ;
-        g_AyaSavedRotationZ = transfer;
-        render = &player->renderObject;
-        transfer = D_8009D2E8;
-        asm volatile("" : : "r"(transfer));
-        entityFlags = player->entityFlags;
-        transfer &= mask;
-        entityFlags |= 0x80;
-        asm volatile("" : : "r"(entityFlags));
-        D_8009D2E8 = transfer;
-        player->entityFlags = entityFlags;
-        Anim_SetInterpRate(render, rate);
-      }
+      player = D_8009D254;
+      g_AyaSavedPos.x = player->posX.fixed;
+      g_AyaSavedPos.y = player->posY.fixed;
+      g_AyaSavedPos.z = player->posZ.fixed;
+      g_AyaSavedRotation.x = player->rotationX;
+      g_AyaAttackStep = 0;
+      g_AyaSavedRotation.facing = player->facingAngle;
+      g_AyaSavedRotation.z = player->rotationZ;
+      D_8009D2E8 &= ~4;
+      player->entityFlags |= 0x80;
+      Anim_SetInterpRate(&player->renderObject, 30);
       D_8009D254->renderObject.flags_9C |= 2;
       Anim_SetInterpRate(&D_800B0CEC, 0x1E);
       D_800B0CEC.flags_9C |= 2;
@@ -166,7 +150,7 @@ s32 Battle_StepAyaAction(void)
         targetEntity = D_800BE830[D_8009D1D4].actor;
         reachScale = (((EnemyCombatant *) targetEntity->core)->statusFlags2 >> 0x13) & 0x1F;
         targetDistance = ((targetEntity->renderObject.hit_cylinder.radius * reachScale) / 10) + D_8009D254->renderObject.hit_cylinder.radius;
-        targetAngle = Battle_CalcAngleToTarget(&targetEntity->renderObject, &g_AyaSavedPosX);
+        targetAngle = Battle_CalcAngleToTarget(&targetEntity->renderObject, &g_AyaSavedPos);
         D_8009D254->facingAngle = targetAngle;
         product = targetDistance * rsin(targetAngle);
         asm("" : "=r"(product) : "0"(product));
@@ -326,27 +310,27 @@ s32 Battle_StepAyaAction(void)
       if (player->renderObject.variant_visible == 0)
       {
         effect = 0x4B6;
-        saved = &g_AyaSavedPosX;
+        saved = &g_AyaSavedPos.x;
         transfer = *saved;
         player->posX.fixed = transfer;
         x = player->posX.parts.integer;
-        transfer = g_AyaSavedPosY;
+        transfer = g_AyaSavedPos.y;
         player->posY.fixed = transfer;
         y = player->posY.parts.integer;
-        transfer = g_AyaSavedPosZ;
+        transfer = g_AyaSavedPos.z;
         player->posZ.fixed = transfer;
         transfer = *saved;
         player->baseX = transfer;
-        transfer = g_AyaSavedPosY;
+        transfer = g_AyaSavedPos.y;
         player->baseY = transfer;
-        transfer = g_AyaSavedPosZ;
+        transfer = g_AyaSavedPos.z;
         player->baseZ = transfer;
-        transfer = g_AyaSavedRotation[0];
+        transfer = g_AyaSavedRotation.x;
         player->rotationX = transfer;
-        transfer = g_AyaSavedRotation[1];
+        transfer = g_AyaSavedRotation.facing;
         player->facingAngle = transfer;
         asm volatile("" : : "r"(transfer));
-        rotationZ = g_AyaSavedRotationZ;
+        rotationZ = g_AyaSavedRotation.z;
         player->rotationZ = rotationZ;
         transfer = player->posZ.parts.integer;
         Asset_Find08Alt(effect, 0, x, y, transfer);

@@ -149,9 +149,16 @@ extern s8 g_AyaAttackStep;
 extern s8 g_EvasionStatus;
 extern s8 g_EvasionReaction;
 extern s16 g_AyaActionTimer;
-extern s32 g_AyaSavedPosX, g_AyaSavedPosY, g_AyaSavedPosZ;
-extern u16 g_AyaSavedRotation[2];
-extern u16 g_AyaSavedRotationZ;
+/* Aya's world position (16.16) saved before an action moves her. */
+typedef struct BattleSavedPosition {
+    s32 x, y, z;
+} BattleSavedPosition;
+extern BattleSavedPosition g_AyaSavedPos;
+/* Aya's rotation saved with the position. */
+typedef struct BattleSavedRotation {
+    u16 x, facing, z;
+} BattleSavedRotation;
+extern BattleSavedRotation g_AyaSavedRotation;
 extern RenderObjectEntity D_800B0CEC;
 /* D_800B0D88 is D_800B0CEC.flags_9C. Battle_StepEscapeOrDeath reloads the
  * player's flags only after this store, so the store must look like it may
