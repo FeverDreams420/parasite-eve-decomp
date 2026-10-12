@@ -920,6 +920,13 @@ Still open:
     - A result flag that retail sets in the delay slot of the last branch is
       assigned after the conditional call (`if (...) f(); result = 1;`),
       not before it (lev 3).
+    - A constant that retail loads at the very top of its block, far from
+      its use, is a variable set to the constant and then updated in place
+      (`brightness = 120; brightness -= g_BattleEndTimer * 4;`): set twice,
+      the pseudo is not launched by sched1, so its `li` stays where the
+      source puts it (`Battle_StepPostBattle` case 2, which retired the
+      `brightnessBase` pin; the `top` constant beside it is stored as is and
+      still needs its pin, lev 23 without).
     - Loops that walk the entity list in different cases of one function
       share the cursor variable when retail keeps every walk in the same
       callee-saved register: a walk without calls then still takes `s0`
