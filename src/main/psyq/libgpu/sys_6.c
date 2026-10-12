@@ -1,10 +1,10 @@
 /* ASSEMBLER: GNU */
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses */
-/* Psy-Q LIBGPU SYS.OBJ, part 6 of 11: the private draw-offset and texture-
- * window command builders, _status, the OTC ordering-table clear, the VRAM
- * fill, upload and readback transfers, the GP1 control mirror and the DMA
- * start helpers. */
+/* Psy-Q LIBGPU SYS.OBJ, part 6 of 11: the private draw-offset and
+ * texture-window command builders, _status, the OTC ordering-table clear, the
+ * VRAM fill, upload and readback transfers, the GP1 control mirror and the
+ * DMA start helpers. */
 #include "pe1/gpu_command_builders.h"
 #include "common.h"
 #include "pe1/psyq_types.h"

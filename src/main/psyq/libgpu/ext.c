@@ -1,5 +1,3 @@
-/* CC1_FLAGS: -mno-split-addresses */
-/* ASSEMBLER: GNU */
 /* GCC_VERSION: 2.8.1 */
 /* Psy-Q LIBGPU EXT.OBJ: LoadTPage, LoadClut, LoadClut2, SetDefDrawEnv and
  * SetDefDispEnv. */

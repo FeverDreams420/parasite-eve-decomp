@@ -8,8 +8,8 @@
  * stays in eleven units because neighbouring parts need different compilers:
  * sys.c, sys_3.c, sys_6.c, sys_8.c and sys_10.c only match with GCC 2.8.1 and
  * -mno-split-addresses, sys_2.c, sys_4.c, sys_7.c, sys_9.c and sys_11.c only
- * with GCC 2.7.2 (the return delay slot), and sys_5.c only with -O1 or -fno-
- * schedule-insns. */
+ * with GCC 2.7.2 (the return delay slot), and sys_5.c only with -O1 or
+ * -fno-schedule-insns. */
 #include "pe1/psyq_callbacks.h"
 #include "pe1/gpu_callbacks.h"
 #include "common.h"
