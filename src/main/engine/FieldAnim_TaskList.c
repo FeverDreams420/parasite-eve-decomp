@@ -86,44 +86,43 @@ int func_800CE5AC(void *arg0, int arg1, int arg2, int arg3, void *arg4) {
 
 void *func_800CE610(char *list) {
     char frame[8];
+    FieldAnimCallbackList *header;
     FieldAnimCallbackList *base;
-    char *entry;
-    register int slot_or_count;
-    register int count asm("$6");
-    register int stride asm("$7");
+    FieldAnimCallbackListEntry *slot;
+    int count;
+    int limit;
+    int stride;
     int i;
-    void *ret;
 
     (void)frame;
-    ret = list;
-    asm volatile("" : "=r"(ret) : "0"(ret));
+    /* The parameter itself becomes the entry cursor, so the header is read
+     * through two copies taken before it advances, as retail does. */
+    header = (FieldAnimCallbackList *)list;
     base = (FieldAnimCallbackList *)list;
-    asm volatile("" : "=r"(base) : "0"(base));
-    entry = list + 0xC;
-        slot_or_count = ((FieldAnimCallbackList *)ret)->count;
-    stride = ((FieldAnimCallbackList *)ret)->stride;
+    list += 0xC;
+    count = header->count;
+    stride = header->stride;
     i = 0;
-    if (slot_or_count > 0) {
-        count = slot_or_count;
+    if (count > 0) {
+        limit = count;
         while (1) {
-            slot_or_count = (int)entry;
-            if (((FieldAnimCallbackListEntry *)entry)->active == 0) {
+            slot = (FieldAnimCallbackListEntry *)list;
+            if (slot->active == 0) {
                 break;
             }
             i++;
-            entry += stride;
-            if (i >= count) {
+            list += stride;
+            if (i >= limit) {
                 break;
             }
         }
 
         if (i < base->count) {
-            ((FieldAnimCallbackListEntry *)slot_or_count)->active = 1;
-            ((FieldAnimCallbackListEntry *)slot_or_count)->age = 0;
-            return entry + 0x4;
+            slot->active = 1;
+            slot->age = 0;
+            return list + 0x4;
         }
     }
-
     return 0;
 }
 
