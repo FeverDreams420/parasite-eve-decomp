@@ -54,4 +54,7 @@ extern char D_800B1628[];
 extern char D_800B162C[];
 extern char D_800B8A18[];
 
+void Gpu_RenderFrame(void);
+int Gpu_CheckDrawStatus(void);
+
 #endif

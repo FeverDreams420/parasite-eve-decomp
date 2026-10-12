@@ -10,6 +10,7 @@
 #include "pe1/entity_allocation.h"
 #include "pe1/entity_animation.h"
 #include "pe1/battle_entity_anim.h"
+#include "pe1/textbox.h"
 
 
 int Task_EncodeBarcode(int **arg0) {
@@ -101,7 +102,6 @@ int Entity_ClearCurrentFlag40(void) {
 
 int g_SceneDataTable0;
 
-int Menu_GetEquipSlotIndex(void);
 
 int Task_GetMenuChoice(int **arg0) {
     int value;

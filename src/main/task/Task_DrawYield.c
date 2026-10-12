@@ -3,10 +3,10 @@
 
 #include "pe1/task_node.h"
 #include "pe1/task_state.h"
+#include "pe1/boot.h"
 
 
 short Seq_GetElapsed(void);
-int Gpu_CheckDrawStatus(void);
 
 int Task_WaitFrameOrDraw(int **arg0) {
     if (Seq_GetElapsed() == *arg0[0]) {
@@ -29,8 +29,6 @@ int Task_Noop1(void) {
 int Task_Noop2(void) {
     return 1;
 }
-
-
 
 
 int Entity_YieldOnDrawBusy(void) {

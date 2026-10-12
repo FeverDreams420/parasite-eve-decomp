@@ -38,4 +38,7 @@ void Sys_Shutdown(void);
 /* Records a started scene track in g_GameState.scene_audio. */
 int Overlay_RegisterAudioSlot(int slot, int key, int bank, int volume);
 
+int Overlay_FindAudioSlotIndex(int key);
+int Overlay_GetAudioSlotByKey(int key);
+
 #endif

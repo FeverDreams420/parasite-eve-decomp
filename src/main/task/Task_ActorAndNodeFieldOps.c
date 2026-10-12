@@ -5,6 +5,8 @@
 #include "pe1/field_actor.h"
 #include "pe1/task_node.h"
 #include "pe1/field_sfx.h"
+#include "pe1/task_state.h"
+#include "pe1/textbox.h"
 
 /* COMMON supplies small-data metadata to MASPSX. */
 int g_SceneDataTable0;
@@ -73,7 +75,6 @@ int Entity_GetCurrentNodeId(int **args)
 /* Script opcodes: random value in a range and a field sound effect on the
  * current actor. Contiguous default-profile handlers. */
 
-u32 Task_GpuFlushPrimQueue(void);
 int Task_GpuPackPrimColor(int start, int end);
 
 /* Equal bounds return one raw RNG word. Otherwise the result is in [start, end). */
@@ -111,7 +112,6 @@ int Task_PlayFieldSfx(FieldSfxScriptArgs *arg0) {
 }
 
 int Tbl_LookupEntry(short arg0);
-void Tbl_ClearEntry(int arg0);
 
 int Task_GetNodeTarget14(int **arg0) {
     *arg0[0] = g_TaskNodePool->target14;

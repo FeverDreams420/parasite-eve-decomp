@@ -8,6 +8,7 @@
 #include "pe1/font.h"
 #include "pe1/task_state.h"
 #include "pe1/entity_allocation.h"
+#include "pe1/textbox.h"
 
 
 int Task_SetSceneFlag2000(void) {
@@ -63,9 +64,6 @@ int Task_ClearInputFlagBit2(void) {
     return 1;
 }
 
-void Task_EnableMovement(void);
-
-void Task_DisableMovement(void);
 
 int Entity_ResolveCurrentPosition(unsigned short **arg0) {
     Entity_ResolvePosition((BattleEntity *)g_CurrentEntity, *arg0[0]);

@@ -184,4 +184,29 @@ extern signed char D_800B0DB7;
 /* Opcode 0x80, 0x81 or 0x82 chosen by the argument. */
 void Akao_Cmd_80_81_82(int arg0);
 
+void Akao_Cmd_11(int slot);
+void Akao_Cmd_90(int command);
+void Akao_Cmd_92(int command);
+void Akao_Cmd_A0(int command, int arg1, int arg2);
+void Akao_Cmd_A1(int command, int arg1, int arg2, int arg3);
+void Akao_Cmd_A2(int command, int arg1, int arg2);
+void Akao_Cmd_A3(int command, int arg1, int arg2, int arg3);
+void Akao_Cmd_A4(int command, int arg1, int arg2);
+void Akao_Cmd_A5(int command, int arg1, int arg2, int arg3);
+void Akao_Cmd_A8(int command);
+void Akao_Cmd_A9(int command, int arg1);
+void Akao_Cmd_AA(int command);
+void Akao_Cmd_AB(int command, int arg1);
+void Akao_Cmd_AC(int command);
+void Akao_Cmd_AD(int command, int arg1);
+void Akao_Cmd_C2_WithSlot(int slot, int value, int arg2, int arg3);
+void Akao_Cmd_D0(int command);
+void Akao_Cmd_D1(int command, int arg1);
+void Akao_Cmd_D2(int command, int arg1, int arg2);
+void Akao_Cmd_D4(int command);
+void Akao_Cmd_D5(int command, int arg1);
+void Akao_Cmd_D6(int command, int arg1, int arg2);
+void Akao_Cmd_D9(int command, int arg1);
+void Akao_Cmd_DA(int command, int arg1, int arg2);
+
 #endif

@@ -24,14 +24,13 @@
 #include "pe1/battle_runtime.h"
 #include "pe1/task_state.h"
 #include "pe1/battle_entity_anim.h"
+#include "pe1/menu_dialog.h"
+#include "pe1/cdrom.h"
 
 /* COMMON supplies small-data metadata to MASPSX. */
 int g_SceneDataTable0;
 TaskNode *g_TaskNodePool;
 TaskNode *D_8009D300;
-
-
-void Menu_OpenStartupMemCardDialog(void);
 
 
 int Render_SetEntryPosition(int index, int x, int y);
@@ -196,35 +195,7 @@ typedef struct AkaoStackLocals {
 
 u32 *D_8009CE00;
 
-void Akao_Cmd_11(int slot);
-void Akao_Cmd_90(int command);
-void Akao_Cmd_92(int command);
-void Akao_Cmd_A0(int command, int arg1, int arg2);
-void Akao_Cmd_A1(int command, int arg1, int arg2, int arg3);
-void Akao_Cmd_A2(int command, int arg1, int arg2);
-void Akao_Cmd_A3(int command, int arg1, int arg2, int arg3);
-void Akao_Cmd_A4(int command, int arg1, int arg2);
-void Akao_Cmd_A5(int command, int arg1, int arg2, int arg3);
-void Akao_Cmd_A8(int command);
-void Akao_Cmd_A9(int command, int arg1);
-void Akao_Cmd_AA(int command);
-void Akao_Cmd_AB(int command, int arg1);
-void Akao_Cmd_AC(int command);
-void Akao_Cmd_AD(int command, int arg1);
-void Akao_Cmd_C2_WithSlot(int slot, int value, int arg2, int arg3);
-void Akao_Cmd_D0(int command);
-void Akao_Cmd_D1(int command, int arg1);
-void Akao_Cmd_D2(int command, int arg1, int arg2);
-void Akao_Cmd_D4(int command);
-void Akao_Cmd_D5(int command, int arg1);
-void Akao_Cmd_D6(int command, int arg1, int arg2);
-void Akao_Cmd_D9(int command, int arg1);
-void Akao_Cmd_DA(int command, int arg1, int arg2);
-void Akao_ResetPositionalState(void);
 int Akao_Cmd_19_Then_C0(u8 *data, int value);
-int CD_SeekToTrack(int key, int mode, int group, int *slot, int immediate);
-int Overlay_FindAudioSlotIndex(int key);
-int Overlay_GetAudioSlotByKey(int key);
 
 int Akao_ProcessCommand(AkaoCommandArgs *args) {
     AkaoStackLocals locals;

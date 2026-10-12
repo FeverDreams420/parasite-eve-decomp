@@ -6,9 +6,6 @@
 #include "pe1/entity_frame_update.h"
 
 
-void Render_InitObjectFromTable(RenderObjectEntity *object,
-                                RenderObjectEntity *source, int index);
-
 int Task_CopyEntityRenderObject(int **args) {
     FieldActor *source;
     int type_id;

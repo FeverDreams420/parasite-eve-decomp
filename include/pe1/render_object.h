@@ -787,4 +787,7 @@ int func_800DF6AC(int mode, RenderFadeEmitter *state);
 
 extern RenderObjectEntity g_PlayerBattleEntity;
 
+void Render_InitObjectFromTable(RenderObjectEntity *object,
+                                RenderObjectEntity *source, int index);
+
 #endif

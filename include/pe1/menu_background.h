@@ -29,4 +29,6 @@ void Menu_SaveBgAdvanceFade(void);
  * incomplete array keeps -G8 units from treating it as small data. */
 extern unsigned char g_GeomOtZ[];
 
+void Menu_DrawSaveBg(void);
+
 #endif /* PE1_MENU_BACKGROUND_H */

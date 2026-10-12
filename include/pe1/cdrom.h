@@ -60,4 +60,7 @@ extern void *tableCheck[] asm("D_800B0E08");
 extern void *tableCheckAgain[] asm("D_800B0E08");
 extern void *tableAgain[] asm("D_800B0E08");
 
+void Akao_ResetPositionalState(void);
+int CD_SeekToTrack(int key, int mode, int group, int *slot, int immediate);
+
 #endif

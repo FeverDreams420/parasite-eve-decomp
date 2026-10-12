@@ -16,8 +16,8 @@
 #include "pe1/game_timers.h"
 #include "pe1/textbox.h"
 #include "pe1/inventory_slots.h"
+#include "pe1/task_state.h"
 
-void Task_SignalExit(void);
 
 int Task_ClearEntityRoamFlag(void) {
     g_CurrentEntity->flags &= 0xFFFDFFFF;

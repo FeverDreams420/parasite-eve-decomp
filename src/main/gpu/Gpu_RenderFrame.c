@@ -8,9 +8,9 @@
 
 #include "include_asm.h"
 #include "pe1/boot_disc_check.h"
-void Menu_DrawSaveBg(void);
+#include "pe1/menu_background.h"
+#include "pe1/boot.h"
 short Seq_GetElapsed(void);
-int Gpu_CheckDrawStatus(void);
 
 
 static inline DISPENV *DispAddress(int index) {

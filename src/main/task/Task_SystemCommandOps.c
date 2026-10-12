@@ -16,6 +16,7 @@
 #include "pe1/field_movement.h"
 #include "pe1/save_tail_state.h"
 #include "pe1/battle_runtime.h"
+#include "pe1/render_camera.h"
 
 
 int Entity_ClearMotionVectors(void) {
@@ -64,10 +65,6 @@ void Obj_SetEntryField8(int arg0, int arg1);
 void Obj_FillEntrySlotValues(int arg0, int arg1);
 void Obj_SetEntrySlotValue(int arg0, int arg1, int arg2);
 void Obj_SetEntryFlags(int arg0, int arg1);
-int Gpu_LoadGeomState(int index);
-int CdRom_SetSeekPos(unsigned int arg0);
-int Render_SetFadeColour(unsigned int arg0);
-int CdRom_SetScreenPos(int arg0, int arg1, int arg2, int arg3, unsigned short arg4);
 
 /* Arms the combat countdown: args are two minute-or-hour terms summed and
  * scaled to 60 Hz frames (216000 per unit), plus seconds (60 frames each). */

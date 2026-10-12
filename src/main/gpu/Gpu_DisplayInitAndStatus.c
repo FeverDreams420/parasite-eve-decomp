@@ -14,12 +14,10 @@
 #include "pe1/sys.h"
 #include "pe1/render_camera.h"
 
-void Draw_InitBuffers(void);
-int CdRom_SetSeekPos(unsigned int arg0);
-void Gpu_RenderFrame(void);
-
 
 #include "pe1/sys.h"
+#include "pe1/menu_queue.h"
+#include "pe1/boot.h"
 
 
 int Gpu_InitDisplay(int mode) {

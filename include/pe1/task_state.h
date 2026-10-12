@@ -34,4 +34,7 @@ typedef struct DeferredAkaoCommand {
 
 extern DeferredAkaoCommand g_DeferredAkaoCommands[16];
 
+u32 Task_GpuFlushPrimQueue(void);
+void Task_SignalExit(void);
+
 #endif /* PE1_TASK_STATE_H */

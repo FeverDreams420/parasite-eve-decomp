@@ -55,4 +55,6 @@ void MenuInput_SetPollingPaused(int paused);
 void Draw_SelectBuffer(void);
 void Draw_PresentFrame(int mode);
 
+void Draw_InitBuffers(void);
+
 #endif /* PE1_MENU_QUEUE_H */

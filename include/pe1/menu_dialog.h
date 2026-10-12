@@ -45,4 +45,6 @@ void Menu_DrawSaveSlotPortLabel(MenuWidgetNode *node);
 int Menu_IsMemCardSlotCompatible(int slot);
 extern void (*g_MenuDeferredCallback)(void);
 
+void Menu_OpenStartupMemCardDialog(void);
+
 #endif
