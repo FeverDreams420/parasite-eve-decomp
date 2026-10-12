@@ -35,6 +35,8 @@ extern void *D_8019AE7C;
 extern int func_80195984(),func_8019A290();
 extern Color D_8018F1E4;
 extern unsigned char D_8019AF69,D_8019AF68;
+extern s16 D_8019AEB2;
+extern RoomFxSeed8 D_8019AEAC;
 extern unsigned short D_8019AF60;
 extern Vector D_8019AD60;
 extern int func_8005186C(int);

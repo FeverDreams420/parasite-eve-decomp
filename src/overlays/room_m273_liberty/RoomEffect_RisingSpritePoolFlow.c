@@ -3,12 +3,14 @@
 #include "room_m273_effects.h"
 #include "pe1/field_anim_callback_list.h"
 #include "room_m273_sweep.h"
+#include "room_m273_boss.h"
 #include "pe1/room_floor.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
 #include "pe1/psyq_gpu.h"
 typedef GteShortVector Vector;
 #include "pe1/gte_sine_table.h"
+#include "RoomEffect_RisingSpritePoolFlow_externs.h"
 
 int func_80197230(int mode, Vector *position) {
     if (mode == 1) {
@@ -36,7 +38,7 @@ int func_80197230(int mode, Vector *position) {
 #define ROOMLIB_POLL_RESET_CALLBACK func_80197230
 #define ROOMLIB_POLL_RESET_FLAG D_8019AF69
 #define ROOMLIB_POLL_RESET_COUNTER D_8019AF0A
-#define ROOMLIB_POLL_RESET_SEED D_8019AF04
+#define ROOMLIB_POLL_RESET_SEED D_8019AF04.hit
 #include "../room_lib/RoomLib_PollAndResetActor.inc"
 
 #include "room_m273_effects.h"
@@ -44,7 +46,6 @@ typedef RoomM273RisingParticle Particle;
 
 /* The timed emitter fills the eight-byte records rendered by this callback. */
 #include "pe1/gte_sine_table.h"
-#include "RoomEffect_RisingSpritePoolFlow_externs.h"
 
 int func_801974DC(int mode, Particle *input) {
     Particle *particle = input;

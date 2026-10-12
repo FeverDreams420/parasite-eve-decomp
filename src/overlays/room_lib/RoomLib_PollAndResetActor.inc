@@ -4,6 +4,8 @@
 #include "pe1/room_fx.h"
 #include "pe1/field_texture_tables.h"
 
+/* The including unit declares the flag (u8), the counter (s16) and the
+ * seed (RoomFxSeed8) it names. */
 #ifndef ROOMLIB_POLL_RESET_FUNC
 #error "ROOMLIB_POLL_RESET_FUNC must name the room entry point"
 #endif
@@ -17,7 +19,7 @@
 #error "ROOMLIB_POLL_RESET_COUNTER must name the pending counter"
 #endif
 #ifndef ROOMLIB_POLL_RESET_SEED
-#error "ROOMLIB_POLL_RESET_SEED must name the copied seed"
+#error "ROOMLIB_POLL_RESET_SEED must name the copied seed (a RoomFxSeed8 lvalue)"
 #endif
 
 #ifndef ROOMLIB_POLL_RESET_POOL_CONTEXT_DECL
@@ -27,7 +29,6 @@
 #define ROOMLIB_POLL_RESET_POOL_EXPR ANIM_POOL_AS(RoomM273PoolContext)[2]
 #endif
 ROOMLIB_POLL_RESET_POOL_CONTEXT_DECL;
-#include "RoomLib_PollAndResetActor_externs.h"
 
 int ROOMLIB_POLL_RESET_CALLBACK();
 

@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/gte_types.h"
+#include "pe1/room_fx.h"
 #include "pe1/render_object.h"
 #include "pe1/field_actor.h"
 #include "room_m273_effects.h"
@@ -129,7 +130,7 @@ PE1_STATIC_ASSERT(sizeof(RoomM273Drop) == 0x18, room_m273_drop_size);
 /* Drop splash queue at 0x8019AF04: the contact position, then twelve
  * queued landing positions stored as separate x/y/z arrays. */
 typedef struct RoomM273DropQueue {
-    GteShortVector hit;
+    RoomFxSeed8 hit;  /* also the seed the rising sprite pool copies */
     s16 x[12];
     s16 y[12];
     s16 z[12];

@@ -60,7 +60,7 @@ int func_80197BBC(int mode) {
         D_8019AF04.in_contact = 0;
         D_8019AF04.step = 0;
         D_8019AF04.count = 0;
-        D_8019AF04.hit.pad = 0;
+        D_8019AF04.hit.vector.pad = 0;
         D_8019AF04.floor = g_RoomFloorY->raw - 0x180;
         instance->owner->flags |= 0x40000000;
     } else if (mode == 1) {

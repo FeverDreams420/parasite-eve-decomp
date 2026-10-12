@@ -1724,8 +1724,8 @@ int func_8019665C(int mode, RoomM273Drop *drop) {
                              (g_PlayerEntity->render_object.model_matrix.translation[2] - drop->position.z) *
                                  (g_PlayerEntity->render_object.model_matrix.translation[2] - drop->position.z)) < 0x80) {
                 drop->touched = 1;
-                D_8019AF04.hit = drop->position;
-                D_8019AF04.hit.pad = 1;
+                D_8019AF04.hit.vector = drop->position;
+                D_8019AF04.hit.vector.pad = 1;
                 g_PlayerEntity->state->flags |= 0x4000;
                 if (ANIM_OWNER_AS(RoomM273BossActor)->instance->owner)
                     ANIM_OWNER_AS(RoomM273BossActor)->instance->owner->flags |= 0x80000000;
