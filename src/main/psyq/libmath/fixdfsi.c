@@ -20,12 +20,12 @@ s32 __fixdfsi(register double value)
     }
 
     exponent = 20;
-    exponent = ((s32)input.bits.hi >> exponent) & 0x7FF;
+    exponent = (input.signedBits.hi >> exponent) & 0x7FF;
     shift = exponent - 0x41D;
     if (shift > 0) {
         _err_math(0x22, 0x11);
         result = 0x7FFFFFFF;
-        if ((s32)input.bits.hi < 0) {
+        if (input.signedBits.hi < 0) {
             result = 0x80000000;
         }
         return result;
@@ -35,7 +35,7 @@ s32 __fixdfsi(register double value)
     parts.lo = input.bits.lo;
     _dbl_shift(&parts, 0, parts, 10);
     mantissa = parts.hi;
-    if ((u32)(exponent - 0x3FE) < 0x20) {
+    if (exponent >= 0x3FE && exponent < 0x41E) {
     if (mantissa != 0) {
     mantissa >>= -shift;
     goto applySign;
@@ -47,7 +47,7 @@ zero:
     return result;
 applySign:
     result = mantissa;
-    if ((s32)input.bits.hi < 0) {
+    if (input.signedBits.hi < 0) {
         result = -result;
     }
 done:
