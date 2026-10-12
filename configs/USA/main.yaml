@@ -111,8 +111,7 @@ segments:
       - [0x196C, rodata, main/rodata_00196C]
       - [0x1970, .rodata, battle/BattleCmd_ActiveListAndAmmo]
       - [0x19A4, rodata, main/rodata_0019A4]
-      - [0x19A8, .rodata, battle/Inv_BuildWeaponList]
-      - [0x19F8, .rodata, battle/BattleCmd_LoadWeaponModifiers]
+      - [0x19A8, .rodata, battle/BattleCmd_WeaponLists]
       - [0x1A18, .rodata, aya/Aya_StatDerivation]
       - [0x1A5C, .rodata, item/Inv_ActiveList]
       - [0x1AA4, .rodata, item/Inv_ItemActions]
@@ -398,9 +397,9 @@ segments:
       - [0x4204C, c, battle/Aya_UnlockParasiteSpell]
       # Integer square root and the ammo commit/update: one default-profile unit.
       - [0x4206C, c, battle/BattleCmd_CommitAmmoAndUpdate]
-      - [0x42180, c, battle/Inv_BuildWeaponList]
-      - [0x424C4, c, battle/BattleCmd_LoadWeaponModifiers]
-      - [0x425F8, c, battle/Battle_GetScaledMaxHP]
+      # Weapon list build, weapon modifier load and the scaled max HP: one -G8
+      # FORCE_G0 unit with COMMON $gp words.
+      - [0x42180, c, battle/BattleCmd_WeaponLists]
       # Aya stats: bonus slot count, armor list build, stat derivation, menu sounds
       # and battle queries. One -G8 FORCE_G0 unit with COMMON $gp words (the armor
       # list and stat derivation were cc1 -G0 only for their absolute words).
