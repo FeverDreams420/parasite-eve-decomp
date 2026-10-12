@@ -272,9 +272,11 @@ def gp_commons(objs: list[str], units: list[str]) -> list[str]:
     for word in sorted(words - defined):
         pattern = re.compile(r"^\s*extern\s+([^;()]*?\b" + re.escape(word)
                              + r"\b(?:\[[^\]]*\])?)\s*;", re.M)
+        pointer = re.compile(r"^\s*extern\s+([^;]*\(\s*\*\s*" + re.escape(word)
+                             + r"\s*\)\s*\([^;]*\))\s*;", re.M)
         found = None
         for text in texts:
-            match = pattern.search(text)
+            match = pattern.search(text) or pointer.search(text)
             if match:
                 found = match.group(1).strip()
                 break
@@ -382,9 +384,9 @@ def main() -> int:
         (ROOT / path).write_text(text)
     for unit in units:
         if unit != new:
-            rm.git("rm", "-q", unit)
+            rm.git("rm", "-qf", unit)
     for header in inlined:
-        rm.git("rm", "-q", header)
+        rm.git("rm", "-qf", header)
     (ROOT / new).write_text(source)
     rm.git("add", new, MANIFEST, *edits)
     return 0

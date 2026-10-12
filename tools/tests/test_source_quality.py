@@ -67,12 +67,12 @@ class SourceQualityTests(unittest.TestCase):
     def test_memcard_dialog_workflow_is_semantic_c(self):
         root = pathlib.Path(__file__).resolve().parents[2]
         self.assertEqual(source_quality.classify(
-            root / "src/main/menu/Menu_MemCardProgress.c"), "semantic_c")
+            root / "src/main/menu/Menu_SaveScreens.c"), "semantic_c")
 
     def test_two_line_dialog_width_picker_is_semantic_c(self):
         root = pathlib.Path(__file__).resolve().parents[2]
         self.assertEqual(source_quality.classify(
-            root / "src/main/menu/Menu_Dialogs.c"), "semantic_c")
+            root / "src/main/menu/Menu_SaveScreens.c"), "semantic_c")
 
     def test_akao_pitch_lfo_depth_is_semantic_c(self):
         self.assert_symbol_is_semantic("SeqOp_SetPitchLFO")

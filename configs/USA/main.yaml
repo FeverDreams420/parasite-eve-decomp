@@ -108,7 +108,7 @@ segments:
       - [0x17F4, .rodata, menu/Menu_ItemActions]
       - [0x1830, rodata, main/rodata_001830]
       - [0x1834, .rodata, menu/Menu_MainMenu]
-      - [0x184C, .rodata, menu/Menu_Dialogs]
+      - [0x184C, .rodata, menu/Menu_SaveScreens]
       - [0x1940, rodata, main/rodata_001940]
       - [0x1944, .rodata, menu/Menu_InventoryScreens]
       - [0x1958, .rodata, battle/BattleCmd_StackFlow]
@@ -393,18 +393,14 @@ segments:
       - [0x3B59C, c, menu/Menu_MainMenu]
       # Spell info and context help panels, notification and two-line dialogs, their
       # deferred confirm callback and the memory-card port dialog with its error
-      # prompt share the widget panel helpers and dialog state (g_McDialogMode).
-      - [0x3CCB4, c, menu/Menu_Dialogs]
-      - [0x3DCC4, c, menu/Menu_SaveSlotListView]
-      - [0x3DE90, c, menu/Menu_DrawSaveSlotPortLabel]
-      - [0x3DED4, c, menu/Menu_StepSaveSelect]
-      # Memory-card progress widget lifecycle, block-meter draw and the write
-      # confirmation prompt share g_MemCardProgressPrimList.
-      - [0x3E178, c, menu/Menu_MemCardProgress]
-      - [0x3E4A4, c, menu/Menu_OpenSaveLoadEntryPoint]
-      - [0x3E564, c, menu/Menu_OpenRenameScreen]
-      # Name entry page input handlers: private data and helpers join the pair.
-      - [0x3E874, c, menu/Menu_NameEntryFlow]
+      # prompt share the widget panel helpers and dialog state (g_McDialogMode); the
+      # save slot list view and port label, the save select step, the memory-card
+      # progress widget lifecycle, block-meter draw and write confirmation prompt
+      # (g_MemCardProgressPrimList), the save/load entry point, the rename screen and
+      # the name entry page input handlers (private data and helpers). One -G8
+      # FORCE_G0 unit with COMMON $gp words; the name entry clears the game-state flags
+      # through D_800B0CD8, which retires its old cc1 -G4096 marker.
+      - [0x3CCB4, c, menu/Menu_SaveScreens]
       # Inventory screens (G0464): equip and inventory screen builders and the equip
       # list container draw (helper calls, G0462); weapon and armor list draws, the
       # inventory category step and the battle command list draw; the inventory pick
