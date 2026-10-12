@@ -359,9 +359,33 @@ def main() -> int:
     rules = rm.token_rules(moves)
     # bare `Old.c` mentions, when no other tracked file has that basename
     basenames = [os.path.basename(p) for p in tracked]
+    # `Old.c:NN` line references follow their line into the merged file
+    import difflib
+    merged_lines = source.splitlines()
+    linemaps: dict[str, dict[int, int]] = {}
+    for unit in units:
+        old_lines = (ROOT / unit).read_text().splitlines()
+        matcher = difflib.SequenceMatcher(None, old_lines, merged_lines, autojunk=False)
+        mapping = {}
+        for a, b, size in matcher.get_matching_blocks():
+            for k in range(size):
+                mapping[a + k + 1] = b + k + 1
+        linemaps[unit] = mapping
+
+    def bare_repl(unit):
+        def repl(match):
+            out = os.path.basename(new)
+            for group in (1, 2):
+                number = match.group(group)
+                if number is None:
+                    continue
+                mapped = linemaps[unit].get(int(number))
+                out += (":" if group == 1 else "-") + (str(mapped) if mapped else number)
+            return out
+        return repl
     bare = [(re.compile(r"(?<![\w/.-])" + re.escape(os.path.basename(u))
-                        + r"(?![\w])"), os.path.basename(new))
-            for u in moves if basenames.count(os.path.basename(u)) == 1]
+                        + r"(?![\w])(?::(\d+)(?:-(\d+))?)?"), bare_repl(u))
+            for u in units if basenames.count(os.path.basename(u)) == 1]
     edits: dict[str, str] = {}
     for path in rm.tracked_files():
         if path == MANIFEST or path in units or rm.is_excluded(path):
