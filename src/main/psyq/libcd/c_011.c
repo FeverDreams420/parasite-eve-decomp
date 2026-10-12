@@ -1,10 +1,10 @@
 /* ASSEMBLER: GNU */
-/* Psy-Q LIBCD C_011.OBJ, from the object start: StCdInterrupt and mem2mem.
- * dma_execute, the end of the object, is a unit of its own (see
- * docs/CODE_ORGANIZATION.md, "PsyQ objects split over several units"). */
+/* Psy-Q LIBCD C_011.OBJ, part 1 of 2: StCdInterrupt and mem2mem. C_011 stays
+ * in two units: these match with GCC 2.7.2, dma_execute (c_011_2.c) only with
+ * GCC 2.8.1, -mno-split-addresses and -fno-schedule-insns. */
 #include "pe1/psyq_cd.h"
 
-#include "StCdInterrupt_externs.h"
+#include "c_011_externs.h"
 
 /* Separate aliases retain the retail handler's address-load schedule. */
 
