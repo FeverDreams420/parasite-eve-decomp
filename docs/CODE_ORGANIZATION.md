@@ -894,25 +894,7 @@ single removal (none was byte-identical):
   CSE folds the masked angle into the previous one) and the pad memory
   barrier (lev 7). Retry `goto`s in the room loaders stay for the loop.c
   reason given for the CD loops.
-- task: `Task_GpuFlushPrimQueue` and `Task_InitGpuHwRegs` keep their
-  register-block pins and barriers (lev 2 to 9 each; retail hand-allocates
-  `$t0`..`$t6` for the GPU register words). `Camera_StepAngleFade` (m2c
-  pins, lev 4 to 57), `Task_SpawnChildNode` (lev 2 to 12),
-  `Task_SetObjEntryFlag80`/`Task_ClearObjEntryFlag80` (index/base `$v0`/`$v1`
-  swap, lev 4 to 15), `Task_WaitAnimRange` (lev 28),
-  `Task_TurnTowardPointStep` (lev 3, 14), `Task_SnapPosToSpawnPos` (lev 12),
-  `Task_SetGteMatrix` (lev 21), `Task_OpenMemCardDialog` (`$v0` clobber,
-  lev 13), `Task_RunInvCommand` (lev 16), `Boot_MemCardStepInit` (lev 15).
-  `Task_DispatchScriptCmd` keeps its `goto`s: the structured switch puts the
-  case-table pivot elsewhere (lev 80).
-- gpu: `Gte_SetBackColor`/`Gte_SetLightColor` keep `t4`..`t6`: these are
-  the registers the PSY-Q GTE macros name (lev 2 to 10). `Draw_AllocColorQuad`,
-  `Draw_AllocSprite`, `Draw_EmitGlyph`, `Draw_AllocTexturedQuad`,
-  `Draw_MeasureTextWidth`, `Draw_PrintCenteredTextInWidth`,
-  `Draw_AllocColorRect`, `Draw_AllocColorTri`, `Gpu_DrawStatusIcons` keep
-  m2c register pins (lev 1 to 78). `Draw_PrintTimeValue` keeps two memory
-  barriers (lev 52). `Gpu_InitDisplay` keeps the same pins as
-  `Boot_InitMemoryLayout` (lev 10 to 46).
+- task and gpu: see "Task and GPU units (src/main/{task,gpu})" below.
 - item: `Inv_SetActiveList` (lev 9 to 36), `Inv_GetSlotItemData`/
   `Inv_GetActiveSlotCount`/`Inv_IsSlotEquipped`/`Inv_IsSlotSelectable` empty
   asm statements (lev 18 to 61: they stop the shared slot lookup being
@@ -997,6 +979,115 @@ or for the best crutch-free form tried:
   inline search helper).
 - `Battle_AdvanceTurnSlot`: the `savedIndex` barrier (lev 26: CSE reuses the
   slot index minus one from the command lookup).
+
+### Task and GPU units (src/main/{task,gpu})
+
+Recipes that removed crutches here (2026-10-12, second pass). Each one was
+found by rewriting the whole function from the retail listing rather than
+deleting one pin at a time:
+
+- A dispatch `switch` whose decision tree splits at the wrong case is
+  missing a case. `Task_DispatchScriptCmd` has a no-op opcode 2100
+  (`case 2100: break;`): with it the tree pivots at 2500 as retail does and
+  the 23-label `goto` tree became a plain switch. Count the case nodes
+  `balance_case_nodes` sees before blaming the compiler.
+- Two branches that end in the same store sequence are cross-jumped into
+  one tail when each branch does the whole update itself
+  (`Task_SetObjEntryFlag80`/`Task_ClearObjEntryFlag80`: each table branch
+  computes its triangle as `index * size + table` through the
+  `CollisionTriangleTable` word and sets the flag; the shared `addu`/`lbu`
+  tail is the compiler's, not the source's).
+- A copy of a value into a second variable, or reuse of one variable for
+  two roles, shows up as retail's register reuse:
+  `Task_TurnTowardPointStep` turns its target coordinates into the deltas
+  passed to `ratan2` (`x = (pos_x - x) >> 16`), and its wrap tests use a
+  fresh block-local `wrap`.
+- Store order of several fields follows the natural statement order once
+  the value has one name (`Task_SnapPosToSpawnPos` stores x, y, z).
+- Block-local single-set temporaries (an inline `AdvanceCursor(dx)` that
+  reads x and y and writes both back) replace function-scope `x`/`y`
+  reused across calls; `Draw_PrintTimeValue` lost both memory barriers.
+- Inline helpers with their own parameter copies reproduce retail's
+  copies: `Draw_PrintCenteredTextInWidth` is `PushCursor`, the inline
+  `Draw_MeasureTextWidth`, a `SetCursor`, a print loop that saves the
+  known cursor (`SaveCursor`) and two `PopCursor`s.
+- PSY-Q GTE macros cover the hand-pinned GTE sequences:
+  `gte_SetBackColor`, `gte_SetColorMatrix` (`Gte_SetBackColor`,
+  `Gte_SetLightColor`) and `gte_MulMatrix0` (`Task_SetGteMatrix`).
+- Address arithmetic on a pointer as an integer goes through a union
+  (`RelocAddress`, `TaskNodeAddress`, `DrawPrimLink`, `TimRelativeTable`).
+  Declare the union in the innermost block that uses it: a union declared
+  at function scope gets the older pseudo, CSE then rewrites the packet
+  pointer's later uses through the copy and an extra `move` appears.
+- Plain argument use beats a laundered copy: `Task_RunInvCommand` and
+  `Task_OpenMemCardDialog` match with the argument block and the shared
+  `return 1` written directly.
+
+Crutches still in these units, with the best crutch-free lev found:
+
+- `Task_InitGpuHwRegs` (7 pins, 2 barriers) and `Task_GpuFlushPrimQueue`
+  (10 pins, 4 barriers, 2 casts) are the additive generator around the
+  80-byte `.text` state block at 0x80070E04, the same original-assembler
+  module as `Task_GpuPackPrimColor` (see ASM_AND_GTE_POLICY.md): absolute
+  addresses built with `lui`/`ori`, constants loaded with `ori`, `or` moves,
+  no frame, hand-filled delay slots. GCC emits none of these (crutch-free
+  lev 22 and 24). They should become `GAME_ASM_FUNCTION` units with
+  evidence entries in a reviewed change; this pass adds no assembler.
+- `Camera_StepAngleFade` (8 pins, 4 barriers, 7 `goto`s): crutch-free
+  lev 93 (stripped) to 96 (structured rewrite). Retail keeps
+  three copies of the current angle and two of the target (`t3`/`a1`/`a2`,
+  `t0`/`a0`/`v1`) and computes the absolute difference twice from
+  different copies; this looks like inlined helpers whose parameters have
+  not been identified yet.
+- `Boot_MemCardStepInit`: 3 re-dispatch `goto`s (a `for`/`continue` loop
+  lets loop.c hoist `0x400000` and `1`, lev 39; tail recursion re-runs the
+  `&g_GameState` load after the re-entry label, lev 24) and one empty
+  barrier that keeps `li v0,1` in the jump delay slot (lev 15).
+- `Task_LoadSceneData`: 2 CD retry `goto`s (a loop lets loop.c hoist the
+  `-1` comparands into saved registers, lev 32).
+- `Akao_ProcessCommand`: 1 `goto archive_match`; retail places the match
+  block after case 0x199, a structured `break`/flag places it in the loop.
+- `Task_SpawnChildNode` (6 pins, 2 barriers): crutch-free lev 8. The
+  insertion branch is exact as an `offset * 2 + base` sum through a union
+  word; the list-head branch swaps the sequence counter (`v1`) and the
+  script offset (`a0`); one `$3` pin on the counter leaves lev 2 (offset and
+  base loads swap).
+- `Task_SetEntityActionAndWait` (1 pin): lev 2 to 3; retail loads the
+  current frame first into `v0`, every crutch-free form either loads it
+  second or allocates it to `v1`.
+- `Task_WaitAnimRange` (1 pin): instruction sequence exact, lev 19 from the
+  global allocation of `next`/`target`/`count` (retail `a0`/`a2`/`v0`).
+- `Draw_AllocColorQuad` (13 pins, 5 barriers): with every crutch removed
+  the instruction sequence is identical and only the register assignment
+  differs (lev 138: the first quad in `s1` with `height` in `s0`, the
+  packet copy in `t2`, the masks in `a0`/`a2`).
+- `Draw_TextPrimitives.c`: `Draw_AllocSprite` (3 pins, 2 barriers, lev 38),
+  `Draw_EmitGlyph` (1 pin, 1 barrier, volatile reloads; lev 44 stripped,
+  46 for a clean rewrite: retail copies the packet to `a0` for the vertex
+  stores, keeps the glyph in `s0` and stores clut and tpage before the tag
+  load), `Draw_AllocTexturedQuad` (6 pins, 6 barriers; a clean
+  rewrite with a `RenderPacketTag` ordering-table view and `AdvanceCursor`
+  is lev 20: the `D_8009CDB0` reload and the `y + 1` add are scheduled
+  earlier) and the `DecodeGlyph` `$4` pin (lev 36 without it: retail keeps
+  the code byte in a hard register so the two `andi`s survive).
+- `Draw_WipeAndGradient.c`: `Draw_AllocColorRect` keeps its byte cursor
+  over the triangle pair (3 byte additions, 2 raw offsets, 2 casts) and 6
+  pins; the typed loop over `&pair->first` is exact but then needs pins on
+  both masks and leaves lev 2 (the first tag load after the ordering-table
+  load). `Draw_AllocColorTri` (1 pin, 2 barriers): lev 41; retail stores
+  the pulse shade, reloads it and stores it to all three channels.
+- `Gpu_InitDisplay` (3 pins, 1 barrier) repeats `Boot_InitMemoryLayout`
+  (sys, also pinned) on the `volatile s32` buffer words of `pe1/sys.h`;
+  both should change together with that header.
+- `Gpu_SetupSprites.c`: the status-icon packets (`D_8009E960[2][13]`,
+  `D_8009EC38[2]`, 28 bytes: draw mode then sprite) are addressed from the
+  sprite part at +8 (`D_8009E968`, `D_8009EC40`) with byte offsets (7 byte
+  additions, 2 raw offsets) and `Gpu_DrawStatusIcons` keeps 8 pins. A typed
+  `{ tag; mode; RenderSpritePacket sprite; }` array reproduces every
+  instruction except the register base, which retail points at the sprite
+  part (lev 8 from the immediates); `battle_status.h` and
+  `Battle_DrawHPBar.c` declare the same symbols as byte arrays, so the
+  typed view belongs to a change that covers them too.
 
 ## Link ownership
 
