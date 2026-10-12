@@ -167,52 +167,27 @@ int func_800CA4A8(void *arg0, FieldEngSlot *state) {
     return ret;
 }
 
-int func_800CA4B4(void *arg0, FieldEngSlot *state, FieldAnimMovingParticle *anim)
-{
-  u16 coordinate;
-  FieldEngSlot *state_a3 = state;
-  FieldAnimMovingParticle *anim_a2 = anim;
-  int temp_v0;
-  int temp_v1;
-  u16 positionY;
-  register int temp_a0 asm("$4");
-  u16 *velocityY;
-  u16 velocityZ;
-  u8 count;
-  temp_v0 = anim_a2->position.x;
-  coordinate = anim_a2->position.y;
-  positionY = coordinate;
-  velocityY = (u16 *)&anim_a2->velocity.y;
-  temp_v1 = *((u16 *) (&anim_a2->velocity.x));
-  coordinate = anim_a2->position.z;
-  temp_a0 = *velocityY;
-  temp_v0 += temp_v1;
-  anim_a2->position.x = temp_v0;
-  velocityZ = *((u16 *) (&anim_a2->velocity.z));
-  temp_v0 = positionY;
-  temp_v1 = coordinate;
-  temp_v0 += temp_a0;
-  temp_v1 += velocityZ;
-  anim_a2->position.y = temp_v0;
-  temp_v0 = *velocityY;
-  temp_a0 = (unsigned int) anim_a2;
-  anim_a2->position.z = temp_v1;
-  temp_v1 = anim_a2->age;
-  temp_v0 += 3;
-  *((u16 *) (&anim_a2->velocity.y)) = temp_v0;
-  temp_v0 = (s16) anim_a2->position.y;
-  temp_v1++;
-  anim_a2->age = temp_v1;
-  if (temp_v0 > 0)
-  {
-    *((u16 *) (&anim_a2->velocity.y)) = -(*velocityY);
-  }
-  count = ((FieldAnimMovingParticle *) temp_a0)->lifetime;
-  ((FieldAnimMovingParticle *) temp_a0)->lifetime = count - 1;
-  if (count == 0)
-  {
-    state_a3->flag = 2;
-  }
+int func_800CA4B4(void *arg0, FieldEngSlot *state, FieldAnimMovingParticle *anim) {
+    FieldAnimMovingParticle *particle = anim;
+    u16 vy = anim->velocity.y;
+    u16 vz = anim->velocity.z;
+    int age;
+    int lifetime;
+
+    anim->position.x += anim->velocity.x;
+    anim->position.y += vy;
+    anim->position.z += vz;
+    anim->velocity.y += 3;
+    age = anim->age;
+    anim->age = age + 1;
+    if ((s16)anim->position.y > 0) {
+        anim->velocity.y = -anim->velocity.y;
+    }
+    lifetime = particle->lifetime;
+    particle->lifetime = lifetime - 1;
+    if (lifetime == 0) {
+        state->flag = 2;
+    }
 }
 
 int func_800CA540(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
