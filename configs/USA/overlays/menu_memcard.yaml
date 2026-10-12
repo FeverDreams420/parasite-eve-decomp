@@ -310,12 +310,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0xA894, c, Memcard_AdvanceFade]
-      - [0xA8E8, c, Memcard_UpdateFadeDisplay]
-      - [0xA97C, c, Memcard_DecreaseFade]
-      - [0xA9AC, c, func_8012B6F0]
-      - [0xA9CC, c, func_8012B710]
-      - [0xAA10, c, func_8012B754]
+      - [0xA894, c, fade]
       - {start: 0xAA64, type: data, name: menu_memcard_data, linker_section_order: .text, linker_section: .code_data}
   - [0xB000]
 # source slice: scanner
