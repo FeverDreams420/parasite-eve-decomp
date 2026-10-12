@@ -150,7 +150,6 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
     register RoomSpriteMatrix *secondMatrix asm("$17");
     RoomInitThreeVec *seed;
     void *callOwner;
-    register RoomDebrisTriplet *workState asm("$21");
     RoomDebrisClock *clock;
     int i;
     RoomSpriteMatrix *projectionMatrix;
@@ -161,7 +160,7 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
     int randomValue;
 
     callOwner = owner;
-    workState = state;
+    particles = state;
     clockResult = func_800C2B50();
     parameterIndex = 3;
     clock = clockResult;
@@ -220,7 +219,6 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
     }
 
     i = 0;
-    particles = workState;
     for (; i < 3; i++) {
         randomValue = func_80071A54();
         particles->size[i] = 0;
