@@ -10,7 +10,7 @@
 
 typedef PsxSignedRect Rect;
 
-#include "MenuCard_FlipScreenPages_externs.h"
+#include "page_flip_externs.h"
 
 void func_80074A44(int);
 

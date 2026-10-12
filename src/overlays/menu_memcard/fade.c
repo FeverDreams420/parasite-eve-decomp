@@ -1,8 +1,50 @@
 #include "menu_memcard_fade.h"
-#include "menu_memcard_menu.h"
 #include "menu_memcard_node.h"
+#include "menu_memcard_menu.h"
 
 #include "fade_externs.h"
+
+void MenuCard_InitFadeForNode(MenuMemcardFadeState *state) {
+    MenuMemcardListNode *node = ((MenuMemcardListNode *)D_801D1370);
+    int kind = 7;
+
+    state->displayTop = 0xB4;
+    state->onStep = 0;
+    state->phase = 0;
+    state->velocity = 0;
+    while (node != 0) {
+        if (node->kind == kind) {
+            break;
+        }
+        node = node->next;
+    }
+    node->fadeLevel = 0x100;
+}
+
+s32 MenuCard_UpdateFadeCounter(MenuMemcardFadeState *state) {
+    s32 shifted;
+    s32 result;
+
+    state->displayTop = state->velocity + state->increment;
+    shifted = state->increment << 4;
+    if (shifted >= 0) {
+        result = 0x100 - shifted;
+    } else {
+        {
+            s32 nextLevel = shifted + 0x100;
+            asm volatile("" : : "r"(nextLevel));
+            state->level = nextLevel;
+        }
+        state->increment += (state->increment != 0);
+        if (state->onStep != 0 && state->increment == state->callbackAt) {
+            state->onStep(state);
+        }
+        if (state->increment < 16) return 1;
+        state->finished = 1;
+        result = 1;
+    }
+    return result;
+}
 
 void MenuCard_AdvanceFade(MenuMemcardFadeState *state) {
     s32 level = state->level;

@@ -24,7 +24,7 @@ typedef struct MemcardRect {
 } MemcardRect;
 
 
-#include "MenuCard_ResetDisplayState_externs.h"
+#include "display_reset_externs.h"
 
 void SetDispMask(s32 enabled);
 

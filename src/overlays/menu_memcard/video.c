@@ -8,7 +8,7 @@
 
 #define MENUCARD_SET_VIDEO_DISPLAY_NAME func_80121004
 #define MENUCARD_VIDEO_DISPLAY_MODE D_801223F6
-#include "MenuCard_SetVideoDisplay.inc"
+#include "video_display.inc"
 
 #undef MENUCARD_SET_VIDEO_DISPLAY_NAME
 #undef MENUCARD_VIDEO_DISPLAY_MODE
@@ -18,7 +18,7 @@
 #define MENUCARD_VIDEO_LAST_TIME D_801227E8
 #define MENUCARD_VIDEO_FINISHED D_801223F5
 #define MENUCARD_VIDEO_SIZE D_80122418
-#include "MenuCard_UpdateVideoFrame.inc"
+#include "video_frame.inc"
 
 #undef MENUCARD_UPDATE_VIDEO_FRAME_NAME
 #undef MENUCARD_VIDEO_ENTRY
@@ -30,7 +30,7 @@
 #define MENUCARD_VIDEO_DISPLAY D_801228CC
 #define MENUCARD_VIDEO_FLIP D_801223F8
 #define MENUCARD_VIDEO_SET_DISPLAY func_80121004
-#include "MenuCard_UploadVideoSlice.inc"
+#include "video_upload.inc"
 
 #undef MENUCARD_UPLOAD_VIDEO_SLICE_NAME
 #undef MENUCARD_VIDEO_DISPLAY
@@ -47,7 +47,7 @@
 #define MENUCARD_VIDEO_LAST_TIME D_801227E8
 #define MENUCARD_VIDEO_SAVED_DISPLAY D_801227EC
 #define MENUCARD_VIDEO_SAVED_DRAW D_80122814
-#include "MenuCard_InitVideoBuffers.inc"
+#include "video_buffers.inc"
 
 #undef MENUCARD_INIT_VIDEO_BUFFERS_NAME
 #undef MENUCARD_VIDEO_PTR0
@@ -69,7 +69,7 @@
 #define MENUCARD_DISPLAY_PTR5 D_80122434
 #define MENUCARD_SLOT20_SOURCE D_801227EC
 #define MENUCARD_SLOT92_SOURCE D_80122814
-#include "MenuCard_ResetDisplayState.inc"
+#include "display_reset.inc"
 
 #undef MENUCARD_RESET_DISPLAY_STATE_NAME
 #undef MENUCARD_DISPLAY_PTR0
@@ -100,7 +100,7 @@
 #define MENUCARD_VIDEO_UPLOAD func_801214D4
 #define MENUCARD_VIDEO_UPDATE_FRAME func_80121270
 #define MENUCARD_VIDEO_FINISHED D_801223F5
-#include "MenuCard_OpenVideo.inc"
+#include "video_open.inc"
 
 #undef MENUCARD_OPEN_VIDEO_NAME
 #undef MENUCARD_VIDEO_TABLE
@@ -131,7 +131,7 @@
 #define MENUCARD_VIDEO_DISPLAY D_801228CC
 #define MENUCARD_VIDEO_PTR4 D_80122430
 #define MENUCARD_VIDEO_FINISHED D_801223F5
-#include "MenuCard_StepVideo.inc"
+#include "video_step.inc"
 
 #undef MENUCARD_STEP_VIDEO_NAME
 #undef MENUCARD_VIDEO_SET_DISPLAY
@@ -162,7 +162,7 @@ void func_80122398(void) {
 
 #define MENUCARD_EVENT_FLAG_NAME func_801223EC
 #define MENUCARD_EVENT_FLAG D_801223F8
-#include "MenuCard_UpdateEventFlag.inc"
+#include "event_flag.inc"
 
 #undef MENUCARD_EVENT_FLAG_NAME
 #undef MENUCARD_EVENT_FLAG
