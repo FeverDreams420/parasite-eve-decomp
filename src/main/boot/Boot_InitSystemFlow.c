@@ -1,13 +1,13 @@
-/* Boot-time system initialization: InitSystem, the subsystem and global
- * reset it is followed by, the start-up display reset, the vsync callback and
- * the pad start-up (G0341/G0342). */
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
+
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_spu_api.h"
 #include "pe1/psyq_callbacks.h"
 #include "pe1/psyq_gpu.h"
 #include "common.h"
 #include "pe1/display_env.h"
-#include "../../../tools/m2c/m2c_macros.h"
 #include "pe1/font.h"
 #include "pe1/field_sfx.h"
 #include "pe1/scene_dispatch.h"
@@ -15,6 +15,26 @@
 #include "pe1/battle_runtime.h"
 #include "pe1/boot.h"
 #include "pe1/draw_buffers.h"
+#include "pe1/menu_inventory.h"
+#include "pe1/gte.h"
+#include "pe1/card_obj.h"
+#include "pe1/game_state_types.h"
+#include "pe1/scene_flags.h"
+#include "pe1/game_state.h"
+#include "pe1/pad_state.h"
+
+/* COMMON supplies small-data metadata to MASPSX: these words are reached
+ * through $gp, every other extern stays absolute. */
+s32 g_SceneFlagBits;
+s32 g_BattleControlFlags;
+s32 g_FieldRenderFlags;
+u32 D_8009D26C;
+u32 D_8009D2D4;
+
+/* Boot-time system initialization: InitSystem, the subsystem and global
+ * reset it is followed by, the start-up display reset, the vsync callback and
+ * the pad start-up (G0341/G0342). */
+#include "../../../tools/m2c/m2c_macros.h"
 
 void Render_ResetScene(int arg0, int arg1);
 void InitGeom(void);
@@ -79,8 +99,6 @@ void Boot_InitSubsystems(void) {
     Menu_ConsumeEquipSlotFlag();
 }
 
-
-
 void ResetGraph(int arg0);
 void SetGraphDebug(int level);
 void SetDispMask(int mask);
@@ -136,7 +154,6 @@ void Render_ResetScene(int width, int height)
 
 void Scene_TickTimers(void);
 
-
 void PadInitDirect(char *arg0, char *arg1);
 void PadStartCom(void);
 
@@ -148,4 +165,254 @@ void Boot_VsyncCallback(void) {
 void Boot_InitMemCard(void) {
     PadInitDirect(g_AnalogStickState, g_AnalogStickState + 0x22);
     PadStartCom();
+}
+
+/* Field render-flag table setup and the helper that stores one table entry
+ * at the bit index of a single-bit mask. The helper's only caller is the
+ * table builder that precedes it (main_tu_evidence G0344). */
+
+void Gte_StoreTableEntry(u32 mask, int value);
+
+void Boot_BuildRenderFlagTable(void) {
+    s32 *entry;
+    u32 i;
+
+    i = 0;
+    entry = g_FieldRenderFlagTable;
+    g_SceneFlagBits = 0;
+    g_BattleControlFlags = 0;
+    D_8009D2D4 = 0;
+    g_FieldRenderFlags = 0;
+    D_8009D26C = 0;
+    do {
+        *entry = 0;
+        i += 1;
+        entry += 1;
+    } while (i < 0x20U);
+    Gte_StoreTableEntry(1, 0x4000);
+    Gte_StoreTableEntry(0x80, 0x1000);
+    Gte_StoreTableEntry(0x100, 0x2000);
+    Gte_StoreTableEntry(8, 0x10);
+    Gte_StoreTableEntry(0x20, 0x40);
+    Gte_StoreTableEntry(0x40, 0x80);
+    Gte_StoreTableEntry(0x10, 0x20);
+    Gte_StoreTableEntry(2, 1);
+    Gte_StoreTableEntry(4, 8);
+    Gte_StoreTableEntry(0x200, 0x2000);
+    Gte_StoreTableEntry(0x400, 0x4000);
+    Gte_StoreTableEntry(0x2000, 0x8000);
+    Gte_StoreTableEntry(0x01000000, 0x100);
+    Gte_StoreTableEntry(0x02000000, 0x200);
+    Gte_StoreTableEntry(0x04000000, 0x400);
+    Gte_StoreTableEntry(0x08000000, 0x800);
+    Gte_StoreTableEntry(0x10000000, 0x1000);
+    Gte_StoreTableEntry(0x20000000, 0x2000);
+    Gte_StoreTableEntry(0x40000000, 0x4000);
+    Gte_StoreTableEntry(0x80000000, 0x8000);
+    g_GameStateFlags = g_GameStateFlags | 0x4000;
+}
+
+void Gte_StoreTableEntry(u32 mask, int value) {
+    int index;
+
+    gte_ldlzcs(mask);
+    index = 31;
+    if (mask != 0x80000000) {
+        gte_stlzcr(&mask);
+        index -= mask;
+    }
+    D_800A76F0[index] = value;
+}
+
+u32 D_8009D1F4;
+unsigned int D_8009D1E4;
+u32 D_8009D238;
+u32 D_8009D2A8;
+
+int PadGetState();
+int PadInfoMode(int arg0, int mode, int index);
+void PadSetMainMode(int arg0, int byte1, int byte2);
+
+void Field_HandleStateTransition(void) {
+    u32 flags;
+    u32 pad_bits;
+    register u32 base_bits asm("$3");
+    u32 old_pad_bits;
+    register u32 pad_mask asm("$2");
+    u32 active_pad;
+    u32 save_pad;
+    u32 final_pad;
+    u32 final_old;
+    u32 changed;
+    u32 mask;
+    u32 sequence_mask;
+    u32 menu_open;
+    u32 pad;
+    u32 inverted;
+    int mode;
+    u16 i;
+    u8 analog;
+
+    if (PadGetState(0) == 0) {
+        u32 initial_flags = g_GameStateFlags;
+        if ((initial_flags & 0x4001) == 0) {
+            D_8009D1F4 = 4;
+            D_8009D26C = 4;
+            D_8009D1E4 = 0;
+            g_GameStateFlags = initial_flags | 0x4000;
+            return;
+        }
+        g_GameStateFlags = initial_flags | 0x4000;
+    }
+
+    mode = D_800BE9A0 & 0xF000;
+    if (!((mode != 0x4000) && (mode != 0x7000))) {
+
+    if (g_GameStateFlags & 0x4000) {
+        mode = PadGetState(0);
+        if (mode == 2) {
+            g_GameStateFlags = g_GameStateFlags & ~0x4000;
+        } else if (mode == 1) {
+            PadSetAct(0, D_8009D1C0, 2);
+        } else if (mode == 6 && PadInfoMode(0, 2, 0) != 0) {
+            if ((g_GameStateFlags & 0x8000) == 0) {
+                PadSetMainMode(0, 1, 0);
+                g_GameStateFlags = g_GameStateFlags | 0x8000;
+            } else {
+                PadSetActAlign(0, D_800921F8);
+                g_GameStateFlags = g_GameStateFlags & ~0x4000;
+            }
+        }
+    }
+
+    pad = D_800BE9A2;
+    pad_mask = 0xFFFF9FFF;
+    base_bits = (~pad) & pad_mask;
+    asm volatile("" : "=r"(pad) : "0"(pad));
+    old_pad_bits = D_8009D26C;
+    D_8009D238 = old_pad_bits;
+    inverted = ~pad;
+    pad_bits = base_bits;
+    if (inverted & 0x2000) {
+        pad_bits = base_bits | 0x4000;
+    }
+    if (inverted & 0x4000) {
+        pad_bits |= 0x2000;
+    }
+
+    D_8009D26C = 0;
+    for (i = 0; i < 0x20; i++) {
+        if (((u16)pad_bits & D_800A76F0[i]) != 0) {
+            D_8009D26C |= 1u << i;
+            D_800A7770[i]++;
+        } else {
+            D_800A7770[i] = 0;
+        }
+    }
+
+    flags = g_GameStateFlags;
+    if ((flags & 1) != 0) {
+        active_pad = D_8009D26C;
+        if ((int)active_pad < 0) {
+            mask = ((active_pad ^ D_8009D2D4) & active_pad) & 0x7000007E;
+            if (mask != 0) {
+                sequence_mask = D_80092200[D_8009D2A8];
+                if ((mask & sequence_mask) == sequence_mask) {
+                    D_8009D2A8++;
+                    if (D_8009D2A8 == 9) {
+                        g_SceneDispatchToken = 0xAA108448;
+                        g_GameStateFlags = flags | 0x12000;
+                    }
+                } else {
+                    D_8009D2A8 = 0;
+                }
+            }
+        } else {
+            D_8009D2A8 = 0;
+        }
+        save_pad = D_8009D26C;
+        D_8009D2D4 = save_pad;
+    }
+
+    menu_open = g_GameState.flags;
+    if (menu_open & 0x400) {
+        D_8009D26C &= 0x40FFDC7F;
+    }
+    if (menu_open & 0x200) {
+        D_8009D26C &= 0x60FFDB04;
+        if (g_GameState.scene_audio.tracks.movie_index != 1) {
+            D_8009D26C &= 0xDFFFFCFF;
+        }
+    }
+    if (D_8009D26C & 0x10000080) {
+        D_8009D26C &= 0x7FFFFFFF;
+    }
+    if (D_8009D26C & 0x40000401) {
+        D_8009D26C &= 0xEFFFFF7F;
+        D_8009D26C &= 0x7FFFFFFF;
+    }
+    if (D_8009D26C & 0x20000300) {
+        D_8009D26C &= 0xBFFFFBFE;
+        D_8009D26C &= 0xEFFFFF7F;
+        D_8009D26C &= 0x7FFFFFFF;
+    }
+
+    if ((D_800BE9A0 & 0xF000) == 0x7000) {
+        D_8009D26C &= ~0x79;
+        menu_open = MenuWidget_FindByModeAndSelectedBase(1, 0) != 0;
+
+        if (menu_open) {
+            analog = D_800BE9A7;
+            if (analog < 0x14) {
+                D_8009D26C |= 0x8;
+            } else if (analog >= 0xE7) {
+                D_8009D26C |= 0x20;
+            }
+
+            analog = D_800BE9A6;
+            if (analog < 0x14) {
+                D_8009D26C |= 0x40;
+            } else if (analog >= 0xE7) {
+                D_8009D26C |= 0x10;
+            }
+        } else {
+            analog = D_800BE9A7;
+            if (analog < 0x5A) {
+                D_8009D26C |= 0x8;
+                if (analog < 0x14) {
+                    D_8009D26C |= 0x1;
+                }
+            } else if (analog >= 0xA1) {
+                D_8009D26C |= 0x20;
+                if (analog >= 0xE7) {
+                    D_8009D26C |= 0x1;
+                }
+            }
+
+            analog = D_800BE9A6;
+            if (analog < 0x5A) {
+                D_8009D26C |= 0x40;
+                if (analog < 0x14) {
+                    D_8009D26C |= 0x1;
+                }
+            } else if (analog >= 0xA1) {
+                D_8009D26C |= 0x10;
+                if (analog >= 0xE7) {
+                    D_8009D26C |= 0x1;
+                }
+            }
+        }
+    }
+
+    final_pad = D_8009D26C;
+    final_old = D_8009D238;
+    changed = final_pad ^ final_old;
+    D_8009D1F4 = changed & final_pad;
+    D_8009D1E4 = changed & final_old;
+    return;
+    }
+
+    D_8009D26C = 0;
+    D_8009D1F4 = 0;
+    D_8009D1E4 = 0;
 }

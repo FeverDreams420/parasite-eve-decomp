@@ -4,7 +4,7 @@
 #include "common.h"
 
 /* Game button bits sampled once per frame by Field_HandleStateTransition
- * (Boot_RenderFlagsAndPadInput.c). */
+ * (Boot_InitSystemFlow.c). */
 extern u32 D_8009D26C; /* held (g_FieldPadBits) */
 extern u32 D_8009D238; /* held on the previous frame */
 extern u32 D_8009D1F4; /* pressed this frame */

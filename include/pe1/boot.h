@@ -38,7 +38,7 @@ extern u16 D_8009315E[];
 extern s32 g_FrameRngCounter[];
 extern char g_AnalogStickState[];
 
-/* Pad sampling (Boot_RenderFlagsAndPadInput.c): render flag table, the
+/* Pad sampling (Boot_InitSystemFlow.c): render flag table, the
  * button mask per game bit, frames each bit has been held, the actuator
  * buffers and the cheat sequence masks. */
 extern s32 g_FieldRenderFlagTable[];
