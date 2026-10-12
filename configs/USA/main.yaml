@@ -780,7 +780,6 @@ segments:
       - [0x70194, c, psyq/libds/dssys_1]
       - [0x7022C, c, psyq/libds/dssys_1_2]
       - [0x70304, c, psyq/libds/dssys_1_3]
-      - [0x70344, c, psyq/libds/dssys_1_4]
       - [0x704FC, c, psyq/libds/dssys_1_5]
       - [0x70A20, c, psyq/libds/dssys_1_6]
       - [0x70F78, c, psyq/libds/dssys_1_7]

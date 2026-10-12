@@ -308,7 +308,7 @@ byte-identical.
 | LIBETC INTR | 3 | 2 | the callbacks GCC 2.7.2, the interrupt manager GCC 2.8.1 |
 | LIBAPI PATCH | 2 | 2 | `_patch_pad` is SDK assembler (policy) |
 | LIBCARD PATCH | 4 | 4 | parts 1 and 3 are SDK assembler (policy) |
-| LIBDS DSSYS_1 | 11 | 11 | neighbours alternate between GNU as with GCC 2.7.2 and GCC 2.8.1, several with their own scheduling option |
+| LIBDS DSSYS_1 | 11 | 10 | neighbours alternate between GNU as with GCC 2.7.2 and GCC 2.8.1, several with their own scheduling option; the GCC 2.8.1 parts keep a base register in `$s0` across calls, which GCC 2.7.2 folds into absolute addresses (`DS_stop` lev 18, `tipDsSystem` 26, `DS_reset_members` 49 under GCC 2.7.2) |
 | LIBDS DSSYS_2 | 5 | 3 | `dssys_2.c` and `dssys_2_5.c` GCC 2.7.2 with GNU as; DsInit and DsReset (`dssys_2_4.c`) need GCC 2.8.1 with `-fno-schedule-insns2`: they clear two tables through a base register, which GCC 2.7.2 folds into absolute addresses (lev 43) |
 | LIBDS DSREAD | 2 | 2 | `dsread.c` GCC 2.7.2, `dsread_2.c` only builds with GCC 2.8.1 |
 | LIBDS DSFILE | 2 | 2 | `dsfile.c` GCC 2.8.1, `dsfile_2.c` GCC 2.7.2 |
