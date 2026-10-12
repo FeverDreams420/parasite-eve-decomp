@@ -12,9 +12,11 @@ RECT *Asset_GetTimImageRect(TimFile *tim);
 int *Asset_GetTimImagePixels(TimFile *tim);
 int *Asset_GetTimClutPixels(TimFile *tim);
 
-/* Packed game table: each word is a byte offset from the table base. */
-typedef struct TimRelativeTable {
+/* Packed game table: each word is a byte offset from the table base;
+ * `bytes` addresses the images those offsets locate. */
+typedef union TimRelativeTable {
     u32 offsets[1];
+    u8 bytes[1];
 } TimRelativeTable;
 
 TimFile *Gpu_GetTimTableEntry(TimRelativeTable *table, int index);

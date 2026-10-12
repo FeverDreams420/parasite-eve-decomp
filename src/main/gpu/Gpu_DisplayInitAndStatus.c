@@ -138,7 +138,7 @@ int Gpu_CheckDrawStatus(void) {
 }
 
 TimFile *Gpu_GetTimTableEntry(TimRelativeTable *table, int index) {
-    return (TimFile *)((u8 *)table + table->offsets[(s16)index]);
+    return (TimFile *)&table->bytes[table->offsets[(s16)index]];
 }
 
 void Gpu_LoadTimTable(TimRelativeTable *table, int count) {
@@ -146,6 +146,6 @@ void Gpu_LoadTimTable(TimRelativeTable *table, int count) {
 
     for (i = 0; i < count; i++) {
         u32 offset = table->offsets[(s16)i];
-        Asset_LoadTimImage((TimFile *)((u8 *)table + offset));
+        Asset_LoadTimImage((TimFile *)&table->bytes[offset]);
     }
 }
