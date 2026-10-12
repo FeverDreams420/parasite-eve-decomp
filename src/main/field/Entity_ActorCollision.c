@@ -1,15 +1,330 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G4 --expand-div --use-comm-section */
+/* MASPSX_FLAGS: -G8 --use-comm-section --expand-div */
 /* MASPSX_FORCE_G0: 1 */
 /* ASPSX_VERSION: 2.70 */
+
+#include "pe1/entity_animation.h"
+#include "pe1/field_actor.h"
 #include "common.h"
+#include "pe1/collision_database.h"
+#include "pe1/floor_polygon.h"
+#include "pe1/floor_edge_point.h"
+#include "pe1/scene_assets.h"
 #include "pe1/field_collision.h"
+#include "pe1/player_entity.h"
 #include "pe1/battle.h"
 #include "pe1/entity_floor.h"
 #include "pe1/gte.h"
 #include "pe1/floor_clip.h"
 #include "pe1/field_movement.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/gte_types.h"
 
+/* COMMON supplies small-data metadata to MASPSX: these words are reached
+ * through $gp, every other extern stays absolute. */
+char *g_SceneDataTable2;
+short g_FieldCollisionTriIndex;
+unsigned short g_WallPolygonVertexCount;
+PolygonVertex *g_WallPolygonVertices;
+
+void Akao_LoadVoiceBank(BattleEntity *entity);
+
+void Entity_AdvanceAnim(BattleEntity *entity) {
+    int flags;
+    int new_flags;
+    int old_frame;
+    register int step;
+    int limit;
+    int next_frame;
+    int end_frame;
+
+    if (entity != 0) {
+        if (entity->parent != 0 && !(entity->parent->entityFlags & 0x800000)) {
+            Entity_AdvanceAnim(entity->parent);
+        }
+
+        Akao_LoadVoiceBank(entity);
+        new_flags = (entity->entityFlags & -9) | 0x800000;
+        entity->entityFlags = new_flags;
+        old_frame = entity->animFrame;
+        entity->animPrev.fixed = old_frame;
+        flags = entity->entityFlags;
+
+        if (!(flags & 0x100)) {
+            if (flags & 0x200) {
+                u32 whole_frame = old_frame;
+
+                if ((whole_frame >> 16) == entity->animStopFrame) {
+                    return;
+                }
+            }
+
+            if (flags & 0x200000) {
+                Entity_SetAction(entity, entity->parent->actionMode);
+                entity->animFrame = entity->parent->animFrame;
+                return;
+            }
+
+            step = entity->animStep;
+            limit = entity->animStopFrame;
+            next_frame = old_frame + step;
+            end_frame = limit << 16;
+
+            if (flags & 0x200) {
+                if (old_frame < end_frame) {
+                    if (end_frame < next_frame) {
+                        entity->animFrame = end_frame;
+                        return;
+                    }
+                }
+                if (end_frame < old_frame) {
+                    if (next_frame < end_frame) {
+                        entity->animFrame = end_frame;
+                        return;
+                    }
+                }
+            }
+
+            if (entity->animLastFrame < (next_frame >> 16)) {
+                limit = (next_frame >> 16) % (entity->animLastFrame + 1);
+                old_frame = 0;
+                entity->entityFlags |= 8;
+                next_frame = limit << 16;
+            } else if (next_frame < 0) {
+                old_frame = entity->animLastFrame << 16;
+                next_frame += (entity->animLastFrame + 1) << 16;
+                entity->entityFlags |= 8;
+            }
+
+            if (entity->entityFlags & 0x200) {
+                if (!(end_frame < old_frame)) {
+                    if (end_frame < next_frame) {
+                        entity->animFrame = end_frame;
+                        return;
+                    }
+                }
+                if (old_frame < end_frame) {
+                    entity->animFrame = next_frame;
+                    return;
+                }
+                if (next_frame < end_frame) {
+                    entity->animFrame = end_frame;
+                    return;
+                }
+            }
+
+store_next:
+            entity->animFrame = next_frame;
+        }
+    }
+}
+
+void Entity_SetActionMode(BattleEntity *arg0, int arg1) {
+    BattleEntity *entity;
+    int mode;
+    unsigned int idx;
+    EntityActionTable *base;
+    BattleEntity *it;
+    void **table;
+    void *action;
+
+    entity = arg0;
+    mode = arg1;
+    idx = entity->modelIndex;
+    base = D_800B0E98;
+    table = base[idx].actions;
+    action = table[(unsigned short)mode];
+    entity->actionMode = mode;
+    entity->animFrame = 0;
+    entity->animPrev.fixed = 0;
+    entity->actionData = action;
+    entity->entityFlags &= -0x201;
+    entity->animLastFrame = ((RenderAnimationDataHeader *)entity->actionData)->frame_count - 1;
+
+    if (entity->entityFlags & 0x100000) {
+        it = (BattleEntity *)g_FieldActorListHead;
+        if (it != 0) {
+            do {
+                if (it->parent == entity && (it->entityFlags & 0x200000)) {
+                    Entity_SetActionMode(it, (unsigned short)mode);
+                }
+                it = it->next;
+            } while (it != 0);
+        }
+    }
+}
+
+void Entity_SetAction(BattleEntity *arg0, int arg1) {
+    BattleEntity *entity;
+    int raw_mode;
+    unsigned int mode;
+    unsigned int idx;
+    EntityActionTable *base;
+    BattleEntity *it;
+    void **table;
+    RenderAnimationDataHeader *action;
+
+    entity = arg0;
+    raw_mode = arg1;
+    mode = (unsigned short)raw_mode;
+    if (entity->actionMode != mode) {
+        idx = entity->modelIndex;
+        base = D_800B0E98;
+        table = base[idx].actions;
+        entity->animFrame = 0;
+        entity->animPrev.fixed = 0;
+        entity->actionMode = raw_mode;
+        action = table[mode];
+        entity->actionData = action;
+        entity->animLastFrame = action->frame_count - 1;
+    }
+
+    entity->entityFlags &= -0x201;
+    if (entity->entityFlags & 0x100000) {
+        it = (BattleEntity *)g_FieldActorListHead;
+        if (it != 0) {
+            do {
+                if (it->parent == entity && (it->entityFlags & 0x200000)) {
+                    Entity_SetAction(it, (unsigned short)raw_mode);
+                }
+                it = it->next;
+            } while (it != 0);
+        }
+    }
+}
+
+/* The room collision database: clearing the per-room collision state and
+ * relocating the loaded database's offsets into pointers. */
+
+unsigned short D_8009CE1C, D_8009CE20, D_8009CE24, D_8009CE28;
+short g_EntityCollisionMoveDelta;
+short g_EntityCollisionWallParam;
+CollisionRegionEntry *g_RegionHeightTable;
+struct CollisionPlane *g_CollisionPlaneTable;
+CollisionDatabase *g_CollisionDb;
+short *g_EntityCollisionWallSlot;
+PolygonVertex *D_8009D248;
+u16 D_8009D1CC;
+
+void Entity_ResetStateGlobals(void) {
+    unsigned int i;
+    unsigned int count;
+    unsigned int *ptr;
+
+    g_RegionHeightTable = 0;
+
+    for (i = 0; i < 8; i += 4) {
+        *(short *)&((char *)&D_8009CE0C)[i] = 0;
+        *(short *)&D_8009CE0E[i] = 0;
+    }
+
+    count = 0;
+    g_SceneDataTable2 = 0;
+    ptr = D_8009DFB0;
+
+    while (count < 20) {
+        *ptr = 0;
+        count++;
+        ptr++;
+    }
+
+    g_FieldCollisionTriIndex = 0;
+    D_8009CE28 = 0;
+    D_8009CE24 = 0;
+    D_8009CE20 = 0;
+    D_8009CE1C = 0;
+    g_EntityCollisionMoveDelta = 0;
+    g_CollisionPlaneTable = 0;
+    g_CollisionDb = 0;
+    g_EntityCollisionWallSlot = 0;
+    D_8009D248 = 0;
+    g_EntityCollisionWallParam = 0;
+    D_8009D1CC = 0;
+}
+
+void Entity_RelocateSceneData(void) {
+    CollisionDatabase *base;
+    register char *loaded asm("$2");
+    char frame[8];
+    u32 offset;
+
+    loaded = D_800B1620[0];
+    base = (CollisionDatabase *)loaded;
+    offset = *(u32 *)&base->vertices;
+    g_CollisionDb = base;
+
+    if (0x80000000U < offset) {
+        struct CollisionPlane *planes;
+        CollisionRegionEntry *heights;
+
+        planes = base->planes.pointer;
+        heights = base->regions;
+        g_RegionHeightTable = heights;
+        g_CollisionPlaneTable = planes;
+        return;
+    }
+
+    base->vertices.pointer = SceneAsset_ResolveOffset(base, offset);
+    base->triangles.pointer = SceneAsset_ResolveOffset(base, base->triangles.word);
+    base->rampEdges.pointer = SceneAsset_ResolveOffset(base, base->rampEdges.word);
+    if (base->planes.word != 0) {
+        base->planes.pointer = SceneAsset_ResolveOffset(base, base->planes.word);
+    }
+
+    {
+        CollisionDatabaseAddress actor;
+        u32 *dst;
+        u32 i;
+        u32 *cursor;
+        u16 wordCount;
+        u16 *regionCountAddress;
+        u32 count;
+        u32 entry;
+
+        actor.db = g_CollisionDb;
+        i = 0;
+        cursor = (u32 *)actor.db->planes.pointer;
+        wordCount = actor.db->visitedWordCount;
+        entry = actor.db->rampEdges.word;
+        dst = (u32 *)actor.db->regions;
+        wordCount >>= 5;
+        g_CollisionPlaneTable = (struct CollisionPlane *)cursor;
+        regionCountAddress = &actor.db->regionCount;
+        g_RegionHeightTable = (CollisionRegionEntry *)dst;
+        count = *regionCountAddress;
+        wordCount++;
+        g_SceneDataTable2 = (char *)entry;
+        actor.db->visitedWordCount = wordCount;
+
+        if (count != 0) {
+            cursor = (u32 *)actor.db;
+            do {
+                entry = cursor[10];
+                cursor++;
+                i++;
+                entry = entry + actor.word;
+                *dst = entry;
+                dst++;
+            } while (i < actor.db->regionCount);
+        }
+    }
+}
+
+void Entity_UpdateList(void) {
+    FieldActor *node;
+
+    if (g_FieldMoveLock & 4) {
+        Entity_ApplyCollisionResponse(g_PlayerEntity);
+    }
+
+    node = g_FieldActorListHead;
+    while (node != 0) {
+        if ((node->flags & 0x80) == 0) {
+            Entity_UpdateAndRender((struct BattleEntity *)node);
+        }
+        node = node->next;
+    }
+}
 
 int Math_FixedMul(int a, int b);
 
@@ -101,8 +416,6 @@ void Entity_FindFloor(BattleEntity *actor)
         floor_index++;
     } while (floor_index < D_8009D1FC->regionCount);
 }
-
-
 
 void Entity_ResolvePosition(BattleEntity *actor, int index) {
     BattleEntity *actor_s2;
@@ -943,4 +1256,233 @@ int Geo_PointInPoly(int x, int z, const PolygonVertex *vertices, unsigned short 
             break;
     }
     return inside;
+}
+
+/* A vertex pointer seen as the address retail adds the scaled edge to. */
+typedef union PolygonVertexAddress {
+    const PolygonVertex *vertex;
+    u32 word;
+} PolygonVertexAddress;
+
+/* One pin and two empty barriers preserve the retail prologue with stock
+ * GCC/maspsx. The first barrier clobbers s3 before the entity is assigned;
+ * it emits no instructions. */
+void Entity_SlideOnWall(BattleEntity *input, const PolygonVertex *vertices,
+                       u16 count, s16 edge, int oldX, int oldZ)
+{
+    register BattleEntity *entity asm("$19");
+    GteVector vector, unit;
+    s32 endX, endZ;
+    s32 startX, startZ;
+    s32 x, z, projection, length;
+    s32 radius, direction, trialX, trialZ;
+    PolygonVertexAddress base, point;
+    asm("" : "=r"(input) : "0"(input) : "$19");
+    base.vertex = vertices;
+    point.word = edge * sizeof(PolygonVertex) + base.word;
+    asm volatile("" : "=r"(input) : "0"(input));
+    entity = input;
+    endX = vertices[edge].x;
+    endZ = vertices[edge].z;
+    if (edge > 0) {
+        startX = vertices[edge - 1].x;
+        startZ = vertices[edge - 1].z;
+    } else {
+        startX = vertices[count - 1].x;
+        startZ = vertices[count - 1].z;
+    }
+    vector.x = endX - startX;
+    vector.y = 0;
+    vector.z = endZ - startZ;
+    VectorNormal(&vector, &unit);
+    unit.x <<= 4;
+    unit.z <<= 4;
+    x = entity->baseX;
+    z = entity->baseZ;
+    projection = Math_FixedMul(unit.x, entity->posX.fixed - x);
+    projection += Math_FixedMul(unit.z, entity->posZ.fixed - z);
+    x = Math_FixedMul(unit.x, projection);
+    z = Math_FixedMul(unit.z, projection);
+    x += entity->baseX;
+    z += entity->baseZ;
+    vector.x = startX - endX;
+    vector.y = 0;
+    vector.z = startZ - endZ;
+    length = SquareRoot0(vector.x * vector.x + vector.z * vector.z);
+    projection = (((z >> 16) - endZ) * vector.x - ((x >> 16) - endX) * vector.z) / length;
+    if (projection < 0)
+        projection = -projection;
+    if (projection > g_CollisionRadius) {
+        entity->posX.fixed = x;
+        entity->posZ.fixed = z;
+        return;
+    }
+    for (radius = 0; ; radius++) {
+        for (direction = 0; direction < 4; ++direction) {
+            trialX = x;
+            trialZ = z;
+            switch (direction) {
+            case 0: trialX += radius << 16; break;
+            case 1: trialX -= radius << 16; break;
+            case 2: trialZ += radius << 16; break;
+            case 3: trialZ -= radius << 16; break;
+            }
+            projection = (((trialZ >> 16) - endZ) * vector.x -
+                          ((trialX >> 16) - endX) * vector.z) / length;
+            if (projection < 0)
+                projection = -projection;
+            if (projection > g_CollisionRadius) {
+                entity->posX.fixed = trialX;
+                entity->posZ.fixed = trialZ;
+                return;
+            }
+        }
+    }
+}
+
+/* Returns the first polygon edge (index of its end vertex) whose segment
+ * passes within g_CollisionRadius of (x, z), or -1 when no edge is that close. */
+int Geo_FindNearestEdge(int x, int z, PolygonVertex *vertices,
+                        unsigned short count)
+{
+    GteVector edge;
+    s16 pointX = x;
+    s16 pointZ = z;
+    s16 prevX = vertices[count - 1].x;
+    s16 prevZ = vertices[count - 1].z;
+    unsigned short i;
+
+    for (i = 0; i < count; i++) {
+        s16 startX, startZ;
+        int radius, vertexX, vertexZ;
+        int endX, endZ;
+        int length, distance, offsetX, offsetZ;
+
+        startX = prevX;
+        startZ = prevZ;
+        radius = g_CollisionRadius;
+        vertexX = vertices[i].x;
+        prevX = vertexX;
+        endX = prevX;
+        vertexZ = vertices[i].z;
+        prevZ = vertexZ;
+        distance = pointX - radius;
+        if (endX < distance && startX < distance)
+            continue;
+        distance = pointX + radius;
+        if (distance < endX && distance < startX)
+            continue;
+        endZ = prevZ;
+        distance = pointZ - radius;
+        if (endZ < distance && startZ < distance)
+            continue;
+        distance = pointZ + radius;
+        if (distance < endZ && distance < startZ)
+            continue;
+        edge.x = startX - endX;
+        edge.y = 0;
+        edge.z = startZ - endZ;
+        length = SquareRoot0(edge.x * edge.x + edge.z * edge.z);
+        offsetZ = pointZ - endZ;
+        offsetX = pointX - endX;
+        distance = (offsetZ * edge.x - offsetX * edge.z) / length;
+        if (distance < 0)
+            distance = -distance;
+        if (distance > g_CollisionRadius)
+            continue;
+        VectorNormal(&edge, &edge);
+        distance = Math_FixedMul(edge.x << 4, offsetX << 16);
+        distance += Math_FixedMul(edge.z << 4, offsetZ << 16);
+        if (distance < 0) {
+            distance = offsetX * offsetX + offsetZ * offsetZ;
+            if (distance > g_CollisionRadius * g_CollisionRadius)
+                continue;
+        }
+        if (length < distance >> 16) {
+            distance = (pointX - startX) * (pointX - startX) +
+                       (pointZ - startZ) * (pointZ - startZ);
+            if (distance > g_CollisionRadius * g_CollisionRadius)
+                continue;
+        }
+        return i;
+    }
+    return -1;
+}
+
+/* Retail data at 0x8009D254; the g_PlayerEntity linker alias names this slot
+ * too. Explicit .data preserves the non-GP accesses amid small-data globals. */
+BattleEntity *D_8009D254 __attribute__((section(".data"))) = 0;
+
+void Entity_ApplyCollisionResponse(struct FieldActor *player)
+{
+    BattleEntity *actor = D_8009D254;
+    int oldX, oldZ;
+    short edge;
+    int radius = (u16)actor->renderObject.hit_cylinder.radius;
+
+    g_CollisionRadius = radius;
+    /* Preserve the low-word multiply and signed division used by retail. */
+    g_CollisionRadius = (int)((long long)radius * actor->moveSpeed) / 4096;
+    oldX = (short)(actor->baseX >> 16);
+    oldZ = (short)(actor->baseZ >> 16);
+    edge = Geo_FindNearestEdge(actor->posX.parts.integer, actor->posZ.parts.integer,
+                              g_WallPolygonVertices, g_WallPolygonVertexCount);
+    if (edge >= 0) {
+        BattleEntity *current;
+
+        Entity_SlideOnWall(D_8009D254, g_WallPolygonVertices, g_WallPolygonVertexCount, edge, oldX, oldZ);
+        current = D_8009D254;
+        if ((short)Geo_FindNearestEdge(current->posX.parts.integer,
+                                      current->posZ.parts.integer,
+                                      g_WallPolygonVertices, g_WallPolygonVertexCount) >= 0) {
+            BattleEntity *restore = D_8009D254;
+            restore->posX.fixed = restore->baseX;
+            restore->posY.fixed = restore->baseY;
+            restore->posZ.fixed = restore->baseZ;
+        }
+    }
+}
+
+void Entity_CheckActionIdMatch(BattleEntity *arg0, void *arg1, EnemyCombatant **arg2, int arg3) {
+    EnemyCombatant *entry;
+    int i;
+    int kind;
+    int offset;
+    int value;
+
+    entry = *arg2;
+    if (entry == 0) {
+        return;
+    }
+
+    if (entry->effect->state != 1) {
+        return;
+    }
+
+    kind = (entry->coreFlags >> 21) & 7;
+    if (kind >= 3) {
+        return;
+    }
+
+    if (entry->hpAlive <= 0) {
+        return;
+    }
+
+    i = 0;
+    arg3 = (short)arg3;
+    do {
+        offset = (entry->coreFlags >> 19) & 0x1C;
+        value = (entry->contactActionIds + offset)[i & 0xFFFF];
+        if (arg3 == value) {
+            ((Combatant *)arg0->core)->stateFlags |= 0x4000;
+            entry->coreFlags |= 0x80000000;
+            return;
+        }
+
+        if (value < 0) {
+            return;
+        }
+
+        i++;
+    } while ((u16)i < 4);
 }

@@ -196,17 +196,14 @@ segments:
       # G0199..G0215 have no split evidence). One unit under cc1 -G0 and the
       # FORCE_G0 assembler -G8 whose COMMON words are the $gp ones.
       - [0x83B4, c, script/Task_SystemOpcodes]
-      # Animation advancement and action selection share per-model action tables.
-      - [0xACAC, c, field/Entity_AnimationState]
-      # Collision-state reset and database relocation share the collision table globals (G0227).
-      - [0xB090, c, field/Entity_CollisionDatabase]
-      - [0xB1F8, c, field/Entity_UpdateList]
-      # Actor floor lookup, boundary clipping, ramp sliding and polygon
-      # containment share collision state and PolygonVertex (G0227).
-      - [0xB278, c, field/Geo_ActorFloorResolution]
-      # Wall sliding, nearest-edge testing and collision response share state.
-      - [0xD3A0, c, field/Entity_ApplyCollisionResponse]
-      - [0xDA68, c, field/Entity_CheckActionIdMatch]
+      # Actor animation and collision (G0227): animation advancement and action
+      # selection (per-model action tables), collision-state reset and database
+      # relocation, the actor update list, actor floor lookup, boundary clipping,
+      # ramp sliding and polygon containment (collision state and PolygonVertex),
+      # wall sliding, nearest-edge testing and collision response, and the action id
+      # match. One -G8 FORCE_G0 unit with COMMON $gp words, --expand-div and
+      # ASPSX 2.70 (from the floor resolution, neutral for the rest).
+      - [0xACAC, c, field/Entity_ActorCollision]
       - [0xDB40, c, battle/Menu_MainUpdate]
       # Drop-table resolution and hit application share the active-actor helpers (G0232).
       - [0xFCD4, c, battle/Entity_HitAndDropTable]
@@ -984,7 +981,7 @@ segments:
       - [0x8BEEC, data, main/dtail_gp_post_dsfile]
       - {start: 0x8D5A0, type: .sdata, name: render/Render_DrawObjectVariant, linker_section_order: .data}
       - [0x8D5A4, data, main/dtail_gp_post_render_color]
-      - [0x8DA54, .data, field/Entity_ApplyCollisionResponse]
+      - [0x8DA54, .data, field/Entity_ActorCollision]
       - [0x8DA58, data, main/dtail_gp_post_collision_actor]
 
   # Data separates the initial code from the field-engine code. Keep a
