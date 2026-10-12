@@ -114,7 +114,7 @@ void func_800C608C(int scale, u8 *src, u8 *dst) {
 }
 
 int func_800C6148(FieldActor *obj, s16 *pos, unsigned short radius) {
-    volatile int delta[3];
+    int delta[3];
     int x = Pe1Fixed_Integer(&obj->pos_x) - pos[0];
     int z;
     int x_sq = x * x;
