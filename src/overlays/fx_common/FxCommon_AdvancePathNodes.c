@@ -8,15 +8,15 @@ void func_80193478(void)
     GteShortVector bank1;
 
     func_8018F55C(D_8019C038, 0x4A, Gpu_GetTimTableEntry(&D_801D0260, 2),
-                  (FxCommonMotionVec *)g_FxCommonPathNodes[4]->matrix.t,
+                  (FxCommonVec3 *)g_FxCommonPathNodes[4]->matrix.t,
                   &g_FxCommonPathNodes[4]->seed.angles);
     func_8018F55C(D_8019C038, 0x4B, Gpu_GetTimTableEntry(&D_801D0260, 2),
-                  (FxCommonMotionVec *)g_FxCommonPathNodes[5]->matrix.t,
+                  (FxCommonVec3 *)g_FxCommonPathNodes[5]->matrix.t,
                   &g_FxCommonPathNodes[5]->seed.angles);
     func_8018F55C(D_8019C03C, 0x4C, Gpu_GetTimTableEntry(&D_801D0260, 2),
-                  (FxCommonMotionVec *)g_FxCommonPathNodes[0]->matrix.t, &bank0);
+                  (FxCommonVec3 *)g_FxCommonPathNodes[0]->matrix.t, &bank0);
     func_8018F55C(D_8019C03C, 0x4D, Gpu_GetTimTableEntry(&D_801D0260, 2),
-                  (FxCommonMotionVec *)g_FxCommonPathNodes[2]->matrix.t, &bank1);
+                  (FxCommonVec3 *)g_FxCommonPathNodes[2]->matrix.t, &bank1);
 
     g_FxCommonPathNodes[0]->seed.component[0] = bank0.x;
     g_FxCommonPathNodes[0]->seed.component[1] = bank0.y;

@@ -3,14 +3,14 @@
 /* Advance effect selection, resource transitions and the two motion blends. */
 void func_801942FC(void)
 {
-    FxCommonMotionVec mode1Sample;
-    FxCommonMotionVec mode1NextSample;
-    FxCommonMotionVec mode2Sample;
-    FxCommonMotionVec mode2NextSample;
+    FxCommonMotionRecord mode1Sample;
+    FxCommonMotionRecord mode1NextSample;
+    FxCommonMotionRecord mode2Sample;
+    FxCommonMotionRecord mode2NextSample;
     GteShortVector shortA;
     GteShortVector shortB;
     GteShortVector sampleExtra;
-    FxCommonMotionVec motionSample;
+    FxCommonMotionRecord motionSample;
     GteShortVector motionExtra;
     s32 copyX;
     s32 copyY;
@@ -106,11 +106,11 @@ void func_801942FC(void)
                         D_8019C044 = 0;
                         D_8019C045 = 0;
                         D_8019C13C = 0;
-                        func_8018F55C(D_8019C038 + 0x20, 0x4A, Gpu_GetTimTableEntry((&D_801D0260), 2), &mode1Sample, &sampleExtra);
-                        func_8018F55C(D_8019C038 + 0x20, 0x4B, Gpu_GetTimTableEntry((&D_801D0260), 2), &mode1NextSample, &sampleExtra);
-                        copyX = mode1Sample.x;
-                        copyY = mode1Sample.y;
-                        copyZ = mode1Sample.z;
+                        func_8018F55C(D_8019C038 + 0x20, 0x4A, Gpu_GetTimTableEntry((&D_801D0260), 2), &mode1Sample.vector, &sampleExtra);
+                        func_8018F55C(D_8019C038 + 0x20, 0x4B, Gpu_GetTimTableEntry((&D_801D0260), 2), &mode1NextSample.vector, &sampleExtra);
+                        copyX = mode1Sample.vector.x;
+                        copyY = mode1Sample.vector.y;
+                        copyZ = mode1Sample.vector.z;
                         currentX = g_FxCommonMotionPosition0.x;
                         currentY = g_FxCommonMotionPosition0.y;
                         currentZ = g_FxCommonMotionPosition0.z;
@@ -142,14 +142,14 @@ void func_801942FC(void)
                     D_8019C044 = 0;
                     D_8019C045 = 0;
                     D_8019C13C = 0;
-                    func_8018F55C(D_8019C03C + 0x100, 0x4C, Gpu_GetTimTableEntry((&D_801D0260), 2), &mode2Sample, &sampleExtra);
-                    func_8018F55C(D_8019C03C + 0x100, 0x4D, Gpu_GetTimTableEntry((&D_801D0260), 2), &mode2NextSample, &sampleExtra);
-                    shortA.x = (s16) mode2NextSample.x;
-                    shortA.y = (s16) mode2NextSample.y;
-                    shortA.z = (s16) mode2NextSample.z;
-                    shortB.x = (s16) mode2Sample.x;
-                    shortB.y = (s16) mode2Sample.y;
-                    shortB.z = (s16) mode2Sample.z;
+                    func_8018F55C(D_8019C03C + 0x100, 0x4C, Gpu_GetTimTableEntry((&D_801D0260), 2), &mode2Sample.vector, &sampleExtra);
+                    func_8018F55C(D_8019C03C + 0x100, 0x4D, Gpu_GetTimTableEntry((&D_801D0260), 2), &mode2NextSample.vector, &sampleExtra);
+                    shortA.x = (s16) mode2NextSample.vector.x;
+                    shortA.y = (s16) mode2NextSample.vector.y;
+                    shortA.z = (s16) mode2NextSample.vector.z;
+                    shortB.x = (s16) mode2Sample.vector.x;
+                    shortB.y = (s16) mode2Sample.vector.y;
+                    shortB.z = (s16) mode2Sample.vector.z;
                     func_80195BC8((FxCommonShortVec3 *)&shortA, (FxCommonShortVec3 *)&shortB, 4, 5);
                 }
             }
@@ -231,11 +231,11 @@ void func_801942FC(void)
                         D_8019C058 = 0x20;
                         motionBase0 = (s16)phase0;
                         do {
-                            func_8018F55C(motionIndex0 << 8, motionBase0 + 0x40, Gpu_GetTimTableEntry((&D_801D0260), 2), &motionSample, &motionExtra);
+                            func_8018F55C(motionIndex0 << 8, motionBase0 + 0x40, Gpu_GetTimTableEntry((&D_801D0260), 2), &motionSample.vector, &motionExtra);
                             motionIndex0 += 1;
-                            g_FxCommonMotionDeltas[motionSlot0].x = ((motionSample.x << 0x10) - D_8019CAA8[motionSlot0].x) >> 5;
-                            g_FxCommonMotionDeltas[motionSlot0].y = ((motionSample.y << 0x10) - D_8019CAA8[motionSlot0].y) >> 5;
-                            g_FxCommonMotionDeltas[motionSlot0].z = ((motionSample.z << 0x10) - D_8019CAA8[motionSlot0].z) >> 5;
+                            g_FxCommonMotionDeltas[motionSlot0].vector.x = ((motionSample.vector.x << 0x10) - D_8019CAA8[motionSlot0].vector.x) >> 5;
+                            g_FxCommonMotionDeltas[motionSlot0].vector.y = ((motionSample.vector.y << 0x10) - D_8019CAA8[motionSlot0].vector.y) >> 5;
+                            g_FxCommonMotionDeltas[motionSlot0].vector.z = ((motionSample.vector.z << 0x10) - D_8019CAA8[motionSlot0].vector.z) >> 5;
                             motionSlot0 += 1;
                         } while (motionIndex0 < 0xAU);
                     }
@@ -262,11 +262,11 @@ void func_801942FC(void)
                         D_8019C058 = 0x20;
                         motionBase1 = (s16)phase1;
                         do {
-                            func_8018F55C(motionIndex1 << 8, motionBase1 + 0x40, Gpu_GetTimTableEntry((&D_801D0260), 2), &motionSample, &motionExtra);
+                            func_8018F55C(motionIndex1 << 8, motionBase1 + 0x40, Gpu_GetTimTableEntry((&D_801D0260), 2), &motionSample.vector, &motionExtra);
                             motionIndex1 += 1;
-                            g_FxCommonMotionDeltas[motionSlot1].x = ((motionSample.x << 0x10) - D_8019CAA8[motionSlot1].x) >> 5;
-                            g_FxCommonMotionDeltas[motionSlot1].y = ((motionSample.y << 0x10) - D_8019CAA8[motionSlot1].y) >> 5;
-                            g_FxCommonMotionDeltas[motionSlot1].z = ((motionSample.z << 0x10) - D_8019CAA8[motionSlot1].z) >> 5;
+                            g_FxCommonMotionDeltas[motionSlot1].vector.x = ((motionSample.vector.x << 0x10) - D_8019CAA8[motionSlot1].vector.x) >> 5;
+                            g_FxCommonMotionDeltas[motionSlot1].vector.y = ((motionSample.vector.y << 0x10) - D_8019CAA8[motionSlot1].vector.y) >> 5;
+                            g_FxCommonMotionDeltas[motionSlot1].vector.z = ((motionSample.vector.z << 0x10) - D_8019CAA8[motionSlot1].vector.z) >> 5;
                             motionSlot1 += 1;
                         } while (motionIndex1 < 0xAU);
                     }
@@ -291,14 +291,14 @@ void func_801942FC(void)
         g_FxCommonMotionPosition0.z = D_801EA578->state[2];
     }
     if (D_8019C046 == 1) {
-        func_8018F55C(D_8019C04C, g_FxCommonEffectSetup[D_8019CC52].motionIndices[3], Gpu_GetTimTableEntry((&D_801D0260), 2), (FxCommonMotionVec *) &g_FxCommonMotionPosition1.x, &sampleExtra);
-        func_8018F55C(D_8019C04C, g_FxCommonEffectSetup[D_8019CC52].motionIndices[2], Gpu_GetTimTableEntry((&D_801D0260), 2), (FxCommonMotionVec *) &g_FxCommonMotionPosition0.x, &sampleExtra);
+        func_8018F55C(D_8019C04C, g_FxCommonEffectSetup[D_8019CC52].motionIndices[3], Gpu_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonMotionPosition1, &sampleExtra);
+        func_8018F55C(D_8019C04C, g_FxCommonEffectSetup[D_8019CC52].motionIndices[2], Gpu_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonMotionPosition0, &sampleExtra);
         D_8019C04C += 0x80;
     }
     if (D_8019C034 == 0xA) {
         D_8019C030 += 1;
-        func_8018F55C(D_8019C04C, 0x4E, Gpu_GetTimTableEntry((&D_801D0260), 2), (FxCommonMotionVec *) &g_FxCommonMotionPosition1.x, &sampleExtra);
-        func_8018F55C(D_8019C04C, 0x4F, Gpu_GetTimTableEntry((&D_801D0260), 2), (FxCommonMotionVec *) &g_FxCommonMotionPosition0.x, &sampleExtra);
+        func_8018F55C(D_8019C04C, 0x4E, Gpu_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonMotionPosition1, &sampleExtra);
+        func_8018F55C(D_8019C04C, 0x4F, Gpu_GetTimTableEntry((&D_801D0260), 2), &g_FxCommonMotionPosition0, &sampleExtra);
         D_8019C04C += 0x10;
         if ((s16) D_8019C030 == 0x4B) {
             D_8019C0C4 = func_801958D4(0xB, 0U);

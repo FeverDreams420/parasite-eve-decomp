@@ -7,7 +7,7 @@
  * and a yaw/bank pair derived from the two neighbouring segment headings,
  * and returns the path's point count. */
 int func_8018F55C(u32 position, int index, void *table,
-                  FxCommonMotionVec *out, GteShortVector *extra)
+                  FxCommonVec3 *out, GteShortVector *extra)
 {
     GteVector start;
     GteVector middle;

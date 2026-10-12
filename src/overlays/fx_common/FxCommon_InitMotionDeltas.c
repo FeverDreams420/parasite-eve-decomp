@@ -4,7 +4,7 @@
 /* Pins and empty scheduling barriers preserve the retail argument setup,
  * interleaved vector reads, and snapshot stores; tracked in crutch debt. */
 void func_80195994(s32 index, s32 first, s32 second, u32 source) {
-    FxCommonMotionVec point;
+    FxCommonMotionRecord point;
     GteShortVector extra;
     s32 secondMask;
     s16 setupIndex;
@@ -44,16 +44,16 @@ void func_80195994(s32 index, s32 first, s32 second, u32 source) {
     base = Gpu_GetTimTableEntry(lookupTable, lookupCount);
     setupIndex = (s16)index;
     extraPtr = &extra;
-    func_8018F55C(sourceValue, g_FxCommonEffectSetup[setupIndex].motionIndices[0], base, &point, extraPtr);
+    func_8018F55C(sourceValue, g_FxCommonEffectSetup[setupIndex].motionIndices[0], base, &point.vector, extraPtr);
 
     lookupTable = table;
     firstValue &= 0xff;
-    px = point.x;
+    px = point.vector.x;
     bx = g_FxCommonMotionPosition0.x;
     asm volatile("" : : "r"(bx));
-    py = point.y;
+    py = point.vector.y;
     by = g_FxCommonMotionPosition0.y;
-    pz = point.z;
+    pz = point.vector.z;
     bz = g_FxCommonMotionPosition0.z;
     D_8019C056 = firstValue;
     firstMask = 1 << firstValue;
@@ -73,17 +73,17 @@ void func_80195994(s32 index, s32 first, s32 second, u32 source) {
 
 
     base = Gpu_GetTimTableEntry(lookupTable, 2);
-    func_8018F55C(sourceValue, g_FxCommonEffectSetup[setupIndex].motionIndices[1], base, &point, extraPtr);
+    func_8018F55C(sourceValue, g_FxCommonEffectSetup[setupIndex].motionIndices[1], base, &point.vector, extraPtr);
 
     asm volatile("" : : "r"(secondValue));
     secondValue &= 0xff;
-    qx = point.x;
+    qx = point.vector.x;
     ax = g_FxCommonMotionPosition1.x;
-    qy = point.y;
+    qy = point.vector.y;
     asm volatile("" : : "r"(qy));
     ay = g_FxCommonMotionPosition1.y;
     asm volatile("" : : "r"(ay));
-    qz = point.z;
+    qz = point.vector.z;
     asm volatile("" : : "r"(qz));
     az = g_FxCommonMotionPosition1.z;
     asm volatile("" : : "r"(az));

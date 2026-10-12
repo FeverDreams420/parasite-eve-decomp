@@ -2,19 +2,19 @@
 
 void func_801939B0(s16 base)
 {
-    FxCommonMotionVec vector;
+    FxCommonMotionRecord sample;
     GteShortVector extra;
     unsigned int i;
 
     D_8019C058 = 0x20;
     for (i = 0; i < 10; i++) {
         func_8018F55C(i << 8, base + 0x40,
-                      Gpu_GetTimTableEntry(&D_801D0260, 2), &vector, &extra);
-        g_FxCommonMotionDeltas[i].x =
-            ((vector.x << 16) - D_8019CAA8[i].x) >> 5;
-        g_FxCommonMotionDeltas[i].y =
-            ((vector.y << 16) - D_8019CAA8[i].y) >> 5;
-        g_FxCommonMotionDeltas[i].z =
-            ((vector.z << 16) - D_8019CAA8[i].z) >> 5;
+                      Gpu_GetTimTableEntry(&D_801D0260, 2), &sample.vector, &extra);
+        g_FxCommonMotionDeltas[i].vector.x =
+            ((sample.vector.x << 16) - D_8019CAA8[i].vector.x) >> 5;
+        g_FxCommonMotionDeltas[i].vector.y =
+            ((sample.vector.y << 16) - D_8019CAA8[i].vector.y) >> 5;
+        g_FxCommonMotionDeltas[i].vector.z =
+            ((sample.vector.z << 16) - D_8019CAA8[i].vector.z) >> 5;
     }
 }

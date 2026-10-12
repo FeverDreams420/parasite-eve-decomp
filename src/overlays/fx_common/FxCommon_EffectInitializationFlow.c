@@ -82,7 +82,7 @@ void func_80196498(void)
     s32 firstPointOffset;
     s32 pointIndex;
     FxCommonPoint8 *pointList;
-    FxCommonMotionVec motion;
+    FxCommonMotionRecord motion;
     GteShortVector shortMotion;
     s32 variantBase;
     s32 textureIndexOrHasPoints;
@@ -529,10 +529,10 @@ void func_80196498(void)
     asm("" : : "r"((u16)motionBase) : "$16");
     variantOrMotionOffset = 0;
     for (; motionIndex < 10; ++motionIndex) {
-        func_8018F55C(motionIndex << 8, motionBase + 0x40, Gpu_GetTimTableEntry(resourceTableData, 2), &motion, &shortMotion);
-        *((s32 *)((u8 *)D_8019CAA8 + variantOrMotionOffset)) = motion.x << 0x10;
-        *((s32 *)((u8 *)D_8019CAAC + variantOrMotionOffset)) = motion.y << 0x10;
-        *((s32 *)((u8 *)D_8019CAB0 + variantOrMotionOffset)) = motion.z << 0x10;
+        func_8018F55C(motionIndex << 8, motionBase + 0x40, Gpu_GetTimTableEntry(resourceTableData, 2), &motion.vector, &shortMotion);
+        *((s32 *)((u8 *)D_8019CAA8 + variantOrMotionOffset)) = motion.vector.x << 0x10;
+        *((s32 *)((u8 *)D_8019CAAC + variantOrMotionOffset)) = motion.vector.y << 0x10;
+        *((s32 *)((u8 *)D_8019CAB0 + variantOrMotionOffset)) = motion.vector.z << 0x10;
         variantOrMotionOffset += 0x10;
     }
     if (D_8019BFF8 == 1) {
@@ -564,20 +564,20 @@ void func_80196498(void)
         D_8019C044 = 1;
         D_8019C048 = 1;
         D_8019BFF8 = 1;
-        func_8018F55C(0, selectedMotion + 1, Gpu_GetTimTableEntry(resourceTableData, 2), &motion, &shortMotion);
+        func_8018F55C(0, selectedMotion + 1, Gpu_GetTimTableEntry(resourceTableData, 2), &motion.vector, &shortMotion);
         /* Shared volatile is scheduling debt in other callers; this store is ordinary. */
         *(s16 *)&D_8019C054 = 0;
-        D_8019C810 = motion.x;
-        D_8019C814 = motion.y;
-        D_8019C818 = motion.z;
-        motionCount = func_8018F55C(0, selectedMotion, Gpu_GetTimTableEntry(resourceTableData, 2), &motion, &shortMotion) - 2;
+        D_8019C810 = motion.vector.x;
+        D_8019C814 = motion.vector.y;
+        D_8019C818 = motion.vector.z;
+        motionCount = func_8018F55C(0, selectedMotion, Gpu_GetTimTableEntry(resourceTableData, 2), &motion.vector, &shortMotion) - 2;
         D_8019C050 = 0;
         D_8019C040 = motionCount;
         D_8019C041 = 0;
         D_8019C042 = selectedMotion;
         D_8019C02C = 0;
-        D_8019C330 = motion.x;
-        D_8019C334 = motion.y;
-        D_8019C338 = motion.z;
+        D_8019C330 = motion.vector.x;
+        D_8019C334 = motion.vector.y;
+        D_8019C338 = motion.vector.z;
     }
 }

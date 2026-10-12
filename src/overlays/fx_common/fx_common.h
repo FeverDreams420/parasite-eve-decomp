@@ -187,12 +187,14 @@ typedef struct FxCommonPathPoint {
     u16 count;                  /* 0x06: header record only */
 } FxCommonPathPoint;
 
-typedef struct FxCommonMotionVec {
-    s32 x;
-    s32 y;
-    s32 z;
+/* Fixed-stride motion storage; the sampler writes only the vector prefix. */
+typedef struct FxCommonMotionRecord {
+    FxCommonVec3 vector;
     s32 pad0C;
-} FxCommonMotionVec;
+} FxCommonMotionRecord;
+PE1_STATIC_ASSERT(sizeof(FxCommonMotionRecord) == 16, fx_motion_record_size);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(FxCommonMotionRecord, vector) == 0,
+                  fx_motion_record_vector_offset);
 
 typedef struct FxCommonMotionLane {
     s32 value;
@@ -225,12 +227,12 @@ extern volatile s16 D_8019C0B4, D_8019C0B6, D_8019C0B8;
 extern volatile s16 D_8019C07C, D_8019C07E, D_8019C080;
 extern volatile s16 D_8019C084, D_8019C086, D_8019C088;
 extern s16 D_8019C056, D_8019C054, D_8019C052, D_8019C050;
-extern FxCommonMotionVec D_8019CAA8[10];
+extern FxCommonMotionRecord D_8019CAA8[10];
 extern FxCommonMotionLane D_8019CAB0[10];
 extern FxCommonMotionByte D_801EA268[1];
 extern FxCommonMotionByte D_801EA26C[1];
 extern FxCommonMotionByte D_801EA270[1];
-extern FxCommonMotionVec g_FxCommonMotionDeltas[10] __asm__("D_801EA268");
+extern FxCommonMotionRecord g_FxCommonMotionDeltas[10] __asm__("D_801EA268");
 extern FxCommonResourceState g_FxCommonResourceState __asm__("D_8019C140");
 
 extern s16 D_8019CC50;
@@ -263,7 +265,7 @@ void func_80077B04(void *packet, int enabled);
 void func_800752AC(void *allocation, int size);
 s16 func_80193B5C(s16 value);
 int func_8018F55C(u32 position, int radius, void *allocation,
-                   FxCommonMotionVec *vector, GteShortVector *angles);
+                   FxCommonVec3 *vector, GteShortVector *angles);
 void *PushMatrix(void);
 int PopMatrix(void);
 void func_8006DFA8(FxCommonShortVec3 *input, int *outA, int *outB);
