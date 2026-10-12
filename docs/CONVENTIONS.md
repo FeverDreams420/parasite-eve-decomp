@@ -163,10 +163,16 @@ name is the configured overlay name.
   (`*.inc` bodies and `room_lib.h`). A templated copy
   keeps its own instantiation file in the overlay until its whole family can
   move to one shared unit.
-- **Function names inside overlays:** `RoomLib_` for `room_lib` templates,
-  `RoomEffect_` for effect templates, `RoomMNNN_`/`SceneENN_` for code that
-  belongs to one overlay, and the overlay's own prefix (target: `FxCommon_`,
-  `FxField_`, `MenuCard_`) for the shared overlays.
+- **Function names inside overlays:** `RoomLib_` for `room_lib` templates
+  and the hooks they call (`RoomLib_GrabOnApproach`), `RoomEffect_` for
+  effect templates (the former `RoomFx_` spelling is gone),
+  `RoomMNNN_`/`SceneENN_` for code that belongs to one overlay, and the
+  overlay's own prefix for the shared overlays: `FxCommon_`, `FxField_`,
+  `MenuCard_`, `BootDisplay_`, `MdecDiag_`. Resident prefixes (`Boot_`,
+  `Scene_`, `MemCard_`) do not appear on overlay functions; an overlay
+  symbol file may still name a word of the main image it reads, and then it
+  uses the main image's name. Template parameter macros take the template's
+  prefix in upper case (`ROOMLIB_`, `ROOMEFFECT_`, `MENUCARD_`).
 
 ## Headers
 
