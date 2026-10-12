@@ -29,7 +29,7 @@ typedef char layout[sizeof(Vector)==8 && sizeof(int)==4 &&
 
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_behavior(self):
-        source = '#include <assert.h>\n#include <string.h>\n#include <limits.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
+        source = '#include <assert.h>\n#include <limits.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
 int D_800E27EC,D_800F3428;
 GteSineWord D_800966EC[4096];
 unsigned short D_800E1204[8];
@@ -43,14 +43,14 @@ u_short GetClut(int x,int y) {
     assert(stage++==0 && x==80 && y==expectedPalette);
     D_800E27EC=19;
     D_800966EC[sampleIndex].word=0x12345678;
-    memset(&input,0xEE,sizeof(input));
+    __builtin_memset(&input,0xEE,sizeof(input));
     return 0xFEDC;
 }
 void func_800CEE20(struct GteShortVector *p,struct GteRotation *rotation,int w,int h,int tile,
                   int clut,int flag,int color,struct RenderColor *extra) {
     Vector *r=(Vector *)rotation;
     assert(stage++==1 && p!=&input && r!=p);
-    assert(memcmp(p,&original,sizeof(original))==0);
+    assert(__builtin_memcmp(p,&original,sizeof(original))==0);
     assert(r->x==0 && r->y==0 && r->z==(short)((unsigned int)frame<<8) && r->pad==0);
     assert(w==(short)sample1*3+2048 && h==w && tile==74);
     assert(clut==0xFEDC && flag==1 && color==shade(sample1) && !extra);
@@ -90,7 +90,7 @@ int main(void) {
             D_800E27EC=counters[i]; frame=counters[i]-1;
             sampleIndex=(((unsigned int)frame<<8)&0x3F00)/4;
             sample1=(int)samples[j]; sample2=(int)samples[k];
-            memset(D_800966EC,0x5A,sizeof(D_800966EC)); D_800966EC[sampleIndex].word=sample1;
+            __builtin_memset(D_800966EC,0x5A,sizeof(D_800966EC)); D_800966EC[sampleIndex].word=sample1;
             D_800F3368.palette=kind; D_800F3428=variant;
             D_800E1204[kind]=65534; expectedPalette=65534+(kind==4 && variant ? 4:0);
             input.x=-32768; input.y=32767; input.z=-1; input.pad=0x1234; original=input;

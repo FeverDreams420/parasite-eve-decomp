@@ -28,7 +28,7 @@ typedef char layout[sizeof(Particle)==8 &&
 
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_behavior(self):
-        source = '#include <assert.h>\n#include <limits.h>\n#include <string.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
+        source = '#include <assert.h>\n#include <limits.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
 int D_800E27EC, D_800F3428;
 GteSineWord D_800966EC[4096];
 unsigned short D_800E1204[8];
@@ -40,7 +40,7 @@ u_short GetClut(int x, int y) {
     assert(cluts++==0 && !draws && x==16 && y==wantPalette);
     D_800E27EC=999;
     D_800F3368.parameter02=-7;
-    memset(D_800966EC,0,sizeof(D_800966EC));
+    __builtin_memset(D_800966EC,0,sizeof(D_800966EC));
     return 0xF123;
 }
 void func_800CEE20(struct GteShortVector *p, struct GteRotation *rotation,
@@ -71,7 +71,7 @@ int main(void) {
             short sizeSample=(short)values[k];
             D_800E27EC=frames[f]+1;
             D_800966EC[shadeOffset/4].word=0x12340000|values[j];
-            memcpy((char *)D_800966EC+sizeOffset,&sizeSample,2);
+            __builtin_memcpy((char *)D_800966EC+sizeOffset,&sizeSample,2);
             /* The two sample locations coincide for some wrapped frames. */
             wantShade=(short)D_800966EC[shadeOffset/4].word>>5;
             wantSize=sizeSample+8192;

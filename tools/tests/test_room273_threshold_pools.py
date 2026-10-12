@@ -50,7 +50,7 @@ void *D_8019AE94;
 unsigned char D_8019AE9A;
 static int calls,allocations,updates,renders,failAllocation,firstSize,secondSize;
 int func_801947CC(int mode, RoomM273PaletteInput *input) { assert(0); return 0; }
-int func_80199F84(void) { assert(0); return 0; }
+int func_80199F84(int mode, RoomM273PulseState *state) { assert(0); return 0; }
 int func_800CE560(char *p,int stride,int count,FieldAnimCallbackListCallback callback) {
     assert(calls++==0 && p==(char *)pool && stride==8 && count==2 &&
            callback==(FieldAnimCallbackListCallback)func_801947CC);
