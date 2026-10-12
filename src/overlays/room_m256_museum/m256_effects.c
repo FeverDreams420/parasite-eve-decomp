@@ -1,6 +1,290 @@
-#include "pe1/room_m256_trail.h"
+#include "common.h"
+#include "pe1/room_orbiting_pair.h"
+#include "pe1/room_m256_effects.h"
 #include "pe1/gte.h"
+#include "pe1/room_m256_trail.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/room_m256.h"
+#include "pe1/gte_types.h"
+#include "pe1/room_model_pulse.h"
+
+#include "m256_effects_externs.h"
+
+int func_801934AC(int mode, u16 *counter) {
+    RoomOrbitPairTemplate8 template = D_8018F208;
+    s16 position[4];
+    s16 target[4];
+    s16 angles[4];
+    char *pool;
+    RoomOrbitSpark *child;
+    int distance;
+    int spread;
+    switch (mode) {
+    case 0:
+    {
+        RoomOrbitPairEventState *event = ANIM_TASK_AS(RoomOrbitPairEventState);
+        *counter = 0;
+        if (event->active) {
+            RoomOrbitPairNode **slot = (RoomOrbitPairNode **)ANIM_OWNER_AS(RoomOrbitPairChannel)->pool;
+            if (slot && *slot) {
+                u8 *flag = (*slot)->state;
+                if (*flag == 1) *flag = 2;
+            }
+        }
+    }
+    pool = ANIM_POOL_AS(RoomOrbitPairChannel)->pool;
+    return func_800CE560(pool, 20, 50,
+                         (FieldAnimCallbackListCallback)func_80192844);
+    case 1:
+    pool = ANIM_OWNER_AS(RoomOrbitPairChannel)->pool;
+    FieldEng_TransformMatrixPoint(pool, 4, &template, position);
+    pool = ANIM_OWNER_AS(RoomOrbitPairChannel)->pool;
+    func_800CE9D4((struct RoomFxTransformOwner *)pool, 4, (GteShortVector *)target);
+    target[0] -= 0xDC;
+    if (D_800E27EC < 110 && (D_800E27EC & 1)) {
+        pool = ANIM_POOL_AS(RoomOrbitPairChannel)->pool;
+        child = func_800CE610(pool);
+        if (child) {
+            distance = (func_80071A54() & 7) + 0x37;
+            child->x = position[0];
+            child->y = position[1];
+            child->z = position[2];
+            angles[0] = target[0];
+            angles[1] = target[1];
+            angles[2] = target[2];
+            spread = func_80071A54() & 0x1F;
+            angles[1] += spread - 0x10;
+            func_800CFB7C((GteShortVector *)angles, distance, (GteShortVector *)&child->vx);
+            child->parity = *counter & 1;
+            child->state = 0;
+            child->timer = 0;
+        }
+        (*counter)++;
+    }
+    if (D_800E27EC < 2) break;
+    return 2;
+    case 2:
+    {
+        int idx = D_800E11EA;
+        int palette;
+        D_800F3368.parameter00 = 32;
+        D_800F3368.parameter02 = 2;
+        D_800F3368.extent_x = 32;
+        D_800F3368.extent_y = 32;
+        palette = D_800E2850[idx];
+        D_800F3368.palette = 3;
+        D_800F3368.parameter06 = 0;
+        D_800F3368.parameter0A = 0;
+        D_800F3368.depth = 8;
+        D_800F3368.tpage = palette;
+    }
+        break;
+    }
+    return 0;
+}
+
+/* Spark that jitters sideways (state 0) or swirls on a spinning circle
+ * (state 1) while it falls with damped velocity and bounces off the
+ * floor height; draws as a fixed or a pulsing sprite. */
+int func_8019377C(int mode, RoomM256SwirlSpark *spark) {
+    RenderMatrixSlot *matrixSlot;
+    int fall;
+    int bounce;
+    int scale;
+
+    switch (mode) {
+    case 1:
+        switch (spark->state) {
+        case 0:
+            spark->timer++;
+            spark->x += spark->vx;
+            spark->y += spark->vy;
+            spark->z += spark->vz;
+            spark->vx = spark->vx * 31 / 32;
+            spark->vz = spark->vz * 31 / 32;
+            fall = (u16)spark->vy - 1;
+            spark->vy = fall;
+            if (spark->y >= g_RoomFloorY->y) {
+                bounce = -(s16)fall;
+                spark->vy = bounce;
+            }
+            spark->x += (func_80071A54() & 1) * 2 - 1;
+            spark->z += (func_80071A54() & 1) * 2 - 1;
+            if ((s16)spark->timer < 8) break;
+            return 1;
+        case 1:
+            spark->timer++;
+            spark->x += spark->vx;
+            spark->y += spark->vy;
+            spark->z += spark->vz;
+            spark->vx = spark->vx * 511 / 512;
+            spark->vz = spark->vz * 511 / 512;
+            fall = (u16)spark->vy - 2;
+            spark->vy = fall;
+            if (spark->y >= g_RoomFloorY->y) {
+                bounce = -(s16)fall;
+                spark->vy = bounce;
+            }
+            spark->spin += 0x100;
+            spark->x += rsin(spark->spin << 8) / 1024;
+            spark->z += rcos(spark->spin << 8) / 1024;
+            if ((s16)spark->timer < 16) break;
+            return 1;
+        }
+        break;
+    case 2:
+        matrixSlot = &D_800BCFA4;
+        gte_ldrotmatrix(matrixSlot->value);
+        gte_ldtransmatrix(matrixSlot->value);
+        switch (spark->state) {
+        case 0: {
+            u16 clut;
+            int kind;
+            int palette;
+            kind = D_800F3368.palette;
+            palette = D_800E1204[kind];
+            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            clut = GetClut(0, palette);
+            func_800CEE20((GteShortVector *)spark, 0, 0x1800, 0x1800,
+                          (s16)D_800F3368.parameter02 * (s16)spark->timer,
+                          clut, 1, 100, 0);
+            break;
+        }
+        case 1: {
+            u16 clut;
+            int kind;
+            int palette;
+            int page = 2;
+            scale = rsin(((s16)spark->timer << 10) / 24) + 0x1000;
+            scale /= 2;
+            if (spark->small) page = 1;
+            kind = D_800F3368.palette;
+            palette = D_800E1204[kind];
+            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            clut = GetClut(0x20, palette);
+            func_800CEE20((GteShortVector *)spark, 0, scale, scale,
+                          (s16)D_800F3368.parameter02 * ((s16)spark->timer / 2) + 0x40,
+                          clut, page, 0x50, 0);
+            break;
+        }
+        }
+        break;
+    }
+    return 0;
+}
+
+/* Swirl spark controller: plays its two sounds on start, then while the
+ * effect is young sheds two swirl sparks per frame from the tracked joint,
+ * aimed through one of three (then one of two) headings picked by a
+ * rotating counter; mode 2 sets the sprite parameters. */
+int func_80193BFC(int mode, s16 *counter) {
+    RoomM256Template template = D_8018F210;
+    GteShortVector position;
+    GteShortVector base;
+    GteShortVector angles;
+    RoomM256SwirlSpark *child;
+    void **soundSlot;
+    int distance = 0;
+    int volume;
+    int time;
+
+    switch (mode) {
+    case 0:
+        *counter = 0;
+        soundSlot = D_800B0E64;
+        if (*soundSlot != 0) {
+            volume = 0x7F;
+            time = func_800D3FD8();
+            Akao_SendTableCommand(*soundSlot, 0x5A7, time, 0x80, volume);
+            /* Retail re-reads the sound owner for the test and again for
+             * the argument. */
+            if (*(void *volatile *)soundSlot != 0)
+                Akao_SendTableCommand(*soundSlot, 0x5BF, 0x80, 0x80, volume);
+        }
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x20,
+                             (FieldAnimCallbackListCallback)func_8019377C);
+    case 1:
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &template, &position);
+        func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &base);
+        if (D_800E27EC < 0x6F) {
+            child = (RoomM256SwirlSpark *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+            if (child) {
+                child->x = position.x;
+                child->y = position.y;
+                child->z = position.z;
+                switch (*counter) {
+                case 0:
+                    distance = (func_80071A54() & 7) + 14;
+                    angles.x = base.x;
+                    angles.y = base.y;
+                    angles.z = base.z;
+                    angles.y += (func_80071A54() & 0x7F) - 0x40;
+                    break;
+                case 1:
+                    distance = (func_80071A54() & 0xF) + 10;
+                    angles.x = base.x;
+                    angles.y = base.y;
+                    angles.z = base.z;
+                    angles.y += (func_80071A54() & 0x7F) + 0x3C0;
+                    break;
+                case 2:
+                    distance = (func_80071A54() & 0xF) + 10;
+                    angles.x = base.x;
+                    angles.y = base.y;
+                    angles.z = base.z;
+                    angles.y -= (func_80071A54() & 0x7F) + 0x3C0;
+                    break;
+                }
+                func_800CFB7C(&angles, distance, (GteShortVector *)&child->vx);
+                child->state = 0;
+                child->timer = 0;
+            }
+            child = (RoomM256SwirlSpark *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+            if (child) {
+                child->x = position.x;
+                child->y = position.y;
+                child->z = position.z;
+                switch (*counter & 1) {
+                case 0:
+                    distance = (func_80071A54() & 0xF) + 0x10;
+                    angles.x = base.x;
+                    angles.y = base.y;
+                    angles.z = base.z;
+                    angles.y += (func_80071A54() & 0xFF) + 0x380;
+                    break;
+                case 1:
+                    distance = (func_80071A54() & 0xF) + 0x10;
+                    angles.x = base.x;
+                    angles.y = base.y;
+                    angles.z = base.z;
+                    angles.y -= (func_80071A54() & 0xFF) + 0x380;
+                    break;
+                }
+                func_800CFB7C(&angles, distance, (GteShortVector *)&child->vx);
+                child->small = func_80071A54() & 1;
+                child->state = 1;
+                child->timer = 0;
+            }
+            *counter = (s16)(*counter + 1) % 3;
+        }
+        if (D_800E27EC < 2) {
+            break;
+        }
+        return 2;
+    case 2:
+        D_800F3368.parameter00 = 0x20;
+        D_800F3368.parameter02 = 2;
+        D_800F3368.extent_x = 0x20;
+        D_800F3368.extent_y = 0x20;
+        D_800F3368.tpage = D_800E2850[D_800E11EA];
+        D_800F3368.palette = 3;
+        D_800F3368.parameter06 = 0;
+        D_800F3368.parameter0A = 0;
+        D_800F3368.depth = 0;
+        break;
+    }
+    return 0;
+}
 
 s32 func_801940B0(int mode, void *effect) {
     RoomM256TrailEffect *state = effect;
@@ -494,4 +778,248 @@ checkLifetime:
         break;
     }
     return 0;
+}
+
+int func_80195320(int mode, u16 *out) {
+    FieldActor *actor;
+    FieldActorState *state;
+    u8 *action;
+    /* Keep the return register available for the retail mode dispatch. */
+    register int ret asm("$2");
+    RoomM256TrailEffect *task;
+    u16 value;
+
+    switch (mode) {
+    case 0:
+
+        *out = (u16)D_800E2368->variables[0];
+        D_80195EF8 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5887704);
+        FieldModel_ScrollUv((union FieldTexturedModel *)D_80195EF8, 0, 0);
+        if (D_800E2368->flags) {
+            actor = (FieldActor *)D_800F32D0->actor;
+            if (actor) {
+                state = actor->state;
+                if (state) {
+                    action = state->action_state;
+                    if (*action == 1) *action = 2;
+                }
+            }
+        }
+        return func_800CE560(D_800F33E0->end, 0x18, 0x20,
+                               func_801940B0);
+
+        case 1:
+    if (D_800E27EC == mode) {
+        task = func_800CE610(D_800F33E0->end);
+        if (task) {
+            value = *out;
+            task->kind = 0;
+            task->frame = 0;
+            task->index = value;
+        }
+        func_800D3F64(0x5A6, func_800D3FD8());
+        func_800D3F64(0x5BE, 0x80);
+    }
+    ret = D_800E27EC < 8;
+    if (ret) return 0;
+    return 2;
+
+    case 2:
+    {
+        unsigned palette_index = D_800E11EA;
+        u16 palette;
+        palette = D_800E2850[palette_index];
+        D_800F3368.palette = 3;
+        D_800F3368.parameter06 = 0;
+        D_800F3368.parameter0A = 0;
+        D_800F3368.depth = 8;
+        D_800F3368.tpage = palette;
+    }
+    }
+    return 0;
+}
+
+int func_8019552C(int mode, RoomModelPulseParticle *particle) {
+    GteShortVector position;
+    GteShortVector color;
+    int scale;
+    int palette;
+    int kind;
+    u16 clut;
+
+    switch (mode) {
+    case 1:
+        particle->frame++;
+        particle->offset += 8;
+        if ((s16)particle->frame >= 16) return 1;
+        break;
+    case 2:
+        scale = particle->scale * rcos((s16)particle->frame << 6) / 4096;
+        func_800CF844(&D_801960A0, &position, scale, &D_80196098,
+                      scale, (s16)particle->offset);
+        func_800CF3AC(D_80195E64, &color, 0x30 - (scale * 48) / 1024);
+        kind = D_800F3368.palette;
+        palette = D_800E1204[kind];
+        if (kind == 4 && D_800F3428 != 0) palette += 4;
+        clut = GetClut(0x20, palette);
+        func_800CEE20(&position, 0, 0x1000, 0x1000,
+                       (s16)D_800F3368.parameter02 * 2 + 0xD8, clut, 3,
+                       D_80196094, (RenderColor *)&color);
+        gte_ldrotmatrix(D_800BCFA4.value);
+        gte_ldtransmatrix(D_800BCFA4.value);
+        func_800D1DEC(&position, &color, D_80196094, 1);
+        break;
+    }
+    return 0;
+}
+
+/* Controller: loads the model asset, seeds sixteen ring particles on frame
+ * 1, then draws the slot-2 ring sprite and, from frame 4, the model scaled by
+ * cos and brightened by sin of the elapsed time.
+ *
+ * Mode 2 keeps the ModelBurstController preamble (spin record, brightness
+ * scaled by 2/3, a cos sample) whose results this effect never reads: the
+ * spin stores and the cos call survive in retail, and the brightness test is
+ * the branch that splits the scheduling block before the /40 division (its
+ * empty jump is only removed after scheduling). */
+int func_80195728(int mode, s16 *state) {
+    GteRotation rotation = D_8018F258;
+    GteShortVector position;
+    GteRotation spin;
+    RenderColor color;
+    RoomModelPulseMatrix matrix;
+    RoomModelPulseScale scale;
+    RoomModelPulseParticle *child;
+    void *slot;
+    u16 *tpages;
+    int size;
+    int brightness;
+    int i;
+
+    switch (mode) {
+    case 0:
+        *state = 0;
+        D_801960A8 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5487704);
+        FieldModel_ScrollUv(D_801960A8, 0, 0);
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 8, 0x10,
+                             (FieldAnimCallbackListCallback)func_8019552C);
+    case 1:
+        if (*state < 0x80) *state += 4;
+        if (D_800E27EC == 1) {
+            for (i = 0; i < 16; i++) {
+                slot = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+                child = slot;
+                if (child) {
+                    child->frame = 0;
+                    child->scale = (func_80071A54() & 0x1FF) + 0x200;
+                    child->offset = func_80071A54();
+                }
+            }
+        }
+        if (D_800E27EC < 0x10) break;
+        return 1;
+    case 2:
+        {
+            D_800F3368.parameter00 = 0x40;
+            D_800F3368.parameter02 = 4;
+            D_800F3368.extent_x = 0x40;
+            D_800F3368.extent_y = 0x40;
+            D_800F3368.tpage = D_800E2850[D_800E11FA];
+            D_800F3368.palette = 3;
+            D_800F3368.parameter06 = 1;
+            D_800F3368.parameter0A = 0;
+            D_800F3368.depth = 0x18;
+        }
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 2, &rotation, &position);
+        spin.x = 0;
+        spin.y = 0;
+        spin.flags = 0;
+        spin.z = -D_800E27EC << 6;
+        /* Copied from the burst template; the value is never read here, but
+         * the emptied branch still splits retail's schedule. */
+        brightness = *state;
+        if (D_800E27EC != 0) brightness = brightness * 2 / 3;
+        rcos((D_800E27EC << 10) / 40);
+        func_800CF3AC(D_80195E8C, &color, D_800E27EC * 3);
+        func_800D004C(&position, 0xA0, 0xA0, 8, 0, 0x1000, 0x1000, &color, 0,
+                      0x80, 1);
+        D_80196094 = *state;
+        D_801960A0.x = position.x;
+        D_801960A0.y = position.y;
+        D_801960A0.z = position.z;
+        func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 2,
+                      &D_80196098);
+        D_80196098.x += 0x400;
+        if (D_800E27EC >= 4) {
+            int angle;
+
+            i = D_800E27EC - 4;
+            angle = (i << 10) / 12;
+            size = rcos(angle);
+            brightness = rsin(angle) / 32;
+            {
+                RenderMatrixSlot *matrixSlot = &D_800BCFA4;
+                gte_ldrotmatrix(matrixSlot->value);
+                gte_ldtransmatrix(matrixSlot->value);
+            }
+            {
+                u16 clut;
+                int kind;
+                int palette;
+                int page;
+                int tpage;
+                tpages = D_800E2850;
+                tpage = tpages[D_800E11EA];
+                D_800F3368.palette = 3;
+                D_800F3368.parameter06 = 0;
+                D_800F3368.tpage = tpage;
+                page = (tpages[D_800E11EA] | ((int (*)(int, int, int, int))GetTPage)(0, 1, 0, 0)) & 0xFFFF;
+                kind = D_800F3368.palette;
+                palette = D_800E1204[kind];
+                if (kind == 4 && D_800F3428 != 0) palette += 4;
+                clut = GetClut(0x50, palette);
+                func_800C6EC0(page, clut);
+            }
+            FieldModel_SetSemiTrans(1);
+            RotMatrixYXZ(&D_80196098, &matrix);
+            matrix.t[0] = position.x;
+            matrix.t[1] = position.y;
+            matrix.t[2] = position.z;
+            scale.x = size;
+            scale.y = size;
+            scale.z = size;
+            ScaleMatrix(&matrix, &scale);
+            FieldModel_SaveColors(D_801960A8);
+            FieldModel_ScaleColors(D_801960A8, (u16)brightness);
+            FieldModel_Draw(D_801960A8, (GteMatrix *)&matrix);
+            FieldModel_RestoreColors(D_801960A8);
+        }
+        D_800F3368.parameter00 = 0x10;
+        D_800F3368.parameter02 = 1;
+        D_800F3368.extent_x = 0x10;
+        D_800F3368.extent_y = 0x10;
+        D_80196098.x += 0x600;
+        {
+            int tpage = D_800E2850[D_800E11E8];
+            D_800F3368.palette = 2;
+            D_800F3368.parameter06 = 0;
+            D_800F3368.depth = 0xC;
+            D_800F3368.tpage = tpage;
+        }
+        break;
+    }
+    return 0;
+}
+
+void *func_80195CC8(void) {
+    return D_80195EEC;
+}
+
+void *func_80195CD8(void *arg0, int value) {
+    if (value < 0x200) {
+        value = 0x200;
+    }
+
+    D_80195EF0 = value;
+    return D_80195EF4;
 }

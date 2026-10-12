@@ -1,5 +1,0 @@
-#ifndef PE1_EXT_BC003CB1EFB4
-#define PE1_EXT_BC003CB1EFB4
-extern int D_80195EF0;
-extern char D_80195EF4[];
-#endif /* PE1_EXT_BC003CB1EFB4 */
