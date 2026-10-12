@@ -281,13 +281,13 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(CdRomEventCommandState, command) +
                   cdrom_retry_attempts_address_offset);
 
 extern CdRomSystemState g_DsReadSysEnabled;
-extern DsReadStatusBlock g_DsReadStatusBlock __asm__("D_8009B574");
+extern DsReadStatusBlock g_DsReadStatusBlock;
 extern CdRomCommandState g_CdSeekState;
 extern CdRomEventCommandState g_CdRomEventCommandState
     __asm__("D_8009B558");
 /* Direct word aliases of the overlapping command-state structure fields. */
-extern s32 g_CdRomCommandEventValue __asm__("D_8009B570");
-extern s32 g_DsSyncResultCountdown __asm__("D_8009B594");
+extern s32 g_CdRomCommandEventValue;
+extern s32 g_DsSyncResultCountdown;
 extern int g_CdRomCmdTimeout __asm__("D_8009B598");
 extern int g_CdRomCmdRetryState __asm__("D_8009B59C");
 extern int g_CdRomCmdLongTimeoutTable[];
@@ -411,7 +411,7 @@ extern CdStreamReadyState D_800B0CD0;
 extern s16 g_CdStreamReadyHalfword __asm__("D_800B0CD0");
 extern volatile s32 D_800B6914, D_800B8620;
 extern void (*D_800B0CCC)(void);
-extern s32 g_CdStreamRingIndex __asm__("D_800BE9EC");
+extern s32 g_CdStreamRingIndex;
 extern StHEADER *D_800C0DC8;
 
 /* Low-level LIBCD command retry wrapper and its shared command state. */

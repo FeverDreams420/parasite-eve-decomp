@@ -30,9 +30,8 @@ enum {
     DSL_MAX_DIR = 128,
 };
 
-extern DslFILE g_DslFileCache[DSL_MAX_FILE] __asm__("D_800A36B0");
-extern DslDirectoryCacheEntry g_DslDirectoryCache[DSL_MAX_DIR]
-    __asm__("D_800A3CB0");
+extern DslFILE g_DslFileCache[DSL_MAX_FILE];
+extern DslDirectoryCacheEntry g_DslDirectoryCache[DSL_MAX_DIR];
 
 typedef union DsCallbackValue {
     DsCallback poll;
@@ -119,13 +118,13 @@ typedef struct DsCallbackRegistry {
 } DsCallbackRegistry;
 PE1_STATIC_ASSERT(sizeof(DsCallbackRegistry) == 12, ds_callback_registry_size);
 
-extern DsCallbackRegistry g_DsReadCallbackState __asm__("D_800B8AB0");
-extern CdQueuedCmdSlot g_CdQueuedCmdSlots[3] __asm__("D_800A3510");
-extern DsReadCallbackSlot g_DsReadCallbackSlots[8] __asm__("D_800A3610");
+extern DsCallbackRegistry g_DsReadCallbackState;
+extern CdQueuedCmdSlot g_CdQueuedCmdSlots[3];
+extern DsReadCallbackSlot g_DsReadCallbackSlots[8];
 extern int g_DsReadCallbackCursor __asm__("D_800A3690");
 extern DsEventCallback volatile g_DsSyncCallback __asm__("D_800A36A4");
 extern DsEventCallback volatile g_DsReadyCallback __asm__("D_800A36A8");
-extern DsCallback volatile g_DsPollCallback __asm__("g_DsPollCallback");
+extern DsCallback volatile g_DsPollCallback;
 extern DsEventCallback volatile g_DsDispatchCallback __asm__("D_800A36AC");
 DsEventCallback DsSyncCallback(DsEventCallback callback);
 DsEventCallback DsReadyCallback(DsEventCallback callback);
@@ -205,7 +204,7 @@ typedef struct IsoDirectoryRecord {
     char name[1];
 } IsoDirectoryRecord;
 
-extern u8 g_DsFileSectorBuffer[2048] __asm__("D_800A52B0");
+extern u8 g_DsFileSectorBuffer[2048];
 extern int g_DsCachedDirectory __asm__("D_8009B6DC");
 extern int g_DsCachedDiskType __asm__("D_8009B6E0");
 
@@ -280,7 +279,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(CdCallbackDataPage, readComplete) +
                       0x738,
                   cd_callback_data_page_async_state_offset);
 
-extern DsAsyncReadState g_DsAsyncReadState __asm__("D_8009B6EC");
+extern DsAsyncReadState g_DsAsyncReadState;
 #define g_DsAsyncReadRetryPending (g_DsAsyncReadState.retryPending)
 #define g_DsAsyncReadSavedReadyCallback \
     (g_DsAsyncReadState.savedReadyCallback)

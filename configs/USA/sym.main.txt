@@ -2172,3 +2172,17 @@ g_WayneStorageItems = 0x800C1EB8;
 g_CursorRenderDataBlock = 0x800C20A4;
 g_InvSpecialItemRecords = 0x800A1E64;
 g_InvFallbackAmmoRecord = 0x800A1E44;
+
+// PSY-Q DS/CD library state and the save SJIS argument block, named by role.
+g_DslFileCache = 0x800A36B0;
+g_DslDirectoryCache = 0x800A3CB0;
+g_DsReadCallbackState = 0x800B8AB0;
+g_CdQueuedCmdSlots = 0x800A3510;
+g_DsReadCallbackSlots = 0x800A3610;
+g_DsFileSectorBuffer = 0x800A52B0;
+g_DsAsyncReadState = 0x8009B6EC;
+g_DsReadStatusBlock = 0x8009B574;
+g_CdRomCommandEventValue = 0x8009B570;
+g_DsSyncResultCountdown = 0x8009B594;
+g_CdStreamRingIndex = 0x800BE9EC;
+g_SaveSjisFormatArguments = 0x800A1708;

@@ -79,8 +79,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(SaveSjisFormatArguments, primary) == 0x10,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(SaveSjisFormatArguments, secondary) == 0x14,
                   save_sjis_secondary_argument_offset);
 
-extern SaveSjisFormatArguments g_SaveSjisFormatArguments
-    __asm__("D_800A1708");
+extern SaveSjisFormatArguments g_SaveSjisFormatArguments;
 void Save_SprintfSjis(unsigned char *dst, unsigned char *fmt);
 
 /* Save header block copied by Save_BuildHeader/Save_RestoreHeader; the
