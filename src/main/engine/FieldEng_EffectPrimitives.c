@@ -103,7 +103,7 @@ void func_800D0E88(GteShortVector *position, GteRotation *rotation, int length,
             if (mode != 0xFF) {
                 drawMode = (RenderTintMode *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
                 D_8009CDD8 += sizeof(RenderTintMode);
-                SetDrawTPage((char *)drawMode, 0, 1, GetTPage(0, mode, 0, 0));
+                SetDrawTPage(drawMode, 0, 1, GetTPage(0, mode, 0, 0));
                 if (packet) {
                     packet->code |= 2;
                     TILE_OT_ADDPRIM(ot, packet, link);
@@ -239,7 +239,7 @@ void func_800D1384(GteShortVector *head, GteShortVector *tail, u32 count,
             if (mode != 0xFF) {
                 drawMode = (RenderTintMode *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
                 D_8009CDD8 += sizeof(RenderTintMode);
-                SetDrawTPage((char *)drawMode, 0, 1, GetTPage(0, mode, 0, 0));
+                SetDrawTPage(drawMode, 0, 1, GetTPage(0, mode, 0, 0));
                 if (packet) {
                     packet->code |= 2;
                     TILE_OT_ADDPRIM(ot, packet, link);
@@ -277,7 +277,7 @@ void func_800D1AE0(u8 *color, int scale, int abr, u32 depth)
         if (abr != 0xFF) {
             mode = (RenderTintMode *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
             D_8009CDD8 += sizeof(RenderTintMode);
-            SetDrawTPage((char *)mode, 0, 1, GetTPage(0, abr, 0, 0));
+            SetDrawTPage(mode, 0, 1, GetTPage(0, abr, 0, 0));
             if (tile) {
                 tile->command |= 2;
                 TILE_OT_ADDPRIM(ot, tile, link);
@@ -353,7 +353,7 @@ void func_800D1DEC(void *position, void *colorArg, int scale, int abr)
         if (abr != 0xFF) {
             mode = (RenderTintMode *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
             D_8009CDD8 += sizeof(RenderTintMode);
-            SetDrawTPage((char *)mode, 0, 1, GetTPage(0, abr, 0, 0));
+            SetDrawTPage(mode, 0, 1, GetTPage(0, abr, 0, 0));
             if (glow) {
                 glow->command |= 2;
                 TILE_OT_ADDPRIM(ot, glow, link);
@@ -399,7 +399,7 @@ void func_800D2104(GteShortVector *position, u8 *color, int scale, int abr)
         if (abr != 0xFF) {
             mode = (RenderTintMode *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
             D_8009CDD8 += sizeof(RenderTintMode);
-            SetDrawTPage((char *)mode, 0, 1, GetTPage(0, abr, 0, 0));
+            SetDrawTPage(mode, 0, 1, GetTPage(0, abr, 0, 0));
             if (tile) {
                 tile->command |= 2;
                 TILE_OT_ADDPRIM(ot, tile, link);
@@ -579,7 +579,7 @@ void func_800D27FC(int x, int y, void *color, int scale, int mode)
         TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[D_8009CDDC], depth);
         blend = (RenderTintMode *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
         D_8009CDD8 += sizeof(RenderTintMode);
-        SetDrawTPage((char *)blend, 0, 1, GetTPage(0, 1, 0, 0));
+        SetDrawTPage(blend, 0, 1, GetTPage(0, 1, 0, 0));
         if (glow) {
             glow->command |= 2;
             TILE_OT_ADDPRIM(ot, glow, link);
@@ -645,7 +645,7 @@ void func_800D2B58(GteShortVector *from, GteShortVector *to, u8 *color0,
         if (mode != 0xFF) {
             drawMode = (RenderTintMode *)(D_800B0E38.packets[D_8009CDDC] + D_8009CDD8);
             D_8009CDD8 += sizeof(RenderTintMode);
-            SetDrawTPage((char *)drawMode, 0, 1, GetTPage(0, mode, 0, 0));
+            SetDrawTPage(drawMode, 0, 1, GetTPage(0, mode, 0, 0));
             if (line) {
                 line->code |= 2;
                 TILE_OT_ADDPRIM(ot, line, link);

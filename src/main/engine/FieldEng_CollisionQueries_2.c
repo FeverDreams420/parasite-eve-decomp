@@ -26,33 +26,33 @@ void func_800C65E4(s16 *from, s16 *to, GteMatrix *out) {
     VectorNormalS(&forward, (GteShortVector *)&out->t[2]);
 }
 
-void *func_800C66C8(char *obj, void *asset, GteMatrix *pos) {
-    void *result = 0;
+int func_800C66C8(FieldAnimObjectPrefix *owner, int message, GteMatrix *pos) {
+    int result = 0;
 
-    if (FieldEng_GetStatus(obj) == 3 || FieldEng_GetStatus(obj) == 4) {
-        result = (void *)Asset_Find08w((int)asset, ((FieldAnimObjectPrefix *)obj)->actor->state->progress,
+    if (FieldEng_GetStatus(owner) == 3 || FieldEng_GetStatus(owner) == 4) {
+        result = Asset_Find08w(message, owner->actor->state->progress,
                                (s16)pos->t[0], (s16)pos->t[1], (s16)pos->t[2]);
     }
 
     return result;
 }
 
-void *func_800C6764(char *obj, void *asset, GteVector *pos) {
-    void *result = 0;
+int func_800C6764(FieldAnimObjectPrefix *owner, int message, GteVector *pos) {
+    int result = 0;
 
-    if (FieldEng_GetStatus(obj) == 3 || FieldEng_GetStatus(obj) == 4) {
-        result = (void *)Asset_Find08w((int)asset, ((FieldAnimObjectPrefix *)obj)->actor->state->progress,
+    if (FieldEng_GetStatus(owner) == 3 || FieldEng_GetStatus(owner) == 4) {
+        result = Asset_Find08w(message, owner->actor->state->progress,
                                (s16)pos->x, (s16)pos->y, (s16)pos->z);
     }
 
     return result;
 }
 
-void *func_800C6800(char *obj, void *asset, GteShortVector *pos) {
-    void *result = 0;
+int func_800C6800(FieldAnimObjectPrefix *owner, int message, GteShortVector *pos) {
+    int result = 0;
 
-    if (FieldEng_GetStatus(obj) == 3 || FieldEng_GetStatus(obj) == 4) {
-        result = (void *)Asset_Find08w((int)asset, ((FieldAnimObjectPrefix *)obj)->actor->state->progress,
+    if (FieldEng_GetStatus(owner) == 3 || FieldEng_GetStatus(owner) == 4) {
+        result = Asset_Find08w(message, owner->actor->state->progress,
                                pos->x, pos->y, pos->z);
     }
 

@@ -227,7 +227,7 @@ void Draw_AllocColorQuad(int width, int height) {
         BoundsCheck_AssertStub(1);
     }
     if (drawMode != 0) {
-        SetDrawTPage((char *)drawMode, 0, 0, 0);
+        SetDrawTPage(drawMode, 0, 0, 0);
     }
     modeMask24 = 0xFFFFFF;
     modeColor1 = 0x808080;

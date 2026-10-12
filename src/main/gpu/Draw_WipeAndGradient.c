@@ -137,7 +137,7 @@ static inline u32 *AllocateDrawMode(int mode) {
         g_DrawPacketCursor = next;
         packet = (u32 *)old;
     } else BoundsCheck_AssertStub(1);
-    if (packet) SetDrawTPage((char *)packet, 0, 0, (mode & 3) << 5);
+    if (packet) SetDrawTPage(packet, 0, 0, (mode & 3) << 5);
     return packet;
 }
 
