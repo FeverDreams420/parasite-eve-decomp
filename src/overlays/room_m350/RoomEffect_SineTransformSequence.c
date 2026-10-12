@@ -86,7 +86,7 @@ int func_8019988C(int event, EmissionState *state)
             effect->amplitude = count * 2048 + 2048;
         }
         /* Keep the position/amplitude stores before the delay/count update. */
-        asm volatile("" ::: "memory");
+        asm volatile("" : : "m"(effect->amplitude));
         {
             int delay = random & 7;
             unsigned short count = state->count;
