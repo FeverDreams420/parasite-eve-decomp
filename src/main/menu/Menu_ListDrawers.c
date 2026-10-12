@@ -581,7 +581,7 @@ void Menu_DrawStatAllocationItem(int arg0) {
     Draw_OffsetCursor(6, 0);
     Draw_AllocSprite(arg0 + 0x8C);
     Draw_OffsetCursor(0x4A, 0);
-    Stat_QueryLevelAndSubLevel(arg0, value, &local, 0);
+    Aya_StatQueryLevelAndSubLevel(arg0, value, &local, 0);
     Draw_PrintNumberWidth2(local + 1);
 }
 
@@ -611,7 +611,7 @@ void Menu_DrawParasiteAbilityItem(int arg0) {
     Draw_OffsetCursor(0x42, -1);
 
     arg0 += 5;
-    Stat_QueryLevelAndSubLevel(arg0, value, &local, 0);
+    Aya_StatQueryLevelAndSubLevel(arg0, value, &local, 0);
     Draw_PrintNumberWidth2(local + 1);
     Draw_OffsetCursor(2, 0);
     Menu_UpdateStatBarAnimation(arg0);

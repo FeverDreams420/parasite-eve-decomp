@@ -101,7 +101,7 @@ void Inv_RecalcSlotStats(void) {
     Combatant *actor;
     AyaLevelStats *row;
 
-    Stat_QueryLevelAndSubLevel(0, *p++, &level, 0);
+    Aya_StatQueryLevelAndSubLevel(0, *p++, &level, 0);
     row = Aya_LookupLevelStats(level);
     hp = ((D_800A1B30[0] + 20) * row->hp) / 20;
     D_800C0E00.max_hp = hp;
@@ -113,22 +113,22 @@ void Inv_RecalcSlotStats(void) {
         if (D_800C0E00.max_hp < D_800C0E00.current_hp)
             D_800C0E00.current_hp = D_800C0E00.max_hp;
 
-        Stat_QueryLevelAndSubLevel(1, *p++, &level, 0);
+        Aya_StatQueryLevelAndSubLevel(1, *p++, &level, 0);
         actor->stat1E = Aya_LookupLevelStats(level + D_800A1B30[1])->offense;
-        Stat_QueryLevelAndSubLevel(2, *p++, &level, 0);
+        Aya_StatQueryLevelAndSubLevel(2, *p++, &level, 0);
         actor->stat20 = Aya_LookupLevelStats(level + D_800A1B30[2])->defense;
-        Stat_QueryLevelAndSubLevel(3, *p++, &level, 0);
+        Aya_StatQueryLevelAndSubLevel(3, *p++, &level, 0);
         row = Aya_LookupLevelStats(level + D_800A1B30[3]);
         actor->maxAtk = row->battleMaxAtk;
         actor->atbRate = row->battleAtbRate;
         actor->atbStep = row->battleAtbStep;
-        Stat_QueryLevelAndSubLevel(4, *p++, &level, 0);
+        Aya_StatQueryLevelAndSubLevel(4, *p++, &level, 0);
         row = Aya_LookupLevelStats(level + D_800A1B30[4]);
         actor->statusStep3C = row->statusStep3C;
         actor->statusStep3E = row->statusStep3E;
-        Stat_QueryLevelAndSubLevel(5, *p++, &level, 0);
+        Aya_StatQueryLevelAndSubLevel(5, *p++, &level, 0);
         actor->stat22 = Aya_LookupLevelStats(level + D_800A1B30[5])->battleStat22;
-        Stat_QueryLevelAndSubLevel(6, *p, &level, 0);
+        Aya_StatQueryLevelAndSubLevel(6, *p, &level, 0);
         actor->stat26 = Aya_LookupLevelStats(level)->inventoryCapacity;
         Inv_SetAyaSlotCount(actor->stat26);
         actor->field04.fieldId04 = D_800C0E00.level + 1;
@@ -140,7 +140,7 @@ void Aya_DeriveStats(int *out_max, int *out_current) {
     int base;
     AyaLevelStats *stats;
 
-    Stat_QueryLevelAndSubLevel(3, D_800C0E00.stats.levels[3], &base, 0);
+    Aya_StatQueryLevelAndSubLevel(3, D_800C0E00.stats.levels[3], &base, 0);
     stats = Aya_LookupLevelStats(base + D_800A1B30[3]);
 
     if (out_max != 0) {

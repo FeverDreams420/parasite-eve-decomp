@@ -522,7 +522,7 @@ void Menu_UpdateStatBarAnimation(s32 arg0) {
     s32 current;
     s32 timer;
 
-    Stat_QueryDistanceAndSubLevel(
+    Aya_StatQueryDistanceAndSubLevel(
         arg0,
         g_BonusPointStatDeltas[arg0] + ((g_BonusPointBarAnimProgress * g_BonusPointStatMultipliers[arg0]) >> 7),
         &sp10,
@@ -627,7 +627,7 @@ void Menu_CreateBonusPointAllocationView(void) {
     for (; var_s1 < 7; ++var_s1) {
         *var_s0 = *var_s4++;
         *var_s2 = 0;
-        Stat_QueryLevelAndSubLevel(var_s1, *var_s0, var_s3, 0);
+        Aya_StatQueryLevelAndSubLevel(var_s1, *var_s0, var_s3, 0);
         var_s3++;
         var_s0++;
         var_s2++;
@@ -691,7 +691,7 @@ void Menu_DrawStatsList(void) {
         Draw_OffsetCursor(2, 0);
         Draw_AllocSprite(var_s2 + 0x8C);
         Draw_OffsetCursor(0x4A, 0);
-        Stat_QueryLevelAndSubLevel(var_s2, temp_s0, &sp10, 0);
+        Aya_StatQueryLevelAndSubLevel(var_s2, temp_s0, &sp10, 0);
         var_s4 += 1;
         Draw_PrintNumberWidth2(sp10 + 1);
         if (temp_s1 != 0) {

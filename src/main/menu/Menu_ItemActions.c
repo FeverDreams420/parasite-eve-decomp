@@ -792,7 +792,7 @@ void Menu_StepInventoryRoot(int mode, int list, int item)
             for (stat = 0; stat < 7; stat++) {
                 g_BonusPointStatDeltas[stat] = *source++;
                 g_BonusPointStatMultipliers[stat] = 0;
-                Stat_QueryLevelAndSubLevel(stat, g_BonusPointStatDeltas[stat], &D_800A18B4.queryResults[stat], 0);
+                Aya_StatQueryLevelAndSubLevel(stat, g_BonusPointStatDeltas[stat], &D_800A18B4.queryResults[stat], 0);
             }
         }
         g_MenuBonusPointBarAnimActive = 0;
@@ -1487,10 +1487,10 @@ void Menu_DrawBonusPointSpendPanel(void) {
         Draw_OffsetCursor(-0x8A, 0x1F);
         Draw_AllocSprite(g_BonusPointSpendStat + 0x8C);
         Draw_OffsetCursor(0x42, -1);
-        Stat_QueryLevelAndSubLevel(g_BonusPointSpendStat,
+        Aya_StatQueryLevelAndSubLevel(g_BonusPointSpendStat,
                                    g_BonusPointSpendCurrentValue, &level, 0);
         Draw_PrintNumberWidth2(level + 1);
-        Stat_QueryDistanceAndSubLevel(g_BonusPointSpendStat,
+        Aya_StatQueryDistanceAndSubLevel(g_BonusPointSpendStat,
                                       g_BonusPointSpendCurrentValue, &distance, &sublevel);
         Draw_OffsetCursor(2, 0);
         Draw_AllocTexturedRectAlt(distance, sublevel);
@@ -1530,7 +1530,7 @@ int Spend_BonusPoints(void *node, unsigned int buttons)
             }
             case 5:
             case 6:
-                Stat_QueryDistanceAndSubLevel(g_BonusPointSpendStat, g_BonusPointSpendCurrentValue, &amount, 0);
+                Aya_StatQueryDistanceAndSubLevel(g_BonusPointSpendStat, g_BonusPointSpendCurrentValue, &amount, 0);
                 changed = amount > 0;
                 g_BonusPointSpendCurrentValue += amount;
                 break;
@@ -1584,11 +1584,11 @@ int Spend_BonusPoints(void *node, unsigned int buttons)
             int gap;
             int new_current;
             if (*minimum < g_BonusPointSpendCurrentValue) {
-                gap = Stat_OverflowQuery(g_BonusPointSpendStat, g_BonusPointSpendCurrentValue);
+                gap = Aya_StatOverflowQuery(g_BonusPointSpendStat, g_BonusPointSpendCurrentValue);
                 if (g_BonusPointSpendCurrentValue - gap < *minimum) {
                     new_current = g_BonusPointStatDeltas[g_BonusPointSpendStat];
                 } else {
-                    new_current = g_BonusPointSpendCurrentValue - Stat_OverflowQuery(g_BonusPointSpendStat, g_BonusPointSpendCurrentValue);
+                    new_current = g_BonusPointSpendCurrentValue - Aya_StatOverflowQuery(g_BonusPointSpendStat, g_BonusPointSpendCurrentValue);
                 }
                 g_BonusPointSpendCurrentValue = new_current;
                 g_BonusPointSpendWorkingValue += 100;

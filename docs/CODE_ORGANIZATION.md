@@ -1305,7 +1305,7 @@ single removal (none was byte-identical):
   function-address load among the three reads does not help, lev 22),
   `Inv_CheckItemEquippable` (lev 5 to 40), `Inv_FindFirstEmptySlot`
   (lev 16, 49), `Inv_RebuildSelectionBitset` (lev 17 to 36),
-  `Stat_QueryLevelAndSubLevel` (lev 65). `Inv_EquipItemById` (formerly
+  `Aya_StatQueryLevelAndSubLevel` (lev 65). `Inv_EquipItemById` (formerly
   `Inv_FindItem`) and `Inv_InitMaxLevelInventory` are crutch-free.
   `Inv_TransferItem` lost its three `goto`s: every arm of the `else if`
   chain calls `Inv_RebuildSelectableMask` itself and the two refusal arms

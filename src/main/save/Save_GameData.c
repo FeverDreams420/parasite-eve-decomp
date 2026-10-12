@@ -45,7 +45,7 @@ int D_8009CDAC;
 int g_MemCardDialogState;
 int g_MenuScrollStep;
 
-int Stat_BinarySearch(int value, int *table) {
+int Aya_StatBinarySearch(int value, int *table) {
     int step;
     int index;
     int result;
@@ -88,7 +88,7 @@ static inline int InterpolateSubLevel(int value, int *cursor) {
     return 0;
 }
 
-void Stat_QueryLevelAndSubLevel(int kind, int value, int *level_out, int *sublevel_out) {
+void Aya_StatQueryLevelAndSubLevel(int kind, int value, int *level_out, int *sublevel_out) {
     int saved_value;
     int *level_ptr;
     int *sublevel_ptr;
@@ -103,7 +103,7 @@ void Stat_QueryLevelAndSubLevel(int kind, int value, int *level_out, int *sublev
     saved_value = value;
     level_ptr = level_out;
     sublevel_ptr = sublevel_out;
-    table = Stat_GetGrowthTable(kind);
+    table = Aya_GetStatGrowthTable(kind);
 
     index = 0x40;
     step = 0x20;
@@ -151,7 +151,7 @@ void Stat_QueryLevelAndSubLevel(int kind, int value, int *level_out, int *sublev
     }
 }
 
-void Stat_QueryDistanceAndSubLevel(int kind, int value, int *distance_out, int *sublevel_out) {
+void Aya_StatQueryDistanceAndSubLevel(int kind, int value, int *distance_out, int *sublevel_out) {
     int saved_value;
     int *distance_ptr;
     int *sublevel_ptr;
@@ -167,7 +167,7 @@ void Stat_QueryDistanceAndSubLevel(int kind, int value, int *distance_out, int *
     saved_value = value;
     distance_ptr = distance_out;
     sublevel_ptr = sublevel_out;
-    table = Stat_GetGrowthTable(kind);
+    table = Aya_GetStatGrowthTable(kind);
 
     index = 0x40;
     step = 0x20;
@@ -219,13 +219,13 @@ void Stat_QueryDistanceAndSubLevel(int kind, int value, int *distance_out, int *
     }
 }
 
-int Stat_OverflowQuery(int arg0, int value) {
+int Aya_StatOverflowQuery(int arg0, int value) {
     int *table;
     int step;
     int index;
     int result;
 
-    table = Stat_GetGrowthTable(arg0);
+    table = Aya_GetStatGrowthTable(arg0);
     index = 0x40;
     step = 0x20;
 
@@ -796,7 +796,7 @@ void Inv_InitNewGameInventory(void) {
     int i, capacity;
     AyaLevelStats *stats;
     u16 *growth = g_AyaStatAgility;
-    for (i = 0; i < 7; i++) *growth++ = *(u16 *)Stat_GetGrowthTable(i);
+    for (i = 0; i < 7; i++) *growth++ = *(u16 *)Aya_GetStatGrowthTable(i);
     stats = Aya_LookupLevelStats(0);
     D_800C0E00.max_hp = D_800C0E00.current_hp = stats->hp;
     D_800C0E00.inventory_slot_count = stats->inventoryCapacity;

@@ -120,8 +120,8 @@ extern u16 g_AyaStatActiveTimeRate[];
 extern u16 g_AyaStatAgility[7];
 extern u8 g_AyaSaveLevel[];
 /* Growth tables have multiple consumers: 32-bit thresholds and initial u16. */
-void *Stat_GetGrowthTable(int category);
-void Stat_QueryLevelAndSubLevel(int category, int value, int *level, int *sublevel);
+void *Aya_GetStatGrowthTable(int category);
+void Aya_StatQueryLevelAndSubLevel(int category, int value, int *level, int *sublevel);
 
 /* ------------------------------------------------------------------------- */
 /* Per-level stat record. The level table base is reached via                */
@@ -158,8 +158,8 @@ void *Aya_GetLevelExpTable(void);
 /* Stat derivation entry points (see src/main/aya, src/main/item):
  *   void *Aya_GetLevelExpTable(void);        // 0x8005DBF8 alias; 4 bytes/level EXP thresholds
  *   AyaLevelStats *Aya_LookupLevelStats(int level); // tableBase + level*0x18
- *   int  Stat_BinarySearch(...);             // EXP -> level
- *   void Stat_QueryLevelAndSubLevel(int cat, int value, int *outLevel, int *outSublevel);
+ *   int  Aya_StatBinarySearch(...);             // EXP -> level
+ *   void Aya_StatQueryLevelAndSubLevel(int cat, int value, int *outLevel, int *outSublevel);
  *   void Aya_DeriveStats(int *out_max, int *out_current);
  *   int  Battle_GetScaledMaxHP(int level);        // (D_800A1B30+0x14)*levelHp/20
  *   void Inv_RecalcSlotStats(void);          // pushes save-state stats into the active battle slot
@@ -167,9 +167,9 @@ void *Aya_GetLevelExpTable(void);
  */
 
 void Inv_RecalcSlotStats(void);
-int Stat_BinarySearch(int value, int *table);
-void Stat_QueryDistanceAndSubLevel(int kind, int value, int *distance_out, int *sublevel_out);
-int Stat_OverflowQuery(int kind, int value);
+int Aya_StatBinarySearch(int value, int *table);
+void Aya_StatQueryDistanceAndSubLevel(int kind, int value, int *distance_out, int *sublevel_out);
+int Aya_StatOverflowQuery(int kind, int value);
 int Battle_GetScaledMaxHP(int level);
 void Aya_DeriveStats(int *out_max, int *out_current);
 int Aya_UnlockParasiteSpellById(int key);

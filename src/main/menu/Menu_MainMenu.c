@@ -390,7 +390,7 @@ void Aya_SetTotalExp(s32 exp_delta, s32 pe_bonus_delta, void *wayne_items) {
     previous = save->total_exp;
     g_MenuPendingTotalExp = previous;
     g_MenuExpAllocTarget = previous + exp_delta;
-    g_MenuExpReviewLevel = Stat_BinarySearch(g_MenuPendingTotalExp, Aya_GetLevelExpTable());
+    g_MenuExpReviewLevel = Aya_StatBinarySearch(g_MenuPendingTotalExp, Aya_GetLevelExpTable());
     g_MenuSelectionLocked = 1;
 
     g_AyaBonusPoolRecord.pool = g_AyaBonusPoolRecord.pool + pe_bonus_delta;
@@ -398,7 +398,7 @@ void Aya_SetTotalExp(s32 exp_delta, s32 pe_bonus_delta, void *wayne_items) {
     g_MenuHpMaxDisplayValue = D_800C0E00.max_hp;
     g_MenuBonusPointDisplayTarget = D_800C0E00.bonus_points;
     g_BonusPointDisplayValue = D_800C0E00.bonus_points;
-    g_MenuLevelDisplayTarget = Stat_BinarySearch(g_MenuExpAllocTarget, Aya_GetLevelExpTable());
+    g_MenuLevelDisplayTarget = Aya_StatBinarySearch(g_MenuExpAllocTarget, Aya_GetLevelExpTable());
 
     if (g_MenuLevelDisplayValue < g_MenuLevelDisplayTarget) {
         s32 total;
@@ -416,12 +416,12 @@ void Aya_SetTotalExp(s32 exp_delta, s32 pe_bonus_delta, void *wayne_items) {
     i = 0;
     do {
         g_BonusPointStatDeltas[i] = *stat_src++;
-        Stat_QueryLevelAndSubLevel(i, g_BonusPointStatDeltas[i], &D_800A18B4.queryResults[i], 0);
+        Aya_StatQueryLevelAndSubLevel(i, g_BonusPointStatDeltas[i], &D_800A18B4.queryResults[i], 0);
         g_BonusPointStatMultipliers[i] = (g_MenuLevelDisplayTarget - g_MenuLevelDisplayValue) * 10;
         i++;
     } while (i < 7);
 
-    Stat_QueryLevelAndSubLevel(0, g_BonusPointStatDeltas[0] + g_BonusPointStatMultipliers[0], &stat_level, 0);
+    Aya_StatQueryLevelAndSubLevel(0, g_BonusPointStatDeltas[0] + g_BonusPointStatMultipliers[0], &stat_level, 0);
     g_MenuHpMaxDisplayTarget = Battle_GetScaledMaxHP(stat_level);
     g_BonusPointBarAnimStep = 2;
     Inv_LoadWayneItemsAsOverride(wayne_items);
@@ -450,7 +450,7 @@ void Menu_DrawExpReviewPanel(void) {
         Akao_FlushBgmVolumeFade();
     }
 
-    level = Stat_BinarySearch(g_MenuPendingTotalExp, Aya_GetLevelExpTable());
+    level = Aya_StatBinarySearch(g_MenuPendingTotalExp, Aya_GetLevelExpTable());
     if (level < 0x62) {
         exp_to_next = ((s32 *)Aya_GetLevelExpTable())[level + 1] - g_MenuPendingTotalExp;
     } else {
@@ -512,8 +512,8 @@ s32 Menu_ConfirmExpAllocation(MenuWidgetNode *node, s32 flags) {
             MenuWidget_DestroyNode(node);
             MenuWidget_DestroyNode(MenuWidget_FindByModeAndSelectedBase(1, 0x16));
             Akao_FlushBgmVolumeFade();
-            new_level = Stat_BinarySearch(g_MenuPendingTotalExp, Aya_GetLevelExpTable());
-            if (new_level != Stat_BinarySearch(D_800C0E00.total_exp, Aya_GetLevelExpTable())) {
+            new_level = Aya_StatBinarySearch(g_MenuPendingTotalExp, Aya_GetLevelExpTable());
+            if (new_level != Aya_StatBinarySearch(D_800C0E00.total_exp, Aya_GetLevelExpTable())) {
                 Menu_CreateLevelUpResultPanel();
                 Akao_SetBgmVolumeFade();
             } else if (Menu_GetBattleCount() != 0) {
@@ -570,7 +570,7 @@ void Menu_InitBonusPointAllocState(int gained_points) {
     do {
         value = *source++;
         *deltas = value;
-        Stat_QueryLevelAndSubLevel(stat, value, query_results, 0);
+        Aya_StatQueryLevelAndSubLevel(stat, value, query_results, 0);
         *multipliers = 0;
         multipliers++;
         query_results++;
@@ -578,7 +578,7 @@ void Menu_InitBonusPointAllocState(int gained_points) {
         stat++;
     } while (stat < 7);
 
-    Stat_QueryLevelAndSubLevel(0, g_BonusPointStatDeltas[0], scratch, 0);
+    Aya_StatQueryLevelAndSubLevel(0, g_BonusPointStatDeltas[0], scratch, 0);
     g_BonusPointBarAnimStep = 2;
     Inv_LoadWayneItemsAsOverride(0);
     Menu_CreateLevelUpResultPanel();

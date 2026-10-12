@@ -52,7 +52,7 @@ ItemDataRecord *Item_LookupBaseData(unsigned int index) {
     return (ItemDataRecord *)&g_ResidentDataPack.bytes[begin] + index;
 }
 
-void *Stat_GetGrowthTable(int category) {
+void *Aya_GetStatGrowthTable(int category) {
     return &RESIDENT_TABLE(u8, statGrowth)[category << 9];
 }
 
