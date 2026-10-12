@@ -367,9 +367,10 @@ segments:
       # Equip-screen construction and item-confirm handler share selection state.
       # Equip/inventory list screen, list input, count header and item action submenu: private data and helpers join the run.
       - [0x34974, c, menu/Menu_EquipScreenFlow]
-      - [0x355CC, c, menu/Menu_ItemLabel]
-      # Yes/no dialog handler, item detail panel step and the discard confirmation it opens (G0397).
-      - [0x35698, c, menu/Menu_ItemDetailPanel]
+      # Item label draw, yes/no dialog handler, item detail panel step and the discard
+      # confirmation it opens (G0397; the label draw is its helper). -G8 FORCE_G0 with
+      # -fno-expensive-optimizations, which the label draw does not mind.
+      - [0x355CC, c, menu/Menu_ItemDetailPanel]
       # Ammo-spend panel construction, input and draw callback share selection
       # state and a typed MenuWidgetNode under one matching -G8/common profile.
       - [0x359D0, c, menu/Menu_AmmoSpendPanel]

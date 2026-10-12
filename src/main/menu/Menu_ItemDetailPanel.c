@@ -1,5 +1,7 @@
 /* CC1_FLAGS: -G8 -fno-expensive-optimizations */
-/* MASPSX_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
+
 #include "common.h"
 #include "pe1/menu_dialog.h"
 #include "pe1/menu_inventory.h"
@@ -7,6 +9,46 @@
 #include "pe1/inventory.h"
 #include "pe1/menu_widget.h"
 #include "pe1/inventory_slots.h"
+
+/* COMMON supplies small-data metadata to MASPSX: these words are reached
+ * through $gp, every other extern stays absolute. */
+int g_MenuActionTextBase;
+int g_MenuActiveItemList;
+int g_MenuActiveItemSlot;
+MenuConfirmCallback g_MenuConfirmCallback;
+int g_MenuEquipMode;
+int g_MenuItemPrimListHandles[2];
+
+void MenuWidget_RestoreSavedCurrentNode(void);
+
+void Draw_SetTextDimmed(int arg0);
+void Draw_FlushPrimList(int arg0);
+
+#include "pe1/menu_widget.h"
+#include "pe1/menu_inventory.h"
+#include "pe1/text.h"
+#include "pe1/menu_dialog.h"
+
+void Menu_CloseActionSubmenu(int arg0) {
+    MenuWidget_DestroyNode(MenuWidget_FindByModeAndSelectedBase(1, arg0 + 0x29));
+
+    if (arg0 != 0) {
+        MenuWidget_RestoreSavedCurrentNode();
+    }
+}
+
+void Menu_DrawItemLabel(MenuWidgetNode *arg0) {
+    int idx;
+
+    idx = arg0->selected_base - 0x29;
+    Draw_OffsetCursor(0, 0xA);
+    Draw_SetTextDimmed(0);
+    Draw_PrintCenteredText(g_MenuItemLabelBuffer + (idx << 6));
+    if (g_MenuItemPrimListHandles[idx] != 0) {
+        Draw_OffsetCursor(0, 0xE);
+        Draw_FlushPrimList(g_MenuItemPrimListHandles[idx]);
+    }
+}
 
 /* The yes/no confirmation dialog, the item detail panel and its discard
  * confirmation (main_tu_evidence G0397). The dialog handler compiles the
@@ -56,7 +98,6 @@ int Menu_ConfirmDialogHandler(void *node, int flags) {
     }
     return 1;
 }
-
 
 void Menu_StepItemDetailPanel(void) {
     MenuWidgetNode *parent, *child;
