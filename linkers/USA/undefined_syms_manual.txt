@@ -2109,3 +2109,4 @@ g_PlayerEntityRecord = 0x8009D254;
 g_GameStateFlagsRecord = 0x8009D1A0;
 g_BattleResultFlagsRecord = 0x8009D1AC;
 g_FieldMoveLockRecord = 0x8009D2E8;
+g_ActiveDrawSlotRecord = 0x8009CDDC;

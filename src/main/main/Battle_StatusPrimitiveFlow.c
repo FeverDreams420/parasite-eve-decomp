@@ -1,9 +1,13 @@
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "pe1/battle_runtime.h"
 #include "pe1/battle_status.h"
 #include "pe1/render_prim.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/battle_main.h"
 #include "pe1/render_buffers.h"
+#include "pe1/draw_slot_record.h"
 
 /* Builds the rotating target pointer and the two connector lines that tie
  * the floating status panel to the selected combatant. */
@@ -190,16 +194,6 @@ void Battle_DrawTargetHighlight(void)
 
 #define NULL ((void *)0)
 
-#include "Battle_StatusPrimitiveFlow_externs.h"
-#define CDDCA (*(s32 *)&D_8009CDDC_oa)
-#define CDDCB (*(s32 *)&D_8009CDDC_oi)
-#define CDDCC (*(s32 *)&D_8009CDDC_og)
-#define CDDCD (*(s32 *)&D_8009CDDC_oh)
-#define CDDCE (*(s32 *)&D_8009CDDC_oa)
-#define CDDCF (*(s32 *)&D_8009CDDC_oi)
-#define CDDCG (*(s32 *)&D_8009CDDC_og)
-#define CDDCH (*(s32 *)&D_8009CDDC_oh)
-#define CDDCI (*(s32 *)&D_8009CDDC_oi)
 
 
 
@@ -216,7 +210,7 @@ void Battle_DrawSpellName(void) {
     u8 *p;
     BattleAction *d68;
 
-    c = CDDCA;
+    c = g_ActiveDrawSlotRecord.slot;
     {
         s32 tv;
         tv = *(u16 *)(g_BattleStatusRowPosY + c * 0x30);
@@ -235,7 +229,7 @@ void Battle_DrawSpellName(void) {
                         pa->u = e0a;
             {
                 s32 cB;
-                cB = CDDCB;
+                cB = g_ActiveDrawSlotRecord.slot;
                 pa->width = 8;
                 pa->height = 0x10;
                 (q508 + cB * 0x118)[0xD] = e0a;
@@ -246,7 +240,7 @@ void Battle_DrawSpellName(void) {
             s32 t3;
             s32 rFD;
             s32 tE;
-            cC = CDDCC;
+            cC = g_ActiveDrawSlotRecord.slot;
             rFD = 0x1FD;
             t3 = cC * 0x118;
             tE = *(u16 *)(D_8009E360 + cC * 0x30);
@@ -258,7 +252,7 @@ void Battle_DrawSpellName(void) {
         {
             s32 cD;
             s32 eo;
-            cD = CDDCD;
+            cD = g_ActiveDrawSlotRecord.slot;
             q508 -= 8;
             eo = cD * 0x118;
             cD = cD * 4;
@@ -286,7 +280,7 @@ void Battle_DrawSpellName(void) {
                 register s32 t118 asm("$3");
                 {
                     s32 cE;
-                    cE = CDDCE;
+                    cE = g_ActiveDrawSlotRecord.slot;
                     t118 = cE * 0x118;
                     s0 = i * 0x1C;
                 }
@@ -303,27 +297,27 @@ void Battle_DrawSpellName(void) {
             if ((d68->attackWord & 0x300000) == 0x300000) {
                 r130 = 0x130;
                                 pl->u = 0xD8;
-                c1 = CDDCF;
+                c1 = g_ActiveDrawSlotRecord.slot;
                 ((u8 *)(c1 * 0x118 + s0) + (u32)e508)[0xD] = e0;
                 clut = GetClut(r130, 0x1FB);
             } else if ((d68->turnWord & 0xC0) == 0x80) {
                 r130 = 0x130;
                                 pl->u = 0xDC;
-                c1 = CDDCG;
+                c1 = g_ActiveDrawSlotRecord.slot;
                 ((u8 *)(c1 * 0x118 + s0) + (u32)e508)[0xD] = e0;
                 clut = GetClut(r130, 0x1FC);
             } else {
                 u8 dv = 0xD4;
                 r130 = 0x130;
                                 pl->u = dv;
-                c1 = CDDCH;
+                c1 = g_ActiveDrawSlotRecord.slot;
                 ((u8 *)(c1 * 0x118 + s0) + (u32)e508)[0xD] = e0;
                 clut = GetClut(r130, 0x1FA);
             }
             {
                 register s32 cI asm("$4");
                 register s32 ti asm("$3");
-                cI = CDDCI;
+                cI = g_ActiveDrawSlotRecord.slot;
                 ti = cI * 0x118;
                 ti = s0 + ti;
                                 *(s16 *)(D_8009E516 + ti) = clut;
@@ -341,7 +335,7 @@ void Battle_DrawSpellName(void) {
                     j7 = ja * 7;
                 }
                 j7 <<= 2;
-                cJ = CDDCA;
+                cJ = g_ActiveDrawSlotRecord.slot;
                 a2v = j7 + (s32)e5m8;
                 t2 = cJ * 0x118;
                 a2v = t2 + a2v;
