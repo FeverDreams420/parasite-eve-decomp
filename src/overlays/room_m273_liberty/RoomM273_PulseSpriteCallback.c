@@ -6,7 +6,7 @@ typedef struct {
     GteShortVector *position;
 } RoomM273PaletteSpriteState;
 
-int func_8019A398(int mode, RoomM273PaletteSpriteState *state) {
+int RoomM273_PulseSpriteCallback(int mode, RoomM273PaletteSpriteState *state) {
     register int frame asm("$3");
     register int special asm("$3");
     int size, shade, kind, palette;

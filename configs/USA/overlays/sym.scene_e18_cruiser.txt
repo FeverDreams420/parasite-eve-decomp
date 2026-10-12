@@ -71,3 +71,4 @@ RoomLib_HandlerA = 0x80192230; // type:func
 RoomLib_HandlerF = 0x80192344; // type:func
 RoomLib_ReleaseHandlerA = 0x801924C4; // type:func
 RoomLib_HandlerANop6 = 0x801924E0; // type:func
+SceneE18_ExpandingRingCallback = 0x80192E60; // type:func

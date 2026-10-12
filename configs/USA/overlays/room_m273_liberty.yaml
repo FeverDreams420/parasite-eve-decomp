@@ -58,7 +58,7 @@ segments:
       # Paired ground sprites and ground rings share sway points and pool-record layout.
       # The emitter owns the callback's four-byte pointer entries.
       # The pointer emitter and boss sway controller share the typed sway-point table.
-      - [0xB3B0, c, func_8019A398]
+      - [0xB3B0, c, RoomM273_PulseSpriteCallback]
       # Adjacent phased-pointer and arc callbacks share frame/trig inputs and effect-pool flow.
       - [0xB4E4, c, RoomEffect_PhasedArcSpriteFlow]
       - [0xB828, data, D_8019A810]

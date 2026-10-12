@@ -1,6 +1,6 @@
-#include "func_8019537C_externs.h"
+#include "RoomM123_SelectSlotPointer_externs.h"
 
-void **func_8019537C(int unused, unsigned int index) {
+void **RoomM123_SelectSlotPointer(int unused, unsigned int index) {
     if (index >= 2) {
         index = 0;
     }

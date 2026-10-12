@@ -24,9 +24,9 @@ typedef struct SceneE18ObjectLink {
     SceneE18Object *object;
 } SceneE18ObjectLink;
 
-#include "func_80192E60_externs.h"
+#include "SceneE18_ExpandingRingCallback_externs.h"
 
-int func_80192E60(int mode, Effect *effect) {
+int SceneE18_ExpandingRingCallback(int mode, Effect *effect) {
     s16 position[4];
     s16 params[4];
     SceneE18Object *object;

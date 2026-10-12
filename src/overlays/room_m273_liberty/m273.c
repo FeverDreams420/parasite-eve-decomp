@@ -1572,7 +1572,7 @@ int func_801960F4(int mode) {
     int unknownFrame[2];
     switch(mode) {
     case 0: {
-        int size=func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,4,6,func_8019A398);
+        int size=func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,4,6,RoomM273_PulseSpriteCallback);
         asm("" : : "r"(size));
         return size+func_800CE5AC(&D_8019AE80,size,4,6,func_8019A4CC);
     }
