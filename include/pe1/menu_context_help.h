@@ -11,7 +11,7 @@
 
 void Draw_StatePush(void);
 void Draw_StatePop(void);
-int GameTime_GetCounterSeconds(int counter);
+unsigned int GameTime_GetCounterSeconds(int counter);
 void Draw_PrintTimeValue(int seconds, int showSeconds);
 void Draw_PrintRawText(u8 *text);
 void Draw_SetTextDimmed(int dimmed);

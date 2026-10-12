@@ -118,7 +118,7 @@ segments:
       - [0x19A8, .rodata, battle/Inv_BuildWeaponList]
       - [0x19F8, .rodata, battle/BattleCmd_LoadWeaponModifiers]
       - [0x1A18, .rodata, aya/Inv_BuildArmorList]
-      - [0x1A5C, .rodata, item/Inv_InsertItem]
+      - [0x1A5C, .rodata, item/Inv_ActiveList]
       - [0x1AA4, .rodata, item/Inv_ItemActions]
       - [0x1ADC, .rodata, save/Save_GameData]
       - [0x1B30, rodata, main/rodata_001B30]
@@ -439,32 +439,16 @@ segments:
       - [0x42664, c, aya/Inv_BuildArmorList]
       - [0x4298C, c, aya/Aya_StatDerivation]
       - [0x42CD0, c, aya/Menu_SoundsAndBattleQueries]
-      - [0x42F0C, c, item/Akao_SetBgmVolumeFade]
-      - [0x42F64, c, item/Menu_ActionSubmenuSelection]
-      - [0x4308C, c, item/GameTime_CounterSeconds]
-      # Item-drop random table seeding and per-draw refresh share g_ItemDropRngIndex.
-      - [0x430F0, c, item/Inv_DropRng]
-      # Byte-string helpers, item grid rebuild and active-list selection share the
-      # active-list pointer, override and slot limit.
-      - [0x433CC, c, item/Inv_ActiveListSelection]
-      - [0x43770, c, item/inv2]
-      - [0x43868, c, item/Inv_LookupActiveListDisplayData]
-      - [0x43928, c, item/Inv_RebuildSelectionBitset]
-      - [0x43AB4, c, item/Inv_DataLookup]
-      # Item-data row renderer and cursor-text selector.
-      # Contiguous item-list row selection and renderer UI helpers.
-      - [0x43CE4, c, item/Sfx_DrawSlotRow]
-      - [0x4402C, c, item/Inv_FindFirstEmptySlot]
-      - [0x44168, c, item/Inv_InsertItem]
-      - [0x4466C, c, item/Inv_CountByValue]
-      # Counts, item-ID/kind queries, base kinds and the packed-list accessors share
-      # the active inventory list.
-      - [0x44720, c, item/Inv_ActiveListQueries]
-      # Filtered active-list builders share one 0x280-byte -G8 inventory object.
-      - [0x44AA0, c, item/Inv_FilteredList]
-      # Eligible-slot count, random item pick, pick message text and active-list
-      # compaction work on the same active inventory list.
-      - [0x44D20, c, item/Inv_RandomPickAndCompact]
+      # Active inventory list: BGM volume fade, action submenu selection, counter
+      # seconds; item-drop random table seeding and per-draw refresh
+      # (g_ItemDropRngIndex); byte-string helpers, item grid rebuild and active-list
+      # selection (active-list pointer, override and slot limit); item-data row
+      # renderer and cursor-text selector; item-list row selection and renderer UI
+      # helpers; first-empty slot and insertion; counts, item-ID/kind queries, base
+      # kinds and the packed-list accessors; filtered active-list builders; eligible
+      # slot count, random item pick, pick message text and active-list compaction.
+      # One -G8 FORCE_G0 unit with COMMON $gp words.
+      - [0x42F0C, c, item/Inv_ActiveList]
       # Capacity check and equip modifier validation, random item type roll, parasite
       # spell packing and unlock, packed-list items, and the selection masks, ammo
       # transfer, comparison panels, item actions and active-list controller (shared

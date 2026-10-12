@@ -11,7 +11,7 @@ sys.path.insert(0, str(ROOT / 'tools/tests'))
 from csource import linked_range_bytes  # noqa: E402
 
 # Entire linked text ranges at their retail addresses.
-CASES = [('item/Inv_FindFirstEmptySlot',
+CASES = [('item/Inv_ActiveList',
   316,
   'c9d79218d158c686643796e7641610c0660987624d9e6e5eb192617e2f91379c',
   'g_InvSelectionBitWords = 0x8009D064;\n'

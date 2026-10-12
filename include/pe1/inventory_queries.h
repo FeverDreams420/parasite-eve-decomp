@@ -1,7 +1,7 @@
 #ifndef PE1_INVENTORY_QUERIES_H
 #define PE1_INVENTORY_QUERIES_H
 
-/* Inventory list helpers (item/inv2.c, item/Inv_ActiveListSelection.c). */
+/* Inventory list helpers (item/Inv_ActiveList.c, item/Inv_ActiveList.c). */
 
 /* Number of item slots Aya currently has. */
 int Inv_GetAyaSlotLimit(void);
