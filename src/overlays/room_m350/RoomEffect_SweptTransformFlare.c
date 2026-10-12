@@ -14,7 +14,8 @@
 
 int func_801981D0(int event, RoomM350FlareParticle *particle)
 {
-    GteShortVector position, rotation;
+    GteShortVector position;
+    GteRotation rotation;
     if (event == 1) {
         int timer = D_800E27EC;
         if (timer >= 8) return 1;
@@ -41,7 +42,7 @@ int func_801981D0(int event, RoomM350FlareParticle *particle)
         rotation.x = (unsigned int)D_800E27EC * 384;
         rotation.y = ((FieldActor *)ANIM_OWNER_AS(RoomM350EffectActor)->instance)->rot_y;
         rotation.z = 0;
-        rotation.pad = 1;
+        rotation.flags = 1;
         kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         if (kind == 4 && D_800F3428) palette += 4;
@@ -53,7 +54,7 @@ int func_801981D0(int event, RoomM350FlareParticle *particle)
             register int product asm("$8") = scale * phase;
             int texture = product + 64;
             asm("" : : "r"(product), "r"(texture));
-            func_800CEE20(&position, (GteRotation *)&rotation, 0x2200, 4096,
+            func_800CEE20(&position, &rotation, 0x2200, 4096,
                 texture, clut, 1, particle->shade, (struct RenderColor *)&D_8019A690[timer & 3]);
         }
     }
