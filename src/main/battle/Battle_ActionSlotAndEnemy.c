@@ -12,7 +12,7 @@ int Battle_ProcessActionSlot(BattleEntity *actor)
 {
     EnemyCombatant *state = (EnemyCombatant *)actor->core;
     int phase = state->coreFlags & 0x6000;
-    int result = 1;
+    s8 result = 1;
 
     if (phase == 0x2000) {
         int index = D_8009D1D4;
@@ -46,12 +46,9 @@ int Battle_ProcessActionSlot(BattleEntity *actor)
             D_8009CE68 = 0xFF;
         }
     } else if (phase == 0x4000 && state->field04.bytes.kind != 0) {
-        /* Matching debt: retail compares the kind against a fresh 1, where
-         * GCC would reuse the result register that already holds 1. */
-        register int one asm("$2") = 1;
         u8 color = D_8009CE68 - 8;
         D_8009CE68 = color;
-        if (state->field04.bytes.kind == one) {
+        if (state->field04.bytes.kind == 1) {
             if (color <= 0x80) {
                 actor->parent->renderObject.flags_9C |= 0x20;
                 state->coreFlags &= ~0x6000;
@@ -91,13 +88,14 @@ int Battle_ProcessActionSlot(BattleEntity *actor)
 }
 
 /* Advance enemy charge/status timers, movement, damage panels and death state.
-* Matching debt: the statusCore pin and the actor/statusCore barriers keep
-* retail's separate copies of the entity and its core.
+* The core is read twice, so retail keeps a second copy of it (statusCore).
+* Matching debt: the actor barrier gives the entity s0 and its core s1;
+* without it global allocation swaps them (lev 129).
 * curHP is the existing name for the 0..9000 charge gauge in this core view.
 */
 void Battle_UpdateEnemy(BattleEntity *entity) {
     BattleEntity *actor = entity;
-    register EnemyCombatant *statusCore asm("$18");
+    EnemyCombatant *statusCore;
     BattleEntity *parent;
     BattleEntity *livingLink;
     BattleEntity *linkedActor;
@@ -126,12 +124,12 @@ void Battle_UpdateEnemy(BattleEntity *entity) {
 
     asm("" : "=r"(actor) : "0"(actor));
     enemy = actor->core;
+    statusCore = actor->core;
     {
         s32 hp = enemy->hpAlive;
         s32 maximum = enemy->hpAliveCap;
-        if (maximum < hp) enemy->hpAlive = maximum;
-        statusCore = enemy;
-        asm("" : "=r"(statusCore) : "0"(statusCore));
+        if (maximum < hp)
+            enemy->hpAlive = maximum;
     }
     if (!(D_8009D1A0 & 0x100)) {
         if (enemy->curHP == 0) {
