@@ -152,10 +152,10 @@ segments:
       - [0x293C, .rodata, akao/Akao_SequencerFlow]
       - [0x2A0C, c, boot/Boot_MainLoop]
       # Node-pool init, scene relocation, map flush and free-list setup share
-      # the task-node pool and g_SceneDataTable1 (main_tu_evidence G0001).
-      - [0x2CF8, c, script/Task_NodePoolSetupFlow]
-      # Allocation and garbage collection share the TaskNode free list.
-      - [0x2F00, c, script/Task_NodePoolFlow]
+      # the task-node pool and g_SceneDataTable1 (main_tu_evidence G0001);
+      # allocation and garbage collection share the TaskNode free list. One -G8
+      # FORCE_G0 unit with -fno-strength-reduce and --dont-expand-li.
+      - [0x2CF8, c, script/Task_NodePool]
       # Expression, Vec3 get/set and mask-test opcodes: contiguous
       # default-profile handlers whose jump tables are adjacent in .rodata.
       - [0x3050, c, script/Task_ValueOps]
