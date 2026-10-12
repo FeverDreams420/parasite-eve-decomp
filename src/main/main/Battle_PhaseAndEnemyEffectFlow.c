@@ -113,11 +113,11 @@ void Battle_AdvancePhase(void) {
         if ((temp_a2 & 0xFF) < (u8) D_8009CE3C) {
             do {
                 temp_a0 = (u16)D_800BE830[var_s0 & 0xFF].command;
-                if ((u32) (temp_a0 - 3) < 0x180U) {
+                if (temp_a0 - 3U < 0x180U) {
                     Inv_AddItem((s16) temp_a0 - 3);
                 }
                 var_s0 += 1;
-            } while ((u32) (var_s0 & 0xFF) < (u8) D_8009CE3C);
+            } while ((var_s0 & 0xFFU) < (u8) D_8009CE3C);
         }
         D_8009CE3C = 0;
         D_8009D1D4 = 0;
@@ -190,7 +190,7 @@ block_search_done:
                 temp_v1_3 = *(u16 *)((u8 *)&D_800BE830[0].command + temp_v1_3);
                 D_8009D1D4 = var_v0_3;
                 temp_v1_3 -= 3;
-                temp_v1_3 = (u32) temp_v1_3 < 0x194U;
+                temp_v1_3 = temp_v1_3 < 0x194U;
                 if (!temp_v1_3 || ((u8) D_8009D254->actionMode < 4U)) {
                     D_8009D1A0 = D_8009D1A0 & ~0x100;
                 }
@@ -226,7 +226,7 @@ block_35:
                 temp_v1_3 = *(u16 *)((u8 *)&D_800BE830[0].command + temp_v1_3);
                 D_8009D1D4 = var_v0_3;
                 temp_v1_3 -= 3;
-                temp_v1_3 = (u32) temp_v1_3 < 0x194U;
+                temp_v1_3 = temp_v1_3 < 0x194U;
                 if (!temp_v1_3 || ((u8) D_8009D254->actionMode < 4U)) {
                     D_8009D1A0 = D_8009D1A0 & ~0x100;
                 }
@@ -271,7 +271,7 @@ block_39:
         if (action != 0x13) {
             D_8009D258 = Scene_LoadRoomAssets(sp18.bytes[action], temp_s2->actor);
         }
-        if (((u32) (action - 7) < 2U) || (action == 0xA)) {
+        if ((action - 7U < 2U) || (action == 0xA)) {
             soundActor = temp_s2->actor;
             var_a0_3 = sp30.soundId[action];
             var_a2_2 = soundActor->renderObject.target_x;
@@ -303,7 +303,7 @@ block_55:
             *(s32 *)&aya_player->entityFlags = (s32) (*(s32 *)&aya_player->entityFlags & ~0x100);
             var_s0_4 = end_slot - 7;
             var_a2_2 = var_s0_4 & 0xFF;
-            if ((u32)var_a2_2 < end_slot) {
+            if (var_a2_2 < end_slot) {
                 do {
                     facingTarget = D_800BE830[var_a2_2].actor;
                     if (facingTarget != ((void *)D_8009D254)) {
@@ -311,7 +311,7 @@ block_55:
                     }
                     var_s0_4 += 1;
                     var_a2_2 = var_s0_4 & 0xFF;
-                } while ((u32)var_a2_2 < (u8) D_8009D1D4);
+                } while ((unsigned)var_a2_2 < (u8) D_8009D1D4);
             }
             var_a0_4 = D_8009D20C;
             if (var_a0_4 != NULL) {
@@ -337,7 +337,7 @@ block_55:
         temp_v0 = Battle_CalcAngleToTarget(&temp_s2->actor->renderObject, ((void *)D_8009D254) + 0x28);
         D_8009D254->facingAngle = temp_v0;
         Battle_StepCharacterAction(temp_s2);
-        if ((u32) (g_PmSlotTable[D_8009D258].header.state - 1) >= 2U) {
+        if (g_PmSlotTable[D_8009D258].header.state - 1U >= 2U) {
             var_a2_2 = 0xFFEFFFFF;
             temp_a0_3 = -0x101;
             cleanupActor = ((void *)D_8009D278);
@@ -357,15 +357,15 @@ block_55:
         if (D_8009D254->animLastFrame == D_8009D254->animPrev.parts.integer) {
             Entity_SetActionMode(((void *)D_8009D254), actor->actionMode12);
         }
-        if ((((u32) (g_PmSlotTable[D_8009D258].header.state - 1) >= 2U) || (temp_s2->command == 0x196)) && (D_8009D278->stateFlags = (s32) (D_8009D278->stateFlags | 0x200000), Battle_ApplySpellEffect(temp_s2->command - 0x183, temp_s2->actor), (temp_s2->command != 0x196))) {
+        if (((g_PmSlotTable[D_8009D258].header.state - 1U >= 2U) || (temp_s2->command == 0x196)) && (D_8009D278->stateFlags = (s32) (D_8009D278->stateFlags | 0x200000), Battle_ApplySpellEffect(temp_s2->command - 0x183, temp_s2->actor), (temp_s2->command != 0x196))) {
             temp_v0_6 = D_8009D1D4 + 1;
             D_8009D1D4 = temp_v0_6;
-            if (((u32) ((u16)D_800BE830[temp_v0_6 & 0xFF].command - 3) >= 0x194U) || ((u8) D_8009D254->actionMode < 4U)) {
+            if (((u16)D_800BE830[temp_v0_6 & 0xFF].command - 3U >= 0x194U) || ((u8) D_8009D254->actionMode < 4U)) {
                 D_8009D1A0 = D_8009D1A0 & ~0x100;
             }
             temp_a0_4 = (u8)D_8009CE3C;
-            for (var_s0_4 = D_8009D1D4; (u32)(var_s0_4 & 0xFF) < (u32)temp_a0_4; var_s0_4++) {
-                if ((u32)((u16)D_800BE830[var_s0_4 & 0xFF].command - 1) < 2U) {
+            for (var_s0_4 = D_8009D1D4; (var_s0_4 & 0xFFU) < (unsigned)temp_a0_4; var_s0_4++) {
+                if ((u16)D_800BE830[var_s0_4 & 0xFF].command - 1U < 2U) {
                     Battle_DispatchEntityEffect();
                     return;
                 }

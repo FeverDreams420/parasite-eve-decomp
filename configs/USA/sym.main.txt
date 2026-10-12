@@ -112,7 +112,7 @@ Sfx_ContextPick = 0x80050878; // type:func
 Seq_GetElapsed = 0x8006EBE4; // type:func
 
 // Inventory.
-Inv_FindItem = 0x8005BF44; // type:func
+Inv_EquipItemById = 0x8005BF44; // type:func
 
 // GTE (COP2) math.
 InvSquareRoot = 0x80078094; // type:func
