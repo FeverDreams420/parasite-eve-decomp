@@ -278,8 +278,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x29DC, c, Boot_StepPlaybackTransfer]
-      - [0x2A9C, c, Boot_CheckPlaybackTime]
+      - [0x29DC, c, playback]
   - [0x2B4C]
   - name: boot_display_tail
     type: code
