@@ -33,7 +33,7 @@ typedef struct FieldModelQuad {
     /* 0x08 */ u16 uv[4];
 } FieldModelQuad;
 
-/* Colour words func_800C6EF8 saves from a model and func_800C6F4C
+/* Colour words FieldModel_SaveColors saves from a model and FieldModel_RestoreColors
  * writes back (0x100 entries). */
 extern u32 g_FieldModelColorBackup[];
 
