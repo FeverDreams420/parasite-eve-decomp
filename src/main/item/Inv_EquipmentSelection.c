@@ -191,11 +191,12 @@ static inline void RemoveItem(int index) {
 }
 
 static inline int FindKind(int kind, int excluded) {
-    /* -1 is an address sentinel; do not form an out-of-bounds C pointer. */
-    unsigned long skip = (unsigned long)D_8009D048 + excluded * sizeof(s16);
+    /* excluded is -1 when no slot is skipped; the address then lies before
+     * the list and never matches. */
+    s16 *skip = D_8009D048 + excluded;
     s16 *p = D_8009D048;
     while (p < D_8009D048 + D_8009D050) {
-        if ((unsigned long)p != skip && Inv_LookupItemRecordScaled(*p)->kind == kind) break;
+        if (p != skip && Inv_LookupItemRecordScaled(*p)->kind == kind) break;
         p++;
     }
     if (p < D_8009D048 + D_8009D050) return p - D_8009D048;

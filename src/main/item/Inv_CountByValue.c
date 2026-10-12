@@ -19,10 +19,8 @@ int Inv_CountByValue(int arg0) {
     if ((arg0 >= g_InvCategoryBaseItemId) && (arg0 < g_InvCategoryBaseItemId + 3)) {
         count = g_InvCategoryItemTable[arg0 - g_InvCategoryBaseItemId].count;
     } else {
-        temp = g_InvSlotLimit;
         ptr = (u16 *)g_InvItemPtr;
-        temp <<= 1;
-        end = (u16 *)((u8 *)ptr + temp);
+        end = ptr + g_InvSlotLimit;
         if (ptr < end) {
             iter_end = end;
             do {
