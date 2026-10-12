@@ -1178,6 +1178,9 @@ deleting one pin at a time:
   for `Draw_AllocSprite`, `Draw_EmitGlyph`, `Draw_AllocTexturedQuad` and the
   wipe triangles it replaced the tag pins and barriers. The `setRGB0`
   colour store with the code byte kept is `RenderPacketColor.fields.rgb`.
+- A `case` that ends with the same `return` as the next label falls into
+  it: `Boot_MemCardStepInit` state 0x3B shares `default: return 1` instead
+  of an empty barrier.
 - Allocations written in their own blocks (`u8 *old`, `u8 *next` declared
   inside) give retail's registers where function-scope temporaries reused
   for the second allocation do not (`Draw_AllocSprite`).
@@ -1199,8 +1202,9 @@ Crutches still in these units, with the best crutch-free lev found:
   instead of integer casts.
 - `Boot_MemCardStepInit`: 3 re-dispatch `goto`s (a `for`/`continue` loop
   lets loop.c hoist `0x400000` and `1`, lev 39; tail recursion re-runs the
-  `&g_GameState` load after the re-entry label, lev 24) and one empty
-  barrier that keeps `li v0,1` in the jump delay slot (lev 15).
+  `&g_GameState` load after the re-entry label, lev 24). Its empty barrier
+  is gone: state 0x3B falls into the `default: return 1`, which shares the
+  `li v0,1` jump as retail does.
 - `Task_LoadSceneData`: 2 CD retry `goto`s (a loop lets loop.c hoist the
   `-1` comparands into saved registers, lev 32).
 - `Akao_ProcessCommand`: 1 `goto archive_match`; retail places the match
