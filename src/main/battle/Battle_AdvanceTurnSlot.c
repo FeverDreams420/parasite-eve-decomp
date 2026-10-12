@@ -8,33 +8,18 @@
 u8 D_8009CE3C, D_8009CE44, D_8009CE60;
 u8 D_8009D2D8, D_8009D1DC;
 
-/* Matching debt: the empty memory barriers preserve repeated slot-index
- * reads; the register barriers keep the two entry calculations distinct.
- * RewindTurn retains one explicit loop-entry jump. No instruction ASM. */
+/* Step the turn index back to the first slot of the action that ends at
+ * initial. The test before the loop is the loop test, so GCC merges the
+ * two and enters the decrement loop through it. */
 static inline void RewindTurn(int initial)
 {
-    int next = initial - 1;
-    goto store_index;
-    do {
-        asm volatile("" : "=m"(D_8009CE3C) : "m"(D_8009CE3C));
-        next = D_8009CE3C - 1;
-store_index:
-        D_8009CE3C = next;
-    } while (D_8009CE3C != 0 &&
-        D_800BE830[D_8009CE3C].actionGeneration ==
-        D_800BE830[D_8009CE3C - 1].actionGeneration);
-}
-
-static inline void RewindEqual(int initial)
-{
-    int current = initial - 1;
-    D_8009CE3C = current;
-    if ((u8)current == 0 ||
-        D_800BE830[(u8)current].actionGeneration !=
-        D_800BE830[(u8)current - 1].actionGeneration)
+    D_8009CE3C = initial - 1;
+    if (D_8009CE3C == 0 ||
+        D_800BE830[D_8009CE3C].actionGeneration !=
+        D_800BE830[D_8009CE3C - 1].actionGeneration)
         return;
     do {
-                D_8009CE3C--;
+        D_8009CE3C--;
     } while (D_8009CE3C != 0 &&
         D_800BE830[D_8009CE3C].actionGeneration ==
         D_800BE830[D_8009CE3C - 1].actionGeneration);
@@ -57,13 +42,15 @@ void Battle_AdvanceTurnSlot(void)
     D_8009CE44 = 0;
     kind = D_800BE830[savedIndex - 1].command;
     if (kind == 1) {
+        /* Matching debt: without this barrier CSE reuses the slot index
+         * minus one computed for the command lookup (lev 26). */
         asm volatile("" : "=r"(savedIndex) : "0"(savedIndex));
         if (D_8009D1DC == (D_8009D278->action->turnWord & 15)) {
             D_8009D2D8++;
-            RewindEqual(savedIndex);
+            RewindTurn(savedIndex);
             RestorePending(savedIndex);
         } else {
-                        RewindTurn(savedIndex);
+            RewindTurn(savedIndex);
         }
         D_8009D1DC = D_8009D278->action->turnWord & 15;
     } else if (kind == 2) {
@@ -87,7 +74,7 @@ void Battle_AdvanceTurnSlot(void)
             u8 current;
             D_8009CE3C = savedIndex - 1;
             for (;;) {
-                                current = D_8009CE3C;
+                current = D_8009CE3C;
                 if (current == 0 ||
                     D_800BE830[current].actionGeneration != D_800BE830[current - 1].actionGeneration)
                     break;
