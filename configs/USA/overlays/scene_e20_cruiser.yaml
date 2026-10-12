@@ -1,17 +1,17 @@
-name: scene_e20.bin
+name: scene_e20_cruiser.bin
 sha1: cb847aba4aa80d900b766aa03ca9e306edc140e8
 options:
-  basename: scene_e20
+  basename: scene_e20_cruiser
   target_path: original/USA/overlays/scene_e20.bin
   base_path: ../../..
   platform: psx
   compiler: GCC
-  asm_path: asm/USA/overlays/scene_e20
-  src_path: src/overlays/scene_e20
-  build_path: build/USA/overlays/scene_e20
-  ld_script_path: linkers/USA/overlays/scene_e20.ld
-  undefined_funcs_auto_path: linkers/USA/overlays/undefined_funcs_auto.scene_e20.txt
-  undefined_syms_auto_path: linkers/USA/overlays/undefined_syms_auto.scene_e20.txt
+  asm_path: asm/USA/overlays/scene_e20_cruiser
+  src_path: src/overlays/scene_e20_cruiser
+  build_path: build/USA/overlays/scene_e20_cruiser
+  ld_script_path: linkers/USA/overlays/scene_e20_cruiser.ld
+  undefined_funcs_auto_path: linkers/USA/overlays/undefined_funcs_auto.scene_e20_cruiser.txt
+  undefined_syms_auto_path: linkers/USA/overlays/undefined_syms_auto.scene_e20_cruiser.txt
   find_file_boundaries: True
   disassemble_all: True
   asm_function_macro: glabel
@@ -25,7 +25,7 @@ options:
   rodata_string_guesser_level: 2
   data_string_guesser_level: 2
 segments:
-  - name: scene_e20
+  - name: scene_e20_cruiser
     type: code
     start: 0x0
     # Section 3 is loaded at g_StrFileDirBuffer - 8, including its header.
@@ -37,7 +37,7 @@ segments:
       - start: 0
         type: rodatabin
         name: scene_e20_header
-        dir: scene_e20
+        dir: scene_e20_cruiser
       - [0x24, .rodata, RoomEffect_HoverOrbController_8018F750]
       - [0x40, c, RoomEffect_FlareParticle_8018F028]
       - [0x768, c, RoomEffect_HoverOrbController_8018F750]

@@ -1,18 +1,18 @@
-name: scene_e19.bin
+name: scene_e19_cruiser.bin
 sha1: 6b114d71ecf274e02267aa9ea10cb2126793d3af
 options:
-  basename: scene_e19
+  basename: scene_e19_cruiser
   target_path: original/USA/overlays/scene_e19.bin
   base_path: ../../..
   platform: psx
   compiler: GCC
-  asm_path: asm/USA/overlays/scene_e19
-  src_path: src/overlays/scene_e19
-  build_path: build/USA/overlays/scene_e19
-  ld_script_path: linkers/USA/overlays/scene_e19.ld
-  undefined_funcs_auto_path: linkers/USA/overlays/undefined_funcs_auto.scene_e19.txt
-  symbol_addrs_path: configs/USA/overlays/sym.scene_e19.txt
-  undefined_syms_auto_path: linkers/USA/overlays/undefined_syms_auto.scene_e19.txt
+  asm_path: asm/USA/overlays/scene_e19_cruiser
+  src_path: src/overlays/scene_e19_cruiser
+  build_path: build/USA/overlays/scene_e19_cruiser
+  ld_script_path: linkers/USA/overlays/scene_e19_cruiser.ld
+  undefined_funcs_auto_path: linkers/USA/overlays/undefined_funcs_auto.scene_e19_cruiser.txt
+  symbol_addrs_path: configs/USA/overlays/sym.scene_e19_cruiser.txt
+  undefined_syms_auto_path: linkers/USA/overlays/undefined_syms_auto.scene_e19_cruiser.txt
   find_file_boundaries: True
   disassemble_all: True
   asm_function_macro: glabel
@@ -26,7 +26,7 @@ options:
   rodata_string_guesser_level: 2
   data_string_guesser_level: 2
 segments:
-  - name: scene_e19
+  - name: scene_e19_cruiser
     type: code
     start: 0x0
     # Boot_InitMemoryLayout: g_LoadedSceneAssetBlock = g_StrFileDirBuffer - 8.
@@ -39,17 +39,17 @@ segments:
       - start: 0
         type: rodatabin
         name: scene_e19_header
-        dir: scene_e19
+        dir: scene_e19_cruiser
       - [0xC, .rodata, ../room_lib/RoomLib_ActorClasses]
       - start: 0x1E4
         type: rodatabin
         name: scene_e19_header_tail
-        dir: scene_e19
+        dir: scene_e19_cruiser
       - [0x1EC, .rodata, SceneE19_BlastSequence]
       - start: 0x228
         type: rodatabin
         name: scene_e19_header_tail2
-        dir: scene_e19
+        dir: scene_e19_cruiser
       - [0x288, c, ../room_lib/RoomLib_ActorClasses]
       - [0x35A4, c, func_8019258C]
       - [0x35AC, c, func_80192594]

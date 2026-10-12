@@ -71,7 +71,7 @@ class SceneFunctionRangeMixin:
 class SceneE01MappingTests(unittest.TestCase):
     def test_mapping_is_the_room_m269_grab_attack_unit(self):
         config = yaml.safe_load(
-            (ROOT / "configs/USA/overlays/scene_e01.yaml").read_text())
+            (ROOT / "configs/USA/overlays/scene_e01_chrysler.yaml").read_text())
         segment = config["segments"][0]
         self.assertEqual(segment["vram"], 0x8018EFE8)
         self.assertEqual(config["sha1"], "af522483e6c8a6fee3a0c45f0484450e2cfefcf4")
@@ -106,7 +106,7 @@ class SceneE01MappingTests(unittest.TestCase):
 class SceneE19MappingTests(SceneFunctionRangeMixin, unittest.TestCase):
     def setUp(self):
         self.config = yaml.safe_load(
-            (ROOT / "configs/USA/overlays/scene_e19.yaml").read_text())
+            (ROOT / "configs/USA/overlays/scene_e19_cruiser.yaml").read_text())
         self.segment = self.config["segments"][0]
         self.rows = {row[0]: row for row in normalized_rows(self.segment)}
         self.row_list = normalized_rows(self.segment)
@@ -161,7 +161,7 @@ class SceneE19MappingTests(SceneFunctionRangeMixin, unittest.TestCase):
 class SceneE02MappingTests(SceneFunctionRangeMixin, unittest.TestCase):
     def setUp(self):
         self.config = yaml.safe_load(
-            (ROOT / "configs/USA/overlays/scene_e02.yaml").read_text())
+            (ROOT / "configs/USA/overlays/scene_e02_chrysler.yaml").read_text())
         self.segment = self.config["segments"][0]
         self.rows = normalized_rows(self.segment)
 
@@ -348,7 +348,7 @@ class SceneArgumentParserTests(SceneFunctionRangeMixin, unittest.TestCase):
     def test_e02_leaf_returns_belong_to_parser_switches(self):
         scene = "scene_e02"
         config = yaml.safe_load(
-            (ROOT / "configs/USA/overlays/scene_e02.yaml").read_text())
+            (ROOT / "configs/USA/overlays/scene_e02_chrysler.yaml").read_text())
         offsets = {r[0] for r in normalized_rows(config["segments"][0])}
         path = ROOT / config["options"]["target_path"]
         if not path.is_file():
@@ -372,7 +372,7 @@ class SceneArgumentParserTests(SceneFunctionRangeMixin, unittest.TestCase):
 class SceneE20MappingTests(unittest.TestCase):
     def setUp(self):
         self.config = yaml.safe_load(
-            (ROOT / "configs/USA/overlays/scene_e20.yaml").read_text())
+            (ROOT / "configs/USA/overlays/scene_e20_cruiser.yaml").read_text())
         self.segment = self.config["segments"][0]
 
     def test_three_complete_functions_and_noncode_header(self):
@@ -387,7 +387,7 @@ class SceneE20MappingTests(unittest.TestCase):
             [0x1704, "c", "Scene_CommandEffectSlot"],
             [0x17F8, "data", "scene_e20_tail"],
         ])
-        source = ROOT / "src/overlays/scene_e20/Scene_CommandEffectSlot.c"
+        source = ROOT / "src/overlays/scene_e20_cruiser/Scene_CommandEffectSlot.c"
         self.assertEqual(source_quality.classify(source), "semantic_c")
 
     def test_retail_switch_targets_are_internal_not_function_entries(self):
@@ -419,7 +419,7 @@ class SceneE08MappingTests(SceneFunctionRangeMixin, unittest.TestCase):
 
     def setUp(self):
         self.config = yaml.safe_load(
-            (ROOT / "configs/USA/overlays/scene_e08.yaml").read_text())
+            (ROOT / "configs/USA/overlays/scene_e08_chrysler.yaml").read_text())
         segment = self.config["segments"][0]
         self.assertEqual(segment["vram"], 0x8018EFE8)
         self.rows = [[r["start"], r["type"], r.get("name")]
@@ -427,14 +427,14 @@ class SceneE08MappingTests(SceneFunctionRangeMixin, unittest.TestCase):
 
     def test_header_and_compiler_jump_tables_are_data(self):
         for name in ("Scene_UpdateFadeSlots_801905F8", "Scene_InitParticleSlots_80191DB8"):
-            source = ROOT / "src/overlays/scene_e08" / (name + ".c")
+            source = ROOT / "src/overlays/scene_e08_chrysler" / (name + ".c")
             self.assertIn("void " + name + "(", source.read_text())
         self.assertEqual(self.rows[0], [0, "rodatabin", "scene_e08_header"])
         for table, size, parser in ((0x80, 0x80, 0x6418), (0x100, 0x84, 0x7164),
                                     (0x184, 4, 0x7164), (0x188, 0x68, 0x7C28),
                                     (0x1F0, 0x68, 0x8740)):
             self.assertTableOwnedBy(self.rows, table, size, parser)
-        self.assertFalse((ROOT / "src/overlays/scene_e08/scene_e08_header.c").exists())
+        self.assertFalse((ROOT / "src/overlays/scene_e08_chrysler/scene_e08_header.c").exists())
 
     def test_ten_complete_c_functions_and_no_epilogue_stubs(self):
         ranges = {r[0]: (r, n[0]) for r, n in zip(self.rows, self.rows[1:])}

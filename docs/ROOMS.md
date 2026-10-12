@@ -252,8 +252,8 @@ keep the number, which still identifies the overlay.
 
 All 161 room overlays with a place of medium or high confidence are renamed.
 room_m350 has no save label and takes its slug from its text bank instead:
-`room_m350_cruiser` (low confidence, see entry 6 below). The scene overlays
-keep theirs.
+`room_m350_cruiser` (low confidence, see entry 6 below). The 22 configured
+scene overlays follow the same rule: `scene_eNN_<place>`.
 
 ### Overlays by place
 
@@ -283,8 +283,9 @@ Confidence rules: **high** = save label present and the dialog bank agrees
 with the same label); **medium** = save label present but the bank belongs
 to another place, or no label but the Chrysler floor bank; **low** = neither.
 
-Scene overlays are not renamed. Their places, for reference: e18-e20
-cruiser, e22 liberty (high); e01-e14 and e24-e27 Chrysler bank (medium).
+Scene overlays carry the same suffixes: e18-e20 `cruiser` and e22
+`liberty` (high); e01-e14 and e24-e27 `chrysler` from the Chrysler bank
+(medium), for example `scene_e08_chrysler`.
 
 ## Entries to confirm
 

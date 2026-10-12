@@ -137,7 +137,8 @@ name is the configured overlay name.
   former `+1`/`+2` tails (`room_m126+1`) recorded an extraction delta, not an
   identity, and are gone; only the retail asset names keep them.
 - **Scene sets:** `scene_eNN`, entry `NN` of the special-scene table at
-  `0x80094048`. They get a suffix the same way once their scenes are named.
+  `0x80094048`, with the place suffix of their map the same way
+  (`scene_e22_liberty`; docs/ROOMS.md).
 - **Shared overlays:** `fx_common`, `fx_field`, `menu_memcard`,
   `boot_display`, `mdec_diag` (MDEC diagnostics and the PsyQ LIBPRESS VLC
   decoder, formerly `sys_reset`): named by responsibility.

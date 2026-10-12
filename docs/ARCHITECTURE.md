@@ -38,8 +38,8 @@ Entry is the PsyQ start-up (`psyq/libsn/snmain.c`): it clears BSS, sets
 
 | Overlay | Link address | Count | What it is |
 | --- | --- | --- | --- |
-| `room_mNNN` | `0x8018EFE8` | 162 | code and data of one map (`m` number), section 3 of its PE.IMG record |
-| `scene_eNN` | `0x8018EFE8` | 22 | special-scene sets: entry `NN` of the table at `0x80094048`, section 3 |
+| `room_mNNN_<place>` | `0x8018EFE8` | 162 | code and data of one map (`m` number), section 3 of its PE.IMG record |
+| `scene_eNN_<place>` | `0x8018EFE8` | 22 | special-scene sets: entry `NN` of the table at `0x80094048`, section 3 |
 | `fx_field` | `0x8018EFE8` | 1 | effect block (PE.IMG sectors 10994..10995) |
 | `fx_common` | `0x8018EFF0` | 1 | effect code block (PE.IMG sectors 1792..1817) |
 | `mdec_diag` | `0x8010BCF8` | 1 | MDEC diagnostics and the PsyQ LIBPRESS VLC decoder with its tables |
