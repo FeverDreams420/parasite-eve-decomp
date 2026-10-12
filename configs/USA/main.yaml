@@ -468,11 +468,12 @@ segments:
       - [0x52D68, c, menu/MenuWidget_Lifecycle]
       # Field sound event enqueue/reset and actor dispatch share queue records.
       - [0x55B6C, c, script/Task_FieldSfxQueue]
-      # Reset, animation update and slot commands share GeomCtrlEntry.
-      # Reset/setup also byte-match under the update profile (-fno-force-mem).
-      - [0x55DD4, c, render/Obj_ControlEntries]
-      # View state reset, camera clamp, bounds, viewport and GTE offsets, scroll mode and screen transitions share private state (G0819).
-      - [0x56370, c, render/Render_CameraViewportFlow]
+      # Geometry control entries (reset, animation update and slot commands share
+      # GeomCtrlEntry) and the view state reset, camera clamp, bounds, viewport and
+      # GTE offsets, scroll mode and screen transitions (private state, G0819). One
+      # default-profile unit with --expand-div; the entries match without the old
+      # -fno-force-mem.
+      - [0x55DD4, c, render/Render_CameraViewportFlow]
       # Tile packet setup and point clamping share GeomEntry flags/depth and bounds.
       - [0x57760, c, render/Geo_LoadMeshEntry]
       # Sprite entry setters, the geometry mesh list build and draw, the screen
