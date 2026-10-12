@@ -1626,9 +1626,76 @@ Left, with the best crutch-free lev:
   because the file is `-fno-strength-reduce`; dropping the marker reverses
   the loops (lev 8).
 - Header aliases: the stuck pairs listed under "Still open" above, plus the
-  overlay-shared `g_ActiveDrawSlot`/`g_GameStateBlock` labels and the PSY-Q
-  callback views that other PSY-Q units still declare under their `D_` names
-  with other types.
+  overlay-shared `g_ActiveDrawSlot`/`g_GameStateBlock` labels. (The PSY-Q
+  callback views were renamed in the 2026-10-12 soft debt sweep below.)
 - Stack reserves: `Menu_DrawTextboxEntries` (its 0x38 slot) and the four
   battle phase/update functions (0x18 to 0x300 bytes); their original locals
   are unknown, and an unused named local would only rename the reserve.
+
+### Soft debt sweep over src/main (2026-10-12, zero-debt round 4)
+
+Byte-pointer arithmetic, raw offset dereferences and pointer/integer casts in
+`src/main` went from 70/14/227 to 8/3/7, and every remaining site is either in
+`FieldEng_GeometryAndShapes`/`Render_DrawObjectVariant` (out of scope) or
+listed below. None of the recipes changed a byte.
+
+Why most sites needed a union rather than a typed index: GCC 2.7.2 and 2.8.1
+expand every C pointer sum (`p + i`, `&p[i]`, `i + p`) with the base first
+(`addu d, base, offset`), while retail often has `addu d, offset, base`, the
+order of an integer sum. Seven forms of typed indexing were tried in
+`Battle_DrawDecimalNumber` alone; all give the base-first `addu`. The integer
+sum therefore stays, but it is written on the `word` member of a typed
+address union (the established `...Address` recipe), so no pointer is cast.
+
+- Address unions added: `GteAtanEntryAddress` (ratan2), `StHeaderAddress`
+  (StFreeRing, init_ring_status: the status is cleared as a plain halfword or
+  word, because a member store lets GCC hoist the `StRingAddr` reload out of
+  the loop), `CdTimeoutFlagAddress`, `CdDsQueueEntryAddress`,
+  `DslNameAddress`, `DsSlotAddress` (DsSync's history reads),
+  `GpuQueueEntryAddress` (_exeque), `CardObjAddress` (LIBPAD ports,
+  capability records, multitap counts and the actuator flag cursor; pinned
+  register unions keep the `$2`/`$3` pins where they were),
+  `SpuReverbEntryAddress`, `TextboxGlyphSpacingAddress`,
+  `RenderBufferSlotAddress` (frame-slot views of the buffer table and
+  `g_OtBufferTable`), `BattleHalfwordAddress`, `BattleGaugePrimAddress`,
+  `BattleSpriteWord` (the action-count sprites, whose m2c integers now hold
+  an offset and then the packet address in one union) and
+  `BattleInitSlotAddress`. A union is declared in the innermost block: at
+  function scope `ratan2` got an 8-byte stack slot for it.
+- Named idioms: `GTE_MULTU` (an unsigned 32x32 product read from LO; an
+  inline function instead adds copies of the pinned operands),
+  `GTE_SINE_WORD_AT_OFFSET` (the rotation builders keep the scaled angle in
+  `$24`), `ISO_NEXT_DIRECTORY_RECORD`, `PSX_ADDRESS` (DMA address registers,
+  ordering-table links and packet tags), `CDROM_EVENT_STATE_FROM_RETRY`,
+  `RENDER_BUFFERS_FROM_GLYPH_SLOT`, `CARD_OBJ_FROM_STATUS_BUFFER` and PSY-Q's
+  `va_start`/`va_arg` (`pe1/psyq_stdarg.h`).
+- Types instead of casts: `dma_execute` takes `void *`; the stream payload is
+  `StSectorPayload *`; `__fixdfsi` reads the sign through `MathS64`; the
+  rotation builders' packed sine word is `s32`; `PadInitDirect` walks
+  `u8 **` statusBuffer members; the DS callback setters take
+  `DsEventCallback`/`DsCallback`.
+- Asm-label aliases replaced by symbols (sym.main.txt or the manual registry):
+  `atan_table`, the four VSync words, `g_CdReadyEvent`,
+  `g_CdRomEventCommandState`, `g_CdRomCmdTimeout`, `g_CdRomCmdRetryState`,
+  `g_CdReadProgress`, `g_CdStreamReady`, `g_DsReadCallbackCursor`, the three
+  DS callbacks and the two DS cache words (now named where `dsfile.c` defines
+  them). Two scalar views stay as `__asm__` aliases, now of the role name:
+  `g_CdReadCommandPollToggle` (through `g_CdReadProgress.commandPollToggle`
+  LIBDS_DSSYS_1_text_4A4 keeps the address in `$s0`; lev 18)
+  and `g_CdStreamReadyHalfword` (through the union the memcard overlay
+  schedules its test and clear differently and fails its hash).
+
+Left, with the best crutch-free lev:
+
+- `Battle_DrawStatusPanel` (miss sprite link, `(u8 *)D_800B01C8 - 8`): as a
+  `BattleSpriteWord` integer sum the frame/panel offset multiplies swap
+  `a1`/`a2` (lev 16); with a byte member the `-8` moves after the sum.
+- `Gpu_SetupSprites` emit macros: the `BattleSpriteWord` form of `EMIT_BASE`
+  reorders the base load against the slot multiply (lev 76); see the earlier
+  entry for the typed forms.
+- `Menu_MainUpdate` `reset_operand` (mask, then `D_8009D278`): any union
+  makes the actor load take `a0` instead of reusing the mask register `v1`
+  (lev 8 over the unit). The `var_v0` tint/entity word is a register union.
+- `CQ_vsync_system`: the queue window as a union word swaps `v0`/`v1` around
+  the index multiply in every form tried (lev 4).
+- Stack reserves and the `cdrom.h` sound-table aliases: unchanged, see above.
