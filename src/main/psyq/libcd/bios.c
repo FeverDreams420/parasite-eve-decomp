@@ -4,8 +4,8 @@
 /* Psy-Q LIBCD BIOS.OBJ, part 1 of 7: getintr. BIOS stays in seven units:
  * neighbouring parts alternate between GCC 2.7.2 (bios_2.c, bios_4.c,
  * bios_5.c) and GCC 2.8.1 (bios.c, bios_3.c, bios_6.c, bios_7.c), and
- * bios_2.c to bios_6.c each need their own -fno-expensive-optimizations or
- * scheduling options. */
+ * bios_2.c, bios_3.c, bios_4.c and bios_6.c each need their own
+ * -fno-expensive-optimizations or scheduling options. */
 #include "pe1/psyq_cd.h"
 #include "bios_internal.h"
 #include "pe1/psyq_bios.h"

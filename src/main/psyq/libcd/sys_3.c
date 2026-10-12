@@ -1,6 +1,3 @@
-/* ASSEMBLER: GNU */
-/* GCC_VERSION: 2.8.1 */
-/* CC1_FLAGS: -mno-split-addresses */
 /* Psy-Q LIBCD SYS.OBJ, part 3 of 3: CdIntToPos, CdPosToInt. */
 #include "pe1/psyq_cd.h"
 

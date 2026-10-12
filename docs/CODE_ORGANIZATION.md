@@ -283,7 +283,7 @@ byte-identical.
 |---|---|---|---|
 | LIBGPU SYS | 17 | 11 (`sys.c` .. `sys_11.c`) | parts 1, 3, 6, 8 and 10 need GCC 2.8.1 with `-mno-split-addresses`; 2, 4, 7, 9 and 11 need GCC 2.7.2; part 5 needs `-O1` or `-fno-schedule-insns` |
 | LIBCD SYS | 6 | 3 | CdLastPos needs GCC 2.8.1, CdControl (part 2) `-fno-schedule-insns`, which CdIntToPos (part 3) does not tolerate |
-| LIBCD BIOS | 9 | 7 | parts alternate between GCC 2.7.2 (2, 4, 5) and GCC 2.8.1 (1, 3, 6, 7); parts 2 to 6 each need their own `-fno-expensive-optimizations` or scheduling option |
+| LIBCD BIOS | 9 | 7 | parts alternate between GCC 2.7.2 (2, 4, 5) and GCC 2.8.1 (1, 3, 6, 7); parts 2, 3, 4 and 6 each need their own `-fno-expensive-optimizations` or scheduling option |
 | LIBCD C_011 | 3 | 2 | StCdInterrupt and mem2mem GCC 2.7.2, dma_execute GCC 2.8.1 with `-fno-schedule-insns` |
 | LIBETC INTR | 3 | 2 | the callbacks GCC 2.7.2, the interrupt manager GCC 2.8.1 |
 | LIBMATH MULDF3 | 2 | 2 | `__muldf3` GCC 2.7.2 with GNU as, `_mul_mant_d` GCC 2.8.1 |
