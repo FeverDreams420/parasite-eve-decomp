@@ -56,7 +56,7 @@ int func_8019988C(int event, EmissionState *state)
     if (state->count < 24) {
         RoomM350SineParticle *effect;
         int random;
-        register int index asm("$3");
+        int index;
         RoomM350EffectActor *actor;
         FieldActor *instance;
         state->delay--;
@@ -66,8 +66,9 @@ int func_8019988C(int event, EmissionState *state)
         random = Inv_ScrambleGrid();
         actor = ANIM_OWNER_AS(RoomM350EffectActor);
         instance = (FieldActor *)actor->instance;
+        index = (unsigned char)random;
         {
-            register int byte asm("$4") = (unsigned char)random;
+            register int byte asm("$4") = index;
             int count = instance->render_object.header->part_count;
             register int range asm("$3") = count - 1;
             register int product asm("$2");
