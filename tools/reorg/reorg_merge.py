@@ -365,6 +365,10 @@ def main() -> int:
             rules)
         for pattern, name in bare:
             new_text = pattern.sub(name, new_text)
+        # `New.c, New.c` / `New.c and New.c` left by the rewrite collapse to one
+        stem = re.escape(os.path.basename(new))
+        new_text = re.sub(r"((?:[\w.+-]+/)*" + stem + r")(?:,\s*|\s+and\s+(?:\*\s*)?)\1",
+                          r"\1", new_text)
         if path.startswith("configs/") and path.endswith(".yaml"):
             new_text = rm.rewrite_manifest(new_text, path, moves)
         if new_text != text:
