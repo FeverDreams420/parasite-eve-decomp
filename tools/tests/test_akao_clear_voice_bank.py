@@ -8,7 +8,7 @@ import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 ENTRY = 0x8006A674
-UNIT = 0x8006A0E8
+UNIT = 0x800698D4  # start of Sys_GameStateAndVoiceBanks.c (display lists first)
 EXIT = 0x80010000
 STATE = 0x800B0CD8
 PAIRS = 0x80094488
@@ -52,7 +52,7 @@ class AkaoClearVoiceBankTests(unittest.TestCase):
                 "g_GameState = 0x800B0CD8;\n"
                 "D_80094488 = 0x80094488;\n"
                 "_gp = 0x8009CD70;\n"
-                "SECTIONS { .text 0x8006A0E8 : SUBALIGN(4) { *(.text) } "
+                "SECTIONS { .text 0x800698D4 : SUBALIGN(4) { *(.text) } "
                 "/DISCARD/ : { *(.reginfo) *(.mdebug) *(.pdr) } }\n"
             )
             subprocess.run(["mipsel-none-elf-ld", "-EL", "--unresolved-symbols=ignore-all",

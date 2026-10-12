@@ -500,11 +500,28 @@ def _link_unit(name: str, address: int, symbols: str, work: pathlib.Path,
                 provide += f"{u} = 0x{value:x};\n"
         else:
             provide += f"PROVIDE({u} = 0x{value:x});\n"
+    # Small data the unit defines itself (a merged unit can own .sdata) sits
+    # at its retail address, so $gp-relative offsets come out as in retail.
+    small = ""
+    out = subprocess.run(["mipsel-none-elf-objdump", "-t", str(obj)], check=True,
+                         capture_output=True, text=True).stdout
+    for section in (".sdata", ".sbss"):
+        for line in out.splitlines():
+            fields = line.split()
+            if len(fields) >= 5 and fields[-3] == section and fields[1] in ("g", "l") \
+                    and not fields[-1].startswith("."):
+                sym = fields[-1]
+                encoded = re.fullmatch(r"D_([0-9A-Fa-f]{8})", sym)
+                where = known.get(sym, int(encoded.group(1), 16) if encoded else None)
+                if where is not None:
+                    small += " %s 0x%x : { *(%s) }" % (section, where - int(fields[0], 16),
+                                                      section)
+                    break
     script = work / "unit.ld"
     script.write_text(
         symbols + "\n" + provide
-        + "SECTIONS { .text 0x%x : SUBALIGN(4) { *(.text .text.*) } "
-        "/DISCARD/ : { *(.reginfo) *(.mdebug) } }\n" % base)
+        + "SECTIONS { .text 0x%x : SUBALIGN(4) { *(.text .text.*) }%s "
+        "/DISCARD/ : { *(.reginfo) *(.mdebug) } }\n" % (base, small))
     result = subprocess.run(["mipsel-none-elf-ld", "-T", str(script),
                              "--no-warn-mismatch", str(obj), "-o", str(elf)],
                             capture_output=True, text=True)

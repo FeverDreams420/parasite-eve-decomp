@@ -12,6 +12,8 @@ import tempfile
 import unittest
 import shutil
 
+from tools.tests.csource import linked_function_bytes
+
 ROOT = Path(__file__).resolve().parents[2]
 
 @unittest.skipUnless(shutil.which('mipsel-none-elf-ld') and (ROOT/'assets/USA/main.exe').is_file(), 'retail image/toolchain unavailable')
@@ -34,15 +36,12 @@ class AssetLoadTimTexturesTests(unittest.TestCase):
                        Asset_FindTable08ByU32Key=0x8006E498, LoadImage=0x8007506C)
         CALLS = {value: name for name, value in SYMBOLS.items() if name in (
             'Gpu_LoadTimAsset', 'CdRom_ReadSectorsFromLba', 'CdRom_PollReady', 'Asset_FindTable08ByU32Key', 'LoadImage')}
-        source = 'src/main/asset/Asset_LoadTimTextures.c'
         retail = (ROOT/'assets/USA/main.exe').read_bytes()[0x5994C:0x59D94]
         with tempfile.TemporaryDirectory() as directory:
-            work = Path(directory)
-            subprocess.run([str(ROOT/'tools/scripts/cc.sh'), str(ROOT/source), str(work/'test.o')], check=True, capture_output=True)
-            (work/'test.ld').write_text('SECTIONS { .text 0x8006914C : SUBALIGN(4) { *(.text) } /DISCARD/ : { *(.reginfo) *(.mdebug) *(.pdr) } }\n' + '\n'.join(f'{name} = 0x{address:X};' for name, address in SYMBOLS.items()))
-            subprocess.run(['mipsel-none-elf-ld', '-EL', '-T', str(work/'test.ld'), str(work/'test.o'), '-o', str(work/'test.elf')], check=True, capture_output=True)
-            subprocess.run(['mipsel-none-elf-objcopy', '-O', 'binary', '-j', '.text', str(work/'test.elf'), str(work/'test.bin')], check=True, capture_output=True)
-            compiled = (work/'test.bin').read_bytes()
+            compiled = linked_function_bytes(
+                'Asset_LoadTimTextures', ENTRY, len(retail),
+                '\n'.join(f'{name} = 0x{address:X};' for name, address in SYMBOLS.items()),
+                Path(directory))
 
         self.assertEqual(compiled, retail, 'Production TIM loader must exactly match retail bytes')
         rng = random.Random(ENTRY)

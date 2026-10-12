@@ -8,7 +8,7 @@ import subprocess
 import tempfile
 import unittest
 
-from tools.tests.csource import find_definition, linked_function_bytes
+from tools.tests.csource import find_definition, function_text, linked_function_bytes
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE = find_definition('Gpu_SetupSprites')
@@ -16,7 +16,7 @@ SOURCE = find_definition('Gpu_SetupSprites')
 
 class GpuSetupSpritesTests(unittest.TestCase):
     def test_setup_function_has_no_assembly(self):
-        source = SOURCE.read_text().split('void Gpu_QueuePrimitive')[0]
+        source = function_text('Gpu_SetupSprites', SOURCE)
         source = re.sub(r'/\*.*?\*/|//[^\n]*','',source,flags=re.S)
         self.assertNotRegex(source,r'\b(?:asm|__asm__|INCLUDE_ASM|CC_POSTPASS)\b')
 
