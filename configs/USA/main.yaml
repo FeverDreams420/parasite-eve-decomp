@@ -1135,16 +1135,10 @@ segments:
       # private anchor D_800E2214) and the rotating ballistic sprite the effect program at
       # D_800E1BA8 pairs with it.
       - [0xC5128, c, fieldfx/FieldEng_SpriteEffects]
-      - [0xCB398, c, fieldfx/FieldEng_WaveEmitterEffect]
-      - [0xCBA5C, c, fieldfx/FieldEng_DiamondEmitter]
-      - [0xCC29C, c, fieldfx/FieldEng_RadialFlashEffect]
-      - [0xCC858, c, fieldfx/FieldEng_TwinModelEffect]
-      - [0xCD110, c, fieldfx/FieldEng_DriftingSpriteEffect]
-      - [0xCD99C, c, fieldfx/FieldEng_ConvergingFlashEffect]
-      - [0xCE1E4, c, fieldfx/FieldEng_SettlingGlowEffect]
-      - [0xCF7FC, c, fieldfx/FieldEng_FadeParticle]
-      - [0xD007C, c, fieldfx/FieldEng_RotatingEffect]
-      - [0xD01B0, c, fieldfx/FieldEng_PointEmitter]
+      # Emitter and flash effects: wave and diamond emitters, radial and converging flashes,
+      # twin model, drifting sprite, settling glow, fade particle, rotating effect and point
+      # emitter.
+      - [0xCB398, c, fieldfx/FieldEng_EmitterEffects]
       # Room-object script conditions: the cursor counter trigger and the busy/one-shot wait test.
       - [0xD0320, c, fieldfx/FieldEng_ObjectConditions]
       - [0xD0444, c, fieldfx/FieldEng_VectorMath]
