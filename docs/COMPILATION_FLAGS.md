@@ -472,7 +472,7 @@ means only the order of symbol-table entries changed (cc1 `-G8` emits
 
 | unit | without this marker part (lev, worst functions) |
 |---|---|
-| `main/akao/Akao_SequencerFlow.c` | maspsx `--expand-div`: lev 119 (Akao_StepSampleLoader 15, SeqOp_NoteOnWithPitchSlide 13, sndTrackSlideVolume 9) |
+| `main/akao/Akao_SequencerFlow.c` | maspsx `--expand-div`: lev 119 (Akao_StepSampleLoader 15, SeqOp_NoteOnWithPitchSlide 13, SeqOp_SlideVolume 9) |
 | `main/akao/Akao_VoiceBankLifecycle.c` | cc1 `-fno-strength-reduce`: lev 496 (Akao_StepSequencerVoice 62, Spu_SlideVoicePanMasked 45, Spu_ParameterSlide 45); maspsx `--expand-div`: lev 209 (Spu_SlideVoicePitchMasked 26, Spu_SlideVoicePanMasked 26, Spu_ParameterSlide 26) |
 | `main/asset/Asset_UnloadTableEntries.c` | cc1 `-fno-force-mem`: lev 1 (Asset_UnloadTableEntries 1) |
 | `main/aya/Aya_StatDerivation.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 2 (Inv_GetBonusSlotCount 2); maspsx `--use-comm-section`: lev 1 (Inv_GetBonusSlotCount 1); FORCE_G0: lev 18 (Inv_RecalcSlotStats 7, Battle_GetEnemyEscapeFlag 5, Battle_SyncEquipSlots 4); small-data set: lev 2 (Inv_GetBonusSlotCount 2) |

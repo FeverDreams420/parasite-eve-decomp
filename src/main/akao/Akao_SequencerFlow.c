@@ -1041,7 +1041,7 @@ void SeqOp_SetVolumeSlideTarget(void *ptr) {
 
 #define READ_S16(addr) ((short)(*(addr)++ | (*(addr)++ << 8)))
 
-void sndTrackJumpRelative(unsigned char **stream) {
+void SeqOp_JumpRelative(unsigned char **stream) {
     *stream += READ_S16(*stream);
 }
 
@@ -1067,7 +1067,7 @@ void SeqOp_BranchIfLoopLimitReached(AkaoTrack *track)
     }
 }
 
-void sndTrackReadVolume(AkaoTrack *track) {
+void SeqOp_ReadVolume(AkaoTrack *track) {
     unsigned char *stream = track->pc;
     unsigned int flags;
     int value;
@@ -1085,7 +1085,7 @@ static inline int ReadVolumeByte(u8 **cursor) {
     return pc[0];
 }
 
-void sndTrackSlideVolume(AkaoTrack *track) {
+void SeqOp_SlideVolume(AkaoTrack *track) {
     u8 *pc;
     int duration;
     int current;
@@ -1164,12 +1164,12 @@ void Akao_SetExpressionSlide(AkaoTrack *track) {
     track->expression_delta = (next - current) / track->expression_duration;
 }
 
-void sndTrackSkip2(int *arg0)
+void SeqOp_Skip2(int *arg0)
 {
     *arg0 += 2;
 }
 
-void sndTrackNoop(void)
+void SeqOp_Ignore(void)
 {
 }
 
@@ -1242,18 +1242,18 @@ void Akao_SetPanSlide(AkaoTrack *track) {
     track->panpot_delta = delta;
 }
 
-void sndTrackReadPanpot(AkaoTrack *track) {
+void SeqOp_ReadPanpot(AkaoTrack *track) {
     unsigned char *cursor = track->pc;
 
     track->pc = cursor + 1;
     track->panpot_step = *cursor;
 }
 
-void sndTrackIncPanpot(AkaoTrack *track) {
+void SeqOp_IncPanpot(AkaoTrack *track) {
     track->panpot_step = (track->panpot_step + 1) & 0xF;
 }
 
-void sndTrackDecPanpot(AkaoTrack *track) {
+void SeqOp_DecPanpot(AkaoTrack *track) {
     track->panpot_step = (track->panpot_step - 1) & 0xF;
 }
 
@@ -1384,14 +1384,14 @@ void SeqOp_LoadInstrumentFromIndex(void *ptr)
   ((AkaoTrack *)ptr)->adsr_release = base;
 }
 
-void sndTrackReadExpression(AkaoTrack *track) {
+void SeqOp_ReadExpression(AkaoTrack *track) {
     unsigned char *cursor = track->pc;
 
     track->pc = cursor + 1;
     track->expression = (signed char)*cursor;
 }
 
-void sndTrackAdjustExpression(AkaoTrack *track) {
+void SeqOp_AdjustExpression(AkaoTrack *track) {
     unsigned char *cursor = track->pc;
 
     track->pc = cursor + 1;
@@ -1437,14 +1437,14 @@ void SeqOp_StopTremolo(AkaoTrack *track) {
     track->tremolo_duration = 0;
 }
 
-void sndTrackReadDetune(AkaoTrack *track) {
+void SeqOp_ReadDetune(AkaoTrack *track) {
     unsigned char *cursor = track->pc;
 
     track->pc = cursor + 1;
     track->detune = (signed char)*cursor;
 }
 
-void sndTrackAdjustDetune(AkaoTrack *track) {
+void SeqOp_AdjustDetune(AkaoTrack *track) {
     unsigned char *cursor = track->pc;
 
     track->pc = cursor + 1;
@@ -1812,7 +1812,7 @@ unsigned int SeqOp_SetTrack5AValue(void *ptr)
   g_AkaoVoiceUpdateFlags |= AKAO_VOICE_PARAM_PITCH;
 }
 
-void sndTrackReadAdsrAttackRate(AkaoTrack *track) {
+void SeqOp_ReadAdsrAttackRate(AkaoTrack *track) {
     unsigned char *cursor = track->pc;
     unsigned int flags;
     unsigned char value;
@@ -1824,7 +1824,7 @@ void sndTrackReadAdsrAttackRate(AkaoTrack *track) {
     track->adsr_attack_rate = value;
 }
 
-void sndTrackReadAdsrDecayRate(AkaoTrack *track) {
+void SeqOp_ReadAdsrDecayRate(AkaoTrack *track) {
     unsigned char *cursor = track->pc;
     unsigned int flags;
     unsigned char value;
@@ -1836,7 +1836,7 @@ void sndTrackReadAdsrDecayRate(AkaoTrack *track) {
     track->adsr_decay_rate = value;
 }
 
-void sndTrackReadAdsrSustainLevel(AkaoTrack *track) {
+void SeqOp_ReadAdsrSustainLevel(AkaoTrack *track) {
     unsigned char *cursor = track->pc;
     unsigned int flags;
     unsigned char value;
@@ -1848,7 +1848,7 @@ void sndTrackReadAdsrSustainLevel(AkaoTrack *track) {
     track->adsr_sustain_level = value;
 }
 
-void sndTrackReadAdsrSustainRate(AkaoTrack *track) {
+void SeqOp_ReadAdsrSustainRate(AkaoTrack *track) {
     unsigned char *cursor = track->pc;
     unsigned int flags;
     unsigned char value;
@@ -1860,7 +1860,7 @@ void sndTrackReadAdsrSustainRate(AkaoTrack *track) {
     track->adsr_sustain_rate = value;
 }
 
-void sndTrackReadAdsrReleaseRate(AkaoTrack *track) {
+void SeqOp_ReadAdsrReleaseRate(AkaoTrack *track) {
     unsigned char *cursor = track->pc;
     unsigned int flags;
     unsigned char value;
@@ -1872,7 +1872,7 @@ void sndTrackReadAdsrReleaseRate(AkaoTrack *track) {
     track->adsr_release_rate = value;
 }
 
-void sndTrackReadAdsrAttack(AkaoTrack *track) {
+void SeqOp_ReadAdsrAttack(AkaoTrack *track) {
     unsigned char *cursor = track->pc;
     unsigned int flags;
     unsigned char value;
@@ -1884,7 +1884,7 @@ void sndTrackReadAdsrAttack(AkaoTrack *track) {
     track->adsr_attack = value;
 }
 
-void sndTrackReadAdsrSustain(AkaoTrack *track) {
+void SeqOp_ReadAdsrSustain(AkaoTrack *track) {
     unsigned char *cursor = track->pc;
     unsigned int flags;
     unsigned char value;
@@ -1896,7 +1896,7 @@ void sndTrackReadAdsrSustain(AkaoTrack *track) {
     track->adsr_sustain = value;
 }
 
-void sndTrackReadAdsrRelease(AkaoTrack *track) {
+void SeqOp_ReadAdsrRelease(AkaoTrack *track) {
     unsigned char *cursor = track->pc;
     unsigned int flags;
     unsigned char value;
@@ -2014,7 +2014,7 @@ void SeqOp_JumpIfLoopCountPop(AkaoTrack *track) {
     track->call_stack_index = (track->call_stack_index - 1) & 3;
 }
 
-void sndTrackReturn(AkaoTrack *track) {
+void SeqOp_Return(AkaoTrack *track) {
     unsigned short index = track->call_stack_index;
 
     track->repeat_counters[index]++;
@@ -2104,8 +2104,8 @@ void SeqOp_ReadTrack64U16(unsigned char **stream) {
 }
 
 void SeqOp_ReadAdsrDecayAndSustain(void *ptr, int arg) {
-    sndTrackReadAdsrDecayRate(ptr);
-    ((void (*)())sndTrackReadAdsrSustainLevel)(ptr, arg);
+    SeqOp_ReadAdsrDecayRate(ptr);
+    ((void (*)())SeqOp_ReadAdsrSustainLevel)(ptr, arg);
 }
 
 void SeqOp_SetDurationBAAndMask(AkaoTrack *track) {

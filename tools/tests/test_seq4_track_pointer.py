@@ -16,11 +16,11 @@ class Seq4TrackPointerTests(unittest.TestCase):
     def test_duplicate_assembly_alias_is_gone(self):
         names=('SeqOp_SetTrack38Mask','SeqOp_ClearMask','SeqOp_EnableField84','SeqOp_Noop_904AC',
                'SeqOp_Noop_904B4','SeqOp_Noop_904BC','SeqOp_SetTrack5AValue',
-               'sndTrackReadAdsrAttackRate','sndTrackReadAdsrDecayRate','sndTrackReadAdsrSustainLevel',
-               'sndTrackReadAdsrSustainRate','sndTrackReadAdsrReleaseRate','sndTrackReadAdsrAttack',
-               'sndTrackReadAdsrSustain','sndTrackReadAdsrRelease','Akao_SetReleaseRate',
+               'SeqOp_ReadAdsrAttackRate','SeqOp_ReadAdsrDecayRate','SeqOp_ReadAdsrSustainLevel',
+               'SeqOp_ReadAdsrSustainRate','SeqOp_ReadAdsrReleaseRate','SeqOp_ReadAdsrAttack',
+               'SeqOp_ReadAdsrSustain','SeqOp_ReadAdsrRelease','Akao_SetReleaseRate',
                'Akao_ResetReleaseRate','SeqOp_PushLoopPoint','SeqOp_LoopCounter','SeqOp_JumpIfLoopCount',
-               'SeqOp_JumpIfLoopCountPop','sndTrackReturn','SeqOp_SetVolume','SeqOp_AdjustVolumeTarget')
+               'SeqOp_JumpIfLoopCountPop','SeqOp_Return','SeqOp_SetVolume','SeqOp_AdjustVolumeTarget')
         body=functions_text(*names)
         unit=find_definition(names[0]).read_text()
         self.assertNotIn('g_AkaoCurTrack_1',unit)

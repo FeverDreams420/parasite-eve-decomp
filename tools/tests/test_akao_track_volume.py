@@ -14,7 +14,7 @@ from csource import functions_text  # noqa: E402
 
 class AkaoTrackVolumeTests(unittest.TestCase):
     def test_translation_unit_is_plain_c(self):
-        source = functions_text('sndTrackReadVolume', 'ReadVolumeByte', 'sndTrackSlideVolume')
+        source = functions_text('SeqOp_ReadVolume', 'ReadVolumeByte', 'SeqOp_SlideVolume')
         source = re.sub(r'/\*.*?\*/|//[^\n]*', '', source, flags=re.S)
         self.assertNotRegex(source, r'\b(?:asm|__asm__|INCLUDE_ASM|CC_POSTPASS)\b')
 
