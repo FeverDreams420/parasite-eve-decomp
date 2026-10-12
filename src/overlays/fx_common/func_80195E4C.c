@@ -11,7 +11,7 @@ void func_80195E4C(int index, int unused1, int unused2, int source)
     FxCommonVec3 point;
     GteShortVector scratch;
     short savedIndex = index;
-    int lookup;
+    void *lookup;
     int result;
     int shortIndex;
 

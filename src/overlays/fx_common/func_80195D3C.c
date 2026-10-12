@@ -10,7 +10,7 @@ void func_80195D3C(void)
 {
     FxCommonVec3 point;
     GteShortVector scratch;
-    int lookup;
+    void *lookup;
 
     if (D_8019C040 > 1) {
         D_8019C040--;
