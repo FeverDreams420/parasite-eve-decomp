@@ -77,12 +77,21 @@ extern RenderPagedSpritePacket D_8009E320[2];   /* PE label */
 extern RenderGouraudQuad D_800B00E8[2];         /* ATB gauge fill */
 extern RenderGouraudQuad D_800B0130[2][2];      /* PE gauge fill, remainder */
 extern RenderPagedSpritePacket D_800B6920[2];   /* ATB gauge marker */
-/* HP digit packets: interior symbols retain independent relocations. */
-extern u8 D_8009E0F0[], D_8009E0F8[], D_8009E1D0[], D_8009E1D8[];
-extern u8 D_8009E2F0[];
+/* HP digit packets: current HP has four per draw buffer, maximum HP five
+ * (digits and slash). Battle_DrawEnemyHP addresses the sprites from the
+ * sprite, each followed by the texture-page command of the next packet (the
+ * BattleTileSlot view), so the sprite arrays keep their own symbols. */
+typedef struct BattleDigitSlot {
+    RenderSpritePacket sprite;
+    RenderTexturePagePacket nextPage;
+} BattleDigitSlot;
+extern RenderPagedSpritePacket D_8009E0F0[2][4], D_8009E1D0[2][5];
+extern BattleDigitSlot D_8009E0F8[2][4], D_8009E1D8[2][5];
+/* HP label packets. */
+extern RenderPagedSpritePacket D_8009E2E8[2];
 /* Packet arenas Battle_DrawHPBar initializes; the clut halfwords of the
  * sprites have their own retail symbols. */
-extern u8 D_8009E106[], D_8009E1E6[], D_8009E2E8[], D_8009E2FE[];
+extern u8 D_8009E106[], D_8009E1E6[], D_8009E2FE[];
 extern u8 D_8009E3CE[], D_8009E476[], D_8009E500[], D_8009E746[];
 extern u8 D_8009E77E[], D_8009E7B6[], D_8009E880[], D_8009E896[];
 extern u8 D_8009E8CE[], D_8009E928[], D_8009E93E[], D_8009E960[];

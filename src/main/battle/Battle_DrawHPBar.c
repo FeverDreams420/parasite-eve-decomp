@@ -295,8 +295,8 @@ loop_8:
         D_8009E0B8[bufferIndex].sprite.clut = hudClut;
         temp_s3_3->width = 8;
         temp_s3_3->height = 4;
-        Gpu_InitDrawModeSprtPacket(temp_s4 + D_8009E2E8, hudPage);
-        temp_s0_12 = temp_s4 + (D_8009E2E8 + 8);
+        Gpu_InitDrawModeSprtPacket(temp_s4 + (u8 *)D_8009E2E8, hudPage);
+        temp_s0_12 = temp_s4 + ((u8 *)D_8009E2E8 + 8);
         SetShadeTex(temp_s0_12, 1);
         temp_s0_12->u = 0x58;
         temp_s0_12->v = markerV;

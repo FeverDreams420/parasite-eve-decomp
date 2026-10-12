@@ -10,10 +10,8 @@
 volatile u16 D_8009CE84;
 
 /* Clamp the active combatant's gauges, draw the ATB and PE bars and the
- * status background, then the HP numbers and status icons. Matching debt:
- * two v0 pins. The background pointer and the ordering-table index of the
- * last AddPrim are both born in v0 in retail; as pseudos they take a0/v1
- * and the index load moves above the background store (lev 37 without). */
+ * status background, then the HP numbers and status icons. Each background
+ * branch writes the whole tile; the compiler merges their common tails. */
 void Battle_DrawActiveStatus(void)
 {
     s16 maximumHP;
@@ -29,8 +27,6 @@ void Battle_DrawActiveStatus(void)
     RenderGouraudQuad *peFill;
     RenderGouraudQuad *peRemainder;
     RenderSpritePacket *peLabel;
-    register RenderColorTilePacket *background asm("$2");
-    u16 backgroundY;
     BattleTileSlot *tiles;
 
     if (!(D_8009D1A0 & 2)) {
@@ -104,243 +100,134 @@ void Battle_DrawActiveStatus(void)
         AddPrim(D_800B0E38.ordering[D_8009CDDC] + 4, (u32 *)&D_8009E320[D_8009CDDC]);
         if (D_8009D1A0 & 2) {
             tiles = D_8009E070;
-            background = &tiles[D_8009CDDC].tile;
-            background->x0 = g_HudOrigin.x;
-            backgroundY = g_HudOrigin.y;
-            background->w = 0x54;
-            background->h = 0x20;
+            tiles[D_8009CDDC].tile.x0 = g_HudOrigin.x;
+            tiles[D_8009CDDC].tile.y0 = g_HudOrigin.y;
+            tiles[D_8009CDDC].tile.w = 0x54;
+            tiles[D_8009CDDC].tile.h = 0x20;
         } else {
             tiles = D_8009E070;
-            background = &tiles[D_8009CDDC].tile;
-            background->x0 = g_HudOrigin.x;
-            backgroundY = g_HudOrigin.y;
-            background->w = 0x54;
-            background->h = 0x19;
-            backgroundY += 7;
+            tiles[D_8009CDDC].tile.x0 = g_HudOrigin.x;
+            tiles[D_8009CDDC].tile.y0 = g_HudOrigin.y + 7;
+            tiles[D_8009CDDC].tile.w = 0x54;
+            tiles[D_8009CDDC].tile.h = 0x19;
         }
     } else if (D_8009D1A0 & 2) {
         tiles = D_8009E070;
-        background = &tiles[D_8009CDDC].tile;
-        background->x0 = g_HudOrigin.x;
-        backgroundY = g_HudOrigin.y;
-        background->w = 0x54;
-        background->h = 0x19;
+        tiles[D_8009CDDC].tile.x0 = g_HudOrigin.x;
+        tiles[D_8009CDDC].tile.y0 = g_HudOrigin.y;
+        tiles[D_8009CDDC].tile.w = 0x54;
+        tiles[D_8009CDDC].tile.h = 0x19;
     } else {
         tiles = D_8009E070;
-        background = &tiles[D_8009CDDC].tile;
-        background->x0 = g_HudOrigin.x;
-        backgroundY = g_HudOrigin.y;
-        background->w = 0x54;
-        background->h = 0x12;
-        backgroundY += 7;
+        tiles[D_8009CDDC].tile.x0 = g_HudOrigin.x;
+        tiles[D_8009CDDC].tile.y0 = g_HudOrigin.y + 7;
+        tiles[D_8009CDDC].tile.w = 0x54;
+        tiles[D_8009CDDC].tile.h = 0x12;
     }
-    background->y0 = backgroundY;
-    {
-        register s32 index asm("$2") = D_8009CDDC;
-        AddPrim(D_800B0E38.ordering[index] + 7, (u32 *)&D_8009E068[index]);
-    }
+    AddPrim(D_800B0E38.ordering[D_8009CDDC] + 7, (u32 *)&D_8009E068[D_8009CDDC]);
     Battle_DrawEnemyHP(D_8009D278->maxHP, D_8009D278->curHP);
     Gpu_DrawStatusIcons();
 }
 
 
+/* Digit sprites of the current draw buffer. Every use indexes again: the
+ * byte stores to the packets make GCC reload the draw slot. */
+#define MAX_HP_DIGIT(i) (&D_8009E1D8[D_8009CDDC][i].sprite)
+#define CURRENT_HP_DIGIT(i) (&D_8009E0F8[D_8009CDDC][i].sprite)
+
 /* Draw current/maximum HP from reversed decimal digits and the HP label.
- * Matching debt: 14 register pins and 9 empty barriers preserve retail scheduling
- * and the volatile label view the final coordinate order. */
+ * The maximum is drawn right to left after a slash, the current value is
+ * right-aligned against it; flashing digits mark the status flags. */
 void Battle_DrawEnemyHP(s16 maximum, s16 current)
 {
     u8 digits[8];
-    register u8 *sprites asm("$18");
-    register s16 savedCurrent asm("$19") = current;
-    s16 screenY;
-    s16 screenX;
-    register s32 digitIndex asm("$4");
-    s32 pulseByte;
-    s32 labelOffset;
-    s32 maximumDigitOffset;
-    register s32 currentDigitOffset asm("$6");
-    register s32 shiftedIndex asm("$3");
-    register s8 slashIndex asm("$4");
-    s8 maximumLastIndex;
-    s8 nextMaximumIndex;
-    s8 missingDigits;
-    s8 nextCurrentIndex;
-    register s8 maximumLastDigit asm("$16");
-    s8 maximumIndex;
-    s8 currentIndex;
-    register u32 maximumPhase asm("$3");
-    register u32 currentPhase asm("$3");
-    u32 maximumPulse;
-    u32 currentPulse;
-    volatile RenderSpritePacket *label;
-    RenderSpritePacket *maximumSprite;
-    RenderSpritePacket *currentSprite;
+    s16 y;
+    s16 x;
+    s8 n;
+    s8 last;
+    s8 missing;
+    s16 quotient;
+    u8 pulse;
+    RenderSpritePacket *label;
 
-    /* Extract maximum HP digits least-significant first, then append slash. */
-    asm("" : : "r"(maximum), "r"(savedCurrent));
-    maximumLastDigit = 0;
-    screenY = g_HudOrigin.y + 11;
-    {
-        s16 value = maximum;
-        s16 quotient;
-        s8 index = 0;
-        for (;;) {
-            quotient = value / 10;
-            digits[index] = value - (s16)quotient * 10;
-            value = quotient;
-            if ((s16)value == 0)
-                break;
-            index = maximumLastDigit + 1;
-            maximumLastDigit = index;
-        }
+    y = g_HudOrigin.y + 11;
+    n = 0;
+    for (;;) {
+        quotient = maximum / 10;
+        digits[n] = maximum - quotient * 10;
+        maximum = quotient;
+        if (maximum == 0)
+            break;
+        n++;
     }
-    slashIndex = maximumLastDigit + 1;
-    maximumIndex = slashIndex;
-    asm volatile("" : "=r"(slashIndex) : "0"(slashIndex));
-    digits[slashIndex] = 0xA;
-    maximumLastIndex = maximumIndex;
-    screenX = (g_HudOrigin.x - (slashIndex * 6)) + 56;
-    if (slashIndex >= 0) {
-        u32 gray = 128;
-        sprites = D_8009E1D8;
-        asm volatile("" : "=r"(maximumIndex) : "0"(maximumIndex), "r"(gray));
-        shiftedIndex = maximumIndex << 24;
-        do {
-            s32 frame = D_8009CDDC;
-            s32 frameOffset;
-            digitIndex = shiftedIndex >> 24;
-            frameOffset = frame * 140;
-            {
-                s32 column = digitIndex * 7;
-                maximumDigitOffset = column * 4;
-            }
-            ((RenderSpritePacket *)(frameOffset + maximumDigitOffset + (u32)sprites))->u = (s8) (digits[digitIndex] * 8);
-            ((RenderSpritePacket *)((D_8009CDDC * 140) + maximumDigitOffset + (u32)sprites))->v = 0xE8;
-            maximumSprite = (RenderSpritePacket *)((D_8009CDDC * 140) + maximumDigitOffset + (u32)sprites);
-            maximumSprite->x = screenX;
-            maximumSprite->y = screenY;
-            if (!(((Combatant *)D_8009D254->core)->stateFlags & 0x800) || (digitIndex == maximumLastIndex)) {
-                maximumSprite->color.bytes.r = gray;
-                ((RenderSpritePacket *)((D_8009CDDC * 140) + maximumDigitOffset + (u32)sprites))->color.bytes.g = gray;
-            }
-            else {
-                {
-                    register u32 clock asm("$2") = D_8009D1E8;
-                    maximumPhase = clock & 31;
-                }
-                maximumPulse = maximumPhase;
-                asm volatile("" : "=r"(maximumPulse) : "0"(maximumPulse));
-                if (maximumPulse >= 17U) {
-                    maximumPulse = 32 - maximumPhase;
-                }
-                maximumSprite->color.bytes.r = (s8) (((maximumPulse & 255) * 6) + 32);
-                ((RenderSpritePacket *)((D_8009CDDC * 140) + maximumDigitOffset + (u32)sprites))->color.bytes.g = (s8) (maximumPulse + 96);
-            }
-            ((RenderSpritePacket *)((D_8009CDDC * 140) + maximumDigitOffset + (u32)sprites))->color.bytes.b = gray;
-            screenX += 6;
-            {
-                s32 frameEnd = D_8009CDDC;
-                u32 otOffset = frameEnd * 4;
-                s32 frameOffset = frameEnd * 140;
-                {
-                    s32 index = maximumIndex;
-                    RenderTexturePagePacket *page = &((RenderPagedSpritePacket *)D_8009E1D0)[index].page;
-                    AddPrim((u32 *)(*(u8 **)((u8 *)D_800B0E38.ordering + otOffset) + 20), (u32 *)(frameOffset + (u32)page));
-                }
-            }
-            nextMaximumIndex = maximumIndex - 1;
-            maximumIndex = nextMaximumIndex;
-            asm volatile("" : "=r"(maximumIndex) : "0"(maximumIndex));
-            shiftedIndex = maximumIndex << 24;
-        } while (nextMaximumIndex >= 0);
+    n++;
+    digits[n] = 10;
+    last = n;
+    x = g_HudOrigin.x - n * 6 + 56;
+    for (; n >= 0; n--) {
+        MAX_HP_DIGIT(n)->u = digits[n] * 8;
+        MAX_HP_DIGIT(n)->v = 0xE8;
+        MAX_HP_DIGIT(n)->x = x;
+        MAX_HP_DIGIT(n)->y = y;
+        if (!(((Combatant *)D_8009D254->core)->stateFlags & 0x800) || n == last) {
+            MAX_HP_DIGIT(n)->color.bytes.r = 128;
+            MAX_HP_DIGIT(n)->color.bytes.g = 128;
+            MAX_HP_DIGIT(n)->color.bytes.b = 128;
+        } else {
+            pulse = D_8009D1E8 & 31;
+            if (pulse >= 17)
+                pulse = 32 - pulse;
+            MAX_HP_DIGIT(n)->color.bytes.r = pulse * 6 + 32;
+            MAX_HP_DIGIT(n)->color.bytes.g = pulse + 96;
+            MAX_HP_DIGIT(n)->color.bytes.b = 128;
+        }
+        x += 6;
+        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 5, (u32 *)&D_8009E1D0[D_8009CDDC][n]);
     }
 
-    /* Align current HP against the maximum field and draw it from left to right. */
-    currentIndex = 0;
-    {
-        s16 x = g_HudOrigin.x - ((((maximumLastIndex << 24) >> 23) + 1) * 6);
-        screenX = x + 62;
+    x = g_HudOrigin.x - (last * 2 + 1) * 6 + 62;
+    n = 0;
+    for (;;) {
+        quotient = current / 10;
+        digits[n] = current - quotient * 10;
+        current = quotient;
+        if (current == 0)
+            break;
+        n++;
     }
-    {
-        s16 value = savedCurrent;
-        s16 quotient;
-        s8 index = 0;
-        for (;;) {
-            quotient = value / 10;
-            digits[index] = value - (s16)quotient * 10;
-            value = quotient;
-            if ((s16)value == 0)
-                break;
-            index = currentIndex + 1;
-            currentIndex = index;
+    missing = last - n - 1;
+    if (missing > 0)
+        x += missing * 6;
+    for (; n >= 0; n--) {
+        CURRENT_HP_DIGIT(n)->u = digits[n] * 8;
+        CURRENT_HP_DIGIT(n)->v = 0xE8;
+        CURRENT_HP_DIGIT(n)->x = x;
+        CURRENT_HP_DIGIT(n)->y = y;
+        if (((Combatant *)D_8009D254->core)->stateFlags & 0x400) {
+            pulse = D_8009D1E8 & 31;
+            if (pulse >= 17)
+                pulse = 32 - pulse;
+            CURRENT_HP_DIGIT(n)->color.bytes.r = pulse * 8;
+            CURRENT_HP_DIGIT(n)->color.bytes.g = 128;
+            CURRENT_HP_DIGIT(n)->color.bytes.b = pulse * 6 + 32;
+        } else {
+            CURRENT_HP_DIGIT(n)->color.bytes.r = 128;
+            CURRENT_HP_DIGIT(n)->color.bytes.g = 128;
+            CURRENT_HP_DIGIT(n)->color.bytes.b = 128;
         }
-    }
-    missingDigits = (maximumLastIndex - currentIndex) - 1;
-    if (missingDigits > 0) {
-        screenX += missingDigits * 6;
-    }
-    if (currentIndex >= 0) {
-        sprites = D_8009E0F8;
-        do {
-            register s32 frame asm("$2") = D_8009CDDC;
-            s32 frameOffset;
-            digitIndex = currentIndex;
-            frameOffset = frame * 112;
-            asm volatile("" : "=r"(frameOffset) : "0"(frameOffset));
-            {
-                register s32 column asm("$2") = digitIndex * 7;
-                asm("" : "=r"(column) : "0"(column));
-                currentDigitOffset = column * 4;
-            }
-            ((RenderSpritePacket *)(frameOffset + currentDigitOffset + (u32)sprites))->u = (s8) (digits[digitIndex] * 8);
-            asm volatile("" : : "r"(digitIndex));
-            ((RenderSpritePacket *)((D_8009CDDC * 112) + currentDigitOffset + (u32)sprites))->v = 0xE8;
-            currentSprite = (RenderSpritePacket *)((D_8009CDDC * 112) + currentDigitOffset + (u32)sprites);
-            currentSprite->x = screenX;
-            currentSprite->y = screenY;
-            if (((Combatant *)D_8009D254->core)->stateFlags & 0x400) {
-                {
-                    register u32 clock asm("$2") = D_8009D1E8;
-                    currentPhase = clock & 31;
-                }
-                currentPulse = currentPhase;
-                asm volatile("" : "=r"(currentPulse) : "0"(currentPulse));
-                if (currentPulse >= 17U) {
-                    currentPulse = 32 - currentPhase;
-                }
-                pulseByte = currentPulse & 255;
-                currentSprite->color.bytes.r = (s8) (pulseByte * 8);
-                ((RenderSpritePacket *)((D_8009CDDC * 112) + currentDigitOffset + (u32)sprites))->color.bytes.g = 128;
-                ((RenderSpritePacket *)((D_8009CDDC * 112) + currentDigitOffset + (u32)sprites))->color.bytes.b = (s8) ((pulseByte * 6) + 32);
-            }
-            else {
-                currentSprite->color.bytes.r = 128;
-                ((RenderSpritePacket *)((D_8009CDDC * 112) + currentDigitOffset + (u32)sprites))->color.bytes.g = 128;
-                ((RenderSpritePacket *)((D_8009CDDC * 112) + currentDigitOffset + (u32)sprites))->color.bytes.b = 128;
-            }
-            screenX += 6;
-            {
-                s32 frameEnd = D_8009CDDC;
-                u32 otOffset = frameEnd * 4;
-                s32 frameOffset = frameEnd * 112;
-                {
-                    s32 index = currentIndex;
-                    RenderTexturePagePacket *page = &((RenderPagedSpritePacket *)D_8009E0F0)[index].page;
-                    AddPrim((u32 *)(*(u8 **)((u8 *)D_800B0E38.ordering + otOffset) + 20), (u32 *)(frameOffset + (u32)page));
-                }
-            }
-            nextCurrentIndex = currentIndex - 1;
-            currentIndex = nextCurrentIndex;
-        } while (nextCurrentIndex >= 0);
+        x += 6;
+        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 5, (u32 *)&D_8009E0F0[D_8009CDDC][n]);
     }
 
     /* Place the HP label after the number pair. */
     {
-        register s32 frame asm("$3") = D_8009CDDC;
-        labelOffset = frame * 28;
-        label = (RenderSpritePacket *)(labelOffset + D_8009E2F0);
-        label->x = (s16) (g_HudOrigin.x + 0x44);
-        label->y = (s16) (g_HudOrigin.y + 0xE);
-        AddPrim((u32 *) (D_800B0E38.ordering[frame] + 4), (u32 *)(labelOffset + (D_8009E2F0 - 8)));
+        s32 frame = D_8009CDDC;
+        RenderSpritePacket *sprites = &D_8009E2E8[0].sprite;
+
+        /* Step the sprite pointer by whole packets. */
+        label = (RenderSpritePacket *)((RenderPagedSpritePacket *)sprites + frame);
+        label->x = g_HudOrigin.x + 0x44;
+        label->y = g_HudOrigin.y + 0xE;
+        AddPrim(D_800B0E38.ordering[frame] + 4, (u32 *)&D_8009E2E8[frame]);
     }
 }
