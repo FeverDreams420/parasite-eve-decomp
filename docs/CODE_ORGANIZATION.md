@@ -135,6 +135,9 @@ exist for the bytes, and why:
   writes `key_off_request_mask` the same way, and `SPU_StepReverbLoad`
   reads the bank cursor through the one-field `AkaoBankCursor` record for the
   opposite reason: its reload after a bank store must stay.
+- `Akao_SetBgmVolumeFade` reads `g_AkaoBgmHandle[0]` twice by index. A
+  fixed-symbol load is not reused across the stack store of the fifth
+  argument, which gives retail's reload without a volatile slot pointer.
 - `D_8009D268`, the message-queue lock the timer interrupt tests, and
   `D_8009D2E0`, the busy flag `Spu_PollOrWaitSeqBusy` spins on, are
   `volatile`: `Spu_InitVoiceState` clears the lock and reads it back before
@@ -189,10 +192,14 @@ permuter and by hand):
   `do { } while (0)` wrapper, which is no better a crutch).
 - `Akao_StepSequencerVoice` (pin on `all_voices`, 1 barrier): retail builds
   0xFFFFFF once in a0 and stores it from a0; cse1 rewrites the argument copy
-  to the constant and builds it twice (lev 3-15).
+  to the constant and builds it twice (lev 3-15). Passing the stored field
+  back (`func_80089960(pend->allocated_voice_mask)`) reloads it (lev 6), and
+  the assignment as the argument builds it twice (lev 4).
 - `Seq_TrackPitchSetup` (2 pins): retail computes the pitch delta in place in
   a2 (sll, subu, div, mflo), which gives it more weight than `track`; without
-  the pins the subtraction goes through v0 and the registers swap (lev 7).
+  the pins the subtraction goes through v0 and the registers swap (lev 20).
+  Dividing in place (`delta /= duration`, the `Seq_SlideTrackPitch` shape)
+  gives lev 29.
 - `Akao_UpdateVoiceMask` (3 pins, 4 barriers): without the v0 pins loop.c
   also hoists the constant 2 (its threshold of 52 equals the loop's 52
   insns); with literals the hoist set matches but the bank copy and
@@ -485,6 +492,14 @@ changing bytes:
   slot sizes and tables are declared there under module names instead of the
   per-unit extern headers.
 
+- A copy of a parameter that retail keeps in its own register survives cse
+  when the parameter itself is reassigned afterwards: `func_800CE610` reads
+  the list header through two copies taken before the `list` parameter
+  advances to the entries (`list += 0xC`), which gives retail's `v0`/`t0`
+  copies without pins or barriers. The `collision_step` post-increment
+  (`step++ == 0x64`) loads the halfword once with `lhu` and sign-extends it
+  for the test, as retail does, without a volatile view.
+
 What is left (best crutch-free lev against retail):
 
 - `FieldEng_AngleMath.c` (5 pins): `FieldEng_TurnToward` lev 15 and
@@ -494,19 +509,12 @@ What is left (best crutch-free lev against retail):
   `-step` as `-delta`, so step dies at the copy and global alloc gives delta
   step's register (a s16 delta, if/else and ternary forms tried). The same
   copy preference ties `func_800E0024`'s distance to the difference in `a0`.
-- `FieldAnim_TaskList.c` `func_800CE610` (2 pins, 2 barriers): lev 14 with a
-  `for` loop over the parameter itself (`list = header->entries`), the stride
-  read before the loop and `if (i >= header->count) return 0`. Retail has two
-  more copies of the list pointer (`v0` for the header loads, `t0` after the
-  loop) and a second register for the count inside the loop; cse merges both
-  in every plain form.
-- `FieldEng_CollisionQueries.c` `func_800C5EB0` (1 pin on the node pointer,
-  one volatile read of `collision_step`): lev 8 without the pin. Global alloc
-  ranks the loop index (9 refs over 45 insns) above the node pointer (11 over
-  59); retail has node, index, strip in s1, s2, s3. Dropping the index's
-  reuse as the return value lets the strip outrank the index (lev 13). The
-  volatile read keeps `lhu` plus `sll/sra` for the `(s16)` test; a plain read
-  is combined into `lh` (lev 4).
+- `FieldEng_CollisionQueries.c` `func_800C5EB0` (1 pin on the node pointer):
+  lev 9 without the pin. Global alloc ranks the loop index (9 refs over 45
+  insns) above the node pointer (11 over 59); retail has node, index, strip in
+  s1, s2, s3. Dropping the index's reuse as the return value lets the strip
+  outrank the index (lev 13); starting the index inside the `if` gives the
+  node s1 but swaps strip and index (lev 17-21).
 - `FieldEng_EffectPrimitives.c`: `func_800D2370` keeps one empty constraint on
   `rotation` and `length` (lev 71 without it: `rotation` is spilled to the
   stack instead of living in s8 across the packet setup calls).
@@ -646,7 +654,9 @@ Still open:
     Storing the Y sample through `angle->y` instead of `angleZ[-1]` gives
     the pointer the extra reference that fixes the allocation, but then the
     store is addressed from `$s2` instead of `$s1` (lev 1); splitting the
-    two loop counters moves other registers (lev 26).
+    two loop counters moves other registers (lev 26). Assigning the angle
+    pointer only after the translation loop fixes the allocation but leaves
+    the `lui` and the `angleZ` address (`lui`/`ori`) after the loop (lev 17).
     The frame byte offset is added through the `AnimSampleAddress`
     pointer/word union. Indexing the halfword samples by frame hoists the
     `<<1` below the `angleZ` setup, and `(u8 *)` arithmetic swaps the
@@ -661,14 +671,19 @@ Still open:
     copying it to the running maximum. Retail loads the palette byte before
     the frame is set up; computing the maximum as `paletteStart + 479` makes
     the load a single-set pseudo that sched1 sinks next to its use (lev 6).
-    It keeps the `disp_x` memory barrier: GCC 2.7 lets the scalar reload of
-    the volatile `D_800B1624` pointer pass the `disp_x` field store, which
-    retail keeps in order (lev 7 without it; the pointer's declaration
-    belongs to the render headers). The byte-storage store to `u34` stays
-    for the same reason (12 instructions differ).
+    The page pointer and `disp_x` are stored through pointers to the fields
+    (`pageSlot = &entry->u34.pagePackets`, `dispX = &entry->disp_x`). GCC 2.7
+    lets a load of a fixed scalar (the `D_800B1624` reload) pass a structure
+    field store, but not an indirect store, so the reload stays after both
+    stores as in retail; this replaced the `disp_x` memory barrier and the
+    byte-storage view of `u34`.
     `Geo_TransformPoint` keeps its three pins and the barrier on the x sum.
     Without the pins, local allocation swaps `$t0`/`$a0` for the entry and
-    y. Without the barrier, the unclamped x copy merges with the sum. The
+    y. Without the barrier, the unclamped x copy merges with the sum
+    (lev 36 with neither; reusing `x` for the clamp bound or comparing
+    before the bound copy changes nothing or is worse, lev 36-38). The
+    `D_800B1624` pointer stays volatile: a plain pointer lets CSE reuse it
+    across the `disp_x` store (lev 21). The
     four bound barriers are gone; loading the bound before the y add gives
     the retail order.
   - `Geo_ActorFloorResolution`: `Entity_FindFloor` adds the region slot
@@ -681,7 +696,9 @@ Still open:
     each branch. Unpinned, CSE folds the copy into the parameter and both
     branches mask `$a1` (lev 5); reusing the copy for the Z argument in the
     sloped branch keeps it in the flat branch only (lev 1), and a `u16`
-    parameter changes nothing.
+    parameter changes nothing. Masking the copy in place keeps the copy but
+    in `$a2` (lev 18); reusing the parameter for the X argument still lets
+    CSE fold the copy (lev 10).
     `Geo_PointInPoly` keeps the `$t3` pin on the parity flag: unpinned, the
     flag (10 references over 52 insns) ranks below the current Z (11 over
     42) and the two swap `$t3`/`$t4` (lev 10). Only a duplicated toggle adds
