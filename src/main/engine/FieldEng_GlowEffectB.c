@@ -234,7 +234,7 @@ int func_800C9868(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
     localScale[2] = scale;
 
     ScaleMatrix(&matrix, (const GteVector *)localScale);
-    func_800C42A4((FieldGlowSprite *)((u8 *)field_s3 - 10), &matrix, 1);
+    func_800C42A4(&D_800E2328, &matrix, 1);
 }
 
 int func_800C9968(void *arg0, u8 *state) {

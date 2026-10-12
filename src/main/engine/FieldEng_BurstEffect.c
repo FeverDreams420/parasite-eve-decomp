@@ -208,7 +208,7 @@ void func_800CD2E4(void) {
 }
 
 int func_800CD2EC(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
-    s16 *field = (s16 *)&D_800E2298.depth;
+    u16 *field = &D_800E2298.depth;
     GteMatrix matrix;
     GteShortVector rot;
     GteVector scaleCopy;
@@ -235,5 +235,5 @@ int func_800CD2EC(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
     scaleCopy = scale;
 
     ScaleMatrix(&matrix, &scaleCopy);
-    func_800C42A4((FieldGlowSprite *)((u8 *)field - PE1_OFFSETOF(FieldGlowSprite, depth)), &matrix, 0);
+    func_800C42A4(&D_800E2298, &matrix, 0);
 }

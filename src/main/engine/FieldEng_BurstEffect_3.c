@@ -28,7 +28,7 @@ int func_800CD50C(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
     D_800F3478.t[1] = (s16)anim->position.y;
     D_800F3478.t[2] = (s16)anim->position.z;
     *field_v1 = anim->brightness;
-    func_800C42A4((FieldGlowSprite *)((u8 *)field_v1 - PE1_OFFSETOF(FieldGlowSprite, depth)), (GteMatrix *)(base_a1 - 5), 1);
+    func_800C42A4(&D_800E27E0, &D_800F3478, 1);
 }
 
 void func_800CD59C(void) {

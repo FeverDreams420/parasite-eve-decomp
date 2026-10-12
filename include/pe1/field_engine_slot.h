@@ -28,6 +28,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldEngSlot, data_offset) == 4,
 
 /* Clears an object's script and dispatch storage, then returns its script
  * table pointer slot at object + 0x78. */
-void **FieldEng_GetSlot(char *object);
+struct FieldEngObject;
+void **FieldEng_GetSlot(struct FieldEngObject *object);
 
 #endif

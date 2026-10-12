@@ -485,7 +485,7 @@ int func_800CB750(void *arg0, void *arg1, FieldAnimTwinGlow *anim) {
     localScale[2] = scale;
 
     ScaleMatrix(&matrix, (const GteVector *)localScale);
-    func_800C42A4((FieldGlowSprite *)((u8 *)field_s4 - 10), &matrix, 1);
+    func_800C42A4(&D_800E2338, &matrix, 1);
 
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -510,7 +510,7 @@ int func_800CB750(void *arg0, void *arg1, FieldAnimTwinGlow *anim) {
     localScale2[2] = scale;
 
     ScaleMatrix(&matrix, (const GteVector *)localScale2);
-    func_800C42A4((FieldGlowSprite *)((u8 *)field_s4 - 10), &matrix, 1);
+    func_800C42A4(&D_800E2338, &matrix, 1);
 }
 
 int func_800CB8E0(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
@@ -543,7 +543,7 @@ int func_800CB8E0(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
     scaleCopy = scale;
 
     ScaleMatrix(&matrix, &scaleCopy);
-    func_800C42A4((FieldGlowSprite *)((u8 *)field - 10), &matrix, 0);
+    func_800C42A4(&D_800F34E8, &matrix, 0);
 }
 
 int func_800CB9F8(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
@@ -571,7 +571,7 @@ int func_800CB9F8(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
     scaleCopy = scale;
 
     ScaleMatrix(&matrix, &scaleCopy);
-    func_800C42A4((FieldGlowSprite *)((u8 *)field - 10), &matrix, 0);
+    func_800C42A4(&D_800F34E8, &matrix, 0);
 }
 
 int func_800CBB24(void *arg0, FieldEngSlot *state) {

@@ -3,6 +3,7 @@
 
 #include "pe1/field_script_context.h"
 #include "pe1/field_engine_slot.h"
+#include "pe1/field_anim_pool.h"
 
 /* Script-state work area (obj+0xC, pointed at by g_FieldEngineScriptState).
  * FieldEng_RunScript interprets the command table: each 32-bit command
@@ -33,11 +34,14 @@ typedef struct FieldEngStateWords {
 
 /* Field engine object: header, script state, dispatch slots, slot data. */
 typedef struct FieldEngObject {
-    /* 0x000 */ unsigned char header[0xC];
+    /* 0x000 */ FieldAnimObjectPrefix prefix;
     /* 0x00C */ FieldEngState state;
     /* 0x080 */ FieldEngSlot slots[0x40];
-    /* 0x200 */ unsigned char data[1];
+    /* 0x200 */ char data[1];
 } FieldEngObject;
+
+/* Bytes of slot data after the dispatch slots (object size 0xA0C). */
+#define FIELD_ENG_DATA_SIZE 0x80C
 
 /* One handler of an effect module's lists: called with the object, its
  * dispatch slot and the slot's data. */
@@ -45,7 +49,7 @@ typedef int (*FieldEngHandler)(void *obj, void *slot, void *data);
 
 /* The object the engine is running and its parts, set by every pass. */
 extern FieldEngState *g_FieldEngineScriptState;
-extern char *g_FieldEngineScriptObject;
+extern FieldEngObject *g_FieldEngineScriptObject;
 extern char *g_FieldEngineScriptData;
 extern int *g_FieldEngineCommandTable;
 extern FieldEngSlot *g_FieldEngineSlotTable;
@@ -60,8 +64,8 @@ extern char g_FieldEngUpdateThreadMissingMsg[];
  * steps the command table and starts slots from the init list with the slot
  * data sizes. FieldEng_Spawn6 stores a script variable; the effect classes
  * forward their six spawn arguments to it unchanged. */
-int FieldEng_Register(char *obj, FieldEngHandler *handlers);
-int FieldEng_UpdateSlots(char *obj, FieldEngHandler *handlers);
+int FieldEng_Register(FieldEngObject *obj, FieldEngHandler *handlers);
+int FieldEng_UpdateSlots(FieldEngObject *obj, FieldEngHandler *handlers);
 int FieldEng_RunScript(FieldEngObject *obj, FieldEngHandler *handlers, u16 *sizes);
 int FieldEng_Spawn6();
 int *FieldEng_RegPtr(int index);

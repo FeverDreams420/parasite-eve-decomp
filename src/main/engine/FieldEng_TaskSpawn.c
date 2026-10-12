@@ -209,8 +209,8 @@ int func_800D4620(FieldAnimTaskOwner *owner)
     FieldAnimTaskSlot *slot;
     int i;
 
-    owner->prefix.reserved02[0] = 1;
-    owner->prefix.reserved02[1] = 0;
+    owner->prefix.owner_kind = 1;
+    owner->prefix.live_slots = 0;
     context->delay = 0;
     context->used = 0;
     context->cursor = context->arena;

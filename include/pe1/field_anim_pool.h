@@ -17,7 +17,9 @@ typedef struct FieldAnimTaskSlot {
 typedef struct FieldAnimObjectPrefix {
     u8 reserved00;
     u8 asset_type;
-    u8 reserved02[6];
+    u8 owner_kind;   /* 1 for a task-list owner, 0 after a script reset */
+    u8 live_slots;   /* script slots alive at the last update pass */
+    u8 reserved04[4];
     struct FieldActor *actor;
 } FieldAnimObjectPrefix;
 PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldAnimObjectPrefix, actor) == 8,

@@ -7,26 +7,26 @@
 /* Field engine objects: clearing an object's script state and dispatch
  * slots, and the two per-frame passes over the 0x40 dispatch slots. */
 
-void **FieldEng_GetSlot(char *obj) {
-    char *p;
+void **FieldEng_GetSlot(FieldEngObject *obj) {
+    u8 *p;
     unsigned int i;
 
-    p = obj + 0xC;
+    p = (u8 *)&obj->state;
     do {
         *p++ = 0;
-    } while (p < obj + 0xA0C);
+    } while (p < (u8 *)&obj->data[FIELD_ENG_DATA_SIZE]);
 
-    obj[2] = 0;
-    obj[3] = 0;
+    obj->prefix.owner_kind = 0;
+    obj->prefix.live_slots = 0;
 
-    g_FieldEngineScriptState = &((FieldEngObject *)obj)->state;
-    g_FieldEngineSlotTable = ((FieldEngObject *)obj)->slots;
+    g_FieldEngineScriptState = &obj->state;
+    g_FieldEngineSlotTable = obj->slots;
     g_FieldEngineScriptObject = obj;
-    g_FieldEngineScriptData = (char *)((FieldEngObject *)obj)->data;
+    g_FieldEngineScriptData = obj->data;
 
-    ((FieldEngObject *)obj)->state.wait = 0;
-    ((FieldEngObject *)obj)->state.pc = 0;
-    ((FieldEngObject *)obj)->state.data_next = 0;
+    obj->state.wait = 0;
+    obj->state.pc = 0;
+    obj->state.data_next = 0;
 
     i = 0;
     do {
@@ -38,7 +38,7 @@ void **FieldEng_GetSlot(char *obj) {
     } while (i < 0x40);
 
     if (FieldEng_GetStatus(obj) == 3) {
-        FieldActorState *inner = ((FieldAnimObjectPrefix *)obj)->actor->state;
+        FieldActorState *inner = obj->prefix.actor->state;
 
         inner->core_flags = (inner->core_flags & 0xC0FFFFFF) | 0x01000000;
     }
@@ -46,18 +46,18 @@ void **FieldEng_GetSlot(char *obj) {
     return (void **)&g_FieldEngineScriptState->commands;
 }
 
-int FieldEng_Register(char *obj, FieldEngHandler *handlers)
+int FieldEng_Register(FieldEngObject *obj, FieldEngHandler *handlers)
 {
-  register char *obj_s0 = obj;
+  register FieldEngObject *obj_s0 = obj;
   register FieldEngHandler *handlers_s2 = handlers;
   s16 i;
-  char *table;
+  int *table;
   i = 0;
-  table = (char *) ((FieldEngObject *) obj_s0)->state.commands;
-  g_FieldEngineScriptState = &((FieldEngObject *)obj_s0)->state;
-  g_FieldEngineSlotTable = ((FieldEngObject *)obj_s0)->slots;
-  g_FieldEngineScriptData = (char *)((FieldEngObject *)obj_s0)->data;
-  g_FieldEngineCommandTable = (int *)table;
+  table = obj_s0->state.commands;
+  g_FieldEngineScriptState = &obj_s0->state;
+  g_FieldEngineSlotTable = obj_s0->slots;
+  g_FieldEngineScriptData = obj_s0->data;
+  g_FieldEngineCommandTable = table;
   for (; i < 0x40; i++)
   {
     FieldEngSlotAddress entry;
@@ -80,27 +80,27 @@ int FieldEng_Register(char *obj, FieldEngHandler *handlers)
   return 0;
 }
 
-int FieldEng_UpdateSlots(char *obj, FieldEngHandler *handlers) {
+int FieldEng_UpdateSlots(FieldEngObject *obj, FieldEngHandler *handlers) {
     int result;
     s16 i;
     FieldActor *data;
-    char *table;
+    int *table;
 
     result = 0;
-    table = (char *)((FieldEngObject *)obj)->state.commands;
-    data = ((FieldAnimObjectPrefix *)obj)->actor;
+    table = obj->state.commands;
+    data = obj->prefix.actor;
 
-    g_FieldEngineScriptState = &((FieldEngObject *)obj)->state;
-    g_FieldEngineSlotTable = ((FieldEngObject *)obj)->slots;
+    g_FieldEngineScriptState = &obj->state;
+    g_FieldEngineSlotTable = obj->slots;
     g_FieldEngineScriptObject = obj;
-    g_FieldEngineScriptData = (char *)((FieldEngObject *)obj)->data;
-    g_FieldEngineCommandTable = (int *)table;
+    g_FieldEngineScriptData = obj->data;
+    g_FieldEngineCommandTable = table;
 
-    obj[3] = obj[0x12];
+    obj->prefix.live_slots = obj->state.slot_count;
 
     if (FieldEng_GetStatus(obj) == 3) {
-        if ((u8)obj[1] != 0x24) {
-            u8 *state = ((FieldAnimObjectPrefix *)obj)->actor->state->action_state;
+        if (obj->prefix.asset_type != 0x24) {
+            u8 *state = obj->prefix.actor->state->action_state;
 
             if ((u8)state[0] == 1) {
                 state[0] = 2;
@@ -151,8 +151,8 @@ int FieldEng_RunScript(FieldEngObject *obj, FieldEngHandler *handlers, u16 *size
 
     g_FieldEngineScriptState = &obj->state;
     g_FieldEngineSlotTable = obj->slots;
-    g_FieldEngineScriptObject = (char *)obj;
-    g_FieldEngineScriptData = (char *)obj->data;
+    g_FieldEngineScriptObject = obj;
+    g_FieldEngineScriptData = obj->data;
     g_FieldEngineCommandTable = obj->state.commands;
 
     wait = obj->state.wait;
@@ -234,10 +234,11 @@ int FieldEng_RunScript(FieldEngObject *obj, FieldEngHandler *handlers, u16 *size
     return result;
 }
 
-int FieldEng_Spawn6(char *base, int unused, int index, int value) {
-    base += 0xC;
-    g_FieldEngineScriptState = (FieldEngState *)base;
-    ((FieldEngState *)base)->vars[index] = value;
+int FieldEng_Spawn6(FieldEngObject *obj, int unused, int index, int value) {
+    FieldEngState *state = &obj->state;
+
+    g_FieldEngineScriptState = state;
+    state->vars[index] = value;
     return 0;
 }
 
