@@ -461,11 +461,11 @@ segments:
       # their own LookupTrackedItem inline shape, so they stay separate units.
       - [0x486CC, c, item/Inv_InventorySwap]
       - [0x49D34, c, item/Menu_OpenItemUsePanelAtIndex]
-      # Armor capacity, snapshots, selection restore and transfers share the item-runtime state.
+      # Armor capacity, snapshots, selection restore and transfers share the
+      # item-runtime state; item comparators, subrange passes and all sort
+      # dispatchers share the active sort state; battle equip mode. One -G8
+      # FORCE_G0 unit with COMMON $gp words.
       - [0x49E8C, c, item/Inv_ArmorCapacity]
-      # Item comparators, subrange passes, and all sort dispatchers share active sort state.
-      - [0x4B7FC, c, item/Inv_CompareItemsForSort]
-      - [0x4C090, c, item/Menu_BattleEquipMode]
       # Save data: stat helpers; metadata-window reset, selection, editing, loading
       # and accessors (with its common index); item lookup, inventory opening and
       # card-dialog gating (menu state); save header build and restore; error-sound
