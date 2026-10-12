@@ -24,7 +24,6 @@ s32 D_8009D2FC;
 void Battle_Update(void) {
     /* Retail reserves 0x1A0 unused bytes; original local layout is unknown. */
     volatile u8 matchingStackReserve[0x1A0];
-    s32 menuContext;
     s32 menuMode;
     BattleEntity *player;
     Combatant *active;
@@ -172,13 +171,11 @@ void Battle_Update(void) {
                         menuMode = 0;
                         D_8009D2B0 = Battle_BuildTargetList();
                         Battle_Init();
-                        menuContext = 1;
                         if (D_8009D2B0 != 0) {
-                            menuContext = 0;
-                            /* Preserve the retail branch instead of folding to SLTIU. */
-                            asm("" : : "r"(menuContext));
+                            Menu_SetItemContext(0);
+                        } else {
+                            Menu_SetItemContext(1);
                         }
-                        Menu_SetItemContext(menuContext);
                     }
                 }
             }
