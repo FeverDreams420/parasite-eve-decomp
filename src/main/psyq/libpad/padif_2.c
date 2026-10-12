@@ -1,7 +1,7 @@
 /* ASSEMBLER: GNU */
 /* PSY-Q LIBPAD PADIF, part 2 of 2: LIBPAD_PADIF_text_26C. */
 #include "pe1/psyq_pad_main.h"
-#include "padif_3_externs.h"
+#include "padif_2_externs.h"
 int MemCard_WriteByte(CardObj *, int);
 void MemCard_WaitStatusBit2(void);
 int LIBPAD_PADIF_text_26C(CardObj *inPort) {

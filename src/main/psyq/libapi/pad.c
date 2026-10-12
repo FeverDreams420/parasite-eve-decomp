@@ -1,9 +1,9 @@
 /* ASSEMBLER: GNU */
 /* PSY-Q LIBAPI PAD, part 1 of 3: SetInitPadFlag, ReadInitPadFlag, PAD_init,
  * InitPAD, StartPAD, StopPAD. */
-/* LIBAPI PAD stays in three units: Sys_SetInterruptHandler (pad_5.c) only
+/* LIBAPI PAD stays in three units: Sys_SetInterruptHandler (pad_2.c) only
  * matches with GCC 2.8.1 and -mno-split-addresses, the rest of the object
- * (pad_6.c) only with GCC 2.7.2. PAD_init and InitPAD instantiate
+ * (pad_3.c) only with GCC 2.7.2. PAD_init and InitPAD instantiate
  * Pad_InitCommon.inc. */
 #include "pe1/pad_internal.h"
 #include "pe1/psyq_bios.h"

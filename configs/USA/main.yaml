@@ -562,7 +562,7 @@ segments:
       - [0x63D54, c, psyq/libmath/mainasu]
       # LIBMATH MULDF3.OBJ: __muldf3; the adjacent helper retains its GCC281 unit.
       - [0x63DC4, c, psyq/libmath/muldf3]
-      - [0x640D8, c, psyq/libmath/_mul_mant_d]
+      - [0x640D8, c, psyq/libmath/muldf3_2]
       - [0x641C4, c, psyq/libmath/ferr]
       - [0x64228, pad]
       - [0x64234, c, psyq/libapi/a07]
@@ -730,7 +730,7 @@ segments:
       # Psy-Q LIBCD C_011.OBJ: StCdInterrupt and its two local helpers.
       - [0x6CD64, c, psyq/libcd/c_011]
       - [0x6D6AC, c, psyq/libcd/c_011_2]
-      - [0x6D854, c, psyq/libspu/SpuInit]
+      - [0x6D854, c, psyq/libspu/s_i]
       # Psy-Q LIBSPU S_INI.OBJ: cold/warm initialization and startup.
       - [0x6D874, c, psyq/libspu/s_ini]
       - [0x6D9CC, pad]
@@ -755,8 +755,8 @@ segments:
       - [0x6E6A0, pad]
       - [0x6E6A4, c, psyq/libapi/pad]
       # Psy-Q libapi PAD control entry points: StartPAD and StopPAD.
-      - [0x6E848, c, psyq/libapi/pad_5]
-      - [0x6E8C0, c, psyq/libapi/pad_6]
+      - [0x6E848, c, psyq/libapi/pad_2]
+      - [0x6E8C0, c, psyq/libapi/pad_3]
       - [0x6E9A0, pad]
       - [0x6E9A4, c, psyq/libapi/a18]
       - [0x6E9B4, c, psyq/libapi/a19]
@@ -817,7 +817,7 @@ segments:
       - [0x72574, c, psyq/libds/dsready]
       - [0x72670, c, psyq/libds/dsready_2]
       - [0x7294C, c, psyq/libds/dsready_3]
-      - [0x72A7C, c, psyq/libds/dsready_5]
+      - [0x72A7C, c, psyq/libds/dsready_4]
       - [0x72B0C, pad]
       # Psy-Q 4.6 LIBDS.LIB DSTYPE.OBJ: query plus async disk callbacks.
       - [0x72B14, c, psyq/libds/dstype]
@@ -834,7 +834,7 @@ segments:
       - [0x746F8, pad]
       - [0x74704, c, psyq/libpad/padif]
       # Command emission, response-size decoding, and acknowledgment share the write protocol.
-      - [0x74968, c, psyq/libpad/padif_3]
+      - [0x74968, c, psyq/libpad/padif_2]
       - [0x74CE4, c, psyq/libpad/padportd]
       - [0x74E44, c, psyq/libpad/padportd_2]
       - [0x74EAC, c, psyq/libpad/padportd_3]

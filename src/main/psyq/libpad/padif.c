@@ -3,7 +3,7 @@
 /* PSY-Q LIBPAD PADIF, part 1 of 2: MemCard_ReadByteWithCallbackValue,
  * CardObj_WriteCommandByte, MemCard_WriteDataAndGetSize,
  * MemCard_WriteByteWithAckCheck. PADIF stays in two units:
- * LIBPAD_PADIF_text_26C (padif_3.c) only matches with GCC 2.7.2. */
+ * LIBPAD_PADIF_text_26C (padif_2.c) only matches with GCC 2.7.2. */
 #include "common.h"
 #include "pe1/psyq_pad_main.h"
 #include "pe1/card_obj.h"

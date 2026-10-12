@@ -15,7 +15,7 @@ CASES = [('psyq/libmath/fltsidf',
   '_dbl_shift_us = 0x80073294;\n'
   'SECTIONS { .text 0x80073454 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) '
   '*(.mdebug) } }'),
- ('psyq/libmath/_mul_mant_d',
+ ('psyq/libmath/muldf3_2',
   236,
   'c05005c411d44159dcc1fbe8fab722366870bea126932e8b3cc666b9897cbf05',
   '_add_mant_d = 0x80072DF4;\n'

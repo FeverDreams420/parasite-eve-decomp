@@ -1,6 +1,6 @@
 #include "pe1/psyq_bios.h"
 #include "pe1/psyq_pad_main.h"
-/* PSY-Q LIBAPI PAD, part 6 of 6: RemovePatchPad, func_8007E0F8, func_8007E160. */
+/* PSY-Q LIBAPI PAD, part 3 of 3: RemovePatchPad, func_8007E0F8, func_8007E160. */
 
 
 void SysDeqIntRP(int index, void *queue);
@@ -18,7 +18,7 @@ typedef struct PadWork {
     s16 unk_a;
 } PadWork;
 
-#include "pad_6_externs.h"
+#include "pad_3_externs.h"
 
 int func_8007E0F8(void) {
     volatile int delay[4];
@@ -36,7 +36,7 @@ int func_8007E0F8(void) {
     return 0;
 }
 
-#include "pad_6_externs_1.h"
+#include "pad_3_externs_1.h"
 int func_8007E160(void)
 {
   register int *state;
