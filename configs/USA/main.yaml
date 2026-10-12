@@ -385,9 +385,9 @@ segments:
       # bars, item icons, save slots and the sound-effect cursor). One unit under
       # cc1 -G8 and the COMMON-driven assembler -G8.
       - [0x406EC, c, menu/Menu_ListDrawers]
-      - [0x41884, c, battle/BattleCmd_InitTableCursor]
-      # Command-stack allocation and rollback share the cursor and record ABI.
-      - [0x41898, c, battle/BattleCmd_StackFlow]
+      # Command table cursor init, command-stack allocation and rollback share the
+      # cursor and record ABI: one -G8 FORCE_G0 unit with COMMON $gp words.
+      - [0x41884, c, battle/BattleCmd_StackFlow]
       # Active-list command and its pending result accessors share D_8009D010.
       - [0x41AAC, c, battle/Inv_ActiveListCommand]
       # Active-stat synchronization and HP writes share the player entity ABI.

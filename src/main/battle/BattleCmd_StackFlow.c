@@ -1,11 +1,20 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: --use-comm-section -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 
-#include "common.h"
 #include "pe1/battle_cmd.h"
+#include "common.h"
 #include "pe1/inventory.h"
 #include "pe1/inventory_slots.h"
 #include "pe1/battle_modifiers.h"
+
+/* COMMON supplies small-data metadata to MASPSX: these words are reached
+ * through $gp, every other extern stays absolute. */
+BattleCmdEntry *g_BattleCmdStackTop;
+
+void BattleCmd_InitTableCursor(void) {
+    g_BattleCmdStackTop = g_BattleCmdStack;
+}
 
 BattleCmdEntry *BattleCmd_AllocSlot(void) {
     BattleCmdEntry *top;
