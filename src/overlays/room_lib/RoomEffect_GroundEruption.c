@@ -539,46 +539,34 @@ void RoomEffect_GroundEruptionNop2(void) {
 }
 
 /* Flings the six debris particles out at random angles. */
-void RoomEffect_GroundEruptionInitDebris(void *arg0, void *arg1, char *state) {
+void RoomEffect_GroundEruptionInitDebris(void *arg0, void *arg1, RoomEruptionDebrisState *state) {
     RoomEruptionActor *owner;
     unsigned int i;
-    short *flag;
-    int *life;
-    char *particle;
     int angle;
     int wave;
 
     owner = func_800C2B50();
     FieldEng_VarPtr(0);
     angle = rand() % 0x1000;
-    i = 0;
-    flag = (short *)state;
-    life = (int *)state;
-    particle = state;
-    for (; i < 6; i++) {
-        PE1_COMPILER_LAUNDER(particle);
-        ((RoomEruptionDebrisState *)particle)->position[0].x = owner->matrix.t[0];
-        ((RoomEruptionDebrisState *)particle)->position[0].y = owner->matrix.t[1];
-        ((RoomEruptionDebrisState *)particle)->position[0].z = owner->matrix.t[2];
+    for (i = 0; i < 6; i++) {
+        state->position[i].x = owner->matrix.t[0];
+        state->position[i].y = owner->matrix.t[1];
+        state->position[i].z = owner->matrix.t[2];
 
         wave = rsin(angle);
-        ((RoomEruptionDebrisState *)particle)->velocity[0].x =
+        state->velocity[i].x =
             (wave * (rand() % 0x800 + 0x800)) >> 12;
-        ((RoomEruptionDebrisState *)particle)->velocity[0].y = -(rand() % 6096 + 3000);
-        wave = rcos(angle);
-        ((RoomEruptionDebrisState *)particle)->velocity[0].z =
-            (wave * (rand() % 0x800 + 0x800)) >> 12;
+        state->velocity[i].y = -(rand() % 6096 + 3000);
+        state->velocity[i].z =
+            (rcos(angle) * (rand() % 0x800 + 0x800)) >> 12;
 
-        ((RoomEruptionDebrisState *)life)->gravityStep[0] = 500;
-        ((RoomEruptionDebrisState *)flag)->visible[0] = 1;
-        flag++;
-        life++;
-        particle += 8;
+        state->gravityStep[i] = 500;
+        state->visible[i] = 1;
     }
 
-    ((RoomEruptionDebrisState *)state)->depth = 0x80;
-    ((RoomEruptionDebrisState *)state)->scale = 0x400;
-    ((RoomEruptionDebrisState *)state)->speed = 0x320;
+    state->depth = 0x80;
+    state->scale = 0x400;
+    state->speed = 0x320;
 }
 
 /* Draws the live debris; the first particle also leaves a floor shadow. */
