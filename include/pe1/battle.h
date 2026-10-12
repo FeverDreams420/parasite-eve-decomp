@@ -198,7 +198,7 @@ typedef struct Combatant {
 /* 0x0C */ u16  curHP;         /* CURRENT HP -- damage & heal land here; clamped to maxHP@0x1C (Battle_AttackResolution.c:518-530) */
 /* 0x0E */ u16  hpMirror;      /* current-HP MIRROR; re-synced from curHP each reset (Battle_ResetEnemyStats.c:42) */
 /* 0x10 */ u16  hpAlive;       /* authoritative ">0 == alive" HP (target tests); on player doubles as EXP/level gauge clamped 0x2328 (Battle_Setup.c:436; Battle_Update.c:155). TENTATIVE width: some reads s32 */
-/* 0x12 */ u8   actionMode12;  /* action-mode id table [0x12..0x19], filled per enemy by facing (Battle_SetupEnemyAnims.c:38-46): 4 idle, 0xD special */
+/* 0x12 */ u8   actionMode12;  /* action-mode id table [0x12..0x19], filled per enemy by facing (Battle_EnemyActions.c:38-46): 4 idle, 0xD special */
 /* 0x13 */ s8   actionMode13;
 /* 0x14 */ u8   targetAngleActionModes[3]; /* selected by the relative target angle in Battle_AdvancePhase */
 /* 0x17 */ u8   followUpAngleActionModes[3]; /* modes 7/9/11 that end the attack started by targetAngleActionModes */
@@ -206,8 +206,8 @@ typedef struct Combatant {
 /* 0x1C */ u16  maxHP;         /* MAX HP; curHP clamped to this (Battle_AttackResolution.c:530; Battle_ResetEnemyStats.c:34) */
 /* 0x1E */ s16  stat1E;        /* SetContextField case11 (Battle_SetContextField.c:42) */
 /* 0x20 */ s16  stat20;        /* SetContextField case12 (Battle_SetContextField.c:45) */
-/* 0x22 */ u16  stat22;        /* base for scaled-offense calc (Battle_SetupEnemyAnims.c:39) */
-/* 0x24 */ u16  scaledOffense; /* = stat22 * tbl[anim] / 10 (Battle_SetupEnemyAnims.c:39) */
+/* 0x22 */ u16  stat22;        /* base for scaled-offense calc (Battle_EnemyActions.c:39) */
+/* 0x24 */ u16  scaledOffense; /* = stat22 * tbl[anim] / 10 (Battle_EnemyActions.c:39) */
 /* 0x26 */ s16  stat26;        /* SetContextField case18 (Battle_SetContextField.c:50) */
 /* 0x28 */ s32  maxAtk;        /* cap for exp_or_acc@0x08 (Battle_AttackResolution.c:533,540; Battle_StartEncounter.c:116) */
 /* 0x2C */ s32  atbStep;       /* per-frame increment subtracted from atbRate */

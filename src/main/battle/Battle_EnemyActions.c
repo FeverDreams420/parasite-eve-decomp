@@ -1,8 +1,31 @@
 #include "common.h"
 #include "pe1/battle.h"
+#include "pe1/battle_entity_anim.h"
+#include "pe1/player_entity.h"
 #include "pe1/inventory.h"
 #include "pe1/battle_runtime.h"
 #include "pe1/game_state.h"
+
+void Battle_SubActionStep(void) {
+    Combatant *state;
+    BattleEntity *actor;
+
+    state = g_ActiveActor;
+    if (state->subActionCounter >= state->subActionPeriod) {
+        state->curHP -= state->subActionStep;
+        state->hpMirror -= state->subActionStep;
+        state->subActionCounter = 0;
+        state->panelAux_val = state->subActionStep;
+        actor = (BattleEntity *)g_PlayerEntity;
+        g_ActiveActor->panelAux_x = actor->renderObject.projected_x;
+        g_ActiveActor->panelAux_y = actor->renderObject.projected_y;
+        g_ActiveActor->panelAux_timer = 0x1E;
+        g_ActiveActor->panelAux_mode = 3;
+    }
+
+    g_ActiveActor->subActionCounter++;
+}
+
 #define NULL ((void *)0)
 
 void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
@@ -241,3 +264,36 @@ void Battle_ApplyEnemyAttack(EnemyCombatant *ent) {
     }
 }
 
+void Battle_SetupEnemyAnims(void) {
+    EnemyAnimTable animTable;
+    EnemyOffenseScaleTable scaleTable;
+    BattleAction *action;
+    Combatant *combatant;
+    u8 *animRow;
+    unsigned int actionId;
+
+    animTable = g_BattleActionAnimRows;
+    scaleTable = g_BattleActionOffenseScale;
+
+    combatant = D_8009D278;
+    action = combatant->action;
+    actionId = action->actionCode.bytes.actionIdByte;
+    combatant->scaledOffense =
+        (combatant->stat22 * scaleTable.values[actionId]) / 10;
+    combatant->actionMode12 = 4;
+    D_8009D278->actionMode13 = 5;
+    D_8009D278->targetAngleActionModes[0] = 6;
+    D_8009D278->followUpAngleActionModes[0] = 7;
+    D_8009D278->targetAngleActionModes[1] = 8;
+    D_8009D278->followUpAngleActionModes[1] = 9;
+    D_8009D278->targetAngleActionModes[2] = 10;
+    D_8009D278->followUpAngleActionModes[2] = 11;
+
+    animRow = animTable.rows[actionId];
+    D_8009D278->action->animMode[0] = animRow[0];
+    D_8009D278->action->animMode[1] = animRow[1];
+    D_8009D278->action->animMode[2] = animRow[2];
+    D_8009D278->action->animMode[3] = animRow[3];
+    D_8009D278->action->hitTrigger = animRow[4];
+    Scene_SetStoryDay(D_8009D278->action->actionCode.actionId);
+}

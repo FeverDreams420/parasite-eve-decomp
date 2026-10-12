@@ -78,7 +78,7 @@ segments:
       - [0xE90, .rodata, script/Task_FlowOpcodes]
       - [0xEA4, rodata, main/rodata_000EA4]
       - [0xEE4, .rodata, battle/Entity_HitAndDropTable]
-      - [0xF0C, .rodata, battle/Battle_ApplyEnemyAttack]
+      - [0xF0C, .rodata, battle/Battle_EnemyActions]
       - [0xF4C, rodata, main/rodata_000F4C]
       - [0xF8C, .rodata, battle/Battle_AttackResolution]
       - [0x1068, pad] # retail alignment after the 17-entry Aya action jump table
@@ -205,9 +205,9 @@ segments:
       # Drop-table resolution and hit application share the active-actor helpers (G0232).
       - [0xFCD4, c, battle/Entity_HitAndDropTable]
       - [0x101C4, c, battle/Entity_UpdateTimers]
-      - [0x109DC, c, battle/Battle_SubActionStep]
-      - [0x10A88, c, battle/Battle_ApplyEnemyAttack]
-      - [0x111F0, c, battle/Battle_SetupEnemyAnims]
+      # Sub-action step, enemy attack application and enemy animation setup: one
+      # default-profile unit (the -g3 timer update before it stays separate).
+      - [0x109DC, c, battle/Battle_EnemyActions]
       # Battle setup: begin-action and return-to-idle transitions (player combat
       # state), entity colours, global flag reset, battle init, pad and menu
       # queries, entity effect dispatch, evasion, target list and sort, pad state
