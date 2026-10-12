@@ -97,9 +97,7 @@ segments:
       - [0x184C, .rodata, menu/Menu_SaveScreens]
       - [0x1940, rodata, main/rodata_001940]
       - [0x1944, .rodata, menu/Menu_InventoryScreens]
-      - [0x1958, .rodata, battle/BattleCmd_StackFlow]
-      - [0x196C, rodata, main/rodata_00196C]
-      - [0x1970, .rodata, battle/BattleCmd_ActiveListAndAmmo]
+      - [0x1958, .rodata, battle/BattleCmd_StackAndActiveList]
       - [0x19A4, rodata, main/rodata_0019A4]
       - [0x19A8, .rodata, battle/BattleCmd_WeaponLists]
       - [0x1A18, .rodata, aya/Aya_StatDerivation]
@@ -360,14 +358,14 @@ segments:
       # bars, item icons, save slots and the sound-effect cursor). One unit under
       # cc1 -G8 and the COMMON-driven assembler -G8.
       - [0x406EC, c, menu/Menu_ListDrawers]
-      # Command table cursor init, command-stack allocation and rollback share the
-      # cursor and record ABI: one -G8 FORCE_G0 unit with COMMON $gp words.
-      - [0x41884, c, battle/BattleCmd_StackFlow]
-      # Active-list command and its pending result accessors (D_8009D010),
+      # Battle command stack and active list: command table cursor init,
+      # command-stack allocation and rollback (cursor and record ABI), the
+      # active-list command and its pending result accessors (D_8009D010),
       # active-stat synchronization and HP writes (player entity ABI), remaining
-      # ammo, ammo commit and sync and the weapon change with its spell check:
-      # one -G8 FORCE_G0 unit with COMMON $gp words.
-      - [0x41AAC, c, battle/BattleCmd_ActiveListAndAmmo]
+      # ammo, ammo commit and sync and the weapon change with its spell check. One
+      # -G8 FORCE_G0 unit with COMMON $gp words; the four zero bytes that were
+      # main/rodata_00196C are the pad before its 8-aligned active-list jump table.
+      - [0x41884, c, battle/BattleCmd_StackAndActiveList]
       # The parasite spell unlock keeps -fno-schedule-insns (lev 7 without it,
       # its neighbours do not match with it).
       - [0x4204C, c, battle/Aya_UnlockParasiteSpell]
