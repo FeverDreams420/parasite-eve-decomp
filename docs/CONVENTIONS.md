@@ -107,7 +107,7 @@ edge, as `akao/Spu_TransferAndLifecycle` did before LIBPAD WAITRC2's
 | `field` | `Field_`, `Geo_` | field map entries, collision and floor geometry | keep; `Geo_*` from `main` join it |
 | `fieldfx` | `FieldEng_`, `FieldAnim_` | the field effect engine in the separate `0x800C1CA0` segment: effect pool, emitters, particles | keep (renamed from `engine`); prefix to become `FieldFx_` |
 | `scene` | `Scene_` | room and scene loading, story flags, scene dispatch | keep; receives `Scene_*` files from `draw`, `main`, `render`, `time` |
-| `overlay` | `Overlay_` | overlay tables and loading, overlay audio/texture slots | keep |
+| `overlay` | `Overlay_` | overlay tables and loading, overlay audio/texture slots | dissolved: `Overlay_AudioSlotFlow` is in `cdrom` |
 | `asset` | `Asset_` | PE.IMG asset tables, TIM upload | keep |
 | `script` | `Task_` | actor script interpreter: opcodes, expressions, node pool | keep (renamed from `task`); prefix to become `Script_`; `Task_Gpu*` to `draw`, `Task_ConvertSecondsToHMS` to `time` |
 | `pm` | `Pm_` | process manager: slot table that runs script batches | keep |
