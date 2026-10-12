@@ -373,6 +373,16 @@ shapes that only exist for the bytes:
   (separate `return 1` statements keep the first copy). The channel shift is
   `index << 3`: `index * 8` expands through a temporary that cse later
   swaps with the variable, leaving one clamp with a copy of the shift in s3.
+- Shared tails come from cross-jumping, and which copy survives depends on
+  how the copies leave: copies that jump to one join (an `else if` chain
+  with a single `return` at the end, `break` out of a `switch`) collapse
+  into the last copy; copies that each end in `return` collapse into the
+  first. `Spend_BonusPoints` uses both: the decrement cases end in their
+  own move/error sounds and `break`, so the success tail stays in the last
+  case and the error call after it, while the increment arm keeps its own
+  move sound with an early `return` and falls through to one error call.
+  This replaced its seven `goto`s, the `$2` refund pin and the four
+  barriers that kept the decrement cases apart.
 - Small decision trees are `switch` statements with an empty `case 1`
   (`Sfx_ContextPick`) or separate identical cases (`Menu_OpenInventoryOrSwapView`).
 - `Menu_AlignEquipPanels` computes the x shift from one conditional
@@ -387,10 +397,6 @@ Crutches still in place (lev is the only metric):
   confirm tail right after the first arm and the reserved/dialog arms jump
   back into it, an order only the label layout gives (if/else chain lev 71);
   each remaining pin alone costs lev 18-43.
-- `Spend_BonusPoints` (1 pin, 4 barriers, 7 gotos): the error tail sits
-  between the 0x1000 and 0x10000 blocks; with return statements the first
-  copy is kept (lev 64), and without the barriers the two identical
-  bonus-decrement cases are cross-jumped into one (lev 52).
 - `Menu_StepItemSelectScreen` (3 pins, 5 barriers, 2 gotos): retail returns
   through the cell-index variable in s0 (`li s0,1` then `move v0,s0`); plain
   returns fold to `li v0,1` (lev 44). Case 8 needs its three argument

@@ -834,90 +834,80 @@ int Spend_BonusPoints(void *node, unsigned int buttons)
 {
     ItemDataRecord *item;
     int amount;
-    register int refund asm("$2");
     int changed;
 
     item = Inv_LookupActiveListData(Inv_RestoreSelection(0));
     if (buttons & 0x4000) {
         g_MenuSpendArrowDirection = 0;
-        if (g_BonusPointSpendWorkingValue < 100) {
-            goto error;
+        if (g_BonusPointSpendWorkingValue >= 100) {
+            changed = 0;
+            switch (g_BonusPointSpendStat) {
+            case 0: {
+                short *bonus = &D_800A1A00.bonusStats[0];
+                changed = *bonus < 999;
+                *bonus += changed;
+                break;
+            }
+            case 1: {
+                short *bonus = &D_800A1A00.bonusStats[1];
+                changed = *bonus < 999;
+                *bonus += changed;
+                break;
+            }
+            case 2: {
+                short *bonus = &D_800A1A00.bonusStats[2];
+                changed = *bonus < 999;
+                *bonus += changed;
+                break;
+            }
+            case 5:
+            case 6:
+                Stat_QueryDistanceAndSubLevel(g_BonusPointSpendStat, g_BonusPointSpendCurrentValue, &amount, 0);
+                changed = amount > 0;
+                g_BonusPointSpendCurrentValue += amount;
+                break;
+            }
+            g_BonusPointSpendWorkingValue -= changed * 100;
+            if (changed) {
+                Menu_PlayMoveSound();
+                return 1;
+            }
         }
-        changed = 0;
-        switch (g_BonusPointSpendStat) {
-        case 0: {
-            short *bonus = &D_800A1A00.bonusStats[0];
-            changed = *bonus < 999;
-            *bonus += changed;
-            break;
-        }
-        case 1: {
-            short *bonus = &D_800A1A00.bonusStats[1];
-            changed = *bonus < 999;
-            *bonus += changed;
-            break;
-        }
-        case 2: {
-            short *bonus = &D_800A1A00.bonusStats[2];
-            changed = *bonus < 999;
-            *bonus += changed;
-            break;
-        }
-        case 5:
-        case 6:
-            Stat_QueryDistanceAndSubLevel(g_BonusPointSpendStat, g_BonusPointSpendCurrentValue, &amount, 0);
-            changed = amount > 0;
-            g_BonusPointSpendCurrentValue += amount;
-            break;
-        }
-        g_BonusPointSpendWorkingValue -= changed * 100;
-        if (!changed) {
-            goto error;
-        }
-        Menu_PlayMoveSound();
-        return 1;
-    }
-
-    if (buttons & 0x1000) {
+        Menu_PlayErrorSound();
+    } else if (buttons & 0x1000) {
         g_MenuSpendArrowDirection = 1;
         switch (g_BonusPointSpendStat) {
         case 0: {
             short *bonus = &D_800A1A00.bonusStats[0];
-            if (*bonus <= item->bonusStats[0]) {
-                goto error;
-            }
-            {
-                short next;
-                refund = g_BonusPointSpendWorkingValue;
-                asm volatile("" : : "r"(refund));
-                next = *bonus - 1;
-                asm volatile("" : "=m"(*bonus) : "m"(*bonus));
-                *bonus = next;
+            if (*bonus > item->bonusStats[0]) {
+                --*bonus;
+                g_BonusPointSpendWorkingValue += 100;
+                Menu_PlayMoveSound();
+            } else {
+                Menu_PlayErrorSound();
             }
             break;
         }
         case 1: {
             short *bonus = &D_800A1A00.bonusStats[1];
-            if (*bonus <= item->bonusStats[1]) {
-                goto error;
-            }
-            {
-                short next;
-                refund = g_BonusPointSpendWorkingValue;
-                asm volatile("" : : "r"(refund));
-                next = *bonus - 1;
-                asm volatile("" : "=m"(*bonus) : "m"(*bonus));
-                *bonus = next;
+            if (*bonus > item->bonusStats[1]) {
+                --*bonus;
+                g_BonusPointSpendWorkingValue += 100;
+                Menu_PlayMoveSound();
+            } else {
+                Menu_PlayErrorSound();
             }
             break;
         }
         case 2: {
             short *bonus = &D_800A1A00.bonusStats[2];
-            if (*bonus <= item->bonusStats[2]) {
-                goto error;
+            if (*bonus > item->bonusStats[2]) {
+                --*bonus;
+                g_BonusPointSpendWorkingValue += 100;
+                Menu_PlayMoveSound();
+            } else {
+                Menu_PlayErrorSound();
             }
-            --*bonus;
-            refund = g_BonusPointSpendWorkingValue;
             break;
         }
         case 5:
@@ -925,33 +915,23 @@ int Spend_BonusPoints(void *node, unsigned int buttons)
             int *minimum = &g_BonusPointStatDeltas[g_BonusPointSpendStat];
             int gap;
             int new_current;
-            if (*minimum >= g_BonusPointSpendCurrentValue) {
-                goto error;
-            }
-            gap = Stat_OverflowQuery(g_BonusPointSpendStat, g_BonusPointSpendCurrentValue);
-            if (g_BonusPointSpendCurrentValue - gap < *minimum) {
-                new_current = g_BonusPointStatDeltas[g_BonusPointSpendStat];
+            if (*minimum < g_BonusPointSpendCurrentValue) {
+                gap = Stat_OverflowQuery(g_BonusPointSpendStat, g_BonusPointSpendCurrentValue);
+                if (g_BonusPointSpendCurrentValue - gap < *minimum) {
+                    new_current = g_BonusPointStatDeltas[g_BonusPointSpendStat];
+                } else {
+                    new_current = g_BonusPointSpendCurrentValue - Stat_OverflowQuery(g_BonusPointSpendStat, g_BonusPointSpendCurrentValue);
+                }
+                g_BonusPointSpendCurrentValue = new_current;
+                g_BonusPointSpendWorkingValue += 100;
+                Menu_PlayMoveSound();
             } else {
-                new_current = g_BonusPointSpendCurrentValue - Stat_OverflowQuery(g_BonusPointSpendStat, g_BonusPointSpendCurrentValue);
+                Menu_PlayErrorSound();
             }
-            g_BonusPointSpendCurrentValue = new_current;
-            refund = g_BonusPointSpendWorkingValue;
             break;
         }
-        default:
-            return 1;
         }
-        g_BonusPointSpendWorkingValue = refund + 100;
-        Menu_PlayMoveSound();
-        return 1;
-    }
-
-    goto after_error;
-error:
-    Menu_PlayErrorSound();
-    return 1;
-after_error:
-    if (buttons & 0x10000) {
+    } else if (buttons & 0x10000) {
         g_BonusPointDisplayValue = g_BonusPointSpendWorkingValue;
         if (g_BonusPointSpendStat < 3) {
             *item = D_800A1A00;
@@ -967,10 +947,7 @@ after_error:
         }
         MenuWidget_DestroyNode(node);
         Menu_PlayConfirmSound();
-        return 1;
-    }
-
-    if (buttons & 0x40) {
+    } else if (buttons & 0x40) {
         MenuWidget_DestroyNode(node);
         Menu_PlayCancelSound();
     }
