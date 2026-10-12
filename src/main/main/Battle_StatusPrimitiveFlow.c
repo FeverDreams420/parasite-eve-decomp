@@ -144,7 +144,11 @@ void Battle_LayoutStatusPrimRow(int bottomY)
 
 static inline RenderSpritePacket *HighlightSpriteAt(RenderSpritePacket *base, int slot, unsigned byte_offset)
 {
-    return (RenderSpritePacket *)(slot * 3 * sizeof(BattleGaugePrim) + byte_offset + (u32)base);
+    BattleStatusPrimAddress at;
+
+    at.sprite = base;
+    at.address = slot * 3 * sizeof(BattleGaugePrim) + byte_offset + at.address;
+    return at.sprite;
 }
 
 void Battle_DrawTargetHighlight(void)
@@ -178,11 +182,22 @@ void Battle_DrawTargetHighlight(void)
         index_offset = index * sizeof(BattleGaugePrim);
         slot = g_ActiveDrawSlot;
         slot_offset = slot * 3 * sizeof(BattleGaugePrim);
-        sprite = (RenderSpritePacket *)(slot_offset + index_offset + (u32)base);
+        {
+            BattleStatusPrimAddress at;
+
+            at.sprite = base;
+            at.address = slot_offset + index_offset + at.address;
+            sprite = at.sprite;
+        }
         sprite->x = D_8009E358[slot * 3].x0 + index * 24;
         sprite->y = D_8009E358[slot * 3].y0 - 8;
-        AddPrim((unsigned *)D_800B0E38.ordering[slot] + 7,
-                (unsigned *)(slot_offset + (index_offset + (u32)packets)));
+        {
+            BattleStatusPrimAddress at;
+
+            at.gauge = packets;
+            at.address = slot_offset + (index_offset + at.address);
+            AddPrim((unsigned *)D_800B0E38.ordering[slot] + 7, at.words);
+        }
         ++index;
     } while (index < (int)((D_8009D278->action->turnWord >> 4) & 3));
 }
@@ -232,16 +247,18 @@ void Battle_DrawSpellName(void) {
         }
         {
             s32 cC;
-            s32 t3;
+            BattleStatusPrimAddress t3;
+            BattleStatusPrimAddress base;
             s32 rFD;
             s32 tE;
             cC = g_ActiveDrawSlotRecord.slot;
             rFD = 0x1FD;
-            t3 = cC * 0x118;
+            t3.address = cC * 0x118;
             tE = *(u16 *)(D_8009E360 + cC * 0x30);
-            t3 = t3 + (s32)q508;
-            ((RenderSpritePacket *)t3)->y = ys;
-            ((RenderSpritePacket *)t3)->x = tE + 0x3C;
+            base.bytes = q508;
+            t3.address = t3.address + base.address;
+            t3.sprite->y = ys;
+            t3.sprite->x = tE + 0x3C;
             clut = GetClut(r130, rFD);
         }
         {
@@ -253,7 +270,13 @@ void Battle_DrawSpellName(void) {
             cD = cD * 4;
             *(s16 *)(D_8009E516 + eo) = clut;
             __asm__ __volatile__("");
-            AddPrim(*(u8 **)((u8 *)g_OtBufferTable + cD) + 0x10, eo + q508);
+            {
+                BattleStatusPrimAddress entry;
+
+                entry.byteOrdering = g_OtBufferTable;
+                entry.address = cD + entry.address;
+                AddPrim(*entry.byteOrdering + 0x10, eo + q508);
+            }
         }
         return;
     }
@@ -280,7 +303,13 @@ void Battle_DrawSpellName(void) {
                     s0 = i * 0x1C;
                 }
                 t118 += s0;
-                pl = (RenderSpritePacket *)((u8 *)t118 + (u32)e508);
+                {
+                    BattleStatusPrimAddress at;
+
+                    at.bytes = e508;
+                    at.address = t118 + at.address;
+                    pl = at.sprite;
+                }
             }
             {
                 Combatant *dval;
@@ -293,20 +322,38 @@ void Battle_DrawSpellName(void) {
                 r130 = 0x130;
                                 pl->u = 0xD8;
                 c1 = g_ActiveDrawSlotRecord.slot;
-                ((u8 *)(c1 * 0x118 + s0) + (u32)e508)[0xD] = e0;
+                {
+                    BattleStatusPrimAddress at;
+
+                    at.bytes = e508;
+                    at.address = c1 * 0x118 + s0 + at.address;
+                    at.sprite->v = e0;
+                }
                 clut = GetClut(r130, 0x1FB);
             } else if ((d68->turnWord & 0xC0) == 0x80) {
                 r130 = 0x130;
                                 pl->u = 0xDC;
                 c1 = g_ActiveDrawSlotRecord.slot;
-                ((u8 *)(c1 * 0x118 + s0) + (u32)e508)[0xD] = e0;
+                {
+                    BattleStatusPrimAddress at;
+
+                    at.bytes = e508;
+                    at.address = c1 * 0x118 + s0 + at.address;
+                    at.sprite->v = e0;
+                }
                 clut = GetClut(r130, 0x1FC);
             } else {
                 u8 dv = 0xD4;
                 r130 = 0x130;
                                 pl->u = dv;
                 c1 = g_ActiveDrawSlotRecord.slot;
-                ((u8 *)(c1 * 0x118 + s0) + (u32)e508)[0xD] = e0;
+                {
+                    BattleStatusPrimAddress at;
+
+                    at.bytes = e508;
+                    at.address = c1 * 0x118 + s0 + at.address;
+                    at.sprite->v = e0;
+                }
                 clut = GetClut(r130, 0x1FA);
             }
             {
@@ -331,13 +378,23 @@ void Battle_DrawSpellName(void) {
                 }
                 j7 <<= 2;
                 cJ = g_ActiveDrawSlotRecord.slot;
-                a2v = j7 + (s32)e5m8;
+                {
+                    BattleStatusPrimAddress base;
+
+                    base.bytes = e5m8;
+                    a2v = j7 + base.address;
+                }
                 t2 = cJ * 0x118;
                 a2v = t2 + a2v;
                 t2 = t2 + j7;
-                t2 = t2 + (s32)e508;
-                ((RenderSpritePacket *)t2)->x = xs;
-                ((RenderSpritePacket *)t2)->y = ys;
+                {
+                    BattleStatusPrimAddress at;
+
+                    at.bytes = e508;
+                    at.address = t2 + at.address;
+                    at.sprite->x = xs;
+                    at.sprite->y = ys;
+                }
                 xs -= 6;
                 AddPrim(g_OtBufferTable[cJ] + 0x10, (void *)a2v);
             }

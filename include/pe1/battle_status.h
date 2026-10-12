@@ -30,6 +30,8 @@ typedef union BattleStatusPrimAddress {
     BattleGaugePrim *gauge;
     RenderSpritePacket *sprite;
     unsigned int *words;
+    u8 *bytes;
+    u8 **byteOrdering;
     u32 **ordering;
     u32 address;
 } BattleStatusPrimAddress;
