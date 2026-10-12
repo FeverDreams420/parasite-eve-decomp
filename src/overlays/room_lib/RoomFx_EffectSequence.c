@@ -54,7 +54,7 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     u8 offsetValue;
     RoomLink *link;
     RoomLibFxMatrixWords *matrix;
-    register int c80a asm("$6");
+    int depth;
     u8 c80b;
     int c40;
     int value;
@@ -76,8 +76,10 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     D_80192C08.offset = 1;
     if (*func_800C2B28(0) == 2 || *func_800C2B28(0) == 5) {
         D_80192C08.offset = -100;
+        depth = 0x80;
+    } else {
+        depth = 0x80;
     }
-    c80a = 0x80;
     c80b = 0x80;
     PE1_COMPILER_USE(c80b);
     c40 = 0x40;
@@ -96,23 +98,23 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     D_80192C28.r = 0x90;
     D_80192C28.g = 0x90;
     D_80192C28.b = 0x90;
-    D_80192C08.depth = c80a;
+    D_80192C08.depth = depth;
     D_80192C08.flip = 0;
     D_80192C08.r = c80b;
     D_80192C08.b = value;
     D_80192C18.cell = c80b;
-    D_80192C18.depth = c80a;
+    D_80192C18.depth = depth;
     D_80192C18.flip = 0;
     D_80192C18.r = c80b;
     D_80192C18.b = value;
     D_80192C28.offset = c40;
-    D_80192C28.depth = c80a;
+    D_80192C28.depth = depth;
     D_80192C28.flip = 0;
     D_80192C38.cell = 0;
     D_80192C38.clut = 0;
     D_80192C38.offset = c40;
     D_80192C38.flip = 0;
-    D_80192C38.depth = c80a;
+    D_80192C38.depth = depth;
     D_80192C38.r = c80b;
     D_80192C38.g = value;
     D_80192C38.b = 0x10;
