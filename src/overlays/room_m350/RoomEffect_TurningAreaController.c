@@ -95,16 +95,15 @@ case 1:
             int cosine,sine,i;
             Matrix *matrix;
             register int *out asm("$6");
-            Instance *source;
             state->yaw=(unsigned int)state->yaw+state->turn;
             cosine=rcos(state->yaw>>8);
             sine=rsin(state->yaw>>8);
-            i=0; matrix=&D_8019A808; out=matrix->t; source=instance;
+            i=0; matrix=&D_8019A808; out=matrix->t;
             matrix->m[0][0]=cosine;
             D_8019A808.m[0][2]=sine; D_8019A808.m[2][0]=0u-sine; D_8019A808.m[2][2]=cosine;
             D_8019A808.t[2]=0; D_8019A808.t[1]=0; D_8019A81C=0;
             D_8019A808.m[2][1]=0; D_8019A808.m[1][2]=0; D_8019A808.m[1][0]=0; D_8019A808.m[0][1]=0; D_8019A808.m[1][1]=4096;
-            for(;i<3;i++) { *out++=source->render_object.model_matrix.translation[0]; source=(Instance *)((char *)source+4); }
+            for(;i<3;i++) *out++=instance->render_object.model_matrix.translation[i];
         }
         if(state->brightness<64) return 0;
         {
