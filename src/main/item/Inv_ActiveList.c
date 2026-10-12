@@ -627,7 +627,7 @@ short Inv_GetActiveListItem(int index) {
     return g_InvItemPtr[index];
 }
 
-void Sfx_DrawSlotRow(ItemDataRecord *entry, u8 *text) {
+void Menu_DrawSlotRow(ItemDataRecord *entry, u8 *text) {
     int type;
     int sprite;
     int ammo;
@@ -691,7 +691,7 @@ void Sfx_DrawSlotRow(ItemDataRecord *entry, u8 *text) {
     Draw_StatePop();
 }
 
-void Sfx_CursorRenderData(ItemDataRecord *record) {
+void Menu_CursorRenderData(ItemDataRecord *record) {
     u8 *cursor;
 
     if (record->flags & ITEM_DATA_FLAG_GENERIC_DESCRIPTION) {
@@ -703,12 +703,12 @@ void Sfx_CursorRenderData(ItemDataRecord *record) {
         cursor = Text_LookupTable8(record->itemId - 1);
     }
 
-    Sfx_DrawSlotRow(record, cursor);
+    Menu_DrawSlotRow(record, cursor);
 }
 
 #define NULL ((void *)0)
 
-void Sfx_DrawActiveListSlot(s32 arg0) {
+void Menu_DrawActiveListSlot(s32 arg0) {
     s16 temp_v1;
     s32 temp_v1_3;
     /* Match debt: retail copies the item ID into a1 before the range
@@ -766,7 +766,7 @@ void Sfx_DrawActiveListSlot(s32 arg0) {
         var_v0 = NULL;
     }
     if (var_v0 != NULL) {
-        Sfx_DrawSlotRow(var_v0, saved_a1);
+        Menu_DrawSlotRow(var_v0, saved_a1);
     }
 }
 #undef NULL

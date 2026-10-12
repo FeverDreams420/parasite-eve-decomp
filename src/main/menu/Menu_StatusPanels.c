@@ -329,7 +329,7 @@ void Menu_HandleInput(int arg0) {
     }
     }
 
-    Sfx_DrawActiveListSlot(value);
+    Menu_DrawActiveListSlot(value);
     if (blocked != 0) {
         Draw_DropShadow();
     }
@@ -658,10 +658,10 @@ void Menu_DrawStatusPanel(void) {
     Draw_OffsetCursor(-0x7C, 0x15);
     Draw_AllocSprite(0x94);
     Draw_OffsetCursor(0, 0x10);
-    Sfx_DrawActiveListSlot(D_800C0E00.equipped_weapon_slot);
+    Menu_DrawActiveListSlot(D_800C0E00.equipped_weapon_slot);
     Draw_OffsetCursor(0, 0x10);
     if (D_800C0E00.equipped_armor_slot >= 0) {
-        Sfx_DrawActiveListSlot(D_800C0E00.equipped_armor_slot);
+        Menu_DrawActiveListSlot(D_800C0E00.equipped_armor_slot);
         return;
     }
     Draw_PrintTextById(0x39);

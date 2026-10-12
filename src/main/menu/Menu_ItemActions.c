@@ -112,7 +112,7 @@ int g_MenuSelectedItemList;
 int g_MenuSelectedItemSlot;
 void Draw_StatePush(void);
 void Draw_StatePop(void);
-void Sfx_DrawActiveListSlot(int arg0);
+void Menu_DrawActiveListSlot(int arg0);
 #define NULL ((void *)0)
 void Menu_DrawEquipStats(void);
 /* Inlined into Menu_OpenItemList, like Menu_CreateItemActionSubmenu; no
@@ -256,7 +256,7 @@ void Menu_DrawItemActionSubmenu(void) {
 
     if ((g_MenuSelectedItemIndex & 1) == 0) {
         Draw_OffsetCursor(0, 0xE);
-        Sfx_DrawActiveListSlot(selected);
+        Menu_DrawActiveListSlot(selected);
         Draw_OffsetCursor(0, 0xE);
         Draw_PrintTextById(0x67);
     }
@@ -345,7 +345,7 @@ void Menu_DrawEquipStats(void) {
     data = Inv_LookupActiveListData(value);
 
     Draw_OffsetCursor(4, 4);
-    Sfx_DrawActiveListSlot(value);
+    Menu_DrawActiveListSlot(value);
     Draw_OffsetCursor(-4, -4);
     Menu_DrawEquipStatsDelta(data);
 
@@ -1322,7 +1322,7 @@ void Menu_StepEquipSlotSelect2(void) {
 
     slot = Inv_RestoreSelection(0);
     Draw_OffsetCursor(4, 4);
-    Sfx_DrawActiveListSlot(slot);
+    Menu_DrawActiveListSlot(slot);
     Draw_OffsetCursor(-4, -4);
 
     item = Inv_LookupActiveListData(slot);

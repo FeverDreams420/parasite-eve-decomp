@@ -327,7 +327,7 @@ void Menu_DrawInventoryItemRow(int index) {
     int slot = Inv_GetWayneListItemByIndex(index);
 
     Draw_SetTextDimmed(Inv_TestSelectionBit(slot) == 0);
-    Sfx_DrawActiveListSlot(slot);
+    Menu_DrawActiveListSlot(slot);
     if (Inv_IsAyaInventorySlotReserved(slot) != 0) {
         Draw_DropShadow();
     }
@@ -395,7 +395,7 @@ void Menu_DrawSelectableEquipSlotRow(int slot) {
     }
 
     Draw_SetTextDimmed(dimmed);
-    Sfx_DrawActiveListSlot(slot);
+    Menu_DrawActiveListSlot(slot);
     if (Inv_IsAyaInventorySlotReserved(slot) != 0) {
         Draw_DropShadow();
     }
@@ -406,7 +406,7 @@ int g_MenuActiveItemSlot;
 int g_MenuItemActionDisabled;
 int g_MenuEquipMode;
 
-void Sfx_ContextPick(int arg0)
+void Menu_ContextPick(int arg0)
 {
     int state;
     int flag;
@@ -483,7 +483,7 @@ void Menu_SoundTestSelect(int index)
 
     if (selected >= 0) {
         MenuWidget_ClearCursorY(MenuWidget_FindByModeAndSelectedBase(1, 6));
-        Sfx_DrawActiveListSlot(selected);
+        Menu_DrawActiveListSlot(selected);
         return;
     }
 
@@ -650,5 +650,5 @@ void Menu_DrawSaveSlot3Item(int index) {
 }
 
 void Menu_DrawSoundEffectItem(int index) {
-    Sfx_CursorRenderData(g_MenuSelectedItemData);
+    Menu_CursorRenderData(g_MenuSelectedItemData);
 }

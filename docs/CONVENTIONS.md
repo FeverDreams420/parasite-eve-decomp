@@ -118,7 +118,7 @@ edge, as `akao/Spu_TransferAndLifecycle` did before LIBPAD WAITRC2's
 | `menu` | `Menu_`, `MenuWidget_`, `MenuInput_` | in-game menus, widget tree, menu input queue | keep; `Inv_*`, `Save_*`, `Pad_*` files out to their owners |
 | `save` | `Save_` | save-data layout, metadata, write flow | keep |
 | `akao` | `Akao_`, `Seq_`, `Spu_` | Square's AKAO sound driver: sequencer, voices, SPU uploads | keep; LIBSPU units to `psyq/libspu` |
-| `audio` | `Sfx_` | misnamed: both files are menu item-list code | dissolved: both `Sfx_` units are in `menu` |
+| `audio` | `Sfx_` | misnamed: both files are menu item-list code | dissolved: the item-list functions are `Menu_*` (`Menu_ContextPick`, `Menu_DrawSlotRow`, ...) |
 | `time` | `GameTime_` | play-time counters and timers | keep |
 | `text` | `Text_` | text and textbox lookup tables, map-name and base-32 id strings | keep (renamed from `table`, prefixes from `Tbl_` and `Str_`); the textbox page helpers are `Draw_*` |
 | `util` | `Util_` | vague | dissolved: `util.c` is `item/Inv_ActiveList.c`; its helpers took their owners' prefixes (`Text_CopyFFTerminatedBytes`, `Akao_CopyWords`, `GameTime_PackTime`) |

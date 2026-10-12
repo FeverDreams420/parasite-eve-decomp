@@ -109,7 +109,7 @@ Spu_ParameterSlide = 0x8008B780; // type:func
 Spu_VoiceStopAll = 0x8008C8B8; // type:func
 Seq_SetParamWithReset = 0x8008CB54; // type:func
 Spu_ManageVoices = 0x8008A400; // type:func
-Sfx_ContextPick = 0x80050878; // type:func
+Menu_ContextPick = 0x80050878; // type:func
 Seq_GetElapsed = 0x8006EBE4; // type:func
 
 // Inventory.
@@ -1182,8 +1182,8 @@ Inv_BuildItemGridFromCategory = 0x80052C6C; // type:func
 Inv_LookupActiveListDisplayData = 0x80053068; // type:func
 Inv_RebuildSelectionBitset = 0x80053128; // type:func
 Inv_FindIndexByData = 0x800533D4; // type:func
-Sfx_DrawSlotRow = 0x800534E4; // type:func
-Sfx_DrawActiveListSlot = 0x800536B8; // type:func
+Menu_DrawSlotRow = 0x800534E4; // type:func
+Menu_DrawActiveListSlot = 0x800536B8; // type:func
 Inv_FindFirstEmptySlot = 0x8005382C; // type:func
 Inv_FindSlotByIndex = 0x80053968; // type:func
 Inv_WriteSlotById = 0x80053B48; // type:func

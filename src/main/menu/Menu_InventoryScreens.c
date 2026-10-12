@@ -575,7 +575,7 @@ int g_MenuMemCardConfirmPending;
 
 void Menu_DrawEquipItemIcon(void) {
     Draw_OffsetCursor(6, 6);
-    Sfx_CursorRenderData(g_MenuSelectedItemData);
+    Menu_CursorRenderData(g_MenuSelectedItemData);
 }
 
 void Menu_ResetStateFlags(void) {
@@ -602,7 +602,7 @@ int g_InvItemUsableFlag;
 
 void Menu_DrawItemSlot(int index);
 void Menu_DrawSelectableEquipSlotRow(int index);
-void Sfx_ContextPick(int index);
+void Menu_ContextPick(int index);
 void Menu_DrawActionOptionRow(int index);
 void Menu_SoundTestSelect(int index);
 void Menu_DrawActionCodeItem(int index);
@@ -641,7 +641,7 @@ void Menu_DrawContextActionList(MenuWidgetNode *node) {
     MenuWidgetNode *saved = node;
 
     Inv_SelectActiveList(g_MenuActiveItemList);
-    MenuWidget_DrawList(saved, Sfx_ContextPick);
+    MenuWidget_DrawList(saved, Menu_ContextPick);
 }
 
 void Menu_DrawActionOptionList(MenuWidgetNode *node) {

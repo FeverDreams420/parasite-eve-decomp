@@ -126,6 +126,6 @@ int Inv_IsActiveListOverrideSelected(void);
 
 int Inv_FindItemById(int id);
 int Inv_SwapSlots(int unused, int from, int unused2, int to);
-void Sfx_CursorRenderData(ItemDataRecord *record);
+void Menu_CursorRenderData(ItemDataRecord *record);
 
 #endif /* PE1_INVENTORY_H */

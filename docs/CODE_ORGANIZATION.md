@@ -593,7 +593,7 @@ shapes that only exist for the bytes:
   This replaced its seven `goto`s, the `$2` refund pin and the four
   barriers that kept the decrement cases apart.
 - Small decision trees are `switch` statements with an empty `case 1`
-  (`Sfx_ContextPick`) or separate identical cases (`Menu_OpenInventoryOrSwapView`).
+  (`Menu_ContextPick`) or separate identical cases (`Menu_OpenInventoryOrSwapView`).
 - `Menu_AlignEquipPanels` computes the x shift from one conditional
   expression; the separate `if` chain gives the loads other registers.
 - The cursor stack is walked as `int` word pairs, except in
@@ -635,7 +635,7 @@ Crutches still in place (lev is the only metric):
   for both calls is also lev 1: cse substitutes the constant on the
   fall-through arm and the delay slot of `MenuWidget_InitPool` gets the
   second `li` instead of a `nop`).
-- `Sfx_DrawActiveListSlot` (1 pin): retail copies the item ID into a1 before
+- `Menu_DrawActiveListSlot` (1 pin): retail copies the item ID into a1 before
   the range tests (lev 12 without).
 - `Draw_InitBuffers` (1 pin, 1 barrier): retail stores the screen
   rectangles relative to s0 (the first frame's packet arena field); constant

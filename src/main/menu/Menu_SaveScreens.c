@@ -962,7 +962,7 @@ void Menu_DrawSaveMetadataPreview(void) {
     (void) frame_pad;
     if (g_MenuRenameTargetRecord != NULL) {
         Draw_OffsetCursor(0x1C, 0xC);
-        Sfx_CursorRenderData(g_MenuRenameTargetRecord);
+        Menu_CursorRenderData(g_MenuRenameTargetRecord);
         text = g_CursorRenderMetadataWindows[0].text;
         if (g_MenuRenameTargetRecord->kind == ITEM_KIND_ARMOR) {
             text = g_CursorRenderMetadataWindows[1].text;
