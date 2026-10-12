@@ -1,5 +1,0 @@
-#ifndef PE1_EXT_BE0C6FA9D0ED
-#define PE1_EXT_BE0C6FA9D0ED
-extern int D_801998F0;
-extern int D_801998F4;
-#endif /* PE1_EXT_BE0C6FA9D0ED */

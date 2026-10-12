@@ -2,7 +2,9 @@
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_anim_pool.h"
 #include "pe1/field_actor.h"
-#include "func_801992A4_externs.h"
+#include "../room_lib/room_lib.h"
+
+#include "m318_player_gate_externs.h"
 
 s32 func_801992A4(s32 arg0, void *arg1, s32 *arg2) {
     FieldActorState *actor;
@@ -37,4 +39,10 @@ s32 func_801992A4(s32 arg0, void *arg1, s32 *arg2) {
         ANIM_TASK_AS(s16)[11] = 0;
         return 1;
     }
+}
+
+ROOMLIB_SET_ARG1(RoomLib_SetArg1_8019937C, RoomSlotA_8019937C)
+
+int *func_8019938C(void) {
+    return &D_801998F0;
 }

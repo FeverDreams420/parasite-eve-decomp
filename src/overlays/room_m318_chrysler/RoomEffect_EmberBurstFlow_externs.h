@@ -1,5 +1,0 @@
-#ifndef PE1_EXT_C9245528AFB8
-#define PE1_EXT_C9245528AFB8
-extern RenderColor D_8018F1FC;
-extern u8 D_80199674[];
-#endif /* PE1_EXT_C9245528AFB8 */
