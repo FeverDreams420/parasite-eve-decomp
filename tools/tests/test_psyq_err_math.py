@@ -1,4 +1,4 @@
-"""Event dispatch and global argument storage without register constraints."""
+"""LIBMATH _err_math (the old Evt_Deliver): event dispatch and global argument storage without register constraints."""
 from pathlib import Path
 import itertools
 import random
@@ -11,7 +11,7 @@ from tools.tests.csource import find_definition
 ROOT = Path(__file__).resolve().parents[2]
 
 
-class EventDeliverTests(unittest.TestCase):
+class PsyqErrMathTests(unittest.TestCase):
     def test_plain_c(self):
         source = find_definition('_err_math').read_text()
         source = re.sub(r'/\*.*?\*/|//[^\n]*', '', source, flags=re.S)
