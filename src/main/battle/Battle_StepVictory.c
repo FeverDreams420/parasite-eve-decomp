@@ -11,8 +11,8 @@ Combatant *D_8009D278;
 int D_8009D28C;
 s8 D_8009D2A0;
 /* Eight-stage transition: model fades, an effect spawn, stat recovery and
- * HUD reset. Matching debt: fixed-register pins, a shared fade tail and
- * interior HUD symbols. */
+ * HUD reset. Matching debt: the result, fade object and brightness pins
+ * (see docs/CODE_ORGANIZATION.md). */
 int Battle_StepVictory(void)
 {
     register int result asm("$18") = 0;
@@ -62,10 +62,7 @@ int Battle_StepVictory(void)
         Scene_LoadRoomAssets(0x69, D_8009D254);
         spawnPlayer = D_8009D254;
         Asset_Find08Alt(0x4AF, 0, spawnPlayer->posX.parts.integer, spawnPlayer->posY.parts.integer, spawnPlayer->posZ.parts.integer);
-        {
-            register u8 delay asm("$3") = 0x34;
-            g_BattleEndTimer = delay;
-        }
+        g_BattleEndTimer = 0x34;
         D_8009CE74++;
         break;
     case 3:
@@ -131,68 +128,12 @@ fade:
         restoredCore->panelB_timer = 30;
         D_8009D278->panelB_flag = 1;
         Aya_DeriveStats(&D_8009D278->atbStep, &D_8009D278->atbRate);
-        {
-            register u8 initialGreen asm("$6") = 70;
-            register u8 blue asm("$5") = 130;
-            register u8 u asm("$4") = 159;
-            register u8 v asm("$2") = 255;
-            register u8 clutLow asm("$3") = 249;
-            D_800B00ED[0] = initialGreen;
-            D_800B00FD[0] = initialGreen;
-            D_800B0111[0] = initialGreen;
-            D_800B0121[0] = initialGreen;
-            initialGreen = 54;
-            D_800B00F4[0] = u;
-            D_800B0104[0] = u;
-            D_800B692C[0] = u;
-            D_800B0118[0] = u;
-            D_800B0128[0] = u;
-            D_800B6948[0] = u;
-            D_800B00EC[0] = 0;
-            D_800B00EE[0] = blue;
-            D_800B00F5[0] = v;
-            D_800B00F6[0] = clutLow;
-            D_800B00FC[0] = 0;
-            D_800B00FE[0] = blue;
-            D_800B0105[0] = v;
-            D_800B0106[0] = clutLow;
-            D_800B692D[0] = v;
-            D_800B692E[0] = clutLow;
-            D_800B0110[0] = 0;
-            D_800B0112[0] = blue;
-            D_800B0119[0] = v;
-            D_800B011A[0] = clutLow;
-            D_800B0120[0] = 0;
-            D_800B0122[0] = blue;
-            D_800B0129[0] = v;
-            D_800B012A[0] = clutLow;
-            D_800B6949[0] = v;
-            D_800B694A[0] = clutLow;
-            D_800B0134[0] = 0;
-            D_800B0135[0] = blue;
-            D_800B0136[0] = initialGreen;
-            D_800B013C[0] = 74;
-            D_800B013D[0] = v;
-            D_800B013E[0] = 59;
-            D_800B0144[0] = 0;
-            D_800B0145[0] = blue;
-            D_800B0146[0] = initialGreen;
-            D_800B014C[0] = 74;
-            D_800B014D[0] = v;
-            D_800B014E[0] = 59;
-            D_800B017C[0] = 0;
-            D_800B017D[0] = blue;
-            D_800B017E[0] = initialGreen;
-            D_800B0184[0] = 74;
-            D_800B0185[0] = v;
-            D_800B0186[0] = 59;
-            D_800B018C[0] = 0;
-            D_800B018D[0] = blue;
-            D_800B018E[0] = initialGreen;
-            D_800B0194[0] = 74;
-            D_800B0195[0] = v;
-            D_800B0196[0] = 59;
-        }
+        BATTLE_SET_GAUGE_GRADIENT(D_800B00E8[0], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
+        BATTLE_SET_SPRITE_COLOR(D_800B6920[0].sprite, 0x9F, 0xFF, 0xF9);
+        BATTLE_SET_GAUGE_GRADIENT(D_800B00E8[1], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
+        BATTLE_SET_SPRITE_COLOR(D_800B6920[1].sprite, 0x9F, 0xFF, 0xF9);
+        BATTLE_SET_GAUGE_GRADIENT(D_800B0130[0][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
+        BATTLE_SET_GAUGE_GRADIENT(D_800B0130[1][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
         D_8009CE74 = 0;
         D_8009D28C = 0;
         result = 1;
