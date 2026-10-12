@@ -369,7 +369,7 @@ s32 func_801909B4(void) {
                 func_800425DC();
                 func_8003EB04();
                 func_80190064();
-                func_8018F468();
+                MenuCard_RedrawImageNodes();
                 node = ((MemcardImageNode *)D_801D1370);
                 previous = 0;
                 if (node != 0) {

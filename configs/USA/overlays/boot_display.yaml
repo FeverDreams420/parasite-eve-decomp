@@ -225,7 +225,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x24C0, c, BootDisplay_BrightenImageRegion_80125364]
+      - [0x24C0, c, BootDisplay_BrightenImageRegion]
   - [0x2600]
   - name: boot_display_late
     type: code

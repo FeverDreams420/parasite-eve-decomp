@@ -39,7 +39,7 @@ void func_8005E6E4(void *);
 void func_8005E6F0(void);
 void func_8005E788(int);
 void func_8018F2F4(void);
-void func_8018F468(void);
+void MenuCard_RedrawImageNodes(void);
 MemcardImageNode *func_8018FBC0(int);
 void func_80190064(void);
 int func_80192CE8(int);

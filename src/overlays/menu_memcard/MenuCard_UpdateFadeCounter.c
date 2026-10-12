@@ -1,6 +1,6 @@
 #include "menu_memcard_fade.h"
 
-s32 func_8012B53C(MenuMemcardFadeState *state) {
+s32 MenuCard_UpdateFadeCounter(MenuMemcardFadeState *state) {
     s32 shifted;
     s32 result;
 

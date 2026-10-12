@@ -133,7 +133,7 @@ segments:
     subsegments:
       - {start: 0x63A0, type: data, name: menu_memcard_data_0063A0, linker_section_order: .text, linker_section: .code_data}
       - [0x6B04, c, MenuCard_FlipScreenPages]
-      - [0x6C78, c, MenuCard_RedrawImageNodes_8018F468]
+      - [0x6C78, c, MenuCard_RedrawImageNodes]
   - [0x7000]
   - name: menu_memcard_blend_image_linkbase
     type: code
@@ -300,7 +300,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0xA7F8, c, MenuCard_UpdateFadeCounter_8012B53C]
+      - [0xA7F8, c, MenuCard_UpdateFadeCounter]
   - [0xA894]
   - name: menu_memcard_fade_late
     type: code

@@ -1,6 +1,6 @@
 #include "pe1/boot_display.h"
 
-void func_80125364(void)
+void BootDisplay_BrightenImageRegion(void)
 {
     s16 line;
     register u8 *image asm("$14") = (u8 *)D_80172C98 + 0x4000;

@@ -14,7 +14,7 @@ typedef struct MemcardBackground {
  * Step every image node, restore the background under the area the nodes
  * cover now or covered last frame, then let each node draw itself into it.
  */
-void func_8018F468(void) {
+void MenuCard_RedrawImageNodes(void) {
     MemcardImageNode *node;
     MemcardScreenBuffer *screen;
     MemcardBackground *background;
