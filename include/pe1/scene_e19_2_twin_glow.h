@@ -33,6 +33,5 @@ extern GteShortVector D_8018F264;
 extern RenderColor D_8018F26C;
 
 int func_80071A54(void);
-int func_80199C28(int mode, void *spark);
 
 #endif

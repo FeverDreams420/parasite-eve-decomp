@@ -45,38 +45,17 @@ segments:
         type: rodatabin
         name: scene_e19_header_tail
         dir: scene_e19_cruiser
-      - [0x1EC, .rodata, SceneE19_BlastSequence]
+      - [0x1EC, .rodata, e19]
       - start: 0x228
         type: rodatabin
         name: scene_e19_header_tail2
         dir: scene_e19_cruiser
       - [0x288, c, ../room_lib/RoomLib_ActorClasses]
-      - [0x35A4, c, func_8019258C]
-      - [0x35AC, c, func_80192594]
-      - [0x3648, c, func_80192630]
-      - [0x3670, c, func_80192658]
+      - [0x35A4, c, e19_class]
       - [0x3678, c, ../room_lib/RoomLib_UpdateCallback]
       - [0x36A0, c, ../room_lib/SceneEffect_GrabAwaitStance]
       # The approach callback arms the grab sequence and both paths share actor/target state.
-      - [0x36CC, c, SceneE19GrabResetFlow]
-      - [0x3E18, c, func_80192E00]
-      - [0x3E20, c, func_80192E08]
-      - [0x3FB4, c, SceneE19_BlastSequence]
-      - [0x64B4, c, func_8019549C]
-      - [0x70DC, c, RoomEffect_HomingBurstController_801960C4]
-      - [0x7760, c, RoomEffect_SpinRayParticle_80196748]
-      - [0x7CE4, c, RoomEffect_SpinRayController_80196CCC]
-      - [0x8304, c, RoomEffect_EmberFlareParticle]
-      - [0x8904, c, RoomEffect_EmberFlareController]
-      - [0x92BC, c, RoomEffect_OrbitSpinParticle_801982A4]
-      - [0x992C, c, RoomEffect_OrbitSpinBurst_80198914]
-      - [0xA210, c, RoomEffect_GlintSparkParticle_801991F8]
-      - [0xA69C, c, RoomEffect_GlintRibbonController_80199684]
-      - [0xAC40, c, RoomEffect_PulseGlintParticle_80199C28]
-      - [0xB06C, c, RoomEffect_TwinGlowController_8019A054]
-      - [0xBC48, c, RoomEffect_JitterSizedSpark_8019AC30]
-      - [0xBEA4, c, RoomEffect_JitterSizedSpawner_8019AE8C]
-      - [0xC1F0, c, SceneE19_StateAccessors]
+      - [0x36CC, c, e19]
       - [0xC26C, data]
   - [0xC800]
 # source slice: scanner

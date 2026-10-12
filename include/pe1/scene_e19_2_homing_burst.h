@@ -53,6 +53,5 @@ extern GteRotation D_8018F1CC;
 extern RenderColor D_8018F21C;
 extern RenderColor D_8018F220;
 
-int func_8019549C(int mode, void *particle);
 
 #endif

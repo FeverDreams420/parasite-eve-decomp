@@ -65,7 +65,7 @@
       "unit": "overlays/scene_e19_2/scene_pre",
       "symbol": "func_8018EFF0",
       "reported_size": 1204,
-      "source": "src/overlays/scene_e19_cruiser/SceneE19_BlastSequence.c",
+      "source": "src/overlays/scene_e19_cruiser/e19.c",
       "status": "matched_integrated",
       "levenshtein_score": 0,
       "actual_symbol": "func_80192F9C",
@@ -74,7 +74,7 @@
       "actual_end_exclusive": "0x8019549C",
       "missing_extracted_bytes": 8192,
       "evidence": "Complete function and rodata match with stock GCC 2.7.2 and MASPSX 2.56. The two extraction slices are merged into the full scene_e19 block; overlay-check SHA1 6b114d71ecf274e02267aa9ea10cb2126793d3af. No bound register variables; two empty barriers (one clobbers $s0 to retain natural parameter allocation), eight gte.h view-matrix transfers (gte_ldrotmatrix/gte_ldtransmatrix).",
-      "current_unit": "overlays/scene_e19_cruiser/SceneE19_BlastSequence",
+      "current_unit": "overlays/scene_e19_cruiser/e19.c",
       "extraction_restored": true,
       "candidate_debt": {
         "pins": 0,

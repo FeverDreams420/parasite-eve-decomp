@@ -58,7 +58,6 @@ extern s32 D_8019B668;
 extern void *D_8019B680, *D_8019B684, *D_8019B688, *D_8019B68C, *D_8019B690;
 
 int func_80192F9C(int mode, SceneE19Blast *blast);
-int func_80192E08(int mode, void *spark);
 int func_80071A54(void);
 #include "pe1/gte_types.h"
 void func_800C6EC0(int page, int clut);

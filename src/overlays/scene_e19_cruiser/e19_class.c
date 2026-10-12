@@ -4,7 +4,11 @@
 #include "pe1/scene_grab_head.h"
 #include "pe1/scene_grab_trigger.h"
 
-#include "func_80192594_externs.h"
+#include "e19_class_externs.h"
+
+int func_8019258C(void) {
+    return 0;
+}
 
 s32 func_80192594(SceneGrabTrigger *obj) {
     obj->control.callback = SceneEffect_GrabAwaitStance;
@@ -17,5 +21,18 @@ s32 func_80192594(SceneGrabTrigger *obj) {
     *(s32 *)((char *)obj + 0x30) = D_8019B310;
     *(s32 *)((char *)obj + 0x34) = D_8019B314;
     *(s32 *)((char *)obj + 0x38) = D_8019B318;
+    return 0;
+}
+
+int func_80192630(SceneGrabTrigger *obj, int mode, int event, int arg3) {
+    if (event == 0x19 && mode == 1) {
+        obj->control.signal = (int *)arg3;
+        *(int *)arg3 = mode;
+    }
+
+    return 0;
+}
+
+int func_80192658(void) {
     return 0;
 }
