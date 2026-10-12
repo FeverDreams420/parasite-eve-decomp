@@ -303,8 +303,15 @@ Crutches still in place (lev is the only metric):
   through the other symbol for that byte; without the memory barrier the
   reload is scheduled first (lev 25, 10, 11). `Render_StepFontLoad` keeps an
   identity constraint on the digit (lev 19) and `Render_SetFontGlyphByCode`
-  one on the stored slot (lev 14). `Render_LoadFontGlyphAlt` keeps its byte
-  view of the table (typed lookup lev 10, shared slot search lev 24).
+  one on the stored slot (lev 14). `Render_LoadFontGlyphAlt` reads the
+  glyph through `groups.codes[slots.indices[...]]` but reloads the stored
+  slot as `*(u8 *)&D_80091A1F`: a plain read is CSE'd with the store
+  (lev 35) and `g_FontSelectionState.selected` is hoisted above the store
+  because it is another symbol (lev 36).
+- `Render_DrawSpriteEntry` keeps `ot = ot_index + (u32)ordering` and the
+  byte offset of the position array: `ordering + ot_index` swaps the
+  `addu` operands (lev 2), and the position array lies `pos_ptr` bytes from
+  the entry, an offset read from the data.
 - PE.IMG and font retry loops (`Render_LoadFontGlyphAlt` 1 goto,
   `Render_FontGlyphLoad` 2, `Render_InitDisplayLists` 2): any loop form lets
   loop.c hoist the table address and constants out of the retry path, which
@@ -406,16 +413,21 @@ Crutches still in place (lev is the only metric):
   addresses fold to absolute stores.
 - `Draw_SetPrimCallback` (1 memory barrier, 1 volatile read): retail
   re-reads y_limit and the other fields after storing them.
-- `Aya_SetTotalExp` (1 barrier, local alias header): retail keeps the save
-  base in s2 for the total and the cleared pool, and reads/writes the bonus
-  pool through three absolute accesses that one symbol lets CSE merge
-  (`Menu_LevelUpFlow_externs.h`).
+- `Aya_SetTotalExp` (1 barrier): retail keeps the save base in s2 for the
+  total and the cleared pool; without the launder the constant base folds
+  into absolute loads (lev 6). The bonus pool is read and written through
+  the `g_AyaBonusPoolRecord` record view (the unit is forced-G0).
 - `Menu_MainUpdate` (3 pointer-integer casts, 3 field macros, local alias
   header): the m2c variables that carry the battle entity pointers also
   carry colours, and splitting them reallocates registers (lev 28-248); the
   halfword position reads must not be structure members (the scheduler
-  would hoist the `D_8009D28C` store); `draw_slot_status0..2` keep retail's
-  reloads of the draw slot (`Menu_MainUpdate_externs.h`).
+  would hoist the `D_8009D28C` store). The draw slot reloads come from the
+  `g_ActiveDrawSlotRecord` record view and the BGM handle reload from an
+  array element read (see the recipes below).
+- `Menu_StepItemGrid2` (two asm-labelled views of `D_800A19C0` in
+  `pe1/Menu_MemCardProgress_externs.h`): retail rebuilds the text buffer
+  address for each `Draw_MeasureTextWidth` call; with one symbol CSE keeps
+  it in a saved register.
 - `Window_SetBoundsByMode` (volatile window X and bound pointer): plain or
   multi-set forms keep the order but swap v0/v1 (lev 5).
 - `Menu_DrawTextboxEntries` (7 pins, 6 barriers, 6 gotos, stack reserve, 2
@@ -856,10 +868,34 @@ These apply to any unit, not only the ones they were found in:
   through `$gp` makes every other word absolute, so plain declarations give
   the same code (`Battle_BuildTargetList`, `Battle_Init`,
   `Battle_PlayerTurnFlow`, `Battle_FinalizeAttackResult`,
-  `Battle_AdvancePhase`, the forced-G0 task units). Views that only separate
-  two reads of one word for CSE are a different crutch and stay
-  (`Battle_ApplySpellEffect`, `Battle_DrawSpellName`, `Inv_TransferItem`,
-  `Inv_ItemActions`).
+  `Battle_AdvancePhase`, the forced-G0 task units).
+- Views that only separate reads of one word for CSE give way to one-field
+  record views (`pe1/battle_word_records.h`, `pe1/draw_slot_record.h`,
+  `g_AyaBonusPoolRecord`, compare `room_sound_slot.h`). A record read is a
+  structure access: GCC reloads it after a store through a structure
+  pointer, where a scalar at a constant address is assumed not to alias and
+  is reused. At one word the record is small data, so a -G8 unit addresses
+  it directly; under `-G0` the unit switches to cc1 `-G8` with
+  `MASPSX_FORCE_G0` so the record does not get its address CSE'd into a
+  register (`Battle_DrawSpellName`). The linker map names the record at the
+  word's address. `Battle_ApplySpellEffect` lost 33 views this way.
+- Scalar views do the opposite job: `g_EquippedWeaponSlot`/`ArmorSlot`
+  (`pe1/aya.h`) are byte scalars, so in a forced-G0 -G8 unit every slot
+  access is a direct `lui`/`lb` or `lui at`/`sb` instead of an address held
+  in a register (`Inv_TransferItem`, `Inv_RemoveActiveListItem`).
+- A masked read-modify-write chain with hoisted `lui`/`ori` masks, or a word
+  stored and immediately loaded again, is a bit-field store in the original:
+  `g_BattleResultFlags` (Scan, `BattleResultFlagsRecord.bits`),
+  `Combatant.stateFlags` (`COMBATANT_STATE_BITS`, Haste) and the
+  `BattleTurnBits.actions` read (a bit-field read loads the word and masks
+  it, where `turnWord & 0xF` is narrowed to `lbu`) replace volatile casts.
+- A read after an outgoing stack argument store is reloaded only when it is
+  a structure access: `g_AkaoBgmHandle[0]` (array element) replaces the
+  `void * volatile *` pointers of the menu sound helpers and
+  `Menu_MainUpdate`.
+- An inline helper keeps an index scaled before the table base is added:
+  `&D_800A1E64[kind - 5]` written directly folds the -5 into the address
+  (lev 16); `AmmoPoolRecord(kind - 5)` does not (`Inv_ArmorCapacity.c`).
 - Under `-G0` every extern is absolute anyway; the views in
   `Scene_UpdateBgDraw` and `Scene_LoadSceneData` were unnecessary.
 - An array bound changes the small-data decision: `g_TaskNodeSeqCounter[1]`
@@ -899,23 +935,43 @@ single removal (none was byte-identical):
   `Inv_GetActiveSlotCount`/`Inv_IsSlotEquipped`/`Inv_IsSlotSelectable` empty
   asm statements (lev 18 to 61: they stop the shared slot lookup being
   cross-jumped), `Inv_ClearDisplaySlots` (lev 12),
-  `Inv_CompareItemsForSort` (two memory barriers, lev 22 and 4),
+  `Inv_CompareItemsForSort` (two memory barriers, lev 22 and 4; moving the
+  function-address load among the three reads does not help, lev 22),
   `Inv_CheckItemEquippable` (lev 5 to 40), `Inv_FindFirstEmptySlot`
-  (lev 16, 49), `Inv_FindItem` (lev 1 to 21), `Inv_InitMaxLevelInventory`
-  (lev 9), `Inv_RebuildSelectionBitset` (lev 17 to 36), `Inv_TransferItem`
-  (lev 4 to 8), `Stat_QueryLevelAndSubLevel` (lev 65). The six local item
+  (lev 16, 49), `Inv_RebuildSelectionBitset` (lev 17 to 36),
+  `Stat_QueryLevelAndSubLevel` (lev 65). `Inv_EquipItemById` (formerly
+  `Inv_FindItem`) and `Inv_InitMaxLevelInventory` are crutch-free.
+  `Inv_TransferItem` keeps three `goto`s: the refusal path stores 0 into the
+  result after the success path's return, so `return result` must sit at a
+  join (`move s4,zero; move v0,s4`); `return 0` and `result = 0; return`
+  give `move v0,zero` (lev 23), a `do`/`while (0)` with `break` lev 48 to 65,
+  a refusal flag lev 53. `Inv_SetActiveList` case 5 keeps its pins: the
+  natural form allocates the action pointer to a3 and the selection to a1
+  (lev 37). `Inv_RemoveActiveListItem` keeps one m2c integer that holds
+  first the list pointer and then the removed item (typed forms swap
+  v0/v1, lev 2). The six local item
   record lookups became `Inv_LookupItemRecord`/`Inv_LookupItemRecordScaled`
   in `pe1/inventory_slots.h`.
 - boot: `Field_HandleStateTransition` (lev 13 to 48), `Gpu_InitPipeline`
   (pins lev 11 to 13, barrier lev 37: the constant clamps are not folded
   without it). `Boot_DiscTableLoad` keeps its retry `goto`s (loop.c).
-- main: `Battle_ApplySpellEffect` (lev 3 to 48), `Battle_BuildTargetList`
+- main: `Battle_ApplySpellEffect` is crutch-free. `Battle_BuildTargetList`
   `finalCount` pin and barrier (lev 5), `Battle_DrawStatusOverlay` (lev 2
-  to 7), `Battle_StepCharacterAction` (lev 2 to 47),
+  to 7), `Battle_StepCharacterAction` (lev 2 to 47; the queue offset pin
+  alone lev 3, a structured rewrite with record views lev 216 because the
+  retail block order follows its `goto`s),
   `Battle_UpdatePlayerTurn`/`Battle_ApplyPlayerHit` (lev 11 to 20),
   `Battle_DrawTargetHighlight` (lev 2 to 24), `Battle_DrawSpellName` (lev 2
-  to 15). `Battle_PhaseAndEnemyEffectFlow` keeps its `(void *)D_8009D254`
-  casts: removing them changes the bytes.
+  to 15; a typed `BattleGaugePrim [2][10]` rewrite lev 224: retail keeps the
+  packet base in a register). `Battle_AdvancePhase` keeps the copy of the
+  sound table as m2c wrote GCC's block move (the struct assignment matches,
+  but the target search's found block then moves out of the copy, where
+  loop.c placed it in retail), its `goto`s, and the scaled queue reads in
+  the two finish tails (array indexing gives the index another register,
+  lev 6). `Battle_DrawStatusValue` keeps two byte offsets (typed line and
+  marker views lev 13, ordering index lev 2). `Battle_ApplyEnemyAttack` keeps
+  two volatile `stateFlags` reloads: bit-field forms drop the store and
+  reload pair (lev 52 with branch offsets, 2 instructions).
 
 ### Battle HUD recipes and crutches left (src/main/battle, first half, 2026-10-12)
 
