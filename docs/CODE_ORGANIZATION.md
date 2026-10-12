@@ -1081,11 +1081,15 @@ single removal (none was byte-identical):
   but the target search's found block then moves out of the copy, where
   loop.c placed it in retail), its `goto`s, and the scaled queue reads in
   the two finish tails (array indexing gives the index another register,
-  lev 6). `Battle_DrawStatusValue` keeps two byte offsets (typed line and
-  marker views lev 13, ordering index lev 2; indexing `D_8009E358` by a
-  precomputed `slot * 3` is lev 6: the element scaling becomes its own
-  single-set shift that sched1 launches late, where retail's whole
-  `(slot * 3) << 4` is one multi-set offset computed first).
+  lev 6). `Battle_DrawStatusValue` and
+  `Battle_DrawDecimalNumber` add their precomputed byte offsets to a
+  block-scope `BattleStatusPrimAddress` (`pe1/battle_status.h`) loaded with
+  the base right where the sum is needed. A function-wide union copy of the
+  `buffer` argument is allocated before the other saved values (s4/s5
+  swap, lev 13); the short-lived copy stays out of global allocation, and
+  a copy of a constant base folds back into `%lo(symbol)(index)`
+  addressing. The x read keeps the `D_8009E360` name: one base symbol for
+  both halfwords makes CSE share the address (lev 8).
   `Battle_DrawStatusSymbol` and `Battle_DrawATBGauge` address their ordering
   entry and sprite as array elements. `Battle_ApplyEnemyAttack` keeps
   two volatile `stateFlags` reloads: bit-field forms drop the store and

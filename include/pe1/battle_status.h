@@ -23,6 +23,17 @@ typedef struct BattleStatusMarkerBody {
 /* Texture-page command followed by a variable-size UI sprite. */
 typedef RenderPagedSpritePacket BattleGaugePrim;
 
+/* A HUD packet address as a pointer or a word: retail adds the scaled slot
+ * and index offsets to the buffer address as integers, offsets first. */
+typedef union BattleStatusPrimAddress {
+    BattleStatusLinePrim *line;
+    BattleGaugePrim *gauge;
+    RenderSpritePacket *sprite;
+    unsigned int *words;
+    u32 **ordering;
+    u32 address;
+} BattleStatusPrimAddress;
+
 extern BattleStatusLinePrim D_8009E358[6];
 /* The same packets seen as the three shaded status-bar tiles of each draw
  * buffer (Battle_DrawHPBar). */

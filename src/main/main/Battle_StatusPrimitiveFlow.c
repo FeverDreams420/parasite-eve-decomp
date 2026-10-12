@@ -113,11 +113,6 @@ void Battle_BuildStatusPrimHeader(RenderObjectEntity *object, s8 outOfRange)
             (unsigned int *)&D_8009E460[g_ActiveDrawSlot]);
 }
 
-typedef union BattleStatusPrimAddress {
-    BattleStatusLinePrim *line;
-    unsigned int *words;
-    u32 address;
-} BattleStatusPrimAddress;
 
 void Battle_LayoutStatusPrimRow(int bottomY)
 {

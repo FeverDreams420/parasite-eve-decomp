@@ -28,19 +28,30 @@ void Battle_DrawStatusValue(int value, int yOffset)
         } while (0);
         drawSlotOffset = drawSlot << 2;
         markerBase -= 8;
-        y = *(u16 *)((u8 *)D_8009E362 + anchorOffset);
+        {
+            BattleStatusPrimAddress anchor;
+
+            anchor.line = D_8009E358;
+            anchor.address = anchorOffset + anchor.address;
+            y = anchor.line->y0;
+        }
         x = (marker->x =
             *(u16 *)(D_8009E360 + anchorOffset) + 8);
         y += yOffset;
     } while (0);
     marker->y = y;
 
-    AddPrim(*(unsigned int **)((u8 *)D_800B0E38.ordering + drawSlotOffset) + 4,
-            (unsigned int *)(markerBase + markerOffset));
+    {
+        BattleStatusPrimAddress entry;
+
+        entry.ordering = D_800B0E38.ordering;
+        entry.address = drawSlotOffset + entry.address;
+        AddPrim(*entry.ordering + 4, (unsigned int *)(markerBase + markerOffset));
+    }
     drawSlot = g_ActiveDrawSlot;
     Battle_DrawDecimalNumber(
         D_8009E8B8[drawSlot],
-        *(u16 *)(D_8009E360 + drawSlot * 3 * 0x10) + 0x40,
+        D_8009E358[drawSlot * 3].x0 + 0x40,
         (s16)--y, (s16)savedValue, 1);
 }
 
@@ -68,7 +79,13 @@ int Battle_DrawDecimalNumber(void *buffer, short x, short y, short value, short 
     for (; index >= 0; --index) {
         unsigned digit;
         /* Retail computes the packet address as a 32-bit integer sum. */
-        packet = (BattleGaugePrim *)(index * sizeof(*packet) + (u32)buffer);
+        {
+            BattleStatusPrimAddress at;
+
+            at.words = buffer;
+            at.address = index * sizeof(*packet) + at.address;
+            packet = at.gauge;
+        }
         digit = digits[index];
         packet->sprite.v = 0xf2;
         packet->sprite.x = x;
