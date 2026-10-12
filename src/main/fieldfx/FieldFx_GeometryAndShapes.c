@@ -1427,7 +1427,7 @@ int Geo_ClipAlternatingArcPoint(int radius, int divisor, int segment) {
     state = D_800B1624;
     state->clip_max_x = state->clip_max_y = 128;
 
-    return Geo_ClipPoint(0, (s16)y, 0);
+    return Render_ClipPoint(0, (s16)y, 0);
 }
 
 /* Projected one-pixel tile plus a 3x3 halo at a quarter of its colour. */

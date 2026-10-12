@@ -174,7 +174,7 @@ int Render_PrepareFrame(void) {
     } local;
     unsigned int *state = D_800B89F8;
     Render_InitViewState(state, state + 8);
-    if (Geo_RenderMeshList((void *)D_800B0E40, &local.result)) return -2;
+    if (Render_DrawMeshList((void *)D_800B0E40, &local.result)) return -2;
     SetGeomScreen(state[8]);
     Render_ResetAllEntries();
     if (D_8009D254) {
@@ -217,15 +217,15 @@ int Render_PrepareFrame(void) {
     }
 }
 
-int Geo_BuildMeshList(void);
+int Render_BuildMeshList(void);
 int Render_StepFade(void);
 int Render_ApplyScreenTint(void);
 
 int Render_Update(void) {
     Render_DrawSprite();
-    Geom_StepGroupAnimations();
-    Geom_ScrollEntries();
-    Geo_BuildMeshList();
+    Render_StepGroupAnimations();
+    Render_ScrollEntries();
+    Render_BuildMeshList();
     Render_StepFade();
     Render_ApplyScreenTint();
     return 0;

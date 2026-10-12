@@ -120,7 +120,7 @@ typedef struct GeomEntry {                /* 0x38 */
 PE1_STATIC_ASSERT(sizeof(GeomEntry) == 0x38, geom_entry_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(GeomEntry, u34) == 0x34, geom_entry_page_offset);
 struct RenderTilePacket;
-int Geo_LoadMeshEntry(GeomEntry *entry, struct RenderTilePacket *buffer, void **end);
+int Render_LoadMeshEntry(GeomEntry *entry, struct RenderTilePacket *buffer, void **end);
 
 
 /* Scrolling view of a 56-byte GeomEntry. Fractions are read as bytes but
@@ -152,7 +152,7 @@ typedef struct GeomScrollCoordinates {
     u16 elapsed, duration;
     u32 *matrixWords;
     s32 *projectionDistance;
-    /* Viewport bounds saved by Geo_RenderMeshList (D_800BCFAC..B2). */
+    /* Viewport bounds saved by Render_DrawMeshList (D_800BCFAC..B2). */
     s16 boundsMinX, boundsMaxX, boundsMinY, boundsMaxY;
     /* Projected screen position of the active actor (D_800BCFB4/B6). */
     s16 cameraOffsetX, cameraOffsetY;
@@ -231,10 +231,10 @@ typedef struct GeomState {                /* header */
     u8  pad18[4];                         /* +0x18 */
     s32 entry_offset_1C;                  /* +0x1C  -> CameraViewport[] */
     u8  pad20[4];                         /* +0x20 */
-    u16 depth_offset;                     /* +0x24  Geo_ClipPoint input Z offset */
+    u16 depth_offset;                     /* +0x24  Render_ClipPoint input Z offset */
     u16 field26;                          /* +0x26 */
-    u16 clip_offset_x;                    /* +0x28  Geo_ClipPoint input X offset */
-    u16 clip_offset_y;                    /* +0x2A  Geo_ClipPoint input Y offset */
+    u16 clip_offset_x;                    /* +0x28  Render_ClipPoint input X offset */
+    u16 clip_offset_y;                    /* +0x2A  Render_ClipPoint input Y offset */
     u16 disp_src_x;                       /* +0x2C */
     u16 disp_src_y;                       /* +0x2E */
     s16 clip_min_x;                       /* +0x30 */
@@ -259,8 +259,8 @@ extern GeomState * volatile D_800B1624;
 
 extern u8 g_GeomGroupSel;
 extern u16 *volatile g_GeomVramPacketDst;
-int Geom_StepGroupAnimations(void);
-int Geom_ScrollEntries(void);
+int Render_StepGroupAnimations(void);
+int Render_ScrollEntries(void);
 int Render_StepCameraTransition(void);
 
 /* 52-byte viewport records addressed through header offset 0x1C. */
@@ -351,7 +351,7 @@ extern u8 g_RenderFadeFrameCounter;
 extern GeomScrollCoordinates D_800BCF8C;
 extern u16 D_800BCF8E, D_800BCF90, D_800BCF92;
 
-int Geo_TransformPoint(GeomEntry *entry, int x, int y, int depth);
-int Geo_ClipPoint(int x, int y, int z);
+int Render_TransformPoint(GeomEntry *entry, int x, int y, int depth);
+int Render_ClipPoint(int x, int y, int z);
 
 #endif /* PE1_GEOM_STATE_H */

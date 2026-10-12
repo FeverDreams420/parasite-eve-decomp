@@ -672,7 +672,7 @@ int Script_SetSceneEntryAnim(int **arg0) {
     char *base = (char *)g_GeomState;
     int index = *arg0[0];
 
-    Geo_TransformPoint(
+    Render_TransformPoint(
         (GeomEntry *)(base + ((GeomState *)header)->entry_offset + (index * 56)),
         *(short *)arg0[1],
         *(short *)arg0[2],
@@ -686,7 +686,7 @@ int Script_SetRenderEntryEnabled(int **arg0) {
 }
 
 int Script_SetRenderEntryPos(short **arg0) {
-    Geo_ClipPoint(*arg0[0], *arg0[1], *arg0[2]);
+    Render_ClipPoint(*arg0[0], *arg0[1], *arg0[2]);
     return 1;
 }
 

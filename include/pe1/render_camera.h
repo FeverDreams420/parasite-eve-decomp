@@ -17,7 +17,7 @@ extern unsigned int D_800B89F8[];
 extern u8 *volatile D_800B0E40;
 extern short D_800BCFB4, D_800BCFB6;
 int Render_InitViewState(void *matrix, void *screen);
-int Geo_RenderMeshList(void *buffer, void **end);
+int Render_DrawMeshList(void *buffer, void **end);
 int Render_ResetAllEntries(void);
 void SetGeomScreen(int distance);
 int Render_PrepareFrame(void);

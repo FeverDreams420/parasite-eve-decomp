@@ -317,7 +317,7 @@ int Render_SetEntryPosition(int index, int x, int y) {
 int Render_LoadGeomState(int);
 /* Loads the selected group's viewport, centres the camera on it and builds
  * every mesh entry's packets into `buffer`; *end returns the free space. */
-int Geo_RenderMeshList(void *buffer, void **end)
+int Render_DrawMeshList(void *buffer, void **end)
 {
     GeomState *state = g_GeomState;
     u8 *group = &g_GeomGroupSel;
@@ -353,7 +353,7 @@ int Geo_RenderMeshList(void *buffer, void **end)
 
         entry = address.entry;
         do {
-            if (Geo_LoadMeshEntry(entry, *end, end))
+            if (Render_LoadMeshEntry(entry, *end, end))
                 return -18;
             entry->bounds.minX = min;
             entry->bounds.maxX = max;
@@ -378,7 +378,7 @@ int Geo_RenderMeshList(void *buffer, void **end)
 
 /* Offsets a point by the display origin and clamps it into the clip
  * window; the result becomes the display source point and depth. */
-int Geo_ClipPoint(int x, int y, int z) {
+int Render_ClipPoint(int x, int y, int z) {
     GeomState *state = g_GeomState;
     u16 clippedX = state->clip_offset_x + x;
     u16 clippedY = state->clip_offset_y + y;
@@ -400,7 +400,7 @@ int Geo_ClipPoint(int x, int y, int z) {
 
 /* Re-derives the display offsets from the camera and draws the sprite
  * entries of the selected group. */
-s32 Geo_BuildMeshList(void) {
+s32 Render_BuildMeshList(void) {
     GeomStateAddress base;
     GeomEntry *entry;
     s32 count;
@@ -562,7 +562,7 @@ int Render_ApplyScreenTint(void) {
 }
 
 /* Applies texture scrolling and camera-relative parallax to the entries. */
-int Geom_ScrollEntries(void)
+int Render_ScrollEntries(void)
 {
     if (!(g_GameStateFlags & 0x104)) {
         int i;

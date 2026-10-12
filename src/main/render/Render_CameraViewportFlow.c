@@ -45,7 +45,7 @@ int Render_ResetAllEntries(void) {
 }
 
 /* Advances the geometry animations of the selected group. */
-int Geom_StepGroupAnimations(void)
+int Render_StepGroupAnimations(void)
 {
     GeomStateAddress state, controls, entries;
     unsigned int i, count;

@@ -11,7 +11,7 @@ typedef union GeomEntryAddress {
 } GeomEntryAddress;
 
 /* Build both frame buffers of room-tile sprites and texture-page packets. */
-int Geo_LoadMeshEntry(GeomEntry *entry, RenderTilePacket *buffer, void **end)
+int Render_LoadMeshEntry(GeomEntry *entry, RenderTilePacket *buffer, void **end)
 {
     unsigned int paletteStart = D_800BD024;
     GeomEntryAddress base;
@@ -96,7 +96,7 @@ int Geo_LoadMeshEntry(GeomEntry *entry, RenderTilePacket *buffer, void **end)
 
 /* The adjacent point command updates the same mesh-entry bounds and depth. */
 
-int Geo_TransformPoint(GeomEntry *entry, int x, int y, int depth) {
+int Render_TransformPoint(GeomEntry *entry, int x, int y, int depth) {
     GeomEntry *current;
     int screenX;
     register int screenY asm("$4");

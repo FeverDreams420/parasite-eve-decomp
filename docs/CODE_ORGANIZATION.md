@@ -241,7 +241,7 @@ Units that stay separate, and why:
   `menu/Menu_EquipScreenFlow.c` (does not match under the item detail
   panel's `-fno-expensive-optimizations`), `entity/Entity_PoolInit.c`
   (`-fno-strength-reduce`, which `Scene_LoadMap` does not take),
-  `render/Geo_LoadMeshEntry.c` and `render/Render_MeshListAndFade.c`, the
+  `render/Render_LoadMeshEntry.c` and `render/Render_MeshListAndFade.c`, the
   primitive queue in `draw/` (`Draw_InitGpuHwRegs` and
   `Draw_FlushPrimQueue` are lev 4 under each other's set) and the `-g3`
   battle units (`Menu_MainUpdate`, `Entity_UpdateTimers`,
@@ -910,7 +910,7 @@ Still open:
     and sched2 put the two `lh` loads last for their load hazard. The
     parameter copy is a fixed head insn before reload, so neither a
     separate `entity = input` copy nor per-branch copies move it.
-  - `Geo_LoadMeshEntry` adds 479 to the palette start in place before
+  - `Render_LoadMeshEntry` adds 479 to the palette start in place before
     copying it to the running maximum. Retail loads the palette byte before
     the frame is set up; computing the maximum as `paletteStart + 479` makes
     the load a single-set pseudo that sched1 sinks next to its use (lev 6).
@@ -920,7 +920,7 @@ Still open:
     field store, but not an indirect store, so the reload stays after both
     stores as in retail; this replaced the `disp_x` memory barrier and the
     byte-storage view of `u34`.
-    `Geo_TransformPoint` keeps its three pins and the barrier on the x sum.
+    `Render_TransformPoint` keeps its three pins and the barrier on the x sum.
     Without the pins, local allocation swaps `$t0`/`$a0` for the entry and
     y. Without the barrier, the unclamped x copy merges with the sum
     (lev 36 with neither; reusing `x` for the clamp bound or comparing

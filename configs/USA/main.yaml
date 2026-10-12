@@ -435,7 +435,7 @@ segments:
       # -fno-force-mem.
       - [0x55DD4, c, render/Render_CameraViewportFlow]
       # Tile packet setup and point clamping share GeomEntry flags/depth and bounds.
-      - [0x57760, c, render/Geo_LoadMeshEntry]
+      - [0x57760, c, render/Render_LoadMeshEntry]
       # Sprite entry setters, the geometry mesh list build and draw, the screen
       # fade and tint, background scroll/parallax and room/primitive colour
       # drawing (G0833/G0835). One -fno-strength-reduce unit: the scroll loop

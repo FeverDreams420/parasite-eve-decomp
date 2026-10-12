@@ -104,7 +104,7 @@ edge, as `akao/Spu_TransferAndLifecycle` did before LIBPAD WAITRC2's
 | `anim` | `Anim_` | skeletal animation decode and interpolation | keep |
 | `entity` | `Entity_` | actor pools, movement, hierarchy, per-frame actor update | keep; `task.c` renamed by content |
 | `obj` | `Obj_` | geometry-state entry slots | dissolved: its functions are `Render_*Entry*` in `render` |
-| `field` | `Field_`, `Geo_` | field map entries, collision and floor geometry | keep; `Geo_*` from `main` join it |
+| `field` | `Field_`, `Geo_` | field map entries, collision and floor geometry | keep; the mesh-list `Geo_*` in `render` became `Render_*` |
 | `fieldfx` | `FieldFx_` | the field effect engine in the separate `0x800C1CA0` segment: effect pool, emitters, particles | keep (renamed from `engine`, prefixes from `FieldEng_` and `FieldAnim_`) |
 | `scene` | `Scene_` | room and scene loading, story flags, scene dispatch | keep; receives `Scene_*` files from `draw`, `main`, `render`, `time` |
 | `overlay` | `Overlay_` | overlay tables and loading, overlay audio/texture slots | dissolved: the audio-slot functions (`CdRom_RegisterAudioSlot`, ...) and `CdRom_LoadInitialImage` are in `cdrom`, `Boot_LoadOverlayTables` in `pm`, `Scene_StreamTexturePage` in `scene` |
