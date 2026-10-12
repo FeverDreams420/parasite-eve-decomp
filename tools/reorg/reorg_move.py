@@ -156,8 +156,11 @@ def add_private_includes(moves: dict[str, str]) -> None:
                 same_dir = {os.path.dirname(u) for u in includers} == {
                     os.path.dirname(target)}
                 if len(new_dirs) == 1 and same_dir:
-                    moves[target] = norm(os.path.join(
-                        new_dirs.pop(), os.path.basename(target)))
+                    new = norm(os.path.join(new_dirs.pop(),
+                                            os.path.basename(target)))
+                    if new == target:
+                        continue  # the includers only change their names
+                    moves[target] = new
                     changed = True
 
 
