@@ -17,7 +17,7 @@ u32 _spu_FsetRXXa(s32 arg0, u32 value) {
     register u32 shifted asm("$7");
     u32 rem;
     u32 unit;
-    register u32 shift asm("$2");
+    u32 alignment;
     u32 ret;
 
     offset = arg0;
@@ -27,12 +27,13 @@ u32 _spu_FsetRXXa(s32 arg0, u32 value) {
         rem = value % unit;
         if (rem != 0) {
             value += unit;
-            value &= ~_spu_mem_mode.mask;
+            alignment = ~_spu_mem_mode.mask;
+            value &= alignment;
         }
     }
 
-    shift = _spu_mem_mode.shift;
-    shifted = value >> shift;
+    alignment = _spu_mem_mode.shift;
+    shifted = value >> alignment;
     asm volatile("" : "=r"(shifted) : "0"(shifted));
     ret = shifted;
 
