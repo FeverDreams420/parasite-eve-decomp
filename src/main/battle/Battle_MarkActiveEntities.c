@@ -37,26 +37,17 @@ inline static void Mark(BattleEntity *entity)
   entity->renderObject.flags_9C |= 0x20;
 }
 
-inline static void MarkCached(BattleEntity *entity, BattleEntity *active)
+inline static void MarkGroup(BattleEntity *entity, int group_kind, BattleEntity *active)
 {
   int kind = ((Combatant *)entity->core)->field04.bytes.kind;
-  if (kind == 1)
-  {
-    entity = entity->parent;
-  }
-  else
-    if (kind == 4)
-  {
+  if (kind == 1) entity = entity->parent;
+  else if (kind == group_kind) {
     entity = (BattleEntity *)D_8009D20C;
-    while (entity != 0)
-    {
-      if (((entity != active) && ((entity->core) != 0)) && ((((Combatant *)entity->core)->field04.bytes.kind) == 4))
-      {
+    while (entity != 0) {
+      if (entity != active && entity->core != 0 && ((Combatant *)entity->core)->field04.bytes.kind == group_kind)
         entity->renderObject.flags_9C |= 0x20;
-      }
       entity = entity->next;
     }
-
     return;
   }
   entity->renderObject.flags_9C |= 0x20;
@@ -89,6 +80,7 @@ void Battle_MarkActiveEntities(BattleTarget *table, int selected_index)
   int inside;
   int linked_kind;
   int group_kind;
+  int range_group;
   BattleEntity *cached_active;
   unsigned char slot;
   BattleEntity *active;
@@ -132,12 +124,7 @@ void Battle_MarkActiveEntities(BattleTarget *table, int selected_index)
       low_copy = lower;
       center_copy = center;
       inside = center < 0x600;
-      {
-        /* Match debt: one t3 pin and this empty scheduling barrier keep
-         * the group-kind constant before the active-entity load. */
-        register int range_group asm("$11") = 4;
-        asm volatile("" : : "r"(range_group));
-      }
+      range_group = 4;
       active = D_8009D254;
       cached_active = active;
       for (; table[slot].actor != 0; slot++)
@@ -159,7 +146,7 @@ void Battle_MarkActiveEntities(BattleTarget *table, int selected_index)
           continue;
         }
       }
-      MarkCached(table[slot].actor, cached_active);
+      MarkGroup(table[slot].actor, range_group, cached_active);
     }
 
       break;
@@ -174,7 +161,7 @@ void Battle_MarkActiveEntities(BattleTarget *table, int selected_index)
       slot = 0;
       linked_kind = 1;
       group_kind = 4;
-      /* Match debt: materialize both kinds before loading the active actor. */
+      /* Retail materializes both kinds before loading the active actor. */
             active = D_8009D254;
       for (; table[slot].actor != 0; slot++)
     {
