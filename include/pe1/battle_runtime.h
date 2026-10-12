@@ -145,7 +145,11 @@ PE1_STATIC_ASSERT(sizeof(BattleEnemySlot) == 0xDC, battle_enemy_slot_size);
 /* Aya action sequencer state and its render/scene dependencies. */
 extern u8 D_8009D25C;
 extern s8 g_AyaAttackStep;
-/* The BattleEvasionOutcome Battle_CheckEvasion fills for the current hit. */
+/* The BattleEvasionOutcome Battle_CheckEvasion fills for the current hit.
+ * g_EvasionStatus and g_EvasionReaction name its two bytes for units whose
+ * assembler (ASPSX 2.56) only addresses whole small-data symbols through
+ * $gp; Battle_StepAyaAction writes the record itself. */
+extern BattleEvasionOutcome g_EvasionOutcome;
 extern s8 g_EvasionStatus;
 extern s8 g_EvasionReaction;
 extern s16 g_AyaActionTimer;

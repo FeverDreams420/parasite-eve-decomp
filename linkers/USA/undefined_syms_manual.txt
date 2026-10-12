@@ -1242,6 +1242,7 @@ g_BattleFadeStep = 0x8009CE6C;
 g_BattlePendingCommand = 0x8009CE50;
 g_EvasionReaction = 0x8009CE55;
 g_EvasionStatus = 0x8009CE54;
+g_EvasionOutcome = 0x8009CE54;
 g_BattleItemMenuState = 0x8009D1F0;
 g_BattleRemainingActions = 0x8009D1DC;
 g_BonusPointDisplayValue = 0x8009CF68;

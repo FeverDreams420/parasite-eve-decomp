@@ -1,4 +1,5 @@
-/* CC1_FLAGS: -G0 */
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FORCE_G0: 1 */
 /* MASPSX_FLAGS: -G8 --use-comm-section --expand-div */
 /* ASPSX_VERSION: 2.77 */
 #include "pe1/battle_runtime.h"
@@ -6,7 +7,8 @@
 /* COMMON declarations preserve GP size metadata for stock MASPSX;
  * storage is provided by the existing retail data/linker symbols. */
 u8 D_8009D25C;
-s8 g_AyaAttackStep, g_EvasionStatus, g_EvasionReaction;
+s8 g_AyaAttackStep;
+BattleEvasionOutcome g_EvasionOutcome;
 s16 g_AyaActionTimer;
 BattleSavedRotation g_AyaSavedRotation;
 u8 D_8009D1D4;
@@ -17,6 +19,8 @@ int D_8009D258;
  * The saved pose is written through the position and rotation records:
  * their field stores may alias the player's fields, which keeps retail's
  * load/store interleaving without pins.
+ * Case 9 writes the evasion outcome record and the target's core flag bits
+ * as fields, so the reaction byte is read back after the flag stores.
  * Matching debt: register pins and empty compiler barriers retain
  * retail allocation and scheduling in the remaining cases. */
 s32 Battle_StepAyaAction(void)
@@ -206,36 +210,16 @@ s32 Battle_StepAyaAction(void)
     {
       Entity_SetActionMode(D_8009D254, ((g_AyaAttackStep * 2) + 9) & 0xFFFF);
       {
-        Combatant *attacker;
-        u32 hitFlags;
-        u32 classFlags;
-        register unsigned attackMask asm("$6");
-        unsigned countMask;
-        register unsigned index asm("$3");
         unsigned targetIndex;
-        unsigned int value;
-        BattleEntity *target;
-        attackMask = 0xFFF30000;
-        asm("" : "=r"(attackMask) : "0"(attackMask));
-        index = D_8009D1D4;
-        value = 2;
-        g_EvasionReaction = value;
-        value = 1;
-        hitCountMask = 7;
-        g_EvasionStatus = value;
-        asm("" : "=r"(index) : "0"(index), "m"(g_EvasionStatus));
-        targetIndex = index;
-        target = D_800BE830[targetIndex].actor;
-        attackMask |= 0xFFFF;
-        /* Keep the word lvalue view: direct members change stock GCC scheduling. */
-        targetCore = target->core;
-        countMask = 0xFFFC7FFF;
-        hitFlags = ((*(u32 *)&targetCore->coreFlags) & (~0x6000)) | 0x2000;
-        attacker = D_8009D278;
-        (*(u32 *)&targetCore->coreFlags) = hitFlags;
-        classFlags = (hitFlags & attackMask) | ((((attacker->action->attackWord) >> 0x14) & 3) << 0x12);
-        (*(u32 *)&targetCore->coreFlags) = classFlags;
-        (*(u32 *)&targetCore->coreFlags) = ((classFlags & countMask) | ((g_EvasionReaction & hitCountMask) << 0xF));
+        EnemyCoreFlagBits *bits;
+        targetIndex = D_8009D1D4;
+        g_EvasionOutcome.reaction = 2;
+        g_EvasionOutcome.status = 1;
+        targetCore = D_800BE830[targetIndex].actor->core;
+        bits = (EnemyCoreFlagBits *)&targetCore->coreFlags;
+        bits->hitState = 1;
+        bits->category = D_8009D278->action->attackWord >> 20;
+        bits->reaction = g_EvasionOutcome.reaction;
         if (g_AyaAttackStep == 2)
         {
           effectTarget = D_800BE830[targetIndex].actor;
