@@ -1,27 +1,376 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
+
+#include "pe1/battle_modifiers.h"
 #include "pe1/inventory_slots.h"
-#include "pe1/text.h"
+#include "pe1/random.h"
 #include "pe1/aya.h"
+#include "pe1/inventory_state.h"
+#include "pe1/menu_dialog.h"
+#include "pe1/text.h"
 #include "pe1/menu_state.h"
 #include "common.h"
-#include "../../../tools/m2c/m2c_macros.h"
 #include "pe1/inventory.h"
 #include "pe1/battle_cmd.h"
 #include "pe1/menu_inventory.h"
-#include "pe1/inventory_state.h"
+
+/* COMMON supplies small-data metadata to MASPSX: these words are reached
+ * through $gp, every other extern stays absolute. */
+s16 *g_InvItemPtr;
+s32 g_InvSlotLimit;
+u32 *g_InvSelectionBits;
+s32 g_InvSelectionBitWords;
+s32 g_InvPendingCompactCount;
+int g_InvCategoryBaseItemId;
+s32 g_ItemDropRngIndex;
+
+int Inv_CheckFreeSlotCapacity(int requested_slots) {
+    s16 *slot;
+    s16 *end;
+    int capacity;
+    int capacity_before_scan;
+    int bonus_slots;
+    int used_slots;
+    int occupied;
+
+    g_InvItemPtr = g_AyaInventoryItems;
+    g_InvSlotLimit = Inv_GetAyaSlotLimit();
+    g_InvSelectionBits = g_InvSelectionBitStorage;
+    g_InvSelectionBitWords = 2;
+
+    bonus_slots = Inv_GetBonusSlotCount();
+    if (g_InvBaseCapacity + bonus_slots < 51) {
+        used_slots = 0;
+        capacity_before_scan =
+            g_InvBaseCapacity + Inv_GetBonusSlotCount();
+    } else {
+        used_slots = 0;
+        capacity_before_scan = 50;
+    }
+
+    g_InvItemPtr = g_AyaInventoryItems;
+    capacity = capacity_before_scan;
+    g_InvSlotLimit = Inv_GetAyaSlotLimit();
+    g_InvSelectionBits = g_InvSelectionBitStorage;
+    g_InvSelectionBitWords = 2;
+
+    slot = g_InvItemPtr;
+    end = slot + g_InvSlotLimit;
+    while (slot < end) {
+        occupied = *slot++;
+        occupied = occupied != 0;
+        used_slots += occupied;
+    }
+
+    g_InvPendingCompactCount = requested_slots;
+    return capacity - used_slots >= requested_slots;
+}
+int Inv_CheckItemEquippable(unsigned int list_index, int modifier_index) {
+    /* Match the retail 0x60-byte stack frame; remove with a cleaner TU model. */
+    unsigned char stack_pad[32];
+    int mod_index = modifier_index;
+    int selected_a;
+    int selected_b;
+    ItemDataRecord *item_a;
+    ItemDataRecord *item_b;
+    int item_id;
+    int count;
+    int i;
+    register int result asm("$19");
+    int mask;
+    register int modifier asm("$4");
+    int existing;
+    int different_slot;
+
+    mask = 0;
+    selected_a = Inv_RestoreSelection(list_index);
+    item_a = 0;
+    if (selected_a >= 0 && selected_a < g_InvSlotLimit) {
+        ItemDataRecord *resolved;
+        int saved_id;
+        int scaled_id;
+        item_id = g_InvItemPtr[selected_a];
+        saved_id = (s16)item_id;
+        if (item_id - 0x100U < 0x80U) {
+            resolved = (ItemDataRecord *)(g_EquipItemDataTable + (item_id << 5));
+        } else if (item_id - 1U < 0xFFU) {
+            resolved = Item_LookupBaseData(item_id - 1);
+        } else if (saved_id - 0x200U < 9U) {
+            resolved = &((ItemDataRecord *)g_KeyItemDataTable)[saved_id];
+        } else {
+            resolved = 0;
+        }
+        item_a = resolved;
+    }
+
+    selected_b = Inv_RestoreSelection(list_index < 1);
+    item_b = 0;
+    if (selected_b >= 0 && selected_b < g_InvSlotLimit) {
+        ItemDataRecord *resolved;
+        int saved_id;
+        int scaled_id;
+        item_id = g_InvItemPtr[selected_b];
+        saved_id = (s16)item_id;
+        if (item_id - 0x100U < 0x80U) {
+            scaled_id = item_id << 5;
+            resolved = (ItemDataRecord *)(g_EquipItemDataTable + scaled_id);
+        } else if (item_id - 1U < 0xFFU) {
+            resolved = Item_LookupBaseData(item_id - 1);
+        } else if (saved_id - 0x200U < 9U) {
+            resolved = &((ItemDataRecord *)g_KeyItemDataTable)[saved_id];
+        } else {
+            resolved = 0;
+        }
+        item_b = resolved;
+    }
+
+    result = 1;
+    if (mod_index >= 0) {
+        count = item_b->tailCount;
+        modifier = item_a->tailData[mod_index];
+        i = 0;
+        if (count > 0) {
+            while (1) {
+                if (item_b->tailData[i] == modifier) {
+                    break;
+                }
+                ++i;
+                if (i >= count) {
+                    break;
+                }
+            }
+            if (i < item_b->tailCount) return 4;
+        }
+
+        for (i = 0; i < item_b->tailCount; i++) {
+            if (item_b->tailData[i] == 0) {
+                break;
+            }
+        }
+
+        if (i >= item_b->tailCount) {
+            modifier = item_a->tailData[mod_index] & 0xE0;
+            if (modifier == 0) {
+                return 3;
+            }
+
+            {
+                int third_count;
+                int third_modifier;
+                register int third_loop_count asm("$4");
+                third_count = item_b->tailCount;
+                if (third_count > 0) {
+                    i = 0;
+                    third_modifier = modifier;
+                    third_loop_count = third_count;
+                    while (1) {
+                        if ((item_b->tailData[i] & 0xE0) == third_modifier) {
+                            break;
+                        }
+                        ++i;
+                        if (i >= third_loop_count) {
+                            break;
+                        }
+                    }
+                    if (i >= item_b->tailCount) return 3;
+                } else {
+                    return 3;
+                }
+            }
+        }
+    }
+
+    Inv_RestoreSelection(list_index);
+    if (g_InvItemPtr == g_AyaInventoryItems && selected_a == D_800C0E22[0]) {
+        {
+            int raw_count;
+            int loop_count;
+            int slot;
+            raw_count = item_a->tailCount;
+            i = 0;
+            if (raw_count > 0) {
+                loop_count = raw_count;
+                while (1) {
+                    raw_count = item_a->tailData[i];
+                    raw_count &= 0x1F;
+                    slot = raw_count - 8;
+                    if ((unsigned int)slot < 3) {
+                        break;
+                    }
+                    ++i;
+                    if (i >= loop_count) {
+                        break;
+                    }
+                }
+                if (i < item_a->tailCount) {
+                    int equip_mask = 1 << slot;
+                    different_slot = i != mod_index;
+                    result = Inv_CheckFreeSlotCapacity(equip_mask);
+                    if (result != 0) goto return_result;
+                    if (different_slot != 0 || mod_index < 0) result = 5;
+                }
+            }
+        }
+        return result;
+    }
+
+    Inv_RestoreSelection(list_index < 1);
+    if (g_InvItemPtr == g_AyaInventoryItems) {
+        if (selected_b == D_800C0E22[0]) {
+            if (mod_index >= 0) {
+
+                {
+                    int raw;
+                    int final_mod;
+                    register int final_count asm("$6");
+                    int final_existing;
+                    int bit_existing;
+                    raw = item_a->tailData[mod_index];
+                    raw &= 0x1F;
+                    final_mod = raw - 8;
+                    if ((unsigned int)final_mod >= 3) goto return_one;
+                    raw = item_b->tailCount;
+                    i = 0;
+                    if (raw > 0) {
+                        final_count = raw;
+                        while (1) {
+                            raw = item_b->tailData[i];
+                            raw &= 0x1F;
+                            final_existing = raw - 8;
+                            if ((unsigned int)final_existing < 3) {
+                                break;
+                            }
+                            ++i;
+                            if (i >= final_count) {
+                                break;
+                            }
+                        }
+                        if (i < item_b->tailCount) {
+                            bit_existing = 1 << final_existing;
+                            mask = bit_existing - (1 << final_mod);
+                        }
+                    }
+                }
+                result = Inv_CheckFreeSlotCapacity(mask);
+                goto return_result;
+            }
+        }
+    }
+return_one:
+    return 1;
+return_result:
+    return result;
+}
+
+static inline int RandomByte(void) {
+    int i;
+    if (++g_ItemDropRngIndex >= 521) {
+        for (i = 0; i < 32; ++i)
+            g_ItemDropRngTable[i] ^= g_ItemDropRngTable[i + 489];
+        for (i = 32; i < 521; ++i)
+            g_ItemDropRngTable[i] ^= g_ItemDropRngTable[i - 32];
+        g_ItemDropRngIndex = 0;
+    }
+    return g_ItemDropRngTable[g_ItemDropRngIndex];
+}
+void Inv_RollRandomItemType(s16 *type, s16 *amount) {
+    /* Retail builds this list but only uses its count when choosing a type. */
+    int available[3];
+    int count;
+    int i;
+    u16 *stock;
+    if (type && amount) {
+        if (!*type) {
+            count = 0;
+            for (i = 0; i < 3; ++i)
+                if (g_InvSpecialItemRecords[i].ammo) available[count++] = i;
+            if (count) *type = ((count * RandomByte()) >> 8) + 1;
+        }
+        {
+            u16 chosen = *type;
+            if (chosen - 1U < 3U) {
+                stock = &g_InvSpecialItemRecords[(s16)chosen - 1].ammo;
+                if (!*amount) *amount = (*stock * RandomByte()) >> 8;
+                else if (*amount < 0) *amount = (*stock * -*amount) / 100;
+                if (*amount > *stock) *amount = *stock;
+                *stock -= *amount;
+            }
+        }
+    }
+}
+
+int g_InvPackedListCursor;
+int g_InvPackedListCount;
+
+void Item_PackParasiteSpells(void) {
+    int flags;
+    short *out;
+    int i;
+
+    flags = g_AyaParasiteSpellFlags[0];
+    out = g_InvPackedList;
+
+    for (i = 0; i < 0x14; i++) {
+        if (flags & 1) {
+            *out++ = i;
+        }
+        flags >>= 1;
+    }
+
+    g_InvPackedListCursor = 0;
+    g_InvPackedListCount = out - g_InvPackedList;
+}
+
+/* Learns the parasite spell whose unlock key matches and announces it.
+ * Returns whether the key named one of the 20 spells. */
+int Aya_UnlockParasiteSpellById(int key)
+{
+    ParasiteSpellEntry *table;
+    int spell;
+    int found;
+
+    table = Aya_GetParasiteSpellUnlockTable();
+    for (spell = 0; spell < 20; spell++) {
+        if (table[spell].unlockKey == key) {
+            break;
+        }
+    }
+    found = spell < 20;
+    if (found) {
+        g_AyaParasiteSpellFlags[0] |= 1 << spell;
+        Menu_CreateParasiteSpellInfoPanel(spell);
+    }
+    return found;
+}
+
+int g_InvPackedListCount;
+short g_InvPackedList[];
+
+unsigned int *g_InvSelectionBits;
+int g_InvSelectionBitWords;
+
+int Inv_GetPackedListItem(int arg0) {
+    if (arg0 >= 0 && arg0 < g_InvPackedListCount) {
+        return g_InvPackedList[arg0];
+    }
+    return 0;
+}
+
+void Inv_ClearSelectionBitset(void) {
+    int i;
+
+    for (i = 0; i < g_InvSelectionBitWords; i++) {
+        g_InvSelectionBits[i] = 0;
+    }
+}
+
+#include "../../../tools/m2c/m2c_macros.h"
 
 /* Item selection masks, ammunition transfer between compared weapons, the
  * weapon comparison panel and the per-slot item actions and active-list controller. Contiguous at
  * 0x80055760 and joined by the comparison records and list state. */
 
-/* COMMON supplies small-data metadata to MASPSX; other words stay absolute. */
-int g_InvCategoryBaseItemId;
-s16 *g_InvItemPtr;
-s32 g_InvSlotLimit;
-u32 *g_InvSelectionBits;
-s32 g_InvSelectionBitWords;
 ItemDataRecord *D_8009D070, *D_8009D074;
 s16 *g_InvActiveListOverride;
 s32 g_InvOverrideSlotLimit;
@@ -29,7 +378,6 @@ int g_InvActiveListCount;
 int g_MenuBattleEquipMode;
 void *Str_LookupTable8(unsigned int index);
 void Sfx_DrawSlotRow(ItemDataRecord *entry, u8 *text);
-
 
 static inline ItemDataRecord *LookupActiveItem(int index) {
     if (index >= 0 && index < g_InvSlotLimit) return Inv_LookupItemRecordScaled(g_InvItemPtr[index]);
@@ -647,7 +995,6 @@ void Battle_UseItem(s32 arg0) {
         BattleCmd_ChangeWeaponAndSync(arg0);
     }
 }
-
 
 void Inv_DropCurrentSelectionItem(void) {
     MenuWidgetNode *node = MenuWidget_FindByModeAndSelectedBase(2, 1);

@@ -465,15 +465,11 @@ segments:
       # Eligible-slot count, random item pick, pick message text and active-list
       # compaction work on the same active inventory list.
       - [0x44D20, c, item/Inv_RandomPickAndCompact]
-      # Capacity check and equip modifier validation share one -G4 inventory flow.
-      - [0x4564C, c, item/Inv_EquipmentCapacityFlow]
-      - [0x45BA4, c, item/Inv_RollRandomItemType]
-      - [0x45E10, c, item/Item_PackParasiteSpells]
-      - [0x45E68, c, item/Aya_UnlockParasiteSpellById]
-      - [0x45EE8, c, item/Inv_PackedListItem]
-      # Selection masks, ammo transfer, comparison panels, item actions and
-      # the active-list controller share records and direct calls (-G8).
-      - [0x45F60, c, item/Inv_ItemActions]
+      # Capacity check and equip modifier validation, random item type roll, parasite
+      # spell packing and unlock, packed-list items, and the selection masks, ammo
+      # transfer, comparison panels, item actions and active-list controller (shared
+      # records and direct calls): one -G8 FORCE_G0 unit with COMMON $gp words.
+      - [0x4564C, c, item/Inv_ItemActions]
       - [0x486CC, c, item/menu_get]
       - [0x48830, c, item/Inv_TransferItem]
       - [0x48B3C, c, item/Inv_CanAddActiveListItemToAya]
