@@ -122,7 +122,7 @@ segments:
       - [0x1AA4, .rodata, item/Inv_ItemActions]
       - [0x1ADC, .rodata, save/Save_GameData]
       - [0x1B30, rodata, main/rodata_001B30]
-      - [0x1B88, .rodata, asset/Render_InitDisplayLists]
+      - [0x1B88, .rodata, asset/Sys_GameStateAndVoiceBanks]
       # Scene startup and entity texture jump tables share the loader TU.
       - [0x1BB0, .rodata, scene/Scene_RoomLoad]
       # Both sector-state jump tables now belong to the shared object.
@@ -493,15 +493,14 @@ segments:
       # Table entry unload keeps -fno-force-mem (lev 1 without it; the TIM loader
       # does not match with it), so it stays a unit of its own.
       - [0x59EF0, c, asset/Asset_UnloadTableEntries]
-      # Disc-image discovery and boot notice use the same mount state.
-      - [0x5A0D4, c, asset/Render_InitDisplayLists]
-      # End-of-frame overlay pass, soft-reset shutdown, vertical-offset update,
+      # Display list init, disc-image discovery and boot notice (same mount state);
+      # end-of-frame overlay pass, soft-reset shutdown, vertical-offset update,
       # the actor voice-bank loader, the sound and DS shell reset,
       # Boot_InitGameState (called from main), the memory layout and the scene
       # voice-bank reset: one default-profile unit; the voice-bank table
       # D_80094488 is read by the loader and cleared by the reset (private
       # evidence into the reset; helper/call/private evidence over the rest).
-      - [0x5A8E8, c, asset/Sys_GameStateAndVoiceBanks]
+      - [0x5A0D4, c, asset/Sys_GameStateAndVoiceBanks]
       # Scene and room loading: startup data and field background loading (scene
       # resource state), the alternate voice-bank load, the room loader, texture-page
       # streaming, disc-change gating, entity textures, player startup and story-day
