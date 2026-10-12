@@ -11,13 +11,6 @@ s32 D_8009D050;
 
 void Battle_SyncEquipSlots(void);
 void *Aya_GetLevelExpTable(void);
-#include "pe1/Inv_InitMaxLevelInventory_externs.h"
-#define g_AyaHpMax (g_AyaHpMax[0])
-#define g_AyaHpCurrent (g_AyaHpCurrent[0])
-#define g_AyaInventorySlotCount (g_AyaInventorySlotCount[0])
-#define g_AyaParasiteSpellFlags (g_AyaParasiteSpellFlags[0])
-#define g_AyaSaveLevel (g_AyaSaveLevel[0])
-#define g_AyaSaveTotalExp (g_AyaSaveTotalExp[0])
 
 void Inv_InitMaxLevelInventory(s32 arg0) {
     u16 *nextStat;
@@ -34,25 +27,24 @@ void Inv_InitMaxLevelInventory(s32 arg0) {
 
     mode = arg0;
     items = g_AyaInventoryItems;
-    g_AyaInventorySlotCount = 0x32;
+    g_AyaInventorySlotCount[0] = 0x32;
     if (g_InvItemPtr == items) {
         g_InvSlotLimit = Inv_GetAyaSlotLimit();
     }
-    g_AyaSaveLevel = 0x62;
+    g_AyaSaveLevel[0] = 0x62;
     expTable = (s32 *)Aya_GetLevelExpTable();
-    g_AyaSaveTotalExp = expTable[D_800C0E00.level];
+    g_AyaSaveTotalExp[0] = expTable[D_800C0E00.level];
     levelStats = Aya_LookupLevelStats(0x62);
     unlockedSpells = 0xFFFFF;
     save = (AyaSaveState *)((u8 *)items - PE1_OFFSETOF(AyaSaveState, inventory_items));
     nextStat = save->stats.levels;
     maxHp = levelStats->hp;
     category = 0;
-    g_AyaParasiteSpellFlags = unlockedSpells;
-    g_AyaHpCurrent = maxHp;
-    g_AyaHpMax = maxHp;
-    __asm__ volatile("" ::: "memory");
-    stat = nextStat;
+    g_AyaParasiteSpellFlags[0] = unlockedSpells;
+    g_AyaHpCurrent[0] = maxHp;
+    g_AyaHpMax[0] = maxHp;
     do {
+        stat = nextStat;
         nextStat = stat + 1;
         if (mode == 0) {
             allocation = 0x3E8;
@@ -66,7 +58,6 @@ void Inv_InitMaxLevelInventory(s32 arg0) {
         }
         *stat = allocation;
         category += 1;
-        stat = nextStat;
     } while (category < 7);
     Battle_SyncEquipSlots();
 }

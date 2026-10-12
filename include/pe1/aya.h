@@ -103,6 +103,8 @@ extern AyaBonusPoolRecord g_AyaBonusPoolRecord;
 /* Interior names for single AyaSaveState fields. Incomplete arrays keep
  * their accesses absolute in -G8 units; scalar readers index element 0. */
 extern u16 g_AyaHpCurrent[];
+extern u16 g_AyaHpMax[];
+extern s32 g_AyaSaveTotalExp[];
 extern u8 g_AyaInventorySlotCount[];
 extern s8 g_AyaEquippedWeaponSlot[];
 extern s8 g_AyaEquippedArmorSlot[];
