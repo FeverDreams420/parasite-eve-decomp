@@ -70,6 +70,8 @@ int func_80198400(int event) {
     GteShortVector offset,vertices[4];
     GteShortVector *previousEndpoint;
     volatile short *currentEndpoint;
+    GteShortVector *previousOppositeEndpoint;
+    volatile short *currentOppositeEndpoint;
     int area;
     FieldActor *instance=(FieldActor *)ANIM_OWNER_AS(RoomM350EffectActor)->instance;
     switch (event) {
@@ -79,6 +81,8 @@ int func_80198400(int event) {
                              (FieldAnimCallbackListCallback)func_801981D0);
         case 1:
     previousEndpoint=&D_8019A8A8;
+    previousOppositeEndpoint=&D_8019A8B0;
+    currentOppositeEndpoint=&D_8019A8A0;
     if(instance->anim.parts.integer>=31) return 2;
     currentEndpoint=&D_8019A898;
     if(!(D_800E27EC&1)) {
@@ -91,12 +95,7 @@ int func_80198400(int event) {
     }
     if(D_8019A8C0 || instance->mode!=9) return 0;
     *previousEndpoint=*(GteShortVector *)currentEndpoint;
-    {
-        register GteShortVector *from asm("$5")=(GteShortVector *)&D_8019A8A0;
-        register GteShortVector *to asm("$4")=&D_8019A8B0;
-        asm("" : "=r"(from),"=r"(to) : "0"(from),"1"(to));
-        *to=*from;
-    }
+    *previousOppositeEndpoint=*(GteShortVector *)currentOppositeEndpoint;
     offset.x=256; offset.y=0; offset.z=0;
     ApplyMatrixSV((GteMatrix *)&instance->render_object.model_matrix,&offset,&offset);
     {
