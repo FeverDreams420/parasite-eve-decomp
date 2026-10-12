@@ -1030,9 +1030,11 @@ segments:
       # twin model, drifting sprite, settling glow, fade particle, rotating effect and point
       # emitter.
       - [0xCB398, c, fieldfx/FieldEng_EmitterEffects]
-      # Room-object script conditions: the cursor counter trigger and the busy/one-shot wait test.
-      - [0xD0320, c, fieldfx/FieldEng_ObjectConditions]
-      - [0xD0444, c, fieldfx/FieldEng_VectorMath]
+      # Room-object script conditions (the cursor counter trigger and the
+      # busy/one-shot wait test) and the vector helpers: one default-profile unit.
+      - [0xD0320, c, fieldfx/FieldEng_ConditionsAndVectorMath]
+      # The angle helpers keep -fno-schedule-insns (FieldEng_TurnToward is lev 2
+      # without it, the vector helpers do not match with it).
       - [0xD07B8, c, fieldfx/FieldEng_AngleMath]
       - [0xD0860, data, main/dtail_0D0860]
 
