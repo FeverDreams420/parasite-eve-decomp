@@ -1344,13 +1344,17 @@ Crutches still in these units, with the best crutch-free lev found:
   (`g_StatusIconPackets[2][13]`, `g_StatusMarkerPackets[2]` in
   `pe1/draw_state.h`, linker names beside the battle byte arrays), and
   `Gpu_SetupSprites`/`Gpu_QueuePrimitive` are plain field accesses.
-  `Gpu_DrawStatusIcons` keeps 8 pins and the integer address sums in its
+  `Gpu_DrawStatusIcons` keeps 7 pins and the integer address sums in its
   three emit macros (3 byte additions): retail adds the slot and icon
   offsets to the sprite base and derives the packet base as sprite base
   minus 8, which typed indexing does not produce (lev 48 with a texture-page
   step back from a `RenderSpritePageSlot` view, 76 with paired array
   references, 188 to 237 for a single typed macro with `short` or `int`
-  cursors).
+  cursors). Typed `&g_StatusIconPackets[slot][code].sprite` plus a separate
+  packet address is merged by cse into one register and stores at +16
+  (lev 106 to 110 for the first emit): retail folds the +8 of the sprite
+  part into the symbol constant and derives the packet as that constant
+  minus 8.
 
 ## Link ownership
 
