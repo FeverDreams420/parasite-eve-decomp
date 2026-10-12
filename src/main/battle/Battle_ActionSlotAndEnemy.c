@@ -6,7 +6,7 @@
 
 /* MASPSX_FORCE_G0 keeps the battle words absolute, as retail; the COMMON
  * fade level supplies the small-data metadata of the one $gp-relative byte. */
-u8 D_8009CE68;
+u8 g_BattleFadeLevel;
 
 int Battle_ProcessActionSlot(BattleEntity *actor)
 {
@@ -19,17 +19,17 @@ int Battle_ProcessActionSlot(BattleEntity *actor)
         s16 command = D_800BE830[index].command;
         if (command != 0x196 && command != 0x189) {
             if (D_8009D278->action->actionCode.actionId != 6) {
-                if (D_8009D23C == 0 && D_800B8A90[0] != 0) {
+                if (g_BattleActionActorCount == 0 && g_BattleActionActors[0] != 0) {
                     int i = 0;
                     do {
-                        D_800B8A90[(u8)i] = 0;
+                        g_BattleActionActors[(u8)i] = 0;
                         i++;
-                    } while (D_800B8A90[(u8)i] != 0);
+                    } while (g_BattleActionActors[(u8)i] != 0);
                 }
                 {
-                    u8 count = D_8009D23C;
-                    D_8009D23C = count + 1;
-                    D_800B8A90[count] = actor;
+                    u8 count = g_BattleActionActorCount;
+                    g_BattleActionActorCount = count + 1;
+                    g_BattleActionActors[count] = actor;
                 }
             } else {
                 /* Matching debt: retail sets the room argument before the
@@ -37,17 +37,17 @@ int Battle_ProcessActionSlot(BattleEntity *actor)
                 register int room asm("$4") = 0x5B;
                 if (actor == D_800BE830[index].actor) {
                     D_8009D208 = Scene_LoadRoomAssets(room, actor);
-                    D_8009D23C = 0;
+                    g_BattleActionActorCount = 0;
                 }
             }
         }
         result = 0;
         if (state->field04.bytes.kind != 0 && state->hpAlive > 0) {
-            D_8009CE68 = 0xFF;
+            g_BattleFadeLevel = 0xFF;
         }
     } else if (phase == 0x4000 && state->field04.bytes.kind != 0) {
-        u8 color = D_8009CE68 - 8;
-        D_8009CE68 = color;
+        u8 color = g_BattleFadeLevel - 8;
+        g_BattleFadeLevel = color;
         if (state->field04.bytes.kind == 1) {
             if (color <= 0x80) {
                 actor->parent->renderObject.flags_9C |= 0x20;
@@ -61,7 +61,7 @@ int Battle_ProcessActionSlot(BattleEntity *actor)
             for (iter = (BattleEntity *)D_8009D20C; iter != 0; iter = iter->next) {
                 if (iter != D_8009D254 && iter->core != 0 &&
                     ((EnemyCombatant *)iter->core)->field04.bytes.kind == 4) {
-                    int shade = D_8009CE68;
+                    int shade = g_BattleFadeLevel;
                     if ((u8)shade <= 0x80) {
                         iter->renderObject.flags_9C |= 0x20;
                         state->coreFlags &= ~0x6000;

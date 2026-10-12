@@ -128,12 +128,12 @@ fade:
         restoredCore->panelB_timer = 30;
         D_8009D278->panelB_flag = 1;
         Aya_DeriveStats(&D_8009D278->atbStep, &D_8009D278->atbRate);
-        BATTLE_SET_GAUGE_GRADIENT(D_800B00E8[0], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
-        BATTLE_SET_SPRITE_COLOR(D_800B6920[0].sprite, 0x9F, 0xFF, 0xF9);
-        BATTLE_SET_GAUGE_GRADIENT(D_800B00E8[1], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
-        BATTLE_SET_SPRITE_COLOR(D_800B6920[1].sprite, 0x9F, 0xFF, 0xF9);
-        BATTLE_SET_GAUGE_GRADIENT(D_800B0130[0][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
-        BATTLE_SET_GAUGE_GRADIENT(D_800B0130[1][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
+        BATTLE_SET_GAUGE_GRADIENT(g_BattleAtbGauges[0], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
+        BATTLE_SET_SPRITE_COLOR(g_BattleAtbMarkers[0].sprite, 0x9F, 0xFF, 0xF9);
+        BATTLE_SET_GAUGE_GRADIENT(g_BattleAtbGauges[1], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
+        BATTLE_SET_SPRITE_COLOR(g_BattleAtbMarkers[1].sprite, 0x9F, 0xFF, 0xF9);
+        BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[0][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
+        BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[1][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
         D_8009CE74 = 0;
         D_8009D28C = 0;
         result = 1;

@@ -65,7 +65,7 @@ typedef struct BattleModeTilePacket {
 PE1_STATIC_ASSERT(sizeof(BattleModeTilePacket) == 0x18,
                   battle_mode_tile_packet_size);
 
-extern BattleModeTilePacket D_8009E068[2];      /* status background */
+extern BattleModeTilePacket g_BattleStatusBackgrounds[2];      /* status background */
 /* The background tiles seen from the tile: each is followed by the mode
  * words of the next packet. Battle_DrawActiveStatus addresses them this way,
  * keeping the tile base in a register. */
@@ -74,12 +74,12 @@ typedef struct BattleTileSlot {
     RenderDrawModePacket nextMode;
 } BattleTileSlot;
 extern BattleTileSlot D_8009E070[2];
-extern RenderColorTilePacket D_8009E098[2];     /* ATB gauge track */
-extern RenderPagedSpritePacket D_8009E0B8[2];   /* ATB label */
-extern RenderPagedSpritePacket D_8009E320[2];   /* PE label */
-extern RenderGouraudQuad D_800B00E8[2];         /* ATB gauge fill */
-extern RenderGouraudQuad D_800B0130[2][2];      /* PE gauge fill, remainder */
-extern RenderPagedSpritePacket D_800B6920[2];   /* ATB gauge marker */
+extern RenderColorTilePacket g_BattleAtbTracks[2];     /* ATB gauge track */
+extern RenderPagedSpritePacket g_BattleAtbLabels[2];   /* ATB label */
+extern RenderPagedSpritePacket g_BattlePeLabels[2];   /* PE label */
+extern RenderGouraudQuad g_BattleAtbGauges[2];         /* ATB gauge fill */
+extern RenderGouraudQuad g_BattlePeGauges[2][2];      /* PE gauge fill, remainder */
+extern RenderPagedSpritePacket g_BattleAtbMarkers[2];   /* ATB gauge marker */
 /* Color a gauge quad: vertices 0 and 2 take the first color, 1 and 3 the
  * second (the PSY-Q setRGB0..setRGB3 sequence). A macro rather than an
  * inline function: the constants must stay shared with neighbouring stores. */
@@ -102,10 +102,10 @@ typedef struct BattleDigitSlot {
     RenderSpritePacket sprite;
     RenderTexturePagePacket nextPage;
 } BattleDigitSlot;
-extern RenderPagedSpritePacket D_8009E0F0[2][4], D_8009E1D0[2][5];
+extern RenderPagedSpritePacket g_BattleHpDigits[2][4], g_BattleMaxHpDigits[2][5];
 extern BattleDigitSlot D_8009E0F8[2][4], D_8009E1D8[2][5];
 /* HP label packets. */
-extern RenderPagedSpritePacket D_8009E2E8[2];
+extern RenderPagedSpritePacket g_BattleHpLabels[2];
 /* Further HUD sprite packets Battle_DrawHPBar initializes. */
 extern RenderPagedSpritePacket D_8009E500[2][10];
 extern RenderPagedSpritePacket D_8009E880[2];
@@ -122,11 +122,11 @@ extern u8 D_8009E976[], D_8009EC38[];
 typedef struct BattleHudShades {
     s8 values[3];
 } BattleHudShades;
-extern BattleHudShades D_8009CD90[]; /* one record; unsized keeps it off $gp */
+extern BattleHudShades g_BattleStatusShades[]; /* one record; unsized keeps it off $gp */
 /* Status-panel digit sprites: two draw buffers, ten panels of five digits. */
-extern RenderPagedSpritePacket D_800B01C0[2][10][5];
+extern RenderPagedSpritePacket g_BattlePanelDigits[2][10][5];
 /* End-of-battle panel quads, one per draw buffer. */
-extern RenderTexturedQuad D_800BE9F0[2];
+extern RenderTexturedQuad g_BattleEndPanels[2];
 /* Corner coordinates of a quad (the PSY-Q setXY4 sequence). */
 #define BATTLE_SET_QUAD_XY(quad, x0_, y0_, x1_, y1_, x2_, y2_, x3_, y3_)  \
     ((quad).x0 = (x0_), (quad).y0 = (y0_), (quad).x1 = (x1_),           \
@@ -145,7 +145,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(BattleGaugePrim, sprite) == 8,
 PE1_STATIC_ASSERT(sizeof(BattleGaugePrim) == 0x1C,
                   battle_gauge_prim_stride);
 
-extern s32 D_8009D230;
+extern s32 g_BattleStatusPanelSlot;
 extern RenderSpritePacket D_800B01C8[];
 /* Interior byte symbols of the first panel sprite, independently relocated. */
 extern u8 D_800B01CC[], D_800B01CD[], D_800B01CE[];

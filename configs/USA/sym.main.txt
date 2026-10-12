@@ -2077,3 +2077,21 @@ Task_ClearEntityFlag400 = 0x80019AE4; // type:func
 Task_EnableEntityGravity = 0x8001A32C; // type:func
 Task_DisableEntityGravity = 0x8001A350; // type:func
 Task_SetMeshFadeLevel = 0x8001A374; // type:func
+
+// Battle HUD packets and state (src/main/battle).
+g_BattleAtbGauges = 0x800B00E8;
+g_BattlePeGauges = 0x800B0130;
+g_BattleAtbMarkers = 0x800B6920;
+g_BattleEndPanels = 0x800BE9F0;
+g_BattlePanelDigits = 0x800B01C0;
+g_BattleStatusBackgrounds = 0x8009E068;
+g_BattleAtbTracks = 0x8009E098;
+g_BattleAtbLabels = 0x8009E0B8;
+g_BattleHpDigits = 0x8009E0F0;
+g_BattleMaxHpDigits = 0x8009E1D0;
+g_BattleHpLabels = 0x8009E2E8;
+g_BattlePeLabels = 0x8009E320;
+g_BattleStatusShades = 0x8009CD90;
+g_BattleStatusPanelSlot = 0x8009D230;
+g_BattleActionActorCount = 0x8009D23C;
+g_BattleActionActors = 0x800B8A90;

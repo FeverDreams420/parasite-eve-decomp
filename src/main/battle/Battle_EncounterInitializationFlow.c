@@ -97,10 +97,10 @@ void Battle_ResetEnemyStats(int mode) {
 void Battle_SetupPlayerPalette(void) {
     u8 *flags;
 
-    BATTLE_SET_GAUGE_GRADIENT(D_800B0130[0][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
-    BATTLE_SET_GAUGE_GRADIENT(D_800B0130[1][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
-    BATTLE_SET_GAUGE_GRADIENT(D_800B0130[0][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
-    BATTLE_SET_GAUGE_GRADIENT(D_800B0130[1][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
+    BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[0][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
+    BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[1][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
+    BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[0][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
+    BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[1][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
     Battle_FlushScriptSounds();
     D_8009D2EC = 0;
     D_8009D2A0 = 0;
@@ -151,7 +151,7 @@ void Battle_StartEncounter(int mode) {
     }
 
     for (i = 0; (u8)i < 7; i++) {
-        D_800B8A90[(u8)i] = 0;
+        g_BattleActionActors[(u8)i] = 0;
     }
 
     srand(D_8009D250);

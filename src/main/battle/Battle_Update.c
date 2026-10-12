@@ -8,7 +8,7 @@
 u8 D_8009CE7C;
 s32 D_8009D1D0;
 s32 D_8009D1E8;
-u8 D_8009D23C;
+u8 g_BattleActionActorCount;
 u8 D_8009D244;
 Combatant *D_8009D278;
 u8 D_8009D288;
@@ -50,7 +50,7 @@ void Battle_Update(void) {
         }
     }
     active = D_8009D254->core;
-    D_8009D230 = 0;
+    g_BattleStatusPanelSlot = 0;
     D_8009D278 = active;
     D_8009D2A4 = Menu_RunFrameWithArg((int)&D_800A76D8);
     if (D_8009D28C == 0 && D_8009D244 != 0) {
@@ -202,10 +202,10 @@ void Battle_Update(void) {
                 entity = entity->next;
             } while (entity != 0);
         }
-        if (D_8009D23C != 0) {
-            Pm_SendCmd(D_8009D2FC, 0, 1, (int)&(D_800B8A90[0]), 0, 0);
+        if (g_BattleActionActorCount != 0) {
+            Pm_SendCmd(D_8009D2FC, 0, 1, (int)&(g_BattleActionActors[0]), 0, 0);
             Pm_SendCmd(D_8009D2FC, 0, 0, 1, 0, 0);
-            D_8009D23C = 0;
+            g_BattleActionActorCount = 0;
         }
         if ((D_8009D235[0]) != 0) {
             Gpu_QueuePrimitive();

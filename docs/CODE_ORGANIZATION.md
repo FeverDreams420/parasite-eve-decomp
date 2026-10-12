@@ -783,7 +783,7 @@ Still open:
     own symbols (`D_800B0D8A`, `D_800B0D88`) are `D_800B0CEC` fields; GCC
     derives the object address from the field address as retail does, and
     only the relocation addend changes. The same holds for the end-of-battle
-    panel color bytes (`D_800BE9F0[slot].color`).
+    panel color bytes (`g_BattleEndPanels[slot].color`).
   - The case-into-if switch shape (`case 0: if (!(rand() & 1)) { case 2:
     ... }`) replaces a goto into a shared resistance body, and a separate
     `if (damage <= 0)` after the scaling block replaces a goto into the

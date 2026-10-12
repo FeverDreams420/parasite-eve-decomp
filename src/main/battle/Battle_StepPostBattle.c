@@ -129,10 +129,10 @@ void Battle_StepPostBattle(void)
         s32 frame;
         asm volatile("" : : "r"(top));
         brightness = brightnessBase - (g_BattleEndTimer * 4);
-        D_800BE9F0[D_8009CDDC].color.bytes.r = brightness;
-        D_800BE9F0[D_8009CDDC].color.bytes.g = brightness;
-        D_800BE9F0[D_8009CDDC].color.bytes.b = brightness;
-        base = D_800BE9F0;
+        g_BattleEndPanels[D_8009CDDC].color.bytes.r = brightness;
+        g_BattleEndPanels[D_8009CDDC].color.bytes.g = brightness;
+        g_BattleEndPanels[D_8009CDDC].color.bytes.b = brightness;
+        base = g_BattleEndPanels;
         frame = D_8009CDDC;
         expandingPanel = &base[frame];
         timer = g_BattleEndTimer;
@@ -165,12 +165,12 @@ void Battle_StepPostBattle(void)
     case 3: {
         if ((u8) g_BattleEndTimer >= 0x1AU) {
             u8 pulse = rcos((g_BattleEndTimer - 16) * 16) * 11U >> 11;
-            RenderTexturedQuad *panels = D_800BE9F0;
+            RenderTexturedQuad *panels = g_BattleEndPanels;
             RenderTexturedQuad *panel = &panels[D_8009CDDC];
             BATTLE_SET_QUAD_XY(*panel, 100, 122 - pulse, 220, 122 - pulse, 100, 124, 220, 124);
         }
         else {
-            RenderTexturedQuad *panels = D_800BE9F0;
+            RenderTexturedQuad *panels = g_BattleEndPanels;
             RenderTexturedQuad *panel = &panels[D_8009CDDC];
             BATTLE_SET_QUAD_XY(*panel, 100, 100, 220, 100, 100, 124, 220, 124);
         }
@@ -199,7 +199,7 @@ void Battle_StepPostBattle(void)
             D_8009CE74++;
             break;
         }
-        base = D_800BE9F0;
+        base = g_BattleEndPanels;
         right = 220;
         fadeBrightness = g_BattleEndTimer * 2;
         fadingPanel = &base[D_8009CDDC];
@@ -224,5 +224,5 @@ void Battle_StepPostBattle(void)
         break;
     }
     AddPrim((u32 *)(D_800B0E38.ordering[D_8009CDDC] + 4),
-    (u32 *)&D_800BE9F0[D_8009CDDC]);
+    (u32 *)&g_BattleEndPanels[D_8009CDDC]);
 }

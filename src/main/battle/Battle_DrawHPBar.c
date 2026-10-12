@@ -56,13 +56,13 @@ void Battle_DrawHPBar(void) {
     DrawGlyphDescriptor *glyph;
     RenderSpritePacket *atbLabel;
 
-    shades = D_8009CD90[0];
+    shades = g_BattleStatusShades[0];
     hudPage = GetTPage(0, 1, 0x100, 0x1E0);
     hudClut = GetClut(0x130, 0x1F8);
     bufferIndex = 0;
     do {
         glyph = Draw_LookupGlyphDescriptor(0x8B);
-        labelQuad = &D_800BE9F0[bufferIndex];
+        labelQuad = &g_BattleEndPanels[bufferIndex];
         SetPolyFT4(labelQuad);
         labelQuad->u0 = glyph->u;
         labelQuad->v0 = glyph->v;
@@ -72,8 +72,8 @@ void Battle_DrawHPBar(void) {
         labelQuad->v2 = glyph->v + glyph->height;
         labelQuad->u3 = glyph->u + glyph->width;
         labelQuad->v3 = glyph->v + glyph->height;
-        D_800BE9F0[bufferIndex].tpage = GetTPage(0, 0, 0x1C0, 0);
-        D_800BE9F0[bufferIndex].clut = glyph->clut;
+        g_BattleEndPanels[bufferIndex].tpage = GetTPage(0, 0, 0x1C0, 0);
+        g_BattleEndPanels[bufferIndex].clut = glyph->clut;
         labelQuad->x0 = 0;
         highBlue = 0x82;
         labelQuad->y0 = 0;
@@ -94,32 +94,32 @@ void Battle_DrawHPBar(void) {
             for (i = 0; (u8)i < 10; i++) {
                 gridRow = (u8)i;
                 for (j = 0; (u8)j < 4; j++) {
-                    Gpu_InitDrawModeSprtPacket(&D_800B01C0[buffer][gridRow][(u8)j], hudPage);
-                    D_800B01C0[buffer][gridRow][(u8)j].sprite.clut = hudClut;
+                    Gpu_InitDrawModeSprtPacket(&g_BattlePanelDigits[buffer][gridRow][(u8)j], hudPage);
+                    g_BattlePanelDigits[buffer][gridRow][(u8)j].sprite.clut = hudClut;
                 }
             }
         }
         pageCode = GetTPage(0, 0, 0, 0);
-        Gpu_InitDrawModeTilePacket(&D_8009E068[bufferIndex], pageCode);
-        background = &D_8009E068[bufferIndex].tile;
+        Gpu_InitDrawModeTilePacket(&g_BattleStatusBackgrounds[bufferIndex], pageCode);
+        background = &g_BattleStatusBackgrounds[bufferIndex].tile;
         background->r0 = 0x30;
         background->g0 = 0x30;
         background->b0 = 0x30;
         SetSemiTrans(background, 1);
-        atbTrack = &D_8009E098[bufferIndex];
+        atbTrack = &g_BattleAtbTracks[bufferIndex];
         SetTile(atbTrack);
-        atbGradient = &D_800B00E8[bufferIndex];
+        atbGradient = &g_BattleAtbGauges[bufferIndex];
         atbTrack->r0 = 0x1D;
         atbTrack->g0 = 0x3E;
         atbTrack->b0 = 0x32;
         atbTrack->w = 0x38;
         atbTrack->h = 3;
         SetPolyG4(atbGradient);
-        Gpu_InitDrawModeSprtPacket(&D_800B6920[bufferIndex], hudPage);
-        atbMarker = &D_800B6920[bufferIndex].sprite;
+        Gpu_InitDrawModeSprtPacket(&g_BattleAtbMarkers[bufferIndex], hudPage);
+        atbMarker = &g_BattleAtbMarkers[bufferIndex].sprite;
         atbMarker->u = 0xC8;
         atbMarker->v = 0xE0;
-        D_800B6920[bufferIndex].sprite.clut = hudClut;
+        g_BattleAtbMarkers[bufferIndex].sprite.clut = hudClut;
         atbMarker->width = 4;
         atbMarker->height = 8;
         atbGradient->b0 = highBlue;
@@ -139,20 +139,20 @@ void Battle_DrawHPBar(void) {
         atbMarker->color.bytes.b = 0xF9;
 
         for (i = 0; (u8)i < 4; i++) {
-            Gpu_InitDrawModeSprtPacket(&D_8009E0F0[bufferIndex][(u8)i], hudPage);
-            D_8009E0F0[bufferIndex][(u8)i].sprite.clut = hudClut;
-            BATTLE_SPRITE_SLOTS(D_8009E0F0, 4)[bufferIndex][(u8)i].sprite.width = 6;
-            BATTLE_SPRITE_SLOTS(D_8009E0F0, 4)[bufferIndex][(u8)i].sprite.height = 0xA;
+            Gpu_InitDrawModeSprtPacket(&g_BattleHpDigits[bufferIndex][(u8)i], hudPage);
+            g_BattleHpDigits[bufferIndex][(u8)i].sprite.clut = hudClut;
+            BATTLE_SPRITE_SLOTS(g_BattleHpDigits, 4)[bufferIndex][(u8)i].sprite.width = 6;
+            BATTLE_SPRITE_SLOTS(g_BattleHpDigits, 4)[bufferIndex][(u8)i].sprite.height = 0xA;
         }
         for (i = 0; (u8)i < 5; i++) {
-            Gpu_InitDrawModeSprtPacket(&D_8009E1D0[bufferIndex][(u8)i], hudPage);
-            D_8009E1D0[bufferIndex][(u8)i].sprite.clut = hudClut;
-            BATTLE_SPRITE_SLOTS(D_8009E1D0, 5)[bufferIndex][(u8)i].sprite.width = 6;
-            BATTLE_SPRITE_SLOTS(D_8009E1D0, 5)[bufferIndex][(u8)i].sprite.height = 0xA;
+            Gpu_InitDrawModeSprtPacket(&g_BattleMaxHpDigits[bufferIndex][(u8)i], hudPage);
+            g_BattleMaxHpDigits[bufferIndex][(u8)i].sprite.clut = hudClut;
+            BATTLE_SPRITE_SLOTS(g_BattleMaxHpDigits, 5)[bufferIndex][(u8)i].sprite.width = 6;
+            BATTLE_SPRITE_SLOTS(g_BattleMaxHpDigits, 5)[bufferIndex][(u8)i].sprite.height = 0xA;
         }
-        greenGradient = &D_800B0130[bufferIndex][0];
+        greenGradient = &g_BattlePeGauges[bufferIndex][0];
         SetPolyG4(greenGradient);
-        pinkGradient = &D_800B0130[bufferIndex][1];
+        pinkGradient = &g_BattlePeGauges[bufferIndex][1];
         SetPolyG4(pinkGradient);
         {
             u8 red;
@@ -173,32 +173,32 @@ void Battle_DrawHPBar(void) {
             greenGradient->b3 = blue;
         }
         BATTLE_SET_GAUGE_GRADIENT(*pinkGradient, 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
-        Gpu_InitDrawModeSprtPacket(&D_8009E0B8[bufferIndex], hudPage);
-        atbLabel = &D_8009E0B8[bufferIndex].sprite;
+        Gpu_InitDrawModeSprtPacket(&g_BattleAtbLabels[bufferIndex], hudPage);
+        atbLabel = &g_BattleAtbLabels[bufferIndex].sprite;
         SetShadeTex(atbLabel, 1);
         markerV = 0xF4;
         atbLabel->u = 0x50;
         atbLabel->v = markerV;
         BATTLE_SET_SPRITE_COLOR(*atbLabel, 0x80, 0x80, 0x80);
-        D_8009E0B8[bufferIndex].sprite.clut = hudClut;
+        g_BattleAtbLabels[bufferIndex].sprite.clut = hudClut;
         atbLabel->width = 8;
         atbLabel->height = 4;
-        Gpu_InitDrawModeSprtPacket(&D_8009E2E8[bufferIndex], hudPage);
-        hpLabel = &D_8009E2E8[bufferIndex].sprite;
+        Gpu_InitDrawModeSprtPacket(&g_BattleHpLabels[bufferIndex], hudPage);
+        hpLabel = &g_BattleHpLabels[bufferIndex].sprite;
         SetShadeTex(hpLabel, 1);
         hpLabel->u = 0x58;
         hpLabel->v = markerV;
         BATTLE_SET_SPRITE_COLOR(*hpLabel, 0x80, 0x80, 0x80);
-        D_8009E2E8[bufferIndex].sprite.clut = hudClut;
+        g_BattleHpLabels[bufferIndex].sprite.clut = hudClut;
         hpLabel->width = 8;
         hpLabel->height = 4;
-        Gpu_InitDrawModeSprtPacket(&D_8009E320[bufferIndex], hudPage);
-        peLabel = &D_8009E320[bufferIndex].sprite;
+        Gpu_InitDrawModeSprtPacket(&g_BattlePeLabels[bufferIndex], hudPage);
+        peLabel = &g_BattlePeLabels[bufferIndex].sprite;
         SetShadeTex(peLabel, 1);
         peLabel->u = 0x60;
         peLabel->v = markerV;
         BATTLE_SET_SPRITE_COLOR(*peLabel, 0x80, 0x80, 0x80);
-        D_8009E320[bufferIndex].sprite.clut = hudClut;
+        g_BattlePeLabels[bufferIndex].sprite.clut = hudClut;
         peLabel->width = 8;
         peLabel->height = 4;
 

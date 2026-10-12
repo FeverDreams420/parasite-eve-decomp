@@ -50,10 +50,10 @@ void Battle_DrawActiveStatus(void)
     atbWidth = (D_8009D278->hpAlive * 0x38) / 9000;
     peWidth = peProduct / (s16)(D_8009D278->maxAtk >> 16);
     if (D_8009D1A0 & 2) {
-        atbTrack = &D_8009E098[D_8009CDDC];
+        atbTrack = &g_BattleAtbTracks[D_8009CDDC];
         atbTrack->x0 = g_HudOrigin.x + 8;
         atbTrack->y0 = g_HudOrigin.y + 4;
-        atbFill = &D_800B00E8[D_8009CDDC];
+        atbFill = &g_BattleAtbGauges[D_8009CDDC];
         atbFill->x0 = g_HudOrigin.x + 8;
         atbFill->y0 = g_HudOrigin.y + 4;
         atbFill->x1 = g_HudOrigin.x + 8 + atbWidth;
@@ -62,19 +62,19 @@ void Battle_DrawActiveStatus(void)
         atbFill->y2 = g_HudOrigin.y + 7;
         atbFill->x3 = g_HudOrigin.x + 8 + atbWidth;
         atbFill->y3 = g_HudOrigin.y + 7;
-        atbMarker = &D_800B6920[D_8009CDDC].sprite;
-        atbMarker->x = D_800B00E8[D_8009CDDC].x1;
-        atbMarker->y = D_800B00E8[D_8009CDDC].y1 - 2;
-        atbLabel = &D_8009E0B8[D_8009CDDC].sprite;
+        atbMarker = &g_BattleAtbMarkers[D_8009CDDC].sprite;
+        atbMarker->x = g_BattleAtbGauges[D_8009CDDC].x1;
+        atbMarker->y = g_BattleAtbGauges[D_8009CDDC].y1 - 2;
+        atbLabel = &g_BattleAtbLabels[D_8009CDDC].sprite;
         atbLabel->x = g_HudOrigin.x + 0x44;
         atbLabel->y = g_HudOrigin.y + 3;
         AddPrim(D_800B0E38.ordering[D_8009CDDC] + 6, (u32 *)atbTrack);
-        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 5, (u32 *)&D_800B00E8[D_8009CDDC]);
-        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 4, (u32 *)&D_800B6920[D_8009CDDC]);
-        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 4, (u32 *)&D_8009E0B8[D_8009CDDC]);
+        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 5, (u32 *)&g_BattleAtbGauges[D_8009CDDC]);
+        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 4, (u32 *)&g_BattleAtbMarkers[D_8009CDDC]);
+        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 4, (u32 *)&g_BattleAtbLabels[D_8009CDDC]);
     }
     if (Menu_GetItemContextFlag() & 2) {
-        peFill = &D_800B0130[D_8009CDDC][0];
+        peFill = &g_BattlePeGauges[D_8009CDDC][0];
         peFill->x0 = g_HudOrigin.x + 8;
         peFill->y0 = g_HudOrigin.y + 0x19;
         peFill->x1 = g_HudOrigin.x + 8 + peWidth;
@@ -83,21 +83,21 @@ void Battle_DrawActiveStatus(void)
         peFill->y2 = g_HudOrigin.y + 0x1C;
         peFill->x3 = g_HudOrigin.x + 8 + peWidth;
         peFill->y3 = g_HudOrigin.y + 0x1C;
-        peRemainder = &D_800B0130[D_8009CDDC][1];
-        peRemainder->x0 = D_800B0130[D_8009CDDC][0].x1;
+        peRemainder = &g_BattlePeGauges[D_8009CDDC][1];
+        peRemainder->x0 = g_BattlePeGauges[D_8009CDDC][0].x1;
         peRemainder->y0 = g_HudOrigin.y + 0x19;
-        peRemainder->x1 = (u16)D_800B0130[D_8009CDDC][0].x1 + 0x38 - peWidth;
+        peRemainder->x1 = (u16)g_BattlePeGauges[D_8009CDDC][0].x1 + 0x38 - peWidth;
         peRemainder->y1 = g_HudOrigin.y + 0x19;
-        peRemainder->x2 = D_800B0130[D_8009CDDC][0].x1;
+        peRemainder->x2 = g_BattlePeGauges[D_8009CDDC][0].x1;
         peRemainder->y2 = g_HudOrigin.y + 0x1C;
-        peLabel = &D_8009E320[D_8009CDDC].sprite;
-        peRemainder->x3 = (u16)D_800B0130[D_8009CDDC][0].x1 + 0x38 - peWidth;
+        peLabel = &g_BattlePeLabels[D_8009CDDC].sprite;
+        peRemainder->x3 = (u16)g_BattlePeGauges[D_8009CDDC][0].x1 + 0x38 - peWidth;
         peRemainder->y3 = g_HudOrigin.y + 0x1C;
         peLabel->x = g_HudOrigin.x + 0x44;
         peLabel->y = g_HudOrigin.y + 0x18;
         AddPrim(D_800B0E38.ordering[D_8009CDDC] + 5, (u32 *)peFill);
-        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 5, (u32 *)&D_800B0130[D_8009CDDC][1]);
-        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 4, (u32 *)&D_8009E320[D_8009CDDC]);
+        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 5, (u32 *)&g_BattlePeGauges[D_8009CDDC][1]);
+        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 4, (u32 *)&g_BattlePeLabels[D_8009CDDC]);
         if (D_8009D1A0 & 2) {
             tiles = D_8009E070;
             tiles[D_8009CDDC].tile.x0 = g_HudOrigin.x;
@@ -124,7 +124,7 @@ void Battle_DrawActiveStatus(void)
         tiles[D_8009CDDC].tile.w = 0x54;
         tiles[D_8009CDDC].tile.h = 0x12;
     }
-    AddPrim(D_800B0E38.ordering[D_8009CDDC] + 7, (u32 *)&D_8009E068[D_8009CDDC]);
+    AddPrim(D_800B0E38.ordering[D_8009CDDC] + 7, (u32 *)&g_BattleStatusBackgrounds[D_8009CDDC]);
     Battle_DrawEnemyHP(D_8009D278->maxHP, D_8009D278->curHP);
     Gpu_DrawStatusIcons();
 }
@@ -182,7 +182,7 @@ void Battle_DrawEnemyHP(s16 maximum, s16 current)
             MAX_HP_DIGIT(n)->color.bytes.b = 128;
         }
         x += 6;
-        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 5, (u32 *)&D_8009E1D0[D_8009CDDC][n]);
+        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 5, (u32 *)&g_BattleMaxHpDigits[D_8009CDDC][n]);
     }
 
     x = g_HudOrigin.x - (last * 2 + 1) * 6 + 62;
@@ -216,18 +216,18 @@ void Battle_DrawEnemyHP(s16 maximum, s16 current)
             CURRENT_HP_DIGIT(n)->color.bytes.b = 128;
         }
         x += 6;
-        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 5, (u32 *)&D_8009E0F0[D_8009CDDC][n]);
+        AddPrim(D_800B0E38.ordering[D_8009CDDC] + 5, (u32 *)&g_BattleHpDigits[D_8009CDDC][n]);
     }
 
     /* Place the HP label after the number pair. */
     {
         s32 frame = D_8009CDDC;
-        RenderSpritePacket *sprites = &D_8009E2E8[0].sprite;
+        RenderSpritePacket *sprites = &g_BattleHpLabels[0].sprite;
 
         /* Step the sprite pointer by whole packets. */
         label = (RenderSpritePacket *)((RenderPagedSpritePacket *)sprites + frame);
         label->x = g_HudOrigin.x + 0x44;
         label->y = g_HudOrigin.y + 0xE;
-        AddPrim(D_800B0E38.ordering[frame] + 4, (u32 *)&D_8009E2E8[frame]);
+        AddPrim(D_800B0E38.ordering[frame] + 4, (u32 *)&g_BattleHpLabels[frame]);
     }
 }

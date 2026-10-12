@@ -381,14 +381,14 @@ void Battle_PhaseInitEnemyTurn(void) {
         }
         D_8009D28C = 7;
         D_8009D2E8 &= ~1;
-        BATTLE_SET_GAUGE_GRADIENT(D_800B00E8[0], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
-        BATTLE_SET_SPRITE_COLOR(D_800B6920[0].sprite, 0x9F, 0xFF, 0xF9);
-        BATTLE_SET_GAUGE_GRADIENT(D_800B00E8[1], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
-        BATTLE_SET_SPRITE_COLOR(D_800B6920[1].sprite, 0x9F, 0xFF, 0xF9);
-        BATTLE_SET_GAUGE_GRADIENT(D_800B0130[0][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
-        BATTLE_SET_GAUGE_GRADIENT(D_800B0130[1][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
-        BATTLE_SET_GAUGE_GRADIENT(D_800B0130[0][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
-        BATTLE_SET_GAUGE_GRADIENT(D_800B0130[1][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
+        BATTLE_SET_GAUGE_GRADIENT(g_BattleAtbGauges[0], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
+        BATTLE_SET_SPRITE_COLOR(g_BattleAtbMarkers[0].sprite, 0x9F, 0xFF, 0xF9);
+        BATTLE_SET_GAUGE_GRADIENT(g_BattleAtbGauges[1], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
+        BATTLE_SET_SPRITE_COLOR(g_BattleAtbMarkers[1].sprite, 0x9F, 0xFF, 0xF9);
+        BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[0][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
+        BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[1][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
+        BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[0][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
+        BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[1][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
     }
 }
 
@@ -773,14 +773,14 @@ void Battle_PhaseEndTurn(void) {
             }
             Entity_SetActionMode(player, nextMode);
             Battle_SetupPlayerPalette();
-            BATTLE_SET_GAUGE_GRADIENT(D_800B00E8[0], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
-            BATTLE_SET_SPRITE_COLOR(D_800B6920[0].sprite, 0x9F, 0xFF, 0xF9);
-            BATTLE_SET_GAUGE_GRADIENT(D_800B00E8[1], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
-            BATTLE_SET_SPRITE_COLOR(D_800B6920[1].sprite, 0x9F, 0xFF, 0xF9);
-            BATTLE_SET_GAUGE_GRADIENT(D_800B0130[0][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
-            BATTLE_SET_GAUGE_GRADIENT(D_800B0130[1][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
-            BATTLE_SET_GAUGE_GRADIENT(D_800B0130[0][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
-            BATTLE_SET_GAUGE_GRADIENT(D_800B0130[1][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
+            BATTLE_SET_GAUGE_GRADIENT(g_BattleAtbGauges[0], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
+            BATTLE_SET_SPRITE_COLOR(g_BattleAtbMarkers[0].sprite, 0x9F, 0xFF, 0xF9);
+            BATTLE_SET_GAUGE_GRADIENT(g_BattleAtbGauges[1], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
+            BATTLE_SET_SPRITE_COLOR(g_BattleAtbMarkers[1].sprite, 0x9F, 0xFF, 0xF9);
+            BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[0][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
+            BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[1][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
+            BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[0][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
+            BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[1][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
             D_8009D28C = 0xC;
             Battle_ResetEnemyStats(0);
         }
@@ -868,14 +868,14 @@ void Battle_StartDeathAnim(void) {
     BattleEntity *player;
 
     Battle_ResetEnemyStats(0);
-    BATTLE_SET_GAUGE_GRADIENT(D_800B00E8[0], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
-    BATTLE_SET_SPRITE_COLOR(D_800B6920[0].sprite, 0x9F, 0xFF, 0xF9);
-    BATTLE_SET_GAUGE_GRADIENT(D_800B00E8[1], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
-    BATTLE_SET_SPRITE_COLOR(D_800B6920[1].sprite, 0x9F, 0xFF, 0xF9);
-    BATTLE_SET_GAUGE_GRADIENT(D_800B0130[0][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
-    BATTLE_SET_GAUGE_GRADIENT(D_800B0130[1][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
-    BATTLE_SET_GAUGE_GRADIENT(D_800B0130[0][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
-    BATTLE_SET_GAUGE_GRADIENT(D_800B0130[1][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
+    BATTLE_SET_GAUGE_GRADIENT(g_BattleAtbGauges[0], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
+    BATTLE_SET_SPRITE_COLOR(g_BattleAtbMarkers[0].sprite, 0x9F, 0xFF, 0xF9);
+    BATTLE_SET_GAUGE_GRADIENT(g_BattleAtbGauges[1], 0, 0x46, 0x82, 0x9F, 0xFF, 0xF9);
+    BATTLE_SET_SPRITE_COLOR(g_BattleAtbMarkers[1].sprite, 0x9F, 0xFF, 0xF9);
+    BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[0][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
+    BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[1][0], 0, 0x82, 0x36, 0x4A, 0xFF, 0x3B);
+    BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[0][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
+    BATTLE_SET_GAUGE_GRADIENT(g_BattlePeGauges[1][1], 0xFF, 0x3D, 0x81, 0x83, 0x13, 1);
     D_8009D28C = 2;
     D_8009D2E8 |= 1;
     player = D_8009D254;

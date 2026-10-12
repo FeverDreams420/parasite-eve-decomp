@@ -41,9 +41,9 @@ extern s32 D_8009D1D0;
 extern s32 D_8009D1E8;
 extern s8 D_8009D1F0[16];
 extern u32 D_8009D1F4;
-extern s32 D_8009D230;
+extern s32 g_BattleStatusPanelSlot;
 extern u8 D_8009D235[16];
-extern u8 D_8009D23C;
+extern u8 g_BattleActionActorCount;
 extern u8 D_8009D244;
 extern u8 D_8009D288;
 extern s32 D_8009D290[16];
@@ -53,6 +53,6 @@ extern s8 D_8009D2B0;
 extern s32 D_8009D2FC;
 extern BattleAction D_800A76D8;
 extern void *D_800B0E08[16];
-extern BattleEntity *D_800B8A90[7];
+extern BattleEntity *g_BattleActionActors[7];
 
 #endif
