@@ -71,7 +71,7 @@ class MainDataLayoutTests(unittest.TestCase):
         ])
         self.assertEqual([r[2] for r in tail[1:9:2]],
                          ["psyq/libc/sprintf", "psyq/libcd/sys_2",
-                          "psyq/libcd/bios", "psyq/libds/dsfile"])
+                          "psyq/libcd/bios_4", "psyq/libds/dsfile"])
         # The gp-relative word is emitted with its owner's .data.
         self.assertEqual(tail[9]["linker_section_order"], ".data")
         engine = segments["field_engine"]

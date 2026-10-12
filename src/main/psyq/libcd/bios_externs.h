@@ -1,4 +1,6 @@
-#ifndef PE1_EXT_652415553604
-#define PE1_EXT_652415553604
-extern u16 *volatile D_8009B290;
-#endif /* PE1_EXT_652415553604 */
+#ifndef PE1_EXT_B96296EEC45A
+#define PE1_EXT_B96296EEC45A
+extern int D_8009AFCC;
+extern int D_8009B17C[], D_8009B07C[];
+extern char D_80011B44[], D_80011B50[], D_80011B6C[], D_80011B80[];
+#endif /* PE1_EXT_B96296EEC45A */

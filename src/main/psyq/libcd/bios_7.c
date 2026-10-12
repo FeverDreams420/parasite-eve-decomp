@@ -1,10 +1,8 @@
 /* ASSEMBLER: GNU */
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses */
-/* Psy-Q LIBCD BIOS.OBJ, end of the object: CD_getsector, CD_getsector2,
- * CD_set_test_parmnum and callback. The rest of BIOS.OBJ is in the preceding
- * units (see docs/CODE_ORGANIZATION.md, "PsyQ objects split over several
- * units"). */
+/* Psy-Q LIBCD BIOS.OBJ, part 7 of 7: CD_getsector, CD_getsector2,
+ * CD_set_test_parmnum and callback. */
 #include "pe1/psyq_cd.h"
 
 int CD_getsector(void *destination, int words) {

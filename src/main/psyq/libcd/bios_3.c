@@ -1,7 +1,7 @@
 /* ASSEMBLER: GNU */
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -fno-expensive-optimizations -mno-split-addresses */
-/* Psy-Q LIBCD BIOS.OBJ: CD_cw, CD_vol, CD_flush. */
+/* Psy-Q LIBCD BIOS.OBJ, part 3 of 7: CD_cw, CD_vol, CD_flush. */
 #include "bios_internal.h"
 
 /* Separate captures preserve stock-compiler argument lifetimes. */
@@ -102,7 +102,6 @@ int CD_cw(int command, void *parameters, u8 *result, int mode)
     return status;
   }
 }
-
 
 int CD_vol(CdlATV *vol) {
     *g_CdRegIndexBase = 2;

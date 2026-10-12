@@ -1,10 +1,10 @@
 /* ASSEMBLER: GNU */
 /* CC1_FLAGS: -fno-expensive-optimizations */
-/* Psy-Q LIBCD BIOS.OBJ: CD_init. */
+/* Psy-Q LIBCD BIOS.OBJ, part 5 of 7: CD_init. */
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_bios.h"
 
-#include "CD_init_externs.h"
+#include "bios_5_externs.h"
 
 int CD_init(void) {
     const int zero = 0;
