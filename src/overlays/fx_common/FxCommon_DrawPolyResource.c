@@ -55,7 +55,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
     var_fp = (FxCommonTexturedQuad *)(((u8 *)var_t8) + resourceOffset);
     resourceOffset = var_t8->offsets[7];
     ((volatile FxCommonRenderScratchpad *)0x1F800000)->depthBias = initialDepthBias;
-    asm volatile("" : : "r"(resourceOffset), "r"(initialDepthBias));
+    asm volatile("" : : "r"(initialDepthBias));
     gt4Slot.cursor = (FxCommonColoredTexturedQuad *)(((u8 *)var_t8) + resourceOffset);
     (void)&gt3Slot.cursor;
     (void)&gt4Slot.cursor;
