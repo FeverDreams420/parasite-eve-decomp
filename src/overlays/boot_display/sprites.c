@@ -1,4 +1,208 @@
+#include "common.h"
 #include "pe1/boot_display.h"
+#include "pe1/cdrom_buffers.h"
+
+#include "sprites_externs.h"
+
+void BootDisplay_InitDisplayResources(void) {
+    s16 rect[4];
+    char *resource;
+    s32 offset;
+
+    func_80074A44(1);
+    func_80074BB8(0);
+    func_80074D28(0);
+
+    g_BootDisplayTextScrollX = 0xE000;
+    g_BootDisplayTextScrollStepX = -0x100;
+    g_BootDisplayTransition = 1;
+    rect[2] = 0x3FF;
+    g_BootDisplayStateTimer = 0;
+    rect[0] = 0;
+    rect[1] = 0;
+    rect[3] = 0x1FF;
+    g_BootDisplayBufferIndex ^= 1;
+    ClearImage(rect, 0, 0, 0);
+    func_80074DC0(0);
+
+    resource = D_8012682C;
+    func_800718D0(resource);
+    D_80172C98 = func_800718D0(resource);
+    D_80172C9C = func_800719C4(resource);
+    D_80172C90 = func_80071964(resource);
+    D_80172C94 = func_80071944(resource);
+    g_BootDisplayTPage = GetTPage(0, 0, D_80172C90[0], D_80172C90[1]);
+    g_BootDisplayClut = GetClut(D_80172C94[0], D_80172C94[1]);
+    func_8010BE3C(0);
+    offset = 0x43000;
+    func_8010BD4C(D_80011610 + (((D_80093168 - D_80093166) << 11) + offset));
+    func_80074D28(1);
+}
+
+void BootDisplay_SelectFrameBuffers(void) {
+    register s32 orderingOffset asm("$4");
+    s32 primitiveOffset;
+    register s32 sectorOffset;
+    if (g_ActiveDrawSlot != 0) {
+        orderingOffset = 0x581E0;
+        primitiveOffset = 0x560D0;
+        sectorOffset = (D_80093168 - D_80093166) << 11;
+    } else {
+        orderingOffset = 0x581A0;
+        primitiveOffset = 0x54000;
+        sectorOffset = (D_80093168 - D_80093166) << 11;
+    }
+    orderingOffset = sectorOffset + orderingOffset;
+
+    {
+        register u8 *base asm("$3") = D_80011610;
+        register u8 *orderingBuffer;
+        sectorOffset += primitiveOffset;
+        orderingBuffer = base + orderingOffset;
+        base = base + sectorOffset;
+        g_BootDisplayOrderingTable = orderingBuffer;
+        g_BootDisplayPrimitiveCursor = base;
+    }
+    func_800752AC(g_BootDisplayOrderingTable, 16);
+}
+
+void BootDisplay_DisplayNoOp(void) {
+}
+
+void BootDisplay_StepImageSprite(void) {
+    BootDisplaySpritePacket *packet = (BootDisplaySpritePacket *)g_BootDisplayPrimitiveCursor;
+    u16 tpage;
+    s16 rect[4];
+    tpage = GetTPage(2, 0, g_BootDisplayImageBuffers[g_BootDisplayBufferIndex].x, g_BootDisplayImageBuffers[g_BootDisplayBufferIndex].y);
+    SetDrawTPage(packet, 0, 0, tpage);
+    /* PsyQ packet length occupies the high byte of its ordering-table tag. */
+    ((u8 *)&packet->sprite.tag)[3] = 4;
+    packet->sprite.code = 0x64;
+    func_80077CB4(packet, &packet->sprite);
+    switch ((u16)g_BootDisplayStateTimer & 3) {
+    case 0: packet->sprite.x0 = 160; packet->sprite.y0 = 0; break;
+    case 1: packet->sprite.x0 = 0; packet->sprite.y0 = 0; break;
+    case 2: packet->sprite.x0 = 160; packet->sprite.y0 = 105; break;
+    case 3: packet->sprite.x0 = 0; packet->sprite.y0 = 105; break;
+    }
+    packet->sprite.u0 = 0;
+    packet->sprite.v0 = 0;
+    packet->sprite.r0 = D_80172CD8;
+    packet->sprite.g0 = D_80172CD8;
+    packet->sprite.b0 = D_80172CD8;
+    packet->sprite.w = 160;
+    packet->sprite.h = 120;
+    if (g_BootDisplayTransition == 0) {
+        s32 brightness = D_80172CD8 + 4;
+        D_80172CD8 = brightness;
+        if (brightness >= 128) {
+            D_80172CD8 = 128;
+            g_BootDisplayTransition = 1;
+        }
+    } else if (g_BootDisplayTransition == 2) {
+        s32 brightness = D_80172CD8 - 4;
+        D_80172CD8 = brightness;
+        if (brightness <= 0) {
+            D_80172CD8 = 0;
+            g_BootDisplayTransition = 1;
+        }
+    }
+    func_80077AC4(g_BootDisplayOrderingTable + 56, packet);
+    g_BootDisplayPrimitiveCursor += sizeof(*packet);
+    switch (g_BootDisplayState) {
+    case 0: {
+        s32 offset;
+        s32 startOffset;
+        s32 endOffset;
+        char *base;
+
+        func_8010C86C(func_8010BF94(D_80125BA4[(u16)g_BootDisplayStateTimer]) >> 2);
+        startOffset = 0x38800;
+        endOffset = 0x43000;
+        offset = (D_80093168 - D_80093166) * 2048;
+        base = D_80011610;
+        startOffset += offset;
+        func_8010C89C(D_80125BA4[(u16)g_BootDisplayStateTimer], base + startOffset, base + (offset + endOffset));
+        g_BootDisplayState = 1;
+        break;
+    }
+    case 1: {
+        s32 offset;
+        offset = (D_80093168 - D_80093166) * 2048;
+        if (func_8010C89C(0, 0, D_80011610 + (offset + 0x43000)) == 0) {
+            g_BootDisplayState = 2;
+            g_BootDisplayTransferProgress = 0;
+        }
+        break;
+    }
+    case 2: {
+        s32 offset;
+        offset = (D_80093168 - D_80093166) * 2048;
+        g_BootDisplayTransferCursor = D_80011610 + offset;
+        func_8010BFA0(D_80011610 + (offset + 0x38800), 0);
+        func_8010C01C(g_BootDisplayTransferCursor, 0x2800);
+        g_BootDisplayState = 3;
+        break;
+    }
+    case 3:
+        if (func_8010C078(1) == 0) {
+            g_BootDisplayState = 4;
+            g_BootDisplayTransferProgress = g_BootDisplayImageBuffers[g_BootDisplayBufferIndex].transferX;
+        }
+        break;
+    case 4:
+        if ((u16)g_BootDisplayTransferProgress < g_BootDisplayImageBuffers[g_BootDisplayBufferIndex].transferX + 160) {
+            rect[0] = g_BootDisplayTransferProgress;
+            rect[1] = g_BootDisplayImageBuffers[g_BootDisplayBufferIndex].transferY;
+            rect[2] = 16;
+            rect[3] = 128;
+            LoadImage(rect, g_BootDisplayTransferCursor);
+            g_BootDisplayTransferCursor += 0x1000;
+            g_BootDisplayTransferProgress += 16;
+        } else g_BootDisplayState = 5;
+        break;
+    case 5: {
+        register u32 frame asm("$2") = g_BootDisplayFrameCounter;
+        u32 divisor = 450;
+        u32 phase;
+        register u32 threshold asm("$2");
+        /* Preserve retail hardware division rather than reciprocal multiplication. */
+        asm("" : "=r"(divisor) : "0"(divisor));
+        phase = frame % divisor;
+        threshold = divisor - 93;
+        if (phase == threshold) g_BootDisplayTransition = 2;
+        if (phase == 0) {
+            g_BootDisplayState = 6;
+            g_BootDisplayTransition = 0;
+        }
+        break;
+    }
+    case 6: {
+        u16 timer = (u16)g_BootDisplayStateTimer + 1;
+        g_BootDisplayStateTimer = timer;
+        if (timer < 30) {
+            g_BootDisplayState = 0;
+        } else {
+            g_BootDisplayState = 7;
+        }
+        g_BootDisplayTransition = 0;
+        g_BootDisplayBufferIndex ^= 1;
+        break;
+    }
+    case 7: {
+        register u32 frame asm("$2") = g_BootDisplayFrameCounter;
+        u32 divisor = 450;
+        u32 phase;
+        register u32 threshold asm("$2");
+        /* Preserve retail hardware division rather than reciprocal multiplication. */
+        asm("" : "=r"(divisor) : "0"(divisor));
+        phase = frame % divisor;
+        threshold = divisor - 93;
+        if (phase == threshold) g_BootDisplayTransition = 2;
+        break;
+    }
+    }
+}
 
 void BootDisplay_QueueTintedSprite(u16 x, u16 y, u8 color) {
     char *primitive = g_BootDisplayPrimitiveCursor;
@@ -30,7 +234,7 @@ void BootDisplay_InitSprite16(BootDisplaySpritePacket *primitive, s16 x, s16 y,
     packet->sprite.clut = g_BootDisplayClut;
 }
 
-void func_80124604(s32 color) {
+void func_80124704(s32 color) {
     BootDisplaySpritePacket *primitive = (BootDisplaySpritePacket *)g_BootDisplayPrimitiveCursor;
 
     SetDrawTPage(&primitive->draw_mode, 0, 0, g_BootDisplayTPage);
@@ -53,7 +257,7 @@ void func_80124604(s32 color) {
     g_BootDisplayPrimitiveCursor += 0x1C;
 }
 
-void func_801246F4(void) {
+void func_801247F4(void) {
     func_80074DC0(0);
     func_80073A44(2);
     func_80074A44(1);
@@ -61,62 +265,4 @@ void func_801246F4(void) {
     func_800754E4(g_BootDisplayOrderingTable + 0x3C,
                   &D_800BCDC8[g_ActiveDrawSlot]);
     g_ActiveDrawSlot ^= 1;
-}
-
-void BootDisplay_InitDisplayBuffers(void) {
-    s16 rect[4];
-    u16 line;
-    /* Keep the original buffer offset in v0 across both address calculations. */
-    register s32 delta asm("$2");
-    char *base;
-    char *start;
-    char *end;
-    s32 offset;
-    u16 *screenY;
-    void *resource;
-
-    func_80074A44(1);
-    func_80074BB8(0);
-    func_80074D28(0);
-
-    screenY = &D_80093168;
-    g_BootDisplayTextScrollX = 0xE000;
-    g_BootDisplayTextScrollStepX = -0x100;
-    rect[0] = 0;
-    rect[1] = 0;
-    rect[2] = 0x3FF;
-    rect[3] = 0x1FF;
-    g_BootDisplayBufferIndex = 0;
-    g_BootDisplayState = 0;
-    g_BootDisplayTransferProgress = 0;
-    g_BootDisplayStateTimer = 0;
-    g_BootDisplayStateTimer = 0;
-
-    line = *screenY;
-    base = D_80011610;
-    delta = (line - D_80093166) << 11;
-    start = base + delta;
-    delta += 0x54000;
-    end = D_80011610 + delta;
-    D_80125B88[0] = start;
-    D_80125B90 = end;
-    D_80125B98 = end;
-    D_80125BA0 = start;
-    ClearImage(rect, 0, 0, 0);
-    func_80074DC0(0);
-    func_8010BE3C(0);
-    offset = 0x43000;
-    func_8010BD4C(((*screenY - D_80093166) << 11) + offset + D_80011610);
-
-    resource = D_8012682C;
-    D_80172C98 = func_80071994(resource);
-    D_80172C9C = func_800719C4(resource);
-    D_80172C90 = func_80071964(resource);
-    D_80172C94 = func_80071944(resource);
-    g_BootDisplayTPage = GetTPage(0, 0, D_80172C90[0], D_80172C90[1]);
-    g_BootDisplayClut = GetClut(D_80172C94[0], D_80172C94[1]);
-    func_80124F40(0);
-    func_80124F40(1);
-    PutDispEnv(&D_800BCE80[g_ActiveDrawSlot]);
-    func_80074D28(1);
 }

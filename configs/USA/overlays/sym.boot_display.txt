@@ -18,5 +18,5 @@ g_BootDisplayCallbacks = 0x80172CD0;
 g_BootDisplayFrameCounter = 0x80172CD4;
 
 g_BootDisplayLowercaseWidths = 0x80125A9C;
-BootDisplay_SetCdFilter = 0x80125794; // type:func
-BootDisplay_RecordReadPosition = 0x801259F0; // type:func
+BootDisplay_SetCdFilter = 0x80125894; // type:func
+BootDisplay_RecordReadPosition = 0x80125AF0; // type:func

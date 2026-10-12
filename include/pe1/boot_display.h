@@ -107,7 +107,7 @@ void func_80077CB4(void *primitive, void *next);
 void func_80074A44(s32 value);
 s32 func_80073A44(s32 value);
 void func_800870F0(s32 value);
-void func_801258EC(s32, s32);
+int func_801258EC(int command, int parameter);
 s32 func_8007EE84(s32, void *, void *, s32);
 s32 func_8007F418(s32, void *);
 void func_800824C8(s32 (*)(u8));

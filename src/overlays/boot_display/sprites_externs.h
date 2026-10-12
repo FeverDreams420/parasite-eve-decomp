@@ -1,8 +1,10 @@
-#ifndef PE1_EXT_2DF1E7C45960
-#define PE1_EXT_2DF1E7C45960
+#ifndef PE1_EXT_SPRITES
+#define PE1_EXT_SPRITES
+extern s32 g_ActiveDrawSlot __asm__("D_8009CDDC");
+extern u16 D_80093168;
+extern void func_800752AC(void *, s32);
 extern void *D_80125BA4[];
-extern u32 D_8009D26C;
-extern u32 D_8009D1F4;
+extern s32 D_80172CD8;
 extern u32 g_BootDisplayFrameCounter;
 extern char *g_BootDisplayTransferCursor;
 extern u32 func_8010BF94(void *);
@@ -11,4 +13,4 @@ extern s32 func_8010C89C(void *, void *, void *);
 extern void func_8010BFA0(void *, s32);
 extern void func_8010C01C(void *, s32);
 extern s32 func_8010C078(s32);
-#endif /* PE1_EXT_2DF1E7C45960 */
+#endif /* PE1_EXT_SPRITES */
