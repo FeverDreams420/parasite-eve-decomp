@@ -163,7 +163,7 @@ segments:
       # Task-node, point-motion, and camera tracking share the active entity cache.
       - [0x39E8, c, script/Task_NodeActions]
       # Field-actor query and distance routines share their actor globals.
-      - [0x4A28, c, entity/Entity_QueryAndDistance]
+      - [0x4A28, c, script/Entity_QueryAndDistance]
       # -G8 opcodes: memory-card init step, position by actor type, relative
       # camera offset tracking and camera angle fade.
       - [0x4CFC, c, script/Task_MemCardPositionCameraOps]
@@ -189,7 +189,7 @@ segments:
       # -G8 opcodes: current-node active/free, jump-if-zero, spawn, assign and
       # stop-anim; g_CurrentEntity stays absolute through the array declaration.
       - [0x7AE0, c, script/Task_NodeAndFlowOpcodes]
-      - [0x7C44, c, entity/Entity_ComputeVelocityToTarget]
+      - [0x7C44, c, script/Entity_ComputeVelocityToTarget]
       # -G8 opcodes: movement wait, field-setter selection, actor flags, node
       # id, random range, field sfx, node table lookups, actor byte fields and
       # node free; g_CurrentEntity stays absolute through the array declaration.
@@ -203,14 +203,14 @@ segments:
       # global flags and battle mode, field get/set by type and battle flags.
       - [0x83B4, c, script/Task_StateAndFlagOpcodes]
       # Task-node animation scheduling and the current-actor event command.
-      - [0x8B00, c, entity/Entity_TaskAnimationOps]
+      - [0x8B00, c, script/Entity_TaskAnimationOps]
       # Motion, system, process-manager and object-entry opcodes: contiguous
       # default-profile handlers between Entity_TaskAnimationOps and the -G8
       # Task_DrawYield.
       - [0x8D6C, c, script/Task_SystemCommandOps]
       - [0x97DC, c, script/Task_DrawYield]
       # Animation rate, attachment and actor-control opcodes share FieldActor.
-      - [0x98AC, c, entity/Entity_AttachmentAndControl]
+      - [0x98AC, c, script/Entity_AttachmentAndControl]
       # -G8 opcodes: loading yield, anim scale, menu clamp, item give/count and
       # the timed equip-swap init.
       - [0x9C10, c, script/Task_LoadWaitAndItemOps]
@@ -224,16 +224,16 @@ segments:
       # G0199..G0215 have no split evidence between them).
       - [0xA404, c, script/Task_SceneCommandOps]
       # Animation advancement and action selection share per-model action tables.
-      - [0xACAC, c, entity/Entity_AnimationState]
+      - [0xACAC, c, field/Entity_AnimationState]
       # Collision-state reset and database relocation share the collision table globals (G0227).
-      - [0xB090, c, entity/Entity_CollisionDatabase]
-      - [0xB1F8, c, entity/Entity_UpdateList]
+      - [0xB090, c, field/Entity_CollisionDatabase]
+      - [0xB1F8, c, field/Entity_UpdateList]
       # Actor floor lookup, boundary clipping, ramp sliding and polygon
       # containment share collision state and PolygonVertex (G0227).
       - [0xB278, c, field/Geo_ActorFloorResolution]
       # Wall sliding, nearest-edge testing and collision response share state.
       - [0xD3A0, c, field/Entity_ApplyCollisionResponse]
-      - [0xDA68, c, entity/Entity_CheckActionIdMatch]
+      - [0xDA68, c, field/Entity_CheckActionIdMatch]
       - [0xDB40, c, battle/Menu_MainUpdate]
       # Drop-table resolution and hit application share the active-actor helpers (G0232).
       - [0xFCD4, c, battle/Entity_HitAndDropTable]
@@ -307,7 +307,7 @@ segments:
       - [0x255E0, c, menu/Menu_SaveOverlayDraw]
       # Pool reset and free-list setup share the entity pool globals and record block.
       - [0x25710, c, entity/Entity_PoolInit]
-      - [0x25838, c, scene/Scene_LoadMap]
+      - [0x25838, c, entity/Scene_LoadMap]
       # Per-frame entity driver and the actor list passes it runs: position integration, rollback, parent following, garbage collection, callbacks and animation sequences (G0296).
       - [0x25D58, c, entity/Entity_FrameUpdate]
       # Scratch block allocator and the actor position/contact pass that closes the entity frame module.
