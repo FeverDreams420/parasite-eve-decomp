@@ -11,7 +11,7 @@ int func_8019258C(void) {
 }
 
 s32 func_80192594(SceneGrabTrigger *obj) {
-    obj->control.callback = SceneEffect_GrabAwaitStance;
+    obj->control.callback = RoomLib_GrabAwaitStance;
     obj->control.started = 0;
     obj->control.grabbed = 0;
     obj->flag3 = 0xFF;

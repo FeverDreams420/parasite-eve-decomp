@@ -14,7 +14,7 @@
 #include "pe1/pe_image.h"
 
 /* The orbit effect set linked by room_m186, m187, m385, m388 and m389
- * (src/overlays/room_lib/RoomFx_OrbitEffectSet.c): eight orbiting
+ * (src/overlays/room_lib/RoomEffect_OrbitEffectSet.c): eight orbiting
  * particles, a burst of eight falling sprites with floor shadows and one
  * drifting sprite, sharing four sprite records the set's init fills. */
 
@@ -38,7 +38,7 @@ extern RoomFxSpritePacket g_RoomOrbitParticlePacket;
 extern RoomFxSpritePacket g_RoomOrbitBurstPacket;
 extern RoomFxSpritePacket g_RoomOrbitShadowPacket;
 
-/* The set's module class (RoomFx_OrbitSetClass.c), in class-table slot
+/* The set's module class (RoomEffect_OrbitSetClass.c), in class-table slot
  * order, and the script and lists it hands the field engine, named in each
  * room's symbol file. */
 extern int g_RoomOrbitSetScript[];
@@ -47,13 +47,13 @@ extern RoomModuleHandler g_RoomOrbitSetUpdateList[];
 extern RoomModuleHandler g_RoomOrbitSetInitList[];
 extern int g_RoomOrbitSetSpawnLayout[];
 
-int RoomFx_OrbitSetNop0(void);
-int RoomFx_OrbitSetPlantScript(void *object);
-int RoomFx_OrbitSetSpawn6(int a, int b, int c, int d, int e, int f);
-int RoomFx_OrbitSetRegister(void *o);
-int RoomFx_OrbitSetStart(void *o);
-int RoomFx_OrbitSetClose(struct RoomEnt *o);
-int RoomFx_OrbitSetNop6(void);
+int RoomEffect_OrbitSetNop0(void);
+int RoomEffect_OrbitSetPlantScript(void *object);
+int RoomEffect_OrbitSetSpawn6(int a, int b, int c, int d, int e, int f);
+int RoomEffect_OrbitSetRegister(void *o);
+int RoomEffect_OrbitSetStart(void *o);
+int RoomEffect_OrbitSetClose(struct RoomEnt *o);
+int RoomEffect_OrbitSetNop6(void);
 
 /* The frame counter at 0x800942EC, read as the floor height. */
 

@@ -1,6 +1,6 @@
 /*
  * The drop field effect set's module class: the seven methods the class
- * table lists in front of the set (RoomFx_DropFieldEffects.c). The
+ * table lists in front of the set (RoomEffect_DropFieldEffects.c). The
  * registration method clears the target's 0x40000000 flag before it
  * registers the draw list, and both it and the start method act only while
  * the field engine runs the object (status 3).
@@ -12,13 +12,13 @@
 #include "room_lib.h"
 #include "pe1/room_drop_field_class.h"
 
-ROOMLIB_RETURN_ZERO(RoomFx_DropFieldNop0)
+ROOMLIB_RETURN_ZERO(RoomEffect_DropFieldNop0)
 
-ROOMLIB_PLANT_TABLE(RoomFx_DropFieldPlantScript, g_RoomDropFieldScript)
+ROOMLIB_PLANT_TABLE(RoomEffect_DropFieldPlantScript, g_RoomDropFieldScript)
 
-ROOMLIB_SPAWN6(RoomFx_DropFieldSpawn6)
+ROOMLIB_SPAWN6(RoomEffect_DropFieldSpawn6)
 
-int RoomFx_DropFieldRegister(RoomEnt *o) {
+int RoomEffect_DropFieldRegister(RoomEnt *o) {
     RoomRenderNode *target;
 
     if (FieldFx_GetStatus(o) == 3) {
@@ -29,10 +29,10 @@ int RoomFx_DropFieldRegister(RoomEnt *o) {
     return 0;
 }
 
-ROOMLIB_START_AT3(RoomFx_DropFieldStart, g_RoomDropFieldUpdateList,
+ROOMLIB_START_AT3(RoomEffect_DropFieldStart, g_RoomDropFieldUpdateList,
                   g_RoomDropFieldSpawnData, g_RoomDropFieldSpawnScript,
-                  RoomFx_DropFieldClose)
+                  RoomEffect_DropFieldClose)
 
-ROOMLIB_CLOSE_TARGET(RoomFx_DropFieldClose)
+ROOMLIB_CLOSE_TARGET(RoomEffect_DropFieldClose)
 
-ROOMLIB_RETURN_ZERO(RoomFx_DropFieldNop6)
+ROOMLIB_RETURN_ZERO(RoomEffect_DropFieldNop6)

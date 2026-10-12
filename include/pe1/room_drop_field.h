@@ -15,7 +15,7 @@
 #include "pe1/field_engine_calls.h"
 
 /* The drop field effect set linked by room_m174, room_m348 and room_m383
- * (src/overlays/room_lib/RoomFx_DropFieldEffects.c): a controller and
+ * (src/overlays/room_lib/RoomEffect_DropFieldEffects.c): a controller and
  * twelve init/draw/update triples, among them the drop field, a beam pair,
  * a ring pair, staged motion and eight particles. */
 

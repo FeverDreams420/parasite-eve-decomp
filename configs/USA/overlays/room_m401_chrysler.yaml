@@ -36,7 +36,7 @@ segments:
     subsegments:
       - [0x0, rodata, room_m401_chrysler]
       - [0xC, .rodata, ../room_lib/RoomLib_ThreeTransformParticles]
-      - [0x14, .rodata, ../room_lib/RoomFx_FallingSpriteBurst]
+      - [0x14, .rodata, ../room_lib/RoomEffect_FallingSpriteBurst]
       - [0x4C, .rodata, ../room_lib/RoomLib_ActorClasses]
       - [0x224, .rodata, ../room_lib/RoomLib_TimedSpawn]
       - [0x22C, c, ../room_lib/RoomLib_ThreeParticleClass]
@@ -48,7 +48,7 @@ segments:
       - [0x12D0, c, ../room_lib/RoomLib_RegisterPairedTables]
       - [0x135C, c, ../room_lib/RoomLib_CloseTarget]
       - [0x13E0, c, ../room_lib/RoomLib_ClassNop6]
-      - [0x13E8, c, ../room_lib/RoomFx_FallingSpriteBurst]
+      - [0x13E8, c, ../room_lib/RoomEffect_FallingSpriteBurst]
       - [0x2344, c, ../room_lib/RoomLib_ActorClasses]
       - [0x5660, c, ../room_lib/RoomLib_FloorWalkerClass]
       - [0x5E50, c, ../room_lib/RoomLib_TimedSpawn]

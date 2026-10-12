@@ -23,10 +23,10 @@
 #include "pe1/room_floor.h"
 
 
-#include "RoomFx_MotionParticles_3_externs.h"
+#include "RoomEffect_MotionParticles_3_externs.h"
 
 
-void RoomFx_UpdateParticleMotion(int arg0, RoomStatePair *control, RoomMotionState *state) {
+void RoomEffect_UpdateParticleMotion(int arg0, RoomStatePair *control, RoomMotionState *state) {
     unsigned int i;
     RoomStatePair *controlReg = control;
     RoomMotionState *stateReg = state;
@@ -113,7 +113,7 @@ typedef struct RoomParticlePairOwner {
     u8 page;                      /* 0x6C */
 } RoomParticlePairOwner;
 
-void RoomFx_InitParticleRenderPair(
+void RoomEffect_InitParticleRenderPair(
     void *owner, void *unused, RoomParticleRenderPairState *state) {
     RoomSpriteMatrix secondMatrix;
     RoomSpriteMatrix firstMatrix;
@@ -161,9 +161,9 @@ void RoomFx_InitParticleRenderPair(
     func_800C66C8(callOwner, 0x576, &firstMatrix);
 }
 
-#include "RoomFx_MotionParticles_3_externs_1.h"
+#include "RoomEffect_MotionParticles_3_externs_1.h"
 
-void RoomFx_DrawParticleRenderPair(void *arg0, void *arg1, char *sys) {
+void RoomEffect_DrawParticleRenderPair(void *arg0, void *arg1, char *sys) {
     char *sysp = sys;
     RoomParticlePairOwner *root;
 
@@ -176,9 +176,9 @@ void RoomFx_DrawParticleRenderPair(void *arg0, void *arg1, char *sys) {
     func_800C5A40(sysp + 0x78);
 }
 
-#include "RoomFx_MotionParticles_3_externs_2.h"
+#include "RoomEffect_MotionParticles_3_externs_2.h"
 
-void RoomFx_UpdateParticleRenderPair(void *arg0, char *state, char *sys) {
+void RoomEffect_UpdateParticleRenderPair(void *arg0, char *state, char *sys) {
     char *statep = state;
     char *sysp = sys;
     int *resultp;

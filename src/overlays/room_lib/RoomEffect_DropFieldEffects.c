@@ -36,7 +36,7 @@ static const GteShortVector s_EightParticleStepLeft = { -0xA, 0, 0, 0 };
 
 
 
-void RoomFx_DropFieldInit(RoomDropFieldEntity *ent, void *unused, RoomDropFieldState *state) {
+void RoomEffect_DropFieldInit(RoomDropFieldEntity *ent, void *unused, RoomDropFieldState *state) {
     RoomDropFieldLink *link;
     RoomDropFieldMatrixWords *matrix;
 
@@ -115,14 +115,14 @@ void RoomFx_DropFieldInit(RoomDropFieldEntity *ent, void *unused, RoomDropFieldS
 
 
 
-void RoomFx_DropFieldNop(void) {
+void RoomEffect_DropFieldNop(void) {
 }
 
 
 
 
 
-void RoomFx_DropFieldTick(int arg0, char* arg1, char* arg2) {
+void RoomEffect_DropFieldTick(int arg0, char* arg1, char* arg2) {
     RoomDropFieldState *state = (RoomDropFieldState *)arg2;
 
     if (state->holdTimer != 0) {
@@ -147,18 +147,18 @@ void RoomFx_DropFieldTick(int arg0, char* arg1, char* arg2) {
 
 
 
-void RoomFx_InitStageSpawn(void) {
+void RoomEffect_InitStageSpawn(void) {
 }
 
 
 
 
-void RoomFx_DrawStageSpawn(void) {
+void RoomEffect_DrawStageSpawn(void) {
 }
 
 
 
-void RoomFx_UpdateStageSpawn(void *effect, RoomDropSlot *state, RoomFxSeed8 *seed) {
+void RoomEffect_UpdateStageSpawn(void *effect, RoomDropSlot *state, RoomFxSeed8 *seed) {
     RoomDropFieldState *owner = func_800C2B50();
     char *slot;
 
@@ -219,7 +219,7 @@ void RoomFx_UpdateStageSpawn(void *effect, RoomDropSlot *state, RoomFxSeed8 *see
 
 
 
-void RoomFx_InitSpinSprite(void* arg0, void* arg1, RoomDropFieldSprite *sprite) {
+void RoomEffect_InitSpinSprite(void* arg0, void* arg1, RoomDropFieldSprite *sprite) {
     sprite->scale = 0x1418;
     sprite->depth = 0xFF;
     sprite->rotation.x = 0;
@@ -234,7 +234,7 @@ void RoomFx_InitSpinSprite(void* arg0, void* arg1, RoomDropFieldSprite *sprite) 
 
 
 
-void RoomFx_DrawSpinSprite(s32 arg0, s32 arg1, RoomDropFieldSprite *sprite) {
+void RoomEffect_DrawSpinSprite(s32 arg0, s32 arg1, RoomDropFieldSprite *sprite) {
     RoomDropFieldSpinFrame stack;
     s16 *ptr;
 
@@ -268,7 +268,7 @@ void RoomFx_DrawSpinSprite(s32 arg0, s32 arg1, RoomDropFieldSprite *sprite) {
 
 
 
-void RoomFx_UpdateSpinSprite(s32 arg0, RoomDropSlot *slot, RoomDropFieldSprite *sprite) {
+void RoomEffect_UpdateSpinSprite(s32 arg0, RoomDropSlot *slot, RoomDropFieldSprite *sprite) {
     RoomDropFieldSprite *obj = sprite;
     u16 value;
 
@@ -295,7 +295,7 @@ void RoomFx_UpdateSpinSprite(s32 arg0, RoomDropSlot *slot, RoomDropFieldSprite *
 
 
 
-void RoomFx_InitDoubleSprite(void* arg0, void* arg1, RoomDropFieldSprite *sprite) {
+void RoomEffect_InitDoubleSprite(void* arg0, void* arg1, RoomDropFieldSprite *sprite) {
     sprite->scale = 0xAD4;
     sprite->depth = 0xFF;
     sprite->rotation.x = 0;
@@ -309,7 +309,7 @@ void RoomFx_InitDoubleSprite(void* arg0, void* arg1, RoomDropFieldSprite *sprite
 #define ROOM_SPRITE_GLOBALS ((RoomDoubleSpriteGlobals *)&g_RoomDropFieldDoubleSprite.code)
 
 
-void RoomFx_DrawDoubleSprite(void *arg0, void *arg1, RoomDoubleSpriteFxParams *fx) {
+void RoomEffect_DrawDoubleSprite(void *arg0, void *arg1, RoomDoubleSpriteFxParams *fx) {
     RoomSpriteMatrix matrix;
     RoomFxSeed8 seed;
     RoomFxVec4 scratch;
@@ -359,7 +359,7 @@ void RoomFx_DrawDoubleSprite(void *arg0, void *arg1, RoomDoubleSpriteFxParams *f
 
 
 
-void RoomFx_UpdateDoubleSprite(int arg0, RoomDropSlot *slot, RoomDropFieldSprite *sprite) {
+void RoomEffect_UpdateDoubleSprite(int arg0, RoomDropSlot *slot, RoomDropFieldSprite *sprite) {
     u16 value;
 
     sprite->scale = sprite->scale + 0xC8;
@@ -379,7 +379,7 @@ void RoomFx_UpdateDoubleSprite(int arg0, RoomDropSlot *slot, RoomDropFieldSprite
 
 
 
-void RoomFx_InitRingPair(int unused0, int unused1,
+void RoomEffect_InitRingPair(int unused0, int unused1,
                                   RoomRingPairState *bounds) {
     s16 *anchor;
     char *source;
@@ -451,7 +451,7 @@ void RoomFx_InitRingPair(int unused0, int unused1,
 
 
 
-void RoomFx_DrawRingPair(void *unused0, void *unused1,
+void RoomEffect_DrawRingPair(void *unused0, void *unused1,
                               RoomRingPairState *fx) {
     RoomSpriteMatrix matrix;
     RoomFxSeed8 seed0;
@@ -507,7 +507,7 @@ void RoomFx_DrawRingPair(void *unused0, void *unused1,
 
 
 
-void RoomFx_UpdateRingPair(void *unused, u8 *signal, RoomRingPairState *state) {
+void RoomEffect_UpdateRingPair(void *unused, u8 *signal, RoomRingPairState *state) {
     u16 scale;
     u16 secondaryScale;
     u16 step;
@@ -530,7 +530,7 @@ void RoomFx_UpdateRingPair(void *unused, u8 *signal, RoomRingPairState *state) {
 
 
 
-void RoomFx_InitStagedMotion(void *unused0, void *unused1, RoomStagedMotionState *state) {
+void RoomEffect_InitStagedMotion(void *unused0, void *unused1, RoomStagedMotionState *state) {
     RoomDropFieldState *owner;
     unsigned int i;
 
@@ -586,7 +586,7 @@ typedef struct RoomStagedMotionPacket {
  * sprite 200 units up, and every kind >= 2 draws the model scaled by the
  * stage. The loop entry test is written as the counter compare so the
  * retail frame keeps its spare 8-byte slot. */
-void RoomFx_DrawStagedMotion(void *unused,
+void RoomEffect_DrawStagedMotion(void *unused,
                                      RoomStagedMotionEmitter *emitter,
                                      RoomStagedMotionState *state)
 {
@@ -740,7 +740,7 @@ typedef GteShortVector RoomStagedMotionPoint;
  * fade their depth. Any live record within 200 units flags the owner. The
  * for loop keeps the entry compare on the counter so the retail frame keeps
  * its spare 8-byte slot and the counter wins $s6. */
-void RoomFx_UpdateStagedMotion(void *entity,
+void RoomEffect_UpdateStagedMotion(void *entity,
                                        RoomStagedMotionControl *control,
                                        RoomStagedMotionState *state)
 {
@@ -832,7 +832,7 @@ void RoomFx_UpdateStagedMotion(void *entity,
 
 
 
-void RoomFx_InitModelSprite(int a, int b, RoomDropFieldSprite *sprite) {
+void RoomEffect_InitModelSprite(int a, int b, RoomDropFieldSprite *sprite) {
     sprite->scale = 0xB20;
     sprite->rotation.x = 0;
     sprite->rotation.y = 0;
@@ -847,7 +847,7 @@ void RoomFx_InitModelSprite(int a, int b, RoomDropFieldSprite *sprite) {
 
 
 
-void RoomFx_DrawModelSprite(s32 arg0, s32 arg1, RoomDropFieldSprite *sprite) {
+void RoomEffect_DrawModelSprite(s32 arg0, s32 arg1, RoomDropFieldSprite *sprite) {
     RoomDropFieldSpinFrame stack;
     s16 *ptr;
 
@@ -881,7 +881,7 @@ void RoomFx_DrawModelSprite(s32 arg0, s32 arg1, RoomDropFieldSprite *sprite) {
 
 
 
-void RoomFx_UpdateModelSprite(void *arg0, RoomDropSlot *slot, RoomDropFieldSprite *sprite) {
+void RoomEffect_UpdateModelSprite(void *arg0, RoomDropSlot *slot, RoomDropFieldSprite *sprite) {
     sprite->depth -= 8;
     sprite->scale += 0x1E;
     sprite->y -= 0xF;
@@ -895,19 +895,19 @@ void RoomFx_UpdateModelSprite(void *arg0, RoomDropSlot *slot, RoomDropFieldSprit
 
 
 
-void RoomFx_InitIdleSlot(void) {
+void RoomEffect_InitIdleSlot(void) {
 }
 
 
 
 
-void RoomFx_DrawIdleSlot(void) {
+void RoomEffect_DrawIdleSlot(void) {
 }
 
 
 
 
-void RoomFx_UpdateIdleSlot(void) {
+void RoomEffect_UpdateIdleSlot(void) {
 }
 
 
@@ -915,7 +915,7 @@ void RoomFx_UpdateIdleSlot(void) {
 
 /* Lays out the sixteen drops in a column above the anchor and starts their
  * sound. */
-void RoomFx_InitDropField(s32 arg0, s32 arg1, RoomDropFieldDrops *state) {
+void RoomEffect_InitDropField(s32 arg0, s32 arg1, RoomDropFieldDrops *state) {
     RoomDropFieldState *src;
     u32 i;
 
@@ -947,7 +947,7 @@ void RoomFx_InitDropField(s32 arg0, s32 arg1, RoomDropFieldDrops *state) {
 /* Draw every live drop below the release height: the drop sprite at its
  * world position (retired once it leaves the walkable polygon; touching
  * the player flags the actor) and its shadow on the floor. */
-void RoomFx_DrawDropField(void *object, void *slot, RoomDropField *field) {
+void RoomEffect_DrawDropField(void *object, void *slot, RoomDropField *field) {
     GteMatrix matrix;
     GteMatrix saved;
     GteMatrix turn;
@@ -1027,7 +1027,7 @@ void RoomFx_DrawDropField(void *object, void *slot, RoomDropField *field) {
 /* Sink every drop; when the script step reaches a drop and flag 7 is set,
  * retire it and, for the first one, spawn the splash at its world
  * position (drop offset turned by the field yaw and the field matrix). */
-void RoomFx_UpdateDropField(void *object, RoomDropSlot *slot, RoomDropField *field) {
+void RoomEffect_UpdateDropField(void *object, RoomDropSlot *slot, RoomDropField *field) {
     GteMatrix matrix;
     GteMatrix turn;
     GteShortVector rotation;
@@ -1082,7 +1082,7 @@ void RoomFx_UpdateDropField(void *object, RoomDropSlot *slot, RoomDropField *fie
 
 
 
-void RoomFx_InitBeamPair(void *unused0, void *unused1, void *output_arg) {
+void RoomEffect_InitBeamPair(void *unused0, void *unused1, void *output_arg) {
     RoomBeamPair *beam = output_arg;
     unsigned char *image;
     short *anchor;
@@ -1158,7 +1158,7 @@ void RoomFx_InitBeamPair(void *unused0, void *unused1, void *output_arg) {
 
 /* Draw both beam halves at the script actor's anchor, offset 100 up and
  * 100 back, spun by the room rotation and scaled uniformly. */
-void RoomFx_DrawBeamPair(void *object, void *slot, RoomBeamPair *beam) {
+void RoomEffect_DrawBeamPair(void *object, void *slot, RoomBeamPair *beam) {
     GteMatrix matrix;
     GteMatrix second;
     RoomBeamPairActor **actor = func_800C2B50();
@@ -1196,7 +1196,7 @@ void RoomFx_DrawBeamPair(void *object, void *slot, RoomBeamPair *beam) {
 
 
 
-void RoomFx_UpdateBeamPair(s32 arg0, RoomDropSlot *slot, RoomBeamPair *beam) {
+void RoomEffect_UpdateBeamPair(s32 arg0, RoomDropSlot *slot, RoomBeamPair *beam) {
     RoomBeamPair *obj = beam;
     u16 value;
 
@@ -1221,7 +1221,7 @@ void RoomFx_UpdateBeamPair(s32 arg0, RoomDropSlot *slot, RoomBeamPair *beam) {
 
 
 
-void RoomFx_InitQuadSprites(void *unused0, void *unused1, void *output_arg) {
+void RoomEffect_InitQuadSprites(void *unused0, void *unused1, void *output_arg) {
     RoomFourSpriteState *base = output_arg;
     int index;
     int red;
@@ -1303,7 +1303,7 @@ typedef struct RoomFourSpriteStack {
  * matrix; each sprite reads its position, scale, depth and color from the
  * arrays that follow it. Retail marks this function handwritten; only its
  * COP2 windows remain ASM. */
-void RoomFx_DrawQuadSprites(void *unused0, void *unused1,
+void RoomEffect_DrawQuadSprites(void *unused0, void *unused1,
                                     RoomFourSpriteState *state) {
     RoomFourSpriteStack stack;
     RoomDropFieldState *clock;
@@ -1384,7 +1384,7 @@ void RoomFx_DrawQuadSprites(void *unused0, void *unused1,
 
 
 
-void RoomFx_UpdateQuadSprites(void *unused, RoomDropSlot *slot, RoomFourSpriteState *p) {
+void RoomEffect_UpdateQuadSprites(void *unused, RoomDropSlot *slot, RoomFourSpriteState *p) {
     unsigned int i;
 
     for (i = 0; i < 4; i++) {
@@ -1406,25 +1406,25 @@ void RoomFx_UpdateQuadSprites(void *unused, RoomDropSlot *slot, RoomFourSpriteSt
 
 
 
-void RoomFx_InitIdleSlot2(void) {
+void RoomEffect_InitIdleSlot2(void) {
 }
 
 
 
 
-void RoomFx_DrawIdleSlot2(void) {
+void RoomEffect_DrawIdleSlot2(void) {
 }
 
 
 
 
-void RoomFx_UpdateIdleSlot2(void) {
+void RoomEffect_UpdateIdleSlot2(void) {
 }
 
 
 
 
-void RoomFx_InitEightParticles(void* arg0, void* arg1, RoomEightParticleState *state) {
+void RoomEffect_InitEightParticles(void* arg0, void* arg1, RoomEightParticleState *state) {
     unsigned int i;
 
     state->activeCount = 0;
@@ -1440,7 +1440,7 @@ void RoomFx_InitEightParticles(void* arg0, void* arg1, RoomEightParticleState *s
 
 
 
-void RoomFx_DrawEightParticles(
+void RoomEffect_DrawEightParticles(
     void *unused0, void *unused1, RoomEightParticleState *stateArg) {
     RoomEightParticleState *state;
     unsigned int i;
@@ -1517,7 +1517,7 @@ void RoomFx_DrawEightParticles(
 
 
 
-void RoomFx_UpdateEightParticles(void *unused,
+void RoomEffect_UpdateEightParticles(void *unused,
                                RoomEightParticleControl *control,
                                RoomEightParticleState *stateArg) {
     RoomEightParticleControl *clock;

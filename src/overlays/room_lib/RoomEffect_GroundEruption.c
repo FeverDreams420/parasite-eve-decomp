@@ -429,14 +429,14 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, RoomEruptionRing 
         matrix.t[2] = point->z;
         *packetDepth = (u16)workState->depth;
         code = workState->frame;
-        RoomFx_SpriteControlFromDepth(packetDepth)->code = code * 2 + 0x20;
+        RoomEffect_SpriteControlFromDepth(packetDepth)->code = code * 2 + 0x20;
         func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
         matrix.t[0] = point->x;
         matrix.t[1] = g_RoomFloorY->y;
         matrix.t[2] = point->z;
         *packetDepth = workState->depth >> 2;
         code = workState->frame;
-        RoomFx_SpriteControlFromDepth(packetDepth)->code = code * 2 + 0x20;
+        RoomEffect_SpriteControlFromDepth(packetDepth)->code = code * 2 + 0x20;
         func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
     }
 }

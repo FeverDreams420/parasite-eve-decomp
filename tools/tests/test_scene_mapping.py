@@ -77,11 +77,11 @@ class SceneE01MappingTests(unittest.TestCase):
         self.assertEqual(config["sha1"], "af522483e6c8a6fee3a0c45f0484450e2cfefcf4")
         rows = normalized_rows(segment)
         self.assertEqual(rows[0][1], "rodatabin")
-        self.assertEqual(rows[1], [0xC, ".rodata", "../room_lib/RoomFx_GrabAttackSet"])
-        self.assertEqual(rows[2], [0x70, "c", "../room_lib/RoomFx_GrabAttackSet"])
+        self.assertEqual(rows[1], [0xC, ".rodata", "../room_lib/RoomEffect_GrabAttackSet"])
+        self.assertEqual(rows[2], [0x70, "c", "../room_lib/RoomEffect_GrabAttackSet"])
         self.assertEqual(rows[3][:2], [0x31E0, "data"])
         self.assertTrue(
-            (ROOT / "src/overlays/room_lib/RoomFx_GrabAttackSet.c").is_file())
+            (ROOT / "src/overlays/room_lib/RoomEffect_GrabAttackSet.c").is_file())
         room = yaml.safe_load(
             (ROOT / "configs/USA/overlays/room_m269_warehouse.yaml").read_text())
         room_rows = normalized_rows(room["segments"][0])

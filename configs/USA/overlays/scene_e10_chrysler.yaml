@@ -39,8 +39,8 @@ segments:
         type: rodatabin
         name: scene_e10_header
         dir: scene_e10_chrysler
-      - [0xC, .rodata, ../room_lib/RoomFx_MotionParticles]
-      - [0x14, .rodata, ../room_lib/RoomFx_MotionParticles_2]
+      - [0xC, .rodata, ../room_lib/RoomEffect_MotionParticles]
+      - [0x14, .rodata, ../room_lib/RoomEffect_MotionParticles_2]
       - [0x24, .rodata, ../room_lib/RoomLib_ActorClasses]
       - [0x1FC, .rodata, ../room_lib/RoomEffect_DroppedFlare]
       - [0x240, c, ../room_lib/RoomLib_PlantScript]
@@ -50,9 +50,9 @@ segments:
       - [0x3A4, c, ../room_lib/RoomLib_CloseTarget]
       - [0x428, c, ../room_lib/RoomLib_ClassNop6]
       - [0x430, c, ../room_lib/RoomLib_ClassNop0]
-      - [0x438, c, ../room_lib/RoomFx_MotionParticles]
-      - [0x146C, c, ../room_lib/RoomFx_MotionParticles_2]
-      - [0x172C, c, ../room_lib/RoomFx_MotionParticles_3]
+      - [0x438, c, ../room_lib/RoomEffect_MotionParticles]
+      - [0x146C, c, ../room_lib/RoomEffect_MotionParticles_2]
+      - [0x172C, c, ../room_lib/RoomEffect_MotionParticles_3]
       - [0x1C60, c, ../room_lib/RoomLib_ActorClasses]
       - [0x4F7C, c, ../room_lib/RoomEffect_DroppedFlare]
       - [0x5C20, data]

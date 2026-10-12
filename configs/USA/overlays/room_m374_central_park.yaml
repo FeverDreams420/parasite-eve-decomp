@@ -35,11 +35,11 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m374_central_park]
-      - [0xC, .rodata, ../room_lib/RoomFx_EffectSequence]
+      - [0xC, .rodata, ../room_lib/RoomEffect_EffectSequence]
       - [0x4C, c, ../room_lib/RoomLib_ClassNop0]
       - [0x54, c, ../room_lib/RoomLib_PlantScript]
       - [0x80, c, ../room_lib/RoomLib_Spawn6]
-      - [0xAC, c, ../room_lib/RoomFx_EffectSequence]
+      - [0xAC, c, ../room_lib/RoomEffect_EffectSequence]
       - [0x3B74, data, D_80192B5C]
       - [0x3B94, data, D_80192B7C]
       - [0x3BB4, data, D_80192B9C]

@@ -9,7 +9,7 @@
 #include "pe1/psyq_libc.h"
 #include "pe1/asset_find.h"
 
-/* The effect sequence (src/overlays/room_lib/RoomFx_EffectSequence.c):
+/* The effect sequence (src/overlays/room_lib/RoomEffect_EffectSequence.c):
  * the room data it fills and reads (the same addresses in all five rooms
  * that link it) and the main code it calls. */
 
@@ -35,8 +35,8 @@ extern char D_80192BFC;
 extern char D_80192BF0;
 
 /* The module's class methods (slots 3 to 5). */
-int RoomFx_EffectSequenceRegister(void *o);
-int RoomFx_EffectSequenceStart(void *o);
-s32 RoomFx_EffectSequenceNop5(void *o);
+int RoomEffect_EffectSequenceRegister(void *o);
+int RoomEffect_EffectSequenceStart(void *o);
+s32 RoomEffect_EffectSequenceNop5(void *o);
 
 #endif

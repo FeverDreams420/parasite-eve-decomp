@@ -25,7 +25,7 @@ typedef struct RoomOrbitSetEntity {
     FieldActor *owner;            /* 0x08 */
 } RoomOrbitSetEntity;
 
-void RoomFx_OrbitSetInit(RoomOrbitSetEntity *object, void *unused, RoomOrbitSetState *state) {
+void RoomEffect_OrbitSetInit(RoomOrbitSetEntity *object, void *unused, RoomOrbitSetState *state) {
     FieldActor *owner;
     void *allocation;
     RenderMatrix *source;
@@ -99,16 +99,16 @@ void RoomFx_OrbitSetInit(RoomOrbitSetEntity *object, void *unused, RoomOrbitSetS
 }
 
 /* The set itself draws nothing; each effect draws its own sprites. */
-void RoomFx_OrbitSetDraw(void) {
+void RoomEffect_OrbitSetDraw(void) {
 }
 
-void RoomFx_OrbitSetUpdate(void *arg0, char *event) {
+void RoomEffect_OrbitSetUpdate(void *arg0, char *event) {
     if (func_800C2B68() == 1) {
         event[1] = 2;
     }
 }
 
-void RoomFx_InitOrbitParticles(void *unused, void *unused2, RoomOrbitParticleState *state) {
+void RoomEffect_InitOrbitParticles(void *unused, void *unused2, RoomOrbitParticleState *state) {
     RoomOrbitSetState *clock = func_800C2B50();
     unsigned int i;
     RoomOrbitParticleLaneView *particle;
@@ -140,7 +140,7 @@ void RoomFx_InitOrbitParticles(void *unused, void *unused2, RoomOrbitParticleSta
 
 
 
-void RoomFx_DrawOrbitParticles(
+void RoomEffect_DrawOrbitParticles(
     void *unused0, void *unused1, RoomOrbitParticleState *fx) {
     RoomSpriteMatrix matrix;
     RoomFxVec4 scratchScale;
@@ -192,7 +192,7 @@ void RoomFx_DrawOrbitParticles(
     }
 }
 
-void RoomFx_UpdateOrbitParticles(
+void RoomEffect_UpdateOrbitParticles(
     void *unused, u8 *control, RoomOrbitParticleState *state) {
     unsigned int i;
     RoomOrbitParticleLaneView *lane;
@@ -229,7 +229,7 @@ void RoomFx_UpdateOrbitParticles(
     }
 }
 
-void RoomFx_InitOrbitBurst(
+void RoomEffect_InitOrbitBurst(
     void *unused0, void *unused1, RoomOrbitBurstState *state) {
     RoomLibOrbitView *view;
     short *particle;
@@ -260,7 +260,7 @@ void RoomFx_InitOrbitBurst(
     state->count = 8;
 }
 
-void RoomFx_DrawOrbitBurst(
+void RoomEffect_DrawOrbitBurst(
     void *unused0, void *unused1, RoomOrbitBurstState *state) {
     RoomSpriteMatrix matrix;
     RoomFxVec4 scratchScale;
@@ -320,7 +320,7 @@ typedef struct RoomOrbitBurstLaneView {
     unsigned short secondary[4];  /* 0x80 */
 } RoomOrbitBurstLaneView;
 
-void RoomFx_UpdateOrbitBurst(
+void RoomEffect_UpdateOrbitBurst(
     void *unused, unsigned char *control, RoomOrbitBurstState *state) {
     unsigned char *particle;
     unsigned int i;
@@ -375,7 +375,7 @@ static const RoomFxSeed8 s_OrbitSpriteSeed3 = {
     { 0x38, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
 };
 
-void RoomFx_InitOrbitSprite(
+void RoomEffect_InitOrbitSprite(
     void *unused0, void *unused1, RoomOrbitSpriteFxParams *state) {
     RoomFxSeed8 seed0;
     RoomFxSeed8 seed1;
@@ -411,7 +411,7 @@ void RoomFx_InitOrbitSprite(
     state->alpha = 0;
 }
 
-void RoomFx_DrawOrbitSprite(
+void RoomEffect_DrawOrbitSprite(
     void *unused, void *unused2, RoomOrbitSpriteFxParams *fx) {
     RoomSpriteMatrix matrix;
     RoomFxVec4 scratchScale;
@@ -448,7 +448,7 @@ void RoomFx_DrawOrbitSprite(
     func_800C42A4((FieldGlowSprite *)(drawSlot - 4), &matrix, 1);
 }
 
-void RoomFx_UpdateOrbitSprite(unsigned char *arg0, RoomFxControl *signal, RoomOrbitSpriteFxParams *state) {
+void RoomEffect_UpdateOrbitSprite(unsigned char *arg0, RoomFxControl *signal, RoomOrbitSpriteFxParams *state) {
     RoomOrbitSpriteFxParams *p = state;
     unsigned short counter = state->alpha;
 

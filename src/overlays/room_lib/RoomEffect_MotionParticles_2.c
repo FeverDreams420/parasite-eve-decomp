@@ -26,7 +26,7 @@ typedef struct RoomLibMotionScaleScratch {
     char pad[8];
 } RoomLibMotionScaleScratch;
 
-void RoomFx_DrawMotionParticles(void *unused, RoomStatePair *control,
+void RoomEffect_DrawMotionParticles(void *unused, RoomStatePair *control,
                    RoomMotionState *state)
 {
     RoomSpriteMatrix matrix;

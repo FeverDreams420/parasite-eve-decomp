@@ -16,7 +16,7 @@
  * the lists of the module whose methods are the shared units. The other
  * module's methods are a class unit of that module, linked in every room
  * that links the module, with the same methods and lists under the
- * module's names (RoomFx_OrbitSetClass.c, RoomFx_DropFieldClass.c,
+ * module's names (RoomEffect_OrbitSetClass.c, RoomEffect_DropFieldClass.c,
  * RoomEffect_GroundEruptionClass.c, RoomLib_ThreeParticleClass.c). */
 
 struct RoomEnt;

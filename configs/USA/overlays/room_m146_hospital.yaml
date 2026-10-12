@@ -36,7 +36,7 @@ segments:
     subsegments:
       - [0x0, rodata, room_m146_hospital]
       - [0xC, .rodata, ../room_lib/RoomEffect_GroundEruption]
-      - [0x5C, .rodata, ../room_lib/RoomFx_FallingSpriteBurst]
+      - [0x5C, .rodata, ../room_lib/RoomEffect_FallingSpriteBurst]
       - [0x94, c, ../room_lib/RoomEffect_GroundEruptionClass]
       - [0x230, c, ../room_lib/RoomEffect_GroundEruption]
       - [0x1558, c, ../room_lib/RoomLib_ClassNop0]
@@ -46,7 +46,7 @@ segments:
       - [0x1600, c, ../room_lib/RoomLib_RegisterPairedTables]
       - [0x168C, c, ../room_lib/RoomLib_CloseTarget]
       - [0x1710, c, ../room_lib/RoomLib_ClassNop6]
-      - [0x1718, c, ../room_lib/RoomFx_FallingSpriteBurst]
+      - [0x1718, c, ../room_lib/RoomEffect_FallingSpriteBurst]
       - [0x2674, c, ../room_lib/RoomEffect_HomingProjectile]
       - [0x3460, data, D_80192448]
       - [0x347C, data, RoomLib_TableC]

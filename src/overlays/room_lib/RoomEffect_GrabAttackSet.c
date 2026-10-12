@@ -23,12 +23,12 @@
 #define GRAB_PLAYER ((FieldActor *)D_8009D254)
 
 /* Class slots 0 and 3. */
-int RoomFx_GrabNop0(void) {
+int RoomEffect_GrabNop0(void) {
     return 0;
 }
 
-int RoomFx_GrabInit(RoomMotionTrigger *obj) {
-    obj->callback = RoomFx_GrabAwaitTarget;
+int RoomEffect_GrabInit(RoomMotionTrigger *obj) {
+    obj->callback = RoomEffect_GrabAwaitTarget;
     obj->flag03 = 0xFF;
     obj->flag1A = 0;
     obj->activated = 0;
@@ -37,7 +37,7 @@ int RoomFx_GrabInit(RoomMotionTrigger *obj) {
 
 /* Message handler: message 0x19 hands the class a completion flag, message
  * 0x200 finds the actor it grabs with. */
-int RoomFx_GrabConfigure(char *obj, int arg1, int op, int arg3, int arg4) {
+int RoomEffect_GrabConfigure(char *obj, int arg1, int op, int arg3, int arg4) {
     FieldActor *node;
     RoomGrabStateTail *base;
     FieldActor *next;
@@ -75,29 +75,29 @@ int RoomFx_GrabConfigure(char *obj, int arg1, int op, int arg3, int arg4) {
     return 0;
 }
 
-int RoomFx_GrabNop3(void) {
+int RoomEffect_GrabNop3(void) {
     return 0;
 }
 
 /* Class update: runs the current state. */
-int RoomFx_GrabUpdate(RoomMotionTrigger *obj) {
+int RoomEffect_GrabUpdate(RoomMotionTrigger *obj) {
     obj->callback();
     return 0;
 }
 
 /* Waits until the actor reaches its attack stance. */
-void RoomFx_GrabAwaitTarget(RoomMotionTrigger *obj) {
+void RoomEffect_GrabAwaitTarget(RoomMotionTrigger *obj) {
     if (obj->probe_actor->mode == 0x10) {
-        obj->callback = RoomFx_GrabStartOnProximity;
+        obj->callback = RoomEffect_GrabStartOnProximity;
     }
 }
 
-void RoomFx_GrabStartOnProximity(RoomMotionTrigger *arg) {
+void RoomEffect_GrabStartOnProximity(RoomMotionTrigger *arg) {
     u8 mode = GRAB_PLAYER->mode;
     s32 kind = arg->probe_actor->anim.parts.integer;
 
     if (mode >= 0x12) {
-        RoomFx_GrabRelease(arg);
+        RoomEffect_GrabRelease(arg);
         return;
     }
     if (kind < 8) {
@@ -119,7 +119,7 @@ void RoomFx_GrabStartOnProximity(RoomMotionTrigger *arg) {
         if (func_800DFE20((Vec3Fixed *)&GRAB_PLAYER->pos_x, (Vec3Fixed *)sp) >= 0x100) {
             return;
         }
-        arg->callback = RoomFx_GrabHold;
+        arg->callback = RoomEffect_GrabHold;
         func_80020C74();
 
         actor = GRAB_PLAYER;
@@ -159,17 +159,17 @@ void RoomFx_GrabStartOnProximity(RoomMotionTrigger *arg) {
         arg->saved_z = p->pos_z;
         return;
     }
-    RoomFx_GrabRelease(arg);
+    RoomEffect_GrabRelease(arg);
 }
 
 static const RoomFxVec4 s_GrabHoldScale = { 0x1400, 0x1400, 0x1400, 0 };
 
 /* The grab animation uses the field actor view of the player record. */
-static __inline__ FieldActor *RoomGrab_PlayerView(RoomSparkBattleEntity *player) {
+static __inline__ FieldActor *RoomEffect_GrabPlayerView(RoomSparkBattleEntity *player) {
     return (FieldActor *)player;
 }
 
-void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
+void RoomEffect_GrabHold(RoomMotionTrigger *arg0) {
     FieldActor *s1 = arg0->probe_actor;
     FieldActor *g;
     RenderMatrix *rotationMatrix;
@@ -193,7 +193,7 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
 
     dc4 = rcos(0xC00);
     cf4 = rsin(0xC00);
-    g = RoomGrab_PlayerView(((RoomSparkBattleEntity *)D_8009D254));
+    g = RoomEffect_GrabPlayerView(((RoomSparkBattleEntity *)D_8009D254));
     rotationMatrix = &g->render_object.model_matrix;
     neg = -cf4;
     rotationMatrix->rotation[0][1] = neg;
@@ -209,9 +209,9 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
     rotationMatrix->rotation[0][2] = 0;
     rotationMatrix->rotation[2][2] = 0x1000;
     scale = s_GrabHoldScale;
-    matrix_arg = RoomGrab_PlayerView(((RoomSparkBattleEntity *)D_8009D254));
+    matrix_arg = RoomEffect_GrabPlayerView(((RoomSparkBattleEntity *)D_8009D254));
     ScaleMatrix(&matrix_arg->render_object.model_matrix, &scale);
-    g = RoomGrab_PlayerView(((RoomSparkBattleEntity *)D_8009D254));
+    g = RoomEffect_GrabPlayerView(((RoomSparkBattleEntity *)D_8009D254));
     g->render_object.model_matrix.translation[0] = 0x100;
     g->render_object.model_matrix.translation[1] = -0x20;
     g->render_object.model_matrix.translation[2] = -0xC0;
@@ -221,17 +221,17 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
     s4 = s0;
 
     if (s1->state == 0 || func_8003010C(s1, 0x2C) <= 0) {
-        if (RoomGrab_PlayerView(((RoomSparkBattleEntity *)D_8009D254))->state->amount > 0) {
+        if (RoomEffect_GrabPlayerView(((RoomSparkBattleEntity *)D_8009D254))->state->amount > 0) {
             func_80020CE4();
         }
-        RoomFx_GrabResetPlayer(s1, s3v);
-        RoomFx_GrabRelease(arg0);
+        RoomEffect_GrabResetPlayer(s1, s3v);
+        RoomEffect_GrabRelease(arg0);
         return;
     }
 
-    if (RoomGrab_PlayerView(((RoomSparkBattleEntity *)D_8009D254))->state->amount <= 0) {
-        RoomFx_GrabResetPlayer(s1, s3v);
-        RoomFx_GrabRelease(arg0);
+    if (RoomEffect_GrabPlayerView(((RoomSparkBattleEntity *)D_8009D254))->state->amount <= 0) {
+        RoomEffect_GrabResetPlayer(s1, s3v);
+        RoomEffect_GrabRelease(arg0);
         return;
     }
     kind = s1->mode;
@@ -241,15 +241,15 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
             return;
         }
         func_80020CE4();
-        RoomFx_GrabResetPlayer(s1, s3v);
-        RoomFx_GrabRelease(arg0);
+        RoomEffect_GrabResetPlayer(s1, s3v);
+        RoomEffect_GrabRelease(arg0);
         return;
     }
 
     if (kind != 0x10) {
         func_80020CE4();
-        RoomFx_GrabResetPlayer(s1, s3v);
-        RoomFx_GrabRelease(arg0);
+        RoomEffect_GrabResetPlayer(s1, s3v);
+        RoomEffect_GrabRelease(arg0);
         return;
     }
     if ((s16)s0 < 0x12) {
@@ -279,7 +279,7 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
         }
         {
             /* One load of the player's state for the read and the write. */
-            FieldActorState *state = RoomGrab_PlayerView(((RoomSparkBattleEntity *)D_8009D254))->state;
+            FieldActorState *state = RoomEffect_GrabPlayerView(((RoomSparkBattleEntity *)D_8009D254))->state;
 
             state->flags |= 0x4000;
         }
@@ -290,14 +290,14 @@ void RoomFx_GrabHold(RoomMotionTrigger *arg0) {
 
     }
     func_80020CE4();
-    RoomFx_GrabResetPlayer(s1, s3v);
-    RoomFx_GrabRelease(arg0);
+    RoomEffect_GrabResetPlayer(s1, s3v);
+    RoomEffect_GrabRelease(arg0);
 }
 
 /* Lets the player go: clears the animation borrowed from the actor, puts
  * the player back where the actor's hold ends and stops its motion. Called
  * with the class's state words from 0x0C on. */
-void RoomFx_GrabResetPlayer(FieldActor *unused, RoomGrabStateTail *state) {
+void RoomEffect_GrabResetPlayer(FieldActor *unused, RoomGrabStateTail *state) {
     {
         FieldActor *actor = GRAB_PLAYER;
 
@@ -338,7 +338,7 @@ void RoomFx_GrabResetPlayer(FieldActor *unused, RoomGrabStateTail *state) {
 }
 
 /* Class release: signals completion and, if the player is held, lets go. */
-int RoomFx_GrabRelease(RoomMotionTrigger *entity) {
+int RoomEffect_GrabRelease(RoomMotionTrigger *entity) {
     int *signal;
 
     signal = entity->completion_state;
@@ -402,13 +402,13 @@ int RoomFx_GrabRelease(RoomMotionTrigger *entity) {
 }
 
 /* Class slot 6. */
-int RoomFx_GrabNop6(void) {
+int RoomEffect_GrabNop6(void) {
     return 0;
 }
 
 static const RoomFxSeed8 s_GroundSweepMarkSeed = {{0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00}};
 
-int RoomFx_GroundSweepMark(int mode, RoomGroundSweepMark *state) {
+int RoomEffect_GroundSweepMark(int mode, RoomGroundSweepMark *state) {
     GteShortVector position;
     RoomFxSeed8 seed = s_GroundSweepMarkSeed;
     int shade;
@@ -472,7 +472,7 @@ static const RenderColor s_GroundSweepColorB = { 0x00, 0x50, 0xA0, 0x00 };
 /* Controller that sweeps a ribbon of light along the ground from the
  * actor's hand: it rises, lunges out and back a few times leaving scorch
  * marks and hitting the player in reach, then fades out. */
-int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
+int RoomEffect_GroundSweepController(int mode, RoomGroundSweep *sweep,
                                  RoomGroundSweepParams *params) {
     GteShortVector offset = s_GroundSweepOffset;
     GteShortVector hand;
@@ -510,7 +510,7 @@ int RoomFx_GroundSweepController(int mode, RoomGroundSweep *sweep,
         sweep->timer = 0;
         sweep->sweeps = 8;
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0xC, 0x10,
-                             (FieldAnimCallbackListCallback)RoomFx_GroundSweepMark);
+                             (FieldAnimCallbackListCallback)RoomEffect_GroundSweepMark);
     case 1:
         func_800CE870((char *)D_8009D254, 1, (s16 *)&hand);
         hand.y = g_RoomFloorY->y;
@@ -720,7 +720,7 @@ static const RenderColor s_OrbitTrailColor = { 0x80, 0x80, 0x80, 0x00 };
 /* Particle that sweeps out from the orbit centre drawing a coloured trail,
  * then flashes as a pulsing sprite, then drifts as a tilted ring; the
  * update side drifts and bounces it while it fades. */
-int RoomFx_OrbitTrailParticle(int mode, RoomOrbitTrailParticle *p) {
+int RoomEffect_OrbitTrailParticle(int mode, RoomOrbitTrailParticle *p) {
     GteShortVector offset;
     GteShortVector blend;
     RenderColor color;
@@ -842,7 +842,7 @@ static const RenderColor s_OrbitBurstColor = { 0xC8, 0xBE, 0x78, 0x00 };
  * first four frames (falling sparks, sweeping trails and drifting rings),
  * flashes a glow, ring and halo while it fades, and publishes the actor
  * position as the orbit centre the trails sweep out from. */
-int RoomFx_OrbitTrailBurst(int mode, RoomOrbitTrailBurst *burst) {
+int RoomEffect_OrbitTrailBurst(int mode, RoomOrbitTrailBurst *burst) {
     RenderColor color = s_OrbitBurstColor;
     RoomOrbitTrailParticle *child;
     int i;
@@ -854,7 +854,7 @@ int RoomFx_OrbitTrailBurst(int mode, RoomOrbitTrailBurst *burst) {
         func_800CE870((char *)D_8009D254, 0, (s16 *)burst);
         func_800D3F64(0x596, func_800D3FD8());
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x28,
-                             (FieldAnimCallbackListCallback)RoomFx_OrbitTrailParticle);
+                             (FieldAnimCallbackListCallback)RoomEffect_OrbitTrailParticle);
     case 1:
         if (D_800E27EC < 4) {
             for (i = 0; i < 3; i++) {
@@ -964,7 +964,7 @@ int RoomFx_OrbitTrailBurst(int mode, RoomOrbitTrailBurst *burst) {
  * it reaches them, then hovers, or falls and bounces off the floor; drawn
  * as a spinning glow with a floor shadow, a fading glow or a shrinking
  * spark. */
-int RoomFx_RisingSprayParticle(int mode, RoomSpraySpark *spark) {
+int RoomEffect_RisingSprayParticle(int mode, RoomSpraySpark *spark) {
     GteRotation rotation;
     GteShortVector position;
     GteShortVector shadow;
@@ -1153,7 +1153,7 @@ static const GteShortVector s_RisingSprayOffset = { 0, 0, -150, 0 };
 /* Controller that sprays sparks from above the primary actor: a wide burst
  * on odd frames for the first second, then a stream along the actor's
  * heading, with two sound cues at frames 1 and 16. */
-int RoomFx_RisingSprayController(int mode, void *state,
+int RoomEffect_RisingSprayController(int mode, void *state,
                                  RoomRisingSprayParams *params) {
     GteShortVector offset = s_RisingSprayOffset;
     GteShortVector position;
@@ -1171,7 +1171,7 @@ int RoomFx_RisingSprayController(int mode, void *state,
             }
         }
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x37,
-                             (FieldAnimCallbackListCallback)RoomFx_RisingSprayParticle);
+                             (FieldAnimCallbackListCallback)RoomEffect_RisingSprayParticle);
     case 1:
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &offset, &position);
         position.y -= 0x50;
@@ -1243,17 +1243,17 @@ int RoomFx_RisingSprayController(int mode, void *state,
 }
 
 /* Setters of the room's attack arguments, called from its script. */
-int *RoomFx_GrabSetSlot(int a0, int a1) {
+int *RoomEffect_GrabSetSlot(int a0, int a1) {
     int *p = &g_RoomGrabSlot;
     *p = a1;
     return p;
 }
 
-int *RoomFx_GrabGetSlot(void) {
+int *RoomEffect_GrabGetSlot(void) {
     return &g_RoomGrabSlot;
 }
 
-int *RoomFx_GrabSetPair(int a0, int a1, int a2) {
+int *RoomEffect_GrabSetPair(int a0, int a1, int a2) {
     int *p = &RoomLib_PairA;
     *p = a1;
     RoomLib_PairB = a2;

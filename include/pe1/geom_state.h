@@ -338,7 +338,7 @@ extern u16 D_800BCF9C, D_800BCF9E, D_800BCFA0, D_800BCFA2;
 
 /* Existing absolute symbols expose overlapping views of the scroll state.
  * The symbol is the leading flags word, a volatile scalar: the grab effects
- * (room_lib RoomFx_GrabAttackSet, scene_e19) read-modify-write it with
+ * (room_lib RoomEffect_GrabAttackSet, scene_e19) read-modify-write it with
  * absolute loads and stores, which any record view would turn into an
  * address kept in a register. The renderer reads the whole state through
  * g_GeomScroll, which generates the same code as a record declaration. */

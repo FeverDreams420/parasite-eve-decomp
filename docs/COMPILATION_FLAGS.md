@@ -141,7 +141,7 @@ and the linked binaries stayed identical:
 | `fx_common/effects.c` | cc1 `-fno-force-addr` | not an option cc.sh reads |
 | `menu_memcard/MenuCard_ListAndScreenFlow.c` | second `-fno-cse-skip-blocks` line | left over from a merge |
 | `menu/Menu_SaveScreens.c`, `menu/Menu_SkillScreens.c`, `script/Script_NodePool.c`, `fx_common/model_buffers.c` | `--dont-expand-li` | no effect at ASPSX 2.56 |
-| `battle/Battle_AttackResolution.c`, `battle/Battle_EncounterFlow.c`, `room_lib/RoomEffect_SeekerSparkCallback.c`, `room_lib/RoomFx_DropFieldEffects.c` | `--expand-div` | no variable division left in the unit |
+| `battle/Battle_AttackResolution.c`, `battle/Battle_EncounterFlow.c`, `room_lib/RoomEffect_SeekerSparkCallback.c`, `room_lib/RoomEffect_DropFieldEffects.c` | `--expand-div` | no variable division left in the unit |
 | `item/Menu_OpenItemUsePanelAtIndex.c` | `--use-comm-section` | the unit defines no COMMON words |
 | `scene_e18_cruiser/e18_emitters.c` | cc1 `-fno-cse-skip-blocks` | the function matches without it |
 | `battle/Battle_AttackResolution.c` | `ASPSX_VERSION` 2.77 written as 2.70 | MASPSX configures both identically |
@@ -298,8 +298,8 @@ differently but resolve to the same options count once.
 - `src/overlays/room_lib/RoomEffect_LineBurst.c`
 - `src/overlays/room_lib/RoomEffect_SparkAttacks.c`
 - `src/overlays/room_lib/RoomEffect_TrailBurstAttacks.c`
-- `src/overlays/room_lib/RoomFx_GrabAttackSet.c`
-- `src/overlays/room_lib/RoomFx_MirrorModel.c`
+- `src/overlays/room_lib/RoomEffect_GrabAttackSet.c`
+- `src/overlays/room_lib/RoomEffect_MirrorModel.c`
 - `src/overlays/room_lib/RoomLib_ActorClasses.c`
 - `src/overlays/room_lib/RoomLib_FloorWalkerClass.c`
 - `src/overlays/room_lib/RoomLib_WindowClass.c`
@@ -383,8 +383,8 @@ differently but resolve to the same options count once.
 #### S7: `cc1 -G0 -fno-strength-reduce ; maspsx -G0`
 
 - `src/main/fieldfx/FieldFx_CollisionQueries.c`
-- `src/overlays/room_lib/RoomFx_MotionParticles_2.c`
-- `src/overlays/room_lib/RoomFx_OrbitEffectSet.c`
+- `src/overlays/room_lib/RoomEffect_MotionParticles_2.c`
+- `src/overlays/room_lib/RoomEffect_OrbitEffectSet.c`
 
 #### S8: `cc1 -G0 ; maspsx -G8 --use-comm-section FORCE_G0`
 
@@ -554,10 +554,10 @@ means only the order of symbol-table entries changed (cc1 `-G8` emits
 | `overlays/room_lib/RoomEffect_LineBurst.c` | maspsx `--expand-div`: lev 36 (RoomEffect_LineBurstController 36) |
 | `overlays/room_lib/RoomEffect_SparkAttacks.c` | maspsx `--expand-div`: lev 37 (RoomEffect_BeamSparkController 37) |
 | `overlays/room_lib/RoomEffect_TrailBurstAttacks.c` | maspsx `--expand-div`: lev 66 (RoomEffect_SeekingTrailParticle 66) |
-| `overlays/room_lib/RoomFx_GrabAttackSet.c` | maspsx `--expand-div`: lev 17 (RoomFx_RisingSprayController 17) |
-| `overlays/room_lib/RoomFx_MirrorModel.c` | maspsx `--expand-div`: lev 29 (RoomFx_ModelUpdate 29) |
-| `overlays/room_lib/RoomFx_MotionParticles_2.c` | cc1 `-fno-strength-reduce`: lev 66 (RoomFx_DrawMotionParticles 66) |
-| `overlays/room_lib/RoomFx_OrbitEffectSet.c` | cc1 `-fno-strength-reduce`: lev 179 (RoomFx_UpdateOrbitBurst 38, RoomFx_DrawOrbitBurst 33, RoomFx_InitOrbitParticles 30) |
+| `overlays/room_lib/RoomEffect_GrabAttackSet.c` | maspsx `--expand-div`: lev 17 (RoomEffect_RisingSprayController 17) |
+| `overlays/room_lib/RoomEffect_MirrorModel.c` | maspsx `--expand-div`: lev 29 (RoomEffect_ModelUpdate 29) |
+| `overlays/room_lib/RoomEffect_MotionParticles_2.c` | cc1 `-fno-strength-reduce`: lev 66 (RoomEffect_DrawMotionParticles 66) |
+| `overlays/room_lib/RoomEffect_OrbitEffectSet.c` | cc1 `-fno-strength-reduce`: lev 179 (RoomEffect_UpdateOrbitBurst 38, RoomEffect_DrawOrbitBurst 33, RoomEffect_InitOrbitParticles 30) |
 | `overlays/room_lib/RoomLib_ActorClasses.c` | maspsx `--expand-div`: lev 194 (RoomLib_HandlerE 58, RoomLib_HandlerC 33, RoomLib_AdvanceArcToTargetY 28) |
 | `overlays/room_lib/RoomLib_FloorWalkerClass.c` | maspsx `--expand-div`: lev 10 (RoomLib_UpdateHandlerG 10) |
 | `overlays/room_lib/RoomLib_WindowClass.c` | maspsx `--expand-div`: lev 20 (RoomLib_WindowHandler 20) |

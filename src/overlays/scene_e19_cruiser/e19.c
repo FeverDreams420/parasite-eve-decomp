@@ -56,7 +56,7 @@ typedef struct SceneE19HomingParticle {
 
 #include "e19_externs.h"
 
-void SceneEffect_GrabOnApproach(SceneGrabHead *head) {
+void RoomLib_GrabOnApproach(SceneGrabHead *head) {
     SceneGrabTrigger *trigger = (SceneGrabTrigger *)head;
     FieldActor *actor = trigger->actor;
     SceneGrabControl *control = &trigger->control;

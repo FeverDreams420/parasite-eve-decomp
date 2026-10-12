@@ -35,7 +35,7 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m392_chrysler]
-      - [0xC, .rodata, ../room_lib/RoomFx_FallingSpriteBurst]
+      - [0xC, .rodata, ../room_lib/RoomEffect_FallingSpriteBurst]
       - [0x44, .rodata, ../room_lib/RoomLib_ActorClasses]
       - [0x21C, .rodata, ../room_lib/RoomEffect_LineBurst]
       - [0x230, c, ../room_lib/RoomLib_ClassNop0]
@@ -45,7 +45,7 @@ segments:
       - [0x2D8, c, ../room_lib/RoomLib_RegisterPairedTables]
       - [0x364, c, ../room_lib/RoomLib_CloseTarget]
       - [0x3E8, c, ../room_lib/RoomLib_ClassNop6]
-      - [0x3F0, c, ../room_lib/RoomFx_FallingSpriteBurst]
+      - [0x3F0, c, ../room_lib/RoomEffect_FallingSpriteBurst]
       - [0x134C, c, ../room_lib/RoomLib_ActorClasses]
       - [0x4668, c, ../room_lib/RoomEffect_LineBurst]
       - [0x5458, c, ../room_lib/RoomLib_SlotSet]

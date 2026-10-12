@@ -53,7 +53,7 @@ segments:
       - [0x288, c, ../room_lib/RoomLib_ActorClasses]
       - [0x35A4, c, e19_class]
       - [0x3678, c, ../room_lib/RoomLib_UpdateCallback]
-      - [0x36A0, c, ../room_lib/SceneEffect_GrabAwaitStance]
+      - [0x36A0, c, ../room_lib/RoomLib_GrabAwaitStance]
       # The approach callback arms the grab sequence and both paths share actor/target state.
       - [0x36CC, c, e19]
       - [0xC26C, data]

@@ -39,7 +39,7 @@ typedef struct RoomAnchoredSpriteState {
 
 /* Motion particle setup: the two trails of ten particles and the four
  * glyphs. */
-void RoomFx_MotionParticlesInit(RoomMotionInitOwner *owner, void *unused, RoomMotionInitState *state) {
+void RoomEffect_MotionParticlesInit(RoomMotionInitOwner *owner, void *unused, RoomMotionInitState *state) {
     RoomMotionInitLink *link;
     RoomMotionParticle *particle;
     unsigned int i;
@@ -126,12 +126,12 @@ void RoomFx_MotionParticlesInit(RoomMotionInitOwner *owner, void *unused, RoomMo
     }
 }
 
-void RoomFx_MotionParticlesNop(void) {
+void RoomEffect_MotionParticlesNop(void) {
 }
 
-ROOM_REARM_TIMER_TICK(RoomFx_MotionParticlesTick, 0x64)
+ROOM_REARM_TIMER_TICK(RoomEffect_MotionParticlesTick, 0x64)
 
-void RoomFx_MotionParticlesAnchor(int a0, int a1, short *out) {
+void RoomEffect_MotionParticlesAnchor(int a0, int a1, short *out) {
     RoomMotionInitState *ctx = func_800C2B50();
 
     out[0] = ctx->primary.t[0];
@@ -156,10 +156,10 @@ typedef struct RoomLibSpriteQuadStack {
  * sprite twice at each of two map anchors: once unrotated at the anchor
  * height and once rotated on the shared floor height. Retail marks this
  * function handwritten; only its COP2 windows remain ASM. Like
- * RoomFx_DrawAnchoredSpritePair, the matrix pointer is still pinned.
+ * RoomEffect_DrawAnchoredSpritePair, the matrix pointer is still pinned.
  * RotMatrix receives the stack addresses directly; the pointer used by
  * the following GTE operations starts its lifetime after that call. */
-void RoomFx_DrawAnchoredSpriteQuad(void *unused0, void *unused1,
+void RoomEffect_DrawAnchoredSpriteQuad(void *unused0, void *unused1,
                                             char *params) {
     RoomLibSpriteQuadStack stack;
     /* The params and packet pointers share one pinned variable. */
@@ -248,7 +248,7 @@ void RoomFx_DrawAnchoredSpriteQuad(void *unused0, void *unused1,
     func_800C42A4((FieldGlowSprite *)fx, matrix, 1);
 }
 
-void RoomFx_UpdateTimedFade(void *arg0, RoomFxControl *state, RoomAnchoredSpriteState *obj) {
+void RoomEffect_UpdateTimedFade(void *arg0, RoomFxControl *state, RoomAnchoredSpriteState *obj) {
     RoomAnchoredSpriteState *p = obj;
     if ((unsigned short)((unsigned short)state->frame - 1) < 7U) {
         obj->depth += 0x10;
@@ -264,9 +264,9 @@ void RoomFx_UpdateTimedFade(void *arg0, RoomFxControl *state, RoomAnchoredSprite
     }
 }
 
-#include "RoomFx_MotionParticles_externs.h"
+#include "RoomEffect_MotionParticles_externs.h"
 
-void RoomFx_InitSpritePair(void *arg0, void *arg1, RoomAnchoredSpriteState *obj) {
+void RoomEffect_InitSpritePair(void *arg0, void *arg1, RoomAnchoredSpriteState *obj) {
     FieldRingGeometry *ring = &obj->ring;
     int c80 = 0x80;
     int v = 0x10;
@@ -296,7 +296,7 @@ void RoomFx_InitSpritePair(void *arg0, void *arg1, RoomAnchoredSpriteState *obj)
 /* Builds a uniformly scaled rotation from the shared seed and draws the
  * sprite at two map anchors. Retail marks this function handwritten; only
  * its COP2 windows remain ASM. */
-void RoomFx_DrawAnchoredSpritePair(void *unused0, void *unused1,
+void RoomEffect_DrawAnchoredSpritePair(void *unused0, void *unused1,
                                             RoomAnchoredSpriteState *params) {
     RoomLibSpriteTransformStack stack;
     /* The GTE and draw matrix pointer still needs its register pin. */
@@ -378,7 +378,7 @@ void RoomFx_DrawAnchoredSpritePair(void *unused0, void *unused1,
     func_800C4FC4(renderState, matrix, 1);
 }
 
-void RoomFx_StepSpritePair(void *arg0, RoomFxControl *state, RoomAnchoredSpriteState *obj) {
+void RoomEffect_StepSpritePair(void *arg0, RoomFxControl *state, RoomAnchoredSpriteState *obj) {
     if (state->frame < 0x10) {
         obj->scale += 0xF0;
         if (state->frame < 0x10) {
@@ -396,7 +396,7 @@ int func_80071A54(void);
 /* Seeds the motion particles: three or six of them depending on the first
  * scene flag, each with a random anchor offset, a random sprite lookup and
  * a random drift that is slower and sideways when the flag is set. */
-void RoomFx_SeedMotionParticles(void *unused0, void *unused1,
+void RoomEffect_SeedMotionParticles(void *unused0, void *unused1,
                                         RoomMotionState *state)
 {
     /* Retail reserves one 8-byte local that nothing in the shipped code

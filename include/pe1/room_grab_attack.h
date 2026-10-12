@@ -15,7 +15,7 @@
 #include "pe1/field_collision.h"
 #include "pe1/geom_state.h"
 
-/* The grab attack set (src/overlays/room_lib/RoomFx_GrabAttackSet.c, in
+/* The grab attack set (src/overlays/room_lib/RoomEffect_GrabAttackSet.c, in
  * room_m269 and scene_e01). */
 
 /* The class's state words from 0x0C on, as the player reset receives them. */
@@ -52,20 +52,20 @@ extern int RoomLib_PairB;
 
 extern FieldActor *D_8009D20C;
 
-int RoomFx_GrabNop0(void);
-int RoomFx_GrabInit(RoomMotionTrigger *obj);
-int RoomFx_GrabConfigure(char *obj, int arg1, int op, int arg3, int arg4);
-int RoomFx_GrabNop3(void);
-int RoomFx_GrabUpdate(RoomMotionTrigger *obj);
-void RoomFx_GrabAwaitTarget(RoomMotionTrigger *obj);
-void RoomFx_GrabStartOnProximity(RoomMotionTrigger *arg);
-void RoomFx_GrabHold(RoomMotionTrigger *arg0);
-void RoomFx_GrabResetPlayer(FieldActor *unused, RoomGrabStateTail *state);
-int RoomFx_GrabRelease(RoomMotionTrigger *entity);
-int RoomFx_GrabNop6(void);
-int RoomFx_GroundSweepMark(int mode, RoomGroundSweepMark *state);
-int RoomFx_OrbitTrailParticle(int mode, RoomOrbitTrailParticle *p);
-int RoomFx_RisingSprayParticle(int mode, RoomSpraySpark *spark);
+int RoomEffect_GrabNop0(void);
+int RoomEffect_GrabInit(RoomMotionTrigger *obj);
+int RoomEffect_GrabConfigure(char *obj, int arg1, int op, int arg3, int arg4);
+int RoomEffect_GrabNop3(void);
+int RoomEffect_GrabUpdate(RoomMotionTrigger *obj);
+void RoomEffect_GrabAwaitTarget(RoomMotionTrigger *obj);
+void RoomEffect_GrabStartOnProximity(RoomMotionTrigger *arg);
+void RoomEffect_GrabHold(RoomMotionTrigger *arg0);
+void RoomEffect_GrabResetPlayer(FieldActor *unused, RoomGrabStateTail *state);
+int RoomEffect_GrabRelease(RoomMotionTrigger *entity);
+int RoomEffect_GrabNop6(void);
+int RoomEffect_GroundSweepMark(int mode, RoomGroundSweepMark *state);
+int RoomEffect_OrbitTrailParticle(int mode, RoomOrbitTrailParticle *p);
+int RoomEffect_RisingSprayParticle(int mode, RoomSpraySpark *spark);
 
 void func_8003E0FC(void *object, int count, void *out);
 void func_80020C74(void);

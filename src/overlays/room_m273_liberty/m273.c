@@ -66,7 +66,7 @@ typedef FieldActor Player;
 
 #include "m273_externs.h"
 
-void SceneEffect_GrabOnApproach(SceneGrabHead *head) {
+void RoomLib_GrabOnApproach(SceneGrabHead *head) {
     RoomSelectionState *typedState = (RoomSelectionState *)head;
     char *stateBytes = (char *)typedState;
     FieldActor *actor = typedState->actor;

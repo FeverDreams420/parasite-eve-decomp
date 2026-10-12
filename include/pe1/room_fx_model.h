@@ -45,7 +45,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomFxModelOwner, geom) == 0x1B4, room_fx_model_g
 int abs(int value);
 void func_80039B74(RoomFxModelGeom *geom, void *animation, int count, int mode);
 
-/* The mirror room controller (src/overlays/room_lib/RoomFx_MirrorModel.c),
+/* The mirror room controller (src/overlays/room_lib/RoomEffect_MirrorModel.c),
  * linked by room_m017, room_m018, room_m021, room_m045, room_m102,
  * room_m151 and room_m319: it finds an actor by kind, binds a mirror model
  * to it across a guide line and redraws the reflection every frame. */
@@ -65,15 +65,15 @@ extern unsigned short *volatile g_GeomVramPacketDst;
 extern void *g_RoomFxMirrorHandlers[7];
 extern GteMatrix g_RoomFxMirrorAxes;
 
-int RoomFx_MirrorNoOp0(void);
-int RoomFx_MirrorReset(RoomFxMirror *mirror);
-int RoomFx_MirrorSelect(RoomFxMirror *mirror, int cancel, u32 mode, int a, int b);
-int RoomFx_MirrorTick(RoomFxMirror *mirror);
-int RoomFx_MirrorNoOp4(void);
-int RoomFx_MirrorKill(u8 *state);
-int RoomFx_MirrorNoOp6(void);
-void RoomFx_ModelBind(RoomFxModelGeom *geom, RoomFxModelOwner *owner,
+int RoomEffect_MirrorNoOp0(void);
+int RoomEffect_MirrorReset(RoomFxMirror *mirror);
+int RoomEffect_MirrorSelect(RoomFxMirror *mirror, int cancel, u32 mode, int a, int b);
+int RoomEffect_MirrorTick(RoomFxMirror *mirror);
+int RoomEffect_MirrorNoOp4(void);
+int RoomEffect_MirrorKill(u8 *state);
+int RoomEffect_MirrorNoOp6(void);
+void RoomEffect_ModelBind(RoomFxModelGeom *geom, RoomFxModelOwner *owner,
                       int x0, int z0, int x1, int z1);
-void RoomFx_ModelUpdate(RoomFxModelGeom *geom);
+void RoomEffect_ModelUpdate(RoomFxModelGeom *geom);
 
 #endif

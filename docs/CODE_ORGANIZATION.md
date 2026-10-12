@@ -166,7 +166,7 @@ after what their functions do (`fx_common/camera_nodes.c`,
   `RoomM273DropQueue` that starts with that seed; that unit separates
   `m273.c` from `m273_boss_sway.c` until the template can take the queue's
   member.
-- Not attempted: `room_lib/RoomFx_MotionParticles{,_2,_3}` (split by
+- Not attempted: `room_lib/RoomEffect_MotionParticles{,_2,_3}` (split by
   `-fno-strength-reduce`, needs a probe first).
 
 ### Resident translation units (src/main, 2026-10-12)
@@ -846,7 +846,7 @@ How the earlier groups were closed, for the next symbols of the same kind:
   with the projection slot record `D_800BCFA8`,
   `RoomEffect_ConfiguredPulseCallback` with `*(volatile u16 *)&D_800E11E8`).
   The cc1 `-G8` trick needs a unit without small data definitions of its
-  own: in `RoomFx_GrabAttackSet` its `.sdata` is discarded by the overlay
+  own: in `RoomEffect_GrabAttackSet` its `.sdata` is discarded by the overlay
   link.
 - The texture slot words `D_800E11E8`/`D_800E11EA` are declared once as
   `u16` entries of the slot table (`field_texture_tables.h`); the one-field
@@ -859,7 +859,7 @@ How the earlier groups were closed, for the next symbols of the same kind:
   view macros, and `RoomLib_SetTaskVar0` returns its address.
 - A unit in a shared overlay directory (room_lib) now counts towards the
   rooms whose splat config links it, so `RoomLib_CaptureFrameSample`
-  (m156/m291/m380) and `RoomFx_EffectSequence` (other rooms) no longer
+  (m156/m291/m380) and `RoomEffect_EffectSequence` (other rooms) no longer
   collide at `D_80192C34`/`D_80192C38`/`D_80192C3C`.
 
 Still open:

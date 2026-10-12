@@ -19,11 +19,11 @@
 #include "pe1/render_tint.h"
 #include "pe1/entity_frame_update.h"
 
-void RoomFx_ModelDraw(RenderObjectEntity *entity);
+void RoomEffect_ModelDraw(RenderObjectEntity *entity);
 
 void *g_RoomFxMirrorHandlers[7] = {
-    RoomFx_MirrorNoOp0, RoomFx_MirrorReset, RoomFx_MirrorSelect, RoomFx_MirrorTick,
-    RoomFx_MirrorNoOp4, RoomFx_MirrorKill, RoomFx_MirrorNoOp6,
+    RoomEffect_MirrorNoOp0, RoomEffect_MirrorReset, RoomEffect_MirrorSelect, RoomEffect_MirrorTick,
+    RoomEffect_MirrorNoOp4, RoomEffect_MirrorKill, RoomEffect_MirrorNoOp6,
 };
 
 /* Mirror across the YZ plane: x negated. */
@@ -32,11 +32,11 @@ GteMatrix g_RoomFxMirrorAxes = {
     { 0, 0, 0 },
 };
 
-int RoomFx_MirrorNoOp0(void) {
+int RoomEffect_MirrorNoOp0(void) {
     return 0;
 }
 
-int RoomFx_MirrorReset(RoomFxMirror *mirror) {
+int RoomEffect_MirrorReset(RoomFxMirror *mirror) {
     mirror->target = 0;
     mirror->lineZ0 = 0;
     mirror->lineX0 = 0;
@@ -50,7 +50,7 @@ int RoomFx_MirrorReset(RoomFxMirror *mirror) {
 /* Script entry: mode 0 finds the first idle actor of the given kind,
  * modes 1 and 2 set the guide line's ends, mode 3 starts or stops the
  * mirror. */
-int RoomFx_MirrorSelect(RoomFxMirror *mirror, int cancel, u32 mode, int a, int b) {
+int RoomEffect_MirrorSelect(RoomFxMirror *mirror, int cancel, u32 mode, int a, int b) {
     RoomFxModelOwner **target = &mirror->target;
 
     switch (mode) {
@@ -84,38 +84,38 @@ int RoomFx_MirrorSelect(RoomFxMirror *mirror, int cancel, u32 mode, int a, int b
     return 0;
 }
 
-int RoomFx_MirrorTick(RoomFxMirror *mirror) {
+int RoomEffect_MirrorTick(RoomFxMirror *mirror) {
     if (mirror->bound == 0) {
-        RoomFx_ModelBind(&mirror->object->geom, mirror->target, mirror->lineX0,
+        RoomEffect_ModelBind(&mirror->object->geom, mirror->target, mirror->lineX0,
                          mirror->lineZ0, mirror->lineX1, mirror->lineZ1);
         mirror->bound = 1;
     }
     if (mirror->active != 0) {
-        RoomFx_ModelUpdate(&mirror->object->geom);
+        RoomEffect_ModelUpdate(&mirror->object->geom);
         Render_TransformVertices((RenderObjectEntity *)&mirror->object->geom);
         Render_TransformMorphVertices((RenderObjectEntity *)&mirror->object->geom,
                                       g_GeomVramPacketDst);
-        RoomFx_ModelDraw((RenderObjectEntity *)&mirror->object->geom);
+        RoomEffect_ModelDraw((RenderObjectEntity *)&mirror->object->geom);
     }
     return 0;
 }
 
-int RoomFx_MirrorNoOp4(void) {
+int RoomEffect_MirrorNoOp4(void) {
     return 0;
 }
 
-int RoomFx_MirrorKill(u8 *state) {
+int RoomEffect_MirrorKill(u8 *state) {
     *state = 4;
     return 0;
 }
 
-int RoomFx_MirrorNoOp6(void) {
+int RoomEffect_MirrorNoOp6(void) {
     return 0;
 }
 
 /* An old-style definition, as retail: the callers pass the line ends as
  * ints, the binder reads them back as halfwords. */
-void RoomFx_ModelBind(geom, owner, x0, z0, x1, z1)
+void RoomEffect_ModelBind(geom, owner, x0, z0, x1, z1)
     RoomFxModelGeom *geom;
     RoomFxModelOwner *owner;
     u16 x0;
@@ -135,7 +135,7 @@ void RoomFx_ModelBind(geom, owner, x0, z0, x1, z1)
 /* Mirror the owner's model across the guide line: reflect its position
  * through the line, flip its rotation and point the model along the line,
  * then rebuild the animation matrices. */
-void RoomFx_ModelUpdate(RoomFxModelGeom *geom) {
+void RoomEffect_ModelUpdate(RoomFxModelGeom *geom) {
     RoomFxModelOwner *owner = geom->owner;
     RoomFxModelGeom *parent = &owner->geom;
     s16 dx = -geom->line_x0 + geom->line_x1;
@@ -208,7 +208,7 @@ void RoomFx_ModelUpdate(RoomFxModelGeom *geom) {
 }
 
 /* Projected screen XY and view depth of the transformed model vertices. */
-#include "RoomFx_MirrorModel_externs.h"
+#include "RoomEffect_MirrorModel_externs.h"
 
 /* PSY-Q libgpu style ordering-table link through the 24-bit tag address. */
 #define ROOMFX_SETADDR(p, a) (((RenderGpuTag *)(p))->address = (u32)(a))
@@ -221,7 +221,7 @@ void RoomFx_ModelUpdate(RoomFxModelGeom *geom) {
  * winding) into the active ordering table at their average depth; culled
  * faces get a null link. Quads and triangles of both packet classes are
  * walked in turn through one shared descriptor cursor. */
-void RoomFx_ModelDraw(RenderObjectEntity *entity) {
+void RoomEffect_ModelDraw(RenderObjectEntity *entity) {
     int i;
     s32 *area = (s32 *)0x1F800000;
     u32 *xy = D_800B1644;

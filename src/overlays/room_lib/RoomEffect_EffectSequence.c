@@ -34,23 +34,23 @@ static const RoomOverlay024MatrixSeed8 s_EffectProjectSeed = {{0x00, 0x00, 0x10,
 static const RoomOverlay024VectorSeed s_EffectVectorSeed = {{0x1388, 0xC18, 0x1388, 0}};
 
 /* Class slot 3: registers the draw list. */
-ROOMLIB_REGISTER_TABLE_ANY(RoomFx_EffectSequenceRegister, g_RoomDrawList)
+ROOMLIB_REGISTER_TABLE_ANY(RoomEffect_EffectSequenceRegister, g_RoomDrawList)
 
 /* Class slot 4: registers the update handlers and spawns the module's
  * objects, closing the module when either call fails. */
-ROOMLIB_START_ANY(RoomFx_EffectSequenceStart, g_RoomUpdateList, g_RoomInitList,
-                  g_RoomSpawnLayout, RoomFx_EffectSequenceNop5)
+ROOMLIB_START_ANY(RoomEffect_EffectSequenceStart, g_RoomUpdateList, g_RoomInitList,
+                  g_RoomSpawnLayout, RoomEffect_EffectSequenceNop5)
 
 /* Class slot 5: the module closes without touching its target. */
-s32 RoomFx_EffectSequenceNop5(void *o) {
+s32 RoomEffect_EffectSequenceNop5(void *o) {
     return 0;
 }
 
-s32 RoomFx_EffectSequenceNop6(void) {
+s32 RoomEffect_EffectSequenceNop6(void) {
     return 0;
 }
 
-void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatrixState *state) {
+void RoomEffect_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatrixState *state) {
     u8 offsetValue;
     RoomLink *link;
     RoomLibFxMatrixWords *matrix;
@@ -121,7 +121,7 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     ent->pad1[1] = *FieldFx_VarPtr(0);
 }
 
-void RoomFx_EffectSequenceNopA(void) {
+void RoomEffect_EffectSequenceNopA(void) {
 }
 
 #define ROOMLIB_EFFECT_CALL(command) \
@@ -130,7 +130,7 @@ void RoomFx_EffectSequenceNopA(void) {
     *FieldFx_RegPtr(index) = (value); \
     ROOMLIB_EFFECT_CALL(command)
 
-void RoomFx_ConfigureEffectSequence(int owner, RoomFxControl *signal)
+void RoomEffect_ConfigureEffectSequence(int owner, RoomFxControl *signal)
 {
     short counter;
     int mode3;
@@ -315,7 +315,7 @@ void RoomFx_ConfigureEffectSequence(int owner, RoomFxControl *signal)
 
 s32 *FieldFx_RegPtr(s32 index);
 
-void RoomFx_InitVariant38(void *arg0, void *arg1, RoomOverlay024Variant38SetupState *state) {
+void RoomEffect_InitVariant38(void *arg0, void *arg1, RoomOverlay024Variant38SetupState *state) {
     state->transform_index = *FieldFx_RegPtr(1);
     state->resource_selector = *FieldFx_RegPtr(2);
     state->active_flag = 1;
@@ -333,7 +333,7 @@ void RoomFx_InitVariant38(void *arg0, void *arg1, RoomOverlay024Variant38SetupSt
     state->field22 = 0;
 }
 
-void RoomFx_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control, RoomOverlay024Variant38State *state) {
+void RoomEffect_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control, RoomOverlay024Variant38State *state) {
     RoomOverlay024Root **owner_ptr;
     RoomOverlay024Root *owner;
     RoomOverlay024Transform *transform;
@@ -468,7 +468,7 @@ void RoomFx_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control, Roo
 
 int rand(void);
 
-void RoomFx_UpdatePairedSprite(void *unused,
+void RoomEffect_UpdatePairedSprite(void *unused,
                                        RoomFxControl *control,
                                        RoomFxPairedSpriteState *state) {
     RoomFxTransformOwner **ownerPtr;
@@ -560,7 +560,7 @@ void RoomFx_UpdatePairedSprite(void *unused,
 
 s32 func_80071A54(void);
 
-void RoomFx_InitVariant38Pulse(void *arg0, void *arg1, RoomOverlay024Variant38SetupState *state) {
+void RoomEffect_InitVariant38Pulse(void *arg0, void *arg1, RoomOverlay024Variant38SetupState *state) {
     s32 random;
 
     state->transform_index = *FieldFx_RegPtr(1);
@@ -583,7 +583,7 @@ void RoomFx_InitVariant38Pulse(void *arg0, void *arg1, RoomOverlay024Variant38Se
     state->random_mod = random % 40;
 }
 
-void RoomFx_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *control, RoomOverlay024Variant38State *state) {
+void RoomEffect_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *control, RoomOverlay024Variant38State *state) {
     RoomOverlay024Root **owner_ptr;
     RoomOverlay024Root *owner;
     RoomOverlay024Transform *transform;
@@ -712,7 +712,7 @@ void RoomFx_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *control
     func_800C42A4((FieldGlowSprite *)&D_80192C28, (GteMatrix *)&matrix, 1);
 }
 
-void RoomFx_UpdatePairedSpriteBurst(
+void RoomEffect_UpdatePairedSpriteBurst(
     void *unused, void *unusedControl, RoomFxPairedSpriteState *state) {
     RoomFxTransformOwner **ownerPtr;
     RoomFxTransform *transform;
@@ -819,7 +819,7 @@ void RoomFx_UpdatePairedSpriteBurst(
     }
 }
 
-void RoomFx_InitVariant290(void *arg0, void *arg1, RoomOverlay024Variant290SetupState *state) {
+void RoomEffect_InitVariant290(void *arg0, void *arg1, RoomOverlay024Variant290SetupState *state) {
     s32 random;
     s32 height;
 
@@ -844,7 +844,7 @@ void RoomFx_InitVariant290(void *arg0, void *arg1, RoomOverlay024Variant290Setup
     state->random_mod = random % 40;
 }
 
-void RoomFx_DrawVariant290(void *arg0, RoomOverlay024VariantControl *control, RoomOverlay024Variant290State *state) {
+void RoomEffect_DrawVariant290(void *arg0, RoomOverlay024VariantControl *control, RoomOverlay024Variant290State *state) {
     RoomOverlay024Root **owner_ptr;
     RoomOverlay024Root *owner;
     RoomOverlay024Transform *transform;
@@ -943,7 +943,7 @@ void RoomFx_DrawVariant290(void *arg0, RoomOverlay024VariantControl *control, Ro
     func_800C42A4((FieldGlowSprite *)&D_80192C38, (GteMatrix *)&matrix, 0);
 }
 
-void RoomFx_UpdateSparkleHeight(
+void RoomEffect_UpdateSparkleHeight(
     void *unused, RoomFxControl *control, RoomFxPairedSpriteState *state) {
     RoomFxTransformOwner **ownerPtr;
     RoomFxTransform *transform;
@@ -1021,7 +1021,7 @@ void RoomFx_UpdateSparkleHeight(
 
 s32 *FieldFx_RegPtr(s32 slot);
 
-void RoomFx_InitVariantD(void *arg0, void *arg1, RoomOverlay024VariantDSetupRecord *obj) {
+void RoomEffect_InitVariantD(void *arg0, void *arg1, RoomOverlay024VariantDSetupRecord *obj) {
     s32 random;
 
     obj->half2E = 0xD;
@@ -1038,7 +1038,7 @@ void RoomFx_InitVariantD(void *arg0, void *arg1, RoomOverlay024VariantDSetupReco
     obj->random_mod = random % 40;
 }
 
-void RoomFx_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, RoomOverlay024VariantDState *state) {
+void RoomEffect_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, RoomOverlay024VariantDState *state) {
     RoomOverlay024Root **owner_ptr;
     RoomOverlay024Root *owner;
     RoomOverlay024Transform *transform;
@@ -1147,7 +1147,7 @@ void RoomFx_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, Room
     func_800C42A4((FieldGlowSprite *)&D_80192C38, (GteMatrix *)&matrix, 0);
 }
 
-void RoomFx_UpdateTransformedSparkle(
+void RoomEffect_UpdateTransformedSparkle(
     void *unused, void *unusedControl, RoomFxPairedSpriteState *state) {
     RoomFxTransformOwner **ownerPtr;
     RoomFxTransform *transform;
@@ -1230,13 +1230,13 @@ void RoomFx_UpdateTransformedSparkle(
     }
 }
 
-void RoomFx_EffectSequenceNopB(void) {
+void RoomEffect_EffectSequenceNopB(void) {
 }
 
 void FieldFx_ModelSetDepthBias(s32 arg0);
 void func_800C6EC0(s32 arg0, s32 arg1);
 
-void RoomFx_DrawEffectGlow(void) {
+void RoomEffect_DrawEffectGlow(void) {
     RoomOverlay024Root **root;
     RoomOverlay024View *view;
     RoomOverlay024ViewMatrix matrix;
@@ -1277,10 +1277,10 @@ void RoomFx_DrawEffectGlow(void) {
     FieldFx_ModelRestoreColors(D_80192C34);
 }
 
-void RoomFx_EffectSequenceNopC(void) {
+void RoomEffect_EffectSequenceNopC(void) {
 }
 
-void RoomFx_SpawnDriftingEffect(void *arg0, void *arg1, RoomOverlay024Effect *effect) {
+void RoomEffect_SpawnDriftingEffect(void *arg0, void *arg1, RoomOverlay024Effect *effect) {
     RoomOverlay024View *view;
     RoomOverlay024MatrixSeed8 seed;
     u16 out[4];
@@ -1339,7 +1339,7 @@ typedef RoomFxSeed8 RoomLibMatrixSeed;
 
 typedef RoomOverlay024VectorSeed RoomLibVectorSeed;
 
-void RoomFx_DrawScaledEffect(void *unused0, void *unused1, RoomLibScaledEffect *effect) {
+void RoomEffect_DrawScaledEffect(void *unused0, void *unused1, RoomLibScaledEffect *effect) {
     RoomLibEffectRootTable *roots;
     RoomLibEffectView *view;
     RoomLibEffectMatrix matrix;
@@ -1429,7 +1429,7 @@ typedef RoomFxSeed8 RoomDriftMatrixSeed;
 
 s32 rand(void);
 
-void RoomFx_UpdateDriftingEffect(void *arg0, void *arg1, RoomDriftEffect *effect) {
+void RoomEffect_UpdateDriftingEffect(void *arg0, void *arg1, RoomDriftEffect *effect) {
     RoomDriftView *view;
     RoomDriftEffect *current;
     RoomDriftMatrixSeed seed;

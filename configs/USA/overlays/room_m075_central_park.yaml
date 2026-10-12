@@ -35,8 +35,8 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x0, rodata, room_m075_central_park]
-      - [0xC, .rodata, ../room_lib/RoomFx_MotionParticles]
-      - [0x14, .rodata, ../room_lib/RoomFx_MotionParticles_2]
+      - [0xC, .rodata, ../room_lib/RoomEffect_MotionParticles]
+      - [0x14, .rodata, ../room_lib/RoomEffect_MotionParticles_2]
       - [0x24, .rodata, ../room_lib/RoomLib_ActorClasses]
       - [0x1FC, rodata, RoomLib_HandlerCArgsData_80192FD4]
       - [0x1FC, c, ../room_lib/RoomLib_PlantScript]
@@ -46,9 +46,9 @@ segments:
       - [0x360, c, ../room_lib/RoomLib_CloseTarget]
       - [0x3E4, c, ../room_lib/RoomLib_ClassNop6]
       - [0x3EC, c, ../room_lib/RoomLib_ClassNop0]
-      - [0x3F4, c, ../room_lib/RoomFx_MotionParticles]
-      - [0x1428, c, ../room_lib/RoomFx_MotionParticles_2]
-      - [0x16E8, c, ../room_lib/RoomFx_MotionParticles_3]
+      - [0x3F4, c, ../room_lib/RoomEffect_MotionParticles]
+      - [0x1428, c, ../room_lib/RoomEffect_MotionParticles_2]
+      - [0x16E8, c, ../room_lib/RoomEffect_MotionParticles_3]
       - [0x1C1C, c, ../room_lib/RoomLib_ActorClasses]
       - [0x4F38, data, D_80193F20]
       - [0x4F50, data, RoomLib_TableA_8018F23C]
