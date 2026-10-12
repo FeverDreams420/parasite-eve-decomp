@@ -15,7 +15,7 @@ int g_MenuInputHeldStatusMask;
 
 #include "pe1/bounds_check.h"
 
-void Queue_Init(void) {
+void MenuInput_InitQueue(void) {
     MenuQueueEntry *entry;
     MenuQueueEntry *end;
 

@@ -31,7 +31,7 @@ s32 g_FieldRenderFlags;
 u32 D_8009D26C;
 u32 D_8009D2D4;
 
-/* Boot-time system initialization: InitSystem, the subsystem and global
+/* Boot-time system initialization: Boot_InitSystem, the subsystem and global
  * reset it is followed by, the start-up display reset, the vsync callback and
  * the pad start-up (G0341/G0342). */
 #include "../../../tools/m2c/m2c_macros.h"
@@ -44,7 +44,7 @@ void MemCard_InitManager(void);
 void Boot_InitMemCard(void);
 void DsInit(void);
 
-void InitSystem(void) {
+void Boot_InitSystem(void) {
     ResetCallback();
     Render_ResetScene(0x140, 0xE0);
     SpuInit();

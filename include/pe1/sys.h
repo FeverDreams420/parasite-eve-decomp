@@ -18,7 +18,7 @@ int Draw_SetBaseY(int unused, u32 y);
 void Boot_InitMemoryLayout(void);
 void Boot_InitGameState(void);
 /* Resets g_GameState and the scene voice-bank entries to start-up values. */
-void GameState_Reset(void);
+void Asset_ResetGameState(void);
 /* End-of-frame pass: draws the fade primitives and sends queued AKAO commands. */
 void Boot_FinishFrame(void);
 

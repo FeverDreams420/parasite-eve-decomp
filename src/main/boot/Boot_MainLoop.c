@@ -18,14 +18,14 @@ void main(void) {
     u32 token;
     Pe1GameState *state;
 
-    InitSystem();
+    Boot_InitSystem();
     mode = 0;
 
     for (;;) {
         state = &g_GameState;
         Boot_SyncShutdown();
 
-        while (OpenPeImage() != 0) {
+        while (Asset_OpenPeImage() != 0) {
             VSync(0);
         }
 

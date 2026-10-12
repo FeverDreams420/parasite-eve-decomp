@@ -33,7 +33,7 @@ void Render_SetupFogLayer(void *source);
 void ResetGraph(int mode);
 int DsSync(int id, void *result);
 int DsStatus(void);
-int OpenPeImage(void);
+int Asset_OpenPeImage(void);
 int Render_InitDisplayLists(int mode);
 
 #endif

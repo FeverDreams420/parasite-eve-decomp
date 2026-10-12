@@ -378,7 +378,7 @@ void Menu_CreateNotificationDialog(int message, int suffix) {
     parent->grid_width = width + 20;
     parent->x = (300 - width) >> 1;
     child->x = parent->grid_width - 68;
-    Queue_Init();
+    MenuInput_InitQueue();
 }
 
 void Menu_CloseNotificationDialogs(void) {
@@ -430,7 +430,7 @@ void Menu_CreateTwoLineDialog(int line0_id, int line1_id) {
     child->x = parent->grid_width - 0x44;
     child->y += 0xE;
 
-    Queue_Init();
+    MenuInput_InitQueue();
 }
 
 void Menu_DrawTwoLineDialogText(void) {
@@ -478,7 +478,7 @@ void Menu_OpenMemCardSelectDialog(s32 arg0) {
         MemCard_SetDialogActive(1);
         MemCard_InitState();
     }
-    Queue_Init();
+    MenuInput_InitQueue();
 }
 
 void Menu_OpenStartupMemCardDialog(void) {
@@ -509,7 +509,7 @@ void Menu_OpenStartupMemCardDialog(void) {
     g_McDialogMode = one;
     MemCard_SetDialogActive(1);
     MemCard_InitState();
-    Queue_Init();
+    MenuInput_InitQueue();
 }
 
 unsigned int MemCard_GetDialogMode(void) {
@@ -598,7 +598,7 @@ s32 Menu_CreateSaveSlotListView(s32 arg0, s32 arg1) {
         temp_s2->cursor_x = -1;
     }
     MenuWidget_CreateSimpleNode(0x3F, temp_s2, 0, 0)->draw = (void (*)())Menu_DrawSaveSlotPortLabel;
-    Queue_Init();
+    MenuInput_InitQueue();
     g_SaveSelectedSlot = arg0;
     return temp_s0;
 }
@@ -881,7 +881,7 @@ void Menu_StepInventoryRoot(s32 arg0, s32 arg1, s32 arg2);
 void Menu_OpenRenameScreen(s32 arg0);
 
 void Menu_OpenSaveLoadEntryPoint(s32 arg0) {
-    Queue_Init();
+    MenuInput_InitQueue();
     if ((MenuWidget_FindByModeAndSelectedBase(1, 0xD) == NULL) && (MenuWidget_FindByModeAndSelectedBase(1, 0x17) == NULL)) {
         if (arg0 != 0) {
             if (Inv_GetPackedListCursor() != 0) {

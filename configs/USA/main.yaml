@@ -282,7 +282,7 @@ segments:
       # Render_IncrementCounter's counter word lives in .text; it is data,
       # not a function (docs/CONVENTIONS.md, text-resident data).
       - {start: 0x2EE0C, type: data, name: render/Render_Counter, linker_section_order: .text, linker_section: .code_data}
-      # InitSystem, the subsystem reset, the start-up display reset, the vsync
+      # Boot_InitSystem, the subsystem reset, the start-up display reset, the vsync
       # callback and the pad/memory-card start-up (G0341/G0342); the render-flag
       # table builder and the per-frame pad and state transition handler share
       # private state (G0343). One -G8 FORCE_G0 unit with COMMON $gp words.

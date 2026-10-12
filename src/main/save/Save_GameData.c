@@ -422,7 +422,7 @@ unsigned int Save_GetMetadataRemainingChars(void) {
 SavedMenuMode g_SavedMenuMode;
 
 unsigned int Menu_GetActiveMode(void);
-void Window_SetBoundsByMode(int mode);
+void Battle_SetWindowBoundsByMode(int mode);
 
 /* Equips the inventory item whose equipment record has this ID: weapons
  * (kinds 1..8) and armor (kind 9). Returns nonzero when nothing was equipped. */
@@ -505,7 +505,7 @@ int Inv_EquipItemById(unsigned int itemId) {
 
 void Menu_ResetInputState(void) {
     g_SavedMenuMode.value = Menu_GetActiveMode() & 0xFF;
-    Window_SetBoundsByMode(0);
+    Battle_SetWindowBoundsByMode(0);
 }
 
 /* Open the player inventory using the same saved menu mode. */
@@ -516,7 +516,7 @@ void Menu_CreateInventoryTabView(void);
 void Inv_OpenAyaItemList(unsigned int arg) {
     g_MenuBattleEquipMode = arg;
     g_SavedMenuMode.value = Menu_GetActiveMode() & 0xFF;
-    Window_SetBoundsByMode(0);
+    Battle_SetWindowBoundsByMode(0);
     BattleCmd_SyncActiveAmmo();
     g_InvItemPtr = g_AyaInventoryItems;
     g_InvSlotLimit = Inv_GetAyaSlotLimit();
@@ -649,7 +649,7 @@ s32 Menu_RunFrameWithArg(s32 arg0) {
             Inv_SetActiveList(9, 0);
         }
         if (Menu_GetCommandResult() != 0) {
-            Window_SetBoundsByMode(g_SavedMenuMode.bytes.mode);
+            Battle_SetWindowBoundsByMode(g_SavedMenuMode.bytes.mode);
         }
         return Menu_GetCommandResult();
     }
@@ -678,7 +678,7 @@ s32 Menu_RunFrame(void) {
             Inv_SetActiveList(9, 0);
         }
         if (Menu_GetCommandResult() != 0) {
-            Window_SetBoundsByMode(g_SavedMenuMode.bytes.mode);
+            Battle_SetWindowBoundsByMode(g_SavedMenuMode.bytes.mode);
         }
         return Menu_GetCommandResult();
     }
@@ -960,7 +960,7 @@ int Inv_DispatchCommand(int command, int value, int other, int *unused) {
     }
     case INV_CMD_OPEN_STORAGE:
         Inv_TransferToStorage();
-        Queue_Init();
+        MenuInput_InitQueue();
         Menu_StepInventoryRoot(0, -3, -1);
         Menu_CreateContextHelpPanel();
         return 0;

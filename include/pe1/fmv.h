@@ -11,7 +11,7 @@
  *
  * == DISC SOURCE ==
  *   FMV streams live on the disc as \FMV1\PEDISC01.IDF;1 (CD1) and
- *   \FMV2\PEDISC02.IDF;1 (CD2) -- the same files OpenPeImage searches for disc
+ *   \FMV2\PEDISC02.IDF;1 (CD2) -- the same files Asset_OpenPeImage searches for disc
  *   detection (see pe_image.h). They are streamed via the CD/DsRead path, not
  *   read out of PE.IMG.
  *

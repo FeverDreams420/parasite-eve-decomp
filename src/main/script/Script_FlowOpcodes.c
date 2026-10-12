@@ -129,7 +129,7 @@ int Script_DispatchScriptCmd(TaskScriptArgs *args)
         Battle_DrawActiveStatus();
         return 1;
     case 2801:
-        Window_SetBoundsByMode(ARG_BYTE(args->arg1));
+        Battle_SetWindowBoundsByMode(ARG_BYTE(args->arg1));
         return 1;
     case 2900:
         g_GameState.flags |= 0x400000;

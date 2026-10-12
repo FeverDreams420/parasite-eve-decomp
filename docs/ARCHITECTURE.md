@@ -62,7 +62,7 @@ templates other shared code still instantiates per overlay.
 
 ## How the game runs
 
-- **Boot.** `main` opens `PE.IMG` (`OpenPeImage`, which also identifies the
+- **Boot.** `main` opens `PE.IMG` (`Asset_OpenPeImage`, which also identifies the
   disc), initializes the game state and subsystems, loads scene data, then
   runs a dispatch loop keyed by a scene token; the default case runs one
   frame (`Boot_RunFrame`).

@@ -18,7 +18,7 @@
 
 int DsPosToInt(CdlLOC *position);
 
-int OpenPeImage(void)
+int Asset_OpenPeImage(void)
 {
     DslFILE file;
     int status;
@@ -180,7 +180,7 @@ retryFog:
                 state = 4;
             break;
         case 4:
-            status = OpenPeImage();
+            status = Asset_OpenPeImage();
             switch (status) {
             case -1:
                 Draw_ResetTextboxes();
@@ -451,10 +451,10 @@ void Boot_SyncShutdown(void)
 void Boot_InitGameState(void)
 {
     Boot_InitMemoryLayout();
-    GameState_Reset();
+    Asset_ResetGameState();
 }
 
-void GameState_Reset(void)
+void Asset_ResetGameState(void)
 {
     int i;
     int j;

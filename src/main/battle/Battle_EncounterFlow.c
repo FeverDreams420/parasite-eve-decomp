@@ -226,7 +226,7 @@ void Battle_StartEncounter(int mode) {
         post_entity->actionCheckFn = callback;
         D_8009D27C = post_actor->translation[1] - 0x64;
     }
-    Window_SetBoundsByMode(mode_reg & 0xFF);
+    Battle_SetWindowBoundsByMode(mode_reg & 0xFF);
     {
         Combatant *final_actor;
         void *final_entity;

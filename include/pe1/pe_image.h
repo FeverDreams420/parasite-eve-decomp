@@ -9,7 +9,7 @@
  * single container we must understand byte-for-byte.
  *
  * == HOW IT IS LOCATED (boot) ==
- *   OpenPeImage() (src/main/cdrom/OpenPeImage.c) searches the ISO9660 volume
+ *   Asset_OpenPeImage() (src/main/cdrom/Asset_OpenPeImage.c) searches the ISO9660 volume
  *   with DsSearchFile() for these paths (verified from the data bytes at
  *   0x80011330 / 0x80011348 / 0x80011354):
  *     "\FMV1\PEDISC01.IDF;1"   -- CD1 marker
@@ -69,7 +69,7 @@
  *   The async "DsRead" subsystem (CdRom_*DsRead*) lets a load run across frames.
  *
  * == PORTING NOTES ==
- *   - Replace OpenPeImage with: open the extracted PE.IMG; set base = 0.
+ *   - Replace Asset_OpenPeImage with: open the extracted PE.IMG; set base = 0.
  *   - sectorOffset * 2048 == byte offset into the extracted file.
  *   - Keep the Tier-1 tables (dump them from the EXE) and the Asset_FindTable*
  *     descriptor logic verbatim; only the read primitive changes (fseek+fread).
@@ -88,7 +88,7 @@
 extern unsigned int   g_PeImageBaseLba;    /* =0x800B0DD8: PE.IMG start sector, found at boot */
 extern signed char    g_PeImageMountFlags; /* =0x800B0DCD: bit0 CD1 (FMV1), bit1 CD2 (FMV2) */
 
-/* ISO9660 paths searched by OpenPeImage. */
+/* ISO9660 paths searched by Asset_OpenPeImage. */
 extern char g_PeDisc1MarkerPath[]; /* "\FMV1\PEDISC01.IDF;1" */
 extern char g_PeImagePath[];       /* "\PE.IMG;1" */
 extern char g_PeDisc2MarkerPath[]; /* "\FMV2\PEDISC02.IDF;1" */

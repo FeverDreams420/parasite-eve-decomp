@@ -1400,7 +1400,7 @@ void Menu_StepEquipSlotSelect2(void) {
 #include "pe1/menu_inventory.h"
 
 void Menu_DrawBonusPointSpendPanel(void);
-s32 Spend_BonusPoints(void *node, u32 buttons);
+s32 Menu_SpendBonusPoints(void *node, u32 buttons);
 
 void Menu_OpenBonusPointSpendDialog(MenuWidgetNode *arg0, s32 arg1) {
     MenuWidgetNode *node;
@@ -1408,7 +1408,7 @@ void Menu_OpenBonusPointSpendDialog(MenuWidgetNode *arg0, s32 arg1) {
 
     node = MenuWidget_CreateSimpleNode(9, arg0, 0, 1);
     node->draw = Menu_DrawBonusPointSpendPanel;
-    node->update = Spend_BonusPoints;
+    node->update = Menu_SpendBonusPoints;
     node->flags = 1;
     MenuWidget_SetCurrentNode(node);
 
@@ -1498,7 +1498,7 @@ void Menu_DrawBonusPointSpendPanel(void) {
 }
 #include "pe1/inventory.h"
 
-int Spend_BonusPoints(void *node, unsigned int buttons)
+int Menu_SpendBonusPoints(void *node, unsigned int buttons)
 {
     ItemDataRecord *item;
     int amount;

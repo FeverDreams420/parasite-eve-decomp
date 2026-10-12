@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-void InitSystem(void);
+void Boot_InitSystem(void);
 void Boot_VsyncCallback(void);
 
 /* Frame counter Boot_FrameLoop advances once per frame (an array view, so

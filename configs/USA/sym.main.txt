@@ -125,7 +125,7 @@ _96_remove = 0x8007436C; // type:func
 
 Field_LoadMap = 0x80012A90; // type:func
 Save_InitSystem = 0x80029388; // type:func
-Window_SetBoundsByMode = 0x800339A0; // type:func
+Battle_SetWindowBoundsByMode = 0x800339A0; // type:func
 Save_DrawSlotMetadata = 0x8003495C; // type:func
 MemCard_GetSlot = 0x800424B4; // type:func
 MemCard_CloseAll = 0x80042798; // type:func
@@ -490,7 +490,7 @@ SeqOp_SetFlag4 = 0x80090C38; // type:func
 // PE.IMG / disc data loader.
 // Probes disc marker files, opens \PE.IMG;1 by converting its CdlLOC to a base
 // LBA, and records which disc's archive was found.
-OpenPeImage = 0x800698D4; // type:func
+Asset_OpenPeImage = 0x800698D4; // type:func
 
 // CD filesystem/status helpers used by the PE.IMG loader path.
 DsSystemStatus = 0x8007F72C; // type:func
@@ -598,7 +598,7 @@ g_SaveTitleFormatShort = 0x80010F18; // type:char*
 // Cheat-code xref labels.
 // Sourced from curated GameShark/CodeBreaker addresses in
 // .claude/worktrees/pe-img-loader/cheat_xref.md.
-Spend_BonusPoints = 0x8004A9A0; // type:func
+Menu_SpendBonusPoints = 0x8004A9A0; // type:func
 Aya_SetTotalExp = 0x8004B70C; // type:func
 Aya_HasParasiteSpell = 0x80051834; // type:func
 Aya_UnlockParasiteSpell = 0x8005184C; // type:func
@@ -795,7 +795,7 @@ Aya_GetLevelExpTable = 0x8005DBF8; // type:func
 Aya_GetParasiteSpellUnlockTable = 0x8005DC10; // type:func
 Text_LookupTable4 = 0x8005DC4C; // type:func
 Text_LookupTable8 = 0x8005DC9C; // type:func
-Queue_Init = 0x8005DE88; // type:func
+MenuInput_InitQueue = 0x8005DE88; // type:func
 MenuInput_SetPollingPaused = 0x8005E114; // type:func
 MenuInput_GetRepeatStep = 0x8005E120; // type:func
 Draw_SetBaseOffsetPosition = 0x8005E850; // type:func
@@ -1294,7 +1294,7 @@ func_80069594 = 0x80069594; // type:func
 Render_InitDisplayLists = 0x80069B08; // type:func
 Boot_FinishFrame = 0x8006A0E8; // type:func
 Akao_LoadVoiceBank = 0x8006A318; // type:func
-GameState_Reset = 0x8006A674; // type:func
+Asset_ResetGameState = 0x8006A674; // type:func
 Akao_LoadVoiceBankAlt = 0x8006B35C; // type:func
 Scene_LoadEntityTexture = 0x8006BECC; // type:func
 Scene_SetStoryDay = 0x8006C4C4; // type:func

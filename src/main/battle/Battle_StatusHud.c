@@ -1286,7 +1286,7 @@ u8 g_MenuActiveMode;
 volatile u16 D_8009CE84;
 u16 g_MenuActiveWindowYOffset;
 
-void Window_SetBoundsByMode(int mode) {
+void Battle_SetWindowBoundsByMode(int mode) {
     SaveWindowModeBounds bounds;
     volatile u16 *entry;
 
@@ -1591,7 +1591,7 @@ void Render_AnimationFrame(void) {
 }
 
 /* Status symbol templates (three 18-byte glyph strips the status primitive
- * flow copies) and the per-mode window bounds Window_SetBoundsByMode reads:
+ * flow copies) and the per-mode window bounds Battle_SetWindowBoundsByMode reads:
  * the data that sat between this module's rodata as main/rodata_0015FC.
  * They are defined after every user, so the users still copy them as the
  * byte-aligned objects their declarations describe; GCC emits them after the

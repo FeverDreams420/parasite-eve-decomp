@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-void Queue_Init(void);
+void MenuInput_InitQueue(void);
 
 typedef struct MenuQueueEntry {
     struct MenuQueueEntry *next;

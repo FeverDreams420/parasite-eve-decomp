@@ -94,7 +94,7 @@ void Menu_OpenEquipScreen(int mode)
     }
     g_MenuActionSubmenuOpen = 0;
     g_MenuSelectionLocked = 0;
-    Queue_Init();
+    MenuInput_InitQueue();
 }
 
 /* Reopen the equip screen with the current menu mode restored. */
@@ -511,7 +511,7 @@ void Menu_CreateItemUsePanel(int itemId) {
         MenuWidget_SetCurrentNode(node);
     }
     MenuWidget_CreateSimpleNode(0x13, 0, 0, 0)->draw = (void (*)())&Menu_DrawEquipItemName;
-    Queue_Init();
+    MenuInput_InitQueue();
 }
 
 void Menu_DrawEquipStatsPanel(void) {

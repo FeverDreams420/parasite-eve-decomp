@@ -28,7 +28,7 @@ void Battle_ResetEnemyStats(int mode);
 void Battle_SetupEnemyAnims(void);
 void Battle_CheckDropChance(void);
 int Entity_CheckActionIdMatch(void);
-void Window_SetBoundsByMode(int mode);
+void Battle_SetWindowBoundsByMode(int mode);
 void Battle_StartEncounter(int mode);
 
 #endif

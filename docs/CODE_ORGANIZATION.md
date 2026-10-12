@@ -442,7 +442,7 @@ Crutches still in place (lev is the only metric):
   words at 0x800942E0. A record member at a fixed address may alias the
   slot stores, so loop.c keeps the reload in the loop and takes the address
   into a register, which is retail's code exactly.
-- `GameState_Reset` (3 pins, 3 launders, byte offsets off `base`): the
+- `Asset_ResetGameState` (3 pins, 3 launders, byte offsets off `base`): the
   eight ordering barriers were redundant and are gone. Each remaining
   launder makes a -1 or the loop counter look like a fresh value after a
   store so it is not merged with an earlier constant (lev 11, 2 and 14 when
@@ -534,7 +534,7 @@ Crutches still in place (lev is the only metric):
   `CdRom_PollReady` puts a stack local in front of the `return`, and
   `CdRom_FindNextDataSector` restarts after its setup, so the helper's
   parameter copies stay as moves at the reentry label (lev 30).
-- `OpenPeImage` (2 barriers): retail leaves the delay slot of the second and
+- `Asset_OpenPeImage` (2 barriers): retail leaves the delay slot of the second and
   third `found == 0` tests empty; without the barriers reorg fills it with
   the -1 constant (lev 5-8).
 - `Render_DrawWireframeModel` (1 goto): the floor-edge search shares the far
@@ -586,7 +586,7 @@ shapes that only exist for the bytes:
   how the copies leave: copies that jump to one join (an `else if` chain
   with a single `return` at the end, `break` out of a `switch`) collapse
   into the last copy; copies that each end in `return` collapse into the
-  first. `Spend_BonusPoints` uses both: the decrement cases end in their
+  first. `Menu_SpendBonusPoints` uses both: the decrement cases end in their
   own move/error sounds and `break`, so the success tail stays in the last
   case and the error call after it, while the increment arm keeps its own
   move sound with an early `return` and falls through to one error call.
@@ -663,7 +663,7 @@ Crutches still in place (lev is the only metric):
   it in a saved register (the `MAX`-style repeated call form is lev 42:
   GCC compares SYMBOL_REFs by name, so only a second name is a second
   constant).
-- `Window_SetBoundsByMode` (volatile window X and bound pointer): plain or
+- `Battle_SetWindowBoundsByMode` (volatile window X and bound pointer): plain or
   multi-set forms keep the order but swap v0/v1 (lev 5).
 - `Menu_DrawTextboxEntries` (pins, barriers, 6 gotos, stack reserve),
   `Render_SetupColorTable` (5 pins, 3 barriers) and `Render_SetupFogLayer`
@@ -1811,7 +1811,7 @@ of scope). Recipes, none of which changed a byte:
   masked word load.
 - `Draw_InitPipeline` clears `D_8009D2E8` through the symbol; the linker gives
   the same `lui 0x800a`/`-0x2D18` pair as the absolute address did.
-- `GameState_Reset` writes named fields; two loop counters (`i` for the
+- `Asset_ResetGameState` writes named fields; two loop counters (`i` for the
   scene object, `j` for the key/table loops) replace the `$3`/`$5` pins and
   two launders, and retail's store order of the movie fields is wide,
   active, frame, volume, index, sample bank.
@@ -1825,7 +1825,7 @@ of scope). Recipes, none of which changed a byte:
 
 Left, with the best crutch-free lev:
 
-- `GameState_Reset`: the `$3` pin on the colour fill (lev 82: without it
+- `Asset_ResetGameState`: the `$3` pin on the colour fill (lev 82: without it
   local-alloc puts the draw mode in `v1`, `a0` frees up for the table counter
   and the state base moves from `a2` to `a1`; no statement order of the flags
   read or fill form helps) and the `minusOne` launder (lev 9: the halfword

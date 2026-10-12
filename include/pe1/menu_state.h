@@ -67,12 +67,12 @@ extern int g_MenuLayoutLocked;
 extern int g_MenuItemRenameMode;
 extern int g_MenuItemDiscardMode;
 
-/* Window X and Y offset per menu window mode (Window_SetBoundsByMode). */
+/* Window X and Y offset per menu window mode (Battle_SetWindowBoundsByMode). */
 typedef struct {
     u16 values[8];
 } SaveWindowModeBounds;
 extern const SaveWindowModeBounds g_MenuWindowModeBounds;
-void Window_SetBoundsByMode(int mode);
+void Battle_SetWindowBoundsByMode(int mode);
 unsigned int Menu_GetActiveMode(void);
 
 /* Visual settings: the blend colour and screen base Y in effect when the

@@ -774,7 +774,7 @@ s32 Menu_OpenEquipSlotSwap(s32 arg0) {
 
     temp_s2 = MenuWidget_FindByModeAndSelectedBase(1, 1) != NULL;
     if (temp_s2 == 0) {
-        Queue_Init();
+        MenuInput_InitQueue();
         MenuWidget_CreateSimpleNode(0x1B, 0, 0, 0)->draw = (void (*)())Menu_DrawAmmoTypeHeader;
         temp_v0 = MenuWidget_CreateSimpleNode(1, 0, 0, 0);
         temp_s1 = MenuWidget_CreateNode(1, temp_v0, temp_v0);

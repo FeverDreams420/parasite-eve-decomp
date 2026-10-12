@@ -100,7 +100,7 @@ void Menu_FullInit(void) {
     Draw_InitBuffers();
     MenuWidget_InitPoolUnk();
     Menu_InitStateBuffer();
-    Queue_Init();
+    MenuInput_InitQueue();
     MemCard_ClearDelayedCallback();
     BattleCmd_InitTableCursor();
     Inv_BuildItemGridFromCategory();
