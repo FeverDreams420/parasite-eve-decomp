@@ -1,8 +1,8 @@
 #include "common.h"
 
-#include "func_801259F0_externs.h"
+#include "Boot_RecordReadPosition_externs.h"
 
-void func_801259F0(u8 mode, int value) {
+void Boot_RecordReadPosition(u8 mode, int value) {
     if (mode == 2) {
         D_80172CFC = func_80080C48(value + 5);
         if (D_80172CFC != 0) {

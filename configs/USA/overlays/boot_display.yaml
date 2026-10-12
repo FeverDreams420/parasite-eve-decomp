@@ -267,7 +267,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x28F0, c, func_80125794]
+      - [0x28F0, c, Boot_SetCdFilter]
   - [0x29DC]
   # Local jumps retain a link address 0x100 above this function's load address.
   - name: boot_display_playback_linkbase
@@ -288,7 +288,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x2B4C, c, func_801259F0]
+      - [0x2B4C, c, Boot_RecordReadPosition]
       # Boot display pointer and glyph tables: data, not code.
       - {start: 0x2BA4, type: data, name: boot_display_2648, linker_section_order: .text, linker_section: .code_data}
   - [0x2D5C]
