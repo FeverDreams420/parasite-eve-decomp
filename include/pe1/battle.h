@@ -241,7 +241,7 @@ typedef struct Combatant {
 /* 0x64 */ u16  panelAux_y;
 /* 0x66 */ u8   panelAux_timer; /* set to 0x1E when Battle_SubActionStep emits the descriptor */
 /* 0x67 */ u8   panelAux_mode;
-/* 0x68 */ struct BattleAction *action; /* the queued action/command descriptor; read by nearly every turn func via M2C_FIELD(combatant,void**,0x68) (Battle_Setup.c:195; Battle_DrawATBGauge.c:55; Battle_AdvanceTurnSlot.c:70) */
+/* 0x68 */ struct BattleAction *action; /* the queued action/command descriptor; read by nearly every turn func via M2C_FIELD(combatant,void**,0x68) (Battle_Setup.c:195; Battle_DrawATBGauge.c:55; Battle_TurnFlow.c:436) */
 /* 0x6C */ BattleAttributes *attributes;
 /* 0x70 */ void *field70;      /* TENTATIVE: no semantic use confirmed yet */
 /* 0x74 */ u8   pad_74[0x14];
@@ -348,7 +348,7 @@ typedef struct BattleAction {
            } actionCode;
 /* 0x08 */ s32  hitTrigger;    /* anim-row byte matched against the hit timer */
 /* 0x0C */ u32  attackWord;    /* &0x3FF = shot/hit countdown (consumed per hit), >>0x14&3 = weapon category (Battle_DrawATBGauge.c:55; Battle_AttackResolution.c:51) */
-/* 0x10 */ u32  turnWord;      /* &0xF = remaining actions, >>4&3 = active turn slot, &0xC0 = action mode, 0x100..0x1000 = attack element (Battle_Setup.c:195; Battle_AdvanceTurnSlot.c:70; Battle_StartEnemyAttackEffect.c:26) */
+/* 0x10 */ u32  turnWord;      /* &0xF = remaining actions, >>4&3 = active turn slot, &0xC0 = action mode, 0x100..0x1000 = attack element (Battle_Setup.c:195; Battle_TurnFlow.c:436; Battle_StartEnemyAttackEffect.c:26) */
 /* 0x14 */ u8   animMode[4];   /* per-facing anim/effect ids [0x14..0x17], filled from a 5-byte table (Battle_Setup.c:197; Battle_SetupEntityTarget.c:55) */
                                /* ... continues; rest unmapped */
 } BattleAction;

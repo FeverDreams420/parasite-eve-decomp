@@ -1328,7 +1328,7 @@ or for the best crutch-free form tried:
   s*0x8C` order; the macro form wastes 8 to 48 stack bytes because combine
   leaves `(use)` insns for the deleted base registers, the direct array form
   computes the slot offset first (lev 73 to 128).
-- `Battle_ActionSlotAndEnemy.c`: `room` (`$4`, lev 27: one delay slot,
+- `Battle_TurnFlow.c`: `room` (`$4`, lev 27: one delay slot,
   the rest is branch offsets), the `actor` barrier (lev 129: global
   allocation swaps s0/s1), the `stepDeathAnimation` goto (lev 184 for an
   inline search helper).

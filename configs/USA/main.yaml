@@ -84,7 +84,7 @@ segments:
       - [0x1068, pad] # retail alignment after the 17-entry Aya action jump table
       - [0x106C, .rodata, battle/Battle_RollEscapeChance]
       - [0x1080, rodata, main/rodata_001080]
-      - [0x1084, .rodata, battle/Battle_TargetAndEnemyTurnFlow]
+      - [0x1084, .rodata, battle/Battle_TurnFlow]
       - [0x10E4, .rodata, battle/Battle_StepEnemyMovement]
       - [0x10F0, .rodata, battle/Battle_StepVictory]
       - [0x1110, .rodata, battle/Battle_StepPostBattle]
@@ -224,12 +224,14 @@ segments:
       - [0x13808, c, battle/Battle_AttackResolution]
       - [0x15CBC, c, battle/Battle_DispatchSpecialAction]
       - [0x15DE4, c, battle/Battle_RollEscapeChance]
-      - [0x160CC, c, battle/Battle_TargetAndEnemyTurnFlow]
-      - [0x174F0, c, battle/Battle_AdvanceTurnSlot]
-      # Initializer and target-highlight animation share their fade state.
-      - [0x177D0, c, battle/Battle_TargetFade]
-      - [0x17DCC, c, battle/Battle_MarkActiveEntities]
-      - [0x18208, c, battle/Battle_ActionSlotAndEnemy]
+      # Turn flow: target and enemy turn, turn slot advance, target fade initializer
+      # and highlight animation (their fade state), active entity marks and action
+      # slot processing. One -G8 FORCE_G0 unit with COMMON $gp words, --expand-div
+      # and ASPSX 2.70. The escape roll before it stays apart until
+      # main/rodata_001080 is claimed as C data; the enemy movement after it stays
+      # apart because one object would pad the 8-aligned turn-flow rodata after the
+      # movement's 11 bytes (the link grows by 4).
+      - [0x160CC, c, battle/Battle_TurnFlow]
       - [0x18D74, c, battle/Battle_StepEnemyMovement]
       - [0x19448, c, battle/Battle_UpdateEntityFacing]
       - [0x19694, c, battle/Battle_StepEntityAnimState]
