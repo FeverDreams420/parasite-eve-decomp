@@ -69,9 +69,9 @@ int func_801981D0(int event, RoomM350FlareParticle *particle)
 int func_80198400(int event) {
     GteShortVector offset,vertices[4];
     GteShortVector *previousEndpoint;
-    volatile short *currentEndpoint;
+    const GteShortVector *currentEndpoint;
     GteShortVector *previousOppositeEndpoint;
-    volatile short *currentOppositeEndpoint;
+    const GteShortVector *currentOppositeEndpoint;
     int area;
     FieldActor *instance=(FieldActor *)ANIM_OWNER_AS(RoomM350EffectActor)->instance;
     switch (event) {
@@ -82,9 +82,9 @@ int func_80198400(int event) {
         case 1:
     previousEndpoint=&D_8019A8A8;
     previousOppositeEndpoint=&D_8019A8B0;
-    currentOppositeEndpoint=&D_8019A8A0;
+    currentOppositeEndpoint=(const GteShortVector *)&D_8019A8A0;
     if(instance->anim.parts.integer>=31) return 2;
-    currentEndpoint=&D_8019A898;
+    currentEndpoint=(const GteShortVector *)&D_8019A898;
     if(!(D_800E27EC&1)) {
         RoomM350FlareParticle *particle=func_800CE610(ANIM_POOL_AS(RoomM350EffectEmitter)->pool);
         if(particle) {
@@ -94,8 +94,8 @@ int func_80198400(int event) {
         }
     }
     if(D_8019A8C0 || instance->mode!=9) return 0;
-    *previousEndpoint=*(GteShortVector *)currentEndpoint;
-    *previousOppositeEndpoint=*(GteShortVector *)currentOppositeEndpoint;
+    *previousEndpoint=*currentEndpoint;
+    *previousOppositeEndpoint=*currentOppositeEndpoint;
     offset.x=256; offset.y=0; offset.z=0;
     ApplyMatrixSV((GteMatrix *)&instance->render_object.model_matrix,&offset,&offset);
     {
