@@ -1111,16 +1111,13 @@ segments:
       # share the model header and the tpage/CLUT/semi-transparency state (TU evidence:
       # private data D_800F346C, D_800F3414, D_800F33E4, D_800F3420).
       - [0xB755C, c, fieldfx/FieldEng_TexturedModel]
-      # Eight field effect objects, one module each. The descriptor table D_80094188 lists
-      # them; each descriptor names a setup function, the spawn/register/update entry points
-      # and the particle and state callback lists. Every module starts with its setup
-      # function and ends with its state callbacks, and the data each setup function points
-      # at sits after that module's own lists, so the setups open the following unit. The
-      # burst module is split in three where -fno-schedule-insns differs (_2 only).
-      - [0xB83A0, c, fieldfx/FieldEng_GlowEffect]
-      - [0xB9534, c, fieldfx/FieldEng_GlowEffectB]
-      - [0xBA270, c, fieldfx/FieldEng_GlowEffectC]
-      - [0xBAD74, c, fieldfx/FieldEng_FourLayerGlowEffect]
+      # Eight field effect objects. The descriptor table D_80094188 lists them; each
+      # descriptor names a setup function, the spawn/register/update entry points and the
+      # particle and state callback lists. Every module starts with its setup function and
+      # ends with its state callbacks, and the data each setup function points at sits after
+      # that module's own lists. The four glow classes are one unit (contiguous, one
+      # marker set); the burst module is split in three (_2/_3).
+      - [0xB83A0, c, fieldfx/FieldEng_GlowEffects]
       - [0xBC4A4, c, fieldfx/FieldEng_PointSpriteEffect]
       - [0xBD3A8, c, fieldfx/FieldEng_BurstEffect]
       - [0xBDC04, c, fieldfx/FieldEng_BurstEffect_2]

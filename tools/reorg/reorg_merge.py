@@ -189,6 +189,12 @@ def build_source(units: list[str], markers: list[str] | None,
                 own.append(m.group(1))
             elif (m := UNDEF.match(line)) and m.group(1) in own:
                 own.remove(m.group(1))
+            elif (m := rm.INCLUDE.match(line)):
+                inc = ROOT / os.path.dirname(units[index]) / m["path"]
+                if inc.is_file():  # a template that #undefs its parameters
+                    for inc_line in inc.read_text().splitlines():
+                        if (u := UNDEF.match(inc_line)) and u.group(1) in own:
+                            own.remove(u.group(1))
         redefined = [name for name in own if name in defined_later[index]]
         if redefined:
             out.extend(f"#undef {name}" for name in redefined)

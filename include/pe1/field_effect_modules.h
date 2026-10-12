@@ -6,7 +6,7 @@
 #include "pe1/field_engine_state.h"
 
 /* The eight field effect modules the descriptor table at 0x80094188 lists
- * (FieldEng_GlowEffect.c .. FieldEng_BurstEffectC.c). Each module is a class
+ * (FieldEng_GlowEffects.c .. FieldEng_BurstEffectC.c). Each module is a class
  * of seven methods, in the order of pe1/room_module.h: a no-op, the setup
  * that plants the module's command script into the engine slot, the spawn
  * forwarder, the draw pass over the draw list, the update pass (update list,
@@ -31,7 +31,7 @@ extern void *g_FieldEffectResource2;
 extern void *g_FieldEffectAssetTable;
 void *FieldAnim_GetEffectResource(int index);
 
-/* Glow effect (FieldEng_GlowEffect.c). */
+/* Glow effect (FieldEng_GlowEffects.c). */
 extern int g_GlowEffectScript[];
 extern FieldEngHandler g_GlowEffectInitList[];
 extern FieldEngHandler g_GlowEffectDrawList[];
@@ -51,7 +51,7 @@ int GlowEffect_RegisterPairedTables(void *object);
 int GlowEffect_CloseTarget(char *object);
 int GlowEffect_ClassNop6(void);
 
-/* Second glow effect (FieldEng_GlowEffectB.c). */
+/* Second glow effect (FieldEng_GlowEffects.c). */
 extern int g_GlowEffectBScript[];
 extern FieldEngHandler g_GlowEffectBInitList[];
 extern FieldEngHandler g_GlowEffectBDrawList[];
@@ -69,7 +69,7 @@ int GlowEffectB_RegisterPairedTables(void *object);
 int GlowEffectB_CloseTarget(char *object);
 int GlowEffectB_ClassNop6(void);
 
-/* Third glow effect (FieldEng_GlowEffectC.c). */
+/* Third glow effect (FieldEng_GlowEffects.c). */
 extern int g_GlowEffectCScript[];
 extern FieldEngHandler g_GlowEffectCInitList[];
 extern FieldEngHandler g_GlowEffectCDrawList[];
@@ -86,7 +86,7 @@ int GlowEffectC_RegisterPairedTables(void *object);
 int GlowEffectC_CloseTarget(char *object);
 int GlowEffectC_ClassNop6(void);
 
-/* Four-layer glow effect (FieldEng_FourLayerGlowEffect.c). */
+/* Four-layer glow effect (FieldEng_GlowEffects.c). */
 extern int g_FourLayerGlowScript[];
 extern FieldEngHandler g_FourLayerGlowInitList[];
 extern FieldEngHandler g_FourLayerGlowDrawList[];

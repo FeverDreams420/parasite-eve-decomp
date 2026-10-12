@@ -595,7 +595,7 @@ changing bytes:
   table and script state in typed globals (`FieldEngSlot *`,
   `FieldEngState *`); the slot address the two dispatch loops add as an
   integer, index first, is a `FieldEngSlotAddress` pointer/word union.
-- `FieldEng_GlowEffect.c` .. `FieldEng_BurstEffectC.c` are the eight effect
+- `FieldEng_GlowEffects.c` .. `FieldEng_BurstEffectC.c` are the eight effect
   module classes of `pe1/field_effect_modules.h`; their scripts, handler lists,
   slot sizes and tables are declared there under module names instead of the
   per-unit extern headers.
@@ -635,7 +635,7 @@ What is left (best crutch-free lev against retail):
   volatile stack parameters (lev 14 without them: sched2 interleaves the
   stack-argument loads with the register saves, retail loads them after the
   last save).
-- `FieldEng_FourLayerGlowEffect.c` `func_800CAE0C` (5 pins, 1 barrier): lev 50
+- `FieldEng_GlowEffects.c` `func_800CAE0C` (5 pins, 1 barrier): lev 50
   as four `gte_CompMatrix` layers. Local alloc ranks the composed translation
   source (`&rotation.t`) above the second-column addresses and leaves the
   matrix second column without a register; retail spills the translation
