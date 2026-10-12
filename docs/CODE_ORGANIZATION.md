@@ -145,10 +145,9 @@ after what their functions do (`fx_common/camera_nodes.c`,
   `menu_memcard` (`-fno-cse-skip-blocks` twice),
   `room_m273_liberty` (`RoomM273_PulseSpriteCallback`, `-fno-schedule-insns`,
   which also leaves `RoomEffect_PhasedArcSpriteFlow` alone after it),
-  `room_m350_cruiser` (`RoomEffect_ConfiguredPulseCallback`, `-G8`),
-  `scene_e18_cruiser` (`SceneE18_ExpandingRingCallback`,
-  `-fno-cse-skip-blocks`) and `scene_e20_cruiser` (the `-ffixed-*` hover orb
-  splits its three units).
+  `room_m350_cruiser` (`RoomEffect_ConfiguredPulseCallback`, `-G8`) and
+  `scene_e20_cruiser` (the `-ffixed-*` hover orb splits its three units).
+  `docs/COMPILATION_FLAGS.md` has the lev of each unit without its flag.
 - Between shared units: `scene_e08_chrysler/SceneE08_ModuleStart`,
   `room_m123_nypd/RoomM123_SelectSlotPointer`, `scene_e14_chrysler`'s only
   unit.

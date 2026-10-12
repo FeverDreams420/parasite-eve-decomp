@@ -40,10 +40,8 @@ segments:
         dir: scene_e18_cruiser
       - [0xC, .rodata, ../room_lib/RoomLib_ActorClasses]
       - [0x1E4, c, ../room_lib/RoomLib_ActorClasses]
-      - [0x3500, c, e18_model_emitters]
-      - [0x3E78, c, SceneE18_ExpandingRingCallback]
+      - [0x3500, c, e18_emitters]
       # Pulse-ring emitter and callback share one pool-record flow.
-      - [0x4030, c, e18_ring_emitters]
       - [0x4EF4, data]
   - [0x5000]
 # source slice: scanner

@@ -120,7 +120,7 @@ and the linked binaries stayed identical:
 | `menu/Menu_SaveScreens.c`, `menu/Menu_SkillScreens.c`, `script/Task_NodePool.c`, `fx_common/FxCommon_DrawPolyResource.c` | `--dont-expand-li` | no effect at ASPSX 2.56 |
 | `battle/Battle_AttackResolution.c`, `battle/Battle_EncounterFlow.c`, `room_lib/RoomEffect_SeekerSparkCallback.c`, `room_lib/RoomFx_DropFieldEffects.c` | `--expand-div` | no variable division left in the unit |
 | `item/Menu_OpenItemUsePanelAtIndex.c` | `--use-comm-section` | the unit defines no COMMON words |
-| `scene_e18_cruiser/SceneE18_ExpandingRingCallback.c` | cc1 `-fno-cse-skip-blocks` | the function matches without it |
+| `scene_e18_cruiser/e18_emitters.c` | cc1 `-fno-cse-skip-blocks` | the function matches without it |
 | `battle/Battle_AttackResolution.c` | `ASPSX_VERSION` 2.77 written as 2.70 | MASPSX configures both identically |
 
 `MASPSX_FORCE_G0` is also byte-identical without it in
@@ -147,6 +147,13 @@ then merged with them:
   under K8, and `main/rodata_0019A4` was the 8-alignment pad before the
   weapon-list constants).
 
+Merges that only needed a redundant marker gone:
+
+- `scene_e18_cruiser`: `SceneE18_ExpandingRingCallback` lost its
+  `-fno-cse-skip-blocks`, so the model emitters, the ring callback and the
+  ring emitters are one unit, `e18_emitters.c` (`--expand-div` is neutral
+  for the first two).
+
 ## Settings in use
 
 Measured on 2026-10-12 with `tools/reorg/flag_audit.py --markdown`. A
@@ -155,7 +162,7 @@ differently but resolve to the same options count once.
 
 | # | effective setting | main | overlays |
 |---|---|---|---|
-| S1 | `cc1 -G0 ; maspsx -G0` (default) | 25 | 120 |
+| S1 | `cc1 -G0 ; maspsx -G0` (default) | 25 | 118 |
 | S2 | `cc1 -G0 ; maspsx -G0 --expand-div` | 9 | 22 |
 | S3 | `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0` | 19 | 0 |
 | S4 | `cc1 -G0 ; gnu-as -G0` | 4 | 6 |
@@ -188,7 +195,7 @@ differently but resolve to the same options count once.
 | S31 | `cc1 -G8 ; maspsx -G8 --expand-div --use-comm-section` | 1 | 0 |
 | S32 | `gcc 2.8.1 ; cc1 -G0 ; maspsx -G0` | 0 | 1 |
 
-32 distinct settings over 260 files.
+32 distinct settings over 258 files.
 
 #### S2: `cc1 -G0 ; maspsx -G0 --expand-div`
 
@@ -220,7 +227,7 @@ differently but resolve to the same options count once.
 - `src/overlays/room_m349_cruiser/m349.c`
 - `src/overlays/room_m350_cruiser/m350.c`
 - `src/overlays/room_m350_cruiser/m350_callbacks.c`
-- `src/overlays/scene_e18_cruiser/e18_ring_emitters.c`
+- `src/overlays/scene_e18_cruiser/e18_emitters.c`
 - `src/overlays/scene_e19_cruiser/e19.c`
 - `src/overlays/scene_e22_liberty/e22.c`
 
