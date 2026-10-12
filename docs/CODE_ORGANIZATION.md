@@ -428,43 +428,87 @@ Crutches still in place (lev is the only metric):
 
 ### Field effect engine (src/main/engine) remaining crutches
 
-Swept 2026-10-11. Recipes that removed crutches without changing bytes:
-preset initialisers written as plain per-record constant stores (record order,
-fields scale, rotation, cell, clut, depth, rgb); `actor->pos_x >> 16` instead of
-`Pe1Fixed_Integer()` where retail has `lh`; guarded do-while plus padding or
-`asm(&frame)` replaced by `for` loops (8-byte loop frame slot); `void` return
-where retail fills the epilogue delay slot; `gte_ldrotmatrix/gte_ldtransmatrix`
-on `D_800BCFA4.value` instead of laundered matrix pointers (this also retired
-the `-ffixed-20..23` reservations of ScatterBurst and TwinModel); deleting the
-`-fno-schedule-insns` markers of CollisionQueries_2 and BurstEffect_2.
+Swept 2026-10-11 and 2026-10-12. Recipes that removed crutches without
+changing bytes:
+
+- preset initialisers written as plain per-record constant stores (record
+  order, fields scale, rotation, cell, clut, depth, rgb); `actor->pos_x >> 16`
+  instead of `Pe1Fixed_Integer()` where retail has `lh`; guarded do-while plus
+  padding or `asm(&frame)` replaced by `for` loops (8-byte loop frame slot);
+  `void` return where retail fills the epilogue delay slot; deleting the
+  `-fno-schedule-insns` markers of CollisionQueries_2 and BurstEffect_2.
+- GTE macro operands are the objects themselves, not pinned pointers:
+  `gte_ldrotmatrix(D_800BCFA4.value)`, `gte_ldv3(D_800F3310, &D_800F3318,
+  &D_800F3320)`, `gte_ldv0(&D_800F3328)`, `gte_stsxy3(&p->x0, &p->x1, &p->x2)`,
+  `gte_stszotz(&depth)`. A constant or memory operand of an `"r"` input is
+  loaded by reload, and reload takes its spill registers round robin
+  (`last_spill_reg`); the number of spill registers is the largest number one
+  insn needs at once, so the three-operand `gte_ldv3` is what gives the
+  t1, t2, t3 rotation retail has in the sprite renderers. Separate
+  `gte_lwc2_*` statements or one-operand loads leave a single spill register.
+- The composed glow layers are two (`FieldEng_GlowLayers.inc`) PSY-Q
+  `gte_CompMatrix(&matrix, &rotation, &matrix)` calls; the floor-triangle
+  tests are the PSY-Q outer product (`gte_ldopv1_psyq`, `gte_ldopv2`, OP,
+  `gte_stlvnl`) with the first operand read through `D_800E2844` and one
+  `FieldTriScratch *` local per later product.
+- A byte field incremented as `age++` is a QImode subreg set, which sched1
+  does not give launch priority, so the increment is hoisted to the top of the
+  block; `age = p->age; p->age = age + 1;` through an `int` makes it a
+  single-set pseudo and sched1 places it where retail does (the four glow
+  particle updaters). The same holds in reverse for `func_800C2FF0`: `u8`
+  cell-size temporaries are not launched, so width-1/height-1 are computed
+  first as in retail.
+- The particle updaters' `move a0,a2` is a second pointer to the particle
+  (`FieldAnimMovingParticle *particle = anim`) used only for the lifetime
+  countdown after the bounce test.
+- `func_800C5EB0` walks the strip nodes beside a `FieldStripNodeTail` view
+  (the node seen from its brightness field, `pe1/field_textured_chain_node.h`):
+  `body[-1].nextCellStep`, `body[1].edgeA` replace the raw byte offsets.
+- The field engine object passes (`FieldEng_ObjectScript.c`) keep the slot
+  table and script state in typed globals (`FieldEngSlot *`,
+  `FieldEngState *`); the slot address the two dispatch loops add as an
+  integer, index first, is a `FieldEngSlotAddress` pointer/word union.
+- `FieldEng_GlowEffect.c` .. `FieldEng_BurstEffectC.c` are the eight effect
+  module classes of `pe1/field_effect_modules.h`; their scripts, handler lists,
+  slot sizes and tables are declared there under module names instead of the
+  per-unit extern headers.
+
 What is left (best crutch-free lev against retail):
 
-- `FieldEng_AngleMath.c` (5 pins): `FieldEng_TurnToward` lev 18 and
-  `func_800E0024` lev 6. Retail keeps the masked target in `t0` apart from the
-  difference in `a1`, and the folded distance in `v1` apart from the delta in
-  `a0`; every plain form (with and without the `-fno-schedule-insns` marker,
-  if/else, ternary, copy-then-negate) ties the two pseudos (cse swaps the copy
-  or global alloc follows the a0 preference).
-- `FieldAnim_TaskList.c` `func_800CE610` (2 pins, 2 barriers): lev 20. Retail
-  holds the list pointer in three registers (v0 for the header loads, t0 after
-  the loop, a0 reused for the entry walk); cse merges the copies in every plain
-  form tried, including a permuter run.
-- `FieldEng_CollisionQueries.c` `func_800C5EB0` (1 pin, 4 raw offsets, 1 cast):
-  lev 53 without `-fno-strength-reduce`, 55..66 for typed node forms. Retail
-  walks two pointers, the node and node+4, and reads cellStep at -1 and the
-  edges at +16/+24 from the second; no typed form reproduces the second base.
-  `func_800C62DC` and `CollisionQueries_3.c` `func_800C689C` (GTE triangle
-  tests, 2+3 pins, 2+2 barriers) and the Glow particle updaters
-  (`func_800C8BC0` and its GlowEffectB/C/FourLayer copies, 1-2 pins each,
-  best lev 27: retail copies the particle pointer into a0 and the slot into a3
-  before the bounce test) are not yet reproduced.
-- `FieldEng_EffectPrimitives.c` (9 pins, 4 barriers), `FieldEng_SpriteRendering.c`
-  (17 pins, 8 barriers), `FieldEng_GlowLayers.inc` and the four-layer glow
-  renderer (10 pins, 3 barriers): GTE packet builders whose matrix pointer and
-  vertex pointers sit in fixed t1..t3/s-registers; not attempted beyond the
-  matrix-load recipe in this sweep. `func_800C2FF0` (1 barrier) is lev 22 crutch
-  free: retail computes width-1/height-1 before the cell sizes.
-- `FieldEng_GeometryAndShapes.c` is excluded from this sweep (owned elsewhere).
+- `FieldEng_AngleMath.c` (5 pins): `FieldEng_TurnToward` lev 15 and
+  `func_800E0024` lev 6. Retail keeps the step and the turn delta in separate
+  registers (`move v1,a2` then `negu v1,a2`): with `delta = step` followed by
+  `delta = -step` cse makes the longer-lived delta the class head and rewrites
+  `-step` as `-delta`, so step dies at the copy and global alloc gives delta
+  step's register (a s16 delta, if/else and ternary forms tried). The same
+  copy preference ties `func_800E0024`'s distance to the difference in `a0`.
+- `FieldAnim_TaskList.c` `func_800CE610` (2 pins, 2 barriers): lev 14 with a
+  `for` loop over the parameter itself (`list = header->entries`), the stride
+  read before the loop and `if (i >= header->count) return 0`. Retail has two
+  more copies of the list pointer (`v0` for the header loads, `t0` after the
+  loop) and a second register for the count inside the loop; cse merges both
+  in every plain form.
+- `FieldEng_CollisionQueries.c` `func_800C5EB0` (1 pin on the node pointer,
+  one volatile read of `collision_step`): lev 8 without the pin. Global alloc
+  ranks the loop index (9 refs over 45 insns) above the node pointer (11 over
+  59); retail has node, index, strip in s1, s2, s3. Dropping the index's
+  reuse as the return value lets the strip outrank the index (lev 13). The
+  volatile read keeps `lhu` plus `sll/sra` for the `(s16)` test; a plain read
+  is combined into `lh` (lev 4).
+- `FieldEng_EffectPrimitives.c`: `func_800D2370` keeps one empty constraint on
+  `rotation` and `length` (lev 71 without it: `rotation` is spilled to the
+  stack instead of living in s8 across the packet setup calls).
+  `func_800D3BC8` keeps the entry memory barrier, the `$6` clobber and the
+  volatile stack parameters (lev 14 without them: sched2 interleaves the
+  stack-argument loads with the register saves, retail loads them after the
+  last save).
+- `FieldEng_FourLayerGlowEffect.c` `func_800CAE0C` (5 pins, 1 barrier): lev 50
+  as four `gte_CompMatrix` layers. Local alloc ranks the composed translation
+  source (`&rotation.t`) above the second-column addresses and leaves the
+  matrix second column without a register; retail spills the translation
+  source instead (stack slot 192).
+- `FieldEng_GeometryAndShapes.c` is excluded from this sweep (owned
+  elsewhere); its three `_externs` headers stay with it.
 
 ### Open declaration conflicts
 
