@@ -19,6 +19,13 @@ typedef struct BattleEvasionOutcome {
 
 PE1_STATIC_ASSERT(sizeof(BattleEvasionOutcome) == 2, battle_evasion_outcome_size);
 
+/* Record view of the outcome's reaction byte (D_8009CE55). Hit resolution
+ * reads it back through this view after storing the target's core flags, so
+ * the read stays ordered after those stores as in retail. */
+typedef struct BattleEvasionReaction {
+    s8 value;
+} BattleEvasionReaction;
+
 typedef struct BattleEnemySlot {
     s32 active;
     EnemyCombatant combatant;

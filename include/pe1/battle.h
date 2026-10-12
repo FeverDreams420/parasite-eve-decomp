@@ -327,6 +327,15 @@ typedef struct EnemyCombatant {
 /* 0xD7 */ u8  panelC_mode; /* 0=damage, 1=recovery, 2=alternate damage display */
 } EnemyCombatant;
 
+/* Bit layout of EnemyCombatant.coreFlags as hit resolution writes it. */
+typedef struct EnemyCoreFlagBits {
+    u32 low : 13;
+    u32 hitState : 2;  /* 0x6000 */
+    u32 reaction : 3;  /* 0x38000: evasion reaction of the last hit */
+    u32 category : 2;  /* 0xC0000: weapon category of the last hit */
+    u32 high : 12;     /* >> 21: contact facing group */
+} EnemyCoreFlagBits;
+
 /* ----------------------------------------------------------------------------
  * BattleAction -- the per-actor action/command descriptor (Combatant.action,
  * i.e. *(void**)(combatant+0x68)). Holds the queued action id and timing.
