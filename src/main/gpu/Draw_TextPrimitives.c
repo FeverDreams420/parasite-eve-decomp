@@ -297,9 +297,6 @@ void Draw_EmitGlyph(s32 arg0, s32 arg1) {
     u16 base_x;
     u16 base_y;
     s32 temp;
-    u32 oldTag;
-    u32 *ot;
-    DrawPrimLink link;
 
     packet = 0;
     glyph = Draw_LookupGlyphDescriptor(arg0);
@@ -340,7 +337,7 @@ void Draw_EmitGlyph(s32 arg0, s32 arg1) {
             s32 glyphDim;
 
             glyphDim = glyph->width;
-            sum = *(volatile u16 *)&ptr->x0;
+            sum = ptr->x0;
             temp = sum + glyphDim;
         }
         ptr->x3 = temp;
@@ -351,7 +348,7 @@ void Draw_EmitGlyph(s32 arg0, s32 arg1) {
             s32 glyphDim;
 
             glyphDim = glyph->height;
-            sum = *(volatile u16 *)&ptr->y0;
+            sum = ptr->y0;
             temp = sum + glyphDim;
         }
         ptr->y3 = temp;
@@ -373,21 +370,16 @@ void Draw_EmitGlyph(s32 arg0, s32 arg1) {
         }
     }
 
-    oldTag = *(volatile u32 *)&packet->tag.word;
     {
-        u32 mask24;
-        u32 maskTop;
-        s32 clut;
+        RenderPacketTag *ot;
+        DrawPrimLink link;
 
-        mask24 = 0xFFFFFF;
-        clut = *(volatile u16 *)&glyph->clut;
-        packet->clut = clut;
-        ot = g_DrawOrderingTableEntry;
-        maskTop = 0xFF000000;
+        packet->clut = glyph->clut;
         packet->tpage = 7;
-        packet->tag.word = (oldTag & maskTop) | (*ot & mask24);
+        ot = (RenderPacketTag *)g_DrawOrderingTableEntry;
+        packet->tag.link.address = ot->link.address;
         link.packet = packet;
-        *ot = (*ot & maskTop) | (link.word & mask24);
+        ot->link.address = link.word;
     }
 }
 
@@ -734,17 +726,12 @@ void Draw_EmitDigitSprite(int digit) {
     }
     {
         RenderTexturedQuad *p;
-        u32 oldTag;
-        u32 mask24;
         u16 x = *(u16 *)&g_DrawSpriteX, y = *(u16 *)&g_DrawSpriteY;
         p = quad;
         p->x0 = p->x2 = x;
         p->y0 = p->y1 = y;
-        x = p->x0 + 5;
-        /* Narrow volatile views preserve the retail packet-field reloads. */
-        y = *(volatile u16 *)&p->y0 + 7;
-        p->x1 = p->x3 = x;
-        p->y2 = p->y3 = y;
+        p->x1 = p->x3 = p->x0 + 5;
+        p->y2 = p->y3 = p->y0 + 7;
         if (digit >= 0) p->u2 = g_DrawDigitFontBaseTexU + (digit % 10) * 5;
         else p->u2 = 88;
         {
@@ -754,28 +741,20 @@ void Draw_EmitDigitSprite(int digit) {
         }
         if (digit >= 0) p->v1 = g_DrawDigitFontBaseTexV;
         else p->v1 = 164;
-        mask24 = 0xFFFFFF;
-        oldTag = *(volatile u32 *)&p->tag.word;
         {
-            u8 value = *(volatile u8 *)&p->v1;
-            int rightU = *(volatile u8 *)&p->u0;
-            int bottomV;
+            u8 value = p->v1;
             p->v0 = value;
-            bottomV = *(volatile u8 *)&p->v0;
-            rightU += 5;
             p->v1 = value;
-            p->u1 = p->u3 = rightU;
-            p->v2 = p->v3 = bottomV + 7;
+            p->u1 = p->u3 = p->u0 + 5;
+            p->v2 = p->v3 = p->v0 + 7;
         }
         p->clut = g_DrawDigitFontTpageClut;
         p->tpage = 7;
         {
-            u32 maskTop = 0xFF000000;
-            u32 *ot = g_DrawOrderingTableEntry;
-            p->tag.word = (oldTag & maskTop) | (*ot & mask24);
+            RenderPacketTag *ot = (RenderPacketTag *)g_DrawOrderingTableEntry;
+            p->tag.link.address = ot->link.address;
             link.packet = p;
-            mask24 &= link.word;
-            *ot = (*ot & maskTop) | mask24;
+            ot->link.address = link.word;
         }
     }
 }
