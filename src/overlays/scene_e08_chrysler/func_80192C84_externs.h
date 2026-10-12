@@ -1,4 +1,0 @@
-#ifndef PE1_EXT_37C560D78524
-#define PE1_EXT_37C560D78524
-extern Ovl178_FourBytes D_8018F04C;
-#endif /* PE1_EXT_37C560D78524 */

@@ -1,4 +1,0 @@
-#ifndef PE1_EXT_853864F58614
-#define PE1_EXT_853864F58614
-extern u8 D_80198820[];
-#endif /* PE1_EXT_853864F58614 */

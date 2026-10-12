@@ -1,5 +1,0 @@
-#ifndef PE1_EXT_A391A4779D7C
-#define PE1_EXT_A391A4779D7C
-extern u16 D_80199604;
-extern u8 D_80198C90[];
-#endif /* PE1_EXT_A391A4779D7C */

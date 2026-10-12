@@ -1,5 +1,0 @@
-#ifndef PE1_EXT_8C519F738000
-#define PE1_EXT_8C519F738000
-extern char D_801995F8[];
-extern s32 D_8019956C, D_8019957C;
-#endif /* PE1_EXT_8C519F738000 */

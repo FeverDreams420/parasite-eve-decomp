@@ -1,5 +1,0 @@
-#ifndef PE1_EXT_0383F2A20196
-#define PE1_EXT_0383F2A20196
-extern u8 D_801996A0[];
-extern char D_80198848[];
-#endif /* PE1_EXT_0383F2A20196 */
