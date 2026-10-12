@@ -37,7 +37,7 @@ int func_801934AC(int mode, u16 *counter) {
                          (FieldAnimCallbackListCallback)func_80192844);
     case 1:
     pool = ANIM_OWNER_AS(RoomOrbitPairChannel)->pool;
-    FieldEng_TransformMatrixPoint(pool, 4, &template, position);
+    FieldFx_TransformMatrixPoint(pool, 4, &template, position);
     pool = ANIM_OWNER_AS(RoomOrbitPairChannel)->pool;
     func_800CE9D4((struct RoomFxTransformOwner *)pool, 4, (GteShortVector *)target);
     target[0] -= 0xDC;
@@ -204,7 +204,7 @@ int func_80193BFC(int mode, s16 *counter) {
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x20,
                              (FieldAnimCallbackListCallback)func_8019377C);
     case 1:
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &template, &position);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &template, &position);
         func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 4, &base);
         if (D_800E27EC < 0x6F) {
             child = (RoomM256SwirlSpark *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
@@ -369,7 +369,7 @@ s32 func_801940B0(int mode, void *effect) {
             state->frame = 0;
             state->kind = 1U;
             state->ending = 0;
-            FieldEng_TransformMatrixPoint(D_800F32D0->actor, 2, &initialRotation, state);
+            FieldFx_TransformMatrixPoint(D_800F32D0->actor, 2, &initialRotation, state);
             func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->actor, 0,
                           (GteShortVector *)&angles.x);
             historyCount = 16;
@@ -407,7 +407,7 @@ s32 func_801940B0(int mode, void *effect) {
             state->frame = (s16) ((u16) state->frame + 1);
             history = &D_80195EFC[state->index];
             func_800CE870((char *)g_PlayerEntity, 1, &delta.x);
-            FieldEng_CalculateLookAngles(state, &delta.x, &angles.x);
+            FieldFx_CalculateLookAngles(state, &delta.x, &angles.x);
             ending = state->ending;
             if (ending == 0) {
                 if (state->speed >= 0x1B) {
@@ -930,7 +930,7 @@ int func_80195728(int mode, s16 *state) {
             D_800F3368.parameter0A = 0;
             D_800F3368.depth = 0x18;
         }
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 2, &rotation, &position);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 2, &rotation, &position);
         spin.x = 0;
         spin.y = 0;
         spin.flags = 0;

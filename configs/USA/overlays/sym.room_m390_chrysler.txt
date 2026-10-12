@@ -1,5 +1,5 @@
-FieldEng_VecToAngle = 0x800DFF80;
-FieldEng_TurnToward = 0x800DFFB8;
+FieldFx_VecToAngle = 0x800DFF80;
+FieldFx_TurnToward = 0x800DFFB8;
 RoomLib_SetArgA = 0x80195D78; // type:func
 RoomLib_SetArgB = 0x80195D88; // type:func
 g_RoomScriptArgA = 0x80195FD0;

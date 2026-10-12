@@ -146,7 +146,7 @@ extern u8 *D_800F3418;
 extern u8 *D_800F342C;
 extern u8 D_800E1E24[];
 int func_800DC058(int mode, FieldAnimTwinModel *state);
-int FieldEng_PointEmitter(int mode, FieldAnimEmitter *state);
+int FieldFx_PointEmitter(int mode, FieldAnimEmitter *state);
 
 typedef struct FieldAnimPointTriple {
     u16 x;

@@ -21,10 +21,10 @@ ROOMLIB_SPAWN6(RoomFx_DropFieldSpawn6)
 int RoomFx_DropFieldRegister(RoomEnt *o) {
     RoomRenderNode *target;
 
-    if (FieldEng_GetStatus(o) == 3) {
+    if (FieldFx_GetStatus(o) == 3) {
         target = o->link->target;
         target->flags &= 0xBFFFFFFF;
-        FieldEng_Register(o, g_RoomDropFieldDrawList);
+        FieldFx_Register(o, g_RoomDropFieldDrawList);
     }
     return 0;
 }

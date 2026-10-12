@@ -729,8 +729,8 @@ int func_80193D6C(int event)
             speed=D_800966EC[(((signedFrame-28)*170)&0xFFE)].part.sin/32;
             bias=-128;
             if(*(unsigned short *)repeat&1) bias=128;
-            angle=FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation,(Vec3Fixed *)instance->render_object.model_matrix.translation);
-            instance->rot_y=FieldEng_TurnToward(instance->rot_y,(short)(bias+angle),speed);
+            angle=FieldFx_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation,(Vec3Fixed *)instance->render_object.model_matrix.translation);
+            instance->rot_y=FieldFx_TurnToward(instance->rot_y,(short)(bias+angle),speed);
         } else if((short)frame>=instance->action-1) {
             register Owner *owner asm("$4")=instance->state;
             if(owner) owner->action_state[0]=4;
@@ -913,8 +913,8 @@ int func_801947BC(int event,RoomM350Particle *p)
             else {
                 GteSineWord *trig=D_800966EC;
                 int speed=trig[(timer<<4)&0xFF0].part.sin/4;
-                int angle=FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation,(Vec3Fixed *)ANIM_OWNER_AS(RoomM350EffectActor)->instance->transform.t);
-                int yaw=FieldEng_TurnToward(p->motion.value.rotation.y,(short)angle,speed);
+                int angle=FieldFx_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation,(Vec3Fixed *)ANIM_OWNER_AS(RoomM350EffectActor)->instance->transform.t);
+                int yaw=FieldFx_TurnToward(p->motion.value.rotation.y,(short)angle,speed);
                 int sum,product;
                 p->motion.value.rotation.y=yaw;
                 product=trig[(D_800E27EC+2048)&4095].part.sin*160;
@@ -1301,8 +1301,8 @@ int func_801958DC(int event) {
             if(frame<19) return 0;
             speed=D_800966EC[((frame-19)*341)&4095].part.sin;
             speed/=32;
-            angle=FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation,(Vec3Fixed *)instance->render_object.model_matrix.translation);
-            instance->rot_y=FieldEng_TurnToward(instance->rot_y,(short)angle,speed);
+            angle=FieldFx_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation,(Vec3Fixed *)instance->render_object.model_matrix.translation);
+            instance->rot_y=FieldFx_TurnToward(instance->rot_y,(short)angle,speed);
         } else {
             if((short)frame>=instance->action-1) {
                 if(instance->state) instance->state->action_state[0]=4;
@@ -1492,7 +1492,7 @@ case 1:
         if(!state->initialized) {
             if(D_8019A831) {
                 int distance=func_800DFE20((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x);
-                int angle=FieldEng_VecToAngle((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x);
+                int angle=FieldFx_VecToAngle((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x);
                 int yaw=state->yaw;
                 int rawDelta=((unsigned int)angle-(yaw>>8))&4095;
                 register int delta asm("$4")=rawDelta;

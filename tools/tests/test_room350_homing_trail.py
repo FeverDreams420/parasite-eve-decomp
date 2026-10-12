@@ -72,12 +72,12 @@ static void store_vector(void *p) {
     assert(v==&particle.position);
     v->x=11; v->y=22; v->z=33;
 }
-int FieldEng_VecToAngle(Vec3Fixed *a,Vec3Fixed *b) {
+int FieldFx_VecToAngle(Vec3Fixed *a,Vec3Fixed *b) {
     assert((void *)a==player.render_object.model_matrix.translation);
     assert((void *)b==instance.transform.t);
     return 123;
 }
-int FieldEng_TurnToward(int a,int b,int c) {
+int FieldFx_TurnToward(int a,int b,int c) {
     assert(b==123); turnCalls++;
     if(steering) { assert(a==-321 && c==expectedStep); D_800E27EC=7; }
     return 456;

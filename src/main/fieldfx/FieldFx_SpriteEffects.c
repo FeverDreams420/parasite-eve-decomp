@@ -372,7 +372,7 @@ int func_800D5A00(int mode, RenderArcingEmitter *state)
         D_800F3368.depth = 64;
         gte_ldrotmatrix((const GteMatrixWords *)D_800BCFA4.value);
         gte_ldtransmatrix((const GteMatrixWords *)D_800BCFA4.value);
-        FieldEng_TransformTranslation(&state->position, 0);
+        FieldFx_TransformTranslation(&state->position, 0);
         break;
     }
     return 0;
@@ -1615,7 +1615,7 @@ int func_800D96F4(int mode, RenderSparkEmitter *state)
 #define SPINNING_MODEL_ANCHOR D_800E220C
 #define SPINNING_MODEL_PALETTE 4
 #define SPINNING_MODEL_COLOR(size) 0, (u8)((size) / 2), (u8)((size) / 8)
-#include "FieldEng_SpinningModel.inc"
+#include "FieldFx_SpinningModel.inc"
 
 int func_800D9E5C(int mode, RenderArcingEffect *state)
 {
@@ -1692,7 +1692,7 @@ int func_800D9FD4(int mode, GteShortVector *state)
 #define SPINNING_MODEL_ANCHOR D_800E2214
 #define SPINNING_MODEL_PALETTE 3
 #define SPINNING_MODEL_COLOR(size) (u8)((size) / 3), 0, (u8)((size) / 2)
-#include "FieldEng_SpinningModel.inc"
+#include "FieldFx_SpinningModel.inc"
 
 int func_800DA5D4(int mode, FieldAnimEmitter *state) {
     FieldAnimEmittedPoint *point;

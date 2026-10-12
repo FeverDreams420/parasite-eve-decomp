@@ -290,7 +290,7 @@ int RoomEffect_PhasedSparkController(int mode, s16 *counter)
                              (FieldAnimCallbackListCallback)RoomEffect_PhasedSparkParticle);
     }
     case 1:
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 6, &position, &output);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 6, &position, &output);
         if (D_800E27EC % 6 == 0 && *counter > 0) {
             particle = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (particle != 0) {
@@ -441,7 +441,7 @@ int RoomEffect_BouncingSparkController(int mode)
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 32,
                              (FieldAnimCallbackListCallback)RoomEffect_BouncingSparkParticle);
     case 1:
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 7, &position, &output);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 7, &position, &output);
         if (D_800E27EC == 8)
             func_800D3F64(0x593, func_800D3FD8());
         if (D_800E27EC < 74) {
@@ -459,7 +459,7 @@ int RoomEffect_BouncingSparkController(int mode)
                     motion[1] = motion[1] * 3 / 2;
                     motion[2] = motion[2] * 3 / 2;
                 }
-                FieldEng_RotateVector(((RoomSparkBarrageOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->bone + 0xE0,
+                FieldFx_RotateVector(((RoomSparkBarrageOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->bone + 0xE0,
                               motion, &particle->vx);
                 particle->state = kind;
                 particle->timer = 0;
@@ -561,22 +561,22 @@ int RoomEffect_WaveSparkParticle(int mode, RoomPhasedSpark *spark) {
         case 0:
             phase = spark->phase;
             if (phase < 7) {
-                FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, phase + 1, &rotationA, &position);
+                FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, phase + 1, &rotationA, &position);
                 ROOMEFFECT_WAVE_SPARK_FLASH();
                 ROOMEFFECT_WAVE_SPARK_BLOOM(1);
-                FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, spark->phase + 1, &rotationB, &position);
+                FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, spark->phase + 1, &rotationB, &position);
             } else {
-                FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, phase + 9, &rotationC, &position);
+                FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, phase + 9, &rotationC, &position);
                 ROOMEFFECT_WAVE_SPARK_FLASH();
                 ROOMEFFECT_WAVE_SPARK_BLOOM(1);
-                FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, spark->phase + 13, &rotationC, &position);
+                FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, spark->phase + 13, &rotationC, &position);
             }
             ROOMEFFECT_WAVE_SPARK_FLASH();
             ROOMEFFECT_WAVE_SPARK_BLOOM(0);
             break;
         case 1:
-            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 11, &rotationC, &position);
-            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 15, &rotationC, &second);
+            FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 11, &rotationC, &position);
+            FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 15, &rotationC, &second);
             {
                 u16 clut;
                 int kind;
@@ -708,8 +708,8 @@ int RoomEffect_CometSparkParticle(int mode, RoomCometSpark *spark) {
         switch (spark->state) {
         case 0:
             spark->timer++;
-            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 11, slot, &first);
-            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 15, slot, &second);
+            FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 11, slot, &first);
+            FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 15, slot, &second);
             spark->x = (first.x + second.x) / 2;
             spark->y = (first.y + second.y) / 2;
             spark->z = (first.z + second.z) / 2;

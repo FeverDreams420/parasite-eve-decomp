@@ -14,7 +14,7 @@ s32 Memcard_TrailEffect(s32 mode, MemcardTrailState *state) {
                              (FieldAnimCallbackListCallback)Memcard_CosineImage);
     case 1:
         state->timer++;
-        FieldEng_TransformMatrixPoint(D_8009D254, state->attachment, &offset, &position);
+        FieldFx_TransformMatrixPoint(D_8009D254, state->attachment, &offset, &position);
         if (state->timer < 33 && (state->timer & 1)) {
             MemcardPulseState *image = func_800CE610(ANIM_POOL_AS(MemcardLinkChannel)->slots);
             if (image) {
@@ -29,7 +29,7 @@ s32 Memcard_TrailEffect(s32 mode, MemcardTrailState *state) {
     case 2:
         gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldtransmatrix(D_800BCFA4.value);
-        FieldEng_TransformMatrixPoint(D_8009D254, state->attachment, &offset, &position);
+        FieldFx_TransformMatrixPoint(D_8009D254, state->attachment, &offset, &position);
         D_800F3368.parameter00 = 32;
         D_800F3368.parameter02 = 2;
         D_800F3368.extent_x = 32; D_800F3368.extent_y = 32;

@@ -16,10 +16,10 @@ s32 func_800DFE20(Vec3Fixed *lhs, Vec3Fixed *rhs);
 void func_800DFE94(Vec3Fixed *from, Vec3Fixed *to, s16 *out);
 /* Heading from one position to another: ratan2(dx, dz) as a signed
  * halfword. */
-int FieldEng_VecToAngle(Vec3Fixed *from, Vec3Fixed *to);
+int FieldFx_VecToAngle(Vec3Fixed *from, Vec3Fixed *to);
 /* Turns a 12-bit angle toward target by at most step. */
-int FieldEng_TurnToward(int current, int target, int step);
+int FieldFx_TurnToward(int current, int target, int step);
 /* Absolute difference of two 12-bit angles, folded into 0..0x800. */
-s32 FieldEng_AngleDistance(s32 lhs, s32 rhs);
+s32 FieldFx_AngleDistance(s32 lhs, s32 rhs);
 
 #endif /* PE1_FIELD_VECTOR_MATH_H */

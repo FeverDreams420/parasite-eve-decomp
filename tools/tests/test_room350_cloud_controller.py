@@ -92,12 +92,12 @@ s32 func_800DFE20(Vec3Fixed *a,Vec3Fixed *b) {
     if(mutate) { g_PlayerEntity=&players[1]; D_800F32D0=(FieldAnimObjectPrefix *)&otherActor; instance.anim.fixed=0; }
     return -123456;
 }
-int FieldEng_VecToAngle(Vec3Fixed *a,Vec3Fixed *b) {
+int FieldFx_VecToAngle(Vec3Fixed *a,Vec3Fixed *b) {
     assert(stage++==1 && a==POS(players[mutate]) && b==POS(instance));
     assert(D_8019A8BA==(short)-123456);
     return angleResult;
 }
-int FieldEng_TurnToward(int yaw,int angle,int step) {
+int FieldFx_TurnToward(int yaw,int angle,int step) {
     assert(stage==2 && yaw==instance.rot_y && angle==(angleResult&4095) && step==80);
     assert(D_8019A8BC==(angleResult&4095)); turns++;
     return turnResult;

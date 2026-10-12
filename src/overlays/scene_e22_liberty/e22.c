@@ -339,11 +339,11 @@ int func_80193414(int mode, SceneE22LinkBeam *beam) {
         beam->reserved00 = 0;
         beam->timer = 0;
         beam->jointSet = ANIM_TASK_AS(SceneE22EmberEvent)->jointSet;
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].first,
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].first,
                       &offset0, &first);
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].middle,
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].middle,
                       &offset0, &middle);
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].last,
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].last,
                       &offset1, &last);
         func_800D1384(&first, &middle, 0x3F2, (unsigned char *)&color2, (unsigned char *)&color1, 0x80,
                       (struct FieldTrailPair *)beam->trailA, 1);
@@ -353,7 +353,7 @@ int func_80193414(int mode, SceneE22LinkBeam *beam) {
                              (FieldAnimCallbackListCallback)func_801931B8);
     case 1:
         beam->timer++;
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].last,
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].last,
                       &offset1, &first);
         func_800CE9D4(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].last,
                       &heading);
@@ -376,11 +376,11 @@ int func_80193414(int mode, SceneE22LinkBeam *beam) {
         return 2;
     case 2:
         if (beam->alpha >= 0) {
-            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].first,
+            FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].first,
                           &offset0, &first);
-            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].middle,
+            FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].middle,
                           &offset0, &middle);
-            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].last,
+            FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, D_801991B8[beam->jointSet].last,
                           &offset1, &last);
             func_800D1384(&first, &middle, 10, (unsigned char *)&color2, (unsigned char *)&color1, beam->alpha,
                           (struct FieldTrailPair *)beam->trailA, 1);
@@ -1066,7 +1066,7 @@ int func_80195B40(int mode, SceneE22SwirlRing *swirl) {
             if (*(void *volatile *)soundSlot != 0)
                 Akao_SendTableCommand(*soundSlot, 0x5D7, 0x80, 0x80, volume);
         }
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, 0, &offset, swirl);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, 0, &offset, swirl);
         return func_800CE560(ANIM_POOL_AS(SceneE22EmberChannel)->pool, 0x14, 0x28,
                              (FieldAnimCallbackListCallback)func_801957CC);
     case 1:
@@ -1275,7 +1275,7 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
         bolt->reserved1C = 0;
         D_80199500 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54C4704);
         FieldModel_ScrollUv(D_80199500, 0, 0);
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, 0, &offset, &bolt->position);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, 0, &offset, &bolt->position);
         bolt->origin.x = bolt->position.x;
         bolt->origin.y = bolt->position.y;
         bolt->origin.z = bolt->position.z;

@@ -1,5 +1,5 @@
-FieldEng_VecToAngle = 0x800DFF80;
-FieldEng_TurnToward = 0x800DFFB8;
+FieldFx_VecToAngle = 0x800DFF80;
+FieldFx_TurnToward = 0x800DFFB8;
 g_FieldActorListHead = 0x8009D20C;
 g_PlayerEntity = 0x8009D254;
 RoomLib_HandlerDNop0 = 0x8018F22C; // type:func

@@ -105,9 +105,9 @@ extern struct FieldActor *RoomMain_ActorPtr; /* the player actor (0x8009D254) */
 extern int RoomMain_RotTable[];
 /* Field object status: 0 no model, 1 model without data, 2 inactive,
  * 3 active, 4 disabled object, 5 the player. */
-extern int FieldEng_GetStatus(void *object);
-extern void FieldEng_Spawn6(int a, int b, int c, int d, int e, int f);
-extern void FieldEng_Register(void *o, void *table);
+extern int FieldFx_GetStatus(void *object);
+extern void FieldFx_Spawn6(int a, int b, int c, int d, int e, int f);
+extern void FieldFx_Register(void *o, void *table);
 extern int func_800C251C(void *o, void *table);
 extern int func_800C2758(void *o, void *tableA, void *tableB);
 extern int func_8003010C(void *o, int arg);
@@ -677,7 +677,7 @@ extern void func_800DFB20(void *state);
                 finish(o); \
             } \
             if (o->h46 != 0) { \
-                RW16(D_8009D254, 0x3A) = FieldEng_TurnToward( \
+                RW16(D_8009D254, 0x3A) = FieldFx_TurnToward( \
                     RW16(D_8009D254, 0x3A), (short)o->h48, (short)o->h46); \
             } \
         } \
@@ -741,7 +741,7 @@ extern char RoomLib_TableB[];
 /* six-argument passthrough to the field engine spawn */
 #define ROOMLIB_SPAWN6(name) \
     int name(int a, int b, int c, int d, int e, int f) { \
-        FieldEng_Spawn6(a, b, c, d, e, f); \
+        FieldFx_Spawn6(a, b, c, d, e, f); \
         return 0; \
     }
 
@@ -749,7 +749,7 @@ extern char RoomLib_TableB[];
 #define ROOMLIB_CLOSE_TARGET(name) \
     int name(RoomEnt *o) { \
         o->state = 4; \
-        if ((unsigned int)FieldEng_GetStatus(o) >= 2) { \
+        if ((unsigned int)FieldFx_GetStatus(o) >= 2) { \
             RoomLinkByte *tgt = o->link->target; \
             *(int *)tgt &= 0xC0FFFFFF; \
             *o->link->target->state = 4; \
@@ -760,8 +760,8 @@ extern char RoomLib_TableB[];
 /* register this entity's table with the field engine when active */
 #define ROOMLIB_REGISTER_TABLE(name, table) \
     int name(void *o) { \
-        if ((unsigned int)FieldEng_GetStatus(o) >= 2) { \
-            FieldEng_Register(o, table); \
+        if ((unsigned int)FieldFx_GetStatus(o) >= 2) { \
+            FieldFx_Register(o, table); \
         } \
         return 0; \
     }
@@ -770,7 +770,7 @@ extern char RoomLib_TableB[];
  * engine's status */
 #define ROOMLIB_REGISTER_TABLE_ANY(name, table) \
     int name(void *o) { \
-        FieldEng_Register(o, table); \
+        FieldFx_Register(o, table); \
         return 0; \
     }
 
@@ -792,7 +792,7 @@ extern char RoomLib_TableB[];
 #define ROOMLIB_START_AT3(name, update, init, layout, close) \
     int name(void *o) { \
         int result; \
-        if (FieldEng_GetStatus(o) == 3) { \
+        if (FieldFx_GetStatus(o) == 3) { \
             result = func_800C251C(o, update); \
             result |= func_800C2758(o, init, layout); \
         } else { \
@@ -807,7 +807,7 @@ extern char RoomLib_TableB[];
 /* plant the room table pointer into the engine slot */
 #define ROOMLIB_PLANT_TABLE(name, table) \
     int name(void *object) { \
-        *FieldEng_GetSlot(object) = table; \
+        *FieldFx_GetSlot(object) = table; \
         return 0; \
     }
 
@@ -941,7 +941,7 @@ extern void *RoomMain_ActorPtr2;
         RoomBlob8 tmp = rect; \
         switch (mode) { \
         case 0: \
-            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomChanCtx)->w8, 0x13, &tmp, msg); \
+            FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomChanCtx)->w8, 0x13, &tmp, msg); \
             if (ANIM_TASK_AS(RoomDlgState)->h12 == 0) goto send_pos; \
             if (ANIM_TASK_AS(RoomDlgState)->h12 == 1) goto at_actor; \
             goto after; \
@@ -952,7 +952,7 @@ extern void *RoomMain_ActorPtr2;
             { \
                 short vec[4]; \
                 func_800CE870(RoomMain_ActorPtr2, 0, vec); \
-                FieldEng_CalculateLookAngles(msg, vec, &msg->sub); \
+                FieldFx_CalculateLookAngles(msg, vec, &msg->sub); \
                 msg->sub.h0 = 0x180; \
             } \
         after: \
@@ -1090,8 +1090,8 @@ extern int func_80071A54(void);
 
 #define ROOMLIB_REGISTER_TABLE_AT3(name, table) \
     int name(void *o) { \
-        if (FieldEng_GetStatus(o) == 3) { \
-            FieldEng_Register(o, table); \
+        if (FieldFx_GetStatus(o) == 3) { \
+            FieldFx_Register(o, table); \
         } \
         return 0; \
     }

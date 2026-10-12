@@ -220,7 +220,7 @@ Merges unblocked by the canonical sets:
 Tried and not removed (lev under the neighbours' settings, or without the
 flag):
 
-- `fieldfx/FieldEng_AngleMath.c` (`-fno-schedule-insns`, lev 2): the
+- `fieldfx/FieldFx_AngleMath.c` (`-fno-schedule-insns`, lev 2): the
   scheduler hoists the target mask above the current mask whatever the
   statement order; the function also carries register pins.
 - `draw/Draw_InitGpuHwRegs.c` (`-fno-schedule-insns`, lev 4) and
@@ -286,10 +286,10 @@ differently but resolve to the same options count once.
 - `src/main/akao/Akao_SequencerFlow.c`
 - `src/main/cdrom/CdRom_SceneAssetsAndBootRead.c`
 - `src/main/draw/Render_FontGlyphSelection.c`
-- `src/main/fieldfx/FieldEng_EmitterEffects.c`
-- `src/main/fieldfx/FieldEng_GeometryAndShapes.c`
-- `src/main/fieldfx/FieldEng_SpriteEffects.c`
-- `src/main/fieldfx/FieldEng_SpriteRendering.c`
+- `src/main/fieldfx/FieldFx_EmitterEffects.c`
+- `src/main/fieldfx/FieldFx_GeometryAndShapes.c`
+- `src/main/fieldfx/FieldFx_SpriteEffects.c`
+- `src/main/fieldfx/FieldFx_SpriteRendering.c`
 - `src/main/render/Render_CameraViewportFlow.c`
 - `src/main/script/Script_ValueOps.c`
 - `src/overlays/boot_display/Boot_StepImageSprite.c`
@@ -376,13 +376,13 @@ differently but resolve to the same options count once.
 
 - `src/main/draw/Render_FontGlyphLoad.c`
 - `src/main/draw/Draw_InitGpuHwRegs.c`
-- `src/main/fieldfx/FieldEng_AngleMath.c`
+- `src/main/fieldfx/FieldFx_AngleMath.c`
 - `src/overlays/fx_common/FxCommon_SetMotionEndpoints.c`
 - `src/overlays/room_m273_liberty/RoomM273_PulseSpriteCallback.c`
 
 #### S7: `cc1 -G0 -fno-strength-reduce ; maspsx -G0`
 
-- `src/main/fieldfx/FieldEng_CollisionQueries.c`
+- `src/main/fieldfx/FieldFx_CollisionQueries.c`
 - `src/overlays/room_lib/RoomFx_MotionParticles_2.c`
 - `src/overlays/room_lib/RoomFx_OrbitEffectSet.c`
 
@@ -505,12 +505,12 @@ means only the order of symbol-table entries changed (cc1 `-G8` emits
 | `main/entity/Entity_FrameUpdate.c` | cc1 `-G8`: lev 70 (Entity_FrameUpdate 70); maspsx `-G8`: lev 180 (Entity_FrameUpdate 71, Scene_LoadMap 50, Entity_CollectGarbage 35); maspsx `--use-comm-section`: lev 39 (Entity_CollectGarbage 12, Scene_LoadMap 11, Entity_FrameUpdate 11); FORCE_G0: lev 81 (Entity_FrameUpdate 73, Entity_IntegratePositionConditional 5, Entity_DispatchCallbacks 3); small-data set: lev 205 (Entity_FrameUpdate 96, Scene_LoadMap 50, Entity_CollectGarbage 35) |
 | `main/entity/Entity_PoolInit.c` | cc1 `-G8`: same code, symbol table differs; cc1 `-fno-strength-reduce`: lev 3 (Entity_ResetAllPools 3); maspsx `-G8`: lev 28 (Entity_ResetAllPools 18, Entity_InitFreePool 10); maspsx `--use-comm-section`: lev 11 (Entity_ResetAllPools 7, Entity_InitFreePool 4); FORCE_G0: identical; small-data set: lev 28 (Entity_ResetAllPools 18, Entity_InitFreePool 10) |
 | `main/field/Entity_ActorCollision.c` | cc1 `-G8`: lev 68 (Entity_SlideOnRamp 68); maspsx `-G8`: lev 562 (Geo_ClipToFloorBoundary 165, Entity_UpdateAndRender 100, Geo_ClipToFloorBoundarySub 53); maspsx `--use-comm-section`: lev 150 (Geo_ClipToFloorBoundary 48, Entity_UpdateAndRender 22, Entity_ResetStateGlobals 16); maspsx `--expand-div`: lev 193 (Geo_ClipToFloorBoundary 76, Entity_SlideOnWall 36, Entity_SlideOnRamp 36); FORCE_G0: lev 196 (Geo_ClipToFloorBoundary 71, Entity_UpdateAndRender 69, Entity_SlideOnRamp 28); ASPSX_VERSION 2.70: lev 93 (Geo_ClipToFloorBoundary 61, Entity_SlideOnRamp 32); small-data set: lev 592 (Geo_ClipToFloorBoundary 165, Entity_UpdateAndRender 100, Entity_SlideOnRamp 82) |
-| `main/fieldfx/FieldEng_AngleMath.c` | cc1 `-fno-schedule-insns`: lev 2 (FieldEng_TurnToward 2) |
-| `main/fieldfx/FieldEng_CollisionQueries.c` | cc1 `-fno-strength-reduce`: lev 53 (func_800C5EB0 53) |
-| `main/fieldfx/FieldEng_EmitterEffects.c` | maspsx `--expand-div`: lev 14 (FieldEng_CosineEffect 14) |
-| `main/fieldfx/FieldEng_GeometryAndShapes.c` | maspsx `--expand-div`: lev 143 (func_800D0728 34, func_800D3114 33, func_800D004C 29) |
-| `main/fieldfx/FieldEng_SpriteEffects.c` | maspsx `--expand-div`: lev 105 (func_800D5010 32, func_800D7FBC 26, func_800D5898 24) |
-| `main/fieldfx/FieldEng_SpriteRendering.c` | maspsx `--expand-div`: lev 46 (func_800C3B04 21, func_800C4E50 13, func_800C4FC4 6) |
+| `main/fieldfx/FieldFx_AngleMath.c` | cc1 `-fno-schedule-insns`: lev 2 (FieldFx_TurnToward 2) |
+| `main/fieldfx/FieldFx_CollisionQueries.c` | cc1 `-fno-strength-reduce`: lev 53 (func_800C5EB0 53) |
+| `main/fieldfx/FieldFx_EmitterEffects.c` | maspsx `--expand-div`: lev 14 (FieldFx_CosineEffect 14) |
+| `main/fieldfx/FieldFx_GeometryAndShapes.c` | maspsx `--expand-div`: lev 143 (func_800D0728 34, func_800D3114 33, func_800D004C 29) |
+| `main/fieldfx/FieldFx_SpriteEffects.c` | maspsx `--expand-div`: lev 105 (func_800D5010 32, func_800D7FBC 26, func_800D5898 24) |
+| `main/fieldfx/FieldFx_SpriteRendering.c` | maspsx `--expand-div`: lev 46 (func_800C3B04 21, func_800C4E50 13, func_800C4FC4 6) |
 | `main/item/Inv_ActiveList.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 580 (Inv_SetupSlotDisplay 96, Inv_PickRandomItem 44, Inv_WriteSlotById 38); maspsx `--use-comm-section`: lev 164 (Inv_SetupSlotDisplay 31, Inv_PickRandomItem 12, Inv_SelectActiveList 10); FORCE_G0: lev 11 (Inv_CompactActiveListSlots 11); small-data set: lev 580 (Inv_SetupSlotDisplay 96, Inv_PickRandomItem 44, Inv_WriteSlotById 38) |
 | `main/item/Inv_ArmorCapacity.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 697 (Inv_TransferItemBetweenLists 263, Inv_BuildStorageDisplay 78, Inv_SortInventoryByMode 63); maspsx `--use-comm-section`: lev 187 (Inv_TransferItemBetweenLists 58, Inv_BuildStorageDisplay 28, Inv_SortInventoryByMode 22); FORCE_G0: lev 9 (Inv_GetActiveSlotCount 9); small-data set: lev 697 (Inv_TransferItemBetweenLists 263, Inv_BuildStorageDisplay 78, Inv_SortInventoryByMode 63) |
 | `main/item/Inv_InventorySwap.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 397 (Inv_RebuildWithSlotLimit 91, Inv_TransferItemAlt 47, Inv_TransferItem 46); maspsx `--use-comm-section`: lev 108 (Inv_RebuildWithSlotLimit 18, Inv_TransferItem 17, Inv_TransferItemAlt 13); FORCE_G0: lev 90 (Inv_TransferItem 56, Inv_TransferItemAlt 27, Inv_CanAddActiveListItemToAya 7); small-data set: lev 397 (Inv_RebuildWithSlotLimit 91, Inv_TransferItemAlt 47, Inv_TransferItem 46) |

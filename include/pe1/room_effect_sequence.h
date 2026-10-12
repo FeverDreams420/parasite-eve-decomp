@@ -26,8 +26,8 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomEffectSequenceSprite, depth) == 0xA, effect_s
 extern RoomEffectSequenceSprite D_80192C08, D_80192C18, D_80192C28, D_80192C38;
 extern void *D_80192C34;
 
-extern int *FieldEng_VarPtr(int index);
-extern int *FieldEng_RegPtr(int index);
+extern int *FieldFx_VarPtr(int index);
+extern int *FieldFx_RegPtr(int index);
 /* Per-command handler table and state size table for func_800C2B90. */
 extern int (*D_80192B5C[])(void *, void *, void *);
 extern u16 D_80192BBC[];

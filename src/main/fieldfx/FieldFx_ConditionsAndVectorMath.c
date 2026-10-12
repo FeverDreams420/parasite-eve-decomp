@@ -298,6 +298,6 @@ void func_800DFE94(Vec3Fixed *from, Vec3Fixed *to, s16 *out) {
 
 #include "common.h"
 
-int FieldEng_VecToAngle(Vec3Fixed *from, Vec3Fixed *to) {
+int FieldFx_VecToAngle(Vec3Fixed *from, Vec3Fixed *to) {
     return (s16)ratan2(to->x - from->x, to->z - from->z);
 }

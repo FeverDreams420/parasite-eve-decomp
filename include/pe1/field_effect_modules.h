@@ -6,7 +6,7 @@
 #include "pe1/field_engine_state.h"
 
 /* The eight field effect modules the descriptor table at 0x80094188 lists
- * (FieldEng_GlowEffects.c .. FieldEng_BurstEffects.c). Each module is a class
+ * (FieldFx_GlowEffects.c .. FieldFx_BurstEffects.c). Each module is a class
  * of seven methods, in the order of pe1/room_module.h: a no-op, the setup
  * that plants the module's command script into the engine slot, the spawn
  * forwarder, the draw pass over the draw list, the update pass (update list,
@@ -31,7 +31,7 @@ extern void *g_FieldEffectResource2;
 extern void *g_FieldEffectAssetTable;
 void *FieldAnim_GetEffectResource(int index);
 
-/* Glow effect (FieldEng_GlowEffects.c). */
+/* Glow effect (FieldFx_GlowEffects.c). */
 extern int g_GlowEffectScript[];
 extern FieldEngHandler g_GlowEffectInitList[];
 extern FieldEngHandler g_GlowEffectDrawList[];
@@ -51,7 +51,7 @@ int GlowEffect_RegisterPairedTables(void *object);
 int GlowEffect_CloseTarget(char *object);
 int GlowEffect_ClassNop6(void);
 
-/* Second glow effect (FieldEng_GlowEffects.c). */
+/* Second glow effect (FieldFx_GlowEffects.c). */
 extern int g_GlowEffectBScript[];
 extern FieldEngHandler g_GlowEffectBInitList[];
 extern FieldEngHandler g_GlowEffectBDrawList[];
@@ -69,7 +69,7 @@ int GlowEffectB_RegisterPairedTables(void *object);
 int GlowEffectB_CloseTarget(char *object);
 int GlowEffectB_ClassNop6(void);
 
-/* Third glow effect (FieldEng_GlowEffects.c). */
+/* Third glow effect (FieldFx_GlowEffects.c). */
 extern int g_GlowEffectCScript[];
 extern FieldEngHandler g_GlowEffectCInitList[];
 extern FieldEngHandler g_GlowEffectCDrawList[];
@@ -86,7 +86,7 @@ int GlowEffectC_RegisterPairedTables(void *object);
 int GlowEffectC_CloseTarget(char *object);
 int GlowEffectC_ClassNop6(void);
 
-/* Four-layer glow effect (FieldEng_GlowEffects.c). */
+/* Four-layer glow effect (FieldFx_GlowEffects.c). */
 extern int g_FourLayerGlowScript[];
 extern FieldEngHandler g_FourLayerGlowInitList[];
 extern FieldEngHandler g_FourLayerGlowDrawList[];
@@ -107,7 +107,7 @@ int FourLayerGlow_RegisterPairedTables(void *object);
 int FourLayerGlow_CloseTarget(char *object);
 int FourLayerGlow_ClassNop6(void);
 
-/* Point sprite effect (FieldEng_BurstEffects.c). */
+/* Point sprite effect (FieldFx_BurstEffects.c). */
 extern u8 g_PointSpriteScript[];
 extern FieldEngHandler g_PointSpriteInitList[];
 extern FieldEngHandler g_PointSpriteDrawList[];
@@ -122,7 +122,7 @@ int PointSprite_RegisterPairedTables(void *object);
 int PointSprite_CloseTarget(char *object);
 int PointSprite_ClassNop6(void);
 
-/* Burst effect (FieldEng_BurstEffects.c); its script and setup
+/* Burst effect (FieldFx_BurstEffects.c); its script and setup
  * are declared with the burst records in pe1/field_anim.h. */
 extern FieldEngHandler g_BurstEffectInitList[];
 extern FieldEngHandler g_BurstEffectDrawList[];
@@ -137,7 +137,7 @@ int BurstEffect_RegisterPairedTables(void *object);
 int BurstEffect_CloseTarget(u8 *object);
 int BurstEffect_ClassNop6(void);
 
-/* Second burst effect (FieldEng_BurstEffects.c). */
+/* Second burst effect (FieldFx_BurstEffects.c). */
 extern int g_BurstEffectBScript[];
 extern FieldEngHandler g_BurstEffectBInitList[];
 extern FieldEngHandler g_BurstEffectBDrawList[];
@@ -152,7 +152,7 @@ int BurstEffectB_RegisterPairedTables(void *object);
 int BurstEffectB_CloseTarget(u8 *object);
 int BurstEffectB_ClassNop6(void);
 
-/* Third burst effect (FieldEng_BurstEffects.c). */
+/* Third burst effect (FieldFx_BurstEffects.c). */
 extern int g_BurstEffectCScript[];
 extern FieldEngHandler g_BurstEffectCInitList[];
 extern FieldEngHandler g_BurstEffectCDrawList[];

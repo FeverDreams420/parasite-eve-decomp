@@ -47,14 +47,14 @@ void RoomEffect_GroundEruptionInit(RoomEnt *owner, void *arg1, RoomEruptionActor
     func_800C2B40(workState);
     workState->cooldown = 0;
     workState->collisionState = 0;
-    workState->reload = *FieldEng_VarPtr(5);
-    workState->collisionRadius = *FieldEng_VarPtr(4);
+    workState->reload = *FieldFx_VarPtr(5);
+    workState->collisionRadius = *FieldFx_VarPtr(4);
     entity = owner->link;
     workState->entity = entity;
     workState->matrix = *(RoomSpriteMatrix *)entity->p238;
-    workState->matrix.t[0] = *FieldEng_VarPtr(1);
-    workState->matrix.t[1] = *FieldEng_VarPtr(2);
-    workState->matrix.t[2] = *FieldEng_VarPtr(3);
+    workState->matrix.t[0] = *FieldFx_VarPtr(1);
+    workState->matrix.t[1] = *FieldFx_VarPtr(2);
+    workState->matrix.t[2] = *FieldFx_VarPtr(3);
     asset = Asset_SearchByKeyType(0xA6);
     callOwner = owner;
     workState->asset.handle = asset;
@@ -125,7 +125,7 @@ void RoomEffect_GroundEruptionTick(RoomEnt *ent, unsigned char *signal,
     work = timer;
     if (timer->h2A == 0) {
         if (work->h2C == 1) {
-            if (FieldEng_GetStatus(ent) == 3) {
+            if (FieldFx_GetStatus(ent) == 3) {
                 if (ent->link->target->state[0] == 2) {
                     reload = work->h28;
                     flagsBase = (int **)D_8009D254;
@@ -547,7 +547,7 @@ void RoomEffect_GroundEruptionInitDebris(void *arg0, void *arg1, RoomEruptionDeb
     int wave;
 
     owner = func_800C2B50();
-    FieldEng_VarPtr(0);
+    FieldFx_VarPtr(0);
     angle = rand() % 0x1000;
     for (i = 0; i < 6; i++) {
         state->position[i].x = owner->matrix.t[0];

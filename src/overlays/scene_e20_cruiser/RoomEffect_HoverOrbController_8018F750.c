@@ -273,7 +273,7 @@ update: {
             effect->alpha = (rsin(D_800E27EC << 5) / 128) + 0x80;
         }
         temp_s0_2 = &effect->rotation;
-        FieldEng_CalculateLookAngles(&effect->position, &effect->endpoint, temp_s0_2);
+        FieldFx_CalculateLookAngles(&effect->position, &effect->endpoint, temp_s0_2);
         func_800CFB7C(temp_s0_2, 0x8C, &effect->trailHead);
         headOffsetX = (u16)effect->trailHead.x;
         headPositionX = (u16)effect->position.x;

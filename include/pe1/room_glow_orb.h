@@ -85,8 +85,8 @@ extern RoomFxSpritePacket g_RoomGlowOrbFlashSprite;
 int RoomEffect_GlowOrbSetup(void *object);
 
 int func_800C61A8(GteShortVector *point, GteMatrix *matrix);
-int FieldEng_GetStatus(void *object);
-int *FieldEng_RegPtr(int index);
-int *FieldEng_VarPtr(int index);
+int FieldFx_GetStatus(void *object);
+int *FieldFx_RegPtr(int index);
+int *FieldFx_VarPtr(int index);
 
 #endif

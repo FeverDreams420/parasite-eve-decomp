@@ -75,12 +75,12 @@ int func_8019251C(int mode, RoomM123JointTriangle *triangle) {
     case 2:
         gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldtransmatrix(D_800BCFA4.value);
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x28, &offset, &corners[0]);
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x22, &offset, &corners[1]);
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x1D, &tip, &corners[2]);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x28, &offset, &corners[0]);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x22, &offset, &corners[1]);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x1D, &tip, &corners[2]);
         switch (triangle->state) {
         case 0:
-            FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x17, &tip, &corners[3]);
+            FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x17, &tip, &corners[3]);
             weight = 0x5000 - rsin((triangle->frame << 10) / 24) * 4;
             LoadAverageShort12(&corners[3], &corners[0], 0x1000 - weight, weight, &corners[0]);
             LoadAverageShort12(&corners[3], &corners[1], 0x1000 - weight, weight, &corners[1]);
@@ -267,7 +267,7 @@ int func_80192F0C(int mode, RoomM123GlowBurst *burst) {
         D_800F3368.parameter06 = 1;
         D_800F3368.parameter0A = 0;
         D_800F3368.depth = 0x32;
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x17, &template, &position);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 0x17, &template, &position);
         rotation.x = 0;
         rotation.y = 0;
         rotation.z = -D_800E27EC << 6;
@@ -391,7 +391,7 @@ int func_80193618(int mode, RoomM123Beacon *state) {
         FieldModel_ScrollUv((union FieldTexturedModel *)D_8019569C, 0, 0xF0);
         return 0;
     case 1:
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123BeaconChannel)->pool, 0x17, &offset, state);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123BeaconChannel)->pool, 0x17, &offset, state);
         func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomM123BeaconChannel)->pool, 0,
                       &state->rotation);
         state->alpha = 0x80;
@@ -721,7 +721,7 @@ int func_80194768(int mode)
         if (time < 80) break;
         return 1;
     case 2:
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 23, &seed, &output);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, 23, &seed, &output);
         scale = rsin((D_800E27EC << 11) / 80);
         if (scale < 0)
             scale += 31;
@@ -897,7 +897,7 @@ int func_80195114(int mode, RoomM123Burst *burst, int *choice) {
     switch (mode) {
     case 0:
         value = *choice ? 34 : 40;
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, value, &position, &burst->x);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM123Pool)->pool, value, &position, &burst->x);
         burst->frame = 0;
         burst->phase = 0;
         func_800D3F64(0x581, func_800D3FD8());

@@ -35,7 +35,7 @@
  * pointer/memory barriers across this TU. Matrix loads are C; each GTE
  * instruction and hazard nop uses its individual macro. */
 
-void FieldEng_TransformMatrixPoint(RoomFxTransformOwner *owner, int index,
+void FieldFx_TransformMatrixPoint(RoomFxTransformOwner *owner, int index,
                                   const GteShortVector *input, GteShortVector *output) {
     GteVector result;
     GteMatrixWords *matrix = (GteMatrixWords *)&owner->transforms[index];
@@ -87,10 +87,10 @@ void func_800CE9D4(RoomFxTransformOwner *owner, int index, GteShortVector *out)
     direction.x = result.x;
     direction.y = result.y;
     direction.z = result.z;
-    FieldEng_CalculateLookAngles(from, vector, out);
+    FieldFx_CalculateLookAngles(from, vector, out);
 }
 
-void FieldEng_RotateVector(const GteMatrixWords *matrix,
+void FieldFx_RotateVector(const GteMatrixWords *matrix,
                            const GteShortVector *input, GteShortVector *output) {
     GteVector result;
     GteMatrixWords untranslated;
@@ -467,7 +467,7 @@ void func_800CF4B4(int arg0, int arg1, u16 *pixels) {
  * the GTE translation registers, optionally returning it in output.
  * Matching debt: seven pins and two empty pointer constraints. Matrix
  * reads are C; every COP2 transfer/command and hazard nop is separate. */
-void FieldEng_TransformTranslation(const GteShortVector *input,
+void FieldFx_TransformTranslation(const GteShortVector *input,
                                   GteMatrixWords *output) {
     GteMatrixWords local;
     /* The slot address stays in $v0 and the loaded matrix in $v1, with the
@@ -605,7 +605,7 @@ void func_800CF844(GteShortVector *origin, GteShortVector *out, int radius,
     out->z = point.z;
 }
 
-void FieldEng_CalculateLookAngles(GteShortVector *from, GteShortVector *to,
+void FieldFx_CalculateLookAngles(GteShortVector *from, GteShortVector *to,
                                  GteShortVector *out) {
     int dx, dz, horizontal_distance;
 
@@ -1998,7 +1998,7 @@ void func_800D3114(GteShortVector *points, s16 count, int width, int u, int v,
     }
 }
 
-void FieldEng_UpdatePointHistory(RenderHistoryPoint *history, s16 count,
+void FieldFx_UpdatePointHistory(RenderHistoryPoint *history, s16 count,
                                  RenderHistoryPoint *value, int reset) {
     RenderHistoryPoint *cursor;
     int i;

@@ -1091,7 +1091,7 @@ int func_8019549C(int mode, SceneE19HomingParticle *particle)
         particle->timer = 0;
         particle->state = 1;
         particle->angles.pad = 0;
-        FieldEng_TransformMatrixPoint(
+        FieldFx_TransformMatrixPoint(
             (struct RoomFxTransformOwner *)D_800F32D0->actor,
             0, (GteShortVector *)&templatePoint, &particle->position);
         func_800CE9D4((struct RoomFxTransformOwner *)D_800F32D0->actor,
@@ -1122,7 +1122,7 @@ int func_8019549C(int mode, SceneE19HomingParticle *particle)
 
     case 1:
         particle->timer++;
-        FieldEng_CalculateLookAngles(&particle->position, &particle->target,
+        FieldFx_CalculateLookAngles(&particle->position, &particle->target,
                                     &rotation);
         func_800CFD50((u16 *)&rotation, (u16 *)&particle->angles,
                      (u16)(rsin(particle->turnPhase) / 5));
@@ -1341,7 +1341,7 @@ int func_801960C4(int mode, SceneHomingBurst *burst)
 
     switch (mode) {
     case 0:
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneHomingBurstChannel)->pool, 0, &rotation, &burst->position);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneHomingBurstChannel)->pool, 0, &rotation, &burst->position);
         burst->timer = 0;
         burst->released = 0;
         if (ANIM_TASK_AS(SceneHomingBurstEvent)->active) {
@@ -1645,7 +1645,7 @@ int func_80196CCC(int mode, SceneSpinRayBurst *burst)
             D_800F3368.depth = 0x18;
             D_800F3368.tpage = tpage;
         }
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneSpinRayChannel)->pool, 0, &tilt, &position);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneSpinRayChannel)->pool, 0, &tilt, &position);
         D_8019B670.x = position.x;
         D_8019B670.y = position.y;
         D_8019B670.z = position.z;
@@ -2125,8 +2125,8 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
         }
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneTwinGlowChannel)->pool, glow->jointA, &offset, &jointA);
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneTwinGlowChannel)->pool, glow->jointB, &offset, &jointB);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneTwinGlowChannel)->pool, glow->jointA, &offset, &jointA);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneTwinGlowChannel)->pool, glow->jointB, &offset, &jointB);
         D_800F3368.parameter00 = 0x40;
         D_800F3368.parameter02 = 4;
         D_800F3368.extent_x = 0x40;

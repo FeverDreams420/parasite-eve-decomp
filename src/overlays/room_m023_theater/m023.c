@@ -129,7 +129,7 @@ int func_8018F3C8(int mode, RoomM023ScatterState *state) {
         return func_800CE560(ANIM_POOL_AS(RoomM023Channel)->pool, 16, 12,
                              (FieldAnimCallbackListCallback)func_8018F004);
     case 1:
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM023Channel)->pool, state->joint, &template, position);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM023Channel)->pool, state->joint, &template, position);
         state->timer++;
         if (ANIM_TASK_AS(RoomM023EventState)->interval == 0) return 1;
         if (ANIM_TASK_AS(RoomM023EventState)->interval < state->timer) {
@@ -154,7 +154,7 @@ int func_8018F3C8(int mode, RoomM023ScatterState *state) {
         }
         break;
     case 2:
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM023Channel)->pool, state->joint, &template, &RoomM023_ScriptAnchor);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM023Channel)->pool, state->joint, &template, &RoomM023_ScriptAnchor);
         D_800F3368.parameter00 = 32;
         D_800F3368.parameter02 = 2;
         D_800F3368.extent_x = 32;
@@ -249,7 +249,7 @@ int func_8018F710(int mode, RoomM023JointGlow *glow) {
         rotation.y = 0;
         rotation.z = -D_800E27EC << 6;
         rotation.flags = 0;
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM023Channel)->pool, glow->joint, &template, &position);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM023Channel)->pool, glow->joint, &template, &position);
         {
             kind = D_800F3368.palette;
             palette = D_800E1204[kind];
@@ -310,7 +310,7 @@ int func_8018FC14(int mode, RoomM023Beacon *state) {
         FieldModel_ScrollUv((union FieldTexturedModel *)D_80190760, 0, 0);
         return 0;
     case 1:
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM023BeaconChannel)->pool, state->joint, &offset, state);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM023BeaconChannel)->pool, state->joint, &offset, state);
         func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomM023BeaconChannel)->pool, 0,
                       &state->rotation);
         switch (state->phase) {

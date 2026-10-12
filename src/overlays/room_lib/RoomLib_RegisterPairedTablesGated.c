@@ -13,7 +13,7 @@ int RoomLib_RegisterPairedTablesGated(void *o) {
     RoomLink *entry;
     int result = 0;
 
-    if ((unsigned int)FieldEng_GetStatus(o) >= 2) {
+    if ((unsigned int)FieldFx_GetStatus(o) >= 2) {
         entry = ((RoomEnt *)o)->link;
         if (entry->variant >= 2 || entry->target->startFlag != 0) {
             result = func_800C251C(o, g_RoomUpdateList);

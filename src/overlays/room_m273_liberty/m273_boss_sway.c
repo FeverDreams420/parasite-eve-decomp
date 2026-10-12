@@ -780,7 +780,7 @@ int func_80199C50(int mode) {
         if (D_8019AF74.repeat && (s16)frame >= 0xF && (s16)frame_1A < 0xF) {
             int step;
             D_8019AF74.sway_timer = 8;
-            value = (s16)FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation, (Vec3Fixed *)instance->position);
+            value = (s16)FieldFx_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation, (Vec3Fixed *)instance->position);
             step = 0x20;
             if ((value - instance->yaw) & 0x800) step = -0x20;
             D_8019AF74.sway_step = step;

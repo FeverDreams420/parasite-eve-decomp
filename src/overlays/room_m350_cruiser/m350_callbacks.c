@@ -512,8 +512,8 @@ int func_80197DA8(int event,short *cursor) {
         else phase=0;
         if (phase) {
         int speed=(short)D_800966EC[(((unsigned int)phase<<10)&0x3C00)/4].word>>6;
-        int angle=FieldEng_VecToAngle(g_PlayerEntity->render_object.model_matrix.translation,instance->render_object.model_matrix.translation);
-        instance->rot_y=FieldEng_TurnToward(instance->rot_y,(short)angle,speed);
+        int angle=FieldFx_VecToAngle(g_PlayerEntity->render_object.model_matrix.translation,instance->render_object.model_matrix.translation);
+        instance->rot_y=FieldFx_TurnToward(instance->rot_y,(short)angle,speed);
         }
         while ((short)frame>=events.entries[*cursor].frame) {
         Event *entry=&events.entries[*cursor];
@@ -835,7 +835,7 @@ int func_80198CF8(int event,State *state)
         }
         }
         D_8019A8B8.playerDistance=func_800DFE20((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x);
-        angle=FieldEng_VecToAngle((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x)&4095;
+        angle=FieldFx_VecToAngle((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x)&4095;
         D_8019A8B8.playerAngle=angle;
         delta=(angle-(unsigned short)instance->rot_y)&4095;
         do {
@@ -845,7 +845,7 @@ int func_80198CF8(int event,State *state)
                     break;
                 }
             } else {
-                if(state->speed<=1280) instance->rot_y=FieldEng_TurnToward(instance->rot_y,angle,80);
+                if(state->speed<=1280) instance->rot_y=FieldFx_TurnToward(instance->rot_y,angle,80);
                 if(state->speed<=state->targetSpeed && ((instance->rot_y-D_8019A8B8.playerAngle+64)&4095)<=256) {
                     state->mode=1; state->targetSpeed=1536; D_8019A8C0=0;
                 }

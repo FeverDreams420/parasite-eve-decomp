@@ -99,12 +99,12 @@ void RoomLib_InitPairedEmitterWithSound(void *arg0, void *arg1,
     primary->mode = 0x10;
     primary->offset = 0;
     primary->intensity = 0x80;
-    primary->color1[0] = *FieldEng_RegPtr(1);
-    primary->color1[1] = *FieldEng_RegPtr(2);
-    primary->color1[2] = *FieldEng_RegPtr(3);
-    primary->color0[0] = *FieldEng_RegPtr(4);
-    primary->color0[1] = *FieldEng_RegPtr(5);
-    primary->color0[2] = *FieldEng_RegPtr(6);
+    primary->color1[0] = *FieldFx_RegPtr(1);
+    primary->color1[1] = *FieldFx_RegPtr(2);
+    primary->color1[2] = *FieldFx_RegPtr(3);
+    primary->color0[0] = *FieldFx_RegPtr(4);
+    primary->color0[1] = *FieldFx_RegPtr(5);
+    primary->color0[2] = *FieldFx_RegPtr(6);
     primary->extent0 = 0x4B0;
     primary->extent1 = 0x258;
     primary->source = state->sourceData;
@@ -114,12 +114,12 @@ void RoomLib_InitPairedEmitterWithSound(void *arg0, void *arg1,
     secondary->mode = 0x10;
     secondary->offset = 0;
     secondary->intensity = 0x80;
-    secondary->color1[0] = *FieldEng_RegPtr(1) >> 1;
-    secondary->color1[1] = *FieldEng_RegPtr(2) >> 1;
-    secondary->color1[2] = *FieldEng_RegPtr(3) >> 1;
-    secondary->color0[0] = *FieldEng_RegPtr(4) >> 1;
-    secondary->color0[1] = *FieldEng_RegPtr(5) >> 1;
-    secondary->color0[2] = *FieldEng_RegPtr(6) >> 1;
+    secondary->color1[0] = *FieldFx_RegPtr(1) >> 1;
+    secondary->color1[1] = *FieldFx_RegPtr(2) >> 1;
+    secondary->color1[2] = *FieldFx_RegPtr(3) >> 1;
+    secondary->color0[0] = *FieldFx_RegPtr(4) >> 1;
+    secondary->color0[1] = *FieldFx_RegPtr(5) >> 1;
+    secondary->color0[2] = *FieldFx_RegPtr(6) >> 1;
     secondary->extent0 = 0x4B0;
     secondary->extent1 = 0x12C;
     secondary->source = state->sourceData;
@@ -302,17 +302,17 @@ void RoomLib_InitPairedEmitter(void *unused0, void *unused1,
     state->primary.offset = 0;
     state->primary.intensity = 0x80;
 
-    value = FieldEng_RegPtr(1);
+    value = FieldFx_RegPtr(1);
     state->primary.color1[0] = *value;
-    value = FieldEng_RegPtr(2);
+    value = FieldFx_RegPtr(2);
     state->primary.color1[1] = *value;
-    value = FieldEng_RegPtr(3);
+    value = FieldFx_RegPtr(3);
     state->primary.color1[2] = *value;
-    value = FieldEng_RegPtr(4);
+    value = FieldFx_RegPtr(4);
     state->primary.color0[0] = *value;
-    value = FieldEng_RegPtr(5);
+    value = FieldFx_RegPtr(5);
     state->primary.color0[1] = *value;
-    value = FieldEng_RegPtr(6);
+    value = FieldFx_RegPtr(6);
     state->primary.color0[2] = *value;
 
     source = state->sourceData;
@@ -325,17 +325,17 @@ void RoomLib_InitPairedEmitter(void *unused0, void *unused1,
     state->secondary.offset = 0;
     state->secondary.intensity = 0x80;
 
-    value = FieldEng_RegPtr(1);
+    value = FieldFx_RegPtr(1);
     state->secondary.color1[0] = *value >> 1;
-    value = FieldEng_RegPtr(2);
+    value = FieldFx_RegPtr(2);
     state->secondary.color1[1] = *value >> 1;
-    value = FieldEng_RegPtr(3);
+    value = FieldFx_RegPtr(3);
     state->secondary.color1[2] = *value >> 1;
-    value = FieldEng_RegPtr(4);
+    value = FieldFx_RegPtr(4);
     state->secondary.color0[0] = *value >> 1;
-    value = FieldEng_RegPtr(5);
+    value = FieldFx_RegPtr(5);
     state->secondary.color0[1] = *value >> 1;
-    value = FieldEng_RegPtr(6);
+    value = FieldFx_RegPtr(6);
     state->secondary.color0[2] = *value >> 1;
 
     state->secondary.extent0 = 0x4B0;

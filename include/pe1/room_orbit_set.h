@@ -58,7 +58,7 @@ int RoomFx_OrbitSetNop6(void);
 /* The frame counter at 0x800942EC, read as the floor height. */
 
 void func_800C2B40(void *state);
-int *FieldEng_RegPtr(int index);
+int *FieldFx_RegPtr(int index);
 int func_800C66C8(void *object, int message, void *state);
 int func_80071A54(void);
 

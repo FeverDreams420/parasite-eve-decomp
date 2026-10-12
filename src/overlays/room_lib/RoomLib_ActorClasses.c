@@ -386,7 +386,7 @@ void RoomLib_HandlerD(RoomEnt *o) {
                                         (void *)scratch);
             scratch[1] = ((RoomLibHandlerDState *)state)->angles[1];
             func_800DFE94((Vec3Fixed *)((RoomLibHandlerDState *)state)->anchor, (Vec3Fixed *)((RoomLibMotionState *)state)->position, ((RoomLibHandlerDState *)state)->angles);
-            ((RoomLibHandlerDState *)state)->angles[1] = FieldEng_TurnToward(
+            ((RoomLibHandlerDState *)state)->angles[1] = FieldFx_TurnToward(
                 (short)*(volatile unsigned short *)&scratch[1],
                 ((RoomLibHandlerDState *)state)->angles[1], ((RoomLibHandlerDState *)state)->range[0]) & 0xFFF;
             RotMatrixYXZ(((RoomLibHandlerDState *)state)->angles, ((RoomLibHandlerDState *)state)->matrix);
@@ -408,9 +408,9 @@ void RoomLib_FxNotify(RoomLink *arg0, struct RoomSub *arg1, int scratch) {
             dst[0] = v->pos[0];
             dst[2] = v->pos[2];
         }
-        ent->rotation[1] = FieldEng_TurnToward(
+        ent->rotation[1] = FieldFx_TurnToward(
             ent->rotation[1],
-            (short)FieldEng_VecToAngle((Vec3Fixed *)dst, (Vec3Fixed *)ent->pos),
+            (short)FieldFx_VecToAngle((Vec3Fixed *)dst, (Vec3Fixed *)ent->pos),
             rec->heading) & 0xFFF;
         if ((rec->reverse != 0)
             && (0x07FFFFFF < rec->progress.word)) {
@@ -419,7 +419,7 @@ void RoomLib_FxNotify(RoomLink *arg0, struct RoomSub *arg1, int scratch) {
         }
     } else {
         func_800DFE94((Vec3Fixed *)ent->pos, (Vec3Fixed *)ent->posMirror, ent->rotation);
-        ent->rotation[1] = FieldEng_TurnToward(
+        ent->rotation[1] = FieldFx_TurnToward(
             ent->rotation[1],
             ent->rotation[1],
             rec->duration) & 0xFFF;
@@ -438,7 +438,7 @@ void RoomLib_HandlerDTransformTarget(RoomLibMotionState *state, RoomLibMotionWor
         state->position[2] = state->target->pos[2];
     }
     if (state->mode.word != 0) {
-        angle = FieldEng_VecToAngle((Vec3Fixed *)state->anchor, (Vec3Fixed *)state->position);
+        angle = FieldFx_VecToAngle((Vec3Fixed *)state->anchor, (Vec3Fixed *)state->position);
         angle &= 0xFFF;
         table = (int *)D_800966EC;
         entry = table + angle;
@@ -464,7 +464,7 @@ void RoomLib_HandlerDTransformTarget(RoomLibMotionState *state, RoomLibMotionWor
         state->position[0] = state->anchor[0] + (work->rotated[0] << 16);
         state->position[2] = state->anchor[2] + (work->rotated[2] << 16);
     }
-    angle = FieldEng_VecToAngle((Vec3Fixed *)state->anchor, (Vec3Fixed *)state->position);
+    angle = FieldFx_VecToAngle((Vec3Fixed *)state->anchor, (Vec3Fixed *)state->position);
     angle &= 0xFFF;
     table = (int *)D_800966EC;
     entry = table + angle;
@@ -739,7 +739,7 @@ void RoomLib_HandlerE(RoomEnt *o) {
             state->target[1] = targetLink->pos[1];
             state->target[2] = targetLink->pos[2];
         }
-        angle = FieldEng_VecToAngle((Vec3Fixed *)state->start, (Vec3Fixed *)state->target) & 0xFFF;
+        angle = FieldFx_VecToAngle((Vec3Fixed *)state->start, (Vec3Fixed *)state->target) & 0xFFF;
         {
             rotBase = (short *)(D_800966EC);
             rot = rotBase + (angle << 1);
@@ -829,9 +829,9 @@ void RoomLib_HandlerESteerToward(char *entArg, char *recArg) {
             dst[0] = v->pos[0];
             dst[2] = v->pos[2];
         }
-        ent->rotation[1] = FieldEng_TurnToward(
+        ent->rotation[1] = FieldFx_TurnToward(
             ent->rotation[1],
-            (short)FieldEng_VecToAngle((Vec3Fixed *)dst, (Vec3Fixed *)ent->pos),
+            (short)FieldFx_VecToAngle((Vec3Fixed *)dst, (Vec3Fixed *)ent->pos),
             rec->secondaryHeading);
     }
 }
@@ -1181,8 +1181,8 @@ void RoomLib_HandlerB(RoomEnt *obj) {
             state->secondaryX = secondary->pos[0];
             state->secondaryZ = secondary->pos[2];
         }
-        result = FieldEng_VecToAngle((Vec3Fixed *)&state->secondaryX, (Vec3Fixed *)link->pos);
-        link->rotation[1] = FieldEng_TurnToward(
+        result = FieldFx_VecToAngle((Vec3Fixed *)&state->secondaryX, (Vec3Fixed *)link->pos);
+        link->rotation[1] = FieldFx_TurnToward(
             link->rotation[1], (short)result, state->secondaryHeading);
     }
     func_800DFB20(self);
@@ -1222,7 +1222,7 @@ void RoomLib_AdvanceArcToTarget(RoomEnt *obj) {
             ((RoomLibArcWork *)0x1F800000)->point[2] = ((RoomLibHandlerBState *)state)->target[2];
         }
 
-        angle = FieldEng_VecToAngle((Vec3Fixed *)link->pos, (Vec3Fixed *)&scratch[20]) & 0xFFF;
+        angle = FieldFx_VecToAngle((Vec3Fixed *)link->pos, (Vec3Fixed *)&scratch[20]) & 0xFFF;
         {
             int *rotBase = (int *)D_800966EC;
             int *entry = rotBase + angle;
@@ -1524,7 +1524,7 @@ void RoomLib_HandlerC(RoomEnt *obj) {
             ((RoomLibArcWork *)scratch)->point[2] = state->targetLink->pos[2];
         }
 
-        angle = FieldEng_VecToAngle((Vec3Fixed *)link->pos, (Vec3Fixed *)((int)scratch | 0x28)) &
+        angle = FieldFx_VecToAngle((Vec3Fixed *)link->pos, (Vec3Fixed *)((int)scratch | 0x28)) &
                 0xFFF;
         {
             int *rotBase = (int *)D_800966EC;
@@ -1617,8 +1617,8 @@ void RoomLib_HandlerC(RoomEnt *obj) {
             state->secondaryX = secondary->pos[0];
             state->secondaryZ = secondary->pos[2];
         }
-        angle = FieldEng_VecToAngle((Vec3Fixed *)&state->secondaryX, (Vec3Fixed *)link->pos);
-        link->rotation[1] = FieldEng_TurnToward(
+        angle = FieldFx_VecToAngle((Vec3Fixed *)&state->secondaryX, (Vec3Fixed *)link->pos);
+        link->rotation[1] = FieldFx_TurnToward(
             link->rotation[1], (short)angle, (short)state->secondaryHeading);
     }
     func_800DFB20(self);
@@ -1658,7 +1658,7 @@ void RoomLib_AdvanceArcToTargetY(RoomEnt *obj) {
                 ((RoomLibHandlerCState *)state)->targetLink->pos[2];
         }
 
-        angle = FieldEng_VecToAngle((Vec3Fixed *)link->pos, (Vec3Fixed *)&scratch[20]) & 0xFFF;
+        angle = FieldFx_VecToAngle((Vec3Fixed *)link->pos, (Vec3Fixed *)&scratch[20]) & 0xFFF;
         {
             int *rotBase = (int *)D_800966EC;
             int *entry = rotBase + angle;
@@ -1844,7 +1844,7 @@ void RoomLib_HandlerA(RoomEnt *o) {
             *sig = 2;
         }
         if (o->h44 == -1) {
-            o->h44 = FieldEng_VecToAngle(
+            o->h44 = FieldFx_VecToAngle(
                 (Vec3Fixed *)o->link->pos,
                 (Vec3Fixed *)((RoomLink *)D_8009D254)->pos);
         }
@@ -1894,7 +1894,7 @@ void RoomLib_HandlerF(RoomEnt *o) {
             RoomLib_ReleaseHandlerA(o);
         }
         if (o->h46 != 0) {
-            RW16(D_8009D254, 0x3A) = FieldEng_TurnToward(
+            RW16(D_8009D254, 0x3A) = FieldFx_TurnToward(
                 RW16(D_8009D254, 0x3A), (short)o->h48, (short)o->h46);
         }
     }

@@ -142,7 +142,7 @@ int RoomEffect_GroundEruptionStart(void *o);
 int RoomEffect_GroundEruptionRelease(struct RoomEnt *o);
 int RoomEffect_GroundEruptionNop6(void);
 
-int *FieldEng_VarPtr(int index);
+int *FieldFx_VarPtr(int index);
 int func_800C66C8(void *object, int message, void *state);
 void func_800C4E50(void *params);
 

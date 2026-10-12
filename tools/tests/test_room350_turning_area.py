@@ -144,7 +144,7 @@ s32 func_800DFE20(Vec3Fixed *a,Vec3Fixed *b) {
     if(mutate) { g_PlayerEntity=&players[1]; D_800F32D0=(FieldAnimObjectPrefix *)&actors[1]; }
     return turnDistance;
 }
-int FieldEng_VecToAngle(Vec3Fixed *a,Vec3Fixed *b) {
+int FieldFx_VecToAngle(Vec3Fixed *a,Vec3Fixed *b) {
     assert(angles++==0 && distances==1);
     assert((void *)a==&players[mutate].pos_x && (void *)b==&instances[0].pos_x);
     return turnAngle;

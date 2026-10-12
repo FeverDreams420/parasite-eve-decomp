@@ -2273,7 +2273,7 @@ temporary names, local packet types, and eight loop gotos remain cleanup debt.
 
 ### Twin-model effect camera loads (`func_800DC058`)
 
-`FieldEng_TwinModel.c` now expresses the former `gte_ldrotmatrix` and
+`FieldFx_TwinModel.c` now expresses the former `gte_ldrotmatrix` and
 `gte_ldtransmatrix` CPU loads in C, using the shared `GteMatrixWords` view.
 Each GTE transfer has its own macro. Stock native GCC 2.7.2 and stock MASPSX
 2.56 reproduce all 1380 retail bytes at `0x800DC058`, with linked score 0.
@@ -2296,7 +2296,7 @@ these constraints.
 
 ### Arcing emitter camera loads (`func_800D5A00`)
 
-`FieldEng_CosinePulse.c` replaces the arcing emitter's former matrix-load
+`FieldFx_CosinePulse.c` replaces the arcing emitter's former matrix-load
 macros with C reads through `GteMatrixWords` and individually wrapped GTE
 transfers. Stock native GCC 2.7.2 and stock MASPSX 2.56, with `--expand-div`,
 produce linked score 0 and all 1100 retail bytes for the two-function TU

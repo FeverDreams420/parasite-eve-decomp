@@ -54,10 +54,10 @@ void RoomFx_DropFieldInit(RoomDropFieldEntity *ent, void *unused, RoomDropFieldS
     state->holdTimer = 0;
     state->hit = 0;
     state->holdFrames = 0x96;
-    state->particlePattern = *FieldEng_VarPtr(0);
-    state->radiusRate = *FieldEng_VarPtr(1);
-    state->fallRate = *FieldEng_VarPtr(2);
-    state->initialFallStep = *FieldEng_VarPtr(3);
+    state->particlePattern = *FieldFx_VarPtr(0);
+    state->radiusRate = *FieldFx_VarPtr(1);
+    state->fallRate = *FieldFx_VarPtr(2);
+    state->initialFallStep = *FieldFx_VarPtr(3);
 
     g_RoomDropFieldSpinSprite.code = 0x22;
     g_RoomDropFieldSpinSprite.mode = 0x30;
@@ -922,8 +922,8 @@ void RoomFx_InitDropField(s32 arg0, s32 arg1, RoomDropFieldDrops *state) {
     src = func_800C2B50();
     state->anchor = src->matrix0.head;
     state->facing = src->matrix0.tail;
-    state->h180 = *FieldEng_RegPtr(1);
-    state->h182 = *FieldEng_VarPtr(8);
+    state->h180 = *FieldFx_RegPtr(1);
+    state->h182 = *FieldFx_VarPtr(8);
     state->h184 = 0;
 
     for (i = 0; i < 16; i++) {
@@ -1036,7 +1036,7 @@ void RoomFx_UpdateDropField(void *object, RoomDropSlot *slot, RoomDropField *fie
 
     for (i = 0; i < 16; i++) {
         field->drops[i].z -= 0x96;
-        if (slot->step == field->first_step + i && *FieldEng_VarPtr(7) == 1) {
+        if (slot->step == field->first_step + i && *FieldFx_VarPtr(7) == 1) {
             field->live[i] = 0;
             if (++field->released == 1) {
                 rotation.x = 0x20;

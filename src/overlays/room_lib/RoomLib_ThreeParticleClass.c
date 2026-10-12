@@ -23,7 +23,7 @@ ROOMLIB_REGISTER_TABLE(RoomLib_ThreeParticleRegister, g_RoomThreeParticleDrawLis
 int RoomLib_ThreeParticleStart(void *o) {
     int result;
 
-    if ((unsigned int)FieldEng_GetStatus(o) >= 2) {
+    if ((unsigned int)FieldFx_GetStatus(o) >= 2) {
         result = func_800C251C(o, g_RoomThreeParticleUpdateList);
         result |= func_800C2758(o, g_RoomThreeParticleInitList,
                                 g_RoomThreeParticleSpawnLayout);

@@ -390,7 +390,7 @@ void RoomFx_InitOrbitSprite(
     seed2 = s_OrbitSpriteSeed2;
     seed3 = s_OrbitSpriteSeed3;
 
-    if (*FieldEng_RegPtr(1) == 0) {
+    if (*FieldFx_RegPtr(1) == 0) {
         ApplyMatrixSV((GteMatrix *)view->transform, &seed0.vector,
                       &state->velocity);
         ApplyMatrixSV((GteMatrix *)view->transform, &seed1.vector,

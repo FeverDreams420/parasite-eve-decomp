@@ -697,7 +697,7 @@ void func_801906BC(void *object, void *timer, ScenePlayerOrb *orb)
     orb->position.z = g_PlayerEntity->pos_z >> 16;
     orb->position.x += func_80071A54() % 300 - 150;
     orb->position.z += func_80071A54() % 300 - 150;
-    rotation.y = *FieldEng_RegPtr(2);
+    rotation.y = *FieldFx_RegPtr(2);
     RotMatrix(&rotation, &matrix);
     offset.x = orb->position.x - orb->anchor.x;
     offset.y = orb->position.y - orb->anchor.y;
@@ -715,7 +715,7 @@ void func_801906BC(void *object, void *timer, ScenePlayerOrb *orb)
     orb->alpha = 0xFF;
     orb->active = 0;
     orb->fade = 0;
-    orb->delay = *FieldEng_RegPtr(1);
+    orb->delay = *FieldFx_RegPtr(1);
     if (D_800B0E64[0] != 0) {
         Akao_SendTableCommand(D_800B0E64[0], 0x606, 0, 0x80, 0x7F);
     }
@@ -1072,24 +1072,24 @@ void func_8019155C(RoomEnt *ent, void *unused, SceneE08InitState *state) {
 void func_80191740(void) {
 }
 
-int *FieldEng_VarPtr(int arg0);
+int *FieldFx_VarPtr(int arg0);
 void func_80020D50(void);
 void func_80020DD0(void);
-int FieldEng_GetStatus(void *arg0);
+int FieldFx_GetStatus(void *arg0);
 
 void func_80191748(SceneGrabHead *arg0, RoomFxControl *arg1) {
     int *status;
     int *flags;
     int *objectFlags;
 
-    status = FieldEng_VarPtr(1);
+    status = FieldFx_VarPtr(1);
     if (*status == 1) {
         if (arg1->frame < 0xF0) {
             func_80020D50();
         }
 
         if (arg1->frame == 0xF0) {
-            if (FieldEng_GetStatus(arg0) == 3) {
+            if (FieldFx_GetStatus(arg0) == 3) {
                 flags = *(int **)D_8009D254;
                 flags[0x13] |= 0x4000;
 
@@ -1850,11 +1850,11 @@ void func_80193480(void *unused0, void *unused1, Ovl178RandomizedEffect *effect)
         effect->tail.flags[i] = 0;
         effect->offsets[i] = 0;
     }
-    threshold = *FieldEng_VarPtr(2);
+    threshold = *FieldFx_VarPtr(2);
     if (Engine_Random() % 256 < threshold) {
-        *FieldEng_VarPtr(1) = 1;
+        *FieldFx_VarPtr(1) = 1;
     } else {
-        *FieldEng_VarPtr(1) = 0;
+        *FieldFx_VarPtr(1) = 0;
     }
 }
 
@@ -2083,7 +2083,7 @@ void func_80193FF8(s32 arg0, s32 arg1, SceneE08TrailGlow *p) {
     s32 z;
 
     view = func_800C2B50();
-    FieldEng_RegPtr(1);
+    FieldFx_RegPtr(1);
     p->acceleration = 0x14;
     p->unused88 = 0x80;
     p->speed = 0;
@@ -2207,9 +2207,9 @@ void func_801943CC(void *arg0, void *arg1, SceneLayeredSpriteState *out)
     out->initialSeed.vector.x = 0;
     out->initialSeed.vector.y = 0;
     out->initialSeed.vector.z = 0;
-    out->phase = *FieldEng_RegPtr(2);
-    out->direction = *FieldEng_RegPtr(3);
-    out->drift = *FieldEng_VarPtr(1);
+    out->phase = *FieldFx_RegPtr(2);
+    out->direction = *FieldFx_RegPtr(3);
+    out->drift = *FieldFx_VarPtr(1);
     if (out->direction == 0)
         out->velocity[2] = 0x124F80;
     else

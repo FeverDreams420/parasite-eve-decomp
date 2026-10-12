@@ -183,7 +183,7 @@ through `$gp` in one block after the includes, private `*_externs.h`
 declarations moved to a shared header, `Old.c:NN` references re-pointed);
 `tools/reorg/marker_probe.py` compares every function with the old unit
 objects before `make check` and `make overlay-check-all` decide. File names
-follow the role of the module (`FieldEng_GlowEffects.c`, `Script_FlowOpcodes.c`,
+follow the role of the module (`FieldFx_GlowEffects.c`, `Script_FlowOpcodes.c`,
 `Menu_InventoryScreens.c`, `Battle_Setup.c`).
 
 The marker sets that unified the most units:
@@ -234,7 +234,7 @@ Units that stay separate, and why:
   `item/Inv_ArmorCapacity.c` each define their own `LookupTrackedItem`
   shape, so the use-panel opener stays between `Inv_InventorySwap.c` and
   `Inv_ArmorCapacity.c`.
-- Flags the neighbours do not tolerate: `fieldfx/FieldEng_AngleMath.c`,
+- Flags the neighbours do not tolerate: `fieldfx/FieldFx_AngleMath.c`,
   `draw/Draw_AllocColorQuad.c` and
   `draw/Render_FontGlyphLoad.c` (`-fno-schedule-insns`),
   `asset/Asset_UnloadTableEntries.c` (`-fno-force-mem`, lev 1 without),
@@ -701,7 +701,7 @@ changing bytes:
   insn needs at once, so the three-operand `gte_ldv3` is what gives the
   t1, t2, t3 rotation retail has in the sprite renderers. Separate
   `gte_lwc2_*` statements or one-operand loads leave a single spill register.
-- The composed glow layers are two (`FieldEng_GlowLayers.inc`) PSY-Q
+- The composed glow layers are two (`FieldFx_GlowLayers.inc`) PSY-Q
   `gte_CompMatrix(&matrix, &rotation, &matrix)` calls; the floor-triangle
   tests are the PSY-Q outer product (`gte_ldopv1_psyq`, `gte_ldopv2`, OP,
   `gte_stlvnl`) with the first operand read through `D_800E2844` and one
@@ -719,11 +719,11 @@ changing bytes:
 - `func_800C5EB0` walks the strip nodes beside a `FieldStripNodeTail` view
   (the node seen from its brightness field, `pe1/field_textured_chain_node.h`):
   `body[-1].nextCellStep`, `body[1].edgeA` replace the raw byte offsets.
-- The field engine object passes (`FieldEng_ObjectScript.c`) keep the slot
+- The field engine object passes (`FieldFx_ObjectScript.c`) keep the slot
   table and script state in typed globals (`FieldEngSlot *`,
   `FieldEngState *`); the slot address the two dispatch loops add as an
   integer, index first, is a `FieldEngSlotAddress` pointer/word union.
-- `FieldEng_GlowEffects.c` .. `FieldEng_BurstEffects.c` are the eight effect
+- `FieldFx_GlowEffects.c` .. `FieldFx_BurstEffects.c` are the eight effect
   module classes of `pe1/field_effect_modules.h`; their scripts, handler lists,
   slot sizes and tables are declared there under module names instead of the
   per-unit extern headers.
@@ -738,37 +738,37 @@ changing bytes:
 
 What is left (best crutch-free lev against retail):
 
-- `FieldEng_AngleMath.c` (5 pins): `FieldEng_TurnToward` lev 15 and
-  `FieldEng_AngleDistance` lev 6. Retail keeps the step and the turn delta in separate
+- `FieldFx_AngleMath.c` (5 pins): `FieldFx_TurnToward` lev 15 and
+  `FieldFx_AngleDistance` lev 6. Retail keeps the step and the turn delta in separate
   registers (`move v1,a2` then `negu v1,a2`): with `delta = step` followed by
   `delta = -step` cse makes the longer-lived delta the class head and rewrites
   `-step` as `-delta`, so step dies at the copy and global alloc gives delta
   step's register (a s16 delta, if/else and ternary forms tried). The same
-  copy preference ties `FieldEng_AngleDistance`'s distance to the difference in `a0`.
+  copy preference ties `FieldFx_AngleDistance`'s distance to the difference in `a0`.
   Declaring the turn delta `unsigned short` breaks the cse equivalence (the
   copy is a truncation), so delta keeps its own register: lev 8, the rest
   being the zero extension before the final add and the difference computed
   into `v0` then copied (`short` lev 9). The distance helper stays at lev 6
   for `s16`/`int` distances, if/else, ternary and in-place `lhs -= rhs`.
-- `FieldEng_CollisionQueries.c` `func_800C5EB0` (1 pin on the node pointer):
+- `FieldFx_CollisionQueries.c` `func_800C5EB0` (1 pin on the node pointer):
   lev 9 without the pin. Global alloc ranks the loop index (9 refs over 45
   insns) above the node pointer (11 over 59); retail has node, index, strip in
   s1, s2, s3. Dropping the index's reuse as the return value lets the strip
   outrank the index (lev 13); starting the index inside the `if` gives the
   node s1 but swaps strip and index (lev 17-21).
-- `FieldEng_GeometryAndShapes.c`: `func_800D2370` keeps one empty constraint on
+- `FieldFx_GeometryAndShapes.c`: `func_800D2370` keeps one empty constraint on
   `rotation` and `length` (lev 71 without it: `rotation` is spilled to the
   stack instead of living in s8 across the packet setup calls).
   `func_800D3BC8` keeps the entry memory barrier, the `$6` clobber and the
   volatile stack parameters (lev 14 without them: sched2 interleaves the
   stack-argument loads with the register saves, retail loads them after the
   last save).
-- `FieldEng_GlowEffects.c` `func_800CAE0C` (5 pins, 1 barrier): lev 50
+- `FieldFx_GlowEffects.c` `func_800CAE0C` (5 pins, 1 barrier): lev 50
   as four `gte_CompMatrix` layers. Local alloc ranks the composed translation
   source (`&rotation.t`) above the second-column addresses and leaves the
   matrix second column without a register; retail spills the translation
   source instead (stack slot 192).
-- `FieldEng_GeometryAndShapes.c` is excluded from this sweep (owned
+- `FieldFx_GeometryAndShapes.c` is excluded from this sweep (owned
   elsewhere); its three `_externs` headers stay with it.
 
 ### Open declaration conflicts
@@ -1846,7 +1846,7 @@ Left, with the best crutch-free lev:
 
 Byte-pointer arithmetic, raw offset dereferences and pointer/integer casts in
 `src/main` went from 70/14/227 to 8/3/7, and every remaining site is either in
-`FieldEng_GeometryAndShapes`/`Render_DrawObjectVariant` (out of scope) or
+`FieldFx_GeometryAndShapes`/`Render_DrawObjectVariant` (out of scope) or
 listed below. None of the recipes changed a byte.
 
 Why most sites needed a union rather than a typed index: GCC 2.7.2 and 2.8.1

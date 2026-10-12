@@ -86,10 +86,10 @@ void SceneEffect_GrabOnApproach(SceneGrabHead *head) {
                 *(int *)(*(char **)&actor->render_object.matrices + 0x594) << 16;
             *(int *)0x1F800010 =
                 *(int *)(*(char **)&actor->render_object.matrices + 0x59C) << 16;
-            mapAngle = FieldEng_VecToAngle(
+            mapAngle = FieldFx_VecToAngle(
                 origin, (Vec3Fixed *)(*(char **)&actor->render_object.matrices + 0x594));
 
-            if (((FieldEng_VecToAngle(
+            if (((FieldFx_VecToAngle(
                       origin, (Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation) -
                   mapAngle + 0x40) &
                  0xFFF) < 0x100) {
@@ -1683,8 +1683,8 @@ int func_80196348(int mode) {
             if (D_8019AE9C.tick >= D_8019AE9C.tick_limit) D_8019AE9C.spin_target = 0;
         } else {
             /* The heading is turned half way round in 16.16 form. */
-            value = FieldEng_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation, (Vec3Fixed *)instance->position);
-            instance->yaw = FieldEng_TurnToward((short)instance->yaw, (short)((value << 16) + 0x8000000 >> 16), 0x20);
+            value = FieldFx_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation, (Vec3Fixed *)instance->position);
+            instance->yaw = FieldFx_TurnToward((short)instance->yaw, (short)((value << 16) + 0x8000000 >> 16), 0x20);
         }
         if (D_8019AE9C.tick < 0x77) {
             value = (D_8019AE9C.tick << 13) / 118;

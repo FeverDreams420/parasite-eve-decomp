@@ -407,7 +407,7 @@ int RoomEffect_BurstOrbController(int mode, void *unused, s32 *state) {
                              (FieldAnimCallbackListCallback)RoomEffect_BurstOrbParticle);
         case 1:
     pool = ANIM_OWNER_AS(RoomSparkChannel)->pool;
-    FieldEng_TransformMatrixPoint(pool, 7, &template, position);
+    FieldFx_TransformMatrixPoint(pool, 7, &template, position);
     pool = ANIM_OWNER_AS(RoomSparkChannel)->pool;
     func_800CE9D4((struct RoomFxTransformOwner *)pool, 0,
                   (GteShortVector *)target);
@@ -558,7 +558,7 @@ int RoomEffect_DampedSparkController(int mode, void *unused, void *state) {
         }
         case 1:
     pool = ANIM_OWNER_AS(RoomSparkChannel)->pool;
-    FieldEng_TransformMatrixPoint(pool, 7, &template, position);
+    FieldFx_TransformMatrixPoint(pool, 7, &template, position);
     pool = ANIM_OWNER_AS(RoomSparkChannel)->pool;
     func_800CE9D4((struct RoomFxTransformOwner *)pool, 0,
                   (GteShortVector *)target);
@@ -707,7 +707,7 @@ int RoomEffect_BeamSparkController(int mode, RoomBeamSpark *fx,
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x20,
                              (FieldAnimCallbackListCallback)RoomEffect_BeamBounceParticle);
     case 1:
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0x1F, &rotation, fx);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0x1F, &rotation, fx);
         func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0,
                       &actor);
         angle = -actor.y + 0x400;

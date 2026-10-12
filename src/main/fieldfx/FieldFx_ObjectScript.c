@@ -7,7 +7,7 @@
 /* Field engine objects: clearing an object's script state and dispatch
  * slots, and the two per-frame passes over the 0x40 dispatch slots. */
 
-void **FieldEng_GetSlot(FieldEngObject *obj) {
+void **FieldFx_GetSlot(FieldEngObject *obj) {
     u8 *p;
     unsigned int i;
 
@@ -37,7 +37,7 @@ void **FieldEng_GetSlot(FieldEngObject *obj) {
         i++;
     } while (i < 0x40);
 
-    if (FieldEng_GetStatus(obj) == 3) {
+    if (FieldFx_GetStatus(obj) == 3) {
         FieldActorState *inner = obj->prefix.actor->state;
 
         inner->core_flags = (inner->core_flags & 0xC0FFFFFF) | 0x01000000;
@@ -46,7 +46,7 @@ void **FieldEng_GetSlot(FieldEngObject *obj) {
     return (void **)&g_FieldEngineScriptState->commands;
 }
 
-int FieldEng_Register(FieldEngObject *obj, FieldEngHandler *handlers)
+int FieldFx_Register(FieldEngObject *obj, FieldEngHandler *handlers)
 {
   register FieldEngObject *obj_s0 = obj;
   register FieldEngHandler *handlers_s2 = handlers;
@@ -80,7 +80,7 @@ int FieldEng_Register(FieldEngObject *obj, FieldEngHandler *handlers)
   return 0;
 }
 
-int FieldEng_UpdateSlots(FieldEngObject *obj, FieldEngHandler *handlers) {
+int FieldFx_UpdateSlots(FieldEngObject *obj, FieldEngHandler *handlers) {
     int result;
     s16 i;
     FieldActor *data;
@@ -98,7 +98,7 @@ int FieldEng_UpdateSlots(FieldEngObject *obj, FieldEngHandler *handlers) {
 
     obj->prefix.live_slots = obj->state.slot_count;
 
-    if (FieldEng_GetStatus(obj) == 3) {
+    if (FieldFx_GetStatus(obj) == 3) {
         if (obj->prefix.asset_type != 0x24) {
             u8 *state = obj->prefix.actor->state->action_state;
 
@@ -125,11 +125,11 @@ int FieldEng_UpdateSlots(FieldEngObject *obj, FieldEngHandler *handlers) {
         }
 
         if (g_FieldEngineSlotTable[i].flag == 2) {
-            result |= FieldEng_FreeSlot((u16)i);
+            result |= FieldFx_FreeSlot((u16)i);
         }
     }
 
-    if (FieldEng_GetStatus(obj) == 3) {
+    if (FieldFx_GetStatus(obj) == 3) {
         char *inner = (char *)data->state;
         u32 flags = ((FieldActorState *)inner)->core_flags;
 
@@ -144,7 +144,7 @@ int FieldEng_UpdateSlots(FieldEngObject *obj, FieldEngHandler *handlers) {
 #define SCRIPT g_FieldEngineScriptState
 
 /* Runs the field script of obj until a wait or end command. */
-int FieldEng_RunScript(FieldEngObject *obj, FieldEngHandler *handlers, u16 *sizes) {
+int FieldFx_RunScript(FieldEngObject *obj, FieldEngHandler *handlers, u16 *sizes) {
     u8 stopped = 0;
     int result = 0;
     s16 wait;
@@ -161,7 +161,7 @@ int FieldEng_RunScript(FieldEngObject *obj, FieldEngHandler *handlers, u16 *size
             int command = g_FieldEngineCommandTable[SCRIPT->pc];
 
             if (command == -3) {
-                result |= FieldEng_FreeAllSlots();
+                result |= FieldFx_FreeAllSlots();
             }
             if (command == -2) {
                 command = 0;
@@ -173,7 +173,7 @@ int FieldEng_RunScript(FieldEngObject *obj, FieldEngHandler *handlers, u16 *size
                 u8 index;
 
                 if (op == 1) {
-                    FieldEng_StartSlot(obj, (u8)operand, sizes, handlers);
+                    FieldFx_StartSlot(obj, (u8)operand, sizes, handlers);
                 }
                 if (op == 2) {
                     stopped = 1;
@@ -234,7 +234,7 @@ int FieldEng_RunScript(FieldEngObject *obj, FieldEngHandler *handlers, u16 *size
     return result;
 }
 
-int FieldEng_Spawn6(FieldEngObject *obj, int unused, int index, int value) {
+int FieldFx_Spawn6(FieldEngObject *obj, int unused, int index, int value) {
     FieldEngState *state = &obj->state;
 
     g_FieldEngineScriptState = state;
@@ -242,27 +242,27 @@ int FieldEng_Spawn6(FieldEngObject *obj, int unused, int index, int value) {
     return 0;
 }
 
-int *FieldEng_RegPtr(int index) {
+int *FieldFx_RegPtr(int index) {
     return &g_FieldEngineScriptState->regs[index];
 }
 
-int *FieldEng_VarPtr(int index) {
+int *FieldFx_VarPtr(int index) {
     return &g_FieldEngineScriptState->vars[index];
 }
 
-void FieldEng_SetScriptContext(void *context) {
+void FieldFx_SetScriptContext(void *context) {
     g_FieldEngineScriptState->current_context = context;
 }
 
-void *FieldEng_GetScriptContext(void) {
+void *FieldFx_GetScriptContext(void) {
     return g_FieldEngineScriptState->current_context;
 }
 
-int FieldEng_IsLastSlotHalted(void) {
+int FieldFx_IsLastSlotHalted(void) {
     return ((((FieldEngStateWords *)g_FieldEngineScriptState)->status & 0xFFFF0000U) ^ 0x01010000U) < 1;
 }
 
-void *FieldEng_StartSlot(void *obj, u8 id, u16 *sizes, FieldEngHandler *handlers) {
+void *FieldFx_StartSlot(void *obj, u8 id, u16 *sizes, FieldEngHandler *handlers) {
     s16 slot = -1;
     s16 i;
     FieldEngSlot *base;
@@ -283,8 +283,8 @@ void *FieldEng_StartSlot(void *obj, u8 id, u16 *sizes, FieldEngHandler *handlers
         return 0;
     }
 
-    if (FieldEng_GetStatus(obj) == 3 || FieldEng_GetStatus(obj) == 4 || FieldEng_GetStatus(obj) == 5) {
-        FieldEng_ActivateSlot(slot, id, sizes[id]);
+    if (FieldFx_GetStatus(obj) == 3 || FieldFx_GetStatus(obj) == 4 || FieldFx_GetStatus(obj) == 5) {
+        FieldFx_ActivateSlot(slot, id, sizes[id]);
 
         entry = &g_FieldEngineSlotTable[slot];
         data = g_FieldEngineScriptData + ((FieldEngSlot *)entry)->data_offset;
@@ -300,7 +300,7 @@ void *FieldEng_StartSlot(void *obj, u8 id, u16 *sizes, FieldEngHandler *handlers
 
 /* Activate slot `slot` with handler `id` and reserve `size` bytes of script
  * data for it, wrapping to offset 0 when the 0x80C-byte area would overflow. */
-void FieldEng_ActivateSlot(u16 slot, u8 id, u16 size) {
+void FieldFx_ActivateSlot(u16 slot, u8 id, u16 size) {
     FieldEngState *state;
     s16 offset;
 
@@ -318,14 +318,14 @@ void FieldEng_ActivateSlot(u16 slot, u8 id, u16 size) {
     state->slot_count++;
 }
 
-int FieldEng_FreeSlot(u16 slot) {
+int FieldFx_FreeSlot(u16 slot) {
     g_FieldEngineSlotTable[slot].flag = 0;
     g_FieldEngineScriptState->slot_count--;
 
     return -((((((FieldEngStateWords *)g_FieldEngineScriptState)->status & 0xFFFF0000) ^ 0x01000000) < 1));
 }
 
-int FieldEng_FreeAllSlots(void) {
+int FieldFx_FreeAllSlots(void) {
     int i;
     int result;
     u32 andMask;

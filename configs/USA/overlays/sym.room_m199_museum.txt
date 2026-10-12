@@ -1,5 +1,5 @@
-FieldEng_VecToAngle = 0x800DFF80;
-FieldEng_TurnToward = 0x800DFFB8;
+FieldFx_VecToAngle = 0x800DFF80;
+FieldFx_TurnToward = 0x800DFFB8;
 RotMatrixYXZ = 0x80079754; // type:func
 RoomLib_HandlerDNop0 = 0x8018F1CC; // type:func
 RoomLib_InitHandlerD = 0x8018F1D4; // type:func

@@ -21,8 +21,8 @@ s32 Memcard_LinkEffect(s32 mode, MemcardLinkState *state) {
         firstPtr = &first;
         state->opacity = opacity; state->phase = 0; state->timer = 0;
         __asm__("" : : : "memory");
-        FieldEng_TransformMatrixPoint(entity, D_801F1D86, offsetPtr, firstPtr);
-        FieldEng_TransformMatrixPoint(D_8009D254, D_801F1D88, &offset, &second);
+        FieldFx_TransformMatrixPoint(entity, D_801F1D86, offsetPtr, firstPtr);
+        FieldFx_TransformMatrixPoint(D_8009D254, D_801F1D88, &offset, &second);
         func_800D1384(&first, &second, 1016, (unsigned char *)&color2, (unsigned char *)&color1, 128, (struct FieldTrailPair *)&state->rotation, 1);
         return func_800CE560(ANIM_POOL_AS(MemcardLinkChannel)->slots, 20, 22,
                              (FieldAnimCallbackListCallback)Memcard_PulseImage);
@@ -34,7 +34,7 @@ s32 Memcard_LinkEffect(s32 mode, MemcardLinkState *state) {
 
             state->timer = timer;
             __asm__("" : : : "memory");
-            FieldEng_TransformMatrixPoint(entity, D_801F1D88, &offset, &unused);
+            FieldFx_TransformMatrixPoint(entity, D_801F1D88, &offset, &unused);
         }
         if (state->timer >= 23 && state->opacity > 0) state->opacity -= 8;
         if (state->timer < 22) return 0;
@@ -43,8 +43,8 @@ s32 Memcard_LinkEffect(s32 mode, MemcardLinkState *state) {
     case 2:
         if (state->opacity >= 0) {
             func_800CF3AC(D_801F1D5C, &color, state->timer);
-            FieldEng_TransformMatrixPoint(D_8009D254, D_801F1D86, &offset, &first);
-            FieldEng_TransformMatrixPoint(D_8009D254, D_801F1D88, &offset, &second);
+            FieldFx_TransformMatrixPoint(D_8009D254, D_801F1D86, &offset, &first);
+            FieldFx_TransformMatrixPoint(D_8009D254, D_801F1D88, &offset, &second);
             gte_ldrotmatrix(D_800BCFA4.value);
             gte_ldtransmatrix(D_800BCFA4.value);
             func_800D1384(&first, &second, 16, (unsigned char *)&color2, (unsigned char *)&color1,

@@ -6,12 +6,12 @@
 #include "pe1/field_anim_pool.h"
 
 /* Script-state work area (obj+0xC, pointed at by g_FieldEngineScriptState).
- * FieldEng_RunScript interprets the command table: each 32-bit command
+ * FieldFx_RunScript interprets the command table: each 32-bit command
  * carries an opcode in the high half and an operand in the low half. The int
  * register file at +0x08 and the variable file at +0x48 are also reached
- * through FieldEng_RegPtr/FieldEng_VarPtr; the active context
- * pointer at +0x70 is shared by FieldEng_SetScriptContext and
- * FieldEng_GetScriptContext. */
+ * through FieldFx_RegPtr/FieldFx_VarPtr; the active context
+ * pointer at +0x70 is shared by FieldFx_SetScriptContext and
+ * FieldFx_GetScriptContext. */
 typedef struct FieldEngState {
     /* 0x00 */ short wait;              /* frames to sleep before the next command */
     /* 0x02 */ short pc;                /* index into the command table */
@@ -19,7 +19,7 @@ typedef struct FieldEngState {
     /* 0x06 */ signed char slot_count;  /* live dispatch slots; a halted script
                                          * reports -1 once it reaches zero */
     /* 0x07 */ signed char halted;      /* set by the -1 end command */
-    /* 0x08 */ int regs[16];            /* regs[14] = slot table full (FieldEng_StartSlot) */
+    /* 0x08 */ int regs[16];            /* regs[14] = slot table full (FieldFx_StartSlot) */
     /* 0x48 */ int vars[9];
     /* 0x6C */ int *commands;           /* command table (obj+0x78) */
     /* 0x70 */ void *current_context;   /* active field object or its effect context */
@@ -58,33 +58,33 @@ extern FieldEngSlot *g_FieldEngineSlotTable;
 extern char g_FieldEngServiceThreadMissingMsg[];
 extern char g_FieldEngUpdateThreadMissingMsg[];
 
-/* Object passes (FieldEng_ObjectScript.c). FieldEng_Register runs the
- * service (draw) handler of every active slot, FieldEng_UpdateSlots the
- * update handler and frees the slots marked for teardown, FieldEng_RunScript
+/* Object passes (FieldFx_ObjectScript.c). FieldFx_Register runs the
+ * service (draw) handler of every active slot, FieldFx_UpdateSlots the
+ * update handler and frees the slots marked for teardown, FieldFx_RunScript
  * steps the command table and starts slots from the init list with the slot
- * data sizes. FieldEng_Spawn6 stores a script variable; the effect classes
+ * data sizes. FieldFx_Spawn6 stores a script variable; the effect classes
  * forward their six spawn arguments to it unchanged. */
-int FieldEng_Register(FieldEngObject *obj, FieldEngHandler *handlers);
-int FieldEng_UpdateSlots(FieldEngObject *obj, FieldEngHandler *handlers);
-int FieldEng_RunScript(FieldEngObject *obj, FieldEngHandler *handlers, u16 *sizes);
-int FieldEng_Spawn6();
-int *FieldEng_RegPtr(int index);
-int *FieldEng_VarPtr(int index);
-void FieldEng_SetScriptContext(void *context);
-void *FieldEng_GetScriptContext(void);
-int FieldEng_IsLastSlotHalted(void);
-void *FieldEng_StartSlot(void *obj, u8 id, u16 *sizes, FieldEngHandler *handlers);
-void FieldEng_ActivateSlot(u16 slot, u8 id, u16 size);
-int FieldEng_FreeSlot(u16 slot);
-int FieldEng_FreeAllSlots(void);
-/* Object status (FieldEng_CollisionQueries.c); 3 = running. */
-int FieldEng_GetStatus(void *obj);
+int FieldFx_Register(FieldEngObject *obj, FieldEngHandler *handlers);
+int FieldFx_UpdateSlots(FieldEngObject *obj, FieldEngHandler *handlers);
+int FieldFx_RunScript(FieldEngObject *obj, FieldEngHandler *handlers, u16 *sizes);
+int FieldFx_Spawn6();
+int *FieldFx_RegPtr(int index);
+int *FieldFx_VarPtr(int index);
+void FieldFx_SetScriptContext(void *context);
+void *FieldFx_GetScriptContext(void);
+int FieldFx_IsLastSlotHalted(void);
+void *FieldFx_StartSlot(void *obj, u8 id, u16 *sizes, FieldEngHandler *handlers);
+void FieldFx_ActivateSlot(u16 slot, u8 id, u16 size);
+int FieldFx_FreeSlot(u16 slot);
+int FieldFx_FreeAllSlots(void);
+/* Object status (FieldFx_CollisionQueries.c); 3 = running. */
+int FieldFx_GetStatus(void *obj);
 
 /* Shared XYZ origin consumed by field effect initializers. */
 struct FieldAnimPointTriple;
 extern struct FieldAnimPointTriple D_800E2290;
 
-/* Shape helpers (FieldEng_GeometryAndShapes.c): the two CLUT pixel blocks
+/* Shape helpers (FieldFx_GeometryAndShapes.c): the two CLUT pixel blocks
  * func_800CED3C uploads and the index of the loaded one, the colour-key table
  * and a word of the direction helpers. */
 extern void *D_800B0E18;

@@ -1,6 +1,6 @@
-FieldEng_Spawn6 = 0x800C2AF0;
-FieldEng_GetStatus = 0x800C6CE0;
-FieldEng_GetSlot = 0x800C22F8;
+FieldFx_Spawn6 = 0x800C2AF0;
+FieldFx_GetStatus = 0x800C6CE0;
+FieldFx_GetSlot = 0x800C22F8;
 memset = 0x80071A44; // type:func
 ScaleMatrix = 0x80078CC4; // type:func
 ApplyMatrixSV = 0x80078C34; // type:func

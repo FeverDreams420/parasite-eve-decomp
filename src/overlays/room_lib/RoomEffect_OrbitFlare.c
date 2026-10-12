@@ -118,9 +118,9 @@ int RoomEffect_OrbitFlareController(int mode, RoomOrbitFlareState *state,
         switch (state->state) {
         case 0:
             if (spawn->attached) {
-                FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomFlareChannel)->pool, 0, &rotation, state);
+                FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomFlareChannel)->pool, 0, &rotation, state);
             } else {
-                FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomFlareChannel)->pool, 0x19, &rotation, state);
+                FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomFlareChannel)->pool, 0x19, &rotation, state);
             }
             height = rsin(((s16)state->frame << 10) / 52) * 3 / 2;
             state->height = height;

@@ -8,7 +8,7 @@
 #include "pe1/room_glow_orb.h"
 
 int RoomEffect_GlowOrbSetup(void *object) {
-    *FieldEng_GetSlot(object) = g_RoomGlowOrbScript;
+    *FieldFx_GetSlot(object) = g_RoomGlowOrbScript;
     g_RoomGlowOrbSprite.code = 0x20;
     g_RoomGlowOrbSprite.mode = 3;
     g_RoomGlowOrbFlashSprite.code = 0x2B;

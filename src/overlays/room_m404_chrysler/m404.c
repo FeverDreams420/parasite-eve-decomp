@@ -257,7 +257,7 @@ int func_80193368(int mode, void *unused, char *state) {
     case 1:
     {
         pool = ANIM_OWNER_AS(RoomM404Channel)->pool;
-        FieldEng_TransformMatrixPoint(pool, 3, &template, position);
+        FieldFx_TransformMatrixPoint(pool, 3, &template, position);
         pool = ANIM_OWNER_AS(RoomM404Channel)->pool;
         func_800CE9D4((struct RoomFxTransformOwner *)pool, 0,
                       (GteShortVector *)target);
@@ -398,7 +398,7 @@ int func_80193A6C(int mode, RoomM404BurstOrigin *origin) {
     switch (mode) {
     case 0:
         func_800CE870(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, (s16 *)origin);
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &template, origin);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &template, origin);
         func_800D3F64(0x5C0, func_800D3FD8());
         func_800D3F64(0x5C1, 0x80);
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 32,

@@ -388,7 +388,7 @@ void FieldModel_Draw(FieldTexturedModel *model, GteMatrix *placement)
     }
 }
 
-void FieldEng_TransformPackedVertex(RenderPackedGeometry *geometry,
+void FieldFx_TransformPackedVertex(RenderPackedGeometry *geometry,
                                    GteMatrix *matrix, u16 index,
                                    GteShortVector *out) {
     u16 vertex_offset;

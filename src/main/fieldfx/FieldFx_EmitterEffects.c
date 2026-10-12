@@ -15,7 +15,7 @@
 #include "pe1/field_glow_fountain.h"
 #include "pe1/field_fade_particle.h"
 
-int FieldEng_CosineEffect(int mode, RenderCosineEffect *effect) {
+int FieldFx_CosineEffect(int mode, RenderCosineEffect *effect) {
     u32 color;
 
     switch (mode) {
@@ -45,7 +45,7 @@ int func_800DACA4(int mode, RenderSparkEmitter *state)
     case 0:
         state->phase = rand();
         func_800CE870((char *)D_8009D254, 0, &state->position.x);
-        return func_800CE560(D_800F33E0->end, 8, 24, (FieldAnimTaskCallback)FieldEng_CosineEffect);
+        return func_800CE560(D_800F33E0->end, 8, 24, (FieldAnimTaskCallback)FieldFx_CosineEffect);
     case 1:
         if (D_800E27EC < 51) {
             particle = func_800CE610(D_800F33E0->end);
@@ -71,7 +71,7 @@ int func_800DACA4(int mode, RenderSparkEmitter *state)
             func_800D0728(&position, 590, 670, 16, 0, scale, scale, 0, &first, intensity, 3);
         }
         D_800F3368.depth = 64;
-        FieldEng_TransformTranslation(&state->position, 0);
+        FieldFx_TransformTranslation(&state->position, 0);
         break;
     }
     return 0;
@@ -538,7 +538,7 @@ int func_800DC750(int mode, GteShortVector *state)
     return 0;
 }
 
-int FieldEng_DriftingEffect(int mode, GteShortVector *position) {
+int FieldFx_DriftingEffect(int mode, GteShortVector *position) {
     RenderColor color;
     GteRotation rotation;
     int scale;
@@ -575,7 +575,7 @@ int func_800DCA80(int mode, GteShortVector *state)
     case 0:
         func_800CE870((char *)D_8009D254, 1, &state->x);
         return func_800CE560(D_800F33E0->end, 8, 20,
-                            (FieldAnimTaskCallback)FieldEng_DriftingEffect);
+                            (FieldAnimTaskCallback)FieldFx_DriftingEffect);
     case 1:
         if (D_800E27EC < 33 && (D_800E27EC & 1)) {
             particle = func_800CE610(D_800F33E0->end);
@@ -1135,7 +1135,7 @@ int func_800DEA30(int mode, FieldGlowFountain *state)
                     vector.x = rand() % 48 - 24;
                     vector.z = -(rand() % 80);
                     vector.y = rand() % 48 - 32;
-                    FieldEng_RotateVector(
+                    FieldFx_RotateVector(
                         (GteMatrixWords *)g_PlayerEntity->render_object.matrices,
                         &vector, &vector);
                     glow->vx = vector.x;
@@ -1230,7 +1230,7 @@ int func_800DEFFC(int mode, RenderFadeParticle *particle)
         switch (particle->phase) {
         case 0:
             particle->timer++;
-            FieldEng_TransformMatrixPoint((struct RoomFxTransformOwner *)g_PlayerEntity,
+            FieldFx_TransformMatrixPoint((struct RoomFxTransformOwner *)g_PlayerEntity,
                                           particle->kind, &offset,
                                           (GteShortVector *)particle);
             if (D_800E27EC & 3)
@@ -1387,7 +1387,7 @@ int func_800DF6AC(int mode, RenderFadeEmitter *state)
     return 0;
 }
 
-int FieldEng_RotatingEffect(int mode) {
+int FieldFx_RotatingEffect(int mode) {
     GteShortVector position;
     GteRotation rotation;
     u32 color;
@@ -1417,7 +1417,7 @@ int FieldEng_RotatingEffect(int mode) {
     return 0;
 }
 
-int FieldEng_PointEmitter(int mode, FieldAnimEmitter *state) {
+int FieldFx_PointEmitter(int mode, FieldAnimEmitter *state) {
     FieldAnimEmittedPoint *point;
     int angle;
 

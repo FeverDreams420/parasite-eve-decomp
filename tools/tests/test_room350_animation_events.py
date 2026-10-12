@@ -78,7 +78,7 @@ static int angles,turns,moves,expectedSpeed,expectedZ,mutate;
 static int word(uint32_t x) { int y; memcpy(&y,&x,4); return y; }
 static int half(unsigned int x) { return (x&65535)<32768 ? (int)(x&65535):(int)(x&65535)-65536; }
 static int floor64(int x) { return x>=0 ? x/64:-((-x+63)/64); }
-int FieldEng_VecToAngle(Vec3Fixed *a,Vec3Fixed *b) {
+int FieldFx_VecToAngle(Vec3Fixed *a,Vec3Fixed *b) {
     assert((void *)a==player.render_object.model_matrix.translation);
     assert((void *)b==instances[0].render_object.model_matrix.translation);
     assert(++angles==1);
@@ -89,7 +89,7 @@ int FieldEng_VecToAngle(Vec3Fixed *a,Vec3Fixed *b) {
     }
     return 0x12348001;
 }
-int FieldEng_TurnToward(int yaw,int angle,int speed) {
+int FieldFx_TurnToward(int yaw,int angle,int speed) {
     assert(++turns==1 && angles==1 && angle==-32767 && speed==expectedSpeed);
     assert(yaw==(mutate ? -777:123));
     return 0x1234ABCD;

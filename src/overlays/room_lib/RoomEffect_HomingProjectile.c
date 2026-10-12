@@ -169,7 +169,7 @@ int RoomEffect_HomingProjectile(int mode) {
                     break;
                 }
                 if (model->escaped == 0) {
-                    model->angle = (FieldEng_VecToAngle((Vec3Fixed *)&model->position[0].word,
+                    model->angle = (FieldFx_VecToAngle((Vec3Fixed *)&model->position[0].word,
                                                         (Vec3Fixed *)((RoomHomingModelEntity *)D_8009D254)->position) + 0x800) & 0xFFF;
                     break;
                 }

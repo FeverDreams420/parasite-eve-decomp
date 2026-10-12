@@ -48,7 +48,7 @@ void RoomEffect_GlowOrbControllerUpdate(void *object, RoomFallingParticleControl
 
 void RoomEffect_GlowOrbSpawnerInit(void *object, void *control, RoomGlowOrbSpawner *spawner) {
     spawner->pad00 = 0;
-    spawner->yaw = *FieldEng_RegPtr(4);
+    spawner->yaw = *FieldFx_RegPtr(4);
 }
 
 void RoomEffect_GlowOrbSpawnerDraw(void) {
@@ -59,7 +59,7 @@ void RoomEffect_GlowOrbSpawnerUpdate(void *object, RoomFallingParticleControl *c
                                      RoomGlowOrbSpawner *spawner) {
     int *yaw;
 
-    yaw = FieldEng_RegPtr(4);
+    yaw = FieldFx_RegPtr(4);
     *yaw = spawner->yaw;
     func_800C2B90(object, 2, (unsigned short *)g_RoomSpawnLayout, g_RoomInitList);
     control->state = 2;
@@ -74,13 +74,13 @@ void RoomEffect_GlowOrbInit(void *object, void *slot, RoomGlowOrb *orb) {
     int *yaw;
 
     turn.x = 0;
-    yaw = FieldEng_RegPtr(4);
-    turn.y = *yaw + *FieldEng_VarPtr(2);
+    yaw = FieldFx_RegPtr(4);
+    turn.y = *yaw + *FieldFx_VarPtr(2);
     turn.z = 0;
     RotMatrixYXZ(&turn, &base);
     tilt.x = 0;
     tilt.y = 0;
-    tilt.z = -*FieldEng_VarPtr(0);
+    tilt.z = -*FieldFx_VarPtr(0);
     ApplyMatrixSV(&g_RoomGlowOrbAxes, &tilt, &orb->offset);
     ApplyMatrixSV(&base, &orb->offset, &orb->offset);
     orb->matrix = g_RoomGlowOrbAxes;
@@ -94,7 +94,7 @@ void RoomEffect_GlowOrbInit(void *object, void *slot, RoomGlowOrb *orb) {
     orb->depth = 0;
     orb->flag2 = 0;
     orb->state = 1;
-    orb->slot = *FieldEng_RegPtr(3);
+    orb->slot = *FieldFx_RegPtr(3);
     RotMatrixYXZ(&spin, &local);
     gte_CompMatrix(&orb->matrix, &local, &orb->matrix);
     gte_CompMatrix(&base, &orb->matrix, &orb->matrix);
@@ -147,7 +147,7 @@ void RoomEffect_GlowOrbDraw(RoomGlowOrbObject *object, u8 *slot, RoomGlowOrb *or
         point.x = ((RoomSparkBattleEntity *)D_8009D254)->x.part.integer;
         point.y = ((RoomSparkBattleEntity *)D_8009D254)->y.part.integer;
         point.z = ((RoomSparkBattleEntity *)D_8009D254)->z.part.integer;
-        if (func_800C61A8(&point, &matrix) != 0 && FieldEng_GetStatus(object) == 3) {
+        if (func_800C61A8(&point, &matrix) != 0 && FieldFx_GetStatus(object) == 3) {
             ((RoomSparkBattleEntity *)D_8009D254)->actor->flags |= 0x4000;
             if (object->link != 0) {
                 *object->link->target |= 0x80000000;

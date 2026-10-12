@@ -216,7 +216,7 @@ void RoomLib_WindowHandler(RoomWindowObject *obj) {
             obj->state.target[1] = obj->state.targetNode->pos[1];
             obj->state.target[2] = obj->state.targetNode->pos[2];
         }
-        trig = (RoomWindowTrig *)&D_800966EC[FieldEng_VecToAngle((Vec3Fixed *)&obj->state.origin[0].value,
+        trig = (RoomWindowTrig *)&D_800966EC[FieldFx_VecToAngle((Vec3Fixed *)&obj->state.origin[0].value,
                                                (Vec3Fixed *)obj->state.target) & 0xFFF].half;
         {
             int c = trig->part.cos;

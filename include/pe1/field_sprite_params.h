@@ -32,7 +32,7 @@ extern RenderEffectParameters D_800F3368;
  * with a fresh lui/lhu after calls, which the field form does not give: a
  * field reached twice across a call keeps its address in a callee-saved
  * register. Units with that reload read D_800F336C. The depth name is still
- * used by fieldfx/FieldEng_GeometryAndShapes.c. */
+ * used by fieldfx/FieldFx_GeometryAndShapes.c. */
 extern u16 D_800F336C; /* D_800F3368.palette */
 extern s16 D_800F3374; /* D_800F3368.depth */
 

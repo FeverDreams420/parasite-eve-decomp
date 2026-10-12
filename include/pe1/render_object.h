@@ -27,7 +27,7 @@ typedef union RenderPackedGeometry {
 PE1_STATIC_ASSERT(sizeof(RenderPackedGeometry) == 16,
                   render_packed_geometry_header_size);
 
-void FieldEng_TransformPackedVertex(RenderPackedGeometry *geometry,
+void FieldFx_TransformPackedVertex(RenderPackedGeometry *geometry,
                                    GteMatrix *matrix, u16 index,
                                    GteShortVector *out);
 
@@ -40,7 +40,7 @@ typedef union RenderHistoryPoint {
 
 PE1_STATIC_ASSERT(sizeof(RenderHistoryPoint) == 8, render_history_point_size);
 
-void FieldEng_UpdatePointHistory(RenderHistoryPoint *history, s16 count,
+void FieldFx_UpdatePointHistory(RenderHistoryPoint *history, s16 count,
                                  RenderHistoryPoint *value, int reset);
 
 typedef struct RenderBouncingSprite {
@@ -230,10 +230,10 @@ int func_800DC5BC(int mode, GteShortVector *state);
 int func_800DC750(int mode, GteShortVector *state);
 int func_800DBCD8(int mode, GteShortVector *state);
 int func_800DBE6C(int mode, GteShortVector *state);
-int FieldEng_CosineEffect(int mode, RenderCosineEffect *effect);
+int FieldFx_CosineEffect(int mode, RenderCosineEffect *effect);
 
 extern u8 D_800E1494[];
-int FieldEng_RotatingEffect(int mode);
+int FieldFx_RotatingEffect(int mode);
 
 extern RenderColor D_800C22BC;
 extern RenderColor D_800C22C0;
@@ -326,7 +326,7 @@ void LoadAverageCol(void *first, void *second, int first_scale,
 
 extern u8 D_800E1988[];
 extern u8 D_800E1EE8[];
-int FieldEng_DriftingEffect(int mode, GteShortVector *position);
+int FieldFx_DriftingEffect(int mode, GteShortVector *position);
 int func_800DCA80(int mode, GteShortVector *position);
 extern u8 D_800E1FA4[];
 extern u8 D_800E1FCC[];
@@ -334,7 +334,7 @@ int func_800DD19C(int mode, RenderSparkEmitter *state);
 int func_800D7E78(int mode, GteShortVector *state);
 
 
-void FieldEng_TransformTranslation(const GteShortVector *input,
+void FieldFx_TransformTranslation(const GteShortVector *input,
                                   GteMatrixWords *output);
 
 extern GteShortVector D_800C2258, D_800C2260;

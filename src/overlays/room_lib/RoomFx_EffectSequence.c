@@ -74,7 +74,7 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     D_80192C08.clut = 0;
     offsetValue = 2;
     D_80192C08.offset = 1;
-    if (*FieldEng_VarPtr(0) == 2 || *FieldEng_VarPtr(0) == 5) {
+    if (*FieldFx_VarPtr(0) == 2 || *FieldFx_VarPtr(0) == 5) {
         D_80192C08.offset = -100;
         depth = 0x80;
     } else {
@@ -118,7 +118,7 @@ void RoomFx_InitEffectSequenceSprites(RoomEnt *ent, void *unused, RoomLibFxMatri
     D_80192C38.r = c80b;
     D_80192C38.g = value;
     D_80192C38.b = 0x10;
-    ent->pad1[1] = *FieldEng_VarPtr(0);
+    ent->pad1[1] = *FieldFx_VarPtr(0);
 }
 
 void RoomFx_EffectSequenceNopA(void) {
@@ -127,7 +127,7 @@ void RoomFx_EffectSequenceNopA(void) {
 #define ROOMLIB_EFFECT_CALL(command) \
     func_800C2B90((void *)owner, (command), D_80192BBC, D_80192B5C)
 #define ROOMLIB_EFFECT_SET(index, value, command) \
-    *FieldEng_RegPtr(index) = (value); \
+    *FieldFx_RegPtr(index) = (value); \
     ROOMLIB_EFFECT_CALL(command)
 
 void RoomFx_ConfigureEffectSequence(int owner, RoomFxControl *signal)
@@ -136,94 +136,94 @@ void RoomFx_ConfigureEffectSequence(int owner, RoomFxControl *signal)
     int mode3;
     int mode4;
 
-    if (*FieldEng_VarPtr(0) == 0) {
+    if (*FieldFx_VarPtr(0) == 0) {
         if (signal->frame == 0) {
-            *FieldEng_RegPtr(1) = 0;
+            *FieldFx_RegPtr(1) = 0;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
         counter = signal->frame;
         if (counter == 10) {
-            *FieldEng_RegPtr(1) = counter;
+            *FieldFx_RegPtr(1) = counter;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
         if (signal->frame == 20) {
-            *FieldEng_RegPtr(1) = 8;
+            *FieldFx_RegPtr(1) = 8;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
         if (signal->frame == 30) {
-            *FieldEng_RegPtr(1) = 15;
+            *FieldFx_RegPtr(1) = 15;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
         if (signal->frame == 40) {
-            *FieldEng_RegPtr(1) = 4;
+            *FieldFx_RegPtr(1) = 4;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
         if (signal->frame == 50) {
-            *FieldEng_RegPtr(1) = 18;
+            *FieldFx_RegPtr(1) = 18;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
         if (signal->frame == 60) {
-            *FieldEng_RegPtr(1) = 2;
+            *FieldFx_RegPtr(1) = 2;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
         if (signal->frame == 70) {
-            *FieldEng_RegPtr(1) = 9;
+            *FieldFx_RegPtr(1) = 9;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
         if (signal->frame == 80) {
-            *FieldEng_RegPtr(1) = 3;
+            *FieldFx_RegPtr(1) = 3;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
         if (signal->frame == 90) {
-            *FieldEng_RegPtr(1) = 19;
+            *FieldFx_RegPtr(1) = 19;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
         if (signal->frame == 100) {
-            *FieldEng_RegPtr(1) = 20;
+            *FieldFx_RegPtr(1) = 20;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
         if (signal->frame == 110) {
-            *FieldEng_RegPtr(1) = 22;
+            *FieldFx_RegPtr(1) = 22;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
         if (signal->frame == 120) {
-            *FieldEng_RegPtr(1) = 12;
+            *FieldFx_RegPtr(1) = 12;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
         if (signal->frame == 130) {
-            *FieldEng_RegPtr(1) = 17;
+            *FieldFx_RegPtr(1) = 17;
             ROOMLIB_EFFECT_SET(2, -1, 1);
         }
     }
 
-    if (*FieldEng_VarPtr(0) == 1) {
+    if (*FieldFx_VarPtr(0) == 1) {
         if (signal->frame == 0) {
-            *FieldEng_RegPtr(1) = 5;
+            *FieldFx_RegPtr(1) = 5;
             ROOMLIB_EFFECT_SET(2, 80, 1);
         }
         if (signal->frame == 3) {
-            *FieldEng_RegPtr(1) = 6;
+            *FieldFx_RegPtr(1) = 6;
             ROOMLIB_EFFECT_SET(2, 80, 1);
         }
         if (signal->frame == 6) {
-            *FieldEng_RegPtr(1) = 5;
+            *FieldFx_RegPtr(1) = 5;
             ROOMLIB_EFFECT_SET(2, 40, 1);
         }
         if (signal->frame == 9) {
-            *FieldEng_RegPtr(1) = 6;
+            *FieldFx_RegPtr(1) = 6;
             ROOMLIB_EFFECT_SET(2, 40, 1);
         }
         if (signal->frame == 12) {
-            *FieldEng_RegPtr(1) = 5;
+            *FieldFx_RegPtr(1) = 5;
             ROOMLIB_EFFECT_SET(2, 20, 1);
         }
         if (signal->frame == 15) {
-            *FieldEng_RegPtr(1) = 6;
+            *FieldFx_RegPtr(1) = 6;
             ROOMLIB_EFFECT_SET(2, 20, 1);
         }
     }
 
-    if (*FieldEng_VarPtr(0) == 2 && signal->frame == 0) {
+    if (*FieldFx_VarPtr(0) == 2 && signal->frame == 0) {
         ROOMLIB_EFFECT_CALL(6);
         ROOMLIB_EFFECT_CALL(6);
         ROOMLIB_EFFECT_CALL(6);
@@ -241,7 +241,7 @@ void RoomFx_ConfigureEffectSequence(int owner, RoomFxControl *signal)
         ROOMLIB_EFFECT_SET(1, 100, 4);
     }
 
-    if (*FieldEng_VarPtr(0) == 5 && signal->frame == 0) {
+    if (*FieldFx_VarPtr(0) == 5 && signal->frame == 0) {
         ROOMLIB_EFFECT_CALL(6);
         ROOMLIB_EFFECT_CALL(6);
         ROOMLIB_EFFECT_CALL(6);
@@ -259,9 +259,9 @@ void RoomFx_ConfigureEffectSequence(int owner, RoomFxControl *signal)
         ROOMLIB_EFFECT_SET(1, 100, 4);
     }
 
-    mode3 = *FieldEng_VarPtr(0);
+    mode3 = *FieldFx_VarPtr(0);
     if (mode3 == 3 && signal->frame == 0) {
-        *FieldEng_RegPtr(2) = -1;
+        *FieldFx_RegPtr(2) = -1;
         ROOMLIB_EFFECT_SET(1, 1, 3);
         ROOMLIB_EFFECT_SET(1, mode3, 3);
         ROOMLIB_EFFECT_SET(1, 5, 3);
@@ -280,9 +280,9 @@ void RoomFx_ConfigureEffectSequence(int owner, RoomFxControl *signal)
         ROOMLIB_EFFECT_SET(1, 8, 3);
     }
 
-    mode4 = *FieldEng_VarPtr(0);
+    mode4 = *FieldFx_VarPtr(0);
     if (mode4 == 4 && signal->frame == 0) {
-        *FieldEng_RegPtr(2) = -1;
+        *FieldFx_RegPtr(2) = -1;
         ROOMLIB_EFFECT_SET(1, 2, 2);
         ROOMLIB_EFFECT_SET(1, mode4, 2);
         ROOMLIB_EFFECT_SET(1, 6, 2);
@@ -313,11 +313,11 @@ void RoomFx_ConfigureEffectSequence(int owner, RoomFxControl *signal)
     }
 }
 
-s32 *FieldEng_RegPtr(s32 index);
+s32 *FieldFx_RegPtr(s32 index);
 
 void RoomFx_InitVariant38(void *arg0, void *arg1, RoomOverlay024Variant38SetupState *state) {
-    state->transform_index = *FieldEng_RegPtr(1);
-    state->resource_selector = *FieldEng_RegPtr(2);
+    state->transform_index = *FieldFx_RegPtr(1);
+    state->resource_selector = *FieldFx_RegPtr(2);
     state->active_flag = 1;
 
     if (state->resource_selector == -1) {
@@ -563,8 +563,8 @@ s32 func_80071A54(void);
 void RoomFx_InitVariant38Pulse(void *arg0, void *arg1, RoomOverlay024Variant38SetupState *state) {
     s32 random;
 
-    state->transform_index = *FieldEng_RegPtr(1);
-    state->resource_selector = *FieldEng_RegPtr(2);
+    state->transform_index = *FieldFx_RegPtr(1);
+    state->resource_selector = *FieldFx_RegPtr(2);
     state->active_flag = 1;
 
     if (state->resource_selector == -1) {
@@ -823,8 +823,8 @@ void RoomFx_InitVariant290(void *arg0, void *arg1, RoomOverlay024Variant290Setup
     s32 random;
     s32 height;
 
-    state->transform_index = *FieldEng_RegPtr(1);
-    state->resource_selector = *FieldEng_RegPtr(2);
+    state->transform_index = *FieldFx_RegPtr(1);
+    state->resource_selector = *FieldFx_RegPtr(2);
     state->active_flag = 1;
 
     if (state->resource_selector == -1) {
@@ -1019,17 +1019,17 @@ void RoomFx_UpdateSparkleHeight(
     }
 }
 
-s32 *FieldEng_RegPtr(s32 slot);
+s32 *FieldFx_RegPtr(s32 slot);
 
 void RoomFx_InitVariantD(void *arg0, void *arg1, RoomOverlay024VariantDSetupRecord *obj) {
     s32 random;
 
     obj->half2E = 0xD;
-    obj->resource1 = *FieldEng_RegPtr(1);
-    obj->resource2 = *FieldEng_RegPtr(2);
+    obj->resource1 = *FieldFx_RegPtr(1);
+    obj->resource2 = *FieldFx_RegPtr(2);
     obj->half26 = 1;
     obj->half2A = 0x80;
-    obj->resource1_again = *FieldEng_RegPtr(1);
+    obj->resource1_again = *FieldFx_RegPtr(1);
     obj->half2C = 0;
     obj->word30 = 0;
     obj->half22 = 0;

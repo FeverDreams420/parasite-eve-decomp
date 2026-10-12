@@ -80,14 +80,14 @@ static void store_ir(void *p) {
     assert(phase==4 && v==&D_8019A7A0); phase+=3;
     v->x=-32768; v->y=32767; v->z=-123;
 }
-int FieldEng_VecToAngle(Vec3Fixed *a,Vec3Fixed *b) {
+int FieldFx_VecToAngle(Vec3Fixed *a,Vec3Fixed *b) {
     assert(phase==7 && angles++==0);
     assert((void *)a==player.render_object.model_matrix.translation);
     assert((void *)b==instance.render_object.model_matrix.translation);
     instance.rot_y=-777;
     return 0x12348001;
 }
-int FieldEng_TurnToward(int current,int target,int speed) {
+int FieldFx_TurnToward(int current,int target,int speed) {
     assert(turns++==0 && angles==1 && current==-777 && target==-32767 && speed==expectedSpeed);
     return -1234;
 }

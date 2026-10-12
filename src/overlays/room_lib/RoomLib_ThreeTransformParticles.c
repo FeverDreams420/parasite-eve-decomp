@@ -25,7 +25,7 @@
 
 #include "RoomLib_ThreeTransformParticles_externs.h"
 
-int *FieldEng_VarPtr(int index);
+int *FieldFx_VarPtr(int index);
 
 /* Rotation seed of the draw pass, copied into its stack frame. */
 static const RoomFxSeed8 s_ThreeParticleSeed = {
@@ -82,7 +82,7 @@ void RoomLib_InitThreeParticlePackets(RoomDebrisEntity *arg0, void *arg1, RoomDe
     state->view.words = *src;
     state->cooldown = 0;
     state->landedFlag = 0;
-    state->reload = *FieldEng_VarPtr(6);
+    state->reload = *FieldFx_VarPtr(6);
 
     RoomLib_ThreeParticlePacket.offset = -0x64;
     RoomLib_ThreeParticleFloorPacket.code = 4;
@@ -137,7 +137,7 @@ typedef struct RoomInitThreeStack {
     RoomSpriteMatrix matrices[2];
 } RoomInitThreeStack;
 
-int *FieldEng_RegPtr(int index);
+int *FieldFx_RegPtr(int index);
 int func_80071A54(void);
 int func_800C66C8(void *object, int message, void *state);
 
@@ -164,7 +164,7 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
     parameterIndex = 3;
     clock = clockResult;
         stack.firstSeed.x = 0;
-    value = FieldEng_VarPtr(parameterIndex);
+    value = FieldFx_VarPtr(parameterIndex);
     stack.firstSeed.y = -*value;
     stack.firstSeed.z = 0;
     seed = &stack.firstSeed;
@@ -174,7 +174,7 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
 
     parameterIndex = 3;
     stack.secondSeed.x = 0;
-    value = FieldEng_VarPtr(parameterIndex);
+    value = FieldFx_VarPtr(parameterIndex);
     stack.secondSeed.y = *value;
     stack.secondSeed.z = 0;
     seed = &stack.secondSeed;
@@ -222,7 +222,7 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
         randomValue = func_80071A54();
         particles->size[i] = 0;
         particles->countdown[i] = (randomValue % 10) + 1;
-        particles->life[i] = *FieldEng_VarPtr(2);
+        particles->life[i] = *FieldFx_VarPtr(2);
         particles->position[i].x = clock->view.matrix.t[0] << 16;
         particles->position[i].y = clock->view.matrix.t[1] << 16;
         particles->position[i].z = clock->view.matrix.t[2] << 16;
@@ -236,11 +236,11 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
     }
 
     particles->remaining = 3;
-    particles->speed = *FieldEng_VarPtr(0);
-    particles->acceleration = *FieldEng_VarPtr(1);
-    particles->swingLimit = *FieldEng_VarPtr(5);
-    particles->keepAlive = *FieldEng_VarPtr(4);
-    particles->reserved08 = *FieldEng_RegPtr(1);
+    particles->speed = *FieldFx_VarPtr(0);
+    particles->acceleration = *FieldFx_VarPtr(1);
+    particles->swingLimit = *FieldFx_VarPtr(5);
+    particles->keepAlive = *FieldFx_VarPtr(4);
+    particles->reserved08 = *FieldFx_RegPtr(1);
 
     stack.projectionSeed.x = 0;
     stack.projectionSeed.y = 0;

@@ -27,7 +27,7 @@ ROOMLIB_START_AT3(RoomEffect_GroundEruptionStart, g_RoomEruptionUpdateList,
 
 int RoomEffect_GroundEruptionRelease(RoomEnt *o) {
     o->state = 4;
-    if ((unsigned int)FieldEng_GetStatus(o) >= 2) {
+    if ((unsigned int)FieldFx_GetStatus(o) >= 2) {
         RoomRenderNode *target = o->link->target;
         target->flags &= 0xC0FFFFFF;
     }

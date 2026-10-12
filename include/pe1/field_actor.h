@@ -233,7 +233,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldActorState, panel_c_timer) == 0xD6,
 /* Scene movement target record; shared by the E02/E03/E06...E27 overlays. */
 typedef struct FieldMoveTarget {
     unsigned char pad00[0x60];
-    int target_pos[3];           /* 0x60: x/y/z passed to FieldEng_VecToAngle */
+    int target_pos[3];           /* 0x60: x/y/z passed to FieldFx_VecToAngle */
     unsigned char pad6C[0x18];
     FieldActor *target_actor;    /* 0x84: copies x/z while target tracking is enabled */
     unsigned char pad88[0x10];

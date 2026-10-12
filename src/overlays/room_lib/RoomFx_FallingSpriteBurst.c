@@ -35,9 +35,9 @@ void RoomFx_FallingBurstInit(void *arg0, int unused, void *arg2) {
     state->cooldown = 0;
     state->hit = 0;
     state->actor = self->actor;
-    state->step = *FieldEng_VarPtr(1);
-    state->tick = *FieldEng_VarPtr(2);
-    state->reload = *FieldEng_VarPtr(3);
+    state->step = *FieldFx_VarPtr(1);
+    state->tick = *FieldFx_VarPtr(2);
+    state->reload = *FieldFx_VarPtr(3);
 
     g_RoomFallingBurstSprite.offset = 0xA;
     g_RoomFallingBurstShimmer.offset = 0x64;
@@ -123,7 +123,7 @@ void RoomFx_InitFallingSprite(void *entity, void *unused,
     state->verticalStep = 0;
     state->active = 0;
 
-    if (*FieldEng_RegPtr(1) == 0) {
+    if (*FieldFx_RegPtr(1) == 0) {
         state->velocityX = func_80071A54() % 10 - 5;
         state->velocityY = 0;
         state->velocityZ = func_80071A54() % 10 - 5;

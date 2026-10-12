@@ -229,7 +229,7 @@ int RoomEffect_DroppedFlareEmitter(int mode, RoomDroppedFlareEmitter *emitter,
 
     switch (mode) {
     case 0:
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomFlareChannel)->pool, 0x13, &rect, emitter);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomFlareChannel)->pool, 0x13, &rect, emitter);
         switch (ANIM_TASK_AS(RoomFlareEventState)->phase) {
         case 0:
             func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomFlareChannel)->pool, 0x13,
@@ -239,7 +239,7 @@ int RoomEffect_DroppedFlareEmitter(int mode, RoomDroppedFlareEmitter *emitter,
             {
                 s16 target[4];
                 func_800CE870((char *)D_8009D254, 0, target);
-                FieldEng_CalculateLookAngles(emitter, target, &emitter->angles);
+                FieldFx_CalculateLookAngles(emitter, target, &emitter->angles);
                 emitter->angles.x = 0x180;
             }
             break;

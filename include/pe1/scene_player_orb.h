@@ -76,7 +76,7 @@ extern GteVector D_8018F008;
 extern u8 D_801987E4[];
 extern FieldGlowSprite D_80199690;
 
-int *FieldEng_RegPtr(int index);
+int *FieldFx_RegPtr(int index);
 int func_80071A54(void);
 
 /* Scene e08 limb beams: ten ribbons fanned from the player's chest bone to

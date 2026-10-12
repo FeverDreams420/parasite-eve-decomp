@@ -162,7 +162,7 @@ int func_8018F330(int mode, RoomM005OrbiterState *state) {
         pool = ANIM_OWNER_AS(RoomM005Channel)->pool;
         func_800CE870(pool, 0, (s16 *)D_80190B84);
         pool = ANIM_OWNER_AS(RoomM005Channel)->pool;
-        FieldEng_TransformMatrixPoint(pool, 20, &seed, D_80190B8C);
+        FieldFx_TransformMatrixPoint(pool, 20, &seed, D_80190B8C);
         {
             int idx = D_800E11E8;
             int palette;
@@ -221,7 +221,7 @@ int func_8018F614(int mode) {
         break;
     case 2:
         D_800F3368.depth = 0x40;
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM005Channel)->pool, 9, &inner, &position);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM005Channel)->pool, 9, &inner, &position);
         if (D_800E27EC < 35) {
             D_800F3368.parameter00 = 0x20;
             D_800F3368.parameter02 = 2;
@@ -254,7 +254,7 @@ int func_8018F614(int mode) {
             }
         }
         D_800F3368.depth = 0x18;
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM005Channel)->pool, 0x14, &outer, &position);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM005Channel)->pool, 0x14, &outer, &position);
         if (D_800E27EC < 35) {
             step = D_800E27EC - 18;
             if ((unsigned int)step < 17) {
@@ -357,7 +357,7 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
 
     switch (mode) {
     case 0:
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM005BeaconChannel)->pool, 0x14, &offset, state);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM005BeaconChannel)->pool, 0x14, &offset, state);
         func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomM005BeaconChannel)->pool, 0,
                       &state->rotation);
         state->rotation.pad = 1;

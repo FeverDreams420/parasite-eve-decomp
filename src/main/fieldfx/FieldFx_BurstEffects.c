@@ -22,7 +22,7 @@ int PointSprite_PlantScript(char *object) {
     FieldActor *actor;
     void **slot;
 
-    slot = FieldEng_GetSlot(object);
+    slot = FieldFx_GetSlot(object);
     *slot = g_PointSpriteScript;
     actor = ((FieldAnimObjectPrefix *)object)->actor;
 
@@ -92,12 +92,12 @@ int PointSprite_PlantScript(char *object) {
 }
 
 int PointSprite_Spawn6(int a, int b, int c, int d, int e, int f) {
-    FieldEng_Spawn6(a, b, c, d, e, f);
+    FieldFx_Spawn6(a, b, c, d, e, f);
     return 0;
 }
 
 int PointSprite_RegisterDrawList(void *o) {
-    FieldEng_Register(o, g_PointSpriteDrawList);
+    FieldFx_Register(o, g_PointSpriteDrawList);
     return 0;
 }
 
@@ -106,8 +106,8 @@ int PointSprite_RegisterPairedTables(void *obj) {
     int second;
     int status;
 
-    first = FieldEng_UpdateSlots(obj, g_PointSpriteUpdateList);
-    second = FieldEng_RunScript(obj, g_PointSpriteInitList, g_PointSpriteSlotSizes);
+    first = FieldFx_UpdateSlots(obj, g_PointSpriteUpdateList);
+    second = FieldFx_RunScript(obj, g_PointSpriteInitList, g_PointSpriteSlotSizes);
     status = first | second;
     if (status == -1) {
         PointSprite_CloseTarget(obj);
@@ -134,9 +134,9 @@ int func_800CBFC4(void *arg0, void *arg1, FieldAnimPointSprite *anim) {
     int x_rand;
     int z_rand;
 
-    D_800F3430.oriented.rgb[0] = *FieldEng_RegPtr(0);
-    D_800F3430.oriented.rgb[1] = *FieldEng_RegPtr(1);
-    D_800F3430.oriented.rgb[2] = *FieldEng_RegPtr(2);
+    D_800F3430.oriented.rgb[0] = *FieldFx_RegPtr(0);
+    D_800F3430.oriented.rgb[1] = *FieldFx_RegPtr(1);
+    D_800F3430.oriented.rgb[2] = *FieldFx_RegPtr(2);
 
     x_rand = rand();
     x_base_a1 = D_800E2290.x - 0x64;
@@ -155,9 +155,9 @@ void FieldAnim_InitRadialEntries(void *arg0, void *arg1, FieldAnimRadialParticle
     int angle;
     int lift;
 
-    D_800E2260.oriented.rgb[0] = *FieldEng_RegPtr(3);
-    D_800E2260.oriented.rgb[1] = *FieldEng_RegPtr(4);
-    D_800E2260.oriented.rgb[2] = *FieldEng_RegPtr(5);
+    D_800E2260.oriented.rgb[0] = *FieldFx_RegPtr(3);
+    D_800E2260.oriented.rgb[1] = *FieldFx_RegPtr(4);
+    D_800E2260.oriented.rgb[2] = *FieldFx_RegPtr(5);
 
     anim->scale = 0x7F;
     if (((Combatant *)D_8009D254->core)->action->actionCode.actionId == 3) {
@@ -457,7 +457,7 @@ int func_800CCBA8(char *object)
 {
     GteVector first, second, third;
 
-    *FieldEng_GetSlot(object) = D_800E0EB8;
+    *FieldFx_GetSlot(object) = D_800E0EB8;
     first = D_800C220C;
     identity_matrix(&D_800F3478);
     ScaleMatrix(&D_800F3478, &first);
@@ -503,12 +503,12 @@ int func_800CCBA8(char *object)
 }
 
 int BurstEffect_Spawn6(int a, int b, int c, int d, int e, int f) {
-    FieldEng_Spawn6(a, b, c, d, e, f);
+    FieldFx_Spawn6(a, b, c, d, e, f);
     return 0;
 }
 
 int BurstEffect_RegisterDrawList(void *o) {
-    FieldEng_Register(o, g_BurstEffectDrawList);
+    FieldFx_Register(o, g_BurstEffectDrawList);
     return 0;
 }
 
@@ -517,8 +517,8 @@ int BurstEffect_RegisterPairedTables(void *obj) {
     int second;
     int status;
 
-    first = FieldEng_UpdateSlots(obj, g_BurstEffectUpdateList);
-    second = FieldEng_RunScript(obj, g_BurstEffectInitList, g_BurstEffectSlotSizes);
+    first = FieldFx_UpdateSlots(obj, g_BurstEffectUpdateList);
+    second = FieldFx_RunScript(obj, g_BurstEffectInitList, g_BurstEffectSlotSizes);
     status = first | second;
     if (status == -1) {
         BurstEffect_CloseTarget(obj);
@@ -546,18 +546,18 @@ int func_800CCFA0(void) {
     FieldActor *next;
     FieldActor *data;
 
-    index = *FieldEng_RegPtr(0xD);
-    targets = (FieldActor **)*FieldEng_VarPtr(1);
+    index = *FieldFx_RegPtr(0xD);
+    targets = (FieldActor **)*FieldFx_VarPtr(1);
     target = targets[index];
     index++;
     next = targets[index];
     g_BurstEffectTarget = target;
 
     if (next == 0) {
-        *FieldEng_RegPtr(0xE) = 1;
+        *FieldFx_RegPtr(0xE) = 1;
     }
 
-    *FieldEng_RegPtr(0xD) = index;
+    *FieldFx_RegPtr(0xD) = index;
 
     data = g_BurstEffectTarget;
     D_800E27F8.x = data->render_object.target_x;
@@ -780,7 +780,7 @@ int func_800CD71C(void *arg0, FieldEngSlot *state) {
 }
 
 int BurstEffectB_PlantScript(char *object) {
-    void **slot = FieldEng_GetSlot(object);
+    void **slot = FieldFx_GetSlot(object);
 
     *slot = &g_BurstEffectBScript;
 
@@ -824,12 +824,12 @@ int BurstEffectB_PlantScript(char *object) {
 }
 
 int BurstEffectB_Spawn6(int a, int b, int c, int d, int e, int f) {
-    FieldEng_Spawn6(a, b, c, d, e, f);
+    FieldFx_Spawn6(a, b, c, d, e, f);
     return 0;
 }
 
 int BurstEffectB_RegisterDrawList(void *o) {
-    FieldEng_Register(o, g_BurstEffectBDrawList);
+    FieldFx_Register(o, g_BurstEffectBDrawList);
     return 0;
 }
 
@@ -838,8 +838,8 @@ int BurstEffectB_RegisterPairedTables(void *obj) {
     int second;
     int status;
 
-    first = FieldEng_UpdateSlots(obj, g_BurstEffectBUpdateList);
-    second = FieldEng_RunScript(obj, g_BurstEffectBInitList, g_BurstEffectBSlotSizes);
+    first = FieldFx_UpdateSlots(obj, g_BurstEffectBUpdateList);
+    second = FieldFx_RunScript(obj, g_BurstEffectBInitList, g_BurstEffectBSlotSizes);
     status = first | second;
     if (status == -1) {
         BurstEffectB_CloseTarget(obj);
@@ -867,18 +867,18 @@ int func_800CD980(void) {
     FieldActor *next;
     FieldActor *data;
 
-    index = *FieldEng_RegPtr(0xD);
-    targets = (FieldActor **)*FieldEng_VarPtr(1);
+    index = *FieldFx_RegPtr(0xD);
+    targets = (FieldActor **)*FieldFx_VarPtr(1);
     target = targets[index];
     index++;
     next = targets[index];
     g_BurstEffectBTarget = target;
 
     if (next == 0) {
-        *FieldEng_RegPtr(0xE) = 1;
+        *FieldFx_RegPtr(0xE) = 1;
     }
 
-    *FieldEng_RegPtr(0xD) = index;
+    *FieldFx_RegPtr(0xD) = index;
 
     data = g_BurstEffectBTarget;
     D_800E27F0.x = data->render_object.target_x;
@@ -1046,7 +1046,7 @@ int func_800CDFE0(void *arg0, FieldEngSlot *state, FieldAnimSparkPoint *anim) {
 }
 
 int BurstEffectC_PlantScript(char *object) {
-    void **slot = FieldEng_GetSlot(object);
+    void **slot = FieldFx_GetSlot(object);
 
     *slot = &g_BurstEffectCScript;
     D_800E22A8.oriented.scale.x = 0x300;
@@ -1064,12 +1064,12 @@ int BurstEffectC_PlantScript(char *object) {
 }
 
 int BurstEffectC_Spawn6(int a, int b, int c, int d, int e, int f) {
-    FieldEng_Spawn6(a, b, c, d, e, f);
+    FieldFx_Spawn6(a, b, c, d, e, f);
     return 0;
 }
 
 int BurstEffectC_RegisterDrawList(void *o) {
-    FieldEng_Register(o, g_BurstEffectCDrawList);
+    FieldFx_Register(o, g_BurstEffectCDrawList);
     return 0;
 }
 
@@ -1078,8 +1078,8 @@ int BurstEffectC_RegisterPairedTables(void *obj) {
     int second;
     int status;
 
-    first = FieldEng_UpdateSlots(obj, g_BurstEffectCUpdateList);
-    second = FieldEng_RunScript(obj, g_BurstEffectCInitList, g_BurstEffectCSlotSizes);
+    first = FieldFx_UpdateSlots(obj, g_BurstEffectCUpdateList);
+    second = FieldFx_RunScript(obj, g_BurstEffectCInitList, g_BurstEffectCSlotSizes);
     status = first | second;
     if (status == -1) {
         BurstEffectC_CloseTarget(obj);
@@ -1107,18 +1107,18 @@ int func_800CE1FC(void) {
     FieldActor *next;
     FieldActor *data;
 
-    index = *FieldEng_RegPtr(0xD);
-    targets = (FieldActor **)*FieldEng_VarPtr(1);
+    index = *FieldFx_RegPtr(0xD);
+    targets = (FieldActor **)*FieldFx_VarPtr(1);
     target = targets[index];
     index++;
     next = targets[index];
     g_BurstEffectCTarget = target;
 
     if (next == 0) {
-        *FieldEng_RegPtr(0xE) = 1;
+        *FieldFx_RegPtr(0xE) = 1;
     }
 
-    *FieldEng_RegPtr(0xD) = index;
+    *FieldFx_RegPtr(0xD) = index;
 
     data = g_BurstEffectCTarget;
     D_800E2808.x = data->render_object.target_x;

@@ -1,5 +1,5 @@
-FieldEng_VecToAngle = 0x800DFF80; // absolute:True
-FieldEng_TurnToward = 0x800DFFB8; // absolute:True
+FieldFx_VecToAngle = 0x800DFF80; // absolute:True
+FieldFx_TurnToward = 0x800DFFB8; // absolute:True
 RoomMain_ActorPtr = 0x8009D254; // absolute:True
 RoomMain_RotTable = 0x800966EC; // absolute:True
 RoomLib_HandlerDNop0 = 0x8018F1DC; // type:func

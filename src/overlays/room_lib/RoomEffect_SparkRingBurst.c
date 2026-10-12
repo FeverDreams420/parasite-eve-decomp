@@ -214,7 +214,7 @@ int RoomEffect_SparkRingController(int mode, RoomSparkRingState *state) {
         switch (state->state) {
         case 0:
             pool = ANIM_OWNER_AS(RoomSparkChannel)->pool;
-            FieldEng_TransformMatrixPoint(pool, 16, &rotation, &target);
+            FieldFx_TransformMatrixPoint(pool, 16, &rotation, &target);
             width = rsin((state->timer << 10) / 20);
             height = rcos((state->timer << 10) / 20) / 2;
             func_800CF3AC(g_RoomSparkRingColorRamp, &color, state->timer);
@@ -588,7 +588,7 @@ int RoomEffect_BurstSparkSpawner(int mode, int *count) {
                              (FieldAnimCallbackListCallback)RoomEffect_BurstSparkParticle);
 
         case 1:
-    FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0x11, &offset, &launch);
+    FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0x11, &offset, &launch);
     func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0,
                   (GteShortVector *)&launch.hx);
     launch.hx -= 0x200;

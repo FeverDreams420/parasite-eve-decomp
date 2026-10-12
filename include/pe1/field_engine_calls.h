@@ -5,7 +5,7 @@
 #include "pe1/field_collision.h"
 
 /* Field engine helpers called from the room and scene effects
- * (FieldEng_CollisionQueries.c). The definitions take typed
+ * (FieldFx_CollisionQueries.c). The definitions take typed
  * records; each effect passes its own view, so these pointers are untyped. */
 
 /* Sends asset message `message` at a halfword position while the object is
@@ -14,7 +14,7 @@ int func_800C6800(void *obj, int message, void *pos);
 /* Nonzero when the player is within its hit radius plus radius of a
  * position on the XZ plane. */
 int func_800C6B90(void *position, int radius);
-/* Status check on the object (FieldEng_GetStatus() == 3). */
+/* Status check on the object (FieldFx_GetStatus() == 3). */
 int func_800C6C18(void *obj);
 
 #endif

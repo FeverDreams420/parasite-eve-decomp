@@ -17,7 +17,7 @@
 int GlowEffect_PlantScript(char *object) {
     void **slot;
 
-    slot = FieldEng_GetSlot(object);
+    slot = FieldFx_GetSlot(object);
     *slot = &g_GlowEffectScript;
 
     D_800E22D8.cell = 0xBD;
@@ -60,11 +60,11 @@ int GlowEffect_PlantScript(char *object) {
 }
 
 int GlowEffect_Spawn6(int a, int b, int c, int d, int e, int f) {
-    FieldEng_Spawn6(a, b, c, d, e, f);
+    FieldFx_Spawn6(a, b, c, d, e, f);
     return 0;
 }
 int GlowEffect_RegisterDrawList(void *o) {
-    FieldEng_Register(o, g_GlowEffectDrawList);
+    FieldFx_Register(o, g_GlowEffectDrawList);
     return 0;
 }
 int GlowEffect_RegisterPairedTables(void *obj) {
@@ -72,8 +72,8 @@ int GlowEffect_RegisterPairedTables(void *obj) {
     int second;
     int status;
 
-    first = FieldEng_UpdateSlots(obj, g_GlowEffectUpdateList);
-    second = FieldEng_RunScript(obj, g_GlowEffectInitList, g_GlowEffectSlotSizes);
+    first = FieldFx_UpdateSlots(obj, g_GlowEffectUpdateList);
+    second = FieldFx_RunScript(obj, g_GlowEffectInitList, g_GlowEffectSlotSizes);
     status = first | second;
     if (status == -1) {
         GlowEffect_CloseTarget(obj);
@@ -233,7 +233,7 @@ int func_800C8270(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
 #define GLOW_LAYERS_SPIN_B D_800C215C
 #define GLOW_LAYERS_SCALE D_800C2164
 #define GLOW_LAYERS_SPRITE D_800F3498
-#include "FieldEng_GlowLayers.inc"
+#include "FieldFx_GlowLayers.inc"
 
 int func_800C8870(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
     GteMatrix matrix;
@@ -399,7 +399,7 @@ void func_800C8CF8(char *arg0, char *arg1, short *arg2) {
 int GlowEffectB_PlantScript(char *object) {
     void **slot;
 
-    slot = FieldEng_GetSlot(object);
+    slot = FieldFx_GetSlot(object);
     *slot = &g_GlowEffectBScript;
 
     D_800E22E8.cell = 0xBD;
@@ -433,11 +433,11 @@ int GlowEffectB_PlantScript(char *object) {
 }
 
 int GlowEffectB_Spawn6(int a, int b, int c, int d, int e, int f) {
-    FieldEng_Spawn6(a, b, c, d, e, f);
+    FieldFx_Spawn6(a, b, c, d, e, f);
     return 0;
 }
 int GlowEffectB_RegisterDrawList(void *o) {
-    FieldEng_Register(o, g_GlowEffectBDrawList);
+    FieldFx_Register(o, g_GlowEffectBDrawList);
     return 0;
 }
 int GlowEffectB_RegisterPairedTables(void *obj) {
@@ -445,8 +445,8 @@ int GlowEffectB_RegisterPairedTables(void *obj) {
     int second;
     int status;
 
-    first = FieldEng_UpdateSlots(obj, g_GlowEffectBUpdateList);
-    second = FieldEng_RunScript(obj, g_GlowEffectBInitList, g_GlowEffectBSlotSizes);
+    first = FieldFx_UpdateSlots(obj, g_GlowEffectBUpdateList);
+    second = FieldFx_RunScript(obj, g_GlowEffectBInitList, g_GlowEffectBSlotSizes);
     status = first | second;
     if (status == -1) {
         GlowEffectB_CloseTarget(obj);
@@ -578,7 +578,7 @@ int func_800C9268(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
 #define GLOW_LAYERS_SPIN_B D_800C218C
 #define GLOW_LAYERS_SCALE D_800C2194
 #define GLOW_LAYERS_SPRITE D_800F34A8
-#include "FieldEng_GlowLayers.inc"
+#include "FieldFx_GlowLayers.inc"
 
 int func_800C9868(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
     u16 *field_s3 = &D_800E2328.depth;
@@ -671,7 +671,7 @@ int func_800C9A34(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
 int GlowEffectC_PlantScript(char *object) {
     void **slot;
 
-    slot = FieldEng_GetSlot(object);
+    slot = FieldFx_GetSlot(object);
     *slot = &g_GlowEffectCScript;
 
     D_800E22F8.cell = 0xBD;
@@ -695,11 +695,11 @@ int GlowEffectC_PlantScript(char *object) {
     return 0;
 }
 int GlowEffectC_Spawn6(int a, int b, int c, int d, int e, int f) {
-    FieldEng_Spawn6(a, b, c, d, e, f);
+    FieldFx_Spawn6(a, b, c, d, e, f);
     return 0;
 }
 int GlowEffectC_RegisterDrawList(void *o) {
-    FieldEng_Register(o, g_GlowEffectCDrawList);
+    FieldFx_Register(o, g_GlowEffectCDrawList);
     return 0;
 }
 int GlowEffectC_RegisterPairedTables(void *obj) {
@@ -707,8 +707,8 @@ int GlowEffectC_RegisterPairedTables(void *obj) {
     int second;
     int status;
 
-    first = FieldEng_UpdateSlots(obj, g_GlowEffectCUpdateList);
-    second = FieldEng_RunScript(obj, g_GlowEffectCInitList, g_GlowEffectCSlotSizes);
+    first = FieldFx_UpdateSlots(obj, g_GlowEffectCUpdateList);
+    second = FieldFx_RunScript(obj, g_GlowEffectCInitList, g_GlowEffectCSlotSizes);
     status = first | second;
     if (status == -1) {
         GlowEffectC_CloseTarget(obj);
@@ -816,7 +816,7 @@ int func_800C9EA8(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
 #define GLOW_LAYERS_SPIN_B D_800C21AC
 #define GLOW_LAYERS_SCALE D_800C21B4
 #define GLOW_LAYERS_SPRITE D_800F34B8
-#include "FieldEng_GlowLayers.inc"
+#include "FieldFx_GlowLayers.inc"
 
 int func_800CA4A8(void *arg0, FieldEngSlot *state) {
     int ret = 2;
@@ -861,7 +861,7 @@ int func_800CA540(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
 int FourLayerGlow_PlantScript(char *object) {
     void **slot;
 
-    slot = FieldEng_GetSlot(object);
+    slot = FieldFx_GetSlot(object);
     *slot = &g_FourLayerGlowScript;
 
     D_800E2308.cell = 0xBD;
@@ -904,12 +904,12 @@ int FourLayerGlow_PlantScript(char *object) {
 }
 
 int FourLayerGlow_Spawn6(int a, int b, int c, int d, int e, int f) {
-    FieldEng_Spawn6(a, b, c, d, e, f);
+    FieldFx_Spawn6(a, b, c, d, e, f);
     return 0;
 }
 
 int FourLayerGlow_RegisterDrawList(void *o) {
-    FieldEng_Register(o, g_FourLayerGlowDrawList);
+    FieldFx_Register(o, g_FourLayerGlowDrawList);
     return 0;
 }
 
@@ -918,8 +918,8 @@ int FourLayerGlow_RegisterPairedTables(void *obj) {
     int second;
     int status;
 
-    first = FieldEng_UpdateSlots(obj, g_FourLayerGlowUpdateList);
-    second = FieldEng_RunScript(obj, g_FourLayerGlowInitList, g_FourLayerGlowSlotSizes);
+    first = FieldFx_UpdateSlots(obj, g_FourLayerGlowUpdateList);
+    second = FieldFx_RunScript(obj, g_FourLayerGlowInitList, g_FourLayerGlowSlotSizes);
     status = first | second;
     if (status == -1) {
         FourLayerGlow_CloseTarget(obj);

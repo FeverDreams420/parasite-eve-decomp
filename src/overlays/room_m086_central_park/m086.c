@@ -198,8 +198,8 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
         slot = &D_800BCFA4;
         gte_ldrotmatrix(slot->value);
         gte_ldtransmatrix(slot->value);
-        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomM086Channel)->pool, 7, &anchor, state);
-        FieldEng_RotateVector(ANIM_OWNER_AS(RoomM086Channel)->pool->bone, &drift, &state->velocity);
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM086Channel)->pool, 7, &anchor, state);
+        FieldFx_RotateVector(ANIM_OWNER_AS(RoomM086Channel)->pool->bone, &drift, &state->velocity);
         state->state = 0;
         state->timer = 0;
         state->velocity.y -= 0x18;
@@ -522,7 +522,7 @@ s32 func_80190574(s32 mode, RoomBounceGlint *ent) {
         goto ret0;
 
     mode0:
-        FieldEng_TransformMatrixPoint(((void **)ANIM_OWNER_AS(void))[2], 7, &blob, ent);
+        FieldFx_TransformMatrixPoint(((void **)ANIM_OWNER_AS(void))[2], 7, &blob, ent);
         ent->y = g_RoomFloorY->y;
         value = func_800D3FD8();
         func_800D3F64(0x579, value);

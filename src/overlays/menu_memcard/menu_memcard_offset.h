@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-/* Joint-space offset handed to FieldEng_TransformMatrixPoint. */
+/* Joint-space offset handed to FieldFx_TransformMatrixPoint. */
 typedef struct MemcardJointOffset {
     s16 x, y, z, reserved06;
 } MemcardJointOffset;
