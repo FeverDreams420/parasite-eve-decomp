@@ -117,8 +117,12 @@ question, not a real conflict:
 
 ### Overlay translation units (src/overlays, 2026-10-12)
 
-The overlays' own C went from 432 files to 106 and from 149 address-named
-files to none. Adjacent units of one overlay were merged when nothing else
+The overlays' own C (outside `room_lib/`) went from 432 files to 97. Of
+the 149 address-named files one is left,
+`menu_memcard/MenuCard_UpdateEventFlag_8012B1F0.c`: the second instance of
+the event-flag template in that overlay (the first is in `video.c`), which
+the address tells apart. The others are named by role, and the functions
+they hold take that name when the overlay has only the one copy. Adjacent units of one overlay were merged when nothing else
 lies between them in the manifest (no shared `room_lib` unit, data, or foreign
 rodata between the members' rodata) and their per-file markers agree.
 `--expand-div` is not a difference: every default overlay unit compiles
@@ -174,8 +178,17 @@ after what their functions do (`fx_common/camera_nodes.c`,
   `D_8019AF04.hit`, and its including units declare the words they name,
   so the main run, the rising sprite pools and the boss sway are one
   `m273.c`.
-- Not attempted: `room_lib/RoomEffect_MotionParticles{,_2,_3}` (split by
-  `-fno-strength-reduce`, needs a probe first).
+- Probed, still split: `room_lib/RoomEffect_MotionParticles{,_2,_3}`.
+  Under the default flags `RoomEffect_DrawMotionParticles` is lev 66 (loop
+  strength reduction turns the lookup index and the particle cursor into
+  pointers that retail computes per iteration); under
+  `-fno-strength-reduce` the other units lose the reductions retail has:
+  `RoomEffect_MotionParticlesInit` lev 24, `RoomEffect_SeedMotionParticles`
+  lev 21, `RoomEffect_UpdateParticleMotion` lev 64. Writing the setup loop
+  with the reduced byte offset by hand brings `RoomEffect_MotionParticlesInit`
+  to lev 9; the rest is loop-invariant hoisting (`-64` leaves the loop once
+  the strength-reduction register is gone). The split matches what the
+  binary shows, two flag sets, until one C shape reproduces both.
 
 ### Resident translation units (src/main, 2026-10-12)
 
