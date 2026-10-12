@@ -160,7 +160,7 @@ name is the configured overlay name.
   unit (`RoomLib_ActorClasses.c`), which every overlay that links the
   library lists in its manifest as `../room_lib/<unit>` and compiles into its
   own build, and the templates that other copied code still instantiates
-  (`*.inc` bodies, `*_family.h` declarations, `room_lib.h`). A templated copy
+  (`*.inc` bodies and `room_lib.h`). A templated copy
   keeps its own instantiation file in the overlay until its whole family can
   move to one shared unit.
 - **Function names inside overlays:** `RoomLib_` for `room_lib` templates,
