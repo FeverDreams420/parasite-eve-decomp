@@ -80,7 +80,7 @@ directory for one file.
 
 **PsyQ code under project names.** About 120 game-named units outside
 `psyq/` lie inside SDK object ranges recorded in
-`configs/USA/psyq_provenance.json`: about half of `gpu` (LIBGPU SYS and primitive
+`configs/USA/psyq_provenance.json`: about half of `draw` (LIBGPU SYS and primitive
 objects), the `CardObj_*`
 files in `memcard` (LIBPAD/LIBCARD), most of `pad` (LIBAPI PAD/PATCH), the
 64-bit helpers in `math` (LIBMATH), the `Spu_*` setters in `akao` (LIBSPU),
@@ -97,7 +97,7 @@ edge, as `akao/Spu_TransferAndLifecycle` did before LIBPAD WAITRC2's
 | `cdrom` | `CdRom_` | game-side CD layer: sector reads from PE.IMG, retries, boot reads | keep; `cd_rom*.c`, `misc9.c` renamed by content |
 | `memcard` | `MemCard_` | memory-card access for saves | keep the game part; LIBPAD/LIBCARD units and BIOS veneers (`_card_*`, `InitCARD2`...) to `psyq` |
 | `pad` | `Pad_` | controller input | mostly LIBAPI: move to `psyq/libapi`; what remains joins `boot` or `menu` input |
-| `gpu` | `Gpu_`, `Draw_` | game 2D drawing: text, glyphs, wipes, number and bar widgets, packet pools | keep the game part (rename to `draw`, `Draw_` prefix); LIBGPU units to `psyq/libgpu`; `Scene_*` files to `scene` |
+| `draw` | `Gpu_`, `Draw_` | game 2D drawing: text, glyphs, wipes, number and bar widgets, packet pools | keep the game part (renamed from `draw`, `Draw_` prefix); LIBGPU units to `psyq/libgpu`; `Scene_*` files to `scene` |
 | `gte` | `Gte_` | none of its own | dissolved: the LIBGTE objects are `psyq/libgte/<object>.c` under SDK names |
 | `math` | `Math_` | fixed-point and integer helpers | keep; the LIBMATH objects are `psyq/libmath/<object>.c` under SDK names |
 | `render` | `Render_` | 3D object, room and sprite rendering, fades, camera | keep; `Scene_*Battle*` predicates to `scene` |
@@ -106,14 +106,14 @@ edge, as `akao/Spu_TransferAndLifecycle` did before LIBPAD WAITRC2's
 | `obj` | `Obj_` | geometry-state entry slots | dissolved: the three `Obj_` units are in `render` |
 | `field` | `Field_`, `Geo_` | field map entries, collision and floor geometry | keep; `Geo_*` from `main` join it |
 | `fieldfx` | `FieldEng_`, `FieldAnim_` | the field effect engine in the separate `0x800C1CA0` segment: effect pool, emitters, particles | keep (renamed from `engine`); prefix to become `FieldFx_` |
-| `scene` | `Scene_` | room and scene loading, story flags, scene dispatch | keep; receives `Scene_*` files from `gpu`, `main`, `render`, `time` |
+| `scene` | `Scene_` | room and scene loading, story flags, scene dispatch | keep; receives `Scene_*` files from `draw`, `main`, `render`, `time` |
 | `overlay` | `Overlay_` | overlay tables and loading, overlay audio/texture slots | keep |
 | `asset` | `Asset_` | PE.IMG asset tables, TIM upload | keep |
 | `script` | `Task_` | actor script interpreter: opcodes, expressions, node pool | keep (renamed from `task`); prefix to become `Script_`; `Task_Gpu*` to `draw`, `Task_ConvertSecondsToHMS` to `time` |
 | `pm` | `Pm_` | process manager: slot table that runs script batches | keep |
 | `event` | `Evt_` | game event delivery and deferred execution | keep; the old `Evt_Deliver` was LIBMATH FERR `_err_math` (`psyq/libmath/ferr.c`) |
 | `battle` | `Battle_`, `BattleCmd_` | ATB battle: turns, targeting, damage, enemy AI, status display | keep; `Inv_Build*List.c` to `item`, `Math_IntSqrt.c` to `math` |
-| `aya` | `Aya_` | the player character: stats, level table, parasite-energy spells | keep; `misc7.c` to `battle`, `Draw_LookupGlyphMetrics` to `gpu` |
+| `aya` | `Aya_` | the player character: stats, level table, parasite-energy spells | keep; `misc7.c` to `battle`, `Draw_LookupGlyphMetrics` to `draw` |
 | `item` | `Inv_`, `Item_` | inventory, item table, equipment and its modifiers | keep; `Menu_*` files to `menu` |
 | `menu` | `Menu_`, `MenuWidget_`, `MenuInput_` | in-game menus, widget tree, menu input queue | keep; `Inv_*`, `Save_*`, `Pad_*` files out to their owners |
 | `save` | `Save_` | save-data layout, metadata, write flow | keep |

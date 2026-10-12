@@ -172,7 +172,7 @@ organization-check:
 organization-baseline:
 	@$(PY) tools/scripts/organization_debt.py --update-baseline
 
-# Verified crutch removal (byte-identical only; run per file/dir): make drop-pins FILE='src/main/gpu/*.c'
+# Verified crutch removal (byte-identical only; run per file/dir): make drop-pins FILE='src/main/draw/*.c'
 drop-pins:
 	@$(PY) tools/scripts/try_drop_pins.py $(FILE)
 drop-barriers:

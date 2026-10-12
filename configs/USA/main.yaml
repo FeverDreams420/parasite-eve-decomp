@@ -297,7 +297,7 @@ segments:
       - [0x22FD8, c, main/Battle_StatusNumberFlow]
       - [0x2330C, c, battle/Battle_DrawStatusPanel]
       # Contiguous battle-status sprite and ordering-table renderer.
-      - [0x23B5C, c, gpu/Gpu_SetupSprites]
+      - [0x23B5C, c, draw/Gpu_SetupSprites]
       # Window mode setter and getter: g_MenuActiveMode is private to this pair.
       - [0x241A0, c, menu/Menu_ActiveWindowMode]
       - [0x2422C, c, script/Task_SignalExit]
@@ -322,7 +322,7 @@ segments:
       - [0x278BC, c, math/math_fixed]
       # Draw-mode + sprite and draw-mode + tile packet initialisers: identical
       # SetDrawTPage/MargePrim shape, contiguous default-profile pair.
-      - [0x278DC, c, gpu/Gpu_DrawModePackets]
+      - [0x278DC, c, draw/Gpu_DrawModePackets]
       - [0x279A4, c, menu/Menu_SetEquipSlotIndex]
       # Fog and colour-table setup, text cursor, textbox table, movement flags, equip slot index, textbox drawing and highlight colour share private state (G0310).
       - [0x279B0, c, menu/Menu_TextboxDraw]
@@ -366,7 +366,7 @@ segments:
       # the fast scene flush and the field frame loop that follow are -G8.
       - [0x2F874, c, boot/Gpu_InitPipeline]
       - [0x2FAFC, c, boot/Boot_FrameLoop]
-      - [0x2FF58, c, gpu/Gte_LightingState]
+      - [0x2FF58, c, draw/Gte_LightingState]
       - [0x30000, c, save/Save_TailBlobFlow]
       # Title-style flag, card file presence, title-screen card support, card
       # port handling and the save flow share card state (G0354).
@@ -560,15 +560,15 @@ segments:
       # Event queue, input dispatch and frame presentation share -G8/common.
       - [0x4E688, c, menu/queue]
       # Base-offset setter and Y accessor share one default-profile object.
-      - [0x4F050, c, gpu/Draw_BaseOffset]
+      - [0x4F050, c, draw/Draw_BaseOffset]
       # Cursor/colour state, rectangle allocation, glyph sprites, text/number
       # packets, wrapping and stat bars share typed draw state and one matching
       # -G8/common/-fno-cse-skip-blocks profile.
-      - [0x4F094, c, gpu/Draw_TextPrimitives]
-      - [0x51844, c, gpu/Draw_AllocColorQuad]
+      - [0x4F094, c, draw/Draw_TextPrimitives]
+      - [0x51844, c, draw/Draw_AllocColorQuad]
       # Blend colour, screen wipes, gradients and colour packet allocators share
       # the draw runtime and matching -G8/common profile.
-      - [0x51CA0, c, gpu/Draw_WipeAndGradient]
+      - [0x51CA0, c, draw/Draw_WipeAndGradient]
       # Pool, recursive drawing, node lookups, labels, scrolling, layouts and popups
       # share their typed widget state and -G8/common profile.
       - [0x52D68, c, menu/MenuWidget_Lifecycle]
@@ -633,7 +633,7 @@ segments:
       # draw-status check and the TIM table loaders: the queries share
       # g_DrawEnabled and g_SeqElapsed (private evidence), contiguous
       # default-profile run with no split evidence.
-      - [0x5F1A0, c, gpu/Gpu_DisplayInitAndStatus]
+      - [0x5F1A0, c, draw/Gpu_DisplayInitAndStatus]
       - [0x5F4EC, c, boot/Boot_DiscTableLoad]
       # Slot allocation opens the contiguous process-manager slot API.
       - [0x5FA24, c, pm/Pm_ProcessManager]
@@ -642,7 +642,7 @@ segments:
       - [0x6156C, c, script/Task_GpuFlushPrimQueue]
       - [0x615D0, c, script/Task_GpuPackPrimColor]
       - [0x61604, pad] # zero words after Task_GpuPackPrimColor's jr ra
-      - [0x61654, c, gpu/Gpu_RenderFrame]
+      - [0x61654, c, draw/Gpu_RenderFrame]
       - [0x617AC, c, math/Math_SqrtApprox3]
       # Player movement state handlers share the pad/analog and camera-angle
       # globals and the default profile (main_tu_evidence G0920..G0923).
