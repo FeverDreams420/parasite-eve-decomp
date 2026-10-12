@@ -2170,3 +2170,5 @@ g_AyaHpCurrent = 0x800C0E08;
 g_AyaStatAgility = 0x800C0E28;
 g_WayneStorageItems = 0x800C1EB8;
 g_CursorRenderDataBlock = 0x800C20A4;
+g_InvSpecialItemRecords = 0x800A1E64;
+g_InvFallbackAmmoRecord = 0x800A1E44;

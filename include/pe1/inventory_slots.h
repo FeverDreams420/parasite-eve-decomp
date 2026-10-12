@@ -83,9 +83,11 @@ extern u8 D_800A1FE8[];
 extern u8 *D_8009D084;
 extern s32 D_8009D088, D_8009D08C;
 extern ItemDataRecord D_800A204C, D_800A206C;
-/* Global fallback and category-specific ammunition records; storage tool IDs. */
-extern ItemDataRecord D_800A1E44;
-extern ItemDataRecord D_800A1E64[];
+/* Global fallback ammunition record, then the records of item values
+ * 0x200..0x208 (the first three are the category ammunition pools);
+ * storage tool IDs. */
+extern ItemDataRecord g_InvFallbackAmmoRecord;
+extern ItemDataRecord g_InvSpecialItemRecords[];
 extern s16 g_WayneStorageItems[];
 
 void Inv_InitWayneStorage(void);
@@ -107,7 +109,7 @@ int Menu_GetCommandResult(void);
 void Menu_ClearCommandResult(void);
 
 /* Item record of an inventory value: 0x100..0x17F equipment records,
- * 1..0xFF base item data, 0x200..0x208 the key item records at D_800A1E64
+ * 1..0xFF base item data, 0x200..0x208 the special item records at g_InvSpecialItemRecords
  * (32 bytes each). Retail units spell the key item address two ways: as a
  * record index, or scaled from the key item table base g_KeyItemDataTable. */
 static inline ItemDataRecord *Inv_LookupItemRecord(int value) {
@@ -119,7 +121,7 @@ static inline ItemDataRecord *Inv_LookupItemRecord(int value) {
         if (value - 1U < 0xFFU) {
             result = Item_LookupBaseData(value - 1);
         } else if (saved - 0x200U < 9U) {
-            result = &D_800A1E64[saved - 0x200];
+            result = &g_InvSpecialItemRecords[saved - 0x200];
         } else {
             result = 0;
         }

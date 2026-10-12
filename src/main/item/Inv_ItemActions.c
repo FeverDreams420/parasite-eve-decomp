@@ -394,7 +394,7 @@ void Inv_StepScrollDisplay(void) {
     entry->payload.ammo_restore.item_data0 = (int)D_8009D070;
     entry->payload.ammo_restore.item_data1 = (int)D_8009D074;
     if (g_InvCompareSlotLeft.reserveAmmo) {
-        pool = &D_800A1E44 + g_InvCompareSlotLeft.tailData[10];
+        pool = &g_InvFallbackAmmoRecord + g_InvCompareSlotLeft.tailData[10];
         entry->payload.ammo_restore.item_data2 = (int)pool;
         if (pool) {
             entry->payload.ammo_restore.ammo2 = pool->ammo;
@@ -412,7 +412,7 @@ void Inv_StepScrollDisplay(void) {
             }
         }
     } else if (g_InvCompareSlotRight.reserveAmmo) {
-        pool = &D_800A1E44 + g_InvCompareSlotRight.tailData[10];
+        pool = &g_InvFallbackAmmoRecord + g_InvCompareSlotRight.tailData[10];
         entry->payload.ammo_restore.item_data2 = (int)pool;
         if (pool) {
             entry->payload.ammo_restore.ammo2 = pool->ammo;
@@ -454,7 +454,7 @@ static inline ItemDataRecord *LookupSlotItem(int value) {
         if (value - 1U < 0xFFU) {
             result = Item_LookupBaseData(value - 1);
         } else if (saved - 0x200U < 9U) {
-            result = &D_800A1E64[saved - 512];
+            result = &g_InvSpecialItemRecords[saved - 512];
         } else {
             result = 0;
         }
@@ -473,13 +473,13 @@ int Inv_DrawSlotItemIcon(void) {
         weapon = LookupSlotItem(g_InvItemPtr[index]);
     kind = weapon->kind;
     if (kind && kind < 8) {
-        pool = &D_800A1E64[0];
+        pool = &g_InvSpecialItemRecords[0];
         if ((int)(kind - 4) > 0)
-            pool = &D_800A1E64[(int)(kind - 5)];
+            pool = &g_InvSpecialItemRecords[(int)(kind - 5)];
     } else if (kind >= 19) {
-        pool = &D_800A1E64[(int)(kind - 19)];
+        pool = &g_InvSpecialItemRecords[(int)(kind - 19)];
     } else {
-        pool = &D_800A1E44;
+        pool = &g_InvFallbackAmmoRecord;
     }
     amount = weapon->baseStats[2] + weapon->bonusStats[2];
     available = pool->ammo;

@@ -24,13 +24,13 @@ void Inv_RollRandomItemType(s16 *type, s16 *amount) {
         if (!*type) {
             count = 0;
             for (i = 0; i < 3; ++i)
-                if (D_800A1E64[i].ammo) available[count++] = i;
+                if (g_InvSpecialItemRecords[i].ammo) available[count++] = i;
             if (count) *type = ((count * RandomByte()) >> 8) + 1;
         }
         {
             u16 chosen = *type;
             if (chosen - 1U < 3U) {
-                stock = &D_800A1E64[(s16)chosen - 1].ammo;
+                stock = &g_InvSpecialItemRecords[(s16)chosen - 1].ammo;
                 if (!*amount) *amount = (*stock * RandomByte()) >> 8;
                 else if (*amount < 0) *amount = (*stock * -*amount) / 100;
                 if (*amount > *stock) *amount = *stock;

@@ -145,7 +145,7 @@ void Inv_InitNewGameInventory(void) {
     D_800C0E00.max_hp = D_800C0E00.current_hp = stats->hp;
     D_800C0E00.inventory_slot_count = stats->inventoryCapacity;
     D_800C0E00.parasite_spell_flags = 1;
-    D_800A1E64[0].ammo = D_800A1E64[1].ammo = D_800A1E64[2].ammo = 0;
+    g_InvSpecialItemRecords[0].ammo = g_InvSpecialItemRecords[1].ammo = g_InvSpecialItemRecords[2].ammo = 0;
     SelectAya();
     capacity = stats->inventoryCapacity;
     if (capacity > 50) capacity = 50;
@@ -260,7 +260,7 @@ int Inv_DispatchCommand(int command, int value, int other, int *unused) {
         int count = 0;
         s16 *p;
         if (value >= g_InvCategoryBaseItemId && value < g_InvCategoryBaseItemId + 3)
-            count = D_800A1E64[value - g_InvCategoryBaseItemId].ammo;
+            count = g_InvSpecialItemRecords[value - g_InvCategoryBaseItemId].ammo;
         else for (p = g_InvItemPtr; p < g_InvItemPtr + g_InvSlotLimit; p++) {
             unsigned short id = *p;
             if (id - 256U < 128U)

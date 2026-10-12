@@ -96,7 +96,7 @@ int Inv_WriteSlotById(ItemDataRecord *item) {
             else
                 failed = 1;
         }
-        pool = &D_800A1E64[category];
+        pool = &g_InvSpecialItemRecords[category];
         pool->ammo += item->ammo;
         ClampAmmo(pool);
     } else {

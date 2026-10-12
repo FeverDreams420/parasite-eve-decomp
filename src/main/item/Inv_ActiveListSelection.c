@@ -102,7 +102,7 @@ void Inv_BuildItemGridFromCategory(void)
     do {
         base = g_InvCategoryBaseItemId + i % 3;
         src = Item_LookupBaseData(base - 1);
-        D_800A1E64[i] = *src;
+        g_InvSpecialItemRecords[i] = *src;
         D_800A1E6D[i][0] = 0;
         D_800A1E76[i][0] = 999;
     } while (++i < 9);

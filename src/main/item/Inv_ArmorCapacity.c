@@ -270,10 +270,10 @@ static inline ItemDataRecord *LookupActiveItem(int index) {
 
 
 /* Ammunition pool record. An inline call keeps the index scaled before the
- * table address is added, as retail does; a direct &D_800A1E64[kind - 5]
+ * table address is added, as retail does; a direct &g_InvSpecialItemRecords[kind - 5]
  * folds the -5 into the address (lev 16). */
 static inline ItemDataRecord *AmmoPoolRecord(int index) {
-    return &D_800A1E64[index];
+    return &g_InvSpecialItemRecords[index];
 }
 static inline void ClampAmmo(ItemDataRecord *item) {
     int current = item->ammo;
@@ -382,10 +382,10 @@ void Inv_TransferItemBetweenLists(unsigned selection, int modifier, int flags, i
             {
                 unsigned kind = source->kind;
                 if (kind != 0 && kind < 8) {
-                    ammo = D_800A1E64;
+                    ammo = g_InvSpecialItemRecords;
                     if ((int)kind - 4 > 0) ammo = AmmoPoolRecord((int)kind - 5);
                 } else if (kind >= 19) ammo = AmmoPoolRecord((int)kind - 19);
-                else ammo = &D_800A1E44;
+                else ammo = &g_InvFallbackAmmoRecord;
             }
             ammo->ammo += source->ammo - source->baseStats[2] - move;
             ClampAmmo(ammo);
@@ -423,10 +423,10 @@ void Inv_TransferItemBetweenLists(unsigned selection, int modifier, int flags, i
         {
             unsigned kind = source->kind;
             if (kind != 0 && kind < 8) {
-                ammo = D_800A1E64;
+                ammo = g_InvSpecialItemRecords;
                 if ((int)kind - 4 > 0) ammo = AmmoPoolRecord((int)kind - 5);
             } else if (kind >= 19) ammo = AmmoPoolRecord((int)kind - 19);
-            else ammo = &D_800A1E44;
+            else ammo = &g_InvFallbackAmmoRecord;
         }
         ammo->ammo += source->ammo;
         ClampAmmo(ammo);
