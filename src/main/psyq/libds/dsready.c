@@ -1,7 +1,7 @@
 /* ASSEMBLER: GNU */
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses */
-/* Psy-Q LIBDS DSREADY.OBJ, part 1 of 5: DsStartReadySystem, DsEndReadySystem, DsReadySystemMode. */
+/* Psy-Q LIBDS DSREADY.OBJ, part 1 of 4: DsStartReadySystem, DsEndReadySystem, DsReadySystemMode. */
 /* DSREADY is split where its functions need different compilers: parts 1
  * and 3 only match with GCC 2.8.1 and -mno-split-addresses, part 4
  * (ER_retry) with GCC 2.8.1, -fno-expensive-optimizations and

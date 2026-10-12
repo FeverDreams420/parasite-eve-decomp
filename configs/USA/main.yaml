@@ -817,7 +817,6 @@ segments:
       - [0x72574, c, psyq/libds/dsready]
       - [0x72670, c, psyq/libds/dsready_2]
       - [0x7294C, c, psyq/libds/dsready_3]
-      - [0x72A04, c, psyq/libds/dsready_4]
       - [0x72A7C, c, psyq/libds/dsready_5]
       - [0x72B0C, pad]
       # Psy-Q 4.6 LIBDS.LIB DSTYPE.OBJ: query plus async disk callbacks.

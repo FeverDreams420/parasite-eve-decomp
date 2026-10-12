@@ -1,5 +1,5 @@
 /* ASSEMBLER: GNU */
-/* Psy-Q LIBDS DSREADY.OBJ, part 5 of 5: ER_cbsync, ER_active, ER_clear. */
+/* Psy-Q LIBDS DSREADY.OBJ, part 4 of 4: ER_cbsync, ER_active, ER_clear. */
 #include "pe1/psyq_ds.h"
 
 void ER_cbready(int event, u_char *result);
