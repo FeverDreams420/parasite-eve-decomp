@@ -2,6 +2,7 @@
 #define PE1_DRAW_STATE_H
 
 #include "common.h"
+#include "pe1/render_prim.h"
 
 /* Lookup entries have an eight-byte stride; the final byte is not read here. */
 typedef struct DrawGlyphDescriptor {
@@ -127,18 +128,12 @@ extern GpuDrawEnabledFlag g_DrawEnabled;
 extern short g_SeqElapsed;
 extern volatile unsigned char D_800B0DC6;
 extern signed char D_800B0DBB;
-extern char D_8009E974[];
-extern char D_8009E975[];
-extern u8 D_8009E976[];
-extern char D_8009EC40[];
-extern char D_8009EC4E[];
-extern u8 D_8009EC38[];
-extern char D_8009EC4A[];
-extern char D_8009E968[];
-extern char D_8009EA48[];
-extern char D_8009EA64[];
-extern char D_8009EA80[];
-extern char D_8009EA9C[];
-extern char D_8009EAB8[];
+
+/* Battle status icons: per draw buffer, thirteen paged sprites (poison,
+ * confusion and the other ailment symbols Gpu_DrawStatusIcons lists). */
+extern RenderPagedSpritePacket g_StatusIconPackets[2][13];
+/* Status icon floated over an entity by Gpu_SetupSprites and raised two
+ * pixels a frame by Gpu_QueuePrimitive. */
+extern RenderPagedSpritePacket g_StatusMarkerPackets[2];
 
 #endif /* PE1_DRAW_STATE_H */

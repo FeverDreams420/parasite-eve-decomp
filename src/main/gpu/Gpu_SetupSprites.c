@@ -15,38 +15,23 @@
 u8 g_BattleSpritePrimCountdown;
 u8 g_MenuActiveMode;
 
-void Gpu_SetupSprites(BattleEntity *arg0, int arg1, int arg2) {
-    BattleEntity *obj;
+void Gpu_SetupSprites(BattleEntity *entity, int unused, int icon) {
     int i;
-    char *dst_base;
-    int src_base;
 
-    obj = arg0;
     g_BattleSpritePrimCountdown = 0x1E;
     i = 0;
-    dst_base = D_8009EC40;
-    arg2 = (u8)arg2;
-    src_base = ((arg2 << 3) - arg2) << 2;
-
+    icon = (u8)icon;
     do {
-        int i_u8;
-        int dst_offset;
-        int src_offset;
-        char *dst;
-        u16 val;
+        RenderSpritePacket *marker;
 
-        i_u8 = (u8)i;
-        dst_offset = ((i_u8 << 3) - i_u8) << 2;
-        src_offset = src_base + i_u8 * 364;
-        dst = (char *)(dst_offset + (int)dst_base);
-
-        dst[0xC] = *(u8 *)(D_8009E974 + src_offset);
-        dst[0xD] = *(u8 *)(D_8009E975 + src_offset);
-        *(u16 *)(dst + 0x8) = obj->renderObject.projected_x - 8;
-        *(u16 *)(dst + 0xA) = obj->renderObject.projected_y - 0x10;
-        val = *(u16 *)(D_8009E976 + src_offset);
+        marker = &g_StatusMarkerPackets[(u8)i].sprite;
+        marker->u = g_StatusIconPackets[(u8)i][icon].sprite.u;
+        marker->v = g_StatusIconPackets[(u8)i][icon].sprite.v;
+        marker->x = entity->renderObject.projected_x - 8;
+        marker->y = entity->renderObject.projected_y - 0x10;
+        g_StatusMarkerPackets[(u8)i].sprite.clut =
+            g_StatusIconPackets[(u8)i][icon].sprite.clut;
         i++;
-        *(u16 *)(D_8009EC4E + dst_offset) = val;
     } while ((u8)i < 2);
 }
 
@@ -56,19 +41,11 @@ void Gpu_SetupSprites(BattleEntity *arg0, int arg1, int arg2) {
 
 
 void Gpu_QueuePrimitive(void) {
-    int index;
-    int prim_offset;
-    int ot_offset;
-    void *prim;
-    char *ot;
+    int slot;
 
-    index = g_ActiveDrawSlot;
-    prim_offset = ((index << 3) - index) << 2;
-    ot_offset = index << 2;
-    *(volatile u16 *)(D_8009EC4A + prim_offset) = *(volatile u16 *)(D_8009EC4A + prim_offset) - 2;
-    prim = D_8009EC38 + prim_offset;
-    ot = *(char *volatile *)((char *)g_OtBufferTable + ot_offset);
-    AddPrim(ot + 0x1C, prim);
+    slot = g_ActiveDrawSlot;
+    g_StatusMarkerPackets[slot].sprite.y -= 2;
+    AddPrim((u32 *)g_OtBufferTable[slot] + 7, &g_StatusMarkerPackets[slot]);
     g_BattleSpritePrimCountdown--;
 }
 
@@ -77,6 +54,7 @@ void Gpu_QueuePrimitive(void) {
 /* MASPSX_FLAGS: -G8 */
 
 
+/* Queue one status icon at the cursor and advance the cursor by one icon. */
 #define INDEX_STRIDE(i) ((((((i) << 1) + (i)) << 3) - (i)) << 2) - (i)
 
 #define EMIT_CODED(code_expr) do { \
@@ -89,7 +67,7 @@ void Gpu_QueuePrimitive(void) {
     register void *packet asm("$2"); \
     void *ot; \
     packet_code = (code_expr); \
-    base = D_8009E968; \
+    base = (char *)&g_StatusIconPackets[0][0].sprite; \
     code_off = ((packet_code << 3) - packet_code) << 2; \
     prim = base - 8; \
      \
@@ -98,12 +76,11 @@ void Gpu_QueuePrimitive(void) {
     idx_off = INDEX_STRIDE(idx) << 2; \
     prim = (char *)(idx_off + (int)prim); \
     packet = (char *)(idx_off + code_off + (int)base); \
-    idx <<= 2; \
     ((RenderSpritePacket *)packet)->x = s0; \
     ((RenderSpritePacket *)packet)->y = s2; \
-    ot = *(void **)((char *)g_OtBufferTable + idx); \
+    ot = g_OtBufferTable[idx]; \
     s0 += s3; \
-    AddPrim((char *)ot + 0x1C, prim); \
+    AddPrim((u32 *)ot + 7, prim); \
 } while (0)
 
 #define EMIT_BASE(base_sym) do { \
@@ -117,11 +94,10 @@ void Gpu_QueuePrimitive(void) {
     packet = (char *)(INDEX_STRIDE(idx) << 2); \
     prim = (char *)packet + (int)prim; \
     packet = (char *)packet + (int)base; \
-    idx <<= 2; \
     ((RenderSpritePacket *)packet)->x = s0; \
     ((RenderSpritePacket *)packet)->y = s2; \
     s0 += s3; \
-    AddPrim(*(char **)((char *)g_OtBufferTable + idx) + 0x1C, prim); \
+    AddPrim((u32 *)g_OtBufferTable[idx] + 7, prim); \
 } while (0)
 
 #define EMIT_BASE_LAST(base_sym) do { \
@@ -219,18 +195,18 @@ void Gpu_DrawStatusIcons(void) {
     }
 
     if (*s4 & 0x1000) {
-        EMIT_BASE(D_8009EA48);
+        EMIT_BASE((char *)&g_StatusIconPackets[0][8].sprite);
     }
     if (*s4 & 0x100) {
-        EMIT_BASE(D_8009EA64);
+        EMIT_BASE((char *)&g_StatusIconPackets[0][9].sprite);
     }
     if (*s4 & 0x400) {
-        EMIT_BASE(D_8009EA80);
+        EMIT_BASE((char *)&g_StatusIconPackets[0][10].sprite);
     }
     if (*s4 & 0x800) {
-        EMIT_BASE(D_8009EA9C);
+        EMIT_BASE((char *)&g_StatusIconPackets[0][11].sprite);
     }
     if (*s4 & 0x200) {
-        EMIT_BASE_LAST(D_8009EAB8);
+        EMIT_BASE_LAST((char *)&g_StatusIconPackets[0][12].sprite);
     }
 }
