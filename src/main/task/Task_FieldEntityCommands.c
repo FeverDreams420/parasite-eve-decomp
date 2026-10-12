@@ -45,7 +45,6 @@ int Entity_ClearCurrentFlag4000(void) {
 }
 
 
-
 int Task_SetAnimSlotPointer(int **arg0) {
     int index = *arg0[0];
 
@@ -88,7 +87,6 @@ int Task_ClearMoveFlag(void) {
     return 1;
 }
 
-int Math_FixedMul(int arg0, int arg1);
 int Entity_PolarToPosition2(int **arg0)
 {
   int **args;

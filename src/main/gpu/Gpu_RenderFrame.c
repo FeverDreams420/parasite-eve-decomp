@@ -7,10 +7,9 @@
 /* MASPSX_FLAGS: -G8 */
 
 #include "include_asm.h"
+#include "pe1/boot_disc_check.h"
 void Menu_DrawSaveBg(void);
 short Seq_GetElapsed(void);
-void SetDispMask(int arg0);
-void ResetGraph(int arg0);
 int Gpu_CheckDrawStatus(void);
 
 

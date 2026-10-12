@@ -8,6 +8,7 @@
 #include "pe1/scene_transition.h"
 #include "pe1/entity_frame_update.h"
 #include "pe1/save_tail_state.h"
+#include "pe1/battle_update.h"
 
 /* COMMON supplies small-data metadata to MASPSX. */
 int g_SceneDataTable0;
@@ -23,8 +24,6 @@ int Entity_YieldOnLoading(void) {
     return 1;
 }
 
-
-int Inv_CountByValue(int arg0);
 
 int Task_ScaleAnimValue(int **arg0) {
     int value = *arg0[0];

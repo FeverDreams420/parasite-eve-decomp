@@ -33,7 +33,6 @@ TaskNode *D_8009D300;
 
 void Menu_OpenStartupMemCardDialog(void);
 
-int MenuWidget_HasActiveNodes(void);
 
 int Render_SetEntryPosition(int index, int x, int y);
 
@@ -200,8 +199,6 @@ u32 *D_8009CE00;
 void Akao_Cmd_11(int slot);
 void Akao_Cmd_90(int command);
 void Akao_Cmd_92(int command);
-void Akao_Cmd_98_9A_9C(int command);
-void Akao_Cmd_99_9B_9D(int command);
 void Akao_Cmd_A0(int command, int arg1, int arg2);
 void Akao_Cmd_A1(int command, int arg1, int arg2, int arg3);
 void Akao_Cmd_A2(int command, int arg1, int arg2);
@@ -214,8 +211,6 @@ void Akao_Cmd_AA(int command);
 void Akao_Cmd_AB(int command, int arg1);
 void Akao_Cmd_AC(int command);
 void Akao_Cmd_AD(int command, int arg1);
-void Akao_Cmd_C0_WithSlot(int slot, int value);
-void Akao_Cmd_C1_WithSlot(int slot, int value, int arg2);
 void Akao_Cmd_C2_WithSlot(int slot, int value, int arg2, int arg3);
 void Akao_Cmd_D0(int command);
 void Akao_Cmd_D1(int command, int arg1);
@@ -223,10 +218,8 @@ void Akao_Cmd_D2(int command, int arg1, int arg2);
 void Akao_Cmd_D4(int command);
 void Akao_Cmd_D5(int command, int arg1);
 void Akao_Cmd_D6(int command, int arg1, int arg2);
-void Akao_Cmd_D8(int command);
 void Akao_Cmd_D9(int command, int arg1);
 void Akao_Cmd_DA(int command, int arg1, int arg2);
-void Akao_Cmd_F1(void);
 void Akao_ResetPositionalState(void);
 int Akao_Cmd_19_Then_C0(u8 *data, int value);
 int CD_SeekToTrack(int key, int mode, int group, int *slot, int immediate);

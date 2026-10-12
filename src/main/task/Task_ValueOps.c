@@ -15,7 +15,6 @@
 #include "pe1/gte.h"
 
 
-int Math_FixedMul(int lhs, int rhs);
 int Math_FixedDivide(int a, int b);
 
 typedef struct ExprOpArgs {

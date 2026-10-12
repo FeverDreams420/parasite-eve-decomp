@@ -7,7 +7,6 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/task_state.h"
 
-void FlushCache(void);
 void ResetGraph(s32);
 void SetDispMask(s32);
 void func_801216C4(s32, s32 *);

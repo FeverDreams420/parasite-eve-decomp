@@ -14,8 +14,6 @@
 #include "pe1/sys.h"
 #include "pe1/render_camera.h"
 
-void SetDispMask(int arg0);
-void ClearImage(RECT *rect, int r, int g, int b);
 void Draw_InitBuffers(void);
 int CdRom_SetSeekPos(unsigned int arg0);
 void Gpu_RenderFrame(void);

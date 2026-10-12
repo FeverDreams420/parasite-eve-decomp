@@ -10,6 +10,8 @@
 #include "pe1/battle_runtime.h"
 #include "pe1/battle_entity_anim.h"
 #include "pe1/render_shadow.h"
+#include "pe1/battle_update.h"
+#include "pe1/menu_state.h"
 
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
@@ -41,8 +43,6 @@ u8 g_ScriptCameraBytes[3];
 void Task_SetCollisionFlag(int value);
 void func_800E00CC(Pe1Vec3s *position, int mode, int arg2, int arg3,
                    int arg4, int arg5, int arg6);
-void Battle_DrawActiveStatus(void);
-void Window_SetBoundsByMode(int mode);
 
 int Task_DispatchScriptCmd(TaskScriptArgs *args)
 {

@@ -5,10 +5,8 @@
 /* MASPSX_FLAGS: -G8 --expand-div */
 
 
-
-int Battle_GetStateFlag1(void);
 #include "pe1/bounds_check.h"
-void SetDrawTPage(void *packet, int drawTexture, int dither, int tpage);
+#include "pe1/menu_sound.h"
 
 void Draw_AllocColorQuad(int width, int height) {
     int w = width;

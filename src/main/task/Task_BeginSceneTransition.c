@@ -6,13 +6,13 @@
 #include "pe1/game_state_types.h"
 #include "pe1/game_state.h"
 #include "pe1/battle_runtime.h"
+#include "pe1/menu_equipment.h"
 
 /* COMMON supplies small-data metadata to MASPSX; the extern words stay
  * absolute. */
 int g_SceneDataTable0;
 TaskNode *g_TaskNodePool;
 
-void Menu_OpenEquipScreen(int arg0);
 
 int Task_BeginSceneTransition(int **arg0) {
     Pe1GameState *state = &g_GameState;

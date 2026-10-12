@@ -14,11 +14,10 @@
 #define NULL ((void *)0)
 
 #include "pe1/game_timers.h"
+#include "pe1/textbox.h"
+#include "pe1/inventory_slots.h"
 
-int Math_IntSqrt(int value);
 void Task_SignalExit(void);
-void Menu_SetTextCursorRect(int arg0, int arg1, int arg2, int arg3);
-void Render_SetupColorTable(int arg0, int arg1, short *arg2);
 
 int Task_ClearEntityRoamFlag(void) {
     g_CurrentEntity->flags &= 0xFFFDFFFF;
@@ -222,7 +221,6 @@ int Task_SetEntityFlag1000000(void) {
     return 1;
 }
 
-int Math_FixedMul(int arg0, int arg1);
 
 int Entity_PolarToPosition(int **arg0)
 {
@@ -332,7 +330,6 @@ int Entity_CallAction(int **arg0)
     return 1;
 }
 
-int Inv_CountTotal(void);
 
 int Task_SetInventorySlotPointer(int **arg0) {
     D_8009D248 = (PolygonVertex *)(g_CurrentEntity->script_base + (*arg0[0] << 1));

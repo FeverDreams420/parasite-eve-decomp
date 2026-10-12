@@ -24,9 +24,6 @@ u32 *D_8009CE00;
 TaskNode *D_8009D300;
 TaskNode *g_TaskNodePool;
 
-GteMatrix *RotMatrix(GteShortVector *rotation, GteMatrix *matrix);
-int Anim_BuildRotationMatrices(RenderObjectEntity *object, void *action, int frame, int mode);
-void Render_TransformVertices(RenderObjectEntity *object);
 
 int Task_SetGteMatrix(int **args) {
     FieldActor *setup_actor;

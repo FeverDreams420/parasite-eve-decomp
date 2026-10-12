@@ -15,9 +15,8 @@
 #include "pe1/task_state.h"
 #include "pe1/field_movement.h"
 #include "pe1/save_tail_state.h"
+#include "pe1/battle_runtime.h"
 
-
-int Math_FixedMul(int arg0, int arg1);
 
 int Entity_ClearMotionVectors(void) {
     g_CurrentEntity->motion_x = 0;
@@ -57,8 +56,6 @@ typedef struct CameraBaseAngles {
 } CameraBaseAngles;
 
 
-int Pm_SetGetState(int arg0, int arg1, int arg2);
-void Entity_AllocSlot(BattleEntity *entity);
 void Render_SetEntryVisible(int arg0, int arg1);
 void Obj_SetEntryLimit(int arg0, int arg1);
 void Sys_SetFlagSlot(int arg0, int arg1);

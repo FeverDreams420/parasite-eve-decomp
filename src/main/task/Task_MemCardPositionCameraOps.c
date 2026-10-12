@@ -14,11 +14,10 @@
 #include "pe1/game_state.h"
 #include "pe1/battle_runtime.h"
 #include "pe1/battle_entity_anim.h"
+#include "pe1/battle_start.h"
 
 #define NULL ((void *)0)
-void Battle_StartEncounter(int mode);
 M2C_UNK func_80042F20();
-int CD_StepReadState(int active);
 s32 g_SceneDataTable0;
 
 PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, memcard_init_phase) == 0xF4,
@@ -172,7 +171,6 @@ u32 *D_8009CE00;
 TaskNode *D_8009D300;
 TaskNode *g_TaskNodePool;
 
-int Math_FixedMul(int a, int b);
 
 int Camera_TrackRelativeOffset(int **args) {
     FieldActor *speed_entity;

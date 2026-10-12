@@ -12,8 +12,6 @@
 #include "pe1/battle_entity_anim.h"
 
 
-int Str_EncodeBase32(char *out, unsigned int value);
-
 int Task_EncodeBarcode(int **arg0) {
     int tmp[2];
     int value;

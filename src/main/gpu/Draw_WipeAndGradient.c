@@ -322,7 +322,6 @@ void Draw_AllocColorGradient(int width, int height, u8 *points, int textured)
 typedef RenderFlatTilePacket TilePrim;
 typedef RenderDrawModePacket DrawModePrim;
 
-void SetDrawTPage(void *packet, int dfe, int dtd, int tpage);
 
 void Draw_AllocColorTri(int width, int height, int pulse) {
     TilePrim *tile;
