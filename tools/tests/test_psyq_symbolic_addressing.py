@@ -13,9 +13,9 @@ import unittest
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 
 CASES = [('src/main/psyq/libapi/pad.c',
-  420,
-  '9cd9988ef27dd18163932706a2722d72706a9c60cd061da3c86393be7e00d3ce',
-  'ChangeClearPAD = 0x80073c74;\nDisablePAD = 0x8007e218;\nEnablePAD = 0x8007e204;\nEnterCriticalSection = 0x80072714;\nExitCriticalSection = 0x80072724;\nInitPAD2 = 0x8007e1a4;\nPAD_init2 = 0x8007e1d4;\nRemovePatchPad = 0x8007e0c0;\nStartPAD2 = 0x8007e1b4;\nStopPAD2 = 0x8007e1c4;\nSys_SetInterruptHandler = 0x8007e048;\n_patch_pad = 0x8007e22c;\n_remove_ChgclrPAD = 0x8007e2a4;\ng_InitPadFlag = 0x8009b4ac;\nSECTIONS { .text 0x8007dea4 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }'),
+  764,
+  '0c89a2c71c48001d54dcecbe19b8cb8f68bc4009271b88940251b51b52d8ea95',
+  'ChangeClearPAD = 0x80073c74;\nD_8009B4B0 = 0x8009b4b0;\nD_8009B4B4 = 0x8009b4b4;\nD_800A34B0 = 0x800a34b0;\nD_800A34B4 = 0x800a34b4;\nD_800A34BC = 0x800a34bc;\nDisablePAD = 0x8007e218;\nEnablePAD = 0x8007e204;\nEnterCriticalSection = 0x80072714;\nExitCriticalSection = 0x80072724;\nInitPAD2 = 0x8007e1a4;\nPAD_init2 = 0x8007e1d4;\nStartPAD2 = 0x8007e1b4;\nStopPAD2 = 0x8007e1c4;\nSysDeqIntRP = 0x8007e1f4;\nSysEnqIntRP = 0x8007e1e4;\n_patch_pad = 0x8007e22c;\n_remove_ChgclrPAD = 0x8007e2a4;\ng_InitPadFlag = 0x8009b4ac;\nSECTIONS { .text 0x8007dea4 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }'),
  ('src/main/psyq/libpad/waitrc2.c',
   192,
   '1795d848e518e058eb629903c8f624ed60f2d7b4315c553f78207b376a3a9b92',

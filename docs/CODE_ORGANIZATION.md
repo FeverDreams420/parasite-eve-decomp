@@ -307,7 +307,6 @@ byte-identical.
 | LIBCD C_011 | 3 | 2 | StCdInterrupt and mem2mem GCC 2.7.2, dma_execute GCC 2.8.1 with `-fno-schedule-insns` |
 | LIBETC INTR | 3 | 2 | the callbacks GCC 2.7.2, the interrupt manager GCC 2.8.1 |
 | LIBMATH MULDF3 | 2 | 2 | `__muldf3` GCC 2.7.2 with GNU as, `_mul_mant_d` GCC 2.8.1 |
-| LIBAPI PAD | 6 | 3 | Sys_SetInterruptHandler (part 2) needs GCC 2.8.1: GCC 2.7.2 folds its second handler store into an absolute address; parts 1 and 3 need GCC 2.7.2 |
 | LIBAPI PATCH | 2 | 2 | `_patch_pad` is SDK assembler (policy) |
 | LIBCARD PATCH | 4 | 4 | parts 1 and 3 are SDK assembler (policy) |
 | LIBDS DSSYS_1 | 11 | 11 | neighbours alternate between GNU as with GCC 2.7.2 and GCC 2.8.1, several with their own scheduling option |
@@ -318,6 +317,15 @@ byte-identical.
 | LIBPAD PADIF | 3 | 2 | `padif.c` GCC 2.8.1, LIBPAD_PADIF_text_26C GCC 2.7.2 |
 | LIBPAD PADPORTD | 4 | 4 | parts 1 and 3 GCC 2.8.1 (3 only builds with it), parts 2 and 4 GCC 2.7.2 |
 | LIBSPU SPU | 4 | 4 | part 1 GCC 2.7.2 with GNU as, parts 2 and 4 GCC 2.8.1, part 3 GCC 2.7.2 with the GNU as 2.8.1 assembler |
+
+Objects unified after a new C shape for the part that needed other
+markers (one unit each now):
+
+- LIBAPI PAD (`pad.c`, GCC 2.7.2 with GNU as): `Sys_SetInterruptHandler`
+  stores its second handler through a post-incremented pointer. With
+  `handlers[1] = ...` cse folds the register-plus-offset address into the
+  constant `D_800A34B4+4` (find_best_addr folds every non-register address)
+  and the store goes out absolute, which is why the part used GCC 2.8.1.
 
 ### AKAO driver (src/main/akao)
 
