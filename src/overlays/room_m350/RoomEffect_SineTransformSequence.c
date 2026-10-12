@@ -98,7 +98,7 @@ int func_8019988C(int event, EmissionState *state)
             int rawHigh;
             int bit;
             effect->rotation.x = (random & 255) + 512;
-            asm volatile("" : :);
+            asm volatile("" : : "m"(effect->rotation.x));
             rawHigh = random >> 8;
             high = rawHigh & 255;
             asm("" : : "r"(high));
