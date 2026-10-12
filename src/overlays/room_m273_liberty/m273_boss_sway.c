@@ -453,7 +453,7 @@ int func_80198E94(int mode, GteShortVector *position) {
         kind = D_800F3368.palette;
         palette = D_800E1204[kind];
         size = value >> 2;
-        GsSetOrign(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 6 : palette + 2));
+        FieldFx_ModelSetTexture(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 6 : palette + 2));
         FieldFx_ModelSetSemiTrans(1);
         FieldFx_ModelSaveColors(D_8019AF04.model);
         FieldFx_ModelScaleColors(D_8019AF04.model, (u16)fade);

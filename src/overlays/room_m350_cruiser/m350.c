@@ -1588,7 +1588,7 @@ case 2:
         kind=D_800F3368.palette;
         palette=D_800E1204[kind];
         palette=GetClut(0,(kind==4 && D_800F3428!=0) ? palette+7 : palette+3);
-        GsSetOrign(page,(unsigned short)palette);
+        FieldFx_ModelSetTexture(page,(unsigned short)palette);
         FieldFx_ModelSetSemiTrans(1);
         FieldFx_ModelSaveColors(state->asset);
         FieldFx_ModelScaleColors(state->asset,(unsigned short)state->brightness);

@@ -73,7 +73,7 @@ int SPINNING_MODEL_FUNC(int mode, FieldAnimSpinningModel *state)
         tpage = (u16)(D_800E2850[D_800E11E4[9]] | GetTPage(0, 1, 0, 0));
         kind = D_800F3368.palette;
         palette = D_800E1204[kind];
-        GsSetOrign(tpage, GetClut(0, (kind == 4 && D_800F3428) ? palette + SPINNING_MODEL_PALETTE + 4 : palette + SPINNING_MODEL_PALETTE));
+        FieldFx_ModelSetTexture(tpage, GetClut(0, (kind == 4 && D_800F3428) ? palette + SPINNING_MODEL_PALETTE + 4 : palette + SPINNING_MODEL_PALETTE));
         FieldFx_ModelSetSemiTrans(1);
         FieldFx_ModelSaveColors(D_800F32D8);
         FieldFx_ModelSetColors(D_800F32D8, SPINNING_MODEL_COLOR(state->size));

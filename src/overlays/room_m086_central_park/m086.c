@@ -92,7 +92,7 @@ int func_8018F004(int mode, RoomM086Seeker *seeker, RoomM086SeekerParams *params
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428) palette += 4;
-                GsSetOrign(page, GetClut(0x20, palette));
+                FieldFx_ModelSetTexture(page, GetClut(0x20, palette));
             }
             FieldFx_ModelSetSemiTrans(0);
             RotMatrixYXZ(&rotation, &matrix);
@@ -312,7 +312,7 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428) palette += 4;
-                GsSetOrign(page, GetClut(0x10, palette));
+                FieldFx_ModelSetTexture(page, GetClut(0x10, palette));
             }
             FieldFx_ModelSetSemiTrans(0);
             RotMatrixYXZ(&rotation, &matrix);

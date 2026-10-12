@@ -22,7 +22,7 @@ extern int D_8019AC0C[];
 extern AssetState D_8019AE8C;
 extern void *D_8019AE90;
 extern unsigned char D_8019AE9A;
-extern void GsSetOrign(int,int);
+extern void FieldFx_ModelSetTexture(int,int);
 extern int func_80193CB8(),func_80193B5C();
 extern short D_8019AE60, D_8019AE64;
 extern int func_80199F84();

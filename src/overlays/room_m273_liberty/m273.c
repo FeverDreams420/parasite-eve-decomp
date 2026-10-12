@@ -727,7 +727,7 @@ int func_80193CB8(int mode,ThresholdTripleEffect *effect) {
         int cosine,sine;
         register void **asset asm("$17");
         palette=D_800E1204[kind];
-        GsSetOrign(page,GetClut(0, (kind == 4 && D_800F3428) ? palette + 11 : palette + 7));
+        FieldFx_ModelSetTexture(page,GetClut(0, (kind == 4 && D_800F3428) ? palette + 11 : palette + 7));
         FieldFx_ModelSetSemiTrans(1);
         asset=&D_8019AE8C.asset;
         FieldFx_ModelSaveColors(*asset);

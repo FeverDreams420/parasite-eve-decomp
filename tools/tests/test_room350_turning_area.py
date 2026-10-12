@@ -249,7 +249,7 @@ u_short GetClut(int x,int y) {
     assert(drawStage++==1 && !x && y==D_800E1204[kind]+(kind==4 && special ? 7:3));
     state.asset=&assets[1]; return 0xFFFF;
 }
-void GsSetOrign(int page,int clut) { assert(drawStage++==2 && page==(0x0100|0x8055) && clut==65535); }
+void FieldFx_ModelSetTexture(int page,int clut) { assert(drawStage++==2 && page==(0x0100|0x8055) && clut==65535); }
 void FieldFx_ModelSetSemiTrans(short x) { assert(drawStage++==3 && x==1); }
 void FieldFx_ModelSaveColors(char *p) { assert(drawStage++==4 && (void *)p==&assets[1]); state.asset=&assets[2]; state.brightness=-1; }
 void FieldFx_ModelScaleColors(char *p,u16 b) { assert(drawStage++==5 && (void *)p==&assets[2] && b==65535); }

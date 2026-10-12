@@ -293,7 +293,7 @@ SetTile1 = 0x80077C24; // type:func
 SetTile = 0x80077C44; // type:func
 SetLineF2 = 0x80077C64; // type:func
 SetDrawTPage = 0x80077C84; // type:func
-GsSetOrign = 0x800C6EC0; // type:func
+FieldFx_ModelSetTexture = 0x800C6EC0; // type:func
 
 // PE asset container table searchers.
 Asset_FindTable08ByU32Key = 0x8006E498; // type:func

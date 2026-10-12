@@ -168,7 +168,7 @@ extern RoomM273SweepStep D_8019AD80[];
 
 /* Ground ring (func_80198E94): model draw helpers and the ring colours. */
 extern RenderColor D_8019AE1C[2];
-void GsSetOrign(int tpage, int clut);
+void FieldFx_ModelSetTexture(int tpage, int clut);
 int func_8005186C(int value);
 extern GteRotation D_8019AB68;
 extern RenderColor D_8019AD54;

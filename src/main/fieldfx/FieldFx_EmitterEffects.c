@@ -418,7 +418,7 @@ int func_800DC058(int mode, FieldAnimTwinModel *state)
             int tpage = (u16)(D_800E2850[D_800E11E4[9]] | GetTPage(0, 3, 0, 0));
             int kind = D_800F3368.palette;
             int palette = D_800E1204[kind];
-            GsSetOrign(tpage, GetClut(0, (kind == 4 && D_800F3428) ? palette + 10 : palette + 6));
+            FieldFx_ModelSetTexture(tpage, GetClut(0, (kind == 4 && D_800F3428) ? palette + 10 : palette + 6));
         }
         FieldFx_ModelSetSemiTrans(1);
         FieldFx_ModelSaveColors(D_800F3418);
@@ -459,7 +459,7 @@ int func_800DC058(int mode, FieldAnimTwinModel *state)
                 int tpage = (u16)(D_800E2850[D_800E11E4[9]] | GetTPage(0, 1, 0, 0));
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
-                GsSetOrign(tpage, GetClut(0, (kind == 4 && D_800F3428) ? palette + 10 : palette + 6));
+                FieldFx_ModelSetTexture(tpage, GetClut(0, (kind == 4 && D_800F3428) ? palette + 10 : palette + 6));
             }
             FieldFx_ModelSetSemiTrans(1);
             FieldFx_ModelSaveColors(D_800F342C);
@@ -999,7 +999,7 @@ int func_800DE0A8(int mode, FieldFlashBurst *state)
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428)
                     palette += 4;
-                GsSetOrign(tpage, GetClut(0xD0, palette));
+                FieldFx_ModelSetTexture(tpage, GetClut(0xD0, palette));
             }
             FieldFx_ModelSetSemiTrans(1);
             FieldFx_ModelSaveColors(D_800F3474);
@@ -1015,7 +1015,7 @@ int func_800DE0A8(int mode, FieldFlashBurst *state)
                 int palette = D_800E1204[kind];
                 if (kind == 4 && D_800F3428)
                     palette += 4;
-                GsSetOrign(tpage, GetClut(0xD0, palette));
+                FieldFx_ModelSetTexture(tpage, GetClut(0xD0, palette));
             }
             FieldFx_ModelDraw((union FieldTexturedModel *)D_800F3474, &matrix);
             FieldFx_ModelRestoreColors(D_800F3474);

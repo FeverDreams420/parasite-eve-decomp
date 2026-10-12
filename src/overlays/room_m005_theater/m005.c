@@ -447,7 +447,7 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
             int kind = D_800F3368.palette;
             int palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428) palette += 4;
-            GsSetOrign(page, GetClut(0x30, palette));
+            FieldFx_ModelSetTexture(page, GetClut(0x30, palette));
         }
         FieldFx_ModelSetSemiTrans(1);
         FieldFx_ModelSaveColors(D_80190B94);
@@ -536,7 +536,7 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
             {
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
-                GsSetOrign(page, GetClut(0, (kind == 4 && D_800F3428) ? palette + 7
+                FieldFx_ModelSetTexture(page, GetClut(0, (kind == 4 && D_800F3428) ? palette + 7
                                                                      : palette + 3));
             }
             FieldFx_ModelSetSemiTrans(1);

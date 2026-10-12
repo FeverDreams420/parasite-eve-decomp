@@ -56,7 +56,7 @@ void FieldFx_ModelScrollUv(FieldTexturedModel *model, u8 xOffset, u8 yOffset) {
     D_800F3420 = 0;
 }
 
-void GsSetOrign(short x, short y) {
+void FieldFx_ModelSetTexture(short x, short y) {
     D_800F346C = x;
     D_800F3414 = y;
 }

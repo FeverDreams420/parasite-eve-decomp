@@ -25,7 +25,7 @@ extern Matrix D_8019A808;
 extern int D_8019A81C;
 extern Vector D_8019A574[];
 extern char D_8019A594[];
-extern void GsSetOrign(int,int);
+extern void FieldFx_ModelSetTexture(int,int);
 extern unsigned char D_8019A82F;
 extern int D_8019A598[];
 #endif /* PE1_EXT_M350 */

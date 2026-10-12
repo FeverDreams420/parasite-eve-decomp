@@ -618,7 +618,7 @@ int func_800D6514(int mode, RenderArcingEmitter *state)
             int palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428)
                 palette += 4;
-            GsSetOrign(tpage, GetClut(0xC0, palette));
+            FieldFx_ModelSetTexture(tpage, GetClut(0xC0, palette));
         }
         FieldFx_ModelSetSemiTrans(1);
         FieldFx_ModelSaveColors(D_800F32D4);

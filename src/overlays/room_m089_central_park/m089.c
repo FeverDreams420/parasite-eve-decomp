@@ -293,7 +293,7 @@ int func_80192CD4(int mode, RoomM089SpinModel *spin, GteShortVector *anchor) {
         {
             int kind = D_800F3368.palette;
             int palette = D_800E1204[kind];
-            GsSetOrign(page, GetClut(0, (kind == 4 && D_800F3428) ? palette + 7 : palette + 3));
+            FieldFx_ModelSetTexture(page, GetClut(0, (kind == 4 && D_800F3428) ? palette + 7 : palette + 3));
         }
         FieldFx_ModelSetSemiTrans(1);
         RotMatrixYXZ(&rotation, &matrix);
@@ -529,7 +529,7 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             {
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
-                GsSetOrign(page, GetClut(0, (kind == 4 && D_800F3428) ? palette + 6
+                FieldFx_ModelSetTexture(page, GetClut(0, (kind == 4 && D_800F3428) ? palette + 6
                                                                      : palette + 2));
             }
             FieldFx_ModelSetSemiTrans(1);
@@ -591,7 +591,7 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             {
                 int kind = D_800F3368.palette;
                 int palette = D_800E1204[kind];
-                GsSetOrign(page, GetClut(0, (kind == 4 && D_800F3428) ? palette + 7
+                FieldFx_ModelSetTexture(page, GetClut(0, (kind == 4 && D_800F3428) ? palette + 7
                                                                      : palette + 3));
             }
             FieldFx_ModelSetSemiTrans(1);
