@@ -1,4 +1,3 @@
-/* MASPSX_FLAGS: --dont-expand-li */
 #include "fx_common_render.h"
 #include "pe1/gte.h"
 

@@ -137,7 +137,7 @@ segments:
       # Node-pool init, scene relocation, map flush and free-list setup share
       # the task-node pool and g_SceneDataTable1 (main_tu_evidence G0001);
       # allocation and garbage collection share the TaskNode free list. One -G8
-      # FORCE_G0 unit with -fno-strength-reduce and --dont-expand-li.
+      # FORCE_G0 unit with -fno-strength-reduce.
       - [0x2CF8, c, script/Task_NodePool]
       # Expression, Vec3 get/set and mask-test opcodes: contiguous
       # default-profile handlers whose jump tables are adjacent in .rodata.
@@ -199,8 +199,8 @@ segments:
       - [0x12B94, c, battle/Battle_PhaseAndEnemyEffectFlow]
       # Attack resolution: finalise the attack result, resolve hits on the timer,
       # apply damage and spell effects and step Aya's action. One -G8 FORCE_G0
-      # unit with COMMON $gp words, --expand-div and ASPSX 2.77 (from the Aya
-      # action step; neutral for the rest, as is dropping -fno-force-mem).
+      # unit with COMMON $gp words and ASPSX 2.70 (from the Aya action step;
+      # neutral for the rest, as is dropping -fno-force-mem).
       - [0x13808, c, battle/Battle_AttackResolution]
       # Turn flow: special action dispatch, escape chance roll, target and enemy
       # turn, turn slot advance, target fade initializer and highlight animation
@@ -317,8 +317,7 @@ segments:
       - [0x359D0, c, menu/Menu_EquipItemSelection]
       # Deferred execution, skill list step, equip confirm, skill action screen and
       # handler, inventory swap view and the weapon modifier flow: one -G8 FORCE_G0
-      # unit with COMMON $gp words; --dont-expand-li (from the swap view) is neutral
-      # for the others.
+      # unit with COMMON $gp words.
       - [0x36B34, c, menu/Menu_SkillScreens]
       # Configure screen; category tab reset, equip screen header, item action submenu,
       # skill select, equip stats, item detail and item list views (private data and

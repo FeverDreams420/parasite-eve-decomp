@@ -1,4 +1,3 @@
-/* MASPSX_FLAGS: --expand-div */
 /*
  * The seeker spark of scenes e03, e06, e07 and e27: one function, linked
  * right after the room library. Its rodata is the two colour initialisers.

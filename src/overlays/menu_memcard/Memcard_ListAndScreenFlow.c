@@ -198,7 +198,6 @@ void func_80190660(void) {
         first->disp.isrgb24 = 1;
     }
 }
-/* CC1_FLAGS: -fno-cse-skip-blocks */
 #include "menu_memcard_menu.h"
 
 /* Run the title/card-selection screen, then restore the game display.

@@ -1,5 +1,5 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FLAGS: -G8 */
 #include "pe1/inventory.h"
 #include "pe1/battle_cmd.h"
 #include "pe1/inventory_slots.h"

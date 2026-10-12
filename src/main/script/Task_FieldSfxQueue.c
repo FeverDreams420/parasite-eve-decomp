@@ -1,4 +1,3 @@
-/* CC1_FLAGS: -G0 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 
 #include "pe1/field_sfx.h"

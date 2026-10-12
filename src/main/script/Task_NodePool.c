@@ -1,5 +1,5 @@
 /* CC1_FLAGS: -G8 -fno-strength-reduce */
-/* MASPSX_FLAGS: -G8 --use-comm-section --dont-expand-li */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
 #include "pe1/reloc_block.h"

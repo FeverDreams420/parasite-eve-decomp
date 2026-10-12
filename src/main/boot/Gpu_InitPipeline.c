@@ -1,4 +1,3 @@
-/* CC1_FLAGS: -G0 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 #include "common.h"

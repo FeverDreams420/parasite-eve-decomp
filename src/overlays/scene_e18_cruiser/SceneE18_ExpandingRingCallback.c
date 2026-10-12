@@ -1,4 +1,3 @@
-/* CC1_FLAGS: -fno-cse-skip-blocks */
 #include "common.h"
 #include "pe1/field_anim_callback_list.h"
 #include "pe1/field_sprite_draw.h"

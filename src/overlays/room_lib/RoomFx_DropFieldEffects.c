@@ -1,4 +1,3 @@
-/* MASPSX_FLAGS: --expand-div */
 /*
  * The drop field effect set: a controller (init, no-op, hold timer) and
  * twelve init/draw/update triples, two of them empty.

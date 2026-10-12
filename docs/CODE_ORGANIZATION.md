@@ -140,9 +140,9 @@ after what their functions do (`fx_common/camera_nodes.c`,
   were copied from, so a segment is at most one unit. Only segments with
   several functions merged (`boot_display/{sprites,playback}.c`,
   `menu_memcard/{video,glint_effects,video_open_step,fade}.c`).
-- Flag singletons: `fx_common` (`-fno-force-addr`, `-fno-schedule-insns`,
-  `-fno-expensive-optimizations`, `--dont-expand-li`; the two `-G8` units are
-  `render_op.c`), `menu_memcard` (`-fno-cse-skip-blocks` twice),
+- Flag singletons: `fx_common` (`-fno-schedule-insns`,
+  `-fno-expensive-optimizations`; the two `-G8` units are `render_op.c`),
+  `menu_memcard` (`-fno-cse-skip-blocks` twice),
   `room_m273_liberty` (`RoomM273_PulseSpriteCallback`, `-fno-schedule-insns`,
   which also leaves `RoomEffect_PhasedArcSpriteFlow` alone after it),
   `room_m350_cruiser` (`RoomEffect_ConfiguredPulseCallback`, `-G8`),

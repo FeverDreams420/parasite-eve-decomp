@@ -1,4 +1,3 @@
-/* CC1_FLAGS: -fno-force-addr */
 #include "fx_common.h"
 
 s16 func_801958D4(s16 resourceId, u8 action)
