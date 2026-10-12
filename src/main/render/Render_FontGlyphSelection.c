@@ -240,10 +240,10 @@ retry_read:
 
     D_80091A1F = find_slot((u8 *)&D_8009ECD8);
     {
-        u8 *result = (u8 *)g_FontSelectionState.table;
-        /* This assembler-backed flag is ordinary RAM. The unqualified byte
-         * view preserves the lookup's stock-GCC integer promotion. */
-        return *(result + *(result + *(u8 *)&D_80091A1F + 0x1D) + 4);
+        FontGlyphTable *table = g_FontSelectionState.table;
+        /* Read back through a pointer: CSE would otherwise reuse the stored
+         * slot instead of reloading it as retail does. */
+        return table->groups.codes[table->slots.indices[*(u8 *)&D_80091A1F]];
     }
 }
 

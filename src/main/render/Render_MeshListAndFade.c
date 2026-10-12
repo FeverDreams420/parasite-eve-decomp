@@ -169,7 +169,7 @@ int Render_DrawSpriteEntry(GeomEntry *input)
                         }
                         if ((u16)(draw_y + 15) < 0xEF) {
                             s32 tile_u = texture_base + (*(u16 *)position_cursor & 0xFFF);
-                            if ((u32)((tile_u - 8) & 0xFFFF) < 0xFF1) {
+                            if (((tile_u - 8) & 0xFFFFU) < 0xFF1) {
                                 u32 sprite_tag;
                                 s32 ot_index = tile_u;
                                 u8 *ot;
@@ -218,7 +218,7 @@ int Render_DrawSpriteEntry(GeomEntry *input)
                     draw_y = y;
                     if ((u16)(y + 15) < 0xEF) {
                         tile_u = texture_base + (*(u16 *)position_cursor & 0xFFF);
-                        if ((u32)((tile_u - 8) & 0xFFFF) < 0xFF1) {
+                        if (((tile_u - 8) & 0xFFFFU) < 0xFF1) {
                             register u32 sprite_tag asm("$3");
                             s32 ot_index = tile_u;
                             u8 *ot;
