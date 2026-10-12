@@ -21,6 +21,8 @@ int Geo_LoadMeshEntry(GeomEntry *entry, RenderTilePacket *buffer, void **end)
     RenderTexturePagePacket *pages;
     unsigned int shade;
     int paletteMax;
+    RenderTexturePagePacket **pageSlot;
+    u16 *dispX;
 
     base.entry = entry;
     count = entry->prim_count;
@@ -33,11 +35,14 @@ int Geo_LoadMeshEntry(GeomEntry *entry, RenderTilePacket *buffer, void **end)
     paletteMax = paletteStart;
 
     entry->u30.prim = buffer;
-    /* Byte-storage view retains the retail alias scheduling for this pointer
-     * store. Direct u34.pagePackets assignment changes twelve instructions. */
-    *(RenderTexturePagePacket **)entry->u34.storage = pages;
-    entry->disp_x = entry->scr_x + D_800B1624->out_disp_x;
-    asm("" : "=m"(entry->disp_x) : "m"(entry->disp_x));
+    /* The page pointer and disp_x are stored through pointers to the fields.
+     * GCC 2.7 lets a load of a fixed scalar pass a structure field store, but
+     * not an indirect store, so the D_800B1624 reload stays after them as in
+     * retail. */
+    pageSlot = &entry->u34.pagePackets;
+    *pageSlot = pages;
+    dispX = &entry->disp_x;
+    *dispX = entry->scr_x + D_800B1624->out_disp_x;
     entry->disp_y = entry->scr_y + D_800B1624->out_disp_y;
 
     do {

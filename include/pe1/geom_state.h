@@ -114,7 +114,6 @@ typedef struct GeomEntry {                /* 0x38 */
     } u30;
     union {                               /* +0x34: second packet-array base */
         struct RenderTexturePagePacket *pagePackets;
-        u8 storage[4];
     } u34;
 } GeomEntry;
 
