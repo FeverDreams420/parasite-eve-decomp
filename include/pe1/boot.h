@@ -24,7 +24,7 @@ void func_8019234C(void);
 void func_801235DC(void);
 int func_801909B4(void);
 
-/* Disc table load (Boot_DiscTableLoad.c): PE.IMG sector ranges of the
+/* Disc table load (Boot_DisplayInitAndDiscTables.c): PE.IMG sector ranges of the
  * startup assets (entries of the D_800930D8 sector table) and the save
  * work word whose bit 0x2000 selects the large texture set. */
 extern unsigned int D_800A77FC;

@@ -170,6 +170,27 @@ after what their functions do (`fx_common/camera_nodes.c`,
 - Not attempted: `room_lib/RoomFx_MotionParticles{,_2,_3}` (split by
   `-fno-strength-reduce`, needs a probe first).
 
+### Resident translation units (src/main, 2026-10-12)
+
+The modules marked READY in `docs/REORGANIZATION_PLAN.md` were merged when
+their units are adjacent in the manifest, no foreign data lies between their
+rodata, and one marker set compiles every member to the same instructions.
+`tools/reorg/reorg_merge.py` concatenates the units in manifest order (one
+include set, the COMMON words of `-G8` FORCE_G0 units in one block after the
+includes, private `*_externs.h` declarations moved to a shared header);
+`tools/reorg/marker_probe.py` compares every function with the old unit
+objects before `make check` and `make overlay-check-all`. File names follow
+the role of the module (`FieldEng_GlowEffects.c`, `Task_FlowOpcodes.c`,
+`Menu_InventoryScreens.c`).
+
+Units that stay separate, and why:
+
+- `pm/Pm_ProcessManager.c` is not part of `pm/Boot_DisplayInitAndDiscTables.c`:
+  the disc table loaders include `pe1/cd_poll.h`, whose `extern inline`
+  `CdRom_PollReady` they inline, while `Scene_LoadRoomAssets` in the process
+  manager unit calls it (lev 56 when the two share a translation unit). This
+  is binary evidence of an original file boundary.
+
 ### AKAO driver (src/main/akao)
 
 The AKAO units have no offset macros, byte arithmetic or file-scope
