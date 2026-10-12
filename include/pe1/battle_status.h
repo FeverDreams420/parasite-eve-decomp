@@ -24,15 +24,18 @@ typedef struct BattleStatusMarkerBody {
 typedef RenderPagedSpritePacket BattleGaugePrim;
 
 extern BattleStatusLinePrim D_8009E358[6];
+/* The same packets seen as the three shaded status-bar tiles of each draw
+ * buffer (Battle_DrawHPBar). */
+#define BATTLE_STATUS_TILES ((RenderColorTilePacket (*)[3])D_8009E358)
 extern int g_ActiveDrawSlot;
 extern BattleStatusMarkerBody D_8009E888[2];
-extern u8 D_8009E8B8[2][0x38];
+extern RenderPagedSpritePacket D_8009E8B8[2][2];  /* ammo digits */
 extern BattleGaugePrim D_8009E3B8[2][3];
 extern BattleGaugePrim D_8009E460[2];
 /* Status symbols use the same texture-page and sprite packet layout. */
 extern BattleGaugePrim D_8009E730[2];
 extern BattleGaugePrim D_8009E768[2];
-extern u8 D_8009E7A0[2][0x70];
+extern RenderPagedSpritePacket D_8009E7A0[2][4];  /* ammo count digits */
 
 void AddPrim(unsigned int *orderingEntry, unsigned int *primitive);
 void Battle_LayoutStatusPrimRow(int bottomY);
@@ -103,22 +106,25 @@ extern RenderPagedSpritePacket D_8009E0F0[2][4], D_8009E1D0[2][5];
 extern BattleDigitSlot D_8009E0F8[2][4], D_8009E1D8[2][5];
 /* HP label packets. */
 extern RenderPagedSpritePacket D_8009E2E8[2];
-/* Packet arenas Battle_DrawHPBar initializes; the clut halfwords of the
- * sprites have their own retail symbols. */
-extern u8 D_8009E106[], D_8009E1E6[], D_8009E2FE[];
-extern u8 D_8009E3CE[], D_8009E476[], D_8009E500[], D_8009E746[];
-extern u8 D_8009E77E[], D_8009E7B6[], D_8009E880[], D_8009E896[];
-extern u8 D_8009E8CE[], D_8009E928[], D_8009E93E[], D_8009E960[];
+/* Further HUD sprite packets Battle_DrawHPBar initializes. */
+extern RenderPagedSpritePacket D_8009E500[2][10];
+extern RenderPagedSpritePacket D_8009E880[2];
+extern RenderPagedSpritePacket D_8009E928[2];
+extern RenderPagedSpritePacket D_8009E960[2][13];  /* glyphs 0x6A..0x76 */
 extern u8 D_8009E976[], D_8009EC38[];
+/* The sprites of a paged-sprite array seen from the first sprite: each is
+ * followed by the texture-page command of the next packet. The view keeps
+ * the sprite base (array + 8) in its own register, as Battle_DrawHPBar's
+ * loops do. */
+#define BATTLE_SPRITE_SLOTS(packets, count) \
+    ((BattleDigitSlot (*)[count])&(packets)[0][0].sprite)
 /* Gray levels of the three status-bar tiles (Battle_DrawHPBar). */
 typedef struct BattleHudShades {
     s8 values[3];
 } BattleHudShades;
-extern u8 D_8009CD90[];
+extern BattleHudShades D_8009CD90[]; /* one record; unsized keeps it off $gp */
 /* Status-panel digit sprites: two draw buffers, ten panels of five digits. */
 extern RenderPagedSpritePacket D_800B01C0[2][10][5];
-/* Clut and texture page halfwords of the end-of-battle panel quads. */
-extern u8 D_800BE9FE[], D_800BEA06[];
 /* End-of-battle panel quads, one per draw buffer. */
 extern RenderTexturedQuad D_800BE9F0[2];
 void Battle_DrawStatusValue(int value, int yOffset);
