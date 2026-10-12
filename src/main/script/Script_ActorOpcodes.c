@@ -350,7 +350,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, target18) == 0x18,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, target1c) == 0x1C,
                   camera_task_node_target1c_offset);
 
-int Camera_TrackRelativeOffset(int **args) {
+int Render_CameraTrackRelativeOffset(int **args) {
     FieldActor *speed_entity;
     FieldActor *motion_entity;
     TaskNode *init_state;
@@ -476,7 +476,7 @@ int Camera_TrackRelativeOffset(int **args) {
  * step in arg0[1], picking the direction of the shorter arc on the first
  * call; yields until the next step would reach or pass the target. The
  * angles are shorts in retail: their extensions survive at every compare. */
-s32 Camera_StepAngleFade(s32 **arg0) {
+s32 Render_CameraStepAngleFade(s32 **arg0) {
     short current;
     short target;
     short step;

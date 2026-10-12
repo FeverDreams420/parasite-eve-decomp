@@ -1493,7 +1493,7 @@ deleting one pin at a time:
 - `sll`/`sra 16` before every use of a value, plus plain `move`s between
   copies of it, is a `short` local: GCC 2.7.2 on MIPS does not promote
   HImode variables, so each use as `int` re-extends it, while assigning a
-  masked `int` to it is a bare copy. `Camera_StepAngleFade` lost 8 pins,
+  masked `int` to it is a bare copy. `Render_CameraStepAngleFade` lost 8 pins,
   4 barriers and 7 `goto`s this way (`short current, target, step`, with an
   `int` copy of the angle and target for the first two reach tests and the
   wrap test written as `(sum & 0xFFF) <= target`).
@@ -1521,7 +1521,7 @@ deleting one pin at a time:
   inside) give retail's registers where function-scope temporaries reused
   for the second allocation do not (`Draw_AllocSprite`).
 - A variable reused for a second role is retail's register reuse:
-  `Camera_TrackEntityAngle` keeps the remaining distance in
+  `Render_CameraTrackEntityAngle` keeps the remaining distance in
   `angle_difference`.
 
 Crutches still in these units, with the best crutch-free lev found:
@@ -1556,7 +1556,7 @@ Crutches still in these units, with the best crutch-free lev found:
   second or allocates it to `v1`.
 - `Script_WaitAnimRange` (1 pin): instruction sequence exact, lev 19 from the
   global allocation of `next`/`target`/`count` (retail `a0`/`a2`/`v0`).
-- `Camera_TrackEntityAngle` keeps its 8-byte `stack_pad[2]` frame reserve
+- `Render_CameraTrackEntityAngle` keeps its 8-byte `stack_pad[2]` frame reserve
   (lev 18 without it).
 - `Draw_AllocColorQuad` (13 pins, 5 barriers): with every crutch removed
   the instruction sequence is identical and only the register assignment

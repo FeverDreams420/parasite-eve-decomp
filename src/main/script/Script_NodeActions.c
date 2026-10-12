@@ -429,7 +429,7 @@ int Script_MoveTowardPoint(int **args) {
 }
 
 /* Camera entity tracking shares the active TaskNode cache and motion ABI. */
-int Camera_TrackEntityAngle(int **args) {
+int Render_CameraTrackEntityAngle(int **args) {
     int **script_args;
     FieldActor *current;
     FieldActor *tracking_entity;
@@ -538,7 +538,7 @@ int Camera_TrackEntityAngle(int **args) {
     }
 }
 
-int Camera_SnapToEntity(int **args) {
+int Render_CameraSnapToEntity(int **args) {
     FieldActor *target;
     int speed;
     int target_angle;
@@ -635,7 +635,7 @@ int Camera_SnapToEntity(int **args) {
     return 1;
 }
 
-int Camera_TrackEntityZoom(int **args) {
+int Render_CameraTrackEntityZoom(int **args) {
     FieldActor *speed_entity;
     FieldActor *motion_entity;
     FieldActor *target;
