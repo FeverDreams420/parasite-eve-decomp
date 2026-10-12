@@ -425,6 +425,7 @@ def main() -> int:
     tracked = git("ls-files").splitlines()
     for unit in units:
         git("rm", "-q", "-f", f"{src_path}/{unit}.c")
+    src_dir.mkdir(parents=True, exist_ok=True)
     (src_dir / f"{new_unit}.c").write_text(source)
     if externs_text:
         (src_dir / externs_name).write_text(externs_text)
