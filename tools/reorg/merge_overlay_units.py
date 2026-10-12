@@ -295,7 +295,16 @@ def main() -> int:
             if inc and inc.group(2).endswith((".inc", ".c")):
                 path = src_dir / inc.group(2)
                 if path.is_file():
-                    macros += DEFINE.findall(path.read_text())
+                    inc_text = path.read_text()
+                    macros += DEFINE.findall(inc_text)
+                    # A template's own externs header is guarded but spelled
+                    # in the template's macros: reset its guard too, so a
+                    # second instantiation declares its own symbols.
+                    for nested in re.findall(INCLUDE.pattern, inc_text, re.M):
+                        if re.search(r"_externs(_\d+)?\.h$", nested[1]):
+                            npath = path.parent / nested[1]
+                            if npath.is_file():
+                                macros += DEFINE.findall(npath.read_text())
             if TYPE_START.match(strip_comments(chunk).strip()):
                 key = norm_ws(chunk)
                 for name in defined_type_names(chunk):
