@@ -93,9 +93,13 @@ void Entity_InitFreePool(void)
     D_800C0B14[0] = 0;
     offset = 0;
     do {
-        ((EntityAllocationBlock *)((u8 *)D_800A7620 + offset))->address = 0;
-        offset += 8;
-    } while ((unsigned int)offset < 0x80);
+        EntityAllocationAddress block;
+
+        block.entry = D_800A7620;
+        block.word += offset;
+        block.entry->address = 0;
+        offset += sizeof(EntityAllocationBlock);
+    } while ((unsigned int)offset < sizeof(D_800A7620));
 
     g_PlayerEntity = 0;
 }

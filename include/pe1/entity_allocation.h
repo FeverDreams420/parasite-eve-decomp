@@ -15,6 +15,12 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(EntityAllocationBlock, address) == 4,
                   entity_allocation_block_address);
 extern EntityAllocationBlock D_800A7620[16];
 
+/* An allocation slot addressed by its byte offset into the table. */
+typedef union EntityAllocationAddress {
+    EntityAllocationBlock *entry;
+    u32 word;
+} EntityAllocationAddress;
+
 /* Entity pool storage cleared by Entity_ResetAllPools: the 0x800-byte work
  * buffer (also saved in the save tail), the 14 0x280-byte actor records at
  * D_800BEA90 (D_800BEA94 is the free-list link word of the first) and the

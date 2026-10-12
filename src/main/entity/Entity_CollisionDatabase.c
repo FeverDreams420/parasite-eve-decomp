@@ -92,7 +92,7 @@ void Entity_RelocateSceneData(void) {
     }
 
     {
-        CollisionDatabase *actor;
+        CollisionDatabaseAddress actor;
         u32 *dst;
         u32 i;
         u32 *cursor;
@@ -101,31 +101,31 @@ void Entity_RelocateSceneData(void) {
         u32 count;
         u32 entry;
 
-        actor = g_CollisionDb;
+        actor.db = g_CollisionDb;
         i = 0;
-        cursor = (u32 *)actor->planes.pointer;
-        wordCount = actor->visitedWordCount;
-        entry = actor->rampEdges.word;
-        dst = (u32 *)actor->regions;
+        cursor = (u32 *)actor.db->planes.pointer;
+        wordCount = actor.db->visitedWordCount;
+        entry = actor.db->rampEdges.word;
+        dst = (u32 *)actor.db->regions;
         wordCount >>= 5;
         g_CollisionPlaneTable = (struct CollisionPlane *)cursor;
-        regionCountAddress = &actor->regionCount;
+        regionCountAddress = &actor.db->regionCount;
         g_RegionHeightTable = (CollisionRegionEntry *)dst;
         count = *regionCountAddress;
         wordCount++;
         g_SceneDataTable2 = (char *)entry;
-        actor->visitedWordCount = wordCount;
+        actor.db->visitedWordCount = wordCount;
 
         if (count != 0) {
-            cursor = (u32 *)actor;
+            cursor = (u32 *)actor.db;
             do {
                 entry = cursor[10];
                 cursor++;
                 i++;
-                entry = entry + (u32)actor;
+                entry = entry + actor.word;
                 *dst = entry;
                 dst++;
-            } while (i < actor->regionCount);
+            } while (i < actor.db->regionCount);
         }
     }
 }

@@ -32,7 +32,7 @@ block_6:
         var_a1 = 0;
     }
     temp_t0 = var_a3 & 0xFF;
-    temp_t1 = g_RenderScratchBufferBase;
+    temp_t1 = (s32 *)g_RenderScratchBufferBase;
     var_a0 = var_a1 & 0xFF;
     while (1) {
     var_v1 = var_a0 << 3;
@@ -42,7 +42,11 @@ block_6:
             var_v0 = var_a3 + var_a0;
             var_a0 = var_v0 << 3;
             while (1) {
-                if (((EntityAllocationBlock *)((u8 *)D_800A7620 + var_v1))->address != 0) {
+                EntityAllocationAddress run;
+
+                run.entry = D_800A7620;
+                run.word += var_v1;
+                if (run.entry->address != 0) {
                     var_a2 = 0;
                     var_a1 += var_a3;
                     break;
@@ -61,13 +65,25 @@ after_empty_scan:
             var_v1 = (var_v1 << 6) - var_v0;
             D_800A7620[var_v0].blockCount = temp_t0;
             var_v0 = *temp_t1 + (var_v1 << 5);
-            ((EntityAllocationBlock *)((u8 *)D_800A7620 + temp_a0))->address = var_v0;
+            {
+                EntityAllocationAddress block;
+
+                block.entry = D_800A7620;
+                block.word += temp_a0;
+                block.entry->address = var_v0;
+            }
             return (void *)var_v0;
         }
     }
     else
     {
-    var_v1 = ((EntityAllocationBlock *)((u8 *)D_800A7620 + var_v1))->blockCount;
+    {
+        EntityAllocationAddress used;
+
+        used.entry = D_800A7620;
+        used.word += var_v1;
+        var_v1 = used.entry->blockCount;
+    }
     if (temp_t0 < var_v1) {
         var_a1 += var_v1;
     } else {

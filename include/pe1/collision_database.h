@@ -118,6 +118,12 @@ typedef struct CollisionDatabase {
     CollisionRegionEntry regions[0]; /* 0x28: variable-length tail. */
 } CollisionDatabase;
 
+/* The database address as the word added to each relative region offset. */
+typedef union CollisionDatabaseAddress {
+    CollisionDatabase *db;
+    u32 word;
+} CollisionDatabaseAddress;
+
 
 extern CollisionDatabase *g_CollisionDb;
 /* Loaded scene blocks; entry 0 is the room collision database. */
