@@ -97,6 +97,34 @@ def split_unit(path: str) -> tuple[list[str], list[str], list[str], list[str]]:
     return markers, includes, body, inlined
 
 
+TENTATIVE = re.compile(r"^(?!extern\b|static\b|typedef\b|return\b)[A-Za-z_][\w\s*]*"
+                       r"\b\w+(\[\w*\])?;\s*$")
+COMMON_NOTE = ("/* COMMON supplies small-data metadata to MASPSX: these words are "
+               "reached\n * through $gp, every other extern stays absolute. */")
+
+
+def hoist_commons(body: list[str]) -> tuple[list[str], list[str]]:
+    """Take the `/* COMMON ... */` blocks and their tentative definitions out."""
+    out, commons = [], []
+    index = 0
+    while index < len(body):
+        line = body[index]
+        if line.lstrip().startswith("/* COMMON"):
+            end = index
+            while "*/" not in body[end]:
+                end += 1
+            defs = end + 1
+            while defs < len(body) and TENTATIVE.match(body[defs]):
+                commons.append(body[defs].strip())
+                defs += 1
+            if defs > end + 1:
+                index = defs
+                continue
+        out.append(line)
+        index += 1
+    return out, commons
+
+
 def externs_body(path: str) -> list[str]:
     lines = (ROOT / path).read_text().splitlines()
     out = [line for line in lines if not GUARD.match(line)]
@@ -172,13 +200,20 @@ def build_source(units: list[str], markers: list[str] | None,
         for part in parts[index + 1:]:
             later |= {m.group(1) for line in part[2] if (m := DEFINE.match(line))}
         defined_later.append(later)
+    hoisted: list[str] = []
+    for index, part in enumerate(parts):
+        body, found = hoist_commons(part[2])
+        parts[index] = (part[0], part[1], body, part[3])
+        hoisted.extend(c for c in found if c not in hoisted)
+    hoisted.extend(c for c in commons if c not in hoisted)
     out = list(markers)
     if out:
         out.append("")
     out.extend(includes)
-    if commons:
+    if hoisted:
         out.append("")
-        out.extend(commons)
+        out.append(COMMON_NOTE)
+        out.extend(hoisted)
     inlined: list[str] = []
     for index, (_m, _i, body, inl) in enumerate(parts):
         inlined.extend(inl)
@@ -199,7 +234,7 @@ def build_source(units: list[str], markers: list[str] | None,
         redefined = [name for name in own if name in defined_later[index]]
         if redefined:
             out.extend(f"#undef {name}" for name in redefined)
-    return "\n".join(out) + "\n", inlined
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(out) + "\n"), inlined
 
 
 def main() -> int:

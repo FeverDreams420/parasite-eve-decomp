@@ -75,7 +75,7 @@ segments:
       - [0x9AC, rodata, main/rodata_0009AC]
       - [0x9B0, .rodata, script/Task_ItemAndSoundOps]
       - [0xE8C, rodata, main/rodata_000E8C]
-      - [0xE90, .rodata, script/Task_RunQueue]
+      - [0xE90, .rodata, script/Task_FlowOpcodes]
       - [0xEA4, rodata, main/rodata_000EA4]
       - [0xEE4, .rodata, battle/Entity_HitAndDropTable]
       - [0xF0C, .rodata, battle/Battle_ApplyEnemyAttack]
@@ -178,26 +178,14 @@ segments:
       # AKAO/CD sound opcodes: contiguous -G8 handlers; only the sound
       # command has rodata.
       - [0x62B8, c, script/Task_ItemAndSoundOps]
-      - [0x7110, c, script/Task_DispatchScriptCmd]
-      - [0x75F8, c, script/Task_ShadowFlagOps]
-      # Pending-node launch controller for equip and save/load menus.
-      - [0x7640, c, script/Task_BeginSceneTransition]
-      - [0x77E0, c, script/Task_GetPlayerInputFlag]
-      # Interpreter loop, jump-to-actor-script and mark-dead opcodes: -G8 unit
-      # sharing the script cursor; no data of the jump opcode is COMMON.
-      - [0x7818, c, script/Task_RunQueue]
-      # -G8 opcodes: current-node active/free, jump-if-zero, spawn, assign and
-      # stop-anim; g_CurrentEntity stays absolute through the array declaration.
-      - [0x7AE0, c, script/Task_NodeAndFlowOpcodes]
-      - [0x7C44, c, script/Entity_ComputeVelocityToTarget]
-      # -G8 opcodes: movement wait, field-setter selection, actor flags, node
-      # id, random range, field sfx, node table lookups, actor byte fields and
-      # node free; g_CurrentEntity stays absolute through the array declaration.
-      - [0x7D40, c, script/Task_ActorAndNodeFieldOps]
-      # Default-profile opcodes: bit and global-flag ops, action mode and anim frame.
-      - [0x81F8, c, script/Task_BitAndActionOpcodes]
-      - [0x8374, c, script/Task_WaitAnimFrameMatch]
-      # Default-profile script opcodes between the -G8 Task_WaitAnimFrameMatch
+      # Script dispatcher, pending-node launch controller for equip and save/load
+      # menus, interpreter loop, jump-to-actor-script and mark-dead opcodes,
+      # node/flow opcodes (current-node active/free, jump-if-zero, spawn, assign,
+      # stop-anim), actor and node field opcodes, bit and global-flag ops, action
+      # mode and anim frame: one -G8 FORCE_G0 unit whose COMMON words are the
+      # $gp ones; g_CurrentEntity stays absolute through the array declaration.
+      - [0x7110, c, script/Task_FlowOpcodes]
+      # Default-profile script opcodes between Task_FlowOpcodes
       # and Entity_TaskAnimationOps: barcode, fog/scroll, camera reset and
       # render state, move lock, menu-choice branch, current-actor flags,
       # global flags and battle mode, field get/set by type and battle flags.
