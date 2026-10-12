@@ -58,6 +58,51 @@ void Draw_StatePop(void) {
     }
 }
 
+/* The glyph renderers move the cursor at D_8009D124/D_8009D128 and save it on
+ * the same stack as Draw_StatePush. */
+static inline void SetCursor(int x, int y)
+{
+    D_8009D124 = x;
+    D_8009D128 = y;
+}
+
+static inline void PushCursor(void)
+{
+    DrawTextCursorPair *stack = (DrawTextCursorPair *)g_TextCursorStack;
+    if (stack < (DrawTextCursorPair *)g_TextCursorStackTop) {
+        int x = D_8009D124, y = D_8009D128;
+        g_TextCursorStack = (int *)(stack + 1);
+        stack->x = x;
+        stack->y = y;
+    } else {
+        BoundsCheck_AssertStub(2);
+    }
+}
+
+/* Saves a known cursor position: the entry is filled before the stack moves. */
+static inline void SaveCursor(int x, int y)
+{
+    DrawTextCursorPair *stack = (DrawTextCursorPair *)g_TextCursorStack;
+    if (stack < (DrawTextCursorPair *)g_TextCursorStackTop) {
+        stack->x = x;
+        stack->y = y;
+        g_TextCursorStack = (int *)(stack + 1);
+    } else {
+        BoundsCheck_AssertStub(2);
+    }
+}
+
+static inline void PopCursor(void)
+{
+    DrawTextCursorPair *stack = (DrawTextCursorPair *)g_TextCursorStack;
+    if ((DrawTextCursorPair *)g_TextCursorStackBottom < stack) {
+        g_TextCursorStack = (int *)(stack - 1);
+        SetCursor(stack[-1].x, stack[-1].y);
+    } else {
+        BoundsCheck_AssertStub(3);
+    }
+}
+
 unsigned int g_DrawPrimColor;
 unsigned int g_DrawColorShaded;
 
@@ -336,6 +381,47 @@ void Draw_SetGlyphAdvance(int arg0) {
 #include "pe1/text.h"
 
 
+/* Allocates one bar quad from the packet arena and sets its colour and
+ * command (0x2C: textured four-point polygon). */
+static inline RenderTexturedQuad *AllocBarQuad(void)
+{
+    RenderTexturedQuad *prim = 0;
+    u8 *old = D_8009D100;
+    u8 *next = old + sizeof(RenderTexturedQuad);
+
+    if (next < D_8009D104 + 0x4000) {
+        D_8009D100 = next;
+        prim = (RenderTexturedQuad *)old;
+    } else {
+        BoundsCheck_AssertStub(1);
+    }
+    if (prim != 0) {
+        if (D_8009D10C != 0)
+            prim->color.word = D_8009D114;
+        else
+            prim->color.word = D_8009D110;
+        prim->tag.bytes.length = 9;
+        prim->color.bytes.code = 0x2C;
+    }
+    return prim;
+}
+
+static inline int DecodeGlyph(int input) {
+    register int code asm("$4") = input;
+    int glyph;
+    glyph = (u8)code;
+    if (D_8009D0D8) {
+        int page = D_8009D0D8 << 8;
+        glyph += page;
+        D_8009D0D8 = 0;
+    }
+    if ((u8)code >= 250) {
+        D_8009D0D8 = (u8)code - 250;
+        glyph = -1;
+    }
+    return glyph;
+}
+
 void Draw_AllocTexturedQuad(int code) {
     int low;
     int glyph;
@@ -486,235 +572,68 @@ void Draw_AllocTexturedQuad(int code) {
     }
 }
 
-int Draw_MeasureTextWidth(u8 *text) {
-    u8 *cursor;
-    int width;
-    int ch;
-    int glyph;
-    int terminator_check;
-    register int sentinel asm("$2");
-    int escape_page;
-    int spacing;
-    int metrics;
 
-    cursor = text;
-    width = 0;
-    for (;;) {
-        ch = *cursor;
-        sentinel = 0xFF;
-        terminator_check = ch & 0xFF;
-        asm volatile("" : "=r"(terminator_check) : "0"(terminator_check));
-        cursor++;
-        if (terminator_check == sentinel) break;
-        glyph = ch & 0xFF;
-        if (D_8009D0D8 != 0) {
-            glyph += D_8009D0D8 << 8;
-            D_8009D0D8 = 0;
-        }
-        ch &= 0xFF;
-        if ((unsigned int)ch >= 0xFA) {
-            escape_page = ch - 0xFA;
-            D_8009D0D8 = escape_page;
-            glyph = -1;
-        }
-        ch = glyph;
-        if (ch >= 0) {
-            spacing = 0;
-            if (ch < 10 || ch == 15) {
-                spacing = 1;
-            }
-            D_8009CDB0 = spacing + 1;
-            if (ch >= 0x100) {
-                ch -= 0x13;
-            }
-            metrics = Draw_LookupGlyphMetrics(ch);
-            width += ((metrics >> 4) & 0xF) + D_8009CDB0;
+inline int Draw_MeasureTextWidth(u8 *text) {
+    u8 *cursor = text;
+    int width = 0;
+
+    while (*cursor != 255) {
+        int glyph = DecodeGlyph(*cursor++);
+        if (glyph >= 0) {
+            int narrow = 0;
+            if (glyph < 10 || glyph == 15) narrow = 1;
+            D_8009CDB0 = narrow + 1;
+            if (glyph >= 256) glyph -= 19;
+            width += ((Draw_LookupGlyphMetrics(glyph) >> 4) & 15) + D_8009CDB0;
         }
     }
-    cursor--;
-    asm volatile("" : : "r"(cursor));
     return width;
 }
 
-#define NULL ((void *)0)
-#include "../../../tools/m2c/m2c_macros.h"
-#define g_TextCursorX D_8009D124
-#define g_TextCursorY D_8009D128
-#define g_TextCursorStackWord (*(u32 *)&D_8009D12C)
-
-void Draw_PrintRawText(u8 *arg0) {
-    s32 temp_a0;
-    s32 temp_v0;
-    u32 temp_a1;
-    u8 *var_s0;
-    u8 var_a0;
-
-    var_s0 = arg0;
-    if (var_s0 != NULL) {
-        temp_a1 = g_TextCursorStackWord;
-        if (temp_a1 < (u32) &g_TextCursorStackTop) {
-            s32 t0 = g_TextCursorX; s32 t1 = g_TextCursorY;
-            g_TextCursorStackWord = temp_a1 + 8;
-            ((DrawTextCursorPair *)temp_a1)->x = t0;
-            ((DrawTextCursorPair *)temp_a1)->y = t1;
-        } else {
-            BoundsCheck_AssertStub(2, temp_a1);
+void Draw_PrintRawText(u8 *text) {
+    if (text) {
+        PushCursor();
+        while (*text != 255) {
+            Draw_AllocTexturedQuad(*text++);
         }
-        var_a0 = *var_s0;
-        if ((var_a0 & 0xFF) != 0xFF) {
-            do {
-                var_s0 += 1;
-                Draw_AllocTexturedQuad(var_a0);
-                var_a0 = *var_s0;
-            } while (var_a0 != 0xFF);
-        }
-        if ((u32) &g_TextCursorStackBottom < g_TextCursorStackWord) {
-            temp_v0 = ((DrawTextCursorPair *)(g_TextCursorStackWord - 8))->x;
-            temp_a0 = ((DrawTextCursorPair *)(g_TextCursorStackWord - 8))->y;
-            g_TextCursorStackWord -= 8;
-            g_TextCursorX = temp_v0;
-            g_TextCursorY = temp_a0;
-            return;
-        }
-        BoundsCheck_AssertStub(3);
+        PopCursor();
     }
 }
 
-static inline int DecodeGlyph(int input) {
-    register int code asm("$4") = input;
-    int glyph;
-    glyph = (u8)code;
-    if (D_8009D0D8) {
-        int page = D_8009D0D8 << 8;
-        glyph += page;
-        D_8009D0D8 = 0;
+/* Draws text from the current cursor position without saving it first. */
+static inline void PrintTextHere(u8 *text) {
+    if (text) {
+        SaveCursor(D_8009D124, D_8009D128);
+        while (*text != 255) {
+            Draw_AllocTexturedQuad(*text++);
+        }
+        PopCursor();
     }
-    if ((u8)code >= 250) {
-        D_8009D0D8 = (u8)code - 250;
-        glyph = -1;
-    }
-    return glyph;
 }
 
 void Draw_PrintCenteredTextInWidth(u8 *text, int width) {
-    u8 *cursor;
     int measured;
-    int savedY;
-    {
-        DrawTextCursorPair *stack = (DrawTextCursorPair *)D_8009D12C;
-        if (stack < (DrawTextCursorPair *)g_TextCursorStackTop) {
-            int x = D_8009D124, y = D_8009D128;
-            D_8009D12C = (int *)(stack + 1);
-            stack->x = x;
-            stack->y = y;
-        } else BoundsCheck_AssertStub(2);
-    }
-    cursor = text;
-    /* Keep the original text pointer distinct from the measuring cursor. */
-    asm("" : "=r"(cursor) : "0"(cursor));
-    measured = 0;
-    if (*text != 255) {
-        do {
-            int narrow;
-            int glyph;
-            glyph = DecodeGlyph(*cursor++);
-            if (glyph >= 0) {
-                narrow = 0;
-                if (glyph < 10 || glyph == 15) narrow = 1;
-                D_8009CDB0 = narrow + 1;
-                if (glyph >= 256) glyph -= 19;
-                measured += ((Draw_LookupGlyphMetrics(glyph) >> 4) & 15)
-                    + D_8009CDB0;
-            }
-        } while (*cursor != 255);
-        cursor = text;
-    }
-    {
-        int padded = measured + 4;
-        int x;
-        x = D_8009D124 + ((width - padded) >> 1);
-        savedY = D_8009D128;
-        D_8009D124 = x;
-        D_8009D128 = savedY;
-    }
-    if (cursor) {
-        DrawTextCursorPair *stack = (DrawTextCursorPair *)D_8009D12C;
-        if (stack < (DrawTextCursorPair *)g_TextCursorStackTop) {
-            stack->x = D_8009D124;
-            stack->y = savedY;
-            D_8009D12C = (int *)(stack + 1);
-        } else BoundsCheck_AssertStub(2);
-        {
-            u8 code = *cursor;
-            if ((code & 255) != 255) {
-                do {
-                    ++cursor;
-                    Draw_AllocTexturedQuad(code);
-                    code = *cursor;
-                } while (code != 255);
-            }
-        }
-        {
-            DrawTextCursorPair *restore = (DrawTextCursorPair *)D_8009D12C;
-            if ((DrawTextCursorPair *)g_TextCursorStackBottom < restore) {
-                int x = restore[-1].x, y = restore[-1].y;
-                D_8009D12C = (int *)(restore - 1);
-                D_8009D124 = x;
-                D_8009D128 = y;
-            } else BoundsCheck_AssertStub(3);
-        }
-    }
-    {
-        DrawTextCursorPair *restore = (DrawTextCursorPair *)D_8009D12C;
-        if ((DrawTextCursorPair *)g_TextCursorStackBottom < restore) {
-            int x = restore[-1].x, y = restore[-1].y;
-            D_8009D12C = (int *)(restore - 1);
-            D_8009D124 = x;
-            D_8009D128 = y;
-        } else BoundsCheck_AssertStub(3);
-    }
-}
 
+    PushCursor();
+    measured = Draw_MeasureTextWidth(text) + 4;
+    SetCursor(D_8009D124 + ((width - measured) >> 1), D_8009D128);
+    PrintTextHere(text);
+    PopCursor();
+}
 
 void Draw_PrintCenteredText(u8 *text) {
     Draw_PrintCenteredTextInWidth(text, g_DrawTextBoxWidth);
 }
 
 void Draw_PrintTextById(unsigned int textId) {
-    s32 temp_a0;
-    s32 temp_v0;
-    u32 temp_a1;
-    u8 *var_s0;
-    u8 var_a0;
+    u8 *text = Str_LookupTable4(textId);
 
-    var_s0 = (u8 *)Str_LookupTable4(textId);
-    if (var_s0 != NULL) {
-        temp_a1 = g_TextCursorStackWord;
-        if (temp_a1 < (u32) &g_TextCursorStackTop) {
-            s32 t0 = g_TextCursorX; s32 t1 = g_TextCursorY;
-            g_TextCursorStackWord = temp_a1 + 8;
-            ((DrawTextCursorPair *)temp_a1)->x = t0;
-            ((DrawTextCursorPair *)temp_a1)->y = t1;
-        } else {
-            BoundsCheck_AssertStub(2, temp_a1);
+    if (text) {
+        PushCursor();
+        while (*text != 255) {
+            Draw_AllocTexturedQuad(*text++);
         }
-        var_a0 = *var_s0;
-        if ((var_a0 & 0xFF) != 0xFF) {
-            do {
-                var_s0 += 1;
-                Draw_AllocTexturedQuad(var_a0);
-                var_a0 = *var_s0;
-            } while (var_a0 != 0xFF);
-        }
-        if ((u32) &g_TextCursorStackBottom < g_TextCursorStackWord) {
-            temp_v0 = ((DrawTextCursorPair *)(g_TextCursorStackWord - 8))->x;
-            temp_a0 = ((DrawTextCursorPair *)(g_TextCursorStackWord - 8))->y;
-            g_TextCursorStackWord -= 8;
-            g_TextCursorX = temp_v0;
-            g_TextCursorY = temp_a0;
-            return;
-        }
-        BoundsCheck_AssertStub(3);
+        PopCursor();
     }
 }
 
@@ -1059,36 +978,6 @@ void Draw_PrintTimeValue(int value, int flag) {
     D_8009D144 = 0xA4;
 }
 
-static inline void SetCursor(u32 x, u32 y)
-{
-    D_8009D124 = x;
-    D_8009D128 = y;
-}
-
-static inline void PushCursor(void)
-{
-    DrawTextCursorPair *stack = (DrawTextCursorPair *)g_TextCursorStack;
-    if (stack < (DrawTextCursorPair *)g_TextCursorStackTop) {
-        int x = D_8009D124, y = D_8009D128;
-        g_TextCursorStack = (int *)(stack + 1);
-        stack->x = x;
-        stack->y = y;
-    } else {
-        BoundsCheck_AssertStub(2);
-    }
-}
-
-static inline void PopCursor(void)
-{
-    DrawTextCursorPair *stack = (DrawTextCursorPair *)g_TextCursorStack;
-    if ((DrawTextCursorPair *)g_TextCursorStackBottom < stack) {
-        g_TextCursorStack = (int *)(stack - 1);
-        SetCursor(stack[-1].x, stack[-1].y);
-    } else {
-        BoundsCheck_AssertStub(3);
-    }
-}
-
 static inline void PrintSign(u8 *text)
 {
     if (text) {
@@ -1206,31 +1095,6 @@ static inline void PushCursorAt(int x, int y)
     } else {
         BoundsCheck_AssertStub(2);
     }
-}
-
-/* Allocates one bar quad from the packet arena and sets its colour and
- * command (0x2C: textured four-point polygon). */
-static inline RenderTexturedQuad *AllocBarQuad(void)
-{
-    RenderTexturedQuad *prim = 0;
-    u8 *old = D_8009D100;
-    u8 *next = old + sizeof(RenderTexturedQuad);
-
-    if (next < D_8009D104 + 0x4000) {
-        D_8009D100 = next;
-        prim = (RenderTexturedQuad *)old;
-    } else {
-        BoundsCheck_AssertStub(1);
-    }
-    if (prim != 0) {
-        if (D_8009D10C != 0)
-            prim->color.word = D_8009D114;
-        else
-            prim->color.word = D_8009D110;
-        prim->tag.bytes.length = 9;
-        prim->color.bytes.code = 0x2C;
-    }
-    return prim;
 }
 
 /* One textured quad of the bar: glyph texels starting `u` columns into the
