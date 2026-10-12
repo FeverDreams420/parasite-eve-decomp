@@ -10,6 +10,18 @@ extern PmCommand **g_PmCmdHandlerTable;
 extern PmPrimarySlot *g_PmSlotTable;
 extern PmSecondarySlot *g_PmSlotTable2;
 
+/* The three tables are adjacent words; this record views them together.
+ * Asset_LoadTimTextures stores the slot bank pointers through it and reads
+ * them back on every iteration, which a record member requires and a
+ * scalar does not. */
+typedef struct PmTables {
+    PmCommand **handlers;
+    PmPrimarySlot *primary;
+    PmSecondarySlot *secondary;
+} PmTables;
+
+extern PmTables g_PmTables;
+
 /* Task programs of commands 108..114 (g_FieldAnimTaskPrograms[23..29]) are
  * read on demand from PE.IMG sectors D_80093162[0..1] to g_PmTaskProgramBuffer. */
 extern u16 D_80093162[2];

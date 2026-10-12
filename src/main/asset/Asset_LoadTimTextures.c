@@ -20,11 +20,9 @@ restart:
     switch (state->tim_load_state) {
     case 0:
         if (!(g_GameStateFlags & 0x80)) {
-            /* Retail reloads the bank pointer on every iteration. Keep
-             * those accesses explicit without changing its shared type. */
-            (*(PmPrimarySlot *volatile *)&g_PmSlotTable) = state->scene_process_slots->primary;
+            g_PmTables.primary = state->scene_process_slots->primary;
             for (i = 0; i < 11; i++) {
-                PmPrimarySlot *slot = &(*(PmPrimarySlot *volatile *)&g_PmSlotTable)[i];
+                PmPrimarySlot *slot = &g_PmTables.primary[i];
                 slot->header.state = 0;
                 slot->header.owner = 0;
                 slot->header.command = 255;
@@ -32,9 +30,9 @@ restart:
                 slot->header.field03 = 255;
                 slot->header.ticks = 0;
             }
-            (*(PmSecondarySlot *volatile *)&g_PmSlotTable2) = state->scene_process_slots->secondary;
+            g_PmTables.secondary = state->scene_process_slots->secondary;
             for (i = 0; i < 11; i++) {
-                PmSecondarySlot *slot = &(*(PmSecondarySlot *volatile *)&g_PmSlotTable2)[i];
+                PmSecondarySlot *slot = &g_PmTables.secondary[i];
                 slot->header.state = 0;
                 slot->header.owner = 0;
                 slot->header.command = 255;

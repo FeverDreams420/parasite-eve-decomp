@@ -1165,6 +1165,7 @@ g_PlayTimeFrameCounter = 0x800A7918;
 g_PlayTimeSeconds = 0x800A76BC;
 g_PlayerBattleEntity = 0x800B0CEC;
 g_PmCmdHandlerTable = 0x800942E0;
+g_PmTables = 0x800942E0;
 g_PmSlotTable = 0x800942E4;
 g_PmSlotTable2 = 0x800942E8;
 g_RoomFloorY = 0x800942EC;
