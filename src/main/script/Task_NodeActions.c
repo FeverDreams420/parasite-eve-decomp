@@ -1,11 +1,12 @@
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section --expand-div */
+/* MASPSX_FORCE_G0: 1 */
+
 #include "common.h"
 #include "pe1/gte_types.h"
 #include "pe1/entity_animation.h"
 #include "pe1/battle_entity_anim.h"
 #include "pe1/battle_runtime.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 --expand-div --use-comm-section */
-/* MASPSX_FORCE_G0: 1 */
 
 #include "pe1/task_node.h"
 #include "pe1/field_actor.h"

@@ -1,4 +1,5 @@
 /* MASPSX_FLAGS: --expand-div */
+
 #include "common.h"
 #include "pe1/scene_e22_ring_burst.h"
 #include "pe1/gte.h"

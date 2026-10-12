@@ -1,5 +1,6 @@
-/* MASPSX_FLAGS: --expand-div */
 /* CC1_FLAGS: -ffixed-10 -ffixed-11 -ffixed-15 -ffixed-21 -ffixed-22 -ffixed-23 -ffixed-24 -ffixed-25 */
+/* MASPSX_FLAGS: --expand-div */
+
 #include "pe1/gte.h"
 #include "pe1/scene_e20_hover_orb.h"
 #define NULL ((void *)0)

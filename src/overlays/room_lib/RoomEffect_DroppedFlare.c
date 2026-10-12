@@ -1,4 +1,5 @@
 /* MASPSX_FLAGS: --expand-div */
+
 /*
  * Dropped flares: the particle, the emitter that drops them and the setter
  * of the room's two flare arguments. The three functions follow each other

@@ -1,3 +1,6 @@
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 */
+
 /* Wireframe model pass: projects a scaled, yawed model and draws its edges
  * as LINE_G2 packets. Back faces only contribute their floor edge (both
  * vertices at y 0, cyan); front faces draw all three edges, cyan on the
@@ -13,8 +16,6 @@
 #include "pe1/render_object.h"
 #include "pe1/render_anim_position.h"
 #include "pe1/render_animation_frame.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
 
 typedef struct RenderAnimFrame {
     u8 reserved0;

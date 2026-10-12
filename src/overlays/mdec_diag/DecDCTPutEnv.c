@@ -1,4 +1,5 @@
 /* ASSEMBLER: GNU */
+
 #include "pe1/mdec_diag.h"
 
 s32 *DecDCTPutEnv(s32 *source)

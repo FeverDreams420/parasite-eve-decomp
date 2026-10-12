@@ -1,4 +1,3 @@
-
 /* CC1_FLAGS: -fno-schedule-insns */
 
 register int *g_TaskGpuReg2 asm("$10");

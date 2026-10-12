@@ -190,10 +190,28 @@ name is the configured overlay name.
   instructions. They are allowed, counted by `make debt`, and removed whenever
   the match survives without them (`make drop-pins`, `make drop-barriers`).
   The `PE1_NOP*` scheduling slots (`psyq_nop.h`) are counted the same way.
-- The compiler and MASPSX are stock. Per-file options use the markers
-  `/* CC1_FLAGS: ... */`, `/* MASPSX_FLAGS: ... */`,
-  `/* ASPSX_VERSION: ... */`, `/* GCC_VERSION: 2.8.1 */` and
-  `/* ASSEMBLER: GNU */` at the top of the file.
+- The compiler and MASPSX are stock. Per-file options are one marker block
+  at the very top of the file, one marker per line in this order, then a
+  blank line:
+
+  ```c
+  /* GCC_VERSION: 2.8.1 */
+  /* CC1_FLAGS: -G8 -g3 -fno-schedule-insns */
+  /* ASSEMBLER: GNU */
+  /* MASPSX_FLAGS: -G8 --use-comm-section --expand-div */
+  /* MASPSX_FORCE_G0: 1 */
+  /* ASPSX_VERSION: 2.70 */
+  ```
+
+  `-G<n>` comes first in its marker, the other options in the order of
+  `tools/scripts/check_flag_markers.py`; defaults are not written out, and
+  marker text appears nowhere else in the file (cc.sh greps the whole file).
+  Small data uses the K8 set (cc1 `-G8`, maspsx
+  `-G8 --use-comm-section`, `MASPSX_FORCE_G0`) or K0 (the same without the
+  cc1 marker), with one COMMON definition per word retail reaches through
+  `$gp`. `make source-policy-check` enforces the block (`--fix` rewrites
+  it); docs/COMPILATION_FLAGS.md says what every flag does, which units
+  need it and why.
 
 ### PsyQ marker sets
 

@@ -1,4 +1,5 @@
 /* MASPSX_FLAGS: --expand-div */
+
 /*
  * The line burst: a controller anchored on the actor that spits bounce
  * particles, sweeps a line from its anchor to a sprite point, rings it with

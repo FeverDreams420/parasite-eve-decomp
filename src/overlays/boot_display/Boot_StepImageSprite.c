@@ -1,4 +1,5 @@
 /* MASPSX_FLAGS: --expand-div */
+
 #include "pe1/boot_display.h"
 #include "Boot_StepImageSprite_externs.h"
 void Boot_StepImageSprite(void) {

@@ -1,4 +1,5 @@
 /* CC1_FLAGS: -fno-schedule-insns */
+
 #include "pe1/font.h"
 #include "pe1/cdrom.h"
 

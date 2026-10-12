@@ -1,6 +1,7 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
+
 /* cc1 -G8 makes the small texture slot word a cheap address, so its
  * volatile read stays an absolute load. */
 #include "pe1/field_sprite_params.h"

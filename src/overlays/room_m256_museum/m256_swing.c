@@ -1,4 +1,5 @@
 /* MASPSX_FLAGS: --expand-div */
+
 #include "common.h"
 #include "pe1/room_m256_swing.h"
 #include "pe1/room_m256_drop.h"

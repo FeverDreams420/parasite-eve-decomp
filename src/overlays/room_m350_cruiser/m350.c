@@ -1,4 +1,5 @@
 /* MASPSX_FLAGS: --expand-div */
+
 #include "common.h"
 #include "pe1/room_m350_effects.h"
 #include "pe1/field_sprite_params.h"

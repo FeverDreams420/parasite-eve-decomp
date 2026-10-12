@@ -1,5 +1,5 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: --use-comm-section -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
 #include "pe1/menu_queue.h"

@@ -1,4 +1,5 @@
 /* ASSEMBLER: GNU */
+
 #include "pe1/psyq_asm.h"
 
 /*

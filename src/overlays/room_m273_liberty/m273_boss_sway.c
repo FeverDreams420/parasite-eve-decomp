@@ -1,4 +1,5 @@
 /* MASPSX_FLAGS: --expand-div */
+
 #include "common.h"
 #include "room_m273_boss.h"
 #include "pe1/gte.h"

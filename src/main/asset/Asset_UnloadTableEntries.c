@@ -1,4 +1,5 @@
 /* CC1_FLAGS: -fno-force-mem */
+
 #include "pe1/scene_assets.h"
 
 static inline void Unload(int index) {

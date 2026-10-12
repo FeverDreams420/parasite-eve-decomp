@@ -1,5 +1,5 @@
-/* CC1_FLAGS: -g3 -G8 */
-/* MASPSX_FLAGS: --expand-div -G8 --use-comm-section */
+/* CC1_FLAGS: -G8 -g3 */
+/* MASPSX_FLAGS: -G8 --use-comm-section --expand-div */
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"

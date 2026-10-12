@@ -1,4 +1,5 @@
 /* ASSEMBLER: GNU */
+
 #include "pe1/mdec_diag.h"
 
 void MdecDiag_Reset(int mode)

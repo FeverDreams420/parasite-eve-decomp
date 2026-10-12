@@ -1,4 +1,5 @@
 /* CC1_FLAGS: -fno-cse-skip-blocks */
+
 #include "menu_memcard_screen.h"
 
 #include "menu_memcard_image.h"

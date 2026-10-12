@@ -1,4 +1,5 @@
 /* CC1_FLAGS: -fno-strength-reduce -fno-expensive-optimizations */
+
 #include "pe1/geom_state.h"
 #include "pe1/render_prim.h"
 #include "pe1/psyq_gpu.h"

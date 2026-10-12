@@ -1,4 +1,5 @@
 /* CC1_FLAGS: -fno-strength-reduce */
+
 /*
  * The orbit effect set: eight particles that orbit outwards from the actor,
  * a burst of eight sprites that fall to the floor over their shadows, and a

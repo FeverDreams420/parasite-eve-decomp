@@ -1,4 +1,5 @@
 /* CC1_FLAGS: -fno-expensive-optimizations */
+
 #include "fx_common_setup.h"
 
 #define SET_RGB(color, r, g, b) \

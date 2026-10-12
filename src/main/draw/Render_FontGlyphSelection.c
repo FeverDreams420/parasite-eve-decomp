@@ -1,4 +1,5 @@
 /* MASPSX_FLAGS: --expand-div */
+
 /* Font glyph selection (0x80038BC0..0x8003999C): the glyph table lookups, the
  * selection state flags, the shuffled code list and its incremental load, and
  * stepping the selection through the cached glyph slots. All of it reads and

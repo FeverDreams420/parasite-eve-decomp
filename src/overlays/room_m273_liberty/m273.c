@@ -1,4 +1,5 @@
 /* MASPSX_FLAGS: --expand-div */
+
 #include "common.h"
 #include "pe1/field_actor.h"
 #include "pe1/scene_grab_head.h"

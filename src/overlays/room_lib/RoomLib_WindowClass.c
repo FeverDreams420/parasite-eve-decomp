@@ -1,4 +1,5 @@
 /* MASPSX_FLAGS: --expand-div */
+
 /*
  * The window actor class: a script object that flies a spinning frame from
  * its anchor actor towards a target actor (RoomLib_WindowHandler), in the

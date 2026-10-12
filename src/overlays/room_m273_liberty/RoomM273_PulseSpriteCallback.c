@@ -1,4 +1,5 @@
 /* CC1_FLAGS: -fno-schedule-insns */
+
 #include "room_m273.h"
 #include "pe1/psyq_gpu.h"
 

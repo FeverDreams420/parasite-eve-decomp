@@ -1,4 +1,5 @@
 /* MASPSX_FLAGS: --expand-div */
+
 /*
  * Spark attacks: burst orbs thrown from the actor's hand, a spray of damped
  * sparks, a beam that showers bouncing sparks and a ring of jittering

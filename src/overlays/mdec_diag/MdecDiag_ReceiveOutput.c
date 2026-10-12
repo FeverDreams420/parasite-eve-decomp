@@ -1,4 +1,5 @@
 /* ASSEMBLER: GNU */
+
 #include "pe1/mdec_diag.h"
 
 void MdecDiag_ReceiveOutput(s32 *data, u32 size)
