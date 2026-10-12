@@ -70,7 +70,10 @@ void Menu_MainUpdate(s32 arg0) {
     register s32 var_a2;
     register s32 var_a1;
     register s32 var_a3;
-    register s32 var_t0;
+    register union {
+        s32 value;
+        BattleEntity *entity;
+    } var_t0;
     register s32 var_t1;
     s32 var_v0_2;
     s32 var_v0_3;
@@ -147,7 +150,7 @@ void Menu_MainUpdate(s32 arg0) {
         var_v1 = D_8009D1E8 & 3;
         if (var_v1 == 0) {
             var_t1 = 0xFF;
-            var_t0 = 0x3D;
+            var_t0.value = 0x3D;
             var_a3 = 0x81;
             var_a2 = 0x83;
             var_a1 = 0x13;
@@ -158,13 +161,13 @@ void Menu_MainUpdate(s32 arg0) {
             var_a0 = 1;
             *(&D_800B0158[0] + (var_v1 * 0x48)) = var_t1;
             }
-            *(&D_800B0159[0] + (D_8009CDDC * 0x48)) = var_t0;
+            *(&D_800B0159[0] + (D_8009CDDC * 0x48)) = var_t0.value;
             *(&D_800B015A[0] + (D_8009CDDC * 0x48)) = var_a3;
             *(&D_800B0160[0] + (D_8009CDDC * 0x48)) = var_a2;
             *(&D_800B0161[0] + (D_8009CDDC * 0x48)) = var_a1;
             *(&D_800B0162[0] + (D_8009CDDC * 0x48)) = var_a0;
             *(&D_800B0168[0] + (D_8009CDDC * 0x48)) = var_t1;
-            *(&D_800B0169[0] + (D_8009CDDC * 0x48)) = var_t0;
+            *(&D_800B0169[0] + (D_8009CDDC * 0x48)) = var_t0.value;
             *(&D_800B016A[0] + (D_8009CDDC * 0x48)) = var_a3;
             *(&D_800B0170[0] + (D_8009CDDC * 0x48)) = var_a2;
             *(&D_800B0171[0] + (D_8009CDDC * 0x48)) = var_a1;
@@ -196,7 +199,7 @@ void Menu_MainUpdate(s32 arg0) {
         }
         else if (var_v1 == 2) {
             var_t1 = 0x83;
-            var_t0 = 0x13;
+            var_t0.value = 0x13;
             var_a3 = 1;
             var_a2 = 0xFF;
             var_a1 = 0x3D;
@@ -207,13 +210,13 @@ void Menu_MainUpdate(s32 arg0) {
             var_a0 = 0x81;
             *(&D_800B0158[0] + (var_v1 * 0x48)) = var_t1;
             }
-            *(&D_800B0159[0] + (D_8009CDDC * 0x48)) = var_t0;
+            *(&D_800B0159[0] + (D_8009CDDC * 0x48)) = var_t0.value;
             *(&D_800B015A[0] + (D_8009CDDC * 0x48)) = var_a3;
             *(&D_800B0160[0] + (D_8009CDDC * 0x48)) = var_a2;
             *(&D_800B0161[0] + (D_8009CDDC * 0x48)) = var_a1;
             *(&D_800B0162[0] + (D_8009CDDC * 0x48)) = var_a0;
             *(&D_800B0168[0] + (D_8009CDDC * 0x48)) = var_t1;
-            *(&D_800B0169[0] + (D_8009CDDC * 0x48)) = var_t0;
+            *(&D_800B0169[0] + (D_8009CDDC * 0x48)) = var_t0.value;
             *(&D_800B016A[0] + (D_8009CDDC * 0x48)) = var_a3;
             *(&D_800B0170[0] + (D_8009CDDC * 0x48)) = var_a2;
             *(&D_800B0171[0] + (D_8009CDDC * 0x48)) = var_a1;
@@ -303,7 +306,7 @@ void Menu_MainUpdate(s32 arg0) {
             if (temp_v0_4 != 0) {
                 var_v1 = D_8009D1E8 & 3;
                 if (var_v1 == 0) {
-                    var_t0 = 0x82;
+                    var_t0.value = 0x82;
                     var_a3 = 0x36;
                     var_a2 = 0x4A;
                     var_a1 = 0xFF;
@@ -314,13 +317,13 @@ void Menu_MainUpdate(s32 arg0) {
                     var_a0_2 = 0x3B;
                     *(&D_800B0134[0] + (var_v1 * 0x48)) = 0;
                     }
-                    *(&D_800B0135[0] + (D_8009CDDC * 0x48)) = var_t0;
+                    *(&D_800B0135[0] + (D_8009CDDC * 0x48)) = var_t0.value;
                     *(&D_800B0136[0] + (D_8009CDDC * 0x48)) = var_a3;
                     *(&D_800B013C[0] + (D_8009CDDC * 0x48)) = var_a2;
                     *(&D_800B013D[0] + (D_8009CDDC * 0x48)) = var_a1;
                     *(&D_800B013E[0] + (D_8009CDDC * 0x48)) = 0x3B;
                     *(&D_800B0144[0] + (D_8009CDDC * 0x48)) = 0;
-                    *(&D_800B0145[0] + (D_8009CDDC * 0x48)) = var_t0;
+                    *(&D_800B0145[0] + (D_8009CDDC * 0x48)) = var_t0.value;
                     *(&D_800B0146[0] + (D_8009CDDC * 0x48)) = var_a3;
                     *(&D_800B014C[0] + (D_8009CDDC * 0x48)) = var_a2;
                     *(&D_800B014D[0] + (D_8009CDDC * 0x48)) = var_a1;
@@ -351,7 +354,7 @@ void Menu_MainUpdate(s32 arg0) {
                     *(&D_800B014E[0] + ((var_v0_4 * 9) * 8)) = var_a0_2;
                 }
                 else if (var_v1 == 2) {
-                    var_t0 = 0x4A;
+                    var_t0.value = 0x4A;
                     var_a3 = 0xFF;
                     var_a2 = 0x3B;
                     var_a1 = 0x82;
@@ -360,14 +363,14 @@ void Menu_MainUpdate(s32 arg0) {
                     var_v1 = D_8009CDDC;
                     do { } while (0);
                     var_a0_2 = 0x36;
-                    *(&D_800B0134[0] + (var_v1 * 0x48)) = var_t0;
+                    *(&D_800B0134[0] + (var_v1 * 0x48)) = var_t0.value;
                     }
                     *(&D_800B0135[0] + (D_8009CDDC * 0x48)) = var_a3;
                     *(&D_800B0136[0] + (D_8009CDDC * 0x48)) = var_a2;
                     *(&D_800B013C[0] + (D_8009CDDC * 0x48)) = 0;
                     *(&D_800B013D[0] + (D_8009CDDC * 0x48)) = var_a1;
                     *(&D_800B013E[0] + (D_8009CDDC * 0x48)) = var_a0_2;
-                    *(&D_800B0144[0] + (D_8009CDDC * 0x48)) = var_t0;
+                    *(&D_800B0144[0] + (D_8009CDDC * 0x48)) = var_t0.value;
                     *(&D_800B0145[0] + (D_8009CDDC * 0x48)) = var_a3;
                     *(&D_800B0146[0] + (D_8009CDDC * 0x48)) = var_a2;
                     *(&D_800B014C[0] + (D_8009CDDC * 0x48)) = 0;
@@ -910,13 +913,19 @@ void Menu_MainUpdate(s32 arg0) {
             register s32 tail_a3;
             register s32 tail_sp;
 
-            /* var_t0 is the function-wide colour/pointer scratch; the
-             * player pointer must reuse it to stay in $t0. */
-            var_t0 = (s32) D_8009D254;
-            tail_a2 = Pe1Fixed_IntegerHalf(&((BattleEntity *)var_t0)->posX);
-            tail_a3 = Pe1Fixed_IntegerHalf(&((BattleEntity *)var_t0)->posY);
+            s16 *coordinate;
+
+            var_t0.entity = D_8009D254;
+            /* posX/posY/posZ integer halves, read through a plain halfword
+             * pointer: struct member reads let the scheduler hoist the
+             * D_8009D28C store above them. */
+            coordinate = &var_t0.entity->posX.parts.integer;
+            tail_a2 = *coordinate;
+            coordinate = &var_t0.entity->posY.parts.integer;
+            tail_a3 = *coordinate;
             D_8009D28C = 3;
-            tail_sp = Pe1Fixed_IntegerHalf(&((BattleEntity *)var_t0)->posZ);
+            coordinate = &var_t0.entity->posZ.parts.integer;
+            tail_sp = *coordinate;
             tail_a1 = 0;
             D_8009D1CE = 0;
             Asset_Find08Alt(tail_a0, tail_a1, tail_a2, tail_a3, tail_sp);
