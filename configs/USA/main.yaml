@@ -556,9 +556,8 @@ segments:
       - [0x63C50, pad]
       - [0x63C54, c, psyq/libmath/fltsidf]
       - [0x63D54, c, psyq/libmath/mainasu]
-      # LIBMATH MULDF3.OBJ: __muldf3; the adjacent helper retains its GCC281 unit.
+      # LIBMATH MULDF3.OBJ: __muldf3 and _mul_mant_d.
       - [0x63DC4, c, psyq/libmath/muldf3]
-      - [0x640D8, c, psyq/libmath/muldf3_2]
       - [0x641C4, c, psyq/libmath/ferr]
       - [0x64228, pad]
       - [0x64234, c, psyq/libapi/a07]

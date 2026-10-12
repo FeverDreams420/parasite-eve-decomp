@@ -306,7 +306,6 @@ byte-identical.
 | LIBCD BIOS | 9 | 7 | parts alternate between GCC 2.7.2 (2, 4, 5) and GCC 2.8.1 (1, 3, 6, 7); parts 2, 3, 4 and 6 each need their own `-fno-expensive-optimizations` or scheduling option |
 | LIBCD C_011 | 3 | 2 | StCdInterrupt and mem2mem GCC 2.7.2, dma_execute GCC 2.8.1 with `-fno-schedule-insns` |
 | LIBETC INTR | 3 | 2 | the callbacks GCC 2.7.2, the interrupt manager GCC 2.8.1 |
-| LIBMATH MULDF3 | 2 | 2 | `__muldf3` GCC 2.7.2 with GNU as, `_mul_mant_d` GCC 2.8.1 |
 | LIBAPI PATCH | 2 | 2 | `_patch_pad` is SDK assembler (policy) |
 | LIBCARD PATCH | 4 | 4 | parts 1 and 3 are SDK assembler (policy) |
 | LIBDS DSSYS_1 | 11 | 11 | neighbours alternate between GNU as with GCC 2.7.2 and GCC 2.8.1, several with their own scheduling option |
@@ -335,6 +334,9 @@ markers (one unit each now):
   the tested value when cse follows the branch into the `else` block, and
   with that option off the whole object matches, `LIBPAD_PADIF_text_26C`
   included.
+- LIBMATH MULDF3 (`muldf3.c`, GCC 2.7.2 with GNU as): `_mul_mant_d` only
+  failed to build with GCC 2.7.2, whose inline asm has no `+` constraint;
+  the two `"+m"` barriers it used are not needed under GCC 2.7.2.
 
 ### AKAO driver (src/main/akao)
 
