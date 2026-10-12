@@ -103,47 +103,13 @@ if grep -q 'CC1_FLAGS:.*-fno-thread-jumps' "$IN"; then
     CC1_FLAGS="$CC1_FLAGS -fno-thread-jumps"
 fi
 
-mkdir -p "$(dirname "$OUT")"
-
-TMP_I=$(mktemp -t pe1-cc.XXXXXX.i)
-TMP_S=$(mktemp -t pe1-cc.XXXXXX.s)
-TMP_D=$(mktemp -t pe1-cc.XXXXXX.d)
-TMP_GAS=$(mktemp -t pe1-cc.XXXXXX.gas.s)
-trap 'rm -f "$TMP_I" "$TMP_S" "$TMP_D" "$TMP_GAS"' EXIT
-
-# This old cpp predates -MF/-MT, but supports -M. Rewrite its generated object
-# target to the real build path and publish the dependency file atomically.
-"$CPP" $CPP_FLAGS -M "$IN" | sed "1s|^[^:]*:|$OUT:|" > "$TMP_D"
-"$CPP" $CPP_FLAGS "$IN" -o "$TMP_I"
-"$CC1" $CC1_FLAGS "$TMP_I" -o "$TMP_S"
-
+BACKEND=maspsx
 if grep -q 'GAS_VERSION:.*2\.8\.1' "$IN"; then
-    GAS281="${PE_GAS281_DIR:-$ROOT/tools/gas-2.8.1}/as"
-    [ -x "$GAS281" ] || "$ROOT/tools/scripts/setup_gas281.sh" >&2
-    "$GAS281" -EL "$AS_G_FLAG" -mips1 -mcpu=r3000 -o "$OUT" "$TMP_S"
-    mv "$TMP_D" "$OUT.d"
-    exit 0
-fi
-
-if grep -q 'GAS_VERSION:.*2\.7' "$IN"; then
-    GAS27="${PE_GAS27_DIR:-$ROOT/tools/gas-2.7}/as"
-    [ -x "$GAS27" ] || "$ROOT/tools/scripts/setup_gas27.sh" >&2
-    "$GAS27" -EL "$AS_G_FLAG" -mips1 -mcpu=r3000 -o "$OUT" "$TMP_S"
-    mv "$TMP_D" "$OUT.d"
-    exit 0
-fi
-
-if grep -q 'ASSEMBLER: GNU' "$IN"; then
-    cat > "$TMP_GAS" <<'EOF'
-.macro move destination, source
-    addu \destination, \source, $zero
-.endm
-EOF
-    "$AS" -EL "$AS_G_FLAG" -march=r3000 -mtune=r3000 -no-pad-sections \
-        -I "$ROOT" -I "$ROOT/include" -I "$ROOT/asm/USA/main" -I "$ROOT/asm/USA/overlays" \
-        -o "$OUT" "$TMP_GAS" "$TMP_S"
-    mv "$TMP_D" "$OUT.d"
-    exit 0
+    BACKEND=gas-2.8.1
+elif grep -q 'GAS_VERSION:.*2\.7' "$IN"; then
+    BACKEND=gas-2.7
+elif grep -q 'ASSEMBLER: GNU' "$IN"; then
+    BACKEND=gnu-as
 fi
 
 MASPSX_EXTRA=()
@@ -161,6 +127,63 @@ fi
 # drives MASPSX's explicit GP loads, while GNU as leaves `la` absolute.
 if [[ "$AS_G_FLAG" != "-G0" ]] && ! grep -q 'MASPSX_FORCE_G0:[[:space:]]*1' "$IN"; then
     MASPSX_EXTRA+=(--dont-force-G0)
+fi
+
+# `PE_CC_PRINT_FLAGS=1 cc.sh <input.c> -` prints the resolved per-file
+# settings and compiles nothing (tools/reorg/flag_audit.py reads this).
+if [ -n "${PE_CC_PRINT_FLAGS:-}" ]; then
+    echo "cc1: $(basename "$CC1")"
+    echo "cc1_flags: $CC1_FLAGS"
+    echo "backend: $BACKEND"
+    echo "as_g: $AS_G_FLAG"
+    if [ "$BACKEND" = maspsx ]; then
+        echo "aspsx_version: $MASPSX_ASPSX_VERSION"
+        echo "maspsx_flags: ${MASPSX_EXTRA[*]+"${MASPSX_EXTRA[*]}"}"
+    fi
+    exit 0
+fi
+
+mkdir -p "$(dirname "$OUT")"
+
+TMP_I=$(mktemp -t pe1-cc.XXXXXX.i)
+TMP_S=$(mktemp -t pe1-cc.XXXXXX.s)
+TMP_D=$(mktemp -t pe1-cc.XXXXXX.d)
+TMP_GAS=$(mktemp -t pe1-cc.XXXXXX.gas.s)
+trap 'rm -f "$TMP_I" "$TMP_S" "$TMP_D" "$TMP_GAS"' EXIT
+
+# This old cpp predates -MF/-MT, but supports -M. Rewrite its generated object
+# target to the real build path and publish the dependency file atomically.
+"$CPP" $CPP_FLAGS -M "$IN" | sed "1s|^[^:]*:|$OUT:|" > "$TMP_D"
+"$CPP" $CPP_FLAGS "$IN" -o "$TMP_I"
+"$CC1" $CC1_FLAGS "$TMP_I" -o "$TMP_S"
+
+if [ "$BACKEND" = gas-2.8.1 ]; then
+    GAS281="${PE_GAS281_DIR:-$ROOT/tools/gas-2.8.1}/as"
+    [ -x "$GAS281" ] || "$ROOT/tools/scripts/setup_gas281.sh" >&2
+    "$GAS281" -EL "$AS_G_FLAG" -mips1 -mcpu=r3000 -o "$OUT" "$TMP_S"
+    mv "$TMP_D" "$OUT.d"
+    exit 0
+fi
+
+if [ "$BACKEND" = gas-2.7 ]; then
+    GAS27="${PE_GAS27_DIR:-$ROOT/tools/gas-2.7}/as"
+    [ -x "$GAS27" ] || "$ROOT/tools/scripts/setup_gas27.sh" >&2
+    "$GAS27" -EL "$AS_G_FLAG" -mips1 -mcpu=r3000 -o "$OUT" "$TMP_S"
+    mv "$TMP_D" "$OUT.d"
+    exit 0
+fi
+
+if [ "$BACKEND" = gnu-as ]; then
+    cat > "$TMP_GAS" <<'EOF'
+.macro move destination, source
+    addu \destination, \source, $zero
+.endm
+EOF
+    "$AS" -EL "$AS_G_FLAG" -march=r3000 -mtune=r3000 -no-pad-sections \
+        -I "$ROOT" -I "$ROOT/include" -I "$ROOT/asm/USA/main" -I "$ROOT/asm/USA/overlays" \
+        -o "$OUT" "$TMP_GAS" "$TMP_S"
+    mv "$TMP_D" "$OUT.d"
+    exit 0
 fi
 
 "${MASPSX[@]}" --aspsx-version="$MASPSX_ASPSX_VERSION" \
