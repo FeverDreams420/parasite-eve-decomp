@@ -66,6 +66,16 @@ static inline void SetCursor(int x, int y)
     D_8009D128 = y;
 }
 
+/* Moves the cursor right by `dx`, rewriting y as the stored pair. */
+static inline void AdvanceCursor(int dx)
+{
+    int x = D_8009D124;
+    int y = D_8009D128;
+
+    D_8009D124 = x + dx;
+    D_8009D128 = y;
+}
+
 static inline void PushCursor(void)
 {
     DrawTextCursorPair *stack = (DrawTextCursorPair *)g_TextCursorStack;
@@ -465,10 +475,7 @@ void Draw_AllocTexturedQuad(int code) {
     if (glyph == 0x100) {
         int x, y;
         Draw_AllocSprite(0x77);
-        x = D_8009D124;
-        y = D_8009D128;
-        D_8009D124 = x + 0xC;
-        D_8009D128 = y;
+        AdvanceCursor(0xC);
         return;
     }
 
@@ -777,17 +784,12 @@ void Draw_PrintNumberWidth2Unk(int value) {
     int width = 2;
     int place = 1;
     int i;
-    int x;
-    int y;
 
     if (value < 0) {
         value = -value;
         Draw_AllocSprite(0x52);
         width = 1;
-        x = g_DrawSpriteX;
-        y = g_DrawSpriteY;
-        g_DrawSpriteX = x + 5;
-        g_DrawSpriteY = y;
+        AdvanceCursor(5);
     }
     for (i = 1; i < width; i++) {
         place *= 10;
@@ -796,10 +798,7 @@ void Draw_PrintNumberWidth2Unk(int value) {
         int q = value / place;
         int digit = (i < width - 1 && q == 0) ? -1 : q;
         Draw_EmitDigitSprite(digit);
-        x = g_DrawSpriteX;
-        y = g_DrawSpriteY;
-        g_DrawSpriteX = x + 5;
-        g_DrawSpriteY = y;
+        AdvanceCursor(5);
         place /= 10;
     }
 }
@@ -808,17 +807,12 @@ void Draw_PrintNumberWidth3Unk(int value) {
     int width = 3;
     int place = 1;
     int i;
-    int x;
-    int y;
 
     if (value < 0) {
         value = -value;
         Draw_AllocSprite(0x52);
         width = 2;
-        x = g_DrawSpriteX;
-        y = g_DrawSpriteY;
-        g_DrawSpriteX = x + 5;
-        g_DrawSpriteY = y;
+        AdvanceCursor(5);
     }
     for (i = 1; i < width; i++) {
         place *= 10;
@@ -827,10 +821,7 @@ void Draw_PrintNumberWidth3Unk(int value) {
         int q = value / place;
         int digit = (i < width - 1 && q == 0) ? -1 : q;
         Draw_EmitDigitSprite(digit);
-        x = g_DrawSpriteX;
-        y = g_DrawSpriteY;
-        g_DrawSpriteX = x + 5;
-        g_DrawSpriteY = y;
+        AdvanceCursor(5);
         place /= 10;
     }
 }
@@ -839,8 +830,6 @@ void Draw_PrintSignedNumberWidth3(int value) {
     int width = 3;
     int place = 1;
     int i;
-    int x;
-    int y;
     int sprite;
 
     if (value < 0) {
@@ -848,18 +837,12 @@ void Draw_PrintSignedNumberWidth3(int value) {
         sprite = 0x52;
         Draw_AllocSprite(sprite);
         width = 2;
-        x = g_DrawSpriteX;
-        y = g_DrawSpriteY;
-        g_DrawSpriteX = x + 5;
-        g_DrawSpriteY = y;
+        AdvanceCursor(5);
     } else if (value > 0) {
         sprite = 0x89;
         Draw_AllocSprite(sprite);
         width = 2;
-        x = g_DrawSpriteX;
-        y = g_DrawSpriteY;
-        g_DrawSpriteX = x + 5;
-        g_DrawSpriteY = y;
+        AdvanceCursor(5);
     }
     for (i = 1; i < width; i++) {
         place *= 10;
@@ -868,10 +851,7 @@ void Draw_PrintSignedNumberWidth3(int value) {
         int q = value / place;
         int digit = (i < width - 1 && q == 0) ? -1 : q;
         Draw_EmitDigitSprite(digit);
-        x = g_DrawSpriteX;
-        y = g_DrawSpriteY;
-        g_DrawSpriteX = x + 5;
-        g_DrawSpriteY = y;
+        AdvanceCursor(5);
         place /= 10;
     }
 }
@@ -880,17 +860,12 @@ void Draw_PrintNumberWidth4Unk(int value) {
     int width = 4;
     int place = 1;
     int i;
-    int x;
-    int y;
 
     if (value < 0) {
         value = -value;
         Draw_AllocSprite(0x52);
         width = 3;
-        x = g_DrawSpriteX;
-        y = g_DrawSpriteY;
-        g_DrawSpriteX = x + 5;
-        g_DrawSpriteY = y;
+        AdvanceCursor(5);
     }
     for (i = 1; i < width; i++) {
         place *= 10;
@@ -899,10 +874,7 @@ void Draw_PrintNumberWidth4Unk(int value) {
         int q = value / place;
         int digit = (i < width - 1 && q == 0) ? -1 : q;
         Draw_EmitDigitSprite(digit);
-        x = g_DrawSpriteX;
-        y = g_DrawSpriteY;
-        g_DrawSpriteX = x + 5;
-        g_DrawSpriteY = y;
+        AdvanceCursor(5);
         place /= 10;
     }
 }
@@ -911,8 +883,6 @@ void Draw_PrintSignedNumberWidth4(int value) {
     int width = 4;
     int place = 1;
     int i;
-    int x;
-    int y;
     int sprite;
 
     if (value < 0) {
@@ -920,18 +890,12 @@ void Draw_PrintSignedNumberWidth4(int value) {
         sprite = 0x52;
         Draw_AllocSprite(sprite);
         width = 3;
-        x = g_DrawSpriteX;
-        y = g_DrawSpriteY;
-        g_DrawSpriteX = x + 5;
-        g_DrawSpriteY = y;
+        AdvanceCursor(5);
     } else if (value > 0) {
         sprite = 0x89;
         Draw_AllocSprite(sprite);
         width = 3;
-        x = g_DrawSpriteX;
-        y = g_DrawSpriteY;
-        g_DrawSpriteX = x + 5;
-        g_DrawSpriteY = y;
+        AdvanceCursor(5);
     }
     for (i = 1; i < width; i++) {
         place *= 10;
@@ -940,18 +904,14 @@ void Draw_PrintSignedNumberWidth4(int value) {
         int q = value / place;
         int digit = (i < width - 1 && q == 0) ? -1 : q;
         Draw_EmitDigitSprite(digit);
-        x = g_DrawSpriteX;
-        y = g_DrawSpriteY;
-        g_DrawSpriteX = x + 5;
-        g_DrawSpriteY = y;
+        AdvanceCursor(5);
         place /= 10;
     }
 }
 
+/* hh:mm:ss from a count of tenths of a second, clamped to 99:59:59.9 when it
+ * exceeds 100 hours; `flag` selects the alternate digit font and separator. */
 void Draw_PrintTimeValue(int value, int flag) {
-    int x;
-    int y;
-
     if (value > 360000) {
         value = 359999;
     }
@@ -960,30 +920,29 @@ void Draw_PrintTimeValue(int value, int flag) {
     D_8009D144 = 0xA4;
 
     Draw_EmitDigitSprite(value / 36000);
-    x = g_DrawSpriteX; y = g_DrawSpriteY; g_DrawSpriteX = x + 5; g_DrawSpriteY = y;
-
+    AdvanceCursor(5);
     Draw_EmitDigitSprite(value / 3600);
-    x = g_DrawSpriteX; y = g_DrawSpriteY; g_DrawSpriteX = x + 5; g_DrawSpriteY = y;
-
-    if (flag) { Draw_AllocSprite(0x9B); x = g_DrawSpriteX; y = g_DrawSpriteY; x = x + 3; }
-    else      { Draw_AllocSprite(0x4F); x = g_DrawSpriteX; y = g_DrawSpriteY; x = x + 5; }
-    g_DrawSpriteX = x; g_DrawSpriteY = y;
-    PE1_COMPILER_MEMORY_BARRIER();
-
+    AdvanceCursor(5);
+    if (flag) {
+        Draw_AllocSprite(0x9B);
+        AdvanceCursor(3);
+    } else {
+        Draw_AllocSprite(0x4F);
+        AdvanceCursor(5);
+    }
     Draw_EmitDigitSprite((value / 600) % 6);
-    x = g_DrawSpriteX; y = g_DrawSpriteY; g_DrawSpriteX = x + 5; g_DrawSpriteY = y;
-
+    AdvanceCursor(5);
     Draw_EmitDigitSprite(value / 60);
-    x = g_DrawSpriteX; y = g_DrawSpriteY; g_DrawSpriteX = x + 5; g_DrawSpriteY = y;
-
-    if (flag) { Draw_AllocSprite(0x9B); x = g_DrawSpriteX; y = g_DrawSpriteY; x = x + 3; }
-    else      { Draw_AllocSprite(0x4F); x = g_DrawSpriteX; y = g_DrawSpriteY; x = x + 5; }
-    g_DrawSpriteX = x; g_DrawSpriteY = y;
-    PE1_COMPILER_MEMORY_BARRIER();
-
+    AdvanceCursor(5);
+    if (flag) {
+        Draw_AllocSprite(0x9B);
+        AdvanceCursor(3);
+    } else {
+        Draw_AllocSprite(0x4F);
+        AdvanceCursor(5);
+    }
     Draw_EmitDigitSprite((value / 10) % 6);
-    x = g_DrawSpriteX; y = g_DrawSpriteY; g_DrawSpriteX = x + 5; g_DrawSpriteY = y;
-
+    AdvanceCursor(5);
     Draw_EmitDigitSprite(value);
 
     D_8009D13C = 0x395D;
@@ -1041,58 +1000,28 @@ void Draw_AllocTexturedRect(int value, int width)
 }
 
 void Draw_PrintNumberWidth6(int value) {
-    int x;
-    int y;
-
     Draw_AllocTexturedRect(value, 6);
-    x = D_8009D124;
-    y = D_8009D128;
-    D_8009D124 = x + 6;
-    D_8009D128 = y;
+    AdvanceCursor(6);
 }
 
 void Draw_PrintNumberWidth5(int value) {
-    int x;
-    int y;
-
     Draw_AllocTexturedRect(value, 5);
-    x = D_8009D124;
-    y = D_8009D128;
-    D_8009D124 = x + 5;
-    D_8009D128 = y;
+    AdvanceCursor(5);
 }
 
 void Draw_PrintNumberWidth4(int value) {
-    int x;
-    int y;
-
     Draw_AllocTexturedRect(value, 4);
-    x = D_8009D124;
-    y = D_8009D128;
-    D_8009D124 = x + 4;
-    D_8009D128 = y;
+    AdvanceCursor(4);
 }
 
 void Draw_PrintNumberWidth3(int value) {
-    int x;
-    int y;
-
     Draw_AllocTexturedRect(value, 3);
-    x = D_8009D124;
-    y = D_8009D128;
-    D_8009D124 = x + 3;
-    D_8009D128 = y;
+    AdvanceCursor(3);
 }
 
 void Draw_PrintNumberWidth2(int value) {
-    int x;
-    int y;
-
     Draw_AllocTexturedRect(value, 2);
-    x = D_8009D124;
-    y = D_8009D128;
-    D_8009D124 = x + 2;
-    D_8009D128 = y;
+    AdvanceCursor(2);
 }
 
 /* Moves the cursor and saves the new position. */
