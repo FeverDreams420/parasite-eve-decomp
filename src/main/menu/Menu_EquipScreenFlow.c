@@ -20,8 +20,6 @@
 
 #define NULL ((void *)0)
 
-int func_80057D18(int);
-void func_800451D0(MenuWidgetNode *);
 void Menu_OpenItemActionSubmenu(MenuWidgetNode *, int, int);
 
 /* COMMON supplies small-data metadata to MASPSX for the words this unit
@@ -156,7 +154,7 @@ int Menu_InventoryInputHandler(MenuWidgetNode *root, unsigned int flags) {
             if (Inv_TestSelectionBit(index)) {
                 if (item != 0) {
                     action = Inv_RemoveActiveListItem;
-                    if (item->kind < 10) action = func_80057D18;
+                    if (item->kind < 10) action = Inv_ClearActiveListSlot;
                     action_result = action(index);
                 } else {
                     action_result = 0;
@@ -188,7 +186,7 @@ int Menu_InventoryInputHandler(MenuWidgetNode *root, unsigned int flags) {
         if (D_8009CF8C >= 0) {
             D_8009CF90 = Inv_IsActiveListOverrideSelected();
             D_8009CF94 = index;
-            if (Inv_TestSelectionBit(index)) func_800451D0(child);
+            if (Inv_TestSelectionBit(index)) Menu_CreateAmmoSpendPanel(child);
         } else if (MenuWidget_GridCellIndex(child) >= 0 &&
                    Inv_LookupActiveListData(index) != 0 && D_8009CEFC == 0) {
             if (child->appearance.cursorTargetX >= 0) child->appearance.cursorTargetX = -1;

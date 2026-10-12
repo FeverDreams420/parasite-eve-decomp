@@ -10,7 +10,6 @@
 void Inventory_OpenAyaItemList(unsigned int mode);
 
 void MenuWidget_RestoreSavedCurrentNode(void);
-void func_80064A54(MenuWidgetNode *node);
 int Menu_InventoryNavigate(MenuWidgetNode *current, MenuWidgetNode *node,
                            u32 flags);
 void Menu_CreateBonusPointAllocationView(void);
@@ -88,7 +87,7 @@ void MenuWidget_ClampScroll(MenuWidgetNode *node);
 void MenuWidget_OffsetPosition(MenuWidgetNode *node, int dx, int dy);
 void MenuWidget_ClearCursorY(MenuWidgetNode *node);
 void Menu_OpenBonusPointSpendDialog(MenuWidgetNode *node, int stat);
-void func_800490B0(void);
+void Menu_ExitBonusPointAllocation(void);
 int Menu_StatSlotInputHandler(MenuWidgetNode *node, unsigned int flags);
 int Menu_StepListNavigate(MenuWidgetListNavigation *node, unsigned int flags);
 

@@ -111,7 +111,7 @@ void MenuWidget_DestroyNodeRecursive(MenuWidgetNode *node) {
             current->next = g_MenuWidgetFreeListHead;
             g_MenuWidgetFreeListHead = current;
             if (current->mode == 2) {
-                func_80064A54(current);
+                MenuWidget_SaveColumnLayout(current);
             }
             for (i = 0; i < 4; i++) {
                 if (current->children[i]) {

@@ -12,7 +12,6 @@ int Inv_GetPackedListCount(void);
 void Inv_BuildFilteredPackedList(int mask);
 void Inv_BuildFilteredPackedListExcluding(int mask, int excluded);
 int Inv_RestoreSelection(unsigned int index);
-M2C_UNK func_80064B74();
 #include "pe1/menu_state.h"
 int Menu_StepEquipConfirm(MenuWidgetNode *node, int input);
 void Menu_DrawEquipSelectionList(MenuWidgetNode *node);
@@ -60,7 +59,7 @@ void Menu_StepSkillList(MenuWidgetNode *arg0, s32 arg1) {
             }
         }
         if (g_InvItemUsableFlag == 0) {
-            func_80064B74(child, 0x13);
+            MenuWidget_SetColumnLayout(child, 0x13);
         }
         if (saved_arg1 == 0) {
             child->cursor_x = -1;

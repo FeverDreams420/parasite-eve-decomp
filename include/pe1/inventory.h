@@ -85,6 +85,7 @@ int Inv_IsAyaInventorySlotReserved(int index);
 int Inv_GetActiveSlotCount(int *requiredReserve);
 void Inv_TransferItemBetweenLists(unsigned selection, int modifier, int flags, int cost);
 void Inv_BuildEquipSlotDisplay(int index);
+int Inv_ClearActiveListSlot(int index);
 int Inv_RemoveActiveListItem(int index);
 void Inv_RebuildSelectableMask(void);
 int Inv_GetSlotHighlightState(int spell, int available);

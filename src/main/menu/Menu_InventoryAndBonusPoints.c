@@ -271,7 +271,7 @@ int Menu_StatSlotInputHandler(MenuWidgetNode *node, unsigned int flags) {
         Menu_OpenBonusPointSpendDialog(current, MenuWidget_GridCellIndex(current) + 5);
         Menu_PlayConfirmSound();
     } else if (flags & 0x40) {
-        func_800490B0();
+        Menu_ExitBonusPointAllocation();
         Menu_PlayCancelSound();
     }
     return 1;
@@ -587,7 +587,7 @@ int Menu_ItemListInputHandler(MenuWidgetNode *node, unsigned int flags)
                     D_8009CEF8 = 1;
                 }
             } else if (D_8009CF30 != 0) {
-                func_800490B0();
+                Menu_ExitBonusPointAllocation();
             } else {
                 Menu_CloseItemList();
             }
