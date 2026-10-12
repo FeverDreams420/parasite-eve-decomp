@@ -30,9 +30,9 @@ typedef union BattleHalfwordAddress {
 extern u8 g_BattleStatusRowPosY[];
 extern u8 D_8009E508[];
 extern u8 D_8009E516[];
-extern StatusSymbolTemplate D_80010DFC;
-extern StatusSymbolTemplate D_80010E10;
-extern StatusSymbolTemplate D_80010E24;
+extern const StatusSymbolTemplate D_80010DFC;
+extern const StatusSymbolTemplate D_80010E10;
+extern const StatusSymbolTemplate D_80010E24;
 extern u8 D_8009E93C[];
 extern u8 D_8009E93D[];
 extern u8 D_8009E930[];

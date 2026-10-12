@@ -87,9 +87,7 @@ segments:
       - [0x10F0, .rodata, battle/Battle_EncounterFlow]
       - [0x1128, rodata, main/rodata_001128]
       - [0x1288, .rodata, battle/Battle_Context]
-      - [0x15E4, .rodata, battle/Battle_StatusPrimitiveFlow]
-      - [0x15FC, rodata, main/rodata_0015FC]
-      - [0x164C, .rodata, battle/Battle_DrawStatusOverlay]
+      - [0x15E4, .rodata, battle/Battle_StatusHud]
       - [0x166C, .rodata, draw/Draw_Textbox]
       - [0x1694, rodata, main/rodata_001694]
       - [0x1734, .rodata, memcard/MemCard_PortAndSaveFlow]
@@ -238,18 +236,13 @@ segments:
       # zero bytes that were main/rodata_001324 are the alignment pad before the
       # 8-aligned enemy-context jump table, which the one object now emits itself.
       - [0x20210, c, battle/Battle_Context]
-      - [0x21094, c, battle/Battle_DrawHPBar]
-      - [0x21CE4, c, battle/Battle_DrawStatusOverlay]
-      - [0x21F60, c, battle/Battle_StatusPrimitiveFlow]
-      - [0x22FD8, c, battle/Battle_StatusNumberFlow]
-      - [0x2330C, c, battle/Battle_DrawStatusPanel]
-      # Contiguous battle-status sprite and ordering-table renderer.
-      - [0x23B5C, c, battle/Gpu_SetupSprites]
-      # Window mode setter and getter: g_MenuActiveMode is private to this pair.
-      - [0x241A0, c, battle/Menu_ActiveWindowMode]
-      - [0x2422C, c, battle/Task_SignalExit]
-      - [0x24240, c, battle/Battle_ActiveAndEnemyStatusFlow]
-      - [0x24FB4, c, battle/Render_AnimationFrame]
+      # Battle status HUD (G0283): HP bar, status overlay, status primitives and
+      # numbers, status panel, the battle-status sprite and ordering-table renderer,
+      # the window mode setter and getter (g_MenuActiveMode), exit signal, active
+      # and enemy status, animation frame. One -G8 FORCE_G0 unit with COMMON $gp
+      # words, --expand-div and ASPSX 2.70. It defines the status symbol templates
+      # and window bounds that were main/rodata_0015FC as const data.
+      - [0x21094, c, battle/Battle_StatusHud]
       # Save slot metadata and save overlay draws (private join); both compile to
       # retail with the assembler at -G4.
       - [0x2515C, c, menu/Menu_SaveSlotDraw]

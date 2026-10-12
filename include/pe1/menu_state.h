@@ -71,7 +71,7 @@ extern int g_MenuItemDiscardMode;
 typedef struct {
     u16 values[8];
 } SaveWindowModeBounds;
-extern SaveWindowModeBounds g_MenuWindowModeBounds;
+extern const SaveWindowModeBounds g_MenuWindowModeBounds;
 void Window_SetBoundsByMode(int mode);
 unsigned int Menu_GetActiveMode(void);
 

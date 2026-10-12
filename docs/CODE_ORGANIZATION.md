@@ -1482,7 +1482,7 @@ Crutches still in these units, with the best crutch-free lev found:
   constant 1 is rematerialized before the loop); without pins and barrier
   lev 61; calling the layout as a `static inline` function lets cse fold
   the pointer chain into symbol offsets (lev 63).
-- `Gpu_SetupSprites.c`: the status-icon packets (`D_8009E960[2][13]`,
+- `Battle_StatusHud.c`: the status-icon packets (`D_8009E960[2][13]`,
   `D_8009EC38[2]`, 28 bytes: draw mode then sprite) are addressed from the
   sprite part at +8 (`D_8009E968`, `D_8009EC40`) with byte offsets (7 byte
   additions, 2 raw offsets) and `Gpu_DrawStatusIcons` keeps 8 pins. A typed
@@ -1491,7 +1491,7 @@ Crutches still in these units, with the best crutch-free lev found:
   part (lev 8 from the immediates). `battle_status.h` now types
   `D_8009E960` as `RenderPagedSpritePacket[2][13]` for `Battle_DrawHPBar`;
   `D_8009E976` and `D_8009EC38` are still byte arrays for this unit.
-- `Gpu_SetupSprites.c`: the status icons are typed now
+- `Battle_StatusHud.c`: the status icons are typed now
   (`g_StatusIconPackets[2][13]`, `g_StatusMarkerPackets[2]` in
   `pe1/draw_state.h`, linker names beside the battle byte arrays), and
   `Gpu_SetupSprites`/`Gpu_QueuePrimitive` are plain field accesses.
