@@ -1,6 +1,5 @@
 /* GCC_VERSION: 2.8.1 */
-/* CC1_FLAGS: -g3 -G8 */
-/* MASPSX_FLAGS: -G8 */
+/* CC1_FLAGS: -g3 */
 /* PSY-Q LIBMATH DBSHIFTU: _dbl_shift_us. */
 #include "pe1/math64.h"
 

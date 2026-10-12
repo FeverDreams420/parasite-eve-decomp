@@ -1,4 +1,3 @@
-/* ASSEMBLER: GNU */
 /* PSY-Q LIBGTE GEO_01: rcos. */
 /* Quarter-wave table views used by the original cosine object. */
 #include "geo_01_externs.h"

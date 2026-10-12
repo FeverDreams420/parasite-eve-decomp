@@ -1,8 +1,7 @@
-/* ASSEMBLER: GNU */
-/* PSY-Q LIBC SPRINTF: sprintf. */
 /* GAS_VERSION: 2.8.1 */
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses */
+/* PSY-Q LIBC SPRINTF: sprintf. */
 /* Psy-Q SPRINTF: variadic formatter, including its private tables and template.
  * Empty scheduling barriers and register pins are tracked in the debt report. */
 
