@@ -24,16 +24,16 @@ extern u8 D_80193084[];
 extern s32 D_80193258[];
 extern u8 D_80193254[], D_80192FE8[], D_8018F7F0[];
 
-MemcardImageNode *Memcard_CreateImageNode(s32 kind);
-void Memcard_CreateFixedImageNode(void);
-void Memcard_CreateImageGroup(void);
+MemcardImageNode *MenuCard_CreateImageNode(s32 kind);
+void MenuCard_CreateFixedImageNode(void);
+void MenuCard_CreateImageGroup(void);
 extern MemcardImagePreset D_801D0DB0, D_801D0DA4;
 extern s32 D_80193274, D_80193270;
 extern u8 D_801930D8[], D_8018F958[], D_80192F98[];
 
-void Memcard_BlendImage(MemcardImageNode *node, u8 *destination, s32 padding);
+void MenuCard_BlendImage(MemcardImageNode *node, u8 *destination, s32 padding);
 
-void Memcard_BlendRotatedImage(MemcardImageNode *node, u8 *destination, s32 padding, s32 stride);
+void MenuCard_BlendRotatedImage(MemcardImageNode *node, u8 *destination, s32 padding, s32 stride);
 
 /* Memory card list screen input. */
 extern s32 D_801D11B8; /* Pad state of the previous frame. */

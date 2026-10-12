@@ -9,7 +9,7 @@ typedef struct MemcardTrailState { s16 phase, timer, attachment; } MemcardTrailS
 extern u8 D_801F1DE8[];
 extern u8 D_801F1E74[];
 
-s32 Memcard_TrailEffect(s32 mode, MemcardTrailState *state);
-s32 Memcard_SineTrailEffect(s32 mode, MemcardTrailState *state);
+s32 MenuCard_TrailEffect(s32 mode, MemcardTrailState *state);
+s32 MenuCard_SineTrailEffect(s32 mode, MemcardTrailState *state);
 
 #endif

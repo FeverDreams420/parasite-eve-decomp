@@ -1,6 +1,6 @@
 #include "menu_memcard_image.h"
 
-void Memcard_CreateFixedImageNode(void) {
+void MenuCard_CreateFixedImageNode(void) {
     s32 kind;
     MemcardImageNode *node = D_801D136C;
     register MemcardImageNode *tail;
@@ -40,7 +40,7 @@ void Memcard_CreateFixedImageNode(void) {
 }
 #include "menu_memcard_image.h"
 
-void Memcard_CreateImageGroup(void) {
+void MenuCard_CreateImageGroup(void) {
     {
         register s32 kind;
         MemcardImageNode *node = D_801D136C;
@@ -78,9 +78,9 @@ void Memcard_CreateImageGroup(void) {
             node->parameter = parameter;
         }
     }
-    Memcard_CreateImageNode(3);
-    Memcard_CreateFixedImageNode();
-    Memcard_CreateImageNode(5)->field14 = D_80192F98;
+    MenuCard_CreateImageNode(3);
+    MenuCard_CreateFixedImageNode();
+    MenuCard_CreateImageNode(5)->field14 = D_80192F98;
     {
         register s32 kind;
         MemcardImageNode *node = D_801D136C;

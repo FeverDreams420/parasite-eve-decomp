@@ -1,11 +1,11 @@
 #include "pe1/cdrom.h"
 #include "pe1/psyq_press.h"
-#include "Memcard_StopVideo_externs.h"
+#include "MenuCard_StopVideo_externs.h"
 
 void func_800870F0(int arg0);
 void StUnSetRing(void);
 
-void Memcard_StopVideo(void) {
+void MenuCard_StopVideo(void) {
     unsigned char *counter;
     int value;
 

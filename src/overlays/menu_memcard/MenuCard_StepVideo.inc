@@ -1,35 +1,35 @@
-#ifndef MEMCARD_STEP_VIDEO_NAME
-#define MEMCARD_STEP_VIDEO_NAME Memcard_StepVideo
-#define MEMCARD_VIDEO_SET_DISPLAY Memcard_SetVideoDisplay
-#define MEMCARD_VIDEO_UPDATE_FRAME Memcard_UpdateVideoFrame
-#define MEMCARD_VIDEO_MODE D_801D0DBE
-#define MEMCARD_VIDEO_FLIP D_801D0DC0
-#define MEMCARD_VIDEO_FILE D_801D0DC4
-#define MEMCARD_VIDEO_RESTART D_801D0DDC
-#define MEMCARD_VIDEO_DISPLAY D_801D1464
-#define MEMCARD_VIDEO_PTR4 D_801D0DF8
-#define MEMCARD_VIDEO_FINISHED D_801D0DBD
+#ifndef MENUCARD_STEP_VIDEO_NAME
+#define MENUCARD_STEP_VIDEO_NAME MenuCard_StepVideo
+#define MENUCARD_VIDEO_SET_DISPLAY MenuCard_SetVideoDisplay
+#define MENUCARD_VIDEO_UPDATE_FRAME MenuCard_UpdateVideoFrame
+#define MENUCARD_VIDEO_MODE D_801D0DBE
+#define MENUCARD_VIDEO_FLIP D_801D0DC0
+#define MENUCARD_VIDEO_FILE D_801D0DC4
+#define MENUCARD_VIDEO_RESTART D_801D0DDC
+#define MENUCARD_VIDEO_DISPLAY D_801D1464
+#define MENUCARD_VIDEO_PTR4 D_801D0DF8
+#define MENUCARD_VIDEO_FINISHED D_801D0DBD
 #endif
 
 /* Wait for the next decoded frame and start its decode; -1 on a stall. */
-static inline s16 Memcard_NextVideoFrame(VideoDisplay *dec) {
+static inline s16 MenuCard_NextVideoFrame(VideoDisplay *dec) {
     s16 retries = 2000;
     void *frame;
 
-    while ((frame = MEMCARD_VIDEO_UPDATE_FRAME(dec)) == 0) {
+    while ((frame = MENUCARD_VIDEO_UPDATE_FRAME(dec)) == 0) {
         if (--retries == 0) {
             return -1;
         }
     }
     D_800B0DBC.value++;
     dec->decodeIndex ^= 1;
-    func_8010C89C(frame, dec->decode[dec->decodeIndex], MEMCARD_VIDEO_PTR4);
+    func_8010C89C(frame, dec->decode[dec->decodeIndex], MENUCARD_VIDEO_PTR4);
     func_8007C394(frame);
     return 0;
 }
 
 /* Restart the stream at the saved position. */
-static inline void Memcard_KickVideoStream(CdlLOC *loc) {
+static inline void MenuCard_KickVideoStream(CdlLOC *loc) {
     u8 result[8];
 
     func_8007C2A0(loc);
@@ -43,7 +43,7 @@ static inline void Memcard_KickVideoStream(CdlLOC *loc) {
 }
 
 /* Wait for the slice upload; on a timeout skip to the other frame buffer. */
-static inline void Memcard_SyncVideoUpload(VideoDisplay *dec) {
+static inline void MenuCard_SyncVideoUpload(VideoDisplay *dec) {
     volatile s32 wait = 0x800000;
 
     while (dec->done == 0) {
@@ -60,26 +60,26 @@ static inline void Memcard_SyncVideoUpload(VideoDisplay *dec) {
 /* Per-frame step: start the decode and the slice upload, wait for the next
  * frame (restarting the stream on a stall), wait for the upload, then stop
  * the player once the last frame has been shown. */
-s32 MEMCARD_STEP_VIDEO_NAME(void) {
+s32 MENUCARD_STEP_VIDEO_NAME(void) {
     s8 finished;
     u8 *flip;
 
     if (D_800B0DBA >= 2) {
-        flip = &MEMCARD_VIDEO_FLIP;
+        flip = &MENUCARD_VIDEO_FLIP;
         finished = 0;
         if (*flip == 2) {
-            MEMCARD_VIDEO_SET_DISPLAY(D_8009CDDC ^ 1, D_800B0DBB);
+            MENUCARD_VIDEO_SET_DISPLAY(D_8009CDDC ^ 1, D_800B0DBB);
             *flip = 0;
         }
-        MEMCARD_VIDEO_RESTART = MEMCARD_VIDEO_FILE.pos;
-        func_8010BFA0(MEMCARD_VIDEO_DISPLAY.decode[MEMCARD_VIDEO_DISPLAY.decodeIndex], MEMCARD_VIDEO_MODE);
-        func_8010C01C(MEMCARD_VIDEO_DISPLAY.buffers[MEMCARD_VIDEO_DISPLAY.selector],
-                      MEMCARD_VIDEO_DISPLAY.rect.w * MEMCARD_VIDEO_DISPLAY.rect.h / 2);
-        while (Memcard_NextVideoFrame(&MEMCARD_VIDEO_DISPLAY) == -1) {
-            Memcard_KickVideoStream(&MEMCARD_VIDEO_RESTART);
+        MENUCARD_VIDEO_RESTART = MENUCARD_VIDEO_FILE.pos;
+        func_8010BFA0(MENUCARD_VIDEO_DISPLAY.decode[MENUCARD_VIDEO_DISPLAY.decodeIndex], MENUCARD_VIDEO_MODE);
+        func_8010C01C(MENUCARD_VIDEO_DISPLAY.buffers[MENUCARD_VIDEO_DISPLAY.selector],
+                      MENUCARD_VIDEO_DISPLAY.rect.w * MENUCARD_VIDEO_DISPLAY.rect.h / 2);
+        while (MenuCard_NextVideoFrame(&MENUCARD_VIDEO_DISPLAY) == -1) {
+            MenuCard_KickVideoStream(&MENUCARD_VIDEO_RESTART);
         }
-        Memcard_SyncVideoUpload(&MEMCARD_VIDEO_DISPLAY);
-        if (MEMCARD_VIDEO_FINISHED == 1) {
+        MenuCard_SyncVideoUpload(&MENUCARD_VIDEO_DISPLAY);
+        if (MENUCARD_VIDEO_FINISHED == 1) {
             finished = 1;
         }
         if (!finished) {

@@ -1,6 +1,6 @@
 #include "menu_memcard_trail.h"
 
-s32 Memcard_TrailEffect(s32 mode, MemcardTrailState *state) {
+s32 MenuCard_TrailEffect(s32 mode, MemcardTrailState *state) {
     GteShortVector position;
     MemcardJointOffset offset = D_801ED818;
     RenderColor color;
@@ -11,7 +11,7 @@ s32 Memcard_TrailEffect(s32 mode, MemcardTrailState *state) {
     case 0:
         state->attachment = 19; state->phase = 0; state->timer = 0;
         return func_800CE560(ANIM_POOL_AS(MemcardLinkChannel)->slots, 20, 24,
-                             (FieldAnimCallbackListCallback)Memcard_CosineImage);
+                             (FieldAnimCallbackListCallback)MenuCard_CosineImage);
     case 1:
         state->timer++;
         FieldFx_TransformMatrixPoint(D_8009D254, state->attachment, &offset, &position);

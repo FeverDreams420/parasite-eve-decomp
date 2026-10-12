@@ -139,7 +139,7 @@ and the linked binaries stayed identical:
 |---|---|---|
 | `boot/Draw_InitPipeline.c`, `script/Script_FieldSfxQueue.c` | cc1 `-G0` | the default, written out |
 | `fx_common/effects.c` | cc1 `-fno-force-addr` | not an option cc.sh reads |
-| `menu_memcard/Memcard_ListAndScreenFlow.c` | second `-fno-cse-skip-blocks` line | left over from a merge |
+| `menu_memcard/MenuCard_ListAndScreenFlow.c` | second `-fno-cse-skip-blocks` line | left over from a merge |
 | `menu/Menu_SaveScreens.c`, `menu/Menu_SkillScreens.c`, `script/Script_NodePool.c`, `fx_common/model_buffers.c` | `--dont-expand-li` | no effect at ASPSX 2.56 |
 | `battle/Battle_AttackResolution.c`, `battle/Battle_EncounterFlow.c`, `room_lib/RoomEffect_SeekerSparkCallback.c`, `room_lib/RoomFx_DropFieldEffects.c` | `--expand-div` | no variable division left in the unit |
 | `item/Menu_OpenItemUsePanelAtIndex.c` | `--use-comm-section` | the unit defines no COMMON words |
@@ -412,8 +412,8 @@ differently but resolve to the same options count once.
 
 #### S12: `cc1 -G0 -fno-cse-skip-blocks ; maspsx -G0`
 
-- `src/overlays/menu_memcard/Memcard_FlipScreenPages.c`
-- `src/overlays/menu_memcard/Memcard_ListAndScreenFlow.c`
+- `src/overlays/menu_memcard/MenuCard_FlipScreenPages.c`
+- `src/overlays/menu_memcard/MenuCard_ListAndScreenFlow.c`
 
 #### S13: `cc1 -G0 -fno-strength-reduce ; maspsx -G0 --expand-div`
 
@@ -548,8 +548,8 @@ means only the order of symbol-table entries changed (cc1 `-G8` emits
 | `overlays/fx_common/FxCommon_SetMotionEndpoints.c` | cc1 `-fno-schedule-insns`: lev 56 (FxCommon_SetMotionEndpoints 56) |
 | `overlays/fx_common/camera_nodes.c` | maspsx `--expand-div`: lev 165 (FxCommon_CheckFourBoundsWithMargin 88, FxCommon_CheckBoundsWithMargin 44, func_8018F55C 33) |
 | `overlays/fx_common/render_op.c` | cc1 `-G8`: lev 27 (func_80191EFC 15, func_80191E30 12); maspsx `-G8`: identical; maspsx `--use-comm-section`: identical; FORCE_G0: lev 14 (func_80191E30 8, func_80191EFC 6); small-data set: lev 27 (func_80191EFC 15, func_80191E30 12) |
-| `overlays/menu_memcard/Memcard_FlipScreenPages.c` | cc1 `-fno-cse-skip-blocks`: lev 12 (Memcard_FlipScreenPages 12) |
-| `overlays/menu_memcard/Memcard_ListAndScreenFlow.c` | cc1 `-fno-cse-skip-blocks`: lev 71 (func_801909B4 59, func_80190660 12) |
+| `overlays/menu_memcard/MenuCard_FlipScreenPages.c` | cc1 `-fno-cse-skip-blocks`: lev 12 (MenuCard_FlipScreenPages 12) |
+| `overlays/menu_memcard/MenuCard_ListAndScreenFlow.c` | cc1 `-fno-cse-skip-blocks`: lev 71 (func_801909B4 59, func_80190660 12) |
 | `overlays/room_lib/RoomEffect_DroppedFlare.c` | maspsx `--expand-div`: lev 63 (RoomEffect_DroppedFlareParticle 63) |
 | `overlays/room_lib/RoomEffect_LineBurst.c` | maspsx `--expand-div`: lev 36 (RoomEffect_LineBurstController 36) |
 | `overlays/room_lib/RoomEffect_SparkAttacks.c` | maspsx `--expand-div`: lev 37 (RoomEffect_BeamSparkController 37) |

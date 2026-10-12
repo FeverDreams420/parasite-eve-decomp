@@ -1,9 +1,9 @@
-#ifndef MEMCARD_SET_VIDEO_DISPLAY_NAME
-#define MEMCARD_SET_VIDEO_DISPLAY_NAME Memcard_SetVideoDisplay
-#define MEMCARD_VIDEO_DISPLAY_MODE D_801D0DBE
+#ifndef MENUCARD_SET_VIDEO_DISPLAY_NAME
+#define MENUCARD_SET_VIDEO_DISPLAY_NAME MenuCard_SetVideoDisplay
+#define MENUCARD_VIDEO_DISPLAY_MODE D_801D0DBE
 #endif
 
-void MEMCARD_SET_VIDEO_DISPLAY_NAME(s8 index, s8 wide) {
+void MENUCARD_SET_VIDEO_DISPLAY_NAME(s8 index, s8 wide) {
     s16 y[2];
 
     if (index == 0) {
@@ -14,7 +14,7 @@ void MEMCARD_SET_VIDEO_DISPLAY_NAME(s8 index, s8 wide) {
         y[1] = 240;
     }
     if (wide) {
-        MEMCARD_VIDEO_DISPLAY_MODE = 3;
+        MENUCARD_VIDEO_DISPLAY_MODE = 3;
         SetDefDispEnv(&D_800BCE80[index], 0, y[0], 480, 240);
         D_800BCE80[index].isrgb24 = 1;
         D_800BCE80[index].disp.w = D_800BCE80[index].disp.w * 2 / 3;
@@ -27,7 +27,7 @@ void MEMCARD_SET_VIDEO_DISPLAY_NAME(s8 index, s8 wide) {
         D_800BCDC8[index].b0 = 0;
         D_800BCDC8[index].clip.w = D_800BCDC8[index].clip.w * 2 / 3;
     } else {
-        MEMCARD_VIDEO_DISPLAY_MODE = 2;
+        MENUCARD_VIDEO_DISPLAY_MODE = 2;
         SetDefDispEnv(&D_800BCE80[index], 0, y[0], 320, 240);
         SetDefDrawEnv(&D_800BCDC8[index], 0, y[1], 320, 240);
         D_800BCDC8[index].isbg = 1;
@@ -39,5 +39,5 @@ void MEMCARD_SET_VIDEO_DISPLAY_NAME(s8 index, s8 wide) {
     }
 }
 
-#undef MEMCARD_VIDEO_DISPLAY_MODE
-#undef MEMCARD_SET_VIDEO_DISPLAY_NAME
+#undef MENUCARD_VIDEO_DISPLAY_MODE
+#undef MENUCARD_SET_VIDEO_DISPLAY_NAME

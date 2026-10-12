@@ -4,7 +4,7 @@
 
 #include "fade_externs.h"
 
-void Memcard_AdvanceFade(MenuMemcardFadeState *state) {
+void MenuCard_AdvanceFade(MenuMemcardFadeState *state) {
     s32 level = state->level;
 
     if ((level <= 0 && state->velocity < 0) ||
@@ -14,7 +14,7 @@ void Memcard_AdvanceFade(MenuMemcardFadeState *state) {
     state->level += state->velocity;
 }
 
-void Memcard_UpdateFadeDisplay(MenuMemcardFadeState *state) {
+void MenuCard_UpdateFadeDisplay(MenuMemcardFadeState *state) {
     {
         s32 velocity = state->velocity;
         s32 increase = 0;
@@ -60,7 +60,7 @@ void Memcard_UpdateFadeDisplay(MenuMemcardFadeState *state) {
     }
 }
 
-void Memcard_DecreaseFade(MenuMemcardFadeState *state) {
+void MenuCard_DecreaseFade(MenuMemcardFadeState *state) {
     s32 level = state->level - 0x10;
 
     if (level < 0) {

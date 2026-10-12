@@ -1,5 +1,5 @@
 #include "menu_memcard_image.h"
-void Memcard_BlendRotatedImage(MemcardImageNode *node, u8 *destination, s32 padding, s32 stride) {
+void MenuCard_BlendRotatedImage(MemcardImageNode *node, u8 *destination, s32 padding, s32 stride) {
     u8 *out = destination;
     s32 progress = node->targetY;
     MemcardImage *image = node->image;

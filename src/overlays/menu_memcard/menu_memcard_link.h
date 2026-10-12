@@ -17,6 +17,6 @@ extern MemcardLinkColor D_801ED850, D_801ED854;
 extern struct BattleEntity *D_8009D254;
 extern s16 D_801F1D86, D_801F1D88;
 
-s32 Memcard_LinkEffect(s32 mode, MemcardLinkState *state);
+s32 MenuCard_LinkEffect(s32 mode, MemcardLinkState *state);
 
 #endif

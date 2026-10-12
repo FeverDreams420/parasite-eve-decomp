@@ -1,5 +1,5 @@
 #include "menu_memcard_image.h"
-void Memcard_BlendImage(MemcardImageNode *node, u8 *destination, s32 padding) {
+void MenuCard_BlendImage(MemcardImageNode *node, u8 *destination, s32 padding) {
     register s32 width asm("$3") = node->width;
     s32 intensity = node->intensity;
     s32 words;

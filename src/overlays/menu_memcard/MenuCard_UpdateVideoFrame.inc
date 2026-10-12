@@ -1,12 +1,12 @@
-#ifndef MEMCARD_UPDATE_VIDEO_FRAME_NAME
-#define MEMCARD_UPDATE_VIDEO_FRAME_NAME Memcard_UpdateVideoFrame
-#define MEMCARD_VIDEO_ENTRY D_801D11AC
-#define MEMCARD_VIDEO_LAST_TIME D_801D11B0
-#define MEMCARD_VIDEO_FINISHED D_801D0DBD
-#define MEMCARD_VIDEO_SIZE D_801D0DE0
+#ifndef MENUCARD_UPDATE_VIDEO_FRAME_NAME
+#define MENUCARD_UPDATE_VIDEO_FRAME_NAME MenuCard_UpdateVideoFrame
+#define MENUCARD_VIDEO_ENTRY D_801D11AC
+#define MENUCARD_VIDEO_LAST_TIME D_801D11B0
+#define MENUCARD_VIDEO_FINISHED D_801D0DBD
+#define MENUCARD_VIDEO_SIZE D_801D0DE0
 #endif
 
-void *MEMCARD_UPDATE_VIDEO_FRAME_NAME(VideoDisplay *display) {
+void *MENUCARD_UPDATE_VIDEO_FRAME_NAME(VideoDisplay *display) {
     struct {
         void *data;
         VideoFrame *frame;
@@ -38,7 +38,7 @@ void *MEMCARD_UPDATE_VIDEO_FRAME_NAME(VideoDisplay *display) {
             return 0;
         }
     }
-    end = MEMCARD_VIDEO_ENTRY->end;
+    end = MENUCARD_VIDEO_ENTRY->end;
     if (local.frame->time >= (end - 16)) {
         s32 position = local.frame->time + 16;
 
@@ -49,11 +49,11 @@ void *MEMCARD_UPDATE_VIDEO_FRAME_NAME(VideoDisplay *display) {
         }
         func_800870F0(D_800B0DBE * remaining / 14);
     }
-    if (local.frame->time < MEMCARD_VIDEO_LAST_TIME || local.frame->time >= MEMCARD_VIDEO_ENTRY->end) {
-        MEMCARD_VIDEO_FINISHED = 1;
+    if (local.frame->time < MENUCARD_VIDEO_LAST_TIME || local.frame->time >= MENUCARD_VIDEO_ENTRY->end) {
+        MENUCARD_VIDEO_FINISHED = 1;
     }
-    MEMCARD_VIDEO_LAST_TIME = local.frame->time;
-    if (MEMCARD_VIDEO_SIZE[0] != local.frame->width || MEMCARD_VIDEO_SIZE[1] != local.frame->height) {
+    MENUCARD_VIDEO_LAST_TIME = local.frame->time;
+    if (MENUCARD_VIDEO_SIZE[0] != local.frame->width || MENUCARD_VIDEO_SIZE[1] != local.frame->height) {
         if (D_800B0DBB) {
             local.clear.x = 0;
             local.clear.y = 0;
@@ -66,22 +66,22 @@ void *MEMCARD_UPDATE_VIDEO_FRAME_NAME(VideoDisplay *display) {
             local.clear.h = 480;
         }
         ClearImage(&local.clear, 0, 0, 0);
-        MEMCARD_VIDEO_SIZE[0] = local.frame->width;
-        MEMCARD_VIDEO_SIZE[1] = local.frame->height;
+        MENUCARD_VIDEO_SIZE[0] = local.frame->width;
+        MENUCARD_VIDEO_SIZE[1] = local.frame->height;
     }
     if (D_800B0DBB) {
-        display->regions[0].w = display->regions[1].w = MEMCARD_VIDEO_SIZE[0] * 3 / 2;
+        display->regions[0].w = display->regions[1].w = MENUCARD_VIDEO_SIZE[0] * 3 / 2;
     } else {
-        display->regions[0].w = display->regions[1].w = MEMCARD_VIDEO_SIZE[0];
+        display->regions[0].w = display->regions[1].w = MENUCARD_VIDEO_SIZE[0];
     }
     data = local.data;
-    display->regions[0].h = display->regions[1].h = MEMCARD_VIDEO_SIZE[1];
-    display->rect.h = MEMCARD_VIDEO_SIZE[1];
+    display->regions[0].h = display->regions[1].h = MENUCARD_VIDEO_SIZE[1];
+    display->rect.h = MENUCARD_VIDEO_SIZE[1];
     return data;
 }
 
-#undef MEMCARD_VIDEO_SIZE
-#undef MEMCARD_VIDEO_FINISHED
-#undef MEMCARD_VIDEO_LAST_TIME
-#undef MEMCARD_VIDEO_ENTRY
-#undef MEMCARD_UPDATE_VIDEO_FRAME_NAME
+#undef MENUCARD_VIDEO_SIZE
+#undef MENUCARD_VIDEO_FINISHED
+#undef MENUCARD_VIDEO_LAST_TIME
+#undef MENUCARD_VIDEO_ENTRY
+#undef MENUCARD_UPDATE_VIDEO_FRAME_NAME

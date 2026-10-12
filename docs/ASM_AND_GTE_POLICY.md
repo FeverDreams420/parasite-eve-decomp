@@ -2128,7 +2128,7 @@ assembly is present.
 
 ## Menu memcard fade display
 
-`Memcard_UpdateFadeDisplay` matches all 148 retail bytes. The shared
+`MenuCard_UpdateFadeDisplay` matches all 148 retail bytes. The shared
 `MenuMemcardFadeState` now names the display halfwords at offsets 6 and 10.
 Volatile accesses preserve the original velocity reloads and the upper display
 store. One empty compiler barrier keeps the lower display floor constant in

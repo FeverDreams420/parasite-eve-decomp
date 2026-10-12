@@ -1,7 +1,7 @@
 #include "menu_memcard_image.h"
 
 /* Matching debt: the workspace operand preserves the retail stack frame. */
-MemcardImageNode *Memcard_CreateImageNode(s32 kind) {
+MemcardImageNode *MenuCard_CreateImageNode(s32 kind) {
     s32 workspace[1];
     MemcardImageNode *node = D_801D136C;
     MemcardImageNode *tail = D_801D137C;

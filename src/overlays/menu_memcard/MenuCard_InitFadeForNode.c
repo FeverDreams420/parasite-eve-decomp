@@ -1,7 +1,7 @@
 #include "menu_memcard_fade.h"
 #include "menu_memcard_node.h"
 
-void Memcard_InitFadeForNode(MenuMemcardFadeState *state) {
+void MenuCard_InitFadeForNode(MenuMemcardFadeState *state) {
     MenuMemcardListNode *node = ((MenuMemcardListNode *)D_801D1370);
     int kind = 7;
 

@@ -1,6 +1,6 @@
 #include "menu_memcard_pulse.h"
 
-s32 Memcard_PulseImage(s32 mode, MemcardPulseState *state) {
+s32 MenuCard_PulseImage(s32 mode, MemcardPulseState *state) {
     GteRotation rotation;
     RenderColor color;
     s32 angle;

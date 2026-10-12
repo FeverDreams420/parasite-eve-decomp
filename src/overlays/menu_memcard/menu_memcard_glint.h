@@ -78,21 +78,21 @@ extern RenderColor D_801ED838, D_801ED83C, D_801ED840;
 extern void func_8006DDCC(int sound, int mode, int x, int y, int z);
 extern u8 D_801F1CB0[];
 
-int Memcard_FadingGlintParticle(int mode, RoomDampedSpark *spark);
-int Memcard_GlintBurstController(int mode, MemcardGlintBurst *burst);
-int Memcard_SpinRingParticle(int mode, MemcardSpinParticle *p);
-int Memcard_SpinBurstController(int mode, MemcardSpinBurst *burst);
-int Memcard_DriftGlowParticle(int mode, RoomDampedSpark *spark);
-int Memcard_RisingEmberParticle(int mode, RoomDampedSpark *spark);
-int Memcard_RingBurstController(int mode, MemcardRingBurst *burst);
+int MenuCard_FadingGlintParticle(int mode, RoomDampedSpark *spark);
+int MenuCard_GlintBurstController(int mode, MemcardGlintBurst *burst);
+int MenuCard_SpinRingParticle(int mode, MemcardSpinParticle *p);
+int MenuCard_SpinBurstController(int mode, MemcardSpinBurst *burst);
+int MenuCard_DriftGlowParticle(int mode, RoomDampedSpark *spark);
+int MenuCard_RisingEmberParticle(int mode, RoomDampedSpark *spark);
+int MenuCard_RingBurstController(int mode, MemcardRingBurst *burst);
 
-GteShortVector *Memcard_GetGlintOriginA(void);
-GteShortVector *Memcard_GetGlintOriginB(void);
-GteShortVector *Memcard_GetGlintOriginC(void);
-GteShortVector *Memcard_GetGlintOriginD(void);
-GteShortVector *Memcard_GetGlintOriginE(void);
-GteShortVector *Memcard_GetGlintOriginF(void);
-int Memcard_ConsumeCrossFlashFlag(int mode);
-int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash);
+GteShortVector *MenuCard_GetGlintOriginA(void);
+GteShortVector *MenuCard_GetGlintOriginB(void);
+GteShortVector *MenuCard_GetGlintOriginC(void);
+GteShortVector *MenuCard_GetGlintOriginD(void);
+GteShortVector *MenuCard_GetGlintOriginE(void);
+GteShortVector *MenuCard_GetGlintOriginF(void);
+int MenuCard_ConsumeCrossFlashFlag(int mode);
+int MenuCard_CrossFlashController(int mode, MemcardCrossFlash *flash);
 
 #endif

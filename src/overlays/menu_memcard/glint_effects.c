@@ -2,7 +2,7 @@
 
 /* Spark that drifts with damped velocity for 44 frames; state 0 draws a
  * flickering coloured glow, state 1 a larger glow that fades with a sine. */
-int Memcard_DriftGlowParticle(int mode, RoomDampedSpark *spark) {
+int MenuCard_DriftGlowParticle(int mode, RoomDampedSpark *spark) {
     GteRotation rotation = D_801ED7FC;
     RenderColor color;
     int angle;
@@ -74,7 +74,7 @@ int Memcard_DriftGlowParticle(int mode, RoomDampedSpark *spark) {
 
 /* Ring burst: sprays drift glows on its first frames, then grows a stack
  * of glow rings and bands around its position. */
-int Memcard_RingBurstController(int mode, MemcardRingBurst *burst) {
+int MenuCard_RingBurstController(int mode, MemcardRingBurst *burst) {
     GteShortVector position;
     GteShortVector offset;
     GteRotation spin = D_801ED7FC;
@@ -97,7 +97,7 @@ int Memcard_RingBurstController(int mode, MemcardRingBurst *burst) {
         burst->state = 0;
         burst->timer = 0;
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 50,
-                             (FieldAnimCallbackListCallback)Memcard_DriftGlowParticle);
+                             (FieldAnimCallbackListCallback)MenuCard_DriftGlowParticle);
     case 1:
         switch (burst->state) {
         case 0:
@@ -223,7 +223,7 @@ int Memcard_RingBurstController(int mode, MemcardRingBurst *burst) {
 /* Spark with three phases: state 0 falls and bounces with a spinning
  * coloured glint, state 1 rises with jitter as a pulsing flame frame,
  * state 2 lies on the floor as a flat glow that fades with a sine. */
-int Memcard_RisingEmberParticle(int mode, RoomDampedSpark *spark) {
+int MenuCard_RisingEmberParticle(int mode, RoomDampedSpark *spark) {
     GteRotation rotation = D_801ED7FC;
     RenderColor color;
     GteShortVector position;
@@ -358,7 +358,7 @@ int Memcard_RisingEmberParticle(int mode, RoomDampedSpark *spark) {
 /* Controller that draws two crossed beams between the actor's hands while
  * the flash flag is raised, sheds sparks from both hands and mirrors every
  * beam to the other side. */
-int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
+int MenuCard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
     GteShortVector from;
     GteShortVector to;
     MemcardJointOffset hand = D_801ED818;
@@ -396,7 +396,7 @@ int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
         FieldFx_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 21, &tipB, &from);
         func_800D1384(&from, &to, 0x3F2, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailD, 1);
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 36,
-                             (FieldAnimCallbackListCallback)Memcard_RisingEmberParticle);
+                             (FieldAnimCallbackListCallback)MenuCard_RisingEmberParticle);
     case 1:
         flash->timer++;
         D_801F1F3A = 1;
@@ -518,7 +518,7 @@ int Memcard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
 /* Spark that drifts with damped velocity for 24 frames; state 0 draws a
  * glint whose size follows a sine scaled by the spark's angle field, state 1
  * also falls and bounces and draws a larger spinning glint. */
-int Memcard_FadingGlintParticle(int mode, RoomDampedSpark *spark) {
+int MenuCard_FadingGlintParticle(int mode, RoomDampedSpark *spark) {
     GteRotation rotation;
     int fall;
     int bounce;
@@ -611,7 +611,7 @@ int Memcard_FadingGlintParticle(int mode, RoomDampedSpark *spark) {
 
 /* Controller that sits on the scene anchor, bursts fading glints on its
  * early frames and flashes a glint, ring and halo while it fades. */
-int Memcard_GlintBurstController(int mode, MemcardGlintBurst *burst) {
+int MenuCard_GlintBurstController(int mode, MemcardGlintBurst *burst) {
     RenderColor color;
     RenderColor flash = D_801ED844;
     RoomDampedSpark *child;
@@ -627,7 +627,7 @@ int Memcard_GlintBurstController(int mode, MemcardGlintBurst *burst) {
         burst->y = ((MemcardGlintAnchor *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->y;
         burst->z = ((MemcardGlintAnchor *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->z;
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 22,
-                             (FieldAnimCallbackListCallback)Memcard_FadingGlintParticle);
+                             (FieldAnimCallbackListCallback)MenuCard_FadingGlintParticle);
     case 1:
         if (D_800E27EC == 3) {
             for (i = 0; i < 6; i++) {
@@ -728,7 +728,7 @@ int Memcard_GlintBurstController(int mode, MemcardGlintBurst *burst) {
 
 /* Particle that spins: state 0 draws a halo, state 1 a tilted textured
  * ring around the shared origin, state 2 a scaled model that orbits it. */
-int Memcard_SpinRingParticle(int mode, MemcardSpinParticle *p) {
+int MenuCard_SpinRingParticle(int mode, MemcardSpinParticle *p) {
     GteShortVector offset;
     RenderColor color;
     RenderColor colorA = D_801ED848;
@@ -849,7 +849,7 @@ int Memcard_SpinRingParticle(int mode, MemcardSpinParticle *p) {
 
 /* Controller that sits on the scene anchor, plays its sound on frame 3 and
  * spawns spinning halos, rings and model shards on frames 2 and 8. */
-int Memcard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
+int MenuCard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
     MemcardSpinParticle *child;
     int i;
 
@@ -862,7 +862,7 @@ int Memcard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
         burst->rotation.x = 0;
         FieldFx_ModelScrollUv((union FieldTexturedModel *)D_800E22D4, 0, 0);
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 40,
-                             (FieldAnimCallbackListCallback)Memcard_SpinRingParticle);
+                             (FieldAnimCallbackListCallback)MenuCard_SpinRingParticle);
     case 1:
         if (D_800E27EC == 3) {
             func_8006DDCC(1201, 0, burst->x, burst->y, burst->z);

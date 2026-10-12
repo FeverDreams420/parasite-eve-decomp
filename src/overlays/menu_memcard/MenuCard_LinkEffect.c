@@ -1,6 +1,6 @@
 #include "menu_memcard_link.h"
 
-s32 Memcard_LinkEffect(s32 mode, MemcardLinkState *state) {
+s32 MenuCard_LinkEffect(s32 mode, MemcardLinkState *state) {
     GteShortVector unused;
     GteShortVector first;
     GteShortVector second;
@@ -25,7 +25,7 @@ s32 Memcard_LinkEffect(s32 mode, MemcardLinkState *state) {
         FieldFx_TransformMatrixPoint(D_8009D254, D_801F1D88, &offset, &second);
         func_800D1384(&first, &second, 1016, (unsigned char *)&color2, (unsigned char *)&color1, 128, (struct FieldTrailPair *)&state->rotation, 1);
         return func_800CE560(ANIM_POOL_AS(MemcardLinkChannel)->slots, 20, 22,
-                             (FieldAnimCallbackListCallback)Memcard_PulseImage);
+                             (FieldAnimCallbackListCallback)MenuCard_PulseImage);
     }
     case 1:
         {

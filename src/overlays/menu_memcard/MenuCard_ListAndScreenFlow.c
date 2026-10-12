@@ -4,7 +4,7 @@
 
 #include "menu_memcard_image.h"
 
-static inline MemcardImageNode *Memcard_FindImageNode(s32 kind) {
+static inline MemcardImageNode *MenuCard_FindImageNode(s32 kind) {
     MemcardImageNode *node;
 
     for (node = ((MemcardImageNode *)D_801D1370); node != 0; node = node->next) {
@@ -23,9 +23,9 @@ void func_80190064(void) {
 
     pad = func_8005E038();
     if ((pad & 0x800) && !(D_801D11B8 & 0x800)) {
-        node = Memcard_FindImageNode(2);
+        node = MenuCard_FindImageNode(2);
         if (node != 0 && node->intensity > 0x80) {
-            node = Memcard_FindImageNode(1);
+            node = MenuCard_FindImageNode(1);
             if (node->stepY == 0) {
                 node->stepY = 1;
                 node->parameter = 8;
@@ -35,44 +35,44 @@ void func_80190064(void) {
             }
         }
     }
-    node = Memcard_FindImageNode(5);
+    node = MenuCard_FindImageNode(5);
     if (node != 0 && node->draw == 0) {
         if (func_80042770(0) != 0 || func_80042770(1) != 0) {
             if (node->y < 200) {
                 node->y++;
-                Memcard_FindImageNode(4)->targetY = 16;
+                MenuCard_FindImageNode(4)->targetY = 16;
                 D_801D1380 = 0;
             }
             if (node->y == 200 && func_8003FFCC() != 0) {
-                node = Memcard_FindImageNode(6);
+                node = MenuCard_FindImageNode(6);
                 if (node->targetY == 0) {
                     node->draw = D_801930D8;
-                    node->update = Memcard_BlendRotatedImage;
+                    node->update = MenuCard_BlendRotatedImage;
                     node->targetY = 20;
                     node->stepY = 1;
                 }
             }
         } else if (node->y >= 181) {
             node->y--;
-            if (Memcard_FindImageNode(7)->y > node->y) {
-                Memcard_FindImageNode(7)->y = node->y;
+            if (MenuCard_FindImageNode(7)->y > node->y) {
+                MenuCard_FindImageNode(7)->y = node->y;
             }
-            Memcard_FindImageNode(4)->targetY = -16;
+            MenuCard_FindImageNode(4)->targetY = -16;
             D_801D1380 = 0;
         }
         if (func_8003FFCC() == 0) {
-            node = Memcard_FindImageNode(6);
+            node = MenuCard_FindImageNode(6);
             if (node->targetY == 0x54) {
                 node->draw = D_8019316C;
             }
             if (node->intensity != 0) {
                 node->stepY = -1;
-                if (Memcard_FindImageNode(7)->y == 140) {
-                    Memcard_FindImageNode(7)->y = 160;
+                if (MenuCard_FindImageNode(7)->y == 140) {
+                    MenuCard_FindImageNode(7)->y = 160;
                 }
             }
         }
-        node = Memcard_FindImageNode(7);
+        node = MenuCard_FindImageNode(7);
         if (pad & 0x20) {
             if (node->y == 160 || node->y == 180 || node->y == 200 || node->y == 140) {
                 D_801D1380 = 1001;
@@ -81,7 +81,7 @@ void func_80190064(void) {
         }
         if ((pad & 0x1000) && !(D_801D11B8 & 0x1000)) {
             y = node->y;
-            if (Memcard_FindImageNode(6)->intensity == 0x100 ? y >= 141 : y >= 161) {
+            if (MenuCard_FindImageNode(6)->intensity == 0x100 ? y >= 141 : y >= 161) {
                 D_801D1380 = 0;
                 node->y -= 20;
                 Menu_PlayMoveSound();
@@ -89,7 +89,7 @@ void func_80190064(void) {
         }
         if ((pad & 0x4000) && !(D_801D11B8 & 0x4000)) {
             y = node->y;
-            if (y <= Memcard_FindImageNode(5)->y - 20) {
+            if (y <= MenuCard_FindImageNode(5)->y - 20) {
                 D_801D1380 = 0;
                 node->y += 20;
                 Menu_PlayMoveSound();

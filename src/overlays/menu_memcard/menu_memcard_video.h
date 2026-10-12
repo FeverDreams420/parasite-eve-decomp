@@ -43,7 +43,7 @@ extern u8 D_800B0DBE,D_801D0DBD;
 extern s8 D_800B0DBB;
 extern s16 D_801D11B0,D_801D0DE0[2];
 
-void *Memcard_UpdateVideoFrame(VideoDisplay *display);
+void *MenuCard_UpdateVideoFrame(VideoDisplay *display);
 void *func_80121270(VideoDisplay *display);
 
 /* State of the first video player copy (linked at 0x80120D00). */
@@ -55,7 +55,7 @@ extern u8 D_801D0DC0;
 extern s32 D_8009CDDC;
 extern void func_8007C564(void),func_8010C01C(void *,s32),func_801918F8(s8,s8);
 
-void Memcard_UploadVideoSlice(void);
+void MenuCard_UploadVideoSlice(void);
 
 extern DISPENV D_801D1384[2];
 extern DRAWENV D_801D13AC[2];
@@ -64,7 +64,7 @@ extern u8 D_800B0DBA;
 typedef struct VideoFrameCount { s16 value; } VideoFrameCount;
 extern VideoFrameCount D_800B0DBC;
 
-s32 Memcard_InitVideoBuffers(s8 count, u8 **buffers);
+s32 MenuCard_InitVideoBuffers(s8 count, u8 **buffers);
 s32 func_801216C4(s8 count, u8 **buffers);
 /* Buffers and saved environments of the first video player copy. */
 extern u8 *D_80122420, *D_80122424, *D_80122428, *D_8012242C, *D_80122430, *D_80122434;
@@ -77,12 +77,12 @@ extern u16 D_8009315E[];
 extern u16 D_80093160;
 extern u16 D_80093162[];
 extern u32 D_8009D26C;
-s32 Memcard_StepVideo(void);
+s32 MenuCard_StepVideo(void);
 extern void SetDispMask(s32), func_80074A44(s32), func_80072714(void), func_800726C4(void), func_80072724(void), func_8003EB04(void), func_8007A2A4(void), Draw_RenderFrame(void);
 
-s32 Memcard_PlayVideo(s32 index);
+s32 MenuCard_PlayVideo(s32 index);
 
-void Memcard_SetVideoDisplay(s8 index, s8 wide);
+void MenuCard_SetVideoDisplay(s8 index, s8 wide);
 void func_80121004(s8 index, s8 wide);
 
 /* Video open: file lookup, stream start and first decoded frame. */
@@ -100,7 +100,7 @@ extern void func_8010C89C(void *, void *, void *), func_801214D4(void);
 extern u32 func_80081414(VideoFile *, char *); extern s32 func_80081314(CdlLOC *, s32);
 extern s32 func_80080D5C(s32, CdlLOC *, void *);
 s32 func_80121C04(s32 number);
-s32 Memcard_OpenVideo(s32 number);
+s32 MenuCard_OpenVideo(s32 number);
 
 /* Per-frame video step: decode, restart the stream on a stall, page flip. */
 extern u8 D_801223F6, D_801223F8, D_801D0DBE;

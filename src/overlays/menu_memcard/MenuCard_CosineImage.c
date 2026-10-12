@@ -1,6 +1,6 @@
 #include "menu_memcard_pulse.h"
 
-s32 Memcard_CosineImage(s32 mode, MemcardPulseState *state) {
+s32 MenuCard_CosineImage(s32 mode, MemcardPulseState *state) {
     GteRotation rotation;
     s32 angle, scale, palette;
     register s32 intensity;
