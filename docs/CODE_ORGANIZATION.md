@@ -243,13 +243,14 @@ Crutches still in place (lev is the only metric):
   active-state test; without the barrier reorg deletes that load as
   redundant while stealing the branch targets' delay slots (lev 26 across
   plain, switch, inline-predicate and wrapped forms).
-- `Asset_LoadTimTextures` (2 gotos, 2 volatile bank-pointer views): the
-  state machine restarts its `switch` after states 0 and 0x35; a `for (;;)`
-  loop around the switch lets loop.c move code out of the cases (lev 81).
-  Retail stores each process bank pointer through its address held in a
-  register and reloads it every iteration; plain stores use absolute
-  addressing (lev 47), a `PmPrimarySlot **` local gives the register address
-  but not retail's extra copy (lev 44).
+- `Asset_LoadTimTextures` (2 gotos): the state machine restarts its
+  `switch` after states 0 and 0x35; a `for (;;)` loop around the switch lets
+  loop.c move code out of the cases (lev 81). The two volatile bank-pointer
+  views are gone: the bank pointers are stored and reloaded through
+  `g_PmTables` (`pe1/pm.h`), a record view of the three adjacent dispatch
+  words at 0x800942E0. A record member at a fixed address may alias the
+  slot stores, so loop.c keeps the reload in the loop and takes the address
+  into a register, which is retail's code exactly.
 - `GameState_Reset` (3 pins, 3 launders, byte offsets off `base`): the
   eight ordering barriers were redundant and are gone. Each remaining
   launder makes a -1 or the loop counter look like a fresh value after a
@@ -1153,23 +1154,49 @@ deleting one pin at a time:
 - Plain argument use beats a laundered copy: `Task_RunInvCommand` and
   `Task_OpenMemCardDialog` match with the argument block and the shared
   `return 1` written directly.
+- `sll`/`sra 16` before every use of a value, plus plain `move`s between
+  copies of it, is a `short` local: GCC 2.7.2 on MIPS does not promote
+  HImode variables, so each use as `int` re-extends it, while assigning a
+  masked `int` to it is a bare copy. `Camera_StepAngleFade` lost 8 pins,
+  4 barriers and 7 `goto`s this way (`short current, target, step`, with an
+  `int` copy of the angle and target for the first two reach tests and the
+  wrap test written as `(sum & 0xFFF) <= target`).
+- GCC 2.7.2's alias rule says a scalar at a fixed address never conflicts
+  with a structure member reached through a pointer. A load of such a scalar
+  is hoisted out of loops and scheduled across member stores; a record view
+  of the scalar (`g_PmTables`, a one-element array like
+  `g_TaskNodeSeqCounter[1]`) keeps it in place without volatile.
+- A stored packet field read straight back is reloaded by itself: any store
+  through a pointer invalidates every remembered memory value in CSE, so
+  `Draw_EmitGlyph` and `Draw_EmitDigitSprite` need no volatile views for
+  their vertex reloads. A reload of a value stored in both arms of an `if`
+  comes from cross-jumping the two stores into the join
+  (`Draw_AllocColorTri`'s pulse shade).
+- PSY-Q `addPrim` is the 24-bit tag bit-field (`RenderPacketTag.link`):
+  `p->tag.link.address = ot->link.address; link.packet = p;
+  ot->link.address = link.word;` reproduces the mask-and-merge sequence, and
+  for `Draw_AllocSprite`, `Draw_EmitGlyph`, `Draw_AllocTexturedQuad` and the
+  wipe triangles it replaced the tag pins and barriers. The `setRGB0`
+  colour store with the code byte kept is `RenderPacketColor.fields.rgb`.
+- Allocations written in their own blocks (`u8 *old`, `u8 *next` declared
+  inside) give retail's registers where function-scope temporaries reused
+  for the second allocation do not (`Draw_AllocSprite`).
+- A variable reused for a second role is retail's register reuse:
+  `Camera_TrackEntityAngle` keeps the remaining distance in
+  `angle_difference`.
 
 Crutches still in these units, with the best crutch-free lev found:
 
 - `Task_InitGpuHwRegs` (7 pins, 2 barriers) and `Task_GpuFlushPrimQueue`
-  (10 pins, 4 barriers, 2 casts) are the additive generator around the
+  (10 pins, 4 barriers) are the additive generator around the
   80-byte `.text` state block at 0x80070E04, the same original-assembler
   module as `Task_GpuPackPrimColor` (see ASM_AND_GTE_POLICY.md): absolute
   addresses built with `lui`/`ori`, constants loaded with `ori`, `or` moves,
   no frame, hand-filled delay slots. GCC emits none of these (crutch-free
   lev 22 and 24). They should become `GAME_ASM_FUNCTION` units with
-  evidence entries in a reviewed change; this pass adds no assembler.
-- `Camera_StepAngleFade` (8 pins, 4 barriers, 7 `goto`s): crutch-free
-  lev 93 (stripped) to 96 (structured rewrite). Retail keeps
-  three copies of the current angle and two of the target (`t3`/`a1`/`a2`,
-  `t0`/`a0`/`v1`) and computes the absolute difference twice from
-  different copies; this looks like inlined helpers whose parameters have
-  not been identified yet.
+  evidence entries in a reviewed change; this pass adds no assembler. The
+  queue offsets are now added through the `TaskGeneratorAddress` union
+  instead of integer casts.
 - `Boot_MemCardStepInit`: 3 re-dispatch `goto`s (a `for`/`continue` loop
   lets loop.c hoist `0x400000` and `1`, lev 39; tail recursion re-runs the
   `&g_GameState` load after the re-entry label, lev 24) and one empty
@@ -1178,35 +1205,39 @@ Crutches still in these units, with the best crutch-free lev found:
   `-1` comparands into saved registers, lev 32).
 - `Akao_ProcessCommand`: 1 `goto archive_match`; retail places the match
   block after case 0x199, a structured `break`/flag places it in the loop.
-- `Task_SpawnChildNode` (6 pins, 2 barriers): crutch-free lev 8. The
-  insertion branch is exact as an `offset * 2 + base` sum through a union
-  word; the list-head branch swaps the sequence counter (`v1`) and the
-  script offset (`a0`); one `$3` pin on the counter leaves lev 2 (offset and
-  base loads swap).
+- `Task_SpawnChildNode` (6 pins, 2 barriers): crutch-free lev 19. Viewing
+  the free-list head as a one-element array (the `g_TaskNodeSeqCounter[1]`
+  recipe) fixes the store order the memory barrier holds and the node
+  register (lev 12 with no else-branch crutch, 8 with the `$4` state pin);
+  what remains is the `g_CurrentEntity` load, which retail schedules right
+  after the argument load in both branches.
 - `Task_SetEntityActionAndWait` (1 pin): lev 2 to 3; retail loads the
   current frame first into `v0`, every crutch-free form either loads it
   second or allocates it to `v1`.
 - `Task_WaitAnimRange` (1 pin): instruction sequence exact, lev 19 from the
   global allocation of `next`/`target`/`count` (retail `a0`/`a2`/`v0`).
+- `Camera_TrackEntityAngle` keeps its 8-byte `stack_pad[2]` frame reserve
+  (lev 18 without it).
 - `Draw_AllocColorQuad` (13 pins, 5 barriers): with every crutch removed
   the instruction sequence is identical and only the register assignment
   differs (lev 138: the first quad in `s1` with `height` in `s0`, the
-  packet copy in `t2`, the masks in `a0`/`a2`).
-- `Draw_TextPrimitives.c`: `Draw_AllocSprite` (3 pins, 2 barriers, lev 38),
-  `Draw_EmitGlyph` (1 pin, 1 barrier, volatile reloads; lev 44 stripped,
-  46 for a clean rewrite: retail copies the packet to `a0` for the vertex
-  stores, keeps the glyph in `s0` and stores clut and tpage before the tag
-  load), `Draw_AllocTexturedQuad` (6 pins, 6 barriers; a clean
-  rewrite with a `RenderPacketTag` ordering-table view and `AdvanceCursor`
-  is lev 20: the `D_8009CDB0` reload and the `y + 1` add are scheduled
-  earlier) and the `DecodeGlyph` `$4` pin (lev 36 without it: retail keeps
-  the code byte in a hard register so the two `andi`s survive).
-- `Draw_WipeAndGradient.c`: `Draw_AllocColorRect` keeps its byte cursor
-  over the triangle pair (3 byte additions, 2 raw offsets, 2 casts) and 6
-  pins; the typed loop over `&pair->first` is exact but then needs pins on
-  both masks and leaves lev 2 (the first tag load after the ordering-table
-  load). `Draw_AllocColorTri` (1 pin, 2 barriers): lev 41; retail stores
-  the pulse shade, reloads it and stores it to all three channels.
+  packet copy in `t2`, the masks in `a0`/`a2`); declaration order, block
+  scope for the first quad and dropping the `w`/`h` copies do not change
+  the global allocation order (lev 138 to 153).
+- `Draw_TextPrimitives.c`: `Draw_EmitGlyph` keeps the `$4` vertex pointer
+  pin and the descriptor barrier (lev 44 without them: retail copies the
+  packet into `a0` for the vertex stores, an inline vertex helper or a
+  block-local copy is merged back into the packet register);
+  `Draw_AllocTexturedQuad` keeps the `$4` GetTPage argument pin (lev 2:
+  `move a0,zero` is scheduled later), the `$5` half and `$6` x pins and
+  three barriers (lev 5 to 15 each; `spacing >>= 1` in place of `half` lev
+  16); the `DecodeGlyph` `$4` pin stays (a `u8` copy of the code lev 10, a
+  `u8` parameter lev 14: retail masks the code byte again for every use but
+  keeps the masked glyph in `v1`).
+- `Draw_WipeAndGradient.c`: `Draw_AllocColorTri` keeps the tag tail of its
+  tile, one pin and two barriers (lev 27 without them: the code byte load
+  is scheduled above the width store and the cursor loads move); its pulse
+  shade and colour clear are plain C now.
 - `Gpu_InitDisplay` (3 pins, 1 barrier) repeats `Boot_InitMemoryLayout`
   (sys, also pinned) on the `volatile s32` buffer words of `pe1/sys.h`;
   both should change together with that header.
@@ -1219,6 +1250,17 @@ Crutches still in these units, with the best crutch-free lev found:
   part (lev 8 from the immediates). `battle_status.h` now types
   `D_8009E960` as `RenderPagedSpritePacket[2][13]` for `Battle_DrawHPBar`;
   `D_8009E976` and `D_8009EC38` are still byte arrays for this unit.
+- `Gpu_SetupSprites.c`: the status icons are typed now
+  (`g_StatusIconPackets[2][13]`, `g_StatusMarkerPackets[2]` in
+  `pe1/draw_state.h`, linker names beside the battle byte arrays), and
+  `Gpu_SetupSprites`/`Gpu_QueuePrimitive` are plain field accesses.
+  `Gpu_DrawStatusIcons` keeps 8 pins and the integer address sums in its
+  three emit macros (3 byte additions): retail adds the slot and icon
+  offsets to the sprite base and derives the packet base as sprite base
+  minus 8, which typed indexing does not produce (lev 48 with a texture-page
+  step back from a `RenderSpritePageSlot` view, 76 with paired array
+  references, 188 to 237 for a single typed macro with `short` or `int`
+  cursors).
 
 ## Link ownership
 
