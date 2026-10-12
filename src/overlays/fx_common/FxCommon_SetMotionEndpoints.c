@@ -2,7 +2,7 @@
 #include "fx_common.h"
 #include "fx_common_motion.h"
 
-void func_80195BC8(FxCommonShortVec3 *a, FxCommonShortVec3 *b, int bi, int ai)
+void FxCommon_SetMotionEndpoints(FxCommonShortVec3 *a, FxCommonShortVec3 *b, int bi, int ai)
 {
     int x, y, z, originComponent, originX, ay, az, u, v, w, one;
     u16 bzCopy, ayCopy, azCopy;

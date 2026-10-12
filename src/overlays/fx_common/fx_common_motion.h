@@ -123,7 +123,7 @@ void func_80086FF8(void);
 void func_80087024(void);
 int func_80038D48(void);
 s16 func_801958D4(s16 resourceId, u8 action);
-void func_80195BC8(FxCommonShortVec3 *a, FxCommonShortVec3 *b, int bi, int ai);
+void FxCommon_SetMotionEndpoints(FxCommonShortVec3 *a, FxCommonShortVec3 *b, int bi, int ai);
 void func_80195D3C(void);
 
 PE1_STATIC_ASSERT(sizeof(FxCommonFrame) == 0x78, fx_common_frame_size);

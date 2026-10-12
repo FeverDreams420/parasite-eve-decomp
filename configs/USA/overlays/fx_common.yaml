@@ -44,7 +44,7 @@ segments:
       - [0x2FF8, c, effects]
       - [0x68E4, c, FxCommon_UpdateResource]
       - [0x69A4, c, FxCommon_InitMotionDeltas]
-      - [0x6BD8, c, func_80195BC8]
+      - [0x6BD8, c, FxCommon_SetMotionEndpoints]
       - [0x6D4C, c, FxCommon_CameraPathSequence]
       - [0x6F7C, c, FxCommon_EffectInitializationFlow]
       - [0x8BB0, c, FxCommon_DrawPolyResource]

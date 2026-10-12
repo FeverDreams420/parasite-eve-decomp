@@ -934,7 +934,7 @@ void func_801942FC(void)
                         shortB.x = (s16)currentX;
                         shortB.y = (s16)currentY;
                         shortB.z = (s16)currentZ;
-                        func_80195BC8((FxCommonShortVec3 *)&shortA, (FxCommonShortVec3 *)&shortB, 4, 5);
+                        FxCommon_SetMotionEndpoints((FxCommonShortVec3 *)&shortA, (FxCommonShortVec3 *)&shortB, 4, 5);
                         D_8019C13E = 1;
                     } else {
                         D_8019C034 = 2;
@@ -964,7 +964,7 @@ void func_801942FC(void)
                     shortB.x = (s16) mode2Sample.vector.x;
                     shortB.y = (s16) mode2Sample.vector.y;
                     shortB.z = (s16) mode2Sample.vector.z;
-                    func_80195BC8((FxCommonShortVec3 *)&shortA, (FxCommonShortVec3 *)&shortB, 4, 5);
+                    FxCommon_SetMotionEndpoints((FxCommonShortVec3 *)&shortA, (FxCommonShortVec3 *)&shortB, 4, 5);
                 }
             }
             if ((D_8009D1F4 & 0x50) && (D_8019C034 != 0)) {
