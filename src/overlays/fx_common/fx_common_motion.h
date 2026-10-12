@@ -101,10 +101,10 @@ extern s16 D_8019C0D0[2];
 extern u8 D_801EA264[3];
 extern void *D_801EA260;
 extern FxCommonTransformNode *g_FxCommonEchoNodes[4] __asm__("D_8019C148");
-void func_80190E04(void *node, FxCommonBuffer *context, u8 pass, u8 force,
-                   u8 mirrored);
-void func_80191114(void *node, FxCommonBuffer *context, u8 pass, u8 mode);
-void func_80190D3C(void *node, FxCommonBuffer *context);
+void func_80190E04(FxCommonTransformNode *node, FxCommonBuffer *context, u8 pass,
+                   u8 force, u8 mirrored);
+void func_80191114(FxCommonLodNode *node, FxCommonBuffer *context, u8 force, u8 mode);
+void func_80190D3C(FxCommonTransformNode *node, void *context);
 void func_80193478(void);
 int func_80191E30(int id, s32 *state);
 void func_80191EFC(int handle, s32 *state);

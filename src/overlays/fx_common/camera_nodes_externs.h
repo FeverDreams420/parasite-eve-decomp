@@ -1,0 +1,42 @@
+#ifndef PE1_EXT_CAMERA_NODES
+#define PE1_EXT_CAMERA_NODES
+extern int D_8019CBB4, D_8019CBB8;
+extern int D_8019CBD4, D_8019CBD8;
+extern int D_8019CB48, D_8019CB4C;
+extern int D_8019CC04, D_8019CC0C;
+extern int D_8019CBB4;
+extern int D_8019CBB8;
+extern int D_8019CBD4;
+extern int D_8019CBD8;
+extern int D_8019CB48;
+extern int D_8019CB4C;
+extern int D_8019CC04;
+extern int D_8019CC0C;
+extern int D_8019CBC8;
+extern int D_8019CC00;
+extern int D_8019CA90;
+extern int D_8019CB54;
+extern int D_8019CB58;
+extern int D_8019CBA8;
+extern int D_8019CBAC;
+extern int D_8019CBC4;
+extern int D_8019CBF4;
+extern int D_8019CBF8;
+extern int D_8019CC08;
+extern int D_8019CC10;
+extern char D_801E4E6C[];
+extern FxCommonNode D_801EA5E8[];
+extern FxCommonNode D_8019CC58[];
+extern short D_8019C39C;
+extern short D_8019C830[];
+extern short D_8019C9D0;
+extern short D_801E4DA8;
+extern short D_801E4DAA;
+extern short D_801E4DAC;
+extern short D_801E4DAE;
+void func_80191580(FxCommonTransformNode *node);
+extern u16 D_80093170[];
+extern u16 D_80093174[];
+extern u16 D_80093172[];
+extern u8 D_8019C1F0;
+#endif /* PE1_EXT_CAMERA_NODES */

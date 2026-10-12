@@ -1,7 +1,0 @@
-#ifndef PE1_EXT_05977C64C50F
-#define PE1_EXT_05977C64C50F
-extern u16 D_80093170[];
-extern u16 D_80093174[];
-extern u16 D_80093172[];
-extern u8 D_8019C1F0;
-#endif /* PE1_EXT_05977C64C50F */
