@@ -1,6 +1,6 @@
 /* ASSEMBLER: GNU */
 /* GCC_VERSION: 2.8.1 */
-/* CC1_FLAGS: -mno-split-addresses -fno-expensive-optimizations */
+/* CC1_FLAGS: -fno-expensive-optimizations -mno-split-addresses */
 /* Psy-Q LIBCD BIOS.OBJ, part 6 of 7: CD_datasync. */
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_bios.h"
