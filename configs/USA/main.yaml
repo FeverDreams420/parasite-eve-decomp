@@ -730,7 +730,6 @@ segments:
       - [0x6CD60, pad]
       # Psy-Q LIBCD C_011.OBJ: StCdInterrupt and its two local helpers.
       - [0x6CD64, c, psyq/libcd/StCdInterrupt]
-      - [0x6D680, c, psyq/libcd/mem2mem]
       - [0x6D6AC, c, psyq/libcd/dma_execute]
       - [0x6D854, c, psyq/libspu/SpuInit]
       # Psy-Q LIBSPU S_INI.OBJ: cold/warm initialization and startup.

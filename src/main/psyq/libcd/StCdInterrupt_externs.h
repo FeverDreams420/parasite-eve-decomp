@@ -1,5 +1,6 @@
-#ifndef PE1_EXT_36162830D5FF
-#define PE1_EXT_36162830D5FF
+#ifndef PSYQ_LIBCD_STCDINTERRUPT_EXTERNS_H
+#define PSYQ_LIBCD_STCDINTERRUPT_EXTERNS_H
+
 extern volatile u8 *D_8009B334;
 extern volatile u8 *D_8009B338;
 extern volatile u32 *D_8009B33C;
@@ -11,4 +12,5 @@ extern StHEADER *D_800A34A0;
 extern s32 D_800B89F4, D_800BCD7C, D_800BE9E4;
 extern s32 D_800C0DC0;
 extern StSectorPayload *D_800C0DC4;
-#endif /* PE1_EXT_36162830D5FF */
+
+#endif /* PSYQ_LIBCD_STCDINTERRUPT_EXTERNS_H */

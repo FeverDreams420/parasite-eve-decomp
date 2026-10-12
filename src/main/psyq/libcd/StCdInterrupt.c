@@ -1,10 +1,11 @@
 /* ASSEMBLER: GNU */
-/* Psy-Q LIBCD C_011.OBJ: StCdInterrupt. */
-/* C_011 stays in three units: StCdInterrupt only matches with GCC 2.7.2,
- * dma_execute only with GCC 2.8.1, -mno-split-addresses and
- * -fno-schedule-insns. */
+/* Psy-Q LIBCD C_011.OBJ, from the object start: StCdInterrupt and mem2mem.
+ * dma_execute, the end of the object, is a unit of its own (see
+ * docs/CODE_ORGANIZATION.md, "PsyQ objects split over several units"). */
 #include "pe1/psyq_cd.h"
+
 #include "StCdInterrupt_externs.h"
+
 /* Separate aliases retain the retail handler's address-load schedule. */
 
 /* Streaming comparisons deliberately use only the low 16 bits of frameCount. */
@@ -239,5 +240,23 @@ void StCdInterrupt(void) {
                     data_ready_callback();
                 }
         }
+    }
+}
+
+void mem2mem(void *destination, void *source, unsigned int count, int reserved) {
+    int *dst = destination;
+    int *src = source;
+    unsigned int i;
+    int value;
+
+    i = 0;
+    if (count != 0) {
+        do {
+            value = *src;
+            src++;
+            i++;
+            *dst = value;
+            dst++;
+        } while (i < count);
     }
 }
