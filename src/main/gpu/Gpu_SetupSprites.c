@@ -54,7 +54,9 @@ void Gpu_QueuePrimitive(void) {
 /* MASPSX_FLAGS: -G8 */
 
 
-/* Queue one status icon at the cursor and advance the cursor by one icon. */
+/* Each emit queues one status icon at the cursor and advances the cursor.
+ * Retail adds the draw-slot and icon offsets to the sprite base and steps
+ * back 8 bytes for the packet; see CODE_ORGANIZATION.md. */
 #define INDEX_STRIDE(i) ((((((i) << 1) + (i)) << 3) - (i)) << 2) - (i)
 
 #define EMIT_CODED(code_expr) do { \
