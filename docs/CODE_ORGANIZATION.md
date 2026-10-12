@@ -794,12 +794,13 @@ Still open:
     an absolute address (`lui`/`lw 4`) where retail indexes `$a1` (lev 4);
     `&pending[count - 2]` and `pending -= 2` change the allocation (lev 10
     and 17). The pin is only needed with the barrier.
-  - `MemCard_AbortActiveOperation` formats the slot name into
-    `D_8009EE70` and passes the buffer to the path format under its second
-    name, `g_MemCardPathForCardFile`; with one symbol CSE keeps the address
-    in `$s0` across `sprintf` instead of rebuilding it. The retry counter is
-    cleared just before the open loop, where retail sets it; the name-buffer
-    barrier is gone.
+  - `MemCard_AbortActiveOperation` keeps the barrier that separates
+    `name_buf` from `D_8009EE70`: with one value CSE keeps the buffer
+    address in `$s0` across `sprintf` instead of rebuilding it (lev 31).
+    Passing the buffer to the path format under a second symbol name and
+    clearing the retry counter just before the open loop matches with no
+    barrier, but that needs the `asm` alias `Save_StartWriteSlot` dropped,
+    so the barrier stays.
     `Save_StartWriteSlot` keeps its `$s0` pin and both barriers (lev 23
     without; lev 1 with only the pin).
   - `Entity_AllocBlock` needs no pin or `goto`: a `u8 slot` (the `andi`
