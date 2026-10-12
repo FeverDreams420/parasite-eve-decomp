@@ -55,13 +55,13 @@ void func_800C2EAC(u8 mode) {
 }
 
 void func_800C2FF0(int width, int height) {
-    int widthMinus;
-    int heightMinus;
+    u8 widthMinus;
+    u8 heightMinus;
     int x;
     int y;
+
     widthMinus = width - 1;
     heightMinus = height - 1;
-    asm("" : : "r"(widthMinus), "r"(heightMinus));
 
     D_800F345C = width;
     x = (width & 0xFF) << 4;
@@ -257,8 +257,7 @@ void func_800C3324(FieldOrientedSprite *sprite)
     D_8009CDD8 += sizeof(FieldStripPacket);
 }
 
-/* Matching debt: four register pins and one empty slot-address barrier.
- * Matrix loads are C; each GTE transfer uses its individual macro. */
+/* Project a camera-facing billboard and link it into the depth ordering table. */
 void func_800C3B04(FieldBillboard *board)
 {
     FieldStripPacket *packet;
@@ -399,26 +398,12 @@ void func_800C3B04(FieldBillboard *board)
 }
 
 /* Compose/project a glow quad and link it into the depth ordering table.
- * Matching debt: twelve register pins and ten empty address/memory barriers.
- * CPU loads, stores and packing are C; GTE commands/transfers and hazard nops
- * are individually wrapped. Columns stay expanded to preserve scheduling. */
+ * The GTE operands are the camera slot and the corner vectors themselves:
+ * reload loads them into t1..t3 in turn, as retail does. */
 void func_800C42A4(FieldGlowSprite *sprite, GteMatrix *placement, u8 mode)
 {
-    register const GteMatrixWords *cameraRot asm("$9");
-    const GteMatrixWords *cameraTrans;
-    const GteMatrixWords *composed;
-    register const GteMatrixWords *camera asm("$11");
-    const u16 *column;
-    u16 *outColumn;
-    register u16 *firstColumn asm("$10");
-    s32 *outTranslation;
-    const s32 *translation;
-    GteMatrix **slot;
-    register GteShortVector *v0 asm("$9");
-    register GteShortVector *v1 asm("$10");
-    register GteShortVector *v2 asm("$11");
-    register s16 *xy0;
-    register s16 *xy1;
+    s16 *xy0;
+    s16 *xy1;
     s16 *xy2;
     FieldStripPacket *packet;
     GteShortVector position;
@@ -430,39 +415,26 @@ void func_800C42A4(FieldGlowSprite *sprite, GteMatrix *placement, u8 mode)
     D_800F33B4 = FIELD_ENGINE_SCRATCH;
     if (mode == 0) {
         /* Compose camera rotation with each placement column. */
-        cameraRot = (const GteMatrixWords *)D_800BCFA4.value;
-        gte_ldrotmatrix(cameraRot);
+        gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldclmv(placement);
         gte_rtir();
-        firstColumn = (u16 *)&D_800F33B4->matrix;
-                gte_stclmv(firstColumn);
-        column = (const u16 *)placement + 1;
-                gte_ldclmv(column);
+        gte_stclmv(&D_800F33B4->matrix);
+        gte_ldclmv((u16 *)placement + 1);
         gte_rtir();
-        outColumn = (u16 *)&D_800F33B4->matrix + 1;
-                gte_stclmv(outColumn);
-        column = (const u16 *)placement + 2;
-                gte_ldclmv(column);
+        gte_stclmv((u16 *)&D_800F33B4->matrix + 1);
+        gte_ldclmv((u16 *)placement + 2);
         gte_rtir();
-        outColumn = (u16 *)&D_800F33B4->matrix + 2;
-                gte_stclmv(outColumn);
+        gte_stclmv((u16 *)&D_800F33B4->matrix + 2);
         /* Transform placement translation with the camera matrix. */
-        cameraTrans = (const GteMatrixWords *)D_800BCFA4.value;
-        gte_ldtransmatrix(cameraTrans);
-        translation = placement->t;
-                gte_ldlv0(translation);
+        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldlv0(placement->t);
         gte_rt();
-        outTranslation = D_800F33B4->matrix.t;
-        gte_stlvl(outTranslation);
-        composed = (const GteMatrixWords *)&D_800F33B4->matrix;
-                gte_ldrotmatrix(composed);
-        gte_ldtransmatrix(composed);
+        gte_stlvl(D_800F33B4->matrix.t);
+        gte_ldrotmatrix(&D_800F33B4->matrix);
+        gte_ldtransmatrix(&D_800F33B4->matrix);
     } else {
-        slot = &D_800BCFA4.value;
-        asm volatile("" : "=r"(slot) : "0"(slot));
-        camera = (const GteMatrixWords *)*slot;
-        gte_ldrotmatrix(camera);
-        gte_ldtransmatrix(camera);
+        gte_ldrotmatrix(D_800BCFA4.value);
+        gte_ldtransmatrix(D_800BCFA4.value);
         position.x = placement->t[0];
         position.y = placement->t[1];
         position.z = placement->t[2];
@@ -471,18 +443,8 @@ void func_800C42A4(FieldGlowSprite *sprite, GteMatrix *placement, u8 mode)
         gte_ldtransmatrix((const GteMatrixWords *)placement);
     }
     func_800C608C((s16)sprite->depth, &sprite->r, &packet->r0);
-    v0 = D_800F3310;
-    v1 = &D_800F3318;
-    v2 = &D_800F3320;
-    gte_lwc2_0_0(v0);
-    gte_lwc2_1_4(v0);
-    gte_lwc2_2_0(v1);
-    gte_lwc2_3_4(v1);
-    gte_lwc2_4_0(v2);
-    gte_lwc2_5_4(v2);
-    gte_cop2_hazard_slot();
-    gte_cop2_hazard_slot();
-    gte_rtpt_command();
+    gte_ldv3(D_800F3310, &D_800F3318, &D_800F3320);
+    gte_rtpt_padded();
     D_800F33B4->v = D_800F3422 + (sprite->cell & 0xF0);
     D_800F33B4->u = (sprite->cell - D_800F33B4->v) << 4;
     D_800F33B4->clutX = sprite->clut << 4;
@@ -533,9 +495,7 @@ void func_800C42A4(FieldGlowSprite *sprite, GteMatrix *placement, u8 mode)
         xy1 = &packet->x1;
         xy2 = &packet->x2;
         gte_stsxy3(xy0, xy1, xy2);
-        v0 = &D_800F3328;
-        gte_lwc2_0_0(v0);
-        gte_lwc2_1_4(v0);
+        gte_ldv0(&D_800F3328);
         gte_cop2_hazard_slot();
         gte_cop2_hazard_slot();
         gte_rtps_command();
@@ -550,27 +510,11 @@ void func_800C42A4(FieldGlowSprite *sprite, GteMatrix *placement, u8 mode)
     }
 }
 
-/* Draw a quad with four independently shaded corners.
- * Matching debt: twelve register pins and ten empty address/memory barriers.
- * CPU matrix loads, stores and packing are C. GTE instructions and hazard
- * nops have individual macros; columns stay expanded to preserve scheduling. */
+/* Draw a quad with four independently shaded corners. */
 void func_800C499C(FieldShadedQuadColors *colors, GteMatrix *placement,
                    u8 mode) {
-    register const GteMatrixWords *cameraRot asm("$9");
-    const GteMatrixWords *cameraTrans;
-    const GteMatrixWords *composed;
-    register const GteMatrixWords *camera asm("$11");
-    const u16 *column;
-    u16 *outColumn;
-    register u16 *firstColumn asm("$10");
-    s32 *outTranslation;
-    const s32 *translation;
-    GteMatrix **slot;
-    register GteShortVector *v0 asm("$9");
-    register GteShortVector *v1 asm("$10");
-    register GteShortVector *v2 asm("$11");
-    register s16 *xy0;
-    register s16 *xy1;
+    s16 *xy0;
+    s16 *xy1;
     s16 *xy2;
     FieldShadedQuadPacket *packet;
     GteShortVector position;
@@ -581,39 +525,26 @@ void func_800C499C(FieldShadedQuadColors *colors, GteMatrix *placement,
     D_800F33B4 = FIELD_ENGINE_SCRATCH;
     if (mode == 0) {
         /* Compose camera rotation with each placement column. */
-        cameraRot = (const GteMatrixWords *)D_800BCFA4.value;
-        gte_ldrotmatrix(cameraRot);
+        gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldclmv(placement);
         gte_rtir();
-        firstColumn = (u16 *)&D_800F33B4->matrix;
-                gte_stclmv(firstColumn);
-        column = (const u16 *)placement + 1;
-                gte_ldclmv(column);
+        gte_stclmv(&D_800F33B4->matrix);
+        gte_ldclmv((u16 *)placement + 1);
         gte_rtir();
-        outColumn = (u16 *)&D_800F33B4->matrix + 1;
-                gte_stclmv(outColumn);
-        column = (const u16 *)placement + 2;
-                gte_ldclmv(column);
+        gte_stclmv((u16 *)&D_800F33B4->matrix + 1);
+        gte_ldclmv((u16 *)placement + 2);
         gte_rtir();
-        outColumn = (u16 *)&D_800F33B4->matrix + 2;
-                gte_stclmv(outColumn);
+        gte_stclmv((u16 *)&D_800F33B4->matrix + 2);
         /* Transform placement translation with the camera matrix. */
-        cameraTrans = (const GteMatrixWords *)D_800BCFA4.value;
-        gte_ldtransmatrix(cameraTrans);
-        translation = placement->t;
-                gte_ldlv0(translation);
+        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldlv0(placement->t);
         gte_rt();
-        outTranslation = D_800F33B4->matrix.t;
-        gte_stlvl(outTranslation);
-        composed = (const GteMatrixWords *)&D_800F33B4->matrix;
-                gte_ldrotmatrix(composed);
-        gte_ldtransmatrix(composed);
+        gte_stlvl(D_800F33B4->matrix.t);
+        gte_ldrotmatrix(&D_800F33B4->matrix);
+        gte_ldtransmatrix(&D_800F33B4->matrix);
     } else {
-        slot = &D_800BCFA4.value;
-        asm volatile("" : "=r"(slot) : "0"(slot));
-        camera = (const GteMatrixWords *)*slot;
-        gte_ldrotmatrix(camera);
-        gte_ldtransmatrix(camera);
+        gte_ldrotmatrix(D_800BCFA4.value);
+        gte_ldtransmatrix(D_800BCFA4.value);
         position.x = placement->t[0];
         position.y = placement->t[1];
         position.z = placement->t[2];
@@ -625,18 +556,8 @@ void func_800C499C(FieldShadedQuadColors *colors, GteMatrix *placement,
     func_800C608C(colors->brightness, colors->rgb[1], &packet->r1);
     func_800C608C(colors->brightness, colors->rgb[2], &packet->r2);
     func_800C608C(colors->brightness, colors->rgb[3], &packet->r3);
-    v0 = D_800F3310;
-    v1 = &D_800F3318;
-    v2 = &D_800F3320;
-    gte_lwc2_0_0(v0);
-    gte_lwc2_1_4(v0);
-    gte_lwc2_2_0(v1);
-    gte_lwc2_3_4(v1);
-    gte_lwc2_4_0(v2);
-    gte_lwc2_5_4(v2);
-    gte_cop2_hazard_slot();
-    gte_cop2_hazard_slot();
-    gte_rtpt_command();
+    gte_ldv3(D_800F3310, &D_800F3318, &D_800F3320);
+    gte_rtpt_padded();
     packet->tag.length = 8;
     packet->code = 0x38;
     gte_cop2_hazard_slot();
@@ -655,9 +576,7 @@ void func_800C499C(FieldShadedQuadColors *colors, GteMatrix *placement,
         xy1 = &packet->x1;
         xy2 = &packet->x2;
         gte_stsxy3(xy0, xy1, xy2);
-        v0 = &D_800F3328;
-        gte_lwc2_0_0(v0);
-        gte_lwc2_1_4(v0);
+        gte_ldv0(&D_800F3328);
         gte_cop2_hazard_slot();
         gte_cop2_hazard_slot();
         gte_rtps_command();
@@ -669,34 +588,28 @@ void func_800C499C(FieldShadedQuadColors *colors, GteMatrix *placement,
     }
 }
 
-/* Draw an annulus from paired inner/outer vertices.
- * Matching debt: seven register pins and eleven empty barriers. Matrix CPU
- * work is C; each GTE transfer/command and hazard nop is individually wrapped. */
-
+/* Lay out the inner and outer vertices of an annulus. */
 void func_800C4E50(FieldRingGeometry *data) {
-    register FieldRingGeometry *data_s3 asm("$19");
     int angle;
     u32 i;
     int step;
     GteShortVector *verts;
 
-    data_s3 = data;
-    asm("" : "=r"(data_s3) : "0"(data_s3));
     angle = 0;
-    step = 0x1000 / data_s3->mode;
-    verts = data_s3->source;
+    step = 0x1000 / data->mode;
+    verts = data->source;
 
-    for (i = 0; i < data_s3->mode; i++, verts++) {
-        verts->x = (rsin(angle) * data_s3->extent1) >> 12;
-        verts->y = (rcos(angle) * data_s3->extent1) >> 12;
+    for (i = 0; i < data->mode; i++, verts++) {
+        verts->x = (rsin(angle) * data->extent1) >> 12;
+        verts->y = (rcos(angle) * data->extent1) >> 12;
         verts->z = 0;
         angle += step;
     }
 
     angle = 0;
-    for (i = 0; i < data_s3->mode; i++, verts++) {
-        verts->x = (rsin(angle) * data_s3->extent0) >> 12;
-        verts->y = (rcos(angle) * data_s3->extent0) >> 12;
+    for (i = 0; i < data->mode; i++, verts++) {
+        verts->x = (rsin(angle) * data->extent0) >> 12;
+        verts->y = (rcos(angle) * data->extent0) >> 12;
         verts->z = 0;
         angle += step;
     }
@@ -704,15 +617,6 @@ void func_800C4E50(FieldRingGeometry *data) {
 
 void func_800C4FC4(FieldShadedRing *ring, GteMatrix *placement, u8 mode)
 {
-    const GteMatrixWords *cameraTrans;
-    const GteMatrixWords *composed;
-    register const GteMatrixWords *camera asm("$10");
-    const u16 *column;
-    u16 *outColumn;
-    register u16 *firstColumn asm("$10");
-    s32 *outTranslation;
-    const s32 *translation;
-    GteMatrix **slot;
     FieldRingPacket *packet;
     char *drawMode;
     u8 outer[4];
@@ -731,39 +635,26 @@ void func_800C4FC4(FieldShadedRing *ring, GteMatrix *placement, u8 mode)
     D_800F33B4 = FIELD_ENGINE_SCRATCH;
     if (mode == 0) {
         /* Compose camera rotation with each placement column. */
-        camera = (const GteMatrixWords *)D_800BCFA4.value;
-        gte_ldrotmatrix(camera);
+        gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldclmv(placement);
         gte_rtir();
-        firstColumn = (u16 *)&D_800F33B4->matrix;
-                gte_stclmv(firstColumn);
-        column = (const u16 *)placement + 1;
-                gte_ldclmv(column);
+        gte_stclmv(&D_800F33B4->matrix);
+        gte_ldclmv((u16 *)placement + 1);
         gte_rtir();
-        outColumn = (u16 *)&D_800F33B4->matrix + 1;
-                gte_stclmv(outColumn);
-        column = (const u16 *)placement + 2;
-                gte_ldclmv(column);
+        gte_stclmv((u16 *)&D_800F33B4->matrix + 1);
+        gte_ldclmv((u16 *)placement + 2);
         gte_rtir();
-        outColumn = (u16 *)&D_800F33B4->matrix + 2;
-                gte_stclmv(outColumn);
+        gte_stclmv((u16 *)&D_800F33B4->matrix + 2);
         /* Transform placement translation with the camera matrix. */
-        cameraTrans = (const GteMatrixWords *)D_800BCFA4.value;
-        gte_ldtransmatrix(cameraTrans);
-        translation = placement->t;
-                gte_ldlv0(translation);
+        gte_ldtransmatrix(D_800BCFA4.value);
+        gte_ldlv0(placement->t);
         gte_rt();
-        outTranslation = D_800F33B4->matrix.t;
-        gte_stlvl(outTranslation);
-        composed = (const GteMatrixWords *)&D_800F33B4->matrix;
-                gte_ldrotmatrix(composed);
-        gte_ldtransmatrix(composed);
+        gte_stlvl(D_800F33B4->matrix.t);
+        gte_ldrotmatrix(&D_800F33B4->matrix);
+        gte_ldtransmatrix(&D_800F33B4->matrix);
     } else {
-        slot = &D_800BCFA4.value;
-        asm volatile("" : "=r"(slot) : "0"(slot));
-        camera = (const GteMatrixWords *)*slot;
-        gte_ldrotmatrix(camera);
-        gte_ldtransmatrix(camera);
+        gte_ldrotmatrix(D_800BCFA4.value);
+        gte_ldtransmatrix(D_800BCFA4.value);
         position.x = placement->t[0];
         position.y = placement->t[1];
         position.z = placement->t[2];
@@ -773,10 +664,7 @@ void func_800C4FC4(FieldShadedRing *ring, GteMatrix *placement, u8 mode)
     }
     func_800C608C(ring->intensity, ring->color1, outer);
     func_800C608C(ring->intensity, ring->color0, inner);
-    /* GCC 2.7.2 allocation debt: five input references keep ring in s1
-     * without a hard pin that would reorder the prologue. Fewer references
-     * change the allocation; this barrier emits no instructions. */
-        points = ring->source;
+    points = ring->source;
     for (i = 0; i < ring->mode; i++) {
         packet = (FieldRingPacket *)(D_800B0E58[D_8009CDDC] + D_8009CDD8);
         D_8009CDD8 += sizeof(FieldRingPacket);
@@ -923,16 +811,8 @@ void func_800C5A40(FieldTexturedStrip *strip)
         quad[1] = node->edgeB;
         quad[2] = node[1].edgeA;
         quad[3] = node[1].edgeB;
-        {
-            GteMatrix **slot;
-            register const GteMatrixWords *matrix asm("$8");
-            asm volatile("" : : : "memory");
-            slot = &D_800BCFA4.value;
-            asm volatile("" : "=r"(slot) : "0"(slot));
-            matrix = (const GteMatrixWords *)*slot;
-            gte_ldrotmatrix(matrix);
-            gte_ldtransmatrix(matrix);
-        }
+        gte_ldrotmatrix(D_800BCFA4.value);
+        gte_ldtransmatrix(D_800BCFA4.value);
         depth = RotTransPers4(&quad[0], &quad[1], &quad[2], &quad[3],
                               &packet->x0, &packet->x1, &packet->x2,
                               &packet->x3, &p, &flag);
@@ -948,14 +828,8 @@ void func_800C5A40(FieldTexturedStrip *strip)
         packet->tpage = D_800E27AC;
         packet->clut = GetClut(D_800F341C + D_800F33B4->clutX,
                                D_800F341E + D_800F33B4->clutY);
-        {
-            register u8 code asm("$8");
-            u8 length = 9;
-            asm("" : : "r"(length) : "$8");
-            code = 0x2C;
-            packet->tag.length = length;
-            packet->code = code;
-        }
+        packet->tag.length = 9;
+        packet->code = 0x2C;
         /* PSY-Q setSemiTrans(packet, D_800F337A). */
         if (D_800F337A) {
             packet->code = packet->code | 2;
