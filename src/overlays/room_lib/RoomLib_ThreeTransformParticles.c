@@ -269,13 +269,13 @@ typedef struct RoomDrawThreeStack {
     RoomFxVec4 sourceScale;
     RoomFxVec4 floorScale;
     RoomFxVec4 sourceFloorScale;
-    s16 *args;
+    RoomFxControl *args;
 } RoomDrawThreeStack;
 
 void func_800C3098(int depth);
 void func_800C2FF0(int width, int height);
 
-void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, RoomDebrisTriplet *state) {
+void RoomLib_DrawThreeTransformParticles(void *unused, RoomFxControl *args, RoomDebrisTriplet *state) {
     RoomDrawThreeStack stack;
     register RoomDebrisTriplet *workState asm("$18");
     unsigned int i;
@@ -285,7 +285,7 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, RoomDebrisTrip
     void *arg0;
     RoomSpriteMatrix *inputArg;
     int frame;
-    register s16 *callArgs asm("$7");
+    register RoomFxControl *callArgs asm("$7");
     RoomDebrisClock *clock;
     RoomDebrisTriplet *drawState;
     int computedScale;
@@ -325,7 +325,7 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, RoomDebrisTrip
             arg0 = RoomLib_ThreeParticleTable;
             RoomLib_ThreeParticleAlpha = alpha;
             asm volatile("" : : "m"(RoomLib_ThreeParticleAlpha));
-            frame = callArgs[1];
+            frame = callArgs->frame;
             func_800C3134(arg0, frame, (unsigned char *)&RoomLib_ThreeParticlePacket);
             func_800C2FF0(0x40, 0x40);
             func_800C3238(2);
@@ -334,7 +334,7 @@ void RoomLib_DrawThreeTransformParticles(void *unused, s16 *args, RoomDebrisTrip
 
             if (drawState->reserved08 == 1) {
                 callArgs = stack.args;
-                computedScale = rsin(callArgs[1] << 7) >> 3;
+                computedScale = rsin(callArgs->frame << 7) >> 3;
                 baseScale = drawState->phase[i];
                 computedScale += baseScale;
                 scaleValue = computedScale;
