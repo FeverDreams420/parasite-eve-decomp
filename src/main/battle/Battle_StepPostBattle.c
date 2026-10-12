@@ -165,7 +165,7 @@ void Battle_StepPostBattle(void)
     case 3: {
         u16 edgeCoordinate;
         if ((u8) D_8009CE70 >= 0x1AU) {
-            u32 pulse = (u32)(rcos((D_8009CE70 - 16) * 16) * 11) >> 11;
+            u32 pulse = rcos((D_8009CE70 - 16) * 16) * 11U >> 11;
             register RenderTexturedQuad *base asm("$5") = D_800BE9F0;
             register u16 left asm("$6") = 100;
             s32 frame = D_8009CDDC;
