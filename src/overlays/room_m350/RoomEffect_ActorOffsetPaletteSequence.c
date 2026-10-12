@@ -11,7 +11,7 @@
 #include "pe1/gte_sine_table.h"
 #include "RoomEffect_ActorOffsetPaletteSequence_externs.h"
 
-int func_80195B64(int event, GteShortVector *object)
+int func_80195B64(int event, RoomM350RadialSpriteParticle *object)
 {
     short position[4];
     if (event == 1) {
@@ -27,7 +27,7 @@ int func_80195B64(int event, GteShortVector *object)
         int kind, palette, handle;
 
         for (i = 0; i < 3; i++) {
-            position[i] = ((short *)object)[i] * scale / 4096 + origin[i];
+            position[i] = object->position[i] * scale / 4096 + origin[i];
         }
         kind = D_800F3368.palette;
         palette = D_800E1204[kind];
@@ -35,7 +35,7 @@ int func_80195B64(int event, GteShortVector *object)
             palette += 4;
         }
         handle = GetClut(32, palette);
-        func_800CEE20((GteShortVector *)position, 0, object->pad, object->pad, (s16)D_800F3368.parameter02 + 216,
+        func_800CEE20((GteShortVector *)position, 0, object->size, object->size, (s16)D_800F3368.parameter02 + 216,
             (unsigned short)handle, 1, shade, (struct RenderColor *)D_8019A56C);
     }
     return 0;
@@ -86,7 +86,7 @@ int func_80195CE0(int event,State *inputState)
         if(state->count>=16) return 0;
         i=0;
         while(i<2) {
-            register GteShortVector *particle asm("$17")=func_800CE610(ANIM_POOL_AS(RoomM350EffectEmitter)->pool);
+            register RoomM350RadialSpriteParticle *particle asm("$17")=func_800CE610(ANIM_POOL_AS(RoomM350EffectEmitter)->pool);
             int random;
             int highByte;
             int divisor;
@@ -102,8 +102,8 @@ radial:
             random=((unsigned int)highByte<<8)|Inv_ScrambleGrid();
             divisor=44;
             vector.z=random%divisor+320;
-            ApplyMatrixSV(&local.matrix,&vector,particle);
-            particle->pad=(unsigned int)state->count*128+2048;
+            ApplyMatrixSV(&local.matrix,&vector,(GteShortVector *)particle);
+            particle->size=(unsigned int)state->count*128+2048;
         }
         state->count=(unsigned short)state->count+1;
     }
