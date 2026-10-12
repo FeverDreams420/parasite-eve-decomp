@@ -191,7 +191,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(CombatantIdentity, bytes.kind) == 1,
  * offsets but diverge at +0x10; use EnemyCombatant for those records.
  * --------------------------------------------------------------------------*/
 typedef struct Combatant {
-/* 0x00 */ u32  coreFlags;     /* bitfield; &0x6000 / &0xC0000 facing, >>13&3 weapon-cat (Battle_GetEnemyContextField.c:28,44,55) */
+/* 0x00 */ u32  coreFlags;     /* bitfield; &0x6000 / &0xC0000 facing, >>13&3 weapon-cat (Battle_Context.c:302,318,329) */
 /* 0x04 */ CombatantIdentity field04;
 /* 0x06 */ s16  fieldId06;     /* SetContextField case2 (Battle_SetContextField.c:24) */
 /* 0x08 */ s32  exp_or_acc;    /* damage-derived accumulator, clamped to maxAtk@0x28 / 0x10000 (Battle_AttackResolution.c:537,541) */
@@ -245,10 +245,10 @@ typedef struct Combatant {
 /* 0x6C */ BattleAttributes *attributes;
 /* 0x70 */ void *field70;      /* TENTATIVE: no semantic use confirmed yet */
 /* 0x74 */ u8   pad_74[0x14];
-/* 0x88 */ s32  field88;       /* GetEnemyCtx case19, clamped >=0 (Battle_GetEnemyContextField.c:35) */
-/* 0x8C */ u16  field8C;       /* GetEnemyCtx case20 (Battle_GetEnemyContextField.c:41) */
+/* 0x88 */ s32  field88;       /* GetEnemyCtx case19, clamped >=0 (Battle_Context.c:309) */
+/* 0x8C */ u16  field8C;       /* GetEnemyCtx case20 (Battle_Context.c:315) */
 /* 0x8E */ u8   pad_8E[0x3E];
-/* 0xCC */ s32  statusFlags2;  /* secondary status bitfield: 0x1000000 petrify-ish, &0x3C000 / &0xC000 / &0x30000 status, &0x30/0xC attack-element gates (Battle_GetEnemyContextField.c:53; Battle_StartEnemyAttackEffect.c:25-64) */
+/* 0xCC */ s32  statusFlags2;  /* secondary status bitfield: 0x1000000 petrify-ish, &0x3C000 / &0xC000 / &0x30000 status, &0x30/0xC attack-element gates (Battle_Context.c:327; Battle_StartEnemyAttackEffect.c:25-64) */
 /* 0xD0 */ s16  panelC_val;    /* enemy floating panel C: Battle_DrawStatusPanel(1, &panelC) (Battle_PhaseHitReaction.c:226) */
 /* 0xD2 */ u16  panelC_x;
 /* 0xD4 */ u16  panelC_y;

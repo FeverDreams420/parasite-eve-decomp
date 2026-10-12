@@ -139,9 +139,10 @@ def manifest_entries(text: str):
     """[(line index, kind, name)] for every subsegment list entry."""
     entries = []
     for index, line in enumerate(text.splitlines()):
-        sub = rm.SUBSEG.match(line)
-        if sub:
-            entries.append((index, sub["kind"], sub["name"]))
+        sub = re.match(r"^\s*-\s*\[\s*0x[0-9A-Fa-f]+\s*,\s*([\w.]+)\s*,\s*([^\],\s]+)",
+                       line)
+        if sub:  # every named entry, data blobs (`rodata`, `data`) included
+            entries.append((index, sub.group(1), sub.group(2)))
             continue
         brace = re.match(r"^\s*-\s*\{.*type:\s*(\S+?),\s*name:\s*([^,}\s]+)", line)
         if brace:
@@ -149,7 +150,10 @@ def manifest_entries(text: str):
     return entries
 
 
-def collapse_manifest(text: str, units: list[str], new: str) -> str:
+def collapse_manifest(text: str, units: list[str], new: str,
+                      absorb: list[str] = ()) -> str:
+    """`absorb`: data entries (`main/rodata_XXXXXX`) between the units that the
+    merged object now produces itself (alignment padding or claimed data)."""
     names = [unit_name(u) for u in units]
     new_name = unit_name(new)
     lines = text.splitlines(keepends=True)
@@ -172,6 +176,9 @@ def collapse_manifest(text: str, units: list[str], new: str) -> str:
         first, last = seq[hits[0]][0], seq[hits[-1]][0]
         for i, k, n in entries:
             if first < i < last and n not in names:
+                if n in absorb:
+                    drop.add(i)
+                    continue
                 sys.exit(f"{kind}: entry {k} {n} lies between the units")
         keep = seq[hits[0]][0]
         lines[keep] = lines[keep].replace(seq[hits[0]][1], new_name, 1)
@@ -303,6 +310,9 @@ def main() -> int:
                              "these (old unit) objects")
     parser.add_argument("--externs-to", metavar="HEADER",
                         help="shared header that receives the private externs")
+    parser.add_argument("--absorb", action="append", default=[], metavar="ENTRY",
+                        help="drop this data entry between the units (the merged "
+                             "object produces its bytes)")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
@@ -320,7 +330,7 @@ def main() -> int:
         commons += [c for c in gp_commons(args.gp_commons, units) if c not in commons]
     source, inlined = build_source(units, args.marker, commons)
     manifest = (ROOT / MANIFEST).read_text()
-    new_manifest = collapse_manifest(manifest, units, new)
+    new_manifest = collapse_manifest(manifest, units, new, args.absorb)
 
     # inlined externs headers must have no other users
     for header in inlined:

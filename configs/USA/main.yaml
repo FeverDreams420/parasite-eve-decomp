@@ -88,11 +88,7 @@ segments:
       - [0x10E4, .rodata, battle/Battle_EnemyMovement]
       - [0x10F0, .rodata, battle/Battle_EncounterFlow]
       - [0x1128, rodata, main/rodata_001128]
-      - [0x1288, .rodata, battle/Entity_AnimationEvents]
-      - [0x12C8, .rodata, battle/Battle_ContextAccess]
-      - [0x1324, rodata, main/rodata_001324]
-      - [0x1328, .rodata, battle/Battle_GetEnemyContextField]
-      - [0x1490, .rodata, battle/Entity_WriteFieldByCmd]
+      - [0x1288, .rodata, battle/Battle_Context]
       - [0x15E4, .rodata, battle/Battle_StatusPrimitiveFlow]
       - [0x15FC, rodata, main/rodata_0015FC]
       - [0x164C, .rodata, battle/Battle_DrawStatusOverlay]
@@ -243,14 +239,13 @@ segments:
       # The enemy slot lifecycle reads g_BattleEquipStateBlock absolutely, which
       # the encounter flow reaches through $gp, so it stays a unit of its own.
       - [0x1FFD8, c, battle/Battle_EnemySlotLifecycle]
-      # Script setters and event execution share the six-record core layout.
-      - [0x20210, c, battle/Entity_AnimationEvents]
-      - [0x20678, c, battle/Battle_ContextAccess]
-      - [0x2090C, c, battle/Battle_GetEnemyContextField]
-      - [0x20A20, c, battle/Entity_WriteFieldByCmd]
-      - [0x20D34, c, battle/Battle_AngleAndDistanceFlow]
-      # Random drop and enemy spawn checks share combatant state and rand().
-      - [0x20E40, c, battle/Battle_RandomChecks]
+      # Battle context: script setters and event execution share the six-record
+      # core layout; context accessors, enemy context fields, field writes by
+      # command, angle and distance helpers, and the random drop and enemy spawn
+      # checks (combatant state and rand()). One default-profile unit; the four
+      # zero bytes that were main/rodata_001324 are the alignment pad before the
+      # 8-aligned enemy-context jump table, which the one object now emits itself.
+      - [0x20210, c, battle/Battle_Context]
       - [0x21094, c, battle/Battle_DrawHPBar]
       - [0x21CE4, c, battle/Battle_DrawStatusOverlay]
       - [0x21F60, c, battle/Battle_StatusPrimitiveFlow]
