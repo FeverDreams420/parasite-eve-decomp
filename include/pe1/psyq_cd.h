@@ -337,8 +337,8 @@ extern CdCommandTables D_8009B0FC;
 extern int D_8009B1FC[];
 extern int D_8009AFC0;
 extern u8 D_8009AFD0[4];
-extern u8 g_CdMode __asm__("D_8009AFD4");
-extern u8 g_CdLastCom __asm__("D_8009AFD5");
+extern u8 g_CdMode;
+extern u8 g_CdLastCom;
 extern volatile u8 *D_8009B280, *D_8009B284;
 extern char D_80011BB4[], D_80011BBC[], D_80011BCC[];
 
@@ -396,7 +396,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(CdStreamEndState, endSectorPending) == 0x04,
                   cd_stream_end_pending_offset);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(CdStreamEndState, dmaBuffer) == 0x08,
                   cd_stream_dma_buffer_offset);
-extern CdStreamEndState g_CdStreamEndState __asm__("g_CdStreamEndSector");
+extern CdStreamEndState g_CdStreamEndState;
 typedef union CdStreamReadyState {
     s32 word;
     struct {

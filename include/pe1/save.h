@@ -29,8 +29,7 @@ extern u8 *g_SaveMetadataCursor;
 extern int g_SaveMetadataWindowLength;
 extern ItemDataRecord *g_SaveMetadataSourceRecord;
 extern ItemDataRecord *g_MenuRenameTargetRecord;
-extern SaveMetadataWindow g_CursorRenderMetadataWindows[2]
-    __asm__("g_CursorRenderDataBlock");
+extern SaveMetadataWindow g_CursorRenderMetadataWindows[2];
 
 int Save_GetMetadataWindowIndex(void);
 void Save_AppendMetadataChar(unsigned char ch);

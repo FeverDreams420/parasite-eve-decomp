@@ -336,9 +336,9 @@ void Menu_DrawWeaponComparisonPanel(void) {
     u8 *var_a1_2;
 
     if (g_InvCompareSlotLeft.flags & 0x10) {
-        var_a1 = g_CursorRenderDataBlock;
+        var_a1 = g_CursorRenderMetadataWindows[0].text;
         if (g_InvCompareSlotLeft.kind == 9) {
-            var_a1 = g_CursorRenderDataBlock + 0x10;
+            var_a1 = g_CursorRenderMetadataWindows[1].text;
         }
     } else {
         var_a1 = Str_LookupTable8(g_InvCompareSlotLeft.itemId - 1);
@@ -346,9 +346,9 @@ void Menu_DrawWeaponComparisonPanel(void) {
     Sfx_DrawSlotRow(&g_InvCompareSlotLeft, var_a1);
     Draw_OffsetCursor(0, 0x18);
     if (g_InvCompareSlotRight.flags & 0x10) {
-        var_a1_2 = g_CursorRenderDataBlock;
+        var_a1_2 = g_CursorRenderMetadataWindows[0].text;
         if (g_InvCompareSlotRight.kind == 9) {
-            var_a1_2 = g_CursorRenderDataBlock + 0x10;
+            var_a1_2 = g_CursorRenderMetadataWindows[1].text;
         }
     } else {
         var_a1_2 = Str_LookupTable8(g_InvCompareSlotRight.itemId - 1);
