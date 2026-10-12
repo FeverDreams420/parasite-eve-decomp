@@ -137,7 +137,7 @@ clashing local types, prototypes taken from the definitions).
 
 The main run of a room or scene is `<short>.c` (`scene_e08_chrysler/e08.c`),
 a grab-trigger class prelude is `<short>_class.c`, and other runs are named
-after what their functions do (`fx_common/camera_nodes.c`,
+after what their functions do (`fx_common/camera.c`,
 `menu_memcard/glint_effects.c`). Units that stay separate, and why:
 
 - Copied code with its own link address: `boot_display` and `menu_memcard`
@@ -145,9 +145,9 @@ after what their functions do (`fx_common/camera_nodes.c`,
   were copied from, so a segment is at most one unit. Only segments with
   several functions merged (`boot_display/{sprites,playback}.c`,
   `menu_memcard/{video,glint_effects,video_open_step,fade}.c`).
-- Flag singletons: `fx_common` (`-fno-schedule-insns`,
-  `-fno-expensive-optimizations`; the two `-G8` units are `render_op.c`),
-  `menu_memcard` (`-fno-cse-skip-blocks` twice),
+- Flag singletons: `fx_common` (`motion_endpoints.c` needs
+  `-fno-schedule-insns`, `effect_init.c` `-fno-expensive-optimizations`,
+  see below), `menu_memcard` (`-fno-cse-skip-blocks` twice),
   `room_m273_liberty` (`RoomM273_PulseSpriteCallback`, `-fno-schedule-insns`,
   which also leaves `RoomEffect_PhasedArcSpriteFlow` alone after it),
   `room_m350_cruiser` (`RoomEffect_ConfiguredPulseCallback`, `-G8`) and
@@ -158,11 +158,38 @@ after what their functions do (`fx_common/camera_nodes.c`,
   unit was a copy of the room library's script-argument entry and now links
   the shared `room_lib/RoomLib_SetArgs3` with its words named
   `g_RoomScriptArgs`, so that scene has no C of its own.
-- `mdec_diag`: the GNU-as units, `DecDCTReset` (GCC 2.8.1) and the two VLC
-  objects stay separate. `MdecDiag_WaitMdec.inc` declares a file-scope
-  register variable on `$a0`; it reserves the register for every later
-  function of its translation unit, so `mdec_wait.c` and `mdec_status.c`
-  cannot be one file.
+- `mdec_diag` (2026-10-13): the LIBPRESS DCT object is `decdct.c`,
+  `mdec_wait.c` and `mdec_status.c`; the decoder-table builder is
+  `vlc_build.c` and the two SDK assembler objects are `vlc.c` and `vlc_c.c`,
+  after their PsyQ objects VLC and VLC_C (each sits in its own segment
+  between data). `DecDCTReset` used to be GCC 2.8.1 and four neighbours
+  GNU as, but every function from `DecDCTReset` to the status read compiles
+  to the same instructions with GCC 2.7.2 and plain GNU as (GNU as fills the
+  return delay slot that made `DecDCTReset` look like GCC 2.8.1), so the
+  seven units from `DecDCTReset` to `MdecDiag_ReceiveOutput` are one
+  `ASSEMBLER: GNU` unit. The two busy waits stay apart: `mdec_wait.inc`
+  declares a global register variable on `$a0`, which GCC 2.7.2 rejects
+  after any function definition of the unit ("global register variable
+  follows a function definition"), and once declared it keeps `$a0` from
+  every later function, so the status read and timeout handler
+  (`mdec_status.c`) score lev 3 after the waits (`func_8010C448` loads the
+  status register into `$a1`).
+- `fx_common` (2026-10-13): `camera_nodes.c` and `render_op.c` are one
+  K8 unit, `camera.c`. Under cc1 `-G8` the camera aim function scored lev 16
+  because the 8-byte angle vector `D_8019BFC4` became small data and lost
+  its address register; declared as an incomplete array it keeps the
+  register and every function of both units is lev 0. Merging also exposed
+  that the render ops' definitions disagreed with their prototypes in
+  `fx_common_motion.h`; both now take the sound handle and the position
+  words the effect loop passes (`Akao_Cmd_A0`/`A2` take an `int` handle).
+  The rest stays apart, each lev with its neighbour's settings:
+  `effects.c` lev 817 under `-fno-schedule-insns`, `motion_endpoints.c`
+  lev 56 without it; `camera_path.c` lev 66 under `-fno-schedule-insns` and
+  lev 32 under `-fno-expensive-optimizations`; `effect_init.c` lev 28
+  without that option, `model_buffers.c` lev 288 with it; `effects.c` lev
+  143 under K8.
+- `fx_field` has no C of its own: it links the shared
+  `room_lib/RoomEffect_OrbitFlare` and `room_lib/RoomLib_SetArgs3`.
 - Data between runs, resolved: `room_m256_museum`'s swing and effects runs
   are one `m256.c`. The 0x24 bytes between their jump tables were the
   effects' stack templates (`D_8018F208`..`D_8018F220`), now `const`

@@ -455,6 +455,17 @@ the `draw/Render_*` units to `render/` and `draw/Math_SqrtApprox3.c` to
 subsystem and stay separate units. `make organization-check` now counts
 names that break the convention (`unconventional_files`).
 
+The shared overlay code followed on 2026-10-13
+(`tools/reorg/maps/step9_overlay_shared_units.csv`, rows also in
+`docs/reorganization_mapping.csv`): `mdec_diag` mirrors its PsyQ LIBPRESS
+objects (`decdct.c`, `mdec_wait.c`, `mdec_status.c`, `vlc_build.c`,
+`vlc.c`, `vlc_c.c`; the seven units from `DecDCTReset` to
+`MdecDiag_ReceiveOutput` are one GNU-as unit), and `fx_common` is
+`camera.c` (the camera nodes and the `-G8` render ops), `effects.c`,
+`motion_endpoints.c`, `camera_path.c`, `effect_init.c` and
+`model_buffers.c`. `fx_field` has no C of its own. What stays apart and
+why is in `docs/CODE_ORGANIZATION.md`.
+
 ---
 
 ## 5. Risks and mitigations

@@ -130,8 +130,12 @@ retail code keeps a redundant load or a memory operand in place.
 **`-ffixed-<reg>`.** Reserves registers for the whole unit. Only the
 `scene_e20_cruiser` hover orb uses it (8 registers), as matching debt.
 
-**`GCC_VERSION: 2.8.1`.** `mdec_diag/DecDCTReset.c` is a PsyQ object built
-by GCC 2.8.1 (it fills a return delay slot GCC 2.7.2 leaves empty).
+**`GCC_VERSION: 2.8.1`.** No game unit uses it since 2026-10-13 (only
+PsyQ units in `src/main/psyq` do). `DecDCTReset` in the `mdec_diag`
+overlay used to: its return delay slot is filled, which GCC 2.7.2 with
+MASPSX leaves empty, but plain GNU as fills it too, so it now compiles with
+GCC 2.7.2 and GNU as like the rest of its LIBPRESS object
+(`mdec_diag/decdct.c`).
 
 **`ASSEMBLER: GNU`.** The unit is evidenced original assembler
 (`GAME_ASM_FUNCTION`, PsyQ assembler objects). `make source-policy-check`
@@ -178,9 +182,22 @@ then merged with them:
   `battle/commands.c` (K8; the ammo commit is the same code
   under K8, and `main/rodata_0019A4` was the 8-alignment pad before the
   weapon-list constants).
+- `fx_common` camera (2026-10-13): under K8 `func_8018F05C` scored lev 16
+  because cc1 `-G8` treats the 8-byte angle vector `D_8019BFC4` as small
+  data and stops keeping its address in a register. Declared as an
+  incomplete array (`extern GteShortVector D_8019BFC4[];`, the
+  `RoomFloorY` recipe) it keeps the register under both settings, so
+  `camera_nodes.c` and the two `-G8` render ops are one unit,
+  `fx_common/camera.c`.
 
 Merges that only needed a redundant marker gone:
 
+- `mdec_diag` (2026-10-13): `DecDCTReset` (GCC 2.8.1), `DecDCTGetEnv` and
+  the DecDCT wrappers (default) and `DecDCTPutEnv`, `MdecDiag_Reset`,
+  `MdecDiag_SendInput`, `MdecDiag_ReceiveOutput` (`ASSEMBLER: GNU`) all
+  compile to the same instructions with GCC 2.7.2 and plain GNU as, so the
+  seven units are one `ASSEMBLER: GNU` unit, `mdec_diag/decdct.c`, and no
+  game unit uses `GCC_VERSION: 2.8.1` any more.
 - `scene_e18_cruiser`: `SceneE18_ExpandingRingCallback` lost its
   `-fno-cse-skip-blocks`, so the model emitters, the ring callback and the
   ring emitters are one unit, `e18_emitters.c` (`--expand-div` is neutral
@@ -207,7 +224,8 @@ order of symbol-table entries can change, and the link is identical):
 - K8 by spelling only: `menu/main_update.c` (`-G1` to `-G8`),
   `entity/frame_update.c` (assembler `-G4` to `-G8`),
   `entity/pool.c` (cc1 `-G8`, which is the same code), and the
-  two overlay units that had cc1 `-G8` alone, `fx_common/render_op.c` and
+  two overlay units that had cc1 `-G8` alone, `fx_common/render_op.c` (now
+  part of `fx_common/camera.c`) and
   `room_m350_cruiser/RoomEffect_ConfiguredPulseCallback.c` (no COMMON
   words, so FORCE_G0 keeps every access absolute, as before).
 - K0: `script/sfx_queue.c` gains `MASPSX_FORCE_G0`.
@@ -251,22 +269,24 @@ flag):
   (`--no-expand-div`): the only units that differ under the defaults.
 - `render/wireframe.c` (cc1 and assembler `-G8` without
   FORCE_G0): lev 52 under K8.
-- Overlays: `render_op.c` and `RoomEffect_ConfiguredPulseCallback` need
-  cc1 `-G8` (lev 27 and 7 without) and their neighbours do not take it
-  (lev 16 to 143); the `room_lib` units keep one unit per method.
+- Overlays: the render ops of `fx_common/camera.c` and
+  `RoomEffect_ConfiguredPulseCallback` need cc1 `-G8` (lev 27 and 7
+  without). The camera functions before the render ops share their K8 unit;
+  `fx_common/effects.c` after them does not take it (lev 143). The
+  `room_lib` units keep one unit per method.
 
 ## Settings in use
 
-Measured on 2026-10-12 with `tools/reorg/flag_audit.py --markdown`. A
+Measured on 2026-10-13 with `tools/reorg/flag_audit.py --markdown`. A
 setting is what cc.sh runs, so two files whose markers are spelled
 differently but resolve to the same options count once. `--expand-div` and
 ASPSX 2.70 are defaults and only their exceptions are shown.
 
 | # | effective setting | main | overlays |
 |---|---|---|---|
-| S1 | `cc1 -G0 ; maspsx -G0` (default) | 33 | 133 |
+| S1 | `cc1 -G0 ; maspsx -G0` (default) | 33 | 130 |
 | S2 | `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0` | 40 | 2 |
-| S3 | `cc1 -G0 ; gnu-as -G0` | 4 | 6 |
+| S3 | `cc1 -G0 ; gnu-as -G0` | 4 | 3 |
 | S4 | `cc1 -G0 -fno-schedule-insns ; maspsx -G0` | 3 | 2 |
 | S5 | `cc1 -G0 -fno-strength-reduce ; maspsx -G0` | 3 | 2 |
 | S6 | `cc1 -G0 ; maspsx -G8 --use-comm-section FORCE_G0` | 3 | 0 |
@@ -283,9 +303,8 @@ ASPSX 2.70 are defaults and only their exceptions are shown.
 | S17 | `cc1 -G8 -fno-schedule-insns ; maspsx -G8 --use-comm-section FORCE_G0` | 1 | 0 |
 | S18 | `cc1 -G8 ; maspsx -G8` | 1 | 0 |
 | S19 | `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0 aspsx 2.56` | 1 | 0 |
-| S20 | `gcc 2.8.1 ; cc1 -G0 ; maspsx -G0` | 0 | 1 |
 
-20 distinct settings over 249 files.
+19 distinct settings over 242 files.
 
 #### S2: `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0`
 
@@ -329,7 +348,7 @@ ASPSX 2.70 are defaults and only their exceptions are shown.
 - `src/main/script/actor_opcodes.c`
 - `src/main/script/flow_opcodes.c`
 - `src/main/script/node_actions.c`
-- `src/overlays/fx_common/render_op.c`
+- `src/overlays/fx_common/camera.c`
 - `src/overlays/room_m350_cruiser/RoomEffect_ConfiguredPulseCallback.c`
 
 #### S3: `cc1 -G0 ; gnu-as -G0`
@@ -338,19 +357,16 @@ ASPSX 2.70 are defaults and only their exceptions are shown.
 - `src/main/math/fixed_mul.c`
 - `src/main/math/fixed_round.c`
 - `src/main/math/sqrt_approx.c`
-- `src/overlays/mdec_diag/DecDCTPutEnv.c`
-- `src/overlays/mdec_diag/DecDCTvlc.c`
-- `src/overlays/mdec_diag/DecDCTvlc2.c`
-- `src/overlays/mdec_diag/MdecDiag_ReceiveOutput.c`
-- `src/overlays/mdec_diag/MdecDiag_Reset.c`
-- `src/overlays/mdec_diag/MdecDiag_SendInput.c`
+- `src/overlays/mdec_diag/decdct.c`
+- `src/overlays/mdec_diag/vlc.c`
+- `src/overlays/mdec_diag/vlc_c.c`
 
 #### S4: `cc1 -G0 -fno-schedule-insns ; maspsx -G0`
 
 - `src/main/draw/gpu_regs.c`
 - `src/main/fieldfx/angle.c`
 - `src/main/render/font_load.c`
-- `src/overlays/fx_common/FxCommon_SetMotionEndpoints.c`
+- `src/overlays/fx_common/motion_endpoints.c`
 - `src/overlays/room_m273_liberty/RoomM273_PulseSpriteCallback.c`
 
 #### S5: `cc1 -G0 -fno-strength-reduce ; maspsx -G0`
@@ -389,7 +405,7 @@ ASPSX 2.70 are defaults and only their exceptions are shown.
 
 #### S11: `cc1 -G0 -fno-expensive-optimizations ; maspsx -G0`
 
-- `src/overlays/fx_common/FxCommon_EffectInitializationFlow.c`
+- `src/overlays/fx_common/effect_init.c`
 
 #### S12: `cc1 -G0 -fno-force-mem ; maspsx -G0`
 
@@ -422,10 +438,6 @@ ASPSX 2.70 are defaults and only their exceptions are shown.
 #### S19: `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0 aspsx 2.56`
 
 - `src/main/battle/encounter.c`
-
-#### S20: `gcc 2.8.1 ; cc1 -G0 ; maspsx -G0`
-
-- `src/overlays/mdec_diag/DecDCTReset.c`
 
 ## Evidence per unit
 
@@ -514,10 +526,10 @@ so the numbers say what the unit scores with `--no-expand-div` or
 | `main/script/system_opcodes.c` | maspsx `-G8`: lev 67 (Entity_InitWithTimeout 16, Script_WaitEntityFlags8 11, Script_WaitFrameOrDraw 8); maspsx `--use-comm-section`: lev 24 (Entity_InitWithTimeout 5, Script_WaitEntityFlags8 4, Script_WaitFrameOrDraw 3); FORCE_G0: identical; small-data set: lev 67 (Entity_InitWithTimeout 16, Script_WaitEntityFlags8 11, Script_WaitFrameOrDraw 8) |
 | `main/script/value_ops.c` | maspsx `--expand-div`: lev 41 (Script_EvalExpr 41) |
 | `overlays/boot_display/BootDisplay_StepImageSprite.c` | maspsx `--expand-div`: lev 22 (BootDisplay_StepImageSprite 22) |
-| `overlays/fx_common/FxCommon_EffectInitializationFlow.c` | cc1 `-fno-expensive-optimizations`: lev 28 (func_80196498 28) |
-| `overlays/fx_common/FxCommon_SetMotionEndpoints.c` | cc1 `-fno-schedule-insns`: lev 56 (FxCommon_SetMotionEndpoints 56) |
-| `overlays/fx_common/camera_nodes.c` | maspsx `--expand-div`: lev 165 (FxCommon_CheckFourBoundsWithMargin 88, FxCommon_CheckBoundsWithMargin 44, func_8018F55C 33) |
-| `overlays/fx_common/render_op.c` | cc1 `-G8`: lev 27 (func_80191EFC 15, func_80191E30 12); maspsx `-G8`: identical; maspsx `--use-comm-section`: identical; FORCE_G0: lev 14 (func_80191E30 8, func_80191EFC 6); small-data set: lev 27 (func_80191EFC 15, func_80191E30 12) |
+| `overlays/fx_common/effect_init.c` | cc1 `-fno-expensive-optimizations`: lev 28 (func_80196498 28) |
+| `overlays/fx_common/motion_endpoints.c` | cc1 `-fno-schedule-insns`: lev 56 (FxCommon_SetMotionEndpoints 56) |
+| `overlays/fx_common/camera.c` | cc1 `-G8`: lev 27 (func_80191EFC 15, func_80191E30 12); maspsx `-G8`: identical; maspsx `--use-comm-section`: identical; FORCE_G0: lev 536 (func_80191854 141, FxCommon_CheckFourBoundsWithMargin 103, FxCommon_CheckBoundsWithMargin 51); small-data set: lev 27 (func_80191EFC 15, func_80191E30 12); maspsx `--expand-div`: lev 165 (FxCommon_CheckFourBoundsWithMargin 88, FxCommon_CheckBoundsWithMargin 44, func_8018F55C 33) |
+| `overlays/mdec_diag/decdct.c` | `ASSEMBLER: GNU`: lev 18 (MdecDiag_Reset 10, DecDCTReset 2, DecDCTPutEnv 2) |
 | `overlays/menu_memcard/MenuCard_FlipScreenPages.c` | cc1 `-fno-cse-skip-blocks`: lev 12 (MenuCard_FlipScreenPages 12) |
 | `overlays/menu_memcard/MenuCard_ListAndScreenFlow.c` | cc1 `-fno-cse-skip-blocks`: lev 71 (func_801909B4 59, func_80190660 12) |
 | `overlays/room_lib/RoomEffect_DroppedFlare.c` | maspsx `--expand-div`: lev 63 (RoomEffect_DroppedFlareParticle 63) |
