@@ -24,10 +24,11 @@ typedef struct RoomOrbitSetEntity {
     FieldActor *owner;            /* 0x08 */
 } RoomOrbitSetEntity;
 
-void RoomFx_OrbitSetInit(char *object, void *unused, char *state) {
+void RoomFx_OrbitSetInit(RoomOrbitSetEntity *object, void *unused, RoomOrbitSetState *state) {
     FieldActor *owner;
     void *allocation;
     RenderMatrix *source;
+    RenderMatrix *matrixArg;
     register void *callObject asm("$4");
     register int value asm("$2");
     u16 value128a;
@@ -37,14 +38,14 @@ void RoomFx_OrbitSetInit(char *object, void *unused, char *state) {
     register int valueNeg42 asm("$5");
 
     func_800C2B40(state);
-    owner = ((RoomOrbitSetEntity *)object)->owner;
-    ((RoomOrbitSetState *)state)->owner = owner;
+    owner = object->owner;
+    state->owner = owner;
     source = owner->render_object.matrices;
-    ((RoomOrbitSetState *)state)->matrix = *source;
+    state->matrix = *source;
     allocation = Asset_SearchByKeyType(0x24);
 
     callObject = object;
-    ((RoomOrbitSetState *)state)->asset.allocation = allocation;
+    state->asset.allocation = allocation;
     value = -0x29;
     value128a = 0x80;
     value128b = 0x80;
@@ -60,8 +61,8 @@ void RoomFx_OrbitSetInit(char *object, void *unused, char *state) {
     g_RoomOrbitBurstPacket.r = value;
     value = 0x40;
     asm volatile("" : "=r"(state) : "0"(state), "r"(value));
-    state += 4;
-    PE1_COMPILER_USE(state);
+    matrixArg = &state->matrix;
+    PE1_COMPILER_USE(matrixArg);
     g_RoomOrbitBurstPacket.offset = valueNeg42;
     g_RoomOrbitShadowPacket.offset = valueNeg42;
     g_RoomOrbitSpritePacket.offset = valueNeg42;
@@ -92,7 +93,7 @@ void RoomFx_OrbitSetInit(char *object, void *unused, char *state) {
     g_RoomOrbitSpritePacket.g = value128b;
     g_RoomOrbitSpritePacket.b = value128b;
     g_RoomOrbitSpritePacket.zero = 0;
-    func_800C66C8((void *)callObject, 0x592, state);
+    func_800C66C8((void *)callObject, 0x592, matrixArg);
 }
 
 /* The set itself draws nothing; each effect draws its own sprites. */
