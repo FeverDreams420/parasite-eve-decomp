@@ -1,7 +1,7 @@
 #include "common.h"
 #include "pe1/entity_allocation.h"
 #include "pe1/entity_frame_update.h"
-#include "pe1/task_node.h"
+#include "pe1/script_node.h"
 #include "pe1/render_buffers.h"
 
 
@@ -87,13 +87,13 @@ void Entity_RollbackPositionHierarchy(FieldActor *actor);
 /* Start SELF's contact task for OTHER unless an active one already exists. */
 static inline void Scene_LinkContactTask(FieldActor *self, FieldActor *other)
 {
-    TaskNode *node;
-    TaskNode *head;
+    ScriptNode *node;
+    ScriptNode *head;
     int found;
 
     if (self->script_cursor_1a0 != 0) {
         found = 0;
-        node = (TaskNode *)self->task_node_lists[1];
+        node = (ScriptNode *)self->script_node_lists[1];
         while (!found) {
             if (node == 0) {
                 break;
@@ -110,12 +110,12 @@ static inline void Scene_LinkContactTask(FieldActor *self, FieldActor *other)
             node->trigger_value = other->field_sfx_id;
             node->target18.coordinate = other->type_id;
             node->target1c = other->sub_id;
-            head = (TaskNode *)self->task_node_lists[1];
+            head = (ScriptNode *)self->script_node_lists[1];
             if (head != 0) {
                 node->next = head;
                 head->prev = node;
             }
-            self->task_node_lists[1] = node;
+            self->script_node_lists[1] = node;
         }
     }
 }

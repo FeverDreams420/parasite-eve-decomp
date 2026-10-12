@@ -2117,7 +2117,7 @@ g_MenuItemActionContext = 0x8009CDA8;
 g_DialogueChoiceCursor = 0x8009CEA0;
 g_MenuEquipSlotIndex = 0x8009CEA4;
 g_PlayerMovementEnabled = 0x8009CED0;
-g_TaskCollisionFlag = 0x8009CED4;
+g_ScriptCollisionFlag = 0x8009CED4;
 // g_MenuItemContextFlag: rando:PauseMenuOptions
 g_MenuItemContextFlag = 0x8009CEF0;
 g_MenuBattleStatusOverlayActive = 0x8009CEF8;

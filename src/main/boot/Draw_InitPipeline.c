@@ -12,7 +12,7 @@
 #include "pe1/render_lighting.h"
 #include "pe1/entity_allocation.h"
 #include "pe1/boot.h"
-#include "pe1/task_state.h"
+#include "pe1/script_state.h"
 #include "pe1/scene_entity_textures.h"
 #include "pe1/save_tail_state.h"
 
@@ -61,7 +61,7 @@ void Draw_InitPipeline(void) {
     Scene_LoadRoom(g_SceneDispatchToken);
     Scene_StreamTexturePage();
     g_EntitySerialCounter = 1;
-    H(g_TaskNodeSeqCounter) = 1;
+    H(g_ScriptNodeSeqCounter) = 1;
     Entity_InitFreePool();
     Script_InitNodeFreeList();
 

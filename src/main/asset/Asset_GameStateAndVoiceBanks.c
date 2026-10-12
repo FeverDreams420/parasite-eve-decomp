@@ -12,7 +12,7 @@
 #include "pe1/asset_find.h"
 #include "pe1/akao.h"
 #include "pe1/sys.h"
-#include "pe1/task_queue.h"
+#include "pe1/script_queue.h"
 #include "pe1/boot_disc_check.h"
 #include "pe1/render_animation_frame.h"
 

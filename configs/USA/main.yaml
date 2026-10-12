@@ -134,7 +134,7 @@ segments:
       - [0x2A0C, c, boot/Boot_MainLoop]
       # Node-pool init, scene relocation, map flush and free-list setup share
       # the task-node pool and g_SceneDataTable1 (main_tu_evidence G0001);
-      # allocation and garbage collection share the TaskNode free list. One -G8
+      # allocation and garbage collection share the ScriptNode free list. One -G8
       # FORCE_G0 unit with -fno-strength-reduce.
       - [0x2CF8, c, script/Script_NodePool]
       # Expression, Vec3 get/set and mask-test opcodes: contiguous

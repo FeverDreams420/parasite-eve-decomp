@@ -13,13 +13,13 @@
 #include "pe1/entity_animation.h"
 #include "pe1/battle_entity_anim.h"
 #include "pe1/textbox.h"
-#include "pe1/task_node.h"
+#include "pe1/script_node.h"
 #include "pe1/gte_types.h"
 #include "pe1/field_collision.h"
-#include "pe1/task_anim.h"
+#include "pe1/script_anim.h"
 #include "pe1/pm.h"
 #include "pe1/save.h"
-#include "pe1/task_state.h"
+#include "pe1/script_state.h"
 #include "pe1/field_movement.h"
 #include "pe1/save_tail_state.h"
 #include "pe1/battle_runtime.h"
@@ -38,7 +38,7 @@
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
 int g_SceneDataTable0;
-TaskNode *g_TaskNodePool;
+ScriptNode *g_ScriptNodePool;
 
 int Script_EncodeBarcode(int **arg0) {
     int tmp[2];
@@ -342,14 +342,14 @@ int Script_SetCurrentEntityField20(int **arg0) {
 int Entity_MarkAnimPending(void) {
     unsigned int i;
     FieldActor *entity;
-    TaskNode *node;
-    TaskNode *skip;
+    ScriptNode *node;
+    ScriptNode *skip;
 
     i = 0;
-    skip = g_TaskNodePool;
+    skip = g_ScriptNodePool;
     entity = g_CurrentEntity;
     do {
-        node = entity->task_node_lists[i];
+        node = entity->script_node_lists[i];
         if (node != 0) {
             do {
                 if (node != skip) {
@@ -366,14 +366,14 @@ int Entity_MarkAnimPending(void) {
 int Entity_AdvancePendingAnim(void) {
     unsigned int i;
     FieldActor *entity;
-    TaskNode *node;
+    ScriptNode *node;
     int active;
 
     i = 0;
     active = 1;
     entity = g_CurrentEntity;
     do {
-        node = entity->task_node_lists[i];
+        node = entity->script_node_lists[i];
         if (node != 0) {
             do {
                 if (node->flags & 0x40) {
@@ -395,12 +395,12 @@ int Entity_AdvancePendingAnim(void) {
 int Entity_MarkNodeAnimPendingById(int **arg0) {
     unsigned int i;
     FieldActor *entity;
-    TaskNode *node;
+    ScriptNode *node;
 
     i = 0;
     entity = g_CurrentEntity;
     do {
-        node = entity->task_node_lists[i];
+        node = entity->script_node_lists[i];
         if (node != 0) {
             do {
                 if (node->seq == **arg0) {
@@ -419,7 +419,7 @@ int Entity_MarkNodeAnimPendingById(int **arg0) {
 int Entity_AdvanceNodeById(int **arg0) {
     unsigned int i;
     FieldActor *entity;
-    TaskNode *node;
+    ScriptNode *node;
     int next_value;
     int active_value;
 
@@ -427,7 +427,7 @@ int Entity_AdvanceNodeById(int **arg0) {
     active_value = 1;
     entity = g_CurrentEntity;
     do {
-        node = entity->task_node_lists[i];
+        node = entity->script_node_lists[i];
         if (node != 0) {
             do {
                 if (node->seq == **arg0) {
@@ -457,7 +457,7 @@ int Script_RunEntityCommand(int **arg0) {
         return 1;
     }
 
-    g_TaskNodePool->active = 1;
+    g_ScriptNodePool->active = 1;
     g_SceneDataTable0 -= 0x10;
     return 0;
 }
@@ -641,7 +641,7 @@ int Script_InitEntityMoveState(void) {
 
 int Script_SetEntityAnim12Args(char **arg0) {
     Script_SetObjAnimEntry12(
-        (TaskAnimObj *)g_CurrentEntity,
+        (ScriptAnimObj *)g_CurrentEntity,
         *(unsigned char *)arg0[0],
         *(unsigned char *)arg0[1],
         *(unsigned char *)arg0[2],
@@ -658,7 +658,7 @@ int Script_SetEntityAnim12Args(char **arg0) {
 
 int Script_SetEntityAnim5Args(char **arg0) {
     Script_SetObjAnimEntry5(
-        (TaskAnimObj *)g_CurrentEntity,
+        (ScriptAnimObj *)g_CurrentEntity,
         *(unsigned char *)arg0[0],
         *(unsigned char *)arg0[1],
         *(unsigned char *)arg0[2],
@@ -834,7 +834,7 @@ int Script_WaitFrameOrDraw(int **arg0) {
     }
     if ((Draw_CheckDrawStatus() << 24) != 0) {
         g_SceneDataTable0 -= 0xC;
-        g_TaskNodePool->active = 1;
+        g_ScriptNodePool->active = 1;
     } else {
         return 1;
     }
@@ -853,7 +853,7 @@ int Script_Noop2(void) {
 int Entity_YieldOnDrawBusy(void) {
     if ((Draw_CheckDrawStatus() << 24) != 0) {
         g_SceneDataTable0 -= 8;
-        g_TaskNodePool->active = 1;
+        g_ScriptNodePool->active = 1;
     } else {
         return 1;
     }
@@ -1008,7 +1008,7 @@ int Script_SetMenuSlotEntry(int **arg0) {
 int Entity_YieldOnLoading(void) {
     if ((g_ScreenTransitionState[0] & 3) >= 2) {
         g_SceneDataTable0 -= 8;
-        g_TaskNodePool->active = 1;
+        g_ScriptNodePool->active = 1;
         return 0;
     }
 
@@ -1042,32 +1042,32 @@ int Script_CountItemsByValue(int **arg0) {
 void Menu_OpenEquipSlotSwap(int arg0);
 
 int Entity_InitWithTimeout(int **arg0) {
-    TaskNode *state = g_TaskNodePool;
+    ScriptNode *state = g_ScriptNodePool;
     unsigned short flags = state->flags;
 
     if ((flags & 0x20) == 0) {
         state->flags = flags | 0x20;
         Render_BeginSceneLoad();
         g_SceneDataTable0 -= 0x10;
-        g_TaskNodePool->active = 1;
+        g_ScriptNodePool->active = 1;
         return 0;
     }
 
     if ((unsigned short)(D_8009D2A4 - 3) < 0x180) {
         *arg0[1] = (short)D_8009D2A4 - 3;
-        g_TaskNodePool->flags &= 0xFFDF;
+        g_ScriptNodePool->flags &= 0xFFDF;
         return 1;
     }
 
     if ((short)D_8009D2A4 == -1) {
         *arg0[1] = -1;
-        g_TaskNodePool->flags &= 0xFFDF;
+        g_ScriptNodePool->flags &= 0xFFDF;
         return 1;
     }
 
     Menu_OpenEquipSlotSwap(*arg0[0]);
     g_SceneDataTable0 -= 0x10;
-    g_TaskNodePool->active = 1;
+    g_ScriptNodePool->active = 1;
     return 0;
 }
 
@@ -1179,7 +1179,7 @@ void Render_SetEntryScrolled(int arg0, int arg1, int arg2, int arg3);
 void Render_SetEntryMirrored(int arg0, int arg1, int arg2, int arg3);
 
 int Script_SetBattleEntryCoords(int **arg0) {
-    Battle_SetEntryCoords((TaskAnimObj *)g_CurrentEntity, *(unsigned char *)arg0[0], *arg0[1], *arg0[2]);
+    Battle_SetEntryCoords((ScriptAnimObj *)g_CurrentEntity, *(unsigned char *)arg0[0], *arg0[1], *arg0[2]);
     return 1;
 }
 
@@ -1239,10 +1239,10 @@ int Script_ClearEntityFlag400(void) {
 }
 
 int Script_WaitEntityFlags8(void) {
-    TaskNode *state;
+    ScriptNode *state;
     unsigned short flags;
 
-    state = g_TaskNodePool;
+    state = g_ScriptNodePool;
     flags = state->flags;
 
     if (flags & 0x20) {
@@ -1255,7 +1255,7 @@ int Script_WaitEntityFlags8(void) {
     }
 
     g_SceneDataTable0 -= 8;
-    g_TaskNodePool->active = 1;
+    g_ScriptNodePool->active = 1;
     return 0;
 }
 
@@ -1290,7 +1290,7 @@ int Script_RotateEntityAngle(int **arg0) {
 }
 
 int Script_SetNodeFlag80(void) {
-    g_TaskNodePool->flags |= 0x80;
+    g_ScriptNodePool->flags |= 0x80;
     return 1;
 }
 
@@ -1304,7 +1304,7 @@ int Script_SetNodeFlag80(void) {
 #include "pe1/game_timers.h"
 #include "pe1/textbox.h"
 #include "pe1/inventory_slots.h"
-#include "pe1/task_state.h"
+#include "pe1/script_state.h"
 
 int Script_ClearEntityRoamFlag(void) {
     g_CurrentEntity->flags &= 0xFFFDFFFF;

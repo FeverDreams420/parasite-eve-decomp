@@ -3,19 +3,19 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "pe1/reloc_block.h"
-#include "pe1/task_node.h"
+#include "pe1/script_node.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/field_actor.h"
-#include "pe1/task_state.h"
+#include "pe1/script_state.h"
 #include "pe1/battle_entity_anim.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
-TaskNode *g_TaskNodeFreeListHead;
-unsigned short g_TaskNodeSeqCounter[1];
+ScriptNode *g_ScriptNodeFreeListHead;
+unsigned short g_ScriptNodeSeqCounter[1];
 int g_SceneDataTable0;
 RelocBlock *g_SceneDataTable1;
-TaskNode *g_TaskNodePool;
+ScriptNode *g_ScriptNodePool;
 
 /* Task-node pool and scene relocation-block setup. Pool initialization,
  * scene data relocation, the scene-map flush and free-list construction are
@@ -25,20 +25,20 @@ void Script_InitNodePool(void) {
     unsigned int i;
     unsigned int j;
     unsigned int rowOffset;
-    TaskNodeAddress base;
+    ScriptNodeAddress base;
     int *ptr;
 
     i = 0;
     base.node = D_8009D310;
     rowOffset = 0;
 
-    g_TaskNodePool = 0;
-    g_TaskNodeSeqCounter[0] = 0;
-    g_TaskNodeFreeListHead = 0;
+    g_ScriptNodePool = 0;
+    g_ScriptNodeSeqCounter[0] = 0;
+    g_ScriptNodeFreeListHead = 0;
 
-    for (; i < 72; i++, rowOffset += sizeof(TaskNode)) {
+    for (; i < 72; i++, rowOffset += sizeof(ScriptNode)) {
         register unsigned int colOffset;
-        TaskNodeAddress cell;
+        ScriptNodeAddress cell;
 
         j = 0;
         colOffset = rowOffset;
@@ -51,7 +51,7 @@ void Script_InitNodePool(void) {
     g_SceneDataTable0 = 0;
 
     i = 0;
-    ptr = g_TaskScriptOperandTable;
+    ptr = g_ScriptOperandTable;
     while (i < 16) {
         *ptr++ = 0;
         i++;
@@ -117,8 +117,8 @@ void Script_InitNodeFreeList(void) {
     unsigned short i;
 
     i = 0;
-    g_TaskNodePool = 0;
-    g_TaskNodeFreeListHead = D_8009D310;
+    g_ScriptNodePool = 0;
+    g_ScriptNodeFreeListHead = D_8009D310;
 
     do {
         D_8009D310[i].next = &D_8009D310[i + 1];
@@ -129,20 +129,20 @@ void Script_InitNodeFreeList(void) {
 
     i = 0;
     do {
-        g_TaskNodeActiveFlags[i] = 0;
+        g_ScriptNodeActiveFlags[i] = 0;
         i++;
     } while (i < 0x40);
 }
 
-TaskNode *Script_AllocNode(unsigned int *script, TaskNode *arg1) {
-    TaskNode *node;
-    TaskNode *next;
+ScriptNode *Script_AllocNode(unsigned int *script, ScriptNode *arg1) {
+    ScriptNode *node;
+    ScriptNode *next;
     unsigned short seq;
     unsigned short value;
 
-    node = g_TaskNodeFreeListHead;
+    node = g_ScriptNodeFreeListHead;
     next = node->next;
-    g_TaskNodeFreeListHead = next;
+    g_ScriptNodeFreeListHead = next;
 
     if (arg1 != 0) {
         node->prev = arg1;
@@ -157,7 +157,7 @@ TaskNode *Script_AllocNode(unsigned int *script, TaskNode *arg1) {
         node->next = 0;
     }
 
-    seq = g_TaskNodeSeqCounter[0];
+    seq = g_ScriptNodeSeqCounter[0];
     value = 1;
     node->trigger_value = 0;
     node->current.script = script;
@@ -166,14 +166,14 @@ TaskNode *Script_AllocNode(unsigned int *script, TaskNode *arg1) {
     node->flags = 0;
     value = seq + 1;
     node->seq = seq;
-    g_TaskNodeSeqCounter[0] = value;
+    g_ScriptNodeSeqCounter[0] = value;
 
     return node;
 }
 
 #include "common.h"
 #include "pe1/field_actor.h"
-#include "pe1/task_node.h"
+#include "pe1/script_node.h"
 
 void Script_GarbageCollectNodes(void) {
     FieldActor *group;
@@ -184,10 +184,10 @@ void Script_GarbageCollectNodes(void) {
         do {
             i = 0;
             do {
-                TaskNode *node;
-                TaskNode *next;
+                ScriptNode *node;
+                ScriptNode *next;
 
-                node = group->task_node_lists[i];
+                node = group->script_node_lists[i];
                 if (node != 0) {
                     do {
                         next = node->next;
@@ -195,15 +195,15 @@ void Script_GarbageCollectNodes(void) {
                             if (node->prev != 0) {
                                 node->prev->next = next;
                             } else {
-                                group->task_node_lists[i] = next;
+                                group->script_node_lists[i] = next;
                             }
 
                             if (node->next != 0) {
                                 node->next->prev = node->prev;
                             }
 
-                            node->next = g_TaskNodeFreeListHead;
-                            g_TaskNodeFreeListHead = node;
+                            node->next = g_ScriptNodeFreeListHead;
+                            g_ScriptNodeFreeListHead = node;
                         }
 
                         node = next;

@@ -14,7 +14,7 @@ from tools.tests.csource import find_definition
 ROOT = Path(__file__).resolve().parents[2]
 
 
-class TaskRunQueueTests(unittest.TestCase):
+class ScriptRunQueueTests(unittest.TestCase):
     def test_plain_source(self):
         source = find_definition('Script_RunQueue').read_text()
         self.assertNotRegex(source, r'\b(?:asm|__asm__|INCLUDE_ASM|REGALLOC_BARRIER)\b')

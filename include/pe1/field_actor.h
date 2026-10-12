@@ -3,7 +3,7 @@
 
 #include "common.h"
 #include "pe1/fixed_point.h"
-#include "pe1/task_node.h"
+#include "pe1/script_node.h"
 #include "pe1/render_object.h"
 
 typedef struct FieldActorState FieldActorState;
@@ -62,7 +62,7 @@ typedef struct FieldActor {
     /* 0x094 */ unsigned char pad_094[0x04];
     /* 0x098 */ unsigned int flags;
     /* 0x09C */ unsigned char *script_base; /* base of the entity's 16-bit scene script */
-    /* 0x0A0 */ TaskNode *task_node_lists[3]; /* 3 task-node list heads (Entity_MarkNodeFree) */
+    /* 0x0A0 */ ScriptNode *script_node_lists[3]; /* 3 script-node list heads (Entity_MarkNodeFree) */
     /* 0x0AC */ unsigned int pad_0AC[0x38]; /* cleared when the actor is created */
     /* 0x18C */ struct FieldActor *parent; /* parent actor; child copies its pos/rot when flags & 0x400000 */
     /* 0x190 */ void (*frame_callback)(struct FieldActor *actor); /* run first every frame */
@@ -92,8 +92,8 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldActor, next) == 0x04,
                   field_actor_next_offset);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldActor, flags) == 0x98,
                   field_actor_flags_offset);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldActor, task_node_lists) == 0xA0,
-                  field_actor_task_node_lists_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldActor, script_node_lists) == 0xA0,
+                  field_actor_script_node_lists_offset);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldActor, anim) == 0x14,
                   field_actor_anim_offset);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldActor, script_base) == 0x9C,
@@ -284,7 +284,7 @@ void Entity_WriteFieldByCmd(FieldActor *actor, int command, int value);
  * migrated and build-checked.
  */
 
-/* The actor whose task-node lists are being run. */
+/* The actor whose script-node lists are being run. */
 extern FieldActor *g_CurrentEntity;
 /* Head of the active actor list (Entity_PoolInit.c). */
 extern FieldActor *g_FieldActorListHead;

@@ -6,7 +6,7 @@
 #include "pe1/player_entity.h"
 #include "pe1/game_state.h"
 #include "common.h"
-#include "pe1/task_node.h"
+#include "pe1/script_node.h"
 #include "pe1/vector_types.h"
 #include "pe1/render_lighting.h"
 #include "pe1/scene_room_load.h"
@@ -20,34 +20,34 @@
 #include "pe1/scene_transition.h"
 #include "pe1/game_state_types.h"
 #include "pe1/menu_equipment.h"
-#include "pe1/task_queue.h"
+#include "pe1/script_queue.h"
 #include "pe1/field_collision.h"
 #include "pe1/field_sfx.h"
-#include "pe1/task_state.h"
+#include "pe1/script_state.h"
 #include "pe1/entity_animation.h"
 #include "pe1/entity_allocation.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
 u32 *D_8009CE00;
-TaskNode *D_8009D300;
+ScriptNode *D_8009D300;
 u8 g_ScriptCameraBytes[3];
 int g_SceneDataTable0;
-TaskNode *g_TaskNodePool;
+ScriptNode *g_ScriptNodePool;
 
 typedef struct ScriptArgParts {
     s16 low;
     signed int high : 16;
 } ScriptArgParts;
 
-typedef struct TaskScriptArgs {
+typedef struct ScriptCmdArgs {
     int *opcode;
     ScriptArgParts *arg1;
     ScriptArgParts *arg2;
     ScriptArgParts *arg3;
     ScriptArgParts *arg4;
     ScriptArgParts *arg5;
-} TaskScriptArgs;
+} ScriptCmdArgs;
 
 #define ARG_WORD(ptr) (*(int *)(ptr))
 #define ARG_BYTE(ptr) (*(u8 *)(ptr))
@@ -55,7 +55,7 @@ typedef struct TaskScriptArgs {
 void func_800E00CC(Pe1Vec3s *position, int mode, int arg2, int arg3,
                    int arg4, int arg5, int arg6);
 
-int Script_DispatchScriptCmd(TaskScriptArgs *args)
+int Script_DispatchScriptCmd(ScriptCmdArgs *args)
 {
     Pe1Vec3s position;
     Pe1Vec3s position2;
@@ -185,14 +185,14 @@ int Script_ClearEntityShadowFlag(void) {
 int Script_BeginSceneTransition(int **arg0) {
     Pe1GameState *state = &g_GameState;
     int **saved = arg0;
-    TaskNode *node;
+    ScriptNode *node;
     unsigned short *node_flags;
     int flags;
     int cursor;
 
     if (!(state->flags & 0x1000)) {
 
-    node = g_TaskNodePool;
+    node = g_ScriptNodePool;
     node_flags = &node->flags;
     flags = *node_flags;
     if ((flags & 0x20) == 0) {
@@ -207,7 +207,7 @@ int Script_BeginSceneTransition(int **arg0) {
     Render_BeginSceneLoad();
     Menu_OpenEquipScreen(**saved);
     {
-        TaskNode *tail_node = g_TaskNodePool;
+        ScriptNode *tail_node = g_ScriptNodePool;
         int tail_flags;
 
         state->flags |= 0x9000;
@@ -227,19 +227,19 @@ void Menu_OpenSaveLoadEntryPoint(int arg0);
 int Script_OpenSaveLoadMenu(int **arg0) {
     Pe1GameState *state = &g_GameState;
     int **saved = arg0;
-    TaskNode *node;
+    ScriptNode *node;
     int flags;
     int cursor;
 
     if (!(state->flags & 0x1000)) {
 
-    node = g_TaskNodePool;
+    node = g_ScriptNodePool;
     flags = node->flags;
     if (flags & 0x20) {
         Render_BeginSceneLoad();
         Menu_OpenSaveLoadEntryPoint(**saved);
         {
-            TaskNode *tail_node = g_TaskNodePool;
+            ScriptNode *tail_node = g_ScriptNodePool;
             int tail_flags;
 
             state->flags |= 0x9000;
@@ -256,7 +256,7 @@ int Script_OpenSaveLoadMenu(int **arg0) {
     }
 
     {
-        TaskNode *mark_node = g_TaskNodePool;
+        ScriptNode *mark_node = g_ScriptNodePool;
         int one = 1;
 
         mark_node->active = one;
@@ -280,19 +280,19 @@ int Script_GetPlayerInputFlag(int **args) {
 /* Script interpreter main loop and the jump-to-actor-script opcode; a
  * contiguous -G8 pair sharing the script cursor D_8009CE00. */
 
-PE1_STATIC_ASSERT(sizeof(TaskNode) == 0x2C, interpreter_task_node_size);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, current) == 0, interpreter_script_offset);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, active) == 0x10, interpreter_wait_offset);
+PE1_STATIC_ASSERT(sizeof(ScriptNode) == 0x2C, interpreter_script_node_size);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(ScriptNode, current) == 0, interpreter_script_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(ScriptNode, active) == 0x10, interpreter_wait_offset);
 
 /* Tentative COMMON declarations preserve small-data metadata for stock
  * maspsx. Storage remains at the existing data/linker addresses. */
-TaskNode *D_8009D300;
+ScriptNode *D_8009D300;
 u32 *D_8009CE00;
 
 void Script_RunQueue(void)
 {
     u32 *args[16];
-    TaskNode *node;
+    ScriptNode *node;
     u8 *entity;
     u32 header, modes, tail, opcode;
     u32 *values;
@@ -343,9 +343,9 @@ void Script_RunQueue(void)
 
 typedef struct {
     int value;
-} TaskJumpOffsetEntry;
+} ScriptJumpOffsetEntry;
 
-int Script_JumpToEntityOffset(TaskJumpOffsetEntry **arg0)
+int Script_JumpToEntityOffset(ScriptJumpOffsetEntry **arg0)
 {
     D_8009CE00 = (u32 *)(((FieldActor *)D_8009D2F0[0])->script_base + ((*arg0)->value * 2));
     return 1;
@@ -357,12 +357,12 @@ int Entity_MarkCurrentDead(void) {
 }
 
 int Entity_SetCurrentNodeActive(int **arg0) {
-    g_TaskNodePool->active = *(unsigned short *)arg0[0];
+    g_ScriptNodePool->active = *(unsigned short *)arg0[0];
     return 0;
 }
 
 int Entity_MarkCurrentNodeFree(void) {
-    g_TaskNodePool->flags |= 0x10;
+    g_ScriptNodePool->flags |= 0x10;
     return 0;
 }
 
@@ -436,7 +436,7 @@ int Entity_YieldWhileMoving(void) {
     }
 
     g_SceneDataTable0 -= 8;
-    g_TaskNodePool->active = 1;
+    g_ScriptNodePool->active = 1;
     return ret;
 }
 int Entity_SelectFieldSetter(int **arg0) {
@@ -454,7 +454,7 @@ int Entity_SelectFieldSetter(int **arg0) {
             g_CurrentEntity->script_cursor_19c = 0;
             break;
         case 3:
-            g_TaskNodePool->next_value = 0;
+            g_ScriptNodePool->next_value = 0;
             break;
         }
     } else {
@@ -467,7 +467,7 @@ int Entity_SelectFieldSetter(int **arg0) {
             g_CurrentEntity->script_cursor_19c = (unsigned int *)(g_CurrentEntity->script_base + (value << 1));
             break;
         case 3:
-            g_TaskNodePool->next_value = (int)(g_CurrentEntity->script_base + (value << 1));
+            g_ScriptNodePool->next_value = (int)(g_CurrentEntity->script_base + (value << 1));
             break;
         }
     }
@@ -483,7 +483,7 @@ int Entity_SetCurrentFlags(int **args)
 
 int Entity_GetCurrentNodeId(int **args)
 {
-    *args[0] = g_TaskNodePool->seq;
+    *args[0] = g_ScriptNodePool->seq;
     return 1;
 }
 
@@ -529,14 +529,14 @@ int Script_PlayFieldSfx(FieldSfxScriptArgs *arg0) {
 int Draw_GetTextboxPageState(short arg0);
 
 int Script_GetNodeTarget14(int **arg0) {
-    *arg0[0] = g_TaskNodePool->target14;
+    *arg0[0] = g_ScriptNodePool->target14;
     return 1;
 }
 
 int Script_YieldWhileTableEntrySet(short **arg0) {
     if ((Draw_GetTextboxPageState(*arg0[0]) << 24) != 0) {
         g_SceneDataTable0 -= 0xC;
-        g_TaskNodePool->active = 1;
+        g_ScriptNodePool->active = 1;
         return 0;
     }
     return 1;
@@ -548,21 +548,21 @@ int Script_ClearTableEntry(short **arg0) {
 }
 
 int Script_GetNodeTargets18_1C(int **arg0) {
-    *arg0[0] = g_TaskNodePool->target18.coordinate;
-    *arg0[1] = g_TaskNodePool->target1c;
+    *arg0[0] = g_ScriptNodePool->target18.coordinate;
+    *arg0[1] = g_ScriptNodePool->target1c;
     return 1;
 }
 
 int Entity_FindNodeById(unsigned short **arg0) {
-    TaskNode *node;
-    TaskNode *cur;
+    ScriptNode *node;
+    ScriptNode *cur;
     unsigned short id;
     unsigned int bucket;
     unsigned int search_id;
     FieldActor *base;
 
     id = *arg0[0];
-    node = g_TaskNodePool;
+    node = g_ScriptNodePool;
     if (node->seq == id) {
         node->flags |= 0x10;
         return 0;
@@ -572,7 +572,7 @@ int Entity_FindNodeById(unsigned short **arg0) {
     search_id = id;
     bucket = 0;
     do {
-        cur = base->task_node_lists[bucket & 0xFF];
+        cur = base->script_node_lists[bucket & 0xFF];
         while (cur != 0) {
             if (cur->seq == search_id) {
                 cur->flags |= 0x10;
@@ -603,15 +603,15 @@ int Script_GetCurrentEntityField24(int **arg0) {
 
 int Entity_MarkNodeFree(void) {
     u8 i;
-    TaskNode *skip;
+    ScriptNode *skip;
     FieldActor *entity;
-    TaskNode *node;
+    ScriptNode *node;
 
     i = 0;
     entity = g_CurrentEntity;
-    skip = g_TaskNodePool;
+    skip = g_ScriptNodePool;
     do {
-        node = (TaskNode *)entity->task_node_lists[i];
+        node = (ScriptNode *)entity->script_node_lists[i];
         while (node != 0) {
             if (node != skip) {
                 node->flags |= 0x10;
@@ -677,12 +677,12 @@ int Script_SetEntityAnimFrame(u16 **arg0) {
 }
 
 int Script_WaitAnimFrameMatch(void) {
-    TaskNode *state;
+    ScriptNode *state;
     FieldActor *entity;
     int stack;
     int ret;
 
-    state = g_TaskNodePool;
+    state = g_ScriptNodePool;
     entity = g_CurrentEntity;
     state->active = 1;
     ret = 0;

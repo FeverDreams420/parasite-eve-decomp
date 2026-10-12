@@ -1,10 +1,10 @@
-#ifndef PE1_TASK_QUEUE_H
-#define PE1_TASK_QUEUE_H
+#ifndef PE1_SCRIPT_QUEUE_H
+#define PE1_SCRIPT_QUEUE_H
 
 #include "common.h"
 #include "pe1/field_actor.h"
 
-#include "pe1/task_node.h"
+#include "pe1/script_node.h"
 
 extern u32 *D_8009CE00;
 extern u8 *D_8009D2F0[];

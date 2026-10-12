@@ -1,19 +1,19 @@
-#ifndef PE1_TASK_STATE_H
-#define PE1_TASK_STATE_H
+#ifndef PE1_SCRIPT_STATE_H
+#define PE1_SCRIPT_STATE_H
 
 #include "common.h"
-#include "pe1/task_node.h"
+#include "pe1/script_node.h"
 
 /* Task script interpreter state and the tables its opcodes read
  * (src/main/script). */
 
 extern int g_SceneDataTable0;
 extern short g_EntityCollisionWallParam;
-extern TaskNode *g_TaskNodeFreeListHead;
-/* Sequence number stamped into each allocated task node (a one-element
+extern ScriptNode *g_ScriptNodeFreeListHead;
+/* Sequence number stamped into each allocated script node (a one-element
  * array: small data in the -G8 pool unit). */
-extern unsigned short g_TaskNodeSeqCounter[1];
-extern int g_TaskScriptOperandTable[16];
+extern unsigned short g_ScriptNodeSeqCounter[1];
+extern int g_ScriptOperandTable[16];
 extern u16 g_SceneInitLbaTbl0[];
 extern u16 g_SceneInitLbaTbl1[];
 extern u16 g_SceneAssetLbaTbl[];
@@ -37,4 +37,4 @@ extern DeferredAkaoCommand g_DeferredAkaoCommands[16];
 u32 Draw_FlushPrimQueue(void);
 void Script_SignalExit(void);
 
-#endif /* PE1_TASK_STATE_H */
+#endif /* PE1_SCRIPT_STATE_H */

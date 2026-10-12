@@ -16,7 +16,7 @@
 #include "pe1/battle.h"
 #include "pe1/battle_entity_anim.h"
 #include "pe1/menu_state.h"
-#include "pe1/task_state.h"
+#include "pe1/script_state.h"
 #include "pe1/battle_update.h"
 #include "pe1/render_animation_frame.h"
 

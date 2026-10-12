@@ -20,7 +20,7 @@
 #include "pe1/aya.h"
 #include "pe1/inventory.h"
 #include "pe1/text.h"
-#include "pe1/task_queue.h"
+#include "pe1/script_queue.h"
 #include "pe1/menu_context_help.h"
 #include "pe1/draw_state.h"
 #include "pe1/inventory_sort.h"

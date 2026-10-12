@@ -18,7 +18,7 @@
 #include "pe1/gte.h"
 #include "pe1/scene_flags.h"
 #include "pe1/pm.h"
-#include "pe1/task_node.h"
+#include "pe1/script_node.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -116,11 +116,11 @@ FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
     ((RenderShadowActor *)actor)->shadow_matrix_index = 0;
     ((RenderShadowActor *)actor)->shadow_intensity = 0x80;
     for (i = 0; i < 0x38; ++i) actor->pad_0AC[i] = 0;
-    for (i = 0; i < 3; ++i) actor->task_node_lists[i] = 0;
+    for (i = 0; i < 3; ++i) actor->script_node_lists[i] = 0;
 
     table = g_GameState.bank_reset_944[0];
     actor->script_base = table[2 + scene[0]];
-    actor->task_node_lists[2] = Script_AllocNode((unsigned int *)actor->script_base, 0);
+    actor->script_node_lists[2] = Script_AllocNode((unsigned int *)actor->script_base, 0);
     actor->rot_x = 0;
     actor->rot_y = 0;
     actor->rot_z = 0;
@@ -450,7 +450,7 @@ void Entity_IntegratePositionConditional(FieldActor *a)
 
 /* Actor list maintenance after movement: rolling positions back through
  * the parent chain, following attached parents, freeing dead actors, and
- * running and advancing each actor's three task-node lists. */
+ * running and advancing each actor's three script-node lists. */
 
 void Entity_FreeAllocationBlock(int arg0);
 int Render_ReturnTrue(void *unused);
@@ -557,15 +557,15 @@ void Entity_CollectGarbage(void) {
 
 void Entity_DispatchCallbacks(Entity *arg0) {
     int i;
-    TaskNode **ptr;
-    TaskNode *callback;
+    ScriptNode **ptr;
+    ScriptNode *callback;
 
     i = 0;
-    ptr = arg0->task_node_lists;
+    ptr = arg0->script_node_lists;
     g_CurrentEntity = arg0;
     do {
         callback = *ptr;
-        g_TaskNodePool = callback;
+        g_ScriptNodePool = callback;
         if (callback != 0) {
             Script_RunQueue();
         }
@@ -576,11 +576,11 @@ void Entity_DispatchCallbacks(Entity *arg0) {
 
 void Entity_TickAnimSequences(FieldActor *arg0) {
     unsigned int i;
-    TaskNode *node;
+    ScriptNode *node;
 
     i = 0;
     do {
-        node = (TaskNode *)arg0->task_node_lists[i];
+        node = (ScriptNode *)arg0->script_node_lists[i];
         if (node != 0) {
             do {
                 if (node->next_value != 0) {

@@ -1,5 +1,5 @@
 #include "common.h"
-#include "pe1/task_anim.h"
+#include "pe1/script_anim.h"
 #include "pe1/battle_context.h"
 #include "pe1/battle.h"
 #include "pe1/room_floor.h"
@@ -14,7 +14,7 @@
 
 void Script_SetObjAnimEntry12(obj, index, effectType, enterMode, exitMode, power,
                            parameter0, parameter1, parameter2, parameter3, category, frame)
-    TaskAnimObj *obj;
+    ScriptAnimObj *obj;
     u8 index;
     int effectType, enterMode;
     u8 exitMode;
@@ -37,7 +37,7 @@ void Script_SetObjAnimEntry12(obj, index, effectType, enterMode, exitMode, power
     obj->core->parameters[index][3] = parameter3;
 }
 
-void Script_SetObjAnimEntry5(TaskAnimObj *obj, int index, int effectType, int enterMode, u8 exitMode, u16 power) {
+void Script_SetObjAnimEntry5(ScriptAnimObj *obj, int index, int effectType, int enterMode, u8 exitMode, u16 power) {
     EnemyActionEffect *dst = &obj->core->records[(u8)index];
 
     dst->state = 0;
@@ -47,7 +47,7 @@ void Script_SetObjAnimEntry5(TaskAnimObj *obj, int index, int effectType, int en
     dst->power = power;
 }
 
-void Battle_SetEntryCoords(TaskAnimObj *arg0, unsigned char arg1, int arg2, int arg3) {
+void Battle_SetEntryCoords(ScriptAnimObj *arg0, unsigned char arg1, int arg2, int arg3) {
     EnemyActionEffect *entry = &arg0->core->records[arg1];
 
     entry->enterStep = arg2;

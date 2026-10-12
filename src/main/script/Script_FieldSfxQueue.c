@@ -30,20 +30,20 @@ void Script_QueueFieldSfx(int arg0, int arg1, int arg2, int arg3, int arg4) {
 
 
 #include "pe1/field_sfx.h"
-#include "pe1/task_node.h"
+#include "pe1/script_node.h"
 
 
 static inline void Start(FieldActor *actor, FieldSfxQueueEntry *event)
 {
-    TaskNode *node = Script_AllocNode(actor->script_cursor_19c, 0);
+    ScriptNode *node = Script_AllocNode(actor->script_cursor_19c, 0);
 
     node->flags |= 4;
     node->trigger_value = event->taskValue;
     node->target14 = event->taskArgument;
-    node->next = (TaskNode *)actor->task_node_lists[2];
+    node->next = (ScriptNode *)actor->script_node_lists[2];
     if (node->next)
         node->next->prev = node;
-    actor->task_node_lists[2] = node;
+    actor->script_node_lists[2] = node;
 }
 
 void Scene_UpdateEntityList(void)

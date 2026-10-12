@@ -1083,7 +1083,7 @@ Still open:
     inlined `Scene_LinkContactTask` calls is not cross-jumped (lev 128).
   - `Entity_TriggerAnimEvent` keeps its three pins (lev 81 without: retail
     copies `entity` to `$a2` first). `Script_RunEntityCommand` needs no pins:
-    the plain `g_TaskNodePool->active = 1; g_SceneDataTable0 -= 0x10;`
+    the plain `g_ScriptNodePool->active = 1; g_SceneDataTable0 -= 0x10;`
     tail allocates `$a1`/`$a0` as retail does.
     `Entity_RelocateSceneData` keeps the `$v0` pin on the loaded block
     (lev 15) and adds region offsets to the database word through the
@@ -1347,7 +1347,7 @@ These apply to any unit, not only the ones they were found in:
   (lev 16); `AmmoPoolRecord(kind - 5)` does not (`Inv_ArmorCapacity.c`).
 - Under `-G0` every extern is absolute anyway; the views in
   `Scene_UpdateBgDraw` and `Scene_LoadSceneData` were unnecessary.
-- An array bound changes the small-data decision: `g_TaskNodeSeqCounter[1]`
+- An array bound changes the small-data decision: `g_ScriptNodeSeqCounter[1]`
   is small, `[]` is not. Declaring a symbol as an incomplete array before
   its tentative definition in the same unit also makes it large, so
   `Boot_FrameLoop` includes `pe1/boot.h` after its definitions.
@@ -1566,7 +1566,7 @@ deleting one pin at a time:
   `gte_SetBackColor`, `gte_SetColorMatrix` (`Boot_SetBackColor`,
   `Boot_SetLightColor`) and `gte_MulMatrix0` (`Script_SetGteMatrix`).
 - Address arithmetic on a pointer as an integer goes through a union
-  (`RelocAddress`, `TaskNodeAddress`, `DrawPrimLink`, `TimRelativeTable`).
+  (`RelocAddress`, `ScriptNodeAddress`, `DrawPrimLink`, `TimRelativeTable`).
   Declare the union in the innermost block that uses it: a union declared
   at function scope gets the older pseudo, CSE then rewrites the packet
   pointer's later uses through the copy and an extra `move` appears.
@@ -1584,7 +1584,7 @@ deleting one pin at a time:
   with a structure member reached through a pointer. A load of such a scalar
   is hoisted out of loops and scheduled across member stores; a record view
   of the scalar (`g_PmTables`, a one-element array like
-  `g_TaskNodeSeqCounter[1]`) keeps it in place without volatile.
+  `g_ScriptNodeSeqCounter[1]`) keeps it in place without volatile.
 - A stored packet field read straight back is reloaded by itself: any store
   through a pointer invalidates every remembered memory value in CSE, so
   `Draw_EmitGlyph` and `Draw_EmitDigitSprite` need no volatile views for
@@ -1629,7 +1629,7 @@ Crutches still in these units, with the best crutch-free lev found:
 - `Akao_ProcessCommand`: 1 `goto archive_match`; retail places the match
   block after case 0x199, a structured `break`/flag places it in the loop.
 - `Script_SpawnChildNode` (6 pins, 2 barriers): crutch-free lev 19. Viewing
-  the free-list head as a one-element array (the `g_TaskNodeSeqCounter[1]`
+  the free-list head as a one-element array (the `g_ScriptNodeSeqCounter[1]`
   recipe) fixes the store order the memory barrier holds and the node
   register (lev 12 with no else-branch crutch, 8 with the `$4` state pin);
   what remains is the `g_CurrentEntity` load, which retail schedules right

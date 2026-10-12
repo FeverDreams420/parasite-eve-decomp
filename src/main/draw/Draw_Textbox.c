@@ -14,7 +14,7 @@
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
-int g_TaskCollisionFlag;
+int g_ScriptCollisionFlag;
 u8 *D_8009CE90;
 unsigned char D_8009CE94;
 TextboxRect D_8009CE98;
@@ -123,7 +123,7 @@ void Render_SetupFogLayer(void *source) {
     tile_payload_base = tile_base + 8;
     g_DialogueChoiceCursor = 0;
     g_PlayerMovementEnabled = 0;
-    g_TaskCollisionFlag = 0;
+    g_ScriptCollisionFlag = 0;
     D_8009CE90 = source;
     for (; (u8)i < 2; ++i) {
         {
@@ -251,7 +251,7 @@ void Script_DisableMovement(void) {
 }
 
 void Script_SetCollisionFlag(int value) {
-    g_TaskCollisionFlag = value != 0;
+    g_ScriptCollisionFlag = value != 0;
 }
 
 /* Opens the first free textbox for message `index`. A styled box takes the
@@ -416,7 +416,7 @@ void Menu_DrawTextboxEntries(void) {
     }
     initialBufferTable = &D_800B0E38.other_buffers[1];
     asm("" : "=r"(initialBufferTable) : "0"(initialBufferTable), "r"(nextPacket));
-    if (g_TaskCollisionFlag != 0) {
+    if (g_ScriptCollisionFlag != 0) {
         TextboxTableAddress ordering;
 
         ordering.pointer = initialBufferTable;
@@ -480,7 +480,7 @@ void Menu_DrawTextboxEntries(void) {
                     }
                 }
             } else {
-                if ((textbox->background != 0) && (backgroundDrawn == 0) && (g_TaskCollisionFlag == 0)) {
+                if ((textbox->background != 0) && (backgroundDrawn == 0) && (g_ScriptCollisionFlag == 0)) {
                     backgroundDrawn = 1;
                     AddPrim(((u32 *)D_800B0E38.ordering[D_8009CDDC]) + 2,
                             (unsigned int *)((D_8009CDDC * 0x18) + (u8 *)D_8009ECA8));

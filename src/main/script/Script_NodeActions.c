@@ -8,42 +8,42 @@
 #include "pe1/battle_entity_anim.h"
 #include "pe1/battle_runtime.h"
 
-#include "pe1/task_node.h"
+#include "pe1/script_node.h"
 #include "pe1/field_actor.h"
 #include "pe1/player_entity.h"
 #include "pe1/global_slot.h"
 
-PE1_STATIC_ASSERT(sizeof(TaskNodeTarget18) == 4, task_node_target18_view_size);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNodeTarget18, coordinate) == 0,
-                  task_node_target18_coordinate_offset);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNodeTarget18, actor) == 0,
-                  task_node_target18_actor_offset);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, target18) == 0x18,
-                  task_node_target18_offset);
+PE1_STATIC_ASSERT(sizeof(ScriptNodeTarget18) == 4, script_node_target18_view_size);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(ScriptNodeTarget18, coordinate) == 0,
+                  script_node_target18_coordinate_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(ScriptNodeTarget18, actor) == 0,
+                  script_node_target18_actor_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(ScriptNode, target18) == 0x18,
+                  script_node_target18_offset);
 
 /* COMMON supplies small-data metadata to MASPSX. */
-TaskNode *g_TaskNodeFreeListHead;
-u16 g_TaskNodeSeqCounter[1];
-TaskNode *g_TaskNodePool;
+ScriptNode *g_ScriptNodeFreeListHead;
+u16 g_ScriptNodeSeqCounter[1];
+ScriptNode *g_ScriptNodePool;
 int g_SceneDataTable0;
 
 int Script_SpawnChildNode(int **args) {
-    TaskNode *node = g_TaskNodePool;
+    ScriptNode *node = g_ScriptNodePool;
 
     if ((node->flags & 3) != 0) {
         register int *value_ptr asm("$2");
         register FieldActor *state asm("$5");
-        TaskNode *entry;
+        ScriptNode *entry;
         u16 seq;
         register unsigned int *script asm("$4");
         int base;
         int scriptValue;
-        TaskNode *next;
+        ScriptNode *next;
 
         value_ptr = args[0];
         state = g_CurrentEntity;
-        entry = g_TaskNodeFreeListHead;
-        seq = g_TaskNodeSeqCounter[0];
+        entry = g_ScriptNodeFreeListHead;
+        seq = g_ScriptNodeSeqCounter[0];
         scriptValue = *value_ptr;
         base = (int)state->script_base;
         asm volatile("" : "=r"(entry) : "0"(entry));
@@ -58,26 +58,26 @@ int Script_SpawnChildNode(int **args) {
         script = (unsigned int *)((scriptValue << 1) + base);
         entry->current.script = script;
         {
-            TaskNode *head = state->task_node_lists[2];
+            ScriptNode *head = state->script_node_lists[2];
             seq++;
-            g_TaskNodeSeqCounter[0] = seq;
-            g_TaskNodeFreeListHead = next;
+            g_ScriptNodeSeqCounter[0] = seq;
+            g_ScriptNodeFreeListHead = next;
             entry->next = head;
             if (head != 0) {
                 head->prev = entry;
             }
-            g_CurrentEntity->task_node_lists[2] = entry;
+            g_CurrentEntity->script_node_lists[2] = entry;
         }
     } else {
-        register TaskNode *entry asm("$5") = g_TaskNodeFreeListHead;
+        register ScriptNode *entry asm("$5") = g_ScriptNodeFreeListHead;
         register int *value_ptr asm("$2") = args[0];
         register FieldActor *state asm("$4") = g_CurrentEntity;
-        TaskNode *next = entry->next;
+        ScriptNode *next = entry->next;
         int value;
 
         value = *value_ptr;
-        g_TaskNodeFreeListHead = next;
-        asm volatile("" : "=m"(g_TaskNodeFreeListHead) : "m"(g_TaskNodeFreeListHead));
+        g_ScriptNodeFreeListHead = next;
+        asm volatile("" : "=m"(g_ScriptNodeFreeListHead) : "m"(g_ScriptNodeFreeListHead));
         value = (value << 1) + (int)state->script_base;
         if (node != 0) {
             entry->prev = node;
@@ -93,12 +93,12 @@ int Script_SpawnChildNode(int **args) {
         }
         entry->current.script = (unsigned int *)value;
         {
-            u16 seq = g_TaskNodeSeqCounter[0];
+            u16 seq = g_ScriptNodeSeqCounter[0];
             entry->trigger_value = 0;
             entry->next_value = 0;
             entry->active = 1;
             entry->flags = 0;
-            g_TaskNodeSeqCounter[0] = seq + 1;
+            g_ScriptNodeSeqCounter[0] = seq + 1;
             entry->seq = seq;
         }
     }
@@ -106,7 +106,7 @@ int Script_SpawnChildNode(int **args) {
 }
 
 int Script_SetEntityActionAndWait(int **arg0) {
-    TaskNode *node = g_TaskNodePool;
+    ScriptNode *node = g_ScriptNodePool;
     int flags = node->flags;
 
     if ((flags & 0x20) == 0) {
@@ -154,7 +154,7 @@ int Script_SetEntityActionAndWait(int **arg0) {
 
     {
         int cursor = g_SceneDataTable0;
-        TaskNode *active_node = g_TaskNodePool;
+        ScriptNode *active_node = g_ScriptNodePool;
         cursor -= 0xC;
         g_SceneDataTable0 = cursor;
         active_node->active = 1;
@@ -162,10 +162,10 @@ int Script_SetEntityActionAndWait(int **arg0) {
     }
 }
 
-/* Animation-range wait consumes the active TaskNode and FieldActor view. */
+/* Animation-range wait consumes the active ScriptNode and FieldActor view. */
 int Script_WaitAnimRange(void) {
     FieldActor *entity;
-    TaskNode *node;
+    ScriptNode *node;
     int current;
     int target;
     int next;
@@ -175,7 +175,7 @@ int Script_WaitAnimRange(void) {
     register int divisor asm("$2");
 
     entity = g_CurrentEntity;
-    node = g_TaskNodePool;
+    node = g_ScriptNodePool;
     max_frame = entity->anim.fixed;
     current = max_frame;
     target = entity->anim_frame_target;
@@ -221,11 +221,11 @@ int Script_WaitAnimRange(void) {
     return 0;
 }
 
-/* Point-turn and movement handlers use the same active TaskNode layout. */
+/* Point-turn and movement handlers use the same active ScriptNode layout. */
 /* Script op: turn the current actor's yaw toward (x, z) by at most `step`
  * per frame along the shorter arc; yields until the yaw reaches it. */
 int Script_TurnTowardPointStep(int **arg0) {
-    TaskNode *node = g_TaskNodePool;
+    ScriptNode *node = g_ScriptNodePool;
     int flags = node->flags;
     int x;
     int y;
@@ -297,18 +297,18 @@ int Script_TurnTowardPointStep(int **arg0) {
         g_CurrentEntity->rot_y = stepped;
         if (stepped != angle) {
             g_SceneDataTable0 -= 0x14;
-            g_TaskNodePool->active = 1;
+            g_ScriptNodePool->active = 1;
             return 0;
         }
     }
-    g_TaskNodePool->flags &= 0xFFDF;
+    g_ScriptNodePool->flags &= 0xFFDF;
     return 1;
 }
 
 int Script_MoveTowardPoint(int **args) {
     FieldActor *speed_entity;
     FieldActor *motion_entity;
-    TaskNode *camera_state;
+    ScriptNode *camera_state;
     int movement_speed;
     int turn_speed;
     int target_angle;
@@ -334,19 +334,19 @@ int Script_MoveTowardPoint(int **args) {
     }
     movement_speed = Math_FixedMul(movement_speed, g_CurrentEntity->move_speed << 4);
 
-    if ((g_TaskNodePool->flags & 0x20) == 0) {
+    if ((g_ScriptNodePool->flags & 0x20) == 0) {
         target_x = *args[0];
         target_z = *args[1];
         if (current_x == target_x && current_z == target_z) {
             return 1;
         }
         turn_speed = *args[2];
-        g_TaskNodePool->target14 = target_x;
-        g_TaskNodePool->target18.coordinate = target_z;
-        g_TaskNodePool->target1c = turn_speed;
-        g_TaskNodePool->flags |= 0x20;
+        g_ScriptNodePool->target14 = target_x;
+        g_ScriptNodePool->target18.coordinate = target_z;
+        g_ScriptNodePool->target1c = turn_speed;
+        g_ScriptNodePool->flags |= 0x20;
     } else {
-        camera_state = g_TaskNodePool;
+        camera_state = g_ScriptNodePool;
         target_x = camera_state->target14;
         target_z = camera_state->target18.coordinate;
         turn_speed = camera_state->target1c;
@@ -414,26 +414,26 @@ int Script_MoveTowardPoint(int **args) {
     movement_distance = current_x * current_x + current_z * current_z;
     motion_entity->motion_z = movement_z;
     if (movement_distance >= remaining_distance) {
-        camera_state = g_TaskNodePool;
+        camera_state = g_ScriptNodePool;
         motion_entity->pos_x = target_x;
         motion_entity->pos_z = target_z;
         motion_entity->motion_x = 0;
         motion_entity->motion_z = 0;
-        g_TaskNodePool->flags &= 0xFFDF;
+        g_ScriptNodePool->flags &= 0xFFDF;
         return 1;
     } else {
         g_SceneDataTable0 -= 0x14;
-        g_TaskNodePool->active = 1;
+        g_ScriptNodePool->active = 1;
         return 0;
     }
 }
 
-/* Camera entity tracking shares the active TaskNode cache and motion ABI. */
+/* Camera entity tracking shares the active ScriptNode cache and motion ABI. */
 int Render_CameraTrackEntityAngle(int **args) {
     int **script_args;
     FieldActor *current;
     FieldActor *tracking_entity;
-    TaskNode *camera_state;
+    ScriptNode *camera_state;
     int *turn_arg;
     int base_speed;
     int current_x;
@@ -461,7 +461,7 @@ int Render_CameraTrackEntityAngle(int **args) {
     }
     base_speed = Math_FixedMul(base_speed, g_CurrentEntity->move_speed << 4);
 
-    if ((g_TaskNodePool->flags & 0x20) == 0) {
+    if ((g_ScriptNodePool->flags & 0x20) == 0) {
         target_x = *script_args[0];
         target_z = *script_args[1];
         if (current_x == target_x && current_z == target_z) {
@@ -474,14 +474,14 @@ int Render_CameraTrackEntityAngle(int **args) {
             tracking_entity->rot_y = tracking_entity->rot_y + 0x1000;
         }
 
-        g_TaskNodePool->target14 = target_x;
-        g_TaskNodePool->target18.coordinate = target_z;
-        g_TaskNodePool->target1c = turn_speed;
-        g_TaskNodePool->flags |= 0x20;
+        g_ScriptNodePool->target14 = target_x;
+        g_ScriptNodePool->target18.coordinate = target_z;
+        g_ScriptNodePool->target1c = turn_speed;
+        g_ScriptNodePool->flags |= 0x20;
     } else {
-        target_x = g_TaskNodePool->target14;
-        target_z = g_TaskNodePool->target18.coordinate;
-        turn_speed = g_TaskNodePool->target1c;
+        target_x = g_ScriptNodePool->target14;
+        target_z = g_ScriptNodePool->target18.coordinate;
+        turn_speed = g_ScriptNodePool->target1c;
     }
 
     target_angle = (u16)(0x1400 - ratan2(current_z - target_z, current_x - target_x));
@@ -524,7 +524,7 @@ int Render_CameraTrackEntityAngle(int **args) {
     movement_distance = current_x * current_x + current_z * current_z;
     current->rot_y &= 0xFFF;
     if (movement_distance >= angle_difference) {
-        camera_state = g_TaskNodePool;
+        camera_state = g_ScriptNodePool;
         current->pos_x = target_x;
         current->pos_z = target_z;
         current->motion_x = 0;
@@ -533,7 +533,7 @@ int Render_CameraTrackEntityAngle(int **args) {
         return 1;
     } else {
         g_SceneDataTable0 -= 0x14;
-        g_TaskNodePool->active = 1;
+        g_ScriptNodePool->active = 1;
         return 0;
     }
 }
@@ -549,7 +549,7 @@ int Render_CameraSnapToEntity(int **args) {
     int delta_x;
     int delta_z;
 
-    if ((g_TaskNodePool->flags & 0x20) == 0) {
+    if ((g_ScriptNodePool->flags & 0x20) == 0) {
         if (*args[0] == 0) {
             if (g_PlayerEntity == 0) {
                 return 1;
@@ -570,16 +570,16 @@ int Render_CameraSnapToEntity(int **args) {
         }
 
         speed = *args[2];
-        g_TaskNodePool->target18.actor = target;
-        g_TaskNodePool->flags |= 0x20;
-        g_TaskNodePool->target14 = speed;
+        g_ScriptNodePool->target18.actor = target;
+        g_ScriptNodePool->flags |= 0x20;
+        g_ScriptNodePool->target14 = speed;
     } else {
-        target = g_TaskNodePool->target18.actor;
+        target = g_ScriptNodePool->target18.actor;
         if ((target->flags & 0x10) != 0) {
-            g_TaskNodePool->flags &= 0xFFDF;
+            g_ScriptNodePool->flags &= 0xFFDF;
             return 1;
         }
-        speed = g_TaskNodePool->target14;
+        speed = g_ScriptNodePool->target14;
     }
 
     delta_x = g_CurrentEntity->pos_x - target->pos_x;
@@ -626,12 +626,12 @@ int Render_CameraSnapToEntity(int **args) {
         g_CurrentEntity->rot_y = next_angle;
         if (next_angle != target_angle) {
             g_SceneDataTable0 -= 0x14;
-            g_TaskNodePool->active = 1;
+            g_ScriptNodePool->active = 1;
             return 0;
         }
     }
 
-    g_TaskNodePool->flags &= 0xFFDF;
+    g_ScriptNodePool->flags &= 0xFFDF;
     return 1;
 }
 
@@ -639,7 +639,7 @@ int Render_CameraTrackEntityZoom(int **args) {
     FieldActor *speed_entity;
     FieldActor *motion_entity;
     FieldActor *target;
-    TaskNode *camera_state;
+    ScriptNode *camera_state;
     int target_move_id;
     int movement_speed;
     int turn_speed;
@@ -656,7 +656,7 @@ int Render_CameraTrackEntityZoom(int **args) {
     int remaining_distance;
     int movement_distance;
 
-    if ((g_TaskNodePool->flags & 0x20) == 0) {
+    if ((g_ScriptNodePool->flags & 0x20) == 0) {
         if (*args[0] == 0) {
             if (g_PlayerEntity == 0) {
                 return 1;
@@ -676,18 +676,18 @@ int Render_CameraTrackEntityZoom(int **args) {
             }
         }
 
-        g_TaskNodePool->flags |= 0x20;
+        g_ScriptNodePool->flags |= 0x20;
         turn_speed = *args[2];
-        g_TaskNodePool->target18.actor = target;
-        g_TaskNodePool->target14 = turn_speed;
+        g_ScriptNodePool->target18.actor = target;
+        g_ScriptNodePool->target14 = turn_speed;
         target_move_id = target->field_sfx_id;
-        g_TaskNodePool->target1c = target_move_id;
+        g_ScriptNodePool->target1c = target_move_id;
     } else {
-        target = g_TaskNodePool->target18.actor;
-        turn_speed = g_TaskNodePool->target14;
+        target = g_ScriptNodePool->target18.actor;
+        turn_speed = g_ScriptNodePool->target14;
         if ((target->flags & 0x10) != 0 ||
-            target->field_sfx_id != g_TaskNodePool->target1c) {
-            g_TaskNodePool->flags &= 0xFFDF;
+            target->field_sfx_id != g_ScriptNodePool->target1c) {
+            g_ScriptNodePool->flags &= 0xFFDF;
             return 1;
         }
     }
@@ -770,7 +770,7 @@ int Render_CameraTrackEntityZoom(int **args) {
     movement_distance = current_x * current_x + current_z * current_z;
     motion_entity->motion_z = movement_z;
     if (movement_distance >= remaining_distance) {
-        camera_state = g_TaskNodePool;
+        camera_state = g_ScriptNodePool;
         motion_entity->pos_x = target_x;
         motion_entity->pos_z = target_z;
         motion_entity->motion_x = 0;
@@ -779,7 +779,7 @@ int Render_CameraTrackEntityZoom(int **args) {
         return 1;
     } else {
         g_SceneDataTable0 -= 0x14;
-        g_TaskNodePool->active = 1;
+        g_ScriptNodePool->active = 1;
         return 0;
     }
 }

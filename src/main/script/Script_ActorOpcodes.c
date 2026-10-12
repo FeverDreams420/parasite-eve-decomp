@@ -5,7 +5,7 @@
 #include "common.h"
 #include "pe1/memcard.h"
 #include "pe1/player_entity.h"
-#include "pe1/task_node.h"
+#include "pe1/script_node.h"
 #include "pe1/game_state_types.h"
 #include "pe1/scene_room_load.h"
 #include "pe1/field_actor.h"
@@ -20,7 +20,7 @@
 #include "pe1/field_collision.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/task_state.h"
+#include "pe1/script_state.h"
 #include "pe1/render_setup.h"
 #include "pe1/entity_frame_update.h"
 #include "pe1/render_lighting.h"
@@ -45,8 +45,8 @@
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
 u32 *D_8009CE00;
-TaskNode *D_8009D300;
-TaskNode *g_TaskNodePool;
+ScriptNode *D_8009D300;
+ScriptNode *g_ScriptNodePool;
 int g_SceneDataTable0;
 
 /* Adjacent field-actor query and distance routines share one compiled unit. */
@@ -262,7 +262,7 @@ s32 Boot_MemCardStepInit(u8 **arg0) {
         return 1;
     }
     g_SceneDataTable0 -= 0xC;
-    g_TaskNodePool->active = 1;
+    g_ScriptNodePool->active = 1;
     return 0;
 }
 
@@ -338,23 +338,23 @@ int Entity_GetPositionByType(int **args) {
     return 1;
 }
 
-PE1_STATIC_ASSERT(sizeof(TaskNode) == 0x2C, camera_task_node_size);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, flags) == 0x08,
-                  camera_task_node_flags_offset);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, active) == 0x10,
-                  camera_task_node_active_offset);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, target14) == 0x14,
-                  camera_task_node_target14_offset);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, target18) == 0x18,
-                  camera_task_node_target18_offset);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, target1c) == 0x1C,
-                  camera_task_node_target1c_offset);
+PE1_STATIC_ASSERT(sizeof(ScriptNode) == 0x2C, camera_script_node_size);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(ScriptNode, flags) == 0x08,
+                  camera_script_node_flags_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(ScriptNode, active) == 0x10,
+                  camera_script_node_active_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(ScriptNode, target14) == 0x14,
+                  camera_script_node_target14_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(ScriptNode, target18) == 0x18,
+                  camera_script_node_target18_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(ScriptNode, target1c) == 0x1C,
+                  camera_script_node_target1c_offset);
 
 int Render_CameraTrackRelativeOffset(int **args) {
     FieldActor *speed_entity;
     FieldActor *motion_entity;
-    TaskNode *init_state;
-    TaskNode *camera_state;
+    ScriptNode *init_state;
+    ScriptNode *camera_state;
     int movement_speed;
     int turn_speed;
     int target_angle;
@@ -480,11 +480,11 @@ s32 Render_CameraStepAngleFade(s32 **arg0) {
     short current;
     short target;
     short step;
-    TaskNode *node;
+    ScriptNode *node;
     int flags;
 
     current = g_CurrentEntity->rot_y & 0xFFF;
-    node = g_TaskNodePool;
+    node = g_ScriptNodePool;
     flags = node->flags;
     if (!(flags & 0x20)) {
         short distance;
@@ -502,19 +502,19 @@ s32 Render_CameraStepAngleFade(s32 **arg0) {
         }
         if (target < current) {
             if (distance >= 0x801) {
-                g_TaskNodePool->target14 = step;
+                g_ScriptNodePool->target14 = step;
             } else {
-                g_TaskNodePool->target14 = -step;
+                g_ScriptNodePool->target14 = -step;
             }
         } else if (distance < 0x801) {
-            g_TaskNodePool->target14 = step;
+            g_ScriptNodePool->target14 = step;
         } else {
-            g_TaskNodePool->target14 = -step;
+            g_ScriptNodePool->target14 = -step;
         }
-        g_TaskNodePool->target18.coordinate = target;
+        g_ScriptNodePool->target18.coordinate = target;
     }
-    step = g_TaskNodePool->target14;
-    target = g_TaskNodePool->target18.coordinate;
+    step = g_ScriptNodePool->target14;
+    target = g_ScriptNodePool->target18.coordinate;
     {
         int angle = current;
         int goal = target;
@@ -522,19 +522,19 @@ s32 Render_CameraStepAngleFade(s32 **arg0) {
         if ((angle >= goal && goal >= angle + step) ||
             (goal >= angle && angle + step >= goal)) {
             g_CurrentEntity->rot_y = target;
-            g_TaskNodePool->flags &= 0xFFDF;
+            g_ScriptNodePool->flags &= 0xFFDF;
             return 1;
         }
     }
     if ((step > 0 && current + step >= 0x1001 && ((current + step) & 0xFFF) >= target) ||
         (step < 0 && current + step < 0 && ((current + step) & 0xFFF) <= target)) {
         g_CurrentEntity->rot_y = target;
-        g_TaskNodePool->flags &= 0xFFDF;
+        g_ScriptNodePool->flags &= 0xFFDF;
         return 1;
     }
     g_SceneDataTable0 -= 0x10;
     g_CurrentEntity->rot_y += step;
-    g_TaskNodePool->active = 1;
+    g_ScriptNodePool->active = 1;
     return 0;
 }
 #undef NULL
@@ -634,24 +634,24 @@ retry_second:
 }
 
 int Script_PlayEntityAnim(s16 **args) {
-    TaskNode *task_state;
+    ScriptNode *script_state;
     FieldActor *actor;
     FieldActor *post_actor;
     FieldActor *player;
     u32 control_flags;
     u16 progress;
 
-    task_state = D_8009D300;
-    progress = task_state->flags;
+    script_state = D_8009D300;
+    progress = script_state->flags;
     if (progress & 0x20) {
         if (!(g_CurrentEntity->render_object.flags_9C & 4)) {
-            task_state->flags = progress & ~0x20;
+            script_state->flags = progress & ~0x20;
             return 1;
         }
     } else {
         actor = g_CurrentEntity;
         actor->flags &= ~0x40;
-        task_state->flags |= 0x20;
+        script_state->flags |= 0x20;
         Anim_SetInterpRate(&actor->render_object, *args[0]);
         post_actor = g_CurrentEntity;
         player = g_PlayerEntity;
@@ -748,7 +748,7 @@ int Script_SetGteMatrix(int **args) {
     int second_draw_slot;
     int result;
     u32 *script_ptr;
-    TaskNode *task_state;
+    ScriptNode *script_state;
     u32 flags;
 
     setup_actor = g_CurrentEntity;
@@ -820,9 +820,9 @@ int Script_SetGteMatrix(int **args) {
         result = 0;
         script_ptr = D_8009CE00;
         flag_actor->flags = flags | 0x08000000;
-        task_state = D_8009D300;
+        script_state = D_8009D300;
         D_8009CE00 = script_ptr - 5;
-        task_state->active = 1;
+        script_state->active = 1;
         return result;
         }
         flag_actor->flags = flags & 0xF7FFFFFF;
@@ -845,7 +845,7 @@ int Boot_CheckModeSwitch(void) {
     } while (0);
     {
         int cursor = g_SceneDataTable0;
-        TaskNode *node = g_TaskNodePool;
+        ScriptNode *node = g_ScriptNodePool;
         cursor -= 8;
         g_SceneDataTable0 = cursor;
         node->active = 1;
@@ -1031,13 +1031,13 @@ int Script_SetActorScreenPos(int **arg0) {
 
 int Script_OpenMemCardDialog(void) {
     Pe1GameState *state = &g_GameState;
-    TaskNode *node;
+    ScriptNode *node;
     unsigned short *node_flags;
     int flags;
     int cursor;
 
     if (!(state->flags & 0x1000)) {
-        node = g_TaskNodePool;
+        node = g_ScriptNodePool;
         node_flags = &node->flags;
         flags = *node_flags;
         if (!(flags & 0x20)) {
@@ -1051,7 +1051,7 @@ int Script_OpenMemCardDialog(void) {
         Render_BeginSceneLoad();
         Menu_OpenStartupMemCardDialog();
         {
-            TaskNode *tail_node = g_TaskNodePool;
+            ScriptNode *tail_node = g_ScriptNodePool;
             int tail_flags;
 
             state->flags |= 0x9000;
@@ -1067,14 +1067,14 @@ int Script_OpenMemCardDialog(void) {
 int Script_ShowReceivedItem(int **arg0) {
     Pe1GameState *state = &g_GameState;
     int **saved = arg0;
-    TaskNode *node;
+    ScriptNode *node;
     unsigned short *node_flags;
     int flags;
     int cursor;
 
     if (!(state->flags & 0x1000)) {
 
-    node = g_TaskNodePool;
+    node = g_ScriptNodePool;
     node_flags = &node->flags;
     flags = *node_flags;
     if (!(flags & 0x20)) {
@@ -1089,7 +1089,7 @@ int Script_ShowReceivedItem(int **arg0) {
     Render_BeginSceneLoad();
     Menu_CreateItemUsePanel(**saved);
     {
-        TaskNode *tail_node = g_TaskNodePool;
+        ScriptNode *tail_node = g_ScriptNodePool;
         int tail_flags;
 
         state->flags |= 0x9000;
@@ -1104,25 +1104,25 @@ int Script_ShowReceivedItem(int **arg0) {
 }
 
 /* Decoded script operands; the result is written back through its pointer. */
-typedef struct TaskInvCommandArgs {
+typedef struct ScriptInvCommandArgs {
     int *command;
     int *value;
     int *other;
     int *result;
     int *unused;
-} TaskInvCommandArgs;
+} ScriptInvCommandArgs;
 
-int Script_RunInvCommand(TaskInvCommandArgs *args) {
-    TaskNode *node;
+int Script_RunInvCommand(ScriptInvCommandArgs *args) {
+    ScriptNode *node;
     int flags;
     int result;
 
-    if ((g_TaskNodePool->flags & 0x20) == 0) {
+    if ((g_ScriptNodePool->flags & 0x20) == 0) {
         *args->result = Inv_DispatchCommand(*args->command, *args->value, *args->other, args->unused);
     }
 
     if (MenuWidget_HasActiveNodes() != 0) {
-        node = g_TaskNodePool;
+        node = g_ScriptNodePool;
         flags = node->flags;
         if ((flags & 0x20) == 0) {
             node->flags = flags | 0x20;
@@ -1132,14 +1132,14 @@ int Script_RunInvCommand(TaskInvCommandArgs *args) {
             g_GameStateFlags |= 4;
         }
         g_SceneDataTable0 -= 0x1C;
-        g_TaskNodePool->active = 1;
+        g_ScriptNodePool->active = 1;
         return 0;
     }
 
     result = D_8009D2A4;
     if (result != 0) {
         *args->result = result;
-        g_TaskNodePool->flags &= 0xFFDF;
+        g_ScriptNodePool->flags &= 0xFFDF;
     }
     return 1;
 }
