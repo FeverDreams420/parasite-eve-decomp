@@ -1,11 +1,27 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
+
 #include "common.h"
 #include "pe1/draw_state.h"
 #include "pe1/render_prim.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/draw_wipe_rect.h"
 #include "pe1/psyq_gpu.h"
+
+/* COMMON supplies small-data metadata to MASPSX: these words are reached
+ * through $gp, every other extern stays absolute. */
+unsigned char *D_8009D100;
+unsigned char *D_8009D104;
+int D_8009D10C;
+int D_8009D110;
+int D_8009D114;
+unsigned int *D_8009D11C;
+int D_8009D124;
+int D_8009D128;
+u16 *g_DrawVertexWritePtr;
+int g_TextCursorX;
+int g_TextCursorY;
 
 int g_DrawBlendColor;
 
@@ -40,7 +56,6 @@ void Draw_BlendColor(int arg0) {
 }
 
 typedef RenderColorTrianglePacket ColorTriPrim;
-
 
 typedef DrawWipeVertex DrawVertexCoord;
 
@@ -322,7 +337,6 @@ void Draw_AllocColorGradient(int width, int height, u8 *points, int textured)
 typedef RenderFlatTilePacket TilePrim;
 typedef RenderDrawModePacket DrawModePrim;
 
-
 void Draw_AllocColorTri(int width, int height, int pulse) {
     TilePrim *tile;
     DrawModePrim *drawMode;
@@ -400,7 +414,6 @@ void Draw_AllocColorTri(int width, int height, int pulse) {
         old = D_8009D100;
         *ot = (*ot & maskTop) | lowTile;
     }
-
 
     drawMode = 0;
     next = old + sizeof(DrawModePrim);

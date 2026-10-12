@@ -158,6 +158,30 @@ Merges that only needed a redundant marker gone:
   `effects.c`, and `FxCommon_DrawPolyResource` (whose `--dont-expand-li`
   did nothing) joins `model_buffers.c`.
 
+Small-data sets brought to the canonical K8/K0 form (same code; only the
+order of symbol-table entries can change, and the link is identical):
+
+- K8 with COMMON definitions of the words retail reaches through `$gp`
+  (generated from the old objects by `reorg_merge.py --gp-commons`):
+  `cdrom/CD_TrackReadFlow.c`, `draw/Draw_WipeAndGradient.c`,
+  `draw/Draw_AllocColorQuad.c` (keeps `-fno-schedule-insns`),
+  `draw/Gpu_RenderFrame.c`, `entity/Scene_LoadMap.c`,
+  `item/Menu_OpenItemUsePanelAtIndex.c`, `menu/Menu_InventoryScreens.c`,
+  `menu/Menu_ItemActions.c`, `menu/Menu_ListDrawers.c`,
+  `menu/Menu_SaveSlotDraw.c` (was assembler `-G4`),
+  `menu/MenuWidget_Lifecycle.c`, `battle/Entity_UpdateTimers.c` (was
+  `-g3 -G1` without FORCE_G0); these units used to let GNU as pick the
+  `$gp` words itself (no FORCE_G0).
+- K8 by spelling only: `battle/Menu_MainUpdate.c` (`-G1` to `-G8`),
+  `entity/Entity_FrameUpdate.c` (assembler `-G4` to `-G8`),
+  `entity/Entity_PoolInit.c` (cc1 `-G8`, which is the same code), and the
+  two overlay units that had cc1 `-G8` alone, `fx_common/render_op.c` and
+  `room_m350_cruiser/RoomEffect_ConfiguredPulseCallback.c` (no COMMON
+  words, so FORCE_G0 keeps every access absolute, as before).
+- K0: `script/Task_FieldSfxQueue.c` gains `MASPSX_FORCE_G0`.
+- Not converted: `draw/Render_DrawWireframeModel.c` (lev 52 under K8: its
+  `g_WireScratch` words need GNU as's own `$gp` choice).
+
 ## Settings in use
 
 Measured on 2026-10-12 with `tools/reorg/flag_audit.py --markdown`. A
@@ -168,38 +192,29 @@ differently but resolve to the same options count once.
 |---|---|---|---|
 | S1 | `cc1 -G0 ; maspsx -G0` (default) | 25 | 115 |
 | S2 | `cc1 -G0 ; maspsx -G0 --expand-div` | 9 | 22 |
-| S3 | `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0` | 19 | 0 |
+| S3 | `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0` | 29 | 2 |
 | S4 | `cc1 -G0 ; gnu-as -G0` | 4 | 6 |
-| S5 | `cc1 -G8 ; maspsx -G8 --expand-div --use-comm-section FORCE_G0` | 7 | 0 |
-| S6 | `cc1 -G8 ; maspsx -G8 --use-comm-section` | 6 | 0 |
-| S7 | `cc1 -G0 -fno-schedule-insns ; maspsx -G0` | 3 | 2 |
-| S8 | `cc1 -G0 -fno-strength-reduce ; maspsx -G0` | 1 | 2 |
-| S9 | `cc1 -G8 ; maspsx -G8` | 3 | 0 |
+| S5 | `cc1 -G8 ; maspsx -G8 --expand-div --use-comm-section FORCE_G0` | 8 | 0 |
+| S6 | `cc1 -G0 -fno-schedule-insns ; maspsx -G0` | 3 | 2 |
+| S7 | `cc1 -G0 -fno-strength-reduce ; maspsx -G0` | 1 | 2 |
+| S8 | `cc1 -G0 ; maspsx -G8 --use-comm-section FORCE_G0` | 3 | 0 |
+| S9 | `cc1 -G8 -g3 ; maspsx -G8 --expand-div --use-comm-section FORCE_G0` | 3 | 0 |
 | S10 | `cc1 -G8 ; maspsx -G8 --expand-div --use-comm-section FORCE_G0 aspsx 2.70` | 3 | 0 |
 | S11 | `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0 aspsx 2.70` | 3 | 0 |
 | S12 | `cc1 -G0 -fno-cse-skip-blocks ; maspsx -G0` | 0 | 2 |
 | S13 | `cc1 -G0 -fno-strength-reduce ; maspsx -G0 --expand-div` | 2 | 0 |
-| S14 | `cc1 -G0 ; maspsx -G8 --use-comm-section FORCE_G0` | 2 | 0 |
-| S15 | `cc1 -G8 ; maspsx -G0` | 0 | 2 |
-| S16 | `cc1 -G0 -ffixed-10 -ffixed-11 -ffixed-15 -ffixed-21 -ffixed-22 -ffixed-23 -ffixed-24 -ffixed-25 ; maspsx -G0 --expand-div` | 0 | 1 |
-| S17 | `cc1 -G0 -fno-expensive-optimizations ; maspsx -G0` | 0 | 1 |
-| S18 | `cc1 -G0 -fno-force-mem ; maspsx -G0` | 1 | 0 |
-| S19 | `cc1 -G0 -fno-strength-reduce -fno-expensive-optimizations ; maspsx -G0` | 1 | 0 |
-| S20 | `cc1 -G0 -fno-strength-reduce ; maspsx -G8 --use-comm-section` | 1 | 0 |
-| S21 | `cc1 -G0 ; maspsx -G8 --use-comm-section` | 1 | 0 |
-| S22 | `cc1 -G1 -g3 ; maspsx -G1 --expand-div` | 1 | 0 |
-| S23 | `cc1 -G1 -g3 ; maspsx -G1 --expand-div --use-comm-section FORCE_G0` | 1 | 0 |
-| S24 | `cc1 -G8 -fno-cse-skip-blocks ; maspsx -G8 --expand-div --use-comm-section FORCE_G0` | 1 | 0 |
-| S25 | `cc1 -G8 -fno-expensive-optimizations ; maspsx -G8 --use-comm-section FORCE_G0` | 1 | 0 |
-| S26 | `cc1 -G8 -fno-schedule-insns ; maspsx -G8 --expand-div` | 1 | 0 |
-| S27 | `cc1 -G8 -fno-strength-reduce ; maspsx -G8 --use-comm-section FORCE_G0` | 1 | 0 |
-| S28 | `cc1 -G8 -g3 ; maspsx -G8 --expand-div --use-comm-section FORCE_G0` | 1 | 0 |
-| S29 | `cc1 -G8 ; maspsx -G4` | 1 | 0 |
-| S30 | `cc1 -G8 ; maspsx -G4 --use-comm-section FORCE_G0` | 1 | 0 |
-| S31 | `cc1 -G8 ; maspsx -G8 --expand-div --use-comm-section` | 1 | 0 |
-| S32 | `gcc 2.8.1 ; cc1 -G0 ; maspsx -G0` | 0 | 1 |
+| S14 | `cc1 -G8 -fno-strength-reduce ; maspsx -G8 --use-comm-section FORCE_G0` | 2 | 0 |
+| S15 | `cc1 -G0 -ffixed-10 -ffixed-11 -ffixed-15 -ffixed-21 -ffixed-22 -ffixed-23 -ffixed-24 -ffixed-25 ; maspsx -G0 --expand-div` | 0 | 1 |
+| S16 | `cc1 -G0 -fno-expensive-optimizations ; maspsx -G0` | 0 | 1 |
+| S17 | `cc1 -G0 -fno-force-mem ; maspsx -G0` | 1 | 0 |
+| S18 | `cc1 -G0 -fno-strength-reduce -fno-expensive-optimizations ; maspsx -G0` | 1 | 0 |
+| S19 | `cc1 -G8 -fno-cse-skip-blocks ; maspsx -G8 --expand-div --use-comm-section FORCE_G0` | 1 | 0 |
+| S20 | `cc1 -G8 -fno-expensive-optimizations ; maspsx -G8 --use-comm-section FORCE_G0` | 1 | 0 |
+| S21 | `cc1 -G8 -fno-schedule-insns ; maspsx -G8 --expand-div --use-comm-section FORCE_G0` | 1 | 0 |
+| S22 | `cc1 -G8 ; maspsx -G8` | 1 | 0 |
+| S23 | `gcc 2.8.1 ; cc1 -G0 ; maspsx -G0` | 0 | 1 |
 
-32 distinct settings over 255 files.
+23 distinct settings over 255 files.
 
 #### S2: `cc1 -G0 ; maspsx -G0 --expand-div`
 
@@ -243,19 +258,31 @@ differently but resolve to the same options count once.
 - `src/main/battle/Battle_PlayerTurnFlow.c`
 - `src/main/boot/Boot_FrameLoop.c`
 - `src/main/boot/Boot_InitSystemFlow.c`
+- `src/main/cdrom/CD_TrackReadFlow.c`
+- `src/main/draw/Draw_WipeAndGradient.c`
+- `src/main/draw/Gpu_RenderFrame.c`
+- `src/main/entity/Entity_FrameUpdate.c`
+- `src/main/entity/Scene_LoadMap.c`
 - `src/main/item/Inv_ActiveList.c`
 - `src/main/item/Inv_ArmorCapacity.c`
 - `src/main/item/Inv_InventorySwap.c`
 - `src/main/item/Inv_ItemActions.c`
+- `src/main/item/Menu_OpenItemUsePanelAtIndex.c`
 - `src/main/menu/Menu_EquipItemSelection.c`
 - `src/main/menu/Menu_EquipScreenFlow.c`
+- `src/main/menu/Menu_InventoryScreens.c`
+- `src/main/menu/Menu_ItemActions.c`
+- `src/main/menu/Menu_ListDrawers.c`
 - `src/main/menu/Menu_MainMenu.c`
 - `src/main/menu/Menu_SaveScreens.c`
+- `src/main/menu/Menu_SaveSlotDraw.c`
 - `src/main/menu/Menu_SkillScreens.c`
 - `src/main/menu/Menu_StatusPanels.c`
 - `src/main/menu/queue.c`
 - `src/main/scene/Scene_RoomLoad.c`
 - `src/main/script/Task_ActorOpcodes.c`
+- `src/overlays/fx_common/render_op.c`
+- `src/overlays/room_m350_cruiser/RoomEffect_ConfiguredPulseCallback.c`
 
 #### S4: `cc1 -G0 ; gnu-as -G0`
 
@@ -275,21 +302,13 @@ differently but resolve to the same options count once.
 - `src/main/battle/Battle_EnemyMovement.c`
 - `src/main/battle/Battle_Setup.c`
 - `src/main/battle/Entity_HitAndDropTable.c`
+- `src/main/menu/MenuWidget_Lifecycle.c`
 - `src/main/render/Render_FrameUpdateAndScreenState.c`
 - `src/main/render/Render_ObjectDraw.c`
 - `src/main/save/Save_GameData.c`
 - `src/main/script/Task_NodeActions.c`
 
-#### S6: `cc1 -G8 ; maspsx -G8 --use-comm-section`
-
-- `src/main/cdrom/CD_TrackReadFlow.c`
-- `src/main/draw/Draw_WipeAndGradient.c`
-- `src/main/entity/Scene_LoadMap.c`
-- `src/main/menu/Menu_InventoryScreens.c`
-- `src/main/menu/Menu_ItemActions.c`
-- `src/main/menu/Menu_ListDrawers.c`
-
-#### S7: `cc1 -G0 -fno-schedule-insns ; maspsx -G0`
+#### S6: `cc1 -G0 -fno-schedule-insns ; maspsx -G0`
 
 - `src/main/draw/Render_FontGlyphLoad.c`
 - `src/main/draw/Task_InitGpuHwRegs.c`
@@ -297,17 +316,23 @@ differently but resolve to the same options count once.
 - `src/overlays/fx_common/FxCommon_SetMotionEndpoints.c`
 - `src/overlays/room_m273_liberty/RoomM273_PulseSpriteCallback.c`
 
-#### S8: `cc1 -G0 -fno-strength-reduce ; maspsx -G0`
+#### S7: `cc1 -G0 -fno-strength-reduce ; maspsx -G0`
 
 - `src/main/fieldfx/FieldEng_CollisionQueries.c`
 - `src/overlays/room_lib/RoomFx_MotionParticles_2.c`
 - `src/overlays/room_lib/RoomFx_OrbitEffectSet.c`
 
-#### S9: `cc1 -G8 ; maspsx -G8`
+#### S8: `cc1 -G0 ; maspsx -G8 --use-comm-section FORCE_G0`
 
-- `src/main/draw/Gpu_RenderFrame.c`
-- `src/main/draw/Render_DrawWireframeModel.c`
-- `src/main/item/Menu_OpenItemUsePanelAtIndex.c`
+- `src/main/boot/Gpu_InitPipeline.c`
+- `src/main/script/Task_FieldSfxQueue.c`
+- `src/main/script/Task_SystemOpcodes.c`
+
+#### S9: `cc1 -G8 -g3 ; maspsx -G8 --expand-div --use-comm-section FORCE_G0`
+
+- `src/main/battle/Battle_PhaseAndEnemyEffectFlow.c`
+- `src/main/battle/Entity_UpdateTimers.c`
+- `src/main/battle/Menu_MainUpdate.c`
 
 #### S10: `cc1 -G8 ; maspsx -G8 --expand-div --use-comm-section FORCE_G0 aspsx 2.70`
 
@@ -331,81 +356,44 @@ differently but resolve to the same options count once.
 - `src/main/akao/Akao_VoiceBankLifecycle.c`
 - `src/main/render/Render_MeshListAndFade.c`
 
-#### S14: `cc1 -G0 ; maspsx -G8 --use-comm-section FORCE_G0`
+#### S14: `cc1 -G8 -fno-strength-reduce ; maspsx -G8 --use-comm-section FORCE_G0`
 
-- `src/main/boot/Gpu_InitPipeline.c`
-- `src/main/script/Task_SystemOpcodes.c`
+- `src/main/entity/Entity_PoolInit.c`
+- `src/main/script/Task_NodePool.c`
 
-#### S15: `cc1 -G8 ; maspsx -G0`
-
-- `src/overlays/fx_common/render_op.c`
-- `src/overlays/room_m350_cruiser/RoomEffect_ConfiguredPulseCallback.c`
-
-#### S16: `cc1 -G0 -ffixed-10 -ffixed-11 -ffixed-15 -ffixed-21 -ffixed-22 -ffixed-23 -ffixed-24 -ffixed-25 ; maspsx -G0 --expand-div`
+#### S15: `cc1 -G0 -ffixed-10 -ffixed-11 -ffixed-15 -ffixed-21 -ffixed-22 -ffixed-23 -ffixed-24 -ffixed-25 ; maspsx -G0 --expand-div`
 
 - `src/overlays/scene_e20_cruiser/RoomEffect_HoverOrbController_8018F750.c`
 
-#### S17: `cc1 -G0 -fno-expensive-optimizations ; maspsx -G0`
+#### S16: `cc1 -G0 -fno-expensive-optimizations ; maspsx -G0`
 
 - `src/overlays/fx_common/FxCommon_EffectInitializationFlow.c`
 
-#### S18: `cc1 -G0 -fno-force-mem ; maspsx -G0`
+#### S17: `cc1 -G0 -fno-force-mem ; maspsx -G0`
 
 - `src/main/asset/Asset_UnloadTableEntries.c`
 
-#### S19: `cc1 -G0 -fno-strength-reduce -fno-expensive-optimizations ; maspsx -G0`
+#### S18: `cc1 -G0 -fno-strength-reduce -fno-expensive-optimizations ; maspsx -G0`
 
 - `src/main/render/Geo_LoadMeshEntry.c`
 
-#### S20: `cc1 -G0 -fno-strength-reduce ; maspsx -G8 --use-comm-section`
-
-- `src/main/entity/Entity_PoolInit.c`
-
-#### S21: `cc1 -G0 ; maspsx -G8 --use-comm-section`
-
-- `src/main/script/Task_FieldSfxQueue.c`
-
-#### S22: `cc1 -G1 -g3 ; maspsx -G1 --expand-div`
-
-- `src/main/battle/Entity_UpdateTimers.c`
-
-#### S23: `cc1 -G1 -g3 ; maspsx -G1 --expand-div --use-comm-section FORCE_G0`
-
-- `src/main/battle/Menu_MainUpdate.c`
-
-#### S24: `cc1 -G8 -fno-cse-skip-blocks ; maspsx -G8 --expand-div --use-comm-section FORCE_G0`
+#### S19: `cc1 -G8 -fno-cse-skip-blocks ; maspsx -G8 --expand-div --use-comm-section FORCE_G0`
 
 - `src/main/draw/Draw_TextPrimitives.c`
 
-#### S25: `cc1 -G8 -fno-expensive-optimizations ; maspsx -G8 --use-comm-section FORCE_G0`
+#### S20: `cc1 -G8 -fno-expensive-optimizations ; maspsx -G8 --use-comm-section FORCE_G0`
 
 - `src/main/menu/Menu_ItemDetailPanel.c`
 
-#### S26: `cc1 -G8 -fno-schedule-insns ; maspsx -G8 --expand-div`
+#### S21: `cc1 -G8 -fno-schedule-insns ; maspsx -G8 --expand-div --use-comm-section FORCE_G0`
 
 - `src/main/draw/Draw_AllocColorQuad.c`
 
-#### S27: `cc1 -G8 -fno-strength-reduce ; maspsx -G8 --use-comm-section FORCE_G0`
+#### S22: `cc1 -G8 ; maspsx -G8`
 
-- `src/main/script/Task_NodePool.c`
+- `src/main/draw/Render_DrawWireframeModel.c`
 
-#### S28: `cc1 -G8 -g3 ; maspsx -G8 --expand-div --use-comm-section FORCE_G0`
-
-- `src/main/battle/Battle_PhaseAndEnemyEffectFlow.c`
-
-#### S29: `cc1 -G8 ; maspsx -G4`
-
-- `src/main/menu/Menu_SaveSlotDraw.c`
-
-#### S30: `cc1 -G8 ; maspsx -G4 --use-comm-section FORCE_G0`
-
-- `src/main/entity/Entity_FrameUpdate.c`
-
-#### S31: `cc1 -G8 ; maspsx -G8 --expand-div --use-comm-section`
-
-- `src/main/menu/MenuWidget_Lifecycle.c`
-
-#### S32: `gcc 2.8.1 ; cc1 -G0 ; maspsx -G0`
+#### S23: `gcc 2.8.1 ; cc1 -G0 ; maspsx -G0`
 
 - `src/overlays/mdec_diag/DecDCTReset.c`
 

@@ -1,5 +1,6 @@
-/* CC1_FLAGS: -g3 -G1 */
-/* MASPSX_FLAGS: --expand-div -G1 */
+/* CC1_FLAGS: -G8 -g3 */
+/* MASPSX_FLAGS: -G8 --use-comm-section --expand-div */
+/* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
 #include "pe1/battle_runtime.h"
@@ -8,6 +9,10 @@
 #include "pe1/menu_flags.h"
 #include "pe1/game_timers.h"
 #include "pe1/render_prim.h"
+
+/* COMMON supplies small-data metadata to MASPSX: these words are reached
+ * through $gp, every other extern stays absolute. */
+unsigned char D_8009CE34;
 
 void Battle_ApplyDamage(s32);
 void Battle_SubActionStep(void);

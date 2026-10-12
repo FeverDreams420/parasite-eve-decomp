@@ -1,4 +1,6 @@
 /* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 #include "fx_common.h"
 
 int func_80191E30(int arg0)

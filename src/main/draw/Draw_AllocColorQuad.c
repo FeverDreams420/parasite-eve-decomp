@@ -1,12 +1,21 @@
+/* CC1_FLAGS: -G8 -fno-schedule-insns */
+/* MASPSX_FLAGS: -G8 --use-comm-section --expand-div */
+/* MASPSX_FORCE_G0: 1 */
+
 #include "common.h"
 #include "pe1/render_prim.h"
 #include "pe1/draw_state.h"
-/* CC1_FLAGS: -G8 -fno-schedule-insns */
-/* MASPSX_FLAGS: -G8 --expand-div */
-
-
 #include "pe1/bounds_check.h"
 #include "pe1/menu_sound.h"
+
+/* COMMON supplies small-data metadata to MASPSX: these words are reached
+ * through $gp, every other extern stays absolute. */
+unsigned char *D_8009D100;
+unsigned char *D_8009D104;
+int D_8009D10C;
+int D_8009D110;
+int D_8009D114;
+unsigned int *D_8009D11C;
 
 void Draw_AllocColorQuad(int width, int height) {
     int w = width;

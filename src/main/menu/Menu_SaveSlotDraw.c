@@ -1,10 +1,18 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G4 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
 #include "pe1/save.h"
 #include "pe1/textbox.h"
 #include "pe1/save_slot_metadata.h"
+
+/* COMMON supplies small-data metadata to MASPSX: these words are reached
+ * through $gp, every other extern stays absolute. */
+unsigned char D_8009CE80;
+unsigned char D_8009CE88;
+u8 D_8009D1CE;
+void *D_8009D1F8;
 
 void Save_DrawSlotMetadata(void)
 {

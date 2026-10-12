@@ -13,8 +13,8 @@
 #include "pe1/battle_update.h"
 #include "pe1/battle_reset_stats.h"
 
-/* CC1_FLAGS: -g3 -G1 */
-/* MASPSX_FLAGS: --expand-div -G1 --use-comm-section */
+/* CC1_FLAGS: -G8 -g3 */
+/* MASPSX_FLAGS: -G8 --use-comm-section --expand-div */
 /* MASPSX_FORCE_G0: 1 */
 
 #define NULL ((void *)0)

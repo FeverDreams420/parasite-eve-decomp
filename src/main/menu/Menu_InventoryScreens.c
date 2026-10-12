@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: --use-comm-section -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 
 #include "pe1/menu_state.h"
 #include "pe1/inventory_queries.h"
@@ -26,6 +27,12 @@
  * through $gp, every other extern stays absolute. */
 int g_MenuInventoryViewMode;
 int g_MenuEquipSwapItem;
+int D_8009CEF4;
+int g_InvSelectedItemIndex;
+int g_InvSwapTargetIndex;
+ItemDataRecord *g_MenuActionItemData;
+int g_MenuEquipSwapSkipRestore;
+int g_MenuItemContextFlag;
 
 /* Builders that open the equip screen (weapon and armor lists) and the
  * inventory swap screen, the equip-mode getter and the equip list container

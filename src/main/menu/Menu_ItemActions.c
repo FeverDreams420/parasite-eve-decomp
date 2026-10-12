@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 
 #include "pe1/menu_widget.h"
 #include "pe1/menu_inventory.h"
@@ -23,6 +24,28 @@
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
 int g_BonusPointSpendCurrentValue;
+int D_8009CFA0;
+int D_8009CFC4;
+int D_8009CFC8;
+int D_8009CFD4;
+int g_BonusPointBarAnimStep;
+int g_BonusPointBarAnimProgress;
+int g_BonusPointSpendStat;
+int g_BonusPointSpendWorkingValue;
+int g_InvSelectedItemIndex;
+int g_InvSwapTargetIndex;
+int g_MenuActionSubmenuOpen;
+int g_MenuActiveItemList;
+int g_MenuBattleStatusOverlayActive;
+int g_MenuBonusPointBarAnimActive;
+MenuConfirmCallback g_MenuConfirmCallback;
+int g_MenuItemUseMode;
+int g_MenuItemRenameMode;
+int g_MenuItemDiscardMode;
+int g_MenuEquipMode;
+int g_MenuSelectionLocked;
+int g_MenuLayoutLocked;
+int g_MenuSpendArrowDirection;
 
 void Menu_CreateItemDetailView(MenuWidgetNode *arg0);
 void Menu_CreateEquipStatsPanel(int arg0);

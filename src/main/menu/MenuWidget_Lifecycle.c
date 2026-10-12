@@ -1,17 +1,32 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section --expand-div */
+/* MASPSX_FORCE_G0: 1 */
+
 #include "pe1/menu_widget.h"
 #include "pe1/draw_state.h"
 #include "pe1/menu_scroll_cursor.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/bounds_check.h"
+#include "common.h"
 
 /* Contiguous widget construction, pool initialization, list drawing and layout. */
-#include "pe1/bounds_check.h"
 
-#include "pe1/menu_widget.h"
-
-#include "common.h"
-#include "pe1/menu_widget.h"
+/* COMMON supplies small-data metadata to MASPSX: these words are reached
+ * through $gp, every other extern stays absolute. */
+unsigned char *D_8009D100;
+unsigned char *D_8009D104;
+int D_8009D110;
+int D_8009D114;
+unsigned int *D_8009D11C;
+int g_DrawTextPosX;
+int D_8009D168;
+int g_DrawBufferIndex;
+int g_TextRenderMode;
+int g_DrawGlyphAdvance;
+int g_DrawTextBoxWidth;
+int g_DrawTextDimmed;
+int g_MenuInputActive;
+int *g_TextCursorStackPtr;
 
 void MenuWidget_InitPoolUnk(void) {
     MenuWidgetNode *node;
@@ -269,7 +284,6 @@ MenuWidgetNode *MenuWidget_FindByModeAndSelectedBase(int mode, int selected_base
 #include "pe1/draw_state.h"
 #include "pe1/text.h"
 
-
 int Draw_LookupGlyphMetrics(int glyph);
 void Draw_AllocTexturedQuad(int glyph);
 #include "pe1/bounds_check.h"
@@ -522,7 +536,6 @@ void MenuWidget_InitPool(void) {
 }
 
 void Draw_PushPrimToList(MenuWidgetNode *node);
-
 
 int g_TextCursorX;
 int g_TextCursorY;

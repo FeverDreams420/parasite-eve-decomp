@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 
 #include "pe1/scene_assets.h"
 #include "pe1/cdrom.h"
@@ -14,6 +15,15 @@
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
 int g_CdFadeStartTime;
+int g_CdFadeFramesLeft;
+int g_CdRangeIndex;
+u32 g_CdReadChunkSectors;
+u32 g_CdReadRemainingSectors;
+u32 g_CdReadStartLba;
+u32 g_CdReadTotalSectors;
+int g_CdStreamBankIndex;
+s16 g_CdTrackBank;
+struct SceneTrackRecord *g_CdTrackRecord;
 
 /* Matching debt: register pins and empty barriers retain the index,
 * zero extension and callback state. The duplicated ready branch preserves

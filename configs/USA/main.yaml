@@ -235,8 +235,8 @@ segments:
       # words, --expand-div and ASPSX 2.70. It defines the status symbol templates
       # and window bounds that were main/rodata_0015FC as const data.
       - [0x21094, c, battle/Battle_StatusHud]
-      # Save slot metadata and save overlay draws (private join); both compile to
-      # retail with the assembler at -G4.
+      # Save slot metadata and save overlay draws (private join). One -G8
+      # FORCE_G0 unit with COMMON $gp words.
       - [0x2515C, c, menu/Menu_SaveSlotDraw]
       # Pool reset and free-list setup share the entity pool globals and record block.
       - [0x25710, c, entity/Entity_PoolInit]
@@ -321,7 +321,7 @@ segments:
       # skill select, equip stats, item detail and item list views (private data and
       # helpers); save/load screen step and navigation; inventory root step, equip
       # panel alignment, bonus-point slot handlers and the bonus-point flow (G0426).
-      # One unit under cc1 -G8 and the COMMON-driven assembler -G8.
+      # One -G8 FORCE_G0 unit with COMMON $gp words.
       - [0x37D60, c, menu/Menu_ItemActions]
       # Main menu view, visual settings (blend colour, screen adjust), level-up and
       # bonus-point flow and the equip slot swap opener: one -G8 FORCE_G0 unit whose
@@ -352,8 +352,8 @@ segments:
       # equip-slot, inventory, armor, battle-command and skill row drawers; the row
       # drawers the widget list renderer calls with the row index (action options,
       # equipped slots, action codes, modifier names, armor cells, table text, stat
-      # bars, item icons, save slots and the sound-effect cursor). One unit under
-      # cc1 -G8 and the COMMON-driven assembler -G8.
+      # bars, item icons, save slots and the sound-effect cursor). One -G8
+      # FORCE_G0 unit with COMMON $gp words.
       - [0x406EC, c, menu/Menu_ListDrawers]
       # Battle commands: command table cursor init, command-stack allocation and
       # rollback (cursor and record ABI), the active-list command and its pending
@@ -417,10 +417,11 @@ segments:
       # and the wipes around it do not match under.
       - [0x51844, c, draw/Draw_AllocColorQuad]
       # Blend colour, screen wipes, gradients and colour packet allocators share
-      # the draw runtime and matching -G8/common profile.
+      # the draw runtime; one -G8 FORCE_G0 unit with COMMON $gp words.
       - [0x51CA0, c, draw/Draw_WipeAndGradient]
       # Pool, recursive drawing, node lookups, labels, scrolling, layouts and popups
-      # share their typed widget state and -G8/common profile.
+      # share their typed widget state; one -G8 FORCE_G0 unit with COMMON $gp
+      # words and --expand-div.
       - [0x52D68, c, menu/MenuWidget_Lifecycle]
       # Field sound event enqueue/reset and actor dispatch share queue records.
       - [0x55B6C, c, script/Task_FieldSfxQueue]
@@ -466,7 +467,8 @@ segments:
       # Sector reads, the range scanner, the scene-audio key reset and the
       # track seek/read state machine share the CD sector-read and scene audio
       # state (helper evidence across the reset); the audio slot registration and
-      # its two lookups share the scene audio keys. One -G8 unit.
+      # its two lookups share the scene audio keys. One -G8 FORCE_G0 unit with
+      # COMMON $gp words.
       - [0x5D5A4, c, cdrom/CD_TrackReadFlow]
       # Scene asset-directory unit: the key-type search, the positional sound
       # senders (scene-table and BGM-handle wrappers, 3D send path, table-command

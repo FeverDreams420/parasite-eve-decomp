@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
 
 #include "pe1/draw_state.h"
 #include "pe1/draw_wipe_rect.h"
@@ -21,6 +22,15 @@
 #include "pe1/menu_context_help.h"
 #include "pe1/menu_bonus_stats.h"
 #include "pe1/menu_sound.h"
+
+/* COMMON supplies small-data metadata to MASPSX: these words are reached
+ * through $gp, every other extern stays absolute. */
+int g_BonusPointBarAnimStep;
+int g_BonusPointBarAnimProgress;
+int g_MemCardProgressPrimList;
+void (*g_MenuDeferredCallback)(void);
+ItemDataRecord *g_MenuSelectedItemData;
+int g_MenuSelectionLocked;
 
 MenuWidgetNode *g_MenuActiveWidget;
 

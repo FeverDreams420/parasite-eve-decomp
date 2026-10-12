@@ -1,10 +1,12 @@
+/* CC1_FLAGS: -G8 -fno-strength-reduce */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
+
 #include "common.h"
 #include "pe1/game_state.h"
 #include "pe1/entity_allocation.h"
 #include "pe1/player_entity.h"
 #include "pe1/task_node.h"
-/* CC1_FLAGS: -fno-strength-reduce */
-/* MASPSX_FLAGS: -G8 --use-comm-section */
 
 /* A pool record cell as the word retail adds the row and column offsets to. */
 typedef union EntityPoolAddress {

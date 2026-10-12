@@ -1,17 +1,22 @@
+/* CC1_FLAGS: -G8 */
+/* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
+
 #include "pe1/draw_buffers.h"
 #include "pe1/game_state.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/render_packets.h"
 #include "pe1/battle_status.h"
-/* CC1_FLAGS: -G8 */
-/* MASPSX_FLAGS: -G8 */
-
 #include "include_asm.h"
 #include "pe1/boot_disc_check.h"
 #include "pe1/menu_background.h"
 #include "pe1/boot.h"
-short Seq_GetElapsed(void);
 
+/* COMMON supplies small-data metadata to MASPSX: these words are reached
+ * through $gp, every other extern stays absolute. */
+int g_ActiveDrawSlot;
+
+short Seq_GetElapsed(void);
 
 static inline DISPENV *DispAddress(int index) {
     return &g_RenderDispEnvArray[index];
