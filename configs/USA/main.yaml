@@ -453,12 +453,13 @@ segments:
       - [0x4E28C, c, text/Tbl_DataTableLookups]
       # Event queue, input dispatch and frame presentation share -G8/common.
       - [0x4E688, c, menu/queue]
-      # Base-offset setter and Y accessor share one default-profile object.
-      - [0x4F050, c, draw/Draw_BaseOffset]
-      # Cursor/colour state, rectangle allocation, glyph sprites, text/number
-      # packets, wrapping and stat bars share typed draw state and one matching
-      # -G8/common/-fno-cse-skip-blocks profile.
-      - [0x4F094, c, draw/Draw_TextPrimitives]
+      # Base-offset setter and Y accessor; cursor/colour state, rectangle
+      # allocation, glyph sprites, text/number packets, wrapping and stat bars
+      # share typed draw state. One -G8 FORCE_G0 unit with COMMON $gp words,
+      # -fno-cse-skip-blocks and --expand-div (neutral for the base offset).
+      - [0x4F050, c, draw/Draw_TextPrimitives]
+      # The colour quad keeps -fno-schedule-insns, which the text primitives
+      # and the wipes around it do not match under.
       - [0x51844, c, draw/Draw_AllocColorQuad]
       # Blend colour, screen wipes, gradients and colour packet allocators share
       # the draw runtime and matching -G8/common profile.

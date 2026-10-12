@@ -1,12 +1,47 @@
 /* CC1_FLAGS: -G8 -fno-cse-skip-blocks */
 /* MASPSX_FLAGS: -G8 --use-comm-section --expand-div */
-#include "common.h"
+/* MASPSX_FORCE_G0: 1 */
+
 #include "pe1/draw_state.h"
+#include "pe1/draw_buffers.h"
+#include "common.h"
 #include "pe1/render_prim.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/draw_level_bar.h"
 
-#include "pe1/draw_state.h"
+/* COMMON supplies small-data metadata to MASPSX: these words are reached
+ * through $gp, every other extern stays absolute. */
+int D_8009CDB0;
+int D_8009D0D8;
+unsigned char *D_8009D100;
+unsigned char *D_8009D104;
+int D_8009D10C;
+int D_8009D110;
+int D_8009D114;
+unsigned int *D_8009D11C;
+int D_8009D124;
+int D_8009D128;
+int *D_8009D12C;
+int D_8009D13C;
+int D_8009D140;
+int D_8009D144;
+int g_DrawBufferIndex;
+int g_DrawDigitFontBaseTexU;
+int g_DrawDigitFontBaseTexV;
+int g_DrawDigitFontTpageClut;
+int g_DrawTextBoxWidth;
+int *g_TextCursorStackPtr;
+int g_TextRenderMode;
+
+int Draw_SetBaseY(int arg0, unsigned int arg1);
+
+void Draw_SetBaseOffsetPosition(int x, int y) {
+    Draw_SetBaseY(D_800B0DB0[0] + x, g_DrawBaseY + y);
+}
+
+int Draw_GetBaseY(void) {
+    return g_DrawBaseY;
+}
 
 int g_TextCursorX;
 int g_TextCursorY;
@@ -20,7 +55,6 @@ void Draw_OffsetCursor(int x, int y) {
     g_TextCursorX += x;
     g_TextCursorY += y;
 }
-
 
 #include "pe1/bounds_check.h"
 
@@ -145,7 +179,6 @@ void Draw_SetStatCompareColor(int arg0, int arg1) {
 
 #include "pe1/psyq_gpu.h"
 #include "pe1/draw_area.h"
-
 
 void Draw_AllocPrimRectFull(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     DrawAreaRect rect;
@@ -385,7 +418,6 @@ void Draw_SetGlyphAdvance(int arg0) {
 
 #include "pe1/text.h"
 
-
 /* Allocates one bar quad from the packet arena and sets its colour and
  * command (0x2C: textured four-point polygon). */
 static inline RenderTexturedQuad *AllocBarQuad(void)
@@ -557,7 +589,6 @@ void Draw_AllocTexturedQuad(int code) {
     AdvanceCursor(width + D_8009CDB0);
 }
 
-
 inline int Draw_MeasureTextWidth(u8 *text) {
     u8 *cursor = text;
     int width = 0;
@@ -673,7 +704,6 @@ void Draw_PrintTextWrapped(u8 *text, int width) {
         }
     }
 }
-
 
 void Draw_SetFontVariant(int variant) {
     D_8009D13C = variant != 0 ? 0x3A1C : 0x395D;
