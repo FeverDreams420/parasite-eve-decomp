@@ -119,9 +119,6 @@ typedef struct SceneFadeSlots {
     u8 activeCount;
 } SceneFadeSlots;
 
-typedef struct {
-    s32 words[8];
-} SceneE08MatrixWords;
 
 typedef struct {
     RoomLink *link;
@@ -133,18 +130,7 @@ typedef GteMatrix Overlay178Matrix;
 
 typedef GteVector Overlay178Vec4;
 
-typedef struct {
-    s16 m[3][3];
-    s16 pad;
-    s32 t[3];
-} Matrix;
 
-typedef struct {
-    s32 x;
-    s32 y;
-    s32 z;
-    s32 w;
-} Vec4;
 
 typedef struct {
     char bytes[4];

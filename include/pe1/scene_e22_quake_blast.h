@@ -97,6 +97,5 @@ extern RenderColor D_8018F228;
 extern int func_80071A54(void);
 extern void func_800C6EC0(int tpage, int clut);
 #include "pe1/gte_types.h"
-extern int func_801981B0(int mode, RoomOrbitTrailParticle *p);
 
 #endif
