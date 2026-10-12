@@ -19,12 +19,6 @@
 #include "pe1/player_entity.h"
 #include "pe1/battle_entity_anim.h"
 
-#define U8_AT(ptr, off) (*(u8 *)((u8 *)(ptr) + (off)))
-#define U16_AT(ptr, off) (*(u16 *)((u8 *)(ptr) + (off)))
-#define U32_AT(ptr, off) (*(u32 *)((u8 *)(ptr) + (off)))
-#define S32_AT(ptr, off) (*(s32 *)((u8 *)(ptr) + (off)))
-#define PTR_AT(ptr, off) (*(u8 **)((u8 *)(ptr) + (off)))
-
 /* COMMON supplies small-data metadata to MASPSX. */
 u32 *D_8009CE00;
 TaskNode *D_8009D300;
@@ -41,9 +35,6 @@ int Task_SetGteMatrix(int **args) {
     FieldActor *render_actor;
     FieldActor *flag_actor;
     GteMatrix scale_matrix;
-    register GteMatrix *first_matrix asm("$3");
-    GteMatrix *second_matrix;
-    GteMatrix *third_matrix;
     GteMatrix *translation_matrix;
     int first_draw_slot;
     int second_draw_slot;
@@ -62,11 +53,11 @@ int Task_SetGteMatrix(int **args) {
     RotMatrix((GteShortVector *)&setup_actor->render_object.table_value2c,
               (GteMatrix *)&setup_actor->render_object.model_matrix);
 
+    /* Scale the rotation by the actor's move speed: model = rotation * diag(speed). */
     matrix_actor = g_CurrentEntity;
     scale_matrix.m[0][0] = matrix_actor->move_speed;
     scale_matrix.m[1][1] = matrix_actor->move_speed;
     scale_matrix.m[2][2] = matrix_actor->move_speed;
-    first_matrix = (GteMatrix *)&matrix_actor->render_object.model_matrix;
     scale_matrix.t[2] = 0;
     scale_matrix.t[1] = 0;
     scale_matrix.t[0] = 0;
@@ -77,18 +68,8 @@ int Task_SetGteMatrix(int **args) {
     scale_matrix.m[0][2] = 0;
     scale_matrix.m[0][1] = 0;
 
-    gte_ldrotmatrix(first_matrix);
-
-    gte_ldrtir12_matrix_column(&scale_matrix.m[0][0]);
-    gte_stir123_column(first_matrix);
-
-    gte_ldrtir12_matrix_column(&scale_matrix.m[0][1]);
-    second_matrix = (GteMatrix *)&g_CurrentEntity->render_object.model_matrix;
-    gte_stir123_column_at(&second_matrix->m[0][1]);
-
-    gte_ldrtir12_matrix_column(&scale_matrix.m[0][2]);
-    third_matrix = (GteMatrix *)&g_CurrentEntity->render_object.model_matrix;
-    gte_stir123_column_at(&third_matrix->m[0][2]);
+    gte_MulMatrix0(&matrix_actor->render_object.model_matrix, &scale_matrix,
+                   &g_CurrentEntity->render_object.model_matrix);
 
     translation_matrix = (GteMatrix *)&g_CurrentEntity->render_object.model_matrix;
     gte_ldtransmatrix(translation_matrix);
@@ -138,7 +119,6 @@ int Task_SetGteMatrix(int **args) {
         }
         flag_actor->flags = flags & 0xF7FFFFFF;
     }
-success:
     return 1;
 }
 
