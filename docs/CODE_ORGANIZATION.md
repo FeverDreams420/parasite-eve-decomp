@@ -156,10 +156,15 @@ after what their functions do (`fx_common/camera_nodes.c`,
   register variable on `$a0`; it reserves the register for every later
   function of its translation unit, so `mdec_wait.c` and `mdec_status.c`
   cannot be one file.
-- Foreign rodata: in `room_m256_museum`, `RoomEffect_SpriteSeeds_8018F208`
-  (still an asm blob) sits between the swing run's and the effects run's
-  rodata, so they are `m256_swing.c` and `m256_effects.c` until the seeds are
-  claimed as C data.
+- Data between runs, resolved: `room_m256_museum`'s swing and effects runs
+  are one `m256.c`. The 0x24 bytes between their jump tables were the
+  effects' stack templates (`D_8018F208`..`D_8018F220`), now `const`
+  definitions placed between the two runs: GCC writes a function's jump
+  tables when it finishes the function and a const global where it is
+  defined, so the templates land after the swing tables and before the
+  effects tables, and the 8-aligned effects tables take the 4-byte pad
+  retail has. In a unit of its own the effects run could not reproduce
+  that pad (the link shrank by 4).
 - Two type views of one symbol: in `room_m273_liberty`, the poll/reset
   template of `RoomEffect_RisingSpritePoolFlow` declares `D_8019AF04` as a
   `RoomFxSeed8` seed, while the boss code declares it as the

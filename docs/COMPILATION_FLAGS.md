@@ -304,7 +304,7 @@ differently but resolve to the same options count once.
 - `src/overlays/room_lib/RoomLib_FloorWalkerClass.c`
 - `src/overlays/room_lib/RoomLib_WindowClass.c`
 - `src/overlays/room_m023_theater/m023.c`
-- `src/overlays/room_m256_museum/m256_swing.c`
+- `src/overlays/room_m256_museum/m256.c`
 - `src/overlays/room_m273_liberty/m273.c`
 - `src/overlays/room_m273_liberty/m273_boss_sway.c`
 - `src/overlays/room_m318_chrysler/m318.c`
@@ -562,7 +562,7 @@ means only the order of symbol-table entries changed (cc1 `-G8` emits
 | `overlays/room_lib/RoomLib_FloorWalkerClass.c` | maspsx `--expand-div`: lev 10 (RoomLib_UpdateHandlerG 10) |
 | `overlays/room_lib/RoomLib_WindowClass.c` | maspsx `--expand-div`: lev 20 (RoomLib_WindowHandler 20) |
 | `overlays/room_m023_theater/m023.c` | maspsx `--expand-div`: lev 16 (func_8018F710 16) |
-| `overlays/room_m256_museum/m256_swing.c` | maspsx `--expand-div`: lev 14 (func_80192680 14) |
+| `overlays/room_m256_museum/m256.c` | maspsx `--expand-div`: lev 14 (func_80192680 14) |
 | `overlays/room_m273_liberty/RoomM273_PulseSpriteCallback.c` | cc1 `-fno-schedule-insns`: lev 24 (RoomM273_PulseSpriteCallback 24) |
 | `overlays/room_m273_liberty/m273.c` | maspsx `--expand-div`: lev 13 (func_80192F5C 13) |
 | `overlays/room_m273_liberty/m273_boss_sway.c` | maspsx `--expand-div`: lev 17 (func_80197BBC 17) |

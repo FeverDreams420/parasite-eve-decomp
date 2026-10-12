@@ -26,8 +26,9 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM256TrailEffect, kind) == 0x14,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM256TrailEffect, frame) == 0x16,
                   room_m256_trail_effect_frame);
 
-extern RenderColor D_8018F218, D_8018F21C;
-extern GteRotation D_8018F220,D_8018F1CC;
+extern const RenderColor D_8018F218, D_8018F21C;
+extern const GteRotation D_8018F220;
+extern GteRotation D_8018F1CC;
 /* Sixteen stored steps plus the current position, each an eight-byte vector. */
 typedef struct RoomM256TrailHistory {
     GteShortVector point[17];
