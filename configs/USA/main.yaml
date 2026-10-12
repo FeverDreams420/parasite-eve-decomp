@@ -124,7 +124,7 @@ segments:
       - [0x1B30, rodata, main/rodata_001B30]
       - [0x1B88, .rodata, asset/Render_InitDisplayLists]
       # Scene startup and entity texture jump tables share the loader TU.
-      - [0x1BB0, .rodata, scene/Scene_LoadTextureAndPlayer]
+      - [0x1BB0, .rodata, scene/Scene_RoomLoad]
       # Both sector-state jump tables now belong to the shared object.
       - [0x1C28, .rodata, cdrom/CD_TrackReadFlow]
       - [0x1E0C, rodata, main/rodata_001E0C]
@@ -546,14 +546,12 @@ segments:
       # D_80094488 is read by the loader and cleared by the reset (private
       # evidence into the reset; helper/call/private evidence over the rest).
       - [0x5A8E8, c, asset/Sys_GameStateAndVoiceBanks]
-      # Startup data and field background loading share scene resource state.
-      - [0x5B1E4, c, scene/Scene_LoadSceneData]
-      - [0x5BB5C, c, scene/Akao_LoadVoiceBankAlt]
-      - [0x5BCF8, c, scene/Scene_LoadRoom]
-      # Texture-page streaming, disc-change gating, entity textures, player
-      # startup and story-day changes share scene state and the default profile.
-      - [0x5C568, c, scene/Scene_LoadTextureAndPlayer]
-      - [0x5D468, c, scene/Scene_UpdateBgDraw]
+      # Scene and room loading: startup data and field background loading (scene
+      # resource state), the alternate voice-bank load, the room loader, texture-page
+      # streaming, disc-change gating, entity textures, player startup and story-day
+      # changes and the background draw update. One -G8 FORCE_G0 unit with COMMON $gp
+      # words (the room loader's old -G1 word is one of them).
+      - [0x5B1E4, c, scene/Scene_RoomLoad]
       # Sector reads, the range scanner, the scene-audio key reset and the
       # track seek/read state machine share the CD sector-read and scene audio
       # state (helper evidence across the reset); one -G8 unit.
