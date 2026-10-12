@@ -1,8 +1,0 @@
-#ifndef PE1_EXT_33B2F9F0206B
-#define PE1_EXT_33B2F9F0206B
-extern int D_8019C810, D_8019C814, D_8019C818;
-extern int D_8019C330, D_8019C334, D_8019C338;
-extern short D_8019C054, D_8019C050, D_8019C02C;
-extern unsigned char D_8019C040;
-extern unsigned char D_8019C042;
-#endif /* PE1_EXT_33B2F9F0206B */
