@@ -152,7 +152,7 @@ after what their functions do (`fx_common/camera_nodes.c`,
   `room_m123_nypd/RoomM123_SelectSlotPointer`, `scene_e14_chrysler`'s only
   unit.
 - `mdec_diag`: the GNU-as units, `DecDCTReset` (GCC 2.8.1) and the two VLC
-  objects stay separate. `SysReset_WaitMdec.inc` declares a file-scope
+  objects stay separate. `MdecDiag_WaitMdec.inc` declares a file-scope
   register variable on `$a0`; it reserves the register for every later
   function of its translation unit, so `mdec_wait.c` and `mdec_status.c`
   cannot be one file.

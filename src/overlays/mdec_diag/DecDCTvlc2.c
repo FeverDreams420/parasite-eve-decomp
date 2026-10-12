@@ -5,7 +5,7 @@
 /*
  * PSY-Q LIBPRESS VLC_C, linked into the mdec_diag overlay:
  * func_8010C86C = DecDCTvlcSize2, func_8010C89C = DecDCTvlc2 (the decoder
- * that uses the table built by SysReset_ExpandDecoderTable, i.e.
+ * that uses the table built by MdecDiag_ExpandDecoderTable, i.e.
  * DecDCTvlcBuild). The boot display and memory-card video code call both.
  *
  * Original SDK assembler (configs/USA/original_asm_evidence.json): the same

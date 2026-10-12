@@ -1,4 +1,4 @@
-#define SYSRESET_WAIT_MDEC(name, status, mask, message_page_size) \
+#define MDECDIAG_WAIT_MDEC(name, status, mask, message_page_size) \
     typedef struct name##_MessagePage { \
         char message[message_page_size]; \
     } name##_MessagePage; \

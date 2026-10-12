@@ -127,7 +127,7 @@
       "library": "LIBPRESS",
       "object": "VLC_C",
       "evidence": [
-        "PSY-Q LIBPRESS DecDCTvlc2: callers pass (bitstream, buffer, table) with the table built by SysReset_ExpandDecoderTable (DecDCTvlcBuild)",
+        "PSY-Q LIBPRESS DecDCTvlc2: callers pass (bitstream, buffer, table) with the table built by MdecDiag_ExpandDecoderTable (DecDCTvlcBuild)",
         "56 trapping add/addi/sub instructions, mfc0/mtc0 of COP0 Status, decoder registers saved to static words instead of a stack frame"
       ],
       "verified_by": "agent review 2026-10-05: retail disassembly"

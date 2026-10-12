@@ -45,7 +45,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x54, c, SysReset_ExpandDecoderTable]
+      - [0x54, c, MdecDiag_ExpandDecoderTable]
   - name: mdec_diag_decoder_padding
     type: code
     start: 0x138

@@ -1,6 +1,6 @@
 #include "common.h"
-#include "SysReset_ExpandDecoderTable_externs.h"
-void SysReset_ExpandDecoderTable(u16 *table) {
+#include "MdecDiag_ExpandDecoderTable_externs.h"
+void MdecDiag_ExpandDecoderTable(u16 *table) {
     s32 distance = 0;
     const u8 *source = D_8010CBFC;
     /* The empty barrier preserves the token load order. */
