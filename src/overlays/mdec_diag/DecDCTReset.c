@@ -5,5 +5,5 @@
 void DecDCTReset(int mode) {
     if (mode == 0)
         ResetCallback();
-    func_8010C0FC(mode);
+    MdecDiag_Reset(mode);
 }

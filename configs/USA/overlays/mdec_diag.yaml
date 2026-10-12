@@ -13,6 +13,7 @@ options:
   build_path: build/USA/overlays/mdec_diag
   ld_script_path: linkers/USA/overlays/mdec_diag.ld
   undefined_funcs_auto_path: linkers/USA/overlays/undefined_funcs_auto.mdec_diag.txt
+  symbol_addrs_path: configs/USA/overlays/sym.mdec_diag.txt
   undefined_syms_auto_path: linkers/USA/overlays/undefined_syms_auto.mdec_diag.txt
   find_file_boundaries: True
   disassemble_all: True
@@ -63,12 +64,12 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x144, c, DecDCTReset]
-      - [0x178, c, func_8010BE70]
-      - [0x204, c, func_8010BEFC]
+      - [0x178, c, DecDCTGetEnv]
+      - [0x204, c, DecDCTPutEnv]
       - [0x29C, c, libpress_decdct]
-      - [0x404, c, func_8010C0FC]
-      - [0x4F4, c, func_8010C1EC]
-      - [0x584, c, func_8010C27C]
+      - [0x404, c, MdecDiag_Reset]
+      - [0x4F4, c, MdecDiag_SendInput]
+      - [0x584, c, MdecDiag_ReceiveOutput]
       - [0x610, c, mdec_wait]
       - [0x738, c, mdec_status]
   - name: mdec_diag_vlc_padding

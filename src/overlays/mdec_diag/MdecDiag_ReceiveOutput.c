@@ -1,7 +1,7 @@
 /* ASSEMBLER: GNU */
 #include "pe1/mdec_diag.h"
 
-void func_8010C27C(s32 *data, u32 size)
+void MdecDiag_ReceiveOutput(s32 *data, u32 size)
 {
     func_8010C39C();
     *D_8010DB54 |= 0x88;

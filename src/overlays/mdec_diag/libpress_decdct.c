@@ -20,11 +20,11 @@ void func_8010BFA0(s32 *arg0, s32 arg1) {
         *arg0 &= ~0x02000000;
     }
 
-    func_8010C1EC(arg0, *(u16 *)arg0);
+    MdecDiag_SendInput(arg0, *(u16 *)arg0);
 }
 
 void func_8010C01C(s32 *buffer, u32 size) {
-    func_8010C27C(buffer, size);
+    MdecDiag_ReceiveOutput(buffer, size);
 }
 
 s32 func_8010C03C(s32 mode) {

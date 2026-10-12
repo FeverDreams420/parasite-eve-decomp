@@ -14,7 +14,7 @@ static inline void CopyWords(long *dst, long *src, size_t count) {
     }
 }
 
-s32 *func_8010BE70(DecDCTEnv *env) {
+s32 *DecDCTGetEnv(DecDCTEnv *env) {
     CopyWords((long *)&env->iqY, (long *)&D_8010DA0C[1], 16);
     CopyWords((long *)&env->iqC, (long *)&D_8010DA0C[17], 16);
     CopyWords((long *)&env->dct, (long *)&D_8010DA90[1], 32);

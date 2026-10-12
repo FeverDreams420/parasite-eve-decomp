@@ -1,7 +1,7 @@
 /* ASSEMBLER: GNU */
 #include "pe1/mdec_diag.h"
 
-void func_8010C0FC(int mode)
+void MdecDiag_Reset(int mode)
 {
     switch (mode) {
     case 0:
@@ -9,8 +9,8 @@ void func_8010C0FC(int mode)
         *D_8010DB24 = 0;
         *D_8010DB30 = 0;
         *D_8010DB50 = 0x60000000;
-        func_8010C1EC(D_8010DA0C, 0x20);
-        func_8010C1EC(D_8010DA90, 0x20);
+        MdecDiag_SendInput(D_8010DA0C, 0x20);
+        MdecDiag_SendInput(D_8010DA90, 0x20);
         break;
     case 1:
         *D_8010DB50 = 0x80000000;

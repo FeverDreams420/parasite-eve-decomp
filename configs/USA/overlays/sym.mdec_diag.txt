@@ -1,0 +1,5 @@
+DecDCTGetEnv = 0x8010BE70; // type:func
+DecDCTPutEnv = 0x8010BEFC; // type:func
+MdecDiag_Reset = 0x8010C0FC; // type:func
+MdecDiag_SendInput = 0x8010C1EC; // type:func
+MdecDiag_ReceiveOutput = 0x8010C27C; // type:func

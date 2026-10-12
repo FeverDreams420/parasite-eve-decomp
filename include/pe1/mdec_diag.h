@@ -21,7 +21,7 @@ extern volatile u32 *D_8010DB4C;
 extern volatile u32 *D_8010DB50;
 extern volatile u32 *D_8010DB54;
 
-void func_8010C1EC(s32 *data, u32 size);
+void MdecDiag_SendInput(s32 *data, u32 size);
 int func_8010C308(void);
 int func_8010C39C(void);
 int func_8010C430(void);
