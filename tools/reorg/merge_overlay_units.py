@@ -164,6 +164,17 @@ def top_level_chunks(text: str) -> list[str]:
     return chunks
 
 
+def defined_type_names(chunk: str) -> list[str]:
+    body = strip_comments(chunk).strip()
+    names = re.findall(r"^(?:typedef\s+)?(?:struct|union|enum)\s+(\w+)\s*\{", body)
+    if body.startswith("typedef"):
+        tail = re.sub(r"\{.*\}", "{}", body, flags=re.S)
+        m = re.search(r"(\w+)\s*(?:\[[^\]]*\])*\s*;\s*$", tail)
+        if m:
+            names.append(m.group(1))
+    return names
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("overlay")
@@ -248,6 +259,8 @@ def main() -> int:
     externs_files: list[pathlib.Path] = []
     seen_types: set[str] = set()
     types: list[str] = []
+    type_owner: dict[str, tuple[str, str]] = {}
+    conflicts: list[str] = []
     bodies: list[str] = []
     for unit in units:
         text = MARKER.sub("", texts[unit])
@@ -263,7 +276,7 @@ def main() -> int:
                 macros += DEFINE.findall(stripped)
             if inc and inc.group(2).endswith(".h") and not defined_before:
                 target = inc.group(2)
-                if target.endswith("_externs.h") and inc.group(1) == '"' and \
+                if re.search(r"_externs(_\d+)?\.h$", target) and inc.group(1) == '"' and \
                         (src_dir / target).is_file():
                     path = src_dir / target
                     if path not in externs_files:
@@ -285,6 +298,10 @@ def main() -> int:
                     macros += DEFINE.findall(path.read_text())
             if TYPE_START.match(strip_comments(chunk).strip()):
                 key = norm_ws(chunk)
+                for name in defined_type_names(chunk):
+                    if name in type_owner and type_owner[name][1] != key:
+                        conflicts.append(f"{name}: {type_owner[name][0]} / {unit}")
+                    type_owner.setdefault(name, (unit, key))
                 if key in seen_types:
                     continue
                 seen_types.add(key)
@@ -321,6 +338,8 @@ def main() -> int:
     externs_text = (f"#ifndef {guard}\n#define {guard}\n" + "\n".join(externs) +
                     f"\n#endif /* {guard} */\n") if externs else ""
 
+    for line in conflicts:
+        print(f"  type conflict {line}")
     print(f"merge {len(units)} units -> {src_path}/{new_unit}.c at {offset}")
     print("  " + " ".join(units))
     print(f"  markers: {merged_markers or 'default'}; externs: {len(externs_files)} headers")
@@ -348,7 +367,7 @@ def main() -> int:
     # ---- sources
     tracked = git("ls-files").splitlines()
     for unit in units:
-        git("rm", "-q", f"{src_path}/{unit}.c")
+        git("rm", "-q", "-f", f"{src_path}/{unit}.c")
     (src_dir / f"{new_unit}.c").write_text(source)
     if externs_text:
         (src_dir / externs_name).write_text(externs_text)
@@ -359,7 +378,7 @@ def main() -> int:
         users = [p for p in tracked if p.startswith("src/") and p.endswith((".c", ".h", ".inc"))
                  and (ROOT / p).is_file() and path.name in (ROOT / p).read_text()]
         if not users:
-            git("rm", "-q", rel)
+            git("rm", "-q", "-f", rel)
 
     # ---- path mentions in docs and tests
     ov_dir = src_path.split("/")[-1]
