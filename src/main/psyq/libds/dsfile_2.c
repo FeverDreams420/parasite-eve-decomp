@@ -108,7 +108,7 @@ int DS_cachefile(int directory) {
     }
     if (D_8009AFC0 > 1) puts(D_80011FF8);
     cursor = (IsoDirectoryRecord *)g_DsFileSectorBuffer;
-    for (count = 0; (u8 *)cursor < g_DsFileSectorBuffer + 2048;) {
+    for (count = 0; cursor < (IsoDirectoryRecord *)&g_DsFileSectorBuffer[2048];) {
         if (cursor->recordLength == 0) break;
         memcpy(&sector, cursor->sectorLE, 4);
         DsIntToPos(sector, &g_DslFileCache[count].pos);
@@ -129,7 +129,7 @@ int DS_cachefile(int directory) {
                    g_DslFileCache[count].pos.second,
                    g_DslFileCache[count].pos.sector,
                    g_DslFileCache[count].size, g_DslFileCache[count].name);
-        cursor = (IsoDirectoryRecord *)((u8 *)cursor + cursor->recordLength);
+        cursor = ISO_NEXT_DIRECTORY_RECORD(cursor);
         if (++count >= DSL_MAX_FILE) break;
     }
     g_DsCachedDirectory = directory;

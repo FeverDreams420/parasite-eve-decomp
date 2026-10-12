@@ -204,6 +204,11 @@ typedef struct IsoDirectoryRecord {
     char name[1];
 } IsoDirectoryRecord;
 
+/* ISO-9660 directory records are variable length: recordLength bytes each,
+ * up to the end of the sector. */
+#define ISO_NEXT_DIRECTORY_RECORD(record) \
+    ((IsoDirectoryRecord *)((u8 *)(record) + (record)->recordLength))
+
 extern u8 g_DsFileSectorBuffer[2048];
 extern int g_DsCachedDirectory __asm__("D_8009B6DC");
 extern int g_DsCachedDiskType __asm__("D_8009B6E0");
