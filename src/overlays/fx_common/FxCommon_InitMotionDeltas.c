@@ -13,6 +13,7 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     s32 secondValue;
     u8 *table = &D_801D0260;
     GteShortVector *extraPtr;
+    volatile FxCommonShortVec3 *origin0 = &g_FxCommonMotionOrigin0;
     register s32 sourceValue asm("$22");
     register void *lookupTable asm("$4");
     register s32 lookupCount asm("$5");
@@ -60,8 +61,8 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     D_8019C090 = py - by;
     D_8019C094 = pz - bz;
     D_8019C0AC = bx;
-    D_8019C0AE = by;
-    D_8019C0B0 = bz;
+    origin0->y = by;
+    origin0->z = bz;
     D_8019C0B4 = px;
     D_8019C0B6 = py;
     D_8019C0B8 = pz;
