@@ -599,8 +599,6 @@ segments:
       # Psy-Q LIBGPU SYS.OBJ. One object; the reconstruction is split where
       # parts need other compiler options or conflicting declarations.
       - [0x65244, c, psyq/libgpu/sys]
-      - [0x659E4, c, psyq/libgpu/ClearOTag]
-      - [0x65AAC, c, psyq/libgpu/ClearOTagR]
       - [0x65DF0, c, psyq/libgpu/PutDispEnv]
       - [0x662E8, c, psyq/libgpu/GetDispEnv]
       - [0x66950, c, psyq/libgpu/Gpu_BuildDrawModeCmd]

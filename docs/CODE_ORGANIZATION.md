@@ -255,6 +255,22 @@ Units that stay separate, and why:
   `math/math_fixed.c`, `draw/Task_GpuPackPrimColor.c`,
   `draw/Math_SqrtApprox3.c`) stay alone.
 
+### PsyQ objects split over several units (src/main/psyq)
+
+Each `psyq/<library>/` unit reproduces one SDK object, or a contiguous part
+of one. Parts of one object are merged into one unit when every part
+compiles to its retail bytes under a single marker set, so the remaining
+splits record a toolchain limit, not an original source boundary: PsyQ
+compiled each object once, but the stock compilers here reproduce some of
+its functions only with GCC 2.7.2 and others only with GCC 2.8.1 (the
+return-delay-slot fill), or only with MASPSX and others only with GNU as.
+The probe compiles every part under every marker set used by its siblings
+and compares instruction words and data against the matching object.
+
+| object | units | why the split stays |
+|---|---|---|
+| LIBGPU SYS | `sys.c` (ResetGraph..GetDrawEnv) and its neighbours | in progress |
+
 ### AKAO driver (src/main/akao)
 
 The AKAO units have no offset macros, byte arithmetic or file-scope

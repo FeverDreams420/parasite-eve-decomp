@@ -1,4 +1,0 @@
-#ifndef PE1_EXT_AD77342E1721
-#define PE1_EXT_AD77342E1721
-extern char D_80011854[];
-#endif /* PE1_EXT_AD77342E1721 */

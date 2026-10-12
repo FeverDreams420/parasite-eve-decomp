@@ -1,6 +1,0 @@
-#ifndef PE1_EXT_A251CA75B7C5
-#define PE1_EXT_A251CA75B7C5
-extern char D_80011910[];
-extern u32 D_800957F8;
-extern u32 D_8009580C;
-#endif /* PE1_EXT_A251CA75B7C5 */
