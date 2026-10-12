@@ -12,8 +12,7 @@ int D_8009D28C;
 s8 D_8009D2A0;
 /* Eight-stage transition: model fades, an effect spawn, stat recovery and
  * HUD reset. Matching debt: fixed-register pins, a shared fade tail and
- * interior HUD symbols.
- * The object pointer is recovered from its known variant_visible field. */
+ * interior HUD symbols. */
 int Battle_StepVictory(void)
 {
     register int result asm("$18") = 0;
@@ -54,11 +53,11 @@ int Battle_StepVictory(void)
         Anim_SetInterpRate(&D_8009D254->renderObject, 30);
         D_8009D254->renderObject.flags_9C |= 2;
         Anim_SetInterpRate(object, 30);
-        D_800B0D88 |= 2;
+        D_800B0CEC.flags_9C |= 2;
         D_8009CE74++;
         break;
     case 2:
-        if (D_8009D254->renderObject.variant_visible != 0 || D_800B0D8A != 0)
+        if (D_8009D254->renderObject.variant_visible != 0 || D_800B0CEC.variant_visible != 0)
             break;
         Scene_LoadRoomAssets(0x69, D_8009D254);
         spawnPlayer = D_8009D254;
@@ -78,13 +77,10 @@ int Battle_StepVictory(void)
         Anim_SetInterpRate(&D_8009D254->renderObject, 30);
         D_8009D254->renderObject.flags_9C |= 4;
         Render_FadeEntityColor(&D_8009D254->renderObject, 255, 255, 255);
-        {
-            register u8 *visible = &D_800B0D8A;
-                        *visible = 1;
-            object = (RenderObjectEntity *)(visible - PE1_OFFSETOF(RenderObjectEntity, variant_visible));
-        }
+        D_800B0CEC.variant_visible = 1;
+        object = &D_800B0CEC;
         Anim_SetInterpRate(object, 30);
-        D_800B0D88 |= 4;
+        D_800B0CEC.flags_9C |= 4;
         Render_FadeEntityColor(object, 255, 255, 255);
         Entity_SetActionMode(D_8009D254, 0xF);
         D_8009CE70 = 30;

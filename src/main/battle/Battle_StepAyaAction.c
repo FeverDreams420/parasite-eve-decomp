@@ -72,7 +72,7 @@ s32 Battle_StepAyaAction(void)
       }
       D_8009D254->renderObject.flags_9C |= 2;
       Anim_SetInterpRate(&D_800B0CEC, 0x1E);
-      D_800B0D88 |= 2;
+      D_800B0CEC.flags_9C |= 2;
       Pm_StopLowerHalf();
       D_8009D258 = Scene_LoadRoomAssets(0x6BU, D_8009D254);
       D_8009D25C += 1;
@@ -83,7 +83,7 @@ s32 Battle_StepAyaAction(void)
       Scene_InitEntityPlayer(1);
       if (D_8009D254->renderObject.variant_visible == 0)
     {
-      if (D_800B0D8A == 0)
+      if (D_800B0CEC.variant_visible == 0)
       {
         D_8009D25C++;
         break;
@@ -123,7 +123,7 @@ s32 Battle_StepAyaAction(void)
 
     /* State 3 also waits for the animation handled by state 4. */
     case 4:
-      if (D_8009D254->animLastFrame == ((u16 *) (&D_8009D254->animFrame))[1])
+      if (D_8009D254->animLastFrame == (u16)(D_8009D254->animFrame >> 16))
     {
       entity = (BattleEntity *)D_8009D20C;
       if (entity != 0)
@@ -162,8 +162,10 @@ s32 Battle_StepAyaAction(void)
     {
       {
         s32 product;
+        int reachScale;
         targetEntity = D_800BE830[D_8009D1D4].actor;
-        targetDistance = (((s32) (targetEntity->renderObject.hit_cylinder.radius * ((((EnemyCombatant *) targetEntity->core)->statusFlags2 >> 0x13) & 0x1F))) / 10) + D_8009D254->renderObject.hit_cylinder.radius;
+        reachScale = (((EnemyCombatant *) targetEntity->core)->statusFlags2 >> 0x13) & 0x1F;
+        targetDistance = ((targetEntity->renderObject.hit_cylinder.radius * reachScale) / 10) + D_8009D254->renderObject.hit_cylinder.radius;
         targetAngle = Battle_CalcAngleToTarget(&targetEntity->renderObject, &D_8009E054);
         D_8009D254->facingAngle = targetAngle;
         product = targetDistance * rsin(targetAngle);
@@ -386,7 +388,7 @@ s32 Battle_StepAyaAction(void)
       break;
 
     case 14:
-      if (D_8009D254->animLastFrame == ((u16 *) (&D_8009D254->animFrame))[1])
+      if (D_8009D254->animLastFrame == (u16)(D_8009D254->animFrame >> 16))
     {
       D_8009D254->entityFlags |= 0x100;
       Anim_SetInterpRate(&D_8009D254->renderObject, 0xF);
@@ -424,14 +426,11 @@ s32 Battle_StepAyaAction(void)
           Anim_SetInterpRate(render, rate);
         }
         D_8009D254->renderObject.flags_9C |= 4;
-        {
-          u8 *visible = &D_800B0D8A;
-          *visible = 1;
-          Anim_SetInterpRate((RenderObjectEntity *) (visible - 0x9E), 0x1E);
-        }
+        D_800B0CEC.variant_visible = 1;
+        Anim_SetInterpRate(&D_800B0CEC, 0x1E);
         {
           D_8009CE4C = 0xF;
-          D_800B0D88 |= 4;
+          D_800B0CEC.flags_9C |= 4;
           D_8009D25C++;
         }
         break;

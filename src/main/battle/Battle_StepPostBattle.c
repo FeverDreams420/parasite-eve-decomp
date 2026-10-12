@@ -210,7 +210,7 @@ void Battle_StepPostBattle(void)
                 u8 state = D_8009CE74;
                 D_8009CE70 = 0x3C;
                 state++;
-                D_800B0D88 |= 2;
+                D_800B0CEC.flags_9C |= 2;
                 D_8009CE74 = state;
             }
         }
@@ -222,7 +222,7 @@ void Battle_StepPostBattle(void)
     case 4: {
         register RenderTexturedQuad *base asm("$7");
         register u16 right asm("$6");
-        if ((D_8009D254->renderObject.variant_visible == 0) && (D_800B0D8A == 0)) {
+        if ((D_8009D254->renderObject.variant_visible == 0) && (D_800B0CEC.variant_visible == 0)) {
             D_8009CE74++;
             break;
         }
