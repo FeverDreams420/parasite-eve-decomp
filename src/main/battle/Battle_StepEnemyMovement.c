@@ -38,13 +38,18 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
     {
         register s32 stat = (u16)D_8009D278->stat1E;
         double base, scale;
+        /* Integer bit patterns avoid native GCC's broken double literal pool. */
+        union { double value; unsigned long long bits; } factor;
         stat -= 25;
         stat += D_8009D278->field04.fieldId04;
         base = __floatsidf(stat * 6);
         scale = __floatsidf(D_8009D2B0 - 1);
-        scale = __muldf3(scale, 0.1);
+        factor.bits = 0x3FB999999999999AULL; /* 0.1 */
+        scale = __muldf3(scale, factor.value);
         scale = __adddf3(scale, 1.0);
-        attackPower = __fixdfsi(__divdf3(__muldf3(base, scale), 7.0));
+        scale = __muldf3(base, scale);
+        factor.bits = 0x401C000000000000ULL; /* 7.0 */
+        attackPower = __fixdfsi(__divdf3(scale, factor.value));
     }
     else if (activeState & 0x100000)
     {
