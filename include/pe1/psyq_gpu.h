@@ -103,6 +103,8 @@ void GPU_memset(unsigned char *dst, int value, int count);
 int Gpu_SetDisplayBuffer(void);
 
 void SetTile(void *tile);
+void SetSprt(void *sprite);
+int MargePrim(void *first, void *second);
 
 void AddPrim(unsigned int *ot, unsigned int *prim);
 

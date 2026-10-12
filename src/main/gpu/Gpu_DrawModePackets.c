@@ -1,5 +1,6 @@
 #include "common.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/psyq_bios.h"
 
 /* A draw-mode word pair followed by the sprite primitive it prefixes. */
 typedef struct GpuModeSprtPacket {
@@ -8,10 +9,12 @@ typedef struct GpuModeSprtPacket {
     u8 sprt[1];
 } GpuModeSprtPacket;
 
-void SetDrawTPage(void *p, int dfe, int dtd, int tpage);
-void SetSprt(void *arg0);
-int MargePrim(void *arg0, void *arg1);
-void exit(int code);
+/* A draw-mode word pair followed by the tile primitive it prefixes. */
+typedef struct GpuModeTilePacket {
+    u32 tag;
+    u32 mode;
+    u8 tile[1];
+} GpuModeTilePacket;
 
 void Gpu_InitDrawModeSprtPacket(GpuModeSprtPacket *packet, int tpage) {
     u8 *prim = packet->sprt;
@@ -23,8 +26,8 @@ void Gpu_InitDrawModeSprtPacket(GpuModeSprtPacket *packet, int tpage) {
     }
 }
 
-void Gpu_InitDrawModeTilePacket(void *packet, int tpage) {
-    void *prim = (char *)packet + 8;
+void Gpu_InitDrawModeTilePacket(GpuModeTilePacket *packet, int tpage) {
+    u8 *prim = packet->tile;
 
     SetDrawTPage(packet, 0, 1, tpage);
     SetTile(prim);
