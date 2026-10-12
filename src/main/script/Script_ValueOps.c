@@ -23,7 +23,7 @@ typedef struct ExprOpArgs {
     int *rhs;
 } ExprOpArgs;
 
-int Task_EvalExpr(ExprOpArgs *args) {
+int Script_EvalExpr(ExprOpArgs *args) {
     switch (*args->op) {
     case 0:
         *args->dst = *args->lhs + *args->rhs;
@@ -101,7 +101,7 @@ int Task_EvalExpr(ExprOpArgs *args) {
     return 1;
 }
 
-int Task_SetEntityVec3(int **args) {
+int Script_SetEntityVec3(int **args) {
     int **argp = args;
 
     switch (*argp[0]) {
@@ -157,7 +157,7 @@ int Task_SetEntityVec3(int **args) {
     return 1;
 }
 
-int Task_GetEntityVec3(int **args) {
+int Script_GetEntityVec3(int **args) {
     switch (*args[0]) {
     case 0:
         *args[1] = g_CurrentEntity->pos_x;
@@ -197,7 +197,7 @@ int Task_GetEntityVec3(int **args) {
     }
     return 1;
 }
-int Task_DispatchCmd(int **args) {
+int Script_DispatchCmd(int **args) {
     int mode;
 
     mode = *args[0];

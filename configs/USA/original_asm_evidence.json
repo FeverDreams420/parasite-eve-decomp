@@ -43,9 +43,9 @@
       "verified_by": "agent review 2026-10-05: retail disassembly"
     },
     {
-      "name": "Task_GpuPackPrimColor",
+      "name": "Draw_PackPrimColor",
       "module": "main",
-      "source": "main/draw/Task_GpuPackPrimColor.c",
+      "source": "main/draw/Draw_PackPrimColor.c",
       "address": "0x80070DD0",
       "size": 52,
       "origin": "game",

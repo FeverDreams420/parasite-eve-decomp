@@ -53,7 +53,7 @@
  *   Entity_IntegratePositionFull()    pos += (motion + accel + gravity) ; saves base for rollback
  *   Entity_IntegratePositionConditional()  same, gated by a pause flag
  *   Entity_ResolvePosition()          field-geometry height (Y) + collision via triangle table
- *   Task_MoveTowardPoint(), Task_TurnTowardPointStep()  scripted/NPC movement & turning
+ *   Script_MoveTowardPoint(), Script_TurnTowardPointStep()  scripted/NPC movement & turning
  *   Camera base angle: D_800BD020/D_800BD022 ; analog stick: D_800BE9A0/A6/A7
  */
 

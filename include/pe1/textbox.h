@@ -102,9 +102,9 @@ void Render_SetupColorTable(int index, int mode, short *colors);
 void Draw_SetCursor(int x, int y);
 
 void Tbl_ClearEntry(int arg0);
-void Task_SetCollisionFlag(int value);
-void Task_EnableMovement(void);
-void Task_DisableMovement(void);
+void Script_SetCollisionFlag(int value);
+void Script_EnableMovement(void);
+void Script_DisableMovement(void);
 int Menu_GetEquipSlotIndex(void);
 
 #endif /* PE1_TEXTBOX_H */

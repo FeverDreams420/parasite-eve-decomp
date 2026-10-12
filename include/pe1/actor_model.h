@@ -60,7 +60,7 @@
  * MODEL DATA BLOCK FORMAT (TMD-like, PE-custom; read live from a shared model):
  *   The 9 pointers at robj +0x00..+0x20 point to consecutive sections of one
  *   model block loaded in RAM (streamed from PE.IMG as part of the scene/room
- *   load: Task_LoadSceneData / Scene_LoadMap / Render_InitDisplayLists).
+ *   load: Script_LoadSceneData / Scene_LoadMap / Render_InitDisplayLists).
  *   Render_SetupEntityPrims(robj, block) is the PARSER: it stores block -> robj
  *   +0x00, skips the 0x1C header (addiu a1,a1,0x1C), then walks the per-section
  *   element counts to compute and store each following section pointer into robj

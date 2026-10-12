@@ -5,7 +5,7 @@
 
 FieldSfxU8 g_FieldSfxQueueCount;
 
-void Task_ClearSfxTable(void) {
+void Script_ClearSfxTable(void) {
     unsigned int i;
     unsigned int j;
 
@@ -17,7 +17,7 @@ void Task_ClearSfxTable(void) {
     g_FieldSfxQueueCount = 0;
 }
 
-void Task_QueueFieldSfx(int arg0, int arg1, int arg2, int arg3, int arg4) {
+void Script_QueueFieldSfx(int arg0, int arg1, int arg2, int arg3, int arg4) {
     FieldSfxQueueEntry *entry = &g_FieldSfxQueue[g_FieldSfxQueueCount];
 
     entry->taskArgument = arg0;
@@ -35,7 +35,7 @@ void Task_QueueFieldSfx(int arg0, int arg1, int arg2, int arg3, int arg4) {
 
 static inline void Start(FieldActor *actor, FieldSfxQueueEntry *event)
 {
-    TaskNode *node = Task_AllocNode(actor->script_cursor_19c, 0);
+    TaskNode *node = Script_AllocNode(actor->script_cursor_19c, 0);
 
     node->flags |= 4;
     node->trigger_value = event->taskValue;

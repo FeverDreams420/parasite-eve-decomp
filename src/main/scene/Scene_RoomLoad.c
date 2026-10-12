@@ -515,7 +515,7 @@ retry_room:
     }
 
     state->bank_reset_944[0] =
-        Task_RelocBlock(SCENE_ROOM_PAYLOAD(room, SceneRoom_FirstRecord(room, directory->taskBlock)));
+        Script_RelocBlock(SCENE_ROOM_PAYLOAD(room, SceneRoom_FirstRecord(room, directory->taskBlock)));
     state->bank_reset_948[0] = SCENE_ROOM_PAYLOAD(room, SceneRoom_FirstRecord(room, directory->taskData));
     state->bank_reset_94c[0] = SCENE_ROOM_PAYLOAD(room, SceneRoom_FirstRecord(room, directory->taskAux));
 

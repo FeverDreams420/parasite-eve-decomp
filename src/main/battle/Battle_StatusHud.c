@@ -1301,7 +1301,7 @@ unsigned int Menu_GetActiveMode(void) {
     return g_MenuActiveMode;
 }
 
-void Task_SignalExit(void) {
+void Script_SignalExit(void) {
     g_BattleEnemyEscapeFlag = 1;
 }
 

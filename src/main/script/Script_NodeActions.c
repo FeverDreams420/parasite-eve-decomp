@@ -27,7 +27,7 @@ u16 g_TaskNodeSeqCounter[1];
 TaskNode *g_TaskNodePool;
 int g_SceneDataTable0;
 
-int Task_SpawnChildNode(int **args) {
+int Script_SpawnChildNode(int **args) {
     TaskNode *node = g_TaskNodePool;
 
     if ((node->flags & 3) != 0) {
@@ -105,7 +105,7 @@ int Task_SpawnChildNode(int **args) {
     return 1;
 }
 
-int Task_SetEntityActionAndWait(int **arg0) {
+int Script_SetEntityActionAndWait(int **arg0) {
     TaskNode *node = g_TaskNodePool;
     int flags = node->flags;
 
@@ -163,7 +163,7 @@ int Task_SetEntityActionAndWait(int **arg0) {
 }
 
 /* Animation-range wait consumes the active TaskNode and FieldActor view. */
-int Task_WaitAnimRange(void) {
+int Script_WaitAnimRange(void) {
     FieldActor *entity;
     TaskNode *node;
     int current;
@@ -224,7 +224,7 @@ int Task_WaitAnimRange(void) {
 /* Point-turn and movement handlers use the same active TaskNode layout. */
 /* Script op: turn the current actor's yaw toward (x, z) by at most `step`
  * per frame along the shorter arc; yields until the yaw reaches it. */
-int Task_TurnTowardPointStep(int **arg0) {
+int Script_TurnTowardPointStep(int **arg0) {
     TaskNode *node = g_TaskNodePool;
     int flags = node->flags;
     int x;
@@ -305,7 +305,7 @@ int Task_TurnTowardPointStep(int **arg0) {
     return 1;
 }
 
-int Task_MoveTowardPoint(int **args) {
+int Script_MoveTowardPoint(int **args) {
     FieldActor *speed_entity;
     FieldActor *motion_entity;
     TaskNode *camera_state;

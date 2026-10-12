@@ -36,14 +36,14 @@ void Akao_LoadVoiceBankAlt(void);
 void Scene_LoadRoom(int arg0);
 s32 Overlay_StreamTexturePage(void);
 void Entity_InitFreePool(void);
-void Task_InitNodeFreeList(void);
+void Script_InitNodeFreeList(void);
 void Gte_SetBackColor(void *arg0, int arg1, int arg2, int arg3);
 void Gte_SetLightColor(void *arg0, int arg1, int arg2, int arg3, int arg4);
 int CdRom_DetectDiscChange(void);
 int Scene_LoadEntityTexture(void);
 void Entity_RelocateSceneData(void);
 void Render_SetupFogLayer(void *source);
-void Task_DrawSyncAndFlush(void);
+void Script_DrawSyncAndFlush(void);
 void func_800E0060(void);
 void SetDispMask(int arg0);
 
@@ -63,7 +63,7 @@ void Gpu_InitPipeline(void) {
     g_EntitySerialCounter = 1;
     H(g_TaskNodeSeqCounter) = 1;
     Entity_InitFreePool();
-    Task_InitNodeFreeList();
+    Script_InitNodeFreeList();
 
     Gte_SetBackColor((char *)&D_800BEA42 - 2, 0x28, 0x28, 0x28);
     BARRIER();
@@ -136,7 +136,7 @@ void Gpu_InitPipeline(void) {
         geom = W(D_800B1628);
     }
     Render_SetupFogLayer(geom);
-    Task_DrawSyncAndFlush();
+    Script_DrawSyncAndFlush();
     func_800E0060();
     g_GlobalFrameCounter = 0;
     g_RoomFloorY->y = 0;

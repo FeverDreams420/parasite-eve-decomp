@@ -137,10 +137,10 @@ and the linked binaries stayed identical:
 
 | unit | removed | why it did nothing |
 |---|---|---|
-| `boot/Gpu_InitPipeline.c`, `script/Task_FieldSfxQueue.c` | cc1 `-G0` | the default, written out |
+| `boot/Gpu_InitPipeline.c`, `script/Script_FieldSfxQueue.c` | cc1 `-G0` | the default, written out |
 | `fx_common/effects.c` | cc1 `-fno-force-addr` | not an option cc.sh reads |
 | `menu_memcard/Memcard_ListAndScreenFlow.c` | second `-fno-cse-skip-blocks` line | left over from a merge |
-| `menu/Menu_SaveScreens.c`, `menu/Menu_SkillScreens.c`, `script/Task_NodePool.c`, `fx_common/model_buffers.c` | `--dont-expand-li` | no effect at ASPSX 2.56 |
+| `menu/Menu_SaveScreens.c`, `menu/Menu_SkillScreens.c`, `script/Script_NodePool.c`, `fx_common/model_buffers.c` | `--dont-expand-li` | no effect at ASPSX 2.56 |
 | `battle/Battle_AttackResolution.c`, `battle/Battle_EncounterFlow.c`, `room_lib/RoomEffect_SeekerSparkCallback.c`, `room_lib/RoomFx_DropFieldEffects.c` | `--expand-div` | no variable division left in the unit |
 | `item/Menu_OpenItemUsePanelAtIndex.c` | `--use-comm-section` | the unit defines no COMMON words |
 | `scene_e18_cruiser/e18_emitters.c` | cc1 `-fno-cse-skip-blocks` | the function matches without it |
@@ -149,7 +149,7 @@ and the linked binaries stayed identical:
 `MASPSX_FORCE_G0` is also byte-identical without it in
 `battle/BattleCmd_Commands.c`, `menu/Menu_EquipItemSelection.c`,
 `menu/Menu_StatusPanels.c`, `boot/Gpu_InitPipeline.c` and
-`script/Task_SystemOpcodes.c`; it stays, because it is part of the canonical
+`script/Script_SystemOpcodes.c`; it stays, because it is part of the canonical
 K8/K0 sets those units share with their neighbours. `ASSEMBLER: GNU` on
 `math/Math_FixedMul.c` and `math/math_fixed.c` also stays: source policy
 requires it on evidenced assembler.
@@ -201,7 +201,7 @@ order of symbol-table entries can change, and the link is identical):
   two overlay units that had cc1 `-G8` alone, `fx_common/render_op.c` and
   `room_m350_cruiser/RoomEffect_ConfiguredPulseCallback.c` (no COMMON
   words, so FORCE_G0 keeps every access absolute, as before).
-- K0: `script/Task_FieldSfxQueue.c` gains `MASPSX_FORCE_G0`.
+- K0: `script/Script_FieldSfxQueue.c` gains `MASPSX_FORCE_G0`.
 - Not converted: `draw/Render_DrawWireframeModel.c` (lev 52 under K8: its
   `g_WireScratch` words need GNU as's own `$gp` choice).
 
@@ -223,7 +223,7 @@ flag):
 - `fieldfx/FieldEng_AngleMath.c` (`-fno-schedule-insns`, lev 2): the
   scheduler hoists the target mask above the current mask whatever the
   statement order; the function also carries register pins.
-- `draw/Task_InitGpuHwRegs.c` (`-fno-schedule-insns`, lev 4) and
+- `draw/Draw_InitGpuHwRegs.c` (`-fno-schedule-insns`, lev 4) and
   `draw/Render_FontGlyphLoad.c` (lev 13): the first sits among GNU-as
   primitive-queue units and is pinned like hand assembler; the second is
   already a contorted shape tuned for the unscheduled order.
@@ -291,7 +291,7 @@ differently but resolve to the same options count once.
 - `src/main/fieldfx/FieldEng_SpriteEffects.c`
 - `src/main/fieldfx/FieldEng_SpriteRendering.c`
 - `src/main/render/Render_CameraViewportFlow.c`
-- `src/main/script/Task_ValueOps.c`
+- `src/main/script/Script_ValueOps.c`
 - `src/overlays/boot_display/Boot_StepImageSprite.c`
 - `src/overlays/fx_common/camera_nodes.c`
 - `src/overlays/room_lib/RoomEffect_DroppedFlare.c`
@@ -344,14 +344,14 @@ differently but resolve to the same options count once.
 - `src/main/menu/Menu_StatusPanels.c`
 - `src/main/menu/queue.c`
 - `src/main/scene/Scene_RoomLoad.c`
-- `src/main/script/Task_ActorOpcodes.c`
+- `src/main/script/Script_ActorOpcodes.c`
 - `src/overlays/fx_common/render_op.c`
 - `src/overlays/room_m350_cruiser/RoomEffect_ConfiguredPulseCallback.c`
 
 #### S4: `cc1 -G0 ; gnu-as -G0`
 
 - `src/main/draw/Math_SqrtApprox3.c`
-- `src/main/draw/Task_GpuPackPrimColor.c`
+- `src/main/draw/Draw_PackPrimColor.c`
 - `src/main/math/Math_FixedMul.c`
 - `src/main/math/math_fixed.c`
 - `src/overlays/mdec_diag/DecDCTPutEnv.c`
@@ -370,12 +370,12 @@ differently but resolve to the same options count once.
 - `src/main/render/Render_FrameUpdateAndScreenState.c`
 - `src/main/render/Render_ObjectDraw.c`
 - `src/main/save/Save_GameData.c`
-- `src/main/script/Task_NodeActions.c`
+- `src/main/script/Script_NodeActions.c`
 
 #### S6: `cc1 -G0 -fno-schedule-insns ; maspsx -G0`
 
 - `src/main/draw/Render_FontGlyphLoad.c`
-- `src/main/draw/Task_InitGpuHwRegs.c`
+- `src/main/draw/Draw_InitGpuHwRegs.c`
 - `src/main/fieldfx/FieldEng_AngleMath.c`
 - `src/overlays/fx_common/FxCommon_SetMotionEndpoints.c`
 - `src/overlays/room_m273_liberty/RoomM273_PulseSpriteCallback.c`
@@ -389,8 +389,8 @@ differently but resolve to the same options count once.
 #### S8: `cc1 -G0 ; maspsx -G8 --use-comm-section FORCE_G0`
 
 - `src/main/boot/Gpu_InitPipeline.c`
-- `src/main/script/Task_FieldSfxQueue.c`
-- `src/main/script/Task_SystemOpcodes.c`
+- `src/main/script/Script_FieldSfxQueue.c`
+- `src/main/script/Script_SystemOpcodes.c`
 
 #### S9: `cc1 -G8 -g3 ; maspsx -G8 --expand-div --use-comm-section FORCE_G0`
 
@@ -408,7 +408,7 @@ differently but resolve to the same options count once.
 
 - `src/main/battle/Battle_AttackResolution.c`
 - `src/main/draw/Draw_Textbox.c`
-- `src/main/script/Task_FlowOpcodes.c`
+- `src/main/script/Script_FlowOpcodes.c`
 
 #### S12: `cc1 -G0 -fno-cse-skip-blocks ; maspsx -G0`
 
@@ -423,7 +423,7 @@ differently but resolve to the same options count once.
 #### S14: `cc1 -G8 -fno-strength-reduce ; maspsx -G8 --use-comm-section FORCE_G0`
 
 - `src/main/entity/Entity_PoolInit.c`
-- `src/main/script/Task_NodePool.c`
+- `src/main/script/Script_NodePool.c`
 
 #### S15: `cc1 -G0 -ffixed-10 -ffixed-11 -ffixed-15 -ffixed-21 -ffixed-22 -ffixed-23 -ffixed-24 -ffixed-25 ; maspsx -G0 --expand-div`
 
@@ -501,7 +501,7 @@ means only the order of symbol-table entries changed (cc1 `-G8` emits
 | `main/draw/Render_DrawWireframeModel.c` | cc1 `-G8`: lev 57 (Render_DrawWireframeModel 57); maspsx `-G8`: lev 56 (Render_DrawWireframeModel 56); small-data set: lev 57 (Render_DrawWireframeModel 57) |
 | `main/draw/Render_FontGlyphLoad.c` | cc1 `-fno-schedule-insns`: lev 13 (Render_LoadFontGlyph 13) |
 | `main/draw/Render_FontGlyphSelection.c` | maspsx `--expand-div`: lev 30 (Render_LoadFontGlyphAlt 30) |
-| `main/draw/Task_InitGpuHwRegs.c` | cc1 `-fno-schedule-insns`: lev 4 (Task_InitGpuHwRegs 4) |
+| `main/draw/Draw_InitGpuHwRegs.c` | cc1 `-fno-schedule-insns`: lev 4 (Draw_InitGpuHwRegs 4) |
 | `main/entity/Entity_FrameUpdate.c` | cc1 `-G8`: lev 70 (Entity_FrameUpdate 70); maspsx `-G8`: lev 180 (Entity_FrameUpdate 71, Scene_LoadMap 50, Entity_CollectGarbage 35); maspsx `--use-comm-section`: lev 39 (Entity_CollectGarbage 12, Scene_LoadMap 11, Entity_FrameUpdate 11); FORCE_G0: lev 81 (Entity_FrameUpdate 73, Entity_IntegratePositionConditional 5, Entity_DispatchCallbacks 3); small-data set: lev 205 (Entity_FrameUpdate 96, Scene_LoadMap 50, Entity_CollectGarbage 35) |
 | `main/entity/Entity_PoolInit.c` | cc1 `-G8`: same code, symbol table differs; cc1 `-fno-strength-reduce`: lev 3 (Entity_ResetAllPools 3); maspsx `-G8`: lev 28 (Entity_ResetAllPools 18, Entity_InitFreePool 10); maspsx `--use-comm-section`: lev 11 (Entity_ResetAllPools 7, Entity_InitFreePool 4); FORCE_G0: identical; small-data set: lev 28 (Entity_ResetAllPools 18, Entity_InitFreePool 10) |
 | `main/field/Entity_ActorCollision.c` | cc1 `-G8`: lev 68 (Entity_SlideOnRamp 68); maspsx `-G8`: lev 562 (Geo_ClipToFloorBoundary 165, Entity_UpdateAndRender 100, Geo_ClipToFloorBoundarySub 53); maspsx `--use-comm-section`: lev 150 (Geo_ClipToFloorBoundary 48, Entity_UpdateAndRender 22, Entity_ResetStateGlobals 16); maspsx `--expand-div`: lev 193 (Geo_ClipToFloorBoundary 76, Entity_SlideOnWall 36, Entity_SlideOnRamp 36); FORCE_G0: lev 196 (Geo_ClipToFloorBoundary 71, Entity_UpdateAndRender 69, Entity_SlideOnRamp 28); ASPSX_VERSION 2.70: lev 93 (Geo_ClipToFloorBoundary 61, Entity_SlideOnRamp 32); small-data set: lev 592 (Geo_ClipToFloorBoundary 165, Entity_UpdateAndRender 100, Entity_SlideOnRamp 82) |
@@ -536,13 +536,13 @@ means only the order of symbol-table entries changed (cc1 `-G8` emits
 | `main/render/Render_ObjectDraw.c` | cc1 `-G8`: lev 54 (Render_ColorEntity 32, Render_DrawObject 14, Render_TickObject 8); maspsx `-G8`: lev 3 (Render_TransformSkinnedVertices 3); maspsx `--use-comm-section`: lev 1 (Render_TransformSkinnedVertices 1); maspsx `--expand-div`: lev 48 (Render_ColorEntity 39, Anim_SetInterpRate 9); FORCE_G0: lev 121 (Render_SetEntityBlendMode 24, Render_DrawTexturedQuads 22, Render_DrawEntity 22); small-data set: lev 57 (Render_ColorEntity 32, Render_DrawObject 14, Render_TickObject 8) |
 | `main/save/Save_GameData.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 526 (Inv_DispatchCommand 83, Inv_RebuildWithBonusSlots 76, Inv_MergeStorageToSlot 54); maspsx `--use-comm-section`: lev 143 (Inv_DispatchCommand 19, Save_InitMetadataState 16, Inv_MergeStorageToSlot 16); maspsx `--expand-div`: lev 33 (Stat_QueryLevelAndSubLevel 17, Stat_QueryDistanceAndSubLevel 16); FORCE_G0: lev 52 (Inv_DispatchCommand 48, Save_GetCurrentMapNumber 2, Save_BuildHeader 2); small-data set: lev 526 (Inv_DispatchCommand 83, Inv_RebuildWithBonusSlots 76, Inv_MergeStorageToSlot 54) |
 | `main/scene/Scene_RoomLoad.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 63 (Scene_LoadRoom 63); maspsx `--use-comm-section`: lev 1 (Scene_LoadRoom 1); FORCE_G0: lev 305 (Scene_LoadEntityTextures 69, Scene_InitEntityPlayer 47, Scene_LoadRoom 41); small-data set: lev 63 (Scene_LoadRoom 63) |
-| `main/script/Task_ActorOpcodes.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 207 (Akao_ProcessCommand 63, Camera_StepAngleFade 41, Camera_TrackRelativeOffset 28); maspsx `--use-comm-section`: lev 45 (Camera_StepAngleFade 10, Task_RunInvCommand 6, Camera_TrackRelativeOffset 5); FORCE_G0: lev 404 (Akao_ProcessCommand 82, Task_SetGteMatrix 48, Camera_TrackRelativeOffset 34); small-data set: lev 207 (Akao_ProcessCommand 63, Camera_StepAngleFade 41, Camera_TrackRelativeOffset 28) |
-| `main/script/Task_FieldSfxQueue.c` | maspsx `-G8`: lev 30 (Scene_UpdateEntityList 22, Task_QueueFieldSfx 6, Task_ClearSfxTable 2); maspsx `--use-comm-section`: lev 7 (Task_QueueFieldSfx 3, Scene_UpdateEntityList 3, Task_ClearSfxTable 1); FORCE_G0: identical; small-data set: lev 30 (Scene_UpdateEntityList 22, Task_QueueFieldSfx 6, Task_ClearSfxTable 2) |
-| `main/script/Task_FlowOpcodes.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 192 (Task_DispatchScriptCmd 59, Task_RunQueue 37, Entity_SelectFieldSetter 18); maspsx `--use-comm-section`: lev 49 (Task_RunQueue 10, Task_DispatchScriptCmd 9, Task_OpenSaveLoadMenu 5); FORCE_G0: lev 197 (Task_DispatchScriptCmd 66, Entity_SelectFieldSetter 26, Task_RunQueue 20); ASPSX_VERSION 2.70: lev 49 (Task_DispatchScriptCmd 49); small-data set: lev 192 (Task_DispatchScriptCmd 59, Task_RunQueue 37, Entity_SelectFieldSetter 18) |
-| `main/script/Task_NodeActions.c` | cc1 `-G8`: lev 32 (Task_SpawnChildNode 32); maspsx `-G8`: lev 238 (Camera_TrackEntityZoom 46, Camera_SnapToEntity 41, Task_MoveTowardPoint 32); maspsx `--use-comm-section`: lev 45 (Task_SpawnChildNode 9, Task_MoveTowardPoint 6, Camera_TrackEntityZoom 6); maspsx `--expand-div`: lev 27 (Task_WaitAnimRange 27); FORCE_G0: lev 230 (Camera_TrackEntityZoom 54, Camera_SnapToEntity 39, Task_MoveTowardPoint 36); small-data set: lev 254 (Camera_TrackEntityZoom 46, Camera_SnapToEntity 41, Task_SpawnChildNode 40) |
-| `main/script/Task_NodePool.c` | cc1 `-G8`: lev 10 (Task_AllocNode 10); cc1 `-fno-strength-reduce`: lev 7 (Task_InitNodePool 4, Task_RelocBlock 3); maspsx `-G8`: lev 51 (Task_InitNodePool 13, Task_AllocNode 11, Task_RelocBlock 8); maspsx `--use-comm-section`: lev 17 (Task_InitNodePool 5, Task_AllocNode 4, Task_RelocBlock 2); FORCE_G0: lev 12 (Task_GarbageCollectNodes 12); small-data set: lev 57 (Task_AllocNode 17, Task_InitNodePool 13, Task_RelocBlock 8) |
-| `main/script/Task_SystemOpcodes.c` | maspsx `-G8`: lev 67 (Entity_InitWithTimeout 16, Task_WaitEntityFlags8 11, Task_WaitFrameOrDraw 8); maspsx `--use-comm-section`: lev 24 (Entity_InitWithTimeout 5, Task_WaitEntityFlags8 4, Task_WaitFrameOrDraw 3); FORCE_G0: identical; small-data set: lev 67 (Entity_InitWithTimeout 16, Task_WaitEntityFlags8 11, Task_WaitFrameOrDraw 8) |
-| `main/script/Task_ValueOps.c` | maspsx `--expand-div`: lev 41 (Task_EvalExpr 41) |
+| `main/script/Script_ActorOpcodes.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 207 (Akao_ProcessCommand 63, Camera_StepAngleFade 41, Camera_TrackRelativeOffset 28); maspsx `--use-comm-section`: lev 45 (Camera_StepAngleFade 10, Script_RunInvCommand 6, Camera_TrackRelativeOffset 5); FORCE_G0: lev 404 (Akao_ProcessCommand 82, Script_SetGteMatrix 48, Camera_TrackRelativeOffset 34); small-data set: lev 207 (Akao_ProcessCommand 63, Camera_StepAngleFade 41, Camera_TrackRelativeOffset 28) |
+| `main/script/Script_FieldSfxQueue.c` | maspsx `-G8`: lev 30 (Scene_UpdateEntityList 22, Script_QueueFieldSfx 6, Script_ClearSfxTable 2); maspsx `--use-comm-section`: lev 7 (Script_QueueFieldSfx 3, Scene_UpdateEntityList 3, Script_ClearSfxTable 1); FORCE_G0: identical; small-data set: lev 30 (Scene_UpdateEntityList 22, Script_QueueFieldSfx 6, Script_ClearSfxTable 2) |
+| `main/script/Script_FlowOpcodes.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 192 (Script_DispatchScriptCmd 59, Script_RunQueue 37, Entity_SelectFieldSetter 18); maspsx `--use-comm-section`: lev 49 (Script_RunQueue 10, Script_DispatchScriptCmd 9, Script_OpenSaveLoadMenu 5); FORCE_G0: lev 197 (Script_DispatchScriptCmd 66, Entity_SelectFieldSetter 26, Script_RunQueue 20); ASPSX_VERSION 2.70: lev 49 (Script_DispatchScriptCmd 49); small-data set: lev 192 (Script_DispatchScriptCmd 59, Script_RunQueue 37, Entity_SelectFieldSetter 18) |
+| `main/script/Script_NodeActions.c` | cc1 `-G8`: lev 32 (Script_SpawnChildNode 32); maspsx `-G8`: lev 238 (Camera_TrackEntityZoom 46, Camera_SnapToEntity 41, Script_MoveTowardPoint 32); maspsx `--use-comm-section`: lev 45 (Script_SpawnChildNode 9, Script_MoveTowardPoint 6, Camera_TrackEntityZoom 6); maspsx `--expand-div`: lev 27 (Script_WaitAnimRange 27); FORCE_G0: lev 230 (Camera_TrackEntityZoom 54, Camera_SnapToEntity 39, Script_MoveTowardPoint 36); small-data set: lev 254 (Camera_TrackEntityZoom 46, Camera_SnapToEntity 41, Script_SpawnChildNode 40) |
+| `main/script/Script_NodePool.c` | cc1 `-G8`: lev 10 (Script_AllocNode 10); cc1 `-fno-strength-reduce`: lev 7 (Script_InitNodePool 4, Script_RelocBlock 3); maspsx `-G8`: lev 51 (Script_InitNodePool 13, Script_AllocNode 11, Script_RelocBlock 8); maspsx `--use-comm-section`: lev 17 (Script_InitNodePool 5, Script_AllocNode 4, Script_RelocBlock 2); FORCE_G0: lev 12 (Script_GarbageCollectNodes 12); small-data set: lev 57 (Script_AllocNode 17, Script_InitNodePool 13, Script_RelocBlock 8) |
+| `main/script/Script_SystemOpcodes.c` | maspsx `-G8`: lev 67 (Entity_InitWithTimeout 16, Script_WaitEntityFlags8 11, Script_WaitFrameOrDraw 8); maspsx `--use-comm-section`: lev 24 (Entity_InitWithTimeout 5, Script_WaitEntityFlags8 4, Script_WaitFrameOrDraw 3); FORCE_G0: identical; small-data set: lev 67 (Entity_InitWithTimeout 16, Script_WaitEntityFlags8 11, Script_WaitFrameOrDraw 8) |
+| `main/script/Script_ValueOps.c` | maspsx `--expand-div`: lev 41 (Script_EvalExpr 41) |
 | `overlays/boot_display/Boot_StepImageSprite.c` | maspsx `--expand-div`: lev 22 (Boot_StepImageSprite 22) |
 | `overlays/fx_common/FxCommon_EffectInitializationFlow.c` | cc1 `-fno-expensive-optimizations`: lev 28 (func_80196498 28) |
 | `overlays/fx_common/FxCommon_SetMotionEndpoints.c` | cc1 `-fno-schedule-insns`: lev 56 (FxCommon_SetMotionEndpoints 56) |

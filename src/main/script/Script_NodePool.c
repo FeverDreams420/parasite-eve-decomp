@@ -21,7 +21,7 @@ TaskNode *g_TaskNodePool;
  * scene data relocation, the scene-map flush and free-list construction are
  * contiguous and share the node pool and g_SceneDataTable1 state. */
 
-void Task_InitNodePool(void) {
+void Script_InitNodePool(void) {
     unsigned int i;
     unsigned int j;
     unsigned int rowOffset;
@@ -62,7 +62,7 @@ void Task_InitNodePool(void) {
 
 /* Turn a loaded block's self-relative base and offsets into addresses;
  * a base already above 0x80000000 means the block was relocated before. */
-RelocBlock *Task_RelocBlock(RelocBlock *block) {
+RelocBlock *Script_RelocBlock(RelocBlock *block) {
     RelocAddress address;
     RelocU32 offset;
     RelocU32 i;
@@ -92,7 +92,7 @@ RelocBlock *Task_RelocBlock(RelocBlock *block) {
     return g_SceneDataTable1;
 }
 
-void Task_DrawSyncAndFlush(void) {
+void Script_DrawSyncAndFlush(void) {
     unsigned int i;
     int offset;
     RelocBlock *block;
@@ -113,7 +113,7 @@ void Task_DrawSyncAndFlush(void) {
     }
 }
 
-void Task_InitNodeFreeList(void) {
+void Script_InitNodeFreeList(void) {
     unsigned short i;
 
     i = 0;
@@ -134,7 +134,7 @@ void Task_InitNodeFreeList(void) {
     } while (i < 0x40);
 }
 
-TaskNode *Task_AllocNode(unsigned int *script, TaskNode *arg1) {
+TaskNode *Script_AllocNode(unsigned int *script, TaskNode *arg1) {
     TaskNode *node;
     TaskNode *next;
     unsigned short seq;
@@ -175,7 +175,7 @@ TaskNode *Task_AllocNode(unsigned int *script, TaskNode *arg1) {
 #include "pe1/field_actor.h"
 #include "pe1/task_node.h"
 
-void Task_GarbageCollectNodes(void) {
+void Script_GarbageCollectNodes(void) {
     FieldActor *group;
     u8 i;
 

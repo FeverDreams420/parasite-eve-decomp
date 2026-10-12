@@ -6,7 +6,7 @@ typedef union TaskGeneratorAddress {
     u32 address;
 } TaskGeneratorAddress;
 
-u32 Task_GpuFlushPrimQueue(void) {
+u32 Draw_FlushPrimQueue(void) {
     register u32 *base asm("$8");
     register u32 *head_slot asm("$15");
     register u32 *tail_slot asm("$24");

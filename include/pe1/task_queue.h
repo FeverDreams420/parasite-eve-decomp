@@ -13,6 +13,6 @@ extern u32 D_8009D1A0;
 extern u32 D_8009DF70[], D_800A77F0[], D_800B6A80[];
 extern int (*D_800910A0[])(u32 **);
 
-void Task_RunQueue(void);
+void Script_RunQueue(void);
 
 #endif

@@ -108,7 +108,7 @@ A merge that one neighbour's cc1 option seems to forbid is usually a C-shape
 question, not a real conflict:
 
 - G0341: `Boot_InitSubsystems` only needed `-fno-schedule-insns2` for its
-  prologue store order; starting its flush loop after `Task_InitGpuHwRegs` as
+  prologue store order; starting its flush loop after `Draw_InitGpuHwRegs` as
   a `for` loop gives the retail order under the default schedule.
 - G0835: the background scroll step only needed strength reduction for the
   loop pointer copy it creates; walking the entry pointer by hand inside a
@@ -183,7 +183,7 @@ through `$gp` in one block after the includes, private `*_externs.h`
 declarations moved to a shared header, `Old.c:NN` references re-pointed);
 `tools/reorg/marker_probe.py` compares every function with the old unit
 objects before `make check` and `make overlay-check-all` decide. File names
-follow the role of the module (`FieldEng_GlowEffects.c`, `Task_FlowOpcodes.c`,
+follow the role of the module (`FieldEng_GlowEffects.c`, `Script_FlowOpcodes.c`,
 `Menu_InventoryScreens.c`, `Battle_Setup.c`).
 
 The marker sets that unified the most units:
@@ -242,16 +242,16 @@ Units that stay separate, and why:
   panel's `-fno-expensive-optimizations`), `entity/Entity_PoolInit.c`
   (`-fno-strength-reduce`, which `Scene_LoadMap` does not take),
   `render/Geo_LoadMeshEntry.c` and `render/Render_MeshListAndFade.c`, the
-  primitive queue in `draw/` (`Task_InitGpuHwRegs` and
-  `Task_GpuFlushPrimQueue` are lev 4 under each other's set) and the `-g3`
+  primitive queue in `draw/` (`Draw_InitGpuHwRegs` and
+  `Draw_FlushPrimQueue` are lev 4 under each other's set) and the `-g3`
   battle units (`Menu_MainUpdate`, `Entity_UpdateTimers`,
   `Battle_PhaseAndEnemyEffectFlow`, which also isolate
   `Entity_HitAndDropTable` and `Battle_PlayerTurnFlow`).
 - Open small-data shapes from `docs/REORGANIZATION_G_FLAGS.md`:
-  `script/Task_ValueOps.c` with `script/Task_NodeActions.c` (#0) and
+  `script/Script_ValueOps.c` with `script/Script_NodeActions.c` (#0) and
   `boot/Gpu_InitPipeline.c` (#20, also a gprofile boundary).
 - Source policy: the GNU-as units (`math/Math_FixedMul.c`,
-  `math/math_fixed.c`, `draw/Task_GpuPackPrimColor.c`,
+  `math/math_fixed.c`, `draw/Draw_PackPrimColor.c`,
   `draw/Math_SqrtApprox3.c`) stay alone.
 
 ### PsyQ objects split over several units (src/main/psyq)
@@ -999,7 +999,7 @@ Still open:
     `Scene_UpdateEntityPositions` keeps its `goto link`: duplicating the two
     inlined `Scene_LinkContactTask` calls is not cross-jumped (lev 128).
   - `Entity_TriggerAnimEvent` keeps its three pins (lev 81 without: retail
-    copies `entity` to `$a2` first). `Task_RunEntityCommand` needs no pins:
+    copies `entity` to `$a2` first). `Script_RunEntityCommand` needs no pins:
     the plain `g_TaskNodePool->active = 1; g_SceneDataTable0 -= 0x10;`
     tail allocates `$a1`/`$a0` as retail does.
     `Entity_RelocateSceneData` keeps the `$v0` pin on the loaded block
@@ -1455,23 +1455,23 @@ found by rewriting the whole function from the retail listing rather than
 deleting one pin at a time:
 
 - A dispatch `switch` whose decision tree splits at the wrong case is
-  missing a case. `Task_DispatchScriptCmd` has a no-op opcode 2100
+  missing a case. `Script_DispatchScriptCmd` has a no-op opcode 2100
   (`case 2100: break;`): with it the tree pivots at 2500 as retail does and
   the 23-label `goto` tree became a plain switch. Count the case nodes
   `balance_case_nodes` sees before blaming the compiler.
 - Two branches that end in the same store sequence are cross-jumped into
   one tail when each branch does the whole update itself
-  (`Task_SetObjEntryFlag80`/`Task_ClearObjEntryFlag80`: each table branch
+  (`Script_SetObjEntryFlag80`/`Script_ClearObjEntryFlag80`: each table branch
   computes its triangle as `index * size + table` through the
   `CollisionTriangleTable` word and sets the flag; the shared `addu`/`lbu`
   tail is the compiler's, not the source's).
 - A copy of a value into a second variable, or reuse of one variable for
   two roles, shows up as retail's register reuse:
-  `Task_TurnTowardPointStep` turns its target coordinates into the deltas
+  `Script_TurnTowardPointStep` turns its target coordinates into the deltas
   passed to `ratan2` (`x = (pos_x - x) >> 16`), and its wrap tests use a
   fresh block-local `wrap`.
 - Store order of several fields follows the natural statement order once
-  the value has one name (`Task_SnapPosToSpawnPos` stores x, y, z).
+  the value has one name (`Script_SnapPosToSpawnPos` stores x, y, z).
 - Block-local single-set temporaries (an inline `AdvanceCursor(dx)` that
   reads x and y and writes both back) replace function-scope `x`/`y`
   reused across calls; `Draw_PrintTimeValue` lost both memory barriers.
@@ -1481,14 +1481,14 @@ deleting one pin at a time:
   known cursor (`SaveCursor`) and two `PopCursor`s.
 - PSY-Q GTE macros cover the hand-pinned GTE sequences:
   `gte_SetBackColor`, `gte_SetColorMatrix` (`Gte_SetBackColor`,
-  `Gte_SetLightColor`) and `gte_MulMatrix0` (`Task_SetGteMatrix`).
+  `Gte_SetLightColor`) and `gte_MulMatrix0` (`Script_SetGteMatrix`).
 - Address arithmetic on a pointer as an integer goes through a union
   (`RelocAddress`, `TaskNodeAddress`, `DrawPrimLink`, `TimRelativeTable`).
   Declare the union in the innermost block that uses it: a union declared
   at function scope gets the older pseudo, CSE then rewrites the packet
   pointer's later uses through the copy and an extra `move` appears.
-- Plain argument use beats a laundered copy: `Task_RunInvCommand` and
-  `Task_OpenMemCardDialog` match with the argument block and the shared
+- Plain argument use beats a laundered copy: `Script_RunInvCommand` and
+  `Script_OpenMemCardDialog` match with the argument block and the shared
   `return 1` written directly.
 - `sll`/`sra 16` before every use of a value, plus plain `move`s between
   copies of it, is a `short` local: GCC 2.7.2 on MIPS does not promote
@@ -1526,10 +1526,10 @@ deleting one pin at a time:
 
 Crutches still in these units, with the best crutch-free lev found:
 
-- `Task_InitGpuHwRegs` (7 pins, 2 barriers) and `Task_GpuFlushPrimQueue`
+- `Draw_InitGpuHwRegs` (7 pins, 2 barriers) and `Draw_FlushPrimQueue`
   (10 pins, 4 barriers) are the additive generator around the
   80-byte `.text` state block at 0x80070E04, the same original-assembler
-  module as `Task_GpuPackPrimColor` (see ASM_AND_GTE_POLICY.md): absolute
+  module as `Draw_PackPrimColor` (see ASM_AND_GTE_POLICY.md): absolute
   addresses built with `lui`/`ori`, constants loaded with `ori`, `or` moves,
   no frame, hand-filled delay slots. GCC emits none of these (crutch-free
   lev 22 and 24). They should become `GAME_ASM_FUNCTION` units with
@@ -1541,20 +1541,20 @@ Crutches still in these units, with the best crutch-free lev found:
   `&g_GameState` load after the re-entry label, lev 24). Its empty barrier
   is gone: state 0x3B falls into the `default: return 1`, which shares the
   `li v0,1` jump as retail does.
-- `Task_LoadSceneData`: 2 CD retry `goto`s (a loop lets loop.c hoist the
+- `Script_LoadSceneData`: 2 CD retry `goto`s (a loop lets loop.c hoist the
   `-1` comparands into saved registers, lev 32).
 - `Akao_ProcessCommand`: 1 `goto archive_match`; retail places the match
   block after case 0x199, a structured `break`/flag places it in the loop.
-- `Task_SpawnChildNode` (6 pins, 2 barriers): crutch-free lev 19. Viewing
+- `Script_SpawnChildNode` (6 pins, 2 barriers): crutch-free lev 19. Viewing
   the free-list head as a one-element array (the `g_TaskNodeSeqCounter[1]`
   recipe) fixes the store order the memory barrier holds and the node
   register (lev 12 with no else-branch crutch, 8 with the `$4` state pin);
   what remains is the `g_CurrentEntity` load, which retail schedules right
   after the argument load in both branches.
-- `Task_SetEntityActionAndWait` (1 pin): lev 2 to 3; retail loads the
+- `Script_SetEntityActionAndWait` (1 pin): lev 2 to 3; retail loads the
   current frame first into `v0`, every crutch-free form either loads it
   second or allocates it to `v1`.
-- `Task_WaitAnimRange` (1 pin): instruction sequence exact, lev 19 from the
+- `Script_WaitAnimRange` (1 pin): instruction sequence exact, lev 19 from the
   global allocation of `next`/`target`/`count` (retail `a0`/`a2`/`v0`).
 - `Camera_TrackEntityAngle` keeps its 8-byte `stack_pad[2]` frame reserve
   (lev 18 without it).
@@ -1710,7 +1710,7 @@ shift test), 21 data words and 17 `lui` halves hold a program address with no
 relocation at all. The literals are LIBCD BIOS state pointers
 (`g_CdBiosHardwareState`), a `0x800E0xxx` function table in
 `dtail_gp_pre_s016`, two string-directory buffer pointers, the
-`Task_InitGpuHwRegs`/`Task_GpuFlushPrimQueue` register-block pointers at
+`Draw_InitGpuHwRegs`/`Draw_FlushPrimQueue` register-block pointers at
 0x80070E0x, and `0x800Axxxx` upper halves in a few CD, memory card, menu
 and GPU units. A few of the 21 data words (`0x80017FFF`) are probably two
 halfwords rather than an address.

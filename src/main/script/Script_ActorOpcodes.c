@@ -547,7 +547,7 @@ void func_801223A8(s32);
 
 #define g_SceneAssetLbaTbl (g_SceneAssetLbaTbl[0])
 
-int Task_PointInPoly(int **arg0) {
+int Script_PointInPoly(int **arg0) {
     int local[8];
     unsigned int i;
 
@@ -560,7 +560,7 @@ int Task_PointInPoly(int **arg0) {
     return 1;
 }
 
-s32 Task_LoadSceneData(s16 **arg0) {
+s32 Script_LoadSceneData(s16 **arg0) {
     s16 **arg0_reg = arg0;
     s32 *base = (s32 *)&g_GameState;
     union {
@@ -633,7 +633,7 @@ retry_second:
     return 1;
 }
 
-int Task_PlayEntityAnim(s16 **args) {
+int Script_PlayEntityAnim(s16 **args) {
     TaskNode *task_state;
     FieldActor *actor;
     FieldActor *post_actor;
@@ -671,7 +671,7 @@ int Task_PlayEntityAnim(s16 **args) {
     return 0;
 }
 
-int Task_CopyEntityRenderObject(int **args) {
+int Script_CopyEntityRenderObject(int **args) {
     FieldActor *source;
     int type_id;
 
@@ -736,7 +736,7 @@ int Task_CopyEntityRenderObject(int **args) {
  * the angle opcode reaches its actors through array views, absolute under
  * -G8 as well. */
 
-int Task_SetGteMatrix(int **args) {
+int Script_SetGteMatrix(int **args) {
     FieldActor *setup_actor;
     FieldActor *matrix_actor;
     FieldActor *color_actor;
@@ -857,7 +857,7 @@ int Boot_CheckModeSwitch(void) {
 
 /* Script op: angle from the current entity to the actor named by
  * (args[0], args[1]), relative to the current entity's yaw, into args[2]. */
-s32 Task_GetAngleToEntity(s32 *args[]) {
+s32 Script_GetAngleToEntity(s32 *args[]) {
     s32 key;
     s32 key2;
     FieldActor *node;
@@ -915,7 +915,7 @@ s32 Task_GetAngleToEntity(s32 *args[]) {
 }
 
 int Menu_GetEquipSlotStateOrIndex(void);
-int Task_GpuPackPrimColor(int start, int end);
+int Draw_PackPrimColor(int start, int end);
 
 int Scene_SelectMapById(int **args) {
     int raw_selection;
@@ -946,10 +946,10 @@ int Scene_SelectMapById(int **args) {
     }
 
     if ((u8)(raw_selection - 6) < 2 || selection == 8) {
-        if ((s16)Task_GpuPackPrimColor(0, 100) < 60) {
+        if ((s16)Draw_PackPrimColor(0, 100) < 60) {
             D_8009D280 = Str_ParseBase32Id(g_MapIdTable);
         } else {
-            D_8009D280 = Str_ParseBase32Id(g_MapIdTable + ((s16)Task_GpuPackPrimColor(1, 4) << 3));
+            D_8009D280 = Str_ParseBase32Id(g_MapIdTable + ((s16)Draw_PackPrimColor(1, 4) << 3));
         }
     } else {
         state = (u8)(Menu_GetEquipSlotStateOrIndex() - 1);
@@ -972,7 +972,7 @@ int Scene_SelectMapById(int **args) {
     return raw_selection;
 }
 
-int Task_SetFloorByEntityRoll(u8 **args) {
+int Script_SetFloorByEntityRoll(u8 **args) {
     int selection;
     u8 state;
     MapSelectionIndexRow *select_index;
@@ -1024,12 +1024,12 @@ int Task_SetFloorByEntityRoll(u8 **args) {
 
 int Render_SetEntryPosition(int index, int x, int y);
 
-int Task_SetActorScreenPos(int **arg0) {
+int Script_SetActorScreenPos(int **arg0) {
     Render_SetEntryPosition(*arg0[0], *(short *)arg0[1], *(short *)arg0[2]);
     return 1;
 }
 
-int Task_OpenMemCardDialog(void) {
+int Script_OpenMemCardDialog(void) {
     Pe1GameState *state = &g_GameState;
     TaskNode *node;
     unsigned short *node_flags;
@@ -1064,7 +1064,7 @@ int Task_OpenMemCardDialog(void) {
     return 1;
 }
 
-int Task_ShowReceivedItem(int **arg0) {
+int Script_ShowReceivedItem(int **arg0) {
     Pe1GameState *state = &g_GameState;
     int **saved = arg0;
     TaskNode *node;
@@ -1112,7 +1112,7 @@ typedef struct TaskInvCommandArgs {
     int *unused;
 } TaskInvCommandArgs;
 
-int Task_RunInvCommand(TaskInvCommandArgs *args) {
+int Script_RunInvCommand(TaskInvCommandArgs *args) {
     TaskNode *node;
     int flags;
     int result;

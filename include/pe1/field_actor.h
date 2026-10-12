@@ -17,7 +17,7 @@ typedef struct FieldActor {
     /* 0x00E */ unsigned char mode;
     /* 0x00F */ unsigned char action;
     /* 0x010 */ unsigned short pad_010; /* 0xC8 when the actor is created */
-    /* 0x012 */ unsigned short anim_frame_target; /* clamped target anim frame (Task_SetEntityAnimFrame) */
+    /* 0x012 */ unsigned short anim_frame_target; /* clamped target anim frame (Script_SetEntityAnimFrame) */
     /* 0x014 */ union {
         int fixed;                                /* current animation position, 16.16 */
         struct { unsigned short fraction; unsigned short integer; } parts;
@@ -25,8 +25,8 @@ typedef struct FieldActor {
     /* 0x018 */ int anim_prev;                    /* previous animation position, 16.16 */
     /* 0x01C */ int anim_step;                    /* signed animation increment, 16.16 */
     /* 0x020 */ int move_factor;          /* fixed movement magnitude, scaled for the player */
-    /* 0x024 */ unsigned short field_sfx_id; /* entity value forwarded to Task_QueueFieldSfx */
-    /* 0x026 */ unsigned short move_speed;  /* movement-speed multiplier, written by Task_SetEntityMoveSpeed */
+    /* 0x024 */ unsigned short field_sfx_id; /* entity value forwarded to Script_QueueFieldSfx */
+    /* 0x026 */ unsigned short move_speed;  /* movement-speed multiplier, written by Script_SetEntityMoveSpeed */
     /* Signed 16.16 coordinates; Pe1Fixed_Integer reads their high halfwords. */
     /* 0x028 */ int pos_x;
     /* 0x02C */ int pos_y;

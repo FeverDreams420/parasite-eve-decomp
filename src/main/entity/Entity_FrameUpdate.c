@@ -120,7 +120,7 @@ FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
 
     table = g_GameState.bank_reset_944[0];
     actor->script_base = table[2 + scene[0]];
-    actor->task_node_lists[2] = Task_AllocNode((unsigned int *)actor->script_base, 0);
+    actor->task_node_lists[2] = Script_AllocNode((unsigned int *)actor->script_base, 0);
     actor->rot_x = 0;
     actor->rot_y = 0;
     actor->rot_z = 0;
@@ -454,7 +454,7 @@ void Entity_IntegratePositionConditional(FieldActor *a)
 
 void Entity_FreeAllocationBlock(int arg0);
 int Util_ReturnTrue(void *unused);
-void Task_RunQueue(void);
+void Script_RunQueue(void);
 
 void Entity_RollbackPositionHierarchy(FieldActor *arg0)
 {
@@ -567,7 +567,7 @@ void Entity_DispatchCallbacks(Entity *arg0) {
         callback = *ptr;
         g_TaskNodePool = callback;
         if (callback != 0) {
-            Task_RunQueue();
+            Script_RunQueue();
         }
         i++;
         ptr++;

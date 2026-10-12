@@ -69,11 +69,11 @@ segments:
     bss_size: 0x0
     subsegments:
       # Expression and FieldActor Vec3 getter/setter switch tables.
-      - [0x800, .rodata, script/Task_ValueOps]
+      - [0x800, .rodata, script/Script_ValueOps]
       - [0x89C, rodata, main/rodata_00089C]
-      - [0x8A0, .rodata, script/Task_ActorOpcodes]
+      - [0x8A0, .rodata, script/Script_ActorOpcodes]
       - [0xE8C, rodata, main/rodata_000E8C]
-      - [0xE90, .rodata, script/Task_FlowOpcodes]
+      - [0xE90, .rodata, script/Script_FlowOpcodes]
       - [0xEA4, rodata, main/rodata_000EA4]
       - [0xEE4, .rodata, battle/Entity_HitAndDropTable]
       - [0xF0C, .rodata, battle/Battle_EnemyActions]
@@ -136,12 +136,12 @@ segments:
       # the task-node pool and g_SceneDataTable1 (main_tu_evidence G0001);
       # allocation and garbage collection share the TaskNode free list. One -G8
       # FORCE_G0 unit with -fno-strength-reduce.
-      - [0x2CF8, c, script/Task_NodePool]
+      - [0x2CF8, c, script/Script_NodePool]
       # Expression, Vec3 get/set and mask-test opcodes: contiguous
       # default-profile handlers whose jump tables are adjacent in .rodata.
-      - [0x3050, c, script/Task_ValueOps]
+      - [0x3050, c, script/Script_ValueOps]
       # Task-node, point-motion, and camera tracking share the active entity cache.
-      - [0x39E8, c, script/Task_NodeActions]
+      - [0x39E8, c, script/Script_NodeActions]
       # Actor, camera, model and item opcodes: field-actor query and distance
       # routines (actor globals); memory-card init step, position by actor type,
       # relative camera offset tracking and camera angle fade; poly and scene load
@@ -151,14 +151,14 @@ segments:
       # sound opcodes. One -G8 FORCE_G0 unit with COMMON $gp words; the four zero
       # bytes that were main/rodata_0009AC are the alignment pad before the
       # 8-aligned sound command jump table, which the one object emits itself.
-      - [0x4A28, c, script/Task_ActorOpcodes]
+      - [0x4A28, c, script/Script_ActorOpcodes]
       # Script dispatcher, pending-node launch controller for equip and save/load
       # menus, interpreter loop, jump-to-actor-script and mark-dead opcodes,
       # node/flow opcodes (current-node active/free, jump-if-zero, spawn, assign,
       # stop-anim), actor and node field opcodes, bit and global-flag ops, action
       # mode and anim frame: one -G8 FORCE_G0 unit whose COMMON words are the
       # $gp ones; g_CurrentEntity stays absolute through the array declaration.
-      - [0x7110, c, script/Task_FlowOpcodes]
+      - [0x7110, c, script/Script_FlowOpcodes]
       # State, system, field-entity and scene opcodes: barcode, fog/scroll, camera
       # reset and render state, move lock, menu-choice branch, current-actor flags,
       # global flags and battle mode, field get/set by type and battle flags;
@@ -170,7 +170,7 @@ segments:
       # scene, game-time, parent-link and trigonometry opcodes (main_tu_evidence
       # G0199..G0215 have no split evidence). One unit under cc1 -G0 and the
       # FORCE_G0 assembler -G8 whose COMMON words are the $gp ones.
-      - [0x83B4, c, script/Task_SystemOpcodes]
+      - [0x83B4, c, script/Script_SystemOpcodes]
       # Actor animation and collision (G0227): animation advancement and action
       # selection (per-model action tables), collision-state reset and database
       # relocation, the actor update list, actor floor lookup, boundary clipping,
@@ -427,7 +427,7 @@ segments:
       # words and --expand-div.
       - [0x52D68, c, menu/MenuWidget_Lifecycle]
       # Field sound event enqueue/reset and actor dispatch share queue records.
-      - [0x55B6C, c, script/Task_FieldSfxQueue]
+      - [0x55B6C, c, script/Script_FieldSfxQueue]
       # Geometry control entries (reset, animation update and slot commands share
       # GeomCtrlEntry) and the view state reset, camera clamp, bounds, viewport and
       # GTE offsets, scroll mode and screen transitions (private state, G0819). One
@@ -491,10 +491,10 @@ segments:
       # CdRom_PollReady (pe1/cd_poll.h), Scene_LoadRoomAssets here calls it.
       - [0x5FA24, c, pm/Pm_ProcessManager]
       - [0x60C1C, c, draw/Render_DrawWireframeModel]
-      - [0x61510, c, draw/Task_InitGpuHwRegs]
-      - [0x6156C, c, draw/Task_GpuFlushPrimQueue]
-      - [0x615D0, c, draw/Task_GpuPackPrimColor]
-      - [0x61604, pad] # zero words after Task_GpuPackPrimColor's jr ra
+      - [0x61510, c, draw/Draw_InitGpuHwRegs]
+      - [0x6156C, c, draw/Draw_FlushPrimQueue]
+      - [0x615D0, c, draw/Draw_PackPrimColor]
+      - [0x61604, pad] # zero words after Draw_PackPrimColor's jr ra
       - [0x61654, c, draw/Gpu_RenderFrame]
       - [0x617AC, c, draw/Math_SqrtApprox3]
       # Player movement state handlers share the pad/analog and camera-angle

@@ -105,7 +105,7 @@ static inline void Scene_LinkContactTask(FieldActor *self, FieldActor *other)
             node = node->next;
         }
         if (!found) {
-            node = Task_AllocNode(self->script_cursor_1a0, 0);
+            node = Script_AllocNode(self->script_cursor_1a0, 0);
             node->flags |= 1;
             node->trigger_value = other->field_sfx_id;
             node->target18.coordinate = other->type_id;

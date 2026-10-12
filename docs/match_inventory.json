@@ -44,8 +44,8 @@
       "evidence": "Fresh linked asm-differ run on darwine against retail instruction target; no source changes required."
     },
     {
-      "unit": "main/draw/Task_GpuPackPrimColor",
-      "symbol": "Task_GpuPackPrimColor",
+      "unit": "main/draw/Draw_PackPrimColor",
+      "symbol": "Draw_PackPrimColor",
       "reported_size": 52,
       "source": null,
       "status": "unimplemented_custom_abi",
@@ -203,7 +203,7 @@
       "source": null,
       "status": "data_or_padding_excluded_from_function_report",
       "levenshtein_score": null,
-      "evidence": "0x50 zero bytes after Task_GpuPackPrimColor returns; now pad. Byte-identical; see docs/CONVENTIONS.md, text-resident data."
+      "evidence": "0x50 zero bytes after Draw_PackPrimColor returns; now pad. Byte-identical; see docs/CONVENTIONS.md, text-resident data."
     },
     {
       "unit": "main/sys/RawData_80074354",

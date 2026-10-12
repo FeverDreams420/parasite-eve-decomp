@@ -151,9 +151,9 @@ class SubsegmentSliceTests(unittest.TestCase):
                     "start": 0x800,
                     "vram": 0x80010000,
                     "subsegments": [
-                        [0x800, ".rodata", "task/Task_EvalExpr"],
-                        [0x3050, "c", "task/Task_EvalExpr"],
-                        [0x38B4, "asm", "task/Task_DispatchCmd"],
+                        [0x800, ".rodata", "task/Script_EvalExpr"],
+                        [0x3050, "c", "task/Script_EvalExpr"],
+                        [0x38B4, "asm", "task/Script_DispatchCmd"],
                     ],
                 },
             ]
@@ -161,9 +161,9 @@ class SubsegmentSliceTests(unittest.TestCase):
 
         slices, spans = gen_expected.subsegment_slices(config)
 
-        self.assertEqual(slices["task/Task_EvalExpr"][".text"], 0x80012850)
-        self.assertEqual(slices["task/Task_EvalExpr"][".rodata"], 0x80010000)
-        self.assertEqual(slices["task/Task_DispatchCmd"][".text"], 0x800130B4)
+        self.assertEqual(slices["task/Script_EvalExpr"][".text"], 0x80012850)
+        self.assertEqual(slices["task/Script_EvalExpr"][".rodata"], 0x80010000)
+        self.assertEqual(slices["task/Script_DispatchCmd"][".text"], 0x800130B4)
         self.assertEqual(spans, [(0x80010000, 0x800130B4)])
 
     def test_configured_padding_counts_unnamed_ranges(self):

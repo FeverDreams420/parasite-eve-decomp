@@ -39,7 +39,7 @@
  *     D_800930D8 / D_800930DA  entity-texture start / end sectors
  *                              (Scene_LoadEntityTexture(s), Render_InitDisplayLists)
  *     D_80093378 / D_8009337C  room data start / offset (Scene_LoadRoom)
- *     D_8009315E / D_80093160  scene init-data ranges (Task_LoadSceneData)
+ *     D_8009315E / D_80093160  scene init-data ranges (Script_LoadSceneData)
  *     D_80093162               scene asset ranges (Scene_LoadRoomAssets)
  *     D_80093168 / D_8009316A / D_8009316E  overlay/main asset + font/UI table
  *                              ranges (Overlay_LoadTables)

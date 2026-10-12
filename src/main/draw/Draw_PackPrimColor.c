@@ -3,17 +3,17 @@
 #include "pe1/game_asm.h"
 
 /*
- * int Task_GpuPackPrimColor(int low, int high): low plus the 16-bit
- * Task_GpuFlushPrimQueue result scaled to (high - low), i.e.
+ * int Draw_PackPrimColor(int low, int high): low plus the 16-bit
+ * Draw_FlushPrimQueue result scaled to (high - low), i.e.
  * low + ((u16)r * (high - low) >> 16).
  *
  * Original assembler (configs/USA/original_asm_evidence.json): ra is kept in
  * $v1 with `or` instead of a stack frame across the call, and the range and
  * result use the trapping `sub` and `add`, which GCC never emits.
  */
-GAME_ASM_FUNCTION(Task_GpuPackPrimColor,
+GAME_ASM_FUNCTION(Draw_PackPrimColor,
     "    or      $v1, $zero, $ra\n"
-    "    jal     Task_GpuFlushPrimQueue\n"
+    "    jal     Draw_FlushPrimQueue\n"
     "    sub     $a1, $a1, $a0\n"
     "    andi    $v0, $v0, 0xFFFF\n"
     "    mult    $v0, $a1\n"

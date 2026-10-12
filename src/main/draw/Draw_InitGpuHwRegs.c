@@ -2,7 +2,7 @@
 
 register int *g_TaskGpuReg2 asm("$10");
 
-void Task_InitGpuHwRegs(void) {
+void Draw_InitGpuHwRegs(void) {
     register unsigned int zero asm("$0");
     register volatile int *ptr asm("$8");
     register unsigned int a asm("$11");

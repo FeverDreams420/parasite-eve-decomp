@@ -42,7 +42,7 @@ extern TaskNode *D_8009D300;
 extern TaskNode *g_TaskNodePool;
 extern TaskNode D_8009D310[72];
 
-TaskNode *Task_AllocNode(unsigned int *script, TaskNode *previous);
+TaskNode *Script_AllocNode(unsigned int *script, TaskNode *previous);
 
 /* One word per task node, cleared when the pools are reset. */
 extern int g_TaskNodeActiveFlags[64];

@@ -58,9 +58,9 @@ void InitSystem(void) {
 }
 
 #define NULL ((void *)0)
-u32 Task_GpuFlushPrimQueue(void);
+u32 Draw_FlushPrimQueue(void);
 M2C_UNK Save_InitSystem();
-M2C_UNK Task_InitNodePool();
+M2C_UNK Script_InitNodePool();
 M2C_UNK Entity_ResetStateGlobals();
 M2C_UNK Entity_ResetAllPools();
 M2C_UNK SsInit();
@@ -68,7 +68,7 @@ void Menu_SetEquipSlotIndex(int index);
 void Boot_BuildRenderFlagTable(void);
 M2C_UNK Save_PostInitStub();
 M2C_UNK CdRom_InitScreenState();
-M2C_UNK Task_InitGpuHwRegs();
+M2C_UNK Draw_InitGpuHwRegs();
 #define g_FrameRngCounter (g_FrameRngCounter[0])
 void Boot_VsyncCallback(void);
 
@@ -80,9 +80,9 @@ void Boot_InitSubsystems(void) {
     g_GameStateFlags = 0;
     g_FrameRngCounter = 0;
     g_ActiveDrawSlot = 0;
-    Task_InitGpuHwRegs();
+    Draw_InitGpuHwRegs();
     for (var_s0 = 0; var_s0 < 0x7D0U; var_s0++) {
-        Task_GpuFlushPrimQueue();
+        Draw_FlushPrimQueue();
     }
     Boot_BuildRenderFlagTable();
     SsInit();
@@ -92,10 +92,10 @@ void Boot_InitSubsystems(void) {
     Save_InitSystem();
     Save_PostInitStub();
     CdRom_InitScreenState();
-    Task_InitNodePool();
+    Script_InitNodePool();
     Entity_ResetStateGlobals();
     Entity_ResetAllPools();
-    Task_ClearSfxTable();
+    Script_ClearSfxTable();
     Menu_ConsumeEquipSlotFlag();
 }
 
@@ -158,7 +158,7 @@ void PadInitDirect(char *arg0, char *arg1);
 void PadStartCom(void);
 
 void Boot_VsyncCallback(void) {
-    Task_GpuFlushPrimQueue();
+    Draw_FlushPrimQueue();
     Scene_TickTimers();
 }
 

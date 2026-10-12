@@ -56,7 +56,7 @@ typedef struct TaskScriptArgs {
 void func_800E00CC(Pe1Vec3s *position, int mode, int arg2, int arg3,
                    int arg4, int arg5, int arg6);
 
-int Task_DispatchScriptCmd(TaskScriptArgs *args)
+int Script_DispatchScriptCmd(TaskScriptArgs *args)
 {
     Pe1Vec3s position;
     Pe1Vec3s position2;
@@ -84,7 +84,7 @@ int Task_DispatchScriptCmd(TaskScriptArgs *args)
         g_GeomScroll.state.position.originY = ARG_WORD(args->arg2);
         break;
     case 2300:
-        Task_SetCollisionFlag(ARG_WORD(args->arg1) != 0);
+        Script_SetCollisionFlag(ARG_WORD(args->arg1) != 0);
         return 1;
     case 2400:
         position.x = args->arg1->high;
@@ -173,17 +173,17 @@ int Task_DispatchScriptCmd(TaskScriptArgs *args)
     return 1;
 }
 
-int Task_SetEntityShadowFlag(void) {
+int Script_SetEntityShadowFlag(void) {
     g_CurrentEntity->flags |= 0x20000000;
     return 1;
 }
 
-int Task_ClearEntityShadowFlag(void) {
+int Script_ClearEntityShadowFlag(void) {
     g_CurrentEntity->flags &= 0xDFFFFFFF;
     return 1;
 }
 
-int Task_BeginSceneTransition(int **arg0) {
+int Script_BeginSceneTransition(int **arg0) {
     Pe1GameState *state = &g_GameState;
     int **saved = arg0;
     TaskNode *node;
@@ -225,7 +225,7 @@ ret_one:
 
 void Menu_OpenSaveLoadEntryPoint(int arg0);
 
-int Task_OpenSaveLoadMenu(int **arg0) {
+int Script_OpenSaveLoadMenu(int **arg0) {
     Pe1GameState *state = &g_GameState;
     int **saved = arg0;
     TaskNode *node;
@@ -268,7 +268,7 @@ ret_zero:
     return 0;
 }
 
-int Task_GetPlayerInputFlag(int **args) {
+int Script_GetPlayerInputFlag(int **args) {
     if (D_8009D2E8 & 1) {
         *args[0] = 0;
     } else {
@@ -290,7 +290,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, active) == 0x10, interpreter_wait_offse
 TaskNode *D_8009D300;
 u32 *D_8009CE00;
 
-void Task_RunQueue(void)
+void Script_RunQueue(void)
 {
     u32 *args[16];
     TaskNode *node;
@@ -346,7 +346,7 @@ typedef struct {
     int value;
 } TaskJumpOffsetEntry;
 
-int Task_JumpToEntityOffset(TaskJumpOffsetEntry **arg0)
+int Script_JumpToEntityOffset(TaskJumpOffsetEntry **arg0)
 {
     D_8009CE00 = (u32 *)(((FieldActor *)D_8009D2F0[0])->script_base + ((*arg0)->value * 2));
     return 1;
@@ -367,14 +367,14 @@ int Entity_MarkCurrentNodeFree(void) {
     return 0;
 }
 
-int Task_JumpIfZero(int **arg0) {
+int Script_JumpIfZero(int **arg0) {
     if (*arg0[0] == 0) {
         g_SceneDataTable0 = (int)(g_CurrentEntity->script_base + (*arg0[1] * 2));
     }
     return 1;
 }
 
-int Task_SpawnEntityAt(int **arg0) {
+int Script_SpawnEntityAt(int **arg0) {
     char local[2];
     FieldActor *entity;
 
@@ -387,12 +387,12 @@ int Task_SpawnEntityAt(int **arg0) {
     Entity_FindFloor((struct BattleEntity *)entity);
     return 1;
 }
-int Task_AssignValue(int **arg0) {
+int Script_AssignValue(int **arg0) {
     *arg0[0] = *arg0[1];
     return 1;
 }
 
-int Task_StopEntityAnim(s16 **arg0) {
+int Script_StopEntityAnim(s16 **arg0) {
     s16 value[5];
 
     value[0] = -1;
@@ -491,23 +491,23 @@ int Entity_GetCurrentNodeId(int **args)
 /* Script opcodes: random value in a range and a field sound effect on the
  * current actor. Contiguous default-profile handlers. */
 
-int Task_GpuPackPrimColor(int start, int end);
+int Draw_PackPrimColor(int start, int end);
 
 /* Equal bounds return one raw RNG word. Otherwise the result is in [start, end). */
-int Task_Random(int **arg0) {
+int Script_Random(int **arg0) {
     int start = *arg0[1];
     int end = *arg0[2];
 
     if (start == end) {
-        *arg0[0] = Task_GpuFlushPrimQueue();
+        *arg0[0] = Draw_FlushPrimQueue();
     } else {
-        *arg0[0] = Task_GpuPackPrimColor(start, end);
+        *arg0[0] = Draw_PackPrimColor(start, end);
     }
 
     return 1;
 }
 
-int Task_PlayFieldSfx(FieldSfxScriptArgs *arg0) {
+int Script_PlayFieldSfx(FieldSfxScriptArgs *arg0) {
     register int a;
     int b;
     int c;
@@ -523,18 +523,18 @@ int Task_PlayFieldSfx(FieldSfxScriptArgs *arg0) {
     ptr0 = (void *)arg0->typeId;
     c = *(unsigned short *)ptr0;
     d = g_CurrentEntity->field_sfx_id;
-    Task_QueueFieldSfx(a, b, c, d, 0);
+    Script_QueueFieldSfx(a, b, c, d, 0);
     return 1;
 }
 
 int Tbl_LookupEntry(short arg0);
 
-int Task_GetNodeTarget14(int **arg0) {
+int Script_GetNodeTarget14(int **arg0) {
     *arg0[0] = g_TaskNodePool->target14;
     return 1;
 }
 
-int Task_YieldWhileTableEntrySet(short **arg0) {
+int Script_YieldWhileTableEntrySet(short **arg0) {
     if ((Tbl_LookupEntry(*arg0[0]) << 24) != 0) {
         g_SceneDataTable0 -= 0xC;
         g_TaskNodePool->active = 1;
@@ -543,12 +543,12 @@ int Task_YieldWhileTableEntrySet(short **arg0) {
     return 1;
 }
 
-int Task_ClearTableEntry(short **arg0) {
+int Script_ClearTableEntry(short **arg0) {
     Tbl_ClearEntry(*arg0[0]);
     return 1;
 }
 
-int Task_GetNodeTargets18_1C(int **arg0) {
+int Script_GetNodeTargets18_1C(int **arg0) {
     *arg0[0] = g_TaskNodePool->target18.coordinate;
     *arg0[1] = g_TaskNodePool->target1c;
     return 1;
@@ -587,17 +587,17 @@ int Entity_FindNodeById(unsigned short **arg0) {
     return 1;
 }
 
-int Task_GetCurrentEntityFieldD(int **arg0) {
+int Script_GetCurrentEntityFieldD(int **arg0) {
     *arg0[0] = g_CurrentEntity->sub_id;
     return 1;
 }
 
-int Task_SetCurrentEntityFieldD(int **arg0) {
+int Script_SetCurrentEntityFieldD(int **arg0) {
     g_CurrentEntity->sub_id = *arg0[0];
     return 1;
 }
 
-int Task_GetCurrentEntityField24(int **arg0) {
+int Script_GetCurrentEntityField24(int **arg0) {
     *arg0[0] = g_CurrentEntity->field_sfx_id;
     return 1;
 }
@@ -625,17 +625,17 @@ int Entity_MarkNodeFree(void) {
     return 1;
 }
 
-int Task_ClearBit(int **arg0) {
+int Script_ClearBit(int **arg0) {
     *arg0[0] &= ~(1 << *arg0[1]);
     return 1;
 }
 
-int Task_TestBit(int **arg0) {
+int Script_TestBit(int **arg0) {
     *arg0[2] = *arg0[0] & (1 << *arg0[1]);
     return 1;
 }
 
-int Task_SetBit(int **arg0) {
+int Script_SetBit(int **arg0) {
     *arg0[0] |= 1 << *arg0[1];
     return 1;
 }
@@ -664,7 +664,7 @@ int Entity_SetCurrentActionMode(u16 **arg0) {
     return 1;
 }
 
-int Task_SetEntityAnimFrame(u16 **arg0) {
+int Script_SetEntityAnimFrame(u16 **arg0) {
     FieldActor *entity = g_CurrentEntity;
     u16 value = *arg0[0];
 
@@ -677,7 +677,7 @@ int Task_SetEntityAnimFrame(u16 **arg0) {
     return 1;
 }
 
-int Task_WaitAnimFrameMatch(void) {
+int Script_WaitAnimFrameMatch(void) {
     TaskNode *state;
     FieldActor *entity;
     int stack;

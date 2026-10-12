@@ -40,7 +40,7 @@
 int g_SceneDataTable0;
 TaskNode *g_TaskNodePool;
 
-int Task_EncodeBarcode(int **arg0) {
+int Script_EncodeBarcode(int **arg0) {
     int tmp[2];
     int value;
     unsigned int *counter;
@@ -63,34 +63,34 @@ int Task_EncodeBarcode(int **arg0) {
 
 void Render_SetScrollMode(int arg0, int arg1, unsigned int arg2, int arg3);
 
-int Task_SetFogParams(short **arg0) {
+int Script_SetFogParams(short **arg0) {
     Render_SetScrollMode(*arg0[0], *arg0[1], *(unsigned short *)arg0[2], 0);
     return 1;
 }
 
-int Task_SetFogParamsAlt(short **arg0) {
+int Script_SetFogParamsAlt(short **arg0) {
     Render_SetScrollMode(*arg0[0], *arg0[1], *(unsigned short *)arg0[2], 8);
     return 1;
 }
 
-int Task_IsBattlePhase4(int **arg0) {
+int Script_IsBattlePhase4(int **arg0) {
     *arg0[0] = ((g_RenderStateFlags & 7) == 4);
     return 1;
 }
 
-int Task_ResetPlayerCameraPos(void) {
+int Script_ResetPlayerCameraPos(void) {
     Render_UpdateScrollPosition(&g_PlayerEntity->pos_x, -1, -1);
     return 1;
 }
 
-int Task_SetBattleStateMode(void) {
+int Script_SetBattleStateMode(void) {
     int *ptr = &g_RenderStateFlags;
 
     *ptr = (*ptr & -8) | 0x80;
     return 1;
 }
 
-int Task_SetEntityField224(short **arg0) {
+int Script_SetEntityField224(short **arg0) {
     FieldActor *entity;
     int value;
 
@@ -126,7 +126,7 @@ int Entity_ClearCurrentFlag40(void) {
 
 int g_SceneDataTable0;
 
-int Task_GetMenuChoice(int **arg0) {
+int Script_GetMenuChoice(int **arg0) {
     int value;
 
     value = Menu_GetEquipSlotIndex();
@@ -134,7 +134,7 @@ int Task_GetMenuChoice(int **arg0) {
     return 1;
 }
 
-int Task_CondBranch(int **arg0) {
+int Script_CondBranch(int **arg0) {
     int *a;
     int *b;
     int *c;
@@ -162,16 +162,16 @@ int Entity_TestCurrentFlags(int **arg0) {
     return 1;
 }
 
-int Task_Noop(void) {
+int Script_Noop(void) {
     return 1;
 }
 
-int Task_SetEntityField1C(int **arg0) {
+int Script_SetEntityField1C(int **arg0) {
     g_CurrentEntity->anim_step = *arg0[0];
     return 1;
 }
 
-int Task_SetEntityAnimSpeed(u16 **arg0) {
+int Script_SetEntityAnimSpeed(u16 **arg0) {
     FieldActor *entity;
     unsigned int value;
 
@@ -320,21 +320,21 @@ int Entity_SetFieldByTypeId(int **arg0) {
     return 1;
 }
 
-int Task_ClearBattleFlags(void) {
+int Script_ClearBattleFlags(void) {
     int *ptr = &g_RenderStateFlags;
 
     *ptr &= -0xC1;
     return 1;
 }
 
-int Task_SetBattleFlags(void) {
+int Script_SetBattleFlags(void) {
     int *ptr = &g_RenderStateFlags;
 
     *ptr |= 0xC0;
     return 1;
 }
 
-int Task_SetCurrentEntityField20(int **arg0) {
+int Script_SetCurrentEntityField20(int **arg0) {
     g_CurrentEntity->move_factor = *arg0[0];
     return 1;
 }
@@ -448,7 +448,7 @@ int Entity_AdvanceNodeById(int **arg0) {
     return 1;
 }
 
-int Task_RunEntityCommand(int **arg0) {
+int Script_RunEntityCommand(int **arg0) {
     int result;
 
     result = (signed char)Entity_TriggerAnimEvent((BattleEntity *)g_CurrentEntity, *(unsigned char *)arg0[0]);
@@ -537,7 +537,7 @@ int Sys_ComputeAudioTimer(int **arg0) {
     return 1;
 }
 
-int Task_GetCombatModeFlag(int **arg0) {
+int Script_GetCombatModeFlag(int **arg0) {
     if (g_CombatModeFlags & 4) {
         *arg0[0] = 1;
     } else {
@@ -547,14 +547,14 @@ int Task_GetCombatModeFlag(int **arg0) {
     return 1;
 }
 
-int Task_SetCombatModeFlag(void) {
+int Script_SetCombatModeFlag(void) {
     int *ptr = &g_CombatModeFlags;
 
     *ptr |= 4;
     return 1;
 }
 
-int Task_GetEntityEffect(int **arg0) {
+int Script_GetEntityEffect(int **arg0) {
     int value;
 
     value = Scene_LoadRoomAssets(*arg0[0], g_CurrentEntity);
@@ -617,7 +617,7 @@ int Pm_ScriptGetState(int **arg0) {
     return 1;
 }
 
-int Task_PlayerPointInPoly(int **arg0) {
+int Script_PlayerPointInPoly(int **arg0) {
     int values[8];
     unsigned int i;
 
@@ -634,13 +634,13 @@ int Task_PlayerPointInPoly(int **arg0) {
     return 1;
 }
 
-int Task_InitEntityMoveState(void) {
+int Script_InitEntityMoveState(void) {
     Entity_AllocSlot((BattleEntity *)g_CurrentEntity);
     return 1;
 }
 
-int Task_SetEntityAnim12Args(char **arg0) {
-    Task_SetObjAnimEntry12(
+int Script_SetEntityAnim12Args(char **arg0) {
+    Script_SetObjAnimEntry12(
         (TaskAnimObj *)g_CurrentEntity,
         *(unsigned char *)arg0[0],
         *(unsigned char *)arg0[1],
@@ -656,8 +656,8 @@ int Task_SetEntityAnim12Args(char **arg0) {
     return 1;
 }
 
-int Task_SetEntityAnim5Args(char **arg0) {
-    Task_SetObjAnimEntry5(
+int Script_SetEntityAnim5Args(char **arg0) {
+    Script_SetObjAnimEntry5(
         (TaskAnimObj *)g_CurrentEntity,
         *(unsigned char *)arg0[0],
         *(unsigned char *)arg0[1],
@@ -667,7 +667,7 @@ int Task_SetEntityAnim5Args(char **arg0) {
     return 1;
 }
 
-int Task_SetSceneEntryAnim(int **arg0) {
+int Script_SetSceneEntryAnim(int **arg0) {
     char *header = (char *)g_GeomState;
     char *base = (char *)g_GeomState;
     int index = *arg0[0];
@@ -680,22 +680,22 @@ int Task_SetSceneEntryAnim(int **arg0) {
     return 1;
 }
 
-int Task_SetRenderEntryEnabled(int **arg0) {
+int Script_SetRenderEntryEnabled(int **arg0) {
     Render_SetEntryVisible(*arg0[0], *arg0[1]);
     return 1;
 }
 
-int Task_SetRenderEntryPos(short **arg0) {
+int Script_SetRenderEntryPos(short **arg0) {
     Geo_ClipPoint(*arg0[0], *arg0[1], *arg0[2]);
     return 1;
 }
 
-int Task_SetObjEntryLimit(int **arg0) {
+int Script_SetObjEntryLimit(int **arg0) {
     Obj_SetEntryLimit(*arg0[0], *arg0[1]);
     return 1;
 }
 
-int Task_SetFlagSlot(int **arg0) {
+int Script_SetFlagSlot(int **arg0) {
     Sys_SetFlagSlot(*arg0[0], *arg0[1]);
     return 1;
 }
@@ -710,32 +710,32 @@ int Entity_SetCurrentFlag20(void) {
     return 1;
 }
 
-int Task_GetObjEntryField6(int **arg0) {
+int Script_GetObjEntryField6(int **arg0) {
     *arg0[1] = Obj_GetEntryField6(*arg0[0]);
     return 1;
 }
 
-int Task_SetObjEntryField8(int **arg0) {
+int Script_SetObjEntryField8(int **arg0) {
     Obj_SetEntryField8(*arg0[0], *arg0[1]);
     return 1;
 }
 
-int Task_FillObjEntrySlotValues(int **arg0) {
+int Script_FillObjEntrySlotValues(int **arg0) {
     Obj_FillEntrySlotValues(*arg0[0], *arg0[1]);
     return 1;
 }
 
-int Task_SetObjEntrySlotValue(int **arg0) {
+int Script_SetObjEntrySlotValue(int **arg0) {
     Obj_SetEntrySlotValue(*arg0[0], *arg0[1], *arg0[2]);
     return 1;
 }
 
-int Task_SetObjEntryFlags(int **arg0) {
+int Script_SetObjEntryFlags(int **arg0) {
     Obj_SetEntryFlags(*arg0[0], *arg0[1]);
     return 1;
 }
 
-int Task_ClearObjEntryFlags(int **arg0) {
+int Script_ClearObjEntryFlags(int **arg0) {
     Obj_SetEntryFlags(*arg0[0], ~*arg0[1]);
     return 1;
 }
@@ -744,7 +744,7 @@ int Task_ClearObjEntryFlags(int **arg0) {
  * of the collision triangle args[0], in whichever of the flat (XZ) and
  * sloped (XYZ) tables the room uses. The triangle address is an integer
  * offset added to the table address; each branch updates its triangle. */
-int Task_SetObjEntryFlag80(int **arg0) {
+int Script_SetObjEntryFlag80(int **arg0) {
     if (g_CollisionPlaneTable == 0) {
         CollisionTriangleTable entry;
 
@@ -759,7 +759,7 @@ int Task_SetObjEntryFlag80(int **arg0) {
     return 1;
 }
 
-int Task_ClearObjEntryFlag80(int **arg0) {
+int Script_ClearObjEntryFlag80(int **arg0) {
     if (g_CollisionPlaneTable == 0) {
         CollisionTriangleTable entry;
 
@@ -774,39 +774,39 @@ int Task_ClearObjEntryFlag80(int **arg0) {
     return 1;
 }
 
-int Task_LoadGeomState(int **arg0) {
+int Script_LoadGeomState(int **arg0) {
     Gpu_LoadGeomState(**arg0);
     return 1;
 }
 
-int Task_SetScreenScrollPos(int **arg0) {
+int Script_SetScreenScrollPos(int **arg0) {
     ((CameraBaseAngles *)&D_800BD020)->x = *arg0[0];
     ((CameraBaseAngles *)&D_800BD020)->y = *arg0[1];
     return 1;
 }
 
-int Task_SetCdRomSeekPos(unsigned short **arg0) {
+int Script_SetCdRomSeekPos(unsigned short **arg0) {
     CdRom_SetSeekPos(**arg0);
     return 1;
 }
 
-int Task_SetFogColor(unsigned short **arg0) {
+int Script_SetFogColor(unsigned short **arg0) {
     Render_SetFadeColour(**arg0);
     return 1;
 }
 
-int Task_SetCdRomScreenPos(unsigned short **arg0) {
+int Script_SetCdRomScreenPos(unsigned short **arg0) {
     return CdRom_SetScreenPos(*arg0[0], *arg0[1], *arg0[2], *arg0[3], *arg0[4]), 1;
 }
 
-int Task_ClearEntityFlag40(void) {
+int Script_ClearEntityFlag40(void) {
     unsigned char *ptr = g_ScreenTransitionState;
 
     *ptr &= 0xBF;
     return 1;
 }
 
-int Task_SetEntityMoveSpeed(int **arg0) {
+int Script_SetEntityMoveSpeed(int **arg0) {
     int **args = arg0;
     FieldActor *current = g_CurrentEntity;
     FieldActor *selected = g_PlayerEntity;
@@ -828,7 +828,7 @@ int Task_SetEntityMoveSpeed(int **arg0) {
 
 short Seq_GetElapsed(void);
 
-int Task_WaitFrameOrDraw(int **arg0) {
+int Script_WaitFrameOrDraw(int **arg0) {
     if (Seq_GetElapsed() == *arg0[0]) {
         return 1;
     }
@@ -842,11 +842,11 @@ int Task_WaitFrameOrDraw(int **arg0) {
     return 0;
 }
 
-int Task_Noop1(void) {
+int Script_Noop1(void) {
     return 1;
 }
 
-int Task_Noop2(void) {
+int Script_Noop2(void) {
     return 1;
 }
 
@@ -861,15 +861,15 @@ int Entity_YieldOnDrawBusy(void) {
     return 0;
 }
 
-int Task_Noop3(void) {
+int Script_Noop3(void) {
     return 1;
 }
 
-int Task_Noop4(void) {
+int Script_Noop4(void) {
     return 1;
 }
 
-int Task_SetAnimInterpRate(short **arg0) {
+int Script_SetAnimInterpRate(short **arg0) {
     short **args = arg0;
     FieldActor *current;
     FieldActor *selected;
@@ -941,13 +941,13 @@ int Entity_CopyAttachmentData(int **arg0)
 
 /* Adjacent script handlers share actor selection and render-object state. */
 
-int Task_ResetEntityRenderObj(void) {
+int Script_ResetEntityRenderObj(void) {
     Render_ClearObjectAnim(&g_CurrentEntity->render_object);
     g_CurrentEntity->parent = 0;
     return 1;
 }
 
-int Task_SetEntityField1E6(int **arg0) {
+int Script_SetEntityField1E6(int **arg0) {
     g_CurrentEntity->render_object.table_index = *arg0[0];
     return 1;
 }
@@ -971,7 +971,7 @@ int Pm_ScriptStopCurrentEntity(int **arg0) {
     return 1;
 }
 
-int Task_SetEntityTarget(int **arg0) {
+int Script_SetEntityTarget(int **arg0) {
     int **args = arg0;
     FieldActor *selected;
 
@@ -995,12 +995,12 @@ int Task_SetEntityTarget(int **arg0) {
     return 1;
 }
 
-int Task_ResetRenderState(void) {
+int Script_ResetRenderState(void) {
     Pm_StopAllBoth();
     return 1;
 }
 
-int Task_SetMenuSlotEntry(int **arg0) {
+int Script_SetMenuSlotEntry(int **arg0) {
     Menu_SetSlotEntry(*arg0[0], *arg0[1], *arg0[2]);
     return 1;
 }
@@ -1015,7 +1015,7 @@ int Entity_YieldOnLoading(void) {
     return 1;
 }
 
-int Task_ScaleAnimValue(int **arg0) {
+int Script_ScaleAnimValue(int **arg0) {
     int value = *arg0[0];
     int scale = (s16)g_CurrentEntity->render_object.hit_cylinder.radius * 2;
     RenderObjectHeader *dst = g_CurrentEntity->render_object.header;
@@ -1024,17 +1024,17 @@ int Task_ScaleAnimValue(int **arg0) {
     return 1;
 }
 
-int Task_ClampMenuRange(int **arg0) {
+int Script_ClampMenuRange(int **arg0) {
     Menu_ClampRange(*arg0[0]);
     return 1;
 }
 
-int Task_GiveItem(int **arg0) {
+int Script_GiveItem(int **arg0) {
     *arg0[1] = Inv_AddItem(*arg0[0]);
     return 1;
 }
 
-int Task_CountItemsByValue(int **arg0) {
+int Script_CountItemsByValue(int **arg0) {
     *arg0[1] = Inv_CountByValue(*arg0[0]);
     return 1;
 }
@@ -1071,14 +1071,14 @@ int Entity_InitWithTimeout(int **arg0) {
     return 0;
 }
 
-int Task_SetSceneFlag2000(void) {
+int Script_SetSceneFlag2000(void) {
     int *ptr = (int *)&g_GameState.flags;
 
     *ptr |= 0x2000;
     return 1;
 }
 
-int Task_ClearSceneFlag2000(void) {
+int Script_ClearSceneFlag2000(void) {
     int *ptr = (int *)&g_GameState.flags;
 
     *ptr &= -0x2001;
@@ -1105,7 +1105,7 @@ int Entity_ClearCurrentFlag4000(void) {
     return 1;
 }
 
-int Task_SetAnimSlotPointer(int **arg0) {
+int Script_SetAnimSlotPointer(int **arg0) {
     int index = *arg0[0];
 
     g_EntityCollisionWallSlot = (short *)(g_CurrentEntity->script_base + index * 2);
@@ -1113,12 +1113,12 @@ int Task_SetAnimSlotPointer(int **arg0) {
     return 1;
 }
 
-int Task_SetInputFlagBit2(void) {
+int Script_SetInputFlagBit2(void) {
     g_FieldMoveLock |= 4;
     return 1;
 }
 
-int Task_ClearInputFlagBit2(void) {
+int Script_ClearInputFlagBit2(void) {
     g_FieldMoveLock &= -5;
     return 1;
 }
@@ -1128,18 +1128,18 @@ int Entity_ResolveCurrentPosition(unsigned short **arg0) {
     return 1;
 }
 
-int Task_GetFloorNumber(int **arg0) {
+int Script_GetFloorNumber(int **arg0) {
     *arg0[0] = (unsigned char)Menu_GetEquipSlotStateOrIndex();
     return 1;
 }
 
-int Task_SetMoveFlag(void) {
-    Task_EnableMovement();
+int Script_SetMoveFlag(void) {
+    Script_EnableMovement();
     return 1;
 }
 
-int Task_ClearMoveFlag(void) {
-    Task_DisableMovement();
+int Script_ClearMoveFlag(void) {
+    Script_DisableMovement();
     return 1;
 }
 
@@ -1178,43 +1178,43 @@ int Entity_PolarToPosition2(int **arg0)
 void Render_SetEntryScrolled(int arg0, int arg1, int arg2, int arg3);
 void Render_SetEntryMirrored(int arg0, int arg1, int arg2, int arg3);
 
-int Task_SetBattleEntryCoords(int **arg0) {
+int Script_SetBattleEntryCoords(int **arg0) {
     Battle_SetEntryCoords((TaskAnimObj *)g_CurrentEntity, *(unsigned char *)arg0[0], *arg0[1], *arg0[2]);
     return 1;
 }
 
-int Task_ClearEntityFlag1(void) {
+int Script_ClearEntityFlag1(void) {
     g_CurrentEntity->flags &= -2;
     return 1;
 }
 
-int Task_SetEntityFlag1(void) {
+int Script_SetEntityFlag1(void) {
     g_CurrentEntity->flags |= 1;
     return 1;
 }
 
-int Task_SetEntryScrolled(int **arg0) {
+int Script_SetEntryScrolled(int **arg0) {
     Render_SetEntryScrolled(*arg0[0], *arg0[1], *arg0[2], *arg0[3]);
     return 1;
 }
 
-int Task_SetEntryMirrored(int **arg0) {
+int Script_SetEntryMirrored(int **arg0) {
     Render_SetEntryMirrored(*arg0[0], *arg0[1], *arg0[2], *arg0[3]);
     return 1;
 }
 
-int Task_SetRenderFlag10Value(int **arg0) {
+int Script_SetRenderFlag10Value(int **arg0) {
     g_CurrentEntity->render_object.script_value9a = *arg0[0];
     g_CurrentEntity->render_object.flags_9C |= 0x10;
     return 1;
 }
 
-int Task_ClearRenderFlag10(void) {
+int Script_ClearRenderFlag10(void) {
     g_CurrentEntity->render_object.flags_9C &= 0xFFEF;
     return 1;
 }
 
-int Task_SetRenderFlag8Params(int **arg0) {
+int Script_SetRenderFlag8Params(int **arg0) {
     g_CurrentEntity->render_object.script_value9a = *arg0[0];
     g_CurrentEntity->render_object.script_param97 = *arg0[1];
     g_CurrentEntity->render_object.script_param98 = *arg0[2];
@@ -1223,22 +1223,22 @@ int Task_SetRenderFlag8Params(int **arg0) {
     return 1;
 }
 
-int Task_ClearRenderFlag8(void) {
+int Script_ClearRenderFlag8(void) {
     g_CurrentEntity->render_object.flags_9C &= 0xFFF7;
     return 1;
 }
 
-int Task_SetEntityFlag400(void) {
+int Script_SetEntityFlag400(void) {
     g_CurrentEntity->flags |= 0x400;
     return 1;
 }
 
-int Task_ClearEntityFlag400(void) {
+int Script_ClearEntityFlag400(void) {
     g_CurrentEntity->flags &= -0x401;
     return 1;
 }
 
-int Task_WaitEntityFlags8(void) {
+int Script_WaitEntityFlags8(void) {
     TaskNode *state;
     unsigned short flags;
 
@@ -1259,7 +1259,7 @@ int Task_WaitEntityFlags8(void) {
     return 0;
 }
 
-int Task_RotateEntityAngle(int **arg0) {
+int Script_RotateEntityAngle(int **arg0) {
     int *src;
     FieldActor *actor;
     int value;
@@ -1289,7 +1289,7 @@ int Task_RotateEntityAngle(int **arg0) {
     return 1;
 }
 
-int Task_SetNodeFlag80(void) {
+int Script_SetNodeFlag80(void) {
     g_TaskNodePool->flags |= 0x80;
     return 1;
 }
@@ -1306,17 +1306,17 @@ int Task_SetNodeFlag80(void) {
 #include "pe1/inventory_slots.h"
 #include "pe1/task_state.h"
 
-int Task_ClearEntityRoamFlag(void) {
+int Script_ClearEntityRoamFlag(void) {
     g_CurrentEntity->flags &= 0xFFFDFFFF;
     return 1;
 }
 
-int Task_SetEntityRoamFlag(void) {
+int Script_SetEntityRoamFlag(void) {
     g_CurrentEntity->flags |= 0x20000;
     return 1;
 }
 
-int Task_GetAngleToPoint(int **arg0) {
+int Script_GetAngleToPoint(int **arg0) {
     int angle;
     int dx;
     int dy;
@@ -1335,7 +1335,7 @@ int Task_GetAngleToPoint(int **arg0) {
     return 1;
 }
 
-int Task_SnapPosToSpawnPos(void) {
+int Script_SnapPosToSpawnPos(void) {
     FieldActor *actor = g_CurrentEntity;
 
     actor->pos_x = actor->render_object.hit_cylinder.value0 << 16;
@@ -1344,17 +1344,17 @@ int Task_SnapPosToSpawnPos(void) {
     return 1;
 }
 
-int Task_SignalSceneExit(void) {
-    Task_SignalExit();
+int Script_SignalSceneExit(void) {
+    Script_SignalExit();
     return 1;
 }
 
-int Task_DrawSaveOverlay(unsigned short **arg0) {
+int Script_DrawSaveOverlay(unsigned short **arg0) {
     Menu_SetTextCursorRect(*arg0[0], *arg0[1], *arg0[2], *arg0[3]);
     return 1;
 }
 
-int Task_ResetEntityAnimSlot(short **arg0) {
+int Script_ResetEntityAnimSlot(short **arg0) {
     short local[8];
 
     local[0] = -1;
@@ -1362,7 +1362,7 @@ int Task_ResetEntityAnimSlot(short **arg0) {
     return 1;
 }
 
-int Task_GetFloorTableValue(int **arg0) {
+int Script_GetFloorTableValue(int **arg0) {
     *arg0[1] = GAME_TIME_COUNTER(*arg0[0]);
     return 1;
 }
@@ -1374,7 +1374,7 @@ typedef struct GameTimeArgs {
     s32 *rest;
 } GameTimeArgs;
 
-s32 Task_ConvertSecondsToHMS(GameTimeArgs *arg0) {
+s32 GameTime_ConvertSecondsToHMS(GameTimeArgs *arg0) {
     *arg0->hours = *arg0->seconds / 216000;
     *arg0->minutes = (*arg0->seconds % 216000) / 3600;
     *arg0->rest = (*arg0->seconds % 3600) / 60;
@@ -1383,7 +1383,7 @@ s32 Task_ConvertSecondsToHMS(GameTimeArgs *arg0) {
 
 /* Script op: attach the current entity to the actor named by
  * (args[0], args[1]) as its parent (pos/rot follow when flags & 0x400000). */
-s32 Task_SetEntityParentLink(s32 *args[]) {
+s32 Script_SetEntityParentLink(s32 *args[]) {
     s32 key;
     FieldActor *node;
 
@@ -1431,7 +1431,7 @@ s32 Task_SetEntityParentLink(s32 *args[]) {
     return 1;
 }
 
-int Task_ClearEntityParentLink(void) {
+int Script_ClearEntityParentLink(void) {
     FieldActor *current;
     FieldActor *it;
 
@@ -1483,27 +1483,27 @@ int Entity_ClearParentLink(void) {
     return 1;
 }
 
-int Task_GetSin(int **arg0) {
+int Script_GetSin(int **arg0) {
     *arg0[1] = rsin(*arg0[0]) << 4;
     return 1;
 }
 
-int Task_GetCos(int **arg0) {
+int Script_GetCos(int **arg0) {
     *arg0[1] = rcos(*arg0[0]) << 4;
     return 1;
 }
 
-int Task_GetAtan2(int **arg0) {
+int Script_GetAtan2(int **arg0) {
     *arg0[2] = ratan2(*arg0[0], *arg0[1]);
     return 1;
 }
 
-int Task_GetSqrt(int **arg0) {
+int Script_GetSqrt(int **arg0) {
     *arg0[1] = Math_IntSqrt(*arg0[0]);
     return 1;
 }
 
-int Task_SetEntityFlag1000000(void) {
+int Script_SetEntityFlag1000000(void) {
     g_CurrentEntity->flags |= 0x1000000;
     return 1;
 }
@@ -1581,17 +1581,17 @@ int Entity_PopCount(int **arg0) {
     return 1;
 }
 
-int Task_EnableEntityGravity(void) {
+int Script_EnableEntityGravity(void) {
     g_CurrentEntity->flags |= 2;
     return 1;
 }
 
-int Task_DisableEntityGravity(void) {
+int Script_DisableEntityGravity(void) {
     g_CurrentEntity->flags &= -3;
     return 1;
 }
 
-int Task_SetMeshFadeLevel(int **arg0) {
+int Script_SetMeshFadeLevel(int **arg0) {
     D_800BCFFC = *arg0[0];
     return 1;
 }
@@ -1615,18 +1615,18 @@ int Entity_CallAction(int **arg0)
     return 1;
 }
 
-int Task_SetInventorySlotPointer(int **arg0) {
+int Script_SetInventorySlotPointer(int **arg0) {
     D_8009D248 = (PolygonVertex *)(g_CurrentEntity->script_base + (*arg0[0] << 1));
     D_8009D1CC = *arg0[1];
     return 1;
 }
 
-int Task_GetInventoryTotal(int **arg0) {
+int Script_GetInventoryTotal(int **arg0) {
     *arg0[0] = Inv_CountTotal();
     return 1;
 }
 
-int Task_GetInventorySlotLimit(int **arg0) {
+int Script_GetInventorySlotLimit(int **arg0) {
     *arg0[0] = Inv_GetAyaSlotLimit();
     return 1;
 }

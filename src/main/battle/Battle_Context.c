@@ -12,7 +12,7 @@
 
 /* Script setup and execution share six inline animation-event records. */
 
-void Task_SetObjAnimEntry12(obj, index, effectType, enterMode, exitMode, power,
+void Script_SetObjAnimEntry12(obj, index, effectType, enterMode, exitMode, power,
                            parameter0, parameter1, parameter2, parameter3, category, frame)
     TaskAnimObj *obj;
     u8 index;
@@ -37,7 +37,7 @@ void Task_SetObjAnimEntry12(obj, index, effectType, enterMode, exitMode, power,
     obj->core->parameters[index][3] = parameter3;
 }
 
-void Task_SetObjAnimEntry5(TaskAnimObj *obj, int index, int effectType, int enterMode, u8 exitMode, u16 power) {
+void Script_SetObjAnimEntry5(TaskAnimObj *obj, int index, int effectType, int enterMode, u8 exitMode, u16 power) {
     EnemyActionEffect *dst = &obj->core->records[(u8)index];
 
     dst->state = 0;

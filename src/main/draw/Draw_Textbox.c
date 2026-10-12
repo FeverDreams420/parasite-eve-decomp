@@ -243,15 +243,15 @@ s8 Tbl_LookupEntry(int arg0) {
     return value;
 }
 
-void Task_EnableMovement(void) {
+void Script_EnableMovement(void) {
     g_PlayerMovementEnabled = 1;
 }
 
-void Task_DisableMovement(void) {
+void Script_DisableMovement(void) {
     g_PlayerMovementEnabled = 0;
 }
 
-void Task_SetCollisionFlag(int value) {
+void Script_SetCollisionFlag(int value) {
     g_TaskCollisionFlag = value != 0;
 }
 

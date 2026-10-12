@@ -101,7 +101,7 @@ For small-data loads followed by symbolic stores, upstream MASPSX's
 `--aspsx-version=2.21 --dont-expand-li` reproduces the required load hazard
 spacing while leaving `li` expansion to GNU as. The source markers
 `ASPSX_VERSION: 2.21` and `MASPSX_FLAGS: --dont-expand-li` select these stock
-options through `cc.sh`. `Task_AllocNode`, `Menu_CreateInvSwapView`, and
+options through `cc.sh`. `Script_AllocNode`, `Menu_CreateInvSwapView`, and
 `Menu_StepSaveSelect` match with these settings after removing handwritten
 `nop` instructions. These flags are per-unit choices, not a global default.
 
@@ -289,7 +289,7 @@ the manifest entry, write the unit with the macro, flip its yaml subsegment to
 | --- | --- | --- | --- |
 | `Math_FixedMul` | `math/Math_FixedMul` | 28 | `mult`, then LO before HI, both shifted in place, `or v0,v1,v0`. Stock 2.7.2 and 2.8.1 compile `(long long)a * b >> 16` to HI before LO and keep the dead high-word shift (9 words, not 7). |
 | `Math_FixedRoundToInt`, `Math_FixedRoundToByte` | `math/math_fixed` | 16 + 16 | `ori $at, $zero, 0x8000` and trapping `add $v0, $a0, $at`: the assembler expansion of `add $v0, $a0, 0x8000`. GCC never allocates `$at` and emits `addu` for C addition. |
-| `Task_GpuPackPrimColor` | `draw/Task_GpuPackPrimColor` | 52 | Calls `Task_GpuFlushPrimQueue` without a frame: `ra` saved with `or $v1, $zero, $ra` and restored with `or $ra, $zero, $v1`; trapping `sub` in the `jal` delay slot and trapping `add` in the return delay slot. It returns `low + ((u16)r * (high - low) >> 16)` for the generator result `r`. |
+| `Draw_PackPrimColor` | `draw/Draw_PackPrimColor` | 52 | Calls `Draw_FlushPrimQueue` without a frame: `ra` saved with `or $v1, $zero, $ra` and restored with `or $ra, $zero, $v1`; trapping `sub` in the `jal` delay slot and trapping `add` in the return delay slot. It returns `low + ((u16)r * (high - low) >> 16)` for the generator result `r`. |
 | `Math_SqrtApprox3` | `draw/Math_SqrtApprox3` | 136 | No frame; LO before HI for all three squares with two NOPs before each following `mult`; three unfilled `bgez` delay slots; the carry is added before the high words. Stock 2.7.2 and 2.8.1 compile the `long long` sum with an 8-byte stack spill, HI first, filled delay slots and a dead high-word shift. |
 
 Overlay SDK entries in the same manifest:
@@ -302,7 +302,7 @@ Overlay SDK entries in the same manifest:
 The three zero words at 0x8010C860..0x8010C86B between the two objects are a
 separate data subsegment, so neither unit range contains padding.
 
-`Task_InitGpuHwRegs` and `Task_GpuFlushPrimQueue`, which initialize and step
+`Draw_InitGpuHwRegs` and `Draw_FlushPrimQueue`, which initialize and step
 the additive generator whose state is the 80-byte `.text` block at
 0x80070E04, show the same hand-written style: absolute addresses built with
 `lui`/`ori` rather than GCC's `lui`/`addiu`, no frame, and `or v0, zero, t5`
@@ -397,7 +397,7 @@ pair: `mtc2 value,$30` writes LZCS; `swc2 $31,0(ptr)` stores LZCR; and
 required hazard slots. Scalar C cannot express these hardware transfers.
 
 The initial target windows are `Gte_StoreTableEntry` at `0x8003EACC`, the
-type-3 branch of `Task_DispatchCmd` at `0x80013188`, and `SquareRoot0` at
+type-3 branch of `Script_DispatchCmd` at `0x80013188`, and `SquareRoot0` at
 `0x80078004`. The first two store LZCR through a normal stack or argument
 pointer; `SquareRoot0`, `InvSquareRoot`, and `LIBGTE_MSC02_text_100` read it after two nop
 hazard slots. No scratchpad layout is involved. The first remaining difference
@@ -428,7 +428,7 @@ have two. The C caller owns source and destination layout; the macros only
 move COP2 state. Initial users include `Render_DrawObjectAlt`,
 `Render_DrawObjectVariant`, `Render_DrawWireframeModel`,
 `Render_TransformMorphVertices`, `Render_SetupBoneTransforms`, and
-`Task_SetGteMatrix`.
+`Script_SetGteMatrix`.
 
 ## RTIR12
 
@@ -438,7 +438,7 @@ IR results are read through the existing `gte_getir*` macros; matrix layout
 and destination stores remain ordinary C. Initial users are the matrix-axis
 helpers in `Render_DrawWireframeModel`, `Render_SetupBoneTransforms`,
 `Render_TransformMorphVertices`, `Render_TransformSkinnedVertices`,
-`Render_TransformVertices`, and `Task_SetGteMatrix`.
+`Render_TransformVertices`, and `Script_SetGteMatrix`.
 
 ## LoadAverage byte results
 

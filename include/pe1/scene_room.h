@@ -111,7 +111,7 @@ extern SceneRoomSectorRange D_80093378[];
 extern u16 D_80094494[];
 extern unsigned int g_PeImageBaseLba;
 
-void *Task_RelocBlock(void *block);
+void *Script_RelocBlock(void *block);
 void FlushCache(void);
 
 #endif
