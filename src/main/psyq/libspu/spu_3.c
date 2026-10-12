@@ -72,9 +72,10 @@ int _spu_t(int command, ...)
             _spu_FsetDelayW();
             control = 0x1000000;
         }
-        size = *(u32 *)(args - 4);
+        /* Both arms step past the address argument; read it and the size. */
+        size = ((u32 *)args)[-1];
         D_8009B450 = size;
-        size = *(u32 *)args;
+        size = ((u32 *)args)[0];
         D_8009B454 = (size >> 6) + ((size & 0x3F) != 0);
         *g_SpuDmaMadrPtr = D_8009B450;
         *g_SpuDmaBcrPtr = (D_8009B454 << 16) | 0x10;
