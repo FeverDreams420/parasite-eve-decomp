@@ -277,7 +277,6 @@ void func_800C2FF0(int width, int height);
 
 void RoomLib_DrawThreeTransformParticles(void *unused, RoomFxControl *args, RoomDebrisTriplet *state) {
     RoomDrawThreeStack stack;
-    register RoomDebrisTriplet *workState asm("$18");
     unsigned int i;
     RoomFxVec4 *sourceScale;
     RoomSpriteMatrix *secondaryMatrix;
@@ -292,7 +291,7 @@ void RoomLib_DrawThreeTransformParticles(void *unused, RoomFxControl *args, Room
     int alpha;
     int baseScale;
 
-    workState = state;
+    drawState = state;
     stack.args = args;
     clock = func_800C2B50();
     stack.seed = s_ThreeParticleSeed;
@@ -300,7 +299,6 @@ void RoomLib_DrawThreeTransformParticles(void *unused, RoomFxControl *args, Room
     sourceScale = &stack.sourceScale;
     secondaryMatrix = &stack.secondaryMatrix;
     func_800C2EAC(clock->asset.page);
-    drawState = workState;
     func_800C3098(0x10);
 
     for (; i < 3; i++) {
