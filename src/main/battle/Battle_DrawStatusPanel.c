@@ -7,13 +7,16 @@
  * absolute. */
 s32 D_8009D230;
 
+/* Digit sprite i of the current draw buffer and panel slot. Every use
+ * indexes again: the byte stores make GCC reload both indices. */
+#define PANEL_DIGIT(i) (&D_800B01C0[D_8009CDDC][D_8009D230][i].sprite)
+
 /* Draw a floating damage/recovery number, or the enemy MISS label.
  * Each frame has ten panel slots (0x578 / 0x8C), each with five 28-byte
- * texture-page/sprite packets. Repeated byte stores deliberately retain
- * the original index reloads.
- * Matching debt: 9 pins and four empty barriers. Retail sizes the digit
- * buffer at 56 bytes although a 16-bit value needs at most five digits.
- * GCC rotates the digit-conversion condition into two blocks.
+ * texture-page/sprite packets. Retail sizes the digit buffer at 56 bytes
+ * although a 16-bit value needs at most five digits.
+ * Matching debt: the MISS branch keeps seven pins and two barriers; the
+ * crutch-free form wastes stack slots (see CODE_ORGANIZATION.md).
  */
 void Battle_DrawStatusPanel(s32 mode, BattleStatusPanel *input) {
     BattleStatusPanel *panel = input;
@@ -22,19 +25,14 @@ void Battle_DrawStatusPanel(s32 mode, BattleStatusPanel *input) {
     s16 panelValue;
     register s32 number asm("$6");
     s32 screenX;
-    s32 panelOffset;
-    s32 digitIndex;
-    s32 frameOffset;
     s32 missFrameOffset;
-    s32 digitOffset;
-    s32 digitPanelOffset;
-    s32 signedDigitIndex;
-    s16 colorOffset;
-    s8 nextDigit;
-    s8 lastDigit;
+    s32 panelOffset;
     s32 timer;
     register RenderSpritePacket *missSprite asm("$2");
-    RenderSpritePacket *digitSprite;
+    s16 value;
+    s16 quotient;
+    s8 n;
+    s32 rise;
 
     panelValue = panel->value;
     number = panelValue;
@@ -43,8 +41,8 @@ void Battle_DrawStatusPanel(s32 mode, BattleStatusPanel *input) {
         register s32 slotIndex asm("$4") = D_8009D230;
         register s32 x asm("$6") = panel->x;
         register s32 y asm("$7");
-                timer = panel->timer;
-                y = panel->y;
+        timer = panel->timer;
+        y = panel->y;
         *(D_800B01CC + ((slotIndex * 0x8C) + (frame * 0x578))) = timer * 4;
         asm("" : : : "memory");
         screenX = x - 16;
@@ -67,82 +65,50 @@ void Battle_DrawStatusPanel(s32 mode, BattleStatusPanel *input) {
             AddPrim(((u32 *)D_800B0E38.ordering[slot]) + 7, panelOffset + ((((u8 *)D_800B01C8) - 8) + missFrameOffset));
         }
     } else {
-        s16 value = number;
-        s16 quotient;
-        s8 index = 0;
-        lastDigit = 0;
-        while ((quotient = (s16)value / 10,
-        digits[index] = value - (s16)quotient * 10,
-        value = quotient, (s16)value != 0)) {
-            index = lastDigit + 1;
-            lastDigit = index;
+        value = number;
+        n = 0;
+        for (;;) {
+            quotient = value / 10;
+            digits[n] = value - quotient * 10;
+            value = quotient;
+            if (value == 0)
+                break;
+            n++;
         }
-        {
-            s32 count = lastDigit;
-            s16 width = (count + 1) * 4;
-            u16 coordinate = panel->x;
-            screenX = coordinate - width;
-            width = panel->timer;
-            coordinate = panel->y;
-            width -= 30;
-
-            screenY = coordinate + width;
-        }
-
-        if (lastDigit >= 0) {
-            do {
-                switch (panel->style) {
-                    case 0:
-                    colorOffset = lastDigit * 0x1C;
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.r = panel->timer * 4;
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.g = panel->timer * 4;
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = panel->timer * 4;
-                    break;
-                    case 1:
-                    colorOffset = lastDigit * 0x1C;
-                    {
-                        RenderSpritePacket *sprite = ((RenderSpritePacket *)(colorOffset + ((D_8009CDDC * 0x578) + (D_8009D230 * 0x8C)) + ((u8 *)D_800B01C8)));
-                        sprite->color.bytes.r = 0;
-                    }
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.g = panel->timer * 4;
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = 0;
-                    break;
-                    case 2:
-                    colorOffset = lastDigit * 0x1C;
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.r = panel->timer * 4;
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.g = panel->timer * 4;
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = 0;
-                    break;
-                    case 3:
-                    colorOffset = lastDigit * 0x1C;
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.r = panel->timer * 4;
-                    {
-                        RenderSpritePacket *sprite = ((RenderSpritePacket *)(colorOffset + ((D_8009CDDC * 0x578) + (D_8009D230 * 0x8C)) + ((u8 *)D_800B01C8)));
-                        sprite->color.bytes.g = 0;
-                    }
-                    ((RenderSpritePacket *)(colorOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->color.bytes.b = panel->timer * 4;
-                    break;
-                }
-                signedDigitIndex = lastDigit << 24;
-                digitIndex = signedDigitIndex >> 0x18;
-                digitOffset = digitIndex * 0x1C;
-                screenX += 8;
-                ((RenderSpritePacket *)(digitOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->u = (s8) (digits[digitIndex] * 8);
-                ((RenderSpritePacket *)(digitOffset + ((D_8009D230 * 0x8C) + (D_8009CDDC * 0x578)) + ((u8 *)D_800B01C8)))->v = 0xE0;
-                {
-                    s32 slot = D_8009CDDC;
-                    frameOffset = slot * 0x578;
-                    digitPanelOffset = D_8009D230 * 0x8C;
-                    digitSprite = (RenderSpritePacket *)(digitOffset + (frameOffset + digitPanelOffset) + ((u8 *)D_800B01C8));
-                    digitSprite->x = screenX;
-                    digitSprite->y = screenY;
-                    digitSprite->width = 8;
-                    digitSprite->height = 8;
-                    AddPrim(((u32 *)D_800B0E38.ordering[slot]) + 7, ((digitPanelOffset + ((((u8 *)D_800B01C8) - 8) + frameOffset)) + digitOffset));
-                }
-                nextDigit = lastDigit - 1;
-                lastDigit = nextDigit;
-            } while (nextDigit >= 0);
+        screenX = panel->x - (n + 1) * 4;
+        rise = panel->timer - 30;
+        screenY = panel->y + rise;
+        for (; n >= 0; n--) {
+            switch (panel->style) {
+            case 0:
+                PANEL_DIGIT(n)->color.bytes.r = panel->timer * 4;
+                PANEL_DIGIT(n)->color.bytes.g = panel->timer * 4;
+                PANEL_DIGIT(n)->color.bytes.b = panel->timer * 4;
+                break;
+            case 1:
+                PANEL_DIGIT(n)->color.bytes.r = 0;
+                PANEL_DIGIT(n)->color.bytes.g = panel->timer * 4;
+                PANEL_DIGIT(n)->color.bytes.b = 0;
+                break;
+            case 2:
+                PANEL_DIGIT(n)->color.bytes.r = panel->timer * 4;
+                PANEL_DIGIT(n)->color.bytes.g = panel->timer * 4;
+                PANEL_DIGIT(n)->color.bytes.b = 0;
+                break;
+            case 3:
+                PANEL_DIGIT(n)->color.bytes.r = panel->timer * 4;
+                PANEL_DIGIT(n)->color.bytes.g = 0;
+                PANEL_DIGIT(n)->color.bytes.b = panel->timer * 4;
+                break;
+            }
+            screenX += 8;
+            PANEL_DIGIT(n)->u = digits[n] * 8;
+            PANEL_DIGIT(n)->v = 0xE0;
+            PANEL_DIGIT(n)->x = screenX;
+            PANEL_DIGIT(n)->y = screenY;
+            PANEL_DIGIT(n)->width = 8;
+            PANEL_DIGIT(n)->height = 8;
+            AddPrim(D_800B0E38.ordering[D_8009CDDC] + 7, (u32 *)&D_800B01C0[D_8009CDDC][D_8009D230][n]);
         }
     }
     D_8009D230 += 1;
