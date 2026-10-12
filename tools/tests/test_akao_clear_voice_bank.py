@@ -39,7 +39,7 @@ class AkaoClearVoiceBankTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             work = pathlib.Path(directory)
             obj, elf, binary = (work / name for name in ("akao.o", "akao.elf", "akao.bin"))
-            subprocess.run(["tools/scripts/cc.sh", "src/main/sys/Sys_GameStateAndVoiceBanks.c", str(obj)],
+            subprocess.run(["tools/scripts/cc.sh", "src/main/asset/Sys_GameStateAndVoiceBanks.c", str(obj)],
                            cwd=ROOT, check=True, capture_output=True)
             # Call targets elsewhere in the unit are placed in jal range; only
             # the reset routine's slice is compared.

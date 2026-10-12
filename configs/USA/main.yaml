@@ -326,7 +326,7 @@ segments:
       - [0x279A4, c, menu/Menu_SetEquipSlotIndex]
       # Fog and colour-table setup, text cursor, textbox table, movement flags, equip slot index, textbox drawing and highlight colour share private state (G0310).
       - [0x279B0, c, menu/Menu_TextboxDraw]
-      - [0x29154, c, sys/Sys_ReportError]
+      - [0x29154, c, draw/Sys_ReportError]
       # The glyph loader keeps -fno-schedule-insns, which changes its
       # neighbours, so it stays a unit of its own.
       - [0x291DC, c, render/Render_FontGlyphLoad]
@@ -605,7 +605,7 @@ segments:
       # voice-bank reset: one default-profile unit; the voice-bank table
       # D_80094488 is read by the loader and cleared by the reset (private
       # evidence into the reset; helper/call/private evidence over the rest).
-      - [0x5A8E8, c, sys/Sys_GameStateAndVoiceBanks]
+      - [0x5A8E8, c, asset/Sys_GameStateAndVoiceBanks]
       # Startup data and field background loading share scene resource state.
       - [0x5B1E4, c, scene/Scene_LoadSceneData]
       - [0x5BB5C, c, akao/Akao_LoadVoiceBankAlt]

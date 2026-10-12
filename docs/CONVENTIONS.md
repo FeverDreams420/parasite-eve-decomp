@@ -93,7 +93,7 @@ edge, as `akao/Spu_TransferAndLifecycle` did before LIBPAD WAITRC2's
 | --- | --- | --- | --- |
 | `psyq/lib*` | SDK names | Sony PsyQ 4.0 libraries, one directory per SDK library | keep; receives the units above |
 | `boot` | `Boot_` | `main`, start-up, subsystem init, the per-frame loop | keep |
-| `sys` | `Sys_` | interrupt and BIOS glue, shutdown and reset | keep the game-side shutdown/state code; SDK parts and `setjmp.c` (LIBAPI veneer) to `psyq` |
+| `sys` | `Sys_` | interrupt and BIOS glue, shutdown and reset | dissolved: `Sys_ReportError` is in `draw`, `Sys_GameStateAndVoiceBanks` in `asset`; SDK parts and `setjmp.c` (LIBAPI veneer) belong in `psyq` |
 | `cdrom` | `CdRom_` | game-side CD layer: sector reads from PE.IMG, retries, boot reads | keep; `cd_rom*.c`, `misc9.c` renamed by content |
 | `memcard` | `MemCard_` | memory-card access for saves | keep the game part; LIBPAD/LIBCARD units and BIOS veneers (`_card_*`, `InitCARD2`...) to `psyq` |
 | `pad` | `Pad_` | controller input | mostly LIBAPI: move to `psyq/libapi`; what remains joins `boot` or `menu` input |
