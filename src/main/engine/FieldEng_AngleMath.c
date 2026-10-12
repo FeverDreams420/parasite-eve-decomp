@@ -40,7 +40,7 @@ int FieldEng_TurnToward(int current, int target, int step) {
 
 
 #include "common.h"
-s32 func_800E0024(s32 lhs, s32 rhs) {
+s32 FieldEng_AngleDistance(s32 lhs, s32 rhs) {
     register s32 delta asm("$4");
     register s32 abs_delta asm("$3");
 

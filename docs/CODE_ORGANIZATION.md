@@ -530,12 +530,12 @@ changing bytes:
 What is left (best crutch-free lev against retail):
 
 - `FieldEng_AngleMath.c` (5 pins): `FieldEng_TurnToward` lev 15 and
-  `func_800E0024` lev 6. Retail keeps the step and the turn delta in separate
+  `FieldEng_AngleDistance` lev 6. Retail keeps the step and the turn delta in separate
   registers (`move v1,a2` then `negu v1,a2`): with `delta = step` followed by
   `delta = -step` cse makes the longer-lived delta the class head and rewrites
   `-step` as `-delta`, so step dies at the copy and global alloc gives delta
   step's register (a s16 delta, if/else and ternary forms tried). The same
-  copy preference ties `func_800E0024`'s distance to the difference in `a0`.
+  copy preference ties `FieldEng_AngleDistance`'s distance to the difference in `a0`.
 - `FieldEng_CollisionQueries.c` `func_800C5EB0` (1 pin on the node pointer):
   lev 9 without the pin. Global alloc ranks the loop index (9 refs over 45
   insns) above the node pointer (11 over 59); retail has node, index, strip in

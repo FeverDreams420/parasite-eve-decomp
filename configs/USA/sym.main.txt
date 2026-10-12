@@ -1579,6 +1579,7 @@ FieldEng_FreeAllSlots = 0x800C2E08; // type:func
 FieldEng_GetStatus = 0x800C6CE0; // type:func
 FieldEng_VecToAngle = 0x800DFF80; // type:func
 FieldEng_TurnToward = 0x800DFFB8; // type:func
+FieldEng_AngleDistance = 0x800E0024; // type:func
 Task_EvalExpr = 0x80012850; // type:func
 Task_SetEntityVec3 = 0x80012C20; // type:func
 Task_GetEntityVec3 = 0x80012E7C; // type:func
