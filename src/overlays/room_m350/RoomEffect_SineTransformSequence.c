@@ -71,11 +71,9 @@ int func_8019988C(int event, EmissionState *state)
             register int byte asm("$4") = index;
             int count = instance->render_object.header->part_count;
             register int range asm("$3") = count - 1;
-            register int product asm("$2");
+            int product;
             asm("" : "=r"(range) : "0"(range), "r"(count));
-            product = byte * range;
-            product /= 256;
-            index = product + 1;
+            product = byte * range; index = product / 256 + 1;
         }
         effect->position.x = instance->render_object.matrices[index].translation[0];
         effect->position.y = ((FieldActor *)actor->instance)->render_object.matrices[index].translation[1];
