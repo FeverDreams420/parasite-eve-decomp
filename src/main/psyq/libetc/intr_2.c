@@ -1,15 +1,16 @@
 /* ASSEMBLER: GNU */
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses */
-/* PSY-Q LIBETC INTR, part 2 of 3: Sys_InitIntrManager, Render_InitSceneGeom,
- * Sys_SetIntrCallback, Sys_SaveDisableIntr, Sys_RestoreIntr. */
+/* PSY-Q LIBETC INTR, part 2 of 2: Sys_InitIntrManager, Render_InitSceneGeom,
+ * Sys_SetIntrCallback, Sys_SaveDisableIntr, Sys_RestoreIntr and
+ * Sys_ClearWordBuf. */
 #include "common.h"
 #include "pe1/psyq_api_internal.h"
 #include "pe1/psyq_bios.h"
 
 #include "intr_2_externs.h"
 
-void Sys_ClearWordBuf(void *dst, int count);
+void Sys_ClearWordBuf(int *dst, int count);
 int setjmp(void *env);
 void Render_InitSceneGeom(void);
 void HookEntryInt(void *entry);
@@ -36,7 +37,7 @@ u16 *Sys_InitIntrManager(void) {
     *dst = *src;
     *D_80095678 = 0x33333333;
 
-    Sys_ClearWordBuf(intr, sizeof(InterruptCallbackState) / 4);
+    Sys_ClearWordBuf((int *)intr, sizeof(InterruptCallbackState) / 4);
     if (setjmp(intr->entry) != 0) {
         Render_InitSceneGeom();
     }
@@ -212,4 +213,16 @@ InterruptCallbackState *Sys_RestoreIntr(void) {
         result = 0;
     }
     return result;
+}
+
+void Sys_ClearWordBuf(int *dst, int count) {
+    int i = count - 1;
+
+    if (count != 0) {
+        do {
+            *dst = 0;
+            i--;
+            dst++;
+        } while (i != -1);
+    }
 }

@@ -576,7 +576,6 @@ segments:
       - [0x64494, c, psyq/libetc/intr]
       - [0x64628, c, psyq/libetc/intr_2]
       # LIBETC INTR.OBJ: trapIntr, setIntr, stopIntr, restartIntr fragment.
-      - [0x64B30, c, psyq/libetc/intr_3]
       # BIOS A(13h) setjmp veneer, its zero object tail, then the LIBAPI C114
       # signature record whose first label (_96_remove) is at offset 8.
       - [0x64B54, c, psyq/libc/c19]
