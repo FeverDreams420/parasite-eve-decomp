@@ -38,8 +38,9 @@ void func_80195994(s32 index, s32 first, s32 second, s32 source) {
     firstValue = first;
     lookupCount = 2;
     sourceValue = source;
-    /* The tied operand copies second unchanged after the other call arguments. */
-    asm("" : "=r"(secondValue) : "0"(second), "r"(lookupTable), "r"(lookupCount), "r"(sourceValue));
+    /* Capture the second lane index after preparing the lookup arguments. */
+    secondValue = second;
+    asm("" : "=r"(secondValue) : "0"(secondValue), "r"(lookupTable), "r"(lookupCount), "r"(sourceValue));
     base = Gpu_GetTimTableEntry(lookupTable, lookupCount);
     setupIndex = (s16)index;
     extraPtr = &extra;
