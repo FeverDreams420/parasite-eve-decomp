@@ -30,6 +30,5 @@ typedef struct RoomM404Particle {
     s16 state, timer;
 } RoomM404Particle;
 extern RoomTemplate8 D_8018F208;
-extern void func_80192540(void);
 
 #endif

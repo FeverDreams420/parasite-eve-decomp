@@ -1,5 +1,8 @@
 #include "common.h"
 #include "pe1/room_m404_drop.h"
+#include "pe1/room_m404.h"
+#include "pe1/room_m404_effects.h"
+#include "pe1/gte.h"
 
 /* Flashes the scene with the given code when the drop touches the player. */
 #define ROOM_M404_DROP_FLASH(code)                                            \
@@ -222,6 +225,221 @@ int func_80192540(int mode, RoomM404Drop *drop) {
                           alpha / 2, 1);
             break;
         }
+        break;
+    }
+    return 0;
+}
+
+#undef ROOM_M404_DROP_FLASH
+
+int func_80193368(int mode, void *unused, char *state) {
+    RoomTemplate8 template = D_8018F208;
+    s16 position[4];
+    s16 target[4];
+    char *pool;
+    RoomM404Particle *child;
+    switch (mode) {
+    case 0:
+        {
+            int handle = func_800D3FD8();
+            func_800D3F64(0x5b9, handle);
+            if (ANIM_TASK_AS(RoomM404EventState)->active) {
+                RoomM404Node **slot = (RoomM404Node **)ANIM_OWNER_AS(RoomM404Channel)->pool;
+                if (slot && *slot) {
+                    u8 *flag = (*slot)->state;
+                    if (*flag == 1) *flag = 2;
+                }
+            }
+            pool = ANIM_POOL_AS(RoomM404Channel)->pool;
+            return func_800CE560(pool, 20, 55,
+                                 (FieldAnimCallbackListCallback)func_80192540);
+        }
+    case 1:
+    {
+        pool = ANIM_OWNER_AS(RoomM404Channel)->pool;
+        FieldEng_TransformMatrixPoint(pool, 3, &template, position);
+        pool = ANIM_OWNER_AS(RoomM404Channel)->pool;
+        func_800CE9D4((struct RoomFxTransformOwner *)pool, 0,
+                      (GteShortVector *)target);
+        if (D_800E27EC == 1) {
+            pool = ANIM_POOL_AS(RoomM404Channel)->pool;
+            child = func_800CE610(pool);
+            if (child) {
+                child->x = position[0];
+                child->y = position[1];
+                child->z = position[2];
+                func_800CFB7C((GteShortVector *)target, *(s16 *)state, (GteShortVector *)&child->vx);
+                child->state = 0;
+                child->timer = 0;
+            }
+        }
+        if (D_800E27EC < 2) break;
+        return 2;
+    }
+    case 2:
+    {
+        int idx = D_800E11EA;
+        int palette;
+        D_800F3368.parameter00 = 32;
+        D_800F3368.parameter02 = 2;
+        D_800F3368.extent_x = 32;
+        D_800F3368.extent_y = 32;
+        palette = D_800E2850[idx];
+        PE1_COMPILER_MEMORY_BARRIER();
+        D_800F3368.palette = 3;
+        D_800F3368.parameter06 = 0;
+        D_800F3368.parameter0A = 0;
+        D_800F3368.depth = 8;
+        D_800F3368.tpage = palette;
+    }
+    }
+    return 0;
+}
+
+/* Spark of the m404 joint debris burst: state 0 bounces twice off the
+ * floor while circling and draws as two glow points, state 1 falls
+ * and draws as a spinning sprite tinted by a color track. */
+int func_801935E0(int mode, RoomDampedSpark *spark) {
+    GteRotation rotation = D_8018F210;
+    GteShortVector position;
+    RenderColor trackColor;
+    RenderColor color = D_8018F218;
+    RenderMatrixSlot *matrixSlot;
+    int fall;
+    int bounce;
+    int scale;
+
+    switch (mode) {
+    case 1:
+        switch (spark->state) {
+        case 0:
+            spark->timer++;
+            spark->x += spark->vx;
+            spark->y += spark->vy;
+            spark->z += spark->vz;
+            spark->vx = spark->vx * 255 / 256;
+            spark->vz = spark->vz * 255 / 256;
+            fall = (u16)spark->vy + 1;
+            spark->vy = fall;
+            if (spark->y >= g_RoomFloorY->y) {
+                bounce = -(s16)fall;
+                spark->vy = bounce;
+                if (spark->y >= g_RoomFloorY->y) {
+                    spark->vy = (s16)bounce / 4;
+                }
+            }
+            spark->z += rsin((s16)spark->timer << 9) / 512;
+            spark->x += rcos((s16)spark->timer << 9) / 512;
+            if ((s16)spark->timer < 64) break;
+            return 1;
+        case 1:
+            spark->timer++;
+            spark->x += spark->vx;
+            spark->y += spark->vy;
+            spark->z += spark->vz;
+            spark->vx = spark->vx * 127 / 128;
+            spark->vz = spark->vz * 127 / 128;
+            fall = (u16)spark->vy + 2;
+            spark->vy = fall;
+            if (spark->y >= g_RoomFloorY->y) {
+                int rebound = -(s16)fall;
+                spark->vy = rebound;
+            }
+            if ((s16)spark->timer < 32) break;
+            return 1;
+        }
+        break;
+    case 2:
+        switch (spark->state) {
+        case 0:
+            matrixSlot = &D_800BCFA4;
+            gte_ldrotmatrix(matrixSlot->value);
+            gte_ldtransmatrix(matrixSlot->value);
+            func_800D2104((GteShortVector *)spark, (unsigned char *)&color, 40, 0xFF);
+            position.x = spark->x;
+            position.y = spark->y;
+            position.z = spark->z;
+            position.y += 8;
+            func_800D2104(&position, (unsigned char *)&color, 40, 0xFF);
+            break;
+        case 1: {
+            int clut;
+            int kind;
+            int palette;
+            scale = rcos((s16)spark->timer << 5) + 0x1000;
+            D_800F3368.parameter00 = 32;
+            D_800F3368.parameter02 = 2;
+            D_800F3368.extent_x = 32;
+            D_800F3368.extent_y = 32;
+            rotation.z = D_800E27EC << 5;
+            func_800CF3AC(D_80193F68, &trackColor, (s16)spark->timer);
+            kind = D_800F3368.palette;
+            palette = D_800E1204[kind];
+            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            clut = GetClut(0, palette);
+            func_800CEE20((GteShortVector *)spark, &rotation, scale / 2, scale / 2,
+                          (s16)D_800F3368.parameter02 * ((s16)spark->timer / 4),
+                          clut, 1, 0x60, &trackColor);
+            break;
+        }
+        }
+        break;
+    }
+    return 0;
+}
+
+/* Bursts six bouncing sparks and two falling ones from a model joint
+ * during the first frames of the effect. */
+int func_80193A6C(int mode, RoomM404BurstOrigin *origin) {
+    RoomM404JointTemplate template = D_8018F21C;
+    RoomDampedSpark *spark;
+    int i;
+
+    switch (mode) {
+    case 0:
+        func_800CE870(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, (s16 *)origin);
+        FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0, &template, origin);
+        func_800D3F64(0x5C0, func_800D3FD8());
+        func_800D3F64(0x5C1, 0x80);
+        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 32,
+                             (FieldAnimCallbackListCallback)func_801935E0);
+    case 1:
+        if (D_800E27EC < 5) {
+            for (i = 0; i < 6; i++) {
+                spark = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+                if (spark != 0) {
+                    spark->x = origin->x;
+                    spark->y = origin->y;
+                    spark->z = origin->z;
+                    spark->vx = func_80071A54() % 50 - 25;
+                    spark->vy = -(func_80071A54() % 39);
+                    spark->vz = func_80071A54() % 50 - 25;
+                    spark->state = 1;
+                    spark->timer = 0;
+                }
+            }
+            for (i = 0; i < 2; i++) {
+                spark = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+                if (spark != 0) {
+                    spark->x = origin->x;
+                    spark->y = origin->y;
+                    spark->z = origin->z;
+                    spark->vx = func_80071A54() % 80 - 40;
+                    spark->vy = -(func_80071A54() % 80);
+                    spark->vz = func_80071A54() % 80 - 40;
+                    spark->state = 0;
+                    spark->timer = 0;
+                }
+            }
+        }
+        if (D_800E27EC < 2) break;
+        return 2;
+    case 2:
+        D_800F3368.tpage = D_800E2850[D_800E11E4[3]];
+        D_800F3368.palette = 3;
+        D_800F3368.parameter06 = 0;
+        D_800F3368.parameter0A = 0;
+        D_800F3368.depth = 8;
         break;
     }
     return 0;
