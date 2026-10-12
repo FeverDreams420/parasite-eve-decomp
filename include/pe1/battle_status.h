@@ -29,6 +29,12 @@ typedef union BattleGaugePrimAddress {
     RenderSpritePacket *sprite;
     u32 word;
 } BattleGaugePrimAddress;
+/* A word that holds a status packet offset, then the packet's address. */
+typedef union BattleSpriteWord {
+    s32 value;
+    u8 *bytes;
+    RenderSpritePacket *sprite;
+} BattleSpriteWord;
 
 /* A HUD packet address as a pointer or a word: retail adds the scaled slot
  * and index offsets to the buffer address as integers, offsets first. */

@@ -214,7 +214,7 @@ void Battle_DrawSpellName(void) {
     s16 ys;
     s16 xs;
     s16 i;
-    u8 *e508;
+    BattleSpriteWord e508;
     s32 cidx;
     s16 clut;
     u8 *p;
@@ -227,14 +227,14 @@ void Battle_DrawSpellName(void) {
         ys = tv + 4;
     }
     if ((D_8009D278->action->attackWord & 0x300000) == 0x200000) {
-        u8 *q508;
+        BattleSpriteWord q508;
         r130 = 0x130;
         __asm__ __volatile__("" :: "r"(r130));
-        q508 = D_8009E508;
+        q508.bytes = D_8009E508;
         {
             RenderSpritePacket *pa;
             u8 e0a;
-            pa = (RenderSpritePacket *)(q508 + c * 0x118);
+            pa = (RenderSpritePacket *)(q508.bytes + c * 0x118);
             e0a = 0xE0;
                         pa->u = e0a;
             {
@@ -242,7 +242,7 @@ void Battle_DrawSpellName(void) {
                 cB = g_ActiveDrawSlotRecord.slot;
                 pa->width = 8;
                 pa->height = 0x10;
-                (q508 + cB * 0x118)[0xD] = e0a;
+                (q508.bytes + cB * 0x118)[0xD] = e0a;
             }
         }
         {
@@ -265,7 +265,7 @@ void Battle_DrawSpellName(void) {
             s32 cD;
             s32 eo;
             cD = g_ActiveDrawSlotRecord.slot;
-            q508 -= 8;
+            q508.bytes -= 8;
             eo = cD * 0x118;
             cD = cD * 4;
             *(s16 *)(D_8009E516 + eo) = clut;
@@ -288,9 +288,9 @@ void Battle_DrawSpellName(void) {
     }
     if (g_BattleRemainingActions != 0) {
         u8 e0 = 0xE0;
-        u8 *e5m8;
-        e508 = D_8009E508;
-        e5m8 = e508 - 8;
+        BattleSpriteWord e5m8;
+        e508.bytes = D_8009E508;
+        e5m8.bytes = e508.bytes - 8;
         do {
             s32 s0;
             RenderSpritePacket *pl;
@@ -367,9 +367,9 @@ void Battle_DrawSpellName(void) {
             }
             {
                 s32 j7;
-                s32 t2;
+                BattleSpriteWord t2;
                 register s32 cJ asm("$6");
-                register s32 a2v asm("$5");
+                register BattleSpriteWord a2v asm("$5");
                 {
                     register s32 ja asm("$4");
                     ja = i;
@@ -396,7 +396,7 @@ void Battle_DrawSpellName(void) {
                     at.sprite->y = ys;
                 }
                 xs -= 6;
-                AddPrim(g_OtBufferTable[cJ] + 0x10, (void *)a2v);
+                AddPrim(g_OtBufferTable[cJ] + 0x10, a2v.bytes);
             }
             {
                 s16 inext = i + 1;

@@ -56,6 +56,7 @@ typedef struct RenderBufferPrefix {
 typedef union RenderBufferSlotAddress {
     char **buffer;
     u32 **ordering;
+    unsigned char **otBuffer; /* g_OtBufferTable */
     u32 word;
 } RenderBufferSlotAddress;
 /* The buffer table seen from other_buffers[1]; offset by the draw slot's
