@@ -891,7 +891,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                     new_var = &scratchpad->midpointScreenCoordinates[3];
                     gte_stsxy2_mem(quadLifetimeOutput1);
                     quadCombinedIn0 = &scratchpad->midpoints[4];
-                    asm volatile("" : : "r"(quadCombinedIn0));
+                    asm("" : : "r"(quadCombinedIn0));
                     quadCenterGteAddress = &scratchpad->midpoints[2];
                     asm("" : "=r"(quadCenterGteAddress) : "0"(quadCenterGteAddress));
                     gte_ldvxy0_precise(quadCombinedIn0);
