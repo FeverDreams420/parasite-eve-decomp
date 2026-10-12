@@ -129,38 +129,38 @@ int Task_SetBattleEntryCoords(int **arg0) {
     return 1;
 }
 
-int func_80019904(void) {
+int Task_ClearEntityFlag1(void) {
     g_CurrentEntity->flags &= -2;
     return 1;
 }
 
-int func_80019928(void) {
+int Task_SetEntityFlag1(void) {
     g_CurrentEntity->flags |= 1;
     return 1;
 }
 
-int func_8001994C(int **arg0) {
+int Task_SetEntryScrolled(int **arg0) {
     Render_SetEntryScrolled(*arg0[0], *arg0[1], *arg0[2], *arg0[3]);
     return 1;
 }
 
-int func_8001998C(int **arg0) {
+int Task_SetEntryMirrored(int **arg0) {
     Render_SetEntryMirrored(*arg0[0], *arg0[1], *arg0[2], *arg0[3]);
     return 1;
 }
 
-int func_800199CC(int **arg0) {
+int Task_SetRenderFlag10Value(int **arg0) {
     g_CurrentEntity->render_object.script_value9a = *arg0[0];
     g_CurrentEntity->render_object.flags_9C |= 0x10;
     return 1;
 }
 
-int func_800199F8(void) {
+int Task_ClearRenderFlag10(void) {
     g_CurrentEntity->render_object.flags_9C &= 0xFFEF;
     return 1;
 }
 
-int func_80019A1C(int **arg0) {
+int Task_SetRenderFlag8Params(int **arg0) {
     g_CurrentEntity->render_object.script_value9a = *arg0[0];
     g_CurrentEntity->render_object.script_param97 = *arg0[1];
     g_CurrentEntity->render_object.script_param98 = *arg0[2];
@@ -169,17 +169,17 @@ int func_80019A1C(int **arg0) {
     return 1;
 }
 
-int func_80019A9C(void) {
+int Task_ClearRenderFlag8(void) {
     g_CurrentEntity->render_object.flags_9C &= 0xFFF7;
     return 1;
 }
 
-int func_80019AC0(void) {
+int Task_SetEntityFlag400(void) {
     g_CurrentEntity->flags |= 0x400;
     return 1;
 }
 
-int func_80019AE4(void) {
+int Task_ClearEntityFlag400(void) {
     g_CurrentEntity->flags &= -0x401;
     return 1;
 }

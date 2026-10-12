@@ -298,17 +298,17 @@ int Entity_PopCount(int **arg0) {
     return 1;
 }
 
-int func_8001A32C(void) {
+int Task_EnableEntityGravity(void) {
     g_CurrentEntity->flags |= 2;
     return 1;
 }
 
-int func_8001A350(void) {
+int Task_DisableEntityGravity(void) {
     g_CurrentEntity->flags &= -3;
     return 1;
 }
 
-int func_8001A374(int **arg0) {
+int Task_SetMeshFadeLevel(int **arg0) {
     D_800BCFFC = *arg0[0];
     return 1;
 }

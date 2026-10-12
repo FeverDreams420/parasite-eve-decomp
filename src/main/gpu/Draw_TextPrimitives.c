@@ -701,7 +701,7 @@ void Draw_PrintTextWrapped(u8 *text, int width) {
 }
 
 
-void func_8005F844(int variant) {
+void Draw_SetFontVariant(int variant) {
     D_8009D13C = variant != 0 ? 0x3A1C : 0x395D;
     D_8009D140 = variant != 0 ? 0xCC : 0x84;
     D_8009D144 = 0xA4;
@@ -1073,7 +1073,7 @@ void Draw_PrintNumberWidth4(int value) {
     D_8009D128 = y;
 }
 
-void func_800605C4(int value) {
+void Draw_PrintNumberWidth3(int value) {
     int x;
     int y;
 
