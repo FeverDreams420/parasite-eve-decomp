@@ -26,10 +26,12 @@ The script refuses, before touching anything:
 * an OLD that the build looks up by name outside the symbol files (a
   Makefile, ``tools/scripts`` or a linker script naming it).
 
-``--audit`` prints, per ``src/main`` directory, the functions whose prefix is
-not one of that directory's prefixes in the subsystem table of
-docs/CONVENTIONS.md, together with the documented exceptions below. It exits
-1 when an undocumented mismatch is found.
+``--audit`` checks every external function in ``src/main`` outside ``psyq/``:
+its prefix must be one its directory lists in the subsystem table of
+docs/CONVENTIONS.md, or one another live (not dissolved) subsystem lists
+(the function serves that subsystem from a unit the binary places here;
+``--verbose`` lists those), or the name must be in AUDIT_EXCEPTIONS. It exits
+1 on any other function.
 """
 from __future__ import annotations
 
@@ -49,16 +51,12 @@ SELF = "tools/reorg/rename_symbols.py"
 BUILD_LOOKUP = ("Makefile", "tools/scripts/")
 WORD = re.compile(r"\b[A-Za-z_][A-Za-z0-9_]*\b")
 
-# Functions in src/main whose prefix differs from their directory on purpose.
-# Keys are function names, values say why. PsyQ units (src/main/psyq) are
-# not audited: they keep SDK labels, and private SDK routines that only have
-# generated labels keep the project names they were given.
+# External functions in src/main that carry no subsystem prefix on purpose,
+# with the reason. PsyQ units (src/main/psyq) are not audited: they keep SDK
+# labels, and private SDK routines keep the project names they were given.
 AUDIT_EXCEPTIONS = {
     "main": "the C entry point; boot owns it",
 }
-# Prefixes that are allowed in every directory: helpers that keep the name of
-# the subsystem they serve. Empty by design; add with a reason.
-AUDIT_GLOBAL_PREFIXES: dict[str, str] = {}
 
 
 def git(*args: str) -> str:

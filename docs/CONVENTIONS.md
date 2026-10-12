@@ -38,7 +38,19 @@ even when the caller is elsewhere: a CD routine is `CdRom_*` wherever it is
 called from. Game code does not use the legacy spellings `CD_`, `Cd_` or
 `SPU_`; they became `CdRom_` and `Spu_`. SDK-internal names that look similar
 (`CD_cw`, `CD_init`, `GPU_cw`, `_spu_init`) are PsyQ names and keep their
-spelling.
+spelling, and so do the project names of private SDK routines inside
+`psyq/` (`Gpu_DmaTimeoutCheck`, `Sys_SetIntrCallback`).
+
+The prefix names the responsibility, the directory names the unit the
+binary places the function in, so the two can differ: a script opcode
+helper compiled into a battle unit is still `Script_*`, and the entity
+helpers the script interpreter's units define are `Entity_*`. What must not
+appear is a prefix that no live subsystem in the table owns (`Task_`,
+`FieldEng_`, `Tbl_`, `Sys_`, `Util_`, ...) or no prefix at all on an
+external function. `tools/reorg/rename_symbols.py --audit` checks this for
+`src/main` outside `psyq/` (`-v` lists the cross-subsystem functions per
+directory), and `rename_symbols.py OLD NEW` or `--map FILE` renames a
+symbol everywhere: symbol files, manifests, sources, docs and tests.
 
 **PsyQ file names.** A unit under `psyq/<library>/` is named after the SDK
 object it reproduces, lower case (`INTR_VB` is `intr_vb.c`, the BIOS veneer
@@ -105,7 +117,7 @@ edge, as `akao/Spu_TransferAndLifecycle` did before LIBPAD WAITRC2's
 | `entity` | `Entity_` | actor pools, movement, hierarchy, per-frame actor update | keep; `task.c` renamed by content |
 | `obj` | `Obj_` | geometry-state entry slots | dissolved: its functions are `Render_*Entry*` in `render` |
 | `field` | `Field_`, `Geo_` | field map entries, collision and floor geometry | keep; the mesh-list `Geo_*` in `render` became `Render_*` |
-| `fieldfx` | `FieldFx_` | the field effect engine in the separate `0x800C1CA0` segment: effect pool, emitters, particles | keep (renamed from `engine`, prefixes from `FieldEng_` and `FieldAnim_`) |
+| `fieldfx` | `FieldFx_`; module classes `GlowEffect_`, `GlowEffectB_`, `GlowEffectC_`, `FourLayerGlow_`, `PointSprite_`, `BurstEffect_`, `BurstEffectB_`, `BurstEffectC_` | the field effect engine in the separate `0x800C1CA0` segment: effect pool, emitters, particles; each of the eight effect modules names its seven class methods `<Module>_<Method>` (pe1/field_effect_modules.h) | keep (renamed from `engine`, prefixes from `FieldEng_` and `FieldAnim_`) |
 | `scene` | `Scene_` | room and scene loading, story flags, scene dispatch | keep; receives `Scene_*` files from `draw`, `main`, `render`, `time` |
 | `overlay` | `Overlay_` | overlay tables and loading, overlay audio/texture slots | dissolved: the audio-slot functions (`CdRom_RegisterAudioSlot`, ...) and `CdRom_LoadInitialImage` are in `cdrom`, `Boot_LoadOverlayTables` in `pm`, `Scene_StreamTexturePage` in `scene` |
 | `asset` | `Asset_` | PE.IMG asset tables, TIM upload | keep |
@@ -117,7 +129,7 @@ edge, as `akao/Spu_TransferAndLifecycle` did before LIBPAD WAITRC2's
 | `item` | `Inv_`, `Item_` | inventory, item table, equipment and its modifiers | keep; `Menu_*` files to `menu` |
 | `menu` | `Menu_`, `MenuWidget_`, `MenuInput_` | in-game menus, widget tree, menu input queue | keep; `Inv_*`, `Save_*`, `Pad_*` files out to their owners |
 | `save` | `Save_` | save-data layout, metadata, write flow | keep |
-| `akao` | `Akao_`, `Seq_`, `Spu_` | Square's AKAO sound driver: sequencer, voices, SPU uploads | keep; LIBSPU units to `psyq/libspu` |
+| `akao` | `Akao_`, `AkaoSpuVoice_`, `Seq_`, `SeqOp_`, `Spu_` | Square's AKAO sound driver: sequencer (`SeqOp_*` are the opcode handlers), voices (`AkaoSpuVoice_*` the per-voice SPU register writers), SPU uploads | keep; LIBSPU units to `psyq/libspu` |
 | `audio` | `Sfx_` | misnamed: both files are menu item-list code | dissolved: the item-list functions are `Menu_*` (`Menu_ContextPick`, `Menu_DrawSlotRow`, ...) |
 | `time` | `GameTime_` | play-time counters and timers | keep |
 | `text` | `Text_` | text and textbox lookup tables, map-name and base-32 id strings | keep (renamed from `table`, prefixes from `Tbl_` and `Str_`); the textbox page helpers are `Draw_*` |
