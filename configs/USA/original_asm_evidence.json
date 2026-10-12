@@ -45,7 +45,7 @@
     {
       "name": "Task_GpuPackPrimColor",
       "module": "main",
-      "source": "main/script/Task_GpuPackPrimColor.c",
+      "source": "main/draw/Task_GpuPackPrimColor.c",
       "address": "0x80070DD0",
       "size": 52,
       "origin": "game",
@@ -59,7 +59,7 @@
     {
       "name": "Math_SqrtApprox3",
       "module": "main",
-      "source": "main/math/Math_SqrtApprox3.c",
+      "source": "main/draw/Math_SqrtApprox3.c",
       "address": "0x80070FAC",
       "size": 136,
       "origin": "game",

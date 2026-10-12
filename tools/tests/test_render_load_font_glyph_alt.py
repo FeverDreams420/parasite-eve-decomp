@@ -29,7 +29,7 @@ class RenderLoadFontGlyphAltTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             work = pathlib.Path(directory)
             obj, elf, binary = (work / name for name in ("glyph.o", "glyph.elf", "glyph.bin"))
-            subprocess.run(["tools/scripts/cc.sh", "src/main/render/Render_FontGlyphSelection.c", str(obj)],
+            subprocess.run(["tools/scripts/cc.sh", "src/main/draw/Render_FontGlyphSelection.c", str(obj)],
                            cwd=ROOT, check=True, capture_output=True)
             symbols = {
                 "D_800B0DD8": STATE, "D_80093176": RANGE, "D_800B0E6C": BUFFER_PTR,

@@ -67,7 +67,7 @@ class RenderSetFontGlyphByCodeTests(unittest.TestCase):
             work = pathlib.Path(directory)
             obj, elf, data = work / "glyph.o", work / "glyph.elf", work / "glyph.bin"
             subprocess.run(
-                ["tools/scripts/cc.sh", "src/main/render/Render_FontGlyphSelection.c", str(obj)],
+                ["tools/scripts/cc.sh", "src/main/draw/Render_FontGlyphSelection.c", str(obj)],
                 cwd=ROOT, check=True, capture_output=True,
             )
             (work / "glyph.ld").write_text(

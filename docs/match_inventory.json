@@ -44,7 +44,7 @@
       "evidence": "Fresh linked asm-differ run on darwine against retail instruction target; no source changes required."
     },
     {
-      "unit": "main/script/Task_GpuPackPrimColor",
+      "unit": "main/draw/Task_GpuPackPrimColor",
       "symbol": "Task_GpuPackPrimColor",
       "reported_size": 52,
       "source": null,
@@ -53,10 +53,10 @@
       "evidence": "Fresh linked stock GCC 2.7.2 + MASPSX 2.56 candidate score on darwine. Not integrated at the time of this inventory."
     },
     {
-      "unit": "main/math/Math_SqrtApprox3",
+      "unit": "main/draw/Math_SqrtApprox3",
       "symbol": "Math_SqrtApprox3",
       "reported_size": 136,
-      "source": "src/main/math/Math_SqrtApprox3.c",
+      "source": "src/main/draw/Math_SqrtApprox3.c",
       "status": "matched_excluded_by_asm_policy",
       "levenshtein_score": 0,
       "evidence": "Fresh linked asm-differ run on darwine against retail instruction target; no source changes required."
