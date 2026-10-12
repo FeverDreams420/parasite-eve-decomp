@@ -23,7 +23,9 @@ game and local toolchains.
 
 ![functions](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fkhasinski%2Fparasite-eve-decomp%2Fmain%2Fdocs%2Fbadges%2Ffunctions.json)
 ![code](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fkhasinski%2Fparasite-eve-decomp%2Fmain%2Fdocs%2Fbadges%2Fcode.json)
-![debt](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fkhasinski%2Fparasite-eve-decomp%2Fmain%2Fdocs%2Fbadges%2Fdebt.json)
+![PsyQ debt](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fkhasinski%2Fparasite-eve-decomp%2Fmain%2Fdocs%2Fbadges%2Fdebt-psyq.json)
+![Game debt](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fkhasinski%2Fparasite-eve-decomp%2Fmain%2Fdocs%2Fbadges%2Fdebt-game.json)
+![Overlays debt](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fkhasinski%2Fparasite-eve-decomp%2Fmain%2Fdocs%2Fbadges%2Fdebt-overlays.json)
 
 Progress is measured by objdiff against a disassembly of the retail binaries,
 the same `report.json` CI publishes for decomp.dev. Regenerate locally with

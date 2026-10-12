@@ -6,7 +6,7 @@ GOAL.md wants plain C with no `asm`/`__asm__` of any kind. A function can be
 byte-matched yet still carry crutches: register pins, empty asm barriers,
 `asm("sym")` aliases, real asm bodies, `goto` chains, INCLUDE_ASM. This script
 counts each per subsystem (read-only; no build side effects) and writes
-docs/CRUTCH_DEBT.md + docs/badges/debt.json.
+docs/CRUTCH_DEBT.md + separate PsyQ, Game and Overlays debt badges.
 
 Run: `make debt` (or `python tools/scripts/crutch_debt.py`).
 """
@@ -246,15 +246,27 @@ def write_reports(per_sub, totals, dirty_files) -> None:
         render_report(per_sub, totals, dirty_files)
     )
 
-    # ----- badge (date-free, code.json shape) -----
-    msg = (f"{totals['asm_constrained_units']} asm units / "
-           f"{totals['pins']} pins / {totals['barriers']} barriers / "
-           f"{totals['nop_barriers']} nops / {totals['gotos']} gotos / {totals['aliases']} aliases")
-    heavy_total = sum(totals[k] for k in HEAVY)
-    color = "brightgreen" if heavy_total == 0 else ("yellow" if heavy_total < 500 else "orange" if heavy_total < 1500 else "red")
-    (ROOT / "docs" / "badges" / "debt.json").write_text(json.dumps({
-        "schemaVersion": 1, "label": "crutch debt", "message": msg, "color": color,
-    }))
+    groups = {name: {k: 0 for k in ORDER} for name in ("PsyQ", "Game", "Overlays")}
+    for subsystem, counts in per_sub.items():
+        group = ("PsyQ" if subsystem == "main/psyq" else
+                 "Overlays" if subsystem == "overlays" else "Game")
+        for key in ORDER:
+            groups[group][key] += counts[key]
+
+    def badge_message(counts):
+        return (f"{counts['pins']} pins / {counts['barriers']} barriers / "
+                f"{counts['nop_barriers']} nops / {counts['gotos']} gotos / "
+                f"{counts['aliases']} aliases")
+
+    for group, counts in groups.items():
+        heavy_total = sum(counts[k] for k in HEAVY)
+        color = "brightgreen" if heavy_total == 0 else ("yellow" if heavy_total < 500 else "orange" if heavy_total < 1500 else "red")
+        (ROOT / "docs" / "badges" / f"debt-{group.lower()}.json").write_text(json.dumps({
+            "schemaVersion": 1, "label": f"crutch debt: {group}",
+            "message": badge_message(counts), "color": color,
+        }) + "\n")
+
+    msg = badge_message(totals)
 
     print(f"wrote {ROOT/'docs'/'CRUTCH_DEBT.md'}")
     print("  " + msg + f" | asm_bodies {totals['asm_bodies']} | directives {totals['directives']} | "
