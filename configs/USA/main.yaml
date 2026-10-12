@@ -481,12 +481,12 @@ segments:
       # drawing (G0833/G0835). One -fno-strength-reduce unit: the scroll loop
       # walks its entry pointer itself.
       - [0x57A94, c, render/Render_MeshListAndFade]
-      - [0x58F10, c, render/Render_SortOt]
-      # Per-frame camera preparation and render update, the screen-tint reset and
-      # the tint/scroll slot step share the D_800BCF88 scroll state with its
-      # embedded RenderTintState (helper evidence; no split evidence). The unit
-      # keeps Render_SetCDDCSlot's --expand-div profile.
-      - [0x59394, c, render/Render_FrameUpdateAndScreenState]
+      # OT sort and grid cursor step; per-frame camera preparation and render
+      # update, the screen-tint reset and the tint/scroll slot step share the
+      # D_800BCF88 scroll state with its embedded RenderTintState (helper
+      # evidence; no split evidence). One -G8 FORCE_G0 unit with COMMON $gp
+      # words (the grid cursor) and Render_SetCDDCSlot's --expand-div.
+      - [0x58F10, c, render/Render_FrameUpdateAndScreenState]
       - [0x5994C, c, asset/Asset_LoadTimTextures]
       # Primary and secondary bank drivers: contiguous default-profile pair
       # sharing the game-state gating flags.

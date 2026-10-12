@@ -274,11 +274,17 @@ def gp_commons(objs: list[str], units: list[str]) -> list[str]:
                              + r"\b(?:\[[^\]]*\])?)\s*;", re.M)
         pointer = re.compile(r"^\s*extern\s+([^;]*\(\s*\*\s*" + re.escape(word)
                              + r"\s*\)\s*\([^;]*\))\s*;", re.M)
+        listed = re.compile(r"^\s*extern\s+((?:[A-Za-z_]\w*\s+)+)(?:\w+\s*,\s*)*"
+                            + re.escape(word) + r"\s*(?:,\s*\w+\s*)*;", re.M)
         found = None
         for text in texts:
             match = pattern.search(text) or pointer.search(text)
             if match:
                 found = match.group(1).strip()
+                break
+            match = listed.search(text)
+            if match:
+                found = match.group(1).strip() + " " + word
                 break
         if found is None or found.endswith("[]"):
             sys.exit(f"no complete declaration for $gp word {word}")
