@@ -8,24 +8,16 @@
 #include "pe1/field_engine_state.h"
 
 /* func_800C62DC specialised for the player position (16.16 integer halves). */
-
-/* Matching debt: 3 register pins and 5 empty constraints.
- * Diagonal loads use gte_ldopv1_psyq; the other vector loads stay C. */
 int func_800C689C(GteShortVector *tri)
 {
-    int playerX;
-    register int playerZ asm("$6");
-    int pointZ, vertexZ;
     GteShortVector point;
     FieldTriScratch *second;
     FieldTriScratch *third;
     FieldTriScratch *result;
 
-    playerX = ((FieldTriEntity *)D_8009D254)->pos[0].integer;
-    point.x = playerX;
+    point.x = ((FieldTriEntity *)D_8009D254)->pos[0].integer;
     point.y = ((FieldTriEntity *)D_8009D254)->pos[1].integer;
-    playerZ = ((FieldTriEntity *)D_8009D254)->pos[2].integer;
-    point.z = playerZ;
+    point.z = ((FieldTriEntity *)D_8009D254)->pos[2].integer;
     FIELD_TRI_SCRATCH->edge[0].y = 0;
     FIELD_TRI_SCRATCH->edge[1].y = 0;
     FIELD_TRI_SCRATCH->edge[2].y = 0;
@@ -36,83 +28,34 @@ int func_800C689C(GteShortVector *tri)
     FIELD_TRI_SCRATCH->edge[0].z = tri[1].z - tri[0].z;
     D_800E2844 = FIELD_TRI_SCRATCH;
     FIELD_TRI_SCRATCH->rel[0].x = point.x - tri[0].x;
-    asm volatile("" : "=m"(D_800E2844) : "m"(D_800E2844));
     FIELD_TRI_SCRATCH->rel[0].z = point.z - tri[0].z;
-    {
-        register const GteVector *inputVector asm("$8");
-        inputVector = &D_800E2844->edge[0];
-                gte_ldopv1_psyq(inputVector);
-        inputVector = &FIELD_TRI_SCRATCH->rel[0];
-        gte_ldir3_precise(inputVector);
-        gte_ldir1_precise(inputVector);
-        gte_ldir2_precise(inputVector);
-    }
+    gte_ldopv1_psyq(&D_800E2844->edge[0]);
+    gte_ldopv2(&FIELD_TRI_SCRATCH->rel[0]);
     gte_cop2_hazard_slot();
     gte_op0();
     FIELD_TRI_SCRATCH->edge[1].x = tri[2].x - tri[1].x;
     FIELD_TRI_SCRATCH->edge[1].z = tri[2].z - tri[1].z;
     FIELD_TRI_SCRATCH->rel[1].x = point.x - tri[1].x;
-    pointZ = point.z;
-    vertexZ = tri[1].z;
-    asm volatile("" : : : "$8");
-    FIELD_TRI_SCRATCH->rel[1].z = pointZ - vertexZ;
-    {
-        register GteVector *cross asm("$8");
-        cross = &FIELD_TRI_SCRATCH->cross[0];
-        gte_swc2_25_0(cross);
-        gte_swc2_26_4(cross);
-        gte_swc2_27_8(cross);
-    }
+    FIELD_TRI_SCRATCH->rel[1].z = point.z - tri[1].z;
+    gte_stlvnl(&FIELD_TRI_SCRATCH->cross[0]);
 
     second = D_800E2844;
-    {
-        const GteVector *edge;
-        edge = &second->edge[1];
-                gte_ldopv1_psyq(edge);
-    }
-    {
-        const GteVector *relative;
-        relative = &second->rel[1];
-        gte_ldir3_precise(relative);
-        gte_ldir1_precise(relative);
-        gte_ldir2_precise(relative);
-    }
+    gte_ldopv1_psyq(&second->edge[1]);
+    gte_ldopv2(&second->rel[1]);
     gte_cop2_hazard_slot();
     gte_op0();
     second->edge[2].x = tri[0].x - tri[2].x;
     second->edge[2].z = tri[0].z - tri[2].z;
     second->rel[2].x = point.x - tri[2].x;
     second->rel[2].z = point.z - tri[2].z;
-    {
-        GteVector *cross;
-        cross = &second->cross[1];
-        gte_swc2_25_0(cross);
-        gte_swc2_26_4(cross);
-        gte_swc2_27_8(cross);
-    }
+    gte_stlvnl(&second->cross[1]);
 
     third = D_800E2844;
-    {
-        const GteVector *edge;
-        edge = &third->edge[2];
-                gte_ldopv1_psyq(edge);
-    }
-    {
-        const GteVector *relative;
-        relative = &third->rel[2];
-        gte_ldir3_precise(relative);
-        gte_ldir1_precise(relative);
-        gte_ldir2_precise(relative);
-    }
+    gte_ldopv1_psyq(&third->edge[2]);
+    gte_ldopv2(&third->rel[2]);
     gte_cop2_hazard_slot();
     gte_op0();
-    {
-        GteVector *cross;
-        cross = &third->cross[2];
-        gte_swc2_25_0(cross);
-        gte_swc2_26_4(cross);
-        gte_swc2_27_8(cross);
-    }
+    gte_stlvnl(&third->cross[2]);
 
     result = D_800E2844;
     return ((result->cross[0].y ^ result->cross[1].y) |

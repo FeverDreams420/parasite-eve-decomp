@@ -914,7 +914,7 @@ void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,
 {
     GteShortVector center;
     GteShortVector screen;
-    s32 depth;
+    u32 depth;
     FieldStripPacket *packet;
     int r, g, b;
     int u, v;
@@ -988,7 +988,7 @@ void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,
     if (pull != 0) {
         depth = 14;
     }
-    if ((u32)depth < 0x1000) {
+    if (depth < 0x1000) {
         gte_stsxy2(&screen);
         pull *= 2;
         LoadAverageShort12(&screen, &center, 0x1000 - pull, pull, &screen);
