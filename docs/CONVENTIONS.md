@@ -171,7 +171,11 @@ name is the configured overlay name.
   `MenuCard_`, `BootDisplay_`, `MdecDiag_`. Resident prefixes (`Boot_`,
   `Scene_`, `MemCard_`) do not appear on overlay functions; an overlay
   symbol file may still name a word of the main image it reads, and then it
-  uses the main image's name. Template parameter macros take the template's
+  uses the main image's name (`g_PlayerEntity`); the `RoomMain_ActorPtr`,
+  `RoomMain_ActorPtr2` and `RoomMain_RotTable` aliases (of
+  `g_PlayerEntity` and the sine table at `0x800966EC`) are the remaining
+  exceptions, left until their overlay declarations agree with the main
+  image's types. Template parameter macros take the template's
   prefix in upper case (`ROOMLIB_`, `ROOMEFFECT_`, `MENUCARD_`).
 
 ## Headers
