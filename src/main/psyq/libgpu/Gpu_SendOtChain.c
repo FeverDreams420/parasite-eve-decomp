@@ -1,5 +1,6 @@
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses */
+#include "pe1/psyq_gpu.h"
 #include "Gpu_SendOtChain_externs.h"
 void Gpu_ResetDmaWaitTimer(void);
 int Gpu_DmaTimeoutCheck(void);
@@ -12,7 +13,7 @@ int Gpu_SendOtChain(unsigned int *table, int count)
     int busyBit;
     *D_80095870 |= 0x08000000;
     *D_8009586C = 0;
-    *D_80095864 = (unsigned int)((char *)table + (count * 4 - 4));
+    *D_80095864 = GPU_ADDRESS(&table[count - 1]);
     *D_80095868 = count;
     /* This store occupies the following call's delay slot in retail. */
     *(unsigned int *)D_8009586C = 0x11000002;

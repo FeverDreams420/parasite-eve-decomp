@@ -108,6 +108,10 @@ int MargePrim(void *first, void *second);
 
 void AddPrim(unsigned int *ot, unsigned int *prim);
 
+/* Ordering-table links, packet tags and GPU DMA registers carry a packet's
+ * address as a plain word (the low 24 bits are the physical address). */
+#define GPU_ADDRESS(pointer) ((u_long)(pointer))
+
 u_short GetTPage(int tp, int abr, int x, int y);
 
 #endif

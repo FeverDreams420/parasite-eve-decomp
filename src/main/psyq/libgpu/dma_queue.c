@@ -46,7 +46,7 @@ int Gpu_SwapDisplayBuffers(void (*function)(u32, u32), u32 *source, int size, u3
         register volatile u32 *gp1 = (volatile u32 *)D_80095854.gp1;
         register u32 ready = 0x04000000;
         do {} while (!(*gp1 & ready));
-        function((u32)source, argument);
+        function(GPU_ADDRESS(source), argument);
         SetIntrMask(D_8009587C);
         return 0;
     }
@@ -65,14 +65,14 @@ queued:
             head = D_80095874;
             i++;
             entry = head * sizeof(GpuQueueEntry);
-            entry += (u32)base;
+            entry += GPU_ADDRESS(base);
             offset += entry;
             *(u32 *)offset = value;
             asm volatile("" ::: "memory");
         }
-        D_800BD030[D_80095874].argument0 = (u32)D_800BD030[D_80095874].packet;
+        D_800BD030[D_80095874].argument0 = GPU_ADDRESS(D_800BD030[D_80095874].packet);
     } else {
-        D_800BD030[D_80095874].argument0 = (u32)source;
+        D_800BD030[D_80095874].argument0 = GPU_ADDRESS(source);
     }
     D_800BD030[D_80095874].argument1 = argument;
     asm volatile("" ::: "memory");

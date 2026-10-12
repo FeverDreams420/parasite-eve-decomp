@@ -25,7 +25,7 @@ u32 *ClearOTag(u32 *ot, int count) {
             linkMask = 0xFFFFFF;
             ((u8 *)ot)[3] = 0;
             mask = 0xFF000000;
-            *ot = (*ot & mask) | ((u32)(ot + 1) & linkMask);
+            *ot = (*ot & mask) | (GPU_ADDRESS(ot + 1) & linkMask);
             ++ot;
         } while (count);
     }
@@ -34,12 +34,12 @@ u32 *ClearOTag(u32 *ot, int count) {
     result = ot;
     PE1_COMPILER_LAUNDER(result);
     terminator = &D_8009580C;
-    address = (u32)&D_800957F8;
+    address = GPU_ADDRESS(&D_800957F8);
     address &= mask;
     command = 0x04000000;
     address |= command;
     *terminator = address;
-    terminator = (u32 *)((u32)terminator & mask);
-    *result = (u32)terminator;
+    terminator = (u32 *)(GPU_ADDRESS(terminator) & mask);
+    *result = GPU_ADDRESS(terminator);
     return result;
 }
