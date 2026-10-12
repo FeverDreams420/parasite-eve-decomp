@@ -142,21 +142,12 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
                     if (*turnFlags & 0x1000)
                     {
                         stopResistance = ((*statusFlags) >> 4) & 3;
-                        if (stopResistance != 0)
+                        switch (stopResistance)
                         {
-                            if (stopResistance != 2)
-                            {
-                            }
-                            else
-                            {
-                                goto applyStop;
-                            }
-                        }
-                        else
-                        {
+                        case 0:
                             if (!(rand() & 1))
                             {
-                            applyStop:
+                            case 2:
                                 flagCore->coreFlags |= 0x1800;
                                 entity->entityFlags |= 0x1000;
                                 if (enemy->field04.bytes.kind != 0)
@@ -164,6 +155,7 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
                                     Entity_SetActionMode(entity, (u16)(s8)enemy->lowAndEntityId.bytes.low);
                                 }
                             }
+                            break;
                         }
                     }
                 }
@@ -179,14 +171,9 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
                 break;
             }
         }
-        if (damage <= 0)
-        {
-            goto minimumDamage;
-        }
     }
-    else
+    if (damage <= 0)
     {
-    minimumDamage:
         flags = flagCore->coreFlags;
         damage = 1;
         if ((flags & 0x38000) == 0x18000)
