@@ -36,7 +36,7 @@ typedef struct SceneE20Channel { int reserved[2]; SceneE20Pool *pool; } SceneE20
 extern SceneE20Color D_8018EFFC, D_8018F000, D_8018F004, D_8018F008;
 extern struct BattleEntity *D_8009D254;
 extern void *D_8019085C;
-int func_8018F750(int mode, SceneE20TrailEffect *effect, SceneEffectSlot *command);
+int SceneE20_HoverOrbController(int mode, SceneE20TrailEffect *effect, SceneEffectSlot *command);
 extern SceneEffectSlot D_80190860[];
 int func_80071A54(void);
 #include "pe1/gte_types.h"

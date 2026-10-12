@@ -8,7 +8,7 @@
 /* mode 0: initialize; mode 1: advance the effect; mode 2: draw.
  * Pins and empty barriers preserve retail allocation and scheduling.
  * See docs/ASM_AND_GTE_POLICY.md for the matching debt. */
-s32 func_8018F750(s32 mode, SceneE20TrailEffect *effect, SceneEffectSlot *command) {
+s32 SceneE20_HoverOrbController(s32 mode, SceneE20TrailEffect *effect, SceneEffectSlot *command) {
     register s32 initialMode asm("$20");
     register SceneE20Color *initColor0 asm("$17");
     register SceneE20Color *initColor1 asm("$19");
@@ -107,7 +107,7 @@ initialize:
             FieldFx_ModelScrollUv(temp_v0, 0, 0);
             func_800D1384(&effect->position, &effect->position, 0x3EE, (unsigned char *)initColor0, (unsigned char *)initColor1, 0x80, (struct FieldTrailPair *)effect->history, initialMode);
             return func_800CE560((char *)ANIM_POOL_AS(SceneE20Channel)->pool, 0x14, 0x20,
-                                 (FieldAnimCallbackListCallback)func_8018F028);
+                                 (FieldAnimCallbackListCallback)SceneE20_FlareParticle);
 update: {
     temp_v1_2 = effect->phase;
     switch (temp_v1_2) {                            /* switch 1 */

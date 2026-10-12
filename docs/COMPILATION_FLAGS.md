@@ -427,7 +427,7 @@ differently but resolve to the same options count once.
 
 #### S15: `cc1 -G0 -ffixed-10 -ffixed-11 -ffixed-15 -ffixed-21 -ffixed-22 -ffixed-23 -ffixed-24 -ffixed-25 ; maspsx -G0 --expand-div`
 
-- `src/overlays/scene_e20_cruiser/RoomEffect_HoverOrbController_8018F750.c`
+- `src/overlays/scene_e20_cruiser/SceneE20_HoverOrbController.c`
 
 #### S16: `cc1 -G0 -fno-expensive-optimizations ; maspsx -G0`
 
@@ -573,5 +573,5 @@ means only the order of symbol-table entries changed (cc1 `-G8` emits
 | `overlays/room_m350_cruiser/m350_callbacks.c` | maspsx `--expand-div`: lev 52 (func_80198ABC 18, func_801992A0 17, func_80197B98 17) |
 | `overlays/scene_e18_cruiser/e18_emitters.c` | maspsx `--expand-div`: lev 17 (func_801935F0 17) |
 | `overlays/scene_e19_cruiser/e19.c` | maspsx `--expand-div`: lev 133 (func_80192F9C 133) |
-| `overlays/scene_e20_cruiser/RoomEffect_HoverOrbController_8018F750.c` | cc1 `-ffixed-10`: lev 6 (func_8018F750 6); cc1 `-ffixed-11`: lev 6 (func_8018F750 6); cc1 `-ffixed-15`: lev 6 (func_8018F750 6); cc1 `-ffixed-21`: lev 74 (func_8018F750 74); cc1 `-ffixed-22`: lev 74 (func_8018F750 74); cc1 `-ffixed-23`: lev 74 (func_8018F750 74); cc1 `-ffixed-24`: lev 6 (func_8018F750 6); cc1 `-ffixed-25`: lev 6 (func_8018F750 6); maspsx `--expand-div`: lev 69 (func_8018F750 69) |
+| `overlays/scene_e20_cruiser/SceneE20_HoverOrbController.c` | cc1 `-ffixed-10`: lev 6 (SceneE20_HoverOrbController 6); cc1 `-ffixed-11`: lev 6 (SceneE20_HoverOrbController 6); cc1 `-ffixed-15`: lev 6 (SceneE20_HoverOrbController 6); cc1 `-ffixed-21`: lev 74 (SceneE20_HoverOrbController 74); cc1 `-ffixed-22`: lev 74 (SceneE20_HoverOrbController 74); cc1 `-ffixed-23`: lev 74 (SceneE20_HoverOrbController 74); cc1 `-ffixed-24`: lev 6 (SceneE20_HoverOrbController 6); cc1 `-ffixed-25`: lev 6 (SceneE20_HoverOrbController 6); maspsx `--expand-div`: lev 69 (SceneE20_HoverOrbController 69) |
 | `overlays/scene_e22_liberty/e22.c` | maspsx `--expand-div`: lev 44 (func_80198348 44) |

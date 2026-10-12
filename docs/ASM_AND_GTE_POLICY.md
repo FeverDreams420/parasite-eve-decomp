@@ -378,9 +378,9 @@ The compiler emits the pointer load for the `"r"` operand: the two reads of
 second read is a common subexpression, so both transfers use one base
 register. C reads of the eight words instead fold the slot address into an
 absolute `lui`/`lw` and schedule the loads with the surrounding code (lev 47
-in scene_e20 `func_8018F028` without crutches, lev 6 at best with pins).
+in scene_e20 `SceneE20_FlareParticle` without crutches, lev 6 at best with pins).
 
-Users: scene_e20 `func_8018F028` (two loads) and scene_e19 `func_80192F9C`
+Users: scene_e20 `SceneE20_FlareParticle` (two loads) and scene_e19 `func_80192F9C`
 (four loads). These previously used the duplicate macros
 `GTE_LOAD_ROTATION_WINDOW`/`GTE_LOAD_TRANSLATION_WINDOW` from a separate
 `gte_window.h` with a per-function evidence list; the instruction text was
@@ -2185,7 +2185,7 @@ executable retains SHA-1 `452fb033f2eaa4b18aa20a5bca60b8125af3a37b`.
 
 ## Scene e20 trail controller
 
-`func_8018F750` (`RoomEffect_HoverOrbController_8018F750.c`) matches all 3996 bytes at
+`SceneE20_HoverOrbController` (`SceneE20_HoverOrbController.c`) matches all 3996 bytes at
 `0x8018F750` with stock native GCC 2.7.2 and stock MASPSX 2.56, `-G0` and
 `--expand-div`. It reconstructs initialization, seven update phases, particle
 spawning, endpoint interpolation, trail history and model/glow rendering.
