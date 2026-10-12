@@ -318,8 +318,8 @@ void Draw_EmitGlyph(s32 arg0, s32 arg1) {
     {
         register RenderTexturedQuad *ptr asm("$4");
 
-        base_x = *(u16 *)&g_TextCursorX;
-        base_y = *(u16 *)&g_TextCursorY;
+        base_x = (u16)g_TextCursorX;
+        base_y = (u16)g_TextCursorY;
         ptr = packet;
         ptr->x2 = base_x;
         ptr->x0 = base_x;
@@ -701,7 +701,7 @@ void Draw_EmitDigitSprite(int digit) {
     }
     {
         RenderTexturedQuad *p;
-        u16 x = *(u16 *)&g_DrawSpriteX, y = *(u16 *)&g_DrawSpriteY;
+        u16 x = (u16)g_DrawSpriteX, y = (u16)g_DrawSpriteY;
         p = quad;
         p->x0 = p->x2 = x;
         p->y0 = p->y1 = y;

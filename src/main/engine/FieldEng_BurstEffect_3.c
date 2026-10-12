@@ -42,7 +42,7 @@ int func_800CD5A4(void *arg0, FieldEngSlot *state) {
 
 int func_800CD5B0(void *arg0, FieldEngSlot *state, FieldAnimGlowPoint *anim) {
     anim->brightness = anim->brightness - 0xA;
-    (*(u16 *)&anim->scale) = (*(u16 *)&anim->scale) + 0x3C;
+    anim->scale += 0x3C;
     if ((s16)anim->brightness < 0x14) {
         anim->brightness = 0;
         state->flag = 2;

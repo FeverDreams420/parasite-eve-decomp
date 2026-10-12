@@ -129,9 +129,9 @@ int func_800CCFA0(void) {
     *FieldEng_RegPtr(0xD) = index;
 
     data = g_BurstEffectTarget;
-    D_800E27F8.x = *(u16 *)&data->render_object.target_x;
-    D_800E27F8.y = *(u16 *)&data->render_object.target_y;
-    D_800E27F8.z = *(u16 *)&data->render_object.target_z;
+    D_800E27F8.x = data->render_object.target_x;
+    D_800E27F8.y = data->render_object.target_y;
+    D_800E27F8.z = data->render_object.target_z;
 
     if (D_800B0CE8.reset_pending != 0) {
         Akao_Cmd_24(g_FieldEffectSoundHeader, 0, 0x80, 0x7F);
