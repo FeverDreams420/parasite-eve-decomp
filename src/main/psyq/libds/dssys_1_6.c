@@ -227,7 +227,6 @@ void LIBDS_DSSYS_1_text_A9C(int event, u8 *inResult) {
 done:;
 }
 
-#include "dssys_1_6_externs_1.h"
 
 void LIBDS_DSSYS_1_text_D24(int event, u8 *result) {
     u32 event_reg;
