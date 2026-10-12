@@ -456,13 +456,21 @@ Crutches still in place (lev is the only metric):
   constant).
 - `Window_SetBoundsByMode` (volatile window X and bound pointer): plain or
   multi-set forms keep the order but swap v0/v1 (lev 5).
-- `Menu_DrawTextboxEntries` (7 pins, 6 barriers, 6 gotos, stack reserve, 2
-  byte offsets), `Render_SetupColorTable` (5 pins, 3 barriers) and
-  `Render_SetupFogLayer` (2 pins, 1 barrier, 3 byte offsets): the glyph
-  spacing offset must stay in s7 across the packet calls (lev 127 with
-  structure indexing), a plain digit loop is lev 95, and the fog packets
-  add the offset to integer copies of the bases (typed pointers put the base
-  first, lev 3).
+- `Menu_DrawTextboxEntries` (pins, barriers, 6 gotos, stack reserve),
+  `Render_SetupColorTable` (5 pins, 3 barriers) and `Render_SetupFogLayer`
+  (2 pins, 1 barrier): the glyph spacing offset must stay in s7 across the
+  packet calls (lev 127 with structure indexing), a plain digit loop is
+  lev 95. The byte offsets into the draw buffers, ordering tables and glyph
+  spacing table go through block-scope `TextboxTableAddress` unions
+  (`pe1/textbox.h`). Two fog packets keep their `(int)` sums: the union
+  copy of the `$11` sprite base or of the laundered payload costs a
+  register (lev 6). The section and delay loops of cases 6 and 7 keep their
+  backward `goto`s: as loops (with a block-scope word so the exit test
+  stays at the top) loop.c hoists `(sectionIndex + 1) << 16` and the
+  spilled section index reloads (lev 69-71). The 0x38 stack reserve is a
+  stack slot retail gave a dead address pseudo: indexing
+  `other_buffers[slot + 1]` directly recreates such a slot, but above the
+  spilled locals instead of at 0x38 (lev 38).
 
 ### Field effect engine (src/main/engine) remaining crutches
 

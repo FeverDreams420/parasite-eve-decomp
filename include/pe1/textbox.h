@@ -62,6 +62,19 @@ extern TextboxEntry g_TextboxEntries[]; /* = D_800BCEA8 */
 extern TextboxFontPage D_80091644[4];
 extern u16 D_80091680[];
 extern TextboxGlyphSpacing D_800916A0[256];
+
+/* A draw-table address as a pointer or a word: Menu_DrawTextboxEntries
+ * adds byte offsets it computed once (draw slot * 4, glyph * 2) to the
+ * table address as integers. */
+typedef union TextboxTableAddress {
+    void *pointer;
+    u8 *bytes;
+    RenderSpritePacket *sprite;
+    TextboxGlyphPacket **packets;
+    u32 **ordering;
+    TextboxGlyphSpacing *spacing;
+    u32 address;
+} TextboxTableAddress;
 extern u8 D_8009EC70[];
 extern u8 D_8009EC78[];
 extern u8 D_8009EC86[];

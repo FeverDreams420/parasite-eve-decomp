@@ -86,7 +86,13 @@ void Render_SetupFogLayer(void *source) {
     g_TaskCollisionFlag = 0;
     D_8009CE90 = source;
     for (; (u8)i < 2; ++i) {
-        draw_mode = (u8 *)((int)((u8)i * 28) + (int)draw_base);
+        {
+            TextboxTableAddress at;
+
+            at.bytes = draw_base;
+            at.address = (u8)i * 28 + at.address;
+            draw_mode = at.bytes;
+        }
         sprite = draw_mode + 8;
         SetDrawTPage(draw_mode, 0, 1, page_source[0]);
         SetSprt(sprite);
@@ -108,7 +114,13 @@ void Render_SetupFogLayer(void *source) {
         sprite_fields->v = color;
         *(u16 *)(D_8009EC86 + (u8)i * 28) = page_source[1];
         tpage = GetTPage(x_arg, y_arg, zero_arg, 0);
-        tile_mode = (u8 *)((int)((u8)i * 24) + (int)tile_base);
+        {
+            TextboxTableAddress at;
+
+            at.bytes = tile_base;
+            at.address = (u8)i * 24 + at.address;
+            tile_mode = at.bytes;
+        }
         tile = tile_mode + 8;
         SetDrawTPage(tile_mode, 0, 1, tpage & 0xFFFF);
         SetTile(tile);
@@ -358,11 +370,21 @@ void Menu_DrawTextboxEntries(void) {
     sectionIndex = 0;
     backgroundDrawn = 0;
     temp_a0 = D_8009CDDC * 4;
-    nextPacket = *(TextboxGlyphPacket **)((u8 *)&D_800B0E38.other_buffers[1] + temp_a0);
+    {
+        TextboxTableAddress buffers;
+
+        buffers.pointer = &D_800B0E38.other_buffers[1];
+        buffers.address = buffers.address + temp_a0;
+        nextPacket = *buffers.packets;
+    }
     initialBufferTable = &D_800B0E38.other_buffers[1];
     asm("" : "=r"(initialBufferTable) : "0"(initialBufferTable), "r"(nextPacket));
     if (g_TaskCollisionFlag != 0) {
-        AddPrim((*(u32 **)((u8 *)initialBufferTable + temp_a0 - 0xC)) + 2,
+        TextboxTableAddress ordering;
+
+        ordering.pointer = initialBufferTable;
+        ordering.address = ordering.address + temp_a0 - 0xC;
+        AddPrim(*ordering.ordering + 2,
                 (unsigned int *)((D_8009CDDC * 0x18) + (u8 *)D_8009ECA8));
     }
     textboxIndex = 0;
@@ -481,7 +503,13 @@ void Menu_DrawTextboxEntries(void) {
                             nameV = (fontRow & 0xFF) * 0xC;
                             uv.x = nameU;
                             uv.y = nameV;
-                            cursor.x -= *((u8 *)D_800916A0 + spacingOffset);
+                            {
+                                TextboxTableAddress spacing;
+
+                                spacing.spacing = D_800916A0;
+                                spacing.address = spacing.address + spacingOffset;
+                                cursor.x -= spacing.spacing->left;
+                            }
                             SetDrawTPage(nextPacket, 0, 1, font->tpage);
                             SetSprt(&nextPacket->sprite);
                             if (MargePrim(nextPacket, &nextPacket->sprite) != 0) {
@@ -507,7 +535,13 @@ void Menu_DrawTextboxEntries(void) {
                             nextNameIndex = nameIndex + 1;
                             nameIndex = nextNameIndex;
                             asm("" : "=r"(nextNameIndex) : "0"(nextNameIndex));
-                            cursor.x += *((u8 *)D_800916A0 + spacingOffset + 1);
+                            {
+                                TextboxTableAddress spacing;
+
+                                spacing.spacing = D_800916A0;
+                                spacing.address = spacing.address + spacingOffset;
+                                cursor.x += spacing.spacing->right;
+                            }
                         } while ((s8)nextNameIndex < D_80091694.count);
                     }
                     stream += 1;
@@ -683,8 +717,13 @@ void Menu_DrawTextboxEntries(void) {
                         selectionSprite->x = (u16)selectionCursor->x;
                         selectionBase = (u8 *)D_8009EC78 - 8;
                         selectionSprite->y = (s16)(selectionCursor->y + ((s8)g_DialogueChoiceCursor * 0xC));
-                        AddPrim(*(u32 **)((u8 *)D_800B0E38.ordering + selectionOrderingOffset) + 1,
-                                selectionOffset + selectionBase);
+                        {
+                            TextboxTableAddress ordering;
+
+                            ordering.ordering = D_800B0E38.ordering;
+                            ordering.address = ordering.address + selectionOrderingOffset;
+                            AddPrim(*ordering.ordering + 1, selectionOffset + selectionBase);
+                        }
                         break;
                     }
                     default:
