@@ -13,10 +13,8 @@
 
 s8 g_BattleTargetIndex;
 
-static inline void PlayTargetSound(void) {
-    void * volatile *slot = &g_AkaoBgmHandle;
-    if (*slot) Akao_SendTableCommand(*slot, 0x44E, 0, 0x80, 0x7F);
-}
+#define PLAY_TABLE_SOUND(command) \
+    { if (g_AkaoBgmHandle[0]) Akao_SendTableCommand(g_AkaoBgmHandle[0], command, 0, 0x80, 0x7F); }
 void Battle_CycleTarget(s8 mode) {
     if (D_8009D2B0 >= 2) {
         if (mode != 1 && mode != 2) {
@@ -24,13 +22,13 @@ void Battle_CycleTarget(s8 mode) {
                 Battle_MarkActiveEntities(g_BattleTargetList, g_BattleTargetIndex);
                 g_BattleTargetIndex = (g_BattleTargetIndex + 1) % D_8009D2B0;
                 Battle_InitFadeVars();
-                PlayTargetSound();
+                PLAY_TABLE_SOUND(0x44E)
             }
             if (D_8009D1F4 & 0x40) {
                 Battle_MarkActiveEntities(g_BattleTargetList, g_BattleTargetIndex);
                 g_BattleTargetIndex = (g_BattleTargetIndex + D_8009D2B0 - 1) % D_8009D2B0;
                 Battle_InitFadeVars();
-                PlayTargetSound();
+                PLAY_TABLE_SOUND(0x44E)
             }
         }
     } else if (!D_8009D2B0) mode = 8;
@@ -123,10 +121,6 @@ void Battle_SetupEntityTarget(BattleEntity *actor) {
 s8 g_BattleActiveTurnSlot, g_BattleItemMenuState, g_BattleTargetIndex;
 u8 D_8009D1DC, D_8009CE60, D_8009CE3C;
 
-static inline void PlaySound(int command) {
-    void * volatile *slot = &g_AkaoBgmHandle;
-    if (*slot) Akao_SendTableCommand(*slot, command, 0, 0x80, 0x7F);
-}
 static inline void FinishAction(void) {
     u8 i;
     if ((unsigned int)((u16)D_800BE830[0].command - 3) < 404 && D_8009D254->actionMode >= 4)
@@ -152,7 +146,7 @@ int Battle_HandleItemMenu(void) {
         active=0;
         FinishAction();
         Battle_MarkActiveEntities(g_BattleTargetList,g_BattleTargetIndex);
-        PlaySound(0x44C);
+        PLAY_TABLE_SOUND(0x44C)
     } else {
         if ((D_8009D1F4&0x2000) && !MenuWidget_FindByModeAndSelectedBase(1,0) && g_BattleItemMenuState!=2) {
             cancelled=1;
@@ -166,10 +160,10 @@ int Battle_HandleItemMenu(void) {
                 active=0;
                 FinishAction();
                 Battle_MarkActiveEntities(g_BattleTargetList,g_BattleTargetIndex);
-                PlaySound(0x44C);
+                PLAY_TABLE_SOUND(0x44C)
                 return active;
             }
-            PlaySound(0x44C);
+            PLAY_TABLE_SOUND(0x44C)
         }
         if (!g_BattleItemMenuState) {
             if (g_BattleActiveTurnSlot) {
@@ -193,13 +187,13 @@ int Battle_HandleItemMenu(void) {
                             D_8009D1DC=D_8009D278->action->turnWord&15;
                         }
                     }
-                    PlaySound(0x44C);
+                    PLAY_TABLE_SOUND(0x44C)
                 }
             }
             if(D_8009D1DC==(D_8009D278->action->turnWord&15) && (D_8009D1F4&0x80) && g_BattleActiveTurnSlot && !cancelled) {
                 g_BattleItemMenuState=1;
                 Battle_MarkActiveEntities(g_BattleTargetList,g_BattleTargetIndex);
-                PlaySound(0x44C);
+                PLAY_TABLE_SOUND(0x44C)
                 Inventory_OpenAyaItemList(1);
                 opened=1;
                 Render_BeginSceneLoad();
@@ -208,7 +202,7 @@ int Battle_HandleItemMenu(void) {
                 Battle_MarkActiveEntities(g_BattleTargetList,g_BattleTargetIndex);
                 if(D_8009CE3C) {Battle_AdvanceTurnSlot();Battle_InitFadeVars();}
                 else active=0;
-                PlaySound(0x44D);
+                PLAY_TABLE_SOUND(0x44D)
             }
         } else {
             g_BattleItemMenuState=Battle_StepEnemyTurn(g_BattleItemMenuState);
@@ -264,11 +258,6 @@ void Battle_FillActionQueue(BattleTarget *target) {
     }
 }
 
-static inline void Sound(int command) {
-    void *volatile *slot = &g_AkaoBgmHandle;
-    if (*slot)
-        Akao_SendTableCommand(*slot, command, 0, 128, 127);
-}
 
 int Battle_StepEnemyTurn(s8 mode) {
     if (mode == 1) {
@@ -356,7 +345,7 @@ int Battle_StepEnemyTurn(s8 mode) {
                 mode = -1;
             }
             if (!D_8009CE40)
-                Sound(0x44C);
+                PLAY_TABLE_SOUND(0x44C)
             g_BattlePendingCommand = D_8009D2A4;
         } else if (command == -1) {
             mode = 0;
@@ -370,24 +359,12 @@ int Battle_StepEnemyTurn(s8 mode) {
             D_8009CE3C++;
             D_8009CE40 = 0;
             mode = 0;
-            {
-                void *volatile *slot = &g_AkaoBgmHandle;
-                if (*slot) {
-                    register int command asm("$5") = 0x44C;
-                    register int unused asm("$6") = 0;
-                    void *table;
-                    table = *slot;
-                    asm volatile("" : : "r"(table));
-                    Akao_SendTableCommand(table, command, unused, 128, 127);
-                }
-            }
+            PLAY_TABLE_SOUND(0x44C)
         } else if (D_8009D1F4 & 0x400) {
             mode = 0;
             BattleCmd_UndoPending();
-            /* Keep the mode update in the call delay slot. */
-            asm volatile("" : : "r"(mode));
             g_BattleTargetIndex = 0;
-            Sound(0x44D);
+            PLAY_TABLE_SOUND(0x44D)
         }
     }
     return mode;
