@@ -530,7 +530,7 @@ Crutches still in place (lev is the only metric):
   helper-local pseudo; retail's function-wide `status` conflicts with `$v0`
   in the later `switch`, so retail copies each poll result to `$v1` and the
   helper form tests `$v0` directly (lev 4 plus branch offsets, 58 in all).
-  `Overlay_LoadInitialImage` cannot use the helper: the inlined
+  `CdRom_LoadInitialImage` cannot use the helper: the inlined
   `CdRom_PollReady` puts a stack local in front of the `return`, and
   `CD_FindNextDataSector` restarts after its setup, so the helper's
   parameter copies stay as moves at the reentry label (lev 30).
@@ -953,7 +953,7 @@ Still open:
   site below was removed and rebuilt; lev is the Levenshtein distance over
   instruction words of the best crutch-free form tried:
   - CD and stream retry loops keep one `goto` each
-    (`Overlay_LoadInitialImage`, `CD_FindNextDataSector`, `CD_StepReadState`).
+    (`CdRom_LoadInitialImage`, `CD_FindNextDataSector`, `CD_StepReadState`).
     Retail hoists no invariant out of these loops: the range pointer, the
     `0xFEFFBFFF` mask and the `-1`/`33`/`42` constants are rebuilt on every
     pass. GCC's loop optimizer only runs on syntactic loops, so a `do`/`for`

@@ -87,7 +87,7 @@ typedef struct Pe1GameState {
     Pe1U8 bank_value_f6, bank_value_f7;
     unsigned short bank_value_f8, bank_value_fa;
     Pe1U8 unk_0fc[2];
-    Pe1U8 track_volumes[2];         /* 0x0FE: per scene audio slot (Overlay_RegisterAudioSlot) */
+    Pe1U8 track_volumes[2];         /* 0x0FE: per scene audio slot (CdRom_RegisterAudioSlot) */
     Pe1U32 pe_image_base_lba;        /* 0x100: g_PeImageBaseLba */
     Pe1FadeTile fade_tile;           /* 0x104: full-screen fade TILE */
     Pe1FadeTpage fade_tpage;         /* 0x114: draw mode for the fade tile */

@@ -47,7 +47,7 @@ void main(void) {
 
             switch (token) {
             case 0xA8000048:
-                Overlay_LoadTables();
+                Boot_LoadOverlayTables();
                 BOOT_CALL_ON_SCRATCHPAD_STACK(BOOT_SCRATCHPAD_STACK_TOP, func_8019234C());
                 g_GameState.flags |= 1;
                 break;
@@ -63,7 +63,7 @@ void main(void) {
                 g_GameState.flags |= 1;
                 break;
             case 0xA9400048:
-                Overlay_LoadInitialImage();
+                CdRom_LoadInitialImage();
                 Draw_InitDisplay(func_801909B4());
                 g_GameState.flags |= 3;
                 break;

@@ -158,7 +158,7 @@ void FlushCache(void);
 
 void Akao_Cmd_F0(void);
 
-int Overlay_LoadTables(void) {
+int Boot_LoadOverlayTables(void) {
     int status;
     int imageBase;
     Pe1GameState *state;

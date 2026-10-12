@@ -631,7 +631,7 @@ retry_room:
     return 0;
 }
 
-s32 Overlay_StreamTexturePage(void)
+s32 Scene_StreamTexturePage(void)
 {
     Pe1GameState *state;
     PeSectorTableAddress ranges;

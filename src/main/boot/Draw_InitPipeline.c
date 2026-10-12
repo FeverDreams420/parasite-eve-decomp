@@ -34,7 +34,7 @@ unsigned int g_GameStateFlags;
 
 void Akao_LoadVoiceBankAlt(void);
 void Scene_LoadRoom(int arg0);
-s32 Overlay_StreamTexturePage(void);
+s32 Scene_StreamTexturePage(void);
 void Entity_InitFreePool(void);
 void Script_InitNodeFreeList(void);
 void Gte_SetBackColor(void *arg0, int arg1, int arg2, int arg3);
@@ -59,7 +59,7 @@ void Draw_InitPipeline(void) {
 
     Akao_LoadVoiceBankAlt();
     Scene_LoadRoom(g_SceneDispatchToken);
-    Overlay_StreamTexturePage();
+    Scene_StreamTexturePage();
     g_EntitySerialCounter = 1;
     H(g_TaskNodeSeqCounter) = 1;
     Entity_InitFreePool();

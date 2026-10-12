@@ -551,7 +551,7 @@ retry:
             }
             Akao_Cmd_C1_WithSlot(voice, 60, state->track_volumes[0]);
             if (voice)
-                Overlay_RegisterAudioSlot(0, state->scene_audio.tracks.keys[0][0], voice,
+                CdRom_RegisterAudioSlot(0, state->scene_audio.tracks.keys[0][0], voice,
                                           state->track_volumes[0]);
             state->cd_transition_phase = 0;
             state->flags = (state->flags & ~4) | 0x40;
@@ -565,7 +565,7 @@ retry:
 
 /* Scene audio slots 0 and 1: each caches a track key, its bank and a volume,
  * and registering one marks that slot's track as loaded in the state flags. */
-int Overlay_RegisterAudioSlot(int slot, int key, int bank, int volume) {
+int CdRom_RegisterAudioSlot(int slot, int key, int bank, int volume) {
     Pe1GameState *state = &g_GameState;
 
     state->scene_audio.tracks.keys[slot][0] = key;
@@ -581,7 +581,7 @@ int Overlay_RegisterAudioSlot(int slot, int key, int bank, int volume) {
     return 0;
 }
 
-int Overlay_GetAudioSlotByKey(int key) {
+int CdRom_GetAudioSlotByKey(int key) {
     Pe1GameState *state = &g_GameState;
     int i;
 
@@ -594,7 +594,7 @@ int Overlay_GetAudioSlotByKey(int key) {
     return -1;
 }
 
-int Overlay_FindAudioSlotIndex(int key) {
+int CdRom_FindAudioSlotIndex(int key) {
     Pe1GameState *state = &g_GameState;
     int i = 0;
 

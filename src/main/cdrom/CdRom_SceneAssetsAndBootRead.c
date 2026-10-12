@@ -399,7 +399,7 @@ int CdRom_PollReady(void) {
     return status;
 }
 
-s32 Overlay_LoadInitialImage(void) {
+s32 CdRom_LoadInitialImage(void) {
     s32 status;
     u16 *range;
     s32 result;

@@ -1228,7 +1228,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         }
         *args->result = Akao_Cmd_10(D_800B0CE8.voice_banks[locals.slot]);
         Akao_Cmd_C0_WithSlot(0, 0x7F);
-        Overlay_RegisterAudioSlot(locals.slot, *args->arg1, *args->result, 0x7F);
+        CdRom_RegisterAudioSlot(locals.slot, *args->arg1, *args->result, 0x7F);
         break;
     case 0xCB:
         status = CD_SeekToTrack(*args->arg1, 1, 1, &locals.slot,
@@ -1243,11 +1243,11 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         }
         *args->result = Akao_Cmd_19_Then_C0(
             D_800B0CE8.voice_banks[locals.slot], *args->arg2);
-        Overlay_RegisterAudioSlot(locals.slot, *args->arg1, *args->result,
+        CdRom_RegisterAudioSlot(locals.slot, *args->arg1, *args->result,
                                   *args->arg2);
         break;
     case 0xC9:
-        locals.slot = Overlay_GetAudioSlotByKey(*args->arg1);
+        locals.slot = CdRom_GetAudioSlotByKey(*args->arg1);
         if (locals.slot == -1) {
             break;
         }
@@ -1264,37 +1264,37 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         Akao_Cmd_90(*args->arg1);
         break;
     case 0xCD:
-        locals.slot = Overlay_GetAudioSlotByKey(*args->arg1);
+        locals.slot = CdRom_GetAudioSlotByKey(*args->arg1);
         if (locals.slot == -1) {
             break;
         }
         Akao_Cmd_C0_WithSlot(locals.slot, *args->arg2);
-        slot_index0 = Overlay_FindAudioSlotIndex(*args->arg1);
-        handle = Overlay_GetAudioSlotByKey(*args->arg1);
-        Overlay_RegisterAudioSlot(slot_index0, *args->arg1, handle,
+        slot_index0 = CdRom_FindAudioSlotIndex(*args->arg1);
+        handle = CdRom_GetAudioSlotByKey(*args->arg1);
+        CdRom_RegisterAudioSlot(slot_index0, *args->arg1, handle,
                                   *args->arg2);
         break;
     case 0xCE:
-        locals.slot = Overlay_GetAudioSlotByKey(*args->arg1);
+        locals.slot = CdRom_GetAudioSlotByKey(*args->arg1);
         if (locals.slot == -1) {
             break;
         }
         Akao_Cmd_C1_WithSlot(locals.slot, *args->arg2 * 2, *args->arg3);
-        slot_index1 = Overlay_FindAudioSlotIndex(*args->arg1);
-        handle = Overlay_GetAudioSlotByKey(*args->arg1);
-        Overlay_RegisterAudioSlot(slot_index1, *args->arg1, handle,
+        slot_index1 = CdRom_FindAudioSlotIndex(*args->arg1);
+        handle = CdRom_GetAudioSlotByKey(*args->arg1);
+        CdRom_RegisterAudioSlot(slot_index1, *args->arg1, handle,
                                   *args->arg3);
         break;
     case 0xCF:
-        locals.slot = Overlay_GetAudioSlotByKey(*args->arg1);
+        locals.slot = CdRom_GetAudioSlotByKey(*args->arg1);
         if (locals.slot == -1) {
             break;
         }
         Akao_Cmd_C2_WithSlot(locals.slot, *args->arg2 * 2, *args->arg3,
                              *args->arg4);
-        slot_index2 = Overlay_FindAudioSlotIndex(*args->arg1);
-        handle = Overlay_GetAudioSlotByKey(*args->arg1);
-        Overlay_RegisterAudioSlot(slot_index2, *args->arg1, handle,
+        slot_index2 = CdRom_FindAudioSlotIndex(*args->arg1);
+        handle = CdRom_GetAudioSlotByKey(*args->arg1);
+        CdRom_RegisterAudioSlot(slot_index2, *args->arg1, handle,
                                   *args->arg4);
         break;
     case 0xD0:

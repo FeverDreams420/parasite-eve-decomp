@@ -36,9 +36,9 @@ extern struct RenderObjectEntity *g_SceneObjectAnimationSource;
 void Boot_Shutdown(void);
 
 /* Records a started scene track in g_GameState.scene_audio. */
-int Overlay_RegisterAudioSlot(int slot, int key, int bank, int volume);
+int CdRom_RegisterAudioSlot(int slot, int key, int bank, int volume);
 
-int Overlay_FindAudioSlotIndex(int key);
-int Overlay_GetAudioSlotByKey(int key);
+int CdRom_FindAudioSlotIndex(int key);
+int CdRom_GetAudioSlotByKey(int key);
 
 #endif

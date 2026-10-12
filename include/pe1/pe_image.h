@@ -42,7 +42,7 @@
  *     D_8009315E / D_80093160  scene init-data ranges (Script_LoadSceneData)
  *     D_80093162               scene asset ranges (Scene_LoadRoomAssets)
  *     D_80093168 / D_8009316A / D_8009316E  overlay/main asset + font/UI table
- *                              ranges (Overlay_LoadTables)
+ *                              ranges (Boot_LoadOverlayTables)
  *     D_80093176               font glyph data (Render_LoadFontGlyph)
  *   These define WHERE each *category* of asset sits inside PE.IMG.
  *

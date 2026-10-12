@@ -13,9 +13,9 @@ extern unsigned int D_8009CDA4[];
 /* Boot sequence (Boot_MainLoop.c) and the services it starts. */
 void Boot_InitSubsystems(void);
 void Scene_LoadSceneData(void);
-int Overlay_LoadTables(void);
+int Boot_LoadOverlayTables(void);
 int CD_LoadBootAudio(void);
-int Overlay_LoadInitialImage(void);
+int CdRom_LoadInitialImage(void);
 int Draw_InitDisplay(int mode);
 void Boot_RunFrame(void);
 /* Entry points of the boot overlays: the title display, the movie player
