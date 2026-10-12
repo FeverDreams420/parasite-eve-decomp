@@ -321,9 +321,9 @@ segments:
       # Glyph table lookups, selection flags, the shuffled code load and the
       # slot stepping: all of it works on g_FontSelectionState (G0313).
       - [0x293C0, c, draw/Render_FontGlyphSelection]
-      - [0x2A19C, c, anim/Scene_CheckFlagBits]
-      # Bone rotation matrices and the byte and halfword rotation decoders (G0315).
-      - [0x2A374, c, anim/Anim_BoneRotations]
+      # Scene flag-bit checks, bone rotation matrices and the byte and halfword
+      # rotation decoders (G0315).
+      - [0x2A19C, c, anim/Anim_BoneRotations]
       # Rigid, skinned and morph vertex transforms: adjacent GTE vertex passes over
       # the same render-object vertex buffers; the rigid and morph passes compile
       # identically under the skinned pass's -G8 profile, which the unit uses.
