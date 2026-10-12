@@ -22,7 +22,7 @@ s32 func_8018F750(s32 mode, SceneE20TrailEffect *effect, SceneEffectSlot *comman
     SceneE20Color flashA;
     SceneE20Color flashB;
     SceneE20Matrix matrix;
-    s32 scale[5]; /* Three scale components plus eight bytes of frame padding. */
+    s32 scale[3];
     register SceneE20Color *oddColor asm("$8");
     register SceneE20Color *evenColor asm("$6");
     SceneE20Actor *temp_v1_4;
@@ -349,7 +349,7 @@ block_63:
             pageArg0 = 0; pageArg1 = temp_s3; pageArg2 = 0;
                         pageIndex = &D_800E11FA;
             asm volatile("" : : "r"(pageIndex));
-            texturePage = firstPageTable[*pageIndex];
+            texturePage = D_800E2850[*pageIndex];
 
             D_800F3368.palette = 3;
             D_800F3368.parameter06 = 1;
