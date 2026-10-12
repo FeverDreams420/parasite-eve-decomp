@@ -41,12 +41,11 @@ def main() -> int:
     cfg_text = cfg.read_text()
     src_path = re.search(r"^\s*src_path:\s*(\S+)", cfg_text, re.M).group(1)
     ov_dir = src_path.split("/")[-1]
-    tracked = git("ls-files").splitlines()
-    sources = [p for p in tracked if p.endswith((".c", ".h", ".inc")) and (
-        p.startswith(src_path + "/") or p.startswith("include/pe1/") or
-        p.startswith("src/overlays/room_lib/"))]
-
     for old, new in zip(args.pairs[::2], args.pairs[1::2]):
+        tracked = git("ls-files").splitlines()
+        sources = [p for p in tracked if p.endswith((".c", ".h", ".inc")) and (
+            p.startswith(src_path + "/") or p.startswith("include/pe1/") or
+            p.startswith("src/overlays/room_lib/")) and (ROOT / p).is_file()]
         m = re.fullmatch(r"func_([0-9A-F]{8})", old)
         if not m:
             sys.exit(f"{old} is not an address name")
