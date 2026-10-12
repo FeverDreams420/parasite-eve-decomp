@@ -180,9 +180,9 @@ segments:
       # ASPSX 2.70 (from the floor resolution, neutral for the rest).
       - [0xACAC, c, field/Entity_ActorCollision]
       - [0xDB40, c, battle/Menu_MainUpdate]
-      # Drop-table resolution and hit application share the active-actor helpers (G0232).
+      # Drop-table resolution and hit application share the active-actor helpers
+      # (G0232); the timer update after them compiles in the same -g3 unit.
       - [0xFCD4, c, battle/Entity_HitAndDropTable]
-      - [0x101C4, c, battle/Entity_UpdateTimers]
       # Sub-action step, enemy attack application and enemy animation setup: one
       # default-profile unit (the -g3 timer update before it stays separate).
       - [0x109DC, c, battle/Battle_EnemyActions]

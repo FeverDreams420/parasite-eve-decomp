@@ -193,7 +193,7 @@ after what their functions do (`fx_common/camera_nodes.c`,
 
 ### Resident translation units (src/main, 2026-10-12)
 
-`src/main` outside `psyq/` went from 339 files to 104. Units were first moved
+`src/main` outside `psyq/` went from 339 files to 103. Units were first moved
 into the directory of their module (`docs/reorganization_mapping.csv`,
 `tools/reorg/maps/step1c_*.csv`), then merged when they are adjacent in the
 manifest, nothing foreign lies between their rodata, and one marker set
@@ -266,9 +266,9 @@ Units that stay separate, and why:
   `render/Render_LoadMeshEntry.c` and `render/Render_MeshListAndFade.c`, the
   primitive queue in `draw/` (`Draw_InitGpuHwRegs` and
   `Draw_FlushPrimQueue` are lev 4 under each other's set) and the `-g3`
-  battle units (`Menu_MainUpdate`, `Entity_UpdateTimers`,
-  `Battle_PhaseAndEnemyEffectFlow`, which also isolate
-  `Entity_HitAndDropTable` and `Battle_PlayerTurnFlow`).
+  battle units (`Menu_MainUpdate`, `Battle_PhaseAndEnemyEffectFlow`, which
+  also isolates `Battle_PlayerTurnFlow`, and the drop table, hit application
+  and timer update, which do compile as one `-g3` unit).
 - Open small-data shapes from `docs/REORGANIZATION_G_FLAGS.md`:
   `script/Script_ValueOps.c` with `script/Script_NodeActions.c` (#0) and
   `boot/Draw_InitPipeline.c` (#20, also a gprofile boundary).

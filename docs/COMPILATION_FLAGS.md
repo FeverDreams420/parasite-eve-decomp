@@ -201,8 +201,8 @@ order of symbol-table entries can change, and the link is identical):
   `item/Menu_OpenItemUsePanelAtIndex.c`, `menu/Menu_InventoryScreens.c`,
   `menu/Menu_ItemActions.c`, `menu/Menu_ListDrawers.c`,
   `menu/Menu_SaveSlotDraw.c` (was assembler `-G4`),
-  `menu/MenuWidget_Lifecycle.c`, `battle/Entity_UpdateTimers.c` (was
-  `-g3 -G1` without FORCE_G0); these units used to let GNU as pick the
+  `menu/MenuWidget_Lifecycle.c`, the timer update in
+  `battle/Entity_HitAndDropTable.c` (was `-g3 -G1` without FORCE_G0); these units used to let GNU as pick the
   `$gp` words itself (no FORCE_G0).
 - K8 by spelling only: `battle/Menu_MainUpdate.c` (`-G1` to `-G8`),
   `entity/Entity_FrameUpdate.c` (assembler `-G4` to `-G8`),
@@ -242,9 +242,11 @@ flag):
   as a new pointer/integer cast.
 - `entity/Entity_PoolInit.c` (`-fno-strength-reduce`, lev 3): loop.c reduces
   the cell address giv in the record-clearing loop.
-- `-g3`: `battle/Menu_MainUpdate.c`, `battle/Entity_UpdateTimers.c` and
+- `-g3`: `battle/Menu_MainUpdate.c`, `battle/Entity_HitAndDropTable.c` and
   `battle/Battle_PhaseAndEnemyEffectFlow.c` now share one set, but their
-  neighbours score lev 276 to 2894 under `-g3`.
+  other neighbours score lev 276 to 2894 under `-g3`. The drop table and hit
+  application take `-g3` with the timer update after them (one unit, same
+  bytes).
 - `Battle_EncounterFlow` (`ASPSX_VERSION: 2.56`) and `Math_FixedDivide`
   (`--no-expand-div`): the only units that differ under the defaults.
 - `draw/Render_DrawWireframeModel.c` (cc1 and assembler `-G8` without
@@ -283,7 +285,7 @@ ASPSX 2.70 are defaults and only their exceptions are shown.
 | S19 | `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0 aspsx 2.56` | 1 | 0 |
 | S20 | `gcc 2.8.1 ; cc1 -G0 ; maspsx -G0` | 0 | 1 |
 
-20 distinct settings over 250 files.
+20 distinct settings over 249 files.
 
 #### S2: `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0`
 
@@ -295,7 +297,6 @@ ASPSX 2.70 are defaults and only their exceptions are shown.
 - `src/main/battle/Battle_Setup.c`
 - `src/main/battle/Battle_StatusHud.c`
 - `src/main/battle/Battle_TurnFlow.c`
-- `src/main/battle/Entity_HitAndDropTable.c`
 - `src/main/boot/Boot_FrameLoop.c`
 - `src/main/boot/Boot_InitSystemFlow.c`
 - `src/main/cdrom/CdRom_TrackReadFlow.c`
@@ -369,7 +370,7 @@ ASPSX 2.70 are defaults and only their exceptions are shown.
 #### S7: `cc1 -G8 -g3 ; maspsx -G8 --use-comm-section FORCE_G0`
 
 - `src/main/battle/Battle_PhaseAndEnemyEffectFlow.c`
-- `src/main/battle/Entity_UpdateTimers.c`
+- `src/main/battle/Entity_HitAndDropTable.c`
 - `src/main/battle/Menu_MainUpdate.c`
 
 #### S8: `cc1 -G0 -fno-cse-skip-blocks ; maspsx -G0`
@@ -453,8 +454,8 @@ so the numbers say what the unit scores with `--no-expand-div` or
 | `main/battle/Battle_Setup.c` | cc1 `-G8`: lev 90 (Battle_CopyPadStateToRecord 57, Battle_SyncEnemyAttributes 33); maspsx `-G8`: lev 137 (Battle_StepScriptEntry 28, Battle_Init 27, Battle_BuildTargetList 22); maspsx `--use-comm-section`: lev 47 (Battle_Init 13, Battle_StepScriptEntry 8, Battle_BuildTargetList 7); maspsx `--expand-div`: lev 42 (Battle_CheckEvasion 42); FORCE_G0: lev 247 (Battle_CheckEvasion 48, Battle_SyncEnemyAttributes 32, Battle_DispatchEntityEffect 32); small-data set: lev 227 (Battle_CopyPadStateToRecord 57, Battle_SyncEnemyAttributes 33, Battle_StepScriptEntry 28) |
 | `main/battle/Battle_StatusHud.c` | cc1 `-G8`: lev 80 (Battle_DrawSpellName 51, Battle_DrawActiveStatus 29); maspsx `-G8`: lev 208 (Battle_DrawActiveStatus 75, Battle_DrawStatusPanel 57, Battle_DrawEnemyHP 26); maspsx `--use-comm-section`: lev 73 (Battle_DrawActiveStatus 34, Battle_DrawStatusPanel 20, Render_AnimationFrame 6); maspsx `--expand-div`: lev 16 (Battle_DrawActiveStatus 16); FORCE_G0: lev 389 (Battle_DrawActiveStatus 62, Battle_DrawStatusPanel 53, Battle_DrawEnemyHP 53); ASPSX_VERSION 2.70: lev 65 (Battle_DrawActiveStatus 45, Battle_DrawEnemyHP 20); small-data set: lev 255 (Battle_DrawActiveStatus 71, Battle_DrawStatusPanel 57, Battle_DrawSpellName 51) |
 | `main/battle/Battle_TurnFlow.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 625 (Battle_HandleItemMenu 122, Battle_StepEnemyTurn 116, Battle_StepPlayerTurn 86); maspsx `--use-comm-section`: lev 155 (Battle_StepEnemyTurn 41, Battle_HandleItemMenu 30, Battle_AdvanceTurnSlot 27); maspsx `--expand-div`: lev 80 (Battle_StepEnemyTurn 35, Battle_CycleTarget 31, Battle_FillActionQueue 14); FORCE_G0: lev 644 (Battle_HandleItemMenu 108, Battle_UpdateEnemy 94, Battle_StepPlayerTurn 84); ASPSX_VERSION 2.70: lev 6 (Battle_SetupEntityTarget 6); small-data set: lev 625 (Battle_HandleItemMenu 122, Battle_StepEnemyTurn 116, Battle_StepPlayerTurn 86) |
-| `main/battle/Entity_HitAndDropTable.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 13 (Entity_ApplyHitAndSetAnim 13); maspsx `--use-comm-section`: lev 3 (Entity_ApplyHitAndSetAnim 3); maspsx `--expand-div`: lev 14 (Entity_ResolveDropTable 14); FORCE_G0: lev 54 (Entity_ResolveDropTable 31, Entity_ApplyHitAndSetAnim 23); small-data set: lev 13 (Entity_ApplyHitAndSetAnim 13) |
-| `main/battle/Entity_UpdateTimers.c` | cc1 `-G8`: same code, symbol table differs; cc1 `-g3`: lev 1032 (Entity_UpdateTimers 516, LM51 23, LM41 13); maspsx `-G8`: lev 4 (LM59 2, LM58 2); maspsx `--use-comm-section`: lev 2 (LM59 1, LM58 1); maspsx `--expand-div`: lev 9 (LM51 9); FORCE_G0: lev 64 (LM51 5, LM18 4, LM9 2); small-data set: lev 4 (LM59 2, LM58 2) |
+| `main/battle/Entity_HitAndDropTable.c` (drop table, hit; measured as a `-G8` unit) | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 13 (Entity_ApplyHitAndSetAnim 13); maspsx `--use-comm-section`: lev 3 (Entity_ApplyHitAndSetAnim 3); maspsx `--expand-div`: lev 14 (Entity_ResolveDropTable 14); FORCE_G0: lev 54 (Entity_ResolveDropTable 31, Entity_ApplyHitAndSetAnim 23); small-data set: lev 13 (Entity_ApplyHitAndSetAnim 13) |
+| `main/battle/Entity_HitAndDropTable.c` (timer update) | cc1 `-G8`: same code, symbol table differs; cc1 `-g3`: lev 1032 (Entity_UpdateTimers 516, LM51 23, LM41 13); maspsx `-G8`: lev 4 (LM59 2, LM58 2); maspsx `--use-comm-section`: lev 2 (LM59 1, LM58 1); maspsx `--expand-div`: lev 9 (LM51 9); FORCE_G0: lev 64 (LM51 5, LM18 4, LM9 2); small-data set: lev 4 (LM59 2, LM58 2) |
 | `main/battle/Menu_MainUpdate.c` | cc1 `-G8`: same code, symbol table differs; cc1 `-g3`: lev 4292 (Menu_MainUpdate 2146, LM35 26, LM22 22); maspsx `-G8`: lev 10 (LM352 2, LM323 2, LM166 2); maspsx `--use-comm-section`: lev 5 (LM352 1, LM323 1, LM166 1); maspsx `--expand-div`: lev 18 (LM424 9, LM22 9); FORCE_G0: lev 372 (LM422 4, LM421 4, LM40 4); small-data set: lev 10 (LM352 2, LM323 2, LM166 2) |
 | `main/boot/Boot_FrameLoop.c` | cc1 `-G8`: lev 13 (Boot_RunFrame 13); maspsx `-G8`: lev 61 (Boot_RunFrame 56, Boot_FlushSceneFast 5); maspsx `--use-comm-section`: lev 17 (Boot_RunFrame 15, Boot_FlushSceneFast 2); FORCE_G0: lev 52 (Boot_RunFrame 52); small-data set: lev 63 (Boot_RunFrame 58, Boot_FlushSceneFast 5) |
 | `main/boot/Boot_InitSystemFlow.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 161 (Field_HandleStateTransition 150, Boot_BuildRenderFlagTable 11); maspsx `--use-comm-section`: lev 55 (Field_HandleStateTransition 50, Boot_BuildRenderFlagTable 5); FORCE_G0: lev 101 (Field_HandleStateTransition 86, Boot_InitSubsystems 9, Boot_BuildRenderFlagTable 4); small-data set: lev 161 (Field_HandleStateTransition 150, Boot_BuildRenderFlagTable 11) |
