@@ -35,22 +35,28 @@ typedef union Pe1SceneAudioState {
     } tracks;
 } Pe1SceneAudioState;
 
+/* GPU primitive tag: 24-bit next-primitive link and the word count. */
+typedef struct Pe1PrimTag {
+    Pe1U8 addr[3];
+    Pe1U8 len;
+} Pe1PrimTag;
+
 /* Full-screen fade primitive pair drawn by the end-of-frame pass. */
 typedef struct Pe1FadeTile {
-    Pe1U32 tag;
+    Pe1PrimTag tag;
     Pe1U8 r, g, b, code;
     short x, y;
     unsigned short w, h;
 } Pe1FadeTile;
 
 typedef struct Pe1FadeTpage {
-    Pe1U32 tag;
+    Pe1PrimTag tag;
     Pe1U32 mode;
 } Pe1FadeTpage;
 
 typedef struct Pe1GameState {
     Pe1U32 flags;                    /* 0x000 */
-    Pe1U8 unk_004[2];
+    unsigned short saved_state_004;  /* 0x004: kept in the save tail, reset to 10 */
     short field_bg_cache_id;         /* 0x006: reset to -1 after a background load */
     Pe1U8 room_type;                /* 0x008: room directory byte 3 */
     Pe1S8 field_bg_cache_bank;       /* 0x009: reset to -1 after a background load */

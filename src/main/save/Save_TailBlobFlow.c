@@ -13,7 +13,7 @@ void Save_SerializeTail(void) {
     SAVE_PUT(SaveBytes4, &D_8009D2E8);
     SAVE_PUT(SaveBytes4, &g_SceneDispatchToken);
     SAVE_PUT(SaveBytes4, &g_GameStateFlags);
-    SAVE_PUT(SaveBytes4, g_GameState.unk_004);
+    SAVE_PUT(SaveBytes4, &g_GameState.saved_state_004);
     SAVE_PUT(SaveBytes2, &g_GameState.room_type);
     SAVE_PUT(SaveBytes2, &g_GameState.requested_entity_bank);
     SAVE_PUT(SaveBytes2, &g_GameState.current_story_day);
@@ -33,7 +33,7 @@ void Save_DeserializeTail(void) {
     SAVE_GET(SaveBytes4, &D_8009D2E8);
     SAVE_GET(SaveBytes4, &g_SceneDispatchToken);
     SAVE_GET(SaveBytes4, &g_GameStateFlags);
-    SAVE_GET(SaveBytes4, g_GameState.unk_004);
+    SAVE_GET(SaveBytes4, &g_GameState.saved_state_004);
     SAVE_GET(SaveBytes2, &g_GameState.room_type);
     SAVE_GET(SaveBytes2, &g_GameState.requested_entity_bank);
     SAVE_GET(SaveBytes2, &g_GameState.current_story_day);
