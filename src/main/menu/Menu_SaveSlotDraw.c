@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G4 */
+
 #include "common.h"
 #include "pe1/save.h"
 #include "pe1/textbox.h"
@@ -80,4 +81,37 @@ void Save_DrawSlotMetadata(void)
     D_8009D1A8.prompt.timer--;
     Draw_SetCursor(0, D_8009CE80 < 2 ? 0xB : 0xBF);
     Draw_AllocColorGradient(0x140, 0x14, 0, 0);
+}
+
+void Menu_SaveOverlayDraw(void)
+{
+    short color;
+    int y;
+    int value;
+    switch (D_8009D1CE) {
+    case 1:
+        color = -1;
+        Tbl_ResetAll();
+        value = Save_GetMetadataWindowIndex() ? 20 : 97;
+        y = D_8009CE80 < 2 ? 15 : 195;
+        Menu_SetTextCursorRect(value, y, 0, 0);
+        Render_SetupColorTable(0, 2, &color);
+        value = D_8009D1CE;
+        g_TextboxEntries[0].state = 2;
+        D_8009CE88 = 75;
+        g_TextboxEntries[0].message = D_8009D1F8;
+        value++;
+        D_8009D1CE = value;
+        g_TextboxEntries[0].control.flags |= 0x2000000;
+        break;
+    case 2:
+        if (!D_8009CE88) {
+            Tbl_ResetAll();
+            D_8009D1CE = 0;
+        }
+        break;
+    }
+    --D_8009CE88;
+    Draw_SetCursor(0, D_8009CE80 < 2 ? 11 : 191);
+    Draw_AllocColorGradient(320, 20, 0, 0);
 }
