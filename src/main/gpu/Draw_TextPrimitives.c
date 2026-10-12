@@ -511,7 +511,7 @@ void Draw_AllocTexturedQuad(int code) {
         int vBase;
         register int half asm("$5");
         register int cursorX asm("$6");
-        register int cursorY asm("$7");
+        int cursorY;
         arg0 = 0;
         cursorX = D_8009D124;
         cursorY = D_8009D128;
@@ -546,34 +546,15 @@ void Draw_AllocTexturedQuad(int code) {
         prim->y3 = prim->y0 + 0xC;
         prim->y2 = prim->y3;
     }
+    prim->tpage = GetTPage(arg0, 0, 0x140, 0);
     {
-        u16 tpage = GetTPage(arg0, 0, 0x140, 0);
-        u32 mask24 = 0xFFFFFF;
-        register u32 maskTop asm("$8") = 0xFF000000;
-        register int linkValue asm("$3") = prim->tag.word;
-        register u32 *ot asm("$7") = D_8009D11C;
-        register int y asm("$5") = D_8009D128;
-        u32 otValue, linkedTag;
-        int newX;
+        RenderPacketTag *ot = (RenderPacketTag *)D_8009D11C;
 
-        prim->tpage = tpage;
-        otValue = *ot;
-        D_8009D128 = y;
-        linkedTag = (linkValue & maskTop) | (otValue & mask24);
-        asm volatile("" : : "r"(linkedTag));
+        prim->tag.link.address = ot->link.address;
         link.packet = prim;
-        mask24 &= link.word;
-        prim->tag.word = linkedTag;
-        asm volatile("" ::: "memory");
-        linkValue = D_8009CDB0;
-        arg0 = *ot;
-        linkValue = width + linkValue;
-        newX = D_8009D124 + linkValue;
-        asm volatile("" : "=r"(newX) : "0"(newX));
-        arg0 = (arg0 & maskTop) | mask24;
-        D_8009D124 = newX;
-        *ot = arg0;
+        ot->link.address = link.word;
     }
+    AdvanceCursor(width + D_8009CDB0);
 }
 
 
