@@ -1,5 +1,6 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
+
 #include "pe1/scene_assets.h"
 #include "pe1/cdrom.h"
 #include "pe1/akao.h"
@@ -8,9 +9,10 @@
 #include "pe1/boot.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/akao/commands.h"
+#include "common.h"
 
-/* COMMON gives MASPSX the small-data size of the fade start word, so it
- * keeps the load delay before the $gp store as ASPSX did. */
+/* COMMON supplies small-data metadata to MASPSX: these words are reached
+ * through $gp, every other extern stays absolute. */
 int g_CdFadeStartTime;
 
 /* Matching debt: register pins and empty barriers retain the index,
@@ -255,7 +257,6 @@ dispatch:
     goto dispatch;
 }
 
-
 void Akao_ResetPositionalState(void) {
     g_GameState.scene_audio.tracks.keys[0][1] = -1;
     g_GameState.scene_audio.tracks.keys[0][0] = -1;
@@ -266,7 +267,6 @@ void Akao_ResetPositionalState(void) {
     g_GameState.flags &= -0xF1;
     Akao_Cmd_F0();
 }
-
 
 /* Matching debt: finished is pinned to s1. The empty count barrier preserves
  * the signed loop test and its scheduling; volatile directory reads retain
@@ -383,7 +383,6 @@ int CD_SeekToTrack(int key, int mode, int group, int *slot, int blocking)
     } while (!finished);
     return busy;
 }
-
 
 /* Matching debt: three table aliases and the retry jump. The aliases preserve
  * independent absolute reads of the table pointer around callbacks. */
@@ -552,4 +551,49 @@ retry:
         }
         goto retry;
     }
+}
+
+/* Scene audio slots 0 and 1: each caches a track key, its bank and a volume,
+ * and registering one marks that slot's track as loaded in the state flags. */
+int Overlay_RegisterAudioSlot(int slot, int key, int bank, int volume) {
+    Pe1GameState *state = &g_GameState;
+
+    state->scene_audio.tracks.keys[slot][0] = key;
+    state->scene_audio.tracks.keys[slot][1] = bank;
+    state->track_volumes[slot] = volume;
+
+    if (slot == 0) {
+        state->flags |= 0x40;
+    } else if (slot == 1) {
+        state->flags |= 0x80;
+    }
+
+    return 0;
+}
+
+int Overlay_GetAudioSlotByKey(int key) {
+    Pe1GameState *state = &g_GameState;
+    int i;
+
+    for (i = 0; i < 2; i++) {
+        if (state->scene_audio.tracks.keys[i][0] == key) {
+            return state->scene_audio.tracks.keys[i][1];
+        }
+    }
+
+    return -1;
+}
+
+int Overlay_FindAudioSlotIndex(int key) {
+    Pe1GameState *state = &g_GameState;
+    int i = 0;
+
+    do {
+        if (state->scene_audio.tracks.keys[i][0] == key) {
+            return i;
+        }
+        i++;
+    } while (i < 2);
+
+    return -1;
 }

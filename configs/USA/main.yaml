@@ -509,10 +509,9 @@ segments:
       - [0x5B1E4, c, scene/Scene_RoomLoad]
       # Sector reads, the range scanner, the scene-audio key reset and the
       # track seek/read state machine share the CD sector-read and scene audio
-      # state (helper evidence across the reset); one -G8 unit.
+      # state (helper evidence across the reset); the audio slot registration and
+      # its two lookups share the scene audio keys. One -G8 unit.
       - [0x5D5A4, c, cdrom/CD_TrackReadFlow]
-      # Audio slot registration and the two lookups share the scene audio keys.
-      - [0x5E348, c, cdrom/Overlay_AudioSlotFlow]
       # Scene asset-directory unit: the key-type search, the positional sound
       # senders (scene-table and BGM-handle wrappers, 3D send path, table-command
       # lookup, GTE pan/volume projection; the two Asset_Find08* names are legacy
