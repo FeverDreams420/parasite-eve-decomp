@@ -487,10 +487,11 @@ segments:
       # evidence; no split evidence). One -G8 FORCE_G0 unit with COMMON $gp
       # words (the grid cursor) and Render_SetCDDCSlot's --expand-div.
       - [0x58F10, c, render/Render_FrameUpdateAndScreenState]
+      # TIM texture loading and the primary and secondary bank drivers (the
+      # game-state gating flags): one default-profile unit.
       - [0x5994C, c, asset/Asset_LoadTimTextures]
-      # Primary and secondary bank drivers: contiguous default-profile pair
-      # sharing the game-state gating flags.
-      - [0x59D94, c, asset/Pm_RunBanks]
+      # Table entry unload keeps -fno-force-mem (lev 1 without it; the TIM loader
+      # does not match with it), so it stays a unit of its own.
       - [0x59EF0, c, asset/Asset_UnloadTableEntries]
       # Disc-image discovery and boot notice use the same mount state.
       - [0x5A0D4, c, asset/Render_InitDisplayLists]
