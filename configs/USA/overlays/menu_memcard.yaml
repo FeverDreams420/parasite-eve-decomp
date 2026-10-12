@@ -132,7 +132,7 @@ segments:
     bss_size: 0x0
     subsegments:
       - {start: 0x63A0, type: data, name: menu_memcard_data_0063A0, linker_section_order: .text, linker_section: .code_data}
-      - [0x6B04, c, func_80127848]
+      - [0x6B04, c, Memcard_FlipScreenPages]
       - [0x6C78, c, Memcard_RedrawImageNodes_8018F468]
   - [0x7000]
   - name: menu_memcard_blend_image_linkbase
@@ -236,7 +236,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x9B04, c, func_8012A848]
+      - [0x9B04, c, Memcard_ResetDisplayState]
   - [0x9D08]
   # The copied video open and step keep the 0x801887F0 link base of the
   # video player copy.
@@ -258,7 +258,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0xA458, c, func_8012B19C]
+      - [0xA458, c, Memcard_StopVideo]
   - [0xA4AC]
   # This copied handler shares the 0x801887F0 link base of the video player copy.
   - name: menu_memcard_copied_handler

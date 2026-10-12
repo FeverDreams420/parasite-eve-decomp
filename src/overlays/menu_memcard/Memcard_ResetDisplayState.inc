@@ -3,7 +3,7 @@
 #include "pe1/gpu_image.h"
 #include "pe1/game_state.h"
 #ifndef MEMCARD_RESET_DISPLAY_STATE_NAME
-#define MEMCARD_RESET_DISPLAY_STATE_NAME func_8012A848
+#define MEMCARD_RESET_DISPLAY_STATE_NAME Memcard_ResetDisplayState
 #endif
 #ifndef MEMCARD_DISPLAY_PTR0
 #define MEMCARD_DISPLAY_PTR0 D_801D0DE8

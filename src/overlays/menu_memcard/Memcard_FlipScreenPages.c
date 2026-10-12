@@ -9,11 +9,11 @@
 
 typedef PsxSignedRect Rect;
 
-#include "func_80127848_externs.h"
+#include "Memcard_FlipScreenPages_externs.h"
 
 void func_80074A44(int);
 
-void func_80127848(void) {
+void Memcard_FlipScreenPages(void) {
     int i;
     int page;
     int y;
