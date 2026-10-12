@@ -4,7 +4,7 @@ void Akao_LoadVoiceBankAlt(void)
 {
     Pe1GameState *state = &g_GameState;
     int i, j;
-    u32 base;
+    u8 *base;
     AkaoVoiceBankEntry *pair;
 
     for (i = 9; i >= 0; --i)

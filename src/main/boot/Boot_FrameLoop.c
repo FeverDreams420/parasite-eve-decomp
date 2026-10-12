@@ -78,12 +78,6 @@ void Boot_FlushSceneFast(void) {
     }
 }
 
-/* A game-state pointer stepped by a byte offset. */
-typedef union GameStateSlotAddress {
-    Pe1GameState *state;
-    u32 word;
-} GameStateSlotAddress;
-
 /* The frame loop reaches the game-state flags back from its scene flag byte. */
 #define GAME_STATE_OF_SCENE_FLAGS(flagsByte) \
     ((Pe1GameState *)((flagsByte) - PE1_OFFSETOF(Pe1GameState, bank_state_12)))
@@ -119,7 +113,7 @@ void Boot_RunFrame(void)
 
             if (!(D_8009D1A0 & 1)) {
             if (!(state->flags & 0x200)) {
-                GameStateSlotAddress slot;
+                Pe1GameStateAddress slot;
 
                 /* The draw slot steps the state one word per slot, so the
                  * ordering table is read from the shifted state. */

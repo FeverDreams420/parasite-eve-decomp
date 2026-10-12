@@ -94,16 +94,16 @@ typedef struct Pe1GameState {
     RenderObjectHeader *scene_object_model;        /* 0x11C */
     void *room_geometry_table;       /* 0x120: key 0xCAAD0704 */
     void *bank_asset_table;           /* 0x124: resolved bank asset table */
-    Pe1U32 bank_work_base;           /* 0x128 */
-    Pe1U32 bank_work_end;            /* 0x12C */
-    Pe1U32 bank_work_far_end;        /* 0x130: voice bank base + 0x2800 */
+    u8 *bank_work_base;              /* 0x128 */
+    u8 *bank_work_end;               /* 0x12C */
+    u8 *bank_work_far_end;           /* 0x130: voice bank base + 0x2800 */
     void *scene_object_tables[3];    /* 0x134 */
     /* Startup resource tables selected by keys 0x57D40D84 and 0x57D41D84. */
     void *startup_resource_tables[2]; /* 0x140 */
     u8 *startup_resource_blob;       /* 0x148 */
     void *bank_asset_source;         /* 0x14C */
-    Pe1U32 voice_bank_base;          /* 0x150 */
-    Pe1U32 voice_bank_base_1400;     /* 0x154 */
+    u8 *voice_bank_base;             /* 0x150 */
+    u8 *voice_bank_base_1400;        /* 0x154 */
     union SceneAssetView *entity_texture_blob; /* 0x158: voice bank base + 0x2800 */
     u8 *scene_object_work;         /* 0x15C */
     /* 0x160: the frame ordering tables (g_OtBufferTable) double as the
@@ -134,6 +134,13 @@ typedef struct Pe1GameState {
     void *bank_reset_950[2];
     Pe1U32 bank_reset_958[1];
 } Pe1GameState;
+
+/* A game-state pointer stepped by a word index: the per-slot fields
+ * (ordering tables, bank work bounds) are read through the shifted state. */
+typedef union Pe1GameStateAddress {
+    Pe1GameState *state;
+    Pe1U32 word;
+} Pe1GameStateAddress;
 
 PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, scene_object) == 0x14,
                   game_state_scene_object_offset);

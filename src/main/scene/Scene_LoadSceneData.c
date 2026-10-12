@@ -121,7 +121,7 @@ restart4:
 
     {
         SceneCopyCursor to, from;
-        to.word = state->bank_work_far_end;
+        to.bytes = state->bank_work_far_end;
         __asm__ __volatile__("" : "=r"(to.word) : "0"(to.word));
         from.bytes = state->scene_load_scratch;
         end = from.bytes + 0x1400;

@@ -152,7 +152,7 @@ retry:
     case 4:
         index = bank + 8;
         if (CdRom_ReadSectorsFromLba(lba + D_800930D8[index],
-                (void *)state->voice_bank_base_1400,
+                state->voice_bank_base_1400,
                 D_800930DA[index] - D_800930D8[index]) != -1)
             state->entity_texture_phase = 5;
         return 1;

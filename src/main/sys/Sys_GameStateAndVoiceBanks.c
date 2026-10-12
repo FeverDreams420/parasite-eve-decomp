@@ -216,7 +216,7 @@ void GameState_Reset(void)
     int pairOffset;
     u8 flags;
     register int fill asm("$3");
-    u32 voiceBase;
+    u8 *voiceBase;
     u32 drawMode;
     i = 0;
     p = (u32 *)base;

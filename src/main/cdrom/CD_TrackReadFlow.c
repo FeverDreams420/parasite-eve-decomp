@@ -278,9 +278,13 @@ int CD_SeekToTrack(int key, int mode, int group, int *slot, int blocking)
     register int finished asm("$17") = 0;
     Pe1GameState *state = &g_GameState;
     int bankIndex = group != 0;
-    Pe1GameState *selected = (Pe1GameState *)((u8 *)state + bankIndex * 4);
-    volatile SceneAssetDirectory *directory = SceneAsset_ResolveOffset(
-        *D_800B0E64, (*D_800B0E64)->directoryOffset);
+    Pe1GameStateAddress selected;
+    volatile SceneAssetDirectory *directory;
+
+    /* Group 1 copies into the second bank work bound. */
+    selected.state = state;
+    selected.word += bankIndex * 4;
+    directory = SceneAsset_ResolveOffset(*D_800B0E64, (*D_800B0E64)->directoryOffset);
     do {
         switch (state->cd_track_phase) {
         case 0: {
@@ -364,7 +368,7 @@ int CD_SeekToTrack(int key, int mode, int group, int *slot, int blocking)
         case 9:
             *slot = bankIndex;
             if (g_CdTrackRecord) {
-                memcpy((void *)selected->bank_work_base,
+                memcpy(selected.state->bank_work_base,
                        SceneAsset_ResolveOffset(state->loaded_scene_assets,
                                                 g_CdTrackRecord->offset & 0xFFFFFF),
                        g_CdTrackRecord->size & 0xFFFFFF);
@@ -531,7 +535,7 @@ retry:
         case 51:
             if (CD_SeekToTrack(state->scene_audio.tracks.keys[0][0], 1, 0, &slot, 0) == 1)
                 return 1;
-            voice = Akao_Cmd_10((void *)state->bank_work_base);
+            voice = Akao_Cmd_10(state->bank_work_base);
             if (voice == -1) {
                 state->cd_transition_phase = 62;
                 return 1;
