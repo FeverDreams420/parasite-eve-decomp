@@ -67,6 +67,6 @@ void Battle_DrawStatusOverlay(RenderObjectEntity *object, int mode, int outOfRan
         Battle_LayoutStatusPrimRow(0x18);
         Battle_DrawStatusSymbol(8);
     }
-    if ((s32)((D_8009D278->action->turnWord >> 4) & 3) >= 2)
+    if (((BattleTurnBits *)&D_8009D278->action->turnWord)->slot >= 2)
         Battle_DrawTargetHighlight();
 }
