@@ -4,33 +4,34 @@
 
 void func_80195BC8(FxCommonShortVec3 *a, FxCommonShortVec3 *b, int bi, int ai)
 {
-    int x, y, z, bz, originX, ay, az, u, v, w, one;
+    int x, y, z, originComponent, originX, ay, az, u, v, w, one;
     u16 bzCopy, ayCopy, azCopy;
     volatile FxCommonShortVec3 *origin0 = &g_FxCommonMotionOrigin0;
     volatile FxCommonShortVec3 *target0 = &g_FxCommonMotionTarget0;
     volatile FxCommonShortVec3 *origin1 = &g_FxCommonMotionOrigin1;
     volatile FxCommonShortVec3 *target1 = &g_FxCommonMotionTarget1;
     int firstOriginX;
-    register int pinnedBy asm("$8");
+    int firstOriginY;
 
     x = b->x;
     originX = g_FxCommonMotionPosition0.x;
     firstOriginX = originX;
-    pinnedBy = g_FxCommonMotionPosition0.y;
+    originComponent = g_FxCommonMotionPosition0.y;
+    firstOriginY = originComponent;
     D_8019C08C = x - firstOriginX;
     y = b->y;
-    bz = g_FxCommonMotionPosition0.z;
-    D_8019C090 = y - pinnedBy;
+    originComponent = g_FxCommonMotionPosition0.z;
+    D_8019C090 = y - firstOriginY;
     z = b->z;
     D_8019C0AC = firstOriginX;
     originX = g_FxCommonMotionPosition1.x;
-    origin0->y = pinnedBy;
+    origin0->y = firstOriginY;
     ay = g_FxCommonMotionPosition1.y;
     D_8019C09C = 0;
     D_8019C0A0 = 0;
     D_8019C0A4 = 0;
-    origin0->z = bz;
-    D_8019C094 = z - bz;
+    origin0->z = originComponent;
+    D_8019C094 = z - originComponent;
     /* These are separate halfword snapshots, after the signed delta reads. */
     D_8019C0B4 = b->x;
     target0->y = b->y;
