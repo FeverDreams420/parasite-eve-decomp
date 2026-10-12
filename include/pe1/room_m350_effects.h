@@ -98,7 +98,7 @@ typedef struct RoomM350CloudParticle {
 
 typedef struct RoomM350SineParticle {
     GteShortVector position;
-    s16 controls[4];
+    GteRotation rotation;
     s16 brightness;
     s16 size;
     s16 amplitude;
@@ -161,8 +161,8 @@ PE1_STATIC_ASSERT(sizeof(RoomM350CloudParticle) == 20,
 PE1_STATIC_ASSERT(sizeof(RoomM350SineParticle) == 24,
                   room_m350_sine_particle_size);
 PE1_STATIC_ASSERT(sizeof(RoomM350Model) == 3, room_m350_model_size);
-PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM350SineParticle, controls) == 8,
-                  room_m350_sine_particle_controls_offset);
+PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM350SineParticle, rotation) == 8,
+                  room_m350_sine_particle_rotation_offset);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM350SineParticle, brightness) == 0x10,
                   room_m350_sine_particle_brightness_offset);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM350Model, transformCount) == 2,

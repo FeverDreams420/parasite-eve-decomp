@@ -25,7 +25,7 @@ int func_801996BC(int event, RoomM350SineParticle *object)
         int palette = D_800E1204[kind];
         unsigned short handle;
         handle = GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7 : palette + 3);
-        func_800CEE20(&object->position, (GteRotation *)object->controls, object->size, object->size,
+        func_800CEE20(&object->position, &object->rotation, object->size, object->size,
             128, handle, 1, object->brightness, 0);
         position.x = object->position.x;
         position.y = ANIM_OWNER_AS(RoomM350EffectActor)->instance->transform.t[1];
@@ -97,7 +97,7 @@ int func_8019988C(int event, EmissionState *state)
             int y;
             int rawHigh;
             int bit;
-            effect->controls[0] = (random & 255) + 512;
+            effect->rotation.x = (random & 255) + 512;
             asm volatile("" : :);
             rawHigh = random >> 8;
             high = rawHigh & 255;
@@ -106,10 +106,10 @@ int func_8019988C(int event, EmissionState *state)
             asm("" : : "r"(bit), "r"(random));
             if (bit) y = high + 768;
             else y = high - 1024;
-            effect->controls[1] = y;
+            effect->rotation.y = y;
         }
-        effect->controls[2] = 0;
-        effect->controls[3] = 0;
+        effect->rotation.z = 0;
+        effect->rotation.flags = 0;
     } else {
         D_8019A8C4 = 1;
         return 2;
