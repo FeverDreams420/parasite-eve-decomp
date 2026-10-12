@@ -89,6 +89,7 @@ g_StatBaseTable = 0x800A1888; // size:0x10
 g_MenuScrollStep = 0x8009D0D4;
 g_MenuSortToggleGlyphs = 0x800922D0;
 g_MenuItemLabelBuffer = 0x800A1980; // size:0x80
+g_DeferredAkaoCommands = 0x800944A8; // size:0x80
 g_MenuStatusPanelPoints = 0x80092258;
 g_MenuStatsListPanelPoints = 0x80092298;
 Render_InitViewState = 0x80065B70; // type:func

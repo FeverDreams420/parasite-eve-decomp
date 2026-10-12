@@ -1,5 +1,6 @@
 #include "common.h"
 #include "pe1/field_actor.h"
+#include "pe1/player_entity.h"
 #include "pe1/global_slot.h"
 #include "pe1/task_node.h"
 #include "pe1/render_setup.h"
@@ -35,7 +36,7 @@ int Task_PlayEntityAnim(s16 **args) {
         task_state->flags |= 0x20;
         Anim_SetInterpRate(&actor->render_object, *args[0]);
         post_actor = g_CurrentEntity;
-        player = (FieldActor *)D_8009D254;
+        player = g_PlayerEntity;
         post_actor->render_object.flags_9C |= 4;
 
         if (post_actor == player) {

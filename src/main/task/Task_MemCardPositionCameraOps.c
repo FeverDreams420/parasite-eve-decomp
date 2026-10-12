@@ -3,6 +3,7 @@
 /* MASPSX_FORCE_G0: 1 */
 #include "common.h"
 #include "pe1/memcard.h"
+#include "pe1/player_entity.h"
 #include "pe1/task_node.h"
 #include "pe1/game_state_types.h"
 #include "pe1/scene_room_load.h"
@@ -90,7 +91,7 @@ int Entity_GetPositionByType(int **args) {
 
     selector = *args[1];
     if (selector == 0) {
-        player = (FieldActor *)D_8009D254;
+        player = g_PlayerEntity;
         if (player == 0) {
             *args[6] = -1;
             return 1;
@@ -196,7 +197,7 @@ int Camera_TrackRelativeOffset(int **args) {
     speed_entity = g_CurrentEntity;
     current_x = speed_entity->pos_x;
     current_z = speed_entity->pos_z;
-    if (speed_entity != (FieldActor *)D_8009D254) {
+    if (speed_entity != g_PlayerEntity) {
         movement_speed = speed_entity->move_factor;
     } else {
         movement_speed = Math_FixedMul(0x50000, speed_entity->move_factor);
@@ -276,7 +277,7 @@ int Camera_TrackRelativeOffset(int **args) {
     current_z = (target_z - current_z) >> 16;
     remaining_distance = current_x * current_x + current_z * current_z;
     motion_entity = g_CurrentEntity;
-    current_x = ((s16 *)&motion_entity->motion_x)[1];
+    current_x = Pe1Fixed_Integer(&motion_entity->motion_x);
     current_z = movement_z >> 16;
     movement_distance = current_x * current_x + current_z * current_z;
     motion_entity->motion_z = movement_z;

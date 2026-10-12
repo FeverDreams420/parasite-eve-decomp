@@ -7,6 +7,7 @@
  * script dispatcher; the screen-position opcode touches no data, so -G8
  * leaves it unchanged. */
 #include "pe1/scene_transition.h"
+#include "pe1/player_entity.h"
 #include "pe1/psyq_cd.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/menu_item_record.h"
@@ -177,15 +178,6 @@ typedef struct AkaoCommandArgs {
     int *arg4;
     int *result;
 } AkaoCommandArgs;
-
-typedef struct DeferredAkaoCommand {
-    u8 actor_type;
-    u8 actor_id;
-    s8 command;
-    s8 arg1;
-    s16 arg2;
-    s16 arg3;
-} DeferredAkaoCommand;
 
 typedef struct AkaoAssetEntry {
     u8 pad0[3];
@@ -440,13 +432,13 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         break;
     case 0x15F:
         *args->result = Asset_Find08w(
-            *args->arg1, 0, ((s16 *)&g_CurrentEntity->pos_x)[1],
-            ((s16 *)&g_CurrentEntity->pos_y)[1],
-            ((s16 *)&g_CurrentEntity->pos_z)[1]);
+            *args->arg1, 0, Pe1Fixed_Integer(&g_CurrentEntity->pos_x),
+            Pe1Fixed_Integer(&g_CurrentEntity->pos_y),
+            Pe1Fixed_Integer(&g_CurrentEntity->pos_z));
         break;
     case 0x160:
         if (*args->arg2 == 0) {
-            player = (FieldActor *)D_8009D254;
+            player = g_PlayerEntity;
             if (player == 0) {
                 break;
             }
@@ -466,14 +458,15 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
             }
         }
         *args->result = Asset_Find08w(
-            *args->arg1, 0, ((s16 *)&actor->pos_x)[1],
-            ((s16 *)&actor->pos_y)[1], ((s16 *)&actor->pos_z)[1]);
+            *args->arg1, 0, ((Pe1Fixed16_16 *)&actor->pos_x)->parts.integer,
+            ((Pe1Fixed16_16 *)&actor->pos_y)->parts.integer,
+            ((Pe1Fixed16_16 *)&actor->pos_z)->parts.integer);
         break;
     case 0x161:
         *args->result = Asset_Find08w(*args->arg1, 0,
-                                     ((s16 *)args->arg2)[1],
-                                     ((s16 *)args->arg3)[1],
-                                     ((s16 *)args->arg4)[1]);
+                                     ((Pe1Fixed16_16 *)args->arg2)->parts.integer,
+                                     ((Pe1Fixed16_16 *)args->arg3)->parts.integer,
+                                     ((Pe1Fixed16_16 *)args->arg4)->parts.integer);
         break;
     case 0x190:
         base = D_800B0CE8.archive;
@@ -526,8 +519,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
     case 0x196:
     case 0x197:
         if (D_800B0CE8.deferred_count < 0x10) {
-            deferred = (DeferredAkaoCommand *)(
-                D_800944A8 + D_800B0CE8.deferred_count * 8);
+            deferred = &g_DeferredAkaoCommands[D_800B0CE8.deferred_count];
             deferred->actor_type = g_CurrentEntity->type_id;
             deferred->actor_id = g_CurrentEntity->sub_id;
             deferred->command = *args->arg1;

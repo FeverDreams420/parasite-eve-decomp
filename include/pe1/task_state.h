@@ -9,7 +9,6 @@
 
 extern int g_SceneDataTable0;
 extern short g_EntityCollisionWallParam;
-extern u8 D_800944A8[];
 extern TaskNode *g_TaskNodeFreeListHead;
 /* Sequence number stamped into each allocated task node (a one-element
  * array: small data in the -G8 pool unit). */
@@ -21,5 +20,18 @@ extern u16 g_SceneAssetLbaTbl[];
 extern unsigned char g_BattleEnemyEscapeFlag;
 extern int g_CombatModeFlags;
 extern int D_800A76CC;
+
+/* Sound commands an actor script queued while deferral was on
+ * (Akao_ProcessCommand ops 0x196/0x197). */
+typedef struct DeferredAkaoCommand {
+    u8 actor_type;
+    u8 actor_id;
+    s8 command;
+    s8 arg1;
+    s16 arg2;
+    s16 arg3;
+} DeferredAkaoCommand;
+
+extern DeferredAkaoCommand g_DeferredAkaoCommands[16];
 
 #endif /* PE1_TASK_STATE_H */

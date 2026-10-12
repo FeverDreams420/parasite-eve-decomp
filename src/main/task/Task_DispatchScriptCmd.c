@@ -1,4 +1,5 @@
 #include "pe1/geom_state.h"
+#include "pe1/player_entity.h"
 #include "pe1/game_state.h"
 #include "common.h"
 #include "pe1/task_node.h"
@@ -63,7 +64,7 @@ int Task_DispatchScriptCmd(TaskScriptArgs *args)
         g_GameState.flags |= 0x800;
         break;
     case 2200:
-        Render_UpdateScrollPosition(&((FieldActor *)D_8009D254)->pos_x,
+        Render_UpdateScrollPosition(&(g_PlayerEntity)->pos_x,
                                     ARG_WORD(args->arg1), ARG_WORD(args->arg2));
         return 1;
     case 2201:

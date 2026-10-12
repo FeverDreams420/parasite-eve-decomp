@@ -1,5 +1,6 @@
 #include "common.h"
 #include "pe1/field_actor.h"
+#include "pe1/player_entity.h"
 #include "pe1/battle_runtime.h"
 #include "pe1/battle_entity_anim.h"
 #include "pe1/entity_frame_update.h"
@@ -16,7 +17,7 @@ int Task_CopyEntityRenderObject(int **args) {
     if (type_id == 0) {
         FieldActor *player;
 
-        player = (FieldActor *)D_8009D254;
+        player = g_PlayerEntity;
         if (player == 0) {
             return 1;
         }
