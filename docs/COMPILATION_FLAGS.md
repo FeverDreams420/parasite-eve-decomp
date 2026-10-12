@@ -115,9 +115,9 @@ and the linked binaries stayed identical:
 | unit | removed | why it did nothing |
 |---|---|---|
 | `boot/Gpu_InitPipeline.c`, `script/Task_FieldSfxQueue.c` | cc1 `-G0` | the default, written out |
-| `fx_common/FxCommon_UpdateResource.c` | cc1 `-fno-force-addr` | not an option cc.sh reads |
+| `fx_common/effects.c` | cc1 `-fno-force-addr` | not an option cc.sh reads |
 | `menu_memcard/Memcard_ListAndScreenFlow.c` | second `-fno-cse-skip-blocks` line | left over from a merge |
-| `menu/Menu_SaveScreens.c`, `menu/Menu_SkillScreens.c`, `script/Task_NodePool.c`, `fx_common/FxCommon_DrawPolyResource.c` | `--dont-expand-li` | no effect at ASPSX 2.56 |
+| `menu/Menu_SaveScreens.c`, `menu/Menu_SkillScreens.c`, `script/Task_NodePool.c`, `fx_common/model_buffers.c` | `--dont-expand-li` | no effect at ASPSX 2.56 |
 | `battle/Battle_AttackResolution.c`, `battle/Battle_EncounterFlow.c`, `room_lib/RoomEffect_SeekerSparkCallback.c`, `room_lib/RoomFx_DropFieldEffects.c` | `--expand-div` | no variable division left in the unit |
 | `item/Menu_OpenItemUsePanelAtIndex.c` | `--use-comm-section` | the unit defines no COMMON words |
 | `scene_e18_cruiser/e18_emitters.c` | cc1 `-fno-cse-skip-blocks` | the function matches without it |
@@ -153,6 +153,10 @@ Merges that only needed a redundant marker gone:
   `-fno-cse-skip-blocks`, so the model emitters, the ring callback and the
   ring emitters are one unit, `e18_emitters.c` (`--expand-div` is neutral
   for the first two).
+- `fx_common`: `FxCommon_UpdateResource` (whose `-fno-force-addr` cc.sh
+  never read) joins the effect methods and the motion-delta setup in
+  `effects.c`, and `FxCommon_DrawPolyResource` (whose `--dont-expand-li`
+  did nothing) joins `model_buffers.c`.
 
 ## Settings in use
 
@@ -162,7 +166,7 @@ differently but resolve to the same options count once.
 
 | # | effective setting | main | overlays |
 |---|---|---|---|
-| S1 | `cc1 -G0 ; maspsx -G0` (default) | 25 | 118 |
+| S1 | `cc1 -G0 ; maspsx -G0` (default) | 25 | 115 |
 | S2 | `cc1 -G0 ; maspsx -G0 --expand-div` | 9 | 22 |
 | S3 | `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0` | 19 | 0 |
 | S4 | `cc1 -G0 ; gnu-as -G0` | 4 | 6 |
@@ -195,7 +199,7 @@ differently but resolve to the same options count once.
 | S31 | `cc1 -G8 ; maspsx -G8 --expand-div --use-comm-section` | 1 | 0 |
 | S32 | `gcc 2.8.1 ; cc1 -G0 ; maspsx -G0` | 0 | 1 |
 
-32 distinct settings over 258 files.
+32 distinct settings over 255 files.
 
 #### S2: `cc1 -G0 ; maspsx -G0 --expand-div`
 
