@@ -5,7 +5,7 @@
 #include "pe1/floor_polygon.h"
 #include "pe1/gte_types.h"
 
-/* Up axis (0, -4096, 0) the placement basis (FieldEng_CollisionQueries_2.c)
+/* Up axis (0, -4096, 0) the placement basis (FieldEng_CollisionQueries.c)
  * crosses with the facing direction. */
 extern GteVector g_FieldPlacementUpAxis;
 

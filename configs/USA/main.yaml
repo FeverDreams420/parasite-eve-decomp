@@ -1104,11 +1104,9 @@ segments:
       # Sprite draw state, oriented sprite, billboard, glow sprite, shaded quad and ring, textured strip and particle chain draws share the draw state (G1390).
       - [0xB36AC, c, fieldfx/FieldEng_SpriteRendering]
       # Field collision queries: ring entry, radius and floor-triangle tests, placement
-      # normals and asset lookups, player/entity collision and object status. Split in
-      # three where the per-file cc1 flags differ (-fno-schedule-insns for _2 only).
+      # normals and asset lookups, player/entity collision and object status. One unit
+      # under -fno-strength-reduce (the old three-way split matched under it unchanged).
       - [0xB66B0, c, fieldfx/FieldEng_CollisionQueries]
-      - [0xB6DE4, c, fieldfx/FieldEng_CollisionQueries_2]
-      - [0xB709C, c, fieldfx/FieldEng_CollisionQueries_3]
       # UV scroll, render-state setters, colour-table helpers and the textured model draw
       # share the model header and the tpage/CLUT/semi-transparency state (TU evidence:
       # private data D_800F346C, D_800F3414, D_800F33E4, D_800F3420).

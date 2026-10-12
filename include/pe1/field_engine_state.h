@@ -77,7 +77,7 @@ void *FieldEng_StartSlot(void *obj, u8 id, u16 *sizes, FieldEngHandler *handlers
 void FieldEng_ActivateSlot(u16 slot, u8 id, u16 size);
 int FieldEng_FreeSlot(u16 slot);
 int FieldEng_FreeAllSlots(void);
-/* Object status (FieldEng_CollisionQueries_3.c); 3 = running. */
+/* Object status (FieldEng_CollisionQueries.c); 3 = running. */
 int FieldEng_GetStatus(void *obj);
 
 /* Shared XYZ origin consumed by field effect initializers. */
