@@ -20,8 +20,6 @@ void Battle_StepPostBattle(void)
     volatile u8 matchingStackReserve[24];
     BattleEntity *player;
     BattleEntity *entity;
-    BattleEntity *fadingEntity;
-    register BattleEntity *hiddenEntity asm("$16");
     RenderTexturedQuad *expandingPanel;
     volatile RenderTexturedQuad *fadingPanel;
     s32 remainingFrames;
@@ -84,28 +82,28 @@ void Battle_StepPostBattle(void)
                 Render_StartFadeIn(0x3C);
                 Akao_Cmd_C1_WithSlot(0, 0x3C, 0);
                 exemptKind = 1;
-                fadingEntity = (BattleEntity *)D_8009D20C;
-                if (fadingEntity != 0) {
+                entity = (BattleEntity *)D_8009D20C;
+                if (entity != 0) {
                     do {
-                    if (fadingEntity != D_8009D254) {
-                        fadingCore = fadingEntity->core;
-                        if ((fadingCore->field04.bytes.kind != exemptKind) && ((fadingCore != 0) || !(fadingEntity->entityFlags & 0x40))) {
-                            Anim_SetInterpRate(&fadingEntity->renderObject, 0x3C);
+                    if (entity != D_8009D254) {
+                        fadingCore = entity->core;
+                        if ((fadingCore->field04.bytes.kind != exemptKind) && ((fadingCore != 0) || !(entity->entityFlags & 0x40))) {
+                            Anim_SetInterpRate(&entity->renderObject, 0x3C);
                         }
                     }
-                    fadingEntity = fadingEntity->next;
-                } while (fadingEntity != 0);
+                    entity = entity->next;
+                } while (entity != 0);
             }
         }
         else {
-            hiddenEntity = (BattleEntity *)D_8009D20C;
-            if (hiddenEntity != 0) {
+            entity = (BattleEntity *)D_8009D20C;
+            if (entity != 0) {
                 do {
-                    if ((hiddenEntity != D_8009D254) && ((hiddenEntity->core != 0) || !(hiddenEntity->entityFlags & 0x40)) && (hiddenEntity->renderObject.variant_visible == 0)) {
-                        hiddenEntity->entityFlags |= 0x10;
+                    if ((entity != D_8009D254) && ((entity->core != 0) || !(entity->entityFlags & 0x40)) && (entity->renderObject.variant_visible == 0)) {
+                        entity->entityFlags |= 0x10;
                     }
-                    hiddenEntity = hiddenEntity->next;
-                } while (hiddenEntity != 0);
+                    entity = entity->next;
+                } while (entity != 0);
             }
         }
         countdown = g_BattleEndTimer;
