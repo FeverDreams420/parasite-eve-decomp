@@ -1459,11 +1459,11 @@ int g_MenuWidgetColumnLayoutMode;
 void bzero(void *ptr, int size);
 
 /* Saved cursor/scroll positions of menu widgets (one 4-byte slot per
- * aux_index): reset, mode, save and restore. Sys_InitStateBuffer (historical
+ * aux_index): reset, mode, save and restore. Menu_InitStateBuffer (historical
  * name) is the unconditional reset; the eight slots set to -1 start with no
  * saved column. */
 
-void Sys_InitStateBuffer(void) {
+void Menu_InitStateBuffer(void) {
     bzero(g_MenuWidgetColumnLayoutTable, 0x120);
     g_MenuWidgetColumnLayoutTable[6].cursorX = -1;
     g_MenuWidgetColumnLayoutTable[16].cursorX = -1;

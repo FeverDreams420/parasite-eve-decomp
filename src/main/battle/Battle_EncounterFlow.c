@@ -945,7 +945,7 @@ void Battle_StepPostBattle(void)
     case 5:
         Battle_SetupPlayerPalette();
         D_8009D28C = -1;
-        Sys_Shutdown();
+        Boot_Shutdown();
         break;
     }
     AddPrim((u32 *)(D_800B0E38.ordering[D_8009CDDC] + 4),

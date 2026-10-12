@@ -63,7 +63,7 @@ void Menu_ResetStateFlags(void);
 void Inv_SetDefaultItemId(void);
 void Draw_InitBuffers(void);
 void MenuWidget_InitPoolUnk(void);
-void Sys_InitStateBuffer(void);
+void Menu_InitStateBuffer(void);
 void MemCard_ClearDelayedCallback(void);
 void BattleCmd_InitTableCursor(void);
 void Inv_BuildItemGridFromCategory(void);
@@ -99,7 +99,7 @@ void Menu_FullInit(void) {
     Inv_SetDefaultItemId();
     Draw_InitBuffers();
     MenuWidget_InitPoolUnk();
-    Sys_InitStateBuffer();
+    Menu_InitStateBuffer();
     Queue_Init();
     MemCard_ClearDelayedCallback();
     BattleCmd_InitTableCursor();

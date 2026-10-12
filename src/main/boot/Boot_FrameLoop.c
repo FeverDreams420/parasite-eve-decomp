@@ -50,7 +50,7 @@ void Render_ResetGteScreenOffset(void);
 int Render_SetCDDCSlot(void);
 void Draw_RenderFrame(void);
 int Render_SetFadeColour(unsigned int arg0);
-void Sys_FinishFrame(void);
+void Boot_FinishFrame(void);
 void ClearImage(RECT *rect, int r, int g, int b);
 void Akao_Cmd_F1(void);
 void Render_Noop(int mode);
@@ -159,10 +159,10 @@ void Boot_RunFrame(void)
 
             if (!(D_800B0CD8 & 0x4200) &&
                 (D_8009D26C & 0x0F000006u) == 0x0F000006u) {
-                Sys_Shutdown();
+                Boot_Shutdown();
             }
             if (!(state->flags & 0x100)) {
-                Sys_FinishFrame();
+                Boot_FinishFrame();
             }
             D_8009CDA4[0]++;
             if ((D_8009D1A0 & 0x2000) && (state->flags & 0x800)) {

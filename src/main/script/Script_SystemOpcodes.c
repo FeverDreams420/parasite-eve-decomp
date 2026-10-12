@@ -55,7 +55,7 @@ int Script_EncodeBarcode(int **arg0) {
         if (*counter == 0x7D0) {
             *counter = 0;
         } else {
-            Sys_Shutdown();
+            Boot_Shutdown();
         }
     }
     return 0;
@@ -506,7 +506,7 @@ typedef struct CameraBaseAngles {
 
 void Render_SetEntryVisible(int arg0, int arg1);
 void Obj_SetEntryLimit(int arg0, int arg1);
-void Sys_SetFlagSlot(int arg0, int arg1);
+void Render_SetFlagSlot(int arg0, int arg1);
 int Obj_GetEntryField6(int arg0);
 void Obj_SetEntryField8(int arg0, int arg1);
 void Obj_FillEntrySlotValues(int arg0, int arg1);
@@ -515,7 +515,7 @@ void Obj_SetEntryFlags(int arg0, int arg1);
 
 /* Arms the combat countdown: args are two minute-or-hour terms summed and
  * scaled to 60 Hz frames (216000 per unit), plus seconds (60 frames each). */
-int Sys_ComputeAudioTimer(int **arg0) {
+int Script_ComputeAudioTimer(int **arg0) {
     int *dst;
     int value;
 
@@ -696,7 +696,7 @@ int Script_SetObjEntryLimit(int **arg0) {
 }
 
 int Script_SetFlagSlot(int **arg0) {
-    Sys_SetFlagSlot(*arg0[0], *arg0[1]);
+    Render_SetFlagSlot(*arg0[0], *arg0[1]);
     return 1;
 }
 

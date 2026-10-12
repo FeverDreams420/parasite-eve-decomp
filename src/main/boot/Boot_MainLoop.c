@@ -23,7 +23,7 @@ void main(void) {
 
     for (;;) {
         state = &g_GameState;
-        Sys_SyncShutdown();
+        Boot_SyncShutdown();
 
         while (OpenPeImage() != 0) {
             VSync(0);

@@ -33,7 +33,7 @@ extern u32 D_800B0CD8;
  * Scene_UpdateBgDraw tests and sets it with absolute loads and stores. */
 extern struct RenderObjectEntity *g_SceneObjectAnimationSource;
 
-void Sys_Shutdown(void);
+void Boot_Shutdown(void);
 
 /* Records a started scene track in g_GameState.scene_audio. */
 int Overlay_RegisterAudioSlot(int slot, int key, int bank, int volume);

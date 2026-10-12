@@ -272,7 +272,7 @@ retryFog:
  * commands), soft-reset shutdown and screen vertical-offset update. These
  * contiguous routines share the default compiler profile and display state. */
 
-void Sys_FinishFrame(void) {
+void Boot_FinishFrame(void) {
     s32 one;
 
     if (!(g_GameState.flags & 0x200) && (g_GameStateFlags & 0x10)) {
@@ -291,7 +291,7 @@ void Sys_FinishFrame(void) {
     }
 }
 
-void Sys_Shutdown(void) {
+void Boot_Shutdown(void) {
     int old;
 
     DsReadBreak();
@@ -429,7 +429,7 @@ int Akao_LoadVoiceBank(AkaoVoiceActor *actor) {
     return 0;
 }
 
-void Sys_SyncShutdown(void)
+void Boot_SyncShutdown(void)
 {
     Spu_InitHardware();
     Akao_Cmd_F0();

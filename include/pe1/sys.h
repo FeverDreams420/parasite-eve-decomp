@@ -3,24 +3,24 @@
 
 #include "common.h"
 
-/* Error reporting (Sys_ReportError.c): prints the severity name and the two
+/* Error reporting (Draw_ReportError.c): prints the severity name and the two
  * messages; severity 1 halts. */
 extern char D_80010EB0[]; /* severity/message format */
 extern char D_80010EC8[]; /* detail format */
 extern char *D_80091A2C[]; /* severity names */
-void Sys_ReportError(char *message, char *detail, int value, unsigned char severity);
+void Draw_ReportError(char *message, char *detail, int value, unsigned char severity);
 
-/* Soft-reset and start-up services (Sys_GameStateAndVoiceBanks.c). */
+/* Soft-reset and start-up services (Asset_GameStateAndVoiceBanks.c). */
 extern int g_SceneDispatchToken;
-extern int D_800A77F4; /* dispatch token saved by Sys_Shutdown */
-void Sys_SyncShutdown(void);
+extern int D_800A77F4; /* dispatch token saved by Boot_Shutdown */
+void Boot_SyncShutdown(void);
 int Draw_SetBaseY(int unused, u32 y);
 void Boot_InitMemoryLayout(void);
 void Boot_InitGameState(void);
 /* Resets g_GameState and the scene voice-bank entries to start-up values. */
 void GameState_Reset(void);
 /* End-of-frame pass: draws the fade primitives and sends queued AKAO commands. */
-void Sys_FinishFrame(void);
+void Boot_FinishFrame(void);
 
 /* Fixed work areas carved up by Boot_InitMemoryLayout. */
 extern u8 D_800F34F8[];

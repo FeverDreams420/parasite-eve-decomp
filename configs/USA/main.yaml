@@ -103,7 +103,7 @@ segments:
       - [0x1AA4, .rodata, item/Inv_ItemActions]
       - [0x1ADC, .rodata, save/Save_GameData]
       - [0x1B30, rodata, main/rodata_001B30]
-      - [0x1B88, .rodata, asset/Sys_GameStateAndVoiceBanks]
+      - [0x1B88, .rodata, asset/Asset_GameStateAndVoiceBanks]
       # Scene startup and entity texture jump tables share the loader TU.
       - [0x1BB0, .rodata, scene/Scene_RoomLoad]
       # Both sector-state jump tables now belong to the shared object.
@@ -261,7 +261,7 @@ segments:
       # highlight colour share private state (G0310). One -G8 FORCE_G0 unit with
       # COMMON $gp words and ASPSX 2.70.
       - [0x278DC, c, draw/Draw_Textbox]
-      - [0x29154, c, draw/Sys_ReportError]
+      - [0x29154, c, draw/Draw_ReportError]
       # The glyph loader keeps -fno-schedule-insns, which changes its
       # neighbours, so it stays a unit of its own.
       - [0x291DC, c, draw/Render_FontGlyphLoad]
@@ -460,7 +460,7 @@ segments:
       # voice-bank reset: one default-profile unit; the voice-bank table
       # D_80094488 is read by the loader and cleared by the reset (private
       # evidence into the reset; helper/call/private evidence over the rest).
-      - [0x5A0D4, c, asset/Sys_GameStateAndVoiceBanks]
+      - [0x5A0D4, c, asset/Asset_GameStateAndVoiceBanks]
       # Scene and room loading: startup data and field background loading (scene
       # resource state), the alternate voice-bank load, the room loader, texture-page
       # streaming, disc-change gating, entity textures, player startup and story-day

@@ -145,7 +145,7 @@ int Obj_SetEntryLimit(int arg0, int arg1)
   return ret;
 }
 
-int Sys_SetFlagSlot(int arg0, int arg1) {
+int Render_SetFlagSlot(int arg0, int arg1) {
     GeomStateAddress table, base;
     GeomCtrlEntry *slot;
 
