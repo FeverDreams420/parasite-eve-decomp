@@ -27,8 +27,8 @@ int func_800DC058(int mode, FieldAnimTwinModel *state)
         state->stage = 0;
         state->timer = 0;
         func_800CE870((char *)D_8009D254, 1, &state->position.x);
-        func_800C6D5C((union FieldTexturedModel *)D_800F3418, 0, 0);
-        func_800C6D5C((union FieldTexturedModel *)D_800F342C, 0, 0);
+        FieldModel_ScrollUv((union FieldTexturedModel *)D_800F3418, 0, 0);
+        FieldModel_ScrollUv((union FieldTexturedModel *)D_800F342C, 0, 0);
         break;
     case 1:
         state->timer++;
@@ -82,10 +82,10 @@ int func_800DC058(int mode, FieldAnimTwinModel *state)
             int palette = D_800E1204[kind];
             GsSetOrign(tpage, GetClut(0, (kind == 4 && D_800F3428) ? palette + 10 : palette + 6));
         }
-        func_800C6ED8(1);
-        func_800C6EF8(D_800F3418);
-        func_800C7098(D_800F3418, color.r, color.g, color.b);
-        func_800C71E4((union FieldTexturedModel *)D_800F3418, &matrix);
+        FieldModel_SetSemiTrans(1);
+        FieldModel_SaveColors(D_800F3418);
+        FieldModel_SetColors(D_800F3418, color.r, color.g, color.b);
+        FieldModel_Draw((union FieldTexturedModel *)D_800F3418, &matrix);
         size = 0x4B0;
         scale.z = size;
         scale.x = size;
@@ -101,8 +101,8 @@ int func_800DC058(int mode, FieldAnimTwinModel *state)
         matrix.t[0] = position.x;
         matrix.t[1] = position.y;
         matrix.t[2] = position.z;
-        func_800C71E4((union FieldTexturedModel *)D_800F3418, &matrix);
-        func_800C6F4C(D_800F3418);
+        FieldModel_Draw((union FieldTexturedModel *)D_800F3418, &matrix);
+        FieldModel_RestoreColors(D_800F3418);
         if (spin) {
             scale.z = size;
             scale.x = size;
@@ -123,11 +123,11 @@ int func_800DC058(int mode, FieldAnimTwinModel *state)
                 int palette = D_800E1204[kind];
                 GsSetOrign(tpage, GetClut(0, (kind == 4 && D_800F3428) ? palette + 10 : palette + 6));
             }
-            func_800C6ED8(1);
-            func_800C6EF8(D_800F342C);
-            func_800C7098(D_800F342C, 255, 255, 255);
-            func_800C71E4((union FieldTexturedModel *)D_800F342C, &matrix);
-            func_800C6F4C(D_800F342C);
+            FieldModel_SetSemiTrans(1);
+            FieldModel_SaveColors(D_800F342C);
+            FieldModel_SetColors(D_800F342C, 255, 255, 255);
+            FieldModel_Draw((union FieldTexturedModel *)D_800F342C, &matrix);
+            FieldModel_RestoreColors(D_800F342C);
         }
         break;
     }

@@ -128,7 +128,7 @@ void Battle_UpdateEnemy(BattleEntity *entity) {
     enemy = actor->core;
     {
         s32 hp = enemy->hpAlive;
-        s32 maximum = enemy->field88;
+        s32 maximum = enemy->hpAliveCap;
         if (maximum < hp) enemy->hpAlive = maximum;
         statusCore = enemy;
         asm("" : "=r"(statusCore) : "0"(statusCore));
@@ -214,7 +214,7 @@ void Battle_UpdateEnemy(BattleEntity *entity) {
                         } else {
                             {
                                 BattleEntity *callEntity;
-                                unsigned mode = enemy->field06.bytes.low;
+                                unsigned mode = enemy->lowAndEntityId.bytes.low;
                                 callEntity = actor;
 
                                 Entity_SetActionMode(callEntity, (u16)(s8)mode);

@@ -13,11 +13,11 @@ void Battle_CopyPadStateToRecord(void) {
     BattleAttackBits *attack = (BattleAttackBits *)&record->attackWord;
     BattleTurnBits *turn = (BattleTurnBits *)&record->turnWord;
 
-    record->field00 = D_800A76D8.field00;
+    record->powerBonus = D_800A76D8.powerBonus;
     record->range = D_800A76D8.range;
     record->field04 = D_800A76D8.field04;
     record->actionCode.actionId = D_800A76D8.actionCode.actionId;
-    record->field08 = D_800A76D8.field08;
+    record->hitTrigger = D_800A76D8.hitTrigger;
     attack->count = D_800A76E4.count;
     attack->power = D_800A76E4.power;
     attack->category = D_800A76E4.category;

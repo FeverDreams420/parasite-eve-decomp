@@ -691,7 +691,7 @@ int RoomEffect_BeamSparkController(int mode, RoomBeamSpark *fx,
         fx->tz = params->z;
         fx->ty = g_RoomFloorY->raw;
         g_RoomBeamSparkAsset = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5485704);
-        func_800C6D5C(g_RoomBeamSparkAsset, 0, 0);
+        FieldModel_ScrollUv(g_RoomBeamSparkAsset, 0, 0);
         handle = func_800D3FD8();
         func_800D3F64(0x58A, handle);
         if (ANIM_TASK_AS(RoomSparkEventState)->active) {
@@ -862,7 +862,7 @@ int RoomEffect_BeamSparkController(int mode, RoomBeamSpark *fx,
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             clut = GetClut(0x40, palette);
             func_800C6EC0(page, clut);
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             RotMatrixYXZ(&modelRotation, &matrix);
             matrix.t[0] = fx->tx;
             matrix.t[1] = fx->ty;
@@ -871,10 +871,10 @@ int RoomEffect_BeamSparkController(int mode, RoomBeamSpark *fx,
             scale.y = fx->scale * 3 / 2;
             scale.z = fx->scale * 3 / 2;
             ScaleMatrix(&matrix, &scale);
-            func_800C6EF8(g_RoomBeamSparkAsset);
-            func_800C6FA0(g_RoomBeamSparkAsset, (u16)((s16)fx->glow / 2));
-            func_800C71E4(g_RoomBeamSparkAsset, (GteMatrix *)&matrix);
-            func_800C6F4C(g_RoomBeamSparkAsset);
+            FieldModel_SaveColors(g_RoomBeamSparkAsset);
+            FieldModel_ScaleColors(g_RoomBeamSparkAsset, (u16)((s16)fx->glow / 2));
+            FieldModel_Draw(g_RoomBeamSparkAsset, (GteMatrix *)&matrix);
+            FieldModel_RestoreColors(g_RoomBeamSparkAsset);
         }
         D_800F3368.parameter00 = 0x20;
         D_800F3368.parameter02 = 2;

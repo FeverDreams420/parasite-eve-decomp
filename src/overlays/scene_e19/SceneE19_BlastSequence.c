@@ -60,15 +60,15 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
     switch (mode) {
     case 0:
         D_8019B680 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54C0704);
-        func_800C6D5C(D_8019B680, 0, 0);
+        FieldModel_ScrollUv(D_8019B680, 0, 0);
         D_8019B684 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC58C0704);
-        func_800C6D5C(D_8019B684, 0, 0);
+        FieldModel_ScrollUv(D_8019B684, 0, 0);
         D_8019B688 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5CC0704);
-        func_800C6D5C(D_8019B688, 0, 0);
+        FieldModel_ScrollUv(D_8019B688, 0, 0);
         D_8019B68C = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC60C0704);
-        func_800C6D5C(D_8019B68C, 0, 0);
+        FieldModel_ScrollUv(D_8019B68C, 0, 0);
         D_8019B690 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC64C0704);
-        func_800C6D5C(D_8019B690, 0, 0);
+        FieldModel_ScrollUv(D_8019B690, 0, 0);
         blast->state = 0;
         blast->timer = 0;
         func_800CE870((char *)ANIM_OWNER_AS(SceneE19BlastChannel)->pool, 1, &blast->position.x);
@@ -246,7 +246,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 palette += 4;
             }
             func_800C6EC0(page, GetClut(0x20, palette));
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             RotMatrixYXZ(&rotation, &shellMatrix1);
             shellScale1.x = radialScale / 2;
             shellScale1.y = radialScale / 2;
@@ -255,10 +255,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix1.t[2] = center.z;
             shellScale1.z = (blast->timer << 6) + 0x400;
             ScaleMatrix(&shellMatrix1, &shellScale1);
-            func_800C6EF8(D_8019B684);
-            func_800C6FA0(D_8019B684, 0x40);
-            func_800C71E4(D_8019B684, &shellMatrix1);
-            func_800C6F4C(D_8019B684);
+            FieldModel_SaveColors(D_8019B684);
+            FieldModel_ScaleColors(D_8019B684, 0x40);
+            FieldModel_Draw(D_8019B684, &shellMatrix1);
+            FieldModel_RestoreColors(D_8019B684);
             gte_ldrotmatrix(D_800BCFA4.value);
             gte_ldtransmatrix(D_800BCFA4.value);
             func_800D004C(&center, 0x12C, 0x12C, 0xC, 0, 0x1000, 0x1000, &glowColor, 0, intensity, 1);
@@ -322,7 +322,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 }
                 func_800C6EC0(page, GetClut(0x20, paletteValue));
             }
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             RotMatrixYXZ(&rotation, &shellMatrix2);
             shellScale2.x = radialScale / 2;
             shellScale2.y = radialScale / 2;
@@ -331,10 +331,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix2.t[2] = center.z;
             shellScale2.z = (blast->timer << 6) + 0x800;
             ScaleMatrix(&shellMatrix2, &shellScale2);
-            func_800C6EF8(D_8019B684);
-            func_800C6FA0(D_8019B684, 0x40);
-            func_800C71E4(D_8019B684, &shellMatrix2);
-            func_800C6F4C(D_8019B684);
+            FieldModel_SaveColors(D_8019B684);
+            FieldModel_ScaleColors(D_8019B684, 0x40);
+            FieldModel_Draw(D_8019B684, &shellMatrix2);
+            FieldModel_RestoreColors(D_8019B684);
             gte_ldrotmatrix(D_800BCFA4.value);
             gte_ldtransmatrix(D_800BCFA4.value);
             func_800D004C(&center, 0x12C, 0x12C, 0xC, 0, 0x1000, 0x1000, &glowColor, 0, intensity, 1);
@@ -399,7 +399,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 palette += 4;
             }
             func_800C6EC0(page, GetClut(0x20, palette));
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             RotMatrixYXZ(&rotation, &shellMatrix3a);
             shellScale3a.x = radialScale;
             shellScale3a.y = verticalScale;
@@ -408,10 +408,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix3a.t[1] = center.y;
             shellMatrix3a.t[2] = center.z;
             ScaleMatrix(&shellMatrix3a, &shellScale3a);
-            func_800C6EF8(D_8019B680);
-            func_800C6FA0(D_8019B680, (u16)intensity);
-            func_800C71E4(D_8019B680, &shellMatrix3a);
-            func_800C6F4C(D_8019B680);
+            FieldModel_SaveColors(D_8019B680);
+            FieldModel_ScaleColors(D_8019B680, (u16)intensity);
+            FieldModel_Draw(D_8019B680, &shellMatrix3a);
+            FieldModel_RestoreColors(D_8019B680);
             radialScale = rsin(phase) / 3 + 0x400;
             verticalScale = rcos(phase) / 2;
             intensity = rcos(phase) / 32;
@@ -430,7 +430,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 palette += 4;
             }
             func_800C6EC0(page, GetClut(0x20, palette));
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             RotMatrixYXZ(&rotation, &shellMatrix3b);
             shellScale3b.x = radialScale;
             shellScale3b.y = verticalScale;
@@ -439,10 +439,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix3b.t[1] = center.y;
             shellMatrix3b.t[2] = center.z;
             ScaleMatrix(&shellMatrix3b, &shellScale3b);
-            func_800C6EF8(D_8019B688);
-            func_800C6FA0(D_8019B688, (u16)(intensity / 2));
-            func_800C71E4(D_8019B688, &shellMatrix3b);
-            func_800C6F4C(D_8019B688);
+            FieldModel_SaveColors(D_8019B688);
+            FieldModel_ScaleColors(D_8019B688, (u16)(intensity / 2));
+            FieldModel_Draw(D_8019B688, &shellMatrix3b);
+            FieldModel_RestoreColors(D_8019B688);
             modelPhase = (blast->timer << 10) / 56;
             radialScale = rsin(modelPhase) / 4 + 0xC00;
             verticalScale = rcos(modelPhase) / 4 + 0x400;
@@ -462,7 +462,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 palette += 4;
             }
             func_800C6EC0(page, GetClut(0x20, palette));
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             height = center.y;
             center.y -= blast->timer * 0x18;
             RotMatrixYXZ(&rotation, &shellMatrix3c);
@@ -473,10 +473,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix3c.t[1] = center.y;
             shellMatrix3c.t[2] = center.z;
             ScaleMatrix(&shellMatrix3c, &shellScale3c);
-            func_800C6EF8(D_8019B68C);
-            func_800C6FA0(D_8019B68C, (u16)(intensity / 2));
-            func_800C71E4(D_8019B68C, &shellMatrix3c);
-            func_800C6F4C(D_8019B68C);
+            FieldModel_SaveColors(D_8019B68C);
+            FieldModel_ScaleColors(D_8019B68C, (u16)(intensity / 2));
+            FieldModel_Draw(D_8019B68C, &shellMatrix3c);
+            FieldModel_RestoreColors(D_8019B68C);
             center.y = height;
             gte_ldrotmatrix(D_800BCFA4.value);
             gte_ldtransmatrix(D_800BCFA4.value);
@@ -508,7 +508,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 palette += 4;
             }
             func_800C6EC0(page, GetClut(0x60, palette));
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             RotMatrixYXZ(&rotation, &shellMatrix3d);
             shellScale3d.x = radialScale;
             shellScale3d.y = verticalScale;
@@ -517,10 +517,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix3d.t[1] = center.y;
             shellMatrix3d.t[2] = center.z;
             ScaleMatrix(&shellMatrix3d, &shellScale3d);
-            func_800C6EF8(D_8019B690);
-            func_800C6FA0(D_8019B690, (u16)intensity);
-            func_800C71E4(D_8019B690, &shellMatrix3d);
-            func_800C6F4C(D_8019B690);
+            FieldModel_SaveColors(D_8019B690);
+            FieldModel_ScaleColors(D_8019B690, (u16)intensity);
+            FieldModel_Draw(D_8019B690, &shellMatrix3d);
+            FieldModel_RestoreColors(D_8019B690);
             radialScale = rsin(modelPhase) / 6 + 0x1200;
             verticalScale = rcos(modelPhase) * 2;
             intensity = rcos(modelPhase) / 32;
@@ -539,7 +539,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 palette += 4;
             }
             func_800C6EC0(page, GetClut(0x60, palette));
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             RotMatrixYXZ(&rotation, &shellMatrix3e);
             shellScale3e.x = radialScale;
             shellScale3e.y = verticalScale;
@@ -548,10 +548,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix3e.t[1] = center.y;
             shellMatrix3e.t[2] = center.z;
             ScaleMatrix(&shellMatrix3e, &shellScale3e);
-            func_800C6EF8(D_8019B690);
-            func_800C6FA0(D_8019B690, (u16)intensity);
-            func_800C71E4(D_8019B690, &shellMatrix3e);
-            func_800C6F4C(D_8019B690);
+            FieldModel_SaveColors(D_8019B690);
+            FieldModel_ScaleColors(D_8019B690, (u16)intensity);
+            FieldModel_Draw(D_8019B690, &shellMatrix3e);
+            FieldModel_RestoreColors(D_8019B690);
             break;
         case 4:
             phase = (blast->timer << 10) / 24;
@@ -573,7 +573,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 palette += 4;
             }
             func_800C6EC0(page, GetClut(0x20, palette));
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             RotMatrixYXZ(&rotation, &shellMatrix4a);
             shellScale4a.x = radialScale;
             shellScale4a.y = verticalScale;
@@ -582,10 +582,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix4a.t[1] = center.y;
             shellMatrix4a.t[2] = center.z;
             ScaleMatrix(&shellMatrix4a, &shellScale4a);
-            func_800C6EF8(D_8019B680);
-            func_800C6FA0(D_8019B680, (u16)intensity);
-            func_800C71E4(D_8019B680, &shellMatrix4a);
-            func_800C6F4C(D_8019B680);
+            FieldModel_SaveColors(D_8019B680);
+            FieldModel_ScaleColors(D_8019B680, (u16)intensity);
+            FieldModel_Draw(D_8019B680, &shellMatrix4a);
+            FieldModel_RestoreColors(D_8019B680);
             modelPhase = ((blast->timer + 0x20) << 10) / 56;
             radialScale = rsin(modelPhase) / 4 + 0xC00;
             verticalScale = rcos(modelPhase) / 4 + 0x400;
@@ -605,7 +605,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 palette += 4;
             }
             func_800C6EC0(page, GetClut(0x20, palette));
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             height = center.y;
             center.y -= (blast->timer + 0x20) * 0x18;
             RotMatrixYXZ(&rotation, &shellMatrix4b);
@@ -616,10 +616,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix4b.t[1] = center.y;
             shellMatrix4b.t[2] = center.z;
             ScaleMatrix(&shellMatrix4b, &shellScale4b);
-            func_800C6EF8(D_8019B68C);
-            func_800C6FA0(D_8019B68C, (u16)(intensity / 2));
-            func_800C71E4(D_8019B68C, &shellMatrix4b);
-            func_800C6F4C(D_8019B68C);
+            FieldModel_SaveColors(D_8019B68C);
+            FieldModel_ScaleColors(D_8019B68C, (u16)(intensity / 2));
+            FieldModel_Draw(D_8019B68C, &shellMatrix4b);
+            FieldModel_RestoreColors(D_8019B68C);
             center.y = height;
             radialScale = rsin(modelPhase) / 4 + 0x1200;
             verticalScale = rcos(modelPhase);
@@ -639,7 +639,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 palette += 4;
             }
             func_800C6EC0(page, GetClut(0x60, palette));
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             RotMatrixYXZ(&rotation, &shellMatrix4c);
             shellScale4c.x = radialScale;
             shellScale4c.y = verticalScale;
@@ -648,10 +648,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix4c.t[1] = center.y;
             shellMatrix4c.t[2] = center.z;
             ScaleMatrix(&shellMatrix4c, &shellScale4c);
-            func_800C6EF8(D_8019B690);
-            func_800C6FA0(D_8019B690, (u16)intensity);
-            func_800C71E4(D_8019B690, &shellMatrix4c);
-            func_800C6F4C(D_8019B690);
+            FieldModel_SaveColors(D_8019B690);
+            FieldModel_ScaleColors(D_8019B690, (u16)intensity);
+            FieldModel_Draw(D_8019B690, &shellMatrix4c);
+            FieldModel_RestoreColors(D_8019B690);
             radialScale = rsin(modelPhase) / 6 + 0x1200;
             verticalScale = rcos(modelPhase) * 2;
             intensity = rcos(modelPhase) / 32;
@@ -670,7 +670,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 palette += 4;
             }
             func_800C6EC0(page, GetClut(0x60, palette));
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             RotMatrixYXZ(&rotation, &shellMatrix4d);
             shellScale4d.x = radialScale;
             shellScale4d.y = verticalScale;
@@ -679,10 +679,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix4d.t[1] = center.y;
             shellMatrix4d.t[2] = center.z;
             ScaleMatrix(&shellMatrix4d, &shellScale4d);
-            func_800C6EF8(D_8019B690);
-            func_800C6FA0(D_8019B690, (u16)intensity);
-            func_800C71E4(D_8019B690, &shellMatrix4d);
-            func_800C6F4C(D_8019B690);
+            FieldModel_SaveColors(D_8019B690);
+            FieldModel_ScaleColors(D_8019B690, (u16)intensity);
+            FieldModel_Draw(D_8019B690, &shellMatrix4d);
+            FieldModel_RestoreColors(D_8019B690);
             break;
         }
         D_800F3368.parameter00 = 0x10;

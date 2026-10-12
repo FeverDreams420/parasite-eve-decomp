@@ -24,7 +24,7 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
         bolt->timer = 0;
         bolt->reserved1C = 0;
         D_80199500 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54C4704);
-        func_800C6D5C(D_80199500, 0, 0);
+        FieldModel_ScrollUv(D_80199500, 0, 0);
         FieldEng_TransformMatrixPoint(ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool, 0, &offset, &bolt->position);
         bolt->origin.x = bolt->position.x;
         bolt->origin.y = bolt->position.y;
@@ -107,7 +107,7 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
                 func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
                                                                              : palette + 3));
             }
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             rotation.x = bolt->heading.x;
             rotation.y = bolt->heading.y;
             rotation.z = bolt->heading.z;
@@ -120,10 +120,10 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
             scale.y = modelScale;
             scale.z = modelScale;
             ScaleMatrix(&matrix, &scale);
-            func_800C6EF8(D_80199500);
-            func_800C6FA0(D_80199500, (u16)glow);
-            func_800C71E4(D_80199500, (GteMatrix *)&matrix);
-            func_800C6F4C(D_80199500);
+            FieldModel_SaveColors(D_80199500);
+            FieldModel_ScaleColors(D_80199500, (u16)glow);
+            FieldModel_Draw(D_80199500, (GteMatrix *)&matrix);
+            FieldModel_RestoreColors(D_80199500);
             break;
         }
         case 1: {
@@ -148,7 +148,7 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
                 func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
                                                                              : palette + 3));
             }
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             rotation.x = bolt->heading.x;
             rotation.y = bolt->heading.y;
             rotation.z = bolt->heading.z;
@@ -161,10 +161,10 @@ int func_80196554(int mode, SceneE22TwistModel *bolt) {
             scale.y = modelScale;
             scale.z = modelScale;
             ScaleMatrix(&matrix, &scale);
-            func_800C6EF8(D_80199500);
-            func_800C6FA0(D_80199500, (u16)glow);
-            func_800C71E4(D_80199500, (GteMatrix *)&matrix);
-            func_800C6F4C(D_80199500);
+            FieldModel_SaveColors(D_80199500);
+            FieldModel_ScaleColors(D_80199500, (u16)glow);
+            FieldModel_Draw(D_80199500, (GteMatrix *)&matrix);
+            FieldModel_RestoreColors(D_80199500);
             {
                 int kind;
                 int palette;

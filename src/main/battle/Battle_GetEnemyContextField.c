@@ -30,13 +30,13 @@ s32 Battle_GetEnemyContextField(FieldActor *arg0, s32 arg1) {
         }
         break;
     case 19:
-        ret = ctx->field88;
+        ret = ctx->hpAliveCap;
         if (ret < 0) {
             ret = 0;
         }
         break;
     case 20:
-        ret = ctx->field8C;
+        ret = ctx->defense;
         break;
     case 36:
         word = ctx->coreFlags;

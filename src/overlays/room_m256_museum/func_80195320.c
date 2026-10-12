@@ -14,7 +14,7 @@ int func_80195320(int mode, u16 *out) {
 
         *out = (u16)D_800E2368->variables[0];
         D_80195EF8 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5887704);
-        func_800C6D5C((union FieldTexturedModel *)D_80195EF8, 0, 0);
+        FieldModel_ScrollUv((union FieldTexturedModel *)D_80195EF8, 0, 0);
         if (D_800E2368->flags) {
             actor = (FieldActor *)D_800F32D0->actor;
             if (actor) {

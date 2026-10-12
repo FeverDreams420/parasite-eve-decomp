@@ -46,14 +46,14 @@ void RoomEffect_GroundEruptionInit(RoomEnt *owner, void *arg1, char *state) {
     func_800C2B40(workState);
     ((RoomEruptionActor *)workState)->cooldown = 0;
     ((RoomEruptionActor *)workState)->collisionState = 0;
-    ((RoomEruptionActor *)workState)->reload = *func_800C2B28(5);
-    ((RoomEruptionActor *)workState)->collisionRadius = *func_800C2B28(4);
+    ((RoomEruptionActor *)workState)->reload = *FieldEng_VarPtr(5);
+    ((RoomEruptionActor *)workState)->collisionRadius = *FieldEng_VarPtr(4);
     entity = owner->link;
     ((RoomEruptionActor *)workState)->entity = entity;
     ((RoomEruptionActor *)workState)->matrix = *(RoomSpriteMatrix *)entity->p238;
-    ((RoomEruptionActor *)workState)->matrix.t[0] = *func_800C2B28(1);
-    ((RoomEruptionActor *)workState)->matrix.t[1] = *func_800C2B28(2);
-    ((RoomEruptionActor *)workState)->matrix.t[2] = *func_800C2B28(3);
+    ((RoomEruptionActor *)workState)->matrix.t[0] = *FieldEng_VarPtr(1);
+    ((RoomEruptionActor *)workState)->matrix.t[1] = *FieldEng_VarPtr(2);
+    ((RoomEruptionActor *)workState)->matrix.t[2] = *FieldEng_VarPtr(3);
     asset = Asset_SearchByKeyType(0xA6);
     callOwner = (char *)owner;
     ((RoomEruptionActor *)workState)->asset.handle = asset;
@@ -549,7 +549,7 @@ void RoomEffect_GroundEruptionInitDebris(void *arg0, void *arg1, char *state) {
     int wave;
 
     owner = func_800C2B50();
-    func_800C2B28(0);
+    FieldEng_VarPtr(0);
     angle = rand() % 0x1000;
     i = 0;
     flag = (short *)state;

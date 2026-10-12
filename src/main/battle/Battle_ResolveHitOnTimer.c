@@ -40,7 +40,7 @@ void Battle_ResolveHitOnTimer(void)
     action = D_8009D278->action;
     selectedSlot = &D_800BE830[D_8009D1D4];
     D_8009D274 = hitTimer;
-    if ((hitTimer & 0xFF) == action->field08)
+    if ((hitTimer & 0xFF) == action->hitTrigger)
     {
         actionId = action->actionCode.actionId;
         if (actionId == 8)

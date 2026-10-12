@@ -48,22 +48,22 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
     }
     else if (activeState & 0x100000)
     {
-        basePower = (((u16)D_8009D278->stat1E / 5U) & 0xFFFF) + (s16) D_8009D278->action->field00;
+        basePower = (((u16)D_8009D278->stat1E / 5U) & 0xFFFF) + (s16) D_8009D278->action->powerBonus;
         attackPower = ((basePower * (((D_8009D278->field04.fieldId04 * 7) + 0x78) / 160) * (s16)(D_8009D278->exp_or_acc >> 16)) / (s16) (s16)(D_8009D278->maxAtk >> 16)) + basePower;
     }
     else
     {
         unsigned char hitCountPercent[11] = { 0, 100, 60, 41, 0, 25, 0, 18, 0, 0, 13 };
         weaponAction = D_8009D278->action;
-        attackPower = ((((s32)(((u16)D_8009D278->stat1E / 5U) & 0xFFFF)) + (s16) weaponAction->field00) * hitCountPercent[weaponAction->turnWord & 0xF]) / 100;
+        attackPower = ((((s32)(((u16)D_8009D278->stat1E / 5U) & 0xFFFF)) + (s16) weaponAction->powerBonus) * hitCountPercent[weaponAction->turnWord & 0xF]) / 100;
     }
     if (!(D_8009D278->stateFlags & 0x180000) && (defenseAction = D_8009D278->action, (defenseAction->actionCode.actionId != 8)))
     {
-        damage = attackPower - (enemy->field8C / (s32) (defenseAction->turnWord & 0xF));
+        damage = attackPower - (enemy->defense / (s32) (defenseAction->turnWord & 0xF));
     }
     else
     {
-        damage = attackPower - enemy->field8C;
+        damage = attackPower - enemy->defense;
     }
     if (damage > 0)
     {
@@ -161,7 +161,7 @@ void Battle_StepEnemyMovement(BattleEntity *entity)
                                 entity->entityFlags |= 0x1000;
                                 if (enemy->field04.bytes.kind != 0)
                                 {
-                                    Entity_SetActionMode(entity, (u16)(s8)enemy->field06.bytes.low);
+                                    Entity_SetActionMode(entity, (u16)(s8)enemy->lowAndEntityId.bytes.low);
                                 }
                             }
                         }

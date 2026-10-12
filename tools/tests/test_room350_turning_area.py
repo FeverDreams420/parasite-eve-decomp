@@ -134,7 +134,7 @@ void *Asset_FindTable08ByU32Key(void *base,int id) {
     assert(mode==0 && calls++==0 && base==D_800B0E64[0] && id==(int)0xC54E0704);
     return &assets[0];
 }
-void func_800C6D5C(union FieldTexturedModel *asset,u8 a,u8 b) {
+void FieldModel_ScrollUv(union FieldTexturedModel *asset,u8 a,u8 b) {
     assert(mode==0 && calls++==1 && (void *)asset==&assets[0] && !a && !b);
     D_8019A82A[0]=-32768; state.size=123; state.initialized=255;
 }
@@ -250,9 +250,9 @@ u_short GetClut(int x,int y) {
     state.asset=&assets[1]; return 0xFFFF;
 }
 void GsSetOrign(int page,int clut) { assert(drawStage++==2 && page==(0x0100|0x8055) && clut==65535); }
-void func_800C6ED8(short x) { assert(drawStage++==3 && x==1); }
-void func_800C6EF8(char *p) { assert(drawStage++==4 && (void *)p==&assets[1]); state.asset=&assets[2]; state.brightness=-1; }
-void func_800C6FA0(char *p,u16 b) { assert(drawStage++==5 && (void *)p==&assets[2] && b==65535); }
+void FieldModel_SetSemiTrans(short x) { assert(drawStage++==3 && x==1); }
+void FieldModel_SaveColors(char *p) { assert(drawStage++==4 && (void *)p==&assets[1]); state.asset=&assets[2]; state.brightness=-1; }
+void FieldModel_ScaleColors(char *p,u16 b) { assert(drawStage++==5 && (void *)p==&assets[2] && b==65535); }
 void *target_memset(void *p,int a,unsigned int b) {
     assert(drawStage==6 && clears==models && scaled==models && !a && b==16);
     initialScale=state.size*(clears+1)/3; memset(p,0,b);
@@ -269,12 +269,12 @@ GteMatrix *ScaleMatrix(GteMatrix *matrix,const GteVector *vector) {
     m->position[0]=12345+scaled; scaled++;
     return matrix;
 }
-void func_800C71E4(union FieldTexturedModel *p,GteMatrix *m) {
+void FieldModel_Draw(union FieldTexturedModel *p,GteMatrix *m) {
     assert(clears==models+1 && scaled==clears && (void *)p==&assets[clears+2]);
     assert(m->t[0]==12345+models); models++;
     memset(&D_8019A808,0,sizeof(D_8019A808)); memset(transforms,0,sizeof(transforms));
 }
-void func_800C6F4C(char *p) {
+void FieldModel_RestoreColors(char *p) {
     assert(models==3 && (void *)p==&assets[5]);
     state.size=tailSize; state.yaw=tailYaw; state.brightness=-123;
     instances[0].render_object.model_matrix.translation[0]=word(0x12348000u);

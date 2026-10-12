@@ -11,9 +11,9 @@ void func_801943CC(void *arg0, void *arg1, SceneLayeredSpriteState *out)
     out->initialSeed.vector.x = 0;
     out->initialSeed.vector.y = 0;
     out->initialSeed.vector.z = 0;
-    out->phase = *func_800C2B10(2);
-    out->direction = *func_800C2B10(3);
-    out->drift = *func_800C2B28(1);
+    out->phase = *FieldEng_RegPtr(2);
+    out->direction = *FieldEng_RegPtr(3);
+    out->drift = *FieldEng_VarPtr(1);
     if (out->direction == 0)
         out->velocity[2] = 0x124F80;
     else

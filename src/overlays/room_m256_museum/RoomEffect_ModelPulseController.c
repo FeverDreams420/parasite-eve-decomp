@@ -29,7 +29,7 @@ int func_80195728(int mode, s16 *state) {
     case 0:
         *state = 0;
         D_801960A8 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5487704);
-        func_800C6D5C(D_801960A8, 0, 0);
+        FieldModel_ScrollUv(D_801960A8, 0, 0);
         return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 8, 0x10,
                              (FieldAnimCallbackListCallback)func_8019552C);
     case 1:
@@ -109,7 +109,7 @@ int func_80195728(int mode, s16 *state) {
                 clut = GetClut(0x50, palette);
                 func_800C6EC0(page, clut);
             }
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             RotMatrixYXZ(&D_80196098, &matrix);
             matrix.t[0] = position.x;
             matrix.t[1] = position.y;
@@ -118,10 +118,10 @@ int func_80195728(int mode, s16 *state) {
             scale.y = size;
             scale.z = size;
             ScaleMatrix(&matrix, &scale);
-            func_800C6EF8(D_801960A8);
-            func_800C6FA0(D_801960A8, (u16)brightness);
-            func_800C71E4(D_801960A8, (GteMatrix *)&matrix);
-            func_800C6F4C(D_801960A8);
+            FieldModel_SaveColors(D_801960A8);
+            FieldModel_ScaleColors(D_801960A8, (u16)brightness);
+            FieldModel_Draw(D_801960A8, (GteMatrix *)&matrix);
+            FieldModel_RestoreColors(D_801960A8);
         }
         D_800F3368.parameter00 = 0x10;
         D_800F3368.parameter02 = 1;

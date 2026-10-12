@@ -70,8 +70,8 @@ int func_800CE1F4(void) {
     return 0;
 }
 
-int *func_800C2B10(int index);
-int *func_800C2B28(int index);
+int *FieldEng_RegPtr(int index);
+int *FieldEng_VarPtr(int index);
 
 #include "FieldEng_BurstEffectC_externs_3.h"
 
@@ -82,18 +82,18 @@ int func_800CE1FC(void) {
     int *next;
     FieldActor *data;
 
-    index = *func_800C2B10(0xD);
-    table = (int *)*func_800C2B28(1);
+    index = *FieldEng_RegPtr(0xD);
+    table = (int *)*FieldEng_VarPtr(1);
     entry = (int *)table[index];
     index++;
     next = (int *)table[index];
     D_800E2848 = (int)entry;
 
     if (next == 0) {
-        *func_800C2B10(0xE) = 1;
+        *FieldEng_RegPtr(0xE) = 1;
     }
 
-    *func_800C2B10(0xD) = index;
+    *FieldEng_RegPtr(0xD) = index;
 
     data = (FieldActor *)D_800E2848;
     D_800E2808.x = data->render_object.target_x;

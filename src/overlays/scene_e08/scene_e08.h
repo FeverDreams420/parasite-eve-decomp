@@ -111,8 +111,8 @@ typedef struct {
     u8 frame;                   /* 0x22 */
 } Ovl178MotionState;
 
-s32 *func_800C2B10(int index);
-s32 *func_800C2B28(int index);
+s32 *FieldEng_RegPtr(int index);
+s32 *FieldEng_VarPtr(int index);
 extern s16 D_80199590[];
 extern u16 D_80199658[];
 extern s32 D_8019956C;

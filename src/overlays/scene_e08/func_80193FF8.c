@@ -6,7 +6,7 @@ void func_80193FF8(s32 arg0, s32 arg1, SceneE08TrailGlow *p) {
     s32 z;
 
     view = func_800C2B50();
-    func_800C2B10(1);
+    FieldEng_RegPtr(1);
     p->acceleration = 0x14;
     p->unused88 = 0x80;
     p->speed = 0;

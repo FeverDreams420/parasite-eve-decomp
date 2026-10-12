@@ -11,10 +11,10 @@ void func_80193480(void *unused0, void *unused1, Ovl178RandomizedEffect *effect)
         effect->tail.flags[i] = 0;
         effect->offsets[i] = 0;
     }
-    threshold = *func_800C2B28(2);
+    threshold = *FieldEng_VarPtr(2);
     if (Engine_Random() % 256 < threshold) {
-        *func_800C2B28(1) = 1;
+        *FieldEng_VarPtr(1) = 1;
     } else {
-        *func_800C2B28(1) = 0;
+        *FieldEng_VarPtr(1) = 0;
     }
 }

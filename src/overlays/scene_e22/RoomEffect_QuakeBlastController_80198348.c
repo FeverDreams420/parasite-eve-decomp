@@ -29,9 +29,9 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             Akao_SendTableCommand(D_800B0E64[0], 0x5DA, func_800D3FD8(), 0x80, 0x7F);
         }
         D_80199508 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC58C4704);
-        func_800C6D5C(D_80199508, 0, 0);
+        FieldModel_ScrollUv(D_80199508, 0, 0);
         D_8019950C = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5CC4704);
-        func_800C6D5C(D_8019950C, 0, 0);
+        FieldModel_ScrollUv(D_8019950C, 0, 0);
         fx->position.x = target->x;
         fx->position.y = target->y;
         fx->position.z = target->z;
@@ -146,7 +146,7 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800C6EC0(page, GetClut(0x10, palette));
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             RotMatrixYXZ(&rotation, &matrix);
             shape.x = scale;
             shape.y = scale * 2;
@@ -155,10 +155,10 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             matrix.t[1] = position.y;
             matrix.t[2] = position.z;
             ScaleMatrix(&matrix, &shape);
-            func_800C6EF8(D_80199508);
-            func_800C6FA0(D_80199508, (u16)(glow * 3 / 2));
-            func_800C71E4(D_80199508, (GteMatrix *)&matrix);
-            func_800C6F4C(D_80199508);
+            FieldModel_SaveColors(D_80199508);
+            FieldModel_ScaleColors(D_80199508, (u16)(glow * 3 / 2));
+            FieldModel_Draw(D_80199508, (GteMatrix *)&matrix);
+            FieldModel_RestoreColors(D_80199508);
         }
         scale = scale / 2;
         {
@@ -181,7 +181,7 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800C6EC0(page, GetClut(0x10, palette));
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             RotMatrixYXZ(&rotation, &matrix);
             shape.x = scale;
             shape.y = scale * 8;
@@ -190,10 +190,10 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             matrix.t[1] = position.y;
             matrix.t[2] = position.z;
             ScaleMatrix(&matrix, &shape);
-            func_800C6EF8(D_80199508);
-            func_800C6FA0(D_80199508, (u16)glow);
-            func_800C71E4(D_80199508, (GteMatrix *)&matrix);
-            func_800C6F4C(D_80199508);
+            FieldModel_SaveColors(D_80199508);
+            FieldModel_ScaleColors(D_80199508, (u16)glow);
+            FieldModel_Draw(D_80199508, (GteMatrix *)&matrix);
+            FieldModel_RestoreColors(D_80199508);
         }
         if (fx->timer < 0x19) {
             SceneE22QuakeMatrix matrix;
@@ -218,7 +218,7 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800C6EC0(page, GetClut(0x30, palette));
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             RotMatrixYXZ(&rotation, &matrix);
             shape.x = scale;
             shape.y = 0x1000;
@@ -227,10 +227,10 @@ int func_80198348(int mode, SceneE22QuakeBlast *fx, SceneE22QuakeTarget *target)
             matrix.t[1] = position.y;
             matrix.t[2] = position.z;
             ScaleMatrix(&matrix, &shape);
-            func_800C6EF8(D_8019950C);
-            func_800C6FA0(D_8019950C, (u16)glow);
-            func_800C71E4(D_8019950C, (GteMatrix *)&matrix);
-            func_800C6F4C(D_8019950C);
+            FieldModel_SaveColors(D_8019950C);
+            FieldModel_ScaleColors(D_8019950C, (u16)glow);
+            FieldModel_Draw(D_8019950C, (GteMatrix *)&matrix);
+            FieldModel_RestoreColors(D_8019950C);
         }
         D_800F3368.parameter00 = 0x10;
         D_800F3368.parameter02 = 1;

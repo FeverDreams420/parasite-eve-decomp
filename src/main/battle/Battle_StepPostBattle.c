@@ -57,7 +57,7 @@ void Battle_StepPostBattle(void)
                                 actionCore = entity->core;
                                 entity->entityFlags |= 0x1000;
                                 if (actionCore != 0) {
-                                    Entity_SetActionMode(entity, (u16)(s8)actionCore->field06.bytes.low);
+                                    Entity_SetActionMode(entity, (u16)(s8)actionCore->lowAndEntityId.bytes.low);
                                     entityFlags = entity->entityFlags;
                                     if ((entityFlags & 0x40000000) && (((EnemyCombatant *)entity->core)->deathPersist == 0)) {
                                         entity->entityFlags = entityFlags | 0x10;

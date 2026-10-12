@@ -136,7 +136,7 @@ int func_800CBFBC(void) {
 }
 
 int rand(void);
-int *func_800C2B10(int index);
+int *FieldEng_RegPtr(int index);
 
 
 int func_800CBFC4(void *arg0, void *arg1, FieldAnimPointSprite *anim) {
@@ -145,9 +145,9 @@ int func_800CBFC4(void *arg0, void *arg1, FieldAnimPointSprite *anim) {
     int x_rand;
     int z_rand;
 
-    D_800F3430.oriented.rgb[0] = *func_800C2B10(0);
-    D_800F3430.oriented.rgb[1] = *func_800C2B10(1);
-    D_800F3430.oriented.rgb[2] = *func_800C2B10(2);
+    D_800F3430.oriented.rgb[0] = *FieldEng_RegPtr(0);
+    D_800F3430.oriented.rgb[1] = *FieldEng_RegPtr(1);
+    D_800F3430.oriented.rgb[2] = *FieldEng_RegPtr(2);
 
     x_rand = rand();
     x_base_a1 = D_800E2290.x - 0x64;
@@ -167,9 +167,9 @@ void FieldAnim_InitRadialEntries(void *arg0, void *arg1, FieldAnimRadialParticle
     int angle;
     int lift;
 
-    D_800E2260.oriented.rgb[0] = *func_800C2B10(3);
-    D_800E2260.oriented.rgb[1] = *func_800C2B10(4);
-    D_800E2260.oriented.rgb[2] = *func_800C2B10(5);
+    D_800E2260.oriented.rgb[0] = *FieldEng_RegPtr(3);
+    D_800E2260.oriented.rgb[1] = *FieldEng_RegPtr(4);
+    D_800E2260.oriented.rgb[2] = *FieldEng_RegPtr(5);
 
     anim->scale = 0x7F;
     if (((Combatant *)D_8009D254->core)->action->actionCode.actionId == 3) {

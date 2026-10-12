@@ -30,7 +30,7 @@ void Battle_StepEscapeOrDeath(void)
             } else {
                 u32 flags;
                 Entity_SetActionMode(entity,
-                    (u16)(s8)((EnemyCombatant *)entity->core)->field06.bytes.low);
+                    (u16)(s8)((EnemyCombatant *)entity->core)->lowAndEntityId.bytes.low);
                 flags = entity->entityFlags;
                 entity->motionX = 0;
                 entity->motionY = 0;
@@ -364,7 +364,7 @@ void Battle_PhaseInitEnemyTurn(void) {
                         Entity_TickAnimSequences(entity);
                         ready = 0;
                         if (entity->animLastFrame == entity->animPrev.parts.integer) {
-                            Entity_SetActionMode(entity, (u16)(s8)((EnemyCombatant *)entity->core)->field06.bytes.low);
+                            Entity_SetActionMode(entity, (u16)(s8)((EnemyCombatant *)entity->core)->lowAndEntityId.bytes.low);
                         } else if (entity->animStep != 0x10000) {
                             entity->animStep = 0x10000;
                         }
@@ -837,7 +837,7 @@ void Battle_PhaseEndTurn(void) {
                     if ((enemy != 0) && (enemy->field04.bytes.kind != 1)) {
                         if ((entity->actionMode - 2) >= 2U) {
                             if (entity->animLastFrame == entity->animPrev.parts.integer) {
-                                Entity_SetActionMode(entity, (u16)(s8)enemy->field06.bytes.low);
+                                Entity_SetActionMode(entity, (u16)(s8)enemy->lowAndEntityId.bytes.low);
                             } else if (entity->animStep != 0x10000) {
                                 entity->animStep = 0x10000;
                             }
@@ -985,7 +985,7 @@ void Battle_StepEntityDeath(void)
             } else {
                 u32 flags;
                 Entity_SetActionMode(entity,
-                    (u16)(s8)((EnemyCombatant *)entity->core)->field06.bytes.low);
+                    (u16)(s8)((EnemyCombatant *)entity->core)->lowAndEntityId.bytes.low);
                 flags = entity->entityFlags;
                 entity->motionX = 0;
                 entity->motionY = 0;

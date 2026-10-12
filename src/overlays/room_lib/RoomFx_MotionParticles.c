@@ -390,7 +390,7 @@ void RoomFx_StepSpritePair(void *arg0, RoomFxControl *state, RoomAnchoredSpriteS
     }
 }
 
-s32 *func_800C2B10(s32 index);
+s32 *FieldEng_RegPtr(s32 index);
 int func_80071A54(void);
 
 /* Seeds the motion particles: three or six of them depending on the first
@@ -404,7 +404,7 @@ void RoomFx_SeedMotionParticles(void *unused0, void *unused1,
     s16 unusedVector[4];
     unsigned int i;
 
-    if (*func_800C2B10(1)) {
+    if (*FieldEng_RegPtr(1)) {
         state->count = 3;
     } else {
         state->count = 6;
@@ -423,7 +423,7 @@ void RoomFx_SeedMotionParticles(void *unused0, void *unused1,
             state->particle[i].secondaryZ = func_80071A54() % 140 - 70;
             state->lookup[i].id = func_80071A54() % 8;
             state->lookup[i].pad = func_80071A54() % 8;
-            if (*func_800C2B10(1) == 0) {
+            if (*FieldEng_RegPtr(1) == 0) {
                 state->velocity[i].primaryX = func_80071A54() % 40 - 20;
                 state->velocity[i].primaryY = 0;
                 state->velocity[i].primaryZ = func_80071A54() % 40 - 20;

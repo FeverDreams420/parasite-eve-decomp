@@ -13,7 +13,7 @@
 #define MODEL_VERTEX(model, offset) ((FieldModelVertex *)&(model)->bytes[offset])
 #define MODEL_COLOR(model, offset) (((FieldModelColor *)&(model)->bytes[offset])->word)
 
-void func_800C6D5C(FieldTexturedModel *model, u8 xOffset, u8 yOffset) {
+void FieldModel_ScrollUv(FieldTexturedModel *model, u8 xOffset, u8 yOffset) {
     FieldModelHeader *header = &model->header;
     FieldModelTri *tri = header->tris;
     FieldModelQuad *quad;
@@ -63,15 +63,15 @@ void GsSetOrign(short x, short y) {
     D_800F3414 = y;
 }
 
-void func_800C6ED8(short value) {
+void FieldModel_SetSemiTrans(short value) {
     D_800F33E4 = value;
 }
 
-void func_800C6EE8(short value) {
+void FieldModel_SetDepthBias(short value) {
     D_800F3420 = value;
 }
 
-void func_800C6EF8(char *data) {
+void FieldModel_SaveColors(char *data) {
     FieldModelHeader *table = (FieldModelHeader *)data;
     int i = 0;
     u32 *src = (u32 *)(data + table->colorOffset);
@@ -83,7 +83,7 @@ void func_800C6EF8(char *data) {
     }
 }
 
-void func_800C6F4C(char *data) {
+void FieldModel_RestoreColors(char *data) {
     FieldModelHeader *table = (FieldModelHeader *)data;
     int i = 0;
     u32 *src = D_800E2370;
@@ -95,7 +95,7 @@ void func_800C6F4C(char *data) {
     }
 }
 
-void func_800C6FA0(char *data, u16 factor)
+void FieldModel_ScaleColors(char *data, u16 factor)
 {
     int i;
     u32 red;
@@ -140,7 +140,7 @@ void func_800C6FA0(char *data, u16 factor)
     }
 }
 
-void func_800C7098(char *data, u8 r, u8 g, u8 b) {
+void FieldModel_SetColors(char *data, u8 r, u8 g, u8 b) {
     FieldModelHeader *table = (FieldModelHeader *)data;
     FieldModelColor *entry = (FieldModelColor *)(data + table->colorOffset);
     int i;
@@ -154,7 +154,7 @@ void func_800C7098(char *data, u8 r, u8 g, u8 b) {
     }
 }
 
-void func_800C70EC(char *data, int rDelta, int gDelta, int bDelta) {
+void FieldModel_ShiftColors(char *data, int rDelta, int gDelta, int bDelta) {
     FieldModelHeader *table = (FieldModelHeader *)data;
     FieldModelColor *entry = (FieldModelColor *)(data + table->colorOffset);
     int i;
@@ -195,7 +195,7 @@ void func_800C70EC(char *data, int rDelta, int gDelta, int bDelta) {
 /* Composes the placement onto the view matrix, then walks the flat and
  * gouraud textured triangles and quads, culling back faces by NCLIP and
  * linking the visible ones at their averaged depth. */
-void func_800C71E4(FieldTexturedModel *model, GteMatrix *placement)
+void FieldModel_Draw(FieldTexturedModel *model, GteMatrix *placement)
 {
     FieldModelHeader *header;
     FieldModelTri *tri;

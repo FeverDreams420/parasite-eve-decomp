@@ -66,7 +66,7 @@ int func_800D6514(int mode, RenderArcingEmitter *state)
         state->position.y = D_800F32D0->actor->render_object.target_y;
         state->position.z = D_800F32D0->actor->render_object.target_z;
         state->position.y = g_RoomFloorY->y;
-        func_800C6D5C((union FieldTexturedModel *)D_800F32D4, 0, 0xC0);
+        FieldModel_ScrollUv((union FieldTexturedModel *)D_800F32D4, 0, 0xC0);
         return func_800CE560(D_800F33E0->end, 16, 24,
                              (FieldEffectCallback)func_800D629C);
     case 1:
@@ -115,10 +115,10 @@ int func_800D6514(int mode, RenderArcingEmitter *state)
                 palette += 4;
             GsSetOrign(tpage, GetClut(0xC0, palette));
         }
-        func_800C6ED8(1);
-        func_800C6EF8(D_800F32D4);
-        func_800C6FA0(D_800F32D4, intensity);
-        func_800C71E4((union FieldTexturedModel *)D_800F32D4, &matrix);
+        FieldModel_SetSemiTrans(1);
+        FieldModel_SaveColors(D_800F32D4);
+        FieldModel_ScaleColors(D_800F32D4, intensity);
+        FieldModel_Draw((union FieldTexturedModel *)D_800F32D4, &matrix);
         scale.x /= 2;
         scale.y /= 2;
         scale.z /= 2;
@@ -127,8 +127,8 @@ int func_800D6514(int mode, RenderArcingEmitter *state)
         matrix.t[0] = state->position.x;
         matrix.t[1] = state->position.y;
         matrix.t[2] = state->position.z;
-        func_800C71E4((union FieldTexturedModel *)D_800F32D4, &matrix);
-        func_800C6F4C(D_800F32D4);
+        FieldModel_Draw((union FieldTexturedModel *)D_800F32D4, &matrix);
+        FieldModel_RestoreColors(D_800F32D4);
         D_800F3368.parameter00 = 32;
         D_800F3368.parameter02 = 2;
         D_800F3368.extent_x = 32;

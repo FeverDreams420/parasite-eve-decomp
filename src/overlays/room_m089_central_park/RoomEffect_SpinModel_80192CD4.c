@@ -28,7 +28,7 @@ int func_80192CD4(int mode, RoomM089SpinModel *spin, GteShortVector *anchor) {
         spin->stage = 0;
         spin->timer = 0;
         D_80194168 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5864704);
-        func_800C6D5C((union FieldTexturedModel *)D_80194168, 0, 0);
+        FieldModel_ScrollUv((union FieldTexturedModel *)D_80194168, 0, 0);
         return 0;
     case 1:
         spin->timer++;
@@ -100,7 +100,7 @@ int func_80192CD4(int mode, RoomM089SpinModel *spin, GteShortVector *anchor) {
             int palette = D_800E1204[kind];
             GsSetOrign(page, GetClut(0, (kind == 4 && D_800F3428) ? palette + 7 : palette + 3));
         }
-        func_800C6ED8(1);
+        FieldModel_SetSemiTrans(1);
         RotMatrixYXZ(&rotation, &matrix);
         matrix.t[0] = position.x;
         matrix.t[1] = position.y;
@@ -109,10 +109,10 @@ int func_80192CD4(int mode, RoomM089SpinModel *spin, GteShortVector *anchor) {
         scale.y = turn;
         scale.z = turn;
         ScaleMatrix(&matrix, &scale);
-        func_800C6EF8(D_80194168);
-        func_800C6FA0(D_80194168, intensity);
-        func_800C71E4((union FieldTexturedModel *)D_80194168, &matrix);
-        func_800C6F4C(D_80194168);
+        FieldModel_SaveColors(D_80194168);
+        FieldModel_ScaleColors(D_80194168, intensity);
+        FieldModel_Draw((union FieldTexturedModel *)D_80194168, &matrix);
+        FieldModel_RestoreColors(D_80194168);
         position.y += (0x20 - D_800E27EC) << 3;
         RotMatrixYXZ(&rotation, &innerMatrix);
         innerMatrix.t[0] = position.x;
@@ -122,10 +122,10 @@ int func_80192CD4(int mode, RoomM089SpinModel *spin, GteShortVector *anchor) {
         innerScale.y = turn / 2;
         innerScale.z = turn / 2;
         ScaleMatrix(&innerMatrix, &innerScale);
-        func_800C6EF8(D_80194168);
-        func_800C6FA0(D_80194168, intensity);
-        func_800C71E4((union FieldTexturedModel *)D_80194168, &innerMatrix);
-        func_800C6F4C(D_80194168);
+        FieldModel_SaveColors(D_80194168);
+        FieldModel_ScaleColors(D_80194168, intensity);
+        FieldModel_Draw((union FieldTexturedModel *)D_80194168, &innerMatrix);
+        FieldModel_RestoreColors(D_80194168);
         break;
     }
     return 0;

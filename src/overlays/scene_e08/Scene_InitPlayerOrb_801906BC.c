@@ -24,7 +24,7 @@ void func_801906BC(void *object, void *timer, ScenePlayerOrb *orb)
     orb->position.z = g_PlayerEntity->pos_z >> 16;
     orb->position.x += func_80071A54() % 300 - 150;
     orb->position.z += func_80071A54() % 300 - 150;
-    rotation.y = *func_800C2B10(2);
+    rotation.y = *FieldEng_RegPtr(2);
     RotMatrix(&rotation, &matrix);
     offset.x = orb->position.x - orb->anchor.x;
     offset.y = orb->position.y - orb->anchor.y;
@@ -42,7 +42,7 @@ void func_801906BC(void *object, void *timer, ScenePlayerOrb *orb)
     orb->alpha = 0xFF;
     orb->active = 0;
     orb->fade = 0;
-    orb->delay = *func_800C2B10(1);
+    orb->delay = *FieldEng_RegPtr(1);
     if (D_800B0E64[0] != 0) {
         Akao_SendTableCommand(D_800B0E64[0], 0x606, 0, 0x80, 0x7F);
     }

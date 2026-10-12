@@ -86,7 +86,7 @@ int RoomEffect_GlowOrbSetup(void *object);
 
 int func_800C61A8(GteShortVector *point, GteMatrix *matrix);
 int FieldEng_GetStatus(void *object);
-int *func_800C2B10(int index);
-int *func_800C2B28(int index);
+int *FieldEng_RegPtr(int index);
+int *FieldEng_VarPtr(int index);
 
 #endif

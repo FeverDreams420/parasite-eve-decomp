@@ -100,7 +100,7 @@ int Memcard_SpinRingParticle(int mode, MemcardSpinParticle *p) {
             palette = D_800E1204[kind];
             if (kind == 4 && D_800F3428 != 0) palette += 4;
             func_800C6EC0(page, GetClut(224, palette));
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             RotMatrixYXZ(&p->rotation, &matrix);
             matrix.t[0] = offset.x;
             matrix.t[1] = offset.y;
@@ -109,10 +109,10 @@ int Memcard_SpinRingParticle(int mode, MemcardSpinParticle *p) {
             scale.y = size;
             scale.z = size;
             ScaleMatrix(&matrix, &scale);
-            func_800C6EF8(D_800E22D4);
-            func_800C6FA0(D_800E22D4, (u16)fade);
-            func_800C71E4((union FieldTexturedModel *)D_800E22D4, (GteMatrix *)&matrix);
-            func_800C6F4C(D_800E22D4);
+            FieldModel_SaveColors(D_800E22D4);
+            FieldModel_ScaleColors(D_800E22D4, (u16)fade);
+            FieldModel_Draw((union FieldTexturedModel *)D_800E22D4, (GteMatrix *)&matrix);
+            FieldModel_RestoreColors(D_800E22D4);
             break;
         }
         }

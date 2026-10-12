@@ -13,7 +13,7 @@ int func_80192B8C(int mode, SceneE18EmitterState *state) {
     case 0:
         D_801941C8 = 4;
         D_801941C4 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC58C7704);
-        func_800C6D5C(D_801941C4, 0, 0);
+        FieldModel_ScrollUv(D_801941C4, 0, 0);
         state->count = 0;
         state->delay = 0;
         return func_800CE560(ANIM_POOL_AS(SceneE18Emitter)->pool, 0x14, 4,
@@ -64,7 +64,7 @@ int func_80192B8C(int mode, SceneE18EmitterState *state) {
             func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 10
                                                                          : palette + 6));
         }
-        func_800C6ED8(1);
+        FieldModel_SetSemiTrans(1);
         break;
     }
     return 0;

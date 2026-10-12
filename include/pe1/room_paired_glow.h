@@ -20,7 +20,7 @@ extern void *g_RoomPairedGlowPacket;
 extern unsigned char g_RoomPairedGlowColorTable[];
 
 
-int *func_800C2B10(int index);
+int *FieldEng_RegPtr(int index);
 void func_800C4E50(void *params);
 void func_800C6EC0(int arg0, int arg1);
 

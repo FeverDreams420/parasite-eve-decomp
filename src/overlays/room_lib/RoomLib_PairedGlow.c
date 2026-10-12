@@ -99,12 +99,12 @@ void RoomLib_InitPairedEmitterWithSound(void *arg0, void *arg1,
     primary->mode = 0x10;
     primary->offset = 0;
     primary->intensity = 0x80;
-    primary->color1[0] = *func_800C2B10(1);
-    primary->color1[1] = *func_800C2B10(2);
-    primary->color1[2] = *func_800C2B10(3);
-    primary->color0[0] = *func_800C2B10(4);
-    primary->color0[1] = *func_800C2B10(5);
-    primary->color0[2] = *func_800C2B10(6);
+    primary->color1[0] = *FieldEng_RegPtr(1);
+    primary->color1[1] = *FieldEng_RegPtr(2);
+    primary->color1[2] = *FieldEng_RegPtr(3);
+    primary->color0[0] = *FieldEng_RegPtr(4);
+    primary->color0[1] = *FieldEng_RegPtr(5);
+    primary->color0[2] = *FieldEng_RegPtr(6);
     primary->extent0 = 0x4B0;
     primary->extent1 = 0x258;
     primary->source = state->sourceData;
@@ -114,12 +114,12 @@ void RoomLib_InitPairedEmitterWithSound(void *arg0, void *arg1,
     secondary->mode = 0x10;
     secondary->offset = 0;
     secondary->intensity = 0x80;
-    secondary->color1[0] = *func_800C2B10(1) >> 1;
-    secondary->color1[1] = *func_800C2B10(2) >> 1;
-    secondary->color1[2] = *func_800C2B10(3) >> 1;
-    secondary->color0[0] = *func_800C2B10(4) >> 1;
-    secondary->color0[1] = *func_800C2B10(5) >> 1;
-    secondary->color0[2] = *func_800C2B10(6) >> 1;
+    secondary->color1[0] = *FieldEng_RegPtr(1) >> 1;
+    secondary->color1[1] = *FieldEng_RegPtr(2) >> 1;
+    secondary->color1[2] = *FieldEng_RegPtr(3) >> 1;
+    secondary->color0[0] = *FieldEng_RegPtr(4) >> 1;
+    secondary->color0[1] = *FieldEng_RegPtr(5) >> 1;
+    secondary->color0[2] = *FieldEng_RegPtr(6) >> 1;
     secondary->extent0 = 0x4B0;
     secondary->extent1 = 0x12C;
     secondary->source = state->sourceData;
@@ -250,7 +250,7 @@ void RoomLib_DrawPairedGlowSprite(char *object, void *unused, RoomDoubleSpriteFx
     stack.scale = stack.sourceScale;
     ScaleMatrix(&stack.matrix, &stack.scale);
 
-    func_800C6D5C(g_RoomPairedGlowPacket, 0, 0);
+    FieldModel_ScrollUv(g_RoomPairedGlowPacket, 0, 0);
     textureWord = 0;
     if (clock->asset.index == 0) {
         handleA = GetTPage(textureWord, 1, 0x340, 0x100);
@@ -264,12 +264,12 @@ void RoomLib_DrawPairedGlowSprite(char *object, void *unused, RoomDoubleSpriteFx
         handleB = GetClut(0, 0x1DB);
         func_800C6EC0(textureWord, (u16)handleB);
     }
-    func_800C6ED8(1);
-    func_800C6EF8(g_RoomPairedGlowPacket);
-    func_800C7098(g_RoomPairedGlowPacket, 0x60, 0x10, 0x80);
-    func_800C6FA0(g_RoomPairedGlowPacket, workState->depth);
-    func_800C71E4(g_RoomPairedGlowPacket, &stack.matrix);
-    func_800C6F4C(g_RoomPairedGlowPacket);
+    FieldModel_SetSemiTrans(1);
+    FieldModel_SaveColors(g_RoomPairedGlowPacket);
+    FieldModel_SetColors(g_RoomPairedGlowPacket, 0x60, 0x10, 0x80);
+    FieldModel_ScaleColors(g_RoomPairedGlowPacket, workState->depth);
+    FieldModel_Draw(g_RoomPairedGlowPacket, &stack.matrix);
+    FieldModel_RestoreColors(g_RoomPairedGlowPacket);
 }
 
 /* Grows the glow sprite and fades it in for sixteen frames, then out. */
@@ -302,17 +302,17 @@ void RoomLib_InitPairedEmitter(void *unused0, void *unused1,
     state->primary.offset = 0;
     state->primary.intensity = 0x80;
 
-    value = func_800C2B10(1);
+    value = FieldEng_RegPtr(1);
     state->primary.color1[0] = *value;
-    value = func_800C2B10(2);
+    value = FieldEng_RegPtr(2);
     state->primary.color1[1] = *value;
-    value = func_800C2B10(3);
+    value = FieldEng_RegPtr(3);
     state->primary.color1[2] = *value;
-    value = func_800C2B10(4);
+    value = FieldEng_RegPtr(4);
     state->primary.color0[0] = *value;
-    value = func_800C2B10(5);
+    value = FieldEng_RegPtr(5);
     state->primary.color0[1] = *value;
-    value = func_800C2B10(6);
+    value = FieldEng_RegPtr(6);
     state->primary.color0[2] = *value;
 
     source = state->sourceData;
@@ -325,17 +325,17 @@ void RoomLib_InitPairedEmitter(void *unused0, void *unused1,
     state->secondary.offset = 0;
     state->secondary.intensity = 0x80;
 
-    value = func_800C2B10(1);
+    value = FieldEng_RegPtr(1);
     state->secondary.color1[0] = *value >> 1;
-    value = func_800C2B10(2);
+    value = FieldEng_RegPtr(2);
     state->secondary.color1[1] = *value >> 1;
-    value = func_800C2B10(3);
+    value = FieldEng_RegPtr(3);
     state->secondary.color1[2] = *value >> 1;
-    value = func_800C2B10(4);
+    value = FieldEng_RegPtr(4);
     state->secondary.color0[0] = *value >> 1;
-    value = func_800C2B10(5);
+    value = FieldEng_RegPtr(5);
     state->secondary.color0[1] = *value >> 1;
-    value = func_800C2B10(6);
+    value = FieldEng_RegPtr(6);
     state->secondary.color0[2] = *value >> 1;
 
     state->secondary.extent0 = 0x4B0;

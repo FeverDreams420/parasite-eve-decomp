@@ -37,7 +37,7 @@ int func_801960C4(int event,State *state)
 case 0:
     {
         state->asset=Asset_FindTable08ByU32Key(D_800B0E64[0],0xC54E0704);
-        func_800C6D5C(state->asset,0,0);
+        FieldModel_ScrollUv(state->asset,0,0);
         state->size=0;
         {
             int yaw=((short )D_8019A82A[0]);
@@ -168,9 +168,9 @@ case 2:
         palette=D_800E1204[kind];
         palette=GetClut(0,(kind==4 && D_800F3428!=0) ? palette+7 : palette+3);
         GsSetOrign(page,(unsigned short)palette);
-        func_800C6ED8(1);
-        func_800C6EF8(state->asset);
-        func_800C6FA0(state->asset,(unsigned short)state->brightness);
+        FieldModel_SetSemiTrans(1);
+        FieldModel_SaveColors(state->asset);
+        FieldModel_ScaleColors(state->asset,(unsigned short)state->brightness);
         i=0;
         for (;i<3;) {
             register int size asm("$17");
@@ -197,9 +197,9 @@ case 2:
             memset(clearTarget,clearValue,clearLength);
             scale.x=size; scale.y=size; scale.z=2048;
             ScaleMatrix((GteMatrix *)&local.matrix, (const GteVector *)&scale);
-            func_800C71E4(state->asset,(GteMatrix *)&local.matrix);
+            FieldModel_Draw(state->asset,(GteMatrix *)&local.matrix);
         }
-        func_800C6F4C(state->asset);
+        FieldModel_RestoreColors(state->asset);
         i=0;
         position.x=instance->render_object.model_matrix.translation[0]; position.y=instance->render_object.model_matrix.translation[1]; position.z=instance->render_object.model_matrix.translation[2];
         {

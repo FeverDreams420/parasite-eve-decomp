@@ -41,9 +41,9 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
             }
         }
         D_80190B88 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5465704);
-        func_800C6D5C((union FieldTexturedModel *)D_80190B88, 0, 0);
+        FieldModel_ScrollUv((union FieldTexturedModel *)D_80190B88, 0, 0);
         D_80190B84 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5865704);
-        func_800C6D5C((union FieldTexturedModel *)D_80190B84, 0, 0);
+        FieldModel_ScrollUv((union FieldTexturedModel *)D_80190B84, 0, 0);
         func_800D3F64(0x577, func_800D3FD8());
         return func_800CE560(ANIM_POOL_AS(RoomM086SpawnChannel)->pool, 0x14, 0xE,
                              (FieldAnimCallbackListCallback)func_8018F004);
@@ -142,7 +142,7 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
                 if (kind == 4 && D_800F3428) palette += 4;
                 GsSetOrign(page, GetClut(0x10, palette));
             }
-            func_800C6ED8(0);
+            FieldModel_SetSemiTrans(0);
             RotMatrixYXZ(&rotation, &matrix);
             matrix.t[0] = state->position.x;
             matrix.t[1] = state->position.y;
@@ -151,10 +151,10 @@ int func_8018F734(int mode, RoomM086SeekerController *state, RoomM086ControllerP
             scale.y = size;
             scale.z = size;
             ScaleMatrix(&matrix, &scale);
-            func_800C6EF8(D_80190B88);
-            func_800C6FA0(D_80190B88, 0x80);
-            func_800C71E4((union FieldTexturedModel *)D_80190B88, &matrix);
-            func_800C6F4C(D_80190B88);
+            FieldModel_SaveColors(D_80190B88);
+            FieldModel_ScaleColors(D_80190B88, 0x80);
+            FieldModel_Draw((union FieldTexturedModel *)D_80190B88, &matrix);
+            FieldModel_RestoreColors(D_80190B88);
             D_800F3368.parameter00 = 0x10;
             D_800F3368.parameter02 = 1;
             D_800F3368.extent_x = 0x10;

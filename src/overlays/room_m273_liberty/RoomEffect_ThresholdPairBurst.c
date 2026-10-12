@@ -105,10 +105,10 @@ int func_80193CB8(int mode,ThresholdTripleEffect *effect) {
         register void **asset asm("$17");
         palette=D_800E1204[kind];
         GsSetOrign(page,GetClut(0, (kind == 4 && D_800F3428) ? palette + 11 : palette + 7));
-        func_800C6ED8(1);
+        FieldModel_SetSemiTrans(1);
         asset=&D_8019AE8C.asset;
-        func_800C6EF8(*asset);
-        func_800C6FA0(*asset,effect->parameter12);
+        FieldModel_SaveColors(*asset);
+        FieldModel_ScaleColors(*asset,effect->parameter12);
         cosine=rcos(effect->phase);
         sine=rsin(effect->phase);
         matrix.m[0][2]=sine; matrix.m[2][0]=-sine;
@@ -124,9 +124,9 @@ int func_80193CB8(int mode,ThresholdTripleEffect *effect) {
             int x=effect->x;
             void *model=*asset;
             matrix.t[0]=x; matrix.t[1]=effect->y; matrix.t[2]=effect->z;
-            func_800C71E4(model,&matrix);
+            FieldModel_Draw(model,&matrix);
         }
-        func_800C6F4C(*asset);
+        FieldModel_RestoreColors(*asset);
     }
     return 0;
 }
@@ -136,7 +136,7 @@ int func_80193F30(int mode) {
     case 0: {
         int size;
         D_8019AE8C.asset=Asset_FindTable08ByU32Key(D_800B0E64[0],0xC5941704);
-        func_800C6D5C(D_8019AE8C.asset,0,0);
+        FieldModel_ScrollUv(D_8019AE8C.asset,0,0);
         size=func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool,16,6,
                            (FieldAnimCallbackListCallback)func_80193CB8);
         asm("" : : "r"(size));

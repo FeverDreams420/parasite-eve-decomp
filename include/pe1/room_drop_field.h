@@ -134,8 +134,8 @@ extern unsigned char g_RoomDropFieldBeamImages[];
 extern u8 g_RoomDropFieldParticleFrames[];
 
 int rand(void);
-s32 *func_800C2B10(s32 index);
+s32 *FieldEng_RegPtr(s32 index);
 void func_800C4E50(void *params);
-void func_800C6EE8(int arg0);
+void FieldModel_SetDepthBias(int arg0);
 
 #endif

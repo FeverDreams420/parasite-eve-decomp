@@ -23,7 +23,7 @@ void func_80190064(void) {
     pad = func_8005E038();
     if ((pad & 0x800) && !(D_801D11B8 & 0x800)) {
         node = Memcard_FindImageNode(2);
-        if (node != 0 && node->field1c > 0x80) {
+        if (node != 0 && node->intensity > 0x80) {
             node = Memcard_FindImageNode(1);
             if (node->stepY == 0) {
                 node->stepY = 1;
@@ -64,7 +64,7 @@ void func_80190064(void) {
             if (node->targetY == 0x54) {
                 node->draw = D_8019316C;
             }
-            if (node->field1c != 0) {
+            if (node->intensity != 0) {
                 node->stepY = -1;
                 if (Memcard_FindImageNode(7)->y == 140) {
                     Memcard_FindImageNode(7)->y = 160;
@@ -80,7 +80,7 @@ void func_80190064(void) {
         }
         if ((pad & 0x1000) && !(D_801D11B8 & 0x1000)) {
             y = node->y;
-            if (Memcard_FindImageNode(6)->field1c == 0x100 ? y >= 141 : y >= 161) {
+            if (Memcard_FindImageNode(6)->intensity == 0x100 ? y >= 141 : y >= 161) {
                 D_801D1380 = 0;
                 node->y -= 20;
                 Menu_PlayMoveSound();
@@ -374,7 +374,7 @@ s32 func_801909B4(void) {
                 previous = 0;
                 if (node != 0) {
                     do {
-                        if (node->field30 != 0) {
+                        if (node->freePending != 0) {
                             if (previous != 0) {
                                 previous->next = node->next;
                             } else {

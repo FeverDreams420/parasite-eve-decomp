@@ -30,6 +30,6 @@ void Battle_SetupEnemyAnims(void) {
     D_8009D278->action->animMode[1] = animRow[1];
     D_8009D278->action->animMode[2] = animRow[2];
     D_8009D278->action->animMode[3] = animRow[3];
-    D_8009D278->action->field08 = animRow[4];
+    D_8009D278->action->hitTrigger = animRow[4];
     Scene_SetStoryDay(D_8009D278->action->actionCode.actionId);
 }

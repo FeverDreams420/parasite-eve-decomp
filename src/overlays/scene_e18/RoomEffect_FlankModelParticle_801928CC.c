@@ -60,10 +60,10 @@ int func_801928CC(int mode, SceneE18FlankParticle *particle) {
         matrix.t[0] = particle->position[0];
         matrix.t[1] = particle->position[1];
         matrix.t[2] = particle->position[2];
-        func_800C6EF8(D_801941C4);
-        func_800C6FA0(D_801941C4, particle->brightness > 0x80 ? 0x80 : particle->brightness);
-        func_800C71E4(D_801941C4, &matrix);
-        func_800C6F4C(D_801941C4);
+        FieldModel_SaveColors(D_801941C4);
+        FieldModel_ScaleColors(D_801941C4, particle->brightness > 0x80 ? 0x80 : particle->brightness);
+        FieldModel_Draw(D_801941C4, &matrix);
+        FieldModel_RestoreColors(D_801941C4);
     }
     return 0;
 }

@@ -414,7 +414,7 @@ checkLifetime:
                 }
             }
             func_800C6EC0(modelPage, GetClut(0x70, modelClutY) & 0xFFFF);
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             RotMatrixYXZ(&state->motionX, &transform);
             transform.t[0] = (s32) state->x;
             transform.t[1] = (s32) state->y;
@@ -424,11 +424,11 @@ checkLifetime:
             scale.z = 0x2AA;
             transform.t[2] = translationZ;
             ScaleMatrix(&transform, &scale.x);
-            func_800C6EF8((char *)D_80195EF8);
-            func_800C7098((char *)D_80195EF8, darkColor.r, darkColor.g, darkColor.b);
-            func_800C6FA0((char *)D_80195EF8, fade & 0xFFFF);
-            func_800C71E4((union FieldTexturedModel *)D_80195EF8, &transform);
-            func_800C6F4C((char *)D_80195EF8);
+            FieldModel_SaveColors((char *)D_80195EF8);
+            FieldModel_SetColors((char *)D_80195EF8, darkColor.r, darkColor.g, darkColor.b);
+            FieldModel_ScaleColors((char *)D_80195EF8, fade & 0xFFFF);
+            FieldModel_Draw((union FieldTexturedModel *)D_80195EF8, &transform);
+            FieldModel_RestoreColors((char *)D_80195EF8);
             return 0;
         case 3:
             pulseSine = rsin(state->frame << 6);

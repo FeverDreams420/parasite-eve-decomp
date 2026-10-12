@@ -26,7 +26,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
         bolt->sweep = 0;
         D_80199504 = 0;
         D_80199500 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54C4704);
-        func_800C6D5C(D_80199500, 0, 0);
+        FieldModel_ScrollUv(D_80199500, 0, 0);
         if (ANIM_TASK_AS(SceneE22EmberEvent)->active) {
             SceneE22EmberSlot *pool = ANIM_OWNER_AS(SceneE22EmberObjectChannel)->pool;
             if (pool) {
@@ -158,7 +158,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
                 func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
                                                                              : palette + 3));
             }
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             rotation.x = bolt->heading.x;
             rotation.y = bolt->heading.y;
             rotation.z = bolt->heading.z;
@@ -171,10 +171,10 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
             scale.y = modelScale;
             scale.z = modelScale;
             ScaleMatrix(&matrix, &scale);
-            func_800C6EF8(D_80199500);
-            func_800C6FA0(D_80199500, (u16)glow);
-            func_800C71E4(D_80199500, (GteMatrix *)&matrix);
-            func_800C6F4C(D_80199500);
+            FieldModel_SaveColors(D_80199500);
+            FieldModel_ScaleColors(D_80199500, (u16)glow);
+            FieldModel_Draw(D_80199500, (GteMatrix *)&matrix);
+            FieldModel_RestoreColors(D_80199500);
             {
                 int kind;
                 int palette;
@@ -225,7 +225,7 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
                 func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 7
                                                                              : palette + 3));
             }
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             rotation.x = bolt->heading.x;
             rotation.y = bolt->heading.y;
             rotation.z = bolt->heading.z;
@@ -238,10 +238,10 @@ int func_8019753C(int mode, SceneE22SweepBolt *bolt, GteShortVector *origin) {
             scale.y = modelScale;
             scale.z = modelScale;
             ScaleMatrix(&matrix, &scale);
-            func_800C6EF8(D_80199500);
-            func_800C6FA0(D_80199500, (u16)glow);
-            func_800C71E4(D_80199500, (GteMatrix *)&matrix);
-            func_800C6F4C(D_80199500);
+            FieldModel_SaveColors(D_80199500);
+            FieldModel_ScaleColors(D_80199500, (u16)glow);
+            FieldModel_Draw(D_80199500, (GteMatrix *)&matrix);
+            FieldModel_RestoreColors(D_80199500);
             modelScale = rcos(angle) + 0x1000;
             spin.z = bolt->timer * 32;
             func_800D004C(&bolt->origin, 1000, 0x32, 8, &spin, modelScale, modelScale,

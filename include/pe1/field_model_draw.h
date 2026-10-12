@@ -10,13 +10,13 @@ union FieldTexturedModel;
 
 void GsSetOrign(int tpage, int clut);
 /* Scrolls the model's texture coordinates by the given offsets. */
-void func_800C6D5C(union FieldTexturedModel *model, u8 x_offset, u8 y_offset);
-void func_800C6ED8(short value);
-void func_800C6EF8(char *data);
-void func_800C6F4C(char *data);
-void func_800C6FA0(char *data, u16 factor);
-void func_800C7098(char *data, u8 r, u8 g, u8 b);
+void FieldModel_ScrollUv(union FieldTexturedModel *model, u8 x_offset, u8 y_offset);
+void FieldModel_SetSemiTrans(short value);
+void FieldModel_SaveColors(char *data);
+void FieldModel_RestoreColors(char *data);
+void FieldModel_ScaleColors(char *data, u16 factor);
+void FieldModel_SetColors(char *data, u8 r, u8 g, u8 b);
 /* Draws the model through placement. */
-void func_800C71E4(union FieldTexturedModel *model, GteMatrix *placement);
+void FieldModel_Draw(union FieldTexturedModel *model, GteMatrix *placement);
 
 #endif

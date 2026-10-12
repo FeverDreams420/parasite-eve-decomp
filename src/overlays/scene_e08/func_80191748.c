@@ -5,7 +5,7 @@
 
 #include "func_80191748_externs.h"
 
-int *func_800C2B28(int arg0);
+int *FieldEng_VarPtr(int arg0);
 void func_80020D50(void);
 void func_80020DD0(void);
 int FieldEng_GetStatus(void *arg0);
@@ -15,7 +15,7 @@ void func_80191748(SceneGrabHead *arg0, RoomFxControl *arg1) {
     int *flags;
     int *objectFlags;
 
-    status = func_800C2B28(1);
+    status = FieldEng_VarPtr(1);
     if (*status == 1) {
         if (arg1->frame < 0xF0) {
             func_80020D50();

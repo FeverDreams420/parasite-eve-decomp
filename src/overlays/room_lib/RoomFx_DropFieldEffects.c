@@ -55,10 +55,10 @@ void RoomFx_DropFieldInit(RoomDropFieldEntity *ent, void *unused, RoomDropFieldS
     state->holdTimer = 0;
     state->hit = 0;
     state->holdFrames = 0x96;
-    state->particlePattern = *func_800C2B28(0);
-    state->radiusRate = *func_800C2B28(1);
-    state->fallRate = *func_800C2B28(2);
-    state->initialFallStep = *func_800C2B28(3);
+    state->particlePattern = *FieldEng_VarPtr(0);
+    state->radiusRate = *FieldEng_VarPtr(1);
+    state->fallRate = *FieldEng_VarPtr(2);
+    state->initialFallStep = *FieldEng_VarPtr(3);
 
     g_RoomDropFieldSpinSprite.code = 0x22;
     g_RoomDropFieldSpinSprite.mode = 0x30;
@@ -705,16 +705,16 @@ void RoomFx_DrawStagedMotion(void *unused,
                 scale3.z = state->kind[i] * 0x20 + 0x20C;
                 scale2 = scale3;
                 ScaleMatrix((GteMatrix *)&matrix, (GteVector *)&scale2);
-                func_800C6D5C(g_RoomDropFieldModel, 0, 0);
-                func_800C6EE8(-0x64);
+                FieldModel_ScrollUv(g_RoomDropFieldModel, 0, 0);
+                FieldModel_SetDepthBias(-0x64);
                 handle = (u16)GetTPage(1, 1, 0x340, 0x100);
                 func_800C6EC0(handle, (u16)GetClut(0, 0x1DB));
-                func_800C6ED8(1);
-                func_800C6EF8(g_RoomDropFieldModel);
-                func_800C6FA0(g_RoomDropFieldModel,
+                FieldModel_SetSemiTrans(1);
+                FieldModel_SaveColors(g_RoomDropFieldModel);
+                FieldModel_ScaleColors(g_RoomDropFieldModel,
                               (u16)(state->depth[i] * 2));
-                func_800C71E4(g_RoomDropFieldModel, &matrix);
-                func_800C6F4C(g_RoomDropFieldModel);
+                FieldModel_Draw(g_RoomDropFieldModel, &matrix);
+                FieldModel_RestoreColors(g_RoomDropFieldModel);
             }
             i++;
         } while ((unsigned int)i < state->count);
@@ -923,8 +923,8 @@ void RoomFx_InitDropField(s32 arg0, s32 arg1, RoomDropFieldDrops *state) {
     src = func_800C2B50();
     state->anchor = src->matrix0.head;
     state->facing = src->matrix0.tail;
-    state->h180 = *func_800C2B10(1);
-    state->h182 = *func_800C2B28(8);
+    state->h180 = *FieldEng_RegPtr(1);
+    state->h182 = *FieldEng_VarPtr(8);
     state->h184 = 0;
 
     for (i = 0; i < 16; i++) {
@@ -1037,7 +1037,7 @@ void RoomFx_UpdateDropField(void *object, RoomDropSlot *slot, RoomDropField *fie
 
     for (i = 0; i < 16; i++) {
         field->drops[i].z -= 0x96;
-        if (slot->step == field->first_step + i && *func_800C2B28(7) == 1) {
+        if (slot->step == field->first_step + i && *FieldEng_VarPtr(7) == 1) {
             field->live[i] = 0;
             if (++field->released == 1) {
                 rotation.x = 0x20;

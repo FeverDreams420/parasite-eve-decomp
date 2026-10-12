@@ -269,8 +269,8 @@ typedef struct EnemyCombatant {
 /* 0x06 */ union {
                s16 field06;
                struct { u8 low; u8 entityId; } bytes;
-           } field06;
-/* 0x08 */ s32 field08;
+           } lowAndEntityId;
+/* 0x08 */ s32 slotBit; /* 1 << allocated enemy slot */
 /* 0x0C */ u16 curHP;
 /* 0x0E */ u16 hpMirror;
 /* 0x10 */ s32 hpAlive;
@@ -282,8 +282,8 @@ typedef struct EnemyCombatant {
 /* 0x6C */ BattleAttributes *attributes;
 /* 0x70 */ u8  pad_70[0x0C];
 /* 0x7C */ s8  contactActionIds[0x0C]; /* four ids per facing group (coreFlags >> 21), -1 ends a group (Entity_CheckActionIdMatch) */
-/* 0x88 */ s32 field88;
-/* 0x8C */ u16 field8C;
+/* 0x88 */ s32 hpAliveCap; /* caps hpAlive when smaller */
+/* 0x8C */ u16 defense; /* subtracted from attack power */
 /* 0x8E */ u16 chargeStep;
 /* 0x90 */ u8  effectChance;
 /* 0x91 */ u8  deathAnimFrame;
@@ -332,14 +332,14 @@ typedef struct EnemyCombatant {
  * i.e. *(void**)(combatant+0x68)). Holds the queued action id and timing.
  * --------------------------------------------------------------------------*/
 typedef struct BattleAction {
-/* 0x00 */ u16  field00;
+/* 0x00 */ u16  powerBonus; /* added to stat1E/5 to form attack power */
 /* 0x02 */ s16  range;         /* compared vs target distance for cycling (Battle_CycleTarget.c:93) */
 /* 0x04 */ u16  field04;
 /* 0x06 */ union {
                s16 actionId;   /* 5=, 6=fire-weapon, 8=item/special */
                struct { u8 actionIdByte; u8 field07; } bytes;
            } actionCode;
-/* 0x08 */ s32  field08;       /* set from anim table (Battle_SetupEnemyAnims.c:52) */
+/* 0x08 */ s32  hitTrigger;    /* anim-row byte matched against the hit timer */
 /* 0x0C */ u32  attackWord;    /* &0x3FF = shot/hit countdown (consumed per hit), >>0x14&3 = weapon category (Battle_DrawATBGauge.c:55; Battle_FinalizeAttackResult.c:34) */
 /* 0x10 */ u32  turnWord;      /* &0xF = remaining actions, >>4&3 = active turn slot, &0xC0 = action mode, 0x100..0x1000 = attack element (Battle_Init.c:60; Battle_AdvanceTurnSlot.c:70; Battle_StartEnemyAttackEffect.c:26) */
 /* 0x14 */ u8   animMode[4];   /* per-facing anim/effect ids [0x14..0x17], filled from a 5-byte table (Battle_Init.c:62; Battle_SetupEntityTarget.c:55) */

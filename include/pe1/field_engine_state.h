@@ -8,7 +8,7 @@
  * func_800C2758 interprets the command table: each 32-bit command carries an
  * opcode in the high half and an operand in the low half. The int register
  * file at +0x08 and the variable file at +0x48 are also reached through the
- * func_800C2B10/2B28 index accessors; the active context pointer at +0x70 is
+ * FieldEng_RegPtr/2B28 index accessors; the active context pointer at +0x70 is
  * shared by func_800C2B50/2B40. */
 typedef struct FieldEngState {
     /* 0x00 */ short wait;              /* frames to sleep before the next command */
@@ -43,7 +43,7 @@ extern char *g_FieldEngineScriptData __asm__("D_800F3330");
 extern int *g_FieldEngineCommandTable __asm__("D_800F33B0");
 extern unsigned char *g_FieldEngineSlotTable __asm__("D_800F34F4");
 /* The same two pointers with their record types. */
-/* The same work area as seen by the slot registrar func_800C2D0C: the next
+/* The same work area as seen by the slot registrar FieldEng_ActivateSlot: the next
  * free byte offset into the script data and the registered slot count. */
 typedef struct FieldEngDataState {
     /* 0x00 */ unsigned char pad_00[4];

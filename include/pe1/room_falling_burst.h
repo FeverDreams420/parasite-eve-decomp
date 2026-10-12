@@ -108,8 +108,8 @@ extern RoomFxSpritePacket g_RoomFallingBurstSprite;
 extern RoomFxSpritePacket g_RoomFallingBurstPulse;
 extern RoomFxSpritePacket g_RoomFallingBurstParticle;
 
-int *func_800C2B10(int index);
-int *func_800C2B28(int index);
+int *FieldEng_RegPtr(int index);
+int *FieldEng_VarPtr(int index);
 int func_80071A54(void);
 
 #endif

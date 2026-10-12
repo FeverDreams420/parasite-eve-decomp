@@ -18,8 +18,8 @@ void Memcard_CreateFixedImageNode(void) {
     else { D_801D137C = node; D_801D1378 = node; }
     node->draw = 0; node->update = 0; node->field14 = 0; node->image = 0;
     node->x = 0; node->y = 0; node->width = 0; node->height = 0;
-    node->field1c = 0; node->targetY = 0; node->stepY = 0;
-    node->parameter = 0; node->kind = 0; node->field30 = 0;
+    node->intensity = 0; node->targetY = 0; node->stepY = 0;
+    node->parameter = 0; node->kind = 0; node->freePending = 0;
     __asm__("" : : : "memory");
     imageData = (MemcardImage *)(D_80193254 + D_80193268);
     node->kind = kind;
@@ -59,8 +59,8 @@ void Memcard_CreateImageGroup(void) {
         else { D_801D137C = node; D_801D1378 = node; }
         node->draw = 0; node->update = 0; node->field14 = 0; node->image = 0;
         node->x = 0; node->y = 0; node->width = 0; node->height = 0;
-        node->field1c = 0; node->targetY = 0; node->stepY = 0;
-        node->parameter = 0; node->kind = 0; node->field30 = 0;
+        node->intensity = 0; node->targetY = 0; node->stepY = 0;
+        node->parameter = 0; node->kind = 0; node->freePending = 0;
         __asm__("" : : : "memory");
         imageData = (MemcardImage *)(D_80193254 + D_80193274);
         node->kind = kind;
@@ -99,8 +99,8 @@ void Memcard_CreateImageGroup(void) {
         else { D_801D137C = node; D_801D1378 = node; }
         node->draw = 0; node->update = 0; node->field14 = 0; node->image = 0;
         node->x = 0; node->y = 0; node->width = 0; node->height = 0;
-        node->field1c = 0; node->targetY = 0; node->stepY = 0;
-        node->parameter = 0; node->kind = 0; node->field30 = 0;
+        node->intensity = 0; node->targetY = 0; node->stepY = 0;
+        node->parameter = 0; node->kind = 0; node->freePending = 0;
         __asm__("" : : : "memory");
         imageData = (MemcardImage *)(D_80193254 + D_80193270);
         node->kind = kind;

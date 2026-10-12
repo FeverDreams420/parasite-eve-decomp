@@ -75,7 +75,7 @@ typedef struct RoomDropSlot {
     /* 0x02 */ s16 step;
 } RoomDropSlot;
 
-int *func_800C2B28(int index);
+int *FieldEng_VarPtr(int index);
 typedef struct RoomDropActor {
     /* 0x00 */ u8 pad00[0x44];
     /* 0x44 */ u8 shade;

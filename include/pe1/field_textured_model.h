@@ -6,7 +6,7 @@
 #include "pe1/render_tint.h"
 #include "pe1/render_object.h"
 
-/* Field engine textured model (func_800C71E4): flat and gouraud textured
+/* Field engine textured model (FieldModel_Draw): flat and gouraud textured
  * triangles and quads whose vertex, colour and face records are linked by
  * byte offsets from the model start. Back faces are culled by NCLIP. */
 
@@ -40,7 +40,7 @@ typedef struct FieldModelHeader {
     /* 0x06 */ u16 shadedQuads;
     /* 0x08 */ u16 colorOffset;   /* byte offset of the colour words */
     /* 0x0A */ u16 colorCount;
-    /* 0x0C */ u16 uOffset;       /* UV scroll applied by func_800C6D5C */
+    /* 0x0C */ u16 uOffset;       /* UV scroll applied by FieldModel_ScrollUv */
     /* 0x0E */ u16 vOffset;
     /* 0x10 */ FieldModelTri tris[1];
 } FieldModelHeader;

@@ -16,7 +16,7 @@ int func_801924E8(int mode, SceneE18SpinShell *shell) {
     switch (mode) {
     case 0:
         D_801941C0 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54C7704);
-        func_800C6D5C(D_801941C0, 0, 0);
+        FieldModel_ScrollUv(D_801941C0, 0, 0);
         shell->width = 0x400;
         shell->heightGrowth = 0x40;
         shell->height = 0;
@@ -90,11 +90,11 @@ int func_801924E8(int mode, SceneE18SpinShell *shell) {
             func_800C6EC0(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 8
                                                                          : palette + 4));
         }
-        func_800C6ED8(1);
-        func_800C6EF8(D_801941C0);
-        func_800C6FA0(D_801941C0, shell->brightness);
-        func_800C71E4(D_801941C0, &matrix);
-        func_800C6F4C(D_801941C0);
+        FieldModel_SetSemiTrans(1);
+        FieldModel_SaveColors(D_801941C0);
+        FieldModel_ScaleColors(D_801941C0, shell->brightness);
+        FieldModel_Draw(D_801941C0, &matrix);
+        FieldModel_RestoreColors(D_801941C0);
         break;
     }
     return 0;

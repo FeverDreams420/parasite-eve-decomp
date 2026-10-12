@@ -45,13 +45,13 @@ void Battle_CycleTarget(s8 mode) {
             outOfRange = D_8009D278->action->range < g_BattleTargetList[g_BattleTargetIndex].dist;
         actor = g_BattleTargetList[g_BattleTargetIndex].actor;
         Battle_DrawStatusOverlay(&actor->renderObject, mode, outOfRange,
-            ((EnemyCombatant *)actor->core)->field06.bytes.entityId);
+            ((EnemyCombatant *)actor->core)->lowAndEntityId.bytes.entityId);
         break;
     }
     case 4: case 5: case 6: case 7: {
         BattleEntity *actor = g_BattleTargetList[g_BattleTargetIndex].actor;
         Battle_DrawStatusOverlay(&actor->renderObject, mode, 0,
-            ((EnemyCombatant *)actor->core)->field06.bytes.entityId);
+            ((EnemyCombatant *)actor->core)->lowAndEntityId.bytes.entityId);
         break;
     }
     case 8: Battle_DrawStatusOverlay(0, 8, 0, 0); break;

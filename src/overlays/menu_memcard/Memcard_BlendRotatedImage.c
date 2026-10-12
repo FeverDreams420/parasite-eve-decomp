@@ -4,7 +4,7 @@ void Memcard_BlendRotatedImage(MemcardImageNode *node, u8 *destination, s32 padd
     s32 progress = node->targetY;
     MemcardImage *image = node->image;
     u8 *source;
-    s32 intensity = node->field1c;
+    s32 intensity = node->intensity;
     s32 limit = progress + 24;
     s32 row;
     s32 columns;

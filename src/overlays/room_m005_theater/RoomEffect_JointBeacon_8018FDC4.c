@@ -35,9 +35,9 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
             }
         }
         D_80190B94 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5462704);
-        func_800C6D5C((union FieldTexturedModel *)D_80190B94, 0, 0);
+        FieldModel_ScrollUv((union FieldTexturedModel *)D_80190B94, 0, 0);
         D_80190B98 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5862704);
-        func_800C6D5C((union FieldTexturedModel *)D_80190B98, 0, 0);
+        FieldModel_ScrollUv((union FieldTexturedModel *)D_80190B98, 0, 0);
         return func_800CE560(ANIM_POOL_AS(RoomM005BeaconSpawnChannel)->pool, 0x10, 8,
                              (FieldAnimCallbackListCallback)func_8018FB84);
     case 1:
@@ -112,31 +112,31 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
             if (kind == 4 && D_800F3428) palette += 4;
             GsSetOrign(page, GetClut(0x30, palette));
         }
-        func_800C6ED8(1);
-        func_800C6EF8(D_80190B94);
-        func_800C6FA0(D_80190B94, 0x32);
-        func_800C71E4((union FieldTexturedModel *)D_80190B94, &matrix);
-        func_800C6F4C(D_80190B94);
-        func_800C6EF8(D_80190B94);
+        FieldModel_SetSemiTrans(1);
+        FieldModel_SaveColors(D_80190B94);
+        FieldModel_ScaleColors(D_80190B94, 0x32);
+        FieldModel_Draw((union FieldTexturedModel *)D_80190B94, &matrix);
+        FieldModel_RestoreColors(D_80190B94);
+        FieldModel_SaveColors(D_80190B94);
         scale.z = 0x1000;
         scale.x = scale.y = 0x2000;
         ScaleMatrix(&matrix, &scale);
-        func_800C70EC(D_80190B94, -0xFF, -0x82, 0x30);
-        func_800C71E4((union FieldTexturedModel *)D_80190B94, &matrix);
-        func_800C6F4C(D_80190B94);
-        func_800C6EF8(D_80190B94);
+        FieldModel_ShiftColors(D_80190B94, -0xFF, -0x82, 0x30);
+        FieldModel_Draw((union FieldTexturedModel *)D_80190B94, &matrix);
+        FieldModel_RestoreColors(D_80190B94);
+        FieldModel_SaveColors(D_80190B94);
         scale.x = scale.y = 0x400;
         ScaleMatrix(&matrix, &scale);
-        func_800C6FA0(D_80190B94, 0xC8);
-        func_800C71E4((union FieldTexturedModel *)D_80190B94, &matrix);
-        func_800C6F4C(D_80190B94);
-        func_800C6EF8(D_80190B94);
+        FieldModel_ScaleColors(D_80190B94, 0xC8);
+        FieldModel_Draw((union FieldTexturedModel *)D_80190B94, &matrix);
+        FieldModel_RestoreColors(D_80190B94);
+        FieldModel_SaveColors(D_80190B94);
         matrix.t[1] = g_RoomFloorY->y;
         scale.x = scale.y = 0x2000;
         ScaleMatrix(&matrix, &scale);
-        func_800C6FA0(D_80190B94, 0x18);
-        func_800C71E4((union FieldTexturedModel *)D_80190B94, &matrix);
-        func_800C6F4C(D_80190B94);
+        FieldModel_ScaleColors(D_80190B94, 0x18);
+        FieldModel_Draw((union FieldTexturedModel *)D_80190B94, &matrix);
+        FieldModel_RestoreColors(D_80190B94);
         D_800F3368.parameter00 = 0x20;
         D_800F3368.parameter02 = 2;
         D_800F3368.extent_x = 0x20;
@@ -202,7 +202,7 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
                 GsSetOrign(page, GetClut(0, (kind == 4 && D_800F3428) ? palette + 7
                                                                      : palette + 3));
             }
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             spinAngles.x = state->rotation.x;
             spinAngles.y = state->rotation.y;
             spinAngles.z = state->rotation.z;
@@ -214,10 +214,10 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
             spin.t[2] = state->position.z;
             spinScale.z = spinScale.y = spinScale.x = size / 2;
             ScaleMatrix(&spin, &spinScale);
-            func_800C6EF8(D_80190B98);
-            func_800C6FA0(D_80190B98, alpha / 2);
-            func_800C71E4((union FieldTexturedModel *)D_80190B98, &spin);
-            func_800C6F4C(D_80190B98);
+            FieldModel_SaveColors(D_80190B98);
+            FieldModel_ScaleColors(D_80190B98, alpha / 2);
+            FieldModel_Draw((union FieldTexturedModel *)D_80190B98, &spin);
+            FieldModel_RestoreColors(D_80190B98);
         }
         D_800F3368.parameter00 = 0x20;
         D_800F3368.parameter02 = 2;

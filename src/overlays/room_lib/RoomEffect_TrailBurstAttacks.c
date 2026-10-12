@@ -358,7 +358,7 @@ int RoomEffect_ModelBurstController(int mode, s16 *state) {
     case 0:
         *state = 0;
         g_RoomModelBurstAsset = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54A5704);
-        func_800C6D5C(g_RoomModelBurstAsset, 0, 0);
+        FieldModel_ScrollUv(g_RoomModelBurstAsset, 0, 0);
         {
             int tpage = D_800E2850[D_800E11EA];
             D_800F3368.palette = 3;
@@ -445,7 +445,7 @@ int RoomEffect_ModelBurstController(int mode, s16 *state) {
             clut = GetClut(0x30, palette);
             func_800C6EC0(page, clut);
         }
-        func_800C6ED8(1);
+        FieldModel_SetSemiTrans(1);
         RotMatrixYXZ((GteShortVector *)&spin, &matrix);
         matrix.t[0] = position.x;
         matrix.t[1] = position.y;
@@ -454,11 +454,11 @@ int RoomEffect_ModelBurstController(int mode, s16 *state) {
         scale.y = size;
         scale.z = size;
         ScaleMatrix(&matrix, &scale);
-        func_800C6EF8(g_RoomModelBurstAsset);
-        func_800C7098(g_RoomModelBurstAsset, color.r, color.g, color.b);
-        func_800C6FA0(g_RoomModelBurstAsset, (u16)(brightness / 2));
-        func_800C71E4(g_RoomModelBurstAsset, &matrix);
-        func_800C6F4C(g_RoomModelBurstAsset);
+        FieldModel_SaveColors(g_RoomModelBurstAsset);
+        FieldModel_SetColors(g_RoomModelBurstAsset, color.r, color.g, color.b);
+        FieldModel_ScaleColors(g_RoomModelBurstAsset, (u16)(brightness / 2));
+        FieldModel_Draw(g_RoomModelBurstAsset, &matrix);
+        FieldModel_RestoreColors(g_RoomModelBurstAsset);
         D_800F3368.parameter00 = 0x20;
         D_800F3368.parameter02 = 2;
         D_800F3368.extent_x = 0x20;
@@ -798,7 +798,7 @@ int RoomEffect_ScatterBurstController(int mode, s16 *state) {
     case 0:
         *state = 0;
         g_RoomScatterBurstAsset = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54A5704);
-        func_800C6D5C(g_RoomScatterBurstAsset, 0, 0);
+        FieldModel_ScrollUv(g_RoomScatterBurstAsset, 0, 0);
         {
             int tpage = D_800E2850[D_800E11EA];
             D_800F3368.palette = 3;
@@ -885,7 +885,7 @@ int RoomEffect_ScatterBurstController(int mode, s16 *state) {
             clut = GetClut(0x30, palette);
             func_800C6EC0(page, clut);
         }
-        func_800C6ED8(1);
+        FieldModel_SetSemiTrans(1);
         RotMatrixYXZ((GteShortVector *)&spin, &matrix);
         matrix.t[0] = position.x;
         matrix.t[1] = position.y;
@@ -894,11 +894,11 @@ int RoomEffect_ScatterBurstController(int mode, s16 *state) {
         scale.y = size;
         scale.z = size;
         ScaleMatrix(&matrix, &scale);
-        func_800C6EF8(g_RoomScatterBurstAsset);
-        func_800C7098(g_RoomScatterBurstAsset, color.r, color.g, color.b);
-        func_800C6FA0(g_RoomScatterBurstAsset, (u16)(brightness / 2));
-        func_800C71E4(g_RoomScatterBurstAsset, &matrix);
-        func_800C6F4C(g_RoomScatterBurstAsset);
+        FieldModel_SaveColors(g_RoomScatterBurstAsset);
+        FieldModel_SetColors(g_RoomScatterBurstAsset, color.r, color.g, color.b);
+        FieldModel_ScaleColors(g_RoomScatterBurstAsset, (u16)(brightness / 2));
+        FieldModel_Draw(g_RoomScatterBurstAsset, &matrix);
+        FieldModel_RestoreColors(g_RoomScatterBurstAsset);
         D_800F3368.parameter00 = 0x20;
         D_800F3368.parameter02 = 2;
         D_800F3368.extent_x = 0x20;

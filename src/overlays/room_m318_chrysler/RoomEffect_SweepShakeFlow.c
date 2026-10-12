@@ -80,11 +80,11 @@ int func_8019326C(int mode, RoomShakeSweepParticle *p) {
             palette = GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 8 : palette + 4);
             func_800C6EC0(page, (u16)palette);
         }
-        func_800C6ED8(1);
-        func_800C6EF8(D_800F32D8);
-        func_800C7098(D_800F32D8, (u8)(p->size / 3), 0, (u8)(p->size / 2));
-        func_800C71E4((union FieldTexturedModel *)D_800F32D8, &matrix);
-        func_800C6F4C(D_800F32D8);
+        FieldModel_SetSemiTrans(1);
+        FieldModel_SaveColors(D_800F32D8);
+        FieldModel_SetColors(D_800F32D8, (u8)(p->size / 3), 0, (u8)(p->size / 2));
+        FieldModel_Draw((union FieldTexturedModel *)D_800F32D8, &matrix);
+        FieldModel_RestoreColors(D_800F32D8);
         break;
     }
     return 0;
@@ -127,7 +127,7 @@ int func_80193638(int mode, RoomShakeSweepAnchor *anchor) {
                     *object->status = 2;
             }
         }
-        func_800C6D5C((union FieldTexturedModel *)D_800F32D8, 0, 0);
+        FieldModel_ScrollUv((union FieldTexturedModel *)D_800F32D8, 0, 0);
         return func_800CE560(ANIM_POOL_AS(RoomShakeBurstSparkChannel)->pool, 0x10, 0x18,
                              (FieldAnimCallbackListCallback)func_8019326C);
     case 1:

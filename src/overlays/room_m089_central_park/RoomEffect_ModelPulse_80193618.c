@@ -42,9 +42,9 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             }
         }
         D_8019416C = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5464704);
-        func_800C6D5C((union FieldTexturedModel *)D_8019416C, 0, 0);
+        FieldModel_ScrollUv((union FieldTexturedModel *)D_8019416C, 0, 0);
         D_80194168 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5864704);
-        func_800C6D5C((union FieldTexturedModel *)D_80194168, 0, 0);
+        FieldModel_ScrollUv((union FieldTexturedModel *)D_80194168, 0, 0);
         return func_800CE560(ANIM_POOL_AS(RoomM089SpawnChannel)->pool, 0x10, 0x18,
                              (FieldAnimCallbackListCallback)func_80193200);
     case 1:
@@ -106,7 +106,7 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
                 GsSetOrign(page, GetClut(0, (kind == 4 && D_800F3428) ? palette + 6
                                                                      : palette + 2));
             }
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             RotMatrixYXZ(&rotation, &matrix);
             matrix.t[0] = state->position.x;
             matrix.t[1] = state->position.y;
@@ -115,10 +115,10 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             scale.y = tall;
             scale.z = outer;
             ScaleMatrix(&matrix, &scale);
-            func_800C6EF8(D_8019416C);
-            func_800C6FA0(D_8019416C, fade);
-            func_800C71E4((union FieldTexturedModel *)D_8019416C, &matrix);
-            func_800C6F4C(D_8019416C);
+            FieldModel_SaveColors(D_8019416C);
+            FieldModel_ScaleColors(D_8019416C, fade);
+            FieldModel_Draw((union FieldTexturedModel *)D_8019416C, &matrix);
+            FieldModel_RestoreColors(D_8019416C);
             rotation.x = 0;
             rotation.z = 0;
             rotation.y = D_800E27EC << 5;
@@ -130,10 +130,10 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             wideScale.y = low;
             wideScale.z = wide;
             ScaleMatrix(&wideMatrix, &wideScale);
-            func_800C6EF8(D_8019416C);
-            func_800C6FA0(D_8019416C, glow);
-            func_800C71E4((union FieldTexturedModel *)D_8019416C, &wideMatrix);
-            func_800C6F4C(D_8019416C);
+            FieldModel_SaveColors(D_8019416C);
+            FieldModel_ScaleColors(D_8019416C, glow);
+            FieldModel_Draw((union FieldTexturedModel *)D_8019416C, &wideMatrix);
+            FieldModel_RestoreColors(D_8019416C);
             rotation.x = 0;
             rotation.z = 0;
             rotation.y = D_800E27EC << 4;
@@ -145,10 +145,10 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             lowScale.y = low * 3 / 2;
             lowScale.z = outer;
             ScaleMatrix(&lowMatrix, &lowScale);
-            func_800C6EF8(D_8019416C);
-            func_800C6FA0(D_8019416C, glow);
-            func_800C71E4((union FieldTexturedModel *)D_8019416C, &lowMatrix);
-            func_800C6F4C(D_8019416C);
+            FieldModel_SaveColors(D_8019416C);
+            FieldModel_ScaleColors(D_8019416C, glow);
+            FieldModel_Draw((union FieldTexturedModel *)D_8019416C, &lowMatrix);
+            FieldModel_RestoreColors(D_8019416C);
         }
         if (D_800E27EC < 0x19) {
             u16 *index;
@@ -168,7 +168,7 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
                 GsSetOrign(page, GetClut(0, (kind == 4 && D_800F3428) ? palette + 7
                                                                      : palette + 3));
             }
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             RotMatrixYXZ(&rotation, &coreMatrix);
             coreMatrix.t[0] = state->position.x;
             coreMatrix.t[1] = state->position.y;
@@ -177,10 +177,10 @@ int func_80193618(int mode, RoomM089ModelPulse *state, GteShortVector *anchor) {
             lowScale.y = outer;
             lowScale.z = outer;
             ScaleMatrix(&coreMatrix, &lowScale);
-            func_800C6EF8(D_80194168);
-            func_800C6FA0(D_80194168, fade);
-            func_800C71E4((union FieldTexturedModel *)D_80194168, &coreMatrix);
-            func_800C6F4C(D_80194168);
+            FieldModel_SaveColors(D_80194168);
+            FieldModel_ScaleColors(D_80194168, fade);
+            FieldModel_Draw((union FieldTexturedModel *)D_80194168, &coreMatrix);
+            FieldModel_RestoreColors(D_80194168);
         }
         if (D_800E27EC < 0x31) {
             func_800CF3AC(D_801940F8, &color, D_800E27EC);

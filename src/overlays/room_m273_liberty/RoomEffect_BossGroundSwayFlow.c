@@ -134,9 +134,9 @@ int func_80198E94(int mode, GteShortVector *position) {
         palette = D_800E1204[kind];
         size = value >> 2;
         GsSetOrign(page, GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 6 : palette + 2));
-        func_800C6ED8(1);
-        func_800C6EF8(D_8019AF04.model);
-        func_800C6FA0(D_8019AF04.model, (u16)fade);
+        FieldModel_SetSemiTrans(1);
+        FieldModel_SaveColors(D_8019AF04.model);
+        FieldModel_ScaleColors(D_8019AF04.model, (u16)fade);
         cosine = rcos(frame << 8);
         sine = rsin(frame << 8);
         matrix.m[0][2] = sine;
@@ -159,8 +159,8 @@ int func_80198E94(int mode, GteShortVector *position) {
         matrix.t[0] = position->x;
         matrix.t[1] = position->y;
         matrix.t[2] = position->z;
-        func_800C71E4((union FieldTexturedModel *)D_8019AF04.model, &matrix);
-        func_800C6F4C(D_8019AF04.model);
+        FieldModel_Draw((union FieldTexturedModel *)D_8019AF04.model, &matrix);
+        FieldModel_RestoreColors(D_8019AF04.model);
     }
     D_800F3368.parameter00 = 0x20;
     D_800F3368.parameter02 = 2;
@@ -202,7 +202,7 @@ int func_801993F0(int mode) {
     switch (mode) {
     case 0:
         D_8019AF6C = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5541704);
-        func_800C6D5C(D_8019AF6C, 0, 0);
+        FieldModel_ScrollUv(D_8019AF6C, 0, 0);
         return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 4,
                              (FieldAnimCallbackListCallback)func_80198E94);
     case 1: {

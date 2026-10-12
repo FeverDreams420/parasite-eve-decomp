@@ -172,7 +172,7 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
                 Akao_SendTableCommand(*soundSlot, 0x5EE, 0x80, 0x80, volume);
         }
         D_80199944 = (void *)Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5509704);
-        func_800C6D5C(D_80199944, 0, 0);
+        FieldModel_ScrollUv(D_80199944, 0, 0);
         if (ANIM_TASK_AS(RoomShakeBurstEvent)->active) {
             pool = ANIM_OWNER_AS(RoomShakeBurstChannel)->pool;
             if (pool != 0 && pool->object != 0) {
@@ -301,7 +301,7 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
                 palette = GetClut(0x40, palette);
                 func_800C6EC0(page, (u16)palette);
             }
-            func_800C6ED8(1);
+            FieldModel_SetSemiTrans(1);
             RotMatrixYXZ(&rotation, &matrix);
             matrix.t[0] = tip.x;
             matrix.t[1] = tip.y;
@@ -310,10 +310,10 @@ int func_801988F8(int mode, RoomEmberSpiral *spiral) {
             scale.y = width;
             scale.z = depth;
             ScaleMatrix(&matrix, &scale);
-            func_800C6EF8(D_80199944);
-            func_800C6FA0(D_80199944, (u16)glow);
-            func_800C71E4(D_80199944, &matrix);
-            func_800C6F4C(D_80199944);
+            FieldModel_SaveColors(D_80199944);
+            FieldModel_ScaleColors(D_80199944, (u16)glow);
+            FieldModel_Draw(D_80199944, &matrix);
+            FieldModel_RestoreColors(D_80199944);
         }
         D_800F3368.parameter0A = 0;
         D_800F3368.depth = 4;

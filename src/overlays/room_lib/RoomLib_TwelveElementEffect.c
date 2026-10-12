@@ -103,7 +103,7 @@ typedef struct RoomTwelveEffectStack {
     RoomSpriteMatrix localMatrix;
 } RoomTwelveEffectStack;
 
-int *func_800C2B28(int index);
+int *FieldEng_VarPtr(int index);
 int func_800C66C8(void *object, int message, void *state);
 
 /* Retail marks this function handwritten; only its COP2 windows remain ASM. */
@@ -126,13 +126,13 @@ void RoomLib_InitTwelveElementEffect(void *owner, void *unused, char *state) {
     stack.sourceMatrix = clock->matrix.matrix;
 
     workState->repeatCount = 0xC;
-    workState->frameStep = *func_800C2B28(0);
-    workState->timerLimit = *func_800C2B28(1);
-    workState->initialPhase = *func_800C2B28(2);
-    spacing = *func_800C2B28(3);
-    *(s16 *)&stack.seed = *func_800C2B28(4);
-    workState->phaseStep = *func_800C2B28(5);
-    workState->phaseLimit = *func_800C2B28(6);
+    workState->frameStep = *FieldEng_VarPtr(0);
+    workState->timerLimit = *FieldEng_VarPtr(1);
+    workState->initialPhase = *FieldEng_VarPtr(2);
+    spacing = *FieldEng_VarPtr(3);
+    *(s16 *)&stack.seed = *FieldEng_VarPtr(4);
+    workState->phaseStep = *FieldEng_VarPtr(5);
+    workState->phaseLimit = *FieldEng_VarPtr(6);
 
     localMatrix = &stack.localMatrix;
     localMatrix->m[2][2] = 0x1000;

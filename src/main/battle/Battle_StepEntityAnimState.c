@@ -32,7 +32,7 @@ void Battle_StepEntityAnimState(BattleEntity *entity) {
             entity->motionY = 0;
             entity->motionZ = 0;
             entity->entityFlags |= 0x1000;
-            Akao_Cmd_21(0, state->field08);
+            Akao_Cmd_21(0, state->slotBit);
 
             iter = (BattleEntity *)g_FieldActorListHead;
             while (iter != 0) {
@@ -42,7 +42,7 @@ void Battle_StepEntityAnimState(BattleEntity *entity) {
                 iter = iter->next;
             }
         } else {
-            Akao_Cmd_21(0, state->field08);
+            Akao_Cmd_21(0, state->slotBit);
             state->deathAnimPhase = 3;
         }
         break;

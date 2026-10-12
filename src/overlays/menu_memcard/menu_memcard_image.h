@@ -11,7 +11,7 @@ typedef struct MemcardImageNode {
     void *update;
     void *field14;
     MemcardImage *volatile image;
-    s32 field1c, targetY, stepY, parameter, kind, field30;
+    s32 intensity, targetY, stepY, parameter, kind, freePending;
 } MemcardImageNode;
 typedef struct MemcardImagePreset { s32 x, y, parameter; } MemcardImagePreset;
 extern MemcardImageNode *D_801D136C, *D_801D137C, *D_801D1378, *D_801D1370;

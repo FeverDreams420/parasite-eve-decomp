@@ -257,11 +257,11 @@ int FieldEng_Spawn6(char *base, int unused, int index, int value) {
     return 0;
 }
 
-void *func_800C2B10(int index) {
+void *FieldEng_RegPtr(int index) {
     return &((FieldEngState *)D_800E2248)->regs[index];
 }
 
-void *func_800C2B28(int index) {
+void *FieldEng_VarPtr(int index) {
     return &((FieldEngState *)D_800E2248)->vars[index];
 }
 
@@ -277,7 +277,7 @@ int func_800C2B68(void) {
     return ((((FieldEngStateWords *)g_FieldEngineScriptState)->status & 0xFFFF0000U) ^ 0x01010000U) < 1;
 }
 
-void func_800C2D0C(u16 slot, u8 id, u16 size);
+void FieldEng_ActivateSlot(u16 slot, u8 id, u16 size);
 
 void *func_800C2B90(void *obj, u8 id, u16 *sizes, int (**handlers)(void *, void *, void *)) {
     s16 slot = -1;
@@ -301,7 +301,7 @@ void *func_800C2B90(void *obj, u8 id, u16 *sizes, int (**handlers)(void *, void 
     }
 
     if (FieldEng_GetStatus(obj) == 3 || FieldEng_GetStatus(obj) == 4 || FieldEng_GetStatus(obj) == 5) {
-        func_800C2D0C(slot, id, sizes[id]);
+        FieldEng_ActivateSlot(slot, id, sizes[id]);
 
         entry = D_800F34F4 + slot * 6;
         data = D_800F3330 + ((FieldEngSlot *)entry)->data_offset;
@@ -317,7 +317,7 @@ void *func_800C2B90(void *obj, u8 id, u16 *sizes, int (**handlers)(void *, void 
 
 /* Activate slot `slot` with handler `id` and reserve `size` bytes of script
  * data for it, wrapping to offset 0 when the 0x80C-byte area would overflow. */
-void func_800C2D0C(u16 slot, u8 id, u16 size) {
+void FieldEng_ActivateSlot(u16 slot, u8 id, u16 size) {
     FieldEngDataState *state;
     s16 offset;
 
