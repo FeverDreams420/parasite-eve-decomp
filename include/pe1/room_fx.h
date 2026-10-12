@@ -43,6 +43,11 @@ PE1_STATIC_ASSERT(sizeof(RoomFxSpriteControl) == 8, room_fx_sprite_control_size)
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomFxSpriteControl, depth) == 6,
                   room_fx_sprite_control_depth_offset);
 
+static inline RoomFxSpriteControl *RoomFx_SpriteControlFromDepth(s16 *depth) {
+    return (RoomFxSpriteControl *)((char *)depth -
+        PE1_OFFSETOF(RoomFxSpriteControl, depth));
+}
+
 typedef GteVector RoomFxVec4;
 
 typedef struct RoomUniformSpriteFxParams {
