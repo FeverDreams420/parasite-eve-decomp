@@ -16,7 +16,7 @@ extern u32 D_8009D1A0;
 void Pm_StopAllBoth(void);
 void Aya_SetTotalExp(u32 exp, u16 pe_bonus, void *rewards);
 int Render_BeginSceneLoad(void);
-int CD_StepReadState(int mode);
+int CdRom_StepReadState(int mode);
 void Battle_SetupPlayerPalette(void);
 void Battle_StepLevelUp(void);
 

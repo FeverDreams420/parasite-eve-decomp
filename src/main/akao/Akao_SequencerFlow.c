@@ -51,7 +51,7 @@ typedef struct AkaoBankCursor {
 /* Advance global, bank and voice slides every fourth tick.
  * Each slide keeps its own previous value so stock GCC can allocate its
  * registers without a pin. */
-void SPU_StepReverbLoad(void)
+void Spu_StepReverbLoad(void)
 {
     u32 value;
     u32 oldGlobalParam;
@@ -313,7 +313,7 @@ void Akao_Tick(void)
 
     if (!D_8009D268)
         Akao_ProcessMessageQueue();
-    SPU_StepReverbLoad();
+    Spu_StepReverbLoad();
     Akao_SetVoicePitch();
 }
 

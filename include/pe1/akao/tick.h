@@ -71,7 +71,7 @@ void Akao_StepSampleLoader(AkaoTrack *track, u32 voice_mask);
 void Spu_UpdateVoiceRegisters(AkaoTrack *track, u32 voice_mask);
 void Spu_TickVoiceEnvelopes(AkaoTrack *track, unsigned int voice_mask);
 void Akao_ProcessMessageQueue(void);
-void SPU_StepReverbLoad(void);
+void Spu_StepReverbLoad(void);
 void Akao_SetVoicePitch(void);
 void Akao_CopyWords(unsigned int *src, unsigned int *dst, unsigned int size);
 void Akao_Tick(void);

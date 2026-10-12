@@ -172,7 +172,7 @@ int Boot_LoadOverlayTables(void) {
     VSync(0);
     SetDispMask(0);
     state = &g_GameState;
-    CD_ReadSectors(1, 0xCC, 0, g_SceneLoadScratchBuffer[0], 0x21, 1);
+    CdRom_ReadAssetSectors(1, 0xCC, 0, g_SceneLoadScratchBuffer[0], 0x21, 1);
 
 retry_first_load:
     range = g_MainAssetLbaTbl;
@@ -238,7 +238,7 @@ retry_final_load:
     return 0;
 }
 
-int CD_LoadBootAudio(void) {
+int CdRom_LoadBootAudio(void) {
     int status;
     u16 *range;
     int retry;

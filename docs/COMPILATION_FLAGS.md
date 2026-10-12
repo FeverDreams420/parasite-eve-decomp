@@ -186,7 +186,7 @@ order of symbol-table entries can change, and the link is identical):
 
 - K8 with COMMON definitions of the words retail reaches through `$gp`
   (generated from the old objects by `reorg_merge.py --gp-commons`):
-  `cdrom/CD_TrackReadFlow.c`, `draw/Draw_WipeAndGradient.c`,
+  `cdrom/CdRom_TrackReadFlow.c`, `draw/Draw_WipeAndGradient.c`,
   `draw/Draw_AllocColorQuad.c` (keeps `-fno-schedule-insns`),
   `draw/Draw_RenderFrame.c`, `entity/Entity_FrameUpdate.c`,
   `item/Menu_OpenItemUsePanelAtIndex.c`, `menu/Menu_InventoryScreens.c`,
@@ -323,7 +323,7 @@ differently but resolve to the same options count once.
 - `src/main/battle/Battle_PlayerTurnFlow.c`
 - `src/main/boot/Boot_FrameLoop.c`
 - `src/main/boot/Boot_InitSystemFlow.c`
-- `src/main/cdrom/CD_TrackReadFlow.c`
+- `src/main/cdrom/CdRom_TrackReadFlow.c`
 - `src/main/draw/Draw_WipeAndGradient.c`
 - `src/main/draw/Draw_RenderFrame.c`
 - `src/main/entity/Entity_FrameUpdate.c`
@@ -491,7 +491,7 @@ means only the order of symbol-table entries changed (cc1 `-G8` emits
 | `main/boot/Boot_FrameLoop.c` | cc1 `-G8`: lev 13 (Boot_RunFrame 13); maspsx `-G8`: lev 61 (Boot_RunFrame 56, Boot_FlushSceneFast 5); maspsx `--use-comm-section`: lev 17 (Boot_RunFrame 15, Boot_FlushSceneFast 2); FORCE_G0: lev 52 (Boot_RunFrame 52); small-data set: lev 63 (Boot_RunFrame 58, Boot_FlushSceneFast 5) |
 | `main/boot/Boot_InitSystemFlow.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 161 (Field_HandleStateTransition 150, Boot_BuildRenderFlagTable 11); maspsx `--use-comm-section`: lev 55 (Field_HandleStateTransition 50, Boot_BuildRenderFlagTable 5); FORCE_G0: lev 101 (Field_HandleStateTransition 86, Boot_InitSubsystems 9, Boot_BuildRenderFlagTable 4); small-data set: lev 161 (Field_HandleStateTransition 150, Boot_BuildRenderFlagTable 11) |
 | `main/boot/Draw_InitPipeline.c` | maspsx `-G8`: lev 17 (Draw_InitPipeline 17); maspsx `--use-comm-section`: lev 4 (Draw_InitPipeline 4); FORCE_G0: identical; small-data set: lev 17 (Draw_InitPipeline 17) |
-| `main/cdrom/CD_TrackReadFlow.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 206 (CD_StepReadState 77, CD_ReadSectors 54, CD_SeekToTrack 53); maspsx `--use-comm-section`: lev 48 (CD_StepReadState 19, CD_ReadSectors 12, CD_SeekToTrack 11); FORCE_G0: identical; small-data set: lev 206 (CD_StepReadState 77, CD_ReadSectors 54, CD_SeekToTrack 53) |
+| `main/cdrom/CdRom_TrackReadFlow.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 206 (CdRom_StepReadState 77, CdRom_ReadAssetSectors 54, CdRom_SeekToTrack 53); maspsx `--use-comm-section`: lev 48 (CdRom_StepReadState 19, CdRom_ReadAssetSectors 12, CdRom_SeekToTrack 11); FORCE_G0: identical; small-data set: lev 206 (CdRom_StepReadState 77, CdRom_ReadAssetSectors 54, CdRom_SeekToTrack 53) |
 | `main/cdrom/CdRom_SceneAssetsAndBootRead.c` | maspsx `--expand-div`: lev 19 (Akao_Calc3DPan 19) |
 | `main/draw/Draw_AllocColorQuad.c` | cc1 `-G8`: identical; cc1 `-fno-schedule-insns`: lev 107 (Draw_AllocColorQuad 107); maspsx `-G8`: lev 70 (Draw_AllocColorQuad 70); maspsx `--use-comm-section`: lev 24 (Draw_AllocColorQuad 24); maspsx `--expand-div`: lev 23 (Draw_AllocColorQuad 23); FORCE_G0: identical; small-data set: lev 70 (Draw_AllocColorQuad 70) |
 | `main/draw/Draw_TextPrimitives.c` | cc1 `-G8`: same code, symbol table differs; cc1 `-fno-cse-skip-blocks`: lev 22 (Draw_AllocTexturedQuad 22); maspsx `-G8`: lev 907 (Draw_AllocTexturedRectAlt 211, Draw_PrintTimeValue 81, Draw_PrintCenteredTextInWidth 65); maspsx `--use-comm-section`: lev 343 (Draw_AllocTexturedRectAlt 82, Draw_PrintTimeValue 38, Draw_PrintCenteredTextInWidth 23); maspsx `--expand-div`: lev 73 (Draw_AllocTexturedRect 13, Draw_PrintSignedNumberWidth4 12, Draw_PrintSignedNumberWidth3 12); FORCE_G0: lev 4 (Draw_SetBaseOffsetPosition 2, Draw_GetBaseY 2); small-data set: lev 907 (Draw_AllocTexturedRectAlt 211, Draw_PrintTimeValue 81, Draw_PrintCenteredTextInWidth 65) |

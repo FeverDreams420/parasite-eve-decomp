@@ -4,7 +4,7 @@
 /* Sequencer-wide slide values and SPU sample-table pointers shared by the
  * AKAO command handlers and the four-tick slide step. */
 
-/* 16.16 slide accumulators stepped by SPU_StepReverbLoad. */
+/* 16.16 slide accumulators stepped by Spu_StepReverbLoad. */
 extern int D_8009D2B4;
 extern int D_8009D2CC;
 extern int D_8009D2D0;

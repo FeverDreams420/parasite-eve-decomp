@@ -84,7 +84,7 @@ typedef struct CdRange {
     u16 last;
 } CdRange;
 
-/* Range table address as a pointer or a word: CD_FindNextDataSector adds
+/* Range table address as a pointer or a word: CdRom_FindNextDataSector adds
  * the scaled index to the table address as an integer, index first. */
 typedef union CdRangeAddress {
     CdRange *range;
@@ -162,7 +162,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, cd_transition_phase) == 0xF2,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, track_volumes) == 0xFE,
                   scene_track_volumes_offset);
 
-/* Range-table cursor used by CD_FindNextDataSector. */
+/* Range-table cursor used by CdRom_FindNextDataSector. */
 extern int g_CdRangeIndex;
 
 /* Scene containers encode byte offsets relative to their loaded base. */
@@ -236,9 +236,9 @@ extern unsigned int g_GameStateFlags;
 extern PmCommand **g_PmCmdHandlerTable;
 extern void *g_FieldAnimTaskPrograms[104];
 
-int CD_ReadSectors(unsigned int kind, unsigned int index, int channel,
+int CdRom_ReadAssetSectors(unsigned int kind, unsigned int index, int channel,
                    void *buffer, u32 maximum, int blocking);
-int CD_FindNextDataSector(void);
+int CdRom_FindNextDataSector(void);
 
 int Asset_UnloadTableEntries(void);
 int Draw_LoadTimAsset(TimUploadRecord *record, void *base);

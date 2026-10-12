@@ -28,7 +28,7 @@ struct SceneTrackRecord *g_CdTrackRecord;
 /* Matching debt: register pins and empty barriers retain the index,
 * zero extension and callback state. The duplicated ready branch preserves
 * GCC's block ordering. No ASM construct emits an instruction. */
-int CD_ReadSectors(unsigned kind, unsigned int index, int channel, void *buffer, u32 maximum, int blocking)
+int CdRom_ReadAssetSectors(unsigned kind, unsigned int index, int channel, void *buffer, u32 maximum, int blocking)
 {
     register Pe1GameState *state asm("$18") = &g_GameState;
     int result = -1;
@@ -204,7 +204,7 @@ int CD_ReadSectors(unsigned kind, unsigned int index, int channel, void *buffer,
     return busy;
 }
 
-int CD_FindNextDataSector(void)
+int CdRom_FindNextDataSector(void)
 {
     Pe1GameState *state = &g_GameState;
     u8 *base = (u8 *)state->loaded_scene_assets;
@@ -222,7 +222,7 @@ dispatch:
         state->cd_range_state = 0x28;
         break;
     case 0x28:
-        if (CD_ReadSectors(1, 1, 0, state->scene_load_scratch, 0x21, 0) == 1) return 1;
+        if (CdRom_ReadAssetSectors(1, 1, 0, state->scene_load_scratch, 0x21, 0) == 1) return 1;
         if (state->cd_range_read_mode >= 2) {
             state->cd_range_state = 0x29;
             return 1;
@@ -230,7 +230,7 @@ dispatch:
         state->cd_range_state = 0x2a;
         break;
     case 0x29:
-        if (CD_ReadSectors(1, state->cd_range_read_mode, 0, state->scene_load_scratch, 0x21, 0) == 1) return 1;
+        if (CdRom_ReadAssetSectors(1, state->cd_range_read_mode, 0, state->scene_load_scratch, 0x21, 0) == 1) return 1;
         state->cd_range_state = 0x2a;
         break;
     case 0x2a:
@@ -256,7 +256,7 @@ dispatch:
         CdRangeAddress entry;
 
         entry.word = g_CdRangeIndex * sizeof(CdRange) + ranges.word;
-        if (CD_ReadSectors(3, entry.range->first, entry.range->last, state->scene_load_scratch, 0x21, 0) == 1) return 1;
+        if (CdRom_ReadAssetSectors(3, entry.range->first, entry.range->last, state->scene_load_scratch, 0x21, 0) == 1) return 1;
         state->cd_range_state = 0x2a;
         g_CdRangeIndex = g_CdRangeIndex + 1;
         break;
@@ -282,7 +282,7 @@ void Akao_ResetPositionalState(void) {
  * the signed loop test and its scheduling; volatile directory reads retain
  * the original pair of loads. The shifted state view retains the workspace
  * selection made before callbacks. Neither ASM construct emits instructions. */
-int CD_SeekToTrack(int key, int mode, int group, int *slot, int blocking)
+int CdRom_SeekToTrack(int key, int mode, int group, int *slot, int blocking)
 {
     int busy = 0;
     register int finished asm("$17") = 0;
@@ -368,7 +368,7 @@ int CD_SeekToTrack(int key, int mode, int group, int *slot, int blocking)
             break;
         }
         case 7:
-            if (CD_ReadSectors(0, g_CdTrackBank, 0, state->scene_load_scratch, 0x21, blocking) == 1) {
+            if (CdRom_ReadAssetSectors(0, g_CdTrackBank, 0, state->scene_load_scratch, 0x21, blocking) == 1) {
                 busy = 1;
                 finished = (blocking ^ 1) & 1;
             } else {
@@ -396,7 +396,7 @@ int CD_SeekToTrack(int key, int mode, int group, int *slot, int blocking)
 
 /* Matching debt: three table aliases and the retry jump. The aliases preserve
  * independent absolute reads of the table pointer around callbacks. */
-int CD_StepReadState(int active)
+int CdRom_StepReadState(int active)
 {
     Pe1GameState *state = &g_GameState;
     int slot;
@@ -443,7 +443,7 @@ retry:
             state->cd_transition_phase = 46;
             break;
         case 46:
-            if (CD_FindNextDataSector() == 1)
+            if (CdRom_FindNextDataSector() == 1)
                 return 1;
             flags = state->flags;
             changing = flags & 4;
@@ -476,7 +476,7 @@ retry:
             }
             break;
         case 47:
-            if (CD_ReadSectors(0, state->scene_audio.tracks.pending_bank, 0,
+            if (CdRom_ReadAssetSectors(0, state->scene_audio.tracks.pending_bank, 0,
                                state->scene_load_scratch, 0x21, 0) == 1)
                 return 1;
             state->cd_transition_phase = 48;
@@ -497,7 +497,7 @@ retry:
             state->cd_transition_phase = 50;
             break;
         case 49:
-            if (CD_ReadSectors(2, state->pending_stream_banks[g_CdStreamBankIndex], g_CdStreamBankIndex,
+            if (CdRom_ReadAssetSectors(2, state->pending_stream_banks[g_CdStreamBankIndex], g_CdStreamBankIndex,
                                state->scene_load_scratch, 0x21, 0) == 1)
                 return 1;
             ++g_CdStreamBankIndex;
@@ -505,7 +505,7 @@ retry:
             break;
         case 50:
             if (state->pending_sample_bank != -1 &&
-                CD_ReadSectors(1, state->pending_sample_bank, 0,
+                CdRom_ReadAssetSectors(1, state->pending_sample_bank, 0,
                                state->scene_load_scratch, 0x21, 0) == 1)
                 return 1;
             if (state->flags & 4) {
@@ -536,13 +536,13 @@ retry:
             state->flags &= ~4;
             return 0;
         case 62:
-            if (CD_ReadSectors(0, ((s8 *)state->scene_audio.tracks.banks)[0], 0,
+            if (CdRom_ReadAssetSectors(0, ((s8 *)state->scene_audio.tracks.banks)[0], 0,
                                state->scene_load_scratch, 0x21, 0) == 1)
                 return 1;
             state->cd_transition_phase = 51;
             break;
         case 51:
-            if (CD_SeekToTrack(state->scene_audio.tracks.keys[0][0], 1, 0, &slot, 0) == 1)
+            if (CdRom_SeekToTrack(state->scene_audio.tracks.keys[0][0], 1, 0, &slot, 0) == 1)
                 return 1;
             voice = Akao_Cmd_10(state->bank_work_base);
             if (voice == -1) {

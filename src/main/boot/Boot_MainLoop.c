@@ -57,7 +57,7 @@ void main(void) {
                     g_GameState.flags |= STATE_FLAG_IMAGE_BUSY;
                     break;
                 }
-                CD_LoadBootAudio();
+                CdRom_LoadBootAudio();
                 func_801235DC();
                 g_SceneDispatchToken = 0xA80830C8;
                 g_GameState.flags |= 1;

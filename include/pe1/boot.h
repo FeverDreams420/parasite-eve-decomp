@@ -14,7 +14,7 @@ extern unsigned int D_8009CDA4[];
 void Boot_InitSubsystems(void);
 void Scene_LoadSceneData(void);
 int Boot_LoadOverlayTables(void);
-int CD_LoadBootAudio(void);
+int CdRom_LoadBootAudio(void);
 int CdRom_LoadInitialImage(void);
 int Draw_InitDisplay(int mode);
 void Boot_RunFrame(void);

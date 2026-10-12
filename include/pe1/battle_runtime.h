@@ -128,7 +128,7 @@ void Entity_AllocSlot(BattleEntity *entity);
 void Battle_StepEntityDeath(void);
 void Anim_SetInterpRate(RenderObjectEntity *object, int rate);
 void Pm_StopAllBoth(void);
-int CD_StepReadState(int mode);
+int CdRom_StepReadState(int mode);
 void Battle_ClearMotionTable(void);
 void Battle_SetupPlayerPalette(void);
 void Battle_ResetEnemyStats(int mode);

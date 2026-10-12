@@ -232,7 +232,7 @@ s32 Boot_MemCardStepInit(u8 **arg0) {
         base->memcard_init_phase = 0x38U;
         goto loop_1;
     case 0x38:
-        if (CD_StepReadState(1) != 1) {
+        if (CdRom_StepReadState(1) != 1) {
             if (!(g_GameState.flags & 0x400000)) {
                 func_80042F20();
             }
@@ -1216,7 +1216,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         break;
     case 0xC8:
     case 0x198:
-        status = CD_SeekToTrack(*args->arg1, 1, 0, &locals.slot,
+        status = CdRom_SeekToTrack(*args->arg1, 1, 0, &locals.slot,
                                 *args->arg2 == 0);
         if (status == 1) {
             D_8009CE00 -= 8;
@@ -1231,7 +1231,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         CdRom_RegisterAudioSlot(locals.slot, *args->arg1, *args->result, 0x7F);
         break;
     case 0xCB:
-        status = CD_SeekToTrack(*args->arg1, 1, 1, &locals.slot,
+        status = CdRom_SeekToTrack(*args->arg1, 1, 1, &locals.slot,
                                 *args->arg3 == 0);
         if (status == 1) {
             D_8009CE00 -= 8;
@@ -1253,7 +1253,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         }
         Akao_Cmd_11(locals.slot);
         wait_one = 1;
-        status = CD_SeekToTrack(*args->arg1, 0, 0, &locals.slot, wait_one);
+        status = CdRom_SeekToTrack(*args->arg1, 0, 0, &locals.slot, wait_one);
         if (status != wait_one) {
             break;
         }
@@ -1444,13 +1444,13 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
         } while (++count < entry_limit);
         break;
     case 0x191:
-        status = CD_SeekToTrack(*args->arg1, 1, 0, &locals.slot,
+        status = CdRom_SeekToTrack(*args->arg1, 1, 0, &locals.slot,
                                *args->arg2 == 0);
         if (status != 1) {
             *args->result = locals.slot;
             break;
     case 0x192:
-        status = CD_SeekToTrack(*args->arg1, 1, 1, &locals.slot,
+        status = CdRom_SeekToTrack(*args->arg1, 1, 1, &locals.slot,
                                *args->arg2 == 0);
         if (status == 1) {
             D_8009CE00 -= 8;

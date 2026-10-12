@@ -107,7 +107,7 @@ segments:
       # Scene startup and entity texture jump tables share the loader TU.
       - [0x1BB0, .rodata, scene/Scene_RoomLoad]
       # Both sector-state jump tables now belong to the shared object.
-      - [0x1C28, .rodata, cdrom/CD_TrackReadFlow]
+      - [0x1C28, .rodata, cdrom/CdRom_TrackReadFlow]
       - [0x1E0C, rodata, main/rodata_001E0C]
       - [0x1E1C, .rodata, psyq/libc/sprintf]
       - [0x1EF8, rodata, main/rodata_001EF8]
@@ -472,7 +472,7 @@ segments:
       # state (helper evidence across the reset); the audio slot registration and
       # its two lookups share the scene audio keys. One -G8 FORCE_G0 unit with
       # COMMON $gp words.
-      - [0x5D5A4, c, cdrom/CD_TrackReadFlow]
+      - [0x5D5A4, c, cdrom/CdRom_TrackReadFlow]
       # Scene asset-directory unit: the key-type search, the positional sound
       # senders (scene-table and BGM-handle wrappers, 3D send path, table-command
       # lookup, GTE pan/volume projection; the two Asset_Find08* names are legacy

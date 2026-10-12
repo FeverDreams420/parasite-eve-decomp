@@ -723,7 +723,7 @@ void Battle_StepLevelUp(void) {
         break;
 
     case 3:
-        if (CD_StepReadState(0) != 1) {
+        if (CdRom_StepReadState(0) != 1) {
             Battle_SetupPlayerPalette();
             D_8009D28C = 9;
             g_GameState.flags &= 0xFFFF7FFF;
@@ -1029,7 +1029,7 @@ void Battle_StepEscapeOrDeath(void)
         break;
     }
     case 3:
-        if (CD_StepReadState(0) != 1) {
+        if (CdRom_StepReadState(0) != 1) {
             Battle_ClearMotionTable();
             Entity_SetActionMode(D_8009D254, 0x15);
             Battle_SetupPlayerPalette();
@@ -1700,7 +1700,7 @@ void Battle_PhaseEndTurn(void) {
         return;
     case 1:
         /* Finish the resource read, restore the player and reset HUD colors. */
-        if (CD_StepReadState(0) != step) {
+        if (CdRom_StepReadState(0) != step) {
             Battle_ClearMotionTable();
             nextMode = 0x18;
             if (!(D_8009D1A0 & 0x1800)) {
@@ -1786,7 +1786,7 @@ void Battle_StepEntityDeath(void)
         break;
     }
     case 2:
-        if (CD_StepReadState(0) != 1) {
+        if (CdRom_StepReadState(0) != 1) {
             Battle_ClearMotionTable();
             Entity_SetActionMode(D_8009D254, 0x15);
             Battle_SetupPlayerPalette();

@@ -16,7 +16,7 @@ extern s32 D_8009D28C;
 extern u8 D_8009CE74;
 int Battle_ProcessActionSlot(BattleEntity *);
 void Battle_ResetEnemyStats(int);
-int CD_StepReadState(int);
+int CdRom_StepReadState(int);
 void Battle_ClearMotionTable(void);
 void Pm_StopAllBoth(void);
 

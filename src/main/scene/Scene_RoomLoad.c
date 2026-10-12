@@ -611,19 +611,19 @@ retry_room:
 
     loaded = 1;
     if ((flags & 1) && state->pending_stream_banks[0] != 0) {
-        CD_ReadSectors(2, state->pending_stream_banks[0], 0,
+        CdRom_ReadAssetSectors(2, state->pending_stream_banks[0], 0,
                        state->scene_load_scratch, 0x21, loaded);
     } else if (!(flags & 0x10)) {
         state->pending_stream_banks[0] = 0;
     }
     if ((flags & 2) && state->pending_stream_banks[1] != 0) {
-        CD_ReadSectors(2, state->pending_stream_banks[1], 1,
+        CdRom_ReadAssetSectors(2, state->pending_stream_banks[1], 1,
                        state->scene_load_scratch, 0x21, 1);
     } else if (!(flags & 0x20)) {
         state->pending_stream_banks[1] = 0;
     }
     if ((flags & 4) && state->pending_sample_bank != -1) {
-        CD_ReadSectors(1, state->pending_sample_bank, 0,
+        CdRom_ReadAssetSectors(1, state->pending_sample_bank, 0,
                        state->scene_load_scratch, 0x21, 1);
     } else if (!(flags & 0x40)) {
         state->pending_sample_bank = -1;
@@ -1110,7 +1110,7 @@ retry:
         state->story_day_flags &= ~3;
         return 0;
     case 7:
-        if (CD_ReadSectors(1, state->cd_range_read_mode, 0,
+        if (CdRom_ReadAssetSectors(1, state->cd_range_read_mode, 0,
                 state->scene_load_scratch, 0x21, 0) == 0) {
             state->scene_init_subphase = 11;
             break;

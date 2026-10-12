@@ -315,7 +315,7 @@ exist for the bytes, and why:
   order, which only non-structure stores give. Declaring the scalars as a
   record instead fixes the stores but not the read-modify-write, which a
   record view turns into a register-held address. `Akao_UpdateVoiceMask`
-  writes `key_off_request_mask` the same way, and `SPU_StepReverbLoad`
+  writes `key_off_request_mask` the same way, and `Spu_StepReverbLoad`
   reads the bank cursor through the one-field `AkaoBankCursor` record for the
   opposite reason: its reload after a bank store must stay.
 - `Akao_SetBgmVolumeFade` reads `g_AkaoBgmHandle[0]` twice by index. A
@@ -532,7 +532,7 @@ Crutches still in place (lev is the only metric):
   helper form tests `$v0` directly (lev 4 plus branch offsets, 58 in all).
   `CdRom_LoadInitialImage` cannot use the helper: the inlined
   `CdRom_PollReady` puts a stack local in front of the `return`, and
-  `CD_FindNextDataSector` restarts after its setup, so the helper's
+  `CdRom_FindNextDataSector` restarts after its setup, so the helper's
   parameter copies stay as moves at the reentry label (lev 30).
 - `OpenPeImage` (2 barriers): retail leaves the delay slot of the second and
   third `found == 0` tests empty; without the barriers reorg fills it with
@@ -872,7 +872,7 @@ Still open:
   words; see "Resident translation units".)
 - Symbol aliases that `MASPSX_FORCE_G0` cannot remove, because cc1 decides
   them before MASPSX runs:
-  - `CD_StepReadState` reads the sound table pointer `D_800B0E08` four
+  - `CdRom_StepReadState` reads the sound table pointer `D_800B0E08` four
     times with no store or call between the check and the use; one symbol
     lets CSE merge those loads, so its three views stay.
   - `Menu_MemCardProgress` (`D_800A19C0`, two views), `Save_StartWriteSlot`
@@ -953,24 +953,24 @@ Still open:
   site below was removed and rebuilt; lev is the Levenshtein distance over
   instruction words of the best crutch-free form tried:
   - CD and stream retry loops keep one `goto` each
-    (`CdRom_LoadInitialImage`, `CD_FindNextDataSector`, `CD_StepReadState`).
+    (`CdRom_LoadInitialImage`, `CdRom_FindNextDataSector`, `CdRom_StepReadState`).
     Retail hoists no invariant out of these loops: the range pointer, the
     `0xFEFFBFFF` mask and the `-1`/`33`/`42` constants are rebuilt on every
     pass. GCC's loop optimizer only runs on syntactic loops, so a `do`/`for`
     form hoists them into `$s` registers (lev 27 and 63).
-  - `CD_FindNextDataSector` adds the range index to the range table as
+  - `CdRom_FindNextDataSector` adds the range index to the range table as
     integers, index first, through the `CdRangeAddress` pointer/word union
     (`&ranges[i]` and `i + ranges` put the table first in the `addu`).
-  - `CD_StepReadState` needs no slot macro or pin: the load-delay `nop`
+  - `CdRom_StepReadState` needs no slot macro or pin: the load-delay `nop`
     between `lw D_8009CDA4` and the gp-relative `sw` to `g_CdFadeStartTime`
     is lost only because MASPSX does not know an extern `.sdata` symbol is
     gp-relative. A tentative definition of `g_CdFadeStartTime` with
     `--use-comm-section` gives MASPSX its size, and it keeps the `nop`.
     The same recipe fixes any other `PE1_NOP` before a `$gp` store of a
     just-loaded value.
-  - `CD_ReadSectors` (pins on `state`, `finished`, `scaledIndex`, `start`,
+  - `CdRom_ReadAssetSectors` (pins on `state`, `finished`, `scaledIndex`, `start`,
     barriers on `blocking`/`kind`, the volatile sector-directory reads)
-    rebuilds at lev 47 without them. `CD_SeekToTrack` keeps the `$s1` pin
+    rebuilds at lev 47 without them. `CdRom_SeekToTrack` keeps the `$s1` pin
     and the count barrier: without the barrier combine knows the count is a
     `>> 22` and turns retail's `blez` into `beqz`, and without the pin
     `slot` and `finished` swap `$s1`/`$s2` (lev 49).
@@ -1213,7 +1213,7 @@ These apply to any unit, not only the ones they were found in:
   the loaded value stands in for the load-delay `nop` ASPSX emitted. A
   tentative definition of the stored word in the unit plus
   `--use-comm-section` gives MASPSX its size and it keeps the `nop`
-  (`CD_StepReadState`, `Scene_LoadMap`, `Battle_StepCharacterAction`).
+  (`CdRom_StepReadState`, `Scene_LoadMap`, `Battle_StepCharacterAction`).
 - 16-byte `struct { char _[16]; } X __asm__("sym")` views in a `-G8` unit
   only make cc1 treat a small word as absolute. `MASPSX_FORCE_G0: 1` with
   `--use-comm-section` and tentative definitions of the words retail reaches

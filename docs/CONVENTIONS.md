@@ -35,8 +35,8 @@ Two principles decide most questions:
 
 Prefixes are fixed per subsystem (table below). Use the subsystem's prefix
 even when the caller is elsewhere: a CD routine is `CdRom_*` wherever it is
-called from. Legacy game-side spellings (`CD_`, `Cd_`, `SPU_`) are renamed to the
-canonical prefix when a file is touched. SDK-internal names that look similar
+called from. Game code does not use the legacy spellings `CD_`, `Cd_` or
+`SPU_`; they became `CdRom_` and `Spu_`. SDK-internal names that look similar
 (`CD_cw`, `CD_init`, `GPU_cw`, `_spu_init`) are PsyQ names and keep their
 spelling.
 
