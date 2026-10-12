@@ -8,7 +8,7 @@
 
 /* Polls the pending sector read; a finished or failed read (0 or -1)
  * clears the read-busy game state flags. Boot loaders that spin on it
- * inline this body; CdRom_BootReadFlow.c holds the out-of-line copy. */
+ * inline this body; CdRom_SceneAssetsAndBootRead.c holds the out-of-line copy. */
 extern inline int CdRom_PollReady(void) {
     int scratch;
     int status;

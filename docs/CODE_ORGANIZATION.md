@@ -1162,7 +1162,7 @@ These apply to any unit, not only the ones they were found in:
 - `CdRom_PollReady` is an `extern inline` in `pe1/cd_poll.h`: the boot disc
   loaders inline it as retail does (the copy into the return register is
   what the old `$v0` pins and status barriers imitated), and
-  `CdRom_BootReadFlow.c` keeps the out-of-line definition.
+  `CdRom_SceneAssetsAndBootRead.c` keeps the out-of-line definition.
 - A loop that walks a table by index rather than an incremented pointer
   leaves the table pointer single-set, and sched1 then places its address
   load late (`MemCard_InitManager`, no pins).
