@@ -1,6 +1,6 @@
 #include "pe1/boot_display.h"
 
-void Boot_InitDisplayResources(void) {
+void BootDisplay_InitDisplayResources(void) {
     s16 rect[4];
     char *resource;
     s32 offset;

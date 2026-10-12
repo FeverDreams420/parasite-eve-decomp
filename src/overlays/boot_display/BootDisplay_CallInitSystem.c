@@ -1,5 +1,5 @@
 #include "pe1/boot.h"
 
-void Boot_CallInitSystem(void) {
+void BootDisplay_CallInitSystem(void) {
     Boot_InitSystem();
 }

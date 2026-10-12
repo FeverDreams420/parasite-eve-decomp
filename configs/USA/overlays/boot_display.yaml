@@ -35,7 +35,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x0, .rodata, Boot_RunDisplay]
+      - [0x0, .rodata, BootDisplay_RunDisplay]
   - [0x14]
   - name: boot_display_font_table_prefix
     type: code
@@ -46,8 +46,8 @@ segments:
     bss_size: 0x0
     subsegments:
       - [0x14, rodata, boot_display_font_tables_pad]
-      - [0x18, .rodata, Boot_GetGlyphIndex]
-      - [0x308, .rodata, Boot_GetGlyphWidth]
+      - [0x18, .rodata, BootDisplay_GetGlyphIndex]
+      - [0x308, .rodata, BootDisplay_GetGlyphWidth]
   - [0x5F8]
   - name: boot_display_sprite_switch_table
     type: code
@@ -57,7 +57,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x5F8, .rodata, Boot_StepImageSprite]
+      - [0x5F8, .rodata, BootDisplay_StepImageSprite]
   - [0x618]
   # The switch table retains the copied routine's original link address.
   - name: boot_display_image_switch_table
@@ -68,7 +68,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x618, .rodata, Boot_StepImageDisplay]
+      - [0x618, .rodata, BootDisplay_StepImageDisplay]
   - [0x638]
   - name: boot_display_early_code
     type: code
@@ -78,7 +78,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x638, c, Boot_RunDisplay]
+      - [0x638, c, BootDisplay_RunDisplay]
   - [0x9AC]
   # The text renderer retains its original copied link VMA.
   - name: boot_display_text_linkbase
@@ -89,7 +89,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x9AC, c, Boot_DrawTextBlock]
+      - [0x9AC, c, BootDisplay_DrawTextBlock]
   - [0xB78]
   - name: boot_display_glyph_index_linkbase
     type: code
@@ -99,7 +99,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0xB78, c, Boot_GetGlyphIndex]
+      - [0xB78, c, BootDisplay_GetGlyphIndex]
   - [0xD08]
   - name: boot_display_glyph_width_linkbase
     type: code
@@ -109,7 +109,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0xD08, c, Boot_GetGlyphWidth]
+      - [0xD08, c, BootDisplay_GetGlyphWidth]
   - [0xE64]
   - name: boot_display_resource_init
     type: code
@@ -119,7 +119,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0xE64, c, Boot_InitDisplayResources]
+      - [0xE64, c, BootDisplay_InitDisplayResources]
   - [0xFE8]
   # The frame-buffer fragment retains a link VMA 0x100 above its load address.
   - name: boot_display_frame_buffers_linkbase
@@ -130,7 +130,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0xFE8, c, Boot_SelectFrameBuffers]
+      - [0xFE8, c, BootDisplay_SelectFrameBuffers]
   - [0x1090]
   - name: boot_display_sprite_commands
     type: code
@@ -140,7 +140,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x1090, c, Boot_DisplayNoOp]
+      - [0x1090, c, BootDisplay_DisplayNoOp]
   - [0x1098]
   # Sprite callback local jumps retain the original copied link VMA.
   - name: boot_display_image_sprite_linkbase
@@ -151,7 +151,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x1098, c, Boot_StepImageSprite]
+      - [0x1098, c, BootDisplay_StepImageSprite]
   - [0x15F4]
   - name: boot_display_sprite_helpers
     type: code
@@ -172,7 +172,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x1B00, c, Boot_PresentFrame]
+      - [0x1B00, c, BootDisplay_PresentFrame]
   - [0x1C60]
   # The glyph routine retains its original link VMA, 0x100 above load.
   - name: boot_display_glyph_linkbase
@@ -183,7 +183,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x1C60, c, Boot_BrightenGlyph]
+      - [0x1C60, c, BootDisplay_BrightenGlyph]
   - [0x1F9C]
   # The display initializer retains its original link VMA, 0x100 above load.
   - name: boot_display_image_display_linkbase
@@ -194,7 +194,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x1F9C, c, Boot_SetImageDisplay]
+      - [0x1F9C, c, BootDisplay_SetImageDisplay]
   - [0x20F0]
   - name: boot_display_image_state_linkbase
     type: code
@@ -204,7 +204,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x20F0, c, Boot_StepImageDisplay]
+      - [0x20F0, c, BootDisplay_StepImageDisplay]
   - [0x24A0]
   - name: boot_display_call_init
     type: code
@@ -214,7 +214,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x24A0, c, Boot_CallInitSystem]
+      - [0x24A0, c, BootDisplay_CallInitSystem]
   - [0x24C0]
   # Retail's local jump retained a link address 0x100 above the load address.
   - name: boot_display_bright_linkbase
@@ -225,7 +225,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x24C0, c, Boot_BrightenImageRegion_80125364]
+      - [0x24C0, c, BootDisplay_BrightenImageRegion_80125364]
   - [0x2600]
   - name: boot_display_late
     type: code
@@ -235,7 +235,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x2600, c, Boot_WaitForCdAndRestoreCallbacks]
+      - [0x2600, c, BootDisplay_WaitForCdAndRestoreCallbacks]
   - [0x2688]
   # The init fragment retains a link address 0x18 above its load address.
   - name: boot_display_file_init_linkbase
@@ -246,7 +246,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x2688, c, Boot_InitPlaybackFile]
+      - [0x2688, c, BootDisplay_InitPlaybackFile]
   - [0x27A0]
   # Local jumps retain a link address 0x100 above the load address.
   - name: boot_display_start_playback_linkbase
@@ -257,7 +257,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x27A0, c, Boot_StartPlayback]
+      - [0x27A0, c, BootDisplay_StartPlayback]
   - [0x28F0]
   - name: boot_display_read_commands
     type: code
@@ -267,7 +267,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x28F0, c, Boot_SetCdFilter]
+      - [0x28F0, c, BootDisplay_SetCdFilter]
   - [0x29DC]
   # Local jumps retain a link address 0x100 above this function's load address.
   - name: boot_display_playback_linkbase
@@ -288,7 +288,7 @@ segments:
     subalign: 4
     bss_size: 0x0
     subsegments:
-      - [0x2B4C, c, Boot_RecordReadPosition]
+      - [0x2B4C, c, BootDisplay_RecordReadPosition]
       # Boot display pointer and glyph tables: data, not code.
       - {start: 0x2BA4, type: data, name: boot_display_2648, linker_section_order: .text, linker_section: .code_data}
   - [0x2D5C]

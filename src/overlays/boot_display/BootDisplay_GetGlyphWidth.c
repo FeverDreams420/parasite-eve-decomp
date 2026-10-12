@@ -3,7 +3,7 @@
 /* Four width choices per alphabetic glyph. The lowercase base accounts for
  * the extra 32 ASCII code points; odd styles select lowercase widths. */
 
-u16 Boot_GetGlyphWidth(u8 character) {
+u16 BootDisplay_GetGlyphWidth(u8 character) {
     u16 style = g_BootDisplayFontStyle;
     u8 saved;
     s32 width;

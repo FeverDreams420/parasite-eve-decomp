@@ -1,5 +1,5 @@
 #include "pe1/boot_display.h"
-void Boot_PresentFrame(void) {
+void BootDisplay_PresentFrame(void) {
     s16 rect[4];
     u16 timer;
     if (g_ActiveDrawSlot != 0) {

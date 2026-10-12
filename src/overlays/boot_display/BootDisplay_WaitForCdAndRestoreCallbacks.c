@@ -5,7 +5,7 @@
 #include "pe1/psyq_ds.h"
 #include "pe1/psyq_callbacks.h"
 
-s32 Boot_WaitForCdAndRestoreCallbacks(void) {
+s32 BootDisplay_WaitForCdAndRestoreCallbacks(void) {
     DsControl(8, 0, 0);
     while (DsControlB(9, 0, 0) == 0) {}
     do {

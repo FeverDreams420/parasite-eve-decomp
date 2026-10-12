@@ -372,12 +372,12 @@ class OverlappingFunctionNameTests(unittest.TestCase):
         instruction = "    /* 212C 80125544 D0FFBD27 */  addiu $sp, $sp, -0x30"
         text = '.section .text, "ax"\nglabel func_80125544\n' + instruction + '\n'
         restored = gen_expected.restore_c_function_names(
-            text, [(0, "Boot_InitPlaybackFile")], 0x80125544)
+            text, [(0, "BootDisplay_InitPlaybackFile")], 0x80125544)
         normalized = gen_expected.normalize_c_function_labels(
-            restored, {"Boot_InitPlaybackFile"})
+            restored, {"BootDisplay_InitPlaybackFile"})
         self.assertIn(".global func_80125544\nfunc_80125544:", normalized)
-        self.assertIn("glabel Boot_InitPlaybackFile\n" + instruction, normalized)
-        self.assertIn("endlabel Boot_InitPlaybackFile", normalized)
+        self.assertIn("glabel BootDisplay_InitPlaybackFile\n" + instruction, normalized)
+        self.assertIn("endlabel BootDisplay_InitPlaybackFile", normalized)
         self.assertEqual([line for line in normalized.splitlines() if "/*" in line],
                          [instruction])
 

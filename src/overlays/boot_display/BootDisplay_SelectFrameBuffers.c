@@ -1,7 +1,7 @@
 #include "pe1/cdrom_buffers.h"
 #include "pe1/boot_display.h"
-#include "Boot_SelectFrameBuffers_externs.h"
-void Boot_SelectFrameBuffers(void) {
+#include "BootDisplay_SelectFrameBuffers_externs.h"
+void BootDisplay_SelectFrameBuffers(void) {
     register s32 orderingOffset asm("$4");
     s32 primitiveOffset;
     register s32 sectorOffset;

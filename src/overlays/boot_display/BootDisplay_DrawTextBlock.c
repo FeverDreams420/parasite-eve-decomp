@@ -1,5 +1,5 @@
 #include "pe1/boot_display.h"
-s32 Boot_DrawTextBlock(void) {
+s32 BootDisplay_DrawTextBlock(void) {
     const u8 *line;
     u32 x = 24;
     u32 width;
@@ -20,19 +20,19 @@ s32 Boot_DrawTextBlock(void) {
                     if (line[1]) {
                         scan = line + 1;
                         do {
-                            width += Boot_GetGlyphWidth(*scan++);
+                            width += BootDisplay_GetGlyphWidth(*scan++);
                         } while (*scan);
                     }
                     x = (320 - width) >> 1;
                     continue;
                 case '\t':
-                    x += Boot_GetGlyphWidth(' ') * 14;
+                    x += BootDisplay_GetGlyphWidth(' ') * 14;
                     continue;
                 default:
                     g_BootDisplayCallbacks->glyph((s16)x, (s16)y, *line);
                     break;
                 }
-                x += Boot_GetGlyphWidth(*line);
+                x += BootDisplay_GetGlyphWidth(*line);
             }
             g_BootDisplayFontStyle = 0;
             x = 24;

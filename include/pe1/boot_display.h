@@ -112,18 +112,18 @@ s32 func_8007EE84(s32, void *, void *, s32);
 s32 func_8007F418(s32, void *);
 void func_800824C8(s32 (*)(u8));
 void func_80073D24(void (*)(void));
-s32 Boot_StartPlayback(void);
-void Boot_CheckPlaybackTime(void);
+s32 BootDisplay_StartPlayback(void);
+void BootDisplay_CheckPlaybackTime(void);
 s32 func_8007F72C(void);
 s32 func_8007F7A8(void);
 /* PsyQ exit: the failure path never returns to the transfer callback. */
 void func_800719E4(s32) __attribute__((noreturn));
 void func_80080AE4(void *, s32);
-s32 Boot_StepPlaybackTransfer(u8 mode);
+s32 BootDisplay_StepPlaybackTransfer(u8 mode);
 void func_8007EC14(void);
 void func_80080CC8(void *);
 s32 func_8007F778(void);
-s32 Boot_InitPlaybackFile(void);
+s32 BootDisplay_InitPlaybackFile(void);
 void func_80074BB8(s32 value);
 void func_80074D28(s32 value);
 void func_80074DC0(s32 value);
@@ -135,13 +135,13 @@ s16 *func_80071944(void *resource);
 void func_8010BE3C(s32 value);
 void func_8010BD4C(void *address);
 void func_80075424(void *draw_env);
-void Boot_PresentFrame(void);
+void BootDisplay_PresentFrame(void);
 void func_800754E4(void *dst, void *src);
 void func_80124F40(s32 value);
 
 /* Callable entry points inside neighboring boot-display code. */
-s32 Boot_GetGlyphIndex(u8 character);
-u16 Boot_GetGlyphWidth(u8 character);
+s32 BootDisplay_GetGlyphIndex(u8 character);
+u16 BootDisplay_GetGlyphWidth(u8 character);
 void func_8012462C(void *primitive, u16 x, u16 y, s32 u, s32 v);
 
 #endif

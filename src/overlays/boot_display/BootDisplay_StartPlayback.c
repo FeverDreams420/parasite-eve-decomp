@@ -1,7 +1,7 @@
 #include "pe1/boot_display.h"
 
 /* Retry labels preserve the original command-error control flow. */
-s32 Boot_StartPlayback(void) {
+s32 BootDisplay_StartPlayback(void) {
     u8 mode[8];
     u8 filter[8];
     u8 result[8];
@@ -28,8 +28,8 @@ retryFilter:
     while ((status = func_8007F418(request, result)) != 2) {
         if (status != 0) goto retryFilter;
     }
-    func_800824C8(Boot_StepPlaybackTransfer);
-    func_80073D24(Boot_CheckPlaybackTime);
+    func_800824C8(BootDisplay_StepPlaybackTransfer);
+    func_80073D24(BootDisplay_CheckPlaybackTime);
     func_801258EC(200, 27);
     do {
         while (func_8007F72C() != 1) {}

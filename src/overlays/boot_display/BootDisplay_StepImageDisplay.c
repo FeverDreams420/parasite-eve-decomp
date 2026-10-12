@@ -1,7 +1,7 @@
 #include "pe1/boot_display.h"
 #include "pe1/psyq_gpu.h"
-#include "Boot_StepImageDisplay_externs.h"
-void Boot_StepImageDisplay(void) {
+#include "BootDisplay_StepImageDisplay_externs.h"
+void BootDisplay_StepImageDisplay(void) {
     s16 rect[4];
     rect[0] = g_BootDisplayImageBuffers[g_BootDisplayBufferIndex].x;
     rect[1] = g_BootDisplayImageBuffers[g_BootDisplayBufferIndex].y;

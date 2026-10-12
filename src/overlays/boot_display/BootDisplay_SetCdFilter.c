@@ -2,9 +2,9 @@
 #include "pe1/boot_display.h"
 #include "pe1/cdrom.h"
 
-#include "Boot_SetCdFilter_externs.h"
+#include "BootDisplay_SetCdFilter_externs.h"
 
-int Boot_SetCdFilter(int code) {
+int BootDisplay_SetCdFilter(int code) {
     int result[2];
     u8 command[2];
     command[0] = 1;

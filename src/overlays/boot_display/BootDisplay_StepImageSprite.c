@@ -1,8 +1,8 @@
 /* MASPSX_FLAGS: --expand-div */
 
 #include "pe1/boot_display.h"
-#include "Boot_StepImageSprite_externs.h"
-void Boot_StepImageSprite(void) {
+#include "BootDisplay_StepImageSprite_externs.h"
+void BootDisplay_StepImageSprite(void) {
     BootDisplaySpritePacket *packet = (BootDisplaySpritePacket *)g_BootDisplayPrimitiveCursor;
     u16 tpage;
     s16 rect[4];

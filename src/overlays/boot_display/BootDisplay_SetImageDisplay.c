@@ -1,6 +1,6 @@
 #include "pe1/boot_display.h"
 #include "pe1/psyq_gpu.h"
-void Boot_SetImageDisplay(u16 index) {
+void BootDisplay_SetImageDisplay(u16 index) {
     s32 displayY, drawY;
     u16 savedWidth;
     DRAWENV *drawArg;

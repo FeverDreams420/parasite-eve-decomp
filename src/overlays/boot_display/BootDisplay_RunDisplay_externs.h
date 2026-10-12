@@ -8,7 +8,7 @@ extern u32 g_BootDisplayFrameCounter;
 extern void func_8012562C(void);
 extern void func_80125744(void);
 extern void func_80125894(s32);
-extern s32 Boot_DrawTextBlock(void);
+extern s32 BootDisplay_DrawTextBlock(void);
 extern void func_8003EB04(void);
 extern void func_801255A4(void);
 #endif /* PE1_EXT_C5603502B80A */

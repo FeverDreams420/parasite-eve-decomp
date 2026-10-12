@@ -20,7 +20,7 @@
     default: index += (base); \
     } \
 }
-s32 Boot_GetGlyphIndex(u8 character) {
+s32 BootDisplay_GetGlyphIndex(u8 character) {
     u16 style = g_BootDisplayFontStyle;
     u8 saved = character;
     s32 index;

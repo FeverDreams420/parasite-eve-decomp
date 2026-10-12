@@ -1,6 +1,6 @@
 #include "pe1/boot_display.h"
-#include "Boot_RunDisplay_externs.h"
-void Boot_RunDisplay(void) {
+#include "BootDisplay_RunDisplay_externs.h"
+void BootDisplay_RunDisplay(void) {
     u32 state;
     s32 fade;
     if (D_8009D1A0 & 0x10000) {
@@ -28,7 +28,7 @@ void Boot_RunDisplay(void) {
         if (g_BootDisplayCallbacks->text) g_BootDisplayCallbacks->text();
         switch (state) {
         case 0:
-            if (Boot_DrawTextBlock()) {
+            if (BootDisplay_DrawTextBlock()) {
                 state = (D_8009D1A0 & 0x20000) ? 1 : 4;
                 fade = 0;
             }

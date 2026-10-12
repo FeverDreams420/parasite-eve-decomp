@@ -1,15 +1,15 @@
 #include "pe1/boot_display.h"
 
-void Boot_QueueTintedSprite(u16 x, u16 y, u8 color) {
+void BootDisplay_QueueTintedSprite(u16 x, u16 y, u8 color) {
     char *primitive = g_BootDisplayPrimitiveCursor;
-    s32 packed = Boot_GetGlyphIndex(color);
+    s32 packed = BootDisplay_GetGlyphIndex(color);
 
     func_8012462C(primitive, x, y, (packed & 15) << 4, packed & 0xF0);
     func_80077AC4(g_BootDisplayOrderingTable + 0x2C, primitive);
     g_BootDisplayPrimitiveCursor += 0x1C;
 }
 
-void Boot_InitSprite16(BootDisplaySpritePacket *primitive, s16 x, s16 y,
+void BootDisplay_InitSprite16(BootDisplaySpritePacket *primitive, s16 x, s16 y,
                        u16 u, u16 v) {
     volatile BootDisplaySpritePacket *packet = primitive;
 
@@ -63,7 +63,7 @@ void func_801246F4(void) {
     g_ActiveDrawSlot ^= 1;
 }
 
-void Boot_InitDisplayBuffers(void) {
+void BootDisplay_InitDisplayBuffers(void) {
     s16 rect[4];
     u16 line;
     /* Keep the original buffer offset in v0 across both address calculations. */

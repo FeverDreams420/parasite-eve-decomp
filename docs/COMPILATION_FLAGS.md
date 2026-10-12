@@ -292,7 +292,7 @@ differently but resolve to the same options count once.
 - `src/main/fieldfx/FieldFx_SpriteRendering.c`
 - `src/main/render/Render_CameraViewportFlow.c`
 - `src/main/script/Script_ValueOps.c`
-- `src/overlays/boot_display/Boot_StepImageSprite.c`
+- `src/overlays/boot_display/BootDisplay_StepImageSprite.c`
 - `src/overlays/fx_common/camera_nodes.c`
 - `src/overlays/room_lib/RoomEffect_DroppedFlare.c`
 - `src/overlays/room_lib/RoomEffect_LineBurst.c`
@@ -543,7 +543,7 @@ means only the order of symbol-table entries changed (cc1 `-G8` emits
 | `main/script/Script_NodePool.c` | cc1 `-G8`: lev 10 (Script_AllocNode 10); cc1 `-fno-strength-reduce`: lev 7 (Script_InitNodePool 4, Script_RelocBlock 3); maspsx `-G8`: lev 51 (Script_InitNodePool 13, Script_AllocNode 11, Script_RelocBlock 8); maspsx `--use-comm-section`: lev 17 (Script_InitNodePool 5, Script_AllocNode 4, Script_RelocBlock 2); FORCE_G0: lev 12 (Script_GarbageCollectNodes 12); small-data set: lev 57 (Script_AllocNode 17, Script_InitNodePool 13, Script_RelocBlock 8) |
 | `main/script/Script_SystemOpcodes.c` | maspsx `-G8`: lev 67 (Entity_InitWithTimeout 16, Script_WaitEntityFlags8 11, Script_WaitFrameOrDraw 8); maspsx `--use-comm-section`: lev 24 (Entity_InitWithTimeout 5, Script_WaitEntityFlags8 4, Script_WaitFrameOrDraw 3); FORCE_G0: identical; small-data set: lev 67 (Entity_InitWithTimeout 16, Script_WaitEntityFlags8 11, Script_WaitFrameOrDraw 8) |
 | `main/script/Script_ValueOps.c` | maspsx `--expand-div`: lev 41 (Script_EvalExpr 41) |
-| `overlays/boot_display/Boot_StepImageSprite.c` | maspsx `--expand-div`: lev 22 (Boot_StepImageSprite 22) |
+| `overlays/boot_display/BootDisplay_StepImageSprite.c` | maspsx `--expand-div`: lev 22 (BootDisplay_StepImageSprite 22) |
 | `overlays/fx_common/FxCommon_EffectInitializationFlow.c` | cc1 `-fno-expensive-optimizations`: lev 28 (func_80196498 28) |
 | `overlays/fx_common/FxCommon_SetMotionEndpoints.c` | cc1 `-fno-schedule-insns`: lev 56 (FxCommon_SetMotionEndpoints 56) |
 | `overlays/fx_common/camera_nodes.c` | maspsx `--expand-div`: lev 165 (FxCommon_CheckFourBoundsWithMargin 88, FxCommon_CheckBoundsWithMargin 44, func_8018F55C 33) |

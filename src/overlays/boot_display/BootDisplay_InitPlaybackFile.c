@@ -2,7 +2,7 @@
 #include "pe1/psyq_ds.h"
 #include "pe1/psyq_ds_queue.h"
 
-s32 Boot_InitPlaybackFile(void) {
+s32 BootDisplay_InitPlaybackFile(void) {
     DslFILE file;
     s32 found;
     /* Preserve separate zero/-1 retries and the ready-constant reload.

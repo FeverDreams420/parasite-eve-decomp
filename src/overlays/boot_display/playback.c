@@ -1,6 +1,6 @@
 #include "pe1/boot_display.h"
 
-s32 Boot_StepPlaybackTransfer(u8 mode) {
+s32 BootDisplay_StepPlaybackTransfer(u8 mode) {
     volatile u16 *index;
     u16 next;
     if (func_8007F72C() == 1 && func_8007F7A8() != D_800B0DD4)
@@ -17,7 +17,7 @@ s32 Boot_StepPlaybackTransfer(u8 mode) {
     return next;
 }
 
-void Boot_CheckPlaybackTime(void) {
+void BootDisplay_CheckPlaybackTime(void) {
     volatile s32 *time;
     if ((func_80073A44(-1) & 31) == 0) {
         time = &D_80172CF0;
