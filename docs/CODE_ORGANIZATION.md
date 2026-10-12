@@ -1053,11 +1053,12 @@ single removal (none was byte-identical):
   (lev 16, 49), `Inv_RebuildSelectionBitset` (lev 17 to 36),
   `Stat_QueryLevelAndSubLevel` (lev 65). `Inv_EquipItemById` (formerly
   `Inv_FindItem`) and `Inv_InitMaxLevelInventory` are crutch-free.
-  `Inv_TransferItem` keeps three `goto`s: the refusal path stores 0 into the
-  result after the success path's return, so `return result` must sit at a
-  join (`move s4,zero; move v0,s4`); `return 0` and `result = 0; return`
-  give `move v0,zero` (lev 23), a `do`/`while (0)` with `break` lev 48 to 65,
-  a refusal flag lev 53. `Inv_SetActiveList` case 5 keeps its pins: the
+  `Inv_TransferItem` lost its three `goto`s: every arm of the `else if`
+  chain calls `Inv_RebuildSelectableMask` itself and the two refusal arms
+  set `result = 0` in an `else`, with one `return result` at the end;
+  cross-jumping folds the copies into the last arm, which is retail's
+  layout (rebuild, then the refusal store falling into the return).
+  `Inv_SetActiveList` case 5 keeps its pins: the
   natural form allocates the action pointer to a3 and the selection to a1
   (lev 37). `Inv_RemoveActiveListItem` keeps one m2c integer that holds
   first the list pointer and then the removed item (typed forms swap

@@ -44,6 +44,7 @@ int Inv_TransferItem(int fromList, int fromSlot, int toList, int toSlot) {
     if (fromList == LIST_ACTIVE && toList == fromList) {
         u16 *table = (u16 *)g_InvActiveListItems;
         SwapItems(&table[fromSlot], &table[toSlot]);
+        Inv_RebuildSelectableMask();
     } else if (fromList == LIST_AYA && toList == fromList) {
         int slot;
         SwapItems((u16 *)&g_InvItemPtr[fromSlot], (u16 *)&g_InvItemPtr[toSlot]);
@@ -59,31 +60,31 @@ int Inv_TransferItem(int fromList, int fromSlot, int toList, int toSlot) {
         } else if (slot == toSlot) {
             g_EquippedArmorSlot = fromSlot;
         }
+        Inv_RebuildSelectableMask();
     } else if (fromList == LIST_ACTIVE) {
         s16 *item;
-        if (!Inv_IsSlotSelectable(toSlot) || IsEquippedSlot(toSlot)) {
-            goto blocked;
-        }
-        {
-            s16 *table = g_InvActiveListItems;
-            item = &table[fromSlot];
-        }
-        if (Item_LookupBaseData(*item - 1)->kind >= 16 && Item_LookupBaseData(*item - 1)->kind < 19) {
-            result = Inv_CanAddActiveListItemToAya(fromSlot) == 0;
+        if (Inv_IsSlotSelectable(toSlot) && !IsEquippedSlot(toSlot)) {
+            {
+                s16 *table = g_InvActiveListItems;
+                item = &table[fromSlot];
+            }
+            if (Item_LookupBaseData(*item - 1)->kind >= 16 && Item_LookupBaseData(*item - 1)->kind < 19) {
+                result = Inv_CanAddActiveListItemToAya(fromSlot) == 0;
+            } else {
+                u16 *table = (u16 *)g_InvActiveListItems;
+                SwapItems(&table[fromSlot], (u16 *)&g_InvItemPtr[toSlot]);
+            }
+            Inv_RebuildSelectableMask();
         } else {
-            u16 *table = (u16 *)g_InvActiveListItems;
-            SwapItems(&table[fromSlot], (u16 *)&g_InvItemPtr[toSlot]);
+            result = 0;
         }
     } else {
-        if (!Inv_IsSlotSelectable(fromSlot) || IsEquippedSlot(fromSlot)) {
-            goto blocked;
+        if (Inv_IsSlotSelectable(fromSlot) && !IsEquippedSlot(fromSlot)) {
+            SwapItems((u16 *)&g_InvItemPtr[fromSlot], (u16 *)&g_InvActiveListItems[toSlot]);
+            Inv_RebuildSelectableMask();
+        } else {
+            result = 0;
         }
-        SwapItems((u16 *)&g_InvItemPtr[fromSlot], (u16 *)&g_InvActiveListItems[toSlot]);
     }
-    Inv_RebuildSelectableMask();
-    goto done;
-blocked:
-    result = 0;
-done:
     return result;
 }
