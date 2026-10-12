@@ -49,7 +49,7 @@ def main() -> int:
         m = re.fullmatch(r"func_([0-9A-F]{8})", old)
         if not m:
             sys.exit(f"{old} is not an address name")
-        if any(re.search(r"\b" + new + r"\b", (ROOT / p).read_text()) for p in sources):
+        if any(re.search(r"\b" + new + r"\b(?!\.)", (ROOT / p).read_text()) for p in sources):
             sys.exit(f"{new} already used")
         rx = re.compile(r"\b" + old + r"\b")
         for path in sources:
@@ -82,8 +82,8 @@ def main() -> int:
                 new_text = path_rx.sub(new, text)
                 if new_text != text:
                     file.write_text(new_text)
+        cfg.write_text(cfg_text)
         print(f"{args.overlay}: {old} -> {new}")
-    cfg.write_text(cfg_text)
     git("add", "-A", src_path, "include", "src/overlays/room_lib", "configs", "docs", "tools/tests")
     return 0
 
