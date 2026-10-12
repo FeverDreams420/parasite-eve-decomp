@@ -58,7 +58,7 @@ int func_8019988C(int event, EmissionState *state)
         int random;
         register int index asm("$3");
         register RoomM350EffectActor *actor asm("$5");
-        register FieldActor *instance asm("$6");
+        FieldActor *instance;
         state->delay--;
         if (state->delay != -1) return 0;
         effect = func_800CE610(ANIM_POOL_AS(RoomM350EffectEmitter)->pool);
