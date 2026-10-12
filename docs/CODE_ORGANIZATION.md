@@ -166,7 +166,15 @@ exist for the bytes, and why:
 - The `Spu_*AllVoice*`/`Spu_*VoiceMasked` loops of the voice-bank unit walk
   a cursor biased to one field of the channel record (`voice - 0xF4`), as
   retail does; a plain `AkaoTrack *` walk addresses the fields from the
-  record start (lev 6-12 per function).
+  record start (lev 6-12 per function). The voice loops that bias their
+  cursor to `flags`, `pan_duration` or `adsr_release_rate` reach the record
+  back with `AKAO_TRACK_OF(cursor, member)` (`pe1/akao/track.h`) and step
+  by `sizeof(AkaoTrack) / sizeof(*cursor)`.
+- The stream uploads copy the relocated instrument records into their
+  cache slot through `AkaoInstrumentAddress` (`cache.word = offset +
+  cache.word`), which keeps retail's offset-first `addu` without byte
+  casts. The playback-bank messages take their `AkaoQueueEntry`, whose
+  `arg0.sequence` is the sequence data `Akao_UpdateVoiceMask` rebases.
 
 Crutches still in place (lev is the only metric; each was retried with the
 permuter and by hand):
@@ -321,10 +329,28 @@ Crutches still in place (lev is the only metric):
   (`ot.word = ot_index + ordering.word`): `ordering + ot_index` swaps the
   `addu` operands (lev 2), and the position array lies `pos_ptr` bytes from
   the entry, an offset read from the data.
-- PE.IMG and font retry loops (`Render_LoadFontGlyphAlt` 1 goto,
-  `Render_FontGlyphLoad` 2, `Render_InitDisplayLists` 2): any loop form lets
-  loop.c hoist the table address and constants out of the retry path, which
-  retail rebuilds on every retry.
+- The font glyph loads (`Render_LoadFontGlyph`, `Render_LoadFontGlyphAlt`)
+  restart a failed poll with a tail call (`return Render_LoadFontGlyph(code);`).
+  GCC 2.7 expands a self call in `return` position as a jump back to the
+  start of the body, and that jump carries no loop notes, so loop.c hoists
+  nothing and the table address and -1 are rebuilt on every retry as in
+  retail. The test needs an empty frame at the `return` (no stack locals or
+  inlined callee locals declared before it), parameter types equal to the
+  argument types after promotion (an `int` code, not `u8`), and a non-void
+  return type (a void function never reaches the tail-recursion test).
+  `Render_LoadFontGlyphAlt` therefore returns `int`, as its map-selection
+  caller already read it.
+- `Render_InitDisplayLists` (2 gotos): its retries restart in the middle of
+  the function. Moving each read into a `static inline` helper that
+  tail-calls itself removes the gotos and rebuilds the addresses (the helper
+  never gets an out-of-line copy), but the poll status becomes a
+  helper-local pseudo; retail's function-wide `status` conflicts with `$v0`
+  in the later `switch`, so retail copies each poll result to `$v1` and the
+  helper form tests `$v0` directly (lev 4 plus branch offsets, 58 in all).
+  `Overlay_LoadInitialImage` cannot use the helper: the inlined
+  `CdRom_PollReady` puts a stack local in front of the `return`, and
+  `CD_FindNextDataSector` restarts after its setup, so the helper's
+  parameter copies stay as moves at the reentry label (lev 30).
 - `OpenPeImage` (2 barriers): retail leaves the delay slot of the second and
   third `found == 0` tests empty; without the barriers reorg fills it with
   the -1 constant (lev 5-8).
@@ -768,10 +794,12 @@ Still open:
     an absolute address (`lui`/`lw 4`) where retail indexes `$a1` (lev 4);
     `&pending[count - 2]` and `pending -= 2` change the allocation (lev 10
     and 17). The pin is only needed with the barrier.
-  - `MemCard_AbortActiveOperation` keeps the barrier that separates
-    `name_buf` from `D_8009EE70`: with one value CSE keeps the buffer
-    address in `$s0` across `sprintf` instead of rebuilding it (lev 31), the
-    same effect as the `Save_StartWriteSlot` alias above.
+  - `MemCard_AbortActiveOperation` formats the slot name into
+    `D_8009EE70` and passes the buffer to the path format under its second
+    name, `g_MemCardPathForCardFile`; with one symbol CSE keeps the address
+    in `$s0` across `sprintf` instead of rebuilding it. The retry counter is
+    cleared just before the open loop, where retail sets it; the name-buffer
+    barrier is gone.
     `Save_StartWriteSlot` keeps its `$s0` pin and both barriers (lev 23
     without; lev 1 with only the pin).
   - `Entity_AllocBlock` keeps its m2c pins and two `goto`s. The structured
@@ -783,9 +811,9 @@ Still open:
     `Scene_UpdateEntityPositions` keeps its `goto link`: duplicating the two
     inlined `Scene_LinkContactTask` calls is not cross-jumped (lev 128).
   - `Entity_TriggerAnimEvent` keeps its three pins (lev 81 without: retail
-    copies `entity` to `$a2` first). `Task_RunEntityCommand` keeps its two
-    argument-register pins: every statement order allocates the `1` and the
-    stack value to `$a0`/`$a1` the other way round (lev 6).
+    copies `entity` to `$a2` first). `Task_RunEntityCommand` needs no pins:
+    the plain `g_TaskNodePool->active = 1; g_SceneDataTable0 -= 0x10;`
+    tail allocates `$a1`/`$a0` as retail does.
     `Entity_RelocateSceneData` keeps the `$v0` pin on the loaded block
     (lev 15) and adds region offsets to the database word through the
     `CollisionDatabaseAddress` union: an indexed `regions[i]` walk reorders
