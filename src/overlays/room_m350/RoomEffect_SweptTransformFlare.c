@@ -68,6 +68,8 @@ int func_801981D0(int event, RoomM350FlareParticle *particle)
 
 int func_80198400(int event) {
     GteShortVector offset,vertices[4];
+    GteShortVector *previousEndpoint;
+    volatile short *currentEndpoint;
     int area;
     FieldActor *instance=(FieldActor *)ANIM_OWNER_AS(RoomM350EffectActor)->instance;
     switch (event) {
@@ -76,7 +78,9 @@ int func_80198400(int event) {
         return func_800CE560(ANIM_POOL_AS(RoomM350EffectEmitter)->pool,8,4,
                              (FieldAnimCallbackListCallback)func_801981D0);
         case 1:
+    previousEndpoint=&D_8019A8A8;
     if(instance->anim.parts.integer>=31) return 2;
+    currentEndpoint=&D_8019A898;
     if(!(D_800E27EC&1)) {
         RoomM350FlareParticle *particle=func_800CE610(ANIM_POOL_AS(RoomM350EffectEmitter)->pool);
         if(particle) {
@@ -86,12 +90,7 @@ int func_80198400(int event) {
         }
     }
     if(D_8019A8C0 || instance->mode!=9) return 0;
-    {
-        register GteShortVector *from asm("$5")=(GteShortVector *)&D_8019A898;
-        register GteShortVector *to asm("$4")=&D_8019A8A8;
-        asm("" : "=r"(from),"=r"(to) : "0"(from),"1"(to));
-        *to=*from;
-    }
+    *previousEndpoint=*(GteShortVector *)currentEndpoint;
     {
         register GteShortVector *from asm("$5")=(GteShortVector *)&D_8019A8A0;
         register GteShortVector *to asm("$4")=&D_8019A8B0;
