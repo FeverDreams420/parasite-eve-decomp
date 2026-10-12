@@ -1,9 +1,8 @@
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses */
-/* Psy-Q LIBDS DSREADY.OBJ, part 1 of 4: DsStartReadySystem, DsEndReadySystem, DsReadySystemMode. */
-/* DSREADY is split where its functions need different compilers: parts 1
- * and 3 only match with GCC 2.8.1 and -mno-split-addresses, parts 2 and 4
- * with GCC 2.7.2. */
+/* Psy-Q LIBDS DSREADY.OBJ, part 1 of 2: DsStartReadySystem, DsEndReadySystem,
+ * DsReadySystemMode. This part needs GCC 2.8.1 with -mno-split-addresses,
+ * the rest of the object GCC 2.7.2. */
 #include "pe1/psyq_ds_queue.h"
 #include "pe1/psyq_ds.h"
 

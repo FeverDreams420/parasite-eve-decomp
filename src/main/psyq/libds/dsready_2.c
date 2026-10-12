@@ -1,7 +1,12 @@
 /* ASSEMBLER: GNU */
-/* Psy-Q LIBDS DSREADY.OBJ, part 2 of 4: ER_cbready. */
+/* Psy-Q LIBDS DSREADY.OBJ, part 2 of 2: ER_cbready, LIBDS_DSREADY_text_3D8,
+ * ER_retry, ER_cbsync, ER_active, ER_clear. */
 #include "pe1/psyq_ds_queue.h"
 #include "pe1/cdrom.h"
+#include "pe1/psyq_cd.h"
+#include "pe1/psyq_ds.h"
+
+#include "dsready_2_externs.h"
 
 int DsPosToInt(CdlLOC *);
 #define ASYNC_FROM_RETRY(p)                                                            \
@@ -96,4 +101,82 @@ void ER_cbready(int inEvent, u8 *inResult) {
         }
     }
 done:;
+}
+
+void LIBDS_DSREADY_text_3D8(unsigned char arg0, unsigned char *arg1) {
+    DsCallback *state;
+    int status;
+    DsCallback *active;
+    void *data;
+    DsAsyncReadCallback callback;
+
+    state = &D_8009B708;
+    active = state + 1;
+    data = arg1;
+    if (state[0] == 0) {
+        return;
+    }
+    /* The loop ends cse's jump-following path here, so GCC 2.7.2 keeps
+     * the state address in $s0 for the field reads below. */
+    do {
+        if (state[1] == 0) {
+            return;
+        }
+    } while (0);
+
+    status = arg0;
+    if (status == 2) {
+        if (DsQueueLen() == 0) {
+            ER_retry();
+        }
+        return;
+    }
+
+    DsReadyCallback(DS_ASYNC_READ_FIELD(active, savedReadyCallback));
+    DsStartCallback(DS_ASYNC_READ_FIELD(active, savedStartCallback));
+    callback = DS_ASYNC_READ_FIELD(active, callback);
+    state[1] = 0;
+    if (callback != 0) {
+        callback(status, data, 0);
+    }
+}
+
+int ER_retry(void) {
+    int mode;
+    CdlLOC *position;
+    int command;
+    int argumentMode;
+    int limit;
+
+    DsReadyCallback(0);
+    g_DsAsyncReadState.nextSector = DsPosToInt(DS_lastpos());
+    mode = DS_lastmode() & 0xFF;
+    position = DS_lastpos();
+    command = func_8007FC44();
+    argumentMode = mode;
+    limit = -1;
+    return DsPacket(argumentMode, position,
+        (unsigned char)command, (DslCB)func_8008227C, limit);
+}
+
+void ER_cbsync(u_char event) {
+    if (event == 2) {
+        DsReadyCallback((DsEventCallback)ER_cbready);
+    }
+}
+
+int ER_active(void) {
+    return g_DsReadBusy;
+}
+
+void ER_clear(void) {
+    int *state;
+
+    state = &g_DsReadBusy;
+    asm volatile("" : "=r"(state) : "0"(state));
+    if (DS_ASYNC_READ_FIELD(state, active) == 1) {
+        DsReadyCallback(DS_ASYNC_READ_FIELD(state, savedReadyCallback));
+        DsStartCallback(DS_ASYNC_READ_FIELD(state, savedStartCallback));
+    }
+    DS_ASYNC_READ_FIELD(state, active) = 0;
 }
