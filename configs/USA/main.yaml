@@ -71,9 +71,7 @@ segments:
       # Expression and FieldActor Vec3 getter/setter switch tables.
       - [0x800, .rodata, script/Task_ValueOps]
       - [0x89C, rodata, main/rodata_00089C]
-      - [0x8A0, .rodata, script/Task_MemCardPositionCameraOps]
-      - [0x9AC, rodata, main/rodata_0009AC]
-      - [0x9B0, .rodata, script/Task_ItemAndSoundOps]
+      - [0x8A0, .rodata, script/Task_ActorOpcodes]
       - [0xE8C, rodata, main/rodata_000E8C]
       - [0xE90, .rodata, script/Task_FlowOpcodes]
       - [0xEA4, rodata, main/rodata_000EA4]
@@ -152,22 +150,16 @@ segments:
       - [0x3050, c, script/Task_ValueOps]
       # Task-node, point-motion, and camera tracking share the active entity cache.
       - [0x39E8, c, script/Task_NodeActions]
-      # Field-actor query and distance routines share their actor globals.
-      - [0x4A28, c, script/Entity_QueryAndDistance]
-      # -G8 opcodes: memory-card init step, position by actor type, relative
-      # camera offset tracking and camera angle fade.
-      - [0x4CFC, c, script/Task_MemCardPositionCameraOps]
-      - [0x55A0, c, script/Task_PolyAndSceneLoadOps]
-      - [0x57D8, c, script/Task_PlayEntityAnim]
-      - [0x5908, c, script/Task_CopyEntityRenderObject]
-      # Actor model draw, render-mode switch wait and angle-to-actor
-      # opcodes: contiguous; -G8 leaves the angle opcode unchanged.
-      - [0x5A40, c, script/Task_ActorModelOps]
-      - [0x5F90, c, script/MapSelectionFlow]
-      # Screen-position, memory-card dialog, received-item, inventory and
-      # AKAO/CD sound opcodes: contiguous -G8 handlers; only the sound
-      # command has rodata.
-      - [0x62B8, c, script/Task_ItemAndSoundOps]
+      # Actor, camera, model and item opcodes: field-actor query and distance
+      # routines (actor globals); memory-card init step, position by actor type,
+      # relative camera offset tracking and camera angle fade; poly and scene load
+      # opcodes; entity anim play; render object copy; actor model draw,
+      # render-mode switch wait and angle-to-actor opcodes; map selection;
+      # screen-position, memory-card dialog, received-item, inventory and AKAO/CD
+      # sound opcodes. One -G8 FORCE_G0 unit with COMMON $gp words; the four zero
+      # bytes that were main/rodata_0009AC are the alignment pad before the
+      # 8-aligned sound command jump table, which the one object emits itself.
+      - [0x4A28, c, script/Task_ActorOpcodes]
       # Script dispatcher, pending-node launch controller for equip and save/load
       # menus, interpreter loop, jump-to-actor-script and mark-dead opcodes,
       # node/flow opcodes (current-node active/free, jump-if-zero, spawn, assign,
