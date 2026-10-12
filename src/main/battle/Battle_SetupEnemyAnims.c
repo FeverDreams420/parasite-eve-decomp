@@ -19,11 +19,11 @@ void Battle_SetupEnemyAnims(void) {
     combatant->actionMode12 = 4;
     D_8009D278->actionMode13 = 5;
     D_8009D278->targetAngleActionModes[0] = 6;
-    D_8009D278->actionMode17 = 7;
+    D_8009D278->followUpAngleActionModes[0] = 7;
     D_8009D278->targetAngleActionModes[1] = 8;
-    D_8009D278->actionMode18 = 9;
+    D_8009D278->followUpAngleActionModes[1] = 9;
     D_8009D278->targetAngleActionModes[2] = 10;
-    D_8009D278->actionMode19 = 11;
+    D_8009D278->followUpAngleActionModes[2] = 11;
 
     animRow = animTable.rows[actionId];
     D_8009D278->action->animMode[0] = animRow[0];

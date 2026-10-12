@@ -201,9 +201,7 @@ typedef struct Combatant {
 /* 0x12 */ u8   actionMode12;  /* action-mode id table [0x12..0x19], filled per enemy by facing (Battle_SetupEnemyAnims.c:38-46): 4 idle, 0xD special */
 /* 0x13 */ s8   actionMode13;
 /* 0x14 */ u8   targetAngleActionModes[3]; /* selected by the relative target angle in Battle_AdvancePhase */
-/* 0x17 */ u8   actionMode17;
-/* 0x18 */ s8   actionMode18;
-/* 0x19 */ s8   actionMode19;
+/* 0x17 */ u8   followUpAngleActionModes[3]; /* modes 7/9/11 that end the attack started by targetAngleActionModes */
 /* 0x1A */ u8   pad_1A[2];
 /* 0x1C */ u16  maxHP;         /* MAX HP; curHP clamped to this (Battle_ApplyDamage.c:85; Battle_ResetEnemyStats.c:34) */
 /* 0x1E */ s16  stat1E;        /* SetContextField case11 (Battle_SetContextField.c:42) */
