@@ -76,15 +76,14 @@ int Stat_BinarySearch(int value, int *table) {
 static inline int InterpolateSubLevel(int value, int *cursor) {
     int current_reg;
     int next_reg;
-    register int delta_reg asm("$3");
+    int delta_reg;
     int numerator_reg;
     next_reg = cursor[1];
     current_reg = cursor[0];
     if (next_reg != current_reg) {
         delta_reg = value - current_reg;
         numerator_reg = ((delta_reg << 1) + delta_reg) * 16 + delta_reg;
-        delta_reg = next_reg - current_reg;
-        return numerator_reg / delta_reg;
+        return numerator_reg / (next_reg - current_reg);
     }
     return 0;
 }
