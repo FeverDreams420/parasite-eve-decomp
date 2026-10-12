@@ -19,8 +19,17 @@ typedef struct { u8 bytes[0x10]; } __attribute__((packed)) PackedCopy16;
 typedef struct { u8 bytes[8]; } __attribute__((packed)) PackedCopy8;
 typedef struct { u8 bytes[0x10]; } LargeSymbol;
 typedef union { s32 value; } FlagValue;
+<<<<<<< HEAD
 /* A block-move pointer seen as a word for GCC's alignment test. */
 typedef union { const u8 *bytes; u32 word; } CopyAddress;
+||||||| parent of 01cc5a43e (Address battle queue slots and the sound table copy through unions)
+=======
+typedef union {
+    u8 *bytes;
+    const u8 *source;
+    u32 word;
+} BattleCopyCursor;
+>>>>>>> 01cc5a43e (Address battle queue slots and the sound table copy through unions)
 
 int BattleCmd_CommitAmmoAndUpdate(); /* no prototype: retail calls it with and without the action */
 s16 Battle_CalcAngleToTarget(RenderObjectEntity *object, void *target);
@@ -102,8 +111,8 @@ void Battle_AdvancePhase(void) {
     Combatant *cleanupActor;
     Combatant *aya_actor;
     BattleEntity *aya_player;
-    u8 *copy_dst;
-    const u8 *copy_src;
+    BattleCopyCursor copy_dst;
+    BattleCopyCursor copy_src;
     const u8 *copy_end;
     u32 misaligned;
 
@@ -128,6 +137,7 @@ void Battle_AdvancePhase(void) {
     }
     if (D_8009D278->stateFlags & 0x200000) {
         sp18 = D_8001074C;
+<<<<<<< HEAD
         copy_dst = (u8 *)sp30.soundId;
         copy_src = (const u8 *)D_80010760.soundId;
         copy_end = copy_src + 0x20;
@@ -140,12 +150,24 @@ void Battle_AdvancePhase(void) {
             misaligned = (dst.word | src.word) & 3;
         }
         if (misaligned) {
+||||||| parent of 01cc5a43e (Address battle queue slots and the sound table copy through unions)
+        copy_dst = (u8 *)sp30.soundId;
+        copy_src = (const u8 *)D_80010760.soundId;
+        copy_end = copy_src + 0x20;
+        if (((u32)copy_dst | (u32)copy_src) & 3) {
+=======
+        copy_dst.bytes = (u8 *)sp30.soundId;
+        copy_src.source = (const u8 *)D_80010760.soundId;
+        copy_end = copy_src.source + 0x20;
+        /* GCC's block move: word copies only when both ends are aligned. */
+        if ((copy_dst.word | copy_src.word) & 3) {
+>>>>>>> 01cc5a43e (Address battle queue slots and the sound table copy through unions)
             do {
-                *(PackedCopy16 *)copy_dst = *(const PackedCopy16 *)copy_src;
-                copy_src += 0x10;
-                copy_dst += 0x10;
-            } while (copy_src != copy_end);
-            *(PackedCopy8 *)copy_dst = *(const PackedCopy8 *)copy_src;
+                *(PackedCopy16 *)copy_dst.bytes = *(const PackedCopy16 *)copy_src.source;
+                copy_src.source += 0x10;
+                copy_dst.bytes += 0x10;
+            } while (copy_src.source != copy_end);
+            *(PackedCopy8 *)copy_dst.bytes = *(const PackedCopy8 *)copy_src.source;
             command_value = temp_s2->command;
         }
         else
@@ -157,12 +179,12 @@ block_found:
         goto block_search_done;
 aligned_copy:
         do {
-            *(Copy16 *)copy_dst = *(const Copy16 *)copy_src;
-            copy_src += 0x10;
-            copy_dst += 0x10;
-        } while (copy_src != copy_end);
+            *(Copy16 *)copy_dst.bytes = *(const Copy16 *)copy_src.source;
+            copy_src.source += 0x10;
+            copy_dst.bytes += 0x10;
+        } while (copy_src.source != copy_end);
 copy_tail:
-        *(PackedCopy8 *)copy_dst = *(const PackedCopy8 *)copy_src;
+        *(PackedCopy8 *)copy_dst.bytes = *(const PackedCopy8 *)copy_src.source;
         command_value = temp_s2->command;
         }
 after_command:
@@ -194,6 +216,7 @@ block_search_done:
                     var_v0_3 = D_8009D1D4 + 7;
                 temp_v1_3 = var_v0_3 & 0xFF;
                 temp_v1_3 <<= 3;
+<<<<<<< HEAD
                 {
                     BattleInitSlotAddress at;
 
@@ -201,6 +224,16 @@ block_search_done:
                     at.address = temp_v1_3 + at.address;
                     temp_v1_3 = (u16)at.slot->command;
                 }
+||||||| parent of 01cc5a43e (Address battle queue slots and the sound table copy through unions)
+                temp_v1_3 = *(u16 *)((u8 *)&D_800BE830[0].command + temp_v1_3);
+=======
+                {
+                    BattleInitSlotAddress at;
+                    at.slot = D_800BE830;
+                    at.word += temp_v1_3;
+                    temp_v1_3 = (u16)at.slot->command;
+                }
+>>>>>>> 01cc5a43e (Address battle queue slots and the sound table copy through unions)
                 D_8009D1D4 = var_v0_3;
                 temp_v1_3 -= 3;
                 temp_v1_3 = temp_v1_3 < 0x194U;
@@ -236,6 +269,7 @@ block_search_done:
 block_35:
                 temp_v1_3 = var_v0_3 & 0xFF;
                 temp_v1_3 <<= 3;
+<<<<<<< HEAD
                 {
                     BattleInitSlotAddress at;
 
@@ -243,6 +277,16 @@ block_35:
                     at.address = temp_v1_3 + at.address;
                     temp_v1_3 = (u16)at.slot->command;
                 }
+||||||| parent of 01cc5a43e (Address battle queue slots and the sound table copy through unions)
+                temp_v1_3 = *(u16 *)((u8 *)&D_800BE830[0].command + temp_v1_3);
+=======
+                {
+                    BattleInitSlotAddress at;
+                    at.slot = D_800BE830;
+                    at.word += temp_v1_3;
+                    temp_v1_3 = (u16)at.slot->command;
+                }
+>>>>>>> 01cc5a43e (Address battle queue slots and the sound table copy through unions)
                 D_8009D1D4 = var_v0_3;
                 temp_v1_3 -= 3;
                 temp_v1_3 = temp_v1_3 < 0x194U;

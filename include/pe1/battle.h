@@ -496,6 +496,11 @@ typedef struct BattleInitSlot {
     s16 actionGeneration; /* signed byte generation shared by entries of one queued action */
 } BattleInitSlot;
 extern BattleInitSlot D_800BE830[45];
+/* A queue slot addressed by its byte offset (slot index << 3). */
+typedef union BattleInitSlotAddress {
+    BattleInitSlot *slot;
+    u32 word;
+} BattleInitSlotAddress;
 
 /* A queue slot address as a pointer or a word: the phase code adds a
  * pre-scaled slot offset to the queue address as an integer. */
