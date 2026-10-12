@@ -109,7 +109,7 @@ segments:
       - [0x1944, .rodata, menu/Menu_InventoryScreens]
       - [0x1958, .rodata, battle/BattleCmd_StackFlow]
       - [0x196C, rodata, main/rodata_00196C]
-      - [0x1970, .rodata, battle/Inv_ActiveListCommand]
+      - [0x1970, .rodata, battle/BattleCmd_ActiveListAndAmmo]
       - [0x19A4, rodata, main/rodata_0019A4]
       - [0x19A8, .rodata, battle/Inv_BuildWeaponList]
       - [0x19F8, .rodata, battle/BattleCmd_LoadWeaponModifiers]
@@ -388,13 +388,13 @@ segments:
       # Command table cursor init, command-stack allocation and rollback share the
       # cursor and record ABI: one -G8 FORCE_G0 unit with COMMON $gp words.
       - [0x41884, c, battle/BattleCmd_StackFlow]
-      # Active-list command and its pending result accessors share D_8009D010.
-      - [0x41AAC, c, battle/Inv_ActiveListCommand]
-      # Active-stat synchronization and HP writes share the player entity ABI.
-      - [0x41D10, c, battle/BattleCmd_ActiveStats]
-      - [0x41DF8, c, battle/BattleCmd_GetRemainingAmmo]
-      - [0x41E84, c, battle/BattleCmd_CommitAndSyncAmmo]
-      - [0x41F70, c, battle/Aya_WeaponChangeAndSpellCheck]
+      # Active-list command and its pending result accessors (D_8009D010),
+      # active-stat synchronization and HP writes (player entity ABI), remaining
+      # ammo, ammo commit and sync and the weapon change with its spell check:
+      # one -G8 FORCE_G0 unit with COMMON $gp words.
+      - [0x41AAC, c, battle/BattleCmd_ActiveListAndAmmo]
+      # The parasite spell unlock keeps -fno-schedule-insns (lev 7 without it,
+      # its neighbours do not match with it).
       - [0x4204C, c, battle/Aya_UnlockParasiteSpell]
       - [0x4206C, c, battle/Math_IntSqrt]
       - [0x420A8, c, battle/BattleCmd_CommitAmmoAndUpdate]
