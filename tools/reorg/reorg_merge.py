@@ -468,6 +468,8 @@ def main() -> int:
             rm.git("rm", "-qf", unit)
     for header in inlined:
         rm.git("rm", "-qf", header)
+    # `git rm` drops a directory it empties; the new unit may live there.
+    (ROOT / new).parent.mkdir(parents=True, exist_ok=True)
     (ROOT / new).write_text(source)
     rm.git("add", new, MANIFEST, *edits)
     if private_text is not None:

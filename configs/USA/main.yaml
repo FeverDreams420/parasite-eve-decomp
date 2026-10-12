@@ -240,9 +240,12 @@ segments:
       - [0x2515C, c, menu/Menu_SaveSlotDraw]
       # Pool reset and free-list setup share the entity pool globals and record block.
       - [0x25710, c, entity/Entity_PoolInit]
-      - [0x25838, c, entity/Scene_LoadMap]
-      # Per-frame entity driver and the actor list passes it runs: position integration, rollback, parent following, garbage collection, callbacks and animation sequences (G0296).
-      - [0x25D58, c, entity/Entity_FrameUpdate]
+      # Map entity loading and the per-frame entity driver with the actor list
+      # passes it runs: position integration, rollback, parent following,
+      # garbage collection, callbacks and animation sequences (G0296). One -G8
+      # FORCE_G0 unit with COMMON $gp words (the entity pool globals); the pool
+      # reset before it keeps -fno-strength-reduce.
+      - [0x25838, c, entity/Entity_FrameUpdate]
       # Scratch block allocator and the actor position/contact pass that closes the entity frame module.
       - [0x26AB8, c, entity/Entity_AllocationAndContacts]
 

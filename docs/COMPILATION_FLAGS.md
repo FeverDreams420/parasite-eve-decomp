@@ -165,7 +165,7 @@ order of symbol-table entries can change, and the link is identical):
   (generated from the old objects by `reorg_merge.py --gp-commons`):
   `cdrom/CD_TrackReadFlow.c`, `draw/Draw_WipeAndGradient.c`,
   `draw/Draw_AllocColorQuad.c` (keeps `-fno-schedule-insns`),
-  `draw/Gpu_RenderFrame.c`, `entity/Scene_LoadMap.c`,
+  `draw/Gpu_RenderFrame.c`, `entity/Entity_FrameUpdate.c`,
   `item/Menu_OpenItemUsePanelAtIndex.c`, `menu/Menu_InventoryScreens.c`,
   `menu/Menu_ItemActions.c`, `menu/Menu_ListDrawers.c`,
   `menu/Menu_SaveSlotDraw.c` (was assembler `-G4`),
@@ -182,6 +182,16 @@ order of symbol-table entries can change, and the link is identical):
 - Not converted: `draw/Render_DrawWireframeModel.c` (lev 52 under K8: its
   `g_WireScratch` words need GNU as's own `$gp` choice).
 
+Merges unblocked by the canonical sets:
+
+- `entity`: `Scene_LoadMap` (cc1 `-G8`, assembler `-G8` without FORCE_G0)
+  and `Entity_FrameUpdate` (assembler `-G4`) are both K8 now and share the
+  entity pool words through `$gp`; they are one unit,
+  `entity/Entity_FrameUpdate.c` (lev 0 against both old objects).
+  `Entity_PoolInit` is K8 too and differs only by `-fno-strength-reduce`
+  (lev 3 in `Entity_ResetAllPools` without it; `Scene_LoadMap` does not
+  match with it).
+
 ## Settings in use
 
 Measured on 2026-10-12 with `tools/reorg/flag_audit.py --markdown`. A
@@ -192,7 +202,7 @@ differently but resolve to the same options count once.
 |---|---|---|---|
 | S1 | `cc1 -G0 ; maspsx -G0` (default) | 25 | 115 |
 | S2 | `cc1 -G0 ; maspsx -G0 --expand-div` | 9 | 22 |
-| S3 | `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0` | 29 | 2 |
+| S3 | `cc1 -G8 ; maspsx -G8 --use-comm-section FORCE_G0` | 28 | 2 |
 | S4 | `cc1 -G0 ; gnu-as -G0` | 4 | 6 |
 | S5 | `cc1 -G8 ; maspsx -G8 --expand-div --use-comm-section FORCE_G0` | 8 | 0 |
 | S6 | `cc1 -G0 -fno-schedule-insns ; maspsx -G0` | 3 | 2 |
@@ -214,7 +224,7 @@ differently but resolve to the same options count once.
 | S22 | `cc1 -G8 ; maspsx -G8` | 1 | 0 |
 | S23 | `gcc 2.8.1 ; cc1 -G0 ; maspsx -G0` | 0 | 1 |
 
-23 distinct settings over 255 files.
+23 distinct settings over 254 files.
 
 #### S2: `cc1 -G0 ; maspsx -G0 --expand-div`
 
@@ -262,7 +272,6 @@ differently but resolve to the same options count once.
 - `src/main/draw/Draw_WipeAndGradient.c`
 - `src/main/draw/Gpu_RenderFrame.c`
 - `src/main/entity/Entity_FrameUpdate.c`
-- `src/main/entity/Scene_LoadMap.c`
 - `src/main/item/Inv_ActiveList.c`
 - `src/main/item/Inv_ArmorCapacity.c`
 - `src/main/item/Inv_InventorySwap.c`
