@@ -124,52 +124,34 @@ typedef struct TaskInvCommandArgs {
     int *unused;
 } TaskInvCommandArgs;
 
-int Task_RunInvCommand(TaskInvCommandArgs *arg0) {
-    TaskInvCommandArgs *saved = arg0;
+int Task_RunInvCommand(TaskInvCommandArgs *args) {
     TaskNode *node;
     int flags;
-    int cursor;
-    int temp;
+    int result;
 
-    {
-        TaskNode *first_node = g_TaskNodePool;
-        if ((first_node->flags & 0x20) == 0) {
-            asm volatile("" : "=r"(saved) : "0"(saved));
-            *saved->result = Inv_DispatchCommand(*saved->command, *saved->value, *saved->other, saved->unused);
-        }
+    if ((g_TaskNodePool->flags & 0x20) == 0) {
+        *args->result = Inv_DispatchCommand(*args->command, *args->value, *args->other, args->unused);
     }
 
     if (MenuWidget_HasActiveNodes() != 0) {
-        TaskNode *active_node = g_TaskNodePool;
-        node = active_node;
+        node = g_TaskNodePool;
         flags = node->flags;
         if ((flags & 0x20) == 0) {
-            Pe1GameState *state = &g_GameState;
             node->flags = flags | 0x20;
-            state->flags |= 0x9000;
+            g_GameState.flags |= 0x9000;
             Render_BeginSceneLoad();
         } else {
             g_GameStateFlags |= 4;
         }
-
-        cursor = g_SceneDataTable0;
-        node = g_TaskNodePool;
-        cursor -= 0x1C;
-        g_SceneDataTable0 = cursor;
-        node->active = 1;
+        g_SceneDataTable0 -= 0x1C;
+        g_TaskNodePool->active = 1;
         return 0;
     }
 
-    temp = D_8009D2A4;
-    if (temp != 0) {
-        *saved->result = temp;
-        {
-            TaskNode *clear_node = g_TaskNodePool;
-            unsigned flags = clear_node->flags;
-
-            flags &= 0xFFDF;
-            clear_node->flags = flags;
-        }
+    result = D_8009D2A4;
+    if (result != 0) {
+        *args->result = result;
+        g_TaskNodePool->flags &= 0xFFDF;
     }
     return 1;
 }
