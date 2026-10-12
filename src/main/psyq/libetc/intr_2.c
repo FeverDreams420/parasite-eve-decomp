@@ -16,17 +16,17 @@ void HookEntryInt(void *entry);
 void _96_remove(void *arg);
 
 u16 *Sys_InitIntrManager(void) {
-    register u16 *state asm("$16");
+    register InterruptCallbackState *intr asm("$16");
+    u32 *entrySp;
     u16 *dst;
     volatile u16 *src;
-    u16 *flag;
     InterruptDispatchTable *ptr;
     InterruptDispatchTable *vsyncPtr;
     VSyncCallbackSetter result;
     DmaCallbackSetter dmaSetter;
 
-    state = D_800945E4;
-    if (state[0] != 0) {
+    intr = (InterruptCallbackState *)D_800945E4;
+    if (intr->active != 0) {
         return 0;
     }
 
@@ -36,16 +36,16 @@ u16 *Sys_InitIntrManager(void) {
     *dst = *src;
     *D_80095678 = 0x33333333;
 
-    Sys_ClearWordBuf(state, 0x41A);
-    if (setjmp(state + 0x1C) != 0) {
+    Sys_ClearWordBuf(intr, sizeof(InterruptCallbackState) / 4);
+    if (setjmp(intr->entry) != 0) {
         Render_InitSceneGeom();
     }
 
-    state = D_80094620;
-    *((u32 *)state) = (u32)(state + 0x7EE);
-    HookEntryInt(state - 2);
-    flag = state - 0x1E;
-    *flag = 1;
+    /* The interrupt context's stack pointer: near the top of its stack. */
+    entrySp = &((InterruptCallbackState *)D_800945E4)->entry[1];
+    *entrySp = PSX_ADDRESS(&((InterruptCallbackState *)D_800945E4)->interruptStack[1004]);
+    HookEntryInt(((InterruptCallbackState *)D_800945E4)->entry);
+    ((InterruptCallbackState *)D_800945E4)->active = 1;
 
     result = startIntrVSync();
     vsyncPtr = g_EventCallbackTable;
@@ -56,10 +56,10 @@ u16 *Sys_InitIntrManager(void) {
     ptr->dma = dmaSetter;
 
     _96_remove(g_EventCallbackTable);
-    state = flag;
+    intr = (InterruptCallbackState *)D_800945E4;
     ExitCriticalSection();
 
-    return state;
+    return &intr->active;
 }
 
 /* Contiguous trapIntr, setIntr, stopIntr and restartIntr from INTR.OBJ. */
