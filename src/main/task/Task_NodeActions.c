@@ -9,6 +9,7 @@
 
 #include "pe1/task_node.h"
 #include "pe1/field_actor.h"
+#include "pe1/player_entity.h"
 #include "pe1/global_slot.h"
 
 PE1_STATIC_ASSERT(sizeof(TaskNodeTarget18) == 4, task_node_target18_view_size);
@@ -23,8 +24,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(TaskNode, target18) == 0x18,
 TaskNode *g_TaskNodeFreeListHead;
 u16 g_TaskNodeSeqCounter[1];
 TaskNode *g_TaskNodePool;
-TaskNode *D_8009D300;
-u32 *D_8009CE00;
 int g_SceneDataTable0;
 
 int Task_SpawnChildNode(int **args) {
@@ -305,17 +304,10 @@ int Task_TurnTowardPointStep(int **arg0) {
     return 1;
 }
 
-#define S16_AT(ptr, off) (*(s16 *)((u8 *)(ptr) + (off)))
-#define U16_AT(ptr, off) (*(u16 *)((u8 *)(ptr) + (off)))
-#define S32_AT(ptr, off) (*(s32 *)((u8 *)(ptr) + (off)))
-
-
-int Math_FixedMul(int a, int b);
-
 int Task_MoveTowardPoint(int **args) {
-    u8 *speed_entity;
-    u8 *motion_entity;
-    u8 *camera_state;
+    FieldActor *speed_entity;
+    FieldActor *motion_entity;
+    TaskNode *camera_state;
     int movement_speed;
     int turn_speed;
     int target_angle;
@@ -331,32 +323,32 @@ int Task_MoveTowardPoint(int **args) {
     int remaining_distance;
     int movement_distance;
 
-    speed_entity = (u8 *)g_CurrentEntity;
-    current_x = S32_AT(speed_entity, 0x28);
-    current_z = S32_AT(speed_entity, 0x30);
-    if (speed_entity != (u8 *)D_8009D254) {
-        movement_speed = S32_AT(speed_entity, 0x20);
+    speed_entity = g_CurrentEntity;
+    current_x = speed_entity->pos_x;
+    current_z = speed_entity->pos_z;
+    if (speed_entity != g_PlayerEntity) {
+        movement_speed = speed_entity->move_factor;
     } else {
-        movement_speed = Math_FixedMul(0x50000, S32_AT(speed_entity, 0x20));
+        movement_speed = Math_FixedMul(0x50000, speed_entity->move_factor);
     }
-    movement_speed = Math_FixedMul(movement_speed, U16_AT(g_CurrentEntity, 0x26) << 4);
+    movement_speed = Math_FixedMul(movement_speed, g_CurrentEntity->move_speed << 4);
 
-    if ((D_8009D300->flags & 0x20) == 0) {
+    if ((g_TaskNodePool->flags & 0x20) == 0) {
         target_x = *args[0];
         target_z = *args[1];
         if (current_x == target_x && current_z == target_z) {
             return 1;
         }
         turn_speed = *args[2];
-        D_8009D300->target14 = target_x;
-        D_8009D300->target18.coordinate = target_z;
-        D_8009D300->target1c = turn_speed;
-        D_8009D300->flags |= 0x20;
+        g_TaskNodePool->target14 = target_x;
+        g_TaskNodePool->target18.coordinate = target_z;
+        g_TaskNodePool->target1c = turn_speed;
+        g_TaskNodePool->flags |= 0x20;
     } else {
-        camera_state = D_8009D300;
-        target_x = S32_AT(camera_state, 0x14);
-        target_z = S32_AT(camera_state, 0x18);
-        turn_speed = S32_AT(camera_state, 0x1C);
+        camera_state = g_TaskNodePool;
+        target_x = camera_state->target14;
+        target_z = camera_state->target18.coordinate;
+        turn_speed = camera_state->target1c;
     }
 
     target_angle = (u16)(0x1400 - ratan2(current_z - target_z,
@@ -364,7 +356,7 @@ int Task_MoveTowardPoint(int **args) {
     target_angle &= 0xFFF;
     desired_angle = target_angle;
     if (turn_speed != 0) {
-        current_angle = S16_AT(g_CurrentEntity, 0x3A);
+        current_angle = g_CurrentEntity->rot_y;
         if (current_angle < desired_angle) {
             angle_difference = desired_angle - current_angle;
             if (angle_difference < 0x800) {
@@ -407,47 +399,40 @@ int Task_MoveTowardPoint(int **args) {
             }
         }
         target_angle &= 0xFFF;
-        S16_AT(g_CurrentEntity, 0x3A) = target_angle;
+        g_CurrentEntity->rot_y = target_angle;
     }
 
-    S32_AT(g_CurrentEntity, 0x68) = Math_FixedMul(-movement_speed, rsin(target_angle) << 4);
+    g_CurrentEntity->motion_x = Math_FixedMul(-movement_speed, rsin(target_angle) << 4);
     movement_z = Math_FixedMul(-movement_speed, rcos(target_angle) << 4);
     current_x = (target_x - current_x) >> 16;
     current_z = (target_z - current_z) >> 16;
     remaining_distance = current_x * current_x + current_z * current_z;
-    motion_entity = (u8 *)g_CurrentEntity;
-    current_x = S16_AT(motion_entity, 0x6A);
+    motion_entity = g_CurrentEntity;
+    current_x = Pe1Fixed_Integer(&motion_entity->motion_x);
     current_z = movement_z >> 16;
     movement_distance = current_x * current_x + current_z * current_z;
-    S32_AT(motion_entity, 0x70) = movement_z;
+    motion_entity->motion_z = movement_z;
     if (movement_distance >= remaining_distance) {
-        camera_state = D_8009D300;
-        S32_AT(motion_entity, 0x28) = target_x;
-        S32_AT(motion_entity, 0x30) = target_z;
-        S32_AT(motion_entity, 0x68) = 0;
-        S32_AT(motion_entity, 0x70) = 0;
-        D_8009D300->flags &= 0xFFDF;
+        camera_state = g_TaskNodePool;
+        motion_entity->pos_x = target_x;
+        motion_entity->pos_z = target_z;
+        motion_entity->motion_x = 0;
+        motion_entity->motion_z = 0;
+        g_TaskNodePool->flags &= 0xFFDF;
         return 1;
     } else {
-        D_8009CE00 -= 5;
-        D_8009D300->active = 1;
+        g_SceneDataTable0 -= 0x14;
+        g_TaskNodePool->active = 1;
         return 0;
     }
 }
 
 /* Camera entity tracking shares the active TaskNode cache and motion ABI. */
-#define U8_AT(ptr, off) (*(u8 *)((u8 *)(ptr) + (off)))
-#define U32_AT(ptr, off) (*(u32 *)((u8 *)(ptr) + (off)))
-#define PTR_AT(ptr, off) (*(u8 **)((u8 *)(ptr) + (off)))
-
-
-int Math_FixedMul(int a, int b);
-
 int Camera_TrackEntityAngle(int **args) {
     int **script_args;
-    u8 *current;
-    u8 *tracking_entity;
-    u8 *camera_state;
+    FieldActor *current;
+    FieldActor *tracking_entity;
+    TaskNode *camera_state;
     int *turn_arg;
     int base_speed;
     int current_x;
@@ -460,128 +445,123 @@ int Camera_TrackEntityAngle(int **args) {
     int angle_difference;
     int squared_x;
     int squared_z;
-    int remaining_distance;
     int movement_distance;
     int stack_pad[2];
 
     script_args = args;
-    args = (int **)g_CurrentEntity;
-    current_x = S32_AT(args, 0x28);
-    current_z = S32_AT(args, 0x30);
+    tracking_entity = g_CurrentEntity;
+    current_x = tracking_entity->pos_x;
+    current_z = tracking_entity->pos_z;
 
-    if ((u8 *)args != (u8 *)D_8009D254) {
-        base_speed = S32_AT(args, 0x20);
+    if (tracking_entity != g_PlayerEntity) {
+        base_speed = tracking_entity->move_factor;
     } else {
-        base_speed = Math_FixedMul(0x50000, S32_AT(args, 0x20));
+        base_speed = Math_FixedMul(0x50000, tracking_entity->move_factor);
     }
-    base_speed = Math_FixedMul(base_speed, U16_AT(g_CurrentEntity, 0x26) << 4);
+    base_speed = Math_FixedMul(base_speed, g_CurrentEntity->move_speed << 4);
 
-    if ((D_8009D300->flags & 0x20) == 0) {
+    if ((g_TaskNodePool->flags & 0x20) == 0) {
         target_x = *script_args[0];
         target_z = *script_args[1];
         if (current_x == target_x && current_z == target_z) {
             return 1;
         }
         turn_arg = script_args[2];
-        tracking_entity = (u8 *)g_CurrentEntity;
+        tracking_entity = g_CurrentEntity;
         turn_speed = *turn_arg;
-        if (S16_AT(tracking_entity, 0x3A) < 0) {
-            S16_AT(tracking_entity, 0x3A) = S16_AT(tracking_entity, 0x3A) + 0x1000;
+        if (tracking_entity->rot_y < 0) {
+            tracking_entity->rot_y = tracking_entity->rot_y + 0x1000;
         }
 
-        D_8009D300->target14 = target_x;
-        D_8009D300->target18.coordinate = target_z;
-        D_8009D300->target1c = turn_speed;
-        D_8009D300->flags |= 0x20;
+        g_TaskNodePool->target14 = target_x;
+        g_TaskNodePool->target18.coordinate = target_z;
+        g_TaskNodePool->target1c = turn_speed;
+        g_TaskNodePool->flags |= 0x20;
     } else {
-        target_x = D_8009D300->target14;
-        target_z = D_8009D300->target18.coordinate;
-        turn_speed = D_8009D300->target1c;
+        target_x = g_TaskNodePool->target14;
+        target_z = g_TaskNodePool->target18.coordinate;
+        turn_speed = g_TaskNodePool->target1c;
     }
 
     target_angle = (u16)(0x1400 - ratan2(current_z - target_z, current_x - target_x));
     target_angle &= 0xFFF;
-    S32_AT(g_CurrentEntity, 0x68) = Math_FixedMul(-base_speed, rsin(target_angle) << 4);
+    g_CurrentEntity->motion_x = Math_FixedMul(-base_speed, rsin(target_angle) << 4);
     base_speed = Math_FixedMul(-base_speed, rcos(target_angle) << 4);
 
-    current = (u8 *)g_CurrentEntity;
-    angle_difference = S16_AT(current, 0x3A);
+    current = g_CurrentEntity;
+    angle_difference = current->rot_y;
     current_angle = angle_difference;
-    S32_AT(current, 0x70) = base_speed;
+    current->motion_z = base_speed;
     if (current_angle < target_angle) {
         angle_difference = target_angle - current_angle;
         if (angle_difference < 0x801) {
             if (turn_speed < angle_difference) {
-                S16_AT(current, 0x3A) = current_angle + turn_speed;
+                current->rot_y = current_angle + turn_speed;
             }
         } else if (turn_speed < angle_difference) {
-            S16_AT(current, 0x3A) = current_angle - turn_speed;
+            current->rot_y = current_angle - turn_speed;
         }
     } else {
         angle_difference = current_angle - target_angle;
         if (angle_difference < 0x801) {
             if (turn_speed < angle_difference) {
-                S16_AT(current, 0x3A) = current_angle - turn_speed;
+                current->rot_y = current_angle - turn_speed;
             }
         } else if (turn_speed < angle_difference) {
-            S16_AT(current, 0x3A) = current_angle + turn_speed;
+            current->rot_y = current_angle + turn_speed;
         }
     }
 
-    current = (u8 *)g_CurrentEntity;
+    current = g_CurrentEntity;
     current_x = (target_x - current_x) >> 16;
     current_z = (target_z - current_z) >> 16;
     squared_x = current_x * current_x;
     squared_z = current_z * current_z;
-    remaining_distance = squared_x + squared_z;
-    angle_difference = 0x6A;
-    current_x = S16_AT(current, angle_difference);
-    current_z = S16_AT(current, 0x72);
+    angle_difference = squared_x + squared_z;
+    current_x = Pe1Fixed_Integer(&current->motion_x);
+    current_z = Pe1Fixed_Integer(&current->motion_z);
     movement_distance = current_x * current_x + current_z * current_z;
-    S16_AT(current, 0x3A) &= 0xFFF;
-    if (movement_distance >= remaining_distance) {
-        camera_state = D_8009D300;
-        S32_AT(current, 0x28) = target_x;
-        S32_AT(current, 0x30) = target_z;
-        S32_AT(current, 0x68) = 0;
-        S32_AT(current, 0x70) = 0;
-        U16_AT(camera_state, 8) &= 0xFFDF;
+    current->rot_y &= 0xFFF;
+    if (movement_distance >= angle_difference) {
+        camera_state = g_TaskNodePool;
+        current->pos_x = target_x;
+        current->pos_z = target_z;
+        current->motion_x = 0;
+        current->motion_z = 0;
+        camera_state->flags &= 0xFFDF;
         return 1;
     } else {
-        D_8009CE00 -= 5;
-        D_8009D300->active = 1;
+        g_SceneDataTable0 -= 0x14;
+        g_TaskNodePool->active = 1;
         return 0;
     }
 }
 
 int Camera_SnapToEntity(int **args) {
-    u8 *target;
-    u8 *current;
+    FieldActor *target;
     int speed;
     int target_angle;
     int next_angle;
     int angle;
     int difference;
     int wrap_difference;
-    u32 *target_x_ptr;
-    s32 delta_x;
-    s32 delta_z;
+    int delta_x;
+    int delta_z;
 
-    if ((D_8009D300->flags & 0x20) == 0) {
+    if ((g_TaskNodePool->flags & 0x20) == 0) {
         if (*args[0] == 0) {
-            if ((u8 *)D_8009D254 == 0) {
+            if (g_PlayerEntity == 0) {
                 return 1;
             }
-            target = (u8 *)D_8009D254;
+            target = g_PlayerEntity;
         } else {
-            target = (u8 *)D_8009D20C;
+            target = g_FieldActorListHead;
             while (target != 0) {
-                if (U8_AT(target, 0xC) == *args[0] &&
-                    U8_AT(target, 0xD) == *args[1] &&
-                    (U32_AT(target, 0x98) & 0x10) == 0) {
+                if (target->type_id == *args[0] && target->sub_id == *args[1] &&
+                    (target->flags & 0x10) == 0) {
                     break;
                 }
-                target = PTR_AT(target, 4);
+                target = target->next;
             }
             if (target == 0) {
                 return 1;
@@ -589,26 +569,23 @@ int Camera_SnapToEntity(int **args) {
         }
 
         speed = *args[2];
-        D_8009D300->target18.actor = target;
-        D_8009D300->flags |= 0x20;
-        D_8009D300->target14 = speed;
+        g_TaskNodePool->target18.actor = target;
+        g_TaskNodePool->flags |= 0x20;
+        g_TaskNodePool->target14 = speed;
     } else {
-        target = D_8009D300->target18.actor;
-        if ((U32_AT(target, 0x98) & 0x10) != 0) {
-            D_8009D300->flags &= 0xFFDF;
+        target = g_TaskNodePool->target18.actor;
+        if ((target->flags & 0x10) != 0) {
+            g_TaskNodePool->flags &= 0xFFDF;
             return 1;
         }
-        speed = D_8009D300->target14;
+        speed = g_TaskNodePool->target14;
     }
 
-    target_x_ptr = (u32 *)(target + 0x28);
-    delta_x = U32_AT(g_CurrentEntity, 0x28) - *target_x_ptr;
-    delta_z = U32_AT(g_CurrentEntity, 0x30) - U32_AT(target, 0x30);
+    delta_x = g_CurrentEntity->pos_x - target->pos_x;
+    delta_z = g_CurrentEntity->pos_z - target->pos_z;
     target_angle = 0x1400 - ratan2(delta_z >> 16, delta_x >> 16);
     next_angle = (target_angle &= 0xFFF);
-    current = (u8 *)g_CurrentEntity;
-    angle = S16_AT(current, 0x3A);
-
+    angle = g_CurrentEntity->rot_y;
     if (target_angle != angle) {
         if (angle < target_angle) {
             difference = target_angle - angle;
@@ -645,23 +622,23 @@ int Camera_SnapToEntity(int **args) {
         }
 
         next_angle &= 0xFFF;
-        S16_AT(g_CurrentEntity, 0x3A) = next_angle;
+        g_CurrentEntity->rot_y = next_angle;
         if (next_angle != target_angle) {
-            D_8009CE00 -= 5;
-            D_8009D300->active = 1;
+            g_SceneDataTable0 -= 0x14;
+            g_TaskNodePool->active = 1;
             return 0;
         }
     }
 
-    D_8009D300->flags &= 0xFFDF;
+    g_TaskNodePool->flags &= 0xFFDF;
     return 1;
 }
 
 int Camera_TrackEntityZoom(int **args) {
-    u8 *speed_entity;
-    u8 *motion_entity;
-    u8 *target;
-    u8 *camera_state;
+    FieldActor *speed_entity;
+    FieldActor *motion_entity;
+    FieldActor *target;
+    TaskNode *camera_state;
     int target_move_id;
     int movement_speed;
     int turn_speed;
@@ -678,65 +655,64 @@ int Camera_TrackEntityZoom(int **args) {
     int remaining_distance;
     int movement_distance;
 
-    if ((D_8009D300->flags & 0x20) == 0) {
+    if ((g_TaskNodePool->flags & 0x20) == 0) {
         if (*args[0] == 0) {
-            if ((u8 *)D_8009D254 == 0) {
+            if (g_PlayerEntity == 0) {
                 return 1;
             }
-            target = (u8 *)D_8009D254;
+            target = g_PlayerEntity;
         } else {
-            target = (u8 *)D_8009D20C;
+            target = g_FieldActorListHead;
             while (target != 0) {
-                if (U8_AT(target, 0xC) == *args[0] &&
-                    U8_AT(target, 0xD) == *args[1] &&
-                    (U32_AT(target, 0x98) & 0x10) == 0) {
+                if (target->type_id == *args[0] && target->sub_id == *args[1] &&
+                    (target->flags & 0x10) == 0) {
                     break;
                 }
-                target = PTR_AT(target, 4);
+                target = target->next;
             }
             if (target == 0) {
                 return 1;
             }
         }
 
-        D_8009D300->flags |= 0x20;
+        g_TaskNodePool->flags |= 0x20;
         turn_speed = *args[2];
-        D_8009D300->target18.actor = target;
-        D_8009D300->target14 = turn_speed;
-        target_move_id = U16_AT(target, 0x24);
-        D_8009D300->target1c = target_move_id;
+        g_TaskNodePool->target18.actor = target;
+        g_TaskNodePool->target14 = turn_speed;
+        target_move_id = target->field_sfx_id;
+        g_TaskNodePool->target1c = target_move_id;
     } else {
-        target = D_8009D300->target18.actor;
-        turn_speed = D_8009D300->target14;
-        if ((U32_AT(target, 0x98) & 0x10) != 0 ||
-            U16_AT(target, 0x24) != D_8009D300->target1c) {
-            D_8009D300->flags &= 0xFFDF;
+        target = g_TaskNodePool->target18.actor;
+        turn_speed = g_TaskNodePool->target14;
+        if ((target->flags & 0x10) != 0 ||
+            target->field_sfx_id != g_TaskNodePool->target1c) {
+            g_TaskNodePool->flags &= 0xFFDF;
             return 1;
         }
     }
 
-    target_x = S32_AT(target, 0x28);
-    target_z = S32_AT(target, 0x30);
-    current_x = S32_AT(g_CurrentEntity, 0x28);
-    current_z = S32_AT(g_CurrentEntity, 0x30);
+    target_x = target->pos_x;
+    target_z = target->pos_z;
+    current_x = g_CurrentEntity->pos_x;
+    current_z = g_CurrentEntity->pos_z;
     if (current_x == target_x && current_z == target_z) {
         return 1;
     }
 
-    speed_entity = (u8 *)g_CurrentEntity;
-    if (speed_entity != (u8 *)D_8009D254) {
-        movement_speed = S32_AT(speed_entity, 0x20);
+    speed_entity = g_CurrentEntity;
+    if (speed_entity != g_PlayerEntity) {
+        movement_speed = speed_entity->move_factor;
     } else {
-        movement_speed = Math_FixedMul(0x50000, S32_AT(speed_entity, 0x20));
+        movement_speed = Math_FixedMul(0x50000, speed_entity->move_factor);
     }
-    movement_speed = Math_FixedMul(movement_speed, U16_AT(g_CurrentEntity, 0x26) << 4);
+    movement_speed = Math_FixedMul(movement_speed, g_CurrentEntity->move_speed << 4);
     target_angle = (u16)(0x1400 - ratan2(current_z - target_z,
                                              current_x - target_x));
     target_angle &= 0xFFF;
 
     desired_angle = target_angle;
     if (turn_speed != 0) {
-        current_angle = S16_AT(g_CurrentEntity, 0x3A);
+        current_angle = g_CurrentEntity->rot_y;
         if (current_angle < desired_angle) {
             angle_difference = desired_angle - current_angle;
             if (angle_difference < 0x800) {
@@ -779,30 +755,30 @@ int Camera_TrackEntityZoom(int **args) {
             }
         }
         target_angle &= 0xFFF;
-        S16_AT(g_CurrentEntity, 0x3A) = target_angle;
+        g_CurrentEntity->rot_y = target_angle;
     }
 
-    S32_AT(g_CurrentEntity, 0x68) = Math_FixedMul(-movement_speed, rsin(target_angle) << 4);
+    g_CurrentEntity->motion_x = Math_FixedMul(-movement_speed, rsin(target_angle) << 4);
     movement_z = Math_FixedMul(-movement_speed, rcos(target_angle) << 4);
     current_x = (target_x - current_x) >> 16;
     current_z = (target_z - current_z) >> 16;
     remaining_distance = current_x * current_x + current_z * current_z;
-    motion_entity = (u8 *)g_CurrentEntity;
-    current_x = S16_AT(motion_entity, 0x6A);
+    motion_entity = g_CurrentEntity;
+    current_x = Pe1Fixed_Integer(&motion_entity->motion_x);
     current_z = movement_z >> 16;
     movement_distance = current_x * current_x + current_z * current_z;
-    S32_AT(motion_entity, 0x70) = movement_z;
+    motion_entity->motion_z = movement_z;
     if (movement_distance >= remaining_distance) {
-        camera_state = D_8009D300;
-        S32_AT(motion_entity, 0x28) = target_x;
-        S32_AT(motion_entity, 0x30) = target_z;
-        S32_AT(motion_entity, 0x68) = 0;
-        S32_AT(motion_entity, 0x70) = 0;
-        U16_AT(camera_state, 8) &= 0xFFDF;
+        camera_state = g_TaskNodePool;
+        motion_entity->pos_x = target_x;
+        motion_entity->pos_z = target_z;
+        motion_entity->motion_x = 0;
+        motion_entity->motion_z = 0;
+        camera_state->flags &= 0xFFDF;
         return 1;
     } else {
-        D_8009CE00 -= 5;
-        D_8009D300->active = 1;
+        g_SceneDataTable0 -= 0x14;
+        g_TaskNodePool->active = 1;
         return 0;
     }
 }
