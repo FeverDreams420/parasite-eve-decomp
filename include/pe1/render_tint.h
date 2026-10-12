@@ -43,6 +43,20 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RenderTintState, start_r) == 0x38, render_tint_st
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RenderTintState, duration) == 0x3E, render_tint_duration_offset);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RenderTintState, frame) == 0x40, render_tint_frame_offset);
 
+/* The target colour at RenderTintState.target_r, also tested as one word:
+ * red and green together are 0x00FF00FF when both are full. */
+typedef union RenderTintTargetView {
+    struct {
+        s16 r, g, b;
+        u8 fade_mode, blend_mode;
+    } colour;
+    struct {
+        u32 red_green;
+        s16 blue;
+        u8 fade_mode;
+    } packed;
+} RenderTintTargetView;
+
 /* Existing absolute symbols also expose the parameter halfwords/bytes. */
 extern s16 D_800BCFE8, D_800BCFEA, D_800BCFEC;
 extern s16 D_800BCFF0, D_800BCFF2, D_800BCFF4;

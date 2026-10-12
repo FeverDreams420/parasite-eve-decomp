@@ -78,20 +78,30 @@ void Boot_FlushSceneFast(void) {
     }
 }
 
+/* A game-state pointer stepped by a byte offset. */
+typedef union GameStateSlotAddress {
+    Pe1GameState *state;
+    u32 word;
+} GameStateSlotAddress;
+
+/* The frame loop reaches the game-state flags back from its scene flag byte. */
+#define GAME_STATE_OF_SCENE_FLAGS(flagsByte) \
+    ((Pe1GameState *)((flagsByte) - PE1_OFFSETOF(Pe1GameState, bank_state_12)))
+
 void Boot_RunFrame(void)
 {
     RECT clear_rect;
     u32 flags;
     u32 status;
-    u32 *game_flags;
+    Pe1GameState *state;
     u8 *scene_flags;
-    u8 *fade;
+    RenderTintTargetView *fade;
 
     Gpu_InitPipeline();
     if (D_8009D1C4 == D_8009D280) {
         scene_flags = &g_GameState.bank_state_12;
-        game_flags = &g_GameState.flags;
-        fade = (u8 *)&D_800BCFE8;
+        state = &g_GameState;
+        fade = (RenderTintTargetView *)&D_800BCFE8;
         do {
             D_8009CDD8 = 0;
             *scene_flags = 0;
@@ -99,7 +109,7 @@ void Boot_RunFrame(void)
             flags = D_8009D1A0;
             D_8009D1A0 = flags & ~0x30u;
 
-            if (!(*(u32 *)(scene_flags - 0x12) & 0x8000) && D_8009CDA4[0] &&
+            if (!(GAME_STATE_OF_SCENE_FLAGS(scene_flags)->flags & 0x8000) && D_8009CDA4[0] &&
                 (D_8009D1F4 & 4) &&
                 !(D_8009D238 & 0xB0002380u)) {
                 D_8009D1A0 =
@@ -108,22 +118,28 @@ void Boot_RunFrame(void)
             }
 
             if (!(D_8009D1A0 & 1)) {
-            if (!(*game_flags & 0x200)) {
-                ClearOTagR(((u32 **)((u8 *)game_flags + (D_8009CDDC << 2)))[0x58],
+            if (!(state->flags & 0x200)) {
+                GameStateSlotAddress slot;
+
+                /* The draw slot steps the state one word per slot, so the
+                 * ordering table is read from the shifted state. */
+                slot.state = state;
+                slot.word += D_8009CDDC << 2;
+                ClearOTagR((u32 *)slot.state->shared_buffers.ordering_tables[0],
                            0x1000);
             }
             D_8009D250 = D_8009D250 + 1;
             Scene_UpdateEntityList();
             Entity_FrameUpdate();
 
-            if (!(*game_flags & 0x100)) {
+            if (!(state->flags & 0x100)) {
                 if ((s8)Gpu_CheckDrawStatus() != 0) {
                     if ((s8)func_80122040() == 0) {
                         func_80121A00();
                         Gpu_ClearOnFlag();
                         continue;
                     }
-                } else if (!(*game_flags & 0x200)) {
+                } else if (!(state->flags & 0x200)) {
                     Render_Update();
                     Menu_DrawTextboxEntries();
                     Render_SetGteScreenOffset();
@@ -132,9 +148,12 @@ void Boot_RunFrame(void)
                     Render_SetCDDCSlot();
                 }
                 Gpu_RenderFrame();
-                if (!D_8009CDA4[0] && *(u32 *)fade == 0xFF00FFu &&
-                    *(s16 *)(fade + 4) == 0xFF && (fade[6] & 0x40)) {
-                    Render_SetFadeColour(15);
+                /* A finished fade to white reloads fade colour 15. */
+                if (!D_8009CDA4[0] && fade->packed.red_green == 0xFF00FFu &&
+                    fade->packed.blue == 0xFF) {
+                    if (fade->colour.fade_mode & 0x40) {
+                        Render_SetFadeColour(15);
+                    }
                 }
             }
             } else {
@@ -145,11 +164,11 @@ void Boot_RunFrame(void)
                 (D_8009D26C & 0x0F000006u) == 0x0F000006u) {
                 Sys_Shutdown();
             }
-            if (!(*game_flags & 0x100)) {
+            if (!(state->flags & 0x100)) {
                 Sys_FinishFrame();
             }
             D_8009CDA4[0]++;
-            if ((D_8009D1A0 & 0x2000) && (*game_flags & 0x800)) {
+            if ((D_8009D1A0 & 0x2000) && (state->flags & 0x800)) {
                 break;
             }
 loop_end_check:

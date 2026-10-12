@@ -106,8 +106,12 @@ typedef struct Pe1GameState {
     Pe1U32 voice_bank_base_1400;     /* 0x154 */
     union SceneAssetView *entity_texture_blob; /* 0x158: voice bank base + 0x2800 */
     u8 *scene_object_work;         /* 0x15C */
-    struct SceneAssetBlob *bg_texture_blob;    /* 0x160 */
-    Pe1U8 unk_164[4];
+    /* 0x160: the frame ordering tables (g_OtBufferTable) double as the
+     * background texture load buffer while a scene loads. */
+    union {
+        unsigned char *ordering_tables[2];
+        struct SceneAssetBlob *bg_texture_blob;
+    } shared_buffers;
     union SceneAssetView *texture_load_scratch; /* 0x168: second room read */
     struct SceneAssetBlob *object_texture_blob; /* 0x16C */
     Pe1U8 unk_170[4];

@@ -51,7 +51,7 @@ retry_first_load:
 
     main_table = (TimRelativeTable *)state->scene_object_work;
     for (i = 0; i < 3; i++) {
-        Asset_LoadTimImage((TimFile *)((u8 *)main_table + main_table->offsets[(s16)i]));
+        Asset_LoadTimImage(SceneAsset_ResolveOffset(main_table, main_table->offsets[(s16)i]));
     }
 
     if (D_800A77FC & 0x2000) {
@@ -80,7 +80,7 @@ retry_large_load_b:
 
     large_table = (TimRelativeTable *)state->object_texture_blob;
     for (i = 0; i < 0x106; i++) {
-        Asset_LoadTimImage((TimFile *)((u8 *)large_table + large_table->offsets[(s16)i]));
+        Asset_LoadTimImage(SceneAsset_ResolveOffset(large_table, large_table->offsets[(s16)i]));
     }
 
     DrawSync(0);

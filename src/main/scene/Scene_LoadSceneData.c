@@ -181,7 +181,7 @@ int Scene_LoadFieldBg(void)
     lba = g_PeImageBaseLba;
 
 retry1:
-    while (CdRom_ReadSectorsFromLba(lba + D_800930D8[9], state->bg_texture_blob,
+    while (CdRom_ReadSectorsFromLba(lba + D_800930D8[9], state->shared_buffers.bg_texture_blob,
                D_800930D8[10] - D_800930D8[9]) == -1)
         ;
     status = 1;
@@ -199,7 +199,7 @@ retry2:
     status = 1;
     do {
         if (!done) {
-            SCENE_BLOB_LOAD_TIMS(state->bg_texture_blob);
+            SCENE_BLOB_LOAD_TIMS(state->shared_buffers.bg_texture_blob);
             for (slot = 2; slot < 4; slot++) {
                 D_80091648[slot].tpage = BG_SLOT_TPAGE(D_80091648[slot].x, D_80091648[slot].y);
                 D_80091648[slot].clut = BG_SLOT_CLUT(D_80091648[slot].clut_x, D_80091648[slot].clut_y);
