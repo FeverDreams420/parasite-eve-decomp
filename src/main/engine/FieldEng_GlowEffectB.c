@@ -9,16 +9,13 @@
 #include "pe1/field_anim_particle.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/psyq_libc.h"
+#include "pe1/field_effect_modules.h"
 
-#include "FieldEng_GlowEffectB_externs.h"
-
-
-
-int func_800C8D34(char *object) {
+int GlowEffectB_PlantScript(char *object) {
     void **slot;
 
     slot = FieldEng_GetSlot(object);
-    *slot = &D_800E0A50;
+    *slot = &g_GlowEffectBScript;
 
     D_800E22E8.cell = 0xBD;
     D_800E22E8.clut = 9;
@@ -50,45 +47,37 @@ int func_800C8D34(char *object) {
     return 0;
 }
 
-#include "FieldEng_GlowEffectB_externs_1.h"
-
-int func_800C8E44(int a, int b, int c, int d, int e, int f) {
+int GlowEffectB_Spawn6(int a, int b, int c, int d, int e, int f) {
     FieldEng_Spawn6(a, b, c, d, e, f);
     return 0;
 }
-#include "FieldEng_GlowEffectB_externs_2.h"
-
-int func_800C8E70(void *o) {
-    FieldEng_Register(o, D_800E09A0);
+int GlowEffectB_RegisterDrawList(void *o) {
+    FieldEng_Register(o, g_GlowEffectBDrawList);
     return 0;
 }
-#include "FieldEng_GlowEffectB_externs_3.h"
-
-int func_800C8E98(void *obj) {
+int GlowEffectB_RegisterPairedTables(void *obj) {
     int first;
     int second;
     int status;
 
-    first = func_800C251C(obj, D_800E09B4);
-    second = func_800C2758(obj, D_800E098C, D_800E09C8);
+    first = FieldEng_UpdateSlots(obj, g_GlowEffectBUpdateList);
+    second = FieldEng_RunScript(obj, g_GlowEffectBInitList, g_GlowEffectBSlotSizes);
     status = first | second;
     if (status == -1) {
-        func_800C8F08(obj);
+        GlowEffectB_CloseTarget(obj);
     }
     return 0;
 }
-int func_800C8F08(char *arg0) {
+int GlowEffectB_CloseTarget(char *arg0) {
     *arg0 = 4;
     return 0;
 }
-int func_800C8F18(void) {
+int GlowEffectB_ClassNop6(void) {
     return 0;
 }
-int func_800C8F20(void) {
+int GlowEffectB_ClassNop0(void) {
     return 0;
 }
-
-#include "FieldEng_GlowEffectB_externs_4.h"
 
 int func_800C8F28(FieldAnimObjectPrefix *obj) {
     FieldActor *data = obj->actor;
@@ -96,11 +85,9 @@ int func_800C8F28(FieldAnimObjectPrefix *obj) {
     D_800E2350.x = data->render_object.matrices[19].translation[0];
     D_800E2350.y = data->render_object.matrices[19].translation[1];
     D_800E2350.z = data->render_object.matrices[19].translation[2];
-    D_800E27A0 = data;
+    g_GlowEffectBOwner = data;
     func_800CEDA8(0);
 }
-
-int rand(void);
 
 int func_800C8F94(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
     GteShortVector vec;
@@ -109,7 +96,7 @@ int func_800C8F94(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
     vec.y = -((rand() % 3) + 9);
     vec.z = (rand() % 5) - 2;
 
-    ApplyMatrixSV((GteMatrix *)D_800E27A0->render_object.matrices, &vec, &anim->velocity);
+    ApplyMatrixSV((GteMatrix *)g_GlowEffectBOwner->render_object.matrices, &vec, &anim->velocity);
 
     {
         u16 z;
@@ -123,21 +110,19 @@ int func_800C8F94(void *arg0, void *arg1, FieldAnimMovingParticle *anim) {
     }
 }
 
-#include "FieldEng_GlowEffectB_externs_5.h"
-
 int func_800C90A4(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
     FieldAnimMatrixGlow *anim_s0 = anim;
     GteShortVector out;
     FieldActor *data;
-    char *entry;
+    GteShortVector *entry;
     RenderMatrix *model;
 
-    entry = D_800E0A10 + (((short)((u16)((Combatant *)D_8009D254->core)->action->actionCode.actionId - 1)) << 3);
-    ApplyMatrixSV((GteMatrix *)&D_800E27A0->render_object.matrices[19], entry, &out);
+    entry = &g_GlowEffectBFlareOffsets[(short)((u16)((Combatant *)D_8009D254->core)->action->actionCode.actionId - 1)];
+    ApplyMatrixSV((GteMatrix *)&g_GlowEffectBOwner->render_object.matrices[19], entry, &out);
 
     anim_s0->position.x = D_800E2350.x + out.x;
     anim_s0->position.y = D_800E2350.y + out.y;
-    data = D_800E27A0;
+    data = g_GlowEffectBOwner;
     anim_s0->position.z = D_800E2350.z + out.z;
 
     model = data->render_object.matrices;
@@ -145,14 +130,12 @@ int func_800C90A4(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
     anim_s0->brightness = 0x7F;
 }
 
-#include "FieldEng_GlowEffectB_externs_6.h"
-
 int func_800C91A8(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
     GteShortVector in;
     GteShortVector out;
 
-    in = D_800C217C;
-    ApplyMatrixSV((GteMatrix *)&D_800E27A0->render_object.matrices[19], &in, &out);
+    in = g_GlowEffectBPointOffset;
+    ApplyMatrixSV((GteMatrix *)&g_GlowEffectBOwner->render_object.matrices[19], &in, &out);
 
     {
         u16 y;
@@ -170,8 +153,6 @@ int func_800C91A8(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
 
 void func_800C9260(void) {
 }
-
-#include "FieldEng_GlowEffectB_externs_7.h"
 
 int func_800C9268(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
     GteMatrix matrix;
@@ -198,9 +179,9 @@ int func_800C9268(void *arg0, void *arg1, FieldAnimMatrixGlow *anim) {
     matrix.t[2] = (s16)anim->position.z;
 
     memset(&scale, 0, sizeof(scale));
-    scale.x = D_800E09F0[index];
-    scale.y = D_800E09F0[index];
-    scale.z = D_800E09F0[index];
+    scale.x = g_GlowEffectBScaleByAction[index];
+    scale.y = g_GlowEffectBScaleByAction[index];
+    scale.z = g_GlowEffectBScaleByAction[index];
     scaleCopy = scale;
 
     ScaleMatrix(&matrix, &scaleCopy);

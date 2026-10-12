@@ -12,6 +12,7 @@
 #include "pe1/field_billboard.h"
 #include "pe1/psyq_libc.h"
 #include "pe1/battle.h"
+#include "pe1/field_effect_modules.h"
 
 static __inline__ void identity_matrix(GteMatrix *matrix)
 {
@@ -70,68 +71,56 @@ int func_800CCBA8(char *object)
     return 0;
 }
 
-#include "FieldEng_BurstEffect_externs.h"
-
-
-int func_800CCEBC(int a, int b, int c, int d, int e, int f) {
+int BurstEffect_Spawn6(int a, int b, int c, int d, int e, int f) {
     FieldEng_Spawn6(a, b, c, d, e, f);
     return 0;
 }
 
-#include "FieldEng_BurstEffect_externs_1.h"
-
-int func_800CCEE8(void *o) {
-    FieldEng_Register(o, D_800E0E60);
+int BurstEffect_RegisterDrawList(void *o) {
+    FieldEng_Register(o, g_BurstEffectDrawList);
     return 0;
 }
 
-#include "FieldEng_BurstEffect_externs_2.h"
-
-int func_800CCF10(void *obj) {
+int BurstEffect_RegisterPairedTables(void *obj) {
     int first;
     int second;
     int status;
 
-    first = func_800C251C(obj, D_800E0E78);
-    second = func_800C2758(obj, D_800E0E48, D_800E0E90);
+    first = FieldEng_UpdateSlots(obj, g_BurstEffectUpdateList);
+    second = FieldEng_RunScript(obj, g_BurstEffectInitList, g_BurstEffectSlotSizes);
     status = first | second;
     if (status == -1) {
-        func_800CCF80(obj);
+        BurstEffect_CloseTarget(obj);
     }
     return 0;
 }
 
-int func_800CCF80(u8 *state) {
+int BurstEffect_CloseTarget(u8 *state) {
     state[0] = 4;
     return 0;
 }
 
-int func_800CCF90(void) {
+int BurstEffect_ClassNop6(void) {
     return 0;
 }
 
-int func_800CCF98(void) {
+int BurstEffect_ClassNop0(void) {
     return 0;
 }
-
-int *FieldEng_RegPtr(int index);
-int *FieldEng_VarPtr(int index);
-
-#include "FieldEng_BurstEffect_externs_3.h"
 
 int func_800CCFA0(void) {
     int index;
-    int *table;
-    int *entry;
-    int *next;
+    FieldActor **targets;
+    FieldActor *target;
+    FieldActor *next;
     FieldActor *data;
 
     index = *FieldEng_RegPtr(0xD);
-    table = (int *)*FieldEng_VarPtr(1);
-    entry = (int *)table[index];
+    targets = (FieldActor **)*FieldEng_VarPtr(1);
+    target = targets[index];
     index++;
-    next = (int *)table[index];
-    D_800E2810 = (int)entry;
+    next = targets[index];
+    g_BurstEffectTarget = target;
 
     if (next == 0) {
         *FieldEng_RegPtr(0xE) = 1;
@@ -139,19 +128,17 @@ int func_800CCFA0(void) {
 
     *FieldEng_RegPtr(0xD) = index;
 
-    data = (FieldActor *)D_800E2810;
+    data = g_BurstEffectTarget;
     D_800E27F8.x = *(u16 *)&data->render_object.target_x;
     D_800E27F8.y = *(u16 *)&data->render_object.target_y;
     D_800E27F8.z = *(u16 *)&data->render_object.target_z;
 
     if (D_800B0CE8.reset_pending != 0) {
-        Akao_Cmd_24((void *)D_800B0E14, 0, 0x80, 0x7F);
+        Akao_Cmd_24(g_FieldEffectSoundHeader, 0, 0x80, 0x7F);
     }
 
     func_800CEDA8(0);
 }
-
-#include "FieldEng_BurstEffect_externs_4.h"
 
 int func_800CD07C(void *arg0, void *arg1, FieldAnimBurstData *anim) {
     u16 x = D_800E27F8.x;
@@ -167,8 +154,6 @@ int func_800CD07C(void *arg0, void *arg1, FieldAnimBurstData *anim) {
     anim->header.duration = 0x60C;
     anim->header.origin_z = z;
 }
-
-int rand(void);
 
 void FieldAnim_InitRandomOffsetPairs(void *arg0, void *arg1,
                                      FieldAnimBurstData *anim) {
@@ -222,8 +207,6 @@ void func_800CD2DC(void) {
 void func_800CD2E4(void) {
 }
 
-#include "FieldEng_BurstEffect_externs_5.h"
-
 int func_800CD2EC(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
     s16 *field = (s16 *)&D_800E2298.depth;
     GteMatrix matrix;
@@ -231,7 +214,7 @@ int func_800CD2EC(void *arg0, void *arg1, FieldAnimGlowPoint *anim) {
     GteVector scaleCopy;
     GteVector scale;
 
-    rot = D_800C223C;
+    rot = g_BurstEffectSpriteRotation;
 
     func_800C2EAC(3);
     func_800C3098(0x100);

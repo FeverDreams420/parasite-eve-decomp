@@ -13,6 +13,13 @@ typedef struct FieldEngSlot {
     /* 0x4 */ short data_offset;
 } FieldEngSlot;
 
+/* A slot address as a pointer or a word: the dispatch passes add the scaled
+ * slot index to the table address as an integer, index first. */
+typedef union FieldEngSlotAddress {
+    FieldEngSlot *slot;
+    u32 word;
+} FieldEngSlotAddress;
+
 PE1_STATIC_ASSERT(sizeof(FieldEngSlot) == 6, field_engine_slot_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldEngSlot, flag) == 1, field_engine_slot_flag);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldEngSlot, counter) == 2, field_engine_slot_counter);

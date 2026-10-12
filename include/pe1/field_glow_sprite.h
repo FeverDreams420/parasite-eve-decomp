@@ -21,7 +21,7 @@ typedef struct FieldGlowSprite {
     /* 0x0C */ u8 pad0C[4];
 } FieldGlowSprite;
 
-/* Shared sprite presets initialized by func_800C7BA0. */
+/* Shared sprite presets initialized by GlowEffect_PlantScript. */
 extern FieldGlowSprite D_800E22D8;
 extern FieldGlowSprite D_800E2318;
 extern FieldGlowSprite D_800F3498;

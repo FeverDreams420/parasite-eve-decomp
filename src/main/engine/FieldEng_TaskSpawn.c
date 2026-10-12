@@ -9,7 +9,7 @@
 #include "pe1/asset_find.h"
 #include "pe1/field_effect_pool.h"
 #include "pe1/field_flash_burst.h"
-
+#include "pe1/field_effect_modules.h"
 
 int func_800D3F64(int arg0, int arg1) {
     FieldActor *actor;
@@ -276,8 +276,6 @@ int func_800D4850(u8 *state) {
     return 0;
 }
 
-#include "FieldEng_TaskSpawn_externs.h"
-
 void func_800CECAC(void);
 void func_800CED3C(int arg0);
 
@@ -286,7 +284,7 @@ int func_800D4860(void) {
 
     func_800CECAC();
 
-    table = &D_800B0E20;
+    table = &g_FieldEffectAssetTable;
     D_800F32D4 = Asset_FindTable08ByU32Key(*table, 0x6DEAE684);
     D_800F32D8 = Asset_FindTable08ByU32Key(*table, 0x8AB5B684);
     D_800F3418 = Asset_FindTable08ByU32Key(*table, 0x5AB32504);

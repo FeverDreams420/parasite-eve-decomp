@@ -1,4 +1,0 @@
-#ifndef PE1_EXT_F192DAF708D7
-#define PE1_EXT_F192DAF708D7
-extern char D_800E08E8[];
-#endif /* PE1_EXT_F192DAF708D7 */

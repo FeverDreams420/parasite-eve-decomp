@@ -7,15 +7,9 @@
 /* Field engine objects: clearing an object's script state and dispatch
  * slots, and the two per-frame passes over the 0x40 dispatch slots. */
 
-int FieldEng_GetStatus(void *obj);
-int func_800C2DA0(u16 slot);
-
-#include "FieldEng_ObjectScript_externs.h"
-
 void **FieldEng_GetSlot(char *obj) {
     char *p;
     unsigned int i;
-    int offset;
 
     p = obj + 0xC;
     do {
@@ -25,24 +19,22 @@ void **FieldEng_GetSlot(char *obj) {
     obj[2] = 0;
     obj[3] = 0;
 
-    D_800E2248 = (char *)&((FieldEngObject *)obj)->state;
-    D_800F34F4 = (u8 *)((FieldEngObject *)obj)->slots;
-    D_800F32A8 = obj;
-    D_800F3330 = (char *)((FieldEngObject *)obj)->data;
+    g_FieldEngineScriptState = &((FieldEngObject *)obj)->state;
+    g_FieldEngineSlotTable = ((FieldEngObject *)obj)->slots;
+    g_FieldEngineScriptObject = obj;
+    g_FieldEngineScriptData = (char *)((FieldEngObject *)obj)->data;
 
     ((FieldEngObject *)obj)->state.wait = 0;
     ((FieldEngObject *)obj)->state.pc = 0;
     ((FieldEngObject *)obj)->state.data_next = 0;
 
     i = 0;
-    offset = 0;
     do {
-        ((FieldEngSlot *)(offset + (int)D_800F34F4))->handler_id = 0;
-        ((FieldEngSlot *)(offset + (int)D_800F34F4))->flag = 0;
-        ((FieldEngSlot *)(offset + (int)D_800F34F4))->counter = 0;
-        ((FieldEngSlot *)(offset + (int)D_800F34F4))->data_offset = 0;
+        g_FieldEngineSlotTable[i].handler_id = 0;
+        g_FieldEngineSlotTable[i].flag = 0;
+        g_FieldEngineSlotTable[i].counter = 0;
+        g_FieldEngineSlotTable[i].data_offset = 0;
         i++;
-        offset += 6;
     } while (i < 0x40);
 
     if (FieldEng_GetStatus(obj) == 3) {
@@ -51,34 +43,36 @@ void **FieldEng_GetSlot(char *obj) {
         inner->core_flags = (inner->core_flags & 0xC0FFFFFF) | 0x01000000;
     }
 
-    return (void **)(D_800E2248 + 0x6C);
+    return (void **)&g_FieldEngineScriptState->commands;
 }
 
-int FieldEng_Register(char *obj, int (**handlers)(char *obj, void *entry, void *data))
+int FieldEng_Register(char *obj, FieldEngHandler *handlers)
 {
   register char *obj_s0 = obj;
-  register int (**handlers_s2)(char *obj, void *entry, void *data) = handlers;
+  register FieldEngHandler *handlers_s2 = handlers;
   s16 i;
   char *table;
   i = 0;
   table = (char *) ((FieldEngObject *) obj_s0)->state.commands;
-  D_800E2248 = (char *)&((FieldEngObject *)obj_s0)->state;
-  D_800F34F4 = (u8 *)((FieldEngObject *)obj_s0)->slots;
-  D_800F3330 = (char *)((FieldEngObject *)obj_s0)->data;
-  D_800F33B0 = table;
+  g_FieldEngineScriptState = &((FieldEngObject *)obj_s0)->state;
+  g_FieldEngineSlotTable = ((FieldEngObject *)obj_s0)->slots;
+  g_FieldEngineScriptData = (char *)((FieldEngObject *)obj_s0)->data;
+  g_FieldEngineCommandTable = (int *)table;
   for (; i < 0x40; i++)
   {
-    FieldEngSlot *entry = (FieldEngSlot *) ((((s16) i) * 6) + ((int) D_800F34F4));
-    if (entry->flag == 1)
+    FieldEngSlotAddress entry;
+    entry.slot = g_FieldEngineSlotTable;
+    entry.word = (s16)i * sizeof(FieldEngSlot) + entry.word;
+    if (entry.slot->flag == 1)
     {
-      int (*handler)(char *obj, void *entry, void *data) = handlers_s2[entry->handler_id];
+      FieldEngHandler handler = handlers_s2[entry.slot->handler_id];
       if (handler != ((void *) (-1)))
       {
-        handler(obj, entry, D_800F3330 + entry->data_offset);
+        handler(obj, entry.slot, g_FieldEngineScriptData + entry.slot->data_offset);
       }
       else
       {
-        printf(D_800C20C8);
+        printf(g_FieldEngServiceThreadMissingMsg);
       }
     }
   }
@@ -86,7 +80,7 @@ int FieldEng_Register(char *obj, int (**handlers)(char *obj, void *entry, void *
   return 0;
 }
 
-int func_800C251C(char *obj, int (**handlers)(char *obj, void *entry, void *data)) {
+int FieldEng_UpdateSlots(char *obj, FieldEngHandler *handlers) {
     int result;
     s16 i;
     FieldActor *data;
@@ -96,11 +90,11 @@ int func_800C251C(char *obj, int (**handlers)(char *obj, void *entry, void *data
     table = (char *)((FieldEngObject *)obj)->state.commands;
     data = ((FieldAnimObjectPrefix *)obj)->actor;
 
-    D_800E2248 = (char *)&((FieldEngObject *)obj)->state;
-    D_800F34F4 = (u8 *)((FieldEngObject *)obj)->slots;
-    D_800F32A8 = obj;
-    D_800F3330 = (char *)((FieldEngObject *)obj)->data;
-    D_800F33B0 = table;
+    g_FieldEngineScriptState = &((FieldEngObject *)obj)->state;
+    g_FieldEngineSlotTable = ((FieldEngObject *)obj)->slots;
+    g_FieldEngineScriptObject = obj;
+    g_FieldEngineScriptData = (char *)((FieldEngObject *)obj)->data;
+    g_FieldEngineCommandTable = (int *)table;
 
     obj[3] = obj[0x12];
 
@@ -115,30 +109,23 @@ int func_800C251C(char *obj, int (**handlers)(char *obj, void *entry, void *data
     }
 
     for (i = 0; i < 0x40; i++) {
-        FieldEngSlot *entry = (FieldEngSlot *)(i * 6 + (int)D_800F34F4);
+        FieldEngSlotAddress entry;
 
-        if (entry->flag == 1) {
-            int (*handler)(char *obj, void *entry, void *data) = handlers[entry->handler_id];
+        entry.slot = g_FieldEngineSlotTable;
+        entry.word = i * sizeof(FieldEngSlot) + entry.word;
+        if (entry.slot->flag == 1) {
+            FieldEngHandler handler = handlers[entry.slot->handler_id];
 
             if (handler != (void *)-1) {
-                handler(obj, entry, D_800F3330 + entry->data_offset);
+                handler(obj, entry.slot, g_FieldEngineScriptData + entry.slot->data_offset);
             } else {
-                printf(D_800C20EC);
+                printf(g_FieldEngUpdateThreadMissingMsg);
             }
-            {
-                FieldEngSlot *counter_entry = (FieldEngSlot *)(i * 6 + (int)D_800F34F4);
-
-                counter_entry->counter += 1;
-            }
+            g_FieldEngineSlotTable[i].counter += 1;
         }
 
-        {
-            int status_offset = i * 6;
-            u8 *status_base = D_800F34F4;
-
-            if (((FieldEngSlot *)(status_offset + (int)status_base))->flag == 2) {
-                result |= func_800C2DA0((u16)i);
-            }
+        if (g_FieldEngineSlotTable[i].flag == 2) {
+            result |= FieldEng_FreeSlot((u16)i);
         }
     }
 
@@ -154,19 +141,16 @@ int func_800C251C(char *obj, int (**handlers)(char *obj, void *entry, void *data
     return result;
 }
 
-void *func_800C2B90(void *obj, u8 id, u16 *sizes, int (**handlers)(void *, void *, void *));
-int func_800C2E08(void);
-
-#define SCRIPT ((FieldEngState *)g_FieldEngineScriptState)
+#define SCRIPT g_FieldEngineScriptState
 
 /* Runs the field script of obj until a wait or end command. */
-int func_800C2758(FieldEngObject *obj, int (**handlers)(void *, void *, void *), u16 *sizes) {
+int FieldEng_RunScript(FieldEngObject *obj, FieldEngHandler *handlers, u16 *sizes) {
     u8 stopped = 0;
     int result = 0;
     s16 wait;
 
-    g_FieldEngineScriptState = (char *)&obj->state;
-    g_FieldEngineSlotTable = (u8 *)obj->slots;
+    g_FieldEngineScriptState = &obj->state;
+    g_FieldEngineSlotTable = obj->slots;
     g_FieldEngineScriptObject = (char *)obj;
     g_FieldEngineScriptData = (char *)obj->data;
     g_FieldEngineCommandTable = obj->state.commands;
@@ -177,7 +161,7 @@ int func_800C2758(FieldEngObject *obj, int (**handlers)(void *, void *, void *),
             int command = g_FieldEngineCommandTable[SCRIPT->pc];
 
             if (command == -3) {
-                result |= func_800C2E08();
+                result |= FieldEng_FreeAllSlots();
             }
             if (command == -2) {
                 command = 0;
@@ -189,7 +173,7 @@ int func_800C2758(FieldEngObject *obj, int (**handlers)(void *, void *, void *),
                 u8 index;
 
                 if (op == 1) {
-                    func_800C2B90(obj, (u8)operand, sizes, handlers);
+                    FieldEng_StartSlot(obj, (u8)operand, sizes, handlers);
                 }
                 if (op == 2) {
                     stopped = 1;
@@ -239,7 +223,7 @@ int func_800C2758(FieldEngObject *obj, int (**handlers)(void *, void *, void *),
 
             if (SCRIPT->halted == 0) {
                 SCRIPT->pc++;
-            } else if (SCRIPT->keep_alive == 0) {
+            } else if (SCRIPT->slot_count == 0) {
                 result = -1;
             }
         } while (!stopped);
@@ -252,42 +236,40 @@ int func_800C2758(FieldEngObject *obj, int (**handlers)(void *, void *, void *),
 
 int FieldEng_Spawn6(char *base, int unused, int index, int value) {
     base += 0xC;
-    g_FieldEngineScriptState = base;
+    g_FieldEngineScriptState = (FieldEngState *)base;
     ((FieldEngState *)base)->vars[index] = value;
     return 0;
 }
 
-void *FieldEng_RegPtr(int index) {
-    return &((FieldEngState *)D_800E2248)->regs[index];
+int *FieldEng_RegPtr(int index) {
+    return &g_FieldEngineScriptState->regs[index];
 }
 
-void *FieldEng_VarPtr(int index) {
-    return &((FieldEngState *)D_800E2248)->vars[index];
+int *FieldEng_VarPtr(int index) {
+    return &g_FieldEngineScriptState->vars[index];
 }
 
-void func_800C2B40(void *context) {
-    ((FieldEngState *)g_FieldEngineScriptState)->current_context = context;
+void FieldEng_SetScriptContext(void *context) {
+    g_FieldEngineScriptState->current_context = context;
 }
 
-void *func_800C2B50(void) {
-    return ((FieldEngState *)g_FieldEngineScriptState)->current_context;
+void *FieldEng_GetScriptContext(void) {
+    return g_FieldEngineScriptState->current_context;
 }
 
-int func_800C2B68(void) {
+int FieldEng_IsLastSlotHalted(void) {
     return ((((FieldEngStateWords *)g_FieldEngineScriptState)->status & 0xFFFF0000U) ^ 0x01010000U) < 1;
 }
 
-void FieldEng_ActivateSlot(u16 slot, u8 id, u16 size);
-
-void *func_800C2B90(void *obj, u8 id, u16 *sizes, int (**handlers)(void *, void *, void *)) {
+void *FieldEng_StartSlot(void *obj, u8 id, u16 *sizes, FieldEngHandler *handlers) {
     s16 slot = -1;
     s16 i;
     FieldEngSlot *base;
     void *entry;
     void *data;
-    int (*handler)(void *, void *, void *);
+    FieldEngHandler handler;
 
-    base = (FieldEngSlot *)D_800F34F4;
+    base = g_FieldEngineSlotTable;
     for (i = 0; i < 0x40; i++) {
         if (base[i].flag == 0) {
             slot = i;
@@ -296,15 +278,15 @@ void *func_800C2B90(void *obj, u8 id, u16 *sizes, int (**handlers)(void *, void 
     }
 
     if (slot == -1) {
-        ((FieldEngState *)D_800E2248)->regs[14] = 1;
+        g_FieldEngineScriptState->regs[14] = 1;
         return 0;
     }
 
     if (FieldEng_GetStatus(obj) == 3 || FieldEng_GetStatus(obj) == 4 || FieldEng_GetStatus(obj) == 5) {
         FieldEng_ActivateSlot(slot, id, sizes[id]);
 
-        entry = D_800F34F4 + slot * 6;
-        data = D_800F3330 + ((FieldEngSlot *)entry)->data_offset;
+        entry = &g_FieldEngineSlotTable[slot];
+        data = g_FieldEngineScriptData + ((FieldEngSlot *)entry)->data_offset;
         handler = handlers[id];
         if (handler != (void *)-1) {
             handler(obj, entry, data);
@@ -318,50 +300,46 @@ void *func_800C2B90(void *obj, u8 id, u16 *sizes, int (**handlers)(void *, void 
 /* Activate slot `slot` with handler `id` and reserve `size` bytes of script
  * data for it, wrapping to offset 0 when the 0x80C-byte area would overflow. */
 void FieldEng_ActivateSlot(u16 slot, u8 id, u16 size) {
-    FieldEngDataState *state;
+    FieldEngState *state;
     s16 offset;
 
-    g_FieldEngineSlots[slot].flag = 1;
-    g_FieldEngineSlots[slot].handler_id = id;
-    g_FieldEngineSlots[slot].counter = 0;
-    state = g_FieldEngineState;
+    g_FieldEngineSlotTable[slot].flag = 1;
+    g_FieldEngineSlotTable[slot].handler_id = id;
+    g_FieldEngineSlotTable[slot].counter = 0;
+    state = g_FieldEngineScriptState;
     offset = state->data_next;
     if ((unsigned int)(offset + (u16)size) >= 0x80C) {
         offset = 0;
     }
-    g_FieldEngineSlots[slot].data_offset = offset;
+    g_FieldEngineSlotTable[slot].data_offset = offset;
     offset += size;
     state->data_next = offset;
     state->slot_count++;
 }
 
-int func_800C2DA0(u16 slot) {
-    ((FieldEngSlot *)D_800F34F4)[slot].flag = 0;
-    D_800E2248[6]--;
+int FieldEng_FreeSlot(u16 slot) {
+    g_FieldEngineSlotTable[slot].flag = 0;
+    g_FieldEngineScriptState->slot_count--;
 
-    return -((((((FieldEngStateWords *)D_800E2248)->status & 0xFFFF0000) ^ 0x01000000) < 1));
+    return -((((((FieldEngStateWords *)g_FieldEngineScriptState)->status & 0xFFFF0000) ^ 0x01000000) < 1));
 }
 
-int func_800C2E08(void) {
+int FieldEng_FreeAllSlots(void) {
     int i;
-    int offset;
     int result;
     u32 andMask;
     u32 xorMask;
-    FieldEngSlot *entry;
 
     result = 0;
     i = 0;
     andMask = 0xFFFF0000;
     xorMask = 0x01000000;
-    offset = 0;
-    for (; i < 0x40; i++, offset += 6) {
-        if (((FieldEngSlot *)(offset + (int)D_800F34F4))->flag != 0) {
+    for (; i < 0x40; i++) {
+        if (g_FieldEngineSlotTable[i].flag != 0) {
             u32 check;
-            entry = (FieldEngSlot *)((u16)i * 6 + (int)D_800F34F4);
-            entry->flag = 0;
-            D_800E2248[6]--;
-            check = ((FieldEngStateWords *)D_800E2248)->status & andMask;
+            g_FieldEngineSlotTable[(u16)i].flag = 0;
+            g_FieldEngineScriptState->slot_count--;
+            check = ((FieldEngStateWords *)g_FieldEngineScriptState)->status & andMask;
             check = check == xorMask;
             result |= -check;
         }

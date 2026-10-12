@@ -14,23 +14,20 @@
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_actor.h"
 #include "pe1/fixed_point.h"
+#include "pe1/field_effect_modules.h"
 
-
-#include "FieldEng_PointSpriteEffect_externs.h"
-
-
-int func_800CBCA4(char *object) {
+int PointSprite_PlantScript(char *object) {
     FieldActor *actor;
     void **slot;
 
     slot = FieldEng_GetSlot(object);
-    *slot = D_800E0D6C;
+    *slot = g_PointSpriteScript;
     actor = ((FieldAnimObjectPrefix *)object)->actor;
 
     D_800E2290.x = actor->pos_x >> 16;
     D_800E2290.y = actor->pos_y >> 16;
     D_800E2290.z = actor->pos_z >> 16;
-    D_800F3470 = actor;
+    g_PointSpriteOwner = actor;
 
     D_800F3430.oriented.rotation.x = 0;
     D_800F3430.oriented.rotation.y = 0;
@@ -92,52 +89,42 @@ int func_800CBCA4(char *object) {
     return 0;
 }
 
-#include "FieldEng_PointSpriteEffect_externs_1.h"
-
-int func_800CBEE0(int a, int b, int c, int d, int e, int f) {
+int PointSprite_Spawn6(int a, int b, int c, int d, int e, int f) {
     FieldEng_Spawn6(a, b, c, d, e, f);
     return 0;
 }
 
-#include "FieldEng_PointSpriteEffect_externs_2.h"
-
-int func_800CBF0C(void *o) {
-    FieldEng_Register(o, D_800E0D08);
+int PointSprite_RegisterDrawList(void *o) {
+    FieldEng_Register(o, g_PointSpriteDrawList);
     return 0;
 }
 
-#include "FieldEng_PointSpriteEffect_externs_3.h"
-
-int func_800CBF34(void *obj) {
+int PointSprite_RegisterPairedTables(void *obj) {
     int first;
     int second;
     int status;
 
-    first = func_800C251C(obj, D_800E0D24);
-    second = func_800C2758(obj, D_800E0CEC, D_800E0D40);
+    first = FieldEng_UpdateSlots(obj, g_PointSpriteUpdateList);
+    second = FieldEng_RunScript(obj, g_PointSpriteInitList, g_PointSpriteSlotSizes);
     status = first | second;
     if (status == -1) {
-        func_800CBFA4(obj);
+        PointSprite_CloseTarget(obj);
     }
     return 0;
 }
 
-int func_800CBFA4(char *arg0) {
+int PointSprite_CloseTarget(char *arg0) {
     *arg0 = 4;
     return 0;
 }
 
-int func_800CBFB4(void) {
+int PointSprite_ClassNop6(void) {
     return 0;
 }
 
-int func_800CBFBC(void) {
+int PointSprite_ClassNop0(void) {
     return 0;
 }
-
-int rand(void);
-int *FieldEng_RegPtr(int index);
-
 
 int func_800CBFC4(void *arg0, void *arg1, FieldAnimPointSprite *anim) {
     int x_base_a1;
@@ -160,7 +147,6 @@ int func_800CBFC4(void *arg0, void *arg1, FieldAnimPointSprite *anim) {
     anim->scale = 0x7F;
     anim->point.z = z_base_a1 + (z_rand % 201);
 }
-
 
 void FieldAnim_InitRadialEntries(void *arg0, void *arg1, FieldAnimRadialParticles *anim) {
     int i;

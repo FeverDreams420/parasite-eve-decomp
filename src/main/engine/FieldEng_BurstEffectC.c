@@ -9,12 +9,13 @@
 #include "pe1/field_anim_particle.h"
 #include "pe1/field_billboard.h"
 #include "pe1/field_actor.h"
+#include "pe1/field_effect_modules.h"
+#include "pe1/psyq_libc.h"
 
-#include "FieldEng_BurstEffectC_externs.h"
-int func_800CE084(char *object) {
+int BurstEffectC_PlantScript(char *object) {
     void **slot = FieldEng_GetSlot(object);
 
-    *slot = &D_800E0FFC;
+    *slot = &g_BurstEffectCScript;
     D_800E22A8.oriented.scale.x = 0x300;
     D_800E22A8.oriented.scale.y = 0x300;
     D_800E22A8.oriented.scale.z = 0x300;
@@ -29,65 +30,56 @@ int func_800CE084(char *object) {
     return 0;
 }
 
-int func_800CE118(int a, int b, int c, int d, int e, int f) {
+int BurstEffectC_Spawn6(int a, int b, int c, int d, int e, int f) {
     FieldEng_Spawn6(a, b, c, d, e, f);
     return 0;
 }
 
-#include "FieldEng_BurstEffectC_externs_1.h"
-
-int func_800CE144(void *o) {
-    FieldEng_Register(o, D_800E0FC0);
+int BurstEffectC_RegisterDrawList(void *o) {
+    FieldEng_Register(o, g_BurstEffectCDrawList);
     return 0;
 }
 
-#include "FieldEng_BurstEffectC_externs_2.h"
-
-int func_800CE16C(void *obj) {
+int BurstEffectC_RegisterPairedTables(void *obj) {
     int first;
     int second;
     int status;
 
-    first = func_800C251C(obj, D_800E0FCC);
-    second = func_800C2758(obj, D_800E0FB4, D_800E0FD8);
+    first = FieldEng_UpdateSlots(obj, g_BurstEffectCUpdateList);
+    second = FieldEng_RunScript(obj, g_BurstEffectCInitList, g_BurstEffectCSlotSizes);
     status = first | second;
     if (status == -1) {
-        func_800CE1DC(obj);
+        BurstEffectC_CloseTarget(obj);
     }
     return 0;
 }
 
-int func_800CE1DC(char *arg0) {
+int BurstEffectC_CloseTarget(char *arg0) {
     *arg0 = 4;
     return 0;
 }
 
-int func_800CE1EC(void) {
+int BurstEffectC_ClassNop6(void) {
     return 0;
 }
 
-int func_800CE1F4(void) {
+int BurstEffectC_ClassNop0(void) {
     return 0;
 }
-
-int *FieldEng_RegPtr(int index);
-int *FieldEng_VarPtr(int index);
-
-#include "FieldEng_BurstEffectC_externs_3.h"
 
 int func_800CE1FC(void) {
     int index;
-    int *table;
-    int *entry;
-    int *next;
+    FieldActor **targets;
+    FieldActor *target;
+    FieldActor *next;
     FieldActor *data;
 
     index = *FieldEng_RegPtr(0xD);
-    table = (int *)*FieldEng_VarPtr(1);
-    entry = (int *)table[index];
+    targets = (FieldActor **)*FieldEng_VarPtr(1);
+    target = targets[index];
     index++;
-    next = (int *)table[index];
-    D_800E2848 = (int)entry;
+    next = targets[index];
+    g_BurstEffectCTarget = target;
 
     if (next == 0) {
         *FieldEng_RegPtr(0xE) = 1;
@@ -95,7 +87,7 @@ int func_800CE1FC(void) {
 
     *FieldEng_RegPtr(0xD) = index;
 
-    data = (FieldActor *)D_800E2848;
+    data = g_BurstEffectCTarget;
     D_800E2808.x = data->render_object.target_x;
     D_800E2808.y = data->render_object.target_y;
     D_800E2808.z = data->render_object.target_z;
@@ -129,8 +121,6 @@ int func_800CE2B4(void *arg0, void *arg1, FieldAnimTimedSpark *anim) {
 
 void func_800CE3AC(void) {
 }
-
-#include "FieldEng_BurstEffectC_externs_4.h"
 
 int func_800CE3B4(void *arg0, void *arg1, FieldAnimTimedSpark *anim) {
     u16 x;

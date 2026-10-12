@@ -1,4 +1,0 @@
-#ifndef PE1_EXT_1186DEFD62BC
-#define PE1_EXT_1186DEFD62BC
-extern void *D_800B0E20;
-#endif /* PE1_EXT_1186DEFD62BC */

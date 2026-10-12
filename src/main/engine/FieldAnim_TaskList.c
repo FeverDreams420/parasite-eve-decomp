@@ -2,6 +2,7 @@
 #include "pe1/scene_assets.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/battle.h"
+#include "pe1/field_effect_modules.h"
 
 /* Binds task program `index` to the owner's task context. */
 int FieldAnim_BindTaskProgram(FieldAnimTaskOwner *owner, int index)
@@ -17,20 +18,19 @@ int FieldAnim_BindTaskProgram(FieldAnimTaskOwner *owner, int index)
     return 0;
 }
 
-#include "FieldAnim_TaskList_externs.h"
-
-int func_800CE4F8(int index) {
-    int ret;
+/* Effect resource `index`: the two texture pages, then the third resource. */
+void *FieldAnim_GetEffectResource(int index) {
+    void *ret;
 
     switch (index) {
     case 0:
-        ret = (int)D_800B0E18;
+        ret = g_FieldEffectTexturePage0;
         return ret;
     case 1:
-        ret = (int)D_800B0E1C;
+        ret = g_FieldEffectTexturePage1;
         return ret;
     case 2:
-        ret = D_800B1630;
+        ret = g_FieldEffectResource2;
         return ret;
     default:
         ret = 0;

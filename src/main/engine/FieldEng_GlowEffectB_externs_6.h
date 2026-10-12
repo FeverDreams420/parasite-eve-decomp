@@ -1,4 +1,0 @@
-#ifndef PE1_EXT_DD91D0E6D222
-#define PE1_EXT_DD91D0E6D222
-extern GteShortVector D_800C217C;
-#endif /* PE1_EXT_DD91D0E6D222 */
