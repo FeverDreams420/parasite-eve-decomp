@@ -52,6 +52,7 @@ void Draw_AllocColorQuad(int width, int height) {
     register u32 linkHigh asm("$2");
     int darkColor;
     int darkerColor;
+    DrawPrimLink link;
 
     first = 0;
     shadeOffset = Battle_GetStateFlag1() == 0 ? 7 : 0;
@@ -122,7 +123,8 @@ void Draw_AllocColorQuad(int width, int height) {
     packet->tag = (firstTag & maskTop) | (*ot & mask24);
     linkHigh = *ot & maskTop;
     old = D_8009D100;
-    *ot = linkHigh | ((u32)packet & mask24);
+    link.packet = packet;
+    *ot = linkHigh | (link.word & mask24);
 
     second = 0;
     next = old + sizeof(RenderGouraudQuad);
@@ -180,7 +182,8 @@ void Draw_AllocColorQuad(int width, int height) {
     packet->tag = (secondTag & tileMask24) | (*ot & mask24);
     linkHigh = *ot & tileMask24;
     old = D_8009D100;
-    *ot = linkHigh | ((u32)packet & mask24);
+    link.packet = packet;
+    *ot = linkHigh | (link.word & mask24);
 
     tile = 0;
     next = old + sizeof(RenderColorTilePacket);
@@ -214,7 +217,8 @@ void Draw_AllocColorQuad(int width, int height) {
     tile->tag = (tile->tag & tileMaskTop) | (*ot & tileMask24);
     linkHigh = *ot & tileMaskTop;
     old = D_8009D100;
-    *ot = linkHigh | ((u32)tile & tileMask24);
+    link.packet = tile;
+    *ot = linkHigh | (link.word & tileMask24);
 
     drawMode = 0;
     next = old + sizeof(RenderDrawModePacket);
@@ -238,5 +242,6 @@ void Draw_AllocColorQuad(int width, int height) {
     D_8009D110 = modeColor1;
     D_8009D114 = modeColor2;
     drawMode->tag = (modeTag & modeMaskTop) | (*modeOt & modeMask24);
-    *modeOt = (*modeOt & modeMaskTop) | ((u32)drawMode & modeMask24);
+    link.packet = drawMode;
+    *modeOt = (*modeOt & modeMaskTop) | (link.word & modeMask24);
 }

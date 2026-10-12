@@ -70,6 +70,7 @@ void Draw_AllocColorRect(int firstVertex, int secondVertex, int width, int mode)
     int packetLen;
     int packetCode;
     int bx, fax, by, fay;
+    DrawPrimLink link;
 
     magnitude = __builtin_abs(width);
     if (next < end + 0x4000) {
@@ -138,9 +139,11 @@ void Draw_AllocColorRect(int firstVertex, int secondVertex, int width, int mode)
     ot = D_8009D11C;
     firstTag = p->first.tag;
     p->first.tag = (firstTag & maskTop) | (*ot & mask24);
-    *ot = (*ot & maskTop) | ((u32)&p->first & mask24);
+    link.packet = &p->first;
+    *ot = (*ot & maskTop) | (link.word & mask24);
     p->second.tag = (p->second.tag & maskTop) | (*ot & mask24);
-    *ot = (*ot & maskTop) | ((u32)&p->second & mask24);
+    link.packet = &p->second;
+    *ot = (*ot & maskTop) | (link.word & mask24);
 }
 
 static inline u32 *AllocateDrawMode(int mode) {
@@ -166,8 +169,11 @@ void Draw_EmitWipeBar(u8 *edges, int mode) {
     {
         u32 mask24 = 0xffffff, maskTop = 0xff000000;
         u32 *ot = g_DrawOrderingTableEntry;
+        DrawPrimLink link;
+
+        link.packet = first;
         *first = (*first & maskTop) | (*ot & mask24);
-        *ot = (*ot & maskTop) | ((u32)first & mask24);
+        *ot = (*ot & maskTop) | (link.word & mask24);
     }
     while ((s8)edges[0] >= 0) {
         Draw_AllocColorRect((s8)edges[0], (s8)edges[1], -2, !mode);
@@ -176,8 +182,11 @@ void Draw_EmitWipeBar(u8 *edges, int mode) {
     {
         u32 mask24 = 0xffffff, maskTop = 0xff000000;
         u32 *ot = g_DrawOrderingTableEntry;
+        DrawPrimLink link;
+
+        link.packet = second;
         *second = (*second & maskTop) | (*ot & mask24);
-        *ot = (*ot & maskTop) | ((u32)second & mask24);
+        *ot = (*ot & maskTop) | (link.word & mask24);
     }
 }
 
@@ -390,6 +399,7 @@ void Draw_AllocColorTri(int width, int height, int pulse) {
         u8 code;
         u32 linkedTag, lowTile, otValue;
         u32 *ot;
+        DrawPrimLink link;
         tag = tile->tag;
         maskTop = 0xFF000000;
         tile->w = w;
@@ -405,7 +415,8 @@ void Draw_AllocColorTri(int width, int height, int pulse) {
         tile->x0 = x + 2;
         otValue = *ot;
         linkedTag = (tag & maskTop) | (otValue & mask24);
-        lowTile = (u32)tile & mask24;
+        link.packet = tile;
+        lowTile = link.word & mask24;
         asm volatile("" : : "r"(lowTile) : "memory");
         tile->tag = linkedTag;
         old = D_8009D100;
@@ -427,8 +438,11 @@ void Draw_AllocColorTri(int width, int height, int pulse) {
         u32 mask24 = 0xFFFFFF;
         u32 maskTop = 0xFF000000;
         u32 *ot = D_8009D11C;
+        DrawPrimLink link;
+
+        link.packet = drawMode;
         drawMode->tag = (drawMode->tag & maskTop) | (*ot & mask24);
-        *ot = (*ot & maskTop) | ((u32)drawMode & mask24);
+        *ot = (*ot & maskTop) | (link.word & mask24);
     }
 }
 

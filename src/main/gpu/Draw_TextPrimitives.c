@@ -143,6 +143,7 @@ void Draw_AllocPrimRectFull(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     u8 *nextPacket;
     GpuCmdPacket *packet;
     DrawAreaRect *rectPtr;
+    DrawPrimLink link;
 
     if (g_DrawBufferIndex != 0) {
         arg1 += 0xE0;
@@ -164,8 +165,9 @@ void Draw_AllocPrimRectFull(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     if (packet != NULL) {
         SetDrawArea(packet, rectPtr);
     }
+    link.packet = packet;
     packet->u0.tag = (packet->u0.tag & 0xFF000000) | (*g_DrawOrderingTableEntry & 0xFFFFFF);
-    *g_DrawOrderingTableEntry = (*g_DrawOrderingTableEntry & 0xFF000000) | ((s32) packet & 0xFFFFFF);
+    *g_DrawOrderingTableEntry = (*g_DrawOrderingTableEntry & 0xFF000000) | (link.word & 0xFFFFFF);
 }
 
 void Draw_AllocPrimRect(void) {
@@ -174,6 +176,7 @@ void Draw_AllocPrimRect(void) {
     u8 *nextPacket;
     GpuCmdPacket *packet;
     DrawAreaRect *rectPtr;
+    DrawPrimLink link;
 
     rect.w = 0x140;
     rect.x = 0;
@@ -195,8 +198,9 @@ void Draw_AllocPrimRect(void) {
     if (packet != NULL) {
         SetDrawArea(packet, rectPtr);
     }
+    link.packet = packet;
     packet->u0.tag = (packet->u0.tag & 0xFF000000) | (*g_DrawOrderingTableEntry & 0xFFFFFF);
-    *g_DrawOrderingTableEntry = (*g_DrawOrderingTableEntry & 0xFF000000) | ((s32) packet & 0xFFFFFF);
+    *g_DrawOrderingTableEntry = (*g_DrawOrderingTableEntry & 0xFF000000) | (link.word & 0xFFFFFF);
 }
 
 int g_DrawTextDimmed;
@@ -212,6 +216,7 @@ void Draw_AllocSprite(int index) {
 
     u32 *page;
     int mode;
+    DrawPrimLink link;
     glyph = Draw_LookupGlyphDescriptor(index);
     /* Finish saving the descriptor before starting the allocation. */
     asm("" : : "r"(glyph));
@@ -244,7 +249,8 @@ void Draw_AllocSprite(int index) {
         ot = g_DrawOrderingTableEntry;
         mask24 = 0xffffff;
         sprite->tag.word = (oldTag & maskTop) | (*ot & mask24);
-        *ot = (*ot & maskTop) | ((u32)sprite & mask24);
+        link.packet = sprite;
+        *ot = (*ot & maskTop) | (link.word & mask24);
     }
     mode = glyph->mode;
     page = 0;
@@ -268,7 +274,8 @@ void Draw_AllocSprite(int index) {
         maskTop = 0xff000000;
         ot = g_DrawOrderingTableEntry;
         *page = (*page & maskTop) | (*ot & mask24);
-        *ot = (*ot & maskTop) | ((u32)page & mask24);
+        link.packet = page;
+        *ot = (*ot & maskTop) | (link.word & mask24);
     }
 }
 
@@ -282,6 +289,7 @@ void Draw_EmitGlyph(s32 arg0, s32 arg1) {
     s32 temp;
     u32 oldTag;
     u32 *ot;
+    DrawPrimLink link;
 
     packet = 0;
     glyph = Draw_LookupGlyphDescriptor(arg0);
@@ -368,7 +376,8 @@ void Draw_EmitGlyph(s32 arg0, s32 arg1) {
         maskTop = 0xFF000000;
         packet->tpage = 7;
         packet->tag.word = (oldTag & maskTop) | (*ot & mask24);
-        *ot = (*ot & maskTop) | ((u32)packet & mask24);
+        link.packet = packet;
+        *ot = (*ot & maskTop) | (link.word & mask24);
     }
 }
 
@@ -438,6 +447,7 @@ void Draw_AllocTexturedQuad(int code) {
     register int arg0 asm("$4");
     RenderTexturedQuad *prim;
     u8 *old, *next;
+    DrawPrimLink link;
 
     current = raw & 0xFF;
     if (D_8009D0D8 != 0) {
@@ -446,7 +456,7 @@ void Draw_AllocTexturedQuad(int code) {
     }
 
     low = raw & 0xFF;
-    if ((u32)low >= 0xFA) {
+    if ((unsigned int)low >= 0xFA) {
         D_8009D0D8 = low - 0xFA;
         current = -1;
     }
@@ -558,7 +568,8 @@ void Draw_AllocTexturedQuad(int code) {
         D_8009D128 = y;
         linkedTag = (linkValue & maskTop) | (otValue & mask24);
         asm volatile("" : : "r"(linkedTag));
-        mask24 &= (u32)prim;
+        link.packet = prim;
+        mask24 &= link.word;
         prim->tag.word = linkedTag;
         asm volatile("" ::: "memory");
         linkValue = D_8009CDB0;
@@ -700,6 +711,7 @@ void Draw_EmitDigitSprite(int digit) {
     RenderTexturedQuad *quad = 0;
     u8 *old = g_DrawPacketCursor;
     u8 *next = old + 40;
+    DrawPrimLink link;
 
     if (next < g_DrawPacketArenaBase + 0x4000) {
         g_DrawPacketCursor = next;
@@ -754,7 +766,8 @@ void Draw_EmitDigitSprite(int digit) {
             u32 maskTop = 0xFF000000;
             u32 *ot = g_DrawOrderingTableEntry;
             p->tag.word = (oldTag & maskTop) | (*ot & mask24);
-            mask24 &= (u32)p;
+            link.packet = p;
+            mask24 &= link.word;
             *ot = (*ot & maskTop) | mask24;
         }
     }
