@@ -1,9 +1,368 @@
 /* CC1_FLAGS: -G8 */
 /* MASPSX_FLAGS: -G8 --use-comm-section */
+/* MASPSX_FORCE_G0: 1 */
+
 #include "common.h"
 #include "pe1/inventory.h"
+#include "pe1/menu_item_rows.h"
+#include "pe1/save.h"
+#include "pe1/text.h"
+#include "pe1/aya.h"
+#include "pe1/inventory_queries.h"
+#include "pe1/inventory_state.h"
 #include "pe1/inventory_slots.h"
+#include "pe1/draw_state.h"
 #include "pe1/menu_inventory.h"
+
+/* COMMON supplies small-data metadata to MASPSX: these words are reached
+ * through $gp, every other extern stays absolute. */
+s16 *g_InvItemPtr;
+s32 g_InvSlotLimit;
+u32 *g_InvSelectionBits;
+s32 g_InvSelectionBitWords;
+s32 D_8009D080;
+s16 *g_InvActiveItemList;
+s16 *g_InvActiveListOverride;
+s32 g_InvOverrideSlotLimit;
+s32 g_InvTransferItemCount;
+
+int g_InvActiveListCount;
+
+int g_InvActiveListCount;
+short g_InvActiveListItems[];
+
+int Menu_GetBattleCount(void) {
+    return g_InvActiveListCount;
+}
+
+int Menu_GetBattleCountEntry(int arg0) {
+    if (arg0 >= 0 && arg0 < g_InvActiveListCount) {
+        return g_InvActiveListItems[arg0];
+    }
+    return 0;
+}
+
+void Inv_ShowItemDescriptionPanel(s32 index) {
+    int value;
+    ItemDataRecord *entry;
+    u8 *text;
+
+    value = g_InvActiveListItems[index];
+    if (value < 0x200) {
+        if ((unsigned int)(value - 0x100) < 0x80U) {
+            entry = (ItemDataRecord *)(g_EquipItemDataTable + (value << 5));
+        } else if ((unsigned int)(value - 1) < 0xFFU) {
+            entry = Item_LookupBaseData(value - 1);
+        } else if ((unsigned int)(value - 0x200) < 9U) {
+            entry = (ItemDataRecord *)(g_KeyItemDataTable + (value << 5));
+        } else {
+            entry = 0;
+        }
+        if (entry != 0) {
+            Sfx_DrawSlotRow(entry, Str_LookupTable8(entry->itemId - 1));
+        }
+    } else {
+        entry = (ItemDataRecord *)(g_KeyItemDataTable + (value << 5));
+        if (entry->flags & ITEM_DATA_FLAG_GENERIC_DESCRIPTION) {
+            text = g_CursorRenderDataBlock;
+            if (entry->kind == 9) {
+                text = g_CursorRenderDataBlock + 0x10;
+            }
+        } else {
+            text = Str_LookupTable8(entry->itemId - 1);
+        }
+        Sfx_DrawSlotRow(entry, text);
+    }
+}
+
+#define LIST_ACTIVE 13
+#define LIST_AYA 14
+
+static inline void SwapItems(u16 *a, u16 *b) {
+    *a ^= *b;
+    *b ^= *a;
+    *a ^= *b;
+}
+
+static inline int IsEquippedSlot(int slot) {
+    int equipped = 0;
+    if (g_InvItemPtr == g_AyaInventoryItems &&
+        (g_EquippedWeaponSlot == slot || g_EquippedArmorSlot == slot)) {
+        equipped = 1;
+    }
+    return equipped;
+}
+
+/* Swaps an item between Aya's inventory and the active (pending) list, or
+ * inside one of them. Returns 0 when the slot cannot move. */
+int Inv_TransferItem(int fromList, int fromSlot, int toList, int toSlot) {
+    int result = 1;
+
+    g_InvItemPtr = g_AyaInventoryItems;
+    g_InvSlotLimit = Inv_GetAyaSlotLimit();
+    g_InvSelectionBits = g_InvSelectionBitStorage;
+    g_InvSelectionBitWords = 2;
+    if (fromList == LIST_ACTIVE && toList == fromList) {
+        u16 *table = (u16 *)g_InvActiveListItems;
+        SwapItems(&table[fromSlot], &table[toSlot]);
+        Inv_RebuildSelectableMask();
+    } else if (fromList == LIST_AYA && toList == fromList) {
+        int slot;
+        SwapItems((u16 *)&g_InvItemPtr[fromSlot], (u16 *)&g_InvItemPtr[toSlot]);
+        slot = g_EquippedWeaponSlot;
+        if (slot == fromSlot) {
+            g_EquippedWeaponSlot = toSlot;
+        } else if (slot == toSlot) {
+            g_EquippedWeaponSlot = fromSlot;
+        }
+        slot = g_EquippedArmorSlot;
+        if (slot == fromSlot) {
+            g_EquippedArmorSlot = toSlot;
+        } else if (slot == toSlot) {
+            g_EquippedArmorSlot = fromSlot;
+        }
+        Inv_RebuildSelectableMask();
+    } else if (fromList == LIST_ACTIVE) {
+        s16 *item;
+        if (Inv_IsSlotSelectable(toSlot) && !IsEquippedSlot(toSlot)) {
+            {
+                s16 *table = g_InvActiveListItems;
+                item = &table[fromSlot];
+            }
+            if (Item_LookupBaseData(*item - 1)->kind >= 16 && Item_LookupBaseData(*item - 1)->kind < 19) {
+                result = Inv_CanAddActiveListItemToAya(fromSlot) == 0;
+            } else {
+                u16 *table = (u16 *)g_InvActiveListItems;
+                SwapItems(&table[fromSlot], (u16 *)&g_InvItemPtr[toSlot]);
+            }
+            Inv_RebuildSelectableMask();
+        } else {
+            result = 0;
+        }
+    } else {
+        if (Inv_IsSlotSelectable(fromSlot) && !IsEquippedSlot(fromSlot)) {
+            SwapItems((u16 *)&g_InvItemPtr[fromSlot], (u16 *)&g_InvActiveListItems[toSlot]);
+            Inv_RebuildSelectableMask();
+        } else {
+            result = 0;
+        }
+    }
+    return result;
+}
+
+int Inv_CanAddActiveListItemToAya(int index) {
+    int slot_index;
+    ItemDataRecord *data;
+    int saved_item_id;
+    int item_id;
+    int result;
+    slot_index = index;
+    if (slot_index >= 0 && slot_index < g_InvActiveListCount) {
+        item_id = g_InvActiveListItems[slot_index];
+        saved_item_id = item_id;
+        if (item_id - 0x100U < 0x80U) {
+            int shifted;
+            u8 *base;
+            shifted = item_id << 5;
+            base = g_EquipItemDataTable;
+            data = (ItemDataRecord *)(shifted + base);
+        } else if (item_id - 1U < 0xFFU) {
+            data = Item_LookupBaseData(item_id - 1);
+        } else if (saved_item_id - 0x200U < 9U) {
+            int shifted;
+            u8 *base;
+            shifted = saved_item_id << 5;
+            base = g_KeyItemDataTable;
+            data = (ItemDataRecord *)(shifted + base);
+        } else {
+            data = 0;
+        }
+
+        g_InvItemPtr = g_AyaInventoryItems;
+        g_InvSlotLimit = Inv_GetAyaSlotLimit();
+        g_InvSelectionBits = g_InvSelectionBitStorage;
+        g_InvSelectionBitWords = 2;
+
+        result = Inv_WriteSlotById(data);
+        if (result == 0) {
+            g_InvActiveListItems[slot_index] = 0;
+        }
+    } else {
+        result = 1;
+    }
+    return result;
+}
+
+static inline int FindFreeActiveSlot(void) {
+    s16 *p = g_InvItemPtr, *end = p + g_InvSlotLimit;
+
+    if (p < end) {
+        do {
+            if (!*p)
+                break;
+            p++;
+        } while (p < end);
+        if (p < g_InvItemPtr + g_InvSlotLimit)
+            return p - g_InvItemPtr;
+    }
+    return -1;
+}
+
+/* Transfer pending IDs, then rebuild the selectable-item mask. */
+void Inv_TransferItemAlt(void) {
+    int i = 0;
+    g_InvItemPtr = g_AyaInventoryItems;
+    g_InvSlotLimit = Inv_GetAyaSlotLimit();
+    g_InvSelectionBits = g_InvSelectionBitStorage;
+    g_InvSelectionBitWords = 2;
+    for (; i < g_InvActiveListCount; i++) {
+        int id = g_InvActiveListItems[i];
+        if (Inv_LookupItemRecord(id)->kind >= 16 && Inv_LookupItemRecord(id)->kind < 19) {
+            if (!Inv_CanAddActiveListItemToAya(i))
+                g_InvActiveListItems[i] = 0;
+        } else if (id < 512) {
+            int slot = FindFreeActiveSlot();
+            if (slot >= 0) {
+                g_InvItemPtr[slot] = id;
+                g_InvActiveListItems[i] = 0;
+            }
+        }
+    }
+    Inv_RebuildSelectableMask();
+}
+
+static inline int ActiveItemKind(int index) {
+    ItemDataRecord *item;
+    if (index >= 0 && index < g_InvSlotLimit)
+        item = Inv_LookupItemRecord(g_InvItemPtr[index]);
+    else
+        item = 0;
+    return item ? item->kind : 0;
+}
+static inline int FindFreeEquipmentRecord(void) {
+    int result;
+    ItemDataRecord *p = D_800C0E20.equipment;
+    ItemDataRecord *end;
+    /* Preserve retail's independent base reload beside the cached bound. */
+    asm("" : "=r"(p) : "0"(p));
+    end = p + 128;
+
+    if (p < D_800C0E20.equipment + 128) {
+        do {
+            if (!p->iconId)
+                break;
+            p++;
+        } while (p < end);
+        if (p < D_800C0E20.equipment + 128) {
+            int index = p - D_800C0E20.equipment;
+            result = index;
+        } else {
+            result = -1;
+        }
+    } else {
+        result = -1;
+    }
+    return result;
+}
+
+/* Replace base equipment IDs with private, mutable equipment records. */
+void Inv_ClearDisplaySlots(void) {
+    int i = 0;
+    g_InvActiveListOverride = 0;
+    g_InvOverrideSlotLimit = 0;
+    g_InvItemPtr = D_800C0E20.slots;
+    g_InvSlotLimit = Inv_GetAyaSlotLimit();
+    g_InvSelectionBits = g_InvSelectionBitStorage;
+    g_InvSelectionBitWords = 2;
+    for (; i < g_InvSlotLimit; i++) {
+        if ((unsigned)(ActiveItemKind(i) - 1) < 9 &&
+            (unsigned)((u16)g_InvItemPtr[i] - 256) >= 128) {
+            int record = FindFreeEquipmentRecord();
+            if (record >= 0) {
+                ItemDataRecord *item = &D_800C0E20.equipment[record];
+                *item = *Item_LookupBaseData(g_InvItemPtr[i] - 1);
+                g_InvItemPtr[i] = record + 256;
+            }
+        }
+    }
+}
+
+/* Select a storage list, adding the special item ID when needed. */
+int Inv_StepScrollDisplay2(int special) {
+    if (special) {
+        int i, found;
+        g_InvActiveItemList = D_800C1F80;
+        for (i = 0; i < 82; i++)
+            if (g_InvActiveItemList[i] == 516)
+                break;
+        found = i < 82;
+        if (!found) {
+            for (i = 0; i < g_InvSlotLimit; i++) {
+                ItemDataRecord *item;
+                if (i >= 0 && i < g_InvSlotLimit)
+                    item = Inv_LookupItemRecord(g_InvItemPtr[i]);
+                else
+                    item = 0;
+                if (item && item->kind == 6)
+                    break;
+            }
+            if (i < g_InvSlotLimit) {
+                /* If slots 0..80 are occupied, retail writes slot 81 unchecked. */
+                for (i = 0; i < 81; i++)
+                    if (!g_InvActiveItemList[i])
+                        break;
+                if (i < 82) {
+                    g_InvActiveItemList[i] = 516;
+                    found = 1;
+                }
+            }
+        }
+        D_8009D080 = 80 + found;
+    } else {
+        g_InvActiveItemList = g_WayneStorageItems;
+        D_8009D080 = 100;
+    }
+    g_InvActiveListOverride = g_InvActiveItemList;
+    return g_InvOverrideSlotLimit = D_8009D080;
+}
+
+void Menu_DrawArmorItemDetail(int slot) {
+    void *display;
+    ItemDataRecord *entry;
+    ItemDataRecord *candidate;
+    int value;
+    unsigned int bit;
+
+    value = g_InvActiveItemList[slot];
+    if (value != 0) {
+        bit = g_InvSelectionBits[slot >> 5] & (1 << (slot & 0x1F));
+        Draw_SetTextDimmed(bit == 0);
+
+        if ((unsigned int)(value - 0x100) < 0x80U) {
+            candidate = (ItemDataRecord *)(g_EquipItemDataTable +
+                                           (value << 5));
+        } else if ((unsigned int)(value - 1) < 0xFFU) {
+            candidate = Item_LookupBaseData(value - 1);
+        } else if ((unsigned int)(value - 0x200) < 9U) {
+            candidate = (ItemDataRecord *)(g_KeyItemDataTable + (value << 5));
+        } else {
+            candidate = 0;
+        }
+
+        entry = candidate;
+
+        if ((entry->flags & ITEM_DATA_FLAG_GENERIC_DESCRIPTION) != 0) {
+            display = g_CursorRenderDataBlock;
+            if (entry->kind == ITEM_KIND_ARMOR) {
+                display = g_CursorRenderDataBlock + 0x10;
+            }
+        } else {
+            display = Str_LookupTable8(entry->itemId - 1);
+        }
+
+        Sfx_DrawSlotRow(entry, display);
+    }
+}
 
 /* Wayne-list item lookup, kind filtering, filtered-slot lookup, equip
  * eligibility and inventory swaps. */
@@ -72,7 +431,6 @@ static inline ItemDataRecord *LookupTrackedItem(int index) {
     }
     return 0;
 }
-
 
 static inline ItemDataRecord *LookupActiveItem(int index) {
     if (index >= 0 && index < g_InvSlotLimit) return Inv_LookupItemRecordScaled(g_InvItemPtr[index]);

@@ -454,13 +454,12 @@ segments:
       # transfer, comparison panels, item actions and active-list controller (shared
       # records and direct calls): one -G8 FORCE_G0 unit with COMMON $gp words.
       - [0x4564C, c, item/Inv_ItemActions]
-      - [0x486CC, c, item/menu_get]
-      - [0x48830, c, item/Inv_TransferItem]
-      - [0x48B3C, c, item/Inv_CanAddActiveListItemToAya]
-      - [0x492A8, c, item/Menu_DrawArmorItemDetail]
-      # Wayne-list item lookup, kind filtering, filtered-slot lookup, eligibility and
-      # swaps form one 0x978-byte unit.
-      - [0x493BC, c, item/Inv_InventorySwap]
+      # Item transfer and swap: menu getters, item transfer, Aya list eligibility,
+      # armor detail draw, Wayne-list item lookup, kind filtering, filtered-slot
+      # lookup, eligibility and swaps. One -G8 FORCE_G0 unit with COMMON $gp words.
+      # The item use panel opener and the armor capacity unit after it each keep
+      # their own LookupTrackedItem inline shape, so they stay separate units.
+      - [0x486CC, c, item/Inv_InventorySwap]
       - [0x49D34, c, item/Menu_OpenItemUsePanelAtIndex]
       # Armor capacity, snapshots, selection restore and transfers share the item-runtime state.
       - [0x49E8C, c, item/Inv_ArmorCapacity]
