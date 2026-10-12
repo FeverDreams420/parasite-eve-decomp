@@ -37,15 +37,7 @@ segments:
       # The block's local jumps and jal targets resolve at 0x80120D00, 0x44 bytes
       # below the load address the header implies.
       - {start: 0x0, type: data, name: menu_memcard_header, linker_section_order: .text, linker_section: .code_data}
-      - [0x304, c, Memcard_SetVideoDisplay_80121004]
-      - [0x570, c, Memcard_UpdateVideoFrame_80121270]
-      - [0x7D4, c, Memcard_UploadVideoSlice_801214D4]
-      - [0x9C4, c, Memcard_InitVideoBuffers_801216C4]
-      - [0xD00, c, Memcard_ResetDisplayState_80121A44]
-      - [0xF04, c, Memcard_OpenVideo_80121C04]
-      - [0x1340, c, Memcard_StepVideo_80122040]
-      - [0x1654, c, func_80122398]
-      - [0x16A8, c, func_801223EC]
+      - [0x304, c, video]
       - {start: 0x16F4, type: data, name: menu_memcard_data_0016F4, linker_section_order: .text, linker_section: .code_data}
   - [0x2060]
   - name: menu_memcard_glint_linkbase
