@@ -316,8 +316,9 @@ Crutches still in place (lev is the only metric):
   slot as `*(u8 *)&D_80091A1F`: a plain read is CSE'd with the store
   (lev 35) and `g_FontSelectionState.selected` is hoisted above the store
   because it is another symbol (lev 36).
-- `Render_DrawSpriteEntry` keeps `ot = ot_index + (u32)ordering` and the
-  byte offset of the position array: `ordering + ot_index` swaps the
+- `Render_DrawSpriteEntry` adds the ordering-table offset and the position
+  array's byte offset through the `RenderLinkAddress` pointer/word union
+  (`ot.word = ot_index + ordering.word`): `ordering + ot_index` swaps the
   `addu` operands (lev 2), and the position array lies `pos_ptr` bytes from
   the entry, an offset read from the data.
 - PE.IMG and font retry loops (`Render_LoadFontGlyphAlt` 1 goto,
@@ -763,8 +764,9 @@ Still open:
     argument-register pins: every statement order allocates the `1` and the
     stack value to `$a0`/`$a1` the other way round (lev 6).
     `Entity_RelocateSceneData` keeps the `$v0` pin on the loaded block
-    (lev 15) and adds region offsets to the database as integers: an
-    indexed `regions[i]` walk reorders the header loads (lev 9 to 19).
+    (lev 15) and adds region offsets to the database word through the
+    `CollisionDatabaseAddress` union: an indexed `regions[i]` walk reorders
+    the header loads (lev 9 to 19).
   - `Entity_ResetStateGlobals` clears both ramp edge points by byte offset
     (`D_8009CE0C`/`D_8009CE0E`); a `FloorEdgePoint` index keeps a separate
     counter and `addiu` base (lev 11). `Entity_ResetAllPools` clears the
@@ -1461,3 +1463,66 @@ Unavoidable, by design: hardware registers and the scratchpad, the kernel and
 BIOS addresses (LIBCARD patch, `0x80000000` vectors), the `.main` load address
 and stack top, and the overlay load addresses (0x8018EFE8 for rooms and the
 other windows): the disc loader and the data on the disc depend on them.
+
+### Soft debt and remaining crutches in render, scene, sys, boot, cdrom, entity and memcard (2026-10-12, zero-debt batch 3)
+
+Byte-pointer arithmetic, raw offset dereferences, pointer/integer casts and
+field macros are gone from these modules (`Render_DrawObjectVariant` was out
+of scope). Recipes, none of which changed a byte:
+
+- Game-state fields: the per-slot ordering tables at 0x160 share their words
+  with the background texture blob (`shared_buffers` union), the voice bank
+  work bounds are `u8 *`, the fade primitives use a `Pe1PrimTag` byte view
+  for the `len` byte, and 0x004 is `saved_state_004`. Work-buffer bases
+  (`g_RenderFrontBufferBase` and the `D_800B0E24..D_800B0E68` views) are
+  byte pointers.
+- A state pointer stepped by a word index (`Pe1GameStateAddress`), an
+  allocation slot addressed by byte offset (`EntityAllocationAddress`), the
+  collision database as the word added to region offsets
+  (`CollisionDatabaseAddress`) and packet link words (`RenderLinkAddress`)
+  replace `(u8 *)` sums and `(u32)` casts with the operand order retail has.
+- `Boot_RunFrame` reaches the flags back from its scene flag byte with
+  `GAME_STATE_OF_SCENE_FLAGS` (container-of on `bank_state_12`); retail
+  computes `&g_GameState` as `scene_flags - 18`. The fade-to-white test reads
+  the colour through `RenderTintTargetView`; the mode bit is a nested `if`,
+  because one `&&` chain lets fold merge the blue and mode compares into one
+  masked word load.
+- `Gpu_InitPipeline` clears `D_8009D2E8` through the symbol; the linker gives
+  the same `lui 0x800a`/`-0x2D18` pair as the absolute address did.
+- `GameState_Reset` writes named fields; two loop counters (`i` for the
+  scene object, `j` for the key/table loops) replace the `$3`/`$5` pins and
+  two launders, and retail's store order of the movie fields is wide,
+  active, frame, volume, index, sample bank.
+- The menu tail in `Menu_MainUpdate` reads the player coordinates through a
+  plain `s16 *` (not a structure member, so the `D_8009D28C` store keeps its
+  place) from `var_t0`, now a register union of the m2c word and the entity
+  pointer so the allocation is unchanged.
+- PSY-Q DS/CD state, the save SJIS argument block, the CD mode bytes, the
+  stream end state and the cursor text windows have one linker name each, so
+  their `__asm__` labels are gone.
+
+Left, with the best crutch-free lev:
+
+- `GameState_Reset`: the `$3` pin on the colour fill (lev 82: without it
+  local-alloc puts the draw mode in `v1`, `a0` frees up for the table counter
+  and the state base moves from `a2` to `a1`; no statement order of the flags
+  read or fill form helps) and the `minusOne` launder (lev 9: the halfword
+  and byte `-1` stores share one register).
+- `Boot_InitMemoryLayout`: the `$2`/`$4` pins and the volatile buffer views
+  (lev 60 without: sched1 reorders the stores to distinct symbols).
+- `Entity_AllocBlock`: structured with `u8 blocks`/`slot` and a default of 8
+  it is lev 3 (reorg fills the not-free branch's delay slot from the
+  fall-through); a `u32 index` copy of the slot fixes the branch target but
+  ranks the free flag (6 refs over 18 insns) just below `blocks` (11 over 49),
+  swapping `a2`/`a3`; moving `free = 0` after the slot step flips them but
+  swaps the scaled-index temporaries (lev 12).
+- `Entity_InitFreePool` keeps its byte-offset loop (now through the union)
+  because the file is `-fno-strength-reduce`; dropping the marker reverses
+  the loops (lev 8).
+- Header aliases: the stuck pairs listed under "Still open" above, plus the
+  overlay-shared `g_ActiveDrawSlot`/`g_GameStateBlock` labels and the PSY-Q
+  callback views that other PSY-Q units still declare under their `D_` names
+  with other types.
+- Stack reserves: `Menu_DrawTextboxEntries` (its 0x38 slot) and the four
+  battle phase/update functions (0x18 to 0x300 bytes); their original locals
+  are unknown, and an unused named local would only rename the reserve.
