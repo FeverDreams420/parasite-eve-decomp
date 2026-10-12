@@ -43,11 +43,22 @@ typedef struct RenderColorTilePacket {
     u16 x0, y0, w, h;
 } RenderColorTilePacket;
 
+/* The same TILE packet seen through its link tag and colour word, as the
+ * wipe renderer builds it. */
+typedef struct RenderFlatTilePacket {
+    RenderPacketTag tag;
+    RenderPacketColor color;
+    u16 x0, y0, w, h;
+} RenderFlatTilePacket;
+
+PE1_STATIC_ASSERT(sizeof(RenderFlatTilePacket) == sizeof(RenderColorTilePacket),
+                  render_flat_tile_packet_size);
+
 /* Flat-colour triangle packet (POLY_F3). Coordinates retain the unsigned
  * halfword view used by the wipe renderer. */
 typedef struct RenderColorTrianglePacket {
-    u32 tag;
-    u8 r, g, b, code;
+    RenderPacketTag tag;
+    RenderPacketColor color;
     u16 x0, y0, x1, y1, x2, y2;
 } RenderColorTrianglePacket;
 

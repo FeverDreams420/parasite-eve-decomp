@@ -14,6 +14,16 @@ PE1_STATIC_ASSERT(sizeof(RenderPacketTag) == 4, render_packet_tag_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(RenderPacketTag, bytes.length) == 3,
                   render_packet_tag_length_offset);
 
+/* Colour word of a GPU primitive: three colour bytes and the command code.
+ * The 24-bit view is the PSY-Q setRGB0 store that keeps the code byte. */
+typedef union RenderPacketColor {
+    u32 word;
+    struct { u8 r, g, b, code; } bytes;
+    struct { u32 rgb : 24, code : 8; } fields;
+} RenderPacketColor;
+
+PE1_STATIC_ASSERT(sizeof(RenderPacketColor) == 4, render_packet_color_size);
+
 /* Variable-size textured sprite packet used by the glyph renderer. */
 typedef struct RenderSpritePacket {
     RenderPacketTag tag;

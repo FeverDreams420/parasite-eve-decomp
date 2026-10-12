@@ -61,14 +61,8 @@ void Draw_AllocColorRect(int firstVertex, int secondVertex, int width, int mode)
     DrawVertexPair a, b, farA, farB;
     int magnitude;
     int color;
-    u32 *ot;
-    register u32 firstTag asm("$3");
-    register u32 mask24 asm("$5");
-    u32 maskTop;
-    register u8 *cursor asm("$3");
-    u8 *limit;
-    int packetLen;
-    int packetCode;
+    RenderPacketTag *ot;
+    ColorTriPrim *prim;
     int bx, fax, by, fay;
     DrawPrimLink link;
 
@@ -77,46 +71,38 @@ void Draw_AllocColorRect(int firstVertex, int secondVertex, int width, int mode)
         D_8009D100 = next;
         pair = (ColorTriPair *)old;
     } else BoundsCheck_AssertStub(1);
-    if (pair != 0 && (u32)pair < (u32)((u8 *)pair + sizeof(ColorTriPair))) {
-        packetLen = 4;
-        packetCode = 0x20;
-        cursor = (u8 *)pair + 7;
-        limit = (u8 *)pair + 0x2f;
+    if (pair != 0 && pair < pair + 1) {
+        prim = &pair->first;
         do {
-            if (D_8009D10C) *(u32 *)(cursor - 3) = D_8009D114;
-            else *(u32 *)(cursor - 3) = D_8009D110;
-            cursor[-4] = packetLen;
-            cursor[0] = packetCode;
-            cursor += 0x14;
-        } while (cursor < limit);
+            if (D_8009D10C) prim->color.word = D_8009D114;
+            else prim->color.word = D_8009D110;
+            prim->tag.bytes.length = 4;
+            prim->color.bytes.code = 0x20;
+            prim++;
+        } while (prim < (ColorTriPrim *)(pair + 1));
     }
     farA = D_800A22B0[firstVertex & 0x7f];
     a = farA;
     farB = D_800A22B0[secondVertex & 0x7f];
     b = farB;
     p = pair;
-    p->first.code |= 2;
-    p->second.code |= 2;
+    p->first.color.bytes.code |= 2;
+    p->second.color.bytes.code |= 2;
     color = D_8009D14C[mode];
     if (COORD(a).y == COORD(b).y) {
         COORD(farA).x += magnitude;
         COORD(farB).x += (secondVertex & 0x80) ? magnitude : -magnitude;
         COORD(farA).y += width;
         COORD(farB).y += width;
-        *(u32 *)&p->first.r = (*(u32 *)&p->first.r & 0xff000000) | color;
-        *(u32 *)&p->second.r = (*(u32 *)&p->second.r & 0xff000000) | color;
+        p->first.color.word = (p->first.color.word & 0xff000000) | color;
+        p->second.color.word = (p->second.color.word & 0xff000000) | color;
     } else {
         COORD(farA).x += width;
         COORD(farB).x += width;
         COORD(farA).y += magnitude;
         COORD(farB).y += (secondVertex & 0x80) ? magnitude : -magnitude;
-        {
-            register int halfMask asm("$2") = 0x7f7f7f;
-            register u32 topMask asm("$5") = 0xff000000;
-            register int faded asm("$4") = (color >> 1) & halfMask;
-            *(u32 *)&p->first.r = (*(u32 *)&p->first.r & topMask) | faded;
-            *(u32 *)&p->second.r = (*(u32 *)&p->second.r & topMask) | faded;
-        }
+        p->first.color.word = (p->first.color.word & 0xff000000) | ((color >> 1) & 0x7f7f7f);
+        p->second.color.word = (p->second.color.word & 0xff000000) | ((color >> 1) & 0x7f7f7f);
     }
     p->first.x0 = COORD(a).x;
     bx = (u16)COORD(b).x;
@@ -134,16 +120,13 @@ void Draw_AllocColorRect(int firstVertex, int secondVertex, int width, int mode)
     p->first.y2 = fay;
     p->second.x0 = COORD(farB).x;
     p->second.y0 = COORD(farB).y;
-    mask24 = 0xffffff;
-    maskTop = 0xff000000;
-    ot = D_8009D11C;
-    firstTag = p->first.tag;
-    p->first.tag = (firstTag & maskTop) | (*ot & mask24);
+    ot = (RenderPacketTag *)D_8009D11C;
+    p->first.tag.link.address = ot->link.address;
     link.packet = &p->first;
-    *ot = (*ot & maskTop) | (link.word & mask24);
-    p->second.tag = (p->second.tag & maskTop) | (*ot & mask24);
+    ot->link.address = link.word;
+    p->second.tag.link.address = ot->link.address;
     link.packet = &p->second;
-    *ot = (*ot & maskTop) | (link.word & mask24);
+    ot->link.address = link.word;
 }
 
 static inline u32 *AllocateDrawMode(int mode) {
@@ -336,7 +319,7 @@ void Draw_AllocColorGradient(int width, int height, u8 *points, int textured)
     DRAW_LINK_PACKET(mode);
 }
 
-typedef RenderColorTilePacket TilePrim;
+typedef RenderFlatTilePacket TilePrim;
 typedef RenderDrawModePacket DrawModePrim;
 
 void SetDrawTPage(void *packet, int dfe, int dtd, int tpage);
@@ -359,33 +342,29 @@ void Draw_AllocColorTri(int width, int height, int pulse) {
     }
     if (tile != 0) {
         if (D_8009D10C != 0) {
-            *(u32 *)&tile->r0 = D_8009D114;
+            tile->color.word = D_8009D114;
         } else {
-            *(u32 *)&tile->r0 = D_8009D110;
+            tile->color.word = D_8009D110;
         }
-        ((u8 *)tile)[3] = 3;
-        tile->code = 0x60;
+        tile->tag.bytes.length = 3;
+        tile->color.bytes.code = 0x60;
     }
 
     if (pulse != 0) {
-        u8 channelShade;
         sync = VSync(-1);
         if (sync & 0x20) {
-            shade = (sync & 0x1F) << 1;
+            tile->color.bytes.b = (sync & 0x1F) << 1;
         } else {
             sync &= 0x1F;
-            shade = 0x40 - (sync << 1);
+            tile->color.bytes.b = 0x40 - (sync << 1);
         }
-        tile->b0 = shade;
-        channelShade = *(volatile u8 *)&tile->b0;
-        tile->b0 = channelShade;
-        tile->g0 = channelShade;
-        tile->r0 = channelShade;
+        tile->color.bytes.r = tile->color.bytes.g = tile->color.bytes.b =
+            tile->color.bytes.b;
     } else {
-        u32 noPulseMask = 0xFFFFFF;
-        u32 colorTop = *(u32 *)&tile->r0 & 0xFF000000;
-        *(volatile u32 *)&tile->r0 = colorTop;
-        *(u32 *)&tile->r0 = colorTop | (D_8009D114 & noPulseMask);
+        u32 *color = &tile->color.word;
+
+        *color &= 0xFF000000;
+        *color |= D_8009D114 & 0xFFFFFF;
     }
 
     {
@@ -400,14 +379,14 @@ void Draw_AllocColorTri(int width, int height, int pulse) {
         u32 linkedTag, lowTile, otValue;
         u32 *ot;
         DrawPrimLink link;
-        tag = tile->tag;
+        tag = tile->tag.word;
         maskTop = 0xFF000000;
         tile->w = w;
         asm volatile("" ::: "memory");
-        code = tile->code;
+        code = tile->color.bytes.code;
         tile->h = h;
         code |= 2;
-        tile->code = code;
+        tile->color.bytes.code = code;
         y = D_8009D128;
         x = D_8009D124;
         tile->y0 = y + 2;
@@ -418,10 +397,11 @@ void Draw_AllocColorTri(int width, int height, int pulse) {
         link.packet = tile;
         lowTile = link.word & mask24;
         asm volatile("" : : "r"(lowTile) : "memory");
-        tile->tag = linkedTag;
+        tile->tag.word = linkedTag;
         old = D_8009D100;
         *ot = (*ot & maskTop) | lowTile;
     }
+
 
     drawMode = 0;
     next = old + sizeof(DrawModePrim);
