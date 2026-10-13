@@ -148,7 +148,6 @@ void Draw_InitPipeline(void) {
         a0p = (char *)&g_GameState;
         g_GameStateFlags = tmp & v1;
     }
-    asm volatile("" : : : "memory");
     D_8009D2E8 &= ~0xCu;
     W(a0p) &= ~0x402;
 }

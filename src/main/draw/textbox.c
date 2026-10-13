@@ -167,8 +167,6 @@ void Render_SetupFogLayer(void *source) {
         if (MargePrim(tile_mode, tile)) exit(-1);
         payload = (u8 *)((int)((u8)i * 24) + (int)tile_payload_base);
         dither_enabled = 1;
-        asm volatile("" : "=r"(payload), "=r"(dither_enabled)
-            : "0"(payload), "1"(dither_enabled));
         {
             int two = 2;
 
