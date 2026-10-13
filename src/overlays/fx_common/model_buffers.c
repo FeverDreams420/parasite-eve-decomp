@@ -471,13 +471,13 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         *((s32 *)&((FxCommonFt3Packet *)(triangleUv2Cursor - 14))->uv1) =
                             *((s32 *)&((FxCommonTexturedTriangle *)(var_a3 - 24))->textures[0].uv1);
                         ((FxCommonFt3Packet *)(triangleUv2Cursor - 14))->uv0 =
-                            (u16)(((FxCommonTexturedTriangle *)(var_a3 - 24))
+                            (((FxCommonTexturedTriangle *)(var_a3 - 24))
                                       ->textures[0]
                                       .uv0.packed);
                         ((FxCommonFt3Packet *)(triangleUv2Cursor - 14))->uv1 =
-                            (u16)scratchpad->midpointUv[2].packed;
+                            scratchpad->midpointUv[2].packed;
                         *triangleUv2Cursor =
-                            (u16)scratchpad->midpointUv[4].packed;
+                            scratchpad->midpointUv[4].packed;
                         {
                             u32 firstFt3Tag = trianglePacketCursor->tag.packed;
                             triangleUv2Cursor += 16;
@@ -507,13 +507,13 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         *((s32 *)&((FxCommonFt3Packet *)(triangleUv2Cursor - 14))->uv1) =
                             *((s32 *)&((FxCommonTexturedTriangle *)(var_a3 - 24))->textures[0].uv1);
                         ((FxCommonFt3Packet *)(triangleUv2Cursor - 14))->uv0 =
-                            (u16)scratchpad->midpointUv[2].packed;
+                            scratchpad->midpointUv[2].packed;
                         ((FxCommonFt3Packet *)(triangleUv2Cursor - 14))->uv1 =
-                            (u16)(((FxCommonTexturedTriangle *)(var_a3 - 24))
+                            (((FxCommonTexturedTriangle *)(var_a3 - 24))
                                       ->textures[0]
                                       .uv1.packed);
                         ++trianglePacketCursor;
-                        *((u16 *)(triangleUv2Cursor)) = (u16)scratchpad->midpointUv[3].packed;
+                        *((u16 *)(triangleUv2Cursor)) = scratchpad->midpointUv[3].packed;
                         asm("" : "=r"(triangleUv2Cursor) : "0"(triangleUv2Cursor));
                         triangleUv2Cursor += 16;
                         temp_a0 = trianglePacketCursor->tag.packed;
@@ -543,10 +543,10 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         *((s32 *)&((FxCommonFt3Packet *)(triangleUv2Cursor - 14))->uv1) =
                             *((s32 *)&((FxCommonTexturedTriangle *)(var_a3 - 24))->textures[0].uv1);
                         ((FxCommonFt3Packet *)(triangleUv2Cursor - 14))->uv0 =
-                            (u16)scratchpad->midpointUv[2].packed;
+                            scratchpad->midpointUv[2].packed;
                         ((FxCommonFt3Packet *)(triangleUv2Cursor - 14))->uv1 =
-                            (u16)(scratchpad->midpointUv[3].packed);
-                        *triangleUv2Cursor = (u16)scratchpad->midpointUv[4].packed;
+                            (scratchpad->midpointUv[3].packed);
+                        *triangleUv2Cursor = scratchpad->midpointUv[4].packed;
                         triangleUv2Cursor += 16;
                         {
                             u32 thirdTriangleTag = trianglePacketCursor->tag.packed;
@@ -576,12 +576,12 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         *((s32 *)&((FxCommonFt3Packet *)(triangleUv2Cursor - 14))->uv1) =
                             *((s32 *)&((FxCommonTexturedTriangle *)(var_a3 - 24))->textures[0].uv1);
                         ((FxCommonFt3Packet *)(triangleUv2Cursor - 14))->uv0 =
-                            (u16)(scratchpad->midpointUv[3].packed);
+                            (scratchpad->midpointUv[3].packed);
                         ((FxCommonFt3Packet *)(triangleUv2Cursor - 14))->uv1 =
-                            (u16)(((FxCommonTexturedTriangle *)(var_a3 - 24))
+                            (((FxCommonTexturedTriangle *)(var_a3 - 24))
                                       ->textures[0]
                                       .uv2.packed);
-                        var_v0 = (u16)scratchpad->midpointUv[4].packed;
+                        var_v0 = scratchpad->midpointUv[4].packed;
                     } else {
 
                         triangleGteScreen0 = &trianglePacketCursor->xy0;
@@ -881,7 +881,7 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                     midpoint02Z = ((volatile FxCommonVector *)quadInput1)->z;
                     scratchpad->midpoints[2].y =
                         (midpoint02Y + (((volatile FxCommonVector *)quadInput2)->y)) >> 1;
-                    midpoint13Z = (s16)(quadInput2->z);
+                    midpoint13Z = (quadInput2->z);
                     quadMidpoint23->z = midpoint23Z;
                     scratchpad->midpoints[2].z = (midpoint02Z + midpoint13Z) >> 1;
                     do {
@@ -963,11 +963,11 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                             ((FxCommonTexturedQuad *)(quadTextureCursor - 6))->textures[0].tpage;
                         quadPacket0->clut =
                             ((FxCommonTexturedQuad *)(quadTextureCursor - 6))->textures[0].clut;
-                        quadPacket0->uv0 = (u16)quadUv0->packed;
-                        quadPacket0->uv1 = (u16)scratchpad->midpointUv[0].packed;
-                        quadPacket0->uv2 = (u16)scratchpad->midpointUv[1].packed;
+                        quadPacket0->uv0 = quadUv0->packed;
+                        quadPacket0->uv1 = scratchpad->midpointUv[0].packed;
+                        quadPacket0->uv2 = scratchpad->midpointUv[1].packed;
                         do {
-                            quadPacket0->uv3 = (u16)scratchpad->midpointUv[2].packed;
+                            quadPacket0->uv3 = scratchpad->midpointUv[2].packed;
                         } while (0);
                         quadUv3Cursor += 20;
                         {
@@ -1001,15 +1001,15 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         quadPacket1->xy1 = scratchpad->screenCoordinates[1];
                         quadPacket1->xy2 = *midpointScreen2Address;
                         quadPacket1->xy3 = scratchpad->midpointScreenCoordinates[3];
-                        quadPacket1->tpage = (u16)((FxCommonTexturedQuad *)(quadTextureCursor - 6))
+                        quadPacket1->tpage = ((FxCommonTexturedQuad *)(quadTextureCursor - 6))
                                                  ->textures[0]
                                                  .tpage;
-                        quadPacket1->clut = (u16)((FxCommonTexturedQuad *)(quadTextureCursor - 6))
+                        quadPacket1->clut = ((FxCommonTexturedQuad *)(quadTextureCursor - 6))
                                                 ->textures[0]
                                                 .clut;
-                        quadPacket1->uv0 = (u16)scratchpad->midpointUv[0].packed;
-                        quadPacket1->uv1 = (u16)quadUv1->packed;
-                        quadPacket1->uv2 = (u16)scratchpad->midpointUv[2].packed;
+                        quadPacket1->uv0 = scratchpad->midpointUv[0].packed;
+                        quadPacket1->uv1 = quadUv1->packed;
+                        quadPacket1->uv2 = scratchpad->midpointUv[2].packed;
                         asm volatile("" : "=r"(quadUv3Cursor) : "0"(quadUv3Cursor));
                         *quadUv3Cursor = scratchpad->midpointUv[3].packed;
                         quadUv3Cursor += 20;
@@ -1039,14 +1039,14 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         quadPacket2->xy1 = scratchpad->midpointScreenCoordinates[2];
                         quadPacket2->xy2 = *quadScreenValueAddress;
                         quadPacket2->xy3 = scratchpad->midpointScreenCoordinates[4];
-                        quadPacket2->tpage = (u16)((FxCommonTexturedQuad *)(quadTextureCursor - 6))
+                        quadPacket2->tpage = ((FxCommonTexturedQuad *)(quadTextureCursor - 6))
                                                  ->textures[0]
                                                  .tpage;
                         quadPacket2->clut =
                             ((FxCommonTexturedQuad *)(quadTextureCursor - 6))->textures[0].clut;
-                        quadPacket2->uv0 = (u16)scratchpad->midpointUv[1].packed;
-                        quadPacket2->uv1 = (u16)scratchpad->midpointUv[2].packed;
-                        quadPacket2->uv2 = (u16)quadUv2->packed;
+                        quadPacket2->uv0 = scratchpad->midpointUv[1].packed;
+                        quadPacket2->uv1 = scratchpad->midpointUv[2].packed;
+                        quadPacket2->uv2 = quadUv2->packed;
 
                         ++var_t1_2;
                         quadPacket2->uv3 = scratchpad->midpointUv[4].packed;
@@ -1085,14 +1085,14 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         quadPacket3->xy3 = scratchpad->screenCoordinates[3];
                         quadPacket3->tpage =
                             ((FxCommonTexturedQuad *)(quadTextureCursor - 6))->textures[0].tpage;
-                        quadPacket3->clut = (u16)((FxCommonTexturedQuad *)(quadTextureCursor - 6))
+                        quadPacket3->clut = ((FxCommonTexturedQuad *)(quadTextureCursor - 6))
                                                 ->textures[0]
                                                 .clut;
-                        quadPacket3->uv0 = (u16)scratchpad->midpointUv[2].packed;
-                        quadPacket3->uv1 = (u16)scratchpad->midpointUv[3].packed;
-                        quadPacket3->uv2 = (u16)scratchpad->midpointUv[4].packed;
+                        quadPacket3->uv0 = scratchpad->midpointUv[2].packed;
+                        quadPacket3->uv1 = scratchpad->midpointUv[3].packed;
+                        quadPacket3->uv2 = scratchpad->midpointUv[4].packed;
                         ++var_t1_2;
-                        quadPacket3->uv3 = (u16)quadUv3->packed;
+                        quadPacket3->uv3 = quadUv3->packed;
                     }
                 }
                 quadUv3Cursor += 20;
