@@ -154,7 +154,7 @@ typedef struct GeomScrollCoordinates {
     s32 *projectionDistance;
     /* Viewport bounds saved by Render_DrawMeshList (D_800BCFAC..B2). */
     s16 boundsMinX, boundsMaxX, boundsMinY, boundsMaxY;
-    /* Projected screen position of the active actor (D_800BCFB4/B6). */
+    /* Projected screen position of the active actor (g_CameraFocusScreenX/B6). */
     s16 cameraOffsetX, cameraOffsetY;
     RenderTintState tint;
     u8 reserved70[0x2C];
@@ -182,7 +182,7 @@ typedef struct GeomScrollWords {
     s32 *projectionDistance;
     u32 savedBoundsX;           /* saved viewport X bounds */
     u32 savedBoundsY;           /* saved viewport Y bounds */
-    u32 cameraOffset;           /* D_800BCFB4, D_800BCFB6 */
+    u32 cameraOffset;           /* g_CameraFocusScreenX, g_CameraOffsetScreenY */
     u8 reserved30[0x70];
     u32 origin;                 /* originX, originY */
 } GeomScrollWords;
@@ -330,9 +330,9 @@ typedef union GeomStateAddress {
      (address).word = (base).word + (address).state->field + (extra))
 
 int Render_UpdateScrollPosition(void *position, int duration, int mode);
-extern s16 D_800BCFFE[];
+extern s16 g_CameraFocusHeight[];
 extern int g_RenderStateFlags;
-extern u16 D_800BCF94, D_800BCF96, D_800BCF98, D_800BCF9A;
+extern u16 g_CameraScreenOffsetX, D_800BCF96, D_800BCF98, g_CameraTransitionStartY;
 extern u16 D_800BCF9C, D_800BCF9E, D_800BCFA0, D_800BCFA2;
 
 /* Existing absolute symbols expose overlapping views of the scroll state.
@@ -343,12 +343,12 @@ extern u16 D_800BCF9C, D_800BCF9E, D_800BCFA0, D_800BCFA2;
  * g_GeomScroll, which generates the same code as a record declaration. */
 extern volatile int D_800BCF88;
 #define g_GeomScroll (*(GeomScrollRecord *)&D_800BCF88)
-extern char D_800BCFFC;
+extern char g_RenderMeshTintLevel;
 /* Screen fade length and elapsed frames (Render_StartFadeIn/StepFade). */
 extern u8 g_RenderFadeFrameCount;
 extern u8 g_RenderFadeFrameCounter;
 extern GeomScrollCoordinates D_800BCF8C;
-extern u16 D_800BCF90, D_800BCF92;
+extern u16 g_CameraSavedX, g_CameraSavedY;
 
 int Render_TransformPoint(GeomEntry *entry, int x, int y, int depth);
 int Render_ClipPoint(int x, int y, int z);

@@ -81,8 +81,8 @@ PE1_STATIC_ASSERT(sizeof(RoomSharedGlobalState) == 0x2C,
                   room_shared_global_state_size);
 
 /* Field engine calls of the motion particle set. */
-void func_800C4E50(void *arg0);
-void func_800C5A40(void *arg0);
-int func_800C5EB0(void *obj, s16 *values, int *result);
+void FieldFx_BuildRingGeometry(void *arg0);
+void FieldFx_DrawTexturedStrip(void *arg0);
+int FieldFx_UpdateStripCollision(void *obj, s16 *values, int *result);
 
 #endif

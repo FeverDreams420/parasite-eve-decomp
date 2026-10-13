@@ -77,8 +77,8 @@ int MemCard_TimerReadyCallback(void) {
     if ((state->status & 1) == 0) {
         return 0;
     }
-    if (D_8009B74C != 0) {
-        D_8009B74C();
+    if (g_PadMainHook != 0) {
+        g_PadMainHook();
     }
     return 1;
 }
@@ -117,15 +117,15 @@ int MemCard_TimerCallback(void) {
         limit = g_MemCardPort2Present;
         if (limit >= index) {
             obj = (void *)((int)g_MemCardObjArray + (((index << 4) - index) << 4));
-            D_8009B768 = 0;
-            D_8009B764 = index;
+            g_MemCardCommandStep = 0;
+            g_PadActivePortIndex = index;
             if (_padInitSioMode(obj) == 0) {
-                D_8009B724(0xFFFF);
+                g_PadDmaCompleteFn(0xFFFF);
             }
 
-            D_8009B76C = 0;
-            while (g_MemCardPort2Present >= D_8009B764) {
-                index = D_8009B764;
+            g_PadActuatorCostTotal = 0;
+            while (g_MemCardPort2Present >= g_PadActivePortIndex) {
+                index = g_PadActivePortIndex;
                 obj = (void *)((int)g_MemCardObjArray + (((index << 4) - index) << 4));
                 MemCard_RunCommandStep(obj);
             }
@@ -148,8 +148,8 @@ int _padChkVsync(void) {
 void _padStartCom(void) {
     g_MemCardServiceReady = 0;
     EnterCriticalSection();
-    SysDeqIntRP(2, D_800A5AB0);
-    SysEnqIntRP(2, D_800A5AB0);
+    SysDeqIntRP(2, g_PadVsyncIntQueueNode);
+    SysEnqIntRP(2, g_PadVsyncIntQueueNode);
     D_8009B784->status = -2;
     D_8009B784->mask |= 1;
     ChangeClearRCnt(3, 0);
@@ -169,7 +169,7 @@ void _padStartCom(void) {
 void _padStopCom(void) {
     EnterCriticalSection();
     ChangeClearRCnt(3, 1);
-    SysDeqIntRP(2, D_800A5AB0);
+    SysDeqIntRP(2, g_PadVsyncIntQueueNode);
     ExitCriticalSection();
 }
 
@@ -182,7 +182,7 @@ int _padInitSioMode(CardObj *port) {
     sio->baud = 136;
     setRC2wait(port->currentId == 8 ? 80 : 145);
     {
-        int index = D_8009B764;
+        int index = g_PadActivePortIndex;
         {
             register MemCardSioRegisters *regs = D_8009B788;
             register int control = 0x1003;
@@ -191,24 +191,24 @@ int _padInitSioMode(CardObj *port) {
             regs->control = control;
         }
         {
-            register int *address asm("$1") = D_8009B77C + index;
+            register int *address asm("$1") = g_MemCardChannelCounts + index;
             register int remaining asm("$2") = *address;
             if (remaining >= 0) {
                 if (remaining > 0) {
-                    register int *counts = D_8009B77C;
+                    register int *counts = g_MemCardChannelCounts;
                     do {
                         CardObjAddress count;
                         count.count = counts;
-                        count.word = (D_8009B764 * 4) + count.word;
+                        count.word = (g_PadActivePortIndex * 4) + count.word;
                         (*count.count)--;
                         g_MemCardResponseHandler(port->subPorts + *count.count);
-                    } while (counts[D_8009B764] > 0);
+                    } while (counts[g_PadActivePortIndex] > 0);
                 }
                 {
-                    register int index = D_8009B764;
+                    register int index = g_PadActivePortIndex;
                     register int *table asm("$3");
                     register int *count;
-                    table = D_8009B77C;
+                    table = g_MemCardChannelCounts;
                     count = &table[index];
                     if (*count == 0) {
                         register int value asm("$3") = -1;
@@ -218,7 +218,7 @@ int _padInitSioMode(CardObj *port) {
                         callback = g_MemCardResponseHandler;
                         *count = value;
                         callback(arg);
-                        D_8009B748(port);
+                        g_CardSwapByteFieldFn(port);
                     }
                 }
             }
@@ -247,24 +247,24 @@ int _padInitSioMode(CardObj *port) {
 /* Adjacent PADMAIN.OBJ state-machine and SIO exchange functions.
  * Empty constraints are tracked in crutch debt. */
 void MemCard_RunCommandStep(CardObj *port) {
-    register int *index asm("$5") = &D_8009B768;
+    register int *index asm("$5") = &g_MemCardCommandStep;
     register int count;
     register int result;
     register int (*next)(void) asm("$2");
     count = *index;
-    next = D_8009B7A8[count];
+    next = g_MemCardCommandStepHandlers[count];
     *index = count + 1;
     result = next();
     if (result >= 0) {
-        if (D_8009B768) {
+        if (g_MemCardCommandStep) {
             setRC2wait(60);
             if (!MemCard_WaitReadyForTransfer())
-                D_8009B724(-3);
+                g_PadDmaCompleteFn(-3);
         }
-        if (D_8009B768 >= 5)
-            D_8009B768--;
+        if (g_MemCardCommandStep >= 5)
+            g_MemCardCommandStep--;
     } else
-        D_8009B724(result);
+        g_PadDmaCompleteFn(result);
 }
 
 s32 _padSioRW(CardObj *inObj, s32 inByte) {
@@ -413,7 +413,7 @@ int MemCard_WriteByte(CardObj *obj, int value)
         } while (!(poll_irq->status & 0x80));
     }
 
-    if (obj->currentId != 8 && D_8009B768 == 2) {
+    if (obj->currentId != 8 && g_MemCardCommandStep == 2) {
         setRC2wait(60);
         while (!chkRC2wait()) { }
     }

@@ -93,7 +93,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(AyaSaveState, blend_color) == 0x44,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(AyaSaveState, stats.levels) == 0x28,
                   aya_stat_allocations_offset);
 PE1_STATIC_ASSERT(sizeof(AyaSaveState) == 0xAC, aya_save_state_prefix_size);
-extern AyaSaveState D_800C0E00;
+extern AyaSaveState g_AyaSaveState;
 /* AyaSaveState.pe_bonus_pool as a one-field record: a small word that
  * -G8 units with MASPSX_FORCE_G0 address directly (Aya_SetTotalExp). */
 typedef struct AyaBonusPoolRecord {

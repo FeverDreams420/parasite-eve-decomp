@@ -5,7 +5,7 @@
 #include "pe1/field_star_fan.h"
 #include "pe1/field_tile.h"
 
-/* Field engine ring band (func_800D0728): an annulus of gouraud quads
+/* Field engine ring band (FieldFx_DrawRingBand): an annulus of gouraud quads
  * between two radii, scaled, turned and placed at a projected anchor. */
 
 /* TILE_OT_ADDPRIM through an ordering-table entry held as a plain tag

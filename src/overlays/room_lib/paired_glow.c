@@ -110,7 +110,7 @@ void RoomLib_InitPairedEmitterWithSound(void *arg0, void *arg1,
     primary->extent0 = 0x4B0;
     primary->extent1 = 0x258;
     primary->source = state->sourceData;
-    func_800C4E50(primary);
+    FieldFx_BuildRingGeometry(primary);
 
     secondary = &state->secondary;
     secondary->mode = 0x10;
@@ -125,7 +125,7 @@ void RoomLib_InitPairedEmitterWithSound(void *arg0, void *arg1,
     secondary->extent0 = 0x4B0;
     secondary->extent1 = 0x12C;
     secondary->source = state->sourceData;
-    func_800C4E50(secondary);
+    FieldFx_BuildRingGeometry(secondary);
 
     soundOwnerSlot = D_800B0E64;
     if (*soundOwnerSlot != 0) {
@@ -188,24 +188,24 @@ void RoomLib_UpdatePairedEmitter(void *arg0, RoomFxControl *arg1,
     gte_rtv0tr_mac();
     gte_stlvl(stack.matrix.t);
 
-    func_800C3238(2);
+    FieldFx_SetSpriteBlendMode(2);
 
     table = g_RoomPairedGlowColorTable;
     view = (*(RoomLink **)owner)->p238;
-    func_800C3134(table, arg1->frame, (unsigned char *)&state->primary.color0);
-    func_800C3134(table, arg1->frame, (unsigned char *)&state->secondary.color0);
+    FieldFx_InterpolateColorRamp(table, arg1->frame, (unsigned char *)&state->primary.color0);
+    FieldFx_InterpolateColorRamp(table, arg1->frame, (unsigned char *)&state->secondary.color0);
     state->primary.intensity = state->intensity;
     stack.matrix.t[0] = view->t[0];
     stack.matrix.t[1] = view->t[1] - 0x64;
     stack.matrix.t[2] = view->t[2];
-    func_800C4FC4(&state->primary, &stack.matrix, 0);
+    FieldFx_DrawShadedRing(&state->primary, &stack.matrix, 0);
 
     state->secondary.intensity = state->intensity;
     stack.matrix.t[0] = view->t[0];
     stack.matrix.t[1] =
         g_RoomFloorY->y;
     stack.matrix.t[2] = view->t[2];
-    func_800C4FC4(&state->secondary, &stack.matrix, 0);
+    FieldFx_DrawShadedRing(&state->secondary, &stack.matrix, 0);
 }
 
 ROOMLIB_PARTICLE_TICK_A(RoomLib_TickPairedGlowA)
@@ -319,7 +319,7 @@ void RoomLib_InitPairedEmitter(void *unused0, void *unused1,
     state->primary.extent0 = 0x4B0;
     state->primary.extent1 = 0x258;
     state->primary.source = source;
-    func_800C4E50(&state->primary);
+    FieldFx_BuildRingGeometry(&state->primary);
 
     state->secondary.mode = 0x10;
     state->secondary.offset = 0;
@@ -341,7 +341,7 @@ void RoomLib_InitPairedEmitter(void *unused0, void *unused1,
     state->secondary.extent0 = 0x4B0;
     state->secondary.extent1 = 0x12C;
     state->secondary.source = source;
-    func_800C4E50(&state->secondary);
+    FieldFx_BuildRingGeometry(&state->secondary);
 }
 
 /* Retail marks this function handwritten; only its COP2 windows remain ASM. */
@@ -403,16 +403,16 @@ void RoomLib_TransformPairedEmitter(void *unused, RoomFxControl *params,
     }
 
     renderParams = params;
-    func_800C3238(2);
+    FieldFx_SetSpriteBlendMode(2);
     table = g_RoomPairedGlowColorTable;
     owner = (*root)->render_object.matrices;
-    func_800C3134(table, renderParams->frame, workState->primary.color0);
-    func_800C3134(table, renderParams->frame, workState->secondary.color0);
+    FieldFx_InterpolateColorRamp(table, renderParams->frame, workState->primary.color0);
+    FieldFx_InterpolateColorRamp(table, renderParams->frame, workState->secondary.color0);
     workState->primary.intensity = workState->intensity;
     stack.matrix.t[0] = owner->translation[0];
     stack.matrix.t[1] = owner->translation[1] - 0x64;
     stack.matrix.t[2] = owner->translation[2];
-    func_800C4FC4(&workState->primary, matrix, 0);
+    FieldFx_DrawShadedRing(&workState->primary, matrix, 0);
 }
 
 ROOMLIB_PARTICLE_TICK_A(RoomLib_TickPairedGlowB)

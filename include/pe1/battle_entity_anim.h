@@ -8,9 +8,9 @@ extern u32 g_GameStateFlags;
 extern struct FieldActor *g_FieldActorListHead;
 extern BattleEntity *D_8009D254;
 extern s8 D_8009D2A0;
-extern u16 D_8009D21C;
-extern u32 D_8009D304;
-extern BattleRewardSlot D_800A7FF0[];
+extern u16 g_BattlePeBonusReward;
+extern u32 g_BattleExpReward;
+extern BattleRewardSlot g_BattleRewardSlots[];
 
 void Anim_SetInterpRate(RenderObjectEntity *anim, int rate);
 void Akao_Cmd_21(int arg0, int arg1);

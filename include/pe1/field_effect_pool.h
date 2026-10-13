@@ -19,9 +19,9 @@ typedef FieldFxObjectPrefix FieldEffectOwner;
 
 typedef int (*FieldEffectCallback)(int mode, void *state);
 
-extern u8 *D_800F32D4;
+extern u8 *g_FieldFxModel6DEAE684;
 
 /* Effect model used by the memory-card spin ring. */
-extern u8 *D_800E22D4;
+extern u8 *g_FieldFxGlintModel;
 
 #endif

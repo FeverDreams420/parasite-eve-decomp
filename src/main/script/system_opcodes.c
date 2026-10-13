@@ -496,7 +496,7 @@ int Entity_ComputeVelocity(void) {
     return 1;
 }
 
-/* Camera base angles at 0x800BD020 (D_800BD020, D_800BD022). The script
+/* Camera base angles at 0x800BD020 (g_CameraBaseAngleDigital, g_CameraBaseAngleAnalog). The script
  * opcode stores them as one record, so the second argument load stays behind
  * the first store: GCC 2.7 lets a varying array load pass a store to a fixed
  * scalar, but not to a structure member. */
@@ -520,7 +520,7 @@ int Script_ComputeAudioTimer(int **arg0) {
     int *dst;
     int value;
 
-    dst = D_800A76C8;
+    dst = g_CombatTimerCurrent;
     value = (*arg0[0] + *arg0[1]) * 216000;
     value += *arg0[2] * 60;
     *dst = value;
@@ -781,8 +781,8 @@ int Script_LoadGeomState(int **arg0) {
 }
 
 int Script_SetScreenScrollPos(int **arg0) {
-    ((CameraBaseAngles *)&D_800BD020)->x = *arg0[0];
-    ((CameraBaseAngles *)&D_800BD020)->y = *arg0[1];
+    ((CameraBaseAngles *)&g_CameraBaseAngleDigital)->x = *arg0[0];
+    ((CameraBaseAngles *)&g_CameraBaseAngleDigital)->y = *arg0[1];
     return 1;
 }
 
@@ -822,7 +822,7 @@ int Script_SetEntityMoveSpeed(int **arg0) {
         if (scaled < 0) {
             scaled += 0xFFF;
         }
-        D_800BCFFE[0] = scaled >> 12;
+        g_CameraFocusHeight[0] = scaled >> 12;
     }
     return 1;
 }
@@ -1586,7 +1586,7 @@ int Script_DisableEntityGravity(void) {
 }
 
 int Script_SetMeshFadeLevel(int **arg0) {
-    D_800BCFFC = *arg0[0];
+    g_RenderMeshTintLevel = *arg0[0];
     return 1;
 }
 
@@ -1610,8 +1610,8 @@ int Entity_CallAction(int **arg0)
 }
 
 int Script_SetInventorySlotPointer(int **arg0) {
-    D_8009D248 = (PolygonVertex *)(g_CurrentEntity->script_base + (*arg0[0] << 1));
-    D_8009D1CC = *arg0[1];
+    g_FloorPolygonVertices = (PolygonVertex *)(g_CurrentEntity->script_base + (*arg0[0] << 1));
+    g_FloorPolygonVertexCount = *arg0[1];
     return 1;
 }
 

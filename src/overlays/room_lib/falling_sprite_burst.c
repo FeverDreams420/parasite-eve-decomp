@@ -136,7 +136,7 @@ void RoomEffect_InitFallingSprite(void *entity, void *unused,
         state->velocityZ = (u16)velocity.z * 2;
     }
 
-    func_800C6800(entity, 0x583, state);
+    FieldFx_FindAssetAtShortPosition(entity, 0x583, state);
 }
 
 /* Draws the sprite stretched by its fall speed, then its shadow on the
@@ -149,10 +149,10 @@ void RoomEffect_DrawFallingSprite(void *unused0, void *unused1,
     RoomFallingBurstClock *owner;
 
     owner = FieldFx_GetScriptContext();
-    func_800C2EAC(owner->asset.page);
-    func_800C2FF0(0x10, 0x10);
-    func_800C3098(0x10);
-    func_800C3238(0);
+    FieldFx_SetSpriteTexturePreset(owner->asset.page);
+    FieldFx_SetSpriteCellSize(0x10, 0x10);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(0);
 
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -178,7 +178,7 @@ void RoomEffect_DrawFallingSprite(void *unused0, void *unused1,
     matrix.t[0] = (s16)fx->x;
     matrix.t[1] = (s16)fx->y - (((s16)fx->scale - 0x100) >> 4);
     matrix.t[2] = (s16)fx->z;
-    func_800C42A4((FieldGlowSprite *)&g_RoomFallingBurstSprite, &matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)&g_RoomFallingBurstSprite, &matrix, 1);
 
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -195,11 +195,11 @@ void RoomEffect_DrawFallingSprite(void *unused0, void *unused1,
 
     scale = s_FallingShadowScale;
     ScaleMatrix(&matrix, &scale);
-    func_800C3238(2);
+    FieldFx_SetSpriteBlendMode(2);
     matrix.t[0] = (s16)fx->x;
     matrix.t[1] = g_RoomFloorY->y;
     matrix.t[2] = (s16)fx->z;
-    func_800C42A4((FieldGlowSprite *)&g_RoomFallingBurstShadow, &matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)&g_RoomFallingBurstShadow, &matrix, 1);
 }
 
 
@@ -290,10 +290,10 @@ void RoomEffect_DrawImpactShimmer(void *arg0, void *arg1, RoomSpriteFxParams *fx
 
     owner = FieldFx_GetScriptContext();
     seed = s_FloorDecalRotation;
-    func_800C2EAC(owner->asset.page);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(1);
+    FieldFx_SetSpriteTexturePreset(owner->asset.page);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(1);
     RotMatrix(&seed.vector, &matrix);
 
     memset(&scale, 0, 0x10);
@@ -308,7 +308,7 @@ void RoomEffect_DrawImpactShimmer(void *arg0, void *arg1, RoomSpriteFxParams *fx
     matrix.t[1] = fx->y;
     matrix.t[2] = fx->z;
     g_RoomFallingBurstShimmer.code = fx->alpha << 1;
-    func_800C42A4((FieldGlowSprite *)&g_RoomFallingBurstShimmer, &matrix, 0);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)&g_RoomFallingBurstShimmer, &matrix, 0);
 }
 
 /* Grows the shimmer; in its last thirty ticks it fades in and ends. */
@@ -344,10 +344,10 @@ void RoomEffect_DrawGroundPulse(void *unused0, void *unused1,
     owner = FieldFx_GetScriptContext();
     matrixPtr = &matrix;
     seed = s_FloorDecalRotation;
-    func_800C2EAC(owner->asset.page);
-    func_800C2FF0(0x40, 0x40);
-    func_800C3098(0x10);
-    func_800C3238(1);
+    FieldFx_SetSpriteTexturePreset(owner->asset.page);
+    FieldFx_SetSpriteCellSize(0x40, 0x40);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(1);
     RotMatrix(&seed.vector, matrixPtr);
 
     memset(&scale, 0, 0x10);
@@ -361,7 +361,7 @@ void RoomEffect_DrawGroundPulse(void *unused0, void *unused1,
     matrixPtr->t[0] = fx->x;
     matrixPtr->t[1] = fx->y;
     matrixPtr->t[2] = fx->z;
-    func_800C42A4((FieldGlowSprite *)&g_RoomFallingBurstPulse, matrixPtr, 0);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)&g_RoomFallingBurstPulse, matrixPtr, 0);
 }
 
 /* Expands the pulse with the clock, fades it in its last sixty ticks and
@@ -380,7 +380,7 @@ void RoomEffect_UpdateGroundPulse(int unused, RoomFallingBurstControl *state,
     } else {
         fx->pulseScale += clock->step;
     }
-    if (func_800C6B90(fx, fx->pulseScale >> 3) != 0) {
+    if (FieldFx_IsPlayerWithinRadius(fx, fx->pulseScale >> 3) != 0) {
         clock->hit = 1;
     }
     if (state->endTick == clock->tick) {
@@ -422,20 +422,20 @@ void RoomEffect_DrawImpactParticles(int unused, void *state,
                                 RoomFallingBurstParticles *fx) {
     RoomFallingBurstClock *clock = FieldFx_GetScriptContext();
     unsigned int i;
-    func_800C2EAC(clock->asset.page);
-    func_800C2FF0(0x10, 0x10);
-    func_800C3098(0x10);
-    func_800C3238(1);
+    FieldFx_SetSpriteTexturePreset(clock->asset.page);
+    FieldFx_SetSpriteCellSize(0x10, 0x10);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(1);
     for (i = 0; i < 6; i++) {
         if (fx->active[i] == 1) {
             fx->matrix.t[0] = (short)fx->position[i].x;
             fx->matrix.t[1] = (short)fx->position[i].y;
             fx->matrix.t[2] = (short)fx->position[i].z;
             g_RoomFallingBurstParticle.depth = fx->depth[i];
-            func_800C42A4((FieldGlowSprite *)&g_RoomFallingBurstParticle, &fx->matrix, 1);
+            FieldFx_DrawGlowSprite((FieldGlowSprite *)&g_RoomFallingBurstParticle, &fx->matrix, 1);
             g_RoomFallingBurstParticle.depth = (short)fx->depth[i] >> 2;
             fx->matrix.t[1] = g_RoomFloorY->y;
-            func_800C42A4((FieldGlowSprite *)&g_RoomFallingBurstParticle, &fx->matrix, 1);
+            FieldFx_DrawGlowSprite((FieldGlowSprite *)&g_RoomFallingBurstParticle, &fx->matrix, 1);
         }
     }
 }

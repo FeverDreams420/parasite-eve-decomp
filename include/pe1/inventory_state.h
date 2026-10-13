@@ -21,13 +21,13 @@ extern int g_InvBonusSlotCount;
 extern s32 D_8009D0A4;
 extern u16 *g_InvSortListBase;
 extern s32 g_InvSortListCount;
-extern s32 D_8009D0A8;
+extern s32 g_InvAmmoSortStatIndex;
 extern unsigned char g_InvSortRankTableA[];
-extern unsigned char D_80092428[];
-extern unsigned char D_80092440[];
+extern unsigned char g_InvSortRankTableC[];
+extern unsigned char g_InvSortRankTableD[];
 extern unsigned char g_InvTypeRankTableA[];
 extern unsigned char g_InvTypeRankTableB[];
-extern unsigned char D_80092410[];
+extern unsigned char g_InvSortRankTableB[];
 extern u16 g_InvItemArray[];
 extern u8 g_ItemCodeRemapTable[];
 extern unsigned char g_ItemDropRngXorKeyHigh[];
@@ -41,7 +41,7 @@ extern SaveMetadataWindow g_CursorRenderMetadataWindows[2];
 extern s16 g_BattleCountTable[];
 extern int g_MenuBattleCount;
 extern s32 g_InvCategoryBaseItemId;
-extern InventorySlotRange D_800923D8[];
+extern InventorySlotRange g_InvItemTableRanges[];
 extern short g_InvPackedList[];
 
 #endif /* PE1_INVENTORY_STATE_H */

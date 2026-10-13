@@ -13,7 +13,7 @@
 
 void Seq_GetGlobalPitch(unsigned int *out)
 {
-    *out = D_8009B3A0.mode;
+    *out = g_SpuReverbState.mode;
 }
 
 void Seq_ApplyGlobalPitch(void) {
@@ -74,7 +74,7 @@ void Spu_StepReverbLoad(void)
         D_8009D2D0 += g_AkaoGlobalD2D0SlideStep;
     }
     if (g_AkaoGlobalD2CCSlideCounter != 0) {
-        oldGlobalParam = D_8009D2CC;
+        oldGlobalParam = g_AkaoGlobalPitchDepth;
         g_AkaoGlobalD2CCSlideCounter--;
         value = oldGlobalParam + g_AkaoGlobalD2CCSlideStep;
         if ((value & 0xFF0000) != (oldGlobalParam & 0xFF0000)) {
@@ -82,7 +82,7 @@ void Spu_StepReverbLoad(void)
             for (count = 24; count != 0; --count, ++track)
                 track->update_flags |= 0x10;
         }
-        D_8009D2CC = value;
+        g_AkaoGlobalPitchDepth = value;
     }
     bank = (AkaoSequencerBank *)D_8009D2C8;
     if (bank->active_voice_mask && bank->pitch_slide_duration) {
@@ -281,10 +281,10 @@ void Akao_Tick(void)
 
     mask = g_SpuActiveVoiceMask;
     if (mask) {
-        accumulator = D_800BCD68 + D_800BCD66;
-        D_800BCD68 = accumulator;
+        accumulator = g_AkaoSfxTickAccumulator + D_800BCD66;
+        g_AkaoSfxTickAccumulator = accumulator;
         if ((accumulator & 0xFFFF0000) || (g_AkaoSeqPendingFlags & 4)) {
-            D_800BCD68 = accumulator & 0xFFFF;
+            g_AkaoSfxTickAccumulator = accumulator & 0xFFFF;
             bit = 0x1000;
             track = D_800BC000;
             do {
@@ -297,7 +297,7 @@ void Akao_Tick(void)
                             Akao_StepSampleLoader(&track->track, bit);
                         } else if (track->timing.gate_length == 0) {
                             g_SpuPendingKeyOffMask |= bit;
-                            D_800BCD58 &= ~bit;
+                            g_AkaoSfxAllocatedVoiceMask &= ~bit;
                         }
                         Spu_TickVoiceEnvelopes(&track->track, bit);
                     }
@@ -309,7 +309,7 @@ void Akao_Tick(void)
         }
     }
 
-    if (!D_8009D268)
+    if (!g_AkaoMessageQueueLock)
         Akao_ProcessMessageQueue();
     Spu_StepReverbLoad();
     Akao_SetVoicePitch();
@@ -690,14 +690,14 @@ void Akao_StepSampleLoader(AkaoTrack *track, u32 voice_mask)
             break;
         if (opcode == 0xFC) {
             period = *track->pc++;
-            handler = D_8009CCF0[period];
+            handler = g_AkaoExtOpcodeHandlers[period];
             handler(track, voice_mask);
         } else {
             if (opcode == 0xCA && (track->flags & AKAO_TRACK_FLAG_KEY_OFF_PENDING)) {
                 g_SpuPendingKeyOffMask |= voice_mask;
                 opcode = 0xA0;
             }
-            D_8009C8F0[opcode](track, voice_mask);
+            g_AkaoOpcodeHandlers[opcode](track, voice_mask);
         }
     } while (opcode >= 0xA0 && opcode != 0xA0);
 
@@ -720,7 +720,7 @@ void Akao_StepSampleLoader(AkaoTrack *track, u32 voice_mask)
     } else {
         u16 length;
 
-        length = track->note_length = D_8009B8DC[opcode % 11];
+        length = track->note_length = g_AkaoNoteLengthTable[opcode % 11];
         if (period - 0x84 >= 0xB && !(track->tremolo_phase & 5))
             length -= 2;
         track->pan_duration = length;
@@ -801,7 +801,7 @@ void Akao_StepSampleLoader(AkaoTrack *track, u32 voice_mask)
         if (track->parent_track_id == 0)
             D_8009D2C8->words[5] |= voice_mask;
         else
-            D_800BCD58 |= voice_mask;
+            g_AkaoSfxAllocatedVoiceMask |= voice_mask;
         track->update_flags |= 0x13;
         opcode = track->flags;
         if (opcode & AKAO_TRACK_FLAG_PITCH_LFO) {

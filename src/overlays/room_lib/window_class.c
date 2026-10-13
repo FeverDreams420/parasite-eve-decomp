@@ -127,7 +127,7 @@ int RoomLib_WindowClassNop3(void) {
 
 /* Runs the armed handler, or releases the class when the script ends. */
 int RoomLib_UpdateWindowClass(RoomEnt *o) {
-    switch (func_800DFB78()) {
+    switch (FieldFx_IsOwnerBusy()) {
     case 0:
         o->sub.cb(o);
         return 0;
@@ -188,7 +188,7 @@ void RoomLib_WindowHandler(RoomWindowObject *obj) {
         sp->in.local.x = 0x80;
         sp->in.local.y = 0;
         sp->in.local.z = -350;
-        trig = (RoomWindowTrig *)&D_800966EC[anchor->yaw & 0xFFF].half;
+        trig = (RoomWindowTrig *)&rcossin_tbl[anchor->yaw & 0xFFF].half;
         {
             int c = trig->part.cos;
             int s;
@@ -216,7 +216,7 @@ void RoomLib_WindowHandler(RoomWindowObject *obj) {
             obj->state.target[1] = obj->state.targetNode->pos[1];
             obj->state.target[2] = obj->state.targetNode->pos[2];
         }
-        trig = (RoomWindowTrig *)&D_800966EC[FieldFx_VecToAngle((Vec3Fixed *)&obj->state.origin[0].value,
+        trig = (RoomWindowTrig *)&rcossin_tbl[FieldFx_VecToAngle((Vec3Fixed *)&obj->state.origin[0].value,
                                                (Vec3Fixed *)obj->state.target) & 0xFFF].half;
         {
             int c = trig->part.cos;
@@ -240,7 +240,7 @@ void RoomLib_WindowHandler(RoomWindowObject *obj) {
         obj->state.target[0] += sp->out.x << 16;
         obj->state.target[1] += sp->out.y << 16;
         obj->state.target[2] += sp->out.z << 16;
-        dist = func_800DFC80((Vec3Fixed *)&obj->state.origin[0].value, (Vec3Fixed *)obj->state.target) +
+        dist = FieldFx_GetFixedDistance3D((Vec3Fixed *)&obj->state.origin[0].value, (Vec3Fixed *)obj->state.target) +
                ((obj->state.step * 0x70) >> 21);
         if (dist < 0x148) {
             dist = 0x148;
@@ -248,13 +248,13 @@ void RoomLib_WindowHandler(RoomWindowObject *obj) {
         quot = 0x5160000 / dist;
         obj->state.spinSpeed = quot << 8;
         obj->state.spin = (quot << 8) >> 3;
-        func_800DFE94((Vec3Fixed *)&obj->state.origin[0].value, (Vec3Fixed *)obj->state.target,
+        FieldFx_FixedVecToLookAngles((Vec3Fixed *)&obj->state.origin[0].value, (Vec3Fixed *)obj->state.target,
                       (short *)&obj->state.angles);
         RotMatrixYXZ(&obj->state.angles, &obj->state.rotation);
     }
 
     sp->arrived = 0;
-    trig = (RoomWindowTrig *)&D_800966EC[(((state->spin + 0x8000) >> 16) - 0x400) & 0xFFF].half;
+    trig = (RoomWindowTrig *)&rcossin_tbl[(((state->spin + 0x8000) >> 16) - 0x400) & 0xFFF].half;
     {
         u16 c;
         u16 s;
@@ -294,7 +294,7 @@ void RoomLib_WindowHandler(RoomWindowObject *obj) {
     sp->spot.y = 0;
     sp->spot.z = (state->pos[2].value + 0x8000) >> 16;
     if (sp->advance.z < 0) {
-        if (func_800DFC44(state->pos[0].part.integer * state->pos[0].part.integer +
+        if (FieldFx_IntSqrt(state->pos[0].part.integer * state->pos[0].part.integer +
                           state->pos[2].part.integer * state->pos[2].part.integer) < 0x100) {
             sp->arrived = 1;
         }
@@ -310,7 +310,7 @@ void RoomLib_WindowHandler(RoomWindowObject *obj) {
     sp->in.angles.y = obj->index * 0x280 + 0x640;
     sp->in.angles.z = -0x400;
     RotMatrixYXZ(&sp->in.angles, (GteMatrix *)&sp->yaw);
-    trig = (RoomWindowTrig *)&D_800966EC[sp->in.angles.y & 0xFFF].half;
+    trig = (RoomWindowTrig *)&rcossin_tbl[sp->in.angles.y & 0xFFF].half;
     {
         u16 c;
         u16 s;
@@ -370,7 +370,7 @@ void RoomLib_WindowHandler(RoomWindowObject *obj) {
     actor->matrix[7] = sp->roll.m[2][1];
     actor->matrix[8] = sp->roll.m[2][2];
     if (state->touched == 0) {
-        if (func_800DFE20((Vec3Fixed *)actor->pos, (Vec3Fixed *)&g_PlayerEntity->pos_x) < 200) {
+        if (FieldFx_GetDistanceXZ((Vec3Fixed *)actor->pos, (Vec3Fixed *)&g_PlayerEntity->pos_x) < 200) {
             state->touched = 1;
             g_PlayerEntity->state->flags |= 0x4000;
             if (anchor->marker != 0) {

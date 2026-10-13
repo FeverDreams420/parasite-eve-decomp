@@ -175,7 +175,7 @@ score; no pins, barriers, `volatile`, `goto` or assembler were added), and
 then merged with them:
 
 - `Aya_UnlockParasiteSpell` (`-fno-schedule-insns`, lev 7 without): the
-  plain `D_800C0E00.parasite_spell_flags |= 1 << spell;` compiles to
+  plain `g_AyaSaveState.parasite_spell_flags |= 1 << spell;` compiles to
   retail's order under the default schedule; the pointer, mask and value
   temporaries were what made the scheduler hoist the `li`. It joined the
   command stack, ammo commit and weapon list units in
@@ -486,11 +486,11 @@ so the numbers say what the unit scores with `--no-expand-div` or
 | `main/entity/pool.c` | cc1 `-G8`: same code, symbol table differs; cc1 `-fno-strength-reduce`: lev 3 (Entity_ResetAllPools 3); maspsx `-G8`: lev 28 (Entity_ResetAllPools 18, Entity_InitFreePool 10); maspsx `--use-comm-section`: lev 11 (Entity_ResetAllPools 7, Entity_InitFreePool 4); FORCE_G0: identical; small-data set: lev 28 (Entity_ResetAllPools 18, Entity_InitFreePool 10) |
 | `main/field/actor_collision.c` | cc1 `-G8`: lev 68 (Entity_SlideOnRamp 68); maspsx `-G8`: lev 562 (Geo_ClipToFloorBoundary 165, Entity_UpdateAndRender 100, Geo_ClipToFloorBoundarySub 53); maspsx `--use-comm-section`: lev 150 (Geo_ClipToFloorBoundary 48, Entity_UpdateAndRender 22, Entity_ResetStateGlobals 16); maspsx `--expand-div`: lev 193 (Geo_ClipToFloorBoundary 76, Entity_SlideOnWall 36, Entity_SlideOnRamp 36); FORCE_G0: lev 196 (Geo_ClipToFloorBoundary 71, Entity_UpdateAndRender 69, Entity_SlideOnRamp 28); ASPSX_VERSION 2.70: lev 93 (Geo_ClipToFloorBoundary 61, Entity_SlideOnRamp 32); small-data set: lev 592 (Geo_ClipToFloorBoundary 165, Entity_UpdateAndRender 100, Entity_SlideOnRamp 82) |
 | `main/fieldfx/angle.c` | cc1 `-fno-schedule-insns`: lev 2 (FieldFx_TurnToward 2) |
-| `main/fieldfx/collision.c` | cc1 `-fno-strength-reduce`: lev 53 (func_800C5EB0 53) |
+| `main/fieldfx/collision.c` | cc1 `-fno-strength-reduce`: lev 53 (FieldFx_UpdateStripCollision 53) |
 | `main/fieldfx/emitters.c` | maspsx `--expand-div`: lev 14 (FieldFx_CosineEffect 14) |
-| `main/fieldfx/geometry.c` | maspsx `--expand-div`: lev 143 (func_800D0728 34, func_800D3114 33, func_800D004C 29) |
-| `main/fieldfx/sprite_effects.c` | maspsx `--expand-div`: lev 105 (func_800D5010 32, func_800D7FBC 26, func_800D5898 24) |
-| `main/fieldfx/sprite_render.c` | maspsx `--expand-div`: lev 46 (func_800C3B04 21, func_800C4E50 13, func_800C4FC4 6) |
+| `main/fieldfx/geometry.c` | maspsx `--expand-div`: lev 143 (FieldFx_DrawRingBand 34, FieldFx_DrawTexturedRibbon 33, FieldFx_DrawStarFan 29) |
+| `main/fieldfx/sprite_effects.c` | maspsx `--expand-div`: lev 105 (func_800D5010 32, FieldFx_OrbitingSprite 26, FieldFx_CosineEffectB 24) |
+| `main/fieldfx/sprite_render.c` | maspsx `--expand-div`: lev 46 (FieldFx_DrawBillboard 21, FieldFx_BuildRingGeometry 13, FieldFx_DrawShadedRing 6) |
 | `main/item/actions.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 932 (Inv_BuildCompatibleWeaponBitset 217, Inv_RebuildSelectableMask 181, Inv_InitSlotDisplay 94); maspsx `--use-comm-section`: lev 242 (Inv_RebuildSelectableMask 50, Inv_BuildCompatibleWeaponBitset 48, Inv_InitSlotDisplay 37); FORCE_G0: lev 25 (Inv_RemoveActiveListItem 11, Inv_CheckFreeSlotCapacity 8, Item_PackParasiteSpells 6); small-data set: lev 932 (Inv_BuildCompatibleWeaponBitset 217, Inv_RebuildSelectableMask 181, Inv_InitSlotDisplay 94) |
 | `main/item/active_list.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 580 (Inv_SetupSlotDisplay 96, Inv_PickRandomItem 44, Inv_WriteSlotById 38); maspsx `--use-comm-section`: lev 164 (Inv_SetupSlotDisplay 31, Inv_PickRandomItem 12, Inv_SelectActiveList 10); FORCE_G0: lev 11 (Inv_CompactActiveListSlots 11); small-data set: lev 580 (Inv_SetupSlotDisplay 96, Inv_PickRandomItem 44, Inv_WriteSlotById 38) |
 | `main/item/armor_capacity.c` | cc1 `-G8`: same code, symbol table differs; maspsx `-G8`: lev 697 (Inv_TransferItemBetweenLists 263, Inv_BuildStorageDisplay 78, Inv_SortInventoryByMode 63); maspsx `--use-comm-section`: lev 187 (Inv_TransferItemBetweenLists 58, Inv_BuildStorageDisplay 28, Inv_SortInventoryByMode 22); FORCE_G0: lev 9 (Inv_GetActiveSlotCount 9); small-data set: lev 697 (Inv_TransferItemBetweenLists 263, Inv_BuildStorageDisplay 78, Inv_SortInventoryByMode 63) |

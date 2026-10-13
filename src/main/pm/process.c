@@ -90,13 +90,13 @@ retry:
         EnterCriticalSection();
         FlushCache();
         ExitCriticalSection();
-        g_FieldFxTaskPrograms[108 - 85] = D_801F1BD8;
-        g_FieldFxTaskPrograms[109 - 85] = D_801F1C58;
-        g_FieldFxTaskPrograms[110 - 85] = D_801F1D00;
-        g_FieldFxTaskPrograms[111 - 85] = D_801F1D8C;
-        g_FieldFxTaskPrograms[112 - 85] = D_801F1E18;
-        g_FieldFxTaskPrograms[113 - 85] = D_801F1EA4;
-        g_FieldFxTaskPrograms[114 - 85] = D_801F1EF0;
+        g_FieldFxTaskPrograms[108 - 85] = g_FieldFxTaskProgramCmd108;
+        g_FieldFxTaskPrograms[109 - 85] = g_FieldFxTaskProgramCmd109;
+        g_FieldFxTaskPrograms[110 - 85] = g_FieldFxTaskProgramCmd110;
+        g_FieldFxTaskPrograms[111 - 85] = g_FieldFxTaskProgramCmd111;
+        g_FieldFxTaskPrograms[112 - 85] = g_FieldFxTaskProgramCmd112;
+        g_FieldFxTaskPrograms[113 - 85] = g_FieldFxTaskProgramCmd113;
+        g_FieldFxTaskPrograms[114 - 85] = g_FieldFxTaskProgramCmd114;
         g_GameState.flags |= 0x10000;
     }
     Asset_LoadTimTextures(0);

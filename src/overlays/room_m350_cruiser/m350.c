@@ -115,11 +115,11 @@ int func_80192508(int event)
     switch (event) {
     case 0:
 
-        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,8,64,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350Emitter)->pool,8,64,
                              (FieldFxCallbackListCallback)func_80199B94);
         case 1:
     {
-        int timer=D_800E27EC;
+        int timer=g_FieldFxCurrentAge;
         int count;
         int i;
         Vector *out;
@@ -133,7 +133,7 @@ int func_80192508(int event)
             int highByte;
             int divisor;
             Vector *base;
-            Particle *particle=func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
+            Particle *particle=FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM350Emitter)->pool);
             if(!particle) return 0;
             vector.x=(unsigned int)Inv_ScrambleGrid()<<4;
             vector.y=(unsigned int)Inv_ScrambleGrid()<<4;
@@ -158,14 +158,14 @@ offset_start:
     case 2:
 
     {
-        int index=D_800E11E8;
+        int index=g_FieldFxTpageSlot2;
         int palette;
-        D_800F3368.parameter00=16; D_800F3368.parameter02=1;
-        D_800F3368.extent_x=16; D_800F3368.extent_y=16;
-        D_800F3368.extent_x=16; D_800F3368.extent_y=16;
-        palette=D_800E2850[index];
-        D_800F3368.palette=2; D_800F3368.parameter06=0;
-        D_800F3368.parameter0A=0; D_800F3368.depth=0; D_800F3368.tpage=palette;
+        g_FieldFxSpriteParams.parameter00=16; g_FieldFxSpriteParams.parameter02=1;
+        g_FieldFxSpriteParams.extent_x=16; g_FieldFxSpriteParams.extent_y=16;
+        g_FieldFxSpriteParams.extent_x=16; g_FieldFxSpriteParams.extent_y=16;
+        palette=g_FieldFxTpageTable[index];
+        g_FieldFxSpriteParams.palette=2; g_FieldFxSpriteParams.parameter06=0;
+        g_FieldFxSpriteParams.parameter0A=0; g_FieldFxSpriteParams.depth=0; g_FieldFxSpriteParams.tpage=palette;
     }
     }
     return 0;
@@ -175,17 +175,17 @@ offset_start:
 
 int func_801927A4(int event, PulsingPalettePairParticle *effect) {
     if (event == 1) {
-        if (D_800E27EC >= 16) return 1;
+        if (g_FieldFxCurrentAge >= 16) return 1;
     } else if (event == 2) {
-        int scale = D_800966EE[((unsigned int)(D_800E27EC - 1) << 8) & 0x1F00] * 4 + 2048;
-        int kind = D_800F3368.palette;
-        int palette = D_800E1204[kind];
+        int scale = D_800966EE[((unsigned int)(g_FieldFxCurrentAge - 1) << 8) & 0x1F00] * 4 + 2048;
+        int kind = g_FieldFxSpriteParams.palette;
+        int palette = g_FieldFxPaletteTable[kind];
         int handle;
-        if (kind == 4 && D_800F3428) palette += 4;
+        if (kind == 4 && g_FieldFxAltPaletteFlag) palette += 4;
         handle = GetClut(48, palette);
-        func_800CEE20(effect->position, (struct GteRotation *)effect, scale, scale, 110,
+        FieldFx_DrawShapeQuads(effect->position, (struct GteRotation *)effect, scale, scale, 110,
             (unsigned short)handle, 1,
-            (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80].word >> 5,
+            (short)rcossin_tbl[((unsigned int)(g_FieldFxCurrentAge - 1) << 7) & 0xF80].word >> 5,
             (struct RenderColor *)&effect->color);
     }
     return 0;
@@ -198,14 +198,14 @@ int func_801928D4(int event, State *state)
 
         state->delay = 0;
         state->count = 0;
-        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 16, 18,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350Emitter)->pool, 16, 18,
                              (FieldFxCallbackListCallback)func_801927A4);
         case 1:
     {
         int i;
-        if (D_800E27EC >= 17) return 2;
+        if (g_FieldFxCurrentAge >= 17) return 2;
         for (i = 0; i < 2; i++) {
-            PulsingPalettePairParticle *particle = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
+            PulsingPalettePairParticle *particle = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM350Emitter)->pool);
             if (!particle) break;
             particle->rotation.x = (unsigned int)Inv_ScrambleGrid() << 4;
             particle->rotation.y = (unsigned int)Inv_ScrambleGrid() << 4;
@@ -225,14 +225,14 @@ int func_801928D4(int event, State *state)
     case 2:
 
     {
-        int index = D_800E11EA;
+        int index = g_FieldFxTpageSlot3;
         int palette;
-        D_800F3368.parameter00 = 32; D_800F3368.parameter02 = 2;
-        D_800F3368.extent_x = 32; D_800F3368.extent_y = 32;
-        D_800F3368.extent_x = 32; D_800F3368.extent_y = 32;
-        palette = D_800E2850[index];
-        D_800F3368.palette = 3; D_800F3368.parameter06 = 0;
-        D_800F3368.parameter0A = 0; D_800F3368.depth = 0; D_800F3368.tpage = palette;
+        g_FieldFxSpriteParams.parameter00 = 32; g_FieldFxSpriteParams.parameter02 = 2;
+        g_FieldFxSpriteParams.extent_x = 32; g_FieldFxSpriteParams.extent_y = 32;
+        g_FieldFxSpriteParams.extent_x = 32; g_FieldFxSpriteParams.extent_y = 32;
+        palette = g_FieldFxTpageTable[index];
+        g_FieldFxSpriteParams.palette = 3; g_FieldFxSpriteParams.parameter06 = 0;
+        g_FieldFxSpriteParams.parameter0A = 0; g_FieldFxSpriteParams.depth = 0; g_FieldFxSpriteParams.tpage = palette;
     }
     }
     return 0;
@@ -243,22 +243,22 @@ int func_801928D4(int event, State *state)
 int func_80192ADC(int event, RampedPalettePairParticle *object)
 {
     if (event == 1) {
-        if (D_800E27EC >= 16) {
+        if (g_FieldFxCurrentAge >= 16) {
             return 1;
         }
     } else if (event == 2) {
-        int size = D_800966EC[((unsigned int)(D_800E27EC - 1) << 6) & 0xFC0].part.sin * object->scale / 4096;
-        int kind = D_800F3368.palette;
-        int palette = D_800E1204[kind];
+        int size = rcossin_tbl[((unsigned int)(g_FieldFxCurrentAge - 1) << 6) & 0xFC0].part.sin * object->scale / 4096;
+        int kind = g_FieldFxSpriteParams.palette;
+        int palette = g_FieldFxPaletteTable[kind];
         int handle;
 
-        if (kind == 4 && D_800F3428) {
+        if (kind == 4 && g_FieldFxAltPaletteFlag) {
             palette += 4;
         }
         handle = GetClut(32, palette);
-        func_800CEE20(object->position, 0, size, size, (s16)D_800F3368.parameter02 + 216,
+        FieldFx_DrawShapeQuads(object->position, 0, size, size, (s16)g_FieldFxSpriteParams.parameter02 + 216,
             (unsigned short)handle, 1,
-            (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80].word >> 5,
+            (short)rcossin_tbl[((unsigned int)(g_FieldFxCurrentAge - 1) << 7) & 0xF80].word >> 5,
             &D_8019A3D0);
     }
     return 0;
@@ -271,19 +271,19 @@ int func_80192C34(int event, RampedPalettePairState *state)
 
         state->target = 16384;
         state->current = 0;
-        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 8, 6,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350Emitter)->pool, 8, 6,
                              (FieldFxCallbackListCallback)func_80192ADC);
         case 1:
     if (!state->target) {
         if (state->current <= 0) return 2;
     } else if (ANIM_OWNER_AS(Actor)->instance->frame >= 41) state->target = 0;
-    if (D_800E27EC & 7) return 0;
+    if (g_FieldFxCurrentAge & 7) return 0;
     if (state->current < state->target) state->current += 4096;
     else if (state->target < state->current) state->current -= 4096;
     if (state->current) {
         int i;
         for (i = 0; i < 2; i++) {
-            RampedPalettePairParticle *particle = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
+            RampedPalettePairParticle *particle = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM350Emitter)->pool);
             if (!particle) return 0;
             particle->position = &D_8019A778[i];
             particle->scale = state->current;
@@ -295,12 +295,12 @@ int func_80192C34(int event, RampedPalettePairState *state)
     {
         int unit = 16;
         int palette;
-                palette = D_800E2850[D_800E11E8];
-        D_800F3368.palette = 2; D_800F3368.parameter06 = 0;
-        D_800F3368.parameter00 = unit; D_800F3368.parameter02 = 1;
-        D_800F3368.extent_x = unit; D_800F3368.extent_y = unit;
-        D_800F3368.extent_x = unit; D_800F3368.extent_y = unit;
-        D_800F3368.parameter0A = 0; D_800F3368.depth = 0; D_800F3368.tpage = palette;
+                palette = g_FieldFxTpageTable[g_FieldFxTpageSlot2];
+        g_FieldFxSpriteParams.palette = 2; g_FieldFxSpriteParams.parameter06 = 0;
+        g_FieldFxSpriteParams.parameter00 = unit; g_FieldFxSpriteParams.parameter02 = 1;
+        g_FieldFxSpriteParams.extent_x = unit; g_FieldFxSpriteParams.extent_y = unit;
+        g_FieldFxSpriteParams.extent_x = unit; g_FieldFxSpriteParams.extent_y = unit;
+        g_FieldFxSpriteParams.parameter0A = 0; g_FieldFxSpriteParams.depth = 0; g_FieldFxSpriteParams.tpage = palette;
     }
     }
     return 0;
@@ -330,14 +330,14 @@ int func_80192E4C(int mode, RoomM350SweepTrap *trap) {
     int dz;
 
     if (mode == 1) {
-        if (D_800E27EC >= 0x10) return 1;
+        if (g_FieldFxCurrentAge >= 0x10) return 1;
     } else if (mode == 2) {
-        phase = D_800E27EC - 1;
+        phase = g_FieldFxCurrentAge - 1;
         intensity = phase < 9;
         i = 8;
         if (intensity) i = phase;
-        trig = ((RoomM350Trig *)D_800966EC);
-        rotation.angles.x = -D_800966EC[(i * 128) & 0xFFF].bits.sin * 0x260 / 4096 - 0x500;
+        trig = ((RoomM350Trig *)rcossin_tbl);
+        rotation.angles.x = -rcossin_tbl[(i * 128) & 0xFFF].bits.sin * 0x260 / 4096 - 0x500;
         rotation.angles.y = ANIM_OWNER_AS(RoomM350TrapChannel)->actor->heading;
         rotation.angles.z = 0x400;
         RotMatrixYXZ(&rotation.angles, &matrix);
@@ -356,16 +356,16 @@ int func_80192E4C(int mode, RoomM350SweepTrap *trap) {
         position = *trap->anchor;
         if (intensity) intensity = 0x80;
         else intensity = trig[((phase - 8) * 128) & 0xFFF].cos >> 5;
-        D_800F3368.tpage = D_800E2850[D_800E11EA];
-        D_800F3368.palette = 3;
-        D_800F3368.parameter06 = 0;
+        g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot3];
+        g_FieldFxSpriteParams.palette = 3;
+        g_FieldFxSpriteParams.parameter06 = 0;
         for (i = phase; position.y < g_RoomFloorY->y; i++) {
-            int kind = D_800F3368.palette;
-            int palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428) palette += 4;
-            func_800CEE20(&position, &rotation.rotation, 0x800, 0x1800,
-                          (s16)D_800F3368.parameter02 * (i & 7) + 0x40,
-                          GetClut(0, palette), 1, intensity, &D_8019A434[D_800E27EC & 1]);
+            int kind = g_FieldFxSpriteParams.palette;
+            int palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag) palette += 4;
+            FieldFx_DrawShapeQuads(&position, &rotation.rotation, 0x800, 0x1800,
+                          (s16)g_FieldFxSpriteParams.parameter02 * (i & 7) + 0x40,
+                          GetClut(0, palette), 1, intensity, &D_8019A434[g_FieldFxCurrentAge & 1]);
             position.x += step.vector.x;
             position.y += step.vector.y;
             position.z += step.vector.z;
@@ -373,17 +373,17 @@ int func_80192E4C(int mode, RoomM350SweepTrap *trap) {
         spin.angles.x = 0x400;
         spin.angles.y = 0;
         spin.angles.pad = 1;
-        spin.angles.z = D_800E27EC << 7;
-        D_800F3368.tpage = D_800E2850[D_800E11FA];
-        D_800F3368.palette = 3;
-        D_800F3368.parameter06 = 1;
+        spin.angles.z = g_FieldFxCurrentAge << 7;
+        g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot11];
+        g_FieldFxSpriteParams.palette = 3;
+        g_FieldFxSpriteParams.parameter06 = 1;
         {
-            int kind = D_800F3368.palette;
-            int palette = D_800E1204[kind];
-            func_800CEE20(&position, &spin.rotation, 0x2000, 0x2000,
-                          (s16)D_800F3368.parameter02 * 17 + 0x84,
-                          GetClut(0, (kind == 4 && D_800F3428) ? palette + 8 : palette + 4),
-                          1, intensity, &D_8019A434[D_800E27EC & 1]);
+            int kind = g_FieldFxSpriteParams.palette;
+            int palette = g_FieldFxPaletteTable[kind];
+            FieldFx_DrawShapeQuads(&position, &spin.rotation, 0x2000, 0x2000,
+                          (s16)g_FieldFxSpriteParams.parameter02 * 17 + 0x84,
+                          GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag) ? palette + 8 : palette + 4),
+                          1, intensity, &D_8019A434[g_FieldFxCurrentAge & 1]);
         }
         dx = position.x - trap->anchor->x;
         dz = position.z - trap->anchor->z;
@@ -392,20 +392,20 @@ int func_80192E4C(int mode, RoomM350SweepTrap *trap) {
         rotation.angles.x = 0;
         rotation.angles.y -= 0x14;
         for (i = 0; i < 2; i++) {
-            func_800D0E88(&position, &rotation.rotation, dist, 0x200, &D_8019A43C, &D_8019A3C8,
+            FieldFx_DrawRotatedTriangle(&position, &rotation.rotation, dist, 0x200, &D_8019A43C, &D_8019A3C8,
                           &D_8019A3C8, (s16)intensity, 1);
             rotation.angles.y += 0x28;
         }
         spin.angles.x = 0;
         spin.angles.y = 0;
         spin.angles.pad = 0;
-        spin.angles.z = D_800E27EC << 7;
-        trig = ((RoomM350Trig *)D_800966EC);
+        spin.angles.z = g_FieldFxCurrentAge << 7;
+        trig = ((RoomM350Trig *)rcossin_tbl);
         {
             int scale = trig[(phase * 64) & 0xFFF].sin + 0x1000;
-            func_800D0728(trap->anchor, 0x100, 0x1C0, 0x10, &spin.rotation, scale, scale,
+            FieldFx_DrawRingBand(trap->anchor, 0x100, 0x1C0, 0x10, &spin.rotation, scale, scale,
                           &D_8019A3C8, &D_8019A440,
-                      trig[((D_800E27EC - 1) * 64) & 0xFFF].cos >> 5, 1);
+                      trig[((g_FieldFxCurrentAge - 1) * 64) & 0xFFF].cos >> 5, 1);
         }
         if (trap->done) return 0;
         if (g_PlayerEntity->mode < 4) return 0;
@@ -466,7 +466,7 @@ int func_8019360C(int event) {
     switch (event) {
     case 0:
 
-        return func_800CE560((ANIM_POOL_AS(RoomM350Emitter))->pool,8,2,
+        return FieldFx_InitCallbackList((ANIM_POOL_AS(RoomM350Emitter))->pool,8,2,
                              (FieldFxCallbackListCallback)func_80192E4C);
         case 1:
     {
@@ -481,7 +481,7 @@ int func_8019360C(int event) {
         if (frame < 8) return 0;
         if (previous < 8) {
             for (i=0;i<2;i++) {
-                RoomM350SweepTrap *particle = func_800CE610((ANIM_POOL_AS(RoomM350Emitter))->pool);
+                RoomM350SweepTrap *particle = FieldFx_AcquireCallbackSlot((ANIM_POOL_AS(RoomM350Emitter))->pool);
                 if (!particle) break;
                 particle->anchor = &D_8019A778[i];
                 particle->done = 0;
@@ -498,14 +498,14 @@ int func_8019360C(int event) {
         break;
     case 2:
 
-    D_800F3368.parameter00=32;
-    D_800F3368.parameter02=2;
-    D_800F3368.extent_x=32;
-    D_800F3368.extent_y=32;
-    D_800F3368.extent_x=32;
-    D_800F3368.extent_y=32;
-    D_800F3368.parameter0A=0;
-    D_800F3368.depth=0;
+    g_FieldFxSpriteParams.parameter00=32;
+    g_FieldFxSpriteParams.parameter02=2;
+    g_FieldFxSpriteParams.extent_x=32;
+    g_FieldFxSpriteParams.extent_y=32;
+    g_FieldFxSpriteParams.extent_x=32;
+    g_FieldFxSpriteParams.extent_y=32;
+    g_FieldFxSpriteParams.parameter0A=0;
+    g_FieldFxSpriteParams.depth=0;
     }
     return 0;
 }
@@ -516,17 +516,17 @@ PE1_STATIC_ASSERT(sizeof(RoomM350SweepTrap) == 8, room_m350_sweep_trap_size);
 
 int func_801937B4(int event, short *position) {
     if (event == 1) {
-        if (D_800E27EC >= 16) return 1;
+        if (g_FieldFxCurrentAge >= 16) return 1;
         position[1] -= position[3]++;
     } else if (event == 2) {
-        int kind = D_800F3368.palette;
-        int texture = D_800E1204[kind];
+        int kind = g_FieldFxSpriteParams.palette;
+        int texture = g_FieldFxPaletteTable[kind];
         int handle;
-        handle = GetClut(0, (kind == 4 && D_800F3428 != 0) ? texture + 6 : texture + 2);
-        func_800CEE20((GteShortVector *)position, 0, 8192, 8192,
-            (s16)D_800F3368.parameter02 * (((D_800E27EC - 1) >> 1) & 7),
+        handle = GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag != 0) ? texture + 6 : texture + 2);
+        FieldFx_DrawShapeQuads((GteShortVector *)position, 0, 8192, 8192,
+            (s16)g_FieldFxSpriteParams.parameter02 * (((g_FieldFxCurrentAge - 1) >> 1) & 7),
             (unsigned short)handle, 1,
-            D_800966EC[((unsigned int)(D_800E27EC - 1) << 6) & 0xFC0].bits.cos >> 5,
+            rcossin_tbl[((unsigned int)(g_FieldFxCurrentAge - 1) << 6) & 0xFC0].bits.cos >> 5,
             &D_8019A464);
     }
     return 0;
@@ -536,12 +536,12 @@ int func_801938E4(int event) {
     switch (event) {
     case 0:
 
-        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,8,4,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350Emitter)->pool,8,4,
                              (FieldFxCallbackListCallback)func_801937B4);
         case 1:
     if(D_8019A79A) return 2;
     if(D_8019A79C) {
-        FallingTexturePairParticle *particle=func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
+        FallingTexturePairParticle *particle=FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM350Emitter)->pool);
         RoomM350TransformOwner *player;
         if(!particle) return 0;
         {
@@ -557,17 +557,17 @@ int func_801938E4(int event) {
         break;
     case 2:
 
-    D_800F3368.parameter00 = 32;
-    D_800F3368.parameter02 = 2;
-    D_800F3368.extent_x = 32;
-    D_800F3368.extent_y = 32;
-    D_800F3368.extent_x = 32;
-    D_800F3368.extent_y = 32;
-    D_800F3368.tpage = D_800E2850[D_800E11E4[11]];
-    D_800F3368.palette = 3;
-    D_800F3368.parameter06 = 1;
-    D_800F3368.parameter0A = 0;
-    D_800F3368.depth = 0;
+    g_FieldFxSpriteParams.parameter00 = 32;
+    g_FieldFxSpriteParams.parameter02 = 2;
+    g_FieldFxSpriteParams.extent_x = 32;
+    g_FieldFxSpriteParams.extent_y = 32;
+    g_FieldFxSpriteParams.extent_x = 32;
+    g_FieldFxSpriteParams.extent_y = 32;
+    g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[g_FieldFxTpageSlots[11]];
+    g_FieldFxSpriteParams.palette = 3;
+    g_FieldFxSpriteParams.parameter06 = 1;
+    g_FieldFxSpriteParams.parameter0A = 0;
+    g_FieldFxSpriteParams.depth = 0;
     }
     return 0;
 }
@@ -577,19 +577,19 @@ int func_801938E4(int event) {
 int func_80193A80(int event, void **object)
 {
     if (event == 1) {
-        if (D_800E27EC >= 16) {
+        if (g_FieldFxCurrentAge >= 16) {
             return 1;
         }
     } else if (event == 2) {
-        int sample = D_800966EC[((unsigned int)(D_800E27EC - 1) << 6) & 0xFC0].part.sin;
-        int kind = D_800F3368.palette;
+        int sample = rcossin_tbl[((unsigned int)(g_FieldFxCurrentAge - 1) << 6) & 0xFC0].part.sin;
+        int kind = g_FieldFxSpriteParams.palette;
         int size = sample * 3;
-        int palette = D_800E1204[kind];
+        int palette = g_FieldFxPaletteTable[kind];
         int handle;
-        handle = GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 8 : palette + 4);
-        func_800CEE20((GteShortVector *)*object, 0, size, size, (s16)D_800F3368.parameter02 * 6 + 128,
+        handle = GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag != 0) ? palette + 8 : palette + 4);
+        FieldFx_DrawShapeQuads((GteShortVector *)*object, 0, size, size, (s16)g_FieldFxSpriteParams.parameter02 * 6 + 128,
             (unsigned short)handle, 1,
-            (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80].word >> 5, 0);
+            (short)rcossin_tbl[((unsigned int)(g_FieldFxCurrentAge - 1) << 7) & 0xF80].word >> 5, 0);
     }
     return 0;
 }
@@ -598,7 +598,7 @@ int func_80193BCC(int event) {
     switch (event) {
     case 0:
 
-        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,4,2,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350Emitter)->pool,4,2,
                              (FieldFxCallbackListCallback)func_80193A80);
         case 1:
     {
@@ -609,7 +609,7 @@ int func_80193BCC(int event) {
         previous = instance->previousFrame;
         if (frame >= 5 && previous < 5) {
             for (i=0;i<2;i++) {
-                TripleScalePairParticle *particle = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
+                TripleScalePairParticle *particle = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM350Emitter)->pool);
                 if (!particle) break;
                 particle->position = &D_8019A778[i];
             }
@@ -620,17 +620,17 @@ int func_80193BCC(int event) {
         break;
     case 2:
 
-    D_800F3368.parameter00 = 32;
-    D_800F3368.parameter02 = 2;
-    D_800F3368.extent_x = 32;
-    D_800F3368.extent_y = 32;
-    D_800F3368.extent_x = 32;
-    D_800F3368.extent_y = 32;
-    D_800F3368.tpage = D_800E2850[D_800E11E4[11]];
-    D_800F3368.palette = 3;
-    D_800F3368.parameter06 = 1;
-    D_800F3368.parameter0A = 0;
-    D_800F3368.depth = 0;
+    g_FieldFxSpriteParams.parameter00 = 32;
+    g_FieldFxSpriteParams.parameter02 = 2;
+    g_FieldFxSpriteParams.extent_x = 32;
+    g_FieldFxSpriteParams.extent_y = 32;
+    g_FieldFxSpriteParams.extent_x = 32;
+    g_FieldFxSpriteParams.extent_y = 32;
+    g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[g_FieldFxTpageSlots[11]];
+    g_FieldFxSpriteParams.palette = 3;
+    g_FieldFxSpriteParams.parameter06 = 1;
+    g_FieldFxSpriteParams.parameter0A = 0;
+    g_FieldFxSpriteParams.depth = 0;
     }
     return 0;
 }
@@ -719,7 +719,7 @@ int func_80193D6C(int event)
                 *repeat=*(volatile unsigned short *)repeat-1;
             }
             if(signedFrame<28) return 0;
-            speed=D_800966EC[(((signedFrame-28)*170)&0xFFE)].part.sin/32;
+            speed=rcossin_tbl[(((signedFrame-28)*170)&0xFFE)].part.sin/32;
             bias=-128;
             if(*(unsigned short *)repeat&1) bias=128;
             angle=FieldFx_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation,(Vec3Fixed *)instance->render_object.model_matrix.translation);
@@ -738,18 +738,18 @@ int func_8019404C(int event, ModelShellLayersParticle *particle)
 {
     char frameGap[8];
     if (event == 1) {
-        if (D_800E27EC >= 8) return 1;
+        if (g_FieldFxCurrentAge >= 8) return 1;
     } else if (event == 2) {
-        int size = D_800966EC[(((unsigned int)D_800E27EC - 1) << 7) & 0xF80].part.sin * particle->size / 4096;
-        int kind = D_800F3368.palette;
-        int palette = D_800E1204[kind];
+        int size = rcossin_tbl[(((unsigned int)g_FieldFxCurrentAge - 1) << 7) & 0xF80].part.sin * particle->size / 4096;
+        int kind = g_FieldFxSpriteParams.palette;
+        int palette = g_FieldFxPaletteTable[kind];
         unsigned short clut;
-        if (kind == 4 && D_800F3428) palette += 4;
+        if (kind == 4 && g_FieldFxAltPaletteFlag) palette += 4;
         clut = GetClut(48, palette);
-        func_800CEE20((GteShortVector *)&particle->x, 0, size, size, (s16)D_800F3368.parameter02 * 5 + 216, clut, 1,
-            D_800966EC[(((unsigned int)D_800E27EC - 1) << 7) & 0xF80].bits.cos >> 5, (struct RenderColor *)particle);
-        func_800D004C((GteShortVector *)&particle->x, 96, 96, 8, 0, size, size, (struct RenderColor *)D_8019A3CC, &D_8019A3C8,
-            (short)D_800966EC[(((unsigned int)D_800E27EC - 1) << 8) & 0xF00].word >> 5, 1);
+        FieldFx_DrawShapeQuads((GteShortVector *)&particle->x, 0, size, size, (s16)g_FieldFxSpriteParams.parameter02 * 5 + 216, clut, 1,
+            rcossin_tbl[(((unsigned int)g_FieldFxCurrentAge - 1) << 7) & 0xF80].bits.cos >> 5, (struct RenderColor *)particle);
+        FieldFx_DrawStarFan((GteShortVector *)&particle->x, 96, 96, 8, 0, size, size, (struct RenderColor *)D_8019A3CC, &D_8019A3C8,
+            (short)rcossin_tbl[(((unsigned int)g_FieldFxCurrentAge - 1) << 8) & 0xF00].word >> 5, 1);
     }
     return 0;
 }
@@ -762,20 +762,20 @@ int func_8019421C(int event)
     switch (event) {
     case 0:
 
-        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 12, 64,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350Emitter)->pool, 12, 64,
                              (FieldFxCallbackListCallback)func_8019404C);
         case 1:
     {
         int i = 0;
         Vector *out;
-        if (D_800E27EC >= 41) return 2;
+        if (g_FieldFxCurrentAge >= 41) return 2;
         out = &offset;
         for (; i < 2; i++) {
             int random;
             int highByte;
             int r, g, b, divisor;
             int j, *position;
-            ModelShellLayersParticle *particle = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
+            ModelShellLayersParticle *particle = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM350Emitter)->pool);
             if (!particle) return 0;
             vector.x = (unsigned int)Inv_ScrambleGrid() << 4;
             vector.y = (unsigned int)Inv_ScrambleGrid() << 4;
@@ -791,7 +791,7 @@ offset_start:
             ApplyMatrixSV(&matrix, &vector, out);
             position = D_8019A7F8->render_object.matrices[i ? 11 : 15].translation;
             for (j = 0; j < 3; j++) (&particle->x)[j] = ((short *)out)[j] + (unsigned int)position[j];
-            particle->size = (unsigned int)D_800966EC[((int)((unsigned int)D_800E27EC << 11) / 40) & 4095].word + 4096;
+            particle->size = (unsigned int)rcossin_tbl[((int)((unsigned int)g_FieldFxCurrentAge << 11) / 40) & 4095].word + 4096;
             r = Inv_ScrambleGrid(); g = Inv_ScrambleGrid(); b = Inv_ScrambleGrid();
             particle->color = (r >> 1) | ((unsigned int)(g >> 1) << 8) | ((unsigned int)(b >> 1) << 16);
         }
@@ -800,14 +800,14 @@ offset_start:
     case 2:
 
     {
-        int index = D_800E11E8;
+        int index = g_FieldFxTpageSlot2;
         int palette;
-        D_800F3368.parameter00 = 16; D_800F3368.parameter02 = 1;
-        D_800F3368.extent_x = 16; D_800F3368.extent_y = 16;
-        D_800F3368.extent_x = 16; D_800F3368.extent_y = 16;
-        palette = D_800E2850[index];
-        D_800F3368.palette = 2; D_800F3368.parameter06 = 0;
-        D_800F3368.parameter0A = 0; D_800F3368.depth = 0; D_800F3368.tpage = palette;
+        g_FieldFxSpriteParams.parameter00 = 16; g_FieldFxSpriteParams.parameter02 = 1;
+        g_FieldFxSpriteParams.extent_x = 16; g_FieldFxSpriteParams.extent_y = 16;
+        g_FieldFxSpriteParams.extent_x = 16; g_FieldFxSpriteParams.extent_y = 16;
+        palette = g_FieldFxTpageTable[index];
+        g_FieldFxSpriteParams.palette = 2; g_FieldFxSpriteParams.parameter06 = 0;
+        g_FieldFxSpriteParams.parameter0A = 0; g_FieldFxSpriteParams.depth = 0; g_FieldFxSpriteParams.tpage = palette;
     }
     }
     return 0;
@@ -817,12 +817,12 @@ int func_801944F0(int event, void **object)
 {
     short vector[4];
     if (event == 1) {
-        if (D_800E27EC >= 8) {
+        if (g_FieldFxCurrentAge >= 8) {
             return 1;
         }
     } else if (event == 2) {
-        GteSineWord *base = D_800966EC;
-        int counter = D_800E27EC;
+        GteSineWord *base = rcossin_tbl;
+        int counter = g_FieldFxCurrentAge;
         TableEntry *entry = (TableEntry *)&base[((unsigned int)(counter - 1) << 7) & 0xF80];
         int size = entry->size;
 
@@ -830,12 +830,12 @@ int func_801944F0(int event, void **object)
         vector[1] = 0;
         vector[2] = counter * 128;
         vector[3] = 0;
-        func_800D004C(*object, 320, 320, 16, (struct GteRotation *)vector, size, size,
+        FieldFx_DrawStarFan(*object, 320, 320, 16, (struct GteRotation *)vector, size, size,
             (struct RenderColor *)D_8019A4DC, &D_8019A3C8, entry->shade >> 5, 1);
         {
-            int nextCounter = D_800E27EC;
+            int nextCounter = g_FieldFxCurrentAge;
             size = nextCounter * 512 + 2048;
-            func_800D0728(*object, 256, 512, 16, (struct GteRotation *)vector, size, size,
+            FieldFx_DrawRingBand(*object, 256, 512, 16, (struct GteRotation *)vector, size, size,
                 &D_8019A3C8, (struct RenderColor *)D_8019A4E0,
                 (short)base[((unsigned int)(nextCounter - 1) << 8) & 0xF00].word >> 5, 1);
         }
@@ -848,7 +848,7 @@ int func_80194654(int event, AnimationBurstState *state)
     switch (event) {
     case 0:
         state->remaining = 0;
-        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 4, 4,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350Emitter)->pool, 4, 4,
                              (FieldFxCallbackListCallback)func_801944F0);
     case 1:
         {
@@ -867,7 +867,7 @@ int func_80194654(int event, AnimationBurstState *state)
                 }
             }
             if (state->remaining != 0 && state->delay-- <= 0) {
-                short **effect = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
+                short **effect = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM350Emitter)->pool);
                 if (effect == 0) {
                     return 0;
                 }
@@ -893,7 +893,7 @@ int func_801947BC(int event,RoomM350Particle *p)
     /* Match note: target saves registers 16 bytes later; original local unknown. */
     char frameGap[16];
     if(event==1) {
-        int timer=D_800E27EC;
+        int timer=g_FieldFxCurrentAge;
         int brightness;
         if(timer>=48) {
             int result=1;
@@ -904,13 +904,13 @@ int func_801947BC(int event,RoomM350Particle *p)
         if(!p->tail.value.active.hit) {
             if(p->motion.value.rotation.x>0) p->motion.value.rotation.x-=64;
             else {
-                GteSineWord *trig=D_800966EC;
+                GteSineWord *trig=rcossin_tbl;
                 int speed=trig[(timer<<4)&0xFF0].part.sin/4;
                 int angle=FieldFx_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation,(Vec3Fixed *)ANIM_OWNER_AS(RoomM350EffectActor)->instance->transform.t);
                 int yaw=FieldFx_TurnToward(p->motion.value.rotation.y,(short)angle,speed);
                 int sum,product;
                 p->motion.value.rotation.y=yaw;
-                product=trig[(D_800E27EC+2048)&4095].part.sin*160;
+                product=trig[(g_FieldFxCurrentAge+2048)&4095].part.sin*160;
                 sum=yaw+80;
                 p->motion.value.rotation.y=sum-product/4096;
             }
@@ -923,9 +923,9 @@ int func_801947BC(int event,RoomM350Particle *p)
             gte_ldv0(&offset); gte_rtv0tr_mac();
             gte_stsv(&p->position);
         }
-        if(p->tail.value.active.frame<40) brightness=((short)D_800966EC[(p->tail.value.active.frame<<9)&0xE00].word>>6)+128;
+        if(p->tail.value.active.frame<40) brightness=((short)rcossin_tbl[(p->tail.value.active.frame<<9)&0xE00].word>>6)+128;
         else {
-            unsigned int value=D_800966EC[((p->tail.value.active.frame-40)<<7)&0xF80].part.cos;
+            unsigned int value=rcossin_tbl[((p->tail.value.active.frame-40)<<7)&0xF80].part.cos;
             brightness=value>>5;
         }
         p->tail.value.active.brightness=brightness;
@@ -979,12 +979,12 @@ int func_801947BC(int event,RoomM350Particle *p)
     } else if(event==2) {
         int clut,palette;
         if(p->tail.value.active.frame>=48) return 0;
-        palette=D_800E1204[D_800F3368.palette];
-        if(D_800F3368.palette==4 && D_800F3428) palette+=4;
+        palette=g_FieldFxPaletteTable[g_FieldFxSpriteParams.palette];
+        if(g_FieldFxSpriteParams.palette==4 && g_FieldFxAltPaletteFlag) palette+=4;
         clut=GetClut(32,palette);
-        func_800CEE20(&p->position,0,4096,4096,108,(unsigned short)clut,1,p->tail.value.active.brightness,0);
+        FieldFx_DrawShapeQuads(&p->position,0,4096,4096,108,(unsigned short)clut,1,p->tail.value.active.brightness,0);
         ground.x=p->position.x; ground.y=g_RoomFloorY->raw; ground.z=p->position.z;
-        func_800D004C(&ground,192,192,8,&D_8019A3C0,4096,4096,&D_8019A4E4,&D_8019A3C8,p->tail.value.active.brightness,1);
+        FieldFx_DrawStarFan(&ground,192,192,8,&D_8019A3C0,4096,4096,&D_8019A4E4,&D_8019A3C8,p->tail.value.active.brightness,1);
     }
     return 0;
 }
@@ -992,7 +992,7 @@ int func_80194CFC(int event) {
     switch (event) {
     case 0:
 
-        return func_800CE560(ANIM_POOL_AS(RoomM350EffectEmitter)->pool,28,3,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350EffectEmitter)->pool,28,3,
                              (FieldFxCallbackListCallback)func_801947BC);
         case 1:
     {
@@ -1005,7 +1005,7 @@ int func_80194CFC(int event) {
         frame=instance->frame;
         previous=instance->previousFrame;
         if (frame<15 || previous>=15) return 0;
-        particle=func_800CE610(ANIM_POOL_AS(RoomM350EffectEmitter)->pool);
+        particle=FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM350EffectEmitter)->pool);
         particle->position=D_8019A7A0;
         particle->position.pad=16;
         particle->motion.value.spawn.speed=512;
@@ -1026,17 +1026,17 @@ int func_80194CFC(int event) {
         break;
     case 2:
 
-    D_800F3368.parameter00 = 32;
-    D_800F3368.parameter02 = 2;
-    D_800F3368.extent_x = 32;
-    D_800F3368.extent_y = 32;
-    D_800F3368.extent_x = 32;
-    D_800F3368.extent_y = 32;
-    D_800F3368.tpage = D_800E2850[D_800E11E4[3]];
-    D_800F3368.palette = 3;
-    D_800F3368.parameter06 = 0;
-    D_800F3368.parameter0A = 0;
-    D_800F3368.depth = 64;
+    g_FieldFxSpriteParams.parameter00 = 32;
+    g_FieldFxSpriteParams.parameter02 = 2;
+    g_FieldFxSpriteParams.extent_x = 32;
+    g_FieldFxSpriteParams.extent_y = 32;
+    g_FieldFxSpriteParams.extent_x = 32;
+    g_FieldFxSpriteParams.extent_y = 32;
+    g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[g_FieldFxTpageSlots[3]];
+    g_FieldFxSpriteParams.palette = 3;
+    g_FieldFxSpriteParams.parameter06 = 0;
+    g_FieldFxSpriteParams.parameter0A = 0;
+    g_FieldFxSpriteParams.depth = 64;
     }
     return 0;
 }
@@ -1045,19 +1045,19 @@ int func_80194F04(int event, PointerQueueParticle *object)
 {
     Vector position;
     if (event == 1) {
-        if (D_800E27EC >= 16) return 1;
+        if (g_FieldFxCurrentAge >= 16) return 1;
         object->offset -= 16;
     } else if (event == 2) {
         int frame,kind,palette,handle;
         position = *object->position;
         position.y += object->offset;
-        kind = D_800F3368.palette;
-        frame = D_800E27EC - 1;
-        palette = D_800E1204[kind];
-        handle = GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + 6 : palette + 2);
-        func_800CEE20((GteShortVector *)&position, 0, 8192, 8192, (s16)D_800F3368.parameter02 * (frame >> 1),
+        kind = g_FieldFxSpriteParams.palette;
+        frame = g_FieldFxCurrentAge - 1;
+        palette = g_FieldFxPaletteTable[kind];
+        handle = GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag != 0) ? palette + 6 : palette + 2);
+        FieldFx_DrawShapeQuads((GteShortVector *)&position, 0, 8192, 8192, (s16)g_FieldFxSpriteParams.parameter02 * (frame >> 1),
             (unsigned short)handle, 1,
-            (short)D_800966EC[((unsigned int)frame << 7) & 0xF80].word >> 5,
+            (short)rcossin_tbl[((unsigned int)frame << 7) & 0xF80].word >> 5,
             &D_8019A4E8);
     }
     return 0;
@@ -1068,7 +1068,7 @@ int func_80195064(int event) {
     switch (event) {
     case 0:
 
-        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,8,16,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350Emitter)->pool,8,16,
                              (FieldFxCallbackListCallback)func_80194F04);
         case 1:
     if (D_8019A7FC.completionFlags[0] && D_8019A7FC.activeCount==0) return 2;
@@ -1083,7 +1083,7 @@ int func_80195064(int event) {
                 Vector **position=queue->positions;
                 while (i<queue->count) {
                     {
-                        PointerQueueParticle *particle=func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
+                        PointerQueueParticle *particle=FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM350Emitter)->pool);
                         if (!particle) break;
                         particle->position=*position;
                         particle->offset=0;
@@ -1098,17 +1098,17 @@ int func_80195064(int event) {
         break;
     case 2:
 
-    D_800F3368.parameter00 = 32;
-    D_800F3368.parameter02 = 2;
-    D_800F3368.extent_x = 32;
-    D_800F3368.extent_y = 32;
-    D_800F3368.extent_x = 32;
-    D_800F3368.extent_y = 32;
-    D_800F3368.tpage = D_800E2850[D_800E11E4[11]];
-    D_800F3368.palette = 3;
-    D_800F3368.parameter06 = 1;
-    D_800F3368.parameter0A = 0;
-    D_800F3368.depth = 0;
+    g_FieldFxSpriteParams.parameter00 = 32;
+    g_FieldFxSpriteParams.parameter02 = 2;
+    g_FieldFxSpriteParams.extent_x = 32;
+    g_FieldFxSpriteParams.extent_y = 32;
+    g_FieldFxSpriteParams.extent_x = 32;
+    g_FieldFxSpriteParams.extent_y = 32;
+    g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[g_FieldFxTpageSlots[11]];
+    g_FieldFxSpriteParams.palette = 3;
+    g_FieldFxSpriteParams.parameter06 = 1;
+    g_FieldFxSpriteParams.parameter0A = 0;
+    g_FieldFxSpriteParams.depth = 0;
     }
     return 0;
 }
@@ -1117,20 +1117,20 @@ int func_80195218(int event, PositionQueueParticle *object)
 {
     short vector[4];
     if (event == 1) {
-        if (D_800E27EC >= 16) return 1;
+        if (g_FieldFxCurrentAge >= 16) return 1;
     } else if (event == 2) {
-        int frame = D_800E27EC - 2;
+        int frame = g_FieldFxCurrentAge - 2;
         if (frame >= 0) {
             int size,kind,palette,handle;
             vector[0] = 1024; vector[1] = object->position.pad;
             vector[2] = 1024; vector[3] = 1;
             size = D_800966EE[((unsigned int)frame << 7) & 0x1F80];
-            kind = D_800F3368.palette; palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428) palette += 4;
+            kind = g_FieldFxSpriteParams.palette; palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag) palette += 4;
             handle = GetClut(0, palette);
-            func_800CEE20((GteShortVector *)object, (struct GteRotation *)vector, size, size * 2, (s16)D_800F3368.parameter02 * object->delay + 64,
+            FieldFx_DrawShapeQuads((GteShortVector *)object, (struct GteRotation *)vector, size, size * 2, (s16)g_FieldFxSpriteParams.parameter02 * object->delay + 64,
                 (unsigned short)handle, 1,
-                D_800966EC[((unsigned int)frame << 6) & 0xFC0].bits.cos >> 5,
+                rcossin_tbl[((unsigned int)frame << 6) & 0xFC0].bits.cos >> 5,
                 &D_8019A3D0);
         }
     }
@@ -1142,7 +1142,7 @@ int func_80195378(int event) {
     switch (event) {
     case 0:
 
-        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,12,50,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350Emitter)->pool,12,50,
                              (FieldFxCallbackListCallback)func_80195218);
         case 1:
     if (D_8019A7FC.completionFlags[0] && D_8019A7FC.activeCount==0) return 2;
@@ -1157,11 +1157,11 @@ int func_80195378(int event) {
                 Vector *position=queue->positions;
                 while (i<queue->count) {
                     {
-                        PositionQueueParticle *particle=func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
+                        PositionQueueParticle *particle=FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM350Emitter)->pool);
                         if (!particle) break;
                         particle->position=*position;
                         particle->position.pad=ANIM_OWNER_AS(Actor)->instance->yaw;
-                        particle->delay=D_800E27EC & 7;
+                        particle->delay=g_FieldFxCurrentAge & 7;
                     }
                     i++;
                     position++;
@@ -1174,11 +1174,11 @@ int func_80195378(int event) {
     case 2:
 
     {
-        int index=D_800E11EA, palette;
-        D_800F3368.parameter00=32; D_800F3368.parameter02=2;
-        D_800F3368.extent_x=32; D_800F3368.extent_y=32; D_800F3368.extent_x=32; D_800F3368.extent_y=32;
-        palette=D_800E2850[index];
-        D_800F3368.palette=3; D_800F3368.parameter06=0; D_800F3368.parameter0A=0; D_800F3368.depth=0; D_800F3368.tpage=palette;
+        int index=g_FieldFxTpageSlot3, palette;
+        g_FieldFxSpriteParams.parameter00=32; g_FieldFxSpriteParams.parameter02=2;
+        g_FieldFxSpriteParams.extent_x=32; g_FieldFxSpriteParams.extent_y=32; g_FieldFxSpriteParams.extent_x=32; g_FieldFxSpriteParams.extent_y=32;
+        palette=g_FieldFxTpageTable[index];
+        g_FieldFxSpriteParams.palette=3; g_FieldFxSpriteParams.parameter06=0; g_FieldFxSpriteParams.parameter0A=0; g_FieldFxSpriteParams.depth=0; g_FieldFxSpriteParams.tpage=palette;
     }
     }
     return 0;
@@ -1186,16 +1186,16 @@ int func_80195378(int event) {
 
 int func_80195564(int event, short *position) {
     if (event == 1) {
-        if (D_800E27EC >= 8) return 1;
+        if (g_FieldFxCurrentAge >= 8) return 1;
     } else if (event == 2) {
-        int kind = D_800F3368.palette;
-        int texture = D_800E1204[kind];
+        int kind = g_FieldFxSpriteParams.palette;
+        int texture = g_FieldFxPaletteTable[kind];
         int handle;
-        handle = GetClut(0, (kind == 4 && D_800F3428 != 0) ? texture + 8 : texture + 4);
-        func_800CEE20((GteShortVector *)position, 0, position[3], position[3],
-            (s16)D_800F3368.parameter02 * D_8019A4EC[(D_800E27EC - 1) / 2] + 128,
+        handle = GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag != 0) ? texture + 8 : texture + 4);
+        FieldFx_DrawShapeQuads((GteShortVector *)position, 0, position[3], position[3],
+            (s16)g_FieldFxSpriteParams.parameter02 * D_8019A4EC[(g_FieldFxCurrentAge - 1) / 2] + 128,
             (unsigned short)handle, 1,
-            (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80].word >> 5,
+            (short)rcossin_tbl[((unsigned int)(g_FieldFxCurrentAge - 1) << 7) & 0xF80].word >> 5,
             &D_8019A3D0);
     }
     return 0;
@@ -1205,7 +1205,7 @@ int func_8019569C(int event) {
     switch (event) {
     case 0:
 
-        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool,8,10,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350Emitter)->pool,8,10,
                              (FieldFxCallbackListCallback)func_80195564);
         case 1:
     if(D_8019A7FC.completionFlags[0]) return 2;
@@ -1220,7 +1220,7 @@ int func_8019569C(int event) {
             Instance *instance;
             int j;
             if(!entry->index) return 0;
-            particle=func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
+            particle=FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM350Emitter)->pool);
             if(!particle) return 0;
             if(entry->alternate) instance=(Instance *)D_8019A7F8;
             else instance=ANIM_OWNER_AS(Actor)->instance;
@@ -1228,23 +1228,23 @@ int func_8019569C(int event) {
                 int *source=instance->transforms[entry->index].t;
                 for(j=0;j<3;j++) particle->position[j]=source[j];
             }
-            particle->size=((int *)D_800966EC)[(relative<<7)&0xF80]+2048;
+            particle->size=((int *)rcossin_tbl)[(relative<<7)&0xF80]+2048;
         }
     }
         break;
     case 2:
 
-    D_800F3368.parameter00 = 32;
-    D_800F3368.parameter02 = 2;
-    D_800F3368.extent_x = 32;
-    D_800F3368.extent_y = 32;
-    D_800F3368.extent_x = 32;
-    D_800F3368.extent_y = 32;
-    D_800F3368.tpage = D_800E2850[D_800E11E4[11]];
-    D_800F3368.palette = 3;
-    D_800F3368.parameter06 = 1;
-    D_800F3368.parameter0A = 0;
-    D_800F3368.depth = 0;
+    g_FieldFxSpriteParams.parameter00 = 32;
+    g_FieldFxSpriteParams.parameter02 = 2;
+    g_FieldFxSpriteParams.extent_x = 32;
+    g_FieldFxSpriteParams.extent_y = 32;
+    g_FieldFxSpriteParams.extent_x = 32;
+    g_FieldFxSpriteParams.extent_y = 32;
+    g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[g_FieldFxTpageSlots[11]];
+    g_FieldFxSpriteParams.palette = 3;
+    g_FieldFxSpriteParams.parameter06 = 1;
+    g_FieldFxSpriteParams.parameter0A = 0;
+    g_FieldFxSpriteParams.depth = 0;
     }
     return 0;
 }
@@ -1292,7 +1292,7 @@ int func_801958DC(int event) {
                 D_8019A7FC.repeats=(unsigned short)D_8019A7FC.repeats-1;
             }
             if(frame<19) return 0;
-            speed=D_800966EC[((frame-19)*341)&4095].part.sin;
+            speed=rcossin_tbl[((frame-19)*341)&4095].part.sin;
             speed/=32;
             angle=FieldFx_VecToAngle((Vec3Fixed *)g_PlayerEntity->render_object.model_matrix.translation,(Vec3Fixed *)instance->render_object.model_matrix.translation);
             instance->rot_y=FieldFx_TurnToward(instance->rot_y,(short)angle,speed);
@@ -1311,11 +1311,11 @@ int func_80195B64(int event, RoomM350RadialSpriteParticle *object)
 {
     short position[4];
     if (event == 1) {
-        if (D_800E27EC >= 8) {
+        if (g_FieldFxCurrentAge >= 8) {
             return 1;
         }
     } else if (event == 2) {
-        int entry = D_800966EC[((unsigned int)D_800E27EC << 7) & 0xF80].word;
+        int entry = rcossin_tbl[((unsigned int)g_FieldFxCurrentAge << 7) & 0xF80].word;
         int scale = entry >> 16;
         int shade = (short)entry >> 5;
         int *origin = ANIM_OWNER_AS(RoomM350EffectActor)->instance->transforms[33].t;
@@ -1325,13 +1325,13 @@ int func_80195B64(int event, RoomM350RadialSpriteParticle *object)
         for (i = 0; i < 3; i++) {
             position[i] = object->position[i] * scale / 4096 + origin[i];
         }
-        kind = D_800F3368.palette;
-        palette = D_800E1204[kind];
-        if (kind == 4 && D_800F3428) {
+        kind = g_FieldFxSpriteParams.palette;
+        palette = g_FieldFxPaletteTable[kind];
+        if (kind == 4 && g_FieldFxAltPaletteFlag) {
             palette += 4;
         }
         handle = GetClut(32, palette);
-        func_800CEE20((GteShortVector *)position, 0, object->size, object->size, (s16)D_800F3368.parameter02 + 216,
+        FieldFx_DrawShapeQuads((GteShortVector *)position, 0, object->size, object->size, (s16)g_FieldFxSpriteParams.parameter02 + 216,
             (unsigned short)handle, 1, shade, (struct RenderColor *)D_8019A56C);
     }
     return 0;
@@ -1356,7 +1356,7 @@ int func_80195CE0(int event,RoomM350RadialSpriteState *inputState)
             emitter=ANIM_POOL_AS(RoomM350EffectEmitter);
             ((int *)&state->rotation)[1]=0;
             state->count=0; state->fade=0;
-            return func_800CE560(emitter->pool,8,18,
+            return FieldFx_InitCallbackList(emitter->pool,8,18,
                                  (FieldFxCallbackListCallback)func_80195B64);
         }
         case 1:
@@ -1369,16 +1369,16 @@ int func_80195CE0(int event,RoomM350RadialSpriteState *inputState)
             state->fade=old+1;
             if(phase>=2048) return 2;
         } else {
-            int timer=D_800E27EC;
+            int timer=g_FieldFxCurrentAge;
             phase=timer<32 ? (unsigned int)timer<<5:1024;
         }
-        sample=(short)D_800966EC[phase&4095].word;
+        sample=(short)rcossin_tbl[phase&4095].word;
         state->brightness=sample>>5;
         state->size=(unsigned int)sample<<2;
         if(state->count>=16) return 0;
         i=0;
         while(i<2) {
-            register RoomM350RadialSpriteParticle *particle asm("$17")=func_800CE610(ANIM_POOL_AS(RoomM350EffectEmitter)->pool);
+            register RoomM350RadialSpriteParticle *particle asm("$17")=FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM350EffectEmitter)->pool);
             int random;
             int highByte;
             int divisor;
@@ -1403,7 +1403,7 @@ radial:
     case 2:
 
     {
-        int index=D_800E11E8;
+        int index=g_FieldFxTpageSlot2;
         int i;
         int palette;
         RoomM350EffectActor *actor;
@@ -1411,27 +1411,27 @@ radial:
         register unsigned short *palettes asm("$19");
         volatile int *position;
         short *out;
-        D_800F3368.parameter00=16; D_800F3368.parameter02=1;
-        D_800F3368.extent_x=16; D_800F3368.extent_y=16; D_800F3368.extent_x=16; D_800F3368.extent_y=16;
-        palette=D_800E2850[index];
+        g_FieldFxSpriteParams.parameter00=16; g_FieldFxSpriteParams.parameter02=1;
+        g_FieldFxSpriteParams.extent_x=16; g_FieldFxSpriteParams.extent_y=16; g_FieldFxSpriteParams.extent_x=16; g_FieldFxSpriteParams.extent_y=16;
+        palette=g_FieldFxTpageTable[index];
 
         actor=ANIM_OWNER_AS(RoomM350EffectActor);
-        D_800F3368.palette=2; D_800F3368.parameter06=0; D_800F3368.parameter0A=0; D_800F3368.depth=0; D_800F3368.tpage=palette;
+        g_FieldFxSpriteParams.palette=2; g_FieldFxSpriteParams.parameter06=0; g_FieldFxSpriteParams.parameter0A=0; g_FieldFxSpriteParams.depth=0; g_FieldFxSpriteParams.tpage=palette;
 
         i=0;
         position=actor->instance->transforms[33].t;
         out=&local.position.x;
         for(;i<3;i++) *out++=*position++;
         i=0;
-        palettes=D_800E1204;
-        state->rotation.z=(unsigned int)D_800E27EC<<8;
+        palettes=g_FieldFxPaletteTable;
+        state->rotation.z=(unsigned int)g_FieldFxCurrentAge<<8;
         specialKind=4;
         while(i<2) {
-            int kind=D_800F3368.palette;
+            int kind=g_FieldFxSpriteParams.palette;
             int clut,pal=palettes[kind];
-            if(kind==specialKind && D_800F3428) pal+=4;
+            if(kind==specialKind && g_FieldFxAltPaletteFlag) pal+=4;
             clut=GetClut(32,pal);
-            func_800CEE20(&local.position,&state->rotation,state->size,state->size,(s16)D_800F3368.parameter02+216,(unsigned short)clut,1,state->brightness,(struct RenderColor *)D_8019A570);
+            FieldFx_DrawShapeQuads(&local.position,&state->rotation,state->size,state->size,(s16)g_FieldFxSpriteParams.parameter02+216,(unsigned short)clut,1,state->brightness,(struct RenderColor *)D_8019A570);
             state->rotation.z=0u-(unsigned short)state->rotation.z;
             ++i;
         }
@@ -1462,13 +1462,13 @@ case 0:
     }
 case 1:
     {
-        int timer=D_800E27EC,size;
+        int timer=g_FieldFxCurrentAge,size;
         register int high asm("$9");
         register int quotient asm("$2");
         int intermediate;
-        if(timer<16) size=((4096-D_800966EC[((unsigned int)timer<<6)&0xFC0].part.sin)>>1)+2048;
+        if(timer<16) size=((4096-rcossin_tbl[((unsigned int)timer<<6)&0xFC0].part.sin)>>1)+2048;
         else if(timer>=91) {
-            int sample=D_800966EC[((unsigned int)(timer-90)<<6)&0xFC0].part.cos;
+            int sample=rcossin_tbl[((unsigned int)(timer-90)<<6)&0xFC0].part.cos;
             asm volatile("" : "=r"(sample) : "0"(sample));
             size=sample>>1;
         }
@@ -1484,7 +1484,7 @@ case 1:
         state->brightness=size<=2048 ? size>>4:(4096-size)>>4;
         if(!state->initialized) {
             if(D_8019A831) {
-                int distance=func_800DFE20((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x);
+                int distance=FieldFx_GetDistanceXZ((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x);
                 int angle=FieldFx_VecToAngle((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x);
                 int yaw=state->yaw;
                 int rawDelta=((unsigned int)angle-(yaw>>8))&4095;
@@ -1578,10 +1578,10 @@ case 2:
         out=base.t; in=transforms[33].t;
         for(;i<3;i++) *out++=*in++;
         rawPage=GetTPage(0,1,0,0);
-        page=(unsigned short)(D_800E2850[D_800E11FA]|rawPage);
-        kind=D_800F3368.palette;
-        palette=D_800E1204[kind];
-        palette=GetClut(0,(kind==4 && D_800F3428!=0) ? palette+7 : palette+3);
+        page=(unsigned short)(g_FieldFxTpageTable[g_FieldFxTpageSlot11]|rawPage);
+        kind=g_FieldFxSpriteParams.palette;
+        palette=g_FieldFxPaletteTable[kind];
+        palette=GetClut(0,(kind==4 && g_FieldFxAltPaletteFlag!=0) ? palette+7 : palette+3);
         FieldFx_ModelSetTexture(page,(unsigned short)palette);
         FieldFx_ModelSetSemiTrans(1);
         FieldFx_ModelSaveColors(state->asset);
@@ -1627,7 +1627,7 @@ case 2:
             register int triple=state->size*3;
             size=triple*2;
             for (;i<3;i++) {
-                func_800D0E88(&position,(GteRotation *)&rotation,size,512,(RenderColor *)D_8019A594,&D_8019A3C8,&D_8019A3C8,state->brightness,1);
+                FieldFx_DrawRotatedTriangle(&position,(GteRotation *)&rotation,size,512,(RenderColor *)D_8019A594,&D_8019A3C8,&D_8019A3C8,state->brightness,1);
                 rotation.y=(unsigned short)rotation.y+24;
             }
         }
@@ -1638,19 +1638,19 @@ case 2:
 
 int func_801968D8(int event, short *position) {
     if (event == 1) {
-        if (D_800E27EC >= 16) return 1;
+        if (g_FieldFxCurrentAge >= 16) return 1;
         position[1] += position[3];
         position[3] -= position[4];
     } else if (event == 2) {
-        int kind = D_800F3368.palette;
-        int palette = D_800E1204[kind];
+        int kind = g_FieldFxSpriteParams.palette;
+        int palette = g_FieldFxPaletteTable[kind];
         int handle;
-        if (kind == 4 && D_800F3428) palette += 4;
+        if (kind == 4 && g_FieldFxAltPaletteFlag) palette += 4;
         handle = GetClut(16, palette);
-        func_800CEE20((GteShortVector *)position, 0, 12288, 12288,
-            (s16)D_800F3368.parameter02 * (((D_800E27EC - 1) >> 1) & 7) + 200,
+        FieldFx_DrawShapeQuads((GteShortVector *)position, 0, 12288, 12288,
+            (s16)g_FieldFxSpriteParams.parameter02 * (((g_FieldFxCurrentAge - 1) >> 1) & 7) + 200,
             (unsigned short)handle, 1,
-            (short)D_800966EC[((unsigned int)(D_800E27EC - 1) << 7) & 0xF80].word >> 5,
+            (short)rcossin_tbl[((unsigned int)(g_FieldFxCurrentAge - 1) << 7) & 0xF80].word >> 5,
             (struct RenderColor *)D_8019A598);
     }
     return 0;
@@ -1661,13 +1661,13 @@ int func_80196A14(int event)
     switch (event) {
     case 0:
 
-        return func_800CE560(ANIM_POOL_AS(RoomM350Emitter)->pool, 12, 16,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM350Emitter)->pool, 12, 16,
                              (FieldFxCallbackListCallback)func_801968D8);
         case 1:
-    if (D_800E27EC >= 107) return 2;
-    if (D_800E27EC & 1) {
+    if (g_FieldFxCurrentAge >= 107) return 2;
+    if (g_FieldFxCurrentAge & 1) {
         Matrix *matrices = ((Instance *)ANIM_OWNER_AS(Actor)->instance)->transforms;
-        DualBallisticParticle *particle = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
+        DualBallisticParticle *particle = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM350Emitter)->pool);
         if (particle) {
             int random = Inv_ScrambleGrid();
             particle->x = (unsigned int)matrices[33].t[0] - (((unsigned int)random << 1) - 256);
@@ -1675,12 +1675,12 @@ int func_80196A14(int event)
             random = Inv_ScrambleGrid();
             particle->z = (unsigned int)matrices[33].t[2] - (((unsigned int)random << 1) - 256);
             particle->velocityY = 0;
-            particle->gravity = ((D_800E27EC >> 1) & 1) + 2;
+            particle->gravity = ((g_FieldFxCurrentAge >> 1) & 1) + 2;
         }
     }
     if (D_8019A82F) {
         Matrix *matrices = ((Instance *)g_PlayerEntity)->transforms;
-        DualBallisticParticle *particle = func_800CE610(ANIM_POOL_AS(RoomM350Emitter)->pool);
+        DualBallisticParticle *particle = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM350Emitter)->pool);
         if (!particle) return 0;
         {
             int random = Inv_ScrambleGrid();
@@ -1689,21 +1689,21 @@ int func_80196A14(int event)
             random = Inv_ScrambleGrid();
             particle->z = (unsigned int)matrices[0].t[2] - (((unsigned int)random << 1) - 256);
             particle->velocityY = 0;
-            particle->gravity = ((D_800E27EC >> 1) & 1) + 2;
+            particle->gravity = ((g_FieldFxCurrentAge >> 1) & 1) + 2;
         }
     }
         break;
     case 2:
 
     {
-        int index = D_800E11E8;
+        int index = g_FieldFxTpageSlot2;
         int palette;
-        D_800F3368.parameter00 = 16; D_800F3368.parameter02 = 1;
-        D_800F3368.extent_x = 16; D_800F3368.extent_y = 16;
-        D_800F3368.extent_x = 16; D_800F3368.extent_y = 16;
-        palette = D_800E2850[index];
-        D_800F3368.palette = 2; D_800F3368.parameter06 = 0;
-        D_800F3368.parameter0A = 0; D_800F3368.depth = 0; D_800F3368.tpage = palette;
+        g_FieldFxSpriteParams.parameter00 = 16; g_FieldFxSpriteParams.parameter02 = 1;
+        g_FieldFxSpriteParams.extent_x = 16; g_FieldFxSpriteParams.extent_y = 16;
+        g_FieldFxSpriteParams.extent_x = 16; g_FieldFxSpriteParams.extent_y = 16;
+        palette = g_FieldFxTpageTable[index];
+        g_FieldFxSpriteParams.palette = 2; g_FieldFxSpriteParams.parameter06 = 0;
+        g_FieldFxSpriteParams.parameter0A = 0; g_FieldFxSpriteParams.depth = 0; g_FieldFxSpriteParams.tpage = palette;
     }
     }
     return 0;

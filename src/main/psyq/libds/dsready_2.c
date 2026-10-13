@@ -110,7 +110,7 @@ void LIBDS_DSREADY_text_3D8(unsigned char arg0, unsigned char *arg1) {
     void *data;
     DsAsyncReadCallback callback;
 
-    state = &D_8009B708;
+    state = &g_DsReadySystemCallback;
     active = state + 1;
     data = arg1;
     if (state[0] == 0) {

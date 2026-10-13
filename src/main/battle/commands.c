@@ -364,7 +364,7 @@ int Aya_HasParasiteSpell(int spell)
 }
 
 void Aya_UnlockParasiteSpell(int spell) {
-    D_800C0E00.parasite_spell_flags |= 1 << spell;
+    g_AyaSaveState.parasite_spell_flags |= 1 << spell;
 }
 
 int Math_IntSqrt(int value) {
@@ -395,7 +395,7 @@ int BattleCmd_CommitAmmoAndUpdate(void *out) {
     if (D_8009D254 != 0) {
         current = D_8009D254->core;
         if (current != 0) {
-            D_800C0E00.current_hp = current->curHP;
+            g_AyaSaveState.current_hp = current->curHP;
             if (current->action != 0) {
                 saved = Inv_IsActiveListOverrideSelected();
                 Inv_SelectActiveList(0);
@@ -424,7 +424,7 @@ void Inv_BuildWeaponList(int unused, WeaponListOutput *out) {
     int i, kind, code, root, shift, trial, radicand;
     int product;
     Inv_SelectActiveList(0);
-    item = Inv_LookupActiveListData(D_800C0E20.tracked[0]);
+    item = Inv_LookupActiveListData(g_InventoryRuntime.tracked[0]);
     if (item->baseStats[0] + item->bonusStats[0] >= 1000) out->attack = 999;
     else out->attack = item->baseStats[0] + item->bonusStats[0];
     {

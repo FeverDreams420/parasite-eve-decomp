@@ -3,9 +3,9 @@
 
 #include "common.h"
 
-extern u16 D_800945E4[];
-extern u16 *D_80095670;
+extern u16 g_IntrState[];
+extern u16 *g_IntrStatusRegPtr;
 extern volatile u16 *D_80095674;
-extern u32 *D_80095678;
+extern u32 *g_IntrDmaControlRegPtr;
 
 #endif /* PSYQ_LIBETC_INTR_2_EXTERNS_H */

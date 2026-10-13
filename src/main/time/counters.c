@@ -29,7 +29,7 @@ void GameTime_InitCounter1(void) {
     int value;
 
     value = 1;
-    D_800A76B0[0] = 0;
+    g_GameTimer1Current[0] = 0;
     g_GameTimer1Limit = 0;
     g_GameTimer1Flags = value;
 }

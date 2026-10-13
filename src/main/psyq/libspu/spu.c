@@ -12,7 +12,7 @@ int _spu_init(int hot) {
     int channel;
     volatile u16 *clear;
     *_spu_sys_pcr |= 0xB0000;
-    D_8009B418 = 0;
+    _spu_transMode = 0;
     D_8009B41C = 0;
     g_SpuTransferAddr = 0;
     _spu_RXX->master_volume_left = 0;
@@ -24,7 +24,7 @@ int _spu_init(int hot) {
     timeout = 0;
     while (_spu_RXX->transfer_status & 0x7FF) {
         if (++timeout > 0xF00) {
-            printf(D_80011C4C, D_80011C5C);
+            printf(g_SpuTimeoutFormat, g_SpuWaitResetText);
             break;
         }
     }
@@ -77,7 +77,7 @@ int _spu_init(int hot) {
         _spu_Fw1ts();
         _spu_Fw1ts();
     }
-    D_8009B430 = 1;
+    _spu_inTransfer = 1;
     _spu_RXX->spucnt = 0xC000;
     _spu_transferCallback = 0;
     _spu_IRQCallback = 0;
@@ -115,7 +115,7 @@ void _spu_FwriteByIO(void *address, u32 size) {
         timer = 0;
         while (_spu_RXX->transfer_status & 0x400) {
             if (++timer > 0xF00u) {
-                printf(D_80011C4C, D_80011C6C);
+                printf(g_SpuTimeoutFormat, g_SpuWaitWrdyText);
                 break;
             }
         }
@@ -131,7 +131,7 @@ void _spu_FwriteByIO(void *address, u32 size) {
     timer = 0;
     while ((_spu_RXX->transfer_status & 0x7FF) != initial_status) {
         if (++timer > 0xF00u) {
-            printf(D_80011C4C, D_80011C80);
+            printf(g_SpuTimeoutFormat, g_SpuWaitDmafText);
             break;
         }
     }

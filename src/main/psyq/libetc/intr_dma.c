@@ -36,9 +36,9 @@ void trapIntrDMA(void) {
         } while (mask != 0);
     }
     if ((DMA_STATUS & 0xFF000000) == 0x80000000 || (DMA_STATUS & 0x8000)) {
-        printf(D_8001177C, DMA_STATUS);
+        printf(g_DmaBusErrorFormat, DMA_STATUS);
         for (i = 0; i < 7; i++) {
-            printf(D_80011798, i, D_800956E0[i].address);
+            printf(g_DmaMadrFormat, i, g_DmaChannelRegsPtr[i].address);
         }
     }
 }

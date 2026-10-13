@@ -37,9 +37,9 @@ int RoomEffect_SoundBurstParticle(int mode, RoomSoundBurstParticle *particle,
         position.x = 0;
         position.y = particle->height;
         position.z = 0;
-        func_800CF844(particle, world, (s16)particle->swing, &position, swing,
+        FieldFx_OffsetPointByAngles(particle, world, (s16)particle->swing, &position, swing,
                       0);
-        if (func_800C6B90(world, 100) != 0) {
+        if (FieldFx_IsPlayerWithinRadius(world, 100) != 0) {
             if (FX_TASK_AS(RoomSoundBurstEventState)->active) {
                 RoomSoundBurstChannel *channel = ANIM_OWNER_AS(RoomSoundBurstChannel);
                 u32 *entry;
@@ -52,31 +52,31 @@ int RoomEffect_SoundBurstParticle(int mode, RoomSoundBurstParticle *particle,
                 }
             }
         }
-        if (D_800E27EC < 0x40) break;
+        if (g_FieldFxCurrentAge < 0x40) break;
         return 1;
     case 2:
-        scale = rcos(D_800E27EC << 4) / 32;
+        scale = rcos(g_FieldFxCurrentAge << 4) / 32;
         scale = particle->spread * scale / 128;
-        base = (D_800E27EC << 8) + 0x1000;
+        base = (g_FieldFxCurrentAge << 8) + 0x1000;
         size = (rcos(particle->tilt) / 4 + 0x1000) * base / 4096;
-        kind = D_800F3368.palette;
-        palette = D_800E1204[kind];
-        if (kind == 4 && D_800F3428 != 0) palette += 4;
+        kind = g_FieldFxSpriteParams.palette;
+        palette = g_FieldFxPaletteTable[kind];
+        if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
         clut = GetClut(0x80, palette);
-        func_800CEE20((GteShortVector *)&particle->wx, 0, size, size,
-                      (s16)D_800F3368.parameter02 * ((D_800E27EC / 4) & 1) + 0xFD, clut, 1,
+        FieldFx_DrawShapeQuads((GteShortVector *)&particle->wx, 0, size, size,
+                      (s16)g_FieldFxSpriteParams.parameter02 * ((g_FieldFxCurrentAge / 4) & 1) + 0xFD, clut, 1,
                       scale, (struct RenderColor *)&color);
         position.x = 0x400;
         position.y = 0;
         position.z = 0;
         position.pad = 1;
         particle->wy = g_RoomFloorY->y;
-        kind = D_800F3368.palette;
-        palette = D_800E1204[kind];
-        if (kind == 4 && D_800F3428 != 0) palette += 4;
+        kind = g_FieldFxSpriteParams.palette;
+        palette = g_FieldFxPaletteTable[kind];
+        if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
         clut2 = GetClut(0x80, palette);
-        func_800CEE20((GteShortVector *)&particle->wx, (GteRotation *)&position, size, size,
-                      (s16)D_800F3368.parameter02 * ((D_800E27EC / 4) & 1) + 0xFD, clut2, 2,
+        FieldFx_DrawShapeQuads((GteShortVector *)&particle->wx, (GteRotation *)&position, size, size,
+                      (s16)g_FieldFxSpriteParams.parameter02 * ((g_FieldFxCurrentAge / 4) & 1) + 0xFD, clut2, 2,
                       scale / 4, 0);
         break;
     }
@@ -93,22 +93,22 @@ int RoomEffect_SoundBurstController(int mode, RoomSoundBurstState *state) {
 
     switch (mode) {
     case 0:
-        state->soundHandle = func_800D3F64(0x5A1, func_800D3FD8());
+        state->soundHandle = FieldFx_PlaySoundAtOwner(0x5A1, FieldFx_GetOwnerProgress());
         pool = ANIM_POOL_AS(RoomSoundBurstChannel)->pool;
-        return func_800CE560(pool, 24, 24,
+        return FieldFx_InitCallbackList(pool, 24, 24,
                              (FieldFxCallbackListCallback)RoomEffect_SoundBurstParticle);
     case 1:
         state->frame++;
-        if (D_800E27EC < 0x47) {
+        if (g_FieldFxCurrentAge < 0x47) {
             pool = ANIM_OWNER_AS(RoomSoundBurstChannel)->pool;
             FieldFx_TransformMatrixPoint(pool, 9, &template, position);
-            angle = rsin((D_800E27EC << 11) / 70) / 32;
-            if (D_800E27EC % 3 == 0) {
+            angle = rsin((g_FieldFxCurrentAge << 11) / 70) / 32;
+            if (g_FieldFxCurrentAge % 3 == 0) {
                 pool = ANIM_POOL_AS(RoomSoundBurstChannel)->pool;
-                child = func_800CE610(pool);
+                child = FieldFx_AcquireCallbackSlot(pool);
                 if (child) {
                     pool = ANIM_OWNER_AS(RoomSoundBurstChannel)->pool;
-                    func_800CE9D4((struct RoomFxTransformOwner *)pool, 0,
+                    FieldFx_GetTransformLookAngles((struct RoomFxTransformOwner *)pool, 0,
                                   (GteShortVector *)target);
                     child->height = target[1];
                     child->x = position[0];
@@ -130,25 +130,25 @@ int RoomEffect_SoundBurstController(int mode, RoomSoundBurstState *state) {
                 }
             }
         }
-        if (D_800E27EC == 0x46 && state->soundHandle != -1) {
+        if (g_FieldFxCurrentAge == 0x46 && state->soundHandle != -1) {
             Akao_Cmd_21(state->soundHandle, 0);
         }
-        if (D_800E27EC < 8) break;
+        if (g_FieldFxCurrentAge < 8) break;
         return 2;
     case 2:
     {
-        int idx = D_800E11E8;
+        int idx = g_FieldFxTpageSlot2;
         int palette;
-        D_800F3368.parameter00 = 16;
-        D_800F3368.parameter02 = 1;
-        D_800F3368.extent_x = 16;
-        D_800F3368.extent_y = 16;
-        palette = D_800E2850[idx];
-        D_800F3368.palette = 2;
-        D_800F3368.parameter06 = 0;
-        D_800F3368.parameter0A = 0;
-        D_800F3368.depth = 8;
-        D_800F3368.tpage = palette;
+        g_FieldFxSpriteParams.parameter00 = 16;
+        g_FieldFxSpriteParams.parameter02 = 1;
+        g_FieldFxSpriteParams.extent_x = 16;
+        g_FieldFxSpriteParams.extent_y = 16;
+        palette = g_FieldFxTpageTable[idx];
+        g_FieldFxSpriteParams.palette = 2;
+        g_FieldFxSpriteParams.parameter06 = 0;
+        g_FieldFxSpriteParams.parameter0A = 0;
+        g_FieldFxSpriteParams.depth = 8;
+        g_FieldFxSpriteParams.tpage = palette;
         break;
     }
     }

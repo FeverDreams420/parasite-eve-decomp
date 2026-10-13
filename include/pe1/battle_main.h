@@ -13,9 +13,9 @@ typedef struct StatusSymbolTemplate {
     u8 bytes[18];
 } StatusSymbolTemplate;
 
-extern const BattleActionSoundTable D_80010760;
+extern const BattleActionSoundTable g_BattleActionSoundIds;
 extern u8 D_8009D274, D_8009CE39, D_8009CE3A;
-extern s16 D_8009D27C;
+extern s16 g_BattlePlayerAimHeight;
 extern const Tbl20 D_8001074C;
 extern u8 D_8009CE3B;
 extern u16 D_800BE834[];
@@ -28,9 +28,9 @@ typedef union BattleHalfwordAddress {
 extern u8 g_BattleStatusRowPosY[];
 extern u8 D_8009E508[];
 extern u8 D_8009E516[];
-extern const StatusSymbolTemplate D_80010DFC;
-extern const StatusSymbolTemplate D_80010E10;
-extern const StatusSymbolTemplate D_80010E24;
+extern const StatusSymbolTemplate g_BattleStatusSymbolUv;
+extern const StatusSymbolTemplate g_BattleStatusSymbolSize;
+extern const StatusSymbolTemplate g_BattleStatusSymbolOffset;
 extern u8 D_8009E93C[];
 extern u8 D_8009E93D[];
 extern u8 D_8009E930[];

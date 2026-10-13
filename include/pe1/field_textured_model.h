@@ -150,9 +150,9 @@ typedef struct FieldModelScratch {
 #define TEXTURED_MODEL_OT(depth) \
     ((RenderGpuTag *)(D_800B0E38.ordering[g_ActiveDrawSlot] + (depth)))
 
-extern u16 D_800F346C;
-extern u16 D_800F3414;
-extern u16 D_800F33E4;
-extern s16 D_800F3420;
+extern u16 g_FieldFxModelTpage;
+extern u16 g_FieldFxModelClut;
+extern u16 g_FieldFxModelSemiTrans;
+extern s16 g_FieldFxModelDepthBias;
 
 #endif

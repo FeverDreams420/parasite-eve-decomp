@@ -39,7 +39,7 @@ void func_800DFB20(Func800DFB20State *state)
  * A pending one-shot flag (0x80000 or 0x40000 at +0x98, selected by the
  * state bits) is consumed and reported once; otherwise the object waits while
  * its child is mid-animation. */
-int func_800DFB78(FieldFxTaskOwner *arg0)
+int FieldFx_IsOwnerBusy(FieldFxTaskOwner *arg0)
 {
   register FieldFxTaskContext *state;
   FieldActor *obj;
@@ -93,7 +93,7 @@ int func_800DFB78(FieldFxTaskOwner *arg0)
   return 0;
 }
 
-int func_800DFC44(int value) {
+int FieldFx_IntSqrt(int value) {
     int result = 0;
     int shift = 0x1E;
 
@@ -111,7 +111,7 @@ int func_800DFC44(int value) {
     return result;
 }
 
-s32 func_800DFC80(Vec3Fixed *lhs, Vec3Fixed *rhs) {
+s32 FieldFx_GetFixedDistance3D(Vec3Fixed *lhs, Vec3Fixed *rhs) {
     s32 dx = (lhs->x - rhs->x) >> 16;
     s32 dx_sq = dx * dx;
     s32 dz = (lhs->z - rhs->z) >> 16;
@@ -168,7 +168,7 @@ s32 func_800DFC80(Vec3Fixed *lhs, Vec3Fixed *rhs) {
     }
 }
 
-s32 func_800DFD54(Pe1Vec3s *lhs, Pe1Vec3s *rhs)
+s32 FieldFx_GetShortDistance3D(Pe1Vec3s *lhs, Pe1Vec3s *rhs)
 {
   register s32 lhs_x = lhs->x;
   register s32 rhs_x = rhs->x;
@@ -230,7 +230,7 @@ s32 func_800DFD54(Pe1Vec3s *lhs, Pe1Vec3s *rhs)
   }
 }
 
-s32 func_800DFE20(Vec3Fixed *lhs, Vec3Fixed *rhs) {
+s32 FieldFx_GetDistanceXZ(Vec3Fixed *lhs, Vec3Fixed *rhs) {
     s32 dx = (lhs->x - rhs->x) >> 16;
     s32 dx_sq = dx * dx;
     s32 dz = (lhs->z - rhs->z) >> 16;
@@ -257,7 +257,7 @@ s32 func_800DFE20(Vec3Fixed *lhs, Vec3Fixed *rhs) {
     return result;
 }
 
-void func_800DFE94(Vec3Fixed *from, Vec3Fixed *to, s16 *out) {
+void FieldFx_FixedVecToLookAngles(Vec3Fixed *from, Vec3Fixed *to, s16 *out) {
     Vec3Fixed *from_reg = from;
     Vec3Fixed *to_reg = to;
     s32 dx = (from_reg->x - to_reg->x) >> 16;

@@ -31,7 +31,7 @@ class AssetLoadTimTexturesTests(unittest.TestCase):
                        g_PmSlotTable=0x800942E4, g_PmSlotTable2=0x800942E8,
                        g_PmCmdHandlerTable=0x800942E0, g_PmTables=0x800942E0,
                        D_800930E2=0x800930E2,
-                       D_800930E4=0x800930E4, Draw_LoadTimAsset=0x8006E1C0,
+                       g_PeImageTimTexturesEndSector=0x800930E4, Draw_LoadTimAsset=0x8006E1C0,
                        CdRom_ReadSectorsFromLba=0x8006E6A8, CdRom_PollReady=0x8006E7E8,
                        Asset_FindTable08ByU32Key=0x8006E498, LoadImage=0x8007506C)
         CALLS = {value: name for name, value in SYMBOLS.items() if name in (

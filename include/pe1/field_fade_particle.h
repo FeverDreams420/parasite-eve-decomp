@@ -8,8 +8,8 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/render_object.h"
 
-/* Field engine fade particle (func_800DEFFC), spawned by the fading
- * emitter func_800DF6AC: a glow pinned to one actor matrix point that
+/* Field engine fade particle (FieldFx_FadeParticle), spawned by the fading
+ * emitter FieldFx_FadeEmitter: a glow pinned to one actor matrix point that
  * sheds drifting and falling sparks into the same pool. */
 
 int rand(void);

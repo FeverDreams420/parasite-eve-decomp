@@ -33,7 +33,7 @@ void Entity_UpdateTimers(void);
 /* Separate declarations preserve the original GCC quantities for each tail. */
 /* COMMON supplies small-data metadata to MASPSX. */
 s8 D_8009CE30;
-unsigned char D_8009CE34;
+unsigned char g_AyaStatusEffectTimer;
 
 
 static inline u8 Battle_GetReactionTimer(void) {
@@ -148,7 +148,7 @@ void Menu_MainUpdate(s32 arg0) {
         g_ActiveActor->exp_or_acc = 0;
     }
     if (*temp_s2 & 0x2000) {
-        var_v1 = D_8009D1E8 & 3;
+        var_v1 = g_BattleFrameCounter & 3;
         if (var_v1 == 0) {
             var_t1 = 0xFF;
             var_t0.value = 0x3D;
@@ -305,7 +305,7 @@ void Menu_MainUpdate(s32 arg0) {
             temp_v0_4 -= 1;
             timer_state->atbGauge = temp_v0_4;
             if (temp_v0_4 != 0) {
-                var_v1 = D_8009D1E8 & 3;
+                var_v1 = g_BattleFrameCounter & 3;
                 if (var_v1 == 0) {
                     var_t0.value = 0x82;
                     var_a3 = 0x36;
@@ -504,7 +504,7 @@ void Menu_MainUpdate(s32 arg0) {
                                     s32 s2_flags;
 
                                     s2_flags = *temp_s2;
-                                    D_8009CE34 = 0x5A;
+                                    g_AyaStatusEffectTimer = 0x5A;
                                     *temp_s2 = s2_flags | 0x01000000;
                                     }
                                 }
@@ -552,7 +552,7 @@ void Menu_MainUpdate(s32 arg0) {
                                     s32 s2_flags2;
                                     register Combatant *desc_state;
 
-                                    D_8009CE34 = 0x5A;
+                                    g_AyaStatusEffectTimer = 0x5A;
                                     s2_flags2 = *temp_s2;
                                     desc_state = g_ActiveActor;
                                     *temp_s2 = s2_flags2 | 0x01000000;

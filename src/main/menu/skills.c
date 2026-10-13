@@ -494,14 +494,14 @@ void Menu_DrawWeaponModSlots(s32 arg0) {
     s32 temp_s0;
     u8 var_a0;
 
-    temp_s0 = arg0 + D_800922B8[g_MenuInventoryViewMode];
+    temp_s0 = arg0 + g_MenuModSlotIconIndexOffsetByView[g_MenuInventoryViewMode];
     if (g_MenuInventoryViewMode == 1) {
         Draw_OffsetCursor(0, 2);
-        Draw_AllocSprite(D_800922BC[temp_s0]);
+        Draw_AllocSprite(g_MenuModSlotFirstGlyphs[temp_s0]);
         Draw_OffsetCursor(0x12, 2);
         Draw_AllocSprite(0x22U);
         Draw_OffsetCursor(0xC, -2);
-        Draw_AllocSprite(D_800922C4[temp_s0]);
+        Draw_AllocSprite(g_MenuModSlotSecondGlyphs[temp_s0]);
         if (g_MenuInventoryViewMode == 0) {
             Draw_OffsetCursor(0x12, 2);
             Draw_AllocSprite(0x22U);
@@ -510,12 +510,12 @@ void Menu_DrawWeaponModSlots(s32 arg0) {
             Draw_AllocSprite(var_a0);
         }
     } else {
-        Draw_AllocSprite(D_800922BC[temp_s0]);
+        Draw_AllocSprite(g_MenuModSlotFirstGlyphs[temp_s0]);
         Draw_AllocSprite(0x68U);
         Draw_OffsetCursor(0x12, 4);
         Draw_AllocSprite(0x22U);
         Draw_OffsetCursor(0xC, -4);
-        Draw_AllocSprite(D_800922C4[temp_s0]);
+        Draw_AllocSprite(g_MenuModSlotSecondGlyphs[temp_s0]);
         Draw_AllocSprite(0x68U);
         if (g_MenuInventoryViewMode == 0) {
             Draw_OffsetCursor(0x12, 4);

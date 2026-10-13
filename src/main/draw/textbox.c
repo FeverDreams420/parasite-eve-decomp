@@ -15,9 +15,9 @@
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
 int g_ScriptCollisionFlag;
-u8 *D_8009CE90;
+u8 *g_TextboxMessageSource;
 unsigned char D_8009CE94;
-TextboxRect D_8009CE98;
+TextboxRect g_TextboxPendingRect;
 u8 g_DialogueChoiceCursor;
 u8 g_PlayerMovementEnabled;
 
@@ -119,12 +119,12 @@ void Render_SetupFogLayer(void *source) {
     i = 0;
     page_source = D_80091680;
     draw_base = D_8009EC70;
-    tile_base = D_8009ECA8;
+    tile_base = g_TextboxFogTilePackets;
     tile_payload_base = tile_base + 8;
     g_DialogueChoiceCursor = 0;
     g_PlayerMovementEnabled = 0;
     g_ScriptCollisionFlag = 0;
-    D_8009CE90 = source;
+    g_TextboxMessageSource = source;
     for (; (u8)i < 2; ++i) {
         {
             TextboxTableAddress at;
@@ -183,10 +183,10 @@ void Render_SetupFogLayer(void *source) {
 }
 
 void Menu_SetTextCursorRect(int x, int y, int w, int h) {
-    D_8009CE98.x = x;
-    D_8009CE98.y = y;
-    D_8009CE98.width = w;
-    D_8009CE98.height = h;
+    g_TextboxPendingRect.x = x;
+    g_TextboxPendingRect.y = y;
+    g_TextboxPendingRect.width = w;
+    g_TextboxPendingRect.height = h;
 }
 
 void Draw_CloseTextboxPage(int arg0) {
@@ -288,10 +288,10 @@ void Render_SetupColorTable(int inputIndex, int inputStyle, short *inputValues)
         }
         g_TextboxEntries[i].control.flags &= ~0x200000;
         if (style) {
-            g_TextboxEntries[i].x = D_8009CE98.x;
-            g_TextboxEntries[i].y = D_8009CE98.y;
-            g_TextboxEntries[i].width = D_8009CE98.width;
-            g_TextboxEntries[i].height = D_8009CE98.height;
+            g_TextboxEntries[i].x = g_TextboxPendingRect.x;
+            g_TextboxEntries[i].y = g_TextboxPendingRect.y;
+            g_TextboxEntries[i].width = g_TextboxPendingRect.width;
+            g_TextboxEntries[i].height = g_TextboxPendingRect.height;
             if (g_TextboxEntries[i].style == 3)
                 g_TextboxEntries[i].control.flags |= 0x100000;
         } else if (g_PlayerMovementEnabled) {
@@ -333,9 +333,9 @@ int Menu_GetEquipSlotIndex(void) {
  * as GP-relative to retain its load-delay nop. The linker pins the COMMON
  * symbol to the retail address, as for other unplaced game globals. */
 signed char g_MenuEquipSlotIndex;
-u8 D_8009CEA8;
+u8 g_TextboxGlyphColorR;
 u8 D_8009CEAC;
-u8 D_8009CEB0;
+u8 g_TextboxGlyphColorB;
 
 void Menu_DrawTextboxEntries(void) {
     TextboxPoint cursor;
@@ -420,7 +420,7 @@ void Menu_DrawTextboxEntries(void) {
         ordering.pointer = initialBufferTable;
         ordering.address = ordering.address + temp_a0 - 0xC;
         AddPrim(*ordering.ordering + 2,
-                (unsigned int *)((g_ActiveDrawSlot * 0x18) + (u8 *)D_8009ECA8));
+                (unsigned int *)((g_ActiveDrawSlot * 0x18) + (u8 *)g_TextboxFogTilePackets));
     }
     textboxIndex = 0;
     sectionMask = 0xFFF0FFFF;
@@ -434,7 +434,7 @@ void Menu_DrawTextboxEntries(void) {
                 textbox->control.parts.delay = 0U;
                 textbox->control.parts.elapsed = 0U;
                 textbox->control.flags = textbox->control.flags & sectionMask;
-                textbox->message = D_8009CE90;
+                textbox->message = g_TextboxMessageSource;
                 while (1) {
                     temp_a0_2 = textbox->message;
                     temp_v0 = *temp_a0_2;
@@ -451,17 +451,17 @@ void Menu_DrawTextboxEntries(void) {
             baseX = 0x14;
             cursor.y = 0xAE;
             cursor.x = 0x14;
-            D_8009CEB0 = 0x80;
+            g_TextboxGlyphColorB = 0x80;
             D_8009CEAC = 0x80;
-            D_8009CEA8 = 0x80;
+            g_TextboxGlyphColorR = 0x80;
             temp_v1_2 = textbox->style;
             if (temp_v1_2 != 0) {
                 if (temp_v1_2 == 3) {
                     cursor.y = 0xAE;
                     cursor.x = 0x14;
-                    D_8009CEA8 = D_8009CEC4;
+                    g_TextboxGlyphColorR = g_TextboxHighlightColorR;
                     D_8009CEAC = D_8009CEC8;
-                    D_8009CEB0 = D_8009CECC;
+                    g_TextboxGlyphColorB = g_TextboxHighlightColorB;
                 } else {
                     temp_t1 = textbox->x;
                     baseX = temp_t1;
@@ -481,7 +481,7 @@ void Menu_DrawTextboxEntries(void) {
                 if ((textbox->background != 0) && (backgroundDrawn == 0) && (g_ScriptCollisionFlag == 0)) {
                     backgroundDrawn = 1;
                     AddPrim(((u32 *)D_800B0E38.ordering[g_ActiveDrawSlot]) + 2,
-                            (unsigned int *)((g_ActiveDrawSlot * 0x18) + (u8 *)D_8009ECA8));
+                            (unsigned int *)((g_ActiveDrawSlot * 0x18) + (u8 *)g_TextboxFogTilePackets));
                 }
             }
             numberStart = textbox->numbers;
@@ -492,7 +492,7 @@ void Menu_DrawTextboxEntries(void) {
             currentPacket = nextPacket;
             lineHeight = 12;
             for (;;) {
-                font = &D_80091644[0];
+                font = &g_TextboxFontPages[0];
                 asm("" : "=r"(currentPacket) : "0"(currentPacket));
                 temp_v1_3 = *stream;
                 switch (temp_v1_3) {
@@ -524,13 +524,13 @@ void Menu_DrawTextboxEntries(void) {
                     break;
                 case 0xFA:
                     nameIndex = 0;
-                    if (D_80091694.count > 0) {
+                    if (g_TextboxNameGlyphs.count > 0) {
                         auxiliaryPacket = nextPacket;
                         do {
                             register u32 fontRow asm("$5");
                             u16 nameU, nameV;
                             register u32 spacingOffset asm("$23");
-                            nameGlyph = D_80091694.glyphs[(s8)nameIndex];
+                            nameGlyph = g_TextboxNameGlyphs.glyphs[(s8)nameIndex];
                             spacingOffset = nameGlyph * 2;
 
                             fontRow = nameGlyph / 21;
@@ -541,7 +541,7 @@ void Menu_DrawTextboxEntries(void) {
                             {
                                 TextboxTableAddress spacing;
 
-                                spacing.spacing = D_800916A0;
+                                spacing.spacing = g_TextboxGlyphSpacing;
                                 spacing.address = spacing.address + spacingOffset;
                                 cursor.x -= spacing.spacing->left;
                             }
@@ -556,12 +556,12 @@ void Menu_DrawTextboxEntries(void) {
                             auxiliaryPacket->sprite.u = (s8)uv.x;
                             auxiliaryPacket->sprite.v = (s8)uv.y;
                             currentPacket++;
-                            auxiliaryPacket->sprite.color.bytes.r = D_8009CEA8;
+                            auxiliaryPacket->sprite.color.bytes.r = g_TextboxGlyphColorR;
                             auxiliaryPacket->sprite.color.bytes.g = D_8009CEAC;
                             nextPacket++;
                             auxiliaryPacket->sprite.width = 12;
                             auxiliaryPacket->sprite.height = 12;
-                            auxiliaryPacket->sprite.color.bytes.b = D_8009CEB0;
+                            auxiliaryPacket->sprite.color.bytes.b = g_TextboxGlyphColorB;
                             auxiliaryPacket->sprite.clut = font->clut;
 
                             temp_a1_2 = auxiliaryPacket;
@@ -573,11 +573,11 @@ void Menu_DrawTextboxEntries(void) {
                             {
                                 TextboxTableAddress spacing;
 
-                                spacing.spacing = D_800916A0;
+                                spacing.spacing = g_TextboxGlyphSpacing;
                                 spacing.address = spacing.address + spacingOffset;
                                 cursor.x += spacing.spacing->right;
                             }
-                        } while ((s8)nextNameIndex < D_80091694.count);
+                        } while ((s8)nextNameIndex < g_TextboxNameGlyphs.count);
                     }
                     stream += 1;
                     break;
@@ -590,8 +590,8 @@ void Menu_DrawTextboxEntries(void) {
                     case 2:
                     case 3:
                         uv.x = (*stream * 0xC) + 0x40;
-                        uv.y = D_80091644[2].textureY;
-                        SetDrawTPage(nextPacket, 0, 1, D_80091644[2].tpage);
+                        uv.y = g_TextboxFontPages[2].textureY;
+                        SetDrawTPage(nextPacket, 0, 1, g_TextboxFontPages[2].tpage);
                         SetSprt(&nextPacket->sprite);
                         if (MargePrim(nextPacket, &nextPacket->sprite) != 0) {
                             exit(-1);
@@ -602,13 +602,13 @@ void Menu_DrawTextboxEntries(void) {
                         currentPacket->sprite.y = cursor.y;
                         currentPacket->sprite.u = (s8)uv.x;
                         currentPacket->sprite.v = (s8)uv.y;
-                        currentPacket->sprite.color.bytes.r = D_8009CEA8;
+                        currentPacket->sprite.color.bytes.r = g_TextboxGlyphColorR;
                         currentPacket->sprite.width = 0xC;
                         currentPacket->sprite.color.bytes.g = D_8009CEAC;
                         linkPacket = currentPacket;
                         currentPacket->sprite.height = 0xC;
-                        currentPacket->sprite.color.bytes.b = D_8009CEB0;
-                        currentPacket->sprite.clut = D_80091644[2].clut;
+                        currentPacket->sprite.color.bytes.b = g_TextboxGlyphColorB;
+                        currentPacket->sprite.clut = g_TextboxFontPages[2].clut;
                         stream++;
                         AddPrim(linkOrdering, (unsigned int *)linkPacket);
                         currentPacket++;
@@ -616,15 +616,15 @@ void Menu_DrawTextboxEntries(void) {
                         cursor.x = var_v0_3;
                         break;
                     case 4:
-                        D_8009CEA8 = 0xFF;
-                        D_8009CEB0 = 0;
+                        g_TextboxGlyphColorR = 0xFF;
+                        g_TextboxGlyphColorB = 0;
                         D_8009CEAC = 0;
                         stream += 1;
                         break;
                     case 5:
-                        D_8009CEB0 = 0x80;
+                        g_TextboxGlyphColorB = 0x80;
                         D_8009CEAC = 0x80;
-                        D_8009CEA8 = 0x80;
+                        g_TextboxGlyphColorR = 0x80;
                         stream += 1;
                         break;
                     case 6: {
@@ -701,12 +701,12 @@ void Menu_DrawTextboxEntries(void) {
                                 auxiliaryPacket->sprite.u = (s8)uv.x;
                                 auxiliaryPacket->sprite.v = (s8)uv.y;
                                 currentPacket++;
-                                auxiliaryPacket->sprite.color.bytes.r = D_8009CEA8;
+                                auxiliaryPacket->sprite.color.bytes.r = g_TextboxGlyphColorR;
                                 nextPacket++;
                                 auxiliaryPacket->sprite.color.bytes.g = D_8009CEAC;
                                 auxiliaryPacket->sprite.width = 12;
                                 auxiliaryPacket->sprite.height = 12;
-                                auxiliaryPacket->sprite.color.bytes.b = D_8009CEB0;
+                                auxiliaryPacket->sprite.color.bytes.b = g_TextboxGlyphColorB;
                                 temp_a1_3 = auxiliaryPacket;
                                 auxiliaryPacket->sprite.clut = font->clut;
                                 auxiliaryPacket++;
@@ -769,7 +769,7 @@ void Menu_DrawTextboxEntries(void) {
                         asm("" : "=r"(divisionHintfb) : "0"(divisionHintfb));
                         if ((temp_v1_10 & 0xFFFF) >= 0xF1U) {
                             uv.y = temp_v1_10 - 0xFC;
-                            font = &D_80091644[1];
+                            font = &g_TextboxFontPages[1];
                         }
                         SetDrawTPage(nextPacket, 0, 1, font->tpage);
                         SetSprt(&nextPacket->sprite);
@@ -782,12 +782,12 @@ void Menu_DrawTextboxEntries(void) {
                         currentPacket->sprite.y = cursor.y;
                         currentPacket->sprite.u = (s8)uv.x;
                         currentPacket->sprite.v = (s8)uv.y;
-                        currentPacket->sprite.color.bytes.r = D_8009CEA8;
+                        currentPacket->sprite.color.bytes.r = g_TextboxGlyphColorR;
                         currentPacket->sprite.width = 0xC;
                         currentPacket->sprite.color.bytes.g = D_8009CEAC;
                         linkPacket = currentPacket;
                         currentPacket->sprite.height = 0xC;
-                        currentPacket->sprite.color.bytes.b = D_8009CEB0;
+                        currentPacket->sprite.color.bytes.b = g_TextboxGlyphColorB;
                         currentPacket->sprite.clut = font->clut;
                         stream++;
                         AddPrim(linkOrdering, (unsigned int *)linkPacket);
@@ -803,7 +803,7 @@ void Menu_DrawTextboxEntries(void) {
                     uv.x = ((*stream + 0x34) % 21) * 0xC;
                     uv.y = ((*stream + 0x34) / 21) * 0xC;
                     asm("" : "=r"(divisionHintfc) : "0"(divisionHintfc));
-                    SetDrawTPage(nextPacket, 0, 1, D_80091644[1].tpage);
+                    SetDrawTPage(nextPacket, 0, 1, g_TextboxFontPages[1].tpage);
                     SetSprt(&nextPacket->sprite);
                     if (MargePrim(nextPacket, &nextPacket->sprite) != 0) {
                         exit(-1);
@@ -814,13 +814,13 @@ void Menu_DrawTextboxEntries(void) {
                     currentPacket->sprite.y = cursor.y;
                     currentPacket->sprite.u = (s8)uv.x;
                     currentPacket->sprite.v = (s8)uv.y;
-                    currentPacket->sprite.color.bytes.r = D_8009CEA8;
+                    currentPacket->sprite.color.bytes.r = g_TextboxGlyphColorR;
                     currentPacket->sprite.width = 0xC;
                     currentPacket->sprite.color.bytes.g = D_8009CEAC;
                     linkPacket = currentPacket;
                     currentPacket->sprite.height = 0xC;
-                    currentPacket->sprite.color.bytes.b = D_8009CEB0;
-                    currentPacket->sprite.clut = D_80091644[1].clut;
+                    currentPacket->sprite.color.bytes.b = g_TextboxGlyphColorB;
+                    currentPacket->sprite.clut = g_TextboxFontPages[1].clut;
                     stream++;
                     AddPrim(linkOrdering, (unsigned int *)linkPacket);
                     currentPacket++;
@@ -831,7 +831,7 @@ void Menu_DrawTextboxEntries(void) {
                     stream++;
                     uv.x = ((*stream + 0x134) % 21) * 0xC;
                     uv.y = ((*stream + 0x134) / 21) * 0xC;
-                    SetDrawTPage(nextPacket, 0, 1, D_80091644[1].tpage);
+                    SetDrawTPage(nextPacket, 0, 1, g_TextboxFontPages[1].tpage);
                     SetSprt(&nextPacket->sprite);
                     if (MargePrim(nextPacket, &nextPacket->sprite) != 0) {
                         exit(-1);
@@ -842,13 +842,13 @@ void Menu_DrawTextboxEntries(void) {
                     currentPacket->sprite.y = cursor.y;
                     currentPacket->sprite.u = (s8)uv.x;
                     currentPacket->sprite.v = (s8)uv.y;
-                    currentPacket->sprite.color.bytes.r = D_8009CEA8;
+                    currentPacket->sprite.color.bytes.r = g_TextboxGlyphColorR;
                     currentPacket->sprite.width = 0xC;
                     currentPacket->sprite.color.bytes.g = D_8009CEAC;
                     linkPacket = currentPacket;
                     currentPacket->sprite.height = 0xC;
-                    currentPacket->sprite.color.bytes.b = D_8009CEB0;
-                    currentPacket->sprite.clut = D_80091644[1].clut;
+                    currentPacket->sprite.color.bytes.b = g_TextboxGlyphColorB;
+                    currentPacket->sprite.clut = g_TextboxFontPages[1].clut;
                     stream++;
                     AddPrim(linkOrdering, (unsigned int *)linkPacket);
                     currentPacket++;
@@ -868,7 +868,7 @@ void Menu_DrawTextboxEntries(void) {
 
                     workingValue = (u8)((unsigned int)temp_v0_7 / 21);
                     uv.y = workingValue * 12;
-                    cursor.x -= D_800916A0[*stream].left;
+                    cursor.x -= g_TextboxGlyphSpacing[*stream].left;
                     SetDrawTPage(nextPacket, 0, 1, font->tpage);
                     SetSprt(&nextPacket->sprite);
                     if (MargePrim(nextPacket, &nextPacket->sprite) != 0) {
@@ -879,16 +879,16 @@ void Menu_DrawTextboxEntries(void) {
                     currentPacket->sprite.y = cursor.y;
                     currentPacket->sprite.u = (s8)uv.x;
                     currentPacket->sprite.v = (s8)uv.y;
-                    currentPacket->sprite.color.bytes.r = D_8009CEA8;
+                    currentPacket->sprite.color.bytes.r = g_TextboxGlyphColorR;
                     currentPacket->sprite.width = 12;
                     currentPacket->sprite.color.bytes.g = D_8009CEAC;
                     currentPacket->sprite.height = 12;
                     nextPacket++;
-                    currentPacket->sprite.color.bytes.b = D_8009CEB0;
+                    currentPacket->sprite.color.bytes.b = g_TextboxGlyphColorB;
                     currentPacket->sprite.clut = font->clut;
 
                     AddPrim(orderingTable, (unsigned int *)(currentPacket++));
-                    temp_v1_11 = D_800916A0[*stream].right;
+                    temp_v1_11 = g_TextboxGlyphSpacing[*stream].right;
                     stream += 1;
                     var_v0_3 = cursor.x + temp_v1_11;
                     cursor.x = var_v0_3;
@@ -915,26 +915,26 @@ unsigned char D_8009CEB4;
 short D_8009CEB8;
 short D_8009CEBC;
 short D_8009CEC0;
-unsigned char D_8009CEC4;
+unsigned char g_TextboxHighlightColorR;
 unsigned char D_8009CEC8;
-unsigned char D_8009CECC;
+unsigned char g_TextboxHighlightColorB;
 
-unsigned char D_8009CEC4;
+unsigned char g_TextboxHighlightColorR;
 unsigned char D_8009CEC8;
-unsigned char D_8009CECC;
+unsigned char g_TextboxHighlightColorB;
 
 void Draw_SetLightingParams(short arg0, short arg1, short arg2, unsigned char arg3, unsigned char arg4, unsigned char arg5) {
     D_8009CEB8 = arg0;
     D_8009CEB4 = 1;
     D_8009CEBC = arg1;
     D_8009CEC0 = arg2;
-    D_8009CEC4 = arg3;
+    g_TextboxHighlightColorR = arg3;
     D_8009CEC8 = arg4;
-    D_8009CECC = arg5;
+    g_TextboxHighlightColorB = arg5;
 }
 
 void Menu_SetHighlightColor(int arg0, int arg1, int arg2, int arg3) {
-    D_8009CEC4 = arg1;
+    g_TextboxHighlightColorR = arg1;
     D_8009CEC8 = arg2;
-    D_8009CECC = arg3;
+    g_TextboxHighlightColorB = arg3;
 }

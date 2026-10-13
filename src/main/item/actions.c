@@ -372,7 +372,7 @@ void Inv_ClearSelectionBitset(void) {
  * weapon comparison panel and the per-slot item actions and active-list controller. Contiguous at
  * 0x80055760 and joined by the comparison records and list state. */
 
-ItemDataRecord *D_8009D070, *D_8009D074;
+ItemDataRecord *g_InvCompareLeftItem, *g_InvCompareRightItem;
 s16 *g_InvActiveListOverride;
 s32 g_InvOverrideSlotLimit;
 int g_InvActiveListCount;
@@ -448,7 +448,7 @@ void Inv_RebuildSelectableMask(void) {
                     int flags = item->flags;
                     u32 selected = g_MenuBattleEquipMode ? ((flags >> 1) & 1) : (flags & 1);
                     if (item->kind == 10 && ConsumableEffect(item) == 2) selected = 0;
-                    if (item->itemId - 6U < 5U && D_800C0E00.current_hp >= D_800C0E00.max_hp) selected = 0;
+                    if (item->itemId - 6U < 5U && g_AyaSaveState.current_hp >= g_AyaSaveState.max_hp) selected = 0;
                     g_InvSelectionBits[i >> 5] |= selected << (i & 31);
                 }
             }
@@ -464,7 +464,7 @@ void Inv_RebuildSelectableMask(void) {
                         if (effect - 4U < 3U) selected &= hasWeapon;
                         else if (effect - 12U < 3U) selected &= hasArmor;
                     }
-                    if (item->itemId - 6U < 5U && D_800C0E00.current_hp >= D_800C0E00.max_hp) selected = 0;
+                    if (item->itemId - 6U < 5U && g_AyaSaveState.current_hp >= g_AyaSaveState.max_hp) selected = 0;
                     g_InvSelectionBits[i >> 5] |= selected << (i & 31);
                 }
             }
@@ -480,7 +480,7 @@ void Inv_SortSlotsByPriority(void) {
     ItemDataRecord *item;
     ClearBits();
     for (i = 0; i < g_InvSlotLimit; i++) {
-        if (i != D_800C0E20.tracked[0] && i != D_800C0E20.tracked[2] && Inv_IsSlotSelectable(i)) {
+        if (i != g_InventoryRuntime.tracked[0] && i != g_InventoryRuntime.tracked[2] && Inv_IsSlotSelectable(i)) {
             if (i >= 0 && i < g_InvSlotLimit) item = Inv_LookupItemRecordScaled(g_InvItemPtr[i]);
             else item = 0;
             g_InvSelectionBits[i >> 5] |= (item ? !(item->flags & 0xE0) : 0) << (i & 31);
@@ -668,11 +668,11 @@ int Inv_GetWeaponCategoryAmmoBase(unsigned int arg0) {
  * including when aliased. */
 void Inv_BuildDisplayFromList(int leftStorage, int leftIndex, int rightStorage, int rightIndex) {
     RestoreList(leftStorage);
-    D_8009D070 = LookupActiveItem(leftIndex);
+    g_InvCompareLeftItem = LookupActiveItem(leftIndex);
     RestoreList(rightStorage);
-    D_8009D074 = LookupActiveItem(rightIndex);
-    g_InvCompareSlotLeft = *D_8009D070;
-    g_InvCompareSlotRight = *D_8009D074;
+    g_InvCompareRightItem = LookupActiveItem(rightIndex);
+    g_InvCompareSlotLeft = *g_InvCompareLeftItem;
+    g_InvCompareSlotRight = *g_InvCompareRightItem;
     g_InvCompareSlotRight.tailData[10] = 0;
     g_InvCompareSlotLeft.tailData[10] = 0;
     g_InvCompareSlotRight.reserveAmmo = 0;
@@ -708,7 +708,7 @@ static inline ItemDataRecord *LookupComparisonItem(int value) {
     int saved = value;
     ItemDataRecord *result;
     if (value - 0x100U < 0x80U) {
-        result = &D_800C0E20.equipment[value - 0x100];
+        result = &g_InventoryRuntime.equipment[value - 0x100];
     } else {
         if (value - 1U < 0xFFU) {
             result = Item_LookupBaseData(value - 1);
@@ -734,13 +734,13 @@ void Inv_StepScrollDisplay(void) {
     /* Mode 7 ignores the buffer; mode 5 consumes the selected record pointer. */
     int selection[2];
     int mode;
-    if (g_InvCompareSlotLeft.ammo == D_8009D070->ammo &&
-        g_InvCompareSlotRight.ammo == D_8009D074->ammo) return;
+    if (g_InvCompareSlotLeft.ammo == g_InvCompareLeftItem->ammo &&
+        g_InvCompareSlotRight.ammo == g_InvCompareRightItem->ammo) return;
     entry = BattleCmd_AllocSlot();
     entry->header.word = 4;
     entry->payload.ammo_restore.item_data2 = 0;
-    entry->payload.ammo_restore.item_data0 = (int)D_8009D070;
-    entry->payload.ammo_restore.item_data1 = (int)D_8009D074;
+    entry->payload.ammo_restore.item_data0 = (int)g_InvCompareLeftItem;
+    entry->payload.ammo_restore.item_data1 = (int)g_InvCompareRightItem;
     if (g_InvCompareSlotLeft.reserveAmmo) {
         pool = &g_InvFallbackAmmoRecord + g_InvCompareSlotLeft.tailData[10];
         entry->payload.ammo_restore.item_data2 = (int)pool;
@@ -778,15 +778,15 @@ void Inv_StepScrollDisplay(void) {
             }
         }
     }
-    entry->payload.ammo_restore.ammo0 = D_8009D070->ammo;
-    entry->payload.ammo_restore.ammo1 = D_8009D074->ammo;
-    *D_8009D070 = g_InvCompareSlotLeft;
-    *D_8009D074 = g_InvCompareSlotRight;
-    tracked = LookupComparisonActiveItem(D_800C0E20.tracked[0]);
-    if (tracked == D_8009D070) {
+    entry->payload.ammo_restore.ammo0 = g_InvCompareLeftItem->ammo;
+    entry->payload.ammo_restore.ammo1 = g_InvCompareRightItem->ammo;
+    *g_InvCompareLeftItem = g_InvCompareSlotLeft;
+    *g_InvCompareRightItem = g_InvCompareSlotRight;
+    tracked = LookupComparisonActiveItem(g_InventoryRuntime.tracked[0]);
+    if (tracked == g_InvCompareLeftItem) {
         mode = 5;
         selection[0] = (int)tracked;
-    } else if (tracked == D_8009D074) {
+    } else if (tracked == g_InvCompareRightItem) {
         selection[0] = (int)tracked;
         mode = 5;
     } else mode = 7;
@@ -797,7 +797,7 @@ static inline ItemDataRecord *LookupSlotItem(int value) {
     int saved = value;
     ItemDataRecord *result;
     if (value - 0x100U < 0x80U) {
-        result = &D_800C0E20.equipment[value - 0x100];
+        result = &g_InventoryRuntime.equipment[value - 0x100];
     } else {
         if (value - 1U < 0xFFU) {
             result = Item_LookupBaseData(value - 1);
@@ -815,7 +815,7 @@ int Inv_DrawSlotItemIcon(void) {
     ItemDataRecord *weapon = 0, *pool;
     unsigned kind;
     int amount, available, loaded;
-    int index = D_800C0E20.tracked[0];
+    int index = g_InventoryRuntime.tracked[0];
 
     if (index >= 0 && index < g_InvSlotLimit)
         weapon = LookupSlotItem(g_InvItemPtr[index]);
@@ -853,7 +853,7 @@ static inline ItemDataRecord *LookupTrackedItem(int index) {
         value = g_InvItemPtr[index];
         saved = value;
         if (value - 0x100U < 0x80U) {
-            result = &D_800C0E20.equipment[value - 0x100];
+            result = &g_InventoryRuntime.equipment[value - 0x100];
         } else {
             if (value - 1U < 0xFFU) {
                 return Item_LookupBaseData(value - 1);
@@ -882,7 +882,7 @@ int Inv_IsSlotSelectable(int index) {
     }
     selectable = 0;
     if (!(data->flags & ITEM_DATA_FLAG_DISABLED)) {
-        if (g_InvItemPtr != g_AyaInventoryItems || index != D_800C0E20.tracked[0]) {
+        if (g_InvItemPtr != g_AyaInventoryItems || index != g_InventoryRuntime.tracked[0]) {
             selectable = 1;
         }
     }
@@ -960,7 +960,7 @@ int Inv_GetSlotHighlightState(int spell, int available) {
     }
     table = Aya_GetParasiteSpellUnlockTable();
     cost = table[spell].cost;
-    armor = LookupTrackedItem(D_800C0E20.tracked[2]);
+    armor = LookupTrackedItem(g_InventoryRuntime.tracked[2]);
     if (armor != 0) {
         for (i = 0; i < armor->tailCount; i++) {
             if (armor->tailData[i] == 0x0E) {

@@ -17,7 +17,7 @@
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
 u16 D_8009D298;
-unsigned char D_8009CE34;
+unsigned char g_AyaStatusEffectTimer;
 
 int rand(void);
 s16 Entity_ApplyHitAndSetAnim(void *arg0);
@@ -310,8 +310,8 @@ void Entity_UpdateTimers(void) {
         }
     }
     if ((*state_flags) & 0x01000000) {
-        effect_timer = D_8009CE34 - 1;
-        D_8009CE34 = effect_timer;
+        effect_timer = g_AyaStatusEffectTimer - 1;
+        g_AyaStatusEffectTimer = effect_timer;
         if ((effect_timer << 0x18) <= 0) {
             (*state_flags) = ((*state_flags) & 0xFEFFFFFF);
         }

@@ -869,12 +869,12 @@ extern char RoomLib_TimedRenderTable;
             if (FX_TASK_AS(RoomDlgState)->h12 == 1) goto at_actor; \
             goto after; \
         send_pos: \
-            func_800CE9D4(ANIM_OWNER_AS(RoomChanCtx)->w8, 0x13, &msg->sub); \
+            FieldFx_GetTransformLookAngles(ANIM_OWNER_AS(RoomChanCtx)->w8, 0x13, &msg->sub); \
             goto after; \
         at_actor: \
             { \
                 short vec[4]; \
-                func_800CE870(g_PlayerEntity, 0, vec); \
+                FieldFx_GetActorPosition(g_PlayerEntity, 0, vec); \
                 FieldFx_CalculateLookAngles(msg, vec, &msg->sub); \
                 msg->sub.h0 = 0x180; \
             } \
@@ -888,19 +888,19 @@ extern char RoomLib_TimedRenderTable;
                     } \
                 } \
             } \
-            return func_800CE560(ANIM_POOL_AS(RoomChanCtx)->w8, 0x14, 0x18, &blob); \
+            return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomChanCtx)->w8, 0x14, 0x18, &blob); \
         case 1: \
-            if (D_800E27EC == mode) { \
-                RoomQRec *p = func_800CE610(ANIM_POOL_AS(RoomChanCtx)->w8); \
+            if (g_FieldFxCurrentAge == mode) { \
+                RoomQRec *p = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomChanCtx)->w8); \
                 if (p != 0) { \
                     p->h0 = msg->h0; \
                     p->h2 = msg->h2; \
                     p->h4 = msg->h4; \
-                    func_800CFB7C(&msg->sub, *pitch, p->sub); \
+                    FieldFx_AnglesToVector(&msg->sub, *pitch, p->sub); \
                     p->h10 = 0; \
                     p->h12 = 0; \
                 } \
-                p = func_800CE610(ANIM_POOL_AS(RoomChanCtx)->w8); \
+                p = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomChanCtx)->w8); \
                 if (p != 0) { \
                     p->h0 = msg->h0; \
                     p->h2 = msg->h2; \
@@ -908,13 +908,13 @@ extern char RoomLib_TimedRenderTable;
                     p->h10 = 3; \
                     p->h12 = 0; \
                 } \
-                func_800D3F64(0x586, func_800D3FD8()); \
+                FieldFx_PlaySoundAtOwner(0x586, FieldFx_GetOwnerProgress()); \
             } \
-            if (D_800E27EC < 2) goto ret0; \
+            if (g_FieldFxCurrentAge < 2) goto ret0; \
             return 2; \
         case 2: \
-            D_800F3368.parameter0A = 0; \
-            D_800F3368.depth = 8; \
+            g_FieldFxSpriteParams.parameter0A = 0; \
+            g_FieldFxSpriteParams.depth = 8; \
             goto ret0; \
         default: \
         ret0: \
@@ -923,7 +923,7 @@ extern char RoomLib_TimedRenderTable;
     }
 
 /* Field engine state query used by the actor class update handlers. */
-extern int func_800DFB78();
+extern int FieldFx_IsOwnerBusy();
 
 typedef struct RoomTimer {
     char pad0[0x24];

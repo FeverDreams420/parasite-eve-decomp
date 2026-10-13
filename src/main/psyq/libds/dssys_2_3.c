@@ -35,15 +35,15 @@ int DsCommand(int inCommand, void *inParameter, DslCB inCallback,
     asm(""
         : "=r"(parameter), "=r"(callback), "=r"(command)
         : "0"(parameter), "1"(callback), "2"(command));
-    if (D_8009B4BC[command & 255] && parameter) {
+    if (g_DsCommandHasParam[command & 255] && parameter) {
 
         if (g_CdPendingReadCount < 8) {
-            previous = D_8009B53C;
+            previous = g_DsCommandSerial;
             serial = previous + 1;
-            D_8009B53C = serial;
+            g_DsCommandSerial = serial;
             if (!serial) {
                 serial = previous + 2;
-                D_8009B53C = serial;
+                g_DsCommandSerial = serial;
             }
             ticket = serial;
             entry = CQ_last_queue();
@@ -72,12 +72,12 @@ int DsCommand(int inCommand, void *inParameter, DslCB inCallback,
     }
 
     if (g_CdPendingReadCount < 8) {
-        previous = D_8009B53C;
+        previous = g_DsCommandSerial;
         serial = previous + 1;
-        D_8009B53C = serial;
+        g_DsCommandSerial = serial;
         if (!serial) {
             serial = previous + 2;
-            D_8009B53C = serial;
+            g_DsCommandSerial = serial;
         }
         ticket = serial;
         entry = CQ_last_queue();
@@ -163,13 +163,13 @@ int DsPacket(int inMode, DslLOC *inPosition, int inCommand,
         if (g_CdPendingReadCount + total >= 9) {
             result = 0; return result;
         }
-        previous = D_8009B53C;
+        previous = g_DsCommandSerial;
         next = previous + 1;
-        D_8009B53C = next;
+        g_DsCommandSerial = next;
         ticket = next;
         if (!next) {
             next = previous + 2;
-            D_8009B53C = next;
+            g_DsCommandSerial = next;
             ticket = next;
         }
         i = 0;
@@ -216,13 +216,13 @@ int DsPacket(int inMode, DslLOC *inPosition, int inCommand,
         if (g_CdPendingReadCount + total >= 9) {
             result = 0; return result;
         }
-        previous = D_8009B53C;
+        previous = g_DsCommandSerial;
         next = previous + 1;
-        D_8009B53C = next;
+        g_DsCommandSerial = next;
         ticket = next;
         if (!next) {
             next = previous + 2;
-            D_8009B53C = next;
+            g_DsCommandSerial = next;
             ticket = next;
         }
         i = 0;
@@ -384,7 +384,7 @@ s32 DsSync(s32 inId, void *inResult) {
     if (*at.words != 0) {
     publishResult:
         {
-            register int *dst = D_800A3500.words;
+            register int *dst = g_DsSlotResultCopy.words;
             register int first asm("$2");
             register int second asm("$3");
             register int third asm("$4");
@@ -415,7 +415,7 @@ s32 DsSync(s32 inId, void *inResult) {
             }
         }
         asm("" ::: "$16", "memory");
-        selected = &D_800A3500;
+        selected = &g_DsSlotResultCopy;
     }
     }
 copyResult:

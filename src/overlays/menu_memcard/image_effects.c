@@ -29,14 +29,14 @@ s32 MenuCard_PulseImage(s32 mode, MemcardPulseState *state) {
         track = D_801F1D5C;
         rotation.flags = 0;
         rotation.z = twist << 5;
-        func_800CF3AC(track, &color, state->timer << 1);
-        D_800F3368.parameter00 = 32;
-        D_800F3368.parameter02 = 2;
-        D_800F3368.extent_x = 32;
-        D_800F3368.extent_y = 32;
-        palette = D_800E1204[D_800F3368.palette];
-        if (D_800F3368.palette == 4 && D_800F3428 != 0) palette += 4;
-        func_800CEE20(&state->position, &rotation, scale, scale, 130,
+        FieldFx_SampleColorTrack(track, &color, state->timer << 1);
+        g_FieldFxSpriteParams.parameter00 = 32;
+        g_FieldFxSpriteParams.parameter02 = 2;
+        g_FieldFxSpriteParams.extent_x = 32;
+        g_FieldFxSpriteParams.extent_y = 32;
+        palette = g_FieldFxPaletteTable[g_FieldFxSpriteParams.palette];
+        if (g_FieldFxSpriteParams.palette == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
+        FieldFx_DrawShapeQuads(&state->position, &rotation, scale, scale, 130,
                      GetClut(48, palette), 1, 128, &color);
         break;
     }
@@ -66,8 +66,8 @@ s32 MenuCard_LinkEffect(s32 mode, MemcardLinkState *state) {
         __asm__("" : : : "memory");
         FieldFx_TransformMatrixPoint(entity, D_801F1D86, offsetPtr, firstPtr);
         FieldFx_TransformMatrixPoint(D_8009D254, D_801F1D88, &offset, &second);
-        func_800D1384(&first, &second, 1016, (unsigned char *)&color2, (unsigned char *)&color1, 128, (struct FieldTrailPair *)&state->rotation, 1);
-        return func_800CE560(ANIM_POOL_AS(MemcardLinkChannel)->slots, 20, 22,
+        FieldFx_DrawHistoryTrail(&first, &second, 1016, (unsigned char *)&color2, (unsigned char *)&color1, 128, (struct FieldTrailPair *)&state->rotation, 1);
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(MemcardLinkChannel)->slots, 20, 22,
                              (FieldFxCallbackListCallback)MenuCard_PulseImage);
     }
     case 1:
@@ -85,23 +85,23 @@ s32 MenuCard_LinkEffect(s32 mode, MemcardLinkState *state) {
         return 2;
     case 2:
         if (state->opacity >= 0) {
-            func_800CF3AC(D_801F1D5C, &color, state->timer);
+            FieldFx_SampleColorTrack(D_801F1D5C, &color, state->timer);
             FieldFx_TransformMatrixPoint(D_8009D254, D_801F1D86, &offset, &first);
             FieldFx_TransformMatrixPoint(D_8009D254, D_801F1D88, &offset, &second);
             gte_ldrotmatrix(D_800BCFA4.value);
             gte_ldtransmatrix(D_800BCFA4.value);
-            func_800D1384(&first, &second, 16, (unsigned char *)&color2, (unsigned char *)&color1,
+            FieldFx_DrawHistoryTrail(&first, &second, 16, (unsigned char *)&color2, (unsigned char *)&color1,
                          state->opacity, (struct FieldTrailPair *)&state->rotation, 1);
         }
         {
-            u16 tpage = D_800E2850[D_800E11E6];
-            D_800F3368.palette = 1;
-            D_800F3368.tpage = tpage;
+            u16 tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot1];
+            g_FieldFxSpriteParams.palette = 1;
+            g_FieldFxSpriteParams.tpage = tpage;
         }
-        func_800CEDA8(1);
-        D_800F3368.parameter06 = 0;
-        D_800F3368.parameter0A = 0;
-        D_800F3368.depth = 16;
+        FieldFx_EnsureEffectTexturePage(1);
+        g_FieldFxSpriteParams.parameter06 = 0;
+        g_FieldFxSpriteParams.parameter0A = 0;
+        g_FieldFxSpriteParams.depth = 16;
         break;
     }
     return 0;
@@ -133,16 +133,16 @@ s32 MenuCard_CosineImage(s32 mode, MemcardPulseState *state) {
         intensity = cosine / 32;
         rotation.x = 0; rotation.y = 0;
         twist = state->timer;
-        index = D_800F3368.palette;
+        index = g_FieldFxSpriteParams.palette;
         __asm__ volatile("" ::: "memory");
         four = 4;
         __asm__("" : : "r"(four));
         rotation.flags = 0;
         rotation.z = twist << 5;
-        palette = D_800E1204[index];
-        if (index == four && D_800F3428 != 0) palette += 7;
+        palette = g_FieldFxPaletteTable[index];
+        if (index == four && g_FieldFxAltPaletteFlag != 0) palette += 7;
         else palette += 3;
-        func_800CEE20(&state->position, &rotation, scale, scale, 66,
+        FieldFx_DrawShapeQuads(&state->position, &rotation, scale, scale, 66,
                      GetClut(0, palette), 1, intensity, &D_801F1F30);
         break;
     }
@@ -159,13 +159,13 @@ s32 MenuCard_TrailEffect(s32 mode, MemcardTrailState *state) {
     switch(mode) {
     case 0:
         state->attachment = 19; state->phase = 0; state->timer = 0;
-        return func_800CE560(ANIM_POOL_AS(MemcardLinkChannel)->slots, 20, 24,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(MemcardLinkChannel)->slots, 20, 24,
                              (FieldFxCallbackListCallback)MenuCard_CosineImage);
     case 1:
         state->timer++;
         FieldFx_TransformMatrixPoint(D_8009D254, state->attachment, &offset, &position);
         if (state->timer < 33 && (state->timer & 1)) {
-            MemcardPulseState *image = func_800CE610(ANIM_POOL_AS(MemcardLinkChannel)->slots);
+            MemcardPulseState *image = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(MemcardLinkChannel)->slots);
             if (image) {
                 image->position.x = position.x;
                 image->position.y = position.y;
@@ -179,44 +179,44 @@ s32 MenuCard_TrailEffect(s32 mode, MemcardTrailState *state) {
         gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldtransmatrix(D_800BCFA4.value);
         FieldFx_TransformMatrixPoint(D_8009D254, state->attachment, &offset, &position);
-        D_800F3368.parameter00 = 32;
-        D_800F3368.parameter02 = 2;
-        D_800F3368.extent_x = 32; D_800F3368.extent_y = 32;
+        g_FieldFxSpriteParams.parameter00 = 32;
+        g_FieldFxSpriteParams.parameter02 = 2;
+        g_FieldFxSpriteParams.extent_x = 32; g_FieldFxSpriteParams.extent_y = 32;
         {
-            u16 tpage = D_800E2850[D_800E11F6];
-            D_800F3368.palette = 1;
-            D_800F3368.tpage = tpage;
+            u16 tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot9];
+            g_FieldFxSpriteParams.palette = 1;
+            g_FieldFxSpriteParams.tpage = tpage;
         }
-        func_800CEDA8(1);
-        D_800F3368.parameter06 = 1;
-        D_800F3368.parameter0A = 5;
-        D_800F3368.depth = 32;
+        FieldFx_EnsureEffectTexturePage(1);
+        g_FieldFxSpriteParams.parameter06 = 1;
+        g_FieldFxSpriteParams.parameter0A = 5;
+        g_FieldFxSpriteParams.depth = 32;
         if (state->timer < 33) {
-            func_800CF3AC(D_801F1DE8, &color, state->timer);
+            FieldFx_SampleColorTrack(D_801F1DE8, &color, state->timer);
             scale = rsin(state->timer << 6) + 4096;
             __asm__("" : "=r"(scale) : "0"(scale) : "memory");
-            index = D_800F3368.palette;
+            index = g_FieldFxSpriteParams.palette;
 
             four = 4;
 
-            palette = D_800E1204[index];
-            if (index == four && D_800F3428) palette += 8;
+            palette = g_FieldFxPaletteTable[index];
+            if (index == four && g_FieldFxAltPaletteFlag) palette += 8;
             else palette += 4;
-            func_800CEE20(&position, 0, scale, scale, 64, GetClut(0,palette), 1, 128, &color);
-            index = D_800F3368.palette;
+            FieldFx_DrawShapeQuads(&position, 0, scale, scale, 64, GetClut(0,palette), 1, 128, &color);
+            index = g_FieldFxSpriteParams.palette;
             __asm__("" : "=r"(index) : "0"(index) : "$3", "memory");
             four = 4;
 
-            palette = D_800E1204[index];
-            if (index == four && D_800F3428) palette += 7;
+            palette = g_FieldFxPaletteTable[index];
+            if (index == four && g_FieldFxAltPaletteFlag) palette += 7;
             else palette += 3;
-            func_800CEE20(&position, 0, scale, scale, 70, GetClut(0,palette), 1, 128, &color);
+            FieldFx_DrawShapeQuads(&position, 0, scale, scale, 70, GetClut(0,palette), 1, 128, &color);
             D_801F1F30.r = color.r; D_801F1F30.g = color.g; D_801F1F30.b = color.b;
         } else {
             *(u32 *)&D_801F1F30 = 0;
         }
-        D_800F3368.parameter0A = 0;
-        D_800F3368.depth = 16;
+        g_FieldFxSpriteParams.parameter0A = 0;
+        g_FieldFxSpriteParams.depth = 16;
         break;
     }
     return 0;
@@ -247,7 +247,7 @@ s32 MenuCard_SineRotatingImage(s32 mode, MemcardPulseState *state) {
         cosine = rcos(angle);
         if (cosine < 0) cosine += 31;
         rotation.x = state->rotation.x;
-        index = D_800F3368.palette;
+        index = g_FieldFxSpriteParams.palette;
         rotation.y = state->rotation.y;
         rotation.z = state->rotation.z;
         intensity = cosine >> 5;
@@ -257,11 +257,11 @@ s32 MenuCard_SineRotatingImage(s32 mode, MemcardPulseState *state) {
         rotation.z = twist * 50;
         {
             four = 4;
-            palette = D_800E1204[index];
+            palette = g_FieldFxPaletteTable[index];
         }
-        if (index == four && D_800F3428 != 0) palette += 7;
+        if (index == four && g_FieldFxAltPaletteFlag != 0) palette += 7;
         else palette += 3;
-        func_800CEE20(&state->position, &rotation, scale, scale, 68,
+        FieldFx_DrawShapeQuads(&state->position, &rotation, scale, scale, 68,
                      GetClut(0, palette), 1, intensity, &D_801F1F34);
         break;
     }
@@ -280,18 +280,18 @@ s32 MenuCard_SineTrailEffect(s32 mode, MemcardTrailState *state) {
         state->attachment = 25;
         state->phase = 0;
         state->timer = 0;
-        return func_800CE560(ANIM_POOL_AS(MemcardLinkChannel)->slots, 20, 24,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(MemcardLinkChannel)->slots, 20, 24,
                              (FieldFxCallbackListCallback)MenuCard_SineRotatingImage);
     case 1:
         state->timer++;
         FieldFx_TransformMatrixPoint(D_8009D254, state->attachment, &offset, &position);
         if (state->timer < 33 && (state->timer & 1)) {
-            MemcardPulseState *image = func_800CE610(ANIM_POOL_AS(MemcardLinkChannel)->slots);
+            MemcardPulseState *image = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(MemcardLinkChannel)->slots);
             if (image) {
                 image->position.x = position.x;
                 image->position.y = position.y;
                 image->position.z = position.z;
-                func_800CE9D4(D_8009D254, 0, (GteShortVector *)&image->rotation);
+                FieldFx_GetTransformLookAngles(D_8009D254, 0, (GteShortVector *)&image->rotation);
                 image->phase = 0;
                 image->timer = 0;
             }
@@ -305,26 +305,26 @@ s32 MenuCard_SineTrailEffect(s32 mode, MemcardTrailState *state) {
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
         FieldFx_TransformMatrixPoint(D_8009D254, state->attachment, &offset, &position);
-        D_800F3368.parameter00 = 32;
-        D_800F3368.parameter02 = 2;
-        D_800F3368.extent_x = 32;
-        D_800F3368.extent_y = 32;
+        g_FieldFxSpriteParams.parameter00 = 32;
+        g_FieldFxSpriteParams.parameter02 = 2;
+        g_FieldFxSpriteParams.extent_x = 32;
+        g_FieldFxSpriteParams.extent_y = 32;
         {
-            u16 tpage = D_800E2850[D_800E11F6];
-            D_800F3368.palette = 1;
-            D_800F3368.tpage = tpage;
+            u16 tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot9];
+            g_FieldFxSpriteParams.palette = 1;
+            g_FieldFxSpriteParams.tpage = tpage;
         }
-        func_800CEDA8(1);
-        D_800F3368.parameter06 = 1;
-        D_800F3368.parameter0A = 5;
-        D_800F3368.depth = 32;
+        FieldFx_EnsureEffectTexturePage(1);
+        g_FieldFxSpriteParams.parameter06 = 1;
+        g_FieldFxSpriteParams.parameter0A = 5;
+        g_FieldFxSpriteParams.depth = 32;
         if (state->timer < 33) {
-            func_800CF3AC(D_801F1E74, &color, state->timer);
+            FieldFx_SampleColorTrack(D_801F1E74, &color, state->timer);
             scale = rsin(state->timer << 6) / 2 + 2048;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            func_800CEE20(&position, 0, scale, scale, 64,
-                          GetClut(0, (kind == 4 && D_800F3428) ? palette + 8 : palette + 4),
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            FieldFx_DrawShapeQuads(&position, 0, scale, scale, 64,
+                          GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag) ? palette + 8 : palette + 4),
                           1, 128, &color);
             D_801F1F34.r = color.r;
             D_801F1F34.g = color.g;
@@ -332,8 +332,8 @@ s32 MenuCard_SineTrailEffect(s32 mode, MemcardTrailState *state) {
         } else {
             *(u32 *)&D_801F1F34 = 0;
         }
-        D_800F3368.parameter0A = 0;
-        D_800F3368.depth = 16;
+        g_FieldFxSpriteParams.parameter0A = 0;
+        g_FieldFxSpriteParams.depth = 16;
         break;
     }
     return 0;

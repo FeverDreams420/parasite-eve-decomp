@@ -43,7 +43,7 @@ s32 ROOMLIB_POLL_RESET_FUNC(s32 state) {
 
     switch (state) {
     case 0:
-        return func_800CE560(ROOMLIB_POLL_RESET_POOL_EXPR, 8, 4,
+        return FieldFx_InitCallbackList(ROOMLIB_POLL_RESET_POOL_EXPR, 8, 4,
                              (FieldFxCallbackListCallback)ROOMLIB_POLL_RESET_CALLBACK);
     case 1:
         if (ROOMLIB_POLL_RESET_FLAG != 0) {
@@ -52,30 +52,30 @@ s32 ROOMLIB_POLL_RESET_FUNC(s32 state) {
         if (ROOMLIB_POLL_RESET_COUNTER == 0) {
             return 0;
         }
-        obj = (RoomFxSeed8 *)func_800CE610(ROOMLIB_POLL_RESET_POOL_EXPR);
+        obj = (RoomFxSeed8 *)FieldFx_AcquireCallbackSlot(ROOMLIB_POLL_RESET_POOL_EXPR);
         if (obj != 0) {
             ROOMLIB_POLL_RESET_COUNTER = 0;
             *obj = ROOMLIB_POLL_RESET_SEED;
         }
         return 0;
     case 2:
-        index = D_800E11FA;
+        index = g_FieldFxTpageSlot11;
         size = 0x20;
-        D_800F3368.parameter00 = size;
+        g_FieldFxSpriteParams.parameter00 = size;
         value2 = 2;
-        D_800F3368.parameter02 = value2;
-        D_800F3368.extent_x = size;
-        D_800F3368.extent_y = size;
-        D_800F3368.extent_x = size;
-        D_800F3368.extent_y = size;
-        tableValue = D_800E2850[index];
+        g_FieldFxSpriteParams.parameter02 = value2;
+        g_FieldFxSpriteParams.extent_x = size;
+        g_FieldFxSpriteParams.extent_y = size;
+        g_FieldFxSpriteParams.extent_x = size;
+        g_FieldFxSpriteParams.extent_y = size;
+        tableValue = g_FieldFxTpageTable[index];
         value3 = 3;
-        D_800F3368.palette = value3;
+        g_FieldFxSpriteParams.palette = value3;
         value1 = 1;
-        D_800F3368.parameter06 = value1;
-        D_800F3368.parameter0A = 0;
-        D_800F3368.depth = 0;
-        D_800F3368.tpage = tableValue;
+        g_FieldFxSpriteParams.parameter06 = value1;
+        g_FieldFxSpriteParams.parameter0A = 0;
+        g_FieldFxSpriteParams.depth = 0;
+        g_FieldFxSpriteParams.tpage = tableValue;
         break;
     }
     return 0;

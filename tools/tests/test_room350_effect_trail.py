@@ -16,22 +16,22 @@ class Room350EffectTrailTests(unittest.TestCase):
     def test_queue_consumption_reloads_and_configuration(self):
         source = host_unit("func_8019784C", under=ROOM)
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <string.h>\n' + source + r'''
-FieldFxTaskSlot *D_800F33E0;
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 unsigned char D_8019A86E;
 short D_8019A85C;
 RoomM350TrailQueue g_RoomEffectTrailPositions;
-unsigned short D_800E11E8, D_800E2850[65536];
+unsigned short g_FieldFxTpageSlot2, g_FieldFxTpageTable[65536];
 /* The retail halfword names are fields of the sprite parameter block; the
  * signed ones are read through signed views as the old globals were. */
-RenderEffectParameters D_800F3368;
-#define SIGNED(field) (*(short *)&D_800F3368.field)
+RenderEffectParameters g_FieldFxSpriteParams;
+#define SIGNED(field) (*(short *)&g_FieldFxSpriteParams.field)
 #define UNIT SIGNED(parameter00)
 #define D_800F336A SIGNED(parameter02)
-#define D_800F336C D_800F3368.palette
+#define D_800F336C g_FieldFxSpriteParams.palette
 #define D_800F336E SIGNED(parameter06)
-#define D_800F3370 D_800F3368.tpage
+#define D_800F3370 g_FieldFxSpriteParams.tpage
 #define D_800F3372 SIGNED(parameter0A)
-#define D_800F3374 D_800F3368.depth
+#define D_800F3374 g_FieldFxSpriteParams.depth
 #define D_800F3376 SIGNED(extent_x)
 #define D_800F3378 SIGNED(extent_y)
 static RoomM350Emitter emitters[2];
@@ -41,17 +41,17 @@ _Static_assert(offsetof(RoomM350Emitter, pool) == 8, "pool offset");
 _Static_assert(sizeof(Vector) == 8, "queue stride");
 _Static_assert(offsetof(Vector, y) == 2 && offsetof(Vector, z) == 4, "coordinate offsets");
 int func_8019A014(int event, short *object) { return 0; }
-int func_800CE560(char *pool, int a, int b,
+int FieldFx_InitCallbackList(char *pool, int a, int b,
                   FieldFxCallbackListCallback callback) {
     assert(setups++ == 0 && allocations == 0 && pool == &pools[0]);
     assert(a == 8 && b == 16 && (void *)callback == (void *)func_8019A014);
     return setupResult;
 }
-void *func_800CE610(char *pool) {
+void *FieldFx_AcquireCallbackSlot(char *pool) {
     int slot = allocations++;
     assert(setups == 0 && slot < 4 && pool == &pools[slot ? 1 : 0]);
     /* Stub changes probe reloads; they do not describe actual allocator behavior. */
-    D_800F33E0 = (FieldFxTaskSlot *)&emitters[1];
+    g_FieldFxActiveTaskSlot = (FieldFxTaskSlot *)&emitters[1];
     D_8019A86E = 255;
     if (replacementCount >= 0) D_8019A85C = replacementCount;
     if (allocations == failAt) return 0;
@@ -63,7 +63,7 @@ void *func_800CE610(char *pool) {
 }
 static void reset(void) {
     setups = allocations = successes = 0;
-    D_800F33E0 = (FieldFxTaskSlot *)&emitters[0];
+    g_FieldFxActiveTaskSlot = (FieldFxTaskSlot *)&emitters[0];
     memset(effects, 0x6B, sizeof(effects));
     memset(&g_RoomEffectTrailPositions, 0x5A, sizeof(g_RoomEffectTrailPositions));
 }
@@ -101,7 +101,7 @@ int main(void) {
             assert(effects[i][j] == (i < successes && j < 3 ? coordinates[i][j] : 0x6B6B));
     }
     for (i = 0; i < 5; ++i) {
-        reset(); D_800E11E8 = indices[i]; D_800E2850[indices[i]] = 65535 - i;
+        reset(); g_FieldFxTpageSlot2 = indices[i]; g_FieldFxTpageTable[indices[i]] = 65535 - i;
         assert(func_8019784C(2) == 0 && allocations == 0 && setups == 0);
         assert(UNIT == 16 && D_800F336A == 1);
         assert(D_800F3376 == 16 && D_800F3378 == 16 && D_800F336C == 2);

@@ -101,7 +101,7 @@ extern int g_MemCardServiceReady;
 extern void (*g_MemCardObjResetFn)(CardObj *obj);
 
 /* Byte-provider callback. The direct-port reader ignores needsAck. */
-extern int (*D_8009B72C)(CardObj *obj, int needsAck);
+extern int (*g_MemCardObjReadPayloadByteFn)(CardObj *obj, int needsAck);
 int CardObj_ReadPayloadByte(CardObj *obj, int needsAck);
 
 PE1_STATIC_ASSERT(PE1_OFFSETOF(CardObj, response_index) == 0x44, card_response_index);

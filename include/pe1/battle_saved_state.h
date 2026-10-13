@@ -24,8 +24,8 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(AyaBattleState, action) == 0x68,
                   aya_battle_state_action_offset);
 
 /* Rodata defaults Battle_SaveAyaState loads into the saved battle records. */
-extern AyaBattleState D_80010928;
-extern BattleStateTail D_80010998;
+extern AyaBattleState g_AyaBattleStateInitial;
+extern BattleStateTail g_SavedBattleStateTailInitial;
 
 extern AyaBattleState g_AyaBattleState;
 extern BattleStateTail g_SavedBattleStateTail;

@@ -145,7 +145,7 @@ typedef struct RoomWindowScratch {
 
 extern struct FieldActor *g_PlayerEntity;
 
-extern int func_800DFC44(int value);
+extern int FieldFx_IntSqrt(int value);
 
 struct RoomEnt;
 

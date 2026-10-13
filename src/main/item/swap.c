@@ -241,20 +241,20 @@ static inline int ActiveItemKind(int index) {
 }
 static inline int FindFreeEquipmentRecord(void) {
     int result;
-    ItemDataRecord *p = D_800C0E20.equipment;
+    ItemDataRecord *p = g_InventoryRuntime.equipment;
     ItemDataRecord *end;
     /* Preserve retail's independent base reload beside the cached bound. */
     asm("" : "=r"(p) : "0"(p));
     end = p + 128;
 
-    if (p < D_800C0E20.equipment + 128) {
+    if (p < g_InventoryRuntime.equipment + 128) {
         do {
             if (!p->iconId)
                 break;
             p++;
         } while (p < end);
-        if (p < D_800C0E20.equipment + 128) {
-            int index = p - D_800C0E20.equipment;
+        if (p < g_InventoryRuntime.equipment + 128) {
+            int index = p - g_InventoryRuntime.equipment;
             result = index;
         } else {
             result = -1;
@@ -270,7 +270,7 @@ void Inv_ClearDisplaySlots(void) {
     int i = 0;
     g_InvActiveListOverride = 0;
     g_InvOverrideSlotLimit = 0;
-    g_InvItemPtr = D_800C0E20.slots;
+    g_InvItemPtr = g_InventoryRuntime.slots;
     g_InvSlotLimit = Inv_GetAyaSlotLimit();
     g_InvSelectionBits = g_InvSelectionBitStorage;
     g_InvSelectionBitWords = 2;
@@ -279,7 +279,7 @@ void Inv_ClearDisplaySlots(void) {
             (unsigned)((u16)g_InvItemPtr[i] - 256) >= 128) {
             int record = FindFreeEquipmentRecord();
             if (record >= 0) {
-                ItemDataRecord *item = &D_800C0E20.equipment[record];
+                ItemDataRecord *item = &g_InventoryRuntime.equipment[record];
                 *item = *Item_LookupBaseData(g_InvItemPtr[i] - 1);
                 g_InvItemPtr[i] = record + 256;
             }
@@ -400,10 +400,10 @@ static inline void SwapAyaSlots(int firstSlot, int secondSlot) {
     int from = firstSlot;
     int to = secondSlot;
     SwapSlots(&g_InvItemPtr[from], &g_InvItemPtr[to]);
-    if (D_800C0E20.tracked[0] == from) D_800C0E20.tracked[0] = to;
-    else if (D_800C0E20.tracked[0] == to) D_800C0E20.tracked[0] = from;
-    if (D_800C0E20.tracked[2] == from) D_800C0E20.tracked[2] = to;
-    else if (D_800C0E20.tracked[2] == to) D_800C0E20.tracked[2] = from;
+    if (g_InventoryRuntime.tracked[0] == from) g_InventoryRuntime.tracked[0] = to;
+    else if (g_InventoryRuntime.tracked[0] == to) g_InventoryRuntime.tracked[0] = from;
+    if (g_InventoryRuntime.tracked[2] == from) g_InventoryRuntime.tracked[2] = to;
+    else if (g_InventoryRuntime.tracked[2] == to) g_InventoryRuntime.tracked[2] = from;
 }
 static inline ItemDataRecord *LookupTrackedItem(int index) {
     int value, saved;
@@ -413,7 +413,7 @@ static inline ItemDataRecord *LookupTrackedItem(int index) {
         value = g_InvItemPtr[index];
         saved = value;
         if (value - 0x100U < 0x80U) {
-            result = &D_800C0E20.equipment[value - 0x100];
+            result = &g_InventoryRuntime.equipment[value - 0x100];
         } else {
             if (value - 1U < 0xFFU) {
                 return Item_LookupBaseData(value - 1);
@@ -483,7 +483,7 @@ int Inv_IsSlotEquipped(int index) {
         if (!(data->flags & 0x20)) {
             equipped = 0;
             if (g_InvItemPtr == g_AyaInventoryItems &&
-                (D_800C0E20.tracked[0] == index || D_800C0E20.tracked[2] == index))
+                (g_InventoryRuntime.tracked[0] == index || g_InventoryRuntime.tracked[2] == index))
                 equipped = 1;
             if (!equipped) allowed = 1;
         }

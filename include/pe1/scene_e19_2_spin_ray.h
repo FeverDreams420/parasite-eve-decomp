@@ -48,7 +48,7 @@ extern u8 D_8019B404[];
 extern GteShortVector D_8019B670;
 
 int rand(void);
-void func_800CFFAC(SceneSpinRay *ray);
+void FieldFx_RandomScatterOffsetXY(SceneSpinRay *ray);
 int func_80196748(int mode, SceneSpinRay *ray);
 
 #endif

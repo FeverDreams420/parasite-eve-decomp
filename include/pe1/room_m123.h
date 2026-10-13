@@ -15,9 +15,9 @@ typedef RoomM123BurstParticle RoomM123PulsingParticle;
 
 extern u8 D_801954BC[];
 
-void func_800CF844(void *, void *, int, void *, int, int);
+void FieldFx_OffsetPointByAngles(void *, void *, int, void *, int, int);
 void LoadAverageShort12(void *, void *, int, int, void *);
-void func_800D2B58(void *, void *, void *, void *, int, int, int);
+void FieldFx_DrawGlowLine(void *, void *, void *, void *, int, int, int);
 
 /* Joint triangle: three boss joint points joined by lines that pull toward a
  * fourth joint, then a spark that runs around the triangle edges. */

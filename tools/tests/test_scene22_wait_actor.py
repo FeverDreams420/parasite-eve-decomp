@@ -32,9 +32,9 @@ typedef char d[OFF(struct FieldActor,state)==0 ? 1:-1];
 WaitState state;
 FieldActorState owner;
 struct FieldActor actor = { &owner };
-struct FieldFxTaskContext *D_800E2368 = (struct FieldFxTaskContext *)&state;
+struct FieldFxTaskContext *g_FieldFxTaskContext = (struct FieldFxTaskContext *)&state;
 struct FieldActor *g_PlayerEntity = &actor;
-int D_800E27EC;
+int g_FieldFxCurrentAge;
 int main(void) {
     int modes[] = {INT_MIN, -1, 2, 3, INT_MAX};
     int timers[] = {INT_MIN, -1, 0, 99, 100, INT_MAX};
@@ -51,7 +51,7 @@ int main(void) {
         assert(owner.flags == 0xEFFFFFFFu);
     }
     for (i = 0; i < sizeof(timers)/sizeof(timers[0]); ++i) {
-        D_800E27EC = timers[i]; owner.flags = 0x123;
+        g_FieldFxCurrentAge = timers[i]; owner.flags = 0x123;
         state.complete = 7; state.signaled = 8;
         assert(func_80198F54(1) == (timers[i] >= 100));
         assert(state.complete == (timers[i] >= 100 ? 1 : 7));

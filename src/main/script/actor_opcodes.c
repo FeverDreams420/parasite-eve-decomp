@@ -600,7 +600,7 @@ retry_second:
         u16 *range = g_SceneInitLbaTbl1;
         s32 minus_one = -1;
         do {
-            ret = CdRom_ReadSectorsFromLba(base[0x40] + range[0], D_80011610, range[1] - range[0]);
+            ret = CdRom_ReadSectorsFromLba(base[0x40] + range[0], g_CdLoadAreaBase, range[1] - range[0]);
         } while (ret == minus_one);
     }
     {
@@ -621,7 +621,7 @@ retry_second:
     ExitCriticalSection();
 
     sp.words[1] = 0;
-    sp.buffers[0] = D_80011610 + ((g_SceneAssetLbaTbl - g_SceneInitLbaTbl1[0]) << 0xB);
+    sp.buffers[0] = g_CdLoadAreaBase + ((g_SceneAssetLbaTbl - g_SceneInitLbaTbl1[0]) << 0xB);
     func_801216C4(1, sp.words);
     func_80121C04(**arg0_reg);
     func_801223A8(1);
@@ -795,7 +795,7 @@ int Script_SetGteMatrix(int **args) {
                                render_actor->action_data, 0, 1);
     Render_TransformVertices(&g_CurrentEntity->render_object);
     Render_TransformSkinnedVertices(&g_CurrentEntity->render_object, D_800B89F8);
-    Render_DrawObject(&g_CurrentEntity->render_object, D_800BEA40.words);
+    Render_DrawObject(&g_CurrentEntity->render_object, g_RenderLightingState.words);
     Render_UpdateClutTable(&g_CurrentEntity->render_object, 1,
                            (s16)g_ActiveDrawSlot);
 
@@ -804,7 +804,7 @@ int Script_SetGteMatrix(int **args) {
         first_draw_slot = g_ActiveDrawSlot;
         first_draw_slot ^= 1;
         g_ActiveDrawSlot = first_draw_slot;
-        Render_DrawObject(&flag_actor->render_object, D_800BEA40.words);
+        Render_DrawObject(&flag_actor->render_object, g_RenderLightingState.words);
         Render_UpdateClutTable(&g_CurrentEntity->render_object, 1,
                                (s16)g_ActiveDrawSlot);
         second_draw_slot = g_ActiveDrawSlot;

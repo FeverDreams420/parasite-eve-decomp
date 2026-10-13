@@ -27,7 +27,7 @@ void srand(unsigned int);
 /* Only element zero is accessed in the wide matching views below. */
 extern u8 D_8009CE7C;
 extern s32 D_8009D1D0;
-extern s32 D_8009D1E8;
+extern s32 g_BattleFrameCounter;
 extern s8 D_8009D1F0[16];
 extern u32 D_8009D1F4;
 extern u8 D_8009D235[16];

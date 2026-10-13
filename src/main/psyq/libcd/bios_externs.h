@@ -1,4 +1,4 @@
 #ifndef PE1_EXT_B96296EEC45A
 #define PE1_EXT_B96296EEC45A
-extern char D_80011B44[], D_80011B50[], D_80011B6C[], D_80011B80[];
+extern char g_CdDiskErrorText[], g_CdDiskErrorDetailFormat[], g_CdUnknownIntrText[], g_CdUnknownIntrFormat[];
 #endif /* PE1_EXT_B96296EEC45A */

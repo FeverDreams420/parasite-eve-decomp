@@ -163,11 +163,11 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RenderBufferPrefix, packets) == 0x20,
 PE1_STATIC_ASSERT(sizeof(RenderBufferPrefix) == 0x28,
                   render_buffer_prefix_size);
 extern RenderBufferPrefix D_800B0E38;
-extern int D_8009CDD8, g_ActiveDrawSlot;
+extern int g_DrawPacketOffset, g_ActiveDrawSlot;
 void SetLineF2(RenderLinePacket *packet);
-void func_800CF6F8(void *ordering, void *packet, int mode);
+void FieldFx_LinkBlendedPacket(void *ordering, void *packet, int mode);
 struct RenderColor;
-void func_800DB25C(GteShortVector *position, int x, int y, int angle,
+void FieldFx_DrawDiamondOutline(GteShortVector *position, int x, int y, int angle,
                    int radius, int depth, int intensity, struct RenderColor *color);
 
 #endif /* PE1_RENDER_PRIM_H */

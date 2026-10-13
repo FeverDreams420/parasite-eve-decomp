@@ -30,7 +30,7 @@ void Script_InitNodePool(void) {
     u32 *ptr;
 
     i = 0;
-    base.node = D_8009D310;
+    base.node = g_ScriptNodes;
     rowOffset = 0;
 
     g_ScriptNodePool = 0;
@@ -119,14 +119,14 @@ void Script_InitNodeFreeList(void) {
 
     i = 0;
     g_ScriptNodePool = 0;
-    g_ScriptNodeFreeListHead = D_8009D310;
+    g_ScriptNodeFreeListHead = g_ScriptNodes;
 
     do {
-        D_8009D310[i].next = &D_8009D310[i + 1];
+        g_ScriptNodes[i].next = &g_ScriptNodes[i + 1];
         i++;
     } while (i < 0x47);
 
-    D_8009D310[71].next = 0;
+    g_ScriptNodes[71].next = 0;
 
     i = 0;
     do {

@@ -39,34 +39,34 @@ int getintr(void) {
         g_CdStatus1 = result[1];
     }
     if (interrupt == 5 && CD_debug > 0) {
-        printf(D_80011B44);
+        printf(g_CdDiskErrorText);
         if (CD_debug > 0)
-            printf(D_80011B50, g_CdCommandNames[g_CdLastCom], g_CdStatus, g_CdStatus1);
+            printf(g_CdDiskErrorDetailFormat, g_CdCommandNames[g_CdLastCom], g_CdStatus, g_CdStatus1);
     }
     switch (interrupt) {
     case 3:
         if (errors) {
             g_CdInterruptEvents.sync = 5;
-            copy_result(D_800A3460, result);
+            copy_result(g_CdSyncResult, result);
             return 2;
         }
         if (g_CdCommandAckOnly[g_CdLastCom]) {
             g_CdInterruptEvents.sync = 3;
-            copy_result(D_800A3460, result);
+            copy_result(g_CdSyncResult, result);
             return 1;
         }
         g_CdInterruptEvents.sync = 2;
-        copy_result(D_800A3460, result);
+        copy_result(g_CdSyncResult, result);
         return 2;
     case 2:
         g_CdInterruptEvents.sync = errors ? 5 : 2;
-        copy_result(D_800A3460, result);
+        copy_result(g_CdSyncResult, result);
         return 2;
     case 1:
         if (errors && count == 1) errors = 0;
         events = &g_CdInterruptEvents;
         events->ready = errors ? 5 : 1;
-        copy_result(D_800A3468, result);
+        copy_result(g_CdReadyResult, result);
         *g_CdRegIndexBase = 0;
         *g_CdRegResponse = 0;
         return 4;
@@ -74,21 +74,21 @@ int getintr(void) {
         CdInterruptEvents *endEvents = &g_CdInterruptEvents;
         endEvents->end = 4;
         endEvents->ready = endEvents->end;
-        copy_result(D_800A3470, result);
-        copy_result(D_800A3468, result);
+        copy_result(g_CdEndResult, result);
+        copy_result(g_CdReadyResult, result);
         return 4;
     }
     case 5: {
         CdInterruptEvents *errorEvents = &g_CdInterruptEvents;
         errorEvents->ready = 5;
         errorEvents->sync = errorEvents->ready;
-        copy_result(D_800A3460, result);
-        copy_result(D_800A3468, result);
+        copy_result(g_CdSyncResult, result);
+        copy_result(g_CdReadyResult, result);
         return 6;
     }
     default:
-        puts(D_80011B6C);
-        printf(D_80011B80, interrupt);
+        puts(g_CdUnknownIntrText);
+        printf(g_CdUnknownIntrFormat, interrupt);
         return 0;
     }
 }

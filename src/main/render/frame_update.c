@@ -209,8 +209,8 @@ int Render_PrepareFrame(void) {
         int word = local.projected.word;
         int x = local.projected.xy[0];
 
-        D_800BCFB4 = x;
-        D_800BCFB6 = word >> 16;
+        g_CameraFocusScreenX = x;
+        g_CameraOffsetScreenY = word >> 16;
         return ret;
     }
 }
@@ -300,11 +300,11 @@ int Render_SetCDDCSlot(void) {
         state->position.tint.tiles[g_ActiveDrawSlot].g =
             D_800BCFF2 + (D_800BCFEA - D_800BCFF2) * frame / divisor;
         state->position.tint.tiles[g_ActiveDrawSlot].b =
-            D_800BCFF4 + (D_800BCFEC - D_800BCFF4) * frame / divisor;
+            D_800BCFF4 + (g_ScreenTintTargetB - D_800BCFF4) * frame / divisor;
     } else {
         state->position.tint.tiles[g_ActiveDrawSlot].r = D_800BCFE8;
         state->position.tint.tiles[g_ActiveDrawSlot].g = D_800BCFEA;
-        state->position.tint.tiles[g_ActiveDrawSlot].b = D_800BCFEC;
+        state->position.tint.tiles[g_ActiveDrawSlot].b = g_ScreenTintTargetB;
     }
     buffers = &D_800B0E38;
     slot = g_ActiveDrawSlot;

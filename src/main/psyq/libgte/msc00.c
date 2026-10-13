@@ -13,12 +13,12 @@
 PSYQ_ASM_OBJECT(LIBGTE, MSC00)
 
 PSYQ_ASM_FUNCTION(InitGeom,
-    "    lui     $at, %hi(D_800960AC)\n"
-    "    sw      $ra, %lo(D_800960AC)($at)\n"
+    "    lui     $at, %hi(g_InitGeomSaveRa)\n"
+    "    sw      $ra, %lo(g_InitGeomSaveRa)($at)\n"
     "    jal     _patch_gte\n"
     "    nop\n"
-    "    lui     $ra, %hi(D_800960AC)\n"
-    "    lw      $ra, %lo(D_800960AC)($ra)\n"
+    "    lui     $ra, %hi(g_InitGeomSaveRa)\n"
+    "    lw      $ra, %lo(g_InitGeomSaveRa)($ra)\n"
     "    nop\n"
     "    mfc0    $v0, $12\n"
     "    lui     $v1, 0x4000\n"

@@ -80,14 +80,14 @@ void Draw_PrintTextById(unsigned int textId);
  *   engine walks the active entries and types out / draws their text. Entry:
  *     +0x00 u8   state (0=free, 1=new -> init, 2=active/displaying)
  *     +0x04 u8*  CURRENT message pointer == the live typewriter position; for a
- *                new entry it is seeded from D_8009CE90 then advanced past
+ *                new entry it is seeded from g_TextboxMessageSource then advanced past
  *                control codes. This points into the room/event message blob
  *                (loaded with the scene, 0x801Axxxx region).
  *     +0x08 u8   box style (0/1/3), +0x12/+0x14 u16 x/y, +0x16/+0x18 colour,
  *     +0x0C flags, +0x10 page/id, +0x1A.. inline data.
  *   Control codes in the stream: 0xF7 (switch/colour), 0xF8/0xF9, 0xFE <arg>
  *   (page/cond), 0xFF (end). Speaker is in-line, e.g. "Doorman" + ':' + text.
- *   D_8009CE90 holds the message SOURCE handed to a freshly-queued entry (the
+ *   g_TextboxMessageSource holds the message SOURCE handed to a freshly-queued entry (the
  *   "show message" call); after that the per-entry +0x04 is the live cursor.
  *
  *   *** To know the current on-screen text: scan D_800BCEA8 (0x38 stride), and

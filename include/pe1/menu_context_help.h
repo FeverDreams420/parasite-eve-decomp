@@ -33,6 +33,6 @@ extern ItemDataRecord *g_MenuActionItemData;
 extern int g_McDialogMode, g_MenuMemCardConfirmPending;
 /* Five help text ids indexed by row; row 2 is replaced by entry 4 in
  * equip mode 1. */
-extern u8 D_8009234C[];
+extern u8 g_MenuContextHelpTextIds[];
 
 #endif

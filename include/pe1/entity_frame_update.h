@@ -22,9 +22,9 @@ typedef struct GameStateBlock {
 extern GameStateBlock g_GameStateBlock;
 extern u32 D_8009D1F4;         /* pad trigger bits */
 extern s16 D_8009D2A4;         /* menu frame result */
-extern BattleAction D_800A76D8;        /* menu frame argument */
+extern BattleAction g_BattleMenuActionRecord;        /* menu frame argument */
 extern u32 D_800B89F8[];       /* view matrix packet */
-extern s16 D_800BCFFE[];       /* camera height (integer part) */
+extern s16 g_CameraFocusHeight[];       /* camera height (integer part) */
 
 void Battle_Update(void);
 void Inv_OpenAyaItemList(unsigned int mode);

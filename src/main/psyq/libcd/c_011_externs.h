@@ -4,15 +4,15 @@
 #include "common.h"
 #include "pe1/psyq_cd.h"
 
-extern volatile u8 *D_8009B334;
-extern volatile u8 *D_8009B338;
-extern volatile u32 *D_8009B33C;
-extern volatile u32 *D_8009B340;
-extern volatile u32 *D_8009B34C;
-extern volatile u32 *D_8009B35C;
-extern s32 D_8009B374;
-extern StHEADER *D_800A34A0;
-extern s32 g_CdStreamDataReadyFlag, D_800BCD7C, g_CdStreamRingReadSlot;
-extern StSectorPayload *D_800C0DC4;
+extern volatile u8 *g_CdStIntrDataFifoPtr;
+extern volatile u8 *g_CdStIntrRequestRegPtr;
+extern volatile u32 *g_CdStIntrDelayRegPtr;
+extern volatile u32 *g_CdStIntrComDelayRegPtr;
+extern volatile u32 *g_CdStIntrMdecDmaChcrPtr;
+extern volatile u32 *g_CdStIntrDmaChcrPtr;
+extern s32 g_CdStIntrState;
+extern StHEADER *g_StCurrentHeader;
+extern s32 g_CdStreamDataReadyFlag, g_CdStreamSectorSlot, g_CdStreamRingReadSlot;
+extern StSectorPayload *g_CdStreamSectorPayloadPtr;
 
 #endif /* PSYQ_LIBCD_STCDINTERRUPT_EXTERNS_H */

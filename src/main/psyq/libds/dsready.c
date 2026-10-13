@@ -56,7 +56,7 @@ DsCallback DsReadySystemMode(DsCallback callback) {
     DsCallback *slot;
     DsCallback old;
 
-    slot = &D_8009B708;
+    slot = &g_DsReadySystemCallback;
     old = *slot;
     *slot = callback;
     return old;

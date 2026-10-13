@@ -5,14 +5,14 @@
 #include "pe1/memcard_state.h"
 
 /* LIBPAD/PADMAIN.OBJ. Legacy MemCard/Spu names are preserved for callers. */
-extern int g_MemCardServiceReady, D_8009B768;
-extern char D_800A5AB0[];
+extern int g_MemCardServiceReady, g_MemCardCommandStep;
+extern char g_PadVsyncIntQueueNode[];
 extern MemCardInterruptRegisters *D_8009B784;
 extern MemCardSioRegisters *D_8009B788;
 /* Per-port idle counters that PadEnableCom and the VSync timer age. */
 extern int D_800A5AC0[2];
-extern int (*D_8009B7A8[])(void);
-extern int (*D_8009B724)(int);
+extern int (*g_MemCardCommandStepHandlers[])(void);
+extern int (*g_PadDmaCompleteFn)(int);
 extern u32 g_TimerTimeoutLimit, g_TimerTimeoutStart;
 void setRC2wait(int);
 int MemCard_WaitReadyForTransfer(void);
@@ -22,6 +22,6 @@ void MemCard_RunCommandStep(CardObj *port);
 int _padSioRW(CardObj *, int);
 
 /* Pad interrupt queue entry removed by StopPAD. */
-extern int D_800A34B0;
+extern int g_PadIntQueueNode;
 
 #endif

@@ -563,7 +563,7 @@ exist for the bytes, and why:
   (`*(int *)&bank[0].volume`). GCC 2.7 assumes a store to a structure field
   through a pointer cannot alias a fixed scalar, so with plain field stores
   the scheduler hoists the `g_AkaoVoiceUpdateFlags` read-modify-write and the
-  `D_800BCD54`..`D_800BCD68` stores across them. Retail keeps the source
+  `D_800BCD54`..`g_AkaoSfxTickAccumulator` stores across them. Retail keeps the source
   order, which only non-structure stores give. Declaring the scalars as a
   record instead fixes the stores but not the read-modify-write, which a
   record view turns into a register-held address. `Akao_UpdateVoiceMask`
@@ -573,7 +573,7 @@ exist for the bytes, and why:
 - `Akao_SetBgmVolumeFade` reads `g_AkaoBgmHandle[0]` twice by index. A
   fixed-symbol load is not reused across the stack store of the fifth
   argument, which gives retail's reload without a volatile slot pointer.
-- `D_8009D268`, the message-queue lock the timer interrupt tests, and
+- `g_AkaoMessageQueueLock`, the message-queue lock the timer interrupt tests, and
   `D_8009D2E0`, the busy flag `Spu_PollOrWaitSeqBusy` spins on, are
   `volatile`: `Spu_InitVoiceState` clears the lock and reads it back before
   copying it to the queue words, and only a volatile object keeps that
@@ -705,7 +705,7 @@ Crutches still in place (lev is the only metric):
   just before its first store while retail loads it early into v1, which
   shifts every later register (best lev 92).
 - `Boot_InitMemoryLayout` (2 pins, 4 pointer-integer casts, volatile
-  `D_800B0E24`..`D_800B0E68` views): without the pins the buffer cursors and
+  `g_SceneBankAssetSource`..`D_800B0E68` views): without the pins the buffer cursors and
   the 0x8000/0x48000 constants trade registers in every declaration order
   (lev 44), and without volatile the scheduler interleaves the game-state
   stores with the render buffer stores differently.
@@ -756,7 +756,7 @@ Crutches still in place (lev is the only metric):
   identity constraint on the digit (lev 19) and `Render_SetFontGlyphByCode`
   one on the stored slot (lev 14). `Render_LoadFontGlyphAlt` reads the
   glyph through `groups.codes[slots.indices[...]]` but reloads the stored
-  slot as `*(u8 *)&D_80091A1F`: a plain read is CSE'd with the store
+  slot as `*(u8 *)&g_FontSelectionSelectedSlot`: a plain read is CSE'd with the store
   (lev 35) and `g_FontSelectionState.selected` is hoisted above the store
   because it is another symbol (lev 36).
 - `Render_DrawSpriteEntry` adds the ordering-table offset and the position
@@ -945,8 +945,8 @@ changing bytes:
   `void` return where retail fills the epilogue delay slot; deleting the
   `-fno-schedule-insns` markers of CollisionQueries_2 and BurstEffect_2.
 - GTE macro operands are the objects themselves, not pinned pointers:
-  `gte_ldrotmatrix(D_800BCFA4.value)`, `gte_ldv3(D_800F3310, &D_800F3318,
-  &D_800F3320)`, `gte_ldv0(&D_800F3328)`, `gte_stsxy3(&p->x0, &p->x1, &p->x2)`,
+  `gte_ldrotmatrix(D_800BCFA4.value)`, `gte_ldv3(g_FieldFxCellQuad, &D_800F3318,
+  &g_FieldFxCellQuadBottomLeft)`, `gte_ldv0(&D_800F3328)`, `gte_stsxy3(&p->x0, &p->x1, &p->x2)`,
   `gte_stszotz(&depth)`. A constant or memory operand of an `"r"` input is
   loaded by reload, and reload takes its spill registers round robin
   (`last_spill_reg`); the number of spill registers is the largest number one
@@ -956,19 +956,19 @@ changing bytes:
 - The composed glow layers are two (`fieldfx/glow_layers.inc`) PSY-Q
   `gte_CompMatrix(&matrix, &rotation, &matrix)` calls; the floor-triangle
   tests are the PSY-Q outer product (`gte_ldopv1_psyq`, `gte_ldopv2`, OP,
-  `gte_stlvnl`) with the first operand read through `D_800E2844` and one
+  `gte_stlvnl`) with the first operand read through `g_FieldFxTriScratch` and one
   `FieldTriScratch *` local per later product.
 - A byte field incremented as `age++` is a QImode subreg set, which sched1
   does not give launch priority, so the increment is hoisted to the top of the
   block; `age = p->age; p->age = age + 1;` through an `int` makes it a
   single-set pseudo and sched1 places it where retail does (the four glow
-  particle updaters). The same holds in reverse for `func_800C2FF0`: `u8`
+  particle updaters). The same holds in reverse for `FieldFx_SetSpriteCellSize`: `u8`
   cell-size temporaries are not launched, so width-1/height-1 are computed
   first as in retail.
 - The particle updaters' `move a0,a2` is a second pointer to the particle
   (`FieldFxMovingParticle *particle = anim`) used only for the lifetime
   countdown after the bounce test.
-- `func_800C5EB0` walks the strip nodes beside a `FieldStripNodeTail` view
+- `FieldFx_UpdateStripCollision` walks the strip nodes beside a `FieldStripNodeTail` view
   (the node seen from its brightness field, `pe1/field_textured_chain_node.h`):
   `body[-1].nextCellStep`, `body[1].edgeA` replace the raw byte offsets.
 - The field engine object passes (`fieldfx/object_script.c`) keep the slot
@@ -981,7 +981,7 @@ changing bytes:
   per-unit extern headers.
 
 - A copy of a parameter that retail keeps in its own register survives cse
-  when the parameter itself is reassigned afterwards: `func_800CE610` reads
+  when the parameter itself is reassigned afterwards: `FieldFx_AcquireCallbackSlot` reads
   the list header through two copies taken before the `list` parameter
   advances to the entries (`list += 0xC`), which gives retail's `v0`/`t0`
   copies without pins or barriers. The `collision_step` post-increment
@@ -1002,20 +1002,20 @@ What is left (best crutch-free lev against retail):
   being the zero extension before the final add and the difference computed
   into `v0` then copied (`short` lev 9). The distance helper stays at lev 6
   for `s16`/`int` distances, if/else, ternary and in-place `lhs -= rhs`.
-- `fieldfx/collision.c` `func_800C5EB0` (1 pin on the node pointer):
+- `fieldfx/collision.c` `FieldFx_UpdateStripCollision` (1 pin on the node pointer):
   lev 9 without the pin. Global alloc ranks the loop index (9 refs over 45
   insns) above the node pointer (11 over 59); retail has node, index, strip in
   s1, s2, s3. Dropping the index's reuse as the return value lets the strip
   outrank the index (lev 13); starting the index inside the `if` gives the
   node s1 but swaps strip and index (lev 17-21).
-- `fieldfx/geometry.c`: `func_800D2370` keeps one empty constraint on
+- `fieldfx/geometry.c`: `FieldFx_DrawRotatedQuad` keeps one empty constraint on
   `rotation` and `length` (lev 71 without it: `rotation` is spilled to the
   stack instead of living in s8 across the packet setup calls).
-  `func_800D3BC8` keeps the entry memory barrier, the `$6` clobber and the
+  `FieldFx_DrawPulledSprite` keeps the entry memory barrier, the `$6` clobber and the
   volatile stack parameters (lev 14 without them: sched2 interleaves the
   stack-argument loads with the register saves, retail loads them after the
   last save).
-- `fieldfx/glow.c` `func_800CAE0C` (5 pins, 1 barrier): lev 50
+- `fieldfx/glow.c` `FourLayerGlow_DrawFlareLayers` (5 pins, 1 barrier): lev 50
   as four `gte_CompMatrix` layers. Local alloc ranks the composed translation
   source (`&rotation.t`) above the second-column addresses and leaves the
   matrix second column without a register; retail spills the translation
@@ -1071,7 +1071,7 @@ How the earlier groups were closed, for the next symbols of the same kind:
   to the view each unit reads, or the `FieldActor` field when it has the
   same offset and type; the generated code does not change.
 - Element views of one table became a union element type
-  (`GteSineWord` for the sine table `D_800966EC`) or the record the data is
+  (`GteSineWord` for the sine table `rcossin_tbl`) or the record the data is
   (`FieldGlowSprite` for the scene_e08 sprites, `DISPENV`/`DRAWENV` for
   `D_800BCE80`/`D_800BCDC8`, `AkaoTickTrack` for `D_800B8AC0`,
   `FontGlyphLoadState` for `D_800B0DD8`). Where a function needs the old
@@ -1100,14 +1100,14 @@ How the earlier groups were closed, for the next symbols of the same kind:
   a record or volatile cast of a small word to read absolutely takes cc1
   `-G8`, which makes the small symbol a cheap address (`FxCommon_*`
   with the projection slot record `D_800BCFA8`,
-  `RoomEffect_ConfiguredPulseCallback` with `*(volatile u16 *)&D_800E11E8`).
+  `RoomEffect_ConfiguredPulseCallback` with `*(volatile u16 *)&g_FieldFxTpageSlot2`).
   The cc1 `-G8` trick needs a unit without small data definitions of its
   own: in `room_lib/grab_attack.c` its `.sdata` is discarded by the overlay
   link.
-- The texture slot words `D_800E11E8`/`D_800E11EA` are declared once as
+- The texture slot words `g_FieldFxTpageSlot2`/`g_FieldFxTpageSlot3` are declared once as
   `u16` entries of the slot table (`field_texture_tables.h`); the one-field
   record views became `TEXTURE_SLOT_RECORD`, the array views index
-  `D_800E11E4`, and the volatile reads were not needed except in the one
+  `g_FieldFxTpageSlots`, and the volatile reads were not needed except in the one
   above.
 - `g_RoomScriptRecord` is declared once (`room_script_record.h`) by the
   leading halfword every room's record starts with: room_m123 reads it as
@@ -1133,7 +1133,7 @@ Still open:
     lets CSE merge those loads, so its three views stay.
   - `Menu_MemCardProgress` (`D_800A19C0`, two views), `Save_StartWriteSlot`
     (`D_8009EE70` in `memcard.h`) and the scene_e20 hover orb
-    (`D_800E2850`) rebuild a buffer or table address after a call or a
+    (`g_FieldFxTpageTable`) rebuild a buffer or table address after a call or a
     store. With one symbol GCC keeps the address in a register (or, in the
     hover orb, an 8-byte spill slot). The text buffer matches only when it
     is declared at 8 bytes or less, which would misstate its 0x40 bytes.
@@ -1263,7 +1263,7 @@ Still open:
     `CollisionDatabaseAddress` union: an indexed `regions[i]` walk reorders
     the header loads (lev 9 to 19).
   - `Entity_ResetStateGlobals` clears both ramp edge points by byte offset
-    (`D_8009CE0C`/`D_8009CE0E`); a `FloorEdgePoint` index keeps a separate
+    (`g_FloorBlockedEdgePointA`/`D_8009CE0E`); a `FloorEdgePoint` index keeps a separate
     counter and `addiu` base (lev 11). `Entity_ResetAllPools` clears the
     allocation slots by byte offset under `-fno-strength-reduce`.
 
@@ -1290,7 +1290,7 @@ Still open:
   - `(u16)(s8)byte` at the call reproduces the enemy action-mode argument;
     `(s16)(word >> 16)` and `(u16)(word >> 16)` read the integer half of a
     16.16 field with one `lh`/`lhu`.
-  - A base pointer local (`BattleTileSlot *tiles = D_8009E070`) keeps a
+  - A base pointer local (`BattleTileSlot *tiles = g_BattleStatusBackgroundTiles`) keeps a
     packet base in a register where retail loads it early.
   - The hit-state, category and reaction inserts into an enemy's core flags
     are `EnemyCoreFlagBits` bitfield assignments; each insert then reuses
@@ -2062,7 +2062,7 @@ What is left, and why:
   the C name moves every overlay reference to a name main lacks until
   overlays link against main's symbols (step 3 below).
 - fx_common's views of main data (`g_FxTextureSetup`, `g_FxCommonSceneIds`,
-  `g_FxCommonGameFlags` on `D_80091648`, `D_800A77F4`, `D_800B0CD8`) have
+  `g_FxCommonGameFlags` on `g_FieldBgTextureSlots`, `D_800A77F4`, `D_800B0CD8`) have
   types that differ from main's declarations (signed fields, a record over a
   word), so they wait for the same step.
 - `psyq_cd.h`'s halfword view of `g_CdStreamReady` (memory card overlay)
@@ -2080,7 +2080,7 @@ above and one is the multiplier 0x80010003 of a division by 0x7FFF in
 
 The literals removed on 2026-10-13: the LIBCD BIOS descriptor in
 `libcd/bios_4.c` points at `g_CdLastCom`, `g_CdStatus`, `g_CdLastPos`, the
-event bytes `g_CdInterruptEvents`, `D_800A3460` and the bios.c version
+event bytes `g_CdInterruptEvents`, `g_CdSyncResult` and the bios.c version
 string; `DsReadCallback` stores
 `g_CdReadCompleteCallback` by name; and six data words in the asm blobs
 assemble as symbol references. `configs/USA/sym.main.txt` labels what they
@@ -2241,7 +2241,7 @@ of scope). Recipes, none of which changed a byte:
   with the background texture blob (`shared_buffers` union), the voice bank
   work bounds are `u8 *`, the fade primitives use a `Pe1PrimTag` byte view
   for the `len` byte, and 0x004 is `saved_state_004`. Work-buffer bases
-  (`g_RenderFrontBufferBase` and the `D_800B0E24..D_800B0E68` views) are
+  (`g_RenderFrontBufferBase` and the `g_SceneBankAssetSource..D_800B0E68` views) are
   byte pointers.
 - A state pointer stepped by a word index (`Pe1GameStateAddress`), an
   allocation slot addressed by byte offset (`EntityAllocationAddress`), the

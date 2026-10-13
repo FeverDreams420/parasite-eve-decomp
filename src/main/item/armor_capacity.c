@@ -30,7 +30,7 @@ s32 D_8009D09C;
 s16 *g_InvActiveListOverride;
 s32 g_InvOverrideSlotLimit;
 s32 D_8009D0A4;
-s32 D_8009D0A8;
+s32 g_InvAmmoSortStatIndex;
 unsigned char *g_InvSortRankTable;
 unsigned char *g_InvSortTypeRankTable;
 u16 *g_InvSortListBase;
@@ -46,7 +46,7 @@ static inline ItemDataRecord *LookupOldArmor(int index) {
         value = g_InvItemPtr[index];
         saved = value;
         if (value - 0x100U < 0x80U) {
-            result = &D_800C0E20.equipment[value - 0x100];
+            result = &g_InventoryRuntime.equipment[value - 0x100];
         } else {
             if (value - 1U < 0xFFU) {
                 return Item_LookupBaseData(value - 1);
@@ -73,7 +73,7 @@ static inline ItemDataRecord *LookupTrackedItem(int index) {
         value = g_InvItemPtr[index];
         saved = value;
         if (value - 0x100U < 0x80U) {
-            result = &D_800C0E20.equipment[value - 0x100];
+            result = &g_InventoryRuntime.equipment[value - 0x100];
         } else {
             if (value - 1U < 0xFFU) {
                 result = Item_LookupBaseData(value - 1);
@@ -98,7 +98,7 @@ static inline ItemDataRecord *LookupArmorTrackedItem(int index) {
         value = g_InvItemPtr[index];
         saved = value;
         if (value - 0x100U < 0x80U) {
-            result = &D_800C0E20.equipment[value - 0x100];
+            result = &g_InventoryRuntime.equipment[value - 0x100];
         } else {
             if (value - 1U < 0xFFU) {
                 result = Item_LookupBaseData(value - 1);
@@ -125,7 +125,7 @@ int Inv_GetSlotItemData(int index) {
     int previousReserve = 0;
     int nextReserve, previousSlot, status, i;
     BattleCmdEntry *command;
-    armor = LookupOldArmor(D_800C0E20.tracked[2]);
+    armor = LookupOldArmor(g_InventoryRuntime.tracked[2]);
     if (armor != 0) {
         for (i = 0; i < armor->tailCount; i++) {
             previousReserve = (armor->tailData[i] & 31) - 8;
@@ -141,9 +141,9 @@ int Inv_GetSlotItemData(int index) {
     }
     if (i < armor->tailCount) nextReserve = 1 << nextReserve;
     else nextReserve = 0;
-    previousSlot = D_800C0E20.tracked[2];
+    previousSlot = g_InventoryRuntime.tracked[2];
     armor = LookupArmorTrackedItem(previousSlot);
-    D_800C0E20.tracked[2] = FilteredSlot(index);
+    g_InventoryRuntime.tracked[2] = FilteredSlot(index);
     status = Inv_CheckFreeSlotCapacity(previousReserve - nextReserve);
     Inv_CompactActiveListSlots();
     if (status == 1) {
@@ -152,7 +152,7 @@ int Inv_GetSlotItemData(int index) {
         command->payload.equip_restore.item_data = armor;
         Inv_SetActiveList(3, 0);
     } else {
-        D_800C0E20.tracked[2] = previousSlot;
+        g_InventoryRuntime.tracked[2] = previousSlot;
     }
     return status;
 }
@@ -167,7 +167,7 @@ int Inv_GetActiveSlotCount(int *out) {
     int capacityBeforeScan, bonusSlots;
     s16 *slot, *end;
 
-    armor = LookupOldArmor(D_800C0E20.tracked[2]);
+    armor = LookupOldArmor(g_InventoryRuntime.tracked[2]);
     if (armor != 0) {
         for (i = 0; i < armor->tailCount; i++) {
             reserve = (armor->tailData[i] & 0x1F) - 8;
@@ -208,7 +208,7 @@ void Inv_InitWayneStorage(void) {
     D_8009D084 = D_800A1FE8;
     D_8009D08C = 0;
     D_8009D088 = 0;
-    D_800A204C = *LookupTrackedItem(Inv_RestoreSelection(0));
+    g_InvSavedSelectionRecord0 = *LookupTrackedItem(Inv_RestoreSelection(0));
     D_800A206C = *LookupTrackedItem(Inv_RestoreSelection(1));
 }
 
@@ -256,7 +256,7 @@ static inline void RestoreList(int storage) {
 }
 void Inv_BuildStorageDisplay(void) {
     RestoreList(D_8009D098);
-    *LookupTrackedItem(D_8009D090) = D_800A204C;
+    *LookupTrackedItem(D_8009D090) = g_InvSavedSelectionRecord0;
     RestoreList(D_8009D09C);
     *LookupTrackedItem(D_8009D094) = D_800A206C;
 }
@@ -269,7 +269,7 @@ static inline ItemDataRecord *LookupActiveItem(int index) {
         value = g_InvItemPtr[index];
         saved = value;
         if (value - 0x100U < 0x80U) {
-            result = &D_800C0E20.equipment[value - 0x100];
+            result = &g_InventoryRuntime.equipment[value - 0x100];
         } else {
             if (value - 1U < 0xFFU) {
                 return Item_LookupBaseData(value - 1);
@@ -300,7 +300,7 @@ static inline void ClampAmmo(ItemDataRecord *item) {
 static inline void DeleteSlot(int slot) {
     int id = g_InvItemPtr[slot];
     g_InvItemPtr[slot] = 0;
-    if (id >= 256) D_800C0E20.equipment[id - 256].iconId = 0;
+    if (id >= 256) g_InventoryRuntime.equipment[id - 256].iconId = 0;
 }
 static inline int ItemKind(int slot) {
     ItemDataRecord *item = LookupActiveItem(slot);
@@ -318,10 +318,10 @@ static inline int FindWeapon(int kind, int excluded) {
     return -1;
 }
 static inline void SetTracked(unsigned index, int value) {
-    if (index < 4) D_800C0E20.tracked[index] = value;
+    if (index < 4) g_InventoryRuntime.tracked[index] = value;
 }
 static inline int GetTracked(unsigned index) {
-    return index < 4 ? D_800C0E20.tracked[index] : -1;
+    return index < 4 ? g_InventoryRuntime.tracked[index] : -1;
 }
 static inline int IsList(s16 *list) {
     return g_InvItemPtr == list;
@@ -457,8 +457,8 @@ void Inv_TransferItemBetweenLists(unsigned selection, int modifier, int flags, i
                 Inv_SetActiveList(3, 0);
             }
             if (IsList(g_AyaInventoryItems)) {
-                if (D_800C0E20.tracked[0] == slot) {
-                    D_800C0E20.tracked[0] = FindWeapon(8, -1);
+                if (g_InventoryRuntime.tracked[0] == slot) {
+                    g_InventoryRuntime.tracked[0] = FindWeapon(8, -1);
                     Inv_SetActiveList(2, 0);
                 } else if (GetTracked(2) == slot) {
                     for (slot = 0; slot < g_InvSlotLimit; ++slot) {
@@ -466,7 +466,7 @@ void Inv_TransferItemBetweenLists(unsigned selection, int modifier, int flags, i
                         if (item && item->kind == 9) break;
                     }
                     if (slot >= g_InvSlotLimit) slot = -1;
-                    D_800C0E20.tracked[2] = slot;
+                    g_InventoryRuntime.tracked[2] = slot;
                     Inv_SetActiveList(3, 0);
                 }
             }
@@ -635,7 +635,7 @@ void Inv_SortAmmoSubrange(void) {
     u16 tmpu;
 
     var_s0 = g_InvSortListBase;
-    g_InvSortStatIndex = D_8009D0A8;
+    g_InvSortStatIndex = g_InvAmmoSortStatIndex;
     mask = 0x200;
     if (var_s0 < g_InvSortListBase + g_InvSortListCount) {
         while (*(s16 *) var_s0 != 0) {
@@ -678,15 +678,15 @@ void Inv_SortInventoryByMode(s32 arg0, s32 arg1) {
 
     switch (arg0) {
     case 0:
-        g_InvSortRankTable = D_80092428;
-        D_8009D0A8 = arg1;
+        g_InvSortRankTable = g_InvSortRankTableC;
+        g_InvAmmoSortStatIndex = arg1;
         break;
     case 1:
         g_InvSortRankTable = g_InvSortRankTableA;
         D_8009D0A4 = arg1;
         break;
     case 2:
-        g_InvSortRankTable = D_80092440;
+        g_InvSortRankTable = g_InvSortRankTableD;
         if (arg1 != 0) {
             g_InvSortTypeRankTable = g_InvTypeRankTableA;
         } else {
@@ -736,7 +736,7 @@ void Inv_SortContainerItems(int arg0) {
         g_InvSortRankTable = g_InvSortRankTableA;
         g_InvSortTypeRankTable = g_InvTypeRankTableA;
     } else {
-        g_InvSortRankTable = D_80092410;
+        g_InvSortRankTable = g_InvSortRankTableB;
         g_InvSortTypeRankTable = g_InvTypeRankTableB;
     }
 
@@ -755,8 +755,8 @@ void Inv_SortInventoryItems(int arg0, int arg1) {
         D_8009D0A4 = arg1;
         g_InvSortRankTable = g_InvSortRankTableA;
     } else {
-        D_8009D0A8 = arg1;
-        g_InvSortRankTable = D_80092410;
+        g_InvAmmoSortStatIndex = arg1;
+        g_InvSortRankTable = g_InvSortRankTableB;
     }
 
     g_InvSortListBase = g_InvItemArray;

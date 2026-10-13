@@ -16,18 +16,18 @@ class Room350EffectRadialTests(unittest.TestCase):
     def test_burst_allocation_random_vectors_and_configuration(self):
         source = host_unit("func_80197B98", under=ROOM)
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <string.h>\n' + source + r'''
-RenderEffectParameters D_800F3368;
-#define D_800F336A D_800F3368.parameter02
-#define D_800F336C D_800F3368.palette
-#define D_800F336E D_800F3368.parameter06
-#define D_800F3370 D_800F3368.tpage
-#define D_800F3372 D_800F3368.parameter0A
-#define D_800F3374 D_800F3368.depth
-#define D_800F3376 D_800F3368.extent_x
-#define D_800F3378 D_800F3368.extent_y
-FieldFxTaskSlot *D_800F33E0;
+RenderEffectParameters g_FieldFxSpriteParams;
+#define D_800F336A g_FieldFxSpriteParams.parameter02
+#define D_800F336C g_FieldFxSpriteParams.palette
+#define D_800F336E g_FieldFxSpriteParams.parameter06
+#define D_800F3370 g_FieldFxSpriteParams.tpage
+#define D_800F3372 g_FieldFxSpriteParams.parameter0A
+#define D_800F3374 g_FieldFxSpriteParams.depth
+#define D_800F3376 g_FieldFxSpriteParams.extent_x
+#define D_800F3378 g_FieldFxSpriteParams.extent_y
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 unsigned char D_8019A86E, D_8019A859;
-unsigned short D_800E11E8, D_800E2850[65536];
+unsigned short g_FieldFxTpageSlot2, g_FieldFxTpageTable[65536];
 static RoomM350Emitter emitters[2];
 static int pools[2], allocations, draws, rotations, randomCalls, setups;
 static int failAt, requestAfterAllocation, setupResult, randomValues[8];
@@ -37,17 +37,17 @@ _Static_assert(sizeof(Matrix) == 32, "matrix size");
 _Static_assert(offsetof(Matrix, position) == 20, "translation offset");
 _Static_assert(sizeof(Vector) == 8, "vector size");
 int func_80197A04(int event, short *object) { return 0; }
-int func_800CE560(char *pool, int a, int b,
+int FieldFx_InitCallbackList(char *pool, int a, int b,
                   FieldFxCallbackListCallback callback) {
     assert(setups++ == 0 && allocations == 0 && pool == &pools[0]);
     assert(a == 8 && b == 16 && (void *)callback == (void *)func_80197A04);
     return setupResult;
 }
-void *func_800CE610(char *pool) {
+void *FieldFx_AcquireCallbackSlot(char *pool) {
     assert(setups == 0 && allocations < 2);
     assert(pool == &pools[allocations & 1]);
     /* Mutations probe reload order, not the real allocator's side effects. */
-    D_800F33E0 = (FieldFxTaskSlot *)&emitters[1];
+    g_FieldFxActiveTaskSlot = (FieldFxTaskSlot *)&emitters[1];
     D_8019A859 = requestAfterAllocation;
     D_8019A86E = 255;
     allocations++;
@@ -84,7 +84,7 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *matrix, const GteShortVector *vec
 }
 static void reset(void) {
     setups = allocations = draws = rotations = randomCalls = 0;
-    D_800F33E0 = (FieldFxTaskSlot *)&emitters[0];
+    g_FieldFxActiveTaskSlot = (FieldFxTaskSlot *)&emitters[0];
 }
 int main(void) {
     const int values[] = {0, 1, 63, 64, 127, 128, 254, 255};
@@ -110,9 +110,9 @@ int main(void) {
         assert(D_8019A859 == (active ? (unsigned char)(requestAfterAllocation - 1) : flags[request]));
     }
     for (i = 0; i < 5; ++i) {
-        reset(); D_800E11E8 = indices[i]; D_800E2850[indices[i]] = 65535 - i;
+        reset(); g_FieldFxTpageSlot2 = indices[i]; g_FieldFxTpageTable[indices[i]] = 65535 - i;
         assert(func_80197B98(2) == 0 && allocations == 0 && setups == 0);
-        assert(D_800F3372 == 0 && D_800F3368.parameter00 == 16 && D_800F336A == 1);
+        assert(D_800F3372 == 0 && g_FieldFxSpriteParams.parameter00 == 16 && D_800F336A == 1);
         assert(D_800F3376 == 16 && D_800F3378 == 16 && D_800F336C == 2);
         assert(D_800F336E == 0 && D_800F3374 == 0 && D_800F3370 == 65535 - i);
     }

@@ -254,11 +254,11 @@ int Menu_SetSlotEntry(int index, unsigned int limit, unsigned int slot)
  * points the view at the given matrix and projection distance. */
 int Render_InitViewState(void *matrix, void *screen) {
     g_GeomScroll.words.flags = 0x70;
-    D_800BCFFC = 0x60;
-    D_800BCFFE[0] = 0x180;
-    D_800BD025.b = 0xFF;
-    D_800BD025.g = 0xFF;
-    D_800BD025.r = 0xFF;
+    g_RenderMeshTintLevel = 0x60;
+    g_CameraFocusHeight[0] = 0x180;
+    g_RoomLightTint.b = 0xFF;
+    g_RoomLightTint.g = 0xFF;
+    g_RoomLightTint.r = 0xFF;
     g_GeomScroll.words.position = 0;
     g_GeomScroll.words.saved = 0;
     g_GeomScroll.words.screenOffset = 0;
@@ -271,8 +271,8 @@ int Render_InitViewState(void *matrix, void *screen) {
     g_GeomScroll.words.savedBoundsY = 0;
     g_GeomScroll.words.cameraOffset = 0;
     g_GeomGroupSel = 0;
-    D_800BD022 = 0;
-    D_800BD020 = 0;
+    g_CameraBaseAngleAnalog = 0;
+    g_CameraBaseAngleDigital = 0;
     D_800BD024 = 0;
     g_GeomScroll.words.origin = 0;
     return 0;
@@ -413,21 +413,21 @@ int Render_SetViewport(s16 *position) {
     screen_x = local.projected[0];
     screen_y = local.projected[1];
     if (camera->flags & 128) {
-        D_800BCFB4 = screen_x;
-        D_800BCFB6 = screen_y;
+        g_CameraFocusScreenX = screen_x;
+        g_CameraOffsetScreenY = screen_y;
     }
     geometry.state = g_GeomState;
-    sum_x = D_800BCFB4 + screen_x;
+    sum_x = g_CameraFocusScreenX + screen_x;
     screen_x = sum_x / 2;
-    D_800BCFB4 = screen_x;
-    sum_y = D_800BCFB6 + screen_y;
+    g_CameraFocusScreenX = screen_x;
+    sum_y = g_CameraOffsetScreenY + screen_y;
     sum_y += (unsigned)sum_y >> 31;
     view_x = 320 - screen_x;
 
     offset_geometry.state = g_GeomState;
 
     screen_y = sum_y >> 1;
-    D_800BCFB6 = screen_y;
+    g_CameraOffsetScreenY = screen_y;
     asm volatile("" : : : "memory");
     viewAddress.word = geometry.word + offset_geometry.state->entry_offset_1C;
     view = viewAddress.viewport;
@@ -464,7 +464,7 @@ int Render_SetViewport(s16 *position) {
         axisValue = y_bound - 112;
         view_y = viewportValue - axisValue;
     }
-    D_800BCF94 = view_x;
+    g_CameraScreenOffsetX = view_x;
     D_800BCF96 = view_y;
     selected_x = target_x;
     if (g_GeomScroll.state.flags & 64) {
@@ -562,7 +562,7 @@ int Render_StepCameraTransition(void)
         return 0;
     {
         u16 targetX = D_800BCF9C, x = D_800BCF98;
-        u16 targetY = D_800BCF9E, y = D_800BCF9A;
+        u16 targetY = D_800BCF9E, y = g_CameraTransitionStartY;
         u16 time = D_800BCFA0;
         duration = D_800BCFA2;
         dx = targetX - x;
@@ -577,7 +577,7 @@ int Render_StepCameraTransition(void)
             int movedX = (short)dx * weight / 8192;
             int movedY = (short)dy * weight / 8192;
             D_800BCF8C.x = D_800BCF98 + movedX;
-            g_CameraClampedY[0] = D_800BCF9A + movedY;
+            g_CameraClampedY[0] = g_CameraTransitionStartY + movedY;
         }
     }
     {
@@ -587,7 +587,7 @@ int Render_StepCameraTransition(void)
         view = &views.viewport[g_GeomGroupSel];
         {
             unsigned int offset = 160 - (D_800BCF8C.x - (short)view->width / 2);
-            D_800BCF94 = offset;
+            g_CameraScreenOffsetX = offset;
         }
         {
             unsigned int offset = 112 - ((short)g_CameraClampedY[0] - (short)view->height / 2);
@@ -626,9 +626,9 @@ int Render_UpdateScrollPosition(void *positionArg, int duration, int mode)
     if (!(camera->flags & 64))
         return -21;
     D_800BCF98 = D_800BCF8C.x;
-    D_800BCF9A = g_CameraClampedY[0];
+    g_CameraTransitionStartY = g_CameraClampedY[0];
     vector.x = position[0] >> 16;
-    vector.y = (position[1] >> 16) - (u16)D_800BCFFE[0];
+    vector.y = (position[1] >> 16) - (u16)g_CameraFocusHeight[0];
     vector.z = position[2] >> 16;
     {
         /* Matching debt: see Render_PrepareFrame; this volatile register
@@ -745,13 +745,13 @@ int Render_InitRoomPrimState(void *objectArg)
     RenderObjectEntity *object = objectArg;
     int intensity, r, g, b;
 
-    D_800BEA40.matrix.m[0][0] = 0;
+    g_RenderLightingState.matrix.m[0][0] = 0;
     D_800BEA42 = 4096;
     D_800BEA44 = 0;
     intensity = object->shade + object->lightPositiveY;
-    r = D_800BD025.r;
-    g = D_800BD025.g;
-    b = D_800BD025.b;
+    r = g_RoomLightTint.r;
+    g = g_RoomLightTint.g;
+    b = g_RoomLightTint.b;
     intensity = ClampLight(intensity) << 4;
     D_800BEA60.matrix.m[0][0] = intensity * r / 256;
     D_800BEA66 = intensity * g / 256;
@@ -782,11 +782,11 @@ int CdRom_SetSeekPos(unsigned int arg0) {
 
     old0 = (u16)D_800BCFE8;
     old1 = g_ScreenTransitionTargetY;
-    old2 = (u16)D_800BCFEC;
+    old2 = (u16)g_ScreenTintTargetB;
 
     D_800BCFE8 = 0xFF;
     g_ScreenTransitionTargetY = 0xFF;
-    D_800BCFEC = 0xFF;
+    g_ScreenTintTargetB = 0xFF;
     g_ScreenTransitionState[0] = 2;
     g_ScreenTransitionMode = 2;
     g_ScreenTransitionFadeColor = arg0;
@@ -806,11 +806,11 @@ int CdRom_SetScreenPos(int arg0, int arg1, int arg2, int arg3, unsigned short ar
 
     old0 = (u16)D_800BCFE8;
     old1 = g_ScreenTransitionTargetY;
-    old2 = (u16)D_800BCFEC;
+    old2 = (u16)g_ScreenTintTargetB;
 
     D_800BCFE8 = arg1;
     g_ScreenTransitionTargetY = arg2;
-    D_800BCFEC = arg3;
+    g_ScreenTintTargetB = arg3;
     g_ScreenTransitionState[0] = 2;
     g_ScreenTransitionFadeColor = arg0;
     D_800BCFF8 = 0;
@@ -839,12 +839,12 @@ int Render_SetFadeColour(unsigned int arg0) {
 
     old0 = (u16)D_800BCFE8;
     old1 = g_ScreenTransitionTargetY;
-    old2 = (u16)D_800BCFEC;
+    old2 = (u16)g_ScreenTintTargetB;
 
     g_ScreenTransitionState[0] = 6;
     D_800BCFE8 = 0;
     g_ScreenTransitionTargetY = 0;
-    D_800BCFEC = 0;
+    g_ScreenTintTargetB = 0;
     g_ScreenTransitionFadeColor = arg0;
     D_800BCFF8 = 0;
     D_800BCFF0 = old0;
@@ -863,10 +863,10 @@ int Render_DrawSprite(void)
     GteShortVector axis;
     GteVector up, right, newUp, forward;
     int angle, cosine, sine;
-    if ((D_800BE9A0 & 0xF000) == 0x7000)
-        angle = D_800BD022;
+    if ((g_PadPort1Buffer & 0xF000) == 0x7000)
+        angle = g_CameraBaseAngleAnalog;
     else
-        angle = D_800BD020;
+        angle = g_CameraBaseAngleDigital;
     {
         int masked = angle & 4095;
         if (D_8009D254 && (D_8009D2E8 & 16)) {
@@ -903,17 +903,17 @@ int Render_DrawSprite(void)
     gte_ldopv2(&right);
     gte_op12_psyq();
     gte_stlvnl(&newUp);
-    D_800BD000.t[0] = 0;
-    D_800BD000.t[1] = 0;
-    D_800BD000.t[2] = 0;
-    D_800BD000.m[0][0] = right.x;
-    D_800BD000.m[0][1] = newUp.x;
-    D_800BD000.m[0][2] = forward.x;
-    D_800BD000.m[1][0] = right.y;
-    D_800BD000.m[1][1] = newUp.y;
-    D_800BD000.m[1][2] = forward.y;
-    D_800BD000.m[2][0] = right.z;
-    D_800BD000.m[2][1] = newUp.z;
-    D_800BD000.m[2][2] = forward.z;
+    g_CameraBasisMatrix.t[0] = 0;
+    g_CameraBasisMatrix.t[1] = 0;
+    g_CameraBasisMatrix.t[2] = 0;
+    g_CameraBasisMatrix.m[0][0] = right.x;
+    g_CameraBasisMatrix.m[0][1] = newUp.x;
+    g_CameraBasisMatrix.m[0][2] = forward.x;
+    g_CameraBasisMatrix.m[1][0] = right.y;
+    g_CameraBasisMatrix.m[1][1] = newUp.y;
+    g_CameraBasisMatrix.m[1][2] = forward.y;
+    g_CameraBasisMatrix.m[2][0] = right.z;
+    g_CameraBasisMatrix.m[2][1] = newUp.z;
+    g_CameraBasisMatrix.m[2][2] = forward.z;
     return 0;
 }

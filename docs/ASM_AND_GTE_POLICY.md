@@ -230,7 +230,7 @@ comparisons.
 | LIBGTE PATCHGTE | `psyq/libgte/patchgte.c` (+ `PATCHGTE_templates` data) | `_patch_gte` | PSY-Q 3.5 `patchgte.o`: same static-ra installer, inline B0 call and `.text` instruction templates (`_patch_GTE` to `_patch_GTE_end`, copy loop at assembler label `1$`). |
 | LIBAPI PATCH | `psyq/libapi/patch_2.c` | `_patch_pad` | Static `ra` slot, inline B0 call, trapping `addi`. EnablePAD/DisablePAD of the same object remain C in `psyq/libapi/patch.c`. |
 | LIBAPI CHCLRPAD | `psyq/libapi/chclrpad.c` | `_remove_ChgclrPAD` | Static `ra` slot, inline B0 call, trapping `addi`. |
-| LIBCARD PATCH | `psyq/libcard/patch.c`, `psyq/libcard/patch_3.c` | `func_8007E344`, `func_8007E3C8`, `_patch_card`, `_patch_card2` | Kernel patch image copied to 0xDF80 that runs with BIOS-supplied `v0`/`v1`. The installers use a static `ra` slot and inline C0/B0 calls. CardPatchFunctions, `func_8007E3B4` and `_copy_memcard_patch` of the same object remain C. |
+| LIBCARD PATCH | `psyq/libcard/patch.c`, `psyq/libcard/patch_3.c` | `func_8007E344`, `func_8007E3C8`, `_patch_card`, `_patch_card2` | Kernel patch image copied to 0xDF80 that runs with BIOS-supplied `v0`/`v1`. The installers use a static `ra` slot and inline C0/B0 calls. CardPatchFunctions, `LIBCARD_PATCH_text_70` and `_copy_memcard_patch` of the same object remain C. |
 | LIBCARD END | `psyq/libcard/end.c` (+ `END_templates` data) | `_ExitCard` | Static `ra` slot, inline C0 call; copies a three-NOP template into the C0 table. |
 
 ## Game-side assembler
@@ -564,7 +564,7 @@ load barrier were removable. The retired CPU instruction macros are deleted.
 
 ## Engine CPU Helper Removal
 
-The engine's `func_800C6148`, `func_800C6584`, and `func_800C6B90` now express
+The engine's `FieldFx_IsActorWithinRadius`, `FieldFx_CirclesOverlapXZ`, and `FieldFx_IsPlayerWithinRadius` now express
 their distance tests as C multiplications and comparisons. Their local
 `volatile int delta[3]` preserves two original stack stores; the third function
 also preserves a short position buffer. These volatile locals are matching
@@ -573,29 +573,29 @@ No register pins, empty barriers or instruction ASM remain in these three
 functions. Keeping the Y halfword in an `int` before narrowing it removes a
 trial tied barrier while retaining signed-load code generation.
 
-`func_800C6B20` now uses C position loads and two ordinary calls instead of
+`FieldFx_IsPlayerInQuadXZ` now uses C position loads and two ordinary calls instead of
 an ASM relocation/call window. One result temporary pin remains; three old
-pins and all trial barriers were removable. `func_800CC92C` uses a signed-byte
+pins and all trial barriers were removable. `PointSprite_UpdateRisingStreak` uses a signed-byte
 C load after one empty memory barrier, which prevents forwarding the previous
 byte store. Its old frame pin remains; removing it changes allocation.
 
 Four further engine units now avoid CPU instruction ASM. `func_800C2E08`
 computes the slot-status mask in C, with one tied empty barrier to prevent
 the optimizer replacing the arithmetic mask with a conditional assignment.
-Its old result pin was removed. `func_800C2FF0` computes width/height decrements
+Its old result pin was removed. `FieldFx_SetSpriteCellSize` computes width/height decrements
 in C with one input-only barrier; both trial pins and the trial tied outputs
 were removable. Neither function retains register pins.
 
-`func_800D3F64` needs no explicit ASM `nop`: the stock pipeline supplies the
+`FieldFx_PlaySoundAtOwner` needs no explicit ASM `nop`: the stock pipeline supplies the
 same load hazard spacing. Its two existing pins and two memory barriers were
-tested for removal and remain. `func_800CC878` forms its first output address
+tested for removal and remain. `PointSprite_DrawOrientedFlash` forms its first output address
 and performs the store in C. It retains one pointer pin, one load-order input
 barrier clobbering `$4`, and one tied pointer barrier preventing address
 folding; removing these changes code generation. No new volatile accesses
 were introduced in this group. These are repairs of constrained sources,
 not independent evidence that all headers are free of CPU instruction ASM.
 
-`func_800C5EB0` replaces its explicit `move` and unaligned copy macro with C.
+`FieldFx_UpdateStripCollision` replaces its explicit `move` and unaligned copy macro with C.
 Four assignments of halfword-aligned eight-byte records reproduce the
 `lwl/lwr/swl/swr` pairs, including their two-word grouping. The local buffer
 is now an array of `s16[4]` records; names remain neutral because copy width
@@ -1294,7 +1294,7 @@ that option, the sector setter uses v0 instead of AT; enabling it gives
 
 The removed page types only encoded fixed addresses. The actual objects
 are four-byte integers: D_8009B260 at 0x8009B260, g_CdStreamMask at
-0x800C0DC0, D_800B6918 at 0x800B6918, and g_CdStreamEndSector at 0x800C0DBC.
+0x800C0DC0, g_CdStreamStartFrame at 0x800B6918, and g_CdStreamEndSector at 0x800C0DBC.
 These are declared separately; no large enclosing structure is inferred.
 All AT uses in the two generated functions were checked against the retail
 instructions, including the final store in each return delay slot.
@@ -2274,7 +2274,7 @@ Permuter scoring must include `--no-ignore-branch-targets`; the final proof
 also compares linked bytes directly with retail. Address views, mechanical
 temporary names, local packet types, and eight loop gotos remain cleanup debt.
 
-### Twin-model effect camera loads (`func_800DC058`)
+### Twin-model effect camera loads (`FieldFx_TwinModelEffect`)
 
 `FieldFx_TwinModel.c` now expresses the former `gte_ldrotmatrix` and
 `gte_ldtransmatrix` CPU loads in C, using the shared `GteMatrixWords` view.
@@ -2297,14 +2297,14 @@ individual clobber; each remaining individual clobber is needed in this
 source form. This does not establish that the original source had any of
 these constraints.
 
-### Arcing emitter camera loads (`func_800D5A00`)
+### Arcing emitter camera loads (`FieldFx_CosineSparkEmitter`)
 
 `FieldFx_CosinePulse.c` replaces the arcing emitter's former matrix-load
 macros with C reads through `GteMatrixWords` and individually wrapped GTE
 transfers. Stock native GCC 2.7.2 and stock MASPSX 2.56, with `--expand-div`,
 produce linked score 0 and all 1100 retail bytes for the two-function TU
 at `0x800D5898`. The edited function at `0x800D5A00` occupies 740 bytes;
-`func_800D5898` is unchanged. This removes hidden CPU assembly from an
+`FieldFx_CosineEffectB` is unchanged. This removes hidden CPU assembly from an
 existing C function.
 
 Matching debt: three transfer-register pins, four empty constraints, and

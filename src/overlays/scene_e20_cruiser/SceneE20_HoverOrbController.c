@@ -105,22 +105,22 @@ initialize:
             temp_v0 = Asset_FindTable08ByU32Key(D_800B0E64[0], assetKey | 0x3704U);
             D_8019085C = temp_v0;
             FieldFx_ModelScrollUv(temp_v0, 0, 0);
-            func_800D1384(&effect->position, &effect->position, 0x3EE, (unsigned char *)initColor0, (unsigned char *)initColor1, 0x80, (struct FieldTrailPair *)effect->history, initialMode);
-            return func_800CE560((char *)ANIM_POOL_AS(SceneE20Channel)->pool, 0x14, 0x20,
+            FieldFx_DrawHistoryTrail(&effect->position, &effect->position, 0x3EE, (unsigned char *)initColor0, (unsigned char *)initColor1, 0x80, (struct FieldTrailPair *)effect->history, initialMode);
+            return FieldFx_InitCallbackList((char *)ANIM_POOL_AS(SceneE20Channel)->pool, 0x14, 0x20,
                                  (FieldFxCallbackListCallback)SceneE20_FlareParticle);
 update: {
     temp_v1_2 = effect->phase;
     switch (temp_v1_2) {                            /* switch 1 */
     case 0:                                         /* switch 1 */
         command->pending = 0;
-        func_800CE870((char *)D_8009D254, 0, (s16 *)&point);
+        FieldFx_GetActorPosition((char *)D_8009D254, 0, (s16 *)&point);
         point.x = (rand() & 0x7FF) - 0x400;
         point.y = ((u16) g_RoomFloorY->y - 0x258) - (rand() & 0x1FF);
         point.z = (rand() & 0x7FF) - 0x400;
         effect->target.x = (s16) (u16) point.x;
         effect->target.y = (s16) (u16) point.y;
         effect->target.z = (s16) (u16) point.z;
-        func_800CE870((char *)D_8009D254, 1, (s16 *)&effect->endpoint);
+        FieldFx_GetActorPosition((char *)D_8009D254, 1, (s16 *)&effect->endpoint);
         effect->duration = (rand() & 0xF) + 6;
         effect->timer = 0;
         effect->phase = 1;
@@ -129,11 +129,11 @@ update: {
         temp_v0_5 = (u16) effect->timer + 1;
         effect->timer = temp_v0_5;
         if ((temp_v0_5 == 1) && (rand() & 1)) {
-            Asset_Find08w(0x5FF, func_800D3FD8(), effect->position.x, effect->position.y, (s32) effect->position.z);
+            Asset_Find08w(0x5FF, FieldFx_GetOwnerProgress(), effect->position.x, effect->position.y, (s32) effect->position.z);
         }
         temp_s3 = rsin((effect->timer << 0xA) / effect->duration);
         LoadAverageShort12(&effect->previousPosition, &effect->target, 0x1000 - temp_s3, temp_s3, &effect->position);
-        func_800CE870((char *)D_8009D254, 1, (s16 *)&effect->endpoint);
+        FieldFx_GetActorPosition((char *)D_8009D254, 1, (s16 *)&effect->endpoint);
         if (effect->timer >= effect->duration) {
             effect->phase = 2;
             effect->timer = 0;
@@ -141,7 +141,7 @@ update: {
         break;
     case 2:                                         /* switch 1 */
         effect->timer = (u16) effect->timer + 1;
-        func_800CE870((char *)D_8009D254, 1, (s16 *)&effect->endpoint);
+        FieldFx_GetActorPosition((char *)D_8009D254, 1, (s16 *)&effect->endpoint);
         if (effect->timer >= 4) {
             effect->phase = 0;
             effect->timer = 0;
@@ -171,7 +171,7 @@ update: {
         temp_v0_7 = (u16) effect->timer + 1;
         effect->timer = temp_v0_7;
         if (temp_v0_7 == 1) {
-            Asset_Find08w(0x5FF, func_800D3FD8(), effect->position.x, effect->position.y, (s32) effect->position.z);
+            Asset_Find08w(0x5FF, FieldFx_GetOwnerProgress(), effect->position.x, effect->position.y, (s32) effect->position.z);
         }
         temp_s3 = rsin((effect->timer << 0xA) / effect->duration);
         temp_s0_3 = 0x1000 - temp_s3;
@@ -189,12 +189,12 @@ update: {
         temp_v0_9 = (u16) effect->timer + 1;
         effect->timer = temp_v0_9;
         if (temp_v0_9 == 1) {
-            temp_v0_10 = func_800CE610((char *)ANIM_POOL_AS(SceneE20Channel)->pool);
+            temp_v0_10 = FieldFx_AcquireCallbackSlot((char *)ANIM_POOL_AS(SceneE20Channel)->pool);
             if (temp_v0_10 != NULL) {
                 temp_v0_10->velocity.x = (s16) (u16) effect->rotation.x;
                 temp_v0_10->velocity.y = (s16) (u16) effect->rotation.y;
                 temp_v0_10->velocity.z = (s16) (u16) effect->rotation.z;
-                func_800CFB7C(&effect->rotation, 0x8C, &temp_v0_10->position);
+                FieldFx_AnglesToVector(&effect->rotation, 0x8C, &temp_v0_10->position);
                 temp_v0_10->position.x = (u16) temp_v0_10->position.x + (u16) effect->position.x;
                 temp_v0_10->position.y = (u16) temp_v0_10->position.y + (u16) effect->position.y;
                 particleZ = (u16) temp_v0_10->position.z;
@@ -208,7 +208,7 @@ update: {
         if (effect->timer >= 4) {
             effect->phase = 5;
             effect->timer = 0;
-            temp_v0_10 = func_800CE610((char *)ANIM_POOL_AS(SceneE20Channel)->pool);
+            temp_v0_10 = FieldFx_AcquireCallbackSlot((char *)ANIM_POOL_AS(SceneE20Channel)->pool);
             if (temp_v0_10 != NULL) {
                 temp_v0_10->position.x = (s16) (u16) effect->endpoint.x;
                 temp_v0_10->position.y = (s16) (u16) effect->endpoint.y;
@@ -221,7 +221,7 @@ update: {
                 temp_v0_10->velocity.z = temp_v0_14;
             }
             for (particleIndex = 0; particleIndex < 12; ++particleIndex) {
-            temp_v0_12 = func_800CE610((char *)ANIM_POOL_AS(SceneE20Channel)->pool);
+            temp_v0_12 = FieldFx_AcquireCallbackSlot((char *)ANIM_POOL_AS(SceneE20Channel)->pool);
             if (temp_v0_12 != NULL) {
                 temp_v0_12->position.x = (s16) (u16) effect->endpoint.x;
                 temp_v0_12->position.y = (s16) (u16) effect->endpoint.y;
@@ -239,7 +239,7 @@ update: {
         break;
     case 5:                                         /* switch 1 */
         effect->timer = (u16) effect->timer + 1;
-        if ((func_800C6B90(&effect->endpoint, 0x42) != 0) && (D_80190800 == 0)) {
+        if ((FieldFx_IsPlayerWithinRadius(&effect->endpoint, 0x42) != 0) && (D_80190800 == 0)) {
             temp_v1_3 = ANIM_OWNER_AS(SceneE20Channel)->pool->node;
             *(u8 *)((u8 *)temp_v1_3 + ((temp_v1_3->flags >> 17) & 0x70) + 0x1C) = 2;
             if (FX_TASK_AS(SceneE20Event)->active != 0) {
@@ -270,11 +270,11 @@ update: {
     default: break;
     }
         if (effect->phase != 6) {
-            effect->alpha = (rsin(D_800E27EC << 5) / 128) + 0x80;
+            effect->alpha = (rsin(g_FieldFxCurrentAge << 5) / 128) + 0x80;
         }
         temp_s0_2 = &effect->rotation;
         FieldFx_CalculateLookAngles(&effect->position, &effect->endpoint, temp_s0_2);
-        func_800CFB7C(temp_s0_2, 0x8C, &effect->trailHead);
+        FieldFx_AnglesToVector(temp_s0_2, 0x8C, &effect->trailHead);
         headOffsetX = (u16)effect->trailHead.x;
         headPositionX = (u16)effect->position.x;
         headPositionY = (u16)effect->position.y;
@@ -282,7 +282,7 @@ update: {
         effect->trailHead.x = headOffsetX + headPositionX;
         effect->trailHead.y = (u16) effect->trailHead.y + headPositionY;
         effect->trailHead.z = (u16) effect->trailHead.z + headPositionZ;
-        func_800CFB7C(temp_s0_2, -0x8C, &effect->trailTail);
+        FieldFx_AnglesToVector(temp_s0_2, -0x8C, &effect->trailTail);
         effect->trailTail.x = (u16) effect->trailTail.x + (u16) effect->position.x;
         effect->trailTail.y = (u16) effect->trailTail.y + (u16) effect->position.y;
         effect->trailTail.z = (u16) effect->trailTail.z + (u16) effect->position.z;
@@ -305,18 +305,18 @@ render: {
             gte_ldrotmatrix((const GteMatrixWords *)matrixWords);
             gte_ldtransmatrix((const GteMatrixWords *)matrixWords);
         }
-        textureIndex = D_800E11EA;
-        D_800F3368.parameter00 = 0x20;
-        D_800F3368.parameter02 = 2;
-        D_800F3368.extent_x = 0x20;
-        D_800F3368.extent_y = 0x20;
-        texturePage = D_800E2850[textureIndex];
+        textureIndex = g_FieldFxTpageSlot3;
+        g_FieldFxSpriteParams.parameter00 = 0x20;
+        g_FieldFxSpriteParams.parameter02 = 2;
+        g_FieldFxSpriteParams.extent_x = 0x20;
+        g_FieldFxSpriteParams.extent_y = 0x20;
+        texturePage = g_FieldFxTpageTable[textureIndex];
 
-        D_800F3368.palette = 3;
-        D_800F3368.parameter06 = 0;
-        D_800F3368.parameter0A = 0;
-        D_800F3368.depth = 4;
-        D_800F3368.tpage = texturePage;
+        g_FieldFxSpriteParams.palette = 3;
+        g_FieldFxSpriteParams.parameter06 = 0;
+        g_FieldFxSpriteParams.parameter0A = 0;
+        g_FieldFxSpriteParams.depth = 4;
+        g_FieldFxSpriteParams.tpage = texturePage;
         {
             u32 *matrixWords;
             asm volatile("" : "=r"(matrixWords) : "0"((u32 *)*matrixAddress) : "$2", "$3", "$4", "$7");
@@ -325,7 +325,7 @@ render: {
             gte_ldtransmatrix((const GteMatrixWords *)matrixWords);
         }
         flashColor = oddColor;
-        if (!(D_800E27EC & 1)) flashColor = evenColor;
+        if (!(g_FieldFxCurrentAge & 1)) flashColor = evenColor;
         temp_v1 = effect->phase;
         switch (temp_v1) {                          /* switch 2; irregular */
         case 4:                                     /* switch 2 */
@@ -333,11 +333,11 @@ render: {
             LoadAverageShort12(&effect->trailHead, &effect->endpoint, 0x1000 - temp_s3, temp_s3, &point);
             var_a1 = &point;
 block_63:
-            func_800D2B58(&effect->trailHead, var_a1, flashColor, flashColor, 128, 128, 1);
+            FieldFx_DrawGlowLine(&effect->trailHead, var_a1, flashColor, flashColor, 128, 128, 1);
             break;
         case 5:                                     /* switch 2 */
             var_s0 = rcos(effect->timer << 7) / 32;
-            func_800D2B58(&effect->trailHead, &effect->endpoint, flashColor, flashColor,
+            FieldFx_DrawGlowLine(&effect->trailHead, &effect->endpoint, flashColor, flashColor,
                          var_s0 / 2, var_s0, 1);
             break;
         }
@@ -348,17 +348,17 @@ block_63:
                 temp_s3 = 0xFF;
             }
             pageArg0 = 0; pageArg1 = temp_s3; pageArg2 = 0;
-                        pageIndex = &D_800E11FA;
+                        pageIndex = &g_FieldFxTpageSlot11;
             asm volatile("" : : "r"(pageIndex));
-            texturePage = D_800E2850[*pageIndex];
+            texturePage = g_FieldFxTpageTable[*pageIndex];
 
-            D_800F3368.palette = 3;
-            D_800F3368.parameter06 = 1;
-            D_800F3368.tpage = texturePage;
-            temp_s0 = (D_800E2850[*pageIndex] | GetTPage(pageArg0, pageArg1, pageArg2, 0)) & 0xFFFF;
+            g_FieldFxSpriteParams.palette = 3;
+            g_FieldFxSpriteParams.parameter06 = 1;
+            g_FieldFxSpriteParams.tpage = texturePage;
+            temp_s0 = (g_FieldFxTpageTable[*pageIndex] | GetTPage(pageArg0, pageArg1, pageArg2, 0)) & 0xFFFF;
             modelScale = 0x400;
-            temp_a1 = D_800E1204[D_800F336C];
-            if ((D_800F336C == 4) && (D_800F3428 != 0)) {
+            temp_a1 = g_FieldFxPaletteTable[D_800F336C];
+            if ((D_800F336C == 4) && (g_FieldFxAltPaletteFlag != 0)) {
                 var_a1_2 = temp_a1 + 6;
             } else {
                 var_a1_2 = temp_a1 + 2;
@@ -366,7 +366,7 @@ block_63:
             FieldFx_ModelSetTexture(temp_s0, GetClut(0, var_a1_2) & 0xFFFF);
             if (temp_s3 != 0xFF) FieldFx_ModelSetSemiTrans(1);
             else FieldFx_ModelSetSemiTrans(0);
-            drawAngle = D_800E27EC * 0x60;
+            drawAngle = g_FieldFxCurrentAge * 0x60;
             temp_v0_3 = (u16) effect->rotation.x;
             drawRotation.x = temp_v0_3;
             drawRotation.y = (u16) effect->rotation.y;
@@ -390,10 +390,10 @@ block_63:
             FieldFx_ModelScaleColors(D_8019085C, (u16) effect->alpha);
             FieldFx_ModelDraw(D_8019085C, (GteMatrix *)&matrix);
             FieldFx_ModelRestoreColors(D_8019085C);
-            func_800D1384(&effect->trailHead, &effect->trailTail, 6, (unsigned char *)&beamColor, (unsigned char *)&edgeColor, (s32) effect->alpha, (struct FieldTrailPair *)effect->history, 1);
-            D_800F3368.depth = 0x33;
+            FieldFx_DrawHistoryTrail(&effect->trailHead, &effect->trailTail, 6, (unsigned char *)&beamColor, (unsigned char *)&edgeColor, (s32) effect->alpha, (struct FieldTrailPair *)effect->history, 1);
+            g_FieldFxSpriteParams.depth = 0x33;
             var_s0 = effect->alpha;
-            if (D_800E27EC & 1) {
+            if (g_FieldFxCurrentAge & 1) {
                 temp_v0_4 = var_s0 * 3;
                 var_s0 = temp_v0_4 >> 2;
                 if (temp_v0_4 < 0) {
@@ -401,16 +401,16 @@ block_63:
                 }
             }
             paletteX = 0;
-            paletteY = D_800E120A;
+            paletteY = g_FieldFxPaletteEntry3;
 
-            texturePage = D_800E2850[D_800E11FA];
+            texturePage = g_FieldFxTpageTable[g_FieldFxTpageSlot11];
 
-            D_800F3368.palette = 3;
-            D_800F3368.parameter06 = 1;
-            D_800F3368.tpage = texturePage;
-            func_800CEE20(&effect->position, NULL, 0x2000, 0x2000, 6, GetClut(paletteX, paletteY + 5) & 0xFFFF, 3, var_s0, (struct RenderColor *)&beamColor);
+            g_FieldFxSpriteParams.palette = 3;
+            g_FieldFxSpriteParams.parameter06 = 1;
+            g_FieldFxSpriteParams.tpage = texturePage;
+            FieldFx_DrawShapeQuads(&effect->position, NULL, 0x2000, 0x2000, 6, GetClut(paletteX, paletteY + 5) & 0xFFFF, 3, var_s0, (struct RenderColor *)&beamColor);
         }
-        D_800F3368.depth = 0xB;
+        g_FieldFxSpriteParams.depth = 0xB;
         return 0;
     }
 }

@@ -38,11 +38,11 @@ DISPENV *PutDispEnv(DISPENV *env) {
     register int span;
     register int index, hstart, hend, clamp;
     asm("" : "=r"(e) : "0"(e));
-    state = &D_8009574C.queueState.debugLevel;
+    state = &g_GpuSystemState.queueState.debugLevel;
     asm("" : "=r"(state) : "0"(state));
     mode = 0x08000000;
     if (*state >= 2)
-        g_GpuDebugPrintf(D_80011970, e);
+        g_GpuDebugPrintf(g_PutDispEnvFormat, e);
     {
         register unsigned opcode = 0x05000000;
         register unsigned y asm("$3") = (unsigned short)e->disp.y;
@@ -64,7 +64,7 @@ DISPENV *PutDispEnv(DISPENV *env) {
             mode |= 0x10;
         if (e->isinter)
             mode |= 0x20;
-        if (D_8009574C.reverse)
+        if (g_GpuSystemState.reverse)
             mode |= 0x80;
         width = e->disp.w;
         if (width <= 280) {
@@ -114,10 +114,10 @@ DISPENV *PutDispEnv(DISPENV *env) {
             }
         }
         {
-            int product = e->screen.x * D_80095848[index];
+            int product = e->screen.x * g_GpuDotClockDividers[index];
             int video = e->pad0;
             int table = (video * 5 + index) * 2;
-            register int base = D_80095820[table];
+            register int base = g_GpuHRangeTable[table];
             register int screenWidth = e->screen.w;
             span = D_80095822[table] - base;
             hstart = base + product;
@@ -134,7 +134,7 @@ DISPENV *PutDispEnv(DISPENV *env) {
                     clamp = hstart;
             }
             hstart = clamp;
-            clamp = hstart + 4 * D_80095848[index];
+            clamp = hstart + 4 * g_GpuDotClockDividers[index];
             if (hend >= clamp)
                 clamp = hend > 3260 ? 3260 : hend;
             hend = clamp;
@@ -151,7 +151,7 @@ DISPENV *PutDispEnv(DISPENV *env) {
                     clamp = hstart;
             }
             hstart = clamp;
-            clamp = hstart + 4 * D_80095848[index];
+            clamp = hstart + 4 * g_GpuDotClockDividers[index];
             if (hend >= clamp)
                 clamp = hend > 3290 ? 3290 : hend;
             hend = clamp;

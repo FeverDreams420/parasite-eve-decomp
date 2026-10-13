@@ -4,7 +4,7 @@
 #include "common.h"
 
 /* Field effect task pool and the active effect owner, shared by fieldfx_task.h
- * and field_effect_pool.h so both declare D_800F33E0 and D_800F32D0 with one
+ * and field_effect_pool.h so both declare g_FieldFxActiveTaskSlot and g_FieldFxOwner with one
  * type. */
 typedef struct FieldFxTaskSlot {
     u16 id;              /* 0xFFFF marks a free slot. */
@@ -26,19 +26,19 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldFxObjectPrefix, actor) == 8,
                   fieldfx_object_actor_offset);
 
 /* The running task context (FieldFxTaskContext in fieldfx_task.h). */
-extern struct FieldFxTaskContext *D_800E2368;
-extern FieldFxTaskSlot *D_800F33E0;
-extern FieldFxObjectPrefix *D_800F32D0;
+extern struct FieldFxTaskContext *g_FieldFxTaskContext;
+extern FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
+extern FieldFxObjectPrefix *g_FieldFxOwner;
 
 /* Each effect reads the pool and the active owner through its own view of
  * the record; the cast is free (a pointer copy). The argument names the
  * view the caller reads, so a call site never casts the result again;
  * code that needs only the common prefix (the owner's actor) reads
- * D_800F32D0 directly. */
-#define ANIM_POOL_AS(type) ((type *)D_800F33E0)
-#define ANIM_OWNER_AS(type) ((type *)D_800F32D0)
+ * g_FieldFxOwner directly. */
+#define ANIM_POOL_AS(type) ((type *)g_FieldFxActiveTaskSlot)
+#define ANIM_OWNER_AS(type) ((type *)g_FieldFxOwner)
 /* The same for the running task context, which effects read as their own
  * event state. */
-#define FX_TASK_AS(type) ((type *)D_800E2368)
+#define FX_TASK_AS(type) ((type *)g_FieldFxTaskContext)
 
 #endif

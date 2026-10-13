@@ -15,7 +15,7 @@ u8 D_8009CE3B;
 u8 g_BattleActionQueueCount;
 u8 g_BattleActionIndex;
 int D_8009D200;
-s16 D_8009D27C;
+s16 g_BattlePlayerAimHeight;
 
 int Battle_StepCharacterAction(BattleInitSlot *slot);
 
@@ -24,7 +24,7 @@ int Battle_StepCharacterAction(BattleInitSlot *slot);
 void Battle_UpdatePlayerTurn(void)
 {
 
-    BattleInitSlot *slot = &D_800BE830[g_BattleActionIndex];
+    BattleInitSlot *slot = &g_BattleActionQueue[g_BattleActionIndex];
     BattleEntity *player = D_8009D254;
     BattleEntity *actor;
     Combatant *active;
@@ -39,7 +39,7 @@ void Battle_UpdatePlayerTurn(void)
             BattleEntity *target = slot->actor;
             if (target->core != 0 && CORE_HEALTH(target) > 0) {
                 diff = target->renderObject.target_y;
-                diff -= D_8009D27C;
+                diff -= g_BattlePlayerAimHeight;
                 angle = ratan2(diff, Battle_CalcDistToPlayer(target, player));
                 if (angle < -0xAB) category = 0;
                 else if (angle < 0xE4) category = 1;
@@ -58,7 +58,7 @@ void Battle_UpdatePlayerTurn(void)
         }
 
         {
-            if (slot->actor != D_800BE830[g_BattleActionIndex + 1].actor ||
+            if (slot->actor != g_BattleActionQueue[g_BattleActionIndex + 1].actor ||
                 CORE_HEALTH(slot->actor) <= 0) {
                 u8 count = D_8009CE39;
                 u8 delta = D_8009CE3B;
@@ -85,7 +85,7 @@ void Battle_UpdatePlayerTurn(void)
     if (player->animLastFrame != player->animPrev.parts.integer) return;
     actor = slot->actor;
     diff = actor->renderObject.target_y;
-    diff -= D_8009D27C;
+    diff -= g_BattlePlayerAimHeight;
     angle = ratan2(diff, Battle_CalcDistToPlayer(actor, player));
     if (angle < -0xAB) category = 0;
     else if (angle < 0xE4) category = 1;
@@ -97,7 +97,7 @@ void Battle_UpdatePlayerTurn(void)
 #define S16_AT(ptr, offset) (*(s16 *)((u8 *)(ptr) + (offset)))
 #define U16_AT(ptr, offset) (*(u16 *)((u8 *)(ptr) + (offset)))
 #define U32_AT(ptr, offset) (*(u32 *)((u8 *)(ptr) + (offset)))
-#define ACTION_AT(index) ((u16)D_800BE830[(u8)(index)].command)
+#define ACTION_AT(index) ((u16)g_BattleActionQueue[(u8)(index)].command)
 
 void Battle_ApplyPlayerHit(void) {
     u32 committed;

@@ -16,10 +16,10 @@ class Room350EffectGateTests(unittest.TestCase):
     def test_gate_position_and_signed_table_value(self):
         source = host_unit("func_8019A134", under=ROOM)
         harness = '#include <assert.h>\n' + source + r'''
-int D_800E27EC, D_8019A614[2];
+int g_FieldFxCurrentAge, D_8019A614[2];
 short D_800966EE[8192];
 static int calls, expectedShade, coordinates[3];
-void func_800D004C(struct GteShortVector *position, int a, int b, int c,
+void FieldFx_DrawStarFan(struct GteShortVector *position, int a, int b, int c,
                   struct GteRotation *d, int e, int f, struct RenderColor *first,
                   struct RenderColor *second, int shade, int flag) {
     short *point = (short *)position;
@@ -38,7 +38,7 @@ int main(void) {
     int *position = coordinates;
     int event, counter, t, p, i;
     for (counter = -16; counter <= 64; ++counter) {
-        D_800E27EC = counter;
+        g_FieldFxCurrentAge = counter;
         for (event = -2; event < 5; ++event) {
             if (event == 2) continue;
             calls = 0;
@@ -49,7 +49,7 @@ int main(void) {
     for (counter = 1; counter <= 32; ++counter)
     for (t = 0; t < 10; ++t) for (p = 0; p < 4; ++p) {
         for (i = 0; i < 8192; ++i) D_800966EE[i] = 12345;
-        D_800E27EC = counter;
+        g_FieldFxCurrentAge = counter;
         expectedShade = values[t];
         D_800966EE[((counter - 1) << 9) & 0x1E00] = expectedShade;
         for (i = 0; i < 3; ++i) coordinates[i] = points[p][i];

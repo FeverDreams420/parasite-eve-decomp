@@ -97,7 +97,7 @@ s32 MENUCARD_OPEN_VIDEO_NAME(s32 number) {
     if ((u16)number >= 47) {
         return 0;
     }
-    D_800B0DBF = index;
+    g_MovieIndex = index;
     MENUCARD_VIDEO_ENTRY = &MENUCARD_VIDEO_TABLE[index];
     D_800B0DBB = MENUCARD_VIDEO_ENTRY->wide;
     MENUCARD_VIDEO_SET_DISPLAY(0, D_800B0DBB);

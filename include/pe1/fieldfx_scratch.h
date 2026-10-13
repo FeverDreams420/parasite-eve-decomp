@@ -5,7 +5,7 @@
 #include "pe1/gte_types.h"
 
 /* Scratchpad work area the field engine draw routines publish through
- * D_800F33B4: an ordering-table depth, the current texture cell, the
+ * g_FieldFxScratch: an ordering-table depth, the current texture cell, the
  * CLUT offset, a colour channel temporary, a composed matrix and an
  * object-local matrix. */
 typedef struct FieldFxScratch {
@@ -23,6 +23,6 @@ typedef struct FieldFxScratch {
 
 #define FIELDFX_SCRATCH ((FieldFxScratch *)0x1F800000)
 
-extern FieldFxScratch *D_800F33B4;
+extern FieldFxScratch *g_FieldFxScratch;
 
 #endif

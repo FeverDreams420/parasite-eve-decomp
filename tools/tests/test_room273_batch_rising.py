@@ -37,19 +37,19 @@ typedef char layout[sizeof(GteShortVector)==8 &&
 typedef RoomM273RisingBatchBuffer Batch;
 typedef GteShortVector Vector;
 RoomM273RisingBatchBuffer D_8019AF0C;
-FieldFxTaskSlot *D_800F33E0;
-unsigned short D_800E11EA,D_800E2850[65536];
-RenderEffectParameters D_800F3368;
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
+unsigned short g_FieldFxTpageSlot3,g_FieldFxTpageTable[65536];
+RenderEffectParameters g_FieldFxSpriteParams;
 static RoomM273PoolContext context;
 static Vector outputs[12];
 static int pool,allocs,failAt,initCalls,initResult,mutate;
 int func_80196F2C(int mode, GteShortVector *p) { assert(0); return 0; }
-int func_800CE560(char *p,int size,int count,FieldFxCallbackListCallback callback) {
+int FieldFx_InitCallbackList(char *p,int size,int count,FieldFxCallbackListCallback callback) {
     assert(p==(char *)&pool && size==8 && count==40 &&
            callback==(FieldFxCallbackListCallback)func_80196F2C);
     ++initCalls; return initResult;
 }
-void *func_800CE610(char *p) {
+void *FieldFx_AcquireCallbackSlot(char *p) {
     int i=allocs++;
     assert(p==(char *)&pool && i<12);
     if(i==failAt) return 0;
@@ -63,7 +63,7 @@ int main(void) {
     short counts[]={-32768,-1,0,1,2,12};
     unsigned short indices[]={0,1,32768,65535};
     int stop,c,i,calls,success,eligible;
-    D_800F33E0=(FieldFxTaskSlot *)&context; context.pool=&pool;
+    g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&context; context.pool=&pool;
     for(initResult=-1;initResult<=1;++initResult)
         assert(func_8019706C(0)==initResult);
     for(stop=0;stop<2;++stop) for(c=0;c<6;++c)
@@ -90,12 +90,12 @@ int main(void) {
     allocs=0; failAt=-1; mutate=1;
     assert(func_8019706C(1)==0 && allocs==1 && D_8019AF0C.count==0);
     for(i=0;i<4;++i) {
-        D_800E11EA=indices[i]; D_800E2850[indices[i]]=65535-i;
-        D_800F3368.parameter06=D_800F3368.parameter0A=D_800F3368.depth=123;
+        g_FieldFxTpageSlot3=indices[i]; g_FieldFxTpageTable[indices[i]]=65535-i;
+        g_FieldFxSpriteParams.parameter06=g_FieldFxSpriteParams.parameter0A=g_FieldFxSpriteParams.depth=123;
         assert(func_8019706C(2)==0);
-        assert(D_800F3368.parameter00==32 && D_800F3368.parameter02==2 && D_800F3368.palette==3);
-        assert(D_800F3368.parameter06==0 && D_800F3368.parameter0A==0 && D_800F3368.depth==0);
-        assert(D_800F3368.tpage==65535-i && D_800F3368.extent_x==32 && D_800F3368.extent_y==32);
+        assert(g_FieldFxSpriteParams.parameter00==32 && g_FieldFxSpriteParams.parameter02==2 && g_FieldFxSpriteParams.palette==3);
+        assert(g_FieldFxSpriteParams.parameter06==0 && g_FieldFxSpriteParams.parameter0A==0 && g_FieldFxSpriteParams.depth==0);
+        assert(g_FieldFxSpriteParams.tpage==65535-i && g_FieldFxSpriteParams.extent_x==32 && g_FieldFxSpriteParams.extent_y==32);
     }
     assert(func_8019706C(-1)==0 && func_8019706C(3)==0 && initCalls==3 && allocs==1);
     return 0;

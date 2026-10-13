@@ -67,13 +67,13 @@ int Gpu_SendOtChain(unsigned int *table, int count)
     unsigned int firstMask;
     int busyBit;
     *g_GpuDmaControlRegPtr |= 0x08000000;
-    *D_8009586C = 0;
-    *D_80095864 = PSX_ADDRESS(&table[count - 1]);
-    *D_80095868 = count;
+    *g_GpuOtDmaChcrPtr = 0;
+    *g_GpuOtDmaMadrPtr = PSX_ADDRESS(&table[count - 1]);
+    *g_GpuOtDmaBcrPtr = count;
     /* This store occupies the following call's delay slot in retail. */
-    *(unsigned int *)D_8009586C = 0x11000002;
+    *(unsigned int *)g_GpuOtDmaChcrPtr = 0x11000002;
     Gpu_ResetDmaWaitTimer();
-    status = *D_8009586C;
+    status = *g_GpuOtDmaChcrPtr;
     /* Keep the first status test separate from the loop's invariant mask. */
     asm volatile("" : "+r"(status), "+r"(count));
     busyBit = 0x01000000;
@@ -83,7 +83,7 @@ int Gpu_SendOtChain(unsigned int *table, int count)
         asm volatile("" : : "r"(count));
         do {
             if (Gpu_DmaTimeoutCheck()) return -1;
-        } while (*D_8009586C & 0x01000000);
+        } while (*g_GpuOtDmaChcrPtr & 0x01000000);
     }
     return count;
 }
@@ -94,39 +94,39 @@ void Gpu_StartDmaTransfer(unsigned int packet);
 int Gpu_DmaVramTransfer(RECT *rect, unsigned int color) {
     unsigned short width, height;
     if (rect->w >= 0) {
-        if (D_80095750 - 1 < rect->w) width = D_80095750 - 1;
+        if (g_GpuMaxWidth - 1 < rect->w) width = g_GpuMaxWidth - 1;
         else width = rect->w;
     } else width = 0;
     rect->w = width;
     if (rect->h >= 0) {
-        if (D_80095752 - 1 < rect->h) height = D_80095752 - 1;
+        if (g_GpuMaxHeight - 1 < rect->h) height = g_GpuMaxHeight - 1;
         else height = rect->h;
     } else height = 0;
     rect->h = height;
     if ((rect->x & 63) || (rect->w & 63)) {
-        D_800A3300[0] = ((unsigned int)D_800A3328 & 0xFFFFFF) | 0x08000000;
-        D_800A3300[1] = 0xE3000000;
-        D_800A3300[2] = 0xE4FFFFFF;
-        D_800A3300[3] = 0xE5000000;
-        D_800A3300[4] = 0xE6000000;
-        D_800A3300[5] = 0xE1000000 | (*g_GpuGp1Ptr & 0x7FF) | ((color >> 31) << 10);
-        D_800A3300[6] = (color & 0xFFFFFF) | 0x60000000;
-        D_800A3300[7] = ((GpuRectWords *)rect)->position;
-        D_800A3300[8] = ((GpuRectWords *)rect)->size;
-        D_800A3328[0] = 0x03FFFFFF;
-        D_800A3328[1] = _param(3) | 0xE3000000;
-        D_800A3328[2] = _param(4) | 0xE4000000;
-        D_800A3328[3] = _param(5) | 0xE5000000;
+        g_GpuVramFillPacket[0] = ((unsigned int)g_GpuVramFillTailPacket & 0xFFFFFF) | 0x08000000;
+        g_GpuVramFillPacket[1] = 0xE3000000;
+        g_GpuVramFillPacket[2] = 0xE4FFFFFF;
+        g_GpuVramFillPacket[3] = 0xE5000000;
+        g_GpuVramFillPacket[4] = 0xE6000000;
+        g_GpuVramFillPacket[5] = 0xE1000000 | (*g_GpuGp1Ptr & 0x7FF) | ((color >> 31) << 10);
+        g_GpuVramFillPacket[6] = (color & 0xFFFFFF) | 0x60000000;
+        g_GpuVramFillPacket[7] = ((GpuRectWords *)rect)->position;
+        g_GpuVramFillPacket[8] = ((GpuRectWords *)rect)->size;
+        g_GpuVramFillTailPacket[0] = 0x03FFFFFF;
+        g_GpuVramFillTailPacket[1] = _param(3) | 0xE3000000;
+        g_GpuVramFillTailPacket[2] = _param(4) | 0xE4000000;
+        g_GpuVramFillTailPacket[3] = _param(5) | 0xE5000000;
     } else {
-        D_800A3300[0] = 0x05FFFFFF;
-        D_800A3300[1] = 0xE6000000;
-        D_800A3300[2] = 0xE1000000 | (*g_GpuGp1Ptr & 0x7FF) | ((color >> 31) << 10);
-        D_800A3300[3] = (color & 0xFFFFFF) | 0x02000000;
-        D_800A3300[4] = ((GpuRectWords *)rect)->position;
-        D_800A3300[5] = ((GpuRectWords *)rect)->size;
+        g_GpuVramFillPacket[0] = 0x05FFFFFF;
+        g_GpuVramFillPacket[1] = 0xE6000000;
+        g_GpuVramFillPacket[2] = 0xE1000000 | (*g_GpuGp1Ptr & 0x7FF) | ((color >> 31) << 10);
+        g_GpuVramFillPacket[3] = (color & 0xFFFFFF) | 0x02000000;
+        g_GpuVramFillPacket[4] = ((GpuRectWords *)rect)->position;
+        g_GpuVramFillPacket[5] = ((GpuRectWords *)rect)->size;
     }
     {
-        Gpu_StartDmaTransfer((unsigned int)D_800A3300);
+        Gpu_StartDmaTransfer((unsigned int)g_GpuVramFillPacket);
     }
     {
         int result = 0;
@@ -150,12 +150,12 @@ int Gpu_WaitDmaComplete(RECT *rect, unsigned int *data)
     Gpu_ResetDmaWaitTimer();
     variant = 0;
     if (rect->w >= 0) {
-        if (D_80095750 < rect->w) width = D_80095750;
+        if (g_GpuMaxWidth < rect->w) width = g_GpuMaxWidth;
         else width = rect->w;
     } else width = 0;
     rect->w = width;
     if (rect->h >= 0) {
-        if (D_80095752 < rect->h) height = D_80095752;
+        if (g_GpuMaxHeight < rect->h) height = g_GpuMaxHeight;
         else height = rect->h;
     } else height = 0;
     rect->h = height;
@@ -214,12 +214,12 @@ int Gpu_FlushDisplayBuffer(RECT *rect, unsigned int *data)
     unsigned short width, height;
     Gpu_ResetDmaWaitTimer();
     if (rect->w >= 0) {
-        if (D_80095750 < rect->w) width = D_80095750;
+        if (g_GpuMaxWidth < rect->w) width = g_GpuMaxWidth;
         else width = rect->w;
     } else width = 0;
     rect->w = width;
     if (rect->h >= 0) {
-        if (D_80095752 < rect->h) height = D_80095752;
+        if (g_GpuMaxHeight < rect->h) height = g_GpuMaxHeight;
         else height = rect->h;
     } else height = 0;
     rect->h = height;

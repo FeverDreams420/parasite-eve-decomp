@@ -8,7 +8,7 @@
 void _copy_memcard_patch(void) {
     register unsigned *dst = (unsigned *)0xdf80;
     register const unsigned *src asm("$10") = func_8007E344;
-    register const unsigned *end asm("$9") = (const unsigned *)func_8007E3B4;
+    register const unsigned *end asm("$9") = (const unsigned *)LIBCARD_PATCH_text_70;
     register unsigned value asm("$3");
     do {
         value = *src;

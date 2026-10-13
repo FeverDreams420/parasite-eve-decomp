@@ -28,11 +28,11 @@ int SPINNING_MODEL_FUNC(int mode, FieldFxSpinningModel *state)
             state->x = SPINNING_MODEL_ANCHOR[0];
             state->z = SPINNING_MODEL_ANCHOR[2];
             state->y = SPINNING_MODEL_ANCHOR[1];
-            state->angle += 32 + D_800E27EC * 4;
-            state->size = rsin((D_800E27EC << 11) / 24) / 32;
-            state->height = (D_800E27EC << 12) / 24;
-            if (D_800E27EC & 1) {
-                copy = func_800CE610(D_800F33E0->end);
+            state->angle += 32 + g_FieldFxCurrentAge * 4;
+            state->size = rsin((g_FieldFxCurrentAge << 11) / 24) / 32;
+            state->height = (g_FieldFxCurrentAge << 12) / 24;
+            if (g_FieldFxCurrentAge & 1) {
+                copy = FieldFx_AcquireCallbackSlot(g_FieldFxActiveTaskSlot->end);
                 if (copy) {
                     copy->stage = 1;
                     copy->x = state->x;
@@ -42,12 +42,12 @@ int SPINNING_MODEL_FUNC(int mode, FieldFxSpinningModel *state)
                     copy->height = state->height;
                 }
             }
-            if (D_800E27EC >= 24)
+            if (g_FieldFxCurrentAge >= 24)
                 return 1;
         } else {
             state->angle += 3;
             state->size = state->size * 3 / 4;
-            if (D_800E27EC >= 4)
+            if (g_FieldFxCurrentAge >= 4)
                 return 1;
         }
         state->ticks++;
@@ -64,16 +64,16 @@ int SPINNING_MODEL_FUNC(int mode, FieldFxSpinningModel *state)
         matrix.t[0] = state->x;
         matrix.t[1] = state->y;
         matrix.t[2] = state->z;
-        D_800F3368.tpage = D_800E2850[D_800E11E4[9]];
-        D_800F3368.palette = 1;
-        func_800CEDA8(1);
-        D_800F3368.parameter06 = 1;
+        g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[g_FieldFxTpageSlots[9]];
+        g_FieldFxSpriteParams.palette = 1;
+        FieldFx_EnsureEffectTexturePage(1);
+        g_FieldFxSpriteParams.parameter06 = 1;
         gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldtransmatrix(D_800BCFA4.value);
-        tpage = (u16)(D_800E2850[D_800E11E4[9]] | GetTPage(0, 1, 0, 0));
-        kind = D_800F3368.palette;
-        palette = D_800E1204[kind];
-        FieldFx_ModelSetTexture(tpage, GetClut(0, (kind == 4 && D_800F3428) ? palette + SPINNING_MODEL_PALETTE + 4 : palette + SPINNING_MODEL_PALETTE));
+        tpage = (u16)(g_FieldFxTpageTable[g_FieldFxTpageSlots[9]] | GetTPage(0, 1, 0, 0));
+        kind = g_FieldFxSpriteParams.palette;
+        palette = g_FieldFxPaletteTable[kind];
+        FieldFx_ModelSetTexture(tpage, GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag) ? palette + SPINNING_MODEL_PALETTE + 4 : palette + SPINNING_MODEL_PALETTE));
         FieldFx_ModelSetSemiTrans(1);
         FieldFx_ModelSaveColors(D_800F32D8);
         FieldFx_ModelSetColors(D_800F32D8, SPINNING_MODEL_COLOR(state->size));

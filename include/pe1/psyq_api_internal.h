@@ -33,16 +33,16 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(InterruptCallbackState, interruptStack) == 0x68,
                   intr_state_stack);
 
 /* Legacy halfword storage and the handler-array view into that state. */
-extern u16 D_800945E4[];
-extern u16 D_800945E6, D_80094614;
-extern int D_8009567C;
-extern char D_80011740[], D_8001175C[];
+extern u16 g_IntrState[];
+extern u16 g_IntrInCallback, g_IntrEnabledMask;
+extern int g_IntrTimeoutCounter;
+extern char g_IntrUnexpectedFormat[], g_IntrTimeoutFormat[];
 void Render_InitSceneGeom(void);
-extern PsyqInterruptHandler D_800945E8[11];
-extern u16 *D_80095670;
+extern PsyqInterruptHandler g_IntrHandlers[11];
+extern u16 *g_IntrStatusRegPtr;
 extern volatile u16 *D_80095674;
 extern u16 *g_IntrMaskRegPtr;
-extern u32 *D_80095678;
+extern u32 *g_IntrDmaControlRegPtr;
 PsyqInterruptHandler Sys_SetIntrCallback(int channel, PsyqInterruptHandler handler);
 InterruptCallbackState *Sys_SaveDisableIntr(void);
 InterruptCallbackState *Sys_RestoreIntr(void);
@@ -80,9 +80,9 @@ typedef struct DmaChannelRegisters {
     u32 unused;
 } DmaChannelRegisters;
 PE1_STATIC_ASSERT(sizeof(DmaChannelRegisters) == 16, dma_channel_stride);
-extern DmaChannelRegisters *D_800956E0;
-extern char D_8001177C[];
-extern char D_80011798[];
+extern DmaChannelRegisters *g_DmaChannelRegsPtr;
+extern char g_DmaBusErrorFormat[];
+extern char g_DmaMadrFormat[];
 
 typedef PsyqInterruptHandler DmaInterruptCallback;
 typedef DmaInterruptCallback (*DmaCallbackSetter)(int channel,

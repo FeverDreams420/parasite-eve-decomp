@@ -15,8 +15,8 @@ typedef struct {
 /* The current room's walkable floor polygon and its vertex count, set by
  * scene command 0x2E. Room effects that read the packed y/z word view the
  * vertices through FLOOR_POLYGON_AS. */
-extern PolygonVertex *D_8009D248;
-extern u16 D_8009D1CC;
-#define FLOOR_POLYGON_AS(type) ((type *)D_8009D248)
+extern PolygonVertex *g_FloorPolygonVertices;
+extern u16 g_FloorPolygonVertexCount;
+#define FLOOR_POLYGON_AS(type) ((type *)g_FloorPolygonVertices)
 
 #endif

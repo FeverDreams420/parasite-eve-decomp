@@ -134,7 +134,7 @@ extern unsigned char g_RoomDropFieldBeamImages[];
 extern u8 g_RoomDropFieldParticleFrames[];
 
 s32 *FieldFx_RegPtr(s32 index);
-void func_800C4E50(void *params);
+void FieldFx_BuildRingGeometry(void *params);
 void FieldFx_ModelSetDepthBias(int arg0);
 
 #endif

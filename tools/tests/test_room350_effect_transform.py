@@ -16,13 +16,13 @@ class Room350EffectTransformTests(unittest.TestCase):
     def test_signed_offset_transform_and_render_reloads(self):
         source = host_unit("func_80195B64", under=ROOM)
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <string.h>\n' + source + r'''
-RenderEffectParameters D_800F3368;
-GteSineWord D_800966EC[4096];
-#define D_800F336A D_800F3368.parameter02
-#define D_800F336C D_800F3368.palette
-FieldFxObjectPrefix *D_800F32D0;
-int D_800E27EC, D_800F3428, D_8019A56C[4];
-unsigned short D_800E1204[8];
+RenderEffectParameters g_FieldFxSpriteParams;
+GteSineWord rcossin_tbl[4096];
+#define D_800F336A g_FieldFxSpriteParams.parameter02
+#define D_800F336C g_FieldFxSpriteParams.palette
+FieldFxObjectPrefix *g_FieldFxOwner;
+int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag, D_8019A56C[4];
+unsigned short g_FieldFxPaletteTable[8];
 static RoomM350EffectActor actor;
 static RoomM350EffectInstance instance;
 /* The effect origin is the translation of the instance's matrix 33. */
@@ -34,16 +34,16 @@ _Static_assert(offsetof(RoomM350EffectActor, instance) == 8, "actor instance off
 _Static_assert(sizeof(GteMatrix) * 33 + offsetof(GteMatrix, t) == 0x434, "origin offset");
 u_short GetClut(int x, int y) {
     assert(lookups++ == 0 && draws == 0 && x == 32);
-    assert(y == D_800E1204[D_800F336C] +
-           (D_800F336C == 4 && D_800F3428 ? 4 : 0));
+    assert(y == g_FieldFxPaletteTable[D_800F336C] +
+           (D_800F336C == 4 && g_FieldFxAltPaletteFlag ? 4 : 0));
     /* Mutations test captured coordinates/shade and reloaded size/scale. */
     memset(ORIGIN, 0, sizeof(ORIGIN));
-    memset(D_800966EC, 0, sizeof(D_800966EC));
+    memset(rcossin_tbl, 0, sizeof(rcossin_tbl));
     object[0] = 123; object[1] = 456; object[2] = 789;
-    object[3] = sizeValue; D_800F336A = renderScale; D_800E27EC += 3;
+    object[3] = sizeValue; D_800F336A = renderScale; g_FieldFxCurrentAge += 3;
     return handleValue;
 }
-void func_800CEE20(struct GteShortVector *p, struct GteRotation *zero, int a,
+void FieldFx_DrawShapeQuads(struct GteShortVector *p, struct GteRotation *zero, int a,
                    int b, int scale, int handle, int flag, int shade,
                    struct RenderColor *colors) {
     assert(lookups == 1 && draws++ == 0 && p != object && zero == 0);
@@ -57,11 +57,11 @@ int main(void) {
     const short values[] = {-32768, -4097, -33, -1, 0, 32, 4097, 32767};
     int counter, event, kind, special, h, s, v, i;
     actor.instance = &instance; instance.transforms = transforms;
-    D_800F32D0 = (FieldFxObjectPrefix *)&actor;
+    g_FieldFxOwner = (FieldFxObjectPrefix *)&actor;
     for (counter = -16; counter <= 80; ++counter)
     for (event = -1; event <= 3; ++event) {
         if (event == 2) continue;
-        D_800E27EC = counter; lookups = draws = 0;
+        g_FieldFxCurrentAge = counter; lookups = draws = 0;
         assert(func_80195B64(event, 0) == (event == 1 && counter >= 8));
         assert(lookups == 0 && draws == 0);
     }
@@ -69,10 +69,10 @@ int main(void) {
     for (kind = 0; kind < 8; ++kind) for (special = 0; special < 2; ++special)
     for (h = 0; h < 2; ++h) for (s = 0; s < 8; ++s) for (v = 0; v < 8; ++v) {
         unsigned int index = ((unsigned int)counter << 7) & 0xF80;
-        for (i = 0; i < 8; ++i) D_800E1204[i] = h ? 65535 : i * 100;
-        memset(D_800966EC, 0, sizeof(D_800966EC));
-        D_800E27EC = counter; D_800F336C = kind; D_800F3428 = special;
-        D_800966EC[index].word = (int)(((unsigned int)(unsigned short)values[s] << 16) |
+        for (i = 0; i < 8; ++i) g_FieldFxPaletteTable[i] = h ? 65535 : i * 100;
+        memset(rcossin_tbl, 0, sizeof(rcossin_tbl));
+        g_FieldFxCurrentAge = counter; D_800F336C = kind; g_FieldFxAltPaletteFlag = special;
+        rcossin_tbl[index].word = (int)(((unsigned int)(unsigned short)values[s] << 16) |
                                   (unsigned short)values[7-s]);
         expectedShade = values[7-s] >> 5;
         for (i = 0; i < 3; ++i) {

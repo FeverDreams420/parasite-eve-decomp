@@ -4,5 +4,5 @@
 #include "common.h"
 
 extern volatile u32 g_GpuDmaQueueTail;
-extern u32 D_80095880;
+extern u32 g_GpuSavedIntrMaskDrain;
 #endif /* PE1_EXT_9653A8058DC1 */

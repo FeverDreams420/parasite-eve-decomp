@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-extern volatile u32 D_8009B450;
-extern u32 D_8009B454;
-extern s32 D_8009B418;
+extern volatile u32 g_SpuDmaAddress;
+extern u32 g_SpuDmaBlockCount;
+extern s32 _spu_transMode;
 #endif /* PE1_EXT_34398B624DF1 */

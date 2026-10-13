@@ -176,7 +176,7 @@ int RoomLib_HandlerDNop3(void) {
     return 0;
 }
 int RoomLib_UpdateHandlerD(RoomEnt *o) {
-    switch (func_800DFB78()) {
+    switch (FieldFx_IsOwnerBusy()) {
     case 0:
         if (o->link->variant < 2) {
             return 0;
@@ -253,7 +253,7 @@ void RoomLib_HandlerD(RoomEnt *o) {
             left = (char *)((RoomLibHandlerDState *)state)->anchor;
             left_arg = left;
             targetPosition = (Vec3Fixed *)((RoomLibMotionState *)state)->position;
-            initial_speed = func_800DFC80((Vec3Fixed *)left_arg, targetPosition);
+            initial_speed = FieldFx_GetFixedDistance3D((Vec3Fixed *)left_arg, targetPosition);
             initial_speed += (((RoomLibHandlerDState *)state)->value8C * 0x70) >> 21;
             if (initial_speed < 0x148) {
                 initial_speed = 0x148;
@@ -261,14 +261,14 @@ void RoomLib_HandlerD(RoomEnt *o) {
             initial_velocity = (0x5160000 / initial_speed) << 8;
             ((RoomLibHandlerDState *)state)->speed = initial_velocity;
             ((RoomLibHandlerDState *)state)->progress.word = initial_velocity >> 3;
-            func_800DFE94((Vec3Fixed *)left, targetPosition, ((RoomLibHandlerDState *)state)->angles);
+            FieldFx_FixedVecToLookAngles((Vec3Fixed *)left, targetPosition, ((RoomLibHandlerDState *)state)->angles);
             RotMatrixYXZ(((RoomLibHandlerDState *)state)->angles, ((RoomLibHandlerDState *)state)->matrix);
         }
     }
 
     {
         int bias = 0x8000;
-        int *table = (int *)D_800966EC;
+        int *table = (int *)rcossin_tbl;
 
     scratch[0x34] = 0;
     {
@@ -385,7 +385,7 @@ void RoomLib_HandlerD(RoomEnt *o) {
             RoomLib_HandlerDTransformTarget((struct RoomLibMotionState *)state,
                                         (void *)scratch);
             scratch[1] = ((RoomLibHandlerDState *)state)->angles[1];
-            func_800DFE94((Vec3Fixed *)((RoomLibHandlerDState *)state)->anchor, (Vec3Fixed *)((RoomLibMotionState *)state)->position, ((RoomLibHandlerDState *)state)->angles);
+            FieldFx_FixedVecToLookAngles((Vec3Fixed *)((RoomLibHandlerDState *)state)->anchor, (Vec3Fixed *)((RoomLibMotionState *)state)->position, ((RoomLibHandlerDState *)state)->angles);
             ((RoomLibHandlerDState *)state)->angles[1] = FieldFx_TurnToward(
                 (short)*(volatile unsigned short *)&scratch[1],
                 ((RoomLibHandlerDState *)state)->angles[1], ((RoomLibHandlerDState *)state)->range[0]) & 0xFFF;
@@ -418,7 +418,7 @@ void RoomLib_FxNotify(RoomLink *arg0, struct RoomSub *arg1, int scratch) {
             rec->duration = 0;
         }
     } else {
-        func_800DFE94((Vec3Fixed *)ent->pos, (Vec3Fixed *)ent->posMirror, ent->rotation);
+        FieldFx_FixedVecToLookAngles((Vec3Fixed *)ent->pos, (Vec3Fixed *)ent->posMirror, ent->rotation);
         ent->rotation[1] = FieldFx_TurnToward(
             ent->rotation[1],
             ent->rotation[1],
@@ -440,7 +440,7 @@ void RoomLib_HandlerDTransformTarget(RoomLibMotionState *state, RoomLibMotionWor
     if (state->mode.word != 0) {
         angle = FieldFx_VecToAngle((Vec3Fixed *)state->anchor, (Vec3Fixed *)state->position);
         angle &= 0xFFF;
-        table = (int *)D_800966EC;
+        table = (int *)rcossin_tbl;
         entry = table + angle;
         hi = ((short *)entry)[1];
         work->matrix[1] = 0;
@@ -466,7 +466,7 @@ void RoomLib_HandlerDTransformTarget(RoomLibMotionState *state, RoomLibMotionWor
     }
     angle = FieldFx_VecToAngle((Vec3Fixed *)state->anchor, (Vec3Fixed *)state->position);
     angle &= 0xFFF;
-    table = (int *)D_800966EC;
+    table = (int *)rcossin_tbl;
     entry = table + angle;
     hi = ((short *)entry)[1];
     work->matrix[1] = 0;
@@ -668,7 +668,7 @@ int RoomLib_HandlerENop3(void) {
     return 0;
 }
 int RoomLib_UpdateHandlerE(RoomEnt *o) {
-    switch (func_800DFB78()) {
+    switch (FieldFx_IsOwnerBusy()) {
     case 0:
         if (o->link->variant < 2) {
             return 0;
@@ -741,7 +741,7 @@ void RoomLib_HandlerE(RoomEnt *o) {
         }
         angle = FieldFx_VecToAngle((Vec3Fixed *)state->start, (Vec3Fixed *)state->target) & 0xFFF;
         {
-            rotBase = (short *)(D_800966EC);
+            rotBase = (short *)(rcossin_tbl);
             rot = rotBase + (angle << 1);
             rotY = rot[1];
             scratch[21] = 0;
@@ -772,7 +772,7 @@ void RoomLib_HandlerE(RoomEnt *o) {
         state->target[1] += *(int *)&scratch[6] << 12;
         state->target[2] += *(int *)&scratch[8] << 12;
         if (state->duration == 0) {
-            state->duration = ((func_800DFC80((Vec3Fixed *)state->start, (Vec3Fixed *)state->target) << 16) / state->speed) + 1;
+            state->duration = ((FieldFx_GetFixedDistance3D((Vec3Fixed *)state->start, (Vec3Fixed *)state->target) << 16) / state->speed) + 1;
         }
         state->delta[0] = (state->target[0] - state->start[0] + 0x800) >> 12;
         state->delta[1] = (state->target[1] - state->start[1] + 0x800) >> 12;
@@ -1068,7 +1068,7 @@ void RoomLib_HandlerB(RoomEnt *obj) {
         v1 += 0x800;
         v0 += v1;
         v0 &= 0xFFF;
-        table = D_800966EC;
+        table = rcossin_tbl;
         entry = &table[v0];
         v1 = entry->part.cos;
         state->matrix[1] = 0;
@@ -1092,7 +1092,7 @@ void RoomLib_HandlerB(RoomEnt *obj) {
 
     scratch->landed = 0;
     if (state->finished == 0) {
-        switch (func_800DFB78(self)) {
+        switch (FieldFx_IsOwnerBusy(self)) {
         case 0:
             break;
         case 1:
@@ -1224,7 +1224,7 @@ void RoomLib_AdvanceArcToTarget(RoomEnt *obj) {
 
         angle = FieldFx_VecToAngle((Vec3Fixed *)link->pos, (Vec3Fixed *)&scratch[20]) & 0xFFF;
         {
-            int *rotBase = (int *)D_800966EC;
+            int *rotBase = (int *)rcossin_tbl;
             int *entry = rotBase + angle;
             int hi = ((short *)entry)[1];
             int lo;
@@ -1277,7 +1277,7 @@ void RoomLib_AdvanceArcToTarget(RoomEnt *obj) {
 
     ((RoomLibArcWork *)scratch)->landed = 0;
     if (((RoomLibHandlerBState *)state)->finished == 0) {
-        switch (func_800DFB78(self)) {
+        switch (FieldFx_IsOwnerBusy(self)) {
         case 0:
             break;
         case 1:
@@ -1527,7 +1527,7 @@ void RoomLib_HandlerC(RoomEnt *obj) {
         angle = FieldFx_VecToAngle((Vec3Fixed *)link->pos, (Vec3Fixed *)((int)scratch | 0x28)) &
                 0xFFF;
         {
-            int *rotBase = (int *)D_800966EC;
+            int *rotBase = (int *)rcossin_tbl;
             int *entry = rotBase + angle;
             int hi = ((short *)entry)[1];
             int lo;
@@ -1566,7 +1566,7 @@ void RoomLib_HandlerC(RoomEnt *obj) {
 
     ((RoomLibArcWork *)scratch)->landed = 0;
     if ((state)->finished == 0) {
-        switch (func_800DFB78(self)) {
+        switch (FieldFx_IsOwnerBusy(self)) {
         case 0:
             break;
         case 1:
@@ -1660,7 +1660,7 @@ void RoomLib_AdvanceArcToTargetY(RoomEnt *obj) {
 
         angle = FieldFx_VecToAngle((Vec3Fixed *)link->pos, (Vec3Fixed *)&scratch[20]) & 0xFFF;
         {
-            int *rotBase = (int *)D_800966EC;
+            int *rotBase = (int *)rcossin_tbl;
             int *entry = rotBase + angle;
             int hi = ((short *)entry)[1];
             int lo;
@@ -1713,7 +1713,7 @@ void RoomLib_AdvanceArcToTargetY(RoomEnt *obj) {
 
     ((RoomLibArcWork *)scratch)->landed = 0;
     if (((RoomLibHandlerCState *)state)->finished == 0) {
-        switch (func_800DFB78(self)) {
+        switch (FieldFx_IsOwnerBusy(self)) {
         case 0:
             break;
         case 1:
@@ -1852,7 +1852,7 @@ void RoomLib_HandlerA(RoomEnt *o) {
             o->h48 = (unsigned short)o->h44 + 0x800;
         }
         {
-            int *e = &D_800966EC[(unsigned short)o->h44 & 0xFFF].word;
+            int *e = &rcossin_tbl[(unsigned short)o->h44 & 0xFFF].word;
             int hi = ((short *)e)[1];
             int lo;
             int savedHi;

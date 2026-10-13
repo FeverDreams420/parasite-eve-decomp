@@ -209,8 +209,8 @@ retry2:
         if (!done) {
             SCENE_BLOB_LOAD_TIMS(state->shared_buffers.bg_texture_blob);
             for (slot = 2; slot < 4; slot++) {
-                D_80091648[slot].tpage = BG_SLOT_TPAGE(D_80091648[slot].x, D_80091648[slot].y);
-                D_80091648[slot].clut = BG_SLOT_CLUT(D_80091648[slot].clut_x, D_80091648[slot].clut_y);
+                g_FieldBgTextureSlots[slot].tpage = BG_SLOT_TPAGE(g_FieldBgTextureSlots[slot].x, g_FieldBgTextureSlots[slot].y);
+                g_FieldBgTextureSlots[slot].clut = BG_SLOT_CLUT(g_FieldBgTextureSlots[slot].clut_x, g_FieldBgTextureSlots[slot].clut_y);
             }
             image = Asset_FindTable08ByU32Key(blob, 0xABADC06C);
             while (image->length != 0) {
@@ -234,8 +234,8 @@ retry3:
         if (!done) {
             Asset_LoadTimImage(state->bg_tim);
             for (slot = 0; slot < 2; slot++) {
-                D_80091648[slot].tpage = BG_SLOT_TPAGE(D_80091648[slot].x, D_80091648[slot].y);
-                D_80091648[slot].clut = BG_SLOT_CLUT(D_80091648[slot].clut_x, D_80091648[slot].clut_y);
+                g_FieldBgTextureSlots[slot].tpage = BG_SLOT_TPAGE(g_FieldBgTextureSlots[slot].x, g_FieldBgTextureSlots[slot].y);
+                g_FieldBgTextureSlots[slot].clut = BG_SLOT_CLUT(g_FieldBgTextureSlots[slot].clut_x, g_FieldBgTextureSlots[slot].clut_y);
             }
             done = 1;
         }
@@ -376,9 +376,9 @@ void Akao_LoadVoiceBankAlt(void)
     state->bank_state_12 = 0;
     state->flags &= ~0x400000;
 
-    for (i = 0, pair = D_80094488; i < 4; ++i, ++pair) {
+    for (i = 0, pair = g_AkaoVoiceBankEntries; i < 4; ++i, ++pair) {
         pair->ids[1] = 0;
-        D_80094488[i].ids[0] = 0;
+        g_AkaoVoiceBankEntries[i].ids[0] = 0;
     }
     state->bank_value_f6 = 0x30;
     state->bank_value_f7 = 0x7F;
@@ -722,7 +722,7 @@ retry:
         index = bank + 3;
         if (CdRom_ReadSectorsFromLba(lba + D_800930D8[index],
                 state->scene_load_scratch,
-                D_800930DA[index] - D_800930D8[index]) != -1)
+                g_PeImageSectorBoundsNext[index] - D_800930D8[index]) != -1)
             state->entity_texture_phase = 2;
         return 1;
     case 2:
@@ -761,7 +761,7 @@ retry:
         index = bank + 8;
         if (CdRom_ReadSectorsFromLba(lba + D_800930D8[index],
                 state->voice_bank_base_1400,
-                D_800930DA[index] - D_800930D8[index]) != -1)
+                g_PeImageSectorBoundsNext[index] - D_800930D8[index]) != -1)
             state->entity_texture_phase = 5;
         return 1;
     case 5:
@@ -892,7 +892,7 @@ s32 Scene_InitEntityPlayer(s32 resume) {
         {
             FieldActor *player = g_PlayerEntity;
             Render_DrawWithAnim(&player->render_object, player->action_data, 0,
-                                &D_800BEA40, g_EntityRenderScratch);
+                                &g_RenderLightingState, g_EntityRenderScratch);
         }
         {
             FieldActor *player = g_PlayerEntity;
@@ -1000,7 +1000,7 @@ retry:
         setup[0] = day + 0x26;
         result = CdRom_ReadSectorsFromLba(lba + D_800930D8[setup[0]],
             state->scene_load_scratch,
-            D_800930DA[setup[0]] - D_800930D8[setup[0]]);
+            g_PeImageSectorBoundsNext[setup[0]] - D_800930D8[setup[0]]);
         Scene_UpdateBgDraw();
         if (result != -1)
             state->scene_init_subphase = 2;
@@ -1038,7 +1038,7 @@ retry:
         setup[0] = (state->requested_entity_bank - 10) / 2 * 8 + day + 0x16;
         if (CdRom_ReadSectorsFromLba(lba + D_800930D8[setup[0]],
                 state->entity_texture_blob,
-                D_800930DA[setup[0]] - D_800930D8[setup[0]]) != -1)
+                g_PeImageSectorBoundsNext[setup[0]] - D_800930D8[setup[0]]) != -1)
             state->scene_init_subphase = 5;
         if (!(g_GameStateFlags & 2))
             Scene_UpdateBgDraw();
@@ -1157,7 +1157,7 @@ retry:
         state->scene_object.lightNegativeY = 0xC;
         state->scene_object.lightPositiveY = 0x18;
         Render_InitRoomPrimState(&state->scene_object);
-        Render_DrawWithAnim(&state->scene_object, 0, 0, &D_800BEA40,
+        Render_DrawWithAnim(&state->scene_object, 0, 0, &g_RenderLightingState,
             g_EntityRenderScratch);
         state->scene_init_subphase = 0;
         state->story_day_flags &= ~3;

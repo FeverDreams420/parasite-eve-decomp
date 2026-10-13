@@ -34,11 +34,11 @@ RANGES = [('Gpu_SetDisplayBuffer', 0x80076EE4, 608,
            'SetIntrMask = 0x80073E10;\n'
            'g_GpuDmaQueueHead = 0x80095874;\n'
            'g_GpuDmaQueueTail = 0x80095878;\n'
-           'D_80095880 = 0x80095880;\n'
-           'D_8009574C = 0x8009574C;\n'
+           'g_GpuSavedIntrMaskDrain = 0x80095880;\n'
+           'g_GpuSystemState = 0x8009574C;\n'
            'DMACallback = 0x80073CF4;\n'
            'g_GpuDmaRegisterWindow = 0x80095854;\n'
-           'D_800BD030 = 0x800BD030;\n',
+           'g_GpuDmaQueue = 0x800BD030;\n',
            'a124857ab6fd91a3b68ea3e5c2efa5337bf6ed5528ef94ca23bc4a781337a78c')]
 
 

@@ -53,20 +53,20 @@ void FieldFx_ModelScrollUv(FieldTexturedModel *model, u8 xOffset, u8 yOffset) {
             } while ((u16)i < header->flatQuads + header->shadedQuads);
         }
     }
-    D_800F3420 = 0;
+    g_FieldFxModelDepthBias = 0;
 }
 
 void FieldFx_ModelSetTexture(short x, short y) {
-    D_800F346C = x;
-    D_800F3414 = y;
+    g_FieldFxModelTpage = x;
+    g_FieldFxModelClut = y;
 }
 
 void FieldFx_ModelSetSemiTrans(short value) {
-    D_800F33E4 = value;
+    g_FieldFxModelSemiTrans = value;
 }
 
 void FieldFx_ModelSetDepthBias(short value) {
-    D_800F3420 = value;
+    g_FieldFxModelDepthBias = value;
 }
 
 void FieldFx_ModelSaveColors(char *data) {
@@ -210,15 +210,15 @@ void FieldFx_ModelDraw(FieldTexturedModel *model, GteMatrix *placement)
     int i;
 
     sp = FIELD_MODEL_SCRATCH;
-    sp->tpage = D_800F346C;
-    sp->clut = D_800F3414;
-    sp->semiTrans = D_800F33E4;
+    sp->tpage = g_FieldFxModelTpage;
+    sp->clut = g_FieldFxModelClut;
+    sp->semiTrans = g_FieldFxModelSemiTrans;
     CompMatrix(D_800BCFA4.value, placement, &sp->matrix);
     SetTransMatrix(&sp->matrix);
     SetRotMatrix(&sp->matrix);
     header = &model->header;
     tri = header->tris;
-    ft3 = (FieldModelFt3Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
+    ft3 = (FieldModelFt3Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
     for (i = 0; i < header->flatTris; i++, tri++) {
         v0 = MODEL_VERTEX(model, tri->vertex[0]);
         v1 = MODEL_VERTEX(model, tri->vertex[1]);
@@ -233,7 +233,7 @@ void FieldFx_ModelDraw(FieldTexturedModel *model, GteMatrix *placement)
         if (sp->winding > 0) {
             gte_avsz3_padded();
             gte_stotz(&sp->depth);
-            sp->depth += D_800F3420;
+            sp->depth += g_FieldFxModelDepthBias;
             ft3->tpage = sp->tpage;
             ft3->clut = sp->clut;
             if (sp->depth > 0) {
@@ -250,7 +250,7 @@ void FieldFx_ModelDraw(FieldTexturedModel *model, GteMatrix *placement)
                 }
                 ft3->tag.address = TEXTURED_MODEL_OT(sp->depth)->address;
                 link.tag = &ft3->tag;
-                D_8009CDD8 += sizeof(FieldModelFt3Packet);
+                g_DrawPacketOffset += sizeof(FieldModelFt3Packet);
                 TEXTURED_MODEL_OT(sp->depth)->address = link.word;
                 ft3++;
             }
@@ -273,7 +273,7 @@ void FieldFx_ModelDraw(FieldTexturedModel *model, GteMatrix *placement)
             gt3->tpage = sp->tpage;
             gt3->clut = sp->clut;
             gte_stotz(&sp->depth);
-            sp->depth += D_800F3420;
+            sp->depth += g_FieldFxModelDepthBias;
             if (sp->depth > 0) {
                 FieldModelLink link;
 
@@ -290,7 +290,7 @@ void FieldFx_ModelDraw(FieldTexturedModel *model, GteMatrix *placement)
                 }
                 gt3->tag.address = TEXTURED_MODEL_OT(sp->depth)->address;
                 link.tag = &gt3->tag;
-                D_8009CDD8 += sizeof(FieldModelGt3Packet);
+                g_DrawPacketOffset += sizeof(FieldModelGt3Packet);
                 TEXTURED_MODEL_OT(sp->depth)->address = link.word;
                 gt3++;
             }
@@ -315,7 +315,7 @@ void FieldFx_ModelDraw(FieldTexturedModel *model, GteMatrix *placement)
             ft4->tpage = sp->tpage;
             ft4->clut = sp->clut;
             gte_stotz(&sp->depth);
-            sp->depth += D_800F3420;
+            sp->depth += g_FieldFxModelDepthBias;
             if (sp->depth > 0) {
                 FieldModelLink link;
 
@@ -334,7 +334,7 @@ void FieldFx_ModelDraw(FieldTexturedModel *model, GteMatrix *placement)
                 }
                 ft4->tag.address = TEXTURED_MODEL_OT(sp->depth)->address;
                 link.tag = &ft4->tag;
-                D_8009CDD8 += sizeof(FieldModelFt4Packet);
+                g_DrawPacketOffset += sizeof(FieldModelFt4Packet);
                 TEXTURED_MODEL_OT(sp->depth)->address = link.word;
                 ft4++;
             }
@@ -356,7 +356,7 @@ void FieldFx_ModelDraw(FieldTexturedModel *model, GteMatrix *placement)
             gte_avsz3_padded();
             gt4->uv3 = quad->uv[3];
             gte_stotz(&sp->depth);
-            sp->depth += D_800F3420;
+            sp->depth += g_FieldFxModelDepthBias;
             if (sp->depth > 0) {
                 FieldModelLink link;
 
@@ -380,7 +380,7 @@ void FieldFx_ModelDraw(FieldTexturedModel *model, GteMatrix *placement)
                 }
                 gt4->tag.address = TEXTURED_MODEL_OT(sp->depth)->address;
                 link.tag = &gt4->tag;
-                D_8009CDD8 += sizeof(FieldModelGt4Packet);
+                g_DrawPacketOffset += sizeof(FieldModelGt4Packet);
                 TEXTURED_MODEL_OT(sp->depth)->address = link.word;
                 gt4++;
             }

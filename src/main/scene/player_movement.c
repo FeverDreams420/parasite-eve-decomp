@@ -41,19 +41,19 @@ void Scene_UpdatePlayerEntity(BattleEntity *entity, int *actionState)
     }
     speed = Math_FixedMul(0x50000, entity->moveFactor);
     speed = Math_FixedMul(speed, entity->moveSpeed << 4);
-    if ((D_800BE9A0 & 0xF000) == 0x7000) {
+    if ((g_PadPort1Buffer & 0xF000) == 0x7000) {
         int angle;
         angle = ratan2(D_800BE9A7 - 128, D_800BE9A6 - 128) - 0x400;
         PE1_COMPILER_LAUNDER(angle);
         if (angle < 0) angle += 0x1000;
-        entity->facingAngle = D_800BD022 + angle;
+        entity->facingAngle = g_CameraBaseAngleAnalog + angle;
         movement.x = Math_FixedMul(-speed, rsin(angle) << 4);
         movement.y = 0;
         movement.z = Math_FixedMul(-speed, rcos(angle) << 4);
     } else {
         diagonal = Math_FixedMul(speed, 0xB504);
         pad = g_FieldPadBits;
-        entity->facingAngle = D_800BD020;
+        entity->facingAngle = g_CameraBaseAngleDigital;
         if (pad & FIELD_PAD_DOWN) {
             if (pad & FIELD_PAD_LEFT) {
                 entity->facingAngle += 0x600;
@@ -83,7 +83,7 @@ void Scene_UpdatePlayerEntity(BattleEntity *entity, int *actionState)
                 movement.y = 0;
                 movement.z = -diagonal;
             } else {
-                entity->facingAngle = D_800BD020;
+                entity->facingAngle = g_CameraBaseAngleDigital;
                 movement.x = 0;
                 movement.y = 0;
                 movement.z = -speed;
@@ -109,7 +109,7 @@ void Scene_UpdatePlayerEntity(BattleEntity *entity, int *actionState)
     }
     facing &= 0xFFF;
     entity->facingAngle = facing;
-    ApplyMatrixLV(&D_800BD000, &movement, (GteVector *)&entity->motionX);
+    ApplyMatrixLV(&g_CameraBasisMatrix, &movement, (GteVector *)&entity->motionX);
     if (D_8009D2E8 & FIELD_MOVE_CONFUSED) {
         entity->facingAngle = (0x1000 - (u16)entity->facingAngle) & 0xFFF;
         entity->motionX = -entity->motionX;
@@ -146,19 +146,19 @@ void Scene_UpdateEntityFacing(BattleEntity *entity, int *actionState)
     }
     speed = Math_FixedMul(speed, entity->moveFactor);
     speed = Math_FixedMul(speed, entity->moveSpeed << 4);
-    if ((D_800BE9A0 & 0xF000) == 0x7000) {
+    if ((g_PadPort1Buffer & 0xF000) == 0x7000) {
         int angle;
         angle = ratan2(D_800BE9A7 - 128, D_800BE9A6 - 128) - 0x400;
         PE1_COMPILER_LAUNDER(angle);
         if (angle < 0) angle += 0x1000;
-        entity->facingAngle = D_800BD022 + angle;
+        entity->facingAngle = g_CameraBaseAngleAnalog + angle;
         movement.x = Math_FixedMul(-speed, rsin(angle) << 4);
         movement.y = 0;
         movement.z = Math_FixedMul(-speed, rcos(angle) << 4);
     } else {
         diagonal = Math_FixedMul(speed, 0xB504);
         pad = g_FieldPadBits;
-        entity->facingAngle = D_800BD020;
+        entity->facingAngle = g_CameraBaseAngleDigital;
         if (pad & FIELD_PAD_DOWN) {
             if (pad & FIELD_PAD_LEFT) {
                 entity->facingAngle += 0x600;
@@ -188,7 +188,7 @@ void Scene_UpdateEntityFacing(BattleEntity *entity, int *actionState)
                 movement.y = 0;
                 movement.z = -diagonal;
             } else {
-                entity->facingAngle = D_800BD020;
+                entity->facingAngle = g_CameraBaseAngleDigital;
                 movement.x = 0;
                 movement.y = 0;
                 movement.z = -speed;
@@ -214,7 +214,7 @@ void Scene_UpdateEntityFacing(BattleEntity *entity, int *actionState)
     }
     facing &= 0xFFF;
     entity->facingAngle = facing;
-    ApplyMatrixLV(&D_800BD000, &movement, (GteVector *)&entity->motionX);
+    ApplyMatrixLV(&g_CameraBasisMatrix, &movement, (GteVector *)&entity->motionX);
     if (D_8009D2E8 & FIELD_MOVE_CONFUSED) {
         entity->facingAngle = (0x1000 - (u16)entity->facingAngle) & 0xFFF;
         entity->motionX = -entity->motionX;
@@ -247,12 +247,12 @@ void Scene_SyncEntityAction(BattleEntity *entity, int *actionState) {
 void Scene_UpdateEntityFacingFromPad(BattleEntity *entity) {
     int angle;
     Entity_SetAction(entity, 0x11);
-    if ((D_800BE9A0 & 0xF000) == 0x7000) {
+    if ((g_PadPort1Buffer & 0xF000) == 0x7000) {
         angle = ratan2(D_800BE9A7 - 128, D_800BE9A6 - 128) - 0x400;
         /* Keep the wrapped-angle correction based on the adjusted value. */
         asm volatile("" : "=r"(angle) : "0"(angle));
         if (angle < 0) angle += 0x1000;
-        angle += D_800BD022;
+        angle += g_CameraBaseAngleAnalog;
     } else {
         if (g_FieldPadBits & FIELD_PAD_DOWN) {
             if (g_FieldPadBits & FIELD_PAD_LEFT) entity->facingAngle = 0x600;
@@ -264,7 +264,7 @@ void Scene_UpdateEntityFacingFromPad(BattleEntity *entity) {
             else entity->facingAngle = 0;
         } else if (g_FieldPadBits & FIELD_PAD_LEFT) entity->facingAngle = 0x400;
         else if (g_FieldPadBits & FIELD_PAD_RIGHT) entity->facingAngle = 0xC00;
-        angle = entity->facingAngle + D_800BD020;
+        angle = entity->facingAngle + g_CameraBaseAngleDigital;
     }
     if (D_8009D254 && (D_8009D2E8 & FIELD_MOVE_CONFUSED)) {
         angle += 0x800;

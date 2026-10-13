@@ -382,7 +382,7 @@ int Menu_StepEquipScreen(MenuWidgetNode *node, unsigned int flags)
         }
         case 2:
             if (Inv_IsSlotSelectable(g_MenuActiveItemSlot)) {
-                if (Inv_IsActiveListOverrideSelected() || g_MenuActiveItemSlot != D_800C0E20.tracked[2] ||
+                if (Inv_IsActiveListOverrideSelected() || g_MenuActiveItemSlot != g_InventoryRuntime.tracked[2] ||
                     Inv_GetActiveSlotCount(0))
                     Menu_StepItemDetailPanel();
                 else

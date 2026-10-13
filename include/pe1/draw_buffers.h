@@ -22,14 +22,14 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(DrawFrameBuffer, frontBufferBase) == 0x74,
                   draw_frame_buffer_packets_offset);
 /* Double buffer: environments, ordering table and packet arena per frame. */
 extern DrawFrameBuffer g_DrawFrameBuffers[2];
-extern DrawFrameBuffer *D_8009D0FC;
+extern DrawFrameBuffer *g_DrawCurrentFrameBuffer;
 /* Frame buffer the game draws into this frame, and the one presented. */
 extern int g_ActiveDrawSlot;
 extern int g_DrawBufferIndex;
 extern int g_DrawPresentEnabled;
 /* Image uploaded over the presented frame when nonzero. */
 extern int g_DrawPresentImage;
-extern u32 *D_8009D118;
+extern u32 *g_DrawOrderingTableBase;
 
 /* Main renderer keeps two SDK environments alongside its buffer pointers. */
 extern DISPENV g_RenderDispEnvArray[2];

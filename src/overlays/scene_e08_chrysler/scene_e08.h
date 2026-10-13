@@ -117,6 +117,6 @@ extern s16 D_80199590[];
 extern u16 D_80199658[];
 extern s32 D_8019956C;
 extern s32 D_8019957C;
-void func_800C4E50(void *item);
+void FieldFx_BuildRingGeometry(void *item);
 
 #endif

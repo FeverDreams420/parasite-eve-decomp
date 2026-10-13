@@ -14,7 +14,7 @@ long SpuSetIRQ(long mode) {
         timer = 0;
         while (_spu_RXX->spucnt & 0x40) {
             if (++timer > 0xF00u) {
-                printf(D_8001208C, D_8001209C);
+                printf(g_SpuTimeoutFormatIrq, g_SpuWaitIrqOnText);
                 return -1;
             }
         }
@@ -25,7 +25,7 @@ long SpuSetIRQ(long mode) {
         timer = 0;
         while (!(_spu_RXX->spucnt & 0x40)) {
             if (++timer > 0xF00u) {
-                printf(D_8001208C, D_800120AC);
+                printf(g_SpuTimeoutFormatIrq, g_SpuWaitIrqOffText);
                 return -1;
             }
         }

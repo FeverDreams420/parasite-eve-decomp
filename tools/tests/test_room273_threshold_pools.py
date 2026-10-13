@@ -43,37 +43,37 @@ static FieldActor scene, replacementScene;
 static RoomM273PointerPoolEffect effect;
 static unsigned char pool[512];
 static RenderMatrix object, replacementObject;
-FieldFxTaskSlot *D_800F33E0=(FieldFxTaskSlot *)&context;
-FieldFxObjectPrefix *D_800F32D0=(FieldFxObjectPrefix *)&stateContext;
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&context;
+FieldFxObjectPrefix *g_FieldFxOwner=(FieldFxObjectPrefix *)&stateContext;
 FieldActor *g_PlayerEntity=&scene;
 void *D_8019AE94;
 unsigned char D_8019AE9A;
 static int calls,allocations,updates,renders,failAllocation,firstSize,secondSize;
 int func_801947CC(int mode, RoomM273PaletteInput *input) { assert(0); return 0; }
 int func_80199F84(int mode, RoomM273PulseState *state) { assert(0); return 0; }
-int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
+int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(calls++==0 && p==(char *)pool && stride==8 && count==2 &&
            callback==(FieldFxCallbackListCallback)func_801947CC);
     return firstSize;
 }
-int func_800CE5AC(void *out,int offset,int stride,int count,void *callback) {
+int FieldFx_AllocCallbackList(void *out,int offset,int stride,int count,void *callback) {
     assert(calls++==1 && out==&D_8019AE94 && offset==firstSize);
     assert(stride==16 && count==9 && callback==(void *)func_80199F84);
     *(void **)out=pool+offset;
     return secondSize;
 }
-void *func_800CE610(char *p) {
+void *FieldFx_AcquireCallbackSlot(char *p) {
     assert(p==(char *)pool && !updates && !renders && allocations++==0);
     /* The caller must resolve the scene pointer after allocation. */
     g_PlayerEntity=&replacementScene;
     D_8019AE94=pool+48;
     return failAllocation ? 0 : &effect;
 }
-int func_800CE688(void *p) {
+int FieldFx_UpdateCallbackList(void *p) {
     assert(p==D_8019AE94 && updates++==0 && !renders);
     return 97;
 }
-int func_800CE78C(char *p) {
+int FieldFx_DrawCallbackList(char *p) {
     assert(p==D_8019AE94 && renders++==0 && !updates && !allocations);
     return 98;
 }

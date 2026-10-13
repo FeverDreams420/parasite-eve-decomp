@@ -18,11 +18,11 @@ class Room350EffectSineFadeTests(unittest.TestCase):
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <stdint.h>\n#include <string.h>\n' + source + r'''
 typedef GteShortVector Vector;
 typedef RoomM350SineParticle Particle;
-FieldFxObjectPrefix *D_800F32D0;
-int D_800E27EC, D_800F3428;
-RenderEffectParameters D_800F3368;
-#define D_800F336C D_800F3368.palette
-unsigned short D_800E1204[65536];
+FieldFxObjectPrefix *g_FieldFxOwner;
+int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag;
+RenderEffectParameters g_FieldFxSpriteParams;
+#define D_800F336C g_FieldFxSpriteParams.palette
+unsigned short g_FieldFxPaletteTable[65536];
 RenderColor D_8019A738, D_8019A734;
 static RoomM350EffectActor actors[2];
 static RoomM350EffectInstance instances[2];
@@ -55,7 +55,7 @@ static int sizeReference(int wave, int amplitude) {
 int rsin(int angle) {
     assert(waves++ == 0 && angle == signedWord((uint32_t)beforeFrame << 4));
     /* Mutations test post-helper reads, not actual rsin side effects. */
-    D_800E27EC = afterWaveFrame;
+    g_FieldFxCurrentAge = afterWaveFrame;
     particle.amplitude = amplitudeAfterWave;
     return waveResult;
 }
@@ -63,10 +63,10 @@ u_short GetClut(int x, int y) {
     int add = kind == 4 && special ? 7 : 3;
     assert(cluts++ == 0 && waves == 0 && firstDraws == 0 && x == 0 && y == palette + add);
     particle.size = renderSize; particle.brightness = renderBrightness;
-    D_800F336C = 65535; D_800F3428 = 0;
+    D_800F336C = 65535; g_FieldFxAltPaletteFlag = 0;
     return handle;
 }
-void func_800CEE20(struct GteShortVector *position, struct GteRotation *controls,
+void FieldFx_DrawShapeQuads(struct GteShortVector *position, struct GteRotation *controls,
                    int w, int h, int tile, int clut, int flag, int brightness,
                    struct RenderColor *colors) {
     assert(firstDraws++ == 0 && cluts == 1 && secondDraws == 0);
@@ -75,10 +75,10 @@ void func_800CEE20(struct GteShortVector *position, struct GteRotation *controls
     assert(flag == 1 && brightness == renderBrightness && colors == 0);
     particle.position.x = -32768; particle.position.z = 32767;
     particle.size = -1234; particle.brightness = -99;
-    D_800F32D0 = (FieldFxObjectPrefix *)&actors[1]; D_800E27EC = afterRenderFrame;
+    g_FieldFxOwner = (FieldFxObjectPrefix *)&actors[1]; g_FieldFxCurrentAge = afterRenderFrame;
     expected = particle;
 }
-void func_800D004C(struct GteShortVector *position, int w, int h, int mode,
+void FieldFx_DrawStarFan(struct GteShortVector *position, int w, int h, int mode,
                    struct GteRotation *texture, int sx, int sy,
                    struct RenderColor *colorsA, struct RenderColor *colorsB,
                    int brightness, int flag) {
@@ -94,8 +94,8 @@ void func_800D004C(struct GteShortVector *position, int w, int h, int mode,
 static void reset(void) {
     waves = cluts = firstDraws = secondDraws = 0;
     memset(&particle, 0x5A, sizeof(particle));
-    D_800E27EC = beforeFrame; D_800F32D0 = (FieldFxObjectPrefix *)&actors[0];
-    D_800F336C = kind; D_800F3428 = special; D_800E1204[kind] = palette;
+    g_FieldFxCurrentAge = beforeFrame; g_FieldFxOwner = (FieldFxObjectPrefix *)&actors[0];
+    D_800F336C = kind; g_FieldFxAltPaletteFlag = special; g_FieldFxPaletteTable[kind] = palette;
 }
 static void runUpdate(int brightness) {
     int faded = afterWaveFrame >= 8 ? signedHalf((uint32_t)brightness - 8) : brightness;

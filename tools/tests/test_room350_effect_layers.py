@@ -20,14 +20,14 @@ class Room350EffectLayersTests(unittest.TestCase):
     def test_two_draws_and_inter_call_reloads(self):
         source = callback_source()
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-GteSineWord D_800966EC[4096];
+GteSineWord rcossin_tbl[4096];
 RenderColor D_8019A3C8;
-int D_800E27EC, D_8019A4DC[4], D_8019A4E0[4];
+int g_FieldFxCurrentAge, D_8019A4DC[4], D_8019A4E0[4];
 static int firstPoint, secondPoint, calls, initialCounter, nextCounter;
 static int sizeValue, firstShade, secondShade;
 static void *object;
 static short *savedVector;
-void func_800D004C(struct GteShortVector *p, int a, int b, int mode,
+void FieldFx_DrawStarFan(struct GteShortVector *p, int a, int b, int mode,
                    struct GteRotation *rotation, int x, int y,
                    struct RenderColor *colorA, struct RenderColor *colorB,
                    int shade, int flag) {
@@ -40,10 +40,10 @@ void func_800D004C(struct GteShortVector *p, int a, int b, int mode,
     assert(vector[3] == 0);
     /* Deliberate mutations test inter-call dataflow, not actual helper effects. */
     savedVector = vector; vector[0] = -11; vector[1] = 22; vector[2] = -33; vector[3] = 44;
-    object = &secondPoint; D_800E27EC = nextCounter;
-    D_800966EC[index].word = (int)(0x76540000U | (unsigned short)secondShade);
+    object = &secondPoint; g_FieldFxCurrentAge = nextCounter;
+    rcossin_tbl[index].word = (int)(0x76540000U | (unsigned short)secondShade);
 }
-void func_800D0728(struct GteShortVector *p, int a, int b, int mode,
+void FieldFx_DrawRingBand(struct GteShortVector *p, int a, int b, int mode,
                    struct GteRotation *rotation, int x, int y,
                    struct RenderColor *colorA, struct RenderColor *colorB,
                    int shade, int flag) {
@@ -62,19 +62,19 @@ int main(void) {
     for (counter = -16; counter <= 80; ++counter)
     for (event = -1; event <= 3; ++event) {
         if (event == 2) continue;
-        D_800E27EC = counter; calls = 0;
+        g_FieldFxCurrentAge = counter; calls = 0;
         assert(func_801944F0(event, 0) == (event == 1 && counter >= 8));
         assert(calls == 0);
     }
     for (counter = -16; counter <= 80; ++counter)
     for (s = 0; s < 6; ++s) for (h = 0; h < 6; ++h) for (n = 0; n < 8; ++n) {
         unsigned int index = ((unsigned int)(counter - 1) << 7) & 0xF80;
-        memset(D_800966EC, 0, sizeof(D_800966EC));
+        memset(rcossin_tbl, 0, sizeof(rcossin_tbl));
         initialCounter = counter; nextCounter = nextValues[n];
         sizeValue = values[s]; firstShade = values[h]; secondShade = values[5-h];
-        D_800966EC[index].word = (int)(((unsigned int)(unsigned short)firstShade << 16) |
+        rcossin_tbl[index].word = (int)(((unsigned int)(unsigned short)firstShade << 16) |
                                   (unsigned short)sizeValue);
-        D_800E27EC = counter; object = &firstPoint; calls = 0;
+        g_FieldFxCurrentAge = counter; object = &firstPoint; calls = 0;
         assert(func_801944F0(2, &object) == 0);
         assert(calls == 2);
     }

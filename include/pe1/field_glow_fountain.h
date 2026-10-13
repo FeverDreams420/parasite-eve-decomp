@@ -9,8 +9,8 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/render_object.h"
 
-/* Field engine glow fountain (func_800DEA30): sprays falling spin glows
- * (func_800DE7A8) out of the actor's facing for 16 frames while a rising
+/* Field engine glow fountain (FieldFx_GlowFountain): sprays falling spin glows
+ * (FieldFx_SpinGlow) out of the actor's facing for 16 frames while a rising
  * shape quad, a ring and a spinning band are drawn over it. */
 typedef struct FieldGlowFountain {
     /* 0x00 */ s16 x, y, z;

@@ -33,7 +33,7 @@ extern u8 D_801954BC[];
 extern u8 D_801954E4[];
 
 int rand(void);
-void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y, int texture,
+void FieldFx_DrawPulledSprite(GteShortVector *position, int scale_x, int scale_y, int texture,
                    int clut, int page, int intensity, int unused, int angle);
 int func_80192BDC(int mode, RoomM123BurstParticle *particle);
 

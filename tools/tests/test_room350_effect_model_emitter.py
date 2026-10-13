@@ -44,22 +44,22 @@ typedef char emitter_pool[OFFSET(RoomM350EffectEmitter, pool) == 8 ? 1 : -1];
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <stdint.h>\n#include <string.h>\n' + source + r'''
 typedef RoomM350SineParticle Particle;
 typedef RenderMatrix Transform;
-FieldFxTaskSlot *D_800F33E0;
-FieldFxObjectPrefix *D_800F32D0;
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
+FieldFxObjectPrefix *g_FieldFxOwner;
 unsigned char D_8019A8C4;
-unsigned short D_800E11E4[12], D_800E2850[65536];
-#define D_800E11FA D_800E11E4[11]
+unsigned short g_FieldFxTpageSlots[12], g_FieldFxTpageTable[65536];
+#define g_FieldFxTpageSlot11 g_FieldFxTpageSlots[11]
 /* The retail halfword names are fields of the sprite parameter block; the
  * signed ones are read through signed views as the old globals were. */
-RenderEffectParameters D_800F3368;
-#define SIGNED(field) (*(short *)&D_800F3368.field)
+RenderEffectParameters g_FieldFxSpriteParams;
+#define SIGNED(field) (*(short *)&g_FieldFxSpriteParams.field)
 #define UNIT SIGNED(parameter00)
 #define D_800F336A SIGNED(parameter02)
-#define D_800F336C D_800F3368.palette
+#define D_800F336C g_FieldFxSpriteParams.palette
 #define D_800F336E SIGNED(parameter06)
-#define D_800F3370 D_800F3368.tpage
+#define D_800F3370 g_FieldFxSpriteParams.tpage
 #define D_800F3372 SIGNED(parameter0A)
-#define D_800F3374 D_800F3368.depth
+#define D_800F3374 g_FieldFxSpriteParams.depth
 #define D_800F3376 SIGNED(extent_x)
 #define D_800F3378 SIGNED(extent_y)
 static RoomM350EffectEmitter emitter;
@@ -84,21 +84,21 @@ static int selectedIndex(void) {
     return quotient + 1;
 }
 int func_801996BC(int event, Particle *particle) { return 0; }
-int func_800CE560(char *p, int stride, int count,
+int FieldFx_InitCallbackList(char *p, int stride, int count,
                   FieldFxCallbackListCallback callback) {
     assert(setups++ == 0 && allocations == 0 && p == &pool);
     assert(stride == 24 && count == 8 && (void *)callback == (void *)func_801996BC);
     assert(state.count == 0 && state.delay == 0);
     return setupResult;
 }
-void *func_800CE610(char *p) {
+void *FieldFx_AcquireCallbackSlot(char *p) {
     assert(allocations++ == 0 && setups == 0 && p == &pool && state.delay == -1);
     return failAllocation ? 0 : &effect;
 }
 int Inv_ScrambleGrid(void) {
     assert(tableRandoms++ == 0 && allocations == 1 && controlRandoms == 0);
     /* Probe post-helper reloads, without asserting these are the real helper's effects. */
-    D_800F32D0 = (FieldFxObjectPrefix *)&actors[1];
+    g_FieldFxOwner = (FieldFxObjectPrefix *)&actors[1];
     state.count = countAfterRandom;
     return tableRandom;
 }
@@ -117,8 +117,8 @@ int rand(void) {
 }
 static void reset(void) {
     setups = allocations = tableRandoms = controlRandoms = 0;
-    D_800F33E0 = (FieldFxTaskSlot *)&emitter;
-    D_800F32D0 = (FieldFxObjectPrefix *)&actors[0]; D_8019A8C4 = 90;
+    g_FieldFxActiveTaskSlot = (FieldFxTaskSlot *)&emitter;
+    g_FieldFxOwner = (FieldFxObjectPrefix *)&actors[0]; D_8019A8C4 = 90;
     state.count = 0; state.delay = 0;
     memset(&effect, 0x5A, sizeof(effect));
 }
@@ -187,7 +187,7 @@ int main(void) {
     }
     for (m = 0; m < 5; ++m) {
         reset(); state.count = -7; state.delay = 123;
-        D_800E11FA = indices[m]; D_800E2850[indices[m]] = 65535 - m;
+        g_FieldFxTpageSlot11 = indices[m]; g_FieldFxTpageTable[indices[m]] = 65535 - m;
         assert(func_8019988C(2, &state) == 0 && allocations == 0 && setups == 0);
         assert(state.count == -7 && state.delay == 123 && D_8019A8C4 == 90);
         assert(UNIT == 64 && D_800F336A == 4 && D_800F3376 == 64 && D_800F3378 == 64);

@@ -382,11 +382,11 @@ int Akao_LoadVoiceBank(AkaoVoiceActor *actor) {
 
     if (actor_reg == ((AkaoVoiceActor *)D_8009D254) && (g_GameStateFlags & 2) == 0 && (state->flags & 0x800000) == 0) {
         u16 *entry_ids;
-        entry_ids = D_80094488[0].ids;
+        entry_ids = g_AkaoVoiceBankEntries[0].ids;
         entry = 0;
         for (i = 0; i < 4; entry_ids += 4, i++, entry++) {
-            if (D_80094488[entry].index == actor_reg->animIndex) {
-                int entry_frame = D_80094488[entry].frame;
+            if (g_AkaoVoiceBankEntries[entry].index == actor_reg->animIndex) {
+                int entry_frame = g_AkaoVoiceBankEntries[entry].frame;
                 if ((step > 0 && entry_frame >= target && entry_frame < frame) ||
                     (step < 0 && frame < entry_frame && entry_frame <= target)) {
                     id = entry_ids[state->active_id_slot];
@@ -406,13 +406,13 @@ int Akao_LoadVoiceBank(AkaoVoiceActor *actor) {
 
     entry = 4;
     do {
-        if (D_80094488[entry].group == actor_reg->animGroup &&
-            D_80094488[entry].set == actor_reg->animSet &&
-            D_80094488[entry].index == actor_reg->animIndex) {
-            int entry_frame = D_80094488[entry].frame;
+        if (g_AkaoVoiceBankEntries[entry].group == actor_reg->animGroup &&
+            g_AkaoVoiceBankEntries[entry].set == actor_reg->animSet &&
+            g_AkaoVoiceBankEntries[entry].index == actor_reg->animIndex) {
+            int entry_frame = g_AkaoVoiceBankEntries[entry].frame;
             if ((step > 0 && entry_frame >= target && entry_frame < frame) ||
                 (step < 0 && frame < entry_frame && entry_frame <= target)) {
-                id = D_80094488[entry].ids[state->active_id_slot];
+                id = g_AkaoVoiceBankEntries[entry].ids[state->active_id_slot];
                 if (id != 0) {
                     Asset_Find08w(id, 0, actor_reg->posXInteger,
                                   actor_reg->posYInteger, actor_reg->posZInteger);
@@ -496,7 +496,7 @@ void Asset_ResetGameState(void)
         base->scene_audio.tracks.keys[j][0] = -1;
         j++;
     } while (j < 2);
-    pair = D_80094488;
+    pair = g_AkaoVoiceBankEntries;
     pairOffset = 0;
     base->track_volumes[1] = 0x7F;
     base->track_volumes[0] = 0x7F;
@@ -512,7 +512,7 @@ void Asset_ResetGameState(void)
     base->pending_stream_banks[0] = 0;
     for (; pairOffset < 4; pairOffset++, pair++) {
         pair->ids[1] = 0;
-        D_80094488[pairOffset].ids[0] = 0;
+        g_AkaoVoiceBankEntries[pairOffset].ids[0] = 0;
     }
     drawMode = 0xE1000440;
     j = 2;
@@ -568,18 +568,18 @@ void Boot_InitMemoryLayout(void) {
 
     ptr = g_BootWorkArea;
     ptr2 = ptr + 0x1800;
-    D_800B0E24 = ptr;
+    g_SceneBankAssetSource = ptr;
     ptr += 0x6000;
-    D_800B0E28 = ptr2;
+    g_VoiceBankBase = ptr2;
     D_800B0E2C = ptr;
     ptr += 0xE000;
-    D_800B0E30 = ptr;
+    g_EntityTextureBlob = ptr;
 
     ptr = D_8010BD00;
     ptr2 = D_80120D08;
     D_800B0E40 = ptr;
     ptr = ptr2 + 0x1C98;
-    D_800B0E34 = ptr2;
+    g_SceneObjectWork = ptr2;
     ptr2 += 0x5C98;
     const_8000 = 0x8000;
     g_OtBufferTable[0] = ptr;
@@ -600,8 +600,8 @@ void Boot_InitMemoryLayout(void) {
     tmp = g_StrFileDirBuffer;
     g_RenderAnimBufferBase[0] = ptr;
     ptr += 0x7000;
-    D_800B0E60 = ptr;
-    g_SceneLoadScratchBuffer[0] = D_801ED800;
+    g_ScenePmSlotBanks = ptr;
+    g_SceneLoadScratchBuffer[0] = g_SceneLoadScratchArea;
     g_LoadedSceneAssetBlock[0] = tmp - 8;
     D_800B0E68 = tmp;
 }

@@ -48,10 +48,10 @@ int RoomLib_UpdateTimedRender(int mode, RoomFxTimedRenderState *state) {
         matrixSlot = &D_800BCFA4.value;
         gte_ldrotmatrix(*matrixSlot);
         gte_ldtransmatrix(*matrixSlot);
-        func_800CF3AC(&RoomLib_TimedRenderTable, &work,
+        FieldFx_SampleColorTrack(&RoomLib_TimedRenderTable, &work,
                       (short)state->frame);
-        angle = rsin((D_800E27EC << 10) / 24);
-        func_800D0728((GteShortVector *)state, 0x578, 0x640, 0x14, (GteRotation *)seedPtr, angle, angle, 0,
+        angle = rsin((g_FieldFxCurrentAge << 10) / 24);
+        FieldFx_DrawRingBand((GteShortVector *)state, 0x578, 0x640, 0x14, (GteRotation *)seedPtr, angle, angle, 0,
                       (struct RenderColor *)&work, 0x80, 1);
         return 0;
     }
@@ -106,7 +106,7 @@ int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
     switch (mode) {
     case 0:
 
-        func_800CE870(ANIM_OWNER_AS(RoomTimedSpawnOwner)->link, 0, (s16 *)&state->position);
+        FieldFx_GetActorPosition(ANIM_OWNER_AS(RoomTimedSpawnOwner)->link, 0, (s16 *)&state->position);
         state->x = 0;
         state->y = 0;
 
@@ -121,16 +121,16 @@ int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
         }
 
         if (D_800B0E64[0] != 0) {
-            value = func_800D3FD8();
+            value = FieldFx_GetOwnerProgress();
             Akao_SendTableCommand(D_800B0E64[0], 0x588, value, 0x80, 0x7F);
         }
-        return func_800CE560(((void **)ANIM_POOL_AS(void))[2], 0xC, 8,
+        return FieldFx_InitCallbackList(((void **)ANIM_POOL_AS(void))[2], 0xC, 8,
                              (FieldFxCallbackListCallback)RoomLib_UpdateTimedRender);
 
         case 1:
-    tick = D_800E27EC;
+    tick = g_FieldFxCurrentAge;
     if (tick < 0x20 && tick % 6 == 0) {
-        actor = func_800CE610(((void **)ANIM_POOL_AS(void))[2]);
+        actor = FieldFx_AcquireCallbackSlot(((void **)ANIM_POOL_AS(void))[2]);
         if (actor != 0) {
             actor->x = state->position.x;
             actor->y = state->position.y;
@@ -142,7 +142,7 @@ int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
         }
     }
 
-    if (D_800E27EC == 7 && FX_TASK_AS(RoomTimedSpawnEventState)->active != 0) {
+    if (g_FieldFxCurrentAge == 7 && FX_TASK_AS(RoomTimedSpawnEventState)->active != 0) {
         RoomTimedSpawnOwner *root;
         root = ANIM_OWNER_AS(RoomTimedSpawnOwner);
         if (((*root->link)->flags & 0x3F000000) ==
@@ -158,22 +158,22 @@ int RoomLib_ControlTimedSpawn(int mode, RoomTimedSpawnState *state) {
             object->flags |= 0x80000000;
         }
     }
-        if (D_800E27EC >= 8) return 2;
+        if (g_FieldFxCurrentAge >= 8) return 2;
     break;
     case 2:
  {
-        int index = D_800E11EA;
+        int index = g_FieldFxTpageSlot3;
         u16 tpage;
-        D_800F3368.parameter00 = 0x20;
-        D_800F3368.parameter02 = 2;
-        D_800F3368.extent_x = 0x20;
-        D_800F3368.extent_y = 0x20;
-        tpage = D_800E2850[index];
-        D_800F3368.palette = 3;
-        D_800F3368.parameter06 = 0;
-        D_800F3368.parameter0A = 0;
-        D_800F3368.depth = 0;
-        D_800F3368.tpage = tpage;
+        g_FieldFxSpriteParams.parameter00 = 0x20;
+        g_FieldFxSpriteParams.parameter02 = 2;
+        g_FieldFxSpriteParams.extent_x = 0x20;
+        g_FieldFxSpriteParams.extent_y = 0x20;
+        tpage = g_FieldFxTpageTable[index];
+        g_FieldFxSpriteParams.palette = 3;
+        g_FieldFxSpriteParams.parameter06 = 0;
+        g_FieldFxSpriteParams.parameter0A = 0;
+        g_FieldFxSpriteParams.depth = 0;
+        g_FieldFxSpriteParams.tpage = tpage;
     }
     
     }

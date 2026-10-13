@@ -119,18 +119,18 @@ void func_80192030(void)
     DrawSync(0);
     PutDispEnv(g_RenderDispEnvArray);
     if (fade == 1)
-        Akao_Cmd_C1_WithSlot(D_800B0DB5, 0x1E, 0);
+        Akao_Cmd_C1_WithSlot(g_SceneAudioSlot0Handle, 0x1E, 0);
     Akao_Cmd_A9(0x1E, 0);
     for (i = 0; i < 0x1E; i++)
         VSync(0);
     if (fade == 1) {
-        D_800B0DB4 = -1;
+        g_SceneAudioSlot0Key = -1;
         D_800B0DB2 = -1;
         D_800B0CD8 &= ~0x40;
         Akao_Cmd_F0();
     }
     Akao_Cmd_F1();
-    func_80038D48();
+    Render_ConsumeFontShuffleSeed();
 }
 
 /* The effect overlay's own frame loop: run every effect system, compact the
@@ -1173,7 +1173,7 @@ void func_801942FC(void)
             D_8019C0C0 = 1;
         }
         if (D_8019C0BC == 0x41A) {
-            Akao_Cmd_C1_WithSlot(D_800B0DB5, 0xDC, 0);
+            Akao_Cmd_C1_WithSlot(g_SceneAudioSlot0Handle, 0xDC, 0);
         }
     }
     func_80195D3C();

@@ -31,23 +31,23 @@ typedef char layout[sizeof(Particle)==8 && sizeof(Color)==4 &&
     def test_behavior(self):
         source = '#include <assert.h>\n#include <limits.h>\n#include <string.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
 Color D_8018F1E4;
-int D_800E27EC, D_800F3428;
-GteSineWord D_800966EC[4096];
-unsigned short D_800E1204[8];
-RenderEffectParameters D_800F3368;
+int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag;
+GteSineWord rcossin_tbl[4096];
+unsigned short g_FieldFxPaletteTable[8];
+RenderEffectParameters g_FieldFxSpriteParams;
 static Particle particle;
 static Color wantColor;
 static int draws,cluts,wantPalette,wantSize,wantShade;
 static unsigned int shadeOffset;
 u_short GetClut(int x, int y) {
     assert(cluts++==0 && !draws && x==0 && y==wantPalette);
-    D_800E27EC=999;
-    memset(D_800966EC,0,sizeof(D_800966EC));
-    D_800966EC[shadeOffset/4].word=0x12348001;
+    g_FieldFxCurrentAge=999;
+    memset(rcossin_tbl,0,sizeof(rcossin_tbl));
+    rcossin_tbl[shadeOffset/4].word=0x12348001;
     memset(&D_8018F1E4,0,sizeof(D_8018F1E4));
     return 0xF123;
 }
-void func_800CEE20(struct GteShortVector *point, struct GteRotation *rotation,
+void FieldFx_DrawShapeQuads(struct GteShortVector *point, struct GteRotation *rotation,
                   int w, int h, int tile, int clut, int flag, int shade,
                   struct RenderColor *colorArg) {
     Color *color=(Color *)colorArg;
@@ -63,7 +63,7 @@ int main(void) {
     int frames[]={-33,-4,-1,0,1,3,4,15,16,31,32,63,64};
     int i,j,k,f,kind,variant;
     for(i=0;i<7;++i) for(j=0;j<5;++j) for(k=0;k<5;++k) {
-        D_800E27EC=times[i]; particle.x=12; particle.z=-34;
+        g_FieldFxCurrentAge=times[i]; particle.x=12; particle.z=-34;
         particle.y=values[j]; particle.speed=values[k];
         assert(func_80195E10(1,&particle)==(times[i]>=16));
         assert(particle.x==12 && particle.z==-34);
@@ -76,13 +76,13 @@ int main(void) {
             unsigned int sizeOffset=((unsigned int)frames[f]<<8)&0x3F00;
             short sizeSample=(short)values[j];
             shadeOffset=((unsigned int)frames[f]<<9)&0x3E00;
-            memset(D_800966EC,0,sizeof(D_800966EC));
-            memcpy((char *)D_800966EC+sizeOffset,&sizeSample,2);
-            D_800E27EC=frames[f]+1;
+            memset(rcossin_tbl,0,sizeof(rcossin_tbl));
+            memcpy((char *)rcossin_tbl+sizeOffset,&sizeSample,2);
+            g_FieldFxCurrentAge=frames[f]+1;
             wantSize=sizeSample*2;
             wantShade=(short)0x8001>>6;
-            D_800F3368.palette=kind; D_800F3428=variant;
-            D_800E1204[kind]=65535;
+            g_FieldFxSpriteParams.palette=kind; g_FieldFxAltPaletteFlag=variant;
+            g_FieldFxPaletteTable[kind]=65535;
             wantPalette=65535+(kind==4 && variant ? 9:5);
             D_8018F1E4.r=1; D_8018F1E4.g=128;
             D_8018F1E4.b=255; D_8018F1E4.unknown=37;

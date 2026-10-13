@@ -12,7 +12,7 @@ typedef union RoomOrbitSpinBurstTilt {
 
 /* Glow sprite with an explicit sprite size; the eighth argument is zero at
  * every known call site. */
-void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,
+void FieldFx_DrawPulledSprite(GteShortVector *position, int scale_x, int scale_y,
                    int texture, int clut, int page, int intensity, int arg7,
                    int size);
 

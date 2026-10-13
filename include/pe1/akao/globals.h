@@ -18,7 +18,7 @@ extern volatile int D_8009D2E0;
 
 /* CD audio mix volume passed to CdMix (a CdlATV). */
 extern struct CdlATV g_AkaoCdVolume;
-/* High byte of the global pitch depth word D_8009D2CC. */
+/* High byte of the global pitch depth word g_AkaoGlobalPitchDepth. */
 extern unsigned char D_8009D2CE;
 
 /* Global slides stepped every fourth tick: counters, 16.16 steps and the
@@ -62,7 +62,7 @@ extern u16 g_AkaoTrack5ATransposeValue;
 extern int g_AkaoSeqLoopCounter;
 
 /* Sound-effect sequencer masks next to the 34/38/3C dirty masks. */
-extern unsigned int D_800BCD58;
+extern unsigned int g_AkaoSfxAllocatedVoiceMask;
 extern unsigned int D_800BCD64;
 
 /* Fields of the first sound-effect channel (g_AkaoVoiceChannelTable[0]),

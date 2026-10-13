@@ -21,18 +21,18 @@ int func_8019A4CC(int mode,Effect *effect) {
     /* Layout only: purpose of these eight original frame bytes is unknown. */
     int stack_pad[2];
     if(mode==1) {
-        if(D_800E27EC>=16) return 1;
+        if(g_FieldFxCurrentAge>=16) return 1;
     } else if(mode==2) {
-        int frame=D_800E27EC-1;
+        int frame=g_FieldFxCurrentAge-1;
         unsigned int sizeOffset=((unsigned int)(u8)frame<<8)&0x3F00;
         unsigned int shadeOffset=((unsigned int)frame<<9)&0x3E00;
-        int size=D_800966EC[sizeOffset/4].part.sin*2+4096;
-        int shade=(short)D_800966EC[shadeOffset/4].word>>5;
+        int size=rcossin_tbl[sizeOffset/4].part.sin*2+4096;
+        int shade=(short)rcossin_tbl[shadeOffset/4].word>>5;
         parameters.x=0;
         parameters.y=((Object *)ANIM_OWNER_AS(RoomM273EffectStateContext)->state.mode)->value;
         parameters.z=(unsigned int)frame<<8;
         parameters.flags=1;
-        func_800D0728(effect->position,32,96,8,&parameters,size,size,
+        FieldFx_DrawRingBand(effect->position,32,96,8,&parameters,size,size,
             (struct RenderColor *)D_8019ACDC,(struct RenderColor *)D_8019ACE0,shade,1);
     }
     return 0;
@@ -61,18 +61,18 @@ s32 func_8019A628(s32 arg0) {
         if (arg0 != 0) {
             return 0;
         }
-        return func_800CE560(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 5,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM273PoolContext)->pool, 8, 5,
                              (FieldFxCallbackListCallback)func_8019A720);
     }
 
     if (D_8019AF6B != 0) {
         return 2;
     }
-    if ((D_800E27EC & 3) != 0) {
+    if ((g_FieldFxCurrentAge & 3) != 0) {
         return 0;
     }
 
-    obj = func_800CE610(ANIM_POOL_AS(RoomM273PoolContext)->pool);
+    obj = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM273PoolContext)->pool);
     if (obj != 0) {
         *(u16 *)(obj + 0) = D_8019AEFC.x;
         *(u16 *)(obj + 2) = D_8019AEFE;
@@ -100,7 +100,7 @@ s32 func_8019A720(s32 mode, RoomM273ArcCallbackState *state) {
     volatile GteRotation rotation;
 
     if (mode == 1) {
-        if (D_800E27EC >= 0x10) {
+        if (g_FieldFxCurrentAge >= 0x10) {
             result = 1;
             return result;
         }
@@ -116,12 +116,12 @@ s32 func_8019A720(s32 mode, RoomM273ArcCallbackState *state) {
         rotation.y = 0;
         rotation.flags = 0;
         callState = state;
-        day = D_800E27EC - 1;
+        day = g_FieldFxCurrentAge - 1;
         count = 0x10;
         rotationValue = day << 7;
         rotation.z = rotationValue;
-        packed = D_800966EC[(day << 6) & 0xFC0].word;
-        func_800D004C((GteShortVector *)callState, 0x100, 0x100, count, (GteRotation *)&rotation,
+        packed = rcossin_tbl[(day << 6) & 0xFC0].word;
+        FieldFx_DrawStarFan((GteShortVector *)callState, 0x100, 0x100, count, (GteRotation *)&rotation,
         ((packed << 16) >> 16) + 0x400,
         ((packed << 16) >> 16) + 0x400,
         (struct RenderColor *)D_8019AB70, (struct RenderColor *)D_8019AD7C, packed >> 21, 1);

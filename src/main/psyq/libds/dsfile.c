@@ -17,38 +17,38 @@ PE1_STATIC_ASSERT(sizeof(DslFILE) == 24, ds_search_file_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(DslFILE, name) == 8, ds_search_file_name_offset);
 
 /* Psy-Q 4.6 DSFILE.OBJ: private diagnostics and persistent media state. */
-const char D_80011E6C[] =
+const char g_DsPathLevelErrorFormat[] =
     "%s: path level (%d) error\n";
-const char D_80011E88[] =
+const char g_DsDirNotFoundFormat[] =
     "%s: dir was not found\n";
-const char D_80011EA0[] =
+const char g_DsSearchFileDiscErrorText[] =
     "DsSearchFile: disc error\n";
-const char D_80011EBC[] =
+const char g_DsSearchComponentFormat[] =
     "DsSearchFile: searching %s...\n";
-const char D_80011EDC[] = "%s:  found\n";
-const char D_80011EE8[] = "%s: not found\n";
-const char D_80011EF8[] =
+const char g_DsComponentFoundFormat[] = "%s:  found\n";
+const char g_DsComponentNotFoundFormat[] = "%s: not found\n";
+const char g_DsNewMediaPvdReadErrorText[] =
     "DS_newmedia: Read error in ds_read(PVD)\n";
-const char D_80011F24[] = "CD001";
-const char D_80011F2C[] =
+const char g_DsIso9660Magic[] = "CD001";
+const char g_DsNewMediaPvdFormatErrorText[] =
     "DS_newmedia: Disc format error in ds_read(PVD)\n";
-const char D_80011F5C[] =
+const char g_DsNewMediaPtReadErrorFormat[] =
     "DS_newmedia: Read error (PT:%08x)\n";
-const char D_80011F80[] =
+const char g_DsNewMediaSearchingDirText[] =
     "DS_newmedia: sarching dir..\n";
-const char D_80011FA0[] =
+const char g_DsDirectoryEntryFormat[] =
     "\t%08x,%04x,%04x,%s\n";
-const char D_80011FB4[] =
+const char g_DsDirectoryCountFormat[] =
     "DS_newmedia: %d dir entries found\n";
-const char D_80011FD8[] =
+const char g_DsCacheFileDirNotFoundText[] =
     "DS_cachefile: dir not found\n";
-const char D_80011FF8[] =
+const char g_DsCacheFileSearchingText[] =
     "DS_cachefile: searching...\n";
-const char D_80012014[] = ".";
-const char D_80012018[] = "..";
-const char D_8001201C[] =
+const char g_DsDotName[] = ".";
+const char g_DsDotDotName[] = "..";
+const char g_DsCacheEntryFormat[] =
     "\t(%02x:%02x:%02x) %8d %s\n";
-const char D_80012038[] =
+const char g_DsCacheCountFormat[] =
     "DS_cachefile: %d files found\n";
 const u8 dsfile_rodata_padding[4] = {0};
 
@@ -93,19 +93,19 @@ DslFILE *DsSearchFile(DslFILE *output, char *input_name) {
         if (directory == not_found) { component[0] = 0; break; }
     }
     if (depth >= 8) {
-        if (CD_debug > 0) printf(D_80011E6C, name, depth);
+        if (CD_debug > 0) printf(g_DsPathLevelErrorFormat, name, depth);
         return 0;
     }
     if (!*(signed char *)component) {
-        if (CD_debug > 0) printf(D_80011E88, name);
+        if (CD_debug > 0) printf(g_DsDirNotFoundFormat, name);
         return 0;
     }
     *cursor = 0;
     if (!DS_cachefile(directory)) {
-        if (CD_debug > 0) puts(D_80011EA0);
+        if (CD_debug > 0) puts(g_DsSearchFileDiscErrorText);
         return 0;
     }
-    if (CD_debug > 1) printf(D_80011EBC, component);
+    if (CD_debug > 1) printf(g_DsSearchComponentFormat, component);
     depth = 0;
     base = D_800A36B8[0];
     entry = (DslFILE *)(base - 8);
@@ -114,7 +114,7 @@ DslFILE *DsSearchFile(DslFILE *output, char *input_name) {
          entry++, entry_name += sizeof(DslFILE), depth++, offset += sizeof(DslFILE)) {
         if (!((signed char *)D_800A36B8)[offset]) break;
         if (_cmp(entry_name, component)) {
-            if (CD_debug > 1) printf(D_80011EDC, component);
+            if (CD_debug > 1) printf(g_DsComponentFoundFormat, component);
             /* Copy the aligned 24-byte record in the retail four-word/two-word order. */
             {
                 u32 word0 = ((u32 *)entry)[0];
@@ -135,7 +135,7 @@ DslFILE *DsSearchFile(DslFILE *output, char *input_name) {
         }
         asm volatile("" : : "r"(depth));
     }
-    if (CD_debug > 0) printf(D_80011EE8, component);
+    if (CD_debug > 0) printf(g_DsComponentNotFoundFormat, component);
     return 0;
 }
 

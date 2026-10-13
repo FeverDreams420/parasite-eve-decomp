@@ -1,12 +1,12 @@
 #ifndef PE1_EXT_F475C29C850F
 #define PE1_EXT_F475C29C850F
-extern char D_80011D74[];
-extern char D_80011D94[];
-extern char D_80011DB0[];
-extern char D_80011DD8[];
-extern char D_80011DF8[];
-extern char D_80011E0C[];
-extern char D_80011E3C[];
-extern char D_80011E44[];
-extern char D_80011E4C[];
+extern char g_DsStatusHeaderText[];
+extern char g_DsCommandStatusFormat[];
+extern char g_DsLastCommandFormat[];
+extern char g_DsCommandRemainFormat[];
+extern char g_DsSystemTimerFormat[];
+extern char g_DsCallbacksFormat[];
+extern char g_DsActiveText[];
+extern char g_DsNoneText[];
+extern char g_DsReadySystemFormat[];
 #endif /* PE1_EXT_F475C29C850F */

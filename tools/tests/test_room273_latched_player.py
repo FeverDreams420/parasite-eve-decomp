@@ -37,20 +37,20 @@ static RoomM273PlayerTransform transform;
 static RoomM273SpritePoolEffect output;
 static RoomM273WorldPosition sentinel;
 static unsigned char pool[32];
-FieldFxTaskSlot *D_800F33E0=(FieldFxTaskSlot *)&context;
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&context;
 FieldActor *g_PlayerEntity=&owner;
-int D_800E27EC;
+int g_FieldFxCurrentAge;
 unsigned char D_8019AE5C;
-unsigned short D_800E11FA,D_800E2850[8];
-RenderEffectParameters D_800F3368;
+unsigned short g_FieldFxTpageSlot11,g_FieldFxTpageTable[8];
+RenderEffectParameters g_FieldFxSpriteParams;
 static int init,allocations,fail;
 int func_80193870(int mode, RoomM273SpritePoolEffect *state) { assert(0); return 0; }
-int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
+int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(init++==0 && p==(char *)pool && stride==4 && count==1 &&
            callback==(FieldFxCallbackListCallback)func_80193870);
     assert(D_8019AE5C==0); return 36;
 }
-void *func_800CE610(char *p) {
+void *FieldFx_AcquireCallbackSlot(char *p) {
     assert(p==(char *)pool && allocations++==0 && D_8019AE5C==0);
     g_PlayerEntity=&replacement;
     return fail ? 0 : &output;
@@ -65,7 +65,7 @@ int main(void) {
     for(i=0;i<6;++i) for(l=0;l<3;++l) for(k=0;k<256;++k) for(f=0;f<2;++f) {
         int stopped=counters[i]>=20 || latches[l]!=0;
         int wanted=!stopped && k<4;
-        D_800E27EC=counters[i]; D_8019AE5C=latches[l]; owner.mode=k;
+        g_FieldFxCurrentAge=counters[i]; D_8019AE5C=latches[l]; owner.mode=k;
         g_PlayerEntity=&owner; owner.render_object.matrices=0; allocations=0; fail=f;
         output.position=&sentinel;
         assert(func_801939B4(1)==(stopped ? 2:0) && allocations==wanted);
@@ -74,15 +74,15 @@ int main(void) {
     }
     for(l=0;l<3;++l) for(i=0;i<8;++i) {
         int enabled=latches[l]!=0;
-        D_8019AE5C=latches[l]; D_800E11FA=i; D_800E2850[i]=65535-i;
-        D_800F3368.parameter00=D_800F3368.parameter02=D_800F3368.palette=D_800F3368.parameter06=99;
-        D_800F3368.tpage=D_800F3368.parameter0A=D_800F3368.depth=D_800F3368.extent_x=D_800F3368.extent_y=99;
+        D_8019AE5C=latches[l]; g_FieldFxTpageSlot11=i; g_FieldFxTpageTable[i]=65535-i;
+        g_FieldFxSpriteParams.parameter00=g_FieldFxSpriteParams.parameter02=g_FieldFxSpriteParams.palette=g_FieldFxSpriteParams.parameter06=99;
+        g_FieldFxSpriteParams.tpage=g_FieldFxSpriteParams.parameter0A=g_FieldFxSpriteParams.depth=g_FieldFxSpriteParams.extent_x=g_FieldFxSpriteParams.extent_y=99;
         assert(func_801939B4(2)==0);
-        assert(D_800F3368.parameter00==(enabled?32:99) && D_800F3368.parameter02==(enabled?2:99));
-        assert(D_800F3368.palette==(enabled?3:99) && D_800F3368.parameter06==(enabled?1:99));
-        assert(D_800F3368.tpage==(enabled?65535-i:99));
-        assert(D_800F3368.parameter0A==(enabled?0:99) && D_800F3368.depth==(enabled?0:99));
-        assert(D_800F3368.extent_x==(enabled?32:99) && D_800F3368.extent_y==(enabled?32:99));
+        assert(g_FieldFxSpriteParams.parameter00==(enabled?32:99) && g_FieldFxSpriteParams.parameter02==(enabled?2:99));
+        assert(g_FieldFxSpriteParams.palette==(enabled?3:99) && g_FieldFxSpriteParams.parameter06==(enabled?1:99));
+        assert(g_FieldFxSpriteParams.tpage==(enabled?65535-i:99));
+        assert(g_FieldFxSpriteParams.parameter0A==(enabled?0:99) && g_FieldFxSpriteParams.depth==(enabled?0:99));
+        assert(g_FieldFxSpriteParams.extent_x==(enabled?32:99) && g_FieldFxSpriteParams.extent_y==(enabled?32:99));
         assert(D_8019AE5C==latches[l]);
     }
     allocations=0;

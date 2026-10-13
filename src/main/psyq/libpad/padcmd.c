@@ -255,7 +255,7 @@ int LIBPAD_PADCMD_text_3A0(CardObj *inPort) {
             }
             base = base + offset;
             record->data = base;
-            D_800A5AD0 = base;
+            g_PadInfoWriteCursor = base;
         } else {
             register u8 *response = port->response_3c;
             bytes = 6;
@@ -263,7 +263,7 @@ int LIBPAD_PADCMD_text_3A0(CardObj *inPort) {
         }
         bytes--;
         if (bytes != -1) {
-            register u8 **destination = &D_800A5AD0;
+            register u8 **destination = &g_PadInfoWriteCursor;
             do {
                 register int remaining = port->combinationBytesRemaining;
                 bytes--;

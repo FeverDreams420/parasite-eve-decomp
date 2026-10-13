@@ -99,9 +99,9 @@ extern u16 g_AyaHpMax[]; /* Maximum HP. */
 int Menu_StepNameEntry(MenuWidgetNode *parent, unsigned int flags);
 int Menu_StepNameEntryAlt(MenuWidgetNode *parent, unsigned int input);
 /* Name entry panel outlines (item and save names) and the save preview. */
-extern u8 D_80092354[];
-extern u8 D_80092380[];
-extern u8 D_800923A0[];
+extern u8 g_MenuRenamePanelPointsWindow0[];
+extern u8 g_MenuRenamePanelPointsWindow1[];
+extern u8 g_MenuRenamePreviewPanelPoints[];
 extern u8 *g_MenuItemIconGlyphTable;
 
 #endif

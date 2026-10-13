@@ -36,7 +36,7 @@
  *     start = baseTable[idx];  end = endTable[idx];  count = end - start;
  *     CdRom_ReadSectorsFromLba(g_PeImageBaseLba + start, dst, count);
  *   Known tables (data lives in Data_0818A0.inc region; dump for exact rows):
- *     D_800930D8 / D_800930DA  entity-texture start / end sectors
+ *     D_800930D8 / g_PeImageSectorBoundsNext  entity-texture start / end sectors
  *                              (Scene_LoadEntityTexture(s), Render_InitDisplayLists)
  *     D_80093378 / D_8009337C  room data start / offset (Scene_LoadRoom)
  *     g_SceneInitLbaTbl0 / g_SceneInitLbaTbl1

@@ -22,6 +22,6 @@ int func_80195320(int mode, u16 *out);
 extern char D_80195E64[];
 extern s16 D_80196094;
 
-void func_800CF844(void *, void *, int, void *, int, int);
+void FieldFx_OffsetPointByAngles(void *, void *, int, void *, int, int);
 
 #endif

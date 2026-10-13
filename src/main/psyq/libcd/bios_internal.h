@@ -6,17 +6,17 @@
 
 /* Compare the previous poll count, then commit the incremented counter. */
 static inline int count_poll(void) {
-    int count = D_800A347C;
+    int count = g_CdTimeoutPollCount;
     int old = count++;
-    D_800A347C = count;
+    g_CdTimeoutPollCount = count;
     return old;
 }
 
 static inline int timed_out(const char **commands, const char **events,
                             CdInterruptEvents *interrupts) {
-    if (VSync(-1) > D_800A3478 || count_poll() > 0x3C0000) {
-        puts(D_80011B18);
-        printf(D_80011B28, D_800A3480, commands[g_CdLastCom],
+    if (VSync(-1) > g_CdTimeoutDeadlineVsync || count_poll() > 0x3C0000) {
+        puts(g_CdTimeoutText);
+        printf(g_CdTimeoutDetailFormat, g_CdTimeoutFuncName, commands[g_CdLastCom],
                events[interrupts->sync], events[interrupts->ready]);
         CD_flush();
         return -1;
@@ -39,9 +39,9 @@ static inline void dispatch_interrupts(u8 *sync, u8 *ready) {
     int pending;
     while ((pending = getintr()) != 0) {
         if ((pending & 4) && g_CdReadyCallback)
-            g_CdReadyCallback(*ready, D_800A3468);
+            g_CdReadyCallback(*ready, g_CdReadyResult);
         if ((pending & 2) && g_CdSyncCallback)
-            g_CdSyncCallback(*sync, D_800A3460);
+            g_CdSyncCallback(*sync, g_CdSyncResult);
     }
     *g_CdRegIndexBase = bank;
 }

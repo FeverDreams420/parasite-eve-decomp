@@ -79,7 +79,7 @@ extern u8 *D_80190760;
 extern u8 D_801906F0[];
 
 void FieldFx_ModelShiftColors(u8 *data, int r, int g, int b);
-int func_800CEB8C(void *position, GteShortVector *target, int radius);
+int FieldFx_IsPlayerInSegmentBand(void *position, GteShortVector *target, int radius);
 GteMatrix *MulMatrix0(GteMatrix *first, GteMatrix *second, GteMatrix *out);
 
 #endif

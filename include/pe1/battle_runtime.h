@@ -32,12 +32,12 @@ typedef struct BattleEnemySlot {
 } BattleEnemySlot;
 
 extern int D_8009D2FC;
-extern int D_8009D258;
-extern s8 D_8009CE40; /* item target mode: 0, or 4..7 while picking */
+extern int g_BattleEffectPmSlot;
+extern s8 g_BattleTargetCycleMode; /* item target mode: 0, or 4..7 while picking */
 extern u8 D_8009D2D8;
 /* Actions left in the battle turn (Save_ResetGlobalFlags clears it). */
 extern unsigned char g_BattleRemainingActions;
-extern u8 D_8009CE38[4];
+extern u8 g_BattleActionAnimModes[4];
 extern unsigned int g_BattleResultFlags;
 extern u8 D_8009D1CE;
 /* D_8009D1CE read as the signed save-overlay flag, and the actor effect
@@ -52,20 +52,20 @@ extern int g_BattleModeState;
 /* Action record the battle menu fills in (Menu_RunFrameWithArg). Its packed
  * words are also declared on their own: retail reads each of them through
  * its own absolute address. */
-extern BattleAction D_800A76D8;
-extern BattleEffectBits D_800A76DC;
-extern BattleAttackBits D_800A76E4;
-extern BattleTurnBits D_800A76E8;
+extern BattleAction g_BattleMenuActionRecord;
+extern BattleEffectBits g_BattleMenuEffectBits;
+extern BattleAttackBits g_BattleMenuAttackBits;
+extern BattleTurnBits g_BattleMenuTurnBits;
 extern s8 D_8009D2B0;
 extern struct FieldActor *g_FieldActorListHead; /* actor list head */
 extern void *D_8009D1F8;
-extern u8 D_8009159C[];
-extern u8 D_800915C0[];
-extern const EnemyCombatant D_800109B0;
-extern BattleEnemySlot D_800A5D58[7];
+extern u8 g_EscapeFailedTexts[];
+extern u8 g_EscapeBlockedTexts[];
+extern const EnemyCombatant g_EnemyCombatantInitial;
+extern BattleEnemySlot g_BattleEnemySlots[7];
 extern u8 g_EntityInstanceCounter;
 extern s8 D_8009D2A0;
-extern u8 D_8009CE74;
+extern u8 g_BattleStepIndex;
 extern u8 g_BattleEnemyEscapeFlag;
 /* Frames since the player halted at battle end; Menu_MainUpdate counts it up
  * to 0x5A. */

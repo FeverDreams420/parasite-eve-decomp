@@ -1,17 +1,17 @@
 /* ASSEMBLER: GNU */
-/* Psy-Q LIBPAD PADSEQD.OBJ: _padInitDirSeq, func_80084B78, LIBPAD_PADSEQD_text_108, _dirFailAuto, CardObj_IsTransferActive. */
+/* Psy-Q LIBPAD PADSEQD.OBJ: _padInitDirSeq, LIBPAD_PADSEQD_text_34, LIBPAD_PADSEQD_text_108, _dirFailAuto, CardObj_IsTransferActive. */
 
 #include "pe1/card_obj.h"
 #include "pe1/psyq_pad_main.h"
 
-int func_80084B78(CardObj *obj);
+int LIBPAD_PADSEQD_text_34(CardObj *obj);
 int CardObj_IsTransferActive(CardObj *obj);
 void LIBPAD_PADSEQD_text_108(CardObj *port);
 
 void _padInitDirSeq(void) {
     void (*response_handler)(CardObj *);
 
-    g_MemCardStateDispatchFn = func_80084B78;
+    g_MemCardStateDispatchFn = LIBPAD_PADSEQD_text_34;
     g_MemCardIsTransferActiveFn = CardObj_IsTransferActive;
     response_handler = LIBPAD_PADSEQD_text_108;
     g_MemCardResponseHandler = response_handler;
@@ -20,7 +20,7 @@ void _padInitDirSeq(void) {
 void _padCmdParaMode(CardObj *obj, unsigned char value);
 void _padSendAtLoadInfo(CardObj *obj);
 
-int func_80084B78(CardObj *obj) {
+int LIBPAD_PADSEQD_text_34(CardObj *obj) {
     register int compare asm("$2");
     int state;
 

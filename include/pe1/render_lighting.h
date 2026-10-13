@@ -10,9 +10,9 @@ typedef union RenderLightingMatrix {
     u32 words[8];
 } RenderLightingMatrix;
 
-extern RenderLightingMatrix D_800BEA40, D_800BEA60;
+extern RenderLightingMatrix g_RenderLightingState, D_800BEA60;
 
-/* Lighting block at D_800BEA40: the light-direction matrix, the light
+/* Lighting block at g_RenderLightingState: the light-direction matrix, the light
  * color matrix (one column per light) and the per-light 8-bit colors. */
 typedef struct RenderLightingState {
     RenderLightingMatrix light;  /* 0x00 */
@@ -29,6 +29,6 @@ typedef struct RenderLightColor {
 } RenderLightColor;
 
 PE1_STATIC_ASSERT(sizeof(RenderLightColor) == 3, render_light_color_size);
-extern RenderLightColor D_800BD025;
+extern RenderLightColor g_RoomLightTint;
 
 #endif

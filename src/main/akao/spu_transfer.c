@@ -105,7 +105,7 @@ void Spu_InitVoiceState(void) {
     g_AkaoSequencerState.primary.pitch_slide_duration = 0;
 
     g_AkaoGlobalD2CCSlideCounter = 0;
-    D_8009D2CC = 0;
+    g_AkaoGlobalPitchDepth = 0;
     g_AkaoGlobalD2D0SlideCounter = 0;
     D_8009D2D0 = 0;
     g_AkaoGlobalPitchSlideCounter = 0;
@@ -118,7 +118,7 @@ void Spu_InitVoiceState(void) {
     g_AkaoSequencerState.secondary.adsr_dirty_mask = 0;
     g_AkaoSequencerState.secondary.volume_dirty_mask = 0;
     g_AkaoSequencerState.secondary.key_off_dirty_mask = 0;
-    D_800B8628[0].opcode.word = 0;
+    g_AkaoMessageQueue[0].opcode.word = 0;
     g_AkaoSequencerState.primary.ticks_per_beat = 0;
     g_AkaoSequencerState.primary.beat = 0;
     g_AkaoSequencerState.primary.beats_per_measure = 0;
@@ -139,15 +139,15 @@ void Spu_InitVoiceState(void) {
     g_AkaoSpuCommonAttr.ext.mix = 0;
     SpuSetCommonAttr(&g_AkaoSpuCommonAttr);
 
-    D_8009D268 = 0;
+    g_AkaoMessageQueueLock = 0;
     g_AkaoSeqLoopCounter = 0;
     g_AkaoVoicePortamentoResetMask = 0;
-    D_800C0DD8 = 0;
-    D_800C0DD4 = 0;
-    D_800C0DD0 = 0;
+    g_AkaoFmEnableMask = 0;
+    g_AkaoNoiseEnableMask = 0;
+    g_AkaoReverbEnableMask = 0;
     /* The message-queue lock is shared with the timer interrupt, so the
      * original reloads it before copying it to the three queue words. */
-    reset = D_8009D268;
+    reset = g_AkaoMessageQueueLock;
     g_AkaoMessageQueueCount = reset;
     g_AkaoSeqPendingFlags = reset;
     D_8009D2E0 = reset;
@@ -190,10 +190,10 @@ void Spu_InitVoiceState(void) {
     *(int *)&bank[1].key_off_request_mask = 0;
     *(int *)&bank[1].allocated_voice_mask = 0;
     *(int *)&bank[1].key_on_request_mask = 0;
-    D_800BCD68 = 1;
+    g_AkaoSfxTickAccumulator = 1;
     D_800BCD64 = 0x66A80000;
     g_SpuPendingKeyOffMask = 0;
-    D_800BCD58 = 0;
+    g_AkaoSfxAllocatedVoiceMask = 0;
     g_AkaoVoiceMaskScratch = 0;
     *(int *)&bank[1].volume = 0x3FFF0000;
     *(int *)&bank[0].volume = 0x3FFF0000;
@@ -232,8 +232,8 @@ void Spu_InitHardware(void) {
 }
 
 void Spu_SetSampleTableBase(unsigned short *table) {
-    D_8009D240 = table;
-    D_8009D260 = (char *)&table[0x400];
+    g_AkaoSampleOffsetTable = table;
+    g_AkaoSampleDataBase = (char *)&table[0x400];
 }
 
 void Spu_Shutdown(void) {

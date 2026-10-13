@@ -143,7 +143,7 @@ int RoomEffect_GroundEruptionRelease(struct RoomEnt *o);
 int RoomEffect_GroundEruptionNop6(void);
 
 int *FieldFx_VarPtr(int index);
-int func_800C66C8(void *object, int message, void *state);
-void func_800C4E50(void *params);
+int FieldFx_PlaySoundAtMatrixPosition(void *object, int message, void *state);
+void FieldFx_BuildRingGeometry(void *params);
 
 #endif

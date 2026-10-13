@@ -462,7 +462,7 @@ segments:
       # the actor voice-bank loader, the sound and DS shell reset,
       # Boot_InitGameState (called from main), the memory layout and the scene
       # voice-bank reset: one default-profile unit; the voice-bank table
-      # D_80094488 is read by the loader and cleared by the reset (private
+      # g_AkaoVoiceBankEntries is read by the loader and cleared by the reset (private
       # evidence into the reset; helper/call/private evidence over the rest).
       - [0x5A0D4, c, asset/game_state]
       # Scene and room loading: startup data and field background loading (scene
@@ -914,7 +914,7 @@ segments:
       - [0x8DA54, .data, field/actor_collision]
       - [0x8DA58, data, main/dtail_gp_post_collision_actor]
       # End of the small COMMON pool (the last item of 8 bytes or less; the
-      # .bss object run starts with D_8009D310). New .sbss and small COMMON
+      # .bss object run starts with g_ScriptNodes). New .sbss and small COMMON
       # go here, inside the positive $gp window (ld_postpass.py).
       - [0x8DB10, linker_offset, main_scommon]
       - [0x8DB10, data, main/dtail_gp_post_scommon]
@@ -953,9 +953,9 @@ segments:
       - [0xB66B0, c, fieldfx/collision]
       # UV scroll, render-state setters, colour-table helpers and the textured model draw
       # share the model header and the tpage/CLUT/semi-transparency state (TU evidence:
-      # private data D_800F346C, D_800F3414, D_800F33E4, D_800F3420).
+      # private data g_FieldFxModelTpage, g_FieldFxModelClut, g_FieldFxModelSemiTrans, g_FieldFxModelDepthBias).
       - [0xB755C, c, fieldfx/model]
-      # Eight field effect objects. The descriptor table D_80094188 lists them; each
+      # Eight field effect objects. The descriptor table g_PmCmdHandlerArray lists them; each
       # descriptor names a setup function, the spawn/register/update entry points and the
       # particle and state callback lists. Every module starts with its setup function and
       # ends with its state callbacks, and the data each setup function points at sits after
@@ -968,16 +968,16 @@ segments:
       # Transform, direction and colour helpers with the shape builders that use them (G1558);
       # the effect primitive builders: rotated triangle, history trail, fade tile, point tiles,
       # rotated quad (G1559), orbit tile, glow line, textured ribbon, point history and pulled
-      # sprite; and effect task spawning: the descriptor at D_800E13D4 names the asset
+      # sprite; and effect task spawning: the descriptor at g_FieldFxTaskClass names the asset
       # bootstrap, the object lifecycle callbacks and the task spawn entry together.
       - [0xBF0F0, c, fieldfx/geometry]
       # Sprite effects: falling, scatter-burst and spiral sprites; ember drift, the fan-sweep
       # spark instance and its controller sharing the spark pools (G1583); the arcing emitter,
       # orbiting/vertical/helical callbacks (G1588 draw helpers and literals) and the damped
-      # spark, whose effect programs at D_800E1920..D_800E1AF0 chain their callbacks with the
+      # spark, whose effect programs at g_FieldFxTaskProgramCmd94..g_FieldFxTaskProgramCmd97 chain their callbacks with the
       # fan-sweep sparks; the two spinning flares, the emitter that spawns the second (call +
-      # private anchor D_800E2214) and the rotating ballistic sprite the effect program at
-      # D_800E1BA8 pairs with it.
+      # private anchor g_SpinningModelAnchorB) and the rotating ballistic sprite the effect program at
+      # g_FieldFxTaskProgramCmd99 pairs with it.
       - [0xC5128, c, fieldfx/sprite_effects]
       # Emitter and flash effects: wave and diamond emitters, radial and converging flashes,
       # twin model, drifting sprite, settling glow, fade particle, rotating effect and point

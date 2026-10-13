@@ -80,7 +80,7 @@ void Menu_ComputeGammaLut(int arg0, int arg1) {
     u8 *iter_end;
     u8 *check_end;
 
-    base = D_800A1878;
+    base = g_MenuSaveBgFadeLut;
     base[0] = 0;
     ptr = base;
     limit = 0x100;
@@ -91,7 +91,7 @@ void Menu_ComputeGammaLut(int arg0, int arg1) {
         iter_end = check_end;
         do {
             if (*ptr >= arg1) {
-                base = D_800A1878;
+                base = g_MenuSaveBgFadeLut;
                 limit = (ptr - base) + 1;
                 g_MenuSaveBgFadeLutLen = limit;
                 return;
@@ -102,7 +102,7 @@ void Menu_ComputeGammaLut(int arg0, int arg1) {
     }
 
 out:
-    base = D_800A1878;
+    base = g_MenuSaveBgFadeLut;
     limit = (ptr - base) + 1;
     g_MenuSaveBgFadeLutLen = limit;
 }
@@ -128,7 +128,7 @@ void Menu_SaveBgApplyFadeStep(void) {
         g_MenuSaveBgFadeState = 7;
     }
 
-    level = D_800A1878[g_MenuSaveBgFadeIndex];
+    level = g_MenuSaveBgFadeLut[g_MenuSaveBgFadeIndex];
     {
         int product = level * g_MenuSaveBgFadeTint;
         bias = product << 5;
@@ -617,7 +617,7 @@ void Menu_CreateBonusPointAllocationView(void) {
     (MenuWidget_CreateSimpleNode(0x18, 0, 0, 0))->draw =
         Menu_DrawBonusPointSlotValue;
     temp_v0_2 = temp_v1_reg = MenuWidget_CreateSimpleNode(0x2D, 0, 0, 0);
-    var_s4 = &D_800C0E00.stats.levels[0];
+    var_s4 = &g_AyaSaveState.stats.levels[0];
     var_s1 = 0;
     var_s0 = g_BonusPointStatDeltas;
     var_s3 = g_BonusPointStatQueryResults;
@@ -632,7 +632,7 @@ void Menu_CreateBonusPointAllocationView(void) {
         var_s0++;
         var_s2++;
     }
-    g_BonusPointDisplayValue = D_800C0E00.bonus_points;
+    g_BonusPointDisplayValue = g_AyaSaveState.bonus_points;
 }
 
 void Menu_DrawStatusPanel(void) {
@@ -645,12 +645,12 @@ void Menu_DrawStatusPanel(void) {
     Draw_OffsetCursor(0, 0x15);
     Draw_AllocSprite(0x97);
     Draw_OffsetCursor(0x3C, 0);
-    Draw_PrintNumberWidth3(D_800C0E00.level + 1);
+    Draw_PrintNumberWidth3(g_AyaSaveState.level + 1);
     Draw_OffsetCursor(-0x78, 0x1A);
     Draw_AllocSprite(0x98);
     Draw_OffsetCursor(0x42, 0);
-    if (D_800C0E00.level < 0x62U) {
-        var_a0 = ((s32 *)Aya_GetLevelExpTable())[D_800C0E00.level + 1] - D_800C0E00.total_exp;
+    if (g_AyaSaveState.level < 0x62U) {
+        var_a0 = ((s32 *)Aya_GetLevelExpTable())[g_AyaSaveState.level + 1] - g_AyaSaveState.total_exp;
     } else {
         var_a0 = 0;
     }
@@ -658,10 +658,10 @@ void Menu_DrawStatusPanel(void) {
     Draw_OffsetCursor(-0x7C, 0x15);
     Draw_AllocSprite(0x94);
     Draw_OffsetCursor(0, 0x10);
-    Menu_DrawActiveListSlot(D_800C0E00.equipped_weapon_slot);
+    Menu_DrawActiveListSlot(g_AyaSaveState.equipped_weapon_slot);
     Draw_OffsetCursor(0, 0x10);
-    if (D_800C0E00.equipped_armor_slot >= 0) {
-        Menu_DrawActiveListSlot(D_800C0E00.equipped_armor_slot);
+    if (g_AyaSaveState.equipped_armor_slot >= 0) {
+        Menu_DrawActiveListSlot(g_AyaSaveState.equipped_armor_slot);
         return;
     }
     Draw_PrintTextById(0x39);

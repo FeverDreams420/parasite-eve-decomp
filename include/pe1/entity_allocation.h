@@ -13,7 +13,7 @@ typedef struct EntityAllocationBlock {
 PE1_STATIC_ASSERT(sizeof(EntityAllocationBlock) == 8, entity_allocation_block_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(EntityAllocationBlock, address) == 4,
                   entity_allocation_block_address);
-extern EntityAllocationBlock D_800A7620[16];
+extern EntityAllocationBlock g_EntityAllocationTable[16];
 /* Bytes per allocation block in the render scratch buffer. */
 #define ENTITY_ALLOCATION_BLOCK_SIZE 0x47E0
 
@@ -25,10 +25,10 @@ typedef union EntityAllocationAddress {
 
 /* Entity pool storage cleared by Entity_ResetAllPools: the 0x800-byte work
  * buffer (also saved in the save tail), the 14 0x280-byte actor records at
- * D_800BEA90 (D_800BEA94 is the free-list link word of the first) and the
+ * g_EntityPool (D_800BEA94 is the free-list link word of the first) and the
  * pool's trailing record. */
 extern char g_EntityWorkBuffer[];
-extern char D_800BEA90[];
+extern char g_EntityPool[];
 extern char D_800BEA94[];
 extern int D_800C0B14[];
 extern int g_FieldMoveLock;

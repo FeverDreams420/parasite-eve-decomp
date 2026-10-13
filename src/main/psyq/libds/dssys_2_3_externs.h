@@ -6,5 +6,5 @@
 
 /* Word-offset views of the eight 16-byte history records. */
 extern int D_800A3614[], D_800A3618[], D_800A361C[];
-extern DsResult D_800A3500;
+extern DsResult g_DsSlotResultCopy;
 #endif /* PE1_EXT_30C3B6FA1917 */

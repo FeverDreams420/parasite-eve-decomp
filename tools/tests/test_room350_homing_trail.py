@@ -45,13 +45,13 @@ static int gteCalls,draws;
 '''
         harness = prefix + source + r'''
 typedef RoomM350Particle Particle;
-FieldFxObjectPrefix *D_800F32D0;
+FieldFxObjectPrefix *g_FieldFxOwner;
 FieldActor *g_PlayerEntity;
-int D_800E27EC,D_800F3428;
-GteSineWord D_800966EC[4096];
+int g_FieldFxCurrentAge,g_FieldFxAltPaletteFlag;
+GteSineWord rcossin_tbl[4096];
 short D_8019A802;
-RenderEffectParameters D_800F3368;
-u16 D_800E1204[65536];
+RenderEffectParameters g_FieldFxSpriteParams;
+u16 g_FieldFxPaletteTable[65536];
 RoomFloorY g_RoomFloorY[1];
 GteRotation D_8019A3C0;
 RenderColor D_8019A4E4,D_8019A3C8;
@@ -79,7 +79,7 @@ int FieldFx_VecToAngle(Vec3Fixed *a,Vec3Fixed *b) {
 }
 int FieldFx_TurnToward(int a,int b,int c) {
     assert(b==123); turnCalls++;
-    if(steering) { assert(a==-321 && c==expectedStep); D_800E27EC=7; }
+    if(steering) { assert(a==-321 && c==expectedStep); g_FieldFxCurrentAge=7; }
     return 456;
 }
 int Math_IntSqrt(int n) { return sqrtResult; }
@@ -90,12 +90,12 @@ GteMatrix *RotMatrixYXZ(GteShortVector *v,GteMatrix *m) {
     return m;
 }
 u_short GetClut(int x,int y) { assert(x==32 && y==104); return 0x5678; }
-void func_800CEE20(struct GteShortVector *p,struct GteRotation *a,int b,int c,int d,int e,int f,int g,struct RenderColor *h) {
+void FieldFx_DrawShapeQuads(struct GteShortVector *p,struct GteRotation *a,int b,int c,int d,int e,int f,int g,struct RenderColor *h) {
     assert(draws++==0 && p==&particle.position && a==0 && b==4096 && c==4096);
     assert(d==108 && e==0x5678 && f==1 && g==77 && h==0);
     particle.position.x=-5; particle.position.z=9; particle.tail.value.active.brightness=88;
 }
-void func_800D004C(struct GteShortVector *v,int a,int b,int c,struct GteRotation *d,int e,int f,struct RenderColor *g,struct RenderColor *h,int i,int j) {
+void FieldFx_DrawStarFan(struct GteShortVector *v,int a,int b,int c,struct GteRotation *d,int e,int f,struct RenderColor *g,struct RenderColor *h,int i,int j) {
     assert(draws++==1 && v->x==-5 && v->y==-123 && v->z==9);
     assert(a==192 && b==192 && c==8 && d==&D_8019A3C0 && e==4096 && f==4096);
     assert(g==&D_8019A4E4 && h==&D_8019A3C8 && i==88 && j==1);
@@ -107,13 +107,13 @@ static void reset(void) {
     /* The player's leading state pointer is read as an effect owner. */
     player.state=(FieldActorState *)&playerOwner;
     playerOwner.status=0; player.mode=4;
-    D_800F32D0=(FieldFxObjectPrefix *)&actor; g_PlayerEntity=&player;
-    D_800E27EC=0; D_8019A802=9; gteCalls=draws=turnCalls=steering=0; sqrtResult=128;
+    g_FieldFxOwner=(FieldFxObjectPrefix *)&actor; g_PlayerEntity=&player;
+    g_FieldFxCurrentAge=0; D_8019A802=9; gteCalls=draws=turnCalls=steering=0; sqrtResult=128;
 }
 int main(void) {
     int n,frame,hit,expected;
     for(n=0;n<65536;n++) {
-        reset(); D_800E27EC=48; D_8019A802=n;
+        reset(); g_FieldFxCurrentAge=48; D_8019A802=n;
         assert(func_801947BC(1,&particle)==1);
         assert((unsigned short)D_8019A802==(unsigned short)(n-1) && gteCalls==0 && D_8019A800==0);
     }
@@ -145,15 +145,15 @@ int main(void) {
         reset(); steering=1; player.mode=0;
         particle.motion.value.rotation.x=-1; particle.motion.value.rotation.y=-321;
         particle.motion.value.rotation.z=987;
-        particle.tail.value.active.speed=n; D_800966EC[0].word=(unsigned short)n;
-        D_800966EC[2055].word=(unsigned short)second;
+        particle.tail.value.active.speed=n; rcossin_tbl[0].word=(unsigned short)n;
+        rcossin_tbl[2055].word=(unsigned short)second;
         expectedStep=n/4; expectedYaw=456+80-(second*160)/4096;
         assert(func_801947BC(1,&particle)==0 && gteCalls==1 && turnCalls==1);
-        assert(D_800E27EC==7 && particle.tail.value.active.frame==1);
+        assert(g_FieldFxCurrentAge==7 && particle.tail.value.active.frame==1);
         assert(particle.tail.value.active.hit==0);
     }
-    reset(); particle.tail.value.active.brightness=77; D_800F3368.palette=4; D_800F3428=1;
-    D_800E1204[4]=100; g_RoomFloorY[0].raw=(unsigned short)-123;
+    reset(); particle.tail.value.active.brightness=77; g_FieldFxSpriteParams.palette=4; g_FieldFxAltPaletteFlag=1;
+    g_FieldFxPaletteTable[4]=100; g_RoomFloorY[0].raw=(unsigned short)-123;
     assert(func_801947BC(2,&particle)==0 && draws==2);
     reset(); particle.tail.value.active.frame=48;
     assert(func_801947BC(2,&particle)==0 && draws==0);

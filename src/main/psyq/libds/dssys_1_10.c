@@ -22,10 +22,10 @@ void tipDsSystem(void) {
     int b4;
     char *busy;
 
-    printf(D_80011D74);
+    printf(g_DsStatusHeaderText);
 
     state = &g_DsReadStatusBlock;
-    printf(D_80011D94, state->status, state->command, state->sector);
+    printf(g_DsCommandStatusFormat, state->status, state->command, state->sector);
     command = (CdRomEventCommandState *)((char *)state -
         PE1_OFFSETOF(CdRomEventCommandState, command.read));
     b0 = command->pendingCommand;
@@ -33,23 +33,23 @@ void tipDsSystem(void) {
     b2 = ((u_char *)state)[PARAM_OFFSET + 1];
     b3 = ((u_char *)state)[PARAM_OFFSET + 2];
     b4 = ((u_char *)state)[PARAM_OFFSET + 3];
-    printf(D_80011DB0, b0, b1, b2, b3, b4);
-    printf(D_80011DD8, state->readyResult);
-    printf(D_80011DF8, state->syncResult);
+    printf(g_DsLastCommandFormat, b0, b1, b2, b3, b4);
+    printf(g_DsCommandRemainFormat, state->readyResult);
+    printf(g_DsSystemTimerFormat, state->syncResult);
     {
         DsCallbackValue poll, sync, ready;
         poll.poll = g_DsPollCallback;
         sync.event = g_DsSyncCallback;
         ready.event = g_DsReadyCallback;
-        printf(D_80011E0C, poll.word, sync.word, ready.word);
+        printf(g_DsCallbacksFormat, poll.word, sync.word, ready.word);
     }
 
     {
         int active = ER_active();
-        busy = D_80011E44;
-        if (active != 0) busy = D_80011E3C;
+        busy = g_DsNoneText;
+        if (active != 0) busy = g_DsActiveText;
     }
-    printf(D_80011E4C, busy);
+    printf(g_DsReadySystemFormat, busy);
 }
 
 unsigned int LIBDS_DSSYS_1_pad[] __attribute__((section(".text"))) = {

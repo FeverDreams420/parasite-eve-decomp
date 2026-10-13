@@ -132,7 +132,7 @@ void Render_TransformSkinnedVertices(RenderObjectEntity *actor, u32 *view) {
     gte_ldrotmatrix(&actor->matrices[header->anchor_matrix_index]);
     gte_ldtransmatrix(&actor->matrices[header->anchor_matrix_index]);
     D_8009CD9A = header->anchor_y;
-    gte_ldv0(D_8009CD98);
+    gte_ldv0(g_SkinAnchorVector);
     gte_rt();
     gte_stsv(&actor->hit_cylinder.value0);
     gte_ldrotmatrix(actor->matrices);
@@ -179,7 +179,7 @@ void Render_TransformMorphVertices(RenderObjectEntity *entity, u32 *view) {
         if (part->visible == 1) {
             RenderVec3s *vertices = &entity->vertices[part->vertex_start];
             u32 *screen = &g_RenderClutLookupTable[part->vertex_start];
-            u32 *depth = &D_800A6360[part->vertex_start];
+            u32 *depth = &g_RenderVertexWorkWords[part->vertex_start];
             int j;
 
             for (j = 0; j < part->vertex_count; ) {
@@ -231,11 +231,11 @@ void Render_DrawEntity(RenderObjectEntity *object, void *viewMatrix) {
             Render_DrawObjectAlt(object, object->script_value9a, object->script_param97,
                                  object->script_param98, object->script_param99);
     } else if (flags & 8) {
-        Render_DrawObject(object, &D_800BEA40);
+        Render_DrawObject(object, &g_RenderLightingState);
         Render_DrawObjectAlt(object, object->script_value9a, object->script_param97,
                              object->script_param98, object->script_param99);
     } else if (flags & 1) {
-        Render_DrawObject(object, &D_800BEA40);
+        Render_DrawObject(object, &g_RenderLightingState);
         Render_UpdateClutTable(object, 0, g_ActiveDrawSlot);
     }
 }
@@ -453,7 +453,7 @@ void Render_BuildEntityMatrix(RenderObjectEntity *object, s16 bufferIndex)
         Anim_BuildRotationMatrices(object, animation, 0, 1);
         Render_TransformVertices(object);
         Render_InitRoomPrimState(object);
-        Render_DrawObject(object, &D_800BEA40);
+        Render_DrawObject(object, &g_RenderLightingState);
         Render_UpdateClutTable(object, 1, bufferIndex);
         model->words[0] = saved[0];
         model->words[1] = saved[1];
@@ -478,7 +478,7 @@ void Render_BuildEntityMatrix(RenderObjectEntity *object, s16 bufferIndex)
     player->words[6] = g_IdentityMatrixSource[6];
     player->words[7] = g_IdentityMatrixSource[7];
     Render_InitRoomPrimState(object);
-    Render_DrawObject(object, &D_800BEA40);
+    Render_DrawObject(object, &g_RenderLightingState);
     Render_UpdateClutTable(object, 1, bufferIndex);
 }
 
@@ -494,7 +494,7 @@ void Render_DrawObject(RenderObjectEntity *entity, union RenderLightingMatrix *v
 
     if (!entity->header || !entity->draw_count)
         return;
-    *baseColour = D_8009CDA0;
+    *baseColour = g_RenderFadeColour;
     matrix = entity->matrices;
     gte_SetBackColor(entity->shade, entity->shade, entity->shade);
     for (i = 0; i < entity->header->part_count; matrix++, i++) {
@@ -510,7 +510,7 @@ void Render_DrawObject(RenderObjectEntity *entity, union RenderLightingMatrix *v
         gte_SetLightMatrix(lightMatrix);
         first = part->vertex_start;
         mainColours = &g_RenderClutLookupTable[first];
-        altColours = &D_800A6360[first];
+        altColours = &g_RenderVertexWorkWords[first];
         vertex = &entity->vertices[first];
         for (j = 0; j < part->vertex_count; j += 3, mainColours += 3, altColours += 3) {
             RenderColor *colours;
@@ -553,7 +553,7 @@ void Render_UpdateClutTable(RenderObjectEntity *arg0, s16 arg1, s16 arg2) {
     hdr = arg0->header;
     if ((hdr != NULL) && (arg0->draw_count != 0)) {
         clutTbl = g_RenderClutLookupTable;
-        tpageTbl = D_800A6360;
+        tpageTbl = g_RenderVertexWorkWords;
         src = arg0->primitive_descriptors;
         prim = arg0->primitive_buffer;
         for (i = 0; i < arg0->header->packet34_count; src++) {
@@ -799,7 +799,7 @@ void Anim_SetInterpRate(RenderObjectEntity *obj, int arg1) {
 
 /* Adjacent object updates use the same animation and colour state. */
 
-u32 D_8009CDA0 = 0x808080;
+u32 g_RenderFadeColour = 0x808080;
 int Render_TickObject(RenderObjectEntity *object) {
     int state;
     u8 r, g, b;
@@ -833,10 +833,10 @@ int Render_TickObject(RenderObjectEntity *object) {
         Render_SetObjectTexturePage(object, 1);
         Render_SetEntityBlendMode(object, 1);
     }
-    D_8009CDA0 = (object->fade_blue << 16) | (object->fade_green << 8) | object->fade_red;
-    Render_DrawObject(object, &D_800BEA40);
+    g_RenderFadeColour = (object->fade_blue << 16) | (object->fade_green << 8) | object->fade_red;
+    Render_DrawObject(object, &g_RenderLightingState);
     if (!(object->flags_9C & 8)) Render_UpdateClutTable(object, 0, (s16)g_ActiveDrawSlot);
-    D_8009CDA0 = 0x808080;
+    g_RenderFadeColour = 0x808080;
     object->fade_red += object->fade_red_step;
     object->fade_green += object->fade_green_step;
     object->fade_blue += object->fade_blue_step;
@@ -850,7 +850,7 @@ int Render_ColorEntity(RenderObjectEntity *object) {
     state = object->fade_remaining;
     if (!state) {
         object->fade_remaining = -1;
-        D_8009CDA0 = 0x808080;
+        g_RenderFadeColour = 0x808080;
         return 1;
     }
     if (state == 1) {
@@ -879,10 +879,10 @@ int Render_ColorEntity(RenderObjectEntity *object) {
         object->fade_blue -= object->fade_blue_step;
         if (object->fade_blue > 128) object->fade_blue = 0;
     }
-    D_8009CDA0 = (object->fade_blue << 16) | (object->fade_green << 8) | object->fade_red;
-    Render_DrawObject(object, &D_800BEA40);
+    g_RenderFadeColour = (object->fade_blue << 16) | (object->fade_green << 8) | object->fade_red;
+    Render_DrawObject(object, &g_RenderLightingState);
     if (!(object->flags_9C & 8)) Render_UpdateClutTable(object, 0, (s16)g_ActiveDrawSlot);
-    D_8009CDA0 = 0x808080;
+    g_RenderFadeColour = 0x808080;
     object->fade_remaining--;
     return 0;
 }

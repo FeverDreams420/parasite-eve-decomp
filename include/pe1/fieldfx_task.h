@@ -11,10 +11,10 @@
 #include "pe1/gte_types.h"
 #include "pe1/room_floor.h"
 
-extern GteMatrix D_800F3478, D_800F33C0, D_800F32B0;
-extern GteVector D_800C220C, D_800C221C, D_800C222C;
-extern char D_800E0EB8[];
-int func_800CCBA8(char *object);
+extern GteMatrix g_BurstEffectScaleMatrix0, g_BurstEffectScaleMatrix1, g_BurstEffectScaleMatrix2;
+extern GteVector g_BurstEffectScaleA, g_BurstEffectScaleB, g_BurstEffectScaleC;
+extern char g_BurstEffectScript[];
+int BurstEffect_PlantScript(char *object);
 
 typedef FieldFxCallbackListCallback FieldFxTaskCallback;
 
@@ -34,7 +34,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldFxTaskProgram, initialize) == 0x30,
                   fieldfx_program_initializer);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldFxTaskProgram, script) == 0x34,
                   fieldfx_program_script);
-extern char D_800C2244[]; /* "TS No Thread No.%d\n" */
+extern char g_FieldFxTaskProgramMissingMsg[]; /* "TS No Thread No.%d\n" */
 
 typedef struct FieldFxTaskContext {
     /* Opcode 3 loads its 16-bit operand as the new script address. */
@@ -78,9 +78,9 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldFxTaskContext, arena) == 0x84,
 PE1_STATIC_ASSERT(sizeof(FieldFxTaskContext) == 0xA00,
                   fieldfx_task_context_size);
 
-int func_800D401C(int id);
+int FieldFx_SpawnTask(int id);
 
-int func_800CE688(void *arg0);
+int FieldFx_UpdateCallbackList(void *arg0);
 
 typedef struct FieldFxEmitter {
     int angle;
@@ -112,16 +112,16 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldFxTaskOwner, tasks.flags) == 0x19,
                   fieldfx_owner_flags);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldFxTaskOwner, tasks.table) == 0x8C,
                   fieldfx_owner_table);
-int func_800D4620(FieldFxTaskOwner *owner);
-int func_800D4698(FieldFxTaskOwner *owner, int skip,
+int FieldFx_InitTaskContext(FieldFxTaskOwner *owner);
+int FieldFx_InitTaskProgram(FieldFxTaskOwner *owner, int skip,
                   int arg2, int arg3, int arg4, int arg5);
-int func_800D4704(FieldFxTaskOwner *owner);
-extern s16 D_800E2214[3];
-int func_800DA5D4(int mode, FieldFxEmitter *state);
+int FieldFx_DrawTasks(FieldFxTaskOwner *owner);
+extern s16 g_SpinningModelAnchorB[3];
+int FieldFx_SpinningModelEmitterB(int mode, FieldFxEmitter *state);
 
 extern u8 *D_800F32D8;
 extern s16 D_800E220C[];
-/* Spinning model flare shared by func_800D9A8C and func_800DA1FC: the leader
+/* Spinning model flare shared by FieldFx_SpinningModelFlareA and FieldFx_SpinningModelFlareB: the leader
  * (stage 0) follows an anchor point and drops stage 1 copies that shrink. */
 typedef struct FieldFxSpinningModel {
     s16 x, y, z;      /* 0x00 */
@@ -131,10 +131,10 @@ typedef struct FieldFxSpinningModel {
     s16 ticks;        /* 0x0C */
     s16 height;       /* 0x0E */
 } FieldFxSpinningModel;
-int func_800D9A8C(int mode, FieldFxSpinningModel *state);
-int func_800DA1FC(int mode, FieldFxSpinningModel *state);
+int FieldFx_SpinningModelFlareA(int mode, FieldFxSpinningModel *state);
+int FieldFx_SpinningModelFlareB(int mode, FieldFxSpinningModel *state);
 
-/* Twin-model flare (func_800DC058): stage 0 grows, stage 1 spins a second
+/* Twin-model flare (FieldFx_TwinModelEffect): stage 0 grows, stage 1 spins a second
  * white copy, stage 2 holds. */
 typedef struct FieldFxTwinModel {
     GteShortVector position;      /* 0x00 */
@@ -143,9 +143,9 @@ typedef struct FieldFxTwinModel {
     int angle;                    /* 0x10 */
 } FieldFxTwinModel;
 extern u8 *D_800F3418;
-extern u8 *D_800F342C;
-extern u8 D_800E1E24[];
-int func_800DC058(int mode, FieldFxTwinModel *state);
+extern u8 *g_FieldFxTwinModelB;
+extern u8 g_TwinModelColorTrack[];
+int FieldFx_TwinModelEffect(int mode, FieldFxTwinModel *state);
 int FieldFx_PointEmitter(int mode, FieldFxEmitter *state);
 
 typedef struct FieldFxPointTriple {
@@ -202,7 +202,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldFxScatteredParticles, velocity_z) == 0xA8,
 PE1_STATIC_ASSERT(sizeof(FieldFxScatteredParticles) == 0xC8,
                   fieldfx_scattered_particles_size);
 
-void func_800CC2C4(void *arg0, void *arg1, FieldFxScatteredParticles *state);
+void FieldFx_InitScatteredParticles(void *arg0, void *arg1, FieldFxScatteredParticles *state);
 
 /* Radial emitter: sixteen halfword extents followed by two arrays of
  * eight-byte XYZ records. Setup selects eight or sixteen active points;
@@ -268,10 +268,10 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldBillboard, scaleX) == 0x10,
                   fieldfx_billboard_scale);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldBillboard, brightness) == 0x28,
                   fieldfx_billboard_brightness);
-extern FieldFxSpriteState D_800F33E8, D_800E2770, D_800E27B0;
+extern FieldFxSpriteState g_BurstEffectBState2, g_BurstEffectBState0, g_BurstEffectBState1;
 
-extern FieldFxSpriteState D_800F32E0, D_800F3338, D_800F3380, D_800F3430;
-extern FieldFxSpriteState D_800E2260, D_800E2818, D_800E22A8;
-extern FieldFxPointTriple D_800E27F8;
+extern FieldFxSpriteState g_PointSpriteGroundRingSprite, g_PointSpriteState3, g_PointSpriteState4, g_PointSpriteStreakSprite;
+extern FieldFxSpriteState g_PointSpriteState0, g_PointSpriteState1, g_BurstEffectCState;
+extern FieldFxPointTriple g_BurstEffectTargetPosition;
 
 #endif

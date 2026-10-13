@@ -31,19 +31,19 @@ int MenuCard_DriftGlowParticle(int mode, RoomDampedSpark *spark) {
             int kind;
             int palette;
             angle = ((s16)spark->timer << 10) / 44;
-            fade = 128 - ((D_800E27EC & 1) << 5);
-            func_800CF3AC(D_801F1BB0, &color, (s16)spark->timer);
-            rotation.z = -D_800E27EC * 16;
+            fade = 128 - ((g_FieldFxCurrentAge & 1) << 5);
+            FieldFx_SampleColorTrack(D_801F1BB0, &color, (s16)spark->timer);
+            rotation.z = -g_FieldFxCurrentAge * 16;
             size = rcos(angle) + 0x1000;
             D_800F336C = 1;
-            D_800F3368.tpage = D_800E2850[D_800E11E6];
-            func_800CEDA8(1);
-            D_800F3368.parameter06 = 0;
-            D_800F3368.parameter0A = 0;
+            g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot1];
+            FieldFx_EnsureEffectTexturePage(1);
+            g_FieldFxSpriteParams.parameter06 = 0;
+            g_FieldFxSpriteParams.parameter0A = 0;
             kind = D_800F336C;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
-            func_800CEE20((GteShortVector *)spark, &rotation, size, size, 128,
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
+            FieldFx_DrawShapeQuads((GteShortVector *)spark, &rotation, size, size, 128,
                           GetClut(32, palette), 1, fade, &color);
             break;
         }
@@ -52,17 +52,17 @@ int MenuCard_DriftGlowParticle(int mode, RoomDampedSpark *spark) {
             int palette;
             angle = ((s16)spark->timer << 10) / 44;
             fade = rsin(angle * 2) / 32;
-            rotation.z = -D_800E27EC * 16;
+            rotation.z = -g_FieldFxCurrentAge * 16;
             size = rsin(angle) / 2 + 0x1000;
             D_800F336C = 1;
-            D_800F3368.tpage = D_800E2850[D_800E11F6];
-            func_800CEDA8(1);
-            D_800F3368.parameter06 = 1;
-            D_800F3368.parameter0A = 5;
+            g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot9];
+            FieldFx_EnsureEffectTexturePage(1);
+            g_FieldFxSpriteParams.parameter06 = 1;
+            g_FieldFxSpriteParams.parameter0A = 5;
             kind = D_800F336C;
-            palette = D_800E1204[kind];
-            func_800CEE20((GteShortVector *)spark, &rotation, size * 3 / 2, size * 3 / 2, 64,
-                          GetClut(0, (kind == 4 && D_800F3428) ? palette + 7 : palette + 3),
+            palette = g_FieldFxPaletteTable[kind];
+            FieldFx_DrawShapeQuads((GteShortVector *)spark, &rotation, size * 3 / 2, size * 3 / 2, 64,
+                          GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag) ? palette + 7 : palette + 3),
                           1, fade / 2, 0);
             break;
         }
@@ -92,11 +92,11 @@ int MenuCard_RingBurstController(int mode, MemcardRingBurst *burst) {
 
     switch (mode) {
     case 0:
-        func_800CE870((char *)D_8009D254, 0, &burst->x);
+        FieldFx_GetActorPosition((char *)D_8009D254, 0, &burst->x);
         Akao_SendPositionalCmdStereo(0x4B7, 0, burst->x, burst->y, burst->z);
         burst->state = 0;
         burst->timer = 0;
-        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 50,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 50,
                              (FieldFxCallbackListCallback)MenuCard_DriftGlowParticle);
     case 1:
         switch (burst->state) {
@@ -107,7 +107,7 @@ int MenuCard_RingBurstController(int mode, MemcardRingBurst *burst) {
             burst->state = 1;
             burst->timer = 0;
             for (i = 0; i < 50; i++) {
-                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+                child = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = burst->x;
                     child->y = burst->y;
@@ -133,60 +133,60 @@ int MenuCard_RingBurstController(int mode, MemcardRingBurst *burst) {
         position.z = burst->z;
         gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldtransmatrix(D_800BCFA4.value);
-        D_800F3368.parameter00 = 32;
-        D_800F3368.parameter02 = 2;
-        D_800F3368.extent_x = 32;
-        D_800F3368.extent_y = 32;
+        g_FieldFxSpriteParams.parameter00 = 32;
+        g_FieldFxSpriteParams.parameter02 = 2;
+        g_FieldFxSpriteParams.extent_x = 32;
+        g_FieldFxSpriteParams.extent_y = 32;
         {
-            u16 tpage = D_800E2850[D_800E11E6];
-            D_800F3368.palette = 1;
-            D_800F3368.tpage = tpage;
+            u16 tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot1];
+            g_FieldFxSpriteParams.palette = 1;
+            g_FieldFxSpriteParams.tpage = tpage;
         }
-        func_800CEDA8(1);
-        D_800F3368.parameter06 = 0;
-        D_800F3368.parameter0A = 0;
-        D_800F3368.depth = 41;
+        FieldFx_EnsureEffectTexturePage(1);
+        g_FieldFxSpriteParams.parameter06 = 0;
+        g_FieldFxSpriteParams.parameter0A = 0;
+        g_FieldFxSpriteParams.depth = 41;
         switch (burst->state) {
         case 0:
             angle = (burst->timer << 10) / 24;
             gte_ldrotmatrix(D_800BCFA4.value);
             gte_ldtransmatrix(D_800BCFA4.value);
             fade = rsin(angle) / 32;
-            if (D_800E27EC & 1) {
+            if (g_FieldFxCurrentAge & 1) {
                 fade = fade * 15 / 16;
             }
             spin.z = burst->timer * 15;
-            func_800D004C(&position, 300, 500, 70, &spin, 0x1000, 0x1000,
+            FieldFx_DrawStarFan(&position, 300, 500, 70, &spin, 0x1000, 0x1000,
                           &glow, 0, fade / 2, 1);
             fade = rsin(angle) / 32;
-            func_800D004C(&position, 700, 700, 20, 0, 0x1000, 0x1000,
+            FieldFx_DrawStarFan(&position, 700, 700, 20, 0, 0x1000, 0x1000,
                           &ring, 0, fade, 1);
             break;
         case 1:
             angle = (burst->timer << 10) / 48;
             if (burst->timer < 5) {
                 amount = 0x80 - burst->timer * 32;
-                func_800D1AE0((unsigned char *)&ring, amount, 1, 8);
+                FieldFx_DrawScreenTint((unsigned char *)&ring, amount, 1, 8);
             }
             gte_ldrotmatrix(D_800BCFA4.value);
             gte_ldtransmatrix(D_800BCFA4.value);
             fade = rcos(angle) / 32;
-            if (D_800E27EC & 1) {
+            if (g_FieldFxCurrentAge & 1) {
                 fade = fade * 15 / 16;
             }
             spin.z = rsin(angle) / 2;
-            func_800D004C(&position, 70, rcos(angle) / 8 + 700, 8,
+            FieldFx_DrawStarFan(&position, 70, rcos(angle) / 8 + 700, 8,
                           &spin, 0x1000, 0x1000, &ring, 0, fade / 2, 1);
-            func_800D004C(&position, 300, 300, 8, 0, 0x1000, 0x1000,
+            FieldFx_DrawStarFan(&position, 300, 300, 8, 0, 0x1000, 0x1000,
                           &glow, 0, fade, 1);
             fade = rcos(angle) / 32;
-            func_800D004C(&position, 1000, 1000, 16, 0, 0x1000, 0x1000,
+            FieldFx_DrawStarFan(&position, 1000, 1000, 16, 0, 0x1000, 0x1000,
                           &ring, 0, fade, 1);
             scale = rsin(angle) / 4 + 0xC00;
-            func_800D0728(&position, 1500, 1900, 24, 0, scale, scale,
+            FieldFx_DrawRingBand(&position, 1500, 1900, 24, 0, scale, scale,
                           0, &ring, fade, 1);
             scale = rsin(angle);
-            func_800D0728(&position, 2000, 2600, 20, &tilt, scale, scale,
+            FieldFx_DrawRingBand(&position, 2000, 2600, 20, &tilt, scale, scale,
                           &band, 0, fade, 1);
             amount = rsin(angle) / 12 + 80;
             dim = fade * 2 / 3;
@@ -194,27 +194,27 @@ int MenuCard_RingBurstController(int mode, MemcardRingBurst *burst) {
             offset.y = position.y;
             offset.z = position.z;
             offset.y -= amount;
-            func_800D0728(&offset, 1000, 1600, 16, &tilt, scale, scale,
+            FieldFx_DrawRingBand(&offset, 1000, 1600, 16, &tilt, scale, scale,
                           &band, 0, dim, 1);
             offset.x = position.x;
             offset.y = position.y;
             offset.z = position.z;
             offset.y += amount;
-            func_800D0728(&offset, 1000, 1600, 16, &tilt, scale, scale,
+            FieldFx_DrawRingBand(&offset, 1000, 1600, 16, &tilt, scale, scale,
                           &band, 0, dim, 1);
             break;
         }
-        D_800F3368.parameter00 = 32;
-        D_800F3368.parameter02 = 2;
-        D_800F3368.extent_x = 32;
-        D_800F3368.extent_y = 32;
+        g_FieldFxSpriteParams.parameter00 = 32;
+        g_FieldFxSpriteParams.parameter02 = 2;
+        g_FieldFxSpriteParams.extent_x = 32;
+        g_FieldFxSpriteParams.extent_y = 32;
         {
-            u16 tpage = D_800E2850[D_800E11E6];
-            D_800F3368.palette = 1;
-            D_800F3368.tpage = tpage;
+            u16 tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot1];
+            g_FieldFxSpriteParams.palette = 1;
+            g_FieldFxSpriteParams.tpage = tpage;
         }
-        func_800CEDA8(1);
-        D_800F3368.parameter06 = 0;
+        FieldFx_EnsureEffectTexturePage(1);
+        g_FieldFxSpriteParams.parameter06 = 0;
         break;
     }
     return 0;
@@ -271,24 +271,24 @@ int MenuCard_RisingEmberParticle(int mode, RoomDampedSpark *spark) {
             int kind;
             int palette;
             angle = (s16)spark->timer;
-            func_800CF3AC(D_801F1C28, &color, angle * 2);
-            rotation.z = spark->x + D_800E27EC * 32;
+            FieldFx_SampleColorTrack(D_801F1C28, &color, angle * 2);
+            rotation.z = spark->x + g_FieldFxCurrentAge * 32;
             size = rsin(angle << 7);
-            D_800F3368.parameter00 = 16;
-            D_800F3368.parameter02 = 1;
-            D_800F3368.extent_x = 16;
-            D_800F3368.extent_y = 16;
+            g_FieldFxSpriteParams.parameter00 = 16;
+            g_FieldFxSpriteParams.parameter02 = 1;
+            g_FieldFxSpriteParams.extent_x = 16;
+            g_FieldFxSpriteParams.extent_y = 16;
             {
-                u16 tpage = D_800E2850[D_800E11E6];
-                D_800F3368.palette = 1;
-                D_800F3368.tpage = tpage;
+                u16 tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot1];
+                g_FieldFxSpriteParams.palette = 1;
+                g_FieldFxSpriteParams.tpage = tpage;
             }
-            func_800CEDA8(1);
-            D_800F3368.parameter06 = 0;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
-            func_800CEE20((GteShortVector *)spark, &rotation, size, size * 3 / 2, 141,
+            FieldFx_EnsureEffectTexturePage(1);
+            g_FieldFxSpriteParams.parameter06 = 0;
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
+            FieldFx_DrawShapeQuads((GteShortVector *)spark, &rotation, size, size * 3 / 2, 141,
                           GetClut(48, palette), 1, 128, &color);
             break;
         }
@@ -297,24 +297,24 @@ int MenuCard_RisingEmberParticle(int mode, RoomDampedSpark *spark) {
             int palette;
             angle = (s16)spark->timer << 6;
             fade = rcos(angle) / 32;
-            rotation.z = D_800E27EC << 5;
+            rotation.z = g_FieldFxCurrentAge << 5;
             size = rcos(angle);
-            D_800F3368.parameter00 = 32;
-            D_800F3368.parameter02 = 2;
-            D_800F3368.extent_x = 32;
-            D_800F3368.extent_y = 32;
+            g_FieldFxSpriteParams.parameter00 = 32;
+            g_FieldFxSpriteParams.parameter02 = 2;
+            g_FieldFxSpriteParams.extent_x = 32;
+            g_FieldFxSpriteParams.extent_y = 32;
             {
-                u16 tpage = D_800E2850[D_800E11E6];
-                D_800F3368.palette = 1;
-                D_800F3368.tpage = tpage;
+                u16 tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot1];
+                g_FieldFxSpriteParams.palette = 1;
+                g_FieldFxSpriteParams.tpage = tpage;
             }
-            func_800CEDA8(1);
-            D_800F3368.parameter06 = 0;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
-            func_800CEE20((GteShortVector *)spark, 0, size / 2, size / 2,
-                          (s16)D_800F3368.parameter02 * (spark->timer & 3) + 104,
+            FieldFx_EnsureEffectTexturePage(1);
+            g_FieldFxSpriteParams.parameter06 = 0;
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
+            FieldFx_DrawShapeQuads((GteShortVector *)spark, 0, size / 2, size / 2,
+                          (s16)g_FieldFxSpriteParams.parameter02 * (spark->timer & 3) + 104,
                           GetClut(16, palette), 3, fade, 0);
             break;
         }
@@ -324,17 +324,17 @@ int MenuCard_RisingEmberParticle(int mode, RoomDampedSpark *spark) {
             angle = ((s16)spark->timer << 10) / 18;
             fade = rsin(angle * 2) / 32;
             size = rsin(angle);
-            D_800F3368.parameter00 = 32;
-            D_800F3368.parameter02 = 2;
-            D_800F3368.extent_x = 32;
-            D_800F3368.extent_y = 32;
+            g_FieldFxSpriteParams.parameter00 = 32;
+            g_FieldFxSpriteParams.parameter02 = 2;
+            g_FieldFxSpriteParams.extent_x = 32;
+            g_FieldFxSpriteParams.extent_y = 32;
             {
-                u16 tpage = D_800E2850[D_800E11F6];
-                D_800F3368.palette = 1;
-                D_800F3368.tpage = tpage;
+                u16 tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot9];
+                g_FieldFxSpriteParams.palette = 1;
+                g_FieldFxSpriteParams.tpage = tpage;
             }
-            func_800CEDA8(1);
-            D_800F3368.parameter06 = 1;
+            FieldFx_EnsureEffectTexturePage(1);
+            g_FieldFxSpriteParams.parameter06 = 1;
             tilt.x = 0x400;
             tilt.y = 0;
             tilt.z = (s16)spark->timer * 48;
@@ -342,10 +342,10 @@ int MenuCard_RisingEmberParticle(int mode, RoomDampedSpark *spark) {
             position.x = spark->x;
             position.z = spark->z;
             position.y = g_RoomFloorY->y;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            func_800CEE20(&position, &tilt, size * 3, size * 3, 68,
-                          GetClut(0, (kind == 4 && D_800F3428) ? palette + 7 : palette + 3),
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            FieldFx_DrawShapeQuads(&position, &tilt, size * 3, size * 3, 68,
+                          GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag) ? palette + 7 : palette + 3),
                           1, fade / 2, 0);
             break;
         }
@@ -385,17 +385,17 @@ int MenuCard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
         tipB.x *= -1;
         FieldFx_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 8, &hand, &from);
         FieldFx_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 8, &tipA, &to);
-        func_800D1384(&from, &to, 0x3F0, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailA, 1);
+        FieldFx_DrawHistoryTrail(&from, &to, 0x3F0, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailA, 1);
         FieldFx_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 8, &tipB, &from);
-        func_800D1384(&from, &to, 0x3F2, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailC, 1);
+        FieldFx_DrawHistoryTrail(&from, &to, 0x3F2, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailC, 1);
         tipA.x *= -1;
         tipB.x *= -1;
         FieldFx_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 21, &hand, &from);
         FieldFx_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 21, &tipA, &to);
-        func_800D1384(&from, &to, 0x3F0, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailB, 1);
+        FieldFx_DrawHistoryTrail(&from, &to, 0x3F0, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailB, 1);
         FieldFx_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 21, &tipB, &from);
-        func_800D1384(&from, &to, 0x3F2, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailD, 1);
-        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 36,
+        FieldFx_DrawHistoryTrail(&from, &to, 0x3F2, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailD, 1);
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 36,
                              (FieldFxCallbackListCallback)MenuCard_RisingEmberParticle);
     case 1:
         flash->timer++;
@@ -404,7 +404,7 @@ int MenuCard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
             int phase = (s16)flash->timer % 3;
             if (phase == 0) {
                 FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, flash->attachA, &center, &from);
-                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+                child = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = from.x;
                     child->y = from.y;
@@ -414,7 +414,7 @@ int MenuCard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
                 }
             } else if (phase == 2) {
                 FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, flash->attachB, &center, &from);
-                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+                child = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = from.x;
                     child->y = from.y;
@@ -427,7 +427,7 @@ int MenuCard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
             else index = 21;
             hand.z = -(rand() & 0x1FF);
             FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, index, &hand, &from);
-            child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+            child = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (child) {
                 child->x = from.x;
                 child->y = from.y;
@@ -439,8 +439,8 @@ int MenuCard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
                 child->timer = 0;
             }
             if ((flash->timer & 7) == 0) {
-                func_800CE870((char *)D_8009D254, 0, (s16 *)&from);
-                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+                FieldFx_GetActorPosition((char *)D_8009D254, 0, (s16 *)&from);
+                child = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = from.x;
                     child->y = from.y;
@@ -456,22 +456,22 @@ int MenuCard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
         matrixSlot = &D_800BCFA4;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
-        D_800F3368.parameter00 = 32;
-        D_800F3368.parameter02 = 2;
-        D_800F3368.extent_x = 32;
-        D_800F3368.extent_y = 32;
+        g_FieldFxSpriteParams.parameter00 = 32;
+        g_FieldFxSpriteParams.parameter02 = 2;
+        g_FieldFxSpriteParams.extent_x = 32;
+        g_FieldFxSpriteParams.extent_y = 32;
         {
-            u16 tpage = D_800E2850[D_800E11E6];
-            D_800F3368.palette = 1;
-            D_800F3368.tpage = tpage;
+            u16 tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot1];
+            g_FieldFxSpriteParams.palette = 1;
+            g_FieldFxSpriteParams.tpage = tpage;
         }
-        func_800CEDA8(1);
+        FieldFx_EnsureEffectTexturePage(1);
         alpha = 140;
         size = 0x1000;
-        D_800F3368.parameter06 = 0;
-        D_800F3368.parameter0A = 0;
-        D_800F3368.depth = 16;
-        if (D_800E27EC & 1) {
+        g_FieldFxSpriteParams.parameter06 = 0;
+        g_FieldFxSpriteParams.parameter0A = 0;
+        g_FieldFxSpriteParams.depth = 16;
+        if (g_FieldFxCurrentAge & 1) {
             size = 0x2000;
             alpha = 100;
         }
@@ -479,37 +479,37 @@ int MenuCard_CrossFlashController(int mode, MemcardCrossFlash *flash) {
             int kind;
             int palette;
             FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, flash->attachA, &center, &from);
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
-            func_800CEE20(&from, 0, size / 4, size / 4, 128,
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
+            FieldFx_DrawShapeQuads(&from, 0, size / 4, size / 4, 128,
                           GetClut(192, palette), 1, alpha / 2, 0);
         }
         {
             int kind;
             int palette;
             FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, flash->attachB, &center, &from);
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
-            func_800CEE20(&from, 0, size / 2, size / 2, 128,
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
+            FieldFx_DrawShapeQuads(&from, 0, size / 2, size / 2, 128,
                           GetClut(192, palette), 1, alpha / 2, 0);
         }
         tipA.x *= -1;
         tipB.x *= -1;
         FieldFx_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 8, &hand, &from);
         FieldFx_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 8, &tipA, &to);
-        func_800D1384(&from, &to, 8, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailA, 1);
+        FieldFx_DrawHistoryTrail(&from, &to, 8, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailA, 1);
         FieldFx_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 8, &tipB, &from);
-        func_800D1384(&from, &to, 10, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailC, 1);
+        FieldFx_DrawHistoryTrail(&from, &to, 10, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailC, 1);
         tipA.x *= -1;
         tipB.x *= -1;
         FieldFx_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 21, &hand, &from);
         FieldFx_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 21, &tipA, &to);
-        func_800D1384(&from, &to, 8, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailB, 1);
+        FieldFx_DrawHistoryTrail(&from, &to, 8, (unsigned char *)&inner, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailB, 1);
         FieldFx_TransformMatrixPoint(((RoomSparkBattleEntity *)D_8009D254), 21, &tipB, &from);
-        func_800D1384(&from, &to, 10, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailD, 1);
-        D_800F3368.depth = 16;
+        FieldFx_DrawHistoryTrail(&from, &to, 10, (unsigned char *)&edge, (unsigned char *)&outer, 128, (struct FieldTrailPair *)flash->trailD, 1);
+        g_FieldFxSpriteParams.depth = 16;
         break;
     }
     return 0;
@@ -570,14 +570,14 @@ int MenuCard_FadingGlintParticle(int mode, RoomDampedSpark *spark) {
             rotation.y = 0;
             rotation.z = (s16)spark->timer * 32;
             rotation.flags = 0;
-            D_800F3368.parameter00 = 32;
-            D_800F3368.parameter02 = 2;
-            D_800F3368.extent_x = 32;
-            D_800F3368.extent_y = 32;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            clut = GetClut(0, (kind == 4 && D_800F3428) ? palette + 6 : palette + 2);
-            func_800CEE20((GteShortVector *)spark, &rotation, size, size, 6,
+            g_FieldFxSpriteParams.parameter00 = 32;
+            g_FieldFxSpriteParams.parameter02 = 2;
+            g_FieldFxSpriteParams.extent_x = 32;
+            g_FieldFxSpriteParams.extent_y = 32;
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            clut = GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag) ? palette + 6 : palette + 2);
+            FieldFx_DrawShapeQuads((GteShortVector *)spark, &rotation, size, size, 6,
                           clut, 1, fade, 0);
             break;
         }
@@ -592,14 +592,14 @@ int MenuCard_FadingGlintParticle(int mode, RoomDampedSpark *spark) {
             rotation.y = 0;
             rotation.z = (s16)spark->timer * 14;
             rotation.flags = 0;
-            D_800F3368.parameter00 = 64;
-            D_800F3368.parameter02 = 4;
-            D_800F3368.extent_x = 64;
-            D_800F3368.extent_y = 64;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            clut = GetClut(0, (kind == 4 && D_800F3428) ? palette + 5 : palette + 1);
-            func_800CEE20((GteShortVector *)spark, &rotation, size * 2, size * 2, 0,
+            g_FieldFxSpriteParams.parameter00 = 64;
+            g_FieldFxSpriteParams.parameter02 = 4;
+            g_FieldFxSpriteParams.extent_x = 64;
+            g_FieldFxSpriteParams.extent_y = 64;
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            clut = GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag) ? palette + 5 : palette + 1);
+            FieldFx_DrawShapeQuads((GteShortVector *)spark, &rotation, size * 2, size * 2, 0,
                           clut, 1, fade, 0);
             break;
         }
@@ -626,12 +626,12 @@ int MenuCard_GlintBurstController(int mode, MemcardGlintBurst *burst) {
         burst->x = ((MemcardGlintAnchor *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->x;
         burst->y = ((MemcardGlintAnchor *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->y;
         burst->z = ((MemcardGlintAnchor *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->z;
-        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 22,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 22,
                              (FieldFxCallbackListCallback)MenuCard_FadingGlintParticle);
     case 1:
-        if (D_800E27EC == 3) {
+        if (g_FieldFxCurrentAge == 3) {
             for (i = 0; i < 6; i++) {
-                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+                child = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = burst->x;
                     child->y = burst->y;
@@ -644,9 +644,9 @@ int MenuCard_GlintBurstController(int mode, MemcardGlintBurst *burst) {
                 }
             }
         }
-        if (D_800E27EC < 5) {
+        if (g_FieldFxCurrentAge < 5) {
             for (i = 0; i < 4; i++) {
-                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+                child = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = burst->x;
                     child->y = burst->y;
@@ -663,7 +663,7 @@ int MenuCard_GlintBurstController(int mode, MemcardGlintBurst *burst) {
                 }
             }
         }
-        if (D_800E27EC >= 8) {
+        if (g_FieldFxCurrentAge >= 8) {
             return 2;
         }
         break;
@@ -671,56 +671,56 @@ int MenuCard_GlintBurstController(int mode, MemcardGlintBurst *burst) {
         matrixSlot = &D_800BCFA4;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
-        D_800F3368.parameter00 = 32;
-        D_800F3368.parameter02 = 2;
-        D_800F3368.extent_x = 32;
-        D_800F3368.extent_y = 32;
+        g_FieldFxSpriteParams.parameter00 = 32;
+        g_FieldFxSpriteParams.parameter02 = 2;
+        g_FieldFxSpriteParams.extent_x = 32;
+        g_FieldFxSpriteParams.extent_y = 32;
         {
-            u16 tpage = D_800E2850[D_800E11E6];
-            D_800F3368.palette = 1;
-            D_800F3368.tpage = tpage;
+            u16 tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot1];
+            g_FieldFxSpriteParams.palette = 1;
+            g_FieldFxSpriteParams.tpage = tpage;
         }
-        func_800CEDA8(1);
-        D_800F3368.parameter06 = 0;
-        D_800F3368.parameter0A = 0;
-        D_800F3368.depth = 32;
-        if (D_800E27EC == 1) {
-            func_800D1AE0((unsigned char *)&flash, 128, 2, 8);
-        } else if (D_800E27EC == 2) {
-            func_800D1AE0((unsigned char *)&flash, 128, 1, 8);
+        FieldFx_EnsureEffectTexturePage(1);
+        g_FieldFxSpriteParams.parameter06 = 0;
+        g_FieldFxSpriteParams.parameter0A = 0;
+        g_FieldFxSpriteParams.depth = 32;
+        if (g_FieldFxCurrentAge == 1) {
+            FieldFx_DrawScreenTint((unsigned char *)&flash, 128, 2, 8);
+        } else if (g_FieldFxCurrentAge == 2) {
+            FieldFx_DrawScreenTint((unsigned char *)&flash, 128, 1, 8);
         }
-        if (D_800E27EC < 33) {
+        if (g_FieldFxCurrentAge < 33) {
             int kind;
             int palette;
-            angle = D_800E27EC << 5;
+            angle = g_FieldFxCurrentAge << 5;
             fade = rcos(angle) / 32;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
-            func_800CEE20((GteShortVector *)burst, 0, 0x2000, 0x2000,
-                          (s16)D_800F3368.parameter02 * (D_800E27EC / 4) + 192,
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
+            FieldFx_DrawShapeQuads((GteShortVector *)burst, 0, 0x2000, 0x2000,
+                          (s16)g_FieldFxSpriteParams.parameter02 * (g_FieldFxCurrentAge / 4) + 192,
                           GetClut(192, palette), 1, fade, 0);
-            func_800CF3AC(D_801F1CB0, &color, D_800E27EC);
+            FieldFx_SampleColorTrack(D_801F1CB0, &color, g_FieldFxCurrentAge);
             scale = rsin(angle) + 0x1000;
-            if (D_800E27EC & 1) {
+            if (g_FieldFxCurrentAge & 1) {
                 fade = fade * 2 / 3;
             }
-            func_800D004C((GteShortVector *)burst, 500, 500, 14, 0, scale, scale,
+            FieldFx_DrawStarFan((GteShortVector *)burst, 500, 500, 14, 0, scale, scale,
                           &color, 0, fade, 1);
             fade = rcos(angle) / 32;
             scale = rsin(angle) + 0x800;
-            func_800D0728((GteShortVector *)burst, 1100, 1700, 18, 0, scale, scale,
+            FieldFx_DrawRingBand((GteShortVector *)burst, 1100, 1700, 18, 0, scale, scale,
                           0, &color, fade / 2, 1);
         }
         {
-            u16 tpage = D_800E2850[D_800E11F6];
-            D_800F3368.palette = 1;
-            D_800F3368.tpage = tpage;
+            u16 tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot9];
+            g_FieldFxSpriteParams.palette = 1;
+            g_FieldFxSpriteParams.tpage = tpage;
         }
-        func_800CEDA8(1);
-        D_800F3368.parameter06 = 1;
-        D_800F3368.parameter0A = 0;
-        D_800F3368.depth = 16;
+        FieldFx_EnsureEffectTexturePage(1);
+        g_FieldFxSpriteParams.parameter06 = 1;
+        g_FieldFxSpriteParams.parameter0A = 0;
+        g_FieldFxSpriteParams.depth = 16;
         break;
     }
     return 0;
@@ -769,8 +769,8 @@ int MenuCard_SpinRingParticle(int mode, MemcardSpinParticle *p) {
         switch (p->state) {
         case 0:
             size = rsin((s16)p->timer << 5);
-            func_800CF3AC(D_801F1CD8, &color, (s16)p->timer);
-            func_800D0728((GteShortVector *)p, 1400, 2200, 18, &p->rotation, size, size,
+            FieldFx_SampleColorTrack(D_801F1CD8, &color, (s16)p->timer);
+            FieldFx_DrawRingBand((GteShortVector *)p, 1400, 2200, 18, &p->rotation, size, size,
                           0, &color, 128, 1);
             break;
         case 1: {
@@ -796,9 +796,9 @@ int MenuCard_SpinRingParticle(int mode, MemcardSpinParticle *p) {
             u = (size & 1) << 7;
             v = (size / 2) * 16 + 160;
             kind = D_800F336C;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
-            func_800D2370(&offset, &p->rotation, width, height, u, v, 128, 16,
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
+            FieldFx_DrawRotatedQuad(&offset, &p->rotation, width, height, u, v, 128, 16,
                           GetClut(96, palette), &colorA, &colorB, (s16)fade, 1);
             break;
         }
@@ -810,21 +810,21 @@ int MenuCard_SpinRingParticle(int mode, MemcardSpinParticle *p) {
             int spin;
             spin = (s16)p->timer << 5;
             width = rsin(spin) / 8 + 100;
-            func_800CFB7C((GteShortVector *)&p->rotation, (s16)width, &offset);
+            FieldFx_AnglesToVector((GteShortVector *)&p->rotation, (s16)width, &offset);
             offset.x += D_801F1F28.x;
             offset.y += D_801F1F28.y;
             offset.z += D_801F1F28.z;
             size = rsin(spin) * 2 + 0x800;
             fade = rcos(spin) / 32;
-            index = &D_800E11E6;
+            index = &g_FieldFxTpageSlot1;
             D_800F336C = 1;
-            D_800F3368.tpage = D_800E2850[*index];
-            func_800CEDA8(1);
-            D_800F3368.parameter06 = 0;
-            page = (D_800E2850[*index] | GetTPage(0, 1, 0, 0)) & 0xFFFF;
+            g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[*index];
+            FieldFx_EnsureEffectTexturePage(1);
+            g_FieldFxSpriteParams.parameter06 = 0;
+            page = (g_FieldFxTpageTable[*index] | GetTPage(0, 1, 0, 0)) & 0xFFFF;
             kind = D_800F336C;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
             FieldFx_ModelSetTexture(page, GetClut(224, palette));
             FieldFx_ModelSetSemiTrans(1);
             RotMatrixYXZ(&p->rotation, &matrix);
@@ -835,10 +835,10 @@ int MenuCard_SpinRingParticle(int mode, MemcardSpinParticle *p) {
             scale.y = size;
             scale.z = size;
             ScaleMatrix(&matrix, &scale);
-            FieldFx_ModelSaveColors(D_800E22D4);
-            FieldFx_ModelScaleColors(D_800E22D4, (u16)fade);
-            FieldFx_ModelDraw((union FieldTexturedModel *)D_800E22D4, (GteMatrix *)&matrix);
-            FieldFx_ModelRestoreColors(D_800E22D4);
+            FieldFx_ModelSaveColors(g_FieldFxGlintModel);
+            FieldFx_ModelScaleColors(g_FieldFxGlintModel, (u16)fade);
+            FieldFx_ModelDraw((union FieldTexturedModel *)g_FieldFxGlintModel, (GteMatrix *)&matrix);
+            FieldFx_ModelRestoreColors(g_FieldFxGlintModel);
             break;
         }
         }
@@ -858,17 +858,17 @@ int MenuCard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
         burst->x = ((MemcardGlintAnchor *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->x;
         burst->y = ((MemcardGlintAnchor *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->y;
         burst->z = ((MemcardGlintAnchor *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->z;
-        func_800CE9D4((struct RoomFxTransformOwner *)D_8009D254, 0, (GteShortVector *)&burst->rotation);
+        FieldFx_GetTransformLookAngles((struct RoomFxTransformOwner *)D_8009D254, 0, (GteShortVector *)&burst->rotation);
         burst->rotation.x = 0;
-        FieldFx_ModelScrollUv((union FieldTexturedModel *)D_800E22D4, 0, 0);
-        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 40,
+        FieldFx_ModelScrollUv((union FieldTexturedModel *)g_FieldFxGlintModel, 0, 0);
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 40,
                              (FieldFxCallbackListCallback)MenuCard_SpinRingParticle);
     case 1:
-        if (D_800E27EC == 3) {
+        if (g_FieldFxCurrentAge == 3) {
             Akao_SendPositionalCmdStereo(1201, 0, burst->x, burst->y, burst->z);
         }
-        if (D_800E27EC == 2) {
-            child = (MemcardSpinParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+        if (g_FieldFxCurrentAge == 2) {
+            child = (MemcardSpinParticle *)FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (child) {
                 child->x = burst->x;
                 child->y = burst->y;
@@ -881,7 +881,7 @@ int MenuCard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
                 child->timer = 0;
             }
             for (i = 0; i < 6; i++) {
-                child = (MemcardSpinParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+                child = (MemcardSpinParticle *)FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = (rand() & 0x7F) - 64;
                     child->y = 0;
@@ -897,8 +897,8 @@ int MenuCard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
                 }
             }
         }
-        if (D_800E27EC == 8) {
-            child = (MemcardSpinParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+        if (g_FieldFxCurrentAge == 8) {
+            child = (MemcardSpinParticle *)FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (child) {
                 child->x = burst->x;
                 child->y = burst->y;
@@ -912,7 +912,7 @@ int MenuCard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
                 child->timer = 0;
             }
             for (i = 0; i < 6; i++) {
-                child = (MemcardSpinParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+                child = (MemcardSpinParticle *)FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     child->x = 0;
                     child->y = (rand() & 0x7F) - 64;
@@ -927,8 +927,8 @@ int MenuCard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
                 }
             }
         }
-        if (D_800E27EC == 2) {
-            child = (MemcardSpinParticle *)func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+        if (g_FieldFxCurrentAge == 2) {
+            child = (MemcardSpinParticle *)FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomSparkChannel)->pool);
             if (child) {
                 child->x = burst->x;
                 child->y = burst->y;
@@ -941,7 +941,7 @@ int MenuCard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
                 child->timer = 0;
             }
         }
-        if (D_800E27EC >= 8) {
+        if (g_FieldFxCurrentAge >= 8) {
             return 2;
         }
         break;
@@ -953,14 +953,14 @@ int MenuCard_SpinBurstController(int mode, MemcardSpinBurst *burst) {
         D_801F1F28.y = burst->y;
         D_801F1F28.z = burst->z;
         {
-            u16 tpage = D_800E2850[D_800E11E6];
-            D_800F3368.palette = 1;
-            D_800F3368.tpage = tpage;
+            u16 tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot1];
+            g_FieldFxSpriteParams.palette = 1;
+            g_FieldFxSpriteParams.tpage = tpage;
         }
-        func_800CEDA8(1);
-        D_800F3368.parameter06 = 0;
-        D_800F3368.parameter0A = 0;
-        D_800F3368.depth = 32;
+        FieldFx_EnsureEffectTexturePage(1);
+        g_FieldFxSpriteParams.parameter06 = 0;
+        g_FieldFxSpriteParams.parameter0A = 0;
+        g_FieldFxSpriteParams.depth = 32;
         break;
     }
     }

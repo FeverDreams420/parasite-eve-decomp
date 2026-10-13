@@ -16,7 +16,7 @@ int CD_getsector(void *destination, int words) {
     *g_CdRegRequest = 0x1323;
     *g_CdRegDmaPcr |= 0x8000;
     *g_CdRegDmaMadr = destination;
-    *D_8009B2BC = words | 0x10000;
+    *g_CdRegDmaBcr = words | 0x10000;
 
     status = g_CdRegIndexBase;
     do {
@@ -52,7 +52,7 @@ int CD_getsector2(void *destination, int words) {
     *g_CdRegRequest = 0x1325;
     *g_CdRegDmaPcr |= 0x8000;
     *g_CdRegDmaMadr = destination;
-    *D_8009B2BC = words | 0x10000;
+    *g_CdRegDmaBcr = words | 0x10000;
     index = g_CdRegIndexBase;
     if (!(*index & 0x40)) {
         do {
@@ -75,10 +75,10 @@ void callback(void) {
 
     while ((pending = getintr()) != 0) {
         if ((pending & 4) && g_CdReadyCallback) {
-            g_CdReadyCallback(*ready, D_800A3468);
+            g_CdReadyCallback(*ready, g_CdReadyResult);
         }
         if ((pending & 2) && g_CdSyncCallback) {
-            g_CdSyncCallback(*complete, D_800A3460);
+            g_CdSyncCallback(*complete, g_CdSyncResult);
         }
     }
 

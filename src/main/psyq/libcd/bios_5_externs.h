@@ -1,4 +1,4 @@
 #ifndef PE1_EXT_9E6E587DD25F
 #define PE1_EXT_9E6E587DD25F
-extern char D_80011C08[], D_80011C14[];
+extern char g_CdInitName[], g_CdInitAddrFormat[];
 #endif /* PE1_EXT_9E6E587DD25F */

@@ -133,6 +133,6 @@ void DsReadBreak(void) {
 
 void DsReadMode(unsigned int mode) {
     if (mode < 2) {
-        D_8009B6B8 = mode;
+        g_DsReadMode = mode;
     }
 }

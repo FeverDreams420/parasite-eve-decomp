@@ -28,19 +28,19 @@ typedef char layout[sizeof(GteShortVector)==8 &&
     def test_behavior(self):
         source = '#include <assert.h>\n#include <limits.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
 typedef GteShortVector Vector;
-int D_800E27EC, D_800F3428;
-unsigned short D_800E1204[8];
-RenderEffectParameters D_800F3368;
+int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag;
+unsigned short g_FieldFxPaletteTable[8];
+RenderEffectParameters g_FieldFxSpriteParams;
 short D_8019AD68[8];
-GteSineWord D_800966EC[4096];
+GteSineWord rcossin_tbl[4096];
 static Vector position;
 static int cluts, draws, expectedPalette, expectedTile, expectedShade, mutate;
 u_short GetClut(int x, int y) {
     assert(cluts++==0 && draws==0 && x==64 && y==expectedPalette);
-    if (mutate) { D_800E27EC=999; D_800F3368.parameter02=-2; }
+    if (mutate) { g_FieldFxCurrentAge=999; g_FieldFxSpriteParams.parameter02=-2; }
     return 0xF123;
 }
-void func_800CEE20(struct GteShortVector *p, struct GteRotation *rotation,
+void FieldFx_DrawShapeQuads(struct GteShortVector *p, struct GteRotation *rotation,
                   int w, int h, int tile, int clut, int flag, int shade,
                   struct RenderColor *color) {
     assert(cluts==1 && draws++==0 && p==&position && rotation==0);
@@ -51,7 +51,7 @@ int main(void) {
     int i, kind, variant, frame, index;
     int timers[]={INT_MIN,0,15,16,INT_MAX};
     for (i=0;i<5;++i) {
-        D_800E27EC=timers[i]; position.x=12; position.y=-32768;
+        g_FieldFxCurrentAge=timers[i]; position.x=12; position.y=-32768;
         position.z=34; position.pad=56;
         assert(func_80196F2C(1,&position)==(timers[i]>=16));
         assert(position.y==(timers[i]>=16 ? -32768:32762));
@@ -61,14 +61,14 @@ int main(void) {
     for (i=0;i<8;++i) D_8019AD68[i]=i+3;
     for (kind=0;kind<8;++kind) for (variant=0;variant<2;++variant)
         for (i=0;i<=16;++i) {
-            D_800E27EC=i; frame=i-1;
-            D_800F3368.palette=kind; D_800F3428=variant;
-            D_800E1204[kind]=65535;
+            g_FieldFxCurrentAge=i; frame=i-1;
+            g_FieldFxSpriteParams.palette=kind; g_FieldFxAltPaletteFlag=variant;
+            g_FieldFxPaletteTable[kind]=65535;
             expectedPalette=65535+(kind==4 && variant ? 4:0);
-            D_800F3368.parameter02=2; mutate=variant;
+            g_FieldFxSpriteParams.parameter02=2; mutate=variant;
             expectedTile=44+(variant ? -2:2)*D_8019AD68[frame/4];
             index=(((unsigned int)frame<<9)&0x3E00)/4;
-            D_800966EC[index].word=variant ? 0x1234FFE0:0x56780040;
+            rcossin_tbl[index].word=variant ? 0x1234FFE0:0x56780040;
             expectedShade=variant ? -1:2;
             cluts=draws=0;
             assert(func_80196F2C(2,&position)==0 && cluts==1 && draws==1);

@@ -16,20 +16,20 @@ typedef struct FieldFxCallbackList {
     unsigned char entries[1];
 } FieldFxCallbackList;
 
-/* Effect task pools: func_800CE560 lays out a list of count entries of
+/* Effect task pools: FieldFx_InitCallbackList lays out a list of count entries of
  * stride bytes (plus the active/age prefix) behind its header and returns
- * the bytes used; func_800CE610 claims the first inactive entry and returns
+ * the bytes used; FieldFx_AcquireCallbackSlot claims the first inactive entry and returns
  * its state, or null when the list is full. */
-int func_800CE560(char *out, int stride, int count,
+int FieldFx_InitCallbackList(char *out, int stride, int count,
                   FieldFxCallbackListCallback callback);
-void *func_800CE610(char *list);
+void *FieldFx_AcquireCallbackSlot(char *list);
 
 /* Age of the entry whose callback is running, saved and restored around
  * each list walk; callbacks read it as their elapsed frame count. */
-extern int D_800E27EC;
+extern int g_FieldFxCurrentAge;
 
-int func_800CE5AC(void *arg0, int arg1, int arg2, int arg3, void *arg4);
+int FieldFx_AllocCallbackList(void *arg0, int arg1, int arg2, int arg3, void *arg4);
 
-int func_800CE78C(char *list);
+int FieldFx_DrawCallbackList(char *list);
 
 #endif /* PE1_FIELDFX_CALLBACK_LIST_H */

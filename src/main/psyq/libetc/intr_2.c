@@ -25,16 +25,16 @@ u16 *Sys_InitIntrManager(void) {
     VSyncCallbackSetter result;
     DmaCallbackSetter dmaSetter;
 
-    intr = (InterruptCallbackState *)D_800945E4;
+    intr = (InterruptCallbackState *)g_IntrState;
     if (intr->active != 0) {
         return 0;
     }
 
-    dst = D_80095670;
+    dst = g_IntrStatusRegPtr;
     src = D_80095674;
     *src = 0;
     *dst = *src;
-    *D_80095678 = 0x33333333;
+    *g_IntrDmaControlRegPtr = 0x33333333;
 
     Sys_ClearWordBuf((int *)intr, sizeof(InterruptCallbackState) / 4);
     if (setjmp(intr->entry) != 0) {
@@ -42,10 +42,10 @@ u16 *Sys_InitIntrManager(void) {
     }
 
     /* The interrupt context's stack pointer: near the top of its stack. */
-    entrySp = &((InterruptCallbackState *)D_800945E4)->entry[1];
-    *entrySp = PSX_ADDRESS(&((InterruptCallbackState *)D_800945E4)->interruptStack[1004]);
-    HookEntryInt(((InterruptCallbackState *)D_800945E4)->entry);
-    ((InterruptCallbackState *)D_800945E4)->active = 1;
+    entrySp = &((InterruptCallbackState *)g_IntrState)->entry[1];
+    *entrySp = PSX_ADDRESS(&((InterruptCallbackState *)g_IntrState)->interruptStack[1004]);
+    HookEntryInt(((InterruptCallbackState *)g_IntrState)->entry);
+    ((InterruptCallbackState *)g_IntrState)->active = 1;
 
     result = startIntrVSync();
     vsyncPtr = g_EventCallbackTable;
@@ -56,7 +56,7 @@ u16 *Sys_InitIntrManager(void) {
     ptr->dma = dmaSetter;
 
     _96_remove(g_EventCallbackTable);
-    intr = (InterruptCallbackState *)D_800945E4;
+    intr = (InterruptCallbackState *)g_IntrState;
     ExitCriticalSection();
 
     return &intr->active;
@@ -66,18 +66,18 @@ u16 *Sys_InitIntrManager(void) {
 /* Legacy project name: this is LIBETC trapIntr, not scene setup. */
 void Render_InitSceneGeom(void)
 {
-    InterruptCallbackState *state = (InterruptCallbackState *) D_800945E4;
+    InterruptCallbackState *state = (InterruptCallbackState *) g_IntrState;
     unsigned short pending;
     unsigned short bits;
     int channel;
     PsyqInterruptHandler *handlers;
     if (!state->active)
     {
-        printf(D_80011740, *D_80095670);
+        printf(g_IntrUnexpectedFormat, *g_IntrStatusRegPtr);
         ReturnFromException();
     }
     state->inCallback = 1;
-    bits = (state->enabled & (*D_80095670)) & (*((u16 *) D_80095674));
+    bits = (state->enabled & (*g_IntrStatusRegPtr)) & (*((u16 *) D_80095674));
     pending = bits;
     if (bits)
     {
@@ -89,7 +89,7 @@ void Render_InitSceneGeom(void)
             {
                 if (pending & 1)
                 {
-                    *D_80095670 = ~(bit << channel);
+                    *g_IntrStatusRegPtr = ~(bit << channel);
                     if (handlers[channel])
                     {
                         handlers[channel]();
@@ -97,39 +97,39 @@ void Render_InitSceneGeom(void)
                 }
             }
 
-            bits = (D_80094614 & (*D_80095670)) & (*((u16 *) D_80095674));
+            bits = (g_IntrEnabledMask & (*g_IntrStatusRegPtr)) & (*((u16 *) D_80095674));
             pending = bits;
         }
         while (bits);
     }
 
-    if ((*D_80095670) & (*((u16 *) D_80095674)))
+    if ((*g_IntrStatusRegPtr) & (*((u16 *) D_80095674)))
     {
-        if ((D_8009567C++) > 0x800)
+        if ((g_IntrTimeoutCounter++) > 0x800)
         {
-            const char *format = D_8001175C;
+            const char *format = g_IntrTimeoutFormat;
             /* These equivalent calls let GCC merge the branch after scheduling
               * the format address before the two MMIO reads, as in the SDK. */
-            if (D_80095670) {
-                printf(format, *D_80095670, *((u16 *)D_80095674));
+            if (g_IntrStatusRegPtr) {
+                printf(format, *g_IntrStatusRegPtr, *((u16 *)D_80095674));
             } else {
-                printf(D_8001175C, *D_80095670, *((u16 *)D_80095674));
+                printf(g_IntrTimeoutFormat, *g_IntrStatusRegPtr, *((u16 *)D_80095674));
             }
-            D_8009567C = 0;
-            *D_80095670 = 0;
+            g_IntrTimeoutCounter = 0;
+            *g_IntrStatusRegPtr = 0;
         }
     }
     else
     {
-        D_8009567C = 0;
+        g_IntrTimeoutCounter = 0;
     }
 
-    D_800945E6 = 0;
+    g_IntrInCallback = 0;
     ReturnFromException();
 }
 
 PsyqInterruptHandler Sys_SetIntrCallback(int channel, PsyqInterruptHandler handler) {
-    PsyqInterruptHandler *handlers = D_800945E8;
+    PsyqInterruptHandler *handlers = g_IntrHandlers;
     InterruptCallbackState *state;
     PsyqInterruptHandler old = handlers[channel];
     unsigned int mask;
@@ -176,22 +176,22 @@ InterruptCallbackState *Sys_SaveDisableIntr(void) {
     u16 *status;
     u32 value;
 
-    state = (InterruptCallbackState *)D_800945E4;
+    state = (InterruptCallbackState *)g_IntrState;
     if (state->active == 0) {
         return 0;
     }
 
     EnterCriticalSection();
     mask = g_IntrMaskRegPtr;
-    control = D_80095678;
+    control = g_IntrDmaControlRegPtr;
     state->interruptMask = *mask;
     value = *control;
-    status = D_80095670;
+    status = g_IntrStatusRegPtr;
     state->dmaControl = value;
     *mask = 0;
     *status = *mask;
 
-    control = D_80095678;
+    control = g_IntrDmaControlRegPtr;
     *control &= 0x77777777;
     ResetEntryInt();
     state->active = 0;
@@ -199,13 +199,13 @@ InterruptCallbackState *Sys_SaveDisableIntr(void) {
 }
 
 InterruptCallbackState *Sys_RestoreIntr(void) {
-    InterruptCallbackState *state = (InterruptCallbackState *)D_800945E4;
+    InterruptCallbackState *state = (InterruptCallbackState *)g_IntrState;
     InterruptCallbackState *result;
     if (!state->active) {
         HookEntryInt(state->entry);
         state->active = 1;
         *D_80095674 = state->interruptMask;
-        *(volatile u32 *)D_80095678 = state->dmaControl;
+        *(volatile u32 *)g_IntrDmaControlRegPtr = state->dmaControl;
         ExitCriticalSection();
         result = state;
     } else {

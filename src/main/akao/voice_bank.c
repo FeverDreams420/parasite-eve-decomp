@@ -491,7 +491,7 @@ void Seq_StartNestedTrack(AkaoTrack *track, AkaoNestedSource *source, unsigned i
     mask = ~mask;
     g_SpuPendingKeyOffMask = old_pending_mask;
     g_AkaoVoiceMaskScratch &= mask;
-    D_800BCD58 &= mask;
+    g_AkaoSfxAllocatedVoiceMask &= mask;
     g_AkaoTrack34Mask &= mask;
     g_AkaoTrack38Mask &= mask;
     g_AkaoTrack3CMask &= mask;
@@ -629,18 +629,18 @@ void Akao_LoadSamplePairFromIndex(int *out0, int *out1, int sample_id) {
     index &= 0x3FF;
     index <<= 1;
 
-    value = D_8009D240[index];
+    value = g_AkaoSampleOffsetTable[index];
     if (value != 0xFFFF) {
-        result = (int)(D_8009D260 + value);
+        result = (int)(g_AkaoSampleDataBase + value);
     } else {
         result = 0;
     }
     *out0 = result;
 
     index++;
-    value = D_8009D240[index];
+    value = g_AkaoSampleOffsetTable[index];
     if (value != 0xFFFF) {
-        result = (int)(D_8009D260 + value);
+        result = (int)(g_AkaoSampleDataBase + value);
     } else {
         result = 0;
     }
@@ -1699,7 +1699,7 @@ void Akao_SetGlobalD2CCImmediate(AkaoGlobalParamCommand *cmd) {
     int value = cmd->value;
 
     g_AkaoGlobalD2CCSlideCounter = 0;
-    D_8009D2CC = value << 16;
+    g_AkaoGlobalPitchDepth = value << 16;
 }
 
 void Akao_InitVoices(int arg0, char *arg1);
@@ -1713,7 +1713,7 @@ void Akao_SlideGlobalD2CCToTarget(AkaoGlobalSlideCommand *cmd) {
         duration = raw_duration;
     }
 
-    step = ((cmd->target << 16) - D_8009D2CC) / duration;
+    step = ((cmd->target << 16) - g_AkaoGlobalPitchDepth) / duration;
     g_AkaoGlobalD2CCSlideCounter = duration;
     g_AkaoGlobalD2CCSlideStep = step;
 }
@@ -1731,7 +1731,7 @@ void Akao_SlideGlobalD2CCFromStartToTarget(AkaoGlobalSlideRangeCommand *cmd) {
 
     start <<= 24;
     start >>= 8;
-    D_8009D2CC = start;
+    g_AkaoGlobalPitchDepth = start;
     step = ((cmd->target << 16) - start) / duration;
     g_AkaoGlobalD2CCSlideCounter = duration;
     g_AkaoGlobalD2CCSlideStep = step;
@@ -1994,7 +1994,7 @@ void Akao_MessageNoop(AkaoQueueEntry *entry) {
 }
 
 void Akao_ProcessMessageQueue(void) {
-    AkaoQueueEntry *entry = D_800B8628;
+    AkaoQueueEntry *entry = g_AkaoMessageQueue;
 
     if (g_AkaoMessageQueueCount != 0) {
         do {
@@ -2006,8 +2006,8 @@ void Akao_ProcessMessageQueue(void) {
 }
 
 void Akao_AllocMessageSlot(AkaoQueueEntry **out_msg) {
-    *out_msg = D_800B8628;
-    *out_msg = &D_800B8628[g_AkaoMessageQueueCount];
+    *out_msg = g_AkaoMessageQueue;
+    *out_msg = &g_AkaoMessageQueue[g_AkaoMessageQueueCount];
     g_AkaoMessageQueueCount++;
 }
 
@@ -2032,7 +2032,7 @@ int Akao_EnqueueStagedCommand(void) {
     AkaoSequenceCounter sequence;
 
     result = 0;
-    D_8009D268 = 1;
+    g_AkaoMessageQueueLock = 1;
     opcode = g_AkaoCmd.opcode;
     switch (opcode) {
     case 0x10:
@@ -2065,9 +2065,9 @@ int Akao_EnqueueStagedCommand(void) {
         Akao_AllocMessageSlot(&msg);
         msg->arg0.value = g_AkaoCmd.arg0.value;
         msg->arg1 = g_AkaoCmd.arg1;
-        sequence = D_8009CDF0;
+        sequence = g_AkaoCmd24Sequence;
         msg->arg2 = g_AkaoCmd.arg2;
-        D_8009CDF0.value = ((sequence.value + 1) & 0x1FF) + 0x400;
+        g_AkaoCmd24Sequence.value = ((sequence.value + 1) & 0x1FF) + 0x400;
         msg->arg3 = g_AkaoCmd.arg3;
         result = sequence.value;
         msg->sequence = result;
@@ -2124,6 +2124,6 @@ int Akao_EnqueueStagedCommand(void) {
         msg->opcode.word = g_AkaoCmd.opcode;
         break;
     }
-    D_8009D268 = 0;
+    g_AkaoMessageQueueLock = 0;
     return result;
 }

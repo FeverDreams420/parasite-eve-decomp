@@ -12,7 +12,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 CASES = [('psyq/libgpu/sys_8',
   1948,
   '5839825b129edc7ba194d09ceaca9b4fa944307bc502c4438fa366c907a4c73c',
-  'D_8009574C = 0x8009574c;\ng_GpuDmaRegisterWindow = 0x80095854;\ng_GpuDmaChcrPtr = 0x80095860;\ng_GpuDmaQueueHead = 0x80095874;\ng_GpuDmaQueueTail = 0x80095878;\nD_8009587C = 0x8009587c;\nD_80095880 = 0x80095880;\nD_80095884 = 0x80095884;\nD_800A3348 = 0x800a3348;\nD_800BD030 = 0x800bd030;\nDMACallback = 0x80073cf4;\ng_GpuDmaChcrPtr = 0x80095860;\ng_GpuDmaControlRegPtr = 0x80095870;\ng_GpuDmaQueueHead = 0x80095874;\ng_GpuDmaQueueTail = 0x80095878;\ng_GpuGp1Ptr = 0x80095854;\nGpu_DmaTimeoutCheck = 0x80077404;\nGPU_memset = 0x80077a28;\nGpu_QueryStatus = 0x80077548;\nGpu_ResetDmaWaitTimer = 0x800773d0;\nSetIntrMask = 0x80073e10;\nSECTIONS { .text 0x80076c34 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }'),
+  'g_GpuSystemState = 0x8009574c;\ng_GpuDmaRegisterWindow = 0x80095854;\ng_GpuDmaChcrPtr = 0x80095860;\ng_GpuDmaQueueHead = 0x80095874;\ng_GpuDmaQueueTail = 0x80095878;\nD_8009587C = 0x8009587c;\nD_80095880 = 0x80095880;\nD_80095884 = 0x80095884;\nD_800A3348 = 0x800a3348;\nD_800BD030 = 0x800bd030;\nDMACallback = 0x80073cf4;\ng_GpuDmaChcrPtr = 0x80095860;\ng_GpuDmaControlRegPtr = 0x80095870;\ng_GpuDmaQueueHead = 0x80095874;\ng_GpuDmaQueueTail = 0x80095878;\ng_GpuGp1Ptr = 0x80095854;\nGpu_DmaTimeoutCheck = 0x80077404;\nGPU_memset = 0x80077a28;\nGpu_QueryStatus = 0x80077548;\nGpu_ResetDmaWaitTimer = 0x800773d0;\nSetIntrMask = 0x80073e10;\nSECTIONS { .text 0x80076c34 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }'),
  ('psyq/libds/dssys_2_2',
   592,
   '71cb6c36483078eb7a6513f2ac8d01d326f1a29003be05a55e261046ffa14825',

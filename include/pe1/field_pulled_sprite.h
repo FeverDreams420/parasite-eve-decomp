@@ -8,7 +8,7 @@
 #include "pe1/render_object.h"
 #include "pe1/render_tint.h"
 
-/* Field engine pulled sprite (func_800D3BC8): a textured quad centred on a
+/* Field engine pulled sprite (FieldFx_DrawPulledSprite): a textured quad centred on a
  * projected point that is pulled toward the screen centre by `pull`
  * (4.12), forced to a fixed near depth when pulled at all. */
 

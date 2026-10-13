@@ -147,7 +147,7 @@ void RoomEffect_GroundEruptionInit(RoomEnt *owner, void *arg1, RoomEruptionActor
     g_RoomEruptionDebrisPacket.b = color;
     g_RoomEruptionDebrisPacket.zero = 0;
     g_RoomFloorY->y = 0;
-    func_800C66C8(callOwner, 0x587, workMatrix);
+    FieldFx_PlaySoundAtMatrixPosition(callOwner, 0x587, workMatrix);
 }
 
 void RoomEffect_GroundEruptionNop(void) {
@@ -208,7 +208,7 @@ void RoomEffect_GroundEruptionInitColumn(void *ent, void *unused,
     state->speed.signedValue = 0;
     state->emitter.offset = 0;
     state->emitter.source = state->sourceData;
-    func_800C4E50(&state->emitter);
+    FieldFx_BuildRingGeometry(&state->emitter);
 }
 
 /* The retail function is marked handwritten and uses four explicit GTE windows. */
@@ -266,12 +266,12 @@ void RoomEffect_GroundEruptionTransformColumn(void *arg0, void *arg1,
         gte_swc2_11_8(translation);
     }
 
-    func_800C3238(2);
+    FieldFx_SetSpriteBlendMode(2);
     workState->emitter.intensity = (u16)workState->depth;
     stack.matrix.t[0] = owner->matrix.t[0];
     stack.matrix.t[1] = owner->matrix.t[1];
     stack.matrix.t[2] = owner->matrix.t[2];
-    func_800C4FC4(&workState->emitter, matrix, 0);
+    FieldFx_DrawShadedRing(&workState->emitter, matrix, 0);
 }
 
 typedef struct RoomEruptionRiseScript {
@@ -306,7 +306,7 @@ void RoomEffect_GroundEruptionUpdateColumn(
     position[0] = actor->matrix.t[0];
     position[1] = g_RoomFloorY->y;
     position[2] = actor->matrix.t[2];
-    if (func_800C6B90(position, actor->collisionRadius) != 0) {
+    if (FieldFx_IsPlayerWithinRadius(position, actor->collisionRadius) != 0) {
         actor->collisionState = 1;
     }
 }
@@ -335,10 +335,10 @@ void RoomEffect_GroundEruptionDrawGlow(void) {
     RoomEruptionActor *owner;
 
     owner = FieldFx_GetScriptContext();
-    func_800C2EAC(owner->asset.page);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(owner->asset.page);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -358,7 +358,7 @@ void RoomEffect_GroundEruptionDrawGlow(void) {
     matrix.t[0] = owner->matrix.t[0];
     matrix.t[1] = g_RoomFloorY->y;
     matrix.t[2] = owner->matrix.t[2];
-    func_800C42A4((FieldGlowSprite *)&g_RoomEruptionGlowPacket, &matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)&g_RoomEruptionGlowPacket, &matrix, 1);
 }
 
 void RoomEffect_GroundEruptionUpdateGlow(void *unused, RoomFxControl *state,
@@ -420,10 +420,10 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, RoomEruptionRing 
     packet = (RoomFxSpritePacket *)packetAddress;
     owner = rawOwner;
     PE1_COMPILER_LAUNDER(owner);
-    func_800C2EAC((s8)owner->asset.page);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset((s8)owner->asset.page);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -445,7 +445,7 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, RoomEruptionRing 
     packet->depth = 0x40;
     matrix.t[2] = ownerZ;
     g_RoomEruptionRingPacket.code = workState->frame * 2 + 0x20;
-    func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)packet, &matrix, 1);
 
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -470,14 +470,14 @@ void RoomEffect_GroundEruptionDrawRing(void *arg0, void *arg1, RoomEruptionRing 
         *packetDepth = (u16)workState->depth;
         code = workState->frame;
         RoomEffect_SpriteControlFromDepth(packetDepth)->code = code * 2 + 0x20;
-        func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
+        FieldFx_DrawGlowSprite((FieldGlowSprite *)packet, &matrix, 1);
         matrix.t[0] = point->x;
         matrix.t[1] = g_RoomFloorY->y;
         matrix.t[2] = point->z;
         *packetDepth = workState->depth >> 2;
         code = workState->frame;
         RoomEffect_SpriteControlFromDepth(packetDepth)->code = code * 2 + 0x20;
-        func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
+        FieldFx_DrawGlowSprite((FieldGlowSprite *)packet, &matrix, 1);
     }
 }
 
@@ -545,10 +545,10 @@ void RoomEffect_GroundEruptionDrawShadow(
     owner = FieldFx_GetScriptContext();
     stack.seed = s_EruptionShadowSeed;
     RotMatrix(&stack.seed.vector, &stack.generatedMatrix);
-    func_800C2EAC(owner->asset.page);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(owner->asset.page);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     stack.matrix.m[2][2] = 0x1000;
     stack.matrix.m[1][1] = 0x1000;
@@ -573,7 +573,7 @@ void RoomEffect_GroundEruptionDrawShadow(
     matrixSlot = &D_800BCFA4;
     gte_ldrotmatrix(matrixSlot->value);
     gte_ldtransmatrix(matrixSlot->value);
-    func_800C42A4((FieldGlowSprite *)((char *)depthSlot - 0xA), &stack.matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)((char *)depthSlot - 0xA), &stack.matrix, 1);
 }
 
 void RoomEffect_GroundEruptionNop2(void) {
@@ -630,10 +630,10 @@ void RoomEffect_GroundEruptionDrawDebris(void *arg0, void *arg1, RoomEruptionDeb
     mode = 3;
     packetFields = (RoomFxSpriteControl *)&g_RoomEruptionDebrisPacket.code;
     packet = (RoomFxSpritePacket *)((char *)packetFields - PE1_OFFSETOF(RoomFxSpritePacket, code));
-    func_800C2EAC(owner->asset.page);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(owner->asset.page);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
     matrix.m[0][0] = 0x1000;
@@ -657,17 +657,17 @@ void RoomEffect_GroundEruptionDrawDebris(void *arg0, void *arg1, RoomEruptionDeb
             matrix.t[1] = particle->y;
             matrix.t[2] = particle->z;
             if (i == 0) {
-                func_800C3238(2);
+                FieldFx_SetSpriteBlendMode(2);
                 packetFields->code = code;
                 packetFields->mode = mode;
                 packetFields->depth = 0xFF;
             } else {
-                func_800C3238(3);
+                FieldFx_SetSpriteBlendMode(3);
                 packetFields->code = 0x47;
                 packetFields->mode = 5;
                 packetFields->depth = depth;
             }
-            func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
+            FieldFx_DrawGlowSprite((FieldGlowSprite *)packet, &matrix, 1);
             if (i == 0) {
                 matrix.t[0] = state->position[0].x;
                 matrix.t[1] = g_RoomFloorY->y;
@@ -675,8 +675,8 @@ void RoomEffect_GroundEruptionDrawDebris(void *arg0, void *arg1, RoomEruptionDeb
                 g_RoomEruptionDebrisDepth = 0x40;
                 g_RoomEruptionDebrisPacket.code = code;
                 g_RoomEruptionDebrisPacket.mode = mode;
-                func_800C3238(2);
-                func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
+                FieldFx_SetSpriteBlendMode(2);
+                FieldFx_DrawGlowSprite((FieldGlowSprite *)packet, &matrix, 1);
             }
         }
     }

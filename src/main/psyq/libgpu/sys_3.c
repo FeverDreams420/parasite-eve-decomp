@@ -86,8 +86,8 @@ void SetDrawEnv(DR_ENV *packet, DRAWENV *env)
         rect.y = env->clip.y;
         rect.w = env->clip.w;
         rect.h = env->clip.h;
-        rect.w = rect.w < 0 ? 0 : rect.w > D_8009574C.width - 1 ? D_8009574C.width - 1 : rect.w;
-        rect.h = rect.h < 0 ? 0 : rect.h > D_8009574C.height - 1 ? D_8009574C.height - 1 : rect.h;
+        rect.w = rect.w < 0 ? 0 : rect.w > g_GpuSystemState.width - 1 ? g_GpuSystemState.width - 1 : rect.w;
+        rect.h = rect.h < 0 ? 0 : rect.h > g_GpuSystemState.height - 1 ? g_GpuSystemState.height - 1 : rect.h;
         rect.x -= env->ofs[0];
         rect.y -= env->ofs[1];
         words[n++] = 0x60000000 | (env->b0 << 16) | (env->g0 << 8) | env->r0;
@@ -115,8 +115,8 @@ void Gpu_SetDrawEnvBack(DR_ENV *packet, DRAWENV *env)
         rect.y = env->clip.y;
         rect.w = env->clip.w;
         rect.h = env->clip.h;
-        rect.w = rect.w < 0 ? 0 : rect.w > D_8009574C.width - 1 ? D_8009574C.width - 1 : rect.w;
-        rect.h = rect.h < 0 ? 0 : rect.h > D_8009574C.height - 1 ? D_8009574C.height - 1 : rect.h;
+        rect.w = rect.w < 0 ? 0 : rect.w > g_GpuSystemState.width - 1 ? g_GpuSystemState.width - 1 : rect.w;
+        rect.h = rect.h < 0 ? 0 : rect.h > g_GpuSystemState.height - 1 ? g_GpuSystemState.height - 1 : rect.h;
         if ((rect.x & 63) || (rect.w & 63)) {
             rect.x -= env->ofs[0];
             rect.y -= env->ofs[1];

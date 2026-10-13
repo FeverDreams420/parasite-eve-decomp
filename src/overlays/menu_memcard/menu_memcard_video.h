@@ -84,7 +84,7 @@ void MenuCard_SetVideoDisplay(s8 index, s8 wide);
 void func_80121004(s8 index, s8 wide);
 
 /* Video open: file lookup, stream start and first decoded frame. */
-extern u8 D_800B0DBF;
+extern u8 g_MovieIndex;
 extern VideoEntry D_80122438[];
 extern DslFILE D_801223FC, D_801D0DC4;
 extern CdlLOC D_80122414, D_801D0DDC;

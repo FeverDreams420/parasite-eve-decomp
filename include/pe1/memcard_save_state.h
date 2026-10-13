@@ -36,7 +36,7 @@ void Menu_DestroyMemCardProgressWidget(void);
 void Save_LoadCardFileIntoRuntime(void);
 
 /* Card directory path "bu00:" whose port digit is patched before scans. */
-extern char *D_80092230;
+extern char *g_MemCardSearchPatternPtr;
 
 void MemCard_UpdateSaveState(int port);
 

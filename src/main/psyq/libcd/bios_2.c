@@ -11,13 +11,13 @@ int CD_sync(int mode, u8 *result) {
     u8 *ready;
     const char **commands;
     const char **events;
-    D_800A3478 = VSync(-1) + 0x3C0;
+    g_CdTimeoutDeadlineVsync = VSync(-1) + 0x3C0;
     commands = g_CdCommandNames;
     events = g_CdInterruptNames;
     sync = (u8 *)&g_CdInterruptEvents;
     ready = (u8 *)&((CdInterruptEvents *)sync)->ready;
-    D_800A347C = 0;
-    D_800A3480 = D_80011BA0;
+    g_CdTimeoutPollCount = 0;
+    g_CdTimeoutFuncName = g_CdSyncName;
     do {
         int status;
         if (timed_out(commands, events, (CdInterruptEvents *)sync)) {
@@ -29,7 +29,7 @@ int CD_sync(int mode, u8 *result) {
         status = ((CdInterruptEvents *)sync)->sync;
         if (status == 2 || status == 5) {
             ((CdInterruptEvents *)sync)->sync = 2;
-            copy_result(result, D_800A3460);
+            copy_result(result, g_CdSyncResult);
             return status;
         }
     } while (!mode);
@@ -42,14 +42,14 @@ int CD_ready(int mode, u8 *result) {
     volatile u8 *end;
     const char **commands;
     const char **events;
-    D_800A3478 = VSync(-1) + 0x3C0;
+    g_CdTimeoutDeadlineVsync = VSync(-1) + 0x3C0;
     commands = g_CdCommandNames;
     events = g_CdInterruptNames;
     sync = (u8 *)&g_CdInterruptEvents;
     ready = (u8 *)&((CdInterruptEvents *)sync)->ready;
     end = (volatile u8 *)&((CdInterruptEvents *)sync)->end;
-    D_800A347C = 0;
-    D_800A3480 = D_80011BA8;
+    g_CdTimeoutPollCount = 0;
+    g_CdTimeoutFuncName = g_CdReadyName;
     do {
         int status;
         if (timed_out(commands, events, (CdInterruptEvents *)sync)) {
@@ -61,13 +61,13 @@ int CD_ready(int mode, u8 *result) {
         status = *end;
         if (status) {
             ((CdInterruptEvents *)sync)->end = 0;
-            copy_result(result, D_800A3470);
+            copy_result(result, g_CdEndResult);
             return status;
         }
         status = end[-1];
         if (status) {
             ((CdInterruptEvents *)sync)->ready = 0;
-            copy_result(result, D_800A3468);
+            copy_result(result, g_CdReadyResult);
             return status;
         }
     } while (!mode);

@@ -11,7 +11,7 @@
 
 void *RoomLib_SetTaskVar0(int mode) {
     if (mode == 1) {
-        D_800E2368->variables[0] = 1;
+        g_FieldFxTaskContext->variables[0] = 1;
     }
     return &g_RoomScriptRecord;
 }

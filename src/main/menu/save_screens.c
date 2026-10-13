@@ -143,8 +143,8 @@ void Menu_DrawContextHelpText(MenuWidgetNode *panel)
         case 5:
             if (index < 0)
                 break;
-            data = Inv_LookupActiveListData(g_InvItemUsableFlag ? D_800C0E20.tracked[0]
-                                                       : D_800C0E20.tracked[2]);
+            data = Inv_LookupActiveListData(g_InvItemUsableFlag ? g_InventoryRuntime.tracked[0]
+                                                       : g_InventoryRuntime.tracked[2]);
             if (data != 0)
                 text = Text_LookupTableC(data->itemId - 1);
             break;
@@ -308,16 +308,16 @@ void Menu_DrawContextHelpText(MenuWidgetNode *panel)
             /* Retail keeps the table base in a register for the row-4
              * override and recomputes the row address on both paths. */
             {
-                u8 *hints = D_8009234C;
+                u8 *hints = g_MenuContextHelpTextIds;
                 u8 *hint;
 
                 if (g_MenuEquipMode == 1) {
                     if (index == 2)
                         hint = &hints[4];
                     else
-                        hint = &D_8009234C[index];
+                        hint = &g_MenuContextHelpTextIds[index];
                 } else {
-                    hint = &D_8009234C[index];
+                    hint = &g_MenuContextHelpTextIds[index];
                 }
                 text = Text_LookupTable10(*hint);
             }
@@ -909,9 +909,9 @@ void Menu_OpenRenameScreen(s32 arg0) {
     temp_v0 = MenuWidget_CreateSimpleNode(0x17, 0, 0, 0);
     (temp_v0)->update = Menu_StepNameEntryAlt;
     temp_v0_5 = Save_GetMetadataWindowIndex();
-    var_v1 = D_80092354;
+    var_v1 = g_MenuRenamePanelPointsWindow0;
     if (temp_v0_5 != 0) {
-        var_v1 = D_80092380;
+        var_v1 = g_MenuRenamePanelPointsWindow1;
     }
     temp_v0->appearance.gradientPoints = var_v1;
     if (Save_GetMetadataWindowIndex() != 0) {
@@ -940,7 +940,7 @@ void Menu_OpenRenameScreen(s32 arg0) {
     record = Inv_LookupActiveListData(arg0);
     g_MenuRenameTargetRecord = record;
     if (record == 0) {
-        temp_v0->appearance.gradientPoints = D_800923A0;
+        temp_v0->appearance.gradientPoints = g_MenuRenamePreviewPanelPoints;
     }
     Save_SelectMetadataWindow(g_MenuRenameTargetRecord);
     Save_LoadMetadataWindowText();

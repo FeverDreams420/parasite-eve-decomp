@@ -19,11 +19,11 @@ class ResetGraphTests(unittest.TestCase):
         self.assertIn('void (*drawSyncCallback)();', source)
         source = source.replace('void (*drawSyncCallback)();',
                                 'unsigned int drawSyncCallback;')
-        # D_8009574C heads the 128-byte SYS.OBJ state ResetGraph clears.
+        # g_GpuSystemState heads the 128-byte SYS.OBJ state ResetGraph clears.
         source = source.replace(
-            'extern GpuDebugState D_8009574C;',
+            'extern GpuDebugState g_GpuSystemState;',
             'extern GpuSystemState g_TestGpuState;\n'
-            '#define D_8009574C (g_TestGpuState.status)')
+            '#define g_GpuSystemState (g_TestGpuState.status)')
         source = source.replace('printf', 'testPrintf')
         harness = source + r'''
 #include <assert.h>
@@ -31,19 +31,19 @@ class ResetGraphTests(unittest.TestCase):
 #include <stdint.h>
 #include <stddef.h>
 GpuSystemState g_TestGpuState;
-unsigned char g_GraphDebug[1], D_80095704[4];
-char D_800117E0[] = "reset", D_80011800[] = "soft";
-unsigned short D_800957CC[3][2];
-unsigned short D_800957D8[3][2] = {{241, 999}, {481, 999}, {513, 999}};
+unsigned char g_GraphDebug[1], g_GpuDefaultCallbacks[4];
+char g_ResetGraphJtbFormat[] = "reset", g_ResetGraphModeFormat[] = "soft";
+unsigned short g_GpuTypeWidthTable[3][2];
+unsigned short g_GpuTypeHeightTable[3][2] = {{241, 999}, {481, 999}, {513, 999}};
 static GpuCallbacks callbacks;
 GpuCallbacks *g_GpuCallbacks = &callbacks;
 static int stage, prints, modeExpected, variantExpected, softCalls;
 int testPrintf(const char *format, ...) {
     va_list ap;
-    assert(stage == 0 && format == D_800117E0);
+    assert(stage == 0 && format == g_ResetGraphJtbFormat);
     va_start(ap, format);
-    assert(va_arg(ap, unsigned char *) == D_80095704);
-    assert(va_arg(ap, unsigned char *) == (unsigned char *)&D_8009574C);
+    assert(va_arg(ap, unsigned char *) == g_GpuDefaultCallbacks);
+    assert(va_arg(ap, unsigned char *) == (unsigned char *)&g_GpuSystemState);
     va_end(ap);
     ++prints;
     return 0;
@@ -54,7 +54,7 @@ static void debug(char *format, ...) {
     va_start(args, format);
     mode = va_arg(args, int);
     va_end(args);
-    assert(stage == 0 && format == D_80011800 && mode == modeExpected);
+    assert(stage == 0 && format == g_ResetGraphModeFormat && mode == modeExpected);
     ++prints;
 }
 GpuDebugPrintf g_GpuDebugPrintf = debug;
@@ -64,9 +64,9 @@ void GPU_memset(unsigned char *ptr, int value, int size) {
         stage = 1;
     } else if (stage == 4) {
         assert((void *)ptr == (void *)&g_TestGpuState.drawCache && value == -1 && size == 0x5C);
-        assert(D_8009574C.type == variantExpected && D_8009574C.queueState.queue == 1);
-        assert(D_8009574C.width == 321 + 100 * variantExpected);
-        assert(D_8009574C.height == D_800957D8[variantExpected][0]);
+        assert(g_GpuSystemState.type == variantExpected && g_GpuSystemState.queueState.queue == 1);
+        assert(g_GpuSystemState.width == 321 + 100 * variantExpected);
+        assert(g_GpuSystemState.height == g_GpuTypeHeightTable[variantExpected][0]);
         stage = 5;
     } else {
         assert(stage == 5 && (void *)ptr == (void *)&g_TestGpuState.displayCache && value == -1 && size == 0x14);
@@ -96,21 +96,21 @@ int main(void) {
     assert(offsetof(GpuSystemState, displayCache) == 0x6C);
     callbacks.reset = softReset;
     for (variant = 0; variant < 3; ++variant)
-        D_800957CC[variant][0] = 321 + 100 * variant;
+        g_GpuTypeWidthTable[variant][0] = 321 + 100 * variant;
     for (mode = -8; mode < 24; ++mode) for (level = 0; level < 4; ++level)
     for (variant = 0; variant < 3; ++variant) {
         unsigned char before[128], expected[128] = {0};
         int full = (mode & 7) == 0 || (mode & 7) == 3 || (mode & 7) == 5;
         int result;
         __builtin_memset(&g_TestGpuState, 0xA5, sizeof(g_TestGpuState));
-        D_8009574C.queueState.debugLevel = g_GraphDebug[0] = levels[level];
+        g_GpuSystemState.queueState.debugLevel = g_GraphDebug[0] = levels[level];
         __builtin_memcpy(before, &g_TestGpuState, 128);
         stage = prints = softCalls = 0;
         modeExpected = mode; variantExpected = variant;
         result = ResetGraph(mode);
         if (full) {
             unsigned short width = 321 + 100 * variant;
-            unsigned short height = D_800957D8[variant][0];
+            unsigned short height = g_GpuTypeHeightTable[variant][0];
             expected[0] = variant; expected[1] = 1;
             __builtin_memcpy(expected + 4, &width, 2); __builtin_memcpy(expected + 6, &height, 2);
             __builtin_memset(expected + 16, 255, 112);

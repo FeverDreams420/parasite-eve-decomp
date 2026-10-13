@@ -37,7 +37,7 @@ typedef struct FontGlyphTable {
  * derives its address from the pointer member's address in retail code. */
 typedef struct FontGlyphSelectionState {
     unsigned char active;     /* set by the shuffled load, cleared by reset */
-    unsigned char codeIndex;  /* index of the loaded code in D_8009EE22 */
+    unsigned char codeIndex;  /* index of the loaded code in g_FontGlyphCodeSequence */
     unsigned char code;       /* glyph code last passed to the loader */
     unsigned char selected;
     unsigned char loadFailed; /* set when the code index runs past the table */
@@ -82,15 +82,15 @@ unsigned char Render_StepFontLoad(void);
 /* Byte views of g_FontSelectionState.codeIndex and .selected. The step load
  * and the shuffled and by-code loads keep retail's instruction order only
  * when these bytes are read outside the record. */
-extern unsigned char D_80091A1D, D_80091A1F;
+extern unsigned char g_FontSelectionCodeIndex, g_FontSelectionSelectedSlot;
 /* The code list: codes from index 2 on are shuffled by
  * Render_LoadFontGlyphAlt. */
-extern unsigned char D_8009EE22[];
+extern unsigned char g_FontGlyphCodeSequence[];
 int Render_LoadFontGlyph(int code);
 unsigned char Render_SetFontGlyphByCode(unsigned char code);
 int Render_LoadFontGlyphAlt(void);
-int func_80038CE4(int index);
-int func_80038D48(void);
+int Render_GetFontSlotCode(int index);
+int Render_ConsumeFontShuffleSeed(void);
 
 /* Selection state queries and resets used by the map selection, the frame
  * loop and the script; the names predate the identification of the state. */

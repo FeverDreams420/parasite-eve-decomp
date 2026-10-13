@@ -119,9 +119,9 @@ int Script_DispatchScriptCmd(ScriptCmdArgs *args)
         ((RenderShadowActor *)g_CurrentEntity)->shadow_intensity = ARG_WORD(args->arg1);
         break;
     case 2700:
-        D_800BD025.r = ARG_WORD(args->arg1);
-        D_800BD025.g = ARG_WORD(args->arg2);
-        D_800BD025.b = ARG_WORD(args->arg3);
+        g_RoomLightTint.r = ARG_WORD(args->arg1);
+        g_RoomLightTint.g = ARG_WORD(args->arg2);
+        g_RoomLightTint.b = ARG_WORD(args->arg3);
         break;
     case 2800:
         Battle_DrawActiveStatus();
@@ -328,13 +328,13 @@ void Script_RunQueue(void)
                     /* Reload after every handler: it may switch actors. */
                     args[i] = (u32 *)((argument_entity = D_8009D2F0[0]) + 0xAC + values[i] * 4);
                     break;
-                case 2: args[i] = &D_800A77F0[values[i]]; break;
+                case 2: args[i] = &g_ScriptVariableBank[values[i]]; break;
                 case 4: args[i] = &g_ScriptNodeActiveFlags[values[i]]; break;
                 }
                 modes >>= 3;
                 if (i == 4) modes = tail;
             }
-        } while (D_800910A0[opcode](args));
+        } while (g_ScriptQueueOpcodeHandlers[opcode](args));
         /* Handlers may replace both the current node and the script cursor. */
         g_ScriptNodePool->current.script = D_8009CE00;
     } while ((g_ScriptNodePool = g_ScriptNodePool->next) != 0);

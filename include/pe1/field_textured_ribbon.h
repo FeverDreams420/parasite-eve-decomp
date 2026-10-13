@@ -8,7 +8,7 @@
 #include "pe1/render_prim.h"
 #include "pe1/render_tint.h"
 
-/* Field engine textured ribbon (func_800D3114): a strip of POLY_GT4 quads
+/* Field engine textured ribbon (FieldFx_DrawTexturedRibbon): a strip of POLY_GT4 quads
  * along a point list, each joint widened across the screen-space direction
  * of its segment and shaded between two colours. */
 

@@ -7,7 +7,7 @@ void SpuSetReverbModeDepth(short left, short right) {
 
     _spu_RXX->reverb_volume_left = left;
     _spu_RXX->reverb_volume_right = right;
-    asm volatile("" : "=r"(vol) : "0"(&D_8009B3A0.depth));
+    asm volatile("" : "=r"(vol) : "0"(&g_SpuReverbState.depth));
     vol->left = left;
     vol->right = right;
 }

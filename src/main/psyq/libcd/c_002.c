@@ -7,10 +7,10 @@ void StClearRing(void) {
 
     g_CdStreamRingIndex = 0;
     g_CdStreamRingReadSlot = 0;
-    D_800BE998 = 0;
+    g_CdStreamRingWriteSlot = 0;
     g_CdStreamDataReadyFlag = 0;
     init_ring_status(0, size);
     g_CdStreamReady.word = 0;
-    D_800A8018 = 0;
-    D_800A5D54 = 0;
+    g_StFrameSectorIndex = 0;
+    g_StCurrentFrameNumber = 0;
 }

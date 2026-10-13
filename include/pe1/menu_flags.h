@@ -5,7 +5,7 @@
  * field units. */
 
 /* Frames left on the menu effect timer (set to 0x5A by the main update). */
-extern unsigned char D_8009CE34;
+extern unsigned char g_AyaStatusEffectTimer;
 /* Equip-slot index chosen by Menu_SetEquipSlotIndex. */
 extern unsigned char D_8009CE94;
 /* Memory-card dialog mode and the pending confirm flag. */

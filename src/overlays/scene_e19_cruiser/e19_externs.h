@@ -13,14 +13,14 @@ extern GteRotation D_8018F1CC;
 extern int D_8019B668;
 extern GteRotation D_8018F210;
 extern RenderColor D_8018F218;
-extern void func_800D3BC8(GteShortVector *, int, int, int,
+extern void FieldFx_DrawPulledSprite(GteShortVector *, int, int, int,
                          int, int, int, int, int);
 extern RenderColor D_8018F234;
 extern GteShortVector D_8019B678;
 extern u8 D_8019B4FC[];
 extern void LoadAverageShort12(void *from, void *to, int weightFrom, int weightTo,
                           void *out);
-extern void func_800D2B58(void *, void *, void *, void *, int, int, int);
+extern void FieldFx_DrawGlowLine(void *, void *, void *, void *, int, int, int);
 extern RenderColor D_8018F23C;
 extern RenderColor D_8018F240;
 extern int func_801982A4(int mode, RoomOrbitTrailParticle *p);

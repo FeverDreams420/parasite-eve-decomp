@@ -30,8 +30,8 @@ int Gpu_SwapDisplayBuffers(void (*function)(u32, u32), u32 *source, int size, u3
         if (Gpu_DmaTimeoutCheck()) return -1;
         Gpu_SetDisplayBuffer();
     }
-    D_8009587C = SetIntrMask(0);
-    state = &D_8009574C;
+    g_GpuSavedIntrMask = SetIntrMask(0);
+    state = &g_GpuSystemState;
     state->syncCallbackPending = 1;
     if (state->queueState.queue) {
         register u32 status;
@@ -47,7 +47,7 @@ int Gpu_SwapDisplayBuffers(void (*function)(u32, u32), u32 *source, int size, u3
         register u32 ready = 0x04000000;
         do {} while (!(*gp1 & ready));
         function(PSX_ADDRESS(source), argument);
-        SetIntrMask(D_8009587C);
+        SetIntrMask(g_GpuSavedIntrMask);
         return 0;
     }
 
@@ -55,7 +55,7 @@ queued:
     DMACallback(2, (PsyqInterruptHandler)Gpu_SetDisplayBuffer);
     i = 0;
     if (size) {
-        register u32 *base = D_800BD030[0].packet;
+        register u32 *base = g_GpuDmaQueue[0].packet;
         register u32 *cursor = source;
         for (; i < size / 4;) {
             register u32 offset = i * 4;
@@ -70,16 +70,16 @@ queued:
             *(u32 *)offset = value;
             asm volatile("" ::: "memory");
         }
-        D_800BD030[g_GpuDmaQueueHead].argument0 = PSX_ADDRESS(D_800BD030[g_GpuDmaQueueHead].packet);
+        g_GpuDmaQueue[g_GpuDmaQueueHead].argument0 = PSX_ADDRESS(g_GpuDmaQueue[g_GpuDmaQueueHead].packet);
     } else {
-        D_800BD030[g_GpuDmaQueueHead].argument0 = PSX_ADDRESS(source);
+        g_GpuDmaQueue[g_GpuDmaQueueHead].argument0 = PSX_ADDRESS(source);
     }
-    D_800BD030[g_GpuDmaQueueHead].argument1 = argument;
+    g_GpuDmaQueue[g_GpuDmaQueueHead].argument1 = argument;
     asm volatile("" ::: "memory");
-    D_800BD030[g_GpuDmaQueueHead].function = function;
+    g_GpuDmaQueue[g_GpuDmaQueueHead].function = function;
     asm volatile("" ::: "memory");
     g_GpuDmaQueueHead = (g_GpuDmaQueueHead + 1) & 63;
-    SetIntrMask(D_8009587C);
+    SetIntrMask(g_GpuSavedIntrMask);
     Gpu_SetDisplayBuffer();
     return (g_GpuDmaQueueHead - g_GpuDmaQueueTail) & 63;
 }
@@ -95,13 +95,13 @@ int Gpu_SetDisplayBuffer(void) {
     register u32 busyMask;
 
     if (*g_GpuDmaChcrPtr & 0x01000000) return 1;
-    D_80095880 = SetIntrMask(0);
+    g_GpuSavedIntrMaskDrain = SetIntrMask(0);
     if (g_GpuDmaQueueHead != g_GpuDmaQueueTail && !(*g_GpuDmaChcrPtr & 0x01000000)) {
         readyMask = 0x04000000;
         busyMask = 0x01000000;
         do {
             if (((g_GpuDmaQueueTail + 1) & 63) == g_GpuDmaQueueHead &&
-                D_8009574C.drawSyncCallback == 0) {
+                g_GpuSystemState.drawSyncCallback == 0) {
                 DMACallback(2, 0);
             }
             {
@@ -128,7 +128,7 @@ int Gpu_SetDisplayBuffer(void) {
                 fnOffset = fnIndex * 3;
                 {
                     GpuQueueEntryAddress at;
-                    at.entry = D_800BD030;
+                    at.entry = g_GpuDmaQueue;
                     at.word += argOffset;
                     arg0 = at.entry->argument0;
                 }
@@ -139,13 +139,13 @@ int Gpu_SetDisplayBuffer(void) {
                 arg1Offset = arg1Index * sizeof(GpuQueueEntry);
                 {
                     GpuQueueEntryAddress at;
-                    at.entry = D_800BD030;
+                    at.entry = g_GpuDmaQueue;
                     at.word += arg1Offset;
                     arg1 = at.entry->argument1;
                 }
                 {
                     GpuQueueEntryAddress at;
-                    at.entry = D_800BD030;
+                    at.entry = g_GpuDmaQueue;
                     at.word += fnOffset;
                     function = at.entry->function;
                 }
@@ -154,13 +154,13 @@ int Gpu_SetDisplayBuffer(void) {
             g_GpuDmaQueueTail = (g_GpuDmaQueueTail + 1) & 63;
         } while (g_GpuDmaQueueHead != g_GpuDmaQueueTail && !(*g_GpuDmaChcrPtr & busyMask));
     }
-    SetIntrMask(D_80095880);
+    SetIntrMask(g_GpuSavedIntrMaskDrain);
     if (g_GpuDmaQueueHead == g_GpuDmaQueueTail) {
         register u32 status = *(volatile u32 *)g_GpuDmaChcrPtr;
         u32 mask;
         mask = 0x01000000;
         if (!(status & mask)) {
-            register u32 *pending = &D_8009574C.syncCallbackPending;
+            register u32 *pending = &g_GpuSystemState.syncCallbackPending;
                         if (*pending) {
                 void (*callback)(void) = *(void (**)(void))(pending + 1);
                 if (callback) {
@@ -185,7 +185,7 @@ int Gpu_InitDmaQueue(int mode) {
 
     saved_mask = SetIntrMask(0);
     g_GpuDmaQueueTail = 0;
-    D_80095884 = saved_mask;
+    g_GpuSavedIntrMaskDma = saved_mask;
     g_GpuDmaQueueHead = g_GpuDmaQueueTail;
 
     channel = mode & 7;
@@ -196,7 +196,7 @@ int Gpu_InitDmaQueue(int mode) {
         *g_GpuDmaControlRegPtr |= 0x800;
         *g_GpuGp1Ptr = 0;
         GPU_memset(g_GpuControlRegMirror, 0, 0x100);
-        GPU_memset((unsigned char *)D_800BD030, 0, 0x1800);
+        GPU_memset((unsigned char *)g_GpuDmaQueue, 0, 0x1800);
         break;
 
     case 1:
@@ -208,7 +208,7 @@ int Gpu_InitDmaQueue(int mode) {
         break;
     }
 
-    SetIntrMask(D_80095884);
+    SetIntrMask(g_GpuSavedIntrMaskDma);
 
     if ((mode & 7) == 0) {
         return Gpu_QueryStatus(mode);

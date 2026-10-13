@@ -53,7 +53,7 @@ void Inv_BuildArmorList(BattleAttributes *out) {
     int value, i;
     out->effectFlags = 0;
     Inv_SelectActiveList(0);
-    item = Inv_LookupActiveListData(D_800C0E20.tracked[2]);
+    item = Inv_LookupActiveListData(g_InventoryRuntime.tracked[2]);
     if (item) {
         value = ClampStat(item, 0);
         out->parameterWord.fields.first = value;
@@ -96,7 +96,7 @@ void Inv_BuildArmorList(BattleAttributes *out) {
 }
 
 void Inv_RecalcSlotStats(void) {
-    s16 *p = D_800C0E00.stats.levels;
+    s16 *p = g_AyaSaveState.stats.levels;
     int level, hp;
     Combatant *actor;
     AyaLevelStats *row;
@@ -104,14 +104,14 @@ void Inv_RecalcSlotStats(void) {
     Aya_StatQueryLevelAndSubLevel(0, *p++, &level, 0);
     row = Aya_LookupLevelStats(level);
     hp = ((g_StatScaleBase[0] + 20) * row->hp) / 20;
-    D_800C0E00.max_hp = hp;
+    g_AyaSaveState.max_hp = hp;
     if (D_8009D254 && (actor = D_8009D254->core)) {
         if ((s16)(actor->maxHP = hp) < (s16)actor->curHP)
             actor->curHP = hp;
         if ((s16)actor->maxHP < (s16)actor->hpMirror)
             actor->hpMirror = actor->maxHP;
-        if (D_800C0E00.max_hp < D_800C0E00.current_hp)
-            D_800C0E00.current_hp = D_800C0E00.max_hp;
+        if (g_AyaSaveState.max_hp < g_AyaSaveState.current_hp)
+            g_AyaSaveState.current_hp = g_AyaSaveState.max_hp;
 
         Aya_StatQueryLevelAndSubLevel(1, *p++, &level, 0);
         actor->stat1E = Aya_LookupLevelStats(level + g_StatScaleBase[1])->offense;
@@ -131,7 +131,7 @@ void Inv_RecalcSlotStats(void) {
         Aya_StatQueryLevelAndSubLevel(6, *p, &level, 0);
         actor->stat26 = Aya_LookupLevelStats(level)->inventoryCapacity;
         Inv_SetAyaSlotCount(actor->stat26);
-        actor->field04.fieldId04 = D_800C0E00.level + 1;
+        actor->field04.fieldId04 = g_AyaSaveState.level + 1;
     }
 }
 
@@ -140,7 +140,7 @@ void Aya_DeriveStats(int *out_max, int *out_current) {
     int base;
     AyaLevelStats *stats;
 
-    Aya_StatQueryLevelAndSubLevel(3, D_800C0E00.stats.levels[3], &base, 0);
+    Aya_StatQueryLevelAndSubLevel(3, g_AyaSaveState.stats.levels[3], &base, 0);
     stats = Aya_LookupLevelStats(base + g_StatScaleBase[3]);
 
     if (out_max != 0) {
@@ -211,7 +211,7 @@ void Menu_CopyPromptCodes(unsigned char *src) {
     unsigned char *end;
     int value;
 
-    dst = D_80091694.glyphs;
+    dst = g_TextboxNameGlyphs.glyphs;
     end = dst + 8;
     while (dst < end) {
         value = *src;
@@ -222,7 +222,7 @@ void Menu_CopyPromptCodes(unsigned char *src) {
         src++;
     }
 
-    D_80091694.count = dst - D_80091694.glyphs;
+    g_TextboxNameGlyphs.count = dst - g_TextboxNameGlyphs.glyphs;
 }
 
 void Menu_PlayConfirmSound(void) {

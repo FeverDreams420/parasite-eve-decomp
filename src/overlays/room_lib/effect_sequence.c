@@ -650,10 +650,10 @@ void RoomEffect_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control,
     transform = &((RoomOverlay024Transform *)owner->view)[state->transform_index];
     base_seed = s_EffectBaseSeed;
 
-    func_800C2EAC(((RoomLibFxMatrixState *)owner_ptr)->asset.page);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(((RoomLibFxMatrixState *)owner_ptr)->asset.page);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     if (state->active_flag == 0) {
         return;
@@ -686,12 +686,12 @@ void RoomEffect_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control,
     matrix.t[2] = transform->z;
 
     if (state->resource_selector == -1) {
-        func_800C3134(&D_80192BF0, state->field30, (char *)&D_80192C08);
+        FieldFx_InterpolateColorRamp(&D_80192BF0, state->field30, (char *)&D_80192C08);
     } else {
-        func_800C3134(&D_80192BFC, state->field30, (char *)&D_80192C08);
+        FieldFx_InterpolateColorRamp(&D_80192BFC, state->field30, (char *)&D_80192C08);
     }
     D_80192C08.cell = state->phase * 2;
-    func_800C42A4((FieldGlowSprite *)&D_80192C08, (GteMatrix *)&matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)&D_80192C08, (GteMatrix *)&matrix, 1);
     RotMatrix(&base_seed, &matrix);
 
     memset(&second_scale, 0, 0x10);
@@ -707,7 +707,7 @@ void RoomEffect_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control,
     draw_zero = 0;
     matrix.t[2] = transform->z;
     D_80192C08.cell = 8;
-    func_800C42A4((FieldGlowSprite *)&D_80192C08, (GteMatrix *)&matrix, draw_zero);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)&D_80192C08, (GteMatrix *)&matrix, draw_zero);
 
     if (control->frame >= 0x5B && state->sparkle_timer > 0) {
         matrix.m[2][2] = 0x1000;
@@ -730,14 +730,14 @@ void RoomEffect_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control,
         matrix.t[1] = state->sparkle_y;
         matrix.t[2] = state->sparkle_z;
         D_80192C38.depth = state->sparkle_alpha;
-        func_800C42A4((FieldGlowSprite *)&D_80192C38, (GteMatrix *)&matrix, 0);
+        FieldFx_DrawGlowSprite((FieldGlowSprite *)&D_80192C38, (GteMatrix *)&matrix, 0);
     }
 
     if (control->frame < 0x1F) {
         return;
     }
 
-    func_800C3238(3);
+    FieldFx_SetSpriteBlendMode(3);
 
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -763,7 +763,7 @@ void RoomEffect_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control,
     matrix.t[1] = state->final_y;
     matrix.t[2] = state->final_z;
     D_80192C28.depth = state->final_alpha;
-    func_800C42A4((FieldGlowSprite *)&D_80192C28, (GteMatrix *)&matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)&D_80192C28, (GteMatrix *)&matrix, 1);
 }
 
 void RoomEffect_UpdatePairedSprite(void *unused,
@@ -898,10 +898,10 @@ void RoomEffect_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *con
     transform = &((RoomOverlay024Transform *)owner->view)[state->transform_index];
     base_seed = s_EffectBaseSeed;
 
-    func_800C2EAC(((RoomLibFxMatrixState *)owner_ptr)->asset.page);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(((RoomLibFxMatrixState *)owner_ptr)->asset.page);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     if (state->active_flag == 0) {
         return;
@@ -934,12 +934,12 @@ void RoomEffect_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *con
     matrix.t[2] = transform->z + (rand() % 20) - 10;
 
     if (state->resource_selector == -1) {
-        func_800C3134(&D_80192BF0, state->field30, (char *)&D_80192C08);
+        FieldFx_InterpolateColorRamp(&D_80192BF0, state->field30, (char *)&D_80192C08);
     } else {
-        func_800C3134(&D_80192BFC, state->field30, (char *)&D_80192C08);
+        FieldFx_InterpolateColorRamp(&D_80192BFC, state->field30, (char *)&D_80192C08);
     }
     D_80192C08.cell = state->phase * 2;
-    func_800C42A4((FieldGlowSprite *)&D_80192C08, (GteMatrix *)&matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)&D_80192C08, (GteMatrix *)&matrix, 1);
     RotMatrix(&base_seed, &matrix);
 
     memset(&second_scale, 0, 0x10);
@@ -955,7 +955,7 @@ void RoomEffect_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *con
     draw_zero = 0;
     matrix.t[2] = transform->z;
     D_80192C08.cell = 8;
-    func_800C42A4((FieldGlowSprite *)&D_80192C08, (GteMatrix *)&matrix, draw_zero);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)&D_80192C08, (GteMatrix *)&matrix, draw_zero);
 
     if (control->frame >= 0x5B && state->sparkle_timer > 0) {
         matrix.m[2][2] = 0x1000;
@@ -978,10 +978,10 @@ void RoomEffect_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *con
         matrix.t[1] = state->sparkle_y;
         matrix.t[2] = state->sparkle_z;
         D_80192C38.depth = state->sparkle_alpha;
-        func_800C42A4((FieldGlowSprite *)&D_80192C38, (GteMatrix *)&matrix, 0);
+        FieldFx_DrawGlowSprite((FieldGlowSprite *)&D_80192C38, (GteMatrix *)&matrix, 0);
     }
 
-    func_800C3238(3);
+    FieldFx_SetSpriteBlendMode(3);
 
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -1007,7 +1007,7 @@ void RoomEffect_DrawVariant38Pulse(void *arg0, RoomOverlay024VariantControl *con
     matrix.t[1] = state->final_y;
     matrix.t[2] = state->final_z;
     D_80192C28.depth = state->final_alpha;
-    func_800C42A4((FieldGlowSprite *)&D_80192C28, (GteMatrix *)&matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)&D_80192C28, (GteMatrix *)&matrix, 1);
 }
 
 void RoomEffect_UpdatePairedSpriteBurst(
@@ -1157,10 +1157,10 @@ void RoomEffect_DrawVariant290(void *arg0, RoomOverlay024VariantControl *control
     transform = &((RoomOverlay024Transform *)owner->view)[state->transform_index];
     base_seed = s_EffectBaseSeed;
 
-    func_800C2EAC(((RoomLibFxMatrixState *)owner_ptr)->asset.page);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(((RoomLibFxMatrixState *)owner_ptr)->asset.page);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     if (state->active_flag == 0) {
         return;
@@ -1192,9 +1192,9 @@ void RoomEffect_DrawVariant290(void *arg0, RoomOverlay024VariantControl *control
     matrix.t[1] = transform->y;
     matrix.t[2] = transform->z + (rand() % 20) - 10;
 
-    func_800C3134(&D_80192BFC, state->field30, (char *)&D_80192C08);
+    FieldFx_InterpolateColorRamp(&D_80192BFC, state->field30, (char *)&D_80192C08);
     D_80192C08.cell = state->phase * 2;
-    func_800C42A4((FieldGlowSprite *)((char *)&D_80192C08), (GteMatrix *)&matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)((char *)&D_80192C08), (GteMatrix *)&matrix, 1);
     RotMatrix(&base_seed, &matrix);
 
     memset(&second_scale, 0, 0x10);
@@ -1209,7 +1209,7 @@ void RoomEffect_DrawVariant290(void *arg0, RoomOverlay024VariantControl *control
     matrix.t[1] = g_RoomFloorY->y;
     matrix.t[2] = transform->z;
     D_80192C08.cell = 8;
-    func_800C42A4((FieldGlowSprite *)((char *)&D_80192C08), (GteMatrix *)&matrix, 0);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)((char *)&D_80192C08), (GteMatrix *)&matrix, 0);
 
     if (control->frame < 0x5B) {
         return;
@@ -1238,7 +1238,7 @@ void RoomEffect_DrawVariant290(void *arg0, RoomOverlay024VariantControl *control
     matrix.t[1] = state->sparkle_y;
     matrix.t[2] = state->sparkle_z;
     D_80192C38.depth = state->sparkle_alpha;
-    func_800C42A4((FieldGlowSprite *)&D_80192C38, (GteMatrix *)&matrix, 0);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)&D_80192C38, (GteMatrix *)&matrix, 0);
 }
 
 void RoomEffect_UpdateSparkleHeight(
@@ -1355,10 +1355,10 @@ void RoomEffect_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, 
     base_seed = s_EffectBaseSeed;
     project_seed = s_EffectProjectSeed;
 
-    func_800C2EAC(((RoomLibFxMatrixState *)owner_ptr)->asset.page);
-    func_800C2FF0(0x40, 0x40);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(((RoomLibFxMatrixState *)owner_ptr)->asset.page);
+    FieldFx_SetSpriteCellSize(0x40, 0x40);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
     ApplyMatrixSV(transform, &project_seed, projected);
 
     scale = (state->drift_value) >> 2;
@@ -1366,7 +1366,7 @@ void RoomEffect_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, 
         return;
     }
 
-    func_800C2FF0(0x20, 0x20);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
 
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -1394,11 +1394,11 @@ void RoomEffect_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, 
     matrix.t[1] = transform->y + projected[1] - ((state->vertical_offset) >> 4);
     matrix.t[2] = transform->z + projected[2] + (rand() % 20) - 10;
 
-    func_800C3134(&D_80192BFC, state->field30, (char *)&D_80192C18);
+    FieldFx_InterpolateColorRamp(&D_80192BFC, state->field30, (char *)&D_80192C18);
     D_80192C18.cell = state->phase * 2;
-    func_800C42A4((FieldGlowSprite *)&D_80192C18, (GteMatrix *)&matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)&D_80192C18, (GteMatrix *)&matrix, 1);
 
-    func_800C2FF0(0x20, 0x20);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
     RotMatrix(&base_seed, &matrix);
 
     memset(&second_scale, 0, 0x10);
@@ -1413,7 +1413,7 @@ void RoomEffect_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, 
     matrix.t[1] = -0x457;
     matrix.t[2] = transform->z + projected[2];
     D_80192C18.cell = 8;
-    func_800C42A4((FieldGlowSprite *)&D_80192C18, (GteMatrix *)&matrix, 0);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)&D_80192C18, (GteMatrix *)&matrix, 0);
 
     if (control->frame < 0x5B) {
         return;
@@ -1442,7 +1442,7 @@ void RoomEffect_DrawVariantD(void *arg0, RoomOverlay024VariantControl *control, 
     matrix.t[1] = state->sparkle_y;
     matrix.t[2] = state->sparkle_z;
     D_80192C38.depth = state->sparkle_alpha;
-    func_800C42A4((FieldGlowSprite *)&D_80192C38, (GteMatrix *)&matrix, 0);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)&D_80192C38, (GteMatrix *)&matrix, 0);
 }
 
 void RoomEffect_UpdateTransformedSparkle(
@@ -1558,10 +1558,10 @@ void RoomEffect_DrawEffectGlow(void) {
     matrix.ty += out[1];
     matrix.tz += out[2];
 
-    func_800C2EAC(((RoomLibFxMatrixState *)root)->asset.page);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(((RoomLibFxMatrixState *)root)->asset.page);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
     FieldFx_ModelScrollUv(D_80192C34, 0, 0);
     FieldFx_ModelSetDepthBias(-10);
     handle_a = GetTPage(0, 1, 0x340, 0x100);
@@ -1660,11 +1660,11 @@ void RoomEffect_DrawScaledEffect(void *unused0, void *unused1, RoomLibScaledEffe
     matrix.t[1] += offset[1];
     matrix.t[2] += offset[2];
 
-    func_800C2EAC(roots->mode);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
-    func_800C3238(3);
+    FieldFx_SetSpriteTexturePreset(roots->mode);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
+    FieldFx_SetSpriteBlendMode(3);
 
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -1693,7 +1693,7 @@ void RoomEffect_DrawScaledEffect(void *unused0, void *unused1, RoomLibScaledEffe
     depthValue = effect->depth;
     D_80192C28.offset = -0x65;
     *depth = depthValue;
-    func_800C42A4((FieldGlowSprite *)((char *)depth - 0xA), (RoomSpriteMatrix *)&matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)((char *)depth - 0xA), (RoomSpriteMatrix *)&matrix, 1);
 }
 
 typedef struct RoomDriftView {

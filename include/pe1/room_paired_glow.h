@@ -21,7 +21,7 @@ extern unsigned char g_RoomPairedGlowColorTable[];
 
 
 int *FieldFx_RegPtr(int index);
-void func_800C4E50(void *params);
+void FieldFx_BuildRingGeometry(void *params);
 void FieldFx_ModelSetTexture(int arg0, int arg1);
 
 #endif

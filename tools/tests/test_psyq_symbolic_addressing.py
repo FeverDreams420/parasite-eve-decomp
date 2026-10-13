@@ -35,7 +35,7 @@ CASES = [('src/main/psyq/libapi/pad.c',
  ('src/main/psyq/libmath/ferr.c',
   100,
   'b94427dfc0967b4aaeacb5750ae5b1e167af9b260ba712e561050f8c6d6ff179',
-  'D_80094564 = 0x80094564;\nD_80094568 = 0x80094568;\nDeliverEvent = 0x80073a34;\nSECTIONS { .text 0x800739c4 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }'),
+  'g_MathErrCode = 0x80094564;\nD_80094568 = 0x80094568;\nDeliverEvent = 0x80073a34;\nSECTIONS { .text 0x800739c4 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }'),
  ('src/main/psyq/libpad/padseqd.c',
   1140,
   'e080b43d7fdd01895057432b2eb8509d80c259ecb79f25aa77b5711f3411b504',
@@ -51,7 +51,7 @@ CASES = [('src/main/psyq/libapi/pad.c',
  ('src/main/psyq/libgpu/sys_6.c',
   2368,
   'b1684999f3f8011414a42bb1aea890052d32a35d9ffc98b9a77d5e9f9789801a',
-  'D_80095750 = 0x80095750;\nD_80095752 = 0x80095752;\ng_GpuDmaRegisterWindow = 0x80095854;\nD_80095864 = 0x80095864;\nD_80095868 = 0x80095868;\nD_8009586C = 0x8009586c;\ng_GpuDmaControlRegPtr = 0x80095870;\nD_800A3300 = 0x800a3300;\nD_800A3328 = 0x800a3328;\nD_800A3348 = 0x800a3348;\nGpu_DmaTimeoutCheck = 0x80077404;\nGpu_ResetDmaWaitTimer = 0x800773d0;\n_param = 0x80076be0;\ng_GpuControlRegMirror = 0x800a3348;\ng_GpuDmaBcrPtr = 0x8009585c;\ng_GpuDmaChcrPtr = 0x80095860;\ng_GpuDmaMadrPtr = 0x80095858;\ng_GpuGp0Ptr = 0x80095850;\ng_GpuGp1Ptr = 0x80095854;\nSECTIONS { .text 0x800762a0 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }')]
+  'g_GpuMaxWidth = 0x80095750;\nD_80095752 = 0x80095752;\ng_GpuDmaRegisterWindow = 0x80095854;\nD_80095864 = 0x80095864;\nD_80095868 = 0x80095868;\nD_8009586C = 0x8009586c;\ng_GpuDmaControlRegPtr = 0x80095870;\nD_800A3300 = 0x800a3300;\nD_800A3328 = 0x800a3328;\nD_800A3348 = 0x800a3348;\nGpu_DmaTimeoutCheck = 0x80077404;\nGpu_ResetDmaWaitTimer = 0x800773d0;\n_param = 0x80076be0;\ng_GpuControlRegMirror = 0x800a3348;\ng_GpuDmaBcrPtr = 0x8009585c;\ng_GpuDmaChcrPtr = 0x80095860;\ng_GpuDmaMadrPtr = 0x80095858;\ng_GpuGp0Ptr = 0x80095850;\ng_GpuGp1Ptr = 0x80095854;\nSECTIONS { .text 0x800762a0 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }')]
 
 # GNU as 2.8.1 preserves the SDK checked-division expansion without CPU ASM.
 CASES.append(('src/main/psyq/libgte/fog_02.c',

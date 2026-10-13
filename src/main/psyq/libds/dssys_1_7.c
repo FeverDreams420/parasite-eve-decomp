@@ -18,7 +18,7 @@ void LIBDS_DSSYS_1_text_EA4(int event, u8 *data) {
     event &= 0xFF;
     if (event != 5) {
 
-    index = D_8009B624[g_CdRomEventCommandState.pendingCommand] - 1;
+    index = g_DsCommandStatusByteIndex[g_CdRomEventCommandState.pendingCommand] - 1;
     if (index < 0) {
         return;
     }

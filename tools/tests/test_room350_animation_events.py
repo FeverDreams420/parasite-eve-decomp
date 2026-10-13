@@ -41,7 +41,7 @@ typedef char g[sizeof(Vector)==8 && sizeof(RenderMatrix)==32 ? 1:-1];
                             r'extern unsigned char D_8019A86E;',
                             r'extern int D_8019A858;',
                             r'extern short D_8019A85C,D_8019A85E,D_8019A86A,D_8019A86C;',
-                            r'extern GteSineWord D_800966EC\[\];',
+                            r'extern GteSineWord rcossin_tbl\[\];',
                             r'extern short D_800966EE\[\];'):
             source, count = re.subn(declaration, '', source)
             self.assertGreater(count, 0, declaration)
@@ -60,11 +60,11 @@ static union { int words[4097]; short halves[8194]; } trig;
 #define D_8019A86A (globals.halves[11])
 #define D_8019A86C (globals.halves[12])
 #define D_8019A86E (globals.bytes[26])
-#define D_800966EC ((GteSineWord *)trig.words)
+#define rcossin_tbl ((GteSineWord *)trig.words)
 #define D_800966EE (trig.halves+1)
 '''
         harness = prefix + source + r'''
-FieldFxObjectPrefix *D_800F32D0;
+FieldFxObjectPrefix *g_FieldFxOwner;
 Instance *g_PlayerEntity;
 Events D_8018F1CC;
 static Actor actors[2];
@@ -83,7 +83,7 @@ int FieldFx_VecToAngle(Vec3Fixed *a,Vec3Fixed *b) {
     assert((void *)b==instances[0].render_object.model_matrix.translation);
     assert(++angles==1);
     if (mutate) {
-        D_800F32D0=(FieldFxObjectPrefix *)&actors[1];
+        g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[1];
         instances[0].rot_y=-777;
         memset(&D_8018F1CC,255,sizeof(D_8018F1CC));
     }
@@ -101,7 +101,7 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *m,const GteShortVector *in,GteSho
     /* Only the helper boundary is modeled, not GTE arithmetic. */
     a->x=-32768; a->y=111; a->z=32767;
     if (mutate) {
-        D_800F32D0=(FieldFxObjectPrefix *)&actors[1];
+        g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[1];
         POS(instances[0])[0]=INT_MIN;
         POS(instances[0])[2]=INT_MAX;
         D_8019A86A=-32768;
@@ -115,7 +115,7 @@ static void reset(void) {
     memset(&player,0,sizeof(player));
     actors[0].instance=(struct RoomM350Instance *)&instances[0];
     actors[1].instance=(struct RoomM350Instance *)&instances[1];
-    D_800F32D0=(FieldFxObjectPrefix *)&actors[0]; g_PlayerEntity=&player;
+    g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[0]; g_PlayerEntity=&player;
     owner.action_state=&status; instances[0].state=&owner; status=1;
     instances[0].action=64; instances[0].rot_y=123;
     POS(instances[0])[0]=INT_MAX-12;

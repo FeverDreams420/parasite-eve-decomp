@@ -106,7 +106,7 @@ typedef struct RoomTwelveEffectStack {
 } RoomTwelveEffectStack;
 
 int *FieldFx_VarPtr(int index);
-int func_800C66C8(void *object, int message, void *state);
+int FieldFx_PlaySoundAtMatrixPosition(void *object, int message, void *state);
 
 /* Retail marks this function handwritten; only its COP2 windows remain ASM. */
 void RoomLib_InitTwelveElementEffect(void *owner, void *unused, char *state) {
@@ -182,7 +182,7 @@ void RoomLib_InitTwelveElementEffect(void *owner, void *unused, char *state) {
         workState->position[i].y = 0;
     }
     ((RoomTwelveEffectWork *)workState)->effectHandle =
-        func_800C66C8(effectOwner, 0x58F, &stack.sourceMatrix);
+        FieldFx_PlaySoundAtMatrixPosition(effectOwner, 0x58F, &stack.sourceMatrix);
 }
 
 typedef struct RoomTwelveEffectDrawStack {
@@ -197,7 +197,7 @@ typedef struct RoomTwelveEffectDrawStack {
 } RoomTwelveEffectDrawStack;
 
 void ApplyMatrix(RoomSpriteMatrix *matrix, void *position, int *translation);
-int func_800C61A8(GteShortVector *point, GteMatrix *matrix);
+int FieldFx_IsPointInSpriteQuad(GteShortVector *point, GteMatrix *matrix);
 
 /* Retail marks this function handwritten; only its COP2 windows remain ASM. */
 void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
@@ -233,10 +233,10 @@ void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
     primaryMatrix = &stack.primaryMatrix;
     sourceScale = &stack.sourceScale;
     secondaryMatrix = &stack.secondaryMatrix;
-    func_800C2EAC(clock->asset.page);
-    func_800C2FF0(0x40, 0x40);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(clock->asset.page);
+    FieldFx_SetSpriteCellSize(0x40, 0x40);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     for (; i < 12; i++) {
         element = (char *)workState + i;
@@ -255,7 +255,7 @@ void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
             stack.primaryMatrix.t[0] += clock->matrix.matrix.t[0];
             stack.primaryMatrix.t[1] += clock->matrix.matrix.t[1];
             stack.primaryMatrix.t[2] += clock->matrix.matrix.t[2];
-            func_800C3134(RoomLib_TwelveEffectTable,
+            FieldFx_InterpolateColorRamp(RoomLib_TwelveEffectTable,
                           ((RoomLibTick12Rec *)element)->timer[0],
                           (unsigned char *)&RoomLib_TwelveEffectPrimaryPacket);
 
@@ -279,13 +279,13 @@ void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
             gte_swc2_10_4(stack.secondaryMatrix.t);
             gte_swc2_11_8(stack.secondaryMatrix.t);
 
-            func_800C42A4((FieldGlowSprite *)&RoomLib_TwelveEffectPrimaryPacket,
+            FieldFx_DrawGlowSprite((FieldGlowSprite *)&RoomLib_TwelveEffectPrimaryPacket,
                           primaryMatrix, 0);
             stack.secondaryMatrix.t[1] = g_RoomFloorY->y;
-            func_800C3134(RoomLib_TwelveEffectTable,
+            FieldFx_InterpolateColorRamp(RoomLib_TwelveEffectTable,
                           ((RoomLibTick12Rec *)element)->timer[0],
                           (unsigned char *)&RoomLib_TwelveEffectSecondaryPacket);
-            func_800C42A4((FieldGlowSprite *)&RoomLib_TwelveEffectSecondaryPacket,
+            FieldFx_DrawGlowSprite((FieldGlowSprite *)&RoomLib_TwelveEffectSecondaryPacket,
                           secondaryMatrix, 0);
 
             stack.collision[0] = stack.secondaryMatrix.t[0];
@@ -293,7 +293,7 @@ void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
             stack.collision[2] = stack.secondaryMatrix.t[2];
             if (Geo_PointInPoly(stack.secondaryMatrix.t[0] << 16,
                               stack.secondaryMatrix.t[2] << 16,
-                              D_8009D248, D_8009D1CC) == 0) {
+                              g_FloorPolygonVertices, g_FloorPolygonVertexCount) == 0) {
                 ((RoomLibTick12Rec *)element)->state[0] = -1;
             }
 
@@ -303,7 +303,7 @@ void RoomLib_DrawTwelveElementEffect(void *unused0, void *unused1,
             stack.point[1] = pointY;
             pointZ = RW16(D_8009D254, 0x32);
             stack.point[2] = pointZ;
-            if (func_800C61A8(stack.point, secondaryMatrix) != 0) {
+            if (FieldFx_IsPointInSpriteQuad(stack.point, secondaryMatrix) != 0) {
                 clock->hit = 1;
             }
         }

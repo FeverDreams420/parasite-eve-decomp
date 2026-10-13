@@ -146,7 +146,7 @@ typedef struct RoomM273ScaledLayerOwner {
     RoomM273ThresholdTransform *transform;
 } RoomM273ScaledLayerOwner;
 
-/* D_800F32D0 points at either view as each controller is active. */
+/* g_FieldFxOwner points at either view as each controller is active. */
 typedef union RoomM273EffectStatePointer {
     RoomM273EffectModeState *mode;
     RoomM273ThresholdEntityState *threshold;

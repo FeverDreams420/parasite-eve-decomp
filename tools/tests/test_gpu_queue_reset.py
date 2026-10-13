@@ -21,10 +21,10 @@ u32 *g_GpuGp1Ptr = &gp1;
 volatile u32 *g_GpuDmaChcrPtr = &chcr;
 volatile u32 *g_GpuDmaControlRegPtr = &control;
 volatile u32 g_GpuDmaQueueHead;
-u32 D_80095884;
+u32 g_GpuSavedIntrMaskDma;
 volatile u32 g_GpuDmaQueueTail;
 unsigned char D_800A3348[256];
-GpuQueueEntry D_800BD030[64];
+GpuQueueEntry g_GpuDmaQueue[64];
 static int masks, clears, queries, currentMode;
 int SetIntrMask(int mask) {
     if (++masks == 1) assert(mask == 0);
@@ -38,7 +38,7 @@ void GPU_memset(unsigned char *dst, int value, int count) {
     assert(masks == 1 && value == 0);
     assert(chcr == 0x401 && gp1 == 0 && control == 0x812);
     if (++clears == 1) assert(dst == D_800A3348 && count == 256);
-    else assert(clears == 2 && dst == (unsigned char *)D_800BD030 && count == 6144);
+    else assert(clears == 2 && dst == (unsigned char *)g_GpuDmaQueue && count == 6144);
     __builtin_memset(dst, value, count);
 }
 int Gpu_QueryStatus(int mode) {
@@ -59,18 +59,18 @@ int main(void) {
         g_GpuDmaQueueHead = 17;
         g_GpuDmaQueueTail = 63;
         __builtin_memset(D_800A3348, 0xA5, sizeof(D_800A3348));
-        __builtin_memset(D_800BD030, 0xA5, sizeof(D_800BD030));
+        __builtin_memset(g_GpuDmaQueue, 0xA5, sizeof(g_GpuDmaQueue));
         assert(Gpu_InitDmaQueue(mode) == (kind == 0 ? 73 : 0));
         assert(masks == 2 && clears == (full ? 2 : 0));
-        assert(queries == (kind == 0) && D_80095884 == 0x1357);
+        assert(queries == (kind == 0) && g_GpuSavedIntrMaskDma == 0x1357);
         assert(chcr == (full || soft ? 0x401 : 0xDEADBEEF));
         assert(control == (full || soft ? 0x812 : 0x12));
         assert(gp1 == (full ? 0 : soft ? 0x01000000 : 0xDEADBEEF));
         for (i = 0; i < sizeof(D_800A3348); ++i)
             assert(D_800A3348[i] == (full ? 0 : 0xA5));
-        for (i = 0; i < sizeof(D_800BD030); ++i)
+        for (i = 0; i < sizeof(g_GpuDmaQueue); ++i)
             /* Host pointers may widen entries; the retail clear is exactly 6144 bytes. */
-            assert(((unsigned char *)D_800BD030)[i] == (full && i < 6144 ? 0 : 0xA5));
+            assert(((unsigned char *)g_GpuDmaQueue)[i] == (full && i < 6144 ? 0 : 0xA5));
     }
     return 0;
 }

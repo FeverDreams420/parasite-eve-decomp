@@ -37,11 +37,11 @@ typedef char e[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
 typedef RoomM350TransformMatrix Transform;
 /* The spawner reads the player through the transform-owner view. */
 FieldActor *g_PlayerEntity;
-FieldFxTaskSlot *D_800F33E0;
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 unsigned char D_8019A79A,D_8019A79C;
-RenderEffectParameters D_800F3368;
-u16 D_800E11E4[16];
-u16 D_800E2850[65536];
+RenderEffectParameters g_FieldFxSpriteParams;
+u16 g_FieldFxTpageSlots[16];
+u16 g_FieldFxTpageTable[65536];
 static Instance players[2];
 static Transform transforms[2];
 static RoomM350Emitter emitter;
@@ -49,12 +49,12 @@ static Particle particle,expected;
 static int pool,calls,setups,setupResult,fail;
 static int half(uint32_t x) { x &=65535; return x<32768 ? (int)x:(int)x-65536; }
 int func_801937B4(int e,short *p) { return 0; }
-int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
+int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pool && stride==8 && count==4);
     assert(cb==(FieldFxCallbackListCallback)func_801937B4);
     setups++; return setupResult;
 }
-void *func_800CE610(char *p) {
+void *FieldFx_AcquireCallbackSlot(char *p) {
     assert(p==(char *)&pool); calls++;
     if(fail) return 0;
     g_PlayerEntity=(FieldActor *)&players[1]; D_8019A79A=255; D_8019A79C=123;
@@ -62,7 +62,7 @@ void *func_800CE610(char *p) {
 }
 static void reset(void) {
     calls=setups=0; g_PlayerEntity=(FieldActor *)&players[0];
-    D_800F33E0=(FieldFxTaskSlot *)&emitter;
+    g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitter;
     D_8019A79A=0; D_8019A79C=1;
     memset(&particle,0x5A,sizeof(particle)); expected=particle;
 }
@@ -100,15 +100,15 @@ int main(void) {
         assert(D_8019A79A==0 && D_8019A79C==1);
     }
     for(i=0;i<65536;i++) {
-        /* Texture slot 11 of D_800E11E4 is the halfword at 0x800E11FA. */
-        reset(); D_800E11E4[11]=i; D_800E2850[i]=65535-i;
-        memset(&D_800F3368,0x9D,sizeof(D_800F3368));
+        /* Texture slot 11 of g_FieldFxTpageSlots is the halfword at 0x800E11FA. */
+        reset(); g_FieldFxTpageSlots[11]=i; g_FieldFxTpageTable[i]=65535-i;
+        memset(&g_FieldFxSpriteParams,0x9D,sizeof(g_FieldFxSpriteParams));
         assert(func_801938E4(2)==0 && calls==0 && setups==0);
-        assert(D_800F3368.parameter00==32 && D_800F3368.parameter02==2);
-        assert(D_800F3368.extent_x==32 && D_800F3368.extent_y==32);
-        assert(D_800F3368.palette==3 && D_800F3368.parameter06==1);
-        assert(D_800F3368.parameter0A==0 && D_800F3368.depth==0);
-        assert(D_800F3368.tpage==65535-i && D_8019A79C==1);
+        assert(g_FieldFxSpriteParams.parameter00==32 && g_FieldFxSpriteParams.parameter02==2);
+        assert(g_FieldFxSpriteParams.extent_x==32 && g_FieldFxSpriteParams.extent_y==32);
+        assert(g_FieldFxSpriteParams.palette==3 && g_FieldFxSpriteParams.parameter06==1);
+        assert(g_FieldFxSpriteParams.parameter0A==0 && g_FieldFxSpriteParams.depth==0);
+        assert(g_FieldFxSpriteParams.tpage==65535-i && D_8019A79C==1);
     }
     for(event=-3;event<=5;event++) if(event<0 || event>2) {
         reset(); assert(func_801938E4(event)==0 && calls==0 && setups==0 && D_8019A79C==1);

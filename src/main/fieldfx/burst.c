@@ -26,67 +26,67 @@ int PointSprite_PlantScript(char *object) {
     *slot = g_PointSpriteScript;
     actor = ((FieldFxObjectPrefix *)object)->actor;
 
-    D_800E2290.x = actor->pos_x >> 16;
-    D_800E2290.y = actor->pos_y >> 16;
-    D_800E2290.z = actor->pos_z >> 16;
+    g_PointSpriteActorPosition.x = actor->pos_x >> 16;
+    g_PointSpriteActorPosition.y = actor->pos_y >> 16;
+    g_PointSpriteActorPosition.z = actor->pos_z >> 16;
     g_PointSpriteOwner = actor;
 
-    D_800F3430.oriented.rotation.x = 0;
-    D_800F3430.oriented.rotation.y = 0;
-    D_800F3430.oriented.rotation.z = 0;
-    D_800F3430.oriented.cell = 0x68;
-    D_800F3430.oriented.clut = 0;
-    D_800F3430.oriented.depth = -100;
+    g_PointSpriteStreakSprite.oriented.rotation.x = 0;
+    g_PointSpriteStreakSprite.oriented.rotation.y = 0;
+    g_PointSpriteStreakSprite.oriented.rotation.z = 0;
+    g_PointSpriteStreakSprite.oriented.cell = 0x68;
+    g_PointSpriteStreakSprite.oriented.clut = 0;
+    g_PointSpriteStreakSprite.oriented.depth = -100;
 
-    D_800E2260.oriented.rotation.x = 0x400;
-    D_800E2260.oriented.rotation.y = 0;
-    D_800E2260.oriented.rotation.z = 0;
-    D_800E2260.oriented.cell = 0x68;
-    D_800E2260.oriented.clut = 0;
-    D_800E2260.oriented.depth = 0;
+    g_PointSpriteState0.oriented.rotation.x = 0x400;
+    g_PointSpriteState0.oriented.rotation.y = 0;
+    g_PointSpriteState0.oriented.rotation.z = 0;
+    g_PointSpriteState0.oriented.cell = 0x68;
+    g_PointSpriteState0.oriented.clut = 0;
+    g_PointSpriteState0.oriented.depth = 0;
 
-    D_800F32E0.oriented.rotation.x = 0x400;
-    D_800F32E0.oriented.rotation.y = 0;
-    D_800F32E0.oriented.rotation.z = 0;
-    D_800F32E0.oriented.cell = 0x68;
-    D_800F32E0.oriented.clut = 0;
-    D_800F32E0.oriented.depth = -100;
-    D_800F32E0.oriented.rgb[0] = 0xA0;
-    D_800F32E0.oriented.rgb[1] = 0xA0;
-    D_800F32E0.oriented.rgb[2] = 0xA0;
+    g_PointSpriteGroundRingSprite.oriented.rotation.x = 0x400;
+    g_PointSpriteGroundRingSprite.oriented.rotation.y = 0;
+    g_PointSpriteGroundRingSprite.oriented.rotation.z = 0;
+    g_PointSpriteGroundRingSprite.oriented.cell = 0x68;
+    g_PointSpriteGroundRingSprite.oriented.clut = 0;
+    g_PointSpriteGroundRingSprite.oriented.depth = -100;
+    g_PointSpriteGroundRingSprite.oriented.rgb[0] = 0xA0;
+    g_PointSpriteGroundRingSprite.oriented.rgb[1] = 0xA0;
+    g_PointSpriteGroundRingSprite.oriented.rgb[2] = 0xA0;
 
-    D_800F3380.oriented.rotation.x = 0x400;
-    D_800F3380.oriented.rotation.y = 0;
-    D_800F3380.oriented.rotation.z = 0;
-    D_800F3380.oriented.cell = 0x46;
-    D_800F3380.oriented.clut = 0x30;
-    D_800F3380.oriented.depth = -0x50;
-    D_800F3380.oriented.rgb[0] = 0x80;
-    D_800F3380.oriented.rgb[1] = 0x80;
-    D_800F3380.oriented.rgb[2] = 0x80;
+    g_PointSpriteState4.oriented.rotation.x = 0x400;
+    g_PointSpriteState4.oriented.rotation.y = 0;
+    g_PointSpriteState4.oriented.rotation.z = 0;
+    g_PointSpriteState4.oriented.cell = 0x46;
+    g_PointSpriteState4.oriented.clut = 0x30;
+    g_PointSpriteState4.oriented.depth = -0x50;
+    g_PointSpriteState4.oriented.rgb[0] = 0x80;
+    g_PointSpriteState4.oriented.rgb[1] = 0x80;
+    g_PointSpriteState4.oriented.rgb[2] = 0x80;
 
-    D_800E2818.oriented.scale.x = 0x1A8;
-    D_800E2818.oriented.scale.y = 0x1A8;
-    D_800E2818.oriented.scale.z = 0x1A8;
-    D_800E2818.oriented.rotation.x = 0;
-    D_800E2818.oriented.rotation.y = 0;
-    D_800E2818.oriented.rotation.z = 0;
-    D_800E2818.oriented.cell = 0xBC;
-    D_800E2818.oriented.clut = 8;
-    D_800E2818.oriented.depth = 0;
-    D_800E2818.oriented.rgb[0] = 0x80;
-    D_800E2818.oriented.rgb[1] = 0x80;
-    D_800E2818.oriented.rgb[2] = 0x80;
+    g_PointSpriteState1.oriented.scale.x = 0x1A8;
+    g_PointSpriteState1.oriented.scale.y = 0x1A8;
+    g_PointSpriteState1.oriented.scale.z = 0x1A8;
+    g_PointSpriteState1.oriented.rotation.x = 0;
+    g_PointSpriteState1.oriented.rotation.y = 0;
+    g_PointSpriteState1.oriented.rotation.z = 0;
+    g_PointSpriteState1.oriented.cell = 0xBC;
+    g_PointSpriteState1.oriented.clut = 8;
+    g_PointSpriteState1.oriented.depth = 0;
+    g_PointSpriteState1.oriented.rgb[0] = 0x80;
+    g_PointSpriteState1.oriented.rgb[1] = 0x80;
+    g_PointSpriteState1.oriented.rgb[2] = 0x80;
 
-    D_800F3338.oriented.rotation.x = 0x400;
-    D_800F3338.oriented.rotation.y = 0;
-    D_800F3338.oriented.rotation.z = 0;
-    D_800F3338.oriented.cell = 0x42;
-    D_800F3338.oriented.clut = 0x20;
-    D_800F3338.oriented.depth = 0x32;
-    D_800F3338.oriented.rgb[0] = 0x80;
-    D_800F3338.oriented.rgb[1] = 0x80;
-    D_800F3338.oriented.rgb[2] = 0x80;
+    g_PointSpriteState3.oriented.rotation.x = 0x400;
+    g_PointSpriteState3.oriented.rotation.y = 0;
+    g_PointSpriteState3.oriented.rotation.z = 0;
+    g_PointSpriteState3.oriented.cell = 0x42;
+    g_PointSpriteState3.oriented.clut = 0x20;
+    g_PointSpriteState3.oriented.depth = 0x32;
+    g_PointSpriteState3.oriented.rgb[0] = 0x80;
+    g_PointSpriteState3.oriented.rgb[1] = 0x80;
+    g_PointSpriteState3.oriented.rgb[2] = 0x80;
 
     return 0;
 }
@@ -128,23 +128,23 @@ int PointSprite_ClassNop0(void) {
     return 0;
 }
 
-int func_800CBFC4(void *arg0, void *arg1, FieldFxPointSprite *anim) {
+int PointSprite_InitRisingStreak(void *arg0, void *arg1, FieldFxPointSprite *anim) {
     int x_base_a1;
     int z_base_a1;
     int x_rand;
     int z_rand;
 
-    D_800F3430.oriented.rgb[0] = *FieldFx_RegPtr(0);
-    D_800F3430.oriented.rgb[1] = *FieldFx_RegPtr(1);
-    D_800F3430.oriented.rgb[2] = *FieldFx_RegPtr(2);
+    g_PointSpriteStreakSprite.oriented.rgb[0] = *FieldFx_RegPtr(0);
+    g_PointSpriteStreakSprite.oriented.rgb[1] = *FieldFx_RegPtr(1);
+    g_PointSpriteStreakSprite.oriented.rgb[2] = *FieldFx_RegPtr(2);
 
     x_rand = rand();
-    x_base_a1 = D_800E2290.x - 0x64;
+    x_base_a1 = g_PointSpriteActorPosition.x - 0x64;
     anim->point.x = x_base_a1 + (x_rand % 201);
-    anim->point.y = D_800E2290.y;
+    anim->point.y = g_PointSpriteActorPosition.y;
 
     z_rand = rand();
-    z_base_a1 = D_800E2290.z - 0x64;
+    z_base_a1 = g_PointSpriteActorPosition.z - 0x64;
     anim->extent = 0x20C;
     anim->scale = 0x7F;
     anim->point.z = z_base_a1 + (z_rand % 201);
@@ -155,9 +155,9 @@ void FieldFx_InitRadialEntries(void *arg0, void *arg1, FieldFxRadialParticles *a
     int angle;
     int lift;
 
-    D_800E2260.oriented.rgb[0] = *FieldFx_RegPtr(3);
-    D_800E2260.oriented.rgb[1] = *FieldFx_RegPtr(4);
-    D_800E2260.oriented.rgb[2] = *FieldFx_RegPtr(5);
+    g_PointSpriteState0.oriented.rgb[0] = *FieldFx_RegPtr(3);
+    g_PointSpriteState0.oriented.rgb[1] = *FieldFx_RegPtr(4);
+    g_PointSpriteState0.oriented.rgb[2] = *FieldFx_RegPtr(5);
 
     anim->scale = 0x7F;
     if (((Combatant *)D_8009D254->core)->action->actionCode.actionId == 3) {
@@ -167,9 +167,9 @@ void FieldFx_InitRadialEntries(void *arg0, void *arg1, FieldFxRadialParticles *a
     }
 
     for (i = 0; i < anim->count; i++) {
-        anim->points[i].position.x = D_800E2290.x;
-        anim->points[i].position.y = D_800E2290.y;
-        anim->points[i].position.z = D_800E2290.z;
+        anim->points[i].position.x = g_PointSpriteActorPosition.x;
+        anim->points[i].position.y = g_PointSpriteActorPosition.y;
+        anim->points[i].position.z = g_PointSpriteActorPosition.z;
 
         if (anim->count == 0x10) {
             angle = i << 8;
@@ -185,29 +185,29 @@ void FieldFx_InitRadialEntries(void *arg0, void *arg1, FieldFxRadialParticles *a
     }
 }
 
-int func_800CC244(void *arg0, void *arg1, FieldFxPointSprite *anim) {
+int PointSprite_InitGroundRing(void *arg0, void *arg1, FieldFxPointSprite *anim) {
     u16 z;
 
-    anim->point.x = D_800E2290.x;
-    anim->point.y = D_800E2290.y;
-    z = D_800E2290.z;
+    anim->point.x = g_PointSpriteActorPosition.x;
+    anim->point.y = g_PointSpriteActorPosition.y;
+    z = g_PointSpriteActorPosition.z;
     anim->extent = 0xBE8;
     anim->scale = 0x7F;
     anim->point.z = z;
 }
 
-int func_800CC284(void *arg0, void *arg1, FieldFxPointSprite *anim) {
+int PointSprite_InitBillboard(void *arg0, void *arg1, FieldFxPointSprite *anim) {
     u16 z;
 
-    anim->point.x = D_800E2290.x;
-    anim->point.y = D_800E2290.y - 0x64;
-    z = D_800E2290.z;
+    anim->point.x = g_PointSpriteActorPosition.x;
+    anim->point.y = g_PointSpriteActorPosition.y - 0x64;
+    z = g_PointSpriteActorPosition.z;
     anim->extent = 0;
     anim->scale = 0x7F;
     anim->point.z = z;
 }
 
-void func_800CC2C4(void *arg0, void *arg1, FieldFxScatteredParticles *state)
+void FieldFx_InitScatteredParticles(void *arg0, void *arg1, FieldFxScatteredParticles *state)
 {
     int i;
 
@@ -218,9 +218,9 @@ void func_800CC2C4(void *arg0, void *arg1, FieldFxScatteredParticles *state)
         state->points.count = 16;
 
     for (i = 0; i < state->points.count; i++) {
-        state->points.x[i] = D_800E2290.x;
-        state->points.y[i] = D_800E2290.y;
-        state->points.z[i] = D_800E2290.z;
+        state->points.x[i] = g_PointSpriteActorPosition.x;
+        state->points.y[i] = g_PointSpriteActorPosition.y;
+        state->points.z[i] = g_PointSpriteActorPosition.z;
         state->velocity_x[i] = (rand() % 11 - 5) * 256;
         state->velocity_y[i] = -(rand() % 16 + 20) * 256;
         state->velocity_z[i] = (rand() % 11 - 5) * 256;
@@ -230,28 +230,28 @@ void func_800CC2C4(void *arg0, void *arg1, FieldFxScatteredParticles *state)
 /* Point sprite setup, draw and update callbacks, including radial and
  * scattered particle arrays. Shared payloads are declared in fieldfx_task.h. */
 
-int func_800CC440(void *arg0, void *arg1, FieldFxPointSprite *anim) {
+int PointSprite_InitOrientedFlash(void *arg0, void *arg1, FieldFxPointSprite *anim) {
     u16 z;
 
-    anim->point.x = D_800E2290.x;
-    anim->point.y = D_800E2290.y;
-    z = D_800E2290.z;
+    anim->point.x = g_PointSpriteActorPosition.x;
+    anim->point.y = g_PointSpriteActorPosition.y;
+    z = g_PointSpriteActorPosition.z;
     anim->extent = 0x224;
     anim->scale = 0x7F;
     anim->point.z = z;
 }
 
-int func_800CC480(void *arg0, FieldFxSlot *params, FieldFxPointSprite *anim) {
+int PointSprite_DrawRisingStreak(void *arg0, FieldFxSlot *params, FieldFxPointSprite *anim) {
     short *base_a0;
     FieldBillboard *output;
     FieldFxPointSprite *pointData = anim;
     u32 value_v0;
     int value_v1;
 
-    func_800C2EAC(3);
-    func_800C3098(0x10);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(3);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteBlendMode(2);
 
     value_v1 = params->counter;
     value_v0 = 0x80;
@@ -263,121 +263,121 @@ int func_800CC480(void *arg0, FieldFxSlot *params, FieldFxPointSprite *anim) {
         value_v1 = 0;
     }
 
-    base_a0 = &D_800F3430.oriented.brightness;
+    base_a0 = &g_PointSpriteStreakSprite.oriented.brightness;
     base_a0[0] = value_v1;
     value_v0 = pointData->point.x;
     output = (FieldBillboard *)((u8 *)base_a0 -
         PE1_OFFSETOF(FieldBillboard, brightness));
     output->position.x = value_v0;
-    D_800F3430.oriented.position.y = pointData->point.y;
-    D_800F3430.oriented.position.z = pointData->point.z;
-    D_800F3430.oriented.scale.x = pointData->extent;
-    D_800F3430.oriented.scale.y = pointData->extent * 2;
-    D_800F3430.oriented.scale.z = pointData->extent;
-    func_800C3B04(output);
+    g_PointSpriteStreakSprite.oriented.position.y = pointData->point.y;
+    g_PointSpriteStreakSprite.oriented.position.z = pointData->point.z;
+    g_PointSpriteStreakSprite.oriented.scale.x = pointData->extent;
+    g_PointSpriteStreakSprite.oriented.scale.y = pointData->extent * 2;
+    g_PointSpriteStreakSprite.oriented.scale.z = pointData->extent;
+    FieldFx_DrawBillboard(output);
 }
 
 void FieldFx_ProcessInterleavedPoints(void *arg0, void *arg1, FieldFxRadialParticles *anim) {
     unsigned int i;
 
-    func_800C2EAC(3);
-    func_800C3098(0x10);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(3);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteBlendMode(2);
 
-    D_800E2260.oriented.scale.x = (s16)anim->extent[0];
-    D_800E2260.oriented.scale.y = (s16)anim->extent[0];
-    D_800E2260.oriented.scale.z = (s16)anim->extent[0];
-    D_800E2260.billboard.brightness = anim->scale;
+    g_PointSpriteState0.oriented.scale.x = (s16)anim->extent[0];
+    g_PointSpriteState0.oriented.scale.y = (s16)anim->extent[0];
+    g_PointSpriteState0.oriented.scale.z = (s16)anim->extent[0];
+    g_PointSpriteState0.billboard.brightness = anim->scale;
 
     for (i = 0; i < anim->count; i++) {
-        D_800E2260.billboard.position.x = anim->points[i].position.x;
-        D_800E2260.billboard.position.y = anim->points[i].position.y;
-        D_800E2260.billboard.position.z = anim->points[i].position.z;
-        func_800C3B04(&D_800E2260.billboard);
+        g_PointSpriteState0.billboard.position.x = anim->points[i].position.x;
+        g_PointSpriteState0.billboard.position.y = anim->points[i].position.y;
+        g_PointSpriteState0.billboard.position.z = anim->points[i].position.z;
+        FieldFx_DrawBillboard(&g_PointSpriteState0.billboard);
     }
 }
 
-int func_800CC644(void *arg0, void *arg1, FieldFxPointSprite *anim) {
+int PointSprite_DrawGroundRing(void *arg0, void *arg1, FieldFxPointSprite *anim) {
     u16 value_v0;
     FieldOrientedSprite *output;
-    func_800C2EAC(3);
-    func_800C3098(0x10);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3238(3);
+    FieldFx_SetSpriteTexturePreset(3);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteBlendMode(3);
 
     value_v0 = anim->point.x;
-    output = &D_800F32E0.oriented;
+    output = &g_PointSpriteGroundRingSprite.oriented;
     output->position.x = value_v0;
-    D_800F32E0.oriented.position.y = anim->point.y;
-    D_800F32E0.oriented.position.z = anim->point.z;
-    D_800F32E0.oriented.scale.x = anim->extent;
-    D_800F32E0.oriented.scale.y = anim->extent;
-    D_800F32E0.oriented.scale.z = anim->extent;
-    D_800F32E0.oriented.brightness = (signed char)anim->scale;
-    func_800C3324(output);
+    g_PointSpriteGroundRingSprite.oriented.position.y = anim->point.y;
+    g_PointSpriteGroundRingSprite.oriented.position.z = anim->point.z;
+    g_PointSpriteGroundRingSprite.oriented.scale.x = anim->extent;
+    g_PointSpriteGroundRingSprite.oriented.scale.y = anim->extent;
+    g_PointSpriteGroundRingSprite.oriented.scale.z = anim->extent;
+    g_PointSpriteGroundRingSprite.oriented.brightness = (signed char)anim->scale;
+    FieldFx_DrawOrientedSprite(output);
 }
 
-int func_800CC6F8(void *arg0, void *arg1, FieldFxPointSprite *anim) {
+int PointSprite_DrawBillboardFlash(void *arg0, void *arg1, FieldFxPointSprite *anim) {
     u16 value_v0;
     FieldBillboard *output;
-    func_800C2EAC(3);
-    func_800C3098(0x100);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(3);
+    FieldFx_SetSpriteColorMode(0x100);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteBlendMode(2);
 
     value_v0 = anim->point.x;
-    output = &D_800F3380.billboard;
+    output = &g_PointSpriteState4.billboard;
     output->position.x = value_v0;
-    D_800F3380.oriented.position.y = anim->point.y;
-    D_800F3380.oriented.position.z = anim->point.z;
-    D_800F3380.oriented.scale.x = anim->extent;
-    D_800F3380.oriented.scale.y = anim->extent;
-    D_800F3380.oriented.scale.z = anim->extent;
-    D_800F3380.oriented.brightness = (signed char)anim->scale;
-    func_800C3B04(output);
+    g_PointSpriteState4.oriented.position.y = anim->point.y;
+    g_PointSpriteState4.oriented.position.z = anim->point.z;
+    g_PointSpriteState4.oriented.scale.x = anim->extent;
+    g_PointSpriteState4.oriented.scale.y = anim->extent;
+    g_PointSpriteState4.oriented.scale.z = anim->extent;
+    g_PointSpriteState4.oriented.brightness = (signed char)anim->scale;
+    FieldFx_DrawBillboard(output);
 }
 
 void FieldFx_ProcessPointTriples(void *arg0, void *arg1,
                                    FieldFxPointData *points) {
     unsigned int i;
 
-    func_800C2EAC(3);
-    func_800C3098(0x10);
-    func_800C2FF0(0x10, 0x10);
-    func_800C3238(0);
+    FieldFx_SetSpriteTexturePreset(3);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteCellSize(0x10, 0x10);
+    FieldFx_SetSpriteBlendMode(0);
 
-    D_800E2818.billboard.brightness = (points->scale << 24) >> 23;
+    g_PointSpriteState1.billboard.brightness = (points->scale << 24) >> 23;
 
     for (i = 0; i < points->count; i++) {
-        D_800E2818.billboard.position.x = points->x[i];
-        D_800E2818.billboard.position.y = points->y[i];
-        D_800E2818.billboard.position.z = points->z[i];
-        func_800C3B04(&D_800E2818.billboard);
+        g_PointSpriteState1.billboard.position.x = points->x[i];
+        g_PointSpriteState1.billboard.position.y = points->y[i];
+        g_PointSpriteState1.billboard.position.z = points->z[i];
+        FieldFx_DrawBillboard(&g_PointSpriteState1.billboard);
     }
 }
 
-int func_800CC878(void *arg0, void *arg1, FieldFxPointSprite *anim) {
+int PointSprite_DrawOrientedFlash(void *arg0, void *arg1, FieldFxPointSprite *anim) {
     u16 value_v0;
     FieldOrientedSprite *output;
-    func_800C2EAC(3);
-    func_800C3098(0x100);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(3);
+    FieldFx_SetSpriteColorMode(0x100);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteBlendMode(2);
 
     value_v0 = anim->point.x;
-    output = &D_800F3338.oriented;
+    output = &g_PointSpriteState3.oriented;
     output->position.x = value_v0;
-    D_800F3338.oriented.position.y = anim->point.y;
-    D_800F3338.oriented.position.z = anim->point.z;
-    D_800F3338.oriented.scale.x = anim->extent;
-    D_800F3338.oriented.scale.y = anim->extent;
-    D_800F3338.oriented.scale.z = anim->extent;
-    D_800F3338.oriented.brightness = (signed char)anim->scale;
-    func_800C3324(output);
+    g_PointSpriteState3.oriented.position.y = anim->point.y;
+    g_PointSpriteState3.oriented.position.z = anim->point.z;
+    g_PointSpriteState3.oriented.scale.x = anim->extent;
+    g_PointSpriteState3.oriented.scale.y = anim->extent;
+    g_PointSpriteState3.oriented.scale.z = anim->extent;
+    g_PointSpriteState3.oriented.brightness = (signed char)anim->scale;
+    FieldFx_DrawOrientedSprite(output);
 }
 
-void func_800CC92C(void *arg0, FieldFxSlot *state, FieldFxPointSprite *anim) {
+void PointSprite_UpdateRisingStreak(void *arg0, FieldFxSlot *state, FieldFxPointSprite *anim) {
     anim->point.x += 0; /* no horizontal drift, but the record is rewritten */
     anim->point.y -= 10;
     anim->scale -= 2;
@@ -387,7 +387,7 @@ void func_800CC92C(void *arg0, FieldFxSlot *state, FieldFxPointSprite *anim) {
     }
 }
 
-void func_800CC974(void *arg0, FieldFxSlot *state, FieldFxRadialParticles *anim) {
+void PointSprite_UpdateRadialParticles(void *arg0, FieldFxSlot *state, FieldFxRadialParticles *anim) {
     int i;
 
     for (i = 0; i < anim->count; i++) {
@@ -412,7 +412,7 @@ int func_800CCA40(void *arg0, FieldFxSlot *state, FieldFxPointSprite *anim) {
     }
 }
 
-int func_800CCA78(void *arg0, FieldFxSlot *state, FieldFxPointSprite *anim) {
+int PointSprite_UpdateBillboardFlash(void *arg0, FieldFxSlot *state, FieldFxPointSprite *anim) {
     anim->scale -= 6;
     anim->extent = (u16)anim->extent + 0xB4;
     if ((s8)anim->scale < 0x1E) {
@@ -420,7 +420,7 @@ int func_800CCA78(void *arg0, FieldFxSlot *state, FieldFxPointSprite *anim) {
     }
 }
 
-void func_800CCAB0(void *arg0, FieldFxSlot *state, FieldFxScatteredParticles *anim) {
+void PointSprite_UpdateScatteredParticles(void *arg0, FieldFxSlot *state, FieldFxScatteredParticles *anim) {
     int i;
 
     for (i = 0; i < anim->points.count; i++) {
@@ -436,7 +436,7 @@ void func_800CCAB0(void *arg0, FieldFxSlot *state, FieldFxScatteredParticles *an
     }
 }
 
-int func_800CCB6C(void *arg0, FieldFxSlot *state, FieldFxPointSprite *anim) {
+int PointSprite_UpdateOrientedFlash(void *arg0, FieldFxSlot *state, FieldFxPointSprite *anim) {
     anim->scale -= 8;
     anim->extent = (u16)anim->extent + 0x1A4;
     if ((s8)anim->scale < 0x14) {
@@ -453,52 +453,52 @@ static __inline__ void identity_matrix(GteMatrix *matrix)
         matrix->t[0] = matrix->t[1] = matrix->t[2] = 0;
 }
 
-int func_800CCBA8(char *object)
+int BurstEffect_PlantScript(char *object)
 {
     GteVector first, second, third;
 
-    *FieldFx_GetSlot(object) = D_800E0EB8;
-    first = D_800C220C;
-    identity_matrix(&D_800F3478);
-    ScaleMatrix(&D_800F3478, &first);
-    second = D_800C221C;
-    identity_matrix(&D_800F33C0);
-    ScaleMatrix(&D_800F33C0, &second);
-    third = D_800C222C;
-    identity_matrix(&D_800F32B0);
-    ScaleMatrix(&D_800F32B0, &third);
+    *FieldFx_GetSlot(object) = g_BurstEffectScript;
+    first = g_BurstEffectScaleA;
+    identity_matrix(&g_BurstEffectScaleMatrix0);
+    ScaleMatrix(&g_BurstEffectScaleMatrix0, &first);
+    second = g_BurstEffectScaleB;
+    identity_matrix(&g_BurstEffectScaleMatrix1);
+    ScaleMatrix(&g_BurstEffectScaleMatrix1, &second);
+    third = g_BurstEffectScaleC;
+    identity_matrix(&g_BurstEffectScaleMatrix2);
+    ScaleMatrix(&g_BurstEffectScaleMatrix2, &third);
 
-    D_800E2298.cell = 0x42;
-    D_800E2298.clut = 0x20;
-    D_800E2298.offset = 50;
-    D_800E2298.depth = 127;
-    D_800E2298.r = 128;
-    D_800E2298.g = 128;
-    D_800E2298.b = 128;
+    g_BurstEffectSprite1.cell = 0x42;
+    g_BurstEffectSprite1.clut = 0x20;
+    g_BurstEffectSprite1.offset = 50;
+    g_BurstEffectSprite1.depth = 127;
+    g_BurstEffectSprite1.r = 128;
+    g_BurstEffectSprite1.g = 128;
+    g_BurstEffectSprite1.b = 128;
 
-    D_800E2250.cell = 128;
-    D_800E2250.clut = 4;
-    D_800E2250.offset = -50;
-    D_800E2250.depth = 127;
-    D_800E2250.r = 128;
-    D_800E2250.g = 128;
-    D_800E2250.b = 128;
+    g_BurstEffectSprite0.cell = 128;
+    g_BurstEffectSprite0.clut = 4;
+    g_BurstEffectSprite0.offset = -50;
+    g_BurstEffectSprite0.depth = 127;
+    g_BurstEffectSprite0.r = 128;
+    g_BurstEffectSprite0.g = 128;
+    g_BurstEffectSprite0.b = 128;
 
-    D_800E27E0.cell = 0x68;
-    D_800E27E0.clut = 0;
-    D_800E27E0.offset = -99;
-    D_800E27E0.depth = 127;
-    D_800E27E0.r = 64;
-    D_800E27E0.b = 64;
-    D_800E27E0.g = 128;
+    g_BurstEffectSprite2.cell = 0x68;
+    g_BurstEffectSprite2.clut = 0;
+    g_BurstEffectSprite2.offset = -99;
+    g_BurstEffectSprite2.depth = 127;
+    g_BurstEffectSprite2.r = 64;
+    g_BurstEffectSprite2.b = 64;
+    g_BurstEffectSprite2.g = 128;
 
-    D_800F3460.cell = 0x6E;
-    D_800F3460.clut = 3;
-    D_800F3460.offset = -100;
-    D_800F3460.depth = 127;
-    D_800F3460.r = 128;
-    D_800F3460.g = 128;
-    D_800F3460.b = 128;
+    g_BurstEffectSprite3.cell = 0x6E;
+    g_BurstEffectSprite3.clut = 3;
+    g_BurstEffectSprite3.offset = -100;
+    g_BurstEffectSprite3.depth = 127;
+    g_BurstEffectSprite3.r = 128;
+    g_BurstEffectSprite3.g = 128;
+    g_BurstEffectSprite3.b = 128;
     return 0;
 }
 
@@ -539,7 +539,7 @@ int BurstEffect_ClassNop0(void) {
     return 0;
 }
 
-int func_800CCFA0(void) {
+int BurstEffect_InitTarget(void) {
     int index;
     FieldActor **targets;
     FieldActor *target;
@@ -560,19 +560,19 @@ int func_800CCFA0(void) {
     *FieldFx_RegPtr(0xD) = index;
 
     data = g_BurstEffectTarget;
-    D_800E27F8.x = data->render_object.target_x;
-    D_800E27F8.y = data->render_object.target_y;
-    D_800E27F8.z = data->render_object.target_z;
+    g_BurstEffectTargetPosition.x = data->render_object.target_x;
+    g_BurstEffectTargetPosition.y = data->render_object.target_y;
+    g_BurstEffectTargetPosition.z = data->render_object.target_z;
 
     if (D_800B0CE8.reset_pending != 0) {
         Akao_Cmd_24(g_FieldEffectSoundHeader, 0, 0x80, 0x7F);
     }
 
-    func_800CEDA8(0);
+    FieldFx_EnsureEffectTexturePage(0);
 }
 
 int func_800CD07C(void *arg0, void *arg1, FieldFxBurstData *anim) {
-    u16 x = D_800E27F8.x;
+    u16 x = g_BurstEffectTargetPosition.x;
     BattleEntity *entity = D_8009D254;
     int y;
     u16 z;
@@ -580,7 +580,7 @@ int func_800CD07C(void *arg0, void *arg1, FieldFxBurstData *anim) {
     anim->header.origin_x = x;
     y = entity->posY.parts.integer;
     anim->header.origin_y = y;
-    z = D_800E27F8.z;
+    z = g_BurstEffectTargetPosition.z;
     anim->header.scale = 0x7F;
     anim->header.duration = 0x60C;
     anim->header.origin_z = z;
@@ -595,7 +595,7 @@ void FieldFx_InitRandomOffsetPairs(void *arg0, void *arg1,
     u16 z;
     int i;
 
-    base = &D_800E27F8;
+    base = &g_BurstEffectTargetPosition;
     i = 0;
 
     anim->header.origin_x = base->x;
@@ -620,26 +620,26 @@ void FieldFx_InitRandomOffsetPairs(void *arg0, void *arg1,
     } while (((unsigned int)i & 0xFFFF) < 2);
 }
 
-int func_800CD1FC(void *arg0, void *arg1, FieldFxBurstData *anim) {
+int BurstEffect_InitSparkPoint(void *arg0, void *arg1, FieldFxBurstData *anim) {
     u16 z;
 
-    anim->header.origin_x = (D_800E27F8.x + (rand() % 201)) - 0x64;
-    anim->header.origin_y = (D_800E27F8.y + (rand() % 101)) - 0x32;
-    z = D_800E27F8.z;
+    anim->header.origin_x = (g_BurstEffectTargetPosition.x + (rand() % 201)) - 0x64;
+    anim->header.origin_y = (g_BurstEffectTargetPosition.y + (rand() % 101)) - 0x32;
+    z = g_BurstEffectTargetPosition.z;
     anim->header.scale = 0x7F;
     anim->header.duration = 0x544;
     anim->header.origin_z = z;
 }
 
 /* Two empty field effect callbacks. */
-void func_800CD2DC(void) {
+void BurstEffect_InitNop4(void) {
 }
 
-void func_800CD2E4(void) {
+void BurstEffect_DrawNop0(void) {
 }
 
-int func_800CD2EC(void *arg0, void *arg1, FieldFxGlowPoint *anim) {
-    u16 *field = &D_800E2298.depth;
+int BurstEffect_DrawGroundGlow(void *arg0, void *arg1, FieldFxGlowPoint *anim) {
+    u16 *field = &g_BurstEffectSprite1.depth;
     GteMatrix matrix;
     GteShortVector rot;
     GteVector scaleCopy;
@@ -647,10 +647,10 @@ int func_800CD2EC(void *arg0, void *arg1, FieldFxGlowPoint *anim) {
 
     rot = g_BurstEffectSpriteRotation;
 
-    func_800C2EAC(3);
-    func_800C3098(0x100);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(3);
+    FieldFx_SetSpriteColorMode(0x100);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteBlendMode(2);
 
     *field = anim->brightness;
     RotMatrix(&rot, &matrix);
@@ -666,65 +666,65 @@ int func_800CD2EC(void *arg0, void *arg1, FieldFxGlowPoint *anim) {
     scaleCopy = scale;
 
     ScaleMatrix(&matrix, &scaleCopy);
-    func_800C42A4(&D_800E2298, &matrix, 0);
+    FieldFx_DrawGlowSprite(&g_BurstEffectSprite1, &matrix, 0);
 }
 
-int func_800CD404(void *arg0, void *arg1, FieldFxBurstData *anim) {
+int BurstEffect_DrawSparkPairs(void *arg0, void *arg1, FieldFxBurstData *anim) {
     FieldFxBurstWindow *window;
     u16 i;
 
-    func_800C2EAC(3);
-    func_800C3098(0x10);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(3);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteBlendMode(2);
 
-    D_800F33C0.t[0] = anim->header.origin_x;
-    D_800F33C0.t[1] = anim->header.origin_y;
-    D_800F33C0.t[2] = anim->header.origin_z;
-    D_800E2250.cell = (anim->header.shade * 2) - 0x80;
-    func_800C42A4(&D_800E2250, &D_800F33C0, 1);
+    g_BurstEffectScaleMatrix1.t[0] = anim->header.origin_x;
+    g_BurstEffectScaleMatrix1.t[1] = anim->header.origin_y;
+    g_BurstEffectScaleMatrix1.t[2] = anim->header.origin_z;
+    g_BurstEffectSprite0.cell = (anim->header.shade * 2) - 0x80;
+    FieldFx_DrawGlowSprite(&g_BurstEffectSprite0, &g_BurstEffectScaleMatrix1, 1);
 
-    func_800C3238(3);
+    FieldFx_SetSpriteBlendMode(3);
 
     for (i = 0; i < 2; i++) {
         window = (FieldFxBurstWindow *)&anim->bytes[i * 8];
-        D_800F32B0.t[0] = (s16)window->point.x;
-        D_800F32B0.t[1] = (s16)window->point.y;
-        D_800F32B0.t[2] = (s16)window->point.z;
-        func_800C42A4(&D_800F3460, &D_800F32B0, 1);
+        g_BurstEffectScaleMatrix2.t[0] = (s16)window->point.x;
+        g_BurstEffectScaleMatrix2.t[1] = (s16)window->point.y;
+        g_BurstEffectScaleMatrix2.t[2] = (s16)window->point.z;
+        FieldFx_DrawGlowSprite(&g_BurstEffectSprite3, &g_BurstEffectScaleMatrix2, 1);
     }
 }
 
 /* Burst and spark effect setup, draw and lifecycle callbacks. */
 
-int func_800CD50C(void *arg0, void *arg1, FieldFxGlowPoint *anim) {
+int BurstEffect_DrawSparkPoint(void *arg0, void *arg1, FieldFxGlowPoint *anim) {
     int *base_a1;
     u16 *field_v1;
 
-    func_800C2EAC(3);
-    func_800C3098(0x10);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3238(3);
+    FieldFx_SetSpriteTexturePreset(3);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteBlendMode(3);
 
-    base_a1 = &D_800F3478.t[0];
-    field_v1 = &D_800E27E0.depth;
+    base_a1 = &g_BurstEffectScaleMatrix0.t[0];
+    field_v1 = &g_BurstEffectSprite2.depth;
     base_a1[0] = (s16)anim->position.x;
-    D_800F3478.t[1] = (s16)anim->position.y;
-    D_800F3478.t[2] = (s16)anim->position.z;
+    g_BurstEffectScaleMatrix0.t[1] = (s16)anim->position.y;
+    g_BurstEffectScaleMatrix0.t[2] = (s16)anim->position.z;
     *field_v1 = anim->brightness;
-    func_800C42A4(&D_800E27E0, &D_800F3478, 1);
+    FieldFx_DrawGlowSprite(&g_BurstEffectSprite2, &g_BurstEffectScaleMatrix0, 1);
 }
 
-void func_800CD59C(void) {
+void BurstEffect_DrawNop4(void) {
 }
 
-int func_800CD5A4(void *arg0, FieldFxSlot *state) {
+int BurstEffect_UpdateEnd(void *arg0, FieldFxSlot *state) {
     int ret = 2;
     state->flag = ret;
     return ret;
 }
 
-int func_800CD5B0(void *arg0, FieldFxSlot *state, FieldFxGlowPoint *anim) {
+int BurstEffect_UpdateGroundGlow(void *arg0, FieldFxSlot *state, FieldFxGlowPoint *anim) {
     anim->brightness = anim->brightness - 0xA;
     anim->scale += 0x3C;
     if ((s16)anim->brightness < 0x14) {
@@ -733,7 +733,7 @@ int func_800CD5B0(void *arg0, FieldFxSlot *state, FieldFxGlowPoint *anim) {
     }
 }
 
-int func_800CD5EC(void *arg0, FieldFxSlot *state, FieldFxTwoPointMotion *anim) {
+int BurstEffect_UpdateSparkPairs(void *arg0, FieldFxSlot *state, FieldFxTwoPointMotion *anim) {
     unsigned int i = 0;
 
     do {
@@ -751,7 +751,7 @@ int func_800CD5EC(void *arg0, FieldFxSlot *state, FieldFxTwoPointMotion *anim) {
     }
 }
 
-int func_800CD678(void *arg0, FieldFxSlot *state, FieldFxGlowPoint *anim) {
+int BurstEffect_UpdateSparkPoint(void *arg0, FieldFxSlot *state, FieldFxGlowPoint *anim) {
     int value = rand() % 11;
     int jitter;
     FieldFxGlowPoint *output;
@@ -773,7 +773,7 @@ int func_800CD678(void *arg0, FieldFxSlot *state, FieldFxGlowPoint *anim) {
     }
 }
 
-int func_800CD71C(void *arg0, FieldFxSlot *state) {
+int BurstEffect_UpdateEnd4(void *arg0, FieldFxSlot *state) {
     int ret = 2;
     state->flag = ret;
     return ret;
@@ -784,41 +784,41 @@ int BurstEffectB_PlantScript(char *object) {
 
     *slot = &g_BurstEffectBScript;
 
-    D_800F33E8.oriented.scale.x = 0x5F4;
-    D_800F33E8.oriented.scale.y = 0x5F4;
-    D_800F33E8.oriented.scale.z = 0x5F4;
-    D_800F33E8.oriented.rotation.x = 0;
-    D_800F33E8.oriented.rotation.y = 0;
-    D_800F33E8.oriented.rotation.z = 0;
-    D_800F33E8.oriented.cell = 0x40;
-    D_800F33E8.oriented.clut = 0x20;
-    D_800F33E8.oriented.depth = -0x64;
-    D_800F33E8.oriented.rgb[0] = 0x15;
-    D_800F33E8.oriented.rgb[1] = 0x20;
-    D_800F33E8.oriented.rgb[2] = 0x20;
+    g_BurstEffectBState2.oriented.scale.x = 0x5F4;
+    g_BurstEffectBState2.oriented.scale.y = 0x5F4;
+    g_BurstEffectBState2.oriented.scale.z = 0x5F4;
+    g_BurstEffectBState2.oriented.rotation.x = 0;
+    g_BurstEffectBState2.oriented.rotation.y = 0;
+    g_BurstEffectBState2.oriented.rotation.z = 0;
+    g_BurstEffectBState2.oriented.cell = 0x40;
+    g_BurstEffectBState2.oriented.clut = 0x20;
+    g_BurstEffectBState2.oriented.depth = -0x64;
+    g_BurstEffectBState2.oriented.rgb[0] = 0x15;
+    g_BurstEffectBState2.oriented.rgb[1] = 0x20;
+    g_BurstEffectBState2.oriented.rgb[2] = 0x20;
 
-    D_800E27B0.oriented.rotation.x = 0;
-    D_800E27B0.oriented.rotation.y = 0;
-    D_800E27B0.oriented.rotation.z = 0;
-    D_800E27B0.oriented.cell = 0x46;
-    D_800E27B0.oriented.clut = 0x30;
-    D_800E27B0.oriented.depth = -0x6E;
-    D_800E27B0.oriented.rgb[0] = 0xFF;
-    D_800E27B0.oriented.rgb[1] = 0xB0;
-    D_800E27B0.oriented.rgb[2] = 0xB0;
+    g_BurstEffectBState1.oriented.rotation.x = 0;
+    g_BurstEffectBState1.oriented.rotation.y = 0;
+    g_BurstEffectBState1.oriented.rotation.z = 0;
+    g_BurstEffectBState1.oriented.cell = 0x46;
+    g_BurstEffectBState1.oriented.clut = 0x30;
+    g_BurstEffectBState1.oriented.depth = -0x6E;
+    g_BurstEffectBState1.oriented.rgb[0] = 0xFF;
+    g_BurstEffectBState1.oriented.rgb[1] = 0xB0;
+    g_BurstEffectBState1.oriented.rgb[2] = 0xB0;
 
-    D_800E2770.oriented.scale.x = 0xA4;
-    D_800E2770.oriented.scale.y = 0xA4;
-    D_800E2770.oriented.scale.z = 0x108;
-    D_800E2770.oriented.rotation.x = 0;
-    D_800E2770.oriented.rotation.y = 0;
-    D_800E2770.oriented.rotation.z = 0;
-    D_800E2770.oriented.cell = 0x6E;
-    D_800E2770.oriented.clut = 3;
-    D_800E2770.oriented.depth = -0x96;
-    D_800E2770.oriented.rgb[0] = 0x80;
-    D_800E2770.oriented.rgb[1] = 0x80;
-    D_800E2770.oriented.rgb[2] = 0x80;
+    g_BurstEffectBState0.oriented.scale.x = 0xA4;
+    g_BurstEffectBState0.oriented.scale.y = 0xA4;
+    g_BurstEffectBState0.oriented.scale.z = 0x108;
+    g_BurstEffectBState0.oriented.rotation.x = 0;
+    g_BurstEffectBState0.oriented.rotation.y = 0;
+    g_BurstEffectBState0.oriented.rotation.z = 0;
+    g_BurstEffectBState0.oriented.cell = 0x6E;
+    g_BurstEffectBState0.oriented.clut = 3;
+    g_BurstEffectBState0.oriented.depth = -0x96;
+    g_BurstEffectBState0.oriented.rgb[0] = 0x80;
+    g_BurstEffectBState0.oriented.rgb[1] = 0x80;
+    g_BurstEffectBState0.oriented.rgb[2] = 0x80;
 
     return 0;
 }
@@ -860,7 +860,7 @@ int BurstEffectB_ClassNop0(void) {
     return 0;
 }
 
-int func_800CD980(void) {
+int BurstEffectB_InitTarget(void) {
     int index;
     FieldActor **targets;
     FieldActor *target;
@@ -881,26 +881,26 @@ int func_800CD980(void) {
     *FieldFx_RegPtr(0xD) = index;
 
     data = g_BurstEffectBTarget;
-    D_800E27F0.x = data->render_object.target_x;
-    D_800E27F0.y = data->render_object.target_y;
-    D_800E27F0.z = data->render_object.target_z;
+    g_BurstEffectBTargetPosition.x = data->render_object.target_x;
+    g_BurstEffectBTargetPosition.y = data->render_object.target_y;
+    g_BurstEffectBTargetPosition.z = data->render_object.target_z;
 
     if (D_800B0CE8.reset_pending != 0) {
         Akao_Cmd_24(g_FieldEffectSoundHeader, 0, 0x80, 0x7F);
     }
 
-    func_800CEDA8(0);
+    FieldFx_EnsureEffectTexturePage(0);
 }
 
-int func_800CDA5C(void *arg0, void *arg1, FieldFxSparkCloud *anim) {
-    u16 *base = &D_800E27F0.x;
+int BurstEffectB_InitSparkCloud(void *arg0, void *arg1, FieldFxSparkCloud *anim) {
+    u16 *base = &g_BurstEffectBTargetPosition.x;
     u16 *base_s4;
     int i = 0;
     int value;
 
     anim->center.position.x = base[0];
-    anim->center.position.y = D_800E27F0.y;
-    anim->center.position.z = D_800E27F0.z;
+    anim->center.position.y = g_BurstEffectBTargetPosition.y;
+    anim->center.position.z = g_BurstEffectBTargetPosition.z;
     anim->center.displacement.x = (rand() % 201) - 0x64;
     anim->center.displacement.y = (rand() % 101) - 0x32;
 
@@ -922,12 +922,12 @@ int func_800CDA5C(void *arg0, void *arg1, FieldFxSparkCloud *anim) {
     } while ((unsigned int)(i & 0xFFFF) < 8U);
 }
 
-int func_800CDC24(void *arg0, void *arg1, FieldFxSparkPoint *anim) {
+int BurstEffectB_InitSparkPoint(void *arg0, void *arg1, FieldFxSparkPoint *anim) {
     int value;
 
-    anim->position.x = D_800E27F0.x;
-    anim->position.y = D_800E27F0.y;
-    anim->position.z = D_800E27F0.z;
+    anim->position.x = g_BurstEffectBTargetPosition.x;
+    anim->position.y = g_BurstEffectBTargetPosition.y;
+    anim->position.z = g_BurstEffectBTargetPosition.z;
     anim->brightness = 0x7F;
     anim->displacement.x = (rand() % 201) - 0x64;
     value = rand();
@@ -935,75 +935,75 @@ int func_800CDC24(void *arg0, void *arg1, FieldFxSparkPoint *anim) {
     anim->displacement.y = (value % 101) - 0x32;
 }
 
-void func_800CDD04(void) {
+void BurstEffectB_DrawNop(void) {
 }
 
-int func_800CDD0C(void *arg0, void *arg1, FieldFxSparkCloud *anim) {
+int BurstEffectB_DrawSparkCloud(void *arg0, void *arg1, FieldFxSparkCloud *anim) {
     u16 lhs_v0;
     FieldBillboard *output;
     u16 rhs_v1;
     unsigned int i;
 
-    func_800C2EAC(3);
-    func_800C3098(0x100);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(3);
+    FieldFx_SetSpriteColorMode(0x100);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteBlendMode(2);
 
     lhs_v0 = anim->center.position.x;
     rhs_v1 = anim->center.displacement.x;
-    output = &D_800E27B0.billboard;
+    output = &g_BurstEffectBState1.billboard;
     lhs_v0 += rhs_v1;
     output->position.x = lhs_v0;
-    D_800E27B0.oriented.position.y = anim->center.position.y + anim->center.displacement.y;
-    D_800E27B0.oriented.position.z = anim->center.position.z + anim->center.displacement.z;
-    D_800E27B0.oriented.scale.x = ((s8)anim->center.scaleStep * 8) + 0x20C;
-    D_800E27B0.oriented.scale.y = ((s8)anim->center.scaleStep * 8) + 0x20C;
-    D_800E27B0.oriented.scale.z = ((s8)anim->center.scaleStep * 8) + 0x20C;
-    D_800E27B0.oriented.brightness = (s8)anim->center.brightness;
+    g_BurstEffectBState1.oriented.position.y = anim->center.position.y + anim->center.displacement.y;
+    g_BurstEffectBState1.oriented.position.z = anim->center.position.z + anim->center.displacement.z;
+    g_BurstEffectBState1.oriented.scale.x = ((s8)anim->center.scaleStep * 8) + 0x20C;
+    g_BurstEffectBState1.oriented.scale.y = ((s8)anim->center.scaleStep * 8) + 0x20C;
+    g_BurstEffectBState1.oriented.scale.z = ((s8)anim->center.scaleStep * 8) + 0x20C;
+    g_BurstEffectBState1.oriented.brightness = (s8)anim->center.brightness;
 
-    func_800C3B04(output);
-    func_800C3098(0x10);
+    FieldFx_DrawBillboard(output);
+    FieldFx_SetSpriteColorMode(0x10);
 
     i = 0;
     do {
         unsigned int slot = i & 0xFFFF;
-        D_800E2770.billboard.position.x = anim->position[0][slot] + anim->center.displacement.x;
-        D_800E2770.billboard.position.y = anim->position[1][slot] + anim->center.displacement.y;
-        D_800E2770.billboard.position.z = anim->position[2][slot] + anim->center.displacement.z;
+        g_BurstEffectBState0.billboard.position.x = anim->position[0][slot] + anim->center.displacement.x;
+        g_BurstEffectBState0.billboard.position.y = anim->position[1][slot] + anim->center.displacement.y;
+        g_BurstEffectBState0.billboard.position.z = anim->position[2][slot] + anim->center.displacement.z;
         i++;
-        D_800E2770.billboard.brightness = (s8)anim->center.brightness;
-        func_800C3B04(&D_800E2770.billboard);
+        g_BurstEffectBState0.billboard.brightness = (s8)anim->center.brightness;
+        FieldFx_DrawBillboard(&g_BurstEffectBState0.billboard);
     } while ((i & 0xFFFF) < 8);
 }
 
-int func_800CDE90(void *arg0, void *arg1, FieldFxSparkPoint *anim) {
+int BurstEffectB_DrawSparkPoint(void *arg0, void *arg1, FieldFxSparkPoint *anim) {
     u16 lhs_v0;
     FieldBillboard *output;
     u16 rhs_v1;
 
-    func_800C2EAC(3);
-    func_800C3098(0x100);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3238(3);
+    FieldFx_SetSpriteTexturePreset(3);
+    FieldFx_SetSpriteColorMode(0x100);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteBlendMode(3);
 
     lhs_v0 = anim->position.x;
     rhs_v1 = anim->displacement.x;
-    output = &D_800F33E8.billboard;
+    output = &g_BurstEffectBState2.billboard;
     lhs_v0 += rhs_v1;
     output->position.x = lhs_v0;
-    D_800F33E8.oriented.position.y = anim->position.y + anim->displacement.y;
-    D_800F33E8.oriented.position.z = anim->position.z + anim->displacement.z;
-    D_800F33E8.oriented.brightness = (s8)anim->brightness;
-    func_800C3B04(output);
+    g_BurstEffectBState2.oriented.position.y = anim->position.y + anim->displacement.y;
+    g_BurstEffectBState2.oriented.position.z = anim->position.z + anim->displacement.z;
+    g_BurstEffectBState2.oriented.brightness = (s8)anim->brightness;
+    FieldFx_DrawBillboard(output);
 }
 
-int func_800CDF40(void *arg0, FieldFxSlot *state) {
+int BurstEffectB_UpdateEnd(void *arg0, FieldFxSlot *state) {
     int ret = 2;
     state->flag = ret;
     return ret;
 }
 
-int func_800CDF4C(void *arg0, FieldFxSlot *state, FieldFxSparkCloud *anim) {
+int BurstEffectB_UpdateSparkCloud(void *arg0, FieldFxSlot *state, FieldFxSparkCloud *anim) {
     unsigned int i = 0;
 
     anim->center.brightness -= 0x10;
@@ -1023,7 +1023,7 @@ int func_800CDF4C(void *arg0, FieldFxSlot *state, FieldFxSparkCloud *anim) {
     }
 }
 
-int func_800CDFE0(void *arg0, FieldFxSlot *state, FieldFxSparkPoint *anim) {
+int BurstEffectB_UpdateSparkPoint(void *arg0, FieldFxSlot *state, FieldFxSparkPoint *anim) {
     int value = rand() % 11;
     int jitter;
     FieldFxSparkPoint *output;
@@ -1049,17 +1049,17 @@ int BurstEffectC_PlantScript(char *object) {
     void **slot = FieldFx_GetSlot(object);
 
     *slot = &g_BurstEffectCScript;
-    D_800E22A8.oriented.scale.x = 0x300;
-    D_800E22A8.oriented.scale.y = 0x300;
-    D_800E22A8.oriented.scale.z = 0x300;
-    D_800E22A8.oriented.clut = 5;
-    D_800E22A8.oriented.depth = -100;
-    D_800E22A8.oriented.rotation.x = 0;
-    D_800E22A8.oriented.rotation.y = 0;
-    D_800E22A8.oriented.rotation.z = 0;
-    D_800E22A8.oriented.rgb[0] = 0x80;
-    D_800E22A8.oriented.rgb[1] = 0x80;
-    D_800E22A8.oriented.rgb[2] = 0x80;
+    g_BurstEffectCState.oriented.scale.x = 0x300;
+    g_BurstEffectCState.oriented.scale.y = 0x300;
+    g_BurstEffectCState.oriented.scale.z = 0x300;
+    g_BurstEffectCState.oriented.clut = 5;
+    g_BurstEffectCState.oriented.depth = -100;
+    g_BurstEffectCState.oriented.rotation.x = 0;
+    g_BurstEffectCState.oriented.rotation.y = 0;
+    g_BurstEffectCState.oriented.rotation.z = 0;
+    g_BurstEffectCState.oriented.rgb[0] = 0x80;
+    g_BurstEffectCState.oriented.rgb[1] = 0x80;
+    g_BurstEffectCState.oriented.rgb[2] = 0x80;
     return 0;
 }
 
@@ -1100,7 +1100,7 @@ int BurstEffectC_ClassNop0(void) {
     return 0;
 }
 
-int func_800CE1FC(void) {
+int BurstEffectC_InitTarget(void) {
     int index;
     FieldActor **targets;
     FieldActor *target;
@@ -1121,29 +1121,29 @@ int func_800CE1FC(void) {
     *FieldFx_RegPtr(0xD) = index;
 
     data = g_BurstEffectCTarget;
-    D_800E2808.x = data->render_object.target_x;
-    D_800E2808.y = data->render_object.target_y;
-    D_800E2808.z = data->render_object.target_z;
+    g_BurstEffectCTargetPosition.x = data->render_object.target_x;
+    g_BurstEffectCTargetPosition.y = data->render_object.target_y;
+    g_BurstEffectCTargetPosition.z = data->render_object.target_z;
 
-    func_800CEDA8(0);
+    FieldFx_EnsureEffectTexturePage(0);
 }
 
-int func_800CE2B4(void *arg0, void *arg1, FieldFxTimedSpark *anim) {
+int BurstEffectC_InitTimedSpark(void *arg0, void *arg1, FieldFxTimedSpark *anim) {
     int randomX;
     int randomY;
     u16 base;
     int randomZ;
 
     randomX = rand();
-    base = D_800E2808.x - 0x28;
+    base = g_BurstEffectCTargetPosition.x - 0x28;
     anim->position.x = base + (randomX % 80);
 
     randomY = rand();
-    base = D_800E2808.y - 0x28;
+    base = g_BurstEffectCTargetPosition.y - 0x28;
     anim->position.y = base + (randomY % 80);
 
     randomZ = rand();
-    base = D_800E2808.z;
+    base = g_BurstEffectCTargetPosition.z;
 
     anim->brightness = 0x7F;
     anim->reserved04 = 0;
@@ -1152,30 +1152,30 @@ int func_800CE2B4(void *arg0, void *arg1, FieldFxTimedSpark *anim) {
     anim->position.z = base + (randomZ % 80);
 }
 
-void func_800CE3AC(void) {
+void BurstEffectC_DrawNop(void) {
 }
 
-int func_800CE3B4(void *arg0, void *arg1, FieldFxTimedSpark *anim) {
+int BurstEffectC_DrawTimedSpark(void *arg0, void *arg1, FieldFxTimedSpark *anim) {
     u16 x;
     FieldBillboard *output;
-    func_800C2EAC(3);
-    func_800C3098(0x10);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(3);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteBlendMode(2);
 
     x = anim->position.x;
-    output = &D_800E22A8.billboard;
+    output = &g_BurstEffectCState.billboard;
     output->position.x = x;
-    D_800E22A8.billboard.position.y = anim->position.y;
-    D_800E22A8.billboard.position.z = anim->position.z;
-    D_800E22A8.billboard.brightness = (s8)anim->brightness;
-    D_800E22A8.billboard.cell = (anim->age * 2) - 0x60;
+    g_BurstEffectCState.billboard.position.y = anim->position.y;
+    g_BurstEffectCState.billboard.position.z = anim->position.z;
+    g_BurstEffectCState.billboard.brightness = (s8)anim->brightness;
+    g_BurstEffectCState.billboard.cell = (anim->age * 2) - 0x60;
 
-    func_800C3B04(output);
-    func_800C3098(0x10);
+    FieldFx_DrawBillboard(output);
+    FieldFx_SetSpriteColorMode(0x10);
 }
 
-int func_800CE464(void *arg0, char *arg1) {
+int BurstEffectC_UpdateEnd(void *arg0, char *arg1) {
     int value;
 
     value = 2;
@@ -1183,7 +1183,7 @@ int func_800CE464(void *arg0, char *arg1) {
     return value;
 }
 
-void func_800CE470(void *arg0, char *arg1, FieldFxTimedSpark *anim) {
+void BurstEffectC_UpdateTimedSpark(void *arg0, char *arg1, FieldFxTimedSpark *anim) {
     anim->age++;
     if ((signed char)anim->age == 6) {
         arg1[1] = 2;

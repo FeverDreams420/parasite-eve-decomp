@@ -47,7 +47,7 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
         state->py = params->y;
         state->pz = params->z;
         state->py = g_RoomFloorY->raw;
-        func_800D3F64(0x57B, func_800D3FD8());
+        FieldFx_PlaySoundAtOwner(0x57B, FieldFx_GetOwnerProgress());
         if (FX_TASK_AS(RoomSparkEventState)->active) {
             RoomSparkNode **slot = (RoomSparkNode **)ANIM_OWNER_AS(RoomSparkChannel)->pool;
             if (slot && *slot) {
@@ -55,11 +55,11 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
                 if (*flag == 1) *flag = 2;
             }
         }
-        return func_800CE560(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x18,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x18,
                              (FieldFxCallbackListCallback)RoomEffect_LineBurstParticle);
     case 1:
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0x13, &template, state);
-        func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0,
+        FieldFx_GetTransformLookAngles((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0,
                       (GteShortVector *)target);
         angle = -target[1] + 0x400;
         switch (state->state) {
@@ -67,7 +67,7 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
             state->timer++;
             if (state->timer == 1) {
                 for (i = 0; i < 2; i++) {
-                    child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+                    child = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomSparkChannel)->pool);
                     if (child) {
                         child->x = state->x;
                         child->y = state->y;
@@ -87,7 +87,7 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
             state->state = 1;
             state->timer = 0;
             for (i = 0; i < 8; i++) {
-                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+                child = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     int speed;
                     child->x = state->px;
@@ -102,8 +102,8 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
                 }
                 angle += 0x200;
             }
-            if (Geo_PointInPoly(state->px << 16, state->pz << 16, D_8009D248,
-                              D_8009D1CC)) {
+            if (Geo_PointInPoly(state->px << 16, state->pz << 16, g_FloorPolygonVertices,
+                              g_FloorPolygonVertexCount)) {
                 break;
             }
             return 1;
@@ -119,7 +119,7 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
             state->timer = 0;
             state->color = 0;
             for (i = 0; i < 12; i++) {
-                child = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+                child = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomSparkChannel)->pool);
                 if (child) {
                     weight = rand() & 0xFFF;
                     LoadAverageShort12(state, &state->px, 0x1000 - weight, weight, child);
@@ -135,7 +135,7 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
             if (state->scale > 0x1000) state->scale -= 0x400;
             state->intensity = rsin((state->timer << 14) / params->duration) / 128 + 0x80;
             if (state->countdown != 0) state->countdown--;
-            if (func_800C6B90(&state->px, 0x104) && state->countdown == 0) {
+            if (FieldFx_IsPlayerWithinRadius(&state->px, 0x104) && state->countdown == 0) {
                 if (FX_TASK_AS(RoomSparkEventState)->active) {
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     u32 *entry;
@@ -166,8 +166,8 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
         gte_ldtransmatrix(matrixSlot->value);
         if (state->color != 0) {
             RoomLineBurstLinePacket *line =
-                (RoomLineBurstLinePacket *)(D_800B0E58[g_ActiveDrawSlot] + D_8009CDD8);
-            D_8009CDD8 += 0x10;
+                (RoomLineBurstLinePacket *)(D_800B0E58[g_ActiveDrawSlot] + g_DrawPacketOffset);
+            g_DrawPacketOffset += 0x10;
             gte_ldv3(state, &state->ex, state);
             gte_rtpt_padded();
             line->length = 3;
@@ -178,42 +178,42 @@ int RoomEffect_LineBurstController(int mode, RoomLineBurstState *state,
             gte_stszotz(&otz);
             if ((u32)(otz - 1) < 0xFFF) {
                 gte_stsxy3(&line->x0, &line->x1, &weight);
-                func_800CF6F8(D_800B0E58[g_ActiveDrawSlot - 8] + otz * 4, line, 1);
+                FieldFx_LinkBlendedPacket(D_800B0E58[g_ActiveDrawSlot - 8] + otz * 4, line, 1);
             }
         }
-        D_800F3368.parameter00 = 0x20;
-        D_800F3368.parameter02 = 2;
-        D_800F3368.extent_x = 0x20;
-        D_800F3368.extent_y = 0x20;
+        g_FieldFxSpriteParams.parameter00 = 0x20;
+        g_FieldFxSpriteParams.parameter02 = 2;
+        g_FieldFxSpriteParams.extent_x = 0x20;
+        g_FieldFxSpriteParams.extent_y = 0x20;
         {
-            int tpage = D_800E2850[D_800E11EC];
-            D_800F3368.palette = 4;
-            D_800F3368.parameter06 = 0;
-            D_800F3368.parameter0A = 5;
-            D_800F3368.depth = 0;
-            D_800F3368.tpage = tpage;
+            int tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot4];
+            g_FieldFxSpriteParams.palette = 4;
+            g_FieldFxSpriteParams.parameter06 = 0;
+            g_FieldFxSpriteParams.parameter0A = 5;
+            g_FieldFxSpriteParams.depth = 0;
+            g_FieldFxSpriteParams.tpage = tpage;
         }
         if (state->intensity != 0) {
-            int kind = D_800F3368.palette;
-            int palette = D_800E1204[kind];
+            int kind = g_FieldFxSpriteParams.palette;
+            int palette = g_FieldFxPaletteTable[kind];
             u16 clut;
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
             clut = GetClut(0, palette);
-            func_800CEE20((GteShortVector *)&state->px, (GteRotation *)&rotation,
+            FieldFx_DrawShapeQuads((GteShortVector *)&state->px, (GteRotation *)&rotation,
                           state->scale, state->scale, 0, clut, 1,
                           state->intensity / 2, 0);
         }
-        D_800F3368.parameter00 = 0x10;
-        D_800F3368.parameter02 = 1;
-        D_800F3368.extent_x = 0x10;
-        D_800F3368.extent_y = 0x10;
+        g_FieldFxSpriteParams.parameter00 = 0x10;
+        g_FieldFxSpriteParams.parameter02 = 1;
+        g_FieldFxSpriteParams.extent_x = 0x10;
+        g_FieldFxSpriteParams.extent_y = 0x10;
         {
-            int tpage = D_800E2850[D_800E11E8];
-            D_800F3368.palette = 2;
-            D_800F3368.parameter06 = 0;
-            D_800F3368.parameter0A = 0;
-            D_800F3368.depth = 8;
-            D_800F3368.tpage = tpage;
+            int tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot2];
+            g_FieldFxSpriteParams.palette = 2;
+            g_FieldFxSpriteParams.parameter06 = 0;
+            g_FieldFxSpriteParams.parameter0A = 0;
+            g_FieldFxSpriteParams.depth = 8;
+            g_FieldFxSpriteParams.tpage = tpage;
         }
         break;
     }

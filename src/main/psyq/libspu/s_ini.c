@@ -26,7 +26,7 @@ void _SpuInit(int mode) {
     SpuStart();
     /* Keep the register selector and shared reverb base ahead of the resets. */
     reverbRegister = 0xD1;
-    reverb = &D_8009B3A0;
+    reverb = &g_SpuReverbState;
     asm volatile("" : "=r"(reverbRegister), "=r"(reverb)
         : "0"(reverbRegister), "1"(reverb));
     _spu_rev_flag = 0;
@@ -41,8 +41,8 @@ void _SpuInit(int mode) {
     _spu_AllocBlockNum = 0;
     _spu_AllocLastNum = 0;
     _spu_memList = 0;
-    D_8009B38C = 0;
-    D_8009B418 = 0;
+    _spu_trans_mode = 0;
+    _spu_transMode = 0;
     D_8009B388 = 0;
     D_8009B3B4 = 0;
     D_8009B3B0 = 0;

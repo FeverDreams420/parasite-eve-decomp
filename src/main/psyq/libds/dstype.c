@@ -51,7 +51,7 @@ void GD_cbready(int event, void *data, void *detail) {
 
     if (arg0 == 1) {
         DsGetSector(buffer, 2);
-        disk_type = strncmp((char *)&buffer[1], D_8001205C, 5);
+        disk_type = strncmp((char *)&buffer[1], g_DsIso9660Id, 5);
         if (disk_type != 0) {
             disk_type = 2;
         }

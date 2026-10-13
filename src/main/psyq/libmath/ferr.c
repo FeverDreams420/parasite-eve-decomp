@@ -8,8 +8,8 @@
 #include "ferr_externs.h"
 
 int _err_math(int arg0, int arg1) {
-    D_80094564 = arg0;
-    D_80094568 = arg1;
+    g_MathErrCode = arg0;
+    g_MathErrArg = arg1;
     if (arg0 != 0x21) {
     if (arg0 != 0x22) {
         return 0;

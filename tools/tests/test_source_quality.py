@@ -22,14 +22,14 @@ class SourceQualityTests(unittest.TestCase):
         self.assertEqual(self.classify("int f(void) { return 1; }"), "semantic_c")
 
     def test_repaired_engine_load_and_distance_sources_are_semantic(self):
-        for name in ("func_800CC92C", "func_800C6148", "func_800C6584",
-                     "func_800C6B90", "func_800C6B20", "FieldFx_FreeAllSlots",
-                     "func_800C2FF0", "func_800D3F64", "func_800CC878",
-                     "func_800C5EB0", "func_800CC644", "func_800CC6F8",
-                     "func_800CE3B4", "func_800CDE90", "func_800CDD0C",
-                     "func_800C8270", "func_800C8970", "func_800C8A88",
-                     "func_800C9268", "func_800C9EA8", "func_800CACDC",
-                     "func_800CB9F8"):
+        for name in ("PointSprite_UpdateRisingStreak", "FieldFx_IsActorWithinRadius", "FieldFx_CirclesOverlapXZ",
+                     "FieldFx_IsPlayerWithinRadius", "FieldFx_IsPlayerInQuadXZ", "FieldFx_FreeAllSlots",
+                     "FieldFx_SetSpriteCellSize", "FieldFx_PlaySoundAtOwner", "PointSprite_DrawOrientedFlash",
+                     "FieldFx_UpdateStripCollision", "PointSprite_DrawGroundRing", "PointSprite_DrawBillboardFlash",
+                     "BurstEffectC_DrawTimedSpark", "BurstEffectB_DrawSparkPoint", "BurstEffectB_DrawSparkCloud",
+                     "GlowEffect_DrawParticle", "GlowEffect_DrawGroundGlow", "GlowEffect_DrawHaloGlow",
+                     "GlowEffectB_DrawParticle", "GlowEffectC_DrawParticle", "FourLayerGlow_DrawParticle",
+                     "FourLayerGlow_DrawHaloGlow"):
             with self.subTest(name=name):
                 self.assert_symbol_is_semantic(name)
 
@@ -166,7 +166,7 @@ class SourceQualityTests(unittest.TestCase):
 
     def test_global_scalar_link_alias_is_semantic(self):
         text = '''
-        signed char target_mode asm("D_8009CE40");
+        signed char target_mode asm("g_BattleTargetCycleMode");
         int f(void) { return target_mode; }
         '''
         self.assertEqual(self.classify(text), "semantic_c")

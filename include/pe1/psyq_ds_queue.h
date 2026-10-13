@@ -44,8 +44,8 @@ PE1_STATIC_ASSERT(sizeof(DsQueueIndices) == 12, ds_queue_indices_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(DsQueueIndices, count) == 8, ds_queue_count_offset);
 void CQ_add_result(u32 id, u8 event, u8 *result);
 
-extern int D_8009B4BC[];
-extern u32 D_8009B53C;
+extern int g_DsCommandHasParam[];
+extern u32 g_DsCommandSerial;
 int DsCommand(int command, void *parameter, DslCB callback,
                              int count);
 int DsPacket(int mode, DslLOC *position, int command,

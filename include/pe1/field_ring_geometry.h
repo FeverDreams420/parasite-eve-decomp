@@ -47,6 +47,6 @@ PE1_STATIC_ASSERT(sizeof(FieldRingGeometry) == 0x18,
 
 /* Field engine: builds and draws one ring through placement; mode 0
  * composes the camera rotation first. */
-void func_800C4FC4(FieldRingGeometry *ring, GteMatrix *placement, u8 mode);
+void FieldFx_DrawShadedRing(FieldRingGeometry *ring, GteMatrix *placement, u8 mode);
 
 #endif /* PE1_FIELD_RING_GEOMETRY_H */

@@ -58,13 +58,13 @@ extern u8 D_8009D2D2;
 extern u32 g_AkaoSeqPendingFlags;
 extern u32 D_8009D22C;
 /* Message-queue lock, also read by the timer interrupt. */
-extern volatile u32 D_8009D268;
+extern volatile u32 g_AkaoMessageQueueLock;
 extern u32 g_AkaoVoiceUpdateFlags;
 extern u32 g_SpuActiveVoiceMask;
-extern u32 D_800BCD58;
+extern u32 g_AkaoSfxAllocatedVoiceMask;
 extern u32 g_SpuPendingKeyOffMask;
 extern u16 D_800BCD66;
-extern u32 D_800BCD68;
+extern u32 g_AkaoSfxTickAccumulator;
 
 void Akao_ProcessVoiceQueue(void);
 void Akao_StepSampleLoader(AkaoTrack *track, u32 voice_mask);

@@ -74,15 +74,15 @@ int FieldFx_GetStatus(void *obj);
 
 /* Shared XYZ origin consumed by field effect initializers. */
 struct FieldFxPointTriple;
-extern struct FieldFxPointTriple D_800E2290;
+extern struct FieldFxPointTriple g_PointSpriteActorPosition;
 
 /* Shape helpers (fieldfx/geometry.c): the two CLUT pixel blocks
- * func_800CED3C uploads and the index of the loaded one, the colour-key table
+ * FieldFx_LoadEffectTexturePage uploads and the index of the loaded one, the colour-key table
  * and a word of the direction helpers. */
 extern void *g_FieldEffectTexturePage0;
 extern void *g_FieldEffectTexturePage1;
-extern s16 D_800F34E4;
+extern s16 g_FieldFxLoadedTexturePage;
 extern u16 D_800E21A8[];
-extern u16 D_800E21C8;
+extern u16 g_FieldFxRandomPhaseCounter;
 
 #endif /* PE1_FIELDFX_STATE_H */

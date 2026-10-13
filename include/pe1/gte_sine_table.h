@@ -20,11 +20,11 @@ typedef union GteSineWord {
     } bits;
 } GteSineWord;
 
-extern GteSineWord D_800966EC[];
+extern GteSineWord rcossin_tbl[];
 
 /* The assembler rotation builders scale the 12-bit angle to a word offset in
  * a register of their own (kept live) and add it to the table base. */
 #define GTE_SINE_WORD_AT_OFFSET(byte_offset) \
-    (*(u32 *)((u8 *)D_800966EC + (byte_offset)))
+    (*(u32 *)((u8 *)rcossin_tbl + (byte_offset)))
 
 #endif

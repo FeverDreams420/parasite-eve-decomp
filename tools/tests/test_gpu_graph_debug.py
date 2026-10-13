@@ -20,8 +20,8 @@ class GpuGraphDebugTests(unittest.TestCase):
         harness = source + r'''
 #include <assert.h>
 #include <stdarg.h>
-GpuDebugState D_8009574C;
-char D_80011814[] = "SetGraphDebug";
+GpuDebugState g_GpuSystemState;
+char g_SetGraphDebugFormat[] = "SetGraphDebug";
 static int calls, expected_level, expected_type, expected_reverse;
 static void print(char *format, ...) {
     va_list args;
@@ -31,19 +31,19 @@ static void print(char *format, ...) {
     type = va_arg(args, int);
     reverse = va_arg(args, int);
     va_end(args);
-    assert(format == D_80011814 && level == expected_level);
+    assert(format == g_SetGraphDebugFormat && level == expected_level);
     assert(type == expected_type && reverse == expected_reverse);
     ++calls;
 }
 GpuDebugPrintf g_GpuDebugPrintf = print;
 static void check(int old, int level, int type, int reverse) {
-    D_8009574C.queueState.debugLevel = old;
-    D_8009574C.type = expected_type = type;
-    D_8009574C.reverse = expected_reverse = reverse;
+    g_GpuSystemState.queueState.debugLevel = old;
+    g_GpuSystemState.type = expected_type = type;
+    g_GpuSystemState.reverse = expected_reverse = reverse;
     expected_level = level;
     calls = 0;
     assert(SetGraphDebug(level) == old);
-    assert(D_8009574C.queueState.debugLevel == (unsigned char)level);
+    assert(g_GpuSystemState.queueState.debugLevel == (unsigned char)level);
     assert(calls == !!(unsigned char)level);
 }
 int main(void) {

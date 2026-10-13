@@ -110,12 +110,12 @@ void Draw_EmitGlyph(int glyph, int mode);
 
 void Draw_EmitWipeBarRect(int width, int height, int mode);
 
-extern signed char D_800B0DB0[];
+extern signed char g_DrawBaseX[];
 extern s32 g_DrawBufferIndex;
 extern u32 D_8009D14C[];
 extern GpuDrawEnabledFlag g_DrawEnabled;
 extern short g_SeqElapsed;
-extern volatile unsigned char D_800B0DC6;
+extern volatile unsigned char g_SceneInitSubphase;
 extern signed char D_800B0DBB;
 
 /* Battle status icons: per draw buffer, thirteen paged sprites (poison,

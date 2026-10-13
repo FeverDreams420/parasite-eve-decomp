@@ -38,7 +38,7 @@ int RestartCallback(void) {
 }
 
 int CheckCallback(void) {
-    return D_800945E6;
+    return g_IntrInCallback;
 }
 
 unsigned short GetIntrMask(void) {

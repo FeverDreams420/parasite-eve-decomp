@@ -12,8 +12,8 @@ int CD_init(void) {
     register int cmd asm("$4");
     register int arg asm("$5");
 
-    puts(D_80011C08);
-        printf(D_80011C14, &g_CdBiosInitDescriptor);
+    puts(g_CdInitName);
+        printf(g_CdInitAddrFormat, &g_CdBiosInitDescriptor);
     g_CdLastCom = 0;
     g_CdMode = 0;
     g_CdReadyCallback = 0;

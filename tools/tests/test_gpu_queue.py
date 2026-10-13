@@ -19,12 +19,12 @@ class GpuQueueTests(unittest.TestCase):
         harness = source + r'''
 #include <assert.h>
 #include <stdarg.h>
-GpuDebugState D_8009574C;
-char D_80011840[] = "queue";
+GpuDebugState g_GpuSystemState;
+char g_SetGraphQueFormat[] = "queue";
 static int events, expectedOld, expectedNew, mutateOnPrint;
 static int reset(int mode) {
     assert(mode == 1);
-    assert(D_8009574C.queueState.queue == expectedOld);
+    assert(g_GpuSystemState.queueState.queue == expectedOld);
     events = events * 10 + 2;
     return 0;
 }
@@ -34,29 +34,29 @@ static void print(char *message, ...) {
     va_start(args, message);
     argument = va_arg(args, int);
     va_end(args);
-    assert(message == D_80011840);
+    assert(message == g_SetGraphQueFormat);
     assert(argument == expectedNew);
     events = events * 10 + 1;
-    if (mutateOnPrint) D_8009574C.queueState.queue = expectedNew;
+    if (mutateOnPrint) g_GpuSystemState.queueState.queue = expectedNew;
 }
 static GpuCallbacks callbacks;
 GpuCallbacks *g_GpuCallbacks = &callbacks;
 GpuDebugPrintf g_GpuDebugPrintf = print;
 PsyqInterruptHandler DMACallback(int channel, PsyqInterruptHandler callback) {
     assert(channel == 2 && callback == 0);
-    assert(D_8009574C.queueState.queue == (unsigned char)expectedNew);
+    assert(g_GpuSystemState.queueState.queue == (unsigned char)expectedNew);
     events = events * 10 + 3;
     return 0;
 }
 static void check(int old, int mode, int debug, int mutate, int expectedEvents) {
-    D_8009574C.queueState.queue = expectedOld = old;
-    D_8009574C.queueState.debugLevel = debug;
+    g_GpuSystemState.queueState.queue = expectedOld = old;
+    g_GpuSystemState.queueState.debugLevel = debug;
     expectedNew = mode;
     mutateOnPrint = mutate;
     events = 0;
     assert(SetGraphQueue(mode) == old);
     assert(events == expectedEvents);
-    assert(D_8009574C.queueState.queue == (unsigned char)mode);
+    assert(g_GpuSystemState.queueState.queue == (unsigned char)mode);
 }
 int main(void) {
     callbacks.reset = reset;

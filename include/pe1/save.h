@@ -44,12 +44,12 @@ void Save_LoadMetadataWindowText(void);
  * shared with older frontend/battle callers under their retail names. */
 extern unsigned char D_8009D1CE;
 extern unsigned char g_MenuActiveMode;
-extern unsigned char D_8009CE88;
+extern unsigned char g_SaveOverlayTimer;
 extern void *D_8009D1F8;
 void Menu_SaveOverlayDraw(void);
 
 /* Leading values of the four runtime timer records reset at new game. */
-extern unsigned int D_800A76A4[], D_800A76B0[], D_800A76BC[], D_800A76C8[];
+extern unsigned int D_800A76A4[], g_GameTimer1Current[], D_800A76BC[], g_CombatTimerCurrent[];
 extern unsigned char g_CursorRenderDataBlock[], D_800C20B4[];
 
 /* The save-title formatter consumes four numeric fields and two variant

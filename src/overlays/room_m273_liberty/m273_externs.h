@@ -49,7 +49,7 @@ extern GteRotation D_8019AB68;
 extern unsigned char D_8019AE5C;
 extern u8 D_8019AE9A;
 extern RoomM273PulseSeed D_8019AC20[2];
-extern int func_800CE688(void *);
+extern int FieldFx_UpdateCallbackList(void *);
 extern short D_8019AC18[];
 extern int D_8019AC0C[];
 extern AssetState D_8019AE8C;

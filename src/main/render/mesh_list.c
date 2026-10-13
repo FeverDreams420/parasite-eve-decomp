@@ -519,7 +519,7 @@ int Render_ApplyScreenTint(void) {
         return 0;
     level = 0x80;
     if (g_RenderStateFlags & 0x2000)
-        level = D_800BCFFC;
+        level = g_RenderMeshTintLevel;
     state = g_GeomState;
     entries.state = g_GeomState;
     entries.word += state->entry_offset;
@@ -612,8 +612,8 @@ int Render_ScrollEntries(void)
         if (g_GeomScroll.state.flags & 0x80) {
             unsigned short x = D_800BCF8C.x, y = g_CameraClampedY[0];
             g_GeomScroll.state.flags &= ~0x80;
-            D_800BCF90 = x;
-            D_800BCF92 = y;
+            g_CameraSavedX = x;
+            g_CameraSavedY = y;
         }
     }
     return 0;

@@ -188,7 +188,7 @@ FieldActor *Scene_LoadMap(u8 *scene, FieldActor *after, int allocateFull)
         actor->render_object.lightPositiveY = 0x18;
         Render_InitRoomPrimState(&actor->render_object);
         Render_DrawWithAnim(&actor->render_object, actor->action_data,
-                            (s16)actor->anim.parts.integer, &D_800BEA40, D_800B89F8);
+                            (s16)actor->anim.parts.integer, &g_RenderLightingState, D_800B89F8);
         actor->render_object.header->shadow_radius = actor->render_object.hit_cylinder.radius * 2;
     }
     } else {
@@ -224,7 +224,7 @@ void Entity_FrameUpdate(void) {
                 g_GameStateBlock.flags |= 4;
                 g_GameState.flags |= 0x9000;
             }
-            D_8009D2A4 = Menu_RunFrameWithArg((int)&D_800A76D8);
+            D_8009D2A4 = Menu_RunFrameWithArg((int)&g_BattleMenuActionRecord);
             if (D_8009D2A4 != 0) {
                 Render_BeginSceneLoad();
                 g_GameStateBlock.flags &= ~4;
@@ -242,7 +242,7 @@ void Entity_FrameUpdate(void) {
         focus = g_PlayerEntity;
         if (focus != 0) {
             camera[0] = focus->pos_x;
-            camera[1] = focus->pos_y - (D_800BCFFE[0] << 16);
+            camera[1] = focus->pos_y - (g_CameraFocusHeight[0] << 16);
             camera[2] = focus->pos_z;
         } else {
             camera[2] = 0;
@@ -251,7 +251,7 @@ void Entity_FrameUpdate(void) {
             for (focus = g_FieldActorListHead; focus != 0; focus = focus->next) {
                 if (focus->model_state.allocation_active != 0) {
                     camera[0] = focus->pos_x;
-                    camera[1] = focus->pos_y - (D_800BCFFE[0] << 16);
+                    camera[1] = focus->pos_y - (g_CameraFocusHeight[0] << 16);
                     camera[2] = focus->pos_z;
                     break;
                 }
@@ -392,7 +392,7 @@ void Entity_IntegratePositionFull(FieldActor *a)
         if ((v0 & 0xC0) == 0x80) {
             tmp = 0x11;
         }
-        Scene_CheckFlagBits(a, D_800943C0, &tmp);
+        Scene_CheckFlagBits(a, g_EntityInputRulesByMode, &tmp);
     }
 
     if (a->flags & 2) {

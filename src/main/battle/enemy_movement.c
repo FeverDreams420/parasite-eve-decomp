@@ -387,24 +387,24 @@ void Battle_StepEntityAnimState(BattleEntity *entity) {
 
         product = state->rewardFactorA * state->rewardFactorB;
         diff = state->rewardBase - product;
-        D_8009D304 += state->hpMirror;
+        g_BattleExpReward += state->hpMirror;
         if (diff > 0) {
-            D_8009D21C += diff;
+            g_BattlePeBonusReward += diff;
         }
 
         for (i = 0; (u8)i < 10; i++) {
-            if (D_800A7FF0[(u8)i].id == 0) {
-                D_800A7FF0[(u8)i].id = state->rewardSlotId;
+            if (g_BattleRewardSlots[(u8)i].id == 0) {
+                g_BattleRewardSlots[(u8)i].id = state->rewardSlotId;
                 break;
             }
         }
 
         if (state->lootItemId != 0) {
             for (i = 0; (u8)i < 10; i++) {
-                if (D_800A7FF0[(u8)i].id == 0) {
-                    D_800A7FF0[(u8)i].id = (u16)state->lootItemId;
+                if (g_BattleRewardSlots[(u8)i].id == 0) {
+                    g_BattleRewardSlots[(u8)i].id = (u16)state->lootItemId;
                     if (state->lootItemAux >= 0) {
-                        D_800A7FF0[(u8)i].extra = state->lootItemAux;
+                        g_BattleRewardSlots[(u8)i].extra = state->lootItemAux;
                     }
                     break;
                 }

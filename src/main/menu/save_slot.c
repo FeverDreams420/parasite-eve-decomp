@@ -10,7 +10,7 @@
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
 unsigned char g_MenuActiveMode;
-unsigned char D_8009CE88;
+unsigned char g_SaveOverlayTimer;
 u8 D_8009D1CE;
 void *D_8009D1F8;
 
@@ -41,7 +41,7 @@ void Save_DrawSlotMetadata(void)
         prompt = (D_8009D1A8.prompt.word >> 10) & 3;
         if (prompt != 0) {
             if (prompt == phase) {
-                g_TextboxEntries[0].message = D_80091474;
+                g_TextboxEntries[0].message = g_AnalyzeHpFormatText;
             }
         } else {
             g_TextboxEntries[0].message = D_80091464;
@@ -59,16 +59,16 @@ void Save_DrawSlotMetadata(void)
             D_8009D1A8.prompt.timer = 0x4B;
             state = D_8009D1A8.prompt.word;
             if (state & 0x1000) {
-                g_TextboxEntries[0].message = D_80091480[Save_GetMetadataWindowIndex()];
+                g_TextboxEntries[0].message = g_TextSusceptibleToPoison[Save_GetMetadataWindowIndex()];
                 D_8009D1A8.prompt.word &= ~0x1000;
             } else if (state & 0x2000) {
-                g_TextboxEntries[0].message = D_800914AC[Save_GetMetadataWindowIndex()];
+                g_TextboxEntries[0].message = g_TextSusceptibleToAcid[Save_GetMetadataWindowIndex()];
                 D_8009D1A8.prompt.word &= ~0x2000;
             } else if (state & 0x4000) {
                 g_TextboxEntries[0].message = D_800914D4[Save_GetMetadataWindowIndex()];
                 D_8009D1A8.prompt.word &= ~0x4000;
             } else if (state & 0x8000) {
-                g_TextboxEntries[0].message = D_800914FC[Save_GetMetadataWindowIndex()];
+                g_TextboxEntries[0].message = g_AnalyzeHeatWeakTexts[Save_GetMetadataWindowIndex()];
                 D_8009D1A8.prompt.word &= ~0x8000;
             } else if (state & 0x10000) {
                 g_TextboxEntries[0].message = D_80091520[Save_GetMetadataWindowIndex()];
@@ -106,20 +106,20 @@ void Menu_SaveOverlayDraw(void)
         Render_SetupColorTable(0, 2, &color);
         value = D_8009D1CE;
         g_TextboxEntries[0].state = 2;
-        D_8009CE88 = 75;
+        g_SaveOverlayTimer = 75;
         g_TextboxEntries[0].message = D_8009D1F8;
         value++;
         D_8009D1CE = value;
         g_TextboxEntries[0].control.flags |= 0x2000000;
         break;
     case 2:
-        if (!D_8009CE88) {
+        if (!g_SaveOverlayTimer) {
             Draw_ResetTextboxes();
             D_8009D1CE = 0;
         }
         break;
     }
-    --D_8009CE88;
+    --g_SaveOverlayTimer;
     Draw_SetCursor(0, g_MenuActiveMode < 2 ? 11 : 191);
     Draw_AllocColorGradient(320, 20, 0, 0);
 }

@@ -39,33 +39,33 @@ typedef char d[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
         assert head in source
         source = source.replace(head, 'static Queue pending;\n#define D_8019A7FE pending.count\n' + head)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-FieldFxTaskSlot *D_800F33E0;
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 short D_8019A802;
 unsigned char D_8019A804;
-RenderEffectParameters D_800F3368;
-u16 D_800E11E4[16];
-u16 D_800E2850[65536];
+RenderEffectParameters g_FieldFxSpriteParams;
+u16 g_FieldFxTpageSlots[16];
+u16 g_FieldFxTpageTable[65536];
 static RoomM350Emitter emitters[2];
 static int pools[2], calls, setups, setupResult, failAt, nextCount;
 static Particle particles[4], expected[4];
 static Vector positions[8];
 int func_80194F04(int e, Particle *p) { return 0; }
-int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
+int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && stride==8 && count==16);
     assert(cb==(FieldFxCallbackListCallback)func_80194F04);
     setups++; return setupResult;
 }
-void *func_800CE610(char *p) {
+void *FieldFx_AcquireCallbackSlot(char *p) {
     int index=calls++;
     assert(index<4 && p==(char *)&pools[index ? 1:0]);
-    D_800F33E0=(FieldFxTaskSlot *)&emitters[1];
+    g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[1];
     pending.count=nextCount;
     pending.positions[index]=&positions[index+4];
     return index==failAt ? 0:&particles[index];
 }
 static void reset(void) {
     int i;
-    calls=setups=0; D_800F33E0=(FieldFxTaskSlot *)&emitters[0];
+    calls=setups=0; g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[0];
     memset(particles,0x5A,sizeof(particles)); memcpy(expected,particles,sizeof(particles));
     for(i=0;i<4;i++) pending.positions[i]=&positions[i];
 }
@@ -104,15 +104,15 @@ int main(void) {
         assert(func_80195064(0)==setupResult && setups==1 && calls==0 && pending.count==3);
     }
     for(i=0;i<65536;i++) {
-        /* Texture slot 11 of D_800E11E4 is the halfword at 0x800E11FA. */
-        reset(); pending.count=3; D_800E11E4[11]=i; D_800E2850[i]=65535-i;
-        memset(&D_800F3368,0x9D,sizeof(D_800F3368));
+        /* Texture slot 11 of g_FieldFxTpageSlots is the halfword at 0x800E11FA. */
+        reset(); pending.count=3; g_FieldFxTpageSlots[11]=i; g_FieldFxTpageTable[i]=65535-i;
+        memset(&g_FieldFxSpriteParams,0x9D,sizeof(g_FieldFxSpriteParams));
         assert(func_80195064(2)==0 && calls==0 && setups==0 && pending.count==3);
-        assert(D_800F3368.parameter00==32 && D_800F3368.parameter02==2);
-        assert(D_800F3368.extent_x==32 && D_800F3368.extent_y==32);
-        assert(D_800F3368.parameter0A==0 && D_800F3368.depth==0);
-        assert(D_800F3368.palette==3 && D_800F3368.parameter06==1);
-        assert(D_800F3368.tpage==65535-i);
+        assert(g_FieldFxSpriteParams.parameter00==32 && g_FieldFxSpriteParams.parameter02==2);
+        assert(g_FieldFxSpriteParams.extent_x==32 && g_FieldFxSpriteParams.extent_y==32);
+        assert(g_FieldFxSpriteParams.parameter0A==0 && g_FieldFxSpriteParams.depth==0);
+        assert(g_FieldFxSpriteParams.palette==3 && g_FieldFxSpriteParams.parameter06==1);
+        assert(g_FieldFxSpriteParams.tpage==65535-i);
     }
     for(i=-3;i<=5;i++) if(i<0 || i>2) {
         reset(); pending.count=3;

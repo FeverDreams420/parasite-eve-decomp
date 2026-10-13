@@ -37,14 +37,14 @@ typedef char i[sizeof(GteSineWord)==4 ? 1:-1];
         source = host_unit(FUNCTION, under=ROOM)
         harness = '#include <assert.h>\n#include <stdint.h>\n#include <string.h>\n#include <limits.h>\n' + source + r'''
 typedef RoomM350CloudParticle Particle;
-int D_800E27EC,D_800F3428;
+int g_FieldFxCurrentAge,g_FieldFxAltPaletteFlag;
 /* Sine words read as halfwords: sin at even, cos at odd indices. */
-GteSineWord D_800966EC[4096];
-#define TABLE ((short *)D_800966EC)
-RenderEffectParameters D_800F3368;
-#define D_800F336A (*(short *)&D_800F3368.parameter02)
-#define D_800F336C D_800F3368.palette
-unsigned short D_800E1204[65536];
+GteSineWord rcossin_tbl[4096];
+#define TABLE ((short *)rcossin_tbl)
+RenderEffectParameters g_FieldFxSpriteParams;
+#define D_800F336A (*(short *)&g_FieldFxSpriteParams.parameter02)
+#define D_800F336C g_FieldFxSpriteParams.palette
+unsigned short g_FieldFxPaletteTable[65536];
 RenderColor D_8019A3D0;
 static Particle particle;
 static int anchor[3],draws,cluts,first,mutate;
@@ -53,8 +53,8 @@ static int word(uint32_t x) { int result; memcpy(&result,&x,4); return result; }
 static int half(uint32_t x) { x &= 65535; return x<32768 ? (int)x:(int)x-65536; }
 static int asr5(int x) { return x>=0 ? x/32:-((-x+31)/32); }
 u_short GetClut(int x,int y) {
-    int expected=D_800E1204[D_800F336C];
-    if(D_800F336C==4 && D_800F3428) expected+=4;
+    int expected=g_FieldFxPaletteTable[D_800F336C];
+    if(D_800F336C==4 && g_FieldFxAltPaletteFlag) expected+=4;
     assert(x==32 && y==expected && draws==cluts);
     cluts++;
     if(mutate) {
@@ -64,7 +64,7 @@ u_short GetClut(int x,int y) {
     }
     return (unsigned short)(0xFFFF-cluts);
 }
-void func_800CEE20(struct GteShortVector *v,struct GteRotation *r,int width,int height,
+void FieldFx_DrawShapeQuads(struct GteShortVector *v,struct GteRotation *r,int width,int height,
                    int texture,int clut,int one,int shade,struct RenderColor *color) {
     int firstDraw=first && draws==0;
     assert(cluts==draws+1 && r==0 && one==1 && color==&D_8019A3D0);
@@ -74,7 +74,7 @@ void func_800CEE20(struct GteShortVector *v,struct GteRotation *r,int width,int 
     assert(texture==D_800F336A*2+216 && clut==(unsigned short)(0xFFFF-cluts));
     draws++;
     if(mutate) {
-        D_800F336C=4; D_800F3428=-1; D_800E1204[4]=65535;
+        D_800F336C=4; g_FieldFxAltPaletteFlag=-1; g_FieldFxPaletteTable[4]=65535;
         particle.position[0]=123; anchor[1]=INT_MAX;
     }
 }
@@ -83,7 +83,7 @@ static void update(int timer,int size) {
     int shade,product;
     memset(&particle,0x5A,sizeof(particle)); particle.size=size;
     memcpy(&before,&particle,sizeof(particle));
-    D_800E27EC=timer;
+    g_FieldFxCurrentAge=timer;
     assert(func_80198860(1,&particle)==(timer>=8 ? 1:0));
     if(timer<8) {
         shade=TABLE[1+((((uint32_t)timer*3)<<8)&0x3F00)/2];
@@ -111,7 +111,7 @@ int main(void) {
             particle.position[k]=half((uint32_t)n*31+k);
             expectedPosition[k]=half((uint32_t)anchor[k]+(uint16_t)particle.position[k]);
         }
-        D_800F336C=n; D_800E1204[n]=n^0xA357; D_800F3428=n&1;
+        D_800F336C=n; g_FieldFxPaletteTable[n]=n^0xA357; g_FieldFxAltPaletteFlag=n&1;
         D_800F336A=half(n); first=particle.state.value.active.firstShade>0; draws=cluts=0;
         assert(func_80198860(2,&particle)==0 && draws==1+first && cluts==draws);
     }

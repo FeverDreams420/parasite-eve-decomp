@@ -57,7 +57,7 @@ init:
     anchor[0] = RoomM005_ScriptDialog.h4;
     anchor[1] = RoomM005_ScriptDialog.h6;
     anchor[2] = RoomM005_ScriptDialog.h8;
-    r->h2 += rsin(D_800E27EC << 6) / 512;
+    r->h2 += rsin(g_FieldFxCurrentAge << 6) / 512;
     r->h0 = anchor[0] + rcos(r->h8) * r->hA / 4096;
     r->h4 = anchor[2] + rsin(r->h8) * r->hA / 4096;
     r->h8 += 0x18;
@@ -84,21 +84,21 @@ fade:
         q[1] = 0;
         q[2] = r->h8;
         q[3] = 0;
-        func_800CF3AC(RoomM005_Rec2, out, (r->h2 + D_800E27EC) & 0x3F);
+        FieldFx_SampleColorTrack(RoomM005_Rec2, out, (r->h2 + g_FieldFxCurrentAge) & 0x3F);
         {
-            int a = D_800E1204[D_800F3368.palette];
-            if (D_800F3368.palette == 4 && D_800F3428 != 0) {
+            int a = g_FieldFxPaletteTable[g_FieldFxSpriteParams.palette];
+            if (g_FieldFxSpriteParams.palette == 4 && g_FieldFxAltPaletteFlag != 0) {
                 a += 4;
             }
-            func_800CEE20((GteShortVector *)r, (GteRotation *)q, 0x800, 0x800, (s16)D_800F3368.parameter02 + 0xD8,
+            FieldFx_DrawShapeQuads((GteShortVector *)r, (GteRotation *)q, 0x800, 0x800, (s16)g_FieldFxSpriteParams.parameter02 + 0xD8,
                           GetClut(0x20, a), 3, r->h6, (RenderColor *)out);
         }
         {
-            int a = D_800E1204[D_800F3368.palette];
-            if (D_800F3368.palette == 4 && D_800F3428 != 0) {
+            int a = g_FieldFxPaletteTable[g_FieldFxSpriteParams.palette];
+            if (g_FieldFxSpriteParams.palette == 4 && g_FieldFxAltPaletteFlag != 0) {
                 a += 4;
             }
-            func_800CEE20((GteShortVector *)r, (GteRotation *)q, 0x1000, 0x1000, ((s16)D_800F3368.parameter02 << 1) + 0xD8,
+            FieldFx_DrawShapeQuads((GteShortVector *)r, (GteRotation *)q, 0x1000, 0x1000, ((s16)g_FieldFxSpriteParams.parameter02 << 1) + 0xD8,
                           GetClut(0x20, a), 3, r->h6, (RenderColor *)out);
         }
     }
@@ -123,25 +123,25 @@ int func_8018F330(int mode, RoomM005OrbiterState *state) {
         state->armed = 0;
         state->frame = 0;
         pool = ANIM_POOL_AS(RoomM005Channel)->pool;
-        return func_800CE560(pool, 16, 24,
+        return FieldFx_InitCallbackList(pool, 16, 24,
                              (FieldFxCallbackListCallback)RoomM005_FxOrbiter);
     case 1:
-        if (D_800E27EC == 7) {
+        if (g_FieldFxCurrentAge == 7) {
             soundSlot = (RoomSoundSlot *)D_800B0E64;
             if (soundSlot->channel != 0) {
                 volume = 0x7F;
-                handle = func_800D3FD8();
+                handle = FieldFx_GetOwnerProgress();
                 Akao_SendTableCommand(soundSlot->channel, 0x5AB, handle, 0x80, volume);
                 if (soundSlot->channel != 0) {
                     Akao_SendTableCommand(soundSlot->channel, 0x5AC, 0x80, 0x80, volume);
                 }
             }
         }
-        if (D_800E27EC < 25) {
+        if (g_FieldFxCurrentAge < 25) {
             pool = ANIM_OWNER_AS(RoomM005Channel)->pool;
-            func_800CE870(pool, 0, target);
+            FieldFx_GetActorPosition(pool, 0, target);
             pool = ANIM_POOL_AS(RoomM005Channel)->pool;
-            child = func_800CE610(pool);
+            child = FieldFx_AcquireCallbackSlot(pool);
             if (child) {
                 child->seed = rand();
                 spread = rand() & 0x1FF;
@@ -161,22 +161,22 @@ int func_8018F330(int mode, RoomM005OrbiterState *state) {
         break;
     case 2:
         pool = ANIM_OWNER_AS(RoomM005Channel)->pool;
-        func_800CE870(pool, 0, (s16 *)D_80190B84);
+        FieldFx_GetActorPosition(pool, 0, (s16 *)D_80190B84);
         pool = ANIM_OWNER_AS(RoomM005Channel)->pool;
         FieldFx_TransformMatrixPoint(pool, 20, &seed, D_80190B8C);
         {
-            int idx = D_800E11E8;
+            int idx = g_FieldFxTpageSlot2;
             int palette;
-            D_800F3368.parameter00 = 16;
-            D_800F3368.parameter02 = 1;
-            D_800F3368.extent_x = 16;
-            D_800F3368.extent_y = 16;
-            palette = D_800E2850[idx];
-            D_800F3368.palette = 2;
-            D_800F3368.parameter06 = 0;
-            D_800F3368.parameter0A = 0;
-            D_800F3368.depth = 8;
-            D_800F3368.tpage = palette;
+            g_FieldFxSpriteParams.parameter00 = 16;
+            g_FieldFxSpriteParams.parameter02 = 1;
+            g_FieldFxSpriteParams.extent_x = 16;
+            g_FieldFxSpriteParams.extent_y = 16;
+            palette = g_FieldFxTpageTable[idx];
+            g_FieldFxSpriteParams.palette = 2;
+            g_FieldFxSpriteParams.parameter06 = 0;
+            g_FieldFxSpriteParams.parameter0A = 0;
+            g_FieldFxSpriteParams.depth = 8;
+            g_FieldFxSpriteParams.tpage = palette;
         }
         break;
     }
@@ -209,7 +209,7 @@ int func_8018F614(int mode) {
         soundSlot = (RoomSoundSlot *)D_800B0E64;
         if (soundSlot->channel != 0) {
             volume = 0x7F;
-            handle = func_800D3FD8();
+            handle = FieldFx_GetOwnerProgress();
             Akao_SendTableCommand(soundSlot->channel, 0x5F8, handle, 0x80, volume);
             if (soundSlot->channel != 0) {
                 Akao_SendTableCommand(soundSlot->channel, 0x5F9, 0x80, 0x80, volume);
@@ -217,74 +217,74 @@ int func_8018F614(int mode) {
         }
         break;
     case 1:
-        if (D_800E27EC >= 35) return 1;
+        if (g_FieldFxCurrentAge >= 35) return 1;
         break;
     case 2:
-        D_800F3368.depth = 0x40;
+        g_FieldFxSpriteParams.depth = 0x40;
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM005Channel)->pool, 9, &inner, &position);
-        if (D_800E27EC < 35) {
-            D_800F3368.parameter00 = 0x20;
-            D_800F3368.parameter02 = 2;
-            D_800F3368.extent_x = 0x20;
-            D_800F3368.extent_y = 0x20;
-            D_800F3368.tpage = D_800E2850[D_800E11EA];
-            D_800F3368.palette = 3;
-            D_800F3368.parameter06 = 0;
-            D_800F3368.parameter0A = 0;
+        if (g_FieldFxCurrentAge < 35) {
+            g_FieldFxSpriteParams.parameter00 = 0x20;
+            g_FieldFxSpriteParams.parameter02 = 2;
+            g_FieldFxSpriteParams.extent_x = 0x20;
+            g_FieldFxSpriteParams.extent_y = 0x20;
+            g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot3];
+            g_FieldFxSpriteParams.palette = 3;
+            g_FieldFxSpriteParams.parameter06 = 0;
+            g_FieldFxSpriteParams.parameter0A = 0;
             rotation.x = 0;
             rotation.y = 0;
-            rotation.z = D_800E27EC << 6;
+            rotation.z = g_FieldFxCurrentAge << 6;
             rotation.flags = 0;
-            level = rsin((D_800E27EC << 11) / 34);
+            level = rsin((g_FieldFxCurrentAge << 11) / 34);
             position.x -= 0x10;
             {
-                int kind = D_800F3368.palette;
-                int palette = D_800E1204[kind];
-                if (kind == 4 && D_800F3428) palette += 4;
-                func_800CEE20(&position, &rotation, 0x1000, 0x1000, 2,
+                int kind = g_FieldFxSpriteParams.palette;
+                int palette = g_FieldFxPaletteTable[kind];
+                if (kind == 4 && g_FieldFxAltPaletteFlag) palette += 4;
+                FieldFx_DrawShapeQuads(&position, &rotation, 0x1000, 0x1000, 2,
                               GetClut(0x10, palette), 1, level, 0);
             }
             position.x += 0x20;
             {
-                int kind = D_800F3368.palette;
-                int palette = D_800E1204[kind];
-                if (kind == 4 && D_800F3428) palette += 4;
-                func_800CEE20(&position, &rotation, 0x1000, 0x1000, 2,
+                int kind = g_FieldFxSpriteParams.palette;
+                int palette = g_FieldFxPaletteTable[kind];
+                if (kind == 4 && g_FieldFxAltPaletteFlag) palette += 4;
+                FieldFx_DrawShapeQuads(&position, &rotation, 0x1000, 0x1000, 2,
                               GetClut(0x10, palette), 1, level, 0);
             }
         }
-        D_800F3368.depth = 0x18;
+        g_FieldFxSpriteParams.depth = 0x18;
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM005Channel)->pool, 0x14, &outer, &position);
-        if (D_800E27EC < 35) {
-            step = D_800E27EC - 18;
+        if (g_FieldFxCurrentAge < 35) {
+            step = g_FieldFxCurrentAge - 18;
             if ((unsigned int)step < 17) {
                 size = rcos(step << 6);
                 width = 600 - step * 100;
-                func_800CF3AC(D_80190AF4, &color, step * 2);
-                func_800D0728(&position, width, 700, 0x18, 0, size, size,
+                FieldFx_SampleColorTrack(D_80190AF4, &color, step * 2);
+                FieldFx_DrawRingBand(&position, width, 700, 0x18, 0, size, size,
                               0, &color, 0x40, 1);
-                func_800D0728(&position, 700, 800, 0x18, 0, size, size,
+                FieldFx_DrawRingBand(&position, 700, 800, 0x18, 0, size, size,
                               &color, 0, 0x40, 1);
             }
-            func_800CF3AC(D_80190AF4, &color, D_800E27EC);
-            D_800F3368.parameter00 = 0x40;
-            D_800F3368.parameter02 = 4;
-            D_800F3368.extent_x = 0x40;
-            D_800F3368.extent_y = 0x40;
-            D_800F3368.tpage = D_800E2850[D_800E11FA];
-            D_800F3368.palette = 3;
-            D_800F3368.parameter06 = 1;
-            D_800F3368.parameter0A = 0;
-            size = rsin((D_800E27EC << 10) / 34);
+            FieldFx_SampleColorTrack(D_80190AF4, &color, g_FieldFxCurrentAge);
+            g_FieldFxSpriteParams.parameter00 = 0x40;
+            g_FieldFxSpriteParams.parameter02 = 4;
+            g_FieldFxSpriteParams.extent_x = 0x40;
+            g_FieldFxSpriteParams.extent_y = 0x40;
+            g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot11];
+            g_FieldFxSpriteParams.palette = 3;
+            g_FieldFxSpriteParams.parameter06 = 1;
+            g_FieldFxSpriteParams.parameter0A = 0;
+            size = rsin((g_FieldFxCurrentAge << 10) / 34);
             rotation.x = 0;
             rotation.y = 0;
-            rotation.z = D_800E27EC << 6;
+            rotation.z = g_FieldFxCurrentAge << 6;
             rotation.flags = 0;
             {
-                int kind = D_800F3368.palette;
-                int palette = D_800E1204[kind];
-                func_800CEE20(&position, &rotation, size, size, 0x40,
-                              GetClut(0, (kind == 4 && D_800F3428) ? palette + 6 : palette + 2),
+                int kind = g_FieldFxSpriteParams.palette;
+                int palette = g_FieldFxPaletteTable[kind];
+                FieldFx_DrawShapeQuads(&position, &rotation, size, size, 0x40,
+                              GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag) ? palette + 6 : palette + 2),
                               1, 0x60, &color);
             }
         }
@@ -312,7 +312,7 @@ int func_8018FB84(int mode, RoomM005DriftingSpriteState *state) {
         state->x += state->vx;
         state->y += state->vy;
         state->z += state->vz;
-        if (D_800E27EC >= 6) return 1;
+        if (g_FieldFxCurrentAge >= 6) return 1;
         break;
     case 2:
         matrixSlot = &D_800BCFA4;
@@ -324,14 +324,14 @@ int func_8018FB84(int mode, RoomM005DriftingSpriteState *state) {
         position.x += D_80190BA0.x;
         position.y += D_80190BA0.y;
         position.z += D_80190BA0.z;
-        u = (D_800E27EC & 1) << 7;
-        v = ((D_800E27EC << 3) & 0x10) + 0x20;
-        scale = rcos((D_800E27EC << 10) / 6) / 24;
-        kind = D_800F3368.palette;
-        palette = D_800E1204[kind];
-        if (kind == 4 && D_800F3428 != 0) palette += 4;
+        u = (g_FieldFxCurrentAge & 1) << 7;
+        v = ((g_FieldFxCurrentAge << 3) & 0x10) + 0x20;
+        scale = rcos((g_FieldFxCurrentAge << 10) / 6) / 24;
+        kind = g_FieldFxSpriteParams.palette;
+        palette = g_FieldFxPaletteTable[kind];
+        if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
         clut = GetClut(0, palette);
-        func_800D2370(&D_80190BA8, (GteRotation *)&position, 0x44C, 0x6E, u, v,
+        FieldFx_DrawRotatedQuad(&D_80190BA8, (GteRotation *)&position, 0x44C, 0x6E, u, v,
                       0x7F, 0xF, clut, &color, &color, (short)scale, 1);
         break;
     }
@@ -358,7 +358,7 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
     switch (mode) {
     case 0:
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM005BeaconChannel)->pool, 0x14, &offset, state);
-        func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomM005BeaconChannel)->pool, 0,
+        FieldFx_GetTransformLookAngles((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomM005BeaconChannel)->pool, 0,
                       &state->rotation);
         state->rotation.pad = 1;
         state->phase = 0;
@@ -375,11 +375,11 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
         FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80190B94, 0, 0);
         D_80190B98 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5862704);
         FieldFx_ModelScrollUv((union FieldTexturedModel *)D_80190B98, 0, 0);
-        return func_800CE560(ANIM_POOL_AS(RoomM005BeaconSpawnChannel)->pool, 0x10, 8,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM005BeaconSpawnChannel)->pool, 0x10, 8,
                              (FieldFxCallbackListCallback)func_8018FB84);
     case 1:
-        if (D_800E27EC < 10) {
-            sprite = func_800CE610(ANIM_POOL_AS(RoomM005BeaconSpawnChannel)->pool);
+        if (g_FieldFxCurrentAge < 10) {
+            sprite = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomM005BeaconSpawnChannel)->pool);
             if (sprite) {
                 sprite->x = (rand() & 0x3FF) - 0x200;
                 sprite->y = (rand() & 0x3FF) - 0x200;
@@ -405,14 +405,14 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
             if (state->timer >= 8) return 1;
             break;
         }
-        func_800CFB7C(&state->rotation, state->height, &position);
+        FieldFx_AnglesToVector(&state->rotation, state->height, &position);
         state->target.x = state->position.x;
         state->target.y = state->position.y;
         state->target.z = state->position.z;
         state->target.x += position.x;
         state->target.y += position.y;
         state->target.z += position.z;
-        if (func_800CEB8C(state, &state->target, 100) == 0) return 0;
+        if (FieldFx_IsPlayerInSegmentBand(state, &state->target, 100) == 0) return 0;
         if (FX_TASK_AS(RoomM005BeaconEvent)->active) {
             RoomM005BeaconChannel *channel = ANIM_OWNER_AS(RoomM005BeaconChannel);
             if ((channel->pool->node->flags & 0x3F000000) != 0x01000000) return 0;
@@ -423,7 +423,7 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
         }
         break;
     case 2:
-        D_800F3368.depth = 8;
+        g_FieldFxSpriteParams.depth = 8;
         matrix = *ANIM_OWNER_AS(RoomM005BeaconChannel)->pool->matrix;
         scale.x = scale.y = state->width / 40;
         scale.z = (state->height << 12) / 8680;
@@ -433,20 +433,20 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
         matrix.t[2] = state->position.z;
         {
             RenderMatrixSlot *slot;
-            u16 *index = &D_800E11EA;
-            u16 *tpages = D_800E2850;
-            D_800F3368.tpage = D_800E2850[*index];
-            D_800F3368.palette = 3;
-            D_800F3368.parameter06 = 0;
+            u16 *index = &g_FieldFxTpageSlot3;
+            u16 *tpages = g_FieldFxTpageTable;
+            g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[*index];
+            g_FieldFxSpriteParams.palette = 3;
+            g_FieldFxSpriteParams.parameter06 = 0;
             slot = &D_800BCFA4;
             gte_ldrotmatrix(slot->value);
             gte_ldtransmatrix(slot->value);
             page = (u16)(tpages[*index] | GetTPage(0, 1, 0, 0));
         }
         {
-            int kind = D_800F3368.palette;
-            int palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428) palette += 4;
+            int kind = g_FieldFxSpriteParams.palette;
+            int palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag) palette += 4;
             FieldFx_ModelSetTexture(page, GetClut(0x30, palette));
         }
         FieldFx_ModelSetSemiTrans(1);
@@ -474,33 +474,33 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
         FieldFx_ModelScaleColors(D_80190B94, 0x18);
         FieldFx_ModelDraw((union FieldTexturedModel *)D_80190B94, &matrix);
         FieldFx_ModelRestoreColors(D_80190B94);
-        D_800F3368.parameter00 = 0x20;
-        D_800F3368.parameter02 = 2;
-        D_800F3368.extent_x = 0x20;
-        D_800F3368.extent_y = 0x20;
-        D_800F3368.tpage = D_800E2850[D_800E11E4[11]];
-        D_800F3368.palette = 3;
-        D_800F3368.parameter06 = 1;
-        D_800F3368.parameter0A = 0;
-        D_800F3368.depth = 0x20;
+        g_FieldFxSpriteParams.parameter00 = 0x20;
+        g_FieldFxSpriteParams.parameter02 = 2;
+        g_FieldFxSpriteParams.extent_x = 0x20;
+        g_FieldFxSpriteParams.extent_y = 0x20;
+        g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[g_FieldFxTpageSlots[11]];
+        g_FieldFxSpriteParams.palette = 3;
+        g_FieldFxSpriteParams.parameter06 = 1;
+        g_FieldFxSpriteParams.parameter0A = 0;
+        g_FieldFxSpriteParams.depth = 0x20;
         alpha = 0xA0;
         size = state->width;
-        if (D_800E27EC & 1) {
+        if (g_FieldFxCurrentAge & 1) {
             alpha = 0x80;
             size = size * 3 / 2;
         }
         {
-            int kind = D_800F3368.palette;
-            int palette = D_800E1204[kind];
-            func_800CEE20(&state->position, 0, size, size, 2,
-                          GetClut(0, (kind == 4 && D_800F3428) ? palette + 8 : palette + 4),
+            int kind = g_FieldFxSpriteParams.palette;
+            int palette = g_FieldFxPaletteTable[kind];
+            FieldFx_DrawShapeQuads(&state->position, 0, size, size, 2,
+                          GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag) ? palette + 8 : palette + 4),
                           1, alpha, 0);
         }
         {
-            int kind = D_800F3368.palette;
-            int palette = D_800E1204[kind];
-            func_800CEE20(&state->target, 0, state->width / 2, state->width / 2, 2,
-                          GetClut(0, (kind == 4 && D_800F3428) ? palette + 8 : palette + 4),
+            int kind = g_FieldFxSpriteParams.palette;
+            int palette = g_FieldFxPaletteTable[kind];
+            FieldFx_DrawShapeQuads(&state->target, 0, state->width / 2, state->width / 2, 2,
+                          GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag) ? palette + 8 : palette + 4),
                           1, alpha, 0);
         }
         position.x = state->position.x;
@@ -512,31 +512,31 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
         rotation.x = 0x400;
         rotation.pad = 1;
         {
-            int kind = D_800F3368.palette;
-            int palette = D_800E1204[kind];
-            func_800CEE20(&position, (GteRotation *)&rotation, size, size, 2,
-                          GetClut(0, (kind == 4 && D_800F3428) ? palette + 8 : palette + 4),
+            int kind = g_FieldFxSpriteParams.palette;
+            int palette = g_FieldFxPaletteTable[kind];
+            FieldFx_DrawShapeQuads(&position, (GteRotation *)&rotation, size, size, 2,
+                          GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag) ? palette + 8 : palette + 4),
                           3, alpha, 0);
         }
-        if (D_800E27EC < 0xD) {
-            alpha = rcos((D_800E27EC << 10) / 12) / 32;
-            size = rsin((D_800E27EC << 10) / 12);
+        if (g_FieldFxCurrentAge < 0xD) {
+            alpha = rcos((g_FieldFxCurrentAge << 10) / 12) / 32;
+            size = rsin((g_FieldFxCurrentAge << 10) / 12);
             {
                 RenderMatrixSlot *slot = &D_800BCFA4;
                 gte_ldrotmatrix(slot->value);
                 gte_ldtransmatrix(slot->value);
             }
             {
-                u16 *index = &D_800E11FA;
-                D_800F3368.tpage = D_800E2850[*index];
-                D_800F3368.palette = 3;
-                D_800F3368.parameter06 = 1;
-                page = (u16)(D_800E2850[*index] | GetTPage(0, 1, 0, 0));
+                u16 *index = &g_FieldFxTpageSlot11;
+                g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[*index];
+                g_FieldFxSpriteParams.palette = 3;
+                g_FieldFxSpriteParams.parameter06 = 1;
+                page = (u16)(g_FieldFxTpageTable[*index] | GetTPage(0, 1, 0, 0));
             }
             {
-                int kind = D_800F3368.palette;
-                int palette = D_800E1204[kind];
-                FieldFx_ModelSetTexture(page, GetClut(0, (kind == 4 && D_800F3428) ? palette + 7
+                int kind = g_FieldFxSpriteParams.palette;
+                int palette = g_FieldFxPaletteTable[kind];
+                FieldFx_ModelSetTexture(page, GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag) ? palette + 7
                                                                      : palette + 3));
             }
             FieldFx_ModelSetSemiTrans(1);
@@ -544,7 +544,7 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
             spinAngles.y = state->rotation.y;
             spinAngles.z = state->rotation.z;
             spinAngles.x += 0x800;
-            spinAngles.z = D_800E27EC << 7;
+            spinAngles.z = g_FieldFxCurrentAge << 7;
             RotMatrixYXZ(&spinAngles, &spin);
             spin.t[0] = state->position.x;
             spin.t[1] = state->position.y;
@@ -556,15 +556,15 @@ int func_8018FDC4(int mode, RoomM005Beacon *state) {
             FieldFx_ModelDraw((union FieldTexturedModel *)D_80190B98, &spin);
             FieldFx_ModelRestoreColors(D_80190B98);
         }
-        D_800F3368.parameter00 = 0x20;
-        D_800F3368.parameter02 = 2;
-        D_800F3368.extent_x = 0x20;
-        D_800F3368.extent_y = 0x20;
-        D_800F3368.tpage = D_800E2850[D_800E11EA];
-        D_800F3368.palette = 3;
-        D_800F3368.parameter06 = 0;
-        D_800F3368.parameter0A = 0;
-        D_800F3368.depth = 4;
+        g_FieldFxSpriteParams.parameter00 = 0x20;
+        g_FieldFxSpriteParams.parameter02 = 2;
+        g_FieldFxSpriteParams.extent_x = 0x20;
+        g_FieldFxSpriteParams.extent_y = 0x20;
+        g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot3];
+        g_FieldFxSpriteParams.palette = 3;
+        g_FieldFxSpriteParams.parameter06 = 0;
+        g_FieldFxSpriteParams.parameter0A = 0;
+        g_FieldFxSpriteParams.depth = 4;
         D_80190BA8.x = state->position.x;
         D_80190BA8.y = state->position.y;
         D_80190BA8.z = state->position.z;

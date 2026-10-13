@@ -460,7 +460,7 @@ void Inv_RebuildSelectionBitset(void) {
     int *table;
     int *table_base;
 
-    entry = D_800C0E20.equipment;
+    entry = g_InventoryRuntime.equipment;
     limit_tmp = entry + 0x80;
     if (entry < limit_tmp) {
         end = limit_tmp;
@@ -475,15 +475,15 @@ void Inv_RebuildSelectionBitset(void) {
     while (start < 0x52) {
         item_id = *list - 0x100;
         if ((unsigned int)item_id < 0x80) {
-            D_800C0E20.equipment[item_id].flags |= 8;
+            g_InventoryRuntime.equipment[item_id].flags |= 8;
         }
         start++;
         list++;
     }
 
-    range = D_800923D8;
-    if (range < D_800923D8 + 8) {
-        table_base = D_800A77F0;
+    range = g_InvItemTableRanges;
+    if (range < g_InvItemTableRanges + 8) {
+        table_base = g_ScriptVariableBank;
         range_stop_ptr = &range->stop;
         do {
             start = range->start;
@@ -493,7 +493,7 @@ void Inv_RebuildSelectionBitset(void) {
                 do {
                     item_id = *table - 0x100;
                     if ((unsigned int)item_id < 0x80) {
-                        D_800C0E20.equipment[item_id].flags |= 8;
+                        g_InventoryRuntime.equipment[item_id].flags |= 8;
                     }
                     stop = *range_stop_ptr;
                     start++;
@@ -501,12 +501,12 @@ void Inv_RebuildSelectionBitset(void) {
                 } while (stop >= start);
             }
             range++;
-            asm volatile("" : "=r"(range_end) : "0"(D_800923D8 + 8));
+            asm volatile("" : "=r"(range_end) : "0"(g_InvItemTableRanges + 8));
             range_stop_ptr += 2;
         } while (range < range_end);
     }
 
-    entry = D_800C0E20.equipment;
+    entry = g_InventoryRuntime.equipment;
     limit_tmp = entry + 0x80;
     if (entry < limit_tmp) {
         end = limit_tmp;
@@ -524,7 +524,7 @@ void Inv_RebuildSelectionBitset(void) {
 
 ItemDataRecord *Inv_LookupData(int arg0) {
     if ((arg0 - 0x100U) < 0x80U) {
-        return &D_800C0E20.equipment[arg0 - 0x100];
+        return &g_InventoryRuntime.equipment[arg0 - 0x100];
     }
 
     if ((arg0 - 1U) < 0xFFU) {
@@ -550,7 +550,7 @@ ItemDataRecord *Inv_LookupActiveListData(int index) {
         value = g_InvItemPtr[index];
         saved_value = value;
         if (value - 0x100U < 0x80U) {
-            entry = &D_800C0E20.equipment[value - 0x100];
+            entry = &g_InventoryRuntime.equipment[value - 0x100];
         } else if (value - 1U < 0xFFU) {
             entry = Item_LookupBaseData(value - 1);
         } else if (saved_value - 0x200U < 9U) {
@@ -584,7 +584,7 @@ int Inv_FindIndexByData(void *needle) {
                 item_id = g_InvItemPtr[index];
                 saved_item_id = (s16)item_id;
                 if (item_id - 0x100U < 0x80U) {
-                    data = &D_800C0E20.equipment[item_id - 0x100];
+                    data = &g_InventoryRuntime.equipment[item_id - 0x100];
                 } else {
                     offset = item_id - 1;
                     if ((unsigned int)offset < 0xFF) {
@@ -804,7 +804,7 @@ int Inv_FindFirstEmptySlot(int count) {
 
 static inline int FindFreeEquipmentRecord(void) {
     int result;
-    ItemDataRecord *p = D_800C0E20.equipment;
+    ItemDataRecord *p = g_InventoryRuntime.equipment;
     ItemDataRecord *end = p + 128;
 
     if (p < end) {
@@ -813,8 +813,8 @@ static inline int FindFreeEquipmentRecord(void) {
                 break;
             p++;
         } while (p < end);
-        if (p < D_800C0E20.equipment + 128) {
-            int index = p - D_800C0E20.equipment;
+        if (p < g_InventoryRuntime.equipment + 128) {
+            int index = p - g_InventoryRuntime.equipment;
             result = index;
         } else {
             result = -1;
@@ -843,9 +843,9 @@ ItemDataRecord *Inv_FindSlotByIndex(int id) {
     int slot = FindFreeActiveSlot();
 
     if (record >= 0 && slot >= 0) {
-        result = &D_800C0E20.equipment[record];
+        result = &g_InventoryRuntime.equipment[record];
         *result = *Item_LookupBaseData(id - 1);
-        g_InvItemPtr = D_800C0E20.slots;
+        g_InvItemPtr = g_InventoryRuntime.slots;
         g_InvSlotLimit = Inv_GetAyaSlotLimit();
         g_InvSelectionBits = g_InvSelectionBitStorage;
         g_InvSelectionBitWords = 2;
@@ -1348,7 +1348,7 @@ static inline int RandomByte(void) {
 static inline int IsTracked(int index) {
     int result = 0;
     if (g_InvItemPtr == g_AyaInventoryItems) {
-        if (D_800C0E20.tracked[0] == index || D_800C0E20.tracked[2] == index)
+        if (g_InventoryRuntime.tracked[0] == index || g_InventoryRuntime.tracked[2] == index)
             result = 1;
     }
     return result;
@@ -1377,16 +1377,16 @@ static inline void AppendText(u8 *dest, const u8 *src) {
     while ((*dest++ = *src++) != 255) {}
 }
 u8 *Inv_GetItemEffectData(int item, int mode) {
-    if (!item) CopyText(D_800A1B50, Text_LookupTable4(19));
-    else if (mode >= 2) CopyText(D_800A1B50, Text_LookupTable4(18));
+    if (!item) CopyText(g_InvItemMessageBuffer, Text_LookupTable4(19));
+    else if (mode >= 2) CopyText(g_InvItemMessageBuffer, Text_LookupTable4(18));
     else if (!g_SaveMetadataWindowIndex) {
-        CopyText(D_800A1B50, Text_LookupTable8(item - 1));
-        AppendText(D_800A1B50, Text_LookupTable4(mode + 16));
+        CopyText(g_InvItemMessageBuffer, Text_LookupTable8(item - 1));
+        AppendText(g_InvItemMessageBuffer, Text_LookupTable4(mode + 16));
     } else {
-        CopyText(D_800A1B50, Text_LookupTable4(mode + 16));
-        AppendText(D_800A1B50, Text_LookupTable8(item - 1));
+        CopyText(g_InvItemMessageBuffer, Text_LookupTable4(mode + 16));
+        AppendText(g_InvItemMessageBuffer, Text_LookupTable8(item - 1));
     }
-    return D_800A1B50;
+    return g_InvItemMessageBuffer;
 }
 
 void Inv_CompactActiveListSlots(void) {

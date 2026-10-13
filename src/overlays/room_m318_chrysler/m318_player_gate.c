@@ -32,7 +32,7 @@ s32 func_801992A4(s32 arg0, void *arg1, s32 *arg2) {
             FX_TASK_AS(s16)[11] = 1;
             return 1;
         }
-        if (D_800E27EC < *arg2) {
+        if (g_FieldFxCurrentAge < *arg2) {
             return 0;
         }
         FX_TASK_AS(s16)[10] = 1;

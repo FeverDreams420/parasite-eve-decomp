@@ -18,7 +18,7 @@ void *firstfile(const char *inName, void *inResult) {
     register unsigned count;
     register int found;
     asm("" : "=r"(name), "=r"(result) : "0"(name), "1"(result) : "memory");
-    out = D_800A32D8;
+    out = g_FirstFileDeviceName;
     if (*(const signed char *)name >= 59) {
         input = (const signed char *)name;
         do {
@@ -33,8 +33,8 @@ void *firstfile(const char *inName, void *inResult) {
     if (entry < end) {
         register BiosDeviceEntry *limit = end;
         do {
-            if (entry->name && strcmp(entry->name, D_800A32D8) == 0) {
-                D_800A32D0 = entry->firstFile;
+            if (entry->name && strcmp(entry->name, g_FirstFileDeviceName) == 0) {
+                g_FirstFileOriginalHandler = entry->firstFile;
                 found = 1;
                 goto check;
             }
@@ -54,7 +54,7 @@ second:
     if (entry < end) {
         register BiosDeviceEntry *limit = end;
         do {
-            if (entry->name && strcmp(entry->name, D_800A32D8) == 0) {
+            if (entry->name && strcmp(entry->name, g_FirstFileDeviceName) == 0) {
                 entry->firstFile = Sys_FirstFileHookCallback;
                 break;
             }
@@ -79,7 +79,7 @@ int Sys_FirstFileHookCallback(int *file, unsigned int arg1, unsigned int arg2) {
     if (!*file) *file = 1;
     count = BIOS_DEVICE_DIRECTORY->byteLength;
     entry = BIOS_DEVICE_DIRECTORY->entries;
-    original = D_800A32D0;
+    original = g_FirstFileOriginalHandler;
     count /= sizeof(BiosDeviceEntry);
     limit = entry + count;
     fileArg = file;
@@ -87,7 +87,7 @@ int Sys_FirstFileHookCallback(int *file, unsigned int arg1, unsigned int arg2) {
         register BiosDeviceEntry *end = limit;
         asm("" : "=r"(end) : "0"(end));
         do {
-            if (entry->name && strcmp(entry->name, D_800A32D8) == 0) {
+            if (entry->name && strcmp(entry->name, g_FirstFileDeviceName) == 0) {
                 entry->firstFile = original;
                 break;
             }
@@ -95,5 +95,5 @@ int Sys_FirstFileHookCallback(int *file, unsigned int arg1, unsigned int arg2) {
         } while (entry < end);
         fileArg = file;
     }
-    return D_800A32D0(fileArg, arg1, arg2);
+    return g_FirstFileOriginalHandler(fileArg, arg1, arg2);
 }

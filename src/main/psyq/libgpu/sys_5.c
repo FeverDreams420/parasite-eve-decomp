@@ -19,8 +19,8 @@ static inline int Gpu_BuildDrawAreaCmd(int x, int y, int opcode) {
     signed_coord = shifted >> 16;
     clamped_x = 0;
     if (signed_coord >= 0) {
-        exceeds_limit = D_80095750 - 1 < signed_coord;
-        limit = (u16)D_80095750;
+        exceeds_limit = g_GpuMaxWidth - 1 < signed_coord;
+        limit = (u16)g_GpuMaxWidth;
         if (exceeds_limit) {
             value = limit;
             clamped_x = value - 1;
@@ -33,8 +33,8 @@ static inline int Gpu_BuildDrawAreaCmd(int x, int y, int opcode) {
     shifted = y << 16;
     signed_coord = shifted >> 16;
     if (signed_coord >= 0) {
-        exceeds_limit = D_80095752 - 1 < signed_coord;
-        limit = (u16)D_80095752;
+        exceeds_limit = g_GpuMaxHeight - 1 < signed_coord;
+        limit = (u16)g_GpuMaxHeight;
         y = exceeds_limit ? limit - 1 : y;
     } else {
         y = 0;

@@ -19,8 +19,8 @@ class GpuDispatchTests(unittest.TestCase):
         harness = source + r'''
 #include <assert.h>
 #include <stdarg.h>
-GpuDebugState D_8009574C;
-char D_80011928[] = "dispatch";
+GpuDebugState g_GpuSystemState;
+char g_DrawOTagFormat[] = "dispatch";
 int g_GpuDmaTimeoutDeadline, g_GpuDmaWaitLoopCounter;
 static volatile unsigned int dma;
 static unsigned int gpu;
@@ -35,14 +35,14 @@ static void debug(char *message, ...) {
     va_start(args, message);
     argument = va_arg(args, void *);
     va_end(args);
-    assert(message == D_80011928 && argument == &packet);
+    assert(message == g_DrawOTagFormat && argument == &packet);
     assert(events == 0);
     events = 1;
 }
 GpuDebugPrintf g_GpuDebugPrintf = debug;
 int VSync(int mode) {
     assert(mode == -1 && ++vsyncCalls == 1);
-    assert(events == (D_8009574C.queueState.debugLevel >= 2 ? 1 : 0));
+    assert(events == (g_GpuSystemState.queueState.debugLevel >= 2 ? 1 : 0));
     events = events * 10 + 2;
     return 123;
 }
@@ -59,18 +59,18 @@ void Gpu_RestoreDmaCallback(void) { assert(0); }
 PsyqInterruptHandler DMACallback(int channel, PsyqInterruptHandler callback) {
     assert(channel == 2 && callback == Gpu_RestoreDmaCallback);
     assert(dma == 0 && gpu == 0x04000000);
-    assert(events == (D_8009574C.queueState.debugLevel >= 2 ? 12 : 2));
+    assert(events == (g_GpuSystemState.queueState.debugLevel >= 2 ? 12 : 2));
     events = events * 10 + 3;
     return 0;
 }
 static int send(void *argument) {
     assert(argument == &packet);
-    assert(events == (D_8009574C.queueState.debugLevel >= 2 ? 123 : 23));
+    assert(events == (g_GpuSystemState.queueState.debugLevel >= 2 ? 123 : 23));
     events = events * 10 + 4;
     return 77;
 }
 static void check(int debugLevel, int idle, int ready, int timeout) {
-    D_8009574C.queueState.debugLevel = debugLevel;
+    g_GpuSystemState.queueState.debugLevel = debugLevel;
     idleAt = idle;
     readyAt = ready;
     timeoutAt = timeout;

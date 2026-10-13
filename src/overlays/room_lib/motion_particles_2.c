@@ -45,10 +45,10 @@ void RoomEffect_DrawMotionParticles(void *unused, RoomStatePair *control,
     int i;
 
     context = FieldFx_GetScriptContext();
-    func_800C2EAC(context->owner);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(context->owner);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -94,11 +94,11 @@ void RoomEffect_DrawMotionParticles(void *unused, RoomStatePair *control,
             matrix.t[0] = primary->t[0] + cursor->particle.primaryX;
             matrix.t[1] = primary->t[1] + cursor->particle.primaryY;
             matrix.t[2] = primary->t[2] + cursor->particle.primaryZ;
-            func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
+            FieldFx_DrawGlowSprite((FieldGlowSprite *)packet, &matrix, 1);
             matrix.t[0] = secondary->t[0] + cursor->particle.secondaryX;
             matrix.t[1] = secondary->t[1] + cursor->particle.secondaryY;
             matrix.t[2] = secondary->t[2] + cursor->particle.secondaryZ;
-            func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
+            FieldFx_DrawGlowSprite((FieldGlowSprite *)packet, &matrix, 1);
             i++;
             cursor = (RoomMotionCursor *)((RoomMotionPoint *)cursor + 1);
         } while ((unsigned int)i < state->count);

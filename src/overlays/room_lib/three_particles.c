@@ -176,7 +176,7 @@ typedef struct RoomInitThreeStack {
 } RoomInitThreeStack;
 
 int *FieldFx_RegPtr(int index);
-int func_800C66C8(void *object, int message, void *state);
+int FieldFx_PlaySoundAtMatrixPosition(void *object, int message, void *state);
 
 /* Retail marks this function handwritten; only its COP2 windows remain ASM. */
 void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
@@ -289,7 +289,7 @@ void RoomLib_InitThreeTransformParticles(void *owner, void *unused,
                   (GteShortVector *)&particles->velocity[1]);
     ApplyMatrixSV(&stack.matrices[1], &stack.projectionSeed,
                   (GteShortVector *)&particles->velocity[2]);
-    func_800C66C8(callOwner, 0x573, projectionMatrix);
+    FieldFx_PlaySoundAtMatrixPosition(callOwner, 0x573, projectionMatrix);
 }
 
 typedef GteShortVector RoomDrawThreeVec;
@@ -306,7 +306,7 @@ typedef struct RoomDrawThreeStack {
     RoomFxControl *args;
 } RoomDrawThreeStack;
 
-void func_800C3098(int depth);
+void FieldFx_SetSpriteColorMode(int depth);
 
 void RoomLib_DrawThreeTransformParticles(void *unused, RoomFxControl *args, RoomDebrisTriplet *state) {
     RoomDrawThreeStack stack;
@@ -331,8 +331,8 @@ void RoomLib_DrawThreeTransformParticles(void *unused, RoomFxControl *args, Room
     i = 0;
     sourceScale = &stack.sourceScale;
     secondaryMatrix = &stack.secondaryMatrix;
-    func_800C2EAC(clock->asset.page);
-    func_800C3098(0x10);
+    FieldFx_SetSpriteTexturePreset(clock->asset.page);
+    FieldFx_SetSpriteColorMode(0x10);
 
     for (; i < 3; i++) {
         if (drawState->active[i] >= 0) {
@@ -357,10 +357,10 @@ void RoomLib_DrawThreeTransformParticles(void *unused, RoomFxControl *args, Room
             RoomLib_ThreeParticleAlpha = alpha;
             asm volatile("" : : "m"(RoomLib_ThreeParticleAlpha));
             frame = callArgs->frame;
-            func_800C3134(arg0, frame, (unsigned char *)&RoomLib_ThreeParticlePacket);
-            func_800C2FF0(0x40, 0x40);
-            func_800C3238(2);
-            func_800C42A4((FieldGlowSprite *)&RoomLib_ThreeParticlePacket,
+            FieldFx_InterpolateColorRamp(arg0, frame, (unsigned char *)&RoomLib_ThreeParticlePacket);
+            FieldFx_SetSpriteCellSize(0x40, 0x40);
+            FieldFx_SetSpriteBlendMode(2);
+            FieldFx_DrawGlowSprite((FieldGlowSprite *)&RoomLib_ThreeParticlePacket,
                           &stack.primaryMatrix, 1);
 
             if (drawState->reserved08 == 1) {
@@ -392,7 +392,7 @@ void RoomLib_DrawThreeTransformParticles(void *unused, RoomFxControl *args, Room
                                            drawState->jitter[1];
                 stack.primaryMatrix.t[2] = (drawState->position[i].z >> 16) +
                                            drawState->jitter[2];
-                func_800C42A4((FieldGlowSprite *)&RoomLib_ThreeParticlePacket,
+                FieldFx_DrawGlowSprite((FieldGlowSprite *)&RoomLib_ThreeParticlePacket,
                               &stack.primaryMatrix, 1);
 
                 RotMatrix(&stack.seed.vector, secondaryMatrix);
@@ -411,9 +411,9 @@ void RoomLib_DrawThreeTransformParticles(void *unused, RoomFxControl *args, Room
                 stack.secondaryMatrix.t[2] = computedScale;
                 alpha = drawState->size[i];
                 RoomLib_ThreeParticleFloorPacket.depth = (unsigned int)alpha >> 1;
-                func_800C2FF0(0x20, 0x20);
-                func_800C3238(3);
-                func_800C42A4((FieldGlowSprite *)&RoomLib_ThreeParticleFloorPacket,
+                FieldFx_SetSpriteCellSize(0x20, 0x20);
+                FieldFx_SetSpriteBlendMode(3);
+                FieldFx_DrawGlowSprite((FieldGlowSprite *)&RoomLib_ThreeParticleFloorPacket,
                               secondaryMatrix, 0);
             }
         }
@@ -468,7 +468,7 @@ void RoomLib_UpdateDebrisTriplet(void *unused, RoomDebrisOwner *owner,
         if (state->landed[i] == 0) {
             if (!Geo_PointInPoly((state->position[i].x >> 16) << 16,
                                (state->position[i].z >> 16) << 16,
-                               D_8009D248, D_8009D1CC)) {
+                               g_FloorPolygonVertices, g_FloorPolygonVertexCount)) {
                 state->landed[i] = 1;
                 state->mode[i] = 0;
                 if (state->keepAlive == 0) state->life[i] = 0x14;
@@ -485,7 +485,7 @@ void RoomLib_UpdateDebrisTriplet(void *unused, RoomDebrisOwner *owner,
         state->jitter[0] = rand() % 11 - 5;
         state->jitter[1] = rand() % 11 - 5;
         state->jitter[2] = rand() % 11 - 5;
-        if (func_800C6B90(point, state->swing[i] >> 4)) {
+        if (FieldFx_IsPlayerWithinRadius(point, state->swing[i] >> 4)) {
             if (state->landed[i] == 0) {
                 clock->landedFlag = 1;
                 state->life[i] = 0x14;

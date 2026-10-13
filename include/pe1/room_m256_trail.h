@@ -40,7 +40,7 @@ PE1_STATIC_ASSERT(sizeof(RoomM256TrailHistory) == 0x88, room_m256_trail_history_
 extern RoomM256TrailHistory D_80195EFC[];
 extern char D_80195F1C[], D_80195F1E[], D_80195F20[];
 extern s32 D_80195EF0, D_80195EF8;
-extern u16 D_800E1208;
+extern u16 g_FieldFxPaletteEntry2;
 typedef struct RoomM256TrailPalettes { u16 first, second; } RoomM256TrailPalettes;
 int rand(void);
 void FieldFx_ModelSetTexture(int,int);

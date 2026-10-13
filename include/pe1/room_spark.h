@@ -48,7 +48,7 @@ extern int rand(void);
  * ribbon. */
 /* Rotates an offset by a bone's matrix. */
 /* Fades a colour layer record in or out. */
-extern void func_800CF4B4(int kind, int value, void *layer);
+extern void FieldFx_LoadRotatedClutRow(int kind, int value, void *layer);
 
 /* Asset library lookup and the model draw calls of the model effects. */
 void FieldFx_ModelSetTexture(int tpage, int clut);
@@ -200,7 +200,7 @@ typedef struct RoomBeamSparkParams {
 } RoomBeamSparkParams;
 
 /* Sprite tpage index table: one entry per sprite kind, followed by the
- * D_800E1204 palette table. An entry read as an array element is an
+ * g_FieldFxPaletteTable palette table. An entry read as an array element is an
  * in-struct reference, so it stays ordered after a store through the
  * parameter block base register, as retail's reads do. */
 

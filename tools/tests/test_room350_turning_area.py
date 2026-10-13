@@ -77,23 +77,23 @@ typedef char f[OFF(Instance,render_object.matrices)==0x238 && OFF(Actor,instance
 #define D_8019A81C D_8019A808.position[0]
 #define D_8019A820 D_8019A808.position[1]
 #define D_8019A824 D_8019A808.position[2]
-#define TABLE ((short *)D_800966EC)
+#define TABLE ((short *)rcossin_tbl)
 #define D_800966EE (TABLE+1)
 '''
         harness = prefix + source + r'''
-FieldFxObjectPrefix *D_800F32D0;
+FieldFxObjectPrefix *g_FieldFxOwner;
 FieldActor *g_PlayerEntity;
 struct SceneAssetBlob *D_800B0E64[1];
 short D_8019A82A[1];
-GteSineWord D_800966EC[4097];
+GteSineWord rcossin_tbl[4097];
 unsigned char D_8019A831,D_8019A82F,D_8019A830;
-int D_800E27EC,D_800F3428;
+int g_FieldFxCurrentAge,g_FieldFxAltPaletteFlag;
 Matrix D_8019A808;
 Vector D_8019A574[4];
 char D_8019A594[8];
 RenderColor D_8019A3C8;
-RenderEffectParameters D_800F3368;
-u16 D_800E11FA,D_800E2850[65536],D_800E1204[65536];
+RenderEffectParameters g_FieldFxSpriteParams;
+u16 g_FieldFxTpageSlot11,g_FieldFxTpageTable[65536],g_FieldFxPaletteTable[65536];
 static Actor actors[2];
 static Instance instances[2],players[2];
 static Owner owners[3];
@@ -115,7 +115,7 @@ static void reset(void) {
     memset(players,0,sizeof(players)); memset(owners,0,sizeof(owners));
     actors[0].instance=(struct RoomM350Instance *)&instances[0];
     actors[1].instance=(struct RoomM350Instance *)&instances[1];
-    D_800F32D0=(FieldFxObjectPrefix *)&actors[0];
+    g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[0];
     instances[0].state=&owners[0]; instances[0].render_object.matrices=(RenderMatrix *)transforms;
     players[0].state=&owners[1]; players[1].state=&owners[2]; g_PlayerEntity=&players[0];
     instances[0].render_object.model_matrix.translation[0]=-100;
@@ -138,10 +138,10 @@ void FieldFx_ModelScrollUv(union FieldTexturedModel *asset,u8 a,u8 b) {
     assert(mode==0 && calls++==1 && (void *)asset==&assets[0] && !a && !b);
     D_8019A82A[0]=-32768; state.size=123; state.initialized=255;
 }
-s32 func_800DFE20(Vec3Fixed *a,Vec3Fixed *b) {
+s32 FieldFx_GetDistanceXZ(Vec3Fixed *a,Vec3Fixed *b) {
     assert(mode==1 && distances++==0);
     assert((void *)a==&players[0].pos_x && (void *)b==&instances[0].pos_x);
-    if(mutate) { g_PlayerEntity=&players[1]; D_800F32D0=(FieldFxObjectPrefix *)&actors[1]; }
+    if(mutate) { g_PlayerEntity=&players[1]; g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[1]; }
     return turnDistance;
 }
 int FieldFx_VecToAngle(Vec3Fixed *a,Vec3Fixed *b) {
@@ -203,7 +203,7 @@ static void update(int timer,int sample,int initialized,int enabled,int distance
     int raw,expectedSize,turn,heading=yaw,index,ret;
     reset(); mode=1; mutate=mutation; outsideAt=outside;
     state.yaw=yaw; state.turn=-77; state.initialized=initialized;
-    D_800E27EC=timer; D_8019A831=enabled; D_8019A82F=inside;
+    g_FieldFxCurrentAge=timer; D_8019A831=enabled; D_8019A82F=inside;
     if(nullOwner) instances[0].state=0;
     turnDistance=distance; turnAngle=angle;
     if(timer<16) {
@@ -242,11 +242,11 @@ static void update(int timer,int sample,int initialized,int enabled,int distance
 }
 u_short GetTPage(int a,int b,int c,int d) {
     assert(mode==2 && drawStage++==0 && !a && b==1 && !c && !d);
-    D_800E11FA=65535; D_800F32D0=(FieldFxObjectPrefix *)&actors[1];
+    g_FieldFxTpageSlot11=65535; g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[1];
     return 0x0100;
 }
 u_short GetClut(int x,int y) {
-    assert(drawStage++==1 && !x && y==D_800E1204[kind]+(kind==4 && special ? 7:3));
+    assert(drawStage++==1 && !x && y==g_FieldFxPaletteTable[kind]+(kind==4 && special ? 7:3));
     state.asset=&assets[1]; return 0xFFFF;
 }
 void FieldFx_ModelSetTexture(int page,int clut) { assert(drawStage++==2 && page==(0x0100|0x8055) && clut==65535); }
@@ -282,7 +282,7 @@ void FieldFx_ModelRestoreColors(char *p) {
     instances[0].render_object.model_matrix.translation[2]=-98765;
     expectedSpriteYaw=half((uint32_t)sar(tailYaw,8)+2024);
 }
-void func_800D0E88(struct GteShortVector *p,struct GteRotation *rotation,int sx,int sy,struct RenderColor *v,struct RenderColor *c,struct RenderColor *c2,int bright,int flag) {
+void FieldFx_DrawRotatedTriangle(struct GteShortVector *p,struct GteRotation *rotation,int sx,int sy,struct RenderColor *v,struct RenderColor *c,struct RenderColor *c2,int bright,int flag) {
     Vector *r=(Vector *)rotation;
     assert(models==3 && sprites<3 && p->x==-32768 && p->y==32767 && p->z==half(-98765));
     assert(r->x==0 && r->z==0 && r->y==expectedSpriteYaw);
@@ -295,7 +295,7 @@ void func_800D0E88(struct GteShortVector *p,struct GteRotation *rotation,int sx,
 static void draw(int size,int yaw,int k,int s) {
     int i;
     reset(); mode=2; kind=k; special=s; tailSize=size; tailYaw=yaw;
-    state.size=size; D_800F3368.palette=k; D_800F3428=s; D_800E2850[65535]=0x8055; D_800E1204[k]=65535;
+    state.size=size; g_FieldFxSpriteParams.palette=k; g_FieldFxAltPaletteFlag=s; g_FieldFxTpageTable[65535]=0x8055; g_FieldFxPaletteTable[k]=65535;
     for(i=0;i<9;i++) ((short *)D_8019A808.rotation)[i]=i*19-71;
     transforms[33].position[0]=INT_MIN; transforms[33].position[1]=INT_MAX; transforms[33].position[2]=-333;
     expectedMatrix=D_8019A808; memcpy(expectedMatrix.position,transforms[33].position,sizeof(expectedMatrix.position));

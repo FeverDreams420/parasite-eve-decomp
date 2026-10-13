@@ -10,9 +10,9 @@
 
 static inline int data_timed_out(const char **commands, const char **events,
                                  int limit, CdInterruptEvents *state) {
-    if (VSync(-1) > D_800A3478 || D_800A347C++ > limit) {
-        puts(D_80011B18);
-        printf(D_80011B28, D_800A3480, commands[g_CdLastCom],
+    if (VSync(-1) > g_CdTimeoutDeadlineVsync || g_CdTimeoutPollCount++ > limit) {
+        puts(g_CdTimeoutText);
+        printf(g_CdTimeoutDetailFormat, g_CdTimeoutFuncName, commands[g_CdLastCom],
                events[state->sync], events[state->ready]);
         CD_flush();
         return -1;
@@ -27,9 +27,9 @@ int CD_datasync(int mode) {
     const char **events;
     CdInterruptEvents *state;
 
-    D_800A3478 = VSync(-1) + 0x3C0;
-    D_800A347C = 0;
-    D_800A3480 = D_80011C20;
+    g_CdTimeoutDeadlineVsync = VSync(-1) + 0x3C0;
+    g_CdTimeoutPollCount = 0;
+    g_CdTimeoutFuncName = g_CdDataSyncName;
     limit = 0x3C0000;
     commands = g_CdCommandNames;
     state = &g_CdInterruptEvents;

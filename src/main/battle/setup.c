@@ -23,16 +23,16 @@
  * through $gp, every other extern stays absolute. */
 s8 D_8009CE30;
 u16 D_8009D298;
-u8 D_8009CE38[4];
+u8 g_BattleActionAnimModes[4];
 u8 D_8009CE39;
 u8 D_8009CE3A;
 u8 D_8009CE3B;
-s8 D_8009CE40;
+s8 g_BattleTargetCycleMode;
 u8 D_8009CE60;
 u8 g_BattleRemainingActions;
 int D_8009D200;
 s32 D_8009D208;
-s32 D_8009D258;
+s32 g_BattleEffectPmSlot;
 u8 D_8009D294;
 u8 D_8009D2D8;
 unsigned char g_BattleActionQueueCount;
@@ -172,29 +172,29 @@ void Battle_Init(void)
 
     Pm_StopAll();
     index = 0;
-    records = D_800BE830;
+    records = g_BattleActionQueue;
     D_8009D200 = -1;
     D_8009D2FC = -1;
-    D_8009D258 = -1;
+    g_BattleEffectPmSlot = -1;
     D_8009D208 = -1;
 
     do {
-        D_800BE830[index].actor = 0;
+        g_BattleActionQueue[index].actor = 0;
         records[index].actionGeneration = 0;
-        D_800BE830[index].command = 0;
+        g_BattleActionQueue[index].command = 0;
         index++;
     } while (index < 45);
 
     action = &g_ActiveActor->action;
     config0 = *action;
     g_BattleTargetIndex = 0;
-    D_8009CE40 = 0;
+    g_BattleTargetCycleMode = 0;
     D_8009D294 = 0;
     config1 = *action;
     D_8009D2D8 = (config0->turnWord >> 4) & 3;
     config2 = *action;
     g_BattleRemainingActions = config1->turnWord & 0xF;
-    D_8009CE38[0] = config2->animMode[0];
+    g_BattleActionAnimModes[0] = config2->animMode[0];
     config3 = *action;
     D_8009CE39 = config3->animMode[1];
     config4 = *action;
@@ -483,31 +483,31 @@ void Battle_CopyPadStateToRecord(void) {
     BattleAttackBits *attack = (BattleAttackBits *)&record->attackWord;
     BattleTurnBits *turn = (BattleTurnBits *)&record->turnWord;
 
-    record->powerBonus = D_800A76D8.powerBonus;
-    record->range = D_800A76D8.range;
-    record->field04 = D_800A76D8.field04;
-    record->actionCode.actionId = D_800A76D8.actionCode.actionId;
-    record->hitTrigger = D_800A76D8.hitTrigger;
-    attack->count = D_800A76E4.count;
-    attack->power = D_800A76E4.power;
-    attack->category = D_800A76E4.category;
-    turn->actions = D_800A76E8.actions;
-    turn->slot = D_800A76E8.slot;
-    turn->mode = D_800A76E8.mode;
-    turn->element8 = D_800A76E8.element8;
-    turn->element9 = D_800A76E8.element9;
-    turn->element10 = D_800A76E8.element10;
-    turn->element11 = D_800A76E8.element11;
-    turn->element12 = D_800A76E8.element12;
-    turn->hitState = D_800A76E8.hitState;
-    turn->flag15 = D_800A76E8.flag15;
-    turn->flag16 = D_800A76E8.flag16;
-    turn->flag17 = D_800A76E8.flag17;
+    record->powerBonus = g_BattleMenuActionRecord.powerBonus;
+    record->range = g_BattleMenuActionRecord.range;
+    record->field04 = g_BattleMenuActionRecord.field04;
+    record->actionCode.actionId = g_BattleMenuActionRecord.actionCode.actionId;
+    record->hitTrigger = g_BattleMenuActionRecord.hitTrigger;
+    attack->count = g_BattleMenuAttackBits.count;
+    attack->power = g_BattleMenuAttackBits.power;
+    attack->category = g_BattleMenuAttackBits.category;
+    turn->actions = g_BattleMenuTurnBits.actions;
+    turn->slot = g_BattleMenuTurnBits.slot;
+    turn->mode = g_BattleMenuTurnBits.mode;
+    turn->element8 = g_BattleMenuTurnBits.element8;
+    turn->element9 = g_BattleMenuTurnBits.element9;
+    turn->element10 = g_BattleMenuTurnBits.element10;
+    turn->element11 = g_BattleMenuTurnBits.element11;
+    turn->element12 = g_BattleMenuTurnBits.element12;
+    turn->hitState = g_BattleMenuTurnBits.hitState;
+    turn->flag15 = g_BattleMenuTurnBits.flag15;
+    turn->flag16 = g_BattleMenuTurnBits.flag16;
+    turn->flag17 = g_BattleMenuTurnBits.flag17;
 }
 
 /* Copy the enemy attributes the menu record carries into the active actor. */
 void Battle_SyncEnemyAttributes(void) {
-    BattleAttributes *source = (BattleAttributes *)&D_800A76D8;
+    BattleAttributes *source = (BattleAttributes *)&g_BattleMenuActionRecord;
     BattleAttributes *attributes = g_ActiveActor->attributes;
     BattleEffectBits *effects = (BattleEffectBits *)&attributes->effectFlags;
 
@@ -515,21 +515,21 @@ void Battle_SyncEnemyAttributes(void) {
     attributes->parameterWord.fields.second = source->parameterWord.fields.second;
     attributes->parameterWord.fields.third = source->parameterWord.fields.third;
     attributes->parameterWord.fields.reserved = source->parameterWord.fields.reserved;
-    effects->resistPoison = D_800A76DC.resistPoison;
-    effects->resistConfusion = D_800A76DC.resistConfusion;
-    effects->resistDarkness = D_800A76DC.resistDarkness;
-    effects->resistStiffness = D_800A76DC.resistStiffness;
-    effects->resistSteal = D_800A76DC.resistSteal;
-    effects->armorMode = D_800A76DC.armorMode;
-    effects->mod14 = D_800A76DC.mod14;
-    effects->mod16 = D_800A76DC.mod16;
-    effects->mod11 = D_800A76DC.mod11;
-    effects->mod17 = D_800A76DC.mod17;
-    effects->mod12 = D_800A76DC.mod12;
-    effects->autoMedicine = D_800A76DC.autoMedicine;
-    effects->autoCure = D_800A76DC.autoCure;
-    effects->mod13 = D_800A76DC.mod13;
-    effects->mod15 = D_800A76DC.mod15;
+    effects->resistPoison = g_BattleMenuEffectBits.resistPoison;
+    effects->resistConfusion = g_BattleMenuEffectBits.resistConfusion;
+    effects->resistDarkness = g_BattleMenuEffectBits.resistDarkness;
+    effects->resistStiffness = g_BattleMenuEffectBits.resistStiffness;
+    effects->resistSteal = g_BattleMenuEffectBits.resistSteal;
+    effects->armorMode = g_BattleMenuEffectBits.armorMode;
+    effects->mod14 = g_BattleMenuEffectBits.mod14;
+    effects->mod16 = g_BattleMenuEffectBits.mod16;
+    effects->mod11 = g_BattleMenuEffectBits.mod11;
+    effects->mod17 = g_BattleMenuEffectBits.mod17;
+    effects->mod12 = g_BattleMenuEffectBits.mod12;
+    effects->autoMedicine = g_BattleMenuEffectBits.autoMedicine;
+    effects->autoCure = g_BattleMenuEffectBits.autoCure;
+    effects->mod13 = g_BattleMenuEffectBits.mod13;
+    effects->mod15 = g_BattleMenuEffectBits.mod15;
 }
 
 /* MASPSX_FORCE_G0 keeps the game-state flags absolute, as retail; the COMMON
@@ -546,7 +546,7 @@ void Battle_FlushScriptSounds(void) {
 
     index = g_BattleActionIndex;
     while ((index & 0xFF) < g_BattleActionQueueCount) {
-        item = (u16)D_800BE830[index & 0xFF].command;
+        item = (u16)g_BattleActionQueue[index & 0xFF].command;
         if ((unsigned int)(item - 3) < 0x180) {
             Inv_AddItem((short)item - 3);
         }
@@ -568,7 +568,7 @@ void Battle_StepScriptEntry(void)
     int command;
 
     if (g_BattleActionIndex < g_BattleActionQueueCount) {
-        entry = &D_800BE830[g_BattleActionIndex];
+        entry = &g_BattleActionQueue[g_BattleActionIndex];
         entity = D_8009D254;
         entity->motionX = 0;
         entity->motionY = 0;

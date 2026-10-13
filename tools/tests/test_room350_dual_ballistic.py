@@ -39,26 +39,26 @@ typedef char h[OFF(Particle,gravity)==8 ? 1:-1];
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_captured_matrices_fresh_fields_and_request(self):
         harness = '#include <assert.h>\n#include <stdint.h>\n#include <string.h>\n#include <limits.h>\n' + controller_source() + r'''
-FieldFxObjectPrefix *D_800F32D0;
-FieldFxTaskSlot *D_800F33E0;
+FieldFxObjectPrefix *g_FieldFxOwner;
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 /* The player is read through the same transform-owner view as the actor. */
 FieldActor *g_PlayerEntity;
 #define PLAYER ((Instance *)g_PlayerEntity)
 unsigned char D_8019A82F;
-int D_800E27EC;
+int g_FieldFxCurrentAge;
 /* The retail halfword names are fields of the sprite parameter block. */
-RenderEffectParameters D_800F3368;
-#define SIGNED(field) (*(short *)&D_800F3368.field)
+RenderEffectParameters g_FieldFxSpriteParams;
+#define SIGNED(field) (*(short *)&g_FieldFxSpriteParams.field)
 #define UNIT SIGNED(parameter00)
 #define D_800F336A SIGNED(parameter02)
-#define D_800F336C D_800F3368.palette
+#define D_800F336C g_FieldFxSpriteParams.palette
 #define D_800F336E SIGNED(parameter06)
-#define D_800F3370 D_800F3368.tpage
+#define D_800F3370 g_FieldFxSpriteParams.tpage
 #define D_800F3372 SIGNED(parameter0A)
-#define D_800F3374 D_800F3368.depth
+#define D_800F3374 g_FieldFxSpriteParams.depth
 #define D_800F3376 SIGNED(extent_x)
 #define D_800F3378 SIGNED(extent_y)
-unsigned short D_800E11E8,D_800E2850[65536];
+unsigned short g_FieldFxTpageSlot2,g_FieldFxTpageTable[65536];
 static Actor actor;
 static RoomM350Emitter emitters[2];
 static Instance actorInstance,players[2];
@@ -69,11 +69,11 @@ static uint32_t seed;
 static int word(uint32_t x) { int result; memcpy(&result,&x,4); return result; }
 static int half(uint32_t x) { x&=65535; return x<32768 ? (int)x:(int)x-65536; }
 int func_801968D8(int e,short *p) { return 0; }
-int func_800CE560(char *p,int size,int count,FieldFxCallbackListCallback cb) {
+int FieldFx_InitCallbackList(char *p,int size,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && size==12 && count==16 && (void *)cb==(void *)func_801968D8);
     setups++; return setupResult;
 }
-void *func_800CE610(char *p) {
+void *FieldFx_AcquireCallbackSlot(char *p) {
     int i=allocs++,isActor=actorAttempt && i==0;
     assert(i<2 && p==(char *)&pools[i!=0]); active=i; part=0;
     captured=isActor ? &actorMatrices[0][33] : PLAYER->transforms;
@@ -83,7 +83,7 @@ void *func_800CE610(char *p) {
         g_PlayerEntity=(FieldActor *)&players[1];
         if(mutation) D_8019A82F=mutation==1 ? 0:255;
     } else PLAYER->transforms=&playerMatrices[2];
-    D_800F33E0=(FieldFxTaskSlot *)&emitters[1];
+    g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[1];
     if(failure&(1<<i)) return 0;
     return &particles[i];
 }
@@ -92,14 +92,14 @@ int Inv_ScrambleGrid(void) {
     int j; randoms++;
     if(part) assert(particles[active].x==expected[active].x && particles[active].y==expected[active].y);
     for(j=0;j<3;j++) captured->position[j]=word(0x7FFFFF00u+seed+j*17u+part*0x8001u);
-    D_800E27EC=word(seed+randoms*31u);
+    g_FieldFxCurrentAge=word(seed+randoms*31u);
     if(!part) {
         expected[active].x=half((uint32_t)captured->position[0]-(value*2-256));
         expected[active].y=half(captured->position[1]);
     } else {
         expected[active].z=half((uint32_t)captured->position[2]-(value*2-256));
         expected[active].velocityY=0;
-        expected[active].gravity=(((uint32_t)D_800E27EC>>1)&1)+2;
+        expected[active].gravity=(((uint32_t)g_FieldFxCurrentAge>>1)&1)+2;
     }
     part++; return word(value);
 }
@@ -107,19 +107,19 @@ static void reset(void) {
     allocs=randoms=setups=0;
     actor.instance=(struct RoomM350Instance *)&actorInstance;
     actorInstance.transforms=actorMatrices[0];
-    D_800F32D0=(FieldFxObjectPrefix *)&actor; D_800F33E0=(FieldFxTaskSlot *)&emitters[0];
+    g_FieldFxOwner=(FieldFxObjectPrefix *)&actor; g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[0];
     players[0].transforms=&playerMatrices[0]; players[1].transforms=&playerMatrices[1];
     g_PlayerEntity=(FieldActor *)&players[0];
     memset(particles,0x5A,sizeof(particles)); memcpy(expected,particles,sizeof(particles));
 }
 static void run(int timer,int flag,int mask,int mode) {
     int playerAttempt,calls,successes,i;
-    reset(); failure=mask; mutation=mode; D_800E27EC=timer; D_8019A82F=flag;
+    reset(); failure=mask; mutation=mode; g_FieldFxCurrentAge=timer; D_8019A82F=flag;
     actorAttempt=timer<107 && (timer&1);
     playerAttempt=timer<107 && (actorAttempt && mode ? mode==2 : flag!=0);
     calls=actorAttempt+playerAttempt; successes=0;
     for(i=0;i<calls;i++) successes+=!(mask&(1<<i));
-    if(!actorAttempt) D_800F32D0=0;
+    if(!actorAttempt) g_FieldFxOwner=0;
     assert(func_80196A14(1)==(timer>=107 ? 2:0));
     assert(allocs==calls && randoms==successes*2 && setups==0);
     assert(memcmp(particles,expected,sizeof(particles))==0);
@@ -137,7 +137,7 @@ int main(void) {
         reset(); assert(func_80196A14(0)==setupResult && setups==1 && !allocs);
     }
     for(i=0;i<65536;i++) {
-        reset(); D_800E11E8=i; D_800E2850[i]=65535-i;
+        reset(); g_FieldFxTpageSlot2=i; g_FieldFxTpageTable[i]=65535-i;
         assert(func_80196A14(2)==0 && !allocs && !setups);
         assert(UNIT==16 && D_800F336A==1 && D_800F3376==16 && D_800F3378==16);
         assert(D_800F336C==2 && D_800F336E==0 && D_800F3372==0 && D_800F3374==0 && D_800F3370==65535-i);

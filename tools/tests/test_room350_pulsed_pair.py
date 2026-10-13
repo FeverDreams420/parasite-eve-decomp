@@ -35,13 +35,13 @@ typedef char d[OFF(RoomM350Emitter,pool)==8 ? 1:-1];
         source = host_unit(SPAWNER, path=find_definition(SPAWNER, under=ROOM))
         # Stubs validate CPU-side helper contracts, not rotation/GTE arithmetic.
         harness = '#include <assert.h>\n#include <stdint.h>\n#include <string.h>\n#include <limits.h>\n' + source + r'''
-FieldFxTaskSlot *D_800F33E0;
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 GteShortVector D_8019A778[2];
-int D_800E27EC;
+int g_FieldFxCurrentAge;
 short D_800966EE[8192];
-RenderEffectParameters D_800F3368;
-u16 D_800E11E8;
-u16 D_800E2850[65536];
+RenderEffectParameters g_FieldFxSpriteParams;
+u16 g_FieldFxTpageSlot2;
+u16 g_FieldFxTpageTable[65536];
 static RoomM350Emitter emitters[2];
 static int pools[2],allocs,randoms,rotations,applications,failAt;
 static Particle particles[36],expected[36];
@@ -51,14 +51,14 @@ static int word(uint32_t x) { int r; memcpy(&r,&x,4); return r; }
 static int half(uint32_t x) { x&=65535; return x<32768 ? (int)x:(int)x-65536; }
 static uint32_t rng(int n) { return seed+(uint32_t)n*0x87654321u; }
 int func_80199B94(int e,Particle *p) { return 0; }
-int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
+int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && stride==8 && count==64);
     assert(cb==(FieldFxCallbackListCallback)func_80199B94); return -123;
 }
-void *func_800CE610(char *p) {
+void *FieldFx_AcquireCallbackSlot(char *p) {
     int i=allocs++;
     assert(i<36 && p==(char *)&pools[i&1] && randoms==i*4 && applications==i);
-    D_800E27EC=INT_MAX;
+    g_FieldFxCurrentAge=INT_MAX;
     return i==failAt ? 0:&particles[i];
 }
 int Inv_ScrambleGrid(void) { return word(rng(randoms++)); }
@@ -79,17 +79,17 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *m,const GteShortVector *v,GteShor
         ((short *)&D_8019A778[i&1])[j]=half(seed*13+i*257+j);
         expected[i].position[j]=half((uint16_t)((short *)out)[j]+(uint16_t)((short *)&D_8019A778[i&1])[j]);
     }
-    D_800F33E0=(FieldFxTaskSlot *)&emitters[(i+1)&1];
+    g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[(i+1)&1];
     memset(D_800966EE,0,sizeof(D_800966EE));
     return out;
 }
 static void reset(void) {
-    allocs=randoms=rotations=applications=0; D_800F33E0=(FieldFxTaskSlot *)&emitters[0];
+    allocs=randoms=rotations=applications=0; g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[0];
     memset(particles,0x5A,sizeof(particles)); memcpy(expected,particles,sizeof(particles));
 }
 static void run(int timer,int sample,int failure) {
     int count=((sample+4096)/2048+1)*2,success,wanted;
-    reset(); failAt=failure; D_800E27EC=timer;
+    reset(); failAt=failure; g_FieldFxCurrentAge=timer;
     D_800966EE[((((uint32_t)timer<<7)+2048)&4095)*2]=sample;
     assert(func_80192508(1)==(timer>=33 ? 2:0));
     if(timer>=33 || count<=0) wanted=success=0;
@@ -110,13 +110,13 @@ int main(void) {
     }
     for(n=0;n<65536;n++) {
         seed=(uint32_t)n*0x81234567u; run(half(n),4096,-1);
-        D_800E11E8=n; D_800E2850[n]=n^0xA357;
-        memset(&D_800F3368,0x9D,sizeof(D_800F3368));
-        assert(func_80192508(2)==0 && D_800F3368.tpage==(unsigned short)(n^0xA357));
-        assert(D_800F3368.parameter00==16 && D_800F3368.parameter02==1);
-        assert(D_800F3368.extent_x==16 && D_800F3368.extent_y==16);
-        assert(D_800F3368.palette==2 && D_800F3368.parameter06==0);
-        assert(D_800F3368.parameter0A==0 && D_800F3368.depth==0);
+        g_FieldFxTpageSlot2=n; g_FieldFxTpageTable[n]=n^0xA357;
+        memset(&g_FieldFxSpriteParams,0x9D,sizeof(g_FieldFxSpriteParams));
+        assert(func_80192508(2)==0 && g_FieldFxSpriteParams.tpage==(unsigned short)(n^0xA357));
+        assert(g_FieldFxSpriteParams.parameter00==16 && g_FieldFxSpriteParams.parameter02==1);
+        assert(g_FieldFxSpriteParams.extent_x==16 && g_FieldFxSpriteParams.extent_y==16);
+        assert(g_FieldFxSpriteParams.palette==2 && g_FieldFxSpriteParams.parameter06==0);
+        assert(g_FieldFxSpriteParams.parameter0A==0 && g_FieldFxSpriteParams.depth==0);
     }
     reset(); assert(func_80192508(-1)==0 && func_80192508(3)==0 && allocs==0);
     return 0;

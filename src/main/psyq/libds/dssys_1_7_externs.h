@@ -3,5 +3,5 @@
 
 #include "common.h"
 
-extern u32 D_8009B624[];
+extern u32 g_DsCommandStatusByteIndex[];
 #endif /* PE1_EXT_E08277A5C127 */

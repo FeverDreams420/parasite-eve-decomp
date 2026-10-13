@@ -20,13 +20,13 @@ class Room350EffectOffsetTests(unittest.TestCase):
     def test_position_copy_offset_and_saved_frame(self):
         source = callback_source()
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-RenderEffectParameters D_800F3368;
-GteSineWord D_800966EC[4096];
+RenderEffectParameters g_FieldFxSpriteParams;
+GteSineWord rcossin_tbl[4096];
 RenderColor D_8019A4E8;
-#define D_800F336A D_800F3368.parameter02
-#define D_800F336C D_800F3368.palette
-int D_800E27EC, D_800F3428;
-unsigned short D_800E1204[8];
+#define D_800F336A g_FieldFxSpriteParams.parameter02
+#define D_800F336C g_FieldFxSpriteParams.palette
+int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag;
+unsigned short g_FieldFxPaletteTable[8];
 static Position original, expectedPosition, replacement;
 static Effect object;
 static int lookups, draws, handleValue, savedFrame, scaleValue, shadeValue;
@@ -34,16 +34,16 @@ _Static_assert(sizeof(Position) == 8, "position size");
 u_short GetClut(int x, int y) {
     unsigned int index = ((unsigned int)savedFrame << 7) & 0xF80;
     assert(lookups++ == 0 && draws == 0 && x == 0);
-    assert(y == D_800E1204[D_800F336C] +
-           (D_800F336C == 4 && D_800F3428 ? 6 : 2));
+    assert(y == g_FieldFxPaletteTable[D_800F336C] +
+           (D_800F336C == 4 && g_FieldFxAltPaletteFlag ? 6 : 2));
     /* Stub mutations test captured values and reloads, not real helper effects. */
     original.x = 777; original.y = 888; original.z = 999; original.pad = 1000;
     object.position = &replacement; object.offset = 123;
-    D_800E27EC += 3; D_800F336A = scaleValue;
-    D_800966EC[index].word = (int)(0x76540000U | (unsigned short)shadeValue);
+    g_FieldFxCurrentAge += 3; D_800F336A = scaleValue;
+    rcossin_tbl[index].word = (int)(0x76540000U | (unsigned short)shadeValue);
     return handleValue;
 }
-void func_800CEE20(struct GteShortVector *p, struct GteRotation *zero, int a,
+void FieldFx_DrawShapeQuads(struct GteShortVector *p, struct GteRotation *zero, int a,
                    int b, int scale, int handle, int flag, int shade,
                    struct RenderColor *colors) {
     assert(lookups == 1 && draws++ == 0 && p != &original && p != &replacement);
@@ -60,7 +60,7 @@ int main(void) {
     for (event = -1; event <= 3; ++event) for (s = 0; s < 6; ++s) {
         int offset = values[s];
         if (event == 2) continue;
-        D_800E27EC = counter; lookups = draws = 0;
+        g_FieldFxCurrentAge = counter; lookups = draws = 0;
         object.position = &original; object.offset = offset;
         assert(func_80194F04(event, &object) == (event == 1 && counter >= 16));
         assert(object.position == &original);
@@ -70,10 +70,10 @@ int main(void) {
     for (counter = -16; counter <= 80; ++counter)
     for (kind = 0; kind < 8; ++kind) for (special = 0; special < 2; ++special)
     for (h = 0; h < 2; ++h) for (s = 0; s < 6; ++s) for (y = 0; y < 6; ++y) {
-        for (i = 0; i < 8; ++i) D_800E1204[i] = h ? 65535 : i * 100;
-        memset(D_800966EC, 0, sizeof(D_800966EC));
-        D_800E27EC = counter; savedFrame = counter - 1;
-        D_800F336C = kind; D_800F3428 = special; D_800F336A = 999;
+        for (i = 0; i < 8; ++i) g_FieldFxPaletteTable[i] = h ? 65535 : i * 100;
+        memset(rcossin_tbl, 0, sizeof(rcossin_tbl));
+        g_FieldFxCurrentAge = counter; savedFrame = counter - 1;
+        D_800F336C = kind; g_FieldFxAltPaletteFlag = special; D_800F336A = 999;
         scaleValue = values[s]; shadeValue = values[5-s];
         handleValue = h ? -1 : 0x12345;
         original.x = -111; original.y = values[y]; original.z = 222; original.pad = -333;

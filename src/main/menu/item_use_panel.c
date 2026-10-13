@@ -20,7 +20,7 @@ static inline ItemDataRecord *LookupTrackedItem(int index) {
     value = g_InvItemPtr[index];
     saved = (s16)value;
     if ((unsigned)(value - 0x100) < 0x80)
-        return &D_800C0E20.equipment[value - 0x100];
+        return &g_InventoryRuntime.equipment[value - 0x100];
     if ((unsigned)(value - 1) < 0xFF)
         return Item_LookupBaseData(value - 1);
     if ((unsigned)(saved - 0x200) < 9) {
@@ -41,8 +41,8 @@ void Menu_OpenItemUsePanelAtIndex(int index) {
     int slot;
     command = BattleCmd_AllocSlot();
     command->header.word = 2;
-    command->payload.equip_restore.item_data = LookupTrackedItem(D_800C0E20.tracked[0]);
+    command->payload.equip_restore.item_data = LookupTrackedItem(g_InventoryRuntime.tracked[0]);
     slot = GetFilteredSlot(index);
-    D_800C0E20.tracked[0] = GetFilteredSlot(index);
+    g_InventoryRuntime.tracked[0] = GetFilteredSlot(index);
     Inv_SetActiveList(2, &slot);
 }

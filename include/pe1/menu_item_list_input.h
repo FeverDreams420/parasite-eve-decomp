@@ -26,6 +26,6 @@ extern int g_MenuBattleStatusOverlayActive;
 /* Pending stat bonus: item index (negative when none), stat and amount. */
 extern int D_8009CFD4;
 /* Copy of the item record being modified. */
-extern ItemDataRecord D_800A1960;
+extern ItemDataRecord g_MenuItemUseSelectedItemSnapshot;
 
 #endif

@@ -9,7 +9,7 @@
  * transform records (RoomFxTransformOwner in pe1/room_fx.h). */
 struct RoomFxTransformOwner;
 
-void func_800CE9D4(struct RoomFxTransformOwner *owner, int index,
+void FieldFx_GetTransformLookAngles(struct RoomFxTransformOwner *owner, int index,
                    GteShortVector *out);
 void FieldFx_TransformMatrixPoint(struct RoomFxTransformOwner *owner, int index,
                                   const GteShortVector *input,

@@ -212,7 +212,7 @@ void Draw_EmitWipeBarRect(int width, int height, int mode)
     PUSH_WIPE_BAR_VERTEX(g_TextCursorX, g_TextCursorY + height);
     PUSH_WIPE_BAR_VERTEX(g_TextCursorX + width, g_TextCursorY + height);
 
-    Draw_EmitWipeBar(D_800930A8, mode);
+    Draw_EmitWipeBar(g_WipeRectEdgeList, mode);
 }
 
 void Draw_EmitWipeBarPoly(int arg0, int arg1, u8 *arg2) {
@@ -292,7 +292,7 @@ void Draw_AllocColorGradient(int width, int height, u8 *points, int textured)
                               (u16 *)g_TextCursorStackTop + 0x18);
         DRAW_PUSH_WIPE_VERTEX(g_TextCursorX + width, g_TextCursorY + height,
                               (u16 *)g_TextCursorStackTop + 0x18);
-        Draw_EmitWipeBar(D_800930A8, 0);
+        Draw_EmitWipeBar(g_WipeRectEdgeList, 0);
     }
 
     if (textured) {
@@ -459,7 +459,7 @@ void Draw_AllocColorTriGradient(int width, int height, int mode, int pulse)
     DRAW_PUSH_WIPE_VERTEX(g_TextCursorX + width, g_TextCursorY + height,
                           (u16 *)g_TextCursorStackTop + 0x18);
 
-    Draw_EmitWipeBar(D_800930A8, mode);
+    Draw_EmitWipeBar(g_WipeRectEdgeList, mode);
     g_TextCursorX -= 2;
     g_TextCursorY -= 2;
     Draw_AllocColorTri(width + 4, height + 4, pulse);

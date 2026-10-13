@@ -301,7 +301,7 @@ int Menu_StepSkillSelect(MenuWidgetNode *arg0, int arg1) {
             Menu_StepInventoryRoot(0x33E, -1, Inv_RestoreSelection(g_MenuSelectedItemList == 0));
             do {
                 temp_s0 = Inv_RestoreSelection(var_s1);
-                if ((Inv_IsActiveListOverrideSelected() == 0) && ((var_a0 = 2, (temp_s0 == D_800C0E20.tracked[0])) || (var_a0 = 3, (temp_s0 == D_800C0E20.tracked[2])))) {
+                if ((Inv_IsActiveListOverrideSelected() == 0) && ((var_a0 = 2, (temp_s0 == g_InventoryRuntime.tracked[0])) || (var_a0 = 3, (temp_s0 == g_InventoryRuntime.tracked[2])))) {
                     Inv_SetActiveList(var_a0, 0);
                 }
                 var_s1 += 1;
@@ -780,7 +780,7 @@ void Menu_StepInventoryRoot(int mode, int list, int item)
                 MenuWidget_SetCurrentNode(node);
         }
         {
-            u16 *source = D_800C0E00.stats.levels;
+            u16 *source = g_AyaSaveState.stats.levels;
             int stat;
 
             for (stat = 0; stat < 7; stat++) {
@@ -791,7 +791,7 @@ void Menu_StepInventoryRoot(int mode, int list, int item)
         }
         g_MenuBonusPointBarAnimActive = 0;
         g_BonusPointBarAnimProgress = 0;
-        g_BonusPointDisplayValue = D_800C0E00.bonus_points;
+        g_BonusPointDisplayValue = g_AyaSaveState.bonus_points;
         for (slot = 6; slot >= 0; slot--)
             D_800A1898[slot] = 0;
         Menu_InitStateTables();
@@ -812,7 +812,7 @@ void Menu_StepInventoryRoot(int mode, int list, int item)
         panel->update = Menu_BonusPointCancelHandler;
         node->draw = Menu_DrawEmptyList;
         node->cursor_x = -1;
-        D_800A1960.iconId = 0;
+        g_MenuItemUseSelectedItemSnapshot.iconId = 0;
     }
     panel->draw = Menu_StepEquipSlotSelect2;
     if (data)
@@ -1185,7 +1185,7 @@ int Menu_ItemListInputHandler(MenuWidgetNode *node, unsigned int flags)
             kind = Inv_GetActiveListItemType(Inv_RestoreSelection(0));
             target->y_limit = kind == 8 ? 1 : kind == 6 ? 2 : 3;
             MenuWidget_SetCurrentNode(target);
-            D_800A1960 = *Inv_LookupActiveListData(Inv_RestoreSelection(0));
+            g_MenuItemUseSelectedItemSnapshot = *Inv_LookupActiveListData(Inv_RestoreSelection(0));
             Menu_PlayConfirmSound();
             return 1;
         } else if (g_MenuItemRenameMode != 0 && Inv_TestSelectionBit(index) != 0) {
@@ -1297,9 +1297,9 @@ void Menu_StepEquipSlotSelect2(void) {
         }
     } else if (g_MenuLayoutLocked == 0) {
         if (g_InvItemUsableFlag != 0) {
-            Inv_RememberSelection(0, D_800C0E20.tracked[0]);
+            Inv_RememberSelection(0, g_InventoryRuntime.tracked[0]);
         } else {
-            Inv_RememberSelection(0, D_800C0E20.tracked[2]);
+            Inv_RememberSelection(0, g_InventoryRuntime.tracked[2]);
         }
     }
 
@@ -1394,7 +1394,7 @@ void Menu_OpenBonusPointSpendDialog(MenuWidgetNode *arg0, s32 arg1) {
     g_BonusPointSpendWorkingValue = g_BonusPointDisplayValue;
     if (arg1 < 3) {
         record = Inv_LookupActiveListData(Inv_RestoreSelection(0));
-        D_800A1A00 = *record;
+        g_BonusPointSpendItemCopy = *record;
         node->grid_width -= 0x14;
         MenuWidget_OffsetPosition(node, 0xA, 0);
     } else {
@@ -1424,33 +1424,33 @@ void Menu_DrawBonusPointSpendPanel(void) {
         mode = g_BonusPointSpendStat;
         switch (mode) {
         case 0: {
-            value = D_800A1A00.baseStats[0] + D_800A1A00.bonusStats[0];
+            value = g_BonusPointSpendItemCopy.baseStats[0] + g_BonusPointSpendItemCopy.bonusStats[0];
             if (value >= 1000) value = 999;
             Draw_PrintNumberWidth4(value);
             Draw_OffsetCursor(4, 2);
-            Draw_PrintNumberWidth4Unk(D_800A1A00.baseStats[0]);
+            Draw_PrintNumberWidth4Unk(g_BonusPointSpendItemCopy.baseStats[0]);
             Draw_OffsetCursor(5, 0);
-            Draw_PrintSignedNumberWidth4(D_800A1A00.bonusStats[0]);
+            Draw_PrintSignedNumberWidth4(g_BonusPointSpendItemCopy.bonusStats[0]);
             break;
         }
         case 1: {
-            value = D_800A1A00.baseStats[1] + D_800A1A00.bonusStats[1];
+            value = g_BonusPointSpendItemCopy.baseStats[1] + g_BonusPointSpendItemCopy.bonusStats[1];
             if (value >= 1000) value = 999;
             Draw_PrintNumberWidth4(value);
             Draw_OffsetCursor(4, 2);
-            Draw_PrintNumberWidth4Unk(D_800A1A00.baseStats[1]);
+            Draw_PrintNumberWidth4Unk(g_BonusPointSpendItemCopy.baseStats[1]);
             Draw_OffsetCursor(5, 0);
-            Draw_PrintSignedNumberWidth4(D_800A1A00.bonusStats[1]);
+            Draw_PrintSignedNumberWidth4(g_BonusPointSpendItemCopy.bonusStats[1]);
             break;
         }
         case 2: {
-            value = D_800A1A00.baseStats[2] + D_800A1A00.bonusStats[2];
+            value = g_BonusPointSpendItemCopy.baseStats[2] + g_BonusPointSpendItemCopy.bonusStats[2];
             if (value >= 1000) value = 999;
             Draw_PrintNumberWidth4(value);
             Draw_OffsetCursor(4, 2);
-            Draw_PrintNumberWidth4Unk(D_800A1A00.baseStats[2]);
+            Draw_PrintNumberWidth4Unk(g_BonusPointSpendItemCopy.baseStats[2]);
             Draw_OffsetCursor(5, 0);
-            Draw_PrintSignedNumberWidth4(D_800A1A00.bonusStats[2]);
+            Draw_PrintSignedNumberWidth4(g_BonusPointSpendItemCopy.bonusStats[2]);
             break;
         }
         }
@@ -1487,19 +1487,19 @@ int Menu_SpendBonusPoints(void *node, unsigned int buttons)
             changed = 0;
             switch (g_BonusPointSpendStat) {
             case 0: {
-                short *bonus = &D_800A1A00.bonusStats[0];
+                short *bonus = &g_BonusPointSpendItemCopy.bonusStats[0];
                 changed = *bonus < 999;
                 *bonus += changed;
                 break;
             }
             case 1: {
-                short *bonus = &D_800A1A00.bonusStats[1];
+                short *bonus = &g_BonusPointSpendItemCopy.bonusStats[1];
                 changed = *bonus < 999;
                 *bonus += changed;
                 break;
             }
             case 2: {
-                short *bonus = &D_800A1A00.bonusStats[2];
+                short *bonus = &g_BonusPointSpendItemCopy.bonusStats[2];
                 changed = *bonus < 999;
                 *bonus += changed;
                 break;
@@ -1522,7 +1522,7 @@ int Menu_SpendBonusPoints(void *node, unsigned int buttons)
         g_MenuSpendArrowDirection = 1;
         switch (g_BonusPointSpendStat) {
         case 0: {
-            short *bonus = &D_800A1A00.bonusStats[0];
+            short *bonus = &g_BonusPointSpendItemCopy.bonusStats[0];
             if (*bonus > item->bonusStats[0]) {
                 --*bonus;
                 g_BonusPointSpendWorkingValue += 100;
@@ -1533,7 +1533,7 @@ int Menu_SpendBonusPoints(void *node, unsigned int buttons)
             break;
         }
         case 1: {
-            short *bonus = &D_800A1A00.bonusStats[1];
+            short *bonus = &g_BonusPointSpendItemCopy.bonusStats[1];
             if (*bonus > item->bonusStats[1]) {
                 --*bonus;
                 g_BonusPointSpendWorkingValue += 100;
@@ -1544,7 +1544,7 @@ int Menu_SpendBonusPoints(void *node, unsigned int buttons)
             break;
         }
         case 2: {
-            short *bonus = &D_800A1A00.bonusStats[2];
+            short *bonus = &g_BonusPointSpendItemCopy.bonusStats[2];
             if (*bonus > item->bonusStats[2]) {
                 --*bonus;
                 g_BonusPointSpendWorkingValue += 100;
@@ -1578,9 +1578,9 @@ int Menu_SpendBonusPoints(void *node, unsigned int buttons)
     } else if (buttons & 0x10000) {
         g_BonusPointDisplayValue = g_BonusPointSpendWorkingValue;
         if (g_BonusPointSpendStat < 3) {
-            *item = D_800A1A00;
+            *item = g_BonusPointSpendItemCopy;
             if (!Inv_IsActiveListOverrideSelected()) {
-                if (item == Inv_LookupActiveListData(D_800C0E20.tracked[0])) {
+                if (item == Inv_LookupActiveListData(g_InventoryRuntime.tracked[0])) {
                     Inv_SetActiveList(2, 0);
                 } else if (item == Inv_LookupActiveListData(g_AyaEquippedArmorSlot[0])) {
                     Inv_SetActiveList(3, 0);

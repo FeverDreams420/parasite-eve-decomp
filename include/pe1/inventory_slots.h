@@ -26,7 +26,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(InventoryRuntime, storage) == 0x1098,
                   inventory_runtime_storage_offset);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(InventoryRuntime, specialStorage) == 0x1160,
                   inventory_runtime_special_storage_offset);
-extern InventoryRuntime D_800C0E20;
+extern InventoryRuntime g_InventoryRuntime;
 /* Count of filtered slot indices in g_InvPackedList; distinct from the
  * pending item-ID list at g_InvActiveListItems (count g_InvActiveListCount). */
 extern s32 g_InvPackedListCount;
@@ -61,11 +61,11 @@ extern s32 g_InvSelectionBitWords;
 extern s32 g_InvPendingCompactCount;
 extern s32 g_InvPackedListCursor;
 /* Equipment comparison filter: nonzero selects kinds 1..8, zero kind 9; first-stat floor. */
-extern s32 D_8009D0CC, D_8009D0D0;
+extern s32 g_InvRebuildFilterMode, g_InvRebuildMinFirstStat;
 /* Pending item IDs and the current number to transfer. */
 extern s32 g_InvActiveListCount;
 extern s16 g_InvActiveListItems[];
-#define g_InvTrackedSlots D_800C0E20.tracked
+#define g_InvTrackedSlots g_InventoryRuntime.tracked
 /* Two remembered selections. The retail indexed accesses use full addresses;
  * fixed-slot accesses use the individual small-data symbols below. Keeping
  * incomplete arrays avoids the old, overlapping three-element declarations. */
@@ -80,7 +80,7 @@ extern u32 g_InvStorageSelectionBits[];
 extern u8 D_800A1FE8[];
 extern u8 *D_8009D084;
 extern s32 D_8009D088, D_8009D08C;
-extern ItemDataRecord D_800A204C, D_800A206C;
+extern ItemDataRecord g_InvSavedSelectionRecord0, D_800A206C;
 /* Global fallback ammunition record, then the records of item values
  * 0x200..0x208 (the first three are the category ammunition pools);
  * storage tool IDs. */
@@ -114,7 +114,7 @@ static inline ItemDataRecord *Inv_LookupItemRecord(int value) {
     int saved = value;
     ItemDataRecord *result;
     if (value - 0x100U < 0x80U) {
-        result = &D_800C0E20.equipment[value - 0x100];
+        result = &g_InventoryRuntime.equipment[value - 0x100];
     } else {
         if (value - 1U < 0xFFU) {
             result = Item_LookupBaseData(value - 1);
@@ -131,7 +131,7 @@ static inline ItemDataRecord *Inv_LookupItemRecordScaled(int value) {
     int saved = value;
     ItemDataRecord *result;
     if (value - 0x100U < 0x80U) {
-        result = &D_800C0E20.equipment[value - 0x100];
+        result = &g_InventoryRuntime.equipment[value - 0x100];
     } else {
         if (value - 1U < 0xFFU) {
             result = Item_LookupBaseData(value - 1);

@@ -36,7 +36,7 @@ extern int func_80192548(int mode, RoomOrbitTrailParticle *p);
  * track, and the trail strip renderer. */
 extern RenderColor D_8018F1CC;
 extern u8 D_80199168[];
-extern void func_800D2B58(void *, void *, void *, void *, int, int, int);
+extern void FieldFx_DrawGlowLine(void *, void *, void *, void *, int, int, int);
 
 /* Damped glow particle (func_801931B8): its glow colour track. */
 extern u8 D_80199190[];
@@ -46,7 +46,7 @@ extern u8 D_80199190[];
 extern GteRotation D_8018F1F4;
 extern u8 D_80199434[];
 extern u8 D_8019944C[];
-extern void func_800CF844(void *, void *, int, void *, int, int);
+extern void FieldFx_OffsetPointByAngles(void *, void *, int, void *, int, int);
 
 /* Twist beam particle (func_8019702C): its colours, trail track, the beam
  * release flag and the beam sprite colour row. */

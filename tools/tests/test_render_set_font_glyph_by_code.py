@@ -71,12 +71,12 @@ class RenderSetFontGlyphByCodeTests(unittest.TestCase):
                 cwd=ROOT, check=True, capture_output=True,
             )
             (work / "glyph.ld").write_text(
-                "D_80091A1D = 0x80091A1D;\n"
+                "g_FontSelectionCodeIndex = 0x80091A1D;\n"
                 "D_80091A1E = 0x80091A1E;\n"
-                "D_80091A1F = 0x80091A1F;\n"
+                "g_FontSelectionSelectedSlot = 0x80091A1F;\n"
                 "D_80091A20 = 0x80091A20;\n"
                 "D_80091A28 = 0x80091A28;\n"
-                "D_8009EE22 = 0x8009EE22;\n"
+                "g_FontGlyphCodeSequence = 0x8009EE22;\n"
                 "D_8009ECD8 = 0x8009ECD8;\n"
                 "D_800B0DD8 = 0x800B0DD8;\n"
                 "D_800B0E6C = 0x800B0E6C;\n"

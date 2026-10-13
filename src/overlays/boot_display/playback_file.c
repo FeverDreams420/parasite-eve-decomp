@@ -31,6 +31,6 @@ s32 BootDisplay_InitPlaybackFile(void) {
     D_80172CF4 = 0;
     D_80172CF8 = 0;
     D_80172CFA = 0;
-    D_80172D00 = D_80011610 + (((g_MainAssetLbaTbl[0] - D_80093166) << 11) + 0x34800);
+    D_80172D00 = g_CdLoadAreaBase + (((g_MainAssetLbaTbl[0] - g_BootDisplayDataLbaTbl) << 11) + 0x34800);
     return 0;
 }

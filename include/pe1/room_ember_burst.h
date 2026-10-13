@@ -67,7 +67,7 @@ extern u8 D_80199868[];
 /* Twisting ember particle (func_80198268): its glow track and the bent
  * trail renderer it draws the orbiting sparks with. */
 extern u8 D_80199890[];
-extern void func_800CF844(void *, void *, int, void *, int, int);
+extern void FieldFx_OffsetPointByAngles(void *, void *, int, void *, int, int);
 
 /* Fan sweep controller (func_80192A7C): attaches to the actor named by its
  * parameters, fans out sparks on a turning angle into its own pool and
@@ -101,15 +101,15 @@ extern void *D_80199900;
 extern RenderColor D_8018F1F0;
 extern GteShortVector D_801998F8;
 extern int func_80192718(int mode, RoomFanSweepSpark *spark);
-/* Main executable copy of the fan sweep spark (func_800D71B8). */
-extern void *D_800E21E8;
+/* Main executable copy of the fan sweep spark (FieldFx_FanSweepSpark). */
+extern void *g_FanSweepSparkTrailPool;
 extern RenderColor D_800C22D4;
-extern GteShortVector D_800E21E0;
-extern int func_800D71B8(int mode, RoomFanSweepSpark *spark);
-extern int func_800D70C0(int mode, s16 *position);
+extern GteShortVector g_FanSweepSparkAnchor;
+extern int FieldFx_FanSweepSpark(int mode, RoomFanSweepSpark *spark);
+extern int FieldFx_EmberSpark(int mode, s16 *position);
 
-/* Main executable fan sweep controller (func_800D751C) and the glowing
- * anchor drawn under it (func_800D7764). */
+/* Main executable fan sweep controller (FieldFx_FanSweep) and the glowing
+ * anchor drawn under it (FieldFx_FanSweepGlow). */
 typedef struct FieldFanSweep {
     s32 angle;                    /* 0x00 */
     void *pool;                   /* 0x04 */
@@ -126,9 +126,9 @@ typedef struct FieldFanSweepEvent {
     s16 stage;                    /* 0x1E */
 } FieldFanSweepEvent;
 
-extern RenderColor D_800C22D8;
+extern RenderColor g_FieldFxFanSweepGlowTint;
 extern int func_80192620(int mode, s16 *position);
-extern int func_800CE688(void *pool);
+extern int FieldFx_UpdateCallbackList(void *pool);
 
 /* Spiral drop controller (func_80192ED4): attaches to the actor named by
  * its parameters and drops falling sparks from a point that circles it on
@@ -174,7 +174,7 @@ static inline void RoomEffect_AttachToActor(int subId, int typeId, void *anchor)
         if (actor != g_PlayerEntity && actor->state != 0 &&
             actor->state->control10.command_value > 0 &&
             actor->sub_id == subId && actor->type_id == typeId) {
-            func_800CE870((char *)actor, 0, (s16 *)anchor);
+            FieldFx_GetActorPosition((char *)actor, 0, (s16 *)anchor);
             return;
         }
     }

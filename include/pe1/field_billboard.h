@@ -7,7 +7,7 @@
 #include "pe1/projection_slot.h"
 #include "pe1/render_tint.h"
 
-/* Field engine billboard (func_800C3B04): a textured quad centred on a
+/* Field engine billboard (FieldFx_DrawBillboard): a textured quad centred on a
  * projected point, sized by the cell size, a 20.12 scale and the
  * perspective distance, optionally turned about the view axis. */
 
@@ -19,7 +19,7 @@ typedef union FieldBillboardScreen {
     } xy;
 } FieldBillboardScreen;
 
-/* Scratchpad work area published through D_800E284C. */
+/* Scratchpad work area published through g_FieldFxBillboardScratch. */
 typedef struct FieldBillboardScratch {
     /* 0x00 */ s32 p;
     /* 0x04 */ s32 flag;
@@ -42,7 +42,7 @@ typedef struct FieldBillboardScratch {
 
 #define FIELD_BILLBOARD_SCRATCH ((FieldBillboardScratch *)0x1F800000)
 
-extern FieldBillboardScratch *D_800E284C;
+extern FieldBillboardScratch *g_FieldFxBillboardScratch;
 
 typedef struct FieldBillboard {
     /* 0x00 */ GteShortVector position;
@@ -59,6 +59,6 @@ typedef struct FieldBillboard {
     /* 0x28 */ u16 brightness;
 } FieldBillboard;
 
-void func_800C3B04(FieldBillboard *board);
+void FieldFx_DrawBillboard(FieldBillboard *board);
 
 #endif

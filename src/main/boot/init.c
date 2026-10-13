@@ -30,7 +30,7 @@ s32 g_SceneFlagBits;
 s32 g_BattleControlFlags;
 s32 g_FieldRenderFlags;
 u32 g_FieldPadBits;
-u32 D_8009D2D4;
+u32 g_FieldPadBitsPrevious;
 
 /* Boot-time system initialization: Boot_InitSystem, the subsystem and global
  * reset it is followed by, the start-up display reset, the vsync callback and
@@ -177,7 +177,7 @@ void Boot_BuildRenderFlagTable(void) {
     entry = g_FieldRenderFlagTable;
     g_SceneFlagBits = 0;
     g_BattleControlFlags = 0;
-    D_8009D2D4 = 0;
+    g_FieldPadBitsPrevious = 0;
     g_FieldRenderFlags = 0;
     g_FieldPadBits = 0;
     do {
@@ -223,7 +223,7 @@ void Boot_StoreTableEntry(u32 mask, int value) {
 u32 D_8009D1F4;
 unsigned int D_8009D1E4;
 u32 D_8009D238;
-u32 D_8009D2A8;
+u32 g_PadComboProgress;
 
 int PadGetState();
 int PadInfoMode(int arg0, int mode, int index);
@@ -262,7 +262,7 @@ void Field_HandleStateTransition(void) {
         g_GameStateFlags = initial_flags | 0x4000;
     }
 
-    mode = D_800BE9A0 & 0xF000;
+    mode = g_PadPort1Buffer & 0xF000;
     if (!((mode != 0x4000) && (mode != 0x7000))) {
 
     if (g_GameStateFlags & 0x4000) {
@@ -270,13 +270,13 @@ void Field_HandleStateTransition(void) {
         if (mode == 2) {
             g_GameStateFlags = g_GameStateFlags & ~0x4000;
         } else if (mode == 1) {
-            PadSetAct(0, D_8009D1C0, 2);
+            PadSetAct(0, g_PadSetActBuffer, 2);
         } else if (mode == 6 && PadInfoMode(0, 2, 0) != 0) {
             if ((g_GameStateFlags & 0x8000) == 0) {
                 PadSetMainMode(0, 1, 0);
                 g_GameStateFlags = g_GameStateFlags | 0x8000;
             } else {
-                PadSetActAlign(0, D_800921F8);
+                PadSetActAlign(0, g_PadActuatorAlign);
                 g_GameStateFlags = g_GameStateFlags & ~0x4000;
             }
         }
@@ -303,9 +303,9 @@ void Field_HandleStateTransition(void) {
         base_bits = i;
         if (((u16)pad_bits & g_FieldRenderFlagTable[base_bits]) != 0) {
             g_FieldPadBits |= 1u << base_bits;
-            D_800A7770[base_bits]++;
+            g_FieldPadHeldFrameCounts[base_bits]++;
         } else {
-            D_800A7770[base_bits] = 0;
+            g_FieldPadHeldFrameCounts[base_bits] = 0;
         }
     }
 
@@ -313,24 +313,24 @@ void Field_HandleStateTransition(void) {
     if ((flags & 1) != 0) {
         active_pad = g_FieldPadBits;
         if ((int)active_pad < 0) {
-            mask = ((active_pad ^ D_8009D2D4) & active_pad) & 0x7000007E;
+            mask = ((active_pad ^ g_FieldPadBitsPrevious) & active_pad) & 0x7000007E;
             if (mask != 0) {
-                sequence_mask = D_80092200[D_8009D2A8];
+                sequence_mask = g_PadComboSequence[g_PadComboProgress];
                 if ((mask & sequence_mask) == sequence_mask) {
-                    D_8009D2A8++;
-                    if (D_8009D2A8 == 9) {
+                    g_PadComboProgress++;
+                    if (g_PadComboProgress == 9) {
                         g_SceneDispatchToken = 0xAA108448;
                         g_GameStateFlags = flags | 0x12000;
                     }
                 } else {
-                    D_8009D2A8 = 0;
+                    g_PadComboProgress = 0;
                 }
             }
         } else {
-            D_8009D2A8 = 0;
+            g_PadComboProgress = 0;
         }
         save_pad = g_FieldPadBits;
-        D_8009D2D4 = save_pad;
+        g_FieldPadBitsPrevious = save_pad;
     }
 
     menu_open = g_GameState.flags;
@@ -356,7 +356,7 @@ void Field_HandleStateTransition(void) {
         g_FieldPadBits &= 0x7FFFFFFF;
     }
 
-    if ((D_800BE9A0 & 0xF000) == 0x7000) {
+    if ((g_PadPort1Buffer & 0xF000) == 0x7000) {
         g_FieldPadBits &= ~0x79;
         menu_open = MenuWidget_FindByModeAndSelectedBase(1, 0) != 0;
 

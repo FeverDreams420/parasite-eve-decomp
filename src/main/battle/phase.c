@@ -29,15 +29,15 @@ int Battle_StepCharacterAction(BattleInitSlot *slot);
 
 /* COMMON supplies the small-data sizes of the turn queue words to MASPSX;
  * every other word stays absolute. */
-u8 D_8009CE38[4];
+u8 g_BattleActionAnimModes[4];
 u8 D_8009CE39;
 u8 D_8009CE3A;
 u8 D_8009CE3B;
 u8 g_BattleActionQueueCount;
 u8 g_BattleActionIndex;
 s32 D_8009D208;
-s32 D_8009D258;
-s16 D_8009D27C;
+s32 g_BattleEffectPmSlot;
+s16 g_BattlePlayerAimHeight;
 
 
 
@@ -105,12 +105,12 @@ void Battle_AdvancePhase(void) {
 
     var_a0 = D_8009D2A0;
     temp_a2 = g_BattleActionIndex;
-    temp_s2 = &D_800BE830[temp_a2 & 0xFF];
+    temp_s2 = &g_BattleActionQueue[temp_a2 & 0xFF];
     if (var_a0 == 0) {
         var_s0 = temp_a2;
         if ((temp_a2 & 0xFF) < g_BattleActionQueueCount) {
             do {
-                temp_a0 = (u16)D_800BE830[var_s0 & 0xFF].command;
+                temp_a0 = (u16)g_BattleActionQueue[var_s0 & 0xFF].command;
                 if (temp_a0 - 3U < 0x180U) {
                     Inv_AddItem((s16) temp_a0 - 3);
                 }
@@ -125,7 +125,7 @@ void Battle_AdvancePhase(void) {
     if (g_ActiveActor->stateFlags & 0x200000) {
         sp18 = D_8001074C;
         copy_dst = (u8 *)sp30.soundId;
-        copy_src = (const u8 *)D_80010760.soundId;
+        copy_src = (const u8 *)g_BattleActionSoundIds.soundId;
         copy_end = copy_src + 0x20;
         {
             CopyAddress dst;
@@ -170,14 +170,14 @@ after_command:
 
             D_8009D254->facingAngle = temp_v0;
             targetFound = 0;
-            if (D_800BE830[firstSlot].command - 0x183 == 0x13) {
+            if (g_BattleActionQueue[firstSlot].command - 0x183 == 0x13) {
                 var_a2 = NULL;
                 var_s0 = var_a0_2;
                 lastSlot = firstSlot + 7;
                 if (firstSlot < lastSlot) {
                     loop_limit.value = lastSlot;
                     do {
-                        temp_v1_2 = D_800BE830[var_s0 & 0xFF].actor;
+                        temp_v1_2 = g_BattleActionQueue[var_s0 & 0xFF].actor;
                         if ((temp_v1_2 == NULL) || (((EnemyCombatant *)temp_v1_2->core)->hpAlive <= 0) || (*(s32 *)&temp_v1_2->entityFlags & 0x4000)) {
                             var_s0 += 1;
                         } else {
@@ -193,7 +193,7 @@ block_search_done:
                 {
                     BattleInitSlotAddress at;
 
-                    at.slot = D_800BE830;
+                    at.slot = g_BattleActionQueue;
                     at.address = temp_v1_3 + at.address;
                     temp_v1_3 = (u16)at.slot->command;
                 }
@@ -214,9 +214,9 @@ block_search_done:
                     if (temp_v1_3 < var_a0_2) {
                         var_a1 = var_a0_2;
                         do {
-                            queuedActor = D_800BE830[temp_v1_3].actor;
+                            queuedActor = g_BattleActionQueue[temp_v1_3].actor;
                             if ((((EnemyCombatant *)queuedActor->core)->hpAlive <= 0) || (queuedActor == NULL)) {
-                                D_800BE830[temp_v1_3].actor = var_a2;
+                                g_BattleActionQueue[temp_v1_3].actor = var_a2;
                             }
                             var_s0 += 1;
                             temp_v1_3 = var_s0 & 0xFF;
@@ -226,7 +226,7 @@ block_search_done:
             }
             else
             {
-            temp_v1_6 = D_800BE830[firstSlot].actor;
+            temp_v1_6 = g_BattleActionQueue[firstSlot].actor;
             if ((temp_v1_6 == NULL) || (((EnemyCombatant *)temp_v1_6->core)->hpAlive <= 0) || (*(s32 *)&temp_v1_6->entityFlags & 0x4000)) {
                 var_v0_3 = g_BattleActionIndex + 1;
 block_35:
@@ -235,7 +235,7 @@ block_35:
                 {
                     BattleInitSlotAddress at;
 
-                    at.slot = D_800BE830;
+                    at.slot = g_BattleActionQueue;
                     at.address = temp_v1_3 + at.address;
                     temp_v1_3 = (u16)at.slot->command;
                 }
@@ -261,7 +261,7 @@ block_39:
             }
             g_ActiveActor->stateFlags |= 0x100000;
             attackTarget = temp_s2->actor;
-            temp_s0 = attackTarget->renderObject.target_y - D_8009D27C;
+            temp_s0 = attackTarget->renderObject.target_y - g_BattlePlayerAimHeight;
             temp_v0_2 = ratan2(temp_s0, Battle_CalcDistToPlayer(attackTarget, ((void *)D_8009D254)));
             if (temp_v0_2 < -0xAB) {
                 var_v1 = 0;
@@ -277,14 +277,14 @@ block_39:
                 *stateFlags &= 0xFFDFFFFF;
             }
             D_8009CE39 = 0x58;
-            D_8009CE38[0] = 0;
+            g_BattleActionAnimModes[0] = 0;
             D_8009CE3A = 0x18;
             D_8009CE3B = 0;
         } else {
             Entity_SetActionMode(((void *)D_8009D254), 0xFU);
         }
         if (action != 0x13) {
-            D_8009D258 = Scene_LoadRoomAssets(sp18.bytes[action], temp_s2->actor);
+            g_BattleEffectPmSlot = Scene_LoadRoomAssets(sp18.bytes[action], temp_s2->actor);
         }
         if ((action - 7U < 2U) || (action == 0xA)) {
             soundActor = temp_s2->actor;
@@ -320,7 +320,7 @@ block_55:
             var_a2_2 = var_s0_4 & 0xFF;
             if (var_a2_2 < end_slot) {
                 do {
-                    facingTarget = D_800BE830[var_a2_2].actor;
+                    facingTarget = g_BattleActionQueue[var_a2_2].actor;
                     if (facingTarget != ((void *)D_8009D254)) {
                         Battle_UpdateEntityFacing(facingTarget);
                     }
@@ -352,7 +352,7 @@ block_55:
         temp_v0 = Battle_CalcAngleToTarget(&temp_s2->actor->renderObject, ((void *)D_8009D254) + 0x28);
         D_8009D254->facingAngle = temp_v0;
         Battle_StepCharacterAction(temp_s2);
-        if (g_PmSlotTable[D_8009D258].header.state - 1U >= 2U) {
+        if (g_PmSlotTable[g_BattleEffectPmSlot].header.state - 1U >= 2U) {
             var_a2_2 = 0xFFEFFFFF;
             temp_a0_3 = -0x101;
             cleanupActor = g_ActiveActor;
@@ -372,15 +372,15 @@ block_55:
         if (D_8009D254->animLastFrame == D_8009D254->animPrev.parts.integer) {
             Entity_SetActionMode(((void *)D_8009D254), actor->actionMode12);
         }
-        if (((g_PmSlotTable[D_8009D258].header.state - 1U >= 2U) || (temp_s2->command == 0x196)) && (g_ActiveActor->stateFlags |= 0x200000, Battle_ApplySpellEffect(temp_s2->command - 0x183, temp_s2->actor), (temp_s2->command != 0x196))) {
+        if (((g_PmSlotTable[g_BattleEffectPmSlot].header.state - 1U >= 2U) || (temp_s2->command == 0x196)) && (g_ActiveActor->stateFlags |= 0x200000, Battle_ApplySpellEffect(temp_s2->command - 0x183, temp_s2->actor), (temp_s2->command != 0x196))) {
             temp_v0_6 = g_BattleActionIndex + 1;
             g_BattleActionIndex = temp_v0_6;
-            if (((u16)D_800BE830[temp_v0_6 & 0xFF].command - 3U >= 0x194U) || (D_8009D254->actionMode < 4U)) {
+            if (((u16)g_BattleActionQueue[temp_v0_6 & 0xFF].command - 3U >= 0x194U) || (D_8009D254->actionMode < 4U)) {
                 g_GameStateFlags = g_GameStateFlags & ~0x100;
             }
             temp_a0_4 = g_BattleActionQueueCount;
             for (var_s0_4 = g_BattleActionIndex; (var_s0_4 & 0xFFU) < (unsigned)temp_a0_4; var_s0_4++) {
-                if ((u16)D_800BE830[var_s0_4 & 0xFF].command - 1U < 2U) {
+                if ((u16)g_BattleActionQueue[var_s0_4 & 0xFF].command - 1U < 2U) {
                     Battle_DispatchEntityEffect();
                     return;
                 }

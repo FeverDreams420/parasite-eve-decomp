@@ -16,7 +16,7 @@ extern int g_DrawBlendColor;
 extern int g_SavedDrawBlendColor[];
 extern int g_DrawScratchBuffer[];
 extern u16 *g_DrawVertexWritePtr;
-extern u8 D_800930A8[];
+extern u8 g_WipeRectEdgeList[];
 
 /* A packet in the 16 KiB packet arena, or an ordering-table link word. */
 typedef union DrawPacketAddress {

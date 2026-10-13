@@ -16,7 +16,7 @@ class Room350AnimationRepeatTests(unittest.TestCase):
     def test_repeat_and_completion_transitions(self):
         source = host_unit("func_80196E04", under=ROOM)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-FieldFxObjectPrefix *D_800F32D0;
+FieldFxObjectPrefix *g_FieldFxOwner;
 short D_8019A828;
 unsigned char D_8019A82E, D_8019A82F, D_8019A830;
 int main(void) {
@@ -30,7 +30,7 @@ int main(void) {
     Actor actor;
     unsigned char actorState;
     int e, a, s, n, f, l, c;
-    D_800F32D0 = (FieldFxObjectPrefix *)slots;
+    g_FieldFxOwner = (FieldFxObjectPrefix *)slots;
     memset(&actor, 0, sizeof(actor));
     actor.state = &actorState;
     for (e = 0; e < 4; ++e) for (a = 0; a < 2; ++a)

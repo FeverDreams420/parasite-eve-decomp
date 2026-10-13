@@ -12,16 +12,16 @@
 /* hardware: SPU voice control registers (key on, key off, FM, noise,
  * reverb), written as halfword pairs by the AKAO driver
  * (akao/voice_driver, include/pe1/akao/spu_registers.h). */
-D_1F801D88 = 0x1F801D88;
-D_1F801D8A = 0x1F801D8A;
-D_1F801D8C = 0x1F801D8C;
-D_1F801D8E = 0x1F801D8E;
-D_1F801D90 = 0x1F801D90;
-D_1F801D92 = 0x1F801D92;
-D_1F801D94 = 0x1F801D94;
-D_1F801D96 = 0x1F801D96;
-D_1F801D98 = 0x1F801D98;
-D_1F801D9A = 0x1F801D9A;
+g_SpuKeyOnLow = 0x1F801D88;
+g_SpuKeyOnHigh = 0x1F801D8A;
+g_SpuKeyOffLow = 0x1F801D8C;
+g_SpuKeyOffHigh = 0x1F801D8E;
+g_SpuPitchModLow = 0x1F801D90;
+g_SpuFmEnableHigh = 0x1F801D92;
+g_SpuNoiseEnableLow = 0x1F801D94;
+g_SpuNoiseEnableHigh = 0x1F801D96;
+g_SpuReverbEnableLow = 0x1F801D98;
+g_SpuReverbEnableHigh = 0x1F801D9A;
 
 /* kernel: LIBCARD's wait patch (psyq/libcard/patch_2, patch_3). The BIOS
  * keeps the patch continuation at 0xDFFC, and the installed patch runs from
@@ -58,7 +58,7 @@ D_8009D14C = g_DrawBlendColor;
 D_800A76A0 = g_GameTimers;
 D_800A76A4 = g_GameTimeTable;
 D_800A76BC = g_PlayTimeSeconds;
-D_800A77F0 = g_EntityWorkBuffer;
+g_ScriptVariableBank = g_EntityWorkBuffer;
 D_800B0CD8 = g_GameState;
 D_800B0CE2 = g_SceneAreaType;
 D_800B0DBA = g_DrawEnabled;
@@ -80,10 +80,10 @@ D_800BCF88 = g_RenderStateFlags;
 D_800BCFEA = g_ScreenTransitionTargetY;
 D_800BCFF2 = g_ScreenTransitionStartY;
 D_800BD024 = g_GeomOtZ;
-D_800BE9A0 = g_AnalogStickState;
+g_PadPort1Buffer = g_AnalogStickState;
 D_800C0D90 = g_AkaoSpuCommonAttr;
-D_800C0E00 = g_AyaSaveTotalExp;
-D_800C0E20 = g_AyaEquippedWeaponSlot;
+g_AyaSaveState = g_AyaSaveTotalExp;
+g_InventoryRuntime = g_AyaEquippedWeaponSlot;
 g_CdRingBufPtr = StRingAddr;
 g_EquippedWeaponSlot = g_AyaEquippedWeaponSlot;
 g_EquippedArmorSlot = g_AyaEquippedArmorSlot;

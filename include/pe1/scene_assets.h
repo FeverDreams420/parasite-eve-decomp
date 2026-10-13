@@ -241,7 +241,7 @@ int CdRom_FindNextDataSector(void);
 
 int Asset_UnloadTableEntries(void);
 int Draw_LoadTimAsset(TimUploadRecord *record, void *base);
-extern u16 D_800930E2, D_800930E4;
+extern u16 D_800930E2, g_PeImageTimTexturesEndSector;
 
 /* Scene voice-bank entries: actor animation key and two voice ids; the
  * game-state initializer clears both ids. */
@@ -252,7 +252,7 @@ typedef struct AkaoVoiceBankEntry {
     u8 frame;
     u16 ids[2];
 } AkaoVoiceBankEntry;
-extern AkaoVoiceBankEntry D_80094488[];
+extern AkaoVoiceBankEntry g_AkaoVoiceBankEntries[];
 void *Asset_FindTable2CByU16Key(char *base, int key);
 void *Asset_FindTable30ByU16Key(char *base, int key);
 void Akao_LoadVoiceBankAlt(void);

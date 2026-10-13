@@ -42,27 +42,27 @@ RoomM273BossState D_8019AE9C;
 static RoomM273PoolContext context;
 static RoomM273EffectStateContext stateContext;
 static State state,replacement;
-FieldFxTaskSlot *D_800F33E0=(FieldFxTaskSlot *)&context;
-FieldFxObjectPrefix *D_800F32D0=(FieldFxObjectPrefix *)&stateContext;
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&context;
+FieldFxObjectPrefix *g_FieldFxOwner=(FieldFxObjectPrefix *)&stateContext;
 static unsigned char primary[64],otherPrimary[64],secondary[64],otherSecondary[64];
 void *D_8019AE80=secondary;
-unsigned short D_800E11FA,D_800E2850[8];
-RenderEffectParameters D_800F3368;
+unsigned short g_FieldFxTpageSlot11,g_FieldFxTpageTable[8];
+RenderEffectParameters g_FieldFxSpriteParams;
 static Vector *primaryLinks[2],*secondaryLinks[2];
 static int init,attempts,aux,updates,renders,failPrimary,failSecondary;
 int func_8019A398(void) { assert(0); return 0; }
 int func_8019A4CC(void) { assert(0); return 0; }
-int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
+int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(init++==0 && p==(char *)primary && stride==4 && count==6 &&
            callback==(FieldFxCallbackListCallback)func_8019A398);
     return 48;
 }
-int func_800CE5AC(void *p,int offset,int stride,int count,void *callback) {
+int FieldFx_AllocCallbackList(void *p,int offset,int stride,int count,void *callback) {
     assert(init++==1 && p==&D_8019AE80 && offset==48 && stride==4 && count==6 &&
            callback==(void *)func_8019A4CC);
     *(void **)p=secondary; return 32;
 }
-void *func_800CE610(char *p) {
+void *FieldFx_AcquireCallbackSlot(char *p) {
     int n;
     if(p==primary || p==otherPrimary) {
         n=attempts++;
@@ -77,10 +77,10 @@ void *func_800CE610(char *p) {
     D_8019AE80=otherSecondary;
     return n==failSecondary ? 0:&secondaryLinks[n];
 }
-int func_800CE688(void *p) { assert(p==D_8019AE80 && updates++==0); return 0; }
-int func_800CE78C(char *p) {
+int FieldFx_UpdateCallbackList(void *p) { assert(p==D_8019AE80 && updates++==0); return 0; }
+int FieldFx_DrawCallbackList(char *p) {
     assert(p==D_8019AE80 && renders++==0);
-    D_800E11FA=3; D_800E2850[3]=0xFEDC;
+    g_FieldFxTpageSlot11=3; g_FieldFxTpageTable[3]=0xFEDC;
     return 0;
 }
 int main(void) {
@@ -107,10 +107,10 @@ int main(void) {
             }
         }
     for(s=0;s<3;++s) {
-        D_8019AE9C.done=stops[s]; renders=0; D_800E11FA=0; D_800E2850[0]=0;
+        D_8019AE9C.done=stops[s]; renders=0; g_FieldFxTpageSlot11=0; g_FieldFxTpageTable[0]=0;
         assert(func_801960F4(2)==0 && renders==1);
-        assert(D_800F3368.parameter00==32 && D_800F3368.parameter02==2 && D_800F3368.extent_x==32 && D_800F3368.extent_y==32);
-        assert(D_800F3368.palette==3 && D_800F3368.parameter06==1 && D_800F3368.parameter0A==0 && D_800F3368.depth==0 && D_800F3368.tpage==0xFEDC);
+        assert(g_FieldFxSpriteParams.parameter00==32 && g_FieldFxSpriteParams.parameter02==2 && g_FieldFxSpriteParams.extent_x==32 && g_FieldFxSpriteParams.extent_y==32);
+        assert(g_FieldFxSpriteParams.palette==3 && g_FieldFxSpriteParams.parameter06==1 && g_FieldFxSpriteParams.parameter0A==0 && g_FieldFxSpriteParams.depth==0 && g_FieldFxSpriteParams.tpage==0xFEDC);
     }
     attempts=updates=renders=0;
     assert(func_801960F4(-1)==0 && func_801960F4(3)==0);

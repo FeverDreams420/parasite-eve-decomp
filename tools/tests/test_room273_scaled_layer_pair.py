@@ -31,14 +31,14 @@ typedef char layout[sizeof(Vector)==8 && sizeof(Effect)==12 && sizeof(int)==4 &&
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_behavior(self):
         source = '#include <assert.h>\n#include <string.h>\n#include <limits.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
-int D_800E27EC;
-GteSineWord D_800966EC[4096];
+int g_FieldFxCurrentAge;
+GteSineWord rcossin_tbl[4096];
 RoomFloorY g_RoomFloorY[1];
 unsigned char D_8019AB70[4];
 static Effect input,original;
 static Vector *savedPosition,*savedRotation;
 static int calls,frame,wantedSize,wantedShade;
-void func_800D004C(struct GteShortVector *p,int w,int h,int count,struct GteRotation *rotation,int sx,int sy,
+void FieldFx_DrawStarFan(struct GteShortVector *p,int w,int h,int count,struct GteRotation *rotation,int sx,int sy,
                   struct RenderColor *a,struct RenderColor *b,int shade,int flag) {
     Vector *r=(Vector *)rotation;
     assert(w==128 && h==128 && count==12 && flag==1);
@@ -52,8 +52,8 @@ void func_800D004C(struct GteShortVector *p,int w,int h,int count,struct GteRota
         p->x=21; p->y=22; p->z=23; p->pad=24;
         r->x=31; r->y=32; r->z=33; r->pad=34;
         g_RoomFloorY->raw=0x8123;
-        D_800E27EC=7;
-        memset(D_800966EC,0x55,sizeof(D_800966EC));
+        g_FieldFxCurrentAge=7;
+        memset(rcossin_tbl,0x55,sizeof(rcossin_tbl));
         wantedSize=(short)(wantedSize*3/2); wantedShade>>=1;
     } else {
         assert(calls==2 && p==savedPosition && r==savedRotation);
@@ -71,10 +71,10 @@ int main(void) {
     for(i=0;i<9;++i) for(j=0;j<8;++j) for(k=0;k<7;++k) for(l=0;l<7;++l) {
         unsigned int bits=((unsigned int)(unsigned short)highs[k]<<16)|(unsigned short)lows[j];
         int index;
-        D_800E27EC=counters[i]; frame=(short)(counters[i]-1);
+        g_FieldFxCurrentAge=counters[i]; frame=(short)(counters[i]-1);
         index=(((unsigned int)frame<<9)&0x3E00)/4;
-        memset(D_800966EC,0,sizeof(D_800966EC));
-        memcpy((char *)D_800966EC + index * 4,&bits,4);
+        memset(rcossin_tbl,0,sizeof(rcossin_tbl));
+        memcpy((char *)rcossin_tbl + index * 4,&bits,4);
         memset(&input,0xA5,sizeof(input));
         input.position.x=-32768; input.position.y=32767; input.position.z=-1;
         input.position.pad=scales[l]; original=input;
@@ -85,9 +85,9 @@ int main(void) {
         assert(memcmp(&input,&original,sizeof(input))==0);
     }
     calls=0;
-    for(i=-2;i<=9;++i) { D_800E27EC=i; assert(func_8019353C(1,0)==(i>=8)); }
-    D_800E27EC=INT_MIN; assert(func_8019353C(1,0)==0);
-    D_800E27EC=INT_MAX; assert(func_8019353C(1,0)==1);
+    for(i=-2;i<=9;++i) { g_FieldFxCurrentAge=i; assert(func_8019353C(1,0)==(i>=8)); }
+    g_FieldFxCurrentAge=INT_MIN; assert(func_8019353C(1,0)==0);
+    g_FieldFxCurrentAge=INT_MAX; assert(func_8019353C(1,0)==1);
     assert(func_8019353C(0,0)==0 && func_8019353C(3,0)==0);
     assert(func_8019353C(INT_MIN,0)==0 && func_8019353C(INT_MAX,0)==0 && calls==0);
     return 0;

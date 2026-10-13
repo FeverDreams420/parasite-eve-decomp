@@ -23,7 +23,7 @@ void Gpu_RestoreDmaCallback(void);
 
 int LoadImage2(RECT *rect, unsigned int *data)
 {
-    checkRECT(D_800119BC, rect);
+    checkRECT(g_LoadImage2Name, rect);
     g_GpuDmaTimeoutDeadline = VSync(-1) + 240;
     g_GpuDmaWaitLoopCounter = 0;
     /* Read GPU readiness only after the volatile DMA status reports idle. */
@@ -37,7 +37,7 @@ int LoadImage2(RECT *rect, unsigned int *data)
 
 int StoreImage2(RECT *rect, unsigned int *data)
 {
-    checkRECT(D_800118E0, rect);
+    checkRECT(g_StoreImageName, rect);
     g_GpuDmaTimeoutDeadline = VSync(-1) + 240;
     g_GpuDmaWaitLoopCounter = 0;
     /* Read GPU readiness only after the volatile DMA status reports idle. */
@@ -51,7 +51,7 @@ int StoreImage2(RECT *rect, unsigned int *data)
 
 int MoveImage2(RECT *rect, int x, int y)
 {
-    checkRECT(D_800118EC, rect);
+    checkRECT(g_MoveImageName, rect);
     g_GpuDmaTimeoutDeadline = VSync(-1) + 240;
     g_GpuDmaWaitLoopCounter = 0;
     /* Read GPU readiness only after the volatile DMA status reports idle. */
@@ -60,16 +60,16 @@ int MoveImage2(RECT *rect, int x, int y)
     }
     DMACallback(2, Gpu_RestoreDmaCallback);
     if (!rect->w || !rect->h) return -1;
-    D_800957EC[0] = *(unsigned int *)&rect->x;
-    D_800957EC[1] = ((unsigned int)y << 16) | (x & 0xFFFF);
-    D_800957EC[2] = *(unsigned int *)&rect->w;
-    g_GpuCallbacks->u18.moveImage((char *)D_800957EC - 8);
+    g_GpuMoveImagePacket[0] = *(unsigned int *)&rect->x;
+    g_GpuMoveImagePacket[1] = ((unsigned int)y << 16) | (x & 0xFFFF);
+    g_GpuMoveImagePacket[2] = *(unsigned int *)&rect->w;
+    g_GpuCallbacks->u18.moveImage((char *)g_GpuMoveImagePacket - 8);
     return 0;
 }
 
 int DrawOTag2(void *packet)
 {
-    if (D_8009574C.queueState.debugLevel >= 2) g_GpuDebugPrintf(D_80011928, packet);
+    if (g_GpuSystemState.queueState.debugLevel >= 2) g_GpuDebugPrintf(g_DrawOTagFormat, packet);
     g_GpuDmaTimeoutDeadline = VSync(-1) + 240;
     g_GpuDmaWaitLoopCounter = 0;
     /* Read GPU readiness only after the volatile DMA status reports idle. */

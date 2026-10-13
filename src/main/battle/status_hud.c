@@ -25,7 +25,7 @@
 s32 g_BattleStatusPanelSlot;
 u8 g_BattleSpritePrimCountdown;
 u8 g_MenuActiveMode;
-u16 D_8009CE84;
+u16 g_MenuActiveWindowXOffset;
 int g_BattleAttackAnimFrame;
 
 void Draw_InitDrawModeSprtPacket(void *, int);
@@ -230,16 +230,16 @@ void Battle_DrawHPBar(void) {
             BATTLE_STATUS_TILES[bufferIndex][tileIndex].g0 = shade;
             BATTLE_STATUS_TILES[bufferIndex][tileIndex].b0 = shade;
         }
-        Draw_InitDrawModeSprtPacket(&D_8009E460[bufferIndex], hudPage);
-        upperLine = &D_8009E498[bufferIndex][0];
-        pointerSprite = &D_8009E460[bufferIndex].sprite;
+        Draw_InitDrawModeSprtPacket(&g_BattleStatusPointerSprites[bufferIndex], hudPage);
+        upperLine = &g_BattleStatusPointerLines[bufferIndex][0];
+        pointerSprite = &g_BattleStatusPointerSprites[bufferIndex].sprite;
         pointerSprite->u = 0xE8;
         pointerSprite->v = 0xE0;
-        D_8009E460[bufferIndex].sprite.clut = hudClut;
+        g_BattleStatusPointerSprites[bufferIndex].sprite.clut = hudClut;
         pointerSprite->width = 0x18;
         pointerSprite->height = 0x18;
         SetLineF2(upperLine);
-        lowerLine = &D_8009E498[bufferIndex][1];
+        lowerLine = &g_BattleStatusPointerLines[bufferIndex][1];
         SetLineF2(lowerLine);
         upperLine->r = 0xE0;
         upperLine->g = 0xE0;
@@ -247,13 +247,13 @@ void Battle_DrawHPBar(void) {
         lowerLine->r = 0x60;
         lowerLine->g = 0x60;
         lowerLine->b = 0x60;
-        SetPolyF3(&D_8009E4D8[bufferIndex]);
+        SetPolyF3(&g_BattleStatusPointerTriangles[bufferIndex]);
         for (i = 0; (u8)i < 3; i++) {
-            Draw_InitDrawModeSprtPacket(&D_8009E3B8[bufferIndex][(u8)i], hudPage);
-            D_8009E3B8[bufferIndex][(u8)i].sprite.clut = hudClut;
-            BATTLE_SPRITE_SLOTS(D_8009E3B8, 3)[bufferIndex][(u8)i].sprite.width = 0x18;
-            BATTLE_SPRITE_SLOTS(D_8009E3B8, 3)[bufferIndex][(u8)i].sprite.height = 8;
-            BATTLE_SET_SPRITE_COLOR(BATTLE_SPRITE_SLOTS(D_8009E3B8, 3)[bufferIndex][(u8)i].sprite,
+            Draw_InitDrawModeSprtPacket(&g_BattleTargetHighlightSprites[bufferIndex][(u8)i], hudPage);
+            g_BattleTargetHighlightSprites[bufferIndex][(u8)i].sprite.clut = hudClut;
+            BATTLE_SPRITE_SLOTS(g_BattleTargetHighlightSprites, 3)[bufferIndex][(u8)i].sprite.width = 0x18;
+            BATTLE_SPRITE_SLOTS(g_BattleTargetHighlightSprites, 3)[bufferIndex][(u8)i].sprite.height = 8;
+            BATTLE_SET_SPRITE_COLOR(BATTLE_SPRITE_SLOTS(g_BattleTargetHighlightSprites, 3)[bufferIndex][(u8)i].sprite,
                                     0x80, 0x80, 0x80);
         }
         for (i = 0; (u8)i < 10; i++) {
@@ -270,11 +270,11 @@ void Battle_DrawHPBar(void) {
         ammoLabel->height = 5;
         BATTLE_SET_SPRITE_COLOR(*ammoLabel, 0x80, 0x80, 0x80);
         for (i = 0; (u8)i < 4; i++) {
-            Draw_InitDrawModeSprtPacket(&D_8009E7A0[bufferIndex][(u8)i], hudPage);
-            D_8009E7A0[bufferIndex][(u8)i].sprite.clut = hudClut;
-            BATTLE_SPRITE_SLOTS(D_8009E7A0, 4)[bufferIndex][(u8)i].sprite.width = 6;
-            BATTLE_SPRITE_SLOTS(D_8009E7A0, 4)[bufferIndex][(u8)i].sprite.height = 6;
-            BATTLE_SET_SPRITE_COLOR(BATTLE_SPRITE_SLOTS(D_8009E7A0, 4)[bufferIndex][(u8)i].sprite,
+            Draw_InitDrawModeSprtPacket(&g_BattleAmmoDigitSprites[bufferIndex][(u8)i], hudPage);
+            g_BattleAmmoDigitSprites[bufferIndex][(u8)i].sprite.clut = hudClut;
+            BATTLE_SPRITE_SLOTS(g_BattleAmmoDigitSprites, 4)[bufferIndex][(u8)i].sprite.width = 6;
+            BATTLE_SPRITE_SLOTS(g_BattleAmmoDigitSprites, 4)[bufferIndex][(u8)i].sprite.height = 6;
+            BATTLE_SET_SPRITE_COLOR(BATTLE_SPRITE_SLOTS(g_BattleAmmoDigitSprites, 4)[bufferIndex][(u8)i].sprite,
                                     0x80, 0x80, 0x80);
         }
         Draw_InitDrawModeSprtPacket(&D_8009E730[bufferIndex], hudPage);
@@ -285,23 +285,23 @@ void Battle_DrawHPBar(void) {
         statusIcon->width = 0x18;
         statusIcon->height = 4;
         BATTLE_SET_SPRITE_COLOR(*statusIcon, 0x80, 0x80, 0x80);
-        Draw_InitDrawModeSprtPacket(&D_8009E880[bufferIndex], hudPage);
-        ammoIcon = &D_8009E880[bufferIndex].sprite;
+        Draw_InitDrawModeSprtPacket(&g_BattleStatusValueMarkers[bufferIndex], hudPage);
+        ammoIcon = &g_BattleStatusValueMarkers[bufferIndex].sprite;
         ammoIcon->u = 0x7C;
         ammoIcon->v = 0xEF;
-        D_8009E880[bufferIndex].sprite.clut = hudClut;
+        g_BattleStatusValueMarkers[bufferIndex].sprite.clut = hudClut;
         ammoIcon->width = 0x24;
         ammoIcon->height = 5;
         BATTLE_SET_SPRITE_COLOR(*ammoIcon, 0x80, 0x80, 0x80);
         for (i = 0; (u8)i < 2; i++) {
-            Draw_InitDrawModeSprtPacket(&D_8009E8B8[bufferIndex][(u8)i], hudPage);
-            D_8009E8B8[bufferIndex][(u8)i].sprite.clut = hudClut;
-            BATTLE_SPRITE_SLOTS(D_8009E8B8, 2)[bufferIndex][(u8)i].sprite.width = 6;
-            BATTLE_SPRITE_SLOTS(D_8009E8B8, 2)[bufferIndex][(u8)i].sprite.height = 6;
+            Draw_InitDrawModeSprtPacket(&g_BattleStatusValueDigits[bufferIndex][(u8)i], hudPage);
+            g_BattleStatusValueDigits[bufferIndex][(u8)i].sprite.clut = hudClut;
+            BATTLE_SPRITE_SLOTS(g_BattleStatusValueDigits, 2)[bufferIndex][(u8)i].sprite.width = 6;
+            BATTLE_SPRITE_SLOTS(g_BattleStatusValueDigits, 2)[bufferIndex][(u8)i].sprite.height = 6;
         }
-        Draw_InitDrawModeSprtPacket(&D_8009E928[bufferIndex], hudPage);
-        D_8009E928[bufferIndex].sprite.clut = hudClut;
-        weaponIcon = &D_8009E928[bufferIndex].sprite;
+        Draw_InitDrawModeSprtPacket(&g_BattleStatusSymbolSprites[bufferIndex], hudPage);
+        g_BattleStatusSymbolSprites[bufferIndex].sprite.clut = hudClut;
+        weaponIcon = &g_BattleStatusSymbolSprites[bufferIndex].sprite;
         BATTLE_SET_SPRITE_COLOR(*weaponIcon, 0x80, 0x80, 0);
 
         for (i = 0; (u8)i < 13; i++) {
@@ -337,8 +337,8 @@ void Battle_DrawStatusOverlay(RenderObjectEntity *object, int mode, int outOfRan
         register int modeMinusOne asm("$2") = modeArg - 1;
         if ((u8)modeMinusOne < 2) {
             u32 slot = g_ActiveDrawSlot;
-            D_8009E358[slot * 3].x0 = 0x78;
-            D_8009E358[slot * 3].y0 = 0x68;
+            g_BattleStatusBarTiles[slot * 3].x0 = 0x78;
+            g_BattleStatusBarTiles[slot * 3].y0 = 0x68;
         } else {
             Battle_BuildStatusPrimHeader(object, (s8)outOfRange);
         }
@@ -366,8 +366,8 @@ void Battle_DrawStatusOverlay(RenderObjectEntity *object, int mode, int outOfRan
             slot = g_ActiveDrawSlot;
             packetOffset = slot * 28;
             packet = (RenderSpritePacket *)(packetBase + packetOffset);
-            packet->x = D_8009E358[slot * 3].x0 + 0x1C;
-            packet->y = D_8009E358[slot * 3].y0 + 8;
+            packet->x = g_BattleStatusBarTiles[slot * 3].x0 + 0x1C;
+            packet->y = g_BattleStatusBarTiles[slot * 3].y0 + 8;
             /* Keep this assignment at the call to preserve the original schedule. */
             AddPrim((unsigned int *)D_800B0E38.ordering[slot] + 4,
                     (unsigned int *)((packetTagBase = packetBase - 8) + packetOffset));
@@ -390,8 +390,8 @@ void Battle_DrawStatusOverlay(RenderObjectEntity *object, int mode, int outOfRan
         }
     } else {
         u32 slot = g_ActiveDrawSlot;
-        D_8009E358[slot * 3].x0 = 0x78;
-        D_8009E358[slot * 3].y0 = 0x6C;
+        g_BattleStatusBarTiles[slot * 3].x0 = 0x78;
+        g_BattleStatusBarTiles[slot * 3].y0 = 0x6C;
         Battle_LayoutStatusPrimRow(0x18);
         Battle_DrawStatusSymbol(8);
     }
@@ -404,8 +404,8 @@ void Battle_DrawStatusOverlay(RenderObjectEntity *object, int mode, int outOfRan
 
 /* Packets of the active draw slot. Every access re-reads the slot, which
  * retail does after each byte store. */
-#define STATUS_POINTER_SPRITE (&D_8009E460[g_ActiveDrawSlot].sprite)
-#define STATUS_POINTER_TRI (&D_8009E4D8[g_ActiveDrawSlot])
+#define STATUS_POINTER_SPRITE (&g_BattleStatusPointerSprites[g_ActiveDrawSlot].sprite)
+#define STATUS_POINTER_TRI (&g_BattleStatusPointerTriangles[g_ActiveDrawSlot])
 
 void Battle_BuildStatusPrimHeader(RenderObjectEntity *object, s8 outOfRange)
 {
@@ -460,47 +460,47 @@ void Battle_BuildStatusPrimHeader(RenderObjectEntity *object, s8 outOfRange)
         s16 panelX;
 
         x -= 8;
-        lines = D_8009E498[g_ActiveDrawSlot];
+        lines = g_BattleStatusPointerLines[g_ActiveDrawSlot];
         lines[1].x0 = x;
-        D_8009E498[g_ActiveDrawSlot][0].x0 = x;
+        g_BattleStatusPointerLines[g_ActiveDrawSlot][0].x0 = x;
         panelX = object->projected_target_x;
         lines[1].x1 = panelX - 35;
-        D_8009E498[g_ActiveDrawSlot][0].x1 = panelX - 35;
-        D_8009E358[g_ActiveDrawSlot * 3].x0 = panelX - 115;
+        g_BattleStatusPointerLines[g_ActiveDrawSlot][0].x1 = panelX - 35;
+        g_BattleStatusBarTiles[g_ActiveDrawSlot * 3].x0 = panelX - 115;
     } else {
         RenderLinePacket *lines;
         s16 lineX;
         s16 panelX;
 
         lineX = x + 8;
-        lines = D_8009E498[g_ActiveDrawSlot];
+        lines = g_BattleStatusPointerLines[g_ActiveDrawSlot];
         lines[1].x0 = lineX;
-        D_8009E498[g_ActiveDrawSlot][0].x0 = lineX;
+        g_BattleStatusPointerLines[g_ActiveDrawSlot][0].x0 = lineX;
         panelX = object->projected_target_x + 35;
-        D_8009E358[g_ActiveDrawSlot * 3].x0 = panelX;
+        g_BattleStatusBarTiles[g_ActiveDrawSlot * 3].x0 = panelX;
         lines[1].x1 = panelX;
-        D_8009E498[g_ActiveDrawSlot][0].x1 = panelX;
+        g_BattleStatusPointerLines[g_ActiveDrawSlot][0].x1 = panelX;
     }
     y = object->projected_target_y;
     if (y - 82 < 0) {
-        D_8009E498[g_ActiveDrawSlot][0].y0 = y + 8;
-        D_8009E498[g_ActiveDrawSlot][1].y0 = object->projected_target_y + 9;
-        D_8009E498[g_ActiveDrawSlot][0].y1 = D_8009E358[g_ActiveDrawSlot * 3].y0 =
+        g_BattleStatusPointerLines[g_ActiveDrawSlot][0].y0 = y + 8;
+        g_BattleStatusPointerLines[g_ActiveDrawSlot][1].y0 = object->projected_target_y + 9;
+        g_BattleStatusPointerLines[g_ActiveDrawSlot][0].y1 = g_BattleStatusBarTiles[g_ActiveDrawSlot * 3].y0 =
             object->projected_target_y + 35;
-        D_8009E498[g_ActiveDrawSlot][1].y1 = object->projected_target_y + 36;
+        g_BattleStatusPointerLines[g_ActiveDrawSlot][1].y1 = object->projected_target_y + 36;
     } else {
-        D_8009E498[g_ActiveDrawSlot][0].y0 = y - 8;
-        D_8009E498[g_ActiveDrawSlot][1].y0 = object->projected_target_y - 7;
-        D_8009E498[g_ActiveDrawSlot][0].y1 = D_8009E358[g_ActiveDrawSlot * 3].y0 =
+        g_BattleStatusPointerLines[g_ActiveDrawSlot][0].y0 = y - 8;
+        g_BattleStatusPointerLines[g_ActiveDrawSlot][1].y0 = object->projected_target_y - 7;
+        g_BattleStatusPointerLines[g_ActiveDrawSlot][0].y1 = g_BattleStatusBarTiles[g_ActiveDrawSlot * 3].y0 =
             object->projected_target_y - 35;
-        D_8009E498[g_ActiveDrawSlot][1].y1 = object->projected_target_y - 34;
+        g_BattleStatusPointerLines[g_ActiveDrawSlot][1].y1 = object->projected_target_y - 34;
     }
     AddPrim((unsigned int *)D_800B0E38.ordering[g_ActiveDrawSlot] + 7,
-            (unsigned int *)&D_8009E498[g_ActiveDrawSlot][1]);
+            (unsigned int *)&g_BattleStatusPointerLines[g_ActiveDrawSlot][1]);
     AddPrim((unsigned int *)D_800B0E38.ordering[g_ActiveDrawSlot] + 6,
-            (unsigned int *)&D_8009E498[g_ActiveDrawSlot][0]);
+            (unsigned int *)&g_BattleStatusPointerLines[g_ActiveDrawSlot][0]);
     AddPrim((unsigned int *)D_800B0E38.ordering[g_ActiveDrawSlot] + 5,
-            (unsigned int *)&D_8009E460[g_ActiveDrawSlot]);
+            (unsigned int *)&g_BattleStatusPointerSprites[g_ActiveDrawSlot]);
 }
 
 void Battle_LayoutStatusPrimRow(int bottomY)
@@ -514,14 +514,14 @@ void Battle_LayoutStatusPrimRow(int bottomY)
 
     savedBottomY = bottomY;
     row = 0;
-    bufferBase.line = D_8009E358;
+    bufferBase.line = g_BattleStatusBarTiles;
     orderingBase = D_800B0E38.ordering;
     do {
         slot = g_ActiveDrawSlot;
         line = (BattleStatusLinePrim *)
             (((slot * 3) << 4) + (row << 4) + bufferBase.address);
-        line->x0 = D_8009E358[slot * 3].x0 + row;
-        line->y0 = D_8009E358[slot * 3].y0 + row;
+        line->x0 = g_BattleStatusBarTiles[slot * 3].x0 + row;
+        line->y0 = g_BattleStatusBarTiles[slot * 3].y0 + row;
         line->x1 = 0x50 - (row * 2);
         line->y1 = (s8)savedBottomY - (row * 2);
         AddPrim(orderingBase[slot] + (7 - row),
@@ -555,7 +555,7 @@ void Battle_DrawTargetHighlight(void)
         return;
     }
     texture_v = 224;
-    base = &D_8009E3B8[0][0].sprite;
+    base = &g_BattleTargetHighlightSprites[0][0].sprite;
     packets = (BattleGaugePrim *)((char *)base - PE1_OFFSETOF(BattleGaugePrim, sprite));
     do {
         if (index == g_BattleActiveTurnSlot - 1) {
@@ -578,8 +578,8 @@ void Battle_DrawTargetHighlight(void)
             at.address = slot_offset + index_offset + at.address;
             sprite = at.sprite;
         }
-        sprite->x = D_8009E358[slot * 3].x0 + index * 24;
-        sprite->y = D_8009E358[slot * 3].y0 - 8;
+        sprite->x = g_BattleStatusBarTiles[slot * 3].x0 + index * 24;
+        sprite->y = g_BattleStatusBarTiles[slot * 3].y0 - 8;
         {
             BattleStatusPrimAddress at;
 
@@ -807,9 +807,9 @@ void Battle_DrawStatusSymbol(s8 which) {
     u8 *a, *b, *c;
     u8 *packetBase;
     u8 *thirdBase;
-    first.data = D_80010DFC;
-    second.data = D_80010E10;
-    third.data = D_80010E24;
+    first.data = g_BattleStatusSymbolUv;
+    second.data = g_BattleStatusSymbolSize;
+    third.data = g_BattleStatusSymbolOffset;
     index = which * 2;
     a = first.data.bytes + index;
     b = second.data.bytes + index;
@@ -840,7 +840,7 @@ void Battle_DrawATBGauge(void)
     unsigned category;
     /* Keep the queue index initialized across the ammo-base callback. */
     i = 0;
-    y = D_8009E358[g_ActiveDrawSlot * 3].y0 + 22;
+    y = g_BattleStatusBarTiles[g_ActiveDrawSlot * 3].y0 + 22;
     category = (g_ActiveActor->action->attackWord >> 20) & 3;
     ammo = Inv_GetWeaponCategoryAmmoBase(category - 1);
     base = &D_8009E768[0].sprite;
@@ -849,11 +849,11 @@ void Battle_DrawATBGauge(void)
     packet += g_ActiveDrawSlot;
     sprite = &D_8009E768[g_ActiveDrawSlot].sprite;
     ammo += *(unsigned short *)&g_ActiveActor->action->attackWord & 0x3ff;
-    sprite->x = D_8009E358[g_ActiveDrawSlot * 3].x0 + 8;
+    sprite->x = g_BattleStatusBarTiles[g_ActiveDrawSlot * 3].x0 + 8;
     sprite->y = y;
     AddPrim((unsigned *)D_800B0E38.ordering[g_ActiveDrawSlot] + 4, (unsigned *)packet);
     while (i < Pad_GetMenuPressedBitOrDisabled()) {
-        int kind = D_800BE830[i].command;
+        int kind = g_BattleActionQueue[i].command;
         if (kind == 1) {
             --ammo;
         } else if (kind == 2) {
@@ -871,7 +871,7 @@ void Battle_DrawATBGauge(void)
     if (ammo < 0) {
         ammo = 0;
     }
-    Battle_DrawDecimalNumber(D_8009E7A0[g_ActiveDrawSlot], D_8009E358[g_ActiveDrawSlot * 3].x0 + 64, y - 1, ammo, 0);
+    Battle_DrawDecimalNumber(g_BattleAmmoDigitSprites[g_ActiveDrawSlot], g_BattleStatusBarTiles[g_ActiveDrawSlot * 3].x0 + 64, y - 1, ammo, 0);
 }
 
 void Battle_DrawStatusValue(int value, int yOffset)
@@ -902,7 +902,7 @@ void Battle_DrawStatusValue(int value, int yOffset)
         {
             BattleStatusPrimAddress anchor;
 
-            anchor.line = D_8009E358;
+            anchor.line = g_BattleStatusBarTiles;
             anchor.address = anchorOffset + anchor.address;
             y = anchor.line->y0;
         }
@@ -921,8 +921,8 @@ void Battle_DrawStatusValue(int value, int yOffset)
     }
     drawSlot = g_ActiveDrawSlot;
     Battle_DrawDecimalNumber(
-        D_8009E8B8[drawSlot],
-        D_8009E358[drawSlot * 3].x0 + 0x40,
+        g_BattleStatusValueDigits[drawSlot],
+        g_BattleStatusBarTiles[drawSlot * 3].x0 + 0x40,
         (s16)--y, (s16)savedValue, 1);
 }
 
@@ -963,9 +963,9 @@ int Battle_DrawDecimalNumber(void *buffer, short x, short y, short value, short 
         packet->sprite.y = y;
         packet->sprite.u = digit * 8;
         if (mode == 1) {
-            packet->sprite.color.bytes.r = D_8009E460[g_ActiveDrawSlot].sprite.color.bytes.r + 40;
-            packet->sprite.color.bytes.g = D_8009E460[g_ActiveDrawSlot].sprite.color.bytes.g;
-            packet->sprite.color.bytes.b = D_8009E460[g_ActiveDrawSlot].sprite.color.bytes.b;
+            packet->sprite.color.bytes.r = g_BattleStatusPointerSprites[g_ActiveDrawSlot].sprite.color.bytes.r + 40;
+            packet->sprite.color.bytes.g = g_BattleStatusPointerSprites[g_ActiveDrawSlot].sprite.color.bytes.g;
+            packet->sprite.color.bytes.b = g_BattleStatusPointerSprites[g_ActiveDrawSlot].sprite.color.bytes.b;
         }
         x += 6;
         AddPrim((unsigned *)D_800B0E38.ordering[g_ActiveDrawSlot] + 4, (unsigned *)packet);
@@ -1385,26 +1385,26 @@ void Battle_DrawActiveStatus(void)
         AddPrim(D_800B0E38.ordering[g_ActiveDrawSlot] + 5, (u32 *)&g_BattlePeGauges[g_ActiveDrawSlot][1]);
         AddPrim(D_800B0E38.ordering[g_ActiveDrawSlot] + 4, (u32 *)&g_BattlePeLabels[g_ActiveDrawSlot]);
         if (g_GameStateFlags & 2) {
-            tiles = D_8009E070;
+            tiles = g_BattleStatusBackgroundTiles;
             tiles[g_ActiveDrawSlot].tile.x0 = g_HudOrigin.x;
             tiles[g_ActiveDrawSlot].tile.y0 = g_HudOrigin.y;
             tiles[g_ActiveDrawSlot].tile.w = 0x54;
             tiles[g_ActiveDrawSlot].tile.h = 0x20;
         } else {
-            tiles = D_8009E070;
+            tiles = g_BattleStatusBackgroundTiles;
             tiles[g_ActiveDrawSlot].tile.x0 = g_HudOrigin.x;
             tiles[g_ActiveDrawSlot].tile.y0 = g_HudOrigin.y + 7;
             tiles[g_ActiveDrawSlot].tile.w = 0x54;
             tiles[g_ActiveDrawSlot].tile.h = 0x19;
         }
     } else if (g_GameStateFlags & 2) {
-        tiles = D_8009E070;
+        tiles = g_BattleStatusBackgroundTiles;
         tiles[g_ActiveDrawSlot].tile.x0 = g_HudOrigin.x;
         tiles[g_ActiveDrawSlot].tile.y0 = g_HudOrigin.y;
         tiles[g_ActiveDrawSlot].tile.w = 0x54;
         tiles[g_ActiveDrawSlot].tile.h = 0x19;
     } else {
-        tiles = D_8009E070;
+        tiles = g_BattleStatusBackgroundTiles;
         tiles[g_ActiveDrawSlot].tile.x0 = g_HudOrigin.x;
         tiles[g_ActiveDrawSlot].tile.y0 = g_HudOrigin.y + 7;
         tiles[g_ActiveDrawSlot].tile.w = 0x54;
@@ -1417,8 +1417,8 @@ void Battle_DrawActiveStatus(void)
 
 /* Digit sprites of the current draw buffer. Every use indexes again: the
  * byte stores to the packets make GCC reload the draw slot. */
-#define MAX_HP_DIGIT(i) (&D_8009E1D8[g_ActiveDrawSlot][i].sprite)
-#define CURRENT_HP_DIGIT(i) (&D_8009E0F8[g_ActiveDrawSlot][i].sprite)
+#define MAX_HP_DIGIT(i) (&g_BattleMaxHpDigitSlots[g_ActiveDrawSlot][i].sprite)
+#define CURRENT_HP_DIGIT(i) (&g_BattleHpDigitSlots[g_ActiveDrawSlot][i].sprite)
 
 /* Draw current/maximum HP from reversed decimal digits and the HP label.
  * The maximum is drawn right to left after a slash, the current value is
@@ -1459,7 +1459,7 @@ void Battle_DrawEnemyHP(s16 maximum, s16 current)
             MAX_HP_DIGIT(n)->color.bytes.g = 128;
             MAX_HP_DIGIT(n)->color.bytes.b = 128;
         } else {
-            pulse = D_8009D1E8 & 31;
+            pulse = g_BattleFrameCounter & 31;
             if (pulse >= 17)
                 pulse = 32 - pulse;
             MAX_HP_DIGIT(n)->color.bytes.r = pulse * 6 + 32;
@@ -1489,7 +1489,7 @@ void Battle_DrawEnemyHP(s16 maximum, s16 current)
         CURRENT_HP_DIGIT(n)->x = x;
         CURRENT_HP_DIGIT(n)->y = y;
         if (((Combatant *)D_8009D254->core)->stateFlags & 0x400) {
-            pulse = D_8009D1E8 & 31;
+            pulse = g_BattleFrameCounter & 31;
             if (pulse >= 17)
                 pulse = 32 - pulse;
             CURRENT_HP_DIGIT(n)->color.bytes.r = pulse * 8;
@@ -1573,8 +1573,8 @@ void Render_AnimationFrame(void) {
                                       size, width & 0xFFFE,
                                       g_OtBufferTable[draw_index] + 8,
                                       g_RenderAnimBufferBase[draw_index] +
-                                           D_8009CDD8);
-    D_8009CDD8 += delta;
+                                           g_DrawPacketOffset);
+    g_DrawPacketOffset += delta;
 
     Render_ResetGteScreenOffset();
     g_BattleAttackAnimFrame++;
@@ -1587,15 +1587,15 @@ void Render_AnimationFrame(void) {
  * byte-aligned objects their declarations describe; GCC emits them after the
  * status primitive constants and before the jump tables, which it writes at
  * the end of the file, as retail has them. */
-const StatusSymbolTemplate D_80010DFC = {{
+const StatusSymbolTemplate g_BattleStatusSymbolUv = {{
     0x00, 0x00, 0x00, 0xF8, 0xD4, 0xF0, 0x00, 0x00, 0x90,
     0xE8, 0x28, 0xF8, 0xB4, 0xEF, 0x50, 0xF8, 0x58, 0xE8,
 }};
-const StatusSymbolTemplate D_80010E10 = {{
+const StatusSymbolTemplate g_BattleStatusSymbolSize = {{
     0x00, 0x00, 0x28, 0x07, 0x14, 0x07, 0x00, 0x00, 0x40,
     0x07, 0x28, 0x07, 0x1C, 0x07, 0x30, 0x07, 0x38, 0x07,
 }};
-const StatusSymbolTemplate D_80010E24 = {{
+const StatusSymbolTemplate g_BattleStatusSymbolOffset = {{
     0x00, 0x00, 0x14, 0x08, 0x1E, 0x08, 0x00, 0x00, 0x08,
     0x08, 0x14, 0x08, 0x1A, 0x08, 0x10, 0x08, 0x0C, 0x08,
 }};

@@ -18,7 +18,7 @@ int MemCard_ReadByteWithCallbackValue(CardObj *port) {
 int MemCard_WriteByte(CardObj *obj, int value);
 
 void CardObj_WriteCommandByte(CardObj *obj) {
-    if (D_8009B764 == g_MemCardPort1Present && D_8009B760 != 0) {
+    if (g_PadActivePortIndex == g_MemCardPort1Present && D_8009B760 != 0) {
         D_8009B754();
         D_8009B750();
     }
@@ -82,7 +82,7 @@ int MemCard_WriteByteWithAckCheck(CardObj *obj) {
 
     asm volatile("" : : : "$4");
     call_obj = card;
-    value = D_8009B72C(call_obj, needs_ack);
+    value = g_MemCardObjReadPayloadByteFn(call_obj, needs_ack);
     call_obj = card;
     result = MemCard_WriteByte(call_obj, value & 0xFF);
     /* Match debt: architectural zero keeps the result copy in the first
@@ -118,7 +118,7 @@ int LIBPAD_PADIF_text_26C(CardObj *inPort) {
     register int three;
     register int result;
     register CardObj *arg;
-    D_8009B730(inPort);
+    g_PadPortActuatorMapFn(inPort);
     mode = 0;
     if (g_MemCardCommandByte) {
         register int id = port->response_3c[0];
@@ -142,9 +142,9 @@ int LIBPAD_PADIF_text_26C(CardObj *inPort) {
             CardObjAddress at;
             at.obj = port->subPorts;
             at.word += offset;
-            D_8009B730(at.obj);
+            g_PadPortActuatorMapFn(at.obj);
         }
-        result = MemCard_WriteByte(port, (u8)D_8009B72C(port, 1));
+        result = MemCard_WriteByte(port, (u8)g_MemCardObjReadPayloadByteFn(port, 1));
         if (result < 0)
             return result;
         setRC2wait(60);
@@ -159,14 +159,14 @@ int LIBPAD_PADIF_text_26C(CardObj *inPort) {
     }
 setup:
     {
-        register int original = D_8009B764;
+        register int original = g_PadActivePortIndex;
         register int opposite;
         opposite = !original;
         if (g_MemCardWriteBlockCount >= 2) {
             register int *count;
             register CardObjAddress table;
             register int scaled;
-            table.count = D_8009B77C;
+            table.count = g_MemCardChannelCounts;
             scaled = opposite * 4;
             table.word = scaled + table.word;
             count = table.count;
@@ -221,7 +221,7 @@ setup:
                         other = (CardObj *)(base.bytes + offset);
                     }
                     g_MemCardResponseHandler(other);
-                    D_8009B748(other);
+                    g_CardSwapByteFieldFn(other);
                     result = -1;
                     } while (0);
                     *count = result;
@@ -230,7 +230,7 @@ setup:
                 arg = port;
                     }
             call_transfer:
-                result = _padSioRW(port, (u8)D_8009B72C(arg, mode));
+                result = _padSioRW(port, (u8)g_MemCardObjReadPayloadByteFn(arg, mode));
                 if (result < 0)
                     return result;
                 setRC2wait(60);
@@ -244,7 +244,7 @@ setup:
         }
     }
     while (--g_MemCardWriteBlockCount > 0) {
-        result = _padSioRW(port, (u8)D_8009B72C(port, mode));
+        result = _padSioRW(port, (u8)g_MemCardObjReadPayloadByteFn(port, mode));
         if (result < 0)
             return result;
         setRC2wait(60);
@@ -257,8 +257,8 @@ setup:
         }
     }
     MemCard_WaitStatusBit2();
-    port->response_3c[port->response_index++] = *D_8009B7A0;
-    D_8009B724(0);
+    port->response_3c[port->response_index++] = *g_PadSioDataPtr;
+    g_PadDmaCompleteFn(0);
     result = 0;
 done:
     return result;

@@ -3,13 +3,13 @@
 
 extern unsigned int *g_GpuGp1Ptr;
 extern volatile unsigned int *g_GpuDmaControlRegPtr;
-extern volatile unsigned int *D_8009586C;
-extern volatile unsigned int *D_80095864;
-extern volatile unsigned int *D_80095868;
-extern short D_80095750;
-extern short D_80095752;
-extern unsigned int D_800A3300[];
-extern unsigned int D_800A3328[];
+extern volatile unsigned int *g_GpuOtDmaChcrPtr;
+extern volatile unsigned int *g_GpuOtDmaMadrPtr;
+extern volatile unsigned int *g_GpuOtDmaBcrPtr;
+extern short g_GpuMaxWidth;
+extern short g_GpuMaxHeight;
+extern unsigned int g_GpuVramFillPacket[];
+extern unsigned int g_GpuVramFillTailPacket[];
 extern unsigned int *g_GpuGp0Ptr;
 extern unsigned char g_GpuControlRegMirror[];
 extern unsigned int *g_GpuDmaBcrPtr;

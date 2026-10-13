@@ -16,24 +16,24 @@ class Room350EffectBallisticTests(unittest.TestCase):
     def test_motion_and_palette_rendering(self):
         source = host_unit("func_801968D8", under=ROOM)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-int D_800E27EC, D_800F3428, D_8019A598[4];
-GteSineWord D_800966EC[4096];
-RenderEffectParameters D_800F3368;
-unsigned short D_800E1204[8];
-#define D_800F336C D_800F3368.palette
-#define D_800F336A D_800F3368.parameter02
+int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag, D_8019A598[4];
+GteSineWord rcossin_tbl[4096];
+RenderEffectParameters g_FieldFxSpriteParams;
+unsigned short g_FieldFxPaletteTable[8];
+#define D_800F336C g_FieldFxSpriteParams.palette
+#define D_800F336A g_FieldFxSpriteParams.parameter02
 static short position[5];
 static int lookups, draws, nextCounter, expectedScale, expectedShade, handleValue;
 u_short GetClut(int x, int y) {
     unsigned int index = ((unsigned int)(nextCounter - 1) << 7) & 0xF80;
     assert(lookups++ == 0 && draws == 0 && x == 16);
-    assert(y == D_800E1204[D_800F336C] +
-           (D_800F336C == 4 && D_800F3428 ? 4 : 0));
-    D_800E27EC = nextCounter; D_800F336A = expectedScale;
-    D_800966EC[index].word = (int)(0x76540000U | (unsigned short)expectedShade);
+    assert(y == g_FieldFxPaletteTable[D_800F336C] +
+           (D_800F336C == 4 && g_FieldFxAltPaletteFlag ? 4 : 0));
+    g_FieldFxCurrentAge = nextCounter; D_800F336A = expectedScale;
+    rcossin_tbl[index].word = (int)(0x76540000U | (unsigned short)expectedShade);
     return handleValue;
 }
-void func_800CEE20(struct GteShortVector *point, struct GteRotation *zero, int a,
+void FieldFx_DrawShapeQuads(struct GteShortVector *point, struct GteRotation *zero, int a,
                   int b, int scale, int handle, int flag, int shade,
                   struct RenderColor *colors) {
     assert(lookups == 1 && draws++ == 0 && point == position && zero == 0);
@@ -58,7 +58,7 @@ int main(void) {
             expected[1] = (short)(position[1] + position[3]);
             expected[3] = (short)(position[3] - position[4]);
         }
-        D_800E27EC = counter; lookups = draws = 0;
+        g_FieldFxCurrentAge = counter; lookups = draws = 0;
         assert(func_801968D8(event, position) == result);
         assert(lookups == 0 && draws == 0);
         assert(memcmp(position, expected, sizeof(position)) == 0);
@@ -66,9 +66,9 @@ int main(void) {
     for (counter = 0; counter < 32; ++counter)
     for (kind = 0; kind < 8; ++kind) for (special = 0; special < 2; ++special)
     for (h = 0; h < 2; ++h) for (s = 0; s < 6; ++s) {
-        for (i = 0; i < 8; ++i) D_800E1204[i] = h ? 65535 : i * 100;
-        D_800E27EC = counter; nextCounter = counter + 1;
-        D_800F336C = kind; D_800F3428 = special; D_800F336A = 999;
+        for (i = 0; i < 8; ++i) g_FieldFxPaletteTable[i] = h ? 65535 : i * 100;
+        g_FieldFxCurrentAge = counter; nextCounter = counter + 1;
+        D_800F336C = kind; g_FieldFxAltPaletteFlag = special; D_800F336A = 999;
         expectedScale = values[s]; expectedShade = values[5-s];
         handleValue = h ? -1 : 0x12345;
         memcpy(expected, position, sizeof(position));

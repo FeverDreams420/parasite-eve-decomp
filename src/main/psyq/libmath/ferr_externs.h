@@ -3,6 +3,6 @@
 
 #include "common.h"
 
-extern s32 D_80094564;
-extern s32 D_80094568;
+extern s32 g_MathErrCode;
+extern s32 g_MathErrArg;
 #endif /* PE1_EXT_FBDC093E29DC */

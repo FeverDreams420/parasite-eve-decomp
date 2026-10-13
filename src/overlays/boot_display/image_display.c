@@ -34,11 +34,11 @@ void BootDisplay_InitDisplayBuffers(void) {
     g_BootDisplayStateTimer = 0;
 
     line = *screenY;
-    base = D_80011610;
-    delta = (line - D_80093166) << 11;
+    base = g_CdLoadAreaBase;
+    delta = (line - g_BootDisplayDataLbaTbl) << 11;
     start = base + delta;
     delta += 0x54000;
-    end = D_80011610 + delta;
+    end = g_CdLoadAreaBase + delta;
     D_80125B88[0] = start;
     D_80125B90 = end;
     D_80125B98 = end;
@@ -47,7 +47,7 @@ void BootDisplay_InitDisplayBuffers(void) {
     DrawSync(0);
     func_8010BE3C(0);
     offset = 0x43000;
-    func_8010BD4C(((*screenY - D_80093166) << 11) + offset + D_80011610);
+    func_8010BD4C(((*screenY - g_BootDisplayDataLbaTbl) << 11) + offset + g_CdLoadAreaBase);
 
     resource = D_8012682C;
     D_80172C98 = Asset_GetTimImagePixels(resource);
@@ -233,8 +233,8 @@ void BootDisplay_StepImageDisplay(void) {
         func_8010C86C(func_8010BF94(D_80125BA4[(u16)g_BootDisplayStateTimer]) >> 4);
         startOffset = 0x38800;
         endOffset = 0x43000;
-        offset = (g_MainAssetLbaTbl[0] - D_80093166) * 2048;
-        base = D_80011610;
+        offset = (g_MainAssetLbaTbl[0] - g_BootDisplayDataLbaTbl) * 2048;
+        base = g_CdLoadAreaBase;
         startOffset += offset;
         func_8010C89C(D_80125BA4[(u16)g_BootDisplayStateTimer], base + startOffset, base + (offset + endOffset));
         g_BootDisplayState = 1;
@@ -242,8 +242,8 @@ void BootDisplay_StepImageDisplay(void) {
     }
     case 1: {
         s32 offset;
-        offset = (g_MainAssetLbaTbl[0] - D_80093166) * 2048;
-        if (func_8010C89C(0, 0, D_80011610 + (offset + 0x43000)) == 0) {
+        offset = (g_MainAssetLbaTbl[0] - g_BootDisplayDataLbaTbl) * 2048;
+        if (func_8010C89C(0, 0, g_CdLoadAreaBase + (offset + 0x43000)) == 0) {
             g_BootDisplayState = 2;
             g_BootDisplayTransferProgress = 0;
         }
@@ -253,8 +253,8 @@ void BootDisplay_StepImageDisplay(void) {
         s32 offset;
         g_BootDisplayTransferCursor = g_BootDisplayImageBuffers[g_BootDisplayBufferIndex].decodeTarget;
         func_8010BE3C(0);
-        offset = (g_MainAssetLbaTbl[0] - D_80093166) * 2048;
-        func_8010BFA0(D_80011610 + (offset + 0x38800), 1);
+        offset = (g_MainAssetLbaTbl[0] - g_BootDisplayDataLbaTbl) * 2048;
+        func_8010BFA0(g_CdLoadAreaBase + (offset + 0x38800), 1);
         func_8010C01C(g_BootDisplayTransferCursor, 0x3C00);
         g_BootDisplayState = 3;
         break;

@@ -48,7 +48,7 @@ extern int g_BattleAttackAnimFrame;
 extern struct Combatant *g_ActiveActor;
 extern struct FieldActor *g_PlayerEntity;
 /* Byte offset of the next free packet in the current draw buffer. */
-extern int D_8009CDD8;
+extern int g_DrawPacketOffset;
 extern void *D_800B0DF8[3];
 
 /* Scratchpad buffers for the wireframe pass: projected screen XY per

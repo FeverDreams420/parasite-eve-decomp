@@ -58,7 +58,7 @@ CdlCB CdReadyCallback(CdlCB callback) {
     return old;
 }
 
-u32 D_8009AF2C[32] = {
+u32 g_CdCommandHasParam[32] = {
     0, 0, 0, 1, 0, 0, 1, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 1, 1, 0,
@@ -88,7 +88,7 @@ int CdControl_Impl(int cmd, void *param, u8 *extra) {
     cmd_reg = tries;
     tries = 3;
     cmd_byte = cmd_reg & 0xFF;
-    table = D_8009AF2C;
+    table = g_CdCommandHasParam;
 
     saved = g_CdSyncCallback;
     slot = &table[cmd_byte];
@@ -148,7 +148,7 @@ int CdControlF_Impl(int command, void *parameters) {
     retries = 3;
     one = 1;
     command_byte = command_word & 0xFF;
-    flag_table = D_8009AF2C;
+    flag_table = g_CdCommandHasParam;
     command_flags = &flag_table[command_byte];
     status = 0;
     exhausted = -1;
@@ -188,7 +188,7 @@ int CdControlB(u_char command, u_char *parameter, u_char *result) {
         retries = 3;
         one = 1;
         command_byte = command & 0xFF;
-        table = D_8009AF2C;
+        table = g_CdCommandHasParam;
         slot = &table[command_byte];
         retry_end = -1;
         for (; retries != retry_end; --retries) {

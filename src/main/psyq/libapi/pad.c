@@ -16,8 +16,8 @@ void EnablePAD(void);
 int RemovePatchPad(void);
 void SysDeqIntRP(int index, void *queue);
 void SysEnqIntRP(int index, void *queue);
-int func_8007E0F8(void);
-int func_8007E160(void);
+int LIBAPI_PAD_text_254(void);
+int LIBAPI_PAD_text_2BC(void);
 
 void SetInitPadFlag(int value) {
     g_InitPadFlag = value;
@@ -58,9 +58,9 @@ int Sys_SetInterruptHandler(void) {
     handlers = slot;
     queue = (char *)handlers - 4;
     slot = handlers++;
-    *slot = func_8007E0F8;
-    *handlers = func_8007E160;
-    D_800A34B0 = 0;
+    *slot = LIBAPI_PAD_text_254;
+    *handlers = LIBAPI_PAD_text_2BC;
+    g_PadIntQueueNode = 0;
     D_800A34BC = 0;
     SysDeqIntRP(1, queue);
     SysEnqIntRP(1, queue);
@@ -70,16 +70,16 @@ int Sys_SetInterruptHandler(void) {
 
 int RemovePatchPad(void) {
     EnterCriticalSection();
-    SysDeqIntRP(1, &D_800A34B0);
+    SysDeqIntRP(1, &g_PadIntQueueNode);
     ExitCriticalSection();
     return 1;
 }
 
-int func_8007E0F8(void) {
+int LIBAPI_PAD_text_254(void) {
     volatile int delay[4];
     PadWork *work;
 
-    work = D_8009B4B0;
+    work = g_PadSioBasePtr;
     work->unk_a = 0;
 
     delay[0] = 10;
@@ -91,12 +91,12 @@ int func_8007E0F8(void) {
     return 0;
 }
 
-int func_8007E160(void)
+int LIBAPI_PAD_text_2BC(void)
 {
   register int *state;
   register int result;
   int new_var;
-  state = D_8009B4B4;
+  state = g_PadIntrRegsPtr;
   new_var = state[1];
   result = new_var;
   result = result & 1;

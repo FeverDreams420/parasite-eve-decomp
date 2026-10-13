@@ -34,8 +34,8 @@ s32 g_InvSlotLimit;
 u32 *g_InvSelectionBits;
 s32 g_InvSelectionBitWords;
 s32 g_InvPackedListCursor;
-s32 D_8009D0CC;
-s32 D_8009D0D0;
+s32 g_InvRebuildFilterMode;
+s32 g_InvRebuildMinFirstStat;
 int g_MenuBattleEquipMode;
 u8 *g_SaveMetadataCursor;
 ItemDataRecord *g_SaveMetadataSourceRecord;
@@ -425,29 +425,29 @@ SavedMenuMode g_SavedMenuMode;
  * (kinds 1..8) and armor (kind 9). Returns nonzero when nothing was equipped. */
 int Inv_EquipItemById(unsigned int itemId) {
     int result = itemId;
-    ItemDataRecord *record = D_800C0E20.equipment;
+    ItemDataRecord *record = g_InventoryRuntime.equipment;
 
-    if (record < D_800C0E20.equipment + 128) {
+    if (record < g_InventoryRuntime.equipment + 128) {
         while (1) {
             if (record->itemId == result) {
                 break;
             }
             record++;
-            if (record >= D_800C0E20.equipment + 128) {
+            if (record >= g_InventoryRuntime.equipment + 128) {
                 break;
             }
         }
-        if (record < D_800C0E20.equipment + 128) {
+        if (record < g_InventoryRuntime.equipment + 128) {
             int value;
             int index;
             int count;
             s16 *item;
             s16 *end;
-            g_InvItemPtr = D_800C0E20.slots;
+            g_InvItemPtr = g_InventoryRuntime.slots;
             count = Inv_GetAyaSlotLimit();
             g_InvSelectionBits = g_InvSelectionBitStorage;
             g_InvSelectionBitWords = 2;
-            value = record - D_800C0E20.equipment + 0x100;
+            value = record - g_InventoryRuntime.equipment + 0x100;
             item = g_InvItemPtr;
             g_InvSlotLimit = count;
             end = item + count;
@@ -686,7 +686,7 @@ int Inv_RebuildWithBonusSlots(int minSecond, int minThird) {
     g_InvSlotLimit = Inv_GetAyaSlotLimit();
     g_InvSelectionBits = g_InvSelectionBitStorage;
     g_InvSelectionBitWords = 2;
-    Inv_BuildFilteredPackedList(D_8009D0CC ? 0x1FE : 0x200);
+    Inv_BuildFilteredPackedList(g_InvRebuildFilterMode ? 0x1FE : 0x200);
     ClearBits();
     count = 0;
     i = 0;
@@ -694,7 +694,7 @@ int Inv_RebuildWithBonusSlots(int minSecond, int minThird) {
         if (i >= g_InvPackedListCount) break;
         index = i >= 0 && i < g_InvPackedListCount ? g_InvPackedList[i] : 0;
         item = LookupActiveItem(index);
-        if (item->baseStats[0] + item->bonusStats[0] >= D_8009D0D0 &&
+        if (item->baseStats[0] + item->bonusStats[0] >= g_InvRebuildMinFirstStat &&
             item->baseStats[1] + item->bonusStats[1] >= minSecond &&
             item->baseStats[2] + item->bonusStats[2] >= minThird &&
             item->itemId != 0x93 && item->itemId != 0x61) {
@@ -705,20 +705,20 @@ int Inv_RebuildWithBonusSlots(int minSecond, int minThird) {
     }
     if (count) {
         ItemDataRecord *scan;
-        if (D_8009D0CC) {
-            scan = D_800C0E20.equipment;
-            for (; scan < D_800C0E20.equipment + 128 &&
+        if (g_InvRebuildFilterMode) {
+            scan = g_InventoryRuntime.equipment;
+            for (; scan < g_InventoryRuntime.equipment + 128 &&
                    !(scan->iconId && scan->kind < 9 && (scan->flags & 0x10));
                  scan++)
                 ;
         } else {
-            scan = D_800C0E20.equipment;
-            for (; scan < D_800C0E20.equipment + 128 &&
+            scan = g_InventoryRuntime.equipment;
+            for (; scan < g_InventoryRuntime.equipment + 128 &&
                    !(scan->iconId && scan->kind == 9 && (scan->flags & 0x10));
                  scan++)
                 ;
         }
-        if (scan < D_800C0E20.equipment + 128) count = -count;
+        if (scan < g_InventoryRuntime.equipment + 128) count = -count;
     }
     g_InvPackedListCursor = count != 0;
     return count;
@@ -750,7 +750,7 @@ int Inv_TransferToStorage(void) {
 }
 
 static inline void SelectAya(void) {
-    g_InvItemPtr = D_800C0E00.inventory_items;
+    g_InvItemPtr = g_AyaSaveState.inventory_items;
     g_InvSlotLimit = Inv_GetAyaSlotLimit();
     g_InvSelectionBits = g_InvSelectionBitStorage;
     g_InvSelectionBitWords = 2;
@@ -760,16 +760,16 @@ static inline void SelectAya(void) {
 static inline int TakeTagged(int armor) {
     ItemDataRecord *p;
     int id = 0;
-    for (p = D_800C0E20.equipment; p < D_800C0E20.equipment + 128; p++) {
+    for (p = g_InventoryRuntime.equipment; p < g_InventoryRuntime.equipment + 128; p++) {
         if (p->iconId && (armor ? p->kind == 9 : p->kind != 9) && (p->flags & 16)) break;
     }
-    if (p < D_800C0E20.equipment + 128) {
+    if (p < g_InventoryRuntime.equipment + 128) {
         s16 *slot;
-        id = (p - D_800C0E20.equipment) + 256;
-        for (slot = D_800C0E20.specialStorage;
-             slot < D_800C0E20.specialStorage + 82; slot++)
+        id = (p - g_InventoryRuntime.equipment) + 256;
+        for (slot = g_InventoryRuntime.specialStorage;
+             slot < g_InventoryRuntime.specialStorage + 82; slot++)
             if (*slot == id) break;
-        if (slot < D_800C0E20.specialStorage + 82) *slot = 0;
+        if (slot < g_InventoryRuntime.specialStorage + 82) *slot = 0;
     }
     return id;
 }
@@ -780,15 +780,15 @@ void Inv_InitNewGameInventory(void) {
     u16 *growth = g_AyaStatAgility;
     for (i = 0; i < 7; i++) *growth++ = *(u16 *)Aya_GetStatGrowthTable(i);
     stats = Aya_LookupLevelStats(0);
-    D_800C0E00.max_hp = D_800C0E00.current_hp = stats->hp;
-    D_800C0E00.inventory_slot_count = stats->inventoryCapacity;
-    D_800C0E00.parasite_spell_flags = 1;
+    g_AyaSaveState.max_hp = g_AyaSaveState.current_hp = stats->hp;
+    g_AyaSaveState.inventory_slot_count = stats->inventoryCapacity;
+    g_AyaSaveState.parasite_spell_flags = 1;
     g_InvSpecialItemRecords[0].ammo = g_InvSpecialItemRecords[1].ammo = g_InvSpecialItemRecords[2].ammo = 0;
     SelectAya();
     capacity = stats->inventoryCapacity;
     if (capacity > 50) capacity = 50;
-    D_800C0E00.inventory_slot_count = capacity;
-    if (g_InvItemPtr == D_800C0E00.inventory_items)
+    g_AyaSaveState.inventory_slot_count = capacity;
+    if (g_InvItemPtr == g_AyaSaveState.inventory_items)
         g_InvSlotLimit = Inv_GetAyaSlotLimit();
     SelectAya();
     for (i = 49; i >= 0; i--) g_InvItemPtr[i] = 0;
@@ -801,25 +801,25 @@ void Inv_InitNewGameInventory(void) {
     if (i) Inv_AddItem(i);
     i = TakeTagged(1);
     if (i) Inv_AddItem(i);
-    D_800C0E20.tracked[2] = 1;
-    D_800C0E20.tracked[0] = 0;
-    D_800C0E00.menu_clamp_value = 61;
+    g_InventoryRuntime.tracked[2] = 1;
+    g_InventoryRuntime.tracked[0] = 0;
+    g_AyaSaveState.menu_clamp_value = 61;
     Menu_ClampRange(61);
-    D_800C0E00.total_exp = 0;
-    D_800C0E00.level = 0;
+    g_AyaSaveState.total_exp = 0;
+    g_AyaSaveState.level = 0;
     Menu_SaveBgInitFade();
 }
 
 /* Remove the selected record, preserving armor-capacity bookkeeping. */
 static inline void RemoveItem(int index) {
     int required, id;
-    if (g_InvItemPtr == g_AyaInventoryItems && D_800C0E20.tracked[2] == index)
+    if (g_InvItemPtr == g_AyaInventoryItems && g_InventoryRuntime.tracked[2] == index)
         Inv_GetActiveSlotCount(&required);
     id = g_InvItemPtr[index];
     g_InvItemPtr[index] = 0;
-    if (id >= 256) D_800C0E20.equipment[id - 256].iconId = 0;
-    if (g_InvItemPtr == g_AyaInventoryItems && D_800C0E20.tracked[2] == index) {
-        D_800C0E20.tracked[2] = -1;
+    if (id >= 256) g_InventoryRuntime.equipment[id - 256].iconId = 0;
+    if (g_InvItemPtr == g_AyaInventoryItems && g_InventoryRuntime.tracked[2] == index) {
+        g_InventoryRuntime.tracked[2] = -1;
         Inv_CheckFreeSlotCapacity(required);
         Inv_CompactActiveListSlots();
         Inv_SetActiveList(3, 0);
@@ -848,11 +848,11 @@ void Inv_MergeStorageToSlot(void) {
     for (i = 0; i < g_InvSlotLimit; i++) {
         unsigned short id = g_InvItemPtr[i];
         if (id - 256U < 128U &&
-            D_800C0E20.equipment[(short)id - 256].itemId == 0x61) break;
+            g_InventoryRuntime.equipment[(short)id - 256].itemId == 0x61) break;
     }
     if (i < g_InvSlotLimit) RemoveItem(i);
     Inv_AddItem(0x93);
-    D_800C0E20.tracked[0] = FindKind(7, -1);
+    g_InventoryRuntime.tracked[0] = FindKind(7, -1);
     g_MenuBattleEquipMode = 0;
     Inv_SetActiveList(2, 0);
 }
@@ -870,7 +870,7 @@ static inline int FindItem(int id) {
 
 static inline void SetCapacity(int value) {
     if (value > 50) value = 50;
-    D_800C0E00.inventory_slot_count = value;
+    g_AyaSaveState.inventory_slot_count = value;
     if (g_InvItemPtr == g_AyaInventoryItems) g_InvSlotLimit = Inv_GetAyaSlotLimit();
 }
 
@@ -900,15 +900,15 @@ int Inv_DispatchCommand(int command, int value, int other, int *unused) {
         else for (p = g_InvItemPtr; p < g_InvItemPtr + g_InvSlotLimit; p++) {
             unsigned short id = *p;
             if (id - 256U < 128U)
-                count += (D_800C0E20.equipment[(short)id - 256].itemId == value);
+                count += (g_InventoryRuntime.equipment[(short)id - 256].itemId == value);
             else
                 count += ((short)id == value);
         }
         return count;
     }
     case INV_CMD_SET_REBUILD_FILTER:
-        D_8009D0CC = value;
-        D_8009D0D0 = other;
+        g_InvRebuildFilterMode = value;
+        g_InvRebuildMinFirstStat = other;
         return 0;
     case INV_CMD_REBUILD_SLOTS:
         return Inv_RebuildWithBonusSlots(value, other);
@@ -916,9 +916,9 @@ int Inv_DispatchCommand(int command, int value, int other, int *unused) {
         SetCapacity(value);
         return 0;
     case INV_CMD_GET_CURRENT_HP:
-        return D_800C0E00.current_hp;
+        return g_AyaSaveState.current_hp;
     case INV_CMD_GET_MAX_HP:
-        return D_800C0E00.max_hp;
+        return g_AyaSaveState.max_hp;
     case INV_CMD_SET_CURRENT_HP:
         BattleCmd_SetCurrentHP(value);
         return 0;
@@ -959,8 +959,8 @@ int Inv_DispatchCommand(int command, int value, int other, int *unused) {
         Inv_RebuildSelectionBitset();
         g_GameState.pending_story_day = 1;
         Menu_SetMemCardConfirmPending();
-        if (D_800C0E00.pad_0B + 1 < 100) D_800C0E00.pad_0B++;
-        else D_800C0E00.pad_0B = 99;
+        if (g_AyaSaveState.pad_0B + 1 < 100) g_AyaSaveState.pad_0B++;
+        else g_AyaSaveState.pad_0B = 99;
         Inv_InitNewGameInventory();
         return 0;
     case INV_CMD_INIT_BONUS_POINTS:
@@ -969,9 +969,9 @@ int Inv_DispatchCommand(int command, int value, int other, int *unused) {
     case INV_CMD_CLEAR_STORAGE_ITEM: {
         s16 *p;
         int missing;
-        for (p = D_800C0E20.storage; p < D_800C0E20.storage + 100; p++)
+        for (p = g_InventoryRuntime.storage; p < g_InventoryRuntime.storage + 100; p++)
             if (*p == value) break;
-        missing = !(p < D_800C0E20.storage + 100);
+        missing = !(p < g_InventoryRuntime.storage + 100);
         if (!missing) *p = 0;
         return missing;
     }
@@ -1009,13 +1009,13 @@ void Save_InitMetadataState(void) {
     InitName(g_SaveRuntimeState.windows.metadata[1].text, 8, 0);
     Menu_CopyPromptCodes(Text_LookupTable4(30));
     Inv_InitNewGameInventory();
-    D_800C0E20.specialStorage[0] = 515;
-    D_800C0E00.blend_color = 0x404040;
+    g_InventoryRuntime.specialStorage[0] = 515;
+    g_AyaSaveState.blend_color = 0x404040;
     Draw_BlendColor(0x404040);
     D_800A76A4[0] = 0;
-    D_800A76B0[0] = 0;
+    g_GameTimer1Current[0] = 0;
     D_800A76BC[0] = 0;
-    D_800A76C8[0] = 0;
+    g_CombatTimerCurrent[0] = 0;
     Draw_SetBaseOffsetPosition(0, 8 - Draw_GetBaseY());
     MenuWidget_SetColumnLayoutMode(0);
     Menu_SetActionSubmenuSelection(1);
@@ -1057,7 +1057,7 @@ void Inv_InitMaxLevelInventory(s32 arg0) {
     }
     g_AyaSaveLevel[0] = 0x62;
     expTable = Aya_GetLevelExpTable();
-    g_AyaSaveTotalExp[0] = expTable[D_800C0E00.level];
+    g_AyaSaveTotalExp[0] = expTable[g_AyaSaveState.level];
     levelStats = Aya_LookupLevelStats(0x62);
     unlockedSpells = 0xFFFFF;
     save = (AyaSaveState *)((u8 *)items - PE1_OFFSETOF(AyaSaveState, inventory_items));

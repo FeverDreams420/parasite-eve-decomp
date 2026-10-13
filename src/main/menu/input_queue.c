@@ -118,7 +118,7 @@ typedef MenuWidgetNode MenuInputWidget;
 /* COMMON supplies small-data metadata to MASPSX for the words this unit
  * reaches through $gp; the other extern words stay absolute. */
 int g_MenuDrawPhase;
-int D_8009D0F8;
+int g_MenuInputRepeatTimer;
 
 /* Translate the field pad bits into the menu input status flags. */
 int Draw_RemapStatusFlags(void) {
@@ -197,11 +197,11 @@ void MenuInput_EnqueueStatusChanges(int flags) {
         }
 
         if (g_MenuInputHeldStatusMask != mapped) {
-            D_8009D0F8 = 0x10;
+            g_MenuInputRepeatTimer = 0x10;
         }
 
-        timer = D_8009D0F8 - 2;
-        D_8009D0F8 = timer;
+        timer = g_MenuInputRepeatTimer - 2;
+        g_MenuInputRepeatTimer = timer;
         if (timer < 0) {
             if ((flags != 0 && timer < -0x5A) || (timer & 3) == 0) {
                 g_MenuInputHeldStatusMask = 0;
@@ -209,7 +209,7 @@ void MenuInput_EnqueueStatusChanges(int flags) {
             }
         }
 
-        g_MenuDrawPhase = D_8009D0F8 >= -0x12B ? 1 : 8;
+        g_MenuDrawPhase = g_MenuInputRepeatTimer >= -0x12B ? 1 : 8;
 
         changed = mapped & ~g_MenuInputHeldStatusMask;
         if (changed != 0) {
@@ -321,10 +321,10 @@ int g_TextCursorX;
 int g_TextCursorY;
 int g_DrawGradientBlendColor;
 int *g_TextCursorStackPtr;
-DrawFrameBuffer *D_8009D0FC;
+DrawFrameBuffer *g_DrawCurrentFrameBuffer;
 u8 *D_8009D100;
 u8 *D_8009D104;
-u32 *D_8009D118;
+u32 *g_DrawOrderingTableBase;
 u32 *D_8009D11C;
 void Draw_InitBuffers(void) {
     g_DrawFrameBuffers[0].frontBufferBase = g_RenderFrontBufferBase[0];
@@ -389,10 +389,10 @@ void Draw_SelectBuffer(void) {
     frame = &g_DrawFrameBuffers[index];
     packets = g_DrawFrameBuffers[index].frontBufferBase;
     ordering = g_DrawFrameBuffers[index].orderingTableBase;
-    D_8009D0FC = frame;
+    g_DrawCurrentFrameBuffer = frame;
     g_DrawPacketArenaBase = packets;
     g_DrawPacketCursor = packets;
-    D_8009D118 = ordering;
+    g_DrawOrderingTableBase = ordering;
     g_DrawOrderingTableEntry = ordering + 1;
 
     if (g_DrawPresentEnabled != 0) {
@@ -425,8 +425,8 @@ void Draw_PresentFrame(int arg0) {
     index = 0xFFF;
     VSync(NormalizeSyncMode(mode));
     ResetGraph(1);
-    PutDrawEnv(&D_8009D0FC->draw);
-    PutDispEnv(&D_8009D0FC->display);
+    PutDrawEnv(&g_DrawCurrentFrameBuffer->draw);
+    PutDispEnv(&g_DrawCurrentFrameBuffer->display);
 
     image = g_DrawPresentImage;
     if (image != 0) {
@@ -441,5 +441,5 @@ void Draw_PresentFrame(int arg0) {
         LoadImage(&rect, (void *)image);
     }
 
-    DrawOTag(&D_8009D118[index]);
+    DrawOTag(&g_DrawOrderingTableBase[index]);
 }

@@ -51,16 +51,16 @@ int RoomEffect_DroppedFlareParticle(int mode, RoomDroppedFlare *flare,
             flare->y += flare->velocity.y;
             flare->z += flare->velocity.z;
             flare->velocity.y += 2;
-            if (func_800C6B90(flare, lift * 50 / 4096)) {
+            if (FieldFx_IsPlayerWithinRadius(flare, lift * 50 / 4096)) {
                 if (FX_TASK_AS(RoomFlareEventState)->active) {
                     ROOMEFFECT_DROPPED_FLARE_FLASH();
                 }
                 flare->state = 1;
                 flare->timer = 0;
             }
-            if (D_800E27EC & 1) {
+            if (g_FieldFxCurrentAge & 1) {
                 spread = lift * 48 / 4096;
-                child = func_800CE610(ANIM_POOL_AS(RoomFlareChannel)->pool);
+                child = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomFlareChannel)->pool);
                 if (child) {
                     child->x = flare->x;
                     child->y = flare->y;
@@ -106,29 +106,29 @@ int RoomEffect_DroppedFlareParticle(int mode, RoomDroppedFlare *flare,
     case 2:
     {
         int unit = 0x20;
-        int index = D_800E11EC;
+        int index = g_FieldFxTpageSlot4;
         int tpage;
-        D_800F3368.parameter00 = unit;
-        D_800F3368.parameter02 = 2;
-        D_800F3368.extent_x = unit;
-        D_800F3368.extent_y = unit;
-        tpage = D_800E2850[index];
-        D_800F3368.palette = 4;
-        D_800F3368.parameter06 = 0;
-        D_800F3368.tpage = tpage;
+        g_FieldFxSpriteParams.parameter00 = unit;
+        g_FieldFxSpriteParams.parameter02 = 2;
+        g_FieldFxSpriteParams.extent_x = unit;
+        g_FieldFxSpriteParams.extent_y = unit;
+        tpage = g_FieldFxTpageTable[index];
+        g_FieldFxSpriteParams.palette = 4;
+        g_FieldFxSpriteParams.parameter06 = 0;
+        g_FieldFxSpriteParams.tpage = tpage;
         switch (flare->state) {
         case 0:
             {
             u16 clut;
             int kind;
             int palette;
-            scale = (rcos(D_800E27EC << 8) / 8 + 0x800) / 2;
+            scale = (rcos(g_FieldFxCurrentAge << 8) / 8 + 0x800) / 2;
             scale = lift * scale / 4096;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
             clut = GetClut(0x10, palette);
-            func_800CEE20((GteShortVector *)flare, 0, scale, scale, 0x20, clut, 0xFF, 0x80,
+            FieldFx_DrawShapeQuads((GteShortVector *)flare, 0, scale, scale, 0x20, clut, 0xFF, 0x80,
                           (struct RenderColor *)&color);
             }
             {
@@ -142,11 +142,11 @@ int RoomEffect_DroppedFlareParticle(int mode, RoomDroppedFlare *flare,
             floorPos.x = flare->x;
             floorPos.z = flare->z;
             floorPos.y = g_RoomFloorY->y;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
             clut = GetClut(0x10, palette);
-            func_800CEE20(&floorPos, &floorSpin, scale, scale, 0x20, clut, 2,
+            FieldFx_DrawShapeQuads(&floorPos, &floorSpin, scale, scale, 0x20, clut, 2,
                           0x46, 0);
             }
             return 0;
@@ -155,12 +155,12 @@ int RoomEffect_DroppedFlareParticle(int mode, RoomDroppedFlare *flare,
             u16 clut;
             int kind;
             int palette;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
             clut = GetClut(0, palette);
-            func_800CEE20((GteShortVector *)flare, 0, lift, lift,
-                          (s16)D_800F3368.parameter02 * (s16)flare->timer, clut, 1,
+            FieldFx_DrawShapeQuads((GteShortVector *)flare, 0, lift, lift,
+                          (s16)g_FieldFxSpriteParams.parameter02 * (s16)flare->timer, clut, 1,
                           0x80, (struct RenderColor *)&color);
             }
             return 0;
@@ -169,12 +169,12 @@ int RoomEffect_DroppedFlareParticle(int mode, RoomDroppedFlare *flare,
             u16 clut;
             int kind;
             int palette;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
             clut = GetClut(0, palette);
-            func_800CEE20((GteShortVector *)flare, &rotation, lift, lift,
-                          (s16)D_800F3368.parameter02 * ((s16)flare->timer / 2),
+            FieldFx_DrawShapeQuads((GteShortVector *)flare, &rotation, lift, lift,
+                          (s16)g_FieldFxSpriteParams.parameter02 * ((s16)flare->timer / 2),
                           clut, 0, 0x80, (struct RenderColor *)&color);
             }
             break;
@@ -184,25 +184,25 @@ int RoomEffect_DroppedFlareParticle(int mode, RoomDroppedFlare *flare,
             int kind;
             int palette;
             int unit2 = 0x10;
-            int index2 = TEXTURE_SLOT_RECORD(D_800E11E8);
+            int index2 = TEXTURE_SLOT_RECORD(g_FieldFxTpageSlot2);
             int tpage2;
-            D_800F3368.parameter00 = unit2;
-            D_800F3368.parameter02 = 1;
-            D_800F3368.extent_x = unit2;
-            D_800F3368.extent_y = unit2;
-            tpage2 = D_800E2850[index2];
-            D_800F3368.palette = 2;
-            D_800F3368.parameter06 = 0;
-            D_800F3368.tpage = tpage2;
+            g_FieldFxSpriteParams.parameter00 = unit2;
+            g_FieldFxSpriteParams.parameter02 = 1;
+            g_FieldFxSpriteParams.extent_x = unit2;
+            g_FieldFxSpriteParams.extent_y = unit2;
+            tpage2 = g_FieldFxTpageTable[index2];
+            g_FieldFxSpriteParams.palette = 2;
+            g_FieldFxSpriteParams.parameter06 = 0;
+            g_FieldFxSpriteParams.tpage = tpage2;
             fade = rcos(((s16)flare->timer << 10) / 24) / 32;
             scale = ((s16)flare->timer << 11) / 24 + 0x1000;
             scale = lift * scale / 4096;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
             clut = GetClut(0x80, palette);
-            func_800CEE20((GteShortVector *)flare, &rotation, scale, scale,
-                          (s16)D_800F3368.parameter02 * 2 + 0xFD, clut, 1, fade, 0);
+            FieldFx_DrawShapeQuads((GteShortVector *)flare, &rotation, scale, scale,
+                          (s16)g_FieldFxSpriteParams.parameter02 * 2 + 0xFD, clut, 1, fade, 0);
             }
             return 0;
         case 4:
@@ -210,7 +210,7 @@ int RoomEffect_DroppedFlareParticle(int mode, RoomDroppedFlare *flare,
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
             fade = rcos(((s16)flare->timer << 10) / 24) / 32;
-            func_800D1DEC(flare, &color, fade, 1);
+            FieldFx_DrawHaloedPoint(flare, &color, fade, 1);
             break;
         }
         break;
@@ -231,13 +231,13 @@ int RoomEffect_DroppedFlareEmitter(int mode, RoomDroppedFlareEmitter *emitter,
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomFlareChannel)->pool, 0x13, &rect, emitter);
         switch (FX_TASK_AS(RoomFlareEventState)->phase) {
         case 0:
-            func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomFlareChannel)->pool, 0x13,
+            FieldFx_GetTransformLookAngles((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomFlareChannel)->pool, 0x13,
                           &emitter->angles);
             break;
         case 1:
             {
                 s16 target[4];
-                func_800CE870((char *)D_8009D254, 0, target);
+                FieldFx_GetActorPosition((char *)D_8009D254, 0, target);
                 FieldFx_CalculateLookAngles(emitter, target, &emitter->angles);
                 emitter->angles.x = 0x180;
             }
@@ -252,20 +252,20 @@ int RoomEffect_DroppedFlareEmitter(int mode, RoomDroppedFlareEmitter *emitter,
                 }
             }
         }
-        return func_800CE560(ANIM_POOL_AS(RoomFlareChannel)->pool, 0x14, 0x18,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomFlareChannel)->pool, 0x14, 0x18,
                              (FieldFxCallbackListCallback)RoomEffect_DroppedFlareParticle);
     case 1:
-        if (D_800E27EC == mode) {
-            RoomDroppedFlare *flare = func_800CE610(ANIM_POOL_AS(RoomFlareChannel)->pool);
+        if (g_FieldFxCurrentAge == mode) {
+            RoomDroppedFlare *flare = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomFlareChannel)->pool);
             if (flare != 0) {
                 flare->x = emitter->x;
                 flare->y = emitter->y;
                 flare->z = emitter->z;
-                func_800CFB7C(&emitter->angles, *speed, &flare->velocity);
+                FieldFx_AnglesToVector(&emitter->angles, *speed, &flare->velocity);
                 flare->state = 0;
                 flare->timer = 0;
             }
-            flare = func_800CE610(ANIM_POOL_AS(RoomFlareChannel)->pool);
+            flare = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomFlareChannel)->pool);
             if (flare != 0) {
                 flare->x = emitter->x;
                 flare->y = emitter->y;
@@ -273,15 +273,15 @@ int RoomEffect_DroppedFlareEmitter(int mode, RoomDroppedFlareEmitter *emitter,
                 flare->state = 3;
                 flare->timer = 0;
             }
-            func_800D3F64(0x586, func_800D3FD8());
+            FieldFx_PlaySoundAtOwner(0x586, FieldFx_GetOwnerProgress());
         }
-        if (D_800E27EC >= 2) {
+        if (g_FieldFxCurrentAge >= 2) {
             return 2;
         }
         break;
     case 2:
-        D_800F3368.parameter0A = 0;
-        D_800F3368.depth = 8;
+        g_FieldFxSpriteParams.parameter0A = 0;
+        g_FieldFxSpriteParams.depth = 8;
         break;
     }
     return 0;

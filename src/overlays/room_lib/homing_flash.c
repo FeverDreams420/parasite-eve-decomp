@@ -35,15 +35,15 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
     case 1:
         switch (spark->state) {
         case 0:
-            func_800CE870((char *)D_8009D254, 0, (s16 *)&target);
+            FieldFx_GetActorPosition((char *)D_8009D254, 0, (s16 *)&target);
             FieldFx_CalculateLookAngles(spark, &target, &angles);
             angles.x = 0;
-            func_800CFD50((unsigned short *)&angles, &spark->hx, params->speed);
-            func_800CFB7C((GteShortVector *)&spark->hx, params->distance, &target);
+            FieldFx_EaseAngles((unsigned short *)&angles, &spark->hx, params->speed);
+            FieldFx_AnglesToVector((GteShortVector *)&spark->hx, params->distance, &target);
             spark->x += target.x;
             spark->y += target.y;
             spark->z += target.z;
-            if (func_800C6B90(spark, 50)) {
+            if (FieldFx_IsPlayerWithinRadius(spark, 50)) {
                 if (FX_TASK_AS(RoomSoundBurstEventState)->active) {
                     RoomSoundBurstChannel *channel = ANIM_OWNER_AS(RoomSoundBurstChannel);
                     u32 *entry;
@@ -61,9 +61,9 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
                     Akao_Cmd_21(spark->soundHandle, 0);
                 }
             }
-            if (D_800E27EC & 1) {
+            if (g_FieldFxCurrentAge & 1) {
                 pool = ANIM_POOL_AS(RoomSoundBurstChannel)->pool;
-                child = func_800CE610(pool);
+                child = FieldFx_AcquireCallbackSlot(pool);
                 if (child) {
                     child->x = spark->x;
                     child->y = spark->y;
@@ -72,7 +72,7 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
                     child->timer = 0;
                 }
             }
-            if (D_800E27EC < 36) return 0;
+            if (g_FieldFxCurrentAge < 36) return 0;
             if (spark->soundHandle != -1) {
                 Akao_Cmd_21(spark->soundHandle, 0);
             }
@@ -93,24 +93,24 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
         case 0: {
             int kind;
             int palette;
-            fade = (D_800E27EC & 1) ? 0xBE : 0x80;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            fade = (g_FieldFxCurrentAge & 1) ? 0xBE : 0x80;
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
             clut = GetClut(0x10, palette);
-            func_800CEE20((GteShortVector *)spark, &rotation, 0x1000, 0x1000, 0x20, clut, 1,
+            FieldFx_DrawShapeQuads((GteShortVector *)spark, &rotation, 0x1000, 0x1000, 0x20, clut, 1,
                           fade / 2, 0);
             break;
         }
         case 1: {
             int kind;
             int palette;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
             clut = GetClut(0, palette);
-            func_800CEE20((GteShortVector *)spark, &rotation, 0x1000, 0x1000,
-                          (s16)D_800F3368.parameter02 * spark->timer, clut, 1,
+            FieldFx_DrawShapeQuads((GteShortVector *)spark, &rotation, 0x1000, 0x1000,
+                          (s16)g_FieldFxSpriteParams.parameter02 * spark->timer, clut, 1,
                           0x80, (struct RenderColor *)&color);
             break;
         }
@@ -118,11 +118,11 @@ int RoomEffect_HomingSpark(int mode, RoomHomingSpark *spark,
             int kind;
             int palette;
             fade = 0x29 - spark->timer * 41 / 16;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
             clut = GetClut(0x10, palette);
-            func_800CEE20((GteShortVector *)spark, &rotation, 0x1000, 0x1000, 0x20, clut, 1,
+            FieldFx_DrawShapeQuads((GteShortVector *)spark, &rotation, 0x1000, 0x1000, 0x20, clut, 1,
                           fade, 0);
             break;
         }
@@ -157,15 +157,15 @@ int RoomEffect_FlashSpriteController(int mode, RoomFlashSpriteState *state,
     switch (mode) {
     case 0:
         pool = ANIM_OWNER_AS(RoomSoundBurstChannel)->pool;
-        func_800CE9D4((struct RoomFxTransformOwner *)pool, 0,
+        FieldFx_GetTransformLookAngles((struct RoomFxTransformOwner *)pool, 0,
                       (GteShortVector *)&state->ax);
         state->soundHandle = -1;
         switch (FX_TASK_AS(RoomSoundBurstEventState)->phase) {
         case 0:
             state->attachment = 0x20;
             state->ay -= spawn->lift;
-            handle = func_800D3FD8();
-            handle = func_800D3F64(0x58D, handle);
+            handle = FieldFx_GetOwnerProgress();
+            handle = FieldFx_PlaySoundAtOwner(0x58D, handle);
             state->soundHandle = handle;
             break;
         case 1:
@@ -179,7 +179,7 @@ int RoomEffect_FlashSpriteController(int mode, RoomFlashSpriteState *state,
         pool = ANIM_OWNER_AS(RoomSoundBurstChannel)->pool;
         FieldFx_TransformMatrixPoint(pool, state->attachment, &rotation, state);
         state->y = g_RoomFloorY->y;
-        func_800CFB7C((GteShortVector *)&state->ax, 0x12C, &target);
+        FieldFx_AnglesToVector((GteShortVector *)&state->ax, 0x12C, &target);
         state->x += target.x;
         state->y += target.y;
         state->z += target.z;
@@ -193,7 +193,7 @@ int RoomEffect_FlashSpriteController(int mode, RoomFlashSpriteState *state,
         state->state = 0;
         state->frame = 0;
         pool = ANIM_POOL_AS(RoomSoundBurstChannel)->pool;
-        return func_800CE560(pool, 24, 16,
+        return FieldFx_InitCallbackList(pool, 24, 16,
                              (FieldFxCallbackListCallback)RoomEffect_HomingSpark);
     case 1:
         switch (state->state) {
@@ -209,7 +209,7 @@ int RoomEffect_FlashSpriteController(int mode, RoomFlashSpriteState *state,
             state->state = 2;
             state->frame = 0;
             pool = ANIM_POOL_AS(RoomSoundBurstChannel)->pool;
-            child = func_800CE610(pool);
+            child = FieldFx_AcquireCallbackSlot(pool);
             if (child) {
                 child->x = state->x;
                 child->y = state->y;
@@ -223,7 +223,7 @@ int RoomEffect_FlashSpriteController(int mode, RoomFlashSpriteState *state,
                 child->soundHandle = state->soundHandle;
             }
             pool = ANIM_POOL_AS(RoomSoundBurstChannel)->pool;
-            child = func_800CE610(pool);
+            child = FieldFx_AcquireCallbackSlot(pool);
             if (child) {
                 child->x = state->x;
                 child->y = state->y;
@@ -245,47 +245,47 @@ int RoomEffect_FlashSpriteController(int mode, RoomFlashSpriteState *state,
             int index;
             int tpage;
             unit = 0x20;
-            index = D_800E11EC;
-            D_800F3368.parameter00 = unit;
-            D_800F3368.parameter02 = 2;
-            D_800F3368.extent_x = unit;
-            D_800F3368.extent_y = unit;
-            tpage = D_800E2850[index];
-            D_800F3368.palette = 4;
-            D_800F3368.parameter06 = 0;
-            D_800F3368.parameter0A = 0;
-            D_800F3368.depth = 0xC;
-            D_800F3368.tpage = tpage;
+            index = g_FieldFxTpageSlot4;
+            g_FieldFxSpriteParams.parameter00 = unit;
+            g_FieldFxSpriteParams.parameter02 = 2;
+            g_FieldFxSpriteParams.extent_x = unit;
+            g_FieldFxSpriteParams.extent_y = unit;
+            tpage = g_FieldFxTpageTable[index];
+            g_FieldFxSpriteParams.palette = 4;
+            g_FieldFxSpriteParams.parameter06 = 0;
+            g_FieldFxSpriteParams.parameter0A = 0;
+            g_FieldFxSpriteParams.depth = 0xC;
+            g_FieldFxSpriteParams.tpage = tpage;
         }
         switch (state->state) {
         case 0:
             rsin((s16)state->frame << 6);
             opacity = (state->frame & 1) ? 0x40 : 0x80;
             scale = rsin((s16)state->frame << 6);
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
             clut = GetClut(0x10, palette);
-            func_800CEE20(&target, 0, scale, scale, 0x20, clut, 1, opacity, 0);
+            FieldFx_DrawShapeQuads(&target, 0, scale, scale, 0x20, clut, 1, opacity, 0);
             break;
         case 1:
             blend = (s16)state->frame << 10;
             LoadAverageShort12(&target, state, 0x1000 - blend, blend, &output);
-            func_800CF3AC(g_RoomFlashColorRamp, &color,
+            FieldFx_SampleColorTrack(g_RoomFlashColorRamp, &color,
                           (s16)state->frame);
             matrixSlot = &D_800BCFA4;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
-            func_800D2B58(&target, &output, &color, &color, 0, 0x80, 1);
+            FieldFx_DrawGlowLine(&target, &output, &color, &color, 0, 0x80, 1);
             break;
         case 2:
             frame = (s16)state->frame;
             if (frame >= 5) break;
-            func_800CF3AC(g_RoomFlashColorRamp, &color, frame + 4);
+            FieldFx_SampleColorTrack(g_RoomFlashColorRamp, &color, frame + 4);
             matrixSlot = &D_800BCFA4;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
-            func_800D2B58(&target, state, &color, &color, 0, 0x80, 1);
+            FieldFx_DrawGlowLine(&target, state, &color, &color, 0, 0x80, 1);
             break;
         }
         break;

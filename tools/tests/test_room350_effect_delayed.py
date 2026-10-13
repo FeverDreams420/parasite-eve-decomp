@@ -21,30 +21,30 @@ class Room350EffectDelayedTests(unittest.TestCase):
         source = callback_source()
         # D_800966EE is the halfword view of the sine table at +2 bytes.
         source = source.replace('extern short D_800966EE[];',
-            '#define D_800966EE ((short *)D_800966EC + 1)')
+            '#define D_800966EE ((short *)rcossin_tbl + 1)')
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-RenderEffectParameters D_800F3368;
+RenderEffectParameters g_FieldFxSpriteParams;
 RenderColor D_8019A3D0;
-#define D_800F336A D_800F3368.parameter02
-#define D_800F336C D_800F3368.palette
-int D_800E27EC, D_800F3428;
-GteSineWord D_800966EC[4097];
-unsigned short D_800E1204[8];
+#define D_800F336A g_FieldFxSpriteParams.parameter02
+#define D_800F336C g_FieldFxSpriteParams.palette
+int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag;
+GteSineWord rcossin_tbl[4097];
+unsigned short g_FieldFxPaletteTable[8];
 static short object[5];
 static int lookups, draws, handleValue, savedFrame, sizeValue, shadeValue;
 static short vectorY, scaleValue, objectScale;
 u_short GetClut(int x, int y) {
     unsigned int index = ((unsigned int)savedFrame << 7) & 0x1F80;
     assert(lookups++ == 0 && draws == 0 && x == 0);
-    assert(y == D_800E1204[D_800F336C] +
-           (D_800F336C == 4 && D_800F3428 ? 4 : 0));
+    assert(y == g_FieldFxPaletteTable[D_800F336C] +
+           (D_800F336C == 4 && g_FieldFxAltPaletteFlag ? 4 : 0));
     /* Stub mutations distinguish captured size/vector from later reads. */
-    D_800E27EC += 3; D_800F336A = scaleValue;
+    g_FieldFxCurrentAge += 3; D_800F336A = scaleValue;
     D_800966EE[index] = shadeValue;
     object[3] = 123; object[4] = objectScale;
     return handleValue;
 }
-void func_800CEE20(struct GteShortVector *p, struct GteRotation *v, int a,
+void FieldFx_DrawShapeQuads(struct GteShortVector *p, struct GteRotation *v, int a,
                    int b, int scale, int handle, int flag, int shade,
                    struct RenderColor *colors) {
     short *vector = (short *)v;
@@ -62,7 +62,7 @@ int main(void) {
     for (counter = -16; counter <= 80; ++counter)
     for (event = -1; event <= 3; ++event) {
         if (event == 2 && counter >= 2) continue;
-        D_800E27EC = counter; lookups = draws = 0;
+        g_FieldFxCurrentAge = counter; lookups = draws = 0;
         assert(func_80195218(event, 0) == (event == 1 && counter >= 16));
         assert(lookups == 0 && draws == 0);
     }
@@ -70,10 +70,10 @@ int main(void) {
     for (kind = 0; kind < 8; ++kind) for (special = 0; special < 2; ++special)
     for (h = 0; h < 2; ++h) for (s = 0; s < 6; ++s) for (m = 0; m < 6; ++m) {
         unsigned int index = ((unsigned int)(counter - 2) << 7) & 0x1F80;
-        for (i = 0; i < 8; ++i) D_800E1204[i] = h ? 65535 : i * 100;
-        memset(D_800966EC, 0x5A, sizeof(D_800966EC));
-        D_800E27EC = counter; savedFrame = counter - 2;
-        D_800F336C = kind; D_800F3428 = special; D_800F336A = 999;
+        for (i = 0; i < 8; ++i) g_FieldFxPaletteTable[i] = h ? 65535 : i * 100;
+        memset(rcossin_tbl, 0x5A, sizeof(rcossin_tbl));
+        g_FieldFxCurrentAge = counter; savedFrame = counter - 2;
+        D_800F336C = kind; g_FieldFxAltPaletteFlag = special; D_800F336A = 999;
         sizeValue = values[s]; shadeValue = values[5-s];
         scaleValue = values[s]; objectScale = values[m]; vectorY = values[5-m];
         D_800966EE[index] = sizeValue;

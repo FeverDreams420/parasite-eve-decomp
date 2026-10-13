@@ -22,7 +22,7 @@ class GpuReadbackTests(unittest.TestCase):
 #include <stdint.h>
 #define SENTINEL 0xDEADBEEFU
 #define SAMPLE 0x56781234U
-short D_80095750 = 1024, D_80095752 = 512;
+short g_GpuMaxWidth = 1024, g_GpuMaxHeight = 512;
 static unsigned int gp0, gp1, madr, bcr, chcr;
 unsigned int *g_GpuGp0Ptr = &gp0;
 GpuDmaRegisterWindow g_GpuDmaRegisterWindow = {&gp1, &madr, &bcr, &chcr};

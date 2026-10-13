@@ -17,37 +17,37 @@ class Room350EffectRequestTests(unittest.TestCase):
         # The fall callback is reduced to a prototype; the test stubs it.
         source = host_unit("func_801976C8", under=ROOM)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-FieldFxTaskSlot *D_800F33E0;
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 unsigned char D_8019A86E, D_8019A857;
 short D_8019A864[3];
 #define D_8019A866 D_8019A864[1]
 #define D_8019A868 D_8019A864[2]
-unsigned short D_800E11E4[12], D_800E2850[65536];
-#define D_800E11FA D_800E11E4[11]
+unsigned short g_FieldFxTpageSlots[12], g_FieldFxTpageTable[65536];
+#define g_FieldFxTpageSlot11 g_FieldFxTpageSlots[11]
 /* The retail halfword names are fields of the sprite parameter block; the
  * signed ones are read through signed views as the old globals were. */
-RenderEffectParameters D_800F3368;
-#define SIGNED(field) (*(short *)&D_800F3368.field)
+RenderEffectParameters g_FieldFxSpriteParams;
+#define SIGNED(field) (*(short *)&g_FieldFxSpriteParams.field)
 #define UNIT SIGNED(parameter00)
 #define D_800F336A SIGNED(parameter02)
-#define D_800F336C D_800F3368.palette
+#define D_800F336C g_FieldFxSpriteParams.palette
 #define D_800F336E SIGNED(parameter06)
-#define D_800F3370 D_800F3368.tpage
+#define D_800F3370 g_FieldFxSpriteParams.tpage
 #define D_800F3372 SIGNED(parameter0A)
-#define D_800F3374 D_800F3368.depth
+#define D_800F3374 g_FieldFxSpriteParams.depth
 #define D_800F3376 SIGNED(extent_x)
 #define D_800F3378 SIGNED(extent_y)
 static RoomM350Emitter emitter;
 static int poolToken, setups, allocations, failAllocation, setupResult;
 static short effect[4], xValue, yValue, zValue;
 int func_80197594(int event, short *point) { return 0; }
-int func_800CE560(char *pool, int a, int b,
+int FieldFx_InitCallbackList(char *pool, int a, int b,
                   FieldFxCallbackListCallback callback) {
     assert(setups++ == 0 && allocations == 0 && pool == &poolToken);
     assert(a == 8 && b == 4 && (void *)callback == (void *)func_80197594);
     return setupResult;
 }
-void *func_800CE610(char *pool) {
+void *FieldFx_AcquireCallbackSlot(char *pool) {
     assert(allocations++ == 0 && setups == 0 && pool == &poolToken);
     assert(D_8019A857 != 0 && D_8019A86E == 0);
     /* Stub mutations verify that coordinates are fetched after allocation. */
@@ -60,7 +60,7 @@ int main(void) {
     const unsigned short indices[] = {0, 1, 255, 32768, 65535};
     short before[4];
     int event, stop, request, fail, x, y, z, i, ret;
-    emitter.pool = &poolToken; D_800F33E0 = (FieldFxTaskSlot *)&emitter;
+    emitter.pool = &poolToken; g_FieldFxActiveTaskSlot = (FieldFxTaskSlot *)&emitter;
     for (ret = -2; ret <= 2; ++ret) {
         setups = allocations = 0; setupResult = ret;
         D_8019A857 = 128; D_8019A86E = 255;
@@ -84,16 +84,16 @@ int main(void) {
             assert(effect[0] == xValue && effect[1] == yValue && effect[2] == zValue && effect[3] == 0);
         } else assert(memcmp(effect, before, sizeof(effect)) == 0);
     }
-    for (i = 0; i < 65536; ++i) D_800E2850[i] = (unsigned short)(i * 13 + 17);
+    for (i = 0; i < 65536; ++i) g_FieldFxTpageTable[i] = (unsigned short)(i * 13 + 17);
     for (i = 0; i < 5; ++i) {
-        D_800E11FA = indices[i]; setups = allocations = 0;
+        g_FieldFxTpageSlot11 = indices[i]; setups = allocations = 0;
         D_8019A857 = 128; D_8019A86E = 255;
         UNIT = D_800F336A = D_800F336E = D_800F3372 = D_800F3374 = -7;
         D_800F336C = D_800F3370 = 65535; D_800F3376 = D_800F3378 = -7;
         assert(func_801976C8(2) == 0 && setups == 0 && allocations == 0);
         assert(UNIT == 32 && D_800F336A == 2 && D_800F336C == 3 && D_800F336E == 1);
         assert(D_800F3376 == 32 && D_800F3378 == 32 && D_800F3372 == 0 && D_800F3374 == 0);
-        assert(D_800F3370 == D_800E2850[indices[i]]);
+        assert(D_800F3370 == g_FieldFxTpageTable[indices[i]]);
         assert(D_8019A857 == 128 && D_8019A86E == 255);
     }
     for (event = -2; event <= 4; ++event) {

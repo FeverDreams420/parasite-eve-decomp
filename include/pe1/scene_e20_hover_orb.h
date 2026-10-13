@@ -41,7 +41,7 @@ extern void *D_8019085C;
 int SceneE20_HoverOrbController(int mode, SceneE20TrailEffect *effect, SceneEffectSlot *command);
 extern SceneEffectSlot D_80190860[];
 int rand(void);
-void func_800D2B58(void *from, void *to, void *color0, void *color1, int scale0,
+void FieldFx_DrawGlowLine(void *from, void *to, void *color0, void *color1, int scale0,
                   int scale1, int mode);
 
 extern s32 D_80190800;

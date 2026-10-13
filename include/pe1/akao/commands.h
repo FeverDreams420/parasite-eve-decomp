@@ -152,7 +152,7 @@ typedef struct AkaoSequenceCounter {
     int value;
 } AkaoSequenceCounter;
 
-extern AkaoSequenceCounter D_8009CDF0;
+extern AkaoSequenceCounter g_AkaoCmd24Sequence;
 
 int Akao_EnqueueStagedCommand(void);
 /* Queues a voice-bank load; returns the queue result. */
@@ -172,13 +172,13 @@ void Akao_Cmd_C0_WithSlot(int slot, int volume);
 void Akao_Cmd_C1_WithSlot(int slot, int duration, int volume);
 
 /* Sound ids the scene and image loaders reset to -1 (none loaded); the
- * effect overlays pass D_800B0DB5 to Akao_Cmd_C1_WithSlot. */
+ * effect overlays pass g_SceneAudioSlot0Handle to Akao_Cmd_C1_WithSlot. */
 extern signed char D_800B0DB2;
 extern signed char D_800B0DB3;
-extern signed char D_800B0DB4;
-extern signed char D_800B0DB5;
+extern signed char g_SceneAudioSlot0Key;
+extern signed char g_SceneAudioSlot0Handle;
 extern signed char D_800B0DB6;
-extern signed char D_800B0DB7;
+extern signed char g_SceneAudioSlot1Handle;
 /* Opcode 0x80, 0x81 or 0x82 chosen by the argument. */
 void Akao_Cmd_80_81_82(int arg0);
 

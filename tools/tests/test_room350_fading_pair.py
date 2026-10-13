@@ -47,14 +47,14 @@ typedef char f[OFF(RoomM350EffectActor,instance)==8 && OFF(RoomM350EffectOwner,a
 typedef GteShortVector Particle;
 typedef GteMatrix Matrix;
 typedef GteShortVector Vector;
-FieldFxObjectPrefix *D_800F32D0;
-FieldFxTaskSlot *D_800F33E0;
+FieldFxObjectPrefix *g_FieldFxOwner;
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 unsigned char D_8019A82E;
-int D_800E27EC,D_800F3428;
-GteSineWord D_800966EC[4096];
-u16 D_800E2850[65536],D_800E1204[65536];
-u16 D_800E11E8;
-RenderEffectParameters D_800F3368;
+int g_FieldFxCurrentAge,g_FieldFxAltPaletteFlag;
+GteSineWord rcossin_tbl[4096];
+u16 g_FieldFxTpageTable[65536],g_FieldFxPaletteTable[65536];
+u16 g_FieldFxTpageSlot2;
+RenderEffectParameters g_FieldFxSpriteParams;
 char D_8019A570[8];
 static RoomM350EffectActor actors[2];
 static RoomM350EffectInstance instances[2];
@@ -78,10 +78,10 @@ int Asset_Find08w(int id,int asset,int x,int y,int z) {
     assert(sounds++==0 && id==0x5C9 && asset==(int)(intptr_t)owners[0].asset);
     assert(x==half(transforms[0][33].t[0]));
     assert(y==half(transforms[0][33].t[1]) && z==half(transforms[0][33].t[2]));
-    D_800F33E0=(FieldFxTaskSlot *)&emitters[1]; memset(&state,0x39,sizeof(state));
+    g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[1]; memset(&state,0x39,sizeof(state));
     return -999;
 }
-int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
+int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     State wanted;
     memset(&wanted,0x39,sizeof(wanted)); memset(&wanted.rotation,0,sizeof(wanted.rotation));
     wanted.count=0; wanted.fade=0;
@@ -90,7 +90,7 @@ int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(cb==(FieldFxCallbackListCallback)func_80195B64);
     return -17;
 }
-void *func_800CE610(char *p) {
+void *FieldFx_AcquireCallbackSlot(char *p) {
     int i=allocs++;
     assert(i<2 && p==(char *)&pools[mutate && i ? 1:0]);
     assert(randoms==i*4 && applies==i && rotations==i);
@@ -120,20 +120,20 @@ GteShortVector *ApplyMatrixSV(const GteMatrix *m,const GteShortVector *v,GteShor
     p->x=expectedParticles[i].x=-32768+i;
     p->y=expectedParticles[i].y=32767-i;
     p->z=expectedParticles[i].z=-1234+i;
-    if(mutate) { state.count=expected.count=i ? -32768:32767; D_800F33E0=(FieldFxTaskSlot *)&emitters[1]; }
+    if(mutate) { state.count=expected.count=i ? -32768:32767; g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[1]; }
     expectedParticles[i].pad=half((uint32_t)state.count*128+2048);
     return out;
 }
 u_short GetClut(int x,int y) {
     int i=cluts++,kind=i ? nextKind:2;
     assert(i<2 && draws==i && x==32);
-    assert(y==D_800E1204[kind]+(kind==4 && special ? 4:0));
+    assert(y==g_FieldFxPaletteTable[kind]+(kind==4 && special ? 4:0));
     assert(state.rotation.z==expectedRotation);
     state.size=i ? 32767:-32768; state.brightness=i ? -1:1023;
-    D_800F3368.parameter02=i ? -32768:32767;
+    g_FieldFxSpriteParams.parameter02=i ? -32768:32767;
     return word(0xABCDFFFFu+i);
 }
-void func_800CEE20(struct GteShortVector *pos,struct GteRotation *rotation,int sx,int sy,int scale,int clut,int flag,int brightness,struct RenderColor *colors) {
+void FieldFx_DrawShapeQuads(struct GteShortVector *pos,struct GteRotation *rotation,int sx,int sy,int scale,int clut,int flag,int brightness,struct RenderColor *colors) {
     Vector *v=pos;
     int i=draws++;
     assert(i<2 && cluts==i+1 && (void *)rotation==&state && flag==1 && (void *)colors==D_8019A570);
@@ -143,12 +143,12 @@ void func_800CEE20(struct GteShortVector *pos,struct GteRotation *rotation,int s
     assert(state.rotation.z==expectedRotation);
     state.rotation.z=i ? -32768:12345;
     expectedRotation=half(0u-(uint16_t)state.rotation.z);
-    D_800F3368.palette=nextKind; D_800F3428=special; D_800E1204[nextKind]=65535;
-    D_800F32D0=(FieldFxObjectPrefix *)&actors[1]; transforms[0][33].t[0]=55; D_800E27EC=999;
+    g_FieldFxSpriteParams.palette=nextKind; g_FieldFxAltPaletteFlag=special; g_FieldFxPaletteTable[nextKind]=65535;
+    g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[1]; transforms[0][33].t[0]=55; g_FieldFxCurrentAge=999;
 }
 static void reset(void) {
     allocs=randoms=rotations=applies=sounds=cluts=draws=0;
-    D_800F32D0=(FieldFxObjectPrefix *)&actors[0]; D_800F33E0=(FieldFxTaskSlot *)&emitters[0];
+    g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[0]; g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[0];
     memset(&state,0x5A,sizeof(state)); memset(particles,0x5A,sizeof(particles));
     memcpy(expectedParticles,particles,sizeof(particles));
     transforms[0][33].t[0]=word(0xABCDEF01u);
@@ -158,11 +158,11 @@ static void reset(void) {
 static void update(int count,int fade,int timer,int stop,int sample,int failure,int mutation) {
     int phase,expired,emits,index;
     reset(); state.count=count; state.fade=fade; expected=state;
-    D_800E27EC=timer; D_8019A82E=stop; failAt=failure; mutate=mutation;
+    g_FieldFxCurrentAge=timer; D_8019A82E=stop; failAt=failure; mutate=mutation;
     phase=stop ? fade*64+1024:timer<32 ? word((uint32_t)timer<<5):1024;
     expired=stop && phase>=2048; emits=!expired && count<16;
     if(stop) expected.fade=half((uint16_t)fade+1);
-    index=(uint32_t)phase&4095; D_800966EC[index].word=sample;
+    index=(uint32_t)phase&4095; rcossin_tbl[index].word=sample;
     if(!expired) { expected.brightness=shift5(half(sample)); expected.size=half((uint32_t)sample<<2); }
     assert(func_80195CE0(1,&state)==(expired ? 2:0));
     if(emits) expected.count=half((uint16_t)expected.count+1);
@@ -190,15 +190,15 @@ int main(void) {
     }
     for(n=1;n<256;n++) update(0,15,0,n,INT_MIN,-1,0);
     for(n=0;n<65536;n++) {
-        reset(); D_800E11E8=n; D_800E2850[n]=n^0xA537;
-        initialTimer=word((uint32_t)n*65537); D_800E27EC=initialTimer;
+        reset(); g_FieldFxTpageSlot2=n; g_FieldFxTpageTable[n]=n^0xA537;
+        initialTimer=word((uint32_t)n*65537); g_FieldFxCurrentAge=initialTimer;
         expectedRotation=half((uint32_t)initialTimer<<8);
-        nextKind=kinds[n%5]; special=n&1; D_800F3428=special;
+        nextKind=kinds[n%5]; special=n&1; g_FieldFxAltPaletteFlag=special;
         assert(func_80195CE0(2,&state)==0 && draws==2 && cluts==2);
         assert(state.rotation.z==expectedRotation && state.rotation.x==0x5A5A && state.rotation.y==0x5A5A);
-        assert(D_800F3368.tpage==(unsigned short)(n^0xA537));
-        assert(D_800F3368.parameter00==16 && D_800F3368.extent_x==16 && D_800F3368.extent_y==16);
-        assert(D_800F3368.parameter06==0 && D_800F3368.parameter0A==0 && D_800F3368.depth==0);
+        assert(g_FieldFxSpriteParams.tpage==(unsigned short)(n^0xA537));
+        assert(g_FieldFxSpriteParams.parameter00==16 && g_FieldFxSpriteParams.extent_x==16 && g_FieldFxSpriteParams.extent_y==16);
+        assert(g_FieldFxSpriteParams.parameter06==0 && g_FieldFxSpriteParams.parameter0A==0 && g_FieldFxSpriteParams.depth==0);
         assert(allocs==0 && sounds==0);
     }
     reset(); expected=state;

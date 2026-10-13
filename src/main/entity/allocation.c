@@ -29,14 +29,14 @@ void *Entity_AllocBlock(u32 size) {
     scratch = (s32 *)g_RenderScratchBufferBase;
     while (slot < 0x10U) {
         offset = slot << 3;
-        if (D_800A7620[slot].address == 0) {
+        if (g_EntityAllocationTable[slot].address == 0) {
             free = 1;
             if (slot < slot + count) {
                 end = (blocks + slot) << 3;
                 do {
                     EntityAllocationAddress run;
 
-                    run.entry = D_800A7620;
+                    run.entry = g_EntityAllocationTable;
                     run.word += offset;
                     if (run.entry->address != 0) {
                         free = 0;
@@ -49,13 +49,13 @@ void *Entity_AllocBlock(u32 size) {
             if (free != 0) {
                 s32 address;
 
-                D_800A7620[slot].blockCount = count;
+                g_EntityAllocationTable[slot].blockCount = count;
                 address = *scratch + slot * ENTITY_ALLOCATION_BLOCK_SIZE;
-                D_800A7620[slot].address = address;
+                g_EntityAllocationTable[slot].address = address;
                 return (void *)address;
             }
         } else {
-            used = D_800A7620[slot].blockCount;
+            used = g_EntityAllocationTable[slot].blockCount;
             if (count < used) {
                 slot += used;
             } else {
@@ -71,8 +71,8 @@ void Entity_FreeAllocationBlock(int arg0) {
 
     i = 0;
     while ((unsigned int)(i & 0xFF) < 0x10U) {
-        if (D_800A7620[i & 0xFF].address == arg0) {
-            D_800A7620[i & 0xFF].address = 0;
+        if (g_EntityAllocationTable[i & 0xFF].address == arg0) {
+            g_EntityAllocationTable[i & 0xFF].address = 0;
             return;
         }
         i++;

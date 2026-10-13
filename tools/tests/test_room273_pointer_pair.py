@@ -28,23 +28,23 @@ typedef char layout[sizeof(Position)==8 && sizeof(Effect)==4 &&
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_behavior(self):
         source = '#include <assert.h>\n#include <limits.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
-FieldFxTaskSlot *D_800F33E0;
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 RoomM273SwayState D_8019AF74;
 short D_8019AE88;
-int D_800E27EC;
-unsigned short D_800E11FA,D_800E2850[65536];
-RenderEffectParameters D_800F3368;
+int g_FieldFxCurrentAge;
+unsigned short g_FieldFxTpageSlot11,g_FieldFxTpageTable[65536];
+RenderEffectParameters g_FieldFxSpriteParams;
 static RoomM273PoolContext context;
 static Effect outputs[2];
 static Position sentinel;
 static int pool,initCalls,initResult,allocs,failAt;
 int func_80199950(int mode,Effect *p) { assert(0); return 0; }
-int func_800CE560(char *p,int size,int count,FieldFxCallbackListCallback callback) {
+int FieldFx_InitCallbackList(char *p,int size,int count,FieldFxCallbackListCallback callback) {
     assert(p==(char *)&pool && size==4 && count==6 &&
            callback==(FieldFxCallbackListCallback)func_80199950);
     assert(D_8019AE88==0); ++initCalls; return initResult;
 }
-void *func_800CE610(char *p) {
+void *FieldFx_AcquireCallbackSlot(char *p) {
     int i=allocs++;
     assert(p==(char *)&pool && i<2);
     if(i==failAt) return 0;
@@ -57,14 +57,14 @@ int main(void) {
     int frames[]={INT_MIN,-9,-8,-1,0,1,7,8,16,INT_MAX};
     unsigned short indices[]={0,1,32768,65535};
     int s,a,b,f,i,stopped,eligible,success,calls;
-    D_800F33E0=(FieldFxTaskSlot *)&context; context.pool=&pool;
+    g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&context; context.pool=&pool;
     for(initResult=-1;initResult<=1;++initResult) {
         D_8019AE88=99; assert(func_80199A90(0)==initResult);
     }
     for(s=0;s<5;++s) for(a=0;a<5;++a) for(b=0;b<4;++b)
         for(f=0;f<10;++f) for(failAt=-1;failAt<2;++failAt) {
             D_8019AE88=stops[s]; D_8019AF74.animation=states[a]; D_8019AF74.frame=counts[b];
-            D_800E27EC=frames[f]; allocs=0;
+            g_FieldFxCurrentAge=frames[f]; allocs=0;
             outputs[0].position=outputs[1].position=&sentinel;
             stopped=stops[s]!=0 || (states[a]==15 && counts[b]>=25);
             assert(func_80199A90(1)==(stopped ?2:0));
@@ -83,14 +83,14 @@ int main(void) {
         }
     calls=allocs; D_8019AE88=91;
     for(i=0;i<4;++i) {
-        D_800E11FA=indices[i]; D_800E2850[indices[i]]=65535-i;
-        D_800F3368.parameter00=D_800F3368.parameter02=D_800F3368.palette=D_800F3368.parameter06=0xAAAA;
-        D_800F3368.tpage=D_800F3368.parameter0A=D_800F3368.depth=0xAAAA;
-        D_800F3368.extent_x=D_800F3368.extent_y=0xAAAA;
+        g_FieldFxTpageSlot11=indices[i]; g_FieldFxTpageTable[indices[i]]=65535-i;
+        g_FieldFxSpriteParams.parameter00=g_FieldFxSpriteParams.parameter02=g_FieldFxSpriteParams.palette=g_FieldFxSpriteParams.parameter06=0xAAAA;
+        g_FieldFxSpriteParams.tpage=g_FieldFxSpriteParams.parameter0A=g_FieldFxSpriteParams.depth=0xAAAA;
+        g_FieldFxSpriteParams.extent_x=g_FieldFxSpriteParams.extent_y=0xAAAA;
         assert(func_80199A90(2)==0 && allocs==calls && D_8019AE88==91);
-        assert(D_800F3368.parameter00==64 && D_800F3368.parameter02==4 && D_800F3368.palette==3);
-        assert(D_800F3368.parameter06==1 && D_800F3368.tpage==65535-i && D_800F3368.parameter0A==0);
-        assert(D_800F3368.depth==32 && D_800F3368.extent_x==64 && D_800F3368.extent_y==64);
+        assert(g_FieldFxSpriteParams.parameter00==64 && g_FieldFxSpriteParams.parameter02==4 && g_FieldFxSpriteParams.palette==3);
+        assert(g_FieldFxSpriteParams.parameter06==1 && g_FieldFxSpriteParams.tpage==65535-i && g_FieldFxSpriteParams.parameter0A==0);
+        assert(g_FieldFxSpriteParams.depth==32 && g_FieldFxSpriteParams.extent_x==64 && g_FieldFxSpriteParams.extent_y==64);
     }
     assert(func_80199A90(-1)==0 && func_80199A90(3)==0);
     assert(func_80199A90(INT_MIN)==0 && func_80199A90(INT_MAX)==0);

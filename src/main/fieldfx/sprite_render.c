@@ -20,40 +20,40 @@
  * draw state and scratch pointers private to this range (main_tu_evidence
  * G1390). */
 
-void func_800C2EAC(u8 mode) {
+void FieldFx_SetSpriteTexturePreset(u8 mode) {
     if (mode == 0) {
-        D_800F3424 = 0x340;
-        D_800F3426 = 0x100;
-        D_800F341C = 0;
-        D_800F341E = 0x1D7;
+        g_FieldFxSpriteTpageX = 0x340;
+        g_FieldFxSpriteTpageY = 0x100;
+        g_FieldFxSpriteClutX = 0;
+        g_FieldFxSpriteClutY = 0x1D7;
         D_800F3422 = 0;
     }
     if (mode == 1) {
-        D_800F3424 = 0x340;
-        D_800F3426 = 0x160;
-        D_800F341E = 0x1DB;
-        D_800F341C = 0;
+        g_FieldFxSpriteTpageX = 0x340;
+        g_FieldFxSpriteTpageY = 0x160;
+        g_FieldFxSpriteClutY = 0x1DB;
+        g_FieldFxSpriteClutX = 0;
         D_800F3422 = 0x60;
     }
     if (mode == 2) {
-        D_800F3424 = 0x340;
-        D_800F3426 = 0x100;
-        D_800F341C = 0;
-        D_800F341E = 0x1D6;
+        g_FieldFxSpriteTpageX = 0x340;
+        g_FieldFxSpriteTpageY = 0x100;
+        g_FieldFxSpriteClutX = 0;
+        g_FieldFxSpriteClutY = 0x1D6;
         D_800F3422 = 0;
     }
     if (mode == 3) {
-        D_800F3424 = 0x380;
-        D_800F3426 = 0x100;
-        D_800F341C = 0;
-        D_800F341E = 0x1C8;
+        g_FieldFxSpriteTpageX = 0x380;
+        g_FieldFxSpriteTpageY = 0x100;
+        g_FieldFxSpriteClutX = 0;
+        g_FieldFxSpriteClutY = 0x1C8;
         D_800F3422 = 0;
     }
 
-    D_800E27AC = GetTPage(D_800F33AC, D_800E224C, D_800F3424, D_800F3426);
+    g_FieldFxSpriteTpageValue = GetTPage(g_FieldFxSpriteColorMode, g_FieldFxSpriteBlendRate, g_FieldFxSpriteTpageX, g_FieldFxSpriteTpageY);
 }
 
-void func_800C2FF0(int width, int height) {
+void FieldFx_SetSpriteCellSize(int width, int height) {
     u8 widthMinus;
     u8 heightMinus;
     int x;
@@ -62,47 +62,47 @@ void func_800C2FF0(int width, int height) {
     widthMinus = width - 1;
     heightMinus = height - 1;
 
-    D_800F345C = width;
+    g_FieldFxSpriteCellUMax = width;
     x = (width & 0xFF) << 4;
-    D_800F345D = height;
+    g_FieldFxSpriteCellVExtent = height;
     y = (height & 0xFF) << 4;
 
-    D_800F3310[0].x = -x;
-    D_800F3310[0].y = -y;
-    D_800F3310[0].z = 0;
+    g_FieldFxCellQuad[0].x = -x;
+    g_FieldFxCellQuad[0].y = -y;
+    g_FieldFxCellQuad[0].z = 0;
     D_800F3318.x = x;
     D_800F3318.y = -y;
     D_800F3318.z = 0;
-    D_800F3320.x = -x;
-    D_800F3320.y = y;
-    D_800F3320.z = 0;
+    g_FieldFxCellQuadBottomLeft.x = -x;
+    g_FieldFxCellQuadBottomLeft.y = y;
+    g_FieldFxCellQuadBottomLeft.z = 0;
     D_800F3328.x = x;
     D_800F3328.y = y;
     D_800F3328.z = 0;
 
-    D_800F345C = widthMinus;
-    D_800F345D = heightMinus;
+    g_FieldFxSpriteCellUMax = widthMinus;
+    g_FieldFxSpriteCellVExtent = heightMinus;
 }
 
-void func_800C3098(int mode) {
+void FieldFx_SetSpriteColorMode(int mode) {
     mode = (short)mode;
 
     switch (mode) {
     case 0x10:
-        D_800F33AC = 0;
+        g_FieldFxSpriteColorMode = 0;
         break;
     case 0x100:
-        D_800F33AC = 1;
+        g_FieldFxSpriteColorMode = 1;
         break;
     default:
         printf(g_FieldSpriteWrongColorModeMsg);
         break;
     }
 
-    D_800E27AC = GetTPage(D_800F33AC, D_800E224C, D_800F3424, D_800F3426);
+    g_FieldFxSpriteTpageValue = GetTPage(g_FieldFxSpriteColorMode, g_FieldFxSpriteBlendRate, g_FieldFxSpriteTpageX, g_FieldFxSpriteTpageY);
 }
 
-void func_800C3134(u8 *table, u32 step, u8 *out) {
+void FieldFx_InterpolateColorRamp(u8 *table, u32 step, u8 *out) {
     u32 sum = 0;
     u32 one = 0x1000;
     u32 last = 0xFF;
@@ -140,124 +140,124 @@ void func_800C3134(u8 *table, u32 step, u8 *out) {
     }
 }
 
-void func_800C3238(u8 mode) {
-    D_800F33B8 = mode;
+void FieldFx_SetSpriteBlendMode(u8 mode) {
+    g_FieldFxSpriteBlendMode = mode;
     switch (mode) {
     case 0:
-        D_800F337A = 0;
-        D_800E224C = 0;
+        g_FieldFxSpriteSemiTrans = 0;
+        g_FieldFxSpriteBlendRate = 0;
         break;
     case 1:
-        D_800F337A = 1;
-        D_800E224C = 0;
+        g_FieldFxSpriteSemiTrans = 1;
+        g_FieldFxSpriteBlendRate = 0;
         break;
     case 2:
-        D_800F337A = 1;
-        D_800E224C = 1;
+        g_FieldFxSpriteSemiTrans = 1;
+        g_FieldFxSpriteBlendRate = 1;
         break;
     case 3:
-        D_800F337A = 1;
-        D_800E224C = 2;
+        g_FieldFxSpriteSemiTrans = 1;
+        g_FieldFxSpriteBlendRate = 2;
         break;
     case 4:
-        D_800F337A = 1;
-        D_800E224C = 3;
+        g_FieldFxSpriteSemiTrans = 1;
+        g_FieldFxSpriteBlendRate = 3;
         break;
     }
-    D_800E27AC = GetTPage(D_800F33AC, D_800E224C, D_800F3424, D_800F3426);
+    g_FieldFxSpriteTpageValue = GetTPage(g_FieldFxSpriteColorMode, g_FieldFxSpriteBlendRate, g_FieldFxSpriteTpageX, g_FieldFxSpriteTpageY);
 }
 
-void func_800C3324(FieldOrientedSprite *sprite)
+void FieldFx_DrawOrientedSprite(FieldOrientedSprite *sprite)
 {
     FieldStripPacket *packet;
     FieldStripLink link;
 
-    packet = (FieldStripPacket *)(D_800B0E58[g_ActiveDrawSlot] + D_8009CDD8);
-    D_800F33B4 = FIELDFX_SCRATCH;
-    D_800F33B4->v = sprite->cell & 0xF0;
-    D_800F33B4->u = (sprite->cell - D_800F33B4->v) << 4;
-    D_800F33B4->clutX = sprite->clut << 4;
-    D_800F33B4->clutY = sprite->clut >> 4;
+    packet = (FieldStripPacket *)(D_800B0E58[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_FieldFxScratch = FIELDFX_SCRATCH;
+    g_FieldFxScratch->v = sprite->cell & 0xF0;
+    g_FieldFxScratch->u = (sprite->cell - g_FieldFxScratch->v) << 4;
+    g_FieldFxScratch->clutX = sprite->clut << 4;
+    g_FieldFxScratch->clutY = sprite->clut >> 4;
     if (sprite->brightness != 0x80) {
-        D_800F33B4->channel = sprite->rgb[0];
-        D_800F33B4->channel *= sprite->brightness;
-        if (D_800F33B4->channel > 0x7FFF) {
-            D_800F33B4->channel = 0x7FFF;
+        g_FieldFxScratch->channel = sprite->rgb[0];
+        g_FieldFxScratch->channel *= sprite->brightness;
+        if (g_FieldFxScratch->channel > 0x7FFF) {
+            g_FieldFxScratch->channel = 0x7FFF;
         }
-        D_800F33B4->channel >>= 7;
-        packet->r0 = D_800F33B4->channel;
-        D_800F33B4->channel = sprite->rgb[1];
-        D_800F33B4->channel *= sprite->brightness;
-        if (D_800F33B4->channel > 0x7FFF) {
-            D_800F33B4->channel = 0x7FFF;
+        g_FieldFxScratch->channel >>= 7;
+        packet->r0 = g_FieldFxScratch->channel;
+        g_FieldFxScratch->channel = sprite->rgb[1];
+        g_FieldFxScratch->channel *= sprite->brightness;
+        if (g_FieldFxScratch->channel > 0x7FFF) {
+            g_FieldFxScratch->channel = 0x7FFF;
         }
-        D_800F33B4->channel >>= 7;
-        packet->g0 = D_800F33B4->channel;
-        D_800F33B4->channel = sprite->rgb[2];
-        D_800F33B4->channel *= sprite->brightness;
-        if (D_800F33B4->channel > 0x7FFF) {
-            D_800F33B4->channel = 0x7FFF;
+        g_FieldFxScratch->channel >>= 7;
+        packet->g0 = g_FieldFxScratch->channel;
+        g_FieldFxScratch->channel = sprite->rgb[2];
+        g_FieldFxScratch->channel *= sprite->brightness;
+        if (g_FieldFxScratch->channel > 0x7FFF) {
+            g_FieldFxScratch->channel = 0x7FFF;
         }
-        D_800F33B4->channel >>= 7;
-        packet->b0 = D_800F33B4->channel;
+        g_FieldFxScratch->channel >>= 7;
+        packet->b0 = g_FieldFxScratch->channel;
     } else {
         packet->r0 = sprite->rgb[0];
         packet->g0 = sprite->rgb[1];
         packet->b0 = sprite->rgb[2];
     }
-    RotMatrixYXZ(&sprite->rotation, &D_800F33B4->local);
-    ScaleMatrix(&D_800F33B4->local, &sprite->scale);
-    D_800F33B4->local.t[0] = 0;
-    D_800F33B4->local.t[1] = 0;
-    D_800F33B4->local.t[2] = 0;
-    D_800F33B4->matrix = *D_800BCFA4.value;
-    D_800F33B4->matrix.t[0] += (D_800F33B4->matrix.m[0][2] * sprite->position.z +
-                                D_800F33B4->matrix.m[0][1] * sprite->position.y +
-                                D_800F33B4->matrix.m[0][0] * sprite->position.x) / 4096;
-    D_800F33B4->matrix.t[1] += (D_800F33B4->matrix.m[1][2] * sprite->position.z +
-                                D_800F33B4->matrix.m[1][1] * sprite->position.y +
-                                D_800F33B4->matrix.m[1][0] * sprite->position.x) / 4096;
-    D_800F33B4->matrix.t[2] += (D_800F33B4->matrix.m[2][2] * sprite->position.z +
-                                D_800F33B4->matrix.m[2][1] * sprite->position.y +
-                                D_800F33B4->matrix.m[2][0] * sprite->position.x) / 4096;
-    gte_CompMatrix(&D_800F33B4->matrix, &D_800F33B4->local, &D_800F33B4->matrix);
-    gte_ldrotmatrix(&D_800F33B4->matrix);
-    gte_ldtransmatrix(&D_800F33B4->matrix);
-    gte_ldv3(D_800F3310, &D_800F3318, &D_800F3320);
+    RotMatrixYXZ(&sprite->rotation, &g_FieldFxScratch->local);
+    ScaleMatrix(&g_FieldFxScratch->local, &sprite->scale);
+    g_FieldFxScratch->local.t[0] = 0;
+    g_FieldFxScratch->local.t[1] = 0;
+    g_FieldFxScratch->local.t[2] = 0;
+    g_FieldFxScratch->matrix = *D_800BCFA4.value;
+    g_FieldFxScratch->matrix.t[0] += (g_FieldFxScratch->matrix.m[0][2] * sprite->position.z +
+                                g_FieldFxScratch->matrix.m[0][1] * sprite->position.y +
+                                g_FieldFxScratch->matrix.m[0][0] * sprite->position.x) / 4096;
+    g_FieldFxScratch->matrix.t[1] += (g_FieldFxScratch->matrix.m[1][2] * sprite->position.z +
+                                g_FieldFxScratch->matrix.m[1][1] * sprite->position.y +
+                                g_FieldFxScratch->matrix.m[1][0] * sprite->position.x) / 4096;
+    g_FieldFxScratch->matrix.t[2] += (g_FieldFxScratch->matrix.m[2][2] * sprite->position.z +
+                                g_FieldFxScratch->matrix.m[2][1] * sprite->position.y +
+                                g_FieldFxScratch->matrix.m[2][0] * sprite->position.x) / 4096;
+    gte_CompMatrix(&g_FieldFxScratch->matrix, &g_FieldFxScratch->local, &g_FieldFxScratch->matrix);
+    gte_ldrotmatrix(&g_FieldFxScratch->matrix);
+    gte_ldtransmatrix(&g_FieldFxScratch->matrix);
+    gte_ldv3(g_FieldFxCellQuad, &D_800F3318, &g_FieldFxCellQuadBottomLeft);
     gte_rtpt_padded();
     packet->tag.length = 9;
     packet->code = 0x2C;
-    packet->u0 = D_800F33B4->u;
-    packet->v0 = D_800F33B4->v;
-    packet->u1 = D_800F33B4->u + D_800F345C;
-    packet->v1 = D_800F33B4->v;
-    packet->u2 = D_800F33B4->u;
-    packet->v2 = D_800F33B4->v + D_800F345D;
-    packet->u3 = D_800F33B4->u + D_800F345C;
-    packet->v3 = D_800F33B4->v + D_800F345D;
+    packet->u0 = g_FieldFxScratch->u;
+    packet->v0 = g_FieldFxScratch->v;
+    packet->u1 = g_FieldFxScratch->u + g_FieldFxSpriteCellUMax;
+    packet->v1 = g_FieldFxScratch->v;
+    packet->u2 = g_FieldFxScratch->u;
+    packet->v2 = g_FieldFxScratch->v + g_FieldFxSpriteCellVExtent;
+    packet->u3 = g_FieldFxScratch->u + g_FieldFxSpriteCellUMax;
+    packet->v3 = g_FieldFxScratch->v + g_FieldFxSpriteCellVExtent;
     gte_avsz3_padded();
-    /* PSY-Q setSemiTrans(packet, D_800F337A). */
-    if (D_800F337A) {
+    /* PSY-Q setSemiTrans(packet, g_FieldFxSpriteSemiTrans). */
+    if (g_FieldFxSpriteSemiTrans) {
         packet->code = packet->code | 2;
     } else {
         packet->code = packet->code & ~2;
     }
-    gte_stotz(&D_800F33B4->depth);
+    gte_stotz(&g_FieldFxScratch->depth);
     gte_stsxy3(&packet->x0, &packet->x1, &packet->x2);
     gte_ldv0(&D_800F3328);
     gte_rtps();
-    packet->tpage = D_800E27AC;
-    packet->clut = GetClut(D_800F341C + D_800F33B4->clutX,
-                           D_800F341E + D_800F33B4->clutY);
+    packet->tpage = g_FieldFxSpriteTpageValue;
+    packet->clut = GetClut(g_FieldFxSpriteClutX + g_FieldFxScratch->clutX,
+                           g_FieldFxSpriteClutY + g_FieldFxScratch->clutY);
     gte_stsxy2(&packet->x3);
-    packet->tag.address = STRIP_OT(D_800F33B4->depth + sprite->depth)->address;
+    packet->tag.address = STRIP_OT(g_FieldFxScratch->depth + sprite->depth)->address;
     link.tag = &packet->tag;
-    STRIP_OT(D_800F33B4->depth + sprite->depth)->address = link.word;
-    D_8009CDD8 += sizeof(FieldStripPacket);
+    STRIP_OT(g_FieldFxScratch->depth + sprite->depth)->address = link.word;
+    g_DrawPacketOffset += sizeof(FieldStripPacket);
 }
 
 /* Project a camera-facing billboard and link it into the depth ordering table. */
-void func_800C3B04(FieldBillboard *board)
+void FieldFx_DrawBillboard(FieldBillboard *board)
 {
     FieldStripPacket *packet;
     int width;
@@ -269,39 +269,39 @@ void func_800C3B04(FieldBillboard *board)
     int projectedHeight;
     FieldStripLink link;
 
-    D_800E284C = FIELD_BILLBOARD_SCRATCH;
-    D_800E284C->v = board->cell & 0xF0;
-    D_800E284C->u = (board->cell - D_800E284C->v) << 4;
-    D_800E284C->clutX = board->clut << 4;
-    D_800E284C->clutY = board->clut >> 4;
-    width = (D_800F345C * board->scaleX) >> 12;
-    height = (D_800F345D * board->scaleY) >> 12;
+    g_FieldFxBillboardScratch = FIELD_BILLBOARD_SCRATCH;
+    g_FieldFxBillboardScratch->v = board->cell & 0xF0;
+    g_FieldFxBillboardScratch->u = (board->cell - g_FieldFxBillboardScratch->v) << 4;
+    g_FieldFxBillboardScratch->clutX = board->clut << 4;
+    g_FieldFxBillboardScratch->clutY = board->clut >> 4;
+    width = (g_FieldFxSpriteCellUMax * board->scaleX) >> 12;
+    height = (g_FieldFxSpriteCellVExtent * board->scaleY) >> 12;
     if (board->brightness != 0x80) {
-        D_800E284C->channel = board->rgb[0];
-        D_800E284C->channel *= board->brightness;
-        if (D_800E284C->channel > 0x7FFF) {
-            D_800E284C->channel = 0x7FFF;
+        g_FieldFxBillboardScratch->channel = board->rgb[0];
+        g_FieldFxBillboardScratch->channel *= board->brightness;
+        if (g_FieldFxBillboardScratch->channel > 0x7FFF) {
+            g_FieldFxBillboardScratch->channel = 0x7FFF;
         }
-        D_800E284C->channel >>= 7;
-        D_800E284C->rgb[0] = D_800E284C->channel;
-        D_800E284C->channel = board->rgb[1];
-        D_800E284C->channel *= board->brightness;
-        if (D_800E284C->channel > 0x7FFF) {
-            D_800E284C->channel = 0x7FFF;
+        g_FieldFxBillboardScratch->channel >>= 7;
+        g_FieldFxBillboardScratch->rgb[0] = g_FieldFxBillboardScratch->channel;
+        g_FieldFxBillboardScratch->channel = board->rgb[1];
+        g_FieldFxBillboardScratch->channel *= board->brightness;
+        if (g_FieldFxBillboardScratch->channel > 0x7FFF) {
+            g_FieldFxBillboardScratch->channel = 0x7FFF;
         }
-        D_800E284C->channel >>= 7;
-        D_800E284C->rgb[1] = D_800E284C->channel;
-        D_800E284C->channel = board->rgb[2];
-        D_800E284C->channel *= board->brightness;
-        if (D_800E284C->channel > 0x7FFF) {
-            D_800E284C->channel = 0x7FFF;
+        g_FieldFxBillboardScratch->channel >>= 7;
+        g_FieldFxBillboardScratch->rgb[1] = g_FieldFxBillboardScratch->channel;
+        g_FieldFxBillboardScratch->channel = board->rgb[2];
+        g_FieldFxBillboardScratch->channel *= board->brightness;
+        if (g_FieldFxBillboardScratch->channel > 0x7FFF) {
+            g_FieldFxBillboardScratch->channel = 0x7FFF;
         }
-        D_800E284C->channel >>= 7;
-        D_800E284C->rgb[2] = D_800E284C->channel;
+        g_FieldFxBillboardScratch->channel >>= 7;
+        g_FieldFxBillboardScratch->rgb[2] = g_FieldFxBillboardScratch->channel;
     } else {
-        D_800E284C->rgb[0] = board->rgb[0];
-        D_800E284C->rgb[1] = board->rgb[1];
-        D_800E284C->rgb[2] = board->rgb[2];
+        g_FieldFxBillboardScratch->rgb[0] = board->rgb[0];
+        g_FieldFxBillboardScratch->rgb[1] = board->rgb[1];
+        g_FieldFxBillboardScratch->rgb[2] = board->rgb[2];
     }
     {
         GteMatrix **slot;
@@ -309,97 +309,97 @@ void func_800C3B04(FieldBillboard *board)
         gte_ldrotmatrix((const GteMatrixWords *)*slot);
         gte_ldtransmatrix((const GteMatrixWords *)*slot);
     }
-    D_800E284C->depth = RotTransPers(&board->position, &D_800E284C->screen.word,
-                                     &D_800E284C->p, &D_800E284C->flag);
-    D_800E284C->centerX = D_800E284C->screen.word;
-    D_800E284C->centerY = D_800E284C->screen.xy.y;
+    g_FieldFxBillboardScratch->depth = RotTransPers(&board->position, &g_FieldFxBillboardScratch->screen.word,
+                                     &g_FieldFxBillboardScratch->p, &g_FieldFxBillboardScratch->flag);
+    g_FieldFxBillboardScratch->centerX = g_FieldFxBillboardScratch->screen.word;
+    g_FieldFxBillboardScratch->centerY = g_FieldFxBillboardScratch->screen.xy.y;
     distance = D_800BCFA8.distance[0];
-    projectedWidth = (width << 5) * distance / (D_800E284C->depth * 4 + distance);
+    projectedWidth = (width << 5) * distance / (g_FieldFxBillboardScratch->depth * 4 + distance);
     projectedHeight =
-        (height << 5) * distance / (D_800E284C->depth * 4 + distance);
+        (height << 5) * distance / (g_FieldFxBillboardScratch->depth * 4 + distance);
     halfWidth = projectedWidth >> 1;
     halfHeight = projectedHeight >> 1;
-    packet = (FieldStripPacket *)(D_800B0E58[g_ActiveDrawSlot] + D_8009CDD8);
+    packet = (FieldStripPacket *)(D_800B0E58[g_ActiveDrawSlot] + g_DrawPacketOffset);
     packet->tag.length = 9;
     packet->code = 0x2C;
-    /* PSY-Q setSemiTrans(packet, D_800F337A). */
-    if (D_800F337A) {
+    /* PSY-Q setSemiTrans(packet, g_FieldFxSpriteSemiTrans). */
+    if (g_FieldFxSpriteSemiTrans) {
         packet->code = packet->code | 2;
     } else {
         packet->code = packet->code & ~2;
     }
     if (board->angle != 0) {
-        D_800E284C->corner[0].x = -halfWidth;
-        D_800E284C->corner[0].y = -halfHeight;
-        D_800E284C->corner[1].x = halfWidth;
-        D_800E284C->corner[1].y = -halfHeight;
-        D_800E284C->corner[2].x = -halfWidth;
-        D_800E284C->corner[2].y = halfHeight;
-        D_800E284C->corner[3].x = halfWidth;
-        D_800E284C->corner[3].y = halfHeight;
-        D_800E284C->rotation.m[2][2] = 0x1000;
-        D_800E284C->rotation.m[1][1] = 0x1000;
-        D_800E284C->rotation.m[0][0] = 0x1000;
-        D_800E284C->rotation.t[2] = 0;
-        D_800E284C->rotation.t[1] = 0;
-        D_800E284C->rotation.t[0] = 0;
-        D_800E284C->rotation.m[2][1] = 0;
-        D_800E284C->rotation.m[2][0] = 0;
-        D_800E284C->rotation.m[1][2] = 0;
-        D_800E284C->rotation.m[1][0] = 0;
-        D_800E284C->rotation.m[0][2] = 0;
-        D_800E284C->rotation.m[0][1] = 0;
-        RotMatrixZ(board->angle, &D_800E284C->rotation);
-        ApplyMatrixSV(&D_800E284C->rotation, &D_800E284C->corner[0],
-                      &D_800E284C->turned[0]);
-        ApplyMatrixSV(&D_800E284C->rotation, &D_800E284C->corner[1],
-                      &D_800E284C->turned[1]);
-        ApplyMatrixSV(&D_800E284C->rotation, &D_800E284C->corner[2],
-                      &D_800E284C->turned[2]);
-        ApplyMatrixSV(&D_800E284C->rotation, &D_800E284C->corner[3],
-                      &D_800E284C->turned[3]);
-        packet->x0 = D_800E284C->centerX + D_800E284C->turned[0].x;
-        packet->y0 = D_800E284C->centerY + D_800E284C->turned[0].y;
-        packet->x1 = D_800E284C->centerX + D_800E284C->turned[1].x;
-        packet->y1 = D_800E284C->centerY + D_800E284C->turned[1].y;
-        packet->x2 = D_800E284C->centerX + D_800E284C->turned[2].x;
-        packet->y2 = D_800E284C->centerY + D_800E284C->turned[2].y;
-        packet->x3 = D_800E284C->centerX + D_800E284C->turned[3].x;
-        packet->y3 = D_800E284C->centerY + D_800E284C->turned[3].y;
+        g_FieldFxBillboardScratch->corner[0].x = -halfWidth;
+        g_FieldFxBillboardScratch->corner[0].y = -halfHeight;
+        g_FieldFxBillboardScratch->corner[1].x = halfWidth;
+        g_FieldFxBillboardScratch->corner[1].y = -halfHeight;
+        g_FieldFxBillboardScratch->corner[2].x = -halfWidth;
+        g_FieldFxBillboardScratch->corner[2].y = halfHeight;
+        g_FieldFxBillboardScratch->corner[3].x = halfWidth;
+        g_FieldFxBillboardScratch->corner[3].y = halfHeight;
+        g_FieldFxBillboardScratch->rotation.m[2][2] = 0x1000;
+        g_FieldFxBillboardScratch->rotation.m[1][1] = 0x1000;
+        g_FieldFxBillboardScratch->rotation.m[0][0] = 0x1000;
+        g_FieldFxBillboardScratch->rotation.t[2] = 0;
+        g_FieldFxBillboardScratch->rotation.t[1] = 0;
+        g_FieldFxBillboardScratch->rotation.t[0] = 0;
+        g_FieldFxBillboardScratch->rotation.m[2][1] = 0;
+        g_FieldFxBillboardScratch->rotation.m[2][0] = 0;
+        g_FieldFxBillboardScratch->rotation.m[1][2] = 0;
+        g_FieldFxBillboardScratch->rotation.m[1][0] = 0;
+        g_FieldFxBillboardScratch->rotation.m[0][2] = 0;
+        g_FieldFxBillboardScratch->rotation.m[0][1] = 0;
+        RotMatrixZ(board->angle, &g_FieldFxBillboardScratch->rotation);
+        ApplyMatrixSV(&g_FieldFxBillboardScratch->rotation, &g_FieldFxBillboardScratch->corner[0],
+                      &g_FieldFxBillboardScratch->turned[0]);
+        ApplyMatrixSV(&g_FieldFxBillboardScratch->rotation, &g_FieldFxBillboardScratch->corner[1],
+                      &g_FieldFxBillboardScratch->turned[1]);
+        ApplyMatrixSV(&g_FieldFxBillboardScratch->rotation, &g_FieldFxBillboardScratch->corner[2],
+                      &g_FieldFxBillboardScratch->turned[2]);
+        ApplyMatrixSV(&g_FieldFxBillboardScratch->rotation, &g_FieldFxBillboardScratch->corner[3],
+                      &g_FieldFxBillboardScratch->turned[3]);
+        packet->x0 = g_FieldFxBillboardScratch->centerX + g_FieldFxBillboardScratch->turned[0].x;
+        packet->y0 = g_FieldFxBillboardScratch->centerY + g_FieldFxBillboardScratch->turned[0].y;
+        packet->x1 = g_FieldFxBillboardScratch->centerX + g_FieldFxBillboardScratch->turned[1].x;
+        packet->y1 = g_FieldFxBillboardScratch->centerY + g_FieldFxBillboardScratch->turned[1].y;
+        packet->x2 = g_FieldFxBillboardScratch->centerX + g_FieldFxBillboardScratch->turned[2].x;
+        packet->y2 = g_FieldFxBillboardScratch->centerY + g_FieldFxBillboardScratch->turned[2].y;
+        packet->x3 = g_FieldFxBillboardScratch->centerX + g_FieldFxBillboardScratch->turned[3].x;
+        packet->y3 = g_FieldFxBillboardScratch->centerY + g_FieldFxBillboardScratch->turned[3].y;
     } else {
-        packet->x0 = D_800E284C->centerX - halfWidth;
-        packet->y0 = D_800E284C->centerY - halfHeight;
-        packet->x1 = D_800E284C->centerX + halfWidth;
-        packet->y1 = D_800E284C->centerY - halfHeight;
-        packet->x2 = D_800E284C->centerX - halfWidth;
-        packet->y2 = D_800E284C->centerY + halfHeight;
-        packet->x3 = D_800E284C->centerX + halfWidth;
-        packet->y3 = D_800E284C->centerY + halfHeight;
+        packet->x0 = g_FieldFxBillboardScratch->centerX - halfWidth;
+        packet->y0 = g_FieldFxBillboardScratch->centerY - halfHeight;
+        packet->x1 = g_FieldFxBillboardScratch->centerX + halfWidth;
+        packet->y1 = g_FieldFxBillboardScratch->centerY - halfHeight;
+        packet->x2 = g_FieldFxBillboardScratch->centerX - halfWidth;
+        packet->y2 = g_FieldFxBillboardScratch->centerY + halfHeight;
+        packet->x3 = g_FieldFxBillboardScratch->centerX + halfWidth;
+        packet->y3 = g_FieldFxBillboardScratch->centerY + halfHeight;
     }
-    packet->r0 = D_800E284C->rgb[0];
-    packet->g0 = D_800E284C->rgb[1];
-    packet->b0 = D_800E284C->rgb[2];
-    packet->tpage = D_800E27AC;
-    packet->clut = GetClut(D_800F341C + D_800E284C->clutX,
-                           D_800F341E + D_800E284C->clutY);
-    packet->u0 = D_800E284C->u + 1;
-    packet->v0 = D_800E284C->v + 1;
-    packet->u1 = D_800E284C->u + D_800F345C;
-    packet->v1 = D_800E284C->v + 1;
-    packet->u2 = D_800E284C->u + 1;
-    packet->v2 = D_800E284C->v + D_800F345D;
-    packet->u3 = D_800E284C->u + D_800F345C;
-    packet->v3 = D_800E284C->v + D_800F345D;
-    packet->tag.address = STRIP_OT(D_800E284C->depth + board->depth)->address;
+    packet->r0 = g_FieldFxBillboardScratch->rgb[0];
+    packet->g0 = g_FieldFxBillboardScratch->rgb[1];
+    packet->b0 = g_FieldFxBillboardScratch->rgb[2];
+    packet->tpage = g_FieldFxSpriteTpageValue;
+    packet->clut = GetClut(g_FieldFxSpriteClutX + g_FieldFxBillboardScratch->clutX,
+                           g_FieldFxSpriteClutY + g_FieldFxBillboardScratch->clutY);
+    packet->u0 = g_FieldFxBillboardScratch->u + 1;
+    packet->v0 = g_FieldFxBillboardScratch->v + 1;
+    packet->u1 = g_FieldFxBillboardScratch->u + g_FieldFxSpriteCellUMax;
+    packet->v1 = g_FieldFxBillboardScratch->v + 1;
+    packet->u2 = g_FieldFxBillboardScratch->u + 1;
+    packet->v2 = g_FieldFxBillboardScratch->v + g_FieldFxSpriteCellVExtent;
+    packet->u3 = g_FieldFxBillboardScratch->u + g_FieldFxSpriteCellUMax;
+    packet->v3 = g_FieldFxBillboardScratch->v + g_FieldFxSpriteCellVExtent;
+    packet->tag.address = STRIP_OT(g_FieldFxBillboardScratch->depth + board->depth)->address;
     link.tag = &packet->tag;
-    STRIP_OT(D_800E284C->depth + board->depth)->address = link.word;
-    D_8009CDD8 += sizeof(FieldStripPacket);
+    STRIP_OT(g_FieldFxBillboardScratch->depth + board->depth)->address = link.word;
+    g_DrawPacketOffset += sizeof(FieldStripPacket);
 }
 
 /* Compose/project a glow quad and link it into the depth ordering table.
  * The GTE operands are the camera slot and the corner vectors themselves:
  * reload loads them into t1..t3 in turn, as retail does. */
-void func_800C42A4(FieldGlowSprite *sprite, GteMatrix *placement, u8 mode)
+void FieldFx_DrawGlowSprite(FieldGlowSprite *sprite, GteMatrix *placement, u8 mode)
 {
     s16 *xy0;
     s16 *xy1;
@@ -410,27 +410,27 @@ void func_800C42A4(FieldGlowSprite *sprite, GteMatrix *placement, u8 mode)
     s32 flag;
     FieldStripLink link;
 
-    packet = (FieldStripPacket *)(D_800B0E58[g_ActiveDrawSlot] + D_8009CDD8);
-    D_800F33B4 = FIELDFX_SCRATCH;
+    packet = (FieldStripPacket *)(D_800B0E58[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_FieldFxScratch = FIELDFX_SCRATCH;
     if (mode == 0) {
         /* Compose camera rotation with each placement column. */
         gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldclmv(placement);
         gte_rtir();
-        gte_stclmv(&D_800F33B4->matrix);
+        gte_stclmv(&g_FieldFxScratch->matrix);
         gte_ldclmv((u16 *)placement + 1);
         gte_rtir();
-        gte_stclmv((u16 *)&D_800F33B4->matrix + 1);
+        gte_stclmv((u16 *)&g_FieldFxScratch->matrix + 1);
         gte_ldclmv((u16 *)placement + 2);
         gte_rtir();
-        gte_stclmv((u16 *)&D_800F33B4->matrix + 2);
+        gte_stclmv((u16 *)&g_FieldFxScratch->matrix + 2);
         /* Transform placement translation with the camera matrix. */
         gte_ldtransmatrix(D_800BCFA4.value);
         gte_ldlv0(placement->t);
         gte_rt();
-        gte_stlvl(D_800F33B4->matrix.t);
-        gte_ldrotmatrix(&D_800F33B4->matrix);
-        gte_ldtransmatrix(&D_800F33B4->matrix);
+        gte_stlvl(g_FieldFxScratch->matrix.t);
+        gte_ldrotmatrix(&g_FieldFxScratch->matrix);
+        gte_ldtransmatrix(&g_FieldFxScratch->matrix);
     } else {
         gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldtransmatrix(D_800BCFA4.value);
@@ -441,23 +441,23 @@ void func_800C42A4(FieldGlowSprite *sprite, GteMatrix *placement, u8 mode)
         gte_ldrotmatrix((const GteMatrixWords *)placement);
         gte_ldtransmatrix((const GteMatrixWords *)placement);
     }
-    func_800C608C((s16)sprite->depth, &sprite->r, &packet->r0);
-    gte_ldv3(D_800F3310, &D_800F3318, &D_800F3320);
+    FieldFx_ScaleColor((s16)sprite->depth, &sprite->r, &packet->r0);
+    gte_ldv3(g_FieldFxCellQuad, &D_800F3318, &g_FieldFxCellQuadBottomLeft);
     gte_rtpt_padded();
-    D_800F33B4->v = D_800F3422 + (sprite->cell & 0xF0);
-    D_800F33B4->u = (sprite->cell - D_800F33B4->v) << 4;
-    D_800F33B4->clutX = sprite->clut << 4;
-    D_800F33B4->clutY = sprite->clut >> 4;
+    g_FieldFxScratch->v = D_800F3422 + (sprite->cell & 0xF0);
+    g_FieldFxScratch->u = (sprite->cell - g_FieldFxScratch->v) << 4;
+    g_FieldFxScratch->clutX = sprite->clut << 4;
+    g_FieldFxScratch->clutY = sprite->clut >> 4;
     packet->tag.length = 9;
     packet->code = 0x2C;
-    packet->u0 = D_800F33B4->u;
-    packet->v0 = D_800F33B4->v;
-    packet->u1 = D_800F33B4->u + D_800F345C;
-    packet->v1 = D_800F33B4->v;
-    packet->u2 = D_800F33B4->u;
-    packet->v2 = D_800F33B4->v + D_800F345D;
-    packet->u3 = D_800F33B4->u + D_800F345C;
-    packet->v3 = D_800F33B4->v + D_800F345D;
+    packet->u0 = g_FieldFxScratch->u;
+    packet->v0 = g_FieldFxScratch->v;
+    packet->u1 = g_FieldFxScratch->u + g_FieldFxSpriteCellUMax;
+    packet->v1 = g_FieldFxScratch->v;
+    packet->u2 = g_FieldFxScratch->u;
+    packet->v2 = g_FieldFxScratch->v + g_FieldFxSpriteCellVExtent;
+    packet->u3 = g_FieldFxScratch->u + g_FieldFxSpriteCellUMax;
+    packet->v3 = g_FieldFxScratch->v + g_FieldFxSpriteCellVExtent;
     if (sprite->flip & 1) {
         swap[0] = packet->u0;
         swap[1] = packet->u1;
@@ -481,15 +481,15 @@ void func_800C42A4(FieldGlowSprite *sprite, GteMatrix *placement, u8 mode)
     gte_cop2_hazard_slot();
     gte_cop2_hazard_slot();
     gte_avsz3_command();
-    /* PSY-Q setSemiTrans(packet, D_800F337A). */
-    if (D_800F337A) {
+    /* PSY-Q setSemiTrans(packet, g_FieldFxSpriteSemiTrans). */
+    if (g_FieldFxSpriteSemiTrans) {
         packet->code = packet->code | 2;
     } else {
         packet->code = packet->code & ~2;
     }
-    gte_stotz(&D_800F33B4->depth);
-    D_800F33B4->depth += sprite->offset;
-    if (D_800F33B4->depth - 1 < 0xFFFU) {
+    gte_stotz(&g_FieldFxScratch->depth);
+    g_FieldFxScratch->depth += sprite->offset;
+    if (g_FieldFxScratch->depth - 1 < 0xFFFU) {
         xy0 = &packet->x0;
         xy1 = &packet->x1;
         xy2 = &packet->x2;
@@ -498,19 +498,19 @@ void func_800C42A4(FieldGlowSprite *sprite, GteMatrix *placement, u8 mode)
         gte_cop2_hazard_slot();
         gte_cop2_hazard_slot();
         gte_rtps_command();
-        packet->tpage = D_800E27AC;
-        packet->clut = GetClut(D_800F341C + D_800F33B4->clutX,
-                               D_800F341E + D_800F33B4->clutY);
+        packet->tpage = g_FieldFxSpriteTpageValue;
+        packet->clut = GetClut(g_FieldFxSpriteClutX + g_FieldFxScratch->clutX,
+                               g_FieldFxSpriteClutY + g_FieldFxScratch->clutY);
         gte_stsxy2(&packet->x3);
-        packet->tag.address = STRIP_OT(D_800F33B4->depth)->address;
+        packet->tag.address = STRIP_OT(g_FieldFxScratch->depth)->address;
         link.tag = &packet->tag;
-        STRIP_OT(D_800F33B4->depth)->address = link.word;
-        D_8009CDD8 += sizeof(FieldStripPacket);
+        STRIP_OT(g_FieldFxScratch->depth)->address = link.word;
+        g_DrawPacketOffset += sizeof(FieldStripPacket);
     }
 }
 
 /* Draw a quad with four independently shaded corners. */
-void func_800C499C(FieldShadedQuadColors *colors, GteMatrix *placement,
+void FieldFx_DrawShadedQuad(FieldShadedQuadColors *colors, GteMatrix *placement,
                    u8 mode) {
     s16 *xy0;
     s16 *xy1;
@@ -520,27 +520,27 @@ void func_800C499C(FieldShadedQuadColors *colors, GteMatrix *placement,
     s32 flag;
     FieldShadedQuadLink link;
 
-    packet = (FieldShadedQuadPacket *)(D_800B0E58[g_ActiveDrawSlot] + D_8009CDD8);
-    D_800F33B4 = FIELDFX_SCRATCH;
+    packet = (FieldShadedQuadPacket *)(D_800B0E58[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_FieldFxScratch = FIELDFX_SCRATCH;
     if (mode == 0) {
         /* Compose camera rotation with each placement column. */
         gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldclmv(placement);
         gte_rtir();
-        gte_stclmv(&D_800F33B4->matrix);
+        gte_stclmv(&g_FieldFxScratch->matrix);
         gte_ldclmv((u16 *)placement + 1);
         gte_rtir();
-        gte_stclmv((u16 *)&D_800F33B4->matrix + 1);
+        gte_stclmv((u16 *)&g_FieldFxScratch->matrix + 1);
         gte_ldclmv((u16 *)placement + 2);
         gte_rtir();
-        gte_stclmv((u16 *)&D_800F33B4->matrix + 2);
+        gte_stclmv((u16 *)&g_FieldFxScratch->matrix + 2);
         /* Transform placement translation with the camera matrix. */
         gte_ldtransmatrix(D_800BCFA4.value);
         gte_ldlv0(placement->t);
         gte_rt();
-        gte_stlvl(D_800F33B4->matrix.t);
-        gte_ldrotmatrix(&D_800F33B4->matrix);
-        gte_ldtransmatrix(&D_800F33B4->matrix);
+        gte_stlvl(g_FieldFxScratch->matrix.t);
+        gte_ldrotmatrix(&g_FieldFxScratch->matrix);
+        gte_ldtransmatrix(&g_FieldFxScratch->matrix);
     } else {
         gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldtransmatrix(D_800BCFA4.value);
@@ -551,26 +551,26 @@ void func_800C499C(FieldShadedQuadColors *colors, GteMatrix *placement,
         gte_ldrotmatrix((const GteMatrixWords *)placement);
         gte_ldtransmatrix((const GteMatrixWords *)placement);
     }
-    func_800C608C(colors->brightness, colors->rgb[0], &packet->r0);
-    func_800C608C(colors->brightness, colors->rgb[1], &packet->r1);
-    func_800C608C(colors->brightness, colors->rgb[2], &packet->r2);
-    func_800C608C(colors->brightness, colors->rgb[3], &packet->r3);
-    gte_ldv3(D_800F3310, &D_800F3318, &D_800F3320);
+    FieldFx_ScaleColor(colors->brightness, colors->rgb[0], &packet->r0);
+    FieldFx_ScaleColor(colors->brightness, colors->rgb[1], &packet->r1);
+    FieldFx_ScaleColor(colors->brightness, colors->rgb[2], &packet->r2);
+    FieldFx_ScaleColor(colors->brightness, colors->rgb[3], &packet->r3);
+    gte_ldv3(g_FieldFxCellQuad, &D_800F3318, &g_FieldFxCellQuadBottomLeft);
     gte_rtpt_padded();
     packet->tag.length = 8;
     packet->code = 0x38;
     gte_cop2_hazard_slot();
     gte_cop2_hazard_slot();
     gte_avsz3_command();
-    /* PSY-Q setSemiTrans(packet, D_800F337A). */
-    if (D_800F337A) {
+    /* PSY-Q setSemiTrans(packet, g_FieldFxSpriteSemiTrans). */
+    if (g_FieldFxSpriteSemiTrans) {
         packet->code = packet->code | 2;
     } else {
         packet->code = packet->code & ~2;
     }
-    gte_stotz(&D_800F33B4->depth);
-    D_800F33B4->depth += colors->depth;
-    if (D_800F33B4->depth - 1 < 0xFFFU) {
+    gte_stotz(&g_FieldFxScratch->depth);
+    g_FieldFxScratch->depth += colors->depth;
+    if (g_FieldFxScratch->depth - 1 < 0xFFFU) {
         xy0 = &packet->x0;
         xy1 = &packet->x1;
         xy2 = &packet->x2;
@@ -580,15 +580,15 @@ void func_800C499C(FieldShadedQuadColors *colors, GteMatrix *placement,
         gte_cop2_hazard_slot();
         gte_rtps_command();
         gte_stsxy2(&packet->x3);
-        packet->tag.address = SHADED_QUAD_OT(D_800F33B4->depth)->address;
+        packet->tag.address = SHADED_QUAD_OT(g_FieldFxScratch->depth)->address;
         link.tag = &packet->tag;
-        SHADED_QUAD_OT(D_800F33B4->depth)->address = link.word;
-        D_8009CDD8 += sizeof(FieldShadedQuadPacket);
+        SHADED_QUAD_OT(g_FieldFxScratch->depth)->address = link.word;
+        g_DrawPacketOffset += sizeof(FieldShadedQuadPacket);
     }
 }
 
 /* Lay out the inner and outer vertices of an annulus. */
-void func_800C4E50(FieldRingGeometry *data) {
+void FieldFx_BuildRingGeometry(FieldRingGeometry *data) {
     int angle;
     u32 i;
     int step;
@@ -614,7 +614,7 @@ void func_800C4E50(FieldRingGeometry *data) {
     }
 }
 
-void func_800C4FC4(FieldShadedRing *ring, GteMatrix *placement, u8 mode)
+void FieldFx_DrawShadedRing(FieldShadedRing *ring, GteMatrix *placement, u8 mode)
 {
     FieldRingPacket *packet;
     char *drawMode;
@@ -631,26 +631,26 @@ void func_800C4FC4(FieldShadedRing *ring, GteMatrix *placement, u8 mode)
     u16 d;
     FieldRingLink link;
 
-    D_800F33B4 = FIELDFX_SCRATCH;
+    g_FieldFxScratch = FIELDFX_SCRATCH;
     if (mode == 0) {
         /* Compose camera rotation with each placement column. */
         gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldclmv(placement);
         gte_rtir();
-        gte_stclmv(&D_800F33B4->matrix);
+        gte_stclmv(&g_FieldFxScratch->matrix);
         gte_ldclmv((u16 *)placement + 1);
         gte_rtir();
-        gte_stclmv((u16 *)&D_800F33B4->matrix + 1);
+        gte_stclmv((u16 *)&g_FieldFxScratch->matrix + 1);
         gte_ldclmv((u16 *)placement + 2);
         gte_rtir();
-        gte_stclmv((u16 *)&D_800F33B4->matrix + 2);
+        gte_stclmv((u16 *)&g_FieldFxScratch->matrix + 2);
         /* Transform placement translation with the camera matrix. */
         gte_ldtransmatrix(D_800BCFA4.value);
         gte_ldlv0(placement->t);
         gte_rt();
-        gte_stlvl(D_800F33B4->matrix.t);
-        gte_ldrotmatrix(&D_800F33B4->matrix);
-        gte_ldtransmatrix(&D_800F33B4->matrix);
+        gte_stlvl(g_FieldFxScratch->matrix.t);
+        gte_ldrotmatrix(&g_FieldFxScratch->matrix);
+        gte_ldtransmatrix(&g_FieldFxScratch->matrix);
     } else {
         gte_ldrotmatrix(D_800BCFA4.value);
         gte_ldtransmatrix(D_800BCFA4.value);
@@ -661,46 +661,46 @@ void func_800C4FC4(FieldShadedRing *ring, GteMatrix *placement, u8 mode)
         gte_ldrotmatrix((const GteMatrixWords *)placement);
         gte_ldtransmatrix((const GteMatrixWords *)placement);
     }
-    func_800C608C(ring->intensity, ring->color1, outer);
-    func_800C608C(ring->intensity, ring->color0, inner);
+    FieldFx_ScaleColor(ring->intensity, ring->color1, outer);
+    FieldFx_ScaleColor(ring->intensity, ring->color0, inner);
     points = ring->source;
     for (i = 0; i < ring->mode; i++) {
-        packet = (FieldRingPacket *)(D_800B0E58[g_ActiveDrawSlot] + D_8009CDD8);
-        D_8009CDD8 += sizeof(FieldRingPacket);
-        drawMode = D_800B0E58[g_ActiveDrawSlot] + D_8009CDD8;
-        D_8009CDD8 += 8;
-        SetDrawTPage(drawMode, 0, 0, (D_800E224C & 3) << 5);
+        packet = (FieldRingPacket *)(D_800B0E58[g_ActiveDrawSlot] + g_DrawPacketOffset);
+        g_DrawPacketOffset += sizeof(FieldRingPacket);
+        drawMode = D_800B0E58[g_ActiveDrawSlot] + g_DrawPacketOffset;
+        g_DrawPacketOffset += 8;
+        SetDrawTPage(drawMode, 0, 0, (g_FieldFxSpriteBlendRate & 3) << 5);
         next = (i + 1) % ring->mode;
         a = i;
         c = ring->mode + i;
         d = ring->mode + next;
-        D_800F33B4->depth = RotTransPers4(&points[a], &points[next], &points[c],
+        g_FieldFxScratch->depth = RotTransPers4(&points[a], &points[next], &points[c],
                                           &points[d], &packet->x0, &packet->x1,
                                           &packet->x2, &packet->x3, &p, &flag);
         /* Word copies through plain pointers (not struct fields), so the
-         * D_800F337A load below stays after them. */
+         * g_FieldFxSpriteSemiTrans load below stays after them. */
         *(u32 *)&packet->c0 = *(u32 *)outer;
         *(u32 *)&packet->c1 = *(u32 *)outer;
         *(u32 *)&packet->c2 = *(u32 *)inner;
         *(u32 *)&packet->c3 = *(u32 *)inner;
         packet->tag.length = 8;
         packet->c0.rgb[3] = 0x38;
-        /* PSY-Q setSemiTrans(packet, D_800F337A). */
-        if (D_800F337A) {
+        /* PSY-Q setSemiTrans(packet, g_FieldFxSpriteSemiTrans). */
+        if (g_FieldFxSpriteSemiTrans) {
             packet->c0.rgb[3] = packet->c0.rgb[3] | 2;
         } else {
             packet->c0.rgb[3] = packet->c0.rgb[3] & ~2;
         }
-        packet->tag.address = RING_OT(D_800F33B4->depth + ring->offset)->address;
+        packet->tag.address = RING_OT(g_FieldFxScratch->depth + ring->offset)->address;
         link.tag = &packet->tag;
-        RING_OT(D_800F33B4->depth + ring->offset)->address = link.word;
+        RING_OT(g_FieldFxScratch->depth + ring->offset)->address = link.word;
         link.bytes = drawMode;
-        link.tag->address = RING_OT(D_800F33B4->depth + ring->offset)->address;
-        RING_OT(D_800F33B4->depth + ring->offset)->address = link.word;
+        link.tag->address = RING_OT(g_FieldFxScratch->depth + ring->offset)->address;
+        RING_OT(g_FieldFxScratch->depth + ring->offset)->address = link.word;
     }
 }
 
-void func_800C5538(FieldChainRecord *record)
+void FieldFx_BuildParticleChain(FieldChainRecord *record)
 {
     GteShortVector tailIn;
     GteShortVector tail;
@@ -779,7 +779,7 @@ void func_800C5538(FieldChainRecord *record)
     }
 }
 
-void func_800C5A40(FieldTexturedStrip *strip)
+void FieldFx_DrawTexturedStrip(FieldTexturedStrip *strip)
 {
     FieldStripNode *node;
     FieldStripPacket *packet;
@@ -794,18 +794,18 @@ void func_800C5A40(FieldTexturedStrip *strip)
 
     node = strip->nodes;
     i = 0;
-    D_800F33B4 = FIELDFX_SCRATCH;
-    packet = (FieldStripPacket *)(D_800B0E58[g_ActiveDrawSlot] + D_8009CDD8);
-    D_800F33B4->clutX = strip->clut << 4;
-    D_800F33B4->clutY = strip->clut >> 4;
+    g_FieldFxScratch = FIELDFX_SCRATCH;
+    packet = (FieldStripPacket *)(D_800B0E58[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_FieldFxScratch->clutX = strip->clut << 4;
+    g_FieldFxScratch->clutY = strip->clut >> 4;
     while (i < strip->count - 1) {
         cell = strip->cell;
         step = node->cellStep;
-        D_800F33B4->v = cell & 0xF0;
-        D_800F33B4->u = (strip->cell - D_800F33B4->v) << 4;
+        g_FieldFxScratch->v = cell & 0xF0;
+        g_FieldFxScratch->u = (strip->cell - g_FieldFxScratch->v) << 4;
         cell += step;
-        D_800F33B4->v = cell & 0xF0;
-        D_800F33B4->u = (cell - D_800F33B4->v) << 4;
+        g_FieldFxScratch->v = cell & 0xF0;
+        g_FieldFxScratch->u = (cell - g_FieldFxScratch->v) << 4;
         quad[0] = node->edgeA;
         quad[1] = node->edgeB;
         quad[2] = node[1].edgeA;
@@ -815,22 +815,22 @@ void func_800C5A40(FieldTexturedStrip *strip)
         depth = RotTransPers4(&quad[0], &quad[1], &quad[2], &quad[3],
                               &packet->x0, &packet->x1, &packet->x2,
                               &packet->x3, &p, &flag);
-        func_800C608C(node->brightness, node->rgb, &packet->r0);
-        packet->u0 = D_800F33B4->u;
-        packet->v0 = D_800F33B4->v;
-        packet->u1 = D_800F33B4->u + D_800F345C;
-        packet->v1 = D_800F33B4->v;
-        packet->u2 = D_800F33B4->u;
-        packet->v2 = D_800F33B4->v + D_800F345D;
-        packet->u3 = D_800F33B4->u + D_800F345C;
-        packet->v3 = D_800F33B4->v + D_800F345D;
-        packet->tpage = D_800E27AC;
-        packet->clut = GetClut(D_800F341C + D_800F33B4->clutX,
-                               D_800F341E + D_800F33B4->clutY);
+        FieldFx_ScaleColor(node->brightness, node->rgb, &packet->r0);
+        packet->u0 = g_FieldFxScratch->u;
+        packet->v0 = g_FieldFxScratch->v;
+        packet->u1 = g_FieldFxScratch->u + g_FieldFxSpriteCellUMax;
+        packet->v1 = g_FieldFxScratch->v;
+        packet->u2 = g_FieldFxScratch->u;
+        packet->v2 = g_FieldFxScratch->v + g_FieldFxSpriteCellVExtent;
+        packet->u3 = g_FieldFxScratch->u + g_FieldFxSpriteCellUMax;
+        packet->v3 = g_FieldFxScratch->v + g_FieldFxSpriteCellVExtent;
+        packet->tpage = g_FieldFxSpriteTpageValue;
+        packet->clut = GetClut(g_FieldFxSpriteClutX + g_FieldFxScratch->clutX,
+                               g_FieldFxSpriteClutY + g_FieldFxScratch->clutY);
         packet->tag.length = 9;
         packet->code = 0x2C;
-        /* PSY-Q setSemiTrans(packet, D_800F337A). */
-        if (D_800F337A) {
+        /* PSY-Q setSemiTrans(packet, g_FieldFxSpriteSemiTrans). */
+        if (g_FieldFxSpriteSemiTrans) {
             packet->code = packet->code | 2;
         } else {
             packet->code = packet->code & ~2;
@@ -843,6 +843,6 @@ void func_800C5A40(FieldTexturedStrip *strip)
         i++;
         node++;
         packet++;
-        D_8009CDD8 += sizeof(FieldStripPacket);
+        g_DrawPacketOffset += sizeof(FieldStripPacket);
     }
 }

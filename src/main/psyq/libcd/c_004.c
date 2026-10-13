@@ -12,13 +12,13 @@ void data_ready_callback(void) {
     DsCallback callback;
 
     base->id = 2;
-    __builtin_memcpy(&D_800A3490, &base->loc, 4);
+    __builtin_memcpy(&g_StLastFrameLoc, &base->loc, 4);
     sector_data = base->frameCount;
     /* Retain the frame load before fetching the next ring slot. */
     asm volatile("" : "=r"(sector_data) : "0"(sector_data));
-    next_slot = D_800BE998;
+    next_slot = g_CdStreamRingWriteSlot;
     callback = g_StrDataReadyCallback;
-    D_800A3494 = sector_data;
+    g_StLastFrameNumber = sector_data;
     g_CdStreamRingReadSlot = next_slot;
     if (callback != 0) {
         callback();
@@ -33,6 +33,6 @@ int StGetBackloc(CdlLOC *arg0) {
         return -1;
     }
 
-    CdIntToPos(CdPosToInt(&D_800A3490) + 1, saved_arg);
-    return D_800A3494;
+    CdIntToPos(CdPosToInt(&g_StLastFrameLoc) + 1, saved_arg);
+    return g_StLastFrameNumber;
 }

@@ -125,7 +125,7 @@ CdInterruptEvents g_CdInterruptEvents = {0, 0, 0};
 
 CdBiosInitDescriptor g_CdBiosInitDescriptor = {
     &g_CdInterruptEvents,
-    D_800A3460,
+    g_CdSyncResult,
     &g_CdLastCom,
     &g_CdStatus,
     &g_CdLastPos,

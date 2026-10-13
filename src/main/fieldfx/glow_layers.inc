@@ -21,10 +21,10 @@ void GLOW_LAYERS_FUNC(void *object, void *slot, FieldGlowLayers *glow)
 
     spinA = GLOW_LAYERS_SPIN_A;
     spinB = GLOW_LAYERS_SPIN_B;
-    func_800C2EAC(3);
-    func_800C3098(0x10);
-    func_800C2FF0(0x20, 0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(3);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteCellSize(0x20, 0x10);
+    FieldFx_SetSpriteBlendMode(2);
     GLOW_LAYERS_SPRITE.depth = glow->depth;
 
     RotMatrixYXZ(&spinA, &rotation);
@@ -38,7 +38,7 @@ void GLOW_LAYERS_FUNC(void *object, void *slot, FieldGlowLayers *glow)
     gte_CompMatrix(&matrix, &rotation, &matrix);
     scaleA = GLOW_LAYERS_SCALE;
     ScaleMatrix(&matrix, &scaleA);
-    func_800C42A4(&GLOW_LAYERS_SPRITE, &matrix, 0);
+    FieldFx_DrawGlowSprite(&GLOW_LAYERS_SPRITE, &matrix, 0);
 
     RotMatrixYXZ(&spinB, &rotation);
     matrix = glow->matrix;
@@ -48,7 +48,7 @@ void GLOW_LAYERS_FUNC(void *object, void *slot, FieldGlowLayers *glow)
     gte_CompMatrix(&matrix, &rotation, &matrix);
     scaleB = GLOW_LAYERS_SCALE;
     ScaleMatrix(&matrix, &scaleB);
-    func_800C42A4(&GLOW_LAYERS_SPRITE, &matrix, 0);
+    FieldFx_DrawGlowSprite(&GLOW_LAYERS_SPRITE, &matrix, 0);
 }
 
 #undef GLOW_LAYERS_FUNC

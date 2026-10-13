@@ -10,10 +10,10 @@ typedef struct Vec3Fixed {
     s32 z;
 } Vec3Fixed;
 
-s32 func_800DFC80(Vec3Fixed *lhs, Vec3Fixed *rhs);
+s32 FieldFx_GetFixedDistance3D(Vec3Fixed *lhs, Vec3Fixed *rhs);
 /* Planar (x/z) distance between two positions, in whole units. */
-s32 func_800DFE20(Vec3Fixed *lhs, Vec3Fixed *rhs);
-void func_800DFE94(Vec3Fixed *from, Vec3Fixed *to, s16 *out);
+s32 FieldFx_GetDistanceXZ(Vec3Fixed *lhs, Vec3Fixed *rhs);
+void FieldFx_FixedVecToLookAngles(Vec3Fixed *from, Vec3Fixed *to, s16 *out);
 /* Heading from one position to another: ratan2(dx, dz) as a signed
  * halfword. */
 int FieldFx_VecToAngle(Vec3Fixed *from, Vec3Fixed *to);

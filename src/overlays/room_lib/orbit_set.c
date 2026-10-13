@@ -129,7 +129,7 @@ void RoomEffect_OrbitSetInit(RoomOrbitSetEntity *object, void *unused, RoomOrbit
     g_RoomOrbitSpritePacket.g = value128b;
     g_RoomOrbitSpritePacket.b = value128b;
     g_RoomOrbitSpritePacket.zero = 0;
-    func_800C66C8(callObject, 0x592, matrixArg);
+    FieldFx_PlaySoundAtMatrixPosition(callObject, 0x592, matrixArg);
 }
 
 /* The set itself draws nothing; each effect draws its own sprites. */
@@ -186,10 +186,10 @@ void RoomEffect_DrawOrbitParticles(
 
     i = 0;
     depthSlot = &g_RoomOrbitParticlePacket.depth;
-    func_800C2EAC(owner->asset.page);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(owner->asset.page);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -218,7 +218,7 @@ void RoomEffect_DrawOrbitParticles(
         matrix.t[2] = position[2];
         *depthSlot = fx->decay >> 1;
         *((unsigned char *)depthSlot - 6) = fx->frame << 1;
-        func_800C42A4((FieldGlowSprite *)((char *)depthSlot - 0xA), &matrix, 1);
+        FieldFx_DrawGlowSprite((FieldGlowSprite *)((char *)depthSlot - 0xA), &matrix, 1);
         i++;
         position += 4;
     }
@@ -310,10 +310,10 @@ void RoomEffect_DrawOrbitBurst(
     configB = &g_RoomOrbitShadowPacket.code;
     PE1_COMPILER_USE(configB);
     position = state->position;
-    func_800C2EAC(owner->asset.page);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(owner->asset.page);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     while (i < 8) {
         if (state->active[i] == 1) {
@@ -329,13 +329,13 @@ void RoomEffect_DrawOrbitBurst(
             matrix.t[1] = position->y;
             matrix.t[2] = position->z;
             *configA = state->frame[i] * 2 + 0x20;
-            func_800C42A4((FieldGlowSprite *)(configA - 4), &matrix, 1);
+            FieldFx_DrawGlowSprite((FieldGlowSprite *)(configA - 4), &matrix, 1);
 
             matrix.t[0] = position->x;
             matrix.t[1] = g_RoomFloorY->y;
             matrix.t[2] = position->z;
             *configB = state->frame[i] * 2 + 0x20;
-            func_800C42A4((FieldGlowSprite *)(configB - 4), &matrix, 0);
+            FieldFx_DrawGlowSprite((FieldGlowSprite *)(configB - 4), &matrix, 0);
         }
         i++;
         position++;
@@ -452,10 +452,10 @@ void RoomEffect_DrawOrbitSprite(
     u8 *drawSlot;
 
     owner = FieldFx_GetScriptContext();
-    func_800C2EAC(owner->asset.page);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(owner->asset.page);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -477,7 +477,7 @@ void RoomEffect_DrawOrbitSprite(
     matrix.t[2] = fx->z;
     *drawSlot = ((s16)fx->alpha >> 1) << 1;
     g_RoomOrbitSpritePacket.depth = fx->depth;
-    func_800C42A4((FieldGlowSprite *)(drawSlot - 4), &matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)(drawSlot - 4), &matrix, 1);
 }
 
 void RoomEffect_UpdateOrbitSprite(unsigned char *arg0, RoomFxControl *signal, RoomOrbitSpriteFxParams *state) {

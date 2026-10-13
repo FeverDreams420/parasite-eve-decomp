@@ -21,8 +21,8 @@ class Room350EffectEmitterTests(unittest.TestCase):
     def test_animation_crossing_burst_and_allocation_failure(self):
         source = controller_source()
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-FieldFxObjectPrefix *D_800F32D0;
-FieldFxTaskSlot *D_800F33E0;
+FieldFxObjectPrefix *g_FieldFxOwner;
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 GteShortVector D_8019A7A0;
 #define VEC (&D_8019A7A0.x)
 static Actor actor, replacementActor;
@@ -34,19 +34,19 @@ static short *effect;
 static int poolToken, soundToken, replacementSound, setupCalls, allocations, sounds;
 static int failAllocation, setupResult, mutate, expectedRemaining, expectedDelay;
 int func_801944F0(int event, void **object) { return 0; }
-int func_800CE560(char *pool, int capacity, int size,
+int FieldFx_InitCallbackList(char *pool, int capacity, int size,
                   FieldFxCallbackListCallback callback) {
     assert(setupCalls++ == 0 && pool == &poolToken && capacity == 4 && size == 4);
     assert((void *)callback == (void *)func_801944F0 && state.remaining == 0 && state.delay == expectedDelay);
     return setupResult;
 }
-void *func_800CE610(char *pool) {
+void *FieldFx_AcquireCallbackSlot(char *pool) {
     assert(allocations++ == 0 && pool == &poolToken && sounds == 0);
     assert(state.delay == expectedDelay);
     if (failAllocation) return 0;
     /* Deliberate mutations verify reloads after allocation. */
     if (mutate) {
-        D_800F32D0 = (FieldFxObjectPrefix *)&replacementActor;
+        g_FieldFxOwner = (FieldFxObjectPrefix *)&replacementActor;
         state.remaining = -3;
     }
     return &effect;
@@ -63,7 +63,7 @@ int main(void) {
     const unsigned short frames[] = {0, 7, 8, 9, 25, 26, 65535};
     const short values[] = {-32768, -1, 0, 1, 4, 32767};
     int id, f, p, r, d, fail, change, ret, event;
-    emitter.pool = &poolToken; D_800F33E0 = (FieldFxTaskSlot *)&emitter;
+    emitter.pool = &poolToken; g_FieldFxActiveTaskSlot = (FieldFxTaskSlot *)&emitter;
     soundToken = 7; replacementSound = -9;
     actor.animation = &animation; animation.owner = &owner; owner.soundMode = soundToken;
     replacementActor.animation = &replacementAnimation;
@@ -96,7 +96,7 @@ int main(void) {
                 }
             }
         }
-        D_800F32D0 = (FieldFxObjectPrefix *)&actor; animation.id = id;
+        g_FieldFxOwner = (FieldFxObjectPrefix *)&actor; animation.id = id;
         animation.frame = frames[f]; animation.previous = frames[p];
         state.remaining = values[r]; state.delay = values[d];
         expectedDelay = delay; expectedRemaining = remaining;

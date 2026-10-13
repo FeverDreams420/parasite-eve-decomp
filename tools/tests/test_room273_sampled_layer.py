@@ -45,21 +45,21 @@ static RoomPlacementOwner owner;
 static RoomPlacementMap transform;
 static Effect output;
 static unsigned char pool[128];
-FieldFxTaskSlot *D_800F33E0=(FieldFxTaskSlot *)&context;
-FieldFxObjectPrefix *D_800F32D0=(FieldFxObjectPrefix *)&state;
-int D_800E27EC;
-GteSineWord D_800966EC[4096];
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&context;
+FieldFxObjectPrefix *g_FieldFxOwner=(FieldFxObjectPrefix *)&state;
+int g_FieldFxCurrentAge;
+GteSineWord rcossin_tbl[4096];
 static int init,allocations,fail,newCounter;
 int func_8019320C(int mode, RoomM273SampledLayerEffect *effect) { assert(0); return 0; }
-int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
+int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(init++==0 && p==(char *)pool && stride==12 && count==9 &&
            callback==(FieldFxCallbackListCallback)func_8019320C);
     return 140;
 }
-void *func_800CE610(char *p) {
+void *FieldFx_AcquireCallbackSlot(char *p) {
     assert(p==(char *)pool && allocations++==0);
-    D_800F32D0=(FieldFxObjectPrefix *)&replacement;
-    D_800E27EC=newCounter;
+    g_FieldFxOwner=(FieldFxObjectPrefix *)&replacement;
+    g_FieldFxCurrentAge=newCounter;
     return fail ? 0 : &output;
 }
 int main(void) {
@@ -72,10 +72,10 @@ int main(void) {
     for(i=0;i<8;++i) for(j=0;j<11;++j) for(k=0;k<11;++k) for(f=0;f<2;++f) {
         int index=(int)(((long long)counters[i]*1024/12)&0xFFF)*2;
         Effect before;
-        newCounter=counters[i]; D_800E27EC=0;
-        D_800F32D0=(FieldFxObjectPrefix *)&state; state.owner=0;
-        memset(D_800966EC,0x55,sizeof(D_800966EC));
-        ((short *)D_800966EC)[index]=samples[j]; ((short *)D_800966EC)[index+1]=samples[k];
+        newCounter=counters[i]; g_FieldFxCurrentAge=0;
+        g_FieldFxOwner=(FieldFxObjectPrefix *)&state; state.owner=0;
+        memset(rcossin_tbl,0x55,sizeof(rcossin_tbl));
+        ((short *)rcossin_tbl)[index]=samples[j]; ((short *)rcossin_tbl)[index+1]=samples[k];
         memset(&output,0xA5,sizeof(output)); before=output;
         fail=f; allocations=0;
         assert(func_801933A0(1)==0 && allocations==1);
@@ -90,11 +90,11 @@ int main(void) {
     }
     fail=1;
     for(i=-2;i<=13;++i) {
-        allocations=0; D_800E27EC=i;
+        allocations=0; g_FieldFxCurrentAge=i;
         assert(func_801933A0(1)==(i>=12 ? 2:0));
         assert(allocations==(i<12));
     }
-    allocations=0; D_800E27EC=INT_MAX;
+    allocations=0; g_FieldFxCurrentAge=INT_MAX;
     assert(func_801933A0(1)==2 && allocations==0);
     assert(func_801933A0(2)==0 && func_801933A0(3)==0);
     assert(func_801933A0(INT_MIN)==0 && func_801933A0(INT_MAX)==0 && allocations==0);

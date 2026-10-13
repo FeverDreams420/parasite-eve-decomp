@@ -19,16 +19,16 @@ class SpuInitTests(unittest.TestCase):
         harness = source + r'''
 #include <assert.h>
 unsigned short _spu_voice_centerNote[24];
-SpuReverbState D_8009B3A0;
+SpuReverbState g_SpuReverbState;
 int _spu_rev_flag, _spu_rev_reserve_wa, D_8009B46C;
 u32 _spu_rev_offsetaddr;
-int _spu_AllocBlockNum, _spu_AllocLastNum, D_8009B38C;
+int _spu_AllocBlockNum, _spu_AllocLastNum, _spu_trans_mode;
 SPU_MALLOC *_spu_memList;
 static SPU_MALLOC memListSentinel;
-int D_8009B418, D_8009B388, D_8009B3B4, D_8009B3B0, D_8009B3E8;
+int _spu_transMode, D_8009B388, D_8009B3B4, D_8009B3B0, D_8009B3E8;
 static int phase, expectedMode;
-static int *late[] = {&_spu_AllocBlockNum, &_spu_AllocLastNum, &D_8009B38C,
-    &D_8009B418, &D_8009B388, &D_8009B3B4, &D_8009B3B0, &D_8009B3E8};
+static int *late[] = {&_spu_AllocBlockNum, &_spu_AllocLastNum, &_spu_trans_mode,
+    &_spu_transMode, &D_8009B388, &D_8009B3B4, &D_8009B3B0, &D_8009B3E8};
 int ResetCallback(void) { assert(phase == 0); phase = 1; return 0; }
 int _spu_init(int mode) { assert(phase == 1 && mode == expectedMode); phase = 2; return 0; }
 void SpuStart(void) {
@@ -36,7 +36,7 @@ void SpuStart(void) {
     assert(phase == 2);
     for (i = 0; i < 24; ++i)
         assert(_spu_voice_centerNote[i] == (expectedMode ? 0x100 + i : 0xC000));
-    assert(_spu_rev_flag == 9 && D_8009B3A0.mode == 9);
+    assert(_spu_rev_flag == 9 && g_SpuReverbState.mode == 9);
     phase = 3;
 }
 void _spu_FsetRXX(u32 reg, u32 area, u32 flag) {
@@ -44,9 +44,9 @@ void _spu_FsetRXX(u32 reg, u32 area, u32 flag) {
     assert(phase == 3 && reg == 0xD1 && area == 0xF800 && flag == 0);
     assert(_spu_rev_flag == 0 && _spu_rev_reserve_wa == 0 &&
            _spu_rev_offsetaddr == area);
-    assert(D_8009B3A0.mode == 0 && D_8009B3A0.depth.left == 0);
-    assert(D_8009B3A0.depth.right == 0 && D_8009B3A0.delay == 0);
-    assert(D_8009B3A0.feedback == 0);
+    assert(g_SpuReverbState.mode == 0 && g_SpuReverbState.depth.left == 0);
+    assert(g_SpuReverbState.depth.right == 0 && g_SpuReverbState.delay == 0);
+    assert(g_SpuReverbState.feedback == 0);
     for (i = 0; i < 8; ++i) assert(*late[i] == 9);
     assert(_spu_memList == &memListSentinel);
     phase = 4;
@@ -60,8 +60,8 @@ int main(void) {
         _spu_memList = &memListSentinel;
         _spu_rev_flag = _spu_rev_reserve_wa = _spu_rev_offsetaddr = 9;
         D_8009B46C = 0xF800;
-        D_8009B3A0.mode = D_8009B3A0.delay = D_8009B3A0.feedback = 9;
-        D_8009B3A0.depth.left = D_8009B3A0.depth.right = 9;
+        g_SpuReverbState.mode = g_SpuReverbState.delay = g_SpuReverbState.feedback = 9;
+        g_SpuReverbState.depth.left = g_SpuReverbState.depth.right = 9;
         _SpuInit(mode);
         assert(phase == 4 && D_8009B46C == 0xF800);
         for (i = 0; i < 8; ++i) assert(*late[i] == 0);

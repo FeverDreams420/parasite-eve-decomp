@@ -337,6 +337,6 @@ int strncmp(const char *left, const char *right, unsigned int count);
 int strcmp(const char *left, const char *right);
 
 /* Pending async-read callback slot polled by the DSREADY callbacks. */
-extern DsCallback D_8009B708;
+extern DsCallback g_DsReadySystemCallback;
 
 #endif /* PE1_PSYQ_DS_H */

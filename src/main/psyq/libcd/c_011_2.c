@@ -19,7 +19,7 @@ void dma_execute(int channel, void *address, int blockCount, int blockSize,
 
     while (*(volatile u32 *)(0x1F801088 + (channel << 4)) & 0x01000000) {
         if (i == 0x10000) {
-            printf(D_80011C2C,
+            printf(g_CdDmaStatusErrorFormat,
                    *(volatile u32 *)(0x1F801088 + (channel << 4)));
             break;
         }
@@ -28,32 +28,32 @@ void dma_execute(int channel, void *address, int blockCount, int blockSize,
 
     bits = 1;
     if (interrupt == bits) {
-        interruptRegister = D_8009B348;
+        interruptRegister = g_CdDmaInterruptRegPtr;
         bits = interruptRegister->fields.enableControl | (bits << channel);
     } else {
-        interruptRegister = D_8009B348;
+        interruptRegister = g_CdDmaInterruptRegPtr;
         bits = interruptRegister->fields.enableControl & ~(bits << channel);
     }
     interruptRegister->fields.enableControl = bits;
     if (channel) {
-        readback = D_8009B348->word;
+        readback = g_CdDmaInterruptRegPtr->word;
     } else {
-        readback = D_8009B348->word;
+        readback = g_CdDmaInterruptRegPtr->word;
     }
 
     shift = channel << 2;
     asm volatile("" : "=r"(shift) : "0"(shift));
     shift += 3;
     priorityBit = 1 << shift;
-    shift = *D_8009B344;
+    shift = *g_CdDmaControlRegPtr;
     dma = (volatile u32 *)0x1F801080;
     dma += channel << 2;
     blockControl = (blockCount << 16) | blockSize;
-    *D_8009B344 = shift | priorityBit;
+    *g_CdDmaControlRegPtr = shift | priorityBit;
     *dma++ = PSX_ADDRESS(address);
     *dma++ = blockControl;
 
-    while (!(*D_8009B32C & 0x40)) {
+    while (!(*g_CdStIntrIndexRegPtr & 0x40)) {
     }
 
     if (address) {

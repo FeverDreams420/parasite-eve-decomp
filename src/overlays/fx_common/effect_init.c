@@ -147,12 +147,12 @@ void func_80196498(void)
     SetFarColor(0xFF, 0xFF, 0xFF);
     textureIndexOrHasPoints = 0;
     do {
-        textureY = D_80091648[textureIndexOrHasPoints].y;
-        D_80091648[textureIndexOrHasPoints].tpage =
-            BG_SLOT_TPAGE(D_80091648[textureIndexOrHasPoints].x, textureY);
-        D_80091648[textureIndexOrHasPoints].clut =
-            BG_SLOT_CLUT(D_80091648[textureIndexOrHasPoints].clut_x,
-                         D_80091648[textureIndexOrHasPoints].clut_y);
+        textureY = g_FieldBgTextureSlots[textureIndexOrHasPoints].y;
+        g_FieldBgTextureSlots[textureIndexOrHasPoints].tpage =
+            BG_SLOT_TPAGE(g_FieldBgTextureSlots[textureIndexOrHasPoints].x, textureY);
+        g_FieldBgTextureSlots[textureIndexOrHasPoints].clut =
+            BG_SLOT_CLUT(g_FieldBgTextureSlots[textureIndexOrHasPoints].clut_x,
+                         g_FieldBgTextureSlots[textureIndexOrHasPoints].clut_y);
         textureIndexOrHasPoints++;
     } while (textureIndexOrHasPoints < 2);
     if ((D_8019C008 != 0) || (Render_SetupFogLayer(Draw_GetTimTableEntry(&D_801D0260, 0)), (D_8019C008 != 0))) {

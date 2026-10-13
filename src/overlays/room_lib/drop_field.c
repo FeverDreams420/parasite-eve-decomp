@@ -252,10 +252,10 @@ void RoomEffect_DrawSpinSprite(s32 arg0, s32 arg1, RoomDropFieldSprite *sprite) 
     RoomDropFieldSpinFrame stack;
     s16 *ptr;
 
-    func_800C2EAC(((RoomDropFieldState *)FieldFx_GetScriptContext())->asset.page);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x100);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(((RoomDropFieldState *)FieldFx_GetScriptContext())->asset.page);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x100);
+    FieldFx_SetSpriteBlendMode(2);
     RotMatrix(&sprite->rotation, &stack.sp10);
     memset(&stack.sp40, 0, 0x10);
 
@@ -276,7 +276,7 @@ void RoomEffect_DrawSpinSprite(s32 arg0, s32 arg1, RoomDropFieldSprite *sprite) 
     stack.sp24[0] = sprite->x;
     stack.sp24[1] = sprite->y;
     stack.sp24[2] = sprite->z;
-    func_800C42A4((FieldGlowSprite *)(ptr - 5), (GteMatrix *)&stack.sp10, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)(ptr - 5), (GteMatrix *)&stack.sp10, 1);
 }
 
 void RoomEffect_UpdateSpinSprite(s32 arg0, RoomDropSlot *slot, RoomDropFieldSprite *sprite) {
@@ -325,10 +325,10 @@ void RoomEffect_DrawDoubleSprite(void *arg0, void *arg1, RoomDoubleSpriteFxParam
 
     owner = FieldFx_GetScriptContext();
     seed = *(RoomFxSeed8 *)&s_DropFieldTiltX;
-    func_800C2EAC(owner->asset.page);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(owner->asset.page);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
     RotMatrix(&fx->seed, &matrix);
 
     memset(&scale, 0, 0x10);
@@ -344,7 +344,7 @@ void RoomEffect_DrawDoubleSprite(void *arg0, void *arg1, RoomDoubleSpriteFxParam
     matrix.t[0] = fx->x;
     matrix.t[1] = fx->y;
     matrix.t[2] = fx->z;
-    func_800C42A4((FieldGlowSprite *)((char *)depth_slot - 0xA), &matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)((char *)depth_slot - 0xA), &matrix, 1);
 
     RotMatrix(&seed, &matrix);
     memset(&second_scale, 0, 0x10);
@@ -358,7 +358,7 @@ void RoomEffect_DrawDoubleSprite(void *arg0, void *arg1, RoomDoubleSpriteFxParam
     matrix.t[0] = fx->x;
     matrix.t[1] = g_RoomFloorY->y;
     matrix.t[2] = fx->z;
-    func_800C42A4((FieldGlowSprite *)((char *)depth_slot - 0xA), &matrix, 0);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)((char *)depth_slot - 0xA), &matrix, 0);
 }
 
 void RoomEffect_UpdateDoubleSprite(int arg0, RoomDropSlot *slot, RoomDropFieldSprite *sprite) {
@@ -422,7 +422,7 @@ void RoomEffect_InitRingPair(int unused0, int unused1,
     g_RoomDropFieldRings[0].extent0 = primaryExtent;
     g_RoomDropFieldRings[0].extent1 = extent1;
     params->source = source;
-    func_800C4E50(params);
+    FieldFx_BuildRingGeometry(params);
 
     params = &g_RoomDropFieldRings[1];
     secondaryExtent = 0x226;
@@ -441,7 +441,7 @@ void RoomEffect_InitRingPair(int unused0, int unused1,
     secondary->extent1 = secondaryExtent;
     secondary->extent0 = extent1;
     secondary->source = source;
-    func_800C4E50(params);
+    FieldFx_BuildRingGeometry(params);
 }
 
 void RoomEffect_DrawRingPair(void *unused0, void *unused1,
@@ -457,7 +457,7 @@ void RoomEffect_DrawRingPair(void *unused0, void *unused1,
 
     seed0 = *(RoomFxSeed8 *)&s_DropFieldTiltX;
     seed1 = *(RoomFxSeed8 *)&s_DropFieldTiltY;
-    func_800C3238(2);
+    FieldFx_SetSpriteBlendMode(2);
     depth_slot = &g_RoomDropFieldRings[0].intensity;
     *depth_slot = fx->depth;
     g_RoomDropFieldRings[1].intensity = fx->depth;
@@ -474,9 +474,9 @@ void RoomEffect_DrawRingPair(void *unused0, void *unused1,
     matrix.t[1] = fx->y;
     matrix.t[2] = fx->z;
     saved_matrix = matrix;
-    func_800C4FC4(&g_RoomDropFieldRings[0], &matrix, 0);
+    FieldFx_DrawShadedRing(&g_RoomDropFieldRings[0], &matrix, 0);
     matrix = saved_matrix;
-    func_800C4FC4(&g_RoomDropFieldRings[1], &matrix, 0);
+    FieldFx_DrawShadedRing(&g_RoomDropFieldRings[1], &matrix, 0);
 
     RotMatrix(&seed0, &matrix);
     memset(&second_scale, 0, 0x10);
@@ -490,9 +490,9 @@ void RoomEffect_DrawRingPair(void *unused0, void *unused1,
     matrix.t[1] = fx->y;
     matrix.t[2] = fx->z;
     saved_matrix = matrix;
-    func_800C4FC4(&g_RoomDropFieldRings[0], &matrix, 0);
+    FieldFx_DrawShadedRing(&g_RoomDropFieldRings[0], &matrix, 0);
     matrix = saved_matrix;
-    func_800C4FC4(&g_RoomDropFieldRings[1], &matrix, 0);
+    FieldFx_DrawShadedRing(&g_RoomDropFieldRings[1], &matrix, 0);
 }
 
 void RoomEffect_UpdateRingPair(void *unused, u8 *signal, RoomRingPairState *state) {
@@ -587,10 +587,10 @@ void RoomEffect_DrawStagedMotion(void *unused,
     owner = FieldFx_GetScriptContext();
     seedA = *(RoomStagedMotionSeed *)&s_DropFieldNoTilt;
     seedB = *(RoomStagedMotionSeed *)&s_DropFieldTiltX;
-    func_800C2EAC(owner->owner);
+    FieldFx_SetSpriteTexturePreset(owner->owner);
     i = 0;
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
 
     if ((unsigned int)i < state->count) {
         /* Both packet views are fixed before the loop: the sprite stage
@@ -600,7 +600,7 @@ void RoomEffect_DrawStagedMotion(void *unused,
         flatDepth = &packet->depth;
         do {
             if (state->kind[i] == 1) {
-                func_800C3238(2);
+                FieldFx_SetSpriteBlendMode(2);
                 seedA.phase = state->phase[i];
                 RotMatrix(&seedA, &matrix);
                 scale = s_DropFieldSpriteScale;
@@ -613,7 +613,7 @@ void RoomEffect_DrawStagedMotion(void *unused,
                 matrix.t[0] = (state->record[i].x >> 16) + state->x;
                 matrix.t[1] = (state->record[i].y >> 16) + state->y;
                 matrix.t[2] = (state->record[i].z >> 16) + state->z;
-                func_800C42A4((FieldGlowSprite *)&g_RoomDropFieldMotionSprite, &matrix, 1);
+                FieldFx_DrawGlowSprite((FieldGlowSprite *)&g_RoomDropFieldMotionSprite, &matrix, 1);
                 packet->mode = 9;
                 RotMatrix(&seedB, &matrix);
                 scale2 = s_DropFieldSpriteScale;
@@ -622,13 +622,13 @@ void RoomEffect_DrawStagedMotion(void *unused,
                 matrix.t[0] = (state->record[i].x >> 16) + state->x;
                 matrix.t[1] = g_RoomFloorY->y;
                 matrix.t[2] = (state->record[i].z >> 16) + state->z;
-                func_800C42A4((FieldGlowSprite *)&g_RoomDropFieldMotionSprite, &matrix, 0);
+                FieldFx_DrawGlowSprite((FieldGlowSprite *)&g_RoomDropFieldMotionSprite, &matrix, 0);
                 packet->mode = 0xB;
             }
             if (state->kind[i] >= 2) {
-                func_800C3238(2);
+                FieldFx_SetSpriteBlendMode(2);
                 if (state->kind[i] < 0xB) {
-                    func_800C3098(0x10);
+                    FieldFx_SetSpriteColorMode(0x10);
                     matrix.m[2][2] = 0x1000;
                     matrix.m[1][1] = 0x1000;
                     matrix.m[0][0] = 0x1000;
@@ -649,9 +649,9 @@ void RoomEffect_DrawStagedMotion(void *unused,
                     matrix.t[0] = (state->record[i].x >> 16) + state->x;
                     matrix.t[1] = (state->record[i].y >> 16) + state->y - 0xC8;
                     matrix.t[2] = (state->record[i].z >> 16) + state->z;
-                    func_800C42A4((FieldGlowSprite *)((char *)flatDepth - 10), &matrix, 1);
+                    FieldFx_DrawGlowSprite((FieldGlowSprite *)((char *)flatDepth - 10), &matrix, 1);
                 }
-                func_800C3098(0x100);
+                FieldFx_SetSpriteColorMode(0x100);
                 /* Taken here, not before the loop, so the depth pointer
                  * outranks the rematerialised packet base for $fp. */
                 modelDepth = &g_RoomDropFieldSpinSprite.depth;
@@ -674,7 +674,7 @@ void RoomEffect_DrawStagedMotion(void *unused,
                 matrix.t[1] = (state->record[i].y >> 16) + state->y - 0xC8;
                 matrix.t[2] = (state->record[i].z >> 16) + state->z;
                 saved = matrix;
-                func_800C42A4((FieldGlowSprite *)((char *)modelDepth - 10), &matrix, 1);
+                FieldFx_DrawGlowSprite((FieldGlowSprite *)((char *)modelDepth - 10), &matrix, 1);
                 matrix = saved;
                 matrix.t[1] += 0xC8;
                 memset(&scale3, 0, 0x10);
@@ -739,8 +739,8 @@ void RoomEffect_UpdateStagedMotion(void *entity,
             spawnPoint.y = (state->record[i].y >> 16) + state->y;
             spawnPoint.z = (state->record[i].z >> 16) + state->z;
             if (Geo_PointInPoly(spawnPoint.x << 16, spawnPoint.z << 16,
-                                (const PolygonVertex *)D_8009D248,
-                                D_8009D1CC) == 0) {
+                                (const PolygonVertex *)g_FloorPolygonVertices,
+                                g_FloorPolygonVertexCount) == 0) {
                 state->kind[i] = 0;
                 state->remaining--;
                 if (state->remaining == 0) {
@@ -792,7 +792,7 @@ void RoomEffect_UpdateStagedMotion(void *entity,
             radiusPoint.x = (state->record[i].x >> 16) + state->x;
             radiusPoint.y = (state->record[i].y >> 16) + state->y;
             radiusPoint.z = (state->record[i].z >> 16) + state->z;
-            if (func_800C6B90(&radiusPoint, 0xC8)) {
+            if (FieldFx_IsPlayerWithinRadius(&radiusPoint, 0xC8)) {
                 owner->hit = 1;
             }
         }
@@ -811,10 +811,10 @@ void RoomEffect_DrawModelSprite(s32 arg0, s32 arg1, RoomDropFieldSprite *sprite)
     RoomDropFieldSpinFrame stack;
     s16 *ptr;
 
-    func_800C2EAC(((RoomDropFieldState *)FieldFx_GetScriptContext())->asset.page);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(((RoomDropFieldState *)FieldFx_GetScriptContext())->asset.page);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
     RotMatrix(&sprite->rotation, &stack.sp10);
     memset(&stack.sp40, 0, 0x10);
 
@@ -835,7 +835,7 @@ void RoomEffect_DrawModelSprite(s32 arg0, s32 arg1, RoomDropFieldSprite *sprite)
     stack.sp24[0] = sprite->x;
     stack.sp24[1] = sprite->y;
     stack.sp24[2] = sprite->z;
-    func_800C42A4((FieldGlowSprite *)(ptr - 5), (GteMatrix *)&stack.sp10, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)(ptr - 5), (GteMatrix *)&stack.sp10, 1);
 }
 
 void RoomEffect_UpdateModelSprite(void *arg0, RoomDropSlot *slot, RoomDropFieldSprite *sprite) {
@@ -883,7 +883,7 @@ void RoomEffect_InitDropField(s32 arg0, s32 arg1, RoomDropFieldDrops *state) {
         state->flag[i] = 1;
     }
 
-    func_800C6800(arg0, 0x56D, state->pos);
+    FieldFx_FindAssetAtShortPosition(arg0, 0x56D, state->pos);
 }
 
 /* Draw every live drop below the release height: the drop sprite at its
@@ -901,10 +901,10 @@ void RoomEffect_DrawDropField(void *object, void *slot, RoomDropField *field) {
     GteVector scale;
     unsigned int i;
 
-    func_800C2EAC(actor->shade);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x100);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(actor->shade);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x100);
+    FieldFx_SetSpriteBlendMode(2);
     rotation.x = 0x20;
     rotation.y = field->yaw;
     rotation.z = 0;
@@ -939,13 +939,13 @@ void RoomEffect_DrawDropField(void *object, void *slot, RoomDropField *field) {
             point.x = matrix.t[0];
             point.y = matrix.t[1];
             point.z = matrix.t[2];
-            if (Geo_PointInPoly(matrix.t[0] << 16, matrix.t[2] << 16, D_8009D248, D_8009D1CC) == 0) {
+            if (Geo_PointInPoly(matrix.t[0] << 16, matrix.t[2] << 16, g_FloorPolygonVertices, g_FloorPolygonVertexCount) == 0) {
                 field->live[i] = 0;
             }
-            if (func_800C6B90(&point, 200) != 0) {
+            if (FieldFx_IsPlayerWithinRadius(&point, 200) != 0) {
                 actor->touched = 1;
             }
-            func_800C42A4((FieldGlowSprite *)&g_RoomDropFieldDropSprite, &matrix, 1);
+            FieldFx_DrawGlowSprite((FieldGlowSprite *)&g_RoomDropFieldDropSprite, &matrix, 1);
             matrix = saved;
             RotMatrix(&shadowSpin, &matrix);
             matrix.t[1] = g_RoomFloorY->y;
@@ -955,7 +955,7 @@ void RoomEffect_DrawDropField(void *object, void *slot, RoomDropField *field) {
                 ScaleMatrix(&matrix, &shadow);
             }
             g_RoomDropFieldDropSprite.depth = field->depth[i] >> 1;
-            func_800C42A4((FieldGlowSprite *)&g_RoomDropFieldDropSprite, &matrix, 0);
+            FieldFx_DrawGlowSprite((FieldGlowSprite *)&g_RoomDropFieldDropSprite, &matrix, 0);
         }
     }
 }
@@ -1061,7 +1061,7 @@ void RoomEffect_InitBeamPair(void *unused0, void *unused1, void *output_arg) {
     g_RoomDropFieldRings[2].extent0 = primary_extent;
     g_RoomDropFieldRings[2].extent1 = extent;
     params->source = image;
-    func_800C4E50(params);
+    FieldFx_BuildRingGeometry(params);
 
     params = &g_RoomDropFieldRings[3];
     PE1_COMPILER_USE(params);
@@ -1079,7 +1079,7 @@ void RoomEffect_InitBeamPair(void *unused0, void *unused1, void *output_arg) {
     g_RoomDropFieldRings[3].extent1 = 0;
     g_RoomDropFieldRings[3].extent0 = extent;
     params->source = image;
-    func_800C4E50(params);
+    FieldFx_BuildRingGeometry(params);
 }
 
 /* Draw both beam halves at the script actor's anchor, offset 100 up and
@@ -1094,7 +1094,7 @@ void RoomEffect_DrawBeamPair(void *object, void *slot, RoomBeamPair *beam) {
     beam->matrix = (*actor)->matrices[5];
     g_RoomDropFieldRings[2].intensity = beam->brightness;
     g_RoomDropFieldRings[3].intensity = beam->brightness;
-    func_800C3238(2);
+    FieldFx_SetSpriteBlendMode(2);
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
     matrix.m[0][0] = 0x1000;
@@ -1115,8 +1115,8 @@ void RoomEffect_DrawBeamPair(void *object, void *slot, RoomBeamPair *beam) {
     scale = (GteVector){ beam->scale, beam->scale, beam->scale };
     ScaleMatrix(&matrix, &scale);
     second = matrix;
-    func_800C4FC4((RoomBeamSprite *)&g_RoomDropFieldRings[2], &matrix, 1);
-    func_800C4FC4((RoomBeamSprite *)&g_RoomDropFieldRings[3], &second, 1);
+    FieldFx_DrawShadedRing((RoomBeamSprite *)&g_RoomDropFieldRings[2], &matrix, 1);
+    FieldFx_DrawShadedRing((RoomBeamSprite *)&g_RoomDropFieldRings[3], &second, 1);
 }
 
 void RoomEffect_UpdateBeamPair(s32 arg0, RoomDropSlot *slot, RoomBeamPair *beam) {
@@ -1234,10 +1234,10 @@ void RoomEffect_DrawQuadSprites(void *unused0, void *unused1,
     matrix = &stack.matrix;
     column1 = &stack.matrix.m[0][1];
     depthSlot = &g_RoomDropFieldQuadSprite.depth;
-    func_800C2EAC(clock->asset.page);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x100);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(clock->asset.page);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x100);
+    FieldFx_SetSpriteBlendMode(2);
 
     for (i = 0; i < 4; i++) {
         stack.matrix.m[2][2] = 0x1000;
@@ -1288,7 +1288,7 @@ void RoomEffect_DrawQuadSprites(void *unused0, void *unused1,
         ((u8 *)depthSlot)[-0xA] = state->color[i].r;
         ((u8 *)depthSlot)[-0x9] = state->color[i].g;
         ((u8 *)depthSlot)[-0x8] = state->color[i].b;
-        func_800C42A4((FieldGlowSprite *)((char *)depthSlot - 0xA), matrix, 1);
+        FieldFx_DrawGlowSprite((FieldGlowSprite *)((char *)depthSlot - 0xA), matrix, 1);
     }
 }
 
@@ -1353,10 +1353,10 @@ void RoomEffect_DrawEightParticles(
     depthOut = &g_RoomDropFieldParticleSprite.depth;
     packet = (char *)depthOut - 10;
 
-    func_800C2EAC(context->asset.page);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(context->asset.page);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     for (; i < 8; i++) {
         if (state->active[i] != 0) {
@@ -1393,9 +1393,9 @@ void RoomEffect_DrawEightParticles(
             matrix.t[0] = (s16)state->position[i].x;
             matrix.t[1] = (s16)state->position[i].y;
             matrix.t[2] = (s16)state->position[i].z;
-            func_800C3134(g_RoomDropFieldParticleFrames,
+            FieldFx_InterpolateColorRamp(g_RoomDropFieldParticleFrames,
                           (s16)state->angle[i], packet);
-            func_800C42A4((FieldGlowSprite *)packet, &matrix, 1);
+            FieldFx_DrawGlowSprite((FieldGlowSprite *)packet, &matrix, 1);
         }
     }
 }

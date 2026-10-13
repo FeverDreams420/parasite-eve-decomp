@@ -20,8 +20,8 @@ CASES = [('StUnSetRing',
   'DsReadyCallback = 0x800824C8;\n'
   'CdDataCallback = 0x8007A8EC;\n'
   'CdReadyCallback = 0x8007A4BC;\n'
-  'D_8009AF1C = 0x8009AF1C;\n'
-  'D_8009AF28 = 0x8009AF28;\n'
+  'g_CdStreamIndexRegPtr = 0x8009AF1C;\n'
+  'g_CdStreamIrqRegPtr = 0x8009AF28;\n'
   'ExitCriticalSection = 0x80072724;\n'
   'SECTIONS { .text 0x8007a2a4 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) '
   '*(.mdebug) } }'),

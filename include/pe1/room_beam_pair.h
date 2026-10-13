@@ -25,7 +25,7 @@ typedef struct RoomBeamPairActor {
     /* 0x238 */ GteMatrix *matrices;
 } RoomBeamPairActor;
 
-/* Sprite parameter block drawn by func_800C4FC4 (one per beam half). */
+/* Sprite parameter block drawn by FieldFx_DrawShadedRing (one per beam half). */
 typedef struct RoomBeamSprite {
     /* 0x00 */ void *texture;
     /* 0x04 */ u8 r0, g0, b0;
@@ -42,7 +42,7 @@ typedef struct RoomBeamSprite {
 
 PE1_STATIC_ASSERT(sizeof(RoomBeamSprite) == 0x18, room_beam_sprite_size);
 
-/* Sprite parameter block drawn by func_800C42A4 for the drops. */
+/* Sprite parameter block drawn by FieldFx_DrawGlowSprite for the drops. */
 typedef struct RoomDropSprite {
     /* 0x00 */ u8 r, g, b;
     /* 0x03 */ u8 reserved03[7];

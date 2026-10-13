@@ -84,9 +84,9 @@ typedef union CollisionRegionTable {
 } CollisionRegionTable;
 extern CollisionRegionTable g_RegionHeightTable;
 /* Bounding box of the ramp edge the player last crossed. */
-extern u16 D_8009CE1C, D_8009CE20, D_8009CE24, D_8009CE28;
+extern u16 g_FloorBlockedEdgeMaxX, g_FloorBlockedEdgeMinX, g_FloorBlockedEdgeMaxZ, g_FloorBlockedEdgeMinZ;
 /* One bit per triangle already visited by the floor search. */
-extern u32 D_8009DFB0[];
+extern u32 g_FloorEdgeVisitedBitmap[];
 int Geo_PointInTri(void *triangle, s16 x, s16 z);
 void *Geo_ClipToFloorBoundarySub(void *triangle, void *previous, s16 x0, s16 z0,
                                  s16 x1, s16 z1);

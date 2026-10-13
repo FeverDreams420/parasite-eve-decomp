@@ -12,7 +12,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 CASES = [('dssys_1_10',
   228,
   '9cf0a1928cb92874823ad99513c1a840740865820bfea90e256b13288e76a292',
-  'D_80011D74 = 0x80011D74;\nD_80011D94 = 0x80011D94;\nD_80011DB0 = 0x80011DB0;\nD_80011DD8 = 0x80011DD8;\nD_80011DF8 = 0x80011DF8;\nD_80011E0C = 0x80011E0C;\nD_80011E3C = 0x80011E3C;\nD_80011E44 = 0x80011E44;\nD_80011E4C = 0x80011E4C;\ng_DsReadStatusBlock = 0x8009B574;\ng_DsSyncCallback = 0x800A36A4;\ng_DsReadyCallback = 0x800A36A8;\nER_active = 0x800822AC;\ng_DsPollCallback = 0x800A36A0;\nprintf = 0x80071A74;\nSECTIONS { .text 0x800809e0 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }'),
+  'g_DsStatusHeaderText = 0x80011D74;\nD_80011D94 = 0x80011D94;\nD_80011DB0 = 0x80011DB0;\nD_80011DD8 = 0x80011DD8;\nD_80011DF8 = 0x80011DF8;\nD_80011E0C = 0x80011E0C;\nD_80011E3C = 0x80011E3C;\nD_80011E44 = 0x80011E44;\nD_80011E4C = 0x80011E4C;\ng_DsReadStatusBlock = 0x8009B574;\ng_DsSyncCallback = 0x800A36A4;\ng_DsReadyCallback = 0x800A36A8;\nER_active = 0x800822AC;\ng_DsPollCallback = 0x800A36A0;\nprintf = 0x80071A74;\nSECTIONS { .text 0x800809e0 : SUBALIGN(4) { *(.text .text.*) } /DISCARD/ : { *(.reginfo) *(.mdebug) } }'),
  ('dssys_2',
   1664,
   'c75008ee4feeec03ea466c3a4598009a2b0c8d457a5bc434ea83b805770809d3',

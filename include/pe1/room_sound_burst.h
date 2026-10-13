@@ -78,9 +78,9 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomSoundBurstState, soundHandle) == 0xC,
 extern void Akao_Cmd_21(int, int);
 extern int rand(void);
 extern struct BattleEntity *D_8009D254;
-extern void func_800CF844(void *, void *, int, void *, int, int);
+extern void FieldFx_OffsetPointByAngles(void *, void *, int, void *, int, int);
 extern void LoadAverageShort12(void *, void *, int, int, void *);
-extern void func_800D2B58(void *, void *, void *, void *, int, int, int);
+extern void FieldFx_DrawGlowLine(void *, void *, void *, void *, int, int, int);
 
 /* Homing spark: anchor, heading vector, state, timer and sound handle. */
 typedef struct RoomHomingSpark {

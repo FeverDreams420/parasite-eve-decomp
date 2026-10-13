@@ -61,10 +61,10 @@ void FieldFx_TransformMatrixPoint(RoomFxTransformOwner *owner, int index,
     output->z = result.z + owner->transforms[index].z;
 }
 
-void func_800CE9D4(RoomFxTransformOwner *owner, int index, GteShortVector *out)
+void FieldFx_GetTransformLookAngles(RoomFxTransformOwner *owner, int index, GteShortVector *out)
 {
     GteShortVector direction = D_800C2258;
-    GteShortVector origin = D_800C2260;
+    GteShortVector origin = g_FieldFxZeroVector;
     GteVector result;
     GteMatrixWords local;
     GteMatrixWords *matrix;
@@ -121,7 +121,7 @@ static inline int div4096(int value) {
     return value >> 12;
 }
 
-int func_800CEB8C(s16 *a, s16 *b, int radius) {
+int FieldFx_IsPlayerInSegmentBand(s16 *a, s16 *b, int radius) {
     /* Match note: target reuses $s0 for the angle and then the x offset. */
     register int angle asm("$16");
     GteShortVector points[4];
@@ -145,23 +145,23 @@ int func_800CEB8C(s16 *a, s16 *b, int radius) {
     points[3].x = b[0] + x;
     points[3].z = b[2] + z;
 
-    return func_800C6B20(points);
+    return FieldFx_IsPlayerInQuadXZ(points);
 }
 
-void func_800CECAC(void) {
+void FieldFx_InitTexturePageTable(void) {
     int i;
 
     for (i = 0; i < 2; i++) {
-        *(short *)((char *)D_800E2850 + i * 4) = GetTPage(i, 0, 0x380, 0x100);
+        *(short *)((char *)g_FieldFxTpageTable + i * 4) = GetTPage(i, 0, 0x380, 0x100);
     }
 
     for (i = 0; i < 2; i++) {
-        *(short *)((char *)D_800E2850 + i * 4 + 2) = GetTPage(i, 0, 0x340, 0x100);
+        *(short *)((char *)g_FieldFxTpageTable + i * 4 + 2) = GetTPage(i, 0, 0x340, 0x100);
     }
 }
 
 
-void func_800CED3C(int index) {
+void FieldFx_LoadEffectTexturePage(int index) {
     RECT rect;
     void *pixels;
 
@@ -177,14 +177,14 @@ void func_800CED3C(int index) {
     }
 
     LoadImage(&rect, pixels);
-    D_800F34E4 = index;
+    g_FieldFxLoadedTexturePage = index;
 }
 
-void func_800CEDA8(int index) {
+void FieldFx_EnsureEffectTexturePage(int index) {
     RECT rect;
     void *pixels;
 
-    if (D_800F34E4 != index) {
+    if (g_FieldFxLoadedTexturePage != index) {
         rect.x = 0x380;
         rect.y = 0x100;
         rect.w = 0x40;
@@ -197,7 +197,7 @@ void func_800CEDA8(int index) {
         }
 
         LoadImage(&rect, pixels);
-        D_800F34E4 = index;
+        g_FieldFxLoadedTexturePage = index;
     }
 }
 
@@ -205,7 +205,7 @@ void func_800CEDA8(int index) {
  * writes are C; each GTE instruction and hazard nop has its own macro.
  * Matching debt: pinned transfer registers/pointers and empty constraints,
  * including the template-copy endpoint used to preserve preheader order. */
-void func_800CEE20(GteShortVector *position, GteRotation *rotation,
+void FieldFx_DrawShapeQuads(GteShortVector *position, GteRotation *rotation,
                    int scale_x, int scale_y, int texture, int clut,
                    int page, int intensity, RenderColor *color)
 {
@@ -226,7 +226,7 @@ void func_800CEE20(GteShortVector *position, GteRotation *rotation,
     int bias;
     int i;
 
-    level = D_800C2268;
+    level = g_FieldFxZeroRotation;
     if (rotation == 0) {
         rotation = &level;
     }
@@ -234,11 +234,11 @@ void func_800CEE20(GteShortVector *position, GteRotation *rotation,
     template.code = 0x2C;
     if (page == 0xFF) {
         template.code &= ~2;
-        template.tpage = D_800F3368.tpage;
+        template.tpage = g_FieldFxSpriteParams.tpage;
     } else {
         template.code |= 2;
         width = GetTPage(0, page, 0, 0);
-        template.tpage = D_800F3368.tpage | width;
+        template.tpage = g_FieldFxSpriteParams.tpage | width;
     }
     view = D_800BCFA4.value;
     template.clut = clut;
@@ -255,7 +255,7 @@ void func_800CEE20(GteShortVector *position, GteRotation *rotation,
     template.r0 = r;
     template.g0 = g;
     template.b0 = b;
-    if (D_800F3368.parameter06 != 0) {
+    if (g_FieldFxSpriteParams.parameter06 != 0) {
         u = texture & 0xF;
         v = 0;
         if (u >= 8) {
@@ -268,11 +268,11 @@ void func_800CEE20(GteShortVector *position, GteRotation *rotation,
         u = (texture & 0xF) << 4;
         v = texture / 16 * 16;
     }
-    if (D_800F3368.palette == 4 && D_800F3428 != 0) {
+    if (g_FieldFxSpriteParams.palette == 4 && g_FieldFxAltPaletteFlag != 0) {
         v += 0x60;
     }
-    width = D_800F3368.extent_x;
-    height = D_800F3368.extent_y;
+    width = g_FieldFxSpriteParams.extent_x;
+    height = g_FieldFxSpriteParams.extent_y;
     asm("" : : "r"(scale_x), "r"(scale_y));
     scale.x = scale_x * (width >> 4);
     template.u0 = template.u2 = u;
@@ -289,9 +289,9 @@ void func_800CEE20(GteShortVector *position, GteRotation *rotation,
     gte_cop2_hazard_slot();
     gte_cop2_hazard_slot();
     gte_mvmva_rotation_v0_translation_sf12();
-    packet = (FieldStripPacket *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-    D_8009CDD8 += D_800E1210[D_800F3368.parameter0A] * sizeof(FieldStripPacket);
-    bias = (u16)D_800F3368.depth;
+    packet = (FieldStripPacket *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_DrawPacketOffset += g_FieldFxStripPacketCounts[g_FieldFxSpriteParams.parameter0A] * sizeof(FieldStripPacket);
+    bias = (u16)g_FieldFxSpriteParams.depth;
     RotMatrixYXZ(rotation, &matrix);
     ScaleMatrix(&matrix, &scale);
     gte_swc2_25_0(matrix.t);
@@ -302,9 +302,9 @@ void func_800CEE20(GteShortVector *position, GteRotation *rotation,
     }
     gte_ldrotmatrix((const GteMatrixWords *)&matrix);
     gte_ldtransmatrix((const GteMatrixWords *)&matrix);
-    vertex = D_800E13BC[D_800F3368.parameter0A];
+    vertex = g_FieldFxShapeVertexTable[g_FieldFxSpriteParams.parameter0A];
     i = 0;
-    if (i < D_800E1210[D_800F3368.parameter0A]) {
+    if (i < g_FieldFxStripPacketCounts[g_FieldFxSpriteParams.parameter0A]) {
         {
             register void *copyEnd asm("$14") = &template.x3;
             asm("" : : "r"(copyEnd));
@@ -362,7 +362,7 @@ void func_800CEE20(GteShortVector *position, GteRotation *rotation,
             i++;
             packet++;
             vertex += 4;
-            if (i >= D_800E1210[D_800F3368.parameter0A])
+            if (i >= g_FieldFxStripPacketCounts[g_FieldFxSpriteParams.parameter0A])
                 break;
         }
     }
@@ -374,7 +374,7 @@ void func_800CEE20(GteShortVector *position, GteRotation *rotation,
 
 int StoreImage(RECT *rect, void *pixels);
 
-void func_800CF3AC(void *key, void *color, int time)
+void FieldFx_SampleColorTrack(void *key, void *color, int time)
 {
     RenderColorTrack *track = (RenderColorTrack *)key;
     /* Matching debt: retain the retail count register across initialization. */
@@ -415,7 +415,7 @@ void func_800CF3AC(void *key, void *color, int time)
     LoadAverageCol(key, (RenderColorKey *)key + 1, 4096 - length, length, color);
 }
 
-void func_800CF4B4(int arg0, int arg1, u16 *pixels) {
+void FieldFx_LoadRotatedClutRow(int arg0, int arg1, u16 *pixels) {
     RECT rect;
     int i;
     u16 *dst;
@@ -423,7 +423,7 @@ void func_800CF4B4(int arg0, int arg1, u16 *pixels) {
     int source_offset;
 
     rect.x = (arg0 & 0xF) << 4;
-    rect.y = D_800E1204[D_800F336C] + (arg0 / 16);
+    rect.y = g_FieldFxPaletteTable[D_800F336C] + (arg0 / 16);
     rect.w = 0x10;
     rect.h = 1;
 
@@ -481,7 +481,7 @@ void FieldFx_TransformTranslation(const GteShortVector *input,
 /* Build, optionally scale/compose, and install a rotation matrix.
  * Matching debt: three pinned word-transfer registers. Matrix reads are C;
  * each GTE control-register transfer uses its own instruction macro. */
-void func_800CF658(GteRotation *rotation, s32 *scale, GteMatrix *matrix) {
+void FieldFx_LoadRotationMatrix(GteRotation *rotation, s32 *scale, GteMatrix *matrix) {
     GteMatrix local;
 
     if (matrix == 0) {
@@ -502,12 +502,12 @@ static __inline__ void link_packet(void *ordering, void *packet)
     *(u32 *)packet = (*(u32 *)packet & 0xff000000) | (*(u32 *)ordering & 0xffffff);
     *(u32 *)ordering = (*(u32 *)ordering & 0xff000000) | ((u32)packet & 0xffffff);
 }
-void func_800CF6F8(void *ordering, void *packet, int mode)
+void FieldFx_LinkBlendedPacket(void *ordering, void *packet, int mode)
 {
     void *drawMode;
     if (mode != 255) {
-        drawMode = D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8;
-        D_8009CDD8 += 8;
+        drawMode = D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset;
+        g_DrawPacketOffset += 8;
         SetDrawTPage(drawMode, 0, 1, GetTPage(0, mode, 0, 0));
         if (packet) {
             ((u8 *)packet)[7] |= 2;
@@ -523,7 +523,7 @@ void func_800CF6F8(void *ordering, void *packet, int mode)
  * arm, then restore the field camera matrix.
  * Matching debt: six register pins and three empty pointer barriers.
  * Matrix loads are C; GTE instructions and hazard nops use individual macros. */
-void func_800CF844(GteShortVector *origin, GteShortVector *out, int radius,
+void FieldFx_OffsetPointByAngles(GteShortVector *origin, GteShortVector *out, int radius,
                    GteShortVector *angles, int arm, int roll)
 {
     GteShortVector forward;
@@ -537,7 +537,7 @@ void func_800CF844(GteShortVector *origin, GteShortVector *out, int radius,
     GteMatrix **slot;
     GteShortVector *rotationAngles;
 
-    rollMatrix = D_800C2270;
+    rollMatrix = g_FieldFxIdentityMatrix;
     forward.y = 0;
     forward.x = 0;
     forward.z = radius;
@@ -607,10 +607,10 @@ void FieldFx_CalculateLookAngles(GteShortVector *from, GteShortVector *to,
  * Matching debt: four register pins and two empty constraints preserve
  * pointer allocation and ordering. All matrix loads are C; each GTE transfer,
  * command and hazard nop is an individual macro. */
-void func_800CFB7C(GteShortVector *input, s16 distance, GteShortVector *out)
+void FieldFx_AnglesToVector(GteShortVector *input, s16 distance, GteShortVector *out)
 {
     GteShortVector rotation;
-    GteShortVector direction = D_800C2260;
+    GteShortVector direction = g_FieldFxZeroVector;
     GteVector result;
     GteMatrixWords local;
     GteMatrixWords *matrix;
@@ -647,7 +647,7 @@ void func_800CFB7C(GteShortVector *input, s16 distance, GteShortVector *out)
  * eased turning, point distance and the alternating scatter offsets. */
 
 
-int func_800CFCF4(int from, int to, s16 *distance)
+int FieldFx_GetTurnDirection(int from, int to, s16 *distance)
 {
   unsigned char new_var;
   register int direction;
@@ -706,7 +706,7 @@ static inline int angle_direction(u16 *fromPtr, u16 *toPtr, s16 *distance) {
     return (s16)direction;
 }
 
-void func_800CFD50(u16 *from, u16 *to, u16 speed) {
+void FieldFx_EaseAngles(u16 *from, u16 *to, u16 speed) {
     s16 distance;
     int direction;
     int scaled;
@@ -730,7 +730,7 @@ void func_800CFD50(u16 *from, u16 *to, u16 speed) {
     to[1] = old1 + change;
 }
 
-int func_800CFE94(s16 *from, s16 *to)
+int FieldFx_GetDistanceNonZero(s16 *from, s16 *to)
 {
     int dx = to[0] - from[0];
     int dy = to[1] - from[1];
@@ -744,7 +744,7 @@ int func_800CFE94(s16 *from, s16 *to)
     return length;
 }
 
-void func_800CFF0C(s16 *out)
+void FieldFx_RandomScatterOffsetYZ(s16 *out)
 {
     s16 *out_reg;
     int y;
@@ -753,9 +753,9 @@ void func_800CFF0C(s16 *out)
     int z;
 
     out_reg = out;
-    D_800E21C8 = (D_800E21C8 + 1) & 7;
+    g_FieldFxRandomPhaseCounter = (g_FieldFxRandomPhaseCounter + 1) & 7;
     temp = rand() & 0x1FF;
-    phase = D_800E21C8;
+    phase = g_FieldFxRandomPhaseCounter;
     temp += (phase << 9) & 0xC00;
     phase &= 1;
     y = temp + 0x100;
@@ -770,7 +770,7 @@ void func_800CFF0C(s16 *out)
     out_reg[2] = z;
 }
 
-void func_800CFFAC(s16 *out)
+void FieldFx_RandomScatterOffsetXY(s16 *out)
 {
     s16 *out_reg;
     int x;
@@ -779,9 +779,9 @@ void func_800CFFAC(s16 *out)
     int y;
 
     out_reg = out;
-    D_800E21C8 = (D_800E21C8 + 1) & 7;
+    g_FieldFxRandomPhaseCounter = (g_FieldFxRandomPhaseCounter + 1) & 7;
     temp = rand() & 0x1FF;
-    phase = D_800E21C8;
+    phase = g_FieldFxRandomPhaseCounter;
     temp += (phase << 9) & 0xC00;
     phase &= 1;
     x = temp + 0x100;
@@ -802,7 +802,7 @@ void func_800CFFAC(s16 *out)
  * rotation. Drawing stops at the first triangle beyond the depth range.
  * Matching debt: twelve register pins and five empty constraints. CPU
  * matrix loads and depth arithmetic are C; each GTE instruction is separate. */
-void func_800D004C(GteShortVector *position, int width, int height, int segments,
+void FieldFx_DrawStarFan(GteShortVector *position, int width, int height, int segments,
                    GteRotation *rotation, int scale_x, int scale_y,
                    RenderColor *color0, RenderColor *color1, int intensity,
                    int mode)
@@ -811,8 +811,8 @@ void func_800D004C(GteShortVector *position, int width, int height, int segments
     s16 radii[2];
     GteShortVector vertices[3];
     GteShortVector anchor;
-    GteShortVector defaultRotation = D_800C2260;
-    GteVector scale = D_800C2290;
+    GteShortVector defaultRotation = g_FieldFxZeroVector;
+    GteVector scale = g_FieldFxUnitScale;
     RenderColor centre;
     RenderColor rim;
     GteMatrix matrix;
@@ -881,8 +881,8 @@ void func_800D004C(GteShortVector *position, int width, int height, int segments
     template.r2 = template.r1 = rim.r;
     template.g2 = template.g1 = rim.g;
     template.b2 = template.b1 = rim.b;
-    packet = (FieldG3Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-    D_8009CDD8 += segments * sizeof(FieldG3Packet);
+    packet = (FieldG3Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_DrawPacketOffset += segments * sizeof(FieldG3Packet);
     vertices[0].x = vertices[0].y = vertices[0].z = vertices[1].z = vertices[2].z = 0;
     radii[0] = width;
     radii[1] = height;
@@ -937,8 +937,8 @@ void func_800D004C(GteShortVector *position, int width, int height, int segments
             return;
         TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], depth);
         if (mode != 0xFF) {
-            drawMode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-            D_8009CDD8 += sizeof(RenderTintMode);
+            drawMode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+            g_DrawPacketOffset += sizeof(RenderTintMode);
             SetDrawTPage((char *)drawMode, 0, 1, GetTPage(0, mode, 0, 0));
             if (packet) {
                 packet->code |= 2;
@@ -957,7 +957,7 @@ void func_800D004C(GteShortVector *position, int width, int height, int segments
  * the first quad beyond the depth range.
  * Matching debt: twelve register pins and four empty constraints. CPU
  * matrix loads and depth arithmetic are C; each GTE instruction is separate. */
-void func_800D0728(GteShortVector *position, int inner, int outer, int segments,
+void FieldFx_DrawRingBand(GteShortVector *position, int inner, int outer, int segments,
                    GteRotation *rotation, int scale_x, int scale_y,
                    struct RenderColor *color0, struct RenderColor *color1,
                    int intensity, int mode)
@@ -965,8 +965,8 @@ void func_800D0728(GteShortVector *position, int inner, int outer, int segments,
     FieldG4Packet template;
     GteShortVector vertices[4];
     GteShortVector anchor;
-    GteShortVector defaultRotation = D_800C2260;
-    GteVector scale = D_800C2290;
+    GteShortVector defaultRotation = g_FieldFxZeroVector;
+    GteVector scale = g_FieldFxUnitScale;
     RenderColor innerColor;
     RenderColor outerColor;
     GteMatrix matrix;
@@ -1038,8 +1038,8 @@ void func_800D0728(GteShortVector *position, int inner, int outer, int segments,
     template.r3 = innerColor.r;
     template.g3 = innerColor.g;
     template.b3 = innerColor.b;
-    packet = (FieldG4Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-    D_8009CDD8 += segments * sizeof(FieldG4Packet);
+    packet = (FieldG4Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_DrawPacketOffset += segments * sizeof(FieldG4Packet);
     vertices[0].z = vertices[1].z = vertices[2].z = vertices[3].z = 0;
     for (i = 0; i < segments; i++, packet++) {
         /* Prevent a separate induction pointer for packet->code. */
@@ -1099,8 +1099,8 @@ void func_800D0728(GteShortVector *position, int inner, int outer, int segments,
         TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], depth);
         entry = ot.tag;
         if (mode != 0xFF) {
-            drawMode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-            D_8009CDD8 += sizeof(RenderTintMode);
+            drawMode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+            g_DrawPacketOffset += sizeof(RenderTintMode);
             SetDrawTPage((char *)drawMode, 0, 1, GetTPage(0, mode, 0, 0));
             if (packet) {
                 packet->code |= 2;
@@ -1119,7 +1119,7 @@ void func_800D0728(GteShortVector *position, int inner, int outer, int segments,
  * else adds a semi-transparent draw mode.
  * The camera and local matrix uploads are gte_ldrotmatrix and
  * gte_ldtransmatrix; the corners go to the GTE through gte_ldv3. */
-void func_800D0E88(GteShortVector *position, GteRotation *rotation, int length,
+void FieldFx_DrawRotatedTriangle(GteShortVector *position, GteRotation *rotation, int length,
                    int breadth, RenderColor *color0, RenderColor *color1,
                    RenderColor *color2, int intensity, int mode)
 {
@@ -1135,12 +1135,12 @@ void func_800D0E88(GteShortVector *position, GteRotation *rotation, int length,
     GteMatrix *view;
     int bias;
 
-    black = D_800C22A0;
-    bias = (u16)D_800F3368.depth;
+    black = g_FieldFxBlackColor;
+    bias = (u16)g_FieldFxSpriteParams.depth;
     /* Keep intensity in s6 without pinning the later draw-mode lifetime. */
     
-    packet = (FieldG3Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-    D_8009CDD8 += sizeof(FieldG3Packet);
+    packet = (FieldG3Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_DrawPacketOffset += sizeof(FieldG3Packet);
     view = D_800BCFA4.value;
     {
         const GteMatrixWords *words = (const GteMatrixWords *)(view);
@@ -1202,8 +1202,8 @@ void func_800D0E88(GteShortVector *position, GteRotation *rotation, int length,
         if (depth < 0x1000) {
             TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], depth);
             if (mode != 0xFF) {
-                drawMode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-                D_8009CDD8 += sizeof(RenderTintMode);
+                drawMode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+                g_DrawPacketOffset += sizeof(RenderTintMode);
                 SetDrawTPage(drawMode, 0, 1, GetTPage(0, mode, 0, 0));
                 if (packet) {
                     packet->code |= 2;
@@ -1224,7 +1224,7 @@ void func_800D0E88(GteShortVector *position, GteRotation *rotation, int length,
  * pair; count >= 1000 instead clears the first count - 999 pairs. Mode
  * 0xFF draws opaque, anything else semi-transparent.
  * The camera upload is gte_ldrotmatrix and gte_ldtransmatrix. */
-void func_800D1384(GteShortVector *head, GteShortVector *tail, u32 count,
+void FieldFx_DrawHistoryTrail(GteShortVector *head, GteShortVector *tail, u32 count,
                    u8 *color0, u8 *color1, int scale, FieldTrailPair *history,
                    int mode)
 {
@@ -1245,7 +1245,7 @@ void func_800D1384(GteShortVector *head, GteShortVector *tail, u32 count,
     s16 fade1;
 
     view = D_800BCFA4.value;
-    bias = (u16)D_800F3368.depth;
+    bias = (u16)g_FieldFxSpriteParams.depth;
     if (count >= 1000) {
         count -= 999;
         for (i = 0; i < count; i++) {
@@ -1280,8 +1280,8 @@ void func_800D1384(GteShortVector *head, GteShortVector *tail, u32 count,
         history[0].tail.vector.y = history[1].tail.vector.y;
         history[0].tail.vector.z = history[1].tail.vector.z;
     }
-    packet = (FieldG4Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-    D_8009CDD8 += count * sizeof(FieldG4Packet);
+    packet = (FieldG4Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_DrawPacketOffset += count * sizeof(FieldG4Packet);
     if (color0 == 0) {
         headColor[0] = headColor[1] = headColor[2] = 0;
     } else {
@@ -1338,8 +1338,8 @@ void func_800D1384(GteShortVector *head, GteShortVector *tail, u32 count,
             packet->b3 = tailColor[2] * fade1 / 128;
             TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], depth);
             if (mode != 0xFF) {
-                drawMode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-                D_8009CDD8 += sizeof(RenderTintMode);
+                drawMode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+                g_DrawPacketOffset += sizeof(RenderTintMode);
                 SetDrawTPage(drawMode, 0, 1, GetTPage(0, mode, 0, 0));
                 if (packet) {
                     packet->code |= 2;
@@ -1355,7 +1355,7 @@ void func_800D1384(GteShortVector *head, GteShortVector *tail, u32 count,
 
 /* Full-screen 320x240 tile in `color` scaled by scale/128, linked at
  * `depth`; any blend mode other than 0xFF adds a semi-transparent draw mode. */
-void func_800D1AE0(u8 *color, int scale, int abr, u32 depth)
+void FieldFx_DrawScreenTint(u8 *color, int scale, int abr, u32 depth)
 {
     RenderTintTile *tile;
     RenderTintMode *mode;
@@ -1363,8 +1363,8 @@ void func_800D1AE0(u8 *color, int scale, int abr, u32 depth)
     FieldTileAddress ot;
     FieldTileAddress link;
 
-    tile = (RenderTintTile *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-    D_8009CDD8 += sizeof(RenderTintTile);
+    tile = (RenderTintTile *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_DrawPacketOffset += sizeof(RenderTintTile);
     SetTile(tile);
     tile->r = color[0] * scale / 128;
     tile->g = color[1] * scale / 128;
@@ -1376,8 +1376,8 @@ void func_800D1AE0(u8 *color, int scale, int abr, u32 depth)
         tile->height = 240;
         TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], depth);
         if (abr != 0xFF) {
-            mode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-            D_8009CDD8 += sizeof(RenderTintMode);
+            mode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+            g_DrawPacketOffset += sizeof(RenderTintMode);
             SetDrawTPage(mode, 0, 1, GetTPage(0, abr, 0, 0));
             if (tile) {
                 tile->command |= 2;
@@ -1412,7 +1412,7 @@ int Geo_ClipAlternatingArcPoint(int radius, int divisor, int segment) {
 }
 
 /* Projected one-pixel tile plus a 3x3 halo at a quarter of its colour. */
-void func_800D1DEC(void *position, void *colorArg, int scale, int abr)
+void FieldFx_DrawHaloedPoint(void *position, void *colorArg, int scale, int abr)
 {
     u8 *color = colorArg;
     FieldTilePoint *point;
@@ -1423,10 +1423,10 @@ void func_800D1DEC(void *position, void *colorArg, int scale, int abr)
     FieldTileAddress link;
     u32 depth;
 
-    point = (FieldTilePoint *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-    D_8009CDD8 += sizeof(FieldTilePoint);
-    glow = (RenderTintTile *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-    D_8009CDD8 += sizeof(RenderTintTile);
+    point = (FieldTilePoint *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_DrawPacketOffset += sizeof(FieldTilePoint);
+    glow = (RenderTintTile *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_DrawPacketOffset += sizeof(RenderTintTile);
     gte_lwc2_0_0(position);
     gte_lwc2_1_4(position);
     gte_cop2_hazard_slot();
@@ -1443,7 +1443,7 @@ void func_800D1DEC(void *position, void *colorArg, int scale, int abr)
     glow->b >>= 2;
     gte_stsxy2(&point->x);
     gte_stszotz(&depth);
-    depth -= (u16)D_800F3368.depth;
+    depth -= (u16)g_FieldFxSpriteParams.depth;
     if (depth < 0x1000) {
         glow->x = point->x - 1;
         glow->y = point->y - 1;
@@ -1452,8 +1452,8 @@ void func_800D1DEC(void *position, void *colorArg, int scale, int abr)
         AddPrim((u32 *)D_800B0E38.ordering[g_ActiveDrawSlot] + depth, (u32 *)point);
         TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], depth);
         if (abr != 0xFF) {
-            mode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-            D_8009CDD8 += sizeof(RenderTintMode);
+            mode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+            g_DrawPacketOffset += sizeof(RenderTintMode);
             SetDrawTPage(mode, 0, 1, GetTPage(0, abr, 0, 0));
             if (glow) {
                 glow->command |= 2;
@@ -1469,7 +1469,7 @@ void func_800D1DEC(void *position, void *colorArg, int scale, int abr)
 /* One-pixel tile at the projected `position` in `color` scaled by
  * scale/128, linked at its view depth; any blend mode other than 0xFF adds a
  * semi-transparent draw mode. */
-void func_800D2104(GteShortVector *position, u8 *color, int scale, int abr)
+void FieldFx_DrawPointTile(GteShortVector *position, u8 *color, int scale, int abr)
 {
     FieldTilePoint *tile;
     RenderTintMode *mode;
@@ -1478,8 +1478,8 @@ void func_800D2104(GteShortVector *position, u8 *color, int scale, int abr)
     FieldTileAddress link;
     u32 depth;
 
-    tile = (FieldTilePoint *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-    D_8009CDD8 += sizeof(FieldTilePoint);
+    tile = (FieldTilePoint *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_DrawPacketOffset += sizeof(FieldTilePoint);
     gte_lwc2_0_0(position);
     gte_lwc2_1_4(position);
     gte_cop2_hazard_slot();
@@ -1494,12 +1494,12 @@ void func_800D2104(GteShortVector *position, u8 *color, int scale, int abr)
         s32 *out = (s32 *)&depth;
         gte_stszotz(out);
     }
-    depth -= (u16)D_800F3368.depth;
+    depth -= (u16)g_FieldFxSpriteParams.depth;
     if (depth < 0x1000) {
         TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], depth);
         if (abr != 0xFF) {
-            mode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-            D_8009CDD8 += sizeof(RenderTintMode);
+            mode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+            g_DrawPacketOffset += sizeof(RenderTintMode);
             SetDrawTPage(mode, 0, 1, GetTPage(0, abr, 0, 0));
             if (tile) {
                 tile->command |= 2;
@@ -1519,7 +1519,7 @@ void func_800D2104(GteShortVector *position, u8 *color, int scale, int abr)
  * The camera and local matrix uploads are gte_ldrotmatrix and
  * gte_ldtransmatrix. Matching debt: one empty constraint on rotation and
  * length (see docs/CODE_ORGANIZATION.md). */
-void func_800D2370(GteShortVector *position, GteRotation *rotation,
+void FieldFx_DrawRotatedQuad(GteShortVector *position, GteRotation *rotation,
                    int length, int breadth, int u, int v, int texture_width,
                    int texture_height, int clut, RenderColor *color0,
                    RenderColor *color1, int intensity, int mode)
@@ -1535,17 +1535,17 @@ void func_800D2370(GteShortVector *position, GteRotation *rotation,
 
     view = D_800BCFA4.value;
     scale = intensity;
-    bias = (u16)D_800F3368.depth;
-    black = D_800C22A0;
-    packet = (FieldGt4Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-    D_8009CDD8 += sizeof(FieldGt4Packet);
+    bias = (u16)g_FieldFxSpriteParams.depth;
+    black = g_FieldFxBlackColor;
+    packet = (FieldGt4Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_DrawPacketOffset += sizeof(FieldGt4Packet);
     SetPolyGT4(packet);
     if (mode == 0xFF) {
         packet->code &= ~2;
-        packet->tpage = D_800F3368.tpage;
+        packet->tpage = g_FieldFxSpriteParams.tpage;
     } else {
         packet->code |= 2;
-        packet->tpage = D_800F3368.tpage | GetTPage(0, mode, 0, 0);
+        packet->tpage = g_FieldFxSpriteParams.tpage | GetTPage(0, mode, 0, 0);
     }
     /* Keep rotation and length in registers across the packet setup calls. */
     asm("" : : "r"(rotation), "r"(length));
@@ -1629,7 +1629,7 @@ void func_800D2370(GteShortVector *position, GteRotation *rotation,
 /* Haloed point at distance `x` from the view origin rotated by `y` about Z.
  * The halo is always drawn semi-transparent; `mode` is not read.
  * The rotation upload is gte_ldrotmatrix. */
-void func_800D27FC(int x, int y, void *color, int scale, int mode)
+void FieldFx_DrawOrbitPoint(int x, int y, void *color, int scale, int mode)
 {
     GteShortVector offset;
     GteMatrix matrix;
@@ -1646,10 +1646,10 @@ void func_800D27FC(int x, int y, void *color, int scale, int mode)
     offset.x = x;
     offset.y = 0;
     offset.z = 0;
-    point = (FieldTilePoint *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-    D_8009CDD8 += sizeof(FieldTilePoint);
-    glow = (RenderTintTile *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-    D_8009CDD8 += sizeof(RenderTintTile);
+    point = (FieldTilePoint *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_DrawPacketOffset += sizeof(FieldTilePoint);
+    glow = (RenderTintTile *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_DrawPacketOffset += sizeof(RenderTintTile);
     matrix.m[0][0] = matrix.m[1][1] = matrix.m[2][2] = 0x1000;
     matrix.m[0][1] = matrix.m[0][2] = matrix.m[1][0] = matrix.m[1][2] =
         matrix.m[2][0] = matrix.m[2][1] = 0;
@@ -1670,7 +1670,7 @@ void func_800D27FC(int x, int y, void *color, int scale, int mode)
     glow->b >>= 2;
     gte_stsxy2(&point->x);
     gte_stszotz(&depth);
-    depth -= (u16)D_800F3368.depth;
+    depth -= (u16)g_FieldFxSpriteParams.depth;
     if (depth < 0x1000) {
         glow->x = point->x - 1;
         glow->y = point->y - 1;
@@ -1678,8 +1678,8 @@ void func_800D27FC(int x, int y, void *color, int scale, int mode)
         glow->width = 3;
         AddPrim((u32 *)D_800B0E38.ordering[g_ActiveDrawSlot] + depth, (u32 *)point);
         TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], depth);
-        blend = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-        D_8009CDD8 += sizeof(RenderTintMode);
+        blend = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+        g_DrawPacketOffset += sizeof(RenderTintMode);
         SetDrawTPage(blend, 0, 1, GetTPage(0, 1, 0, 0));
         if (glow) {
             glow->command |= 2;
@@ -1692,7 +1692,7 @@ void func_800D27FC(int x, int y, void *color, int scale, int mode)
 /* Gouraud line from `from` (color0 at scale0/128) to `to` (color1 at
  * scale1/128) linked at the mean depth, with a 16x16 glow cell stretched
  * along it; mode 0xFF draws both opaque, anything else semi-transparent. */
-void func_800D2B58(GteShortVector *from, GteShortVector *to, u8 *color0,
+void FieldFx_DrawGlowLine(GteShortVector *from, GteShortVector *to, u8 *color0,
                    u8 *color1, int scale0, int scale1, int mode)
 {
     u32 depth[2];
@@ -1708,10 +1708,10 @@ void func_800D2B58(GteShortVector *from, GteShortVector *to, u8 *color0,
     int along;
     int alongY;
 
-    line = (FieldLineG2Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-    D_8009CDD8 += sizeof(FieldLineG2Packet);
-    glow = (FieldGlowQuadPacket *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-    D_8009CDD8 += sizeof(FieldGlowQuadPacket);
+    line = (FieldLineG2Packet *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_DrawPacketOffset += sizeof(FieldLineG2Packet);
+    glow = (FieldGlowQuadPacket *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_DrawPacketOffset += sizeof(FieldGlowQuadPacket);
     gte_ldv0(from);
     gte_cop2_hazard_slot();
     gte_cop2_hazard_slot();
@@ -1740,12 +1740,12 @@ void func_800D2B58(GteShortVector *from, GteShortVector *to, u8 *color0,
         gte_stszotz(out);
     }
     gte_stsxy2(&line->x1);
-    depth[0] = (int)(depth[0] + depth[1]) / 2 - (u16)D_800F3368.depth;
+    depth[0] = (int)(depth[0] + depth[1]) / 2 - (u16)g_FieldFxSpriteParams.depth;
     if (depth[0] < 0x1000) {
         TILE_OT_ENTRY(ot, table, D_800B0E38.ordering[g_ActiveDrawSlot], depth[0]);
         if (mode != 0xFF) {
-            drawMode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-            D_8009CDD8 += sizeof(RenderTintMode);
+            drawMode = (RenderTintMode *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+            g_DrawPacketOffset += sizeof(RenderTintMode);
             SetDrawTPage(drawMode, 0, 1, GetTPage(0, mode, 0, 0));
             if (line) {
                 line->code |= 2;
@@ -1764,10 +1764,10 @@ void func_800D2B58(GteShortVector *from, GteShortVector *to, u8 *color0,
         glow->code = 0x3C;
         if (mode == 0xFF) {
             glow->code = 0x3C;
-            glow->tpage = D_800E2852;
+            glow->tpage = g_FieldFxTpageTableEntry1;
         } else {
             glow->code = 0x3E;
-            glow->tpage = D_800E2852 | GetTPage(0, mode, 0, 0);
+            glow->tpage = g_FieldFxTpageTableEntry1 | GetTPage(0, mode, 0, 0);
         }
         glow->clut = GetClut(0x20, 0x1D6);
         glow->x0 = line->x0 - along + across;
@@ -1808,7 +1808,7 @@ void func_800D2B58(GteShortVector *from, GteShortVector *to, u8 *color0,
  * shaded from color0 to color1 (each at scale/128) along the ribbon and
  * textured from u..u+du by v..v+height. Mode 0xFF draws opaque, anything
  * else semi-transparent. */
-void func_800D3114(GteShortVector *points, s16 count, int width, int u, int v,
+void FieldFx_DrawTexturedRibbon(GteShortVector *points, s16 count, int width, int u, int v,
                    int du, int height, int tpage, int clut, int scale,
                    RenderColor *color0, RenderColor *color1, int mode)
 {
@@ -1835,9 +1835,9 @@ void func_800D3114(GteShortVector *points, s16 count, int width, int u, int v,
     int angle;
     int joint;
 
-    packet = (FieldRibbonPacket *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-    D_8009CDD8 += count * sizeof(FieldRibbonPacket);
-    bias = (u16)D_800F3368.depth;
+    packet = (FieldRibbonPacket *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_DrawPacketOffset += count * sizeof(FieldRibbonPacket);
+    bias = (u16)g_FieldFxSpriteParams.depth;
     color0Scaled.bytes.rgb[0] = color0->r * scale / 128;
     color0Scaled.bytes.rgb[1] = color0->g * scale / 128;
     color0Scaled.bytes.rgb[2] = color0->b * scale / 128;
@@ -2008,7 +2008,7 @@ void FieldFx_UpdatePointHistory(RenderHistoryPoint *history, s16 count,
 /* Matching debt: two empty barriers and five volatile stack parameters keep
  * every register save before the stack argument loads (see
  * docs/CODE_ORGANIZATION.md). */
-void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,
+void FieldFx_DrawPulledSprite(GteShortVector *position, int scale_x, int scale_y,
                    int texture, volatile int input_clut, volatile int input_page,
                    volatile int input_intensity, RenderColor *volatile input_color,
                    volatile int input_pull)
@@ -2035,8 +2035,8 @@ void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,
     asm volatile("" : : : "$6");
     center.x = 0xA0;
     center.y = 0x78;
-    packet = (FieldStripPacket *)(D_800B0E38.packets[g_ActiveDrawSlot] + D_8009CDD8);
-    D_8009CDD8 += sizeof(FieldStripPacket);
+    packet = (FieldStripPacket *)(D_800B0E38.packets[g_ActiveDrawSlot] + g_DrawPacketOffset);
+    g_DrawPacketOffset += sizeof(FieldStripPacket);
     if (color == 0) {
         r = g = b = intensity;
     } else {
@@ -2047,7 +2047,7 @@ void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,
     packet->r0 = r;
     packet->g0 = g;
     packet->b0 = b;
-    if (D_800F3368.parameter06 != 0) {
+    if (g_FieldFxSpriteParams.parameter06 != 0) {
         u = texture & 0xF;
         v = 0;
         if (u >= 8) {
@@ -2070,14 +2070,14 @@ void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,
     packet->code = 0x2C;
     if (page == 0xFF) {
         packet->code &= ~2;
-        packet->tpage = D_800F3368.tpage;
+        packet->tpage = g_FieldFxSpriteParams.tpage;
     } else {
         packet->code |= 2;
-        packet->tpage = D_800F3368.tpage | GetTPage(0, page, 0, 0);
+        packet->tpage = g_FieldFxSpriteParams.tpage | GetTPage(0, page, 0, 0);
     }
     packet->clut = clut;
-    width = D_800F3368.extent_x;
-    height = D_800F3368.extent_y;
+    width = g_FieldFxSpriteParams.extent_x;
+    height = g_FieldFxSpriteParams.extent_y;
     packet->u0 = packet->u2 = u;
     packet->v1 = packet->v0 = v;
     packet->u1 = packet->u3 = u + width - 1;
@@ -2085,7 +2085,7 @@ void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,
     width = width * scale_x / 8192;
     height = height * scale_y / 8192;
     gte_stszotz(&depth);
-    depth -= (u16)D_800F3368.depth;
+    depth -= (u16)g_FieldFxSpriteParams.depth;
     if (pull != 0) {
         depth = 14;
     }
@@ -2101,23 +2101,23 @@ void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,
     }
 }
 
-int func_800D3F64(int arg0, int arg1) {
+int FieldFx_PlaySoundAtOwner(int arg0, int arg1) {
     FieldActor *actor;
     s16 position[3];
 
-    actor = D_800F32D0->actor;
+    actor = g_FieldFxOwner->actor;
     position[0] = actor->render_object.matrices->translation[0];
     position[1] = actor->render_object.matrices->translation[1];
     position[2] = actor->render_object.matrices->translation[2];
     return Asset_Find08w(arg0, arg1, position[0], position[1], position[2]);
 }
 
-int func_800D3FD8(void) {
+int FieldFx_GetOwnerProgress(void) {
     FieldFxObjectPrefix *ctx;
     FieldActorState *node;
     int value;
 
-    ctx = D_800F32D0;
+    ctx = g_FieldFxOwner;
     node = ctx->actor->state;
     value = 0x80;
     if (node != 0) {
@@ -2129,11 +2129,11 @@ int func_800D3FD8(void) {
     return value;
 }
 
-int func_800D401C(int id)
+int FieldFx_SpawnTask(int id)
 {
     /* Reused for the callback's additional payload size after the slot scan. */
     int result;
-    FieldFxTaskContext *ctx = D_800E2368;
+    FieldFxTaskContext *ctx = g_FieldFxTaskContext;
     FieldFxTaskSlot *slot = ctx->slots;
     int size;
     char *payload;
@@ -2156,7 +2156,7 @@ int func_800D401C(int id)
     }
     slot->end = payload + size;
     slot->start = payload;
-    D_800F33E0 = slot;
+    g_FieldFxActiveTaskSlot = slot;
     result = ctx->table->callbacks[slot->id](0, payload, ctx->argument);
     if (!result)
         slot->end = 0;
@@ -2169,7 +2169,7 @@ int func_800D401C(int id)
  * Opcodes: 0 stop (end of script), 1 set variable, 2 spawn task,
  * 3 count down a variable and jump while positive, 4 wait on a timer or
  * a variable, 5 toggle the owner's held state. */
-int func_800D413C(FieldFxTaskOwner *owner)
+int FieldFx_UpdateTasks(FieldFxTaskOwner *owner)
 {
     FieldFxTaskContext *context = &owner->tasks;
     FieldFxTaskSlot *slot;
@@ -2181,8 +2181,8 @@ int func_800D413C(FieldFxTaskOwner *owner)
     int i;
     s16 op, a, b;
 
-    D_800F32D0 = &owner->prefix;
-    D_800E2368 = context;
+    g_FieldFxOwner = &owner->prefix;
+    g_FieldFxTaskContext = context;
     while (running) {
         if (context->delay != 0) {
             if (--context->delay != 0)
@@ -2200,11 +2200,11 @@ int func_800D413C(FieldFxTaskOwner *owner)
             context->pc.script -= 3;
             if (context->count == 0) {
                 owner->prefix.reserved00 = 4;
-                if (D_800E2368->flags) {
-                    if (D_800F32D0->actor->state != 0) {
-                        D_800F32D0->actor->state->core_flags &= 0xC0FFFFFF;
-                        *D_800F32D0->actor->state->action_state = 4;
-                        D_800E2368->flags = 0;
+                if (g_FieldFxTaskContext->flags) {
+                    if (g_FieldFxOwner->actor->state != 0) {
+                        g_FieldFxOwner->actor->state->core_flags &= 0xC0FFFFFF;
+                        *g_FieldFxOwner->actor->state->action_state = 4;
+                        g_FieldFxTaskContext->flags = 0;
                     }
                 }
             }
@@ -2214,7 +2214,7 @@ int func_800D413C(FieldFxTaskOwner *owner)
             context->variables[a] = b;
             break;
         case 2:
-            func_800D401C(a);
+            FieldFx_SpawnTask(a);
             break;
         case 3:
             if ((s16)--context->variables[b] <= 0) {
@@ -2236,19 +2236,19 @@ int func_800D413C(FieldFxTaskOwner *owner)
             break;
         case 5:
             if (a == 0) {
-                D_800F32D0->actor->state->core_flags =
-                    (D_800F32D0->actor->state->core_flags & 0xC0FFFFFF) | 0x1000000;
-                D_800E2368->flags = 1;
-            } else if (D_800E2368->flags && D_800F32D0->actor && D_800F32D0->actor->state) {
-                u8 *mode = D_800F32D0->actor->state->action_state;
+                g_FieldFxOwner->actor->state->core_flags =
+                    (g_FieldFxOwner->actor->state->core_flags & 0xC0FFFFFF) | 0x1000000;
+                g_FieldFxTaskContext->flags = 1;
+            } else if (g_FieldFxTaskContext->flags && g_FieldFxOwner->actor && g_FieldFxOwner->actor->state) {
+                u8 *mode = g_FieldFxOwner->actor->state->action_state;
                 if (*mode == 1)
                     *mode = 2;
             }
             break;
         }
     }
-    if (D_800E2368->flags && D_800F32D0->actor && D_800F32D0->actor->state) {
-        state = D_800F32D0->actor->state;
+    if (g_FieldFxTaskContext->flags && g_FieldFxOwner->actor && g_FieldFxOwner->actor->state) {
+        state = g_FieldFxOwner->actor->state;
         flags = state->core_flags;
         count = (flags >> 24) & 0x3F;
         if (count >= 2)
@@ -2262,24 +2262,24 @@ int func_800D413C(FieldFxTaskOwner *owner)
         if (*state->action_state == 0) {
             if (state->core_flags & 0x180E)
                 owner->prefix.reserved00 = 4;
-            if (D_800F32D0->actor->mode < 2)
+            if (g_FieldFxOwner->actor->mode < 2)
                 return 0;
         }
     }
     if (context->flags)
-        D_800F3428 = Asset_SearchByKeyType(owner->prefix.asset_type);
+        g_FieldFxAltPaletteFlag = Asset_SearchByKeyType(owner->prefix.asset_type);
     slot = context->slots;
     for (i = 0; i < 8; i++, slot++) {
         if (slot->id != 0xFFFF) {
-            D_800F33E0 = slot;
-            D_800E27EC = slot->age;
+            g_FieldFxActiveTaskSlot = slot;
+            g_FieldFxCurrentAge = slot->age;
             result = context->table->callbacks[slot->id](1, slot->start, context->argument);
             if (slot->end) {
                 if (result == 2) {
-                    if (!func_800CE688(slot->end))
+                    if (!FieldFx_UpdateCallbackList(slot->end))
                         result = 1;
                 } else {
-                    func_800CE688(slot->end);
+                    FieldFx_UpdateCallbackList(slot->end);
                 }
             }
             slot->age++;
@@ -2292,7 +2292,7 @@ int func_800D413C(FieldFxTaskOwner *owner)
     return 0;
 }
 
-int func_800D4620(FieldFxTaskOwner *owner)
+int FieldFx_InitTaskContext(FieldFxTaskOwner *owner)
 {
     FieldFxTaskContext *context = &owner->tasks;
     FieldFxTaskSlot *slot;
@@ -2319,15 +2319,15 @@ int func_800D4620(FieldFxTaskOwner *owner)
     return 0;
 }
 
-int func_800D4698(FieldFxTaskOwner *owner, int skip, int arg2, int arg3, int arg4, int arg5) {
+int FieldFx_InitTaskProgram(FieldFxTaskOwner *owner, int skip, int arg2, int arg3, int arg4, int arg5) {
     FieldFxTaskContext *ctx;
     int (*callback)(int, int, int, int);
 
     ctx = &owner->tasks;
     if (skip == 0) {
         callback = ((FieldFxTaskProgram *)owner->tasks.table)->initialize;
-        D_800F32D0 = &owner->prefix;
-        D_800E2368 = ctx;
+        g_FieldFxOwner = &owner->prefix;
+        g_FieldFxTaskContext = ctx;
         if (callback != 0) {
             owner->tasks.argument = callback(arg2, arg3, arg4, arg5);
         }
@@ -2337,48 +2337,48 @@ int func_800D4698(FieldFxTaskOwner *owner, int skip, int arg2, int arg3, int arg
 
 /* Draws every live task of the owner: loads the current view matrix into
  * the GTE, then runs each task callback and its particle list in mode 2. */
-int func_800D4704(FieldFxTaskOwner *owner)
+int FieldFx_DrawTasks(FieldFxTaskOwner *owner)
 {
     FieldFxTaskContext *context = &owner->tasks;
     FieldFxTaskSlot *slot = context->slots;
     int i;
 
-    D_800F32D0 = &owner->prefix;
-    D_800E2368 = context;
+    g_FieldFxOwner = &owner->prefix;
+    g_FieldFxTaskContext = context;
     if (context->flags)
-        D_800F3428 = Asset_SearchByKeyType(owner->prefix.asset_type);
+        g_FieldFxAltPaletteFlag = Asset_SearchByKeyType(owner->prefix.asset_type);
     for (i = 0; i < 8; i++, slot++) {
         if (slot->id != 0xFFFF) {
             gte_ldrotmatrix((const GteMatrixWords *)D_800BCFA4.value);
             gte_ldtransmatrix((const GteMatrixWords *)D_800BCFA4.value);
-            D_800F33E0 = slot;
-            D_800E27EC = slot->age;
+            g_FieldFxActiveTaskSlot = slot;
+            g_FieldFxCurrentAge = slot->age;
             context->table->callbacks[slot->id](2, slot->start, context->argument);
             if (slot->end)
-                func_800CE78C(slot->end);
+                FieldFx_DrawCallbackList(slot->end);
         }
     }
     return 0;
 }
 
-int func_800D4850(u8 *state) {
+int FieldFx_CloseTaskOwner(u8 *state) {
     state[0] = 4;
     return 0;
 }
 
-int func_800D4860(void) {
+int FieldFx_InitEffectResources(void) {
     void **table;
 
-    func_800CECAC();
+    FieldFx_InitTexturePageTable();
 
     table = &g_FieldEffectAssetTable;
-    D_800F32D4 = Asset_FindTable08ByU32Key(*table, 0x6DEAE684);
+    g_FieldFxModel6DEAE684 = Asset_FindTable08ByU32Key(*table, 0x6DEAE684);
     D_800F32D8 = Asset_FindTable08ByU32Key(*table, 0x8AB5B684);
     D_800F3418 = Asset_FindTable08ByU32Key(*table, 0x5AB32504);
-    D_800F342C = Asset_FindTable08ByU32Key(*table, 0x5AB32104);
-    D_800F3474 = Asset_FindTable08ByU32Key(*table, 0x83ACD504);
-    D_800E22D4 = Asset_FindTable08ByU32Key(*table, 0x57E8EB04);
-    func_800CED3C(0);
+    g_FieldFxTwinModelB = Asset_FindTable08ByU32Key(*table, 0x5AB32104);
+    g_FieldFxModel83ACD504 = Asset_FindTable08ByU32Key(*table, 0x83ACD504);
+    g_FieldFxGlintModel = Asset_FindTable08ByU32Key(*table, 0x57E8EB04);
+    FieldFx_LoadEffectTexturePage(0);
 
     return 0;
 }

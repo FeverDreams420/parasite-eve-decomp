@@ -495,7 +495,7 @@ typedef struct BattleInitSlot {
     s16 command; /* turn command or spell id; 1/2 are actor action kinds */
     s16 actionGeneration; /* signed byte generation shared by entries of one queued action */
 } BattleInitSlot;
-extern BattleInitSlot D_800BE830[45];
+extern BattleInitSlot g_BattleActionQueue[45];
 /* A queue slot address as a pointer or a word: the phase code adds a
  * pre-scaled slot offset to the queue address as an integer. */
 typedef union BattleInitSlotAddress {

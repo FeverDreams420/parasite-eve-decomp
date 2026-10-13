@@ -59,12 +59,12 @@ typedef char h[sizeof(Matrix)==32 && OFF(Matrix,translation)==20 && sizeof(Vecto
 #include <string.h>
 #include <limits.h>
 ''' + source + r'''
-FieldFxObjectPrefix *D_800F32D0;
-FieldFxTaskSlot *D_800F33E0;
+FieldFxObjectPrefix *g_FieldFxOwner;
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 unsigned char D_8019A8C4;
-RenderEffectParameters D_800F3368;
-u16 D_800E11E4[16];
-u16 D_800E2850[65536];
+RenderEffectParameters g_FieldFxSpriteParams;
+u16 g_FieldFxTpageSlots[16];
+u16 g_FieldFxTpageTable[65536];
 static Actor actors[3];
 static Instance instances[3];
 static RenderObjectHeader models[3];
@@ -87,7 +87,7 @@ int Asset_Find08w(int id,int asset,int x,int y,int z) {
     if(id==0x549) {
         assert(asset==owners[0].progress && x==(short)matrices[0][0].translation[0]);
         assert(y==(short)matrices[0][0].translation[1] && z==(short)matrices[0][0].translation[2]);
-        D_800F33E0=(FieldFxTaskSlot *)&emitters[1]; state.count=123; state.delay=456; D_8019A8C4=255;
+        g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[1]; state.count=123; state.delay=456; D_8019A8C4=255;
     } else {
         assert(id==0x5FE && asset==owners[mutate ? 2:0].progress && gteStage==7);
         assert(x==expected.x && y==expected.y && z==expected.z);
@@ -95,12 +95,12 @@ int Asset_Find08w(int id,int asset,int x,int y,int z) {
     }
     return -999;
 }
-int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
+int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[1] && stride==20 && count==10);
     assert(cb==(FieldFxCallbackListCallback)func_80199148);
     assert(sounds==1 && state.count==0 && state.delay==0 && D_8019A8C4==0); return -17;
 }
-void *func_800CE610(char *p) {
+void *FieldFx_AcquireCallbackSlot(char *p) {
     assert(p==(char *)&pools[0] && allocs++==0 && randoms==0);
     return fail ? 0:&particle;
 }
@@ -113,7 +113,7 @@ int rand(void) {
 }
 int Inv_ScrambleGrid(void) {
     assert(randoms==1 && scrambles++==0 && particle.brightness==64 && particle.size==size);
-    if(mutate) D_800F32D0=(FieldFxObjectPrefix *)&actors[1];
+    if(mutate) g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[1];
     return sample;
 }
 int rcos(int angle) { assert(randoms==3 && cosines++==0 && angle==rng(2)); return -12345; }
@@ -135,7 +135,7 @@ static void load_vector(void *p) {
 }
 static void transform(void) {
     assert(gteStage++==3 && vector);
-    if(mutate) { D_800F32D0=(FieldFxObjectPrefix *)&actors[2]; state.count=-1; }
+    if(mutate) { g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[2]; state.count=-1; }
 }
 static void store_ir(void *p) {
     Vector *v=p;
@@ -144,8 +144,8 @@ static void store_ir(void *p) {
 }
 static void reset(void) {
     allocs=randoms=scrambles=sounds=cosines=sines=gteStage=0;
-    D_800F32D0=(FieldFxObjectPrefix *)&actors[0];
-    D_800F33E0=(FieldFxTaskSlot *)&emitters[0]; D_8019A8C4=0;
+    g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[0];
+    g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[0]; D_8019A8C4=0;
     memset(&particle,0x5A,sizeof(particle)); memcpy(&expected,&particle,sizeof(particle));
 }
 static void run(int count,int delay,int modelCount,int failure,int mutation,int stop) {
@@ -190,14 +190,14 @@ int main(void) {
     }
     for(n=1;n<256;n++) run(-1,32767,255,0,0,n);
     for(n=0;n<65536;n++) {
-        /* Texture slot 11 of D_800E11E4 is the halfword at 0x800E11FA. */
-        D_800E11E4[11]=n; D_800E2850[n]=n^0xA357;
-        memset(&D_800F3368,0x9D,sizeof(D_800F3368));
-        assert(func_801992A0(2,&state)==0 && D_800F3368.tpage==(unsigned short)(n^0xA357));
-        assert(D_800F3368.parameter00==32 && D_800F3368.parameter02==2);
-        assert(D_800F3368.extent_x==32 && D_800F3368.extent_y==32);
-        assert(D_800F3368.palette==3 && D_800F3368.parameter06==1);
-        assert(D_800F3368.parameter0A==0 && D_800F3368.depth==32);
+        /* Texture slot 11 of g_FieldFxTpageSlots is the halfword at 0x800E11FA. */
+        g_FieldFxTpageSlots[11]=n; g_FieldFxTpageTable[n]=n^0xA357;
+        memset(&g_FieldFxSpriteParams,0x9D,sizeof(g_FieldFxSpriteParams));
+        assert(func_801992A0(2,&state)==0 && g_FieldFxSpriteParams.tpage==(unsigned short)(n^0xA357));
+        assert(g_FieldFxSpriteParams.parameter00==32 && g_FieldFxSpriteParams.parameter02==2);
+        assert(g_FieldFxSpriteParams.extent_x==32 && g_FieldFxSpriteParams.extent_y==32);
+        assert(g_FieldFxSpriteParams.palette==3 && g_FieldFxSpriteParams.parameter06==1);
+        assert(g_FieldFxSpriteParams.parameter0A==0 && g_FieldFxSpriteParams.depth==32);
     }
     reset(); assert(func_801992A0(-1,&state)==0 && func_801992A0(3,&state)==0 && sounds==0);
     return 0;

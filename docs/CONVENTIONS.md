@@ -23,7 +23,7 @@ Two principles decide most questions:
 | PsyQ function | exact SDK spelling | `SpuSetReverb`, `CdControl`, `RotMatrixYXZ`, `_card_auto` |
 | Unknown function | `func_XXXXXXXX` (address, upper-case hex) | `func_80192F9C` |
 | Global variable | `g_PascalCase` | `g_GameState`, `g_PlayTimeFrameCounter` |
-| Unknown global | `D_XXXXXXXX` | `D_800966EC` |
+| Unknown global | `D_XXXXXXXX` | `rcossin_tbl` |
 | File-local (`static`) data or function | `s_PascalCase` data, `Prefix_Name` functions | |
 | Type (struct, union, typedef) | PascalCase, no `_t`, no `struct` tag-only types | `Pe1GameState`, `FieldActor`, `AkaoTrack` |
 | Struct member | `lowerCamelCase` for new code; existing `snake_case` members stay until the struct is reworked | `directoryOffset`, `pe_image_base_lba` |

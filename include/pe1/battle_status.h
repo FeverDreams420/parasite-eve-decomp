@@ -49,18 +49,18 @@ typedef union BattleStatusPrimAddress {
     u32 address;
 } BattleStatusPrimAddress;
 
-extern BattleStatusLinePrim D_8009E358[6];
+extern BattleStatusLinePrim g_BattleStatusBarTiles[6];
 /* The same packets seen as the three shaded status-bar tiles of each draw
  * buffer (Battle_DrawHPBar). */
-#define BATTLE_STATUS_TILES ((RenderColorTilePacket (*)[3])D_8009E358)
+#define BATTLE_STATUS_TILES ((RenderColorTilePacket (*)[3])g_BattleStatusBarTiles)
 extern BattleStatusMarkerBody D_8009E888[2];
-extern RenderPagedSpritePacket D_8009E8B8[2][2];  /* ammo digits */
-extern BattleGaugePrim D_8009E3B8[2][3];
-extern BattleGaugePrim D_8009E460[2];
+extern RenderPagedSpritePacket g_BattleStatusValueDigits[2][2];  /* ammo digits */
+extern BattleGaugePrim g_BattleTargetHighlightSprites[2][3];
+extern BattleGaugePrim g_BattleStatusPointerSprites[2];
 /* Status symbols use the same texture-page and sprite packet layout. */
 extern BattleGaugePrim D_8009E730[2];
 extern BattleGaugePrim D_8009E768[2];
-extern RenderPagedSpritePacket D_8009E7A0[2][4];  /* ammo count digits */
+extern RenderPagedSpritePacket g_BattleAmmoDigitSprites[2][4];  /* ammo count digits */
 
 void AddPrim(unsigned int *orderingEntry, unsigned int *primitive);
 void Battle_LayoutStatusPrimRow(int bottomY);
@@ -70,7 +70,7 @@ void Battle_DrawEnemyHP(s16 maximum, s16 current);
 void Draw_StatusIcons(void);
 int Menu_GetItemContextFlag(void);
 
-/* Active menu window origin (Menu_ActiveWindowMode): x at D_8009CE84 and y
+/* Active menu window origin (Menu_ActiveWindowMode): x at g_MenuActiveWindowXOffset and y
  * in the next halfword. The HUD reads it as one record, so the stores to the
  * packets make GCC reload it. */
 typedef struct BattleHudOrigin {
@@ -78,8 +78,8 @@ typedef struct BattleHudOrigin {
     u16 y;
 } BattleHudOrigin;
 
-extern u16 D_8009CE84;
-#define g_HudOrigin (*(BattleHudOrigin *)&D_8009CE84)
+extern u16 g_MenuActiveWindowXOffset;
+#define g_HudOrigin (*(BattleHudOrigin *)&g_MenuActiveWindowXOffset)
 
 /* Per draw buffer HUD packets (Battle_DrawHPBar fills them once). */
 typedef struct BattleModeTilePacket {
@@ -98,7 +98,7 @@ typedef struct BattleTileSlot {
     RenderColorTilePacket tile;
     RenderDrawModePacket nextMode;
 } BattleTileSlot;
-extern BattleTileSlot D_8009E070[2];
+extern BattleTileSlot g_BattleStatusBackgroundTiles[2];
 extern RenderColorTilePacket g_BattleAtbTracks[2];     /* ATB gauge track */
 extern RenderPagedSpritePacket g_BattleAtbLabels[2];   /* ATB label */
 extern RenderPagedSpritePacket g_BattlePeLabels[2];   /* PE label */
@@ -128,13 +128,13 @@ typedef struct BattleDigitSlot {
     RenderTexturePagePacket nextPage;
 } BattleDigitSlot;
 extern RenderPagedSpritePacket g_BattleHpDigits[2][4], g_BattleMaxHpDigits[2][5];
-extern BattleDigitSlot D_8009E0F8[2][4], D_8009E1D8[2][5];
+extern BattleDigitSlot g_BattleHpDigitSlots[2][4], g_BattleMaxHpDigitSlots[2][5];
 /* HP label packets. */
 extern RenderPagedSpritePacket g_BattleHpLabels[2];
 /* Further HUD sprite packets Battle_DrawHPBar initializes. */
 extern RenderPagedSpritePacket D_8009E500[2][10];
-extern RenderPagedSpritePacket D_8009E880[2];
-extern RenderPagedSpritePacket D_8009E928[2];
+extern RenderPagedSpritePacket g_BattleStatusValueMarkers[2];
+extern RenderPagedSpritePacket g_BattleStatusSymbolSprites[2];
 extern u8 D_8009E976[];
 /* The sprites of a paged-sprite array seen from the first sprite: each is
  * followed by the texture-page command of the next packet. The view keeps
@@ -186,8 +186,8 @@ typedef struct BattleStatusPointerPrim {
     s16 x0, y0, x1, y1, x2, y2;
 } BattleStatusPointerPrim;
 
-extern RenderLinePacket D_8009E498[2][2];
-extern BattleStatusPointerPrim D_8009E4D8[2];
+extern RenderLinePacket g_BattleStatusPointerLines[2][2];
+extern BattleStatusPointerPrim g_BattleStatusPointerTriangles[2];
 /* Frame counter; drives the pointer's rotation. */
 extern u32 D_8009D250;
 

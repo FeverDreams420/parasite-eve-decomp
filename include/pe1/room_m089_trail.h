@@ -21,6 +21,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM089SpiralTrail, rise) == 0x36,
 
 extern RenderColor D_8018F1CC;
 extern RenderColor D_8018F1D0;
-void func_800D2B58(void *, void *, void *, void *, int, int, int);
+void FieldFx_DrawGlowLine(void *, void *, void *, void *, int, int, int);
 
 #endif

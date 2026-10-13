@@ -47,15 +47,15 @@ typedef union CdDmaInterruptRegister {
 typedef char CdDmaInterruptRegisterSize[
     (sizeof(CdDmaInterruptRegister) == 4) ? 1 : -1];
 
-extern CdDmaInterruptRegister *D_8009B348;
-extern volatile u32 *D_8009B344;
-extern volatile u8 *D_8009B32C;
-extern char D_80011C2C[];
+extern CdDmaInterruptRegister *g_CdDmaInterruptRegPtr;
+extern volatile u32 *g_CdDmaControlRegPtr;
+extern volatile u8 *g_CdStIntrIndexRegPtr;
+extern char g_CdDmaStatusErrorFormat[];
 
 /* LIBCD keeps DMA register addresses in shared pointer slots. */
 extern volatile u32 *g_CdRegDelaySize, *g_CdRegDmaPcr;
 extern void *volatile *g_CdRegDmaMadr;
-extern volatile u32 *D_8009B2BC, *g_CdRegDmaControl;
+extern volatile u32 *g_CdRegDmaBcr, *g_CdRegDmaControl;
 
 typedef void (*CdReadCompleteCallback)(int event, void *data);
 
@@ -91,7 +91,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(CdReadProgressState, inProgress) == 0x28,
                   cd_read_progress_in_progress_offset);
 
 /* Optional 2048-byte-sector staging buffer used by the streaming CD path. */
-extern u8 *D_800C0DB8;
+extern u8 *g_CdStreamMemorySource;
 
 typedef struct CdlLOC {
     u_char minute;
@@ -144,9 +144,9 @@ extern u32 StRingSize;
 extern u8 *g_CdRingBufPtr;
 extern int g_CdStreamRingReadSlot;
 extern int g_CdStreamDataReadyFlag;
-extern int D_800BE998;
-extern CdlLOC D_800A3490;
-extern int D_800A3494;
+extern int g_CdStreamRingWriteSlot;
+extern CdlLOC g_StLastFrameLoc;
+extern int g_StLastFrameNumber;
 extern int g_DsStreamNoLocFlag;
 extern volatile DsCallback g_StrDataReadyCallback;
 int CdPosToInt(CdlLOC *p);
@@ -337,10 +337,10 @@ void callback(void);
 /* BIOS_1.OBJ polling state, result buffers and timeout diagnostics. */
 extern const char *g_CdCommandNames[], *g_CdInterruptNames[];
 extern u32 g_CdCommandAckOnly[];
-extern u8 D_800A3460[8], D_800A3468[8], D_800A3470[8];
-extern int D_800A3478, D_800A347C;
-extern char *D_800A3480;
-extern char D_80011B18[], D_80011B28[], D_80011BA0[], D_80011BA8[];
+extern u8 g_CdSyncResult[8], g_CdReadyResult[8], g_CdEndResult[8];
+extern int g_CdTimeoutDeadlineVsync, g_CdTimeoutPollCount;
+extern char *g_CdTimeoutFuncName;
+extern char g_CdTimeoutText[], g_CdTimeoutDetailFormat[], g_CdSyncName[], g_CdReadyName[];
 int getintr(void);
 void CD_flush(void);
 
@@ -357,7 +357,7 @@ PE1_STATIC_ASSERT(sizeof(CdCommandTables) == 0x180, cd_command_tables_size);
 extern CdCommandTables g_CdCommandTables;
 extern u8 g_CdMode;
 extern u8 g_CdLastCom;
-extern char D_80011BB4[], D_80011BBC[], D_80011BCC[];
+extern char g_CdCommandTraceFormat[], g_CdNoParamFormat[], g_CdCwName[];
 /* "$Id: bios.c,v 1.86 ...$", the LIBCD BIOS version string. */
 extern const char g_CdBiosVersion[];
 
@@ -405,11 +405,11 @@ typedef struct CdBiosInitDescriptor {
 extern CdBiosInitDescriptor g_CdBiosInitDescriptor;
 extern CdlLOC g_CdCurPosPtr;
 extern u32 g_CdStreamMask;
-extern u32 D_800B6918;
+extern u32 g_CdStreamStartFrame;
 
 /* CD streaming state shared by StSetStream, StSetRing and StCdInterrupt. */
-extern s32 D_800A5D54;
-extern s16 D_800A8018;
+extern s32 g_StCurrentFrameNumber;
+extern s16 g_StFrameSectorIndex;
 extern s32 D_800A801C;
 /* Contiguous end-of-stream controls. StCdInterrupt retains its two interior
  * scalar aliases because field-based addressing changes its retail schedule. */
@@ -438,12 +438,12 @@ extern CdStreamReadyState g_CdStreamReady;
 /* The memcard overlay reads and clears only the low halfword, as a scalar:
  * through the union its test and clear schedule differently. */
 extern s16 g_CdStreamReadyHalfword __asm__("g_CdStreamReady");
-extern volatile s32 D_800B6914, D_800B8620;
-extern void (*D_800B0CCC)(void);
+extern volatile s32 D_800B6914, g_CdStreamExpectedTypeId;
+extern void (*g_StrEndCallback)(void);
 extern s32 g_CdStreamRingIndex;
 
 /* Low-level LIBCD command retry wrapper and its shared command state. */
-extern u32 D_8009AF2C[];
+extern u32 g_CdCommandHasParam[];
 extern CdlCB g_CdSyncCallback;
 extern CdlCB g_CdReadyCallback;
 extern CdlCB g_CdReadCallback;

@@ -246,8 +246,8 @@ extern s16 D_8019C9D0;
 extern u16 D_8019CBC0;
 extern FxCommonIndexLink D_801E4A88[];
 
-extern u8 D_800B0DCE;
-extern u8 D_800B0DCF;
+extern u8 g_Akao3dVolumeMin;
+extern u8 g_Akao3dVolumeMax;
 extern s16 D_800B0DD0;
 extern s16 D_800B0DD2;
 extern FxCommonBufferRegion *D_800B0E4C;

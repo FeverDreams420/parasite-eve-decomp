@@ -42,7 +42,7 @@ typedef struct TextboxNameGlyphs {
     u8 glyphs[9];
     s8 count;
 } TextboxNameGlyphs;
-extern TextboxNameGlyphs D_80091694;
+extern TextboxNameGlyphs g_TextboxNameGlyphs;
 typedef struct TextboxGlyphSpacing {
     u8 left, right;
 } TextboxGlyphSpacing;
@@ -59,9 +59,9 @@ extern TextboxEntry g_TextboxEntries[]; /* = D_800BCEA8 */
 /* Font pages, the per-glyph spacing table and the textbox sprite/tile
  * packets for both frame buffers (glyph packets at 0x8009EC70, 28 bytes;
  * fog tiles at 0x8009ECA8, 24 bytes). */
-extern TextboxFontPage D_80091644[4];
+extern TextboxFontPage g_TextboxFontPages[4];
 extern u16 D_80091680[];
-extern TextboxGlyphSpacing D_800916A0[256];
+extern TextboxGlyphSpacing g_TextboxGlyphSpacing[256];
 
 /* A draw-table address as a pointer or a word: Menu_DrawTextboxEntries
  * adds byte offsets it computed once (draw slot * 4, glyph * 2) to the
@@ -83,11 +83,11 @@ typedef union TextboxGlyphSpacingAddress {
 extern u8 D_8009EC70[];
 extern u8 D_8009EC78[];
 extern u8 D_8009EC86[];
-extern u8 D_8009ECA8[];
+extern u8 g_TextboxFogTilePackets[];
 /* Text colour bytes of the textbox glyphs. */
-extern u8 D_8009CEC4;
+extern u8 g_TextboxHighlightColorR;
 extern u8 D_8009CEC8;
-extern u8 D_8009CECC;
+extern u8 g_TextboxHighlightColorB;
 
 PE1_STATIC_ASSERT(sizeof(TextboxEntry) == 0x38, textbox_entry_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(TextboxEntry, control) == 0xC, textbox_control_offset);

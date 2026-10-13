@@ -135,7 +135,7 @@ int RoomLib_UpdateHandlerG(RoomTransformScaleOwner *owner) {
     ScaleMatrix((void *)matrix, (void *)0x1F800008);
 
     if (owner->timer != 0) {
-        curve = (*(s32 *)D_800966EC[(((owner->duration - owner->timer) << 11) /
+        curve = (*(s32 *)rcossin_tbl[(((owner->duration - owner->timer) << 11) /
                                      owner->duration) & 0xFFF].half << 16) >> 17;
         Scratch_1F800010 = 0x1000 + curve;
         scale[0] = 0x1000 + curve;
@@ -207,7 +207,7 @@ void RoomLib_HandlerGFloorWalker(RoomEnt *obj) {
     }
     retries = 1;
     do {
-        entry = (RoomFloorWalkerTrig *)D_800966EC[(state->angle + 0x800) & 0xFFF].half;
+        entry = (RoomFloorWalkerTrig *)rcossin_tbl[(state->angle + 0x800) & 0xFFF].half;
         {
             int cosine = entry->part.cosine;
             int sine;
@@ -236,10 +236,10 @@ void RoomLib_HandlerGFloorWalker(RoomEnt *obj) {
         scratch->next.x = core->pos[0] + (scratch->rotated.x << 12);
         scratch->next.z = core->pos[2] + (scratch->rotated.z << 12);
         point = ((u32)scratch->next.x >> 16) | (scratch->next.z & 0xFFFF0000);
-        previous = FLOOR_POLYGON_AS(RoomFloorWalkerVertex)[(s16)D_8009D1CC - 1].x |
-                   (FLOOR_POLYGON_AS(RoomFloorWalkerVertex)[(s16)D_8009D1CC - 1].yz & 0xFFFF0000);
+        previous = FLOOR_POLYGON_AS(RoomFloorWalkerVertex)[(s16)g_FloorPolygonVertexCount - 1].x |
+                   (FLOOR_POLYGON_AS(RoomFloorWalkerVertex)[(s16)g_FloorPolygonVertexCount - 1].yz & 0xFFFF0000);
         i = 0;
-        while (i < (s16)D_8009D1CC) {
+        while (i < (s16)g_FloorPolygonVertexCount) {
             current = FLOOR_POLYGON_AS(RoomFloorWalkerVertex)[i].x | (FLOOR_POLYGON_AS(RoomFloorWalkerVertex)[i].yz & 0xFFFF0000);
             gte_ldsxy0(point);
             gte_ldsxy2(previous);
@@ -250,7 +250,7 @@ void RoomLib_HandlerGFloorWalker(RoomEnt *obj) {
             i++;
             previous = current;
         }
-        if (i >= (s16)D_8009D1CC) {
+        if (i >= (s16)g_FloorPolygonVertexCount) {
             state->turning = 1;
             break;
         }

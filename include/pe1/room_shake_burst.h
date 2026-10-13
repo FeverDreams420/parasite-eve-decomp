@@ -130,7 +130,7 @@ extern GteShortVector D_80199924;
 extern int func_80195190(int mode, RoomOrbitTrailParticle *p);
 extern GteRotation D_8018F208;
 extern u8 D_801996EC[];
-extern u16 D_800E11F8;
+extern u16 g_FieldFxTpageSlot10;
 
 /* Cross flash controller (func_80196820): an anchor with an orientation,
  * and particles that carry their own position, rotation and draw kind. */

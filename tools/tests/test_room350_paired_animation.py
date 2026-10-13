@@ -42,10 +42,10 @@ typedef char k[OFF(RoomM350SoundOwner,soundMode)==8 ? 1:-1];
         source = host_unit(CONTROLLER, path=find_definition(CONTROLLER, under=ROOM))
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
 typedef RoomM350SweepTrap Particle;
-FieldFxObjectPrefix *D_800F32D0;
-FieldFxTaskSlot *D_800F33E0;
+FieldFxObjectPrefix *g_FieldFxOwner;
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
 GteShortVector D_8019A778[2];
-RenderEffectParameters D_800F3368;
+RenderEffectParameters g_FieldFxSpriteParams;
 static RoomM350Actor actors[2];
 static Instance instances[2];
 static RoomM350SoundOwner owners[2];
@@ -54,18 +54,18 @@ static RoomM350Emitter emitters[2];
 static int pools[2], calls, sounds, setups, failAt, setupResult;
 static Particle particles[2], expected[2];
 int func_80192E4C(int e, RoomM350SweepTrap *p) { return 0; }
-int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
+int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && stride==8 && count==2);
     assert(cb==(FieldFxCallbackListCallback)func_80192E4C);
     setups++;
     return setupResult;
 }
-void *func_800CE610(char *pool) {
+void *FieldFx_AcquireCallbackSlot(char *pool) {
     int index=calls++;
     assert(index<2 && pool==(char *)&pools[index ? 1:0]);
     /* Exercise reloads after allocation, including the failure path. */
-    D_800F33E0=(FieldFxTaskSlot *)&emitters[1];
-    D_800F32D0=(FieldFxObjectPrefix *)&actors[1];
+    g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[1];
+    g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[1];
     return index==failAt ? 0:&particles[index];
 }
 int Asset_Find08w(int sound,int mode,int x,int y,int z) {
@@ -77,8 +77,8 @@ int Asset_Find08w(int sound,int mode,int x,int y,int z) {
 }
 static void reset(void) {
     calls=sounds=setups=0;
-    D_800F32D0=(FieldFxObjectPrefix *)&actors[0];
-    D_800F33E0=(FieldFxTaskSlot *)&emitters[0];
+    g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[0];
+    g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[0];
     memset(particles,0x5A,sizeof(particles));
     memcpy(expected,particles,sizeof(particles));
 }
@@ -116,11 +116,11 @@ int main(void) {
         reset(); assert(func_8019360C(0)==setupResult && setups==1 && calls==0 && sounds==0);
     }
     reset();
-    memset(&D_800F3368,0x9D,sizeof(D_800F3368));
+    memset(&g_FieldFxSpriteParams,0x9D,sizeof(g_FieldFxSpriteParams));
     assert(func_8019360C(2)==0 && calls==0 && sounds==0 && setups==0);
-    assert(D_800F3368.parameter00==32 && D_800F3368.parameter02==2);
-    assert(D_800F3368.extent_x==32 && D_800F3368.extent_y==32);
-    assert(D_800F3368.parameter0A==0 && D_800F3368.depth==0);
+    assert(g_FieldFxSpriteParams.parameter00==32 && g_FieldFxSpriteParams.parameter02==2);
+    assert(g_FieldFxSpriteParams.extent_x==32 && g_FieldFxSpriteParams.extent_y==32);
+    assert(g_FieldFxSpriteParams.parameter0A==0 && g_FieldFxSpriteParams.depth==0);
     for(i=-3;i<=5;i++) if(i<0 || i>2) {
         reset(); assert(func_8019360C(i)==0 && calls==0 && sounds==0 && setups==0);
     }

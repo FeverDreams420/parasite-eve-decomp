@@ -7,9 +7,9 @@
 #include "pe1/gte_types.h"
 #include "pe1/render_tint.h"
 
-/* Field engine shaded quad (func_800C499C): four vertex colours scaled by
+/* Field engine shaded quad (FieldFx_DrawShadedQuad): four vertex colours scaled by
  * a brightness, a fixed four-corner shape transformed by a placed matrix
- * and drawn as a POLY_G4 (semi-transparent when D_800F337A is set). */
+ * and drawn as a POLY_G4 (semi-transparent when g_FieldFxSpriteSemiTrans is set). */
 
 typedef struct FieldShadedQuadColors {
     /* 0x00 */ u8 rgb[4][4];
@@ -33,10 +33,10 @@ typedef struct FieldShadedQuadPacket {
 extern char *D_800B0E58[];
 
 /* Corners of the sprite quad around its centre, 16 units per texel; set by
- * func_800C2FF0. */
-extern GteShortVector D_800F3310[];
+ * FieldFx_SetSpriteCellSize. */
+extern GteShortVector g_FieldFxCellQuad[];
 extern GteShortVector D_800F3318;
-extern GteShortVector D_800F3320;
+extern GteShortVector g_FieldFxCellQuadBottomLeft;
 extern GteShortVector D_800F3328;
 
 /* A packet tag seen as the 32-bit address the DMA chain links through. */
@@ -49,6 +49,6 @@ typedef union FieldShadedQuadLink {
 #define SHADED_QUAD_OT(depth) \
     ((RenderGpuTag *)(D_800B0E38.ordering[g_ActiveDrawSlot] + (depth)))
 
-void func_800C608C(int scale, u8 *src, u8 *dst);
+void FieldFx_ScaleColor(int scale, u8 *src, u8 *dst);
 
 #endif

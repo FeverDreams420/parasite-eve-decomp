@@ -127,8 +127,8 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(FieldFxMatrixGlow, transform) == 0x10,
 PE1_STATIC_ASSERT(sizeof(FieldFxMatrixGlow) == 0x30,
                   fieldfx_matrix_glow_size);
 
-extern FieldFxParticlePosition D_800E27F0, D_800E2808;
+extern FieldFxParticlePosition g_BurstEffectBTargetPosition, g_BurstEffectCTargetPosition;
 
-extern FieldFxParticlePosition D_800E2348, D_800E2350, D_800E2358, D_800E2360;
+extern FieldFxParticlePosition g_GlowEffectPosition, g_GlowEffectBPosition, g_GlowEffectCPosition, g_FourLayerGlowPosition;
 
 #endif

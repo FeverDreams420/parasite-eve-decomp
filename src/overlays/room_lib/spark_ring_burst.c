@@ -71,21 +71,21 @@ int RoomEffect_SparkRingParticle(int mode, RoomSparkRingParticle *state) {
          * the barrier keep both in place. */
         table = g_RoomSparkRingColorRamp;
         PE1_COMPILER_USE(table);
-        D_800F3368.parameter00 = 0x20;
-        D_800F3368.parameter02 = 2;
-        D_800F3368.extent_x = 0x20;
-        D_800F3368.extent_y = 0x20;
-        frame = D_800E27EC;
+        g_FieldFxSpriteParams.parameter00 = 0x20;
+        g_FieldFxSpriteParams.parameter02 = 2;
+        g_FieldFxSpriteParams.extent_x = 0x20;
+        g_FieldFxSpriteParams.extent_y = 0x20;
+        frame = g_FieldFxCurrentAge;
         *(unsigned short *)&seed.bytes[4] = frame * 24;
         PE1_COMPILER_MEMORY_BARRIER();
-        func_800CF3AC(table, &out, state->timer);
-        texture = D_800E1204[D_800F3368.palette];
-        if (D_800F3368.palette == 4 && D_800F3428 != 0) {
+        FieldFx_SampleColorTrack(table, &out, state->timer);
+        texture = g_FieldFxPaletteTable[g_FieldFxSpriteParams.palette];
+        if (g_FieldFxSpriteParams.palette == 4 && g_FieldFxAltPaletteFlag != 0) {
             texture += 4;
         }
-        func_800CEE20((GteShortVector *)state, (GteRotation *)&seed,
+        FieldFx_DrawShapeQuads((GteShortVector *)state, (GteRotation *)&seed,
                       scale, scale,
-                      (s16)D_800F3368.parameter02 * (state->timer / 3) + 0x20,
+                      (s16)g_FieldFxSpriteParams.parameter02 * (state->timer / 3) + 0x20,
                       GetClut(0x10, texture),
                       1, 0xA0, (RenderColor *)&out);
         return 0;
@@ -133,9 +133,9 @@ int RoomEffect_SparkRingController(int mode, RoomSparkRingState *state) {
 
     switch (mode) {
     case 0:
-        func_800CE870((char *)D_8009D254, 0, (s16 *)&state->target);
-        handle = func_800D3FD8();
-        func_800D3F64(0x59E, handle);
+        FieldFx_GetActorPosition((char *)D_8009D254, 0, (s16 *)&state->target);
+        handle = FieldFx_GetOwnerProgress();
+        FieldFx_PlaySoundAtOwner(0x59E, handle);
         state->state = 0;
         state->timer = 0;
         if (FX_TASK_AS(RoomSparkEventState)->active) {
@@ -146,7 +146,7 @@ int RoomEffect_SparkRingController(int mode, RoomSparkRingState *state) {
             }
         }
         pool = ANIM_POOL_AS(RoomSparkChannel)->pool;
-        return func_800CE560(pool, 20, 24,
+        return FieldFx_InitCallbackList(pool, 20, 24,
                              (FieldFxCallbackListCallback)RoomEffect_SparkRingParticle);
     case 1:
         switch (state->state) {
@@ -159,7 +159,7 @@ int RoomEffect_SparkRingController(int mode, RoomSparkRingState *state) {
         case 1:
             state->timer++;
             pool = ANIM_POOL_AS(RoomSparkChannel)->pool;
-            child = func_800CE610(pool);
+            child = FieldFx_AcquireCallbackSlot(pool);
             if (child) {
                 child->x = state->target.x;
                 child->y = state->target.y;
@@ -173,7 +173,7 @@ int RoomEffect_SparkRingController(int mode, RoomSparkRingState *state) {
                 child->state = 0;
                 child->timer = 0;
             }
-            if (func_800C6B90(&state->target, 180)) {
+            if (FieldFx_IsPlayerWithinRadius(&state->target, 180)) {
                 if (FX_TASK_AS(RoomSparkEventState)->active) {
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     u32 *entry;
@@ -198,19 +198,19 @@ int RoomEffect_SparkRingController(int mode, RoomSparkRingState *state) {
             int index;
             int tpage;
             unit = 0x20;
-            index = TEXTURE_SLOT_RECORD(D_800E11EC);
-            D_800F3368.parameter02 = 2;
-            D_800F3368.parameter00 = unit;
-            D_800F3368.extent_x = unit;
-            D_800F3368.extent_y = unit;
-            D_800F3368.extent_x = 0x100;
-            D_800F3368.extent_y = unit;
-            tpage = D_800E2850[index];
-            D_800F3368.palette = 4;
-            D_800F3368.parameter06 = 0;
-            D_800F3368.parameter0A = 0;
-            D_800F3368.depth = unit;
-            D_800F3368.tpage = tpage;
+            index = TEXTURE_SLOT_RECORD(g_FieldFxTpageSlot4);
+            g_FieldFxSpriteParams.parameter02 = 2;
+            g_FieldFxSpriteParams.parameter00 = unit;
+            g_FieldFxSpriteParams.extent_x = unit;
+            g_FieldFxSpriteParams.extent_y = unit;
+            g_FieldFxSpriteParams.extent_x = 0x100;
+            g_FieldFxSpriteParams.extent_y = unit;
+            tpage = g_FieldFxTpageTable[index];
+            g_FieldFxSpriteParams.palette = 4;
+            g_FieldFxSpriteParams.parameter06 = 0;
+            g_FieldFxSpriteParams.parameter0A = 0;
+            g_FieldFxSpriteParams.depth = unit;
+            g_FieldFxSpriteParams.tpage = tpage;
         }
         switch (state->state) {
         case 0:
@@ -218,19 +218,19 @@ int RoomEffect_SparkRingController(int mode, RoomSparkRingState *state) {
             FieldFx_TransformMatrixPoint(pool, 16, &rotation, &target);
             width = rsin((state->timer << 10) / 20);
             height = rcos((state->timer << 10) / 20) / 2;
-            func_800CF3AC(g_RoomSparkRingColorRamp, &color, state->timer);
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            FieldFx_SampleColorTrack(g_RoomSparkRingColorRamp, &color, state->timer);
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
             clut = GetClut(0, palette);
-            func_800CEE20(&target, 0, width, height, 0, clut, 1, 0x80, &color);
+            FieldFx_DrawShapeQuads(&target, 0, width, height, 0, clut, 1, 0x80, &color);
             matrixSlot = &D_800BCFA4;
             gte_ldrotmatrix(matrixSlot->value);
             gte_ldtransmatrix(matrixSlot->value);
             intensity = rcos((state->timer << 10) / 20) / 64;
-            func_800D004C(&target, 0x44C, 0x44C, 16, 0, 0x1000, 0x1000, &shade,
+            FieldFx_DrawStarFan(&target, 0x44C, 0x44C, 16, 0, 0x1000, 0x1000, &shade,
                           0, intensity, 1);
-            func_800D004C(&target, 0x1F4, 0x1F4, 8, 0, 0x1000, 0x1000, &shade,
+            FieldFx_DrawStarFan(&target, 0x1F4, 0x1F4, 8, 0, 0x1000, 0x1000, &shade,
                           0, intensity, 1);
             break;
         case 1:
@@ -241,15 +241,15 @@ int RoomEffect_SparkRingController(int mode, RoomSparkRingState *state) {
         /* Retail addresses the closing stores and the unit read through a
          * register holding the tpage slot; the empty constraint keeps the
          * compiler from folding it back into absolute addresses. */
-        tpageSlot = &D_800F3368.tpage;
+        tpageSlot = &g_FieldFxSpriteParams.tpage;
         asm("" : "=r"(tpageSlot) : "0"(tpageSlot));
-        idx = TEXTURE_SLOT_RECORD(D_800E11EC);
+        idx = TEXTURE_SLOT_RECORD(g_FieldFxTpageSlot4);
         unit = tpageSlot[-4];
-        palette = D_800E2850[idx];
-        D_800F3368.palette = 4;
-        D_800F3368.parameter06 = 0;
-        D_800F3368.extent_x = unit;
-        D_800F3368.extent_y = unit;
+        palette = g_FieldFxTpageTable[idx];
+        g_FieldFxSpriteParams.palette = 4;
+        g_FieldFxSpriteParams.parameter06 = 0;
+        g_FieldFxSpriteParams.extent_x = unit;
+        g_FieldFxSpriteParams.extent_y = unit;
         tpageSlot[1] = 0;
         tpageSlot[2] = 0x10;
         tpageSlot[0] = palette;
@@ -290,13 +290,13 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
         switch (spark->state) {
         case 0:
             spark->timer++;
-            func_800CFB7C((GteShortVector *)&spark->vx, *distance, &target);
+            FieldFx_AnglesToVector((GteShortVector *)&spark->vx, *distance, &target);
             spark->x += target.x;
             spark->y += target.y;
             spark->z += target.z;
             if (!(spark->timer & 1)) {
                 pool = ANIM_POOL_AS(RoomSparkChannel)->pool;
-                child = func_800CE610(pool);
+                child = FieldFx_AcquireCallbackSlot(pool);
                 if (child) {
                     child->x = spark->x;
                     child->y = spark->y;
@@ -308,7 +308,7 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
                     child->timer = 0;
                 }
             }
-            if (func_800C6B90(spark, 50) && g_RoomFloorY->y - 0x202 < spark->y) {
+            if (FieldFx_IsPlayerWithinRadius(spark, 50) && g_RoomFloorY->y - 0x202 < spark->y) {
                 if (FX_TASK_AS(RoomSparkEventState)->active) {
                     RoomSparkChannel *channel = ANIM_OWNER_AS(RoomSparkChannel);
                     u32 *entry;
@@ -324,7 +324,7 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
                 spark->timer = 0;
                 for (i = 0; i < 6; i++) {
                     pool = ANIM_POOL_AS(RoomSparkChannel)->pool;
-                    child = func_800CE610(pool);
+                    child = FieldFx_AcquireCallbackSlot(pool);
                     if (child) {
                         child->x = spark->x;
                         child->y = spark->y;
@@ -342,7 +342,7 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
                 spark->timer = 0;
                 for (i = 0; i < 6; i++) {
                     pool = ANIM_POOL_AS(RoomSparkChannel)->pool;
-                    child = func_800CE610(pool);
+                    child = FieldFx_AcquireCallbackSlot(pool);
                     if (child) {
                         child->x = spark->x;
                         child->y = spark->y;
@@ -355,8 +355,8 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
                     }
                 }
             }
-            if (Geo_PointInPoly(spark->x << 16, spark->z << 16, D_8009D248,
-                              D_8009D1CC) == 0) {
+            if (Geo_PointInPoly(spark->x << 16, spark->z << 16, g_FloorPolygonVertices,
+                              g_FloorPolygonVertexCount) == 0) {
                 spark->state = 2;
                 spark->timer = 0;
             }
@@ -417,29 +417,29 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
                 int kind;
                 int palette;
 
-                D_800F3368.parameter00 = 0x10;
-                D_800F3368.parameter02 = 1;
-                D_800F3368.extent_x = 0x10;
-                D_800F3368.extent_y = 0x10;
-                D_800F3368.tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11E8)];
-                D_800F3368.palette = 2;
-                D_800F3368.parameter06 = 0;
-                kind = D_800F3368.palette;
-                palette = D_800E1204[kind];
-                if (kind == 4 && D_800F3428 != 0) palette += 4;
+                g_FieldFxSpriteParams.parameter00 = 0x10;
+                g_FieldFxSpriteParams.parameter02 = 1;
+                g_FieldFxSpriteParams.extent_x = 0x10;
+                g_FieldFxSpriteParams.extent_y = 0x10;
+                g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[TEXTURE_SLOT_RECORD(g_FieldFxTpageSlot2)];
+                g_FieldFxSpriteParams.palette = 2;
+                g_FieldFxSpriteParams.parameter06 = 0;
+                kind = g_FieldFxSpriteParams.palette;
+                palette = g_FieldFxPaletteTable[kind];
+                if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
                 clut = GetClut(0x20, palette);
             }
-            func_800CEE20((GteShortVector *)spark, (GteRotation *)&target,
+            FieldFx_DrawShapeQuads((GteShortVector *)spark, (GteRotation *)&target,
                           0x1000, 0x1000, 0xD8, clut, 1, opacity, &glow);
             {
-                u16 kind = D_800F3368.palette;
-                int palette = D_800E1204[kind];
-                if (kind == 4 && D_800F3428 != 0) palette += 4;
+                u16 kind = g_FieldFxSpriteParams.palette;
+                int palette = g_FieldFxPaletteTable[kind];
+                if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
                 clut = GetClut(0x20, palette);
             }
-            func_800CEE20((GteShortVector *)spark, (GteRotation *)&target,
+            FieldFx_DrawShapeQuads((GteShortVector *)spark, (GteRotation *)&target,
                           0x2000, 0x2000,
-                          (s16)D_800F3368.parameter02 + 0xD8, clut, 1,
+                          (s16)g_FieldFxSpriteParams.parameter02 + 0xD8, clut, 1,
                           opacity / 2, &shade);
             flat.x = 0x400;
             flat.y = 0;
@@ -448,12 +448,12 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
             ground.x = spark->x;
             ground.z = spark->z;
             ground.y = g_RoomFloorY->y;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
             clut = GetClut(0x20, palette);
-            func_800CEE20(&ground, (GteRotation *)&flat, 0x1000, 0x1000,
-                          (s16)D_800F3368.parameter02 + 0xD8, clut, 1,
+            FieldFx_DrawShapeQuads(&ground, (GteRotation *)&flat, 0x1000, 0x1000,
+                          (s16)g_FieldFxSpriteParams.parameter02 + 0xD8, clut, 1,
                           opacity, &shade);
             break;
         case 1: {
@@ -462,43 +462,43 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
             int palette;
 
             opacity = rsin((s16)spark->timer << 7) / 64 + 0x40;
-            D_800F3368.parameter00 = 0x10;
-            D_800F3368.parameter02 = 1;
-            D_800F3368.extent_x = 0x10;
-            D_800F3368.extent_y = 0x10;
-            D_800F3368.tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11E8)];
-            D_800F3368.palette = 2;
-            D_800F3368.parameter06 = 0;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            g_FieldFxSpriteParams.parameter00 = 0x10;
+            g_FieldFxSpriteParams.parameter02 = 1;
+            g_FieldFxSpriteParams.extent_x = 0x10;
+            g_FieldFxSpriteParams.extent_y = 0x10;
+            g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[TEXTURE_SLOT_RECORD(g_FieldFxTpageSlot2)];
+            g_FieldFxSpriteParams.palette = 2;
+            g_FieldFxSpriteParams.parameter06 = 0;
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
             clut = GetClut(0x20, palette);
-            func_800CEE20((GteShortVector *)spark, 0, 0x1000, 0x1000,
-                          (s16)D_800F3368.parameter02 * (s16)spark->timer + 0xE0,
+            FieldFx_DrawShapeQuads((GteShortVector *)spark, 0, 0x1000, 0x1000,
+                          (s16)g_FieldFxSpriteParams.parameter02 * (s16)spark->timer + 0xE0,
                           clut, 1, opacity, &shade);
             break;
         }
         case 2:
             opacity = rcos((s16)spark->timer << 6) / 32;
             if (spark->timer & 1) opacity = opacity * 2 / 3;
-            D_800F3368.parameter00 = 0x20;
-            D_800F3368.parameter02 = 2;
-            D_800F3368.extent_x = 0x20;
-            D_800F3368.extent_y = 0x20;
-            D_800F3368.tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11EC)];
-            D_800F3368.palette = 4;
-            D_800F3368.parameter06 = 0;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            g_FieldFxSpriteParams.parameter00 = 0x20;
+            g_FieldFxSpriteParams.parameter02 = 2;
+            g_FieldFxSpriteParams.extent_x = 0x20;
+            g_FieldFxSpriteParams.extent_y = 0x20;
+            g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[TEXTURE_SLOT_RECORD(g_FieldFxTpageSlot4)];
+            g_FieldFxSpriteParams.palette = 4;
+            g_FieldFxSpriteParams.parameter06 = 0;
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
             clut = GetClut(0, palette);
             one = 1;
-            func_800CEE20((GteShortVector *)spark, 0, 0x1800, 0x1800,
-                          (s16)D_800F3368.parameter02 *
+            FieldFx_DrawShapeQuads((GteShortVector *)spark, 0, 0x1800, 0x1800,
+                          (s16)g_FieldFxSpriteParams.parameter02 *
                               ((s16)spark->timer / 2) + 0xC0,
                           clut, one, opacity, &glow);
             scale = rsin((s16)spark->timer << 6) + 0x800;
-            func_800D004C((GteShortVector *)spark, 0x12C, 0x12C, 5, 0,
+            FieldFx_DrawStarFan((GteShortVector *)spark, 0x12C, 0x12C, 5, 0,
                           scale, scale, &shade, 0, opacity / 2, one);
             return 0;
         case 3: {
@@ -508,20 +508,20 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
             int step;
 
             opacity = rcos(((s16)spark->timer << 10) / 12) / 32;
-            D_800F3368.parameter00 = 0x10;
-            D_800F3368.parameter02 = 1;
-            D_800F3368.extent_x = 0x10;
-            D_800F3368.extent_y = 0x10;
-            D_800F3368.tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11E8)];
-            D_800F3368.palette = 2;
-            D_800F3368.parameter06 = 0;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            g_FieldFxSpriteParams.parameter00 = 0x10;
+            g_FieldFxSpriteParams.parameter02 = 1;
+            g_FieldFxSpriteParams.extent_x = 0x10;
+            g_FieldFxSpriteParams.extent_y = 0x10;
+            g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[TEXTURE_SLOT_RECORD(g_FieldFxTpageSlot2)];
+            g_FieldFxSpriteParams.palette = 2;
+            g_FieldFxSpriteParams.parameter06 = 0;
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
             clut = GetClut(0x20, palette);
             step = (s16)spark->timer * 2 / 3;
-            func_800CEE20((GteShortVector *)spark, 0, 0x1000, 0x1000,
-                          (s16)D_800F3368.parameter02 * step + 0xC8, clut, 1,
+            FieldFx_DrawShapeQuads((GteShortVector *)spark, 0, 0x1000, 0x1000,
+                          (s16)g_FieldFxSpriteParams.parameter02 * step + 0xC8, clut, 1,
                           opacity, &shade);
             break;
         }
@@ -534,20 +534,20 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
             opacity = rcos((s16)spark->timer << 6) / 32;
             spark->vw = 1;
             spark->vz = (s16)spark->timer * 24;
-            D_800F3368.parameter00 = 0x10;
-            D_800F3368.parameter02 = 1;
-            D_800F3368.extent_x = 0x10;
-            D_800F3368.extent_y = 0x10;
-            D_800F3368.tpage = D_800E2850[TEXTURE_SLOT_RECORD(D_800E11E8)];
-            D_800F3368.palette = 2;
-            D_800F3368.parameter06 = 0;
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
+            g_FieldFxSpriteParams.parameter00 = 0x10;
+            g_FieldFxSpriteParams.parameter02 = 1;
+            g_FieldFxSpriteParams.extent_x = 0x10;
+            g_FieldFxSpriteParams.extent_y = 0x10;
+            g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[TEXTURE_SLOT_RECORD(g_FieldFxTpageSlot2)];
+            g_FieldFxSpriteParams.palette = 2;
+            g_FieldFxSpriteParams.parameter06 = 0;
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
             clut = GetClut(0x90, palette);
-            func_800CEE20((GteShortVector *)spark,
+            FieldFx_DrawShapeQuads((GteShortVector *)spark,
                           (GteRotation *)&spark->vx, scale, scale,
-                          (s16)D_800F3368.parameter02 * 2 + 0xFD, clut, 1,
+                          (s16)g_FieldFxSpriteParams.parameter02 * 2 + 0xFD, clut, 1,
                           opacity, 0);
             break;
         }
@@ -582,19 +582,19 @@ int RoomEffect_BurstSparkSpawner(int mode, int *count) {
                 }
             }
         }
-        func_800D3F64(0x59E, func_800D3FD8());
+        FieldFx_PlaySoundAtOwner(0x59E, FieldFx_GetOwnerProgress());
         channel = ANIM_POOL_AS(RoomSparkChannel);
         *count = 0;
-        return func_800CE560(channel->pool, 0x14, 0x37,
+        return FieldFx_InitCallbackList(channel->pool, 0x14, 0x37,
                              (FieldFxCallbackListCallback)RoomEffect_BurstSparkParticle);
 
         case 1:
     FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, 0x11, &offset, &launch);
-    func_800CE9D4((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0,
+    FieldFx_GetTransformLookAngles((struct RoomFxTransformOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool, 0,
                   (GteShortVector *)&launch.hx);
     launch.hx -= 0x200;
-    if (D_800E27EC % 3 == mode && *count < 8) {
-        spark = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+    if (g_FieldFxCurrentAge % 3 == mode && *count < 8) {
+        spark = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomSparkChannel)->pool);
         if (spark != 0) {
             spark->x = launch.position.x;
             spark->y = launch.position.y;
@@ -605,7 +605,7 @@ int RoomEffect_BurstSparkSpawner(int mode, int *count) {
             spark->state = 0;
             spark->timer = 0;
         }
-        spark = func_800CE610(ANIM_POOL_AS(RoomSparkChannel)->pool);
+        spark = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomSparkChannel)->pool);
         if (spark != 0) {
             spark->x = launch.position.x;
             spark->y = launch.position.y;
@@ -618,12 +618,12 @@ int RoomEffect_BurstSparkSpawner(int mode, int *count) {
         }
         (*count)++;
     }
-        if (D_800E27EC >= 8) return 2;
+        if (g_FieldFxCurrentAge >= 8) return 2;
     break;
     case 2:
 
-        D_800F3368.parameter0A = 0;
-        D_800F3368.depth = 4;
+        g_FieldFxSpriteParams.parameter0A = 0;
+        g_FieldFxSpriteParams.depth = 4;
     
     }
     return 0;

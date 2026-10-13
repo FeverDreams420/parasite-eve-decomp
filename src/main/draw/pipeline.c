@@ -74,7 +74,7 @@ void Draw_InitPipeline(void) {
         v1 = -0x7FFF;
     }
     t0 = 0x7FFF;
-    a0p = (char *)&D_800BEA40;
+    a0p = (char *)&g_RenderLightingState;
     *(s16 *)a0p = t0;
     D_800BEA42 = t1;
     D_800BEA44 = v1;
@@ -117,7 +117,7 @@ void Draw_InitPipeline(void) {
 
     one = 1;
     Render_PrepareFrame();
-    SetGeomScreen(W(D_800B8A18));
+    SetGeomScreen(W(g_RenderProjectionDistance));
     UB(g_ScreenTransitionState) |= 0x40;
     CdRom_DetectDiscChange();
     while (Scene_LoadEntityTexture() == one) {

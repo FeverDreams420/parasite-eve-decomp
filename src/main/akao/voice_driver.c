@@ -276,13 +276,13 @@ void Akao_Cmd_C2_WithSlot(int arg0, int arg1, int arg2, int arg3) {
     Akao_EnqueueStagedCommand();
 }
 
-void func_80086CF8(int arg0) {
+void Akao_Cmd_C8(int arg0) {
     g_AkaoCmd.opcode = 0xC8;
     g_AkaoCmd.arg0.value = arg0;
     Akao_EnqueueStagedCommand();
 }
 
-void func_80086D2C(int arg0, int arg1) {
+void Akao_Cmd_C9(int arg0, int arg1) {
     g_AkaoCmd.opcode = 0xC9;
     g_AkaoCmd.arg0.value = arg0;
     g_AkaoCmd.arg1 = arg1;
@@ -570,8 +570,8 @@ int Spu_UploadStreamBlockA(unsigned bank, unsigned char *input, unsigned availab
         address = ((bank * 5) << 13) + 0x4f000;
         SpuSetTransferStartAddr(address);
         Spu_UploadWithPrepare(input, upload_size);
-        D_8009D1EC = address + upload_size;
-        D_8009D204 = payload_size - upload_size;
+        g_AkaoStreamAAddress = address + upload_size;
+        g_AkaoStreamARemaining = payload_size - upload_size;
         Spu_RebaseStreamAddrs(instruments, address, count);
         address = bank << 10;
         cache.instrument = D_800B4D00;
@@ -584,15 +584,15 @@ int Spu_UploadStreamBlockA(unsigned bank, unsigned char *input, unsigned availab
             instruments += 4;
         } while (upload_size);
         g_AkaoStreamUploadMode &= ~2U;
-        return D_8009D204;
+        return g_AkaoStreamARemaining;
     }
-    SpuSetTransferStartAddr(D_8009D1EC);
+    SpuSetTransferStartAddr(g_AkaoStreamAAddress);
     upload_size = available;
-    if (upload_size >= D_8009D204) upload_size = D_8009D204;
+    if (upload_size >= g_AkaoStreamARemaining) upload_size = g_AkaoStreamARemaining;
     Spu_UploadWithPrepare(input, upload_size);
-    D_8009D1EC += upload_size;
-    D_8009D204 -= upload_size;
-    return D_8009D204;
+    g_AkaoStreamAAddress += upload_size;
+    g_AkaoStreamARemaining -= upload_size;
+    return g_AkaoStreamARemaining;
 }
 
 int Spu_UploadStreamBlockB(unsigned bank, unsigned char *cursor)
@@ -622,7 +622,7 @@ int Spu_UploadStreamBlockB(unsigned bank, unsigned char *cursor)
     Spu_RebaseStreamAddrs(instruments,address,count);
     /* Cache the relocated records after the SPU payload upload. */
     address = bank << 10;
-    cache.instrument = D_800B4900;
+    cache.instrument = g_AkaoStreamInstrumentCacheB;
     cache.word = address + cache.word;
     dest = cache.words;
     size = count << 4;
@@ -635,33 +635,33 @@ int Spu_UploadStreamBlockB(unsigned bank, unsigned char *cursor)
 }
 
 void Spu_WriteKeyOn(u32 value) {
-    D_1F801D88 = value;
+    g_SpuKeyOnLow = value;
     value >>= 16;
-    D_1F801D8A = value;
+    g_SpuKeyOnHigh = value;
 }
 
 void Spu_WriteKeyOff(u32 value) {
-    D_1F801D8C = value;
+    g_SpuKeyOffLow = value;
     value >>= 16;
-    D_1F801D8E = value;
+    g_SpuKeyOffHigh = value;
 }
 
 void Spu_WriteReverbEnable(u32 value) {
-    D_1F801D98 = value;
+    g_SpuReverbEnableLow = value;
     value >>= 16;
-    D_1F801D9A = value;
+    g_SpuReverbEnableHigh = value;
 }
 
 void Spu_WriteNoiseEnable(u32 value) {
-    D_1F801D94 = value;
+    g_SpuNoiseEnableLow = value;
     value >>= 16;
-    D_1F801D96 = value;
+    g_SpuNoiseEnableHigh = value;
 }
 
 void Spu_WriteFmEnable(u32 value) {
-    D_1F801D90 = value;
+    g_SpuPitchModLow = value;
     value >>= 16;
-    D_1F801D92 = value;
+    g_SpuFmEnableHigh = value;
 }
 
 void AkaoSpuVoice_SetVolume(u32 index, u32 left, u32 right) {
@@ -1181,12 +1181,12 @@ void Akao_SetVoiceKeyOff(AkaoTrack *voice, u32 voice_mask, int index) {
         base_volume = product >> 7;
         switch (g_AkaoPlaybackMode) {
         case 1:
-            voice->volume_left = (base_volume * D_8009B8F8[value]) >> 15;
-            voice->volume_right = (base_volume * D_8009B8F8[value ^ 0xFF]) >> 15;
+            voice->volume_left = (base_volume * g_AkaoPanVolumeTable[value]) >> 15;
+            voice->volume_right = (base_volume * g_AkaoPanVolumeTable[value ^ 0xFF]) >> 15;
             break;
         case 4:
-            voice->volume_left = (base_volume * D_8009B8F8[value]) >> 15;
-            voice->volume_right = (base_volume * D_8009B8F8[value ^ 0xFF]) >> 15;
+            voice->volume_left = (base_volume * g_AkaoPanVolumeTable[value]) >> 15;
+            voice->volume_right = (base_volume * g_AkaoPanVolumeTable[value ^ 0xFF]) >> 15;
             if ((voice_mask & 0x00AAAAAA) != 0) {
                 voice->volume_right = ~voice->volume_right;
             } else {
@@ -1206,12 +1206,12 @@ void Akao_SetVoiceKeyOff(AkaoTrack *voice, u32 voice_mask, int index) {
             base_volume = voice->pitch_slide_current >> 1;
             switch (g_AkaoPlaybackMode) {
         case 1:
-            voice->volume_left = (base_volume * D_8009B8F8[value]) >> 15;
-            voice->volume_right = (base_volume * D_8009B8F8[value ^ 0xFF]) >> 15;
+            voice->volume_left = (base_volume * g_AkaoPanVolumeTable[value]) >> 15;
+            voice->volume_right = (base_volume * g_AkaoPanVolumeTable[value ^ 0xFF]) >> 15;
             break;
         case 4:
-            voice->volume_left = (base_volume * D_8009B8F8[value]) >> 15;
-            voice->volume_right = (base_volume * D_8009B8F8[value ^ 0xFF]) >> 15;
+            voice->volume_left = (base_volume * g_AkaoPanVolumeTable[value]) >> 15;
+            voice->volume_right = (base_volume * g_AkaoPanVolumeTable[value ^ 0xFF]) >> 15;
             if ((voice_mask & 0x00AAAAAA) != 0) {
                 voice->volume_right = ~voice->volume_right;
             } else {
@@ -1345,12 +1345,12 @@ void Akao_SetVoiceKeyOn(AkaoTrack *voice, u32 voice_mask) {
 
         switch (g_AkaoPlaybackMode) {
         case 1:
-            voice->volume_left = (base_volume * D_8009B8F8[value]) >> 15;
-            voice->volume_right = (base_volume * D_8009B8F8[value ^ 0xFF]) >> 15;
+            voice->volume_left = (base_volume * g_AkaoPanVolumeTable[value]) >> 15;
+            voice->volume_right = (base_volume * g_AkaoPanVolumeTable[value ^ 0xFF]) >> 15;
             break;
         case 4:
-            voice->volume_left = (base_volume * D_8009B8F8[value]) >> 15;
-            voice->volume_right = (base_volume * D_8009B8F8[value ^ 0xFF]) >> 15;
+            voice->volume_left = (base_volume * g_AkaoPanVolumeTable[value]) >> 15;
+            voice->volume_right = (base_volume * g_AkaoPanVolumeTable[value ^ 0xFF]) >> 15;
             if ((voice_mask & 0x00AAAAAA) != 0) {
                 voice->volume_right = ~voice->volume_right;
             } else {
@@ -1587,7 +1587,7 @@ void Akao_ProcessVoiceQueue(void)
     Akao_StepVoiceNote(g_AkaoVoiceStateTable, primary, excluded, &result);
     g_AkaoCurTrack->key_on_request_mask = 0;
   }
-  primary = (*active) & D_800BCD58;
+  primary = (*active) & g_AkaoSfxAllocatedVoiceMask;
   if (primary)
   {
     bit = 0x1000;
@@ -1637,9 +1637,9 @@ void Akao_ProcessVoiceQueue(void)
     Akao_SetVoiceAdsr();
     Akao_SetVoiceVolume();
     Akao_SetVoiceStartAddr();
-    Spu_WriteReverbEnable(D_800C0DD0);
-    Spu_WriteNoiseEnable(D_800C0DD4);
-    Spu_WriteFmEnable(D_800C0DD8);
+    Spu_WriteReverbEnable(g_AkaoReverbEnableMask);
+    Spu_WriteNoiseEnable(g_AkaoNoiseEnableMask);
+    Spu_WriteFmEnable(g_AkaoFmEnableMask);
     g_AkaoVoiceUpdateFlags &= ~0x100;
   }
   if (result)
@@ -1731,7 +1731,7 @@ void Akao_SetVoiceVolume(void) {
     }
     if (primary) Spu_VoiceMaskCompose(g_AkaoVoiceStateTable, &result, primary, keep);
     result |= g_AkaoTrack34Mask;
-    D_800C0DD4 = result;
+    g_AkaoNoiseEnableMask = result;
     g_AkaoVoiceUpdateFlags |= 0x100;
 }
 
@@ -1762,7 +1762,7 @@ void Akao_SetVoiceAdsr(void) {
     }
     if (primary) Spu_VoiceMaskCompose(g_AkaoVoiceStateTable, &result, primary, keep);
     result |= g_AkaoTrack38Mask;
-    D_800C0DD0 = result;
+    g_AkaoReverbEnableMask = result;
     g_AkaoVoiceUpdateFlags |= 0x100;
 }
 
@@ -1793,6 +1793,6 @@ void Akao_SetVoiceStartAddr(void) {
     }
     if (primary) Spu_VoiceMaskCompose(g_AkaoVoiceStateTable, &result, primary, keep);
     result |= g_AkaoTrack3CMask;
-    D_800C0DD8 = result;
+    g_AkaoFmEnableMask = result;
     g_AkaoVoiceUpdateFlags |= 0x100;
 }

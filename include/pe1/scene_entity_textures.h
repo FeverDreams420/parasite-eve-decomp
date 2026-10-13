@@ -20,7 +20,7 @@
 extern u8 g_SceneAreaType;
 extern s8 D_800B0CE4[];
 extern u32 g_PeImageBaseLba;
-extern u16 D_800930D8[], D_800930DA[];
+extern u16 D_800930D8[], g_PeImageSectorBoundsNext[];
 extern u8 g_EntityRenderScratch[];
 /* Aya action sequencer step (battle_runtime.h); a battle-start texture
  * load waits until it reaches 2. */

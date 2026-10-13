@@ -44,7 +44,7 @@ int Gpu_DmaTimeoutCheck(void) {
     (void)*gp1;
     head = g_GpuDmaQueueHead;
 
-    printf(D_80011988,
+    printf(g_GpuTimeoutFormat,
            (head - g_GpuDmaQueueTail) & 0x3F,
            *gp1,
            *g_GpuDmaChcrPtr,
@@ -52,7 +52,7 @@ int Gpu_DmaTimeoutCheck(void) {
 
     mask = SetIntrMask(0);
     g_GpuDmaQueueTail = 0;
-    D_80095884 = mask;
+    g_GpuSavedIntrMaskDma = mask;
     g_GpuDmaQueueHead = g_GpuDmaQueueTail;
 
     *g_GpuDmaChcrPtr = 0x401;
@@ -60,7 +60,7 @@ int Gpu_DmaTimeoutCheck(void) {
     *ptr = *ptr | 0x800;
     *g_GpuGp1Ptr = 0x02000000;
     *g_GpuGp1Ptr = 0x01000000;
-    SetIntrMask(D_80095884);
+    SetIntrMask(g_GpuSavedIntrMaskDma);
     return -1;
 
 return_zero:

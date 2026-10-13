@@ -30,7 +30,7 @@ int func_801909B4(void);
 extern unsigned int D_800A77FC;
 extern u16 g_MainAssetLbaTbl[];
 extern u16 g_LargeTexLbaTbl[];
-extern u16 D_8009316C[];
+extern u16 g_SmallTexLbaTbl[];
 extern u16 g_FontUiLbaTbl[];
 extern u16 g_SceneInitLbaTbl0[];
 
@@ -42,16 +42,16 @@ extern char g_AnalogStickState[];
  * button mask per game bit, frames each bit has been held, the actuator
  * buffers and the cheat sequence masks. */
 extern s32 g_FieldRenderFlagTable[];
-extern u32 D_800A7770[];
-extern u8 D_8009D1C0[];
-extern u8 D_800921F8[];
-extern u32 D_80092200[];
+extern u32 g_FieldPadHeldFrameCounts[];
+extern u8 g_PadSetActBuffer[];
+extern u8 g_PadActuatorAlign[];
+extern u32 g_PadComboSequence[];
 
 /* Render pipeline set-up (draw/pipeline.c): the projection distances
  * of the field and battle views. */
 extern char D_800B1628[];
 extern char D_800B162C[];
-extern char D_800B8A18[];
+extern char g_RenderProjectionDistance[];
 
 void Draw_RenderFrame(void);
 int Draw_CheckDrawStatus(void);

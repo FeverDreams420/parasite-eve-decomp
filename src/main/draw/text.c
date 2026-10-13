@@ -41,7 +41,7 @@ int g_TextRenderMode;
 int Draw_SetBaseY(int arg0, unsigned int arg1);
 
 void Draw_SetBaseOffsetPosition(int x, int y) {
-    Draw_SetBaseY(D_800B0DB0[0] + x, g_DrawBaseY + y);
+    Draw_SetBaseY(g_DrawBaseX[0] + x, g_DrawBaseY + y);
 }
 
 int Draw_GetBaseY(void) {

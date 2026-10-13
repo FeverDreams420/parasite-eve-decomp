@@ -36,7 +36,7 @@ class DrawPresentFrameTests(unittest.TestCase):
         offset = entry-0x8000F800
         retail = (ROOT/'assets/USA/main.exe').read_bytes()[offset:offset+200]
         callbacks = ('VSync','DrawSync','ResetGraph','PutDrawEnv','PutDispEnv','LoadImage','DrawOTag')
-        data = ('g_DrawPresentEnabled','g_DrawPresentImage','g_DrawBufferIndex','D_8009D0FC','D_8009D118','_gp')
+        data = ('g_DrawPresentEnabled','g_DrawPresentImage','g_DrawBufferIndex','g_DrawCurrentFrameBuffer','g_DrawOrderingTableBase','_gp')
         with tempfile.TemporaryDirectory() as directory:
             compiled = linked_function_bytes(
                 'Draw_PresentFrame', entry, 200,
@@ -66,7 +66,7 @@ class DrawPresentFrameTests(unittest.TestCase):
                                 def word(name,value): put(symbols[name],struct.pack('<I',value&0xFFFFFFFF))
                                 put(entry,body)
                                 for name in callbacks: put(symbols[name],struct.pack('<III',0,0x03E00008,0))
-                                for name,value in (('g_DrawPresentEnabled',enabled),('g_DrawPresentImage',image),('g_DrawBufferIndex',index),('D_8009D0FC',0x80110000),('D_8009D118',0x80140000)):
+                                for name,value in (('g_DrawPresentEnabled',enabled),('g_DrawPresentImage',image),('g_DrawBufferIndex',index),('g_DrawCurrentFrameBuffer',0x80110000),('g_DrawOrderingTableBase',0x80140000)):
                                     word(name,value)
                                 m.reg_write(R.UC_MIPS_REG_A0,mode&0xFFFFFFFF)
                                 m.reg_write(R.UC_MIPS_REG_RA,stop)
@@ -85,12 +85,12 @@ class DrawPresentFrameTests(unittest.TestCase):
                                     else: events.append((name,a0))
                                     if mutate:
                                         if name=='VSync': word('g_DrawPresentEnabled',0)
-                                        elif name=='ResetGraph': word('D_8009D0FC',draw_env)
-                                        elif name=='PutDrawEnv': word('D_8009D0FC',disp_env-0x5C)
+                                        elif name=='ResetGraph': word('g_DrawCurrentFrameBuffer',draw_env)
+                                        elif name=='PutDrawEnv': word('g_DrawCurrentFrameBuffer',disp_env-0x5C)
                                         elif name=='PutDispEnv':
                                             word('g_DrawPresentImage',final_image)
                                             word('g_DrawBufferIndex',final_index)
-                                        elif name=='LoadImage': word('D_8009D118',ot)
+                                        elif name=='LoadImage': word('g_DrawOrderingTableBase',ot)
                                     for reg in ('V0','V1','A0','A1','A2','A3','T0','T1','T2','T3','T4','T5','T6','T7','T8','T9'):
                                         machine.reg_write(getattr(R,'UC_MIPS_REG_'+reg),0xDEADCAFE)
                                 m.hook_add(UC_HOOK_CODE,hook)

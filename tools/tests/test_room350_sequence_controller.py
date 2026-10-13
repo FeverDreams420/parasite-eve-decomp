@@ -53,13 +53,13 @@ typedef char h[sizeof(Vector)==8 ? 1:-1];
 #include <string.h>
 '''
         harness = prefix + source + r'''
-FieldFxObjectPrefix *D_800F32D0;
+FieldFxObjectPrefix *g_FieldFxOwner;
 FieldActor *D_8019A7F8,*g_PlayerEntity;
 GteShortVector D_8019A7A0;
 short D_8019A7FC;
 short D_8019A7FE,D_8019A800,D_8019A802;
 unsigned char D_8019A804,D_8019A805,D_8019A806;
-GteSineWord D_800966EC[4096];
+GteSineWord rcossin_tbl[4096];
 static Actor actor,otherActor;
 static Instance instance,other,player;
 static Owner owner;
@@ -73,7 +73,7 @@ static void load_vector(void *p) {
 }
 static void command(void) {
     assert(phase++==3);
-    D_800F32D0=(FieldFxObjectPrefix *)&otherActor;
+    g_FieldFxOwner=(FieldFxObjectPrefix *)&otherActor;
 }
 static void store_ir(void *p) {
     Vector *v=p;
@@ -95,7 +95,7 @@ static void reset(void) {
     memset(&instance,0,sizeof(instance)); memset(&other,0,sizeof(other));
     actor.instance=(struct RoomM350Instance *)&instance;
     otherActor.instance=(struct RoomM350Instance *)&other;
-    D_800F32D0=(FieldFxObjectPrefix *)&actor;
+    g_FieldFxOwner=(FieldFxObjectPrefix *)&actor;
     owner.action_state=action; owner.core_flags=0x13579;
     /* mode is the animation id; action holds the clip length. */
     instance.state=&owner; instance.mode=13; instance.action=30; instance.rot_y=123;
@@ -112,7 +112,7 @@ int main(void) {
     for(frame=-32768;frame<=32767;frame++) for(repeat=-1;repeat<=2;repeat++) {
         reset(); D_8019A7FC=repeat; instance.anim.fixed=((uint32_t)(uint16_t)frame<<16)|123;
         index=((frame-19)*341)&4095; word=(int16_t)(frame*17);
-        D_800966EC[index].word=(uint16_t)word; expectedSpeed=word<0 ? -((-word)/32):word/32;
+        rcossin_tbl[index].word=(uint16_t)word; expectedSpeed=word<0 ? -((-word)/32):word/32;
         doTurn=repeat>0 && frame>=19;
         result=repeat<=0 && frame>=29;
         assert(func_801958DC(1)==result && phase==7);

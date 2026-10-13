@@ -58,15 +58,15 @@ int SceneE20_FlareParticle(int mode, SceneE20Particle *p)
         case 0: {
             int kind;
             int palette;
-            D_800F3368.parameter00 = 0x20;
-            D_800F3368.parameter02 = 2;
-            D_800F3368.extent_x = 0x20;
-            D_800F3368.extent_y = 0x20;
+            g_FieldFxSpriteParams.parameter00 = 0x20;
+            g_FieldFxSpriteParams.parameter02 = 2;
+            g_FieldFxSpriteParams.extent_x = 0x20;
+            g_FieldFxSpriteParams.extent_y = 0x20;
             {
-                int tpage = D_800E2850[D_800E11E4[11]];
-                D_800F3368.palette = 3;
-                D_800F3368.parameter06 = 1;
-                D_800F3368.tpage = tpage;
+                int tpage = g_FieldFxTpageTable[g_FieldFxTpageSlots[11]];
+                g_FieldFxSpriteParams.palette = 3;
+                g_FieldFxSpriteParams.parameter06 = 1;
+                g_FieldFxSpriteParams.tpage = tpage;
             }
             angle = p->timer << 6;
             scale = rsin(angle);
@@ -76,20 +76,20 @@ int SceneE20_FlareParticle(int mode, SceneE20Particle *p)
             rotation.flags = 1;
             gte_ldrotmatrix(D_800BCFA4.value);
             gte_ldtransmatrix(D_800BCFA4.value);
-            func_800CF3AC(D_80190804, &color, p->timer);
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind] + ((kind == 4 && D_800F3428 != 0) ? 8 : 4);
-            func_800CEE20(&p->position, &rotation, scale * 3, scale * 3, 4,
+            FieldFx_SampleColorTrack(D_80190804, &color, p->timer);
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind] + ((kind == 4 && g_FieldFxAltPaletteFlag != 0) ? 8 : 4);
+            FieldFx_DrawShapeQuads(&p->position, &rotation, scale * 3, scale * 3, 4,
                           GetClut(0, palette), 1, 0x80, &color);
             if (p->timer < 8) {
                 int width = (p->timer / 2) << 5;
                 int top = 0x40;
                 int streakKind;
                 glow = rcos(angle) / 32;
-                func_800CF3AC(D_80190804, &color, p->timer << 1);
-                streakKind = D_800F3368.palette;
-                palette = D_800E1204[streakKind] + ((streakKind == 4 && D_800F3428 != 0) ? 7 : 3);
-                func_800D2370(&p->position, &rotation, 500, 0x168, width, top, 0x1F, 0x1F,
+                FieldFx_SampleColorTrack(D_80190804, &color, p->timer << 1);
+                streakKind = g_FieldFxSpriteParams.palette;
+                palette = g_FieldFxPaletteTable[streakKind] + ((streakKind == 4 && g_FieldFxAltPaletteFlag != 0) ? 7 : 3);
+                FieldFx_DrawRotatedQuad(&p->position, &rotation, 500, 0x168, width, top, 0x1F, 0x1F,
                               GetClut(0, palette), &streakColor, &streakColor,
                               (s16)glow, 1);
             }
@@ -104,43 +104,43 @@ int SceneE20_FlareParticle(int mode, SceneE20Particle *p)
             rotation.y = 0;
             rotation.z = p->timer * 32;
             rotation.flags = 1;
-            D_800F3368.parameter00 = 0x20;
-            D_800F3368.parameter02 = 2;
-            D_800F3368.extent_x = 0x20;
-            D_800F3368.extent_y = 0x20;
+            g_FieldFxSpriteParams.parameter00 = 0x20;
+            g_FieldFxSpriteParams.parameter02 = 2;
+            g_FieldFxSpriteParams.extent_x = 0x20;
+            g_FieldFxSpriteParams.extent_y = 0x20;
             {
-                int tpage = D_800E2850[D_800E11E4[3]];
-                D_800F3368.palette = 3;
-                D_800F3368.parameter06 = 0;
-                D_800F3368.tpage = tpage;
+                int tpage = g_FieldFxTpageTable[g_FieldFxTpageSlots[3]];
+                g_FieldFxSpriteParams.palette = 3;
+                g_FieldFxSpriteParams.parameter06 = 0;
+                g_FieldFxSpriteParams.tpage = tpage;
             }
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 4;
-            func_800CEE20(&p->position, 0, 0x2000, 0x2000,
-                          (s16)D_800F3368.parameter02 * (p->timer / 2) + 0x60,
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
+            FieldFx_DrawShapeQuads(&p->position, 0, 0x2000, 0x2000,
+                          (s16)g_FieldFxSpriteParams.parameter02 * (p->timer / 2) + 0x60,
                           GetClut(0, palette), state, 0x80, 0);
             scale = rcos(angle) / 2 + 0x800;
             glow = rsin(time << 7) / 32;
             {
-                int tpage = D_800E2850[D_800E11E4[11]];
-                D_800F3368.palette = 3;
-                D_800F3368.parameter06 = 1;
-                D_800F3368.tpage = tpage;
+                int tpage = g_FieldFxTpageTable[g_FieldFxTpageSlots[11]];
+                g_FieldFxSpriteParams.palette = 3;
+                g_FieldFxSpriteParams.parameter06 = 1;
+                g_FieldFxSpriteParams.tpage = tpage;
             }
-            kind = D_800F3368.palette;
-            palette = D_800E1204[kind];
-            if (kind == 4 && D_800F3428 != 0) palette += 9;
+            kind = g_FieldFxSpriteParams.palette;
+            palette = g_FieldFxPaletteTable[kind];
+            if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 9;
             else palette += 5;
-            func_800CEE20(&p->position, 0, scale * 4, scale * 4, 6,
+            FieldFx_DrawShapeQuads(&p->position, 0, scale * 4, scale * 4, 6,
                           GetClut(0, palette), 3, glow, &glowColor);
             break;
         }
         case 2:
             gte_ldrotmatrix(D_800BCFA4.value);
             gte_ldtransmatrix(D_800BCFA4.value);
-            func_800CF3AC(D_80190804, &color, (p->timer << 4) / 20);
-            func_800D2104(&p->position, (unsigned char *)&color, 0x80, 1);
+            FieldFx_SampleColorTrack(D_80190804, &color, (p->timer << 4) / 20);
+            FieldFx_DrawPointTile(&p->position, (unsigned char *)&color, 0x80, 1);
             break;
         }
         break;

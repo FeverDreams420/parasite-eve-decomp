@@ -24,19 +24,19 @@ int ROOM_FAN_SWEEP_SPARK_NAME(int mode, RoomFanSweepSpark *spark) {
     switch (mode) {
     case 1:
         spark->timer++;
-        spark->y = D_800E27EC * 700 / 36 - 700 + ROOM_FAN_SWEEP_SPARK_ANCHOR.y;
+        spark->y = g_FieldFxCurrentAge * 700 / 36 - 700 + ROOM_FAN_SWEEP_SPARK_ANCHOR.y;
         spark->x = ROOM_FAN_SWEEP_SPARK_ANCHOR.x + ROOM_FAN_SWEEP_SPARK_COS((s16)spark->angle) * spark->radius / 4096;
         spark->z = ROOM_FAN_SWEEP_SPARK_ANCHOR.z + ROOM_FAN_SWEEP_SPARK_SIN((s16)spark->angle) * spark->radius / 4096;
         spark->angle += 0x80;
         if (!(ROOM_FAN_SWEEP_SPARK_RAND() & 7)) {
-            point = (GteShortVector *)func_800CE610(ROOM_FAN_SWEEP_SPARK_TRAIL);
+            point = (GteShortVector *)FieldFx_AcquireCallbackSlot(ROOM_FAN_SWEEP_SPARK_TRAIL);
             if (point) {
                 point->x = spark->x;
                 point->y = spark->y;
                 point->z = spark->z;
             }
         }
-        if (D_800E27EC < 0x24) break;
+        if (g_FieldFxCurrentAge < 0x24) break;
         return 1;
     case 2:
         switch (spark->state) {
@@ -66,13 +66,13 @@ int ROOM_FAN_SWEEP_SPARK_NAME(int mode, RoomFanSweepSpark *spark) {
         size = size * 3 / 2;
         spin.x = 0;
         spin.y = 0;
-        spin.z = D_800E27EC << 7;
+        spin.z = g_FieldFxCurrentAge << 7;
         spin.flags = 0;
         {
-            int kind = D_800F3368.palette;
-            int palette = D_800E1204[kind];
-            func_800CEE20(&position, &spin, size, size, 0x24,
-                          GetClut(0, (kind == 4 && D_800F3428 != 0) ? palette + ROOM_FAN_SWEEP_SPARK_PALETTE_LIT : palette + ROOM_FAN_SWEEP_SPARK_PALETTE_BASE),
+            int kind = g_FieldFxSpriteParams.palette;
+            int palette = g_FieldFxPaletteTable[kind];
+            FieldFx_DrawShapeQuads(&position, &spin, size, size, 0x24,
+                          GetClut(0, (kind == 4 && g_FieldFxAltPaletteFlag != 0) ? palette + ROOM_FAN_SWEEP_SPARK_PALETTE_LIT : palette + ROOM_FAN_SWEEP_SPARK_PALETTE_BASE),
                           1, alpha, &color);
         }
         break;

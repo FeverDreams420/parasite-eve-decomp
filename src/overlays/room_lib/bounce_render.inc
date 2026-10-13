@@ -111,13 +111,13 @@ int ROOMLIB_UPDATE_BOUNCE_RENDER_NAME(int mode, RoomLineBurstParticle *fx) {
             cosine += 0x7F;
         }
         saved0 = (cosine >> 7) + 0x28;
-        texture = D_800E1204[D_800F3368.palette];
-        if (D_800F3368.palette == 4 && D_800F3428 != 0) {
+        texture = g_FieldFxPaletteTable[g_FieldFxSpriteParams.palette];
+        if (g_FieldFxSpriteParams.palette == 4 && g_FieldFxAltPaletteFlag != 0) {
             texture += 4;
         }
         texture = GetClut(ROOMLIB_BOUNCE_CLUT_X, texture);
-        func_800CEE20((GteShortVector *)fx, 0, saved2, saved2,
-                      (s16)D_800F3368.parameter02 * (fx->timer / 6) + ROOMLIB_BOUNCE_FRAME_BASE,
+        FieldFx_DrawShapeQuads((GteShortVector *)fx, 0, saved2, saved2,
+                      (s16)g_FieldFxSpriteParams.parameter02 * (fx->timer / 6) + ROOMLIB_BOUNCE_FRAME_BASE,
                       (unsigned short)texture, 1, saved0, 0);
         return 0;
     }
@@ -133,7 +133,7 @@ int ROOMLIB_UPDATE_BOUNCE_RENDER_NAME(int mode, RoomLineBurstParticle *fx) {
         matrixSlot = &D_800BCFA4;
         gte_ldrotmatrix(matrixSlot->value);
         gte_ldtransmatrix(matrixSlot->value);
-        func_800D2104((GteShortVector *)fx, (u8 *)&blob, saved0, 1);
+        FieldFx_DrawPointTile((GteShortVector *)fx, (u8 *)&blob, saved0, 1);
     }
     default:
         break;

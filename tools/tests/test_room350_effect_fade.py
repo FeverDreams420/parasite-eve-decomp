@@ -16,11 +16,11 @@ class Room350EffectFadeTests(unittest.TestCase):
     def test_motion_fade_threshold_and_palette(self):
         source = host_unit("func_80199148", under=ROOM)
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <string.h>\n' + source + r'''
-RenderEffectParameters D_800F3368;
-#define D_800F336A D_800F3368.parameter02
-#define D_800F336C D_800F3368.palette
-int D_800F3428;
-unsigned short D_800E1204[8];
+RenderEffectParameters g_FieldFxSpriteParams;
+#define D_800F336A g_FieldFxSpriteParams.parameter02
+#define D_800F336C g_FieldFxSpriteParams.palette
+int g_FieldFxAltPaletteFlag;
+unsigned short g_FieldFxPaletteTable[8];
 static Particle object;
 static int lookups, draws, handleValue;
 static short sizeValue, phaseValue, brightnessValue, scaleValue;
@@ -30,14 +30,14 @@ _Static_assert(offsetof(Particle, brightness) == 12, "brightness offset");
 _Static_assert(offsetof(Particle, phase) == 16, "phase offset");
 u_short GetClut(int x, int y) {
     assert(lookups++ == 0 && draws == 0 && x == 0);
-    assert(y == D_800E1204[D_800F336C] +
-           (D_800F336C == 4 && D_800F3428 ? 6 : 2));
+    assert(y == g_FieldFxPaletteTable[D_800F336C] +
+           (D_800F336C == 4 && g_FieldFxAltPaletteFlag ? 6 : 2));
     /* Stub mutations verify post-call reads, not real GetClut side effects. */
     object.size = sizeValue; object.phase = phaseValue;
     object.brightness = brightnessValue; D_800F336A = scaleValue;
     return handleValue;
 }
-void func_800CEE20(struct GteShortVector *p, struct GteRotation *zero, int a,
+void FieldFx_DrawShapeQuads(struct GteShortVector *p, struct GteRotation *zero, int a,
                    int b, int scale, int handle, int flag, int shade,
                    struct RenderColor *colors) {
     assert(lookups == 1 && draws++ == 0 && p == &object && zero == 0);
@@ -77,8 +77,8 @@ int main(void) {
     }
     for (kind = 0; kind < 8; ++kind) for (special = 0; special < 2; ++special)
     for (h = 0; h < 2; ++h) for (s = 0; s < 8; ++s) for (m = 0; m < 8; ++m) {
-        for (i = 0; i < 8; ++i) D_800E1204[i] = h ? 65535 : i * 100;
-        D_800F336C = kind; D_800F3428 = special;
+        for (i = 0; i < 8; ++i) g_FieldFxPaletteTable[i] = h ? 65535 : i * 100;
+        D_800F336C = kind; g_FieldFxAltPaletteFlag = special;
         sizeValue = values[s]; phaseValue = values[m];
         brightnessValue = values[7-s]; scaleValue = values[7-m];
         handleValue = h ? -1 : 0x12345;

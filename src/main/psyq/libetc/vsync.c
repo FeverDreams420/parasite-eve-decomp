@@ -53,7 +53,7 @@ void v_wait(int arg0, int arg1) {
     if (g_VSyncCount < arg0) {
         do {
             if (--timeout == -1) {
-                puts(D_800116FC);
+                puts(g_VSyncTimeoutText);
                 ChangeClearPAD(0);
                 ChangeClearRCnt(3, 0);
                 return;

@@ -69,7 +69,7 @@ the overlay windows up to 0x801FE000.
 | ~0x800A5C00..0x800C20C8 | large COMMON pool | none | `g_GameState`, `g_AkaoCmd`, `g_SaveRuntimeState`, PsyQ `StRingSize` |
 | 0x800C20C8 | `_end` | startup BSS clear stops here and `InitHeap(_end + 4, ...)` | `__SN_ENTRY_POINT` |
 | 0x800C20C8..0x800E21A4 | field engine rodata, text, data | its own link order | engine strings start exactly at `_end` |
-| 0x800E21A4..~0x800F3500 | field engine BSS (referenced by main) | | `fieldfx/burst` statics, `D_800F3428` ... |
+| 0x800E21A4..~0x800F3500 | field engine BSS (referenced by main) | | `fieldfx/burst` statics, `g_FieldFxAltPaletteFlag` ... |
 | ~0x800F3500..0x8010BCF8 | zero, no label referenced by main | unknown: possibly runtime buffers | needs a RAM trace before it is used as growth room |
 | 0x8010BCF8..0x801FE000 | overlay windows and buffers at fixed addresses | disc ABI | section 6 |
 
@@ -273,8 +273,8 @@ behaviour for the small pool and is a later decision (section 8).
 ### 3.6 Startup and header symbols
 
 `snmain.c` (asm kept in the PsyQ macro) refers to the BSS bounds through blob
-labels (`D_8009CDF8`, `D_800C20C8`) and to the heap words `D_8009453C`,
-`D_80094540`. They move with their blobs today. Once `.sbss` is owned and the
+labels (`D_8009CDF8`, `D_800C20C8`) and to the heap words `g_SnProgramEnd`,
+`g_SnHeapSize`. They move with their blobs today. Once `.sbss` is owned and the
 engine boundary moves, they become linker symbols: BSS start = first `.sbss`
 input of main, `_end` = `main_VRAM_END`. The PS-X EXE header's initial PC
 is `__SN_ENTRY_POINT` and its text size `PSX_EXE_TEXT_SIZE`, both written by
@@ -504,7 +504,7 @@ high risk, then by size. `script/sfx_queue` (pilot) is done.
 | 68 | `psyq/libpad/padentry` | 3 (0 own) | 18 | data 3 | `g_MemCardObjLookupFn`, `g_MemCardObjArray`, `g_MemCardCommandByte` | low |
 | 69 | `psyq/libspu/spu_3` | 3 (0 own) | 26 | data 3 | `_spu_mem_mode`, `_spu_RXX`, `_spu_sys_pcr` | low |
 | 70 | `script/value_ops` | 3 (0 own) | 62 | scommon 2, common 1 | `g_CurrentEntity`, `g_PlayerEntity`, `g_RenderStateFlags` | low (1 aliased) |
-| 71 | `fieldfx/burst` | 3 (3 own) | 82 | engine 3 | `D_800F3430`, `D_800E2260`, `D_800E2818` | low |
+| 71 | `fieldfx/burst` | 3 (3 own) | 82 | engine 3 | `g_PointSpriteStreakSprite`, `g_PointSpriteState0`, `g_PointSpriteState1` | low |
 | 72 | `psyq/libspu/s_m_init` | 4 (2 own) | 8 | data 4 | `_spu_mem_mode`, `_spu_AllocBlockNum`, `_spu_AllocLastNum` | low |
 | 73 | `psyq/libds/dssys_1_10` | 4 (0 own) | 8 | bss 3, data 1 | `g_DsReadStatusBlock`, `g_DsPollCallback`, `g_DsSyncCallback` | low |
 | 74 | `psyq/libcd/c_004` | 4 (1 own) | 10 | common 4 | `g_CdStreamRingReadSlot`, `g_StrDataReadyCallback`, `g_CdStreamDataReadyFlag` | low (1 aliased) |
@@ -531,7 +531,7 @@ high risk, then by size. `script/sfx_queue` (pilot) is done.
 | 95 | `battle/commands` | 3 (0 own) | 18 | common 2, scommon 1 | `g_PlayerEntity`, `g_AyaEquippedWeaponSlot`, `g_AyaParasiteSpellFlags` | medium (2 aliased) |
 | 96 | `asm:dtail_gp_pre_s016` | 4 (4 own) | 4 | func 4 | `func_80017928`, `func_80017948`, `func_80017968` | medium (4 aliased) |
 | 97 | `draw/frame` | 4 (0 own) | 15 | common 3, sdata 1 | `g_ActiveDrawSlot`, `g_GameState`, `g_RenderDrawEnvArray` | medium (1 aliased) |
-| 98 | `battle/phase` | 5 (0 own) | 22 | scommon 3, data 1, sbss 1 | `D_8009D1D4`, `g_PmSlotTable`, `D_8009D258` | medium (1 aliased) |
+| 98 | `battle/phase` | 5 (0 own) | 22 | scommon 3, data 1, sbss 1 | `D_8009D1D4`, `g_PmSlotTable`, `g_BattleEffectPmSlot` | medium (1 aliased) |
 | 99 | `menu/inventory` | 5 (1 own) | 28 | sbss 5 | `g_MenuActiveWidget`, `g_MenuSelectedItemData`, `g_MenuEquipSwapSource` | medium (1 aliased) |
 | 100 | `asset/tim_textures` | 5 (1 own) | 32 | data 3, scommon 1, common 1 | `g_GameStateFlags`, `g_PmCmdHandlerTable`, `g_PmTables` | medium (3 aliased) |
 | 101 | `item/swap` | 5 (1 own) | 32 | common 3, sbss 2 | `g_EquippedWeaponSlot`, `g_EquippedArmorSlot`, `g_EquipItemDataTable` | medium (2 aliased) |
@@ -555,7 +555,7 @@ high risk, then by size. `script/sfx_queue` (pilot) is done.
 | 119 | `script/flow_opcodes` | 9 (1 own) | 131 | scommon 6, sbss 2, common 1 | `g_CurrentEntity`, `g_ScriptNodePool`, `g_SceneDataTable0` | medium (5 aliased) |
 | 120 | `menu/save_screens` | 10 (3 own) | 39 | sbss 6, bss 2, common 2 | `D_800A19C0`, `g_MenuRenameTargetRecord`, `g_SaveSelectedSlot` | medium (1 aliased) |
 | 121 | `menu/lists` | 11 (0 own) | 29 | sbss 7, common 3, bss 1 | `g_MenuActiveWidget`, `g_BonusPointStatDeltas`, `g_SaveSelectedSlot` | medium (2 aliased) |
-| 122 | `field/actor_collision` | 11 (5 own) | 35 | scommon 6, sbss 5 | `D_8009CE0C`, `g_CollisionPlaneTable`, `g_CollisionDb` | medium (5 aliased) |
+| 122 | `field/actor_collision` | 11 (5 own) | 35 | scommon 6, sbss 5 | `g_FloorBlockedEdgePointA`, `g_CollisionPlaneTable`, `g_CollisionDb` | medium (5 aliased) |
 | 123 | `render/camera` | 11 (5 own) | 176 | common 10, scommon 1 | `g_GeomState`, `g_RenderStateFlags`, `g_GeomVramPacketDst` | medium (1 aliased) |
 | 124 | `scene/room_load` | 12 (4 own) | 128 | common 7, scommon 4, data 1 | `g_GameState`, `g_PlayerEntity`, `g_GameStateFlags` | medium (4 aliased) |
 | 125 | `boot/init` | 13 (6 own) | 95 | scommon 7, common 5, sdata 1 | `g_RenderDrawEnvArray`, `g_GameStateFlags`, `g_RenderDispEnvArray` | medium (2 aliased) |
@@ -582,7 +582,7 @@ high risk, then by size. `script/sfx_queue` (pilot) is done.
 | 146 | `script/actor_opcodes` | 15 (4 own) | 192 | scommon 8, data 3, common 2, func 1, sbss 1 | `g_CurrentEntity`, `g_GameStateFlags`, `g_ScriptNodePool` | high (6 aliased) |
 | 147 | `battle/setup` | 16 (2 own) | 70 | scommon 12, sbss 3, bss 1 | `g_ActiveActor`, `g_BattleTargetList`, `g_GameStateFlags` | high (9 aliased) |
 | 148 | `asset/game_state` | 17 (1 own) | 110 | common 14, scommon 2, sdata 1 | `g_GameState`, `g_PeImageMountFlags`, `g_ActiveDrawSlot` | high (2 aliased) |
-| 149 | `battle/status_hud` | 17 (9 own) | 243 | scommon 7, sbss 3, bss 3, sdata 2, common 2 | `g_ActiveDrawSlot`, `D_8009CE84`, `g_OtBufferTable` | high (6 aliased) |
+| 149 | `battle/status_hud` | 17 (9 own) | 243 | scommon 7, sbss 3, bss 3, sdata 2, common 2 | `g_ActiveDrawSlot`, `g_MenuActiveWindowXOffset`, `g_OtBufferTable` | high (6 aliased) |
 | 150 | `battle/turn` | 18 (4 own) | 183 | scommon 11, sbss 5, bss 1, common 1 | `g_BattleTargetList`, `D_8009D2D8`, `g_AkaoBgmHandle` | high (7 aliased) |
 | 151 | `akao/voice_driver` | 18 (1 own) | 518 | common 13, scommon 4, sdata 1 | `g_AkaoCmd`, `g_AkaoCurTrack`, `g_AkaoVoiceUpdateFlags` | high |
 | 152 | `psyq/libcd/bios_3` | 19 (3 own) | 80 | data 19 | `g_CdRegResponse`, `g_CdRegIndexBase`, `D_8009B294` | high (16 aliased) |
@@ -634,9 +634,9 @@ file. One table names the windows:
 - Main: `main.ld` INCLUDEs the table (`ld_postpass.py`), so `main.elf`
   defines the window symbols. Main's own references into the block are
   labels of the `main/overlay_windows` blob (`D_8010BCF8`, `D_80120D00`,
-  `g_StrFileDirArea`, `g_PmTaskProgramArea`, `D_8010BD00`, `D_801ED800`,
+  `g_StrFileDirArea`, `g_PmTaskProgramArea`, `D_8010BD00`, `g_SceneLoadScratchArea`,
   the menu_memcard and boot entry points, the process slots
-  `D_801F1BD8`..`D_801F1F38`), so they move with the block.
+  `g_FieldFxTaskProgramCmd108`..`D_801F1F38`), so they move with the block.
 - Overlays: `make overlay-split` rewrites each overlay's linker script so
   every section VMA is `(OVERLAY_WINDOW_x + offset)`
   (`tools/scripts/overlay_windows.py rebase-ld`); `overlay_link_symbols.py`
@@ -793,7 +793,7 @@ with its reason (`KNOWN_LITERALS`):
 - `Render_LoadFontGlyphAlt` (`render/font.c`): `lui s0,0x8001` is the upper
   half of the multiplier 0x80010003 of a division by 0x7FFF. Not an address.
 - `dtail_gp_post_dsfile` data words: 0x80017FFF twice (the halfword pair
-  0x7FFF, 0x8001 inside the AKAO sound entries `D_8009BAF8`/`D_8009BB10`)
+  0x7FFF, 0x8001 inside the AKAO sound entries `g_AkaoLfoWave0`/`g_AkaoLfoWave1`)
   and 0x80010804 (one word of the random-looking table `D_8009BE78`). Not
   addresses.
 
@@ -831,8 +831,8 @@ all overlays, because the Makefile does not track header dependencies):
 | unused, moved to the catalogue (1) | `g_GpuDmaState` |
 | overlay spellings (17): the old name is what overlay C uses, with an overlay-local type; goes when the overlay declarations take main's name and type | `D_800BCFA4`, `g_PlayerEntity` (FieldActor view, 21 rooms), `D_800B0CD8`, `D_800B0DBA`, `D_800B0DBC`, `D_800B0DCD`, `D_800B0DD8`, `D_800B0E38`, `D_800B0E3C`, `D_800B0E4C`, `D_800B0E50`, `D_800B0E54`, `D_800B0E58`, `D_800B0E64`, `D_800BCF88`, `D_8009D1F4`, `D_8009D280` |
 | type differs only in signedness or qualifier; the rename compiles but changes code (`lh`/`lhu`, a `volatile` reload) | `D_800BCFEA`, `D_800BCFF2` (s16 views of u16), `D_80095674`, `D_8009B784` (volatile views), `g_CdRingBufPtr` (u8 * view of `StHEADER *StRingAddr`), `D_8009D1E0`, `D_8009D090`, `g_EquippedWeaponSlot`, `g_EquippedArmorSlot` (scalar views of s8 arrays) |
-| record views: a struct over a word or a block, used where the record form keeps retail's code (`pe1/battle_word_records.h` and friends); needs one struct type for the label | `g_PlayerEntityRecord`, `g_ActiveDrawSlotRecord`, `g_ActiveActorRecord`, `g_GameStateFlagsRecord`, `g_GameStateBlock`, `g_BattleResultFlagsRecord`, `g_FieldMoveLockRecord`, `g_PmTables`, `g_GpuDmaRegisterWindow`, `g_CursorRenderMetadataWindows`, `D_8009D1A8`, `D_800C0E00`, `D_800C0E20`, `D_800B8AC0`, `D_800BC000`, `D_8009D2C8`, `D_800A76A0` |
-| scalar/array and width views that do not compile as one declaration (one unit uses the word as a scalar, another indexes it, or reads a different width) | the other 34: `D_8009CE00`, `D_8009D098`, `D_8009D14C`, `D_800A76A4`, `D_800A76BC`, `D_800A77F0`, `D_800B0CE2`, `D_800B0E6C`, `D_800B89F8`, `D_800BD024`, `D_800BE9A0`, `D_800C0D90`, `D_8009B788`, `D_8009B46C`, `g_AyaInventorySlotCount`, `D_8009D1CE`, `D_8009D1D0`, `D_8009D1E4`, `D_8009D1F0`, `D_8009D1F8`, `D_8009D228`, `D_8009D22C`, `D_8009D235`, `D_8009D238`, `D_8009D250`, `g_EntityCollisionWallParam`, `g_EntityCollisionWallSlot`, `D_8009D290`, `D_8009D29A`, `D_8009D29C`, `D_8009D2B0`, `D_8009D2D8`, `D_8009D2E8`, `D_8009D2F0` |
+| record views: a struct over a word or a block, used where the record form keeps retail's code (`pe1/battle_word_records.h` and friends); needs one struct type for the label | `g_PlayerEntityRecord`, `g_ActiveDrawSlotRecord`, `g_ActiveActorRecord`, `g_GameStateFlagsRecord`, `g_GameStateBlock`, `g_BattleResultFlagsRecord`, `g_FieldMoveLockRecord`, `g_PmTables`, `g_GpuDmaRegisterWindow`, `g_CursorRenderMetadataWindows`, `D_8009D1A8`, `g_AyaSaveState`, `g_InventoryRuntime`, `D_800B8AC0`, `D_800BC000`, `D_8009D2C8`, `D_800A76A0` |
+| scalar/array and width views that do not compile as one declaration (one unit uses the word as a scalar, another indexes it, or reads a different width) | the other 34: `D_8009CE00`, `D_8009D098`, `D_8009D14C`, `D_800A76A4`, `D_800A76BC`, `g_ScriptVariableBank`, `D_800B0CE2`, `D_800B0E6C`, `D_800B89F8`, `D_800BD024`, `g_PadPort1Buffer`, `D_800C0D90`, `D_8009B788`, `D_8009B46C`, `g_AyaInventorySlotCount`, `D_8009D1CE`, `D_8009D1D0`, `D_8009D1E4`, `D_8009D1F0`, `D_8009D1F8`, `D_8009D228`, `D_8009D22C`, `D_8009D235`, `D_8009D238`, `D_8009D250`, `g_EntityCollisionWallParam`, `g_EntityCollisionWallSlot`, `D_8009D290`, `D_8009D29A`, `D_8009D29C`, `D_8009D2B0`, `D_8009D2D8`, `D_8009D2E8`, `D_8009D2F0` |
 
 None of them is a fixed address: a relative alias moves with its label.
 They are naming debt; the record and overlay groups are the ones worth a

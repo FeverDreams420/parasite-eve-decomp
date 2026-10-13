@@ -16,24 +16,24 @@ class Room350EffectConfiguredPulseTests(unittest.TestCase):
     def test_configuration_and_pre_post_clut_samples(self):
         source = host_unit("func_80196C64", under=ROOM)
         harness = '#include <assert.h>\n#include <stddef.h>\n#include <stdint.h>\n#include <string.h>\n' + source + r'''
-int D_800E27EC;
+int g_FieldFxCurrentAge;
 /* The retail halfword names are fields of the sprite parameter block; the
  * signed ones are read through signed views as the old globals were. */
-RenderEffectParameters D_800F3368;
-#define SIGNED(field) (*(short *)&D_800F3368.field)
+RenderEffectParameters g_FieldFxSpriteParams;
+#define SIGNED(field) (*(short *)&g_FieldFxSpriteParams.field)
 #define UNIT SIGNED(parameter00)
 #define D_800F336A SIGNED(parameter02)
-#define D_800F336C D_800F3368.palette
+#define D_800F336C g_FieldFxSpriteParams.palette
 #define D_800F336E SIGNED(parameter06)
-#define D_800F3370 D_800F3368.tpage
+#define D_800F3370 g_FieldFxSpriteParams.tpage
 #define D_800F3372 SIGNED(parameter0A)
-#define D_800F3374 D_800F3368.depth
+#define D_800F3374 g_FieldFxSpriteParams.depth
 #define D_800F3376 SIGNED(extent_x)
 #define D_800F3378 SIGNED(extent_y)
-unsigned short D_800E11E8, D_800E1208, D_800E2850[65536];
+unsigned short g_FieldFxTpageSlot2, g_FieldFxPaletteEntry2, g_FieldFxTpageTable[65536];
 /* Size samples are the low halfword, shades the high halfword of a word. */
-GteSineWord D_800966EC[4096];
-#define HALVES ((short *)D_800966EC)
+GteSineWord rcossin_tbl[4096];
+#define HALVES ((short *)rcossin_tbl)
 int D_8019A59C[4];
 static unsigned char object[16];
 static int cluts, draws, before, after, sample, shade, scale;
@@ -52,15 +52,15 @@ u_short GetClut(int x, int y) {
     assert(D_800F336E == 0 && D_800F3372 == 0 && D_800F3374 == 32);
     assert(D_800F3370 == (unsigned short)(65535 - paletteIndex));
     /* These mutations test capture/reload order, not the actual helper's effects. */
-    D_800E27EC = after;
+    g_FieldFxCurrentAge = after;
     D_800F336A = scale;
     HALVES[tableIndex(before)] = 12345;
     HALVES[tableIndex(after) + 1] = shade;
-    D_800E11E8 ^= 65535;
-    D_800E1208 ^= 65535;
+    g_FieldFxTpageSlot2 ^= 65535;
+    g_FieldFxPaletteEntry2 ^= 65535;
     return handle;
 }
-void func_800CEE20(struct GteShortVector *position, struct GteRotation *unused,
+void FieldFx_DrawShapeQuads(struct GteShortVector *position, struct GteRotation *unused,
                    int width, int height, int tile, int clut, int flag,
                    int brightness, struct RenderColor *colors) {
     unsigned phase = (((uint32_t)after - 1) >> 2) & 3;
@@ -72,12 +72,12 @@ void func_800CEE20(struct GteShortVector *position, struct GteRotation *unused,
 }
 static void reset(void) {
     cluts = draws = 0;
-    D_800E27EC = before;
+    g_FieldFxCurrentAge = before;
     UNIT = -999; D_800F336A = -998;
     D_800F336E = -997; D_800F3372 = -996; D_800F3374 = -995;
     D_800F3376 = -994; D_800F3378 = -993; D_800F336C = 65535; D_800F3370 = 65534;
-    D_800E11E8 = paletteIndex; D_800E1208 = clutY;
-    D_800E2850[paletteIndex] = 65535 - paletteIndex;
+    g_FieldFxTpageSlot2 = paletteIndex; g_FieldFxPaletteEntry2 = clutY;
+    g_FieldFxTpageTable[paletteIndex] = 65535 - paletteIndex;
     HALVES[tableIndex(before)] = sample;
     HALVES[tableIndex(after) + 1] = 23456;
 }

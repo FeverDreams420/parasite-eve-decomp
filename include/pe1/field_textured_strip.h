@@ -9,7 +9,7 @@
 #include "pe1/psyq_gpu.h"
 #include "pe1/render_tint.h"
 
-/* Field engine textured strip (func_800C5A40): consecutive nodes joined by
+/* Field engine textured strip (FieldFx_DrawTexturedStrip): consecutive nodes joined by
  * POLY_FT4 segments, each node's two edge points projected with
  * RotTransPers4 and textured from a 16x16 cell grid. */
 
@@ -53,7 +53,7 @@ typedef union FieldStripLink {
 
 extern char *D_800B0E58[];
 
-void func_800C608C(int scale, u8 *src, u8 *dst);
+void FieldFx_ScaleColor(int scale, u8 *src, u8 *dst);
 long RotTransPers4(void *v0, void *v1, void *v2, void *v3, void *sxy0,
                    void *sxy1, void *sxy2, void *sxy3, void *p, void *flag);
 

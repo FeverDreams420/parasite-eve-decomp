@@ -46,9 +46,9 @@ int SpuClearReverbWorkArea(int mode)
         length = (0x10000 - start) << _spu_mem_mode.shift;
         address = start << _spu_mem_mode.shift;
     }
-    oldTransmode = D_8009B418;
-    if (D_8009B418 == 1) {
-        D_8009B418 = 0;
+    oldTransmode = _spu_transMode;
+    if (_spu_transMode == 1) {
+        _spu_transMode = 0;
         /* Materialize the restore flag independently of the comparison value. */
         asm volatile("" ::: "$2");
         transmodeCleared = 1;
@@ -66,13 +66,13 @@ int SpuClearReverbWorkArea(int mode)
         }
         _spu_t(2, address);
         _spu_t(1);
-        _spu_t(3, &D_8009C4C0, size);
+        _spu_t(3, &g_SpuZeroBuffer, size);
         WaitEvent(_spu_EVdma);
         length -= 0x400;
         address += 0x400;
     } while (more != 0);
     if (transmodeCleared != 0) {
-        D_8009B418 = oldTransmode;
+        _spu_transMode = oldTransmode;
     }
     if (callback != 0) {
         _spu_transferCallback = callback;

@@ -40,21 +40,21 @@ static RoomM273EffectStateContext stateContext;
 static State state;
 static Seed output[2];
 static unsigned char pool[32],secondPool[32];
-FieldFxTaskSlot *D_800F33E0=(FieldFxTaskSlot *)&context;
-FieldFxObjectPrefix *D_800F32D0=(FieldFxObjectPrefix *)&stateContext;
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&context;
+FieldFxObjectPrefix *g_FieldFxOwner=(FieldFxObjectPrefix *)&stateContext;
 unsigned char D_8019AE9A;
 Seed D_8019AC20[2];
-unsigned short D_800E11FA,D_800E2850[8];
-RenderEffectParameters D_800F3368;
+unsigned short g_FieldFxTpageSlot11,g_FieldFxTpageTable[8];
+RenderEffectParameters g_FieldFxSpriteParams;
 static int init,allocations,randomCalls,failAt,randomValue;
 int func_80194128(int mode, GteRotation *rotation) { assert(0); return 0; }
-int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
+int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback callback) {
     assert(init++==0 && p==(char *)pool && stride==8 && count==4 &&
            callback==(FieldFxCallbackListCallback)func_80194128);
     return 60;
 }
 int Inv_ScrambleGrid(void) { assert(randomCalls++==0 && !allocations); return randomValue; }
-void *func_800CE610(char *p) {
+void *FieldFx_AcquireCallbackSlot(char *p) {
     int index=allocations++;
     assert(randomCalls==1 && index<2 && p==(char *)(index ? secondPool:pool));
     context.pool=secondPool;
@@ -88,11 +88,11 @@ int main(void) {
             }
         }
     for(i=0;i<8;++i) {
-        D_800E11FA=i; D_800E2850[i]=65535-i;
+        g_FieldFxTpageSlot11=i; g_FieldFxTpageTable[i]=65535-i;
         assert(func_80194284(2)==0);
-        assert(D_800F3368.parameter00==16 && D_800F3368.parameter02==1 && D_800F3368.palette==3 && D_800F3368.parameter06==1);
-        assert(D_800F3368.tpage==65535-i && D_800F3368.parameter0A==3 && D_800F3368.depth==0);
-        assert(D_800F3368.extent_x==16 && D_800F3368.extent_y==64);
+        assert(g_FieldFxSpriteParams.parameter00==16 && g_FieldFxSpriteParams.parameter02==1 && g_FieldFxSpriteParams.palette==3 && g_FieldFxSpriteParams.parameter06==1);
+        assert(g_FieldFxSpriteParams.tpage==65535-i && g_FieldFxSpriteParams.parameter0A==3 && g_FieldFxSpriteParams.depth==0);
+        assert(g_FieldFxSpriteParams.extent_x==16 && g_FieldFxSpriteParams.extent_y==64);
     }
     allocations=randomCalls=0;
     assert(func_80194284(-1)==0 && func_80194284(3)==0);

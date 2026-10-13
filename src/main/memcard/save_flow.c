@@ -756,7 +756,7 @@ void MemCard_UpdateSaveState(int port) {
             MemCard_AbortActiveOperation(state);
             break;
         }
-        D_80092230[2] = port + '0';
+        g_MemCardSearchPatternPtr[2] = port + '0';
         state->fileCount = 0;
         state->selectedSlot = 0;
         state->scanCursor = 0;
@@ -767,7 +767,7 @@ void MemCard_UpdateSaveState(int port) {
         for (i = 14; i >= 0; i--) {
             state->slots[i].state = current;
         }
-        if (firstfile(D_80092230, &entry) != 0) {
+        if (firstfile(g_MemCardSearchPatternPtr, &entry) != 0) {
             MemCard_NoteSaveFile(state, &entry);
             while (nextfile(&entry) != 0) {
                 MemCard_NoteSaveFile(state, &entry);
@@ -847,7 +847,7 @@ void MemCard_UpdateSaveState(int port) {
             MemCard_FormatSlotFileName(state, slot);
             if ((state->fileDescriptor = open(D_8009EE70, 1)) >= 0) {
                 state->managerState = 8;
-                state->transferData = D_800A1720[port].bytes;
+                state->transferData = g_MemCardPreviewBuffers[port].bytes;
                 state->transferSize = 0x80;
                 state->retryCount = 30;
                 if (state->slots[state->selectedSlot].state ==
@@ -992,7 +992,7 @@ void MemCard_UpdateSaveState(int port) {
         close(state->fileDescriptor);
         state->fileDescriptor = -1;
         MemCard_ApplySavePreview(&state->slots[state->selectedSlot],
-                                 &D_800A1720[port].preview);
+                                 &g_MemCardPreviewBuffers[port].preview);
         state->scanCursor++;
         state->managerState =
             state->scanCursor < state->fileCount * 2 ? 3 : 12;

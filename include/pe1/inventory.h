@@ -42,8 +42,8 @@ extern u8 g_EquipItemDataTable[];
 extern u8 g_KeyItemDataTable[];
 extern ItemDataRecord g_InvCompareSlotLeft;
 extern ItemDataRecord g_InvCompareSlotRight;
-extern ItemDataRecord *D_8009D070, *D_8009D074;
-extern ItemDataRecord D_800A1A00;
+extern ItemDataRecord *g_InvCompareLeftItem, *g_InvCompareRightItem;
+extern ItemDataRecord g_BonusPointSpendItemCopy;
 extern ItemDataRecord g_InvItemSlotArray[128];
 
 /* Historical name: this operation returns a status, not an item pointer. */
@@ -68,7 +68,7 @@ int Inv_StepScrollDisplay2(int special);
 int Inv_SetupSlotDisplay(int mask);
 int Inv_PickRandomItem(int unused);
 u8 *Inv_GetItemEffectData(int item, int mode);
-extern u8 D_800A1B50[];
+extern u8 g_InvItemMessageBuffer[];
 void Inv_RollRandomItemType(s16 *type, s16 *amount);
 int Inv_IsSlotSelectable(int index);
 int Inv_IsSlotEquipped(int index);

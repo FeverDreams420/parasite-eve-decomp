@@ -29,24 +29,24 @@ int RoomEffect_HomingProjectileSpark(int mode, GteShortVector *spark) {
     u16 clut;
 
     if (mode == 1) {
-        if (D_800E27EC >= 9) {
+        if (g_FieldFxCurrentAge >= 9) {
             return 1;
         }
     } else if (mode == 2) {
-        frame = D_800E27EC - 1;
-        kind = D_800F3368.palette;
-        size = D_800966EC[((frame << 9) & 0x3E00) >> 2].word + 0x200;
-        palette = D_800E1204[kind];
+        frame = g_FieldFxCurrentAge - 1;
+        kind = g_FieldFxSpriteParams.palette;
+        size = rcossin_tbl[((frame << 9) & 0x3E00) >> 2].word + 0x200;
+        palette = g_FieldFxPaletteTable[kind];
         /* The pulse reads the cosine half through its own copy of the
          * frame, as retail does. */
         pulse = frame;
-        if (kind == 4 && D_800F3428) {
+        if (kind == 4 && g_FieldFxAltPaletteFlag) {
             palette += 4;
         }
         clut = GetClut(0x80, palette);
-        func_800CEE20(spark, &g_RoomHomingSparkRotation, (s16)size, (s16)size,
-                      (s16)D_800F3368.parameter02 * 2 + 0xFD, clut, 1,
-                      (s16)(D_800966EC[((pulse << 9) & 0x3E00) >> 2].word >> 16) >> 5,
+        FieldFx_DrawShapeQuads(spark, &g_RoomHomingSparkRotation, (s16)size, (s16)size,
+                      (s16)g_FieldFxSpriteParams.parameter02 * 2 + 0xFD, clut, 1,
+                      (s16)(rcossin_tbl[((pulse << 9) & 0x3E00) >> 2].word >> 16) >> 5,
                       &g_RoomHomingSparkColor);
     }
     return 0;
@@ -71,7 +71,7 @@ int RoomEffect_HomingProjectile(int mode) {
     case 0:
         model->state = 0;
         model->angle = ANIM_OWNER_AS(RoomHomingModelActorChannel)->actor->heading;
-        return func_800CE560(ANIM_POOL_AS(RoomHomingModelSparkChannel)->pool, 8, 4,
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomHomingModelSparkChannel)->pool, 8, 4,
                              (FieldFxCallbackListCallback)RoomEffect_HomingProjectileSpark);
     case 1:
         actor = ANIM_OWNER_AS(RoomHomingModelActorChannel)->actor;
@@ -151,10 +151,10 @@ int RoomEffect_HomingProjectile(int mode) {
                 position.x = model->position[0].word + (rotated[0] << 12);
                 position.z = model->position[2].word + (rotated[2] << 12);
                 point = ((u32)position.x >> 16) | (position.z & 0xFFFF0000);
-                previous = FLOOR_POLYGON_AS(RoomHomingModelVertex)[D_8009D1CC - 1].x |
-                           (FLOOR_POLYGON_AS(RoomHomingModelVertex)[D_8009D1CC - 1].yz & 0xFFFF0000);
+                previous = FLOOR_POLYGON_AS(RoomHomingModelVertex)[g_FloorPolygonVertexCount - 1].x |
+                           (FLOOR_POLYGON_AS(RoomHomingModelVertex)[g_FloorPolygonVertexCount - 1].yz & 0xFFFF0000);
                 i = 0;
-                while (i < D_8009D1CC) {
+                while (i < g_FloorPolygonVertexCount) {
                     current = FLOOR_POLYGON_AS(RoomHomingModelVertex)[i].x | (FLOOR_POLYGON_AS(RoomHomingModelVertex)[i].yz & 0xFFFF0000);
                     gte_ldsxy0(point);
                     gte_ldsxy2(previous);
@@ -165,7 +165,7 @@ int RoomEffect_HomingProjectile(int mode) {
                     i++;
                     previous = current;
                 }
-                if (i >= D_8009D1CC) {
+                if (i >= g_FloorPolygonVertexCount) {
                     model->escaped = 1;
                     break;
                 }
@@ -194,7 +194,7 @@ int RoomEffect_HomingProjectile(int mode) {
                     if (model->lift <= 0x2FFFFF) {
                         model->gravity = 0;
                     } else {
-                        RoomHomingModelSpark *spark = func_800CE610(ANIM_POOL_AS(RoomHomingModelSparkChannel)->pool);
+                        RoomHomingModelSpark *spark = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(RoomHomingModelSparkChannel)->pool);
                         if (spark != 0) {
                             spark->x = model->position[0].part.integer;
                             spark->y = g_RoomFloorY->raw;
@@ -209,7 +209,7 @@ int RoomEffect_HomingProjectile(int mode) {
                 if (model->speed <= 0) model->finished = 1;
             }
             if (model->floor - 0x200 < model->position[1].part.integer) {
-                area = func_800DFE20((Vec3Fixed *)&position.x, (Vec3Fixed *)((RoomHomingModelEntity *)D_8009D254)->position);
+                area = FieldFx_GetDistanceXZ((Vec3Fixed *)&position.x, (Vec3Fixed *)((RoomHomingModelEntity *)D_8009D254)->position);
                 if (area < 0x80) model->finished = 1;
             }
             if (model->finished == 0) return 0;
@@ -246,54 +246,54 @@ int RoomEffect_HomingProjectile(int mode) {
         for (axis = 0; axis < 3; axis++) {
             ((s16 *)&sprite)[axis] = model->position[axis].part.integer;
         }
-        frame = D_800E27EC;
+        frame = g_FieldFxCurrentAge;
         if (frame < 8) {
-            scale = D_800966EC[((frame << 10) & 0x3C00) >> 2].part.sin + 0x1000;
+            scale = rcossin_tbl[((frame << 10) & 0x3C00) >> 2].part.sin + 0x1000;
             intensity = 0x80;
         } else {
-            intensity = D_800966EC[((frame << 12) & 0x3000) >> 2].part.cos / 64 + 0x60;
+            intensity = rcossin_tbl[((frame << 12) & 0x3000) >> 2].part.cos / 64 + 0x60;
             scale = 0x1000;
         }
-        D_800F3368.parameter00 = 0x20;
+        g_FieldFxSpriteParams.parameter00 = 0x20;
         {
-            int index = TEXTURE_SLOT_RECORD(D_800E11EC);
+            int index = TEXTURE_SLOT_RECORD(g_FieldFxTpageSlot4);
             int tpage;
-            D_800F3368.parameter02 = 2;
-            D_800F3368.extent_x = 0x20;
-            D_800F3368.extent_y = 0x20;
-            D_800F3368.extent_x = 0x20;
-            D_800F3368.extent_y = 0x20;
-            tpage = D_800E2850[index];
-            D_800F3368.palette = 4;
-            D_800F3368.parameter06 = 0;
-            D_800F3368.parameter0A = 0;
-            D_800F3368.depth = 0;
-            D_800F3368.tpage = tpage;
+            g_FieldFxSpriteParams.parameter02 = 2;
+            g_FieldFxSpriteParams.extent_x = 0x20;
+            g_FieldFxSpriteParams.extent_y = 0x20;
+            g_FieldFxSpriteParams.extent_x = 0x20;
+            g_FieldFxSpriteParams.extent_y = 0x20;
+            tpage = g_FieldFxTpageTable[index];
+            g_FieldFxSpriteParams.palette = 4;
+            g_FieldFxSpriteParams.parameter06 = 0;
+            g_FieldFxSpriteParams.parameter0A = 0;
+            g_FieldFxSpriteParams.depth = 0;
+            g_FieldFxSpriteParams.tpage = tpage;
         }
-        kind = D_800F3368.palette;
-        palette = D_800E1204[kind];
-        if (kind == 4 && D_800F3428 != 0) palette += 4;
-        tpages = D_800E2850;
+        kind = g_FieldFxSpriteParams.palette;
+        palette = g_FieldFxPaletteTable[kind];
+        if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
+        tpages = g_FieldFxTpageTable;
         clut = GetClut(0x30, palette);
-        func_800CEE20(&sprite, 0, scale, scale, 0x42, clut, 1, intensity, 0);
+        FieldFx_DrawShapeQuads(&sprite, 0, scale, scale, 0x42, clut, 1, intensity, 0);
         if (model->state != 0) {
             sprite.y = model->floor;
-            func_800D004C(&sprite, 0x50, 0x50, 8,
+            FieldFx_DrawStarFan(&sprite, 0x50, 0x50, 8,
                           &g_RoomHomingRingRotation, 0x1000, 0x1000,
                           &g_RoomHomingRingInner,
                           &g_RoomHomingRingOuter, intensity, 1);
         }
-        D_800F3368.parameter00 = 0x10;
+        g_FieldFxSpriteParams.parameter00 = 0x10;
         {
-            int index = TEXTURE_SLOT_RECORD(D_800E11E8);
+            int index = TEXTURE_SLOT_RECORD(g_FieldFxTpageSlot2);
             int tpage;
-            D_800F3368.parameter02 = 1;
-            D_800F3368.extent_x = 0x10;
-            D_800F3368.extent_y = 0x10;
+            g_FieldFxSpriteParams.parameter02 = 1;
+            g_FieldFxSpriteParams.extent_x = 0x10;
+            g_FieldFxSpriteParams.extent_y = 0x10;
             tpage = tpages[index];
-            D_800F3368.palette = 2;
-            D_800F3368.parameter06 = 0;
-            D_800F3368.tpage = tpage;
+            g_FieldFxSpriteParams.palette = 2;
+            g_FieldFxSpriteParams.parameter06 = 0;
+            g_FieldFxSpriteParams.tpage = tpage;
         }
         break;
     }

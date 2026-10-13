@@ -121,7 +121,7 @@ typedef struct SceneE22ModelScale {
     s32 x, y, z, reserved0C;
 } SceneE22ModelScale;
 
-extern void func_800D3BC8(GteShortVector *position, int scale_x, int scale_y,
+extern void FieldFx_DrawPulledSprite(GteShortVector *position, int scale_x, int scale_y,
                           int texture, int clut, int page, int intensity, int arg7,
                           int size);
 

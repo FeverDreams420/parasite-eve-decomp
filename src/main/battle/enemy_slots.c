@@ -1,15 +1,15 @@
 #include "pe1/battle_runtime.h"
 
 void Entity_AllocSlot(BattleEntity *entity) {
-    EnemyCombatant initial = D_800109B0;
+    EnemyCombatant initial = g_EnemyCombatantInitial;
     u8 index;
     EnemyCombatant *allocated;
 
     for (index = 0; index < 7; index++) {
-        if (D_800A5D58[index].active == 0) {
-            D_800A5D58[index].active = 1;
-            D_800A5D58[index].combatant = initial;
-            allocated = &D_800A5D58[index].combatant;
+        if (g_BattleEnemySlots[index].active == 0) {
+            g_BattleEnemySlots[index].active = 1;
+            g_BattleEnemySlots[index].combatant = initial;
+            allocated = &g_BattleEnemySlots[index].combatant;
             entity->core = allocated;
             g_EntityInstanceCounter++;
             allocated->lowAndEntityId.bytes.entityId = g_EntityInstanceCounter;
@@ -31,8 +31,8 @@ void Battle_SlotFree(void **combatantPtr) {
 
     index = 0;
     do {
-        if (&D_800A5D58[index].combatant == *combatantPtr) {
-            D_800A5D58[index].active = 0;
+        if (&g_BattleEnemySlots[index].combatant == *combatantPtr) {
+            g_BattleEnemySlots[index].active = 0;
         }
         index++;
     } while (index < 7);
@@ -42,7 +42,7 @@ void Battle_ClearMotionTable(void) {
     u8 i;
     i = 0;
     do {
-        D_800A5D58[i].active = 0;
+        g_BattleEnemySlots[i].active = 0;
         i++;
     } while (i < 7);
 }

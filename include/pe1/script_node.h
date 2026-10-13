@@ -39,7 +39,7 @@ typedef union ScriptNodeAddress {
 
 /* The node the task interpreter is currently running. */
 extern ScriptNode *g_ScriptNodePool;
-extern ScriptNode D_8009D310[72];
+extern ScriptNode g_ScriptNodes[72];
 
 ScriptNode *Script_AllocNode(unsigned int *script, ScriptNode *previous);
 

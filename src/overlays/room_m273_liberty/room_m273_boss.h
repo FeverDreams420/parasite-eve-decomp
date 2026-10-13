@@ -192,7 +192,7 @@ extern RenderColor D_8019AE08;
 extern RenderColor D_8019AE0C;
 extern u8 D_8019AB70[];
 
-int func_800CE688(void *list);
+int FieldFx_UpdateCallbackList(void *list);
 int func_801981A4(int mode, RoomM273SwayShard *shard);
 int func_80198060(int mode, GteShortVector *position);
 

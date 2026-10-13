@@ -98,7 +98,7 @@ typedef struct RoomParticleRenderPairState {
 } RoomParticleRenderPairState;
 
 
-void func_800C5538(RoomParticleRenderRecord *record);
+void FieldFx_BuildParticleChain(RoomParticleRenderRecord *record);
 
 /* The effect owner: its actor (whose joint transforms place the two
  * records), the hit flag the update raises and the texture page. */
@@ -141,7 +141,7 @@ void RoomEffect_InitParticleRenderPair(
     workState->second.field10 = 32;
     workState->second.field11 = 1;
     workState->second.field12 = 1;
-    func_800C5538(&workState->second);
+    FieldFx_BuildParticleChain(&workState->second);
 
     workState->first.field04 = 10;
     workState->first.packet = g_RoomMotionTrailA;
@@ -153,9 +153,9 @@ void RoomEffect_InitParticleRenderPair(
     workState->first.field10 = 32;
     workState->first.field11 = 1;
     workState->first.field12 = 1;
-    func_800C5538(&workState->first);
+    FieldFx_BuildParticleChain(&workState->first);
 
-    func_800C66C8(callOwner, 0x576, &firstMatrix);
+    FieldFx_PlaySoundAtMatrixPosition(callOwner, 0x576, &firstMatrix);
 }
 
 void RoomEffect_DrawParticleRenderPair(void *arg0, void *arg1, char *sys) {
@@ -163,12 +163,12 @@ void RoomEffect_DrawParticleRenderPair(void *arg0, void *arg1, char *sys) {
     RoomParticlePairOwner *root;
 
     root = FieldFx_GetScriptContext();
-    func_800C2EAC(root->page);
-    func_800C2FF0(0x10, 0x40);
-    func_800C3098(0x10);
-    func_800C3238(2);
-    func_800C5A40(sysp + 0xAC);
-    func_800C5A40(sysp + 0x78);
+    FieldFx_SetSpriteTexturePreset(root->page);
+    FieldFx_SetSpriteCellSize(0x10, 0x40);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
+    FieldFx_DrawTexturedStrip(sysp + 0xAC);
+    FieldFx_DrawTexturedStrip(sysp + 0x78);
 }
 
 void RoomEffect_UpdateParticleRenderPair(void *arg0, char *state, char *sys) {
@@ -194,8 +194,8 @@ void RoomEffect_UpdateParticleRenderPair(void *arg0, char *state, char *sys) {
     value2 = global->field2A;
     values[2] = value2;
 
-    func_800C5EB0(sysp + 0xAC, values, resultp);
-    ret = func_800C5EB0(sysp + 0x78, values, resultp);
+    FieldFx_UpdateStripCollision(sysp + 0xAC, values, resultp);
+    ret = FieldFx_UpdateStripCollision(sysp + 0x78, values, resultp);
 
     if (result == 1) {
         root->hit = 1;

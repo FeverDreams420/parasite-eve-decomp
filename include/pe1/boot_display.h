@@ -85,7 +85,7 @@ extern s16 *D_80172C90;
 extern s16 *D_80172C94;
 extern s32 D_80172C98;
 extern s32 D_80172C9C;
-extern u16 D_80093166;
+extern u16 g_BootDisplayDataLbaTbl;
 extern u16 g_MainAssetLbaTbl[];
 extern char D_8012682C[];
 /* Two buffer records, each holding four image addresses. */

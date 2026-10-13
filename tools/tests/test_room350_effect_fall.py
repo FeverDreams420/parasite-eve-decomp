@@ -25,26 +25,26 @@ class Room350EffectFallTests(unittest.TestCase):
         definitions = (f"#define CALLBACK {callback}\n#define COLORS {colors}\n"
                        f"#define SIZE {size}\n#define INCREMENT {increment}\n")
         harness = '#include <assert.h>\n#include <string.h>\n' + definitions + source + r'''
-int D_800E27EC, D_800F3428;
+int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag;
 RenderColor COLORS;
-RenderEffectParameters D_800F3368;
-#define D_800F336C D_800F3368.palette
-#define D_800F336A D_800F3368.parameter02
-unsigned short D_800E1204[8];
+RenderEffectParameters g_FieldFxSpriteParams;
+#define D_800F336C g_FieldFxSpriteParams.palette
+#define D_800F336A g_FieldFxSpriteParams.parameter02
+unsigned short g_FieldFxPaletteTable[8];
 /* The shade is the high half of a sine-table record (bits.cos). */
-GteSineWord D_800966EC[4097];
-#define D_800966EE ((short *)D_800966EC + 1)
+GteSineWord rcossin_tbl[4097];
+#define D_800966EE ((short *)rcossin_tbl + 1)
 static short position[4];
 static int lookups, draws, handleValue, nextCounter, expectedShade, expectedScale;
 u_short GetClut(int mode, int texture) {
     assert(lookups++ == 0 && draws == 0 && mode == 0);
-    assert(texture == D_800E1204[D_800F336C] +
-           (D_800F336C == 4 && D_800F3428 ? 6 : 2));
-    D_800E27EC = nextCounter;
+    assert(texture == g_FieldFxPaletteTable[D_800F336C] +
+           (D_800F336C == 4 && g_FieldFxAltPaletteFlag ? 6 : 2));
+    g_FieldFxCurrentAge = nextCounter;
     D_800F336A = expectedScale;
     return handleValue;
 }
-void func_800CEE20(struct GteShortVector *point, struct GteRotation *a, int b,
+void FieldFx_DrawShapeQuads(struct GteShortVector *point, struct GteRotation *a, int b,
                    int c, int scale, int texture, int flag, int shade,
                    struct RenderColor *colors) {
     assert(draws++ == 0 && lookups == 1 && point == position);
@@ -73,7 +73,7 @@ int main(void) {
                 expected[3] = (short)(position[3] + INCREMENT);
             }
         }
-        D_800E27EC = counter; lookups = draws = 0;
+        g_FieldFxCurrentAge = counter; lookups = draws = 0;
         assert(CALLBACK(event, position) == result);
         assert(memcmp(position, expected, sizeof(position)) == 0);
         assert(lookups == 0 && draws == 0);
@@ -82,10 +82,10 @@ int main(void) {
     for (kind = 0; kind < 8; ++kind) for (special = 0; special < 2; ++special)
     for (h = 0; h < 2; ++h) for (s = 0; s < 6; ++s) {
         unsigned int index = ((unsigned int)counter * 256 & 0x3F00) / 2;
-        for (i = 0; i < 8194; ++i) ((short *)D_800966EC)[i] = 12345;
-        for (i = 0; i < 8; ++i) D_800E1204[i] = h ? 65535 : i * 100;
-        D_800E27EC = counter; nextCounter = counter + 1;
-        D_800F336C = kind; D_800F3428 = special;
+        for (i = 0; i < 8194; ++i) ((short *)rcossin_tbl)[i] = 12345;
+        for (i = 0; i < 8; ++i) g_FieldFxPaletteTable[i] = h ? 65535 : i * 100;
+        g_FieldFxCurrentAge = counter; nextCounter = counter + 1;
+        D_800F336C = kind; g_FieldFxAltPaletteFlag = special;
         D_800F336A = 999; expectedScale = values[s]; expectedShade = values[5-s];
         D_800966EE[index] = expectedShade;
         handleValue = h ? -1 : 0x12345;

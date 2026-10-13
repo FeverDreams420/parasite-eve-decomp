@@ -20,7 +20,7 @@ extern DRAWENV D_800BCE24, D_801D1498, D_801D14F4;
 extern u16 D_800BCE8A, D_800BCE9E;
 extern u8 D_800B0DCD;
 extern s32 D_8009D1BC, g_ActiveDrawSlot;
-extern u8 *D_80011610, *D_800B0E3C, *D_800B0E50, *D_800B0E54;
+extern u8 *g_CdLoadAreaBase, *D_800B0E3C, *D_800B0E50, *D_800B0E54;
 extern RenderBufferPrefix D_800B0E38;
 extern u8 D_8019319C[];
 

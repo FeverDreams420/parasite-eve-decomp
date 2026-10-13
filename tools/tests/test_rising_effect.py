@@ -15,8 +15,8 @@ ROOT = Path(__file__).resolve().parents[2]
 
 class RisingEffectTests(unittest.TestCase):
     def test_plain_source(self):
-        source = find_definition('func_800D5CE4').read_text()
-        source = source[source.index('int func_800D5CE4'):source.index('int func_800D5EB4')]
+        source = find_definition('FieldFx_RisingSprite').read_text()
+        source = source[source.index('int FieldFx_RisingSprite'):source.index('int FieldFx_RisingSpriteEmitter')]
         self.assertNotRegex(source, r'\b(?:asm|__asm__|INCLUDE_ASM|REGALLOC_BARRIER)\b')
 
     @unittest.skipUnless((ROOT/'assets/USA/main.exe').is_file() and

@@ -3,6 +3,6 @@
 
 #include "common.h"
 
-extern s16 D_80095750;
-extern s16 D_80095752;
+extern s16 g_GpuMaxWidth;
+extern s16 g_GpuMaxHeight;
 #endif /* PE1_EXT_C2422447EC50 */

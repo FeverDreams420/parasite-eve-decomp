@@ -14,7 +14,7 @@ from csource import function_text  # noqa: E402
 
 class BouncingSpriteEmitterTests(unittest.TestCase):
     def test_plain_source(self):
-        source = function_text("func_800D6E3C")
+        source = function_text("FieldFx_BouncingSpinEmitter")
         self.assertNotRegex(source, r'\b(?:INCLUDE_ASM|REGALLOC_BARRIER)\b')
         self.assertNotRegex(source, r'asm\s+volatile\s*\(\s*"[^\"]+')
 

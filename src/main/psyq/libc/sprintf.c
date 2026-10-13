@@ -9,7 +9,7 @@
 
 #include "sprintf_externs.h"
 
-/* The 12-byte template at D_80094528 is all zero.  Only the low-byte
+/* The 12-byte template at g_SprintfFormatSpecDefault is all zero.  Only the low-byte
  * flag field and the following prefix byte are used by this formatter. */
 typedef union {
     u32 flags;
@@ -31,9 +31,9 @@ typedef struct {
     FormatSpec spec;
 } FormatWork;
 
-FormatSpec D_80094528 = {{0}, 0, 0};
-const u8 D_8001161C[] = "0123456789ABCDEF";
-const u8 D_80011630[] = "0123456789abcdef";
+FormatSpec g_SprintfFormatSpecDefault = {{0}, 0, 0};
+const u8 g_SprintfDigitsUpper[] = "0123456789ABCDEF";
+const u8 g_SprintfDigitsLower[] = "0123456789abcdef";
 
 s32 sprintf(char *dest, s8 *format, ...)
 {
@@ -71,7 +71,7 @@ s32 sprintf(char *dest, s8 *format, ...)
         }
 
         {
-            register FormatSpec *initial asm("$5") = &D_80094528;
+            register FormatSpec *initial asm("$5") = &g_SprintfFormatSpecDefault;
             u32 flags = initial->header.flags;
             s32 width = initial->width;
             s32 precision = initial->precision;
@@ -275,11 +275,11 @@ decimal:
             }
 
         case 'X':
-            digits = D_8001161C;
+            digits = g_SprintfDigitsUpper;
             goto hexadecimal;
 
         case 'x':
-            digits = D_80011630;
+            digits = g_SprintfDigitsLower;
 hexadecimal:
             value = *(u32 *)args;
             args += 4;

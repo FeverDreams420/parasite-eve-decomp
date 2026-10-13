@@ -403,9 +403,9 @@ s32 CdRom_LoadInitialImage(void) {
     s32 result;
     DISPENV sp18;
 
-    D_800B0DB5 = -1;
-    D_800B0DB4 = -1;
-    D_800B0DB7 = -1;
+    g_SceneAudioSlot0Handle = -1;
+    g_SceneAudioSlot0Key = -1;
+    g_SceneAudioSlot1Handle = -1;
     D_800B0DB6 = -1;
     D_800B0DB3 = -1;
     D_800B0DB2 = -1;

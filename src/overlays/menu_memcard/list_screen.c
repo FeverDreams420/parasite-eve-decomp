@@ -240,7 +240,7 @@ s32 func_801909B4(void) {
     titleMode = D_800B0DCD & 1;
     D_801D1498 = g_RenderDrawEnvArray[0];
     D_801D14F4 = D_800BCE24;
-    firstMemory = D_80011610;
+    firstMemory = g_CdLoadAreaBase;
     secondMemory = firstMemory + 0x1C080;
     D_800B0E50 = firstMemory + 0x4080;
     D_801D11BC[0] = (MemcardScreenBuffer *) firstMemory;

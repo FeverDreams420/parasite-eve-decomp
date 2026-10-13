@@ -31,16 +31,16 @@ typedef char layout[sizeof(Effect)==4 && sizeof(GteRotation)==8 &&
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_behavior(self):
         source = '#include <assert.h>\n#include <limits.h>\n#include <string.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
-int D_800E27EC;
-GteSineWord D_800966EC[4096];
-FieldFxObjectPrefix *D_800F32D0;
+int g_FieldFxCurrentAge;
+GteSineWord rcossin_tbl[4096];
+FieldFxObjectPrefix *g_FieldFxOwner;
 unsigned char D_8019ACDC[4],D_8019ACE0[4];
 static Object object;
 static RoomM273EffectStateContext context;
 static Effect effect;
 static int position,draws,wantSize,wantShade;
 static unsigned short wantPhase;
-void func_800D0728(struct GteShortVector *p,int a,int b,int c,
+void FieldFx_DrawRingBand(struct GteShortVector *p,int a,int b,int c,
                   struct GteRotation *params,int w,int h,
                   struct RenderColor *color,struct RenderColor *other,
                   int shade,int flag) {
@@ -55,11 +55,11 @@ int main(void) {
     int times[]={INT_MIN,-1,0,15,16,INT_MAX};
     unsigned short values[]={0,1,32767,32768,65535};
     int f,j,k,i;
-    D_800F32D0=(FieldFxObjectPrefix *)&context;
+    g_FieldFxOwner=(FieldFxObjectPrefix *)&context;
     context.state.mode=(RoomM273EffectModeState *)&object; effect.position=&position;
     memset(object.unknown,0xA5,sizeof(object.unknown));
     for(i=0;i<6;++i) {
-        D_800E27EC=times[i];
+        g_FieldFxCurrentAge=times[i];
         assert(func_8019A4CC(1,&effect)==(times[i]>=16));
     }
     assert(draws==0);
@@ -67,11 +67,11 @@ int main(void) {
         unsigned int so=((unsigned int)frames[f]<<8)&0x3F00;
         unsigned int bo=((unsigned int)frames[f]<<9)&0x3E00;
         short sample=(short)values[j];
-        D_800E27EC=frames[f]+1;
-        D_800966EC[bo/4].word=0x12340000|values[k];
-        memcpy((char *)D_800966EC+so,&sample,2);
+        g_FieldFxCurrentAge=frames[f]+1;
+        rcossin_tbl[bo/4].word=0x12340000|values[k];
+        memcpy((char *)rcossin_tbl+so,&sample,2);
         wantSize=sample*2+4096;
-        wantShade=(short)D_800966EC[bo/4].word>>5;
+        wantShade=(short)rcossin_tbl[bo/4].word>>5;
         wantPhase=(unsigned int)frames[f]<<8;
         object.value=values[k]; draws=0;
         assert(func_8019A4CC(2,&effect)==0 && draws==1);

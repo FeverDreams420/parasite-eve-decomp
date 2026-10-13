@@ -27,21 +27,21 @@ int DS_newmedia(void) {
 
     read_status = ds_read(1, 16, g_DsFileSectorBuffer);
     if (read_status != 1) {
-        if (CD_debug > 0) puts(D_80011EF8);
+        if (CD_debug > 0) puts(g_DsNewMediaPvdReadErrorText);
         return 0;
     }
     if (strncmp(((IsoVolumePathTable *)g_DsFileSectorBuffer)->identifier,
-                D_80011F24, 5) != 0) {
-        if (CD_debug > 0) puts(D_80011F2C);
+                g_DsIso9660Magic, 5) != 0) {
+        if (CD_debug > 0) puts(g_DsNewMediaPvdFormatErrorText);
         return 0;
     }
     end = ((IsoVolumePathTable *)g_DsFileSectorBuffer)->pathTableSectorLE;
     memcpy(&sector, end, 4);
     if (ds_read(1, sector, g_DsFileSectorBuffer) != read_status) {
-        if (CD_debug > 0) printf(D_80011F5C, sector);
+        if (CD_debug > 0) printf(g_DsNewMediaPtReadErrorFormat, sector);
         return 0;
     }
-    if (CD_debug > 1) puts(D_80011F80);
+    if (CD_debug > 1) puts(g_DsNewMediaSearchingDirText);
     cursor = g_DsFileSectorBuffer;
     end = cursor + 2048;
     count = 0;
@@ -67,7 +67,7 @@ int DS_newmedia(void) {
             name[record->nameLength] = 0;
             cursor += record->nameLength + 8 + (record->nameLength & 1);
             if (CD_debug > 1)
-                printf(D_80011FA0, g_DslDirectoryCache[count].sector,
+                printf(g_DsDirectoryEntryFormat, g_DslDirectoryCache[count].sector,
                        g_DslDirectoryCache[count].directoryId,
                        g_DslDirectoryCache[count].parentDirectoryId, name);
             if (++count >= DSL_MAX_DIR) break;
@@ -78,7 +78,7 @@ int DS_newmedia(void) {
 finished:
     if (count < DSL_MAX_DIR) g_DslDirectoryCache[count].parentDirectoryId = 0;
     g_DsCachedDirectory = 0;
-    if (CD_debug > 1) printf(D_80011FB4, count);
+    if (CD_debug > 1) printf(g_DsDirectoryCountFormat, count);
     return 1;
 }
 
@@ -109,10 +109,10 @@ int DS_cachefile(int directory) {
     if (directory == g_DsCachedDirectory) return 1;
     if (ds_read(1, (g_DslDirectoryCache + directory)[-1].sector,
                 g_DsFileSectorBuffer) != 1) {
-        if (CD_debug > 0) puts(D_80011FD8);
+        if (CD_debug > 0) puts(g_DsCacheFileDirNotFoundText);
         return -1;
     }
-    if (CD_debug > 1) puts(D_80011FF8);
+    if (CD_debug > 1) puts(g_DsCacheFileSearchingText);
     cursor = (IsoDirectoryRecord *)g_DsFileSectorBuffer;
     for (count = 0; cursor < (IsoDirectoryRecord *)&g_DsFileSectorBuffer[2048];) {
         if (cursor->recordLength == 0) break;
@@ -121,17 +121,17 @@ int DS_cachefile(int directory) {
         memcpy(&g_DslFileCache[count].size, cursor->sizeLE, 4);
         switch (count) {
         case 0:
-            memcpy(g_DslFileCache[0].name, D_80012014, 2);
+            memcpy(g_DslFileCache[0].name, g_DsDotName, 2);
             break;
         case 1:
-            memcpy(g_DslFileCache[1].name, D_80012018, 3);
+            memcpy(g_DslFileCache[1].name, g_DsDotDotName, 3);
             break;
         default:
             memcpy(g_DslFileCache[count].name, cursor->name, cursor->nameLength);
             g_DslFileCache[count].name[cursor->nameLength] = 0;
         }
         if (CD_debug > 1)
-            printf(D_8001201C, g_DslFileCache[count].pos.minute,
+            printf(g_DsCacheEntryFormat, g_DslFileCache[count].pos.minute,
                    g_DslFileCache[count].pos.second,
                    g_DslFileCache[count].pos.sector,
                    g_DslFileCache[count].size, g_DslFileCache[count].name);
@@ -140,7 +140,7 @@ int DS_cachefile(int directory) {
     }
     g_DsCachedDirectory = directory;
     if (count < DSL_MAX_FILE) g_DslFileCache[count].name[0] = 0;
-    if (CD_debug > 1) printf(D_80012038, count);
+    if (CD_debug > 1) printf(g_DsCacheCountFormat, count);
     return 1;
 }
 

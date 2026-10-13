@@ -9,8 +9,8 @@ extern u32 *D_8009CE00;
 extern u8 *D_8009D2F0[];
 extern struct BattleEntity *D_8009D254;
 extern u32 g_GameStateFlags;
-extern u32 D_800A77F0[];
-extern int (*D_800910A0[])(u32 **);
+extern u32 g_ScriptVariableBank[];
+extern int (*g_ScriptQueueOpcodeHandlers[])(u32 **);
 
 void Script_RunQueue(void);
 

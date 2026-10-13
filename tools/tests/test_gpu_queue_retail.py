@@ -23,8 +23,8 @@ class GpuQueueRetailTests(unittest.TestCase):
         entry, stop, state = 0x80074C14, 0x80010000, 0x8009574C
         print_cb, reset_cb, table = 0x80010100, 0x80010110, 0x80100000
         dma_cb, format_addr = 0x80073CF4, 0x80011840
-        symbols = dict(D_8009574C=state, g_GpuCallbacks=0x80095744,
-                       g_GpuDebugPrintf=0x80095748, D_80011840=format_addr, DMACallback=dma_cb)
+        symbols = dict(g_GpuSystemState=state, g_GpuCallbacks=0x80095744,
+                       g_GpuDebugPrintf=0x80095748, g_SetGraphQueFormat=format_addr, DMACallback=dma_cb)
         retail = (ROOT/'assets/USA/main.exe').read_bytes()[0x65414:0x654B8]
         with tempfile.TemporaryDirectory() as directory:
             compiled = linked_function_bytes(

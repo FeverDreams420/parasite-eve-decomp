@@ -26,19 +26,19 @@ typedef char layout[sizeof(Vector)==8 &&
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_behavior(self):
         source = '#include <assert.h>\n#include <limits.h>\n' + host_unit(FUNCTION) + r'''
-int D_800E27EC, D_800F3428;
-GteSineWord D_800966EC[4096];
-RenderEffectParameters D_800F3368;
-unsigned short D_800E1204[8];
+int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag;
+GteSineWord rcossin_tbl[4096];
+RenderEffectParameters g_FieldFxSpriteParams;
+unsigned short g_FieldFxPaletteTable[8];
 static Vector position={12,34,56,78};
 static int cluts,draws,expectedPalette,expectedSize,shadeIndex;
 u_short GetClut(int x, int y) {
     assert(cluts++==0 && !draws && x==0 && y==expectedPalette);
-    D_800E27EC=999;
-    D_800966EC[shadeIndex].word=0x1234FFE0;
+    g_FieldFxCurrentAge=999;
+    rcossin_tbl[shadeIndex].word=0x1234FFE0;
     return 0xF123;
 }
-void func_800CEE20(struct GteShortVector *p, struct GteRotation *rotation,
+void FieldFx_DrawShapeQuads(struct GteShortVector *p, struct GteRotation *rotation,
                   int w, int h, int tile, int clut, int flag, int shade,
                   struct RenderColor *color) {
     assert(cluts==1 && draws++==0 && p==&position && rotation==0);
@@ -50,19 +50,19 @@ int main(void) {
     int words[]={0,0x12347FFF,-2049,0x1234FFFF};
     int i,j,kind,variant,frame,sizeIndex;
     for(i=0;i<6;++i) {
-        D_800E27EC=times[i];
+        g_FieldFxCurrentAge=times[i];
         assert(func_80197230(1,&position)==(times[i]>=8));
     }
     assert(!cluts && !draws);
     for(kind=0;kind<8;++kind) for(variant=0;variant<2;++variant)
         for(i=0;i<=8;++i) for(j=0;j<4;++j) {
-            D_800E27EC=i; frame=i-1;
+            g_FieldFxCurrentAge=i; frame=i-1;
             sizeIndex=(((unsigned int)frame<<9)&0x3E00)/4;
             shadeIndex=(((unsigned int)frame<<10)&0x3C00)/4;
-            D_800966EC[sizeIndex].word=words[j];
+            rcossin_tbl[sizeIndex].word=words[j];
             expectedSize=(short)(words[j]+2048);
-            D_800F3368.palette=kind; D_800F3428=variant;
-            D_800E1204[kind]=65535;
+            g_FieldFxSpriteParams.palette=kind; g_FieldFxAltPaletteFlag=variant;
+            g_FieldFxPaletteTable[kind]=65535;
             expectedPalette=65535+(kind==4 && variant ? 9:5);
             cluts=draws=0;
             assert(func_80197230(2,&position)==0 && cluts==1 && draws==1);

@@ -26,8 +26,8 @@ extern PmTables g_PmTables;
  * read on demand from PE.IMG sectors g_SceneAssetLbaTbl[0..1] to g_PmTaskProgramBuffer. */
 extern u16 g_SceneAssetLbaTbl[2];
 extern void *g_PmTaskProgramBuffer;
-extern u8 D_801F1BD8[], D_801F1C58[], D_801F1D00[], D_801F1D8C[];
-extern u8 D_801F1E18[], D_801F1EA4[], D_801F1EF0[];
+extern u8 g_FieldFxTaskProgramCmd108[], g_FieldFxTaskProgramCmd109[], g_FieldFxTaskProgramCmd110[], g_FieldFxTaskProgramCmd111[];
+extern u8 g_FieldFxTaskProgramCmd112[], g_FieldFxTaskProgramCmd113[], g_FieldFxTaskProgramCmd114[];
 
 int Pm_AllocSlot(unsigned int command);
 int Pm_FreeSlot(int slot);

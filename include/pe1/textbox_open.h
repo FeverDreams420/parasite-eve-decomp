@@ -10,7 +10,7 @@ typedef struct TextboxRect {
     s16 x, y, width, height;
 } TextboxRect;
 
-extern TextboxRect D_8009CE98;
+extern TextboxRect g_TextboxPendingRect;
 extern u8 g_DialogueChoiceCursor;
 extern s8 g_MenuEquipSlotIndex;
 extern u8 g_PlayerMovementEnabled;

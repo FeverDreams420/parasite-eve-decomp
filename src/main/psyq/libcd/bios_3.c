@@ -16,7 +16,7 @@ int CD_cw(int command, void *parameters, u8 *result, int mode)
   opcode = command;
   if (CD_debug >= 2)
   {
-    printf(D_80011BB4, g_CdCommandNames[(u8) opcode]);
+    printf(g_CdCommandTraceFormat, g_CdCommandNames[(u8) opcode]);
   }
   payload = parameter;
   i = 0;
@@ -24,7 +24,7 @@ int CD_cw(int command, void *parameters, u8 *result, int mode)
   {
     if (CD_debug > 0)
     {
-      printf(D_80011BBC, g_CdCommandNames[(u8) opcode]);
+      printf(g_CdNoParamFormat, g_CdCommandNames[(u8) opcode]);
     }
     return -2;
   }
@@ -70,9 +70,9 @@ int CD_cw(int command, void *parameters, u8 *result, int mode)
   {
     return 0;
   }
-  D_800A3478 = VSync(-1) + 0x3C0;
-  D_800A347C = 0;
-  D_800A3480 = D_80011BCC;
+  g_CdTimeoutDeadlineVsync = VSync(-1) + 0x3C0;
+  g_CdTimeoutPollCount = 0;
+  g_CdTimeoutFuncName = g_CdCwName;
   if (!g_CdInterruptEvents.sync)
   {
     const char **commands = g_CdCommandNames;
@@ -92,7 +92,7 @@ int CD_cw(int command, void *parameters, u8 *result, int mode)
     }
     while (!(*((volatile u8 *) sync)));
   }
-  copy_result(result, D_800A3460);
+  copy_result(result, g_CdSyncResult);
   {
     unsigned long status = 0;
     unsigned short event = g_CdInterruptEvents.sync;

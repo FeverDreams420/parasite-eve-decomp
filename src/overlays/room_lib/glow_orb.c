@@ -110,10 +110,10 @@ void RoomEffect_GlowOrbDraw(RoomGlowOrbObject *object, u8 *slot, RoomGlowOrb *or
     GteMatrix matrix;
     GteShortVector point;
 
-    func_800C2EAC(0);
-    func_800C3098(0x10);
-    func_800C2FF0(0x40, 0x20);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(0);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteCellSize(0x40, 0x20);
+    FieldFx_SetSpriteBlendMode(2);
     if (orb->state == 1) {
         GteVector scale;
 
@@ -128,7 +128,7 @@ void RoomEffect_GlowOrbDraw(RoomGlowOrbObject *object, u8 *slot, RoomGlowOrb *or
         matrix.t[2] = orb->z - orb->offset.x;
         scale = (GteVector){ orb->size >> 1, 0x251, 0x251 };
         ScaleMatrix(&matrix, &scale);
-        func_800C42A4((FieldGlowSprite *)&g_RoomGlowOrbSprite, &matrix, 0);
+        FieldFx_DrawGlowSprite((FieldGlowSprite *)&g_RoomGlowOrbSprite, &matrix, 0);
 
         g_RoomGlowOrbSprite.r = 0x20;
         g_RoomGlowOrbSprite.g = 0x20;
@@ -142,13 +142,13 @@ void RoomEffect_GlowOrbDraw(RoomGlowOrbObject *object, u8 *slot, RoomGlowOrb *or
 
             size = (GteVector){ orb->size, 0x448, 0x448 };
             ScaleMatrix(&matrix, &size);
-            func_800C42A4((FieldGlowSprite *)&g_RoomGlowOrbSprite, &matrix, 0);
+            FieldFx_DrawGlowSprite((FieldGlowSprite *)&g_RoomGlowOrbSprite, &matrix, 0);
         }
 
         point.x = ((RoomSparkBattleEntity *)D_8009D254)->x.part.integer;
         point.y = ((RoomSparkBattleEntity *)D_8009D254)->y.part.integer;
         point.z = ((RoomSparkBattleEntity *)D_8009D254)->z.part.integer;
-        if (func_800C61A8(&point, &matrix) != 0 && FieldFx_GetStatus(object) == 3) {
+        if (FieldFx_IsPointInSpriteQuad(&point, &matrix) != 0 && FieldFx_GetStatus(object) == 3) {
             ((RoomSparkBattleEntity *)D_8009D254)->actor->flags |= 0x4000;
             if (object->link != 0) {
                 *object->link->target |= 0x80000000;
@@ -160,7 +160,7 @@ void RoomEffect_GlowOrbDraw(RoomGlowOrbObject *object, u8 *slot, RoomGlowOrb *or
         g_RoomGlowOrbSprite.g = 0xF0;
         g_RoomGlowOrbSprite.b = 0x78;
         matrix.t[1] = orb->y - 0x100;
-        func_800C42A4((FieldGlowSprite *)&g_RoomGlowOrbSprite, &matrix, 0);
+        FieldFx_DrawGlowSprite((FieldGlowSprite *)&g_RoomGlowOrbSprite, &matrix, 0);
 
         matrix.t[0] = orb->x - orb->offset.x;
         matrix.t[1] = orb->y - orb->offset.y;
@@ -169,7 +169,7 @@ void RoomEffect_GlowOrbDraw(RoomGlowOrbObject *object, u8 *slot, RoomGlowOrb *or
         g_RoomGlowOrbSprite.g = 0x78;
         g_RoomGlowOrbSprite.b = 0x3C;
         matrix.t[1] = orb->y - 0x100;
-        func_800C42A4((FieldGlowSprite *)&g_RoomGlowOrbSprite, &matrix, 0);
+        FieldFx_DrawGlowSprite((FieldGlowSprite *)&g_RoomGlowOrbSprite, &matrix, 0);
 
         matrix.t[0] = orb->x - orb->offset.x * 2;
         matrix.t[1] = orb->y - orb->offset.y * 2;
@@ -178,7 +178,7 @@ void RoomEffect_GlowOrbDraw(RoomGlowOrbObject *object, u8 *slot, RoomGlowOrb *or
         g_RoomGlowOrbSprite.g = 0x3C;
         g_RoomGlowOrbSprite.b = 0x1E;
         matrix.t[1] = orb->y - 0x100;
-        func_800C42A4((FieldGlowSprite *)&g_RoomGlowOrbSprite, &matrix, 0);
+        FieldFx_DrawGlowSprite((FieldGlowSprite *)&g_RoomGlowOrbSprite, &matrix, 0);
     }
 }
 
@@ -198,7 +198,7 @@ void RoomEffect_GlowOrbUpdate(void *owner, RoomFallingParticleControl *control,
     }
 
     state->frame++;
-    if (Geo_PointInPoly((s16)state->x << 16, (s16)state->z << 16, D_8009D248, D_8009D1CC)) {
+    if (Geo_PointInPoly((s16)state->x << 16, (s16)state->z << 16, g_FloorPolygonVertices, g_FloorPolygonVertexCount)) {
         if ((s8)state->frame % 3 == 0) {
             spawn = FieldFx_StartSlot(owner, 3, (unsigned short *)g_RoomSpawnLayout, g_RoomInitList);
             if (spawn != 0) {
@@ -209,7 +209,7 @@ void RoomEffect_GlowOrbUpdate(void *owner, RoomFallingParticleControl *control,
         }
     }
 
-    if (!Geo_PointInPoly((s16)state->x << 16, (s16)state->z << 16, D_8009D248, D_8009D1CC)) {
+    if (!Geo_PointInPoly((s16)state->x << 16, (s16)state->z << 16, g_FloorPolygonVertices, g_FloorPolygonVertexCount)) {
         control->state = 2;
         state->active = 0;
     }
@@ -225,10 +225,10 @@ void RoomEffect_GlowOrbFlashDraw(void *object, void *control, RoomGlowOrbFlash *
     GteVector scale;
     s16 *depth;
 
-    func_800C2EAC(0);
-    func_800C3098(0x10);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(0);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteBlendMode(2);
 
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -250,7 +250,7 @@ void RoomEffect_GlowOrbFlashDraw(void *object, void *control, RoomGlowOrbFlash *
     matrix.t[2] = flash->z;
     scale = s_GlowOrbFlashScale;
     ScaleMatrix(&matrix, &scale);
-    func_800C42A4((FieldGlowSprite *)&g_RoomGlowOrbFlashSprite, &matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)&g_RoomGlowOrbFlashSprite, &matrix, 1);
 }
 
 void RoomEffect_GlowOrbFlashUpdate(void *object, RoomFallingParticleControl *control,

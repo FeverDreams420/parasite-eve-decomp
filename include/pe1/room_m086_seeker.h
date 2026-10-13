@@ -97,7 +97,7 @@ typedef struct RoomM086SpawnChannel {
 extern RoomM086Offset D_8018EFF4;
 extern RoomM086Offset D_8018EFFC;
 extern u8 *D_80190B88;
-extern u16 D_800E1208;
+extern u16 g_FieldFxPaletteEntry2;
 
 int func_8018F004(int mode, RoomM086Seeker *seeker, RoomM086SeekerParams *params);
 int rand(void);

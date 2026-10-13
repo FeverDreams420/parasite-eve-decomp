@@ -69,9 +69,9 @@ extern unsigned char g_MenuEquipSlotGlyphs[][8];
 extern short g_MenuSortToggleGlyphs[];
 /* Item icon glyph table for the current list (Text_LookupTable4 entry). */
 extern unsigned char *g_MenuItemIconGlyphTable;
-extern u8 D_800922B8[];
-extern u8 D_800922BC[];
-extern u8 D_800922C4[];
+extern u8 g_MenuModSlotIconIndexOffsetByView[];
+extern u8 g_MenuModSlotFirstGlyphs[];
+extern u8 g_MenuModSlotSecondGlyphs[];
 extern u8 D_800922CC[];
 
 #endif

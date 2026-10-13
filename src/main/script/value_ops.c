@@ -252,7 +252,7 @@ int Script_DispatchCmd(int **args) {
                 gte_stlzcr(args[1]);
                 index -= *args[1];
             }
-            *args[2] = D_800A7770[index];
+            *args[2] = g_FieldPadHeldFrameCounts[index];
         } else {
             *args[2] = 0;
         }

@@ -22,14 +22,14 @@ class CheckRectTests(unittest.TestCase):
         source = 'extern void test_debug(char *, ...);\n' + source
         source = source.replace('g_GpuDebugPrintf(format, name);',
                                 'test_debug(format, name);')
-        source = source.replace('g_GpuDebugPrintf(D_800118A4, x, y, width, height);',
-                                'test_debug(D_800118A4, x, y, width, height);')
+        source = source.replace('g_GpuDebugPrintf(g_RectCoordsFormat, x, y, width, height);',
+                                'test_debug(g_RectCoordsFormat, x, y, width, height);')
         harness = source + r'''
 #include <assert.h>
 #include <stdarg.h>
 #include <stdint.h>
-GpuDebugState D_8009574C;
-char D_80011898[] = "invalid", D_800118B8[] = "all", D_800118A4[] = "fields";
+GpuDebugState g_GpuSystemState;
+char g_BadRectFormat[] = "invalid", g_RectNameFormat[] = "all", g_RectCoordsFormat[] = "fields";
 static char name[] = "test";
 static RECT before;
 static int calls;
@@ -37,11 +37,11 @@ void test_debug(char *format, ...) {
     va_list ap;
     va_start(ap, format);
     if (calls == 0) {
-        assert(format == (D_8009574C.queueState.debugLevel == 1
-            ? D_80011898 : D_800118B8));
+        assert(format == (g_GpuSystemState.queueState.debugLevel == 1
+            ? g_BadRectFormat : g_RectNameFormat));
         assert(va_arg(ap, char *) == name);
     } else {
-        assert(calls == 1 && format == D_800118A4);
+        assert(calls == 1 && format == g_RectCoordsFormat);
         assert(va_arg(ap, int) == before.x);
         assert(va_arg(ap, int) == before.y);
         assert(va_arg(ap, int) == before.w);
@@ -54,10 +54,10 @@ int main(void) {
     static const short values[] = {-32768, -1, 0, 1, 239, 240, 241,
                                     319, 320, 321, 32767};
     int a, b, c, d, level;
-    D_8009574C.width = 320;
-    D_8009574C.height = 240;
+    g_GpuSystemState.width = 320;
+    g_GpuSystemState.height = 240;
     for (level = 0; level < 5; ++level) {
-        D_8009574C.queueState.debugLevel = level == 4 ? 255 : level;
+        g_GpuSystemState.queueState.debugLevel = level == 4 ? 255 : level;
         for (a = 0; a < 11; ++a) for (b = 0; b < 11; ++b)
         for (c = 0; c < 11; ++c) for (d = 0; d < 11; ++d) {
             RECT rect = {values[a], values[b], values[c], values[d]};

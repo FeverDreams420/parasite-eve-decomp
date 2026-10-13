@@ -37,7 +37,7 @@ typedef struct GpuQueueEntry {
     /* 0x0C */ u32 packet[21];
 } GpuQueueEntry;
 
-extern GpuQueueEntry D_800BD030[64];
+extern GpuQueueEntry g_GpuDmaQueue[64];
 /* A queue entry addressed by its byte offset, as _exeque computes it. */
 typedef union GpuQueueEntryAddress {
     GpuQueueEntry *entry;

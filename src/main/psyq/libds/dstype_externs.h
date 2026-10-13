@@ -1,4 +1,4 @@
 #ifndef PE1_EXT_F3C37B001F56
 #define PE1_EXT_F3C37B001F56
-extern char D_8001205C[];
+extern char g_DsIso9660Id[];
 #endif /* PE1_EXT_F3C37B001F56 */

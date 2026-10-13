@@ -91,7 +91,7 @@ void Boot_RunFrame(void)
         state = &g_GameState;
         fade = (RenderTintTargetView *)&D_800BCFE8;
         do {
-            D_8009CDD8 = 0;
+            g_DrawPacketOffset = 0;
             *scene_flags = 0;
             Field_HandleStateTransition();
             flags = g_GameStateFlags;

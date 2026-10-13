@@ -16,7 +16,7 @@ typedef union EntityPoolAddress {
 } EntityPoolAddress;
 
 /* Entity pool reset and free-list construction share the pool globals and the
- * 14-entry 0x280-byte entity record block at D_800BEA90. */
+ * 14-entry 0x280-byte entity record block at g_EntityPool. */
 
 int g_FieldMoveLock;
 FieldActor *g_EntityFreeListHead;
@@ -54,7 +54,7 @@ void Entity_ResetAllPools(void)
     } while (i < 0x40);
 
     i = 0;
-    base.bytes = D_800BEA90;
+    base.bytes = g_EntityPool;
     row = 0;
     do {
         col = 0;
@@ -86,7 +86,7 @@ void Entity_InitFreePool(void)
     char *next;
 
     i = 0;
-    base = D_800BEA90;
+    base = g_EntityPool;
     next = base + 0x280;
     offset = 0;
     g_EntityFreePoolCount = 0;
@@ -105,11 +105,11 @@ void Entity_InitFreePool(void)
     do {
         EntityAllocationAddress block;
 
-        block.entry = D_800A7620;
+        block.entry = g_EntityAllocationTable;
         block.word += offset;
         block.entry->address = 0;
         offset += sizeof(EntityAllocationBlock);
-    } while ((unsigned int)offset < sizeof(D_800A7620));
+    } while ((unsigned int)offset < sizeof(g_EntityAllocationTable));
 
     g_PlayerEntity = 0;
 }

@@ -3,30 +3,30 @@
 
 #include "common.h"
 
-/* Texture page slot table; D_800E11E6 and D_800E11F6 are entries 1 and 9. */
-extern u16 D_800E11E4[];
-extern u16 D_800E11E6;
-extern u16 D_800E11F6;
+/* Texture page slot table; g_FieldFxTpageSlot1 and g_FieldFxTpageSlot9 are entries 1 and 9. */
+extern u16 g_FieldFxTpageSlots[];
+extern u16 g_FieldFxTpageSlot1;
+extern u16 g_FieldFxTpageSlot9;
 /* Palette (CLUT) table indexed by effect kind. */
-extern u16 D_800E1204[];
+extern u16 g_FieldFxPaletteTable[];
 /* Slot table entries 2 and 3. */
-extern u16 D_800E11E8, D_800E11EA;
+extern u16 g_FieldFxTpageSlot2, g_FieldFxTpageSlot3;
 /* Slot table entries 4 and 11 and palette table entry 3. */
-extern u16 D_800E11EC, D_800E11FA;
-extern u16 D_800E120A;
+extern u16 g_FieldFxTpageSlot4, g_FieldFxTpageSlot11;
+extern u16 g_FieldFxPaletteEntry3;
 
 /* View of one of those entries: a few effects read it as a one-field
  * record, which GCC orders after their particle-record stores. Effects that
- * index past an entry read the slot table itself (D_800E11E4[3] for
- * D_800E11EA). */
+ * index past an entry read the slot table itself (g_FieldFxTpageSlots[3] for
+ * g_FieldFxTpageSlot3). */
 typedef struct FieldTextureSlot {
     u16 value;
 } FieldTextureSlot;
 #define TEXTURE_SLOT_RECORD(slot) (((FieldTextureSlot *)&(slot))->value)
 
-/* Texture page table indexed by a slot from D_800E11E4. */
-extern u16 D_800E2850[];
+/* Texture page table indexed by a slot from g_FieldFxTpageSlots. */
+extern u16 g_FieldFxTpageTable[];
 /* Selects the alternate palette for effect kind 4 when set. */
-extern int D_800F3428;
+extern int g_FieldFxAltPaletteFlag;
 
 #endif /* PE1_FIELD_TEXTURE_TABLES_H */

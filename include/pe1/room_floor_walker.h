@@ -96,7 +96,7 @@ typedef struct RoomFloorWalkerTarget {
     s32 pos[3];                   /* 0x28 */
 } RoomFloorWalkerTarget;
 
-/* The rsin/rcos table (D_800966EC) and the player entity (D_8009D254) are
+/* The rsin/rcos table (rcossin_tbl) and the player entity (D_8009D254) are
  * declared by the room library header and read through the views above;
  * the floor height is g_RoomFloorY (pe1/room_floor.h). */
 

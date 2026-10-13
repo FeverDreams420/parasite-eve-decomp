@@ -8,7 +8,7 @@
 #include "pe1/render_prim.h"
 #include "pe1/render_tint.h"
 
-/* Field engine history trail (func_800D1384): a ribbon of gouraud quads
+/* Field engine history trail (FieldFx_DrawHistoryTrail): a ribbon of gouraud quads
  * through the last `count` head/tail point pairs, fading out towards the
  * oldest pair. The `pad` halves of both points flag a recorded pair. */
 

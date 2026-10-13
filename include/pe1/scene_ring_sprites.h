@@ -27,7 +27,7 @@ typedef struct SceneRingSpritesState {
     /* 0x0D */ u8 reserved0D;  /* set to 156 by the init, never read */
 } SceneRingSpritesState;
 
-/* Shaded ring parameter block drawn by func_800C4FC4. */
+/* Shaded ring parameter block drawn by FieldFx_DrawShadedRing. */
 typedef struct SceneRingShade {
     /* 0x00 */ u8 pad00[0x14];
     /* 0x14 */ s16 depth;

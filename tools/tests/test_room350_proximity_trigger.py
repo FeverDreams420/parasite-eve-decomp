@@ -21,7 +21,7 @@ class Room350ProximityTriggerTests(unittest.TestCase):
 /* The player is read both as a FieldActor (state flags) and through the
  * unit's WorldActor view (x/z); both share the leading state pointer. */
 FieldActor *g_PlayerEntity;
-FieldFxObjectPrefix *D_800F32D0;
+FieldFxObjectPrefix *g_FieldFxOwner;
 short D_8019A86C;
 RoomFloorY g_RoomFloorY[1];
 static WorldActor world[2];
@@ -34,7 +34,7 @@ int Math_IntSqrt(int squared) {
     assert(calls++ == 0 && squared == expectedSquared);
     if (mutate) {
         g_PlayerEntity = (FieldActor *)&world[1];
-        D_800F32D0 = (FieldFxObjectPrefix *)roomSlots[1];
+        g_FieldFxOwner = (FieldFxObjectPrefix *)roomSlots[1];
         D_8019A86C = 77;
     }
     return distanceResult;
@@ -60,7 +60,7 @@ int main(void) {
             roomSlots[i][2] = &rooms[i];
         }
         g_PlayerEntity = (FieldActor *)&world[0];
-        D_800F32D0 = (FieldFxObjectPrefix *)roomSlots[0];
+        g_FieldFxOwner = (FieldFxObjectPrefix *)roomSlots[0];
         world[0].x = point[4] + dx; world[0].z = point[6] + dz;
         g_RoomFloorY[0].y = 700; point[5] = 188 + height;
         D_8019A86C = gate ? 30 : 0;
@@ -81,7 +81,7 @@ int main(void) {
                    (changed && hasActor ? 0x80000000U : 0)));
         }
     }
-    D_8019A86C = -1; g_PlayerEntity = 0; D_800F32D0 = 0; calls = 0;
+    D_8019A86C = -1; g_PlayerEntity = 0; g_FieldFxOwner = 0; calls = 0;
     assert(func_8019721C(0, 10) == 0 && calls == 0);
     return 0;
 }

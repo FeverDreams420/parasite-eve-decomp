@@ -30,15 +30,15 @@ typedef char layout_b[sizeof(GteShortVector)==8 && OFF(GteShortVector,z)==4 ? 1:
     def test_behavior(self):
         source = '#include <assert.h>\n#include <limits.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
 typedef RoomSpiralDropSparkCallbackView Particle;
-int D_800E27EC, D_800F3428;
-unsigned short D_800E1204[8];
-RenderEffectParameters D_800F3368;
+int g_FieldFxCurrentAge, g_FieldFxAltPaletteFlag;
+unsigned short g_FieldFxPaletteTable[8];
+RenderEffectParameters g_FieldFxSpriteParams;
 char D_8019948C[1];
 static Particle particle;
 static int generated, cluts, draws, expectedPalette, mutate;
-void func_800CF3AC(void *table, void *out, int frame) {
+void FieldFx_SampleColorTrack(void *table, void *out, int frame) {
     int *color = out;
-    assert(table == D_8019948C && frame == D_800E27EC);
+    assert(table == D_8019948C && frame == g_FieldFxCurrentAge);
     assert(generated++ == 0 && cluts == 0 && draws == 0);
     color[0] = 123; color[1] = 456;
     if (mutate) { particle.x = 65535; particle.y = 32768; particle.z = 32767; }
@@ -48,7 +48,7 @@ u_short GetClut(int x, int y) {
     assert(x == 0 && y == expectedPalette);
     return 0xCAFE;
 }
-void func_800CEE20(struct GteShortVector *p, struct GteRotation *rotation,
+void FieldFx_DrawShapeQuads(struct GteShortVector *p, struct GteRotation *rotation,
                   int w, int h, int tile, int clut, int flag, int shade,
                   struct RenderColor *data) {
     int *color = data;
@@ -67,7 +67,7 @@ int main(void) {
     for (i=0; i<sizeof(frames)/sizeof(frames[0]); ++i)
         for (j=0; j<sizeof(speeds)/sizeof(speeds[0]); ++j) {
             particle.x=12; particle.y=3; particle.z=34; particle.speed=speeds[j];
-            D_800E27EC=frames[i];
+            g_FieldFxCurrentAge=frames[i];
             assert(func_80192DA0(1, (RoomSpiralDropSparkRecord *)&particle) == (frames[i]>=24));
             assert(particle.y == (unsigned short)(3-speeds[j]));
             assert(particle.speed == (unsigned short)(speeds[j]-1));
@@ -76,8 +76,8 @@ int main(void) {
     assert(!generated && !cluts && !draws);
     for (kind=0; kind<8; ++kind) for (variant=0; variant<2; ++variant) {
         generated=cluts=draws=0; mutate=variant;
-        D_800F3368.palette=kind; D_800F3428=variant;
-        D_800E1204[kind]=65535;
+        g_FieldFxSpriteParams.palette=kind; g_FieldFxAltPaletteFlag=variant;
+        g_FieldFxPaletteTable[kind]=65535;
         expectedPalette=65535+(kind==4 && variant ? 10:6);
         assert(func_80192DA0(2, (RoomSpiralDropSparkRecord *)&particle)==0);
         assert(generated==1 && cluts==1 && draws==1);

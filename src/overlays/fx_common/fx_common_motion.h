@@ -21,7 +21,7 @@ extern s16 g_FxCommonMotionRemaining0;
 extern s16 g_FxCommonMotionRemaining1;
 extern u32 D_8009D1F4;
 extern u32 g_FieldPadBits;
-extern s8 D_800B0DB5;
+extern s8 g_SceneAudioSlot0Handle;
 extern void *g_AkaoBgmHandle[1];
 extern s32 D_8019C018;
 extern s32 D_8019C01C;
@@ -68,7 +68,7 @@ extern FxCommonTransformNode *g_FxCommonPathNodes[6];
 extern GteShortVector D_8019BFC4[];
 extern RoomSpriteMatrix D_8019CDF0;
 extern s8 D_800B0DB2;
-extern s8 D_800B0DB4;
+extern s8 g_SceneAudioSlot0Key;
 
 void Akao_Cmd_C1_WithSlot(int channel, int value, int mode);
 void func_80196498(void);
@@ -117,7 +117,7 @@ void func_8018F344(GteMatrix *out, GteShortVector *eye,
                    GteShortVector *target, GteVector *up);
 void Akao_Cmd_F0(void);
 void Akao_Cmd_F1(void);
-int func_80038D48(void);
+int Render_ConsumeFontShuffleSeed(void);
 s16 func_801958D4(s16 resourceId, u8 action);
 void FxCommon_SetMotionEndpoints(FxCommonShortVec3 *a, FxCommonShortVec3 *b, int bi, int ai);
 void func_80195D3C(void);

@@ -14,7 +14,7 @@
 #include "pe1/gte_types.h"
 #include "pe1/psyq_libc.h"
 
-int func_800C5EB0(char *data, void *unused, int *hit) {
+int FieldFx_UpdateStripCollision(char *data, void *unused, int *hit) {
     GteShortVector local[5];
     FieldTexturedStrip *data_s3 = (FieldTexturedStrip *)data;
     register FieldTexturedChainNode *entry asm("$17");
@@ -57,7 +57,7 @@ int func_800C5EB0(char *data, void *unused, int *hit) {
                 local[2].y = 0;
                 local[3].y = 0;
 
-                if (func_800C6B20(local) == 1) {
+                if (FieldFx_IsPlayerInQuadXZ(local) == 1) {
                     *hit_s4 = 1;
                 }
 
@@ -79,7 +79,7 @@ int func_800C5EB0(char *data, void *unused, int *hit) {
     return i;
 }
 
-void func_800C608C(int scale, u8 *src, u8 *dst) {
+void FieldFx_ScaleColor(int scale, u8 *src, u8 *dst) {
     scale = (short)scale;
 
     if (scale != 0x80) {
@@ -115,7 +115,7 @@ void func_800C608C(int scale, u8 *src, u8 *dst) {
     }
 }
 
-int func_800C6148(FieldActor *obj, s16 *pos, unsigned short radius) {
+int FieldFx_IsActorWithinRadius(FieldActor *obj, s16 *pos, unsigned short radius) {
     int delta[3];
     int x = Pe1Fixed_Integer(&obj->pos_x) - pos[0];
     int z;
@@ -130,16 +130,16 @@ int func_800C6148(FieldActor *obj, s16 *pos, unsigned short radius) {
     return x_sq + z_sq < radius_sq;
 }
 
-int func_800C653C(void *arg0, GteShortVector *verts);
+int FieldFx_IsPointInQuadXZ(void *arg0, GteShortVector *verts);
 
 
-int func_800C61A8(void *arg0, GteMatrix *matrix) {
+int FieldFx_IsPointInSpriteQuad(void *arg0, GteMatrix *matrix) {
     GteShortVector verts[4];
 
-    ApplyMatrixSV(matrix, &D_800F3310[0], &verts[0]);
-    ApplyMatrixSV(matrix, &D_800F3310[1], &verts[1]);
-    ApplyMatrixSV(matrix, &D_800F3310[2], &verts[2]);
-    ApplyMatrixSV(matrix, &D_800F3310[3], &verts[3]);
+    ApplyMatrixSV(matrix, &g_FieldFxCellQuad[0], &verts[0]);
+    ApplyMatrixSV(matrix, &g_FieldFxCellQuad[1], &verts[1]);
+    ApplyMatrixSV(matrix, &g_FieldFxCellQuad[2], &verts[2]);
+    ApplyMatrixSV(matrix, &g_FieldFxCellQuad[3], &verts[3]);
 
     verts[0].x += matrix->t[0];
     verts[1].x += matrix->t[0];
@@ -156,14 +156,14 @@ int func_800C61A8(void *arg0, GteMatrix *matrix) {
     verts[2].z += matrix->t[2];
     verts[3].z += matrix->t[2];
 
-    return func_800C653C(arg0, verts) != 0;
+    return FieldFx_IsPointInQuadXZ(arg0, verts) != 0;
 }
 
 /* Floor-triangle containment in XZ: OP cross products of each edge with the
  * point relative to its corner; the point is inside when all Y components
  * agree in sign. */
 
-int func_800C62DC(GteShortVector *point, GteShortVector *tri)
+int FieldFx_IsPointInTriangleXZ(GteShortVector *point, GteShortVector *tri)
 {
     FieldTriScratch *second;
     FieldTriScratch *third;
@@ -177,10 +177,10 @@ int func_800C62DC(GteShortVector *point, GteShortVector *tri)
     FIELD_TRI_SCRATCH->rel[2].y = 0;
     FIELD_TRI_SCRATCH->edge[0].x = tri[1].x - tri[0].x;
     FIELD_TRI_SCRATCH->edge[0].z = tri[1].z - tri[0].z;
-    D_800E2844 = FIELD_TRI_SCRATCH;
+    g_FieldFxTriScratch = FIELD_TRI_SCRATCH;
     FIELD_TRI_SCRATCH->rel[0].x = point->x - tri[0].x;
     FIELD_TRI_SCRATCH->rel[0].z = point->z - tri[0].z;
-    gte_ldopv1_psyq(&D_800E2844->edge[0]);
+    gte_ldopv1_psyq(&g_FieldFxTriScratch->edge[0]);
     gte_ldopv2(&FIELD_TRI_SCRATCH->rel[0]);
     gte_cop2_hazard_slot();
     gte_op0();
@@ -190,7 +190,7 @@ int func_800C62DC(GteShortVector *point, GteShortVector *tri)
     FIELD_TRI_SCRATCH->rel[1].z = point->z - tri[1].z;
     gte_stlvnl(&FIELD_TRI_SCRATCH->cross[0]);
 
-    second = D_800E2844;
+    second = g_FieldFxTriScratch;
     gte_ldopv1_psyq(&second->edge[1]);
     gte_ldopv2(&second->rel[1]);
     gte_cop2_hazard_slot();
@@ -201,25 +201,25 @@ int func_800C62DC(GteShortVector *point, GteShortVector *tri)
     second->rel[2].z = point->z - tri[2].z;
     gte_stlvnl(&second->cross[1]);
 
-    third = D_800E2844;
+    third = g_FieldFxTriScratch;
     gte_ldopv1_psyq(&third->edge[2]);
     gte_ldopv2(&third->rel[2]);
     gte_cop2_hazard_slot();
     gte_op0();
     gte_stlvnl(&third->cross[2]);
 
-    result = D_800E2844;
+    result = g_FieldFxTriScratch;
     return ((result->cross[0].y ^ result->cross[1].y) |
             (result->cross[1].y ^ result->cross[2].y)) > 0;
 }
 
-int func_800C653C(void *arg0, GteShortVector *verts) {
-    int first = func_800C62DC(arg0, verts);
+int FieldFx_IsPointInQuadXZ(void *arg0, GteShortVector *verts) {
+    int first = FieldFx_IsPointInTriangleXZ(arg0, verts);
 
-    return first | func_800C62DC(arg0, verts + 1);
+    return first | FieldFx_IsPointInTriangleXZ(arg0, verts + 1);
 }
 
-int func_800C6584(s16 *a, int radiusA, s16 *b, int radiusB) {
+int FieldFx_CirclesOverlapXZ(s16 *a, int radiusA, s16 *b, int radiusB) {
     int delta[3];
     int x = a[0] - b[0];
     int z;
@@ -237,9 +237,9 @@ int func_800C6584(s16 *a, int radiusA, s16 *b, int radiusB) {
 }
 
 /* Floor-placement basis vectors and the asset lookups at a field
- * position; func_800C66C8 reads the normals func_800C65E4 writes. */
+ * position; FieldFx_PlaySoundAtMatrixPosition reads the normals FieldFx_BuildPlacementBasis writes. */
 
-void func_800C65E4(s16 *from, s16 *to, GteMatrix *out) {
+void FieldFx_BuildPlacementBasis(s16 *from, s16 *to, GteMatrix *out) {
     GteVector side;
     GteVector up;
     GteVector forward;
@@ -256,7 +256,7 @@ void func_800C65E4(s16 *from, s16 *to, GteMatrix *out) {
     VectorNormalS(&forward, (GteShortVector *)&out->t[2]);
 }
 
-int func_800C66C8(FieldFxObjectPrefix *owner, int message, GteMatrix *pos) {
+int FieldFx_PlaySoundAtMatrixPosition(FieldFxObjectPrefix *owner, int message, GteMatrix *pos) {
     int result = 0;
 
     if (FieldFx_GetStatus(owner) == 3 || FieldFx_GetStatus(owner) == 4) {
@@ -267,7 +267,7 @@ int func_800C66C8(FieldFxObjectPrefix *owner, int message, GteMatrix *pos) {
     return result;
 }
 
-int func_800C6764(FieldFxObjectPrefix *owner, int message, GteVector *pos) {
+int FieldFx_PlaySoundAtVectorPosition(FieldFxObjectPrefix *owner, int message, GteVector *pos) {
     int result = 0;
 
     if (FieldFx_GetStatus(owner) == 3 || FieldFx_GetStatus(owner) == 4) {
@@ -278,7 +278,7 @@ int func_800C6764(FieldFxObjectPrefix *owner, int message, GteVector *pos) {
     return result;
 }
 
-int func_800C6800(FieldFxObjectPrefix *owner, int message, GteShortVector *pos) {
+int FieldFx_FindAssetAtShortPosition(FieldFxObjectPrefix *owner, int message, GteShortVector *pos) {
     int result = 0;
 
     if (FieldFx_GetStatus(owner) == 3 || FieldFx_GetStatus(owner) == 4) {
@@ -289,8 +289,8 @@ int func_800C6800(FieldFxObjectPrefix *owner, int message, GteShortVector *pos) 
     return result;
 }
 
-/* func_800C62DC specialised for the player position (16.16 integer halves). */
-int func_800C689C(GteShortVector *tri)
+/* FieldFx_IsPointInTriangleXZ specialised for the player position (16.16 integer halves). */
+int FieldFx_IsPlayerInTriangleXZ(GteShortVector *tri)
 {
     GteShortVector point;
     FieldTriScratch *second;
@@ -308,10 +308,10 @@ int func_800C689C(GteShortVector *tri)
     FIELD_TRI_SCRATCH->rel[2].y = 0;
     FIELD_TRI_SCRATCH->edge[0].x = tri[1].x - tri[0].x;
     FIELD_TRI_SCRATCH->edge[0].z = tri[1].z - tri[0].z;
-    D_800E2844 = FIELD_TRI_SCRATCH;
+    g_FieldFxTriScratch = FIELD_TRI_SCRATCH;
     FIELD_TRI_SCRATCH->rel[0].x = point.x - tri[0].x;
     FIELD_TRI_SCRATCH->rel[0].z = point.z - tri[0].z;
-    gte_ldopv1_psyq(&D_800E2844->edge[0]);
+    gte_ldopv1_psyq(&g_FieldFxTriScratch->edge[0]);
     gte_ldopv2(&FIELD_TRI_SCRATCH->rel[0]);
     gte_cop2_hazard_slot();
     gte_op0();
@@ -321,7 +321,7 @@ int func_800C689C(GteShortVector *tri)
     FIELD_TRI_SCRATCH->rel[1].z = point.z - tri[1].z;
     gte_stlvnl(&FIELD_TRI_SCRATCH->cross[0]);
 
-    second = D_800E2844;
+    second = g_FieldFxTriScratch;
     gte_ldopv1_psyq(&second->edge[1]);
     gte_ldopv2(&second->rel[1]);
     gte_cop2_hazard_slot();
@@ -332,19 +332,19 @@ int func_800C689C(GteShortVector *tri)
     second->rel[2].z = point.z - tri[2].z;
     gte_stlvnl(&second->cross[1]);
 
-    third = D_800E2844;
+    third = g_FieldFxTriScratch;
     gte_ldopv1_psyq(&third->edge[2]);
     gte_ldopv2(&third->rel[2]);
     gte_cop2_hazard_slot();
     gte_op0();
     gte_stlvnl(&third->cross[2]);
 
-    result = D_800E2844;
+    result = g_FieldFxTriScratch;
     return ((result->cross[0].y ^ result->cross[1].y) |
             (result->cross[1].y ^ result->cross[2].y)) > 0;
 }
 
-int func_800C6B20(GteShortVector *arg0) {
+int FieldFx_IsPlayerInQuadXZ(GteShortVector *arg0) {
     GteShortVector pos;
     FieldActor *entity = (FieldActor *)D_8009D254;
     GteShortVector *point = &pos;
@@ -353,11 +353,11 @@ int func_800C6B20(GteShortVector *arg0) {
     point->x = entity->pos_x >> 16;
     point->y = entity->pos_y >> 16;
     point->z = entity->pos_z >> 16;
-    first = func_800C62DC(point, arg0);
-    return first | func_800C62DC(point, arg0 + 1);
+    first = FieldFx_IsPointInTriangleXZ(point, arg0);
+    return first | FieldFx_IsPointInTriangleXZ(point, arg0 + 1);
 }
 
-int func_800C6B90(s16 *pos, int extraRadius) {
+int FieldFx_IsPlayerWithinRadius(s16 *pos, int extraRadius) {
     int delta[3];
     s16 local[4];
     BattleEntity *entity = D_8009D254;

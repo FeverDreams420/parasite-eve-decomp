@@ -176,10 +176,10 @@ void RoomEffect_DrawAnchoredSpriteQuad(void *unused0, void *unused1,
     root = FieldFx_GetScriptContext();
     stack.seed = s_MotionQuadSeed;
     map = ((RoomMotionInitLink *)root->link)->model;
-    func_800C2EAC(root->owner);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(root->owner);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     stack.scaleMatrix.m[2][2] = 0x1000;
     stack.scaleMatrix.m[1][1] = 0x1000;
@@ -231,22 +231,22 @@ void RoomEffect_DrawAnchoredSpriteQuad(void *unused0, void *unused1,
     stack.scaleMatrix.t[1] = map->primary.t[1];
     fx -= 10;
     stack.scaleMatrix.t[2] = map->primary.t[2];
-    func_800C42A4((FieldGlowSprite *)fx, scaleMatrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)fx, scaleMatrix, 1);
     stack.scaleMatrix.t[0] = map->secondary.t[0];
     stack.scaleMatrix.t[1] = map->secondary.t[1];
     stack.scaleMatrix.t[2] = map->secondary.t[2];
-    func_800C42A4((FieldGlowSprite *)fx, scaleMatrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)fx, scaleMatrix, 1);
 
     fx = (char *)&g_RoomMotionQuadPacket;
     floorY = &g_RoomFloorY->y;
     stack.matrix.t[0] = map->primary.t[0];
     stack.matrix.t[1] = *floorY;
     stack.matrix.t[2] = map->primary.t[2];
-    func_800C42A4((FieldGlowSprite *)fx, matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)fx, matrix, 1);
     stack.matrix.t[0] = map->secondary.t[0];
     stack.matrix.t[1] = *floorY;
     stack.matrix.t[2] = map->secondary.t[2];
-    func_800C42A4((FieldGlowSprite *)fx, matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)fx, matrix, 1);
 }
 
 void RoomEffect_UpdateTimedFade(void *arg0, RoomFxControl *state, RoomAnchoredSpriteState *obj) {
@@ -289,7 +289,7 @@ void RoomEffect_InitSpritePair(void *arg0, void *arg1, RoomAnchoredSpriteState *
     ring->color0[2] = c80;
     ring->extent1 = 0;
     ring->source = obj->sourceData;
-    func_800C4E50(ring);
+    FieldFx_BuildRingGeometry(ring);
 }
 
 /* Builds a uniformly scaled rotation from the shared seed and draws the
@@ -355,7 +355,7 @@ void RoomEffect_DrawAnchoredSpritePair(void *unused0, void *unused1,
         gte_swc2_11_8(translation);
     }
 
-    func_800C3238(2);
+    FieldFx_SetSpriteBlendMode(2);
     map = ((RoomMotionInitLink *)root->link)->model;
     renderState = &params->ring;
     renderState->intensity = params->depth;
@@ -368,13 +368,13 @@ void RoomEffect_DrawAnchoredSpritePair(void *unused0, void *unused1,
     stack.matrix.t[1] = firstY;
     stack.matrix.t[0] = firstX;
     stack.matrix.t[2] = map->primary.t[2];
-    func_800C4FC4(renderState, matrix, 1);
+    FieldFx_DrawShadedRing(renderState, matrix, 1);
     secondX = map->secondary.t[0];
     secondY = *floorY;
     stack.matrix.t[0] = secondX;
     stack.matrix.t[1] = secondY;
     stack.matrix.t[2] = map->secondary.t[2];
-    func_800C4FC4(renderState, matrix, 1);
+    FieldFx_DrawShadedRing(renderState, matrix, 1);
 }
 
 void RoomEffect_StepSpritePair(void *arg0, RoomFxControl *state, RoomAnchoredSpriteState *obj) {

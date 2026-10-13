@@ -59,6 +59,6 @@ int RoomEffect_OrbitSetNop6(void);
 
 void FieldFx_SetScriptContext(void *state);
 int *FieldFx_RegPtr(int index);
-int func_800C66C8(void *object, int message, void *state);
+int FieldFx_PlaySoundAtMatrixPosition(void *object, int message, void *state);
 
 #endif

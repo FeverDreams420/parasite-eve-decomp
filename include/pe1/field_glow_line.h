@@ -8,7 +8,7 @@
 #include "pe1/render_prim.h"
 #include "pe1/render_tint.h"
 
-/* Field engine glow line (func_800D2B58): a gouraud line between two
+/* Field engine glow line (FieldFx_DrawGlowLine): a gouraud line between two
  * projected points plus a textured glow quad laid across it. */
 
 /* PSY-Q LINE_G2. */
@@ -45,6 +45,6 @@ PE1_STATIC_ASSERT(sizeof(FieldLineG2Packet) == 0x14, field_line_g2_size);
 PE1_STATIC_ASSERT(sizeof(FieldGlowQuadPacket) == 0x34, field_glow_quad_size);
 
 /* Texture page of the shared effect sheet. */
-extern u16 D_800E2852;
+extern u16 g_FieldFxTpageTableEntry1;
 
 #endif /* PE1_FIELD_GLOW_LINE_H */

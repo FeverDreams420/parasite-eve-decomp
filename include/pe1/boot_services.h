@@ -5,9 +5,9 @@
 
 /* Error reporting (draw/error.c): prints the severity name and the two
  * messages; severity 1 halts. */
-extern char D_80010EB0[]; /* severity/message format */
-extern char D_80010EC8[]; /* detail format */
-extern char *D_80091A2C[]; /* severity names */
+extern char g_ErrorMessageFormat[]; /* severity/message format */
+extern char g_ErrorDetailFormat[]; /* detail format */
+extern char *g_ErrorSeverityNames[]; /* severity names */
 void Draw_ReportError(char *message, char *detail, int value, unsigned char severity);
 
 /* Soft-reset and start-up services (asset/game_state.c). */
@@ -38,20 +38,20 @@ void Boot_FinishFrame(void);
 extern u8 g_BootWorkArea[];
 extern u8 D_8010BD00[];
 extern u8 D_80120D08[];
-extern u8 D_801ED800[];
+extern u8 g_SceneLoadScratchArea[];
 
 /* Absolute views of the g_GameState buffer-pointer fields that
  * Boot_InitMemoryLayout writes (0x14C..0x190). */
-extern u8 *volatile D_800B0E24;
-extern u8 *volatile D_800B0E28;
+extern u8 *volatile g_SceneBankAssetSource;
+extern u8 *volatile g_VoiceBankBase;
 extern u8 *volatile D_800B0E2C;
-extern u8 *volatile D_800B0E30;
-extern u8 *volatile D_800B0E34;
+extern u8 *volatile g_EntityTextureBlob;
+extern u8 *volatile g_SceneObjectWork;
 extern u8 *volatile D_800B0E40;
 extern u8 *volatile D_800B0E44;
 extern u8 *volatile D_800B0E48;
 extern u8 *volatile D_800B0E5C;
-extern u8 *volatile D_800B0E60;
+extern u8 *volatile g_ScenePmSlotBanks;
 extern u8 *volatile D_800B0E68;
 
 #endif /* PE1_BOOT_SERVICES_H */

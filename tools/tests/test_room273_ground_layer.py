@@ -28,11 +28,11 @@ typedef char layout[sizeof(Vector)==8 && __alignof__(Vector)==2 &&
     @unittest.skipUnless(shutil.which('cc'), 'host compiler unavailable')
     def test_behavior(self):
         source = '#include <assert.h>\n#include <limits.h>\n' + host_unit(FUNCTION, path=find_definition(FUNCTION, ROOM)) + r'''
-int D_800E27EC,D_800F3428;
+int g_FieldFxCurrentAge,g_FieldFxAltPaletteFlag;
 short D_800966EE[8192];
-unsigned short D_800E1204[8];
+unsigned short g_FieldFxPaletteTable[8];
 RoomFloorY g_RoomFloorY[1];
-RenderEffectParameters D_800F3368;
+RenderEffectParameters g_FieldFxSpriteParams;
 GteRotation D_8019AB68;
 unsigned char D_8019AE18[8],D_8019AB70[8];
 static Vector input={12,-34,56,78};
@@ -40,11 +40,11 @@ static Vector *local;
 static int stage,expectedPalette,expectedSize,expectedShade,sizeIndex,shadeIndex;
 u_short GetClut(int x,int y) {
     assert(stage++==0 && x==0 && y==expectedPalette);
-    D_800E27EC=999;
+    g_FieldFxCurrentAge=999;
     D_800966EE[sizeIndex]=111; D_800966EE[shadeIndex]=222;
     return 0xF123;
 }
-void func_800CEE20(struct GteShortVector *p, struct GteRotation *rotation,
+void FieldFx_DrawShapeQuads(struct GteShortVector *p, struct GteRotation *rotation,
                   int w, int h, int tile, int clut, int flag, int shade,
                   struct RenderColor *color) {
     assert(stage++==1 && p!=&input && !rotation);
@@ -54,7 +54,7 @@ void func_800CEE20(struct GteShortVector *p, struct GteRotation *rotation,
     local=p; p->x=-111; p->y=222; p->z=-333; p->pad=444;
     g_RoomFloorY->raw=0xFEDC;
 }
-void func_800D004C(struct GteShortVector *p,int w,int h,int mode,
+void FieldFx_DrawStarFan(struct GteShortVector *p,int w,int h,int mode,
                   struct GteRotation *rotation,int sx,int sy,
                   struct RenderColor *a,struct RenderColor *b,int shade,int flag) {
     assert(stage++==2 && p==local && w==384 && h==384 && mode==8);
@@ -69,18 +69,18 @@ int main(void) {
     int i,j,k,kind,variant;
     unsigned int phase;
     for(i=0;i<6;++i) {
-        D_800E27EC=times[i];
+        g_FieldFxCurrentAge=times[i];
         assert(func_80198B1C(1,&input)==(times[i]>=32));
     }
     assert(stage==0);
     for(kind=0;kind<8;++kind) for(variant=0;variant<2;++variant)
         for(i=0;i<9;++i) for(j=0;j<6;++j) for(k=0;k<6;++k) {
-            D_800E27EC=frames[i]+1; phase=(unsigned int)frames[i]<<5;
+            g_FieldFxCurrentAge=frames[i]+1; phase=(unsigned int)frames[i]<<5;
             sizeIndex=(phase&4095)*2; shadeIndex=((phase+1024)&4095)*2;
             D_800966EE[sizeIndex]=samples[j]; D_800966EE[shadeIndex]=samples[k];
             expectedSize=(short)(samples[j]*2+4096);
             expectedShade=(short)((unsigned int)(samples[k]+4096)>>5);
-            D_800F3368.palette=kind; D_800F3428=variant; D_800E1204[kind]=65535;
+            g_FieldFxSpriteParams.palette=kind; g_FieldFxAltPaletteFlag=variant; g_FieldFxPaletteTable[kind]=65535;
             expectedPalette=65535+(kind==4 && variant ?8:4);
             stage=0; g_RoomFloorY->raw=123;
             assert(func_80198B1C(2,&input)==0 && stage==3);

@@ -21,7 +21,7 @@ void handler(void) {}
 void (*g_IntrVSyncCallbackTable[8])(void);
 volatile int g_VSyncCount;
 static int timer_mode;
-int *D_800956B0 = &timer_mode;
+int *g_IntrVSyncTimerModePtr = &timer_mode;
 static int clear_calls, event, callback;
 void memclrIntrVSync(void *ptr, int count) {
     int i;

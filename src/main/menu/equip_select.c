@@ -290,12 +290,12 @@ void Menu_StepEquipSlotSelect(void)
         if (node && node->cursor_x >= 0)
             Inv_RememberSelection(0, Inv_GetPackedListItem(MenuWidget_GridCellIndex(node)));
     } else if (!g_MenuLayoutLocked) {
-        Inv_RememberSelection(0, g_InvItemUsableFlag ? D_800C0E20.tracked[0] : D_800C0E20.tracked[2]);
+        Inv_RememberSelection(0, g_InvItemUsableFlag ? g_InventoryRuntime.tracked[0] : g_InventoryRuntime.tracked[2]);
     }
     if (g_MenuLayoutLocked)
         selection = Inv_RestoreSelection(0);
     else
-        selection = g_InvItemUsableFlag ? D_800C0E20.tracked[0] : D_800C0E20.tracked[2];
+        selection = g_InvItemUsableFlag ? g_InventoryRuntime.tracked[0] : g_InventoryRuntime.tracked[2];
     item = Inv_LookupActiveListData(selection);
     current = MenuWidget_FindByModeAndSelectedBase(2, 7);
     if (current == MenuWidget_GetCurrentNode()) {

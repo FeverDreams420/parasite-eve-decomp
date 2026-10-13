@@ -18,8 +18,8 @@ void StUnSetRing(void) {
         CdDataCallback(0);
         CdReadyCallback(0);
     }
-    *D_8009AF1C = 0;
-    interrupt_enable = D_8009AF28;
+    *g_CdStreamIndexRegPtr = 0;
+    interrupt_enable = g_CdStreamIrqRegPtr;
     *interrupt_enable = 0;
     ExitCriticalSection();
 }

@@ -41,14 +41,14 @@ typedef char f[OFF(Actor,instance)==8 ? 1:-1];
         assert head in source
         source = source.replace(head, 'static Queue pending;\n#define D_8019A800 pending.count\n' + head)
         harness = '#include <assert.h>\n#include <string.h>\n' + source + r'''
-FieldFxTaskSlot *D_800F33E0;
-FieldFxObjectPrefix *D_800F32D0;
-int D_800E27EC;
+FieldFxTaskSlot *g_FieldFxActiveTaskSlot;
+FieldFxObjectPrefix *g_FieldFxOwner;
+int g_FieldFxCurrentAge;
 short D_8019A802;
 unsigned char D_8019A804;
-RenderEffectParameters D_800F3368;
-u16 D_800E11EA;
-u16 D_800E2850[65536];
+RenderEffectParameters g_FieldFxSpriteParams;
+u16 g_FieldFxTpageSlot3;
+u16 g_FieldFxTpageTable[65536];
 static RoomM350Emitter emitters[2];
 static Actor actors[2];
 static Instance instances[2];
@@ -56,16 +56,16 @@ static int pools[2], calls, setups, setupResult, failAt, nextCount, yaw, timer;
 static Particle particles[8], expected[8];
 static int half(int x) { unsigned int b=(unsigned int)x&65535; return b<32768 ? (int)b:(int)b-65536; }
 int func_80195218(int e, Particle *p) { return 0; }
-int func_800CE560(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
+int FieldFx_InitCallbackList(char *p,int stride,int count,FieldFxCallbackListCallback cb) {
     assert(p==(char *)&pools[0] && stride==12 && count==50);
     assert(cb==(FieldFxCallbackListCallback)func_80195218);
     setups++; return setupResult;
 }
-void *func_800CE610(char *p) {
+void *FieldFx_AcquireCallbackSlot(char *p) {
     int index=calls++;
     assert(index<8 && p==(char *)&pools[index ? 1:0]);
-    D_800F33E0=(FieldFxTaskSlot *)&emitters[1]; D_800F32D0=(FieldFxObjectPrefix *)&actors[1];
-    instances[1].yaw=yaw; D_800E27EC=timer;
+    g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[1]; g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[1];
+    instances[1].yaw=yaw; g_FieldFxCurrentAge=timer;
     pending.count=nextCount;
     pending.positions[index].x=-32768+index;
     pending.positions[index].y=32767-index;
@@ -74,9 +74,9 @@ void *func_800CE610(char *p) {
     return index==failAt ? 0:&particles[index];
 }
 static void reset(void) {
-    calls=setups=0; D_800F33E0=(FieldFxTaskSlot *)&emitters[0];
-    D_800F32D0=(FieldFxObjectPrefix *)&actors[0];
-    D_800E27EC=123; instances[0].yaw=123;
+    calls=setups=0; g_FieldFxActiveTaskSlot=(FieldFxTaskSlot *)&emitters[0];
+    g_FieldFxOwner=(FieldFxObjectPrefix *)&actors[0];
+    g_FieldFxCurrentAge=123; instances[0].yaw=123;
     memset(particles,0x5A,sizeof(particles)); memcpy(expected,particles,sizeof(particles));
     memset(pending.positions,0,sizeof(pending.positions));
 }
@@ -119,14 +119,14 @@ int main(void) {
         assert(func_80195378(0)==setupResult && setups==1 && calls==0 && pending.count==3);
     }
     for(i=0;i<65536;i++) {
-        reset(); pending.count=3; D_800E11EA=i; D_800E2850[i]=65535-i;
-        memset(&D_800F3368,0x9D,sizeof(D_800F3368));
+        reset(); pending.count=3; g_FieldFxTpageSlot3=i; g_FieldFxTpageTable[i]=65535-i;
+        memset(&g_FieldFxSpriteParams,0x9D,sizeof(g_FieldFxSpriteParams));
         assert(func_80195378(2)==0 && calls==0 && setups==0 && pending.count==3);
-        assert(D_800F3368.parameter00==32 && D_800F3368.parameter02==2);
-        assert(D_800F3368.extent_x==32 && D_800F3368.extent_y==32);
-        assert(D_800F3368.parameter0A==0 && D_800F3368.depth==0);
-        assert(D_800F3368.palette==3 && D_800F3368.parameter06==0);
-        assert(D_800F3368.tpage==65535-i);
+        assert(g_FieldFxSpriteParams.parameter00==32 && g_FieldFxSpriteParams.parameter02==2);
+        assert(g_FieldFxSpriteParams.extent_x==32 && g_FieldFxSpriteParams.extent_y==32);
+        assert(g_FieldFxSpriteParams.parameter0A==0 && g_FieldFxSpriteParams.depth==0);
+        assert(g_FieldFxSpriteParams.palette==3 && g_FieldFxSpriteParams.parameter06==0);
+        assert(g_FieldFxSpriteParams.tpage==65535-i);
     }
     for(i=-3;i<=5;i++) if(i<0 || i>2) {
         reset(); pending.count=3;

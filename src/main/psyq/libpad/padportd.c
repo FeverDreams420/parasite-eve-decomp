@@ -35,23 +35,23 @@ int PadInitDirect(u8 *output0, u8 *output1) {
     _padInitDirSeq();
 
     obj = &D_800A5B70[0];
-    D_8009B724 = MemCard_DmaCompleteCallback;
+    g_PadDmaCompleteFn = MemCard_DmaCompleteCallback;
     g_MemCardObjResetFn = CardObj_ResetFields;
-    D_8009B72C = CardObj_ReadPayloadByte;
-    D_8009B730 = LIBPAD_PADPORTD_text_388;
-    D_8009B734 = CardObj_GetChannelId;
+    g_MemCardObjReadPayloadByteFn = CardObj_ReadPayloadByte;
+    g_PadPortActuatorMapFn = LIBPAD_PADPORTD_text_388;
+    g_CardGetChannelIdFn = CardObj_GetChannelId;
     g_MemCardObjLookupFn = CardObj_LookupByChannelId;
     swapCommand = CardObj_SwapByteField;
     asm volatile("" : "=r"(clearObj) : "0"(obj));
     g_MemCardObjArray = obj;
-    D_8009B748 = swapCommand;
+    g_CardSwapByteFieldFn = swapCommand;
 
     bzero(clearObj, sizeof(CardObj) * 2);
     i = 0;
     fill = 0xFF;
     field40 = &obj->statusBuffer;
-    table40 = D_800A5B28;
-    table3c = D_800A5AE0;
+    table40 = g_MemCardObjStatusBuffers;
+    table3c = g_MemCardObjResponseBuffers;
     cursor = (u8 *)&obj[0].output_30;
     *(u8 **)cursor = savedOutput0;
     cursor = (u8 *)&obj[1].output_30;
@@ -131,10 +131,10 @@ int MemCard_DmaCompleteCallback(int result) {
 
     objects = &D_800A5B70[0];
     ignoredResult = -9;
-    channelResults = &D_8009B77C[0];
+    channelResults = &g_MemCardChannelCounts[0];
 
     do {
-        index = D_8009B764;
+        index = g_PadActivePortIndex;
         offset = index * sizeof(CardObj);
         obj = (CardObj *)(offset + (int)objects);
 
@@ -148,13 +148,13 @@ int MemCard_DmaCompleteCallback(int result) {
             }
         }
 
-        asm("" : "=r"(control), "=r"(index) : "0"(D_8009B7BC), "1"(D_8009B764));
-        D_8009B768 = 0;
+        asm("" : "=r"(control), "=r"(index) : "0"(g_CardSioRegsPtr), "1"(g_PadActivePortIndex));
+        g_MemCardCommandStep = 0;
         asm volatile("" : : : "memory");
         control->control = 0;
         limit = g_MemCardPort2Present;
         index += 1;
-        D_8009B764 = index;
+        g_PadActivePortIndex = index;
         asm volatile("" : : : "memory");
         if (limit >= index) {
             nextResult = _padInitSioMode(
@@ -271,9 +271,9 @@ void LIBPAD_PADPORTD_text_388(CardObj *port) {
                     int total;
                     costRecord.capability = port->capabilities;
                     costRecord.word = offset + costRecord.word;
-                    total = D_8009B76C + costRecord.capability->activationCost;
+                    total = g_PadActuatorCostTotal + costRecord.capability->activationCost;
                     if (total < 61)
-                        D_8009B76C = total;
+                        g_PadActuatorCostTotal = total;
                     else {
                         goto deny;
                     selected:
@@ -307,10 +307,10 @@ void LIBPAD_PADPORTD_text_388(CardObj *port) {
         if (((unsigned)(port->currentId - 4) < 2 || port->currentId == 7) &&
             !port->currentExtendedId && port->payload_28_len >= 2) {
             if ((port->payload_28[0] & 192) == 64 && (port->payload_28[1] & 1) &&
-                D_8009B76C + 10 < 61) {
+                g_PadActuatorCostTotal + 10 < 61) {
                 port->actuatorEnabled[1] = 1;
                 port->actuatorEnabled[0] = 1;
-                D_8009B76C += 10;
+                g_PadActuatorCostTotal += 10;
             }
         } else {
             asm("" ::: "memory");

@@ -9,7 +9,7 @@
 #include "pe1/psyq_libc.h"
 
 /* The slot-search tails store the selected byte and reload it through the
- * other symbol for that byte (g_FontSelectionState.selected or D_80091A1F)
+ * other symbol for that byte (g_FontSelectionState.selected or g_FontSelectionSelectedSlot)
  * after a memory barrier, as retail does: without the barrier the reload is
  * scheduled before the store (lev 10..25). */
 
@@ -83,7 +83,7 @@ unsigned char Render_DrawTextDigit(FontGlyphTable *table, unsigned char mode)
 }
 
 /* Code of the glyph cached in slot `index`. */
-int func_80038CE4(int index)
+int Render_GetFontSlotCode(int index)
 {
     FontGlyphTable *table = g_FontSelectionState.table;
 
@@ -106,7 +106,7 @@ int Menu_ConsumeEquipSlotFlag(void) {
     return 0xFF;
 }
 
-int func_80038D48(void) {
+int Render_ConsumeFontShuffleSeed(void) {
     u32 *state = &g_FontSelectionState.seed;
 
     if (*state != 0) {
@@ -198,7 +198,7 @@ int Render_LoadFontGlyphAlt(void)
     forced_slot = 0;
     for (i = 0; i < 0x45; i++) {
         if ((i + 2) % 10 == 0) {
-            (D_8009EE22 + 2)[i] = forced_slot;
+            (g_FontGlyphCodeSequence + 2)[i] = forced_slot;
             forced_slot++;
             continue;
         }
@@ -217,14 +217,14 @@ int Render_LoadFontGlyphAlt(void)
         }
 
         glyph = (rand() % (limit - 7)) + 7;
-        (D_8009EE22 + 2)[i] = glyph;
+        (g_FontGlyphCodeSequence + 2)[i] = glyph;
 
         if (unique_count < D_8009ECD8.codeCount - 9) {
             do {
                 duplicate = 1;
                 for (j = 0; j < i; j++) {
-                    if ((D_8009EE22 + 2)[j] == (D_8009EE22 + 2)[i]) {
-                        (D_8009EE22 + 2)[i] = (rand() % (limit - 7)) + 7;
+                    if ((g_FontGlyphCodeSequence + 2)[j] == (g_FontGlyphCodeSequence + 2)[i]) {
+                        (g_FontGlyphCodeSequence + 2)[i] = (rand() % (limit - 7)) + 7;
                         duplicate = 0;
                     }
                 }
@@ -233,19 +233,19 @@ int Render_LoadFontGlyphAlt(void)
         unique_count++;
     }
 
-    Render_LoadFontGlyph((D_8009EE22 + 2)[0]);
+    Render_LoadFontGlyph((g_FontGlyphCodeSequence + 2)[0]);
 
     g_FontSelectionState.active = 1;
     g_FontSelectionState.codeIndex = 2;
-    g_FontSelectionState.code = (D_8009EE22 + 2)[0];
+    g_FontSelectionState.code = (g_FontGlyphCodeSequence + 2)[0];
     g_FontSelectionState.table = &D_8009ECD8;
 
-    D_80091A1F = find_slot((u8 *)&D_8009ECD8);
+    g_FontSelectionSelectedSlot = find_slot((u8 *)&D_8009ECD8);
     {
         FontGlyphTable *table = g_FontSelectionState.table;
         /* Read back through a pointer: CSE would otherwise reuse the stored
          * slot instead of reloading it as retail does. */
-        return table->groups.codes[table->slots.indices[*(u8 *)&D_80091A1F]];
+        return table->groups.codes[table->slots.indices[*(u8 *)&g_FontSelectionSelectedSlot]];
     }
 }
 
@@ -258,7 +258,7 @@ u8 Render_StepFontLoad(void) {
     u16 digit;
     u8 *statep;
 
-    statep = &D_80091A1D;
+    statep = &g_FontSelectionCodeIndex;
     state = *statep;
     if (state < 3U) {
         *statep = 1;
@@ -267,16 +267,16 @@ u8 Render_StepFontLoad(void) {
 
     next = state - 1;
     *statep = next;
-    code = D_8009EE22[next];
+    code = g_FontGlyphCodeSequence[next];
     g_FontSelectionState.code = code;
     Render_LoadFontGlyph(code);
 
-    digit = (u8)(D_80091A1D % 10) != 0;
+    digit = (u8)(g_FontSelectionCodeIndex % 10) != 0;
     asm("" : "=r"(digit) : "0"(digit));
     g_FontSelectionState.selected = Font_FindCodeSlot(g_FontSelectionState.table, digit);
     __asm__ volatile("" : "=m"(g_FontSelectionState) : "m"(g_FontSelectionState));
     result = g_FontSelectionState.table;
-    return result->groups.codes[result->slots.indices[D_80091A1F]];
+    return result->groups.codes[result->slots.indices[g_FontSelectionSelectedSlot]];
 }
 
 int Menu_GetEquipSlotStateOrIndex(void) {
@@ -298,11 +298,11 @@ u8 Render_FindFontGlyphSlot(void) {
     }
     index = g_FontSelectionState.codeIndex + 1;
     g_FontSelectionState.codeIndex = index;
-    code = D_8009EE22[index];
+    code = g_FontGlyphCodeSequence[index];
     g_FontSelectionState.loadFailed = 0;
     g_FontSelectionState.code = code;
     Render_LoadFontGlyph(code);
-    D_80091A1F = Font_FindCodeSlot(g_FontSelectionState.table, 2);
+    g_FontSelectionSelectedSlot = Font_FindCodeSlot(g_FontSelectionState.table, 2);
     __asm__ volatile("" : "=m"(g_FontSelectionState) : "m"(g_FontSelectionState));
     result = g_FontSelectionState.table;
     return result->groups.codes[result->slots.indices[g_FontSelectionState.selected]];
@@ -349,19 +349,19 @@ unsigned char Render_SetFontGlyphByCode(unsigned char code)
         return 255;
     }
     g_FontSelectionState.codeIndex = code;
-    code = D_8009EE22[code];
+    code = g_FontGlyphCodeSequence[code];
     g_FontSelectionState.code = code;
     Render_LoadFontGlyph(code);
     if (g_FontSelectionState.loadFailed == 1)
         selected = findSlot(1);
     else
         selected = findSlot(0);
-    D_80091A1F = selected;
+    g_FontSelectionSelectedSlot = selected;
     /* Keep retail's store and reload of the selected byte. */
-    asm volatile("" : "=m"(D_80091A1F) : "0"(D_80091A1F));
+    asm volatile("" : "=m"(g_FontSelectionSelectedSlot) : "0"(g_FontSelectionSelectedSlot));
     {
         FontGlyphTable *table = g_FontSelectionState.table;
-        int index = D_80091A1F;
+        int index = g_FontSelectionSelectedSlot;
         g_FontSelectionState.loadFailed = 0;
         return table->groups.codes[table->slots.indices[index]];
     }
@@ -420,7 +420,7 @@ int Menu_FindSelectedEquipSlotItem(void) {
     g_FontSelectionState.selected = Font_FindCodeSlot(g_FontSelectionState.table, 3);
     __asm__ volatile("" : "=m"(g_FontSelectionState) : "m"(g_FontSelectionState));
     result = g_FontSelectionState.table;
-    return result->groups.codes[result->slots.indices[D_80091A1F]];
+    return result->groups.codes[result->slots.indices[g_FontSelectionSelectedSlot]];
 }
 
 int Menu_ResetEquipSlotState(void) {

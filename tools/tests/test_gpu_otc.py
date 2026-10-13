@@ -22,9 +22,9 @@ class GpuOtcTests(unittest.TestCase):
 #include <stdint.h>
 static volatile unsigned int priority, control, address, length;
 volatile unsigned int *g_GpuDmaControlRegPtr = &priority;
-volatile unsigned int *D_8009586C = &control;
-volatile unsigned int *D_80095864 = &address;
-volatile unsigned int *D_80095868 = &length;
+volatile unsigned int *g_GpuOtDmaChcrPtr = &control;
+volatile unsigned int *g_GpuOtDmaMadrPtr = &address;
+volatile unsigned int *g_GpuOtDmaBcrPtr = &length;
 static unsigned int table[64];
 static int expectedCount, resets, polls, completeAt, timeoutAt;
 void Gpu_ResetDmaWaitTimer(void) {

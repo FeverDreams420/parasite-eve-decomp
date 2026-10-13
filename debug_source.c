@@ -109,7 +109,7 @@ extern VideoDiscRange D_8009315E;
 extern u16 D_80093160;
 extern u16 D_80093162;
 extern void *D_8001160C;
-extern u8 *D_80011610;
+extern u8 *g_CdLoadAreaBase;
 extern u32 D_800B0DD8;
 extern u32 D_8009D26C;
 extern s32 func_8006E6A8(u32, void *, s32);

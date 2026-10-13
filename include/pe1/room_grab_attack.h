@@ -70,6 +70,6 @@ int RoomEffect_RisingSprayParticle(int mode, RoomSpraySpark *spark);
 
 void Render_FindAnimEntry(void *object, int count, void *out);
 void Akao_Cmd_21(int handle, int arg);
-void func_800D2B58(void *, void *, void *, void *, int, int, int);
+void FieldFx_DrawGlowLine(void *, void *, void *, void *, int, int, int);
 
 #endif

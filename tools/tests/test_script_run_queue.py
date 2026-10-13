@@ -34,7 +34,7 @@ class ScriptRunQueueTests(unittest.TestCase):
         self.assertEqual(images[0][0xE90:0xEA4], images[1][0xE90:0xEA4])
         syms = {name: int(name[2:], 16) for name in (
             'D_8009D300', 'D_8009CE00', 'D_8009D2F0', 'D_8009D254',
-            'D_8009D1A0', 'D_800910A0', 'D_800A77F0', 'D_8009DF70', 'D_800B6A80')}
+            'D_8009D1A0', 'g_ScriptQueueOpcodeHandlers', 'g_ScriptVariableBank', 'D_8009DF70', 'D_800B6A80')}
         nodes=0x80100000;actors=0x80101000;programs=(0x80110000,0x80111000,0x80112000)
         behaviors=(0,1,3,4,9,15)
         cases=[(f,e,g,a,t,6,5,b) for f,e,g,a,t,b in itertools.product((0,0x10,0x40,0x80),(0,0x1000),(0,0x100),(False,True),(0,1,2,0xFFFFFFFF),behaviors)]
@@ -49,7 +49,7 @@ class ScriptRunQueueTests(unittest.TestCase):
             put(0x8000F800,image)
             hooks={0x801E0000+op*16:op for op in (3,4,5)}
             for address,op in hooks.items():
-                put(address,struct.pack('<II',0x03E00008,0));word(syms['D_800910A0']+op*4,address)
+                put(address,struct.pack('<II',0x03E00008,0));word(syms['g_ScriptQueueOpcodeHandlers']+op*4,address)
             actual=[]
             def hook(uc,address,size,data):
                 if address not in hooks:return
@@ -100,7 +100,7 @@ class ScriptRunQueueTests(unittest.TestCase):
                             cursor=struct.unpack_from('<I',expected_nodes,offset)[0]
                             while True:
                                 start=cursor;op,ms,values,cursor=records[start]
-                                bases=(None,entity+0xAC,syms['D_800A77F0'],syms['D_8009DF70'],syms['D_800B6A80'])
+                                bases=(None,entity+0xAC,syms['g_ScriptVariableBank'],syms['D_8009DF70'],syms['D_800B6A80'])
                                 args=tuple(start+8+i*4 if mode==0 else bases[mode]+v*4 for i,(mode,v) in enumerate(zip(ms,values)))
                                 expected.append((op,args));first=len(expected)==1
                                 if first:

@@ -57,13 +57,13 @@ typedef char f[OFF(RoomM350EffectActor,instance)==8 ? 1:-1];
         harness = prefix + source + r'''
 typedef GteShortVector Vector;
 typedef RoomM350FlareParticle Particle;
-FieldFxObjectPrefix *D_800F32D0;
+FieldFxObjectPrefix *g_FieldFxOwner;
 GteMatrix D_8019A870;
 short D_8019A890[3];
-int D_800E27EC,D_800F3428,D_8019A690[4];
-GteSineWord D_800966EC[4096];
-RenderEffectParameters D_800F3368;
-u16 D_800E1204[65536];
+int g_FieldFxCurrentAge,g_FieldFxAltPaletteFlag,D_8019A690[4];
+GteSineWord rcossin_tbl[4096];
+RenderEffectParameters g_FieldFxSpriteParams;
+u16 g_FieldFxPaletteTable[65536];
 static RoomM350EffectActor actor,otherActor;
 static FieldActor instance,other;
 static Particle particle,snapshot;
@@ -78,7 +78,7 @@ static void load_vector(void *p) {
     vector=p; assert(step++==2 && vector->x==0 && vector->y==particle.y && vector->z==particle.z);
     vector->pad=0x2468;
 }
-static void command(void) { assert(step++==3); D_800F32D0=(FieldFxObjectPrefix *)&otherActor; }
+static void command(void) { assert(step++==3); g_FieldFxOwner=(FieldFxObjectPrefix *)&otherActor; }
 static void store_ir(void *p) {
     Vector *v=p;
     assert(step==4 && v==vector); step+=3;
@@ -86,10 +86,10 @@ static void store_ir(void *p) {
 }
 u_short GetClut(int x,int y) {
     assert(step++==7 && x==0 && y==wantPalette);
-    D_800E27EC=nextTimer; D_800F3368.parameter02=nextScale; particle.shade=nextShade;
+    g_FieldFxCurrentAge=nextTimer; g_FieldFxSpriteParams.parameter02=nextScale; particle.shade=nextShade;
     snapshot=particle; return clut;
 }
-void func_800CEE20(struct GteShortVector *p,struct GteRotation *rotation,int size,int scale,int texture,int palette,int one,int shade,struct RenderColor *colors) {
+void FieldFx_DrawShapeQuads(struct GteShortVector *p,struct GteRotation *rotation,int size,int scale,int texture,int palette,int one,int shade,struct RenderColor *colors) {
     Vector *r=(Vector *)rotation;
     assert(step++==8 && p==vector && size==0x2200 && scale==4096);
     assert(p->x==half((uint32_t)ir[0]+D_8019A890[0]));
@@ -103,35 +103,35 @@ int main(void) {
     int i,phase,event,result,edge,timers[]={INT_MIN,-32769,-1,0,7,8,INT_MAX};
     actor.instance=(RoomM350EffectInstance *)&instance;
     otherActor.instance=(RoomM350EffectInstance *)&other;
-    for(i=0;i<65536;i++) D_800E1204[i]=65535-i;
+    for(i=0;i<65536;i++) g_FieldFxPaletteTable[i]=65535-i;
     for(i=0;i<65536;i++) {
         unsigned index; uint32_t word=0x5A5A0000u|i;
-        D_800E27EC=i-32768; index=((unsigned)D_800E27EC<<8)&0xF00;
-        memcpy(&D_800966EC[index].word,&word,4);
+        g_FieldFxCurrentAge=i-32768; index=((unsigned)g_FieldFxCurrentAge<<8)&0xF00;
+        memcpy(&rcossin_tbl[index].word,&word,4);
         particle.y=123; particle.z=-456; particle.shade=777; snapshot=particle; step=0;
-        result=D_800E27EC>=8;
+        result=g_FieldFxCurrentAge>=8;
         assert(func_801981D0(1,&particle)==result && step==0);
         if(!result) snapshot.shade=asr5(half(i));
         assert(memcmp(&snapshot,&particle,sizeof(particle))==0);
-        D_800E27EC=-1; memcpy(&D_800966EC[0xF00].word,&word,4);
+        g_FieldFxCurrentAge=-1; memcpy(&rcossin_tbl[0xF00].word,&word,4);
         assert(func_801981D0(1,&particle)==0 && particle.shade==asr5(half(i)));
     }
     for(i=0;i<65536;i++) for(phase=0;phase<8;phase++) {
-        step=0; D_800F32D0=(FieldFxObjectPrefix *)&actor; D_800E27EC=timerBefore=i-32768;
+        step=0; g_FieldFxOwner=(FieldFxObjectPrefix *)&actor; g_FieldFxCurrentAge=timerBefore=i-32768;
         particle.y=half(i); particle.z=half(65535-i); particle.shade=321;
         ir[0]=i; ir[1]=-i-1; ir[2]=i*30001;
         D_8019A890[0]=half(i*7); D_8019A890[1]=half(i*11); D_8019A890[2]=half(i*19);
         other.rot_y=half(i*23); instance.rot_y=~other.rot_y;
-        D_800F3368.palette=i; D_800F3428=phase&1; D_800F3368.parameter02=123;
-        wantPalette=D_800E1204[i]+(i==4 && D_800F3428 ? 4:0);
+        g_FieldFxSpriteParams.palette=i; g_FieldFxAltPaletteFlag=phase&1; g_FieldFxSpriteParams.parameter02=123;
+        wantPalette=g_FieldFxPaletteTable[i]+(i==4 && g_FieldFxAltPaletteFlag ? 4:0);
         nextTimer=(i-32768)*8+phase; nextScale=half(i); nextShade=half(i*29); clut=i;
         assert(func_801981D0(2,&particle)==0 && step==9);
         assert(memcmp(&snapshot,&particle,sizeof(particle))==0);
     }
     for(edge=0;edge<7;edge++) for(event=-3;event<=5;event++) if(event!=2) {
-        step=0; D_800E27EC=timers[edge]; snapshot=particle;
-        assert(func_801981D0(event,&particle)==(event==1 && D_800E27EC>=8) && step==0);
-        if(event!=1 || D_800E27EC>=8) assert(memcmp(&snapshot,&particle,sizeof(particle))==0);
+        step=0; g_FieldFxCurrentAge=timers[edge]; snapshot=particle;
+        assert(func_801981D0(event,&particle)==(event==1 && g_FieldFxCurrentAge>=8) && step==0);
+        if(event!=1 || g_FieldFxCurrentAge>=8) assert(memcmp(&snapshot,&particle,sizeof(particle))==0);
     }
     return 0;
 }

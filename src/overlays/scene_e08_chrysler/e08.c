@@ -213,12 +213,12 @@ void func_8018F53C(void *unused0, void *unused1, Ovl178FadeState *state)
         item->color0[1] = 0;
         item->color0[2] = 0;
         item->source = state->sourceData[i];
-        func_800C4E50(item);
+        FieldFx_BuildRingGeometry(item);
     }
 }
 
-void func_800C2FF0(int, int);
-void func_800C3098(int);
+void FieldFx_SetSpriteCellSize(int, int);
+void FieldFx_SetSpriteColorMode(int);
 
 void func_8018F640(void *unused, s16 *args, Ovl178FadeState *state) {
     RoomSpriteMatrix matrix;
@@ -232,11 +232,11 @@ void func_8018F640(void *unused, s16 *args, Ovl178FadeState *state) {
     seed.raw = D_8018EFF4;
 
     ownerCursor = &owner->position;
-    func_800C2EAC(owner->drawMode);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
-    func_800C3134(D_801986F8, args[1], (u8 *)&D_80199670);
+    FieldFx_SetSpriteTexturePreset(owner->drawMode);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
+    FieldFx_InterpolateColorRamp(D_801986F8, args[1], (u8 *)&D_80199670);
     for (i = 0; i < 4; ++i) {
         seed.fields.angle = state->glowAngle[i];
         RotMatrix(&seed.raw.vector, &matrix);
@@ -250,7 +250,7 @@ void func_8018F640(void *unused, s16 *args, Ovl178FadeState *state) {
         matrix.t[1] = ownerCursor->y;
         matrix.t[2] = ownerCursor->z;
         D_80199670.depth = state->glowDepth;
-        func_800C42A4(&D_80199670, &matrix, 1);
+        FieldFx_DrawGlowSprite(&D_80199670, &matrix, 1);
     }
     for (i = 0; i < 2; ++i) {
         matrix.m[2][2] = 0x1000;
@@ -274,8 +274,8 @@ void func_8018F640(void *unused, s16 *args, Ovl178FadeState *state) {
         matrix.t[0] = ownerCursor->x;
         matrix.t[1] = ownerCursor->y;
         matrix.t[2] = ownerCursor->z;
-        func_800C3134(D_80198708, args[1], &state->emitters[i].color1[0]);
-        func_800C4FC4(&state->emitters[i], &matrix, 1);
+        FieldFx_InterpolateColorRamp(D_80198708, args[1], &state->emitters[i].color1[0]);
+        FieldFx_DrawShadedRing(&state->emitters[i], &matrix, 1);
     }
 }
 
@@ -349,8 +349,8 @@ void func_8018F958(int unused0, int unused1, SceneParticleCluster *slots) {
     }
 }
 
-void func_800C2FF0(int, int);
-void func_800C3098(int);
+void FieldFx_SetSpriteCellSize(int, int);
+void FieldFx_SetSpriteColorMode(int);
 
 void func_8018FBA4(void *unused0, void *unused1, SceneParticleCluster *argSlots) {
     SceneParticleCluster *slots = argSlots;
@@ -364,9 +364,9 @@ void func_8018FBA4(void *unused0, void *unused1, SceneParticleCluster *argSlots)
     i = 0;
     /* Hoist the draw state address before the cursor setup. */
     asm("" : : "r"(slot));
-    func_800C2EAC(owner->drawMode);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(owner->drawMode);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     for (; i < 30; i++) {
         if (slots->active[i] == 1) {
@@ -395,11 +395,11 @@ void func_8018FBA4(void *unused0, void *unused1, SceneParticleCluster *argSlots)
             matrix.t[2] = slots->position[i].z;
             *slot = slots->brightness[i];
             if (slots->texture[i] == 0x44) {
-                func_800C2FF0(0x20, 0x20);
+                FieldFx_SetSpriteCellSize(0x20, 0x20);
                 ((FieldGlowSprite *)((char *)slot - 10))->cell = slots->texture[i];
             }
             if (slots->texture[i] == 0x4C) {
-                func_800C2FF0(0x10, 0x10);
+                FieldFx_SetSpriteCellSize(0x10, 0x10);
                 {
                     u8 color = slots->texture[i];
                     u8 counter = slots->counter[i];
@@ -408,7 +408,7 @@ void func_8018FBA4(void *unused0, void *unused1, SceneParticleCluster *argSlots)
                 }
             }
             if (slots->texture[i] == 0x58) {
-                func_800C2FF0(0x10, 0x10);
+                FieldFx_SetSpriteCellSize(0x10, 0x10);
                 {
                     u8 color = slots->texture[i];
                     u8 counter = slots->counter[i];
@@ -417,7 +417,7 @@ void func_8018FBA4(void *unused0, void *unused1, SceneParticleCluster *argSlots)
                 }
             }
             ((FieldGlowSprite *)((char *)slot - 10))->clut = slots->mode[i];
-            func_800C42A4((FieldGlowSprite *)((char *)slot - 10), &matrix, 1);
+            FieldFx_DrawGlowSprite((FieldGlowSprite *)((char *)slot - 10), &matrix, 1);
         }
     }
 }
@@ -577,8 +577,8 @@ void func_801902CC(int unused0, int unused1, SceneEmitterSlots *slots) {
     }
 }
 
-void func_800C2FF0(int, int);
-void func_800C3098(int);
+void FieldFx_SetSpriteCellSize(int, int);
+void FieldFx_SetSpriteColorMode(int);
 
 void func_80190460(void *unused0, void *unused1, char *effect) {
     Matrix matrix;
@@ -592,9 +592,9 @@ void func_80190460(void *unused0, void *unused1, char *effect) {
     owner = FieldFx_GetScriptContext();
     i = 0;
         asm volatile("" : : "r"(slot));
-    func_800C2EAC(owner->spriteMode);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(owner->spriteMode);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     for (; i < 4; i++) {
         if (base->active[i] == 1) {
@@ -622,11 +622,11 @@ void func_80190460(void *unused0, void *unused1, char *effect) {
             matrix.t[1] = base->position[i].y;
             matrix.t[2] = base->position[i].z;
             *slot = base->depth[i];
-            func_800C2FF0(0x10, 0x10);
+            FieldFx_SetSpriteCellSize(0x10, 0x10);
             sprite = (FieldGlowSprite *)((char *)slot - 10);
             sprite->cell = base->cell[i] + (base->frame[i] >> 1);
             sprite->clut = base->clut[i];
-            func_800C42A4(sprite, &matrix, 1);
+            FieldFx_DrawGlowSprite(sprite, &matrix, 1);
         }
     }
 }
@@ -719,17 +719,17 @@ void func_80190914(void *object, void *timer, ScenePlayerOrb *orb)
 
     anchor = FieldFx_GetScriptContext();
     color = D_8018F004;
-    func_800C2EAC(anchor->mode);
-    func_800C3098(0x10);
-    func_800C3238(2);
-    func_800C2FF0(0x10, 0x10);
+    FieldFx_SetSpriteTexturePreset(anchor->mode);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
+    FieldFx_SetSpriteCellSize(0x10, 0x10);
     if (orb->active != 0) {
-        func_800C3134(D_801987E4, orb->fade, (unsigned char *)&orb->head);
-        func_800C3134(D_801987E4, orb->fade, (unsigned char *)&orb->tail);
-        func_800D3114(orb->trailA, orb->count - 1, 0x3C, 0x20, 0x90, 0x51, 0x10,
+        FieldFx_InterpolateColorRamp(D_801987E4, orb->fade, (unsigned char *)&orb->head);
+        FieldFx_InterpolateColorRamp(D_801987E4, orb->fade, (unsigned char *)&orb->tail);
+        FieldFx_DrawTexturedRibbon(orb->trailA, orb->count - 1, 0x3C, 0x20, 0x90, 0x51, 0x10,
                       GetTPage(1, 0, 0x340, 0x100), GetClut(0, 0x1D9),
                       orb->alpha, &orb->head, &orb->tail, 1);
-        func_800D3114(orb->trailB, orb->count - 1, 0x3C, 0x20, 0x90, 0x51, 0x10,
+        FieldFx_DrawTexturedRibbon(orb->trailB, orb->count - 1, 0x3C, 0x20, 0x90, 0x51, 0x10,
                       GetTPage(1, 0, 0x340, 0x100), GetClut(0, 0x1D9),
                       orb->alpha, &color, &color, 2);
         matrix.m[2][2] = 0x1000;
@@ -750,7 +750,7 @@ void func_80190914(void *object, void *timer, ScenePlayerOrb *orb)
             matrix.t[0] = orb->points[i].x;
             matrix.t[1] = orb->points[i].y;
             matrix.t[2] = orb->points[i].z;
-            func_800C42A4(&D_80199690, &matrix, 1);
+            FieldFx_DrawGlowSprite(&D_80199690, &matrix, 1);
         }
     }
 }
@@ -782,7 +782,7 @@ void func_80190B98(void *object, ScenePlayerOrbTimer *timer, ScenePlayerOrb *orb
                 spawn->x = orb->position.x;
                 spawn->y = orb->position.y;
                 spawn->z = orb->position.z;
-                if (func_800C6B90(spawn, 200) != 0) {
+                if (FieldFx_IsPlayerWithinRadius(spawn, 200) != 0) {
                     anchor->orbHit = 1;
                 }
             }
@@ -846,7 +846,7 @@ void func_80190F0C(void *unused0, void *unused1, SceneRingSpritesState *effect) 
     D_801995D8 = 1200;
     source = D_80198B90;
     base[0].source = source;
-    func_800C4E50(base);
+    FieldFx_BuildRingGeometry(base);
 
     base[1].mode = 8;
     base[1].offset = 0;
@@ -860,7 +860,7 @@ void func_80190F0C(void *unused0, void *unused1, SceneRingSpritesState *effect) 
     base[1].extent0 = 1200;
     base[1].extent1 = 800;
     base[1].source = source + 128;
-    func_800C4E50(&base[1]);
+    FieldFx_BuildRingGeometry(&base[1]);
 }
 
 /* Draw the flash sprite while the state is younger than 12 ticks, then the
@@ -883,10 +883,10 @@ void func_8019104C(void *object, void *timer, void *data)
     rotation = D_8018F018;
     ring = data;
     state = data;
-    func_800C2EAC(owner->mode);
-    func_800C3098(0x10);
-    func_800C3238(2);
-    func_800C2FF0(0x20, 0x20);
+    FieldFx_SetSpriteTexturePreset(owner->mode);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
     if (ring->ticks < 12) {
         matrix.m[2][2] = 0x1000;
         matrix.m[1][1] = 0x1000;
@@ -907,7 +907,7 @@ void func_8019104C(void *object, void *timer, void *data)
         matrix.t[2] = ring->z;
         D_801995A8.depth = ring->depth;
         D_801995A8.cell = (ring->ticks % 12 & 0xFE) - 0x5C;
-        func_800C42A4(&D_801995A8, &matrix, 1);
+        FieldFx_DrawGlowSprite(&D_801995A8, &matrix, 1);
     }
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -928,7 +928,7 @@ void func_8019104C(void *object, void *timer, void *data)
     matrix.t[1] = state->y;
     matrix.t[2] = state->z;
     D_801995B8.depth = state->depth >> 2;
-    func_800C42A4(&D_801995B8, data, 1);
+    FieldFx_DrawGlowSprite(&D_801995B8, data, 1);
     RotMatrix(&rotation, data);
     memset(&source, 0, 0x10);
     source.x = state->size;
@@ -940,9 +940,9 @@ void func_8019104C(void *object, void *timer, void *data)
     matrix.t[1] = state->y;
     matrix.t[2] = state->z;
     D_801995C8[0].depth = state->depth;
-    func_800C4FC4(&D_801995C8[0], data, 0);
+    FieldFx_DrawShadedRing(&D_801995C8[0], data, 0);
     D_801995C8[1].depth = state->depth;
-    func_800C4FC4(&D_801995C8[1], data, 0);
+    FieldFx_DrawShadedRing(&D_801995C8[1], data, 0);
 }
 
 void func_80191348(s32 arg0, RoomFxControl *rec, SceneRingSpritesState *p) {
@@ -1097,8 +1097,8 @@ void func_80191830(void *arg0, void *arg1, SceneE08CentreGlow *glow) {
     glow->unused0C = 0;
 }
 
-void func_800C2FF0(s32 arg0, s32 arg1);
-void func_800C3098(s32 arg0);
+void FieldFx_SetSpriteCellSize(s32 arg0, s32 arg1);
+void FieldFx_SetSpriteColorMode(s32 arg0);
 
 void func_80191850(void *arg0, void *arg1, SceneE08CentreGlow *glow) {
     SceneE08Matrix matrix;
@@ -1107,10 +1107,10 @@ void func_80191850(void *arg0, void *arg1, SceneE08CentreGlow *glow) {
     Ovl178Position *owner;
 
     owner = FieldFx_GetScriptContext();
-    func_800C2EAC(owner->spriteMode);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(owner->spriteMode);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -1135,7 +1135,7 @@ void func_80191850(void *arg0, void *arg1, SceneE08CentreGlow *glow) {
     matrix.t[0] = glow->x + D_8019956C;
     matrix.t[1] = glow->y;
     matrix.t[2] = glow->z + D_8019957C;
-    func_800C42A4((FieldGlowSprite *)D_801996A0, &matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)D_801996A0, &matrix, 1);
 }
 
 void func_80191970(void *arg0, RoomFxControl *control, void *arg2) {
@@ -1159,24 +1159,24 @@ void func_801919B0(s32 arg0, s32 arg1, SceneMovingSlots *base) {
     u8 buf40[8];
 
     st = FieldFx_GetScriptContext();
-    func_800C2EAC(st->spriteMode);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(st->spriteMode);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     for (i = 0; i < 0x10; i++) {
         s16 type = base->active[i];
         if (type == 1) {
             s32 v64;
             s32 vAA;
-            func_800C3134(D_8019880C, base->life[i], buf38);
-            func_800C3134(D_8019880C, base->life[i], buf40);
+            FieldFx_InterpolateColorRamp(D_8019880C, base->life[i], buf38);
+            FieldFx_InterpolateColorRamp(D_8019880C, base->life[i], buf40);
             buf40[0] = 0;
             buf40[1] = 0;
             buf40[2] = 0;
-            D_800F3368.depth = 0x1F4;
+            g_FieldFxSpriteParams.depth = 0x1F4;
             v64 = GetTPage(0, 0, 0x340, 0x100) & 0xFFFF;
             vAA = GetClut(0, 0x1D7) & 0xFFFF;
-            func_800D3114((struct GteShortVector *)&base->vector[i], 2, base->range[i], 0x40,
+            FieldFx_DrawTexturedRibbon((struct GteShortVector *)&base->vector[i], 2, base->range[i], 0x40,
                           0x80, 0x9C, 0x10, v64, vAA, base->initialSize[i],
                           (struct RenderColor *)buf38, (struct RenderColor *)buf40, type);
         }
@@ -1261,15 +1261,15 @@ void func_80191E78(void *object, void *timer, SceneParticleSlots *slots)
     position = offset;
     offset = D_8018F040;
     color = D_8018F048;
-    D_800F3368.tpage = D_800E2850[D_800E11EA];
-    D_800F3368.palette = 3;
-    D_800F3368.parameter06 = 0;
-    D_800F3368.parameter00 = 0x40;
-    D_800F3368.parameter02 = 4;
-    D_800F3368.extent_x = 0x40;
-    D_800F3368.extent_y = 0x40;
-    D_800F3368.depth = 1000;
-    D_800F3368.parameter0A = 0;
+    g_FieldFxSpriteParams.tpage = g_FieldFxTpageTable[g_FieldFxTpageSlot3];
+    g_FieldFxSpriteParams.palette = 3;
+    g_FieldFxSpriteParams.parameter06 = 0;
+    g_FieldFxSpriteParams.parameter00 = 0x40;
+    g_FieldFxSpriteParams.parameter02 = 4;
+    g_FieldFxSpriteParams.extent_x = 0x40;
+    g_FieldFxSpriteParams.extent_y = 0x40;
+    g_FieldFxSpriteParams.depth = 1000;
+    g_FieldFxSpriteParams.parameter0A = 0;
     for (i = 0; i < 4; i++) {
         offset = slots->offset[i];
         color.b = 0xFF;
@@ -1277,31 +1277,31 @@ void func_80191E78(void *object, void *timer, SceneParticleSlots *slots)
         color.r = 0xFF;
         offset.z <<= 1;
         scale = slots->phase[i] * slots->motionRamp >> 12;
-        kind = D_800F3368.palette;
-        palette = D_800E1204[kind];
-        if (kind == 4 && D_800F3428 != 0) {
+        kind = g_FieldFxSpriteParams.palette;
+        palette = g_FieldFxPaletteTable[kind];
+        if (kind == 4 && g_FieldFxAltPaletteFlag != 0) {
             palette += 4;
         }
-        func_800CEE20(&position, (GteRotation *)&offset, scale, scale, 0,
+        FieldFx_DrawShapeQuads(&position, (GteRotation *)&offset, scale, scale, 0,
                       GetClut(0, palette), 1, slots->verticalOffset[i], 0);
     }
-    D_800F3368.parameter00 = 0x40;
-    D_800F3368.parameter02 = 4;
-    D_800F3368.extent_x = 0x40;
-    D_800F3368.extent_y = 0x40;
-    D_800F3368.depth = 0;
-    D_800F3368.parameter0A = 5;
+    g_FieldFxSpriteParams.parameter00 = 0x40;
+    g_FieldFxSpriteParams.parameter02 = 4;
+    g_FieldFxSpriteParams.extent_x = 0x40;
+    g_FieldFxSpriteParams.extent_y = 0x40;
+    g_FieldFxSpriteParams.depth = 0;
+    g_FieldFxSpriteParams.parameter0A = 5;
     for (i = 0; i < 4; i++) {
-        u16 *palettes = D_800E1204;
+        u16 *palettes = g_FieldFxPaletteTable;
         int special = 4;
 
         scale = slots->phase[i] * slots->motionRamp >> 12;
-        kind = D_800F3368.palette;
+        kind = g_FieldFxSpriteParams.palette;
         palette = palettes[kind];
-        if (kind == special && D_800F3428 != 0) {
+        if (kind == special && g_FieldFxAltPaletteFlag != 0) {
             palette += 4;
         }
-        func_800CEE20(&position, (GteRotation *)&slots->offset[i], scale, scale, 0x80,
+        FieldFx_DrawShapeQuads(&position, (GteRotation *)&slots->offset[i], scale, scale, 0x80,
                       GetClut(0x80, palette), 2, slots->verticalOffset[i], 0);
     }
 }
@@ -1339,7 +1339,7 @@ void func_801921C8(int unused, u8 *state, SceneParticleSlots *slots)
     }
 }
 
-void func_800C4E50(void *);
+void FieldFx_BuildRingGeometry(void *);
 
 void func_801923D8(void *unused0, void *unused1, SceneE08RingEffectState *effect) {
     u8 *mid = (u8 *)&D_80199604;
@@ -1372,7 +1372,7 @@ void func_801923D8(void *unused0, void *unused1, SceneE08RingEffectState *effect
     record->extent0 = span;
     record->extent1 = 0;
     ring->source = source;
-    func_800C4E50(ring);
+    FieldFx_BuildRingGeometry(ring);
 
     ++ring;
 
@@ -1388,7 +1388,7 @@ void func_801923D8(void *unused0, void *unused1, SceneE08RingEffectState *effect
     ring->extent0 = span;
     ring->extent1 = 0;
     ring->source = source + 0x200;
-    func_800C4E50(ring);
+    FieldFx_BuildRingGeometry(ring);
 
     record = ring + 1;
     asm ("" : : "r"(record));
@@ -1405,14 +1405,14 @@ void func_801923D8(void *unused0, void *unused1, SceneE08RingEffectState *effect
     record->extent1 = 0;
     source += 0x400;
     record->source = source;
-    func_800C4E50(record);
+    FieldFx_BuildRingGeometry(record);
 }
 
 void func_80192544(void *unused, RoomFxControl *time, SceneE08RingEffectState *record) {
     Matrix matrix;
     Vec4 scratchScale, firstScale, secondScale;
 
-    func_800C3238(3);
+    FieldFx_SetSpriteBlendMode(3);
     record->rotation[0] = 0;
     record->rotation[1] = 0;
     record->rotation[2] = 0;
@@ -1426,9 +1426,9 @@ void func_80192544(void *unused, RoomFxControl *time, SceneE08RingEffectState *r
     matrix.t[0] = D_8019956C;
     matrix.t[1] = 0;
     matrix.t[2] = D_8019957C;
-    func_800C4FC4(D_801995F8, &matrix, 1);
+    FieldFx_DrawShadedRing(D_801995F8, &matrix, 1);
     if (time->frame >= 0x3D) {
-        func_800C3238(2);
+        FieldFx_SetSpriteBlendMode(2);
         record->rotation[0] = 0x400;
         record->rotation[1] = 0x400;
         record->rotation[2] = 0;
@@ -1442,7 +1442,7 @@ void func_80192544(void *unused, RoomFxControl *time, SceneE08RingEffectState *r
         matrix.t[0] = D_8019956C;
         matrix.t[1] = 0;
         matrix.t[2] = D_8019957C;
-        func_800C4FC4(D_801995F8 + 0x18, &matrix, 0);
+        FieldFx_DrawShadedRing(D_801995F8 + 0x18, &matrix, 0);
     }
 }
 
@@ -1473,7 +1473,7 @@ void func_80192788(void *arg0, void *arg1, SceneMovingSlots *slots) {
     }
 }
 
-void func_800C3098(int);
+void FieldFx_SetSpriteColorMode(int);
 
 void func_801927A8(void *unused0, void *unused1, SceneMovingSlots *effect) {
     unsigned int i;
@@ -1491,9 +1491,9 @@ void func_801927A8(void *unused0, void *unused1, SceneMovingSlots *effect) {
     i = 0;
     table = D_80198820;
     scratchPtr = scratchB;
-    func_800C2EAC(owner->spriteMode);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(owner->spriteMode);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     dst = effect->vector;
     asm("" : : "r"(dst));
@@ -1502,15 +1502,15 @@ void func_801927A8(void *unused0, void *unused1, SceneMovingSlots *effect) {
     while (i < 16) {
         asm("" : "=r"(step), "=r"(frame) : "0"(step), "1"(frame));
         if (frame->active) {
-            func_800C3134(table, step->life, scratchA);
-            func_800C3134(table, step->life, scratchPtr);
+            FieldFx_InterpolateColorRamp(table, step->life, scratchA);
+            FieldFx_InterpolateColorRamp(table, step->life, scratchPtr);
             scratchB[0] = 0;
             scratchB[1] = 0;
             scratchB[2] = 0;
-            D_800F3368.depth = 0;
+            g_FieldFxSpriteParams.depth = 0;
             retA = GetTPage(1, 0, 0x340, 0x100) & 0xffff;
             retB = GetClut(0, 0x1D9) & 0xffff;
-            func_800D3114((struct GteShortVector *)dst, 2, frame->range, 0x20, 0x90,
+            FieldFx_DrawTexturedRibbon((struct GteShortVector *)dst, 2, frame->range, 0x20, 0x90,
                            0x51, 0x10, retA, retB, frame->initialSize,
                            (struct RenderColor *)scratchA, (struct RenderColor *)scratchPtr, 1);
         }
@@ -1584,7 +1584,7 @@ void func_80192C84(void *arg0, void *arg1, SceneE08ScreenFade *fade) {
     SceneE08FourBytes local;
 
     local = D_8018F04C;
-    func_800D1AE0((unsigned char *)&local, fade->level, 1, 8);
+    FieldFx_DrawScreenTint((unsigned char *)&local, fade->level, 1, 8);
 }
 
 void func_80192CCC(void *arg0, RoomFxControl *control, SceneE08ScreenFade *fade) {
@@ -1621,8 +1621,8 @@ void func_80192D70(void *arg0, void *arg1, char *arg2) {
     } while (arg2 < end);
 }
 
-void func_800C2FF0(int, int);
-void func_800C3098(int);
+void FieldFx_SetSpriteCellSize(int, int);
+void FieldFx_SetSpriteColorMode(int);
 void func_80192D90(void *unused0, void *unused1, SceneE08OrbitParticles *effect) {
     SceneE08Matrix matrix;
     s16 temp[3];
@@ -1636,10 +1636,10 @@ void func_80192D90(void *unused0, void *unused1, SceneE08OrbitParticles *effect)
     owner = FieldFx_GetScriptContext();
     i = 0;
     asm volatile("" : : "r"(scale));
-    func_800C2EAC(owner->spriteMode);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(owner->spriteMode);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
     for (; i < 32; i++) {
         if (effect->active[i] == 1) {
             temp[0] = (rsin(effect->angle[i]) * effect->radius[i]) >> 12;
@@ -1666,8 +1666,8 @@ void func_80192D90(void *unused0, void *unused1, SceneE08OrbitParticles *effect)
             matrix.t[0] = temp[0] + D_8019956C;
             matrix.t[1] = temp[1];
             matrix.t[2] = temp[2] + D_8019957C;
-            func_800C3134(D_80198848, effect->frame[i], table);
-            func_800C42A4((FieldGlowSprite *)table, &matrix, 1);
+            FieldFx_InterpolateColorRamp(D_80198848, effect->frame[i], table);
+            FieldFx_DrawGlowSprite((FieldGlowSprite *)table, &matrix, 1);
         }
     }
 }
@@ -1760,7 +1760,7 @@ void func_80193150(void *object, SceneGlowModelTimer *timer, SceneGlowModelState
         int tpage = GetTPage(0, 1, 0x340, 0x160);
         FieldFx_ModelSetTexture(tpage, GetClut(0, 0x1DB));
     }
-    func_800C3134(D_80198860, timer->ticks, (unsigned char *)&color);
+    FieldFx_InterpolateColorRamp(D_80198860, timer->ticks, (unsigned char *)&color);
     FieldFx_ModelSetSemiTrans(1);
     FieldFx_ModelSaveColors(D_80199528);
     FieldFx_ModelScaleColors(D_80199528, model->depth);
@@ -1770,10 +1770,10 @@ void func_80193150(void *object, SceneGlowModelTimer *timer, SceneGlowModelState
         size = (timer->ticks - 10) << 9;
         if (size > 0x7D00)
             size = 0x7D00;
-        func_800C2EAC(3);
-        func_800C2FF0(0x20, 0x20);
-        func_800C3098(0x100);
-        func_800C3238(2);
+        FieldFx_SetSpriteTexturePreset(3);
+        FieldFx_SetSpriteCellSize(0x20, 0x20);
+        FieldFx_SetSpriteColorMode(0x100);
+        FieldFx_SetSpriteBlendMode(2);
         matrix.m[2][2] = 0x1000;
         matrix.m[1][1] = 0x1000;
         matrix.m[0][0] = 0x1000;
@@ -1794,7 +1794,7 @@ void func_80193150(void *object, SceneGlowModelTimer *timer, SceneGlowModelState
         matrix.t[0] = D_8019956C;
         matrix.t[1] = 0;
         matrix.t[2] = D_8019957C;
-        func_800C42A4(&D_801996B0, &matrix, 1);
+        FieldFx_DrawGlowSprite(&D_801996B0, &matrix, 1);
     }
 }
 
@@ -1854,11 +1854,11 @@ void func_801935A8(void *object, void *timer, SceneLimbBeams *beams)
 
     anchor = FieldFx_GetScriptContext();
     target = &g_PlayerEntity->render_object.matrices[2];
-    func_800C2EAC(anchor->mode);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
-    D_800F3368.depth = 0x1F4;
+    FieldFx_SetSpriteTexturePreset(anchor->mode);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
+    g_FieldFxSpriteParams.depth = 0x1F4;
     for (i = 0; i < 10; i++) {
         mode = beams->mode[i];
         if (mode == 1) {
@@ -1893,10 +1893,10 @@ void func_801935A8(void *object, void *timer, SceneLimbBeams *beams)
             points[4].x = target->translation[0];
             points[4].y = target->translation[1];
             points[4].z = target->translation[2];
-            func_800C3134(D_801989BC, beams->fade[i], (unsigned char *)&head);
-            func_800C3134(D_801989D0, beams->fade[i], (unsigned char *)&tail);
+            FieldFx_InterpolateColorRamp(D_801989BC, beams->fade[i], (unsigned char *)&head);
+            FieldFx_InterpolateColorRamp(D_801989D0, beams->fade[i], (unsigned char *)&tail);
             tpage = GetTPage(0, 0, 0x340, 0x100);
-            func_800D3114(points, 4, 100, 0x40, 0x80, 0x9C, 0x10, tpage,
+            FieldFx_DrawTexturedRibbon(points, 4, 100, 0x40, 0x80, 0x9C, 0x10, tpage,
                           GetClut(0, 0x1D7), 0x80, &tail, &tail, mode);
         }
     }
@@ -2078,8 +2078,8 @@ void func_80193FF8(s32 arg0, s32 arg1, SceneE08TrailGlow *p) {
     p->trail[0].z = z;
 }
 
-void func_800C2FF0(int, int);
-void func_800C3098(int);
+void FieldFx_SetSpriteCellSize(int, int);
+void FieldFx_SetSpriteColorMode(int);
 void func_80194090(void *arg0, void *arg1, char *effects) {
     GteMatrix matrix;
     GteVector scratch, vec;
@@ -2099,10 +2099,10 @@ void func_80194090(void *arg0, void *arg1, char *effects) {
         state = (SceneE08PositionSample *)base;
         phase = (SceneE08TrailLane *)base;
         angleOffset = 0x30;
-        func_800C2EAC(owner->spriteMode);
-        func_800C2FF0(0x40, 0x20);
-        func_800C3098(0x10);
-        func_800C3238(2);
+        FieldFx_SetSpriteTexturePreset(owner->spriteMode);
+        FieldFx_SetSpriteCellSize(0x40, 0x20);
+        FieldFx_SetSpriteColorMode(0x10);
+        FieldFx_SetSpriteBlendMode(2);
      }
 
     for (; i < 3; ++i, angleOffset += 8) {
@@ -2121,14 +2121,14 @@ void func_80194090(void *arg0, void *arg1, char *effects) {
         if (i == 0) {
             *alpha = 0xC0;
         }
-        func_800C42A4((FieldGlowSprite *)((char *)alpha - 10), &matrix, 0);
+        FieldFx_DrawGlowSprite((FieldGlowSprite *)((char *)alpha - 10), &matrix, 0);
         state++;
         phase = (SceneE08TrailLane *)(&phase->step + 1);
     }
     matrix.t[0] = ((SceneE08TrailGlow *)base)->trail[0].x;
     matrix.t[1] = g_RoomFloorY->y;
     matrix.t[2] = ((SceneE08TrailGlow *)base)->trail[0].z;
-    func_800C42A4(&D_80199580, &matrix, 0);
+    FieldFx_DrawGlowSprite(&D_80199580, &matrix, 0);
 }
 
 void func_80194214(void *unused, RoomFxControl *phase, SceneE08TrailGlow *effect) {
@@ -2168,10 +2168,10 @@ void func_80194214(void *unused, RoomFxControl *phase, SceneE08TrailGlow *effect
     point[1] = effect->trail[0].y;
     z = effect->trail[0].z;
     point[2] = z;
-    if (Geo_PointInPoly(x << 16, z << 16, D_8009D248, D_8009D1CC) == 0) {
+    if (Geo_PointInPoly(x << 16, z << 16, g_FloorPolygonVertices, g_FloorPolygonVertexCount) == 0) {
         phase->state = 2;
     }
-    if (func_800C6B90(point, 0x320) != 0) {
+    if (FieldFx_IsPlayerWithinRadius(point, 0x320) != 0) {
         owner->playerHit = 1;
     }
 }
@@ -2197,8 +2197,8 @@ void func_801943CC(void *arg0, void *arg1, SceneLayeredSpriteState *out)
     out->velocity[1] = 0xFFF551A0;
 }
 
-void func_800C2FF0(int, int);
-void func_800C3098(int);
+void FieldFx_SetSpriteCellSize(int, int);
+void FieldFx_SetSpriteColorMode(int);
 
 void func_80194498(void *unused, u16 *phase, SceneLayeredSpriteState *state) {
     RoomSpriteMatrix matrix;
@@ -2210,10 +2210,10 @@ void func_80194498(void *unused, u16 *phase, SceneLayeredSpriteState *state) {
     u8 *red;
 
     owner = FieldFx_GetScriptContext();
-    func_800C2EAC(((Ovl178Position *)owner)->spriteMode);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(((Ovl178Position *)owner)->spriteMode);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     RotMatrix(&state->initialSeed.vector, &matrix);
     firstScale = D_8018F050;
@@ -2235,13 +2235,13 @@ void func_80194498(void *unused, u16 *phase, SceneLayeredSpriteState *state) {
     matrix.t[1] = state->center[1].parts.integer;
     matrix.t[2] = state->center[2].parts.integer;
     *alpha = 0x80;
-    func_800C42A4((FieldGlowSprite *)((char *)alphaBase - 10), &matrix, 0);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)((char *)alphaBase - 10), &matrix, 0);
 
     matrix.t[0] = state->center[0].parts.integer;
     matrix.t[1] = g_RoomFloorY->y;
     matrix.t[2] = state->center[2].parts.integer;
     *alpha = 0x20;
-    func_800C42A4((FieldGlowSprite *)((char *)alpha - 10), &matrix, 0);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)((char *)alpha - 10), &matrix, 0);
 
     *red = 0x40;
     D_80199561 = 0x20;
@@ -2255,7 +2255,7 @@ void func_80194498(void *unused, u16 *phase, SceneLayeredSpriteState *state) {
         matrix.t[1] = state->layers[i].y;
         matrix.t[2] = state->layers[i].z;
         *alpha = (5 - i) * 31;
-        func_800C42A4((FieldGlowSprite *)(owner - 10), &matrix, 0);
+        FieldFx_DrawGlowSprite((FieldGlowSprite *)(owner - 10), &matrix, 0);
     }
 }
 
@@ -2314,12 +2314,12 @@ void func_801946D4(void *unused, RoomFxControl *control, char *state)
     nextZ = zBase + zVelocity;
     nextY = yBase + yVelocity;
     nextX = ((SceneLayeredSpriteState *)state)->center[0].fixed + xVelocity;
-    screenLimit = D_8009D1CC;
+    screenLimit = g_FloorPolygonVertexCount;
     ((SceneLayeredSpriteState *)state)->center[0].fixed = nextX;
     *((s32 *) (state + 4)) = nextY;
     *((s32 *) (state + 8)) = nextZ;
     zArg = (unsigned)(nextZ >> 16) << 16;
-    if (Geo_PointInPoly(((unsigned)((SceneLayeredSpriteState *)state)->center[0].parts.integer) << 16, zArg, D_8009D248, screenLimit) == 0)
+    if (Geo_PointInPoly(((unsigned)((SceneLayeredSpriteState *)state)->center[0].parts.integer) << 16, zArg, g_FloorPolygonVertices, screenLimit) == 0)
     {
         control->state = 2;
     }
@@ -2361,7 +2361,7 @@ void func_801946D4(void *unused, RoomFxControl *control, char *state)
     point[1] = pointValue;
     pointValue = ((SceneLayeredSpriteState *)state)->center[2].parts.integer;
     point[2] = pointValue;
-    if (func_800C6B90(point, 0xC8))
+    if (FieldFx_IsPlayerWithinRadius(point, 0xC8))
     {
         owner->playerHit = 1;
     }
@@ -2388,8 +2388,8 @@ void func_80194988(void *arg0, void *arg1, Ovl178MotionState *state) {
     state_reg->z = z;
 }
 
-void func_800C2FF0(s32, s32);
-void func_800C3098(s32);
+void FieldFx_SetSpriteCellSize(s32, s32);
+void FieldFx_SetSpriteColorMode(s32);
 
 void func_801949F4(s32 arg0, RoomFxControl *arg1, Ovl178MotionState *rec) {
     Ovl178Position *ctx;
@@ -2405,10 +2405,10 @@ void func_801949F4(s32 arg0, RoomFxControl *arg1, Ovl178MotionState *rec) {
     if (idx >= 0xD) {
         idx = 0xC;
     }
-    func_800C2EAC(ctx->spriteMode);
-    func_800C2FF0(0x40, 0x40);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(ctx->spriteMode);
+    FieldFx_SetSpriteCellSize(0x40, 0x40);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
     RotMatrix(&r->rotation, &buf);
     memset(&vsrc, 0, 0x10);
     vsrc.x = r->scale;
@@ -2416,13 +2416,13 @@ void func_801949F4(s32 arg0, RoomFxControl *arg1, Ovl178MotionState *rec) {
     vsrc.z = 0x1000;
     vdst = vsrc;
     ScaleMatrix(&buf, &vdst);
-    func_800C3134(&D_80198AD4, arg1->frame, &D_80199570);
+    FieldFx_InterpolateColorRamp(&D_80198AD4, arg1->frame, &D_80199570);
     buf.t[0] = r->x;
     buf.t[1] = r->y;
     buf.t[2] = r->z;
     D_80199570.cell = idx;
     D_80199570.depth = r->depth;
-    func_800C42A4(&D_80199570, &buf, 1);
+    FieldFx_DrawGlowSprite(&D_80199570, &buf, 1);
 }
 
 void func_80194B44(s32 arg0, s16 *rec, u16 *p)
@@ -2478,10 +2478,10 @@ void func_80194C60(void *arg0, void *arg1, SceneE08ExpandingGlow *glow) {
     s16 *draw_slot;
 
     owner = FieldFx_GetScriptContext();
-    func_800C2EAC(owner->spriteMode);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
+    FieldFx_SetSpriteTexturePreset(owner->spriteMode);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
 
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -2509,7 +2509,7 @@ void func_80194C60(void *arg0, void *arg1, SceneE08ExpandingGlow *glow) {
 
     draw_slot = &D_801994D2;
     *draw_slot = glow->depth;
-    func_800C42A4((FieldGlowSprite *)((char *)draw_slot - 0xA), &matrix, 1);
+    FieldFx_DrawGlowSprite((FieldGlowSprite *)((char *)draw_slot - 0xA), &matrix, 1);
 }
 
 void func_80194D74(s32 arg0, RoomFxControl *rec, SceneE08ExpandingGlow *p) {
@@ -2548,11 +2548,11 @@ void func_80194DD8(void *object, void *timer, SceneArmGlow *glow)
     matrices = anchor->actor->render_object.matrices;
     head = D_8018F060;
     tail = D_8018F064;
-    func_800C2EAC(anchor->mode);
-    func_800C2FF0(0x20, 0x20);
-    func_800C3098(0x10);
-    func_800C3238(2);
-    D_800F3368.depth = 0x1F4;
+    FieldFx_SetSpriteTexturePreset(anchor->mode);
+    FieldFx_SetSpriteCellSize(0x20, 0x20);
+    FieldFx_SetSpriteColorMode(0x10);
+    FieldFx_SetSpriteBlendMode(2);
+    g_FieldFxSpriteParams.depth = 0x1F4;
     D_801994C8.depth = glow->frame;
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
@@ -2575,7 +2575,7 @@ void func_80194DD8(void *object, void *timer, SceneArmGlow *glow)
     matrix.t[0] = matrices[32].translation[0];
     matrix.t[1] = matrices[32].translation[1];
     matrix.t[2] = matrices[32].translation[2];
-    func_800C42A4(&D_801994C8, &matrix, 1);
+    FieldFx_DrawGlowSprite(&D_801994C8, &matrix, 1);
     matrix.m[2][2] = 0x1000;
     matrix.m[1][1] = 0x1000;
     matrix.m[0][0] = 0x1000;
@@ -2597,7 +2597,7 @@ void func_80194DD8(void *object, void *timer, SceneArmGlow *glow)
     matrix.t[0] = matrices[22].translation[0];
     matrix.t[1] = matrices[22].translation[1];
     matrix.t[2] = matrices[22].translation[2];
-    func_800C42A4(&D_801994C8, &matrix, 1);
+    FieldFx_DrawGlowSprite(&D_801994C8, &matrix, 1);
     points[0].x = matrices[32].translation[0];
     points[0].y = matrices[32].translation[1];
     points[0].z = matrices[32].translation[2];
@@ -2620,7 +2620,7 @@ void func_80194DD8(void *object, void *timer, SceneArmGlow *glow)
     points[6].y = matrices[22].translation[1];
     points[6].z = matrices[22].translation[2];
     tpage = GetTPage(0, 0, 0x340, 0x100);
-    func_800D3114(points, 7, 300, 0x40, 0x80, 0x9C, 0x10, tpage,
+    FieldFx_DrawTexturedRibbon(points, 7, 300, 0x40, 0x80, 0x9C, 0x10, tpage,
                   GetClut(0, 0x1D7), 0x80, &head, &tail, 1);
 }
 

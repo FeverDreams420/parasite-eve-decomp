@@ -55,18 +55,18 @@ int Draw_InitDisplay(int mode) {
 
     ptr = g_BootWorkArea;
     ptr2 = ptr + 0x1800;
-    D_800B0E24 = ptr;
+    g_SceneBankAssetSource = ptr;
     ptr += 0x6000;
-    D_800B0E28 = ptr2;
+    g_VoiceBankBase = ptr2;
     D_800B0E2C = ptr;
     ptr += 0xE000;
-    D_800B0E30 = ptr;
+    g_EntityTextureBlob = ptr;
 
     ptr = D_8010BD00;
     ptr2 = D_80120D08;
     D_800B0E40 = ptr;
     ptr = ptr2 + 0x1C98;
-    D_800B0E34 = ptr2;
+    g_SceneObjectWork = ptr2;
     ptr2 += 0x5C98;
     const_8000 = 0x8000;
     g_OtBufferTable[0] = ptr;
@@ -87,8 +87,8 @@ int Draw_InitDisplay(int mode) {
     tmp = g_StrFileDirBuffer;
     g_RenderAnimBufferBase[0] = ptr;
     ptr += 0x7000;
-    D_800B0E60 = ptr;
-    g_SceneLoadScratchBuffer[0] = D_801ED800;
+    g_ScenePmSlotBanks = ptr;
+    g_SceneLoadScratchBuffer[0] = g_SceneLoadScratchArea;
     g_LoadedSceneAssetBlock[0] = tmp - 8;
     D_800B0E68 = tmp;
 
@@ -101,7 +101,7 @@ int Draw_InitDisplay(int mode) {
         Draw_RenderFrame();
     } while ((g_ScreenTransitionState[0] & 3) != one);
 
-    D_800B0DC6 = 0;
+    g_SceneInitSubphase = 0;
     Menu_ConsumeEquipSlotFlag();
 
     if (mode_reg == 1) {
@@ -200,7 +200,7 @@ retry_large_load_a:
         }
     } else {
 retry_large_load_b:
-        range = D_8009316C;
+        range = g_SmallTexLbaTbl;
         do {
             status = CdRom_ReadSectors(imageBase + range[0], 0, (int)state->object_texture_blob, range[1] - range[0]);
         } while (status == -1);
@@ -240,9 +240,9 @@ int CdRom_LoadBootAudio(void) {
     u16 *range;
     int retry;
 
-    D_800B0DB5 = -1;
-    D_800B0DB4 = -1;
-    D_800B0DB7 = -1;
+    g_SceneAudioSlot0Handle = -1;
+    g_SceneAudioSlot0Key = -1;
+    g_SceneAudioSlot1Handle = -1;
     D_800B0DB6 = -1;
     D_800B0DB3 = -1;
     D_800B0DB2 = -1;
@@ -267,10 +267,10 @@ retry_first:
     ExitCriticalSection();
 
 retry_second:
-    range = &D_80093166;
+    range = &g_BootDisplayDataLbaTbl;
     retry = -1;
     do {
-        status = CdRom_ReadSectors(D_800B0DD8.baseLba + range[0], 0, D_80011610, range[1] - range[0]);
+        status = CdRom_ReadSectors(D_800B0DD8.baseLba + range[0], 0, g_CdLoadAreaBase, range[1] - range[0]);
     } while (status == retry);
 
     while ((status = CdRom_PollReady()) != 0) {

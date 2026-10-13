@@ -76,11 +76,11 @@ int _spu_t(int command, ...)
         }
         /* Both arms step past the address argument; read it and the size. */
         size = ((u32 *)args)[-1];
-        D_8009B450 = size;
+        g_SpuDmaAddress = size;
         size = ((u32 *)args)[0];
-        D_8009B454 = (size >> 6) + ((size & 0x3F) != 0);
-        *g_SpuDmaMadrPtr = D_8009B450;
-        *g_SpuDmaBcrPtr = (D_8009B454 << 16) | 0x10;
+        g_SpuDmaBlockCount = (size >> 6) + ((size & 0x3F) != 0);
+        *g_SpuDmaMadrPtr = g_SpuDmaAddress;
+        *g_SpuDmaBcrPtr = (g_SpuDmaBlockCount << 16) | 0x10;
         if (g_SpuDmaDirection != 1) {
             control |= 0x201;
         } else {
@@ -94,7 +94,7 @@ int _spu_t(int command, ...)
 
 u32 _spu_Fw(void *address, u32 size)
 {
-    if (D_8009B418 == 0) {
+    if (_spu_transMode == 0) {
         _spu_t(2, g_SpuTransferAddr << _spu_mem_mode.shift);
         _spu_t(1);
         _spu_t(3, address, size);
