@@ -900,8 +900,7 @@ void FxCommon_StepEffects(void)
     mode = g_FxCommonViewMode;
     if (mode != 0xA) {
         if ((g_FxCommonExitCountdown == 0) && (g_FieldPadBits != 0)) {
-            if ((D_8009D1F4 & 2) && (g_FxCommonAutoPlay == -1)) {
-            if ((g_FieldPadPressed & 2) && (D_8019BFF8 == -1)) {
+            if ((g_FieldPadPressed & 2) && (g_FxCommonAutoPlay == -1)) {
                 nextMode = (s16)(mode + 1) % 3;
                 g_FxCommonViewMode = nextMode;
                 if ((nextMode << 0x10) == 0) {
@@ -971,9 +970,8 @@ void FxCommon_StepEffects(void)
                     FxCommon_SetMotionEndpoints((FxCommonShortVec3 *)&shortA, (FxCommonShortVec3 *)&shortB, 4, 5);
                 }
             }
-            if ((D_8009D1F4 & 0x50) && (g_FxCommonViewMode != 0)) {
+            if ((g_FieldPadPressed & 0x50) && (g_FxCommonViewMode != 0)) {
                 g_FxCommonViewMode = 0;
-            if ((g_FieldPadPressed & 0x50) && (D_8019C034 != 0)) {
                 g_FxCommonMarkerFade = 1;
                 g_FxCommonPlayAdvance = 0;
                 FxCommon_StartCameraMove(g_FxCommonRoomVariant, 4, 5, 0);
@@ -982,12 +980,11 @@ void FxCommon_StepEffects(void)
                 }
             }
             if ((g_FxCommonCameraPathRemaining < 2U) && (g_FxCommonViewMode == 0) && (D_8019C13C == 0)) {
-                if ((D_8009D1F4 & 0x20000000) && (g_FxCommonExitCountdown == 0)) {
+                if ((g_FieldPadPressed & 0x20000000) && (g_FxCommonExitCountdown == 0)) {
                     if (g_FxCommonCameraPathRemaining == 1) {
                         g_FxCommonScreenFade = 1;
                         g_FxCommonExitCountdown = 0x10;
                         g_FxCommonExitVariant = g_FxCommonRoomVariant;
-                if ((g_FieldPadPressed & 0x20000000) && (D_8019C026 == 0)) {
                     }
                     if (g_FxCommonPlaying == 0) {
                         if (g_AkaoBgmHandle[0] != 0) {
@@ -1017,8 +1014,7 @@ void FxCommon_StepEffects(void)
                         g_FxCommonExitVariant = g_FxCommonRoomVariant;
                     }
                 }
-                if ((D_8009D1F4 & 0x40000000) && (g_FxCommonAutoPlay == -1) && (g_FxCommonExitCountdown == 0)) {
-                if ((g_FieldPadPressed & 0x40000000) && (D_8019BFF8 == -1) && (D_8019C026 == 0)) {
+                if ((g_FieldPadPressed & 0x40000000) && (g_FxCommonAutoPlay == -1) && (g_FxCommonExitCountdown == 0)) {
                     D_8019C032 = 1;
                     if (g_FxCommonPlaying == 1) {
                         if (g_AkaoBgmHandle[0] != 0) {
@@ -1030,9 +1026,8 @@ void FxCommon_StepEffects(void)
                         g_FxCommonPlayAdvance = 0;
                     }
                 }
-                if ((D_8009D1F4 & 0x40) && (g_FxCommonAutoPlay == -1)) {
+                if ((g_FieldPadPressed & 0x40) && (g_FxCommonAutoPlay == -1)) {
                     if (g_FxCommonPlaying == 1) {
-                if ((g_FieldPadPressed & 0x40) && (D_8019BFF8 == -1)) {
                         g_FxCommonMarkerFade = 1;
                     }
                     g_FxCommonPlayAdvance = 0;
@@ -1062,9 +1057,8 @@ void FxCommon_StepEffects(void)
                         } while (motionIndex0 < 0xAU);
                     }
                 }
-                if ((D_8009D1F4 & 0x10) && (g_FxCommonAutoPlay == -1)) {
+                if ((g_FieldPadPressed & 0x10) && (g_FxCommonAutoPlay == -1)) {
                     if (g_FxCommonPlaying == 1) {
-                if ((g_FieldPadPressed & 0x10) && (D_8019BFF8 == -1)) {
                         g_FxCommonMarkerFade = 1;
                     }
                     g_FxCommonPlayAdvance = 0;

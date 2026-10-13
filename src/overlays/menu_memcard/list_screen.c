@@ -279,9 +279,9 @@ s32 func_801909B4(void) {
         DrawSync(0);
         VSync(0);
         VSync(0);
-            MenuCard_ShowLogoFade();
         if (g_LogoFadePlayed == 0) {
             g_LogoFadePlayed = 1;
+            MenuCard_ShowLogoFade();
         }
         if (titleMode != 0) {
             if (MenuCard_PlayVideo(1) != 0) {
