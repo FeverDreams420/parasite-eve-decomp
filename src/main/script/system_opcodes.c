@@ -1016,7 +1016,7 @@ int Entity_YieldOnLoading(void) {
 
 int Script_ScaleAnimValue(int **arg0) {
     int value = *arg0[0];
-    int scale = (s16)g_CurrentEntity->render_object.hit_cylinder.radius * 2;
+    int scale = g_CurrentEntity->render_object.hit_cylinder.radius * 2;
     RenderObjectHeader *dst = g_CurrentEntity->render_object.header;
 
     dst->shadow_radius = (scale * value) >> 16;
@@ -1053,12 +1053,12 @@ int Entity_InitWithTimeout(int **arg0) {
     }
 
     if ((unsigned short)(D_8009D2A4 - 3) < 0x180) {
-        *arg0[1] = (short)D_8009D2A4 - 3;
+        *arg0[1] = D_8009D2A4 - 3;
         g_ScriptNodePool->flags &= 0xFFDF;
         return 1;
     }
 
-    if ((short)D_8009D2A4 == -1) {
+    if (D_8009D2A4 == -1) {
         *arg0[1] = -1;
         g_ScriptNodePool->flags &= 0xFFDF;
         return 1;
@@ -1157,14 +1157,14 @@ int Entity_PolarToPosition2(int **arg0)
   args = arg0;
   src = args[0];
   radius = *src;
-  value = rsin((short) current->rot_y);
+  value = rsin(current->rot_y);
   radius = -radius;
   value = Math_FixedMul(radius, value << 4);
   current_v1 = g_CurrentEntity;
   dst = args[1];
   *dst = g_CurrentEntity->pos_x + value;
   current = g_CurrentEntity;
-  value = rcos((short) current->rot_y);
+  value = rcos(current->rot_y);
   value = Math_FixedMul(radius, value << 4);
   current_v1 = g_CurrentEntity;
   dst = args[2];
