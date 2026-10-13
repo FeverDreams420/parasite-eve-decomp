@@ -757,10 +757,9 @@ void Battle_DrawSpellName(void) {
                 register s32 cJ asm("$6");
                 register s32 a2v asm("$5");
                 {
-                    register s32 ja asm("$4");
-                    ja = i;
-                    __asm__("" : "=r"(ja) : "0"(ja));
-                    j7 = ja * 7;
+                    r130 = i;
+                    __asm__("" : "=r"(r130) : "0"(r130));
+                    j7 = r130 * 7;
                 }
                 j7 <<= 2;
                 cJ = g_ActiveDrawSlotRecord.slot;
