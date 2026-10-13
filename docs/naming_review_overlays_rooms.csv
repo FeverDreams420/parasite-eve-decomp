@@ -456,3 +456,31 @@ address,overlay,old_name,new_name,evidence
 0x801960A0,room_m256_museum,D_801960A0,g_RoomM256PulseCenter,position written by RoomM256_ModelPulse and used as the ring centre by RoomM256_ModelPulseParticleCallback
 0x80195E64,room_m256_museum,D_80195E64,g_RoomM256PulseParticleColorTrack,colour track sampled by RoomM256_ModelPulseParticleCallback
 0x80195E8C,room_m256_museum,D_80195E8C,g_RoomM256PulseColorTrack,colour track sampled by RoomM256_ModelPulse
+0x8019251C,room_m123_nypd,func_8019251C,RoomM123_JointTriangleCallback,RoomM123JointTriangle drawn between joint corners; installed by RoomM123_JointTriangleEmitter via FieldFx_InitCallbackList
+0x801929FC,room_m123_nypd,func_801929FC,RoomM123_JointTriangleEmitter,every sixth frame up to frame 40 spawns three triangle records (RoomM123JointTriangleEmitterView) and ends at frame 40; slot 0 of effect set D_8019553C
+0x80192BDC,room_m123_nypd,func_80192BDC,RoomM123_GlowBurstParticleCallback,RoomM123PulsingParticle drawn about g_RoomM123GlowBurstCenter with the glow colour track; installed by RoomM123_GlowBurst via FieldFx_InitCallbackList
+0x80192F0C,room_m123_nypd,func_80192F0C,RoomM123_GlowBurst,"source comment: glow burst spawning sixteen pulsing particles at frame 1, then drawing four glow layers, two flash rings and a swept flare on joint 23; slot 1 of effect set D_8019553C"
+0x80193618,room_m123_nypd,func_80193618,RoomM123_JointBeacon,"source comment: joint beacon riding joint 0x17, swelling in, pulsing and fading out, tagging the player once on contact; slot 2 of effect set D_8019553C"
+0x801945EC,room_m123_nypd,func_801945EC,RoomM123_JointSwirlParticleCallback,RoomM123Particle advancing 24 frames and drawn about g_RoomM123SwirlCenter with FieldFx_OffsetPointByAngles; installed by RoomM123_JointSwirl via FieldFx_InitCallbackList
+0x80194768,room_m123_nypd,func_80194768,RoomM123_JointSwirl,"spawns 24 particles at frame 1 then one per frame around the joint 23 position, fading its speed (g_RoomM123SwirlSpeed) from frame 50 and ending at frame 80; slot 3 of effect set D_8019553C"
+0x80194A70,room_m123_nypd,func_80194A70,RoomM123_PulseRingCallback,"ring band scaled by rsin of the age, coloured by the selected colour track; installed by RoomM123_PulseRing via FieldFx_InitCallbackList"
+0x80194C04,room_m123_nypd,func_80194C04,RoomM123_PulseRing,"every sixth frame up to 32 drops a ring particle at the actor position on the floor, plays sounds 0x582/0x5B1 and tags the player at frame 32; slot 0 of effect set D_801955D4"
+0x80194F68,room_m123_nypd,func_80194F68,RoomM123_WaveCallback,RoomM123Wave rising 3 units per frame for 24 frames drawn with g_RoomM123WaveColorTrack; installed by RoomM123_WaveBurst via FieldFx_InitCallbackList
+0x80195114,room_m123_nypd,func_80195114,RoomM123_WaveBurst,spawns waves around joint 34 or 40 (by the choice argument) for 32 frames and plays sound 0x581; slot 0 of effect set D_8019564C
+0x8019553C,room_m123_nypd,D_8019553C,g_RoomM123JointEffects,"effect set table: slots 0..3 RoomM123_JointTriangleEmitter, RoomM123_GlowBurst, RoomM123_JointBeacon, RoomM123_JointSwirl"
+0x801955D4,room_m123_nypd,D_801955D4,g_RoomM123PulseRingEffects,"effect set table: slot 0 RoomM123_PulseRing, slot 12 RoomM123_SelectSlotPointer"
+0x8019564C,room_m123_nypd,D_8019564C,g_RoomM123WaveBurstEffects,effect set table: slot 0 RoomM123_WaveBurst
+0x801954BC,room_m123_nypd,D_801954BC,g_RoomM123GlowColorTrack,colour track sampled by RoomM123_GlowBurstParticleCallback and RoomM123_GlowBurst
+0x801954E4,room_m123_nypd,D_801954E4,g_RoomM123GlowBurstColorTrack,colour track sampled by RoomM123_GlowBurst for the flash rings
+0x8019550C,room_m123_nypd,D_8019550C,g_RoomM123BeaconColorTrack,colour track sampled by RoomM123_JointBeacon with its shade
+0x80195594,room_m123_nypd,D_80195594,g_RoomM123PulseColorTrack0,colour track selected by RoomM123_SelectSlotPointer index 0
+0x801955B4,room_m123_nypd,D_801955B4,g_RoomM123PulseColorTrack1,colour track selected by RoomM123_SelectSlotPointer index 1
+0x801956B8,room_m123_nypd,D_801956B8,g_RoomM123SelectedColorTrack,pointer written by RoomM123_SelectSlotPointer and returned to the engine as the reference argument of RoomM123_PulseRingCallback
+0x80195624,room_m123_nypd,D_80195624,g_RoomM123WaveColorTrack,colour track sampled by RoomM123_WaveCallback
+0x80195688,room_m123_nypd,D_80195688,g_RoomM123GlowBurstAngles,look angles written by RoomM123_GlowBurst (FieldFx_GetTransformLookAngles joint 0) and used by RoomM123_GlowBurstParticleCallback
+0x80195690,room_m123_nypd,D_80195690,g_RoomM123GlowBurstCenter,position written by RoomM123_GlowBurst and used as the ring centre by RoomM123_GlowBurstParticleCallback
+0x80195698,room_m123_nypd,D_80195698,g_RoomM123BeaconModel0,model asset key 0xC5483704 loaded in RoomM123_JointBeacon mode 0
+0x8019569C,room_m123_nypd,D_8019569C,g_RoomM123BeaconModel1,model asset key 0xC5883704 loaded in RoomM123_JointBeacon mode 0
+0x801956A0,room_m123_nypd,D_801956A0,g_RoomM123SwirlBrightness,brightness (sine of the age >> 5) written in the draw mode of RoomM123_JointSwirl and used by RoomM123_JointSwirlParticleCallback
+0x801956A4,room_m123_nypd,D_801956A4,g_RoomM123SwirlSpeed,speed scale set to 0x1000 each update by RoomM123_JointSwirl (fading after frame 50) and used by RoomM123_JointSwirlParticleCallback
+0x801956A8,room_m123_nypd,D_801956A8,g_RoomM123SwirlAngles,look angles written by RoomM123_JointSwirl and used by RoomM123_JointSwirlParticleCallback

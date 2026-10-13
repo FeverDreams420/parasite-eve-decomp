@@ -13,7 +13,7 @@
  * cosine of its frame counter, then fades into a second blended sprite. */
 typedef RoomM123BurstParticle RoomM123PulsingParticle;
 
-extern u8 D_801954BC[];
+extern u8 g_RoomM123GlowColorTrack[];
 
 void FieldFx_OffsetPointByAngles(void *, void *, int, void *, int, int);
 void LoadAverageShort12(void *, void *, int, int, void *);

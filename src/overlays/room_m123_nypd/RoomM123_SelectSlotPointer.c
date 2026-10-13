@@ -7,12 +7,12 @@ void **RoomM123_SelectSlotPointer(int unused, unsigned int index) {
 
     switch (index) {
     case 0:
-        D_801956B8 = D_80195594;
+        g_RoomM123SelectedColorTrack = g_RoomM123PulseColorTrack0;
         break;
     case 1:
-        D_801956B8 = D_801955B4;
+        g_RoomM123SelectedColorTrack = g_RoomM123PulseColorTrack1;
         break;
     }
 
-    return &D_801956B8;
+    return &g_RoomM123SelectedColorTrack;
 }

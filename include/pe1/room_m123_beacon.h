@@ -18,7 +18,7 @@
 #include "pe1/render_prim.h"
 #include "pe1/scene_archive.h"
 
-/* room_m123 joint beacon (func_80193618): follows joint 0x17 of the actor,
+/* room_m123 joint beacon (RoomM123_JointBeacon): follows joint 0x17 of the actor,
  * swells, pulses and fades, tags the player once on contact, and draws a glow
  * sprite pair with star fans, a fading ground ring of three sprites, a
  * turning model while the effect starts and three passes of a second model. */
@@ -81,9 +81,9 @@ typedef struct RoomM123BeaconColor {
 
 extern struct BattleEntity *D_8009D254;
 extern RoomM123BeaconOffset D_8018F1E8;
-extern u8 *D_80195698;
-extern u8 *D_8019569C;
-extern u8 D_8019550C[];
+extern u8 *g_RoomM123BeaconModel0;
+extern u8 *g_RoomM123BeaconModel1;
+extern u8 g_RoomM123BeaconColorTrack[];
 
 void FieldFx_DrawPulledSprite(GteShortVector *position, int scale_x, int scale_y, int texture,
                    int clut, int page, int intensity, int unused, int angle);

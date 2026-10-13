@@ -12,7 +12,7 @@
 #include "pe1/room_m123_burst_particle.h"
 #include "pe1/room_script_record.h"
 
-/* room_m123 glow burst (func_80192F0C): spawns pulsing particles at frame
+/* room_m123 glow burst (RoomM123_GlowBurst): spawns pulsing particles at frame
  * 1, then layers four glow sprites, two flash rings and a swept flare on a
  * boss joint while publishing the joint for the pulsing particles. */
 typedef struct RoomM123GlowBurst {
@@ -27,14 +27,14 @@ typedef union RoomM123JointAngles {
     GteRotation rotation;
 } RoomM123JointAngles;
 
-extern RoomM123JointAngles D_80195688;
-extern GteShortVector D_80195690;
-extern u8 D_801954BC[];
-extern u8 D_801954E4[];
+extern RoomM123JointAngles g_RoomM123GlowBurstAngles;
+extern GteShortVector g_RoomM123GlowBurstCenter;
+extern u8 g_RoomM123GlowColorTrack[];
+extern u8 g_RoomM123GlowBurstColorTrack[];
 
 int rand(void);
 void FieldFx_DrawPulledSprite(GteShortVector *position, int scale_x, int scale_y, int texture,
                    int clut, int page, int intensity, int unused, int angle);
-int func_80192BDC(int mode, RoomM123BurstParticle *particle);
+int RoomM123_GlowBurstParticleCallback(int mode, RoomM123BurstParticle *particle);
 
 #endif
