@@ -11,3 +11,10 @@ address,overlay,old_name,new_name,evidence
 0x8018F000,room_m023_theater,D_8018F000,g_RoomM023StarFanColor,"RoomM023_JointGlow copies it to local flare (rgb 100,200,100) and passes it as the colour of FieldFx_DrawStarFan."
 0x801906F0,room_m023_theater,D_801906F0,g_RoomM023BeaconColorTrack,"Only reader: RoomM023_JointBeacon passes it as the track to FieldFx_SampleColorTrack(.., &color, state->shade), the beacon glow colour ramp."
 0x80190760,room_m023_theater,D_80190760,g_RoomM023BeaconModel,"RoomM023_JointBeacon case 0 stores Asset_FindTable08ByU32Key(scene block, 0xC5463704) in it; the draw case passes it to FieldFx_ModelSaveColors/ModelDraw (the beacon model)."
+0x8018EFF4,room_m086_central_park,D_8018EFF4,g_RoomM086JointAnchor,"Local point {0,0,-30}: RoomM086_SeekerController case 0 and RoomM086_BounceGlint both pass it to FieldFx_TransformMatrixPoint on joint 7 as the anchor."
+0x8018EFFC,room_m086_central_park,D_8018EFFC,g_RoomM086LaunchVelocity,"Local vector {0,0,-41}: RoomM086_SeekerController rotates it by the actor bone with FieldFx_RotateVector into state->velocity (initial drift velocity)."
+0x80190B78,room_m086_central_park,D_80190B78,g_RoomM086ControllerParams[1],Interior of the 4-word block g_RoomM086ControllerParams (0x80190B74): RoomM086_SetControllerParams stores arg2 there. Declared int[4]; element access stays byte-identical.
+0x80190B7C,room_m086_central_park,D_80190B7C,g_RoomM086ControllerParams[2],"Same block, arg3 store of RoomM086_SetControllerParams."
+0x80190B80,room_m086_central_park,D_80190B80,g_RoomM086ControllerParams[3],"Same block, arg1 store of the arg0==2 branch of RoomM086_SetControllerParams."
+0x80190B90,room_m086_central_park,D_80190B90,g_RoomM086BounceGlintParams[1],Interior of the 3-word block g_RoomM086BounceGlintParams (0x80190B8C): RoomM086_SetBounceGlintParams stores arg2 there through its base pointer; int[3] view.
+0x80190B94,room_m086_central_park,D_80190B94,g_RoomM086BounceGlintParams[2],"Same block, arg3 store of RoomM086_SetBounceGlintParams."
