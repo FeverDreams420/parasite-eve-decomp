@@ -1042,6 +1042,7 @@ void RoomLib_HandlerB(RoomEnt *obj) {
     RoomLibHandlerBState *state = (RoomLibHandlerBState *)&self->sub;
     RoomLink *link = self->link;
     int previousValue;
+    register int a0 asm("$4");
     RoomLibArcWork *scratch;
     int result;
 
@@ -1055,7 +1056,6 @@ void RoomLib_HandlerB(RoomEnt *obj) {
         GteSineWord *table;
         unsigned short matrixComponent;
         BattleEntity *player;
-        register int a0 asm("$4");
 
         self->t1A = 1;
         state->finished = 0;
@@ -1155,10 +1155,10 @@ void RoomLib_HandlerB(RoomEnt *obj) {
     {
         register int delta asm("$2") = state->mode;
         int enabled = state->heading;
-        register int current asm("$4") = previousValue - delta;
-        state->phaseValue = current;
+        a0 = previousValue - delta;
+        state->phaseValue = a0;
         if (enabled != 0) {
-            delta = previousValue ^ current;
+            delta = previousValue ^ a0;
 
             if (delta < 0) {
                 state->callback = (void (*)(void))RoomLib_HandlerBPhase;
