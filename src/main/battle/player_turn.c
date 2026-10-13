@@ -23,6 +23,7 @@ int Battle_StepCharacterAction(BattleInitSlot *slot);
 
 void Battle_UpdatePlayerTurn(void)
 {
+
     BattleInitSlot *slot = &D_800BE830[g_BattleActionIndex];
     BattleEntity *player = D_8009D254;
     BattleEntity *actor;
@@ -61,11 +62,10 @@ void Battle_UpdatePlayerTurn(void)
                 CORE_HEALTH(slot->actor) <= 0) {
                 u8 count = D_8009CE39;
                 u8 delta = D_8009CE3B;
-                register Combatant *effect asm("$4");
-                                effect = g_ActiveActor;
+                BattleAction *effectAction = g_ActiveActor->action;
                 D_8009CE39 = count + delta;
                 asm volatile("" : : );
-                if (effect->action->attackWord & 0x3FF)
+                if (effectAction->attackWord & 0x3FF)
                     Battle_StartEnemyAttackEffect(slot->actor);
             }
         }
