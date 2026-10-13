@@ -78,7 +78,7 @@ int Render_DrawSpriteEntry(GeomEntry *input)
 
     active = g_ActiveDrawSlot;
     entry = input;
-    sprite = (RenderTilePacket *)entry->u30.prim;
+    sprite = entry->u30.prim;
     count = entry->prim_count;
     asm("" : "=r"(active), "=r"(sprite), "=r"(count)
         : "0"(active), "1"(sprite), "2"(count));
