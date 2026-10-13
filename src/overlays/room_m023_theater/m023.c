@@ -8,7 +8,7 @@
  * a local pointer first: its address load is what keeps the frame counter
  * load after the palette lookup like retail. */
 
-int func_8018F004(int mode, RoomDriftPulseState *state) {
+int RoomM023_DriftPulseCallback(int mode, RoomDriftPulseState *state) {
     GteShortVector origin;
     GteRotation rotation;
     RenderColor color;
@@ -106,7 +106,7 @@ int func_8018F004(int mode, RoomDriftPulseState *state) {
 
 /* Every `interval` frames emits a particle with a random velocity, either
  * from the tracked model joint or from a random point of a wide band. */
-int func_8018F3C8(int mode, RoomM023ScatterState *state) {
+int RoomM023_ScatterEmitter(int mode, RoomM023ScatterState *state) {
     RoomM023Template template = D_8018EFF4;
     s16 position[4];
     RoomM023Particle *particle;
@@ -125,7 +125,7 @@ int func_8018F3C8(int mode, RoomM023ScatterState *state) {
             break;
         }
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomM023Channel)->pool, 16, 12,
-                             (FieldFxCallbackListCallback)func_8018F004);
+                             (FieldFxCallbackListCallback)RoomM023_DriftPulseCallback);
     case 1:
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomM023Channel)->pool, state->joint, &template, position);
         state->timer++;
@@ -167,7 +167,7 @@ int func_8018F3C8(int mode, RoomM023ScatterState *state) {
     return 0;
 }
 
-int func_8018F710(int mode, RoomM023JointGlow *glow) {
+int RoomM023_JointGlow(int mode, RoomM023JointGlow *glow) {
     GteShortVector position;
     GteRotation rotation;
     RoomM023Template template = D_8018EFF4;
@@ -271,7 +271,7 @@ int func_8018F710(int mode, RoomM023JointGlow *glow) {
 /* Joint beacon: rides a model joint, swells in, pulses, flickers and
  * collapses, tagging the player once on contact; draws a glow sprite pair
  * with two star fans and a loaded model scaled by the beacon size. */
-int func_8018FC14(int mode, RoomM023Beacon *state) {
+int RoomM023_JointBeacon(int mode, RoomM023Beacon *state) {
     GteVector scale;
     GteShortVector position;
     GteShortVector rotation;

@@ -70,7 +70,7 @@ extern RoomM023Template D_8018EFF4;
 #define RoomM023_ScriptAnchor (*(GteShortVector *)&g_RoomScriptRecord)
 
 extern int rand(void);
-extern int func_8018F004(int mode,
+extern int RoomM023_DriftPulseCallback(int mode,
                          RoomM023DriftPulseCallbackView *particle);
 
 /* Joint glow: a ring burst, then a growing and pulsing glow sprite pair
@@ -83,6 +83,6 @@ typedef struct RoomM023JointGlow {
 
 extern RenderColor D_8018EFFC;
 extern RenderColor D_8018F000;
-int func_8018F710(int mode, RoomM023JointGlow *glow);
+int RoomM023_JointGlow(int mode, RoomM023JointGlow *glow);
 
 #endif

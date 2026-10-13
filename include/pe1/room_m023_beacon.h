@@ -20,7 +20,7 @@
 #include "pe1/room_m023_effects.h"
 #include "pe1/scene_archive.h"
 
-/* room_m023 joint beacon (func_8018FC14): follows a model joint, swells
+/* room_m023 joint beacon (RoomM023_JointBeacon): follows a model joint, swells
  * and pulses through four phases, tags the player on contact and draws a
  * glow sprite pair, two star fans and a loaded model at the joint. */
 typedef struct RoomM023Beacon {
