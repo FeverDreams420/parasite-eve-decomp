@@ -48,6 +48,11 @@ segments:
         type: databin
         name: RoomSlotC_8018FC54
         dir: room_m027_sewer
+      - [0xFF68, data, D_8019EF50]
+      - start: 0xFF74
+        type: databin
+        name: D_8019EF5C
+        dir: room_m027_sewer
   - [0x10800]
 # room: m027, section3 sector 13743, scanner delta 0
 # source slice: room-section3

@@ -71,6 +71,11 @@ segments:
         type: databin
         name: D_801E01E0
         dir: room_m188_subway
+      - [0x5B940, data, D_801EA928]
+      - start: 0x5B988
+        type: databin
+        name: D_801EA970
+        dir: room_m188_subway
   - [0x5C000]
 # room: m188, section3 sector 50714, scanner delta 0
 # source slice: room-section3

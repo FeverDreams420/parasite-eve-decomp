@@ -48,6 +48,11 @@ segments:
         type: databin
         name: RoomSlotC_8018FC54
         dir: room_m030_sewer
+      - [0x11E60, data, D_801A0E48]
+      - start: 0x11E6C
+        type: databin
+        name: D_801A0E54
+        dir: room_m030_sewer
   - [0x12800]
 # room: m030, section3 sector 14403, scanner delta 0
 # source slice: room-section3

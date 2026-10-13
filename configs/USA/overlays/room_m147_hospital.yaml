@@ -81,6 +81,11 @@ segments:
         type: databin
         name: D_801C01E0
         dir: room_m147_hospital
+      - [0x432F4, data, D_801D22DC]
+      - start: 0x4330C
+        type: databin
+        name: D_801D22F4
+        dir: room_m147_hospital
   - [0x43800]
 # room: m147, section3 sector 42679, scanner delta 0
 # source slice: room-section3

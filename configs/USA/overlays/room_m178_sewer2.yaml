@@ -64,6 +64,11 @@ segments:
         type: databin
         name: D_801932D8
         dir: room_m178_sewer2
+      - [0x19D94, data, D_801A8D7C]
+      - start: 0x19DB8
+        type: databin
+        name: D_801A8DA0
+        dir: room_m178_sewer2
   - [0x1A000]
 # room: m178, section3 sector 49170, scanner delta 0
 # source slice: room-section3

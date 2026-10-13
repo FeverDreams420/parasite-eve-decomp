@@ -59,6 +59,11 @@ segments:
         type: databin
         name: D_801C01EC
         dir: room_m203_museum
+      - [0x4A70C, data, D_801D96F4]
+      - start: 0x4A73C
+        type: databin
+        name: D_801D9724
+        dir: room_m203_museum
   - [0x4B000]
 # room: m203, section3 sector 54307, scanner delta 0
 # source slice: room-section3

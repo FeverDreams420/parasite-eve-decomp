@@ -54,6 +54,11 @@ segments:
         type: databin
         name: RoomSlotA_80193E24
         dir: room_m404_chrysler
+      - [0x41178, data, D_801D0160]
+      - start: 0x4119C
+        type: databin
+        name: D_801D0184
+        dir: room_m404_chrysler
       - [0x411F8, data, D_801D01E0]
   - [0x41800]
 # room: m404, section3 sector 93050, scanner delta 0

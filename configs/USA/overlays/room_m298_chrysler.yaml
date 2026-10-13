@@ -51,6 +51,11 @@ segments:
         type: databin
         name: RoomSlotC_80193148
         dir: room_m298_chrysler
+      - [0x1DB9C, data, D_801ACB84]
+      - start: 0x1DBB4
+        type: databin
+        name: D_801ACB9C
+        dir: room_m298_chrysler
   - [0x1E000]
 # room: m298, section3 sector 74586, scanner delta 0
 # source slice: room-section3

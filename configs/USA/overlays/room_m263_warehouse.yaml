@@ -63,6 +63,11 @@ segments:
         type: databin
         name: D_801C01E0
         dir: room_m263_warehouse
+      - [0x3DA08, data, D_801CC9F0]
+      - start: 0x3DA20
+        type: databin
+        name: D_801CCA08
+        dir: room_m263_warehouse
   - [0x3E000]
 # room: m263, section3 sector 67837, scanner delta 0
 # source slice: room-section3

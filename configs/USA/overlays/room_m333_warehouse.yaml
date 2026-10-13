@@ -57,6 +57,11 @@ segments:
         type: databin
         name: RoomLib_SlotTable
         dir: room_m333_warehouse
+      - [0x28184, data, D_801B716C]
+      - start: 0x281B4
+        type: databin
+        name: D_801B719C
+        dir: room_m333_warehouse
   - [0x28800]
 # room: m333, section3 sector 80602, scanner delta 0
 # source slice: room-section3

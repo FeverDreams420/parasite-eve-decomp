@@ -51,6 +51,11 @@ segments:
         type: databin
         name: RoomSlotC_80193148
         dir: room_m014_theater
+      - [0x2065C, data, D_801AF644]
+      - start: 0x20674
+        type: databin
+        name: D_801AF65C
+        dir: room_m014_theater
   - [0x21000]
 # room: m014, section3 sector 11368, scanner delta 0
 # source slice: room-section3

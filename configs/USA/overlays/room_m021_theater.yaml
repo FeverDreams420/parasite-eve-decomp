@@ -43,6 +43,11 @@ segments:
         type: databin
         name: D_8018FB80
         dir: room_m021_theater
+      - [0x1C618, data, D_801AB600]
+      - start: 0x1C624
+        type: databin
+        name: D_801AB60C
+        dir: room_m021_theater
   - [0x1C800]
 # room: m021, section3 sector 12456, scanner delta 0
 # source slice: room-section3

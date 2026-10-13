@@ -50,6 +50,11 @@ segments:
         type: databin
         name: D_801A81E4
         dir: room_m126_hospital
+      - [0x24078, data, D_801B3060]
+      - start: 0x24084
+        type: databin
+        name: D_801B306C
+        dir: room_m126_hospital
   - [0x24800]
 # room: m126, section3 sector 38302, scanner delta 1
 # source slice: room-section3

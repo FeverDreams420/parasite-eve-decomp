@@ -168,6 +168,11 @@ segments:
         type: databin
         name: D_801D01E8
         dir: room_m273_liberty
+      - [0x4FDCC, data, D_801DEDB4]
+      - start: 0x4FE44
+        type: databin
+        name: D_801DEE2C
+        dir: room_m273_liberty
   - [0x50800]
 # room: m273, section3 sector 70012, scanner delta 0
 # source slice: room-section3

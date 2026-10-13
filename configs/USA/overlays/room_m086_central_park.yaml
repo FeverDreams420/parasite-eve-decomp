@@ -59,6 +59,11 @@ segments:
         type: databin
         name: D_801A81F4
         dir: room_m086_central_park
+      - [0x266C0, data, D_801B56A8]
+      - start: 0x266D8
+        type: databin
+        name: D_801B56C0
+        dir: room_m086_central_park
   - [0x27000]
 # room: m086, section3 sector 29189, scanner delta 0
 # source slice: room-section3

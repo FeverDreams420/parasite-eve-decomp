@@ -52,6 +52,11 @@ segments:
         type: databin
         name: RoomSlotC_80193118
         dir: room_m162_chinatown
+      - [0x355B8, data, D_801C45A0]
+      - start: 0x355DC
+        type: databin
+        name: D_801C45C4
+        dir: room_m162_chinatown
   - [0x36000]
 # room: m162, section3 sector 46136, scanner delta 0
 # source slice: room-section3

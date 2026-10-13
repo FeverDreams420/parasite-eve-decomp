@@ -58,6 +58,11 @@ segments:
         type: databin
         name: D_80190194
         dir: room_m111_nypd
+      - [0x318A0, data, D_801C0888]
+      - start: 0x318AC
+        type: databin
+        name: D_801C0894
+        dir: room_m111_nypd
   - [0x32000]
 # room: m111, section3 sector 34874, scanner delta 0
 # source slice: room-section3

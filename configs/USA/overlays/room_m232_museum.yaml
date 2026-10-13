@@ -46,6 +46,11 @@ segments:
         type: databin
         name: D_801981F8
         dir: room_m232_museum
+      - [0x1CD80, data, D_801ABD68]
+      - start: 0x1CD8C
+        type: databin
+        name: D_801ABD74
+        dir: room_m232_museum
   - [0x1D000]
 # room: m232, section3 sector 60803, scanner delta 0
 # source slice: room-section3

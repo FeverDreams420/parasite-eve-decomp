@@ -46,6 +46,11 @@ segments:
         type: databin
         name: RoomLib_SlotTable
         dir: room_m159_hospital
+      - [0x1DE30, data, D_801ACE18]
+      - start: 0x1DE3C
+        type: databin
+        name: D_801ACE24
+        dir: room_m159_hospital
   - [0x1E800]
 # room: m159, section3 sector 45529, scanner delta 0
 # source slice: room-section3

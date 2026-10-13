@@ -60,6 +60,11 @@ segments:
         type: databin
         name: D_801900B8
         dir: room_m187_subway
+      - [0x17598, data, D_801A6580]
+      - start: 0x175A4
+        type: databin
+        name: D_801A658C
+        dir: room_m187_subway
   - [0x17800]
 # room: m187, section3 sector 50449, scanner delta 0
 # source slice: room-section3

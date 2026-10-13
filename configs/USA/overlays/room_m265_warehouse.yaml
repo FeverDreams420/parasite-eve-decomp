@@ -57,6 +57,11 @@ segments:
         type: databin
         name: RoomLib_SlotTable
         dir: room_m265_warehouse
+      - [0x2728C, data, D_801B6274]
+      - start: 0x272BC
+        type: databin
+        name: D_801B62A4
+        dir: room_m265_warehouse
   - [0x27800]
 # room: m265, section3 sector 68099, scanner delta 0
 # source slice: room-section3

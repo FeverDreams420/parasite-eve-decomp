@@ -114,6 +114,11 @@ segments:
         type: databin
         name: D_801974FC
         dir: room_m383_chrysler
+      - [0x35898, data, D_801C4880]
+      - start: 0x358B0
+        type: databin
+        name: D_801C4898
+        dir: room_m383_chrysler
   - [0x36000]
 # room: m383, section3 sector 88737, scanner delta 0
 # source slice: room-section3

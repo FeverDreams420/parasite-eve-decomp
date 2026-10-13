@@ -45,6 +45,11 @@ segments:
         type: databin
         name: D_80192590
         dir: room_m386_chrysler
+      - [0x12644, data, D_801A162C]
+      - start: 0x12650
+        type: databin
+        name: D_801A1638
+        dir: room_m386_chrysler
   - [0x12800]
 # room: m386, section3 sector 89285, scanner delta 0
 # source slice: room-section3

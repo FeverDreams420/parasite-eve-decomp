@@ -45,6 +45,11 @@ segments:
         type: databin
         name: D_80192590
         dir: room_m407_chrysler
+      - [0x1F7C0, data, D_801AE7A8]
+      - start: 0x1F7D8
+        type: databin
+        name: D_801AE7C0
+        dir: room_m407_chrysler
   - [0x20000]
 # room: m407, section3 sector 93670, scanner delta 0
 # source slice: room-section3

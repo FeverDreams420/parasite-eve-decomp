@@ -46,6 +46,11 @@ segments:
         type: databin
         name: RoomLib_PairB
         dir: room_m139_hospital
+      - [0x21418, data, D_801B0400]
+      - start: 0x21424
+        type: databin
+        name: D_801B040C
+        dir: room_m139_hospital
   - [0x21800]
 # room: m139, section3 sector 40549, scanner delta 1
 # source slice: room-section3
