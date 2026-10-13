@@ -666,7 +666,7 @@ MenuWidgetNode *MenuWidget_CreateNode(s32 mode, MenuWidgetNode *parent_arg, Menu
         t = desc->x;
         node->x = t;
         u = desc->y;
-        node->update = (void (*)())Menu_StepScrollCursor;
+        node->update = Menu_StepScrollCursor;
         node->y = u;
         t = desc->gridWidth;
         node->x_limit = t;
@@ -1617,7 +1617,7 @@ void Draw_SwapPrimBuffers(MenuWidgetNode *list)
         Inv_BoundsCheckAssertStub(16);
     node->mode = 3;
     node->draw = Draw_FlushFrontBuffer;
-    node->update = (void (*)())Menu_StepListNavigate;
+    node->update = Menu_StepListNavigate;
     navigation->list = list;
     navigation->flags = list->layout_flags;
     list->popup_node = node;
