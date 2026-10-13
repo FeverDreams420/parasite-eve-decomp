@@ -7,7 +7,7 @@
 #include "pe1/render_object.h"
 #include "pe1/room_ember_burst.h"
 
-/* Twin ribbon controller (room_m318 func_80196E4C): two mirrored pairs of
+/* Twin ribbon controller (room_m318 RoomM318_TwinRibbon): two mirrored pairs of
  * light ribbons hang between the actor's bones 8 and 21; a pulse is shed
  * from alternating bones every frame until the parameters stop it. */
 typedef struct RoomTwinRibbon {
@@ -58,6 +58,6 @@ extern GteShortVector D_8018F22C;
 extern RenderColor D_8018F234;
 extern RenderColor D_8018F238;
 extern RenderColor D_8018F23C;
-extern int func_80196C48(int mode, RoomTwinRibbonPulse *p);
+extern int RoomM318_TwinRibbonPulseCallback(int mode, RoomTwinRibbonPulse *p);
 
 #endif

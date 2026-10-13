@@ -38,9 +38,9 @@ extern RenderColor D_8018F200;
 extern RenderColor D_8018F204;
 
 extern int rand(void);
-extern int func_801944E8(int mode, RoomOrbitTrailParticle *p);
+extern int RoomM318_EmberBurstParticleCallback(int mode, RoomOrbitTrailParticle *p);
 
-/* Ember fountain controller (func_80197CBC): follows its actor for 141
+/* Ember fountain controller (RoomM318_EmberFountain): follows its actor for 141
  * frames while it sprays embers, smoke and orbiting sparks. */
 typedef struct RoomEmberFountain {
     s16 x, y, z;                  /* 0x00 */
@@ -57,19 +57,19 @@ typedef struct RoomEmberFountainChannel {
 } RoomEmberFountainChannel;
 
 extern GteShortVector D_8019993C;
-extern int func_80197618(int mode, RoomOrbitTrailParticle *p);
+extern int RoomM318_EmberFountainParticleCallback(int mode, RoomOrbitTrailParticle *p);
 
-/* Ember fountain particle (func_80197618). */
+/* Ember fountain particle (RoomM318_EmberFountainParticleCallback). */
 extern GteRotation D_8018F1F4;
 extern RenderColor D_8018F240;
 extern u8 D_80199868[];
 
-/* Twisting ember particle (func_80198268): its glow track and the bent
+/* Twisting ember particle (RoomM318_EmberSpiralParticleCallback): its glow track and the bent
  * trail renderer it draws the orbiting sparks with. */
 extern u8 D_80199890[];
 extern void FieldFx_OffsetPointByAngles(void *, void *, int, void *, int, int);
 
-/* Fan sweep controller (func_80192A7C): attaches to the actor named by its
+/* Fan sweep controller (RoomM318_FanSweep): attaches to the actor named by its
  * parameters, fans out sparks on a turning angle into its own pool and
  * publishes that pool and its anchor for the pool's callbacks. */
 typedef struct RoomFanSweep {
@@ -100,7 +100,7 @@ PE1_STATIC_ASSERT(sizeof(RoomFanSweepSpark) == 0x10,
 extern void *D_80199900;
 extern RenderColor D_8018F1F0;
 extern GteShortVector D_801998F8;
-extern int func_80192718(int mode, RoomFanSweepSpark *spark);
+extern int RoomM318_FanSweepSpark(int mode, RoomFanSweepSpark *spark);
 /* Main executable copy of the fan sweep spark (FieldFx_FanSweepSpark). */
 extern void *g_FanSweepSparkTrailPool;
 extern RenderColor D_800C22D4;
@@ -127,10 +127,10 @@ typedef struct FieldFanSweepEvent {
 } FieldFanSweepEvent;
 
 extern RenderColor g_FieldFxFanSweepGlowTint;
-extern int func_80192620(int mode, s16 *position);
+extern int RoomM318_FanSweepTrailCallback(int mode, s16 *position);
 extern int FieldFx_UpdateCallbackList(void *pool);
 
-/* Spiral drop controller (func_80192ED4): attaches to the actor named by
+/* Spiral drop controller (RoomM318_SpiralDrop): attaches to the actor named by
  * its parameters and drops falling sparks from a point that circles it on
  * a turning angle at a pulsing radius. */
 typedef struct RoomSpiralDrop {
@@ -163,7 +163,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomSpiralDropSparkRecord, callback.speed) == 6,
                   room_spiral_drop_spark_speed_offset);
 
 extern u8 D_801994BC[];
-extern int func_80192DA0(int mode, volatile RoomSpiralDropSparkRecord *spark);
+extern int RoomM318_SpiralDropSparkCallback(int mode, volatile RoomSpiralDropSparkRecord *spark);
 
 /* Attaches the effect to the first live actor with the given ids, or
  * reports the missing actor. */

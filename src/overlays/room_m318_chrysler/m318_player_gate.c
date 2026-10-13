@@ -6,7 +6,7 @@
 #include "../room_lib/room_lib.h"
 #include "m318_player_gate_externs.h"
 
-s32 func_801992A4(s32 arg0, void *arg1, s32 *arg2) {
+s32 RoomM318_PlayerGate(s32 arg0, void *arg1, s32 *arg2) {
     FieldActorState *actor;
 
     if (arg0 != 1) {
@@ -45,6 +45,6 @@ s32 func_801992A4(s32 arg0, void *arg1, s32 *arg2) {
  * RoomLib_SetArg1 unit linked just before this one. */
 ROOMLIB_SET_ARG1(RoomM318_SetScriptArg2, g_RoomM318ScriptArg2)
 
-int *func_8019938C(void) {
-    return &D_801998F0;
+int *RoomM318_GetActorParams(void) {
+    return &g_RoomM318ActorParams;
 }
