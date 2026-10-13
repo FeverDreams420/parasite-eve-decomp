@@ -56,8 +56,10 @@ extern BattleStatusMarkerBody g_BattleStatusValueMarkerSlots[2];
 extern RenderPagedSpritePacket g_BattleStatusValueDigits[2][2];  /* ammo digits */
 extern BattleGaugePrim g_BattleTargetHighlightSprites[2][3];
 extern BattleGaugePrim g_BattleStatusPointerSprites[2];
-/* Status symbols use the same texture-page and sprite packet layout. */
-extern BattleGaugePrim D_8009E730[2];
+/* Status symbols use the same texture-page and sprite packet layout.
+ * Label sprite (u 0x68, v 0xF4, 24x4) Battle_DrawStatusOverlay mode 3 places
+ * at the status bar before the status value; one per draw buffer. */
+extern BattleGaugePrim g_BattleStatusValueLabelSprites[2];
 extern BattleGaugePrim g_BattleAmmoLabelSprites[2];
 extern RenderPagedSpritePacket g_BattleAmmoDigitSprites[2][4];  /* ammo count digits */
 

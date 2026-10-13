@@ -16,7 +16,7 @@
  * through $gp, every other extern stays absolute. */
 int g_ScriptCollisionFlag;
 u8 *g_TextboxMessageSource;
-unsigned char D_8009CE94;
+unsigned char g_TextboxKernGlyph0F;
 TextboxRect g_TextboxPendingRect;
 u8 g_DialogueChoiceCursor;
 u8 g_PlayerMovementEnabled;
@@ -56,7 +56,7 @@ void Draw_InitDrawModeTilePacket(GpuModeTilePacket *packet, int tpage) {
 }
 
 void Menu_SetEquipSlotIndex(int index) {
-    D_8009CE94 = index;
+    g_TextboxKernGlyph0F = index;
 }
 
 void SetDrawTPage(void *, int, int, int);
@@ -857,7 +857,7 @@ void Menu_DrawTextboxEntries(void) {
                     cursor.x = var_v0_3;
                     break;
                 case 0xF:
-                    if (D_8009CE94 == 1) {
+                    if (g_TextboxKernGlyph0F == 1) {
                         cursor.x -= 7;
                     }
                     /* fallthrough */

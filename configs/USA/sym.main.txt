@@ -3648,3 +3648,7 @@ g_AkaoNestedKeyOffMask = 0x800B89D4;
 g_AkaoNestedKeyOnMask = 0x800B89D8;
 g_AkaoNestedPan = 0x800B89DC;
 g_AkaoNestedPanTarget = 0x800B89E0;
+g_BattleStatusValueLabelSprites = 0x8009E730; // size:0x38
+g_TextboxKernGlyph0F = 0x8009CE94;
+g_EntityBankBuffer = 0x800B0E2C;
+FieldFx_LoopLinkedAnimation = 0x800DFB20; // type:func

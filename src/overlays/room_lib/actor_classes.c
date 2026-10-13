@@ -392,7 +392,7 @@ void RoomLib_HandlerD(RoomEnt *o) {
     if (state->lockY == 0) {
         RoomLib_FxNotify(link, (struct RoomSub *)state, (int)scratch);
     }
-    func_800DFB20(ent);
+    FieldFx_LoopLinkedAnimation(ent);
 }
 
 void RoomLib_FxNotify(RoomLink *arg0, struct RoomSub *arg1, int scratch) {
@@ -814,7 +814,7 @@ void RoomLib_HandlerE(RoomEnt *o) {
         }
     }
     RoomLib_HandlerESteerToward(link, state);
-    func_800DFB20(o);
+    FieldFx_LoopLinkedAnimation(o);
 }
 void RoomLib_HandlerESteerToward(char *entArg, char *recArg) {
     RoomLink *ent = (RoomLink *)entArg;
@@ -1179,7 +1179,7 @@ void RoomLib_HandlerB(RoomEnt *obj) {
         link->rotation[1] = FieldFx_TurnToward(
             link->rotation[1], (short)result, state->secondaryHeading);
     }
-    func_800DFB20(self);
+    FieldFx_LoopLinkedAnimation(self);
     if (scratch->landed != 0) {
         RoomLib_ReleaseHandlerB(self);
     }
@@ -1302,7 +1302,7 @@ void RoomLib_AdvanceArcToTarget(RoomEnt *obj) {
         link->pos[1] = ((RoomLibHandlerBState *)state)->target[1];
         link->pos[2] = ((RoomLibHandlerBState *)state)->target[2];
     }
-    func_800DFB20(self);
+    FieldFx_LoopLinkedAnimation(self);
     if (((RoomLibArcWork *)scratch)->landed != 0) {
         RoomLib_ReleaseHandlerB(self);
     }
@@ -1615,7 +1615,7 @@ void RoomLib_HandlerC(RoomEnt *obj) {
         link->rotation[1] = FieldFx_TurnToward(
             link->rotation[1], (short)angle, state->secondaryHeading);
     }
-    func_800DFB20(self);
+    FieldFx_LoopLinkedAnimation(self);
     if (((RoomLibArcWork *)scratch)->landed != 0) {
         RoomLib_ReleaseHandlerC(self);
     }
@@ -1736,7 +1736,7 @@ void RoomLib_AdvanceArcToTargetY(RoomEnt *obj) {
         ((RoomLibArcWork *)scratch)->landed = 1;
         link->pos[1] = ((RoomLibHandlerCState *)state)->arcTarget[1];
     }
-    func_800DFB20(self);
+    FieldFx_LoopLinkedAnimation(self);
     if (((RoomLibArcWork *)scratch)->landed != 0) {
         RoomLib_ReleaseHandlerC(self);
     }

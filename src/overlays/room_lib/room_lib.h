@@ -634,7 +634,7 @@ extern unsigned char RoomLib_TwelveEffectTable[];
 #define ROOMLIB_JOIN(a, b) ROOMLIB_JOIN_RAW(a, b)
 
 extern void RoomLib_FxNotify(RoomLink *l, struct RoomSub *s, int scratch);
-extern void func_800DFB20(void *state);
+extern void FieldFx_LoopLinkedAnimation(void *state);
 
 /* state=4 and clear the signal word */
 #define ROOMLIB_SET4_CLEAR_SIGNAL(name) \

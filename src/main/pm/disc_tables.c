@@ -61,7 +61,7 @@ int Draw_InitDisplay(int mode) {
     g_SceneBankAssetSource = ptr;
     ptr += 0x6000;
     g_VoiceBankBase = ptr2;
-    D_800B0E2C = ptr;
+    g_EntityBankBuffer = ptr;
     ptr += 0xE000;
     g_EntityTextureBlob = ptr;
 

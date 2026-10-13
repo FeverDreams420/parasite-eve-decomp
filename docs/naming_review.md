@@ -116,7 +116,7 @@ gone:
   `D_800B89F8`, `D_800BCF88`);
 - no reader: written-only words, unreferenced tails after a sized object
   and the pad words after the 0x2C-byte effect states;
-- role not established: `func_800C6C18`, `func_800DFB20`, `D_800B0E2C`,
+- role not established: `func_800C6C18`, `FieldFx_LoopLinkedAnimation`, `g_EntityBankBuffer`,
   `D_800B0E48`, `D_800B6914`, `D_800E21D0`, and the mdec_diag window bytes
   `D_8010BD00` (the window start itself is `g_MdecOverlayArea`);
 - used only in `fieldfx/geometry.c`, `render/object.c` or

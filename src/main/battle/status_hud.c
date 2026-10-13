@@ -278,11 +278,11 @@ void Battle_DrawHPBar(void) {
             BATTLE_SET_SPRITE_COLOR(BATTLE_SPRITE_SLOTS(g_BattleAmmoDigitSprites, 4)[bufferIndex][(u8)i].sprite,
                                     0x80, 0x80, 0x80);
         }
-        Draw_InitDrawModeSprtPacket(&D_8009E730[bufferIndex], hudPage);
-        statusIcon = &D_8009E730[bufferIndex].sprite;
+        Draw_InitDrawModeSprtPacket(&g_BattleStatusValueLabelSprites[bufferIndex], hudPage);
+        statusIcon = &g_BattleStatusValueLabelSprites[bufferIndex].sprite;
         statusIcon->u = 0x68;
         statusIcon->v = 0xF4;
-        D_8009E730[bufferIndex].sprite.clut = GetClut(0x130, 0x1F9);
+        g_BattleStatusValueLabelSprites[bufferIndex].sprite.clut = GetClut(0x130, 0x1F9);
         statusIcon->width = 0x18;
         statusIcon->height = 4;
         BATTLE_SET_SPRITE_COLOR(*statusIcon, 0x80, 0x80, 0x80);
@@ -363,7 +363,7 @@ void Battle_DrawStatusOverlay(RenderObjectEntity *object, int mode, int outOfRan
             RenderSpritePacket *packet;
             u8 *packetTagBase;
             Battle_LayoutStatusPrimRow(0x1C);
-            packetBase = (u8 *)&D_8009E730[0].sprite;
+            packetBase = (u8 *)&g_BattleStatusValueLabelSprites[0].sprite;
             slot = g_ActiveDrawSlot;
             packetOffset = slot * 28;
             packet = (RenderSpritePacket *)(packetBase + packetOffset);
