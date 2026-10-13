@@ -580,7 +580,7 @@ void Entity_TickAnimSequences(FieldActor *arg0) {
 
     i = 0;
     do {
-        node = (ScriptNode *)arg0->script_node_lists[i];
+        node = arg0->script_node_lists[i];
         if (node != 0) {
             do {
                 if (node->next_value != 0) {
