@@ -829,23 +829,17 @@ int g_SceneDataTable0;
 
 int Boot_CheckModeSwitch(void) {
     int mode = g_RenderStateFlags & 7;
+    int cursor;
+    ScriptNode *node;
 
-    asm volatile("");
-    if (mode != 4) {
-        if (mode != 0) {
-            goto queue_mode_script;
-        }
-    }
-    return 1;
-queue_mode_script:
-    {
-        int cursor = g_SceneDataTable0;
-        ScriptNode *node = g_ScriptNodePool;
-        cursor -= 8;
-        g_SceneDataTable0 = cursor;
-        node->active = 1;
-        return 0;
-    }
+    if (mode == 4 || mode == 0)
+        return 1;
+    cursor = g_SceneDataTable0;
+    node = g_ScriptNodePool;
+    cursor -= 8;
+    g_SceneDataTable0 = cursor;
+    node->active = 1;
+    return 0;
 }
 
 #define NULL ((void *)0)
