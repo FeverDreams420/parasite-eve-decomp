@@ -939,7 +939,7 @@ int Scene_SetStoryDay(s32 storyDay) {
     }
 
     if ((storyDay - 1U) < 8U) {
-        if (storyDay != (s8)gameState->pending_story_day) {
+        if (storyDay != gameState->pending_story_day) {
             s8 newStoryDay;
 
             newStoryDay = storyDay;
