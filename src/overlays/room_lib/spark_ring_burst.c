@@ -159,7 +159,7 @@ int RoomEffect_SparkRingController(int mode, RoomSparkRingState *state) {
         case 1:
             state->timer++;
             pool = ANIM_POOL_AS(RoomSparkChannel)->pool;
-            child = (RoomSparkRingChild *)func_800CE610(pool);
+            child = func_800CE610(pool);
             if (child) {
                 child->x = state->target.x;
                 child->y = state->target.y;
@@ -296,7 +296,7 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
             spark->z += target.z;
             if (!(spark->timer & 1)) {
                 pool = ANIM_POOL_AS(RoomSparkChannel)->pool;
-                child = (RoomBurstSpark *)func_800CE610(pool);
+                child = func_800CE610(pool);
                 if (child) {
                     child->x = spark->x;
                     child->y = spark->y;
@@ -324,7 +324,7 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
                 spark->timer = 0;
                 for (i = 0; i < 6; i++) {
                     pool = ANIM_POOL_AS(RoomSparkChannel)->pool;
-                    child = (RoomBurstSpark *)func_800CE610(pool);
+                    child = func_800CE610(pool);
                     if (child) {
                         child->x = spark->x;
                         child->y = spark->y;
@@ -342,7 +342,7 @@ int RoomEffect_BurstSparkParticle(int mode, RoomBurstSpark *spark,
                 spark->timer = 0;
                 for (i = 0; i < 6; i++) {
                     pool = ANIM_POOL_AS(RoomSparkChannel)->pool;
-                    child = (RoomBurstSpark *)func_800CE610(pool);
+                    child = func_800CE610(pool);
                     if (child) {
                         child->x = spark->x;
                         child->y = spark->y;
