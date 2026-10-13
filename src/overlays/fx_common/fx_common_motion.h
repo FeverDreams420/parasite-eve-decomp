@@ -4,6 +4,7 @@
 #include "pe1/display_env.h"
 #include "pe1/gpu_image.h"
 #include "pe1/gte_types.h"
+#include "pe1/psyq_libc.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/signed_rect.h"
 
@@ -73,8 +74,6 @@ void Akao_Cmd_C1_WithSlot(int channel, int value, int mode);
 void func_80196498(void);
 void func_80191DE8(int enabled);
 s32 VSync(s32 value);
-void srand(int seed);
-int rand(void);
 void Field_HandleStateTransition(void);
 void SetDispMask(s32 value);
 void Boot_Shutdown(void);
