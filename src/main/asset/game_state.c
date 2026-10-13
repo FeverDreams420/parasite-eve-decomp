@@ -64,7 +64,7 @@ int Asset_OpenPeImage(void)
             }
         }
     }
-    return ((s8)g_PeImageMountFlags == 0) ? -2 : 0;
+    return (g_PeImageMountFlags == 0) ? -2 : 0;
 }
 
 /* Boot notice screen and disc check; mode 1 or 2 is the expected disc. */
