@@ -100,7 +100,7 @@ void Akao_StepSequencerVoice(void *arg0) {
     AkaoSequencerBank *p2c8b;
     AkaoSequencerBank *p2c8c;
     AkaoSequencerBank *pend;
-    register s32 all_voices asm("$4");
+    register s32 all_voices;
 
     arg0v = arg0;
     walk = (u8 *)arg0v;
@@ -210,7 +210,6 @@ void Akao_StepSequencerVoice(void *arg0) {
     pend->condition_value = 0;
     pend->key_on_request_mask = 0;
     all_voices = 0xFFFFFF;
-    __asm__ __volatile__("");
     pend->allocated_voice_mask = all_voices;
     pend->reserved_voice_mask = 0;
     Seq_MarkTrack34MaskDirty();
