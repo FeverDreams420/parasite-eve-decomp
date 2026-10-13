@@ -11,14 +11,14 @@ and `conflicting` otherwise. Rules for resolving the conflicting names are in
 
 | Class | Names |
 | --- | ---: |
-| Global names defined by any overlay | 3053 |
-| Defined in more than one overlay, identical | 981 |
-| Defined in more than one overlay, conflicting | 137 |
-| - of which already non-auto names | 25 |
-|   - room interface (a shared source names it) | 24 |
+| Global names defined by any overlay | 2996 |
+| Defined in more than one overlay, identical | 961 |
+| Defined in more than one overlay, conflicting | 119 |
+| - of which already non-auto names | 24 |
+|   - room interface (a shared source names it) | 23 |
 |   - also a main symbol | 1 |
 |   - private to one overlay's own code (must be renamed) | 0 |
-| - of which auto names (`func_`/`D_`/`jtbl_`/`__D_..._databin`) | 112 |
+| - of which auto names (`func_`/`D_`/`jtbl_`/`__D_..._databin`) | 95 |
 | Overlay global that main also defines | 8 |
 | - of which non-auto names | 1 |
 
@@ -37,7 +37,6 @@ Each overlay defines the name and a source shared by several overlays (`src/over
 | `RoomLib_GrabOnApproach` | room_m273_liberty, scene_e19_cruiser | .text | 452,468 |
 | `RoomLib_PairB` | room_m126_hospital, room_m129_hospital, room_m137_hospital, room_m139_hospital, room_m140_hospital, room_m141_hospital, ... (20) | .data | 4,1192,16808,24232,99496,99512,124096,129116,132804 |
 | `RoomLib_SlotTable` | room_m104_nypd, room_m113_nypd, room_m115_nypd, room_m116_nypd, room_m120_nypd, room_m122_nypd, ... (17) | .data | 48,128,15972,55848,87008,95156,118660,139584,143416,148260,197456 |
-| `RoomLib_TimedRenderTable` | room_m145_hospital, room_m152_hospital, room_m153_hospital, room_m154_hospital, room_m332_hospital, room_m399_chrysler, ... (8) | .data | 32,70280 |
 | `g_RoomClassTable` | room_m014_theater, room_m016_theater, room_m022_theater, room_m028_sewer, room_m032_sewer, room_m059_central_park, ... (120) | .data | 28,168,196 |
 | `g_RoomDrawList` | room_m034_sewer, room_m049_nypd, room_m050_nypd, room_m075_central_park, room_m080_central_park, room_m082_central_park, ... (46) | .data | 12,16,20,24,32 |
 | `g_RoomDropFieldDrawList` | room_m174_sewer2, room_m348_sewer, room_m383_chrysler | .data | 52,56 |
@@ -109,28 +108,20 @@ Left to the concurrent auto-name renaming; listed here only.
 | `D_801921C8` | room_m141_hospital, room_m269_warehouse, room_m328_hospital, scene_e01_chrysler | .data | 2,28 |
 | `D_801921D8` | room_m141_hospital, room_m328_hospital | .data | 2,188428 |
 | `D_801922E0` | room_m269_warehouse, scene_e01_chrysler | .data | 24,80 |
-| `D_801924E8` | room_m032_sewer, room_m059_central_park, room_m061_central_park, room_m062_central_park, room_m066_central_park, room_m067_central_park, ... (27) | .data | 56,112,768,32128 |
-| `D_80192520` | room_m059_central_park, room_m220_museum, room_m226_museum, room_m232_museum, room_m405_chrysler, room_m408_chrysler, ... (7) | .data | 56,23748,23764,23768 |
 | `D_80192590` | room_m032_sewer, room_m059_central_park, room_m220_museum, room_m226_museum, room_m232_museum, scene_e26_chrysler | .data | 600,23636,23652,23656,31960 |
 | `D_80192B9C` | room_m156_hospital, room_m291_chrysler, room_m380_hospital | .data | 36,92 |
 | `D_80192C34` | room_m049_nypd, room_m050_nypd, room_m090_soho, room_m156_hospital, room_m291_chrysler, room_m344_museum, ... (8) | .data | 2,4 |
-| `D_80192C38` | room_m049_nypd, room_m050_nypd, room_m090_soho, room_m156_hospital, room_m205_museum, room_m243_museum, ... (12) | .data | 1,4,56 |
+| `D_80192C38` | room_m049_nypd, room_m050_nypd, room_m090_soho, room_m156_hospital, room_m291_chrysler, room_m344_museum, ... (8) | .data | 1,4 |
 | `D_80192C3C` | room_m049_nypd, room_m050_nypd, room_m090_soho, room_m156_hospital, room_m291_chrysler, room_m344_museum, ... (8) | .data | 1,239180,251300,251320 |
 | `D_80192C40` | room_m049_nypd, room_m050_nypd, room_m090_soho, room_m344_museum, room_m374_central_park | .data | 2,185760,185768,238084 |
 | `D_80192C42` | room_m049_nypd, room_m344_museum | .data | 3586,21922 |
-| `D_80192C70` | room_m205_museum, room_m243_museum, room_m406_chrysler, room_m410_chrysler | .data | 56,112 |
 | `D_80192D44` | room_m205_museum, room_m243_museum, room_m406_chrysler, room_m410_chrysler | .data | 149284,161208,168532,178760 |
-| `D_8019316C` | room_m014_theater, room_m016_theater, room_m028_sewer, room_m100_nypd, room_m110_nypd, room_m121_nypd, ... (9) | .data | 56,112,168 |
-| `D_80193250` | room_m014_theater, room_m016_theater, room_m028_sewer, room_m100_nypd, room_m110_nypd, room_m121_nypd, ... (18) | .data | 56,112 |
 | `D_80193290` | room_m014_theater, room_m016_theater, room_m028_sewer, room_m100_nypd, room_m110_nypd, room_m121_nypd, ... (16) | .data | 4,68776,81672,85848,102388,103664,104692,115636,128580,131336 |
 | `D_80193294` | room_m162_chinatown, room_m163_chinatown, room_m398_chrysler, room_m400_chrysler, room_m403_chrysler, scene_e24_chrysler, ... (7) | .data | 1364,176348,177616,180124,201484,202152 |
 | `D_801932D8` | room_m167_sewer2, room_m168_sewer2, room_m169_sewer2, room_m173_sewer2, room_m178_sewer2, room_m295_chrysler, ... (9) | .data | 2,88740,143600,150044,150096,152304,317544 |
 | `D_801932DA` | room_m168_sewer2, room_m169_sewer2, room_m173_sewer2 | .data | 20230,20238,20250 |
-| `D_80193330` | room_m116_nypd, room_m120_nypd | .data | 56,168 |
 | `D_801933D8` | room_m116_nypd, room_m120_nypd | .data | 32,88 |
-| `D_80193EDC` | room_m152_hospital, room_m404_chrysler, scene_e18_cruiser | .data | 32,112,268 |
-| `D_80193FB4` | room_m263_warehouse, room_m265_warehouse, room_m333_warehouse | .data | 56,168 |
-| `D_8019405C` | room_m089_central_park, room_m263_warehouse, room_m265_warehouse, room_m333_warehouse | .data | 60,112 |
+| `D_80193EDC` | room_m404_chrysler, scene_e18_cruiser | .data | 32,268 |
 | `D_801940F0` | room_m203_museum, room_m221_museum, room_m223_museum, room_m224_museum, room_m229_museum, room_m233_museum, ... (11) | .data | 32,56 |
 | `D_80194164` | room_m089_central_park, room_m186_subway, room_m385_chrysler, room_m388_chrysler, room_m389_chrysler | .data | 4,28 |
 | `D_80194354` | room_m186_subway, room_m385_chrysler, room_m388_chrysler, room_m389_chrysler, room_m399_chrysler, room_m402_chrysler | .data | 1,60 |
@@ -139,14 +130,10 @@ Left to the concurrent auto-name renaming; listed here only.
 | `D_80194650` | room_m075_central_park, room_m080_central_park, room_m082_central_park | .data | 166452,179104,187584 |
 | `D_8019489C` | room_m231_museum, room_m234_museum, room_m393_chrysler, room_m396_chrysler | .data | 1,32 |
 | `D_801948A0` | room_m393_chrysler, room_m396_chrysler | .data | 178500 |
-| `D_80195604` | room_m245_museum, room_m397_chrysler, room_m401_chrysler | .data | 1,56 |
 | `D_80195700` | room_m153_hospital, room_m154_hospital, scene_e02_chrysler | .data | 2,56 |
 | `D_80195720` | room_m245_museum, room_m397_chrysler, scene_e02_chrysler | .data | 2,56 |
 | `D_80195FF0` | room_m188_subway, room_m390_chrysler | .data | 8712,238064 |
 | `D_801974FC` | room_m174_sewer2, room_m383_chrysler | .data | 167140,185220 |
-| `D_8019A810` | room_m273_liberty, room_m350_cruiser | .data | 2,56 |
-| `D_8019A864` | room_m273_liberty, room_m350_cruiser | .data | 2,28 |
-| `D_8019A880` | room_m273_liberty, room_m350_cruiser | .data | 4,56 |
 | `D_801B81E8` | room_m123_nypd, room_m256_museum | .data | 32760 |
 | `D_801C01E0` | room_m140_hospital, room_m174_sewer2, room_m197_museum, room_m220_museum, room_m233_museum, room_m242_museum, ... (7) | .data | 4,8,24,5640,9736 |
 | `D_801C01E4` | room_m115_nypd, room_m174_sewer2, room_m324_hospital, room_m327_hospital, room_m393_chrysler, room_m396_chrysler | .data | 4,8,7684,15876,26116 |
@@ -158,13 +145,8 @@ Left to the concurrent auto-name renaming; listed here only.
 | `D_801D01F4` | room_m272_liberty, room_m380_hospital | .data | 4,3572 |
 | `D_801D01F8` | room_m116_nypd, room_m272_liberty | .data | 13808,22000 |
 | `__D_8018FB80_databin` | room_m017_theater, room_m018_theater, room_m021_theater, room_m045_nypd, room_m102_nypd, room_m151_hospital, ... (7) | .data | 34424,66976,94616,113280,117204,133068,180952 |
-| `__D_8018FDDC_databin` | room_m063_central_park, room_m083_central_park | .data | 54156,55964 |
 | `__D_8018FDF8_databin` | room_m063_central_park, room_m083_central_park | .data | 54128,55936 |
-| `__D_801924E8_databin` | room_m022_theater, room_m198_museum, room_m217_museum | .data | 41424,42336,94976 |
-| `__D_80192520_databin` | room_m061_central_park, room_m062_central_park, room_m066_central_park, room_m067_central_park, room_m078_central_park, room_m081_central_park, ... (17) | .data | 62152,78536,89288,92872,99016,103112,105160,109256,111304,150216,160456,166600,172744,187584,187600,203464 |
-| `__D_80192558_databin` | room_m405_chrysler, room_m407_chrysler, room_m408_chrysler, room_m409_chrysler | .data | 117392,158352,162448 |
 | `__D_80192590_databin` | room_m022_theater, room_m061_central_park, room_m062_central_park, room_m066_central_park, room_m067_central_park, room_m078_central_park, ... (24) | .data | 41256,42168,61596,76924,89176,91168,93464,97252,102420,104228,106896,109520,115224,149340,155696,155836,159712,159904,165452,171092,187472,187488,201224 |
-| `__D_801932D0_databin` | room_m358_central_park, room_m384_chrysler, room_m387_chrysler | .data | 58264,66104 |
 | `__D_80193394_databin` | room_m358_central_park, room_m384_chrysler, room_m387_chrysler | .data | 58068,65908 |
 | `__D_801981E0_databin` | room_m005_theater, room_m118_nypd, room_m169_sewer2 | .data | 133036,157996,158284 |
 | `__D_801981E4_databin` | room_m059_central_park, room_m220_museum, room_m344_museum | .data | 65540,99800,163836 |
