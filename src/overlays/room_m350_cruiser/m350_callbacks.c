@@ -833,23 +833,25 @@ int func_80198CF8(int event,State *state)
         angle=FieldFx_VecToAngle((Vec3Fixed *)&g_PlayerEntity->pos_x,(Vec3Fixed *)&instance->pos_x)&4095;
         D_8019A8B8.playerAngle=angle;
         delta=(angle-(unsigned short)instance->rot_y)&4095;
-        do {
+        {
             if (state->mode != 0) {
                 if (state->mode != 1) {
                     state->targetSpeed=0;
-                    break;
+                    goto apply_cruise_speed;
                 }
             } else {
                 if(state->speed<=1280) instance->rot_y=FieldFx_TurnToward(instance->rot_y,angle,80);
                 if(state->speed<=state->targetSpeed && ((instance->rot_y-D_8019A8B8.playerAngle+64)&4095)<=256) {
                     state->mode=1; state->targetSpeed=1536; D_8019A8C0=0;
                 }
-                break;
+                goto apply_cruise_speed;
             }
             if(state->targetSpeed>=state->speed && ((delta-1536)&4095)<1024) {
                 state->mode=0; state->targetSpeed=512;
             }
-        } while (0);
+        }
+apply_cruise_speed:
+        asm volatile("");
         speed=state->speed; target=state->targetSpeed;
         {
             register int next asm("$3")=speed;

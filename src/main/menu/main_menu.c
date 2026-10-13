@@ -323,7 +323,7 @@ void Menu_DrawScreenAdjustPanel(void) {
 int Menu_ScreenAdjustInputHandler(void *node, int input) {
     int zero_arg;
 
-    do {
+    {
         if ((input & 0x1000) != 0) {
             zero_arg = 0;
             input = -1;
@@ -331,12 +331,13 @@ int Menu_ScreenAdjustInputHandler(void *node, int input) {
             zero_arg = 0;
             input = 1;
         } else {
-            break;
+            goto screen_adjust_other;
         }
         Draw_SetBaseOffsetPosition(zero_arg, input);
         Menu_PlayMoveSound();
         return 1;
-    } while (0);
+    }
+screen_adjust_other:
 
     if ((input & 0x10000) != 0) {
         MenuWidget_DestroyNode(node);
