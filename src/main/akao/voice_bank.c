@@ -217,8 +217,6 @@ void Akao_StepSequencerVoice(void *arg0) {
     Seq_MarkTrack3CMaskDirty();
 }
 
-void SeqOp_DeactivateVoice(AkaoTrack *ptr, int mask);
-
 void Akao_InitVoices(int arg0, char *arg1) {
     unsigned int i;
     int mode3;

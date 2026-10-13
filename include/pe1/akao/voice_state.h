@@ -24,5 +24,7 @@ void Seq_MarkTrack34MaskDirty(void);
 void Seq_MarkTrack38MaskDirty(void);
 void Seq_MarkTrack3CMaskDirty(void);
 void Spu_TickVoiceEnvelopes(AkaoTrack *track, unsigned int voice_mask);
+/* Sequence op handler; also called directly when a voice is released. */
+void SeqOp_DeactivateVoice(AkaoTrack *track, int mask);
 
 #endif
