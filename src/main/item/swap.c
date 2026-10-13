@@ -103,7 +103,7 @@ int Inv_TransferItem(int fromList, int fromSlot, int toList, int toSlot) {
     g_InvSelectionBits = g_InvSelectionBitStorage;
     g_InvSelectionBitWords = 2;
     if (fromList == LIST_ACTIVE && toList == fromList) {
-        u16 *table = (u16 *)g_InvActiveListItems;
+        u16 *table = g_InvActiveListItems;
         SwapItems(&table[fromSlot], &table[toSlot]);
         Inv_RebuildSelectableMask();
     } else if (fromList == LIST_AYA && toList == fromList) {
@@ -132,7 +132,7 @@ int Inv_TransferItem(int fromList, int fromSlot, int toList, int toSlot) {
             if (Item_LookupBaseData(*item - 1)->kind >= 16 && Item_LookupBaseData(*item - 1)->kind < 19) {
                 result = Inv_CanAddActiveListItemToAya(fromSlot) == 0;
             } else {
-                u16 *table = (u16 *)g_InvActiveListItems;
+                u16 *table = g_InvActiveListItems;
                 SwapItems(&table[fromSlot], (u16 *)&g_InvItemPtr[toSlot]);
             }
             Inv_RebuildSelectableMask();
