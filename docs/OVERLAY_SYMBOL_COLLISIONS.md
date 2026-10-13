@@ -16,11 +16,16 @@ and `conflicting` otherwise. Rules for resolving the conflicting names are in
 | Defined in more than one overlay, conflicting | 25 |
 | - of which already non-auto names | 25 |
 |   - room interface (a shared source names it) | 24 |
-|   - also a main symbol | 1 |
+| Global names defined by any overlay | 3816 |
+| Defined in more than one overlay, identical | 903 |
+| Defined in more than one overlay, conflicting | 93 |
+| - of which already non-auto names | 0 |
+|   - room interface (a shared source names it) | 0 |
+|   - also a main symbol | 0 |
 |   - private to one overlay's own code (must be renamed) | 0 |
 | - of which auto names (`func_`/`D_`/`jtbl_`/`__D_..._databin`) | 0 |
-| Overlay global that main also defines | 8 |
-| - of which non-auto names | 1 |
+| Overlay global that main also defines | 7 |
+| - of which non-auto names | 0 |
 
 ## Conflicting, private to an overlay
 
@@ -30,48 +35,23 @@ None.
 
 ## Conflicting, room interface
 
-Each overlay defines the name and a source shared by several overlays (`src/overlays/room_lib`, `include/pe1`) refers to it, so the name cannot differ per overlay in the source. The single-executable link gives each overlay's definition its overlay-specific name (`--rename-map`).
+Each overlay defines the name and a source shared by several overlays (`src/overlays/room_lib`, `include/pe1`) refers to it. Add it to `include/pe1/room_interface.h` and suffix its symbol-file entries with `__<overlay>` (docs/CONVENTIONS.md, Overlays).
 
-| Name | Overlays | Kinds | Sizes |
-| --- | --- | --- | --- |
-| `RoomLib_GrabOnApproach` | room_m273_liberty, scene_e19_cruiser | .text | 452,468 |
-| `RoomLib_PairB` | room_m126_hospital, room_m129_hospital, room_m137_hospital, room_m139_hospital, room_m140_hospital, room_m141_hospital, ... (20) | .data | 4,1192,16808,24232,99496,99512,124096,129116,132804 |
-| `RoomLib_SlotTable` | room_m104_nypd, room_m113_nypd, room_m115_nypd, room_m116_nypd, room_m120_nypd, room_m122_nypd, ... (17) | .data | 48,128,15972,55848,87008,95156,118660,139584,143416,148260,197456 |
 | `g_RoomCaptureFrameWord` | room_m156_hospital, room_m291_chrysler, room_m380_hospital | .data | 239180,251300,251320 |
-| `g_RoomClassTable` | room_m014_theater, room_m016_theater, room_m022_theater, room_m028_sewer, room_m032_sewer, room_m059_central_park, ... (120) | .data | 28,168,196 |
-| `g_RoomDrawList` | room_m034_sewer, room_m049_nypd, room_m050_nypd, room_m075_central_park, room_m080_central_park, room_m082_central_park, ... (46) | .data | 12,16,20,24,32 |
-| `g_RoomDropFieldDrawList` | room_m174_sewer2, room_m348_sewer, room_m383_chrysler | .data | 52,56 |
-| `g_RoomDropFieldParticleFrames` | room_m174_sewer2, room_m348_sewer, room_m383_chrysler | .data | 20,24 |
-| `g_RoomEruptionSpawnLayout` | room_m141_hospital, room_m146_hospital, room_m153_hospital, room_m154_hospital, room_m328_hospital, scene_e02_chrysler, ... (8) | .data | 16,28,44 |
-| `g_RoomGlowOrbScript` | room_m034_sewer, room_m174_sewer2, room_m383_chrysler | .data | 140,144 |
-| `g_RoomGrabSweepSide` | room_m269_warehouse, scene_e01_chrysler | .data | 4,60 |
-| `g_RoomGrabTrailTrack` | room_m269_warehouse, scene_e01_chrysler | .data | 40,96 |
-| `g_RoomInitList` | room_m034_sewer, room_m049_nypd, room_m050_nypd, room_m075_central_park, room_m080_central_park, room_m082_central_park, ... (46) | .data | 12,16,20,24,32 |
-| `g_RoomMotionTrailA` | room_m075_central_park, room_m080_central_park, room_m082_central_park, scene_e09_chrysler, scene_e10_chrysler | .data | 464,680 |
-| `g_RoomPairedGlowColorTable` | room_m107_nypd, room_m111_nypd, room_m114_nypd, room_m118_nypd, room_m122_nypd, scene_e11_chrysler, ... (9) | .data | 24,28 |
-| `g_RoomPairedGlowPacket` | room_m107_nypd, room_m111_nypd, room_m114_nypd, room_m118_nypd, room_m122_nypd, scene_e11_chrysler, ... (9) | .data | 332,1028,32844,140264,175752,191256,198388 |
-| `g_RoomScatterBurstLayer` | room_m245_museum, room_m397_chrysler | .data | 9860,230048 |
-| `g_RoomScript` | room_m049_nypd, room_m050_nypd, room_m075_central_park, room_m080_central_park, room_m082_central_park, room_m090_soho, ... (43) | .data | 8,16,48,76,104,120 |
-| `g_RoomScriptArg` | room_m123_nypd, room_m156_hospital, room_m291_chrysler, room_m318_chrysler, room_m380_hospital, room_m404_chrysler | .data | 4,76580,246176 |
-| `g_RoomScriptArgs` | fx_field, room_m013_theater, room_m014_theater, room_m016_theater, room_m027_sewer, room_m028_sewer, ... (35) | .code_data,.data | 4 |
-| `g_RoomScriptRecord` | room_m005_theater, room_m023_theater, room_m123_nypd | .data | 4,8 |
-| `g_RoomSparkSlot` | room_m203_museum, room_m221_museum, room_m223_museum, room_m224_museum, room_m229_museum, room_m231_museum, ... (10) | .data | 147620,150884,180376,180380,180388,180400,243936 |
-| `g_RoomSpawnLayout` | room_m034_sewer, room_m049_nypd, room_m050_nypd, room_m075_central_park, room_m080_central_park, room_m082_central_park, ... (46) | .data | 8,12,16,36,40,44 |
-| `g_RoomUpdateList` | room_m034_sewer, room_m049_nypd, room_m050_nypd, room_m075_central_park, room_m080_central_park, room_m082_central_park, ... (46) | .data | 12,16,20,24,32 |
+None.
 
 ## Conflicting, also a main symbol
 
-`sym.main.txt` places a main symbol inside the overlay window.
+`sym.main.txt` places a main symbol inside the overlay window; main-only names belong in `configs/USA/sym.main_only.txt`.
 
-| Name | Overlays | Kinds | Sizes |
-| --- | --- | --- | --- |
-| `g_StrFileDirArea` | fx_common, fx_field, menu_memcard, room_m005_theater, room_m013_theater, room_m014_theater, ... (170) | .code_data,.rodata | 4,68,756 |
+None.
 
 ## Conflicting, auto names
 
 Left to the concurrent auto-name renaming; listed here only.
 
 None.
+| `D_8018EFE8` | fx_field, room_m005_theater, room_m013_theater, room_m014_theater, room_m016_theater, room_m017_theater, ... (168) | .rodata | 12 |
 
 ## Overlay global also defined by main
 
@@ -84,4 +64,3 @@ None.
 | `func_80122040` | menu_memcard |
 | `func_801909B4` | menu_memcard |
 | `func_8019234C` | fx_common |
-| `g_StrFileDirArea` | fx_common, fx_field, menu_memcard, room_m005_theater, room_m013_theater, room_m014_theater, ... |

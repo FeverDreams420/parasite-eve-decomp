@@ -1975,13 +1975,28 @@ every name defined in more than one overlay:
 
 Rule: a symbol private to one overlay takes that overlay's prefix
 (`docs/CONVENTIONS.md`, Overlays). The check fails on any private conflicting
-name, on any new conflicting name and on any new overlay/main collision.
-Room-interface names keep their spelling in the source, because renaming them
-per overlay would mean editing the shared unit that names them; the
-single-executable link gives each overlay's definition its own name instead
-(`overlay_symbol_collisions.py --rename-map FILE` lists `overlay old new`
-with `new = old__<overlay>`). Moving those names behind per-overlay macros is
-a source change and is left until the port's link design needs it.
+name, on any new conflicting name and on any new overlay/main collision. A
+conflicting name is new only when it lives somewhere no baseline conflict
+lived: the baseline keeps each conflict's `overlay:address` set, so giving an
+auto name a role name (or renaming part of a conflict) passes.
+Room-interface names keep their spelling in the source and are unique in the
+objects: the overlay compile rule passes `-DPE_OVERLAY=<overlay>`,
+`include/pe1/room_interface.h` turns each interface name into
+`<name>__<overlay>`, and the overlay symbol files spell the definitions the
+same way. Renaming the interface data per overlay makes the room_lib
+functions that use it (and the functions that call those) per-overlay code as
+well, and with them the module classes and effect records in each room's data
+that point at those functions; the functions take the same suffix, the
+records the overlay prefix (`g_RoomM014OrbitFlareEffects`,
+`g_RoomM174GlowOrbClass`). 2026-10-13: 23 interface data names and 33 room_lib
+functions in `room_interface.h` (803 symbol-file entries), 102 record names in
+90 rooms; named conflicts 24 -> 0, all conflicts 117 -> 93 (the rest auto
+names), overlay/main collisions 8 -> 7. The
+main label `g_StrFileDirArea`, at an address inside the room window, moved to
+`configs/USA/sym.main_only.txt` so the overlay splits no longer label their
+header word with it. `overlay_symbol_collisions.py --rename-map FILE` still
+lists `overlay old new` (`new = old__<overlay>`) for the remaining auto-name
+conflicts.
 
 ## Review contract
 

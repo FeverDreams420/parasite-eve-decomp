@@ -222,12 +222,32 @@ name is the configured overlay name.
   carries that overlay's prefix: `RoomMNNN_`/`SceneENN_` for functions and
   `g_RoomMNNN`/`g_SceneENN` for data (`g_RoomM318ScriptArg2`,
   `g_SceneE08OrbScript`), never a bare `g_Room...` or an address name that
-  another overlay also defines for different content. The exceptions are the
-  room interface (a name a shared source in `src/overlays/room_lib` or
-  `include/pe1` refers to, `g_RoomScript`, `g_RoomDrawList`, ...), which every
-  room defines under the one spelling, and symbols whose content is
-  identical in every overlay. `make overlay-collision-check` enforces this
-  (`docs/OVERLAY_SYMBOL_COLLISIONS.md`, `docs/CODE_ORGANIZATION.md`).
+  another overlay also defines for different content. Symbols whose content
+  is identical in every overlay may share one name. `make
+  overlay-collision-check` enforces this (`docs/OVERLAY_SYMBOL_COLLISIONS.md`,
+  `docs/CODE_ORGANIZATION.md`).
+- **Room interface names:** a name that a shared source in
+  `src/overlays/room_lib` or `include/pe1` refers to and that each room
+  defines in its own data (`g_RoomScript`, `g_RoomDrawList`,
+  `RoomLib_SlotTable`, ...) keeps that one spelling in the source and gets
+  the overlay name as a suffix in the object file:
+  `<name>__<overlay>`, for example `g_RoomScript__room_m256_museum`. The
+  overlay compile rule passes `-DPE_OVERLAY=<overlay>` and
+  `include/pe1/room_interface.h` maps each name through
+  `PE_OVERLAY_SYM`; the overlay's symbol file (and `overlay_abi.txt`, for an
+  address past the image) writes the suffixed name. A new interface name
+  gets a line in `room_interface.h`, which the header that declares it
+  includes, and the suffix in every symbol file that names it. A shared
+  room_lib function that uses an interface name (or calls such a function)
+  is that overlay's own code and is listed there too
+  (`RoomLib_PlantScript__room_m111_nypd`); a record in a room's data that
+  points at one is that room's data and takes the overlay prefix
+  (`g_RoomM111PairedGlowClass`).
+- **Main-only names inside the overlay window:** every overlay split reads
+  `configs/USA/sym.main.txt`, so a main label at an overlay-window address
+  would label each overlay image too. Such a label goes in
+  `configs/USA/sym.main_only.txt`, which only `main.yaml` lists
+  (`g_StrFileDirArea`).
 
 ## Headers
 
