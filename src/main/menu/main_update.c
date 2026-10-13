@@ -934,19 +934,12 @@ void Menu_MainUpdate(s32 arg0) {
         }
         g_BattleEnemyEscapeFlag = 0;
         MenuWidget_InitPool();
-        {
-        register s32 minus5;
-
         if (g_GeomScroll.state.flags & 0x2000) {
             Render_BeginSceneLoad();
-            minus5 = -5;
-        } else {
-            minus5 = -5;
         }
-        g_GameStateFlags &= minus5;
+        g_GameStateFlags &= ~4;
         D_8009D2E8 |= 1;
-        ((void (*)(BattleEntity *, int, int))Entity_SetActionMode)(D_8009D254, 0x13U, minus5);
-        }
+        Entity_SetActionMode(D_8009D254, 0x13);
             g_ActiveActor->curHP = 0;
     }
 }
