@@ -520,7 +520,7 @@ int Script_ComputeAudioTimer(int **arg0) {
     int *dst;
     int value;
 
-    dst = (int *)D_800A76C8;
+    dst = D_800A76C8;
     value = (*arg0[0] + *arg0[1]) * 216000;
     value += *arg0[2] * 60;
     *dst = value;
@@ -1071,14 +1071,14 @@ int Entity_InitWithTimeout(int **arg0) {
 }
 
 int Script_SetSceneFlag2000(void) {
-    int *ptr = (int *)&g_GameState.flags;
+    int *ptr = &g_GameState.flags;
 
     *ptr |= 0x2000;
     return 1;
 }
 
 int Script_ClearSceneFlag2000(void) {
-    int *ptr = (int *)&g_GameState.flags;
+    int *ptr = &g_GameState.flags;
 
     *ptr &= -0x2001;
     return 1;
