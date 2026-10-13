@@ -5,6 +5,7 @@
  * flash or the sound burst); the words are the room's
  * (g_RoomScriptArgs, pe1/room_module.h).
  */
+
 #include "pe1/room_module.h"
 
 int *RoomLib_SetArgs3(int unused, int a, int b, int c) {

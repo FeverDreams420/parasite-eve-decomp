@@ -1,5 +1,5 @@
-#include "pe1/psyq_bios.h"
 #include "pe1/boot_services.h"
+#include "pe1/psyq_bios.h"
 
 void Draw_ReportError(char *message, char *detail, int value, unsigned char severity) {
     int index = severity & 0xFF;

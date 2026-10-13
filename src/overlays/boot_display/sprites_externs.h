@@ -1,5 +1,8 @@
 #ifndef PE1_EXT_SPRITES
 #define PE1_EXT_SPRITES
+
+#include "common.h"
+
 extern s32 g_ActiveDrawSlot;
 extern u16 g_MainAssetLbaTbl[];
 extern void ClearOTagR(void *, s32);

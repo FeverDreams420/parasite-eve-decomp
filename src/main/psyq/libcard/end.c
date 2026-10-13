@@ -7,6 +7,7 @@
  * template and END's final word are data at their link address, kept as the
  * segment psyq/libcard/END_templates.
  */
+
 #include "pe1/psyq_asm.h"
 
 PSYQ_ASM_OBJECT(LIBCARD, END)

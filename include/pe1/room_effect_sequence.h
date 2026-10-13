@@ -2,12 +2,12 @@
 #define PE1_ROOM_EFFECT_SEQUENCE_H
 
 #include "common.h"
-#include "pe1/field_sprite_state.h"
-#include "pe1/room_floor.h"
-#include "pe1/field_script_context.h"
-#include "pe1/scene_archive.h"
-#include "pe1/psyq_libc.h"
 #include "pe1/asset_find.h"
+#include "pe1/field_script_context.h"
+#include "pe1/field_sprite_state.h"
+#include "pe1/psyq_libc.h"
+#include "pe1/room_floor.h"
+#include "pe1/scene_archive.h"
 
 /* The effect sequence (src/overlays/room_lib/effect_sequence.c):
  * the room data it fills and reads (the same addresses in all five rooms

@@ -2,9 +2,9 @@
 #define PE1_ROOM_M349_EFFECTS_H
 
 #include "common.h"
+#include "pe1/field_texture_tables.h"
 #include "pe1/render_object.h"
 #include "pe1/room_spark.h"
-#include "pe1/field_texture_tables.h"
 
 /* Room m349 flare spark: jitters its velocity (states 0 and 1) or its
  * position (state 2) while it falls and bounces off the floor height. */

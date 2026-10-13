@@ -10,19 +10,18 @@
  * merged once they compile together. Trails, glyphs and lookup codes live
  * in each room's own data (pe1/room_motion_init.h).
  */
-#include "pe1/room_motion_init.h"
-#include "pe1/room_ground_eruption.h"
+
 #include "common.h"
-#include "room_lib.h"
-#include "pe1/gte.h"
-#include "pe1/room_fx.h"
 #include "pe1/field_script_context.h"
-#include "render_layouts.h"
-#include "motion_particles.h"
+#include "pe1/gte.h"
 #include "pe1/room_floor.h"
+#include "pe1/room_fx.h"
+#include "pe1/room_ground_eruption.h"
+#include "pe1/room_motion_init.h"
 
-
-
+#include "motion_particles.h"
+#include "render_layouts.h"
+#include "room_lib.h"
 
 void RoomEffect_UpdateParticleMotion(int arg0, RoomStatePair *control, RoomMotionState *state) {
     unsigned int i;

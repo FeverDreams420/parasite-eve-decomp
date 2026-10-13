@@ -1,4 +1,5 @@
 /* PSY-Q LIBSPU S_SRMD: SpuSetReverbModeDepth. */
+
 #include "pe1/psyq_spu_internal.h"
 
 void SpuSetReverbModeDepth(short left, short right) {

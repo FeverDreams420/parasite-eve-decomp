@@ -4,7 +4,6 @@
 #include "common.h"
 #include "pe1/akao/pos.h"
 #include "pe1/gte_types.h"
-
 #include "pe1/projection_slot.h"
 
 /* Projects a world position and derives the stereo pan (0..255) and the

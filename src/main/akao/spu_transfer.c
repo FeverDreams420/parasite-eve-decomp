@@ -1,9 +1,9 @@
 #include "common.h"
-#include "pe1/psyq_spu_internal.h"
-#include "pe1/psyq_bios.h"
 #include "pe1/akao.h"
 #include "pe1/akao/file_header.h"
 #include "pe1/akao/init_state.h"
+#include "pe1/psyq_bios.h"
+#include "pe1/psyq_spu_internal.h"
 
 int Spu_ValidateSampleHeader(void *header) {
     return ((AkaoFilePrefix *)header)->magic + 0xB0BEB4BF;

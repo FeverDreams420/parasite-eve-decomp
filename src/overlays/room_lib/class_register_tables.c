@@ -5,8 +5,10 @@
  * not running. The same function in every room that links it; the lists are
  * the room's (pe1/room_module.h).
  */
-#include "room_lib.h"
+
 #include "pe1/room_module.h"
+
+#include "room_lib.h"
 
 int RoomLib_RegisterPairedTables(void *o) {
     int result;

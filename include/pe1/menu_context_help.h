@@ -3,25 +3,20 @@
 
 /* Context help line drawn under the menu clock by Menu_DrawContextHelpText. */
 
-#include "pe1/menu_inventory.h"
-#include "pe1/inventory_slots.h"
-#include "pe1/text.h"
 #include "pe1/draw_state.h"
 #include "pe1/inventory_queries.h"
+#include "pe1/inventory_slots.h"
+#include "pe1/menu_inventory.h"
+#include "pe1/text.h"
 
 void Draw_StatePush(void);
 void Draw_StatePop(void);
 unsigned int GameTime_GetCounterSeconds(int counter);
 void Draw_PrintTimeValue(int seconds, int showSeconds);
-void Draw_PrintRawText(u8 *text);
-void Draw_SetTextDimmed(int dimmed);
 u8 *Text_LookupTableC(unsigned int index);
 u8 *Text_LookupTable10(unsigned int index);
 ItemDataRecord *Inv_LookupItemData(int item);
-int Inv_GetWayneListItemByIndex(int index);
 int Inv_GetPackedListCount(void);
-int Inv_GetPackedListItem(int index);
-int Inv_RestoreSelection(unsigned int index);
 int Menu_GetBattleCountEntry(int index);
 int MemCard_PollTransferDelay(void);
 int MemCard_IsPortPresent(int port);

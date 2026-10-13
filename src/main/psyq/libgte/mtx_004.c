@@ -1,6 +1,7 @@
 /* PSY-Q LIBGTE MTX_004: ApplyMatrixLV. */
-#include "pe1/gte_types.h"
+
 #include "pe1/gte.h"
+#include "pe1/gte_types.h"
 
 /* Split signed inputs at bit 15 before the two GTE rotation passes.
  * Empty outputs on architectural $0 retain retail's relative branches;

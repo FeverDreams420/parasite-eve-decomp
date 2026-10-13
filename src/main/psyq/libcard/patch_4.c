@@ -2,7 +2,9 @@
 /* Psy-Q _copy_memcard_patch. Retains the existing link symbol for callers.
  * Empty constraints preserve the retail schedule. */
 /* Treat the patch instruction image as words; copy up to the next label. */
+
 #include "pe1/psyq_card.h"
+
 void _copy_memcard_patch(void) {
     register unsigned *dst = (unsigned *)0xdf80;
     register const unsigned *src asm("$10") = func_8007E344;

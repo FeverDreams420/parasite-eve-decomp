@@ -2,21 +2,21 @@
 #define PE1_ROOM_FLARE_H
 
 #include "common.h"
-#include "pe1/field_sprite_params.h"
-#include "pe1/fieldfx_callback_list.h"
-#include "pe1/field_transform_point.h"
-#include "pe1/gte_types.h"
-#include "pe1/render_matrix_slot.h"
-#include "pe1/gte_short_vector.h"
-#include "pe1/room_fx.h"
-#include "pe1/room_floor.h"
-#include "pe1/field_sprite_draw.h"
-#include "pe1/field_texture_tables.h"
 #include "pe1/field_owner_actor.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_sprite_params.h"
+#include "pe1/field_texture_tables.h"
+#include "pe1/field_transform_point.h"
+#include "pe1/fieldfx_callback_list.h"
+#include "pe1/fieldfx_calls.h"
 #include "pe1/fieldfx_task_pool.h"
 #include "pe1/floor_polygon.h"
+#include "pe1/gte_short_vector.h"
+#include "pe1/gte_types.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/fieldfx_calls.h"
+#include "pe1/render_matrix_slot.h"
+#include "pe1/room_floor.h"
+#include "pe1/room_fx.h"
 
 /* Flare effects: a controller that orbits an anchor read from the scene
  * object and sheds drift particles, and a dropped flare particle that falls,

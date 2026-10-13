@@ -2,36 +2,34 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-#include "pe1/geom_state.h"
 #include "common.h"
-#include "pe1/scene_transition.h"
-#include "pe1/textbox.h"
-#include "pe1/menu_widget.h"
-#include "pe1/gte_types.h"
 #include "pe1/akao.h"
-#include "pe1/entity_animation.h"
-#include "pe1/menu_flags.h"
 #include "pe1/asset_find.h"
-#include "pe1/pm.h"
+#include "pe1/battle.h"
+#include "pe1/battle_hud_colors.h"
+#include "pe1/battle_reset_stats.h"
 #include "pe1/battle_runtime.h"
 #include "pe1/battle_update.h"
-#include "pe1/battle_reset_stats.h"
+#include "pe1/draw_slot_record.h"
+#include "pe1/entity_animation.h"
+#include "pe1/geom_state.h"
+#include "pe1/gte_types.h"
+#include "pe1/menu_flags.h"
+#include "pe1/menu_widget.h"
+#include "pe1/pm.h"
+#include "pe1/scene_transition.h"
+#include "pe1/textbox.h"
+#include "m2c_macros.h"
 
 #define NULL ((void *)0)
 
-#include "pe1/battle.h"
-#include "pe1/battle_hud_colors.h"
-#include <m2c_macros.h>
-
 M2C_UNK Battle_ReturnToIdle();                            /* extern */
 s8 Pad_GetMenuPressedBitOrDisabled(void);
-void Battle_FlushScriptSounds(void);
 struct BattleStatusPanel;
 void Battle_DrawStatusPanel(s32, struct BattleStatusPanel *);
 M2C_UNK Entity_ResolveDropTable(void *);                      /* static */
 s16 Entity_ApplyHitAndSetAnim(void *);                 /* static */
 void Entity_UpdateTimers(void);
-#include "pe1/draw_slot_record.h"
 /* Separate declarations preserve the original GCC quantities for each tail. */
 /* COMMON supplies small-data metadata to MASPSX. */
 s8 D_8009CE30;

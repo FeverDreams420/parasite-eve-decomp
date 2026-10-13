@@ -1,8 +1,8 @@
 #include "common.h"
 #include "pe1/gte.h"
 #include "pe1/room_drift_pulse.h"
-#include "pe1/room_m023_effects.h"
 #include "pe1/room_m023_beacon.h"
+#include "pe1/room_m023_effects.h"
 
 /* Drift/pulse sprite for room_m023. The glow strip's anchor is taken into
  * a local pointer first: its address load is what keeps the frame counter

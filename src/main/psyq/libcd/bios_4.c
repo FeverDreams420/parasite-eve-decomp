@@ -1,8 +1,9 @@
 /* ASSEMBLER: GNU */
 /* CC1_FLAGS: -fno-schedule-insns -fno-schedule-insns2 */
 /* Psy-Q LIBCD BIOS.OBJ, part 4 of 7: CD_initvol, CD_initintr. */
-#include "pe1/psyq_callbacks.h"
+
 #include "common.h"
+#include "pe1/psyq_callbacks.h"
 #include "pe1/psyq_cd.h"
 
 #include "bios_4_externs.h"

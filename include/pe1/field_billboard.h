@@ -2,9 +2,10 @@
 #define PE1_FIELD_BILLBOARD_H
 
 #include "common.h"
-#include "pe1/gte_types.h"
-#include "pe1/render_tint.h"
 #include "pe1/field_textured_strip.h"
+#include "pe1/gte_types.h"
+#include "pe1/projection_slot.h"
+#include "pe1/render_tint.h"
 
 /* Field engine billboard (func_800C3B04): a textured quad centred on a
  * projected point, sized by the cell size, a 20.12 scale and the
@@ -59,7 +60,5 @@ typedef struct FieldBillboard {
 } FieldBillboard;
 
 void func_800C3B04(FieldBillboard *board);
-
-#include "pe1/projection_slot.h"
 
 #endif

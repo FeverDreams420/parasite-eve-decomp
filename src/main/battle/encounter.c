@@ -4,21 +4,21 @@
 /* ASPSX_VERSION: 2.56 */
 
 #include "common.h"
-#include "pe1/battle_runtime.h"
-#include "pe1/battle_reset_stats.h"
-#include "pe1/battle_palette.h"
+#include "pe1/akao/commands.h"
+#include "pe1/aya.h"
 #include "pe1/battle.h"
+#include "pe1/battle_entity_anim.h"
+#include "pe1/battle_level_up.h"
+#include "pe1/battle_modifiers.h"
+#include "pe1/battle_palette.h"
+#include "pe1/battle_reset_stats.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/battle_saved_state.h"
 #include "pe1/battle_start.h"
 #include "pe1/battle_status.h"
-#include "pe1/battle_update.h"
-#include "pe1/battle_entity_anim.h"
-#include "pe1/aya.h"
-#include "pe1/battle_level_up.h"
-#include "pe1/game_state.h"
-#include "pe1/akao/commands.h"
 #include "pe1/battle_turn.h"
-#include "pe1/battle_modifiers.h"
-#include "pe1/battle_saved_state.h"
+#include "pe1/battle_update.h"
+#include "pe1/game_state.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -41,7 +41,6 @@ s32 D_8009D28C;
 BattleAttributes g_BattleEquipStateBlock;
 
 void Battle_SaveAyaState(void);
-void Save_ResetGlobalFlags(void);
 
 void Save_InitSystem(void)
 {

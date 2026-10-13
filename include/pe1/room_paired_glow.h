@@ -2,14 +2,14 @@
 #define PE1_ROOM_PAIRED_GLOW_H
 
 #include "common.h"
-#include "pe1/room_fx.h"
-#include "pe1/field_sprite_state.h"
-#include "pe1/field_model_draw.h"
-#include "pe1/scene_archive.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/psyq_libc.h"
 #include "pe1/akao_send.h"
 #include "pe1/asset_find.h"
+#include "pe1/field_model_draw.h"
+#include "pe1/field_sprite_state.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/psyq_libc.h"
+#include "pe1/room_fx.h"
+#include "pe1/scene_archive.h"
 
 /* The paired glow (src/overlays/room_lib/paired_glow.c). */
 

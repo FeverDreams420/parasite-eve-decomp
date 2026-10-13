@@ -39,7 +39,6 @@ int FieldFx_TurnToward(int current, int target, int step) {
 }
 
 
-#include "common.h"
 s32 FieldFx_AngleDistance(s32 lhs, s32 rhs) {
     register s32 delta asm("$4");
     register s32 abs_delta asm("$3");

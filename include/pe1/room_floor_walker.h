@@ -2,9 +2,9 @@
 #define PE1_ROOM_FLOOR_WALKER_H
 
 #include "common.h"
-#include "pe1/gte_types.h"
 #include "pe1/field_vector_math.h"
 #include "pe1/floor_polygon.h"
+#include "pe1/gte_types.h"
 
 /* Room creature that walks along its heading inside the walkable floor
  * polygon, turning off the polygon's edges, and hops with a simple

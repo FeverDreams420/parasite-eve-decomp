@@ -2,15 +2,15 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-#include "pe1/scene_assets.h"
-#include "pe1/cdrom.h"
-#include "pe1/akao.h"
-#include "pe1/game_state.h"
-#include "pe1/scene_archive.h"
-#include "pe1/boot.h"
-#include "pe1/psyq_bios.h"
-#include "pe1/akao/commands.h"
 #include "common.h"
+#include "pe1/akao.h"
+#include "pe1/akao/commands.h"
+#include "pe1/boot.h"
+#include "pe1/cdrom.h"
+#include "pe1/game_state.h"
+#include "pe1/psyq_bios.h"
+#include "pe1/scene_archive.h"
+#include "pe1/scene_assets.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */

@@ -2,24 +2,26 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-#include "pe1/menu_widget.h"
-#include "pe1/menu_inventory.h"
 #include "common.h"
-#include "pe1/menu_item_list_input.h"
-#include "pe1/inventory.h"
-#include "pe1/menu_equipment.h"
-#include "pe1/text.h"
-#include "pe1/inventory_slots.h"
+#include "pe1/aya.h"
+#include "pe1/battle_modifiers.h"
+#include "pe1/draw_level_bar.h"
 #include "pe1/draw_state.h"
+#include "pe1/inventory.h"
 #include "pe1/inventory_queries.h"
-#include "pe1/menu_sound.h"
-#include "pe1/menu_item_rows.h"
+#include "pe1/inventory_slots.h"
 #include "pe1/menu_bonus_stats.h"
 #include "pe1/menu_confirm_callback.h"
-#include "pe1/aya.h"
+#include "pe1/menu_equipment.h"
+#include "pe1/menu_inventory.h"
 #include "pe1/menu_inventory_root.h"
-#include "pe1/draw_level_bar.h"
-#include "pe1/battle_modifiers.h"
+#include "pe1/menu_item_list_input.h"
+#include "pe1/menu_item_rows.h"
+#include "pe1/menu_sound.h"
+#include "pe1/menu_widget.h"
+#include "pe1/psyq_nop.h"
+#include "pe1/text.h"
+#include "m2c_macros.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -92,8 +94,6 @@ void Menu_ConfigureScreen(void) {
     }
 }
 
-#include "../../../tools/m2c/m2c_macros.h"
-
 /* Category tab reset and equip screen header, item action submenu,
  * skill/stat point use, the equip stats panel and the item detail and item
  * list views of the inventory menu. Contiguous at 0x80047678 and joined by
@@ -106,12 +106,9 @@ int D_8009CFBC;
 void Menu_CreateItemActionSubmenu(void);
 void Menu_CreateItemList(void);
 int g_MenuActionTextBase;
-void Menu_DrawItemActionSubmenu(void);
 int g_InvItemUsableFlag;
 int g_MenuSelectedItemList;
 int g_MenuSelectedItemSlot;
-void Draw_StatePush(void);
-void Draw_StatePop(void);
 void Menu_DrawActiveListSlot(int arg0);
 #define NULL ((void *)0)
 void Menu_DrawEquipStats(void);
@@ -136,9 +133,7 @@ static inline void Menu_CreateScreenModeSubmenu(void) {
     MenuWidget_SetCurrentNode(child);
 }
 
-void Menu_OpenItemList(void);
 void Menu_StepInventoryRoot(s32 arg0, s32 arg1, s32 arg2);
-void Inv_BuildStorageDisplay(void);
 void Menu_DrawItemListHeader(void);
 int D_8009CFC0;
 
@@ -952,10 +947,7 @@ int Menu_StatSlotInputHandler(MenuWidgetNode *node, unsigned int flags) {
     return 1;
 }
 
-#include "common.h"
-
 #define NULL ((void *)0)
-#include "pe1/menu_inventory.h"
 
 s32 Menu_BonusPointCancelHandler(void *arg0, s32 arg1) {
     s32 temp_s0;
@@ -1001,8 +993,6 @@ s32 Menu_BonusPointCancelHandler(void *arg0, s32 arg1) {
     }
     return 1;
 }
-#include "pe1/menu_item_list_input.h"
-#include "pe1/text.h"
 
 /* Leaves the item list: scrolls the inventory panels back and returns the
  * focus to the equipment slots or the category tabs. */
@@ -1272,12 +1262,6 @@ int Menu_ItemListInputHandler(MenuWidgetNode *node, unsigned int flags)
     return 1;
 }
 #undef g_BonusPointStatDeltas
-#include "common.h"
-#include "pe1/menu_equipment.h"
-#include "pe1/menu_inventory.h"
-#include "pe1/menu_item_rows.h"
-#include "pe1/draw_state.h"
-#include "pe1/text.h"
 #define CLAMP_EQUIP_PREVIEW(out, item, stat_index, active_stat) do { \
     int desired_ = (active_stat); \
     int current_ = D_8009CFC8; \
@@ -1393,11 +1377,6 @@ void Menu_StepEquipSlotSelect2(void) {
         set_cursor_y(cursor_node);
     }
 }
-#include "common.h"
-#include "pe1/psyq_nop.h"
-
-#include "pe1/inventory.h"
-#include "pe1/menu_inventory.h"
 
 void Menu_DrawBonusPointSpendPanel(void);
 s32 Menu_SpendBonusPoints(void *node, u32 buttons);
@@ -1424,7 +1403,6 @@ void Menu_OpenBonusPointSpendDialog(MenuWidgetNode *arg0, s32 arg1) {
     }
     g_MenuSpendArrowDirection = 0;
 }
-#include "pe1/inventory.h"
 
 void Menu_DrawBonusPointSpendPanel(void) {
     int value;
@@ -1496,7 +1474,6 @@ void Menu_DrawBonusPointSpendPanel(void) {
         Draw_AllocTexturedRectAlt(distance, sublevel);
     }
 }
-#include "pe1/inventory.h"
 
 int Menu_SpendBonusPoints(void *node, unsigned int buttons)
 {

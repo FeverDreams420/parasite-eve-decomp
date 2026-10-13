@@ -2,22 +2,22 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-#include "pe1/entity_animation.h"
-#include "pe1/field_actor.h"
 #include "common.h"
-#include "pe1/collision_database.h"
-#include "pe1/floor_polygon.h"
-#include "pe1/floor_edge_point.h"
-#include "pe1/scene_assets.h"
-#include "pe1/field_collision.h"
-#include "pe1/player_entity.h"
 #include "pe1/battle.h"
-#include "pe1/entity_floor.h"
-#include "pe1/gte.h"
-#include "pe1/floor_clip.h"
-#include "pe1/field_movement.h"
 #include "pe1/battle_runtime.h"
+#include "pe1/collision_database.h"
+#include "pe1/entity_animation.h"
+#include "pe1/entity_floor.h"
+#include "pe1/field_actor.h"
+#include "pe1/field_collision.h"
+#include "pe1/field_movement.h"
+#include "pe1/floor_clip.h"
+#include "pe1/floor_edge_point.h"
+#include "pe1/floor_polygon.h"
+#include "pe1/gte.h"
 #include "pe1/gte_types.h"
+#include "pe1/player_entity.h"
+#include "pe1/scene_assets.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -324,8 +324,6 @@ void Entity_UpdateList(void) {
         node = node->next;
     }
 }
-
-int Math_FixedMul(int a, int b);
 
 void Entity_FindFloor(BattleEntity *actor)
 {

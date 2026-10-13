@@ -29,7 +29,6 @@ typedef struct FieldSfxScriptArgs {
 } FieldSfxScriptArgs;
 PE1_STATIC_ASSERT(sizeof(FieldSfxScriptArgs) == 12, field_sfx_script_args_size);
 
-extern FieldActor *g_FieldActorListHead;
 void Scene_UpdateEntityList(void);
 void Script_ClearSfxTable(void);
 void Script_QueueFieldSfx(int taskArgument, int subId, int typeId,

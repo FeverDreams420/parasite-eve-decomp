@@ -3,8 +3,8 @@
 
 #include "common.h"
 #include "pe1/psyq_callbacks.h"
-#include "pe1/psyq_types.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/psyq_types.h"
 
 typedef PsyqEventCallback CdlCB;
 
@@ -56,7 +56,6 @@ extern volatile u32 *D_8009B28C;
 extern volatile u32 *D_8009B2B0, *D_8009B2B4;
 extern void *volatile *D_8009B2B8;
 extern volatile u32 *D_8009B2BC, *g_CdRegDmaControl;
-extern volatile u32 *g_CdRegDmaControl;
 
 typedef void (*CdReadCompleteCallback)(int event, void *data);
 
@@ -468,8 +467,6 @@ int CD_getsector(void *destination, int words);
 int CD_getsector2(void *destination, int words);
 int CdGetSector2(void *address, int size);
 int CdGetSector(void *address, int size);
-DsCallback CdDataCallback(DsCallback callback);
-int CdDataSync(int mode);
 
 void LIBDS_DSSYS_1_text_8B8(int event, u8 *result);
 void LIBDS_DSSYS_1_text_A9C(int event, u8 *result);

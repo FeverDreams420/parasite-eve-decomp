@@ -2,8 +2,8 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-#include "pe1/inventory.h"
 #include "pe1/battle_cmd.h"
+#include "pe1/inventory.h"
 #include "pe1/inventory_slots.h"
 #include "pe1/menu_inventory.h"
 

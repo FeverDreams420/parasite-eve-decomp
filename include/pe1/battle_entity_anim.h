@@ -1,13 +1,12 @@
 #ifndef PE1_BATTLE_ENTITY_ANIM_H
 #define PE1_BATTLE_ENTITY_ANIM_H
 
-#include "pe1/entity_animation.h"
 #include "pe1/asset_find.h"
+#include "pe1/entity_animation.h"
 
 extern u32 D_8009D1A0;
 extern struct FieldActor *g_FieldActorListHead;
 extern BattleEntity *D_8009D254;
-extern Combatant *g_ActiveActor;
 extern s8 D_8009D2A0;
 extern u16 D_8009D21C;
 extern u32 D_8009D304;

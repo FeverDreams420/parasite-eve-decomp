@@ -3,9 +3,10 @@
 /* PSY-Q LIBPAD PADIF: MemCard_ReadByteWithCallbackValue,
  * CardObj_WriteCommandByte, MemCard_WriteDataAndGetSize,
  * MemCard_WriteByteWithAckCheck, LIBPAD_PADIF_text_26C. */
+
 #include "common.h"
-#include "pe1/psyq_pad_main.h"
 #include "pe1/card_obj.h"
+#include "pe1/psyq_pad_main.h"
 
 #include "padif_externs.h"
 

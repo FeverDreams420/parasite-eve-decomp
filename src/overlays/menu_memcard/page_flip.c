@@ -3,14 +3,14 @@
 #include "common.h"
 #include "pe1/boot_disc_check.h"
 #include "pe1/boot_display.h"
-#include "pe1/signed_rect.h"
 #include "pe1/psyq_gpu.h"
-#include "menu_memcard_screen.h"
+#include "pe1/signed_rect.h"
+
 #include "menu_memcard_image.h"
+#include "menu_memcard_screen.h"
+#include "page_flip_externs.h"
 
 typedef PsxSignedRect Rect;
-
-#include "page_flip_externs.h"
 
 void ResetGraph(int);
 

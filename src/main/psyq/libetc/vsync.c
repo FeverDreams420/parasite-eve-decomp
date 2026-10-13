@@ -1,8 +1,11 @@
 /* ASSEMBLER: GNU */
 /* Psy-Q LIBETC VSYNC.OBJ: VSync, v_wait. */
+
 #include "common.h"
-#include "pe1/psyq_bios.h"
 #include "pe1/psyq_api_internal.h"
+#include "pe1/psyq_bios.h"
+
+#include "vsync_externs_1.h"
 
 void v_wait(int target, int frames);
 
@@ -43,10 +46,6 @@ int VSync(int mode) {
     } while (g_VSyncLastHcount != *g_VSyncHcountRegister);
     return elapsed;
 }
-
-#include "vsync_externs_1.h"
-
-int ChangeClearRCnt(int counter, int enabled);
 
 void v_wait(int arg0, int arg1) {
     volatile int timeout = arg1 << 15;

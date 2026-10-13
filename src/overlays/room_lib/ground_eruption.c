@@ -13,11 +13,13 @@
  * class and the eruption directly after each other, with the eruption's
  * seeds and scales as the unit's only rodata, so they are one unit.
  */
-#include "room_lib.h"
-#include "pe1/room_ground_eruption.h"
-#include "render_layouts.h"
+
 #include "pe1/pe_image.h"
 #include "pe1/random.h"
+#include "pe1/room_ground_eruption.h"
+
+#include "render_layouts.h"
+#include "room_lib.h"
 
 ROOMLIB_RETURN_ZERO(RoomEffect_GroundEruptionNop0)
 

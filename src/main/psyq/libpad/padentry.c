@@ -1,10 +1,11 @@
 /* ASSEMBLER: GNU */
 /* Psy-Q LIBPAD PADENTRY.OBJ: PadChkVsync, PadStartCom, PadStopCom, PadChkMtap, PadGetState, PadInfoMode, PadInfoAct, PadInfoComb, PadSetActAlign, PadSetMainMode, PadSetAct. */
+
 #include "pe1/card_obj.h"
 
-int _padChkVsync(void);
-
 #include "padentry_externs.h"
+
+int _padChkVsync(void);
 
 void _padStopCom(void);
 

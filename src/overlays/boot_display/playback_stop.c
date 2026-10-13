@@ -1,9 +1,9 @@
 #include "common.h"
 #include "pe1/boot.h"
 #include "pe1/cdrom.h"
+#include "pe1/psyq_callbacks.h"
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_ds.h"
-#include "pe1/psyq_callbacks.h"
 
 s32 BootDisplay_WaitForCdAndRestoreCallbacks(void) {
     DsControl(8, 0, 0);

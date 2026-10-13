@@ -2,14 +2,14 @@
 #define PE1_AKAO_INIT_STATE_H
 
 #include "common.h"
+#include "pe1/akao/globals.h"
 #include "pe1/akao/queue.h"
-#include "pe1/akao/spu_common.h"
 #include "pe1/akao/seq_param.h"
-#include "pe1/akao/track.h"
+#include "pe1/akao/spu_common.h"
 #include "pe1/akao/tick.h"
+#include "pe1/akao/track.h"
 #include "pe1/akao/voice_masks.h"
 #include "pe1/akao_counters.h"
-#include "pe1/akao/globals.h"
 
 extern SpuCommonAttr g_AkaoSpuCommonAttr;
 

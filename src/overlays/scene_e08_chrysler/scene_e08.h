@@ -1,10 +1,10 @@
 #ifndef SCENE_E08_H
 #define SCENE_E08_H
 
-#include "pe1/room_fx.h"
-#include "pe1/field_script_context.h"
-#include "pe1/scene_archive.h"
 #include "pe1/akao_send.h"
+#include "pe1/field_script_context.h"
+#include "pe1/room_fx.h"
+#include "pe1/scene_archive.h"
 
 typedef struct {
     RoomFxEmitterParams emitters[2];

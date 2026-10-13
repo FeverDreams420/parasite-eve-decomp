@@ -1,5 +1,9 @@
 #ifndef PE1_EXT_TEXT_SCREEN
 #define PE1_EXT_TEXT_SCREEN
+
+#include "common.h"
+#include "pe1/boot_display.h"
+
 extern BootDisplayCallbacks D_80125B4C, D_80125B68;
 extern u32 D_8009D1A0, D_8009D1F4;
 extern u32 D_8009D26C;

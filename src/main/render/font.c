@@ -2,9 +2,10 @@
  * selection state flags, the shuffled code list and its incremental load, and
  * stepping the selection through the cached glyph slots. All of it reads and
  * writes g_FontSelectionState (main_tu_evidence G0313). */
+
 #include "common.h"
-#include "pe1/font.h"
 #include "pe1/cdrom.h"
+#include "pe1/font.h"
 #include "pe1/psyq_libc.h"
 
 /* The slot-search tails store the selected byte and reload it through the

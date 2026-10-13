@@ -1,9 +1,9 @@
 #ifndef PE1_ROOM_GLINT_RIBBON_H
 #define PE1_ROOM_GLINT_RIBBON_H
 
-#include "pe1/room_spark.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/room_spark.h"
 
 /* Glint ribbon controller state: two light ribbons strung across three
  * actor joints that shed glint sparks from the last joint and its floor

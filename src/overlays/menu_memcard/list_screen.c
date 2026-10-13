@@ -1,8 +1,8 @@
 /* CC1_FLAGS: -fno-cse-skip-blocks */
 
-#include "menu_memcard_screen.h"
-
 #include "menu_memcard_image.h"
+#include "menu_memcard_menu.h"
+#include "menu_memcard_screen.h"
 
 static inline MemcardImageNode *MenuCard_FindImageNode(s32 kind) {
     MemcardImageNode *node;
@@ -199,7 +199,6 @@ void func_80190660(void) {
         first->disp.isrgb24 = 1;
     }
 }
-#include "menu_memcard_menu.h"
 
 /* Run the title/card-selection screen, then restore the game display.
  * Five pins and the header's two symbol views retain retail allocation. */

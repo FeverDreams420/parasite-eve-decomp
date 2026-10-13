@@ -2,19 +2,20 @@
 #define PE1_ROOM_SHAKE_BURST_H
 
 #include "common.h"
-#include "pe1/fieldfx_callback_list.h"
-#include "pe1/render_object.h"
-#include "pe1/room_fx.h"
-#include "pe1/room_orbit_trail.h"
-#include "pe1/room_floor.h"
-#include "pe1/field_texture_tables.h"
+#include "pe1/akao_send.h"
 #include "pe1/field_model_draw.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/fieldfx_task_pool.h"
-#include "pe1/scene_archive.h"
+#include "pe1/gte_types.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/akao_send.h"
+#include "pe1/render_object.h"
+#include "pe1/room_floor.h"
+#include "pe1/room_fx.h"
+#include "pe1/room_orbit_trail.h"
+#include "pe1/scene_archive.h"
 
 /* Shake burst controller (room_m318): shakes the camera while it scatters
  * debris particles around its anchor, then flags the actor for the
@@ -101,7 +102,6 @@ extern int func_8019326C(int mode, RoomShakeSweepParticle *particle);
 extern GteShortVector D_80199904;
 
 /* Sweep particle draw: model asset, matrix helpers and clut lookups. */
-#include "pe1/gte_types.h"
 extern void FieldFx_ModelSetTexture(int tpage, int clut);
 
 /* Flash burst controller (func_80195D20): its particle callback, colour

@@ -1,16 +1,16 @@
 #ifndef PE1_BOOT_DISPLAY_H
 #define PE1_BOOT_DISPLAY_H
 
-#include "pe1/display_env.h"
 #include "common.h"
-#include "pe1/cdrom_buffers.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/gpu_image.h"
 #include "pe1/asset_tim.h"
+#include "pe1/cdrom_buffers.h"
+#include "pe1/display_env.h"
+#include "pe1/gpu_image.h"
 #include "pe1/psyq_callbacks.h"
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_ds.h"
 #include "pe1/psyq_ds_queue.h"
+#include "pe1/psyq_gpu.h"
 
 /* Three byte channels in the boot screen image buffer. */
 typedef struct BootRgb24Pixel {

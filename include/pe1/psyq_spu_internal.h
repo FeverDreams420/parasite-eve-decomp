@@ -1,15 +1,12 @@
 #ifndef PE1_PSYQ_SPU_INTERNAL_H
 #define PE1_PSYQ_SPU_INTERNAL_H
 
-#ifndef PE1_COMMON_H
-typedef signed int s32;
-typedef unsigned int u32;
-typedef unsigned short u16;
-#endif
-#include "pe1/psyq_types.h"
+#include "common.h"
 #include "pe1/psyq_callbacks.h"
 #include "pe1/psyq_spu_api.h"
 #include "pe1/psyq_spu_reverb.h"
+#include "pe1/psyq_types.h"
+
 typedef PsyqVoidCallback SpuCallback;
 
 /*

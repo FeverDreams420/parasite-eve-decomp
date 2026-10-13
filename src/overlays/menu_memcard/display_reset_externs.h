@@ -1,5 +1,9 @@
 #ifndef PE1_EXT_6E76AD431068
 #define PE1_EXT_6E76AD431068
+
+#include "common.h"
+#include "pe1/psyq_gpu.h"
+
 extern u8 D_800B0DBA;
 extern u8 *MENUCARD_DISPLAY_PTR0;
 extern u8 *MENUCARD_DISPLAY_PTR1;

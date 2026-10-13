@@ -2,11 +2,11 @@
 #define PE1_FIELD_EFFECT_POOL_H
 
 #include "common.h"
+#include "pe1/field_actor.h"
+#include "pe1/field_model_draw.h"
 #include "pe1/fieldfx_callback_list.h"
 #include "pe1/fieldfx_task_pool.h"
 #include "pe1/render_object.h"
-#include "pe1/field_actor.h"
-#include "pe1/field_model_draw.h"
 #include "pe1/room_floor.h"
 
 /* Effect pool declarations for field engine emitters that read the room

@@ -13,18 +13,20 @@
  * rooms, with the set's 0x70 bytes of read-only data as the unit's only
  * rodata, so they are one unit.
  */
-#include "room_lib.h"
-#include "pe1/room_drop_field_class.h"
-#include "pe1/room_drop_field.h"
-#include "pe1/field_script_context.h"
-#include "pe1/room_spark.h"
-#include "pe1/room_staged_motion.h"
+
 #include "pe1/field_collision.h"
-#include "pe1/gte_short_vector.h"
+#include "pe1/field_script_context.h"
 #include "pe1/gte.h"
+#include "pe1/gte_short_vector.h"
 #include "pe1/room_beam_pair.h"
+#include "pe1/room_drop_field.h"
+#include "pe1/room_drop_field_class.h"
 #include "pe1/room_four_sprite.h"
 #include "pe1/room_ring_pair.h"
+#include "pe1/room_spark.h"
+#include "pe1/room_staged_motion.h"
+
+#include "room_lib.h"
 
 ROOMLIB_RETURN_ZERO(RoomEffect_DropFieldNop0)
 

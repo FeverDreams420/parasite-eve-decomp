@@ -1,9 +1,9 @@
 #ifndef PE1_MENU_DIALOG_H
 #define PE1_MENU_DIALOG_H
 
-#include "pe1/menu_inventory.h"
-#include "pe1/menu_confirm_callback.h"
 #include "pe1/inventory_queries.h"
+#include "pe1/menu_confirm_callback.h"
+#include "pe1/menu_inventory.h"
 
 void Menu_DrawNotificationText(MenuWidgetNode *node);
 void Menu_DrawTwoLineDialogText(void);

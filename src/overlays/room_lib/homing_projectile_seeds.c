@@ -4,6 +4,7 @@
  * colours. room_m141, room_m146, room_m153, room_m154, room_m328 and scene_e02
  * carry these 0x28 bytes in their data.
  */
+
 #include "pe1/room_homing_model.h"
 
 GteRotation g_RoomHomingSparkRotation = { 0x400, 0, 0, 1 };

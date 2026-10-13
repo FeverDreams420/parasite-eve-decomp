@@ -1,24 +1,26 @@
 #include "common.h"
-#include "pe1/gte.h"
-#include "pe1/fieldfx_callback_list.h"
-#include "pe1/room_m123.h"
-#include "pe1/room_m123_joint_triangle.h"
-#include "room_m123_effects.h"
-#include "pe1/field_texture_tables.h"
-#include "pe1/room_m123_glow_burst.h"
-#include "pe1/room_m123_beacon.h"
-#include "pe1/field_sprite_params.h"
-#include "pe1/field_transform_point.h"
-#include "pe1/gte_types.h"
-#include "pe1/field_sprite_draw.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/fieldfx_calls.h"
-#include "pe1/render_matrix_slot.h"
-#include "pe1/room_sound_slot.h"
-#include "pe1/room_floor.h"
-#include "pe1/field_owner_actor.h"
-#include "pe1/fieldfx_task_pool.h"
 #include "pe1/akao_send.h"
+#include "pe1/field_owner_actor.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_sprite_params.h"
+#include "pe1/field_texture_tables.h"
+#include "pe1/field_transform_point.h"
+#include "pe1/fieldfx_callback_list.h"
+#include "pe1/fieldfx_calls.h"
+#include "pe1/fieldfx_task_pool.h"
+#include "pe1/gte.h"
+#include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/render_matrix_slot.h"
+#include "pe1/room_floor.h"
+#include "pe1/room_m123.h"
+#include "pe1/room_m123_beacon.h"
+#include "pe1/room_m123_glow_burst.h"
+#include "pe1/room_m123_joint_triangle.h"
+#include "pe1/room_sound_slot.h"
+
+#include "m123_externs.h"
+#include "room_m123_effects.h"
 
 typedef struct RoomPulseObject RoomPulseObject;
 
@@ -43,8 +45,6 @@ typedef struct RoomM123Burst {
     u16 x, y, z;
     u16 pad;
 } RoomM123Burst;
-
-#include "m123_externs.h"
 
 int func_8019251C(int mode, RoomM123JointTriangle *triangle) {
     GteShortVector corners[4];

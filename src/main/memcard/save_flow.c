@@ -1,15 +1,15 @@
 #include "common.h"
-#include "pe1/save_tail_state.h"
-#include "pe1/memcard.h"
-#include "pe1/resident_tables.h"
+#include "pe1/game_timers.h"
 #include "pe1/inventory_slots.h"
-#include "pe1/save.h"
-#include "pe1/save_blob.h"
+#include "pe1/memcard.h"
 #include "pe1/memcard_save_state.h"
 #include "pe1/menu_notification_dialog.h"
-#include "pe1/psyq_bios.h"
 #include "pe1/menu_widget.h"
-#include "pe1/game_timers.h"
+#include "pe1/psyq_bios.h"
+#include "pe1/resident_tables.h"
+#include "pe1/save.h"
+#include "pe1/save_blob.h"
+#include "pe1/save_tail_state.h"
 
 /* The save tail is a packed byte stream: each record is copied as an
  * unaligned byte block at the IO cursor, which then advances past it. */

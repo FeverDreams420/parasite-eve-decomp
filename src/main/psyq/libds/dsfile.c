@@ -5,10 +5,13 @@
 /* DSFILE is split in two: DsSearchFile and _cmp only match with GCC 2.8.1
  * and -mno-split-addresses, the directory cache in dsfile_2.c only with
  * GCC 2.7.2. */
-#include "pe1/psyq_ds.h"
-#include "pe1/cdrom.h"
+
 #include "common.h"
+#include "pe1/cdrom.h"
 #include "pe1/psyq_bios.h"
+#include "pe1/psyq_ds.h"
+
+#include "dsfile_externs.h"
 
 PE1_STATIC_ASSERT(sizeof(DslFILE) == 24, ds_search_file_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(DslFILE, name) == 8, ds_search_file_name_offset);
@@ -53,7 +56,6 @@ int g_DsCachedDirectory = 0;
 int g_DsCachedDiskType = 0;
 int dsfile_data_padding[2] = {0, 0};
 
-#include "dsfile_externs.h"
 DslFILE *DsSearchFile(DslFILE *output, char *input_name) {
     register DslFILE *out asm("$22") = output;
     char *name = input_name;

@@ -5,11 +5,12 @@
  * texture-window command builders, _status, the OTC ordering-table clear, the
  * VRAM fill, upload and readback transfers, the GP1 control mirror and the
  * DMA start helpers. */
-#include "pe1/gpu_command_builders.h"
+
 #include "common.h"
-#include "pe1/psyq_types.h"
-#include "pe1/psyq_gpu.h"
+#include "pe1/gpu_command_builders.h"
 #include "pe1/gpu_dma_register_window.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/psyq_types.h"
 
 #include "sys_6_externs.h"
 

@@ -1,8 +1,8 @@
 #include "common.h"
-#include "pe1/room_m404_drop.h"
-#include "pe1/room_m404.h"
-#include "pe1/room_m404_effects.h"
 #include "pe1/gte.h"
+#include "pe1/room_m404.h"
+#include "pe1/room_m404_drop.h"
+#include "pe1/room_m404_effects.h"
 
 /* Flashes the scene with the given code when the drop touches the player. */
 #define ROOM_M404_DROP_FLASH(code)                                            \

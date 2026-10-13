@@ -14,16 +14,18 @@
  * (pe1/room_module.h), are room data at the same addresses in all five
  * rooms.
  */
+
 #include "common.h"
-#include "pe1/room_effect_sequence.h"
-#include "room_lib.h"
-#include "pe1/field_script_context.h"
-#include "pe1/room_fx.h"
-#include "pe1/room_module.h"
-#include "pe1/gte_types.h"
 #include "pe1/field_model_draw.h"
+#include "pe1/field_script_context.h"
+#include "pe1/gte_types.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/psyq_libc.h"
+#include "pe1/room_effect_sequence.h"
+#include "pe1/room_fx.h"
+#include "pe1/room_module.h"
+
+#include "room_lib.h"
 
 /* The records the sequence's handlers read and write. */
 typedef struct RoomOverlay024Matrix {
@@ -763,8 +765,6 @@ void RoomEffect_DrawVariant38(void *arg0, RoomOverlay024VariantControl *control,
     D_80192C28.depth = state->final_alpha;
     func_800C42A4((FieldGlowSprite *)&D_80192C28, (GteMatrix *)&matrix, 1);
 }
-
-int rand(void);
 
 void RoomEffect_UpdatePairedSprite(void *unused,
                                        RoomFxControl *control,
@@ -1724,8 +1724,6 @@ typedef struct RoomDriftEffect {
 } RoomDriftEffect;
 
 typedef RoomFxSeed8 RoomDriftMatrixSeed;
-
-s32 rand(void);
 
 void RoomEffect_UpdateDriftingEffect(void *arg0, void *arg1, RoomDriftEffect *effect) {
     RoomDriftView *view;

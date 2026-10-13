@@ -2,16 +2,17 @@
 #define PE1_ROOM_HOMING_MODEL_H
 
 #include "common.h"
+#include "pe1/asset_find.h"
+#include "pe1/field_texture_tables.h"
+#include "pe1/field_vector_math.h"
 #include "pe1/fieldfx_callback_list.h"
+#include "pe1/fieldfx_task_pool.h"
+#include "pe1/floor_polygon.h"
+#include "pe1/gte_sine_table.h"
 #include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
 #include "pe1/render_object.h"
 #include "pe1/room_floor.h"
-#include "pe1/field_vector_math.h"
-#include "pe1/fieldfx_task_pool.h"
-#include "pe1/field_texture_tables.h"
-#include "pe1/floor_polygon.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/asset_find.h"
 
 /* Room projectile that flies along its heading, bounces off the walkable
  * polygon's edges, drops onto the floor and finally hands its position to
@@ -106,8 +107,6 @@ typedef struct RoomHomingModelEntity {
 } RoomHomingModelEntity;
 
 extern struct BattleEntity *D_8009D254;
-
-#include "pe1/gte_sine_table.h"
 
 extern void Akao_Cmd_21(int handle, int arg);
 extern int Scene_LoadRoomAssets(int id, void *actor);

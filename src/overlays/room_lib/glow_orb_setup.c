@@ -5,6 +5,7 @@
  * glow orb (glow_orb.c); the data is each room's own
  * (pe1/room_glow_orb.h).
  */
+
 #include "pe1/room_glow_orb.h"
 
 int RoomEffect_GlowOrbSetup(void *object) {

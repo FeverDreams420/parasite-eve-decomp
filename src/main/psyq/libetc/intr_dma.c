@@ -1,6 +1,7 @@
 /* ASSEMBLER: GNU */
 /* CC1_FLAGS: -fno-cse-follow-jumps */
 /* Psy-Q LIBETC INTR_DMA.OBJ: startIntrDMA, trapIntrDMA, setIntrDMA, memclrIntrDMA. */
+
 #include "pe1/psyq_api_internal.h"
 #include "pe1/psyq_bios.h"
 

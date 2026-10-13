@@ -1,8 +1,8 @@
 #ifndef PE1_SCENE_E08_LAYERED_SPRITE_H
 #define PE1_SCENE_E08_LAYERED_SPRITE_H
 
-#include "pe1/room_fx.h"
 #include "pe1/fixed_point.h"
+#include "pe1/room_fx.h"
 
 typedef struct SceneLayerPosition {
     s16 x, y, z, pad;

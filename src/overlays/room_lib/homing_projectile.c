@@ -12,10 +12,11 @@
  * files. The launch parameters live in each room's own data
  * (g_RoomHomingLaunch).
  */
-#include "pe1/room_homing_model.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/gte.h"
+
 #include "pe1/field_texture_tables.h"
+#include "pe1/gte.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/room_homing_model.h"
 
 /* Spark left where the projectile bounces: lives eight frames, drawn as a
  * pulsing sprite in the current palette. */

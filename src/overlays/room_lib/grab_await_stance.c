@@ -5,6 +5,7 @@
  * link it right after RoomLib_UpdateCallback; the grab class of room_m269
  * and scene_e01 has the same step as RoomEffect_GrabAwaitTarget.
  */
+
 #include "pe1/field_actor.h"
 #include "pe1/scene_grab_head.h"
 

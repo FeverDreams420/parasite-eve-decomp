@@ -11,6 +11,7 @@
  * has the same structure (_patch_GTE.._patch_GTE_end in .text, copy loop at
  * assembler label 1$) without the comparison pass.
  */
+
 #include "pe1/psyq_asm.h"
 
 PSYQ_ASM_OBJECT(LIBGTE, PATCHGTE)

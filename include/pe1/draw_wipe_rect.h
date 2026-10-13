@@ -2,6 +2,7 @@
 #define PE1_DRAW_WIPE_RECT_H
 
 #include "common.h"
+#include "pe1/bounds_check.h"
 #include "pe1/draw_state.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/render_prim.h"
@@ -15,10 +16,7 @@ extern int g_DrawBlendColor;
 extern int g_SavedDrawBlendColor[];
 extern int g_DrawScratchBuffer[];
 extern u16 *g_DrawVertexWritePtr;
-extern int g_TextCursorStackTop[];
 extern u8 D_800930A8[];
-extern int g_TextCursorX;
-extern int g_TextCursorY;
 
 /* A packet in the 16 KiB packet arena, or an ordering-table link word. */
 typedef union DrawPacketAddress {
@@ -36,9 +34,7 @@ extern unsigned int g_DrawPrimColor;                 /* primary colour */
 extern unsigned int g_DrawColorShaded;                 /* alternate colour */
 extern u32 *D_8009D11C;                 /* ordering-table entry */
 
-#include "pe1/bounds_check.h"
 void SetTexWindow(GpuCmdPacket *packet, RECT *window);
-void Draw_EmitWipeBar(u8 *edges, int mode);
 void Draw_AllocColorTri(int width, int height, int pulse);
 
 static inline void Draw_BlendColorInline(int color)

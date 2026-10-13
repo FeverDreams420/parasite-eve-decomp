@@ -8,6 +8,5 @@ void Render_CopyMatrixBlock(RenderMatrix *source, RenderMatrix *destination,
 
 /* Matrix blocks copied word by word into model and player matrices. */
 extern s32 g_IdentityMatrixSource[8];
-extern u32 g_RenderClutLookupTable[];
 
 #endif

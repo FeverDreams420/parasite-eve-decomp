@@ -1,5 +1,18 @@
 #ifndef PE1_EXT_M350_CALLBACKS
 #define PE1_EXT_M350_CALLBACKS
+
+#include "common.h"
+#include "pe1/battle.h"
+#include "pe1/field_actor.h"
+#include "pe1/field_color.h"
+#include "pe1/gte_short_vector.h"
+#include "pe1/gte_types.h"
+#include "pe1/room_m350_effects.h"
+
+typedef struct { unsigned char frame,slot,value,pad; } Event;
+
+typedef struct { Event entries[8]; } Events;
+
 extern short D_8019A828;
 extern unsigned char D_8019A82F;
 extern FieldActor *g_PlayerEntity;
@@ -28,20 +41,17 @@ extern volatile short D_8019A898,D_8019A8A0;
 extern GteShortVector D_8019A8A8,D_8019A8B0;
 extern volatile short D_8019A89C,D_8019A89E,D_8019A8A4;
 extern RenderColor D_8019A3D0;
-extern volatile short D_8019A89E;
 extern unsigned char D_8019A8C4;
 extern int Asset_Find08w(int,int,int,int,int);
 int func_80199148(int event, RoomM350FadingParticle *object);
 extern int rand(void),Inv_ScrambleGrid(void),rcos(int),rsin(int);
 extern RenderColor D_8019A738, D_8019A734;
 extern int rand(void);
-extern FieldActor *g_FieldActorListHead;
 extern void D_8019A410;
 extern short D_8019A82C;
 extern unsigned char D_8019A831;
 extern struct BattleEntity *D_8009D254;
 extern void func_80196C64(void);
-extern short D_8019A85E;
 int func_8019A134(int event, int **position);
 extern char D_8019A856;
 extern u16 D_8019A860;

@@ -1,5 +1,6 @@
 /* ASSEMBLER: GNU */
 /* PSY-Q LIBAPI CHCLRPAD: _remove_ChgclrPAD. */
+
 #include "pe1/psyq_asm.h"
 
 /*

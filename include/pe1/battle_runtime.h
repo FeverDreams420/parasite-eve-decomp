@@ -1,9 +1,9 @@
 #ifndef PE1_BATTLE_RUNTIME_H
 #define PE1_BATTLE_RUNTIME_H
 
+#include "pe1/asset_find.h"
 #include "pe1/entity_animation.h"
 #include "pe1/pm.h"
-#include "pe1/asset_find.h"
 #include "pe1/scene_transition.h"
 
 extern Combatant *D_8009D278;
@@ -33,7 +33,6 @@ typedef struct BattleEnemySlot {
 
 extern int D_8009D2FC;
 extern int D_8009D258;
-extern int D_8009D208;
 extern s8 D_8009CE40; /* item target mode: 0, or 4..7 while picking */
 extern u8 D_8009D2D8;
 extern u8 D_8009D1DC;
@@ -117,7 +116,6 @@ void Battle_CheckEvasion(BattleEntity *actor, BattleEvasionOutcome *outcome,
                          int attackType);
 void Battle_AdvancePhase(void);
 void BattleCmd_UndoPending(void);
-int Battle_RollEscapeChance(void);
 void Battle_CopyPadStateToRecord(void);
 int Battle_HandleItemMenu(void);
 int Battle_StepEnemyTurn(s8 mode);
@@ -126,7 +124,6 @@ void Battle_AdvanceTurnSlot(void);
 void Entity_AllocSlot(BattleEntity *entity);
 void Battle_StepEntityDeath(void);
 void Anim_SetInterpRate(RenderObjectEntity *object, int rate);
-void Pm_StopAllBoth(void);
 int CdRom_StepReadState(int mode);
 void Battle_ClearMotionTable(void);
 void Battle_SetupPlayerPalette(void);
@@ -162,7 +159,6 @@ typedef struct BattleSavedRotation {
     u16 x, facing, z;
 } BattleSavedRotation;
 extern BattleSavedRotation g_AyaSavedRotation;
-extern RenderObjectEntity g_PlayerBattleEntity;
 /* D_800B0D88 is g_PlayerBattleEntity.flags_9C. Battle_StepEscapeOrDeath reloads the
  * player's flags only after this store, so the store must look like it may
  * alias them: a non-small view keeps the address in a register, and separate

@@ -2,20 +2,21 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
+#include "common.h"
 #include "pe1/battle.h"
+#include "pe1/battle_cmd.h"
 #include "pe1/battle_entity_anim.h"
+#include "pe1/battle_hud_colors.h"
 #include "pe1/battle_reset_stats.h"
 #include "pe1/battle_runtime.h"
-#include "pe1/player_entity.h"
-#include "common.h"
-#include "pe1/battle_hud_colors.h"
-#include "pe1/menu_flags.h"
-#include "pe1/textbox.h"
-#include "pe1/battle_cmd.h"
-#include "pe1/pm.h"
-#include "pe1/random.h"
+#include "pe1/game_state.h"
 #include "pe1/gte_types.h"
 #include "pe1/inventory.h"
+#include "pe1/menu_flags.h"
+#include "pe1/player_entity.h"
+#include "pe1/pm.h"
+#include "pe1/random.h"
+#include "pe1/textbox.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -156,9 +157,6 @@ void Save_ResetGlobalFlags(void) {
     g_BattleItemMenuState = 0;
 }
 
-void Pm_StopAll(void);
-void Battle_InitFadeVars(void);
-
 void Battle_Init(void)
 {
     u8 index;
@@ -218,9 +216,6 @@ signed char Pad_GetMenuPressedBitOrDisabled(void) {
     }
     return (signed char)g_BattleActionQueueCount;
 }
-
-#include "pe1/game_state.h"
-#include "pe1/battle_entity_anim.h"
 
 int Battle_IsActive(void) {
     if (g_BattleActionQueueCount != 0) {
@@ -400,7 +395,6 @@ done:
 }
 
 #define NULL ((void *)0)
-int Battle_CalcDistToPlayer(BattleEntity *actor, BattleEntity *player);
 
 void Battle_BuildTargetList(void) {
     s32 entityFlags;

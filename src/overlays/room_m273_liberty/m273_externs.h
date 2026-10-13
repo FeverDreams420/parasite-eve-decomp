@@ -1,22 +1,56 @@
 #ifndef PE1_EXT_M273
 #define PE1_EXT_M273
+
+#include "common.h"
+#include "pe1/battle.h"
+#include "pe1/field_actor.h"
+#include "pe1/gte_types.h"
+#include "pe1/room_fx.h"
+
+#include "room_m273.h"
+#include "room_m273_effects.h"
+
+typedef GteShortVector Vector;
+
+/* Threshold model triple callbacks and controller. */
+typedef struct { short x,y,z,phase,scaleXZ,scaleY; unsigned short parameter12,unknown14; } ThresholdTripleEffect;
+
+typedef struct { void *asset,*pool; } AssetState;
+
+typedef struct { unsigned char r, g, b, unknown; } Color;
+
+/* Partial storage views; the fourth halfword carries the emitter flag. */
+typedef RoomM273PairPoolRecord Entry;
+
+typedef struct { Entry entries[2]; unsigned char unknown[14]; unsigned char stopped; } EmitterState;
+
+typedef struct {
+    char pad_00[4];
+    s32 *source;
+    s16 scaleX;
+    s16 scaleY;
+    u16 value;
+    u16 step;
+} RoomM273PulseState;
+
+typedef struct {
+    u16 *source;
+} RoomM273PhaseState;
+
 extern FieldActor *g_PlayerEntity;
 extern void Battle_BeginPlayerAction(void);
 void func_80192838(RoomSelectionState *state);
 void func_80192D50(char *obj);
 extern void Battle_ReturnToIdle(void);
-void func_80192C00(RoomPlacementOwner *owner, RoomPlacementState *state);
 extern struct BattleEntity *D_8009D254;
 extern u8 D_8019A8C8[];
 extern s32 Inv_ScrambleGrid(void);
 extern short D_800966EE[];
-extern unsigned char D_8019AB70[];
 extern GteRotation D_8019AB68;
 extern unsigned char D_8019AE5C;
 extern u8 D_8019AE9A;
 extern RoomM273PulseSeed D_8019AC20[2];
 extern int func_800CE688(void *);
-extern int Inv_ScrambleGrid(void);
 extern short D_8019AC18[];
 extern int D_8019AC0C[];
 extern AssetState D_8019AE8C;
@@ -58,5 +92,4 @@ extern s16 D_8019AEEA;
 extern s16 D_8019AEEE;
 extern s16 D_8019AEF2;
 extern s16 D_8019AEF6;
-extern u8 D_8019AEFA;
 #endif /* PE1_EXT_M273 */

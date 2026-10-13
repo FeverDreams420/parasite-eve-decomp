@@ -2,8 +2,8 @@
 #define PE1_BATTLE_H
 
 #include "common.h"
-#include "pe1/field_actor.h"
 #include "pe1/battle_ailment.h"
+#include "pe1/field_actor.h"
 
 typedef struct BattleRewardSlot {
     s16 id;

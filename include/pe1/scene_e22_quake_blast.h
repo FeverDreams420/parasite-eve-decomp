@@ -2,22 +2,23 @@
 #define PE1_SCENE_E22_QUAKE_BLAST_H
 
 #include "common.h"
-#include "pe1/fieldfx_callback_list.h"
-#include "pe1/render_object.h"
+#include "pe1/akao_send.h"
+#include "pe1/asset_find.h"
 #include "pe1/field_actor.h"
-#include "pe1/room_orbit_trail.h"
-#include "pe1/gte.h"
-#include "pe1/room_floor.h"
 #include "pe1/field_model_draw.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_sprite_draw.h"
-#include "pe1/fieldfx_task_pool.h"
-#include "pe1/scene_archive.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/akao_send.h"
-#include "pe1/asset_find.h"
-#include "pe1/fieldfx_calls.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/fieldfx_callback_list.h"
+#include "pe1/fieldfx_calls.h"
+#include "pe1/fieldfx_task_pool.h"
+#include "pe1/gte.h"
+#include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/render_object.h"
+#include "pe1/room_floor.h"
+#include "pe1/room_orbit_trail.h"
+#include "pe1/scene_archive.h"
 
 /* Quake blast controller (scene_e22 func_80198348): a blast at the target
  * that lights the actor once it stands in reach, sprays sparks for six
@@ -95,7 +96,5 @@ extern GteRotation D_8018F1FC;
 extern RenderColor D_8018F228;
 
 extern int rand(void);
-extern void FieldFx_ModelSetTexture(int tpage, int clut);
-#include "pe1/gte_types.h"
 
 #endif

@@ -3,8 +3,8 @@
 
 #include "common.h"
 #include "pe1/gte_types.h"
-#include "pe1/render_object.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/render_object.h"
 
 /* Room effect that spirals a sprite up from an anchor (phase 0) and then
  * slides it away while a wide glow strip pulses at the anchor (phase 1). */

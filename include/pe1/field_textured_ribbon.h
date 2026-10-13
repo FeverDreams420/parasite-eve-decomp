@@ -3,10 +3,10 @@
 
 #include "common.h"
 #include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/render_object.h"
 #include "pe1/render_prim.h"
 #include "pe1/render_tint.h"
-#include "pe1/render_object.h"
-#include "pe1/psyq_gpu.h"
 
 /* Field engine textured ribbon (func_800D3114): a strip of POLY_GT4 quads
  * along a point list, each joint widened across the screen-space direction

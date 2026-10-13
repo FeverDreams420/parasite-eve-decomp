@@ -2,13 +2,13 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
+#include "pe1/battle_entity_anim.h"
+#include "pe1/battle_reset_stats.h"
 #include "pe1/battle_runtime.h"
-#include "pe1/math64.h"
-#include "pe1/random.h"
 #include "pe1/entity_animation.h"
 #include "pe1/gte.h"
-#include "pe1/battle_reset_stats.h"
-#include "pe1/battle_entity_anim.h"
+#include "pe1/math64.h"
+#include "pe1/random.h"
 
 /* Legacy name: this computes enemy damage, applies attack/status resistances,
  * subtracts HP, and starts the hit reaction. The double arithmetic calls the

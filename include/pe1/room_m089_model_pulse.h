@@ -2,12 +2,12 @@
 #define PE1_ROOM_M089_MODEL_PULSE_H
 
 #include "common.h"
+#include "pe1/field_texture_tables.h"
 #include "pe1/fieldfx_callback_list.h"
+#include "pe1/fieldfx_calls.h"
+#include "pe1/fieldfx_task_pool.h"
 #include "pe1/room_m089_spin_model.h"
 #include "pe1/room_swirl_rise.h"
-#include "pe1/fieldfx_task_pool.h"
-#include "pe1/fieldfx_calls.h"
-#include "pe1/field_texture_tables.h"
 
 /* room_m089 pulsing model burst (func_80193618): three turning layers of
  * one model and a fourth model over a glow strip, while swirl/rise sprites

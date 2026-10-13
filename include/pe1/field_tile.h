@@ -2,13 +2,13 @@
 #define PE1_FIELD_TILE_H
 
 #include "common.h"
+#include "pe1/field_sprite_draw.h"
 #include "pe1/field_sprite_params.h"
 #include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/psyq_libc.h"
 #include "pe1/render_prim.h"
 #include "pe1/render_tint.h"
-#include "pe1/field_sprite_draw.h"
-#include "pe1/psyq_libc.h"
-#include "pe1/psyq_gpu.h"
 
 /* Flat colour tiles linked straight into the active ordering table. */
 

@@ -3,18 +3,19 @@
 /* Geometry sprite entries and mesh lists, the screen fade and tint, the
  * background scroll/parallax step and the room shadow and primitive colour
  * draws (G0833/G0835). */
+
 #include "common.h"
-#include "pe1/geom_state.h"
-#include "pe1/render_prim.h"
-#include "pe1/render_camera.h"
-#include "pe1/psyq_nop.h"
-#include "pe1/game_state.h"
-#include "pe1/gte.h"
-#include "pe1/gte_types.h"
 #include "pe1/field_tile.h"
 #include "pe1/fieldfx_task.h"
-#include "pe1/render_shadow.h"
+#include "pe1/game_state.h"
+#include "pe1/geom_state.h"
+#include "pe1/gte.h"
+#include "pe1/gte_types.h"
+#include "pe1/psyq_nop.h"
 #include "pe1/render_buffers.h"
+#include "pe1/render_camera.h"
+#include "pe1/render_prim.h"
+#include "pe1/render_shadow.h"
 
 /* Matching debt: fixed-register pins and scheduling constraints preserve the stock PSYQ instruction schedule. */
 

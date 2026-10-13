@@ -5,10 +5,11 @@
  * variants) link it after RoomLib_SlotSet; this unit is that function,
  * compiled into each of them.
  */
+
 #include "common.h"
-#include "pe1/room_floor.h"
-#include "pe1/fieldfx_task_pool.h"
 #include "pe1/field_actor.h"
+#include "pe1/fieldfx_task_pool.h"
+#include "pe1/room_floor.h"
 #include "pe1/room_spark_attacks.h"
 
 typedef struct RoomCaptureContext {

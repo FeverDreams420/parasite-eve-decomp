@@ -7,8 +7,9 @@
  * with the controller's two rotation seeds as the only read-only data; this
  * unit is that object, compiled into each of them.
  */
-#include "pe1/room_flare.h"
+
 #include "pe1/field_texture_tables.h"
+#include "pe1/room_flare.h"
 
 static const GteRotation s_OrbitFlareRotation = { 0, 0, -60, 0 };
 static const GteRotation s_OrbitFlareSpin = { 0, 0, 0, 0 };

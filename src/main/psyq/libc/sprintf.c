@@ -5,12 +5,9 @@
 /* Psy-Q SPRINTF: variadic formatter, including its private tables and template.
  * Empty scheduling barriers and register pins are tracked in the debt report. */
 
-typedef unsigned char u8;
-typedef signed char s8;
-typedef unsigned short u16;
-typedef signed short s16;
-typedef unsigned int u32;
-typedef signed int s32;
+#include "common.h"
+
+#include "sprintf_externs.h"
 
 /* The 12-byte template at D_80094528 is all zero.  Only the low-byte
  * flag field and the following prefix byte are used by this formatter. */
@@ -37,8 +34,6 @@ typedef struct {
 FormatSpec D_80094528 = {{0}, 0, 0};
 const u8 D_8001161C[] = "0123456789ABCDEF";
 const u8 D_80011630[] = "0123456789abcdef";
-
-#include "sprintf_externs.h"
 
 s32 sprintf(char *dest, s8 *format, ...)
 {

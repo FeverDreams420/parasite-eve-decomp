@@ -3,17 +3,17 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
-#include "pe1/menu_context_help.h"
-#include "pe1/text.h"
+#include "pe1/draw_level_bar.h"
+#include "pe1/draw_state.h"
 #include "pe1/inventory.h"
 #include "pe1/inventory_slots.h"
+#include "pe1/menu_context_help.h"
 #include "pe1/menu_equipment.h"
 #include "pe1/menu_inventory.h"
-#include "pe1/menu_widget.h"
-#include "pe1/draw_state.h"
-#include "pe1/draw_level_bar.h"
 #include "pe1/menu_item_rows.h"
 #include "pe1/menu_sound.h"
+#include "pe1/menu_widget.h"
+#include "pe1/text.h"
 
 /* Inventory/equip list screen: creation, list input, the item-count header,
  * the per-item action submenu and its input step. Contiguous at 0x80044274

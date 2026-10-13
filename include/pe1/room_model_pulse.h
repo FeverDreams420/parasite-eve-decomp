@@ -1,9 +1,9 @@
 #ifndef PE1_ROOM_MODEL_PULSE_H
 #define PE1_ROOM_MODEL_PULSE_H
 
-#include "pe1/room_spark.h"
-#include "pe1/room_model_pulse_particle.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/room_model_pulse_particle.h"
+#include "pe1/room_spark.h"
 
 /* room_m256 pulsing model effect: one controller (func_80195728) that seeds
  * sixteen ring particles on frame 1, draws a ring sprite at the slot-2

@@ -1,16 +1,19 @@
 #ifndef PE1_ROOM_M256_TRAIL_H
 #define PE1_ROOM_M256_TRAIL_H
 
-#include "pe1/field_sprite_params.h"
 #include "pe1/field_actor.h"
-#include "pe1/fieldfx_callback_list.h"
-#include "pe1/fieldfx_task.h"
-#include "pe1/room_floor.h"
-#include "pe1/field_texture_tables.h"
 #include "pe1/field_model_draw.h"
 #include "pe1/field_sprite_draw.h"
-#include "pe1/psyq_gpu.h"
+#include "pe1/field_sprite_params.h"
+#include "pe1/field_texture_tables.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/fieldfx_calls.h"
+#include "pe1/fieldfx_task.h"
+#include "pe1/gte_types.h"
+#include "pe1/player_entity.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/render_object.h"
+#include "pe1/room_floor.h"
 
 /* Shared 24-byte pool record: steering trail, damped sparks, model burst,
  * expanding sprite and floor impact. Modes 1 and 2 update and draw it. */
@@ -40,9 +43,6 @@ extern s32 D_80195EF0, D_80195EF8;
 extern u16 D_800E1208;
 typedef struct RoomM256TrailPalettes { u16 first, second; } RoomM256TrailPalettes;
 int rand(void);
-#include "pe1/gte_types.h"
-#include "pe1/player_entity.h"
-#include "pe1/render_object.h"
 void FieldFx_ModelSetTexture(int,int);
 
 int func_801940B0(int mode, void *effect);

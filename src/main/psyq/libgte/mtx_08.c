@@ -1,4 +1,5 @@
 /* PSY-Q LIBGTE MTX_08: ScaleMatrix. */
+
 #include "pe1/gte_types.h"
 
 /* Packed-word scaling preserves the original full-word padding overwrite.

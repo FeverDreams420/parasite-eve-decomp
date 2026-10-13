@@ -1,24 +1,26 @@
 #include "common.h"
-#include "pe1/fieldfx_task_pool.h"
-#include "room_m350_shared.h"
-#include "pe1/room_m350_drop.h"
-#include "pe1/room_floor.h"
+#include "pe1/akao/commands.h"
+#include "pe1/asset_find.h"
 #include "pe1/field_actor.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_sprite_params.h"
+#include "pe1/field_texture_tables.h"
+#include "pe1/field_vector_math.h"
 #include "pe1/fieldfx_callback_list.h"
+#include "pe1/fieldfx_task_pool.h"
+#include "pe1/gte.h"
+#include "pe1/gte_sine_table.h"
 #include "pe1/gte_types.h"
 #include "pe1/player_entity.h"
-#include "pe1/asset_find.h"
-#include "pe1/render_object.h"
-#include "pe1/field_texture_tables.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/gte_sine_table.h"
-#include "pe1/field_sprite_params.h"
-#include "room_m350_data.h"
+#include "pe1/render_object.h"
+#include "pe1/room_floor.h"
+#include "pe1/room_m350_drop.h"
 #include "pe1/room_m350_effects.h"
-#include "pe1/field_sprite_draw.h"
-#include "pe1/field_vector_math.h"
-#include "pe1/gte.h"
-#include "pe1/akao/commands.h"
+
+#include "m350_callbacks_externs.h"
+#include "room_m350_data.h"
+#include "room_m350_shared.h"
 
 typedef struct {
     char reserved[24];
@@ -56,10 +58,6 @@ typedef FieldActor Instance;
 
 typedef FieldActor Player;
 
-typedef struct { unsigned char frame,slot,value,pad; } Event;
-
-typedef struct { Event entries[8]; } Events;
-
 typedef struct { int asset; short speed,targetSpeed,heightPhase,mode; } State;
 
 typedef struct { short count,delay; } FadingModelState;
@@ -67,8 +65,6 @@ typedef struct { short count,delay; } FadingModelState;
 typedef struct { short count, delay; } EmissionState;
 
 typedef struct { signed int scale:16; signed int shade:16; } EffectEntry;
-
-#include "m350_callbacks_externs.h"
 
 int func_80196E04(int event) {
     Animation *animation = ANIM_OWNER_AS(Animation *)[2];

@@ -1,14 +1,13 @@
 #include "common.h"
-#include "pe1/boot_disc_check.h"
-#include "pe1/field_bg_load.h"
-#include "pe1/boot_stack.h"
-#include "pe1/game_state.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/game_timers.h"
-#include "pe1/scene_dispatch.h"
 #include "pe1/boot.h"
+#include "pe1/boot_disc_check.h"
 #include "pe1/boot_services.h"
-
+#include "pe1/boot_stack.h"
+#include "pe1/field_bg_load.h"
+#include "pe1/game_state.h"
+#include "pe1/game_timers.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/scene_dispatch.h"
 
 #define STATE_FLAG_IMAGE_BUSY 0x00100000U
 #define STATE_FLAG_READY 0x00000100U

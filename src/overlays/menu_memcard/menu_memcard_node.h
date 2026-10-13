@@ -2,6 +2,7 @@
 #define MENU_MEMCARD_NODE_H
 
 #include "common.h"
+
 #include "menu_memcard_image.h"
 
 typedef struct MenuMemcardListNode {

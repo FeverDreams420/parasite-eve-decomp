@@ -2,8 +2,9 @@
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses */
 /* Psy-Q LIBDS DSSYS_1.OBJ, part 10 of 10: tipDsSystem and the object's zero tail. */
-#include "pe1/psyq_ds.h"
+
 #include "pe1/psyq_bios.h"
+#include "pe1/psyq_ds.h"
 
 #include "dssys_1_10_externs.h"
 

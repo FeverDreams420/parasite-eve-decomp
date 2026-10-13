@@ -1,5 +1,8 @@
 #ifndef PE1_EXT_IMAGE_DISPLAY
 #define PE1_EXT_IMAGE_DISPLAY
+
+#include "common.h"
+
 extern void *D_80125BA4[];
 extern u32 D_8009D26C;
 extern u32 D_8009D1F4;

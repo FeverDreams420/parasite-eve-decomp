@@ -1,5 +1,6 @@
 /* ASSEMBLER: GNU */
 /* Psy-Q LIBAPI FIRST.OBJ: firstfile, Sys_FirstFileHookCallback. */
+
 #include "pe1/bios_firstfile.h"
 
 /* SDK firstfile wrapper (FIRST.OBJ). Constraints are tracked in crutch debt.

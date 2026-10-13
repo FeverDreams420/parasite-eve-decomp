@@ -32,7 +32,6 @@ extern u16 D_800930D8[];
 
 void Akao_Cmd_F1(void);
 void ResetGraph(int mode);
-void SetDispMask(int mask);
 void Battle_DrawHPBar(void);
 
 int Scene_LoadFieldBg(void);

@@ -3,15 +3,14 @@
 
 /* Declarations used only by the per-frame entity driver Entity_FrameUpdate. */
 
+#include "pe1/entity_animation.h"
 #include "pe1/field_actor.h"
 #include "pe1/game_state.h"
-#include "pe1/entity_animation.h"
 #include "pe1/player_entity.h"
+#include "pe1/render_shadow.h"
 #include "pe1/scene_room_load.h"
 #include "pe1/scene_transition.h"
-#include "pe1/render_shadow.h"
 
-extern FieldActor *g_FieldActorListHead;
 /* Global game-state flags (bit 4 = menu open, 2 = battle, 0x100 =
  * player-only animation) and the word after them. */
 typedef struct GameStateBlock {
@@ -35,9 +34,6 @@ void Render_SetViewport(int *camera);
 void Render_SetGteScreenOffset(void);
 void Render_ResetGteScreenOffset(void);
 int Anim_BuildRotationMatrices(RenderObjectEntity *object, void *action, int frame, int mode);
-void Render_TransformVertices(RenderObjectEntity *object);
-void Render_TransformSkinnedVertices(RenderObjectEntity *object, u32 *view_matrix);
-void Render_TransformMorphVertices(RenderObjectEntity *object, u32 *view_matrix);
 void Render_DrawEntity(RenderObjectEntity *object, void *viewMatrix);
 void Scene_UpdateEntityPositions(void);
 void Script_GarbageCollectNodes(void);

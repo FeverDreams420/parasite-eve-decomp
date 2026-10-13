@@ -8,9 +8,11 @@
  * it directly after the room library (actor_classes.c). The ten
  * functions and the configure jump table are the same in all five rooms.
  */
-#include "room_lib.h"
+
 #include "pe1/gte.h"
 #include "pe1/room_window.h"
+
+#include "room_lib.h"
 
 int RoomLib_WindowClassNop0(void) {
     return 0;

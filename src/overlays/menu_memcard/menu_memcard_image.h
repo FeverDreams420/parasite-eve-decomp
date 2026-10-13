@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "pe1/menu_sound.h"
+
 typedef struct MemcardImage { u8 header[16]; s16 width, height; } MemcardImage;
 typedef struct MemcardImageNode {
     struct MemcardImageNode *next;

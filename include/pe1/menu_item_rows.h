@@ -1,9 +1,9 @@
 #ifndef PE1_MENU_ITEM_ROWS_H
 #define PE1_MENU_ITEM_ROWS_H
 
-#include "pe1/menu_widget.h"
-#include "pe1/menu_draw_list.h"
 #include "pe1/inventory.h"
+#include "pe1/menu_draw_list.h"
+#include "pe1/menu_widget.h"
 
 void Menu_DrawWeaponList(MenuWidgetNode *node);
 void Menu_DrawArmorList(MenuWidgetNode *node);
@@ -29,7 +29,6 @@ void Menu_DrawItemIconList(MenuWidgetNode *node);
 void Menu_DrawMemCardSlot1List(MenuWidgetNode *node);
 void Menu_DrawMemCardSlot2List(MenuWidgetNode *node);
 void Menu_DrawMemCardSlot3List(MenuWidgetNode *node);
-void Menu_CursorRenderData(ItemDataRecord *record);
 /* List adapters binding a widget list to its row drawer. */
 void Menu_DrawMainMenuList(MenuWidgetNode *node);
 void Menu_DrawActionSubmenuList(MenuWidgetNode *node);

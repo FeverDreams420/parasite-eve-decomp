@@ -2,30 +2,30 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-#include "pe1/geom_state.h"
-#include "pe1/player_entity.h"
-#include "pe1/game_state.h"
 #include "common.h"
-#include "pe1/script_node.h"
-#include "pe1/vector_types.h"
-#include "pe1/render_lighting.h"
-#include "pe1/scene_room_load.h"
-#include "pe1/field_actor.h"
-#include "pe1/battle_runtime.h"
 #include "pe1/battle_entity_anim.h"
-#include "pe1/render_shadow.h"
+#include "pe1/battle_runtime.h"
 #include "pe1/battle_update.h"
-#include "pe1/menu_state.h"
-#include "pe1/textbox.h"
-#include "pe1/scene_transition.h"
-#include "pe1/game_state_types.h"
-#include "pe1/menu_equipment.h"
-#include "pe1/script_queue.h"
+#include "pe1/entity_allocation.h"
+#include "pe1/entity_animation.h"
+#include "pe1/field_actor.h"
 #include "pe1/field_collision.h"
 #include "pe1/field_sfx.h"
+#include "pe1/game_state.h"
+#include "pe1/game_state_types.h"
+#include "pe1/geom_state.h"
+#include "pe1/menu_equipment.h"
+#include "pe1/menu_state.h"
+#include "pe1/player_entity.h"
+#include "pe1/render_lighting.h"
+#include "pe1/render_shadow.h"
+#include "pe1/scene_room_load.h"
+#include "pe1/scene_transition.h"
+#include "pe1/script_node.h"
+#include "pe1/script_queue.h"
 #include "pe1/script_state.h"
-#include "pe1/entity_animation.h"
-#include "pe1/entity_allocation.h"
+#include "pe1/textbox.h"
+#include "pe1/vector_types.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -399,7 +399,6 @@ int Script_StopEntityAnim(s16 **arg0) {
     return 1;
 }
 
-int Math_FixedDivide(int a, int b);
 int Math_FixedMul(int arg0, int arg1);
 
 int Entity_ComputeVelocityToTarget(int **arg0) {

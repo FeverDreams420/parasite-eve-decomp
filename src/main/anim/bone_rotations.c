@@ -1,7 +1,7 @@
 #include "common.h"
-#include "pe1/scene_flags.h"
 #include "pe1/pad_state.h"
 #include "pe1/render_object.h"
+#include "pe1/scene_flags.h"
 
 void Scene_CheckFlagBits(void *ctx, SceneFlagRecord **table, int *index_ptr)
 {

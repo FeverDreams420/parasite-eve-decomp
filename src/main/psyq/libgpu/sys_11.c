@@ -1,5 +1,6 @@
 /* Psy-Q LIBGPU SYS.OBJ, part 11 of 11: the private DMA callback restore and
  * GPU_memset. */
+
 #include "pe1/psyq_callbacks.h"
 #include "pe1/psyq_gpu.h"
 

@@ -1,14 +1,14 @@
 #include "common.h"
-#include "pe1/akao/commands.h"
 #include "pe1/akao.h"
-#include "pe1/akao/track.h"
-#include "pe1/akao/voice_state.h"
-#include "pe1/akao/voice_masks.h"
-#include "pe1/psyq_spu_internal.h"
-#include "pe1/akao/tick.h"
+#include "pe1/akao/commands.h"
 #include "pe1/akao/globals.h"
 #include "pe1/akao/spu_registers.h"
+#include "pe1/akao/tick.h"
+#include "pe1/akao/track.h"
+#include "pe1/akao/voice_masks.h"
+#include "pe1/akao/voice_state.h"
 #include "pe1/psyq_cd.h"
+#include "pe1/psyq_spu_internal.h"
 
 int Akao_Cmd_10(void *bank) {
     g_AkaoCmd.opcode = 0x10;

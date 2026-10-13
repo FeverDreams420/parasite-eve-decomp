@@ -1,8 +1,8 @@
 #ifndef PE1_PSYQ_LIBCD_BIOS_INTERNAL_H
 #define PE1_PSYQ_LIBCD_BIOS_INTERNAL_H
 
-#include "pe1/psyq_cd.h"
 #include "pe1/psyq_bios.h"
+#include "pe1/psyq_cd.h"
 
 /* Compare the previous poll count, then commit the incremented counter. */
 static inline int count_poll(void) {

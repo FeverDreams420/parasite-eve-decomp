@@ -11,12 +11,14 @@
  * merged once they compile together. Trails, glyphs and lookup codes live
  * in each room's own data (pe1/room_motion_init.h).
  */
+
 #include "common.h"
-#include "room_lib.h"
+#include "pe1/field_script_context.h"
 #include "pe1/room_fx.h"
 #include "pe1/room_motion_init.h"
-#include "pe1/field_script_context.h"
+
 #include "motion_particles.h"
+#include "room_lib.h"
 
 static const RoomFxVec4 s_MotionScale = { 0x590, 0x590, 0x590, 0 };
 

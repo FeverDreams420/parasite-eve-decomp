@@ -3,12 +3,13 @@
 /* Psy-Q LIBGPU SYS.OBJ, part 3 of 11: GetDispEnv, GetODE, SetTexWindow,
  * SetDrawArea, SetDrawOffset, SetPriority, SetDrawStp, SetDrawMode,
  * SetDrawEnv and the private Gpu_SetDrawEnvBack. */
+
+#include "common.h"
+#include "pe1/draw_area.h"
+#include "pe1/gpu_callbacks.h"
 #include "pe1/gpu_command_builders.h"
 #include "pe1/gpu_state.h"
-#include "common.h"
-#include "pe1/gpu_callbacks.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/draw_area.h"
 
 #include "sys_3_externs.h"
 

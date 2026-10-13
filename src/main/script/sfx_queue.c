@@ -2,6 +2,7 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "pe1/field_sfx.h"
+#include "pe1/script_node.h"
 
 FieldSfxU8 g_FieldSfxQueueCount;
 static FieldSfxQueueEntry g_FieldSfxQueue[28];
@@ -28,10 +29,6 @@ void Script_QueueFieldSfx(int arg0, int arg1, int arg2, int arg3, int arg4) {
     entry->actorSelector.word = arg4;
     g_FieldSfxQueueCount++;
 }
-
-
-#include "pe1/field_sfx.h"
-#include "pe1/script_node.h"
 
 
 static inline void Start(FieldActor *actor, FieldSfxQueueEntry *event)

@@ -1,16 +1,16 @@
 #ifndef MENU_MEMCARD_VIDEO_H
 #define MENU_MEMCARD_VIDEO_H
 
+#include "common.h"
+#include "pe1/cdrom.h"
+#include "pe1/cdrom_buffers.h"
 #include "pe1/disc_load_state.h"
 #include "pe1/display_env.h"
-#include "common.h"
-#include "pe1/cdrom_buffers.h"
+#include "pe1/game_state.h"
+#include "pe1/gpu_image.h"
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/psyq_press.h"
-#include "pe1/cdrom.h"
-#include "pe1/gpu_image.h"
-#include "pe1/game_state.h"
 
 typedef struct VideoFrame { u32 reserved[2], time, reserved0c; u16 width, height; } VideoFrame;
 /* One entry of a video table: file name, colour depth and playback layout. */
@@ -36,7 +36,6 @@ typedef struct VideoDisplay {
 } VideoDisplay;
 extern s32 DsSystemStatus(void),DsShellOpen(void);
 extern void exit(s32),Spu_SetVoiceVolume(s32);
-extern u16 g_CdDiskType;
 extern VideoEntry *D_801D11AC;
 extern u8 D_800B0DBE,D_801D0DBD;
 extern s8 D_800B0DBB;

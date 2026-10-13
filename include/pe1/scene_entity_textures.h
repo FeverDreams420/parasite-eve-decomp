@@ -2,13 +2,13 @@
 #define PE1_SCENE_ENTITY_TEXTURES_H
 
 #include "common.h"
+#include "pe1/cdrom.h"
+#include "pe1/field_actor.h"
+#include "pe1/player_entity.h"
+#include "pe1/render_lighting.h"
 #include "pe1/render_setup.h"
 #include "pe1/scene_assets.h"
-#include "pe1/field_actor.h"
-#include "pe1/render_lighting.h"
-#include "pe1/player_entity.h"
 #include "pe1/scene_room_load.h"
-#include "pe1/cdrom.h"
 
 /*
  * Scene_LoadEntityTextures: 14-state loader for the area entity bank.
@@ -27,7 +27,6 @@ extern u8 g_EntityRenderScratch[];
 extern u8 D_8009D25C;
 
 int Scene_UpdateBgDraw(void);
-int CdRom_ReadSectorsFromLba(u32 lba, void *destination, u32 size);
 void Render_DrawWithAnim(void *object, void *animation, int frame,
                          void *matrices, void *scratch);
 

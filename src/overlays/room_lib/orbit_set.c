@@ -15,10 +15,12 @@
  * loops need -fno-strength-reduce; the class methods compile the same
  * either way.
  */
-#include "room_lib.h"
-#include "pe1/room_orbit_set.h"
-#include "render_layouts.h"
+
 #include "pe1/field_actor.h"
+#include "pe1/room_orbit_set.h"
+
+#include "render_layouts.h"
+#include "room_lib.h"
 
 ROOMLIB_RETURN_ZERO(RoomEffect_OrbitSetNop0)
 

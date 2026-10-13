@@ -1,18 +1,20 @@
 #ifndef PE1_SCENE_E20_HOVER_ORB_H
 #define PE1_SCENE_E20_HOVER_ORB_H
 
-#include "pe1/field_sprite_params.h"
-#include "pe1/scene_e20_flare.h"
-#include "pe1/fieldfx_callback_list.h"
-#include "pe1/field_sprite_draw.h"
-#include "pe1/field_texture_tables.h"
+#include "pe1/asset_find.h"
 #include "pe1/field_model_draw.h"
 #include "pe1/field_owner_actor.h"
-#include "pe1/fieldfx_task_pool.h"
-#include "pe1/scene_archive.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/asset_find.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_sprite_params.h"
+#include "pe1/field_texture_tables.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/fieldfx_calls.h"
+#include "pe1/fieldfx_task_pool.h"
+#include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/render_matrix_slot.h"
+#include "pe1/scene_archive.h"
+#include "pe1/scene_e20_flare.h"
 
 /* Scene e20 trail controller and its command/particle records.
  * Reserved members are observed offsets, not recovered field meanings. */
@@ -39,12 +41,8 @@ extern void *D_8019085C;
 int SceneE20_HoverOrbController(int mode, SceneE20TrailEffect *effect, SceneEffectSlot *command);
 extern SceneEffectSlot D_80190860[];
 int rand(void);
-#include "pe1/gte_types.h"
 void func_800D2B58(void *from, void *to, void *color0, void *color1, int scale0,
                   int scale1, int mode);
-
-void FieldFx_ModelSetTexture(int tpage,int clut);
-#include "pe1/render_matrix_slot.h"
 
 extern s32 D_80190800;
 

@@ -1,29 +1,29 @@
-#include "pe1/draw_buffers.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/boot_disc_check.h"
-#include "pe1/render_tint.h"
-#include "pe1/cdrom_buffers.h"
 #include "common.h"
-#include "pe1/asset_tim.h"
-#include "pe1/font.h"
-#include "pe1/render_buffers.h"
-#include "pe1/draw_state.h"
-#include "pe1/battle_status.h"
-#include "pe1/save_tail_state.h"
-#include "pe1/scene_dispatch.h"
-#include "pe1/boot_services.h"
-#include "pe1/render_camera.h"
-#include "pe1/menu_queue.h"
-#include "pe1/boot.h"
-#include "pe1/disc_load_state.h"
-#include "pe1/cdrom.h"
-#include "pe1/cd_poll.h"
-#include "pe1/scene_assets.h"
-#include "include_asm.h"
-#include "pe1/psyq_bios.h"
-#include "pe1/boot_display.h"
-#include "pe1/pe_image.h"
 #include "pe1/akao/commands.h"
+#include "pe1/asset_tim.h"
+#include "pe1/battle_status.h"
+#include "pe1/boot.h"
+#include "pe1/boot_disc_check.h"
+#include "pe1/boot_display.h"
+#include "pe1/boot_services.h"
+#include "pe1/cd_poll.h"
+#include "pe1/cdrom.h"
+#include "pe1/cdrom_buffers.h"
+#include "pe1/disc_load_state.h"
+#include "pe1/draw_buffers.h"
+#include "pe1/draw_state.h"
+#include "pe1/font.h"
+#include "pe1/menu_queue.h"
+#include "pe1/pe_image.h"
+#include "pe1/psyq_bios.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/render_buffers.h"
+#include "pe1/render_camera.h"
+#include "pe1/render_tint.h"
+#include "pe1/save_tail_state.h"
+#include "pe1/scene_assets.h"
+#include "pe1/scene_dispatch.h"
+#include "include_asm.h"
 
 int Draw_InitDisplay(int mode) {
     int mode_reg;
@@ -154,9 +154,6 @@ void Draw_LoadTimTable(TimRelativeTable *table, int count) {
  * tables and the boot audio banks. */
 
 void SetDispMask(int arg0);
-void FlushCache(void);
-
-void Akao_Cmd_F0(void);
 
 int Boot_LoadOverlayTables(void) {
     int status;

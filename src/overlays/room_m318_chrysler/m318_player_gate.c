@@ -1,9 +1,9 @@
 #include "common.h"
+#include "pe1/field_actor.h"
 #include "pe1/fieldfx_callback_list.h"
 #include "pe1/fieldfx_task_pool.h"
-#include "pe1/field_actor.h"
-#include "../room_lib/room_lib.h"
 
+#include "../room_lib/room_lib.h"
 #include "m318_player_gate_externs.h"
 
 s32 func_801992A4(s32 arg0, void *arg1, s32 *arg2) {

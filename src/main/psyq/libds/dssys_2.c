@@ -2,6 +2,7 @@
 /* Psy-Q LIBDS DSSYS_2.OBJ, part 1 of 3: CQ_clear_queue, CQ_delete_command,
  * CQ_last_queue, CQ_error_flush, CQ_execute, CQ_sync_system, CQ_add_result.
  * DsInit and DsReset (dssys_2_2.c) still need GCC 2.8.1. */
+
 #include "common.h"
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_ds.h"

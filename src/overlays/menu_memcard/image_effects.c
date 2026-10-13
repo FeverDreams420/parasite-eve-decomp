@@ -1,7 +1,7 @@
-#include "menu_memcard_pulse.h"
-#include "menu_memcard_link.h"
-#include "menu_memcard_trail.h"
 #include "menu_memcard_glint.h"
+#include "menu_memcard_link.h"
+#include "menu_memcard_pulse.h"
+#include "menu_memcard_trail.h"
 
 s32 MenuCard_PulseImage(s32 mode, MemcardPulseState *state) {
     GteRotation rotation;

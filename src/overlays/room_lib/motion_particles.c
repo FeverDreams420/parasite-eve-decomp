@@ -11,17 +11,19 @@
  * merged once they compile together. Trails, glyphs and lookup codes live
  * in each room's own data (pe1/room_motion_init.h).
  */
-#include "pe1/room_motion_init.h"
+
 #include "common.h"
-#include "room_lib.h"
-#include "pe1/gte.h"
-#include "pe1/room_fx.h"
 #include "pe1/field_script_context.h"
-#include "render_layouts.h"
-#include "motion_particles.h"
-#include "pe1/room_floor.h"
-#include "pe1/room_rearm_timer.h"
+#include "pe1/gte.h"
 #include "pe1/psyq_libc.h"
+#include "pe1/room_floor.h"
+#include "pe1/room_fx.h"
+#include "pe1/room_motion_init.h"
+#include "pe1/room_rearm_timer.h"
+
+#include "motion_particles.h"
+#include "render_layouts.h"
+#include "room_lib.h"
 
 static const RoomFxSeed8 s_MotionQuadSeed = { { 0, 4, 0, 0, 0, 0, 0, 0 } };
 
@@ -388,7 +390,6 @@ void RoomEffect_StepSpritePair(void *arg0, RoomFxControl *state, RoomAnchoredSpr
 }
 
 s32 *FieldFx_RegPtr(s32 index);
-int rand(void);
 
 /* Seeds the motion particles: three or six of them depending on the first
  * scene flag, each with a random anchor offset, a random sprite lookup and

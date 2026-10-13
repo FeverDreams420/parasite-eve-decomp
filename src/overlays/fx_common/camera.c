@@ -3,20 +3,20 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
-#include "fx_common_motion.h"
-#include "fx_common.h"
+#include "pe1/cdrom.h"
+#include "pe1/game_state.h"
 #include "pe1/gte.h"
 #include "pe1/gte_types.h"
+
+#include "camera_externs.h"
+#include "fx_common.h"
+#include "fx_common_motion.h"
 #include "fx_common_setup.h"
-#include "pe1/game_state.h"
-#include "pe1/cdrom.h"
 
 typedef struct FxAssetSource {
     u8 reserved[0x100];
     u8 *data;
 } FxAssetSource;
-
-#include "camera_externs.h"
 
 /* Aim the effect camera from its position at its target: build the view
  * matrix, the look-at matrix and the billboard rotation used by sprites. */
@@ -560,9 +560,7 @@ FxCommonNode *func_80190AEC(FxCommonNode *parent, void *payload)
     return node;
 }
 
-int func_801915DC(void);
 int func_8019959C(void *payload, int type);
-void func_801917BC(FxCommonNode *node, FxCommonNode *parent);
 
 FxCommonNode *func_80190B78(FxCommonNode *parent, s16 type, void *payload)
 {
@@ -580,9 +578,7 @@ FxCommonNode *func_80190B78(FxCommonNode *parent, s16 type, void *payload)
     return node;
 }
 
-int func_801915DC(void);
 int func_8019959C(void *payload, int subtype);
-void func_801917BC(FxCommonNode *node, FxCommonNode *parent);
 
 FxCommonNode *func_80190C1C(FxCommonNode *parent, s16 subtype, s16 variant,
                             s16 type, void *data38, void *data3C,
@@ -928,8 +924,6 @@ void func_80191854(void)
         D_8019C1F0 = 0;
     func_80191C94();
 }
-
-int CdRom_PollReady(void);
 
 void func_80191C94(void) {
     FxAssetSource *resource = (FxAssetSource *)&D_800B0CD8;

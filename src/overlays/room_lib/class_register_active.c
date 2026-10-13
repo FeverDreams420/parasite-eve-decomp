@@ -6,8 +6,10 @@
  * directly after each other, so they are one unit. The lists are the
  * room's (pe1/room_module.h).
  */
-#include "room_lib.h"
+
 #include "pe1/room_module.h"
+
+#include "room_lib.h"
 
 ROOMLIB_REGISTER_TABLE_AT3(RoomLib_RegisterDrawListActive, g_RoomDrawList)
 

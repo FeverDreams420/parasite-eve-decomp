@@ -3,8 +3,8 @@
 
 #include "common.h"
 #include "pe1/field_actor.h"
-#include "pe1/player_entity.h"
 #include "pe1/field_vector_math.h"
+#include "pe1/player_entity.h"
 
 /* Scene script object that pulls the player into a scripted grab animation
  * when the player walks up to the owning actor during its reach window. */

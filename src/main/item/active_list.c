@@ -2,29 +2,30 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-#include "pe1/akao_counters.h"
-#include "pe1/akao.h"
-#include "pe1/akao_send.h"
-#include "pe1/menu_state.h"
-#include "pe1/game_state.h"
-#include "pe1/inventory_slots.h"
-#include "pe1/menu_queue.h"
-#include "pe1/akao/commands.h"
-#include "pe1/save.h"
-#include "pe1/menu_inventory.h"
-#include "pe1/battle_modifiers.h"
-#include "pe1/game_timers.h"
 #include "common.h"
-#include "pe1/inventory_state.h"
-#include "pe1/inventory_queries.h"
+#include "pe1/akao.h"
+#include "pe1/akao/commands.h"
+#include "pe1/akao_counters.h"
+#include "pe1/akao_send.h"
 #include "pe1/aya.h"
-#include "pe1/inventory.h"
-#include "pe1/text.h"
-#include "pe1/script_queue.h"
-#include "pe1/menu_context_help.h"
+#include "pe1/battle_modifiers.h"
 #include "pe1/draw_state.h"
+#include "pe1/game_state.h"
+#include "pe1/game_timers.h"
+#include "pe1/inventory.h"
+#include "pe1/inventory_category.h"
+#include "pe1/inventory_queries.h"
+#include "pe1/inventory_slots.h"
 #include "pe1/inventory_sort.h"
+#include "pe1/inventory_state.h"
+#include "pe1/menu_context_help.h"
+#include "pe1/menu_inventory.h"
+#include "pe1/menu_queue.h"
+#include "pe1/menu_state.h"
 #include "pe1/random.h"
+#include "pe1/save.h"
+#include "pe1/script_queue.h"
+#include "pe1/text.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -60,7 +61,6 @@ void Akao_SetBgmVolumeFade(void) {
 void Save_ResetMetadataWindow(int);
 void Menu_ResetStateFlags(void);
 void Inv_SetDefaultItemId(void);
-void Draw_InitBuffers(void);
 void MenuWidget_InitPoolUnk(void);
 void Menu_InitStateBuffer(void);
 void MemCard_ClearDelayedCallback(void);
@@ -358,10 +358,6 @@ void Inv_SetAyaSlotCount(int count) {
         g_InvSlotLimit = Inv_GetAyaSlotLimit();
     }
 }
-
-int Inv_GetBonusSlotCount(void);
-
-#include "pe1/inventory.h"
 
 int Inv_GetAyaSlotLimit(void) {
     if (g_AyaInventorySlotCount[0] + Inv_GetBonusSlotCount() >= 0x33) {
@@ -986,7 +982,6 @@ s32 Inv_AddItem(s32 arg0) {
 int g_InvCategoryBaseItemId;
 s16 *g_InvItemPtr;
 int g_InvSlotLimit;
-#include "pe1/inventory_category.h"
 
 int Inv_CountByValue(int arg0) {
     int count;

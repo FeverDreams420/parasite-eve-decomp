@@ -1,8 +1,8 @@
 #ifndef PE1_AKAO_COMMANDS_H
 #define PE1_AKAO_COMMANDS_H
 
-#include "pe1/akao/queue.h"
 #include "pe1/akao/file_header.h"
+#include "pe1/akao/queue.h"
 #include "pe1/akao/track.h"
 
 /* The relative-stream command initially holds an offset-table address in
@@ -167,8 +167,6 @@ void Akao_Cmd_F0(void);
 void Akao_Cmd_F1(void);
 
 void Akao_Cmd_21(int arg0, int arg1);
-void Akao_Cmd_F0(void);
-void Akao_Cmd_F1(void);
 void Akao_Cmd_40(void);
 void Akao_Cmd_C0_WithSlot(int slot, int volume);
 void Akao_Cmd_C1_WithSlot(int slot, int duration, int volume);

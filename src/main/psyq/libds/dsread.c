@@ -4,10 +4,11 @@
  * callbacks and controls in dsread_2.c only with GCC 2.8.1 and
  * -mno-split-addresses (2.7.2 cannot keep the shared address base in a
  * register). */
-#include "pe1/psyq_cd.h"
-#include "pe1/psyq_ds_queue.h"
+
 #include "pe1/cdrom.h"
+#include "pe1/psyq_cd.h"
 #include "pe1/psyq_ds.h"
+#include "pe1/psyq_ds_queue.h"
 
 #define READ_STATE(anchor, field) ((CdReadProgressState *)((char *)(anchor) - PE1_OFFSETOF(CdReadProgressState, field)))
 

@@ -2,13 +2,14 @@
 #define PE1_ROOM_M350_SWEEP_TRAP_H
 
 #include "common.h"
-#include "pe1/gte_types.h"
-#include "pe1/render_object.h"
 #include "pe1/field_actor.h"
-#include "pe1/room_floor.h"
-#include "pe1/fieldfx_task_pool.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/fieldfx_task_pool.h"
+#include "pe1/gte_sine_table.h"
+#include "pe1/gte_types.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/render_object.h"
+#include "pe1/room_floor.h"
 
 /* room_m350 sweeping beam trap (func_80192E4C): a column of sprites swept
  * down from the actor's head, a flare and two fan blades towards the
@@ -55,7 +56,6 @@ typedef struct RoomM350Trig {
     int cos : 16;
 } RoomM350Trig;
 
-#include "pe1/gte_sine_table.h"
 extern struct FieldActor *g_PlayerEntity;
 extern RenderColor D_8019A434[];
 extern RenderColor D_8019A3C8;

@@ -1,5 +1,6 @@
 /* ASSEMBLER: GNU */
 /* PSY-Q LIBPAD WAITRC2: setRC2wait, chkRC2wait. */
+
 #include "pe1/psyq_pad_main.h"
 
 #include "waitrc2_externs.h"

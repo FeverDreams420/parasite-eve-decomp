@@ -1,18 +1,18 @@
 /* CC1_FLAGS: -fno-strength-reduce */
 
 #include "common.h"
-#include "pe1/field_textured_strip.h"
-#include "pe1/gte_types.h"
-#include "pe1/field_tri_test.h"
-#include "pe1/gte.h"
-#include "pe1/field_shaded_quad.h"
-#include "pe1/field_actor.h"
-#include "pe1/psyq_libc.h"
 #include "pe1/asset_find.h"
-#include "pe1/fieldfx_task_pool.h"
-#include "pe1/fieldfx_state.h"
-#include "pe1/field_collision.h"
 #include "pe1/battle.h"
+#include "pe1/field_actor.h"
+#include "pe1/field_collision.h"
+#include "pe1/field_shaded_quad.h"
+#include "pe1/field_textured_strip.h"
+#include "pe1/field_tri_test.h"
+#include "pe1/fieldfx_state.h"
+#include "pe1/fieldfx_task_pool.h"
+#include "pe1/gte.h"
+#include "pe1/gte_types.h"
+#include "pe1/psyq_libc.h"
 
 int func_800C5EB0(char *data, void *unused, int *hit) {
     GteShortVector local[5];

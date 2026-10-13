@@ -10,9 +10,10 @@
  * module's lists, script, matrices and sprite blocks are each room's own
  * data (pe1/room_glow_orb.h, pe1/room_module.h).
  */
-#include "pe1/room_glow_orb.h"
-#include "pe1/gte.h"
+
 #include "pe1/field_collision.h"
+#include "pe1/gte.h"
+#include "pe1/room_glow_orb.h"
 
 static const GteShortVector s_GlowOrbSpin = { 0xC00, 0, 0, 0 };
 static const GteVector s_GlowOrbFlashScale = { 0x448, 0x448, 0x448, 0 };

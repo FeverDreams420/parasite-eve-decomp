@@ -1,4 +1,5 @@
 /* PSY-Q LIBCARD PATCH, part 2 of 4: CardPatchFunctions, func_8007E3B4. */
+
 #include "pe1/psyq_card.h"
 
 /* The copied BIOS patch enters with its I/O base in v1, not in a0. */

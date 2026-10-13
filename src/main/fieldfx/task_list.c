@@ -1,8 +1,8 @@
-#include "pe1/fieldfx_task.h"
-#include "pe1/scene_assets.h"
-#include "pe1/psyq_bios.h"
 #include "pe1/battle.h"
 #include "pe1/field_effect_modules.h"
+#include "pe1/fieldfx_task.h"
+#include "pe1/psyq_bios.h"
+#include "pe1/scene_assets.h"
 
 /* Binds task program `index` to the owner's task context. */
 int FieldFx_BindTaskProgram(FieldFxTaskOwner *owner, int index)

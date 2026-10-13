@@ -6,8 +6,10 @@
  * or the engine is not running. The lists are the room's
  * (pe1/room_module.h).
  */
-#include "room_lib.h"
+
 #include "pe1/room_module.h"
+
+#include "room_lib.h"
 
 int RoomLib_RegisterPairedTablesGated(void *o) {
     RoomLink *entry;

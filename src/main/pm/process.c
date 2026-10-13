@@ -1,14 +1,15 @@
 /* Process manager: allocates the 22 process slots, dispatches the per-command
  * handler callbacks, and loads the task programs of commands 108..114. */
+
+#include "pe1/cdrom.h"
 #include "pe1/disc_load_state.h"
+#include "pe1/fieldfx_task.h"
+#include "pe1/game_state.h"
+#include "pe1/player_entity.h"
 #include "pe1/pm.h"
 #include "pe1/psyq_bios.h"
-#include "pe1/scene_room_load.h"
 #include "pe1/scene_assets.h"
-#include "pe1/game_state.h"
-#include "pe1/cdrom.h"
-#include "pe1/fieldfx_task.h"
-#include "pe1/player_entity.h"
+#include "pe1/scene_room_load.h"
 
 static inline int FindSlot(u32 command)
 {

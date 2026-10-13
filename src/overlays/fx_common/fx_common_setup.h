@@ -1,8 +1,9 @@
 #ifndef FX_COMMON_SETUP_H
 #define FX_COMMON_SETUP_H
 
-#include "fx_common.h"
 #include "pe1/psyq_gpu.h"
+
+#include "fx_common.h"
 
 typedef struct FxTextureSetup { s16 x,y,w,h,tpage,clut; s32 reserved; } FxTextureSetup;
 typedef char FxTextureSetupSizeCheck[sizeof(FxTextureSetup)==16 ? 1 : -1];

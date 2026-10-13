@@ -4,7 +4,9 @@
 /* INTR stays in two units: these callbacks only match with GCC 2.7.2,
  * the interrupt manager in intr_2.c only with GCC 2.8.1 and
  * -mno-split-addresses. */
+
 #include "pe1/psyq_api_internal.h"
+
 #include "intr_externs.h"
 
 int ResetCallback(void) {

@@ -3,18 +3,17 @@
 
 /* Callbacks and state wired up by Menu_StepInventoryRoot. */
 
+#include "pe1/aya.h"
+#include "pe1/inventory.h"
+#include "pe1/menu_bonus_stats.h"
 #include "pe1/menu_dialog.h"
 #include "pe1/menu_equipment.h"
-#include "pe1/inventory.h"
-#include "pe1/aya.h"
-#include "pe1/menu_bonus_stats.h"
 #include "pe1/menu_item_list_input.h"
 
 int Menu_InventoryPageNavHandler(MenuWidgetNode *root, unsigned int flags);
 void Menu_DrawBattleCommandList();
 void Menu_DrawEquipSelectionList(MenuWidgetNode *node);
 void Inv_BuildFilteredPackedListExcluding(int mask, int excluded);
-int Inv_GetPackedListCount(void);
 void Menu_DrawBonusPointSlotValue(void);
 void Menu_DrawParasiteAbilityList();
 void Menu_InitStateTables(void);
@@ -30,6 +29,5 @@ extern int D_8009CFD4;
 /* Per-stat preview tables: value, level, sublevel and pending bonus. */
 extern int D_800A1898[7];
 extern int g_AyaBonusPoints[];
-extern int g_MenuBonusPointBarAnimActive, g_BonusPointBarAnimProgress, g_BonusPointDisplayValue;
 
 #endif

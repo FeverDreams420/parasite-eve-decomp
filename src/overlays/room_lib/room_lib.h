@@ -3,22 +3,25 @@
 #ifndef ROOM_LIB_H
 #define ROOM_LIB_H
 
-#include "../../../include/common.h"
-#include "pe1/fieldfx_callback_list.h"
-#include "../../../include/pe1/gte.h"
-#include "../../../include/pe1/room_fx.h"
-#include "../../../include/pe1/field_script_context.h"
-#include "../../../include/pe1/room_particle_state.h"
-#include "../../../include/pe1/render_object.h"
-#include "../../../include/pe1/field_sprite_state.h"
-#include "pe1/room_floor.h"
+#include "common.h"
+#include "pe1/field_glow_sprite.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_script_context.h"
+#include "pe1/field_sprite_state.h"
 #include "pe1/field_vector_math.h"
-#include "pe1/fieldfx_task_pool.h"
-#include "pe1/fieldfx_slot.h"
-#include "pe1/pe_image.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/fieldfx_calls.h"
+#include "pe1/fieldfx_slot.h"
+#include "pe1/fieldfx_task_pool.h"
+#include "pe1/gte.h"
+#include "pe1/gte_sine_table.h"
+#include "pe1/gte_types.h"
+#include "pe1/pe_image.h"
+#include "pe1/render_object.h"
+#include "pe1/room_floor.h"
+#include "pe1/room_fx.h"
+#include "pe1/room_particle_state.h"
+#include "pe1/room_twelve_effect.h"
 
 typedef struct RoomObj {
     char pad0[0xC];
@@ -63,7 +66,6 @@ typedef struct RoomParticleEmitter {
 #define ROOMLIB_V0_PTR_DECL(name) void *name
 #define ROOMLIB_V1_INT_DECL(name) int name
 #define ROOMLIB_A0_INT_DECL(name) int name
-#include "pe1/room_twelve_effect.h"
 
 #define ROOMLIB_TICK_12_COUNTERS(name) \
     void name(void *arg0, unsigned char *signal, RoomLibTick12Rec *rec) { \
@@ -423,7 +425,6 @@ typedef struct RoomLibHandlerCState {
 } RoomLibHandlerCState;
 
 extern short D_800966EE[];
-#include "pe1/gte_sine_table.h"
 extern struct BattleEntity *D_8009D254;
 struct FieldActorNode;
 extern struct FieldActor *g_FieldActorListHead;
@@ -827,8 +828,6 @@ typedef struct FieldActorNode {
     int w98;                      /* 0x98: 0x10 = busy */
 } FieldActorNode;
 
-extern struct FieldActor *g_FieldActorListHead;
-
 typedef struct RoomSlotRec {
     short h0;
     short h2;                     /* stamped with the global frame counter */
@@ -1067,8 +1066,6 @@ typedef struct RoomClock {
     unsigned char renderOwner;   /* 0x10 */
 } RoomClock;
 
-#include "pe1/gte_types.h"
-#include "pe1/field_glow_sprite.h"
 extern int rand(void);
 
 #define ROOMLIB_REGISTER_TABLE_AT3(name, table) \

@@ -2,14 +2,14 @@
 #define PE1_RENDER_OBJECT_H
 
 #include "common.h"
-#include "pe1/gte_types.h"
-#include "pe1/render_matrix_slot.h"
-#include "pe1/field_transform_point.h"
-#include "pe1/field_sprite_params.h"
 #include "pe1/field_color.h"
 #include "pe1/field_sprite_draw.h"
-#include "pe1/fieldfx_callback_list.h"
+#include "pe1/field_sprite_params.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/field_transform_point.h"
+#include "pe1/fieldfx_callback_list.h"
+#include "pe1/gte_types.h"
+#include "pe1/render_matrix_slot.h"
 
 /* Packed geometry at 0x800C7AE0: two groups of 12-byte records and two
  * groups of 16-byte records precede the 8-byte vertex array. The record

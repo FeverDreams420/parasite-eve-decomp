@@ -2,11 +2,11 @@
 #define PE1_FIELD_SHADED_RING_H
 
 #include "common.h"
+#include "pe1/field_ring_geometry.h"
+#include "pe1/field_sprite_state.h"
+#include "pe1/fieldfx_scratch.h"
 #include "pe1/gte_types.h"
 #include "pe1/render_tint.h"
-#include "pe1/fieldfx_scratch.h"
-#include "pe1/field_sprite_state.h"
-#include "pe1/field_ring_geometry.h"
 
 /* Field engine ring geometry: the vertex builder writes the outer ring first
  * and the inner ring second; the renderer joins each pair with POLY_G4. */

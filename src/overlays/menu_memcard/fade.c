@@ -1,8 +1,7 @@
-#include "menu_memcard_fade.h"
-#include "menu_memcard_node.h"
-#include "menu_memcard_menu.h"
-
 #include "fade_externs.h"
+#include "menu_memcard_fade.h"
+#include "menu_memcard_menu.h"
+#include "menu_memcard_node.h"
 
 void MenuCard_InitFadeForNode(MenuMemcardFadeState *state) {
     MenuMemcardListNode *node = ((MenuMemcardListNode *)D_801D1370);

@@ -1,12 +1,14 @@
 #ifndef ROOM_M273_H
 #define ROOM_M273_H
 
-#include "pe1/render_object.h"
-#include "pe1/fieldfx_callback_list.h"
 #include "pe1/field_actor_script_state.h"
-#include "room_m273_effects.h"
-#include "pe1/room_floor.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/fieldfx_callback_list.h"
+#include "pe1/gte_sine_table.h"
+#include "pe1/render_object.h"
+#include "pe1/room_floor.h"
+
+#include "room_m273_effects.h"
 
 typedef GteShortVector RoomM273Vector;
 
@@ -74,7 +76,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(RoomM273TemplatePoint, flags) ==
                       PE1_OFFSETOF(RoomM273RisingParticle, speed),
                   room_m273_delayed_burst_tail_offset);
 
-#include "pe1/gte_sine_table.h"
 extern s16 D_8019AE98;
 extern int D_8019ABFC[];
 extern s16 D_8019ACC0[];

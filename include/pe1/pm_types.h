@@ -3,7 +3,6 @@
 
 #include "common.h"
 
-
 /* Both process-manager banks share this prefix. Pm_Exec increments ticks
  * at +4 after calling the command handler; +8 identifies the owning object. */
 typedef struct PmSlotHeader {

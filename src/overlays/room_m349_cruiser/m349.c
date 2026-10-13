@@ -1,4 +1,5 @@
 #include "pe1/room_m349_effects.h"
+
 #include "room_m349.h"
 
 /* Spark that jitters its velocity (states 0 and 1) or its position

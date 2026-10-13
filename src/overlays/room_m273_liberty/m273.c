@@ -1,36 +1,38 @@
 #include "common.h"
-#include "pe1/field_actor.h"
-#include "pe1/scene_grab_head.h"
-#include "room_m273.h"
-#include "pe1/field_vector_math.h"
-#include "pe1/geom_state.h"
-#include "pe1/floor_polygon.h"
-#include "pe1/field_collision.h"
-#include "pe1/fieldfx_calls.h"
-#include "pe1/room_liberty_choice.h"
-#include "pe1/gte_types.h"
-#include "pe1/fieldfx_task_pool.h"
-#include "room_m273_effects.h"
-#include "pe1/fieldfx_callback_list.h"
-#include "pe1/room_floor.h"
-#include "pe1/field_sprite_draw.h"
-#include "pe1/gte_sine_table.h"
-#include "pe1/field_sprite_params.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/field_texture_tables.h"
-#include "pe1/field_model_draw.h"
-#include "pe1/scene_archive.h"
-#include "pe1/psyq_libc.h"
 #include "pe1/asset_find.h"
-#include "room_m273_boss.h"
+#include "pe1/field_actor.h"
+#include "pe1/field_collision.h"
+#include "pe1/field_model_draw.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_sprite_params.h"
+#include "pe1/field_texture_tables.h"
+#include "pe1/field_vector_math.h"
+#include "pe1/fieldfx_callback_list.h"
+#include "pe1/fieldfx_calls.h"
+#include "pe1/fieldfx_task_pool.h"
+#include "pe1/floor_polygon.h"
+#include "pe1/geom_state.h"
 #include "pe1/gte.h"
-#include "room_m273_particles.h"
-#include "room_m273_boss_state.h"
-#include "room_m273_sweep.h"
+#include "pe1/gte_sine_table.h"
+#include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/psyq_libc.h"
+#include "pe1/room_floor.h"
+#include "pe1/room_liberty_choice.h"
+#include "pe1/scene_archive.h"
 #include "pe1/scene_assets.h"
-#include "room_m273_sway.h"
+#include "pe1/scene_grab_head.h"
 
-typedef GteShortVector Vector;
+#include "m273_externs.h"
+#include "m273_externs_1.h"
+#include "m273_externs_2.h"
+#include "room_m273.h"
+#include "room_m273_boss.h"
+#include "room_m273_boss_state.h"
+#include "room_m273_effects.h"
+#include "room_m273_particles.h"
+#include "room_m273_sway.h"
+#include "room_m273_sweep.h"
 
 typedef struct { Vector position; unsigned char parameter[4]; } RoomM273ScaledLayerEffect;
 
@@ -40,14 +42,9 @@ typedef RoomM273ScaledLayerOwner Owner;
 
 typedef struct { short x, y, z, pad; } Sprite;
 
-/* Threshold model triple callbacks and controller. */
-typedef struct { short x,y,z,phase,scaleXZ,scaleY; unsigned short parameter12,unknown14; } ThresholdTripleEffect;
-
 typedef GteMatrix ThresholdTripleMatrix;
 
 typedef GteVector ThresholdTripleVector;
-
-typedef struct { void *asset,*pool; } AssetState;
 
 /* Ring band record the pair callback draws: anchor, scale and intensity. */
 typedef struct { GteShortVector position; short scale; short pad0A; short intensity; } ThresholdPairBand;
@@ -59,35 +56,13 @@ typedef struct RoomM273RingController {
 
 typedef RoomM273RisingParticle Particle;
 
-typedef struct { unsigned char r, g, b, unknown; } Color;
-
 typedef GteMatrix Matrix;
 
 typedef FieldActor Player;
 
 typedef RoomM273PairPoolRecord Record;
 
-/* Partial storage views; the fourth halfword carries the emitter flag. */
-typedef RoomM273PairPoolRecord Entry;
-
-typedef struct { Entry entries[2]; unsigned char unknown[14]; unsigned char stopped; } EmitterState;
-
 typedef GteShortVector Position;
-
-typedef struct {
-    char pad_00[4];
-    s32 *source;
-    s16 scaleX;
-    s16 scaleY;
-    u16 value;
-    u16 step;
-} RoomM273PulseState;
-
-typedef struct {
-    u16 *source;
-} RoomM273PhaseState;
-
-#include "m273_externs.h"
 
 void RoomLib_GrabOnApproach(SceneGrabHead *head) {
     RoomSelectionState *typedState = (RoomSelectionState *)head;
@@ -237,8 +212,6 @@ void func_80192838(RoomSelectionState *state) {
     }
 }
 
-void Battle_ReturnToIdle(void);
-
 void func_80192C00(RoomPlacementOwner *owner, RoomPlacementState *state) {
     FieldActor *player = g_PlayerEntity;
     RoomPlacementMap *placement;
@@ -329,8 +302,6 @@ int func_80192E4C(RoomOscillationEffect *obj) {
     obj->params.active = 0;
     return 0;
 }
-
-int Math_IntSqrt(int value);
 
 int func_80192E64(RoomOscillationEffect *base, int unused, unsigned int operation, int arg3,
                   int arg4, int arg5) {
@@ -1587,9 +1558,7 @@ int func_80195E10(int mode, Particle *particle) {
 #define ROOMLIB_POLL_RESET_SEED D_8019AEAC
 #include "../room_lib/poll_reset_actor.inc"
 
-#include "room_m273_effects.h"
 typedef RoomM273EffectModeState State;
-#include "m273_externs_1.h"
 
 int func_801960F4(int mode) {
     /* Layout only: purpose of these eight original frame bytes is unknown. */
@@ -1990,11 +1959,7 @@ int func_80197230(int mode, Vector *position) {
 #define ROOMLIB_POLL_RESET_SEED D_8019AF04.hit
 #include "../room_lib/poll_reset_actor.inc"
 
-#include "room_m273_effects.h"
-
 /* The timed emitter fills the eight-byte records rendered by this callback. */
-#include "pe1/gte_sine_table.h"
-
 int func_801974DC(int mode, Particle *input) {
     Particle *particle = input;
     /* Layout only: original purpose of these eight frame bytes is unknown. */
@@ -2075,9 +2040,6 @@ int func_80197648(int mode) {
 }
 
 /* The position emitter fills the eight-byte records rendered by this callback. */
-#include "pe1/gte_sine_table.h"
-#include "m273_externs_2.h"
-
 int func_801977F8(int mode,Vector *input) {
     Vector rotation,position;
     if(mode==1) {
@@ -2989,8 +2951,6 @@ s32 func_8019A068(s32 state) {
     }
     return 0;
 }
-
-int Inv_ScrambleGrid(void);
 
 void *func_8019A1A0(void *unused, int mode) {
     int direction;

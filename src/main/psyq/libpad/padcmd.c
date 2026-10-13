@@ -1,9 +1,12 @@
 /* ASSEMBLER: GNU */
 /* Psy-Q LIBPAD PADCMD.OBJ: _padSetAct, _padSetCmd, _padSendAtLoadInfo, _padRecvAtLoadInfo, _padGetActSize, _padLoadActInfo, _padSetActAlign, _padSetMainMode, _padCmdParaMode and the command emitters. */
-#include "pe1/card_obj.h"
+
 #include "common.h"
-#include "../../../../tools/m2c/m2c_macros.h"
+#include "pe1/card_obj.h"
 #include "pe1/psyq_pad_main.h"
+#include "m2c_macros.h"
+
+#include "padcmd_externs.h"
 
 void CardObj_EmitCommand45(CardObj *arg0);
 void CardObj_EmitCommand4C(CardObj *arg0, unsigned char arg1);
@@ -195,7 +198,6 @@ void CardObj_EmitReadTransferCommand(CardObj *arg0) {
 
 /* Psy-Q LIBPAD/PADCMD.OBJ private text_3A0.
  * Provenance: configs/USA/psyq_provenance.json (LIBPAD PADCMD). */
-#include "padcmd_externs.h"
 int LIBPAD_PADCMD_text_3A0(CardObj *inPort) {
     register CardObj *port = inPort;
     switch (port->sequenceStep) {
@@ -302,6 +304,7 @@ complete:
     return 1;
 }
 
+/* Late include: its prototype rejects _padLoadActInfo's argument-less call. */
 #include "padcmd_externs_1.h"
 
 void CardObj_EmitCommand4D(CardObj *arg0);

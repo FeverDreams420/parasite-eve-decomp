@@ -1,8 +1,8 @@
 #ifndef PE1_TEXTBOX_H
 #define PE1_TEXTBOX_H
 
-#include "pe1/render_packets.h"
 #include "pe1/draw_state.h"
+#include "pe1/render_packets.h"
 
 /* Textbox / on-screen dialogue entry, walked by Menu_DrawTextboxEntries.
  * g_TextboxEntries (= D_800BCEA8) is an array of these, stride 0x38. Each

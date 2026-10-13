@@ -4,6 +4,7 @@
 /* PSY-Q LIBETC INTR, part 2 of 2: Sys_InitIntrManager, Render_InitSceneGeom,
  * Sys_SetIntrCallback, Sys_SaveDisableIntr, Sys_RestoreIntr and
  * Sys_ClearWordBuf. */
+
 #include "common.h"
 #include "pe1/psyq_api_internal.h"
 #include "pe1/psyq_bios.h"
@@ -12,8 +13,6 @@
 
 void Sys_ClearWordBuf(int *dst, int count);
 int setjmp(void *env);
-void Render_InitSceneGeom(void);
-void HookEntryInt(void *entry);
 void _96_remove(void *arg);
 
 u16 *Sys_InitIntrManager(void) {

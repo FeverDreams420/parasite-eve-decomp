@@ -2,9 +2,11 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
+#include "common.h"
+#include "pe1/battle.h"
+#include "pe1/battle_main.h"
 #include "pe1/battle_runtime.h"
 #include "pe1/gte_types.h"
-#include "pe1/battle_main.h"
 
 /* COMMON supplies the small-data sizes of the turn queue words to MASPSX;
  * every other word stays absolute. */
@@ -15,8 +17,6 @@ u8 D_8009D1D4;
 int D_8009D200;
 s16 D_8009D27C;
 
-int Battle_CalcDistToPlayer(BattleEntity *actor, BattleEntity *player);
-s16 Battle_CalcAngleToTarget(RenderObjectEntity *object, void *target);
 int Battle_StepCharacterAction(BattleInitSlot *slot);
 
 #define CORE_HEALTH(entity) (((EnemyCombatant *)(entity)->core)->hpAlive)
@@ -93,16 +93,11 @@ void Battle_UpdatePlayerTurn(void)
     Entity_SetActionMode(D_8009D254, *(category + D_8009D278->targetAngleActionModes));
 }
 
-#include "common.h"
-#include "pe1/battle.h"
-
 #define U8_AT(ptr, offset) (*(u8 *)((u8 *)(ptr) + (offset)))
 #define S16_AT(ptr, offset) (*(s16 *)((u8 *)(ptr) + (offset)))
 #define U16_AT(ptr, offset) (*(u16 *)((u8 *)(ptr) + (offset)))
 #define U32_AT(ptr, offset) (*(u32 *)((u8 *)(ptr) + (offset)))
 #define ACTION_AT(index) ((u16)D_800BE830[(u8)(index)].command)
-
-void Battle_ApplyDamage(int action);
 
 void Battle_ApplyPlayerHit(void) {
     u32 committed;

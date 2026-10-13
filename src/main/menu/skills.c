@@ -2,25 +2,26 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-#include "pe1/save_tail_state.h"
-#include "pe1/menu_queue.h"
 #include "common.h"
-#include "pe1/menu_widget.h"
-#include "pe1/menu_sound.h"
-#include "pe1/menu_state.h"
-#include "pe1/menu_context_help.h"
-#include "pe1/menu_inventory.h"
-#include "pe1/text.h"
+#include "pe1/draw_state.h"
 #include "pe1/inventory.h"
+#include "pe1/inventory_queries.h"
+#include "pe1/inventory_slots.h"
+#include "pe1/inventory_sort.h"
+#include "pe1/menu_context_help.h"
 #include "pe1/menu_dialog.h"
+#include "pe1/menu_draw_list.h"
 #include "pe1/menu_equipment.h"
+#include "pe1/menu_inventory.h"
 #include "pe1/menu_item_list_input.h"
 #include "pe1/menu_item_rows.h"
-#include "pe1/inventory_slots.h"
-#include "pe1/inventory_queries.h"
-#include "pe1/draw_state.h"
-#include "pe1/inventory_sort.h"
-#include "pe1/menu_draw_list.h"
+#include "pe1/menu_queue.h"
+#include "pe1/menu_sound.h"
+#include "pe1/menu_state.h"
+#include "pe1/menu_widget.h"
+#include "pe1/save_tail_state.h"
+#include "pe1/text.h"
+#include "m2c_macros.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -49,14 +50,7 @@ void Menu_DeferredExec(void) {
 }
 
 #define NULL ((void *)0)
-#include "../../../tools/m2c/m2c_macros.h"
-void MenuWidget_OffsetPosition(MenuWidgetNode *node, int dx, int dy);
-int Inv_GetActiveListItemType(int index);
-int Inv_GetPackedListCount(void);
-void Inv_BuildFilteredPackedList(int mask);
 void Inv_BuildFilteredPackedListExcluding(int mask, int excluded);
-int Inv_RestoreSelection(unsigned int index);
-#include "pe1/menu_state.h"
 int Menu_StepEquipConfirm(MenuWidgetNode *node, int input);
 void Menu_DrawEquipSelectionList(MenuWidgetNode *node);
 

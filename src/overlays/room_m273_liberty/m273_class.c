@@ -1,11 +1,11 @@
+#include "pe1/field_actor.h"
 #include "pe1/gte_types.h"
 #include "pe1/room_m023_beacon.h"
 #include "pe1/scene_grab_head.h"
-#include "pe1/field_actor.h"
-#include "room_m273.h"
-#include "../room_lib/room_lib.h"
 
+#include "../room_lib/room_lib.h"
 #include "m273_class_externs.h"
+#include "room_m273.h"
 
 int func_80192504(void) {
     return 0;

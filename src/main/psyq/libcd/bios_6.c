@@ -2,11 +2,11 @@
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -fno-expensive-optimizations -mno-split-addresses */
 /* Psy-Q LIBCD BIOS.OBJ, part 6 of 7: CD_datasync. */
-#include "pe1/psyq_cd.h"
+
 #include "pe1/psyq_bios.h"
+#include "pe1/psyq_cd.h"
 
 #include "bios_6_externs.h"
-void CD_flush(void);
 
 static inline int data_timed_out(char **commands, char **events, int limit,
                                  CdInterruptEvents *state) {

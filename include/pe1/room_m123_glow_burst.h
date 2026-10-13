@@ -2,15 +2,15 @@
 #define PE1_ROOM_M123_GLOW_BURST_H
 
 #include "common.h"
+#include "pe1/field_owner_actor.h"
+#include "pe1/field_texture_tables.h"
 #include "pe1/fieldfx_callback_list.h"
+#include "pe1/fieldfx_calls.h"
 #include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
 #include "pe1/render_object.h"
 #include "pe1/room_m123_burst_particle.h"
-#include "pe1/field_owner_actor.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/fieldfx_calls.h"
 #include "pe1/room_script_record.h"
-#include "pe1/field_texture_tables.h"
 
 /* room_m123 glow burst (func_80192F0C): spawns pulsing particles at frame
  * 1, then layers four glow sprites, two flash rings and a swept flare on a

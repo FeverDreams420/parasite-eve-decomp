@@ -1,6 +1,8 @@
 /* ASSEMBLER: GNU */
 /* PSY-Q LIBMATH DIVDF3: __divdf3 and _comp_mant. */
+
 #include "pe1/math64.h"
+
 double __divdf3(double numerator, double denominator) {
     struct {
         MathU64 quotient, bit, round, n, d, temp;

@@ -11,9 +11,11 @@
  * HandlerB jump tables is the 8-byte alignment of the third table inside
  * this one object.
  */
-#include "room_lib.h"
+
 #include "pe1/battle.h"
 #include "pe1/gte_types.h"
+
+#include "room_lib.h"
 
 int RoomLib_HandlerDNop0(void) {
     return 0;

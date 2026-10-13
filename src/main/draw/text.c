@@ -2,12 +2,17 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-#include "pe1/draw_state.h"
-#include "pe1/draw_buffers.h"
 #include "common.h"
-#include "pe1/render_prim.h"
-#include "pe1/menu_inventory.h"
+#include "pe1/bounds_check.h"
+#include "pe1/draw_area.h"
+#include "pe1/draw_buffers.h"
 #include "pe1/draw_level_bar.h"
+#include "pe1/draw_state.h"
+#include "pe1/menu_inventory.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/render_prim.h"
+#include "pe1/text.h"
+#include "m2c_macros.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -55,8 +60,6 @@ void Draw_OffsetCursor(int x, int y) {
     g_TextCursorX += x;
     g_TextCursorY += y;
 }
-
-#include "pe1/bounds_check.h"
 
 void Draw_StatePush(void) {
     DrawTextCursorPair *cursor;
@@ -171,14 +174,7 @@ void Draw_SetStatCompareColor(int arg0, int arg1) {
     g_DrawColorShaded = color >> 1;
 }
 
-#include "common.h"
-#include "pe1/draw_level_bar.h"
-
 #define NULL ((void *)0)
-#include "m2c_macros.h"
-
-#include "pe1/psyq_gpu.h"
-#include "pe1/draw_area.h"
 
 void Draw_AllocPrimRectFull(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     DrawAreaRect rect;
@@ -415,8 +411,6 @@ int g_DrawGlyphAdvance;
 void Draw_SetGlyphAdvance(int arg0) {
     g_DrawGlyphAdvance = arg0;
 }
-
-#include "pe1/text.h"
 
 /* Allocates one bar quad from the packet arena and sets its colour and
  * command (0x2C: textured four-point polygon). */

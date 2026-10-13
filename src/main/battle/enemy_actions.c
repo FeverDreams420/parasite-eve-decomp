@@ -1,10 +1,10 @@
 #include "common.h"
 #include "pe1/battle.h"
 #include "pe1/battle_entity_anim.h"
-#include "pe1/player_entity.h"
-#include "pe1/inventory.h"
 #include "pe1/battle_runtime.h"
 #include "pe1/game_state.h"
+#include "pe1/inventory.h"
+#include "pe1/player_entity.h"
 
 void Battle_SubActionStep(void) {
     Combatant *state;

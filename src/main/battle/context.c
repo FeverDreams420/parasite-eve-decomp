@@ -1,14 +1,14 @@
 #include "common.h"
-#include "pe1/script_anim.h"
-#include "pe1/battle_context.h"
 #include "pe1/battle.h"
-#include "pe1/room_floor.h"
-#include "pe1/player_entity.h"
+#include "pe1/battle_context.h"
 #include "pe1/battle_entity_anim.h"
-#include "pe1/field_actor.h"
 #include "pe1/battle_runtime.h"
+#include "pe1/field_actor.h"
 #include "pe1/gte_types.h"
+#include "pe1/player_entity.h"
 #include "pe1/psyq_libc.h"
+#include "pe1/room_floor.h"
+#include "pe1/script_anim.h"
 
 /* Script setup and execution share six inline animation-event records. */
 

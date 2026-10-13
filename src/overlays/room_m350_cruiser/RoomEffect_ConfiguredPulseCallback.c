@@ -4,16 +4,18 @@
 
 /* cc1 -G8 makes the small texture slot word a cheap address, so its
  * volatile read stays an absolute load. */
-#include "pe1/field_sprite_params.h"
-#include "room_m350_shared.h"
-#include "pe1/fieldfx_callback_list.h"
+
 #include "pe1/field_sprite_draw.h"
+#include "pe1/field_sprite_params.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/fieldfx_callback_list.h"
+#include "pe1/gte_sine_table.h"
 #include "pe1/psyq_gpu.h"
 
+#include "room_m350_shared.h"
 #include "RoomEffect_ConfiguredPulseCallback_externs.h"
-#include "pe1/gte_sine_table.h"
 #include "RoomEffect_ConfiguredPulseCallback_externs_1.h"
+
 /* Signed high-half view avoids LHU followed by explicit sign extension. */
 
 int func_80196C64(int event, void *object)

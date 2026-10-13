@@ -1,12 +1,13 @@
 #include "common.h"
-#include "pe1/gte.h"
-#include "pe1/room_m089_trail.h"
-#include "room_m089.h"
-#include "pe1/room_sound_slot.h"
-#include "pe1/room_m089_spin_model.h"
-#include "pe1/room_swirl_rise.h"
 #include "pe1/field_model_draw.h"
+#include "pe1/gte.h"
 #include "pe1/room_m089_model_pulse.h"
+#include "pe1/room_m089_spin_model.h"
+#include "pe1/room_m089_trail.h"
+#include "pe1/room_sound_slot.h"
+#include "pe1/room_swirl_rise.h"
+
+#include "room_m089.h"
 
 /* Spiral trail: the history shift is written out field by field (retail
  * loads all fifteen halfwords before the first store), and the flash angle

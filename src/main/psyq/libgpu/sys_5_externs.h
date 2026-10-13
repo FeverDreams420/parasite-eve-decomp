@@ -1,5 +1,8 @@
 #ifndef PE1_EXT_C2422447EC50
 #define PE1_EXT_C2422447EC50
+
+#include "common.h"
+
 extern s16 D_80095750;
 extern s16 D_80095752;
 #endif /* PE1_EXT_C2422447EC50 */

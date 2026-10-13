@@ -2,6 +2,7 @@
 
 #include "pe1/gte.h"
 #include "pe1/scene_e20_hover_orb.h"
+
 #define NULL ((void *)0)
 
 /* mode 0: initialize; mode 1: advance the effect; mode 2: draw.

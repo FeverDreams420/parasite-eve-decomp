@@ -3,16 +3,16 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
-#include "pe1/render_prim.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/field_movement.h"
+#include "pe1/geom_state.h"
 #include "pe1/gte.h"
 #include "pe1/gte_types.h"
 #include "pe1/psyq_nop.h"
-#include "pe1/render_object.h"
-#include "pe1/field_movement.h"
-#include "pe1/battle_runtime.h"
-#include "pe1/render_camera.h"
-#include "pe1/geom_state.h"
 #include "pe1/render_buffers.h"
+#include "pe1/render_camera.h"
+#include "pe1/render_object.h"
+#include "pe1/render_prim.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */

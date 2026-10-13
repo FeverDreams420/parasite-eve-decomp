@@ -2,10 +2,9 @@
 #define PE1_BATTLE_MODIFIERS_H
 
 #include "pe1/inventory.h"
-#include "pe1/weapon_list_output.h"
 #include "pe1/stat_modifiers.h"
+#include "pe1/weapon_list_output.h"
 
-int Inv_IsActiveListOverrideSelected(void);
 void Inv_SelectActiveList(int useOverride);
 void Inv_RecalcSlotStats(void);
 struct BattleAttributes;

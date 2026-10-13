@@ -10,11 +10,12 @@
  * spark is the bounce_render.inc template, which the line burst
  * instantiates with other constants.
  */
-#include "pe1/room_spark_attacks.h"
+
+#include "pe1/gte.h"
+#include "pe1/render_prim.h"
 #include "pe1/room_line_burst.h"
 #include "pe1/room_sound_slot.h"
-#include "pe1/render_prim.h"
-#include "pe1/gte.h"
+#include "pe1/room_spark_attacks.h"
 
 /* First object of the primary channel's pool: its packet flags. */
 typedef struct RoomBurstOrbObject {

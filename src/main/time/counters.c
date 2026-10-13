@@ -1,6 +1,6 @@
+#include "pe1/game_state.h"
 #include "pe1/game_timers.h"
 #include "pe1/save.h"
-#include "pe1/game_state.h"
 
 /* Restarts the game clock, counting up to 100 hours of frames. */
 void GameTime_InitCounter0(void) {

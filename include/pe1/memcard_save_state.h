@@ -3,11 +3,12 @@
 
 /* Declarations used only by the memory card save state machine
  * (MemCard_UpdateSaveState). */
+
 #include "pe1/memcard.h"
 #include "pe1/menu_inventory.h"
+#include "pe1/menu_notification_dialog.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/psyq_libc.h"
-#include "pe1/menu_notification_dialog.h"
 
 /* PSY-Q struct DIRENTRY as filled by firstfile/nextfile. */
 typedef struct MemCardDirEntry {

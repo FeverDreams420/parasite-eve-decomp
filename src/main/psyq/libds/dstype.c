@@ -1,12 +1,12 @@
 /* ASSEMBLER: GNU */
 /* Psy-Q LIBDS DSTYPE.OBJ: DsGetDiskType, GD_cbsync, GD_cbready. */
-#include "pe1/psyq_ds_queue.h"
-#include "pe1/psyq_cd.h"
+
 #include "pe1/cdrom.h"
+#include "pe1/psyq_cd.h"
+#include "pe1/psyq_ds_queue.h"
 
 #include "dstype_externs.h"
 
-CdlLOC *DsIntToPos(int sector, CdlLOC *position);
 void GD_cbsync(unsigned char event);
 
 

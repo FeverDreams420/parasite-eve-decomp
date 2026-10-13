@@ -6,6 +6,7 @@
  * the same routines with the local labels CONTpush and CONTpop; its assembler
  * filled the branch delay slots that 4.0 leaves as NOPs.
  */
+
 #include "pe1/psyq_asm.h"
 
 PSYQ_ASM_OBJECT(LIBGTE, MTX_006)

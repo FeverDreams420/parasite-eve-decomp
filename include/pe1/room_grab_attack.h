@@ -3,18 +3,18 @@
 
 #include "common.h"
 #include "pe1/akao_send.h"
-#include "pe1/gte.h"
-#include "pe1/room_fx.h"
-#include "pe1/room_motion_trigger.h"
-#include "pe1/room_spark.h"
-#include "pe1/room_sound_slot.h"
-#include "pe1/room_ground_sweep.h"
-#include "pe1/room_orbit_trail.h"
-#include "pe1/room_rising_spray.h"
+#include "pe1/field_collision.h"
 #include "pe1/field_sprite_draw.h"
 #include "pe1/field_vector_math.h"
-#include "pe1/field_collision.h"
 #include "pe1/geom_state.h"
+#include "pe1/gte.h"
+#include "pe1/room_fx.h"
+#include "pe1/room_ground_sweep.h"
+#include "pe1/room_motion_trigger.h"
+#include "pe1/room_orbit_trail.h"
+#include "pe1/room_rising_spray.h"
+#include "pe1/room_sound_slot.h"
+#include "pe1/room_spark.h"
 
 /* The grab attack set (src/overlays/room_lib/grab_attack.c, in
  * room_m269 and scene_e01). */
@@ -50,8 +50,6 @@ extern u8 g_RoomGrabTrailTrack[];
 extern int g_RoomGrabSlot;
 extern int RoomLib_PairA;
 extern int RoomLib_PairB;
-
-extern FieldActor *g_FieldActorListHead;
 
 int RoomEffect_GrabNop0(void);
 int RoomEffect_GrabInit(RoomMotionTrigger *obj);

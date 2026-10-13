@@ -5,6 +5,7 @@
  * Chrysler rooms m406 and m410; the unit's rodata is the particle's colour
  * and the controller's spawn template.
  */
+
 #include "common.h"
 #include "pe1/field_sprite_params.h"
 #include "pe1/room_sound_burst.h"

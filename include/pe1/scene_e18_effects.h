@@ -2,18 +2,18 @@
 #define PE1_SCENE_E18_EFFECTS_H
 
 #include "common.h"
-#include "pe1/fieldfx_callback_list.h"
-#include "pe1/gte_types.h"
-#include "pe1/render_object.h"
+#include "pe1/asset_find.h"
 #include "pe1/field_actor.h"
-#include "pe1/scene_e18_pulse.h"
-#include "pe1/field_texture_tables.h"
 #include "pe1/field_model_draw.h"
+#include "pe1/field_texture_tables.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/fieldfx_task_pool.h"
-#include "pe1/scene_archive.h"
+#include "pe1/gte_types.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/psyq_libc.h"
-#include "pe1/asset_find.h"
+#include "pe1/render_object.h"
+#include "pe1/scene_archive.h"
+#include "pe1/scene_e18_pulse.h"
 
 /* Particle emitters of the scene_e18 script: one rises from random model
  * joints and fades out, the other drops wave rings from random joints. */
@@ -87,7 +87,6 @@ typedef struct SceneE18WaveParticle {
 extern u8 D_801941D0;
 
 extern int Inv_ScrambleGrid(void);
-extern int rand(void);
 
 /* Flank model emitter (func_80192B8C): four model particles that follow
  * the room model's translation and alternate sides, the model asset it
@@ -106,7 +105,6 @@ typedef struct SceneE18FlankParticle {
 
 extern void *D_801941C4;
 extern s16 D_801941C8;
-extern void FieldFx_ModelSetTexture(int tpage, int clut);
 extern int func_801928CC(int mode, SceneE18FlankParticle *particle);
 
 /* Flank model particle (func_801928CC): the player instance whose distance

@@ -4,6 +4,7 @@
  * function of its own among the class handlers of room_m256, room_m273 and
  * scene_e19.
  */
+
 #include "room_lib.h"
 
 int RoomLib_UpdateCallback(RoomObj *obj) {

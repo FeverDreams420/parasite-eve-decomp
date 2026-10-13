@@ -2,20 +2,20 @@
 #define PE1_SCENE_PLAYER_ORB_H
 
 #include "common.h"
-#include "pe1/gte_types.h"
+#include "pe1/akao_send.h"
 #include "pe1/field_actor.h"
-#include "pe1/render_object.h"
-#include "pe1/field_sprite_state.h"
-#include "pe1/room_floor.h"
-#include "pe1/player_entity.h"
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_script_context.h"
 #include "pe1/field_sprite_draw.h"
-#include "pe1/scene_archive.h"
+#include "pe1/field_sprite_state.h"
+#include "pe1/fieldfx_calls.h"
+#include "pe1/gte_types.h"
+#include "pe1/player_entity.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/psyq_libc.h"
-#include "pe1/akao_send.h"
-#include "pe1/fieldfx_calls.h"
+#include "pe1/render_object.h"
+#include "pe1/room_floor.h"
+#include "pe1/scene_archive.h"
 
 /* Scene e08 player orb: an effect spawned at a random spot around the
  * player, swung around the scene anchor by the anchor's facing, then drawn
@@ -77,7 +77,6 @@ extern u8 D_801987E4[];
 extern FieldGlowSprite D_80199690;
 
 int *FieldFx_RegPtr(int index);
-int rand(void);
 
 /* Scene e08 limb beams: ten ribbons fanned from the player's chest bone to
  * hand and foot bones, each with its own swing and bend offsets. */

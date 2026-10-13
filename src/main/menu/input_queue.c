@@ -2,8 +2,16 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
+#include "pe1/boot_disc_check.h"
+#include "pe1/bounds_check.h"
+#include "pe1/draw_buffers.h"
+#include "pe1/draw_state.h"
+#include "pe1/field_pad.h"
 #include "pe1/menu_queue.h"
+#include "pe1/menu_widget.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/psyq_nop.h"
+#include "pe1/psyq_tim.h"
 #include "pe1/render_buffers.h"
 
 MenuQueueEntry *g_MenuEventQueueFreeList;
@@ -12,8 +20,6 @@ MenuQueueEntry *g_MenuEventQueueTail;
 int g_MenuInputActive;
 int g_MenuInputPollingPaused;
 int g_MenuInputHeldStatusMask;
-
-#include "pe1/bounds_check.h"
 
 void MenuInput_InitQueue(void) {
     MenuQueueEntry *entry;
@@ -107,22 +113,12 @@ inline void Queue_DequeueByMask(int mask, MenuQueueEntry *out_arg) {
     }
 }
 
-#include "pe1/psyq_nop.h"
-#include "pe1/menu_widget.h"
-#include "pe1/menu_queue.h"
-#include "pe1/boot_disc_check.h"
-#include "pe1/draw_state.h"
-#include "pe1/psyq_tim.h"
-#include "pe1/draw_buffers.h"
-
 typedef MenuWidgetNode MenuInputWidget;
 
 /* COMMON supplies small-data metadata to MASPSX for the words this unit
  * reaches through $gp; the other extern words stay absolute. */
 int g_MenuDrawPhase;
 int D_8009D0F8;
-
-#include "pe1/field_pad.h"
 
 /* Translate the field pad bits into the menu input status flags. */
 int Draw_RemapStatusFlags(void) {
@@ -177,8 +173,6 @@ int Draw_RemapStatusFlags(void) {
     }
     return mask;
 }
-
-#include "pe1/bounds_check.h"
 
 void MenuInput_SetPollingPaused(int paused) {
     g_MenuInputPollingPaused = paused;

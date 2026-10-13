@@ -1,9 +1,10 @@
 #ifndef MENU_MEMCARD_PULSE_H
 #define MENU_MEMCARD_PULSE_H
 
-#include "pe1/render_object.h"
 #include "pe1/gte_types.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/render_object.h"
+
 typedef struct MemcardPulseState {
     GteShortVector position;
     GteRotation rotation;

@@ -1,6 +1,8 @@
 #ifndef PE1_SAVE_BLOB_H
 #define PE1_SAVE_BLOB_H
 
+#include "common.h"
+
 typedef unsigned char SaveU8;
 
 typedef struct SaveBytes2 {

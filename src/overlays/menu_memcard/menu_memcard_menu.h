@@ -1,12 +1,13 @@
 #ifndef MENU_MEMCARD_MENU_H
 #define MENU_MEMCARD_MENU_H
 
-#include "menu_memcard_screen.h"
-#include "menu_memcard_image.h"
-#include "pe1/psyq_gpu.h"
 #include "pe1/display_env.h"
 #include "pe1/gpu_image.h"
+#include "pe1/psyq_gpu.h"
 #include "pe1/render_packets.h"
+
+#include "menu_memcard_image.h"
+#include "menu_memcard_screen.h"
 
 /* Matching views of the existing two pointer slots, not extra storage.
  * Separate names retain retail's reloads instead of caching their addresses. */

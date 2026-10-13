@@ -1,9 +1,9 @@
 #ifndef PE1_ROOM_M350_DROP_H
 #define PE1_ROOM_M350_DROP_H
 
+#include "pe1/psyq_gpu.h"
 #include "pe1/render_object.h"
 #include "pe1/room_floor.h"
-#include "pe1/psyq_gpu.h"
 
 /* Falling drop moved by room_m350's splash callback. */
 typedef struct RoomM350Drop {

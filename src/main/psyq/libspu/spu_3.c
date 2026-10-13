@@ -1,6 +1,7 @@
 /* GAS_VERSION: 2.8.1 */
 /* PSY-Q LIBSPU SPU, part 3 of 3: _spu_FsetRXX, _spu_FsetRXXa, _spu_FgetRXXa,
  * _spu_FsetPCR, _spu_FsetDelayW, _spu_FsetDelayR, _spu_Fw1ts. */
+
 #include "pe1/psyq_spu_internal.h"
 
 void _spu_FsetRXX(u32 offset, u32 value, u32 mode) {
@@ -58,8 +59,6 @@ u32 _spu_FgetRXXa(u32 offset, s32 mode)
     }
     return value << _spu_mem_mode.shift;
 }
-
-#include "pe1/psyq_spu_internal.h"
 
 void _spu_FsetPCR(s32 high_priority) {
     *_spu_sys_pcr &= 0xFFF8FFFF;

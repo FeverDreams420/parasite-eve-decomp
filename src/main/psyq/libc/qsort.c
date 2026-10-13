@@ -1,7 +1,9 @@
 /* GCC_VERSION: 2.8.1 */
 /* PSY-Q LIBC QSORT (byte-identical to LIBC2 QSORT): qsort, Mem_SwapBuffers. */
+
 #include "common.h"
 #include "pe1/psyq_libc.h"
+
 void Mem_SwapBuffers(void *, void *, unsigned int);
 
 void qsort(void *base, unsigned int count, unsigned int size,

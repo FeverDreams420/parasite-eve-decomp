@@ -3,14 +3,14 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/psyq_bios.h"
-#include "pe1/menu_flags.h"
-#include "pe1/textbox_open.h"
-#include "pe1/textbox.h"
-#include "pe1/render_prim.h"
-#include "pe1/field_pad.h"
 #include "pe1/boot_disc_check.h"
+#include "pe1/field_pad.h"
+#include "pe1/menu_flags.h"
+#include "pe1/psyq_bios.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/render_prim.h"
+#include "pe1/textbox.h"
+#include "pe1/textbox_open.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */

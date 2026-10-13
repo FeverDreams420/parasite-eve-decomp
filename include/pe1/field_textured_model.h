@@ -3,8 +3,8 @@
 
 #include "common.h"
 #include "pe1/gte_types.h"
-#include "pe1/render_tint.h"
 #include "pe1/render_object.h"
+#include "pe1/render_tint.h"
 
 /* Field engine textured model (FieldFx_ModelDraw): flat and gouraud textured
  * triangles and quads whose vertex, colour and face records are linked by

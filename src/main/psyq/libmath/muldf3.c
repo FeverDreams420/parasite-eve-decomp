@@ -1,5 +1,6 @@
 /* ASSEMBLER: GNU */
 /* PSY-Q LIBMATH MULDF3: __muldf3 and its helper _mul_mant_d. */
+
 #include "pe1/math64.h"
 
 double __muldf3(double x, double y)

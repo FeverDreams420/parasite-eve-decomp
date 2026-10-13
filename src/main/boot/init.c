@@ -2,26 +2,27 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-#include "pe1/psyq_cd.h"
-#include "pe1/psyq_spu_api.h"
-#include "pe1/psyq_callbacks.h"
-#include "pe1/psyq_gpu.h"
 #include "common.h"
-#include "pe1/display_env.h"
-#include "pe1/font.h"
-#include "pe1/field_sfx.h"
-#include "pe1/scene_dispatch.h"
-#include "pe1/battle_status.h"
 #include "pe1/battle_runtime.h"
+#include "pe1/battle_status.h"
 #include "pe1/boot.h"
-#include "pe1/draw_buffers.h"
-#include "pe1/menu_inventory.h"
-#include "pe1/gte.h"
 #include "pe1/card_obj.h"
-#include "pe1/game_state_types.h"
-#include "pe1/scene_flags.h"
+#include "pe1/display_env.h"
+#include "pe1/draw_buffers.h"
+#include "pe1/field_sfx.h"
+#include "pe1/font.h"
 #include "pe1/game_state.h"
+#include "pe1/game_state_types.h"
+#include "pe1/gte.h"
+#include "pe1/menu_inventory.h"
 #include "pe1/pad_state.h"
+#include "pe1/psyq_callbacks.h"
+#include "pe1/psyq_cd.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/psyq_spu_api.h"
+#include "pe1/scene_dispatch.h"
+#include "pe1/scene_flags.h"
+#include "m2c_macros.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -34,7 +35,6 @@ u32 D_8009D2D4;
 /* Boot-time system initialization: Boot_InitSystem, the subsystem and global
  * reset it is followed by, the start-up display reset, the vsync callback and
  * the pad start-up (G0341/G0342). */
-#include "../../../tools/m2c/m2c_macros.h"
 
 void Render_ResetScene(int arg0, int arg1);
 void InitGeom(void);
@@ -70,7 +70,6 @@ M2C_UNK Save_PostInitStub();
 M2C_UNK CdRom_InitScreenState();
 M2C_UNK Draw_InitGpuHwRegs();
 #define g_FrameRngCounter (g_FrameRngCounter[0])
-void Boot_VsyncCallback(void);
 
 void Boot_InitSubsystems(void) {
     u32 var_s0;
@@ -101,10 +100,7 @@ void Boot_InitSubsystems(void) {
 
 void ResetGraph(int arg0);
 void SetGraphDebug(int level);
-void SetDispMask(int mask);
 void ClearImage(RECT *rect, int r, int g, int b);
-DISPENV *SetDefDispEnv(DISPENV *env, int x, int y, int w, int h);
-DRAWENV *SetDefDrawEnv(DRAWENV *env, int x, int y, int w, int h);
 
 void Render_ResetScene(int width, int height)
 {

@@ -4,8 +4,10 @@
  * the room's data and returns where it went. Linked right after the
  * barrage module (spark_barrage.c).
  */
-#include "room_lib.h"
+
 #include "pe1/room_module.h"
+
+#include "room_lib.h"
 
 ROOMLIB_SET_ARG1(RoomLib_SetArgA, g_RoomScriptArgA)
 

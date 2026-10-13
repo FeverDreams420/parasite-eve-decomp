@@ -3,8 +3,8 @@
 
 /* Declarations used by the model parser Render_SetupEntityPrims. */
 
-#include "pe1/render_object.h"
 #include "pe1/gte_types.h"
+#include "pe1/render_object.h"
 
 /* GPU packet head shared by every primitive class: the word count byte of
  * the tag and the command byte after the first colour. */

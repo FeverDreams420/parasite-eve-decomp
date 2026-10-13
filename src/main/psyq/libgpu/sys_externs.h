@@ -1,6 +1,9 @@
 #ifndef PSYQ_LIBGPU_SYS_EXTERNS_H
 #define PSYQ_LIBGPU_SYS_EXTERNS_H
 
+#include "common.h"
+#include "pe1/gpu_callbacks.h"
+
 extern unsigned char D_80095704[];
 extern char D_800117E0[], D_80011800[];
 extern unsigned short D_800957CC[][2], D_800957D8[][2];

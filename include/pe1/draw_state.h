@@ -112,7 +112,6 @@ void Draw_EmitWipeBarRect(int width, int height, int mode);
 
 extern signed char D_800B0DB0[];
 extern s32 g_DrawBufferIndex;
-extern int g_DrawTextBoxWidth;
 extern u32 D_8009D14C[];
 extern GpuDrawEnabledFlag g_DrawEnabled;
 extern short g_SeqElapsed;

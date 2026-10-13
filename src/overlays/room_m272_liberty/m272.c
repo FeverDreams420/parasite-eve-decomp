@@ -1,8 +1,9 @@
-#include "../room_lib/room_lib.h"
 #include "pe1/boot_display.h"
-#include "pe1/psyq_gpu.h"
 #include "pe1/display_env.h"
 #include "pe1/gpu_image.h"
+#include "pe1/psyq_gpu.h"
+
+#include "../room_lib/room_lib.h"
 #include "room_m272.h"
 #include "room_m272_phase.h"
 

@@ -1,9 +1,8 @@
 #include "common.h"
 #include "pe1/entity_allocation.h"
 #include "pe1/entity_frame_update.h"
-#include "pe1/script_node.h"
 #include "pe1/render_buffers.h"
-
+#include "pe1/script_node.h"
 
 /* Allocates a run of 0x47E0-byte blocks from the render scratch buffer, sized
  * 1, 2, 4 or 8 blocks by the request; returns 0 when no run is free. */

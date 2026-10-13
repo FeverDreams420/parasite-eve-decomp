@@ -1,5 +1,4 @@
 #include "pe1/random.h"
-
 #include "pe1/scene_e20_hover_orb.h"
 
 SceneEffectSlot *SceneE20_CommandEffectSlot(unsigned int command, int index, int value, int z) {

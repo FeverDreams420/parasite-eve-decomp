@@ -3,15 +3,15 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
-#include "pe1/battle.h"
-#include "pe1/gte_types.h"
-#include "pe1/inventory.h"
 #include "pe1/akao.h"
-#include "pe1/entity_animation.h"
-#include "pe1/pm.h"
+#include "pe1/battle.h"
 #include "pe1/battle_entity_anim.h"
 #include "pe1/battle_main.h"
 #include "pe1/battle_runtime.h"
+#include "pe1/entity_animation.h"
+#include "pe1/gte_types.h"
+#include "pe1/inventory.h"
+#include "pe1/pm.h"
 
 #define NULL ((void *)0)
 typedef struct { s32 words[4]; } Copy16;
@@ -24,13 +24,8 @@ typedef union { const u8 *bytes; u32 word; } CopyAddress;
 
 int BattleCmd_CommitAmmoAndUpdate(); /* no prototype: retail calls it with and without the action */
 s16 Battle_CalcAngleToTarget(RenderObjectEntity *object, void *target);
-int Battle_CalcDistToPlayer(BattleEntity *actor, BattleEntity *player);
-void Battle_DispatchEntityEffect(void);
 void Battle_HaltOnPositiveX(void);
-int Battle_StepAyaAction(void);
 int Battle_StepCharacterAction(BattleInitSlot *slot);
-void Battle_UpdateEntityFacing(BattleEntity *entity);
-void Pm_StopAll(void);
 
 /* COMMON supplies the small-data sizes of the turn queue words to MASPSX;
  * every other word stays absolute. */

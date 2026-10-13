@@ -3,8 +3,8 @@
 
 /* Declarations used by the sequencer note step Akao_StepSampleLoader. */
 
-#include "pe1/akao/track.h"
 #include "pe1/akao/tick.h"
+#include "pe1/akao/track.h"
 
 typedef void (*AkaoCommandHandler)(AkaoTrack *track, u32 voice_mask);
 

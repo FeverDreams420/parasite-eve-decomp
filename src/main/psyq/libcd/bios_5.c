@@ -1,7 +1,8 @@
 /* ASSEMBLER: GNU */
 /* Psy-Q LIBCD BIOS.OBJ, part 5 of 7: CD_init. */
-#include "pe1/psyq_cd.h"
+
 #include "pe1/psyq_bios.h"
+#include "pe1/psyq_cd.h"
 
 #include "bios_5_externs.h"
 

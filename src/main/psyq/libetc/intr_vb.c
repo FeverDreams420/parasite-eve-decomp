@@ -1,5 +1,6 @@
 /* ASSEMBLER: GNU */
 /* Psy-Q LIBETC INTR_VB.OBJ: startIntrVSync, trapIntrVSync, setIntrVSync, memclrIntrVSync. */
+
 #include "pe1/psyq_api_internal.h"
 
 #include "intr_vb_externs.h"

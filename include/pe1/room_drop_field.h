@@ -2,17 +2,17 @@
 #define PE1_ROOM_DROP_FIELD_H
 
 #include "common.h"
-#include "pe1/gte_types.h"
-#include "pe1/room_fx.h"
-#include "pe1/field_ring_geometry.h"
 #include "pe1/field_collision.h"
-#include "pe1/room_spark.h"
-#include "pe1/field_sprite_state.h"
-#include "pe1/room_drop_field_class.h"
+#include "pe1/field_ring_geometry.h"
 #include "pe1/field_script_context.h"
-#include "pe1/psyq_libc.h"
-#include "pe1/pe_image.h"
+#include "pe1/field_sprite_state.h"
 #include "pe1/fieldfx_calls.h"
+#include "pe1/gte_types.h"
+#include "pe1/pe_image.h"
+#include "pe1/psyq_libc.h"
+#include "pe1/room_drop_field_class.h"
+#include "pe1/room_fx.h"
+#include "pe1/room_spark.h"
 
 /* The drop field effect set linked by room_m174, room_m348 and room_m383
  * (src/overlays/room_lib/drop_field.c): a controller and
@@ -133,7 +133,6 @@ extern char g_RoomDropFieldRingImages[];
 extern unsigned char g_RoomDropFieldBeamImages[];
 extern u8 g_RoomDropFieldParticleFrames[];
 
-int rand(void);
 s32 *FieldFx_RegPtr(s32 index);
 void func_800C4E50(void *params);
 void FieldFx_ModelSetDepthBias(int arg0);

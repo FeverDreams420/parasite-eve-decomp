@@ -1,9 +1,9 @@
+#include "pe1/asset_tim.h"
 #include "pe1/battle_runtime.h"
 #include "pe1/field_movement.h"
-#include "pe1/gte_types.h"
 #include "pe1/gte.h"
+#include "pe1/gte_types.h"
 #include "pe1/render_camera.h"
-#include "pe1/asset_tim.h"
 
 /* Field player movement state handlers: idle, walk, run, turn-in-place and
  * the idle resync. All five are contiguous, compile under the default

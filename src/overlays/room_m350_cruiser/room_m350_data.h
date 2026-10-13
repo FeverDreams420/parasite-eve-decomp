@@ -4,10 +4,10 @@
 /* room_m350 data shared by several effect units, declared once. */
 
 #include "common.h"
+#include "pe1/field_actor.h"
+#include "pe1/field_color.h"
 #include "pe1/gte_short_vector.h"
 #include "pe1/gte_types.h"
-#include "pe1/field_color.h"
-#include "pe1/field_actor.h"
 #include "pe1/room_m350_drop.h"
 
 /* Colour seeds handed to the trail and glow drawers. */

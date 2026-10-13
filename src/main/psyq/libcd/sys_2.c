@@ -3,6 +3,7 @@
  * CdSync, CdReady, CdSyncCallback, CdReadyCallback, CdControl, CdControlF,
  * CdControlB, CdMix, CdGetSector, CdGetSector2, CdDataCallback, CdDataSync,
  * CdIntToPos and CdPosToInt. */
+
 #include "pe1/psyq_cd.h"
 
 #include "sys_2_externs.h"

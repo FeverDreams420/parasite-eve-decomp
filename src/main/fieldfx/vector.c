@@ -1,9 +1,9 @@
 #include "common.h"
-#include "pe1/fieldfx_task.h"
 #include "pe1/field_actor.h"
-#include "pe1/vector_types.h"
 #include "pe1/field_vector_math.h"
+#include "pe1/fieldfx_task.h"
 #include "pe1/gte_types.h"
+#include "pe1/vector_types.h"
 
 typedef struct {
     char pad0[0x8];
@@ -230,8 +230,6 @@ s32 func_800DFD54(Pe1Vec3s *lhs, Pe1Vec3s *rhs)
   }
 }
 
-#include "common.h"
-
 s32 func_800DFE20(Vec3Fixed *lhs, Vec3Fixed *rhs) {
     s32 dx = (lhs->x - rhs->x) >> 16;
     s32 dx_sq = dx * dx;
@@ -258,8 +256,6 @@ s32 func_800DFE20(Vec3Fixed *lhs, Vec3Fixed *rhs) {
 
     return result;
 }
-
-#include "common.h"
 
 void func_800DFE94(Vec3Fixed *from, Vec3Fixed *to, s16 *out) {
     Vec3Fixed *from_reg = from;
@@ -295,8 +291,6 @@ void func_800DFE94(Vec3Fixed *from, Vec3Fixed *to, s16 *out) {
     out[1] = angle & 0xFFF;
     out[2] = 0;
 }
-
-#include "common.h"
 
 int FieldFx_VecToAngle(Vec3Fixed *from, Vec3Fixed *to) {
     return (s16)ratan2(to->x - from->x, to->z - from->z);

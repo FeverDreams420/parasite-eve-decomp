@@ -1,17 +1,14 @@
 #ifndef PE1_EXT_CAMERA
 #define PE1_EXT_CAMERA
+
+#include "common.h"
+
+#include "fx_common.h"
+
 extern int D_8019CBB4, D_8019CBB8;
 extern int D_8019CBD4, D_8019CBD8;
 extern int D_8019CB48, D_8019CB4C;
 extern int D_8019CC04, D_8019CC0C;
-extern int D_8019CBB4;
-extern int D_8019CBB8;
-extern int D_8019CBD4;
-extern int D_8019CBD8;
-extern int D_8019CB48;
-extern int D_8019CB4C;
-extern int D_8019CC04;
-extern int D_8019CC0C;
 extern int D_8019CBC8;
 extern int D_8019CC00;
 extern int D_8019CA90;
@@ -38,5 +35,4 @@ void func_80191580(FxCommonTransformNode *node);
 extern u16 D_80093170[];
 extern u16 D_80093174[];
 extern u16 D_80093172[];
-extern u8 D_8019C1F0;
 #endif /* PE1_EXT_CAMERA */

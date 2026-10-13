@@ -6,11 +6,12 @@
  * bios_5.c) and GCC 2.8.1 (bios.c, bios_3.c, bios_6.c, bios_7.c), and
  * bios_2.c, bios_3.c, bios_4.c and bios_6.c each need their own
  * -fno-expensive-optimizations or scheduling options. */
-#include "pe1/psyq_cd.h"
-#include "bios_internal.h"
+
 #include "pe1/psyq_bios.h"
+#include "pe1/psyq_cd.h"
 
 #include "bios_externs.h"
+#include "bios_internal.h"
 
 int getintr(void) {
     volatile u8 interrupt;

@@ -1,20 +1,21 @@
 #ifndef PE1_SCENE_E19_BLAST_H
 #define PE1_SCENE_E19_BLAST_H
 
-#include "pe1/render_object.h"
-#include "pe1/fieldfx_callback_list.h"
-#include "pe1/gte.h"
-#include "pe1/room_floor.h"
+#include "pe1/akao_send.h"
+#include "pe1/asset_find.h"
 #include "pe1/field_model_draw.h"
 #include "pe1/field_owner_actor.h"
 #include "pe1/field_sprite_draw.h"
-#include "pe1/fieldfx_task_pool.h"
 #include "pe1/field_texture_tables.h"
-#include "pe1/scene_archive.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/akao_send.h"
-#include "pe1/asset_find.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/fieldfx_calls.h"
+#include "pe1/fieldfx_task_pool.h"
+#include "pe1/gte.h"
+#include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/render_object.h"
+#include "pe1/room_floor.h"
+#include "pe1/scene_archive.h"
 
 /* Scene e19 blast sequence: loads five shell models, then runs a five-state
  * charge/burst timeline at an actor position, spawning rising sparks while
@@ -59,7 +60,6 @@ extern void *D_8019B680, *D_8019B684, *D_8019B688, *D_8019B68C, *D_8019B690;
 
 int func_80192F9C(int mode, SceneE19Blast *blast);
 int rand(void);
-#include "pe1/gte_types.h"
 void FieldFx_ModelSetTexture(int page, int clut);
 void Geo_ClipAlternatingArcPoint(int mode, int count, int value);
 

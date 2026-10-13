@@ -7,15 +7,17 @@
  * rooms, and the unit's rodata (the three seeds) sits in front of the
  * library's jump tables in every one of them.
  */
+
 #include "common.h"
-#include "pe1/gte.h"
-#include "pe1/room_fx.h"
 #include "pe1/field_script_context.h"
-#include "room_lib.h"
-#include "pe1/room_floor.h"
-#include "pe1/floor_polygon.h"
-#include "pe1/psyq_libc.h"
 #include "pe1/fieldfx_calls.h"
+#include "pe1/floor_polygon.h"
+#include "pe1/gte.h"
+#include "pe1/psyq_libc.h"
+#include "pe1/room_floor.h"
+#include "pe1/room_fx.h"
+
+#include "room_lib.h"
 
 /* Seeds copied into the stack frames; file-scope so the all-zero rotation
  * stays a rodata copy. */

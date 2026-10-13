@@ -1,40 +1,42 @@
 #include "common.h"
-#include "../room_lib/room_lib.h"
-#include "pe1/pe_image.h"
-#include "pe1/field_glow_sprite.h"
-#include "scene_e08.h"
-#include "pe1/field_sprite_state.h"
-#include "pe1/psyq_libc.h"
-#include "pe1/random.h"
-#include "scene_particle_slots.h"
-#include "pe1/gte_types.h"
-#include "pe1/field_script_context.h"
-#include "pe1/room_fx.h"
-#include "scene_e08_modules.h"
-#include "pe1/room_rearm_timer.h"
-#include "pe1/fieldfx_calls.h"
-#include "pe1/scene_e08_glow_sprites.h"
-#include "pe1/scene_player_orb.h"
-#include "pe1/scene_ring_sprites.h"
-#include "pe1/field_actor.h"
-#include "pe1/scene_archive.h"
 #include "pe1/akao_send.h"
 #include "pe1/asset_find.h"
-#include "pe1/scene_grab_head.h"
-#include "pe1/field_sprite_params.h"
-#include "pe1/field_sprite_draw.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/scene_particle_slot_draw.h"
-#include "pe1/scene_e08_ring_effect.h"
-#include "pe1/field_ring_geometry.h"
+#include "pe1/field_actor.h"
 #include "pe1/field_flash_burst.h"
-#include "pe1/scene_e08_orbit_particles.h"
-#include "pe1/scene_glow_model.h"
-#include "pe1/room_sound_slot.h"
+#include "pe1/field_glow_sprite.h"
+#include "pe1/field_ring_geometry.h"
+#include "pe1/field_script_context.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_sprite_params.h"
+#include "pe1/field_sprite_state.h"
+#include "pe1/fieldfx_calls.h"
+#include "pe1/floor_polygon.h"
+#include "pe1/gte_types.h"
+#include "pe1/pe_image.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/psyq_libc.h"
+#include "pe1/random.h"
 #include "pe1/room_drop_field.h"
 #include "pe1/room_floor.h"
-#include "pe1/floor_polygon.h"
+#include "pe1/room_fx.h"
+#include "pe1/room_rearm_timer.h"
+#include "pe1/room_sound_slot.h"
+#include "pe1/scene_archive.h"
+#include "pe1/scene_e08_glow_sprites.h"
 #include "pe1/scene_e08_layered_sprite.h"
+#include "pe1/scene_e08_orbit_particles.h"
+#include "pe1/scene_e08_ring_effect.h"
+#include "pe1/scene_glow_model.h"
+#include "pe1/scene_grab_head.h"
+#include "pe1/scene_particle_slot_draw.h"
+#include "pe1/scene_player_orb.h"
+#include "pe1/scene_ring_sprites.h"
+
+#include "../room_lib/room_lib.h"
+#include "e08_externs.h"
+#include "scene_e08.h"
+#include "scene_e08_modules.h"
+#include "scene_particle_slots.h"
 
 typedef struct {
     s32 w0;
@@ -125,10 +127,6 @@ typedef struct {
     void *asset;
 } SceneE08InitState;
 
-typedef struct {
-    char bytes[4];
-} SceneE08FourBytes;
-
 typedef GteMatrix SceneE08Matrix;
 
 typedef GteVector SceneE08Vector;
@@ -147,8 +145,6 @@ typedef struct {
     u8 mode;
     s16 timer;
 } Ovl178EffectController;
-
-#include "e08_externs.h"
 
 void FieldFx_SetScriptContext(void *arg0);
 
@@ -823,8 +819,6 @@ void func_80190B98(void *object, ScenePlayerOrbTimer *timer, ScenePlayerOrb *orb
     }
 }
 
-void func_800C4E50(void *item);
-
 void func_80190F0C(void *unused0, void *unused1, SceneRingSpritesState *effect) {
     u8 *mid = D_801995D4;
     u8 *source;
@@ -1161,8 +1155,6 @@ void func_80191990(void *arg0, void *arg1, SceneMovingSlots *slots) {
         slots->active[i] = 0;
     }
 }
-
-void func_800C3098(s32 arg0);
 
 void func_801919B0(s32 arg0, s32 arg1, SceneMovingSlots *base) {
     Ovl178Position *st;
@@ -2273,8 +2265,6 @@ void func_80194498(void *unused, u16 *phase, SceneLayeredSpriteState *state) {
     }
 }
 
-int rand(void);
-
 void func_801946D4(void *unused, RoomFxControl *control, char *state)
 {
     Ovl178Position *owner = FieldFx_GetScriptContext();
@@ -2485,9 +2475,6 @@ void func_80194C04(void *arg0, void *arg1, SceneE08ExpandingGlow *glow) {
     glow->growth = 0;
     glow->depth = 0xFF;
 }
-
-void func_800C2FF0(s32 arg0, s32 arg1);
-void func_800C3098(s32 arg0);
 
 void func_80194C60(void *arg0, void *arg1, SceneE08ExpandingGlow *glow) {
     SceneE08Matrix matrix;

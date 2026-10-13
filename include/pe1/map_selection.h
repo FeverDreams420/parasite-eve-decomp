@@ -24,8 +24,6 @@ extern MapSelectionName g_MapFilenameTable[];
 extern s8 g_MapNameOverrideA[];
 extern s8 g_MapNameOverrideB[];
 extern s8 g_MapIdTable[];
-extern s8 g_MapNameOverrideA[];
-extern s8 g_MapNameOverrideB[];
 extern unsigned int D_8009D280; /* selected map id */
 
 #endif

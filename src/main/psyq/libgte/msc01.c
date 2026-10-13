@@ -8,6 +8,7 @@
  * only in the temporary register its assembler chose to expand `and $t2,
  * $v0, -2`.
  */
+
 #include "pe1/psyq_asm.h"
 
 PSYQ_ASM_OBJECT(LIBGTE, MSC01)

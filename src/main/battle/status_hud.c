@@ -3,22 +3,22 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
-#include "pe1/render_prim.h"
-#include "pe1/draw_state.h"
-#include "pe1/battle_status.h"
-#include "pe1/battle_runtime.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/battle_main.h"
-#include "pe1/render_buffers.h"
-#include "pe1/draw_slot_record.h"
-#include "pe1/global_slot.h"
-#include "pe1/render_packets.h"
 #include "pe1/battle.h"
 #include "pe1/battle_entity_anim.h"
-#include "pe1/menu_state.h"
-#include "pe1/script_state.h"
+#include "pe1/battle_main.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/battle_status.h"
 #include "pe1/battle_update.h"
+#include "pe1/draw_slot_record.h"
+#include "pe1/draw_state.h"
+#include "pe1/global_slot.h"
+#include "pe1/menu_state.h"
+#include "pe1/psyq_gpu.h"
 #include "pe1/render_animation_frame.h"
+#include "pe1/render_buffers.h"
+#include "pe1/render_packets.h"
+#include "pe1/render_prim.h"
+#include "pe1/script_state.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -1104,8 +1104,6 @@ void Draw_SetupSprites(BattleEntity *entity, int unused, int icon) {
     } while ((u8)i < 2);
 }
 
-#include "common.h"
-
 void Draw_QueuePrimitive(void) {
     int slot;
 
@@ -1114,8 +1112,6 @@ void Draw_QueuePrimitive(void) {
     AddPrim((u32 *)g_OtBufferTable[slot] + 7, &g_StatusMarkerPackets[slot]);
     g_BattleSpritePrimCountdown--;
 }
-
-#include "common.h"
 
 /* Each emit queues one status icon at the cursor and advances the cursor.
  * Retail adds the draw-slot and icon offsets to the sprite base and steps

@@ -1,11 +1,15 @@
 /* ASSEMBLER: GNU */
 /* Psy-Q LIBPAD PADMAIN.OBJ: PadEnableCom, _padSetVsyncParam, _padChkVsync, _padStartCom, _padStopCom, _padInitSioMode, _padSioRW and their local helpers. */
+
 #include "common.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/psyq_nop.h"
 #include "pe1/psyq_pad_main.h"
 
 #include "padmain_externs.h"
+#include "padmain_externs_1.h"
+#include "padmain_externs_2.h"
+#include "padmain_externs_3.h"
 
 int PadEnableCom(int portMask) {
     int currentMask;
@@ -48,7 +52,6 @@ int PadEnableCom(int portMask) {
 
 int MemCard_TimerCallback(void);
 int MemCard_TimerReadyCallback(void);
-#include "padmain_externs_1.h"
 
 void _padSetVsyncParam(void) {
     void **table;
@@ -61,13 +64,9 @@ void _padSetVsyncParam(void) {
     table[2] = 0;
 }
 
-#include "padmain_externs_2.h"
-
-
 void SysDeqIntRP(int index, void *queue);
 void SysEnqIntRP(int index, void *queue);
 
-int chkRC2wait(void);
 int _padInitSioMode(CardObj *port);
 
 int MemCard_TimerReadyCallback(void) {
@@ -175,7 +174,6 @@ void _padStopCom(void) {
     ExitCriticalSection();
 }
 
-#include "padmain_externs_3.h"
 void MemCard_WaitStatusBit2(void);
 int _padInitSioMode(CardObj *port) {
     register MemCardSioRegisters *sio = D_8009B788;

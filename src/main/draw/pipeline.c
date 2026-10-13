@@ -2,19 +2,19 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
-#include "pe1/scene_transition.h"
-#include "pe1/render_camera.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/game_state.h"
-#include "pe1/room_floor.h"
-#include "pe1/scene_room_load.h"
-#include "pe1/scene_dispatch.h"
-#include "pe1/render_lighting.h"
-#include "pe1/entity_allocation.h"
 #include "pe1/boot.h"
-#include "pe1/script_state.h"
-#include "pe1/scene_entity_textures.h"
+#include "pe1/entity_allocation.h"
+#include "pe1/game_state.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/render_camera.h"
+#include "pe1/render_lighting.h"
+#include "pe1/room_floor.h"
 #include "pe1/save_tail_state.h"
+#include "pe1/scene_dispatch.h"
+#include "pe1/scene_entity_textures.h"
+#include "pe1/scene_room_load.h"
+#include "pe1/scene_transition.h"
+#include "pe1/script_state.h"
 
 /* GPU pipeline start-up: voice bank, first room, light matrix and colours,
  * entity textures and fog. Retail compiles it without small-data address
@@ -32,7 +32,6 @@ unsigned int g_GameStateFlags;
 #define LAUNDER(x) asm volatile("" : "=r"(x) : "0"(x))
 #define BARRIER() 
 
-void Akao_LoadVoiceBankAlt(void);
 void Scene_LoadRoom(int arg0);
 s32 Scene_StreamTexturePage(void);
 void Entity_InitFreePool(void);

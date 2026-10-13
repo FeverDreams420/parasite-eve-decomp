@@ -2,14 +2,15 @@
 #define FX_COMMON_H
 
 #include "common.h"
-#include "fx_common_vectors.h"
-#include "pe1/room_fx.h"
-#include "pe1/gte_types.h"
-#include "pe1/render_matrix_slot.h"
-#include "pe1/projection_slot.h"
-#include "pe1/psyq_gpu.h"
 #include "pe1/akao_send.h"
 #include "pe1/asset_tim.h"
+#include "pe1/gte_types.h"
+#include "pe1/projection_slot.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/render_matrix_slot.h"
+#include "pe1/room_fx.h"
+
+#include "fx_common_vectors.h"
 
 typedef struct FxCommonSelection {
     s16 record;

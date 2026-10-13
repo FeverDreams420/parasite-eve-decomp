@@ -2,13 +2,13 @@
 #define PE1_ROOM_BEAM_PAIR_H
 
 #include "common.h"
-#include "pe1/gte_types.h"
-#include "pe1/field_ring_geometry.h"
-#include "pe1/field_sprite_state.h"
 #include "pe1/field_glow_sprite.h"
+#include "pe1/field_ring_geometry.h"
 #include "pe1/field_script_context.h"
-#include "pe1/psyq_libc.h"
+#include "pe1/field_sprite_state.h"
 #include "pe1/fieldfx_calls.h"
+#include "pe1/gte_types.h"
+#include "pe1/psyq_libc.h"
 
 /* Work area of the paired beam effect (rooms m174, m348, m383): the
  * anchor matrix copied from the script actor, a scale and a brightness. */

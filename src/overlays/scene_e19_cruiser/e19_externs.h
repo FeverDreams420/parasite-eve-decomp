@@ -1,6 +1,14 @@
 #ifndef PE1_EXT_E19
 #define PE1_EXT_E19
-extern struct BattleEntity *D_8009D254;
+
+#include "common.h"
+#include "pe1/battle.h"
+#include "pe1/field_color.h"
+#include "pe1/gte_short_vector.h"
+#include "pe1/gte_types.h"
+#include "pe1/room_orbit_trail.h"
+#include "pe1/room_spark.h"
+
 extern GteRotation D_8018F1CC;
 extern int D_8019B668;
 extern GteRotation D_8018F210;

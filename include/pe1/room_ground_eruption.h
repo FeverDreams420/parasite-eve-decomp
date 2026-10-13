@@ -2,9 +2,9 @@
 #define PE1_ROOM_GROUND_ERUPTION_H
 
 #include "common.h"
+#include "pe1/psyq_libc.h"
 #include "pe1/room_fx.h"
 #include "pe1/room_module.h"
-#include "pe1/psyq_libc.h"
 
 /* The ground eruption (src/overlays/room_lib/ground_eruption.c). */
 

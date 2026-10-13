@@ -2,9 +2,10 @@
 #define PE1_ROOM_WINDOW_H
 
 #include "common.h"
-#include "pe1/gte_types.h"
-#include "pe1/field_vector_math.h"
 #include "pe1/field_actor.h"
+#include "pe1/field_vector_math.h"
+#include "pe1/gte_sine_table.h" /* packed PSY-Q sine table, one RoomWindowTrig per angle step */
+#include "pe1/gte_types.h"
 
 /* The window effect: a script object that flies a camera-facing frame from
  * its anchor actor towards a target actor, spinning it around the flight
@@ -142,8 +143,6 @@ typedef struct RoomWindowScratch {
 
 #define ROOM_WINDOW_SCRATCH ((RoomWindowScratch *)0x1F800000)
 
-/* The packed PSY-Q sine table, one RoomWindowTrig per angle step. */
-#include "pe1/gte_sine_table.h"
 extern struct FieldActor *g_PlayerEntity;
 
 extern int func_800DFC44(int value);

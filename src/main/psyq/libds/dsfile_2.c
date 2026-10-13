@@ -1,14 +1,16 @@
 /* ASSEMBLER: GNU */
 /* Psy-Q LIBDS DSFILE.OBJ, part 2 of 2: DS_cachefile, DS_newmedia, DS_searchdir, ds_read. */
-#include "pe1/psyq_ds.h"
+
 #include "pe1/cdrom.h"
 #include "pe1/psyq_bios.h"
+#include "pe1/psyq_ds.h"
+
+#include "dsfile_2_externs.h"
 
 CdlLOC *DsIntToPos(int sector, CdlLOC *position);
 void *memcpy(void *, const void *, unsigned int);
 int strcmp(const char *, const char *);
 
-#include "dsfile_2_externs.h"
 /* These two strings are word-aligned in dsfile.c, permitting halfword copies. */
 
 int DS_newmedia(void) {

@@ -2,10 +2,11 @@
 /* PSY-Q LIBPAD PADPORTD: PadInitDirect, CardObj_ResetFields,
  * MemCard_DmaCompleteCallback, CardObj_SwapByteField, CardObj_ReadPayloadByte,
  * LIBPAD_PADPORTD_text_388, CardObj_GetChannelId, CardObj_LookupByChannelId. */
+
 #include "common.h"
 #include "pe1/card_obj.h"
-#include "pe1/psyq_pad_main.h"
 #include "pe1/memcard_state.h"
+#include "pe1/psyq_pad_main.h"
 
 #include "padportd_externs.h"
 

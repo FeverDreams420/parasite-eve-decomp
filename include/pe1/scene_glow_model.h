@@ -1,14 +1,14 @@
 #ifndef PE1_SCENE_GLOW_MODEL_H
 #define PE1_SCENE_GLOW_MODEL_H
 
-#include "pe1/room_fx.h"
-#include "pe1/field_sprite_state.h"
-#include "pe1/room_floor.h"
 #include "pe1/field_glow_sprite.h"
 #include "pe1/field_model_draw.h"
 #include "pe1/field_script_context.h"
+#include "pe1/field_sprite_state.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/psyq_libc.h"
+#include "pe1/room_floor.h"
+#include "pe1/room_fx.h"
 
 /* Scene e08 glowing model: the effect model drawn at the scene anchor,
  * followed by a glow sprite that grows once the timer passes 10. */
@@ -43,7 +43,5 @@ extern int D_8019956C;
 extern int D_8019957C;
 extern u8 D_80198860[];
 extern FieldGlowSprite D_801996B0;
-
-void FieldFx_ModelSetTexture(int tpage, int clut);
 
 #endif

@@ -2,38 +2,39 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
-#include "pe1/geom_state.h"
-#include "pe1/field_actor.h"
-#include "pe1/game_state.h"
 #include "pe1/battle_context.h"
-#include "pe1/game_timers.h"
-#include "pe1/scene_dispatch.h"
-#include "pe1/player_entity.h"
+#include "pe1/battle_entity_anim.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/battle_update.h"
+#include "pe1/boot.h"
+#include "pe1/collision_database.h"
 #include "pe1/entity_allocation.h"
 #include "pe1/entity_animation.h"
-#include "pe1/battle_entity_anim.h"
-#include "pe1/textbox.h"
-#include "pe1/script_node.h"
-#include "pe1/gte_types.h"
-#include "pe1/field_collision.h"
-#include "pe1/script_anim.h"
-#include "pe1/pm.h"
-#include "pe1/save.h"
-#include "pe1/script_state.h"
-#include "pe1/field_movement.h"
-#include "pe1/save_tail_state.h"
-#include "pe1/battle_runtime.h"
-#include "pe1/render_camera.h"
-#include "pe1/boot.h"
-#include "pe1/render_setup.h"
-#include "pe1/menu_inventory.h"
-#include "pe1/inventory.h"
-#include "pe1/scene_transition.h"
 #include "pe1/entity_frame_update.h"
-#include "pe1/battle_update.h"
-#include "pe1/collision_database.h"
+#include "pe1/field_actor.h"
+#include "pe1/field_collision.h"
+#include "pe1/field_movement.h"
 #include "pe1/font.h"
+#include "pe1/game_state.h"
+#include "pe1/game_timers.h"
+#include "pe1/geom_state.h"
+#include "pe1/gte_types.h"
+#include "pe1/inventory.h"
 #include "pe1/inventory_queries.h"
+#include "pe1/inventory_slots.h"
+#include "pe1/menu_inventory.h"
+#include "pe1/player_entity.h"
+#include "pe1/pm.h"
+#include "pe1/render_camera.h"
+#include "pe1/render_setup.h"
+#include "pe1/save.h"
+#include "pe1/save_tail_state.h"
+#include "pe1/scene_dispatch.h"
+#include "pe1/scene_transition.h"
+#include "pe1/script_anim.h"
+#include "pe1/script_node.h"
+#include "pe1/script_state.h"
+#include "pe1/textbox.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -962,8 +963,6 @@ int Menu_SetModeState8(void) {
     return 1;
 }
 
-void Pm_StopAllBoth(void);
-
 int Menu_SetSlotEntry(int index, unsigned int limit, unsigned int slot);
 
 int Pm_ScriptStopCurrentEntity(int **arg0) {
@@ -1300,11 +1299,6 @@ int Script_SetNodeFlag80(void) {
  * read the current actor through absolute addresses. */
 
 #define NULL ((void *)0)
-
-#include "pe1/game_timers.h"
-#include "pe1/textbox.h"
-#include "pe1/inventory_slots.h"
-#include "pe1/script_state.h"
 
 int Script_ClearEntityRoamFlag(void) {
     g_CurrentEntity->flags &= 0xFFFDFFFF;

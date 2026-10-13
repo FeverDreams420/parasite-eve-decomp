@@ -2,16 +2,15 @@
 
 #include "common.h"
 #include "pe1/akao.h"
-#include "pe1/akao/voice_state.h"
-#include "pe1/akao/voice_masks.h"
 #include "pe1/akao/commands.h"
-#include "pe1/akao/tick.h"
-#include "pe1/akao/seq_param.h"
-#include "m2c_macros.h"
-#include "pe1/akao_counters.h"
 #include "pe1/akao/globals.h"
 #include "pe1/akao/queue.h"
-
+#include "pe1/akao/seq_param.h"
+#include "pe1/akao/tick.h"
+#include "pe1/akao/voice_masks.h"
+#include "pe1/akao/voice_state.h"
+#include "pe1/akao_counters.h"
+#include "m2c_macros.h"
 
 void Akao_SetNotePitch(AkaoTrack *track, int arg);
 

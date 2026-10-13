@@ -2,12 +2,13 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
+#include "common.h"
+#include "pe1/battle_entity_anim.h"
+#include "pe1/field_actor.h"
+#include "pe1/psyq_gpu.h"
 #include "pe1/reloc_block.h"
 #include "pe1/script_node.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/field_actor.h"
 #include "pe1/script_state.h"
-#include "pe1/battle_entity_anim.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -170,10 +171,6 @@ ScriptNode *Script_AllocNode(unsigned int *script, ScriptNode *arg1) {
 
     return node;
 }
-
-#include "common.h"
-#include "pe1/field_actor.h"
-#include "pe1/script_node.h"
 
 void Script_GarbageCollectNodes(void) {
     FieldActor *group;

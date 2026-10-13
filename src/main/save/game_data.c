@@ -2,28 +2,28 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-#include "include_asm.h"
-#include "pe1/aya.h"
-#include "pe1/save.h"
-#include "pe1/text.h"
-#include "pe1/menu_state.h"
-#include "pe1/menu_sound.h"
-#include "pe1/inventory_state.h"
-#include "pe1/inventory_slots.h"
 #include "common.h"
-#include "pe1/inventory_category.h"
-#include "pe1/game_timers.h"
+#include "pe1/aya.h"
+#include "pe1/draw_state.h"
 #include "pe1/draw_wipe_rect.h"
+#include "pe1/game_state.h"
+#include "pe1/game_timers.h"
+#include "pe1/inventory_category.h"
+#include "pe1/inventory_slots.h"
+#include "pe1/inventory_state.h"
+#include "pe1/memcard.h"
 #include "pe1/menu_background.h"
 #include "pe1/menu_inventory.h"
-#include "pe1/memcard.h"
 #include "pe1/menu_queue.h"
+#include "pe1/menu_sound.h"
+#include "pe1/menu_state.h"
 #include "pe1/menu_widget.h"
-#include "pe1/game_state.h"
 #include "pe1/psyq_bios.h"
-#include "pe1/draw_state.h"
+#include "pe1/save.h"
 #include "pe1/scene_dispatch.h"
 #include "pe1/scene_room.h"
+#include "pe1/text.h"
+#include "include_asm.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -421,9 +421,6 @@ unsigned int Save_GetMetadataRemainingChars(void) {
 
 SavedMenuMode g_SavedMenuMode;
 
-unsigned int Menu_GetActiveMode(void);
-void Battle_SetWindowBoundsByMode(int mode);
-
 /* Equips the inventory item whose equipment record has this ID: weapons
  * (kinds 1..8) and armor (kind 9). Returns nonzero when nothing was equipped. */
 int Inv_EquipItemById(unsigned int itemId) {
@@ -527,10 +524,6 @@ void Inv_OpenAyaItemList(unsigned int arg) {
 }
 
 /* Memory-card dialog gating from the inventory frontend. */
-#include "pe1/menu_state.h"
-#include "pe1/game_state.h"
-
-void MemCard_CloseAll(void);
 
 void MemCard_SetDialogActive(int active) {
     if (active == 0) {
@@ -543,13 +536,8 @@ void MemCard_SetDialogActive(int active) {
     }
 }
 
-int Draw_GetBlendColor(void);
 int Menu_GetItemContextFlag(void);
-int Draw_GetBaseY(void);
-unsigned int Menu_GetActionSubmenuSelection(void);
-int MenuWidget_GetColumnLayoutMode(void);
 int Save_ClassifyPlaytime(int arg0);
-int Save_GetCurrentMapNumber(void);
 
 void Save_BuildHeader(void) {
     u16 *dst;
@@ -582,12 +570,6 @@ void Save_BuildHeader(void) {
     g_SaveRuntimeState.currentMapNumber = Save_GetCurrentMapNumber();
 }
 
-void Draw_BlendColor(int color);
-int Menu_ClampRange(int value);
-int Draw_GetBaseY(void);
-void Draw_SetBaseOffsetPosition(int x, int y);
-void Menu_SetActionSubmenuSelection(int value);
-void MenuWidget_SetColumnLayoutMode(int mode);
 void Menu_CopyPromptCodes(u8 *src);
 
 void Save_RestoreHeader(void) {
@@ -1053,7 +1035,6 @@ void Menu_InitScrollDirection(void) {
 }
 
 void Battle_SyncEquipSlots(void);
-void *Aya_GetLevelExpTable(void);
 
 void Inv_InitMaxLevelInventory(s32 arg0) {
     u16 *nextStat;

@@ -10,9 +10,10 @@
  * reaches the actor, the floor or a wall. The colour ramp and the slot word
  * live in each room's own data.
  */
-#include "pe1/room_spark_ring_burst.h"
-#include "pe1/gte.h"
+
 #include "pe1/field_texture_tables.h"
+#include "pe1/gte.h"
+#include "pe1/room_spark_ring_burst.h"
 
 static const RoomSparkSeed s_SparkRingParticleSeed = {
     { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }

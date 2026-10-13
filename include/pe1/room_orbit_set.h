@@ -2,16 +2,16 @@
 #define PE1_ROOM_ORBIT_SET_H
 
 #include "common.h"
-#include "pe1/room_fx.h"
-#include "pe1/render_object.h"
+#include "pe1/field_glow_sprite.h"
 #include "pe1/field_script_context.h"
 #include "pe1/field_sprite_state.h"
-#include "pe1/room_module.h"
-#include "pe1/room_floor.h"
-#include "pe1/field_glow_sprite.h"
 #include "pe1/gte_types.h"
-#include "pe1/psyq_libc.h"
 #include "pe1/pe_image.h"
+#include "pe1/psyq_libc.h"
+#include "pe1/render_object.h"
+#include "pe1/room_floor.h"
+#include "pe1/room_fx.h"
+#include "pe1/room_module.h"
 
 /* The orbit effect set linked by room_m186, m187, m385, m388 and m389
  * (src/overlays/room_lib/orbit_set.c): eight orbiting
@@ -60,6 +60,5 @@ int RoomEffect_OrbitSetNop6(void);
 void FieldFx_SetScriptContext(void *state);
 int *FieldFx_RegPtr(int index);
 int func_800C66C8(void *object, int message, void *state);
-int rand(void);
 
 #endif

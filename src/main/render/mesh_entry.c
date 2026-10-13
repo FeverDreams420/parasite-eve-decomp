@@ -1,8 +1,8 @@
 /* CC1_FLAGS: -fno-strength-reduce -fno-expensive-optimizations */
 
 #include "pe1/geom_state.h"
-#include "pe1/render_prim.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/render_prim.h"
 
 /* A mesh entry seen as the address its self-relative array offsets add to. */
 typedef union GeomEntryAddress {

@@ -1,12 +1,14 @@
 /* Psy-Q LIBGPU SYS.OBJ, part 9 of 11: the private DMA wait timer, timeout
  * check and status query. */
+
+#include "pe1/gpu_dma_register_window.h"
 #include "pe1/gpu_dma_timeout_state.h"
 #include "pe1/psyq_bios.h"
-#include "pe1/gpu_dma_register_window.h"
+
+#include "sys_9_externs.h"
 
 int SetIntrMask(int mask);
 
-#include "sys_9_externs.h"
 /* The status query reads and writes the GP0 port as device memory. */
 #define GPU_GP0_PORT (*(volatile unsigned int *)g_GpuGp0Ptr)
 /* Queue indices can change asynchronously; preserve ordered status reads. */

@@ -10,23 +10,25 @@
  * particles directly after each other; the script and the lists are each
  * room's own data (pe1/room_three_particle_class.h).
  */
-#include "room_lib.h"
-#include "pe1/room_three_particle_class.h"
+
 #include "common.h"
-#include "pe1/gte.h"
-#include "pe1/room_fx.h"
-#include "pe1/room_effect_state.h"
-#include "pe1/room_debris_triplet.h"
-#include "pe1/field_script_context.h"
-#include "pe1/gte_short_vector.h"
-#include "pe1/room_floor.h"
 #include "pe1/field_glow_sprite.h"
+#include "pe1/field_script_context.h"
 #include "pe1/field_sprite_state.h"
-#include "pe1/floor_polygon.h"
-#include "pe1/gte_types.h"
-#include "pe1/psyq_libc.h"
-#include "pe1/pe_image.h"
 #include "pe1/fieldfx_calls.h"
+#include "pe1/floor_polygon.h"
+#include "pe1/gte.h"
+#include "pe1/gte_short_vector.h"
+#include "pe1/gte_types.h"
+#include "pe1/pe_image.h"
+#include "pe1/psyq_libc.h"
+#include "pe1/room_debris_triplet.h"
+#include "pe1/room_effect_state.h"
+#include "pe1/room_floor.h"
+#include "pe1/room_fx.h"
+#include "pe1/room_three_particle_class.h"
+
+#include "room_lib.h"
 
 ROOMLIB_PLANT_TABLE(RoomLib_ThreeParticlePlantScript, g_RoomThreeParticleScript)
 
@@ -176,7 +178,6 @@ typedef struct RoomInitThreeStack {
 } RoomInitThreeStack;
 
 int *FieldFx_RegPtr(int index);
-int rand(void);
 int func_800C66C8(void *object, int message, void *state);
 
 /* Retail marks this function handwritten; only its COP2 windows remain ASM. */
@@ -308,7 +309,6 @@ typedef struct RoomDrawThreeStack {
 } RoomDrawThreeStack;
 
 void func_800C3098(int depth);
-void func_800C2FF0(int width, int height);
 
 void RoomLib_DrawThreeTransformParticles(void *unused, RoomFxControl *args, RoomDebrisTriplet *state) {
     RoomDrawThreeStack stack;

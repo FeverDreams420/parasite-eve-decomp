@@ -11,8 +11,9 @@
  * into each of them. The colour ramps and the comet's trail record live in
  * each room's own data.
  */
-#include "pe1/room_spark_barrage.h"
+
 #include "pe1/gte.h"
+#include "pe1/room_spark_barrage.h"
 
 static const GteRotation s_FloorRotation = { 0x400, 0, 0, 1 };
 static const GteRotation s_ZeroRotation = { 0, 0, 0, 0 };

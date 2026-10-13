@@ -13,7 +13,6 @@ extern BattleEntity *D_8009D254;
 extern unsigned int D_8009D2E8;
 
 int abs(int value);
-int Math_FixedMul(int a, int b);
 int Geo_ClipToFloorBoundary(s16 x, s16 z, void *face);
 
 #endif /* PE1_ENTITY_FLOOR_H */

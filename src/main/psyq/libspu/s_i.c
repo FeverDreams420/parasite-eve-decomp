@@ -1,4 +1,5 @@
 /* PSY-Q LIBSPU S_I (signature also matches LIBSND UT_ROFF): SpuInit. */
+
 #include "pe1/psyq_spu_internal.h"
 
 void SpuInit(void) {

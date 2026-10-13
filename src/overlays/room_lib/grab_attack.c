@@ -15,6 +15,7 @@
  * orbit centre and the trail's track are each overlay's own data
  * (pe1/room_grab_attack.h).
  */
+
 #include "pe1/room_grab_attack.h"
 
 /* The player, as the class sees it. */

@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 class DrawQueuePrimitiveTests(unittest.TestCase):
     def test_queue_function_has_no_assembly(self):
         source = find_definition('Draw_QueuePrimitive').read_text()
-        source = source.split('void Draw_QueuePrimitive(void) {',1)[1].split('\n#include',1)[0]
+        source = source.split('void Draw_QueuePrimitive(void) {',1)[1].split('\n}\n',1)[0]
         source = re.sub(r'/\*.*?\*/|//[^\n]*','',source,flags=re.S)
         self.assertNotRegex(source,r'\b(?:asm|__asm__)\b')
 

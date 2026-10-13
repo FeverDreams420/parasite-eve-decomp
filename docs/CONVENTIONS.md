@@ -233,9 +233,52 @@ name is the configured overlay name.
   (`src/overlays/room_lib/room_lib.h`, `src/main/psyq/libcd/bios_internal.h`).
   Declarations used by one file stay `static` in that file.
 - Headers include what they use, have an include guard
-  `PE1_<NAME>_H`, and contain no definitions that allocate storage.
+  `PE1_<NAME>_H`, and contain no definitions that allocate storage. Every
+  header compiles on its own: a private `*_externs.h` includes the headers
+  that declare its types, and a unit-local type it names lives in it.
 - Moving a declaration must keep its exact width, signedness, qualifiers and
   prototype. Do not "fix" an uncertain ABI while centralizing it.
+
+### Includes
+
+All includes are spelled with quotes; angle brackets are not used. A file has
+one include block at the top, after its marker block and file comment (in a
+header, after the include guard) and before any declaration:
+
+```c
+#include "common.h"
+#include "pe1/gte.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/room_fx.h"
+#include "m2c_macros.h"
+
+#include "../room_lib/room_lib.h"
+#include "m273_externs.h"
+```
+
+- `common.h` first, then the other include-path headers alphabetically: the
+  `pe1/` headers (the PsyQ `pe1/psyq_*.h` sort among them), then
+  `include_asm.h` and `m2c_macros.h`. A blank line, then the local headers
+  next to the file, alphabetically, by their path relative to it.
+- A header is spelled by its canonical path (`pe1/gte.h`, never
+  `../../../include/pe1/gte.h`) and included once per file.
+- A `.c` does not include a header after code. When the build proves an
+  include has to follow a declaration, it stays there under a one-line
+  `/* Late include: <why> */` comment. Two today: `boot/frame_loop.c`
+  includes `pe1/boot.h` after its COMMON words, whose small-data decision the
+  header's incomplete `D_8009CDA4[]` would otherwise change, and
+  `psyq/libpad/padcmd.c` includes `padcmd_externs_1.h` after
+  `_padLoadActInfo`, which calls the pointer the header prototypes without
+  arguments.
+- `.inc` files are function templates expanded in place after the `#define`s
+  that configure them; they may appear anywhere and more than once.
+- An `extern` or prototype is not repeated in a file, nor repeated from a
+  header the file includes.
+
+`make source-policy-check` runs `tools/scripts/check_includes.py`, which
+enforces the block, the order, the spelling, the duplicates and the include
+guards; `--fix` hoists, deduplicates and sorts (the build decides whether the
+result is byte-identical).
 
 ## Assembler
 

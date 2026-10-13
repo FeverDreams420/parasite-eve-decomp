@@ -1,5 +1,7 @@
 #include "common.h"
+
 #include "vlc_build_externs.h"
+
 void MdecDiag_ExpandDecoderTable(u16 *table) {
     s32 distance = 0;
     const u8 *source = D_8010CBFC;

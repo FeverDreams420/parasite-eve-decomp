@@ -1,5 +1,20 @@
 #ifndef PE1_EXT_M350
 #define PE1_EXT_M350
+
+#include "common.h"
+#include "pe1/field_actor.h"
+#include "pe1/field_color.h"
+#include "pe1/gte_short_vector.h"
+#include "pe1/gte_types.h"
+
+#include "room_m350_shared.h"
+
+typedef RoomM350Vector Vector;
+
+typedef GteMatrix Matrix;
+
+typedef struct { unsigned char index, alternate; } Entry;
+
 extern short D_800966EE[];
 extern int Inv_ScrambleGrid(void);
 extern int D_8019A414[];
@@ -26,6 +41,5 @@ extern int D_8019A81C;
 extern Vector D_8019A574[];
 extern char D_8019A594[];
 extern void FieldFx_ModelSetTexture(int,int);
-extern unsigned char D_8019A82F;
 extern int D_8019A598[];
 #endif /* PE1_EXT_M350 */

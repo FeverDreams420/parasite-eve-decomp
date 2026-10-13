@@ -1,6 +1,7 @@
 /* ASSEMBLER: GNU */
 /* GAS_VERSION: 2.7 */
 /* PSY-Q LIBGTE RATAN: ratan2. */
+
 #include "common.h"
 #include "pe1/gte_types.h"
 

@@ -2,11 +2,11 @@
 #define PE1_ROOM_LINE_BURST_H
 
 #include "common.h"
+#include "pe1/field_texture_tables.h"
 #include "pe1/gte_types.h"
 #include "pe1/render_object.h"
 #include "pe1/render_prim.h"
 #include "pe1/room_spark.h"
-#include "pe1/field_texture_tables.h"
 
 /* Room burst that spits a ring of bounce particles, draws a line from its
  * anchor to a point swept along the actor, then shrinks away. */

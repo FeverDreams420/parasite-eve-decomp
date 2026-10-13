@@ -3,9 +3,10 @@
  * DS_ready_callback, DS_start_callback, DS_sync_callback, DS_system_status,
  * DS_lastcom, DS_lastmode, DS_lastpos, DS_lastread, DS_lastseek, DS_status,
  * DS_sync, DS_ready, DS_shell_open, DS_cw_system. */
+
+#include "pe1/cdrom.h"
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_ds.h"
-#include "pe1/cdrom.h"
 
 #include "dssys_1_3_externs.h"
 

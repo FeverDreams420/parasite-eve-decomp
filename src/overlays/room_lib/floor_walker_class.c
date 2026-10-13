@@ -5,12 +5,14 @@
  * same room class table with the same seven-method layout (no-op, Init,
  * Configure, no-op, Update, ..., Release, no-op).
  */
+
 #include "common.h"
-#include "room_lib.h"
-#include "pe1/room_floor_walker.h"
 #include "pe1/field_actor.h"
 #include "pe1/fixed_point.h"
 #include "pe1/gte.h"
+#include "pe1/room_floor_walker.h"
+
+#include "room_lib.h"
 
 /* The update handler's owner: the step callback it runs first and the
  * squash timer it plays out. */

@@ -3,10 +3,10 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
-#include "pe1/render_prim.h"
-#include "pe1/draw_state.h"
 #include "pe1/bounds_check.h"
+#include "pe1/draw_state.h"
 #include "pe1/menu_sound.h"
+#include "pe1/render_prim.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */

@@ -1,15 +1,15 @@
 #ifndef PE1_SCENE_E19_2_HOMING_BURST_H
 #define PE1_SCENE_E19_2_HOMING_BURST_H
 
-#include "pe1/render_object.h"
-#include "pe1/fieldfx_callback_list.h"
-#include "pe1/gte.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
+#include "pe1/fieldfx_callback_list.h"
+#include "pe1/fieldfx_calls.h"
 #include "pe1/fieldfx_task_pool.h"
+#include "pe1/gte.h"
 #include "pe1/gte_types.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/fieldfx_calls.h"
-#include "pe1/field_texture_tables.h"
+#include "pe1/render_object.h"
 
 /* Scene e19_2 homing burst controller: anchored on the room actor, it
  * releases twenty homing particles (func_8019549C) on odd frames, then

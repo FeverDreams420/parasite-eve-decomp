@@ -10,6 +10,7 @@
  * and local labels (RshiftI, CNTISQ, RTNISQRT, VectorNormalS_entry, ...);
  * 4.0 reordered some delay slots.
  */
+
 #include "pe1/psyq_asm.h"
 
 PSYQ_ASM_OBJECT(LIBGTE, MSC02)

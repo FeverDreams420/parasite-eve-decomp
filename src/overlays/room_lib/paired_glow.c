@@ -11,15 +11,17 @@
  * colour table are room data, named in each overlay's symbol file
  * (pe1/room_paired_glow.h).
  */
+
 #include "common.h"
-#include "pe1/gte.h"
-#include "pe1/room_fx.h"
-#include "pe1/room_effect_state.h"
-#include "pe1/field_script_context.h"
-#include "room_lib.h"
-#include "render_layouts.h"
-#include "pe1/room_paired_glow.h"
 #include "pe1/field_actor.h"
+#include "pe1/field_script_context.h"
+#include "pe1/gte.h"
+#include "pe1/room_effect_state.h"
+#include "pe1/room_fx.h"
+#include "pe1/room_paired_glow.h"
+
+#include "render_layouts.h"
+#include "room_lib.h"
 
 /* Copied into the emitter transforms' stack frames. */
 static const RoomFxSeed8 s_PairedGlowSeed = {{0x00, 0x04, 0, 0, 0, 0, 0, 0}};

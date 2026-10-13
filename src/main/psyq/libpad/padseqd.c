@@ -1,14 +1,14 @@
 /* ASSEMBLER: GNU */
 /* Psy-Q LIBPAD PADSEQD.OBJ: _padInitDirSeq, func_80084B78, LIBPAD_PADSEQD_text_108, _dirFailAuto, CardObj_IsTransferActive. */
+
 #include "pe1/card_obj.h"
 #include "pe1/psyq_pad_main.h"
+
+#include "padseqd_externs.h"
 
 int func_80084B78(CardObj *obj);
 int CardObj_IsTransferActive(CardObj *obj);
 void LIBPAD_PADSEQD_text_108(CardObj *port);
-
-/* LIBPAD hook slots that _padInitDirSeq points at this object's routines. */
-#include "padseqd_externs.h"
 
 void _padInitDirSeq(void) {
     void (*response_handler)(CardObj *);

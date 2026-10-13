@@ -3,15 +3,14 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
-#include "pe1/gte_types.h"
-#include "pe1/entity_animation.h"
 #include "pe1/battle_entity_anim.h"
 #include "pe1/battle_runtime.h"
-
-#include "pe1/script_node.h"
+#include "pe1/entity_animation.h"
 #include "pe1/field_actor.h"
-#include "pe1/player_entity.h"
 #include "pe1/global_slot.h"
+#include "pe1/gte_types.h"
+#include "pe1/player_entity.h"
+#include "pe1/script_node.h"
 
 PE1_STATIC_ASSERT(sizeof(ScriptNodeTarget18) == 4, script_node_target18_view_size);
 PE1_STATIC_ASSERT(PE1_OFFSETOF(ScriptNodeTarget18, coordinate) == 0,

@@ -1,8 +1,8 @@
 #ifndef PE1_ROOM_ORBIT_SPIN_BURST_H
 #define PE1_ROOM_ORBIT_SPIN_BURST_H
 
-#include "pe1/room_spark.h"
 #include "pe1/room_orbit_trail.h"
+#include "pe1/room_spark.h"
 
 /* Rotation read back from the actor's transform and fed to the ring draw. */
 typedef union RoomOrbitSpinBurstTilt {

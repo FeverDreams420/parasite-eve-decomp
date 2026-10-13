@@ -2,14 +2,14 @@
 #define PE1_ROOM_M089_SPIN_MODEL_H
 
 #include "common.h"
-#include "pe1/gte_types.h"
-#include "pe1/render_object.h"
-#include "pe1/render_prim.h"
+#include "pe1/asset_find.h"
 #include "pe1/field_model_draw.h"
 #include "pe1/field_texture_tables.h"
-#include "pe1/scene_archive.h"
+#include "pe1/gte_types.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/asset_find.h"
+#include "pe1/render_object.h"
+#include "pe1/render_prim.h"
+#include "pe1/scene_archive.h"
 
 /* room_m089 spinning model: a glow sprite swells over the anchor while two
  * copies of a loaded model turn and shrink above it. */

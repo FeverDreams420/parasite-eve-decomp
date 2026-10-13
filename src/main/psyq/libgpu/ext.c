@@ -1,10 +1,11 @@
 /* GCC_VERSION: 2.8.1 */
 /* Psy-Q LIBGPU EXT.OBJ: LoadTPage, LoadClut, LoadClut2, SetDefDrawEnv and
  * SetDefDispEnv. */
+
 #include "common.h"
+#include "pe1/psyq_gpu.h"
 #include "pe1/psyq_tim.h"
 #include "pe1/render_prim.h"
-#include "pe1/psyq_gpu.h"
 
 int GetVideoMode(void);
 

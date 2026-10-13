@@ -1,33 +1,33 @@
-#include "pe1/gte.h"
-#include "pe1/room_fx.h"
-#include "pe1/render_object.h"
 #include "common.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/render_prim.h"
-#include "pe1/field_shape_quads.h"
-#include "pe1/gte_types.h"
-#include "pe1/field_orbit_point.h"
-#include "pe1/random.h"
-#include "pe1/field_star_fan.h"
-#include "pe1/field_ring_band.h"
-#include "pe1/field_rotated_triangle.h"
-#include "pe1/field_history_trail.h"
-#include "pe1/field_tile.h"
-#include "pe1/geom_state.h"
-#include "pe1/field_rotated_quad.h"
-#include "pe1/field_glow_line.h"
-#include "pe1/field_textured_ribbon.h"
-#include "pe1/field_pulled_sprite.h"
-#include "pe1/fieldfx_task.h"
-#include "pe1/field_actor.h"
-#include "pe1/field_owner_actor.h"
-#include "pe1/pe_image.h"
-#include "pe1/scene_assets.h"
 #include "pe1/asset_find.h"
+#include "pe1/field_actor.h"
+#include "pe1/field_effect_modules.h"
 #include "pe1/field_effect_pool.h"
 #include "pe1/field_flash_burst.h"
-#include "pe1/field_effect_modules.h"
+#include "pe1/field_glow_line.h"
+#include "pe1/field_history_trail.h"
+#include "pe1/field_orbit_point.h"
+#include "pe1/field_owner_actor.h"
+#include "pe1/field_pulled_sprite.h"
+#include "pe1/field_ring_band.h"
+#include "pe1/field_rotated_quad.h"
+#include "pe1/field_rotated_triangle.h"
+#include "pe1/field_shape_quads.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/field_star_fan.h"
+#include "pe1/field_textured_ribbon.h"
+#include "pe1/field_tile.h"
+#include "pe1/fieldfx_task.h"
+#include "pe1/geom_state.h"
+#include "pe1/gte.h"
+#include "pe1/gte_types.h"
+#include "pe1/pe_image.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/random.h"
+#include "pe1/render_object.h"
+#include "pe1/render_prim.h"
+#include "pe1/room_fx.h"
+#include "pe1/scene_assets.h"
 
 /* Matching debt: three transfer-register pins per function, plus five empty
  * pointer/memory barriers across this TU. Matrix loads are C; each GTE
@@ -122,9 +122,6 @@ typedef struct AlternatingArcPoints {
     ArcPointComponent component[8];
 } AlternatingArcPoints;
 
-int ratan2(int y, int x);
-int rsin(int angle);
-int rcos(int angle);
 int func_800C6B20(void *arg0);
 
 static inline int div4096(int value) {
@@ -172,8 +169,6 @@ void func_800CECAC(void) {
         *(short *)((char *)D_800E2850 + i * 4 + 2) = GetTPage(i, 0, 0x340, 0x100);
     }
 }
-
-int LoadImage(RECT *rect, void *pixels);
 
 
 void func_800CED3C(int index) {
@@ -492,8 +487,6 @@ void FieldFx_TransformTranslation(const GteShortVector *input,
 
     gte_ldtransmatrix(output);
 }
-
-void MulRotMatrix(GteMatrix *matrix);
 
 /* Build, optionally scale/compose, and install a rotation matrix.
  * Matching debt: three pinned word-transfer registers. Matrix reads are C;

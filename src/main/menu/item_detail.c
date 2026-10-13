@@ -3,12 +3,13 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
+#include "pe1/inventory.h"
+#include "pe1/inventory_slots.h"
 #include "pe1/menu_dialog.h"
 #include "pe1/menu_inventory.h"
-#include "pe1/text.h"
-#include "pe1/inventory.h"
+#include "pe1/menu_state.h"
 #include "pe1/menu_widget.h"
-#include "pe1/inventory_slots.h"
+#include "pe1/text.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -19,15 +20,8 @@ MenuConfirmCallback g_MenuConfirmCallback;
 int g_MenuEquipMode;
 int g_MenuItemPrimListHandles[2];
 
-void MenuWidget_RestoreSavedCurrentNode(void);
-
 void Draw_SetTextDimmed(int arg0);
 void Draw_FlushPrimList(int arg0);
-
-#include "pe1/menu_widget.h"
-#include "pe1/menu_inventory.h"
-#include "pe1/text.h"
-#include "pe1/menu_dialog.h"
 
 void Menu_CloseActionSubmenu(int arg0) {
     MenuWidget_DestroyNode(MenuWidget_FindByModeAndSelectedBase(1, arg0 + 0x29));
@@ -135,8 +129,6 @@ void Menu_StepItemDetailPanel(void) {
     child->y = panel->visible_rows - 20;
     g_MenuConfirmCallback = confirm;
 }
-
-#include "pe1/menu_state.h"
 
 /* Discard confirmation: on "yes" remove the selected item, close the
  * dialog and refresh the slot counts of the open inventory panels. */

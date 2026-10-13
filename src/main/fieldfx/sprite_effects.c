@@ -1,13 +1,13 @@
-#include "pe1/render_object.h"
-#include "pe1/fieldfx_task.h"
 #include "pe1/battle_runtime.h"
-#include "pe1/random.h"
-#include "pe1/gte.h"
-#include "pe1/psyq_gpu.h"
 #include "pe1/field_actor.h"
 #include "pe1/field_effect_pool.h"
-#include "pe1/room_ember_burst.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/fieldfx_task.h"
+#include "pe1/gte.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/random.h"
+#include "pe1/render_object.h"
+#include "pe1/room_ember_burst.h"
 
 /* One falling sprite: drifts with damped sideways speed, bounces off the
  * floor and spins through a seven-frame strip tinted by the scene track. */

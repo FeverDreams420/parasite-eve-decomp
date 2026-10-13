@@ -1,18 +1,20 @@
 #include "common.h"
-#include "pe1/scene_e18_effects.h"
-#include "pe1/fieldfx_callback_list.h"
-#include "pe1/field_sprite_draw.h"
-#include "pe1/fieldfx_task_pool.h"
 #include "pe1/asset_find.h"
 #include "pe1/field_actor.h"
-#include "pe1/scene_e18_pulse.h"
-#include "pe1/render_object.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/gte_sine_table.h"
-#include "pe1/gte.h"
+#include "pe1/field_sprite_draw.h"
 #include "pe1/field_sprite_params.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/fieldfx_callback_list.h"
+#include "pe1/fieldfx_task_pool.h"
+#include "pe1/gte.h"
+#include "pe1/gte_sine_table.h"
 #include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/render_object.h"
+#include "pe1/scene_e18_effects.h"
+#include "pe1/scene_e18_pulse.h"
+
+#include "e18_emitters_externs.h"
 
 typedef struct Effect {
     s16 field00;
@@ -49,8 +51,6 @@ typedef struct SceneE18WaveEffect {
     s16 field08, field0a, field0c, field0e;
     s16 size, wave, amplitude;
 } SceneE18WaveEffect;
-
-#include "e18_emitters_externs.h"
 
 /* Spinning shell controller: loads the shell model, then spins it around
  * the room model while it widens and rises; after frame 8 the spin and the

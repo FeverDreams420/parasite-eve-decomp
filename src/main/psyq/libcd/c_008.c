@@ -1,4 +1,5 @@
 /* Psy-Q LIBCD C_008.OBJ: init_ring_status. */
+
 #include "pe1/psyq_cd.h"
 
 void init_ring_status(int start, u32 count) {

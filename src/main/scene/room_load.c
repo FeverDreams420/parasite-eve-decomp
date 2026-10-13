@@ -3,20 +3,30 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
-#include "pe1/boot_disc_check.h"
-#include "pe1/scene_assets.h"
 #include "pe1/akao.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/cdrom.h"
-#include "pe1/scene_room.h"
-#include "pe1/disc_load_state.h"
-#include "pe1/game_state.h"
 #include "pe1/asset_tim.h"
+#include "pe1/boot_disc_check.h"
+#include "pe1/cdrom.h"
+#include "pe1/disc_load_state.h"
 #include "pe1/entity_animation.h"
-#include "pe1/pe_image.h"
-#include "pe1/save_tail_state.h"
-#include "pe1/scene_entity_textures.h"
 #include "pe1/entity_frame_update.h"
+#include "pe1/field_actor.h"
+#include "pe1/field_bg_load.h"
+#include "pe1/game_state.h"
+#include "pe1/gpu_image.h"
+#include "pe1/menu_memcard_display.h"
+#include "pe1/menu_state.h"
+#include "pe1/pe_image.h"
+#include "pe1/player_entity.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/render_prim.h"
+#include "pe1/resident_tables.h"
+#include "pe1/save_tail_state.h"
+#include "pe1/scene_assets.h"
+#include "pe1/scene_entity_textures.h"
+#include "pe1/scene_room.h"
+#include "pe1/scene_room_load.h"
+#include "pe1/scene_transition.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -32,14 +42,6 @@ typedef union SceneCopyCursor {
     Copy16a *aligned;
     u32 word;
 } SceneCopyCursor;
-
-#include "pe1/game_state.h"
-#include "pe1/pe_image.h"
-#include "pe1/resident_tables.h"
-#include "pe1/gpu_image.h"
-#include "pe1/field_bg_load.h"
-#include "pe1/menu_state.h"
-#include "pe1/scene_room_load.h"
 
 void Scene_LoadSceneData(void) {
     RECT rect;
@@ -156,14 +158,6 @@ restart4:
 }
 
 /* The adjacent field background loader shares the scene resource state. */
-#include "pe1/game_state.h"
-#include "pe1/pe_image.h"
-#include "pe1/asset_tim.h"
-#include "pe1/menu_memcard_display.h"
-#include "pe1/render_prim.h"
-#include "pe1/field_bg_load.h"
-#include "pe1/menu_state.h"
-#include "pe1/scene_room_load.h"
 
 /* Uploads every TIM listed in a scene blob's directory. */
 #define SCENE_BLOB_LOAD_TIMS(source)                                         \
@@ -694,14 +688,6 @@ int CdRom_DetectDiscChange(void) {
 
     return 0;
 }
-
-#include "common.h"
-#include "pe1/scene_transition.h"
-#include "pe1/scene_entity_textures.h"
-#include "pe1/scene_assets.h"
-#include "pe1/cdrom.h"
-#include "pe1/field_actor.h"
-#include "pe1/player_entity.h"
 
 /* Matching debt: pins, empty barriers, one retry jump, and a
  * 32-byte unused stack reserve retain retail allocation and scheduling.

@@ -8,6 +8,7 @@
  * protocol, and the templates are copied into kernel memory word by word.
  * The template's fifth word is part of the 20 bytes _patch_card2 copies.
  */
+
 #include "pe1/psyq_asm.h"
 
 PSYQ_ASM_OBJECT(LIBCARD, PATCH)

@@ -2,9 +2,10 @@
  * The seeker spark of scenes e03, e06, e07 and e27: one function, linked
  * right after the room library. Its rodata is the two colour initialisers.
  */
+
 #include "common.h"
-#include "pe1/room_spark.h"
 #include "pe1/gte.h"
+#include "pe1/room_spark.h"
 
 /* First object of the primary channel's pool: its packet flags. */
 typedef struct RoomSeekerObject {

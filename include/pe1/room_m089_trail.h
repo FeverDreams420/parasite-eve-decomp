@@ -3,8 +3,8 @@
 
 #include "common.h"
 #include "pe1/gte_types.h"
-#include "pe1/render_object.h"
 #include "pe1/psyq_gpu.h"
+#include "pe1/render_object.h"
 
 /* room_m089 spiral trail: a sprite that spirals in towards an anchor while
  * five older positions follow it as fading line segments, then flashes. */

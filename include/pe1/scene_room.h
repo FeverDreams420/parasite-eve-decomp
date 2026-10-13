@@ -2,10 +2,10 @@
 #define PE1_SCENE_ROOM_H
 
 #include "common.h"
-#include "pe1/scene_assets.h"
 #include "pe1/asset_table.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/psyq_libc.h"
+#include "pe1/scene_assets.h"
 
 /*
  * Room archive loaded by Scene_LoadRoom. The archive starts with a
@@ -112,6 +112,5 @@ extern u16 D_80094494[];
 extern unsigned int g_PeImageBaseLba;
 
 void *Script_RelocBlock(void *block);
-void FlushCache(void);
 
 #endif

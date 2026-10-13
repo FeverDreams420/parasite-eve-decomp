@@ -3,10 +3,12 @@
 /* Adapted from sozud/psy-q-decomp src/spu/s_crwa.c; see THIRD_PARTY_NOTICES.md. */
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses */
+
 #include "common.h"
 #include "pe1/psyq_spu_internal.h"
 
 #include "s_crwa_externs.h"
+
 int _spu_t(int, ...);
 int WaitEvent(int);
 

@@ -2,19 +2,19 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-#include "pe1/battle.h"
+#include "pe1/akao.h"
 #include "pe1/asset_find.h"
+#include "pe1/battle.h"
+#include "pe1/battle_cmd.h"
 #include "pe1/battle_entity_anim.h"
 #include "pe1/battle_runtime.h"
+#include "pe1/battle_update.h"
+#include "pe1/menu_inventory.h"
 #include "pe1/player_entity.h"
 #include "pe1/random.h"
-#include "pe1/save.h"
-#include "pe1/akao.h"
 #include "pe1/render_object.h"
-#include "pe1/battle_cmd.h"
-#include "pe1/menu_inventory.h"
+#include "pe1/save.h"
 #include "pe1/scene_transition.h"
-#include "pe1/battle_update.h"
 
 void Battle_DispatchSpecialAction(int arg0) {
     BattleEntity *actor;

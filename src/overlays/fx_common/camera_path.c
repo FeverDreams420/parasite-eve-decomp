@@ -1,9 +1,9 @@
-#include "fx_common_vectors.h"
-#include "pe1/gte_types.h"
 #include "pe1/asset_tim.h"
+#include "pe1/gte_types.h"
+
 #include "fx_common.h"
 #include "fx_common_setup.h"
-
+#include "fx_common_vectors.h"
 
 void func_80195D3C(void)
 {

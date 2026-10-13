@@ -3,12 +3,16 @@
 /* CC1_FLAGS: -mno-split-addresses */
 /* Psy-Q LIBGPU SYS.OBJ, part 8 of 11: the private display-buffer swap and DMA
  * queue. */
-#include "pe1/gpu_state.h"
-#include "pe1/gpu_dma_state.h"
-#include "pe1/psyq_gpu.h"
+
 #include "pe1/gpu_dma_register_window.h"
+#include "pe1/gpu_dma_state.h"
+#include "pe1/gpu_state.h"
+#include "pe1/psyq_gpu.h"
 
 #include "sys_8_externs.h"
+#include "sys_8_externs_1.h"
+#include "sys_8_externs_2.h"
+
 void Gpu_ResetDmaWaitTimer(void);
 int Gpu_DmaTimeoutCheck(void);
 int SetIntrMask(int);
@@ -80,7 +84,6 @@ queued:
     return (g_GpuDmaQueueHead - g_GpuDmaQueueTail) & 63;
 }
 
-#include "sys_8_externs_1.h"
 int SetIntrMask(int);
 
 /* LIBGPU queue drain (_exeque); the existing project name is retained.
@@ -173,8 +176,6 @@ int Gpu_SetDisplayBuffer(void) {
     return (g_GpuDmaQueueHead - g_GpuDmaQueueTail) & 63;
 }
 
-#include "sys_8_externs_2.h"
-
 int SetIntrMask(int mask);
 int Gpu_QueryStatus(int arg0);
 
@@ -215,9 +216,6 @@ int Gpu_InitDmaQueue(int mode) {
 
     return 0;
 }
-
-void Gpu_ResetDmaWaitTimer(void);
-int Gpu_DmaTimeoutCheck(void);
 
 static __inline__ unsigned int readGpuStatus(void) {
     return *(volatile u32 *)g_GpuDmaRegisterWindow.gp1;

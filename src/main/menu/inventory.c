@@ -2,26 +2,27 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-#include "pe1/menu_state.h"
-#include "pe1/inventory_queries.h"
-#include "pe1/menu_context_help.h"
+#include "common.h"
+#include "pe1/battle_cmd.h"
+#include "pe1/battle_modifiers.h"
+#include "pe1/draw_state.h"
 #include "pe1/inventory.h"
+#include "pe1/inventory_queries.h"
 #include "pe1/inventory_slots.h"
+#include "pe1/memcard.h"
+#include "pe1/menu_context_help.h"
+#include "pe1/menu_draw_list.h"
 #include "pe1/menu_equipment.h"
+#include "pe1/menu_inventory.h"
+#include "pe1/menu_item_list_input.h"
+#include "pe1/menu_item_record.h"
 #include "pe1/menu_item_rows.h"
 #include "pe1/menu_queue.h"
-#include "pe1/battle_cmd.h"
-#include "common.h"
-#include "pe1/menu_widget.h"
-#include "pe1/draw_state.h"
-#include "pe1/text.h"
-#include "pe1/battle_modifiers.h"
-#include "pe1/menu_inventory.h"
 #include "pe1/menu_sound.h"
-#include "pe1/menu_item_list_input.h"
-#include "pe1/menu_draw_list.h"
-#include "pe1/menu_item_record.h"
-#include "pe1/memcard.h"
+#include "pe1/menu_state.h"
+#include "pe1/menu_widget.h"
+#include "pe1/text.h"
+#include "m2c_macros.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -452,14 +453,10 @@ void Menu_ProcessSwapReturnIfPending(void) {
 }
 #undef NULL
 
-#include "../../../tools/m2c/m2c_macros.h"
-
 /* Item use/discard panel: creation, its input handler and the item name
  * header. Defines the selected item record and the discard flag. */
 
 #define NULL ((void *)0)
-void MenuWidget_OffsetPosition(MenuWidgetNode *node, int dx, int dy);
-#include "pe1/menu_state.h"
 ItemDataRecord *g_MenuSelectedItemData;
 void Menu_DrawEquipStatsPanel(void);
 int Menu_HandleItemInput(int arg0, int arg1);
@@ -468,8 +465,6 @@ void Menu_DrawEquipItemIcon(void);
 M2C_UNK Menu_DrawSoundEffectList();
 M2C_UNK Menu_DrawEquipItemDetailPanel();
 int g_MenuItemDiscardMode;
-void Inv_SetActiveList(int mode, int *slot);
-u8 *Text_LookupTableC(unsigned int index);
 void Draw_PrintRawText(u8 *arg0);
 
 void Menu_CreateItemUsePanel(int itemId) {
@@ -606,7 +601,6 @@ void Menu_DrawActionOptionRow(int index);
 void Menu_SoundTestSelect(int index);
 void Menu_DrawActionCodeItem(int index);
 void Draw_SetTextDimmed(int value);
-int Battle_GetStateFlag1(void);
 void Battle_DrawActiveStatus(void);
 
 void Menu_DrawItemList(MenuWidgetNode *node) {
@@ -697,11 +691,7 @@ void Menu_DrawUsableItemActionList2(MenuWidgetNode *node) {
     MenuWidget_DrawList(node, Menu_DrawActionCodeItem);
 }
 
-int Inv_RestoreSelection(unsigned int index);
-int Inv_GetActiveListItemType(int index);
-int Inv_IsActiveListOverrideSelected(void);
 void Inv_BuildFilteredPackedListExcluding(int mask, int excluded);
-int Inv_GetPackedListCount(void);
 void Menu_HandleInput(int index);
 
 void Menu_DrawEquipSelectionList(MenuWidgetNode *node) {

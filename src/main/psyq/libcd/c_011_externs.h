@@ -1,6 +1,9 @@
 #ifndef PSYQ_LIBCD_STCDINTERRUPT_EXTERNS_H
 #define PSYQ_LIBCD_STCDINTERRUPT_EXTERNS_H
 
+#include "common.h"
+#include "pe1/psyq_cd.h"
+
 extern volatile u8 *D_8009B334;
 extern volatile u8 *D_8009B338;
 extern volatile u32 *D_8009B33C;

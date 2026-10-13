@@ -1,4 +1,5 @@
 /* Psy-Q LIBCD C_007.OBJ: StFreeRing. */
+
 #include "pe1/psyq_cd.h"
 
 u32 StFreeRing(u32 *ptr) {

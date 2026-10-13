@@ -2,9 +2,9 @@
 #define PE1_MENU_BACKGROUND_H
 
 #include "common.h"
+#include "pe1/display_env.h"
 #include "pe1/game_state.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/display_env.h"
 
 extern int g_MenuSaveBgFadeState; /* Fade state. */
 extern int g_MenuSaveBgFadeHeight; /* Number of 256-pixel blocks. */

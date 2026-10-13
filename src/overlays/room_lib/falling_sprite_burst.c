@@ -8,9 +8,10 @@
  * object, compiled into each of them. The five sprite records and the spawn
  * tables live in each room's own data.
  */
-#include "pe1/room_falling_burst.h"
+
 #include "pe1/field_actor.h"
 #include "pe1/render_object.h"
+#include "pe1/room_falling_burst.h"
 #include "pe1/room_rearm_timer.h"
 
 static const RoomFxSeed8 s_FallingSpritePositionSeed = {

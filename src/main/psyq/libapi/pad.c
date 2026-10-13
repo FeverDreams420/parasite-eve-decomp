@@ -3,15 +3,11 @@
  * StartPAD, StopPAD, Sys_SetInterruptHandler, RemovePatchPad and the two
  * interrupt handlers it installs. PAD_init and InitPAD instantiate
  * Pad_InitCommon.inc. */
+
 #include "common.h"
 #include "pe1/pad_internal.h"
 #include "pe1/psyq_bios.h"
 #include "pe1/psyq_pad_main.h"
-
-typedef struct PadWork {
-    char pad[0xA];
-    s16 unk_a;
-} PadWork;
 
 #include "pad_externs.h"
 

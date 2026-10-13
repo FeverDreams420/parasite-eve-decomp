@@ -2,8 +2,8 @@
 #define PE1_RENDER_ANIMATION_FRAME_H
 
 #include "common.h"
-#include "pe1/render_anim_position.h"
 #include "pe1/asset_find.h"
+#include "pe1/render_anim_position.h"
 #include "pe1/render_buffers.h"
 
 typedef struct RenderAnimFrameData {

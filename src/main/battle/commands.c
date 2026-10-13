@@ -2,19 +2,19 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-#include "pe1/battle_cmd.h"
 #include "common.h"
-#include "pe1/inventory.h"
-#include "pe1/inventory_slots.h"
+#include "pe1/aya.h"
+#include "pe1/battle.h"
+#include "pe1/battle_cmd.h"
+#include "pe1/battle_entity_anim.h"
 #include "pe1/battle_modifiers.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/inventory.h"
+#include "pe1/inventory_queries.h"
+#include "pe1/inventory_slots.h"
 #include "pe1/menu_state.h"
 #include "pe1/menu_widget.h"
-#include "pe1/battle_entity_anim.h"
-#include "pe1/battle.h"
-#include "pe1/inventory_queries.h"
-#include "pe1/aya.h"
 #include "pe1/player_entity.h"
-#include "pe1/battle_runtime.h"
 #include "pe1/weapon_list_output.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
@@ -126,7 +126,6 @@ void BattleCmd_UndoAllPending(void) {
 /* Active-list commands from the item menus and the pending command result
  * (g_MenuCommandResult) that the menu loop polls and clears. */
 
-#include "pe1/battle_modifiers.h"
 void Battle_DispatchSpecialAction(int);
 
 void Inv_SetActiveList(int mode, int *slot) {

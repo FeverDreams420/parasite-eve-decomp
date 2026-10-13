@@ -1,8 +1,8 @@
 #include "common.h"
-#include "pe1/gte.h"
-#include "pe1/render_prim.h"
 #include "pe1/field_textured_model.h"
+#include "pe1/gte.h"
 #include "pe1/render_object.h"
+#include "pe1/render_prim.h"
 
 /* Textured field models: UV scrolling, the texture page, CLUT,
  * semi-transparency and depth state the draw reads, the colour-table

@@ -1,4 +1,5 @@
 /* Psy-Q LIBCD C_002.OBJ: StClearRing. */
+
 #include "pe1/psyq_cd.h"
 
 void StClearRing(void) {

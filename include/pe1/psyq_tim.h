@@ -1,6 +1,7 @@
 #ifndef PE1_PSYQ_TIM_H
 #define PE1_PSYQ_TIM_H
 
+#include "common.h"
 #include "pe1/psyq_gpu.h"
 
 /* The length includes this block's length word, rectangle and pixel bytes;
@@ -20,7 +21,5 @@ typedef struct TimFile {
     int flags;
     TimBlock first_block;
 } TimFile;
-
-int LoadImage(RECT *rect, void *pixels);
 
 #endif

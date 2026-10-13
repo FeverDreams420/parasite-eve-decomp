@@ -1,6 +1,11 @@
 #ifndef PE1_EXT_M318
 #define PE1_EXT_M318
-extern FieldActor *g_FieldActorListHead;
+
+#include "common.h"
+#include "pe1/battle.h"
+#include "pe1/field_actor.h"
+#include "pe1/field_color.h"
+
 extern struct BattleEntity *D_8009D254;
 extern char D_8018F1CC[];
 extern char D_80199464[];

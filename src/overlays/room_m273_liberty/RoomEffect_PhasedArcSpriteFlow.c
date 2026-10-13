@@ -1,12 +1,20 @@
-#include "room_m273_effects.h"
+#include "common.h"
 #include "pe1/field_sprite_draw.h"
+#include "pe1/fieldfx_callback_list.h"
 #include "pe1/fieldfx_task_pool.h"
+#include "pe1/gte_sine_table.h"
+#include "pe1/scene_fx.h"
+
+#include "room_m273_arc.h"
+#include "room_m273_effects.h"
 #include "room_m273_sweep.h"
+#include "RoomEffect_PhasedArcSpriteFlow_externs.h"
+#include "RoomEffect_PhasedArcSpriteFlow_externs_1.h"
+#include "RoomEffect_PhasedArcSpriteFlow_externs_2.h"
+#include "RoomEffect_PhasedArcSpriteFlow_externs_3.h"
 
 typedef RoomM273PointerPoolEffect Effect;
 typedef struct { unsigned char unknown[58]; unsigned short value; } Object;
-#include "pe1/gte_sine_table.h"
-#include "RoomEffect_PhasedArcSpriteFlow_externs.h"
 
 int func_8019A4CC(int mode,Effect *effect) {
     GteRotation parameters;
@@ -31,13 +39,6 @@ int func_8019A4CC(int mode,Effect *effect) {
 }
 
 /* Arc spawn-state helper, callback, and pool controller. */
-#include "common.h"
-#include "room_m273_arc.h"
-#include "pe1/scene_fx.h"
-
-#include "pe1/gte_sine_table.h"
-#include "RoomEffect_PhasedArcSpriteFlow_externs_1.h"
-
 
 void *func_8019A5D4(int unused, int value, int flag) {
     D_8019AF56 = value;
@@ -49,13 +50,6 @@ void *func_8019A5D4(int unused, int value, int flag) {
 
     return &D_8019AEFC;
 }
-
-#include "common.h"
-#include "pe1/fieldfx_callback_list.h"
-
-#include "room_m273_effects.h"
-#include "RoomEffect_PhasedArcSpriteFlow_externs_2.h"
-
 
 s32 func_8019A628(s32 arg0) {
     char *obj;
@@ -88,8 +82,6 @@ s32 func_8019A628(s32 arg0) {
 
     return 0;
 }
-
-#include "RoomEffect_PhasedArcSpriteFlow_externs_3.h"
 
 short *func_8019A70C(void *arg0, short arg1) {
     short *ptr = &D_8019AF9A;

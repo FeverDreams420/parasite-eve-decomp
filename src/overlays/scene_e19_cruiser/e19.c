@@ -1,30 +1,32 @@
 #include "common.h"
-#include "pe1/scene_grab_trigger.h"
-#include "pe1/scene_grab_head.h"
-#include "pe1/scene_e19_selection.h"
-#include "scene_e19_shared.h"
-#include "pe1/geom_state.h"
-#include "pe1/field_sprite_params.h"
-#include "pe1/gte_types.h"
-#include "pe1/field_sprite_draw.h"
-#include "pe1/field_texture_tables.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/scene_e19_blast.h"
-#include "pe1/render_object.h"
-#include "pe1/gte.h"
-#include "pe1/fieldfx_task.h"
 #include "pe1/field_actor.h"
-#include "pe1/random.h"
-#include "pe1/room_floor.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_sprite_params.h"
+#include "pe1/field_texture_tables.h"
 #include "pe1/fieldfx_calls.h"
+#include "pe1/fieldfx_task.h"
+#include "pe1/geom_state.h"
+#include "pe1/gte.h"
+#include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/random.h"
+#include "pe1/render_object.h"
+#include "pe1/room_floor.h"
+#include "pe1/room_glint_ribbon.h"
+#include "pe1/room_orbit_spin_burst.h"
+#include "pe1/room_orbit_trail.h"
+#include "pe1/room_spark.h"
+#include "pe1/scene_e19_2_ember.h"
 #include "pe1/scene_e19_2_homing_burst.h"
 #include "pe1/scene_e19_2_spin_ray.h"
-#include "pe1/scene_e19_2_ember.h"
 #include "pe1/scene_e19_2_twin_glow.h"
-#include "pe1/room_spark.h"
-#include "pe1/room_orbit_trail.h"
-#include "pe1/room_orbit_spin_burst.h"
-#include "pe1/room_glint_ribbon.h"
+#include "pe1/scene_e19_blast.h"
+#include "pe1/scene_e19_selection.h"
+#include "pe1/scene_grab_head.h"
+#include "pe1/scene_grab_trigger.h"
+
+#include "e19_externs.h"
+#include "scene_e19_shared.h"
 #include "scene_e19_state.h"
 
 typedef struct SceneE19FrameGateLink {
@@ -54,8 +56,6 @@ typedef struct SceneE19HomingParticle {
     s16 state;
     s16 timer;
 } SceneE19HomingParticle;
-
-#include "e19_externs.h"
 
 void RoomLib_GrabOnApproach(SceneGrabHead *head) {
     SceneGrabTrigger *trigger = (SceneGrabTrigger *)head;

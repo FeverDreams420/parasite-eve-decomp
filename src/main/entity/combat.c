@@ -3,15 +3,15 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
-#include "pe1/player_entity.h"
-#include "pe1/battle.h"
-#include "pe1/entity_animation.h"
 #include "pe1/asset_find.h"
+#include "pe1/battle.h"
 #include "pe1/battle_runtime.h"
+#include "pe1/entity_animation.h"
+#include "pe1/game_timers.h"
 #include "pe1/inventory.h"
 #include "pe1/item_ids.h"
 #include "pe1/menu_flags.h"
-#include "pe1/game_timers.h"
+#include "pe1/player_entity.h"
 #include "pe1/render_prim.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached

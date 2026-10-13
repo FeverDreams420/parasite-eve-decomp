@@ -3,27 +3,29 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
+#include "pe1/draw_state.h"
+#include "pe1/game_state.h"
+#include "pe1/inventory.h"
+#include "pe1/inventory_queries.h"
 #include "pe1/inventory_slots.h"
 #include "pe1/memcard.h"
 #include "pe1/memcard_save_state.h"
-#include "pe1/menu_dialog.h"
+#include "pe1/menu_confirm_callback.h"
 #include "pe1/menu_context_help.h"
+#include "pe1/menu_dialog.h"
+#include "pe1/menu_flags.h"
 #include "pe1/menu_inventory.h"
+#include "pe1/menu_item_rows.h"
+#include "pe1/Menu_MemCardProgress_externs.h"
 #include "pe1/menu_notification_dialog.h"
 #include "pe1/menu_queue.h"
 #include "pe1/menu_sound.h"
-#include "pe1/menu_widget.h"
-#include "pe1/text.h"
-#include "pe1/menu_flags.h"
-#include "pe1/menu_confirm_callback.h"
-#include "pe1/inventory_queries.h"
-#include "pe1/save.h"
-#include "pe1/draw_state.h"
 #include "pe1/menu_state.h"
+#include "pe1/menu_widget.h"
+#include "pe1/save.h"
+#include "pe1/text.h"
 #include "include_asm.h"
-#include "pe1/game_state.h"
-#include "pe1/menu_item_rows.h"
-#include "pe1/inventory.h"
+#include "m2c_macros.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -745,7 +747,6 @@ int MemCard_GetActivePort(void);
 void Menu_CreateNotificationDialog(int arg0, int arg1);
 void MemCard_ClearActivePrompt(void);
 
-#include "pe1/Menu_MemCardProgress_externs.h"
 /* Separate compiler identities preserve address reloads across text calls. */
 
 void Menu_CreateMemCardProgressWidget(int arg0) {
@@ -872,7 +873,6 @@ void Menu_NavToSaveConfirmDialog(void) {
 }
 
 #define NULL ((void *)0)
-#include "../../../tools/m2c/m2c_macros.h"
 
 s32 Inv_GetPackedListCursor(void);
 void Menu_StepInventoryRoot(s32 arg0, s32 arg1, s32 arg2);

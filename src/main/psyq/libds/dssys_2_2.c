@@ -2,15 +2,17 @@
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses -fno-schedule-insns2 */
 /* Psy-Q LIBDS DSSYS_2.OBJ, part 2 of 3: DsInit, DsReset. */
+
+#include "pe1/cdrom.h"
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_ds.h"
-#include "pe1/cdrom.h"
 #include "pe1/psyq_ds_queue.h"
+
+#include "dssys_2_2_externs.h"
 
 /* These adjacent retail functions share DS queue reset state:
  * DsInit at 0x8007EC14 and DsReset at
  * 0x8007ED58. Their combined GNU 2.8.1 object preserves both code ranges. */
-#include "dssys_2_2_externs.h"
 int DsInit(void) {
     int i, j, k, offset;
     CdQueuedCmdSlot *state;

@@ -1,8 +1,8 @@
 #include "common.h"
-#include "pe1/fieldfx_state.h"
-#include "pe1/psyq_bios.h"
-#include "pe1/fieldfx_task_pool.h"
 #include "pe1/field_actor.h"
+#include "pe1/fieldfx_state.h"
+#include "pe1/fieldfx_task_pool.h"
+#include "pe1/psyq_bios.h"
 
 /* Field engine objects: clearing an object's script state and dispatch
  * slots, and the two per-frame passes over the 0x40 dispatch slots. */

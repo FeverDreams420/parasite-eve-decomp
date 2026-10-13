@@ -2,11 +2,11 @@
 #define PE1_SCENE_RING_SPRITES_H
 
 #include "common.h"
-#include "pe1/gte_types.h"
-#include "pe1/field_ring_geometry.h"
-#include "pe1/field_sprite_state.h"
 #include "pe1/field_glow_sprite.h"
+#include "pe1/field_ring_geometry.h"
 #include "pe1/field_script_context.h"
+#include "pe1/field_sprite_state.h"
+#include "pe1/gte_types.h"
 #include "pe1/psyq_libc.h"
 
 /* Scene e08 ring sprites: an animated flash sprite (first 12 ticks), a

@@ -2,26 +2,26 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
+#include "pe1/aya.h"
 #include "pe1/draw_state.h"
 #include "pe1/draw_wipe_rect.h"
-#include "pe1/menu_draw_list.h"
-#include "pe1/menu_item_rows.h"
 #include "pe1/inventory.h"
+#include "pe1/inventory_slots.h"
+#include "pe1/menu_bonus_stats.h"
+#include "pe1/menu_confirm_callback.h"
+#include "pe1/menu_context_help.h"
+#include "pe1/menu_dialog.h"
+#include "pe1/menu_draw_list.h"
+#include "pe1/menu_equipment.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/menu_item_record.h"
-#include "pe1/text.h"
-#include "pe1/menu_equipment.h"
-#include "pe1/menu_confirm_callback.h"
-#include "pe1/menu_dialog.h"
-#include "pe1/menu_notification_dialog.h"
-#include "pe1/menu_widget.h"
+#include "pe1/menu_item_rows.h"
 #include "pe1/menu_memcard_display.h"
-#include "pe1/menu_state.h"
-#include "pe1/aya.h"
-#include "pe1/inventory_slots.h"
-#include "pe1/menu_context_help.h"
-#include "pe1/menu_bonus_stats.h"
+#include "pe1/menu_notification_dialog.h"
 #include "pe1/menu_sound.h"
+#include "pe1/menu_state.h"
+#include "pe1/menu_widget.h"
+#include "pe1/text.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -55,7 +55,6 @@ void Menu_DrawSaveSlot2Item(int index);
 void Menu_DrawSaveSlot3Item(int index);
 void Menu_DrawSoundEffectItem(int index);
 void Menu_DrawActionCodeItem(int index);
-void Draw_SetTextDimmed(int dimmed);
 
 void Menu_DrawMainMenuItem(int arg0);
 
@@ -201,11 +200,7 @@ int Inv_GetPackedListItem(int arg0);
 void Menu_CloseContextHelpPanel(void);
 int Inv_GetActiveListItem(int arg0);
 
-void Draw_StatePush(void);
-void Draw_StatePop(void);
 void Draw_SetColor(int arg0);
-void Draw_PrintNumberWidth3Unk(int value);
-int Draw_GetBlendColor(void);
 
 void Menu_ItemUseAction(struct MenuWidgetNode *arg0, int arg1) {
     int saved;
@@ -348,7 +343,6 @@ void Menu_DrawSkillItem(int arg0) {
 int g_MenuItemContextFlag;
 MenuWidgetNode *g_MenuActiveWidget;
 
-int Battle_IsActiveWrapped(void);
 void Draw_SetTextDimmed(int value);
 
 void Menu_DrawItemSlot(int arg0) {
@@ -450,10 +444,7 @@ int g_MenuLayoutLocked;
 MenuWidgetNode *g_MenuActiveWidget;
 unsigned char *g_MenuItemIconGlyphTable;
 void Draw_PrintNumberWidth2(int arg0);
-void Draw_StatePush(void);
-void Draw_StatePop(void);
 void Draw_PrintNumberWidth2Unk(int);
-void Draw_PrintNumberWidth3Unk(int value);
 void Menu_UpdateStatBarAnimation(int);
 void Draw_AllocTexturedQuad(int);
 void Inv_ShowItemDescriptionPanel(void);

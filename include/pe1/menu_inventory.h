@@ -1,12 +1,11 @@
 #ifndef PE1_MENU_INVENTORY_H
 #define PE1_MENU_INVENTORY_H
 
-#include "pe1/menu_state.h"
+#include "pe1/bounds_check.h"
 #include "pe1/menu_sound.h"
-
+#include "pe1/menu_state.h"
 #include "pe1/menu_widget.h"
 
-#include "pe1/bounds_check.h"
 void Inv_OpenAyaItemList(unsigned int mode);
 
 void MenuWidget_RestoreSavedCurrentNode(void);

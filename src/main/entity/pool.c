@@ -3,8 +3,8 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
-#include "pe1/game_state.h"
 #include "pe1/entity_allocation.h"
+#include "pe1/game_state.h"
 #include "pe1/player_entity.h"
 #include "pe1/script_node.h"
 

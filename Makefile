@@ -133,6 +133,7 @@ check-sources:
 source-policy-check:
 	@$(PY) tools/scripts/check_source_policy.py
 	@$(PY) tools/scripts/check_flag_markers.py
+	@$(PY) tools/scripts/check_includes.py
 
 # Structural checks suitable for a fresh public clone without retail assets.
 # Byte matching is verified by the full build workflow; the legacy unit-test

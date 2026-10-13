@@ -4,8 +4,8 @@
 #include "common.h"
 #include "pe1/field_actor.h"
 #include "pe1/field_actor_script_state.h"
-#include "pe1/render_object.h"
 #include "pe1/player_entity.h"
+#include "pe1/render_object.h"
 
 /* Scene e19 grab sequence: keeps the player locked to the selection matrix
  * while the partner actor plays its animation and fires events on frame

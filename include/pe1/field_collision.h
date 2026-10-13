@@ -2,6 +2,8 @@
 #define PE1_FIELD_COLLISION_H
 
 #include "common.h"
+#include "pe1/collision_database.h"
+#include "pe1/floor_edge_point.h"
 #include "pe1/floor_polygon.h"
 #include "pe1/gte_types.h"
 
@@ -35,7 +37,6 @@ typedef struct RampEdge {
     s32 directionZ;
 } RampEdge;
 
-#include "pe1/floor_edge_point.h"
 extern RampEdge *g_SceneDataTable2;
 extern u16 g_FieldCollisionTriIndex;
 void Entity_SlideOnRamp(struct BattleEntity *entity);
@@ -58,8 +59,6 @@ void Entity_SlideOnWall(struct BattleEntity *actor, const PolygonVertex *vertice
 /* The retail caller passes an argument; this routine uses D_8009D254. */
 struct FieldActor;
 void Entity_ApplyCollisionResponse(struct FieldActor *player);
-
-#include "pe1/collision_database.h"
 
 /* Vertex `index` of the active table, addressed as retail does. */
 #define COLLISION_VERTEX(address, index, type) \

@@ -1,6 +1,10 @@
 #ifndef PSYQ_LIBPAD_PADPORTD_EXTERNS_H
 #define PSYQ_LIBPAD_PADPORTD_EXTERNS_H
 
+#include "common.h"
+#include "pe1/card_obj.h"
+#include "pe1/memcard_state.h"
+
 extern CardObj D_800A5B70[];
 extern u8 D_800A5AE0[];
 extern u8 D_800A5B28[];

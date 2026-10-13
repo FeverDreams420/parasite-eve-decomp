@@ -9,7 +9,6 @@ extern int g_MemCardServiceReady, D_8009B768;
 extern char D_800A5AB0[];
 extern MemCardInterruptRegisters *D_8009B784;
 extern MemCardSioRegisters *D_8009B788;
-extern CardObj *g_MemCardObjArray;
 extern void (*g_MemCardObjResetFn)(CardObj *);
 /* Per-port idle counters that PadEnableCom and the VSync timer age. */
 extern int D_800A5AC0[2];

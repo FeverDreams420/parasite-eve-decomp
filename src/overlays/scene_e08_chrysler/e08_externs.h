@@ -1,5 +1,16 @@
 #ifndef PE1_EXT_E08
 #define PE1_EXT_E08
+
+#include "common.h"
+#include "pe1/battle.h"
+#include "pe1/field_actor.h"
+#include "pe1/field_glow_sprite.h"
+#include "pe1/room_fx.h"
+
+typedef struct {
+    char bytes[4];
+} SceneE08FourBytes;
+
 extern FieldGlowSprite D_801994A8;
 extern FieldGlowSprite D_80199670;
 extern RoomFxSeed8 D_8018EFF4;
@@ -57,11 +68,7 @@ extern u8 D_8019949A;
 extern u8 D_8019949C;
 extern u8 D_8019949D;
 extern u8 D_8019949E;
-extern FieldGlowSprite D_80199580;
 extern RoomFxVec4 D_8018F050;
-extern u8 D_80199560, D_80199561, D_80199562;
-extern s16 D_8019956A;
 extern u8 D_80198AD4;
-extern FieldGlowSprite D_80199570;
 extern s16 D_801994D2;
 #endif /* PE1_EXT_E08 */

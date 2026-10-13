@@ -2,18 +2,19 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-#include "pe1/battle_modifiers.h"
-#include "pe1/inventory_slots.h"
-#include "pe1/random.h"
+#include "common.h"
 #include "pe1/aya.h"
+#include "pe1/battle_cmd.h"
+#include "pe1/battle_modifiers.h"
+#include "pe1/inventory.h"
+#include "pe1/inventory_slots.h"
 #include "pe1/inventory_state.h"
 #include "pe1/menu_dialog.h"
-#include "pe1/text.h"
-#include "pe1/menu_state.h"
-#include "common.h"
-#include "pe1/inventory.h"
-#include "pe1/battle_cmd.h"
 #include "pe1/menu_inventory.h"
+#include "pe1/menu_state.h"
+#include "pe1/random.h"
+#include "pe1/text.h"
+#include "m2c_macros.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -365,8 +366,6 @@ void Inv_ClearSelectionBitset(void) {
     }
 }
 
-#include "../../../tools/m2c/m2c_macros.h"
-
 /* Item selection masks, ammunition transfer between compared weapons, the
  * weapon comparison panel and the per-slot item actions and active-list controller. Contiguous at
  * 0x80055760 and joined by the comparison records and list state. */
@@ -376,7 +375,6 @@ s16 *g_InvActiveListOverride;
 s32 g_InvOverrideSlotLimit;
 int g_InvActiveListCount;
 int g_MenuBattleEquipMode;
-void *Text_LookupTable8(unsigned int index);
 void Menu_DrawSlotRow(ItemDataRecord *entry, u8 *text);
 
 static inline ItemDataRecord *LookupActiveItem(int index) {

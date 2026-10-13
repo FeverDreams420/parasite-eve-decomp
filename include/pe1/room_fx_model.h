@@ -2,8 +2,8 @@
 #define PE1_ROOM_FX_MODEL_H
 
 #include "common.h"
-#include "pe1/gte_types.h"
 #include "pe1/entity_frame_update.h"
+#include "pe1/gte_types.h"
 
 struct RoomFxModelOwner;
 

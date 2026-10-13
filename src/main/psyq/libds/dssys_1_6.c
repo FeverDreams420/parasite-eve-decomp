@@ -1,10 +1,10 @@
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses -fno-schedule-insns */
 /* Psy-Q LIBDS DSSYS_1.OBJ, part 6 of 10: LIBDS_DSSYS_1_text_E10. */
+
 #include "common.h"
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_ds.h"
-
 
 void LIBDS_DSSYS_1_text_E10(int event, u8 *data) {
     int event_reg;

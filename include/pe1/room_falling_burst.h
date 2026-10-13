@@ -2,15 +2,15 @@
 #define PE1_ROOM_FALLING_BURST_H
 
 #include "common.h"
-#include "pe1/room_fx.h"
-#include "pe1/field_script_context.h"
-#include "pe1/room_module.h"
-#include "pe1/field_sprite_state.h"
-#include "pe1/room_floor.h"
 #include "pe1/field_glow_sprite.h"
-#include "pe1/psyq_libc.h"
-#include "pe1/pe_image.h"
+#include "pe1/field_script_context.h"
+#include "pe1/field_sprite_state.h"
 #include "pe1/fieldfx_calls.h"
+#include "pe1/pe_image.h"
+#include "pe1/psyq_libc.h"
+#include "pe1/room_floor.h"
+#include "pe1/room_fx.h"
+#include "pe1/room_module.h"
 
 /* The falling sprite burst linked by ten hospital and Chrysler rooms
  * (src/overlays/room_lib/falling_sprite_burst.c): a sprite and its
@@ -110,6 +110,5 @@ extern RoomFxSpritePacket g_RoomFallingBurstParticle;
 
 int *FieldFx_RegPtr(int index);
 int *FieldFx_VarPtr(int index);
-int rand(void);
 
 #endif

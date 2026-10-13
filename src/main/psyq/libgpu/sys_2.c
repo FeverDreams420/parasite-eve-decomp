@@ -1,9 +1,12 @@
 /* ASSEMBLER: GNU */
 /* Psy-Q LIBGPU SYS.OBJ, part 2 of 11: PutDispEnv. */
+
 #include "common.h"
 #include "pe1/gpu_state.h"
 #include "pe1/psyq_gpu.h"
+
 #include "sys_2_externs.h"
+
 int GetVideoMode(void);
 void *memcpy(void *, const void *, unsigned);
 #define SIGNED_HALF(p) ((short)*(volatile unsigned short *)(p))

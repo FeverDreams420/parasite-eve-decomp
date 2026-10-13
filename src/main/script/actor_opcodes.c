@@ -3,44 +3,45 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
-#include "pe1/memcard.h"
-#include "pe1/player_entity.h"
-#include "pe1/script_node.h"
-#include "pe1/game_state_types.h"
-#include "pe1/scene_room_load.h"
-#include "pe1/field_actor.h"
-#include "pe1/global_slot.h"
-#include "pe1/gte_types.h"
-#include "pe1/game_state.h"
-#include "pe1/battle_runtime.h"
-#include "pe1/battle_entity_anim.h"
-#include "pe1/battle_start.h"
-#include "pe1/cdrom_buffers.h"
-#include "pe1/cdrom.h"
-#include "pe1/field_collision.h"
-#include "pe1/psyq_bios.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/script_state.h"
-#include "pe1/render_setup.h"
-#include "pe1/entity_frame_update.h"
-#include "pe1/render_lighting.h"
-#include "pe1/gte.h"
-#include "pe1/boot_disc_check.h"
-#include "pe1/geom_state.h"
-#include "pe1/map_selection.h"
-#include "pe1/font.h"
-#include "pe1/scene_dispatch.h"
+#include "pe1/akao.h"
+#include "pe1/akao/commands.h"
+#include "pe1/asset_find.h"
 #include "pe1/asset_table.h"
-#include "pe1/scene_transition.h"
-#include "pe1/psyq_cd.h"
+#include "pe1/battle_entity_anim.h"
+#include "pe1/battle_level_up.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/battle_start.h"
+#include "pe1/boot_disc_check.h"
+#include "pe1/cdrom.h"
+#include "pe1/cdrom_buffers.h"
+#include "pe1/entity_frame_update.h"
+#include "pe1/field_actor.h"
+#include "pe1/field_collision.h"
+#include "pe1/font.h"
+#include "pe1/game_audio_state.h"
+#include "pe1/game_state.h"
+#include "pe1/game_state_types.h"
+#include "pe1/geom_state.h"
+#include "pe1/global_slot.h"
+#include "pe1/gte.h"
+#include "pe1/gte_types.h"
+#include "pe1/map_selection.h"
+#include "pe1/memcard.h"
+#include "pe1/menu_dialog.h"
 #include "pe1/menu_inventory.h"
 #include "pe1/menu_item_record.h"
-#include "pe1/game_audio_state.h"
-#include "pe1/akao/commands.h"
-#include "pe1/akao.h"
-#include "pe1/asset_find.h"
-#include "pe1/battle_level_up.h"
-#include "pe1/menu_dialog.h"
+#include "pe1/player_entity.h"
+#include "pe1/psyq_bios.h"
+#include "pe1/psyq_cd.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/render_lighting.h"
+#include "pe1/render_setup.h"
+#include "pe1/scene_dispatch.h"
+#include "pe1/scene_room_load.h"
+#include "pe1/scene_transition.h"
+#include "pe1/script_node.h"
+#include "pe1/script_state.h"
+#include "m2c_macros.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -51,8 +52,6 @@ int g_SceneDataTable0;
 
 /* Adjacent field-actor query and distance routines share one compiled unit. */
 #define NULL ((void *)0)
-#include "pe1/field_actor.h"
-#include "pe1/player_entity.h"
 
 /* Script op: look up an actor by (type id, sub id) script args and read one
  * of its fields into the out arg. args = script argument pointer array:
@@ -203,8 +202,6 @@ s32 Entity_GetDistanceComponents(s32 *args[]) {
     return 1;
 }
 #undef NULL
-
-#include "../../../tools/m2c/m2c_macros.h"
 
 #define NULL ((void *)0)
 s32 g_SceneDataTable0;
@@ -913,7 +910,6 @@ s32 Script_GetAngleToEntity(s32 *args[]) {
     return 1;
 }
 
-int Menu_GetEquipSlotStateOrIndex(void);
 int Draw_PackPrimColor(int start, int end);
 
 int Scene_SelectMapById(int **args) {

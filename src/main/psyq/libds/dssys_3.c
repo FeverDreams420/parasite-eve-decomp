@@ -1,7 +1,8 @@
 /* ASSEMBLER: GNU */
 /* Psy-Q LIBDS DSSYS_3.OBJ: DsMix, DsGetSector, DsGetSector2, DsDataSync, DsIntToPos, DsPosToInt, DsSetDebug, DsLastPos. */
-#include "pe1/psyq_cd.h"
+
 #include "pe1/cdrom.h"
+#include "pe1/psyq_cd.h"
 
 int DsMix(CdlATV *volume) {
     CD_vol(volume);

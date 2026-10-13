@@ -4,6 +4,7 @@
  * RoomLib_RegisterDrawList and RoomLib_RegisterPairedTables they act
  * whatever the field engine's status.
  */
+
 #include "../room_lib/room_lib.h"
 #include "scene_e08_modules.h"
 

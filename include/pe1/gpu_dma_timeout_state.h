@@ -1,5 +1,6 @@
 #ifndef PE1_GPU_DMA_TIMEOUT_STATE_H
 #define PE1_GPU_DMA_TIMEOUT_STATE_H
+
 #include "pe1/psyq_gpu.h"
 
 extern int g_GpuDmaTimeoutDeadline;

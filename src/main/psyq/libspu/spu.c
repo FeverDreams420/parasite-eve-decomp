@@ -1,8 +1,11 @@
 /* ASSEMBLER: GNU */
 /* PSY-Q LIBSPU SPU.OBJ, part 1 of 3: initialization, programmed I/O and DMA interrupt.
  * Transfer and register helpers retain separate compiler/assembler profiles. */
-#include "pe1/psyq_spu_internal.h"
+
 #include "pe1/psyq_bios.h"
+#include "pe1/psyq_spu_internal.h"
+
+#include "spu_externs.h"
 
 int _spu_init(int hot) {
     unsigned int timeout;
@@ -80,8 +83,6 @@ int _spu_init(int hot) {
     _spu_IRQCallback = 0;
     return 0;
 }
-
-#include "spu_externs.h"
 
 void _spu_FwriteByIO(void *address, u32 size) {
     u16 *source = address;

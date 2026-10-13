@@ -1,12 +1,12 @@
 #include "common.h"
-#include "fx_common_render.h"
-#include "pe1/gte.h"
-#include "fx_common.h"
-#include "fx_common_model.h"
-#include "pe1/psyq_gpu.h"
 #include "pe1/gpu_image.h"
+#include "pe1/gte.h"
+#include "pe1/psyq_gpu.h"
 #include "pe1/render_packets.h"
 
+#include "fx_common.h"
+#include "fx_common_model.h"
+#include "fx_common_render.h"
 #include "model_buffers_externs.h"
 
 /* Reconstructs the eight polygon streams and the FT3/FT4 subdivision paths.

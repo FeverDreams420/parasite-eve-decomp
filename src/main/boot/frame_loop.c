@@ -3,22 +3,22 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
-#include "pe1/scene_transition.h"
-#include "pe1/render_camera.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/game_state.h"
-#include "pe1/room_floor.h"
-#include "pe1/scene_room_load.h"
-#include "pe1/scene_dispatch.h"
-#include "pe1/render_tint.h"
-#include "pe1/render_animation_frame.h"
-#include "pe1/boot_disc_check.h"
 #include "pe1/battle_runtime.h"
-#include "pe1/pad_state.h"
 #include "pe1/battle_status.h"
+#include "pe1/boot_disc_check.h"
 #include "pe1/field_movement.h"
+#include "pe1/game_state.h"
 #include "pe1/gte.h"
+#include "pe1/pad_state.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/render_animation_frame.h"
+#include "pe1/render_camera.h"
 #include "pe1/render_lighting.h"
+#include "pe1/render_tint.h"
+#include "pe1/room_floor.h"
+#include "pe1/scene_dispatch.h"
+#include "pe1/scene_room_load.h"
+#include "pe1/scene_transition.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -31,6 +31,7 @@ u32 g_GlobalFrameCounter[1];
 /* Field frame loop and its scene flush: Boot_FlushSceneFast is the exit tail
  * that Boot_RunFrame repeats after its loop. Contiguous -G8 pair. */
 
+/* Late include: its D_8009CDA4[] would make the COMMON word above large. */
 #include "pe1/boot.h"
 
 void Draw_InitPipeline(void);
@@ -38,20 +39,12 @@ void Field_HandleStateTransition(void);
 void ClearOTagR(u32 *address, int length);
 void Scene_UpdateEntityList(void);
 void Entity_FrameUpdate(void);
-int Draw_CheckDrawStatus(void);
 int func_80122040(void);
 void func_80121A00(void);
 void Draw_ClearOnFlag(void);
 void Render_Update(void);
-void Menu_DrawTextboxEntries(void);
-void Render_SetGteScreenOffset(void);
 void func_800E01BC(void);
-void Render_ResetGteScreenOffset(void);
-int Render_SetCDDCSlot(void);
-void Draw_RenderFrame(void);
-int Render_SetFadeColour(unsigned int arg0);
 void Boot_FinishFrame(void);
-void ClearImage(RECT *rect, int r, int g, int b);
 void Akao_Cmd_F1(void);
 void Render_Noop(int mode);
 int Asset_UnloadTableEntries(void);

@@ -1,7 +1,7 @@
 /* CC1_FLAGS: -fno-schedule-insns */
 
-#include "pe1/font.h"
 #include "pe1/cdrom.h"
+#include "pe1/font.h"
 
 /* A failed poll restarts the whole load. Retail rebuilds the directory
  * address and the -1 sentinel on every pass, which a loop around the read

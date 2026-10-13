@@ -2,14 +2,14 @@
 #define PE1_FIELDFX_TASK_H
 
 #include "common.h"
+#include "pe1/field_billboard.h"
+#include "pe1/field_glow_sprite.h"
+#include "pe1/field_model_draw.h"
+#include "pe1/field_oriented_sprite.h"
 #include "pe1/fieldfx_callback_list.h"
 #include "pe1/fieldfx_task_pool.h"
 #include "pe1/gte_types.h"
 #include "pe1/room_floor.h"
-#include "pe1/field_oriented_sprite.h"
-#include "pe1/field_billboard.h"
-#include "pe1/field_glow_sprite.h"
-#include "pe1/field_model_draw.h"
 
 extern GteMatrix D_800F3478, D_800F33C0, D_800F32B0;
 extern GteVector D_800C220C, D_800C221C, D_800C222C;

@@ -10,12 +10,13 @@
  * mirror axes. This unit is that object, compiled into each of them; the
  * room's model and images follow in its own data.
  */
-#include "pe1/room_fx_model.h"
+
+#include "pe1/entity_frame_update.h"
 #include "pe1/gte.h"
 #include "pe1/render_object.h"
 #include "pe1/render_prim.h"
 #include "pe1/render_tint.h"
-#include "pe1/entity_frame_update.h"
+#include "pe1/room_fx_model.h"
 
 void RoomEffect_ModelDraw(RenderObjectEntity *entity);
 

@@ -1,5 +1,12 @@
 #ifndef PE1_EXT_M123
 #define PE1_EXT_M123
+
+#include "common.h"
+#include "pe1/battle.h"
+#include "pe1/gte_short_vector.h"
+
+#include "room_m123_effects.h"
+
 extern s16 D_801956A4, D_801956A0;
 extern u16 D_801956B0, D_801956B2, D_801956B4;
 extern u8 D_801956A8[];

@@ -1,14 +1,17 @@
 #include "common.h"
 #include "pe1/field_sprite_params.h"
-#include "../room_lib/room_lib.h"
-#include "pe1/room_script_record.h"
-#include "pe1/fieldfx_callback_list.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/fieldfx_callback_list.h"
+#include "pe1/gte.h"
+#include "pe1/gte_types.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/room_m005.h"
-#include "pe1/room_sound_slot.h"
-#include "pe1/gte.h"
 #include "pe1/room_m005_beacon.h"
+#include "pe1/room_script_record.h"
+#include "pe1/room_sound_slot.h"
+
+#include "../room_lib/room_lib.h"
+#include "RoomM005_FxOrbiter_externs.h"
 
 typedef struct RoomM005_OrbRec {
     short h0;                     /* 0x00: x */
@@ -33,8 +36,6 @@ typedef struct RoomM005_Dialog {
 
 /* Dialog anchor room_m005 keeps in its scene script record. */
 #define RoomM005_ScriptDialog (*(RoomM005_Dialog *)&g_RoomScriptRecord)
-#include "RoomM005_FxOrbiter_externs.h"
-#include "pe1/gte_types.h"
 
 int RoomM005_FxOrbiter(int mode, RoomM005_OrbRec *r) {
     unsigned short anchor[3];

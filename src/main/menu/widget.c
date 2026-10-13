@@ -2,12 +2,18 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-#include "pe1/menu_widget.h"
-#include "pe1/draw_state.h"
-#include "pe1/menu_scroll_cursor.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/bounds_check.h"
 #include "common.h"
+#include "pe1/bounds_check.h"
+#include "pe1/draw_area.h"
+#include "pe1/draw_state.h"
+#include "pe1/menu_draw_list.h"
+#include "pe1/menu_inventory.h"
+#include "pe1/menu_scroll_cursor.h"
+#include "pe1/menu_widget.h"
+#include "pe1/psyq_cd.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/text.h"
+#include "pe1/textbox.h"
 
 /* Contiguous widget construction, pool initialization, list drawing and layout. */
 
@@ -48,8 +54,6 @@ void MenuWidget_InitPoolUnk(void) {
     g_MenuWidgetActiveListHead = 0;
 }
 #define NULL ((void *)0)
-
-#include "pe1/bounds_check.h"
 
 inline MenuWidgetNode *MenuWidget_AllocNode(MenuWidgetNode *arg0, MenuWidgetNode *arg1) {
     s32 var_a0;
@@ -102,7 +106,6 @@ inline MenuWidgetNode *MenuWidget_AllocNode(MenuWidgetNode *arg0, MenuWidgetNode
     return temp_s0;
 }
 
-#include "pe1/menu_inventory.h"
 MenuWidgetNode *g_MenuWidgetActiveListHead;
 MenuWidgetNode *g_MenuWidgetFreeListHead;
 void MenuWidget_DestroyNodeRecursive(MenuWidgetNode *node) {
@@ -150,11 +153,7 @@ void MenuWidget_DestroyNodeRecursive(MenuWidgetNode *node) {
     }
 }
 
-#include "pe1/draw_state.h"
-#include "pe1/menu_widget.h"
-
 #define NULL ((void *)0)
-#include "pe1/bounds_check.h"
 
 /* Draws a widget and its children, each relative to its parent's origin,
  * saving the text cursor on the cursor stack around it. */
@@ -280,13 +279,6 @@ MenuWidgetNode *MenuWidget_FindByModeAndSelectedBase(int mode, int selected_base
     }
     return node;
 }
-
-#include "pe1/draw_state.h"
-#include "pe1/text.h"
-
-int Draw_LookupGlyphMetrics(int glyph);
-void Draw_AllocTexturedQuad(int glyph);
-#include "pe1/bounds_check.h"
 
 /* The text cursor stack holds (x, y) word pairs. */
 #define PUSH_CURSOR()                                                      \
@@ -712,8 +704,6 @@ MenuWidgetNode *MenuWidget_CreateNode(s32 mode, MenuWidgetNode *parent_arg, Menu
     return node;
 }
 
-#include "pe1/menu_widget.h"
-
 int MenuWidget_GridCellIndex(MenuWidgetNode *ptr) {
     int ret;
     int x;
@@ -732,7 +722,6 @@ int MenuWidget_GridCellIndex(MenuWidgetNode *ptr) {
 
     return ret;
 }
-#include "pe1/menu_widget.h"
 
 int MenuWidget_GetCellIndex(MenuWidgetNode *ptr) {
     int idx;
@@ -761,12 +750,6 @@ int MenuWidget_GetCellIndex(MenuWidgetNode *ptr) {
     return ret;
 }
 
-#include "pe1/menu_inventory.h"
-#include "pe1/menu_draw_list.h"
-#include "pe1/draw_state.h"
-#include "pe1/draw_area.h"
-
-#include "pe1/bounds_check.h"
 void Draw_AllocColorTri(int, int, int);
 
 typedef DrawTextCursorPair CursorPair;
@@ -1011,8 +994,6 @@ void MenuWidget_DrawList(MenuWidgetNode *node, void (*draw_callback)(int))
     }
 }
 
-#include "pe1/menu_widget.h"
-
 void MenuWidget_ClampScroll(MenuWidgetNode *ptr) {
     int y;
     int top;
@@ -1031,7 +1012,6 @@ void MenuWidget_ClampScroll(MenuWidgetNode *ptr) {
         }
     }
 }
-#include "pe1/menu_widget.h"
 
 void MenuWidget_ClampCursor(MenuWidgetNode *ptr, int x, int y) {
     int limit;
@@ -1070,8 +1050,6 @@ void MenuWidget_ClampCursor(MenuWidgetNode *ptr, int x, int y) {
         }
     }
 }
-
-#include "pe1/menu_scroll_cursor.h"
 
 static inline int MenuWidget_CursorCell(MenuWidgetNode *node)
 {
@@ -1386,10 +1364,6 @@ int Menu_StepScrollCursor(MenuWidgetNode *node, unsigned int buttons)
     return changed;
 }
 
-#include "common.h"
-
-#include "pe1/menu_widget.h"
-
 void Draw_SetPrimCallback(MenuWidgetNode *arg0, s32 arg1) {
     MenuWidgetNode *temp_a1_2;
     s32 temp_a2;
@@ -1450,10 +1424,6 @@ void Draw_SetPrimCallback(MenuWidgetNode *arg0, s32 arg1) {
         }
     }
 }
-
-#include "common.h"
-#include "pe1/draw_state.h"
-#include "pe1/menu_widget.h"
 
 int g_MenuWidgetColumnLayoutMode;
 void bzero(void *ptr, int size);
@@ -1578,14 +1548,9 @@ void MenuWidget_DrawCenteredText(u8 *text) {
     Draw_PrintCenteredTextInWidth(text, g_DrawTextPosX);
 }
 
-#include "pe1/draw_state.h"
-#include "pe1/text.h"
-
 void MenuWidget_DrawCenteredTableText(int text_id) {
     Draw_PrintCenteredTextInWidth(Text_LookupTable4(text_id), g_DrawTextPosX);
 }
-
-#include "pe1/draw_state.h"
 
 void Draw_AllocColorTri(int width, int height, int arg2);
 
@@ -1600,8 +1565,6 @@ void Draw_DropShadow(void) {
     g_DrawSpriteX += 2;
     g_DrawSpriteY += 2;
 }
-
-#include "pe1/menu_inventory.h"
 
 MenuWidgetNode *g_MenuWidgetFreeListHead;
 
@@ -1660,19 +1623,12 @@ void Draw_SwapPrimBuffers(MenuWidgetNode *list)
     list->popup_node = node;
 }
 
-#include "pe1/menu_widget.h"
-
 void MenuWidget_DestroyPopupNode(MenuWidgetNode *node) {
     MenuWidgetNode *owner = ((MenuWidgetListNavigation *)node)->list;
 
     owner->popup_node = 0;
     MenuWidget_DestroyNodeRecursive(node);
 }
-
-#include "pe1/menu_inventory.h"
-#include "pe1/draw_state.h"
-#include "pe1/textbox.h"
-#include "pe1/psyq_cd.h"
 
 int g_DrawColorSelect, g_DrawSpriteX, g_DrawSpriteY;
 int *g_TextCursorStack;
@@ -1716,8 +1672,6 @@ void Draw_FlushFrontBuffer(MenuWidgetListNavigation *node) {
     }
 }
 
-#include "pe1/menu_inventory.h"
-
 static inline int Move(MenuWidgetNode *node, int delta) {
     int changed = 0;
 
@@ -1751,8 +1705,6 @@ int Menu_StepListNavigate(MenuWidgetListNavigation *node, unsigned int flags) {
     }
     return handled || !(node->flags & 0x40);
 }
-
-#include "pe1/menu_widget.h"
 
 #define NULL ((void *)0)
 void MenuWidget_EaseNodePosition(MenuWidgetNode *arg0) {

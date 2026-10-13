@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "pe1/psyq_callbacks.h"
+
 typedef void (*PadToggleFunc)(void);
 
 /* LIBETC INTR.OBJ state: a 12-word BIOS jump buffer and 4 KiB IRQ stack. */

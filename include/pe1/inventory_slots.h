@@ -36,7 +36,6 @@ extern s16 *g_InvActiveItemList;
 extern s32 D_8009D080;
 extern s16 D_800C1F80[];
 extern s16 g_InvPackedList[];
-extern u8 g_KeyItemDataTable[];
 /* Saved by inventory commands as a word; the frame loop reads its low byte. */
 typedef union SavedMenuMode {
     u32 value;

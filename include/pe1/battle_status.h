@@ -2,8 +2,8 @@
 #define PE1_BATTLE_STATUS_H
 
 #include "pe1/battle.h"
-#include "pe1/render_prim.h"
 #include "pe1/battle_hud_colors.h"
+#include "pe1/render_prim.h"
 
 typedef struct BattleStatusLinePrim {
     u8 pad00[8];
@@ -53,7 +53,6 @@ extern BattleStatusLinePrim D_8009E358[6];
 /* The same packets seen as the three shaded status-bar tiles of each draw
  * buffer (Battle_DrawHPBar). */
 #define BATTLE_STATUS_TILES ((RenderColorTilePacket (*)[3])D_8009E358)
-extern int g_ActiveDrawSlot;
 extern BattleStatusMarkerBody D_8009E888[2];
 extern RenderPagedSpritePacket D_8009E8B8[2][2];  /* ammo digits */
 extern BattleGaugePrim D_8009E3B8[2][3];

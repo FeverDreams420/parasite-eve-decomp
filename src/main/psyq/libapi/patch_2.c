@@ -1,5 +1,6 @@
 /* ASSEMBLER: GNU */
 /* PSY-Q LIBAPI PATCH, part 2 of 2: _patch_pad. */
+
 #include "pe1/psyq_asm.h"
 
 /*

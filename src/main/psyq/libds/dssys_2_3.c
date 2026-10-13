@@ -1,9 +1,17 @@
 /* ASSEMBLER: GNU */
 /* Psy-Q LIBDS DSSYS_2.OBJ, part 3 of 3: DsClose, DsCommand, DsReady, DsFlush, DsSystemStatus, DsQueueLen, DsStatus, DsShellOpen, DsLastCom, CQ_vsync_system, CQ_ready_system, LIBDS_DSSYS_2_text_13CC and the object's zero tail. */
-#include "pe1/psyq_ds_queue.h"
+
+#include "pe1/cdrom.h"
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_ds.h"
-#include "pe1/cdrom.h"
+#include "pe1/psyq_ds_queue.h"
+
+#include "dssys_2_3_externs.h"
+#include "dssys_2_3_externs_1.h"
+#include "dssys_2_3_externs_2.h"
+#include "dssys_2_3_externs_3.h"
+#include "dssys_2_3_externs_4.h"
+#include "dssys_2_3_externs_5.h"
 
 void DS_close(void);
 
@@ -262,9 +270,6 @@ done:
 
 /* Empty constraints preserve the retail schedule. */
 
-/* Word-offset views of the eight 16-byte history records. */
-#include "dssys_2_3_externs.h"
-
 s32 DsSync(s32 inId, void *inResult) {
     register s32 id = inId;
     register void *result = inResult;
@@ -424,9 +429,6 @@ done:
     return status;
 }
 
-#include "dssys_2_3_externs_1.h"
-
-
 int DsReady(u8 *destination) {
     CdQueuedCmdSlot *slot;
     u8 *copyDestination;
@@ -454,9 +456,6 @@ int DsReady(u8 *destination) {
     rescpy(copyDestination, slot->payload);
     return slot->result;
 }
-
-#include "dssys_2_3_externs_2.h"
-
 
 void DsFlush(void) {
     int i;
@@ -523,10 +522,6 @@ int DsLastCom(void) {
     return DS_lastcom() & 0xFF;
 }
 
-#include "dssys_2_3_externs_3.h"
-
-int DS_system_status(int mode);
-
 void CQ_vsync_system(void) {
     int status;
     s32 *pending;
@@ -554,8 +549,6 @@ void CQ_vsync_system(void) {
         }
     }
 }
-
-#include "dssys_2_3_externs_4.h"
 
 void CQ_error_flush(int command);
 
@@ -597,8 +590,6 @@ callback:
         return callbackFn(command_byte, payload);
     return 0;
 }
-
-#include "dssys_2_3_externs_5.h"
 
 void LIBDS_DSSYS_2_text_13CC(int arg0) {
     if (g_DsStartCallback != 0) {

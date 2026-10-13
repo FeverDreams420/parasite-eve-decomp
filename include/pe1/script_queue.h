@@ -3,7 +3,6 @@
 
 #include "common.h"
 #include "pe1/field_actor.h"
-
 #include "pe1/script_node.h"
 
 extern u32 *D_8009CE00;

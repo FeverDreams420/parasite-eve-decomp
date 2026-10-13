@@ -2,11 +2,11 @@
 #define PE1_FIELD_HISTORY_TRAIL_H
 
 #include "common.h"
+#include "pe1/field_tile.h"
 #include "pe1/gte_types.h"
+#include "pe1/render_object.h"
 #include "pe1/render_prim.h"
 #include "pe1/render_tint.h"
-#include "pe1/render_object.h"
-#include "pe1/field_tile.h"
 
 /* Field engine history trail (func_800D1384): a ribbon of gouraud quads
  * through the last `count` head/tail point pairs, fading out towards the

@@ -1,31 +1,29 @@
 #include "common.h"
-#include "pe1/room_m350_effects.h"
-#include "pe1/field_sprite_params.h"
-#include "room_m350_shared.h"
-#include "pe1/fieldfx_callback_list.h"
-#include "pe1/gte_types.h"
-#include "pe1/field_texture_tables.h"
-#include "pe1/fieldfx_task_pool.h"
-#include "room_m350_data.h"
-#include "pe1/field_sprite_draw.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/gte_sine_table.h"
-#include "pe1/gte.h"
-#include "pe1/room_m350_sweep_trap.h"
 #include "pe1/asset_find.h"
 #include "pe1/field_actor.h"
-#include "pe1/render_object.h"
-#include "pe1/player_entity.h"
-#include "pe1/field_vector_math.h"
-#include "pe1/room_floor.h"
-#include "pe1/scene_assets.h"
 #include "pe1/field_model_draw.h"
-#include "pe1/scene_archive.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_sprite_params.h"
+#include "pe1/field_texture_tables.h"
+#include "pe1/field_vector_math.h"
+#include "pe1/fieldfx_callback_list.h"
+#include "pe1/fieldfx_task_pool.h"
+#include "pe1/gte.h"
+#include "pe1/gte_sine_table.h"
+#include "pe1/gte_types.h"
+#include "pe1/player_entity.h"
+#include "pe1/psyq_gpu.h"
 #include "pe1/psyq_libc.h"
+#include "pe1/render_object.h"
+#include "pe1/room_floor.h"
+#include "pe1/room_m350_effects.h"
+#include "pe1/room_m350_sweep_trap.h"
+#include "pe1/scene_archive.h"
+#include "pe1/scene_assets.h"
 
-typedef RoomM350Vector Vector;
-
-typedef GteMatrix Matrix;
+#include "m350_externs.h"
+#include "room_m350_data.h"
+#include "room_m350_shared.h"
 
 typedef GteShortVector Particle;
 
@@ -101,15 +99,11 @@ typedef struct { Vector position; short delay,reserved; } PositionQueueParticle;
 
 typedef struct { short position[3]; short size; } TableTransformParticle;
 
-typedef struct { unsigned char index, alternate; } Entry;
-
 typedef GteVector Scale;
 
 typedef struct { void *asset; int yaw; short size,brightness,unknown,turn; unsigned char initialized; } TurningAreaControllerState;
 
 typedef struct { short x, y, z, velocityY, gravity, reserved; } DualBallisticParticle;
-
-#include "m350_externs.h"
 
 int func_80192508(int event)
 {

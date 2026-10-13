@@ -4,6 +4,7 @@
  * 6, 8 and 10 only match with GCC 2.8.1 and -mno-split-addresses (2.7.2
  * cannot keep the shared address base in a register), the rest match with
  * GCC 2.7.2. */
+
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_ds.h"
 

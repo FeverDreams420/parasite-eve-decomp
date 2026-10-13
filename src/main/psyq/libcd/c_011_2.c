@@ -2,6 +2,7 @@
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses -fno-schedule-insns */
 /* Psy-Q LIBCD C_011.OBJ, part 2 of 2: dma_execute. */
+
 #include "pe1/psyq_bios.h"
 #include "pe1/psyq_cd.h"
 

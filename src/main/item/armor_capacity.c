@@ -2,16 +2,16 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-#include "pe1/battle_cmd.h"
-#include "pe1/inventory.h"
-#include "pe1/inventory_slots.h"
 #include "common.h"
 #include "pe1/aya.h"
+#include "pe1/battle_cmd.h"
+#include "pe1/inventory.h"
 #include "pe1/inventory_queries.h"
+#include "pe1/inventory_slots.h"
 #include "pe1/inventory_sort.h"
 #include "pe1/inventory_state.h"
-#include "pe1/psyq_libc.h"
 #include "pe1/menu_state.h"
+#include "pe1/psyq_libc.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */

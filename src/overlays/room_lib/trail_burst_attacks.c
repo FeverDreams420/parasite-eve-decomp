@@ -10,8 +10,9 @@
  * follows another joint. The trail histories, colour ramps, model assets,
  * layer records and anchors live in each room's own data.
  */
-#include "pe1/room_trail_burst.h"
+
 #include "pe1/gte.h"
+#include "pe1/room_trail_burst.h"
 
 static const RenderColor s_TrailHeadColor = { 0xA0, 0xA0, 0xA0, 0 };
 static const RenderColor s_TrailTailColor = { 0x00, 0x00, 0x20, 0 };

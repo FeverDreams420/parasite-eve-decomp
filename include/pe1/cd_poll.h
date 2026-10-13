@@ -2,9 +2,8 @@
 #define PE1_CD_POLL_H
 
 #include "common.h"
-#include "pe1/game_state.h"
-
 #include "pe1/cdrom.h"
+#include "pe1/game_state.h"
 
 /* Polls the pending sector read; a finished or failed read (0 or -1)
  * clears the read-busy game state flags. Boot loaders that spin on it

@@ -2,11 +2,15 @@
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses */
 /* Psy-Q LIBDS DSREAD.OBJ, part 2 of 2: DS_read_cbready, DS_read_cbdata, DsReadSync, DsReadCallback, DsReadBreak, DsReadMode. */
-#include "pe1/psyq_cd.h"
+
 #include "pe1/cdrom.h"
+#include "pe1/psyq_cd.h"
 #include "pe1/psyq_ds.h"
 #include "pe1/psyq_ds_queue.h"
 #include "pe1/psyq_gpu.h"
+
+#include "dsread_2_externs.h"
+#include "dsread_2_externs_1.h"
 
 #define CD_READ_FIELD(anchor, field)                                      \
     ((anchor)[(PE1_OFFSETOF(CdReadProgressState, field) -                  \
@@ -52,8 +56,6 @@ void DS_read_cbready(int status, void *data, void *detail) {
 }
 
 #undef CD_READ_FIELD
-
-#include "dsread_2_externs.h"
 
 void DS_read_cbdata(void) {
     int *state = D_8009B6B0;
@@ -128,8 +130,6 @@ void DsReadBreak(void) {
     g_CdReadInProgress = 0;
     asm volatile("" : : : "memory");
 }
-
-#include "dsread_2_externs_1.h"
 
 void DsReadMode(unsigned int mode) {
     if (mode < 2) {

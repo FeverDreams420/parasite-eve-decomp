@@ -2,15 +2,15 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
+#include "pe1/battle_status.h"
+#include "pe1/boot.h"
+#include "pe1/boot_disc_check.h"
 #include "pe1/draw_buffers.h"
 #include "pe1/game_state.h"
+#include "pe1/menu_background.h"
 #include "pe1/psyq_gpu.h"
 #include "pe1/render_packets.h"
-#include "pe1/battle_status.h"
 #include "include_asm.h"
-#include "pe1/boot_disc_check.h"
-#include "pe1/menu_background.h"
-#include "pe1/boot.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */

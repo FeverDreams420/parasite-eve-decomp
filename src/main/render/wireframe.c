@@ -11,11 +11,12 @@
  * sp+0x50..0x6F; the dead "line_b = scale" store, the identical-arm screen
  * tests, the do-while(0) blocks and the shared far_edge tail keep GCC's
  * register allocation (best lev without each: 26, 169..232, 68 and 14). */
+
 #include "common.h"
 #include "pe1/gte.h"
-#include "pe1/render_object.h"
 #include "pe1/render_anim_position.h"
 #include "pe1/render_animation_frame.h"
+#include "pe1/render_object.h"
 
 typedef struct RenderAnimFrame {
     u8 reserved0;

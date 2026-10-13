@@ -1,11 +1,13 @@
 /* PSY-Q LIBSPU SPU, part 2 of 3: _spu_Fr_, _spu_t, _spu_Fw, _spu_Fr. */
-#include "common.h"
-/* GCC_VERSION: 2.8.1 */
-/* CC1_FLAGS: -mno-split-addresses */
 
+#include "common.h"
 #include "pe1/psyq_spu_internal.h"
 #include "pe1/psyq_stdarg.h"
+
 #include "spu_2_externs.h"
+
+/* GCC_VERSION: 2.8.1 */
+/* CC1_FLAGS: -mno-split-addresses */
 
 void _spu_Fr_(void *address, u16 spuAddress, u32 blocks)
 {

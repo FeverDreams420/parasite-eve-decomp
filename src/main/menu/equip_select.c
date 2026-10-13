@@ -3,20 +3,20 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
-#include "pe1/menu_dialog.h"
-#include "pe1/menu_inventory.h"
-#include "pe1/menu_item_rows.h"
-#include "pe1/menu_queue.h"
+#include "pe1/draw_level_bar.h"
+#include "pe1/draw_state.h"
 #include "pe1/inventory.h"
 #include "pe1/inventory_queries.h"
 #include "pe1/inventory_slots.h"
-#include "pe1/draw_state.h"
-#include "pe1/text.h"
 #include "pe1/menu_context_help.h"
+#include "pe1/menu_dialog.h"
 #include "pe1/menu_equipment.h"
+#include "pe1/menu_inventory.h"
 #include "pe1/menu_item_list_input.h"
+#include "pe1/menu_item_rows.h"
+#include "pe1/menu_queue.h"
 #include "pe1/menu_widget.h"
-#include "pe1/draw_level_bar.h"
+#include "pe1/text.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */

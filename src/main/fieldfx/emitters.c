@@ -1,17 +1,17 @@
-#include "pe1/render_object.h"
-#include "pe1/gte.h"
-#include "pe1/fieldfx_task.h"
-#include "pe1/battle_runtime.h"
-#include "pe1/random.h"
-#include "pe1/render_prim.h"
-#include "pe1/field_actor.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/field_model_draw.h"
 #include "common.h"
-#include "pe1/field_flash_burst.h"
-#include "pe1/field_spin_glow.h"
-#include "pe1/field_glow_fountain.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/field_actor.h"
 #include "pe1/field_fade_particle.h"
+#include "pe1/field_flash_burst.h"
+#include "pe1/field_glow_fountain.h"
+#include "pe1/field_model_draw.h"
+#include "pe1/field_spin_glow.h"
+#include "pe1/fieldfx_task.h"
+#include "pe1/gte.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/random.h"
+#include "pe1/render_object.h"
+#include "pe1/render_prim.h"
 
 int FieldFx_CosineEffect(int mode, RenderCosineEffect *effect) {
     u32 color;
@@ -1336,8 +1336,6 @@ int func_800DEFFC(int mode, RenderFadeParticle *particle)
     }
     return 0;
 }
-
-#include "pe1/render_object.h"
 
 int func_800DF6AC(int mode, RenderFadeEmitter *state)
 {

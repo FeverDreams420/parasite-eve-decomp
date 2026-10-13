@@ -3,16 +3,16 @@
 /* MASPSX_FORCE_G0: 1 */
 
 #include "common.h"
+#include "pe1/entity_frame_update.h"
+#include "pe1/field_actor.h"
 #include "pe1/gte.h"
+#include "pe1/render_buffers.h"
+#include "pe1/render_lighting.h"
+#include "pe1/render_matrix_copy.h"
 #include "pe1/render_object.h"
 #include "pe1/render_prim.h"
-#include "pe1/render_lighting.h"
-#include "pe1/render_tint.h"
-#include "pe1/field_actor.h"
-#include "pe1/render_matrix_copy.h"
-#include "pe1/render_buffers.h"
 #include "pe1/render_setup.h"
-#include "pe1/entity_frame_update.h"
+#include "pe1/render_tint.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */
@@ -799,8 +799,6 @@ void Anim_SetInterpRate(RenderObjectEntity *obj, int arg1) {
 
 /* Adjacent object updates use the same animation and colour state. */
 
-#include "pe1/render_lighting.h"
-#include "pe1/render_prim.h"
 u32 D_8009CDA0 = 0x808080;
 int Render_TickObject(RenderObjectEntity *object) {
     int state;

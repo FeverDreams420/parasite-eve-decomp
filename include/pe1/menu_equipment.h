@@ -1,12 +1,11 @@
 #ifndef PE1_MENU_EQUIPMENT_H
 #define PE1_MENU_EQUIPMENT_H
 
-#include "pe1/menu_state.h"
-#include "pe1/menu_context_help.h"
-#include "pe1/menu_widget.h"
-
-#include "pe1/menu_dialog.h"
 #include "pe1/inventory_slots.h"
+#include "pe1/menu_context_help.h"
+#include "pe1/menu_dialog.h"
+#include "pe1/menu_state.h"
+#include "pe1/menu_widget.h"
 
 void Menu_StepSaveLoadScreen(void);
 int Menu_SaveLoadNavigate(MenuWidgetNode *node, unsigned int flags);
@@ -18,7 +17,6 @@ void Menu_RebuildSelectableMask(void);
 int Inv_TransferItem(int arg0, int arg1, int arg2, int arg3);
 int Menu_GetBattleCount(void);
 void MenuWidget_ClampCursor(MenuWidgetNode *node, int x, int y);
-extern int g_InvSwapTargetIndex, g_InvSelectedItemIndex, g_MenuActionSubmenuOpen;
 
 PE1_STATIC_ASSERT(PE1_OFFSETOF(MenuWidgetNode, itemAction) == 0x84,
                   menu_widget_item_action_offset);
@@ -28,12 +26,10 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(MenuWidgetNode, refreshItems) == 0x88,
 void Menu_OpenEquipScreen(int mode);
 int Menu_StepInventoryCategory(MenuWidgetNode *node, unsigned int flags);
 void Menu_DrawEquipListContainer(void *node);
-extern int g_MenuSelectionLocked;
 
 int Menu_EquipOptionsInputHandler(void *node, int flags);
 void Menu_DrawEquipOptionsList(int node);
 void Menu_OpenInventoryScreen(void);
-extern int g_MenuLayoutLocked;
 /* Equipment selection state and stat preview. */
 extern int g_MenuItemUseMode, g_MenuItemRenameMode, g_MenuItemDiscardMode;
 extern int D_8009CFC4, D_8009CFC8, D_8009CFCC;
@@ -41,7 +37,6 @@ extern int D_8009CFC4, D_8009CFC8, D_8009CFCC;
  * unlimited); a nonzero sum enables the ammo transfer actions. */
 extern int g_StatBaseTable[4];
 extern int g_MenuSelectedItemList, g_MenuSelectedItemSlot, D_8009CFBC, g_MenuSelectedItemIndex;
-extern int g_MenuActionTextBase;
 /* Item put back into Aya's inventory after a storage swap (0: none). */
 extern int g_AyaFullInvHold;
 

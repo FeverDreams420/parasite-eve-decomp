@@ -1,11 +1,13 @@
 #ifndef FX_COMMON_MOTION_H
 #define FX_COMMON_MOTION_H
 
-#include "fx_common_setup.h"
-#include "pe1/signed_rect.h"
-#include "pe1/psyq_gpu.h"
 #include "pe1/display_env.h"
 #include "pe1/gpu_image.h"
+#include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/signed_rect.h"
+
+#include "fx_common_setup.h"
 
 extern FxCommonVec3 g_FxCommonMotionAccum1;
 extern FxCommonVec3 g_FxCommonMotionAccum0;
@@ -113,8 +115,6 @@ void func_80193AB0(void);
 void ResetGraph(s32 value);
 void DrawOTag(void *ordering_table);
 void func_80192030(void);
-int SquareRoot0(int value);
-#include "pe1/gte_types.h"
 void func_8018F344(GteMatrix *out, GteShortVector *eye,
                    GteShortVector *target, GteVector *up);
 void Akao_Cmd_F0(void);

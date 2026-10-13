@@ -2,9 +2,9 @@
 #define PE1_FIELD_GLOW_LAYERS_H
 
 #include "common.h"
-#include "pe1/gte_types.h"
-#include "pe1/field_sprite_state.h"
 #include "pe1/field_glow_sprite.h"
+#include "pe1/field_sprite_state.h"
+#include "pe1/gte_types.h"
 
 /* Field engine glow layers: a placed axis matrix turned by fixed spins
  * and drawn as scaled sprites through func_800C42A4. Three two-layer

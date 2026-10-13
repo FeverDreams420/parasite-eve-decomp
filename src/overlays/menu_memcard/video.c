@@ -1,9 +1,9 @@
 #include "common.h"
-#include "pe1/menu_memcard_display.h"
-#include "menu_memcard_video.h"
 #include "pe1/cdrom.h"
+#include "pe1/menu_memcard_display.h"
 #include "pe1/psyq_press.h"
 
+#include "menu_memcard_video.h"
 #include "video_externs.h"
 
 #define MENUCARD_SET_VIDEO_DISPLAY_NAME func_80121004
@@ -145,7 +145,6 @@
 #undef MENUCARD_VIDEO_FINISHED
 
 void Spu_SetVoiceVolume(int arg0);
-void StUnSetRing(void);
 
 void func_80122398(void) {
     unsigned char *counter;

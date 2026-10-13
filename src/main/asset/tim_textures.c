@@ -1,9 +1,9 @@
-#include "pe1/scene_assets.h"
-#include "pe1/psyq_tim.h"
-#include "pe1/pm.h"
 #include "pe1/cdrom.h"
 #include "pe1/game_state.h"
+#include "pe1/pm.h"
+#include "pe1/psyq_tim.h"
 #include "pe1/render_animation_frame.h"
+#include "pe1/scene_assets.h"
 
 static inline void InitHandler(int index)
 {

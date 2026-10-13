@@ -2,10 +2,10 @@
 #define PE1_SCENE_ASSETS_H
 
 #include "common.h"
+#include "pe1/asset_table.h"
 #include "pe1/game_state.h"
 #include "pe1/pm_types.h"
 #include "pe1/scene_room_load.h"
-#include "pe1/asset_table.h"
 
 /* Scene startup and teardown callbacks; other handlers remain unidentified. */
 typedef PmCommand SceneAssetHandler;
@@ -231,7 +231,6 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneAssetBlob, directoryOffset) == 4,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(Pe1GameState, loaded_scene_assets) == 0x18C,
                   game_state_scene_assets_offset);
 
-extern unsigned int g_GameStateFlags;
 /* Opaque handler pointers; the unload path reads the prefix declared above. */
 extern PmCommand **g_PmCmdHandlerTable;
 extern void *g_FieldFxTaskPrograms[104];

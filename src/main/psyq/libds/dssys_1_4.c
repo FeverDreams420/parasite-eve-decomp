@@ -2,6 +2,7 @@
 /* GCC_VERSION: 2.8.1 */
 /* CC1_FLAGS: -mno-split-addresses */
 /* Psy-Q LIBDS DSSYS_1.OBJ, part 4 of 10: LIBDS_DSSYS_1_text_368, LIBDS_DSSYS_1_text_4A4, LIBDS_DSSYS_1_text_774, LIBDS_DSSYS_1_text_7FC. */
+
 #include "pe1/psyq_cd.h"
 #include "pe1/psyq_ds.h"
 
@@ -171,8 +172,6 @@ callbacks:
     }
 done:;
 }
-
-void CD_flush(void);
 
 s32 LIBDS_DSSYS_1_text_774(void) {
     int *retry;

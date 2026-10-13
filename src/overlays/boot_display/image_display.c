@@ -1,6 +1,6 @@
+#include "pe1/boot.h"
 #include "pe1/boot_display.h"
 #include "pe1/psyq_gpu.h"
-#include "pe1/boot.h"
 
 #include "image_display_externs.h"
 

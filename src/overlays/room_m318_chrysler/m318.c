@@ -1,20 +1,22 @@
 #include "common.h"
+#include "pe1/battle_runtime.h"
 #include "pe1/field_actor.h"
 #include "pe1/field_sprite_draw.h"
-#include "pe1/fieldfx_callback_list.h"
-#include "pe1/room_ember_burst.h"
-#include "pe1/gte.h"
-#include "pe1/room_shake_burst.h"
-#include "pe1/render_object.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/fieldfx_task.h"
-#include "pe1/battle_runtime.h"
-#include "pe1/random.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/fieldfx_callback_list.h"
+#include "pe1/fieldfx_task.h"
 #include "pe1/fieldfx_task_pool.h"
-#include "pe1/room_twin_ribbon.h"
+#include "pe1/gte.h"
 #include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/random.h"
+#include "pe1/render_object.h"
+#include "pe1/room_ember_burst.h"
 #include "pe1/room_ember_spiral.h"
+#include "pe1/room_shake_burst.h"
+#include "pe1/room_twin_ribbon.h"
+
+#include "m318_externs.h"
 
 typedef struct RoomM318Node {
     char pad[8];
@@ -22,8 +24,6 @@ typedef struct RoomM318Node {
 } RoomM318Node;
 
 typedef RoomTwinRibbonPulse RoomM318Pulse;
-
-#include "m318_externs.h"
 
 /* printf. */
 int printf(const char *format, ...);
@@ -1435,8 +1435,6 @@ int func_80196820(int mode, RoomCrossFlash *flash) {
     }
     return 0;
 }
-
-int rand(void);
 
 int func_80196C48(int mode, RoomM318Pulse *pulse) {
     int angle, sine, cosine, size, clut, random;

@@ -2,24 +2,26 @@
 #define ROOM_M273_BOSS_H
 
 #include "common.h"
-#include "pe1/fieldfx_callback_list.h"
-#include "pe1/gte_types.h"
-#include "pe1/room_fx.h"
-#include "pe1/render_object.h"
+#include "pe1/asset_find.h"
 #include "pe1/field_actor.h"
+#include "pe1/field_model_draw.h"
+#include "pe1/field_sprite_draw.h"
+#include "pe1/field_texture_tables.h"
+#include "pe1/field_vector_math.h"
+#include "pe1/fieldfx_callback_list.h"
+#include "pe1/fieldfx_task_pool.h"
+#include "pe1/gte_sine_table.h"
+#include "pe1/gte_types.h"
+#include "pe1/psyq_gpu.h"
+#include "pe1/psyq_libc.h"
+#include "pe1/render_object.h"
+#include "pe1/room_floor.h"
+#include "pe1/room_fx.h"
+
+#include "room_m273_boss_state.h"
 #include "room_m273_effects.h"
 #include "room_m273_sway.h"
 #include "room_m273_sweep.h"
-#include "room_m273_boss_state.h"
-#include "pe1/room_floor.h"
-#include "pe1/field_sprite_draw.h"
-#include "pe1/field_model_draw.h"
-#include "pe1/field_vector_math.h"
-#include "pe1/fieldfx_task_pool.h"
-#include "pe1/field_texture_tables.h"
-#include "pe1/psyq_libc.h"
-#include "pe1/psyq_gpu.h"
-#include "pe1/asset_find.h"
 
 /* Boss instance fields read by room_m273's animation controllers. */
 typedef struct RoomM273BossOwner {
@@ -113,8 +115,6 @@ typedef struct RoomM273BossTrig {
     signed int cosine : 16;
 } RoomM273BossTrig;
 
-#include "pe1/gte_sine_table.h"
-
 /* Falling drop: position (the pad halfword counts frames after landing),
  * ring position, velocity and the player-contact flag. */
 typedef struct RoomM273Drop {
@@ -169,7 +169,6 @@ extern RoomM273SweepStep D_8019AD80[];
 
 /* Ground ring (func_80198E94): model draw helpers and the ring colours. */
 extern RenderColor D_8019AE1C[2];
-void FieldFx_ModelSetTexture(int tpage, int clut);
 int Math_IntSqrt(int value);
 extern GteRotation D_8019AB68;
 extern RenderColor D_8019AD54;
@@ -196,8 +195,6 @@ extern u8 D_8019AB70[];
 int func_800CE688(void *list);
 int func_801981A4(int mode, RoomM273SwayShard *shard);
 int func_80198060(int mode, GteShortVector *position);
-
-int Math_IntSqrt(int value);
 
 /* Falling trail (func_80194E6C): 100-byte pool record that spins down to
  * the floor and keeps an eight-entry ring of two-point trail samples. */

@@ -3,8 +3,8 @@
 
 #include "common.h"
 #include "pe1/fixed_point.h"
-#include "pe1/script_node.h"
 #include "pe1/render_object.h"
+#include "pe1/script_node.h"
 
 typedef struct FieldActorState FieldActorState;
 

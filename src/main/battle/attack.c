@@ -2,20 +2,20 @@
 /* MASPSX_FLAGS: -G8 --use-comm-section */
 /* MASPSX_FORCE_G0: 1 */
 
-#include "pe1/battle_runtime.h"
-#include "pe1/gte_types.h"
-#include "pe1/battle_main.h"
-#include "pe1/inventory.h"
-#include "pe1/random.h"
-#include "pe1/field_movement.h"
-#include "pe1/item_ids.h"
 #include "common.h"
-#include "pe1/battle.h"
 #include "pe1/akao.h"
-#include "pe1/entity_animation.h"
-#include "pe1/battle_entity_anim.h"
-#include "pe1/battle_word_records.h"
+#include "pe1/battle.h"
 #include "pe1/battle_ailment.h"
+#include "pe1/battle_entity_anim.h"
+#include "pe1/battle_main.h"
+#include "pe1/battle_runtime.h"
+#include "pe1/battle_word_records.h"
+#include "pe1/entity_animation.h"
+#include "pe1/field_movement.h"
+#include "pe1/gte_types.h"
+#include "pe1/inventory.h"
+#include "pe1/item_ids.h"
+#include "pe1/random.h"
 
 /* COMMON supplies small-data metadata to MASPSX: these words are reached
  * through $gp, every other extern stays absolute. */

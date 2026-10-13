@@ -1,8 +1,8 @@
 #ifndef PE1_FIELDFX_CALLS_H
 #define PE1_FIELDFX_CALLS_H
 
-#include "pe1/field_transform_point.h"
 #include "pe1/field_collision.h"
+#include "pe1/field_transform_point.h"
 
 /* Field engine helpers called from the room and scene effects
  * (fieldfx/collision.c). The definitions take typed

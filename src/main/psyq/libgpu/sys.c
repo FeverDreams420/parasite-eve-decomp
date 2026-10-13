@@ -10,13 +10,14 @@
  * -mno-split-addresses, sys_2.c, sys_4.c, sys_7.c, sys_9.c and sys_11.c only
  * with GCC 2.7.2 (the return delay slot), and sys_5.c only with -O1 or
  * -fno-schedule-insns. */
-#include "pe1/psyq_callbacks.h"
-#include "pe1/gpu_callbacks.h"
+
 #include "common.h"
+#include "pe1/gpu_callbacks.h"
 #include "pe1/gpu_state.h"
-#include "include_asm.h"
-#include "pe1/psyq_gpu.h"
 #include "pe1/psyq_bios.h"
+#include "pe1/psyq_callbacks.h"
+#include "pe1/psyq_gpu.h"
+#include "include_asm.h"
 
 #include "sys_externs.h"
 
@@ -212,8 +213,6 @@ int ClearImage2(RECT *rect, u8 r, u8 g, u8 b) {
     callbacks = g_GpuCallbacks;
     return callbacks->addque2(callbacks->clr, rect, 8, color);
 }
-
-void checkRECT(char *message, RECT *rect);
 
 int LoadImage(RECT *rect, void *pixels) {
     GpuCallbacks *callbacks;

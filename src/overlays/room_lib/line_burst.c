@@ -7,8 +7,9 @@
  * particle colour, the anchor template and the sprite rotation as the only
  * read-only data; this unit is that object, compiled into each of them.
  */
-#include "pe1/room_line_burst.h"
+
 #include "pe1/gte.h"
+#include "pe1/room_line_burst.h"
 
 static const RoomLineBurstColor s_LineBurstParticleColor = { 0x80, 0x80, 0x80, 0 };
 static const RoomLineBurstWords8 s_LineBurstAnchorTemplate = { { 0, 0xFF88 } };

@@ -2,8 +2,8 @@
 #define PE1_FIELD_EFFECT_MODULES_H
 
 #include "common.h"
-#include "pe1/gte_types.h"
 #include "pe1/fieldfx_state.h"
+#include "pe1/gte_types.h"
 
 /* The eight field effect modules the descriptor table at 0x80094188 lists
  * (fieldfx/glow.c .. fieldfx/burst.c). Each module is a class
@@ -25,8 +25,6 @@ extern struct BattleEntity *D_8009D254;
  * VRAM (0x380, 0x100), the third resource the task pool hands out with them, and the
  * asset table the task spawner searches. */
 extern void *g_FieldEffectSoundHeader;
-extern void *g_FieldEffectTexturePage0;
-extern void *g_FieldEffectTexturePage1;
 extern void *g_FieldEffectResource2;
 extern void *g_FieldEffectAssetTable;
 void *FieldFx_GetEffectResource(int index);

@@ -7,6 +7,7 @@
  * same 32 instruction words. The 8-byte object signature before InitGeom is
  * the separate psyq/libgte/MSC00_signature segment.
  */
+
 #include "pe1/psyq_asm.h"
 
 PSYQ_ASM_OBJECT(LIBGTE, MSC00)

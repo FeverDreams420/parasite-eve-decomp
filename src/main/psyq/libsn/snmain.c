@@ -12,6 +12,7 @@
  * `__bss_start` is the end of .sdata and `_end` the end of main, where the
  * heap begins.
  */
+
 #include "pe1/psyq_asm.h"
 
 PSYQ_ASM_OBJECT(LIBSN, SNMAIN)

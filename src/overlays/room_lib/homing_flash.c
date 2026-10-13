@@ -10,8 +10,9 @@
  * ramp the controller blends through is room data (g_RoomFlashColorRamp),
  * named in each room's symbol file.
  */
-#include "pe1/room_homing_flash.h"
+
 #include "pe1/gte.h"
+#include "pe1/room_homing_flash.h"
 
 static const RoomSoundBurstColor s_HomingSparkHitColor = { 0xFF, 0x80, 0, 0 };
 static const GteRotation s_HomingSparkRotation = { 0x400, 0, 0, 1 };

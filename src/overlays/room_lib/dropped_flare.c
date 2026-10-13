@@ -5,10 +5,11 @@
  * the unit's rodata (the particle's two seed initialisers, its two jump
  * tables, the emitter's rectangle) is one contiguous block in all of them.
  */
+
 #include "common.h"
-#include "pe1/room_flare.h"
-#include "pe1/gte.h"
 #include "pe1/field_texture_tables.h"
+#include "pe1/gte.h"
+#include "pe1/room_flare.h"
 
 /* Flashes the scene: marks the battle actor and rewrites the colour code of
  * the first packet in the primary effect channel. */

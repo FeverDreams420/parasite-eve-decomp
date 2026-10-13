@@ -1,15 +1,15 @@
 #include "common.h"
-#include "pe1/akao/spu_common.h"
-#include "pe1/psyq_spu_internal.h"
-#include "pe1/akao/track.h"
-#include "pe1/akao/tick.h"
 #include "pe1/akao.h"
-#include "pe1/akao/note_step.h"
-#include "pe1/akao_script.h"
-#include "pe1/akao_counters.h"
 #include "pe1/akao/globals.h"
+#include "pe1/akao/note_step.h"
+#include "pe1/akao/spu_common.h"
+#include "pe1/akao/tick.h"
+#include "pe1/akao/track.h"
 #include "pe1/akao/voice_state.h"
+#include "pe1/akao_counters.h"
+#include "pe1/akao_script.h"
 #include "pe1/psyq_bios.h"
+#include "pe1/psyq_spu_internal.h"
 
 void Seq_GetGlobalPitch(unsigned int *out)
 {

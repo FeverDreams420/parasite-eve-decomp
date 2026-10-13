@@ -2,6 +2,7 @@
 #define PE1_INVENTORY_H
 
 #include "common.h"
+#include "pe1/inventory_category.h"
 
 enum ItemDataFlags {
     ITEM_DATA_FLAG_GENERIC_DESCRIPTION = 0x10,
@@ -42,7 +43,6 @@ extern u8 g_KeyItemDataTable[];
 extern ItemDataRecord g_InvCompareSlotLeft;
 extern ItemDataRecord g_InvCompareSlotRight;
 extern ItemDataRecord *D_8009D070, *D_8009D074;
-#include "pe1/inventory_category.h"
 extern ItemDataRecord D_800A1A00;
 extern ItemDataRecord g_InvItemSlotArray[128];
 

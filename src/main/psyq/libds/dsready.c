@@ -3,8 +3,9 @@
 /* Psy-Q LIBDS DSREADY.OBJ, part 1 of 2: DsStartReadySystem, DsEndReadySystem,
  * DsReadySystemMode. This part needs GCC 2.8.1 with -mno-split-addresses,
  * the rest of the object GCC 2.7.2. */
-#include "pe1/psyq_ds_queue.h"
+
 #include "pe1/psyq_ds.h"
+#include "pe1/psyq_ds_queue.h"
 
 void ER_cbready(int event, u_char *result);
 void LIBDS_DSREADY_text_3D8(u_char event, u_char *result);

@@ -1,10 +1,10 @@
 #ifndef PE1_AKAO_H
 #define PE1_AKAO_H
 
-#include "pe1/akao/track.h"
-#include "pe1/akao/queue.h"
 #include "pe1/akao/commands.h"
+#include "pe1/akao/queue.h"
 #include "pe1/akao/spu_voice.h"
+#include "pe1/akao/track.h"
 #include "pe1/akao_send.h"
 
 /*

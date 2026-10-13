@@ -1,9 +1,12 @@
 /* ASSEMBLER: GNU */
 /* PSY-Q LIBSPU S_INI: _SpuInit, SpuStart. */
 /* Complete LIBSPU S_INI.OBJ code; object alignment stays in the manifest. */
+
 #include "pe1/psyq_bios.h"
 #include "pe1/psyq_callbacks.h"
 #include "pe1/psyq_spu_internal.h"
+
+#include "s_ini_externs.h"
 
 void _SpuInit(int mode) {
     int i;
@@ -45,8 +48,6 @@ void _SpuInit(int mode) {
     D_8009B3B0 = 0;
     D_8009B3E8 = 0;
 }
-
-#include "s_ini_externs.h"
 
 void SpuStart(void) {
     if (_spu_isCalled == 0) {

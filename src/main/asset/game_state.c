@@ -1,20 +1,21 @@
-#include "pe1/psyq_ds.h"
-#include "pe1/pe_image.h"
-#include "pe1/cdrom.h"
-#include "pe1/psyq_gpu.h"
 #include "common.h"
-#include "pe1/draw_buffers.h"
-#include "pe1/game_state.h"
-#include "pe1/font.h"
-#include "pe1/scene_assets.h"
-#include "pe1/cdrom_buffers.h"
-#include "pe1/render_buffers.h"
-#include "pe1/asset_find.h"
 #include "pe1/akao.h"
-#include "pe1/boot_services.h"
-#include "pe1/script_queue.h"
+#include "pe1/asset_find.h"
+#include "pe1/asset_tim.h"
 #include "pe1/boot_disc_check.h"
+#include "pe1/boot_services.h"
+#include "pe1/cdrom.h"
+#include "pe1/cdrom_buffers.h"
+#include "pe1/draw_buffers.h"
+#include "pe1/font.h"
+#include "pe1/game_state.h"
+#include "pe1/pe_image.h"
+#include "pe1/psyq_ds.h"
+#include "pe1/psyq_gpu.h"
 #include "pe1/render_animation_frame.h"
+#include "pe1/render_buffers.h"
+#include "pe1/scene_assets.h"
+#include "pe1/script_queue.h"
 
 int DsPosToInt(CdlLOC *position);
 
@@ -65,9 +66,6 @@ int Asset_OpenPeImage(void)
     }
     return ((s8)g_PeImageMountFlags == 0) ? -2 : 0;
 }
-#include "common.h"
-#include "pe1/boot_disc_check.h"
-#include "pe1/asset_tim.h"
 
 /* Boot notice screen and disc check; mode 1 or 2 is the expected disc. */
 int Render_InitDisplayLists(int mode)
