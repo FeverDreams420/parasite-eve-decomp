@@ -575,8 +575,8 @@ void Menu_CreateInventoryTabView(void) {
         temp_v0 = MenuWidget_CreateSimpleNode(0, 0, 0, 0);
         temp_s1 = MenuWidget_CreateNode(0, temp_v0, temp_v0);
         temp_a0 = temp_s1;
-        temp_v0->update = (void (*)())Menu_StepItemSelectScreen;
-        temp_s1->draw = (void (*)())Menu_DrawItemList;
+        temp_v0->update = Menu_StepItemSelectScreen;
+        temp_s1->draw = Menu_DrawItemList;
         MenuWidget_SetCurrentNode(temp_a0);
         if (Menu_GetBattleEquipMode() != 0) {
             var_v1 = g_MenuItemContextFlag & 0x1F;
