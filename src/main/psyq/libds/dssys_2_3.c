@@ -10,7 +10,6 @@
 #include "dssys_2_3_externs_1.h"
 #include "dssys_2_3_externs_2.h"
 #include "dssys_2_3_externs_3.h"
-#include "dssys_2_3_externs_4.h"
 #include "dssys_2_3_externs_5.h"
 
 void DS_close(void);
@@ -574,7 +573,7 @@ int CQ_ready_system(int command, u8 *payload) {
         copy_destination = slot->payload;
         break;
     default:
-        callbackFn = D_800B8AB4;
+        callbackFn = (int (*)(u8, u8 *))g_DsReadCallbackState.ready;
         if (callbackFn != 0)
             return callbackFn(command_byte, payload);
         return 0;
@@ -585,7 +584,7 @@ int CQ_ready_system(int command, u8 *payload) {
     rescpy(copy_destination, payload);
 
 callback:
-    callbackFn = D_800B8AB4;
+    callbackFn = (int (*)(u8, u8 *))g_DsReadCallbackState.ready;
     if (callbackFn != 0)
         return callbackFn(command_byte, payload);
     return 0;
