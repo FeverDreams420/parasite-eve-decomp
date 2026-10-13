@@ -412,7 +412,7 @@ void Battle_Update(void) {
             Save_DrawSlotMetadata();
         }
         Menu_MainUpdate(menuMode);
-        entity = (BattleEntity *)D_8009D20C;
+        entity = (BattleEntity *)g_FieldActorListHead;
         if (entity != 0) {
             do {
                 if ((entity != D_8009D254) && (entity->core != 0)) {
@@ -495,7 +495,7 @@ void Battle_Update(void) {
                 Battle_DrawStatusPanel(0, (BattleStatusPanel *)&status->panelAux_val);
                 D_8009D278->panelAux_timer = (u8) (D_8009D278->panelAux_timer - 1);
             }
-            victoryEntity = (BattleEntity *)D_8009D20C;
+            victoryEntity = (BattleEntity *)g_FieldActorListHead;
             if (victoryEntity != 0) {
                 do {
                     if ((victoryEntity != D_8009D254) && (victoryEntity->core != 0)) {
@@ -769,7 +769,7 @@ void Battle_StepPostBattle(void)
             player = D_8009D254;
         }
         if (player->animLastFrame == (u16)(player->animFrame >> 16)) {
-            entity = (BattleEntity *)D_8009D20C;
+            entity = (BattleEntity *)g_FieldActorListHead;
             if (entity != 0) {
                 do {
                         if (entity != D_8009D254) {
@@ -809,7 +809,7 @@ void Battle_StepPostBattle(void)
                 Render_StartFadeIn(0x3C);
                 Akao_Cmd_C1_WithSlot(0, 0x3C, 0);
                 exemptKind = 1;
-                entity = (BattleEntity *)D_8009D20C;
+                entity = (BattleEntity *)g_FieldActorListHead;
                 if (entity != 0) {
                     do {
                     if (entity != D_8009D254) {
@@ -823,7 +823,7 @@ void Battle_StepPostBattle(void)
             }
         }
         else {
-            entity = (BattleEntity *)D_8009D20C;
+            entity = (BattleEntity *)g_FieldActorListHead;
             if (entity != 0) {
                 do {
                     if ((entity != D_8009D254) && ((entity->core != 0) || !(entity->entityFlags & 0x40)) && (entity->renderObject.variant_visible == 0)) {
@@ -961,7 +961,7 @@ void Battle_StepEscapeOrDeath(void)
     case 0:
         D_8009D244 = 0;
         Pm_StopUpperHalf();
-        for (entity = (BattleEntity *)D_8009D20C; entity != 0; entity = entity->next) {
+        for (entity = (BattleEntity *)g_FieldActorListHead; entity != 0; entity = entity->next) {
             if (entity->core == 0) {
                 if (entity->parent == 0) continue;
             } else if (entity == D_8009D254) {
@@ -993,7 +993,7 @@ void Battle_StepEscapeOrDeath(void)
             D_800B0D8A != 0) break;
         Battle_ResetEnemyStats(0);
         D_8009CE74++;
-        entity = (BattleEntity *)D_8009D20C;
+        entity = (BattleEntity *)g_FieldActorListHead;
         if (entity != 0) {
             BattleEntity *player = D_8009D254;
             do {
@@ -1005,7 +1005,7 @@ void Battle_StepEscapeOrDeath(void)
         break;
     case 2: {
         int all_done = 1;
-        entity = (BattleEntity *)D_8009D20C;
+        entity = (BattleEntity *)g_FieldActorListHead;
         if (entity != 0) {
             BattleEntity *player = D_8009D254;
             do {
@@ -1266,7 +1266,7 @@ void Battle_PhaseInitEnemyTurn(void) {
         D_8009D278->panelAux_timer = (u8) (D_8009D278->panelAux_timer - 1);
     }
     /* Wait for player/enemy animations to reach their requested idle modes. */
-    entity = (BattleEntity *)D_8009D20C;
+    entity = (BattleEntity *)g_FieldActorListHead;
     if (entity != 0) {
         do {
             if (entity == D_8009D254) {
@@ -1449,7 +1449,7 @@ void Battle_PhaseHitReaction(void) {
         Battle_DrawStatusPanel(0, (BattleStatusPanel *)&D_8009D278->panelB_val);
         D_8009D278->panelB_timer--;
     }
-    for (entity = (BattleEntity *)D_8009D20C; entity; entity = entity->next) {
+    for (entity = (BattleEntity *)g_FieldActorListHead; entity; entity = entity->next) {
         if (entity != D_8009D254 && entity->core) {
             enemy = entity->core;
             if (enemy->coreFlags & 0x6000) {
@@ -1670,7 +1670,7 @@ void Battle_PhaseEndTurn(void) {
     switch (step) {
     case 0:
         /* Wait for enemy actions to finish before stopping effects. */
-        entity = (BattleEntity *)D_8009D20C;
+        entity = (BattleEntity *)g_FieldActorListHead;
         D_8009D2E8 = D_8009D2E8 | 1;
         if (entity != 0) {
             do {
@@ -1736,7 +1736,7 @@ void Battle_StepEntityDeath(void)
     switch (D_8009CE74) {
     case 0:
         D_8009D244 = 0;
-        for (entity = (BattleEntity *)D_8009D20C; entity != 0; entity = entity->next) {
+        for (entity = (BattleEntity *)g_FieldActorListHead; entity != 0; entity = entity->next) {
             if (entity == D_8009D254) continue;
             if (entity->core == 0) {
                 if (entity->parent == 0) continue;
@@ -1763,7 +1763,7 @@ void Battle_StepEntityDeath(void)
         break;
     case 1: {
         int all_done = 1;
-        entity = (BattleEntity *)D_8009D20C;
+        entity = (BattleEntity *)g_FieldActorListHead;
         if (entity != 0) {
             BattleEntity *player = D_8009D254;
             do {

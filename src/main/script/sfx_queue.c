@@ -4,6 +4,7 @@
 #include "pe1/field_sfx.h"
 
 FieldSfxU8 g_FieldSfxQueueCount;
+static FieldSfxQueueEntry g_FieldSfxQueue[28];
 
 void Script_ClearSfxTable(void) {
     unsigned int i;

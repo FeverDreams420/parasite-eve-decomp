@@ -138,7 +138,7 @@ int Script_DispatchScriptCmd(ScriptCmdArgs *args)
         if (initial_entity_id == 0) {
             return 1;
         }
-        entity = D_8009D20C;
+        entity = g_FieldActorListHead;
         entity_id = initial_entity_id;
         if (entity == 0) {
             return 1;

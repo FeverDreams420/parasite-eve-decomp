@@ -51,7 +51,7 @@ class MainDataLayoutTests(unittest.TestCase):
                     if isinstance(s, dict)}
         # Offsets and kinds are the retail layout; the owning unit names are
         # not, since game units are renamed and merged as they are understood.
-        tail = segments["main"]["subsegments"][-13:]
+        tail = segments["main"]["subsegments"][-15:]
         rows = [[r["start"], r["type"]] if isinstance(r, dict) else r[:2]
                 for r in tail]
         self.assertEqual(rows, [
@@ -68,6 +68,8 @@ class MainDataLayoutTests(unittest.TestCase):
             [0x8D5A4, "data"],
             [0x8DA54, ".data"],
             [0x8DA58, "data"],
+            [0x93980, ".bss"],
+            [0x93AD0, "data"],
         ])
         self.assertEqual([r[2] for r in tail[1:9:2]],
                          ["psyq/libc/sprintf", "psyq/libcd/sys_2",
@@ -192,6 +194,16 @@ class SubsegmentSliceTests(unittest.TestCase):
             [0x100C, "asm", "function"],
         ]}]}
         self.assertEqual(gen_expected.configured_pad_bytes(config), 4)
+
+    def test_inline_bss_counts_only_bss_rows_inside_the_image(self):
+        config = {"segments": [{"subsegments": [
+            [0x1000, "data", "before"],
+            {"start": 0x1010, "type": ".bss", "name": "unit",
+             "linker_section_order": ".data"},
+            [0x1160, "data", "after"],
+            [0x1200, ".bss", "tail"],
+        ]}]}
+        self.assertEqual(gen_expected.inline_bss_bytes(config), 0x150)
 
 
 class ObjectCoverageTests(unittest.TestCase):

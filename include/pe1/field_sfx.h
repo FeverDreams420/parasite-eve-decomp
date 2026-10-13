@@ -36,6 +36,5 @@ void Script_QueueFieldSfx(int taskArgument, int subId, int typeId,
                         int taskValue, int actorSelector);
 
 extern FieldSfxU8 g_FieldSfxQueueCount;
-extern FieldSfxQueueEntry g_FieldSfxQueue[28];
 
 #endif /* PE1_FIELD_SFX_H */

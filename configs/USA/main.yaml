@@ -903,6 +903,11 @@ segments:
       - [0x8D5A4, data, main/dtail_gp_post_render_color]
       - [0x8DA54, .data, field/actor_collision]
       - [0x8DA58, data, main/dtail_gp_post_collision_actor]
+      # The field sfx event queue is sfx_queue's file-static .bss: retail's
+      # per-object .bss run (link order) puts it between the menu widget and
+      # LIBGPU state (docs/SHIFTABILITY_PLAN.md, stage B).
+      - {start: 0x93980, type: .bss, name: script/sfx_queue, linker_section_order: .data}
+      - [0x93AD0, data, main/dtail_gp_post_sfx_queue]
 
   # Data separates the initial code from the field-engine code. Keep a
   # separate linker segment so section ordering preserves retail addresses.

@@ -2233,3 +2233,6 @@ Battle_GetEnemyContextField = 0x8003010C;
 Inv_ScrambleGrid = 0x80052B2C; // type:func
 g_GeomVramPacketDst = 0x800BCFA4;
 D_800E2368 = 0x800E2368;
+g_FieldSfxQueueCount = 0x8009CDB4; // size:0x1
+g_FieldSfxQueue = 0x800A3180; // size:0x150
+g_FieldActorListHead = 0x8009D20C; // size:0x4

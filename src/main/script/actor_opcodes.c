@@ -281,7 +281,7 @@ int Entity_GetPositionByType(int **args) {
         }
         entity = player;
     } else {
-        entity = D_8009D20C;
+        entity = g_FieldActorListHead;
         entity_id = selector;
         while (entity != 0) {
             if (entity->type_id == entity_id &&
@@ -685,7 +685,7 @@ int Script_CopyEntityRenderObject(int **args) {
         }
         source = player;
     } else {
-        source = D_8009D20C;
+        source = g_FieldActorListHead;
         if (source == 0) {
             return 1;
         }
@@ -1397,7 +1397,7 @@ int Akao_ProcessCommand(AkaoCommandArgs *args) {
             }
             actor = player;
         } else {
-            actor = D_8009D20C;
+            actor = g_FieldActorListHead;
             while (actor != 0) {
                 if (actor->type_id == *args->arg2 &&
                     actor->sub_id == *args->arg3 &&

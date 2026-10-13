@@ -332,7 +332,7 @@ block_55:
                     var_a2_2 = var_s0_4 & 0xFF;
                 } while ((unsigned)var_a2_2 < (u8) D_8009D1D4);
             }
-            var_a0_4 = D_8009D20C;
+            var_a0_4 = g_FieldActorListHead;
             if (var_a0_4 != NULL) {
                 do {
                     if (var_a0_4 != D_8009D254) {

@@ -414,7 +414,7 @@ void Battle_BuildTargetList(void) {
     BattleEntity *player;
     BattleEntity *candidate;
 
-    candidate = (BattleEntity *)D_8009D20C;
+    candidate = (BattleEntity *)g_FieldActorListHead;
     g_BattleTargetIndex = 0;
     if (candidate != NULL) {
         do {

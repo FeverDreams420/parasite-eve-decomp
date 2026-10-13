@@ -468,7 +468,7 @@ void Menu_MainUpdate(s32 arg0) {
                 *temp_s2 &= 0xFF7FFFFF;
             }
         } else if (!(temp_v1_4 & 0x180000)) {
-            var_s0 = (BattleEntity *)D_8009D20C;
+            var_s0 = (BattleEntity *)g_FieldActorListHead;
             if (var_s0 != NULL) {
                 do {
                     if (var_s0 != D_8009D254) {

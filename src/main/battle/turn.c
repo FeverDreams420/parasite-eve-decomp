@@ -59,7 +59,7 @@ void Battle_DispatchInit(int arg0) {
 }
 
 int Battle_RollEscapeChance(void) {
-    BattleEntity *entity = (BattleEntity *)D_8009D20C;
+    BattleEntity *entity = (BattleEntity *)g_FieldActorListHead;
     s16 highestRank = 0;
     /* Retail narrows the probability after every multiplier. */
     s8 result = 0;
@@ -175,7 +175,7 @@ void Battle_SetupEntityTarget(BattleEntity *actor) {
     D_8009CE38[3] = D_8009D278->action->animMode[3];
     target = 0;
     if ((actor->entityFlags & 0x40000000) && !((EnemyCombatant *)actor->core)->deathPersist) {
-        for (target = (BattleEntity *)D_8009D20C; target; target = target->next) {
+        for (target = (BattleEntity *)g_FieldActorListHead; target; target = target->next) {
             EnemyCombatant *enemy;
             if (target == D_8009D254 || target == actor) continue;
             enemy = target->core;
@@ -184,7 +184,7 @@ void Battle_SetupEntityTarget(BattleEntity *actor) {
                 target->teamId == actor->teamId && !(actor->entityFlags & 0x40000000)) break;
         }
     } else if ((actor->entityFlags & 0x6000) && ((EnemyCombatant *)actor->core)->field04.bytes.kind == 3) {
-        for (target = (BattleEntity *)D_8009D20C; target; target = target->next) {
+        for (target = (BattleEntity *)g_FieldActorListHead; target; target = target->next) {
             EnemyCombatant *enemy;
             if (target == D_8009D254 || target == actor) continue;
             enemy = target->core;
@@ -582,7 +582,7 @@ void Battle_InitFadeVars(void) {
             Render_FadeEntityColor(&entity->parent->renderObject, (level), (level),      \
                                    (level));                                             \
         } else if (kind == 4) {                                                          \
-            for (actor = (BattleEntity *)D_8009D20C; actor != 0; actor = actor->next) {                  \
+            for (actor = (BattleEntity *)g_FieldActorListHead; actor != 0; actor = actor->next) {                  \
                 if (actor != D_8009D254 && actor->core != 0 &&                           \
                     ((Combatant *)actor->core)->field04.bytes.kind == 4) {        \
                     Render_FadeEntityColor(&actor->renderObject, g_BattleFadeLevel,      \
@@ -684,7 +684,7 @@ inline static void Mark(BattleEntity *entity)
     if (kind == 4)
   {
     BattleEntity *active;
-    entity = (BattleEntity *)D_8009D20C;
+    entity = (BattleEntity *)g_FieldActorListHead;
     if (!entity)
       return;
     active = D_8009D254;
@@ -707,7 +707,7 @@ inline static void MarkGroup(BattleEntity *entity, int group_kind, BattleEntity 
   int kind = ((Combatant *)entity->core)->field04.bytes.kind;
   if (kind == 1) entity = entity->parent;
   else if (kind == group_kind) {
-    entity = (BattleEntity *)D_8009D20C;
+    entity = (BattleEntity *)g_FieldActorListHead;
     while (entity != 0) {
       if (entity != active && entity->core != 0 && ((Combatant *)entity->core)->field04.bytes.kind == group_kind)
         entity->renderObject.flags_9C |= 0x20;
@@ -723,7 +723,7 @@ inline static void MarkKinds(BattleEntity *entity, int group_kind, int linked_ki
   int kind = ((Combatant *)entity->core)->field04.bytes.kind;
   if (kind == linked_kind) entity = entity->parent;
   else if (kind == group_kind) {
-    entity = (BattleEntity *)D_8009D20C;
+    entity = (BattleEntity *)g_FieldActorListHead;
     while (entity != 0) {
       if (entity != active && entity->core != 0 && ((Combatant *)entity->core)->field04.bytes.kind == group_kind)
         entity->renderObject.flags_9C |= 0x20;
@@ -893,7 +893,7 @@ int Battle_ProcessActionSlot(BattleEntity *actor)
             }
         } else if (state->field04.bytes.kind == 4) {
             BattleEntity *iter;
-            for (iter = (BattleEntity *)D_8009D20C; iter != 0; iter = iter->next) {
+            for (iter = (BattleEntity *)g_FieldActorListHead; iter != 0; iter = iter->next) {
                 if (iter != D_8009D254 && iter->core != 0 &&
                     ((EnemyCombatant *)iter->core)->field04.bytes.kind == 4) {
                     int shade = g_BattleFadeLevel;
@@ -1075,7 +1075,7 @@ void Battle_UpdateEnemy(BattleEntity *entity) {
                         } else if (effectKind == 4) {
                             int linkedKind = 4;
                             BattleEntity *player;
-                            linkedActor = (BattleEntity *)D_8009D20C;
+                            linkedActor = (BattleEntity *)g_FieldActorListHead;
                             if (linkedActor != 0) {
                                 player = D_8009D254;
                                 do {
@@ -1169,7 +1169,7 @@ stepDeathAnimation:
                 actor->motionZ = 0;
                 Battle_StepEntityAnimState(actor);
             } else {
-                livingLink = (BattleEntity *)D_8009D20C;
+                livingLink = (BattleEntity *)g_FieldActorListHead;
                 for (;;) {
                     if (livingLink == 0) {
                         deadKind = enemy->field04.bytes.kind;

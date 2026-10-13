@@ -359,7 +359,7 @@ void Battle_ResolveHitOnTimer(void)
         reaction = g_EvasionReaction;
         if (g_EvasionStatus == 1)
         {
-            for (target = (BattleEntity *)D_8009D20C; target != 0; target = target->next)
+            for (target = (BattleEntity *)g_FieldActorListHead; target != 0; target = target->next)
             {
                 EnemyCombatant *core;
                 u32 flags;
@@ -400,7 +400,7 @@ void Battle_ResolveHitOnTimer(void)
             lowerBound = playerAngle - 0x1600;
             upperBound = playerAngle - 0xA00;
         }
-        target = (BattleEntity *)D_8009D20C;
+        target = (BattleEntity *)g_FieldActorListHead;
         if (target != 0)
         {
             s32 upper = (s16)upperBound;
@@ -847,7 +847,7 @@ s32 Battle_StepAyaAction(void)
     case 4:
       if (D_8009D254->animLastFrame == (u16)(D_8009D254->animFrame >> 16))
     {
-      entity = (BattleEntity *)D_8009D20C;
+      entity = (BattleEntity *)g_FieldActorListHead;
       if (entity != 0)
       {
         do

@@ -663,8 +663,8 @@ def object_section_bytes(path):
     return total
 
 
-def configured_pad_bytes(config):
-    """Bytes deliberately classified as padding rather than object content."""
+def configured_kind_bytes(config, kinds):
+    """File bytes of the subsegments whose type is in KINDS."""
     total = 0
     for segment in config.get("segments", []):
         if not isinstance(segment, dict):
@@ -676,9 +676,23 @@ def configured_pad_bytes(config):
             elif isinstance(row, list):
                 rows.append((row[0], row[1] if len(row) > 1 else None))
         for row, following in zip(rows, rows[1:]):
-            if row[1] == "pad":
+            if row[1] in kinds:
                 total += following[0] - row[0]
     return total
+
+
+def configured_pad_bytes(config):
+    """Bytes deliberately classified as padding rather than object content."""
+    return configured_kind_bytes(config, ("pad",))
+
+
+def inline_bss_bytes(config):
+    """Zero bytes of a C unit's .bss/.sbss placed inside the file image.
+
+    Main's BSS lies inside the PS-X EXE image, so a unit's .bss subsegment
+    followed by another subsegment spans file bytes the objects (NOBITS on
+    both sides) do not count."""
+    return configured_kind_bytes(config, (".bss", ".sbss"))
 
 
 def check_coverage(jobs, binary, padding=0):
@@ -856,7 +870,8 @@ def process_module(module, shared, assembler, workers):
         list(pool.map(assemble, jobs))
 
     binary = ROOT / base_config["options"]["target_path"]
-    total, want = check_coverage(jobs, binary, configured_pad_bytes(base_config))
+    total, want = check_coverage(
+        jobs, binary, configured_pad_bytes(base_config) + inline_bss_bytes(base_config))
     status = "ok" if total == want else "off by 0x%X bytes" % abs(want - total)
     print(
         "%s: %d units (%d from the tree, %d names from the base), 0x%X of 0x%X bytes [%s]"
