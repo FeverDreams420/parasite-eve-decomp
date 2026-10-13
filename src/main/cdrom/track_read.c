@@ -30,6 +30,8 @@ struct SceneTrackRecord *g_CdTrackRecord;
 * GCC's block ordering. No ASM construct emits an instruction. */
 int CdRom_ReadAssetSectors(unsigned kind, unsigned int index, int channel, void *buffer, u32 maximum, int blocking)
 {
+    /* Transfer addresses and phase changes use this scratch in separate cases. */
+    register u32 workValue asm("$3");
     register Pe1GameState *state asm("$18") = &g_GameState;
     int result = -1;
     u32 *archiveLba;
@@ -55,7 +57,6 @@ int CdRom_ReadAssetSectors(unsigned kind, unsigned int index, int channel, void 
             {
                 u8 *table = (u8 *)root;
                 u32 first;
-                register u32 start asm("$3");
                 entries = table + byteOffset;
                 first = *(u16 *)entry;
                 asm("" : "=r"(first) : "0"(first), "r"(entries) : "memory");
@@ -63,11 +64,11 @@ int CdRom_ReadAssetSectors(unsigned kind, unsigned int index, int channel, void 
                 asm("" : "=r"(scaledIndex) : "0"(scaledIndex) : "memory");
                 scaledIndex -= entry[0];
                 transferValue = *archiveLba + first;
-                start = state->pe_image_base_lba + transferValue;
+                workValue = state->pe_image_base_lba + transferValue;
                 g_CdReadTotalSectors = scaledIndex;
                 g_CdReadRemainingSectors = g_CdReadTotalSectors;
                 isSequence = kind == 0;
-                g_CdReadStartLba = start;
+                g_CdReadStartLba = workValue;
                 if (isSequence)
                 {
                     result = Spu_SetStreamModeA();
@@ -187,15 +188,14 @@ int CdRom_ReadAssetSectors(unsigned kind, unsigned int index, int channel, void 
             } else {
                 u32 remaining, remainingSnapshot;
                 u32 transferred;
-                register u32 nextPhase asm("$3");
                 busy = 1;
                 remainingSnapshot = g_CdReadRemainingSectors;
                 finished = (blocking ^ 1) & 1;
                 asm("" : : "r"(busy), "r"(finished) : "memory");
                 remaining = remainingSnapshot;
                 transferred = g_CdReadChunkSectors;
-                nextPhase = 7;
-                state->cd_read_phase = nextPhase;
+                workValue = 7;
+                state->cd_read_phase = workValue;
                 g_CdReadRemainingSectors = remaining - transferred;
             }
             break;
