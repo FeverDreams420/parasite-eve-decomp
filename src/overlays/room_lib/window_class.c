@@ -28,7 +28,7 @@ int RoomLib_InitWindowClass(RoomWindowObject *ctx) {
     ctx->state.optionC = value;
     ctx->state.flags = 3;
     ctx->state.scale = 0x400;
-    ctx->state.callback = (void (*)(void))RoomLib_WindowHandler;
+    ctx->state.callback = RoomLib_WindowHandler;
     ctx->state.signal = 0;
     ctx->state.active = 0;
     ctx->state.started = 0;
@@ -99,7 +99,7 @@ int RoomLib_ConfigureWindowClass(RoomWindowObject *obj, int query, unsigned int 
         state->flags = a | b | c;
         break;
     case 10:
-        callback = (void (*)(void))RoomLib_ArmWindowClass;
+        callback = RoomLib_ArmWindowClass;
         sentinel = -1;
         state->variant = a;
         state->active = b;
