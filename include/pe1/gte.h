@@ -199,10 +199,10 @@
     }
 
 #define gte_ldv0_word3_at(vec) \
-    do { \
+    { \
         s32 *source = (vec); \
         gte_ldv0_word3(source); \
-    } while (0)
+    }
 
 #define gte_swc2_9_0(ptr) \
     asm volatile("swc2 $9,0(%0)" : : "r"(ptr) : "memory")
