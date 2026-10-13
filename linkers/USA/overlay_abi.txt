@@ -71,7 +71,9 @@ D_80172D00 = OVERLAY_WINDOW_FX_SECTOR17 + 0x2D00; /* boot_display */
  * linked or loaded at (0x80120D44 load base, 0x801EB7F8 link base,
  * see configs/USA/overlays/menu_memcard.yaml) outside the segment
  * windows its config splits out, and its work memory in the overlay
- * region (0x80193254.., 0x801D0D5C..). Fixed by the menu loader. */
+ * region (0x80193254.., 0x801D0D5C.., and the work areas after the
+ * effect code at 0x801F1B98.. that its effect descriptors point at).
+ * Fixed by the menu loader. */
 MenuCard_FlipScreenPages = OVERLAY_WINDOW_BOOT_DISPLAY + 0x48A4; /* menu_memcard */
 MenuCard_ResetDisplayState = OVERLAY_WINDOW_BOOT_DISPLAY + 0x78A4; /* menu_memcard */
 MenuCard_StopVideo = OVERLAY_WINDOW_BOOT_DISPLAY + 0x81F8; /* menu_memcard */
@@ -140,15 +142,22 @@ D_801ED848 = OVERLAY_WINDOW_TASK_PROGRAM + 0x50; /* menu_memcard */
 D_801ED84C = OVERLAY_WINDOW_TASK_PROGRAM + 0x54; /* menu_memcard */
 D_801ED850 = OVERLAY_WINDOW_TASK_PROGRAM + 0x58; /* menu_memcard */
 D_801ED854 = OVERLAY_WINDOW_TASK_PROGRAM + 0x5C; /* menu_memcard */
+D_801F1B98 = OVERLAY_WINDOW_TASK_PROGRAM + 0x43A0; /* menu_memcard */
 D_801F1BB0 = OVERLAY_WINDOW_TASK_PROGRAM + 0x43B8; /* menu_memcard */
+D_801F1C10 = OVERLAY_WINDOW_TASK_PROGRAM + 0x4418; /* menu_memcard */
 D_801F1C28 = OVERLAY_WINDOW_TASK_PROGRAM + 0x4430; /* menu_memcard */
+D_801F1C90 = OVERLAY_WINDOW_TASK_PROGRAM + 0x4498; /* menu_memcard */
 D_801F1CB0 = OVERLAY_WINDOW_TASK_PROGRAM + 0x44B8; /* menu_memcard */
 D_801F1CD8 = OVERLAY_WINDOW_TASK_PROGRAM + 0x44E0; /* menu_memcard */
+D_801F1D38 = OVERLAY_WINDOW_TASK_PROGRAM + 0x4540; /* menu_memcard */
 D_801F1D5C = OVERLAY_WINDOW_TASK_PROGRAM + 0x4564; /* menu_memcard */
 D_801F1D86 = OVERLAY_WINDOW_TASK_PROGRAM + 0x458E; /* menu_memcard */
 D_801F1D88 = OVERLAY_WINDOW_TASK_PROGRAM + 0x4590; /* menu_memcard */
+D_801F1DC4 = OVERLAY_WINDOW_TASK_PROGRAM + 0x45CC; /* menu_memcard */
 D_801F1DE8 = OVERLAY_WINDOW_TASK_PROGRAM + 0x45F0; /* menu_memcard */
+D_801F1E50 = OVERLAY_WINDOW_TASK_PROGRAM + 0x4658; /* menu_memcard */
 D_801F1E74 = OVERLAY_WINDOW_TASK_PROGRAM + 0x467C; /* menu_memcard */
+D_801F1EDC = OVERLAY_WINDOW_TASK_PROGRAM + 0x46E4; /* menu_memcard */
 D_801F1F28 = OVERLAY_WINDOW_TASK_PROGRAM + 0x4730; /* menu_memcard */
 D_801F1F30 = OVERLAY_WINDOW_TASK_PROGRAM + 0x4738; /* menu_memcard */
 D_801F1F34 = OVERLAY_WINDOW_TASK_PROGRAM + 0x473C; /* menu_memcard */

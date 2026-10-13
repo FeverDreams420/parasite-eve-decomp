@@ -61,3 +61,14 @@ g_MenuCardVideoName033A = 0x80120D34; // type:asciz
 g_MenuCardVideoName033B = 0x80120D24; // type:asciz
 g_MenuCardVideoName034 = 0x80120D14; // type:asciz
 g_MenuCardVideoName035 = 0x80120D04; // type:asciz
+
+// The work areas the effect descriptors (D_8018EC00.., two words: the
+// effect function and its work area) point at, after the effect code in the
+// task program window. Labelled so the descriptors hold symbol references.
+D_801F1B98 = 0x801F1B98; // absolute:true
+D_801F1C10 = 0x801F1C10; // absolute:true
+D_801F1C90 = 0x801F1C90; // absolute:true
+D_801F1D38 = 0x801F1D38; // absolute:true
+D_801F1DC4 = 0x801F1DC4; // absolute:true
+D_801F1E50 = 0x801F1E50; // absolute:true
+D_801F1EDC = 0x801F1EDC; // absolute:true
