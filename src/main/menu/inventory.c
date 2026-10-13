@@ -116,17 +116,11 @@ void Menu_OpenInventoryScreen(void) {
     MenuWidgetNode *root1;
     MenuWidgetNode *node;
     MenuWidgetNode *current;
-    /* Match debt: retail loads the 9 once into a0 ahead of the branch, for
-     * both MenuWidget_InitPool(9) and Inv_SetActiveList(9, 0). */
-    register s32 nine asm("$4");
-
-    nine = 9;
     Inv_ResetActiveList();
     g_MenuEquipMode = 0;
 
     if (g_MenuEquipSwapSource != 0) {
-        /* The retail caller passes 9 although the pool initializer ignores it. */
-        ((void (*)(int))MenuWidget_InitPool)(nine);
+        MenuWidget_InitPool();
 
         if (MenuWidget_FindByModeAndSelectedBase(1, 0) == 0) {
             root0 = MenuWidget_CreateSimpleNode(0, 0, 0, 0);
