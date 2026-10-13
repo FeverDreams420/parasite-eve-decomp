@@ -44,7 +44,7 @@ void RoomEffect_DrawMotionParticles(void *unused, RoomStatePair *control,
     RoomMotionCursor *cursor;
     int i;
 
-    context = (RoomMotionContext *)FieldFx_GetScriptContext();
+    context = FieldFx_GetScriptContext();
     func_800C2EAC(context->owner);
     func_800C2FF0(0x20, 0x20);
     func_800C3098(0x10);
@@ -66,9 +66,9 @@ void RoomEffect_DrawMotionParticles(void *unused, RoomStatePair *control,
     ScaleMatrix(&matrix, &scale.value);
 
     if (control->h2 == 30) {
-        savedSecondary = (RoomMotionTransform *)context->link->p238;
+        savedSecondary = context->link->p238;
         state->matrix[1] = savedSecondary->secondary;
-        savedPrimary = (RoomMotionTransform *)context->link->p238;
+        savedPrimary = context->link->p238;
         state->matrix[0] = savedPrimary->primary;
     }
 
@@ -77,7 +77,7 @@ void RoomEffect_DrawMotionParticles(void *unused, RoomStatePair *control,
         primary = &state->matrix[0];
         secondary = &state->matrix[1];
     } else {
-        current = (RoomMotionTransform *)context->link->p238;
+        current = context->link->p238;
         primary = &current->primary;
         secondary = &current->secondary;
     }
