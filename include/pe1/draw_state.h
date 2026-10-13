@@ -116,7 +116,6 @@ extern u32 D_8009D14C[];
 extern GpuDrawEnabledFlag g_DrawEnabled;
 extern short g_SeqElapsed;
 extern volatile unsigned char g_SceneInitSubphase;
-extern signed char D_800B0DBB;
 
 /* Battle status icons: per draw buffer, thirteen paged sprites (poison,
  * confusion and the other ailment symbols Draw_StatusIcons lists). */

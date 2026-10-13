@@ -989,7 +989,7 @@ void Battle_StepEscapeOrDeath(void)
         break;
     case 1:
         if (D_8009D254->renderObject.variant_visible != 0 ||
-            D_800B0D8A != 0) break;
+            g_PlayerBattleEntity.variant_visible != 0) break;
         Battle_ResetEnemyStats(0);
         g_BattleStepIndex++;
         entity = (BattleEntity *)g_FieldActorListHead;

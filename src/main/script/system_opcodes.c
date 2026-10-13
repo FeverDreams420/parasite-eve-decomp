@@ -885,7 +885,7 @@ int Script_SetAnimInterpRate(short **arg0) {
 
     if (current == selected) {
         Anim_SetInterpRate(&g_PlayerBattleEntity, *args[0]);
-        D_800B0D88 |= 2;
+        g_PlayerBattleEntity.flags_9C |= 2;
     }
 
     return 1;

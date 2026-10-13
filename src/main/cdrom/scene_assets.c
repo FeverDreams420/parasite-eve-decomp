@@ -404,13 +404,13 @@ s32 CdRom_LoadInitialImage(void) {
     s32 result;
     DISPENV sp18;
 
-    g_SceneAudioSlot0Handle = -1;
-    g_SceneAudioSlot0Key = -1;
-    g_SceneAudioSlot1Handle = -1;
-    D_800B0DB6 = -1;
-    D_800B0DB3 = -1;
-    D_800B0DB2 = -1;
-    D_800B0CD8 &= 0xFFFFFF0F;
+    g_GameState.scene_audio.tracks.keys[0][1] = -1;
+    g_GameState.scene_audio.tracks.keys[0][0] = -1;
+    g_GameState.scene_audio.tracks.keys[1][1] = -1;
+    g_GameState.scene_audio.tracks.keys[1][0] = -1;
+    g_GameState.scene_audio.tracks.banks[1] = -1;
+    g_GameState.scene_audio.tracks.banks[0] = -1;
+    g_GameState.flags &= 0xFFFFFF0F;
     Akao_Cmd_F0();
 
 restart:

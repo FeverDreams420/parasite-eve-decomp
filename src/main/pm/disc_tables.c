@@ -13,6 +13,7 @@
 #include "pe1/draw_buffers.h"
 #include "pe1/draw_state.h"
 #include "pe1/font.h"
+#include "pe1/game_state.h"
 #include "pe1/geom_state.h"
 #include "pe1/menu_queue.h"
 #include "pe1/pe_image.h"
@@ -65,7 +66,7 @@ int Draw_InitDisplay(int mode) {
 
     ptr = D_8010BD00;
     ptr2 = D_80120D08;
-    D_800B0E40 = ptr;
+    g_GameState.texture_load_scratch = (union SceneAssetView *)ptr;
     ptr = ptr2 + 0x1C98;
     g_SceneObjectWork = ptr2;
     ptr2 += 0x5C98;
@@ -74,7 +75,7 @@ int Draw_InitDisplay(int mode) {
     ptr += const_8000;
     g_RenderOtBufferBaseAlt[0] = ptr2;
     ptr2 = ptr + 0x2400;
-    D_800B0E44 = ptr;
+    g_GameState.object_texture_blob = (struct SceneAssetBlob *)ptr;
     ptr += 0x4800;
     g_RenderScratchBufferBase[0] = ptr;
     ptr += const_48000;
@@ -129,7 +130,7 @@ inline short Seq_GetElapsed(void) {
 int Draw_CheckDrawStatus(void) {
     if (Draw_GetDrawEnabled()) {
         if (Seq_GetElapsed() > 0) {
-            if (D_800B0DBB != 0) {
+            if (g_GameState.scene_audio.tracks.movie_wide != 0) {
                 return 2;
             }
             return 1;
@@ -241,13 +242,13 @@ int CdRom_LoadBootAudio(void) {
     u16 *range;
     int retry;
 
-    g_SceneAudioSlot0Handle = -1;
-    g_SceneAudioSlot0Key = -1;
-    g_SceneAudioSlot1Handle = -1;
-    D_800B0DB6 = -1;
-    D_800B0DB3 = -1;
-    D_800B0DB2 = -1;
-    D_800B0CD8 &= -0xF1;
+    g_GameState.scene_audio.tracks.keys[0][1] = -1;
+    g_GameState.scene_audio.tracks.keys[0][0] = -1;
+    g_GameState.scene_audio.tracks.keys[1][1] = -1;
+    g_GameState.scene_audio.tracks.keys[1][0] = -1;
+    g_GameState.scene_audio.tracks.banks[1] = -1;
+    g_GameState.scene_audio.tracks.banks[0] = -1;
+    g_GameState.flags &= -0xF1;
     Akao_Cmd_F0();
 
 retry_first:

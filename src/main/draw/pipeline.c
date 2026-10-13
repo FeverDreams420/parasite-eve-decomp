@@ -53,7 +53,7 @@ void Draw_InitPipeline(void) {
     register int t1 asm("$9");
     char *p;
     char *a0p;
-    int geom;
+    void *fogSource;
     int frame_pad[6];
 
     Akao_LoadVoiceBankAlt();
@@ -130,11 +130,11 @@ void Draw_InitPipeline(void) {
 
     Entity_RelocateSceneData();
     if (g_GameState.flags & 0x40000000) {
-        geom = W(D_800B162C);
+        fogSource = g_GameState.bank_reset_950[1];
     } else {
-        geom = W(D_800B1628);
+        fogSource = g_GameState.bank_reset_950[0];
     }
-    Render_SetupFogLayer(geom);
+    Render_SetupFogLayer(fogSource);
     Script_DrawSyncAndFlush();
     func_800E0060();
     g_GlobalFrameCounter[0] = 0;

@@ -16,16 +16,16 @@ extern u8 g_DiscChangeFlags;
  * Scene_SetStoryDay keeps the lbu and its separate sign extension only
  * through a volatile read; a plain one combines into lb (lev 28). */
 extern volatile u8 D_800B0CE5;
-/* Room and area bytes of g_GameState as their own symbols: room_type (as
- * the texture page to load), field_bg_cache_bank (the loaded page) and
- * loaded_entity_bank (the area type before the transition). */
-extern s8 D_800B0CE0;
+/* Room and area bytes of g_GameState as their own symbols:
+ * field_bg_cache_bank (the loaded texture page) and loaded_entity_bank
+ * (the area type before the transition). */
 extern s8 g_LoadedTexturePageId;
 extern u8 g_SavedSceneAreaType;
 
-/* g_GameState.flags as its own scalar symbol: the frame loop, the process
- * manager and the CD boot read update it with absolute loads and stores,
- * where the record keeps its address in a register. */
+/* g_GameState.flags as its own scalar symbol: the frame loop, the save
+ * screens, the scene loader and the fx_common/menu_memcard overlays update
+ * it with absolute loads and stores, where the record keeps its address in
+ * a register. */
 extern u32 D_800B0CD8;
 
 /* g_GameState.scene_object.animation_source as its own scalar symbol:

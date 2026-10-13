@@ -5,6 +5,7 @@
 #include "common.h"
 #include "pe1/battle_runtime.h"
 #include "pe1/field_movement.h"
+#include "pe1/game_state.h"
 #include "pe1/geom_state.h"
 #include "pe1/gte.h"
 #include "pe1/gte_types.h"
@@ -172,7 +173,7 @@ int Render_PrepareFrame(void) {
     } local;
     unsigned int *state = D_800B89F8;
     Render_InitViewState(state, state + 8);
-    if (Render_DrawMeshList((void *)D_800B0E40, &local.result)) return -2;
+    if (Render_DrawMeshList((void *)g_GameState.texture_load_scratch, &local.result)) return -2;
     SetGeomScreen(state[8]);
     Render_ResetAllEntries();
     if (D_8009D254) {

@@ -577,7 +577,7 @@ void Boot_InitMemoryLayout(void) {
 
     ptr = D_8010BD00;
     ptr2 = D_80120D08;
-    D_800B0E40 = ptr;
+    g_GameState.texture_load_scratch = (union SceneAssetView *)ptr;
     ptr = ptr2 + 0x1C98;
     g_SceneObjectWork = ptr2;
     ptr2 += 0x5C98;
@@ -586,7 +586,7 @@ void Boot_InitMemoryLayout(void) {
     ptr += const_8000;
     g_RenderOtBufferBaseAlt[0] = ptr2;
     ptr2 = ptr + 0x2400;
-    D_800B0E44 = ptr;
+    g_GameState.object_texture_blob = (struct SceneAssetBlob *)ptr;
     ptr += 0x4800;
     g_RenderScratchBufferBase[0] = ptr;
     ptr += const_48000;

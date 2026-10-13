@@ -638,7 +638,7 @@ s32 Scene_StreamTexturePage(void)
     s32 poll;
 
     state = &g_GameState;
-    if (D_800B0CE0 != g_LoadedTexturePageId) {
+    if ((s8)g_GameState.room_type != g_LoadedTexturePageId) {
         DrawSync(0);
         /* Matching debt: the CD retry restarts from the table address;
          * a loop lets loop.c hoist it (docs/CODE_ORGANIZATION.md). */

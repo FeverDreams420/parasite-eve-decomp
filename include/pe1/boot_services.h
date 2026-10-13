@@ -36,8 +36,6 @@ extern u8 *volatile g_VoiceBankBase;
 extern u8 *volatile D_800B0E2C;
 extern u8 *volatile g_EntityTextureBlob;
 extern u8 *volatile g_SceneObjectWork;
-extern u8 *volatile D_800B0E40;
-extern u8 *volatile D_800B0E44;
 extern u8 *volatile D_800B0E48;
 extern u8 *volatile D_800B0E5C;
 extern u8 *volatile g_ScenePmSlotBanks;

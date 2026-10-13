@@ -165,8 +165,6 @@ extern BattleSavedRotation g_AyaSavedRotation;
  * the store. Matching debt (see docs/CODE_ORGANIZATION.md). */
 extern struct { u16 value; char pad[14]; } D_800B0D88_read __asm__("D_800B0D88");
 extern struct { u16 value; char pad[14]; } D_800B0D88_write __asm__("D_800B0D88");
-extern u16 D_800B0D88;
-extern u8 D_800B0D8A;
 extern u16 D_801F1F38;
 int Scene_InitEntityPlayer(int mode);
 void Pm_StopLowerHalf(void);

@@ -11,6 +11,7 @@
 #include "pe1/battle_update.h"
 #include "pe1/draw_slot_record.h"
 #include "pe1/draw_state.h"
+#include "pe1/game_state.h"
 #include "pe1/global_slot.h"
 #include "pe1/menu_state.h"
 #include "pe1/psyq_gpu.h"
@@ -1568,7 +1569,7 @@ void Render_AnimationFrame(void) {
     Render_SetGteScreenOffset();
 
     draw_index = g_ActiveDrawSlot;
-    delta = Render_DrawWireframeModel(D_800B0DF8[0],
+    delta = Render_DrawWireframeModel(g_GameState.room_geometry_table,
                                       ((RenderAnimPlayer *)g_PlayerEntity)->decoderData,
                                       size, width & 0xFFFE,
                                       g_OtBufferTable[draw_index] + 8,
