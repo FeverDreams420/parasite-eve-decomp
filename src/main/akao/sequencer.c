@@ -1834,7 +1834,7 @@ void SeqOp_ReadAdsrDecayRate(AkaoTrack *track) {
     track->adsr_decay_rate = value;
 }
 
-void SeqOp_ReadAdsrSustainLevel(AkaoTrack *track) {
+void SeqOp_ReadAdsrSustainLevel(AkaoTrack *track, u32 voice_mask) {
     unsigned char *cursor = track->pc;
     unsigned int flags;
     unsigned char value;
@@ -2101,12 +2101,12 @@ void SeqOp_ReadTrack64U16(unsigned char **stream) {
     track->repeat_counters[1] |= cursor[0] << 8;
 }
 
-void SeqOp_ReadAdsrDecayAndSustain(void *ptr, int arg) {
-    SeqOp_ReadAdsrDecayRate(ptr);
-    ((void (*)())SeqOp_ReadAdsrSustainLevel)(ptr, arg);
+void SeqOp_ReadAdsrDecayAndSustain(AkaoTrack *track, u32 voice_mask) {
+    SeqOp_ReadAdsrDecayRate(track);
+    SeqOp_ReadAdsrSustainLevel(track, voice_mask);
 }
 
-void SeqOp_SetDurationBAAndMask(AkaoTrack *track) {
+void SeqOp_SetDurationBAAndMask(AkaoTrack *track, u32 voice_mask) {
     unsigned char *cursor = track->pc;
     int value;
 
@@ -2118,7 +2118,7 @@ void SeqOp_SetDurationBAAndMask(AkaoTrack *track) {
         value = 0x101;
     }
     track->key_on_delay = value;
-    ((void (*)())SeqOp_SetTrack34Mask)(track);
+    SeqOp_SetTrack34Mask(track, voice_mask);
 }
 
 void SeqOp_SetDuration(AkaoTrack *track) {
@@ -2135,7 +2135,7 @@ void SeqOp_SetDuration(AkaoTrack *track) {
     track->key_on_delay = value;
 }
 
-void SeqOp_SetRepeatCount(AkaoTrack *track) {
+void SeqOp_SetRepeatCount(AkaoTrack *track, u32 voice_mask) {
     unsigned char *cursor = track->pc;
     int value;
 
@@ -2147,7 +2147,7 @@ void SeqOp_SetRepeatCount(AkaoTrack *track) {
         value = 0x101;
     }
     track->key_off_delay = value;
-    ((void (*)())SeqOp_SetMask)(track);
+    SeqOp_SetMask(track, voice_mask);
 }
 
 void SeqOp_SetDurationAlt(AkaoTrack *track) {
@@ -2164,11 +2164,11 @@ void SeqOp_SetDurationAlt(AkaoTrack *track) {
     track->key_off_delay = value;
 }
 
-void SeqOp_StopAndClearTrack(AkaoTrack *track, int arg) {
+void SeqOp_StopAndClearTrack(AkaoTrack *track, u32 voice_mask) {
     track->flags &= ~AKAO_TRACK_FLAG_STOP_CLEAR_MASK;
-    ((void (*)())SeqOp_ClearTrack34Mask)(track);
-    SeqOp_ClearTrack3CMask(track, arg);
-    SeqOp_ClearMask(track, arg);
+    SeqOp_ClearTrack34Mask(track, voice_mask);
+    SeqOp_ClearTrack3CMask(track, voice_mask);
+    SeqOp_ClearMask(track, voice_mask);
     track->tremolo_phase &= 0xFFFA;
 }
 
@@ -2353,7 +2353,7 @@ void SeqOp_StopVoice(AkaoTrack *track, u32 arg1) {
             state->reserved_voice_mask &= ~(1 << track->voice_index);
         }
     } else {
-        ((void (*)())SeqOp_DeactivateVoice)(track);
+        SeqOp_DeactivateVoice(track, arg1);
     }
 
     {
