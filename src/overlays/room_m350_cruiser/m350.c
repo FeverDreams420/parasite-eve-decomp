@@ -1624,7 +1624,6 @@ case 2:
         }
         {
             register int triple asm("$2")=state->size*3;
-            asm("" : : "r"(triple));
             size=triple*2;
             for (;i<3;i++) {
                 func_800D0E88(&position,(GteRotation *)&rotation,size,512,(RenderColor *)D_8019A594,&D_8019A3C8,&D_8019A3C8,state->brightness,1);
