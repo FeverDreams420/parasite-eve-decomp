@@ -44,14 +44,15 @@ class LiteralAddressOperandTests(unittest.TestCase):
 
 
 class MainDataLayoutTests(unittest.TestCase):
-    def test_gp_data_is_not_text_and_engine_keeps_its_retail_address(self):
+    def test_gp_data_is_not_text_and_engine_starts_at_retail_end(self):
         root = Path(__file__).resolve().parents[2]
         config = yaml.safe_load((root / "configs/USA/main.yaml").read_text())
         segments = {s["name"]: s for s in config["segments"]
                     if isinstance(s, dict)}
         # Offsets and kinds are the retail layout; the owning unit names are
         # not, since game units are renamed and merged as they are understood.
-        tail = segments["main"]["subsegments"][-15:]
+        tail = [r for r in segments["main"]["subsegments"]
+                if (r["start"] if isinstance(r, dict) else r[0]) >= 0x818A0]
         rows = [[r["start"], r["type"]] if isinstance(r, dict) else r[:2]
                 for r in tail]
         self.assertEqual(rows, [
@@ -66,8 +67,12 @@ class MainDataLayoutTests(unittest.TestCase):
             [0x8BEEC, "data"],
             [0x8D5A0, ".sdata"],
             [0x8D5A4, "data"],
+            [0x8D5F8, "linker_offset"],
+            [0x8D5F8, "data"],
             [0x8DA54, ".data"],
             [0x8DA58, "data"],
+            [0x8DB10, "linker_offset"],
+            [0x8DB10, "data"],
             [0x93980, ".bss"],
             [0x93AD0, "data"],
         ])
@@ -76,11 +81,15 @@ class MainDataLayoutTests(unittest.TestCase):
                           "psyq/libcd/bios_4", "psyq/libds/dsfile"])
         # The gp-relative word is emitted with its owner's .data.
         self.assertEqual(tail[9]["linker_section_order"], ".data")
+        # .sdata ends and retail's BSS starts at 0x8009CDF8; the small COMMON
+        # pool ends at 0x8009D310 (ld_postpass.py places catch-alls there).
+        self.assertEqual(tail[11][2], "main_sbss")
+        self.assertEqual(tail[15][2], "main_scommon")
         engine = segments["field_engine"]
-        self.assertEqual(engine["start"], 0xB24A0)
-        self.assertEqual(engine["vram"], 0x800C1CA0)
+        self.assertEqual(engine["start"], 0xB28C8)
+        self.assertEqual(engine["vram"], 0x800C20C8)
         first = engine["subsegments"][0]
-        self.assertEqual(first[0], 0xB24A0)
+        self.assertEqual(first[0], 0xB28C8)
         self.assertNotEqual(first[1], "c")
 
 

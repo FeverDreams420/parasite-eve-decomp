@@ -1,6 +1,6 @@
 {
  "counts": {
-  "exe:relocs_to_absolute_program": 7484,
+  "exe:relocs_to_absolute_program": 7480,
   "exe:unrelocated:data_word": 3,
   "exe:unrelocated:lui": 7,
   "overlays:abi_loader_contract": 458,
@@ -11,7 +11,7 @@
   "shift_test:literal_data_word": 3,
   "shift_test:literal_jump": 0,
   "shift_test:literal_lui": 7,
-  "shift_test:pinned_symbol_reference": 6253,
+  "shift_test:pinned_symbol_reference": 6249,
   "shift_test:relocated_unchanged_other": 0,
   "shift_test:unexplained_difference": 0,
   "shift_test:unexplained_relocated": 0,
@@ -24,7 +24,6 @@
   "src:overlays:alias_address_named_owned": 4,
   "src:overlays:pointer_integer_cast": 74,
   "undefined_addr_aliases.main.txt:data_asm_blob": 1,
-  "undefined_addr_aliases.main.txt:data_asm_blob/named_elsewhere": 1,
   "undefined_addr_aliases.main.txt:data_c_unit": 17,
   "undefined_addr_aliases.main.txt:data_c_unit/named_elsewhere": 6,
   "undefined_addr_aliases.main.txt:function/named_elsewhere": 8,

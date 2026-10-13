@@ -8,16 +8,19 @@
  * s1 and ra at 4/8/12 and leaves no outgoing argument area, which GCC never
  * produces. PSY-Q 4.6 LIBSN.LIB SNMAIN has all 67 non-relocated words
  * identical; the 4.3 object is in configs/USA/psyq_provenance.json.
+ * The BSS bounds are linker symbols (tools/scripts/ld_postpass.py):
+ * `__bss_start` is the end of .sdata and `_end` the end of main, where the
+ * heap begins.
  */
 #include "pe1/psyq_asm.h"
 
 PSYQ_ASM_OBJECT(LIBSN, SNMAIN)
 
 PSYQ_ASM_FUNCTION(__SN_ENTRY_POINT,
-    "    lui     $v0, %hi(D_8009CDF8)\n"
-    "    addiu   $v0, $v0, %lo(D_8009CDF8)\n"
-    "    lui     $v1, %hi(D_800C20C8)\n"
-    "    addiu   $v1, $v1, %lo(D_800C20C8)\n"
+    "    lui     $v0, %hi(__bss_start)\n"
+    "    addiu   $v0, $v0, %lo(__bss_start)\n"
+    "    lui     $v1, %hi(_end)\n"
+    "    addiu   $v1, $v1, %lo(_end)\n"
     ".Lclear_bss:\n"
     "    sw      $zero, 0x0($v0)\n"
     "    addiu   $v0, $v0, 0x4\n"
@@ -30,8 +33,8 @@ PSYQ_ASM_FUNCTION(__SN_ENTRY_POINT,
     "    addi    $v0, $v0, -0x8\n"
     "    lui     $t0, 0x8000\n"
     "    or      $sp, $v0, $t0\n"
-    "    lui     $a0, %hi(D_800C20C8)\n"
-    "    addiu   $a0, $a0, %lo(D_800C20C8)\n"
+    "    lui     $a0, %hi(_end)\n"
+    "    addiu   $a0, $a0, %lo(_end)\n"
     "    sll     $a0, $a0, 3\n"
     "    srl     $a0, $a0, 3\n"
     "    lui     $v1, %hi(_stacksize)\n"

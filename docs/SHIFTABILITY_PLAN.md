@@ -342,7 +342,7 @@ keep rebases trivial) and every C rename those symbols need.
 
 | wave | package | symbols | words + gp | risk | notes |
 | --- | --- | ---: | ---: | --- | --- |
-| 0 | layout: engine boundary to 0x800C20C8, COMMON catch-all, `_end`/BSS-start symbols | | | low | byte-identical manifest work, unblocks growth |
+| 0 | layout: engine boundary to 0x800C20C8, COMMON catch-all, `_end`/BSS-start symbols | 1 | 4 | low | done: engine at 0x800C20C8; `tools/scripts/ld_postpass.py` (run by `make split`) puts main's BSS in `.main`, adds `*(.sdata)` at `__bss_start`, `*(.sbss) *(.scommon)` at the small pool end 0x8009D310 (the gp window: new small data at the end of main overflows `R_MIPS_GPREL16`) and `*(COMMON)` before `_end`; `snmain` uses `__bss_start`/`_end`; a new global and function link and main grows by their size (`test_ld_postpass.py`) |
 | 1 | functions named elsewhere, shadowing pins, field engine labels | 24 | 131 | low | names only |
 | 2 | `.bss` object run | 60 | 1016 | low | mostly `memcard/save_flow` (26) and menus; few aliases |
 | 2 | `.sbss` object run + `.sdata` | 108 | 1183 | medium | 99 COMMON pins; names used by many menu units |
@@ -595,6 +595,19 @@ byte-identical image).
   Owning the 102 `.sbss` object-run variables needs a global label there. If
   ASPSX did emit it global (to be checked against a PsyQ object with a small
   global `.comm`), this is a fidelity fix in MASPSX, not a crutch.
+  *Checked 2026-10-13: ASPSX did not.* The raw PsyQ 4.0 `LIBGTE.LIB`
+  `CLIP_INI.OBJ` declares `CLIPNearz`, `CLIPHdkx` and four more 4-byte
+  globals as XBSS records (SN's common block, allocated by psylink), not as
+  labels in the object's `.sbss`/`.bss`; the 4.0 signatures list XBSS for
+  every small tentative global of LIBCD (`StRingSize`, `CChannel`, 20 in
+  `CDROM.OBJ`), LIBDS, LIBETC and LIBSPU. No PsyQ library uses small data
+  (all are -G0), so the `.sbss` case is seen in this game: the small COMMON
+  pool after the `.sbss` object run is exactly psylink allocating small
+  XBSS, and `StRingSize` (4 bytes, -G0 LIBCD) sits in the large pool.
+  `--use-comm-section` is therefore the faithful mode and a global `.sbss`
+  label would not be a fidelity fix. A `.sbss` object-run variable that
+  several of our units reference is a file-static (`.lcomm`) of one retail
+  object, i.e. TU-merge evidence, or stays a blob label.
 - **COMMON pools.** Keep them as labelled blobs (shiftable, simplest), or
   model them as pool units in retail order. Recommendation: blobs now, pool
   units only if the PsyQ COMMON allocation order can be explained.
