@@ -610,13 +610,13 @@ void Menu_StepSaveLoadScreen(void)
 
     parent = MenuWidget_CreateSimpleNode(12, 0, 0, 0);
     container = MenuWidget_CreateNode(12, parent, parent);
-    parent->update = (void (*)())Menu_SaveLoadNavigate;
+    parent->update = Menu_SaveLoadNavigate;
     container->draw = Menu_DrawArmorListContainer;
     MenuWidget_SetCurrentNode(container);
 
     parent = MenuWidget_CreateSimpleNode(13, container, 0, 0);
     container = MenuWidget_CreateNode(13, parent, parent);
-    parent->update = (void (*)())Menu_InventoryInputHandler;
+    parent->update = Menu_InventoryInputHandler;
     parent->disabled = 1;
     container->draw = Menu_DrawArmorSelectionList;
     transfer = Inv_TransferItem;
@@ -627,7 +627,7 @@ void Menu_StepSaveLoadScreen(void)
 
     parent = MenuWidget_CreateSimpleNode(14, container, 0, 0);
     list = MenuWidget_CreateNode(14, parent, parent);
-    parent->update = (void (*)())Menu_InventoryInputHandler;
+    parent->update = Menu_InventoryInputHandler;
     list->draw = Menu_DrawSelectableEquipSlotList;
     list->refreshItems = Menu_RebuildSelectableMask;
     list->itemAction = transfer;
@@ -1028,7 +1028,7 @@ static inline void Menu_CreateUsableItemActionView(MenuWidgetNode *parent)
 
     root = MenuWidget_CreateSimpleNode(6, parent, 0, 0);
     node = MenuWidget_CreateNode(6, root, root);
-    root->update = (void (*)())Menu_InventoryPageInputHandler;
+    root->update = Menu_InventoryPageInputHandler;
     root->disabled = 1;
     node->draw = Menu_DrawUsableItemActionList;
     node->layout_flags |= 0x80;
@@ -1049,7 +1049,7 @@ static inline void Menu_CreateEquipItemSelectionView(MenuWidgetNode *parent)
     root = MenuWidget_CreateSimpleNode(5, parent, 0, 0);
     node = MenuWidget_CreateNode(5, root, root);
     root->draw = Menu_StepEquipSlotSelect;
-    root->update = (void (*)())Menu_StepSkillScreen;
+    root->update = Menu_StepSkillScreen;
     node->draw = Menu_DrawSoundTestList;
     if (g_MenuLayoutLocked != 0)
         MenuWidget_ClearColumnLayout(node);
@@ -1059,7 +1059,7 @@ static inline void Menu_CreateEquipItemSelectionView(MenuWidgetNode *parent)
         MenuWidget_SetCurrentNode(node);
     root->disabled = 1;
     node = MenuWidget_CreateNode(0x1B, root, root);
-    node->draw = (void (*)())Menu_DrawItemListInvPanel;
+    node->draw = Menu_DrawItemListInvPanel;
     MenuWidget_ClearColumnLayout(node);
 }
 
@@ -1161,7 +1161,7 @@ int Menu_ItemListInputHandler(MenuWidgetNode *node, unsigned int flags)
                     MenuWidgetNode *submenu;
 
                     submenu = MenuWidget_CreateSimpleNode(0x35, 0, 0, 0);
-                    MenuWidget_CreateNode(0x35, submenu, submenu)->draw = (void (*)())Menu_SetupSkillSubmenu;
+                    MenuWidget_CreateNode(0x35, submenu, submenu)->draw = Menu_SetupSkillSubmenu;
                 }
                 /* The list child is no longer needed: reuse it for the equipment node. */
                 child = MenuWidget_FindByModeAndSelectedBase(2, 0x36);
@@ -1203,9 +1203,9 @@ int Menu_ItemListInputHandler(MenuWidgetNode *node, unsigned int flags)
 
                 dialog = MenuWidget_CreateSimpleNode(0x29, child, 0, 1);
                 options = MenuWidget_CreateNode(0x29, dialog, dialog);
-                dialog->draw = (void (*)())Menu_DrawItemLabel;
-                dialog->update = (void (*)())Menu_ConfirmDialogHandler;
-                options->draw = (void (*)())Menu_DrawActionOptionList;
+                dialog->draw = Menu_DrawItemLabel;
+                dialog->update = Menu_ConfirmDialogHandler;
+                options->draw = Menu_DrawActionOptionList;
                 g_MenuActionTextBase = 5;
                 MenuWidget_SetCurrentNode(options);
                 Inv_SelectActiveList(g_MenuActiveItemList);
