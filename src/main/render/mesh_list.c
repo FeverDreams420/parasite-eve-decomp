@@ -217,11 +217,10 @@ int Render_DrawSpriteEntry(GeomEntry *input)
             position_cursor = pos;
             do {
             u32 word = *position_cursor;
-            register s32 x asm("$2");
             register s32 draw_x asm("$13");
-            x = scroll_x + (word >> 22);
-            draw_x = x;
-            if ((u16)(x + 15) < 0x14F) {
+            modulus_y = scroll_x + (word >> 22);
+            draw_x = modulus_y;
+            if ((u16)(modulus_y + 15) < 0x14F) {
                     {
                     s32 y;
                     s32 draw_y;
