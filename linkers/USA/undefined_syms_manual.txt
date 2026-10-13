@@ -777,7 +777,6 @@ func_8FD02A8C = 0x8FD02A8C;
 func_8FE02A78 = 0x8FE02A78;
 func_8FE02FD0 = 0x8FE02FD0;
 func_8FF02A64 = 0x8FF02A64;
-jtbl_80010000 = 0x80010000;
 jtbl_80010AC8 = 0x80010AC8;
 jtbl_80011458 = 0x80011458;
 
@@ -1564,10 +1563,6 @@ g_CardPatchContinuation = 0x0000DFFC;
 D_A000DFAC = 0xA000DFAC;
 
 /* Selection index +3 and table pointer +0xC share the observed state prefix. */
-
-/* Three script bytes opcode 0x961 stores and opcode 0x962 passes on
- * (Script_DispatchScriptCmd). */
-g_ScriptCameraBytes = 0x8009CDF8;
 
 /* Scalar views of AyaSaveState.equipped_weapon_slot/equipped_armor_slot
  * (Inv_TransferItem). */

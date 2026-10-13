@@ -10,7 +10,9 @@
  * identical; the 4.3 object is in configs/USA/psyq_provenance.json.
  * The BSS bounds are linker symbols (tools/scripts/ld_postpass.py):
  * `__bss_start` is the end of .sdata and `_end` the end of main, where the
- * heap begins.
+ * heap begins. The constructor and destructor tables are the linker symbols
+ * `__sn_ctor_table` and `__sn_dtor_table`; both tables are empty in this
+ * game, so they sit at the first address of the image.
  */
 
 #include "pe1/psyq_asm.h"
@@ -73,8 +75,8 @@ PSYQ_ASM_FUNCTION(__main,
     "    ori     $t0, $zero, 0x1\n"
     "    lui     $at, %hi(D_80094538)\n"
     "    sw      $t0, %lo(D_80094538)($at)\n"
-    "    lui     $s0, %hi(jtbl_80010000)\n"
-    "    addiu   $s0, $s0, %lo(jtbl_80010000)\n"
+    "    lui     $s0, %hi(__sn_ctor_table)\n"
+    "    addiu   $s0, $s0, %lo(__sn_ctor_table)\n"
     /* Table length from the SN linker; it links as zero in this game. */
     "    lui     $s1, 0x0\n"
     "    addiu   $s1, $s1, 0x0\n"
@@ -104,8 +106,8 @@ PSYQ_ASM_FUNCTION(__do_global_dtors,
     "    sw      $ra, 0xC($sp)\n"
     "    beqz    $t0, .Ldtors_done\n"
     "    nop\n"
-    "    lui     $s0, %hi(jtbl_80010000)\n"
-    "    addiu   $s0, $s0, %lo(jtbl_80010000)\n"
+    "    lui     $s0, %hi(__sn_dtor_table)\n"
+    "    addiu   $s0, $s0, %lo(__sn_dtor_table)\n"
     /* Table length from the SN linker; it links as zero in this game. */
     "    lui     $s1, 0x0\n"
     "    addiu   $s1, $s1, 0x0\n"

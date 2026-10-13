@@ -17,7 +17,10 @@ file and memory, so this pass rewrites `linkers/USA/main.ld`
   the positive $gp window, and `*(COMMON)` after main's BSS;
 - startup symbols: `_edata` and `__bss_start` at `main_sbss` (end of .sdata,
   where the startup's BSS clear starts) and `_end` at the end of main, where
-  the clear stops and the heap begins;
+  the clear stops and the heap begins; `__sn_ctor_table` and
+  `__sn_dtor_table` at the start of `.main`, the constructor and destructor
+  tables that snmain's `__main` and `__do_global_dtors` walk (both empty in
+  this game, so retail's SN linker put them at the first address of the image);
 - an assertion that the field engine has no NOLOAD BSS: its zero data is the
   in-image blob `engine_bss_800E21A8`, followed by Boot_InitMemoryLayout's
   work area (plan 3.4);
@@ -69,6 +72,10 @@ DATA_END = re.compile(
     r"(        main_DATA_SIZE = ABSOLUTE\(main_DATA_END - main_DATA_START\);\n)"
     r"(    \}\n)")
 ROM_ADVANCE = "    __romPos += SIZEOF(.main);\n"
+MAIN_START = re.compile(
+    r"    \.main 0x[0-9A-Fa-f]+ : AT\(main_ROM_START\) SUBALIGN\(4\)\n"
+    r"    \{\n"
+    r"        FILL\(0x00000000\);\n")
 SDATA_END = "        main_main_sbss_OFFSET = .;\n"
 SCOMMON_END = "        main_main_scommon_OFFSET = .;\n"
 ENGINE_BSS_END = ("        field_engine_BSS_SIZE = ABSOLUTE(field_engine_BSS_END - field_engine_BSS_START);\n"
@@ -109,6 +116,9 @@ def rewrite(text: str) -> str:
         raise PostPassError("`main_sbss` and `main_scommon` must be in that order inside main's data")
     if text.count(ENGINE_BSS_END) != 1:
         raise PostPassError("expected one .field_engine_bss section")
+    main_starts = list(MAIN_START.finditer(text))
+    if len(main_starts) != 1:
+        raise PostPassError("expected one `.main` section opening with FILL(0x00000000)")
     windows = list(WINDOWS_START.finditer(text))
     if len(windows) != 1:
         raise PostPassError("expected one `overlay_windows` segment (configs/USA/main.yaml)")
@@ -157,6 +167,11 @@ def rewrite(text: str) -> str:
         ENGINE_BSS_END + "    /* No semicolon: ASSERT is a statement inside SECTIONS. */\n"
         "    ASSERT(SIZEOF(.field_engine_bss) == 0,\n"
         "        \"field engine BSS must be in the image, before the work area (docs/SHIFTABILITY_PLAN.md 3.4)\")\n")
+    opening = main_starts[0].group(0)
+    text = text.replace(opening, opening
+                        + "        /* SN constructor and destructor tables (snmain): empty in this game. */\n"
+                        "        __sn_ctor_table = .;\n"
+                        "        __sn_dtor_table = .;\n", 1)
     return text
 
 

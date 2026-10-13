@@ -2682,3 +2682,9 @@ g_CurrentEntity = 0x8009D2F0;
 g_AkaoMessageQueueCount = 0x8009D2F4;
 g_ScriptNodePool = 0x8009D300;
 g_ScriptNodeSeqCounter = 0x8009D308;
+
+// Remnants package (shiftability): the last absolute pins become blob labels.
+// flow_opcodes' three script camera bytes (opcode 0x961 stores them, 0x962
+// passes them on; a tentative global in the unit) are the first word of the
+// .sbss object run, where the startup's BSS clear begins (`__bss_start`).
+g_ScriptCameraBytes = 0x8009CDF8;

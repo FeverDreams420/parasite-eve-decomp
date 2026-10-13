@@ -103,6 +103,14 @@ class RewriteTests(unittest.TestCase):
         with self.assertRaises(lp.PostPassError):
             lp.rewrite_header(HEADER.replace("/* .text size */", "/* size */"))
 
+    def test_constructor_tables_open_main(self):
+        out = lp.rewrite(SCRIPT)
+        opening = "    {\n        FILL(0x00000000);\n        /* SN constructor"
+        main = out[out.index(".main 0x80010000"):]
+        self.assertTrue(main[main.index("\n") + 1:].startswith(opening))
+        self.assertLess(main.index("__sn_ctor_table = .;"), main.index("main_DATA_START"))
+        self.assertLess(main.index("__sn_dtor_table = .;"), main.index("main_DATA_START"))
+
     def test_idempotent(self):
         once = lp.rewrite(SCRIPT)
         self.assertEqual(lp.rewrite(once), once)
