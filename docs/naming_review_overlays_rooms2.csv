@@ -169,3 +169,50 @@ address,overlay,old_name,new_name,evidence
 0x80199918,room_m318_chrysler,D_80199918,g_RoomM318RisingColumnParams[1],"Block g_RoomM318RisingColumnParams (0x80199914): RoomM318_SetRisingColumnParams writes arg1 at [0] in mode 1, arg1/arg2/arg3 at [1..3] otherwise; int[4]."
 0x8019991C,room_m318_chrysler,D_8019991C,g_RoomM318RisingColumnParams[2],Same block.
 0x80199920,room_m318_chrysler,D_80199920,g_RoomM318RisingColumnParams[3],Same block.
+0x8019A3C0,room_m350_cruiser,D_8019A3C0,g_RoomM350StarFanTilt,"GteRotation {0x400,0,0,1} (bytes read from the image) passed as the rotation of FieldFx_DrawStarFan in RoomM350_DropCallback and RoomM350_OrbCallback."
+0x8019A3C8,room_m350_cruiser,D_8019A3C8,g_RoomM350BlackColor,"RenderColor 00,00,00: second colour of the gouraud draws (star fan, ring band, triangle) in 6 functions, always paired with a coloured first argument."
+0x8019A3CC,room_m350_cruiser,D_8019A3CC,g_RoomM350OrbHandSparkColor,"(40,40,40) colour of the star fan in RoomM350_OrbHandSparkCallback."
+0x8019A3D0,room_m350_cruiser,D_8019A3D0,g_RoomM350GlowSpriteColor,"(80,80,C0) colour of the DrawShapeQuads glow sprites of RoomM350_RushCloudCallback, HandGlowCallback, OrbTrailCallback and OrbTableFlashCallback."
+0x8019A410,room_m350_cruiser,D_8019A410,g_RoomM350HandSparkColor,"(50,50,80) colour read by RoomM350_HandSparkCallback (only user)."
+0x8019A434,room_m350_cruiser,D_8019A434,g_RoomM350HandSweepTrapPulseColors,"RenderColor[2] (C0,C0,F0)/(80,80,F0) indexed by g_FieldFxCurrentAge & 1 in RoomM350_HandSweepTrapCallback."
+0x8019A43C,room_m350_cruiser,D_8019A43C,g_RoomM350HandSweepTrapTriangleColor,"(30,30,40) first colour of the FieldFx_DrawRotatedTriangle call in RoomM350_HandSweepTrapCallback."
+0x8019A440,room_m350_cruiser,D_8019A440,g_RoomM350HandSweepTrapRingColor,"(18,18,20) second colour of the ring band in RoomM350_HandSweepTrapCallback."
+0x8019A444,room_m350_cruiser,D_8019A444,g_RoomM350HandSweepTrapCorners,"GteShortVector[4]: RoomM350_HandSweepTrapCallback sets .z of corners 2 and 3 to -dist, loads each with gte_ldv0 and projects it into quad[k] (the trap's floor rectangle)."
+0x8019A464,room_m350_cruiser,D_8019A464,g_RoomM350HandSweepHitColor,"(00,80,F0) colour of RoomM350_HandSweepHitCallback."
+0x8019A4DC,room_m350_cruiser,D_8019A4DC,g_RoomM350OrbBurstRingColorA,"(C0,C0,F0) first-band colour of the paired ring draws in RoomM350_OrbBurstCallback."
+0x8019A4E0,room_m350_cruiser,D_8019A4E0,g_RoomM350OrbBurstRingColorB,"(10,10,20) second-band colour in RoomM350_OrbBurstCallback."
+0x8019A4E4,room_m350_cruiser,D_8019A4E4,g_RoomM350OrbGroundFanColor,"(50,50,50) colour0 of the ground star fan in RoomM350_OrbCallback."
+0x8019A4E8,room_m350_cruiser,D_8019A4E8,g_RoomM350OrbImpactColor,"(10,40,F0) colour of RoomM350_OrbImpactCallback."
+0x8019A4EC,room_m350_cruiser,D_8019A4EC,g_RoomM350OrbTableFlashSizes,"u8 table {2,3,6,7,0xF,..} indexed by (age-1)/2 as the size multiplier in RoomM350_OrbTableFlashCallback."
+0x8019A56C,room_m350_cruiser,D_8019A56C,g_RoomM350AreaSparkColor,"(F0,A0,FF) colour of RoomM350_AreaSparkCallback."
+0x8019A570,room_m350_cruiser,D_8019A570,g_RoomM350AreaSparkEmitterColor,"(C0,80,C0) colour of the shape quads drawn by RoomM350_AreaSparkEmitter."
+0x8019A594,room_m350_cruiser,D_8019A594,g_RoomM350AreaZoneTriangleColor,"(20,10,20) first colour of the rotated triangles in RoomM350_AreaZoneEmitter."
+0x8019A598,room_m350_cruiser,D_8019A598,g_RoomM350AreaDropletColor,"(80,40,80) colour of RoomM350_AreaDropletCallback."
+0x8019A59C,room_m350_cruiser,D_8019A59C,g_RoomM350AreaPlayerPulseColor,"(80,C0,C0) colour of RoomM350_AreaPlayerPulseCallback (local colors pointer)."
+0x8019A614,room_m350_cruiser,D_8019A614,g_RoomM350DropFlareColors,"Colour pair read as colors[0], colors[1] by RoomM350_DropFlareCallback."
+0x8019A61C,room_m350_cruiser,D_8019A61C,g_RoomM350DropColors,"RenderColor[3] used by RoomM350_DropCallback (shape quads colour [0], star fan colours [1] and [2])."
+0x8019A628,room_m350_cruiser,D_8019A628,g_RoomM350DropSplashColor,"(20,20,40) colour of RoomM350_DropSplashCallback."
+0x8019A62C,room_m350_cruiser,D_8019A62C,g_RoomM350DropHitColor,"(10,40,F0) colour of RoomM350_DropHitCallback."
+0x8019A630,room_m350_cruiser,D_8019A630,g_RoomM350DropTrailColor,"(40,40,80) colour of RoomM350_DropTrailCallback."
+0x8019A634,room_m350_cruiser,D_8019A634,g_RoomM350DropBurstColor,"(80,80,F0) colour of RoomM350_DropBurstCallback."
+0x8019A690,room_m350_cruiser,D_8019A690,g_RoomM350RushFlareColors,"Colour pair (F0,F0,F0)/(F0,50,F0) indexed by timer & 3 in RoomM350_RushFlareCallback."
+0x8019A734,room_m350_cruiser,D_8019A734,g_RoomM350BodyRingColor1,colour1 argument (80,40,40) of the RoomM350_BodyRingCallback ring band.
+0x8019A738,room_m350_cruiser,D_8019A738,g_RoomM350BodyRingColor0,"colour0 argument (00,00,00) of the RoomM350_BodyRingCallback ring band."
+0x8019A854,room_m350_cruiser,D_8019A854,g_RoomM350DropEventSlots,First of the four animation event slot bytes: cleared as one word by RoomM350_DropController and set by (&slot)[entry->slot]; slot 0 is tested by RoomM350_DropFlareEmitter (room_m350_data.h comment).
+0x8019A855,room_m350_cruiser,D_8019A855,g_RoomM350DropEmitterTrigger,Event slot 1: RoomM350_DropEmitter returns early unless set and clears it.
+0x8019A856,room_m350_cruiser,D_8019A856,g_RoomM350DropSplashTrigger,Event slot 2: tested and cleared by RoomM350_DropSplashEmitter.
+0x8019A857,room_m350_cruiser,D_8019A857,g_RoomM350DropHitTrigger,Event slot 3: tested and cleared by RoomM350_DropHitEmitter.
+0x8019A85C,room_m350_cruiser,D_8019A85C,g_RoomM350DropTrailCount,"Loop bound of the trail spawn loop in RoomM350_DropTrailEmitter, cleared by RoomM350_DropController init."
+0x8019A860,room_m350_cruiser,D_8019A860,g_RoomM350DropSplashPosX,u16 stored at +0 of the splash effect by RoomM350_DropSplashEmitter.
+0x8019A862,room_m350_cruiser,D_8019A862,g_RoomM350DropSplashPosZ,u16 stored at +4 of the splash effect by RoomM350_DropSplashEmitter.
+0x8019A864,room_m350_cruiser,D_8019A864,g_RoomM350DropHitPosition,short[3] copied into the effect position (effect[0..2]) by RoomM350_DropHitEmitter.
+0x8019A898,room_m350_cruiser,D_8019A898,g_RoomM350RushEndpointX,x of the current sweep endpoint vertex[0] built by RoomM350_RushFlareEmitter (y is the untouched middle halfword).
+0x8019A89C,room_m350_cruiser,D_8019A89C,g_RoomM350RushEndpointZ,z of the same endpoint.
+0x8019A89E,room_m350_cruiser,D_8019A89E,g_RoomM350RushEndpointValid,"pad halfword of the endpoint, set to 1 by the emitter."
+0x8019A8A0,room_m350_cruiser,D_8019A8A0,g_RoomM350RushOppositeX,x of the opposite endpoint vertex[1].
+0x8019A8A4,room_m350_cruiser,D_8019A8A4,g_RoomM350RushOppositeZ,z of the opposite endpoint.
+0x8019A8A8,room_m350_cruiser,D_8019A8A8,g_RoomM350RushPreviousEndpoint,"GteShortVector holding the previous endpoint, copied before the update; .pad is the validity flag the emitter tests (vertices[3])."
+0x8019A8B0,room_m350_cruiser,D_8019A8B0,g_RoomM350RushPreviousOpposite,GteShortVector holding the previous opposite endpoint (vertices[2]).
+0x8019A82C,room_m350_cruiser,D_8019A82C,g_RoomM350AreaConfigYaw[1],"RoomM350_AreaConfigure stores arg2 at g_RoomM350AreaConfigYaw[0] (0x8019A82A) and arg3 at the next halfword; folded into the array, byte-identical."
+0x8019A77E,room_m350_cruiser,D_8019A77E,g_RoomM350HandPointPadView,"Interior of g_RoomM350HandPoints (8-byte vectors, 0x8019A778): the pad halfword of element i, written as index i by the hand sweep controller. The member form recomputes the address and mismatches, so a one-field view."
+0x8019A81C,room_m350_cruiser,D_8019A81C,g_RoomM350AreaMatrixTxView,"Interior of g_RoomM350AreaMatrix (0x8019A808): its translation t[0] at +0x14, cleared with the other two components in RoomM350_AreaZoneEmitter; member form mismatches, so a one-field view."
