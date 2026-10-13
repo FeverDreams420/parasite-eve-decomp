@@ -357,20 +357,19 @@ int func_80192F5C(RoomOscillationEffect *effect) {
         int period = effect->params.period;
         int phase = ((frame << 12) / period - 2048) & 4095;
         register int sine asm("$2");
-        register int displacement asm("$2");
         register int half asm("$4");
         FieldActor *target;
 
         effect->params.frame = frame + 1;
         sine = D_800966EC[phase].part.cos;
         half = (sine + 4096) / 2;
-        displacement = (half * effect->params.amplitude) / 4096 + 8;
+        sine = (half * effect->params.amplitude) / 4096 + 8;
         target = ((RoomOscillationEffect *)effect)->actor;
         {
             int height;
             register int scaled asm("$4");
 
-            scaled = displacement << 12;
+            scaled = sine << 12;
             height = effect->params.baseHeight - scaled;
             target->pos_y = height;
         }
