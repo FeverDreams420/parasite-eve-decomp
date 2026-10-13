@@ -1868,6 +1868,72 @@ Crutches still in these units, with the best crutch-free lev found:
   part into the symbol constant and derives the packet as that constant
   minus 8.
 
+### Casts that hide type facts (2026-10-13)
+
+The two unnecessary-cast rounds left casts whose removal changes the
+object or the diagnostics. Those that hid a wrong declaration were fixed
+from the retail code: the chained AKAO opcode handlers take the
+`(AkaoTrack *, u32 voice_mask)` table signature, `RoomEnt.sub.cb` takes the
+entity, `Render_GetOrLoadFontGlyph` returns `int`, `Combatant.statusFlags2`
+is `u32`, `gte_ldv0_word3` takes the `s32` translation, the timer tick
+walks `g_GameTimers` instead of an interior volatile word, narrowing reads
+of wider members are value conversions (`(u16)`, `(short)`; GCC still
+emits `lhu`/`lh`) instead of pointer views, and
+`Akao_SendPositionalCmdStereo`, `MenuWidget_InitPool`,
+`MenuWidget_NavScrollTo`, `Save_SetTitleStyleFlag` and one
+`Entity_SetActionMode` call use their prototypes. What is left, with the
+evidence:
+
+- **`Menu_StepItemSelectScreen` case 3 (`menu/status_panels.c`)** calls the
+  `void` `Menu_StepSkillList` through an `int`-returning view. The callee
+  never writes `$v0` (its epilogue is `lw ra` ... `jr ra` after
+  `Menu_PlayConfirmSound`), so the true type is `void`. Retail keeps cases
+  2 and 3 as two identical tails (`0x80043ECC` and `0x80043F18`:
+  `Menu_CreateInventoryListView`, `Menu_CreateEquipItemSelectionView`,
+  `MenuWidget_FindByModeAndSelectedBase(2, 5)`, `Menu_StepSkillList(..., 0)`)
+  that differ only in the `g_InvItemUsableFlag` store before them; with a
+  `void` call GCC's post-reload cross-jumping merges the tails. The view
+  makes the second call `(set v0 (call ...))` so the patterns differ. No
+  plain C shape that keeps the two tails apart has been found.
+- **`Menu_MainUpdate` (`menu/main_update.c`), `Entity_SetActionMode(...,
+  0x12)`** passes `var_a2` as a third argument. `Entity_SetActionMode` never
+  reads `$a2`; retail's `$a2` is the last slot-colour byte the function
+  stored. Dropping the argument shortens `var_a2`'s life and local-alloc
+  swaps `var_a1`/`var_a2` over the whole colour block (lev 112). The block
+  writes the four `rgb` triples of a 0x48-byte slot record at
+  `D_800B0158 + g_ActiveDrawSlot * 0x48` through `register` locals; it has
+  to be rewritten as typed colour stores before the call can be plain.
+- **`Combatant.curHP` (`pe1/battle.h`, `u16`)**: `Battle_ApplyEnemyAttack`
+  reads it with `lh` through three `s16` views and once as
+  `lhu`/`sll 16`/`sra 16`, and stores `-1` into it. Declared `s16`, every
+  unit compiles the same if that one read is written `(u16)pD->curHP << 16`;
+  but the `EnemyCombatant` view of the same word has to stay `u16`
+  (`battle/turn.c` and `battle/context.c` read it with `lhu`). The field
+  keeps `u16` until both views can agree.
+- **`Akao_StepSequencerVoice` (`akao/voice_bank.c`)** writes the bank masks
+  (`key_off_request_mask`, `active_voice_mask`, `pending_restore_mask`)
+  through `s32` views of `AkaoU32` members. This is not a type fact: a
+  member store is `MEM_IN_STRUCT_P`, a scalar view is not, and the scalar
+  view schedules the `key_off_request_mask` store after the branch as
+  retail does (lev 7 as members).
+- **`g_TextCursorStackTop` (`pe1/draw_state.h`, `int[]`)** is both the end
+  of the text cursor stack (`menu/widget.c` compares cursor pointers against
+  it) and the start of the wipe vertex scratch (`draw/wipe.c` views it as
+  `u16` vertices and `DrawVertexPair`). Two records share the address; the
+  casts go once the scratch area gets its own symbol or a union record.
+- **Room class configure handlers (`room_lib/actor_classes.c`,
+  `floor_walker_class.c`, `grab_attack.c`, room and scene class units)**:
+  `(int *)arg0` / `(int *)arg3`. The opcode arguments are words whose type
+  depends on the opcode (op 19 with a query writes results through them,
+  op 25 stores a completion-signal pointer); the casts state the per-opcode
+  reading of an `int` ABI slot.
+- **Floor walker class object**: `RoomEnt`, `RoomFloorWalkerObject` and
+  `RoomTransformScaleOwner` are three views of one class object; they agree
+  up to `sub` at `+0x0C`, after which `RoomEnt.mat` (`+0x1C`) overlaps the
+  walker's `leader` pointer. The views need a common class-object header
+  with per-class tails before the `(RoomFloorWalkerObject *)o` casts can
+  go.
+
 ## Link ownership
 
 Splat's `undefined_syms_auto` and `undefined_funcs_auto` files are address/name
