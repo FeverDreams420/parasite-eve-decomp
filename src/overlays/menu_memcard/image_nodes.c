@@ -205,17 +205,16 @@ void MenuCard_BlendImage(MemcardImageNode *node, u8 *destination, s32 padding) {
                     s32 old;
                     s32 input = *source;
                     s32 product;
-                    register s32 value asm("$3");
 
                     product = input * intensity;
                     source++;
 
                     target = destination;
                     old = *destination;
-                    value = product >> 8;
+                    width = product >> 8;
                     destination++;
-                    if (value < old) value = old;
-                    *target = value;
+                    if (width < old) width = old;
+                    *target = width;
                 }
             } else { source += 4; destination += 4; }
         }
