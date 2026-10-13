@@ -1171,11 +1171,11 @@ void FourLayerGlow_DrawFlareLayers(void *object, void *slot, FieldGlowLayers *gl
     gte_rtir();
     outColumn1 = (u16 *)&matrix + 1;
         gte_stclmv(outColumn1);
-    column2 = (const volatile u16 *)&rotation + 2;
+    outColumn2 = (u16 *)&rotation + 2;
+    column2 = outColumn2;
         gte_ldclmv(column2);
     gte_rtir();
     outColumn2 = (u16 *)&matrix + 2;
-    asm("" : "=r"(outColumn2) : "0"(outColumn2));
     gte_stclmv(outColumn2);
     /* Compose the translation using the current matrix. */
 
