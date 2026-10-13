@@ -43,3 +43,32 @@ address names: the same address is a different function in other overlays.
 A name for a symbol that lives in an asm data blob needs a line in
 `configs/USA/sym.main.txt`; renaming only the C use leaves the label as
 `D_XXXXXXXX`, and the linker then places the C definition elsewhere.
+
+## Second pass, 0x80010000-0x800A0000
+
+`docs/naming_review_main2.csv` lists the second pass over the auto-named
+symbols left in this range (address, old name, new name or owner member,
+evidence). A name was applied only with a reader or writer that shows the
+role; members replaced labels where the member access compiles to the
+retail code, and one-field views kept their own symbol where it does not
+(`g_BattleActionAnimMode1/3`, `g_BattleStatusSymbolSpriteU/V`,
+`g_BattleRemainingActionClut`, `g_GpuHRangeEndTable`, `g_SkinAnchorY`,
+`g_FloorBlockedEdgeZHalves`, `g_RcossinTblCos`). Three existing names were
+wrong and were replaced: the pad edge words `g_FieldPadPressed`,
+`g_FieldPadReleased`, `g_FieldPadLastFrame` (formerly
+`g_BattleControlFlags`, `g_SceneFlagBits`, `g_FieldRenderFlags`) and the
+script cursor `g_ScriptCursor` / `g_ScriptCursorAddress` (formerly
+`D_8009CE00` / `g_SceneDataTable0`).
+
+Left unnamed on purpose:
+
+- labels splat derives from retail code for interior fields that the C
+  already reaches as members (sprite packets, the PE.IMG sector table, the
+  font selection state, LIBGPU/LIBCD/LIBDS state blocks, the biased bases of
+  `g_SineQuarterTable`);
+- second spellings of already-named words that the C keeps for a different
+  type (`undefined_syms_manual.txt` aliases);
+- zero padding between objects, PsyQ object stamps and signature records;
+- PsyQ-internal code labels (`func_8007E344`, `func_8007E3C8`), which the
+  rename tool keeps;
+- words that are only written or whose readers do not show a role.
