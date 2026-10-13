@@ -127,9 +127,9 @@ void *func_800CE610(char *list) {
 }
 
 int func_800CE688(void *data) {
-    FieldFxCallbackList *list = (FieldFxCallbackList *)data;
+    FieldFxCallbackList *list = data;
     int saved_age = D_800E27EC;
-    char *entry = (char *)list->entries;
+    char *entry = list->entries;
     int i;
     int active = 0;
     FieldFxTaskCallback callback = list->callback;
@@ -155,7 +155,7 @@ int func_800CE688(void *data) {
 int func_800CE78C(char *data) {
     FieldFxCallbackList *list = (FieldFxCallbackList *)data;
     int saved_age = D_800E27EC;
-    char *entry = (char *)list->entries;
+    char *entry = list->entries;
     int i;
     int active = 0;
     FieldFxTaskCallback callback = list->callback;
