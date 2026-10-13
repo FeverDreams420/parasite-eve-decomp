@@ -672,8 +672,7 @@ void Menu_DrawStatsList(void) {
     int var_a0;
     int var_a1;
     s32 *var_s3;
-    /* Match debt: retain the modifier-table iterator in s4. */
-    register s32 *var_s4 asm("$20");
+    s32 *var_s4;
     s32 temp_s0;
     s32 temp_s1;
     s32 var_a0_2;
@@ -696,7 +695,8 @@ void Menu_DrawStatsList(void) {
             Draw_OffsetCursor(6, 0);
             var_a0 = 0x70;
             if (temp_s1 > 0) {
-                var_a0 = 0x6F;
+                var_a0_2 = 0x6F;
+                var_a0 = var_a0_2;
             }
             Draw_PrintTextById(var_a0);
             /* The printed marker ID is dead; reuse its scratch for the sign. */
