@@ -1142,7 +1142,8 @@ void Draw_QueuePrimitive(void) {
     AddPrim((u32 *)ot + 7, prim); \
  }); })
 
-#define EMIT_BASE(base_sym) { \
+/* The last repeated icon queues its packet before advancing the cursor. */
+#define EMIT_BASE(base_sym, advanceBeforeQueue) { \
     char *base; \
     int idx; \
     void *prim; \
@@ -1155,8 +1156,9 @@ void Draw_QueuePrimitive(void) {
     packet = (char *)packet + (int)base; \
     ((RenderSpritePacket *)packet)->x = s0; \
     ((RenderSpritePacket *)packet)->y = s2; \
-    s0 += s3; \
+    if (advanceBeforeQueue) s0 += s3; \
     AddPrim((u32 *)g_OtBufferTable[idx] + 7, prim); \
+    if (!(advanceBeforeQueue)) s0 += s3; \
 }
 
 #define EMIT_BASE_LAST(base_sym) { \
@@ -1177,9 +1179,10 @@ void Draw_QueuePrimitive(void) {
 
 void Draw_StatusIcons(void) {
     Combatant *s1;
+    char *lastIconBase;
     int s0;
     int s2;
-    register int s3 asm("$19");
+    int s3;
     s32 *s4;
     u8 mode;
     int bits;
@@ -1254,19 +1257,20 @@ void Draw_StatusIcons(void) {
     }
 
     if (*s4 & 0x1000) {
-        EMIT_BASE((char *)&g_StatusIconPackets[0][8].sprite);
+        EMIT_BASE((char *)&g_StatusIconPackets[0][8].sprite, 1);
     }
     if (*s4 & 0x100) {
-        EMIT_BASE((char *)&g_StatusIconPackets[0][9].sprite);
+        EMIT_BASE((char *)&g_StatusIconPackets[0][9].sprite, 1);
     }
     if (*s4 & 0x400) {
-        EMIT_BASE((char *)&g_StatusIconPackets[0][10].sprite);
+        EMIT_BASE((char *)&g_StatusIconPackets[0][10].sprite, 1);
     }
     if (*s4 & 0x800) {
-        EMIT_BASE((char *)&g_StatusIconPackets[0][11].sprite);
+        EMIT_BASE((char *)&g_StatusIconPackets[0][11].sprite, 0);
     }
     if (*s4 & 0x200) {
-        EMIT_BASE_LAST((char *)&g_StatusIconPackets[0][12].sprite);
+        lastIconBase = (char *)&g_StatusIconPackets[0][12].sprite;
+        EMIT_BASE_LAST(lastIconBase);
     }
 }
 
