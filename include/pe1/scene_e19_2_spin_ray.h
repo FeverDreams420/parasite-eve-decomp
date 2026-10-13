@@ -43,12 +43,12 @@ extern RenderColor D_8018F228;
 extern RenderColor D_8018F22C;
 extern GteRotation D_8018F210;
 extern RenderColor D_8018F230;
-extern u8 D_8019B3E4[];
-extern u8 D_8019B404[];
-extern GteShortVector D_8019B670;
+extern u8 g_SceneE19SpinRayColorTrack[];
+extern u8 g_SceneE19SpinRayBurstColorTrack[];
+extern GteShortVector g_SceneE19SpinRayOrigin;
 
 int rand(void);
 void FieldFx_RandomScatterOffsetXY(SceneSpinRay *ray);
-int func_80196748(int mode, SceneSpinRay *ray);
+int SceneE19_SpinRayCallback(int mode, SceneSpinRay *ray);
 
 #endif

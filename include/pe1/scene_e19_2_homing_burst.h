@@ -12,7 +12,7 @@
 #include "pe1/render_object.h"
 
 /* Scene e19_2 homing burst controller: anchored on the room actor, it
- * releases twenty homing particles (func_8019549C) on odd frames, then
+ * releases twenty homing particles (SceneE19_HomingParticleCallback) on odd frames, then
  * draws a fading flash, a screen tint and a shrinking set of glows. */
 typedef struct SceneHomingBurst {
     /* 0x00 */ GteShortVector position;

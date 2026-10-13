@@ -339,3 +339,57 @@ address,overlay,old_name,new_name,evidence
 0x80199914,room_m318_chrysler,D_80199914,g_RoomM318RisingColumnParams,record written by RoomM318_SetRisingColumnParams and returned to the engine
 0x80199944,room_m318_chrysler,D_80199944,g_RoomM318EmberSpiralModel,"asset from Asset_FindTable08ByU32Key key 0xC5509704 in RoomM318_EmberSpiral mode 0, drawn with FieldFx_ModelDraw in mode 2"
 0x801995B8,room_m318_chrysler,D_801995B8,g_RoomM318StarFlarePhase,phase counter read and advanced by 1365 per RoomM318_StarFlare instance
+0x8019258C,scene_e19_cruiser,func_8019258C,SceneE19_GrabNop0,"returns 0; slot 0 of the class table at D_8019B31C (Nop0, Init, Configure, Nop3, RoomLib_UpdateCallback, Release, Nop6 layout shared with the RoomLib handler classes)"
+0x80192594,scene_e19_cruiser,func_80192594,SceneE19_GrabInit,"sets control.callback = RoomLib_GrabAwaitStance, clears started/grabbed and builds the player matrix with RotMatrixYXZ/MulMatrix0; slot 1 of the class table at D_8019B31C (Nop0, Init, Configure, Nop3, RoomLib_UpdateCallback, Release, Nop6 layout shared with the RoomLib handler classes)"
+0x80192630,scene_e19_cruiser,func_80192630,SceneE19_GrabConfigure,"on event 0x19 in mode 1 stores the signal pointer arg in obj->control.signal; slot 2 of the class table at D_8019B31C (Nop0, Init, Configure, Nop3, RoomLib_UpdateCallback, Release, Nop6 layout shared with the RoomLib handler classes)"
+0x80192658,scene_e19_cruiser,func_80192658,SceneE19_GrabNop3,"returns 0; slot 3 of the class table at D_8019B31C (Nop0, Init, Configure, Nop3, RoomLib_UpdateCallback, Release, Nop6 layout shared with the RoomLib handler classes)"
+0x80192BFC,scene_e19_cruiser,func_80192BFC,SceneE19_GrabRelease,"clears the signal, sets state 4 and, when enabled, returns the player to idle and zeroes its motion; slot 5 of the class table at D_8019B31C (Nop0, Init, Configure, Nop3, RoomLib_UpdateCallback, Release, Nop6 layout shared with the RoomLib handler classes); also called from SceneE19_RunAfterFrame37"
+0x80192E00,scene_e19_cruiser,func_80192E00,SceneE19_GrabNop6,"returns 0; slot 6 of the class table at D_8019B31C (Nop0, Init, Configure, Nop3, RoomLib_UpdateCallback, Release, Nop6 layout shared with the RoomLib handler classes)"
+0x80192878,scene_e19_cruiser,func_80192878,SceneE19_GrabSequence,source comment: grab sequence driver pinning the player to the selection matrix and stepping the partner animation events; assigned as control->callback in RoomLib_GrabOnApproach
+0x80192B10,scene_e19_cruiser,func_80192B10,SceneE19_ResetPlayerMotion,"zeroes the player entity (D_8009D254) velocity/move vectors, copies pos to base_pos, sets bit 0x80 of D_800BCF88; called from SceneE19_GrabSequence default case"
+0x80192D04,scene_e19_cruiser,func_80192D04,SceneE19_ResetGrabTarget,same player reset as SceneE19_GrabRelease without clearing the signal; called from RoomLib_GrabOnApproach when the partner state command value drops
+0x80192E08,scene_e19_cruiser,func_80192E08,SceneE19_BlastGlowCallback,"rising shape quad (y -= 128, 8 frames) brightened by g_SceneE19BlastGlow; callback pool 0xC x 8 installed by SceneE19_Blast"
+0x80192F9C,scene_e19_cruiser,func_80192F9C,SceneE19_Blast,loads five blast models (keys 0xC54C0704..0xC64C0704) in mode 0 and draws them as scaled shells; slot 0 of effect set D_8019B340
+0x8019549C,scene_e19_cruiser,func_8019549C,SceneE19_HomingParticleCallback,"SceneE19HomingParticle updater/drawer (position, angles, target, speed, turnPhase) installed by SceneE19_HomingBurst"
+0x801960C4,scene_e19_cruiser,func_801960C4,SceneE19_HomingBurst,"source comment: anchors on the room actor and releases a homing particle on odd frames (twenty in all), ending after eight frames; slot 0 of effect set D_8019B3B8"
+0x80196748,scene_e19_cruiser,func_80196748,SceneE19_SpinRayCallback,"source comment: spins and ages the ray, drawn as a growing ray, sweeping blade or glow sprite; installed by SceneE19_SpinRayBurst via FieldFx_InitCallbackList"
+0x80196CCC,scene_e19_cruiser,func_80196CCC,SceneE19_SpinRayBurst,source comment: spin ray controller seeding spinning rays for 48 frames and casting blades every fourth frame; slot 1 of effect set D_8019B3B8
+0x801972EC,scene_e19_cruiser,func_801972EC,SceneE19_EmberFlareParticleCallback,source comment: embers drift and bounce off the floor while a wide flare pulses in place; installed by SceneE19_EmberFlare via FieldFx_InitCallbackList
+0x801978EC,scene_e19_cruiser,func_801978EC,SceneE19_EmberFlare,"source comment: ember flare controller riding the room actor, spraying orbiting sparks, embers and flares; slot 0 of effect set D_8019B464"
+0x801982A4,scene_e19_cruiser,func_801982A4,SceneE19_OrbitTrailParticleCallback,source comment: orbit trail particle variant with a spinning flash sprite and a larger closing ring; installed by SceneE19_OrbitTrailBurst via FieldFx_InitCallbackList
+0x80198914,scene_e19_cruiser,func_80198914,SceneE19_OrbitTrailBurst,source comment: controller bursting orbit spin particles from the actor in the first four frames and publishing the orbit centre; slot 0 of effect set D_8019B4E4
+0x801991F8,scene_e19_cruiser,func_801991F8,SceneE19_GlintRibbonSparkCallback,"source comment: spark with damped velocity bouncing off the floor height, drawn as a spinning glint; installed by SceneE19_GlintRibbon via FieldFx_InitCallbackList"
+0x80199684,scene_e19_cruiser,func_80199684,SceneE19_GlintRibbon,source comment: strings two light ribbons across three actor joints and sheds glint sparks for twelve frames; slot 0 of effect set D_8019B564
+0x80199C28,scene_e19_cruiser,func_80199C28,SceneE19_TwinGlowSparkCallback,"source comment: damped spark bouncing off the floor height for 24 frames, drawn as a spinning glint; installed by SceneE19_TwinGlow via FieldFx_InitCallbackList"
+0x8019A054,scene_e19_cruiser,func_8019A054,SceneE19_TwinGlow,"source comment: picks two joints, sprays a ring of sixteen sparks and sixteen falling sparks at frame 15 and draws pulsing glows on both joints; slot 0 of effect set D_8019B5B0"
+0x8019AC30,scene_e19_cruiser,func_8019AC30,SceneE19_JitterSparkCallback,source comment: damped spark that jitters and spins for 8 frames drawing an animated sprite; installed by SceneE19_JitterSparkSpawner via FieldFx_InitCallbackList
+0x8019AE8C,scene_e19_cruiser,func_8019AE8C,SceneE19_JitterSparkSpawner,source comment: scatters up to three jitter sized sparks a frame while the primary scene object is past frame 10; slot 0 of effect set D_8019B61C
+0x8019B1D8,scene_e19_cruiser,func_8019B1D8,SceneE19_BlastConfigure,slot 12 of effect set D_8019B340: returns &g_SceneE19BlastGlow
+0x8019B1E8,scene_e19_cruiser,func_8019B1E8,SceneE19_SetHomingBurstParams,slot 12 of effect set D_8019B3B8: stores its two short arguments into g_SceneE19HomingBurstParams
+0x8019B204,scene_e19_cruiser,func_8019B204,SceneE19_EmberFlareConfigure,slot 12 of effect set D_8019B464: returns &g_SceneE19BlastGlow
+0x8019B214,scene_e19_cruiser,func_8019B214,SceneE19_OrbitTrailConfigure,slot 12 of effect set D_8019B4E4: returns &g_SceneE19BlastGlow
+0x8019B224,scene_e19_cruiser,func_8019B224,SceneE19_GlintRibbonConfigure,slot 12 of effect set D_8019B564: returns &g_SceneE19BlastGlow
+0x8019B234,scene_e19_cruiser,func_8019B234,SceneE19_TwinGlowConfigure,slot 12 of effect set D_8019B5B0: returns &g_SceneE19BlastGlow
+0x8019B244,scene_e19_cruiser,func_8019B244,SceneE19_JitterSparkConfigure,slot 12 of effect set D_8019B61C: returns &g_SceneE19BlastGlow
+0x8019B340,scene_e19_cruiser,D_8019B340,g_SceneE19BlastEffects,"effect set table: slot 0 SceneE19_Blast, slot 12 SceneE19_BlastConfigure"
+0x8019B3B8,scene_e19_cruiser,D_8019B3B8,g_SceneE19HomingBurstEffects,"effect set table: slot 0 SceneE19_HomingBurst, slot 1 SceneE19_SpinRayBurst, slot 12 SceneE19_SetHomingBurstParams"
+0x8019B464,scene_e19_cruiser,D_8019B464,g_SceneE19EmberFlareEffects,"effect set table: slot 0 SceneE19_EmberFlare, slot 12 SceneE19_EmberFlareConfigure"
+0x8019B4E4,scene_e19_cruiser,D_8019B4E4,g_SceneE19OrbitTrailEffects,"effect set table: slot 0 SceneE19_OrbitTrailBurst, slot 12 SceneE19_OrbitTrailConfigure"
+0x8019B564,scene_e19_cruiser,D_8019B564,g_SceneE19GlintRibbonEffects,"effect set table: slot 0 SceneE19_GlintRibbon, slot 12 SceneE19_GlintRibbonConfigure"
+0x8019B5B0,scene_e19_cruiser,D_8019B5B0,g_SceneE19TwinGlowEffects,"effect set table: slot 0 SceneE19_TwinGlow, slot 12 SceneE19_TwinGlowConfigure"
+0x8019B61C,scene_e19_cruiser,D_8019B61C,g_SceneE19JitterSparkEffects,"effect set table: slot 0 SceneE19_JitterSparkSpawner, slot 12 SceneE19_JitterSparkConfigure"
+0x8019B2FC,scene_e19_cruiser,D_8019B2FC,g_SceneE19GrabIdentityMatrix,"packed 3x3 matrix with 0x1000 on the diagonal (words at +0, +8, +0x10) multiplied with the grab angles matrix by SceneE19_GrabInit"
+0x8019B668,scene_e19_cruiser,D_8019B668,g_SceneE19BlastGlow,"brightness written by SceneE19_Blast (0x80 or rcos(timer)/32), read by SceneE19_BlastGlowCallback and returned by every SceneE19_*Configure slot 12"
+0x8019B66C,scene_e19_cruiser,D_8019B66C,g_SceneE19HomingBurstParams,pair of shorts written by SceneE19_SetHomingBurstParams and returned to the engine
+0x8019B670,scene_e19_cruiser,D_8019B670,g_SceneE19SpinRayOrigin,point written by SceneE19_SpinRayBurst (follows the room actor) and used as the origin of SceneE19_SpinRayCallback
+0x8019B678,scene_e19_cruiser,D_8019B678,g_SceneE19OrbitTrailCenter,position written by SceneE19_OrbitTrailBurst and used as the centre of SceneE19_OrbitTrailParticleCallback
+0x8019B680,scene_e19_cruiser,D_8019B680,g_SceneE19BlastModel0,model asset from Asset_FindTable08ByU32Key key 0xC54C0704 in SceneE19_Blast mode 0
+0x8019B684,scene_e19_cruiser,D_8019B684,g_SceneE19BlastModel1,model asset key 0xC58C0704 in SceneE19_Blast mode 0
+0x8019B688,scene_e19_cruiser,D_8019B688,g_SceneE19BlastModel2,model asset key 0xC5CC0704 in SceneE19_Blast mode 0
+0x8019B68C,scene_e19_cruiser,D_8019B68C,g_SceneE19BlastModel3,model asset key 0xC60C0704 in SceneE19_Blast mode 0
+0x8019B690,scene_e19_cruiser,D_8019B690,g_SceneE19BlastModel4,model asset key 0xC64C0704 in SceneE19_Blast mode 0
+0x8019B3E4,scene_e19_cruiser,D_8019B3E4,g_SceneE19SpinRayColorTrack,colour track sampled by SceneE19_SpinRayCallback
+0x8019B404,scene_e19_cruiser,D_8019B404,g_SceneE19SpinRayBurstColorTrack,colour track sampled by SceneE19_SpinRayBurst for its halo
+0x8019B484,scene_e19_cruiser,D_8019B484,g_SceneE19EmberFlareColorTrack,colour track sampled by SceneE19_EmberFlareParticleCallback
+0x8019B4FC,scene_e19_cruiser,D_8019B4FC,g_SceneE19OrbitTrailColorTrack,colour track sampled by SceneE19_OrbitTrailParticleCallback
+0x8019B55C,scene_e19_cruiser,D_8019B55C,g_SceneE19GlintRibbonJoints,per-joint parameter array indexed 0..2 and passed to FieldFx_TransformMatrixPoint by SceneE19_GlintRibbon

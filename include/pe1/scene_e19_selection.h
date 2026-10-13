@@ -36,7 +36,7 @@ PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneE19Selection, matrix) == 0x1C,
 PE1_STATIC_ASSERT(PE1_OFFSETOF(SceneE19Selection, savedZ) == 0x40,
                   scene_e19_selection_saved_z_offset);
 
-void func_80192B10();
-int func_80192BFC();
+void SceneE19_ResetPlayerMotion();
+int SceneE19_GrabRelease();
 
 #endif

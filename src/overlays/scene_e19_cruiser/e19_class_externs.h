@@ -4,7 +4,7 @@
 #include "common.h"
 
 extern char D_8019B31C[];
-extern char D_8019B2FC[];
+extern char g_SceneE19GrabIdentityMatrix[];
 extern s32 D_8019B310;
 extern s32 D_8019B314;
 extern s32 D_8019B318;

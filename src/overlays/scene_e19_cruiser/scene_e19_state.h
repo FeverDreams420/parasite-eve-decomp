@@ -3,8 +3,8 @@
 
 #include "common.h"
 
-extern int D_8019B668;
-extern s16 D_8019B66C;
+extern int g_SceneE19BlastGlow;
+extern s16 g_SceneE19HomingBurstParams;
 extern s16 D_8019B66E;
 
 #endif

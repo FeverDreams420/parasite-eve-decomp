@@ -55,10 +55,10 @@ typedef struct SceneE19BlastScript {
 } SceneE19BlastScript;
 
 extern struct BattleEntity *D_8009D254;
-extern s32 D_8019B668;
-extern void *D_8019B680, *D_8019B684, *D_8019B688, *D_8019B68C, *D_8019B690;
+extern s32 g_SceneE19BlastGlow;
+extern void *g_SceneE19BlastModel0, *g_SceneE19BlastModel1, *g_SceneE19BlastModel2, *g_SceneE19BlastModel3, *g_SceneE19BlastModel4;
 
-int func_80192F9C(int mode, SceneE19Blast *blast);
+int SceneE19_Blast(int mode, SceneE19Blast *blast);
 int rand(void);
 void FieldFx_ModelSetTexture(int page, int clut);
 void Geo_ClipAlternatingArcPoint(int mode, int count, int value);

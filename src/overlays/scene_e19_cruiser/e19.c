@@ -65,7 +65,7 @@ void RoomLib_GrabOnApproach(SceneGrabHead *head) {
 
     if (state != 0 && state->control10.command_value <= 1000000) {
         *trigger->control.signal = 4;
-        func_80192D04((char *)trigger);
+        SceneE19_ResetGrabTarget((char *)trigger);
         return;
     }
     if (g_PlayerEntity->mode < 18) {
@@ -82,7 +82,7 @@ void RoomLib_GrabOnApproach(SceneGrabHead *head) {
             if (FieldFx_GetDistanceXZ((Vec3Fixed *)&g_PlayerEntity->pos_x, (Vec3Fixed *)&target->x) < 0x140) {
                 FieldActor *player;
 
-                control->callback = func_80192878;
+                control->callback = SceneE19_GrabSequence;
                 Battle_BeginPlayerAction();
                 player = g_PlayerEntity;
                 player->render_object.animation_source = &actor->render_object;
@@ -111,7 +111,7 @@ void RoomLib_GrabOnApproach(SceneGrabHead *head) {
  * of the 16.16 positions taken with an unsigned shift, which gives retail's
  * lhu loads and the copies cse keeps for the later cases. */
 
-void func_80192878(SceneE19Selection *selection) {
+void SceneE19_GrabSequence(SceneE19Selection *selection) {
     FieldActor *actor = selection->actor;
     SceneE19SelectionTail *tail = &selection->tail;
     FieldActorState *playerState;
@@ -125,8 +125,8 @@ void func_80192878(SceneE19Selection *selection) {
     g_PlayerEntity->pos_x = selection->savedX;
     g_PlayerEntity->pos_z = selection->savedZ;
     if (g_PlayerEntity->state == 0 || g_PlayerEntity->state->amount <= 0) {
-        func_80192B10(actor, tail);
-        func_80192BFC(selection);
+        SceneE19_ResetPlayerMotion(actor, tail);
+        SceneE19_GrabRelease(selection);
         return;
     }
 
@@ -145,7 +145,7 @@ void func_80192878(SceneE19Selection *selection) {
         }
         if ((s16)previousFrame < 18 && (s16)currentFrame >= 18) {
             Battle_ReturnToIdle();
-            func_80192B10(actor, tail);
+            SceneE19_ResetPlayerMotion(actor, tail);
             return;
         }
         if ((s16)previousFrame < 3 && (s16)currentFrame >= 3) {
@@ -165,20 +165,20 @@ void func_80192878(SceneE19Selection *selection) {
         if (actorState != 0) {
             *actorState->substate = 4;
         }
-        func_80192BFC(selection);
+        SceneE19_GrabRelease(selection);
         return;
     case 12:
         return;
     default:
         Battle_ReturnToIdle();
-        func_80192B10(actor, tail);
-        func_80192BFC(selection);
+        SceneE19_ResetPlayerMotion(actor, tail);
+        SceneE19_GrabRelease(selection);
         return;
     }
 }
 
 
-void func_80192B10(void *arg0, unsigned char *state) {
+void SceneE19_ResetPlayerMotion(void *arg0, unsigned char *state) {
     {
         SceneE19Actor *actor = (SceneE19Actor *)D_8009D254;
 
@@ -223,11 +223,11 @@ PE1_STATIC_ASSERT(sizeof(SceneE19FrameGateEntity) == 0x0C,
 void SceneE19_RunAfterFrame37(SceneE19FrameGateEntity *o)
 {
     if (o->link->winLo >= 0x26) {
-        func_80192BFC();
+        SceneE19_GrabRelease();
     }
 }
 
-int func_80192BFC(SceneE19ResetTarget *ent) {
+int SceneE19_GrabRelease(SceneE19ResetTarget *ent) {
     unsigned char *state;
 
     *ent->signal = 0;
@@ -279,7 +279,7 @@ int func_80192BFC(SceneE19ResetTarget *ent) {
     return 0;
 }
 
-s32 func_80192D04(char *obj)
+s32 SceneE19_ResetGrabTarget(char *obj)
 {
   s32 *out;
   char *sub = obj + 0xC;
@@ -319,11 +319,11 @@ s32 func_80192D04(char *obj)
   return 0;
 }
 
-int func_80192E00(void) {
+int SceneE19_GrabNop6(void) {
     return 0;
 }
 
-int func_80192E08(int mode, SceneE19Effect *effect) {
+int SceneE19_BlastGlowCallback(int mode, SceneE19Effect *effect) {
     GteRotation position = D_8018F1CC;
     int angle, cosine, sine, brightness, palette, kind;
     u16 clut;
@@ -342,7 +342,7 @@ int func_80192E08(int mode, SceneE19Effect *effect) {
         angle = effect->frame << 7;
         cosine = rsin(angle);
         sine = rcos(angle);
-        brightness = (D_8019B668 * sine) / 4096;
+        brightness = (g_SceneE19BlastGlow * sine) / 4096;
         kind = g_FieldFxSpriteParams.palette;
         palette = g_FieldFxPaletteTable[kind];
         if (kind == 4 && g_FieldFxAltPaletteFlag) palette += 4;
@@ -354,7 +354,7 @@ int func_80192E08(int mode, SceneE19Effect *effect) {
     return 0;
 }
 
-int func_80192F9C(int mode, SceneE19Blast *blast)
+int SceneE19_Blast(int mode, SceneE19Blast *blast)
 {
     GteShortVector center;
     GteShortVector ringPoint;
@@ -411,23 +411,23 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
 
     switch (mode) {
     case 0:
-        D_8019B680 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54C0704);
-        FieldFx_ModelScrollUv(D_8019B680, 0, 0);
-        D_8019B684 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC58C0704);
-        FieldFx_ModelScrollUv(D_8019B684, 0, 0);
-        D_8019B688 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5CC0704);
-        FieldFx_ModelScrollUv(D_8019B688, 0, 0);
-        D_8019B68C = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC60C0704);
-        FieldFx_ModelScrollUv(D_8019B68C, 0, 0);
-        D_8019B690 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC64C0704);
-        FieldFx_ModelScrollUv(D_8019B690, 0, 0);
+        g_SceneE19BlastModel0 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC54C0704);
+        FieldFx_ModelScrollUv(g_SceneE19BlastModel0, 0, 0);
+        g_SceneE19BlastModel1 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC58C0704);
+        FieldFx_ModelScrollUv(g_SceneE19BlastModel1, 0, 0);
+        g_SceneE19BlastModel2 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC5CC0704);
+        FieldFx_ModelScrollUv(g_SceneE19BlastModel2, 0, 0);
+        g_SceneE19BlastModel3 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC60C0704);
+        FieldFx_ModelScrollUv(g_SceneE19BlastModel3, 0, 0);
+        g_SceneE19BlastModel4 = Asset_FindTable08ByU32Key(D_800B0E64[0], 0xC64C0704);
+        FieldFx_ModelScrollUv(g_SceneE19BlastModel4, 0, 0);
         blast->state = 0;
         blast->timer = 0;
         FieldFx_GetActorPosition((char *)ANIM_OWNER_AS(SceneE19BlastChannel)->pool, 1, &blast->position.x);
         blast->position.y = g_RoomFloorY->raw;
         FieldFx_GetActorPosition((char *)ANIM_OWNER_AS(SceneE19BlastChannel)->pool, 0, &blast->target.x);
         FieldFx_GetTransformLookAngles((struct RoomFxTransformOwner *)ANIM_OWNER_AS(SceneE19BlastChannel)->pool, 0, &blast->origin);
-        return FieldFx_InitCallbackList((char *)ANIM_POOL_AS(SceneE19BlastChannel)->pool, 0xC, 8, func_80192E08);
+        return FieldFx_InitCallbackList((char *)ANIM_POOL_AS(SceneE19BlastChannel)->pool, 0xC, 8, SceneE19_BlastGlowCallback);
     case 1:
         switch (blast->state) {
         case 0:
@@ -492,7 +492,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 spark->timer = 0;
                 spark->z += value - 0x100;
             }
-            D_8019B668 = 0x80;
+            g_SceneE19BlastGlow = 0x80;
             if (blast->timer < 0x20) {
                 return 0;
             }
@@ -514,7 +514,7 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
                 spark->timer = 0;
                 spark->z += value - 0x100;
             }
-            D_8019B668 = rcos((blast->timer << 10) / 24) / 32;
+            g_SceneE19BlastGlow = rcos((blast->timer << 10) / 24) / 32;
             if (blast->timer < 0x18) {
                 return 0;
             }
@@ -607,10 +607,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix1.t[2] = center.z;
             shellScale1.z = (blast->timer << 6) + 0x400;
             ScaleMatrix(&shellMatrix1, &shellScale1);
-            FieldFx_ModelSaveColors(D_8019B684);
-            FieldFx_ModelScaleColors(D_8019B684, 0x40);
-            FieldFx_ModelDraw(D_8019B684, &shellMatrix1);
-            FieldFx_ModelRestoreColors(D_8019B684);
+            FieldFx_ModelSaveColors(g_SceneE19BlastModel1);
+            FieldFx_ModelScaleColors(g_SceneE19BlastModel1, 0x40);
+            FieldFx_ModelDraw(g_SceneE19BlastModel1, &shellMatrix1);
+            FieldFx_ModelRestoreColors(g_SceneE19BlastModel1);
             gte_ldrotmatrix(D_800BCFA4.value);
             gte_ldtransmatrix(D_800BCFA4.value);
             FieldFx_DrawStarFan(&center, 0x12C, 0x12C, 0xC, 0, 0x1000, 0x1000, &glowColor, 0, intensity, 1);
@@ -683,10 +683,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix2.t[2] = center.z;
             shellScale2.z = (blast->timer << 6) + 0x800;
             ScaleMatrix(&shellMatrix2, &shellScale2);
-            FieldFx_ModelSaveColors(D_8019B684);
-            FieldFx_ModelScaleColors(D_8019B684, 0x40);
-            FieldFx_ModelDraw(D_8019B684, &shellMatrix2);
-            FieldFx_ModelRestoreColors(D_8019B684);
+            FieldFx_ModelSaveColors(g_SceneE19BlastModel1);
+            FieldFx_ModelScaleColors(g_SceneE19BlastModel1, 0x40);
+            FieldFx_ModelDraw(g_SceneE19BlastModel1, &shellMatrix2);
+            FieldFx_ModelRestoreColors(g_SceneE19BlastModel1);
             gte_ldrotmatrix(D_800BCFA4.value);
             gte_ldtransmatrix(D_800BCFA4.value);
             FieldFx_DrawStarFan(&center, 0x12C, 0x12C, 0xC, 0, 0x1000, 0x1000, &glowColor, 0, intensity, 1);
@@ -760,10 +760,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix3a.t[1] = center.y;
             shellMatrix3a.t[2] = center.z;
             ScaleMatrix(&shellMatrix3a, &shellScale3a);
-            FieldFx_ModelSaveColors(D_8019B680);
-            FieldFx_ModelScaleColors(D_8019B680, (u16)intensity);
-            FieldFx_ModelDraw(D_8019B680, &shellMatrix3a);
-            FieldFx_ModelRestoreColors(D_8019B680);
+            FieldFx_ModelSaveColors(g_SceneE19BlastModel0);
+            FieldFx_ModelScaleColors(g_SceneE19BlastModel0, (u16)intensity);
+            FieldFx_ModelDraw(g_SceneE19BlastModel0, &shellMatrix3a);
+            FieldFx_ModelRestoreColors(g_SceneE19BlastModel0);
             radialScale = rsin(phase) / 3 + 0x400;
             verticalScale = rcos(phase) / 2;
             intensity = rcos(phase) / 32;
@@ -791,10 +791,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix3b.t[1] = center.y;
             shellMatrix3b.t[2] = center.z;
             ScaleMatrix(&shellMatrix3b, &shellScale3b);
-            FieldFx_ModelSaveColors(D_8019B688);
-            FieldFx_ModelScaleColors(D_8019B688, (u16)(intensity / 2));
-            FieldFx_ModelDraw(D_8019B688, &shellMatrix3b);
-            FieldFx_ModelRestoreColors(D_8019B688);
+            FieldFx_ModelSaveColors(g_SceneE19BlastModel2);
+            FieldFx_ModelScaleColors(g_SceneE19BlastModel2, (u16)(intensity / 2));
+            FieldFx_ModelDraw(g_SceneE19BlastModel2, &shellMatrix3b);
+            FieldFx_ModelRestoreColors(g_SceneE19BlastModel2);
             modelPhase = (blast->timer << 10) / 56;
             radialScale = rsin(modelPhase) / 4 + 0xC00;
             verticalScale = rcos(modelPhase) / 4 + 0x400;
@@ -825,10 +825,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix3c.t[1] = center.y;
             shellMatrix3c.t[2] = center.z;
             ScaleMatrix(&shellMatrix3c, &shellScale3c);
-            FieldFx_ModelSaveColors(D_8019B68C);
-            FieldFx_ModelScaleColors(D_8019B68C, (u16)(intensity / 2));
-            FieldFx_ModelDraw(D_8019B68C, &shellMatrix3c);
-            FieldFx_ModelRestoreColors(D_8019B68C);
+            FieldFx_ModelSaveColors(g_SceneE19BlastModel3);
+            FieldFx_ModelScaleColors(g_SceneE19BlastModel3, (u16)(intensity / 2));
+            FieldFx_ModelDraw(g_SceneE19BlastModel3, &shellMatrix3c);
+            FieldFx_ModelRestoreColors(g_SceneE19BlastModel3);
             center.y = height;
             gte_ldrotmatrix(D_800BCFA4.value);
             gte_ldtransmatrix(D_800BCFA4.value);
@@ -869,10 +869,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix3d.t[1] = center.y;
             shellMatrix3d.t[2] = center.z;
             ScaleMatrix(&shellMatrix3d, &shellScale3d);
-            FieldFx_ModelSaveColors(D_8019B690);
-            FieldFx_ModelScaleColors(D_8019B690, (u16)intensity);
-            FieldFx_ModelDraw(D_8019B690, &shellMatrix3d);
-            FieldFx_ModelRestoreColors(D_8019B690);
+            FieldFx_ModelSaveColors(g_SceneE19BlastModel4);
+            FieldFx_ModelScaleColors(g_SceneE19BlastModel4, (u16)intensity);
+            FieldFx_ModelDraw(g_SceneE19BlastModel4, &shellMatrix3d);
+            FieldFx_ModelRestoreColors(g_SceneE19BlastModel4);
             radialScale = rsin(modelPhase) / 6 + 0x1200;
             verticalScale = rcos(modelPhase) * 2;
             intensity = rcos(modelPhase) / 32;
@@ -900,10 +900,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix3e.t[1] = center.y;
             shellMatrix3e.t[2] = center.z;
             ScaleMatrix(&shellMatrix3e, &shellScale3e);
-            FieldFx_ModelSaveColors(D_8019B690);
-            FieldFx_ModelScaleColors(D_8019B690, (u16)intensity);
-            FieldFx_ModelDraw(D_8019B690, &shellMatrix3e);
-            FieldFx_ModelRestoreColors(D_8019B690);
+            FieldFx_ModelSaveColors(g_SceneE19BlastModel4);
+            FieldFx_ModelScaleColors(g_SceneE19BlastModel4, (u16)intensity);
+            FieldFx_ModelDraw(g_SceneE19BlastModel4, &shellMatrix3e);
+            FieldFx_ModelRestoreColors(g_SceneE19BlastModel4);
             break;
         case 4:
             phase = (blast->timer << 10) / 24;
@@ -934,10 +934,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix4a.t[1] = center.y;
             shellMatrix4a.t[2] = center.z;
             ScaleMatrix(&shellMatrix4a, &shellScale4a);
-            FieldFx_ModelSaveColors(D_8019B680);
-            FieldFx_ModelScaleColors(D_8019B680, (u16)intensity);
-            FieldFx_ModelDraw(D_8019B680, &shellMatrix4a);
-            FieldFx_ModelRestoreColors(D_8019B680);
+            FieldFx_ModelSaveColors(g_SceneE19BlastModel0);
+            FieldFx_ModelScaleColors(g_SceneE19BlastModel0, (u16)intensity);
+            FieldFx_ModelDraw(g_SceneE19BlastModel0, &shellMatrix4a);
+            FieldFx_ModelRestoreColors(g_SceneE19BlastModel0);
             modelPhase = ((blast->timer + 0x20) << 10) / 56;
             radialScale = rsin(modelPhase) / 4 + 0xC00;
             verticalScale = rcos(modelPhase) / 4 + 0x400;
@@ -968,10 +968,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix4b.t[1] = center.y;
             shellMatrix4b.t[2] = center.z;
             ScaleMatrix(&shellMatrix4b, &shellScale4b);
-            FieldFx_ModelSaveColors(D_8019B68C);
-            FieldFx_ModelScaleColors(D_8019B68C, (u16)(intensity / 2));
-            FieldFx_ModelDraw(D_8019B68C, &shellMatrix4b);
-            FieldFx_ModelRestoreColors(D_8019B68C);
+            FieldFx_ModelSaveColors(g_SceneE19BlastModel3);
+            FieldFx_ModelScaleColors(g_SceneE19BlastModel3, (u16)(intensity / 2));
+            FieldFx_ModelDraw(g_SceneE19BlastModel3, &shellMatrix4b);
+            FieldFx_ModelRestoreColors(g_SceneE19BlastModel3);
             center.y = height;
             radialScale = rsin(modelPhase) / 4 + 0x1200;
             verticalScale = rcos(modelPhase);
@@ -1000,10 +1000,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix4c.t[1] = center.y;
             shellMatrix4c.t[2] = center.z;
             ScaleMatrix(&shellMatrix4c, &shellScale4c);
-            FieldFx_ModelSaveColors(D_8019B690);
-            FieldFx_ModelScaleColors(D_8019B690, (u16)intensity);
-            FieldFx_ModelDraw(D_8019B690, &shellMatrix4c);
-            FieldFx_ModelRestoreColors(D_8019B690);
+            FieldFx_ModelSaveColors(g_SceneE19BlastModel4);
+            FieldFx_ModelScaleColors(g_SceneE19BlastModel4, (u16)intensity);
+            FieldFx_ModelDraw(g_SceneE19BlastModel4, &shellMatrix4c);
+            FieldFx_ModelRestoreColors(g_SceneE19BlastModel4);
             radialScale = rsin(modelPhase) / 6 + 0x1200;
             verticalScale = rcos(modelPhase) * 2;
             intensity = rcos(modelPhase) / 32;
@@ -1031,10 +1031,10 @@ int func_80192F9C(int mode, SceneE19Blast *blast)
             shellMatrix4d.t[1] = center.y;
             shellMatrix4d.t[2] = center.z;
             ScaleMatrix(&shellMatrix4d, &shellScale4d);
-            FieldFx_ModelSaveColors(D_8019B690);
-            FieldFx_ModelScaleColors(D_8019B690, (u16)intensity);
-            FieldFx_ModelDraw(D_8019B690, &shellMatrix4d);
-            FieldFx_ModelRestoreColors(D_8019B690);
+            FieldFx_ModelSaveColors(g_SceneE19BlastModel4);
+            FieldFx_ModelScaleColors(g_SceneE19BlastModel4, (u16)intensity);
+            FieldFx_ModelDraw(g_SceneE19BlastModel4, &shellMatrix4d);
+            FieldFx_ModelRestoreColors(g_SceneE19BlastModel4);
             break;
         }
         g_FieldFxSpriteParams.parameter00 = 0x10;
@@ -1061,7 +1061,7 @@ int FieldFx_GetDistanceNonZero(s16 *from, s16 *to);
 /* Not declared in production headers; parameter order inferred from both
  * call sites and the ABI. The eighth argument is zero at both sites. */
 
-int func_8019549C(int mode, SceneE19HomingParticle *particle)
+int SceneE19_HomingParticleCallback(int mode, SceneE19HomingParticle *particle)
 {
     GteRotation templatePoint = D_8018F210;
     GteShortVector temporaryPosition;
@@ -1325,7 +1325,7 @@ timer_return_one:
  * object; mode 1 releases a homing particle on odd frames (twenty in all)
  * and reports 2 after eight frames; mode 2 draws the flash, the screen
  * tint and the glows that shrink over 32 frames. */
-int func_801960C4(int mode, SceneHomingBurst *burst)
+int SceneE19_HomingBurst(int mode, SceneHomingBurst *burst)
 {
     GteShortVector position;
     GteRotation rotation = D_8018F210;
@@ -1351,7 +1351,7 @@ int func_801960C4(int mode, SceneHomingBurst *burst)
                 }
             }
         }
-        return FieldFx_InitCallbackList((char *)ANIM_POOL_AS(SceneHomingBurstChannel)->pool, 0x20, 0x20, func_8019549C);
+        return FieldFx_InitCallbackList((char *)ANIM_POOL_AS(SceneHomingBurstChannel)->pool, 0x20, 0x20, SceneE19_HomingParticleCallback);
     case 1:
         burst->timer++;
         if (burst->released < 0x14 && (burst->timer & 1)) {
@@ -1463,7 +1463,7 @@ int func_801960C4(int mode, SceneHomingBurst *burst)
 
 /* Mode 1 spins and ages the ray (states return 1 when they finish);
  * mode 2 draws it as a growing ray, a sweeping blade or a glow sprite. */
-int func_80196748(int mode, SceneSpinRay *ray)
+int SceneE19_SpinRayCallback(int mode, SceneSpinRay *ray)
 {
     RenderColor color;
     RenderColor rayColor;
@@ -1516,8 +1516,8 @@ int func_80196748(int mode, SceneSpinRay *ray)
             width = rsin(time << 6) / 32;
             if (ray->timer & 1) glow = 0x5C;
             else glow = 0x80;
-            FieldFx_SampleColorTrack(D_8019B3E4, &color, time);
-            FieldFx_DrawRotatedTriangle(&D_8019B670, &ray->spin.rotation, 0x9C4, width, &rayColor, 0, 0,
+            FieldFx_SampleColorTrack(g_SceneE19SpinRayColorTrack, &color, time);
+            FieldFx_DrawRotatedTriangle(&g_SceneE19SpinRayOrigin, &ray->spin.rotation, 0x9C4, width, &rayColor, 0, 0,
                           (s16)glow, 1);
             break;
         case 1: {
@@ -1527,9 +1527,9 @@ int func_80196748(int mode, SceneSpinRay *ray)
             glow = ((s16)ray->timer << 7) / 48;
             width = rsin(((s16)ray->timer << 10) / 48) / 4 + 0x1F4;
             FieldFx_AnglesToVector(&ray->spin.angles, (s16)(ray->reach * angle / 4096), &offset);
-            offset.x += D_8019B670.x;
-            offset.y += D_8019B670.y;
-            offset.z += D_8019B670.z;
+            offset.x += g_SceneE19SpinRayOrigin.x;
+            offset.y += g_SceneE19SpinRayOrigin.y;
+            offset.z += g_SceneE19SpinRayOrigin.z;
             kind = g_FieldFxSpriteParams.palette;
             palette = g_FieldFxPaletteTable[kind];
             if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
@@ -1542,7 +1542,7 @@ int func_80196748(int mode, SceneSpinRay *ray)
             int kind;
             int palette;
             width = rcos((s16)ray->timer << 6) * 2;
-            FieldFx_SampleColorTrack(D_8019B3E4, &color, (s16)ray->timer);
+            FieldFx_SampleColorTrack(g_SceneE19SpinRayColorTrack, &color, (s16)ray->timer);
             {
                 int tpage;
                 g_FieldFxSpriteParams.parameter00 = 0x40;
@@ -1558,7 +1558,7 @@ int func_80196748(int mode, SceneSpinRay *ray)
             kind = g_FieldFxSpriteParams.palette;
             palette = g_FieldFxPaletteTable[kind];
             if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
-            FieldFx_DrawShapeQuads(&D_8019B670, &ray->spin.rotation, width, width, 0x40,
+            FieldFx_DrawShapeQuads(&g_SceneE19SpinRayOrigin, &ray->spin.rotation, width, width, 0x40,
                           GetClut(0, palette), 1, 0x80, &color);
             break;
         }
@@ -1573,7 +1573,7 @@ int func_80196748(int mode, SceneSpinRay *ray)
  * blades on the first frame. While it runs it follows the room actor,
  * publishes that spot as the ray origin and draws a halo, two glows and
  * two rings there. */
-int func_80196CCC(int mode, SceneSpinRayBurst *burst)
+int SceneE19_SpinRayBurst(int mode, SceneSpinRayBurst *burst)
 {
     GteRotation tilt = D_8018F210;
     GteShortVector position;
@@ -1593,7 +1593,7 @@ int func_80196CCC(int mode, SceneSpinRayBurst *burst)
         FieldFx_PlaySoundAtOwner(0x5E1, FieldFx_GetOwnerProgress());
         FieldFx_PlaySoundAtOwner(0x5E2, 0x80);
         return FieldFx_InitCallbackList(ANIM_POOL_AS(SceneSpinRayChannel)->pool, 0x10, 0x32,
-                             (FieldFxCallbackListCallback)func_80196748);
+                             (FieldFxCallbackListCallback)SceneE19_SpinRayCallback);
     case 1:
         if (++burst->timer & 1) {
             child = FieldFx_AcquireCallbackSlot(ANIM_POOL_AS(SceneSpinRayChannel)->pool);
@@ -1644,13 +1644,13 @@ int func_80196CCC(int mode, SceneSpinRayBurst *burst)
             g_FieldFxSpriteParams.tpage = tpage;
         }
         FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(SceneSpinRayChannel)->pool, 0, &tilt, &position);
-        D_8019B670.x = position.x;
-        D_8019B670.y = position.y;
-        D_8019B670.z = position.z;
+        g_SceneE19SpinRayOrigin.x = position.x;
+        g_SceneE19SpinRayOrigin.y = position.y;
+        g_SceneE19SpinRayOrigin.z = position.z;
         if (burst->timer & 1) glow = 0x60;
         else glow = 0x80;
         scale = rsin(((s16)burst->timer << 10) / 48) / 2 + 0x800;
-        FieldFx_SampleColorTrack(D_8019B404, &color, (s16)burst->timer);
+        FieldFx_SampleColorTrack(g_SceneE19SpinRayBurstColorTrack, &color, (s16)burst->timer);
         FieldFx_DrawStarFan(&position, 800, 800, 12, 0, scale, scale, &color, 0, 100, 1);
         {
             int kind;
@@ -1702,7 +1702,7 @@ int func_80196CCC(int mode, SceneSpinRayBurst *burst)
 /* Ember flare particle: embers drift and bounce off the floor while their
  * sideways speed decays (state 0 slowly, state 1 quickly while falling),
  * and a wide flare pulses in place (state 2). */
-int func_801972EC(int mode, RoomOrbitTrailParticle *p) {
+int SceneE19_EmberFlareParticleCallback(int mode, RoomOrbitTrailParticle *p) {
     GteRotation spin = D_8018F1CC;
     GteRotation turn = D_8018F1D4;
     RenderColor color = D_8018F234;
@@ -1762,7 +1762,7 @@ int func_801972EC(int mode, RoomOrbitTrailParticle *p) {
             g_FieldFxSpriteParams.parameter02 = 2;
             g_FieldFxSpriteParams.extent_x = 0x20;
             g_FieldFxSpriteParams.extent_y = 0x20;
-            FieldFx_SampleColorTrack(D_8019B484, &color, (s16)p->timer);
+            FieldFx_SampleColorTrack(g_SceneE19EmberFlareColorTrack, &color, (s16)p->timer);
             kind = g_FieldFxSpriteParams.palette;
             palette = g_FieldFxPaletteTable[kind];
             if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
@@ -1779,7 +1779,7 @@ int func_801972EC(int mode, RoomOrbitTrailParticle *p) {
             g_FieldFxSpriteParams.parameter02 = 2;
             g_FieldFxSpriteParams.extent_x = 0x20;
             g_FieldFxSpriteParams.extent_y = 0x20;
-            FieldFx_SampleColorTrack(D_8019B484, &color, (s16)p->timer);
+            FieldFx_SampleColorTrack(g_SceneE19EmberFlareColorTrack, &color, (s16)p->timer);
             kind = g_FieldFxSpriteParams.palette;
             palette = g_FieldFxPaletteTable[kind];
             if (kind == 4 && g_FieldFxAltPaletteFlag != 0) palette += 4;
@@ -1795,7 +1795,7 @@ int func_801972EC(int mode, RoomOrbitTrailParticle *p) {
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
-            FieldFx_SampleColorTrack(D_8019B484, &color, (s16)p->timer * 2);
+            FieldFx_SampleColorTrack(g_SceneE19EmberFlareColorTrack, &color, (s16)p->timer * 2);
             FieldFx_DrawRingBand((GteShortVector *)p, 0x320, 0x578, 0x18, &turn, size, size,
                           0, &color, glow, 1);
             break;
@@ -1810,7 +1810,7 @@ int func_801972EC(int mode, RoomOrbitTrailParticle *p) {
  * and flares every sixth; then it fades and, on its first fading frame,
  * hands the actor to the scene script. While it glows it draws two floor
  * glows, a halo and a ring. */
-int func_801978EC(int mode, SceneE22EmberBurst *burst) {
+int SceneE19_EmberFlare(int mode, SceneE22EmberBurst *burst) {
     RenderColor color = D_8018F238;
     GteShortVector position;
     GteRotation spin;
@@ -1850,7 +1850,7 @@ int func_801978EC(int mode, SceneE22EmberBurst *burst) {
         FieldFx_GetActorPosition((char *)g_PlayerEntity, 1, (s16 *)burst);
         burst->y = g_RoomFloorY->y;
         return FieldFx_InitCallbackList(ANIM_POOL_AS(SceneE22EmberChannel)->pool, 0x14, 0x28,
-                             (FieldFxCallbackListCallback)func_801972EC);
+                             (FieldFxCallbackListCallback)SceneE19_EmberFlareParticleCallback);
     case 1:
         if (burst->state < 2)
             Battle_HaltOnPositiveX();
@@ -2006,7 +2006,7 @@ int func_801978EC(int mode, SceneE22EmberBurst *burst) {
 /* Orbit trail particle variant: the flash phase draws a spinning sprite
  * with its own parameter block and the closing ring is larger and
  * slower than RoomEffect_OrbitTrailParticle's. */
-int func_801982A4(int mode, RoomOrbitTrailParticle *p) {
+int SceneE19_OrbitTrailParticleCallback(int mode, RoomOrbitTrailParticle *p) {
     GteShortVector offset;
     GteShortVector blend;
     GteRotation rotation;
@@ -2054,18 +2054,18 @@ int func_801982A4(int mode, RoomOrbitTrailParticle *p) {
         case 0:
             scale = (rsin(((s16)p->timer << 10) / 24) + 0x1000) / 2;
             FieldFx_AnglesToVector(&p->heading, (s16)(p->radius * scale / 4096), &offset);
-            offset.x += D_8019B678.x;
-            offset.y += D_8019B678.y;
-            offset.z += D_8019B678.z;
+            offset.x += g_SceneE19OrbitTrailCenter.x;
+            offset.y += g_SceneE19OrbitTrailCenter.y;
+            offset.z += g_SceneE19OrbitTrailCenter.z;
             weight = rsin(((s16)p->timer << 10) / 24);
-            LoadAverageShort12(&D_8019B678, &offset, 0x1000 - weight,
+            LoadAverageShort12(&g_SceneE19OrbitTrailCenter, &offset, 0x1000 - weight,
                           weight, &blend);
             {
                 RenderMatrixSlot *matrixSlot = &D_800BCFA4;
                 gte_ldrotmatrix(matrixSlot->value);
                 gte_ldtransmatrix(matrixSlot->value);
             }
-            FieldFx_SampleColorTrack(D_8019B4FC, &color, (s16)p->timer);
+            FieldFx_SampleColorTrack(g_SceneE19OrbitTrailColorTrack, &color, (s16)p->timer);
             FieldFx_DrawGlowLine(&blend, &offset, 0, &color, 0, 0x80, 1);
             break;
         case 1: {
@@ -2100,9 +2100,9 @@ int func_801982A4(int mode, RoomOrbitTrailParticle *p) {
              * is what leaves the heading pointer the first saved register. */
             kind = p->radius * scale / 4096;
             FieldFx_AnglesToVector(&p->heading, (s16)kind, &offset);
-            offset.x += D_8019B678.x;
-            offset.y += D_8019B678.y;
-            offset.z += D_8019B678.z;
+            offset.x += g_SceneE19OrbitTrailCenter.x;
+            offset.y += g_SceneE19OrbitTrailCenter.y;
+            offset.z += g_SceneE19OrbitTrailCenter.z;
             {
                 RenderMatrixSlot *matrixSlot = &D_800BCFA4;
                 gte_ldrotmatrix(matrixSlot->value);
@@ -2133,7 +2133,7 @@ int func_801982A4(int mode, RoomOrbitTrailParticle *p) {
  * first four frames (falling sparks, sweeping trails and drifting rings),
  * flashes a glow, a halo, two tilted rings and three glow sprites while it
  * fades, and publishes the actor position as the orbit centre. */
-int func_80198914(int mode, RoomOrbitTrailBurst *burst) {
+int SceneE19_OrbitTrailBurst(int mode, RoomOrbitTrailBurst *burst) {
     RoomOrbitSpinBurstTilt tilt;
     RenderColor color = D_8018F23C;
     RenderColor ringColor = D_8018F240;
@@ -2148,7 +2148,7 @@ int func_80198914(int mode, RoomOrbitTrailBurst *burst) {
         FieldFx_PlaySoundAtOwner(0x5E0, 0x80);
         FieldFx_GetActorPosition((char *)D_8009D254, 0, (s16 *)burst);
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x3C,
-                             (FieldFxCallbackListCallback)func_801982A4);
+                             (FieldFxCallbackListCallback)SceneE19_OrbitTrailParticleCallback);
     case 1:
         if (g_FieldFxCurrentAge < 4) {
             for (i = 0; i < 4; i++) {
@@ -2286,9 +2286,9 @@ int func_80198914(int mode, RoomOrbitTrailBurst *burst) {
                               1, glow, 0, 0x600);
             }
         }
-        D_8019B678.x = burst->x;
-        D_8019B678.y = burst->y;
-        D_8019B678.z = burst->z;
+        g_SceneE19OrbitTrailCenter.x = burst->x;
+        g_SceneE19OrbitTrailCenter.y = burst->y;
+        g_SceneE19OrbitTrailCenter.z = burst->z;
         g_FieldFxSpriteParams.parameter00 = 0x20;
         g_FieldFxSpriteParams.parameter02 = 2;
         g_FieldFxSpriteParams.extent_x = 0x20;
@@ -2309,7 +2309,7 @@ int func_80198914(int mode, RoomOrbitTrailBurst *burst) {
 /* Spark that drifts with damped velocity and bounces off the floor
  * height; state 0 draws a spinning glint that pulses with a sine of its
  * age, state 1 spins while it drifts and draws a tinted fading glint. */
-int func_801991F8(int mode, RoomDampedSpark *spark) {
+int SceneE19_GlintRibbonSparkCallback(int mode, RoomDampedSpark *spark) {
     GteRotation rotation;
     RenderColor color = D_8018F244;
     int fall;
@@ -2412,7 +2412,7 @@ int func_801991F8(int mode, RoomDampedSpark *spark) {
 /* Strings two light ribbons across three actor joints.  For twelve frames
  * the last joint and its floor shadow each shed a glint spark per frame,
  * after which the ribbons fade out. */
-int func_80199684(int mode, RoomGlintRibbon *ribbon) {
+int SceneE19_GlintRibbon(int mode, RoomGlintRibbon *ribbon) {
     GteShortVector first;
     GteShortVector middle;
     GteShortVector last;
@@ -2428,21 +2428,21 @@ int func_80199684(int mode, RoomGlintRibbon *ribbon) {
         ribbon->alpha = 0x80;
         ribbon->reserved00 = 0;
         ribbon->timer = 0;
-        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, D_8019B55C[0],
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, g_SceneE19GlintRibbonJoints[0],
                       &offset0, &first);
-        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, D_8019B55C[1],
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, g_SceneE19GlintRibbonJoints[1],
                       &offset0, &middle);
-        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, D_8019B55C[2],
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, g_SceneE19GlintRibbonJoints[2],
                       &offset1, &last);
         FieldFx_DrawHistoryTrail(&first, &middle, 0x3F2, (unsigned char *)&color0, (unsigned char *)&color1, 0x80,
                       (struct FieldTrailPair *)ribbon->trailA, 1);
         FieldFx_DrawHistoryTrail(&middle, &last, 0x3F2, (unsigned char *)&color1, (unsigned char *)&color2, 0x80,
                       (struct FieldTrailPair *)ribbon->trailB, 1);
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomSparkChannel)->pool, 0x14, 0x24,
-                             (FieldFxCallbackListCallback)func_801991F8);
+                             (FieldFxCallbackListCallback)SceneE19_GlintRibbonSparkCallback);
     case 1:
         ribbon->timer++;
-        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, D_8019B55C[2],
+        FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, g_SceneE19GlintRibbonJoints[2],
                       &offset0, &first);
         middle.x = first.x;
         middle.y = first.y;
@@ -2478,11 +2478,11 @@ int func_80199684(int mode, RoomGlintRibbon *ribbon) {
         return 2;
     case 2:
         if (ribbon->alpha >= 0) {
-            FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, D_8019B55C[0],
+            FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, g_SceneE19GlintRibbonJoints[0],
                           &offset0, &first);
-            FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, D_8019B55C[1],
+            FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, g_SceneE19GlintRibbonJoints[1],
                           &offset0, &middle);
-            FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, D_8019B55C[2],
+            FieldFx_TransformMatrixPoint(ANIM_OWNER_AS(RoomSparkChannel)->pool, g_SceneE19GlintRibbonJoints[2],
                           &offset1, &last);
             FieldFx_DrawHistoryTrail(&first, &middle, 10, (unsigned char *)&color0, (unsigned char *)&color1, ribbon->alpha,
                           (struct FieldTrailPair *)ribbon->trailA, 1);
@@ -2510,7 +2510,7 @@ int func_80199684(int mode, RoomGlintRibbon *ribbon) {
  * height for 24 frames; state 0 draws a spinning glint whose size and
  * fade follow a sine and a cosine of its age, state 1 also spins its
  * seed angle and draws a fixed frame glint that shrinks as it fades. */
-int func_80199C28(int mode, RoomDampedSpark *spark) {
+int SceneE19_TwinGlowSparkCallback(int mode, RoomDampedSpark *spark) {
     GteRotation rotation;
     int fall;
     int bounce;
@@ -2612,7 +2612,7 @@ int func_80199C28(int mode, RoomDampedSpark *spark) {
  * sixteen falling sparks at frame 15 and reports 2 after frame 33; mode 2
  * draws pulsing glows on both joints, then fading glows, a ring and a
  * floor glow. */
-int func_8019A054(int mode, SceneTwinGlow *glow)
+int SceneE19_TwinGlow(int mode, SceneTwinGlow *glow)
 {
     GteShortVector jointA;
     GteShortVector jointB;
@@ -2633,7 +2633,7 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
         glow->jointB = 0x12;
         glow->state = 0;
         glow->timer = 0;
-        return FieldFx_InitCallbackList(ANIM_POOL_AS(SceneTwinGlowChannel)->pool, 0x14, 0x20, func_80199C28);
+        return FieldFx_InitCallbackList(ANIM_POOL_AS(SceneTwinGlowChannel)->pool, 0x14, 0x20, SceneE19_TwinGlowSparkCallback);
     case 1:
         glow->timer++;
         if (glow->timer == 0xF) {
@@ -2837,7 +2837,7 @@ int func_8019A054(int mode, SceneTwinGlow *glow)
 
 /* Spark that drifts with damped velocity, jitters and spins for 8 frames
  * while drawing an animated sprite scaled by its size field. */
-int func_8019AC30(int mode, RoomJitterSpark *spark) {
+int SceneE19_JitterSparkCallback(int mode, RoomJitterSpark *spark) {
     GteRotation rotation = D_8018F1CC;
     int fall;
     int bounce;
@@ -2891,7 +2891,7 @@ int func_8019AC30(int mode, RoomJitterSpark *spark) {
 
 /* Spawner that, while the primary scene object is past frame 10, scatters
  * up to three jitter sized sparks a frame up the object's anchor. */
-int func_8019AE8C(int mode) {
+int SceneE19_JitterSparkSpawner(int mode) {
     GteShortVector position;
     RoomJitterSpark *child;
     int i;
@@ -2899,7 +2899,7 @@ int func_8019AE8C(int mode) {
     switch (mode) {
     case 0:
         return FieldFx_InitCallbackList(ANIM_POOL_AS(RoomSparkChannel)->pool, 20, 10,
-                             (FieldFxCallbackListCallback)func_8019AC30);
+                             (FieldFxCallbackListCallback)SceneE19_JitterSparkCallback);
     case 1:
         if (ANIM_OWNER_AS(struct PmPrimarySlot) != g_PmSlotTable) return 1;
         if (((RoomSparkOwner *)ANIM_OWNER_AS(RoomSparkChannel)->pool)->state->frame < 11) return 1;
@@ -2944,34 +2944,34 @@ int func_8019AE8C(int mode) {
     return 0;
 }
 
-u32 *func_8019B1D8(void) {
-    return &D_8019B668;
+u32 *SceneE19_BlastConfigure(void) {
+    return &g_SceneE19BlastGlow;
 }
 
-s16 *func_8019B1E8(int unused, s16 first, s16 second) {
-    s16 *result = &D_8019B66C;
+s16 *SceneE19_SetHomingBurstParams(int unused, s16 first, s16 second) {
+    s16 *result = &g_SceneE19HomingBurstParams;
 
     *result = first;
     D_8019B66E = second;
     return result;
 }
 
-u32 *func_8019B204(void) {
-    return &D_8019B668;
+u32 *SceneE19_EmberFlareConfigure(void) {
+    return &g_SceneE19BlastGlow;
 }
 
-u32 *func_8019B214(void) {
-    return &D_8019B668;
+u32 *SceneE19_OrbitTrailConfigure(void) {
+    return &g_SceneE19BlastGlow;
 }
 
-u32 *func_8019B224(void) {
-    return &D_8019B668;
+u32 *SceneE19_GlintRibbonConfigure(void) {
+    return &g_SceneE19BlastGlow;
 }
 
-u32 *func_8019B234(void) {
-    return &D_8019B668;
+u32 *SceneE19_TwinGlowConfigure(void) {
+    return &g_SceneE19BlastGlow;
 }
 
-u32 *func_8019B244(void) {
-    return &D_8019B668;
+u32 *SceneE19_JitterSparkConfigure(void) {
+    return &g_SceneE19BlastGlow;
 }
