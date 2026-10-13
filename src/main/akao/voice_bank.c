@@ -229,16 +229,16 @@ void Akao_InitVoices(int arg0, char *arg1) {
     u16 *field;
     do {
     if (arg0 == 0) {
-        if (((AkaoSequencerBank *)g_AkaoCurTrack)->active_voice_mask != 0) {
+        if ((g_AkaoCurTrack)->active_voice_mask != 0) {
             break;
         }
         return;
-    } else if (arg0 != ((AkaoSequencerBank *)g_AkaoCurTrack)->bank_id) {
+    } else if (arg0 != (g_AkaoCurTrack)->bank_id) {
         return;
     }
     } while (0);
 
-    ((AkaoSequencerBank *)g_AkaoCurTrack)->key_off_request_mask = 0xFFFFFF;
+    (g_AkaoCurTrack)->key_off_request_mask = 0xFFFFFF;
 
     i = 0;
     mode3 = 3;
@@ -276,7 +276,7 @@ void Spu_ManageVoices(int arg0, int mode_bits)
     {
         return;
     }
-    voice = (AkaoTrack *) g_AkaoVoiceChannelTable;
+    voice = g_AkaoVoiceChannelTable;
     active = g_SpuActiveVoiceMask;
     if ((mode_bits & 0x0FFFFFFF) != 0)
     {
@@ -318,7 +318,7 @@ void Spu_ManageVoices(int arg0, int mode_bits)
     }
     else if (mode_bits < 0)
     {
-        voice = ((AkaoTrack *) g_AkaoVoiceChannelTable) + id;
+        voice = (g_AkaoVoiceChannelTable) + id;
         mask <<= id;
         if ((active & mask) != 0)
         {
@@ -354,7 +354,7 @@ void Spu_ManageVoices(int arg0, int mode_bits)
             mask <<= 1;
         }
         while (i < 12);
-        voice = (AkaoTrack *) g_AkaoVoiceChannelTable;
+        voice = g_AkaoVoiceChannelTable;
         mask = AKAO_SPU_VOICE_SFX_START_MASK;
         best = 0;
         i = 0;
@@ -373,7 +373,7 @@ void Spu_ManageVoices(int arg0, int mode_bits)
             mask <<= 1;
         }
         while (i < 12);
-        voice = (AkaoTrack *) g_AkaoVoiceChannelTable;
+        voice = g_AkaoVoiceChannelTable;
         mask = AKAO_SPU_VOICE_SFX_START_MASK;
         i = 0;
         flag1 = AKAO_TRACK_FLAG_SUSTAIN;
@@ -846,7 +846,7 @@ void Seq_SelectPlaybackBank(AkaoQueueEntry *entry);
 void Seq_RestoreSecondaryStateAndSelect(AkaoQueueEntry *entry) {
     AkaoSequencerBank *state;
 
-    state = (AkaoSequencerBank *)g_AkaoCurTrack;
+    state = g_AkaoCurTrack;
     if ((state->active_voice_mask != 0) && ((state + 1)->active_voice_mask == 0)) {
         Akao_CopyWords((u32 *)state, (u32 *)(state + 1), sizeof(*state));
         Akao_CopyWords((u32 *)g_AkaoVoiceStateTable,
@@ -965,7 +965,7 @@ void Seq_SetTrackPitchImmediate(AkaoBankPitchCommand *arg0) {
             next_track = track + 1;
             base = g_AkaoVoiceStateTable2;
             value = msg->pitch;
-            g_AkaoCurTrack = (AkaoSequencerBank *)next_track;
+            g_AkaoCurTrack = next_track;
             ((AkaoSequencerState *)track)->secondary.pitch_slide_duration = 0;
             value &= 0x7F;
             value <<= 16;
@@ -1058,7 +1058,7 @@ void Seq_TrackPitchSetup(AkaoBankPitchRangeCommand *arg0) {
                 base = g_AkaoVoiceStateTable2;
                 state->secondary.pitch_slide_duration = duration;
                 next_track = track + 1;
-                g_AkaoCurTrack = (AkaoSequencerBank *)next_track;
+                g_AkaoCurTrack = next_track;
                 state->secondary.pitch_delta = delta / duration;
                 Seq_MarkDirtyTracks(base);
                 g_AkaoCurTrack--;
