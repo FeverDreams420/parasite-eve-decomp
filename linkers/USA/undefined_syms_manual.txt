@@ -983,7 +983,6 @@ g_CdEnqueueCmdQueue = 0x800A3610;
 g_DsReadCallbackCursor = 0x800A3690;
 g_CdIntrStringTable = 0x8009B05C;
 CD_debug = 0x8009AFC0;
-g_CdReadCompleteCallback = 0x8009B6D0;
 g_CdReadInProgress = 0x8009B6CC;
 g_CdReadyCallback = 0x8009AFB8;
 g_CdRegDataWrite = 0x8009B284;

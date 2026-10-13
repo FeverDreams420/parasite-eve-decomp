@@ -363,6 +363,8 @@ extern u8 g_CdMode;
 extern u8 g_CdLastCom;
 extern volatile u8 *D_8009B280, *D_8009B284;
 extern char D_80011BB4[], D_80011BBC[], D_80011BCC[];
+/* "$Id: bios.c,v 1.86 ...$", the LIBCD BIOS version string. */
+extern const char g_CdBiosVersion[];
 
 /* Command/ready event polling; result is an optional eight-byte buffer. */
 int CD_sync(int mode, u8 *result);

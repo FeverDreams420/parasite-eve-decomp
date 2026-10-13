@@ -90,14 +90,11 @@ int DsReadSync(void *argument) {
     return s0;
 }
 
-register CdReadCompleteCallbackPage *g_CdCallbackWritePage asm("$1");
-
 CdReadCompleteCallback DsReadCallback(CdReadCompleteCallback callback) {
     CdReadCompleteCallback old;
 
     old = g_CdReadCompleteCallback;
-    g_CdCallbackWritePage = (CdReadCompleteCallbackPage *)0x800A0000;
-    g_CdCallbackWritePage[-1].callback = callback;
+    g_CdReadCompleteCallback = callback;
     return old;
 }
 
