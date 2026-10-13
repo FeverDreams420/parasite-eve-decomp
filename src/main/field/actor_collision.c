@@ -371,7 +371,7 @@ void Entity_FindFloor(BattleEntity *actor)
                  triangle_index++, indices++) {
                     triangle_id = *indices;
                     simple_triangle = (u8 *)&g_CollisionDb->triangles.xz[triangle_id];
-                    if (Geo_PointInTri(simple_triangle, (s16)x, (s16)z)) {
+                    if (Geo_PointInTri(simple_triangle, x, z)) {
                         actor->collisionFace = simple_triangle;
                         actor->collisionFaceMirror = simple_triangle;
                         if ((actor->entityFlags & 2) == 0) {
@@ -392,7 +392,7 @@ void Entity_FindFloor(BattleEntity *actor)
                  triangle_index++, indices++) {
                     triangle_id = *indices;
                     complex_triangle = &g_CollisionDb->triangles.xyz[triangle_id].face;
-                    if (Geo_PointInTri(complex_triangle, (s16)x, (s16)z)) {
+                    if (Geo_PointInTri(complex_triangle, x, z)) {
                         actor->collisionFace = complex_triangle;
                         actor->collisionFaceMirror = complex_triangle;
                         if ((actor->entityFlags & 2) == 0) {
