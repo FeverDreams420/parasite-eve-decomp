@@ -1080,7 +1080,6 @@ int func_8019549C(int mode, SceneE19HomingParticle *particle)
     u16 floorZ;
     register int floorIndex asm("$4");
     int floorTimer;
-    register int negValue asm("$2");
     int signedValue;
     register int returnTest asm("$2");
 
@@ -1220,8 +1219,8 @@ test_timer:
         D_800F3368.parameter00 = 32;
         D_800F3368.extent_x = 32;
         D_800F3368.extent_y = 32;
-        negValue = rotation.z;
-        rotation.z = -negValue;
+        test = rotation.z;
+        rotation.z = -test;
         palette = D_800E1204[D_800F3368.palette];
         if (D_800F3368.palette == 4 && D_800F3428)
             palette += 4;
