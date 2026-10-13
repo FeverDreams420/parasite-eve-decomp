@@ -12,6 +12,7 @@
 /* Reconstructs the eight polygon streams and the FT3/FT4 subdivision paths.
  * Retail range 0x80197BA0..0x8019959C; source boundary is provisional. */
 void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
+    register u32 *gteScreen0 asm("$4");
     register FxCommonRenderScratchpad *scratchpad asm("$16");
     FxCommonVector *quadMidpoint13;
     FxCommonBuffer *buffer;
@@ -328,7 +329,6 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
             var_s4 = 0;
             primitiveCount = var_t8->counts[4];
             if (primitiveCount > 0) {
-                register u32 *triangleGteScreen0 asm("$4");
                 register u32 *triangleGteScreen1 asm("$3");
                 s32 *triangleGteScreen2;
                 FxCommonVector *triangleMidpoint02;
@@ -584,10 +584,10 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                         var_v0 = scratchpad->midpointUv[4].packed;
                     } else {
 
-                        triangleGteScreen0 = &trianglePacketCursor->xy0;
+                        gteScreen0 = &trianglePacketCursor->xy0;
                         triangleGteScreen2 = &trianglePacketCursor->xy2;
                         triangleGteScreen1 = &trianglePacketCursor->xy1;
-                        gte_stsxy0_precise(triangleGteScreen0);
+                        gte_stsxy0_precise(gteScreen0);
                         gte_stsxy1_precise(triangleGteScreen1);
                         gte_stsxy2_precise(triangleGteScreen2);
                         ((FxCommonFt3Packet *)(triangleUv2Cursor - 14))->tag.bytes.length =
@@ -707,7 +707,6 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                 else
                 {
                 if (temp_a0 >= 0x1F5) {
-                    register u32 *quadGteScreen0 asm("$4");
                     register u32 *quadGteScreen1 asm("$3");
                     u32 *quadGteScreen2;
                     if (temp_a0 < 0x1FE) {
@@ -762,10 +761,10 @@ void FxCommon_DrawPolyResource(void *context, FxCommonPolyResource *resource) {
                                 ->textures[1]
                                 .uv3.packed;
                     }
-                    quadGteScreen0 = &var_t1_2->xy0;
+                    gteScreen0 = &var_t1_2->xy0;
                     quadGteScreen1 = &var_t1_2->xy1;
                     quadGteScreen2 = &var_t1_2->xy2;
-                    gte_stsxy0_precise(quadGteScreen0);
+                    gte_stsxy0_precise(gteScreen0);
                     gte_stsxy1_precise(quadGteScreen1);
                     gte_stsxy2_precise(quadGteScreen2);
                     gte_lwc2_0_0(quadVertex3);
