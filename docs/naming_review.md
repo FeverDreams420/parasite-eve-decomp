@@ -72,3 +72,47 @@ Left unnamed on purpose:
 - PsyQ-internal code labels (`func_8007E344`, `func_8007E3C8`), which the
   rename tool keeps;
 - words that are only written or whose readers do not show a role.
+
+## Second pass, 0x800A0000 to 0x80120000
+
+`docs/naming_review_main3.csv` lists the 679 address names of this range
+that a second pass resolved (address, old name, name or member path,
+evidence; 12 of them are now written as members but keep their splat
+label, see below). Of the 792 `func_`/`D_` symbols the range had, 652 are
+gone:
+
+- 61 got names from a concrete reader or writer (9 functions, among them
+  the three routines in the engine data blob behind script opcodes
+  2400/2402, and 52 data symbols). Views that must stay separate words for
+  retail's code are named after the member they view and say so at their
+  declaration (`g_RenderLight0DirY`, `g_BattleMissSprite`,
+  `g_AkaoNestedKeyOffMask`, `g_PadIntQueueHandlers`, ...).
+- The rest were interior bytes of larger objects. Their C uses are now
+  members (`g_BattleAtbGauges[g_ActiveDrawSlot].r0`,
+  `g_CdQueuedCmdSlots[1]`, `g_RenderLightingState.matrix.m[2][1]`), and the
+  owner's size in `configs/USA/sym.main.txt` (`// size:0x..`, the size of
+  its C type) stops splat from labelling its interior.
+
+140 remain, by reason:
+
+- member labels kept because a named one-field view inside the same
+  record splits it (the members are reached by name in C): the
+  `g_GameTimers`, `g_GameState`, `g_GeomScroll`, `g_RenderLightingState`,
+  `g_SaveRuntimeState`/`g_AyaSaveState`, `g_FieldFxSpriteParams` and
+  inventory array labels;
+- second spellings of a named object kept for a type, qualifier or overlay
+  declaration (`D_800A76A0`, `D_800A76A4`, `D_800B0CE2`, `D_800B0DBA`,
+  `D_800B0DBC`, `D_800B0DCD`, `D_800B0E38`, `D_800B0E3C`, `D_800B0E4C`,
+  `D_800B0E50`, `D_800B0E54`, `D_800B0E58`, `D_800B0E64`, `D_800B0E6C`,
+  `D_800B89F8`, `D_800BCF88`);
+- no reader: written-only words, unreferenced tails after a sized object
+  and the pad words after the 0x2C-byte effect states;
+- role not established: `func_800C6C18`, `func_800DFB20`, `D_800B0E2C`,
+  `D_800B0E48`, `D_800B6914`, `D_800E21D0`, and the mdec_diag window bytes
+  `D_8010BCF8`/`D_8010BD00`;
+- used only in `fieldfx/geometry.c`, `render/object.c` or
+  `field/actor_collision.c`, which this pass did not touch (`D_800A636C`,
+  `D_800B0E98`, `D_800B1640`, `D_800B1644`, `D_800C2258`, `D_800E21A8`,
+  `D_800F32D8`, `D_800F336C`, `D_800F3374`, `D_800F3418`), and
+  `D_800BCFA4`, which keeps its name;
+- `D_800B0D88`, behind the asm-label views of `battle/encounter.c`.
